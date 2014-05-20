@@ -1,5 +1,6 @@
 package net.quetzi.bluepower;
 
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraftforge.common.config.Configuration;
 import net.quetzi.bluepower.init.Blocks;
 import net.quetzi.bluepower.init.Config;
@@ -18,17 +19,19 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 
-@Mod(modid = Refs.MODID, name = Refs.NAME, version = Refs.VERSION + "." + Refs.BUILD)
+@Mod(modid = Refs.MODID, name = Refs.NAME)
 public class BluePower {
     @Instance("BluePower")
-    @SidedProxy(clientSide = "ClientProxy", serverSide = "CommonProxy")
-    public static CommonProxy commonProxy;
-    public static ClientProxy clientProxy;
-    
+    @SidedProxy(clientSide = "net.quetzi.bluepower.ClientProxy", serverSide = "net.quetzi.bluepower.CommonProxy")
+    public static CommonProxy proxy;
+
     @EventHandler
     public void PreInit(FMLPreInitializationEvent event) {
+        event.getModMetadata().version = Refs.fullVersionString();
+        
         Logger log = event.getModLog();
         Configuration config = new Configuration(event.getSuggestedConfigurationFile());
+        
         // Load configs
         config.load();
         Config.setUp(config);
