@@ -13,7 +13,14 @@ public class Refs {
     }
 
     public static final String BLOCKMARBLE_NAME = "Marble";    
-    public static final String MARBLE_TEXTURE_NAME = "";
+    public static final String ITEMMARBLE_NAME = "Marble";   
+    public static final String MARBLE_TEXTURE_NAME = "bluepower:marble";
+    
     public static final String BLOCKBASALT_NAME = "Basalt";
-    public static final String BASALT_TEXTURE_NAME = "";
+    public static final String ITEMBASALT_NAME = "Basalt";
+    public static final String BASALT_TEXTURE_NAME = "bluepower:basalt";
+    
+    public static final String BLOCKBASALTCOBBLE_NAME = "Basalt Cobblestone";
+    public static final String ITEMBASALTCOBBLE_NAME = "Basalt Cobblestone";
+    public static final String BASALTCOBBLE_TEXTURE_NAME = "bluepower:basaltcobble";
 }

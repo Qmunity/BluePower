@@ -22,6 +22,7 @@ import cpw.mods.fml.common.event.FMLServerStartingEvent;
 @Mod(modid = Refs.MODID, name = Refs.NAME)
 public class BluePower {
     @Instance("BluePower")
+    public static BluePower instance;
     @SidedProxy(clientSide = "net.quetzi.bluepower.ClientProxy", serverSide = "net.quetzi.bluepower.CommonProxy")
     public static CommonProxy proxy;
 

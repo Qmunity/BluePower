@@ -10,6 +10,7 @@ public class BlockMarble extends Block {
         super(Material.rock);
         this.textureName = Refs.MARBLE_TEXTURE_NAME;
         this.setCreativeTab(CreativeTabs.tabBlock);
+        this.setStepSound(soundTypeStone);
     }
 
 }
