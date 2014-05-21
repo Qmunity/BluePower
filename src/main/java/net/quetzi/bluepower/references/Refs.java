@@ -12,23 +12,11 @@ public class Refs {
         return String.format("%s-%s.%s.%s", MCVERSION, MAJOR, MINOR, BUILD);
     }
 
-    public static final String BLOCKMARBLE_NAME = "Marble";    
-    public static final String ITEMMARBLE_NAME = "Marble";   
     public static final String MARBLE_TEXTURE_NAME = "bluepower:marble";
-    
-    public static final String BLOCKBASALT_NAME = "Basalt";
-    public static final String ITEMBASALT_NAME = "Basalt";
     public static final String BASALT_TEXTURE_NAME = "bluepower:basalt";
-    
-    public static final String BLOCKBASALTCOBBLE_NAME = "Basalt Cobblestone";
-    public static final String ITEMBASALTCOBBLE_NAME = "Basalt Cobblestone";
-    public static final String BASALTCOBBLE_TEXTURE_NAME = "bluepower:basaltcobble";
-    
-    public static final String BLOCKBASALTBRICK_NAME = "Basalt Brick";
-    public static final String ITEMBASALTBRICK_NAME = "Basalt Brick";
-    public static final String BASALTBRICK_TEXTURE_NAME = "bluepower:basaltbrick";
-    
-    public static final String BLOCKMARBLEBRICK_NAME = "Marble Brick";
-    public static final String ITEMMARBLEBRICK_NAME = "Marble Brick";
-    public static final String MARBLEBRICK_TEXTURE_NAME = "bluepower:marblebrick";
+    public static final String BASALTCOBBLE_TEXTURE_NAME = "bluepower:basalt_cobble";
+    public static final String BASALTBRICK_TEXTURE_NAME = "bluepower:basalt_brick";
+    public static final String MARBLEBRICK_TEXTURE_NAME = "bluepower:marble_brick";
+    public static final String ALLOYFURNACE_TEXTURESIDE = "bluepower:alloyfurnace_side";
+    public static final String ALLOYFURNACE_TEXTUREFRONT = "bluepower:alloyfurnace_front";
 }
