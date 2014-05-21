@@ -9,21 +9,21 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
-import net.quetzi.bluepower.machines.TileEntityAlloyFurnace;
 
-public class BlockAlloyFurnace extends BlockContainer {
+public class ContainerAlloyFurnace extends BlockContainer {
     public static boolean isActivated = false;
-    public BlockAlloyFurnace() {
+    public ContainerAlloyFurnace() {
         super(Material.rock);
     }
     
     private static IIcon iconSide;
     private static IIcon iconTop;
     private static IIcon iconFront;
+    private TileAlloyFurnace tileFurnace;
     
     @Override
     public TileEntity createNewTileEntity(World var1, int var2) {
-        return new TileEntityAlloyFurnace();
+        return new TileAlloyFurnace();
     }
     
     public void onBlockAdded(World world, int x, int y, int z) {

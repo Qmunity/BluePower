@@ -1,7 +1,7 @@
 package net.quetzi.bluepower.init;
 
 import net.minecraft.block.Block;
-import net.quetzi.bluepower.blocks.BlockAlloyFurnace;
+import net.quetzi.bluepower.blocks.ContainerAlloyFurnace;
 import net.quetzi.bluepower.blocks.BlockBasalt;
 import net.quetzi.bluepower.blocks.BlockBasaltBrick;
 import net.quetzi.bluepower.blocks.BlockBasaltCobble;
@@ -27,6 +27,6 @@ public class Blocks {
         GameRegistry.registerBlock(new BlockBasaltCobble(), "basalt_cobble");
         GameRegistry.registerBlock(new BlockBasaltBrick(), "basalt_brick");
         GameRegistry.registerBlock(new BlockMarbleBrick(), "marble_brick");
-        GameRegistry.registerBlock(new BlockAlloyFurnace(),"alloy_furnace");
+        GameRegistry.registerBlock(new ContainerAlloyFurnace(),"alloy_furnace");
     }
 }
