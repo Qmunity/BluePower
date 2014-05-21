@@ -22,11 +22,11 @@ public class Blocks {
     public static final Block marble_brick = (Block)Block.blockRegistry.getObject("marble_brick");
     
     private static void registerBlocks() {
-        GameRegistry.registerBlock(new BlockBasalt(), "basalt");
-        GameRegistry.registerBlock(new BlockMarble(), "marble");
-        GameRegistry.registerBlock(new BlockBasaltCobble(), "basalt_cobble");
-        GameRegistry.registerBlock(new BlockBasaltBrick(), "basalt_brick");
-        GameRegistry.registerBlock(new BlockMarbleBrick(), "marble_brick");
-        GameRegistry.registerBlock(new ContainerAlloyFurnace(),"alloy_furnace");
+        GameRegistry.registerBlock(new BlockBasalt().setBlockName("basalt"), "basalt");
+        GameRegistry.registerBlock(new BlockMarble().setBlockName("marble"), "marble");
+        GameRegistry.registerBlock(new BlockBasaltCobble().setBlockName("basalt_cobble"), "basalt_cobble");
+        GameRegistry.registerBlock(new BlockBasaltBrick().setBlockName("basalt_brick"), "basalt_brick");
+        GameRegistry.registerBlock(new BlockMarbleBrick().setBlockName("marble_brick"), "marble_brick");
+        GameRegistry.registerBlock(new ContainerAlloyFurnace().setBlockName("alloy_furnace"),"alloy_furnace");
     }
 }

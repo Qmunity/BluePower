@@ -12,6 +12,8 @@ public class BlockBasaltCobble extends Block {
         this.textureName = Refs.BASALTCOBBLE_TEXTURE_NAME;
         this.setCreativeTab(CreativeTabs.tabBlock);
         this.setStepSound(soundTypeStone);
+        this.setHardness(1.5F);
+        this.setResistance(10.0F);
     }
     
     public void registerBlockIcon(IIconRegister iconRegister) {

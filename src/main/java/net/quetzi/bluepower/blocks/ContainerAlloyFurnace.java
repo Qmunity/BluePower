@@ -14,6 +14,8 @@ public class ContainerAlloyFurnace extends BlockContainer {
     public static boolean isActivated = false;
     public ContainerAlloyFurnace() {
         super(Material.rock);
+        this.setHardness(1.5F);
+        this.setResistance(20.0F);
     }
     
     private static IIcon iconSide;

@@ -1,6 +1,5 @@
 package net.quetzi.bluepower;
 
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraftforge.common.config.Configuration;
 import net.quetzi.bluepower.init.Blocks;
 import net.quetzi.bluepower.init.Config;
@@ -23,7 +22,7 @@ import cpw.mods.fml.common.event.FMLServerStartingEvent;
 public class BluePower {
     @Instance("BluePower")
     public static BluePower instance;
-    @SidedProxy(clientSide = "net.quetzi.bluepower.ClientProxy", serverSide = "net.quetzi.bluepower.CommonProxy")
+//    @SidedProxy(clientSide = "ClientProxy", serverSide = "CommonProxy")
     public static CommonProxy proxy;
 
     @EventHandler

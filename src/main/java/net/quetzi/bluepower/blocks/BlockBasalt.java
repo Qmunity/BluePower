@@ -16,12 +16,16 @@ public class BlockBasalt extends Block {
         this.textureName = Refs.BASALT_TEXTURE_NAME;
         this.setCreativeTab(CreativeTabs.tabBlock);
         this.setStepSound(soundTypeStone);
+        this.setHardness(1.5F);
+        this.setResistance(10.0F);
     }
 
     public Item getItemDropped(int par1, Random par2, int par3) {
-        return Item.getItemFromBlock(Blocks.basalt_cobble);
+        return Item.getItemFromBlock(Block.getBlockFromName("bluepower:basalt_cobble"));
     }
-    
+    public int quantityDropped() {
+        return 1;
+    }
     public void registerBlockIcon(IIconRegister iconRegister) {
         iconRegister.registerIcon("bluepower:" + Refs.BASALT_TEXTURE_NAME);
     }
