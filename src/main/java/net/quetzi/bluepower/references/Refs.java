@@ -23,4 +23,12 @@ public class Refs {
     public static final String BLOCKBASALTCOBBLE_NAME = "Basalt Cobblestone";
     public static final String ITEMBASALTCOBBLE_NAME = "Basalt Cobblestone";
     public static final String BASALTCOBBLE_TEXTURE_NAME = "bluepower:basaltcobble";
+    
+    public static final String BLOCKBASALTBRICK_NAME = "Basalt Brick";
+    public static final String ITEMBASALTBRICK_NAME = "Basalt Brick";
+    public static final String BASALTBRICK_TEXTURE_NAME = "bluepower:basaltbrick";
+    
+    public static final String BLOCKMARBLEBRICK_NAME = "Marble Brick";
+    public static final String ITEMMARBLEBRICK_NAME = "Marble Brick";
+    public static final String MARBLEBRICK_TEXTURE_NAME = "bluepower:marblebrick";
 }

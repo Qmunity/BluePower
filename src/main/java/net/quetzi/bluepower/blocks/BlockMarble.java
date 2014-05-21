@@ -2,6 +2,7 @@ package net.quetzi.bluepower.blocks;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.quetzi.bluepower.references.Refs;
 
@@ -13,4 +14,7 @@ public class BlockMarble extends Block {
         this.setStepSound(soundTypeStone);
     }
 
+    public void registerBlockIcon(IIconRegister iconRegister) {
+        iconRegister.registerIcon("bluepower:" + Refs.MARBLE_TEXTURE_NAME);
+    }
 }
