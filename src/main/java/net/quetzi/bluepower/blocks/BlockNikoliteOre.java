@@ -8,26 +8,25 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.quetzi.bluepower.BluePower;
-import net.quetzi.bluepower.init.Blocks;
 import net.quetzi.bluepower.references.Refs;
 
-public class BlockBasalt extends Block {
-    public BlockBasalt() {
+public class BlockNikoliteOre extends Block {
+    public BlockNikoliteOre() {
         super(Material.rock);
-        this.textureName = Refs.MODID + ":" + Refs.BASALT_NAME;
+        this.textureName = Refs.MODID + ":" + Refs.NIKOLITEORE_NAME;
         this.setCreativeTab(BluePower.creativeTab);
         this.setStepSound(soundTypeStone);
-        this.setHardness(1.5F);
+        this.setHardness(1.9F);
         this.setResistance(10.0F);
     }
 
     public Item getItemDropped(int par1, Random par2, int par3) {
-        return Item.getItemFromBlock(Block.getBlockFromName(Refs.MODID + ":" + Refs.BASALTCOBBLE_NAME));
+        return Item.getItemFromBlock(Block.getBlockFromName(Refs.MODID + ":" + this.getUnlocalizedName().substring(5)));
     }
     public int quantityDropped() {
         return 1;
     }
     public void registerBlockIcon(IIconRegister iconRegister) {
-        iconRegister.registerIcon(Refs.MODID + ":" + Refs.BASALT_NAME);
+        iconRegister.registerIcon(Refs.MODID + ":" + Refs.NIKOLITEORE_NAME);
     }
 }

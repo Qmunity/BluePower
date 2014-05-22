@@ -7,17 +7,18 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.quetzi.bluepower.BluePower;
 import net.quetzi.bluepower.references.Refs;
 
-public class BlockBasaltBrick extends Block {
-    public BlockBasaltBrick() {
+public class BlockRubyBlock extends Block {
+    public BlockRubyBlock() {
         super(Material.rock);
-        this.textureName = Refs.MODID + ":" + Refs.BASALTBRICK_NAME;
+        this.textureName = Refs.MODID + ":" + Refs.RUBYBLOCK_NAME;
         this.setCreativeTab(BluePower.creativeTab);
         this.setStepSound(soundTypeStone);
-        this.setHardness(1.5F);
+        this.setHardness(1.9F);
         this.setResistance(10.0F);
     }
-    
+
     public void registerBlockIcon(IIconRegister iconRegister) {
-        iconRegister.registerIcon(Refs.MODID + ":" + Refs.BASALTBRICK_NAME);
+        iconRegister.registerIcon(Refs.MODID + ":" + Refs.RUBYBLOCK_NAME);
     }
+
 }

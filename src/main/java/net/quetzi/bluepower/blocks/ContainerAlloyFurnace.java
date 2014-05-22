@@ -9,6 +9,8 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
+import net.quetzi.bluepower.BluePower;
+import net.quetzi.bluepower.references.Refs;
 
 public class ContainerAlloyFurnace extends BlockContainer {
     public static boolean isActivated = false;
@@ -16,6 +18,7 @@ public class ContainerAlloyFurnace extends BlockContainer {
         super(Material.rock);
         this.setHardness(1.5F);
         this.setResistance(20.0F);
+        this.setCreativeTab(BluePower.creativeTab);
     }
     
     private static IIcon iconSide;
@@ -41,8 +44,8 @@ public class ContainerAlloyFurnace extends BlockContainer {
     @SideOnly(Side.CLIENT)
     public void registerBlockIcons(IIconRegister iconRegister)
     {
-        this.iconSide = iconRegister.registerIcon("alloyfurnace_side");
-        this.iconFront = iconRegister.registerIcon(this.isActivated ? "alloyfurnace_front_on" : "alloyfurnace_front_off");
-        this.iconTop = iconRegister.registerIcon("alloyfurnace_top");
+        this.iconSide = iconRegister.registerIcon(Refs.MODID + ":" + Refs.ALLOYFURNACE_NAME + "_side");
+        this.iconFront = iconRegister.registerIcon(this.isActivated ? Refs.MODID + ":" + Refs.ALLOYFURNACE_NAME + "_front_on" : Refs.MODID + ":" + Refs.ALLOYFURNACE_NAME + "_front_off");
+        this.iconTop = iconRegister.registerIcon(Refs.MODID + ":" + Refs.ALLOYFURNACE_NAME + "_top");
     }
 }

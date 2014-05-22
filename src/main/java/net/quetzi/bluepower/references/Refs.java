@@ -12,11 +12,23 @@ public class Refs {
         return String.format("%s-%s.%s.%s", MCVERSION, MAJOR, MINOR, BUILD);
     }
 
-    public static final String MARBLE_TEXTURE_NAME = "bluepower:marble";
-    public static final String BASALT_TEXTURE_NAME = "bluepower:basalt";
-    public static final String BASALTCOBBLE_TEXTURE_NAME = "bluepower:basalt_cobble";
-    public static final String BASALTBRICK_TEXTURE_NAME = "bluepower:basalt_brick";
-    public static final String MARBLEBRICK_TEXTURE_NAME = "bluepower:marble_brick";
-    public static final String ALLOYFURNACE_TEXTURESIDE = "bluepower:alloyfurnace_side";
-    public static final String ALLOYFURNACE_TEXTUREFRONT = "bluepower:alloyfurnace_front";
+    public static final String MARBLE_NAME = "marble";
+    public static final String BASALT_NAME = "basalt";
+    public static final String BASALTCOBBLE_NAME = "basalt_cobble";
+    public static final String BASALTBRICK_NAME = "basalt_brick";
+    public static final String MARBLEBRICK_NAME = "marble_brick";
+    public static final String ALLOYFURNACE_NAME = "alloyfurnace";
+    public static final String MALACHITEORE_NAME = "malachiteore";
+    public static final String RUBYORE_NAME = "rubyore";
+    public static final String SAPPHIREORE_NAME = "sapphireore";
+    public static final String NIKOLITEORE_NAME = "nikoliteore";
+    public static final String MALACHITEBLOCK_NAME = "malachite_block";
+    public static final String SAPPHIREBLOCK_NAME = "sapphire_block";
+    public static final String RUBYBLOCK_NAME = "ruby_block";
+    public static final String NIKOLITEBLOCK_NAME = "nikolite_block";
+    
+    public static final String ITEMMALACHITE_NAME = "malachite";
+    public static final String ITEMSAPPHIRE_NAME = "sapphire";
+    public static final String ITEMRUBY_NAME = "ruby";
+    public static final String ITEMNIKOLITE_NAME = "nikolite";
 }

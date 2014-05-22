@@ -3,4 +3,12 @@ tile.bluepower:marble.name=Marble
 tile.bluepower:basalt_brick.name=Basalt Brick
 tile.bluepower:marble_brick.name=Marble Brick
 tile.bluepower:basalt_cobble.name=Basalt Cobble
-tile.bluepower:alloy_furnace=Alloy Furnace
+tile.bluepower:alloy_furnace.name=Alloy Furnace
+tile.bluepower:malachite_ore.name=Malachite Ore
+tile.bluepower:ruby_ore.name=Ruby Ore
+tile.bluepower:sapphire_ore.name=Sapphire Ore
+tile.bluepower:nikolite_ore.name=Nikolite Ore
+tile.bluepower:malachite_block.name=Malachite Block
+tile.bluepower:sapphire_block.name=Sapphire Block
+tile.bluepower:ruby_block.name=Ruby Block
+
