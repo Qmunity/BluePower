@@ -31,4 +31,8 @@ public class Refs {
     public static final String ITEMSAPPHIRE_NAME = "sapphire";
     public static final String ITEMRUBY_NAME = "ruby";
     public static final String ITEMNIKOLITE_NAME = "nikolite";
+    
+    public static final String COPPERORE_NAME = "copper_ore";
+    public static final String SILVERORE_NAME = "silver_ore";
+    public static final String TINORE_NAME = "tin_ore";
 }
