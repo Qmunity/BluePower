@@ -1,6 +1,7 @@
 package net.quetzi.bluepower;
 
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.crafting.CraftingManager;
 import net.minecraftforge.common.config.Configuration;
 import net.quetzi.bluepower.init.Blocks;
 import net.quetzi.bluepower.init.Config;
@@ -25,7 +26,7 @@ public class BluePower {
 //    @SidedProxy(clientSide = "ClientProxy", serverSide = "CommonProxy")
     public static CommonProxy proxy;
     
-    public static CreativeTabs creativeTab = new CreativeTabBluePower();
+    public static CreativeTabs creativeTab = CreativeTabs.tabBlock;//new CreativeTabBluePower();
 
     @EventHandler
     public void PreInit(FMLPreInitializationEvent event) {
@@ -45,7 +46,7 @@ public class BluePower {
     }
     @EventHandler
     public void Init(FMLInitializationEvent event) {
-        Recipes.init();
+        Recipes.init(CraftingManager.getInstance());
     }
     @EventHandler
     public void PostInit(FMLPostInitializationEvent event) {

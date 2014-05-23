@@ -1,6 +1,7 @@
 package net.quetzi.bluepower.init;
 
 import net.minecraft.block.Block;
+import net.minecraftforge.oredict.OreDictionary;
 import net.quetzi.bluepower.blocks.BlockGemOre;
 import net.quetzi.bluepower.blocks.BlockNikoliteBlock;
 import net.quetzi.bluepower.blocks.BlockNikoliteOre;
@@ -50,6 +51,14 @@ public class Blocks {
         GameRegistry.registerBlock(new BlockStoneOre(Refs.RUBYBLOCK_NAME), Refs.RUBYBLOCK_NAME);
         GameRegistry.registerBlock(new BlockStoneOre(Refs.SAPPHIREBLOCK_NAME), Refs.SAPPHIREBLOCK_NAME);
         GameRegistry.registerBlock(new BlockStoneOre(Refs.MALACHITEBLOCK_NAME), Refs.MALACHITEBLOCK_NAME);
-        GameRegistry.registerBlock(new BlockNikoliteBlock(Refs.NIKOLITEBLOCK_NAME), Refs.NIKOLITEBLOCK_NAME);    
+        GameRegistry.registerBlock(new BlockNikoliteBlock(Refs.NIKOLITEBLOCK_NAME), Refs.NIKOLITEBLOCK_NAME);
+        
+        OreDictionary.registerOre("oreCopper", Blocks.copper_ore);
+        OreDictionary.registerOre("oreTin", Blocks.tin_ore);
+        OreDictionary.registerOre("oreSilver", Blocks.silver_ore);
+        OreDictionary.registerOre("oreRuby", Blocks.ruby_ore);
+        OreDictionary.registerOre("oreMalachite", Blocks.malachite_ore);
+        OreDictionary.registerOre("oreSapphire", Blocks.sapphire_ore);
+        OreDictionary.registerOre("oreNikolite", Blocks.nikolite_ore);
     }
 }

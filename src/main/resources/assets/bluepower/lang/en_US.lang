@@ -1,14 +1,23 @@
-tile.bluepower:basalt.name=Basalt
-tile.bluepower:marble.name=Marble
-tile.bluepower:basalt_brick.name=Basalt Brick
-tile.bluepower:marble_brick.name=Marble Brick
-tile.bluepower:basalt_cobble.name=Basalt Cobble
-tile.bluepower:alloy_furnace.name=Alloy Furnace
-tile.bluepower:malachite_ore.name=Malachite Ore
-tile.bluepower:ruby_ore.name=Ruby Ore
-tile.bluepower:sapphire_ore.name=Sapphire Ore
-tile.bluepower:nikolite_ore.name=Nikolite Ore
-tile.bluepower:malachite_block.name=Malachite Block
-tile.bluepower:sapphire_block.name=Sapphire Block
-tile.bluepower:ruby_block.name=Ruby Block
+tile.basalt.name=Basalt
+tile.marble.name=Marble
+tile.basalt_brick.name=Basalt Brick
+tile.marble_brick.name=Marble Brick
+tile.basalt_cobble.name=Basalt Cobble
+tile.alloy_furnace.name=Alloy Furnace
+tile.malachite_ore.name=Malachite Ore
+tile.ruby_ore.name=Ruby Ore
+tile.sapphire_ore.name=Sapphire Ore
+tile.nikolite_ore.name=Nikolite Ore
+tile.malachite_block.name=Malachite Block
+tile.sapphire_block.name=Sapphire Block
+tile.nikolite_block=Nikolite Block
+tile.ruby_block.name=Ruby Block
+tile.copper_ore.name=Copper Ore
+tile.silver_ore.name=Silver Ore
+tile.tin_ore.name=Tin Ore
+
+item.ruby.name=Ruby
+item.malachite.name=Malachite
+item.sapphire.name=Sapphire
+ite.nikolite.name=Nikolite
 
