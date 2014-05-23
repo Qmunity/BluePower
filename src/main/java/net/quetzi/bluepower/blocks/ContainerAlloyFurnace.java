@@ -1,16 +1,16 @@
 package net.quetzi.bluepower.blocks;
 
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
-import net.quetzi.bluepower.BluePower;
+import net.quetzi.bluepower.init.CustomTabs;
 import net.quetzi.bluepower.references.Refs;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class ContainerAlloyFurnace extends BlockContainer {
     public static boolean isActivated = false;
@@ -18,7 +18,7 @@ public class ContainerAlloyFurnace extends BlockContainer {
         super(Material.rock);
         this.setHardness(1.5F);
         this.setResistance(20.0F);
-        this.setCreativeTab(BluePower.creativeTab);
+        this.setCreativeTab(CustomTabs.tabBluePowerMachines);
     }
     
     private static IIcon iconSide;

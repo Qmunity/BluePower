@@ -21,3 +21,6 @@ item.malachite.name=Malachite
 item.sapphire.name=Sapphire
 ite.nikolite.name=Nikolite
 
+
+itemGroup.tabBluePowerMachines=BluePower Machines
+itemGroup.tabBluePowerBlocks=BluePower Blocks
