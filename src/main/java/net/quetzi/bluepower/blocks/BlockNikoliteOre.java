@@ -6,14 +6,14 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.Item;
-import net.quetzi.bluepower.BluePower;
+import net.quetzi.bluepower.init.CustomTabs;
 import net.quetzi.bluepower.references.Refs;
 
 public class BlockNikoliteOre extends Block {
     public BlockNikoliteOre(String name) {
         super(Material.rock);
         this.textureName = Refs.MODID + ":" + name;
-        this.setCreativeTab(BluePower.creativeTab);
+        this.setCreativeTab(CustomTabs.tabBluePowerBlocks);
         this.setStepSound(soundTypeStone);
         this.setHardness(1.9F);
         this.setResistance(10.0F);
