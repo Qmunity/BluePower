@@ -7,7 +7,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.Item;
 import net.minecraft.world.IBlockAccess;
-import net.quetzi.bluepower.BluePower;
+import net.quetzi.bluepower.init.CustomTabs;
 import net.quetzi.bluepower.items.ItemMalachite;
 import net.quetzi.bluepower.items.ItemRuby;
 import net.quetzi.bluepower.items.ItemSapphire;
@@ -16,7 +16,7 @@ import net.quetzi.bluepower.references.Refs;
 public class BlockGemOre extends Block {
     public BlockGemOre(String type) {
         super(Material.iron);
-        this.setCreativeTab(BluePower.creativeTab);
+        this.setCreativeTab(CustomTabs.tabBluePowerBlocks);
         this.setStepSound(soundTypeStone);
         this.setHardness(2.5F);
         this.setResistance(10.0F);

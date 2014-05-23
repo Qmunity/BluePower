@@ -12,3 +12,6 @@ tile.bluepower:malachite_block.name=Malachite Block
 tile.bluepower:sapphire_block.name=Sapphire Block
 tile.bluepower:ruby_block.name=Ruby Block
 
+
+itemGroup.tabBluePowerMachines=BluePower Machines
+itemGroup.tabBluePowerBlocks=BluePower Blocks

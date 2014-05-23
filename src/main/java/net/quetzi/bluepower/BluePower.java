@@ -1,9 +1,9 @@
 package net.quetzi.bluepower;
 
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraftforge.common.config.Configuration;
 import net.quetzi.bluepower.init.Blocks;
 import net.quetzi.bluepower.init.Config;
+import net.quetzi.bluepower.init.CustomTabs;
 import net.quetzi.bluepower.init.Items;
 import net.quetzi.bluepower.init.Recipes;
 import net.quetzi.bluepower.references.Refs;
@@ -25,7 +25,7 @@ public class BluePower {
 //    @SidedProxy(clientSide = "ClientProxy", serverSide = "CommonProxy")
     public static CommonProxy proxy;
     
-    public static CreativeTabs creativeTab = new CreativeTabBluePower();
+    //public static CreativeTabs creativeTab = new CreativeTabBluePower();
 
     @EventHandler
     public void PreInit(FMLPreInitializationEvent event) {
@@ -34,6 +34,7 @@ public class BluePower {
         Logger log = event.getModLog();
         Configuration config = new Configuration(event.getSuggestedConfigurationFile());
         
+        CustomTabs.init();
         // Load configs
         config.load();
         Config.setUp(config);
