@@ -2,6 +2,7 @@ package net.quetzi.bluepower.world;
 
 import java.util.Random;
 
+import net.minecraft.block.Block;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.feature.WorldGenMinable;
@@ -17,58 +18,35 @@ public class WorldGenerationHandler implements IWorldGenerator {
             return;
         }
         Random rand = new Random(Integer.valueOf(chunkX).hashCode() + Integer.valueOf(chunkZ).hashCode());
-        for (int i = 0; i < 20; i++) {
-            if (i<2) {
-                if (Config.generateMalachite) {
-                    int x = chunkX * 16 + rand.nextInt(16);
-                    int y = rand.nextInt(Config.maxMalachiteY - Config.minMalachiteY) + Config.minMalachiteY;
-                    int z = chunkZ * 16 + rand.nextInt(16);
-                    new WorldGenMinable(Blocks.malachite_ore, 7).generate(world, rand, x, y, z);
-                }
-                if (Config.generateRuby) {
-                    int x = chunkX * 16 + rand.nextInt(16);
-                    int y = rand.nextInt(Config.maxRubyY - Config.minRubyY) + Config.minRubyY;
-                    int z = chunkZ * 16 + rand.nextInt(16);
-                    new WorldGenMinable(Blocks.ruby_ore, 7).generate(world, rand, x, y, z);
-                }
-                if (Config.generateSapphire) {
-                    int x = chunkX * 16 + rand.nextInt(16);
-                    int y = rand.nextInt(Config.maxSapphireY - Config.minSapphireY) + Config.minSapphireY;
-                    int z = chunkZ * 16 + rand.nextInt(16);
-                    new WorldGenMinable(Blocks.sapphire_ore, 7).generate(world, rand, x, y, z);
-                }
-            }
-            if (i<4) {
-                if (Config.generateSilver) {
-                    int x = chunkX * 16 + rand.nextInt(16);
-                    int y = rand.nextInt(Config.maxSilverY - Config.minSilverY) + Config.minSilverY;
-                    int z = chunkZ * 16 + rand.nextInt(16);
-                    new WorldGenMinable(Blocks.silver_ore, 8).generate(world, rand, x, y, z);
-                }
-                if (Config.generateNikolite) {
-                    int x = chunkX * 16 + rand.nextInt(16);
-                    int y = rand.nextInt(Config.maxNikoliteY - Config.minNikoliteY) + Config.minNikoliteY;
-                    int z = chunkZ * 16 + rand.nextInt(16);
-                    new WorldGenMinable(Blocks.nikolite_ore, 10).generate(world, rand, x, y, z);
-                }
-            }
-    
-            if (i<10) {
-                if (Config.generateTin) {
-                    int x = chunkX * 16 + rand.nextInt(16);
-                    int y = rand.nextInt(Config.maxTinY - Config.minTinY) + Config.minTinY;
-                    int z = chunkZ * 16 + rand.nextInt(16);
-                    new WorldGenMinable(Blocks.tin_ore, 8).generate(world, rand, x, y, z);
-                }
-            }
-            if (i<20) {
-                if (Config.generateCopper) {
-                    int x = chunkX * 16 + rand.nextInt(16);
-                    int y = rand.nextInt(Config.maxCopperY - Config.minCopperY) + Config.minCopperY;
-                    int z = chunkZ * 16 + rand.nextInt(16);
-                    new WorldGenMinable(Blocks.copper_ore, 8).generate(world, rand, x, y, z);
-                }
-            }
+        if (Config.generateMalachite) {
+            this.addOreToGenerate(Config.veinCountMalachite, Config.veinSizeMalachite, Config.minMalachiteY, Config.maxMalachiteY, Blocks.malachite_ore, world, chunkX, chunkZ);
+        }
+        if (Config.generateRuby) {
+            this.addOreToGenerate(Config.veinCountRuby, Config.veinSizeRuby, Config.minRubyY, Config.maxRubyY, Blocks.ruby_ore, world, chunkX, chunkZ);
+        }
+        if (Config.generateSapphire) {
+            this.addOreToGenerate(Config.veinCountSapphire, Config.veinSizeSapphire, Config.minSapphireY, Config.maxSapphireY, Blocks.sapphire_ore, world, chunkX, chunkZ);
+        }
+        if (Config.generateSilver) {
+            this.addOreToGenerate(Config.veinCountSilver, Config.veinSizeSilver, Config.minSilverY, Config.maxSilverY, Blocks.silver_ore, world, chunkX, chunkZ);
+        }
+        if (Config.generateNikolite) {
+            this.addOreToGenerate(Config.veinCountNikolite, Config.veinSizeNikolite, Config.minNikoliteY, Config.maxNikoliteY, Blocks.nikolite_ore, world, chunkX, chunkZ);
+        }
+        if (Config.generateTin) {
+            this.addOreToGenerate(Config.veinCountTin, Config.veinSizeTin, Config.minTinY, Config.maxTinY, Blocks.tin_ore, world, chunkX, chunkZ);
+        }
+        if (Config.generateCopper) {
+            this.addOreToGenerate(Config.veinCountCopper, Config.veinSizeCopper, Config.minCopperY, Config.maxCopperY, Blocks.copper_ore, world, chunkX, chunkZ);
+        }
+    }
+    private void addOreToGenerate(int veinCount, int veinSize, int minY, int maxY, Block block, World world, int chunkX, int chunkZ) {
+        Random rand = new Random(Integer.valueOf(chunkX).hashCode() + Integer.valueOf(chunkZ).hashCode());
+        for (int i=0;i<veinCount;i++){
+            int x = chunkX * 16 + rand.nextInt(16);
+            int y = rand.nextInt(maxY - minY) + minY;
+            int z = chunkZ * 16 + rand.nextInt(16);
+            new WorldGenMinable(block, veinSize).generate(world,  rand,  x,  y, z);
         }
     }
 }

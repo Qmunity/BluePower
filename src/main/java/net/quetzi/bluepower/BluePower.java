@@ -1,6 +1,5 @@
 package net.quetzi.bluepower;
 
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraftforge.common.config.Configuration;
 import net.quetzi.bluepower.init.Blocks;
@@ -9,6 +8,7 @@ import net.quetzi.bluepower.init.CustomTabs;
 import net.quetzi.bluepower.init.Items;
 import net.quetzi.bluepower.init.Recipes;
 import net.quetzi.bluepower.references.Refs;
+import net.quetzi.bluepower.world.WorldGenerationHandler;
 
 import org.apache.logging.log4j.Logger;
 
@@ -19,6 +19,7 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
+import cpw.mods.fml.common.registry.GameRegistry;
 
 @Mod(modid = Refs.MODID, name = Refs.NAME)
 public class BluePower {
@@ -50,6 +51,7 @@ public class BluePower {
     }
     @EventHandler
     public void PostInit(FMLPostInitializationEvent event) {
+        GameRegistry.registerWorldGenerator(new WorldGenerationHandler(), 0);
         // register events
     }
     @EventHandler
