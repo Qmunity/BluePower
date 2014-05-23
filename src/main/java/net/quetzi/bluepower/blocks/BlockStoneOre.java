@@ -26,7 +26,7 @@ public class BlockStoneOre extends Block {
     }
 
     public Item getItemDropped(int par1, Random par2, int par3) {
-        if (this.getUnlocalizedName().substring(5) == Refs.BASALT_NAME) {
+        if (this.getUnlocalizedName().substring(5).matches(Refs.BASALT_NAME)) {
             return Item.getItemFromBlock(Block.getBlockFromName(Refs.MODID + ":"
                     + Refs.BASALTCOBBLE_NAME));
         }

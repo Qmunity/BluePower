@@ -8,7 +8,9 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.Item;
 import net.minecraft.world.IBlockAccess;
 import net.quetzi.bluepower.BluePower;
-import net.quetzi.bluepower.init.Items;
+import net.quetzi.bluepower.items.ItemMalachite;
+import net.quetzi.bluepower.items.ItemRuby;
+import net.quetzi.bluepower.items.ItemSapphire;
 import net.quetzi.bluepower.references.Refs;
 
 public class BlockGemOre extends Block {
@@ -23,14 +25,14 @@ public class BlockGemOre extends Block {
     }
     public Item getItemDropped(int par1, Random par2, int par3) {
         Item dropped =  null;
-        if (this.getUnlocalizedName().substring(5) == Refs.RUBYORE_NAME) {
-            dropped = (Item) Items.ruby;
+        if (this.getUnlocalizedName().substring(5).matches(Refs.RUBYORE_NAME)) {
+            return new ItemRuby();
         }
-        if (this.getUnlocalizedName().substring(5) == Refs.SAPPHIREORE_NAME) {
-            dropped = (Item) Items.sapphire;
+        if (this.getUnlocalizedName().substring(5).matches(Refs.SAPPHIREORE_NAME)) {
+            return new ItemSapphire();
         }
-        if (this.getUnlocalizedName().substring(5) == Refs.MALACHITEORE_NAME) {
-            dropped = (Item) Items.malachite;
+        if (this.getUnlocalizedName().substring(5).matches(Refs.MALACHITEORE_NAME)) {
+            return new ItemMalachite();
         }
         return dropped;
     }

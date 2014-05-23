@@ -18,10 +18,10 @@ public class Refs {
     public static final String BASALTBRICK_NAME = "basalt_brick";
     public static final String MARBLEBRICK_NAME = "marble_brick";
     public static final String ALLOYFURNACE_NAME = "alloyfurnace";
-    public static final String MALACHITEORE_NAME = "malachiteore";
-    public static final String RUBYORE_NAME = "rubyore";
-    public static final String SAPPHIREORE_NAME = "sapphireore";
-    public static final String NIKOLITEORE_NAME = "nikoliteore";
+    public static final String MALACHITEORE_NAME = "malachite_ore";
+    public static final String RUBYORE_NAME = "ruby_ore";
+    public static final String SAPPHIREORE_NAME = "sapphire_ore";
+    public static final String NIKOLITEORE_NAME = "nikolite_ore";
     public static final String MALACHITEBLOCK_NAME = "malachite_block";
     public static final String SAPPHIREBLOCK_NAME = "sapphire_block";
     public static final String RUBYBLOCK_NAME = "ruby_block";

@@ -21,10 +21,11 @@ public class BlockNikoliteOre extends Block {
     }
 
     public Item getItemDropped(int par1, Random par2, int par3) {
-        return Item.getItemFromBlock(Block.getBlockFromName(Refs.MODID + ":" + this.getUnlocalizedName().substring(5)));
+        return Item.getItemFromBlock(Block.getBlockFromName(Refs.MODID + ":" + Refs.ITEMNIKOLITE_NAME));
     }
     public int quantityDropped() {
-        return 1;
+        int quantity = new Random().nextInt(2);
+        return quantity + 2;
     }
     public void registerBlockIcon(IIconRegister iconRegister) {
         iconRegister.registerIcon(Refs.MODID + ":" + this.getUnlocalizedName().substring(5));
