@@ -17,36 +17,36 @@ public class WorldGenerationHandler implements IWorldGenerator {
         if (!world.provider.isSurfaceWorld()) {
             return;
         }
-        Random rand = new Random(Integer.valueOf(chunkX).hashCode() + Integer.valueOf(chunkZ).hashCode());
-        if (Config.generateMalachite) {
+        if (Config.generateMalachite == true) {
             this.addOreToGenerate(Config.veinCountMalachite, Config.veinSizeMalachite, Config.minMalachiteY, Config.maxMalachiteY, Blocks.malachite_ore, world, chunkX, chunkZ);
         }
-        if (Config.generateRuby) {
+        if (Config.generateRuby == true) {
             this.addOreToGenerate(Config.veinCountRuby, Config.veinSizeRuby, Config.minRubyY, Config.maxRubyY, Blocks.ruby_ore, world, chunkX, chunkZ);
         }
-        if (Config.generateSapphire) {
+        if (Config.generateSapphire == true) {
             this.addOreToGenerate(Config.veinCountSapphire, Config.veinSizeSapphire, Config.minSapphireY, Config.maxSapphireY, Blocks.sapphire_ore, world, chunkX, chunkZ);
         }
-        if (Config.generateSilver) {
+        if (Config.generateSilver == true) {
             this.addOreToGenerate(Config.veinCountSilver, Config.veinSizeSilver, Config.minSilverY, Config.maxSilverY, Blocks.silver_ore, world, chunkX, chunkZ);
         }
-        if (Config.generateNikolite) {
+        if (Config.generateNikolite == true) {
             this.addOreToGenerate(Config.veinCountNikolite, Config.veinSizeNikolite, Config.minNikoliteY, Config.maxNikoliteY, Blocks.nikolite_ore, world, chunkX, chunkZ);
         }
-        if (Config.generateTin) {
+        if (Config.generateTin == true) {
             this.addOreToGenerate(Config.veinCountTin, Config.veinSizeTin, Config.minTinY, Config.maxTinY, Blocks.tin_ore, world, chunkX, chunkZ);
         }
-        if (Config.generateCopper) {
+        if (Config.generateCopper == true) {
             this.addOreToGenerate(Config.veinCountCopper, Config.veinSizeCopper, Config.minCopperY, Config.maxCopperY, Blocks.copper_ore, world, chunkX, chunkZ);
         }
     }
     private void addOreToGenerate(int veinCount, int veinSize, int minY, int maxY, Block block, World world, int chunkX, int chunkZ) {
         Random rand = new Random(Integer.valueOf(chunkX).hashCode() + Integer.valueOf(chunkZ).hashCode());
         for (int i=0;i<veinCount;i++){
+            System.out.println("Generating some " + block.getUnlocalizedName().substring(5));
             int x = chunkX * 16 + rand.nextInt(16);
             int y = rand.nextInt(maxY - minY) + minY;
             int z = chunkZ * 16 + rand.nextInt(16);
-            new WorldGenMinable(block, veinSize).generate(world,  rand,  x,  y, z);
+            (new WorldGenMinable(block, veinSize)).generate(world,  rand,  x,  y, z);
         }
     }
 }

@@ -43,7 +43,7 @@ public class BluePower {
         
         Blocks.init();
         Items.init();
-        
+        GameRegistry.registerWorldGenerator(new WorldGenerationHandler(), 0);
     }
     @EventHandler
     public void Init(FMLInitializationEvent event) {
@@ -51,7 +51,7 @@ public class BluePower {
     }
     @EventHandler
     public void PostInit(FMLPostInitializationEvent event) {
-        GameRegistry.registerWorldGenerator(new WorldGenerationHandler(), 0);
+        
         // register events
     }
     @EventHandler

@@ -21,13 +21,13 @@ public class Blocks {
     public static final Block basalt_brick = (Block)Block.blockRegistry.getObject(Refs.BASALTBRICK_NAME);
     public static final Block marble_brick = (Block)Block.blockRegistry.getObject(Refs.MARBLEBRICK_NAME);
     
-    public static final Block nikolite_ore = (Block)Block.blockRegistry.getObject(Refs.NIKOLITEORE_NAME);
-    public static final Block ruby_ore = (Block)Block.blockRegistry.getObject(Refs.RUBYORE_NAME);
-    public static final Block sapphire_ore = (Block)Block.blockRegistry.getObject(Refs.SAPPHIREORE_NAME);
-    public static final Block malachite_ore = (Block)Block.blockRegistry.getObject(Refs.MALACHITEORE_NAME);
-    public static final Block copper_ore = (Block)Block.blockRegistry.getObject(Refs.COPPERORE_NAME);
-    public static final Block silver_ore = (Block)Block.blockRegistry.getObject(Refs.SILVERORE_NAME);
-    public static final Block tin_ore = (Block)Block.blockRegistry.getObject(Refs.TINORE_NAME);
+    public static final Block nikolite_ore = new BlockNikoliteOre(Refs.NIKOLITEORE_NAME);
+    public static final Block ruby_ore = new BlockGemOre(Refs.RUBYORE_NAME);
+    public static final Block sapphire_ore = new BlockGemOre(Refs.SAPPHIREORE_NAME);
+    public static final Block malachite_ore = new BlockGemOre(Refs.MALACHITEORE_NAME);
+    public static final Block copper_ore = new BlockStoneOre(Refs.COPPERORE_NAME);
+    public static final Block silver_ore = new BlockStoneOre(Refs.SILVERORE_NAME);
+    public static final Block tin_ore = new BlockStoneOre(Refs.TINORE_NAME);
     
     public static final Block ruby_block = (Block)Block.blockRegistry.getObject(Refs.RUBYBLOCK_NAME);
     public static final Block sapphire_block = (Block)Block.blockRegistry.getObject(Refs.SAPPHIREBLOCK_NAME);
