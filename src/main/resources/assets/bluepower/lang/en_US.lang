@@ -15,12 +15,32 @@ tile.ruby_block.name=Ruby Block
 tile.copper_ore.name=Copper Ore
 tile.silver_ore.name=Silver Ore
 tile.tin_ore.name=Tin Ore
+tile.copper_block.name=Copper Block
+tile.silver_block.name=Silver Block
+tile.tin_block.name=Tin Block
+
+tile.alloy_furnace.name=Alloy Furnace
 
 item.ruby.name=Ruby
 item.malachite.name=Malachite
 item.sapphire.name=Sapphire
-ite.nikolite.name=Nikolite
+item.nikolite.name=Nikolite
+item.copper_ingot.name=Copper Ingot
+item.silver_ingot.name=Silver Ingot
+item.tin_ingot.name=Tin Ingot
 
+item.ruby_sword.name=Ruby Sword
+item.ruby_spade.name=Ruby Spade
+item.ruby_axe.name=Ruby Axe
+item.ruby_pickaxe.name=Ruby Pickaxe
+item.sapphire_sword.name=Sapphire Sword
+item.sapphire_spade.name=Sapphire Spade
+item.sapphire_axe.name=Sapphire Axe
+item.sapphire_pickaxe.name=Sapphire Pickaxe
+item.malachite_sword.name=Malachite Sword
+item.malachite_spade.name=Malachite Spade
+item.malachite_axe.name=Malachite Axe
+item.malachite_pickaxe.name=Malachite Pickaxe
 
 itemGroup.tabBluePowerMachines=BluePower Machines
 itemGroup.tabBluePowerBlocks=BluePower Blocks

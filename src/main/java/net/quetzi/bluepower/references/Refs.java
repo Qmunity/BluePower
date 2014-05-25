@@ -35,4 +35,23 @@ public class Refs {
     public static final String COPPERORE_NAME = "copper_ore";
     public static final String SILVERORE_NAME = "silver_ore";
     public static final String TINORE_NAME = "tin_ore";
+    public static final String COPPERBLOCK_NAME = "copper_block";
+    public static final String SILVERBLOCK_NAME = "silver_block";
+    public static final String TINBLOCK_NAME = "tin_block";
+    public static final String ITEMCOPPERINGOT_NAME = "copper_ingot";
+    public static final String ITEMSILVERINGOT_NAME = "silver_ingot";
+    public static final String ITEMTININGOT_NAME = "tin_ingot";
+    
+    public static final String RUBYAXE_NAME = "ruby_axe";
+    public static final String RUBYSWORD_NAME = "ruby_sword";
+    public static final String RUBYPICKAXE_NAME = "ruby_pickaxe";
+    public static final String RUBYSPADE_NAME = "ruby_spade";
+    public static final String SAPPHIREAXE_NAME = "sapphire_axe";
+    public static final String SAPPHIRESWORD_NAME = "sapphire_sword";
+    public static final String SAPPHIREPICKAXE_NAME = "sapphire_pickaxe";
+    public static final String SAPPHIRESPADE_NAME = "sapphire_spade";
+    public static final String MALACHITEAXE_NAME = "malachite_axe";
+    public static final String MALACHITESWORD_NAME = "malachite_sword";
+    public static final String MALACHITEPICKAXE_NAME = "malachite_pickaxe";
+    public static final String MALACHITESPADE_NAME = "malachite_spade";
 }

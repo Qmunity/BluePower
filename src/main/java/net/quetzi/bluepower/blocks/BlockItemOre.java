@@ -8,13 +8,11 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.Item;
 import net.minecraft.world.IBlockAccess;
 import net.quetzi.bluepower.init.CustomTabs;
-import net.quetzi.bluepower.items.ItemMalachite;
-import net.quetzi.bluepower.items.ItemRuby;
-import net.quetzi.bluepower.items.ItemSapphire;
 import net.quetzi.bluepower.references.Refs;
 
-public class BlockGemOre extends Block {
-    public BlockGemOre(String type) {
+public class BlockItemOre extends Block {
+    private Item itemToDrop;
+    public BlockItemOre(String type, Item item) {
         super(Material.iron);
         this.setCreativeTab(CustomTabs.tabBluePowerBlocks);
         this.setStepSound(soundTypeStone);
@@ -22,19 +20,10 @@ public class BlockGemOre extends Block {
         this.setResistance(10.0F);
         this.textureName = Refs.MODID + ":" + type;
         this.setBlockName(type);
+        itemToDrop = item;
     }
     public Item getItemDropped(int par1, Random par2, int par3) {
-        Item dropped =  null;
-        if (this.getUnlocalizedName().substring(5).matches(Refs.RUBYORE_NAME)) {
-            return new ItemRuby();
-        }
-        if (this.getUnlocalizedName().substring(5).matches(Refs.SAPPHIREORE_NAME)) {
-            return new ItemSapphire();
-        }
-        if (this.getUnlocalizedName().substring(5).matches(Refs.MALACHITEORE_NAME)) {
-            return new ItemMalachite();
-        }
-        return dropped;
+        return this.itemToDrop;
     }
     public int quantityDropped() {
         int quantity = new Random().nextInt(2);

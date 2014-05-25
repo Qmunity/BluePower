@@ -2,10 +2,10 @@ package net.quetzi.bluepower;
 
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraftforge.common.config.Configuration;
-import net.quetzi.bluepower.init.Blocks;
+import net.quetzi.bluepower.init.BPBlocks;
 import net.quetzi.bluepower.init.Config;
 import net.quetzi.bluepower.init.CustomTabs;
-import net.quetzi.bluepower.init.Items;
+import net.quetzi.bluepower.init.BPItems;
 import net.quetzi.bluepower.init.Recipes;
 import net.quetzi.bluepower.references.Refs;
 import net.quetzi.bluepower.world.WorldGenerationHandler;
@@ -41,8 +41,8 @@ public class BluePower {
         Config.setUp(config);
         config.save();
         
-        Blocks.init();
-        Items.init();
+        BPBlocks.init();
+        BPItems.init();
         GameRegistry.registerWorldGenerator(new WorldGenerationHandler(), 0);
     }
     @EventHandler
