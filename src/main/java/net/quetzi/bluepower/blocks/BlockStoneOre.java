@@ -14,11 +14,16 @@ public class BlockStoneOre extends Block {
     public BlockStoneOre(String name) {
         super(Material.rock);
         this.setBlockName(name);
-        this.setHardness(1.9F);
+        this.setHardness(3.0F);
         if (name == Refs.BASALT_NAME) {
             this.setResistance(25.0F);
+            this.setHarvestLevel("pickaxe",1);
+        } else if (name == Refs.MARBLE_NAME) {
+            this.setResistance(1.0F);
+            this.setHarvestLevel("pickaxe",1);
         } else {
-            this.setResistance(10.0F);
+            this.setResistance(5.0F);
+            this.setHarvestLevel("pickaxe", 2);
         }
         this.textureName = Refs.MODID + ":" + name;
         this.setCreativeTab(CustomTabs.tabBluePowerBlocks);

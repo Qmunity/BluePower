@@ -1,6 +1,8 @@
 package net.quetzi.bluepower.init;
 
 import net.minecraft.item.Item;
+import net.minecraft.item.Item.ToolMaterial;
+import net.minecraftforge.common.util.EnumHelper;
 import net.quetzi.bluepower.items.ItemGem;
 import net.quetzi.bluepower.items.ItemGemAxe;
 import net.quetzi.bluepower.items.ItemGemPickaxe;
@@ -12,6 +14,8 @@ import net.quetzi.bluepower.references.Refs;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public class BPItems{
+    private static ToolMaterial gemMaterial = EnumHelper.addToolMaterial("GEM", 2, 750, 6.0F, 2.0F, 10);
+    
     public static final Item malachite = new ItemGem(Refs.ITEMMALACHITE_NAME);
     public static final Item sapphire = new ItemGem(Refs.ITEMSAPPHIRE_NAME);
     public static final Item ruby = new ItemGem(Refs.ITEMRUBY_NAME);
@@ -20,18 +24,18 @@ public class BPItems{
     public static final Item silver_ingot = new ItemIngot(Refs.ITEMSILVERINGOT_NAME);
     public static final Item tin_ingot = new ItemIngot(Refs.ITEMTININGOT_NAME);
     
-    public static final Item ruby_axe = new ItemGemAxe(Refs.RUBYAXE_NAME);
-    public static final Item ruby_sword = new ItemGemSword(Refs.RUBYSWORD_NAME);
-    public static final Item ruby_pickaxe = new ItemGemPickaxe(Refs.RUBYPICKAXE_NAME);
-    public static final Item ruby_spade = new ItemGemSpade(Refs.RUBYSPADE_NAME);    
-    public static final Item sapphire_axe = new ItemGemAxe(Refs.SAPPHIREAXE_NAME);
-    public static final Item sapphire_sword = new ItemGemSword(Refs.SAPPHIRESWORD_NAME);
-    public static final Item sapphire_pickaxe = new ItemGemPickaxe(Refs.SAPPHIREPICKAXE_NAME);
-    public static final Item sapphire_spade = new ItemGemSpade(Refs.SAPPHIRESPADE_NAME);
-    public static final Item malachite_axe = new ItemGemAxe(Refs.RUBYAXE_NAME);
-    public static final Item malachite_sword = new ItemGemSword(Refs.MALACHITESWORD_NAME);
-    public static final Item malachite_pickaxe = new ItemGemPickaxe(Refs.MALACHITEPICKAXE_NAME);
-    public static final Item malachite_spade = new ItemGemSpade(Refs.MALACHITESPADE_NAME);
+    public static final Item ruby_axe = new ItemGemAxe(gemMaterial,Refs.RUBYAXE_NAME);
+    public static final Item ruby_sword = new ItemGemSword(gemMaterial,Refs.RUBYSWORD_NAME);
+    public static final Item ruby_pickaxe = new ItemGemPickaxe(gemMaterial,Refs.RUBYPICKAXE_NAME);
+    public static final Item ruby_spade = new ItemGemSpade(gemMaterial,Refs.RUBYSPADE_NAME);    
+    public static final Item sapphire_axe = new ItemGemAxe(gemMaterial,Refs.SAPPHIREAXE_NAME);
+    public static final Item sapphire_sword = new ItemGemSword(gemMaterial,Refs.SAPPHIRESWORD_NAME);
+    public static final Item sapphire_pickaxe = new ItemGemPickaxe(gemMaterial,Refs.SAPPHIREPICKAXE_NAME);
+    public static final Item sapphire_spade = new ItemGemSpade(gemMaterial,Refs.SAPPHIRESPADE_NAME);
+    public static final Item malachite_axe = new ItemGemAxe(gemMaterial,Refs.MALACHITEAXE_NAME);
+    public static final Item malachite_sword = new ItemGemSword(gemMaterial,Refs.MALACHITESWORD_NAME);
+    public static final Item malachite_pickaxe = new ItemGemPickaxe(gemMaterial,Refs.MALACHITEPICKAXE_NAME);
+    public static final Item malachite_spade = new ItemGemSpade(gemMaterial,Refs.MALACHITESPADE_NAME);
     
     public static void init(){
         GameRegistry.registerItem(malachite, Refs.ITEMMALACHITE_NAME);
