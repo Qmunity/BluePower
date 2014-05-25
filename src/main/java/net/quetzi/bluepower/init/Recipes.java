@@ -2,6 +2,7 @@ package net.quetzi.bluepower.init;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.quetzi.bluepower.init.BPBlocks;
 import net.minecraft.item.crafting.CraftingManager;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -13,11 +14,27 @@ public class Recipes {
         GameRegistry.addSmelting(BPBlocks.tin_ore, new ItemStack(BPItems.tin_ingot), 0.5F);
         GameRegistry.addSmelting(BPBlocks.silver_ore, new ItemStack(BPItems.silver_ingot), 0.7F);
         
-        craftManager.addRecipe(new ItemStack(BPBlocks.basalt_brick,4), new Object[] {"##", "##", '#', BPBlocks.basalt});
-        craftManager.addRecipe(new ItemStack(BPBlocks.marble_brick,4), new Object[] {"##", "##", '#', BPBlocks.marble});
-        craftManager.addRecipe(new ItemStack(BPBlocks.copper_block,1), new Object[] {"###", "###", "###", '#', BPItems.copper_ingot});
-        craftManager.addRecipe(new ItemStack(BPBlocks.silver_block,1), new Object[] {"###", "###", "###", '#', BPItems.silver_ingot});
-        craftManager.addRecipe(new ItemStack(BPBlocks.tin_block,1), new Object[] {"###", "###", "###", '#', BPItems.tin_ingot});
+        craftManager.addRecipe(new ItemStack(BPBlocks.basalt_brick, 4), new Object[] {"##", "##", '#', BPBlocks.basalt});
+        craftManager.addRecipe(new ItemStack(BPBlocks.marble_brick, 4), new Object[] {"##", "##", '#', BPBlocks.marble});
+        craftManager.addRecipe(new ItemStack(BPBlocks.copper_block, 1), new Object[] {"###", "###", "###", '#', BPItems.copper_ingot});
+        craftManager.addRecipe(new ItemStack(BPBlocks.silver_block, 1), new Object[] {"###", "###", "###", '#', BPItems.silver_ingot});
+        craftManager.addRecipe(new ItemStack(BPBlocks.tin_block, 1), new Object[] {"###", "###", "###", '#', BPItems.tin_ingot});
+        
+        craftManager.addRecipe(new ItemStack(BPItems.ruby_axe, 1), new Object[] {"GG ", "GS ", " S ", 'G', BPItems.ruby, 'S', Items.stick});
+        craftManager.addRecipe(new ItemStack(BPItems.ruby_axe, 1), new Object[] {" GG", " SG", " S ", 'G', BPItems.ruby, 'S', Items.stick});
+        craftManager.addRecipe(new ItemStack(BPItems.ruby_pickaxe, 1), new Object[] {"GGG", " S ", " S ", 'G', BPItems.ruby, 'S', Items.stick});
+        craftManager.addRecipe(new ItemStack(BPItems.ruby_sword, 1), new Object[] {"G", "G", "S", 'G', BPItems.ruby, 'S', Items.stick});
+        craftManager.addRecipe(new ItemStack(BPItems.ruby_spade, 1), new Object[] {"G", "S", "S", 'G', BPItems.ruby, 'S', Items.stick});
+        craftManager.addRecipe(new ItemStack(BPItems.sapphire_axe, 1), new Object[] {"GG ", "GS ", " S ", 'G', BPItems.sapphire, 'S', Items.stick});
+        craftManager.addRecipe(new ItemStack(BPItems.sapphire_axe, 1), new Object[] {" GG", " SG", " S ", 'G', BPItems.sapphire, 'S', Items.stick});
+        craftManager.addRecipe(new ItemStack(BPItems.sapphire_pickaxe, 1), new Object[] {"GGG", " S ", " S ", 'G', BPItems.sapphire, 'S', Items.stick});
+        craftManager.addRecipe(new ItemStack(BPItems.sapphire_sword, 1), new Object[] {"G", "G", "S", 'G', BPItems.sapphire, 'S', Items.stick});
+        craftManager.addRecipe(new ItemStack(BPItems.sapphire_spade, 1), new Object[] {"G", "S", "S", 'G', BPItems.sapphire, 'S', Items.stick});
+        craftManager.addRecipe(new ItemStack(BPItems.malachite_axe, 1), new Object[] {"GG ", "GS ", " S ", 'G', BPItems.malachite, 'S', Items.stick});
+        craftManager.addRecipe(new ItemStack(BPItems.malachite_axe, 1), new Object[] {" GG", " SG", " S ", 'G', BPItems.malachite, 'S', Items.stick});
+        craftManager.addRecipe(new ItemStack(BPItems.malachite_pickaxe, 1), new Object[] {"GGG", " S ", " S ", 'G', BPItems.malachite, 'S', Items.stick});
+        craftManager.addRecipe(new ItemStack(BPItems.malachite_sword, 1), new Object[] {"G", "G", "S", 'G', BPItems.malachite, 'S', Items.stick});
+        craftManager.addRecipe(new ItemStack(BPItems.malachite_spade, 1), new Object[] {"G", "S", "S", 'G', BPItems.malachite, 'S', Items.stick});
         
         craftManager.addRecipe(new ItemStack(BPBlocks.alloy_furnace,1), new Object[] {"###", "# #", "###", '#', Blocks.brick_block});
     }
