@@ -52,7 +52,6 @@ public class BluePower {
     }
     @EventHandler
     public void PostInit(FMLPostInitializationEvent event) {
-        
         // register events
     }
     @EventHandler

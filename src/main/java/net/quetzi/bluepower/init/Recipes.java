@@ -36,6 +36,5 @@ public class Recipes {
         craftManager.addRecipe(new ItemStack(BPItems.malachite_sword, 1), new Object[] {"G", "G", "S", 'G', BPItems.malachite, 'S', Items.stick});
         craftManager.addRecipe(new ItemStack(BPItems.malachite_spade, 1), new Object[] {"G", "S", "S", 'G', BPItems.malachite, 'S', Items.stick});
         
-        craftManager.addRecipe(new ItemStack(BPBlocks.alloy_furnace,1), new Object[] {"###", "# #", "###", '#', Blocks.brick_block});
     }
 }

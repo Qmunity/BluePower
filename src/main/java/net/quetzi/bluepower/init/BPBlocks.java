@@ -4,7 +4,6 @@ import net.minecraft.block.Block;
 import net.minecraftforge.oredict.OreDictionary;
 import net.quetzi.bluepower.blocks.BlockItemOre;
 import net.quetzi.bluepower.blocks.BlockStoneOre;
-import net.quetzi.bluepower.blocks.ContainerAlloyFurnace;
 import net.quetzi.bluepower.references.Refs;
 import cpw.mods.fml.common.registry.GameRegistry;
 
@@ -36,9 +35,6 @@ public class BPBlocks {
     public static final Block silver_block = new BlockStoneOre(Refs.SILVERBLOCK_NAME);
     public static final Block tin_block = new BlockStoneOre(Refs.TINBLOCK_NAME);
 
-    public static final Block alloy_furnace = new ContainerAlloyFurnace()
-            .setBlockName(Refs.ALLOYFURNACE_NAME);
-
     private static void registerBlocks() {
         GameRegistry.registerBlock(basalt, Refs.BASALT_NAME);
         GameRegistry.registerBlock(marble, Refs.MARBLE_NAME);
@@ -69,6 +65,5 @@ public class BPBlocks {
         OreDictionary.registerOre("gemSapphire", sapphire_ore);
         OreDictionary.registerOre("dustNikolite", nikolite_ore);
 
-        GameRegistry.registerBlock(alloy_furnace, Refs.ALLOYFURNACE_NAME);
     }
 }

@@ -22,7 +22,7 @@ public class CustomTabs {
             @Override
             public Item getTabIconItem() {
                 // Todo: Referer to a static object in the Blocks class.
-                Block iconBlock = (Block) Block.blockRegistry.getObject(Refs.ALLOYFURNACE_NAME);
+                Block iconBlock = BPBlocks.basalt;
                 if (iconBlock != null) {
                     return Item.getItemFromBlock(iconBlock);
                 } else {
