@@ -2,6 +2,7 @@ package net.quetzi.bluepower.init;
 
 import net.minecraft.block.Block;
 import net.minecraftforge.oredict.OreDictionary;
+import net.quetzi.bluepower.blocks.BlockCrop;
 import net.quetzi.bluepower.blocks.BlockItemOre;
 import net.quetzi.bluepower.blocks.BlockStoneOre;
 import net.quetzi.bluepower.references.Refs;
@@ -34,6 +35,8 @@ public class BPBlocks {
     public static final Block copper_block = new BlockStoneOre(Refs.COPPERBLOCK_NAME);
     public static final Block silver_block = new BlockStoneOre(Refs.SILVERBLOCK_NAME);
     public static final Block tin_block = new BlockStoneOre(Refs.TINBLOCK_NAME);
+    
+    public static final Block flax_crop = new BlockCrop().setBlockName(Refs.FLAXCROP_NAME);
 
     private static void registerBlocks() {
         GameRegistry.registerBlock(basalt, Refs.BASALT_NAME);
@@ -56,6 +59,8 @@ public class BPBlocks {
         GameRegistry.registerBlock(copper_block, Refs.COPPERBLOCK_NAME);
         GameRegistry.registerBlock(silver_block, Refs.SILVERBLOCK_NAME);
         GameRegistry.registerBlock(tin_block, Refs.TINBLOCK_NAME);
+        
+        GameRegistry.registerBlock(flax_crop, Refs.FLAXCROP_NAME);
 
         OreDictionary.registerOre("oreCopper", copper_ore);
         OreDictionary.registerOre("oreTin", tin_ore);

@@ -18,6 +18,7 @@ tile.tin_ore.name=Tin Ore
 tile.copper_block.name=Copper Block
 tile.silver_block.name=Silver Block
 tile.tin_block.name=Tin Block
+tile.flax_crop.name=Flax
 
 tile.alloy_furnace.name=Alloy Furnace
 
@@ -28,6 +29,7 @@ item.nikolite.name=Nikolite
 item.copper_ingot.name=Copper Ingot
 item.silver_ingot.name=Silver Ingot
 item.tin_ingot.name=Tin Ingot
+item.flax_seed.name=Flax Seeds
 
 item.ruby_sword.name=Ruby Sword
 item.ruby_spade.name=Ruby Spade

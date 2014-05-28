@@ -54,4 +54,6 @@ public class Refs {
     public static final String MALACHITESWORD_NAME = "malachite_sword";
     public static final String MALACHITEPICKAXE_NAME = "malachite_pickaxe";
     public static final String MALACHITESPADE_NAME = "malachite_spade";
+    public static final String FLAXSEED_NAME = "flax_seed";
+    public static final String FLAXCROP_NAME = "flax_crop";
 }

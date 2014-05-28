@@ -1,8 +1,10 @@
 package net.quetzi.bluepower.init;
 
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.Item.ToolMaterial;
 import net.minecraftforge.common.util.EnumHelper;
+import net.quetzi.bluepower.items.ItemCropSeed;
 import net.quetzi.bluepower.items.ItemGem;
 import net.quetzi.bluepower.items.ItemGemAxe;
 import net.quetzi.bluepower.items.ItemGemPickaxe;
@@ -37,6 +39,8 @@ public class BPItems{
     public static final Item malachite_pickaxe = new ItemGemPickaxe(gemMaterial,Refs.MALACHITEPICKAXE_NAME);
     public static final Item malachite_spade = new ItemGemSpade(gemMaterial,Refs.MALACHITESPADE_NAME);
     
+    public static final Item flax_seed = new ItemCropSeed(BPBlocks.flax_crop, Blocks.farmland).setUnlocalizedName(Refs.FLAXSEED_NAME);
+    
     public static void init(){
         GameRegistry.registerItem(malachite, Refs.ITEMMALACHITE_NAME);
         GameRegistry.registerItem(sapphire, Refs.ITEMSAPPHIRE_NAME);
@@ -58,6 +62,8 @@ public class BPItems{
         GameRegistry.registerItem(malachite_sword, Refs.MALACHITESWORD_NAME);
         GameRegistry.registerItem(malachite_pickaxe, Refs.MALACHITEPICKAXE_NAME);
         GameRegistry.registerItem(malachite_spade, Refs.MALACHITESPADE_NAME);
+        
+        GameRegistry.registerItem(flax_seed,  Refs.FLAXSEED_NAME);
         
     }
 }
