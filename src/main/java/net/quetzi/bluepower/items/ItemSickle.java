@@ -10,6 +10,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTool;
 import net.minecraft.world.World;
+import net.quetzi.bluepower.init.CustomTabs;
 
 import com.google.common.collect.Sets;
 
@@ -22,6 +23,7 @@ public class ItemSickle extends ItemTool {
     public ItemSickle(ToolMaterial material, String name) {
         super(1.0F, material, toolBlocks);
         this.setUnlocalizedName(name);
+        this.setCreativeTab(CustomTabs.tabBluePowerTools);
     }
 
     public float func_150893_a(ItemStack itemStack, Block block) {

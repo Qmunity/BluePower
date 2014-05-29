@@ -7,7 +7,7 @@ public class ItemGemAxe extends ItemAxe {
     public ItemGemAxe(ToolMaterial material, String name) {
         super(material);
         this.setUnlocalizedName(name);
-        this.setCreativeTab(CustomTabs.tabBluePowerBlocks);
+        this.setCreativeTab(CustomTabs.tabBluePowerTools);
     }
 
 }

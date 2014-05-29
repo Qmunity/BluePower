@@ -7,6 +7,6 @@ public class ItemGemSword extends ItemSword {
     public ItemGemSword(ToolMaterial material, String name) {
         super(material);
         this.setUnlocalizedName(name);
-        this.setCreativeTab(CustomTabs.tabBluePowerBlocks);
+        this.setCreativeTab(CustomTabs.tabBluePowerTools);
     }
 }
