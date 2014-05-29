@@ -46,14 +46,33 @@ public class Refs {
     public static final String RUBYSWORD_NAME = "ruby_sword";
     public static final String RUBYPICKAXE_NAME = "ruby_pickaxe";
     public static final String RUBYSPADE_NAME = "ruby_spade";
+    public static final String RUBYHOE_NAME = "ruby_hoe";
+    public static final String RUBYSICKLE_NAME = "ruby_sickle";
+    
     public static final String SAPPHIREAXE_NAME = "sapphire_axe";
     public static final String SAPPHIRESWORD_NAME = "sapphire_sword";
     public static final String SAPPHIREPICKAXE_NAME = "sapphire_pickaxe";
     public static final String SAPPHIRESPADE_NAME = "sapphire_spade";
+    public static final String SAPPHIREHOE_NAME = "sapphire_hoe";
+    public static final String SAPPHIRESICKLE_NAME = "sapphire_sickle";
+    
     public static final String MALACHITEAXE_NAME = "malachite_axe";
     public static final String MALACHITESWORD_NAME = "malachite_sword";
     public static final String MALACHITEPICKAXE_NAME = "malachite_pickaxe";
     public static final String MALACHITESPADE_NAME = "malachite_spade";
+    public static final String MALACHITEHOE_NAME = "malachite_hoe";
+    public static final String MALACHITESICKLE_NAME = "malachite_sickle";
+
     public static final String FLAXSEED_NAME = "flax_seed";
     public static final String FLAXCROP_NAME = "flax_crop";
+    public static final String INDIGOFLOWER_NAME = "indigo_flower";
+    
+    public static final String WOODSICKLE_NAME = "wood_sickle";
+    public static final String STONESICKLE_NAME = "stone_sickle";
+    public static final String IRONSICKLE_NAME = "iron_sickle";
+    public static final String GOLDSICKLE_NAME = "gold_sickle";
+    public static final String DIAMONDSICKLE_NAME = "diamond_sickle";
+    
+    
+    
 }

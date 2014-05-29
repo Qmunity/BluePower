@@ -29,20 +29,37 @@ item.nikolite.name=Nikolite
 item.copper_ingot.name=Copper Ingot
 item.silver_ingot.name=Silver Ingot
 item.tin_ingot.name=Tin Ingot
+
 item.flax_seed.name=Flax Seeds
+item.indigo_flower.name=Indigo Flower
 
 item.ruby_sword.name=Ruby Sword
 item.ruby_spade.name=Ruby Spade
 item.ruby_axe.name=Ruby Axe
 item.ruby_pickaxe.name=Ruby Pickaxe
+item.ruby_hoe.name=Ruby Hoe
+item.ruby_sickle.name=Ruby Sickle
+
 item.sapphire_sword.name=Sapphire Sword
 item.sapphire_spade.name=Sapphire Spade
 item.sapphire_axe.name=Sapphire Axe
 item.sapphire_pickaxe.name=Sapphire Pickaxe
+item.sapphire_hoe.name=Sapphire Hoe
+item.sapphire_sickle.name=Sapphire Sickle
+
 item.malachite_sword.name=Malachite Sword
 item.malachite_spade.name=Malachite Spade
 item.malachite_axe.name=Malachite Axe
 item.malachite_pickaxe.name=Malachite Pickaxe
+item.malachite_hoe.name=Malachite Hoe
+item.malachite_sickle.name=Malachite Sickle
+
+item.wood_sickle.name=Wooden Sickle
+item.stone_sickle.name=Stone Sickle
+item.iron_sickle.name=Iron Sickle
+item.gold_sickle.name=Gold Sickle
+item.diamond_sickle.name=Diamond Sickle
 
 itemGroup.tabBluePowerMachines=BluePower Machines
 itemGroup.tabBluePowerBlocks=BluePower Blocks
+itemGroup.tabBluePowerTools=BluePower Tools

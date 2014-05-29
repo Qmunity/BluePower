@@ -7,6 +7,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockCrops;
 import net.minecraft.block.IGrowable;
 import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -16,6 +17,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.quetzi.bluepower.init.BPItems;
+import net.quetzi.bluepower.references.Refs;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -24,6 +26,13 @@ public class BlockCrop extends BlockCrops implements IGrowable {
     private IIcon[] iconArray;
 
     public BlockCrop() {
+        this.setTickRandomly(true);
+        float f = 0.5F;
+        this.setBlockBounds(0.5F - f, 0.0F, 0.5F - f, 0.5F + f, 0.25F, 0.5F + f);
+        this.setCreativeTab((CreativeTabs)null);
+        this.setHardness(0.0F);
+        this.setStepSound(soundTypeGrass);
+        this.disableStats();
     }
 
     /**
@@ -56,11 +65,9 @@ public class BlockCrop extends BlockCrops implements IGrowable {
     public void func_149863_m(World world, int x, int y, int z) {
         int l = world.getBlockMetadata(x, y, z)
                 + MathHelper.getRandomIntegerInRange(world.rand, 2, 5);
-
         if (l > 7) {
             l = 7;
         }
-
         world.setBlockMetadataWithNotify(x, y, z, l, 2);
     }
 
@@ -81,11 +88,9 @@ public class BlockCrop extends BlockCrops implements IGrowable {
         for (int l = x - 1; l <= x + 1; ++l) {
             for (int i1 = z - 1; i1 <= z + 1; ++i1) {
                 float f1 = 0.0F;
-
                 if (world.getBlock(l, y - 1, i1).canSustainPlant(world, l, y - 1, i1,
                         ForgeDirection.UP, this)) {
                     f1 = 1.0F;
-
                     if (world.getBlock(l, y - 1, i1).isFertile(world, l, y - 1, i1)) {
                         f1 = 3.0F;
                     }
@@ -94,15 +99,12 @@ public class BlockCrop extends BlockCrops implements IGrowable {
                 if (l != x || i1 != z) {
                     f1 /= 4.0F;
                 }
-
                 f += f1;
             }
         }
-
         if (flag2 || flag && flag1) {
             f /= 2.0F;
         }
-
         return f;
     }
 
@@ -117,7 +119,7 @@ public class BlockCrop extends BlockCrops implements IGrowable {
 
         return this.iconArray[meta];
     }
-
+    
     /**
      * The type of render function that is called for this block
      */
@@ -193,7 +195,6 @@ public class BlockCrop extends BlockCrops implements IGrowable {
                 }
             }
         }
-
         return ret;
     }
 }

@@ -14,54 +14,45 @@ import net.minecraftforge.common.util.ForgeDirection;
 import net.quetzi.bluepower.init.CustomTabs;
 
 public class ItemCropSeed extends ItemSeeds implements IPlantable {
-    public static Block plantBlock;
+    public static Block field_150925_a;
 
     public ItemCropSeed(Block blockCrop, Block blockSoil) {
         super(blockCrop, blockSoil);
-        this.plantBlock = blockCrop;
+        this.field_150925_a = blockCrop;
         this.setCreativeTab(CustomTabs.tabBluePowerBlocks);
     }
-    
-    public boolean onItemUse(ItemStack itemStack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ)
-    {
-        if (side != 1)
-        {
+
+    public boolean onItemUse(ItemStack itemStack, EntityPlayer player, World world, int x, int y,
+            int z, int side, float hitX, float hitY, float hitZ) {
+        if (side != 1) {
             return false;
-        }
-        else if (player.canPlayerEdit(x, y, z, side, itemStack) && player.canPlayerEdit(x, y + 1, z, side, itemStack))
-        {
-            if (world.getBlock(x, y, z).canSustainPlant(world, x, y, z, ForgeDirection.UP, this) && world.isAirBlock(x, y + 1, z))
-            {
-                world.setBlock(x, y + 1, z, this.plantBlock);
+        } else if (player.canPlayerEdit(x, y, z, side, itemStack)
+                && player.canPlayerEdit(x, y + 1, z, side, itemStack)) {
+            if (world.getBlock(x, y, z).canSustainPlant(world, x, y, z, ForgeDirection.UP, this)
+                    && world.isAirBlock(x, y + 1, z)) {
+                world.setBlock(x, y + 1, z, this.field_150925_a);
                 --itemStack.stackSize;
                 return true;
-            }
-            else
-            {
+            } else {
                 return false;
             }
-        }
-        else
-        {
+        } else {
             return false;
         }
     }
 
     @Override
-    public EnumPlantType getPlantType(IBlockAccess world, int x, int y, int z)
-    {
+    public EnumPlantType getPlantType(IBlockAccess world, int x, int y, int z) {
         return EnumPlantType.Crop;
     }
 
     @Override
-    public Block getPlant(IBlockAccess world, int x, int y, int z)
-    {
-        return plantBlock;
+    public Block getPlant(IBlockAccess world, int x, int y, int z) {
+        return field_150925_a;
     }
 
     @Override
-    public int getPlantMetadata(IBlockAccess world, int x, int y, int z)
-    {
+    public int getPlantMetadata(IBlockAccess world, int x, int y, int z) {
         return 0;
     }
 }

@@ -1,8 +1,10 @@
 package net.quetzi.bluepower.init;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockFlower;
 import net.minecraftforge.oredict.OreDictionary;
 import net.quetzi.bluepower.blocks.BlockCrop;
+import net.quetzi.bluepower.blocks.BlockCustomFlower;
 import net.quetzi.bluepower.blocks.BlockItemOre;
 import net.quetzi.bluepower.blocks.BlockStoneOre;
 import net.quetzi.bluepower.references.Refs;
@@ -37,6 +39,7 @@ public class BPBlocks {
     public static final Block tin_block = new BlockStoneOre(Refs.TINBLOCK_NAME);
     
     public static final Block flax_crop = new BlockCrop().setBlockName(Refs.FLAXCROP_NAME);
+    public static final Block indigo_flower = new BlockCustomFlower(0).setBlockName(Refs.INDIGOFLOWER_NAME);
 
     private static void registerBlocks() {
         GameRegistry.registerBlock(basalt, Refs.BASALT_NAME);

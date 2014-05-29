@@ -8,6 +8,7 @@ import net.quetzi.bluepower.references.Refs;
 public class CustomTabs {
     public static CreativeTabs tabBluePowerBlocks;
     public static CreativeTabs tabBluePowerMachines;
+    public static CreativeTabs tabBluePowerTools;
 
     public static void init() {
         tabBluePowerBlocks = new CreativeTabs("tabBluePowerBlocks") {
@@ -18,7 +19,6 @@ public class CustomTabs {
         };
 
         tabBluePowerMachines = new CreativeTabs("tabBluePowerMachines") {
-
             @Override
             public Item getTabIconItem() {
                 // Todo: Referer to a static object in the Blocks class.
@@ -30,5 +30,12 @@ public class CustomTabs {
                 }
             }
         };
+        tabBluePowerTools = new CreativeTabs("tabBluePowerTools") {
+            @Override
+            public Item getTabIconItem() {
+                return net.minecraft.init.Items.iron_pickaxe;
+            }
+        };
+
     }
 }
