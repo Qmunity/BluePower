@@ -21,14 +21,9 @@ def isDev = false
 major = "0"
 minor = "0"
 getBuildNumber
-version = "1.7.2-" + major + "." + minor + "." + ${project.ext.buildNum}
+version = "1.7.2-" + major + "." + minor + "." + ${System.getenv("BUILD_NUMBER")
 group= "net.quetzi.bluepower" 
 archivesBaseName = "bluepower"
-
-task getBuildNumber << {
-    ext.env = System.getenv()
-    ext.buildNum = env.BUILD_NUMBER?.toInteger()
-}
 
 minecraft {
     version = "1.7.2-10.12.1.1084"
@@ -38,19 +33,19 @@ minecraft {
 	replace '@MINOR@', project.minor
 	replace '@MC_VERSION@', version
 	if(isDev){
-		replace '@BUILD_NUMBER@', "DEV-${project.ext.buildNum}"
+		replace '@BUILD_NUMBER@', "DEV-$${System.getenv("BUILD_NUMBER")"
 	}else{
 		replace '@BUILD_NUMBER@', project.buildNum
 	}
 }
 
 task release << {
-    println("Building release of ${project.archivesBaseName} with buildNumber ${project.ext.buildNum}")
+    println("Building release of ${project.archivesBaseName} with buildNumber ${System.getenv("BUILD_NUMBER")")
     isDev = false
 }
 
 task dev << {
-    println("Building dev version of ${project.archivesBaseName} with buildNumber DEV-${project.ext.buildNum}")
+    println("Building dev version of ${project.archivesBaseName} with buildNumber DEV-${System.getenv("BUILD_NUMBER")")
     isDev = true
 }
 
@@ -85,7 +80,7 @@ processResources
     inputs.property "mcversion", project.minecraft.version
 
 	if(isDev){
-        inputs.property "buildNum","DEV-${project.ext.buildNum}"
+        inputs.property "buildNum","DEV-$${System.getenv("BUILD_NUMBER")"
     }else{
         inputs.property "buildNum", project.ext.buildNum
     } 
@@ -96,9 +91,9 @@ processResources
                 
         // replace version and mcversion
        if(isDev){
-            expand 'version':project.version, 'mcversion':project.minecraft.version, 'buildNum':"DEV-${project.ext.buildNum}"
+            expand 'version':project.version, 'mcversion':project.minecraft.version, 'buildNum':"DEV-${System.getenv("BUILD_NUMBER")"
         }else{
-            expand 'version':project.version, 'mcversion':project.minecraft.version, 'buildNum':project.ext.buildNum
+            expand 'version':project.version, 'mcversion':project.minecraft.version, 'buildNum':${System.getenv("BUILD_NUMBER")
         }
     }
         
@@ -108,9 +103,9 @@ processResources
     }
 jar {
         if(isDev){
-            classifier = "DEV-${project.ext.buildNum}"
+            classifier = "DEV-${System.getenv("BUILD_NUMBER")"
         }else{
-            classifier = project.ext.buildNum
+            classifier = ${System.getenv("BUILD_NUMBER")
         }
     }
 }
