@@ -20,9 +20,15 @@ apply plugin: 'forge'
 def isDev = false
 major = "0"
 minor = "0"
-version = "1.7.2-" + major + "." + minor
-group= "net.quetzi.bluepower" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+getBuildNumber
+version = "1.7.2-" + major + "." + minor + "." + ${project.ext.buildNum}
+group= "net.quetzi.bluepower" 
 archivesBaseName = "bluepower"
+
+task getBuildNumber << {
+    ext.env = System.getenv()
+    ext.buildNum = env.BUILD_NUMBER?.toInteger()
+}
 
 minecraft {
     version = "1.7.2-10.12.1.1084"
@@ -34,7 +40,7 @@ minecraft {
 	if(isDev){
 		replace '@BUILD_NUMBER@', "DEV-${project.ext.buildNum}"
 	}else{
-		replace '@BUILD_NUMBER@', project.ext.buildNum
+		replace '@BUILD_NUMBER@', project.buildNum
 	}
 }
 
@@ -55,15 +61,6 @@ task whatIsDev << {
         println("NOPE YOU BASTARD")
     }
 }
-
-//This ups our build number by one!
-task updateBuildNum << {
-    ant.propertyfile(file:"gradle.properties"){
-        entry(key : "buildNum", value: project.ext.buildNum.toInteger() + 1)
-    }
-}
-
-build.finalizedBy updateBuildNum
 
 // configure the source folders
 sourceSets {
