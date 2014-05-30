@@ -20,7 +20,7 @@ apply plugin: 'forge'
 def isDev = false
 major = "0"
 minor = "0"
-version = "1.7.2-${project.major}.${project.minor}.${System.getenv("BUILD_NUMBER")"
+version = "1.7.2-${project.major}.${project.minor}.${System.getenv("BUILD_NUMBER") ?:0}"
 group= "net.quetzi.bluepower" 
 archivesBaseName = "bluepower"
 
@@ -32,19 +32,19 @@ minecraft {
 	replace '@MINOR@', project.minor
 	replace '@MC_VERSION@', version
 	if(isDev){
-		replace '@BUILD_NUMBER@', "DEV-${System.getenv("BUILD_NUMBER")"
+		replace '@BUILD_NUMBER@', "DEV-${System.getenv("BUILD_NUMBER")}"
 	}else{
-		replace '@BUILD_NUMBER@', ${System.getenv("BUILD_NUMBER")
+		replace '@BUILD_NUMBER@', ${System.getenv("BUILD_NUMBER")}
 	}
 }
 
 task release << {
-    println("Building release of ${project.archivesBaseName} with buildNumber ${System.getenv("BUILD_NUMBER")")
+    println("Building release of ${project.archivesBaseName} with buildNumber ${System.getenv("BUILD_NUMBER")}")
     isDev = false
 }
 
 task dev << {
-    println("Building dev version of ${project.archivesBaseName} with buildNumber DEV-${System.getenv("BUILD_NUMBER")")
+    println("Building dev version of ${project.archivesBaseName} with buildNumber DEV-${System.getenv("BUILD_NUMBER")}")
     isDev = true
 }
 
@@ -90,9 +90,9 @@ processResources
                 
         // replace version and mcversion
        if(isDev){
-            expand 'version':project.version, 'mcversion':project.minecraft.version, 'buildNum':"DEV-${System.getenv("BUILD_NUMBER")"
+            expand 'version':project.version, 'mcversion':project.minecraft.version, 'buildNum':"DEV-${System.getenv("BUILD_NUMBER")}"
         }else{
-            expand 'version':project.version, 'mcversion':project.minecraft.version, 'buildNum':${System.getenv("BUILD_NUMBER")
+            expand 'version':project.version, 'mcversion':project.minecraft.version, 'buildNum':${System.getenv("BUILD_NUMBER")}
         }
     }
         
@@ -102,9 +102,9 @@ processResources
     }
 jar {
         if(isDev){
-            classifier = "DEV-${System.getenv("BUILD_NUMBER")"
+            classifier = "DEV-${System.getenv("BUILD_NUMBER")}"
         }else{
-            classifier = ${System.getenv("BUILD_NUMBER")
+            classifier = ${System.getenv("BUILD_NUMBER")}
         }
     }
 }
