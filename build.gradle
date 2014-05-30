@@ -20,7 +20,7 @@ apply plugin: 'forge'
 def isDev = false
 major = "0"
 minor = "0"
-version = "1.7.2-${project.major}.${project.minor}.${System.getenv('BUILD_NUMBER')"
+version = "1.7.2-${project.major}.${project.minor}.${System.getenv("BUILD_NUMBER")"
 group= "net.quetzi.bluepower" 
 archivesBaseName = "bluepower"
 
