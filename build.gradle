@@ -33,7 +33,7 @@ minecraft {
 	replace '@MINOR@', project.minor
 	replace '@MC_VERSION@', version
 	if(isDev){
-		replace '@BUILD_NUMBER@', "DEV-$${System.getenv("BUILD_NUMBER")"
+		replace '@BUILD_NUMBER@', "DEV-${System.getenv("BUILD_NUMBER")"
 	}else{
 		replace '@BUILD_NUMBER@', project.buildNum
 	}
