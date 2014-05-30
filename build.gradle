@@ -27,51 +27,13 @@ archivesBaseName = "bluepower"
 minecraft {
     version = "1.7.2-10.12.1.1084"
     assetDir = "eclipse/assets"
+    
 	// replacing stuff in the source
 	replace '@MAJOR@', project.major
 	replace '@MINOR@', project.minor
 	replace '@MC_VERSION@', version
-	if(isDev){
-		replace '@BUILD_NUMBER@', "DEV-${System.getenv("BUILD_NUMBER")}"
-	}else{
-		replace '@BUILD_NUMBER@', System.getenv("BUILD_NUMBER")
-	}
+	replace '@BUILD_NUMBER@', System.getenv("BUILD_NUMBER")
 }
-
-task release << {
-    println("Building release of ${project.archivesBaseName} with buildNumber ${System.getenv("BUILD_NUMBER")}")
-    isDev = false
-}
-
-task dev << {
-    println("Building dev version of ${project.archivesBaseName} with buildNumber DEV-${System.getenv("BUILD_NUMBER")}")
-    isDev = true
-}
-
-task whatIsDev << {
-    if(isDev){
-        println("FUCKING YAY")
-    }else{
-        println("NOPE YOU BASTARD")
-    }
-}
-
-// configure the source folders
-//sourceSets {
-//    main {
-//        java {
-//            srcDir 'java'
-//                // exclude 'some exclusion'
-//                // include 'some inclusion'
-//        }
-//        resources {
-//            srcDir 'resources'
-//                exclude '**/.md' // exclude readme from localization repo
-//                // exclude 'some exclusion'
-//                // include 'some inclusion'
-//        }
-//   }
-//}
 
 processResources
 {
