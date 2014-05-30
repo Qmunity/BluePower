@@ -93,7 +93,6 @@ processResources
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
     }
-}
 jar {
         if(isDev){
             classifier = "DEV"
