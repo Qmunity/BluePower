@@ -79,32 +79,26 @@ processResources
     inputs.property "mcversion", project.minecraft.version
 
 	if(isDev){
-        inputs.property "buildNum","DEV-${System.getenv("BUILD_NUMBER")}"
-    }else{
-        inputs.property "buildNum", System.getenv("BUILD_NUMBER")
-    } 
-	
+        inputs.property "buildNum","DEV"
+    }
     // replace stuff in mcmod.info, nothing else
     from(sourceSets.main.resources.srcDirs) {
         include 'mcmod.info'
                 
         // replace version and mcversion
-       if(isDev){
-            expand 'version':project.version, 'mcversion':project.minecraft.version
-        }else{
-            expand 'version':project.version, 'mcversion':project.minecraft.version
-        }
+		expand 'version':project.version, 'mcversion':project.minecraft.version
     }
         
     // copy everything else, thats not the mcmod.info
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
     }
+}
 jar {
         if(isDev){
-            classifier = "DEV-${System.getenv("BUILD_NUMBER")}"
+            classifier = "DEV"
         }else{
-            classifier = System.getenv("BUILD_NUMBER")
+            classifier = ""
         }
     }
 }
