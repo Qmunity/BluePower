@@ -3,7 +3,7 @@
   "modid": "bluepower",
   "name": "Blue Power",
   "description": "",
-  "version": "${version}.${buildNum}",
+  "version": "${version}",
   "mcversion": "$mcversion",
   "url": "",
   "updateUrl": "",
