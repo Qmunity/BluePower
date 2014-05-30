@@ -21,7 +21,7 @@ project.ext {
     major = "0"
     minor = "0"
 }
-version = "1.7.2-${project.ext.major}.${project.ext.minor}.${System.getenv("BUILD_NUMBER") ?:0}"
+version = "1.7.2-${project.ext.major}.${project.minor}.${System.getenv("BUILD_NUMBER") ?:0}"
 group= "net.quetzi.bluepower" 
 archivesBaseName = "bluepower"
 
@@ -44,7 +44,7 @@ processResources
 
     // replace stuff in mcmod.info, nothing else
     from(sourceSets.main.resources.srcDirs) {
-        include 'mcmod.info'
+        include '*.info'
                 
         // replace version and mcversion
         expand 'version':project.version, 'mcversion':project.minecraft.version
