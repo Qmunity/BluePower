@@ -90,9 +90,9 @@ processResources
                 
         // replace version and mcversion
        if(isDev){
-            expand 'version':project.version, 'mcversion':project.minecraft.version, 'buildNum':"DEV-${System.getenv("BUILD_NUMBER")}"
+            expand 'version':project.version, 'mcversion':project.minecraft.version
         }else{
-            expand 'version':project.version, 'mcversion':project.minecraft.version, 'buildNum':System.getenv("BUILD_NUMBER")
+            expand 'version':project.version, 'mcversion':project.minecraft.version
         }
     }
         
