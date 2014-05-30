@@ -34,7 +34,7 @@ minecraft {
 	if(isDev){
 		replace '@BUILD_NUMBER@', "DEV-${System.getenv("BUILD_NUMBER")}"
 	}else{
-		replace '@BUILD_NUMBER@', ${System.getenv("BUILD_NUMBER")}
+		replace '@BUILD_NUMBER@', System.getenv("BUILD_NUMBER")
 	}
 }
 
@@ -79,9 +79,9 @@ processResources
     inputs.property "mcversion", project.minecraft.version
 
 	if(isDev){
-        inputs.property "buildNum","DEV-${System.getenv("BUILD_NUMBER")"
+        inputs.property "buildNum","DEV-${System.getenv("BUILD_NUMBER")}"
     }else{
-        inputs.property "buildNum", project.ext.buildNum
+        inputs.property "buildNum", System.getenv("BUILD_NUMBER")
     } 
 	
     // replace stuff in mcmod.info, nothing else
@@ -92,7 +92,7 @@ processResources
        if(isDev){
             expand 'version':project.version, 'mcversion':project.minecraft.version, 'buildNum':"DEV-${System.getenv("BUILD_NUMBER")}"
         }else{
-            expand 'version':project.version, 'mcversion':project.minecraft.version, 'buildNum':${System.getenv("BUILD_NUMBER")}
+            expand 'version':project.version, 'mcversion':project.minecraft.version, 'buildNum':System.getenv("BUILD_NUMBER")
         }
     }
         
@@ -104,7 +104,7 @@ jar {
         if(isDev){
             classifier = "DEV-${System.getenv("BUILD_NUMBER")}"
         }else{
-            classifier = ${System.getenv("BUILD_NUMBER")}
+            classifier = System.getenv("BUILD_NUMBER")
         }
     }
 }
