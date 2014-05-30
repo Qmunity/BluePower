@@ -3,9 +3,9 @@ package net.quetzi.bluepower.references;
 public class Refs {
     public static final String NAME = "Blue Power";
     public static final String MODID = "bluepower";
-    private static final String MAJOR = "0";
-    private static final String MINOR = "0";
-    private static final String BUILD = "1";
+    private static final String MAJOR = "@MAJOR@";
+    private static final String MINOR = "@MINOR@";
+    private static final String BUILD = "@BUILD_NUMBER@";
     private static final String MCVERSION = "1.7.2";
     
     public static String fullVersionString() {

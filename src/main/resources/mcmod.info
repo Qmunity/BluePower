@@ -3,8 +3,8 @@
   "modid": "bluepower",
   "name": "Blue Power",
   "description": "",
-  "version": "0.0.1",
-  "mcversion": "1.7.2",
+  "version": "${version}.${buildNum}",
+  "mcversion": "$mcversion",
   "url": "",
   "updateUrl": "",
   "authors": [

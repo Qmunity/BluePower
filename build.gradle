@@ -17,31 +17,102 @@ buildscript {
 
 apply plugin: 'forge'
 
-version = "1.7.2-0.0.1"
+def isDev = false
+major = "0"
+minor = "0"
+version = "1.7.2-" + major + "." + minor
 group= "net.quetzi.bluepower" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "bluepower"
 
 minecraft {
     version = "1.7.2-10.12.1.1084"
     assetDir = "eclipse/assets"
+	// replacing stuff in the source
+	replace '@MAJOR@', project.major
+	replace '@MINOR@', project.minor
+	replace '@MC_VERSION@', version
+	if(isDev){
+		replace '@BUILD_NUMBER@', "DEV-${project.ext.buildNum}"
+	}else{
+		replace '@BUILD_NUMBER@', project.ext.buildNum
+	}
 }
 
+task release << {
+    println("Building release of ${project.archivesBaseName} with buildNumber ${project.ext.buildNum}")
+    isDev = false
+}
+
+task dev << {
+    println("Building dev version of ${project.archivesBaseName} with buildNumber DEV-${project.ext.buildNum}")
+    isDev = true
+}
+
+task whatIsDev << {
+    if(isDev){
+        println("FUCKING YAY")
+    }else{
+        println("NOPE YOU BASTARD")
+    }
+}
+
+//This ups our build number by one!
+task updateBuildNum << {
+    ant.propertyfile(file:"gradle.properties"){
+        entry(key : "buildNum", value: project.ext.buildNum.toInteger() + 1)
+    }
+}
+
+build.finalizedBy updateBuildNum
+
+// configure the source folders
+sourceSets {
+    main {
+        java {
+            srcDir 'java'
+                // exclude 'some exclusion'
+                // include 'some inclusion'
+        }
+        resources {
+            srcDir 'resources'
+                exclude '**/.md' // exclude readme from localization repo
+                // exclude 'some exclusion'
+                // include 'some inclusion'
+        }
+    }
+}
 processResources
 {
     // this will ensure that this task is redone when the versions change.
     inputs.property "version", project.version
     inputs.property "mcversion", project.minecraft.version
 
+	if(isDev){
+        inputs.property "buildNum","DEV-${project.ext.buildNum}"
+    }else{
+        inputs.property "buildNum", project.ext.buildNum
+    } 
+	
     // replace stuff in mcmod.info, nothing else
     from(sourceSets.main.resources.srcDirs) {
         include 'mcmod.info'
                 
         // replace version and mcversion
-        expand 'version':project.version, 'mcversion':project.minecraft.version
+       if(isDev){
+            expand 'version':project.version, 'mcversion':project.minecraft.version, 'buildNum':"DEV-${project.ext.buildNum}"
+        }else{
+            expand 'version':project.version, 'mcversion':project.minecraft.version, 'buildNum':project.ext.buildNum
+        }
     }
         
     // copy everything else, thats not the mcmod.info
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
+    }
+jar {
+    if(isDev){
+        classifier = "DEV-${project.ext.buildNum}"
+    }else{
+        classifier = project.ext.buildNum
     }
 }
