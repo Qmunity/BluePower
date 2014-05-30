@@ -57,21 +57,21 @@ task whatIsDev << {
 }
 
 // configure the source folders
-sourceSets {
-    main {
-        java {
-            srcDir 'java'
-                // exclude 'some exclusion'
-                // include 'some inclusion'
-        }
-        resources {
-            srcDir 'resources'
-                exclude '**/.md' // exclude readme from localization repo
-                // exclude 'some exclusion'
-                // include 'some inclusion'
-        }
-    }
-}
+//sourceSets {
+//    main {
+//        java {
+//            srcDir 'java'
+//                // exclude 'some exclusion'
+//                // include 'some inclusion'
+//        }
+//        resources {
+//            srcDir 'resources'
+//                exclude '**/.md' // exclude readme from localization repo
+//                // exclude 'some exclusion'
+//                // include 'some inclusion'
+//        }
+//   }
+//}
 
 processResources
 {
