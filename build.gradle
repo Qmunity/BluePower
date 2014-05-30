@@ -80,7 +80,7 @@ processResources
     inputs.property "mcversion", project.minecraft.version
 
 	if(isDev){
-        inputs.property "buildNum","DEV-$${System.getenv("BUILD_NUMBER")"
+        inputs.property "buildNum","DEV-${System.getenv("BUILD_NUMBER")"
     }else{
         inputs.property "buildNum", project.ext.buildNum
     } 
