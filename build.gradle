@@ -107,9 +107,10 @@ processResources
         exclude 'mcmod.info'
     }
 jar {
-    if(isDev){
-        classifier = "DEV-${project.ext.buildNum}"
-    }else{
-        classifier = project.ext.buildNum
+        if(isDev){
+            classifier = "DEV-${project.ext.buildNum}"
+        }else{
+            classifier = project.ext.buildNum
+        }
     }
 }
