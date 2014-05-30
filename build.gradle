@@ -17,10 +17,11 @@ buildscript {
 
 apply plugin: 'forge'
 
-def isDev = false
-major = "0"
-minor = "0"
-version = "1.7.2-${project.major}.${project.minor}.${System.getenv("BUILD_NUMBER") ?:0}"
+project.ext {
+    major = "0"
+    minor = "0"
+}
+version = "1.7.2-${project.ext.major}.${project.ext.minor}.${System.getenv("BUILD_NUMBER") ?:0}"
 group= "net.quetzi.bluepower" 
 archivesBaseName = "bluepower"
 
