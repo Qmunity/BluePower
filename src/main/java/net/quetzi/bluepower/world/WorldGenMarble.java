@@ -24,10 +24,10 @@ public class WorldGenMarble extends WorldGenMinable {
     }
 
     private void addBlock(int x, int y, int z, int num) {
-        List marbleCandidate = Arrays.asList(new Integer[]{x, y, z});
+        List marbleCandidate = Arrays.asList(x, y, z);
         if (this.veinsList.contains(marbleCandidate))
             return;
-        this.marbleVein.addLast(Arrays.asList(new Integer[]{x, y, z, num}));
+        this.marbleVein.addLast(Arrays.asList(x, y, z, num));
         this.veinsList.add(marbleCandidate);
     }
 
@@ -60,7 +60,7 @@ public class WorldGenMarble extends WorldGenMinable {
         while ((this.marbleVein.size() > 0) && (this.numberOfBlocks > 0)) {
             List blocksToGenerate = (List) this.marbleVein.removeFirst();
             Integer[] blockToSet = (Integer[]) blocksToGenerate.toArray();
-            if (world.blockExists(blockToSet[0], blockToSet[1], blockToSet[2])) {
+            if (world.getBlock(blockToSet[0], blockToSet[1], blockToSet[2]) == Blocks.stone) {
                 world.setBlock(blockToSet[0], blockToSet[1], blockToSet[2], this.block);
                 if (blockToSet[3] > 0) {
                     searchBlock(world, blockToSet[0], blockToSet[1], blockToSet[2], blockToSet[3] - 1);
