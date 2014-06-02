@@ -79,6 +79,9 @@ public class WorldGenVolcano extends WorldGenMinable {
         if (world.getBlock(x, y, z) != Blocks.lava) {
             return false;
         }
+        if (random.nextInt(100) > 50) {
+            return false;
+        }
         genLavaColumn(world, x, y, z);
         int head = 3 + random.nextInt(4);
         int spread = random.nextInt(3);

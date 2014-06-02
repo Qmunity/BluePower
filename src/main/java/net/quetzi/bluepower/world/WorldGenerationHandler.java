@@ -5,6 +5,7 @@ import java.util.Random;
 import net.minecraft.block.Block;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
+import net.minecraft.world.gen.feature.WorldGenFlowers;
 import net.minecraft.world.gen.feature.WorldGenMinable;
 import net.quetzi.bluepower.init.BPBlocks;
 import net.quetzi.bluepower.init.Config;
@@ -37,6 +38,13 @@ public class WorldGenerationHandler implements IWorldGenerator {
         }
         if (Config.generateCopper) {
             this.addOreToGenerate(Config.veinCountCopper, Config.veinSizeCopper, Config.minCopperY, Config.maxCopperY, BPBlocks.copper_ore, world, chunkX, chunkZ);
+        }
+
+        for (int i = 0; i < 1; i++) {
+            int x = chunkX * 16 + random.nextInt(16) + 8;
+            int y = random.nextInt(128);
+            int z = chunkZ * 16 + random.nextInt(16) + 8;
+            new WorldGenFlowers(BPBlocks.indigo_flower).generate(world, random, x, y, z);
         }
 
         for (int i = 0; i < 4; i++) {
