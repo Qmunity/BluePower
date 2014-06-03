@@ -4,6 +4,7 @@ import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.feature.WorldGenFlowers;
 import net.minecraft.world.gen.feature.WorldGenMinable;
@@ -39,8 +40,17 @@ public class WorldGenerationHandler implements IWorldGenerator {
         if (Config.generateCopper) {
             this.addOreToGenerate(Config.veinCountCopper, Config.veinSizeCopper, Config.minCopperY, Config.maxCopperY, BPBlocks.copper_ore, world, chunkX, chunkZ);
         }
+        
+        BiomeGenBase bgb = world.getWorldChunkManager().getBiomeGenAt(chunkX * 16 + 16, chunkZ * 16 + 16);
 
-        for (int i = 0; i < 1; i++) {
+        int n = 0;
+        if (bgb == BiomeGenBase.birchForest) n = 1;
+        else if (bgb == BiomeGenBase.birchForestHills) n = 1;
+        else if (bgb == BiomeGenBase.plains) n = 1;
+        else if (bgb == BiomeGenBase.forest) n = 4;
+        else if (bgb == BiomeGenBase.roofedForest) n = 4;
+        
+        for (int i = 0; i < n; i++) {
             int x = chunkX * 16 + random.nextInt(16) + 8;
             int y = random.nextInt(128);
             int z = chunkZ * 16 + random.nextInt(16) + 8;
@@ -57,7 +67,7 @@ public class WorldGenerationHandler implements IWorldGenerator {
         vc *= vc;
         for (int i = 0; i < vc; i++) {
             int x = chunkX * 16 + random.nextInt(16);
-            int y = random.nextInt(32);
+            int y = random.nextInt(26)+6;
             int z = chunkZ * 16 + random.nextInt(16);
             new WorldGenVolcano(BPBlocks.basalt, random.nextInt(65536)).generate(world, random, x, y, z);
         }

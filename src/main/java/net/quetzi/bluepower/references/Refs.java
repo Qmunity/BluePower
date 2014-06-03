@@ -66,12 +66,14 @@ public class Refs {
     public static final String FLAXSEED_NAME = "flax_seed";
     public static final String FLAXCROP_NAME = "flax_crop";
     public static final String INDIGOFLOWER_NAME = "indigo_flower";
+    public static final String INDIGODYE_NAME = "indigo_dye";
     
     public static final String WOODSICKLE_NAME = "wood_sickle";
     public static final String STONESICKLE_NAME = "stone_sickle";
     public static final String IRONSICKLE_NAME = "iron_sickle";
     public static final String GOLDSICKLE_NAME = "gold_sickle";
     public static final String DIAMONDSICKLE_NAME = "diamond_sickle";
+    
     
     
     

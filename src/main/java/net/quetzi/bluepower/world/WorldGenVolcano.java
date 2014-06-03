@@ -79,9 +79,6 @@ public class WorldGenVolcano extends WorldGenMinable {
         if (world.getBlock(x, y, z) != Blocks.lava) {
             return false;
         }
-        if (random.nextInt(100) > 50) {
-            return false;
-        }
         genLavaColumn(world, x, y, z);
         int head = 3 + random.nextInt(4);
         int spread = random.nextInt(3);
@@ -93,12 +90,12 @@ public class WorldGenVolcano extends WorldGenMinable {
             boolean atTop = false;
             // if the layer is empty we need to fill it
             while (this.layerFill.size() == 0) {
-                world.setBlock(x, currentY -4, z, Blocks.lava); // set the centre block to lava
+                world.setBlock(x, currentY, z, Blocks.lava); // set the centre block to lava
                 this.currentLayerFill.clear(); //clear out the temporary layer data
                 searchBlock(x, currentY, z, head, random);
                 currentY++;
-                if (currentY > 125) {
-                    world.setBlock(x, currentY -4, z, Blocks.flowing_lava);
+                if (currentY > 200) {
+                    world.setBlock(x, currentY, z, Blocks.flowing_lava);
                     while ((currentY > surfaceHeight) && (world.getBlock(x, currentY, z) == Blocks.lava)) {
                         world.markBlockForUpdate(x, currentY, z);
                         world.notifyBlocksOfNeighborChange(x, currentY, z, Blocks.lava);

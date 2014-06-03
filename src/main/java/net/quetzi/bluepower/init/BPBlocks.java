@@ -65,13 +65,5 @@ public class BPBlocks {
         
         GameRegistry.registerBlock(flax_crop, Refs.FLAXCROP_NAME);
 
-        OreDictionary.registerOre("oreCopper", copper_ore);
-        OreDictionary.registerOre("oreTin", tin_ore);
-        OreDictionary.registerOre("oreSilver", silver_ore);
-        OreDictionary.registerOre("gemRuby", ruby_ore);
-        OreDictionary.registerOre("gemMalachite", malachite_ore);
-        OreDictionary.registerOre("gemSapphire", sapphire_ore);
-        OreDictionary.registerOre("dustNikolite", nikolite_ore);
-
     }
 }

@@ -53,5 +53,6 @@ public class Recipes {
         craftManager.addRecipe(new ItemStack(BPItems.gold_sickle, 1), new Object[] {" G ", "  G", "SG ", 'G', Items.gold_ingot, 'S', Items.stick});
         craftManager.addRecipe(new ItemStack(BPItems.diamond_sickle, 1), new Object[] {" G ", "  G", "SG ", 'G', Items.diamond, 'S', Items.stick});
         
+        craftManager.addRecipe(new ItemStack(BPItems.indigo_dye,1), new Object[] {"#", '#', BPBlocks.indigo_flower});
     }
 }

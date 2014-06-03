@@ -1,10 +1,10 @@
 package net.quetzi.bluepower.init;
 
-import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.Item.ToolMaterial;
 import net.minecraftforge.common.util.EnumHelper;
+import net.minecraftforge.oredict.OreDictionary;
 import net.quetzi.bluepower.items.ItemCropSeed;
 import net.quetzi.bluepower.items.ItemGem;
 import net.quetzi.bluepower.items.ItemGemAxe;
@@ -12,6 +12,7 @@ import net.quetzi.bluepower.items.ItemGemHoe;
 import net.quetzi.bluepower.items.ItemGemPickaxe;
 import net.quetzi.bluepower.items.ItemGemSpade;
 import net.quetzi.bluepower.items.ItemGemSword;
+import net.quetzi.bluepower.items.ItemIndigoDye;
 import net.quetzi.bluepower.items.ItemIngot;
 import net.quetzi.bluepower.items.ItemNikolite;
 import net.quetzi.bluepower.items.ItemSickle;
@@ -57,6 +58,7 @@ public class BPItems{
     public static final Item diamond_sickle = new ItemSickle(ToolMaterial.EMERALD, Refs.DIAMONDSICKLE_NAME);
     
     public static final Item flax_seed = new ItemCropSeed(BPBlocks.flax_crop, Blocks.farmland).setUnlocalizedName(Refs.FLAXSEED_NAME);
+    public static final Item indigo_dye = new ItemIndigoDye(Refs.INDIGODYE_NAME);
     
     public static void init(){
         GameRegistry.registerItem(malachite, Refs.ITEMMALACHITE_NAME);
@@ -95,6 +97,7 @@ public class BPItems{
         GameRegistry.registerItem(diamond_sickle, Refs.DIAMONDSICKLE_NAME);
         
         GameRegistry.registerItem(flax_seed,  Refs.FLAXSEED_NAME);
+        GameRegistry.registerItem(indigo_dye, Refs.INDIGODYE_NAME);
         
     }
 }

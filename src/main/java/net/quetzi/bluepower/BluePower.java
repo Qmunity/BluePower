@@ -7,6 +7,7 @@ import net.quetzi.bluepower.init.BPBlocks;
 import net.quetzi.bluepower.init.BPItems;
 import net.quetzi.bluepower.init.Config;
 import net.quetzi.bluepower.init.CustomTabs;
+import net.quetzi.bluepower.init.OreDictionarySetup;
 import net.quetzi.bluepower.init.Recipes;
 import net.quetzi.bluepower.references.Refs;
 import net.quetzi.bluepower.world.WorldGenerationHandler;
@@ -44,6 +45,7 @@ public class BluePower {
 
         BPBlocks.init();
         BPItems.init();
+        OreDictionarySetup.init();
         GameRegistry.registerWorldGenerator(new WorldGenerationHandler(), 0);
     }
     @EventHandler
