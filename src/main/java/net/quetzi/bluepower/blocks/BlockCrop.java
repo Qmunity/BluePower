@@ -56,13 +56,11 @@ public class BlockCrop extends BlockCrops implements IGrowable {
             if ((meta == 4) || (meta == 5)) {
                 return;
             }
-            if ((world.getBlock(x, y - 1, z) != Blocks.farmland) || (world.getBlock(x, y - 1, z) == Blocks.air) || (!world.isAirBlock(x, y + 1, z))) {
+            if ((world.getBlock(x, y - 1, z) != Blocks.farmland) || (world.getBlock(x, y - 1, z) == BPBlocks.flax_crop) || (!world.isAirBlock(x, y + 1, z))) {
               return;
             }
             if (random.nextInt(30) == 0) {
                 world.setBlockMetadataWithNotify(x, y, z, meta + 1, 2);
-                if (meta == 3)
-                  world.setBlock(x, y + 1, z, BPBlocks.flax_crop, 7, 2);
               }
         }
     }
@@ -75,7 +73,6 @@ public class BlockCrop extends BlockCrops implements IGrowable {
         }
         world.setBlockMetadataWithNotify(x, y, z, l, 2);
     }
-
     private float func_149864_n(World world, int x, int y, int z) {
         float f = 1.0F;
         Block block = world.getBlock(x, y, z - 1);
@@ -181,7 +178,15 @@ public class BlockCrop extends BlockCrops implements IGrowable {
         this.iconArray = new IIcon[8];
 
         for (int i = 0; i < this.iconArray.length; ++i) {
-            this.iconArray[i] = iconRegister.registerIcon(this.getTextureName() + "_stage_" + i);
+            int tex = 0;
+            if (i == 0 || i == 1) { tex = 0; }
+            else if (i == 2) { tex = 1; }
+            else if (i == 3 || i == 4) { tex = 2; }
+            else if (i == 5) { tex = 3; }
+            else if (i == 6) { tex = 4; }
+            else if (i == 7) { tex = 5; }
+
+            this.iconArray[i] = iconRegister.registerIcon(this.getTextureName() + "_stage_" + tex);
         }
     }
 
