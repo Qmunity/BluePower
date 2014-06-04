@@ -1,8 +1,6 @@
 package net.quetzi.bluepower.init;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockFlower;
-import net.minecraftforge.oredict.OreDictionary;
 import net.quetzi.bluepower.blocks.BlockCrop;
 import net.quetzi.bluepower.blocks.BlockCustomFlower;
 import net.quetzi.bluepower.blocks.BlockItemOre;
@@ -11,36 +9,63 @@ import net.quetzi.bluepower.references.Refs;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public class BPBlocks {
+	public static Block basalt;
+    public static Block marble;
+    public static Block basalt_cobble;
+    public static Block basalt_brick;
+    public static Block marble_brick;
+
+    public static Block nikolite_ore;
+    public static Block ruby_ore;
+    public static Block sapphire_ore;
+    public static Block malachite_ore;
+    
+    public static Block copper_ore;
+    public static Block silver_ore;
+    public static Block tin_ore;
+
+    public static Block ruby_block;
+    public static Block sapphire_block;
+    public static Block malachite_block;
+    public static Block nikolite_block;
+    public static Block copper_block;
+    public static Block silver_block;
+    public static Block tin_block;
+    
+    public static Block flax_crop;
+    public static Block indigo_flower;
+
+	
     public static void init() {
+    	basalt = new BlockStoneOre(Refs.BASALT_NAME);
+    	marble = new BlockStoneOre(Refs.MARBLE_NAME);
+    	basalt_cobble  = new BlockStoneOre(Refs.BASALTCOBBLE_NAME);
+    	basalt_brick = new BlockStoneOre(Refs.BASALTBRICK_NAME);
+    	marble_brick = new BlockStoneOre(Refs.MARBLEBRICK_NAME);
+
+        nikolite_ore = new BlockItemOre(Refs.NIKOLITEORE_NAME, BPItems.nikolite);
+        ruby_ore = new BlockItemOre(Refs.RUBYORE_NAME, BPItems.ruby);
+        sapphire_ore = new BlockItemOre(Refs.SAPPHIREORE_NAME, BPItems.sapphire);
+        malachite_ore = new BlockItemOre(Refs.MALACHITEORE_NAME, BPItems.malachite);
+        copper_ore = new BlockStoneOre(Refs.COPPERORE_NAME);
+        silver_ore = new BlockStoneOre(Refs.SILVERORE_NAME);
+        tin_ore = new BlockStoneOre(Refs.TINORE_NAME);
+
+        ruby_block = new BlockStoneOre(Refs.RUBYBLOCK_NAME);
+        sapphire_block = new BlockStoneOre(Refs.SAPPHIREBLOCK_NAME);
+        malachite_block = new BlockStoneOre(Refs.MALACHITEBLOCK_NAME);
+        nikolite_block = new BlockStoneOre(Refs.NIKOLITEBLOCK_NAME);
+        copper_block = new BlockStoneOre(Refs.COPPERBLOCK_NAME);
+        silver_block = new BlockStoneOre(Refs.SILVERBLOCK_NAME);
+        tin_block = new BlockStoneOre(Refs.TINBLOCK_NAME);
+        
+        flax_crop = new BlockCrop().setBlockName(Refs.FLAXCROP_NAME);
+        indigo_flower = new BlockCustomFlower(Refs.INDIGOFLOWER_NAME);
+    	
         registerBlocks();
     }
 
-    public static final Block basalt = new BlockStoneOre(Refs.BASALT_NAME);
-    public static final Block marble = new BlockStoneOre(Refs.MARBLE_NAME);
-    public static final Block basalt_cobble = new BlockStoneOre(Refs.BASALTCOBBLE_NAME);
-    public static final Block basalt_brick = new BlockStoneOre(Refs.BASALTBRICK_NAME);
-    public static final Block marble_brick = new BlockStoneOre(Refs.MARBLEBRICK_NAME);
-
-    public static final Block nikolite_ore = new BlockItemOre(Refs.NIKOLITEORE_NAME, BPItems.nikolite);
-    public static final Block ruby_ore = new BlockItemOre(Refs.RUBYORE_NAME, BPItems.ruby);
-    public static final Block sapphire_ore = new BlockItemOre(Refs.SAPPHIREORE_NAME, BPItems.sapphire);
-    public static final Block malachite_ore = new BlockItemOre(Refs.MALACHITEORE_NAME,
-            BPItems.malachite);
-    public static final Block copper_ore = new BlockStoneOre(Refs.COPPERORE_NAME);
-    public static final Block silver_ore = new BlockStoneOre(Refs.SILVERORE_NAME);
-    public static final Block tin_ore = new BlockStoneOre(Refs.TINORE_NAME);
-
-    public static final Block ruby_block = new BlockStoneOre(Refs.RUBYBLOCK_NAME);
-    public static final Block sapphire_block = new BlockStoneOre(Refs.SAPPHIREBLOCK_NAME);
-    public static final Block malachite_block = new BlockStoneOre(Refs.MALACHITEBLOCK_NAME);
-    public static final Block nikolite_block = new BlockStoneOre(Refs.NIKOLITEBLOCK_NAME);
-    public static final Block copper_block = new BlockStoneOre(Refs.COPPERBLOCK_NAME);
-    public static final Block silver_block = new BlockStoneOre(Refs.SILVERBLOCK_NAME);
-    public static final Block tin_block = new BlockStoneOre(Refs.TINBLOCK_NAME);
     
-    public static final Block flax_crop = new BlockCrop().setBlockName(Refs.FLAXCROP_NAME);
-    public static final Block indigo_flower = new BlockCustomFlower(Refs.INDIGOFLOWER_NAME);
-
     private static void registerBlocks() {
         GameRegistry.registerBlock(basalt, Refs.BASALT_NAME);
         GameRegistry.registerBlock(marble, Refs.MARBLE_NAME);
@@ -65,6 +90,9 @@ public class BPBlocks {
         
         GameRegistry.registerBlock(flax_crop, Refs.FLAXCROP_NAME);
         GameRegistry.registerBlock(indigo_flower, Refs.INDIGOFLOWER_NAME);
+        
+        //Todo: Add oreDictionary here. oreNikolite, oreTin etc
+        //OreDictionary.registerOre(name, ore);
 
     }
 }
