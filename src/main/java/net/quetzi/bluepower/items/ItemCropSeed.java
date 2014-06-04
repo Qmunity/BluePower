@@ -32,7 +32,7 @@ public class ItemCropSeed extends ItemSeeds implements IPlantable {
                 && player.canPlayerEdit(x, y + 1, z, side, itemStack)) {
             if (world.getBlock(x, y, z).canSustainPlant(world, x, y, z, ForgeDirection.UP, this)
                     && world.isAirBlock(x, y + 1, z)) {
-                world.setBlock(x, y + 1, z, this.field_150925_a);
+                world.setBlock(x, y + 1, z, this.field_150925_a, 0, 2);
                 --itemStack.stackSize;
                 return true;
             } else {

@@ -16,6 +16,7 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import net.quetzi.bluepower.init.BPBlocks;
 import net.quetzi.bluepower.init.BPItems;
 import net.quetzi.bluepower.references.Refs;
 import cpw.mods.fml.relauncher.Side;
@@ -50,16 +51,18 @@ public class BlockCrop extends BlockCrops implements IGrowable {
         super.updateTick(world, x, y, z, random);
 
         if (world.getBlockLightValue(x, y + 1, z) >= 9) {
-            int l = world.getBlockMetadata(x, y, z);
-
-            if (l < 7) {
-                float f = this.func_149864_n(world, x, y, z);
-
-                if (random.nextInt((int) (25.0F / f) + 1) == 0) {
-                    ++l;
-                    world.setBlockMetadataWithNotify(x, y, z, l, 2);
-                }
+            int meta = world.getBlockMetadata(x, y, z);
+            if ((meta == 4) || (meta == 5)) {
+                return;
             }
+            if ((world.getBlock(x, y - 1, z) != Blocks.farmland) || (world.getBlock(x, y - 1, z) == Blocks.air) || (!world.isAirBlock(x, y + 1, z))) {
+              return;
+            }
+            if (random.nextInt(30) == 0) {
+                world.setBlockMetadataWithNotify(x, y, z, meta + 1, 2);
+                if (meta == 3)
+                  world.setBlock(x, y + 1, z, BPBlocks.flax_crop, 5, 2);
+              }
         }
     }
 

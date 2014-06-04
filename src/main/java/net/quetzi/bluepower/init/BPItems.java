@@ -3,8 +3,9 @@ package net.quetzi.bluepower.init;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.Item.ToolMaterial;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.EnumHelper;
-import net.minecraftforge.oredict.OreDictionary;
 import net.quetzi.bluepower.items.ItemCropSeed;
 import net.quetzi.bluepower.items.ItemGem;
 import net.quetzi.bluepower.items.ItemGemAxe;
@@ -98,6 +99,6 @@ public class BPItems{
         
         GameRegistry.registerItem(flax_seed,  Refs.FLAXSEED_NAME);
         GameRegistry.registerItem(indigo_dye, Refs.INDIGODYE_NAME);
-        
+        MinecraftForge.addGrassSeed(new ItemStack(flax_seed), 5);
     }
 }
