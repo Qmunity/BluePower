@@ -39,7 +39,7 @@ public class BPBlocks {
     public static final Block tin_block = new BlockStoneOre(Refs.TINBLOCK_NAME);
     
     public static final Block flax_crop = new BlockCrop().setBlockName(Refs.FLAXCROP_NAME);
-    public static final Block indigo_flower = new BlockCustomFlower(0).setBlockName(Refs.INDIGOFLOWER_NAME);
+    public static final Block indigo_flower = new BlockCustomFlower(Refs.INDIGOFLOWER_NAME);
 
     private static void registerBlocks() {
         GameRegistry.registerBlock(basalt, Refs.BASALT_NAME);
@@ -64,6 +64,7 @@ public class BPBlocks {
         GameRegistry.registerBlock(tin_block, Refs.TINBLOCK_NAME);
         
         GameRegistry.registerBlock(flax_crop, Refs.FLAXCROP_NAME);
+        GameRegistry.registerBlock(indigo_flower, Refs.INDIGOFLOWER_NAME);
 
     }
 }

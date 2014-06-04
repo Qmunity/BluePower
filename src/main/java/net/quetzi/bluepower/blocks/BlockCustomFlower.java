@@ -7,6 +7,7 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.EnumPlantType;
 import net.quetzi.bluepower.init.BPBlocks;
+import net.quetzi.bluepower.init.CustomTabs;
 import net.quetzi.bluepower.references.Refs;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -14,11 +15,15 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class BlockCustomFlower extends BlockBush {
     public static final String[] field_149858_b = new String[] { "indigo_flower" };
     @SideOnly(Side.CLIENT)
-    private IIcon[] iconArray;
+    private IIcon icon;
     private int meta;
 
-    public BlockCustomFlower(int par1) {
+    public BlockCustomFlower(String name) {
         super();
+        this.setCreativeTab(CustomTabs.tabBluePowerBlocks);
+        this.setHardness(0.0F);
+        this.setStepSound(soundTypeGrass);
+        this.setBlockName(name);
     }
 
     @Override
@@ -28,18 +33,13 @@ public class BlockCustomFlower extends BlockBush {
 
     @SideOnly(Side.CLIENT)
     public IIcon getIcon(int side, int meta) {
-        if (meta >= this.iconArray.length) {
-            meta = 0;
-        }
-        return this.iconArray[meta];
+         return this.icon;
     }
 
     @SideOnly(Side.CLIENT)
     public void registerBlockIcons(IIconRegister iconRegister) {
-        for (int i = 0; i < this.iconArray.length; ++i) {
-            this.iconArray[i] = iconRegister.registerIcon(Refs.MODID + ":"
+            this.icon = iconRegister.registerIcon(Refs.MODID + ":"
                     + this.getUnlocalizedName().substring(5));
-        }
     }
 
     public int damageDropped(int damage) {

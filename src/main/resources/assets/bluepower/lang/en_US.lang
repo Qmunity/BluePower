@@ -19,6 +19,7 @@ tile.copper_block.name=Copper Block
 tile.silver_block.name=Silver Block
 tile.tin_block.name=Tin Block
 tile.flax_crop.name=Flax
+tile.indigo_flower.name=Indigo Flower
 
 tile.alloy_furnace.name=Alloy Furnace
 
