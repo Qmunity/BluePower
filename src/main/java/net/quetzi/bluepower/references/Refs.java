@@ -63,7 +63,7 @@ public class Refs {
     public static final String MALACHITEHOE_NAME = "malachite_hoe";
     public static final String MALACHITESICKLE_NAME = "malachite_sickle";
 
-    public static final String FLAXSEED_NAME = "flax_seed";
+    public static final String FLAXSEED_NAME = "flax_seeds";
     public static final String FLAXCROP_NAME = "flax_crop";
     public static final String INDIGOFLOWER_NAME = "indigo_flower";
     public static final String INDIGODYE_NAME = "indigo_dye";
