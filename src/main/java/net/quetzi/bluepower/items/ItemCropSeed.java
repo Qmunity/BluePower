@@ -12,6 +12,7 @@ import net.minecraftforge.common.EnumPlantType;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.quetzi.bluepower.init.CustomTabs;
+import net.quetzi.bluepower.references.Refs;
 
 public class ItemCropSeed extends ItemSeeds implements IPlantable {
     public static Block field_150925_a;
@@ -20,6 +21,7 @@ public class ItemCropSeed extends ItemSeeds implements IPlantable {
         super(blockCrop, blockSoil);
         this.field_150925_a = blockCrop;
         this.setCreativeTab(CustomTabs.tabBluePowerBlocks);
+        this.setTextureName(Refs.MODID + ":" + Refs.FLAXSEED_NAME);
     }
 
     public boolean onItemUse(ItemStack itemStack, EntityPlayer player, World world, int x, int y,

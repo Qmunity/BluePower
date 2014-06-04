@@ -13,6 +13,7 @@ import net.minecraft.world.World;
 import net.quetzi.bluepower.init.CustomTabs;
 
 import com.google.common.collect.Sets;
+import net.quetzi.bluepower.references.Refs;
 
 public class ItemSickle extends ItemTool {
     private static final Set toolBlocks = Sets.newHashSet(new Block[] { Blocks.leaves,
@@ -24,6 +25,7 @@ public class ItemSickle extends ItemTool {
         super(1.0F, material, toolBlocks);
         this.setUnlocalizedName(name);
         this.setCreativeTab(CustomTabs.tabBluePowerTools);
+        this.setTextureName(Refs.MODID + ":" + name);
     }
 
     public float func_150893_a(ItemStack itemStack, Block block) {

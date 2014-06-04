@@ -27,10 +27,10 @@ public class Refs {
     public static final String RUBYBLOCK_NAME = "ruby_block";
     public static final String NIKOLITEBLOCK_NAME = "nikolite_block";
     
-    public static final String ITEMMALACHITE_NAME = "malachite";
-    public static final String ITEMSAPPHIRE_NAME = "sapphire";
-    public static final String ITEMRUBY_NAME = "ruby";
-    public static final String ITEMNIKOLITE_NAME = "nikolite";
+    public static final String ITEMMALACHITE_NAME = "malachite_gem";
+    public static final String ITEMSAPPHIRE_NAME = "sapphire_gem";
+    public static final String ITEMRUBY_NAME = "ruby_gem";
+    public static final String ITEMNIKOLITE_NAME = "nikolite_dust";
     
     public static final String COPPERORE_NAME = "copper_ore";
     public static final String SILVERORE_NAME = "silver_ore";
@@ -45,21 +45,21 @@ public class Refs {
     public static final String RUBYAXE_NAME = "ruby_axe";
     public static final String RUBYSWORD_NAME = "ruby_sword";
     public static final String RUBYPICKAXE_NAME = "ruby_pickaxe";
-    public static final String RUBYSPADE_NAME = "ruby_spade";
+    public static final String RUBYSPADE_NAME = "ruby_shovel";
     public static final String RUBYHOE_NAME = "ruby_hoe";
     public static final String RUBYSICKLE_NAME = "ruby_sickle";
     
     public static final String SAPPHIREAXE_NAME = "sapphire_axe";
     public static final String SAPPHIRESWORD_NAME = "sapphire_sword";
     public static final String SAPPHIREPICKAXE_NAME = "sapphire_pickaxe";
-    public static final String SAPPHIRESPADE_NAME = "sapphire_spade";
+    public static final String SAPPHIRESPADE_NAME = "sapphire_shovel";
     public static final String SAPPHIREHOE_NAME = "sapphire_hoe";
     public static final String SAPPHIRESICKLE_NAME = "sapphire_sickle";
     
     public static final String MALACHITEAXE_NAME = "malachite_axe";
     public static final String MALACHITESWORD_NAME = "malachite_sword";
     public static final String MALACHITEPICKAXE_NAME = "malachite_pickaxe";
-    public static final String MALACHITESPADE_NAME = "malachite_spade";
+    public static final String MALACHITESPADE_NAME = "malachite_shovel";
     public static final String MALACHITEHOE_NAME = "malachite_hoe";
     public static final String MALACHITESICKLE_NAME = "malachite_sickle";
 
