@@ -33,6 +33,7 @@ public class BlockCrop extends BlockCrops implements IGrowable {
         this.setHardness(0.0F);
         this.setStepSound(soundTypeGrass);
         this.disableStats();
+        this.setBlockName(Refs.FLAXCROP_NAME);
     }
 
     /**
@@ -192,6 +193,7 @@ public class BlockCrop extends BlockCrops implements IGrowable {
             for (int i = 0; i < 3 + fortune; ++i) {
                 if (world.rand.nextInt(15) <= metadata) {
                     ret.add(new ItemStack(this.func_149866_i(), 1, 0));
+                    ret.add(new ItemStack(this.func_149865_P(), 1, 0));
                 }
             }
         }

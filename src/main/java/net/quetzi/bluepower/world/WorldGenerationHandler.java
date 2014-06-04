@@ -67,7 +67,7 @@ public class WorldGenerationHandler implements IWorldGenerator {
         vc *= vc;
         for (int i = 0; i < vc; i++) {
             int x = chunkX * 16 + random.nextInt(16);
-            int y = random.nextInt(26)+6;
+            int y = random.nextInt(22)+10;
             int z = chunkZ * 16 + random.nextInt(16);
             new WorldGenVolcano(BPBlocks.basalt, random.nextInt(65536)).generate(world, random, x, y, z);
         }
