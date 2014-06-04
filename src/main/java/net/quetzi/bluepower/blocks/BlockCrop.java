@@ -62,7 +62,7 @@ public class BlockCrop extends BlockCrops implements IGrowable {
             if (random.nextInt(30) == 0) {
                 world.setBlockMetadataWithNotify(x, y, z, meta + 1, 2);
                 if (meta == 3)
-                  world.setBlock(x, y + 1, z, BPBlocks.flax_crop, 5, 2);
+                  world.setBlock(x, y + 1, z, BPBlocks.flax_crop, 7, 2);
               }
         }
     }

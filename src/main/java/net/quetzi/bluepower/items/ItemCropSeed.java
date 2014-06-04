@@ -1,9 +1,7 @@
 package net.quetzi.bluepower.items;
 
 import net.minecraft.block.Block;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.IBlockAccess;
@@ -31,7 +29,7 @@ public class ItemCropSeed extends ItemSeeds implements IPlantable {
         } else if (player.canPlayerEdit(x, y, z, side, itemStack)
                 && player.canPlayerEdit(x, y + 1, z, side, itemStack)) {
             if (world.getBlock(x, y, z).canSustainPlant(world, x, y, z, ForgeDirection.UP, this)
-                    && world.isAirBlock(x, y + 1, z)) {
+                    && world.isAirBlock(x, y + 1, z) && (world.getBlock(x, y, z).isFertile(world, x, y, z))) {
                 world.setBlock(x, y + 1, z, this.field_150925_a, 0, 2);
                 --itemStack.stackSize;
                 return true;

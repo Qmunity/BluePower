@@ -3,6 +3,7 @@ package net.quetzi.bluepower.items;
 import java.util.Set;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockBush;
 import net.minecraft.block.BlockCrops;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -13,11 +14,12 @@ import net.minecraft.world.World;
 import net.quetzi.bluepower.init.CustomTabs;
 
 import com.google.common.collect.Sets;
+
 import net.quetzi.bluepower.references.Refs;
 
 public class ItemSickle extends ItemTool {
     private static final Set toolBlocks = Sets.newHashSet(new Block[] { Blocks.leaves,
-            Blocks.leaves2, Blocks.grass, Blocks.wheat, Blocks.potatoes, Blocks.carrots });
+            Blocks.leaves2, Blocks.wheat, Blocks.potatoes, Blocks.carrots });
     private int cropRadius = 2;
     private int leafRadius = 1;
 
@@ -73,7 +75,7 @@ public class ItemSickle extends ItemTool {
                 Block blockToCheck = world.getBlock(x + i, y, z + j);
                 int meta = world.getBlockMetadata(x + i, y, z + j);
                 if (blockToCheck != null) {
-                    if (blockToCheck instanceof BlockCrops) {
+                    if ((blockToCheck instanceof BlockCrops) || (blockToCheck instanceof BlockBush)) {
                         if (blockToCheck.canHarvestBlock(player, meta)) {
                             blockToCheck.harvestBlock(world, player, x + i, y, z + j, meta);
                         }
