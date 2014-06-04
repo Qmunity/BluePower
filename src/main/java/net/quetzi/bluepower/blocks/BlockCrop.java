@@ -35,6 +35,7 @@ public class BlockCrop extends BlockCrops implements IGrowable {
         this.setStepSound(soundTypeGrass);
         this.disableStats();
         this.setBlockName(Refs.FLAXCROP_NAME);
+        this.setBlockTextureName(Refs.MODID + ":" + Refs.FLAXCROP_NAME);
     }
 
     /**
