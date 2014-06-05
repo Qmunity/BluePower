@@ -3,6 +3,7 @@ package net.quetzi.bluepower.world;
 import java.util.Random;
 
 import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.IChunkProvider;
@@ -63,13 +64,11 @@ public class WorldGenerationHandler implements IWorldGenerator {
             int z = chunkZ * 16 + random.nextInt(16);
             new WorldGenMarble(BPBlocks.marble, random.nextInt(4096)).generate(world, random, x, y, z);
         }
-        int vc = Math.max(1, random.nextInt(10) - 6);
-        vc *= vc;
-        for (int i = 0; i < vc; i++) {
+        if(random.nextInt(5) == 0){
             int x = chunkX * 16 + random.nextInt(16);
-            int y = random.nextInt(40)+80;
             int z = chunkZ * 16 + random.nextInt(16);
-            new WorldGenVolcano().generate(world, random, x, y, z);
+            int y = world.getHeightValue(x, z) + 20 + random.nextInt(10);//This number determines the topmost block of the volcano, it increases generation time exponentially when increased!
+            if(world.getBlock(x, 10, z) == Blocks.lava) new WorldGenVolcano().generate(world, random, x, y, z);
         }
     }
 

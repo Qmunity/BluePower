@@ -8,6 +8,7 @@ import java.util.Random;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.quetzi.bluepower.init.BPBlocks;
 
 public class WorldGenVolcano{
@@ -24,7 +25,6 @@ public class WorldGenVolcano{
     private static final int MAX_VULCANO_RADIUS = 200;//absulute max radius a vulcano can have, this should be a magnitude bigger than an average vulcano radius.
 
     public void generate(World world, Random rand, int middleX, int vulcanoHeight, int middleZ){
-        if(rand.nextInt(200) != 0) return;
         List<Pos>[] distMap = calculateDistMap();
         long start = System.currentTimeMillis();
         boolean first = true;
@@ -36,7 +36,7 @@ public class WorldGenVolcano{
                 if(posHeight > worldHeight) {// If the calculated desired vulcano height is higher than the world height, generate.
                     vulcanoMap.put(p, posHeight);
                     if(first){
-                        generateLavaColumn(world, middleX, posHeight, middleZ);
+                        generateLavaColumn(world, middleX, posHeight, middleZ, worldHeight);
                     }else{
                         for(int i = worldHeight + 1; i <= posHeight; i++) {
                             world.setBlock(p.x + middleX, i, p.z + middleZ, BPBlocks.basalt, 0, 0);
@@ -45,22 +45,23 @@ public class WorldGenVolcano{
                     isFinished = false;
                 }
                 first = false;
-                if(System.currentTimeMillis() - start > 3000) break;
             }
             if(isFinished) break;
-            if(System.currentTimeMillis() - start > 3000){
-                System.out.println("Too long!");
-                break;
-            }
         }
         System.out.println("time: " + (System.currentTimeMillis() - start));
     }
     
-    private void generateLavaColumn(World world, int x, int topY, int z){
+    private void generateLavaColumn(World world, int x, int topY, int z, int worldHeight){
         world.setBlock(x, topY, z, Blocks.lava);
         world.setBlock(x, topY - 1, z,Blocks.lava);//This block set, which does update neighbors, will make the lava above update.
-        for(int y = topY - 2; world.getBlock(x, y, z) != Blocks.bedrock && y > 0; y--){
+        for(int y = topY - 2; world.getBlock(x, y, z) != Blocks.lava && y > 0; y--){
             world.setBlock(x, y, z, Blocks.lava, 0, 0);
+            if(y <= worldHeight){
+                world.setBlock(x+1, y, z, BPBlocks.basalt, 0, 0);
+                world.setBlock(x-1, y, z, BPBlocks.basalt, 0, 0);
+                world.setBlock(x, y, z+1, BPBlocks.basalt, 0, 0);
+                world.setBlock(x, y, z-1, BPBlocks.basalt, 0, 0);
+            }
         }
     }
 
@@ -69,7 +70,6 @@ public class WorldGenVolcano{
    */
     @SuppressWarnings("unchecked")
     private  List<Pos>[] calculateDistMap(){
-        long start = System.currentTimeMillis();
         List<Pos>[] distMap = new List[MAX_VULCANO_RADIUS];
         for(int x = -MAX_VULCANO_RADIUS; x <= MAX_VULCANO_RADIUS; x++) {
             for(int z = -MAX_VULCANO_RADIUS; z <= MAX_VULCANO_RADIUS; z++) {
@@ -84,7 +84,6 @@ public class WorldGenVolcano{
                 }
             }
         }
-        System.out.println("calc time: " + (System.currentTimeMillis() - start));
         return distMap;
     }
 
@@ -110,14 +109,12 @@ public class WorldGenVolcano{
         }
         if(neighborCount != 0){
             double avgHeight = (double)totalHeight / neighborCount;
+            if((int)avgHeight < worldHeight + 2 && rand.nextInt(5) != 0) return -1;
+            //Formula that defines how fast the volcano descends. Using a square function to make it steeper at the top, and added randomness.
             int blocksDown = (int)(Math.pow(avgHeight - worldHeight + 1, 1.2) * 0.02D + ((rand.nextDouble() - 0.5) * 3) + 0.4D);
             if(blocksDown < 0) blocksDown = 0;
             int newHeight = (int)avgHeight - blocksDown;
-            if(newHeight == worldHeight){
-                return newHeight - rand.nextInt(3) == 0 ? 0 : 1;
-            }else{
-                return newHeight;
-            }
+            return newHeight;
         }else{
             return -1;
         }
