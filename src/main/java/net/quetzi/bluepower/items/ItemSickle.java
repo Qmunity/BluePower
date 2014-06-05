@@ -75,7 +75,7 @@ public class ItemSickle extends ItemTool {
                 Block blockToCheck = world.getBlock(x + i, y, z + j);
                 int meta = world.getBlockMetadata(x + i, y, z + j);
                 if (blockToCheck != null) {
-                    if ((blockToCheck instanceof BlockCrops) || (blockToCheck instanceof BlockBush)) {
+                    if (blockToCheck instanceof BlockBush) {
                         if (blockToCheck.canHarvestBlock(player, meta)) {
                             blockToCheck.harvestBlock(world, player, x + i, y, z + j, meta);
                         }
