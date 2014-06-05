@@ -79,7 +79,6 @@ public class BlockCrop extends BlockCrops implements IGrowable {
                     world.setBlock(x, y + 1, z, Blocks.air, 0, 2);
                 }
             }
-
             world.setBlock(x, y, z, Blocks.air, 0, 2);
         }
     }
@@ -121,8 +120,10 @@ public class BlockCrop extends BlockCrops implements IGrowable {
                 world.setBlockMetadataWithNotify(x, y, z, meta + 1, 2);
             }
             if ((meta > 5) && (world.getBlock(x, y - 1, z) == Blocks.farmland) && (world.getBlock(x, y + 1, z) == Blocks.air)) {
-                world.setBlockMetadataWithNotify(x, y, z, 7, 2);
-                world.setBlock(x, y + 1, z, BPBlocks.flax_crop, 8, 2);
+                if (meta == 7) {
+                    world.setBlock(x, y + 1, z, BPBlocks.flax_crop, 8, 2);
+                }
+                world.setBlockMetadataWithNotify(x, y, z, 6, 2);
             }
         }
     }
