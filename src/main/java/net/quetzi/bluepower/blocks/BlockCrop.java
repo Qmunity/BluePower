@@ -14,6 +14,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.quetzi.bluepower.init.BPBlocks;
 import net.quetzi.bluepower.init.BPItems;
@@ -28,8 +29,6 @@ public class BlockCrop extends BlockCrops implements IGrowable {
 
     public BlockCrop() {
         this.setTickRandomly(true);
-        float f = 0.5F;
-        this.setBlockBounds(0.5F - f, 0.0F, 0.5F - f, 0.5F + f, 0.25F, 0.5F + f);
         this.setCreativeTab((CreativeTabs) null);
         this.setHardness(0.0F);
         this.setStepSound(soundTypeGrass);
@@ -38,35 +37,45 @@ public class BlockCrop extends BlockCrops implements IGrowable {
         this.setBlockTextureName(Refs.MODID + ":" + Refs.FLAXCROP_NAME);
     }
 
+    @Override
+    public void setBlockBoundsBasedOnState(IBlockAccess world, int x, int y, int z) {
+        int l = world.getBlockMetadata(x, y, z);
+        if (l <= 2) {
+            this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.25F, 1.0F);
+        } else if (l <= 4) {
+            this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.5F, 1.0F);
+        } else if (l <= 6) {
+            this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.75F, 1.0F);
+        } else {
+            this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
+        }
+    }
+
     /**
      * is the block grass, dirt or farmland
      */
     protected boolean canPlaceBlockOn(Block block) {
         return block == Blocks.farmland;
     }
+
     /**
      * Checks to see if its valid to put this block at the specified coordinates. Args: world, x, y, z
      */
-    public boolean canPlaceBlockAt(World world, int x, int y, int z)
-    {
+    public boolean canPlaceBlockAt(World world, int x, int y, int z) {
         return super.canPlaceBlockAt(world, x, y, z) && world.isAirBlock(x, y + 1, z);
     }
 
     /**
      * checks if the block can stay, if not drop as item
      */
-    protected void checkAndDropBlock(World world, int x, int y, int z)
-    {
-        if (!this.canBlockStay(world, x, y, z))
-        {
+    protected void checkAndDropBlock(World world, int x, int y, int z) {
+        if (!this.canBlockStay(world, x, y, z)) {
             int l = world.getBlockMetadata(x, y, z);
 
-            if (!func_149887_c(l))
-            {
+            if (!func_149887_c(l)) {
                 this.dropBlockAsItem(world, x, y, z, l, 0);
 
-                if (world.getBlock(x, y + 1, z) == this)
-                {
+                if (world.getBlock(x, y + 1, z) == this) {
                     world.setBlock(x, y + 1, z, Blocks.air, 0, 2);
                 }
             }
@@ -74,8 +83,8 @@ public class BlockCrop extends BlockCrops implements IGrowable {
             world.setBlock(x, y, z, Blocks.air, 0, 2);
         }
     }
-    public static boolean func_149887_c(int meta)
-    {
+
+    public static boolean func_149887_c(int meta) {
         return (meta & 8) != 0;
     }
 
@@ -159,7 +168,7 @@ public class BlockCrop extends BlockCrops implements IGrowable {
      * items
      */
     public void dropBlockAsItemWithChance(World world, int x, int y, int z, int p_149690_5_,
-            float p_149690_6_, int p_149690_7_) {
+                                          float p_149690_6_, int p_149690_7_) {
         super.dropBlockAsItemWithChance(world, x, y, z, p_149690_5_, p_149690_6_, 0);
     }
 
