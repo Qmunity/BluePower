@@ -44,6 +44,50 @@ public class BlockCrop extends BlockCrops implements IGrowable {
     protected boolean canPlaceBlockOn(Block block) {
         return block == Blocks.farmland;
     }
+    /**
+     * Checks to see if its valid to put this block at the specified coordinates. Args: world, x, y, z
+     */
+    public boolean canPlaceBlockAt(World world, int x, int y, int z)
+    {
+        return super.canPlaceBlockAt(world, x, y, z) && world.isAirBlock(x, y + 1, z);
+    }
+
+    /**
+     * checks if the block can stay, if not drop as item
+     */
+    protected void checkAndDropBlock(World world, int x, int y, int z)
+    {
+        if (!this.canBlockStay(world, x, y, z))
+        {
+            int l = world.getBlockMetadata(x, y, z);
+
+            if (!func_149887_c(l))
+            {
+                this.dropBlockAsItem(world, x, y, z, l, 0);
+
+                if (world.getBlock(x, y + 1, z) == this)
+                {
+                    world.setBlock(x, y + 1, z, Blocks.air, 0, 2);
+                }
+            }
+
+            world.setBlock(x, y, z, Blocks.air, 0, 2);
+        }
+    }
+    public static boolean func_149887_c(int p_149887_0_)
+    {
+        return (p_149887_0_ & 8) != 0;
+    }
+
+    /**
+     * Can this block stay at this position.  Similar to canPlaceBlockAt except gets checked often with plants.
+     */
+    public boolean canBlockStay(World world, int x, int y, int z)
+    {
+        if (world.getBlock(x, y, z) != this) return super.canBlockStay(world, x, y, z); //Forge: This function is called during world gen and placement, before this block is set, so if we are not 'here' then assume it's the pre-check.
+        int l = world.getBlockMetadata(x, y, z);
+        return func_149887_c(l) ? world.getBlock(x, y - 1, z) == this : world.getBlock(x, y + 1, z) == this && super.canBlockStay(world, x, y, z);
+    }
 
     /**
      * Ticks the block if it's been scheduled
