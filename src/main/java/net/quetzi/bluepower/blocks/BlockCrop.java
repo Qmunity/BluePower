@@ -1,10 +1,10 @@
 package net.quetzi.bluepower.blocks;
 
-import java.util.ArrayList;
-import java.util.Random;
-
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCrops;
+import net.minecraft.block.BlockFarmland;
 import net.minecraft.block.IGrowable;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
@@ -15,12 +15,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
 import net.quetzi.bluepower.init.BPBlocks;
 import net.quetzi.bluepower.init.BPItems;
 import net.quetzi.bluepower.references.Refs;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+
+import java.util.ArrayList;
+import java.util.Random;
 
 public class BlockCrop extends BlockCrops implements IGrowable {
     @SideOnly(Side.CLIENT)
@@ -74,19 +74,22 @@ public class BlockCrop extends BlockCrops implements IGrowable {
             world.setBlock(x, y, z, Blocks.air, 0, 2);
         }
     }
-    public static boolean func_149887_c(int p_149887_0_)
+    public static boolean func_149887_c(int meta)
     {
-        return (p_149887_0_ & 8) != 0;
+        return (meta & 8) != 0;
     }
 
     /**
      * Can this block stay at this position.  Similar to canPlaceBlockAt except gets checked often with plants.
      */
-    public boolean canBlockStay(World world, int x, int y, int z)
-    {
-        if (world.getBlock(x, y, z) != this) return super.canBlockStay(world, x, y, z); //Forge: This function is called during world gen and placement, before this block is set, so if we are not 'here' then assume it's the pre-check.
+    public boolean canBlockStay(World world, int x, int y, int z) {
+        if (world.getBlock(x, y, z) != this)
+            return super.canBlockStay(world, x, y, z); //Forge: This function is called during world gen and placement, before this block is set, so if we are not 'here' then assume it's the pre-check.
         int l = world.getBlockMetadata(x, y, z);
-        return func_149887_c(l) ? world.getBlock(x, y - 1, z) == this : world.getBlock(x, y + 1, z) == this && super.canBlockStay(world, x, y, z);
+        if ((world.getBlock(x, y - 1, z) instanceof BlockFarmland) || (world.getBlock(x, y - 1, z) instanceof BlockCrop)) {
+            return true;
+        } else
+            return false;
     }
 
     /**
@@ -109,9 +112,8 @@ public class BlockCrop extends BlockCrops implements IGrowable {
                 world.setBlockMetadataWithNotify(x, y, z, meta + 1, 2);
             }
             if ((meta > 5) && (world.getBlock(x, y - 1, z) == Blocks.farmland) && (world.getBlock(x, y + 1, z) == Blocks.air)) {
-                world.setBlockMetadataWithNotify(x, y, z, 6, 2);
-                world.setBlock(x, y + 1, z, BPBlocks.flax_crop);
-                world.setBlockMetadataWithNotify(x, y + 1, z, 7, 2);
+                world.setBlockMetadataWithNotify(x, y, z, 7, 2);
+                world.setBlock(x, y + 1, z, BPBlocks.flax_crop, 8, 2);
             }
         }
     }
@@ -130,8 +132,8 @@ public class BlockCrop extends BlockCrops implements IGrowable {
      */
     @SideOnly(Side.CLIENT)
     public IIcon getIcon(int side, int meta) {
-        if (meta < 0 || meta > 7) {
-            meta = 7;
+        if (meta < 0 || meta > 8) {
+            meta = 8;
         }
 
         return this.iconArray[meta];
@@ -162,7 +164,7 @@ public class BlockCrop extends BlockCrops implements IGrowable {
     }
 
     public Item getItemDropped(int meta, Random random, int p_149650_3_) {
-        return meta == 7 ? this.func_149865_P() : this.func_149866_i();
+        return meta == 8 ? this.func_149865_P() : this.func_149866_i();
     }
 
     /**
@@ -190,7 +192,7 @@ public class BlockCrop extends BlockCrops implements IGrowable {
 
     @SideOnly(Side.CLIENT)
     public void registerBlockIcons(IIconRegister iconRegister) {
-        this.iconArray = new IIcon[8];
+        this.iconArray = new IIcon[9];
 
         for (int i = 0; i < this.iconArray.length; ++i) {
             int tex = 0;
@@ -202,9 +204,9 @@ public class BlockCrop extends BlockCrops implements IGrowable {
                 tex = 2;
             } else if (i == 5) {
                 tex = 3;
-            } else if (i == 6) {
+            } else if ((i == 6) || (i == 7)) {
                 tex = 4;
-            } else if (i == 7) {
+            } else if (i == 8) {
                 tex = 5;
             }
 
@@ -220,10 +222,9 @@ public class BlockCrop extends BlockCrops implements IGrowable {
     public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
         ArrayList<ItemStack> ret = super.getDrops(world, x, y, z, metadata, fortune);
 
-        if (metadata >= 7) {
+        if (metadata >= 8) {
             for (int i = 0; i < 3 + fortune; ++i) {
                 if (world.rand.nextInt(15) <= metadata) {
-                    ret.add(new ItemStack(this.func_149866_i(), 1, 0));
                     ret.add(new ItemStack(this.func_149865_P(), 1, 0));
                 }
             }
