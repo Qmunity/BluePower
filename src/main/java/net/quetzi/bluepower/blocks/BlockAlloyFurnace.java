@@ -97,6 +97,7 @@ public class BlockAlloyFurnace extends BlockContainerBase {
 		return TileAlloyFurnace.class;
 	}
 	
+	@SuppressWarnings("cast")
 	@SideOnly(Side.CLIENT)
     public void randomDisplayTick(World world, int x, int y, int z, Random rnd){
 		int metadata = world.getBlockMetadata(x, y, z);
