@@ -11,6 +11,8 @@ public class Refs {
     public static String fullVersionString() {
         return String.format("%s-%s.%s.%s", MCVERSION, MAJOR, MINOR, BUILD);
     }
+    
+    public static final String PROXY_LOCATION = "net.quetzi.bluepower";
 
     public static final String MARBLE_NAME = "marble";
     public static final String BASALT_NAME = "basalt";
@@ -73,6 +75,7 @@ public class Refs {
     public static final String IRONSICKLE_NAME = "iron_sickle";
     public static final String GOLDSICKLE_NAME = "gold_sickle";
     public static final String DIAMONDSICKLE_NAME = "diamond_sickle";
+	
     
     
     

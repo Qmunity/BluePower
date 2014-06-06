@@ -1,7 +1,13 @@
 package net.quetzi.bluepower;
 
-public class ClientProxy {
-    public ClientProxy() {
-        
+import net.quetzi.bluepower.client.renderers.Renderers;
+
+public class ClientProxy extends CommonProxy{
+    public static void init(){
+    	
+    }
+    
+    public static void initRenderers(){
+    	Renderers.init();
     }
 }

@@ -1,7 +1,11 @@
 package net.quetzi.bluepower;
 
 public class CommonProxy {
-    public CommonProxy() {
-        
+public static void init(){
+    	
+    }
+    
+    public static void initRenderers(){
+    	
     }
 }
