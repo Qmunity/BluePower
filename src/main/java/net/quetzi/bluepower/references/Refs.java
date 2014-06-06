@@ -20,6 +20,7 @@ public class Refs {
     public static final String BASALTCOBBLE_NAME = "basalt_cobble";
     public static final String BASALTBRICK_NAME = "basalt_brick";
     public static final String MARBLEBRICK_NAME = "marble_brick";
+    public static final String CRACKED_BASALT = "cracked_basalt_lava";
     public static final String ALLOYFURNACE_NAME = "alloyfurnace";
     public static final String MALACHITEORE_NAME = "malachite_ore";
     public static final String RUBYORE_NAME = "ruby_ore";

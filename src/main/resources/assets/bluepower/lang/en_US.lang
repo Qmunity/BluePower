@@ -3,6 +3,7 @@ tile.marble.name=Marble
 tile.basalt_brick.name=Basalt Brick
 tile.marble_brick.name=Marble Brick
 tile.basalt_cobble.name=Basalt Cobble
+tile.cracked_basalt_lava.name=Cracked Basalt
 tile.alloy_furnace.name=Alloy Furnace
 tile.malachite_ore.name=Malachite Ore
 tile.ruby_ore.name=Ruby Ore
