@@ -1,0 +1,67 @@
+tile.basalt.name=Basalto
+tile.marble.name=Mármol
+tile.basalt_brick.name=Ladrillos de basalto
+tile.marble_brick.name=Ladrillos de mármol
+tile.basalt_cobble.name=Roca de basalto
+tile.alloy_furnace.name=Horno de aleaciones
+tile.malachite_ore.name=Mena de malaquita
+tile.ruby_ore.name=Mena de rubí
+tile.sapphire_ore.name=Mena de zafiro
+tile.nikolite_ore.name=Mena de nikolita
+tile.malachite_block.name=Bloque de malaquita
+tile.sapphire_block.name=Bloque de zafiro
+tile.nikolite_block.name=Bloque de nikolita
+tile.ruby_block.name=Bloque de rubí
+tile.copper_ore.name=Mena de cobre
+tile.silver_ore.name=Mena de plata
+tile.tin_ore.name=Mena de estaño
+tile.copper_block.name=Bloque de cobre
+tile.silver_block.name=Bloque de plata
+tile.tin_block.name=Bloque de estaño
+tile.flax_crop.name=Lino
+tile.indigo_flower.name=Flor índigo
+
+tile.alloy_furnace.name=Horno de aleaciones
+
+item.ruby_gem.name=Rubí
+item.malachite_gem.name=Malaquita
+item.sapphire_gem.name=Zafiro
+item.nikolite_dust.name=Nikolita
+item.copper_ingot.name=Lingote de cobre
+item.silver_ingot.name=Lingote de plata
+item.tin_ingot.name=Lingote de estaño
+
+item.flax_seeds.name=Semillas de lino
+item.indigo_flower.name=Flor índigo
+item.indigo_dye.name=Tinta índigo
+
+item.ruby_sword.name=Espada de rubí
+item.ruby_shovel.name=Pala de rubí
+item.ruby_axe.name=Hacha de rubí
+item.ruby_pickaxe.name=Pico de rubí
+item.ruby_hoe.name=Azada de rubí
+item.ruby_sickle.name=Hoz de rubí
+
+item.sapphire_sword.name=Espada de zafiro
+item.sapphire_shovel.name=Pala de zafiro
+item.sapphire_axe.name=Hacha de zafiro
+item.sapphire_pickaxe.name=Pico de zafiro
+item.sapphire_hoe.name=Azada de zafiro
+item.sapphire_sickle.name=Hoz de zafiro
+
+item.malachite_sword.name=Espada de malaquita
+item.malachite_shovel.name=Pala de malaquita
+item.malachite_axe.name=Hacha de malaquita
+item.malachite_pickaxe.name=Pico de malaquita
+item.malachite_hoe.name=Azada de malaquita
+item.malachite_sickle.name=Hoz de malaquita
+
+item.wood_sickle.name=Hoz de madera
+item.stone_sickle.name=Hoz de piedra
+item.iron_sickle.name=Hoz de hierro
+item.gold_sickle.name=Hoz de oro
+item.diamond_sickle.name=Hoz de diamante
+
+itemGroup.tabBluePowerMachines=Máquinas de BluePower
+itemGroup.tabBluePowerBlocks=Bloques de BluePower
+itemGroup.tabBluePowerTools=Herramientas de BluePower
