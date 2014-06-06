@@ -25,6 +25,25 @@ version = "1.7.2-${project.ext.major}.${project.minor}.${System.getenv("BUILD_NU
 group= "net.quetzi.bluepower" 
 archivesBaseName = "bluepower"
 
+dependencies {
+    def f = new File('dep/')
+    if(f.exists()){
+        f.delete()
+    }
+    f.mkdirs()
+    if(!f.exists()){
+        f.mkdir()
+    }
+	println("  Downloading dependencies!")
+    ant.get(src: 'http://files.minecraftforge.net/maven/codechicken/CodeChickenLib/1.7.2-1.1.1.81/CodeChickenLib-1.7.2-1.1.1.81-dev.jar', dest: 'dep')
+	file("dep/CodeChickenLib-1.7.2-1.1.1.81-dev.jar").renameTo(file("dep/ccl.jar"))
+    ant.get(src: 'http://files.minecraftforge.net/maven/codechicken/ForgeMultipart/1.7.2-1.1.0.282/ForgeMultipart-1.7.2-1.1.0.282-dev.jar', dest: 'dep')
+	file("dep/ForgeMultipart-1.7.2-1.1.0.282-dev.jar").renameTo(file("dep/fmp.jar"))
+	println("  Adding dependencies!")
+    compile files("dep/ccl.jar", "dep/fmp.jar")
+	println("  Finished adding dependencies!")
+}
+
 minecraft {
     version = "1.7.2-10.12.1.1101"
     assetDir = "eclipse/assets"
