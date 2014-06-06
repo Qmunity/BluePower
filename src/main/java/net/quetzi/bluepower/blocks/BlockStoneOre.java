@@ -21,6 +21,7 @@ public class BlockStoneOre extends Block {
         } else if (name == Refs.MARBLE_NAME) {
             this.setResistance(1.0F);
             this.setHarvestLevel("pickaxe",1);
+            this.setHardness(1.5F);
         } else {
             this.setResistance(5.0F);
             this.setHarvestLevel("pickaxe", 2);
