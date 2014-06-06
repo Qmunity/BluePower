@@ -11,6 +11,7 @@ import net.quetzi.bluepower.init.CustomTabs;
 import net.quetzi.bluepower.init.OreDictionarySetup;
 import net.quetzi.bluepower.init.Recipes;
 import net.quetzi.bluepower.references.Refs;
+import net.quetzi.bluepower.tileEntities.TileEntities;
 import net.quetzi.bluepower.world.WorldGenerationHandler;
 
 import org.apache.logging.log4j.Logger;
@@ -30,12 +31,14 @@ public class BluePower {
     public static BluePower instance;
 //    @SidedProxy(clientSide = "ClientProxy", serverSide = "CommonProxy")
     public static CommonProxy proxy;
-
+    public static Logger log;
+    
+    
     @EventHandler
     public void PreInit(FMLPreInitializationEvent event) {
         event.getModMetadata().version = Refs.fullVersionString();
         
-        Logger log = event.getModLog();
+        log = event.getModLog();
         Configuration config = new Configuration(event.getSuggestedConfigurationFile());
         
         CustomTabs.init();
@@ -46,6 +49,7 @@ public class BluePower {
 
         BPBlocks.init();
         BPItems.init();
+        TileEntities.init();
         OreDictionarySetup.init();
         GameRegistry.registerWorldGenerator(new WorldGenerationHandler(), 0);
     }
