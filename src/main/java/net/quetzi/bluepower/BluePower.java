@@ -1,8 +1,9 @@
 package net.quetzi.bluepower;
 
 import net.minecraft.item.crafting.CraftingManager;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.common.util.EnumHelper;
+import net.quetzi.bluepower.events.PlayerEventHandler;
 import net.quetzi.bluepower.init.BPBlocks;
 import net.quetzi.bluepower.init.BPItems;
 import net.quetzi.bluepower.init.Config;
@@ -54,7 +55,7 @@ public class BluePower {
     }
     @EventHandler
     public void PostInit(FMLPostInitializationEvent event) {
-        // register events
+        MinecraftForge.EVENT_BUS.register(new PlayerEventHandler());
     }
     @EventHandler
     public void ServerStarting(FMLServerStartingEvent event) {

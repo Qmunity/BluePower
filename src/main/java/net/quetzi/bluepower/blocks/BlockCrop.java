@@ -51,6 +51,17 @@ public class BlockCrop extends BlockCrops implements IGrowable {
             this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
         }
     }
+    
+    public boolean fertilize(World world, int x, int y, int z) {
+        if (!world.isAirBlock(x,  y + 1, z) || (!(world.getBlock(x, y, z) instanceof BlockFarmland))) { return false; }
+        int meta = world.getBlockMetadata(x,  y,  z); 
+        if (meta == 7) {
+            world.setBlockMetadataWithNotify(x, y, z, 7, 2);
+            world.setBlock(x, y, z, BPBlocks.flax_crop, 8, 2);
+            return true;
+        }
+        return true;
+    }
 
     /**
      * is the block grass, dirt or farmland
