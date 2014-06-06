@@ -20,10 +20,12 @@ public class TileAlloyFurnace extends TileBase {
 		//Check if the meta is already set after loading the NBT.
 		if(!metaSet){
 			metaSet = true;
-			int newMeta = getBlockMetadata();
-			newMeta  = newMeta & 7;
-			newMeta |= (isActive == true ? 8 : 0);
-			getWorldObj().setBlockMetadataWithNotify(xCoord, yCoord, zCoord, newMeta, 2);
+			if(isActive){
+				int newMeta = getBlockMetadata();
+				newMeta  = newMeta & 7;
+				newMeta |= (isActive == true ? 8 : 0);
+				getWorldObj().setBlockMetadataWithNotify(xCoord, yCoord, zCoord, newMeta, 2);
+			}
 		}
 	}
 	
@@ -54,18 +56,16 @@ public class TileAlloyFurnace extends TileBase {
 	}
 	
 	@Override
-	protected void redstoneChanged(boolean newValue) { 
-		if(newValue == true){
-			isActive = true;
-			metaSet = false;
-		}else{
-			isActive = false;
-			metaSet = false;
-		}
+	protected void redstoneChanged(boolean newValue) {
+		setIsActive(newValue);
 	}
 
-	public void setIsActive(boolean isActive2) {
-		
+	public void setIsActive(boolean _isActive) {
+		isActive = _isActive;
+		int newMeta = getBlockMetadata();
+		newMeta  = newMeta & 7;
+		newMeta |= (_isActive == true ? 8 : 0);
+		getWorldObj().setBlockMetadataWithNotify(xCoord, yCoord, zCoord, newMeta, 2);		
 	}
 	
 }

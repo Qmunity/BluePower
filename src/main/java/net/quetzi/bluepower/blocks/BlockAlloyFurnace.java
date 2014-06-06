@@ -8,6 +8,7 @@ import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.quetzi.bluepower.init.BPBlocks;
 import net.quetzi.bluepower.references.Refs;
@@ -27,6 +28,7 @@ public class BlockAlloyFurnace extends BlockContainerBase {
         this.setBlockName(Refs.ALLOYFURNACE_NAME);
         //This might not be needed actually.
         this.setBlockTextureName(Refs.ALLOYFURNACE_NAME + "_front");
+
     }
 
     @Override
@@ -94,4 +96,38 @@ public class BlockAlloyFurnace extends BlockContainerBase {
 	protected Class<? extends TileEntity> getTileEntity() {
 		return TileAlloyFurnace.class;
 	}
+	
+	@SideOnly(Side.CLIENT)
+    public void randomDisplayTick(World world, int x, int y, int z, Random rnd){
+		int metadata = world.getBlockMetadata(x, y, z);
+    	if((metadata & 8) != 0){
+            int l = world.getBlockMetadata(x, y, z) & 7;
+            float f = (float)x + 0.5F;
+            float f1 = (float)y + 0.0F + rnd.nextFloat() * 6.0F / 16.0F;
+            float f2 = (float)z + 0.5F;
+            float f3 = 0.52F;
+            float f4 = rnd.nextFloat() * 0.6F - 0.3F;
+
+            if (l == 4)
+            {
+                world.spawnParticle("smoke", (double)(f - f3), (double)f1, (double)(f2 + f4), 0.0D, 0.0D, 0.0D);
+                world.spawnParticle("flame", (double)(f - f3), (double)f1, (double)(f2 + f4), 0.0D, 0.0D, 0.0D);
+            }
+            else if (l == 5)
+            {
+                world.spawnParticle("smoke", (double)(f + f3), (double)f1, (double)(f2 + f4), 0.0D, 0.0D, 0.0D);
+                world.spawnParticle("flame", (double)(f + f3), (double)f1, (double)(f2 + f4), 0.0D, 0.0D, 0.0D);
+            }
+            else if (l == 2)
+            {
+                world.spawnParticle("smoke", (double)(f + f4), (double)f1, (double)(f2 - f3), 0.0D, 0.0D, 0.0D);
+                world.spawnParticle("flame", (double)(f + f4), (double)f1, (double)(f2 - f3), 0.0D, 0.0D, 0.0D);
+            }
+            else if (l == 3)
+            {
+                world.spawnParticle("smoke", (double)(f + f4), (double)f1, (double)(f2 + f3), 0.0D, 0.0D, 0.0D);
+                world.spawnParticle("flame", (double)(f + f4), (double)f1, (double)(f2 + f3), 0.0D, 0.0D, 0.0D);
+            }
+        }
+    }
 }
