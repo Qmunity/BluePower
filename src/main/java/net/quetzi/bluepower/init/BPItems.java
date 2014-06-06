@@ -6,7 +6,6 @@ import net.minecraft.item.Item.ToolMaterial;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.EnumHelper;
-import net.minecraftforge.oredict.OreDictionary;
 import net.quetzi.bluepower.items.ItemCropSeed;
 import net.quetzi.bluepower.items.ItemGem;
 import net.quetzi.bluepower.items.ItemGemAxe;

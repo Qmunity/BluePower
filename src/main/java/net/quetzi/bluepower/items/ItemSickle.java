@@ -4,7 +4,6 @@ import java.util.Set;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
-import net.minecraft.block.BlockCrops;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -12,10 +11,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTool;
 import net.minecraft.world.World;
 import net.quetzi.bluepower.init.CustomTabs;
+import net.quetzi.bluepower.references.Refs;
 
 import com.google.common.collect.Sets;
-
-import net.quetzi.bluepower.references.Refs;
 
 public class ItemSickle extends ItemTool {
     private static final Set toolBlocks = Sets.newHashSet(new Block[] { Blocks.leaves,

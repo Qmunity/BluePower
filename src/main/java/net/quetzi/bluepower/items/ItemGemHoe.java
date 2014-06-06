@@ -1,6 +1,5 @@
 package net.quetzi.bluepower.items;
 
-import net.minecraft.item.Item.ToolMaterial;
 import net.minecraft.item.ItemHoe;
 import net.quetzi.bluepower.init.CustomTabs;
 import net.quetzi.bluepower.references.Refs;

@@ -1,12 +1,11 @@
 package net.quetzi.bluepower.events;
 
 
-import cpw.mods.fml.common.eventhandler.Event.Result;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import net.minecraft.block.Block;
 import net.minecraftforge.event.entity.player.BonemealEvent;
 import net.quetzi.bluepower.blocks.BlockCrop;
 import net.quetzi.bluepower.init.BPBlocks;
+import cpw.mods.fml.common.eventhandler.Event.Result;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class PlayerEventHandler {
 

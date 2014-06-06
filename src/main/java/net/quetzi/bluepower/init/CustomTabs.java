@@ -3,7 +3,6 @@ package net.quetzi.bluepower.init;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
-import net.quetzi.bluepower.references.Refs;
 
 public class CustomTabs {
     public static CreativeTabs tabBluePowerBlocks;
