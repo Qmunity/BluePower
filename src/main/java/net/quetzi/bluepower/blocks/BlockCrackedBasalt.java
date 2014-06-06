@@ -5,6 +5,7 @@ import java.util.Random;
 import net.minecraft.entity.item.EntityFallingBlock;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
 import net.minecraft.world.World;
 import net.quetzi.bluepower.init.BPBlocks;
 
@@ -12,6 +13,8 @@ public class BlockCrackedBasalt extends BlockStoneOre{
     public BlockCrackedBasalt(String name){
         super(name);
         setTickRandomly(true);
+        setResistance(25.0F);
+        setHarvestLevel("pickaxe",1);
     }
 
     /* Debug, when testing, also change the 'random.nextInt(100)' to 'random.nextInt(1)'
@@ -43,5 +46,13 @@ public class BlockCrackedBasalt extends BlockStoneOre{
         entity.field_145812_b = 1;//make this field that keeps track of the ticks set to 1, so it doesn't kill itself when it searches for a lava block.
         entity.field_145813_c = false; //disable item drops when the falling block fails to place.
         world.spawnEntityInWorld(entity);
+    }
+    
+    public Item getItemDropped(int par1, Random par2, int par3) {
+        return Item.getItemFromBlock(BPBlocks.basalt_cobble);
+    }
+    
+    protected boolean canSilkHarvest(){
+        return false;
     }
 }

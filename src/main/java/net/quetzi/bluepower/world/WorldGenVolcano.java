@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 import net.quetzi.bluepower.init.BPBlocks;
@@ -33,11 +35,14 @@ public class WorldGenVolcano{
             for(Pos p : distList) {
                 int worldHeight = world.getHeightValue(p.x + middleX, p.z + middleZ) - 1;
                 int posHeight = first ? vulcanoHeight : getNewVulcanoHeight(worldHeight, p, rand, dist);
-                if(posHeight > worldHeight) {// If the calculated desired vulcano height is higher than the world height, generate.
+                if(posHeight >= 0 && (posHeight > worldHeight || canReplace(world, p.x + middleX, posHeight, p.z + middleZ))) {// If the calculated desired vulcano height is higher than the world height, generate.
                     vulcanoMap.put(p, posHeight);
                     if(!first){
-                        for(int i = worldHeight + 1; i <= posHeight; i++) {
+                        for(int i = posHeight; i > 0 && (i > worldHeight || canReplace(world, p.x + middleX, i, p.z + middleZ)); i--) {
                             world.setBlock(p.x + middleX, i, p.z + middleZ, BPBlocks.basalt, 0, 0);
+                        }
+                        for(int i = posHeight + 1; i < vulcanoHeight; i++){
+                            if(canReplace(world, p.x + middleX, i, p.z + middleZ)) world.setBlock(p.x + middleX, i, p.z + middleZ, Blocks.air, 0, 0);
                         }
                     }
                     isFinished = false;
@@ -49,6 +54,13 @@ public class WorldGenVolcano{
         generateLavaColumn(world, middleX, vulcanoHeight, middleZ, rand);
     }
     
+    private boolean canReplace(World world, int x, int y, int z){
+        if(world.isAirBlock(x, y, z)) return true;
+        Block block = world.getBlock(x, y, z);
+        Material material = block.getMaterial();
+        return material == Material.wood || material == Material.cactus || material == Material.leaves || material == Material.plants || material == Material.vine || block == Blocks.water || block == Blocks.flowing_water;
+    }
+    
     private void generateLavaColumn(World world, int x, int topY, int z, Random rand){
        // world.setBlock(x, topY, z, Blocks.lava);
         if(rand.nextDouble() < Config.volcanoActiveToInactiveRatio){
@@ -57,7 +69,7 @@ public class WorldGenVolcano{
             world.setBlock(x, topY + 1, z,Blocks.lava);
             world.setBlock(x, topY, z,Blocks.lava);//This block set, which does update neighbors, will make the lava above update.
         }
-        for(int y = 10; y < topY - 1; y++){
+        for(int y = 10; y < topY; y++){
             world.setBlock(x, y, z, Blocks.lava, 0, 0);
             world.setBlock(x+1, y, z, BPBlocks.basalt, 0, 0);
             world.setBlock(x-1, y, z, BPBlocks.basalt, 0, 0);
@@ -110,7 +122,7 @@ public class WorldGenVolcano{
         }
         if(neighborCount != 0){
             double avgHeight = (double)totalHeight / neighborCount;
-            if((int)avgHeight < worldHeight + 2 && rand.nextInt(5) != 0) return -1;
+            if((int)avgHeight < worldHeight + 2 && rand.nextInt(5) != 0) return (int)avgHeight - 2;
             //Formula that defines how fast the volcano descends. Using a square function to make it steeper at the top, and added randomness.
             int blocksDown;
             if(distFromCenter < 2){
