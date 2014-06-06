@@ -4,6 +4,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.quetzi.bluepower.tileEntities.TileBase;
 
 public class TileAlloyFurnace extends TileBase {
+	private boolean isActive;
+	private boolean metaSet = false;
 	
 	/*************** BASIC TE FUNCTIONS **************/
 	
@@ -14,6 +16,17 @@ public class TileAlloyFurnace extends TileBase {
 	@Override
 	public void updateEntity(){
 		super.updateEntity();
+		
+		//Check if the meta is already set after loading the NBT.
+		if(!metaSet){
+			metaSet = true;
+			if(isActive){
+				int newMeta = getBlockMetadata();
+				newMeta  = newMeta & 0b0111;
+				newMeta |= (isActive == true ? 0b1000 : 0);
+				getWorldObj().setBlockMetadataWithNotify(xCoord, yCoord, zCoord, newMeta, 2);
+			}
+		}
 	}
 	
 	/**
@@ -22,6 +35,8 @@ public class TileAlloyFurnace extends TileBase {
 	@Override
 	public void readFromNBT(NBTTagCompound tCompound){
 		super.readFromNBT(tCompound);
+		isActive = tCompound.getBoolean("isActive");
+		metaSet = false;
 	}
 	
 	/**
@@ -30,6 +45,25 @@ public class TileAlloyFurnace extends TileBase {
 	@Override
 	public void writeToNBT(NBTTagCompound tCompound){
 		super.writeToNBT(tCompound);
+		tCompound.setBoolean("isActive", isActive);
+	}
+
+	
+	/**************** ADDED FUNCTIONS **************/
+	
+	public boolean getIsActive() {
+		return isActive;
+	}
+	
+	@Override
+	protected void redstoneChanged(boolean newValue) { 
+		if(newValue == true){
+			isActive = true;
+			metaSet = false;
+		}else{
+			isActive = false;
+			metaSet = false;
+		}
 	}
 	
 }

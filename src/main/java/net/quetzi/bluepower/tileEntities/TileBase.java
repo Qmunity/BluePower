@@ -2,11 +2,9 @@ package net.quetzi.bluepower.tileEntities;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.util.ForgeDirection;
 
 public class TileBase extends TileEntity {
-	private ForgeDirection facing;
-	
+	private boolean isRedstonePowered;
 	
 	/*************** BASIC TE FUNCTIONS **************/
 	
@@ -25,7 +23,7 @@ public class TileBase extends TileEntity {
 	@Override
 	public void readFromNBT(NBTTagCompound tCompound){
 		super.readFromNBT(tCompound);
-		facing = ForgeDirection.getOrientation(tCompound.getInteger("facing"));
+		isRedstonePowered = tCompound.getBoolean("isRedstonePowered");
 	}
 	
 	/**
@@ -34,27 +32,35 @@ public class TileBase extends TileEntity {
 	@Override
 	public void writeToNBT(NBTTagCompound tCompound){
 		super.writeToNBT(tCompound);
-		tCompound.setInteger("facing", facing.ordinal());
+		tCompound.setBoolean("isRedstonePowered", isRedstonePowered);
 	}
-	
 	
 	/***************** ADDED FUNCTIONS *****************/
 	
 	/**
-	 * Method to set the direction this TE is facing.
-	 * @param _facing
+	 * Checks if redstone has changed.
 	 */
-	public void setFacing(ForgeDirection _facing){
-		facing = _facing;
-		//Todo: Sent packet to clients
+	public void checkRedstonePower() {
+		boolean isIndirectlyPowered = getWorldObj().isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord);
+		if(isIndirectlyPowered && !isRedstonePowered){
+			isRedstonePowered = true;
+			this.redstoneChanged(isRedstonePowered);
+		}else if(isRedstonePowered && !isIndirectlyPowered){
+			isRedstonePowered = false;
+			this.redstoneChanged(isRedstonePowered);
+		}
 	}
+
+	/**
+	 * This method can be overwritten to get alerted when the redstone level has changed.
+	 * @param newValue The redstone level it is at now
+	 */
+	protected void redstoneChanged(boolean newValue) { }
 	
 	/**
-	 * Method to get the direction this TE is facing.
-	 * @return
+	 * Check whether or not redstone level is high
 	 */
-	public ForgeDirection getFacing(){
-		return facing;
+	public boolean getIsRedstonePowered(){
+		return isRedstonePowered;
 	}
-	
 }

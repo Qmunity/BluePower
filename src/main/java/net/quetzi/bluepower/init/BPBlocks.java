@@ -65,7 +65,7 @@ public class BPBlocks {
         flax_crop = new BlockCrop().setBlockName(Refs.FLAXCROP_NAME);
         indigo_flower = new BlockCustomFlower(Refs.INDIGOFLOWER_NAME);
     	
-        alloy_furnace = new BlockAlloyFurnace(false);
+        alloy_furnace = new BlockAlloyFurnace();
         
         registerBlocks();
     }
