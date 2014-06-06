@@ -26,7 +26,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 
 @Mod(modid = Refs.MODID, name = Refs.NAME)
 public class BluePower {
-    @Instance("BluePower")
+    @Instance(Refs.MODID)
     public static BluePower instance;
 //    @SidedProxy(clientSide = "ClientProxy", serverSide = "CommonProxy")
     public static CommonProxy proxy;
