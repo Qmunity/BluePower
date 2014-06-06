@@ -16,6 +16,25 @@ public class Refs {
     
     public static final String PROXY_LOCATION         = "net.quetzi.bluepower";
     public static final double PACKET_UPDATE_DISTANCE = 64;
+<<<<<<< HEAD
+=======
+
+    public static final String MARBLE_NAME = "marble";
+    public static final String BASALT_NAME = "basalt";
+    public static final String BASALTCOBBLE_NAME = "basalt_cobble";
+    public static final String BASALTBRICK_NAME = "basalt_brick";
+    public static final String MARBLEBRICK_NAME = "marble_brick";
+    public static final String CRACKED_BASALT = "cracked_basalt_lava";
+    public static final String ALLOYFURNACE_NAME = "alloyfurnace";
+    public static final String MALACHITEORE_NAME = "malachite_ore";
+    public static final String RUBYORE_NAME = "ruby_ore";
+    public static final String SAPPHIREORE_NAME = "sapphire_ore";
+    public static final String NIKOLITEORE_NAME = "nikolite_ore";
+    public static final String MALACHITEBLOCK_NAME = "malachite_block";
+    public static final String SAPPHIREBLOCK_NAME = "sapphire_block";
+    public static final String RUBYBLOCK_NAME = "ruby_block";
+    public static final String NIKOLITEBLOCK_NAME = "nikolite_block";
+>>>>>>> c75e0617c553521d782acb5b4c879ec236af2dee
     
     public static final String MARBLE_NAME            = "marble";
     public static final String BASALT_NAME            = "basalt";

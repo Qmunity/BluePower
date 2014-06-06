@@ -2,6 +2,7 @@ package net.quetzi.bluepower.init;
 
 import net.minecraft.block.Block;
 import net.quetzi.bluepower.blocks.BlockAlloyFurnace;
+import net.quetzi.bluepower.blocks.BlockCrackedBasalt;
 import net.quetzi.bluepower.blocks.BlockCrop;
 import net.quetzi.bluepower.blocks.BlockCustomFlower;
 import net.quetzi.bluepower.blocks.BlockItemOre;
@@ -15,6 +16,7 @@ public class BPBlocks {
     public static Block basalt_cobble;
     public static Block basalt_brick;
     public static Block marble_brick;
+    public static Block cracked_basalt;
 
     public static Block nikolite_ore;
     public static Block ruby_ore;
@@ -45,6 +47,7 @@ public class BPBlocks {
     	basalt_cobble  = new BlockStoneOre(Refs.BASALTCOBBLE_NAME);
     	basalt_brick = new BlockStoneOre(Refs.BASALTBRICK_NAME);
     	marble_brick = new BlockStoneOre(Refs.MARBLEBRICK_NAME);
+    	cracked_basalt = new BlockCrackedBasalt(Refs.CRACKED_BASALT);
 
         nikolite_ore = new BlockItemOre(Refs.NIKOLITEORE_NAME, BPItems.nikolite);
         ruby_ore = new BlockItemOre(Refs.RUBYORE_NAME, BPItems.ruby);
@@ -77,6 +80,7 @@ public class BPBlocks {
         GameRegistry.registerBlock(basalt_cobble, Refs.BASALTCOBBLE_NAME);
         GameRegistry.registerBlock(basalt_brick, Refs.BASALTBRICK_NAME);
         GameRegistry.registerBlock(marble_brick, Refs.MARBLEBRICK_NAME);
+        GameRegistry.registerBlock(cracked_basalt, Refs.CRACKED_BASALT);
 
         GameRegistry.registerBlock(nikolite_ore, Refs.NIKOLITEORE_NAME);
         GameRegistry.registerBlock(copper_ore, Refs.COPPERORE_NAME);

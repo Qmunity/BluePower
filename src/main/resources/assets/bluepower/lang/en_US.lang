@@ -3,6 +3,7 @@ tile.marble.name=Marble
 tile.basalt_brick.name=Basalt Brick
 tile.marble_brick.name=Marble Brick
 tile.basalt_cobble.name=Basalt Cobble
+tile.cracked_basalt_lava.name=Cracked Basalt
 tile.alloy_furnace.name=Alloy Furnace
 tile.malachite_ore.name=Malachite Ore
 tile.ruby_ore.name=Ruby Ore
@@ -36,21 +37,21 @@ item.indigo_flower.name=Indigo Flower
 item.indigo_dye.name=Indigo Dye
 
 item.ruby_sword.name=Ruby Sword
-item.ruby_shovel.name=Ruby Spade
+item.ruby_shovel.name=Ruby Shovel
 item.ruby_axe.name=Ruby Axe
 item.ruby_pickaxe.name=Ruby Pickaxe
 item.ruby_hoe.name=Ruby Hoe
 item.ruby_sickle.name=Ruby Sickle
 
 item.sapphire_sword.name=Sapphire Sword
-item.sapphire_shovel.name=Sapphire Spade
+item.sapphire_shovel.name=Sapphire Shovel
 item.sapphire_axe.name=Sapphire Axe
 item.sapphire_pickaxe.name=Sapphire Pickaxe
 item.sapphire_hoe.name=Sapphire Hoe
 item.sapphire_sickle.name=Sapphire Sickle
 
 item.malachite_sword.name=Malachite Sword
-item.malachite_shovel.name=Malachite Spade
+item.malachite_shovel.name=Malachite Shovel
 item.malachite_axe.name=Malachite Axe
 item.malachite_pickaxe.name=Malachite Pickaxe
 item.malachite_hoe.name=Malachite Hoe

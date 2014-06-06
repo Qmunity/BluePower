@@ -9,6 +9,7 @@ import java.util.Random;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 import net.quetzi.bluepower.init.BPBlocks;
+import net.quetzi.bluepower.init.Config;
 
 public class WorldGenVolcano{
     public class Pos{
@@ -25,18 +26,16 @@ public class WorldGenVolcano{
 
     public void generate(World world, Random rand, int middleX, int vulcanoHeight, int middleZ){
         List<Pos>[] distMap = calculateDistMap();
-        long start = System.currentTimeMillis();
         boolean first = true;
-        for(List<Pos> distList : distMap) {//Loop through every XZ position of the vulcano, in order of how close the positions are from the center. The vulcano will be generated from the center to the edge.
+        for(int dist = 0; dist < distMap.length; dist++) {//Loop through every XZ position of the vulcano, in order of how close the positions are from the center. The vulcano will be generated from the center to the edge.
+            List<Pos> distList = distMap[dist];
             boolean isFinished = true;//Will stay true as long as there were still blocks being generated at this distance from the vulcano.
             for(Pos p : distList) {
                 int worldHeight = world.getHeightValue(p.x + middleX, p.z + middleZ) - 1;
-                int posHeight = first ? vulcanoHeight : getNewVulcanoHeight(worldHeight, p, rand);
+                int posHeight = first ? vulcanoHeight : getNewVulcanoHeight(worldHeight, p, rand, dist);
                 if(posHeight > worldHeight) {// If the calculated desired vulcano height is higher than the world height, generate.
                     vulcanoMap.put(p, posHeight);
-                    if(first){
-                        generateLavaColumn(world, middleX, posHeight, middleZ, worldHeight);
-                    }else{
+                    if(!first){
                         for(int i = worldHeight + 1; i <= posHeight; i++) {
                             world.setBlock(p.x + middleX, i, p.z + middleZ, BPBlocks.basalt, 0, 0);
                         }
@@ -47,20 +46,23 @@ public class WorldGenVolcano{
             }
             if(isFinished) break;
         }
-        System.out.println("time: " + (System.currentTimeMillis() - start));
+        generateLavaColumn(world, middleX, vulcanoHeight, middleZ, rand);
     }
     
-    private void generateLavaColumn(World world, int x, int topY, int z, int worldHeight){
-        world.setBlock(x, topY, z, Blocks.lava);
-        world.setBlock(x, topY - 1, z,Blocks.lava);//This block set, which does update neighbors, will make the lava above update.
-        for(int y = topY - 2; world.getBlock(x, y, z) != Blocks.lava && y > 0; y--){
+    private void generateLavaColumn(World world, int x, int topY, int z, Random rand){
+       // world.setBlock(x, topY, z, Blocks.lava);
+        if(rand.nextDouble() < Config.volcanoActiveToInactiveRatio){
+            world.setBlock(x, topY, z, BPBlocks.cracked_basalt);
+        }else{
+            world.setBlock(x, topY + 1, z,Blocks.lava);
+            world.setBlock(x, topY, z,Blocks.lava);//This block set, which does update neighbors, will make the lava above update.
+        }
+        for(int y = 10; y < topY - 1; y++){
             world.setBlock(x, y, z, Blocks.lava, 0, 0);
-            if(y <= worldHeight){
-                world.setBlock(x+1, y, z, BPBlocks.basalt, 0, 0);
-                world.setBlock(x-1, y, z, BPBlocks.basalt, 0, 0);
-                world.setBlock(x, y, z+1, BPBlocks.basalt, 0, 0);
-                world.setBlock(x, y, z-1, BPBlocks.basalt, 0, 0);
-            }
+            world.setBlock(x+1, y, z, BPBlocks.basalt, 0, 0);
+            world.setBlock(x-1, y, z, BPBlocks.basalt, 0, 0);
+            world.setBlock(x, y, z+1, BPBlocks.basalt, 0, 0);
+            world.setBlock(x, y, z-1, BPBlocks.basalt, 0, 0);
         }
     }
 
@@ -94,7 +96,7 @@ public class WorldGenVolcano{
      * @param maxHeight
      * @return
      */
-    private int getNewVulcanoHeight(int worldHeight, Pos requestedPos, Random rand){
+    private int getNewVulcanoHeight(int worldHeight, Pos requestedPos, Random rand, int distFromCenter){
         int neighborCount = 0;
         int totalHeight = 0;
         for(int x = requestedPos.x - 1; x <= requestedPos.x + 1; x++) {
@@ -110,7 +112,14 @@ public class WorldGenVolcano{
             double avgHeight = (double)totalHeight / neighborCount;
             if((int)avgHeight < worldHeight + 2 && rand.nextInt(5) != 0) return -1;
             //Formula that defines how fast the volcano descends. Using a square function to make it steeper at the top, and added randomness.
-            int blocksDown = (int)(Math.pow(avgHeight - worldHeight + 1, 1.2) * 0.02D + ((rand.nextDouble() - 0.5) * 3) + 0.4D);
+            int blocksDown;
+            if(distFromCenter < 2){
+                blocksDown = 0;
+            }else if(distFromCenter == 2){
+                blocksDown = rand.nextInt(2);
+            }else{
+                blocksDown = (int)(Math.pow(avgHeight - worldHeight + 1, 1.2) * 0.02D + ((rand.nextDouble() - 0.5) * 3) + 0.4D);
+            }
             if(blocksDown < 0) blocksDown = 0;
             int newHeight = (int)avgHeight - blocksDown;
             return newHeight;
