@@ -8,6 +8,7 @@ import net.minecraft.block.BlockFarmland;
 import net.minecraft.block.IGrowable;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -99,7 +100,13 @@ public class BlockCrop extends BlockCrops implements IGrowable {
         } else
             return false;
     }
-
+    public void onBlockHarvested(World world, int x, int y, int z, int meta, EntityPlayer player) {
+        if (world.getBlock(x, y, z) instanceof BlockCrop) {
+            if (world.getBlockMetadata(x, y, z) == 8) {
+                world.setBlockMetadataWithNotify(x, y -1, z, 5, 2);
+            }
+        }
+    }
     /**
      * Ticks the block if it's been scheduled
      */
@@ -119,11 +126,11 @@ public class BlockCrop extends BlockCrops implements IGrowable {
             if (random.nextInt(30) == 0) {
                 world.setBlockMetadataWithNotify(x, y, z, meta + 1, 2);
             }
-            if ((meta > 5) && (world.getBlock(x, y - 1, z) == Blocks.farmland) && (world.getBlock(x, y + 1, z) == Blocks.air)) {
+            if ((meta > 6) && (world.getBlock(x, y - 1, z) == Blocks.farmland) && (world.getBlock(x, y + 1, z) == Blocks.air)) {
                 if (meta == 7) {
                     world.setBlock(x, y + 1, z, BPBlocks.flax_crop, 8, 2);
                 }
-                world.setBlockMetadataWithNotify(x, y, z, 6, 2);
+                world.setBlockMetadataWithNotify(x, y, z, 7, 2);
             }
         }
     }
@@ -212,9 +219,9 @@ public class BlockCrop extends BlockCrops implements IGrowable {
                 tex = 1;
             } else if (i == 3 || i == 4) {
                 tex = 2;
-            } else if (i == 5) {
+            } else if ((i == 5) || (i == 6)) {
                 tex = 3;
-            } else if ((i == 6) || (i == 7)) {
+            } else if (i == 7) {
                 tex = 4;
             } else if (i == 8) {
                 tex = 5;
