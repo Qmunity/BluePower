@@ -21,8 +21,8 @@ public class TileAlloyFurnace extends TileBase {
 		if(!metaSet){
 			metaSet = true;
 			int newMeta = getBlockMetadata();
-			newMeta  = newMeta & 0b0111;
-			newMeta |= (isActive == true ? 0b1000 : 0);
+			newMeta  = newMeta & 7;
+			newMeta |= (isActive == true ? 8 : 0);
 			getWorldObj().setBlockMetadataWithNotify(xCoord, yCoord, zCoord, newMeta, 2);
 		}
 	}
