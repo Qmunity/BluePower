@@ -64,7 +64,7 @@ public class WorldGenerationHandler implements IWorldGenerator {
             int z = chunkZ * 16 + random.nextInt(16);
             new WorldGenMarble(BPBlocks.marble, random.nextInt(4096)).generate(world, random, x, y, z);
         }
-        if(random.nextInt(5) == 0){
+        if(random.nextDouble() < Config.volcanoSpawnChance){
             int x = chunkX * 16 + random.nextInt(16);
             int z = chunkZ * 16 + random.nextInt(16);
             int y = world.getHeightValue(x, z) + 20 + random.nextInt(10);//This number determines the topmost block of the volcano, it increases generation time exponentially when increased!
