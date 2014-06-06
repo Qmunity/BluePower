@@ -1,6 +1,5 @@
 package net.quetzi.bluepower.compat.fmp;
 
-import net.quetzi.bluepower.api.part.BPPart;
 import net.quetzi.bluepower.api.part.PartRegistry;
 import net.quetzi.bluepower.references.Refs;
 import codechicken.multipart.MultiPartRegistry;
