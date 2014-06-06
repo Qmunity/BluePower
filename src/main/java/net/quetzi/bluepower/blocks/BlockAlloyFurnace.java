@@ -32,7 +32,7 @@ public class BlockAlloyFurnace extends BlockContainerBase {
     @Override
     public int getLightValue(IBlockAccess world, int x, int y, int z){
     	int metadata = world.getBlockMetadata(x, y, z);
-    	if((metadata & (1 << 3)) != 0){
+    	if((metadata & 0b1000) != 0){
     		return 13;
     	}
         return 0;
@@ -53,9 +53,10 @@ public class BlockAlloyFurnace extends BlockContainerBase {
     public IIcon getIcon(int side, int meta){
     	ForgeDirection s = ForgeDirection.getOrientation(side);
     	//If is facing
-    	if(meta == side){
+    	
+    	if((meta & 0b0111) == side){
     		//Do some bitmasking
-    		if((meta & (1 << 3)) != 0){
+    		if((meta & 0b1000) != 0){
     			return this.textureFrontOn;
     		}else{
     			return this.textureFrontOff;

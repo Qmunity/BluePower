@@ -13,6 +13,7 @@ public class Refs {
     }
     
     public static final String PROXY_LOCATION = "net.quetzi.bluepower";
+    public static final double PACKET_UPDATE_DISTANCE = 64;
 
     public static final String MARBLE_NAME = "marble";
     public static final String BASALT_NAME = "basalt";
@@ -75,6 +76,7 @@ public class Refs {
     public static final String IRONSICKLE_NAME = "iron_sickle";
     public static final String GOLDSICKLE_NAME = "gold_sickle";
     public static final String DIAMONDSICKLE_NAME = "diamond_sickle";
+	
 	
     
     

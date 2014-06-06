@@ -20,12 +20,10 @@ public class TileAlloyFurnace extends TileBase {
 		//Check if the meta is already set after loading the NBT.
 		if(!metaSet){
 			metaSet = true;
-			if(isActive){
-				int newMeta = getBlockMetadata();
-				newMeta  = newMeta & 0b0111;
-				newMeta |= (isActive == true ? 0b1000 : 0);
-				getWorldObj().setBlockMetadataWithNotify(xCoord, yCoord, zCoord, newMeta, 2);
-			}
+			int newMeta = getBlockMetadata();
+			newMeta  = newMeta & 0b0111;
+			newMeta |= (isActive == true ? 0b1000 : 0);
+			getWorldObj().setBlockMetadataWithNotify(xCoord, yCoord, zCoord, newMeta, 2);
 		}
 	}
 	
@@ -64,6 +62,10 @@ public class TileAlloyFurnace extends TileBase {
 			isActive = false;
 			metaSet = false;
 		}
+	}
+
+	public void setIsActive(boolean isActive2) {
+		
 	}
 	
 }

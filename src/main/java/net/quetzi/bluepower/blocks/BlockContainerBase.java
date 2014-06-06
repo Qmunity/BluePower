@@ -65,13 +65,14 @@ public abstract class BlockContainerBase extends BlockContainer {
 	}
 	
 	@Override
-	public void onNeighborBlockChange(World world, int x, int y, int z,
-			Block block) {
+	public void onNeighborBlockChange(World world, int x, int y, int z, Block block) {
 		super.onNeighborBlockChange(world, x, y, z, block);
-		TileBase tileEntity = (TileBase) world.getTileEntity(x, y, z);
-		if (tileEntity != null) {
-			tileEntity.checkRedstonePower();
+		//Only do this on the server side.
+		if(!world.isRemote){
+			TileBase tileEntity = (TileBase) world.getTileEntity(x, y, z);
+			if (tileEntity != null) {
+				tileEntity.checkRedstonePower();
+			}
 		}
-
 	}
 }
