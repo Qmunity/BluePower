@@ -21,7 +21,7 @@ tile.tin_block.name=Bloque de estaño
 tile.flax_crop.name=Lino
 tile.indigo_flower.name=Flor índigo
 
-tile.alloy_furnace.name=Horno de aleaciones
+tile.alloyfurnace.name=Horno de aleaciones
 
 item.ruby_gem.name=Rubí
 item.malachite_gem.name=Malaquita

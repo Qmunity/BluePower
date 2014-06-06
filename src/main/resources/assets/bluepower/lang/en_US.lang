@@ -21,7 +21,7 @@ tile.tin_block.name=Tin Block
 tile.flax_crop.name=Flax
 tile.indigo_flower.name=Indigo Flower
 
-tile.alloy_furnace.name=Alloy Furnace
+tile.alloyfurnace.name=Alloy Furnace
 
 item.ruby_gem.name=Ruby
 item.malachite_gem.name=Malachite
