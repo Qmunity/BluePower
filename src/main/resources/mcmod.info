@@ -10,12 +10,13 @@
   "authors": [
     "Quetzi"
   ],
-  "credits": "Quetzi",
+  "credits": "Quetzi, Zness, Minemaarten, K-4U",
   "logoFile": "",
   "screenshots": [
   ],
   "parent":"",
   "dependencies": [
-  ]
+  ],
+  "requiredMods": [ "Forge" ]
 }
 ]

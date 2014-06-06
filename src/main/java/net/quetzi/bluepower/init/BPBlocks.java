@@ -1,6 +1,7 @@
 package net.quetzi.bluepower.init;
 
 import net.minecraft.block.Block;
+import net.quetzi.bluepower.blocks.BlockAlloyFurnace;
 import net.quetzi.bluepower.blocks.BlockCrop;
 import net.quetzi.bluepower.blocks.BlockCustomFlower;
 import net.quetzi.bluepower.blocks.BlockItemOre;
@@ -34,6 +35,8 @@ public class BPBlocks {
     
     public static Block flax_crop;
     public static Block indigo_flower;
+    
+    public static Block alloy_furnace;
 
 	
     public static void init() {
@@ -62,6 +65,8 @@ public class BPBlocks {
         flax_crop = new BlockCrop().setBlockName(Refs.FLAXCROP_NAME);
         indigo_flower = new BlockCustomFlower(Refs.INDIGOFLOWER_NAME);
     	
+        alloy_furnace = new BlockAlloyFurnace(false);
+        
         registerBlocks();
     }
 
@@ -91,8 +96,7 @@ public class BPBlocks {
         GameRegistry.registerBlock(flax_crop, Refs.FLAXCROP_NAME);
         GameRegistry.registerBlock(indigo_flower, Refs.INDIGOFLOWER_NAME);
         
-        //Todo: Add oreDictionary here. oreNikolite, oreTin etc
-        //OreDictionary.registerOre(name, ore);
+        GameRegistry.registerBlock(alloy_furnace, Refs.ALLOYFURNACE_NAME);
 
     }
 }
