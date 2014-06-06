@@ -51,16 +51,23 @@ public class BlockCrop extends BlockCrops implements IGrowable {
             this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
         }
     }
-    
-    public boolean fertilize(World world, int x, int y, int z) {
-        if (!world.isAirBlock(x,  y + 1, z) || (!(world.getBlock(x, y, z) instanceof BlockFarmland))) { return false; }
-        int meta = world.getBlockMetadata(x,  y,  z); 
-        if (meta == 7) {
+
+    public void fertilize(World world, int x, int y, int z) {
+        int meta = world.getBlockMetadata(x, y, z);
+        if (meta < 5) {
             world.setBlockMetadataWithNotify(x, y, z, 7, 2);
-            world.setBlock(x, y, z, BPBlocks.flax_crop, 8, 2);
-            return true;
+            world.setBlock(x, y + 1, z, BPBlocks.flax_crop, 8, 2);
+            return;
         }
-        return true;
+        return;
+    }
+
+    public void onNeighborBlockChange(World world, int x, int y, int z, Block block) {
+        super.onNeighborBlockChange(world, x, y, z, block);
+        if ((world.getBlockMetadata(x, y, z) == 7) && (world.getBlock(x, y + 1, z) == Blocks.air)) {
+            world.setBlockMetadataWithNotify(x, y, z, 5, 2);
+        }
+        this.checkAndDropBlock(world, x, y, z);
     }
 
     /**
@@ -111,13 +118,15 @@ public class BlockCrop extends BlockCrops implements IGrowable {
         } else
             return false;
     }
+
     public void onBlockHarvested(World world, int x, int y, int z, int meta, EntityPlayer player) {
         if (world.getBlock(x, y, z) instanceof BlockCrop) {
             if (world.getBlockMetadata(x, y, z) == 8) {
-                world.setBlockMetadataWithNotify(x, y -1, z, 5, 2);
+                world.setBlockMetadataWithNotify(x, y - 1, z, 5, 2);
             }
         }
     }
+
     /**
      * Ticks the block if it's been scheduled
      */
@@ -144,15 +153,6 @@ public class BlockCrop extends BlockCrops implements IGrowable {
                 world.setBlockMetadataWithNotify(x, y, z, 7, 2);
             }
         }
-    }
-
-    public void func_149863_m(World world, int x, int y, int z) {
-        int l = world.getBlockMetadata(x, y, z)
-                + MathHelper.getRandomIntegerInRange(world.rand, 2, 5);
-        if (l > 7) {
-            l = 7;
-        }
-        world.setBlockMetadataWithNotify(x, y, z, l, 2);
     }
 
     /**
@@ -243,7 +243,7 @@ public class BlockCrop extends BlockCrops implements IGrowable {
     }
 
     public void func_149853_b(World world, Random random, int x, int y, int z) {
-        this.func_149863_m(world, x, y, z);
+        this.fertilize(world, x, y, z);
     }
 
     @Override
