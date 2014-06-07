@@ -38,14 +38,14 @@ public class Recipes {
         craftManager.addRecipe(new ItemStack(BPItems.sapphire_hoe, 1), new Object[] {" GG", " S ", " S ", 'G', BPItems.sapphire, 'S', Items.stick});
         craftManager.addRecipe(new ItemStack(BPItems.sapphire_sickle, 1), new Object[] {" G ", "  G", "SG ", 'G', BPItems.sapphire, 'S', Items.stick});
         
-        craftManager.addRecipe(new ItemStack(BPItems.malachite_axe, 1), new Object[] {"GG ", "GS ", " S ", 'G', BPItems.malachite, 'S', Items.stick});
-        craftManager.addRecipe(new ItemStack(BPItems.malachite_axe, 1), new Object[] {" GG", " SG", " S ", 'G', BPItems.malachite, 'S', Items.stick});
-        craftManager.addRecipe(new ItemStack(BPItems.malachite_pickaxe, 1), new Object[] {"GGG", " S ", " S ", 'G', BPItems.malachite, 'S', Items.stick});
-        craftManager.addRecipe(new ItemStack(BPItems.malachite_sword, 1), new Object[] {"G", "G", "S", 'G', BPItems.malachite, 'S', Items.stick});
-        craftManager.addRecipe(new ItemStack(BPItems.malachite_spade, 1), new Object[] {"G", "S", "S", 'G', BPItems.malachite, 'S', Items.stick});
-        craftManager.addRecipe(new ItemStack(BPItems.malachite_hoe, 1), new Object[] {"GG ", " S ", " S ", 'G', BPItems.malachite, 'S', Items.stick});
-        craftManager.addRecipe(new ItemStack(BPItems.malachite_hoe, 1), new Object[] {" GG", " S ", " S ", 'G', BPItems.malachite, 'S', Items.stick});
-        craftManager.addRecipe(new ItemStack(BPItems.malachite_sickle, 1), new Object[] {" G ", "  G", "SG ", 'G', BPItems.malachite, 'S', Items.stick});
+        craftManager.addRecipe(new ItemStack(BPItems.amethyst_axe, 1), new Object[] {"GG ", "GS ", " S ", 'G', BPItems.amethyst, 'S', Items.stick});
+        craftManager.addRecipe(new ItemStack(BPItems.amethyst_axe, 1), new Object[] {" GG", " SG", " S ", 'G', BPItems.amethyst, 'S', Items.stick});
+        craftManager.addRecipe(new ItemStack(BPItems.amethyst_pickaxe, 1), new Object[] {"GGG", " S ", " S ", 'G', BPItems.amethyst, 'S', Items.stick});
+        craftManager.addRecipe(new ItemStack(BPItems.amethyst_sword, 1), new Object[] {"G", "G", "S", 'G', BPItems.amethyst, 'S', Items.stick});
+        craftManager.addRecipe(new ItemStack(BPItems.amethyst_spade, 1), new Object[] {"G", "S", "S", 'G', BPItems.amethyst, 'S', Items.stick});
+        craftManager.addRecipe(new ItemStack(BPItems.amethyst_hoe, 1), new Object[] {"GG ", " S ", " S ", 'G', BPItems.amethyst, 'S', Items.stick});
+        craftManager.addRecipe(new ItemStack(BPItems.amethyst_hoe, 1), new Object[] {" GG", " S ", " S ", 'G', BPItems.amethyst, 'S', Items.stick});
+        craftManager.addRecipe(new ItemStack(BPItems.amethyst_sickle, 1), new Object[] {" G ", "  G", "SG ", 'G', BPItems.amethyst, 'S', Items.stick});
         
         craftManager.addRecipe(new ItemStack(BPItems.wood_sickle, 1), new Object[] {" G ", "  G", "SG ", 'G', Blocks.planks, 'S', Items.stick});
         craftManager.addRecipe(new ItemStack(BPItems.stone_sickle, 1), new Object[] {" G ", "  G", "SG ", 'G', Blocks.cobblestone, 'S', Items.stick});

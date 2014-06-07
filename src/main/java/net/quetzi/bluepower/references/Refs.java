@@ -33,7 +33,7 @@ public class Refs {
     public static final String RUBYBLOCK_NAME         = "ruby_block";
     public static final String NIKOLITEBLOCK_NAME     = "nikolite_block";
     
-    public static final String ITEMMALACHITE_NAME     = "malachite_gem";
+    public static final String ITEMAMETHYST_NAME     = "amethyst_gem";
     public static final String ITEMSAPPHIRE_NAME      = "sapphire_gem";
     public static final String ITEMRUBY_NAME          = "ruby_gem";
     public static final String ITEMNIKOLITE_NAME      = "nikolite_dust";

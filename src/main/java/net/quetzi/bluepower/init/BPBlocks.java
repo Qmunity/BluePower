@@ -67,7 +67,7 @@ public class BPBlocks {
         nikolite_ore = new BlockItemOre(Refs.NIKOLITEORE_NAME, BPItems.nikolite);
         ruby_ore = new BlockItemOre(Refs.RUBYORE_NAME, BPItems.ruby);
         sapphire_ore = new BlockItemOre(Refs.SAPPHIREORE_NAME, BPItems.sapphire);
-        amethyst_ore = new BlockItemOre(Refs.AMETHYSTORE_NAME, BPItems.malachite);
+        amethyst_ore = new BlockItemOre(Refs.AMETHYSTORE_NAME, BPItems.amethyst);
         copper_ore = new BlockStoneOre(Refs.COPPERORE_NAME);
         silver_ore = new BlockStoneOre(Refs.SILVERORE_NAME);
         tin_ore = new BlockStoneOre(Refs.TINORE_NAME);

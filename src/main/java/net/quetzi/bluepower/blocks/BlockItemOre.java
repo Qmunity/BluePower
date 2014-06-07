@@ -62,7 +62,7 @@ public class BlockItemOre extends Block {
     public int getExpDrop(IBlockAccess par1, int par2, int par3) {
         if (this.getItemDropped(par2, rand, par3) != Item.getItemFromBlock(this)) {
             int j1 = 0;
-            if (this == BPBlocks.malachite_ore) {
+            if (this == BPBlocks.amethyst_ore) {
                 j1 = MathHelper.getRandomIntegerInRange(rand, 3, 7);
             } else if (this == BPBlocks.ruby_ore) {
                 j1 = MathHelper.getRandomIntegerInRange(rand, 3, 7);

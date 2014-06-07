@@ -30,7 +30,7 @@ public class BPItems {
     private static ToolMaterial gemMaterial = EnumHelper.addToolMaterial("GEM",
             2, 750, 6.0F, 2.0F, 10);
 
-    public static Item malachite;
+    public static Item amethyst;
     public static Item sapphire;
     public static Item ruby;
     public static Item nikolite;
@@ -72,7 +72,7 @@ public class BPItems {
 
     public static void init() {
 
-        malachite = new ItemGem(Refs.ITEMMALACHITE_NAME);
+        amethyst = new ItemGem(Refs.ITEMAMETHYST_NAME);
         sapphire = new ItemGem(Refs.ITEMSAPPHIRE_NAME);
         ruby = new ItemGem(Refs.ITEMRUBY_NAME);
         nikolite = new ItemNikolite();
@@ -127,7 +127,7 @@ public class BPItems {
 
     public static void registerItems() {
 
-        GameRegistry.registerItem(malachite, Refs.ITEMMALACHITE_NAME);
+        GameRegistry.registerItem(amethyst, Refs.ITEMAMETHYST_NAME);
         GameRegistry.registerItem(sapphire, Refs.ITEMSAPPHIRE_NAME);
         GameRegistry.registerItem(ruby, Refs.ITEMRUBY_NAME);
         GameRegistry.registerItem(nikolite, Refs.ITEMNIKOLITE_NAME);
