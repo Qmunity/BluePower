@@ -53,5 +53,4 @@ public class CompatModuleFMP extends CompatModule {
         MicroMaterialRegistry.registerMaterial(new BlockMicroMaterial(b, 0),
                 b.getUnlocalizedName());
     }
-    
 }

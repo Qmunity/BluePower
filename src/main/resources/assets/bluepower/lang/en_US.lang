@@ -16,7 +16,7 @@ tile.basalt_tile.name=Basalt Tile
 tile.ruby_ore.name=Ruby Ore
 tile.sapphire_ore.name=Sapphire Ore
 tile.nikolite_ore.name=Nikolite Ore
-tile.malachite_block.name=Malachite Block
+tile.amethyst_block.name=Amethyst Block
 tile.sapphire_block.name=Sapphire Block
 tile.nikolite_block.name=Nikolite Block
 tile.ruby_block.name=Ruby Block
@@ -38,6 +38,9 @@ item.nikolite_dust.name=Nikolite
 item.copper_ingot.name=Copper Ingot
 item.silver_ingot.name=Silver Ingot
 item.tin_ingot.name=Tin Ingot
+item.red_alloy_ingot.name=Red Alloy Ingot
+item.blue_alloy_ingot.name=Blue Alloy Ingot
+item.brass_ingot.name=Brass Ingot
 
 item.flax_seeds.name=Flax Seeds
 item.indigo_flower.name=Indigo Flower
@@ -62,7 +65,7 @@ item.amethyst_shovel.name=Amethyst Shovel
 item.amethyst_axe.name=Amethyst Axe
 item.amethyst_pickaxe.name=Amethyst Pickaxe
 item.amethyst_hoe.name=Amethyst Hoe
-item.amethyste_sickle.name=Amethyst Sickle
+item.amethyst_sickle.name=Amethyst Sickle
 
 item.wood_sickle.name=Wooden Sickle
 item.stone_sickle.name=Stone Sickle
@@ -70,8 +73,17 @@ item.iron_sickle.name=Iron Sickle
 item.gold_sickle.name=Gold Sickle
 item.diamond_sickle.name=Diamond Sickle
 
+item.iron_saw.name=Iron Saw
+item.amethyst_saw.name=Amethyst Saw
+item.ruby_saw.name=Ruby Saw
+item.sapphire_saw.name=Sapphire Saw
+item.diamond_saw.name=Diamond Saw
+
+item.silicon_boule.name=Silicon Boule
+item.silicon_wafer.name=Silicon Wafer
+
 itemGroup.tabBluePowerMachines=Blue Power Machines
 itemGroup.tabBluePowerBlocks=Blue Power Blocks
 itemGroup.tabBluePowerItems=Blue Power Items
 itemGroup.tabBluePowerTools=Blue Power Tools
-itemGroup.tabBluePowerCircuits=Blue Power Circuits
+itemGroup.tabBluePowerCircuits=Blue Power Logic Gates

@@ -2,8 +2,49 @@ package net.quetzi.bluepower.init;
 
 import net.minecraftforge.common.config.Configuration;
 
-public class Config {
-    public static void setUp(Configuration config) {
+public class Config
+{
+
+    public static boolean generateCopper;
+    public static int     minCopperY;
+    public static int     maxCopperY;
+    public static int     veinCountCopper;
+    public static int     veinSizeCopper;
+    public static boolean generateSilver;
+    public static int     minSilverY;
+    public static int     maxSilverY;
+    public static int     veinCountSilver;
+    public static int     veinSizeSilver;
+    public static boolean generateTin;
+    public static int     minTinY;
+    public static int     maxTinY;
+    public static int     veinCountTin;
+    public static int     veinSizeTin;
+    public static boolean generateNikolite;
+    public static int     minNikoliteY;
+    public static int     maxNikoliteY;
+    public static int     veinCountNikolite;
+    public static int     veinSizeNikolite;
+    public static boolean generateRuby;
+    public static int     minRubyY;
+    public static int     maxRubyY;
+    public static int     veinCountRuby;
+    public static int     veinSizeRuby;
+    public static boolean generateAmethyst;
+    public static int     minAmethystY;
+    public static int     maxAmethystY;
+    public static int     veinCountAmethyst;
+    public static int     veinSizeAmethyst;
+    public static boolean generateSapphire;
+    public static int     minSapphireY;
+    public static int     maxSapphireY;
+    public static int     veinCountSapphire;
+    public static int     veinSizeSapphire;
+    public static double  volcanoActiveToInactiveRatio;
+    public static double  volcanoSpawnChance;//chance of a volcano spawning per chunk.
+
+    public static void setUp(Configuration config)
+    {
         config.addCustomCategoryComment("World Gen", "Toggle blocks being generated into the world");
         generateCopper = config.get("World Gen", "generateCopper", true).getBoolean(true);
         minCopperY = config.get("World Gen", "minCopperY", 0).getInt();
@@ -40,45 +81,7 @@ public class Config {
         maxSapphireY = config.get("World Gen", "maxSapphireY", 48).getInt();
         veinCountSapphire = config.get("World Gen", "veinCountSapphire", 7).getInt();
         veinSizeSapphire = config.get("World Gen", "veinSizeSapphire", 2).getInt();
-        volcanoSpawnChance = config.get("World Gen", "volcanoSpawnChance", 0.2).getDouble(0);
+        volcanoSpawnChance = config.get("World Gen", "volcanoSpawnChance", 0.02).getDouble(0);
         volcanoActiveToInactiveRatio = config.get("World Gen", "volcanoActiveToInactiveRatio", 0.5).getDouble(0);
     }
-    public static boolean generateCopper;
-    public static int minCopperY;
-    public static int maxCopperY;
-    public static int veinCountCopper;
-    public static int veinSizeCopper;
-    public static boolean generateSilver;
-    public static int minSilverY;
-    public static int maxSilverY;
-    public static int veinCountSilver;
-    public static int veinSizeSilver;
-    public static boolean generateTin;
-    public static int minTinY;
-    public static int maxTinY;
-    public static int veinCountTin;
-    public static int veinSizeTin;
-    public static boolean generateNikolite;
-    public static int minNikoliteY;
-    public static int maxNikoliteY;
-    public static int veinCountNikolite;
-    public static int veinSizeNikolite;
-    public static boolean generateRuby;
-    public static int minRubyY;
-    public static int maxRubyY;
-    public static int veinCountRuby;
-    public static int veinSizeRuby;
-    public static boolean generateAmethyst;
-    public static int minAmethystY;
-    public static int maxAmethystY;
-    public static int veinCountAmethyst;
-    public static int veinSizeAmethyst;
-    public static boolean generateSapphire;
-    public static int minSapphireY;
-    public static int maxSapphireY;
-    public static int veinCountSapphire;
-    public static int veinSizeSapphire;
-    
-    public static double volcanoActiveToInactiveRatio;
-    public static double volcanoSpawnChance;//chance of a volcano spawning per chunk.
 }

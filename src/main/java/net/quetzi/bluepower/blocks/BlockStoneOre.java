@@ -1,7 +1,5 @@
 package net.quetzi.bluepower.blocks;
 
-import java.util.Random;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -10,13 +8,15 @@ import net.minecraft.world.IBlockAccess;
 import net.quetzi.bluepower.init.BPBlocks;
 import net.quetzi.bluepower.init.CustomTabs;
 import net.quetzi.bluepower.references.Refs;
+import java.util.Random;
 
-public class BlockStoneOre extends Block {
-    
+public class BlockStoneOre extends Block
+{
+
     private String name;
     
-    public BlockStoneOre(String name) {
-    
+    public BlockStoneOre(String name)
+    {
         super(Material.rock);
         
         this.name = name;
@@ -59,6 +59,7 @@ public class BlockStoneOre extends Block {
         blockIcon = iconRegister.registerIcon(Refs.MODID + ":" + this.name);
     }
     
+
     // Allow storage blocks to be used as a beacon base
     public boolean isBeaconBase(IBlockAccess worldObj, int x, int y, int z,
             int beaconX, int beaconY, int beaconZ) {
@@ -67,5 +68,10 @@ public class BlockStoneOre extends Block {
                 || this == BPBlocks.sapphire_block
                 || this == BPBlocks.copper_block || this == BPBlocks.tin_block
                 || this == BPBlocks.silver_block;
+    }
+
+    public void registerBlockIcon(IIconRegister iconRegister)
+    {
+        iconRegister.registerIcon(Refs.MODID + ":" + this.getUnlocalizedName().substring(5));
     }
 }
