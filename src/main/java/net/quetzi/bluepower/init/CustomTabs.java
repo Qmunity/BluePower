@@ -2,6 +2,7 @@ package net.quetzi.bluepower.init;
 
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 
 public class CustomTabs
@@ -12,6 +13,7 @@ public class CustomTabs
     public static CreativeTabs tabBluePowerItems;
     public static CreativeTabs tabBluePowerTools;
     public static CreativeTabs tabBluePowerCircuits;
+    public static CreativeTabs tabBluePowerLighting;
 
     public static void init()
     {
@@ -90,10 +92,17 @@ public class CustomTabs
             @Override
             public Item getTabIconItem()
             {
-
                 return net.minecraft.init.Items.redstone;
             }
         };
 
+        tabBluePowerLighting = new CreativeTabs("tabBluePowerLighting")
+        {
+            @Override
+            public Item getTabIconItem()
+            {
+                return Item.getItemFromBlock(Blocks.redstone_lamp);
+            }
+        };
     }
 }

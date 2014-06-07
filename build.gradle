@@ -23,7 +23,7 @@ project.ext {
 }
 version = "1.7.2-${project.ext.major}.${project.minor}.${System.getenv("BUILD_NUMBER") ?:0}"
 group= "net.quetzi.bluepower" 
-archivesBaseName = "bluepower"
+archivesBaseName = "BluePower"
 
 dependencies {
     def f = new File('dep/')

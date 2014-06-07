@@ -14,6 +14,7 @@ public class ItemSaw extends Item
         this.sawLevel = sawLevel;
         this.setTextureName(Refs.MODID + ":" + name);
         this.setUnlocalizedName(name);
+        this.maxStackSize = 1;
     }
 
     public int getSawLevel()
