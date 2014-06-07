@@ -6,14 +6,16 @@ import net.minecraft.entity.player.EntityPlayer;
 
 /**
  * MineChess
- * @author MineMaarten
- * www.minemaarten.com
- * @license Lesser GNU Public License v3 (http://www.gnu.org/licenses/lgpl.html)
  *
- * AbstractPacket class. Should be the parent of all packets wishing to use the PacketPipeline.
+ * @author MineMaarten
+ *         www.minemaarten.com
  * @author sirgingalot
+ * @license Lesser GNU Public License v3 (http://www.gnu.org/licenses/lgpl.html)
+ * <p/>
+ * AbstractPacket class. Should be the parent of all packets wishing to use the PacketPipeline.
  */
-public abstract class AbstractPacket{
+public abstract class AbstractPacket
+{
 
     /**
      * Encode the packet data into the ByteBuf stream. Complex data sets may need specific data handlers (See @link{cpw.mods.fml.common.network.ByteBuffUtils})

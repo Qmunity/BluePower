@@ -1,16 +1,13 @@
 package net.quetzi.bluepower.init;
 
-import net.minecraft.block.Block;
-import net.quetzi.bluepower.blocks.BlockAlloyFurnace;
-import net.quetzi.bluepower.blocks.BlockCrackedBasalt;
-import net.quetzi.bluepower.blocks.BlockCrop;
-import net.quetzi.bluepower.blocks.BlockCustomFlower;
-import net.quetzi.bluepower.blocks.BlockItemOre;
-import net.quetzi.bluepower.blocks.BlockStoneOre;
-import net.quetzi.bluepower.references.Refs;
 import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraft.block.Block;
+import net.quetzi.bluepower.blocks.*;
+import net.quetzi.bluepower.references.Refs;
 
-public class BPBlocks {
+public class BPBlocks
+{
+
     public static Block basalt;
     public static Block marble;
     public static Block basalt_cobble;
@@ -49,10 +46,11 @@ public class BPBlocks {
     public static Block alloy_furnace;
 
 
-    public static void init() {
+    public static void init()
+    {
         basalt = new BlockStoneOre(Refs.BASALT_NAME);
         marble = new BlockStoneOre(Refs.MARBLE_NAME);
-        basalt_cobble  = new BlockStoneOre(Refs.BASALTCOBBLE_NAME);
+        basalt_cobble = new BlockStoneOre(Refs.BASALTCOBBLE_NAME);
         basalt_brick = new BlockStoneOre(Refs.BASALTBRICK_NAME);
         marble_brick = new BlockStoneOre(Refs.MARBLEBRICK_NAME);
         cracked_basalt = new BlockCrackedBasalt(Refs.CRACKED_BASALT);
@@ -89,7 +87,8 @@ public class BPBlocks {
     }
 
 
-    private static void registerBlocks() {
+    private static void registerBlocks()
+    {
         GameRegistry.registerBlock(basalt, Refs.BASALT_NAME);
         GameRegistry.registerBlock(marble, Refs.MARBLE_NAME);
         GameRegistry.registerBlock(basalt_cobble, Refs.BASALTCOBBLE_NAME);
