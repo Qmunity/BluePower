@@ -14,7 +14,6 @@ import java.util.Random;
 
 public class BlockItemOre extends Block
 {
-
     private Item itemToDrop;
     private Random rand = new Random();
 
@@ -30,21 +29,25 @@ public class BlockItemOre extends Block
         itemToDrop = item;
     }
 
+    @Override
     public int quantityDropped(Random rand)
     {
         return this == BPBlocks.nikolite_ore ? 4 + rand.nextInt(2) : 1;
     }
 
+    @Override
     public Item getItemDropped(int par1, Random par2, int par3)
     {
         return this.itemToDrop;
     }
 
+    @Override
     protected boolean canSilkHarvest()
     {
         return true;
     }
 
+    @Override
     public int quantityDroppedWithBonus(int quantity, Random rand)
     {
         if (quantity > 0 && Item.getItemFromBlock(this) != this.getItemDropped(0, rand, quantity)) {
@@ -58,6 +61,7 @@ public class BlockItemOre extends Block
         }
     }
 
+    @Override
     public int getExpDrop(IBlockAccess par1, int par2, int par3)
     {
         if (this.getItemDropped(par2, rand, par3) != Item.getItemFromBlock(this)) {
@@ -74,15 +78,5 @@ public class BlockItemOre extends Block
             return j1;
         }
         return 0;
-    }
-
-    public void registerBlockIcon(IIconRegister iconRegister)
-    {
-        iconRegister.registerIcon(Refs.MODID + ":" + this.getUnlocalizedName().substring(5));
-    }
-
-    public int getExpDrop(IBlockAccess world, Random x, int fortune)
-    {
-        return 1;
     }
 }

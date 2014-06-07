@@ -38,7 +38,8 @@ public class BlockStoneOre extends Block
         this.setCreativeTab(CustomTabs.tabBluePowerBlocks);
         this.setStepSound(soundTypeStone);
     }
-    
+
+    @Override
     public Item getItemDropped(int par1, Random par2, int par3) {
     
         if (this.name.matches(Refs.BASALT_NAME)) { return Item
@@ -46,11 +47,6 @@ public class BlockStoneOre extends Block
                         + Refs.BASALTCOBBLE_NAME)); }
         return Item.getItemFromBlock(Block.getBlockFromName(Refs.MODID + ":"
                 + this.name));
-    }
-    
-    public int quantityDropped() {
-    
-        return 1;
     }
     
     @Override
@@ -61,6 +57,7 @@ public class BlockStoneOre extends Block
     
 
     // Allow storage blocks to be used as a beacon base
+    @Override
     public boolean isBeaconBase(IBlockAccess worldObj, int x, int y, int z,
             int beaconX, int beaconY, int beaconZ) {
     
@@ -68,10 +65,5 @@ public class BlockStoneOre extends Block
                 || this == BPBlocks.sapphire_block
                 || this == BPBlocks.copper_block || this == BPBlocks.tin_block
                 || this == BPBlocks.silver_block;
-    }
-
-    public void registerBlockIcon(IIconRegister iconRegister)
-    {
-        iconRegister.registerIcon(Refs.MODID + ":" + this.getUnlocalizedName().substring(5));
     }
 }

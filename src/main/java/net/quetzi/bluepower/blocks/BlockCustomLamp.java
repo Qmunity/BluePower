@@ -31,6 +31,7 @@ public class BlockCustomLamp extends BlockRedstoneLight
         this.setCreativeTab(CustomTabs.tabBluePowerLighting);
     }
 
+    @Override
     public void onBlockAdded(World world, int x, int y, int z)
     {
         if (!world.isRemote) {
@@ -42,6 +43,7 @@ public class BlockCustomLamp extends BlockRedstoneLight
         }
     }
 
+    @Override
     public void onNeighborBlockChange(World world, int x, int y, int z, Block block)
     {
         if (!world.isRemote) {
@@ -53,6 +55,7 @@ public class BlockCustomLamp extends BlockRedstoneLight
         }
     }
 
+    @Override
     public void updateTick(World world, int x, int y, int z, Random random)
     {
         if (!world.isRemote) {
@@ -65,6 +68,7 @@ public class BlockCustomLamp extends BlockRedstoneLight
     }
 
     @SideOnly(Side.CLIENT)
+    @Override
     public Item getItem(World world, int x, int y, int z)
     {
         switch (colour) {

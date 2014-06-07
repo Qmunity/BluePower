@@ -57,6 +57,7 @@ public class BlockCrop extends BlockCrops implements IGrowable
         }
     }
 
+    @Override
     public void onBlockHarvested(World world, int x, int y, int z, int meta, EntityPlayer player)
     {
         if (world.getBlock(x, y, z) instanceof BlockCrop)
@@ -91,6 +92,7 @@ public class BlockCrop extends BlockCrops implements IGrowable
     /**
      * is the block grass, dirt or farmland
      */
+    @Override
     protected boolean canPlaceBlockOn(Block block)
     {
         return block == Blocks.farmland;
@@ -99,6 +101,7 @@ public class BlockCrop extends BlockCrops implements IGrowable
     /**
      * Ticks the block if it's been scheduled
      */
+    @Override
     public void updateTick(World world, int x, int y, int z, Random random)
     {
         super.updateTick(world, x, y, z, random);
@@ -127,6 +130,7 @@ public class BlockCrop extends BlockCrops implements IGrowable
      * Gets the block's texture. Args: side, meta
      */
     @SideOnly(Side.CLIENT)
+    @Override
     public IIcon getIcon(int side, int meta)
     {
         if (meta < 0 || meta > 8) {
@@ -139,16 +143,19 @@ public class BlockCrop extends BlockCrops implements IGrowable
     /**
      * The type of render function that is called for this block
      */
+    @Override
     public int getRenderType()
     {
         return 6;
     }
 
+    @Override
     protected Item func_149866_i()
     {
         return BPItems.flax_seed;
     }
 
+    @Override
     protected Item func_149865_P()
     {
         return Items.string;
@@ -158,11 +165,13 @@ public class BlockCrop extends BlockCrops implements IGrowable
      * Drops the block items with a specified chance of dropping the specified
      * items
      */
+    @Override
     public void dropBlockAsItemWithChance(World world, int x, int y, int z, int p_149690_5_, float p_149690_6_, int p_149690_7_)
     {
         super.dropBlockAsItemWithChance(world, x, y, z, p_149690_5_, p_149690_6_, 0);
     }
 
+    @Override
     public Item getItemDropped(int meta, Random random, int p_149650_3_)
     {
         return meta == 8 ? this.func_149865_P() : this.func_149866_i();
@@ -171,16 +180,19 @@ public class BlockCrop extends BlockCrops implements IGrowable
     /**
      * Returns the quantity of items to drop on block destruction.
      */
+    @Override
     public int quantityDropped(Random random)
     {
         return random.nextInt(2);
     }
 
+    @Override
     public boolean func_149851_a(World world, int x, int y, int z, boolean p_149851_5_)
     {
         return world.getBlockMetadata(x, y, z) != 7;
     }
 
+    @Override
     public boolean func_149852_a(World world, Random random, int x, int y, int z)
     {
         return true;
@@ -190,12 +202,14 @@ public class BlockCrop extends BlockCrops implements IGrowable
      * Gets an item for the block being called on. Args: world, x, y, z
      */
     @SideOnly(Side.CLIENT)
+    @Override
     public Item getItem(World world, int x, int y, int z)
     {
         return this.func_149866_i();
     }
 
     @SideOnly(Side.CLIENT)
+    @Override
     public void registerBlockIcons(IIconRegister iconRegister)
     {
         this.iconArray = new IIcon[9];
@@ -220,6 +234,7 @@ public class BlockCrop extends BlockCrops implements IGrowable
         }
     }
 
+    @Override
     public void func_149853_b(World world, Random random, int x, int y, int z)
     {
         this.fertilize(world, x, y, z);
@@ -243,11 +258,13 @@ public class BlockCrop extends BlockCrops implements IGrowable
     /**
      * Checks to see if its valid to put this block at the specified coordinates. Args: world, x, y, z
      */
+    @Override
     public boolean canPlaceBlockAt(World world, int x, int y, int z)
     {
         return super.canPlaceBlockAt(world, x, y, z) && world.isAirBlock(x, y + 1, z);
     }
 
+    @Override
     public void onNeighborBlockChange(World world, int x, int y, int z, Block block)
     {
         super.onNeighborBlockChange(world, x, y, z, block);
@@ -260,6 +277,7 @@ public class BlockCrop extends BlockCrops implements IGrowable
     /**
      * checks if the block can stay, if not drop as item
      */
+    @Override
     protected void checkAndDropBlock(World world, int x, int y, int z)
     {
         if (!this.canBlockStay(world, x, y, z)) {
@@ -279,6 +297,7 @@ public class BlockCrop extends BlockCrops implements IGrowable
     /**
      * Can this block stay at this position.  Similar to canPlaceBlockAt except gets checked often with plants.
      */
+    @Override
     public boolean canBlockStay(World world, int x, int y, int z)
     {
         if (world.getBlock(x, y, z) != this)

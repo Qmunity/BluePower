@@ -65,17 +65,20 @@ public class BlockCustomFlower extends BlockBush
     }
 
     @SideOnly(Side.CLIENT)
+    @Override
     public IIcon getIcon(int side, int meta)
     {
         return this.icon;
     }
 
+    @Override
     public int damageDropped(int damage)
     {
         return damage;
     }
 
     @SideOnly(Side.CLIENT)
+    @Override
     public void registerBlockIcons(IIconRegister iconRegister)
     {
         this.icon = iconRegister.registerIcon(Refs.MODID + ":" + this.getUnlocalizedName().substring(5));

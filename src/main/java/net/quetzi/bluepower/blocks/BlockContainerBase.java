@@ -16,7 +16,6 @@ import net.quetzi.bluepower.tileentities.TileBase;
 
 public abstract class BlockContainerBase extends BlockContainer
 {
-
     private static int rotation;
 
     public BlockContainerBase(Material material)

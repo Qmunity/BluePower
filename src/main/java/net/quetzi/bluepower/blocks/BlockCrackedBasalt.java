@@ -26,6 +26,7 @@ public class BlockCrackedBasalt extends BlockStoneOre
         return true;
     }*/
 
+    @Override
     public void updateTick(World world, int x, int y, int z, Random random)
     {
         int meta = world.getBlockMetadata(x, y, z);
@@ -41,6 +42,7 @@ public class BlockCrackedBasalt extends BlockStoneOre
         }
     }
 
+    @Override
     protected boolean canSilkHarvest()
     {
         return false;
@@ -57,6 +59,7 @@ public class BlockCrackedBasalt extends BlockStoneOre
         world.spawnEntityInWorld(entity);
     }
 
+    @Override
     public Item getItemDropped(int par1, Random par2, int par3)
     {
         return Item.getItemFromBlock(BPBlocks.basalt_cobble);
