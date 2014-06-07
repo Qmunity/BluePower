@@ -34,7 +34,7 @@ public class WorldGenVolcano
                             world.setBlock(p.x + middleX, i, p.z + middleZ, BPBlocks.basalt, 0, 0);
                         }
                         for (int i = posHeight + 1; i < vulcanoHeight; i++) {
-                            if (canReplace(world, p.x + middleX, i, p.z + middleZ))
+                            if (canReplace(world, p.x + middleX, i, p.z + middleZ) && world.getBlock(p.x + middleX, i, p.z + middleZ).getMaterial() != Material.water)
                                 world.setBlock(p.x + middleX, i, p.z + middleZ, Blocks.air, 0, 0);
                         }
                     }
@@ -65,11 +65,11 @@ public class WorldGenVolcano
             world.setBlock(x, topY, z, Blocks.lava);//This block set, which does update neighbors, will make the lava above update.
         }
         for (int y = 10; y < topY; y++) {
-            world.setBlock(x, y, z, Blocks.lava, 0, 0);
             world.setBlock(x + 1, y, z, BPBlocks.basalt, 0, 0);
             world.setBlock(x - 1, y, z, BPBlocks.basalt, 0, 0);
             world.setBlock(x, y, z + 1, BPBlocks.basalt, 0, 0);
             world.setBlock(x, y, z - 1, BPBlocks.basalt, 0, 0);
+            world.setBlock(x, y, z, Blocks.lava, 0, 0);
         }
     }
 
