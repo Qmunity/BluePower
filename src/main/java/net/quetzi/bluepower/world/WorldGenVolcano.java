@@ -64,7 +64,7 @@ public class WorldGenVolcano
             world.setBlock(x, topY + 1, z, Blocks.lava);
             world.setBlock(x, topY, z, Blocks.lava);//This block set, which does update neighbors, will make the lava above update.
         }
-        for (int y = 10; y < topY; y++) {
+        for (int y = topY - 1; y >= 10; y--) {
             world.setBlock(x + 1, y, z, BPBlocks.basalt, 0, 0);
             world.setBlock(x - 1, y, z, BPBlocks.basalt, 0, 0);
             world.setBlock(x, y, z + 1, BPBlocks.basalt, 0, 0);
