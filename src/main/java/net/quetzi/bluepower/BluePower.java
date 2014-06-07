@@ -3,6 +3,7 @@ package net.quetzi.bluepower;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraftforge.common.config.Configuration;
 import net.quetzi.bluepower.api.part.PartRegistry;
+import net.quetzi.bluepower.client.gui.GUIHandler;
 import net.quetzi.bluepower.compat.CompatibilityUtils;
 import net.quetzi.bluepower.init.BPBlocks;
 import net.quetzi.bluepower.init.BPItems;
@@ -24,6 +25,7 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
+import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 @Mod(modid = Refs.MODID, name = Refs.NAME)
@@ -69,6 +71,7 @@ public class BluePower {
         Recipes.init(CraftingManager.getInstance());
         // proxy.init();
         // proxy.initRenderers();
+        NetworkRegistry.INSTANCE.registerGuiHandler(this.instance, new GUIHandler());
         
         CompatibilityUtils.init(event);
     }

@@ -11,6 +11,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.quetzi.bluepower.init.BPBlocks;
+import net.quetzi.bluepower.references.GuiIDs;
 import net.quetzi.bluepower.references.Refs;
 import net.quetzi.bluepower.tileEntities.tier1.TileAlloyFurnace;
 import cpw.mods.fml.relauncher.Side;
@@ -131,4 +132,9 @@ public class BlockAlloyFurnace extends BlockContainerBase {
             }
         }
     }
+
+	@Override
+	public GuiIDs getGuiID() {
+		return GuiIDs.ALLOY_FURNACE;
+	}
 }

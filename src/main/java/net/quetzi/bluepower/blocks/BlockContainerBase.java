@@ -4,11 +4,14 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import net.quetzi.bluepower.BluePower;
 import net.quetzi.bluepower.init.CustomTabs;
+import net.quetzi.bluepower.references.GuiIDs;
 import net.quetzi.bluepower.tileEntities.TileBase;
 
 public abstract class BlockContainerBase extends BlockContainer {
@@ -75,4 +78,27 @@ public abstract class BlockContainerBase extends BlockContainer {
 			}
 		}
 	}
+	@Override
+	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int par6, float par7, float par8, float par9){
+		if(player.isSneaking()){
+			return false;
+		}
+		
+		TileEntity entity = world.getTileEntity(x, y, z);
+		if(entity == null || !(entity instanceof TileBase)){
+			return false;
+		}
+		
+		if(getGuiID() != GuiIDs.INVALID){
+			player.openGui(BluePower.instance, getGuiID().ordinal(), world, x, y, z);
+			return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * Method to be overwritten that returns a GUI ID
+	 * @return
+	 */
+	public abstract GuiIDs getGuiID();
 }
