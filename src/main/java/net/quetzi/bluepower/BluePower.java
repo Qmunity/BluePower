@@ -16,7 +16,7 @@ import net.quetzi.bluepower.api.part.PartRegistry;
 import net.quetzi.bluepower.client.gui.GUIHandler;
 import net.quetzi.bluepower.compat.CompatibilityUtils;
 import net.quetzi.bluepower.init.*;
-import net.quetzi.bluepower.network.PacketPipeline;
+import net.quetzi.bluepower.network.NetworkHandler;
 import net.quetzi.bluepower.references.Refs;
 import net.quetzi.bluepower.tileentities.TileEntities;
 import net.quetzi.bluepower.world.WorldGenerationHandler;
@@ -66,7 +66,7 @@ public class BluePower
         Recipes.init(CraftingManager.getInstance());
         // proxy.init();
         // proxy.initRenderers();
-        PacketPipeline.init();
+        NetworkHandler.init();
         NetworkRegistry.INSTANCE.registerGuiHandler(this.instance, new GUIHandler());
 
         CompatibilityUtils.init(event);
