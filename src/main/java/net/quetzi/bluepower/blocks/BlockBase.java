@@ -6,8 +6,6 @@ import net.quetzi.bluepower.init.CustomTabs;
 
 public class BlockBase extends Block
 {
-    private static int rotation;
-
     public BlockBase(Material material)
     {
         super(material);

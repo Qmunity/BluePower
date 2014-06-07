@@ -8,8 +8,8 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import net.quetzi.bluepower.slots.SlotMachineInput;
-import net.quetzi.bluepower.slots.SlotMachineOutput;
+import net.quetzi.bluepower.containers.slots.SlotMachineInput;
+import net.quetzi.bluepower.containers.slots.SlotMachineOutput;
 import net.quetzi.bluepower.tileentities.tier1.TileAlloyFurnace;
 
 public class ContainerAlloyFurnace extends Container

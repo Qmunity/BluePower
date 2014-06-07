@@ -25,7 +25,6 @@ import org.apache.logging.log4j.Logger;
 @Mod(modid = Refs.MODID, name = Refs.NAME)
 public class BluePower
 {
-
     @Instance(Refs.MODID)
     public static BluePower instance;
 
@@ -36,7 +35,6 @@ public class BluePower
     @EventHandler
     public void PreInit(FMLPreInitializationEvent event)
     {
-
         event.getModMetadata().version = Refs.fullVersionString();
 
         log = event.getModLog();
@@ -62,7 +60,6 @@ public class BluePower
     @EventHandler
     public void Init(FMLInitializationEvent event)
     {
-
         Recipes.init(CraftingManager.getInstance());
         proxy.init();
         proxy.initRenderers();
@@ -74,14 +71,12 @@ public class BluePower
     @EventHandler
     public void PostInit(FMLPostInitializationEvent event)
     {
-
         CompatibilityUtils.postInit(event);
     }
 
     @EventHandler
     public void ServerStarting(FMLServerStartingEvent event)
     {
-
         // register commands
     }
 }

@@ -1,4 +1,4 @@
-package net.quetzi.bluepower.slots;
+package net.quetzi.bluepower.containers.slots;
 
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;

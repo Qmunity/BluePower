@@ -2,6 +2,7 @@ package net.quetzi.bluepower.blocks;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
+import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -14,16 +15,11 @@ import net.quetzi.bluepower.init.CustomTabs;
 import net.quetzi.bluepower.references.GuiIDs;
 import net.quetzi.bluepower.tileentities.TileBase;
 
-public abstract class BlockContainerBase extends BlockContainer
+public abstract class BlockContainerBase extends BlockBase implements ITileEntityProvider
 {
-    private static int rotation;
-
     public BlockContainerBase(Material material)
     {
         super(material);
-        this.setStepSound(soundTypeStone);
-        this.setCreativeTab(CustomTabs.tabBluePowerMachines);
-        this.blockHardness = 3.0F;
     }
 
 
