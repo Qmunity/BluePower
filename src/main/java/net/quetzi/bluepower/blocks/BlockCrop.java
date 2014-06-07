@@ -2,10 +2,7 @@ package net.quetzi.bluepower.blocks;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockCrops;
-import net.minecraft.block.BlockFarmland;
-import net.minecraft.block.IGrowable;
+import net.minecraft.block.*;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -62,8 +59,10 @@ public class BlockCrop extends BlockCrops implements IGrowable
 
     public void onBlockHarvested(World world, int x, int y, int z, int meta, EntityPlayer player)
     {
-        if (world.getBlock(x, y, z) instanceof BlockCrop) {
-            if (world.getBlockMetadata(x, y, z) == 8) {
+        if (world.getBlock(x, y, z) instanceof BlockCrop)
+        {
+            if (world.getBlockMetadata(x, y, z) == 8)
+            {
                 world.setBlockMetadataWithNotify(x, y - 1, z, 5, 2);
             }
         }
@@ -72,12 +71,21 @@ public class BlockCrop extends BlockCrops implements IGrowable
     public void fertilize(World world, int x, int y, int z)
     {
         int meta = world.getBlockMetadata(x, y, z);
-        if (meta < 5) {
-            world.setBlockMetadataWithNotify(x, y, z, 7, 2);
-            world.setBlock(x, y + 1, z, BPBlocks.flax_crop, 8, 2);
+        if (world.getBlock(x, y + 1, z) instanceof BlockAir)
+        {
+            if (meta < 5)
+            {
+                world.setBlockMetadataWithNotify(x, y, z, 7, 2);
+                world.setBlock(x, y + 1, z, BPBlocks.flax_crop, 8, 2);
+                return;
+            }
             return;
+        } else {
+            if (meta < 5)
+            {
+                world.setBlockMetadataWithNotify(x, y, z, 5, 2);
+            }
         }
-        return;
     }
 
     /**
