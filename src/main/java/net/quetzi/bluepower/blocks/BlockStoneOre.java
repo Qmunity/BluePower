@@ -52,6 +52,6 @@ public class BlockStoneOre extends Block {
     // Allow storage blocks to be used as a beacon base
     public boolean isBeaconBase(IBlockAccess worldObj, int x, int y, int z, int beaconX, int beaconY, int beaconZ)
     {
-        return this == BPBlocks.malachite_block || this == BPBlocks.ruby_block || this == BPBlocks.sapphire_block || this == BPBlocks.copper_block || this == BPBlocks.tin_block || this == BPBlocks.silver_block;
+        return this == BPBlocks.amethyst_block || this == BPBlocks.ruby_block || this == BPBlocks.sapphire_block || this == BPBlocks.copper_block || this == BPBlocks.tin_block || this == BPBlocks.silver_block;
     }
 }

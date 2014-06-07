@@ -30,13 +30,16 @@ public class BPItems {
     private static ToolMaterial gemMaterial = EnumHelper.addToolMaterial("GEM",
             2, 750, 6.0F, 2.0F, 10);
 
-    public static Item malachite;
+    public static Item amethyst;
     public static Item sapphire;
     public static Item ruby;
     public static Item nikolite;
     public static Item copper_ingot;
     public static Item silver_ingot;
     public static Item tin_ingot;
+    public static Item brass_ingot;
+    public static Item blue_alloy_ingot;
+    public static Item red_alloy_ingot;
 
     public static Item ruby_axe;
     public static Item ruby_sword;
@@ -44,6 +47,7 @@ public class BPItems {
     public static Item ruby_spade;
     public static Item ruby_hoe;
     public static Item ruby_sickle;
+    public static Item ruby_saw;
 
     public static Item sapphire_axe;
     public static Item sapphire_sword;
@@ -51,6 +55,7 @@ public class BPItems {
     public static Item sapphire_spade;
     public static Item sapphire_hoe;
     public static Item sapphire_sickle;
+    public static Item sapphire_saw;
 
     public static Item amethyst_axe;
     public static Item amethyst_sword;
@@ -58,27 +63,35 @@ public class BPItems {
     public static Item amethyst_spade;
     public static Item amethyst_hoe;
     public static Item amethyst_sickle;
+    public static Item amethyst_saw;
 
     public static Item wood_sickle;
     public static Item stone_sickle;
     public static Item iron_sickle;
     public static Item gold_sickle;
     public static Item diamond_sickle;
+    public static Item iron_saw;
+    public static Item diamond_saw;
 
     public static Item flax_seed;
     public static Item indigo_dye;
+    public static Item silicone_boule;
+    public static Item silicone_wafer;
 
     public static Item multipart;
 
     public static void init() {
 
-        malachite = new ItemGem(Refs.ITEMMALACHITE_NAME);
+        amethyst = new ItemGem(Refs.ITEMAMETHYST_NAME);
         sapphire = new ItemGem(Refs.ITEMSAPPHIRE_NAME);
         ruby = new ItemGem(Refs.ITEMRUBY_NAME);
         nikolite = new ItemNikolite();
         copper_ingot = new ItemIngot(Refs.ITEMCOPPERINGOT_NAME);
         silver_ingot = new ItemIngot(Refs.ITEMSILVERINGOT_NAME);
         tin_ingot = new ItemIngot(Refs.ITEMTININGOT_NAME);
+        brass_ingot = new ItemIngot(Refs.ITEMBRASSINGOT_NAME);
+        blue_alloy_ingot = new ItemIngot(Refs.ITEMBLUEALLOYINGOT_NAME);
+        red_alloy_ingot = new ItemIngot(Refs.ITEMREDALLOYINGOT_NAME);
 
         ruby_axe = new ItemGemAxe(gemMaterial, Refs.RUBYAXE_NAME);
         ruby_sword = new ItemGemSword(gemMaterial, Refs.RUBYSWORD_NAME);
@@ -127,13 +140,16 @@ public class BPItems {
 
     public static void registerItems() {
 
-        GameRegistry.registerItem(malachite, Refs.ITEMMALACHITE_NAME);
+        GameRegistry.registerItem(amethyst, Refs.ITEMAMETHYST_NAME);
         GameRegistry.registerItem(sapphire, Refs.ITEMSAPPHIRE_NAME);
         GameRegistry.registerItem(ruby, Refs.ITEMRUBY_NAME);
         GameRegistry.registerItem(nikolite, Refs.ITEMNIKOLITE_NAME);
         GameRegistry.registerItem(copper_ingot, Refs.ITEMCOPPERINGOT_NAME);
         GameRegistry.registerItem(silver_ingot, Refs.ITEMSILVERINGOT_NAME);
         GameRegistry.registerItem(tin_ingot, Refs.ITEMTININGOT_NAME);
+        GameRegistry.registerItem(brass_ingot, Refs.ITEMBRASSINGOT_NAME);
+        GameRegistry.registerItem(blue_alloy_ingot, Refs.ITEMBLUEALLOYINGOT_NAME);
+        GameRegistry.registerItem(red_alloy_ingot, Refs.ITEMREDALLOYINGOT_NAME);
 
         GameRegistry.registerItem(ruby_axe, Refs.RUBYAXE_NAME);
         GameRegistry.registerItem(ruby_sword, Refs.RUBYSWORD_NAME);

@@ -20,8 +20,8 @@ public class WorldGenerationHandler implements IWorldGenerator {
         if (!world.provider.isSurfaceWorld()) {
             return;
         }
-        if (Config.generateMalachite) {
-            this.addOreToGenerate(Config.veinCountMalachite, Config.veinSizeMalachite, Config.minMalachiteY, Config.maxMalachiteY, BPBlocks.malachite_ore, world, chunkX, chunkZ);
+        if (Config.generateAmethyst) {
+            this.addOreToGenerate(Config.veinCountAmethyst, Config.veinSizeAmethyst, Config.minAmethystY, Config.maxAmethystY, BPBlocks.amethyst_ore, world, chunkX, chunkZ);
         }
         if (Config.generateRuby) {
             this.addOreToGenerate(Config.veinCountRuby, Config.veinSizeRuby, Config.minRubyY, Config.maxRubyY, BPBlocks.ruby_ore, world, chunkX, chunkZ);
