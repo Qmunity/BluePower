@@ -15,6 +15,8 @@ public class Recipes
         GameRegistry.addSmelting(BPBlocks.copper_ore, new ItemStack(BPItems.copper_ingot), 0.5F);
         GameRegistry.addSmelting(BPBlocks.tin_ore, new ItemStack(BPItems.tin_ingot), 0.5F);
         GameRegistry.addSmelting(BPBlocks.silver_ore, new ItemStack(BPItems.silver_ingot), 0.7F);
+        GameRegistry.addSmelting(BPBlocks.basalt, new ItemStack(BPBlocks.basalt_tile), 0);
+        GameRegistry.addSmelting(BPBlocks.marble, new ItemStack(BPBlocks.marble_tile), 0);
 
         craftManager.addRecipe(new ItemStack(BPBlocks.basalt_brick, 4), new Object[]{"##", "##", '#', BPBlocks.basalt});
         craftManager.addRecipe(new ItemStack(BPBlocks.marble_brick, 4), new Object[]{"##", "##", '#', BPBlocks.marble});
@@ -55,6 +57,20 @@ public class Recipes
         craftManager.addRecipe(new ItemStack(BPItems.gold_sickle, 1), new Object[]{" G ", "  G", "SG ", 'G', Items.gold_ingot, 'S', Items.stick});
         craftManager.addRecipe(new ItemStack(BPItems.diamond_sickle, 1), new Object[]{" G ", "  G", "SG ", 'G', Items.diamond, 'S', Items.stick});
 
+        craftManager.addRecipe(new ItemStack(BPItems.iron_saw, 1), new Object[]{"SSS", " II", " II", 'S', Items.stick, 'I', Items.iron_ingot});
+        craftManager.addRecipe(new ItemStack(BPItems.ruby_saw, 1), new Object[]{"SSS", " II", " ##", 'S', Items.stick, 'I', Items.iron_ingot, '#', BPItems.ruby});
+        craftManager.addRecipe(new ItemStack(BPItems.amethyst_saw, 1), new Object[]{"SSS", " II", " ##", 'S', Items.stick, 'I', Items.iron_ingot, '#', BPItems.amethyst});
+        craftManager.addRecipe(new ItemStack(BPItems.sapphire_saw, 1), new Object[]{"SSS", " II", " ##", 'S', Items.stick, 'I', Items.iron_ingot, '#', BPItems.sapphire});
+        craftManager.addRecipe(new ItemStack(BPItems.diamond_saw, 1), new Object[]{"SSS", " II", " ##", 'S', Items.stick, 'I', Items.iron_ingot, '#', Items.diamond});
+
         craftManager.addRecipe(new ItemStack(BPItems.indigo_dye, 1), new Object[]{"#", '#', BPBlocks.indigo_flower});
+
+        craftManager.addRecipe(new ItemStack(BPBlocks.basalt_brick_small, 4), new Object[]{"##", "##", '#', BPBlocks.basalt_brick});
+        craftManager.addRecipe(new ItemStack(BPBlocks.marble_brick_small, 4), new Object[]{"##", "##", '#', BPBlocks.marble_brick});
+        craftManager.addRecipe(new ItemStack(BPBlocks.basalt_brick, 1), new Object[]{"#", '#', BPBlocks.basalt_brick_small});
+        craftManager.addRecipe(new ItemStack(BPBlocks.marble_brick, 1), new Object[]{"#", '#', BPBlocks.marble_brick_small});
+
+        craftManager.addRecipe(new ItemStack(BPBlocks.fancy_basalt, 1), new Object[]{"#", '#', BPBlocks.basalt_brick});
+        craftManager.addRecipe(new ItemStack(BPBlocks.fancy_marble, 1), new Object[]{"#", '#', BPBlocks.marble_brick});
     }
 }
