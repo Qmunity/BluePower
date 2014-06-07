@@ -18,6 +18,14 @@ public class BPBlocks {
     public static Block marble_brick;
     public static Block cracked_basalt;
 
+    public static Block basaltbrick_cracked;
+    public static Block basalt_brick_small;
+    public static Block marble_brick_small;
+    public static Block fancy_basalt;
+    public static Block fancy_marble;
+    public static Block marble_tile;
+    public static Block basalt_tile;
+
     public static Block nikolite_ore;
     public static Block ruby_ore;
     public static Block sapphire_ore;
@@ -48,6 +56,13 @@ public class BPBlocks {
     	basalt_brick = new BlockStoneOre(Refs.BASALTBRICK_NAME);
     	marble_brick = new BlockStoneOre(Refs.MARBLEBRICK_NAME);
     	cracked_basalt = new BlockCrackedBasalt(Refs.CRACKED_BASALT);
+        basaltbrick_cracked = new BlockStoneOre(Refs.CRACKEDBASALTBRICK_NAME);
+        basalt_brick_small = new BlockStoneOre(Refs.SMALLBASALTBRICK_NAME);
+        marble_brick_small = new BlockStoneOre(Refs.SMALLMARBLEBRICK_NAME);
+        fancy_basalt = new BlockStoneOre(Refs.CHISELEDBASALTBRICK_NAME);
+        fancy_marble = new BlockStoneOre(Refs.CHISELEDMARBLEBRICK_NAME);
+        marble_tile = new BlockStoneOre(Refs.MARBLETILE_NAME);
+        basalt_tile = new BlockStoneOre(Refs.BASALTTILE_NAME);
 
         nikolite_ore = new BlockItemOre(Refs.NIKOLITEORE_NAME, BPItems.nikolite);
         ruby_ore = new BlockItemOre(Refs.RUBYORE_NAME, BPItems.ruby);
@@ -81,6 +96,13 @@ public class BPBlocks {
         GameRegistry.registerBlock(basalt_brick, Refs.BASALTBRICK_NAME);
         GameRegistry.registerBlock(marble_brick, Refs.MARBLEBRICK_NAME);
         GameRegistry.registerBlock(cracked_basalt, Refs.CRACKED_BASALT);
+        GameRegistry.registerBlock(basaltbrick_cracked, Refs.CRACKEDBASALTBRICK_NAME);
+        GameRegistry.registerBlock(basalt_brick_small, Refs.SMALLBASALTBRICK_NAME);
+        GameRegistry.registerBlock(marble_brick_small, Refs.SMALLMARBLEBRICK_NAME);
+        GameRegistry.registerBlock(fancy_basalt, Refs.CHISELEDBASALTBRICK_NAME);
+        GameRegistry.registerBlock(fancy_marble, Refs.CHISELEDMARBLEBRICK_NAME);
+        GameRegistry.registerBlock(marble_tile, Refs.MARBLETILE_NAME);
+        GameRegistry.registerBlock(basalt_tile, Refs.BASALTTILE_NAME);
 
         GameRegistry.registerBlock(nikolite_ore, Refs.NIKOLITEORE_NAME);
         GameRegistry.registerBlock(copper_ore, Refs.COPPERORE_NAME);

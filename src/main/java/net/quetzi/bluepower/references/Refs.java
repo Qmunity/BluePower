@@ -82,4 +82,12 @@ public class Refs {
     
     public static final String MULTIPART_NAME         = "bluepower_multipart";
     
+    public static final String CRACKEDBASALTBRICK_NAME= "basaltbrick_cracked";
+    public static final String SMALLBASALTBRICK_NAME = "basalt_brick_small";
+    public static final String SMALLMARBLEBRICK_NAME = "marble_brick_small";
+    public static final String CHISELEDBASALTBRICK_NAME = "fancy_basalt";
+    public static final String CHISELEDMARBLEBRICK_NAME = "fancy_marble";
+    public static final String MARBLETILE_NAME = "marble_tile";
+    public static final String BASALTTILE_NAME = "basalt_tile";
+    
 }
