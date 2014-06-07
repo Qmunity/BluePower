@@ -72,4 +72,6 @@ item.diamond_sickle.name=Diamond Sickle
 
 itemGroup.tabBluePowerMachines=BluePower Machines
 itemGroup.tabBluePowerBlocks=BluePower Blocks
+itemGroup.tabBluePowerItems=BluePower Items
 itemGroup.tabBluePowerTools=BluePower Tools
+itemGroup.tabBluePowerCircuits=BluePower Curcuits

@@ -18,7 +18,7 @@ public class ItemCropSeed extends ItemSeeds implements IPlantable {
     public ItemCropSeed(Block blockCrop, Block blockSoil) {
         super(blockCrop, blockSoil);
         this.field_150925_a = blockCrop;
-        this.setCreativeTab(CustomTabs.tabBluePowerBlocks);
+        this.setCreativeTab(CustomTabs.tabBluePowerItems);
         this.setTextureName(Refs.MODID + ":" + Refs.FLAXSEED_NAME);
     }
 
