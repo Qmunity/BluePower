@@ -47,6 +47,10 @@ public class Refs {
     public static final String ITEMCOPPERINGOT_NAME   = "copper_ingot";
     public static final String ITEMSILVERINGOT_NAME   = "silver_ingot";
     public static final String ITEMTININGOT_NAME      = "tin_ingot";
+
+    public static final String ITEMBRASSINGOT_NAME    = "brass_ingot";
+    public static final String ITEMBLUEALLOYINGOT_NAME = "blue_alloy_ingot";
+    public static final String ITEMREDALLOYINGOT_NAME = "red_alloy_ingot";
     
     public static final String RUBYAXE_NAME           = "ruby_axe";
     public static final String RUBYSWORD_NAME         = "ruby_sword";
