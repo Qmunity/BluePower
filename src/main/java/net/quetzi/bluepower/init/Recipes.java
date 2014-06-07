@@ -72,5 +72,12 @@ public class Recipes
 
         craftManager.addRecipe(new ItemStack(BPBlocks.fancy_basalt, 1), new Object[]{"#", '#', BPBlocks.basalt_brick});
         craftManager.addRecipe(new ItemStack(BPBlocks.fancy_marble, 1), new Object[]{"#", '#', BPBlocks.marble_brick});
+        craftManager.addRecipe(new ItemStack(BPItems.amethyst, 9), new Object[]{"#", '#', BPBlocks.amethyst_block});
+        craftManager.addRecipe(new ItemStack(BPItems.sapphire, 9), new Object[]{"#", '#', BPBlocks.sapphire_block});
+        craftManager.addRecipe(new ItemStack(BPItems.ruby, 9), new Object[]{"#", '#', BPBlocks.ruby_block});
+        craftManager.addRecipe(new ItemStack(BPItems.silver_ingot, 9), new Object[]{"#", '#', BPBlocks.silver_block});
+        craftManager.addRecipe(new ItemStack(BPItems.copper_ingot, 9), new Object[]{"#", '#', BPBlocks.copper_block});
+        craftManager.addRecipe(new ItemStack(BPItems.tin_ingot, 9), new Object[]{"#", '#', BPBlocks.tin_block});
+
     }
 }
