@@ -73,6 +73,13 @@ public class Refs
     public static final  String CHISELEDMARBLEBRICK_NAME = "fancy_marble";
     public static final  String MARBLETILE_NAME          = "marble_tile";
     public static final  String BASALTTILE_NAME          = "basalt_tile";
+    public static final  String AMETHYSTSAW_NAME         = "amethyst_saw";
+    public static final  String SAPPHIRESAW_NAME         = "sapphire_saw";
+    public static final  String RUBYSAW_NAME             = "ruby_saw";
+    public static final  String DIAMONDSAW_NAME          = "diamond_saw";
+    public static final  String IRONSAW_NAME             = "iron_saw";
+    public static final  String SILICONBOULE_NAME        = "silicon_boule";
+    public static final  String SILICONWAFER_NAME        = "silicon_wafer";
     private static final String MAJOR                    = "@MAJOR@";
     private static final String MINOR                    = "@MINOR@";
     private static final String BUILD                    = "@BUILD_NUMBER@";

@@ -70,6 +70,15 @@ item.iron_sickle.name=Iron Sickle
 item.gold_sickle.name=Gold Sickle
 item.diamond_sickle.name=Diamond Sickle
 
+item.iron_saw.name=Iron Saw
+item.amethyst_saw.name=Amethyst Saw
+item.ruby_saw.name=Ruby Saw
+item.sapphire_saw.name=Sapphire Saw
+item.diamond_saw.name=Diamond Saw
+
+item.silicon_boule.name=Silicon Boule
+item.silicon_wafer.name=Silicon Wafer
+
 itemGroup.tabBluePowerMachines=Blue Power Machines
 itemGroup.tabBluePowerBlocks=Blue Power Blocks
 itemGroup.tabBluePowerItems=Blue Power Items

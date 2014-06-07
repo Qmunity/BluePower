@@ -15,6 +15,8 @@ import net.quetzi.bluepower.part.gate.ItemBPPart;
 import net.quetzi.bluepower.references.Dependencies;
 import net.quetzi.bluepower.references.Refs;
 
+import javax.tools.Tool;
+
 public class BPItems
 {
 
@@ -58,14 +60,13 @@ public class BPItems
     public static Item diamond_saw;
     public static Item flax_seed;
     public static Item indigo_dye;
-    public static Item silicone_boule;
-    public static Item silicone_wafer;
+    public static Item silicon_boule;
+    public static Item silicon_wafer;
     public static Item multipart;
     private static ToolMaterial gemMaterial = EnumHelper.addToolMaterial("GEM", 2, 750, 6.0F, 2.0F, 10);
 
     public static void init()
     {
-
         amethyst = new ItemGem(Refs.ITEMAMETHYST_NAME);
         sapphire = new ItemGem(Refs.ITEMSAPPHIRE_NAME);
         ruby = new ItemGem(Refs.ITEMRUBY_NAME);
@@ -107,6 +108,15 @@ public class BPItems
         flax_seed = new ItemCropSeed(BPBlocks.flax_crop, Blocks.farmland).setUnlocalizedName(Refs.FLAXSEED_NAME);
         indigo_dye = new ItemIndigoDye(Refs.INDIGODYE_NAME);
 
+        ruby_saw = new ItemSaw(1,Refs.RUBYSAW_NAME);
+        amethyst_saw = new ItemSaw(1,Refs.AMETHYSTSAW_NAME);
+        sapphire_saw = new ItemSaw(1,Refs.SAPPHIRESAW_NAME);
+        iron_saw = new ItemSaw(1,Refs.IRONSAW_NAME);
+        diamond_saw = new ItemSaw(2,Refs.DIAMONDSAW_NAME);
+
+        silicon_boule = new ItemSiliconBoule(Refs.SILICONBOULE_NAME);
+        silicon_wafer = new ItemSiliconWafer(Refs.SILICONWAFER_NAME);
+
         if (!Loader.isModLoaded(Dependencies.FMP)) {
             multipart = new ItemBPPart();
         } else {
@@ -119,13 +129,11 @@ public class BPItems
     @Optional.Method(modid = Dependencies.FMP)
     private static void initFMP()
     {
-
         multipart = new ItemBPMultipart();
     }
 
     public static void registerItems()
     {
-
         GameRegistry.registerItem(amethyst, Refs.ITEMAMETHYST_NAME);
         GameRegistry.registerItem(sapphire, Refs.ITEMSAPPHIRE_NAME);
         GameRegistry.registerItem(ruby, Refs.ITEMRUBY_NAME);
@@ -164,8 +172,17 @@ public class BPItems
         GameRegistry.registerItem(gold_sickle, Refs.GOLDSICKLE_NAME);
         GameRegistry.registerItem(diamond_sickle, Refs.DIAMONDSICKLE_NAME);
 
+        GameRegistry.registerItem(iron_saw, Refs.IRONSAW_NAME);
+        GameRegistry.registerItem(diamond_saw, Refs.DIAMONDSAW_NAME);
+        GameRegistry.registerItem(ruby_saw, Refs.RUBYSAW_NAME);
+        GameRegistry.registerItem(sapphire_saw, Refs.SAPPHIRESAW_NAME);
+        GameRegistry.registerItem(amethyst_saw, Refs.AMETHYSTSAW_NAME);
+
         GameRegistry.registerItem(flax_seed, Refs.FLAXSEED_NAME);
         GameRegistry.registerItem(indigo_dye, Refs.INDIGODYE_NAME);
+        GameRegistry.registerItem(silicon_boule, Refs.SILICONBOULE_NAME);
+        GameRegistry.registerItem(silicon_wafer, Refs.SILICONWAFER_NAME);
+
         MinecraftForge.addGrassSeed(new ItemStack(flax_seed), 5);
 
         GameRegistry.registerItem(multipart, Refs.MULTIPART_NAME);

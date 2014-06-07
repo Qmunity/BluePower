@@ -19,7 +19,8 @@ public class WorldGenVolcano
     {
         List<Pos>[] distMap = calculateDistMap();
         boolean first = true;
-        for (int dist = 0; dist < distMap.length; dist++) {//Loop through every XZ position of the vulcano, in order of how close the positions are from the center. The vulcano will be generated from the center to the edge.
+        for (int dist = 0; dist < distMap.length; dist++)
+        {//Loop through every XZ position of the vulcano, in order of how close the positions are from the center. The vulcano will be generated from the center to the edge.
             List<Pos> distList = distMap[dist];
             boolean isFinished = true;//Will stay true as long as there were still blocks being generated at this distance from the vulcano.
             for (Pos p : distList) {
@@ -28,7 +29,8 @@ public class WorldGenVolcano
                 if (posHeight >= 0 && (posHeight > worldHeight || canReplace(world, p.x + middleX, posHeight, p.z + middleZ))) {// If the calculated desired vulcano height is higher than the world height, generate.
                     vulcanoMap.put(p, posHeight);
                     if (!first) {
-                        for (int i = posHeight; i > 0 && (i > worldHeight || canReplace(world, p.x + middleX, i, p.z + middleZ)); i--) {
+                        for (int i = posHeight; i > 0 && (i > worldHeight || canReplace(world, p.x + middleX, i, p.z + middleZ)); i--)
+                        {
                             world.setBlock(p.x + middleX, i, p.z + middleZ, BPBlocks.basalt, 0, 0);
                         }
                         for (int i = posHeight + 1; i < vulcanoHeight; i++) {
