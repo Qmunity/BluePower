@@ -18,6 +18,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.INetHandler;
 import net.minecraft.network.NetHandlerPlayServer;
 import net.minecraft.world.World;
+import net.quetzi.bluepower.network.packets.PacketUpdateAlloyFurnaceGUI;
 import net.quetzi.bluepower.references.Refs;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.FMLEmbeddedChannel;
@@ -114,7 +115,7 @@ public class PacketPipeline extends MessageToMessageCodec<FMLProxyPacket, Abstra
     }
 
     public PacketPipeline(){
-    	//registerPacket(PacketAlloyFurnaceStateChange.class);
+    	registerPacket(PacketUpdateAlloyFurnaceGUI.class);
 
         channels = NetworkRegistry.INSTANCE.newChannel(Refs.MODID, this);
 

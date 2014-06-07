@@ -11,6 +11,7 @@ import net.quetzi.bluepower.init.Config;
 import net.quetzi.bluepower.init.CustomTabs;
 import net.quetzi.bluepower.init.OreDictionarySetup;
 import net.quetzi.bluepower.init.Recipes;
+import net.quetzi.bluepower.network.PacketPipeline;
 import net.quetzi.bluepower.references.Refs;
 import net.quetzi.bluepower.tileEntities.TileEntities;
 import net.quetzi.bluepower.world.WorldGenerationHandler;
@@ -71,6 +72,7 @@ public class BluePower {
         Recipes.init(CraftingManager.getInstance());
         // proxy.init();
         // proxy.initRenderers();
+        PacketPipeline.init();
         NetworkRegistry.INSTANCE.registerGuiHandler(this.instance, new GUIHandler());
         
         CompatibilityUtils.init(event);

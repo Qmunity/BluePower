@@ -5,10 +5,16 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntityFurnace;
+import net.quetzi.bluepower.network.PacketPipeline;
+import net.quetzi.bluepower.network.packets.PacketUpdateAlloyFurnaceGUI;
 import net.quetzi.bluepower.tileEntities.TileBase;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class TileAlloyFurnace extends TileBase implements IInventory {
 	private boolean isActive;
+	private int currentBurnTime;
+	private int maxBurnTime;
 	private boolean metaSet = false;
 	private ItemStack[] inventory;
 	private ItemStack fuelInventory;
@@ -39,6 +45,47 @@ public class TileAlloyFurnace extends TileBase implements IInventory {
 				getWorldObj().setBlockMetadataWithNotify(xCoord, yCoord, zCoord, newMeta, 2);
 			}
 		}
+		
+		boolean needsUpdate = false;
+		setIsActive(currentBurnTime > 0);
+		if(isActive){
+			currentBurnTime --;
+			needsUpdate = true;
+			//Work function, right here
+		}
+		if(!worldObj.isRemote){
+			//Do checks if the furnace should run, right here please
+			if(currentBurnTime <= 0 && TileEntityFurnace.isItemFuel(fuelInventory)){
+				//Put new item in
+				currentBurnTime = maxBurnTime = TileEntityFurnace.getItemBurnTime(fuelInventory)+1;
+				if(fuelInventory != null){
+					fuelInventory.stackSize--;
+					if(fuelInventory.stackSize <= 0){
+						fuelInventory = fuelInventory.getItem().getContainerItem(fuelInventory);
+					}
+					needsUpdate = true;
+				}
+			}
+			
+		}
+		
+		if(needsUpdate){
+			PacketPipeline.instance.sendToAllAround(new PacketUpdateAlloyFurnaceGUI(xCoord, yCoord, zCoord, maxBurnTime, currentBurnTime), getWorldObj());
+		}
+	}
+	
+	@SideOnly(Side.CLIENT)
+	public void setBurnTicks(int _maxBurnTime, int _currentBurnTime){
+		maxBurnTime = _maxBurnTime;
+		currentBurnTime = _currentBurnTime;
+	}
+	
+	public float getBurningPercentage() {
+		if(maxBurnTime > 0){
+			return ((float)currentBurnTime / (float)maxBurnTime);
+		}else{
+			return 0;
+		}
 	}
 	
 	/**
@@ -49,6 +96,13 @@ public class TileAlloyFurnace extends TileBase implements IInventory {
 		super.readFromNBT(tCompound);
 		isActive = tCompound.getBoolean("isActive");
 		metaSet = false;
+		
+		for(int i = 0; i<9; i++){
+			NBTTagCompound tc = tCompound.getCompoundTag("inventory"+i);
+			inventory[i] = ItemStack.loadItemStackFromNBT(tc);
+		}
+		fuelInventory = ItemStack.loadItemStackFromNBT(tCompound.getCompoundTag("fuelInventory"));
+		outputInventory = ItemStack.loadItemStackFromNBT(tCompound.getCompoundTag("outputInventory"));
 	}
 	
 	/**
@@ -58,6 +112,25 @@ public class TileAlloyFurnace extends TileBase implements IInventory {
 	public void writeToNBT(NBTTagCompound tCompound){
 		super.writeToNBT(tCompound);
 		tCompound.setBoolean("isActive", isActive);
+		
+		for(int i = 0; i<9; i++){
+			if(inventory[i] != null){
+				NBTTagCompound tc = new NBTTagCompound();
+				inventory[i].writeToNBT(tc);
+				tCompound.setTag("inventory"+i, tc);
+			}
+		}
+		if(fuelInventory != null){
+			NBTTagCompound fuelCompound = new NBTTagCompound();
+			fuelInventory.writeToNBT(fuelCompound);
+			tCompound.setTag("fuelInventory", fuelCompound);
+		}
+		
+		if(outputInventory != null){
+			NBTTagCompound outputCompound = new NBTTagCompound();
+			outputInventory.writeToNBT(outputCompound);
+			tCompound.setTag("outputInventory", outputCompound);
+		}
 	}
 
 	
@@ -69,7 +142,7 @@ public class TileAlloyFurnace extends TileBase implements IInventory {
 	
 	@Override
 	protected void redstoneChanged(boolean newValue) {
-		setIsActive(newValue);
+		//setIsActive(newValue);
 	}
 
 	public void setIsActive(boolean _isActive) {
@@ -101,8 +174,31 @@ public class TileAlloyFurnace extends TileBase implements IInventory {
 
 	@Override
 	public ItemStack decrStackSize(int var1, int var2) {
-		// TODO Auto-generated method stub
-		return null;
+		ItemStack tInventory = getStackInSlot(var1);
+        
+        if(tInventory == null){
+        	return null;
+        }
+        
+        ItemStack ret = null;
+        if(tInventory.stackSize < var2) {
+            ret = tInventory;
+            inventory = null;
+        } else {
+            ret = tInventory.splitStack(var2);
+            if(tInventory.stackSize <= 0) {
+            	if(var2 == 0){
+            		fuelInventory = null;
+            	}else if(var2 == 1){
+            		outputInventory = null;
+            	}else{
+            		inventory[var2 - 2] = null;
+            	}
+            }
+        }
+        worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+
+        return ret;
 	}
 
 	@Override
