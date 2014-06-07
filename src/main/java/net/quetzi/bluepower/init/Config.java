@@ -81,7 +81,7 @@ public class Config
         maxSapphireY = config.get("World Gen", "maxSapphireY", 48).getInt();
         veinCountSapphire = config.get("World Gen", "veinCountSapphire", 7).getInt();
         veinSizeSapphire = config.get("World Gen", "veinSizeSapphire", 2).getInt();
-        volcanoSpawnChance = config.get("World Gen", "volcanoSpawnChance", 0.2).getDouble(0);
+        volcanoSpawnChance = config.get("World Gen", "volcanoSpawnChance", 0.02).getDouble(0);
         volcanoActiveToInactiveRatio = config.get("World Gen", "volcanoActiveToInactiveRatio", 0.5).getDouble(0);
     }
 }
