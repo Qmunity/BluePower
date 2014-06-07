@@ -7,7 +7,7 @@ import net.quetzi.bluepower.references.Refs;
 public class ItemIndigoDye extends Item {
     public ItemIndigoDye(String name) {
         this.setUnlocalizedName(name);
-        this.setCreativeTab(CustomTabs.tabBluePowerBlocks);
+        this.setCreativeTab(CustomTabs.tabBluePowerItems);
         this.setTextureName(Refs.MODID + ":" + name);
     }
 }
