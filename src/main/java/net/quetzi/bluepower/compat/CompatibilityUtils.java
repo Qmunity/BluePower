@@ -30,7 +30,7 @@ public class CompatibilityUtils {
         Class<?> c;
         try {
             c = Class.forName(module);
-            if (!c.isInstance(CompatModule.class)) return;
+            if (!CompatModule.class.isAssignableFrom(c)) return;
             modules.put(modid, (CompatModule) c.newInstance());
         } catch (Exception e) {
             e.printStackTrace();

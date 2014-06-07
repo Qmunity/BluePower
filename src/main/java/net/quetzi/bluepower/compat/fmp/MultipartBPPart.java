@@ -29,12 +29,13 @@ public class MultipartBPPart extends TMultiPart implements IRedstonePart,
     
     @Override
     public String getType() {
-        
+    
         return Refs.MODID + "_" + part.getType();
     }
     
     @Override
     public void writeDesc(MCDataOutput packet) {
+    
         super.writeDesc(packet);
         
         packet.writeString(part.getType());
@@ -42,9 +43,11 @@ public class MultipartBPPart extends TMultiPart implements IRedstonePart,
     
     @Override
     public void readDesc(MCDataInput packet) {
+    
         super.readDesc(packet);
         
-        part = PartRegistry.createPart(packet.readString());
+        String type = packet.readString();
+        if (part == null) part = PartRegistry.createPart(type);
     }
     
     @Override

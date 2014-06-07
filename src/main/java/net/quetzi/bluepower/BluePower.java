@@ -70,10 +70,11 @@ public class BluePower {
     public void Init(FMLInitializationEvent event) {
     
         Recipes.init(CraftingManager.getInstance());
-        // proxy.init();
-        // proxy.initRenderers();
+        proxy.init();
+        proxy.initRenderers();
         PacketPipeline.init();
-        NetworkRegistry.INSTANCE.registerGuiHandler(this.instance, new GUIHandler());
+        NetworkRegistry.INSTANCE.registerGuiHandler(this.instance,
+                new GUIHandler());
         
         CompatibilityUtils.init(event);
     }

@@ -26,7 +26,7 @@ public class BlockCrackedBasalt extends BlockStoneOre{
     public void updateTick(World world, int x, int y, int z, Random random) {
         int meta = world.getBlockMetadata(x,y,z);
         //When this block was active already (meta > 0) or when the random chance hit, spew lava.
-        if(!world.isRemote && (meta > 0 || random.nextInt(100) == 0)){
+        if(!world.isRemote && (meta > 0 || random.nextInt(1) == 0)){
             spawnLava(world, x, y, z, random);
             if(meta < 15){
                 if(random.nextInt(20) == 0) world.setBlockMetadataWithNotify(x, y, z, meta + 1, 0);

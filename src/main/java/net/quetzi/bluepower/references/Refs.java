@@ -93,5 +93,7 @@ public class Refs {
     public static final String CHISELEDMARBLEBRICK_NAME = "fancy_marble";
     public static final String MARBLETILE_NAME          = "marble_tile";
     public static final String BASALTTILE_NAME          = "basalt_tile";
+    public static final String MARBLEPAVER_NAME          = "marble_paver";
+    public static final String BASALTPAVER_NAME          = "basalt_paver";
     
 }

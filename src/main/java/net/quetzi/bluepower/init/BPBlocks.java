@@ -7,6 +7,7 @@ import net.quetzi.bluepower.blocks.BlockCrop;
 import net.quetzi.bluepower.blocks.BlockCustomFlower;
 import net.quetzi.bluepower.blocks.BlockItemOre;
 import net.quetzi.bluepower.blocks.BlockStoneOre;
+import net.quetzi.bluepower.blocks.BlockStoneOreConnected;
 import net.quetzi.bluepower.references.Refs;
 import cpw.mods.fml.common.registry.GameRegistry;
 
@@ -25,6 +26,8 @@ public class BPBlocks {
     public static Block fancy_marble;
     public static Block marble_tile;
     public static Block basalt_tile;
+    public static Block marble_paver;
+    public static Block basalt_paver;
 
     public static Block nikolite_ore;
     public static Block ruby_ore;
@@ -61,8 +64,10 @@ public class BPBlocks {
         marble_brick_small = new BlockStoneOre(Refs.SMALLMARBLEBRICK_NAME);
         fancy_basalt = new BlockStoneOre(Refs.CHISELEDBASALTBRICK_NAME);
         fancy_marble = new BlockStoneOre(Refs.CHISELEDMARBLEBRICK_NAME);
-        marble_tile = new BlockStoneOre(Refs.MARBLETILE_NAME);
-        basalt_tile = new BlockStoneOre(Refs.BASALTTILE_NAME);
+        marble_tile = new BlockStoneOreConnected(Refs.MARBLETILE_NAME);
+        basalt_tile = new BlockStoneOreConnected(Refs.BASALTTILE_NAME);
+        marble_paver = new BlockStoneOre(Refs.MARBLEPAVER_NAME);
+        basalt_paver = new BlockStoneOre(Refs.BASALTPAVER_NAME);
 
         nikolite_ore = new BlockItemOre(Refs.NIKOLITEORE_NAME, BPItems.nikolite);
         ruby_ore = new BlockItemOre(Refs.RUBYORE_NAME, BPItems.ruby);
@@ -91,18 +96,21 @@ public class BPBlocks {
 
     private static void registerBlocks() {
         GameRegistry.registerBlock(basalt, Refs.BASALT_NAME);
-        GameRegistry.registerBlock(marble, Refs.MARBLE_NAME);
         GameRegistry.registerBlock(basalt_cobble, Refs.BASALTCOBBLE_NAME);
         GameRegistry.registerBlock(basalt_brick, Refs.BASALTBRICK_NAME);
-        GameRegistry.registerBlock(marble_brick, Refs.MARBLEBRICK_NAME);
-        GameRegistry.registerBlock(cracked_basalt, Refs.CRACKED_BASALT);
         GameRegistry.registerBlock(basaltbrick_cracked, Refs.CRACKEDBASALTBRICK_NAME);
-        GameRegistry.registerBlock(basalt_brick_small, Refs.SMALLBASALTBRICK_NAME);
-        GameRegistry.registerBlock(marble_brick_small, Refs.SMALLMARBLEBRICK_NAME);
         GameRegistry.registerBlock(fancy_basalt, Refs.CHISELEDBASALTBRICK_NAME);
-        GameRegistry.registerBlock(fancy_marble, Refs.CHISELEDMARBLEBRICK_NAME);
-        GameRegistry.registerBlock(marble_tile, Refs.MARBLETILE_NAME);
+        GameRegistry.registerBlock(basalt_brick_small, Refs.SMALLBASALTBRICK_NAME);
+        GameRegistry.registerBlock(cracked_basalt, Refs.CRACKED_BASALT);
         GameRegistry.registerBlock(basalt_tile, Refs.BASALTTILE_NAME);
+        GameRegistry.registerBlock(basalt_paver, Refs.BASALTPAVER_NAME);
+        
+        GameRegistry.registerBlock(marble, Refs.MARBLE_NAME);
+        GameRegistry.registerBlock(marble_brick, Refs.MARBLEBRICK_NAME);
+        GameRegistry.registerBlock(fancy_marble, Refs.CHISELEDMARBLEBRICK_NAME);
+        GameRegistry.registerBlock(marble_brick_small, Refs.SMALLMARBLEBRICK_NAME);
+        GameRegistry.registerBlock(marble_tile, Refs.MARBLETILE_NAME);
+        GameRegistry.registerBlock(marble_paver, Refs.MARBLEPAVER_NAME);
 
         GameRegistry.registerBlock(nikolite_ore, Refs.NIKOLITEORE_NAME);
         GameRegistry.registerBlock(copper_ore, Refs.COPPERORE_NAME);
