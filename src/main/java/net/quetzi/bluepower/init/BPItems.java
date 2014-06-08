@@ -1,3 +1,20 @@
+/*
+ * This file is part of Blue Power.
+ *
+ *     Blue Power is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     Blue Power is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with Blue Power.  If not, see <http://www.gnu.org/licenses/>
+ */
+
 package net.quetzi.bluepower.init;
 
 import net.minecraft.init.Blocks;
@@ -29,54 +46,55 @@ import cpw.mods.fml.common.Optional;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public class BPItems {
-    
-    public static Item          amethyst;
-    public static Item          sapphire;
-    public static Item          ruby;
-    public static Item          nikolite;
-    public static Item          copper_ingot;
-    public static Item          silver_ingot;
-    public static Item          tin_ingot;
-    public static Item          brass_ingot;
-    public static Item          blue_alloy_ingot;
-    public static Item          red_alloy_ingot;
-    public static Item          ruby_axe;
-    public static Item          ruby_sword;
-    public static Item          ruby_pickaxe;
-    public static Item          ruby_spade;
-    public static Item          ruby_hoe;
-    public static Item          ruby_sickle;
-    public static Item          ruby_saw;
-    public static Item          sapphire_axe;
-    public static Item          sapphire_sword;
-    public static Item          sapphire_pickaxe;
-    public static Item          sapphire_spade;
-    public static Item          sapphire_hoe;
-    public static Item          sapphire_sickle;
-    public static Item          sapphire_saw;
-    public static Item          amethyst_axe;
-    public static Item          amethyst_sword;
-    public static Item          amethyst_pickaxe;
-    public static Item          amethyst_spade;
-    public static Item          amethyst_hoe;
-    public static Item          amethyst_sickle;
-    public static Item          amethyst_saw;
-    public static Item          wood_sickle;
-    public static Item          stone_sickle;
-    public static Item          iron_sickle;
-    public static Item          gold_sickle;
-    public static Item          diamond_sickle;
-    public static Item          iron_saw;
-    public static Item          diamond_saw;
-    public static Item          flax_seed;
-    public static Item          indigo_dye;
-    public static Item          silicon_boule;
-    public static Item          silicon_wafer;
-    public static Item          multipart;
-    private static ToolMaterial gemMaterial = EnumHelper.addToolMaterial("GEM", 2, 750, 6.0F, 2.0F, 10);
-    
+
+    public static Item amethyst;
+    public static Item sapphire;
+    public static Item ruby;
+    public static Item nikolite;
+    public static Item copper_ingot;
+    public static Item silver_ingot;
+    public static Item tin_ingot;
+    public static Item brass_ingot;
+    public static Item blue_alloy_ingot;
+    public static Item red_alloy_ingot;
+    public static Item ruby_axe;
+    public static Item ruby_sword;
+    public static Item ruby_pickaxe;
+    public static Item ruby_spade;
+    public static Item ruby_hoe;
+    public static Item ruby_sickle;
+    public static Item ruby_saw;
+    public static Item sapphire_axe;
+    public static Item sapphire_sword;
+    public static Item sapphire_pickaxe;
+    public static Item sapphire_spade;
+    public static Item sapphire_hoe;
+    public static Item sapphire_sickle;
+    public static Item sapphire_saw;
+    public static Item amethyst_axe;
+    public static Item amethyst_sword;
+    public static Item amethyst_pickaxe;
+    public static Item amethyst_spade;
+    public static Item amethyst_hoe;
+    public static Item amethyst_sickle;
+    public static Item amethyst_saw;
+    public static Item wood_sickle;
+    public static Item stone_sickle;
+    public static Item iron_sickle;
+    public static Item gold_sickle;
+    public static Item diamond_sickle;
+    public static Item iron_saw;
+    public static Item diamond_saw;
+    public static Item flax_seed;
+    public static Item indigo_dye;
+    public static Item silicon_boule;
+    public static Item silicon_wafer;
+    public static Item multipart;
+    private static ToolMaterial gemMaterial = EnumHelper
+            .addToolMaterial("GEM", 2, 750, 6.0F, 2.0F, 10);
+
     public static void init() {
-    
+
         amethyst = new ItemGem(Refs.ITEMAMETHYST_NAME);
         sapphire = new ItemGem(Refs.ITEMSAPPHIRE_NAME);
         ruby = new ItemGem(Refs.ITEMRUBY_NAME);
@@ -87,14 +105,14 @@ public class BPItems {
         brass_ingot = new ItemIngot(Refs.ITEMBRASSINGOT_NAME);
         blue_alloy_ingot = new ItemIngot(Refs.ITEMBLUEALLOYINGOT_NAME);
         red_alloy_ingot = new ItemIngot(Refs.ITEMREDALLOYINGOT_NAME);
-        
+
         ruby_axe = new ItemGemAxe(gemMaterial, Refs.RUBYAXE_NAME);
         ruby_sword = new ItemGemSword(gemMaterial, Refs.RUBYSWORD_NAME);
         ruby_pickaxe = new ItemGemPickaxe(gemMaterial, Refs.RUBYPICKAXE_NAME);
         ruby_spade = new ItemGemSpade(gemMaterial, Refs.RUBYSPADE_NAME);
         ruby_hoe = new ItemGemHoe(gemMaterial, Refs.RUBYHOE_NAME);
         ruby_sickle = new ItemSickle(gemMaterial, Refs.RUBYSICKLE_NAME);
-        
+
         sapphire_axe = new ItemGemAxe(gemMaterial, Refs.SAPPHIREAXE_NAME);
         sapphire_sword = new ItemGemSword(gemMaterial, Refs.SAPPHIRESWORD_NAME);
         sapphire_pickaxe = new ItemGemPickaxe(gemMaterial, Refs.SAPPHIREPICKAXE_NAME);
