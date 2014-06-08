@@ -50,6 +50,12 @@ public class RegisterMultiparts implements IPartFactory {
     public static TMultiPart createPart_(String id, boolean client, boolean multipartFactory) {
     
         BPPart part = PartRegistry.createPart(id, multipartFactory);
+        
+        return createPart_(part);
+    }
+    
+    public static TMultiPart createPart_(BPPart part) {
+    
         if (part != null) {
             if (part instanceof IBPFacePart) {
                 return new MultipartFaceBPPart((IBPFacePart) part);

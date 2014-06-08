@@ -82,6 +82,30 @@ public class GateBase extends BPPartFace {
         GL11.glPushMatrix();
         {
             GL11.glTranslated(loc.getX(), loc.getY(), loc.getZ());
+
+            GL11.glTranslated(0.5, 0.5, 0.5);
+            {
+                switch(getFace()){
+                    case 0:
+                        break;
+                    case 1:
+                        break;
+                    case 2:
+                        GL11.glRotated(90, 1, 0, 0);
+                        break;
+                    case 3:
+                        GL11.glRotated(90, -1, 0, 0);
+                        break;
+                    case 4:
+                        GL11.glRotated(90, 0, 0, -1);
+                        break;
+                    case 5:
+                        GL11.glRotated(90, 0, 0, 1);
+                        break;
+                }
+            }
+            GL11.glTranslated(-0.5, -0.5, -0.5);
+            
             GL11.glDisable(GL11.GL_CULL_FACE);
             Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/gates/bottom.png"));
             GL11.glBegin(GL11.GL_QUADS);
@@ -139,7 +163,7 @@ public class GateBase extends BPPartFace {
         }
         GL11.glPopMatrix();
         
-        return true;
+        return false;
     }
     
     @Override
