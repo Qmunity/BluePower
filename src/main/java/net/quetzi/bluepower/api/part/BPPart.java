@@ -87,6 +87,16 @@ public abstract class BPPart {
     }
     
     /**
+     * Gets all the occlusion boxes for this block
+     * 
+     * @return A list with the occlusion boxes
+     */
+    public List<AxisAlignedBB> getOcclusionBoxes() {
+    
+        return getSelectionBoxes();
+    }
+    
+    /**
      * Raytraces the block
      * 
      * @param start

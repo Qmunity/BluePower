@@ -75,6 +75,17 @@ public class MultipartBPPart extends TMultiPart implements IRedstonePart, JNorma
     }
     
     @Override
+    public Iterable<Cuboid6> getOcclusionBoxes() {
+    
+        List<Cuboid6> cubes = new ArrayList<Cuboid6>();
+        List<AxisAlignedBB> aabbs = getPart().getOcclusionBoxes();
+        if (aabbs == null) return cubes;
+        for (AxisAlignedBB aabb : aabbs)
+            cubes.add(new Cuboid6(aabb));
+        return cubes;
+    }
+    
+    @Override
     public void writeDesc(MCDataOutput packet) {
     
         super.writeDesc(packet);
@@ -158,19 +169,6 @@ public class MultipartBPPart extends TMultiPart implements IRedstonePart, JNorma
         if (getPart() instanceof IBPRedstonePart) return ((IBPRedstonePart) getPart()).canConnect(ForgeDirection.getOrientation(side));
         
         return false;
-    }
-    
-    // Occlusion
-    
-    @Override
-    public Iterable<Cuboid6> getOcclusionBoxes() {
-    
-        List<Cuboid6> cubes = new ArrayList<Cuboid6>();
-        
-        for (Cuboid6 c : getSubParts())
-            cubes.add(c);
-        
-        return cubes;
     }
     
     // Events
