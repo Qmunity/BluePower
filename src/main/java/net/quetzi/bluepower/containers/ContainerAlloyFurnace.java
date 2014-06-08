@@ -131,6 +131,7 @@ public class ContainerAlloyFurnace extends Container {
         
         currentBurnTime = tileFurnace.currentBurnTime;
         maxBurnTime = tileFurnace.maxBurnTime;
+        currentProcessTime = tileFurnace.currentProcessTime;
     }
     
     @Override
