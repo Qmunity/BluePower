@@ -7,6 +7,7 @@ import net.minecraft.item.Item;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.quetzi.bluepower.init.BPBlocks;
+import net.quetzi.bluepower.init.BPItems;
 import net.quetzi.bluepower.init.CustomTabs;
 import net.quetzi.bluepower.references.Refs;
 
@@ -14,10 +15,9 @@ import java.util.Random;
 
 public class BlockItemOre extends Block
 {
-    private Item itemToDrop;
     private Random rand = new Random();
 
-    public BlockItemOre(String type, Item item)
+    public BlockItemOre(String type)
     {
         super(Material.iron);
         this.setCreativeTab(CustomTabs.tabBluePowerBlocks);
@@ -26,7 +26,6 @@ public class BlockItemOre extends Block
         this.setResistance(10.0F);
         this.textureName = Refs.MODID + ":" + type;
         this.setBlockName(type);
-        itemToDrop = item;
     }
 
     @Override
@@ -38,7 +37,7 @@ public class BlockItemOre extends Block
     @Override
     public Item getItemDropped(int par1, Random par2, int par3)
     {
-        return this.itemToDrop;
+        return getDropFromBlockName(this.getUnlocalizedName().substring(5));
     }
 
     @Override
@@ -78,5 +77,29 @@ public class BlockItemOre extends Block
             return j1;
         }
         return 0;
+    }
+
+    public static Item getDropFromBlockName(String blockName)
+    {
+        if (blockName.equalsIgnoreCase(Refs.NIKOLITEORE_NAME))
+        {
+            return BPItems.nikolite;
+        }
+        else if (blockName.equalsIgnoreCase(Refs.RUBYORE_NAME))
+        {
+            return BPItems.ruby;
+        }
+        else if (blockName.equalsIgnoreCase(Refs.SAPPHIREORE_NAME))
+        {
+            return BPItems.sapphire;
+        }
+        else if (blockName.equalsIgnoreCase(Refs.AMETHYSTORE_NAME))
+        {
+            return BPItems.amethyst;
+        }
+        else
+        {
+            return null;
+        }
     }
 }

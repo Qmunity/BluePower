@@ -99,10 +99,10 @@ public class BPBlocks
         marble_paver = new BlockStoneOre(Refs.MARBLEPAVER_NAME);
         basalt_paver = new BlockStoneOre(Refs.BASALTPAVER_NAME);
 
-        nikolite_ore = new BlockItemOre(Refs.NIKOLITEORE_NAME, BPItems.nikolite);
-        ruby_ore = new BlockItemOre(Refs.RUBYORE_NAME, BPItems.ruby);
-        sapphire_ore = new BlockItemOre(Refs.SAPPHIREORE_NAME, BPItems.sapphire);
-        amethyst_ore = new BlockItemOre(Refs.AMETHYSTORE_NAME, BPItems.amethyst);
+        nikolite_ore = new BlockItemOre(Refs.NIKOLITEORE_NAME);
+        ruby_ore = new BlockItemOre(Refs.RUBYORE_NAME);
+        sapphire_ore = new BlockItemOre(Refs.SAPPHIREORE_NAME);
+        amethyst_ore = new BlockItemOre(Refs.AMETHYSTORE_NAME);
         copper_ore = new BlockStoneOre(Refs.COPPERORE_NAME);
         silver_ore = new BlockStoneOre(Refs.SILVERORE_NAME);
         tin_ore = new BlockStoneOre(Refs.TINORE_NAME);
