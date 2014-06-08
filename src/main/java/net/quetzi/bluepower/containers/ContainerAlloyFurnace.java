@@ -16,9 +16,8 @@ public class ContainerAlloyFurnace extends Container
 {
     private TileAlloyFurnace tileFurnace;
 
-    private int lastCookTime;
-    private int lastBurnTime;
-    private int lastItemBurnTime;
+    private int currentBurnTime;
+    private int maxBurnTime;
 
     public ContainerAlloyFurnace(InventoryPlayer invPlayer, TileAlloyFurnace furnace)
     {
@@ -87,29 +86,23 @@ public class ContainerAlloyFurnace extends Container
     {
         super.detectAndSendChanges();
 
-        for (int i = 0; i < this.crafters.size(); ++i)
+        for (Object crafter : this.crafters)
         {
-            ICrafting icrafting = (ICrafting)this.crafters.get(i);
+            ICrafting icrafting = (ICrafting) crafter;
 
-            if (this.lastCookTime != this.tileFurnace.furnaceCookTime)
+            if (this.currentBurnTime != this.tileFurnace.currentBurnTime)
             {
-                icrafting.sendProgressBarUpdate(this, 0, this.tileFurnace.furnaceCookTime);
+                icrafting.sendProgressBarUpdate(this, 0, this.tileFurnace.currentBurnTime);
             }
 
-            if (this.lastBurnTime != this.tileFurnace.furnaceBurnTime)
+            if (this.maxBurnTime != this.tileFurnace.maxBurnTime)
             {
-                icrafting.sendProgressBarUpdate(this, 1, this.tileFurnace.furnaceBurnTime);
-            }
-
-            if (this.lastItemBurnTime != this.tileFurnace.currentItemBurnTime)
-            {
-                icrafting.sendProgressBarUpdate(this, 2, this.tileFurnace.currentItemBurnTime);
+                icrafting.sendProgressBarUpdate(this, 1, this.tileFurnace.maxBurnTime);
             }
         }
 
-        this.lastCookTime = this.tileFurnace.furnaceCookTime;
-        this.lastBurnTime = this.tileFurnace.furnaceBurnTime;
-        this.lastItemBurnTime = this.tileFurnace.currentItemBurnTime;
+        this.currentBurnTime = this.tileFurnace.currentBurnTime;
+        this.maxBurnTime = this.tileFurnace.maxBurnTime;
     }
 
     @SideOnly(Side.CLIENT)
@@ -117,17 +110,12 @@ public class ContainerAlloyFurnace extends Container
     {
         if (par1 == 0)
         {
-            this.tileFurnace.furnaceCookTime = par2;
+            this.tileFurnace.currentBurnTime = par2;
         }
 
         if (par1 == 1)
         {
-            this.tileFurnace.furnaceBurnTime = par2;
-        }
-
-        if (par1 == 2)
-        {
-            this.tileFurnace.currentItemBurnTime = par2;
+            this.tileFurnace.maxBurnTime = par2;
         }
     }
 
