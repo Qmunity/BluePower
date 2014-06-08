@@ -60,10 +60,8 @@ public class BlockCrop extends BlockCrops implements IGrowable
     @Override
     public void onBlockHarvested(World world, int x, int y, int z, int meta, EntityPlayer player)
     {
-        if (world.getBlock(x, y, z) instanceof BlockCrop)
-        {
-            if (world.getBlockMetadata(x, y, z) == 8)
-            {
+        if (world.getBlock(x, y, z) instanceof BlockCrop) {
+            if (world.getBlockMetadata(x, y, z) == 8) {
                 world.setBlockMetadataWithNotify(x, y - 1, z, 5, 2);
             }
         }
@@ -72,18 +70,15 @@ public class BlockCrop extends BlockCrops implements IGrowable
     public void fertilize(World world, int x, int y, int z)
     {
         int meta = world.getBlockMetadata(x, y, z);
-        if (world.getBlock(x, y + 1, z) instanceof BlockAir)
-        {
-            if (meta < 5)
-            {
+        if (world.getBlock(x, y + 1, z) instanceof BlockAir) {
+            if (meta < 5) {
                 world.setBlockMetadataWithNotify(x, y, z, 7, 2);
                 world.setBlock(x, y + 1, z, BPBlocks.flax_crop, 8, 2);
                 return;
             }
             return;
         } else {
-            if (meta < 5)
-            {
+            if (meta < 5) {
                 world.setBlockMetadataWithNotify(x, y, z, 5, 2);
             }
         }
@@ -300,11 +295,7 @@ public class BlockCrop extends BlockCrops implements IGrowable
     @Override
     public boolean canBlockStay(World world, int x, int y, int z)
     {
-        if (world.getBlock(x, y, z) != this)
-            return super.canBlockStay(world, x, y, z); //Forge: This function is called during world gen and placement, before this block is set, so if we are not 'here' then assume it's the pre-check.
-        //int l = world.getBlockMetadata(x, y, z);
-        if ((world.getBlock(x, y - 1, z) instanceof BlockFarmland) || (world.getBlock(x, y - 1, z) instanceof BlockCrop)) {
-            return true;
-        } else return false;
+        if (world.getBlock(x, y, z) != this) return super.canBlockStay(world, x, y, z);
+        return (world.getBlock(x, y - 1, z) instanceof BlockFarmland) || (world.getBlock(x, y - 1, z) instanceof BlockCrop);
     }
 }
