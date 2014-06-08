@@ -112,12 +112,11 @@ public class TileAlloyFurnace extends TileBase implements IInventory {
             }
         }
         
-        setIsActive(currentBurnTime > 0);
-        if (isActive) {
-            currentBurnTime--;
-            // Work function, right here
-        }
         if (!worldObj.isRemote) {
+            setIsActive(currentBurnTime > 0);
+            if (isActive) {
+                currentBurnTime--;
+            }
             IAlloyFurnaceRecipe recipe = AlloyFurnaceRegistry.getInstance().getMatchingRecipe(inventory, outputInventory);
             if (recipe != null) {
                 if (currentBurnTime <= 0) {

@@ -49,6 +49,15 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
         alloyFurnaceRecipes.add(recipe);
     }
     
+    /**
+     * getter for NEI plugin
+     * @return
+     */
+    public List<IAlloyFurnaceRecipe> getAllRecipes() {
+    
+        return alloyFurnaceRecipes;
+    }
+    
     @Override
     public void addRecipe(ItemStack craftingResult, Object... requiredItems) {
     
@@ -87,7 +96,7 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
         return null;
     }
     
-    private class StandardAlloyFurnaceRecipe implements IAlloyFurnaceRecipe {
+    public class StandardAlloyFurnaceRecipe implements IAlloyFurnaceRecipe {
         
         private final ItemStack   craftingResult;
         private final ItemStack[] requiredItems;
@@ -148,6 +157,15 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
         public ItemStack getCraftingResult(ItemStack[] input) {
         
             return craftingResult;
+        }
+        
+        /**
+         * getter for NEI plugin
+         * @return
+         */
+        public ItemStack[] getRequiredItems() {
+        
+            return requiredItems;
         }
         
     }
