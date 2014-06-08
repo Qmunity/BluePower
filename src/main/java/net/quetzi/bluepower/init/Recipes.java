@@ -5,6 +5,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
+import net.quetzi.bluepower.api.BPRegistry;
 
 public class Recipes
 {
@@ -78,6 +79,11 @@ public class Recipes
         craftManager.addRecipe(new ItemStack(BPItems.silver_ingot, 9), new Object[]{"#", '#', BPBlocks.silver_block});
         craftManager.addRecipe(new ItemStack(BPItems.copper_ingot, 9), new Object[]{"#", '#', BPBlocks.copper_block});
         craftManager.addRecipe(new ItemStack(BPItems.tin_ingot, 9), new Object[]{"#", '#', BPBlocks.tin_block});
-
+        
+        
+        //Alloy furnace
+        BPRegistry.alloyFurnaceRegistry.addRecipe(new ItemStack(BPItems.red_alloy_ingot, 4), new ItemStack(Items.redstone, 4), Items.iron_ingot);
+        BPRegistry.alloyFurnaceRegistry.addRecipe(new ItemStack(BPItems.brass_ingot, 4), new ItemStack(BPItems.copper_ingot, 3), BPItems.tin_ingot);
+        
     }
 }

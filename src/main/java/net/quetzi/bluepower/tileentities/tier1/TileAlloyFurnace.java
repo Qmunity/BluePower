@@ -7,6 +7,9 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntityFurnace;
+import net.quetzi.bluepower.api.BPRegistry;
+import net.quetzi.bluepower.api.recipe.IAlloyFurnaceRecipe;
+import net.quetzi.bluepower.recipe.AlloyFurnaceRegistry;
 import net.quetzi.bluepower.tileentities.TileBase;
 
 public class TileAlloyFurnace extends TileBase implements IInventory
@@ -101,8 +104,17 @@ public class TileAlloyFurnace extends TileBase implements IInventory
             //Work function, right here
         }
         if (!worldObj.isRemote) {
-            //Do checks if the furnace should run, right here please
-            if (currentBurnTime <= 0 && TileEntityFurnace.isItemFuel(fuelInventory)) {
+            IAlloyFurnaceRecipe recipe = AlloyFurnaceRegistry.getInstance().getMatchingRecipe(inventory);
+            if(recipe != null && outputInventory != null){//check if we can add the crafting result to the output slot
+                ItemStack craftingResult = recipe.getCraftingResult(inventory);
+                if(!ItemStack.areItemStackTagsEqual(outputInventory, craftingResult) || 
+                        !outputInventory.isItemEqual(craftingResult)){
+                    recipe = null;
+                }else if(craftingResult.stackSize + outputInventory.stackSize > getInventoryStackLimit()){
+                    recipe = null;
+                }
+            }
+            if (recipe != null && currentBurnTime <= 0 && TileEntityFurnace.isItemFuel(fuelInventory)) {
                 //Put new item in
                 currentBurnTime = maxBurnTime = TileEntityFurnace.getItemBurnTime(fuelInventory) + 1;
                 if (fuelInventory != null) {
@@ -112,7 +124,15 @@ public class TileAlloyFurnace extends TileBase implements IInventory
                     }
                 }
             }
-
+            if(recipe != null){
+                if(outputInventory != null){
+                    outputInventory.stackSize += recipe.getCraftingResult(inventory).stackSize;
+                }else{
+                    outputInventory = recipe.getCraftingResult(inventory).copy();
+                }
+                recipe.useItems(inventory);
+                worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+            }
         }
     }
 
@@ -195,12 +215,12 @@ public class TileAlloyFurnace extends TileBase implements IInventory
         } else {
             ret = tInventory.splitStack(var2);
             if (tInventory.stackSize <= 0) {
-                if (var2 == 0) {
+                if (var1 == 0) {
                     fuelInventory = null;
-                } else if (var2 == 1) {
+                } else if (var1 == 1) {
                     outputInventory = null;
                 } else {
-                    inventory[var2 - 2] = null;
+                    inventory[var1 - 2] = null;
                 }
             }
         }
@@ -221,11 +241,11 @@ public class TileAlloyFurnace extends TileBase implements IInventory
         if (var1 == 0) {
             fuelInventory = itemStack;
         } else if (var1 == 1) {
-            //This shouldn't happen, this is the output slot
+            outputInventory = itemStack;
         } else {
             inventory[var1 - 2] = itemStack;
-            worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
         }
+        worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
     }
 
     @Override
@@ -267,10 +287,8 @@ public class TileAlloyFurnace extends TileBase implements IInventory
         } else if (var1 == 1) { //Output slot
             return false;
         } else {
-            //What items do we want here? Maybe even check the recipes here.
             return true;
         }
-        //return false;
     }
 
 }

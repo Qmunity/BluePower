@@ -2,6 +2,7 @@ package net.quetzi.bluepower;
 
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraftforge.common.config.Configuration;
+import net.quetzi.bluepower.api.BPRegistry;
 import net.quetzi.bluepower.api.part.PartRegistry;
 import net.quetzi.bluepower.client.gui.GUIHandler;
 import net.quetzi.bluepower.compat.CompatibilityUtils;
@@ -12,6 +13,7 @@ import net.quetzi.bluepower.init.CustomTabs;
 import net.quetzi.bluepower.init.OreDictionarySetup;
 import net.quetzi.bluepower.init.Recipes;
 import net.quetzi.bluepower.network.NetworkHandler;
+import net.quetzi.bluepower.recipe.AlloyFurnaceRegistry;
 import net.quetzi.bluepower.references.Refs;
 import net.quetzi.bluepower.tileentities.TileEntities;
 import net.quetzi.bluepower.world.WorldGenerationHandler;
@@ -56,6 +58,7 @@ public class BluePower {
         config.save();
         BPBlocks.init();
         BPItems.init();
+        BPRegistry.alloyFurnaceRegistry = AlloyFurnaceRegistry.getInstance();
 
         TileEntities.init();
         OreDictionarySetup.init();

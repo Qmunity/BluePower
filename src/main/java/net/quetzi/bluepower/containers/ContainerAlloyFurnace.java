@@ -8,6 +8,7 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntityFurnace;
 import net.quetzi.bluepower.containers.slots.SlotMachineInput;
 import net.quetzi.bluepower.containers.slots.SlotMachineOutput;
 import net.quetzi.bluepower.tileentities.tier1.TileAlloyFurnace;
@@ -23,14 +24,13 @@ public class ContainerAlloyFurnace extends Container
     {
         tileFurnace = furnace;
 
-        addSlotToContainer(new SlotMachineInput(furnace, 9, 21, 35));
+        addSlotToContainer(new SlotMachineInput(furnace, 0, 21, 35));
+        addSlotToContainer(new SlotMachineOutput(furnace, 1, 134, 35));
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
-                addSlotToContainer(new SlotMachineInput(furnace, (i * 3) + j, 47 + (i * 18), 17 + (j * 18)));
+                addSlotToContainer(new SlotMachineInput(furnace, (i * 3) + j + 2, 47 + (i * 18), 17 + (j * 18)));
             }
         }
-        addSlotToContainer(new SlotMachineOutput(furnace, 10, 134, 35));
-
         bindPlayerInventory(invPlayer);
 
     }
@@ -54,29 +54,37 @@ public class ContainerAlloyFurnace extends Container
     //Best ask MineMaarten to do this
     //TODO
     @Override
-    public ItemStack transferStackInSlot(EntityPlayer player, int slot)
-    {
-        ItemStack stack = null;
-        Slot slotObject = (Slot) inventorySlots.get(slot);
+    public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int par2){
 
-        if (slotObject != null && slotObject.getHasStack()) {
-            ItemStack stackInSlot = slotObject.getStack();
-            stack = stackInSlot.copy();
+        ItemStack var3 = null;
+        Slot var4 = (Slot)inventorySlots.get(par2);
 
+        if(var4 != null && var4.getHasStack()) {
+            ItemStack var5 = var4.getStack();
+            var3 = var5.copy();
 
-            if (stackInSlot.stackSize == 0) {
-                slotObject.putStack(null);
+            if(par2 < 11) {
+                if(!mergeItemStack(var5, 11, 47, false)) return null;
+                var4.onSlotChange(var5, var3);
             } else {
-                slotObject.onSlotChanged();
+                if(TileEntityFurnace.isItemFuel(var5) && mergeItemStack(var5, 0, 1, false)) {
+
+                } else if(!mergeItemStack(var5, 2, 11, false)) return null;
+                var4.onSlotChange(var5, var3);
             }
 
-            if (stackInSlot.stackSize == stack.stackSize) {
-                return null;
+            if(var5.stackSize == 0) {
+                var4.putStack((ItemStack)null);
+            } else {
+                var4.onSlotChanged();
             }
 
-            slotObject.onPickupFromSlot(player, stackInSlot);
+            if(var5.stackSize == var3.stackSize) return null;
+
+            var4.onPickupFromSlot(par1EntityPlayer, var5);
         }
-        return stack;
+
+        return var3;
     }
 
     /**
