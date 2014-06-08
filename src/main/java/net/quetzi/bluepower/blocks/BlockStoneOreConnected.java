@@ -94,7 +94,7 @@ public class BlockStoneOreConnected extends BlockStoneOre {
     @Override
     public void registerBlockIcons(IIconRegister iconRegister) {
     
-        for (int i = 0; i < icons.length; i++)
+        for (int i = 0; i < 47; i++)
             icons[i] = iconRegister.registerIcon(Refs.MODID + ":" + this.name
                     + "/" + this.name + "_" + (i + 1));
     }

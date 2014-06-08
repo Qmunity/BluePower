@@ -1,4 +1,4 @@
-package net.quetzi.bluepower.compat.fmp;
+package net.quetzi.bluepower.part;
 
 import java.util.List;
 
@@ -8,45 +8,44 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-import net.quetzi.bluepower.api.part.BPPart;
 import net.quetzi.bluepower.api.part.PartRegistry;
 import net.quetzi.bluepower.init.CustomTabs;
-import net.quetzi.bluepower.part.ItemBPPart;
 import net.quetzi.bluepower.references.Refs;
-import codechicken.lib.vec.BlockCoord;
-import codechicken.lib.vec.Vector3;
-import codechicken.multipart.JItemMultiPart;
-import codechicken.multipart.TMultiPart;
 
-public class ItemBPMultipart extends JItemMultiPart {
+public class ItemBPPart extends Item {
     
-    public ItemBPMultipart() {
+    public ItemBPPart() {
     
         super();
         setUnlocalizedName(Refs.MODID + ".part");
         setCreativeTab(CustomTabs.tabBluePowerCircuits);
     }
     
-    @Override
-    public TMultiPart newPart(ItemStack is, EntityPlayer player, World w,
-            BlockCoord b, int unused, Vector3 unused1) {
+    public static String getUnlocalizedName_(ItemStack item) {
     
-        BPPart part = PartRegistry.createPartFromItem(is);
-        
-        if (part == null) return null;
-        
-        return new MultipartBPPart(part);
+        return Refs.MODID + ".part." + PartRegistry.getPartIdFromItem(item);// TODO Unlocalized names for parts
+    }
+    
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    public static void getSubItems(List l) {
+    
+        for (String id : PartRegistry.getRegisteredParts())
+            l.add(PartRegistry.getItemForPart(id));
     }
     
     @Override
     public boolean onItemUse(ItemStack stack, EntityPlayer player, World w,
             int x, int y, int z, int side, float f, float f2, float f3) {
     
-        if (super.onItemUse(stack, player, w, x, y, z, side, f, f2, f3)) {
+        boolean flag = true;
+        
+        if (flag) {
             w.playSoundEffect(x + 0.5, y + 0.5, z + 0.5,
                     Block.soundTypeWood.soundName,
                     Block.soundTypeWood.getVolume(),
                     Block.soundTypeWood.getPitch());
+            
+            // TODO Place part without FMP
             return true;
         }
         return false;
@@ -61,21 +60,14 @@ public class ItemBPMultipart extends JItemMultiPart {
     @Override
     public String getUnlocalizedName(ItemStack item) {
     
-        return ItemBPPart.getUnlocalizedName_(item);
-    }
-    
-    @SuppressWarnings("rawtypes")
-    @Override
-    public void addInformation(ItemStack item, EntityPlayer par2EntityPlayer,
-            List l, boolean par4) {
-    
+        return getUnlocalizedName_(item);
     }
     
     @SuppressWarnings({ "rawtypes" })
     @Override
     public void getSubItems(Item unused, CreativeTabs tab, List l) {
     
-        ItemBPPart.getSubItems(l);
+        getSubItems(l);
     }
     
 }

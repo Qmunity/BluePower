@@ -1,8 +1,5 @@
 package net.quetzi.bluepower.init;
 
-import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.common.Optional;
-import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.Item.ToolMaterial;
@@ -10,12 +7,26 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.EnumHelper;
 import net.quetzi.bluepower.compat.fmp.ItemBPMultipart;
-import net.quetzi.bluepower.items.*;
-import net.quetzi.bluepower.part.gate.ItemBPPart;
+import net.quetzi.bluepower.items.ItemCropSeed;
+import net.quetzi.bluepower.items.ItemGem;
+import net.quetzi.bluepower.items.ItemGemAxe;
+import net.quetzi.bluepower.items.ItemGemHoe;
+import net.quetzi.bluepower.items.ItemGemPickaxe;
+import net.quetzi.bluepower.items.ItemGemSpade;
+import net.quetzi.bluepower.items.ItemGemSword;
+import net.quetzi.bluepower.items.ItemIndigoDye;
+import net.quetzi.bluepower.items.ItemIngot;
+import net.quetzi.bluepower.items.ItemNikolite;
+import net.quetzi.bluepower.items.ItemSaw;
+import net.quetzi.bluepower.items.ItemSickle;
+import net.quetzi.bluepower.items.ItemSiliconBoule;
+import net.quetzi.bluepower.items.ItemSiliconWafer;
+import net.quetzi.bluepower.part.ItemBPPart;
 import net.quetzi.bluepower.references.Dependencies;
 import net.quetzi.bluepower.references.Refs;
-
-import javax.tools.Tool;
+import cpw.mods.fml.common.Loader;
+import cpw.mods.fml.common.Optional;
+import cpw.mods.fml.common.registry.GameRegistry;
 
 public class BPItems
 {
