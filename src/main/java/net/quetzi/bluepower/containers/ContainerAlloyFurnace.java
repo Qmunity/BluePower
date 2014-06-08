@@ -1,7 +1,22 @@
+/*
+ * This file is part of Blue Power.
+ *
+ *     Blue Power is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     Blue Power is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with Blue Power.  If not, see <http://www.gnu.org/licenses/>
+ */
+
 package net.quetzi.bluepower.containers;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -12,13 +27,16 @@ import net.minecraft.tileentity.TileEntityFurnace;
 import net.quetzi.bluepower.containers.slots.SlotMachineInput;
 import net.quetzi.bluepower.containers.slots.SlotMachineOutput;
 import net.quetzi.bluepower.tileentities.tier1.TileAlloyFurnace;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class ContainerAlloyFurnace extends Container {
     
-    private TileAlloyFurnace tileFurnace;
+    private final TileAlloyFurnace tileFurnace;
     
-    private int              currentBurnTime;
-    private int              maxBurnTime;
+    private int                    currentBurnTime;
+    private int                    maxBurnTime;
+    private int                    currentProcessTime;
     
     public ContainerAlloyFurnace(InventoryPlayer invPlayer, TileAlloyFurnace furnace) {
     
@@ -28,7 +46,7 @@ public class ContainerAlloyFurnace extends Container {
         addSlotToContainer(new SlotMachineOutput(furnace, 1, 134, 35));
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
-                addSlotToContainer(new SlotMachineInput(furnace, (i * 3) + j + 2, 47 + (i * 18), 17 + (j * 18)));
+                addSlotToContainer(new SlotMachineInput(furnace, i * 3 + j + 2, 47 + j * 18, 17 + i * 18));
             }
         }
         bindPlayerInventory(invPlayer);
@@ -40,13 +58,13 @@ public class ContainerAlloyFurnace extends Container {
         // Render inventory
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 9; j++) {
-                addSlotToContainer(new Slot(invPlayer, j + (i * 9) + 9, 8 + (j * 18), 84 + (i * 18)));
+                addSlotToContainer(new Slot(invPlayer, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
             }
         }
         
         // Render hotbar
         for (int j = 0; j < 9; j++) {
-            addSlotToContainer(new Slot(invPlayer, j, 8 + (j * 18), 142));
+            addSlotToContainer(new Slot(invPlayer, j, 8 + j * 18, 142));
         }
     }
     
@@ -90,35 +108,46 @@ public class ContainerAlloyFurnace extends Container {
     /**
      * Looks for changes made in the container, sends them to every listener.
      */
+    @Override
     public void detectAndSendChanges() {
     
         super.detectAndSendChanges();
         
-        for (Object crafter : this.crafters) {
+        for (Object crafter : crafters) {
             ICrafting icrafting = (ICrafting) crafter;
             
-            if (this.currentBurnTime != this.tileFurnace.currentBurnTime) {
-                icrafting.sendProgressBarUpdate(this, 0, this.tileFurnace.currentBurnTime);
+            if (currentBurnTime != tileFurnace.currentBurnTime) {
+                icrafting.sendProgressBarUpdate(this, 0, tileFurnace.currentBurnTime);
             }
             
-            if (this.maxBurnTime != this.tileFurnace.maxBurnTime) {
-                icrafting.sendProgressBarUpdate(this, 1, this.tileFurnace.maxBurnTime);
+            if (maxBurnTime != tileFurnace.maxBurnTime) {
+                icrafting.sendProgressBarUpdate(this, 1, tileFurnace.maxBurnTime);
+            }
+            
+            if (currentProcessTime != tileFurnace.currentProcessTime) {
+                icrafting.sendProgressBarUpdate(this, 2, tileFurnace.currentProcessTime);
             }
         }
         
-        this.currentBurnTime = this.tileFurnace.currentBurnTime;
-        this.maxBurnTime = this.tileFurnace.maxBurnTime;
+        currentBurnTime = tileFurnace.currentBurnTime;
+        maxBurnTime = tileFurnace.maxBurnTime;
+        currentProcessTime = tileFurnace.currentProcessTime;
     }
     
+    @Override
     @SideOnly(Side.CLIENT)
     public void updateProgressBar(int par1, int par2) {
     
         if (par1 == 0) {
-            this.tileFurnace.currentBurnTime = par2;
+            tileFurnace.currentBurnTime = par2;
         }
         
         if (par1 == 1) {
-            this.tileFurnace.maxBurnTime = par2;
+            tileFurnace.maxBurnTime = par2;
+        }
+        
+        if (par1 == 2) {
+            tileFurnace.currentProcessTime = par2;
         }
     }
     

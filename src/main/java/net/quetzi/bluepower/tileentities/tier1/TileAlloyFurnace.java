@@ -1,3 +1,20 @@
+/*
+ * This file is part of Blue Power.
+ *
+ *     Blue Power is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     Blue Power is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with Blue Power.  If not, see <http://www.gnu.org/licenses/>
+ */
+
 package net.quetzi.bluepower.tileentities.tier1;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -15,6 +32,7 @@ public class TileAlloyFurnace extends TileBase implements IInventory {
     
     private boolean     isActive;
     public int          currentBurnTime;
+    public int          currentProcessTime;
     public int          maxBurnTime;
     private boolean     metaSet = false;
     private ItemStack[] inventory;
@@ -89,7 +107,7 @@ public class TileAlloyFurnace extends TileBase implements IInventory {
             if (isActive) {
                 int newMeta = getBlockMetadata();
                 newMeta = newMeta & 7;
-                newMeta |= (isActive == true ? 8 : 0);
+                newMeta |= isActive == true ? 8 : 0;
                 getWorldObj().setBlockMetadataWithNotify(xCoord, yCoord, zCoord, newMeta, 2);
             }
         }
@@ -100,33 +118,35 @@ public class TileAlloyFurnace extends TileBase implements IInventory {
             // Work function, right here
         }
         if (!worldObj.isRemote) {
-            IAlloyFurnaceRecipe recipe = AlloyFurnaceRegistry.getInstance().getMatchingRecipe(inventory);
-            if (recipe != null && outputInventory != null) {// check if we can add the crafting result to the output slot
-                ItemStack craftingResult = recipe.getCraftingResult(inventory);
-                if (!ItemStack.areItemStackTagsEqual(outputInventory, craftingResult) || !outputInventory.isItemEqual(craftingResult)) {
-                    recipe = null;
-                } else if (craftingResult.stackSize + outputInventory.stackSize > getInventoryStackLimit()) {
-                    recipe = null;
-                }
-            }
-            if (recipe != null && currentBurnTime <= 0 && TileEntityFurnace.isItemFuel(fuelInventory)) {
-                // Put new item in
-                currentBurnTime = maxBurnTime = TileEntityFurnace.getItemBurnTime(fuelInventory) + 1;
-                if (fuelInventory != null) {
-                    fuelInventory.stackSize--;
-                    if (fuelInventory.stackSize <= 0) {
-                        fuelInventory = fuelInventory.getItem().getContainerItem(fuelInventory);
+            IAlloyFurnaceRecipe recipe = AlloyFurnaceRegistry.getInstance().getMatchingRecipe(inventory, outputInventory);
+            if (recipe != null) {
+                if (currentBurnTime <= 0) {
+                    if (TileEntityFurnace.isItemFuel(fuelInventory)) {
+                        // Put new item in
+                        currentBurnTime = maxBurnTime = TileEntityFurnace.getItemBurnTime(fuelInventory) + 1;
+                        if (fuelInventory != null) {
+                            fuelInventory.stackSize--;
+                            if (fuelInventory.stackSize <= 0) {
+                                fuelInventory = fuelInventory.getItem().getContainerItem(fuelInventory);
+                            }
+                        }
+                    } else {
+                        currentProcessTime = 0;
                     }
                 }
-            }
-            if (recipe != null) {
-                if (outputInventory != null) {
-                    outputInventory.stackSize += recipe.getCraftingResult(inventory).stackSize;
-                } else {
-                    outputInventory = recipe.getCraftingResult(inventory).copy();
+                
+                if (++currentProcessTime >= 200) {
+                    currentProcessTime = 0;
+                    if (outputInventory != null) {
+                        outputInventory.stackSize += recipe.getCraftingResult(inventory).stackSize;
+                    } else {
+                        outputInventory = recipe.getCraftingResult(inventory).copy();
+                    }
+                    recipe.useItems(inventory);
+                    worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
                 }
-                recipe.useItems(inventory);
-                worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+            } else {
+                currentProcessTime = 0;
             }
         }
     }
@@ -147,10 +167,15 @@ public class TileAlloyFurnace extends TileBase implements IInventory {
     public float getBurningPercentage() {
     
         if (maxBurnTime > 0) {
-            return ((float) currentBurnTime / (float) maxBurnTime);
+            return (float) currentBurnTime / (float) maxBurnTime;
         } else {
             return 0;
         }
+    }
+    
+    public float getProcessPercentage() {
+    
+        return (float) currentProcessTime / 200;
     }
     
     /**
@@ -167,7 +192,7 @@ public class TileAlloyFurnace extends TileBase implements IInventory {
         isActive = _isActive;
         int newMeta = getBlockMetadata();
         newMeta = newMeta & 7;
-        newMeta |= (_isActive == true ? 8 : 0);
+        newMeta |= _isActive == true ? 8 : 0;
         getWorldObj().setBlockMetadataWithNotify(xCoord, yCoord, zCoord, newMeta, 2);
     }
     
@@ -260,7 +285,8 @@ public class TileAlloyFurnace extends TileBase implements IInventory {
     @Override
     public boolean isUseableByPlayer(EntityPlayer var1) {
     
-        // Todo: Some fancy code here that detects whether the player is far away
+        // Todo: Some fancy code here that detects whether the player is far
+        // away
         return true;
     }
     

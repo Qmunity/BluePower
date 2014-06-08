@@ -1,3 +1,20 @@
+/*
+ * This file is part of Blue Power.
+ *
+ *     Blue Power is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     Blue Power is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with Blue Power.  If not, see <http://www.gnu.org/licenses/>
+ */
+
 package net.quetzi.bluepower.client.gui;
 
 import net.minecraft.entity.player.InventoryPlayer;
@@ -9,7 +26,7 @@ import net.quetzi.bluepower.tileentities.tier1.TileAlloyFurnace;
 public class GuiAlloyFurnace extends GuiBase {
     
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/GUI/alloy_furnace.png");
-    private TileAlloyFurnace              furnace;
+    private final TileAlloyFurnace        furnace;
     
     public GuiAlloyFurnace(InventoryPlayer invPlayer, TileAlloyFurnace _furnace) {
     
@@ -38,7 +55,10 @@ public class GuiAlloyFurnace extends GuiBase {
         int burningPercentage = (int) (furnace.getBurningPercentage() * 12);
         
         // Todo: Tweak these variables a bit till it lines up perfectly.
-        this.drawTexturedModalRect(x + 22, y + 54 + 12 - burningPercentage, 177, 11 - burningPercentage, 14, burningPercentage + 0);
+        drawTexturedModalRect(x + 22, y + 54 + 12 - burningPercentage, 177, 11 - burningPercentage, 14, burningPercentage + 0);
+        
+        int processPercentage = (int) (furnace.getProcessPercentage() * 22);
+        drawTexturedModalRect(x + 103, y + 35, 178, 14, processPercentage, 15);
     }
     
 }
