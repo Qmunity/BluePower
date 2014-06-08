@@ -34,15 +34,12 @@ public class ItemBPPart extends Item {
     }
     
     @Override
-    public boolean onItemUse(ItemStack stack, EntityPlayer player, World w,
-            int x, int y, int z, int side, float f, float f2, float f3) {
+    public boolean onItemUse(ItemStack stack, EntityPlayer player, World w, int x, int y, int z, int side, float f, float f2, float f3) {
     
         boolean flag = true;
         
         if (flag) {
-            w.playSoundEffect(x + 0.5, y + 0.5, z + 0.5,
-                    Block.soundTypeWood.soundName,
-                    Block.soundTypeWood.getVolume(),
+            w.playSoundEffect(x + 0.5, y + 0.5, z + 0.5, Block.soundTypeWood.soundName, Block.soundTypeWood.getVolume(),
                     Block.soundTypeWood.getPitch());
             
             // TODO Place part without FMP

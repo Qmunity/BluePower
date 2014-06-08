@@ -21,8 +21,7 @@ public class RenderItemBPPart implements IItemRenderer {
     }
     
     @Override
-    public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item,
-            ItemRendererHelper helper) {
+    public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item, ItemRendererHelper helper) {
     
         return true;
     }
@@ -30,21 +29,21 @@ public class RenderItemBPPart implements IItemRenderer {
     @SuppressWarnings("incomplete-switch")
     @Override
     public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
-        
+    
         BPPart part = null;
-        for(BPPart p : parts)
-            if(p.getType().equals(PartRegistry.getPartIdFromItem(item))){
+        for (BPPart p : parts)
+            if (p.getType().equals(PartRegistry.getPartIdFromItem(item))) {
                 part = p;
                 break;
             }
-        if(part == null){
+        if (part == null) {
             part = PartRegistry.createPartFromItem(item);
             parts.add(part);
         }
         
         GL11.glPushMatrix();
         {
-            switch(type){
+            switch (type) {
                 case ENTITY:
                     GL11.glTranslated(-0.5, 0, -0.5);
                     break;

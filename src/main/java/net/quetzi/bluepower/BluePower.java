@@ -37,8 +37,7 @@ public class BluePower {
     @Instance(Refs.MODID)
     public static BluePower   instance;
     
-    @SidedProxy(clientSide = Refs.PROXY_LOCATION + ".ClientProxy", serverSide = Refs.PROXY_LOCATION
-            + ".CommonProxy")
+    @SidedProxy(clientSide = Refs.PROXY_LOCATION + ".ClientProxy", serverSide = Refs.PROXY_LOCATION + ".CommonProxy")
     public static CommonProxy proxy;
     public static Logger      log;
     
@@ -48,8 +47,7 @@ public class BluePower {
         event.getModMetadata().version = Refs.fullVersionString();
         
         log = event.getModLog();
-        Configuration config = new Configuration(
-                event.getSuggestedConfigurationFile());
+        Configuration config = new Configuration(event.getSuggestedConfigurationFile());
         
         CustomTabs.init();
         // Load configs
@@ -59,7 +57,7 @@ public class BluePower {
         BPBlocks.init();
         BPItems.init();
         BPRegistry.alloyFurnaceRegistry = AlloyFurnaceRegistry.getInstance();
-
+        
         TileEntities.init();
         OreDictionarySetup.init();
         GameRegistry.registerWorldGenerator(new WorldGenerationHandler(), 0);

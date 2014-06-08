@@ -50,7 +50,6 @@ public class CompatModuleFMP extends CompatModule {
     
     private void registerBlockAsMicroblock(Block b) {
     
-        MicroMaterialRegistry.registerMaterial(new BlockMicroMaterial(b, 0),
-                b.getUnlocalizedName());
+        MicroMaterialRegistry.registerMaterial(new BlockMicroMaterial(b, 0), b.getUnlocalizedName());
     }
 }

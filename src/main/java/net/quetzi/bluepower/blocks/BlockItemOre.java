@@ -12,12 +12,12 @@ import net.quetzi.bluepower.init.BPItems;
 import net.quetzi.bluepower.init.CustomTabs;
 import net.quetzi.bluepower.references.Refs;
 
-public class BlockItemOre extends Block
-{
+public class BlockItemOre extends Block {
+    
     private Random rand = new Random();
-
-    public BlockItemOre(String type)
-    {
+    
+    public BlockItemOre(String type) {
+    
         super(Material.iron);
         this.setCreativeTab(CustomTabs.tabBluePowerBlocks);
         this.setStepSound(soundTypeStone);
@@ -26,28 +26,28 @@ public class BlockItemOre extends Block
         this.textureName = Refs.MODID + ":" + type;
         this.setBlockName(type);
     }
-
+    
     @Override
-    public int quantityDropped(Random rand)
-    {
+    public int quantityDropped(Random rand) {
+    
         return this == BPBlocks.nikolite_ore ? 4 + rand.nextInt(2) : 1;
     }
-
+    
     @Override
-    public Item getItemDropped(int par1, Random par2, int par3)
-    {
+    public Item getItemDropped(int par1, Random par2, int par3) {
+    
         return getDropFromBlockName(this.getUnlocalizedName().substring(5));
     }
-
+    
     @Override
-    protected boolean canSilkHarvest()
-    {
+    protected boolean canSilkHarvest() {
+    
         return true;
     }
-
+    
     @Override
-    public int quantityDroppedWithBonus(int quantity, Random rand)
-    {
+    public int quantityDroppedWithBonus(int quantity, Random rand) {
+    
         if (quantity > 0 && Item.getItemFromBlock(this) != this.getItemDropped(0, rand, quantity)) {
             int j = rand.nextInt(quantity + 2) - 1;
             if (j < 0) {
@@ -58,10 +58,10 @@ public class BlockItemOre extends Block
             return this.quantityDropped(rand);
         }
     }
-
+    
     @Override
-    public int getExpDrop(IBlockAccess par1, int par2, int par3)
-    {
+    public int getExpDrop(IBlockAccess par1, int par2, int par3) {
+    
         if (this.getItemDropped(par2, rand, par3) != Item.getItemFromBlock(this)) {
             int j1 = 0;
             if (this == BPBlocks.amethyst_ore) {
@@ -77,27 +77,18 @@ public class BlockItemOre extends Block
         }
         return 0;
     }
-
-    public static Item getDropFromBlockName(String blockName)
-    {
-        if (blockName.equalsIgnoreCase(Refs.NIKOLITEORE_NAME))
-        {
+    
+    public static Item getDropFromBlockName(String blockName) {
+    
+        if (blockName.equalsIgnoreCase(Refs.NIKOLITEORE_NAME)) {
             return BPItems.nikolite;
-        }
-        else if (blockName.equalsIgnoreCase(Refs.RUBYORE_NAME))
-        {
+        } else if (blockName.equalsIgnoreCase(Refs.RUBYORE_NAME)) {
             return BPItems.ruby;
-        }
-        else if (blockName.equalsIgnoreCase(Refs.SAPPHIREORE_NAME))
-        {
+        } else if (blockName.equalsIgnoreCase(Refs.SAPPHIREORE_NAME)) {
             return BPItems.sapphire;
-        }
-        else if (blockName.equalsIgnoreCase(Refs.AMETHYSTORE_NAME))
-        {
+        } else if (blockName.equalsIgnoreCase(Refs.AMETHYSTORE_NAME)) {
             return BPItems.amethyst;
-        }
-        else
-        {
+        } else {
             return null;
         }
     }

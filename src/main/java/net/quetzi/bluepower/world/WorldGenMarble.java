@@ -11,33 +11,33 @@ import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenMinable;
 
-@SuppressWarnings({"unchecked", "rawtypes"})
-public class WorldGenMarble extends WorldGenMinable
-{
-
+@SuppressWarnings({ "unchecked", "rawtypes" })
+public class WorldGenMarble extends WorldGenMinable {
+    
     LinkedList marbleVein = new LinkedList();
     HashSet    veinsList  = new HashSet();
-    Block block;
-    int   numberOfBlocks;
-
-    public WorldGenMarble(Block block, int num)
-    {
+    Block      block;
+    int        numberOfBlocks;
+    
+    public WorldGenMarble(Block block, int num) {
+    
         super(block, num);
         this.block = block;
         this.numberOfBlocks = num;
     }
-
-    private void addBlock(int x, int y, int z, int num)
-    {
+    
+    private void addBlock(int x, int y, int z, int num) {
+    
         List marbleCandidate = Arrays.asList(x, y, z);
         if (this.veinsList.contains(marbleCandidate)) return;
         this.marbleVein.addLast(Arrays.asList(x, y, z, num));
         this.veinsList.add(marbleCandidate);
     }
-
-    private void searchBlock(World world, int x, int y, int z, int num)
-    {
-        if (world.isAirBlock(x - 1, y, z) || world.isAirBlock(x + 1, y, z) || world.isAirBlock(x, y - 1, z) || world.isAirBlock(x, y + 1, z) || world.isAirBlock(x, y, z - 1) || world.isAirBlock(x, y, z + 1)) {
+    
+    private void searchBlock(World world, int x, int y, int z, int num) {
+    
+        if (world.isAirBlock(x - 1, y, z) || world.isAirBlock(x + 1, y, z) || world.isAirBlock(x, y - 1, z) || world.isAirBlock(x, y + 1, z)
+                || world.isAirBlock(x, y, z - 1) || world.isAirBlock(x, y, z + 1)) {
             num = 6;
         }
         addBlock(x - 1, y, z, num);
@@ -47,13 +47,11 @@ public class WorldGenMarble extends WorldGenMinable
         addBlock(x, y, z - 1, num);
         addBlock(x, y, z + 1, num);
     }
-
-    public boolean generate(World world, Random random, int x, int y, int z)
-    {
-        if (!world.blockExists(x, y, z)) {
-            return false;
-        }
-
+    
+    public boolean generate(World world, Random random, int x, int y, int z) {
+    
+        if (!world.blockExists(x, y, z)) { return false; }
+        
         int i = y;
         while (world.getBlock(x, i, z) != Blocks.stone) {
             if (i > 96) return false; // Don't generate marble over y96

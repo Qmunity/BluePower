@@ -5,26 +5,22 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 
-public class CustomTabs
-{
-
+public class CustomTabs {
+    
     public static CreativeTabs tabBluePowerBlocks;
     public static CreativeTabs tabBluePowerMachines;
     public static CreativeTabs tabBluePowerItems;
     public static CreativeTabs tabBluePowerTools;
     public static CreativeTabs tabBluePowerCircuits;
     public static CreativeTabs tabBluePowerLighting;
-
-    public static void init()
-    {
-
-        tabBluePowerBlocks = new CreativeTabs("tabBluePowerBlocks")
-        {
-
+    
+    public static void init() {
+    
+        tabBluePowerBlocks = new CreativeTabs("tabBluePowerBlocks") {
+            
             @Override
-            public Item getTabIconItem()
-            {
-
+            public Item getTabIconItem() {
+            
                 // Todo: Referer to a static object in the Blocks class.
                 Block iconBlock = BPBlocks.basalt;
                 if (iconBlock != null) {
@@ -34,14 +30,12 @@ public class CustomTabs
                 }
             }
         };
-
-        tabBluePowerMachines = new CreativeTabs("tabBluePowerMachines")
-        {
-
+        
+        tabBluePowerMachines = new CreativeTabs("tabBluePowerMachines") {
+            
             @Override
-            public Item getTabIconItem()
-            {
-
+            public Item getTabIconItem() {
+            
                 // Todo: Referer to a static object in the Blocks class.
                 Block iconBlock = BPBlocks.alloy_furnace;
                 if (iconBlock != null) {
@@ -51,14 +45,12 @@ public class CustomTabs
                 }
             }
         };
-
-        tabBluePowerItems = new CreativeTabs("tabBluePowerItems")
-        {
-
+        
+        tabBluePowerItems = new CreativeTabs("tabBluePowerItems") {
+            
             @Override
-            public Item getTabIconItem()
-            {
-
+            public Item getTabIconItem() {
+            
                 // Todo: Referer to a static object in the Items class.
                 Item iconItem = BPItems.ruby;
                 if (iconItem != null) {
@@ -68,14 +60,12 @@ public class CustomTabs
                 }
             }
         };
-
-        tabBluePowerTools = new CreativeTabs("tabBluePowerTools")
-        {
-
+        
+        tabBluePowerTools = new CreativeTabs("tabBluePowerTools") {
+            
             @Override
-            public Item getTabIconItem()
-            {
-
+            public Item getTabIconItem() {
+            
                 // Todo: Referer to a static object in the Items class.
                 Item iconItem = BPItems.ruby_pickaxe;
                 if (iconItem != null) {
@@ -85,22 +75,21 @@ public class CustomTabs
                 }
             }
         };
-
-        tabBluePowerCircuits = new CreativeTabs("tabBluePowerCircuits")
-        {
-
+        
+        tabBluePowerCircuits = new CreativeTabs("tabBluePowerCircuits") {
+            
             @Override
-            public Item getTabIconItem()
-            {
+            public Item getTabIconItem() {
+            
                 return net.minecraft.init.Items.redstone;
             }
         };
-
-        tabBluePowerLighting = new CreativeTabs("tabBluePowerLighting")
-        {
+        
+        tabBluePowerLighting = new CreativeTabs("tabBluePowerLighting") {
+            
             @Override
-            public Item getTabIconItem()
-            {
+            public Item getTabIconItem() {
+            
                 return Item.getItemFromBlock(Blocks.redstone_lamp);
             }
         };

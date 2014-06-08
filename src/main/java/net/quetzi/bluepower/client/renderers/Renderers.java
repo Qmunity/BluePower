@@ -7,7 +7,6 @@ public class Renderers {
     
     public static void init() {
     
-        MinecraftForgeClient.registerItemRenderer(BPItems.multipart,
-                new RenderItemBPPart());
+        MinecraftForgeClient.registerItemRenderer(BPItems.multipart, new RenderItemBPPart());
     }
 }

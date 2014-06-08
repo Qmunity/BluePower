@@ -13,8 +13,7 @@ import net.quetzi.bluepower.BluePower;
 import net.quetzi.bluepower.references.GuiIDs;
 import net.quetzi.bluepower.tileentities.TileBase;
 
-public abstract class BlockContainerBase extends BlockBase implements
-        ITileEntityProvider {
+public abstract class BlockContainerBase extends BlockBase implements ITileEntityProvider {
     
     public BlockContainerBase(Material material) {
     
@@ -32,16 +31,14 @@ public abstract class BlockContainerBase extends BlockBase implements
     }
     
     /**
-     * Method to be overwritten to fetch the TileEntity Class that goes with the
-     * block
+     * Method to be overwritten to fetch the TileEntity Class that goes with the block
      * 
      * @return a .class
      */
     protected abstract Class<? extends TileEntity> getTileEntity();
     
     @Override
-    public void onNeighborBlockChange(World world, int x, int y, int z,
-            Block block) {
+    public void onNeighborBlockChange(World world, int x, int y, int z, Block block) {
     
         super.onNeighborBlockChange(world, x, y, z, block);
         // Only do this on the server side.
@@ -54,8 +51,7 @@ public abstract class BlockContainerBase extends BlockBase implements
     }
     
     @Override
-    public boolean onBlockActivated(World world, int x, int y, int z,
-            EntityPlayer player, int par6, float par7, float par8, float par9) {
+    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int par6, float par7, float par8, float par9) {
     
         if (player.isSneaking()) { return false; }
         
@@ -63,8 +59,7 @@ public abstract class BlockContainerBase extends BlockBase implements
         if (entity == null || !(entity instanceof TileBase)) { return false; }
         
         if (getGuiID() != GuiIDs.INVALID) {
-            player.openGui(BluePower.instance, getGuiID().ordinal(), world, x,
-                    y, z);
+            player.openGui(BluePower.instance, getGuiID().ordinal(), world, x, y, z);
             return true;
         }
         return false;
@@ -74,11 +69,9 @@ public abstract class BlockContainerBase extends BlockBase implements
      * Method to detect how the block was placed, and what way it's facing.
      */
     @Override
-    public void onBlockPlacedBy(World world, int x, int y, int z,
-            EntityLivingBase player, ItemStack iStack) {
+    public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase player, ItemStack iStack) {
     
-        int sideToPlace = MathHelper
-                .floor_double(player.rotationYaw / 90F + 0.5D) & 3;
+        int sideToPlace = MathHelper.floor_double(player.rotationYaw / 90F + 0.5D) & 3;
         
         int metaDataToSet = 0;
         switch (sideToPlace) {
