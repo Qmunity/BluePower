@@ -26,7 +26,7 @@ import net.quetzi.bluepower.tileentities.tier1.TileAlloyFurnace;
 public class GuiAlloyFurnace extends GuiBase {
     
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/GUI/alloy_furnace.png");
-    private TileAlloyFurnace              furnace;
+    private final TileAlloyFurnace        furnace;
     
     public GuiAlloyFurnace(InventoryPlayer invPlayer, TileAlloyFurnace _furnace) {
     
@@ -55,7 +55,10 @@ public class GuiAlloyFurnace extends GuiBase {
         int burningPercentage = (int) (furnace.getBurningPercentage() * 12);
         
         // Todo: Tweak these variables a bit till it lines up perfectly.
-        this.drawTexturedModalRect(x + 22, y + 54 + 12 - burningPercentage, 177, 11 - burningPercentage, 14, burningPercentage + 0);
+        drawTexturedModalRect(x + 22, y + 54 + 12 - burningPercentage, 177, 11 - burningPercentage, 14, burningPercentage + 0);
+        
+        int processPercentage = (int) (furnace.getProcessPercentage() * 22);
+        drawTexturedModalRect(x + 103, y + 35, 178, 14, processPercentage, 15);
     }
     
 }

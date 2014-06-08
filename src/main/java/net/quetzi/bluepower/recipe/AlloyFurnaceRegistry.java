@@ -30,9 +30,9 @@ import net.quetzi.bluepower.util.ItemStackUtils;
 
 public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
     
-    private static AlloyFurnaceRegistry INSTANCE            = new AlloyFurnaceRegistry();
+    private static AlloyFurnaceRegistry     INSTANCE            = new AlloyFurnaceRegistry();
     
-    private List<IAlloyFurnaceRecipe>   alloyFurnaceRecipes = new ArrayList<IAlloyFurnaceRecipe>();
+    private final List<IAlloyFurnaceRecipe> alloyFurnaceRecipes = new ArrayList<IAlloyFurnaceRecipe>();
     
     private AlloyFurnaceRegistry() {
     
@@ -43,6 +43,7 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
         return INSTANCE;
     }
     
+    @Override
     public void addRecipe(IAlloyFurnaceRecipe recipe) {
     
         alloyFurnaceRecipes.add(recipe);
@@ -66,29 +67,41 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
         addRecipe(new StandardAlloyFurnaceRecipe(craftingResult, requiredStacks));
     }
     
-    public IAlloyFurnaceRecipe getMatchingRecipe(ItemStack[] input) {
+    public IAlloyFurnaceRecipe getMatchingRecipe(ItemStack[] input, ItemStack outputSlot) {
     
         for (IAlloyFurnaceRecipe recipe : alloyFurnaceRecipes) {
-            if (recipe.matches(input)) return recipe;
+            if (recipe.matches(input)) {
+                if (outputSlot != null) {
+                    if (outputSlot != null) {// check if we can add the crafting result to the output slot
+                        ItemStack craftingResult = recipe.getCraftingResult(input);
+                        if (!ItemStack.areItemStackTagsEqual(outputSlot, craftingResult) || !outputSlot.isItemEqual(craftingResult)) {
+                            continue;
+                        } else if (craftingResult.stackSize + outputSlot.stackSize > outputSlot.getMaxStackSize()) {
+                            continue;
+                        }
+                    }
+                }
+                return recipe;
+            }
         }
         return null;
     }
     
     private class StandardAlloyFurnaceRecipe implements IAlloyFurnaceRecipe {
         
-        private ItemStack   craftingResult;
-        private ItemStack[] requiredItems;
+        private final ItemStack   craftingResult;
+        private final ItemStack[] requiredItems;
         
         private StandardAlloyFurnaceRecipe(ItemStack craftingResult, ItemStack... requiredItems) {
         
             if (craftingResult == null) throw new IllegalArgumentException("Alloy Furnace crafting result can't be null!");
+            if (requiredItems.length > 9) throw new IllegalArgumentException("There can't be more than 9 crafting ingredients for the Alloy Furnace!");
             for (ItemStack requiredItem : requiredItems) {
                 if (requiredItem == null) throw new NullPointerException("An Alloy Furnace crafting ingredient can't be null!");
             }
             for (ItemStack stack : requiredItems) {
                 for (ItemStack stack2 : requiredItems) {
-                    if (stack != stack2 && ItemStackUtils.isItemFuzzyEqual(stack, stack2)) throw new IllegalArgumentException(
-                            "No equivalent Alloy Furnace crafting ingredient can be given twice! This does take OreDict + wildcard values in account.");
+                    if (stack != stack2 && ItemStackUtils.isItemFuzzyEqual(stack, stack2)) throw new IllegalArgumentException("No equivalent Alloy Furnace crafting ingredient can be given twice! This does take OreDict + wildcard values in account.");
                 }
             }
             
@@ -127,8 +140,7 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
                         if (itemsNeeded <= 0) break;
                     }
                 }
-                if (itemsNeeded > 0) throw new IllegalArgumentException(
-                        "Alloy Furnace recipe using items, after using still items required?? This is a bug!");
+                if (itemsNeeded > 0) throw new IllegalArgumentException("Alloy Furnace recipe using items, after using still items required?? This is a bug!");
             }
         }
         
