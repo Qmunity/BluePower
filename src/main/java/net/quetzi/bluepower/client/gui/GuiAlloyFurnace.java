@@ -52,10 +52,10 @@ public class GuiAlloyFurnace extends GuiBase {
         int x = (width - xSize) / 2;
         int y = (height - ySize) / 2;
         
-        int burningPercentage = (int) (furnace.getBurningPercentage() * 12);
+        int burningPercentage = (int) (furnace.getBurningPercentage() * 14);
         
         // Todo: Tweak these variables a bit till it lines up perfectly.
-        drawTexturedModalRect(x + 22, y + 54 + 12 - burningPercentage, 177, 11 - burningPercentage, 14, burningPercentage + 0);
+        drawTexturedModalRect(x + 22, y + 54 + 14 - burningPercentage, 177, 14 - burningPercentage, 14, burningPercentage + 0);
         
         int processPercentage = (int) (furnace.getProcessPercentage() * 22);
         drawTexturedModalRect(x + 103, y + 35, 178, 14, processPercentage, 15);

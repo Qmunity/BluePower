@@ -17,12 +17,13 @@
 
 package net.quetzi.bluepower.init;
 
-import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.quetzi.bluepower.api.BPRegistry;
+import net.quetzi.bluepower.api.recipe.IAlloyFurnaceRegistry;
+import cpw.mods.fml.common.registry.GameRegistry;
 
 public class Recipes {
     
@@ -52,42 +53,33 @@ public class Recipes {
         
         craftManager.addRecipe(new ItemStack(BPItems.sapphire_axe, 1), new Object[] { "GG ", "GS ", " S ", 'G', BPItems.sapphire, 'S', Items.stick });
         craftManager.addRecipe(new ItemStack(BPItems.sapphire_axe, 1), new Object[] { " GG", " SG", " S ", 'G', BPItems.sapphire, 'S', Items.stick });
-        craftManager.addRecipe(new ItemStack(BPItems.sapphire_pickaxe, 1), new Object[] { "GGG", " S ", " S ", 'G', BPItems.sapphire, 'S',
-                Items.stick });
+        craftManager.addRecipe(new ItemStack(BPItems.sapphire_pickaxe, 1), new Object[] { "GGG", " S ", " S ", 'G', BPItems.sapphire, 'S', Items.stick });
         craftManager.addRecipe(new ItemStack(BPItems.sapphire_sword, 1), new Object[] { "G", "G", "S", 'G', BPItems.sapphire, 'S', Items.stick });
         craftManager.addRecipe(new ItemStack(BPItems.sapphire_spade, 1), new Object[] { "G", "S", "S", 'G', BPItems.sapphire, 'S', Items.stick });
         craftManager.addRecipe(new ItemStack(BPItems.sapphire_hoe, 1), new Object[] { "GG ", " S ", " S ", 'G', BPItems.sapphire, 'S', Items.stick });
         craftManager.addRecipe(new ItemStack(BPItems.sapphire_hoe, 1), new Object[] { " GG", " S ", " S ", 'G', BPItems.sapphire, 'S', Items.stick });
-        craftManager.addRecipe(new ItemStack(BPItems.sapphire_sickle, 1),
-                new Object[] { " G ", "  G", "SG ", 'G', BPItems.sapphire, 'S', Items.stick });
+        craftManager.addRecipe(new ItemStack(BPItems.sapphire_sickle, 1), new Object[] { " G ", "  G", "SG ", 'G', BPItems.sapphire, 'S', Items.stick });
         
         craftManager.addRecipe(new ItemStack(BPItems.amethyst_axe, 1), new Object[] { "GG ", "GS ", " S ", 'G', BPItems.amethyst, 'S', Items.stick });
         craftManager.addRecipe(new ItemStack(BPItems.amethyst_axe, 1), new Object[] { " GG", " SG", " S ", 'G', BPItems.amethyst, 'S', Items.stick });
-        craftManager.addRecipe(new ItemStack(BPItems.amethyst_pickaxe, 1), new Object[] { "GGG", " S ", " S ", 'G', BPItems.amethyst, 'S',
-                Items.stick });
+        craftManager.addRecipe(new ItemStack(BPItems.amethyst_pickaxe, 1), new Object[] { "GGG", " S ", " S ", 'G', BPItems.amethyst, 'S', Items.stick });
         craftManager.addRecipe(new ItemStack(BPItems.amethyst_sword, 1), new Object[] { "G", "G", "S", 'G', BPItems.amethyst, 'S', Items.stick });
         craftManager.addRecipe(new ItemStack(BPItems.amethyst_spade, 1), new Object[] { "G", "S", "S", 'G', BPItems.amethyst, 'S', Items.stick });
         craftManager.addRecipe(new ItemStack(BPItems.amethyst_hoe, 1), new Object[] { "GG ", " S ", " S ", 'G', BPItems.amethyst, 'S', Items.stick });
         craftManager.addRecipe(new ItemStack(BPItems.amethyst_hoe, 1), new Object[] { " GG", " S ", " S ", 'G', BPItems.amethyst, 'S', Items.stick });
-        craftManager.addRecipe(new ItemStack(BPItems.amethyst_sickle, 1),
-                new Object[] { " G ", "  G", "SG ", 'G', BPItems.amethyst, 'S', Items.stick });
+        craftManager.addRecipe(new ItemStack(BPItems.amethyst_sickle, 1), new Object[] { " G ", "  G", "SG ", 'G', BPItems.amethyst, 'S', Items.stick });
         
         craftManager.addRecipe(new ItemStack(BPItems.wood_sickle, 1), new Object[] { " G ", "  G", "SG ", 'G', Blocks.planks, 'S', Items.stick });
-        craftManager.addRecipe(new ItemStack(BPItems.stone_sickle, 1),
-                new Object[] { " G ", "  G", "SG ", 'G', Blocks.cobblestone, 'S', Items.stick });
+        craftManager.addRecipe(new ItemStack(BPItems.stone_sickle, 1), new Object[] { " G ", "  G", "SG ", 'G', Blocks.cobblestone, 'S', Items.stick });
         craftManager.addRecipe(new ItemStack(BPItems.iron_sickle, 1), new Object[] { " G ", "  G", "SG ", 'G', Items.iron_ingot, 'S', Items.stick });
         craftManager.addRecipe(new ItemStack(BPItems.gold_sickle, 1), new Object[] { " G ", "  G", "SG ", 'G', Items.gold_ingot, 'S', Items.stick });
         craftManager.addRecipe(new ItemStack(BPItems.diamond_sickle, 1), new Object[] { " G ", "  G", "SG ", 'G', Items.diamond, 'S', Items.stick });
         
         craftManager.addRecipe(new ItemStack(BPItems.iron_saw, 1), new Object[] { "SSS", " II", " II", 'S', Items.stick, 'I', Items.iron_ingot });
-        craftManager.addRecipe(new ItemStack(BPItems.ruby_saw, 1), new Object[] { "SSS", " II", " ##", 'S', Items.stick, 'I', Items.iron_ingot, '#',
-                BPItems.ruby });
-        craftManager.addRecipe(new ItemStack(BPItems.amethyst_saw, 1), new Object[] { "SSS", " II", " ##", 'S', Items.stick, 'I', Items.iron_ingot,
-                '#', BPItems.amethyst });
-        craftManager.addRecipe(new ItemStack(BPItems.sapphire_saw, 1), new Object[] { "SSS", " II", " ##", 'S', Items.stick, 'I', Items.iron_ingot,
-                '#', BPItems.sapphire });
-        craftManager.addRecipe(new ItemStack(BPItems.diamond_saw, 1), new Object[] { "SSS", " II", " ##", 'S', Items.stick, 'I', Items.iron_ingot,
-                '#', Items.diamond });
+        craftManager.addRecipe(new ItemStack(BPItems.ruby_saw, 1), new Object[] { "SSS", " II", " ##", 'S', Items.stick, 'I', Items.iron_ingot, '#', BPItems.ruby });
+        craftManager.addRecipe(new ItemStack(BPItems.amethyst_saw, 1), new Object[] { "SSS", " II", " ##", 'S', Items.stick, 'I', Items.iron_ingot, '#', BPItems.amethyst });
+        craftManager.addRecipe(new ItemStack(BPItems.sapphire_saw, 1), new Object[] { "SSS", " II", " ##", 'S', Items.stick, 'I', Items.iron_ingot, '#', BPItems.sapphire });
+        craftManager.addRecipe(new ItemStack(BPItems.diamond_saw, 1), new Object[] { "SSS", " II", " ##", 'S', Items.stick, 'I', Items.iron_ingot, '#', Items.diamond });
         
         craftManager.addRecipe(new ItemStack(BPItems.indigo_dye, 1), new Object[] { "#", '#', BPBlocks.indigo_flower });
         
@@ -106,8 +98,14 @@ public class Recipes {
         craftManager.addRecipe(new ItemStack(BPItems.tin_ingot, 9), new Object[] { "#", '#', BPBlocks.tin_block });
         
         // Alloy furnace
-        BPRegistry.alloyFurnaceRegistry.addRecipe(new ItemStack(BPItems.red_alloy_ingot, 4), new ItemStack(Items.redstone, 4), Items.iron_ingot);
-        BPRegistry.alloyFurnaceRegistry.addRecipe(new ItemStack(BPItems.brass_ingot, 4), new ItemStack(BPItems.copper_ingot, 3), BPItems.tin_ingot);
+        IAlloyFurnaceRegistry af = BPRegistry.alloyFurnaceRegistry;
+        af.addRecipe(new ItemStack(BPItems.red_alloy_ingot, 1), new ItemStack(Items.redstone, 4), Items.iron_ingot);
+        af.addRecipe(new ItemStack(BPItems.red_alloy_ingot, 1), new ItemStack(Items.redstone, 4), BPItems.copper_ingot);
+        af.addRecipe(new ItemStack(BPItems.brass_ingot, 4), new ItemStack(BPItems.copper_ingot, 3), BPItems.tin_ingot);
+        af.addRecipe(new ItemStack(BPItems.blue_alloy_ingot, 1), new ItemStack(BPItems.nikolite, 4), BPItems.silver_ingot);
+        af.addRecipe(new ItemStack(BPItems.silicon_boule, 1), new ItemStack(Items.coal, 8), new ItemStack(Blocks.sand, 8));
+        //  af.addRecipe(new ItemStack(BPItems.red_doped_wafer, 1), new ItemStack(Items.redstone, 4), BPItems.silicon_wafer);
+        //  af.addRecipe(new ItemStack(BPItems.blue_doped_wafer, 1), new ItemStack(BPItems.nikolite, 4), BPItems.silicon_wafer);
         
     }
 }
