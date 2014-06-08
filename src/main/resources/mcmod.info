@@ -2,15 +2,15 @@
 {
   "modid": "bluepower",
   "name": "Blue Power",
-  "description": "",
+  "description": "Work in progress mod aiming to reintroduce some missing 'glue' blocks from prior versions of modded Minecraft",
   "version": "${version}",
   "mcversion": "$mcversion",
-  "url": "",
+  "url": "Not yet released",
   "updateUrl": "",
   "authors": [
     "Quetzi"
   ],
-  "credits": "Quetzi, Zness, Minemaarten, K-4U",
+  "credits": "Quetzi, Zness, Minemaarten, K-4U, Dynious",
   "logoFile": "",
   "screenshots": [
   ],
