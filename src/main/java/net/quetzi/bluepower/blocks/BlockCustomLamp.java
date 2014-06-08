@@ -26,7 +26,7 @@ public class BlockCustomLamp extends BlockRedstoneLight
         this.setBlockTextureName(Refs.MODID + ":" + this.getUnlocalizedName().substring(5));
         this.isInverted = isInverted;
         this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
-        this.isOn = isInverted ? false : true;
+        this.isOn = !isInverted;
         this.colour = colour;
         this.setCreativeTab(CustomTabs.tabBluePowerLighting);
     }
