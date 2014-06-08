@@ -31,10 +31,8 @@ public class RegisterMultiparts implements IPartFactory {
         BPPart part = PartRegistry.createPart(id, true);
         if (part != null) {
             if (part instanceof IBPFacePart) {
-                System.out.println("Face");
                 return new MultipartFaceBPPart((IBPFacePart) part);
             } else {
-                System.out.println("Non-face");
                 return new MultipartBPPart(part);
             }
         }

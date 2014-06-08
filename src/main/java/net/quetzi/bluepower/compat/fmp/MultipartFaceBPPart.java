@@ -2,9 +2,10 @@ package net.quetzi.bluepower.compat.fmp;
 
 import net.quetzi.bluepower.api.part.BPPart;
 import net.quetzi.bluepower.api.part.IBPFacePart;
+import codechicken.multipart.IFaceRedstonePart;
 import codechicken.multipart.TFacePart;
 
-public class MultipartFaceBPPart extends MultipartBPPart implements TFacePart {
+public class MultipartFaceBPPart extends MultipartBPPart implements TFacePart, IFaceRedstonePart {
     
     private IBPFacePart facePart;
     
@@ -29,6 +30,12 @@ public class MultipartFaceBPPart extends MultipartBPPart implements TFacePart {
     public boolean solid(int side) {
     
         return false;
+    }
+
+    @Override
+    public int getFace() {
+        
+        return facePart.getFace();
     }
     
 }
