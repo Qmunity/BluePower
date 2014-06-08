@@ -17,6 +17,7 @@ public class ItemCropSeed extends ItemSeeds implements IPlantable
 
     public static Block field_150925_a;
 
+    @SuppressWarnings("static-access")
     public ItemCropSeed(Block blockCrop, Block blockSoil)
     {
         super(blockCrop, blockSoil);
@@ -25,6 +26,7 @@ public class ItemCropSeed extends ItemSeeds implements IPlantable
         this.setTextureName(Refs.MODID + ":" + Refs.FLAXSEED_NAME);
     }
 
+    @SuppressWarnings("static-access")
     public boolean onItemUse(ItemStack itemStack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ)
     {
         if (side != 1) {

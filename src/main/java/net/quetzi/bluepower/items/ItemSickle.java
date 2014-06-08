@@ -1,6 +1,7 @@
 package net.quetzi.bluepower.items;
 
 import com.google.common.collect.Sets;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
 import net.minecraft.entity.EntityLivingBase;
@@ -17,6 +18,7 @@ import java.util.Set;
 public class ItemSickle extends ItemTool
 {
 
+    @SuppressWarnings("rawtypes")
     private static final Set toolBlocks = Sets.newHashSet(new Block[]{Blocks.leaves, Blocks.leaves2, Blocks.wheat, Blocks.potatoes, Blocks.carrots});
     private              int cropRadius = 2;
     private              int leafRadius = 1;
@@ -29,6 +31,7 @@ public class ItemSickle extends ItemTool
         this.setTextureName(Refs.MODID + ":" + name);
     }
 
+    @SuppressWarnings("static-access")
     public float func_150893_a(ItemStack itemStack, Block block)
     {
         return this.toolBlocks.contains(block) ? this.efficiencyOnProperMaterial : 1.0F;

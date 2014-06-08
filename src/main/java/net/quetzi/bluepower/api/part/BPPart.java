@@ -42,8 +42,7 @@ public abstract class BPPart {
     }
     
     /**
-     * Gets an unique part type identifier, used to distinguish between this
-     * part and others
+     * Gets an unique part type identifier, used to distinguish between this part and others
      * 
      * @return The part type
      */
@@ -55,6 +54,13 @@ public abstract class BPPart {
      * @return The unlocalized name of this part
      */
     public abstract String getUnlocalizedName();
+    
+    /**
+     * Called every tick to update the part
+     */
+    public void update() {
+    
+    }
     
     /**
      * Gets all the collision boxes for this block
@@ -95,8 +101,7 @@ public abstract class BPPart {
     }
     
     /**
-     * This render method gets called every tick. You should use this if you're
-     * doing animations
+     * This render method gets called every tick. You should use this if you're doing animations
      * 
      * @param loc
      *            Distance from the player's position
@@ -110,10 +115,8 @@ public abstract class BPPart {
     }
     
     /**
-     * This render method gets called whenever there's a block update in the
-     * chunk. You should use this to remove load from the renderer if a part of
-     * the rendering code doesn't need to get called too often or just doesn't
-     * change at all. To call a render update to re-render this just call
+     * This render method gets called whenever there's a block update in the chunk. You should use this to remove load from the renderer if a part of
+     * the rendering code doesn't need to get called too often or just doesn't change at all. To call a render update to re-render this just call
      * {@link BPPart#markPartForRenderUpdate()}
      * 
      * @param loc
@@ -128,27 +131,21 @@ public abstract class BPPart {
     }
     
     /**
-     * Used to render the item when it's not placed in the world (in the
-     * player's hand, as a dropped item, in an inventory...)
+     * Used to render the item when it's not placed in the world (in the player's hand, as a dropped item, in an inventory...)
      * 
      * @param type
-     *            Render type (Inventory, dropped item, held (first person),
-     *            held (third person)...)
+     *            Render type (Inventory, dropped item, held (first person), held (third person)...)
      * @param item
-     *            The item that will be rendered. This can be useful if special
-     *            data is stored in the item's NBT tag
+     *            The item that will be rendered. This can be useful if special data is stored in the item's NBT tag
      * @param data
-     *            Extra data provided by the renderer (check
-     *            {@link ItemRenderType} for javadocs on what data each type
-     *            will have)
+     *            Extra data provided by the renderer (check {@link ItemRenderType} for javadocs on what data each type will have)
      */
     public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
     
     }
     
     /**
-     * Marks the part (and the entire chunk) for a render update on the next
-     * render tick
+     * Marks the part (and the entire chunk) for a render update on the next render tick
      */
     public final void markPartForRenderUpdate() {
     
@@ -156,8 +153,7 @@ public abstract class BPPart {
     }
     
     /**
-     * Gets the amount of light emitted by this block. If you want this to
-     * update in real time you'll probably need to call
+     * Gets the amount of light emitted by this block. If you want this to update in real time you'll probably need to call
      * {@link BPPart#markPartForRenderUpdate()}
      * 
      * @return The light value (0-15)
@@ -190,16 +186,13 @@ public abstract class BPPart {
     }
     
     /**
-     * Gets the hardnes of this part based on the player and the location where
-     * it's clicking
+     * Gets the hardnes of this part based on the player and the location where it's clicking
      * 
      * @param mop
-     *            Point in the block at which the player is looking when
-     *            breaking it
+     *            Point in the block at which the player is looking when breaking it
      * @param player
      *            The player that's trying to break the block
-     * @return The hardness of the part depending on the player and where it's
-     *         looking when breaking it
+     * @return The hardness of the part depending on the player and where it's looking when breaking it
      */
     public float getHardness(MovingObjectPosition mop, EntityPlayer player) {
     
@@ -220,8 +213,7 @@ public abstract class BPPart {
      * Gets the picked item when middle-clicked
      * 
      * @param hit
-     *            Position at which the player is looking at when middle
-     *            clicking
+     *            Position at which the player is looking at when middle clicking
      * @return The item that the player will pickup
      */
     public ItemStack getPickedItem(MovingObjectPosition hit) {
@@ -319,8 +311,7 @@ public abstract class BPPart {
      *            Item that was used to click it
      * @return Whether or not an action occurred
      */
-    public boolean onActivated(EntityPlayer player, MovingObjectPosition mop,
-            ItemStack item) {
+    public boolean onActivated(EntityPlayer player, MovingObjectPosition mop, ItemStack item) {
     
         return onActivated(player, item);
     }

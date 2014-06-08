@@ -3,13 +3,12 @@ package net.quetzi.bluepower.part.gate;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
-import net.quetzi.bluepower.api.part.BPPart;
-import net.quetzi.bluepower.api.part.IBPFacePart;
+import net.quetzi.bluepower.api.part.BPPartFace;
 import net.quetzi.bluepower.api.vec.Vector3;
 
 import org.lwjgl.opengl.GL11;
 
-public class GateBase extends BPPart implements IBPFacePart {
+public class GateBase extends BPPartFace {
     
     @Override
     public String getType() {
@@ -24,24 +23,16 @@ public class GateBase extends BPPart implements IBPFacePart {
     }
     
     @Override
-    public int getFace() {
-    
-        return 0;
-    }
-    
-    @Override
-    public void onNeigbourUpdate() {
-    
-        System.out.println("Neighbour update!");
-        super.onNeigbourUpdate();
-    }
-    
-    @Override
     public void renderDynamic(Vector3 loc, int pass, float frame) {
     
         GL11.glPushMatrix();
         {
             GL11.glTranslated(loc.getX(), loc.getY(), loc.getZ());
+            
+            GL11.glTranslated(0.5, 0.0, 0.5);
+            double divider = 8;
+            GL11.glRotated((System.currentTimeMillis() % (360 * divider)) / divider, 0, 1, 0);
+            GL11.glTranslated(-0.5, 0, 0);
             
             GL11.glDisable(GL11.GL_TEXTURE_2D);
             GL11.glDisable(GL11.GL_LIGHTING);
@@ -67,6 +58,15 @@ public class GateBase extends BPPart implements IBPFacePart {
     
         GL11.glPushMatrix();
         {
+            if (type != ItemRenderType.ENTITY) {
+                GL11.glTranslated(0.5, 0.0, 0.5);
+                double divider = 8;
+                GL11.glRotated((System.currentTimeMillis() % (360 * divider)) / divider, 0, 1, 0);
+                GL11.glTranslated(-0.5, 0, 0);
+            } else {
+                GL11.glTranslated(0.0, 0.0, 0.5);
+            }
+            
             GL11.glDisable(GL11.GL_TEXTURE_2D);
             GL11.glDisable(GL11.GL_LIGHTING);
             GL11.glDisable(GL11.GL_CULL_FACE);

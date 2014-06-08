@@ -1,16 +1,15 @@
 package net.quetzi.bluepower.tileentities.tier1;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntityFurnace;
-import net.quetzi.bluepower.api.BPRegistry;
 import net.quetzi.bluepower.api.recipe.IAlloyFurnaceRecipe;
 import net.quetzi.bluepower.recipe.AlloyFurnaceRegistry;
 import net.quetzi.bluepower.tileentities.TileBase;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class TileAlloyFurnace extends TileBase implements IInventory
 {

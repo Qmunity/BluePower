@@ -8,7 +8,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-import net.quetzi.bluepower.api.part.BPPart;
 import net.quetzi.bluepower.api.part.PartRegistry;
 import net.quetzi.bluepower.init.CustomTabs;
 import net.quetzi.bluepower.part.ItemBPPart;
@@ -28,24 +27,16 @@ public class ItemBPMultipart extends JItemMultiPart {
     }
     
     @Override
-    public TMultiPart newPart(ItemStack is, EntityPlayer player, World w,
-            BlockCoord b, int unused, Vector3 unused1) {
+    public TMultiPart newPart(ItemStack is, EntityPlayer player, World w, BlockCoord b, int unused, Vector3 unused1) {
     
-        BPPart part = PartRegistry.createPartFromItem(is);
-        
-        if (part == null) return null;
-        
-        return new MultipartBPPart(part);
+        return RegisterMultiparts.createPart_(PartRegistry.getPartIdFromItem(is), w.isRemote, false);
     }
     
     @Override
-    public boolean onItemUse(ItemStack stack, EntityPlayer player, World w,
-            int x, int y, int z, int side, float f, float f2, float f3) {
+    public boolean onItemUse(ItemStack stack, EntityPlayer player, World w, int x, int y, int z, int side, float f, float f2, float f3) {
     
         if (super.onItemUse(stack, player, w, x, y, z, side, f, f2, f3)) {
-            w.playSoundEffect(x + 0.5, y + 0.5, z + 0.5,
-                    Block.soundTypeWood.soundName,
-                    Block.soundTypeWood.getVolume(),
+            w.playSoundEffect(x + 0.5, y + 0.5, z + 0.5, Block.soundTypeWood.soundName, Block.soundTypeWood.getVolume(),
                     Block.soundTypeWood.getPitch());
             return true;
         }
@@ -66,8 +57,7 @@ public class ItemBPMultipart extends JItemMultiPart {
     
     @SuppressWarnings("rawtypes")
     @Override
-    public void addInformation(ItemStack item, EntityPlayer par2EntityPlayer,
-            List l, boolean par4) {
+    public void addInformation(ItemStack item, EntityPlayer par2EntityPlayer, List l, boolean par4) {
     
     }
     

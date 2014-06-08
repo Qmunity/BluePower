@@ -30,6 +30,7 @@ public class ExampleMessage implements IMessage, IMessageHandler<ExampleMessage,
         buf.writeInt(data);
     }
 
+    @SuppressWarnings("unused")
     @Override
     public IMessage onMessage(ExampleMessage message, MessageContext ctx)
     {

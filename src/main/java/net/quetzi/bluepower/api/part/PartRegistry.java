@@ -43,8 +43,7 @@ public class PartRegistry {
      * @param id
      *            The part ID
      * @param isMultipart
-     *            Whether it's using a multipart id or not (this is usually
-     *            false)
+     *            Whether it's using a multipart id or not (this is usually false)
      * @return A new instance of the part or null if it couldn't be found
      */
     public static BPPart createPart(String id, boolean isMultipart) {
@@ -76,8 +75,7 @@ public class PartRegistry {
     
     public static List<String> getRegisteredParts() {
     
-        return Collections.unmodifiableList(new ArrayList<String>(parts
-                .keySet()));
+        return Collections.unmodifiableList(new ArrayList<String>(parts.keySet()));
     }
     
     /**
@@ -121,8 +119,7 @@ public class PartRegistry {
         return getPartClass(id, false);
     }
     
-    public static Class<? extends BPPart> getPartClass(String id,
-            boolean isMultipart) {
+    public static Class<? extends BPPart> getPartClass(String id, boolean isMultipart) {
     
         try {
             for (String s : parts.keySet()) {
@@ -149,7 +146,8 @@ public class PartRegistry {
     
     /**
      * Gets the part ID stored in the item
-     * @param is Item to get the part ID from
+     * @param is
+     *            Item to get the part ID from
      * @return The part ID
      */
     public static String getPartIdFromItem(ItemStack is) {

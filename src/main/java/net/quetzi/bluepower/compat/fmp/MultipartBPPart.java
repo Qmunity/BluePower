@@ -23,8 +23,7 @@ import codechicken.multipart.IRedstonePart;
 import codechicken.multipart.JNormalOcclusion;
 import codechicken.multipart.TMultiPart;
 
-public class MultipartBPPart extends TMultiPart implements IRedstonePart,
-        JNormalOcclusion {
+public class MultipartBPPart extends TMultiPart implements IRedstonePart, JNormalOcclusion {
     
     private BPPart part;
     
@@ -37,11 +36,13 @@ public class MultipartBPPart extends TMultiPart implements IRedstonePart,
     
     }
     
-    protected BPPart getPart(){
+    protected BPPart getPart() {
+    
         return this.part;
     }
     
-    protected void setPart(BPPart part){
+    protected void setPart(BPPart part) {
+    
         this.part = part;
     }
     
@@ -138,8 +139,7 @@ public class MultipartBPPart extends TMultiPart implements IRedstonePart,
     @Override
     public int strongPowerLevel(int side) {
     
-        if (getPart() instanceof IBPRedstonePart) return ((IBPRedstonePart) getPart())
-                .getStrongOutput(ForgeDirection.getOrientation(side));
+        if (getPart() instanceof IBPRedstonePart) return ((IBPRedstonePart) getPart()).getStrongOutput(ForgeDirection.getOrientation(side));
         
         return 0;
     }
@@ -147,8 +147,7 @@ public class MultipartBPPart extends TMultiPart implements IRedstonePart,
     @Override
     public int weakPowerLevel(int side) {
     
-        if (getPart() instanceof IBPRedstonePart) return ((IBPRedstonePart) getPart())
-                .getWeakOutput(ForgeDirection.getOrientation(side));
+        if (getPart() instanceof IBPRedstonePart) return ((IBPRedstonePart) getPart()).getWeakOutput(ForgeDirection.getOrientation(side));
         
         return 0;
     }
@@ -156,8 +155,7 @@ public class MultipartBPPart extends TMultiPart implements IRedstonePart,
     @Override
     public boolean canConnectRedstone(int side) {
     
-        if (getPart() instanceof IBPRedstonePart) return ((IBPRedstonePart) getPart())
-                .canConnect(ForgeDirection.getOrientation(side));
+        if (getPart() instanceof IBPRedstonePart) return ((IBPRedstonePart) getPart()).canConnect(ForgeDirection.getOrientation(side));
         
         return false;
     }
@@ -208,8 +206,7 @@ public class MultipartBPPart extends TMultiPart implements IRedstonePart,
     }
     
     @Override
-    public boolean activate(EntityPlayer player, MovingObjectPosition hit,
-            ItemStack item) {
+    public boolean activate(EntityPlayer player, MovingObjectPosition hit, ItemStack item) {
     
         return getPart().onActivated(player, hit, item);
     }
@@ -219,15 +216,24 @@ public class MultipartBPPart extends TMultiPart implements IRedstonePart,
     @Override
     public void renderDynamic(Vector3 pos, float frame, int pass) {
     
-        getPart().renderDynamic(new net.quetzi.bluepower.api.vec.Vector3(pos.x,
-                pos.y, pos.z), pass, frame);
+        getPart().renderDynamic(new net.quetzi.bluepower.api.vec.Vector3(pos.x, pos.y, pos.z), pass, frame);
     }
     
     @Override
     public boolean renderStatic(Vector3 pos, int pass) {
     
-        return getPart().renderStatic(new net.quetzi.bluepower.api.vec.Vector3(
-                pos.x, pos.y, pos.z), pass);
+        return getPart().renderStatic(new net.quetzi.bluepower.api.vec.Vector3(pos.x, pos.y, pos.z), pass);
+    }
+    
+    @Override
+    public void update() {
+    
+        getPart().world = world();
+        getPart().x = x();
+        getPart().y = y();
+        getPart().z = z();
+        
+        getPart().update();
     }
     
 }

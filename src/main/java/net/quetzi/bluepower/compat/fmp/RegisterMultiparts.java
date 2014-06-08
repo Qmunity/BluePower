@@ -16,8 +16,7 @@ public class RegisterMultiparts implements IPartFactory {
     
     public static void register() {
     
-        String[] parts = PartRegistry.getRegisteredParts().toArray(
-                new String[0]);
+        String[] parts = PartRegistry.getRegisteredParts().toArray(new String[0]);
         
         for (int i = 0; i < parts.length; i++)
             parts[i] = Refs.MODID + "_" + parts[i];
@@ -28,7 +27,12 @@ public class RegisterMultiparts implements IPartFactory {
     @Override
     public TMultiPart createPart(String id, boolean client) {
     
-        BPPart part = PartRegistry.createPart(id, true);
+        return createPart_(id, client, true);
+    }
+    
+    public static TMultiPart createPart_(String id, boolean client, boolean multipartFactory) {
+    
+        BPPart part = PartRegistry.createPart(id, multipartFactory);
         if (part != null) {
             if (part instanceof IBPFacePart) {
                 return new MultipartFaceBPPart((IBPFacePart) part);

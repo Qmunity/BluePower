@@ -4,4 +4,6 @@ public interface IBPFacePart {
     
     public int getFace();
     
+    public boolean canStay();
+    
 }

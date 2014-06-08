@@ -1,12 +1,17 @@
 package net.quetzi.bluepower.world;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Random;
+
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenMinable;
 
-import java.util.*;
-
+@SuppressWarnings({"unchecked", "rawtypes"})
 public class WorldGenMarble extends WorldGenMinable
 {
 

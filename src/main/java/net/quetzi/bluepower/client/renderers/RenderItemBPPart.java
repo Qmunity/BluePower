@@ -46,7 +46,7 @@ public class RenderItemBPPart implements IItemRenderer {
         {
             switch(type){
                 case ENTITY:
-                    GL11.glTranslated(-0.5, -0.5, -0.5);
+                    GL11.glTranslated(-0.5, 0, -0.5);
                     break;
                 case EQUIPPED:
                     break;
