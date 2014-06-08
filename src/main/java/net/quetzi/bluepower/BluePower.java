@@ -54,9 +54,9 @@ public class BluePower {
         config.load();
         Config.setUp(config);
         config.save();
-        
-        BPItems.init();
         BPBlocks.init();
+        BPItems.init();
+
         TileEntities.init();
         OreDictionarySetup.init();
         GameRegistry.registerWorldGenerator(new WorldGenerationHandler(), 0);
