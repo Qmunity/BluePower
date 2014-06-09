@@ -63,6 +63,7 @@ public class Refs {
     public static final String  IRONSAW_NAME             = "iron_saw";
     public static final String  SILICONBOULE_NAME        = "silicon_boule";
     public static final String  SILICONWAFER_NAME        = "silicon_wafer";
+    public static final String  BLOCKBREAKER_NAME        = "block_breaker";
     
     public static final String  ITEMBRASSINGOT_NAME      = "brass_ingot";
     public static final String  ITEMBLUEALLOYINGOT_NAME  = "blue_alloy_ingot";

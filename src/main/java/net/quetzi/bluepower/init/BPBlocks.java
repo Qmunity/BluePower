@@ -60,8 +60,9 @@ public class BPBlocks {
     
     public static Block flax_crop;
     public static Block indigo_flower;
-    
+
     public static Block alloy_furnace;
+    public static Block block_breaker;
     
     public static void init() {
     
@@ -99,8 +100,9 @@ public class BPBlocks {
         
         flax_crop = new BlockCrop().setBlockName(Refs.FLAXCROP_NAME);
         indigo_flower = new BlockCustomFlower(Refs.INDIGOFLOWER_NAME);
-        
+
         alloy_furnace = new BlockAlloyFurnace();
+        block_breaker = new BlockBlockBreaker();
         
         registerBlocks();
     }
@@ -141,8 +143,8 @@ public class BPBlocks {
         
         GameRegistry.registerBlock(flax_crop, Refs.FLAXCROP_NAME);
         GameRegistry.registerBlock(indigo_flower, Refs.INDIGOFLOWER_NAME);
-        
+
         GameRegistry.registerBlock(alloy_furnace, Refs.ALLOYFURNACE_NAME);
-        
+        GameRegistry.registerBlock(block_breaker, Refs.BLOCKBREAKER_NAME);
     }
 }
