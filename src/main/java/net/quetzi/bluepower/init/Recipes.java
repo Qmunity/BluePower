@@ -107,5 +107,7 @@ public class Recipes {
         //  af.addRecipe(new ItemStack(BPItems.red_doped_wafer, 1), new ItemStack(Items.redstone, 4), BPItems.silicon_wafer);
         //  af.addRecipe(new ItemStack(BPItems.blue_doped_wafer, 1), new ItemStack(BPItems.nikolite, 4), BPItems.silicon_wafer);
         
+        af.addRecyclingRecipe(new ItemStack(Items.iron_ingot));
+        
     }
 }

@@ -98,6 +98,7 @@ public class BluePower {
     public void PostInit(FMLPostInitializationEvent event) {
     
         CompatibilityUtils.postInit(event);
+        AlloyFurnaceRegistry.getInstance().generateRecyclingRecipes();
         proxy.initRenderers();
     }
     
