@@ -34,7 +34,7 @@ import java.util.Set;
 public class ItemSickle extends ItemTool {
 
     @SuppressWarnings("rawtypes")
-    private static final Set toolBlocks = Sets.newHashSet(new Block[] { Blocks.leaves, Blocks.leaves2, Blocks.wheat, Blocks.potatoes, Blocks.carrots });
+    private static final Set toolBlocks = Sets.newHashSet(new Block[] { Blocks.leaves, Blocks.leaves2, Blocks.wheat, Blocks.potatoes, Blocks.carrots, Blocks.nether_wart, Blocks.red_mushroom, Blocks.brown_mushroom, Blocks.reeds, Blocks.tallgrass, Blocks.vine, Blocks.waterlily, Blocks.red_flower, Blocks.yellow_flower });
     private              int cropRadius = 2;
     private              int leafRadius = 1;
 
