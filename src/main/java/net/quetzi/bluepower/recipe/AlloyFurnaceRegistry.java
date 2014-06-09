@@ -98,33 +98,39 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
                 int recyclingAmount = 0;
                 if (recipe instanceof ShapedRecipes) {
                     ShapedRecipes shaped = (ShapedRecipes) recipe;
-                    for (ItemStack input : shaped.recipeItems) {
-                        if (input != null && ItemStackUtils.isItemFuzzyEqual(input, recyclingItem)) {
-                            recyclingAmount++;
+                    if (shaped.recipeItems != null) {
+                        for (ItemStack input : shaped.recipeItems) {
+                            if (input != null && ItemStackUtils.isItemFuzzyEqual(input, recyclingItem)) {
+                                recyclingAmount++;
+                            }
                         }
                     }
                 } else if (recipe instanceof ShapelessRecipes) {
                     ShapelessRecipes shapeless = (ShapelessRecipes) recipe;
-                    for (ItemStack input : (List<ItemStack>) shapeless.recipeItems) {
-                        if (input != null && ItemStackUtils.isItemFuzzyEqual(input, recyclingItem)) {
-                            recyclingAmount++;
+                    if (shapeless.recipeItems != null) {
+                        for (ItemStack input : (List<ItemStack>) shapeless.recipeItems) {
+                            if (input != null && ItemStackUtils.isItemFuzzyEqual(input, recyclingItem)) {
+                                recyclingAmount++;
+                            }
                         }
                     }
                 } else if (recipe instanceof ShapedOreRecipe) {
                     ShapedOreRecipe shapedOreRecipe = (ShapedOreRecipe) recipe;
-                    for (Object input : shapedOreRecipe.getInput()) {
-                        if (input != null) {
-                            List<ItemStack> itemList;
-                            if (input instanceof ItemStack) {
-                                itemList = new ArrayList<ItemStack>();
-                                itemList.add((ItemStack) input);
-                            } else {
-                                itemList = (List<ItemStack>) input;
-                            }
-                            for (ItemStack item : itemList) {
-                                if (item != null && ItemStackUtils.isItemFuzzyEqual(item, recyclingItem)) {
-                                    recyclingAmount++;
-                                    break;
+                    if (shapedOreRecipe.getInput() != null) {
+                        for (Object input : shapedOreRecipe.getInput()) {
+                            if (input != null) {
+                                List<ItemStack> itemList;
+                                if (input instanceof ItemStack) {
+                                    itemList = new ArrayList<ItemStack>();
+                                    itemList.add((ItemStack) input);
+                                } else {
+                                    itemList = (List<ItemStack>) input;
+                                }
+                                for (ItemStack item : itemList) {
+                                    if (item != null && ItemStackUtils.isItemFuzzyEqual(item, recyclingItem)) {
+                                        recyclingAmount++;
+                                        break;
+                                    }
                                 }
                             }
                         }
