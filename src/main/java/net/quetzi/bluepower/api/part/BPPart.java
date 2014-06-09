@@ -8,9 +8,9 @@
 
 package net.quetzi.bluepower.api.part;
 
-import codechicken.multipart.BlockMultipart;
-import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.common.Optional;
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -18,12 +18,13 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.quetzi.bluepower.api.vec.Vector3;
 import net.quetzi.bluepower.references.Dependencies;
 import net.quetzi.bluepower.util.RayTracer;
-
-import java.util.ArrayList;
-import java.util.List;
+import codechicken.multipart.BlockMultipart;
+import cpw.mods.fml.common.Loader;
+import cpw.mods.fml.common.Optional;
 
 public abstract class BPPart {
 
@@ -277,7 +278,7 @@ public abstract class BPPart {
     /**
      * Event called whenever a nearby block updates
      */
-    public void onNeigbourUpdate() {
+    public void onNeighborUpdate() {
 
     }
 
@@ -315,6 +316,15 @@ public abstract class BPPart {
     public boolean onActivated(EntityPlayer player, MovingObjectPosition mop, ItemStack item) {
 
         return onActivated(player, item);
+    }
+    
+    /**
+     * Notifies surrounding blocks of a part update in this block
+     */
+    public void notifyUpdate(){
+        for(ForgeDirection d : ForgeDirection.VALID_DIRECTIONS){
+            world.notifyBlockOfNeighborChange(x + d.offsetX, y + d.offsetY, z + d.offsetZ, world.getBlock(x, y, z));
+        }
     }
 
 }

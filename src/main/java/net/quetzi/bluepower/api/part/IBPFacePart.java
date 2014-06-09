@@ -21,6 +21,8 @@ public interface IBPFacePart {
 
     public int getFace();
 
+    public void setFace(int face);
+
     public boolean canStay();
 
 }
