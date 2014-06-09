@@ -294,6 +294,7 @@ public class BlockCrop extends BlockCrops implements IGrowable {
                 this.dropBlockAsItem(world, x, y, z, l, 0);
                 
                 if (world.getBlock(x, y + 1, z) == this) {
+                    world.getBlock(x, y + 1, z).dropBlockAsItem(world, x, y + 1, z, 8, 0);
                     world.setBlock(x, y + 1, z, Blocks.air, 0, 2);
                 }
             }
