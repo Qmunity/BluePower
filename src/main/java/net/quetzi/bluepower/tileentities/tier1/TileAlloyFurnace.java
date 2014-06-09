@@ -317,10 +317,10 @@ public class TileAlloyFurnace extends TileBase implements IInventory {
     public List<ItemStack> getDrops() {
     
         List<ItemStack> drops = super.getDrops();
-        drops.add(fuelInventory);
-        drops.add(outputInventory);
+        if (fuelInventory != null) drops.add(fuelInventory);
+        if (outputInventory != null) drops.add(outputInventory);
         for (ItemStack stack : inventory)
-            drops.add(stack);
+            if (stack != null) drops.add(stack);
         return drops;
     }
 }
