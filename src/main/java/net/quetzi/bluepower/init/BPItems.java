@@ -80,9 +80,9 @@ public class BPItems {
     public static Item red_doped_wafer;
     public static Item blue_doped_wafer;
     public static Item screwdriver;
+    public static Item athame;
 
-    private static ToolMaterial gemMaterial = EnumHelper
-            .addToolMaterial("GEM", 2, 750, 6.0F, 2.0F, 10);
+    private static ToolMaterial gemMaterial = EnumHelper.addToolMaterial("GEM", 2, 750, 6.0F, 2.0F, 18);
 
     public static void init() {
 
@@ -138,6 +138,7 @@ public class BPItems {
         blue_doped_wafer = new ItemSiliconWafer(Refs.BLUEDOPEDWAFER_NAME);
         red_doped_wafer = new ItemSiliconWafer(Refs.REDDOPEDWAFER_NAME);
         screwdriver = new ItemScrewdriver();
+        athame = new ItemAthame();
 
         if (!Loader.isModLoaded(Dependencies.FMP)) {
             multipart = new ItemBPPart();
@@ -207,6 +208,8 @@ public class BPItems {
         GameRegistry.registerItem(blue_doped_wafer, Refs.BLUEDOPEDWAFER_NAME);
         GameRegistry.registerItem(red_doped_wafer, Refs.REDDOPEDWAFER_NAME);
         GameRegistry.registerItem(screwdriver, Refs.SCREWDRIVER_NAME);
+        GameRegistry.registerItem(athame, Refs.ITEMATHAME_NAME);
+
 
         MinecraftForge.addGrassSeed(new ItemStack(flax_seed), 5);
 

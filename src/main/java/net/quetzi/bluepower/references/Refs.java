@@ -104,7 +104,7 @@ public class Refs {
     public static final String DIAMONDSICKLE_NAME = "diamond_sickle";
 
     public static final String SCREWDRIVER_NAME = "screwdriver";
-    public static final String MULTIPART_NAME = "bluepower_multipart";
+    public static final String MULTIPART_NAME   = "bluepower_multipart";
 
     public static final String CRACKEDBASALTBRICK_NAME  = "basaltbrick_cracked";
     public static final String SMALLBASALTBRICK_NAME    = "basalt_brick_small";
@@ -148,6 +148,8 @@ public class Refs {
     public static final String INVERTEDLAMP_RED       = "invertedlamp_red";
     public static final String LAMP_BLACK             = "lamp_black";
     public static final String INVERTEDLAMP_BLACK     = "invertedlamp_black";
+
+    public static final String ITEMATHAME_NAME        = "athame";
 
     public static String fullVersionString() {
 
