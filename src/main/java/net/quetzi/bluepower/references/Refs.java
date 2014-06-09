@@ -103,6 +103,7 @@ public class Refs {
     public static final String GOLDSICKLE_NAME    = "gold_sickle";
     public static final String DIAMONDSICKLE_NAME = "diamond_sickle";
 
+    public static final String SCREWDRIVER_NAME = "screwdriver";
     public static final String MULTIPART_NAME = "bluepower_multipart";
 
     public static final String CRACKEDBASALTBRICK_NAME  = "basaltbrick_cracked";
