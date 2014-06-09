@@ -17,63 +17,63 @@ import net.quetzi.bluepower.api.vec.Vector3;
 import net.quetzi.bluepower.util.ForgeDirectionUtils;
 
 public abstract class BPPartFace extends BPPart implements IBPFacePart, IBPRedstonePart {
-    
+
     private int face = 0;
-    
+
     @Override
     public int getFace() {
-    
+
         return face;
     }
-    
+
     public void setFace(int face) {
-    
+
         this.face = face;
         System.out.println("Set " + FMLCommonHandler.instance().getEffectiveSide());
     }
-    
+
     @Override
     public boolean canPlacePart(ItemStack is, EntityPlayer player, Vector3 block, MovingObjectPosition mop) {
-    
+
         this.world = block.getWorld();
         this.x = block.getBlockX();
         this.y = block.getBlockY();
         this.z = block.getBlockZ();
-        
+
         ForgeDirection dir = ForgeDirection.getOrientation(mop.sideHit).getOpposite();
         if (dir == ForgeDirection.DOWN) {
             dir = ForgeDirection.UP;
         } else {
             if (dir == ForgeDirection.UP) dir = ForgeDirection.DOWN;
         }
-        
+
         setFace(ForgeDirectionUtils.getSide(dir));
-        
+
         return true;
     }
-    
+
     @Override
     public boolean canStay() {
-    
+
         return true;
     }
-    
+
     @Override
     public final boolean canConnect(ForgeDirection side) {
-    
+
         return false;
     }
-    
+
     @Override
     public final int getStrongOutput(ForgeDirection side) {
-    
+
         return 0;
     }
-    
+
     @Override
     public final int getWeakOutput(ForgeDirection side) {
-    
+
         return 0;
     }
-    
+
 }

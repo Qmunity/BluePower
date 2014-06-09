@@ -22,9 +22,9 @@ import net.quetzi.bluepower.init.CustomTabs;
 import net.quetzi.bluepower.references.Refs;
 
 public class ItemIngot extends Item {
-    
+
     public ItemIngot(String name) {
-    
+
         super();
         this.setUnlocalizedName(name);
         this.setCreativeTab(CustomTabs.tabBluePowerItems);

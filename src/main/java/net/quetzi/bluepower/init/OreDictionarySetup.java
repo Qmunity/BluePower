@@ -20,13 +20,13 @@ package net.quetzi.bluepower.init;
 import net.minecraftforge.oredict.OreDictionary;
 
 public class OreDictionarySetup {
-    
+
     public static void init() {
-    
+
         OreDictionary.registerOre("oreCopper", BPBlocks.copper_ore);
         OreDictionary.registerOre("oreTin", BPBlocks.tin_ore);
         OreDictionary.registerOre("oreSilver", BPBlocks.silver_ore);
-        
+
         OreDictionary.registerOre("gemRuby", BPItems.ruby);
         OreDictionary.registerOre("gemMalachite", BPItems.amethyst);
         OreDictionary.registerOre("gemSapphire", BPItems.sapphire);

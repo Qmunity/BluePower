@@ -20,7 +20,7 @@ package net.quetzi.bluepower.init;
 import net.minecraftforge.common.config.Configuration;
 
 public class Config {
-    
+
     public static boolean generateCopper;
     public static int     minCopperY;
     public static int     maxCopperY;
@@ -58,9 +58,9 @@ public class Config {
     public static int     veinSizeSapphire;
     public static double  volcanoActiveToInactiveRatio;
     public static double  volcanoSpawnChance;           // chance of a volcano spawning per chunk.
-                                                        
+
     public static void setUp(Configuration config) {
-    
+
         config.addCustomCategoryComment("World Gen", "Toggle blocks being generated into the world");
         generateCopper = config.get("World Gen Copper", "generateCopper", true).getBoolean(true);
         minCopperY = config.get("World Gen Copper", "minCopperY", 0).getInt();

@@ -17,36 +17,35 @@
 
 package net.quetzi.bluepower.client.renderers;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.lwjgl.opengl.GL11;
-
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer;
 import net.quetzi.bluepower.api.part.BPPart;
 import net.quetzi.bluepower.api.part.PartRegistry;
+import org.lwjgl.opengl.GL11;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class RenderItemBPPart implements IItemRenderer {
-    
+
     private List<BPPart> parts = new ArrayList<BPPart>();
-    
+
     @Override
     public boolean handleRenderType(ItemStack item, ItemRenderType type) {
-    
+
         return true;
     }
-    
+
     @Override
     public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item, ItemRendererHelper helper) {
-    
+
         return true;
     }
-    
+
     @SuppressWarnings("incomplete-switch")
     @Override
     public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
-    
+
         BPPart part = null;
         for (BPPart p : parts)
             if (p.getType().equals(PartRegistry.getPartIdFromItem(item))) {
@@ -57,7 +56,7 @@ public class RenderItemBPPart implements IItemRenderer {
             part = PartRegistry.createPartFromItem(item);
             parts.add(part);
         }
-        
+
         GL11.glPushMatrix();
         {
             switch (type) {
@@ -77,5 +76,5 @@ public class RenderItemBPPart implements IItemRenderer {
         }
         GL11.glPopMatrix();
     }
-    
+
 }

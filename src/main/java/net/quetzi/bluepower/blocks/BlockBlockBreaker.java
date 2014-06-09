@@ -29,27 +29,32 @@ import net.quetzi.bluepower.references.Refs;
 import net.quetzi.bluepower.tileentities.tier1.TileBlockBreaker;
 
 public class BlockBlockBreaker extends BlockContainerBase {
+
     private IIcon textureFront;
     private IIcon textureBack;
 
     public BlockBlockBreaker() {
+
         super(Material.rock);
         this.setBlockName(Refs.BLOCKBREAKER_NAME);
     }
 
     @Override
     protected Class<? extends TileEntity> getTileEntity() {
+
         return TileBlockBreaker.class;
     }
 
     @Override
     public GuiIDs getGuiID() {
+
         return GuiIDs.INVALID; // TODO: Not sure what to return if it has no gui
     }
 
     @Override
     @SideOnly(Side.CLIENT)
     public void registerBlockIcons(IIconRegister iconRegister) {
+
         this.textureFront = iconRegister.registerIcon(Refs.MODID + ":" + Refs.BLOCKBREAKER_NAME + "_front");
         this.textureBack = iconRegister.registerIcon(Refs.MODID + ":" + Refs.BLOCKBREAKER_NAME + "_back");
         this.blockIcon = iconRegister.registerIcon(Refs.MODID + ":" + Refs.BLOCKBREAKER_NAME);
@@ -58,6 +63,7 @@ public class BlockBlockBreaker extends BlockContainerBase {
     @Override
     @SideOnly(Side.CLIENT)
     public IIcon getIcon(int side, int meta) {
+
         ForgeDirection direction = ForgeDirection.getOrientation(meta);
         if (side == direction.ordinal()) {
             return textureFront;

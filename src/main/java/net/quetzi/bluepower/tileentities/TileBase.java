@@ -17,51 +17,67 @@
 
 package net.quetzi.bluepower.tileentities;
 
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class TileBase extends TileEntity {
-    
+
     private boolean isRedstonePowered;
-    
+    private int ticker = 0;
+
     /*************** BASIC TE FUNCTIONS **************/
-    
+
     /**
      * This function gets called whenever the world/chunk loads
      */
     @Override
     public void readFromNBT(NBTTagCompound tCompound) {
-    
+
         super.readFromNBT(tCompound);
         isRedstonePowered = tCompound.getBoolean("isRedstonePowered");
     }
-    
+
     /**
      * This function gets called whenever the world/chunk is saved
      */
     @Override
     public void writeToNBT(NBTTagCompound tCompound) {
-    
+
         super.writeToNBT(tCompound);
         tCompound.setBoolean("isRedstonePowered", isRedstonePowered);
     }
-    
+
     /**
      * Function gets called every tick. Do not forget to call the super method!
      */
     @Override
     public void updateEntity() {
-    
+
+        if (ticker == 0) {
+            onTileLoaded();
+        }
         super.updateEntity();
+        ticker++;
     }
-    
-    /***************** ADDED FUNCTIONS *****************/
-    
+
+    /**
+     * ************** ADDED FUNCTIONS ****************
+     */
+
+    public void onBlockNeighbourChanged() {
+
+        checkRedstonePower();
+    }
+
     /**
      * Checks if redstone has changed.
      */
     public void checkRedstonePower() {
-    
+
         boolean isIndirectlyPowered = getWorldObj().isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord);
         if (isIndirectlyPowered && !isRedstonePowered) {
             isRedstonePowered = true;
@@ -71,22 +87,44 @@ public class TileBase extends TileEntity {
             this.redstoneChanged(isRedstonePowered);
         }
     }
-    
+
     /**
      * This method can be overwritten to get alerted when the redstone level has changed.
-     * 
-     * @param newValue
-     *            The redstone level it is at now
+     *
+     * @param newValue The redstone level it is at now
      */
     protected void redstoneChanged(boolean newValue) {
-    
+
     }
-    
+
     /**
      * Check whether or not redstone level is high
      */
     public boolean getIsRedstonePowered() {
-    
+
         return isRedstonePowered;
+    }
+
+    /**
+     * Returns the ticker of the Tile, this number wll increase every tick
+     *
+     * @return the ticker
+     */
+    public int getTicker() {
+
+        return ticker;
+    }
+
+    /**
+     * Gets called when the TileEntity ticks for the first time, the world is accessible and updateEntity() has not been ran yet
+     */
+    protected void onTileLoaded() {
+
+        onBlockNeighbourChanged();
+    }
+
+    public List<ItemStack> getDrops() {
+
+        return new ArrayList<ItemStack>();
     }
 }

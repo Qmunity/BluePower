@@ -18,7 +18,6 @@
 package net.quetzi.bluepower.items;
 
 import com.google.common.collect.Sets;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
 import net.minecraft.entity.EntityLivingBase;
@@ -33,39 +32,39 @@ import net.quetzi.bluepower.references.Refs;
 import java.util.Set;
 
 public class ItemSickle extends ItemTool {
-    
+
     @SuppressWarnings("rawtypes")
     private static final Set toolBlocks = Sets.newHashSet(new Block[] { Blocks.leaves, Blocks.leaves2, Blocks.wheat, Blocks.potatoes, Blocks.carrots });
-    private int              cropRadius = 2;
-    private int              leafRadius = 1;
-    
+    private              int cropRadius = 2;
+    private              int leafRadius = 1;
+
     public ItemSickle(ToolMaterial material, String name) {
-    
+
         super(1.0F, material, toolBlocks);
         this.setUnlocalizedName(name);
         this.setCreativeTab(CustomTabs.tabBluePowerTools);
         this.setTextureName(Refs.MODID + ":" + name);
     }
-    
+
     @SuppressWarnings("static-access")
     public float func_150893_a(ItemStack itemStack, Block block) {
-    
+
         return this.toolBlocks.contains(block) ? this.efficiencyOnProperMaterial : 1.0F;
     }
-    
+
     public boolean hitEntity(ItemStack itemStack, EntityLivingBase par2EntityLivingBase, EntityLivingBase par3EntityLivingBase) {
-    
+
         itemStack.damageItem(2, par3EntityLivingBase);
         return true;
     }
-    
+
     public boolean onBlockDestroyed(ItemStack itemStack, World world, Block block, int x, int y, int z, EntityLivingBase entityLiving) {
-    
+
         boolean used = false;
-        
+
         if (!(entityLiving instanceof EntityPlayer)) return false;
         EntityPlayer player = (EntityPlayer) entityLiving;
-        
+
         if ((block != null) && (block.isLeaves(world, x, y, z))) {
             for (int i = -this.leafRadius; i <= this.leafRadius; i++) {
                 for (int j = -this.leafRadius; j <= this.leafRadius; j++)
@@ -86,7 +85,7 @@ public class ItemSickle extends ItemTool {
             }
             return used;
         }
-        
+
         for (int i = -this.cropRadius; i <= this.cropRadius; i++)
             for (int j = -this.cropRadius; j <= this.cropRadius; j++) {
                 Block blockToCheck = world.getBlock(x + i, y, z + j);

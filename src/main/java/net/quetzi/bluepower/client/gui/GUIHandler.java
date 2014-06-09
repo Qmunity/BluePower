@@ -26,10 +26,10 @@ import net.quetzi.bluepower.references.GuiIDs;
 import net.quetzi.bluepower.tileentities.tier1.TileAlloyFurnace;
 
 public class GUIHandler implements IGuiHandler {
-    
+
     @Override
     public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
-    
+
         // This function creates a container
         TileEntity ent = world.getTileEntity(x, y, z);
         if (ent != null) {
@@ -42,10 +42,10 @@ public class GUIHandler implements IGuiHandler {
         }
         return null;
     }
-    
+
     @Override
     public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
-    
+
         TileEntity ent = world.getTileEntity(x, y, z);
         if (ent != null) {
             // ID is the GUI ID
@@ -57,5 +57,5 @@ public class GUIHandler implements IGuiHandler {
         }
         return null;
     }
-    
+
 }
