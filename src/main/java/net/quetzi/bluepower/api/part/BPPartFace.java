@@ -25,13 +25,6 @@ public abstract class BPPartFace extends BPPart implements IBPFacePart, IBPRedst
     
     protected RedstoneConnection[] connections = new RedstoneConnection[4];
     
-    public BPPartFace() {
-        super();
-    
-        for (int i = 0; i < 4; i++)
-            connections[i] = new RedstoneConnection(this, i + "", true, false);
-    }
-    
     @Override
     public int getFace() {
     

@@ -18,6 +18,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.quetzi.bluepower.api.part.BPPartFace;
+import net.quetzi.bluepower.api.part.RedstoneConnection;
 import net.quetzi.bluepower.api.vec.Vector3;
 import net.quetzi.bluepower.api.vec.Vector3Cube;
 import net.quetzi.bluepower.client.renderers.RenderHelper;
@@ -35,7 +36,8 @@ public class GateBase extends BPPartFace {
     
     public GateBase() {
     
-        super();
+        for (int i = 0; i < 4; i++)
+            connections[i] = new RedstoneConnection(this, i + "", true, false);
         
         for (int i = 0; i < 4; i++)
             getConnection(i).enable();
