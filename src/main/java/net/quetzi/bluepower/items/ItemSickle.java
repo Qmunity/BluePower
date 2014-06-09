@@ -20,6 +20,7 @@ package net.quetzi.bluepower.items;
 import com.google.common.collect.Sets;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
+import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -48,8 +49,10 @@ public class ItemSickle extends ItemTool {
 
     @SuppressWarnings("static-access")
     public float func_150893_a(ItemStack itemStack, Block block) {
-
-        return this.toolBlocks.contains(block) ? this.efficiencyOnProperMaterial : 1.0F;
+        if ((block.getMaterial() == Material.leaves) || (block.getMaterial() == Material.grass) || this.toolBlocks.contains(block)) {
+            return this.efficiencyOnProperMaterial;
+        }
+        return 1.0F;
     }
 
     public boolean hitEntity(ItemStack itemStack, EntityLivingBase par2EntityLivingBase, EntityLivingBase par3EntityLivingBase) {
