@@ -117,6 +117,8 @@ item.diamond_saw.name=Diamond Saw
 
 item.silicon_boule.name=Silicon Boule
 item.silicon_wafer.name=Silicon Wafer
+item.blue_doped_wafer.name=Blue Doped Wafer
+item.red_doped_wafer.name=Red Doped Wafer
 
 itemGroup.tabBluePowerMachines=Blue Power Machines
 itemGroup.tabBluePowerBlocks=Blue Power Blocks
