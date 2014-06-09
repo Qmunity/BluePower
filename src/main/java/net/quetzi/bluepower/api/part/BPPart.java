@@ -18,7 +18,6 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
-import net.minecraftforge.common.util.ForgeDirection;
 import net.quetzi.bluepower.api.vec.Vector3;
 import net.quetzi.bluepower.references.Dependencies;
 import net.quetzi.bluepower.util.RayTracer;
@@ -345,13 +344,12 @@ public abstract class BPPart {
      */
     private boolean shouldNotifyUpdates = false;
     
-    public final void notifyUpdate() {
+    public void notifyUpdate() {
     
         if (!shouldNotifyUpdates) return;
         
-        for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
-            world.notifyBlockOfNeighborChange(x + d.offsetX, y + d.offsetY, z + d.offsetZ, world.getBlock(x, y, z));
-        }
+        world.notifyBlockChange(x, y, z, world.getBlock(x, y, z));
+        markPartForRenderUpdate();
     }
     
 }

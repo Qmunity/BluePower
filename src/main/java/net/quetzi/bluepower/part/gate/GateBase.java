@@ -12,8 +12,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -22,6 +24,7 @@ import net.quetzi.bluepower.api.part.RedstoneConnection;
 import net.quetzi.bluepower.api.vec.Vector3;
 import net.quetzi.bluepower.api.vec.Vector3Cube;
 import net.quetzi.bluepower.client.renderers.RenderHelper;
+import net.quetzi.bluepower.init.BPItems;
 import net.quetzi.bluepower.references.Refs;
 
 import org.lwjgl.opengl.GL11;
@@ -209,6 +212,17 @@ public class GateBase extends BPPartFace {
         
         getConnection(2).setPower(getConnection(0).getPower());
         getConnection(3).setPower(getConnection(1).getPower());
+    }
+    
+    @Override
+    public boolean onActivated(EntityPlayer player, MovingObjectPosition mop, ItemStack item) {
+    
+        if (item != null && item.getItem() == BPItems.screwdriver) {
+            setRotation(getRotation() + 1);
+            return true;
+        }
+        
+        return super.onActivated(player, mop, item);
     }
     
 }

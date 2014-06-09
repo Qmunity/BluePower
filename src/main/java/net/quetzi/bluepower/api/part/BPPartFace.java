@@ -8,20 +8,20 @@
 
 package net.quetzi.bluepower.api.part;
 
-import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.quetzi.bluepower.api.vec.Vector3;
+import net.quetzi.bluepower.helper.RedstoneHelper;
 import net.quetzi.bluepower.util.ForgeDirectionUtils;
 
 import org.lwjgl.opengl.GL11;
 
 public abstract class BPPartFace extends BPPart implements IBPFacePart, IBPRedstonePart {
     
-    private int                  face        = 0;
-    private int                  rotation    = 0;
+    private int                    face        = 0;
+    private int                    rotation    = 0;
     
     protected RedstoneConnection[] connections = new RedstoneConnection[4];
     
@@ -34,6 +34,20 @@ public abstract class BPPartFace extends BPPart implements IBPFacePart, IBPRedst
     public void setFace(int face) {
     
         this.face = face;
+        notifyUpdate();
+    }
+    
+    @Override
+    public int getRotation() {
+    
+        return rotation;
+    }
+    
+    @Override
+    public void setRotation(int rotation) {
+    
+        this.rotation = rotation % 4;
+        notifyUpdate();
     }
     
     @Override
@@ -64,20 +78,27 @@ public abstract class BPPartFace extends BPPart implements IBPFacePart, IBPRedst
     
     @Override
     public final boolean canConnect(ForgeDirection side) {
+    
+        RedstoneConnection con = getConnection(side);
+        if (con == null) return false;
         
-        return getConnection(side).isEnabled();
+        return con.isEnabled();
     }
     
     @Override
     public final int getStrongOutput(ForgeDirection side) {
     
-        return getConnection(side).isOutput() ? getConnection(side).getPower() : 0;
+        return getWeakOutput(side);
     }
     
     @Override
     public final int getWeakOutput(ForgeDirection side) {
     
-        return getConnection(side).isOutput() ? getConnection(side).getPower() : 0;
+        RedstoneConnection con = getConnection(side);
+        if (con == null) return 0;
+        System.out.println(side + " " + con.isOutput() + " " + con.getPower());
+        
+        return con.isOutput() ? con.getPower() : 0;
     }
     
     @Override
@@ -85,11 +106,10 @@ public abstract class BPPartFace extends BPPart implements IBPFacePart, IBPRedst
     
         GL11.glTranslated(loc.getX(), loc.getY(), loc.getZ());
         
-        for (int i = 0; i < rotation; i++)
-            GL11.glRotated(90, 0, 1, 0);
-        
         GL11.glTranslated(0.5, 0.5, 0.5);
         {
+            GL11.glRotated(90 * rotation, 0, 1, 0);
+            
             switch (getFace()) {
                 case 0:
                     GL11.glRotated(180, 1, 0, 0);
@@ -116,7 +136,7 @@ public abstract class BPPartFace extends BPPart implements IBPFacePart, IBPRedst
     public RedstoneConnection getConnection(int id) {
     
         try {
-            return connections[id];
+            return connections[(id + rotation) % 4];
         } catch (Exception ex) {
         }
         return null;
@@ -137,16 +157,31 @@ public abstract class BPPartFace extends BPPart implements IBPFacePart, IBPRedst
         ForgeDirection face = ForgeDirection.getOrientation(getFace());
         
         if (face == ForgeDirection.UP || face == ForgeDirection.DOWN) {
-            id = ForgeDirectionUtils.getSide(dir) - 2;
-        } else if (face == ForgeDirection.NORTH || face == ForgeDirection.SOUTH) {
             switch (dir) {
-                case DOWN:
+                case NORTH:
                     id = 0;
                     break;
-                case UP:
+                case EAST:
                     id = 1;
                     break;
+                case SOUTH:
+                    id = 2;
+                    break;
+                case WEST:
+                    id = 3;
+                    break;
+                default:
+                    break;
+            }
+        } else if (face == ForgeDirection.NORTH || face == ForgeDirection.SOUTH) {
+            switch (dir) {
+                case UP:
+                    id = 0;
+                    break;
                 case EAST:
+                    id = 1;
+                    break;
+                case DOWN:
                     id = 2;
                     break;
                 case WEST:
@@ -157,13 +192,13 @@ public abstract class BPPartFace extends BPPart implements IBPFacePart, IBPRedst
             }
         } else if (face == ForgeDirection.EAST || face == ForgeDirection.WEST) {
             switch (dir) {
-                case DOWN:
+                case UP:
                     id = 0;
                     break;
-                case UP:
+                case NORTH:
                     id = 1;
                     break;
-                case NORTH:
+                case DOWN:
                     id = 2;
                     break;
                 case SOUTH:
@@ -185,11 +220,15 @@ public abstract class BPPartFace extends BPPart implements IBPFacePart, IBPRedst
         for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
             RedstoneConnection rc = getConnection(d);
             if (rc != null && rc.isInput()) {
-                Block b = world.getBlock(x + d.offsetX, y + d.offsetY, z + d.offsetZ);
-                rc.setPower(Math.max(b.isProvidingWeakPower(world, x + d.offsetX, y + d.offsetY, z + d.offsetZ, ForgeDirectionUtils.getSide(d)),
-                        b.isProvidingStrongPower(world, x + d.offsetX, y + d.offsetY, z + d.offsetZ, ForgeDirectionUtils.getSide(d))));
+                rc.setPower(RedstoneHelper.getInput(world, x, y, z, d));
             }
         }
+    }
+    
+    @Override
+    public void notifyUpdate() {
+    
+        super.notifyUpdate();
     }
     
 }

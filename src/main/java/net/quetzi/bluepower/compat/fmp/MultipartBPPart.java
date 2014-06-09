@@ -157,10 +157,8 @@ public class MultipartBPPart extends TMultiPart implements IRedstonePart, JNorma
     
     @Override
     public int strongPowerLevel(int side) {
-    
-        if (getPart() instanceof IBPRedstonePart) return ((IBPRedstonePart) getPart()).getStrongOutput(ForgeDirection.getOrientation(side));
         
-        return 0;
+        return weakPowerLevel(side);
     }
     
     @Override

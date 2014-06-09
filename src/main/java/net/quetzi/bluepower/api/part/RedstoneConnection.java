@@ -55,15 +55,22 @@ public class RedstoneConnection {
     }
     
     public void enable() {
-    
+
+        boolean was = this.isEnabled;
+        
         this.isEnabled = true;
         part.notifyUpdate();
+        if(!was)
+            part.notifyUpdate();
     }
     
     public void disable() {
     
+        boolean was = this.isEnabled;
+        
         this.isEnabled = false;
-        part.notifyUpdate();
+        if(was)
+            part.notifyUpdate();
     }
     
     public boolean isEnabled() {
@@ -73,8 +80,12 @@ public class RedstoneConnection {
     
     public void setPower(int power) {
     
+        int last = this.power;
+        
         this.power = power;
-        part.notifyUpdate();
+        
+        if(last != power)
+            part.notifyUpdate();
     }
     
     public int getPower() {

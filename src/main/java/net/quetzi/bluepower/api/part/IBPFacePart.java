@@ -22,6 +22,10 @@ public interface IBPFacePart {
     public int getFace();
 
     public void setFace(int face);
+    
+    public int getRotation();
+    
+    public void setRotation(int rotation);
 
     public boolean canStay();
 
