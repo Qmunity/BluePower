@@ -17,17 +17,17 @@
 
 package net.quetzi.bluepower.items;
 
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.monster.EntityEnderman;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraftforge.common.util.EnumHelper;
 import net.quetzi.bluepower.references.Refs;
 
 public class ItemAthame extends ItemSword {
-
-    private float damageBonus;
+    private float damageDealt;
     private static ToolMaterial athameMaterial = EnumHelper.addToolMaterial("SILVER", 0, 100, 6.0F, 2.0F, 10);
 
     public ItemAthame() {
@@ -35,26 +35,24 @@ public class ItemAthame extends ItemSword {
         super(athameMaterial);
         this.setMaxDamage(100);
         this.setUnlocalizedName(Refs.ITEMATHAME_NAME);
-        this.setTextureName(Refs.MODID + ":" + this.getUnlocalizedName().substring(5));
+        this.setTextureName(Refs.MODID + ":" + Refs.ITEMATHAME_NAME);
         this.maxStackSize = 1;
+        this.setFull3D();
     }
 
     @Override
     public float func_150931_i() {
 
-        return this.athameMaterial.getDamageVsEntity() + this.damageBonus;
+        return this.damageDealt;
     }
-
+    // TODO: This method does not work and needs fixing ~Q
     @Override
-    public boolean hitEntity(ItemStack itemStack, EntityLivingBase entityLivingBase, EntityLivingBase player) {
-
-        if ((entityLivingBase instanceof EntityEnderman) || (entityLivingBase instanceof EntityDragon)) {
-            this.damageBonus = 10.0F;
+    public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity entity) {
+        if ((entity instanceof EntityEnderman) || (entity instanceof EntityDragon)) {
+           this.damageDealt = athameMaterial.getDamageVsEntity() + 25.0F;
         } else {
-            this.damageBonus = 0.0F;
+            this.damageDealt = athameMaterial.getDamageVsEntity();
         }
-        itemStack.damageItem(1, player);
-        return true;
+        return false;
     }
-
 }
