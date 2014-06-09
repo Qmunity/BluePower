@@ -20,6 +20,7 @@ package net.quetzi.bluepower.items;
 import com.google.common.collect.Sets;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
+import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -34,7 +35,9 @@ import java.util.Set;
 public class ItemSickle extends ItemTool {
 
     @SuppressWarnings("rawtypes")
-    private static final Set toolBlocks = Sets.newHashSet(new Block[] { Blocks.leaves, Blocks.leaves2, Blocks.wheat, Blocks.potatoes, Blocks.carrots });
+    private static final Set toolBlocks = Sets.newHashSet(new Block[] { Blocks.leaves, Blocks.leaves2, Blocks.wheat, Blocks.potatoes, Blocks.carrots,
+            Blocks.nether_wart, Blocks.red_mushroom, Blocks.brown_mushroom, Blocks.reeds, Blocks.tallgrass, Blocks.vine, Blocks.waterlily,
+            Blocks.red_flower, Blocks.yellow_flower });
     private              int cropRadius = 2;
     private              int leafRadius = 1;
 
@@ -49,7 +52,11 @@ public class ItemSickle extends ItemTool {
     @SuppressWarnings("static-access")
     public float func_150893_a(ItemStack itemStack, Block block) {
 
-        return this.toolBlocks.contains(block) ? this.efficiencyOnProperMaterial : 1.0F;
+        if ((block.getMaterial() == Material.leaves) || (block.getMaterial() == Material.plants) || (block.getMaterial() == Material.grass) || this.toolBlocks.contains(block)) {
+
+            return this.efficiencyOnProperMaterial;
+        }
+        return 1.0F;
     }
 
     public boolean hitEntity(ItemStack itemStack, EntityLivingBase par2EntityLivingBase, EntityLivingBase par3EntityLivingBase) {
@@ -67,7 +74,7 @@ public class ItemSickle extends ItemTool {
 
         if ((block != null) && (block.isLeaves(world, x, y, z))) {
             for (int i = -this.leafRadius; i <= this.leafRadius; i++) {
-                for (int j = -this.leafRadius; j <= this.leafRadius; j++)
+                for (int j = -this.leafRadius; j <= this.leafRadius; j++) {
                     for (int k = -this.leafRadius; k <= this.leafRadius; k++) {
                         Block blockToCheck = world.getBlock(x + i, y + j, z + k);
                         int meta = world.getBlockMetadata(x + i, y + j, z + k);
@@ -79,6 +86,7 @@ public class ItemSickle extends ItemTool {
                             used = true;
                         }
                     }
+                }
             }
             if (used) {
                 itemStack.damageItem(1, entityLiving);

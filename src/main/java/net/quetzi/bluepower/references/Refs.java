@@ -63,6 +63,8 @@ public class Refs {
     public static final String IRONSAW_NAME           = "iron_saw";
     public static final String SILICONBOULE_NAME      = "silicon_boule";
     public static final String SILICONWAFER_NAME      = "silicon_wafer";
+    public static final String BLUEDOPEDWAFER_NAME    = "blue_doped_wafer";
+    public static final String REDDOPEDWAFER_NAME     = "red_doped_wafer";
     public static final String BLOCKBREAKER_NAME      = "block_breaker";
 
     public static final String ITEMBRASSINGOT_NAME     = "brass_ingot";
@@ -101,6 +103,7 @@ public class Refs {
     public static final String GOLDSICKLE_NAME    = "gold_sickle";
     public static final String DIAMONDSICKLE_NAME = "diamond_sickle";
 
+    public static final String SCREWDRIVER_NAME = "screwdriver";
     public static final String MULTIPART_NAME = "bluepower_multipart";
 
     public static final String CRACKEDBASALTBRICK_NAME  = "basaltbrick_cracked";
