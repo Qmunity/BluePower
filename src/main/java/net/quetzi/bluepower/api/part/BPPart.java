@@ -347,6 +347,7 @@ public abstract class BPPart {
     public void notifyUpdate() {
     
         if (!shouldNotifyUpdates) return;
+        if (world == null) return;
         
         world.notifyBlockChange(x, y, z, world.getBlock(x, y, z));
         markPartForRenderUpdate();

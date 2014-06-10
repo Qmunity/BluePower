@@ -12,6 +12,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.quetzi.bluepower.api.part.BPPart;
 import net.quetzi.bluepower.api.part.BPPartFace;
+import net.quetzi.bluepower.api.part.FaceDirection;
 import net.quetzi.bluepower.api.part.IBPFacePart;
 import codechicken.lib.data.MCDataInput;
 import codechicken.lib.data.MCDataOutput;
@@ -81,7 +82,7 @@ public class MultipartFaceBPPart extends MultipartBPPart implements TFacePart, I
         packet.writeInt(facePart.getFace());
         packet.writeInt(facePart.getRotation());
         for (int i = 0; i < 4; i++) {
-            packet.writeNBTTagCompound(((BPPartFace) getPart()).getConnection(i).getNBTTag());
+            packet.writeNBTTagCompound(((BPPartFace) getPart()).getConnection(FaceDirection.getDirection(i)).getNBTTag());
         }
     }
     
@@ -92,7 +93,7 @@ public class MultipartFaceBPPart extends MultipartBPPart implements TFacePart, I
         facePart.setFace(packet.readInt());
         facePart.setRotation(packet.readInt());
         for (int i = 0; i < 4; i++) {
-            ((BPPartFace) getPart()).getConnection(i).load(packet.readNBTTagCompound());
+            ((BPPartFace) getPart()).getConnection(FaceDirection.getDirection(i)).load(packet.readNBTTagCompound());
         }
     }
     
@@ -103,7 +104,7 @@ public class MultipartFaceBPPart extends MultipartBPPart implements TFacePart, I
         tag.setInteger("face", facePart.getFace());
         tag.setInteger("rotation", facePart.getRotation());
         for (int i = 0; i < 4; i++) {
-            tag.setTag("con_" + i, ((BPPartFace) getPart()).getConnection(i).getNBTTag());
+            tag.setTag("con_" + i, ((BPPartFace) getPart()).getConnection(FaceDirection.getDirection(i)).getNBTTag());
         }
     }
     
@@ -114,7 +115,7 @@ public class MultipartFaceBPPart extends MultipartBPPart implements TFacePart, I
         facePart.setFace(tag.getInteger("face"));
         facePart.setRotation(tag.getInteger("rotation"));
         for (int i = 0; i < 4; i++) {
-            ((BPPartFace) getPart()).getConnection(i).load(tag.getCompoundTag("con_" + i));
+            ((BPPartFace) getPart()).getConnection(FaceDirection.getDirection(i)).load(tag.getCompoundTag("con_" + i));
         }
     }
     

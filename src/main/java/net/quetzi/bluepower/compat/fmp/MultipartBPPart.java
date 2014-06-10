@@ -114,7 +114,7 @@ public class MultipartBPPart extends TMultiPart implements IRedstonePart, JNorma
     public void load(NBTTagCompound tag) {
     
         super.load(tag);
-        String type = tag.getString("id");
+        String type = tag.getString("part_id");
         if (getPart() == null) setPart(PartRegistry.createPart(type));
     }
     
@@ -122,7 +122,7 @@ public class MultipartBPPart extends TMultiPart implements IRedstonePart, JNorma
     public void save(NBTTagCompound tag) {
     
         super.save(tag);
-        tag.setString("id", getPart().getType());
+        tag.setString("part_id", getPart().getType());
     }
     
     @Override

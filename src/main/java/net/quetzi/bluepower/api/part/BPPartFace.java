@@ -132,10 +132,13 @@ public abstract class BPPartFace extends BPPart implements IBPFacePart, IBPRedst
         GL11.glTranslated(-0.5, -0.5, -0.5);
     }
     
-    public RedstoneConnection getConnection(int id) {
+    public RedstoneConnection getConnection(FaceDirection dir) {
     
+        if(dir == null)
+            return null;
+        
         try {
-            return connections[(id + rotation) % 4];
+            return connections[(dir.ordinal() + rotation) % 4];
         } catch (Exception ex) {
         }
         return null;
@@ -208,7 +211,10 @@ public abstract class BPPartFace extends BPPart implements IBPFacePart, IBPRedst
             }
         }
         
-        return getConnection(id);
+        if(id < 0)
+            return null;
+        
+        return getConnection(FaceDirection.getDirection(id));
     }
     
     @Override

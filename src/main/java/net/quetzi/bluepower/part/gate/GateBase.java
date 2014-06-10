@@ -20,6 +20,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.quetzi.bluepower.api.part.BPPartFace;
+import net.quetzi.bluepower.api.part.FaceDirection;
 import net.quetzi.bluepower.api.part.RedstoneConnection;
 import net.quetzi.bluepower.api.vec.Vector3;
 import net.quetzi.bluepower.api.vec.Vector3Cube;
@@ -43,10 +44,9 @@ public class GateBase extends BPPartFace {
             connections[i] = new RedstoneConnection(this, i + "", true, false);
         
         for (int i = 0; i < 4; i++)
-            getConnection(i).enable();
+            getConnection(FaceDirection.getDirection(i)).enable();
         
-        getConnection(2).setOutput();
-        getConnection(3).setOutput();
+        getConnection(FaceDirection.FRONT).setOutput();
     }
     
     @Override
@@ -79,7 +79,7 @@ public class GateBase extends BPPartFace {
     
     @Override
     public List<AxisAlignedBB> getSelectionBoxes() {
-    
+        
         List<AxisAlignedBB> aabbs = new ArrayList<AxisAlignedBB>();
         
         aabbs.add(hitbox.toAABB());
@@ -210,8 +210,13 @@ public class GateBase extends BPPartFace {
     
         super.update();
         
-        getConnection(2).setPower(getConnection(0).getPower());
-        getConnection(3).setPower(getConnection(1).getPower());
+        int power = 0;
+
+        power = Math.max(power, getConnection(FaceDirection.LEFT).getPower() - 1);
+        power = Math.max(power, getConnection(FaceDirection.BACK).getPower() - 1);
+        power = Math.max(power, getConnection(FaceDirection.RIGHT).getPower() - 1);
+        
+        getConnection(FaceDirection.FRONT).setPower(power);
     }
     
     @Override

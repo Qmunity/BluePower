@@ -102,17 +102,45 @@ public class Vector3Cube {
             dir = ForgeDirection.getOrientation(ForgeDirection.ROTATION_MATRIX[ForgeDirectionUtils.getSide(last)][ForgeDirectionUtils.getSide(dir)]);
         }
         
-        Vector3 min = this.min.clone();
-        Vector3 max = this.max.clone();
+        double mul = 1;
+        ForgeDirection o = dir;
+        switch(o){
+            case DOWN:
+                mul = 2;
+                dir = ForgeDirection.NORTH;
+                break;
+            case EAST:
+                dir = ForgeDirection.SOUTH;
+                break;
+            case NORTH:
+                dir = ForgeDirection.EAST;
+                break;
+            case SOUTH:
+                dir = ForgeDirection.WEST;
+                break;
+            case UP:
+                mul = 0;
+                break;
+            case WEST:
+                dir = ForgeDirection.NORTH;
+                break;
+            default:
+                break;
+            
+        }
+
+        double rx = dir.offsetX * (Math.PI/2) * mul;
+        double ry = dir.offsetY * (Math.PI/2) * mul;
+        double rz = dir.offsetZ * (Math.PI/2) * mul;
         
-        rotate(min, dir);
-        rotate(max, dir);
-        
+        Vector3 min = this.min.clone().subtract(0.5, 0.5, 0.5);
+        min.rotate(rx, ry, rz);
+        min.add(0.5, 0.5, 0.5);
+        Vector3 max = this.max.clone().subtract(0.5, 0.5, 0.5);
+        max.rotate(rx, ry, rz);
+        max.add(0.5, 0.5, 0.5);
+
         return new Vector3Cube(min, max);
-    }
-    
-    private void rotate(Vector3 vec, ForgeDirection dir) {
-    
     }
     
 }

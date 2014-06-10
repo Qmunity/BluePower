@@ -90,6 +90,7 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
         bufferedRecyclingItems.add(recycledItem);
     }
 
+    @SuppressWarnings("unchecked")
     public void generateRecyclingRecipes() {
 
         for (ItemStack recyclingItem : bufferedRecyclingItems) {
