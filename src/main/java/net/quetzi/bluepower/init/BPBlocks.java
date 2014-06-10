@@ -17,10 +17,18 @@
 
 package net.quetzi.bluepower.init;
 
-import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
-import net.quetzi.bluepower.blocks.*;
+import net.quetzi.bluepower.blocks.BlockAlloyFurnace;
+import net.quetzi.bluepower.blocks.BlockBlockBreaker;
+import net.quetzi.bluepower.blocks.BlockCrackedBasalt;
+import net.quetzi.bluepower.blocks.BlockCrop;
+import net.quetzi.bluepower.blocks.BlockCustomFlower;
+import net.quetzi.bluepower.blocks.BlockIgniter;
+import net.quetzi.bluepower.blocks.BlockItemOre;
+import net.quetzi.bluepower.blocks.BlockStoneOre;
+import net.quetzi.bluepower.blocks.BlockStoneOreConnected;
 import net.quetzi.bluepower.references.Refs;
+import cpw.mods.fml.common.registry.GameRegistry;
 
 public class BPBlocks {
 
@@ -63,6 +71,7 @@ public class BPBlocks {
 
     public static Block alloy_furnace;
     public static Block block_breaker;
+    public static Block igniter;
 
     public static void init() {
 
@@ -103,6 +112,7 @@ public class BPBlocks {
 
         alloy_furnace = new BlockAlloyFurnace();
         block_breaker = new BlockBlockBreaker();
+        igniter = new BlockIgniter();
 
         registerBlocks();
     }
@@ -146,5 +156,6 @@ public class BPBlocks {
 
         GameRegistry.registerBlock(alloy_furnace, Refs.ALLOYFURNACE_NAME);
         GameRegistry.registerBlock(block_breaker, Refs.BLOCKBREAKER_NAME);
+        GameRegistry.registerBlock(igniter, Refs.BLOCKIGNITER_NAME);
     }
 }

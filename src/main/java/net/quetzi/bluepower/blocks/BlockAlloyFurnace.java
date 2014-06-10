@@ -129,11 +129,11 @@ public class BlockAlloyFurnace extends BlockContainerBase {
     @SideOnly(Side.CLIENT)
     public void registerBlockIcons(IIconRegister iconRegister) {
 
-        this.textureTop = iconRegister.registerIcon(Refs.MODID + ":" + this.getUnlocalizedName().substring(5) + "_top");
-        this.textureBottom = iconRegister.registerIcon(Refs.MODID + ":" + this.getUnlocalizedName().substring(5) + "_bottom");
-        this.textureSide = iconRegister.registerIcon(Refs.MODID + ":" + this.getUnlocalizedName().substring(5) + "_side");
-        this.textureFrontOn = iconRegister.registerIcon(Refs.MODID + ":" + this.getUnlocalizedName().substring(5) + "_front_on");
-        this.textureFrontOff = iconRegister.registerIcon(Refs.MODID + ":" + this.getUnlocalizedName().substring(5) + "_front_off");
+        this.textureTop = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + this.getUnlocalizedName().substring(5) + "_top");
+        this.textureBottom = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + this.getUnlocalizedName().substring(5) + "_bottom");
+        this.textureSide = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + this.getUnlocalizedName().substring(5) + "_side");
+        this.textureFrontOn = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + this.getUnlocalizedName().substring(5) + "_front_on");
+        this.textureFrontOff = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + this.getUnlocalizedName().substring(5) + "_front_off");
     }
 
     @Override

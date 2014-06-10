@@ -55,9 +55,9 @@ public class BlockBlockBreaker extends BlockContainerBase {
     @SideOnly(Side.CLIENT)
     public void registerBlockIcons(IIconRegister iconRegister) {
 
-        this.textureFront = iconRegister.registerIcon(Refs.MODID + ":" + Refs.BLOCKBREAKER_NAME + "_front");
-        this.textureBack = iconRegister.registerIcon(Refs.MODID + ":" + Refs.BLOCKBREAKER_NAME + "_back");
-        this.blockIcon = iconRegister.registerIcon(Refs.MODID + ":" + Refs.BLOCKBREAKER_NAME);
+        this.textureFront = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + Refs.BLOCKBREAKER_NAME + "_front");
+        this.textureBack = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + Refs.BLOCKBREAKER_NAME + "_back");
+        this.blockIcon = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + Refs.BLOCKBREAKER_NAME + "_side");
     }
 
     @Override

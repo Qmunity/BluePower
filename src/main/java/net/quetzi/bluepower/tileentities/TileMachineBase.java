@@ -25,10 +25,10 @@ public class TileMachineBase extends TileBase {
 
         if (!worldObj.isRemote) {
             if (getTicker() % 10 == 0 && !internalItemStackBuffer.isEmpty()) {
-                if (IOHelper.canInterfaceWith(tileAtOutput, this.blockMetadata)) {
+                if (IOHelper.canInterfaceWith(tileAtOutput, getFacingDirection())) {
                     for (Iterator<ItemStack> iterator = internalItemStackBuffer.iterator(); iterator.hasNext(); ) {
                         ItemStack itemStack = iterator.next();
-                        ItemStack returnedStack = IOHelper.insert(tileAtOutput, itemStack, this.blockMetadata, false);
+                        ItemStack returnedStack = IOHelper.insert(tileAtOutput, itemStack, getFacingDirection(), false);
                         if (returnedStack == null) {
                             iterator.remove();
                             markDirty();
@@ -37,7 +37,7 @@ public class TileMachineBase extends TileBase {
                         }
                     }
                 } else if (spawnItemsInWorld) {
-                    ForgeDirection direction = ForgeDirection.getOrientation(this.blockMetadata).getOpposite();
+                    ForgeDirection direction = getFacingDirection().getOpposite();
                     if (worldObj.isAirBlock(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ)) {
                         for (Iterator<ItemStack> iterator = internalItemStackBuffer.iterator(); iterator.hasNext(); ) {
                             ItemStack itemStack = iterator.next();

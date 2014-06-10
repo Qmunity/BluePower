@@ -17,12 +17,13 @@
 
 package net.quetzi.bluepower.tileentities;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-
-import java.util.ArrayList;
-import java.util.List;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public class TileBase extends TileEntity {
 
@@ -79,22 +80,23 @@ public class TileBase extends TileEntity {
     public void checkRedstonePower() {
 
         boolean isIndirectlyPowered = getWorldObj().isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord);
-        if (isIndirectlyPowered && !isRedstonePowered) {
-            isRedstonePowered = true;
-            this.redstoneChanged(isRedstonePowered);
-        } else if (isRedstonePowered && !isIndirectlyPowered) {
-            isRedstonePowered = false;
-            this.redstoneChanged(isRedstonePowered);
+        if (isIndirectlyPowered && !getIsRedstonePowered()) {
+            this.redstoneChanged(true);
+        } else if (getIsRedstonePowered() && !isIndirectlyPowered) {
+            this.redstoneChanged(false);
         }
     }
 
     /**
-     * This method can be overwritten to get alerted when the redstone level has changed.
-     *
-     * @param newValue The redstone level it is at now
+     * This method can be overwritten to get alerted when the redstone level has
+     * changed.
+     * 
+     * @param newValue
+     *            The redstone level it is at now
      */
     protected void redstoneChanged(boolean newValue) {
 
+        isRedstonePowered = newValue;
     }
 
     /**
@@ -107,7 +109,7 @@ public class TileBase extends TileEntity {
 
     /**
      * Returns the ticker of the Tile, this number wll increase every tick
-     *
+     * 
      * @return the ticker
      */
     public int getTicker() {
@@ -116,7 +118,8 @@ public class TileBase extends TileEntity {
     }
 
     /**
-     * Gets called when the TileEntity ticks for the first time, the world is accessible and updateEntity() has not been ran yet
+     * Gets called when the TileEntity ticks for the first time, the world is
+     * accessible and updateEntity() has not been ran yet
      */
     protected void onTileLoaded() {
 
@@ -126,5 +129,10 @@ public class TileBase extends TileEntity {
     public List<ItemStack> getDrops() {
 
         return new ArrayList<ItemStack>();
+    }
+
+    public ForgeDirection getFacingDirection() {
+
+        return ForgeDirection.getOrientation(blockMetadata);
     }
 }

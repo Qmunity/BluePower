@@ -25,6 +25,8 @@ public class Refs {
     private static final String MINOR     = "@MINOR@";
     private static final String BUILD     = "@BUILD_NUMBER@";
     private static final String MCVERSION = "1.7.2";
+    
+    public static final String MACHINE_TEXTURE_LOCATION = "machines/";
 
     public static final double PACKET_UPDATE_DISTANCE = 64;
     public static final String PROXY_LOCATION         = "net.quetzi.bluepower";
@@ -150,6 +152,7 @@ public class Refs {
     public static final String INVERTEDLAMP_BLACK     = "invertedlamp_black";
 
     public static final String ITEMATHAME_NAME        = "athame";
+    public static final String BLOCKIGNITER_NAME      = "igniter";
 
     public static String fullVersionString() {
 

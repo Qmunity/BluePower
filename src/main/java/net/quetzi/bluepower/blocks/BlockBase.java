@@ -19,9 +19,13 @@ package net.quetzi.bluepower.blocks;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.MathHelper;
+import net.minecraft.world.World;
 import net.quetzi.bluepower.init.CustomTabs;
 
-public class BlockBase extends Block {
+public abstract class BlockBase extends Block {
 
     public BlockBase(Material material) {
 
@@ -29,5 +33,32 @@ public class BlockBase extends Block {
         this.setStepSound(soundTypeStone);
         this.setCreativeTab(CustomTabs.tabBluePowerMachines);
         this.blockHardness = 3.0F;
+    }
+
+    /**
+     * Method to detect how the block was placed, and what way it's facing.
+     */
+    @Override
+    public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase player, ItemStack iStack) {
+
+        int sideToPlace = MathHelper.floor_double(player.rotationYaw / 90F + 0.5D) & 3;
+
+        int metaDataToSet = 0;
+        switch (sideToPlace) {
+        case 0:
+            metaDataToSet = 2;
+            break;
+        case 1:
+            metaDataToSet = 5;
+            break;
+        case 2:
+            metaDataToSet = 3;
+            break;
+        case 3:
+            metaDataToSet = 4;
+            break;
+        }
+
+        world.setBlockMetadataWithNotify(x, y, z, metaDataToSet, 2);
     }
 }
