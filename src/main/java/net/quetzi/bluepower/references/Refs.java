@@ -25,6 +25,8 @@ public class Refs {
     private static final String MINOR     = "@MINOR@";
     private static final String BUILD     = "@BUILD_NUMBER@";
     private static final String MCVERSION = "1.7.2";
+    
+    public static final String MACHINE_TEXTURE_LOCATION = "machines/";
 
     public static final double PACKET_UPDATE_DISTANCE = 64;
     public static final String PROXY_LOCATION         = "net.quetzi.bluepower";

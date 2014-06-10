@@ -63,12 +63,12 @@ public class BlockIgniter extends BlockContainerBase {
     @SideOnly(Side.CLIENT)
     public void registerBlockIcons(IIconRegister iconRegister) {
 
-        this.textureFrontOn = iconRegister.registerIcon(Refs.MODID + ":" + Refs.BLOCKIGNITER_NAME + "_front_on");
-        this.textureFrontOff = iconRegister.registerIcon(Refs.MODID + ":" + Refs.BLOCKIGNITER_NAME + "_front_off");
-        this.textureBack = iconRegister.registerIcon(Refs.MODID + ":" + Refs.BLOCKIGNITER_NAME + "_back");
-        this.textureSide1 = iconRegister.registerIcon(Refs.MODID + ":" + Refs.BLOCKIGNITER_NAME + "_side_0");
-        this.textureSide2 = iconRegister.registerIcon(Refs.MODID + ":" + Refs.BLOCKIGNITER_NAME + "_side_1");
-        this.blockIcon = iconRegister.registerIcon(Refs.MODID + ":" + Refs.BLOCKIGNITER_NAME + "_side_0");
+        this.textureFrontOn = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + Refs.BLOCKIGNITER_NAME + "_front_on");
+        this.textureFrontOff = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + Refs.BLOCKIGNITER_NAME + "_front_off");
+        this.textureBack = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + Refs.BLOCKIGNITER_NAME + "_back");
+        this.textureSide1 = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + Refs.BLOCKIGNITER_NAME + "_side_0");
+        this.textureSide2 = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + Refs.BLOCKIGNITER_NAME + "_side_1");
+        this.blockIcon = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + Refs.BLOCKIGNITER_NAME + "_side_0");
     }
 
     @Override
