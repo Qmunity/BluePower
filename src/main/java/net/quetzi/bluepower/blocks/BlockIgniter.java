@@ -28,7 +28,7 @@ import net.quetzi.bluepower.tileentities.tier1.TileIgniter;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class BlockIgniter extends BlockBase {
+public class BlockIgniter extends BlockContainerBase {
 
     private IIcon textureFrontOn;
     private IIcon textureFrontOff;

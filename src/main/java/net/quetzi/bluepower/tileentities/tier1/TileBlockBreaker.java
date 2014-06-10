@@ -44,9 +44,9 @@ public class TileBlockBreaker extends TileMachineBase {
 
             worldObj.func_147480_a(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ, false); //destroyBlock
 
-            if (IOHelper.canInterfaceWith(tileEntity, direction.ordinal())) {
+            if (IOHelper.canInterfaceWith(tileEntity, direction)) {
                 for (ItemStack breakStack : breakStacks) {
-                    ItemStack returnedStack = IOHelper.insert(tileEntity, breakStack, direction.ordinal(), false);
+                    ItemStack returnedStack = IOHelper.insert(tileEntity, breakStack, direction, false);
                     if (returnedStack != null) {
                         internalItemStackBuffer.add(returnedStack);
                     }
@@ -60,10 +60,5 @@ public class TileBlockBreaker extends TileMachineBase {
                 internalItemStackBuffer.addAll(breakStacks);
             }
         }
-    }
-
-    public ForgeDirection getFacingDirection() {
-
-        return ForgeDirection.getOrientation(worldObj.getBlockMetadata(xCoord, yCoord, zCoord));
     }
 }

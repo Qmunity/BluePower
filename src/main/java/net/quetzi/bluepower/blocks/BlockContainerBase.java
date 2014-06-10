@@ -87,38 +87,10 @@ public abstract class BlockContainerBase extends BlockBase implements ITileEntit
         return false;
     }
 
-    /**
-     * Method to detect how the block was placed, and what way it's facing.
-     */
-    @Override
-    public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase player, ItemStack iStack) {
-
-        int sideToPlace = MathHelper.floor_double(player.rotationYaw / 90F + 0.5D) & 3;
-
-        int metaDataToSet = 0;
-        switch (sideToPlace) {
-            case 0:
-                metaDataToSet = 2;
-                break;
-            case 1:
-                metaDataToSet = 5;
-                break;
-            case 2:
-                metaDataToSet = 3;
-                break;
-            case 3:
-                metaDataToSet = 4;
-                break;
-        }
-
-        world.setBlockMetadataWithNotify(x, y, z, metaDataToSet, 2);
-    }
-
     @Override
     public void breakBlock(World world, int x, int y, int z, Block block, int meta) {
 
         TileBase tile = (TileBase) world.getTileEntity(x, y, z);
-        System.out.println(tile);
         for (ItemStack stack : tile.getDrops()) {
             IOHelper.spawnItemInWorld(world, stack, x + 0.5F, y + 0.5F, z + 0.5F);
         }

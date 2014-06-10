@@ -80,12 +80,10 @@ public class TileBase extends TileEntity {
     public void checkRedstonePower() {
 
         boolean isIndirectlyPowered = getWorldObj().isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord);
-        if (isIndirectlyPowered && !isRedstonePowered) {
-            isRedstonePowered = true;
-            this.redstoneChanged(isRedstonePowered);
-        } else if (isRedstonePowered && !isIndirectlyPowered) {
-            isRedstonePowered = false;
-            this.redstoneChanged(isRedstonePowered);
+        if (isIndirectlyPowered && !getIsRedstonePowered()) {
+            this.redstoneChanged(true);
+        } else if (getIsRedstonePowered() && !isIndirectlyPowered) {
+            this.redstoneChanged(false);
         }
     }
 
@@ -98,6 +96,7 @@ public class TileBase extends TileEntity {
      */
     protected void redstoneChanged(boolean newValue) {
 
+        isRedstonePowered = newValue;
     }
 
     /**
@@ -134,6 +133,6 @@ public class TileBase extends TileEntity {
 
     public ForgeDirection getFacingDirection() {
 
-        return ForgeDirection.getOrientation(worldObj.getBlockMetadata(xCoord, yCoord, zCoord));
+        return ForgeDirection.getOrientation(blockMetadata);
     }
 }

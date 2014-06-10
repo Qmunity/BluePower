@@ -45,10 +45,10 @@ public class IOHelper {
         return null;
     }
 
-    public static ItemStack insert(TileEntity tile, ItemStack itemStack, int side, boolean simulate) {
+    public static ItemStack insert(TileEntity tile, ItemStack itemStack, ForgeDirection direction, boolean simulate) {
 
         if (tile instanceof IInventory) {
-            return insert((IInventory) tile, itemStack, side, simulate);
+            return insert((IInventory) tile, itemStack, direction.ordinal(), simulate);
         }
         return itemStack;
     }
@@ -171,10 +171,10 @@ public class IOHelper {
         itemStack.stackSize = 0;
     }
 
-    public static boolean canInterfaceWith(TileEntity tile, int side) {
+    public static boolean canInterfaceWith(TileEntity tile, ForgeDirection direction) {
 
         if (tile instanceof IInventory) {
-            return !(tile instanceof ISidedInventory) || ((ISidedInventory) tile).getAccessibleSlotsFromSide(side).length > 0;
+            return !(tile instanceof ISidedInventory) || ((ISidedInventory) tile).getAccessibleSlotsFromSide(direction.ordinal()).length > 0;
         }
         return false;
     }
