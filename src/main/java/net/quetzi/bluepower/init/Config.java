@@ -20,47 +20,49 @@ package net.quetzi.bluepower.init;
 import net.minecraftforge.common.config.Configuration;
 
 public class Config {
-
-    public static boolean generateCopper;
-    public static int     minCopperY;
-    public static int     maxCopperY;
-    public static int     veinCountCopper;
-    public static int     veinSizeCopper;
-    public static boolean generateSilver;
-    public static int     minSilverY;
-    public static int     maxSilverY;
-    public static int     veinCountSilver;
-    public static int     veinSizeSilver;
-    public static boolean generateTin;
-    public static int     minTinY;
-    public static int     maxTinY;
-    public static int     veinCountTin;
-    public static int     veinSizeTin;
-    public static boolean generateNikolite;
-    public static int     minNikoliteY;
-    public static int     maxNikoliteY;
-    public static int     veinCountNikolite;
-    public static int     veinSizeNikolite;
-    public static boolean generateRuby;
-    public static int     minRubyY;
-    public static int     maxRubyY;
-    public static int     veinCountRuby;
-    public static int     veinSizeRuby;
-    public static boolean generateAmethyst;
-    public static int     minAmethystY;
-    public static int     maxAmethystY;
-    public static int     veinCountAmethyst;
-    public static int     veinSizeAmethyst;
-    public static boolean generateSapphire;
-    public static int     minSapphireY;
-    public static int     maxSapphireY;
-    public static int     veinCountSapphire;
-    public static int     veinSizeSapphire;
-    public static double  volcanoActiveToInactiveRatio;
-    public static double  volcanoSpawnChance;           // chance of a volcano spawning per chunk.
-
+    
+    public static boolean  generateCopper;
+    public static int      minCopperY;
+    public static int      maxCopperY;
+    public static int      veinCountCopper;
+    public static int      veinSizeCopper;
+    public static boolean  generateSilver;
+    public static int      minSilverY;
+    public static int      maxSilverY;
+    public static int      veinCountSilver;
+    public static int      veinSizeSilver;
+    public static boolean  generateTin;
+    public static int      minTinY;
+    public static int      maxTinY;
+    public static int      veinCountTin;
+    public static int      veinSizeTin;
+    public static boolean  generateNikolite;
+    public static int      minNikoliteY;
+    public static int      maxNikoliteY;
+    public static int      veinCountNikolite;
+    public static int      veinSizeNikolite;
+    public static boolean  generateRuby;
+    public static int      minRubyY;
+    public static int      maxRubyY;
+    public static int      veinCountRuby;
+    public static int      veinSizeRuby;
+    public static boolean  generateAmethyst;
+    public static int      minAmethystY;
+    public static int      maxAmethystY;
+    public static int      veinCountAmethyst;
+    public static int      veinSizeAmethyst;
+    public static boolean  generateSapphire;
+    public static int      minSapphireY;
+    public static int      maxSapphireY;
+    public static int      veinCountSapphire;
+    public static int      veinSizeSapphire;
+    public static double   volcanoActiveToInactiveRatio;
+    public static double   volcanoSpawnChance;          // chance of a volcano spawning per chunk.
+                                                         
+    public static String[] alloyFurnaceBlacklist;
+    
     public static void setUp(Configuration config) {
-
+    
         config.addCustomCategoryComment("World Gen", "Toggle blocks being generated into the world");
         generateCopper = config.get("World Gen Copper", "generateCopper", true).getBoolean(true);
         minCopperY = config.get("World Gen Copper", "minCopperY", 0).getInt();
@@ -99,5 +101,8 @@ public class Config {
         veinSizeSapphire = config.get("World Gen Sapphire", "veinSizeSapphire", 2).getInt();
         volcanoSpawnChance = config.get("World Gen", "volcanoSpawnChance", 0.02).getDouble(0);
         volcanoActiveToInactiveRatio = config.get("World Gen", "volcanoActiveToInactiveRatio", 0.5).getDouble(0);
+        
+        config.addCustomCategoryComment("Recipe Enabling", "Toggle recipes to be enabled or not");
+        alloyFurnaceBlacklist = config.get("Recipe Enabling", "alloyFurnaceBlacklist", new String[] { "minecraft:bucket", "minecraft:anvil" }).getStringList();
     }
 }
