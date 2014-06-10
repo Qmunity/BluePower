@@ -96,7 +96,6 @@ public abstract class BPPartFace extends BPPart implements IBPFacePart, IBPRedst
     
         RedstoneConnection con = getConnection(side);
         if (con == null) return 0;
-        System.out.println(side + " " + con.isOutput() + " " + con.getPower());
         
         return con.isOutput() ? con.getPower() : 0;
     }
@@ -223,12 +222,6 @@ public abstract class BPPartFace extends BPPart implements IBPFacePart, IBPRedst
                 rc.setPower(RedstoneHelper.getInput(world, x, y, z, d));
             }
         }
-    }
-    
-    @Override
-    public void notifyUpdate() {
-    
-        super.notifyUpdate();
     }
     
 }
