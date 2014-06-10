@@ -20,7 +20,7 @@ package net.quetzi.bluepower.api.recipe;
 import net.minecraft.item.ItemStack;
 
 public interface IAlloyFurnaceRegistry {
-
+    
     /**
      * With this you can add recipes that require special handling (like NBT dependent recipes). It's similar to Vanilla's IRecipe
      * For the normal recipes, use addRecipe(ItemStack output, Object... input).
@@ -28,7 +28,7 @@ public interface IAlloyFurnaceRegistry {
      * @param recipe
      */
     void addRecipe(IAlloyFurnaceRecipe recipe);
-
+    
     /**
      * Adds a recipe to the Alloy Furnace.
      *
@@ -37,13 +37,15 @@ public interface IAlloyFurnaceRegistry {
      *               You can only specify
      */
     void addRecipe(ItemStack output, Object... input);
-
+    
     /**
      * Any item added here will cause dynamically generated recipes that allows items to be broken down to this item.
      * In BluePower, this is called with an iron ingot.
      * It doesn't matter when you call this, as the recipes will be generated in the postInit.
      *
      * @param recycledItem
+     * @param blacklist list of item registry names ("minecraft:bucket") that shouldn't be added by the generator.
+     * As modder you could pass a config entry to this.
      */
-    void addRecyclingRecipe(ItemStack recycledItem);
+    void addRecyclingRecipe(ItemStack recycledItem, String... blacklist);
 }
