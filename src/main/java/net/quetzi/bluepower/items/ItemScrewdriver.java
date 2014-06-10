@@ -17,7 +17,12 @@
 
 package net.quetzi.bluepower.items;
 
+import net.minecraft.block.Block;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.quetzi.bluepower.init.CustomTabs;
 import net.quetzi.bluepower.references.Refs;
 
@@ -30,4 +35,14 @@ public class ItemScrewdriver extends Item {
         this.setMaxStackSize(1);
         this.setTextureName(Refs.MODID + ":" + this.getUnlocalizedName().substring(5));
     }
+
+    @Override
+    public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
+
+        Block block = world.getBlock(x, y, z);
+        block.rotateBlock(world, x, y, z, ForgeDirection.getOrientation(side));
+        stack.setItemDamage(stack.getItemDamage() + 1);
+        return false;
+    }
+
 }
