@@ -150,6 +150,7 @@ public class Refs {
     public static final String INVERTEDLAMP_BLACK     = "invertedlamp_black";
 
     public static final String ITEMATHAME_NAME        = "athame";
+    public static final String BLOCKIGNITER_NAME      = "igniter";
 
     public static String fullVersionString() {
 
