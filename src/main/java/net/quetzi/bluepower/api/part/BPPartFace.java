@@ -11,6 +11,7 @@ package net.quetzi.bluepower.api.part;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.Vec3;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.quetzi.bluepower.api.vec.Vector3;
 import net.quetzi.bluepower.helper.RedstoneHelper;
@@ -66,6 +67,39 @@ public abstract class BPPartFace extends BPPart implements IBPFacePart, IBPRedst
         }
         
         setFace(ForgeDirectionUtils.getSide(dir));
+        
+        int rotation = 0;
+        
+        {
+            double s1 = 0;
+            double s2 = 0;
+            
+            double dist = mop.hitVec.distanceTo(Vec3.createVectorHelper(player.posX, player.posY, player.posZ));
+            
+            switch(dir){
+                case DOWN:
+                case UP:
+                    s1 = mop.hitVec.xCoord - block.getX();
+                    s2 = mop.hitVec.zCoord - block.getZ();
+                    break;
+                case NORTH:
+                case SOUTH:
+                    s1 = mop.hitVec.xCoord - block.getX();
+                    s2 = mop.hitVec.yCoord - block.getY();
+                    break;
+                case WEST:
+                case EAST:
+                    s1 = mop.hitVec.yCoord - block.getY();
+                    s2 = mop.hitVec.zCoord - block.getZ();
+                    break;
+                default:
+                    break;
+            }
+            
+            
+        }
+        
+        setRotation(rotation);
         
         return world.isSideSolid(x, y, z, dir);
     }

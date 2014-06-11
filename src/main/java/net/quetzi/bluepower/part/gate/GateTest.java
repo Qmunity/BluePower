@@ -13,7 +13,10 @@ public class GateTest extends GateBase {
     
     @Override
     public void initializeConnections(RedstoneConnection front, RedstoneConnection left, RedstoneConnection back, RedstoneConnection right) {
-    
+        front.enable();
+        //left.enable();
+        //back.enable();
+        //right.enable();
     }
     
     @Override

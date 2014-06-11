@@ -152,8 +152,6 @@ public abstract class GateBase extends BPPartFace {
         {
             super.renderDynamic(loc, pass, frame);
             
-            //GL11.glDisable(GL11.GL_CULL_FACE);
-            
             /* Top */
             renderTop(frame);
             
@@ -193,7 +191,6 @@ public abstract class GateBase extends BPPartFace {
             RenderHelper.addVertexWithTexture(1, 1D / 8D, 1, 1, 1);
             RenderHelper.addVertexWithTexture(0, 1D / 8D, 1, 1, 0);
             GL11.glEnd();
-            //GL11.glEnable(GL11.GL_CULL_FACE);
         }
         GL11.glPopMatrix();
     }
@@ -209,7 +206,6 @@ public abstract class GateBase extends BPPartFace {
     
         GL11.glPushMatrix();
         {
-            GL11.glDisable(GL11.GL_CULL_FACE);
             
             /* Top */
             renderTopItem();
@@ -228,9 +224,9 @@ public abstract class GateBase extends BPPartFace {
             /* East */
             GL11.glNormal3d(1, 0, 0);
             RenderHelper.addVertexWithTexture(1, 0, 0, 0, 0);
-            RenderHelper.addVertexWithTexture(1, 0, 1, 0, 1);
-            RenderHelper.addVertexWithTexture(1, 1D / 8D, 1, 1, 1);
             RenderHelper.addVertexWithTexture(1, 1D / 8D, 0, 1, 0);
+            RenderHelper.addVertexWithTexture(1, 1D / 8D, 1, 1, 1);
+            RenderHelper.addVertexWithTexture(1, 0, 1, 0, 1);
             /* West */
             GL11.glNormal3d(-1, 0, 0);
             RenderHelper.addVertexWithTexture(0, 0, 0, 0, 0);
@@ -240,9 +236,9 @@ public abstract class GateBase extends BPPartFace {
             /* North */
             GL11.glNormal3d(0, 0, -1);
             RenderHelper.addVertexWithTexture(0, 0, 0, 0, 0);
-            RenderHelper.addVertexWithTexture(1, 0, 0, 0, 1);
-            RenderHelper.addVertexWithTexture(1, 1D / 8D, 0, 1, 1);
             RenderHelper.addVertexWithTexture(0, 1D / 8D, 0, 1, 0);
+            RenderHelper.addVertexWithTexture(1, 1D / 8D, 0, 1, 1);
+            RenderHelper.addVertexWithTexture(1, 0, 0, 0, 1);
             /* South */
             GL11.glNormal3d(0, 0, 1);
             RenderHelper.addVertexWithTexture(0, 0, 1, 0, 0);
@@ -250,7 +246,6 @@ public abstract class GateBase extends BPPartFace {
             RenderHelper.addVertexWithTexture(1, 1D / 8D, 1, 1, 1);
             RenderHelper.addVertexWithTexture(0, 1D / 8D, 1, 1, 0);
             GL11.glEnd();
-            GL11.glEnable(GL11.GL_CULL_FACE);
         }
         GL11.glPopMatrix();
     }
