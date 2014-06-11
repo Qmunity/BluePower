@@ -169,9 +169,9 @@ public class PartRegistry {
     
     public static void init() {
         
-        ICON_PART = "test";
+        ICON_PART = "not";
     
-        registerPart("test", GateTest.class);
+        registerPart("not", GateTest.class);
     }
     
 }

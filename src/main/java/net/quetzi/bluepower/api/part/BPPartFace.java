@@ -11,7 +11,6 @@ package net.quetzi.bluepower.api.part;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.Vec3;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.quetzi.bluepower.api.vec.Vector3;
 import net.quetzi.bluepower.helper.RedstoneHelper;
@@ -74,29 +73,39 @@ public abstract class BPPartFace extends BPPart implements IBPFacePart, IBPRedst
             double s1 = 0;
             double s2 = 0;
             
-            double dist = mop.hitVec.distanceTo(Vec3.createVectorHelper(player.posX, player.posY, player.posZ));
-            
             switch(dir){
+                case WEST:
+                case EAST:
+                    s1 = mop.hitVec.yCoord - player.posY;
+                    s2 = mop.hitVec.zCoord - player.posZ;
+                    break;
                 case DOWN:
                 case UP:
-                    s1 = mop.hitVec.xCoord - block.getX();
-                    s2 = mop.hitVec.zCoord - block.getZ();
+                    s1 = mop.hitVec.xCoord - player.posX;
+                    s2 = mop.hitVec.zCoord - player.posZ;
                     break;
                 case NORTH:
                 case SOUTH:
-                    s1 = mop.hitVec.xCoord - block.getX();
-                    s2 = mop.hitVec.yCoord - block.getY();
-                    break;
-                case WEST:
-                case EAST:
-                    s1 = mop.hitVec.yCoord - block.getY();
-                    s2 = mop.hitVec.zCoord - block.getZ();
+                    s1 = mop.hitVec.xCoord - player.posX;
+                    s2 = mop.hitVec.yCoord - player.posY;
                     break;
                 default:
                     break;
             }
             
-            
+            if(Math.abs(s1) >= Math.abs(s2)){
+                if(s1 >= 0){
+                    rotation = 3;
+                }else{
+                    rotation = 1;
+                }
+            }else{
+                if(s2 >= 0){
+                    rotation = 0;
+                }else{
+                    rotation = 2;
+                }
+            }
         }
         
         setRotation(rotation);
@@ -146,7 +155,6 @@ public abstract class BPPartFace extends BPPart implements IBPFacePart, IBPRedst
         
         GL11.glTranslated(0.5, 0.5, 0.5);
         {
-            GL11.glRotated(90 * rotation, 0, 1, 0);
             
             switch (getFace()) {
                 case 0:
@@ -167,6 +175,7 @@ public abstract class BPPartFace extends BPPart implements IBPFacePart, IBPRedst
                     GL11.glRotated(90, 0, 0, 1);
                     break;
             }
+            GL11.glRotated(90 * rotation, 0, 1, 0);
         }
         GL11.glTranslated(-0.5, -0.5, -0.5);
     }

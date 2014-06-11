@@ -160,9 +160,9 @@ public abstract class GateBase extends BPPartFace {
             /* Bottom */
             GL11.glNormal3d(0, -1, 0);
             RenderHelper.addVertexWithTexture(0, 0, 0, 0, 0);
-            RenderHelper.addVertexWithTexture(0, 0, 1, 0, 1);
-            RenderHelper.addVertexWithTexture(1, 0, 1, 1, 1);
             RenderHelper.addVertexWithTexture(1, 0, 0, 1, 0);
+            RenderHelper.addVertexWithTexture(1, 0, 1, 1, 1);
+            RenderHelper.addVertexWithTexture(0, 0, 1, 0, 1);
             GL11.glEnd();
             Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/gates/side.png"));
             GL11.glBegin(GL11.GL_QUADS);
@@ -215,9 +215,9 @@ public abstract class GateBase extends BPPartFace {
             /* Bottom */
             GL11.glNormal3d(0, -1, 0);
             RenderHelper.addVertexWithTexture(0, 0, 0, 0, 0);
-            RenderHelper.addVertexWithTexture(0, 0, 1, 0, 1);
-            RenderHelper.addVertexWithTexture(1, 0, 1, 1, 1);
             RenderHelper.addVertexWithTexture(1, 0, 0, 1, 0);
+            RenderHelper.addVertexWithTexture(1, 0, 1, 1, 1);
+            RenderHelper.addVertexWithTexture(0, 0, 1, 0, 1);
             GL11.glEnd();
             Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/gates/side.png"));
             GL11.glBegin(GL11.GL_QUADS);

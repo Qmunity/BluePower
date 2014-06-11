@@ -13,16 +13,27 @@ public class GateTest extends GateBase {
     
     @Override
     public void initializeConnections(RedstoneConnection front, RedstoneConnection left, RedstoneConnection back, RedstoneConnection right) {
+        // Init front
         front.enable();
-        //left.enable();
-        //back.enable();
-        //right.enable();
+        front.setOutput();
+        
+        // Init left
+        left.enable();
+        left.setInput();
+        
+        // Init back
+        back.enable();
+        back.setInput();
+        
+        // Init right
+        right.enable();
+        right.setInput();
     }
     
     @Override
     public String getGateID() {
     
-        return "test";
+        return "not";
     }
     
     @Override
@@ -47,13 +58,13 @@ public class GateTest extends GateBase {
     @Override
     public void doLogic(RedstoneConnection front, RedstoneConnection left, RedstoneConnection back, RedstoneConnection right) {
     
-        int power = 0;
+        boolean power = false;
         
-        power = Math.max(power, getConnection(FaceDirection.LEFT).getPower() - 1);
-        power = Math.max(power, getConnection(FaceDirection.BACK).getPower() - 1);
-        power = Math.max(power, getConnection(FaceDirection.RIGHT).getPower() - 1);
+        power |= getConnection(FaceDirection.LEFT).getPower() > 0;
+        power |= getConnection(FaceDirection.BACK).getPower() > 0;
+        power |= getConnection(FaceDirection.RIGHT).getPower() > 0;
         
-        getConnection(FaceDirection.FRONT).setPower(power);
+        getConnection(FaceDirection.FRONT).setPower(!power ? 15 : 0);
     }
     
 }
