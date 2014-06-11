@@ -17,12 +17,14 @@ import java.util.Map;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.quetzi.bluepower.init.BPItems;
-import net.quetzi.bluepower.part.gate.GateBase;
+import net.quetzi.bluepower.part.gate.GateTest;
 import net.quetzi.bluepower.references.Refs;
 
 public class PartRegistry {
     
     private static Map<String, Class<? extends BPPart>> parts = new HashMap<String, Class<? extends BPPart>>();
+    
+    public static String ICON_PART;
     
     private PartRegistry() {
     
@@ -166,8 +168,10 @@ public class PartRegistry {
     }
     
     public static void init() {
+        
+        ICON_PART = "test";
     
-        registerPart("gatebase", GateBase.class);
+        registerPart("test", GateTest.class);
     }
     
 }

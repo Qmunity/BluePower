@@ -36,6 +36,11 @@ public class Vector3Cube {
         this.max = new Vector3(maxX, maxY, maxZ, w);
     }
     
+    public Vector3Cube(AxisAlignedBB aabb) {
+    
+        this(aabb.minX, aabb.minY, aabb.minZ, aabb.maxX, aabb.maxY, aabb.maxZ);
+    }
+    
     public Vector3 getMin() {
     
         return min;
@@ -104,7 +109,7 @@ public class Vector3Cube {
         
         double mul = 1;
         ForgeDirection o = dir;
-        switch(o){
+        switch (o) {
             case DOWN:
                 mul = 2;
                 dir = ForgeDirection.NORTH;
@@ -126,12 +131,12 @@ public class Vector3Cube {
                 break;
             default:
                 break;
-            
+        
         }
-
-        double rx = dir.offsetX * (Math.PI/2) * mul;
-        double ry = dir.offsetY * (Math.PI/2) * mul;
-        double rz = dir.offsetZ * (Math.PI/2) * mul;
+        
+        double rx = dir.offsetX * (Math.PI / 2) * mul;
+        double ry = dir.offsetY * (Math.PI / 2) * mul;
+        double rz = dir.offsetZ * (Math.PI / 2) * mul;
         
         Vector3 min = this.min.clone().subtract(0.5, 0.5, 0.5);
         min.rotate(rx, ry, rz);
@@ -139,7 +144,7 @@ public class Vector3Cube {
         Vector3 max = this.max.clone().subtract(0.5, 0.5, 0.5);
         max.rotate(rx, ry, rz);
         max.add(0.5, 0.5, 0.5);
-
+        
         return new Vector3Cube(min, max);
     }
     

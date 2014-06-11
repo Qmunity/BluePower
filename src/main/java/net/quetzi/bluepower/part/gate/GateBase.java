@@ -30,173 +30,223 @@ import net.quetzi.bluepower.references.Refs;
 
 import org.lwjgl.opengl.GL11;
 
-public class GateBase extends BPPartFace {
+public abstract class GateBase extends BPPartFace {
     
-    private static Vector3Cube HITBOX    = new Vector3Cube(0, 0, 0, 1, 1D / 8D, 1);
-    private static Vector3Cube OCCLUSION = new Vector3Cube(1D / 8D, 0, 1D / 8D, 7D / 8D, 1D / 8D, 7D / 8D);
+    private static Vector3Cube HITBOX         = new Vector3Cube(0, 0, 0, 1, 1D / 8D, 1);
+    private static Vector3Cube OCCLUSION      = new Vector3Cube(1D / 8D, 0, 1D / 8D, 7D / 8D, 1D / 8D, 7D / 8D);
     
-    private Vector3Cube        hitbox    = HITBOX.clone();
-    private Vector3Cube        occlusion = OCCLUSION.clone();
+    private List<Vector3Cube>  selectionBoxes = new ArrayList<Vector3Cube>();
+    private List<Vector3Cube>  collisionBoxes = new ArrayList<Vector3Cube>();
+    private List<Vector3Cube>  occlusionBoxes = new ArrayList<Vector3Cube>();
     
     public GateBase() {
     
         for (int i = 0; i < 4; i++)
             connections[i] = new RedstoneConnection(this, i + "", true, false);
         
-        for (int i = 0; i < 4; i++)
-            getConnection(FaceDirection.getDirection(i)).enable();
-        
-        getConnection(FaceDirection.FRONT).setOutput();
+        initializeConnections(getConnection(FaceDirection.FRONT), getConnection(FaceDirection.LEFT), getConnection(FaceDirection.BACK),
+                getConnection(FaceDirection.RIGHT));
     }
+    
+    public abstract void initializeConnections(RedstoneConnection front, RedstoneConnection left, RedstoneConnection back, RedstoneConnection right);
     
     @Override
     public void setFace(int face) {
     
         super.setFace(face);
-        ForgeDirection d = ForgeDirection.getOrientation(face);
-        
-        hitbox = HITBOX.clone().rotate90Degrees(d);
-        occlusion = OCCLUSION.clone();
     }
     
     @Override
     public String getType() {
     
-        return "gatebase";
+        return getGateID();
     }
     
     @Override
     public String getUnlocalizedName() {
     
-        return "gate.gatebase";
+        return "gate." + getGateID();
     }
     
-    @Override
-    public List<AxisAlignedBB> getCollisionBoxes() {
-    
-        return getSelectionBoxes();
-    }
+    public abstract String getGateID();
     
     @Override
-    public List<AxisAlignedBB> getSelectionBoxes() {
-        
+    public final List<AxisAlignedBB> getCollisionBoxes() {
+    
         List<AxisAlignedBB> aabbs = new ArrayList<AxisAlignedBB>();
         
-        aabbs.add(hitbox.toAABB());
+        ForgeDirection d = ForgeDirection.getOrientation(getFace());
+        
+        collisionBoxes.clear();
+        
+        collisionBoxes.add(HITBOX.clone().rotate90Degrees(d));
+        List<AxisAlignedBB> boxes = new ArrayList<AxisAlignedBB>();
+        addCollisionBoxes(boxes);
+        for(AxisAlignedBB b : boxes)
+            collisionBoxes.add(new Vector3Cube(b).rotate90Degrees(d));
+        
+        for(Vector3Cube c : collisionBoxes)
+            aabbs.add(c.toAABB());
         
         return aabbs;
     }
     
+    public void addCollisionBoxes(List<AxisAlignedBB> boxes) {
+    
+    }
+    
     @Override
-    public List<AxisAlignedBB> getOcclusionBoxes() {
+    public final List<AxisAlignedBB> getSelectionBoxes() {
     
         List<AxisAlignedBB> aabbs = new ArrayList<AxisAlignedBB>();
         
-        aabbs.add(occlusion.toAABB());
+        ForgeDirection d = ForgeDirection.getOrientation(getFace());
+        
+        selectionBoxes.clear();
+        
+        selectionBoxes.add(HITBOX.clone().rotate90Degrees(d));
+        List<AxisAlignedBB> boxes = new ArrayList<AxisAlignedBB>();
+        addSelectionBoxes(boxes);
+        for(AxisAlignedBB b : boxes)
+            selectionBoxes.add(new Vector3Cube(b).rotate90Degrees(d));
+        
+        for(Vector3Cube c : selectionBoxes)
+            aabbs.add(c.toAABB());
         
         return aabbs;
     }
     
+    public void addSelectionBoxes(List<AxisAlignedBB> boxes) {
+    
+    }
+    
     @Override
-    public void renderDynamic(Vector3 loc, int pass, float frame) {
+    public final List<AxisAlignedBB> getOcclusionBoxes() {
+    
+        List<AxisAlignedBB> aabbs = new ArrayList<AxisAlignedBB>();
+        
+        ForgeDirection d = ForgeDirection.getOrientation(getFace());
+        
+        occlusionBoxes.clear();
+        
+        occlusionBoxes.add(OCCLUSION.clone().rotate90Degrees(d));
+        List<AxisAlignedBB> boxes = new ArrayList<AxisAlignedBB>();
+        addOcclusionBoxes(boxes);
+        for(AxisAlignedBB b : boxes)
+            occlusionBoxes.add(new Vector3Cube(b).rotate90Degrees(d));
+        
+        for(Vector3Cube c : occlusionBoxes)
+            aabbs.add(c.toAABB());
+        
+        return aabbs;
+    }
+    
+    public void addOcclusionBoxes(List<AxisAlignedBB> boxes) {
+    
+    }
+    
+    @Override
+    public final void renderDynamic(Vector3 loc, int pass, float frame) {
     
         GL11.glPushMatrix();
         {
             super.renderDynamic(loc, pass, frame);
             
-            GL11.glDisable(GL11.GL_CULL_FACE);
+            //GL11.glDisable(GL11.GL_CULL_FACE);
+            
+            /* Top */
+            renderTop(frame);
+            
             Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/gates/bottom.png"));
             GL11.glBegin(GL11.GL_QUADS);
-            /* Top */
-            GL11.glNormal3d(0, 1, 0);
-            RenderHelper.addVertexWithTexture(0, 1D / 8D, 0, 0, 0);
-            RenderHelper.addVertexWithTexture(0, 1D / 8D, 1, 0, 1);
-            RenderHelper.addVertexWithTexture(1, 1D / 8D, 1, 1, 1);
-            RenderHelper.addVertexWithTexture(1, 1D / 8D, 0, 1, 0);
             /* Bottom */
             GL11.glNormal3d(0, -1, 0);
-            RenderHelper.addVertexWithTexture(0, 0.001, 0, 0, 0);
-            RenderHelper.addVertexWithTexture(0, 0.001, 1, 0, 1);
-            RenderHelper.addVertexWithTexture(1, 0.001, 1, 1, 1);
-            RenderHelper.addVertexWithTexture(1, 0.001, 0, 1, 0);
+            RenderHelper.addVertexWithTexture(0, 0, 0, 0, 0);
+            RenderHelper.addVertexWithTexture(0, 0, 1, 0, 1);
+            RenderHelper.addVertexWithTexture(1, 0, 1, 1, 1);
+            RenderHelper.addVertexWithTexture(1, 0, 0, 1, 0);
             GL11.glEnd();
             Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/gates/side.png"));
             GL11.glBegin(GL11.GL_QUADS);
             /* East */
             GL11.glNormal3d(1, 0, 0);
-            RenderHelper.addVertexWithTexture(1, 0.001, 0, 0, 0);
-            RenderHelper.addVertexWithTexture(1, 0.001, 1, 0, 1);
-            RenderHelper.addVertexWithTexture(1, 1D / 8D, 1, 1, 1);
+            RenderHelper.addVertexWithTexture(1, 0, 0, 0, 0);
             RenderHelper.addVertexWithTexture(1, 1D / 8D, 0, 1, 0);
+            RenderHelper.addVertexWithTexture(1, 1D / 8D, 1, 1, 1);
+            RenderHelper.addVertexWithTexture(1, 0, 1, 0, 1);
             /* West */
             GL11.glNormal3d(-1, 0, 0);
-            RenderHelper.addVertexWithTexture(0, 0.001, 0, 0, 0);
-            RenderHelper.addVertexWithTexture(0, 0.001, 1, 0, 1);
+            RenderHelper.addVertexWithTexture(0, 0, 0, 0, 0);
+            RenderHelper.addVertexWithTexture(0, 0, 1, 0, 1);
             RenderHelper.addVertexWithTexture(0, 1D / 8D, 1, 1, 1);
             RenderHelper.addVertexWithTexture(0, 1D / 8D, 0, 1, 0);
             /* North */
             GL11.glNormal3d(0, 0, -1);
-            RenderHelper.addVertexWithTexture(0, 0.001, 0, 0, 0);
-            RenderHelper.addVertexWithTexture(1, 0.001, 0, 0, 1);
-            RenderHelper.addVertexWithTexture(1, 1D / 8D, 0, 1, 1);
+            RenderHelper.addVertexWithTexture(0, 0, 0, 0, 0);
             RenderHelper.addVertexWithTexture(0, 1D / 8D, 0, 1, 0);
+            RenderHelper.addVertexWithTexture(1, 1D / 8D, 0, 1, 1);
+            RenderHelper.addVertexWithTexture(1, 0, 0, 0, 1);
             /* South */
             GL11.glNormal3d(0, 0, 1);
-            RenderHelper.addVertexWithTexture(0, 0.001, 1, 0, 0);
-            RenderHelper.addVertexWithTexture(1, 0.001, 1, 0, 1);
+            RenderHelper.addVertexWithTexture(0, 0, 1, 0, 0);
+            RenderHelper.addVertexWithTexture(1, 0, 1, 0, 1);
             RenderHelper.addVertexWithTexture(1, 1D / 8D, 1, 1, 1);
             RenderHelper.addVertexWithTexture(0, 1D / 8D, 1, 1, 0);
             GL11.glEnd();
-            GL11.glEnable(GL11.GL_CULL_FACE);
+            //GL11.glEnable(GL11.GL_CULL_FACE);
         }
         GL11.glPopMatrix();
     }
     
     @Override
-    public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
+    public final boolean renderStatic(Vector3 loc, int pass) {
+    
+        return super.renderStatic(loc, pass);
+    }
+    
+    @Override
+    public final void renderItem(ItemRenderType type, ItemStack item, Object... data) {
     
         GL11.glPushMatrix();
         {
             GL11.glDisable(GL11.GL_CULL_FACE);
+            
+            /* Top */
+            renderTopItem();
+            
             Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/gates/bottom.png"));
             GL11.glBegin(GL11.GL_QUADS);
-            /* Top */
-            GL11.glNormal3d(0, 1, 0);
-            RenderHelper.addVertexWithTexture(0, 1D / 8D, 0, 0, 0);
-            RenderHelper.addVertexWithTexture(0, 1D / 8D, 1, 0, 1);
-            RenderHelper.addVertexWithTexture(1, 1D / 8D, 1, 1, 1);
-            RenderHelper.addVertexWithTexture(1, 1D / 8D, 0, 1, 0);
             /* Bottom */
             GL11.glNormal3d(0, -1, 0);
-            RenderHelper.addVertexWithTexture(0, 0.001, 0, 0, 0);
-            RenderHelper.addVertexWithTexture(0, 0.001, 1, 0, 1);
-            RenderHelper.addVertexWithTexture(1, 0.001, 1, 1, 1);
-            RenderHelper.addVertexWithTexture(1, 0.001, 0, 1, 0);
+            RenderHelper.addVertexWithTexture(0, 0, 0, 0, 0);
+            RenderHelper.addVertexWithTexture(0, 0, 1, 0, 1);
+            RenderHelper.addVertexWithTexture(1, 0, 1, 1, 1);
+            RenderHelper.addVertexWithTexture(1, 0, 0, 1, 0);
             GL11.glEnd();
             Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/gates/side.png"));
             GL11.glBegin(GL11.GL_QUADS);
             /* East */
             GL11.glNormal3d(1, 0, 0);
-            RenderHelper.addVertexWithTexture(1, 0.001, 0, 0, 0);
-            RenderHelper.addVertexWithTexture(1, 0.001, 1, 0, 1);
+            RenderHelper.addVertexWithTexture(1, 0, 0, 0, 0);
+            RenderHelper.addVertexWithTexture(1, 0, 1, 0, 1);
             RenderHelper.addVertexWithTexture(1, 1D / 8D, 1, 1, 1);
             RenderHelper.addVertexWithTexture(1, 1D / 8D, 0, 1, 0);
             /* West */
             GL11.glNormal3d(-1, 0, 0);
-            RenderHelper.addVertexWithTexture(0, 0.001, 0, 0, 0);
-            RenderHelper.addVertexWithTexture(0, 0.001, 1, 0, 1);
+            RenderHelper.addVertexWithTexture(0, 0, 0, 0, 0);
+            RenderHelper.addVertexWithTexture(0, 0, 1, 0, 1);
             RenderHelper.addVertexWithTexture(0, 1D / 8D, 1, 1, 1);
             RenderHelper.addVertexWithTexture(0, 1D / 8D, 0, 1, 0);
             /* North */
             GL11.glNormal3d(0, 0, -1);
-            RenderHelper.addVertexWithTexture(0, 0.001, 0, 0, 0);
-            RenderHelper.addVertexWithTexture(1, 0.001, 0, 0, 1);
+            RenderHelper.addVertexWithTexture(0, 0, 0, 0, 0);
+            RenderHelper.addVertexWithTexture(1, 0, 0, 0, 1);
             RenderHelper.addVertexWithTexture(1, 1D / 8D, 0, 1, 1);
             RenderHelper.addVertexWithTexture(0, 1D / 8D, 0, 1, 0);
             /* South */
             GL11.glNormal3d(0, 0, 1);
-            RenderHelper.addVertexWithTexture(0, 0.001, 1, 0, 0);
-            RenderHelper.addVertexWithTexture(1, 0.001, 1, 0, 1);
+            RenderHelper.addVertexWithTexture(0, 0, 1, 0, 0);
+            RenderHelper.addVertexWithTexture(1, 0, 1, 0, 1);
             RenderHelper.addVertexWithTexture(1, 1D / 8D, 1, 1, 1);
             RenderHelper.addVertexWithTexture(0, 1D / 8D, 1, 1, 0);
             GL11.glEnd();
@@ -204,20 +254,21 @@ public class GateBase extends BPPartFace {
         }
         GL11.glPopMatrix();
     }
+    
+    public abstract void renderTop(float frame);
+    
+    public abstract void renderTopItem();
     
     @Override
     public void update() {
     
         super.update();
         
-        int power = 0;
-
-        power = Math.max(power, getConnection(FaceDirection.LEFT).getPower() - 1);
-        power = Math.max(power, getConnection(FaceDirection.BACK).getPower() - 1);
-        power = Math.max(power, getConnection(FaceDirection.RIGHT).getPower() - 1);
-        
-        getConnection(FaceDirection.FRONT).setPower(power);
+        doLogic(getConnection(FaceDirection.FRONT), getConnection(FaceDirection.LEFT), getConnection(FaceDirection.BACK),
+                getConnection(FaceDirection.RIGHT));
     }
+    
+    public abstract void doLogic(RedstoneConnection front, RedstoneConnection left, RedstoneConnection back, RedstoneConnection right);
     
     @Override
     public boolean onActivated(EntityPlayer player, MovingObjectPosition mop, ItemStack item) {

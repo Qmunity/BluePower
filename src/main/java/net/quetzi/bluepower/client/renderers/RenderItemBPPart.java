@@ -39,16 +39,21 @@ public class RenderItemBPPart implements IItemRenderer {
     public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
     
         BPPart part = null;
-        for (BPPart p : parts)
-            if (p.getType().equals(PartRegistry.getPartIdFromItem(item))) {
-                part = p;
-                break;
+        try {
+            for (BPPart p : parts)
+                if (p.getType().equals(PartRegistry.getPartIdFromItem(item))) {
+                    part = p;
+                    break;
+                }
+            if (part == null) {
+                part = PartRegistry.createPartFromItem(item);
+                if (part != null) parts.add(part);
             }
-        if (part == null) {
-            part = PartRegistry.createPartFromItem(item);
-            if (part != null) parts.add(part);
+        } catch (Exception ex) {
         }
-        if (part == null) return;
+        if (part == null) {
+            part = PartRegistry.createPart(PartRegistry.ICON_PART);
+        }
         
         GL11.glPushMatrix();
         {
@@ -62,7 +67,7 @@ public class RenderItemBPPart implements IItemRenderer {
                 case EQUIPPED_FIRST_PERSON:
                     break;
                 case INVENTORY:
-                    GL11.glTranslated(0, -0.15, 0);
+                    GL11.glTranslated(0, -0.1, 0);
                     break;
             }
             part.renderItem(type, item, data);

@@ -92,11 +92,10 @@ public class CustomTabs {
 
         tabBluePowerCircuits = new CreativeTabs("tabBluePowerCircuits") {
 
-            // TODO: Return a BP block icon
             @Override
             public Item getTabIconItem() {
 
-                return Items.redstone;
+                return BPItems.multipart;
             }
         };
 

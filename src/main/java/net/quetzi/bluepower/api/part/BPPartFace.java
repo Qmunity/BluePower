@@ -67,19 +67,24 @@ public abstract class BPPartFace extends BPPart implements IBPFacePart, IBPRedst
         
         setFace(ForgeDirectionUtils.getSide(dir));
         
-        return true;
+        return world.isSideSolid(x, y, z, dir);
     }
     
     @Override
     public boolean canStay() {
     
-        return true;
+        ForgeDirection d = ForgeDirection.getOrientation(getFace());
+        
+        if(d == ForgeDirection.UP || d == ForgeDirection.DOWN)
+            d = d.getOpposite();
+        
+        return world.isSideSolid(x + d.offsetX, y + d.offsetY, z + d.offsetZ, d.getOpposite());
     }
     
     @Override
     public final boolean canConnect(ForgeDirection side) {
     
-        RedstoneConnection con = getConnection(side);
+        RedstoneConnection con = getConnection(FaceDirection.getDirection(ForgeDirection.getOrientation(getFace()), side, rotation));
         if (con == null) return false;
         
         return con.isEnabled();
@@ -134,87 +139,18 @@ public abstract class BPPartFace extends BPPart implements IBPFacePart, IBPRedst
     
     public RedstoneConnection getConnection(FaceDirection dir) {
     
-        if(dir == null)
-            return null;
+        if (dir == null) return null;
         
         try {
-            return connections[(dir.ordinal() + rotation) % 4];
+            return connections[dir.getDirection()];
         } catch (Exception ex) {
         }
         return null;
     }
     
-    public RedstoneConnection getConnection(String id) {
-    
-        for (RedstoneConnection c : connections)
-            if (c.getID().equalsIgnoreCase(id)) return c;
-        
-        return null;
-    }
-    
     public RedstoneConnection getConnection(ForgeDirection dir) {
     
-        int id = -1;
-        
-        ForgeDirection face = ForgeDirection.getOrientation(getFace());
-        
-        if (face == ForgeDirection.UP || face == ForgeDirection.DOWN) {
-            switch (dir) {
-                case NORTH:
-                    id = 0;
-                    break;
-                case EAST:
-                    id = 1;
-                    break;
-                case SOUTH:
-                    id = 2;
-                    break;
-                case WEST:
-                    id = 3;
-                    break;
-                default:
-                    break;
-            }
-        } else if (face == ForgeDirection.NORTH || face == ForgeDirection.SOUTH) {
-            switch (dir) {
-                case UP:
-                    id = 0;
-                    break;
-                case EAST:
-                    id = 1;
-                    break;
-                case DOWN:
-                    id = 2;
-                    break;
-                case WEST:
-                    id = 3;
-                    break;
-                default:
-                    break;
-            }
-        } else if (face == ForgeDirection.EAST || face == ForgeDirection.WEST) {
-            switch (dir) {
-                case UP:
-                    id = 0;
-                    break;
-                case NORTH:
-                    id = 1;
-                    break;
-                case DOWN:
-                    id = 2;
-                    break;
-                case SOUTH:
-                    id = 3;
-                    break;
-                default:
-                    break;
-            }
-        }
-        
-        if(id < 0)
-            return null;
-        
-        return getConnection(FaceDirection.getDirection(id));
+        return getConnection(FaceDirection.getDirection(ForgeDirection.getOrientation(getFace()), dir, rotation));
     }
     
     @Override
