@@ -17,13 +17,15 @@
 
 package net.quetzi.bluepower.items;
 
-import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.monster.EntityEnderman;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
+import net.minecraft.util.DamageSource;
 import net.minecraftforge.common.util.EnumHelper;
+import net.quetzi.bluepower.init.CustomTabs;
 import net.quetzi.bluepower.references.Refs;
 
 public class ItemAthame extends ItemSword {
@@ -33,6 +35,7 @@ public class ItemAthame extends ItemSword {
     public ItemAthame() {
 
         super(athameMaterial);
+	    this.setCreativeTab(CustomTabs.tabBluePowerTools);
         this.setMaxDamage(100);
         this.setUnlocalizedName(Refs.ITEMATHAME_NAME);
         this.setTextureName(Refs.MODID + ":" + Refs.ITEMATHAME_NAME);
@@ -42,17 +45,16 @@ public class ItemAthame extends ItemSword {
 
     @Override
     public float func_150931_i() {
-
         return this.damageDealt;
     }
-    // TODO: This method does not work and needs fixing ~Q
-    @Override
-    public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity entity) {
-        if ((entity instanceof EntityEnderman) || (entity instanceof EntityDragon)) {
-           this.damageDealt = athameMaterial.getDamageVsEntity() + 25.0F;
-        } else {
-            this.damageDealt = athameMaterial.getDamageVsEntity();
-        }
-        return false;
-    }
+
+	@Override
+	public boolean hitEntity(ItemStack stack, EntityLivingBase entity, EntityLivingBase player) {
+		this.damageDealt = athameMaterial.getDamageVsEntity();
+		if ((entity instanceof EntityEnderman) || (entity instanceof EntityDragon)) {
+			this.damageDealt += 25.0F;
+		}
+		entity.attackEntityFrom(DamageSource.causePlayerDamage((EntityPlayer) player), this.damageDealt);
+		return super.hitEntity(stack, entity, player);
+	}
 }
