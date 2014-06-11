@@ -14,6 +14,7 @@ import java.util.List;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
@@ -351,6 +352,14 @@ public abstract class BPPart {
         
         world.notifyBlockChange(x, y, z, world.getBlock(x, y, z));
         markPartForRenderUpdate();
+    }
+    
+    public void save(NBTTagCompound tag) {
+    
+    }
+    
+    public void load(NBTTagCompound tag) {
+    
     }
     
 }
