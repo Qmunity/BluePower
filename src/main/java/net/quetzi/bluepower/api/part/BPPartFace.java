@@ -8,11 +8,16 @@
 
 package net.quetzi.bluepower.api.part;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.quetzi.bluepower.api.vec.Vector3;
+import net.quetzi.bluepower.api.vec.Vector3Cube;
 import net.quetzi.bluepower.helper.RedstoneHelper;
 import net.quetzi.bluepower.util.ForgeDirectionUtils;
 
@@ -20,10 +25,14 @@ import org.lwjgl.opengl.GL11;
 
 public abstract class BPPartFace extends BPPart implements IBPFacePart, IBPRedstonePart {
     
-    private int                    face        = 0;
-    private int                    rotation    = 0;
+    private int                    face           = 0;
+    private int                    rotation       = 0;
     
-    protected RedstoneConnection[] connections = new RedstoneConnection[4];
+    protected RedstoneConnection[] connections    = new RedstoneConnection[4];
+    
+    private List<Vector3Cube>      selectionBoxes = new ArrayList<Vector3Cube>();
+    private List<Vector3Cube>      collisionBoxes = new ArrayList<Vector3Cube>();
+    private List<Vector3Cube>      occlusionBoxes = new ArrayList<Vector3Cube>();
     
     @Override
     public int getFace() {
@@ -73,7 +82,7 @@ public abstract class BPPartFace extends BPPart implements IBPFacePart, IBPRedst
             double s1 = 0;
             double s2 = 0;
             
-            switch(dir){
+            switch (dir) {
                 case WEST:
                 case EAST:
                     s1 = mop.hitVec.yCoord - player.posY;
@@ -93,16 +102,16 @@ public abstract class BPPartFace extends BPPart implements IBPFacePart, IBPRedst
                     break;
             }
             
-            if(Math.abs(s1) >= Math.abs(s2)){
-                if(s1 >= 0){
+            if (Math.abs(s1) >= Math.abs(s2)) {
+                if (s1 >= 0) {
                     rotation = 3;
-                }else{
+                } else {
                     rotation = 1;
                 }
-            }else{
-                if(s2 >= 0){
+            } else {
+                if (s2 >= 0) {
                     rotation = 0;
-                }else{
+                } else {
                     rotation = 2;
                 }
             }
@@ -118,8 +127,7 @@ public abstract class BPPartFace extends BPPart implements IBPFacePart, IBPRedst
     
         ForgeDirection d = ForgeDirection.getOrientation(getFace());
         
-        if(d == ForgeDirection.UP || d == ForgeDirection.DOWN)
-            d = d.getOpposite();
+        if (d == ForgeDirection.UP || d == ForgeDirection.DOWN) d = d.getOpposite();
         
         return world.isSideSolid(x + d.offsetX, y + d.offsetY, z + d.offsetZ, d.getOpposite());
     }
@@ -207,6 +215,77 @@ public abstract class BPPartFace extends BPPart implements IBPFacePart, IBPRedst
                 rc.setPower(RedstoneHelper.getInput(world, x, y, z, d));
             }
         }
+    }
+    
+    @Override
+    public final List<AxisAlignedBB> getCollisionBoxes() {
+    
+        List<AxisAlignedBB> aabbs = new ArrayList<AxisAlignedBB>();
+        
+        ForgeDirection d = ForgeDirection.getOrientation(getFace());
+        
+        collisionBoxes.clear();
+        
+        List<AxisAlignedBB> boxes = new ArrayList<AxisAlignedBB>();
+        addCollisionBoxes(boxes);
+        for (AxisAlignedBB b : boxes)
+            collisionBoxes.add(new Vector3Cube(b).rotate90Degrees(d));
+        
+        for (Vector3Cube c : collisionBoxes)
+            aabbs.add(c.toAABB());
+        
+        return aabbs;
+    }
+    
+    public void addCollisionBoxes(List<AxisAlignedBB> boxes) {
+    
+    }
+    
+    @Override
+    public final List<AxisAlignedBB> getSelectionBoxes() {
+    
+        List<AxisAlignedBB> aabbs = new ArrayList<AxisAlignedBB>();
+        
+        ForgeDirection d = ForgeDirection.getOrientation(getFace());
+        
+        selectionBoxes.clear();
+        
+        List<AxisAlignedBB> boxes = new ArrayList<AxisAlignedBB>();
+        addSelectionBoxes(boxes);
+        for (AxisAlignedBB b : boxes)
+            selectionBoxes.add(new Vector3Cube(b).rotate90Degrees(d));
+        
+        for (Vector3Cube c : selectionBoxes)
+            aabbs.add(c.toAABB());
+        
+        return aabbs;
+    }
+    
+    public void addSelectionBoxes(List<AxisAlignedBB> boxes) {
+    
+    }
+    
+    @Override
+    public final List<AxisAlignedBB> getOcclusionBoxes() {
+    
+        List<AxisAlignedBB> aabbs = new ArrayList<AxisAlignedBB>();
+        
+        ForgeDirection d = ForgeDirection.getOrientation(getFace());
+        
+        occlusionBoxes.clear();
+        List<AxisAlignedBB> boxes = new ArrayList<AxisAlignedBB>();
+        addOcclusionBoxes(boxes);
+        for (AxisAlignedBB b : boxes)
+            occlusionBoxes.add(new Vector3Cube(b).rotate90Degrees(d));
+        
+        for (Vector3Cube c : occlusionBoxes)
+            aabbs.add(c.toAABB());
+        
+        return aabbs;
+    }
+    
+    public void addOcclusionBoxes(List<AxisAlignedBB> boxes) {
+    
     }
     
 }

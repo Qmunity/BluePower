@@ -8,7 +8,6 @@
 
 package net.quetzi.bluepower.part.gate;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.client.Minecraft;
@@ -18,7 +17,6 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
-import net.minecraftforge.common.util.ForgeDirection;
 import net.quetzi.bluepower.api.part.BPPartFace;
 import net.quetzi.bluepower.api.part.FaceDirection;
 import net.quetzi.bluepower.api.part.RedstoneConnection;
@@ -32,12 +30,8 @@ import org.lwjgl.opengl.GL11;
 
 public abstract class GateBase extends BPPartFace {
     
-    private static Vector3Cube HITBOX         = new Vector3Cube(0, 0, 0, 1, 1D / 8D, 1);
-    private static Vector3Cube OCCLUSION      = new Vector3Cube(1D / 8D, 0, 1D / 8D, 7D / 8D, 1D / 8D, 7D / 8D);
-    
-    private List<Vector3Cube>  selectionBoxes = new ArrayList<Vector3Cube>();
-    private List<Vector3Cube>  collisionBoxes = new ArrayList<Vector3Cube>();
-    private List<Vector3Cube>  occlusionBoxes = new ArrayList<Vector3Cube>();
+    private static Vector3Cube HITBOX    = new Vector3Cube(0, 0, 0, 1, 1D / 8D, 1);
+    private static Vector3Cube OCCLUSION = new Vector3Cube(1D / 8D, 0, 1D / 8D, 7D / 8D, 1D / 8D, 7D / 8D);
     
     public GateBase() {
     
@@ -71,78 +65,21 @@ public abstract class GateBase extends BPPartFace {
     public abstract String getGateID();
     
     @Override
-    public final List<AxisAlignedBB> getCollisionBoxes() {
-    
-        List<AxisAlignedBB> aabbs = new ArrayList<AxisAlignedBB>();
-        
-        ForgeDirection d = ForgeDirection.getOrientation(getFace());
-        
-        collisionBoxes.clear();
-        
-        collisionBoxes.add(HITBOX.clone().rotate90Degrees(d));
-        List<AxisAlignedBB> boxes = new ArrayList<AxisAlignedBB>();
-        addCollisionBoxes(boxes);
-        for(AxisAlignedBB b : boxes)
-            collisionBoxes.add(new Vector3Cube(b).rotate90Degrees(d));
-        
-        for(Vector3Cube c : collisionBoxes)
-            aabbs.add(c.toAABB());
-        
-        return aabbs;
-    }
-    
     public void addCollisionBoxes(List<AxisAlignedBB> boxes) {
     
+        boxes.add(HITBOX.clone().toAABB());
     }
     
     @Override
-    public final List<AxisAlignedBB> getSelectionBoxes() {
-    
-        List<AxisAlignedBB> aabbs = new ArrayList<AxisAlignedBB>();
-        
-        ForgeDirection d = ForgeDirection.getOrientation(getFace());
-        
-        selectionBoxes.clear();
-        
-        selectionBoxes.add(HITBOX.clone().rotate90Degrees(d));
-        List<AxisAlignedBB> boxes = new ArrayList<AxisAlignedBB>();
-        addSelectionBoxes(boxes);
-        for(AxisAlignedBB b : boxes)
-            selectionBoxes.add(new Vector3Cube(b).rotate90Degrees(d));
-        
-        for(Vector3Cube c : selectionBoxes)
-            aabbs.add(c.toAABB());
-        
-        return aabbs;
-    }
-    
-    public void addSelectionBoxes(List<AxisAlignedBB> boxes) {
-    
-    }
-    
-    @Override
-    public final List<AxisAlignedBB> getOcclusionBoxes() {
-    
-        List<AxisAlignedBB> aabbs = new ArrayList<AxisAlignedBB>();
-        
-        ForgeDirection d = ForgeDirection.getOrientation(getFace());
-        
-        occlusionBoxes.clear();
-        
-        occlusionBoxes.add(OCCLUSION.clone().rotate90Degrees(d));
-        List<AxisAlignedBB> boxes = new ArrayList<AxisAlignedBB>();
-        addOcclusionBoxes(boxes);
-        for(AxisAlignedBB b : boxes)
-            occlusionBoxes.add(new Vector3Cube(b).rotate90Degrees(d));
-        
-        for(Vector3Cube c : occlusionBoxes)
-            aabbs.add(c.toAABB());
-        
-        return aabbs;
-    }
-    
     public void addOcclusionBoxes(List<AxisAlignedBB> boxes) {
     
+        boxes.add(OCCLUSION.clone().toAABB());
+    }
+    
+    @Override
+    public void addSelectionBoxes(List<AxisAlignedBB> boxes) {
+    
+        boxes.add(HITBOX.clone().toAABB());
     }
     
     @Override

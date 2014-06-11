@@ -8,14 +8,9 @@
 
 package net.quetzi.bluepower.compat.fmp;
 
-import codechicken.lib.data.MCDataInput;
-import codechicken.lib.data.MCDataOutput;
-import codechicken.lib.raytracer.IndexedCuboid6;
-import codechicken.lib.vec.Cuboid6;
-import codechicken.lib.vec.Vector3;
-import codechicken.multipart.IRedstonePart;
-import codechicken.multipart.JNormalOcclusion;
-import codechicken.multipart.TMultiPart;
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -27,9 +22,15 @@ import net.quetzi.bluepower.api.part.BPPart;
 import net.quetzi.bluepower.api.part.IBPRedstonePart;
 import net.quetzi.bluepower.api.part.PartRegistry;
 import net.quetzi.bluepower.references.Refs;
-
-import java.util.ArrayList;
-import java.util.List;
+import codechicken.lib.data.MCDataInput;
+import codechicken.lib.data.MCDataOutput;
+import codechicken.lib.raytracer.IndexedCuboid6;
+import codechicken.lib.vec.Cuboid6;
+import codechicken.lib.vec.Vector3;
+import codechicken.multipart.IRedstonePart;
+import codechicken.multipart.JNormalOcclusion;
+import codechicken.multipart.NormalOcclusionTest;
+import codechicken.multipart.TMultiPart;
 
 public class MultipartBPPart extends TMultiPart implements IRedstonePart, JNormalOcclusion {
     
@@ -94,11 +95,21 @@ public class MultipartBPPart extends TMultiPart implements IRedstonePart, JNorma
     }
     
     @Override
+    public boolean occlusionTest(TMultiPart part) {
+        
+        return NormalOcclusionTest.apply(this, part);
+    }
+    
+    @Override
     public void writeDesc(MCDataOutput packet) {
     
         super.writeDesc(packet);
         
         packet.writeString(getPart().getType());
+        
+        NBTTagCompound tag = new NBTTagCompound();
+        getPart().save(tag);
+        packet.writeNBTTagCompound(tag);
     }
     
     @Override
@@ -108,6 +119,8 @@ public class MultipartBPPart extends TMultiPart implements IRedstonePart, JNorma
         
         String type = packet.readString();
         if (getPart() == null) setPart(PartRegistry.createPart(type));
+        
+        getPart().load(packet.readNBTTagCompound());
     }
     
     @Override
@@ -116,6 +129,10 @@ public class MultipartBPPart extends TMultiPart implements IRedstonePart, JNorma
         super.load(tag);
         String type = tag.getString("part_id");
         if (getPart() == null) setPart(PartRegistry.createPart(type));
+        
+        NBTTagCompound t = new NBTTagCompound();
+        getPart().save(t);
+        tag.setTag("partData", t);
     }
     
     @Override
@@ -123,6 +140,9 @@ public class MultipartBPPart extends TMultiPart implements IRedstonePart, JNorma
     
         super.save(tag);
         tag.setString("part_id", getPart().getType());
+        
+        NBTTagCompound t = tag.getCompoundTag("partData");
+        getPart().load(t);
     }
     
     @Override

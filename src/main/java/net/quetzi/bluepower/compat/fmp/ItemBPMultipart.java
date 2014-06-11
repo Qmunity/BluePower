@@ -75,12 +75,6 @@ public class ItemBPMultipart extends JItemMultiPart {
         return ItemBPPart.getUnlocalizedName_(item);
     }
 
-    @SuppressWarnings("rawtypes")
-    @Override
-    public void addInformation(ItemStack item, EntityPlayer par2EntityPlayer, List l, boolean par4) {
-
-    }
-
     @SuppressWarnings({ "rawtypes" })
     @Override
     public void getSubItems(Item unused, CreativeTabs tab, List l) {

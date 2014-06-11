@@ -8,21 +8,25 @@
 
 package net.quetzi.bluepower.api.part;
 
+import java.lang.reflect.Constructor;
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.quetzi.bluepower.init.BPItems;
+import net.quetzi.bluepower.part.PartLamp;
 import net.quetzi.bluepower.part.gate.GateTest;
 import net.quetzi.bluepower.references.Refs;
 
 public class PartRegistry {
     
-    private static Map<String, Class<? extends BPPart>> parts = new HashMap<String, Class<? extends BPPart>>();
+    private static Map<String, Entry<Class<? extends BPPart>, Object[]>> parts = new HashMap<String, Entry<Class<? extends BPPart>, Object[]>>();
     
     public static String ICON_PART;
     
@@ -38,13 +42,14 @@ public class PartRegistry {
      * @param part
      *            Part class
      */
-    public static void registerPart(String id, Class<? extends BPPart> part) {
+    public static void registerPart(String id, Class<? extends BPPart> part, Object... constructorArgs) {
     
         if (id == null || id.trim().isEmpty()) return;
         if (part == null) return;
-        if (parts.containsKey(part)) return;
+        Entry<Class<? extends BPPart>, Object[]> e = new AbstractMap.SimpleEntry<Class<? extends BPPart>, Object[]>(part, constructorArgs);
+        if (parts.containsKey(e)) return;
         
-        parts.put(id, part);
+        parts.put(id, e);
     }
     
     /**
@@ -59,8 +64,23 @@ public class PartRegistry {
     public static BPPart createPart(String id, boolean isMultipart) {
     
         try {
-            return getPartClass(id, isMultipart).newInstance();
+            Entry<Class<? extends BPPart>, Object[]> e = getPartData(id, isMultipart);
+            if(e == null) return null;
+            Class<? extends BPPart> c = e.getKey();
+            Object[] args = e.getValue();
+            Class<?>[] argsClasses = new Class<?>[args.length];
+            for(int i = 0; i < args.length; i++)
+                argsClasses[i] = args[i].getClass();
+            
+            Constructor<? extends BPPart> cons = c.getConstructor(argsClasses);
+            boolean wasAccessible = cons.isAccessible();
+            cons.setAccessible(true);
+            BPPart inst = cons.newInstance(args);
+            cons.setAccessible(wasAccessible);
+            
+            return inst;
         } catch (Exception ex) {
+            ex.printStackTrace();
         }
         
         return null;
@@ -78,7 +98,7 @@ public class PartRegistry {
         return createPart(id, false);
     }
     
-    public static Map<String, Class<? extends BPPart>> getMappings() {
+    public static Map<String, Entry<Class<? extends BPPart>, Object[]>> getMappings() {
     
         return Collections.unmodifiableMap(parts);
     }
@@ -124,12 +144,12 @@ public class PartRegistry {
         return createPart(id);
     }
     
-    public static Class<? extends BPPart> getPartClass(String id) {
+    public static Entry<Class<? extends BPPart>, Object[]> getPartData(String id) {
     
-        return getPartClass(id, false);
+        return getPartData(id, false);
     }
     
-    public static Class<? extends BPPart> getPartClass(String id, boolean isMultipart) {
+    public static Entry<Class<? extends BPPart>, Object[]> getPartData(String id, boolean isMultipart) {
     
         try {
             for (String s : parts.keySet()) {
@@ -148,10 +168,10 @@ public class PartRegistry {
         return null;
     }
     
-    public static Class<? extends BPPart> getPartClassFromItem(ItemStack is) {
+    public static Entry<Class<? extends BPPart>, Object[]> getPartDataFromItem(ItemStack is) {
     
         String id = getPartIdFromItem(is);
-        return getPartClass(id);
+        return getPartData(id);
     }
     
     /**
@@ -170,8 +190,11 @@ public class PartRegistry {
     public static void init() {
         
         ICON_PART = "not";
-    
+        // Gates
         registerPart("not", GateTest.class);
+        
+        // Lamps
+        registerPart("lampwhite", PartLamp.class, "white", 0xFFFFFF);
     }
     
 }
