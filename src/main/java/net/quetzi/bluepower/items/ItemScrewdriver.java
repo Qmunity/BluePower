@@ -19,16 +19,20 @@ package net.quetzi.bluepower.items;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.quetzi.bluepower.init.CustomTabs;
 import net.quetzi.bluepower.references.Refs;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemScrewdriver extends Item {
 
     public ItemScrewdriver() {
+    
         this.setUnlocalizedName(Refs.SCREWDRIVER_NAME);
         this.setCreativeTab(CustomTabs.tabBluePowerTools);
         this.setMaxDamage(250);
@@ -41,8 +45,22 @@ public class ItemScrewdriver extends Item {
 
         Block block = world.getBlock(x, y, z);
         block.rotateBlock(world, x, y, z, ForgeDirection.getOrientation(side));
-        stack.setItemDamage(stack.getItemDamage() + 1);
+        if (!player.capabilities.isCreativeMode) {
+            stack.setItemDamage(stack.getItemDamage() + 1);
+        }
         return false;
     }
 
+    @SideOnly(Side.CLIENT)
+    @Override
+    public boolean isFull3D() {
+    
+        return true;
+    }
+    
+    @Override
+    public EnumAction getItemUseAction(ItemStack par1ItemStack) {
+    
+        return EnumAction.block;
+    }
 }
