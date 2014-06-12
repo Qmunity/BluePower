@@ -29,4 +29,10 @@ public abstract class CompatModule {
 
     public abstract void postInit(FMLPostInitializationEvent ev);
 
+    public abstract void registerBlocks();
+    
+    public abstract void registerItems();
+
+    public abstract void registerRenders();
+
 }

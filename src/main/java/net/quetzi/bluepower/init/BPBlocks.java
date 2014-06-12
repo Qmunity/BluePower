@@ -72,6 +72,8 @@ public class BPBlocks {
     public static Block alloy_furnace;
     public static Block block_breaker;
     public static Block igniter;
+    
+    public static Block multipart;// DO NOT GENERATE OR REMOVE THIS BLOCK!
 
     public static void init() {
 
@@ -143,6 +145,7 @@ public class BPBlocks {
         GameRegistry.registerBlock(ruby_ore, Refs.RUBYORE_NAME);
         GameRegistry.registerBlock(sapphire_ore, Refs.SAPPHIREORE_NAME);
         GameRegistry.registerBlock(amethyst_ore, Refs.AMETHYSTORE_NAME);
+        
         GameRegistry.registerBlock(ruby_block, Refs.RUBYBLOCK_NAME);
         GameRegistry.registerBlock(sapphire_block, Refs.SAPPHIREBLOCK_NAME);
         GameRegistry.registerBlock(amethyst_block, Refs.AMETHYSTBLOCK_NAME);

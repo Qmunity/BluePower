@@ -12,6 +12,8 @@ import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import net.quetzi.bluepower.compat.fmp.CompatModuleFMP;
+import net.quetzi.bluepower.compat.fmp.CompatModuleFMPAlt;
 import net.quetzi.bluepower.references.Dependencies;
 
 import java.util.*;
@@ -24,12 +26,12 @@ public class CompatibilityUtils {
     
     }
     
-    public static void registerModule(String modid, Class<? extends CompatModule> module) {
+    public static void registerModule(String modid, Class<? extends CompatModule> module, Class<? extends CompatModule> alternate) {
     
-        registerModule(modid, module.getName());
+        registerModule(modid, module.getName(), alternate == null ? null : alternate.getName());
     }
     
-    public static void registerModule(String modid, String module) {
+    public static void registerModule(String modid, String module, String alternate) {
     
         if (modid == null || modid.trim().isEmpty()) return;
         if (!Loader.isModLoaded(modid)) return;
@@ -41,6 +43,18 @@ public class CompatibilityUtils {
             c = Class.forName(module);
             if (!CompatModule.class.isAssignableFrom(c)) return;
             modules.put(modid, (CompatModule) c.newInstance());
+            return;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+        if(alternate == null || alternate.trim().isEmpty()) return;
+        
+        Class<?> c2;
+        try {
+            c2 = Class.forName(alternate);
+            if (!CompatModule.class.isAssignableFrom(c2)) return;
+            modules.put(modid, (CompatModule) c2.newInstance());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -49,6 +63,14 @@ public class CompatibilityUtils {
     public static List<CompatModule> getLoadedModules() {
     
         return Collections.unmodifiableList(new ArrayList<CompatModule>(modules.values()));
+    }
+    
+    public static CompatModule getModule(String modid){
+        try{
+            return modules.get(modid);
+        }catch(Exception ex){}
+        
+        return null;
     }
     
     public static void preInit(FMLPreInitializationEvent ev) {
@@ -73,7 +95,7 @@ public class CompatibilityUtils {
      * Register your modules here
      */
     static {
-        registerModule(Dependencies.FMP, "net.quetzi.bluepower.compat.fmp.CompatModuleFMP");
+        registerModule(Dependencies.FMP, CompatModuleFMP.class, CompatModuleFMPAlt.class);
     }
     
 }
