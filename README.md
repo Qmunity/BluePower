@@ -7,7 +7,7 @@ Blue Power is a collaborative effort to revive some of the things that are missi
 1. Clone into an empty directory using your git client of choice.
 2. Open a command line and type the following:
         `gradlew setupDecompWorkspace`
-        `gradlew eclipse' or `gradlew idea`
+        `gradlew eclipse` or `gradlew idea`
         
 3. Open the directory in your IDE of choice
 4. After making code changes you can build with `gradlew build`
