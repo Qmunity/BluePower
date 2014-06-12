@@ -17,7 +17,11 @@
 
 package net.quetzi.bluepower.items;
 
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.passive.EntitySheep;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.quetzi.bluepower.init.CustomTabs;
 import net.quetzi.bluepower.references.Refs;
 
@@ -29,4 +33,18 @@ public class ItemIndigoDye extends Item {
         this.setCreativeTab(CustomTabs.tabBluePowerItems);
         this.setTextureName(Refs.MODID + ":" + name);
     }
+
+	@Override
+	public boolean itemInteractionForEntity(ItemStack stack, EntityPlayer player, EntityLivingBase entity) {
+	
+		if (entity instanceof EntitySheep) {
+			EntitySheep sheep = (EntitySheep) entity;
+			if (!sheep.getSheared() && sheep.getFleeceColor() != 10) {
+				sheep.setFleeceColor(10);
+				--stack.stackSize;
+			}
+			return true;
+		}
+		return false;
+	}
 }
