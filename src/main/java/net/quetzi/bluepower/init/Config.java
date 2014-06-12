@@ -103,6 +103,6 @@ public class Config {
         volcanoActiveToInactiveRatio = config.get("World Gen", "volcanoActiveToInactiveRatio", 0.5).getDouble(0);
         
         config.addCustomCategoryComment("Recipe Enabling", "Toggle recipes to be enabled or not");
-        alloyFurnaceBlacklist = config.get("Recipe Enabling", "alloyFurnaceBlacklist", new String[] { "minecraft:bucket", "minecraft:anvil" }).getStringList();
+        alloyFurnaceBlacklist = config.get("Recipe Enabling", "alloyFurnaceBlacklist", new String[0]).getStringList();
     }
 }

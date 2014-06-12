@@ -38,8 +38,7 @@ public abstract class GateBase extends BPPartFace {
         for (int i = 0; i < 4; i++)
             connections[i] = new RedstoneConnection(this, i + "", true, false);
         
-        initializeConnections(getConnection(FaceDirection.FRONT), getConnection(FaceDirection.LEFT), getConnection(FaceDirection.BACK),
-                getConnection(FaceDirection.RIGHT));
+        initializeConnections(getConnection(FaceDirection.FRONT), getConnection(FaceDirection.LEFT), getConnection(FaceDirection.BACK), getConnection(FaceDirection.RIGHT));
     }
     
     public abstract void initializeConnections(RedstoneConnection front, RedstoneConnection left, RedstoneConnection back, RedstoneConnection right);
@@ -208,8 +207,7 @@ public abstract class GateBase extends BPPartFace {
     
         super.update();
         
-        doLogic(getConnection(FaceDirection.FRONT), getConnection(FaceDirection.LEFT), getConnection(FaceDirection.BACK),
-                getConnection(FaceDirection.RIGHT));
+        doLogic(getConnection(FaceDirection.FRONT), getConnection(FaceDirection.LEFT), getConnection(FaceDirection.BACK), getConnection(FaceDirection.RIGHT));
     }
     
     public abstract void doLogic(RedstoneConnection front, RedstoneConnection left, RedstoneConnection back, RedstoneConnection right);
@@ -218,11 +216,19 @@ public abstract class GateBase extends BPPartFace {
     public boolean onActivated(EntityPlayer player, MovingObjectPosition mop, ItemStack item) {
     
         if (item != null && item.getItem() == BPItems.screwdriver) {
-            setRotation(getRotation() + 1);
+            if (player.isSneaking()) {
+                return changeMode(getConnection(FaceDirection.FRONT), getConnection(FaceDirection.LEFT), getConnection(FaceDirection.BACK), getConnection(FaceDirection.RIGHT));
+            } else {
+                setRotation(getRotation() + 1);
+            }
             return true;
         }
-        
         return super.onActivated(player, mop, item);
+    }
+    
+    protected boolean changeMode(RedstoneConnection front, RedstoneConnection left, RedstoneConnection back, RedstoneConnection right) {
+    
+        return false;
     }
     
 }
