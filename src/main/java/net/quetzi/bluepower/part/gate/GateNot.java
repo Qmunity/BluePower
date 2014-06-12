@@ -21,7 +21,7 @@ public class GateNot extends GateBase {
         
         // Init left
         left.enable();
-        left.setInput();
+        left.setOutput();
         
         // Init back
         back.enable();
@@ -29,7 +29,7 @@ public class GateNot extends GateBase {
         
         // Init right
         right.enable();
-        right.setInput();
+        right.setOutput();
     }
     
     @Override
@@ -50,14 +50,12 @@ public class GateNot extends GateBase {
         renderTopTexture(Refs.MODID + ":textures/blocks/gates/not/top.png");
         if(!power){
             renderTopTexture(Refs.MODID + ":textures/blocks/gates/not/traceFrontOn.png");
+            renderTopTexture(Refs.MODID + ":textures/blocks/gates/not/traceLeftOn.png");
+            renderTopTexture(Refs.MODID + ":textures/blocks/gates/not/traceRightOn.png");
         }else{
             renderTopTexture(Refs.MODID + ":textures/blocks/gates/not/traceFrontOff.png");
-        }
-        
-        if(getConnection(FaceDirection.LEFT).getPower() > 0){
-            renderTopTexture(Refs.MODID + ":textures/blocks/gates/not/traceLeftOn.png");
-        }else{
             renderTopTexture(Refs.MODID + ":textures/blocks/gates/not/traceLeftOff.png");
+            renderTopTexture(Refs.MODID + ":textures/blocks/gates/not/traceRightOff.png");
         }
         
         if(getConnection(FaceDirection.BACK).getPower() > 0){
@@ -66,25 +64,17 @@ public class GateNot extends GateBase {
             renderTopTexture(Refs.MODID + ":textures/blocks/gates/not/traceBackOff.png");
         }
         
-        if(getConnection(FaceDirection.RIGHT).getPower() > 0){
-            renderTopTexture(Refs.MODID + ":textures/blocks/gates/not/traceRightOn.png");
-        }else{
-            renderTopTexture(Refs.MODID + ":textures/blocks/gates/not/traceRightOff.png");
-        }
-        
         RenderHelper.renderRedstoneTorch(0, 1D/8D, -1D/16D, 9D/16D, !power);
     }
     
     @Override
     public void doLogic(RedstoneConnection front, RedstoneConnection left, RedstoneConnection back, RedstoneConnection right) {
     
-        power = false;
-        
-        power |= left.getPower() > 0;
-        power |= back.getPower() > 0;
-        power |= right.getPower() > 0;
-        
-        getConnection(FaceDirection.FRONT).setPower(!power ? 15 : 0);
+        power = back.isEnabled() && back.getPower() > 0;
+
+        left.setPower(!power ? 15 : 0);
+        front.setPower(!power ? 15 : 0);
+        right.setPower(!power ? 15 : 0);
     }
     
     @Override

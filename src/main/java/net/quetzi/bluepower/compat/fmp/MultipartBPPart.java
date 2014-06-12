@@ -25,6 +25,7 @@ import net.quetzi.bluepower.references.Refs;
 import codechicken.lib.data.MCDataInput;
 import codechicken.lib.data.MCDataOutput;
 import codechicken.lib.raytracer.IndexedCuboid6;
+import codechicken.lib.raytracer.RayTracer;
 import codechicken.lib.vec.Cuboid6;
 import codechicken.lib.vec.Vector3;
 import codechicken.multipart.IRedstonePart;
@@ -232,6 +233,8 @@ public class MultipartBPPart extends TMultiPart implements IRedstonePart, JNorma
     @Override
     public boolean activate(EntityPlayer player, MovingObjectPosition hit, ItemStack item) {
     
+        System.out.println("Shift: " + player.isSneaking());
+        
         return getPart().onActivated(player, hit, item);
     }
     
@@ -247,6 +250,17 @@ public class MultipartBPPart extends TMultiPart implements IRedstonePart, JNorma
     public boolean renderStatic(Vector3 pos, int pass) {
     
         return getPart().renderStatic(new net.quetzi.bluepower.api.vec.Vector3(pos.x, pos.y, pos.z), pass);
+    }
+    
+    @Override
+    public boolean drawHighlight(MovingObjectPosition hit, EntityPlayer player, float frame) {
+        
+        Cuboid6 c = null;
+        
+        if(c == null) return false;
+        RayTracer.instance().rayTraceCuboid(new Vector3(RayTracer.getStartVec(player)), new Vector3(RayTracer.getEndVec(player)), c);
+        
+        return true;
     }
     
     @Override

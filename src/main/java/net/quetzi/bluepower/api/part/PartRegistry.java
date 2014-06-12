@@ -28,7 +28,7 @@ public class PartRegistry {
     
     private static Map<String, Entry<Class<? extends BPPart>, Object[]>> parts = new HashMap<String, Entry<Class<? extends BPPart>, Object[]>>();
     
-    public static String ICON_PART;
+    public static String                                                 ICON_PART;
     
     private PartRegistry() {
     
@@ -65,11 +65,11 @@ public class PartRegistry {
     
         try {
             Entry<Class<? extends BPPart>, Object[]> e = getPartData(id, isMultipart);
-            if(e == null) return null;
+            if (e == null) return null;
             Class<? extends BPPart> c = e.getKey();
             Object[] args = e.getValue();
             Class<?>[] argsClasses = new Class<?>[args.length];
-            for(int i = 0; i < args.length; i++)
+            for (int i = 0; i < args.length; i++)
                 argsClasses[i] = args[i].getClass();
             
             Constructor<? extends BPPart> cons = c.getConstructor(argsClasses);
@@ -188,7 +188,7 @@ public class PartRegistry {
     }
     
     public static void init() {
-        
+    
         ICON_PART = "not";
         // Gates
         registerPart("not", GateNot.class);

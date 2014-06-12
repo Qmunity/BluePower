@@ -352,6 +352,8 @@ public abstract class BPPart {
         
         world.notifyBlockChange(x, y, z, world.getBlock(x, y, z));
         markPartForRenderUpdate();
+        
+        world.notifyBlockOfNeighborChange(x, y, z, world.getBlock(x, y + 1, z));
     }
     
     public void save(NBTTagCompound tag) {
