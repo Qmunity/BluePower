@@ -29,32 +29,35 @@ import net.quetzi.bluepower.init.CustomTabs;
 import net.quetzi.bluepower.references.Refs;
 
 public class ItemAthame extends ItemSword {
-    private float damageDealt;
+    
+    private float               damageDealt;
     private static ToolMaterial athameMaterial = EnumHelper.addToolMaterial("SILVER", 0, 100, 6.0F, 2.0F, 10);
-
+    
     public ItemAthame() {
-
+    
         super(athameMaterial);
-	    this.setCreativeTab(CustomTabs.tabBluePowerTools);
+        this.setCreativeTab(CustomTabs.tabBluePowerTools);
         this.setMaxDamage(100);
         this.setUnlocalizedName(Refs.ITEMATHAME_NAME);
         this.setTextureName(Refs.MODID + ":" + Refs.ITEMATHAME_NAME);
         this.maxStackSize = 1;
         this.setFull3D();
     }
-
+    
     @Override
     public float func_150931_i() {
+    
         return this.damageDealt;
     }
-
-	@Override
-	public boolean hitEntity(ItemStack stack, EntityLivingBase entity, EntityLivingBase player) {
-		this.damageDealt = athameMaterial.getDamageVsEntity();
-		if ((entity instanceof EntityEnderman) || (entity instanceof EntityDragon)) {
-			this.damageDealt += 25.0F;
-		}
-		entity.attackEntityFrom(DamageSource.causePlayerDamage((EntityPlayer) player), this.damageDealt);
-		return super.hitEntity(stack, entity, player);
-	}
+    
+    @Override
+    public boolean hitEntity(ItemStack stack, EntityLivingBase entity, EntityLivingBase player) {
+    
+        this.damageDealt = athameMaterial.getDamageVsEntity();
+        if ((entity instanceof EntityEnderman) || (entity instanceof EntityDragon)) {
+            this.damageDealt += 25.0F;
+        }
+        entity.attackEntityFrom(DamageSource.causePlayerDamage((EntityPlayer) player), this.damageDealt);
+        return super.hitEntity(stack, entity, player);
+    }
 }
