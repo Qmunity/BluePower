@@ -122,6 +122,14 @@ item.blue_doped_wafer.name=Blue Doped Wafer
 item.red_doped_wafer.name=Red Doped Wafer
 item.athame.name=Athame
 item.screwdriver.name=Screwdriver
+item.tinplate.name=Tin Plate
+item.stone_wafer.name=Stone Wafer
+item.stone_wire.name=Stone Wire
+item.stone_anode.name=Stone Anode
+item.stone_cathode.name=Stone Cathode
+item.stone_pointer.name=Stone Pointer
+item.silicon_chip.name=Silicon Chip
+
 
 itemGroup.tabBluePowerMachines=Blue Power Machines
 itemGroup.tabBluePowerBlocks=Blue Power Blocks

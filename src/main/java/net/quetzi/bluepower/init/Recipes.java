@@ -35,6 +35,7 @@ public class Recipes {
         GameRegistry.addSmelting(BPBlocks.silver_ore, new ItemStack(BPItems.silver_ingot), 0.7F);
         GameRegistry.addSmelting(BPBlocks.basalt, new ItemStack(BPBlocks.basalt_tile), 0);
         GameRegistry.addSmelting(BPBlocks.marble, new ItemStack(BPBlocks.marble_tile), 0);
+        GameRegistry.addSmelting(Blocks.stone, new ItemStack(BPItems.stone_wafer, 2), 0);
         
         craftManager.addRecipe(new ItemStack(BPBlocks.basalt_brick, 4), new Object[] { "##", "##", '#', BPBlocks.basalt });
         craftManager.addRecipe(new ItemStack(BPBlocks.marble_brick, 4), new Object[] { "##", "##", '#', BPBlocks.marble });
@@ -99,7 +100,12 @@ public class Recipes {
         
         craftManager.addRecipe(new ItemStack(BPItems.screwdriver, 1), new Object[] { "# ", " S", '#', Items.iron_ingot, 'S', Items.stick });
         craftManager.addRecipe(new ItemStack(BPItems.athame, 1), new Object[] { "# ", " S", '#', BPItems.silver_ingot, 'S', Items.stick });
-        
+        craftManager.addRecipe(new ItemStack(BPItems.stone_wire, 1), new Object[] {"#", "W", '#', Items.redstone, 'W', BPItems.stone_wafer });
+        craftManager.addRecipe(new ItemStack(BPItems.stone_anode, 3), new Object[] {" # ", "###", "WWW", '#', Items.redstone, 'W', BPItems.stone_wafer });
+        craftManager.addRecipe(new ItemStack(BPItems.stone_cathode, 1), new Object[] {"#", "W", '#', Blocks.redstone_torch, 'W', BPItems.stone_wafer });
+        craftManager.addRecipe(new ItemStack(BPItems.stone_pointer, 1), new Object[] {"S", "#", "W",'S', Blocks.stone, '#', Items.redstone, 'W', BPItems.stone_wafer });
+        craftManager.addRecipe(new ItemStack(BPItems.silicon_chip, 1), new Object[] {" # ", "WWW", '#', BPItems.red_doped_wafer, 'W', BPItems.stone_wafer });
+
         // Alloy furnace
         IAlloyFurnaceRegistry af = BPRegistry.alloyFurnaceRegistry;
         af.addRecipe(new ItemStack(BPItems.red_alloy_ingot, 1), new ItemStack(Items.redstone, 4), Items.iron_ingot);
@@ -110,7 +116,7 @@ public class Recipes {
         
         af.addRecipe(new ItemStack(BPItems.red_doped_wafer, 1), new ItemStack(Items.redstone, 4), BPItems.silicon_wafer);
         af.addRecipe(new ItemStack(BPItems.blue_doped_wafer, 1), new ItemStack(BPItems.nikolite, 4), BPItems.silicon_wafer);
-        af.addRecipe(new ItemStack(BPItems.tinplate, 4), new ItemStack(BPItems.tin_ingot, 1), Items.iron_ingot, 2);
+        af.addRecipe(new ItemStack(BPItems.tinplate, 4), new ItemStack(BPItems.tin_ingot, 1), new ItemStack(Items.iron_ingot, 2));
         
         af.addRecyclingRecipe(new ItemStack(Blocks.iron_block));
         af.addRecyclingRecipe(new ItemStack(Blocks.gold_block));

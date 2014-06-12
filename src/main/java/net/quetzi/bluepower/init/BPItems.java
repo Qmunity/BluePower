@@ -98,7 +98,13 @@ public class BPItems {
     public static Item          screwdriver;
     public static Item          athame;
     public static Item          tinplate;
-    
+    public static Item          stone_wafer;
+    public static Item          stone_wire;
+    public static Item          stone_anode;
+    public static Item          stone_cathode;
+    public static Item          stone_pointer;
+    public static Item          silicon_chip;
+
     private static ToolMaterial gemMaterial = EnumHelper.addToolMaterial("GEM", 2, 750, 6.0F, 2.0F, 18);
     
     public static void init() {
@@ -157,7 +163,13 @@ public class BPItems {
         screwdriver = new ItemScrewdriver();
         athame = new ItemAthame();
         tinplate = new ItemTinPlate();
-        
+        stone_wafer = new ItemStoneWafer(Refs.ITEMSTONEWAFER_NAME);
+        stone_wire = new ItemStoneWafer(Refs.ITEMSTONEWIRE_NAME);
+        stone_anode = new ItemStoneWafer(Refs.ITEMSTONEANODE_NAME);
+        stone_cathode = new ItemStoneWafer(Refs.ITEMSTONECATHODE_NAME);
+        stone_pointer = new ItemStoneWafer(Refs.ITEMSTONEPOINTER_NAME);
+        silicon_chip = new ItemStoneWafer(Refs.ITEMSILICONCHIP_NAME);
+
         if (!Loader.isModLoaded(Dependencies.FMP)) {
             multipart = new ItemBPPart();
         } else {
@@ -228,7 +240,13 @@ public class BPItems {
         GameRegistry.registerItem(screwdriver, Refs.SCREWDRIVER_NAME);
         GameRegistry.registerItem(athame, Refs.ITEMATHAME_NAME);
         GameRegistry.registerItem(tinplate, Refs.ITEMTINPLATE_NAME);
-        
+        GameRegistry.registerItem(stone_wafer, Refs.ITEMSTONEWAFER_NAME);
+        GameRegistry.registerItem(stone_wire, Refs.ITEMSTONEWIRE_NAME);
+        GameRegistry.registerItem(stone_anode, Refs.ITEMSTONEANODE_NAME);
+        GameRegistry.registerItem(stone_cathode, Refs.ITEMSTONECATHODE_NAME);
+        GameRegistry.registerItem(stone_pointer, Refs.ITEMSTONEPOINTER_NAME);
+        GameRegistry.registerItem(silicon_chip, Refs.ITEMSILICONCHIP_NAME);
+
         MinecraftForge.addGrassSeed(new ItemStack(flax_seed), 5);
         
         GameRegistry.registerItem(multipart, Refs.MULTIPART_NAME);
