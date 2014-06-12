@@ -85,7 +85,7 @@ public abstract class BPPartFace extends BPPart implements IBPFacePart, IBPRedst
             switch (dir) {
                 case WEST:
                 case EAST:
-                    s1 = mop.hitVec.yCoord - player.posY;
+                    s1 = -(mop.hitVec.yCoord - player.posY - player.height);
                     s2 = mop.hitVec.zCoord - player.posZ;
                     break;
                 case DOWN:
@@ -96,7 +96,7 @@ public abstract class BPPartFace extends BPPart implements IBPFacePart, IBPRedst
                 case NORTH:
                 case SOUTH:
                     s1 = mop.hitVec.xCoord - player.posX;
-                    s2 = mop.hitVec.yCoord - player.posY;
+                    s2 = -(mop.hitVec.yCoord - player.posY - player.height);
                     break;
                 default:
                     break;
@@ -183,7 +183,7 @@ public abstract class BPPartFace extends BPPart implements IBPFacePart, IBPRedst
                     GL11.glRotated(90, 0, 0, 1);
                     break;
             }
-            GL11.glRotated(90 * rotation, 0, 1, 0);
+            GL11.glRotated(90 * (rotation == 0 || rotation == 2 ? (rotation + 2) % 4 : rotation), 0, 1, 0);
         }
         GL11.glTranslated(-0.5, -0.5, -0.5);
     }

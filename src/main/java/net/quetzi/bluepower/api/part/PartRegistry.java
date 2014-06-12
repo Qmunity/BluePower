@@ -21,7 +21,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.quetzi.bluepower.init.BPItems;
 import net.quetzi.bluepower.part.PartLamp;
-import net.quetzi.bluepower.part.gate.GateTest;
+import net.quetzi.bluepower.part.gate.GateNot;
 import net.quetzi.bluepower.references.Refs;
 
 public class PartRegistry {
@@ -191,7 +191,7 @@ public class PartRegistry {
         
         ICON_PART = "not";
         // Gates
-        registerPart("not", GateTest.class);
+        registerPart("not", GateNot.class);
         
         // Lamps
         registerPart("lampwhite", PartLamp.class, "white", 0xFFFFFF);

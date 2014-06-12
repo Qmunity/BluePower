@@ -37,6 +37,8 @@ public enum FaceDirection {
     
         FaceDirection dir = null;
         
+        int rot = rotation;
+        
         switch (face) {
             case UP:
             case DOWN:
@@ -62,6 +64,7 @@ public enum FaceDirection {
                 break;
             case WEST:
             case EAST:
+                rot++;
                 switch(direction){
                     case UP:
                         dir = FRONT;
@@ -108,7 +111,7 @@ public enum FaceDirection {
                 break;
         }
         
-        if (dir != null) dir = getDirection((dir.getDirection() + rotation) % 4);
+        if (dir != null) dir = getDirection((dir.getDirection() + rot) % 4);
         
         return dir;
     }

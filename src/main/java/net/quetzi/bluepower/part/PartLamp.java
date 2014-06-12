@@ -6,7 +6,6 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.quetzi.bluepower.api.part.BPPartFace;
-import net.quetzi.bluepower.api.part.FaceDirection;
 import net.quetzi.bluepower.api.part.RedstoneConnection;
 import net.quetzi.bluepower.api.vec.Vector3;
 import net.quetzi.bluepower.helper.RedstoneHelper;
@@ -99,15 +98,13 @@ public class PartLamp extends BPPartFace {
         int old = power;
         
         power = 0;
-        for(ForgeDirection d : ForgeDirection.VALID_DIRECTIONS)
+        for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS)
             power = Math.max(power, RedstoneHelper.getInput(world, x, y, z, d));
         
-        if(old != power){
+        if (old != power) {
             notifyUpdate();
             world.updateLightByType(EnumSkyBlock.Block, x, y, z);
         }
     }
-    
-    
     
 }

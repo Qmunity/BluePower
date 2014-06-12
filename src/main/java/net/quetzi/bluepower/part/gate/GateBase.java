@@ -132,6 +132,18 @@ public abstract class GateBase extends BPPartFace {
         GL11.glPopMatrix();
     }
     
+    public void renderTopTexture(String texture) {
+    
+        Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(texture));
+        GL11.glBegin(GL11.GL_QUADS);
+        GL11.glNormal3d(0, 1, 0);
+        RenderHelper.addVertexWithTexture(0, 1D / 8D, 0, 0, 0);
+        RenderHelper.addVertexWithTexture(0, 1D / 8D, 1, 0, 1);
+        RenderHelper.addVertexWithTexture(1, 1D / 8D, 1, 1, 1);
+        RenderHelper.addVertexWithTexture(1, 1D / 8D, 0, 1, 0);
+        GL11.glEnd();
+    }
+    
     @Override
     public final boolean renderStatic(Vector3 loc, int pass) {
     
