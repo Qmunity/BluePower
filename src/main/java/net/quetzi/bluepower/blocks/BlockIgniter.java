@@ -29,43 +29,40 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockIgniter extends BlockContainerBase {
-
-    @SuppressWarnings("unused")
+    
     private IIcon textureFrontOn;
     private IIcon textureFrontOff;
-    @SuppressWarnings("unused")
     private IIcon textureSide1;
-    @SuppressWarnings("unused")
     private IIcon textureSide2;
     private IIcon textureBack;
-
+    
     public BlockIgniter() {
+    
         super(Material.rock);
     }
-
+    
     @Override
     protected Class<? extends TileEntity> getTileEntity() {
-
+    
         return TileIgniter.class;
     }
-
+    
     @Override
     @SideOnly(Side.CLIENT)
     public IIcon getIcon(int side, int meta) {
+    
         // TODO: Set textures correctly
         ForgeDirection direction = ForgeDirection.getOrientation(meta);
         if (side == direction.ordinal()) {
             return textureFrontOff;
-        } else if (side == direction.getOpposite().ordinal()) {
-            return textureBack;
-        }
+        } else if (side == direction.getOpposite().ordinal()) { return textureBack; }
         return blockIcon;
     }
-
+    
     @Override
     @SideOnly(Side.CLIENT)
     public void registerBlockIcons(IIconRegister iconRegister) {
-
+    
         this.textureFrontOn = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + Refs.BLOCKIGNITER_NAME + "_front_on");
         this.textureFrontOff = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + Refs.BLOCKIGNITER_NAME + "_front_off");
         this.textureBack = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + Refs.BLOCKIGNITER_NAME + "_back");
@@ -73,9 +70,10 @@ public class BlockIgniter extends BlockContainerBase {
         this.textureSide2 = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + Refs.BLOCKIGNITER_NAME + "_side_1");
         this.blockIcon = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + Refs.BLOCKIGNITER_NAME + "_side_0");
     }
-
+    
     @Override
     public GuiIDs getGuiID() {
+    
         return GuiIDs.INVALID;
     }
 }

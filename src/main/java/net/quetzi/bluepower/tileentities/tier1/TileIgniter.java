@@ -23,11 +23,12 @@ import net.minecraftforge.common.util.ForgeDirection;
 import net.quetzi.bluepower.tileentities.TileBase;
 
 public class TileIgniter extends TileBase {
-
+    
     boolean isActive;
-
+    
     @Override
     protected void redstoneChanged(boolean newValue) {
+    
         ForgeDirection direction = this.getFacingDirection();
         if (this.getIsRedstonePowered()) {
             if (isActive) {
@@ -42,12 +43,21 @@ public class TileIgniter extends TileBase {
             }
         }
     }
-
+    
     private void ignite(ForgeDirection direction) {
+    
         if (this.isActive) {
             worldObj.getBlock(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ).isBurning(worldObj,
                     xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ);
         }
     }
-
+    
+    @Override
+    public void updateEntity() {
+    
+        if (this.getTicker() % 5 == 0) {
+            this.ignite(this.getFacingDirection());
+        }
+        super.updateEntity();
+    }
 }
