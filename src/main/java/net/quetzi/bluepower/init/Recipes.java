@@ -33,6 +33,7 @@ public class Recipes {
         GameRegistry.addSmelting(BPBlocks.copper_ore, new ItemStack(BPItems.copper_ingot), 0.5F);
         GameRegistry.addSmelting(BPBlocks.tin_ore, new ItemStack(BPItems.tin_ingot), 0.5F);
         GameRegistry.addSmelting(BPBlocks.silver_ore, new ItemStack(BPItems.silver_ingot), 0.7F);
+        GameRegistry.addSmelting(BPBlocks.tungsten_block, new ItemStack(BPItems.tungsten_ingot), 0.8F);
         GameRegistry.addSmelting(BPBlocks.basalt, new ItemStack(BPBlocks.basalt_tile), 0);
         GameRegistry.addSmelting(BPBlocks.marble, new ItemStack(BPBlocks.marble_tile), 0);
         GameRegistry.addSmelting(Blocks.stone, new ItemStack(BPItems.stone_wafer, 2), 0);
