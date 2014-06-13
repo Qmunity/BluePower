@@ -38,27 +38,26 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemScrewdriver extends Item {
-
+    
     public ItemScrewdriver() {
     
-        this.setUnlocalizedName(Refs.SCREWDRIVER_NAME);
-        this.setCreativeTab(CustomTabs.tabBluePowerTools);
-        this.setMaxDamage(250);
-        this.setMaxStackSize(1);
-        this.setTextureName(Refs.MODID + ":" + this.getUnlocalizedName().substring(5));
+        setUnlocalizedName(Refs.SCREWDRIVER_NAME);
+        setCreativeTab(CustomTabs.tabBluePowerTools);
+        setMaxDamage(250);
+        setMaxStackSize(1);
+        setTextureName(Refs.MODID + ":" + this.getUnlocalizedName().substring(5));
     }
-
+    
     @Override
     public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
-
+    
         Block block = world.getBlock(x, y, z);
         
-        if(block == BPBlocks.multipart){
+        if (block == BPBlocks.multipart) {
             IMultipartCompat compat = (IMultipartCompat) CompatibilityUtils.getModule(Dependencies.FMP);
-            MovingObjectPosition mop = player.rayTrace(player.capabilities.isCreativeMode ? 5 : 4.5, 0);
-            BPPart p = compat.getClickedPart(new Vector3(x, y, z, world), new Vector3(hitX, hitY, hitZ), mop, stack, player);
+            BPPart p = compat.getClickedPart(new Vector3(x, y, z, world), new Vector3(hitX, hitY, hitZ), stack, player);
             
-            if(p != null && player.isSneaking()){
+            if (p != null && player.isSneaking()) {
                 p.onActivated(player, new MovingObjectPosition(x, y, z, side, Vec3.createVectorHelper(x + hitX, y + hitY, z + hitZ)), stack);
             }
             
@@ -71,7 +70,7 @@ public class ItemScrewdriver extends Item {
         }
         return false;
     }
-
+    
     @SideOnly(Side.CLIENT)
     @Override
     public boolean isFull3D() {

@@ -48,7 +48,7 @@ public class MultipartBPPart extends TMultiPart implements IRedstonePart, JNorma
     
     protected BPPart getPart() {
     
-        return this.part;
+        return part;
     }
     
     protected void setPart(BPPart part) {
@@ -97,7 +97,7 @@ public class MultipartBPPart extends TMultiPart implements IRedstonePart, JNorma
     
     @Override
     public boolean occlusionTest(TMultiPart part) {
-        
+    
         return NormalOcclusionTest.apply(this, part);
     }
     
@@ -178,7 +178,7 @@ public class MultipartBPPart extends TMultiPart implements IRedstonePart, JNorma
     
     @Override
     public int strongPowerLevel(int side) {
-        
+    
         return weakPowerLevel(side);
     }
     
@@ -233,8 +233,6 @@ public class MultipartBPPart extends TMultiPart implements IRedstonePart, JNorma
     @Override
     public boolean activate(EntityPlayer player, MovingObjectPosition hit, ItemStack item) {
     
-        System.out.println("Shift: " + player.isSneaking());
-        
         return getPart().onActivated(player, hit, item);
     }
     
@@ -254,10 +252,10 @@ public class MultipartBPPart extends TMultiPart implements IRedstonePart, JNorma
     
     @Override
     public boolean drawHighlight(MovingObjectPosition hit, EntityPlayer player, float frame) {
-        
+    
         Cuboid6 c = null;
         
-        if(c == null) return false;
+        if (c == null) return false;
         RayTracer.instance().rayTraceCuboid(new Vector3(RayTracer.getStartVec(player)), new Vector3(RayTracer.getEndVec(player)), c);
         
         return true;
