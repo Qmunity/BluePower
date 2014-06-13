@@ -56,5 +56,10 @@ public class CompatModuleFMPAlt extends CompatModule implements IMultipartCompat
     
         return 0;
     }
+
+    @Override
+    public void sendUpdatePacket(BPPart part) {
+        
+    }
     
 }

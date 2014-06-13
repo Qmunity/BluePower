@@ -14,4 +14,6 @@ public interface IMultipartCompat {
     
     public int getInput(World w, int x, int y, int z, ForgeDirection side, ForgeDirection face);
     
+    public void sendUpdatePacket(BPPart part);
+    
 }
