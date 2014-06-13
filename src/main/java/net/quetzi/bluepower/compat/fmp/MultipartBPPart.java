@@ -11,6 +11,7 @@ package net.quetzi.bluepower.compat.fmp;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -22,10 +23,13 @@ import net.quetzi.bluepower.api.part.BPPart;
 import net.quetzi.bluepower.api.part.IBPRedstonePart;
 import net.quetzi.bluepower.api.part.PartRegistry;
 import net.quetzi.bluepower.references.Refs;
+
+import org.lwjgl.opengl.GL11;
+
 import codechicken.lib.data.MCDataInput;
 import codechicken.lib.data.MCDataOutput;
 import codechicken.lib.raytracer.IndexedCuboid6;
-import codechicken.lib.raytracer.RayTracer;
+import codechicken.lib.render.RenderUtils;
 import codechicken.lib.vec.Cuboid6;
 import codechicken.lib.vec.Vector3;
 import codechicken.multipart.IRedstonePart;
@@ -97,7 +101,7 @@ public class MultipartBPPart extends TMultiPart implements IRedstonePart, JNorma
     
     @Override
     public boolean occlusionTest(TMultiPart part) {
-        
+    
         return NormalOcclusionTest.apply(this, part);
     }
     
@@ -178,7 +182,7 @@ public class MultipartBPPart extends TMultiPart implements IRedstonePart, JNorma
     
     @Override
     public int strongPowerLevel(int side) {
-        
+    
         return weakPowerLevel(side);
     }
     
@@ -253,12 +257,20 @@ public class MultipartBPPart extends TMultiPart implements IRedstonePart, JNorma
     }
     
     @Override
-    public boolean drawHighlight(MovingObjectPosition hit, EntityPlayer player, float frame) {
+    public boolean drawHighlight(MovingObjectPosition mop, EntityPlayer player, float frame) {
         
-        Cuboid6 c = null;
+        ForgeDirection face = ForgeDirection.getOrientation(mop.sideHit);
+    
+        Cuboid6 c = net.quetzi.bluepower.util.RayTracer.getSelectedCuboid(mop, player, face, getSubParts(), true);
         
-        if(c == null) return false;
-        RayTracer.instance().rayTraceCuboid(new Vector3(RayTracer.getStartVec(player)), new Vector3(RayTracer.getEndVec(player)), c);
+        if (c == null) return true;
+        
+        GL11.glPushMatrix();
+        {
+            GL11.glTranslated(x() - TileEntityRendererDispatcher.staticPlayerX, y() - TileEntityRendererDispatcher.staticPlayerY, z() - TileEntityRendererDispatcher.staticPlayerZ);
+            RenderUtils.drawCuboidOutline(c);
+        }
+        GL11.glPopMatrix();
         
         return true;
     }

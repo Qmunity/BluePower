@@ -99,7 +99,7 @@ public class GateNot extends GateBase {
     
         super.addSelectionBoxes(boxes);
         
-        boxes.add(AxisAlignedBB.getBoundingBox(7D/16D, 1D/8D, 7D/16D, 9D/16D, 7D/16D, 9D/16D));
+        boxes.add(AxisAlignedBB.getBoundingBox(7D/16D, 1D/8D, 8D/16D, 9D/16D, 7D/16D, 10D/16D));
     }
     
 }

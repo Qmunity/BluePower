@@ -234,8 +234,20 @@ public abstract class BPPartFace extends BPPart implements IBPFacePart, IBPRedst
         
         List<AxisAlignedBB> boxes = new ArrayList<AxisAlignedBB>();
         addCollisionBoxes(boxes);
-        for (AxisAlignedBB b : boxes)
-            collisionBoxes.add(new Vector3Cube(b).rotate90Degrees(d));
+        for (AxisAlignedBB b : boxes) {
+            Vector3Cube c = new Vector3Cube(b);
+            
+            c.getMin().subtract(0.5, 0.5, 0.5);
+            c.getMax().subtract(0.5, 0.5, 0.5);
+            c.getMin().rotate(0, Math.PI / 2 * getRotation(), 0);
+            c.getMax().rotate(0, Math.PI / 2 * getRotation(), 0);
+            c.getMin().add(0.5, 0.5, 0.5);
+            c.getMax().add(0.5, 0.5, 0.5);
+            
+            c = c.rotate90Degrees(d);
+            
+            collisionBoxes.add(new Vector3Cube(c.getMin(), c.getMax()));
+        }
         
         for (Vector3Cube c : collisionBoxes)
             aabbs.add(c.toAABB());
@@ -258,8 +270,20 @@ public abstract class BPPartFace extends BPPart implements IBPFacePart, IBPRedst
         
         List<AxisAlignedBB> boxes = new ArrayList<AxisAlignedBB>();
         addSelectionBoxes(boxes);
-        for (AxisAlignedBB b : boxes)
-            selectionBoxes.add(new Vector3Cube(b).rotate90Degrees(d));
+        for (AxisAlignedBB b : boxes) {
+            Vector3Cube c = new Vector3Cube(b);
+            
+            c.getMin().subtract(0.5, 0.5, 0.5);
+            c.getMax().subtract(0.5, 0.5, 0.5);
+            c.getMin().rotate(0, Math.PI / 2 * getRotation(), 0);
+            c.getMax().rotate(0, Math.PI / 2 * getRotation(), 0);
+            c.getMin().add(0.5, 0.5, 0.5);
+            c.getMax().add(0.5, 0.5, 0.5);
+            
+            c = c.rotate90Degrees(d);
+            
+            selectionBoxes.add(new Vector3Cube(c.getMin(), c.getMax()));
+        }
         
         for (Vector3Cube c : selectionBoxes)
             aabbs.add(c.toAABB());
@@ -281,8 +305,20 @@ public abstract class BPPartFace extends BPPart implements IBPFacePart, IBPRedst
         occlusionBoxes.clear();
         List<AxisAlignedBB> boxes = new ArrayList<AxisAlignedBB>();
         addOcclusionBoxes(boxes);
-        for (AxisAlignedBB b : boxes)
-            occlusionBoxes.add(new Vector3Cube(b).rotate90Degrees(d));
+        for (AxisAlignedBB b : boxes) {
+            Vector3Cube c = new Vector3Cube(b);
+            
+            c.getMin().subtract(0.5, 0.5, 0.5);
+            c.getMax().subtract(0.5, 0.5, 0.5);
+            c.getMin().rotate(0, Math.PI / 2 * getRotation(), 0);
+            c.getMax().rotate(0, Math.PI / 2 * getRotation(), 0);
+            c.getMin().add(0.5, 0.5, 0.5);
+            c.getMax().add(0.5, 0.5, 0.5);
+            
+            c = c.rotate90Degrees(d);
+            
+            occlusionBoxes.add(new Vector3Cube(c.getMin(), c.getMax()));
+        }
         
         for (Vector3Cube c : occlusionBoxes)
             aabbs.add(c.toAABB());
