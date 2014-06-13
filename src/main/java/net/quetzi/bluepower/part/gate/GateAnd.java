@@ -41,11 +41,11 @@ public class GateAnd extends GateBase {
         RenderHelper.renderRedstoneTorch(0, 1D / 8D, -4D / 16D, 10D / 16D, power);
         
         renderTopTexture(FaceDirection.LEFT, left);
-        RenderHelper.renderRedstoneTorch(-4D/16D, 1D / 8D, 1D / 16D, 8D / 16D, power);
+        RenderHelper.renderRedstoneTorch(-3D/16D, 1D / 8D, 0, 8D / 16D, power);
         renderTopTexture(FaceDirection.BACK, back);
-        RenderHelper.renderRedstoneTorch(0, 1D / 8D, 1D / 16D, 8D / 16D, power);
+        RenderHelper.renderRedstoneTorch(0, 1D / 8D, 0, 8D / 16D, power);
         renderTopTexture(FaceDirection.RIGHT, right);
-        RenderHelper.renderRedstoneTorch(4D/16D, 1D / 8D, 1D / 16D, 8D / 16D, power);
+        RenderHelper.renderRedstoneTorch(3D/16D, 1D / 8D, 0, 8D / 16D, power);
     }
     
     @Override

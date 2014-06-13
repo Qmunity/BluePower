@@ -41,7 +41,7 @@ public class GateNot extends GateBase {
         renderTopTexture(FaceDirection.LEFT, !power);
         renderTopTexture(FaceDirection.RIGHT, !power);
         renderTopTexture(FaceDirection.BACK, back.getPower() > 0);
-        RenderHelper.renderRedstoneTorch(0, 1D / 8D, -1D / 16D, 9D / 16D, !power);
+        RenderHelper.renderRedstoneTorch(0, 1D / 8D, 0, 9D / 16D, !power);
     }
     
     @Override

@@ -144,7 +144,7 @@ public abstract class GateBase extends BPPartFace {
     
     protected void renderTopTexture(FaceDirection side, boolean state) {
     
-        renderTopTexture(Refs.MODID + ":textures/blocks/gates/" + getType() + "/trace" + side.getName() + (state ? "On" : "Off") + ".png");
+        renderTopTexture(Refs.MODID + ":textures/blocks/gates/" + getType() + "/" + side.getName() + "_" + (state ? "on" : "off") + ".png");
     }
     
     public void renderTopTexture(String texture) {
@@ -215,12 +215,12 @@ public abstract class GateBase extends BPPartFace {
     }
     
     public void renderTop(float frame) {
-        renderTopTexture(Refs.MODID + ":textures/blocks/gates/" + getType() + "/top.png");
+        renderTopTexture(Refs.MODID + ":textures/blocks/gates/" + getType() + "/base.png");
         renderTop(getConnection(FaceDirection.FRONT), getConnection(FaceDirection.LEFT), getConnection(FaceDirection.BACK), getConnection(FaceDirection.RIGHT), frame);
     }
     
     public void renderTop() {
-        renderTopTexture(Refs.MODID + ":textures/blocks/gates/" + getType() + "/top.png");
+        renderTopTexture(Refs.MODID + ":textures/blocks/gates/" + getType() + "/base.png");
         renderTopItem(getConnection(FaceDirection.FRONT), getConnection(FaceDirection.LEFT), getConnection(FaceDirection.BACK), getConnection(FaceDirection.RIGHT));
     }
     
