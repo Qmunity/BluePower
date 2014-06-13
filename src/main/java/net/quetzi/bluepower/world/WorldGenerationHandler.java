@@ -65,6 +65,9 @@ public class WorldGenerationHandler implements IWorldGenerator {
             this.addOreToGenerate(random, Config.veinCountCopper, Config.veinSizeCopper, Config.minCopperY, Config.maxCopperY, BPBlocks.copper_ore, world,
                     chunkX, chunkZ);
         }
+        if (Config.generateTungsten) {
+        	this.addOreToGenerate(random, Config.veinCountTungsten, Config.veinSizeTungsten, Config.minTungstenY, Config.maxTungstenY, BPBlocks.tungsten_ore, world, chunkX, chunkZ);
+        }
 
         BiomeGenBase bgb = world.getWorldChunkManager().getBiomeGenAt(chunkX * 16 + 16, chunkZ * 16 + 16);
 

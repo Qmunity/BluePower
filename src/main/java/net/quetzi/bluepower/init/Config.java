@@ -21,6 +21,11 @@ import net.minecraftforge.common.config.Configuration;
 
 public class Config {
     
+	public static boolean  generateTungsten;
+	public static int      minTungstenY;
+	public static int      maxTungstenY;
+	public static int      veinCountTungsten;
+	public static int      veinSizeTungsten;
     public static boolean  generateCopper;
     public static int      minCopperY;
     public static int      maxCopperY;
@@ -64,6 +69,11 @@ public class Config {
     public static void setUp(Configuration config) {
     
         config.addCustomCategoryComment("World Gen", "Toggle blocks being generated into the world");
+        generateTungsten = config.get("World Gen Tungsten", "generateTungsten", true).getBoolean(true);
+        minTungstenY = config.get("World Gen Tungsten", "minTungstenY", 5).getInt();
+        maxTungstenY = config.get("World Gen Tungsten", "maxTungstenY", 32).getInt();
+        veinCountTungsten = config.get("World Gen Tungsten", "veinCountTungsten", 2).getInt();
+        veinSizeTungsten = config.get("World Gen Tungsten", "veinSizeTungsten", 3).getInt();
         generateCopper = config.get("World Gen Copper", "generateCopper", true).getBoolean(true);
         minCopperY = config.get("World Gen Copper", "minCopperY", 0).getInt();
         maxCopperY = config.get("World Gen Copper", "maxCopperY", 64).getInt();

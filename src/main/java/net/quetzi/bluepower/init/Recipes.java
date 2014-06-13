@@ -42,6 +42,7 @@ public class Recipes {
         craftManager.addRecipe(new ItemStack(BPBlocks.copper_block, 1), new Object[] { "###", "###", "###", '#', BPItems.copper_ingot });
         craftManager.addRecipe(new ItemStack(BPBlocks.silver_block, 1), new Object[] { "###", "###", "###", '#', BPItems.silver_ingot });
         craftManager.addRecipe(new ItemStack(BPBlocks.tin_block, 1), new Object[] { "###", "###", "###", '#', BPItems.tin_ingot });
+        craftManager.addRecipe(new ItemStack(BPBlocks.tungsten_block, 1), new Object[] { "###", "###","###", '#', BPItems.tungsten_ingot });
         
         craftManager.addRecipe(new ItemStack(BPItems.ruby_axe, 1), new Object[] { "GG ", "GS ", " S ", 'G', BPItems.ruby, 'S', Items.stick });
         craftManager.addRecipe(new ItemStack(BPItems.ruby_axe, 1), new Object[] { " GG", " SG", " S ", 'G', BPItems.ruby, 'S', Items.stick });
@@ -70,6 +71,15 @@ public class Recipes {
         craftManager.addRecipe(new ItemStack(BPItems.amethyst_hoe, 1), new Object[] { " GG", " S ", " S ", 'G', BPItems.amethyst, 'S', Items.stick });
         craftManager.addRecipe(new ItemStack(BPItems.amethyst_sickle, 1), new Object[] { " G ", "  G", "SG ", 'G', BPItems.amethyst, 'S', Items.stick });
         
+        craftManager.addRecipe(new ItemStack(BPItems.tungcarb_axe, 1), new Object[] { "TT ", "TS ", " S ", 'T', BPItems.tungsten_carbite, 'S', Items.stick });
+        craftManager.addRecipe(new ItemStack(BPItems.tungcarb_axe, 1), new Object[] { " TT", " ST", " S ", 'T', BPItems.tungsten_carbite, 'S', Items.stick });
+        craftManager.addRecipe(new ItemStack(BPItems.tungcarb_sword, 1), new Object[] { " T ", " T ", " S ", 'T', BPItems.tungsten_carbite, 'S', Items.stick });
+        craftManager.addRecipe(new ItemStack(BPItems.tungcarb_pickaxe, 1), new Object[] { "TTT", " S ", " S ", 'T', BPItems.tungsten_carbite, 'S', Items.stick });
+        craftManager.addRecipe(new ItemStack(BPItems.tungcarb_spade, 1), new Object[] { " T ", " S ", " S ", 'T', BPItems.tungsten_carbite, 'S', Items.stick });
+        craftManager.addRecipe(new ItemStack(BPItems.tungcarb_hoe, 1), new Object[] { "TT ", " S ", " S ", 'T', BPItems.tungsten_carbite, 'S', Items.stick });
+        craftManager.addRecipe(new ItemStack(BPItems.tungcarb_hoe, 1), new Object[] { " TT", " S ", " S ", 'T', BPItems.tungsten_carbite, 'S', Items.stick });
+        craftManager.addRecipe(new ItemStack(BPItems.tungcarb_sickle, 1), new Object[] { " T ", "  T", "ST ", 'T', BPItems.tungsten_carbite, 'S', Items.stick });
+        
         craftManager.addRecipe(new ItemStack(BPItems.wood_sickle, 1), new Object[] { " G ", "  G", "SG ", 'G', Blocks.planks, 'S', Items.stick });
         craftManager.addRecipe(new ItemStack(BPItems.stone_sickle, 1), new Object[] { " G ", "  G", "SG ", 'G', Blocks.cobblestone, 'S', Items.stick });
         craftManager.addRecipe(new ItemStack(BPItems.iron_sickle, 1), new Object[] { " G ", "  G", "SG ", 'G', Items.iron_ingot, 'S', Items.stick });
@@ -81,6 +91,7 @@ public class Recipes {
         craftManager.addRecipe(new ItemStack(BPItems.amethyst_saw, 1), new Object[] { "SSS", " II", " ##", 'S', Items.stick, 'I', Items.iron_ingot, '#', BPItems.amethyst });
         craftManager.addRecipe(new ItemStack(BPItems.sapphire_saw, 1), new Object[] { "SSS", " II", " ##", 'S', Items.stick, 'I', Items.iron_ingot, '#', BPItems.sapphire });
         craftManager.addRecipe(new ItemStack(BPItems.diamond_saw, 1), new Object[] { "SSS", " II", " ##", 'S', Items.stick, 'I', Items.iron_ingot, '#', Items.diamond });
+        craftManager.addRecipe(new ItemStack(BPItems.tungcarb_saw, 1), new Object[] { "SSS", " II", " ##", 'S', Items.stick, 'I', Items.iron_ingot, '#', BPItems.tungsten_carbite });
         
         craftManager.addRecipe(new ItemStack(BPItems.indigo_dye, 1), new Object[] { "#", '#', BPBlocks.indigo_flower });
         
@@ -97,6 +108,7 @@ public class Recipes {
         craftManager.addRecipe(new ItemStack(BPItems.silver_ingot, 9), new Object[] { "#", '#', BPBlocks.silver_block });
         craftManager.addRecipe(new ItemStack(BPItems.copper_ingot, 9), new Object[] { "#", '#', BPBlocks.copper_block });
         craftManager.addRecipe(new ItemStack(BPItems.tin_ingot, 9), new Object[] { "#", '#', BPBlocks.tin_block });
+        craftManager.addRecipe(new ItemStack(BPItems.tungsten_ingot, 9), new Object[] { " # ", '#', BPBlocks.tungsten_block });
         
         craftManager.addRecipe(new ItemStack(BPItems.screwdriver, 1), new Object[] { "# ", " S", '#', Items.iron_ingot, 'S', Items.stick });
         craftManager.addRecipe(new ItemStack(BPItems.athame, 1), new Object[] { "# ", " S", '#', BPItems.silver_ingot, 'S', Items.stick });
@@ -112,6 +124,7 @@ public class Recipes {
         af.addRecipe(new ItemStack(BPItems.red_alloy_ingot, 1), new ItemStack(Items.redstone, 4), BPItems.copper_ingot);
         af.addRecipe(new ItemStack(BPItems.brass_ingot, 4), new ItemStack(BPItems.copper_ingot, 3), BPItems.tin_ingot);
         af.addRecipe(new ItemStack(BPItems.blue_alloy_ingot, 1), new ItemStack(BPItems.nikolite, 4), BPItems.silver_ingot);
+        af.addRecipe(new ItemStack(BPItems.tungsten_carbite, 1), new ItemStack(Items.coal, 2), BPItems.tungsten_ingot, Items.iron_ingot);
         af.addRecipe(new ItemStack(BPItems.silicon_boule, 1), new ItemStack(Items.coal, 8), new ItemStack(Blocks.sand, 8));
         
         af.addRecipe(new ItemStack(BPItems.red_doped_wafer, 1), new ItemStack(Items.redstone, 4), BPItems.silicon_wafer);

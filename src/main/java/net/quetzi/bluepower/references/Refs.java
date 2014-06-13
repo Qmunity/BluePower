@@ -52,17 +52,21 @@ public class Refs {
     public static final String COPPERORE_NAME         = "copper_ore";
     public static final String SILVERORE_NAME         = "silver_ore";
     public static final String TINORE_NAME            = "tin_ore";
+    public static final String TUNGSTENORE_NAME       = "tungsten_ore";
     public static final String COPPERBLOCK_NAME       = "copper_block";
     public static final String SILVERBLOCK_NAME       = "silver_block";
     public static final String TINBLOCK_NAME          = "tin_block";
+    public static final String TUNGSTENBLOCK_NAME     = "tungsten_block";
     public static final String ITEMCOPPERINGOT_NAME   = "copper_ingot";
     public static final String ITEMSILVERINGOT_NAME   = "silver_ingot";
     public static final String ITEMTININGOT_NAME      = "tin_ingot";
+    public static final String TUNGSTENINGOT_NAME     = "tungsten_ingot";
     public static final String AMETHYSTSAW_NAME       = "amethyst_saw";
     public static final String SAPPHIRESAW_NAME       = "sapphire_saw";
     public static final String RUBYSAW_NAME           = "ruby_saw";
     public static final String DIAMONDSAW_NAME        = "diamond_saw";
     public static final String IRONSAW_NAME           = "iron_saw";
+    public static final String TUNGCARBSAW_NAME       = "tungstencarbite_saw";
     public static final String SILICONBOULE_NAME      = "silicon_boule";
     public static final String SILICONWAFER_NAME      = "silicon_wafer";
     public static final String BLUEDOPEDWAFER_NAME    = "blue_doped_wafer";
@@ -72,6 +76,7 @@ public class Refs {
     public static final String ITEMBRASSINGOT_NAME     = "brass_ingot";
     public static final String ITEMBLUEALLOYINGOT_NAME = "blue_alloy_ingot";
     public static final String ITEMREDALLOYINGOT_NAME  = "red_alloy_ingot";
+    public static final String TUNGSTENCARBITE_NAME    = "tungstencarbite_name";
     public static final String ITEMTINPLATE_NAME       = "tinplate";
 
     public static final String RUBYAXE_NAME     = "ruby_axe";
@@ -94,6 +99,13 @@ public class Refs {
     public static final String AMETHYSTSPADE_NAME   = "amethyst_shovel";
     public static final String AMETHYSTHOE_NAME     = "amethyst_hoe";
     public static final String AMETHYSTSICKLE_NAME  = "amethyst_sickle";
+    
+    public static final String TUNGCARBAXE_NAME       = "tungstencarbite_axe";
+    public static final String TUNGCARBSWORD_NAME     = "tungstencarbite_sword";
+    public static final String TUNGCARBPICKAXE_NAME   = "tungstencarbite_pickaxe";
+    public static final String TUNGCARBSPADE_NAME     = "tungstencarbite_spade";
+    public static final String TUNGCARBHOE_NAME       = "tungstencarbite_hoe";
+    public static final String TUNGCARBSICKLE_NAME    = "tungstencarbite_sickle";
 
     public static final String FLAXSEED_NAME     = "flax_seeds";
     public static final String FLAXCROP_NAME     = "flax_crop";
