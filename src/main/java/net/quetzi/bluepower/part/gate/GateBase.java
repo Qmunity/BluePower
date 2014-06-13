@@ -131,6 +131,20 @@ public abstract class GateBase extends BPPartFace {
         GL11.glPopMatrix();
     }
     
+    protected void renderTopTexture(FaceDirection side, RedstoneConnection connection) {
+    
+        if (connection.isEnabled()) {
+            renderTopTexture(side, connection.getPower() > 0);
+        } else {
+            renderTopTexture(Refs.MODID + ":textures/blocks/gates/" + getType() + "/trace" + side.getName() + "Disabled");
+        }
+    }
+    
+    protected void renderTopTexture(FaceDirection side, boolean state) {
+    
+        renderTopTexture(Refs.MODID + ":textures/blocks/gates/" + getType() + "/trace" + side.getName() + (state ? "On" : "Off") + ".png");
+    }
+    
     public void renderTopTexture(String texture) {
     
         Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(texture));
@@ -156,7 +170,7 @@ public abstract class GateBase extends BPPartFace {
         {
             
             /* Top */
-            renderTopItem();
+            renderTop();
             
             Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/gates/bottom.png"));
             GL11.glBegin(GL11.GL_QUADS);
@@ -198,9 +212,18 @@ public abstract class GateBase extends BPPartFace {
         GL11.glPopMatrix();
     }
     
-    public abstract void renderTop(float frame);
+    public void renderTop(float frame) {
     
-    public abstract void renderTopItem();
+        renderTop();
+    }
+    
+    public void renderTop() {
+    
+        renderTopTexture(Refs.MODID + ":textures/blocks/gates/" + getType() + "/top.png");
+        renderTopItem(getConnection(FaceDirection.FRONT), getConnection(FaceDirection.LEFT), getConnection(FaceDirection.BACK), getConnection(FaceDirection.RIGHT));
+    }
+    
+    protected abstract void renderTopItem(RedstoneConnection front, RedstoneConnection left, RedstoneConnection back, RedstoneConnection right);
     
     @Override
     public void update() {

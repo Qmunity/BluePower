@@ -4,9 +4,17 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 public enum FaceDirection {
     
-    FRONT, BACK, LEFT, RIGHT;
+    FRONT("Front"), BACK("Back"), LEFT("Left"), RIGHT("Right");
     
-    public FaceDirection getOpposite(){
+    private FaceDirection(String name) {
+    
+        this.name = name;
+    }
+    
+    private String name; //used in texture paths
+                         
+    public FaceDirection getOpposite() {
+    
         return FaceDirection.getDirection((getDirection() + 2) % 4);
     }
     
@@ -23,6 +31,11 @@ public enum FaceDirection {
                 return 3;
         }
         return -1;
+    }
+    
+    public String getName() {
+    
+        return name;
     }
     
     public static FaceDirection getDirection(int id) {
@@ -42,7 +55,7 @@ public enum FaceDirection {
         switch (face) {
             case UP:
             case DOWN:
-                switch(direction){
+                switch (direction) {
                     case NORTH:
                         dir = FRONT;
                         break;
@@ -59,13 +72,12 @@ public enum FaceDirection {
                         break;
                 }
                 
-                if(face == ForgeDirection.UP && dir != null)
-                    dir = dir.getOpposite();
+                if (face == ForgeDirection.UP && dir != null) dir = dir.getOpposite();
                 break;
             case WEST:
             case EAST:
                 rot++;
-                switch(direction){
+                switch (direction) {
                     case UP:
                         dir = FRONT;
                         break;
@@ -82,12 +94,11 @@ public enum FaceDirection {
                         break;
                 }
                 
-                if(face == ForgeDirection.WEST && dir != null)
-                    dir = dir.getOpposite();
+                if (face == ForgeDirection.WEST && dir != null) dir = dir.getOpposite();
                 break;
             case NORTH:
             case SOUTH:
-                switch(direction){
+                switch (direction) {
                     case UP:
                         dir = FRONT;
                         break;
@@ -104,8 +115,7 @@ public enum FaceDirection {
                         break;
                 }
                 
-                if(face == ForgeDirection.NORTH && dir != null)
-                    dir = dir.getOpposite();
+                if (face == ForgeDirection.NORTH && dir != null) dir = dir.getOpposite();
                 break;
             default:
                 break;

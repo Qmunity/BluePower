@@ -1,12 +1,8 @@
 package net.quetzi.bluepower.part.gate;
 
-import java.util.List;
-
-import net.minecraft.util.AxisAlignedBB;
 import net.quetzi.bluepower.api.part.FaceDirection;
 import net.quetzi.bluepower.api.part.RedstoneConnection;
 import net.quetzi.bluepower.client.renderers.RenderHelper;
-import net.quetzi.bluepower.references.Refs;
 
 public class GateAnd extends GateBase {
     
@@ -39,40 +35,14 @@ public class GateAnd extends GateBase {
     }
     
     @Override
-    public void renderTop(float frame) {
+    public void renderTopItem(RedstoneConnection front, RedstoneConnection left, RedstoneConnection back, RedstoneConnection right) {
     
-        renderTopItem();
-    }
-    
-    @Override
-    public void renderTopItem() {
-    
-        renderTopTexture(Refs.MODID + ":textures/blocks/gates/not/top.png");
-        if (!power) {
-            renderTopTexture(Refs.MODID + ":textures/blocks/gates/not/traceFrontOn.png");
-        } else {
-            renderTopTexture(Refs.MODID + ":textures/blocks/gates/not/traceFrontOff.png");
-        }
+        renderTopTexture(FaceDirection.FRONT, power);
+        RenderHelper.renderRedstoneTorch(0, 1D / 8D, -3D / 16D, 9D / 16D, power);
         
-        if (getConnection(FaceDirection.LEFT).getPower() > 0) {
-            renderTopTexture(Refs.MODID + ":textures/blocks/gates/not/traceLeftOn.png");
-        } else {
-            renderTopTexture(Refs.MODID + ":textures/blocks/gates/not/traceLeftOff.png");
-        }
-        
-        if (getConnection(FaceDirection.BACK).getPower() > 0) {
-            renderTopTexture(Refs.MODID + ":textures/blocks/gates/not/traceBackOn.png");
-        } else {
-            renderTopTexture(Refs.MODID + ":textures/blocks/gates/not/traceBackOff.png");
-        }
-        
-        if (getConnection(FaceDirection.RIGHT).getPower() > 0) {
-            renderTopTexture(Refs.MODID + ":textures/blocks/gates/not/traceRightOn.png");
-        } else {
-            renderTopTexture(Refs.MODID + ":textures/blocks/gates/not/traceRightOff.png");
-        }
-        
-        RenderHelper.renderRedstoneTorch(0, 1D / 8D, -1D / 16D, 9D / 16D, !power);
+        renderTopTexture(FaceDirection.LEFT, left);
+        renderTopTexture(FaceDirection.BACK, back);
+        renderTopTexture(FaceDirection.RIGHT, right);
     }
     
     @Override
@@ -113,31 +83,6 @@ public class GateAnd extends GateBase {
             back.enable();
         }
         return true;
-    }
-    
-    @Override
-    public void addCollisionBoxes(List<AxisAlignedBB> boxes) {
-    
-        super.addCollisionBoxes(boxes);
-        
-        boxes.add(AxisAlignedBB.getBoundingBox(7D / 16D, 1D / 8D, 7D / 16D, 9D / 16D, 7D / 16D, 9D / 16D));
-    }
-    
-    @Override
-    public void addOcclusionBoxes(List<AxisAlignedBB> boxes) {
-    
-        super.addOcclusionBoxes(boxes);
-        
-        boxes.add(AxisAlignedBB.getBoundingBox(7D / 16D, 1D / 8D, 7D / 16D, 9D / 16D, 7D / 16D, 9D / 16D));
-        
-    }
-    
-    @Override
-    public void addSelectionBoxes(List<AxisAlignedBB> boxes) {
-    
-        super.addSelectionBoxes(boxes);
-        
-        boxes.add(AxisAlignedBB.getBoundingBox(7D / 16D, 1D / 8D, 7D / 16D, 9D / 16D, 7D / 16D, 9D / 16D));
     }
     
 }
