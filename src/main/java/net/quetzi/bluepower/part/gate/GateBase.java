@@ -217,7 +217,14 @@ public abstract class GateBase extends BPPartFace {
     
         if (item != null && item.getItem() == BPItems.screwdriver) {
             if (player.isSneaking()) {
-                return changeMode(getConnection(FaceDirection.FRONT), getConnection(FaceDirection.LEFT), getConnection(FaceDirection.BACK), getConnection(FaceDirection.RIGHT));
+                if (!world.isRemote) {
+                    if (changeMode(getConnection(FaceDirection.FRONT), getConnection(FaceDirection.LEFT), getConnection(FaceDirection.BACK), getConnection(FaceDirection.RIGHT))) {
+                        notifyUpdate();
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }
             } else {
                 setRotation(getRotation() + 1);
             }

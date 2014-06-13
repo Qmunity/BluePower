@@ -20,6 +20,8 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 import net.quetzi.bluepower.api.vec.Vector3;
+import net.quetzi.bluepower.compat.CompatibilityUtils;
+import net.quetzi.bluepower.compat.fmp.IMultipartCompat;
 import net.quetzi.bluepower.references.Dependencies;
 import net.quetzi.bluepower.util.RayTracer;
 import codechicken.multipart.BlockMultipart;
@@ -354,6 +356,17 @@ public abstract class BPPart {
         markPartForRenderUpdate();
         
         world.notifyBlockOfNeighborChange(x, y, z, world.getBlock(x, y + 1, z));
+    }
+    
+    /**
+     * Sends this part's data to the client
+     */
+    public void sendUpdatePacket() {
+    
+        if (!shouldNotifyUpdates) return;
+        if (world == null) return;
+        
+        ((IMultipartCompat) CompatibilityUtils.getModule(Dependencies.FMP)).sendUpdatePacket(this);
     }
     
     public void save(NBTTagCompound tag) {

@@ -153,7 +153,11 @@ public abstract class BPPartFace extends BPPart implements IBPFacePart, IBPRedst
         RedstoneConnection con = getConnection(side);
         if (con == null) return 0;
         
-        return con.isOutput() ? con.getPower() : 0;
+        ForgeDirection face = ForgeDirection.getOrientation(getFace()).getOpposite();
+        
+        int p = RedstoneHelper.setOutput(world, x, y, z, side, face, con.getPower());
+        
+        return con.isOutput() ? p : 0;
     }
     
     @Override
@@ -209,10 +213,12 @@ public abstract class BPPartFace extends BPPart implements IBPFacePart, IBPRedst
     
         super.update();
         
+        ForgeDirection face = ForgeDirection.getOrientation(getFace()).getOpposite();
+        
         for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
             RedstoneConnection rc = getConnection(d);
             if (rc != null && rc.isInput()) {
-                rc.setPower(RedstoneHelper.getInput(world, x, y, z, d));
+                rc.setPower(RedstoneHelper.getInput(world, x, y, z, d, face));
             }
         }
     }
