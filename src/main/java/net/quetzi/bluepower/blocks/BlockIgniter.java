@@ -42,6 +42,7 @@ public class BlockIgniter extends BlockContainerBase {
     public BlockIgniter() {
     
         super(Material.rock);
+        this.setBlockName(Refs.BLOCKIGNITER_NAME);
     }
     
     @Override

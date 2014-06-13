@@ -158,7 +158,7 @@ public class Refs {
     public static final String ITEMSTONEWIRE_NAME    = "stone_wire";
     public static final String ITEMSTONEANODE_NAME   = "stone_anode";
     public static final String ITEMSTONECATHODE_NAME = "stone_cathode";
-    public static final String ITEMSTONEPOINTER_NAME = "stone_pointer.name";
+    public static final String ITEMSTONEPOINTER_NAME = "stone_pointer";
     public static final String ITEMSILICONCHIP_NAME  = "silicon_chip";
 
     public static String fullVersionString() {
