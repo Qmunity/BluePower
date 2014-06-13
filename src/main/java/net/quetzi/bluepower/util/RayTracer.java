@@ -12,8 +12,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.Vec3;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.quetzi.bluepower.api.vec.Vector3;
 import net.quetzi.bluepower.references.Dependencies;
@@ -37,13 +39,13 @@ public class RayTracer {
     
         return null;
     }
-
+    
     @Optional.Method(modid = Dependencies.FMP)
     public static final Cuboid6 getSelectedCuboid(MovingObjectPosition mop, EntityPlayer player, ForgeDirection face, Iterable<IndexedCuboid6> boxes,
             boolean unused) {
     
         List<Cuboid6> cuboids = new ArrayList<Cuboid6>();
-        for(IndexedCuboid6 c : boxes)
+        for (IndexedCuboid6 c : boxes)
             cuboids.add(c);
         
         return getSelectedCuboid(mop, player, face, cuboids);
@@ -93,6 +95,35 @@ public class RayTracer {
         }
         
         return null;
+    }
+    
+    /*
+     * The following methods are from CodeChickenLib, credits to ChickenBones for this. CodeChickenLib can be found here:
+     * http://files.minecraftforge.net/CodeChickenLib/
+     */
+    public static Vec3 getCorrectedHeadVec(EntityPlayer player) {
+    
+        Vec3 v = Vec3.createVectorHelper(player.posX, player.posY, player.posZ);
+        if (player.worldObj.isRemote) {
+            v.yCoord += player.getEyeHeight() - player.getDefaultEyeHeight();// compatibility with eye height changing mods
+        } else {
+            v.yCoord += player.getEyeHeight();
+            if (player instanceof EntityPlayerMP && player.isSneaking()) v.yCoord -= 0.08;
+        }
+        return v;
+    }
+    
+    public static Vec3 getStartVec(EntityPlayer player) {
+    
+        return getCorrectedHeadVec(player);
+    }
+    
+    public static Vec3 getEndVec(EntityPlayer player) {
+    
+        Vec3 headVec = getCorrectedHeadVec(player);
+        Vec3 lookVec = player.getLook(1.0F);
+        double reach = 4.5;
+        return headVec.addVector(lookVec.xCoord * reach, lookVec.yCoord * reach, lookVec.zCoord * reach);
     }
     
 }

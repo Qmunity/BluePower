@@ -52,7 +52,7 @@ public class MultipartBPPart extends TMultiPart implements IRedstonePart, JNorma
     
     protected BPPart getPart() {
     
-        return this.part;
+        return part;
     }
     
     protected void setPart(BPPart part) {
@@ -237,8 +237,6 @@ public class MultipartBPPart extends TMultiPart implements IRedstonePart, JNorma
     @Override
     public boolean activate(EntityPlayer player, MovingObjectPosition hit, ItemStack item) {
     
-        System.out.println("Shift: " + player.isSneaking());
-        
         return getPart().onActivated(player, hit, item);
     }
     

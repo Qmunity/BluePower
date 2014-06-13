@@ -9,21 +9,21 @@
 package net.quetzi.bluepower.compat.fmp;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.quetzi.bluepower.api.part.BPPart;
 import net.quetzi.bluepower.api.vec.Vector3;
 import net.quetzi.bluepower.compat.CompatModule;
 import net.quetzi.bluepower.init.BPBlocks;
-import codechicken.lib.raytracer.IndexedCuboid6;
-import codechicken.lib.raytracer.RayTracer;
+import net.quetzi.bluepower.util.RayTracer;
+import codechicken.lib.raytracer.ExtendedMOP;
 import codechicken.microblock.BlockMicroMaterial;
 import codechicken.microblock.MicroMaterialRegistry;
 import codechicken.multipart.TMultiPart;
@@ -101,33 +101,28 @@ public class CompatModuleFMP extends CompatModule implements IMultipartCompat {
     }
     
     @Override
-    public BPPart getClickedPart(Vector3 loc, Vector3 subLoc, MovingObjectPosition original, ItemStack item, EntityPlayer player) {
+    public BPPart getClickedPart(Vector3 loc, Vector3 subLoc, ItemStack item, EntityPlayer player) {
     
-        BPPart part = null;
-        
         TileMultipart te = (TileMultipart) loc.getTileEntity();
-        for (TMultiPart p : te.jPartList()) {
-            if (!(p instanceof MultipartBPPart)) continue;
-            
-            List<IndexedCuboid6> l = new ArrayList<IndexedCuboid6>();
-            for (IndexedCuboid6 c : p.getSubParts()) {
-                IndexedCuboid6 c1 = (IndexedCuboid6) c;
-                c1.min.add(loc.getX(), loc.getY(), loc.getZ());
-                c1.max.add(loc.getX(), loc.getY(), loc.getZ());
-                l.add(c1);
+        
+        List<ExtendedMOP> mops = new ArrayList<ExtendedMOP>();
+        for (int i = 0; i < te.jPartList().size(); i++) {
+            ExtendedMOP mop = te.jPartList().get(i).collisionRayTrace(RayTracer.getStartVec(player), RayTracer.getEndVec(player));
+            if (mop != null) {
+                mop.setData(i);
+                mops.add(mop);
             }
-            
-            MovingObjectPosition mop = RayTracer.instance().rayTraceCuboids(new codechicken.lib.vec.Vector3(RayTracer.getStartVec(player)),
-                    new codechicken.lib.vec.Vector3(RayTracer.getEndVec(player)), l, loc.toBlockCoord(), loc.getBlock());
-            if (mop == null) continue;
-            
-            float dist = (float) new Vector3(mop.hitVec).distanceTo(new Vector3(original.hitVec));
-            
-            if (dist > 0) return null;
+        }
+        if (mops.isEmpty()) return null;
+        Collections.sort(mops);
+        TMultiPart p = te.jPartList().get((int) ExtendedMOP.getData(mops.get(0)));
+        
+        if (p instanceof MultipartBPPart) {
             return ((MultipartBPPart) p).getPart();
+        } else {
+            return null;
         }
         
-        return part;
     }
     
     @Override
@@ -145,7 +140,7 @@ public class CompatModuleFMP extends CompatModule implements IMultipartCompat {
             for (TMultiPart p : te.jPartList()) {
                 if (p instanceof MultipartBPPart) {
                     MultipartBPPart bpp = (MultipartBPPart) p;
-                    if(bpp.getPart() == part){
+                    if (bpp.getPart() == part) {
                         bpp.sendDescUpdate();
                         return;
                     }

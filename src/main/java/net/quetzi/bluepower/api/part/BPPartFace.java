@@ -25,14 +25,14 @@ import org.lwjgl.opengl.GL11;
 
 public abstract class BPPartFace extends BPPart implements IBPFacePart, IBPRedstonePart {
     
-    private int                    face           = 0;
-    private int                    rotation       = 0;
+    private int                     face           = 0;
+    private int                     rotation       = 0;
     
-    protected RedstoneConnection[] connections    = new RedstoneConnection[4];
+    protected RedstoneConnection[]  connections    = new RedstoneConnection[4];
     
-    private List<Vector3Cube>      selectionBoxes = new ArrayList<Vector3Cube>();
-    private List<Vector3Cube>      collisionBoxes = new ArrayList<Vector3Cube>();
-    private List<Vector3Cube>      occlusionBoxes = new ArrayList<Vector3Cube>();
+    private final List<Vector3Cube> selectionBoxes = new ArrayList<Vector3Cube>();
+    private final List<Vector3Cube> collisionBoxes = new ArrayList<Vector3Cube>();
+    private final List<Vector3Cube> occlusionBoxes = new ArrayList<Vector3Cube>();
     
     @Override
     public int getFace() {
@@ -40,6 +40,7 @@ public abstract class BPPartFace extends BPPart implements IBPFacePart, IBPRedst
         return face;
     }
     
+    @Override
     public void setFace(int face) {
     
         this.face = face;
@@ -62,10 +63,10 @@ public abstract class BPPartFace extends BPPart implements IBPFacePart, IBPRedst
     @Override
     public boolean canPlacePart(ItemStack is, EntityPlayer player, Vector3 block, MovingObjectPosition mop) {
     
-        this.world = block.getWorld();
-        this.x = block.getBlockX();
-        this.y = block.getBlockY();
-        this.z = block.getBlockZ();
+        world = block.getWorld();
+        x = block.getBlockX();
+        y = block.getBlockY();
+        z = block.getBlockZ();
         
         ForgeDirection dir = ForgeDirection.getOrientation(mop.sideHit).getOpposite();
         if (dir == ForgeDirection.DOWN) {

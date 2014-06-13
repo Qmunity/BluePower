@@ -3,7 +3,6 @@ package net.quetzi.bluepower.part.gate;
 import java.util.List;
 
 import net.minecraft.util.AxisAlignedBB;
-import net.quetzi.bluepower.BluePower;
 import net.quetzi.bluepower.api.part.FaceDirection;
 import net.quetzi.bluepower.api.part.RedstoneConnection;
 import net.quetzi.bluepower.client.renderers.RenderHelper;
@@ -113,7 +112,6 @@ public class GateAnd extends GateBase {
             left.enable();
             back.enable();
         }
-        BluePower.log.info("front: " + front.isEnabled() + ", left: " + left.isEnabled() + ", back: " + back.isEnabled() + ", right: " + right.isEnabled());
         return true;
     }
     
