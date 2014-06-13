@@ -15,6 +15,8 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.quetzi.bluepower.api.part.BPPart;
 import net.quetzi.bluepower.api.vec.Vector3;
 import net.quetzi.bluepower.compat.CompatModule;
@@ -124,5 +126,11 @@ public class CompatModuleFMP extends CompatModule implements IMultipartCompat {
         }
         
         return part;
+    }
+
+    @Override
+    public int getInput(World w, int x, int y, int z, ForgeDirection side, ForgeDirection face) {
+        
+        return 0;
     }
 }
