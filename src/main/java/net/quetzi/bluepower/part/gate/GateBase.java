@@ -138,7 +138,7 @@ public abstract class GateBase extends BPPartFace {
         if (connection.isEnabled()) {
             renderTopTexture(side, connection.getPower() > 0);
         } else {
-            renderTopTexture(Refs.MODID + ":textures/blocks/gates/" + getType() + "/trace" + side.getName() + "Disabled");
+            renderTopTexture(Refs.MODID + ":textures/blocks/gates/" + getType() + "/" + side.getName() + "_disabled.png");
         }
     }
     
@@ -215,16 +215,19 @@ public abstract class GateBase extends BPPartFace {
     }
     
     public void renderTop(float frame) {
+    
         renderTopTexture(Refs.MODID + ":textures/blocks/gates/" + getType() + "/base.png");
         renderTop(getConnection(FaceDirection.FRONT), getConnection(FaceDirection.LEFT), getConnection(FaceDirection.BACK), getConnection(FaceDirection.RIGHT), frame);
     }
     
     public void renderTop() {
+    
         renderTopTexture(Refs.MODID + ":textures/blocks/gates/" + getType() + "/base.png");
         renderTopItem(getConnection(FaceDirection.FRONT), getConnection(FaceDirection.LEFT), getConnection(FaceDirection.BACK), getConnection(FaceDirection.RIGHT));
     }
     
-    protected void renderTopItem(RedstoneConnection front, RedstoneConnection left, RedstoneConnection back, RedstoneConnection right){
+    protected void renderTopItem(RedstoneConnection front, RedstoneConnection left, RedstoneConnection back, RedstoneConnection right) {
+    
         renderTop(getConnection(FaceDirection.FRONT), getConnection(FaceDirection.LEFT), getConnection(FaceDirection.BACK), getConnection(FaceDirection.RIGHT), 0);
     }
     
@@ -268,7 +271,7 @@ public abstract class GateBase extends BPPartFace {
     
     @Override
     public CreativeTabs getCreativeTab() {
-        
+    
         return CustomTabs.tabBluePowerCircuits;
     }
     
