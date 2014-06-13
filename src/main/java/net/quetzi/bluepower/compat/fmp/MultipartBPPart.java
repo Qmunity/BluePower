@@ -266,7 +266,11 @@ public class MultipartBPPart extends TMultiPart implements IRedstonePart, JNorma
         GL11.glPushMatrix();
         {
             GL11.glTranslated(x() - TileEntityRendererDispatcher.staticPlayerX, y() - TileEntityRendererDispatcher.staticPlayerY, z() - TileEntityRendererDispatcher.staticPlayerZ);
-            RenderUtils.drawCuboidOutline(c);
+            GL11.glDisable(GL11.GL_TEXTURE_2D);
+            GL11.glColor4d(0, 0, 0, 0);
+            RenderUtils.drawCuboidOutline(c.copy().expand(0.001));
+            GL11.glColor4d(1, 1, 1, 1);
+            GL11.glEnable(GL11.GL_TEXTURE_2D);
         }
         GL11.glPopMatrix();
         

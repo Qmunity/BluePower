@@ -40,7 +40,7 @@ public class GateTimer extends GateBase {
     @Override
     public void renderTop(RedstoneConnection front, RedstoneConnection left, RedstoneConnection back, RedstoneConnection right, float frame) {
     
-        renderTopTexture(FaceDirection.FRONT, power);
+        //renderTopTexture(FaceDirection.FRONT, power);
         renderTopTexture(FaceDirection.LEFT, power);
         renderTopTexture(FaceDirection.RIGHT, power);
         renderTopTexture(FaceDirection.BACK, back.getPower() > 0);
