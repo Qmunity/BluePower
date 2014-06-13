@@ -227,7 +227,7 @@ public abstract class GateBase extends BPPartFace {
     }
     
     protected boolean changeMode(RedstoneConnection front, RedstoneConnection left, RedstoneConnection back, RedstoneConnection right) {
-    
+        
         return false;
     }
     

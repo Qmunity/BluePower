@@ -5,6 +5,7 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.MovingObjectPosition;
 import net.quetzi.bluepower.api.part.BPPart;
 import net.quetzi.bluepower.api.vec.Vector3;
 import net.quetzi.bluepower.compat.CompatModule;
@@ -43,7 +44,7 @@ public class CompatModuleFMPAlt extends CompatModule implements IMultipartCompat
     }
 
     @Override
-    public BPPart getClickedPart(Vector3 loc, Vector3 subLoc, ItemStack item, EntityPlayer player) {
+    public BPPart getClickedPart(Vector3 loc, Vector3 subLoc, MovingObjectPosition mop, ItemStack item, EntityPlayer player) {
     
         return null;
     }
