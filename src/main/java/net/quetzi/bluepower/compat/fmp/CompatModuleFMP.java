@@ -21,7 +21,6 @@ import net.quetzi.bluepower.compat.CompatModule;
 import net.quetzi.bluepower.init.BPBlocks;
 import codechicken.lib.raytracer.IndexedCuboid6;
 import codechicken.lib.raytracer.RayTracer;
-import codechicken.lib.vec.Cuboid6;
 import codechicken.microblock.BlockMicroMaterial;
 import codechicken.microblock.MicroMaterialRegistry;
 import codechicken.multipart.TMultiPart;
@@ -99,7 +98,7 @@ public class CompatModuleFMP extends CompatModule implements IMultipartCompat {
     }
     
     @Override
-    public BPPart getClickedPart(Vector3 loc, Vector3 subLoc, ItemStack item, EntityPlayer player) {
+    public BPPart getClickedPart(Vector3 loc, Vector3 subLoc, MovingObjectPosition original, ItemStack item, EntityPlayer player) {
     
         BPPart part = null;
         
@@ -114,10 +113,13 @@ public class CompatModuleFMP extends CompatModule implements IMultipartCompat {
                 c1.max.add(loc.getX(), loc.getY(), loc.getZ());
                 l.add(c1);
             }
+            
             MovingObjectPosition mop = RayTracer.instance().rayTraceCuboids(new codechicken.lib.vec.Vector3(RayTracer.getStartVec(player)), new codechicken.lib.vec.Vector3(RayTracer.getEndVec(player)), l, loc.toBlockCoord(), loc.getBlock());
             if(mop == null) continue;
-            float dist = (float) new Vector3(mop.hitVec).distanceTo(loc.clone().add(subLoc));
-            System.out.println(dist);
+            
+            float dist = (float) new Vector3(mop.hitVec).distanceTo(new Vector3(original.hitVec));
+            
+            if(dist > 0) return null;
             return ((MultipartBPPart)p).getPart();
         }
         

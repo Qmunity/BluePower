@@ -55,7 +55,8 @@ public class ItemScrewdriver extends Item {
         
         if(block == BPBlocks.multipart){
             IMultipartCompat compat = (IMultipartCompat) CompatibilityUtils.getModule(Dependencies.FMP);
-            BPPart p = compat.getClickedPart(new Vector3(x, y, z, world), new Vector3(hitX, hitY, hitZ), stack, player);
+            MovingObjectPosition mop = player.rayTrace(player.capabilities.isCreativeMode ? 5 : 4.5, 0);
+            BPPart p = compat.getClickedPart(new Vector3(x, y, z, world), new Vector3(hitX, hitY, hitZ), mop, stack, player);
             
             if(p != null && player.isSneaking()){
                 p.onActivated(player, new MovingObjectPosition(x, y, z, side, Vec3.createVectorHelper(x + hitX, y + hitY, z + hitZ)), stack);
