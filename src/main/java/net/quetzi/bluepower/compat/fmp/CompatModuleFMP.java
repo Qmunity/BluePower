@@ -115,7 +115,7 @@ public class CompatModuleFMP extends CompatModule implements IMultipartCompat {
         }
         if (mops.isEmpty()) return null;
         Collections.sort(mops);
-        TMultiPart p = te.jPartList().get((int) ExtendedMOP.getData(mops.get(0)));
+        TMultiPart p = te.jPartList().get((Integer) ExtendedMOP.getData(mops.get(0)));
         
         if (p instanceof MultipartBPPart) {
             return ((MultipartBPPart) p).getPart();
