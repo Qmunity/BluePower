@@ -206,7 +206,6 @@ public abstract class GateBase extends BPPartFace {
     public void update() {
     
         super.update();
-        
         doLogic(getConnection(FaceDirection.FRONT), getConnection(FaceDirection.LEFT), getConnection(FaceDirection.BACK), getConnection(FaceDirection.RIGHT));
     }
     
@@ -220,6 +219,7 @@ public abstract class GateBase extends BPPartFace {
                 if (!world.isRemote) {
                     if (changeMode(getConnection(FaceDirection.FRONT), getConnection(FaceDirection.LEFT), getConnection(FaceDirection.BACK), getConnection(FaceDirection.RIGHT))) {
                         notifyUpdate();
+                        sendUpdatePacket();
                         return true;
                     } else {
                         return false;
