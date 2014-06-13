@@ -110,9 +110,11 @@ public class BPItems {
         copper_ingot = new ItemIngot(Refs.ITEMCOPPERINGOT_NAME);
         silver_ingot = new ItemIngot(Refs.ITEMSILVERINGOT_NAME);
         tin_ingot = new ItemIngot(Refs.ITEMTININGOT_NAME);
+        tungsten_ingot = new ItemIngot(Refs.TUNGSTENINGOT_NAME);
         brass_ingot = new ItemIngot(Refs.ITEMBRASSINGOT_NAME);
         blue_alloy_ingot = new ItemIngot(Refs.ITEMBLUEALLOYINGOT_NAME);
         red_alloy_ingot = new ItemIngot(Refs.ITEMREDALLOYINGOT_NAME);
+        tungsten_carbite = new ItemIngot(Refs.TUNGSTENCARBITE_NAME);
         
         ruby_axe = new ItemGemAxe(gemMaterial, Refs.RUBYAXE_NAME);
         ruby_sword = new ItemGemSword(gemMaterial, Refs.RUBYSWORD_NAME);
