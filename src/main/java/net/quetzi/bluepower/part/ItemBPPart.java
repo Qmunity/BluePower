@@ -17,6 +17,8 @@
 
 package net.quetzi.bluepower.part;
 
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -26,8 +28,6 @@ import net.minecraft.world.World;
 import net.quetzi.bluepower.api.part.PartRegistry;
 import net.quetzi.bluepower.init.CustomTabs;
 import net.quetzi.bluepower.references.Refs;
-
-import java.util.List;
 
 public class ItemBPPart extends Item {
 

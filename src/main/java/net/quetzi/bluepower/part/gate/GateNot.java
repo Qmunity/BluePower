@@ -35,7 +35,7 @@ public class GateNot extends GateBase {
     }
     
     @Override
-    public void renderTopItem(RedstoneConnection front, RedstoneConnection left, RedstoneConnection back, RedstoneConnection right) {
+    public void renderTop(RedstoneConnection front, RedstoneConnection left, RedstoneConnection back, RedstoneConnection right, float frame) {
     
         renderTopTexture(FaceDirection.FRONT, !power);
         renderTopTexture(FaceDirection.LEFT, !power);

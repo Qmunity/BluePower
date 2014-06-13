@@ -2,6 +2,7 @@ package net.quetzi.bluepower.part;
 
 import java.util.List;
 
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -9,6 +10,7 @@ import net.quetzi.bluepower.api.part.BPPartFace;
 import net.quetzi.bluepower.api.part.RedstoneConnection;
 import net.quetzi.bluepower.api.vec.Vector3;
 import net.quetzi.bluepower.helper.RedstoneHelper;
+import net.quetzi.bluepower.init.CustomTabs;
 
 import org.lwjgl.opengl.GL11;
 
@@ -105,6 +107,12 @@ public class PartLamp extends BPPartFace {
             notifyUpdate();
             world.updateLightByType(EnumSkyBlock.Block, x, y, z);
         }
+    }
+    
+    @Override
+    public CreativeTabs getCreativeTab() {
+        
+        return CustomTabs.tabBluePowerLighting;
     }
     
 }

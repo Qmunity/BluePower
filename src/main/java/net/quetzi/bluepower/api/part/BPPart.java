@@ -11,6 +11,7 @@ package net.quetzi.bluepower.api.part;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -375,6 +376,10 @@ public abstract class BPPart {
     
     public void load(NBTTagCompound tag) {
     
+    }
+    
+    public CreativeTabs getCreativeTab(){
+        return null;
     }
     
 }

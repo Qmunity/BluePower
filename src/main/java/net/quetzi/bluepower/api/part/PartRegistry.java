@@ -17,17 +17,21 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.quetzi.bluepower.init.BPItems;
+import net.quetzi.bluepower.init.CustomTabs;
 import net.quetzi.bluepower.part.PartLamp;
 import net.quetzi.bluepower.part.gate.GateAnd;
 import net.quetzi.bluepower.part.gate.GateNot;
+import net.quetzi.bluepower.part.gate.GateTimer;
 import net.quetzi.bluepower.references.Refs;
 
 public class PartRegistry {
     
     private static Map<String, Entry<Class<? extends BPPart>, Object[]>> parts = new HashMap<String, Entry<Class<? extends BPPart>, Object[]>>();
+    private static Map<String, CreativeTabs>                             tabs  = new HashMap<String, CreativeTabs>();
     
     public static String                                                 ICON_PART;
     
@@ -51,6 +55,22 @@ public class PartRegistry {
         if (parts.containsKey(e)) return;
         
         parts.put(id, e);
+        tabs.put(id, null);
+    }
+    
+    /**
+     * Sets the tab a part should show in
+     * @param id
+     *            Part identifier
+     * @param tab
+     *            Creative tab
+     */
+    public static void setPartTab(String id, CreativeTabs tab) {
+    
+        if (tabs.containsKey(id)) {
+            tabs.remove(id);
+            tabs.put(id, tab);
+        }
     }
     
     /**
@@ -107,6 +127,18 @@ public class PartRegistry {
     public static List<String> getRegisteredParts() {
     
         return Collections.unmodifiableList(new ArrayList<String>(parts.keySet()));
+    }
+    
+    public static List<String> getRegisteredPartsForTab(CreativeTabs tab) {
+    
+        List<String> parts = new ArrayList<String>();
+        
+        if (tab != null) {
+            for (String s : PartRegistry.parts.keySet())
+                if (tabs.get(s) == tab) parts.add(s);
+        }
+        
+        return Collections.unmodifiableList(new ArrayList<String>(parts));
     }
     
     /**
@@ -193,10 +225,15 @@ public class PartRegistry {
         ICON_PART = "not";
         // Gates
         registerPart("not", GateNot.class);
+        setPartTab("not", CustomTabs.tabBluePowerCircuits);
         registerPart("and", GateAnd.class);
+        setPartTab("and", CustomTabs.tabBluePowerCircuits);
+        registerPart("timer", GateTimer.class);
+        setPartTab("timer", CustomTabs.tabBluePowerCircuits);
         
         // Lamps
         registerPart("lampwhite", PartLamp.class, "white", 0xFFFFFF);
+        setPartTab("lampwhite", CustomTabs.tabBluePowerLighting);
     }
     
 }

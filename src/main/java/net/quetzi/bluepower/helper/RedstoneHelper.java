@@ -17,6 +17,8 @@ public class RedstoneHelper {
     }
     
     public static final int getInput(World w, int x, int y, int z, ForgeDirection side, ForgeDirection face) {
+        
+        if(w == null) return 0;
     
         int power = 0;
         
@@ -44,6 +46,8 @@ public class RedstoneHelper {
     }
     
     public static final int setOutput(World w, int x, int y, int z, ForgeDirection side, ForgeDirection face, int p) {
+        
+        if(w == null) return 0;
     
         int power = 0;
         

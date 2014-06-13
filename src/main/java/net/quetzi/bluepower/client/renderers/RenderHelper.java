@@ -8,6 +8,7 @@ import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
@@ -52,15 +53,69 @@ public class RenderHelper {
         GL11.glTranslated(-x, -y, -z);
     }
     
-    public static DoubleBuffer planeEquation(double x1, double y1, double z1,
-            double x2, double y2, double z2, double x3, double y3, double z3) {
+    public static void renderPointer(double x, double y, double z, double angle) {
+    
+        GL11.glPushMatrix();
+        {
+            GL11.glTranslated(x, y, z);
+            
+            GL11.glTranslated(0.5, 0.5, 0.5);
+            GL11.glRotated(360 * angle, 0, 1, 0);
+            GL11.glTranslated(-0.5, -0.5, -0.5);
+            
+            Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation("minecraft:textures/blocks/stone.png"));
+            
+            GL11.glBegin(GL11.GL_QUADS);
+            {
+                GL11.glNormal3d(0, -1, 0);
+                // Bottom
+                addVertexWithTexture(0.5, 0, 1D / 16D, 0.5, 1D / 16D);
+                addVertexWithTexture(0.5 - 1D / 8D, 0, 0.5, 0.5 - 1D / 8D, 0.5);
+                addVertexWithTexture(0.5, 0, 0.5 + 1D / 8D, 0.5, 0.5 + 1D / 8D);
+                addVertexWithTexture(0.5 + 1D / 8D, 0, 0.5, 0.5 + 1D / 8D, 0.5);
+                GL11.glNormal3d(0, 1, 0);
+                // Top
+                addVertexWithTexture(0.5, 1D/16D, 1D / 16D, 0.5, 1D / 16D);
+                addVertexWithTexture(0.5 - 1D / 8D, 1D/16D, 0.5, 0.5 - 1D / 8D, 0.5);
+                addVertexWithTexture(0.5, 1D/16D, 0.5 + 1D / 8D, 0.5, 0.5 + 1D / 8D);
+                addVertexWithTexture(0.5 + 1D / 8D, 1D/16D, 0.5, 0.5 + 1D / 8D, 0.5);
+                GL11.glNormal3d(1, 0, 0);
+                // Side 1
+                addVertexWithTexture(0.5, 1D/16D, 1D / 16D, 0.5, 1D / 16D);
+                addVertexWithTexture(0.5, 0, 1D / 16D, 0.5, 1D / 16D);
+                addVertexWithTexture(0.5 - 1D / 8D, 0, 0.5, 0.5 - 1D / 8D, 0.5);
+                addVertexWithTexture(0.5 - 1D / 8D, 1D/16D, 0.5, 0.5 - 1D / 8D, 0.5);
+                // Side 2
+                addVertexWithTexture(0.5 - 1D / 8D, 1D/16D, 0.5, 0.5 - 1D / 8D, 0.5);
+                addVertexWithTexture(0.5 - 1D / 8D, 0, 0.5, 0.5 - 1D / 8D, 0.5);
+                addVertexWithTexture(0.5, 0, 0.5 + 1D / 8D, 0.5, 0.5 + 1D / 8D);
+                addVertexWithTexture(0.5, 1D/16D, 0.5 + 1D / 8D, 0.5, 0.5 + 1D / 8D);
+                GL11.glNormal3d(-1, 0, 0);
+                // Side 3
+                addVertexWithTexture(0.5, 1D/16D, 0.5 + 1D / 8D, 0.5, 0.5 + 1D / 8D);
+                addVertexWithTexture(0.5, 0, 0.5 + 1D / 8D, 0.5, 0.5 + 1D / 8D);
+                addVertexWithTexture(0.5 + 1D / 8D, 0, 0.5, 0.5 + 1D / 8D, 0.5);
+                addVertexWithTexture(0.5 + 1D / 8D, 1D/16D, 0.5, 0.5 + 1D / 8D, 0.5);
+                // Side 4
+                addVertexWithTexture(0.5 + 1D / 8D, 1D/16D, 0.5, 0.5 + 1D / 8D, 0.5);
+                addVertexWithTexture(0.5 + 1D / 8D, 0, 0.5, 0.5 + 1D / 8D, 0.5);
+                addVertexWithTexture(0.5, 0, 1D / 16D, 0.5, 1D / 16D);
+                addVertexWithTexture(0.5, 1D/16D, 1D / 16D, 0.5, 1D / 16D);
+            }
+            GL11.glEnd();
+            
+        }
+        GL11.glPopMatrix();
+        
+    }
+    
+    public static DoubleBuffer planeEquation(double x1, double y1, double z1, double x2, double y2, double z2, double x3, double y3, double z3) {
     
         double[] eq = new double[4];
         eq[0] = (y1 * (z2 - z3)) + (y2 * (z3 - z1)) + (y3 * (z1 - z2));
         eq[1] = (z1 * (x2 - x3)) + (z2 * (x3 - x1)) + (z3 * (x1 - x2));
         eq[2] = (x1 * (y2 - y3)) + (x2 * (y3 - y1)) + (x3 * (y1 - y2));
-        eq[3] = -((x1 * ((y2 * z3) - (y3 * z2)))
-                + (x2 * ((y3 * z1) - (y1 * z3))) + (x3 * ((y1 * z2) - (y2 * z1))));
+        eq[3] = -((x1 * ((y2 * z3) - (y3 * z2))) + (x2 * ((y3 * z1) - (y1 * z3))) + (x3 * ((y1 * z2) - (y2 * z1))));
         DoubleBuffer b = BufferUtils.createDoubleBuffer(8).put(eq);
         b.flip();
         return b;

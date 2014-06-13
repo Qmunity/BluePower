@@ -11,6 +11,7 @@ package net.quetzi.bluepower.part.gate;
 import java.util.List;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
@@ -24,6 +25,7 @@ import net.quetzi.bluepower.api.vec.Vector3;
 import net.quetzi.bluepower.api.vec.Vector3Cube;
 import net.quetzi.bluepower.client.renderers.RenderHelper;
 import net.quetzi.bluepower.init.BPItems;
+import net.quetzi.bluepower.init.CustomTabs;
 import net.quetzi.bluepower.references.Refs;
 
 import org.lwjgl.opengl.GL11;
@@ -213,17 +215,20 @@ public abstract class GateBase extends BPPartFace {
     }
     
     public void renderTop(float frame) {
-    
-        renderTop();
+        renderTopTexture(Refs.MODID + ":textures/blocks/gates/" + getType() + "/top.png");
+        renderTop(getConnection(FaceDirection.FRONT), getConnection(FaceDirection.LEFT), getConnection(FaceDirection.BACK), getConnection(FaceDirection.RIGHT), frame);
     }
     
     public void renderTop() {
-    
         renderTopTexture(Refs.MODID + ":textures/blocks/gates/" + getType() + "/top.png");
         renderTopItem(getConnection(FaceDirection.FRONT), getConnection(FaceDirection.LEFT), getConnection(FaceDirection.BACK), getConnection(FaceDirection.RIGHT));
     }
     
-    protected abstract void renderTopItem(RedstoneConnection front, RedstoneConnection left, RedstoneConnection back, RedstoneConnection right);
+    protected void renderTopItem(RedstoneConnection front, RedstoneConnection left, RedstoneConnection back, RedstoneConnection right){
+        renderTop(getConnection(FaceDirection.FRONT), getConnection(FaceDirection.LEFT), getConnection(FaceDirection.BACK), getConnection(FaceDirection.RIGHT), 0);
+    }
+    
+    protected abstract void renderTop(RedstoneConnection front, RedstoneConnection left, RedstoneConnection back, RedstoneConnection right, float frame);
     
     @Override
     public void update() {
@@ -259,6 +264,12 @@ public abstract class GateBase extends BPPartFace {
     protected boolean changeMode(RedstoneConnection front, RedstoneConnection left, RedstoneConnection back, RedstoneConnection right) {
     
         return false;
+    }
+    
+    @Override
+    public CreativeTabs getCreativeTab() {
+        
+        return CustomTabs.tabBluePowerCircuits;
     }
     
 }
