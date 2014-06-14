@@ -152,14 +152,18 @@ public class Refs {
     public static final String LAMP_BLACK             = "lamp_black";
     public static final String INVERTEDLAMP_BLACK     = "invertedlamp_black";
 
-    public static final String ITEMATHAME_NAME       = "athame";
-    public static final String BLOCKIGNITER_NAME     = "igniter";
-    public static final String ITEMSTONEWAFER_NAME   = "stone_wafer";
-    public static final String ITEMSTONEWIRE_NAME    = "stone_wire";
-    public static final String ITEMSTONEANODE_NAME   = "stone_anode";
-    public static final String ITEMSTONECATHODE_NAME = "stone_cathode";
-    public static final String ITEMSTONEPOINTER_NAME = "stone_pointer";
-    public static final String ITEMSILICONCHIP_NAME  = "silicon_chip";
+    public static final String ITEMATHAME_NAME             = "athame";
+    public static final String BLOCKIGNITER_NAME           = "igniter";
+    public static final String ITEMSTONEWAFER_NAME         = "stone_wafer";
+    public static final String ITEMSTONEWIRE_NAME          = "stone_wire";
+    public static final String ITEMSTONEANODE_NAME         = "stone_anode";
+    public static final String ITEMSTONECATHODE_NAME       = "stone_cathode";
+    public static final String ITEMSTONEPOINTER_NAME       = "stone_pointer";
+    public static final String ITEMSILICONCHIP_NAME        = "silicon_chip";
+    public static final String ITEMTAINTEDSILICONCHIP_NAME = "taintedsilicon_chip";
+    public static final String ITEMSTONEREDWIRE_NAME       = "stone_redwire";
+    public static final String ITEMPLATEASSEMBLY_NAME      = "plate_assembly";
+    public static final String ITEMSTONEBUNDLE_NAME        = "stone_bundle";
 
     public static String fullVersionString() {
 

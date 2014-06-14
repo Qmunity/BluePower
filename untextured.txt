@@ -1,0 +1,15 @@
+Blocks
+******
+
+
+Items
+*****
+stone_wafer
+stone_wire
+stone_anode
+stone_cathode
+stone_redwire
+stone_bundle
+silicon_chip
+taintedsilicon_chip
+stone_pointer
