@@ -7,10 +7,12 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.quetzi.bluepower.api.part.BPPart;
 import net.quetzi.bluepower.api.vec.Vector3;
@@ -108,7 +110,7 @@ public class PneumaticTube extends BPPart {
     public void onAdded() {
     
         super.onAdded();
-        //   updateConnections();
+        // updateConnections();
     }
     
     private TileEntityCache[] getTileCache() {
@@ -133,10 +135,10 @@ public class PneumaticTube extends BPPart {
                 
                 if (d == ForgeDirection.UP || d == ForgeDirection.DOWN) d = d.getOpposite();
                 if (connections[i]) {
-                    //     connections[i] = !checkOcclusion(sideBB.clone().rotate90Degrees(d).toAABB());
+                    // connections[i] = !checkOcclusion(sideBB.clone().rotate90Degrees(d).toAABB());
                 }
             }
-            //  BluePower.log.info("connections: " + Arrays.toString(connections) + "  object : " + this);
+            // BluePower.log.info("connections: " + Arrays.toString(connections) + "  object : " + this);
             sendUpdatePacket();
         }
     }
@@ -203,36 +205,78 @@ public class PneumaticTube extends BPPart {
         GL11.glPopMatrix();
     }
     
+    @Override
+    public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
+    
+        GL11.glPushMatrix();
+        GL11.glDisable(GL11.GL_CULL_FACE);
+        
+        List<AxisAlignedBB> aabbs = new ArrayList<AxisAlignedBB>();
+        aabbs.addAll(getCollisionBoxes());
+        aabbs.add(sideBB.clone().toAABB());
+        aabbs.add(sideBB.clone().rotate90Degrees(ForgeDirection.UP).toAABB());
+        
+        boolean shouldRenderNode = false;
+        boolean hasConnection = false;
+        for (int i = 0; i < 6; i += 2) {
+            if (connections[i] ^ connections[i + 1]) {
+                shouldRenderNode = true;
+                break;
+            }
+            if (connections[i] || connections[i + 1]) hasConnection = true;
+        }
+        if (shouldRenderNode || !hasConnection) {
+            Minecraft.getMinecraft().renderEngine.bindTexture(tubeNodeTexture);
+            renderTexturedCuboid(aabbs.get(0));
+            Minecraft.getMinecraft().renderEngine.bindTexture(tubeSideTexture);
+        } else {
+            Minecraft.getMinecraft().renderEngine.bindTexture(tubeSideTexture);
+            renderTexturedCuboid(aabbs.get(0));
+        }
+        for (int i = 1; i < aabbs.size(); i++) {
+            renderTexturedCuboid(aabbs.get(i));
+        }
+        Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
+        GL11.glEnable(GL11.GL_CULL_FACE);
+        GL11.glPopMatrix();
+    }
+    
     public static void renderTexturedCuboid(AxisAlignedBB aabb) {
     
         Tessellator t = Tessellator.instance;
         t.startDrawingQuads();
-        t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.minZ, aabb.minX, aabb.minY);//minZ
+        t.setNormal(0, 0, -1);
+        t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.minZ, aabb.minX, aabb.minY);// minZ
         t.addVertexWithUV(aabb.minX, aabb.minY, aabb.minZ, aabb.minX, aabb.maxY);
         t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.minZ, aabb.maxX, aabb.maxY);
         t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.minZ, aabb.maxX, aabb.minY);
         
+        t.setNormal(0, 0, 1);
         t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.maxZ, aabb.minX, aabb.minY);
-        t.addVertexWithUV(aabb.minX, aabb.minY, aabb.maxZ, aabb.minX, aabb.maxY);//maxZ
+        t.addVertexWithUV(aabb.minX, aabb.minY, aabb.maxZ, aabb.minX, aabb.maxY);// maxZ
         t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.maxZ, aabb.maxX, aabb.maxY);
         t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.maxZ, aabb.maxX, aabb.minY);
         
-        t.addVertexWithUV(aabb.minX, aabb.minY, aabb.minZ, aabb.minX, aabb.minZ);//bottom
+        t.setNormal(0, -1, 0);
+        t.addVertexWithUV(aabb.minX, aabb.minY, aabb.minZ, aabb.minX, aabb.minZ);// bottom
         t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.minZ, aabb.minX, aabb.maxZ);
         t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.maxZ, aabb.maxX, aabb.maxZ);
         t.addVertexWithUV(aabb.minX, aabb.minY, aabb.maxZ, aabb.maxX, aabb.minZ);
         
-        t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.minZ, aabb.minX, aabb.minZ);//top
+        t.setNormal(0, 1, 0);
+        t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.minZ, aabb.minX, aabb.minZ);// top
         t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.minZ, aabb.minX, aabb.maxZ);
         t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.maxZ, aabb.maxX, aabb.maxZ);
         t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.maxZ, aabb.maxX, aabb.minZ);
         
-        t.addVertexWithUV(aabb.minX, aabb.minY, aabb.minZ, aabb.minY, aabb.minZ);//minX
+        t.setNormal(-1, 0, 0);
+        t.addVertexWithUV(aabb.minX, aabb.minY, aabb.minZ, aabb.minY, aabb.minZ);// minX
         t.addVertexWithUV(aabb.minX, aabb.minY, aabb.maxZ, aabb.minY, aabb.maxZ);
         t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.maxX, aabb.maxY, aabb.maxZ);
         t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.minZ, aabb.maxY, aabb.minZ);
         
-        t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.minZ, aabb.minY, aabb.minZ);//maxZ
+        t.setNormal(1, 0, 0);
+        t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.minZ, aabb.minY, aabb.minZ);// maxZ
         t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.minZ, aabb.minY, aabb.maxZ);
         t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.maxZ, aabb.maxY, aabb.maxZ);
         t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.maxZ, aabb.maxY, aabb.minZ);
@@ -258,7 +302,7 @@ public class PneumaticTube extends BPPart {
     
     @Override
     public CreativeTabs getCreativeTab() {
-        
+    
         return CustomTabs.tabBluePowerMachines;
     }
 }
