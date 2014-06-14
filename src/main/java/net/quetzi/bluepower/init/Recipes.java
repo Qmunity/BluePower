@@ -101,16 +101,37 @@ public class Recipes {
         
         craftManager.addRecipe(new ItemStack(BPItems.screwdriver, 1), new Object[] { "# ", " S", '#', Items.iron_ingot, 'S', Items.stick });
         craftManager.addRecipe(new ItemStack(BPItems.athame, 1), new Object[] { "# ", " S", '#', BPItems.silver_ingot, 'S', Items.stick });
+
         craftManager.addRecipe(new ItemStack(BPItems.stone_wire, 1), new Object[] {"#", "W", '#', Items.redstone, 'W', BPItems.stone_wafer });
         craftManager.addRecipe(new ItemStack(BPItems.stone_anode, 3), new Object[] {" # ", "###", "WWW", '#', Items.redstone, 'W', BPItems.stone_wafer });
         craftManager.addRecipe(new ItemStack(BPItems.stone_cathode, 1), new Object[] {"#", "W", '#', Blocks.redstone_torch, 'W', BPItems.stone_wafer });
         craftManager.addRecipe(new ItemStack(BPItems.stone_pointer, 1), new Object[] {"S", "#", "W",'S', Blocks.stone, '#', Items.redstone, 'W', BPItems.stone_wafer });
         craftManager.addRecipe(new ItemStack(BPItems.silicon_chip, 1), new Object[] {" # ", "WWW", '#', BPItems.red_doped_wafer, 'W', BPItems.stone_wafer });
 
-        craftManager.addRecipe(PartRegistry.getItemForPart("not"), new Object[] {"#A#", "ACA", "#W#", '#', BPItems.stone_wafer, 'A', BPItems.stone_anode, 'C', BPItems.stone_cathode, 'W', BPItems.stone_wire});
         craftManager.addRecipe(PartRegistry.getItemForPart("and"), new Object[] {"ACA", "CCC", "#W#", '#', BPItems.stone_wafer, 'A', BPItems.stone_anode, 'C', BPItems.stone_cathode, 'W', BPItems.stone_wire});
-        craftManager.addRecipe(PartRegistry.getItemForPart("timer"), new Object[] {"#W#", "WPW", "ACA", '#', BPItems.stone_wafer, 'A', BPItems.stone_anode, 'C', BPItems.stone_cathode, 'W', BPItems.stone_wire, 'P', BPItems.stone_pointer});
+//        craftManager.addRecipe(PartRegistry.getItemForPart("buffer"), new Object[] {"ACA", "WCW", "#W#", '#', BPItems.stone_wafer, 'A', BPItems.stone_anode, 'C', BPItems.stone_cathode, 'W', BPItems.stone_wire});
+//        craftManager.addRecipe(PartRegistry.getItemForPart("counter"), new Object[] {"#W#", "CPC", "#W#", '#', BPItems.stone_wafer, 'C', BPItems.stone_cathode, 'W', BPItems.stone_wire, 'P', BPItems.stone_pointer});
+//        TODO: Invert Cell recipe
+//        craftManager.addRecipe(PartRegistry.getItemForPart("light"), new Object[] {"#W#", "#B#", "###", '#', BPItems.stone_wafer, 'B', BPItems.blue_doped_wafer, 'W', BPItems.stone_wire});
+//        craftManager.addRecipe(PartRegistry.getItemForPart("multiplexer"), new Object[] {"ACA", "C#C", "ACW", '#', '#', BPItems.stone_wafer, 'A', BPItems.stone_anode, 'C', BPItems.stone_cathode, 'W', BPItems.stone_wire});
+//        craftManager.addRecipe(PartRegistry.getItemForPart("nand"), new Object[] {"AAA", "CCC", "#W#", '#', '#', BPItems.stone_wafer, 'A', BPItems.stone_anode, 'C', BPItems.stone_cathode, 'W', BPItems.stone_wire});
+//        TODO: Non Invert Cell recipe
+//        craftManager.addRecipe(PartRegistry.getItemForPart("nor"), new Object[] {"#A#", "WCW", "#W#", '#', BPItems.stone_wafer, 'A', BPItems.stone_anode, 'C', BPItems.stone_cathode, 'W', BPItems.stone_wire});
+        craftManager.addRecipe(PartRegistry.getItemForPart("not"), new Object[] {"#A#", "ACA", "#W#", '#', BPItems.stone_wafer, 'A', BPItems.stone_anode, 'C', BPItems.stone_cathode, 'W', BPItems.stone_wire});
+//        TODO: Null Cell recipe
+//        craftManager.addRecipe(PartRegistry.getItemForPart("or"), new Object[] {"#C#", "WCW", "#W#", '#', '#', BPItems.stone_wafer, 'C', BPItems.stone_cathode, 'W', BPItems.stone_wire});
+//        craftManager.addRecipe(PartRegistry.getItemForPart("pulseformer"), new Object[] {"ACA", "CAC", "WW#", '#', '#', BPItems.stone_wafer, 'A', BPItems.stone_anode, 'C', BPItems.stone_cathode, 'W', BPItems.stone_wire});
+//        TODO: Randomizer recipe
+//        craftManager.addRecipe(PartRegistry.getItemForPart("repeater"), new Object[] {"#CW", "#AW", "#WC", '#', '#', BPItems.stone_wafer, 'A', BPItems.stone_anode, 'C', BPItems.stone_cathode, 'W', BPItems.stone_wire});
+//        craftManager.addRecipe(PartRegistry.getItemForPart("rs"), new Object[] {"WWA", "C#C", "AWW", '#', '#', BPItems.stone_wafer, 'A', BPItems.stone_anode, 'C', BPItems.stone_cathode, 'W', BPItems.stone_wire});
 //        craftManager.addRecipe(PartRegistry.getItemForPart("sequencer"), new Object[] {"#C#", "CPC", "#C#", '#', BPItems.stone_wafer, 'C', BPItems.stone_cathode, 'P', BPItems.stone_pointer});
+//        craftManager.addRecipe(PartRegistry.getItemForPart("state"), new Object[] {"#AC", "WXP", "#W#", '#', BPItems.stone_wafer, 'A', BPItems.stone_anode, 'C', BPItems.stone_cathode, 'P', BPItems.stone_pointer, 'W', BPItems.stone_wire, 'X', BPItems.silicon_chip});
+//        craftManager.addRecipe(PartRegistry.getItemForPart("synchronizer"), new Object[] {"WCW", "XAX", "WWW", '#', 'A', BPItems.stone_anode, 'C', BPItems.stone_cathode, 'W', BPItems.stone_wire, 'X', BPItems.silicon_chip});
+        craftManager.addRecipe(PartRegistry.getItemForPart("timer"), new Object[] {"#W#", "WPW", "ACA", '#', BPItems.stone_wafer, 'A', BPItems.stone_anode, 'C', BPItems.stone_cathode, 'W', BPItems.stone_wire, 'P', BPItems.stone_pointer});
+//        craftManager.addRecipe(PartRegistry.getItemForPart("toggle"), new Object[] {"#C#", "WLW", "#C#", '#', BPItems.stone_wafer, 'C', BPItems.stone_cathode, 'W', BPItems.stone_wire, 'L', Blocks.lever});
+//        craftManager.addRecipe(PartRegistry.getItemForPart("transparent"), new Object[] {"ACW", "CCC", "CW#", '#', BPItems.stone_wafer, 'A', BPItems.stone_anode, 'C', BPItems.stone_cathode, 'W', BPItems.stone_wire});
+//        craftManager.addRecipe(PartRegistry.getItemForPart("xnor"), new Object[] {"ACA", "CAC", "WCW", 'A', BPItems.stone_anode, 'C', BPItems.stone_cathode, 'W', BPItems.stone_wire});
+//        craftManager.addRecipe(PartRegistry.getItemForPart("xor"), new Object[] {"AWA", "CAC", "WCW", 'A', BPItems.stone_anode, 'C', BPItems.stone_cathode, 'W', BPItems.stone_wire});
 
         craftManager.addRecipe(new ItemStack(BPBlocks.alloy_furnace, 1), new Object[] {"###", "# #", "###", '#', Blocks.brick_block});
 
