@@ -72,12 +72,16 @@ public abstract class BPPart {
         return true;
     }
     
+    private int tick = 0;
+    
     /**
      * Called every tick to update the part
      */
     public void update() {
-    
-        shouldNotifyUpdates = true;
+        
+        if(tick == 2)
+            shouldNotifyUpdates = true;
+        tick++;
     }
     
     /**
@@ -364,7 +368,6 @@ public abstract class BPPart {
      */
     public void sendUpdatePacket() {
     
-        if (!shouldNotifyUpdates) return;
         if (world == null) return;
         
         ((IMultipartCompat) CompatibilityUtils.getModule(Dependencies.FMP)).sendUpdatePacket(this);

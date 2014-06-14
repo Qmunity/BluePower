@@ -25,6 +25,7 @@ import net.quetzi.bluepower.init.CustomTabs;
 import net.quetzi.bluepower.part.PartLamp;
 import net.quetzi.bluepower.part.gate.GateAnd;
 import net.quetzi.bluepower.part.gate.GateNot;
+import net.quetzi.bluepower.part.gate.GateSequencer;
 import net.quetzi.bluepower.part.gate.GateTimer;
 import net.quetzi.bluepower.references.Refs;
 
@@ -230,7 +231,7 @@ public class PartRegistry {
         setPartTab("and", CustomTabs.tabBluePowerCircuits);
         registerPart("timer", GateTimer.class);
         setPartTab("timer", CustomTabs.tabBluePowerCircuits);
-        registerPart("sequencer", GateTimer.class);
+        registerPart("sequencer", GateSequencer.class);
         setPartTab("sequencer", CustomTabs.tabBluePowerCircuits);
         
         // Lamps
