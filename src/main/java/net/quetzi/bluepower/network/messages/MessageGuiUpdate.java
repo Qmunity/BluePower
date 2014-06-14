@@ -92,21 +92,16 @@ public class MessageGuiUpdate extends LocationIntPacket<MessageGuiUpdate> {
     private void messagePart(TileEntity te, MessageGuiUpdate message) {
     
         List<TMultiPart> parts = ((TileMultipart) te).jPartList();
-        BluePower.log.info("part id: " + message.partId + ", size: " + parts.size());
         if (message.partId < parts.size()) {
             TMultiPart part = parts.get(message.partId);
             if (part instanceof MultipartBPPart) {
                 if (((MultipartBPPart) part).getPart() instanceof IGuiButtonSensitive) {
                     ((IGuiButtonSensitive) ((MultipartBPPart) part).getPart()).onButtonPress(message.messageId, message.value);
-                    return;
                 } else {
-                    throw new IllegalArgumentException("[BluePower][MessageGuiPacket] Part doesn't implement IGuiButtonSensitive");
+                    BluePower.log.error("[BluePower][MessageGuiPacket] Part doesn't implement IGuiButtonSensitive");
                 }
-            } else {
-                throw new IllegalArgumentException("[BluePower][MessageGuiPacket] Part not a MultipartBPPart");
             }
         }
-        throw new IllegalArgumentException("[BluePower][MessageGuiPacket] No part found for received GUI packet");
     }
     
 }
