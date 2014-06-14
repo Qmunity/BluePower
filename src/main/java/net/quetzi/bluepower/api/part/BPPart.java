@@ -231,6 +231,16 @@ public abstract class BPPart {
     }
     
     /**
+     * Gets the explosion resistance of this part
+     * 
+     * @return The resistance
+     */
+    public float getExplosionResistance() {
+    
+        return 0;
+    }
+    
+    /**
      * Gets the picked item when middle-clicked
      * 
      * @return The item that the player will pickup
@@ -405,7 +415,7 @@ public abstract class BPPart {
      */
     public CreativeTabs[] getCreativeTabs() {
     
-        return new CreativeTabs[]{ getCreativeTab() };
+        return new CreativeTabs[] { getCreativeTab() };
     }
     
     /**

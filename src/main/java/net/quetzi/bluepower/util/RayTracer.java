@@ -41,8 +41,8 @@ public class RayTracer {
     }
     
     @Optional.Method(modid = Dependencies.FMP)
-    public static final Cuboid6 getSelectedCuboid(MovingObjectPosition mop, EntityPlayer player, ForgeDirection face, Iterable<IndexedCuboid6> boxes,
-            boolean unused) {
+    public static final AxisAlignedBB getSelectedCuboid(MovingObjectPosition mop, EntityPlayer player, ForgeDirection face,
+            Iterable<IndexedCuboid6> boxes, boolean unused) {
     
         List<Cuboid6> cuboids = new ArrayList<Cuboid6>();
         for (IndexedCuboid6 c : boxes)
@@ -52,43 +52,52 @@ public class RayTracer {
     }
     
     @Optional.Method(modid = Dependencies.FMP)
-    public static final Cuboid6 getSelectedCuboid(MovingObjectPosition mop, EntityPlayer player, ForgeDirection face, Iterable<Cuboid6> boxes) {
+    public static final AxisAlignedBB getSelectedCuboid(MovingObjectPosition mop, EntityPlayer player, ForgeDirection face, Iterable<Cuboid6> boxes) {
+    
+        List<AxisAlignedBB> aabbs = new ArrayList<AxisAlignedBB>();
+        for (Cuboid6 c : boxes)
+            aabbs.add(c.toAABB());
+        
+        return getSelectedBox(mop, player, face, aabbs);
+    }
+    
+    public static final AxisAlignedBB getSelectedBox(MovingObjectPosition mop, EntityPlayer player, ForgeDirection face, Iterable<AxisAlignedBB> boxes) {
     
         Vector3 hit = new Vector3(mop.hitVec.xCoord - mop.blockX, mop.hitVec.yCoord - mop.blockY, mop.hitVec.zCoord - mop.blockZ);
         
-        for (Cuboid6 c : boxes) {
+        for (AxisAlignedBB c : boxes) {
             boolean is = false;
             if (face == ForgeDirection.UP || face == ForgeDirection.DOWN) {
                 boolean is2 = false;
                 if (face == ForgeDirection.UP) {
-                    if (c.max.y == hit.getY()) is2 = true;
+                    if (c.maxY == hit.getY()) is2 = true;
                 } else {
-                    if (c.min.y == hit.getY()) is2 = true;
+                    if (c.minY == hit.getY()) is2 = true;
                 }
                 
-                if (is2 && hit.getX() >= c.min.x && hit.getX() < c.max.x && hit.getZ() >= c.min.z && hit.getZ() < c.max.z) is = true;
+                if (is2 && hit.getX() >= c.minX && hit.getX() < c.maxX && hit.getZ() >= c.minZ && hit.getZ() < c.maxZ) is = true;
             }
             
             if (face == ForgeDirection.NORTH || face == ForgeDirection.SOUTH) {
                 boolean is2 = false;
                 if (face == ForgeDirection.SOUTH) {
-                    if (c.max.z == hit.getZ()) is2 = true;
+                    if (c.maxZ == hit.getZ()) is2 = true;
                 } else {
-                    if (c.min.z == hit.getZ()) is2 = true;
+                    if (c.minZ == hit.getZ()) is2 = true;
                 }
                 
-                if (is2 && hit.getX() >= c.min.x && hit.getX() < c.max.x && hit.getY() >= c.min.y && hit.getY() < c.max.y) is = true;
+                if (is2 && hit.getX() >= c.minX && hit.getX() < c.maxX && hit.getY() >= c.minY && hit.getY() < c.maxY) is = true;
             }
             
             if (face == ForgeDirection.EAST || face == ForgeDirection.WEST) {
                 boolean is2 = false;
                 if (face == ForgeDirection.EAST) {
-                    if (c.max.x == hit.getX()) is2 = true;
+                    if (c.maxX == hit.getX()) is2 = true;
                 } else {
-                    if (c.min.x == hit.getX()) is2 = true;
+                    if (c.minX == hit.getX()) is2 = true;
                 }
                 
-                if (is2 && hit.getY() >= c.min.y && hit.getY() < c.max.y && hit.getZ() >= c.min.z && hit.getZ() < c.max.z) is = true;
+                if (is2 && hit.getY() >= c.minY && hit.getY() < c.maxY && hit.getZ() >= c.minZ && hit.getZ() < c.maxZ) is = true;
             }
             
             if (is) return c;
@@ -122,7 +131,7 @@ public class RayTracer {
     
         Vec3 headVec = getCorrectedHeadVec(player);
         Vec3 lookVec = player.getLook(1.0F);
-        double reach = 4.5;
+        double reach = player.capabilities.isCreativeMode ? 5 : 4.5;
         return headVec.addVector(lookVec.xCoord * reach, lookVec.yCoord * reach, lookVec.zCoord * reach);
     }
     

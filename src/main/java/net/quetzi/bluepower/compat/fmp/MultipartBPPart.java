@@ -259,7 +259,7 @@ public class MultipartBPPart extends TMultiPart implements IRedstonePart, JNorma
     
         ForgeDirection face = ForgeDirection.getOrientation(mop.sideHit);
         
-        Cuboid6 c = net.quetzi.bluepower.util.RayTracer.getSelectedCuboid(mop, player, face, getSubParts(), true);
+        AxisAlignedBB c = net.quetzi.bluepower.util.RayTracer.getSelectedCuboid(mop, player, face, getSubParts(), true);
         
         if (c == null) return true;
         
@@ -269,7 +269,7 @@ public class MultipartBPPart extends TMultiPart implements IRedstonePart, JNorma
                     - TileEntityRendererDispatcher.staticPlayerZ);
             GL11.glDisable(GL11.GL_TEXTURE_2D);
             GL11.glColor4d(0, 0, 0, 0);
-            RenderUtils.drawCuboidOutline(c.copy().expand(0.001));
+            RenderUtils.drawCuboidOutline(new Cuboid6(c).expand(0.001));
             GL11.glColor4d(1, 1, 1, 1);
             GL11.glEnable(GL11.GL_TEXTURE_2D);
         }
