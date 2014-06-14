@@ -400,6 +400,15 @@ public abstract class BPPart {
     }
     
     /**
+     * Gets the creative tabs to display on
+     * @return The creative tab instances
+     */
+    public CreativeTabs[] getCreativeTabs() {
+    
+        return new CreativeTabs[]{ getCreativeTab() };
+    }
+    
+    /**
      * Renders the highlight for the selected cube
      * @param cube
      *            Cube that's highlighted

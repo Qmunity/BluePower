@@ -71,7 +71,7 @@ public class PartLamp extends BPPartFace {
     
     @Override
     public boolean renderStatic(Vector3 loc, int pass) {
-        
+    
         GL11.glPushMatrix();
         {
             super.renderStatic(loc, pass);

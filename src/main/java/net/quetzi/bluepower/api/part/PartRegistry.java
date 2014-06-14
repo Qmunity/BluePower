@@ -11,6 +11,7 @@ package net.quetzi.bluepower.api.part;
 import java.lang.reflect.Constructor;
 import java.util.AbstractMap;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -21,7 +22,6 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.quetzi.bluepower.init.BPItems;
-import net.quetzi.bluepower.init.CustomTabs;
 import net.quetzi.bluepower.part.PartCageLamp;
 import net.quetzi.bluepower.part.gate.GateAnd;
 import net.quetzi.bluepower.part.gate.GateNot;
@@ -32,8 +32,8 @@ import net.quetzi.bluepower.references.Refs;
 
 public class PartRegistry {
     
-    private static Map<String, Entry<Class<? extends BPPart>, Object[]>> parts = new HashMap<String, Entry<Class<? extends BPPart>, Object[]>>();
-    private static Map<String, CreativeTabs>                             tabs  = new HashMap<String, CreativeTabs>();
+    private static Map<String, Entry<Class<? extends BPPart>, Object[]>> parts   = new HashMap<String, Entry<Class<? extends BPPart>, Object[]>>();
+    private static Map<String, BPPart>                                   samples = new HashMap<String, BPPart>();
     
     public static String                                                 ICON_PART;
     
@@ -57,22 +57,7 @@ public class PartRegistry {
         if (parts.containsKey(e)) return;
         
         parts.put(id, e);
-        tabs.put(id, null);
-    }
-    
-    /**
-     * Sets the tab a part should show in
-     * @param id
-     *            Part identifier
-     * @param tab
-     *            Creative tab
-     */
-    public static void setPartTab(String id, CreativeTabs tab) {
-    
-        if (tabs.containsKey(id)) {
-            tabs.remove(id);
-            tabs.put(id, tab);
-        }
+        samples.put(id, createPart(id));
     }
     
     /**
@@ -136,8 +121,8 @@ public class PartRegistry {
         List<String> parts = new ArrayList<String>();
         
         if (tab != null) {
-            for (String s : PartRegistry.parts.keySet())
-                if (tabs.get(s) == tab) parts.add(s);
+            for (String s : PartRegistry.samples.keySet())
+                if (Arrays.asList(samples.get(s).getCreativeTabs()).contains(tab)) parts.add(s);
         }
         
         return Collections.unmodifiableList(new ArrayList<String>(parts));
@@ -227,21 +212,15 @@ public class PartRegistry {
         ICON_PART = "not";
         // Gates
         registerPart("not", GateNot.class);
-        setPartTab("not", CustomTabs.tabBluePowerCircuits);
         registerPart("and", GateAnd.class);
-        setPartTab("and", CustomTabs.tabBluePowerCircuits);
         registerPart("timer", GateTimer.class);
-        setPartTab("timer", CustomTabs.tabBluePowerCircuits);
         registerPart("sequencer", GateSequencer.class);
-        setPartTab("sequencer", CustomTabs.tabBluePowerCircuits);
         
         // Lamps
         registerPart("cagelampwhite", PartCageLamp.class, "white", 0xFFFFFF);
-        setPartTab("cagelampwhite", CustomTabs.tabBluePowerLighting);
         
         // Pneumatic Tubes
         registerPart("pneumaticTube", PneumaticTube.class);
-        setPartTab("pneumaticTube", CustomTabs.tabBluePowerMachines);
     }
     
 }

@@ -17,11 +17,14 @@
 
 package net.quetzi.bluepower.init;
 
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
+import net.quetzi.bluepower.api.part.PartRegistry;
 
 public class CustomTabs {
     
@@ -34,7 +37,7 @@ public class CustomTabs {
     
     public static void init() {
     
-        tabBluePowerBlocks = new CreativeTabs("tabBluePowerBlocks") {
+        tabBluePowerBlocks = new BPCreativeTab("tabBluePowerBlocks") {
             
             @Override
             public Item getTabIconItem() {
@@ -48,7 +51,7 @@ public class CustomTabs {
             }
         };
         
-        tabBluePowerMachines = new CreativeTabs("tabBluePowerMachines") {
+        tabBluePowerMachines = new BPCreativeTab("tabBluePowerMachines") {
             
             @Override
             public Item getTabIconItem() {
@@ -62,7 +65,7 @@ public class CustomTabs {
             }
         };
         
-        tabBluePowerItems = new CreativeTabs("tabBluePowerItems") {
+        tabBluePowerItems = new BPCreativeTab("tabBluePowerItems") {
             
             @Override
             public Item getTabIconItem() {
@@ -76,7 +79,7 @@ public class CustomTabs {
             }
         };
 
-        tabBluePowerTools = new CreativeTabs("tabBluePowerTools") {
+        tabBluePowerTools = new BPCreativeTab("tabBluePowerTools") {
 
             @Override
             public Item getTabIconItem() {
@@ -90,7 +93,7 @@ public class CustomTabs {
             }
         };
 
-        tabBluePowerCircuits = new CreativeTabs("tabBluePowerCircuits") {
+        tabBluePowerCircuits = new BPCreativeTab("tabBluePowerCircuits") {
 
             @Override
             public Item getTabIconItem() {
@@ -99,7 +102,7 @@ public class CustomTabs {
             }
         };
 
-        tabBluePowerLighting = new CreativeTabs("tabBluePowerLighting") {
+        tabBluePowerLighting = new BPCreativeTab("tabBluePowerLighting") {
 
             @Override
             public Item getTabIconItem() {
@@ -107,5 +110,22 @@ public class CustomTabs {
                 return Item.getItemFromBlock(Blocks.redstone_lamp);
             }
         };
+    }
+    
+    private static abstract class BPCreativeTab extends CreativeTabs{
+
+        public BPCreativeTab(String label) {
+            super(label);
+        }
+        
+        @SuppressWarnings({ "rawtypes", "unchecked" })
+        @Override
+        public void displayAllReleventItems(List l) {
+        
+            super.displayAllReleventItems(l);
+            for(String s : PartRegistry.getRegisteredPartsForTab(this))
+                l.add(PartRegistry.getItemForPart(s));
+        }
+        
     }
 }

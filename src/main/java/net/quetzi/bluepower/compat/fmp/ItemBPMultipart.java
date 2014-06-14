@@ -89,7 +89,6 @@ public class ItemBPMultipart extends JItemMultiPart {
     @Override
     public void getSubItems(Item unused, CreativeTabs tab, List l) {
     
-        ItemBPPart.getSubItems(l);
     }
     
 }
