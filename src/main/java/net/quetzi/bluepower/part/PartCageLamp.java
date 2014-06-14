@@ -9,12 +9,12 @@ public class PartCageLamp extends PartLamp{
 	
 	
 	@Override
-    public void renderBottom(int pass){
+    public void renderBase(int pass){
     	
     }
     
 	@Override
-    public void renderGlass(int pass){
+    public void renderLamp(int pass){
     	
     }
 	

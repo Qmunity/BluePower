@@ -3,6 +3,9 @@ package net.quetzi.bluepower.part;
 import java.util.List;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.ResourceLocation;
@@ -20,9 +23,9 @@ import org.lwjgl.opengl.GL11;
 public class PartLamp extends BPPartFace {
     
     protected String colorName;
-    private int    colorVal;
+    private int      colorVal;
     
-    private int    power = 0;
+    private int      power = 0;
     
     public PartLamp(String colorName, Integer colorVal) {
     
@@ -70,7 +73,7 @@ public class PartLamp extends BPPartFace {
     
     @Override
     public boolean renderStatic(Vector3 loc, int pass) {
-    
+        
         GL11.glPushMatrix();
         {
             super.renderStatic(loc, pass);
@@ -78,7 +81,8 @@ public class PartLamp extends BPPartFace {
             // Render base here
             Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/lamps/side.png"));
             
-            GL11.glEnd();
+            // Render base
+            renderBase(pass);
             
             // Color multiplier
             int redMask = 0xFF0000, greenMask = 0xFF00, blueMask = 0xFF;
@@ -88,17 +92,26 @@ public class PartLamp extends BPPartFace {
             GL11.glColor4d(r / 256D, g / 256D, b / 256D, 1);
             
             // Render lamp itself here
+            GL11.glBegin(GL11.GL_QUADS);
+            renderLamp(pass);
+            GL11.glEnd();
+            
+            // Reset color
+            GL11.glColor4d(1, 1, 1, 1);
+            
+            // Re-bind blocks texture
+            Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
         }
         GL11.glPopMatrix();
         return true;
     }
     
-    public void renderBottom(int pass){
-    	
+    public void renderBase(int pass) {
+    
     }
     
-    public void renderGlass(int pass){
-    	
+    public void renderLamp(int pass) {
+    
     }
     
     @Override
@@ -126,7 +139,7 @@ public class PartLamp extends BPPartFace {
     
     @Override
     public CreativeTabs getCreativeTab() {
-        
+    
         return CustomTabs.tabBluePowerLighting;
     }
     
