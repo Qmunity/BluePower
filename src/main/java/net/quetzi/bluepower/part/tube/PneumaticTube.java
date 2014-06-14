@@ -135,12 +135,17 @@ public class PneumaticTube extends BPPart {
                 
                 if (d == ForgeDirection.UP || d == ForgeDirection.DOWN) d = d.getOpposite();
                 if (connections[i]) {
-                    // connections[i] = !checkOcclusion(sideBB.clone().rotate90Degrees(d).toAABB());
+                    connections[i] = isConnected(d);
                 }
             }
             // BluePower.log.info("connections: " + Arrays.toString(connections) + "  object : " + this);
             sendUpdatePacket();
         }
+    }
+    
+    public boolean isConnected(ForgeDirection dir) {
+    
+        return !checkOcclusion(sideBB.clone().rotate90Degrees(dir).toAABB());
     }
     
     @Override
@@ -209,38 +214,38 @@ public class PneumaticTube extends BPPart {
     @Override
     public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
     
-        /*    GL11.glPushMatrix();
-            GL11.glDisable(GL11.GL_CULL_FACE);
-            
-            List<AxisAlignedBB> aabbs = new ArrayList<AxisAlignedBB>();
-            aabbs.addAll(getCollisionBoxes());
-            aabbs.add(sideBB.clone().toAABB());
-            aabbs.add(sideBB.clone().rotate90Degrees(ForgeDirection.UP).toAABB());
-            
-            boolean shouldRenderNode = false;
-            int connectionCount = 0;
-            for (int i = 0; i < 6; i += 2) {
-                if (connections[i] ^ connections[i + 1]) {
-                    shouldRenderNode = true;
-                    break;
-                }
-                if (connections[i]) connectionCount++;
-                if (connections[i + 1]) connectionCount++;
+        GL11.glPushMatrix();
+        GL11.glDisable(GL11.GL_CULL_FACE);
+        
+        List<AxisAlignedBB> aabbs = new ArrayList<AxisAlignedBB>();
+        aabbs.addAll(getCollisionBoxes());
+        aabbs.add(sideBB.clone().toAABB());
+        aabbs.add(sideBB.clone().rotate90Degrees(ForgeDirection.UP).toAABB());
+        
+        boolean shouldRenderNode = false;
+        int connectionCount = 0;
+        for (int i = 0; i < 6; i += 2) {
+            if (connections[i] ^ connections[i + 1]) {
+                shouldRenderNode = true;
+                break;
             }
-            if (shouldRenderNode || connectionCount == 0 || connectionCount > 2) {
-                Minecraft.getMinecraft().renderEngine.bindTexture(tubeNodeTexture);
-                renderMiddle(aabbs.get(0));
-                Minecraft.getMinecraft().renderEngine.bindTexture(tubeSideTexture);
-            } else {
-                Minecraft.getMinecraft().renderEngine.bindTexture(tubeSideTexture);
-                renderMiddle(aabbs.get(0));
-            }
-            for (int i = 1; i < aabbs.size(); i++) {
-                renderTexturedCuboid(aabbs.get(i));
-            }
-            Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
-            GL11.glEnable(GL11.GL_CULL_FACE);
-            GL11.glPopMatrix();*/
+            if (connections[i]) connectionCount++;
+            if (connections[i + 1]) connectionCount++;
+        }
+        if (shouldRenderNode || connectionCount == 0 || connectionCount > 2) {
+            Minecraft.getMinecraft().renderEngine.bindTexture(tubeNodeTexture);
+            renderMiddle(aabbs.get(0));
+            Minecraft.getMinecraft().renderEngine.bindTexture(tubeSideTexture);
+        } else {
+            Minecraft.getMinecraft().renderEngine.bindTexture(tubeSideTexture);
+            renderMiddle(aabbs.get(0));
+        }
+        for (int i = 1; i < aabbs.size(); i++) {
+            renderTexturedCuboid(aabbs.get(i));
+        }
+        Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
+        GL11.glEnable(GL11.GL_CULL_FACE);
+        GL11.glPopMatrix();
     }
     
     private void renderMiddle(AxisAlignedBB aabb) {

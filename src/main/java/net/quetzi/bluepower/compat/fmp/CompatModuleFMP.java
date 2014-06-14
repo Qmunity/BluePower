@@ -163,12 +163,8 @@ public class CompatModuleFMP extends CompatModule implements IMultipartCompat {
     
         if (tile != null && tile instanceof TileMultipart) {
             TileMultipart te = (TileMultipart) tile;
-            
             NormallyOccludedPart noc = new NormallyOccludedPart(new Cuboid6(box));
-            
-            for (TMultiPart p : te.jPartList()) {
-                if (!p.occlusionTest(noc)) return true;
-            }
+            return !te.canAddPart(noc);
         }
         
         return false;
