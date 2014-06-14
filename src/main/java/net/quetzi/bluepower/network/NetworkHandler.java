@@ -56,16 +56,19 @@ public class NetworkHandler {
         INSTANCE.sendTo(message, player);
     }
     
+    @SuppressWarnings("rawtypes")
     public static void sendToAllAround(LocationIntPacket message, World world, double distance) {
     
         sendToAllAround(message, message.getTargetPoint(world, distance));
     }
-    
+
+    @SuppressWarnings("rawtypes")
     public static void sendToAllAround(LocationIntPacket message, World world) {
     
         sendToAllAround(message, message.getTargetPoint(world));
     }
-    
+
+    @SuppressWarnings("rawtypes")
     public static void sendToAllAround(LocationDoublePacket message, World world) {
     
         sendToAllAround(message, message.getTargetPoint(world));

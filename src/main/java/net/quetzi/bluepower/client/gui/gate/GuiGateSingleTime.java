@@ -17,6 +17,7 @@ public abstract class GuiGateSingleTime extends GuiGate {
         super(gate, 228, 66);
     }
     
+    @SuppressWarnings("unchecked")
     @Override
     public void initGui() {
     
