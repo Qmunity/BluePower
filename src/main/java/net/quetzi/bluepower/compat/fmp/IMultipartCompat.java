@@ -3,6 +3,7 @@ package net.quetzi.bluepower.compat.fmp;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.quetzi.bluepower.api.part.BPPart;
@@ -17,5 +18,7 @@ public interface IMultipartCompat {
     public void sendUpdatePacket(BPPart part);
     
     public boolean isMultipart(TileEntity te);
+    
+    public boolean checkOcclusion(TileEntity te, AxisAlignedBB box);
     
 }

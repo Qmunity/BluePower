@@ -8,19 +8,16 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.quetzi.bluepower.api.part.BPPart;
+import net.quetzi.bluepower.api.vec.Vector3;
 import net.quetzi.bluepower.api.vec.Vector3Cube;
+import net.quetzi.bluepower.compat.CompatibilityUtils;
+import net.quetzi.bluepower.compat.fmp.IMultipartCompat;
 import net.quetzi.bluepower.helper.IOHelper;
-import net.quetzi.bluepower.helper.TileEntityCache;
 import net.quetzi.bluepower.references.Dependencies;
-import codechicken.lib.vec.Cuboid6;
-import codechicken.multipart.NormallyOccludedPart;
-import codechicken.multipart.TileMultipart;
-import cpw.mods.fml.common.Optional;
 
 public class PneumaticTube extends BPPart {
     
     private final boolean[]   connections = new boolean[6];
-    private TileEntityCache[] tileCache;
     private final Vector3Cube sideBB      = new Vector3Cube(AxisAlignedBB.getBoundingBox(0.25, 0, 0.25, 0.75, 0.25, 0.75));
     
     @Override
@@ -57,7 +54,10 @@ public class PneumaticTube extends BPPart {
         List<AxisAlignedBB> aabbs = getOcclusionBoxes();
         for (int i = 0; i < 6; i++) {
             if (connections[i]) {
-                aabbs.add(sideBB.rotate90Degrees(ForgeDirection.getOrientation(i)).toAABB());
+                ForgeDirection d = ForgeDirection.getOrientation(i);
+                if (d == ForgeDirection.UP || d == ForgeDirection.DOWN) d = d.getOpposite();
+                Vector3Cube c = sideBB.clone().rotate90Degrees(d);
+                aabbs.add(c.toAABB());
             }
         }
         return aabbs;
@@ -74,14 +74,6 @@ public class PneumaticTube extends BPPart {
         List<AxisAlignedBB> aabbs = new ArrayList<AxisAlignedBB>();
         aabbs.add(AxisAlignedBB.getBoundingBox(0.25, 0.25, 0.25, 0.75, 0.75, 0.75));
         return aabbs;
-    }
-    
-    private TileEntityCache[] getTileCache() {
-    
-        if (tileCache == null) {
-            tileCache = TileEntityCache.getDefaultCache(world, x, y, z);
-        }
-        return tileCache;
     }
     
     /**
@@ -106,26 +98,32 @@ public class PneumaticTube extends BPPart {
     public void onAdded() {
     
         super.onAdded();
-        //      updateConnections();
+        updateConnections();
     }
     
     private void updateConnections() {
     
+        if (world == null) return;
+        
         if (!world.isRemote) {
+            Vector3 loc = new Vector3(x, y, z, world);
+            IMultipartCompat compat = ((IMultipartCompat) CompatibilityUtils.getModule(Dependencies.FMP));
             for (int i = 0; i < 6; i++) {
-                getTileCache()[i].update();
-                TileEntity neighbor = getTileCache()[i].getTileEntity();
+                ForgeDirection d = ForgeDirection.getOrientation(i);
+                Vector3 l = loc.getRelative(d);
+                TileEntity neighbor = world.getTileEntity(l.getBlockX(), l.getBlockY(), l.getBlockZ());
                 connections[i] = IOHelper.canInterfaceWith(neighbor, ForgeDirection.getOrientation(i).getOpposite());
-                // if (connections[i] && isFMPMultipart()) connections[i] = !isOccludedByMultipart(ForgeDirection.getOrientation(i));
+                
+                if (d == ForgeDirection.UP || d == ForgeDirection.DOWN) d = d.getOpposite();
+                if (!connections[i]) {
+                    connections[i] = checkOcclusion(sideBB.clone().rotate90Degrees(d).toAABB());
+                    if (compat.isMultipart(neighbor)) {
+                        connections[i] = compat.checkOcclusion(neighbor, sideBB.clone().rotate90Degrees(d.getOpposite()).toAABB());
+                    }
+                }
             }
             sendUpdatePacket();
         }
-    }
-    
-    @Optional.Method(modid = Dependencies.FMP)
-    private boolean isOccludedByMultipart(ForgeDirection side) {
-    
-        return !((TileMultipart) tile()).canAddPart(new NormallyOccludedPart(new Cuboid6(sideBB.rotate90Degrees(side).toAABB())));
     }
     
     @Override
@@ -144,16 +142,6 @@ public class PneumaticTube extends BPPart {
         for (int i = 0; i < 6; i++) {
             connections[i] = tag.getBoolean("connections" + i);
         }
-    }
-    
-    /**
-     * TODO improve handling on this, probably put this in the BPPart class, and give it the non FMP TileEntity when no part.
-     * if not possible (should be), cache this.
-     * @return
-     */
-    private TileEntity tile() {
-    
-        return world.getTileEntity(x, y, z);
     }
     
 }

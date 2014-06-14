@@ -16,6 +16,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
@@ -78,9 +79,8 @@ public abstract class BPPart {
      * Called every tick to update the part
      */
     public void update() {
-        
-        if(tick == 2)
-            shouldNotifyUpdates = true;
+    
+        if (tick == 2) shouldNotifyUpdates = true;
         tick++;
     }
     
@@ -373,17 +373,53 @@ public abstract class BPPart {
         ((IMultipartCompat) CompatibilityUtils.getModule(Dependencies.FMP)).sendUpdatePacket(this);
     }
     
+    /**
+     * Saves the data either to the save file or to an update packet
+     * @param tag
+     *            NBT tag the data will be written to
+     */
     public void save(NBTTagCompound tag) {
     
     }
     
+    /**
+     * Loads the data either from the save file or from an update packet
+     * @param tag
+     *            NBT tag with the data
+     */
     public void load(NBTTagCompound tag) {
     
     }
     
+    /**
+     * Gets the creative tab to display on
+     * @return The creative tab instance
+     */
     public CreativeTabs getCreativeTab() {
     
         return null;
+    }
+    
+    /**
+     * Renders the highlight for the selected cube
+     * @param cube
+     *            Cube that's highlighted
+     * @return False if it wasn't rendered, true if it was
+     */
+    public boolean drawHighlight(AxisAlignedBB cube, MovingObjectPosition mop) {
+    
+        return false;
+    }
+    
+    /**
+     * Checks if there's another part colliding with the cube passed as an argument
+     * @param cube
+     *            Cube that will be checked for collision
+     * @return True if there's another part in that position, false if there's not
+     */
+    public boolean checkOcclusion(AxisAlignedBB cube) {
+    
+        return ((IMultipartCompat) CompatibilityUtils.getModule(Dependencies.FMP)).checkOcclusion(world.getTileEntity(x, y, z), cube);
     }
     
 }

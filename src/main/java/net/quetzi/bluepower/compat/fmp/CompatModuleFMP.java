@@ -16,6 +16,7 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.quetzi.bluepower.api.part.BPPart;
@@ -24,8 +25,10 @@ import net.quetzi.bluepower.compat.CompatModule;
 import net.quetzi.bluepower.init.BPBlocks;
 import net.quetzi.bluepower.util.RayTracer;
 import codechicken.lib.raytracer.ExtendedMOP;
+import codechicken.lib.vec.Cuboid6;
 import codechicken.microblock.BlockMicroMaterial;
 import codechicken.microblock.MicroMaterialRegistry;
+import codechicken.multipart.NormallyOccludedPart;
 import codechicken.multipart.TMultiPart;
 import codechicken.multipart.TileMultipart;
 import codechicken.multipart.handler.MultipartProxy;
@@ -153,5 +156,21 @@ public class CompatModuleFMP extends CompatModule implements IMultipartCompat {
     public boolean isMultipart(TileEntity te) {
     
         return te instanceof TileMultipart;
+    }
+    
+    @Override
+    public boolean checkOcclusion(TileEntity tile, AxisAlignedBB box) {
+    
+        if (tile != null && tile instanceof TileMultipart) {
+            TileMultipart te = (TileMultipart) tile;
+            
+            NormallyOccludedPart noc = new NormallyOccludedPart(new Cuboid6(box));
+            
+            for (TMultiPart p : te.jPartList()) {
+                if (!p.occlusionTest(noc)) return true;
+            }
+        }
+        
+        return false;
     }
 }

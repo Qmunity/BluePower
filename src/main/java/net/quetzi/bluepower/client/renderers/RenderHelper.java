@@ -9,6 +9,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.ResourceLocation;
+import net.quetzi.bluepower.api.vec.Vector3Cube;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
@@ -119,6 +120,51 @@ public class RenderHelper {
         DoubleBuffer b = BufferUtils.createDoubleBuffer(8).put(eq);
         b.flip();
         return b;
+    }
+    
+    public static void drawColoredCube(Vector3Cube vector){
+        
+        //Top side
+        GL11.glColor3f(1.0F, 0.0F, 0.0F);
+        addVertex(vector.getMinX(), vector.getMaxY(), vector.getMaxZ());
+        addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ());
+        addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMinZ());
+        addVertex(vector.getMinX(), vector.getMaxY(), vector.getMinZ());
+
+        //Bottom side
+        GL11.glColor3f(1.0F, 1.0F, 0.0F);
+        addVertex(vector.getMaxX(), vector.getMinY(), vector.getMaxZ());
+        addVertex(vector.getMinX(), vector.getMinY(), vector.getMaxZ());
+        addVertex(vector.getMinX(), vector.getMinY(), vector.getMinZ());
+        addVertex(vector.getMaxX(), vector.getMinY(), vector.getMinZ());
+
+        //Draw west side:
+        GL11.glColor3f(0.0F, 1.0F, 0.0F);
+        addVertex(vector.getMinX(), vector.getMinY(), vector.getMaxZ());
+        addVertex(vector.getMinX(), vector.getMaxY(), vector.getMaxZ());
+        addVertex(vector.getMinX(), vector.getMaxY(), vector.getMinZ());
+        addVertex(vector.getMinX(), vector.getMinY(), vector.getMinZ());
+
+        //Draw east side:
+        GL11.glColor3f(0.0F, 1.0F, 1.0F);
+        addVertex(vector.getMaxX(), vector.getMinY(), vector.getMinZ());
+        addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMinZ());
+        addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ());
+        addVertex(vector.getMaxX(), vector.getMinY(), vector.getMaxZ());
+
+        //Draw north side
+        GL11.glColor3f(0.0F, 0.0F, 1.0F);
+        addVertex(vector.getMinX(), vector.getMinY(), vector.getMinZ()); 
+        addVertex(vector.getMinX(), vector.getMaxY(), vector.getMinZ());
+        addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMinZ());
+        addVertex(vector.getMaxX(), vector.getMinY(), vector.getMinZ());
+
+        //Draw south side
+        GL11.glColor3f(0.0F, 0.0F, 0.0F);
+        addVertex(vector.getMinX(), vector.getMinY(), vector.getMaxZ());
+        addVertex(vector.getMaxX(), vector.getMinY(), vector.getMaxZ());
+        addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ());
+        addVertex(vector.getMinX(), vector.getMaxY(), vector.getMaxZ());
     }
     
 }
