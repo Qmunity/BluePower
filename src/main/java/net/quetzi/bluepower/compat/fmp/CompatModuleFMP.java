@@ -172,5 +172,35 @@ public class CompatModuleFMP extends CompatModule implements IMultipartCompat {
         }
         
         return false;
+        
+    }
+    
+    @Override
+    public <T> T getBPPart(TileEntity te, Class<T> searchedClass) {
+    
+        if (isMultipart(te)) {
+            Iterable<MultipartBPPart> parts = getMultiParts((TileMultipart) te, MultipartBPPart.class);
+            for (MultipartBPPart part : parts) {
+                if (searchedClass.isAssignableFrom(part.getPart().getClass())) return (T) part.getPart();
+            }
+        }
+        return null;
+    }
+    
+    public static <T> T getMultiPart(TileMultipart t, Class<T> searchedClass) {
+    
+        for (TMultiPart part : t.jPartList()) {
+            if (searchedClass.isAssignableFrom(part.getClass())) return (T) part;
+        }
+        return null;
+    }
+    
+    public static <T> Iterable<T> getMultiParts(TileMultipart t, Class<T> searchedClass) {
+    
+        List<T> parts = new ArrayList<T>();
+        for (TMultiPart part : t.jPartList()) {
+            if (searchedClass.isAssignableFrom(part.getClass())) parts.add((T) part);
+        }
+        return parts;
     }
 }

@@ -67,11 +67,17 @@ public class CompatModuleFMPAlt extends CompatModule implements IMultipartCompat
     
         return false;
     }
-
+    
     @Override
     public boolean checkOcclusion(TileEntity tile, AxisAlignedBB box) {
     
         return false;
+    }
+    
+    @Override
+    public <T> T getBPPart(TileEntity te, Class<T> searchedClass) {
+    
+        return null;//TODO return non-FMP part
     }
     
 }

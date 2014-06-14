@@ -21,4 +21,6 @@ public interface IMultipartCompat {
     
     public boolean checkOcclusion(TileEntity te, AxisAlignedBB box);
     
+    public <T> T getBPPart(TileEntity te, Class<T> searchedClass);
+    
 }

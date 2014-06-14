@@ -9,6 +9,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.quetzi.bluepower.api.vec.Vector3Cube;
 
 import org.lwjgl.BufferUtils;
@@ -76,32 +77,32 @@ public class RenderHelper {
                 addVertexWithTexture(0.5 - 1D / 8D, 0, 0.5, 0.5 - 1D / 8D, 0.5);
                 GL11.glNormal3d(0, 1, 0);
                 // Top
-                addVertexWithTexture(0.5, 1D/16D, 1D / 16D, 0.5, 1D / 16D);
-                addVertexWithTexture(0.5 - 1D / 8D, 1D/16D, 0.5, 0.5 - 1D / 8D, 0.5);
-                addVertexWithTexture(0.5, 1D/16D, 0.5 + 1D / 8D, 0.5, 0.5 + 1D / 8D);
-                addVertexWithTexture(0.5 + 1D / 8D, 1D/16D, 0.5, 0.5 + 1D / 8D, 0.5);
+                addVertexWithTexture(0.5, 1D / 16D, 1D / 16D, 0.5, 1D / 16D);
+                addVertexWithTexture(0.5 - 1D / 8D, 1D / 16D, 0.5, 0.5 - 1D / 8D, 0.5);
+                addVertexWithTexture(0.5, 1D / 16D, 0.5 + 1D / 8D, 0.5, 0.5 + 1D / 8D);
+                addVertexWithTexture(0.5 + 1D / 8D, 1D / 16D, 0.5, 0.5 + 1D / 8D, 0.5);
                 GL11.glNormal3d(1, 0, 0);
                 // Side 1
-                addVertexWithTexture(0.5, 1D/16D, 1D / 16D, 0.5, 1D / 16D);
+                addVertexWithTexture(0.5, 1D / 16D, 1D / 16D, 0.5, 1D / 16D);
                 addVertexWithTexture(0.5, 0, 1D / 16D, 0.5, 1D / 16D);
                 addVertexWithTexture(0.5 - 1D / 8D, 0, 0.5, 0.5 - 1D / 8D, 0.5);
-                addVertexWithTexture(0.5 - 1D / 8D, 1D/16D, 0.5, 0.5 - 1D / 8D, 0.5);
+                addVertexWithTexture(0.5 - 1D / 8D, 1D / 16D, 0.5, 0.5 - 1D / 8D, 0.5);
                 // Side 2
-                addVertexWithTexture(0.5 - 1D / 8D, 1D/16D, 0.5, 0.5 - 1D / 8D, 0.5);
+                addVertexWithTexture(0.5 - 1D / 8D, 1D / 16D, 0.5, 0.5 - 1D / 8D, 0.5);
                 addVertexWithTexture(0.5 - 1D / 8D, 0, 0.5, 0.5 - 1D / 8D, 0.5);
                 addVertexWithTexture(0.5, 0, 0.5 + 1D / 8D, 0.5, 0.5 + 1D / 8D);
-                addVertexWithTexture(0.5, 1D/16D, 0.5 + 1D / 8D, 0.5, 0.5 + 1D / 8D);
+                addVertexWithTexture(0.5, 1D / 16D, 0.5 + 1D / 8D, 0.5, 0.5 + 1D / 8D);
                 GL11.glNormal3d(-1, 0, 0);
                 // Side 3
-                addVertexWithTexture(0.5, 1D/16D, 0.5 + 1D / 8D, 0.5, 0.5 + 1D / 8D);
+                addVertexWithTexture(0.5, 1D / 16D, 0.5 + 1D / 8D, 0.5, 0.5 + 1D / 8D);
                 addVertexWithTexture(0.5, 0, 0.5 + 1D / 8D, 0.5, 0.5 + 1D / 8D);
                 addVertexWithTexture(0.5 + 1D / 8D, 0, 0.5, 0.5 + 1D / 8D, 0.5);
-                addVertexWithTexture(0.5 + 1D / 8D, 1D/16D, 0.5, 0.5 + 1D / 8D, 0.5);
+                addVertexWithTexture(0.5 + 1D / 8D, 1D / 16D, 0.5, 0.5 + 1D / 8D, 0.5);
                 // Side 4
-                addVertexWithTexture(0.5 + 1D / 8D, 1D/16D, 0.5, 0.5 + 1D / 8D, 0.5);
+                addVertexWithTexture(0.5 + 1D / 8D, 1D / 16D, 0.5, 0.5 + 1D / 8D, 0.5);
                 addVertexWithTexture(0.5 + 1D / 8D, 0, 0.5, 0.5 + 1D / 8D, 0.5);
                 addVertexWithTexture(0.5, 0, 1D / 16D, 0.5, 1D / 16D);
-                addVertexWithTexture(0.5, 1D/16D, 1D / 16D, 0.5, 1D / 16D);
+                addVertexWithTexture(0.5, 1D / 16D, 1D / 16D, 0.5, 1D / 16D);
             }
             GL11.glEnd();
             
@@ -113,52 +114,52 @@ public class RenderHelper {
     public static DoubleBuffer planeEquation(double x1, double y1, double z1, double x2, double y2, double z2, double x3, double y3, double z3) {
     
         double[] eq = new double[4];
-        eq[0] = (y1 * (z2 - z3)) + (y2 * (z3 - z1)) + (y3 * (z1 - z2));
-        eq[1] = (z1 * (x2 - x3)) + (z2 * (x3 - x1)) + (z3 * (x1 - x2));
-        eq[2] = (x1 * (y2 - y3)) + (x2 * (y3 - y1)) + (x3 * (y1 - y2));
-        eq[3] = -((x1 * ((y2 * z3) - (y3 * z2))) + (x2 * ((y3 * z1) - (y1 * z3))) + (x3 * ((y1 * z2) - (y2 * z1))));
+        eq[0] = y1 * (z2 - z3) + y2 * (z3 - z1) + y3 * (z1 - z2);
+        eq[1] = z1 * (x2 - x3) + z2 * (x3 - x1) + z3 * (x1 - x2);
+        eq[2] = x1 * (y2 - y3) + x2 * (y3 - y1) + x3 * (y1 - y2);
+        eq[3] = -(x1 * (y2 * z3 - y3 * z2) + x2 * (y3 * z1 - y1 * z3) + x3 * (y1 * z2 - y2 * z1));
         DoubleBuffer b = BufferUtils.createDoubleBuffer(8).put(eq);
         b.flip();
         return b;
     }
     
-    public static void drawColoredCube(Vector3Cube vector){
-        
+    public static void drawColoredCube(Vector3Cube vector) {
+    
         //Top side
         GL11.glColor3f(1.0F, 0.0F, 0.0F);
         addVertex(vector.getMinX(), vector.getMaxY(), vector.getMaxZ());
         addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ());
         addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMinZ());
         addVertex(vector.getMinX(), vector.getMaxY(), vector.getMinZ());
-
+        
         //Bottom side
         GL11.glColor3f(1.0F, 1.0F, 0.0F);
         addVertex(vector.getMaxX(), vector.getMinY(), vector.getMaxZ());
         addVertex(vector.getMinX(), vector.getMinY(), vector.getMaxZ());
         addVertex(vector.getMinX(), vector.getMinY(), vector.getMinZ());
         addVertex(vector.getMaxX(), vector.getMinY(), vector.getMinZ());
-
+        
         //Draw west side:
         GL11.glColor3f(0.0F, 1.0F, 0.0F);
         addVertex(vector.getMinX(), vector.getMinY(), vector.getMaxZ());
         addVertex(vector.getMinX(), vector.getMaxY(), vector.getMaxZ());
         addVertex(vector.getMinX(), vector.getMaxY(), vector.getMinZ());
         addVertex(vector.getMinX(), vector.getMinY(), vector.getMinZ());
-
+        
         //Draw east side:
         GL11.glColor3f(0.0F, 1.0F, 1.0F);
         addVertex(vector.getMaxX(), vector.getMinY(), vector.getMinZ());
         addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMinZ());
         addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ());
         addVertex(vector.getMaxX(), vector.getMinY(), vector.getMaxZ());
-
+        
         //Draw north side
         GL11.glColor3f(0.0F, 0.0F, 1.0F);
-        addVertex(vector.getMinX(), vector.getMinY(), vector.getMinZ()); 
+        addVertex(vector.getMinX(), vector.getMinY(), vector.getMinZ());
         addVertex(vector.getMinX(), vector.getMaxY(), vector.getMinZ());
         addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMinZ());
         addVertex(vector.getMaxX(), vector.getMinY(), vector.getMinZ());
-
+        
         //Draw south side
         GL11.glColor3f(0.0F, 0.0F, 0.0F);
         addVertex(vector.getMinX(), vector.getMinY(), vector.getMaxZ());
@@ -167,4 +168,27 @@ public class RenderHelper {
         addVertex(vector.getMinX(), vector.getMaxY(), vector.getMaxZ());
     }
     
+    public static void rotateRenderMatrix(ForgeDirection d) {
+    
+        switch (d) {
+            case UP:
+                GL11.glRotatef(1, 0, 0, -90);
+                break;
+            case DOWN:
+                GL11.glRotatef(1, 0, 0, 90);
+                break;
+            case NORTH:
+                GL11.glRotatef(1, 0, -90, 0);
+                break;
+            case SOUTH:
+                GL11.glRotatef(1, 0, 90, 0);
+                break;
+            case WEST:
+                GL11.glRotatef(1, 0, 0, 180);
+                break;
+            case EAST:
+                GL11.glRotatef(1, 0, 0, 0);
+                break;
+        }
+    }
 }
