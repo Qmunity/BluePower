@@ -32,11 +32,13 @@ public class ItemStackUtils {
     
     public static boolean isSameOreDictStack(ItemStack stack1, ItemStack stack2) {
     
-        int id = OreDictionary.getOreID(stack1);
-        if (id >= 0) {
-            List<ItemStack> oreDictStacks = OreDictionary.getOres(id);
-            for (ItemStack oreDictStack : oreDictStacks) {
-                if (OreDictionary.itemMatches(oreDictStack, stack2, false)) { return true; }
+        int ids[] = OreDictionary.getOreIDs(stack1);
+        for(int id = 0; id < ids.length; id++){
+            if (id >= 0) {
+                List<ItemStack> oreDictStacks = OreDictionary.getOres(OreDictionary.getOreName(id));
+                for (ItemStack oreDictStack : oreDictStacks) {
+                    if (OreDictionary.itemMatches(oreDictStack, stack2, false)) { return true; }
+                }
             }
         }
         return false;
