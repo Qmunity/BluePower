@@ -58,7 +58,8 @@ public class Config {
     public static int      veinSizeSapphire;
     public static double   volcanoActiveToInactiveRatio;
     public static double   volcanoSpawnChance;          // chance of a volcano spawning per chunk.
-                                                         
+    public static boolean  useAltScrewdriverRecipe;
+
     public static String[] alloyFurnaceBlacklist;
     
     public static void setUp(Configuration config) {
@@ -101,6 +102,7 @@ public class Config {
         veinSizeSapphire = config.get("World Gen Sapphire", "veinSizeSapphire", 2).getInt();
         volcanoSpawnChance = config.get("World Gen", "volcanoSpawnChance", 0.02).getDouble(0);
         volcanoActiveToInactiveRatio = config.get("World Gen", "volcanoActiveToInactiveRatio", 0.5).getDouble(0);
+        useAltScrewdriverRecipe = config.get("Settings", "useAltScrewdriverRecipe", false).getBoolean(false);
         
         config.addCustomCategoryComment("Recipe Enabling", "Toggle recipes to be enabled or not");
         alloyFurnaceBlacklist = config.get("Recipe Enabling", "alloyFurnaceBlacklist", new String[0]).getStringList();

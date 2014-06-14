@@ -99,7 +99,14 @@ public class Recipes {
         craftManager.addRecipe(new ItemStack(BPItems.copper_ingot, 9), new Object[] { "#", '#', BPBlocks.copper_block });
         craftManager.addRecipe(new ItemStack(BPItems.tin_ingot, 9), new Object[] { "#", '#', BPBlocks.tin_block });
         
-        craftManager.addRecipe(new ItemStack(BPItems.screwdriver, 1), new Object[] { "# ", " S", '#', Items.iron_ingot, 'S', Items.stick });
+        if(Config.useAltScrewdriverRecipe) {
+            craftManager.addRecipe(new ItemStack(BPItems.screwdriver_handle), new Object[] {"#", '#', Items.stick});
+            craftManager.addRecipe(new ItemStack(BPItems.screwdriver, 1), new Object[] { "# ", " S", '#', Items.iron_ingot, 'S', BPItems.screwdriver_handle });
+        } else {
+            craftManager.addRecipe(new ItemStack(BPItems.screwdriver, 1), new Object[] { "# ", " S", '#', Items.iron_ingot, 'S', Items.stick });
+        }
+
+
         craftManager.addRecipe(new ItemStack(BPItems.athame, 1), new Object[] { "# ", " S", '#', BPItems.silver_ingot, 'S', Items.stick });
 
         craftManager.addRecipe(new ItemStack(BPItems.stone_wire, 1), new Object[] {"#", "W", '#', Items.redstone, 'W', BPItems.stone_wafer });

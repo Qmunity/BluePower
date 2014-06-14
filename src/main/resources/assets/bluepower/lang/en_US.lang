@@ -134,7 +134,7 @@ item.taintedsilicon_chip.name=Tainted Silicon Chip
 item.plate_assembly.name=Plate Assembly
 item.stone_redwire.name=Stone Redwire
 item.stone_bundle.name=Stone Bundle
-
+item.screwdriver_handle.name=Screwdriver Handle
 
 bluepower.part.and.name=AND Gate
 bluepower.part.buffer.name=Buffer Gate

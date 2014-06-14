@@ -164,6 +164,7 @@ public class Refs {
     public static final String ITEMSTONEREDWIRE_NAME       = "stone_redwire";
     public static final String ITEMPLATEASSEMBLY_NAME      = "plate_assembly";
     public static final String ITEMSTONEBUNDLE_NAME        = "stone_bundle";
+    public static final String ITEMSCREWDRIVERHANDLE_NAME  = "screwdriver_handle";
 
     public static String fullVersionString() {
 
