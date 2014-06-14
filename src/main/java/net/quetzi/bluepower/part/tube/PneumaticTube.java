@@ -6,6 +6,7 @@ import java.util.List;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
@@ -16,6 +17,7 @@ import net.quetzi.bluepower.api.vec.Vector3;
 import net.quetzi.bluepower.api.vec.Vector3Cube;
 import net.quetzi.bluepower.helper.IOHelper;
 import net.quetzi.bluepower.helper.TileEntityCache;
+import net.quetzi.bluepower.init.CustomTabs;
 import net.quetzi.bluepower.references.Refs;
 
 import org.lwjgl.opengl.GL11;
@@ -252,5 +254,11 @@ public class PneumaticTube extends BPPart {
     public boolean renderStatic(Vector3 loc, int pass) {
     
         return false;
+    }
+    
+    @Override
+    public CreativeTabs getCreativeTab() {
+        
+        return CustomTabs.tabBluePowerMachines;
     }
 }
