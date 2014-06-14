@@ -145,7 +145,12 @@ public class Vector3Cube {
         max.rotate(rx, ry, rz);
         max.add(0.5, 0.5, 0.5);
         
-        return new Vector3Cube(min, max);
+        Vector3Cube v3c = new Vector3Cube(min, max);
+        
+        this.min = v3c.min;
+        this.max = v3c.max;
+        
+        return this;
     }
     
 }

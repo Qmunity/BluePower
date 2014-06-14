@@ -102,7 +102,7 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
             Collections.addAll(this.blacklist, blacklist);
         }
     }
-
+    
     @SuppressWarnings("unchecked")
     public void generateRecyclingRecipes() {
     
@@ -121,29 +121,50 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
         for (ItemStack recyclingItem : bufferedRecyclingItems) {
             List<IRecipe> recipes = CraftingManager.getInstance().getRecipeList();
             for (IRecipe recipe : recipes) {
-                int recyclingAmount = 0;
-                if (recipe instanceof ShapedRecipes) {
-                    ShapedRecipes shaped = (ShapedRecipes) recipe;
-                    if (shaped.recipeItems != null) {
-                        for (ItemStack input : shaped.recipeItems) {
-                            if (input != null && ItemStackUtils.isItemFuzzyEqual(input, recyclingItem)) {
-                                recyclingAmount++;
+                try {
+                    int recyclingAmount = 0;
+                    if (recipe instanceof ShapedRecipes) {
+                        ShapedRecipes shaped = (ShapedRecipes) recipe;
+                        if (shaped.recipeItems != null) {
+                            for (ItemStack input : shaped.recipeItems) {
+                                if (input != null && ItemStackUtils.isItemFuzzyEqual(input, recyclingItem)) {
+                                    recyclingAmount++;
+                                }
                             }
                         }
-                    }
-                } else if (recipe instanceof ShapelessRecipes) {
-                    ShapelessRecipes shapeless = (ShapelessRecipes) recipe;
-                    if (shapeless.recipeItems != null) {
-                        for (ItemStack input : (List<ItemStack>) shapeless.recipeItems) {
-                            if (input != null && ItemStackUtils.isItemFuzzyEqual(input, recyclingItem)) {
-                                recyclingAmount++;
+                    } else if (recipe instanceof ShapelessRecipes) {
+                        ShapelessRecipes shapeless = (ShapelessRecipes) recipe;
+                        if (shapeless.recipeItems != null) {
+                            for (ItemStack input : (List<ItemStack>) shapeless.recipeItems) {
+                                if (input != null && ItemStackUtils.isItemFuzzyEqual(input, recyclingItem)) {
+                                    recyclingAmount++;
+                                }
                             }
                         }
-                    }
-                } else if (recipe instanceof ShapedOreRecipe) {
-                    ShapedOreRecipe shapedOreRecipe = (ShapedOreRecipe) recipe;
-                    if (shapedOreRecipe.getInput() != null) {
-                        for (Object input : shapedOreRecipe.getInput()) {
+                    } else if (recipe instanceof ShapedOreRecipe) {
+                        ShapedOreRecipe shapedOreRecipe = (ShapedOreRecipe) recipe;
+                        if (shapedOreRecipe.getInput() != null) {
+                            for (Object input : shapedOreRecipe.getInput()) {
+                                if (input != null) {
+                                    List<ItemStack> itemList;
+                                    if (input instanceof ItemStack) {
+                                        itemList = new ArrayList<ItemStack>();
+                                        itemList.add((ItemStack) input);
+                                    } else {
+                                        itemList = (List<ItemStack>) input;
+                                    }
+                                    for (ItemStack item : itemList) {
+                                        if (item != null && ItemStackUtils.isItemFuzzyEqual(item, recyclingItem)) {
+                                            recyclingAmount++;
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    } else if (recipe instanceof ShapelessOreRecipe) {
+                        ShapelessOreRecipe shapeless = (ShapelessOreRecipe) recipe;
+                        for (Object input : shapeless.getInput()) {
                             if (input != null) {
                                 List<ItemStack> itemList;
                                 if (input instanceof ItemStack) {
@@ -161,33 +182,17 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
                             }
                         }
                     }
-                } else if (recipe instanceof ShapelessOreRecipe) {
-                    ShapelessOreRecipe shapeless = (ShapelessOreRecipe) recipe;
-                    for (Object input : shapeless.getInput()) {
-                        if (input != null) {
-                            List<ItemStack> itemList;
-                            if (input instanceof ItemStack) {
-                                itemList = new ArrayList<ItemStack>();
-                                itemList.add((ItemStack) input);
-                            } else {
-                                itemList = (List<ItemStack>) input;
-                            }
-                            for (ItemStack item : itemList) {
-                                if (item != null && ItemStackUtils.isItemFuzzyEqual(item, recyclingItem)) {
-                                    recyclingAmount++;
-                                    break;
-                                }
-                            }
+                    if (recyclingAmount > 0 && !registeredRecipes.contains(recipe)) {
+                        if (blacklist.contains(recipe.getRecipeOutput().getItem())) {
+                            BluePower.log.info("Skipped adding item/block " + recipe.getRecipeOutput().getDisplayName() + " to the Alloy Furnace recipes.");
+                            continue;
                         }
+                        registeredRecipes.add(recipe);
+                        addRecipe(new ItemStack(recyclingItem.getItem(), recyclingAmount, recyclingItem.getItemDamage()), recipe.getRecipeOutput());
                     }
-                }
-                if (recyclingAmount > 0 && !registeredRecipes.contains(recipe)) {
-                    if (blacklist.contains(recipe.getRecipeOutput().getItem())) {
-                        BluePower.log.info("Skipped adding item/block " + recipe.getRecipeOutput().getDisplayName() + " to the Alloy Furnace recipes.");
-                        continue;
-                    }
-                    registeredRecipes.add(recipe);
-                    addRecipe(new ItemStack(recyclingItem.getItem(), recyclingAmount, recyclingItem.getItemDamage()), recipe.getRecipeOutput());
+                } catch (Throwable e) {
+                    BluePower.log.error("Error when generating an Alloy Furnace recipe for item " + recyclingItem.getDisplayName() + ", recipe output: " + recipe.getRecipeOutput().getDisplayName());
+                    e.printStackTrace();
                 }
             }
         }
