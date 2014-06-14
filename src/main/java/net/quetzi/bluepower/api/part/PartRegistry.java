@@ -22,7 +22,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.quetzi.bluepower.init.BPItems;
 import net.quetzi.bluepower.init.CustomTabs;
-import net.quetzi.bluepower.part.PartLamp;
+import net.quetzi.bluepower.part.PartCageLamp;
 import net.quetzi.bluepower.part.gate.GateAnd;
 import net.quetzi.bluepower.part.gate.GateNot;
 import net.quetzi.bluepower.part.gate.GateSequencer;
@@ -235,8 +235,8 @@ public class PartRegistry {
         setPartTab("sequencer", CustomTabs.tabBluePowerCircuits);
         
         // Lamps
-        registerPart("lampwhite", PartLamp.class, "white", 0xFFFFFF);
-        setPartTab("lampwhite", CustomTabs.tabBluePowerLighting);
+        registerPart("cagelampwhite", PartCageLamp.class, "white", 0xFFFFFF);
+        setPartTab("cagelampwhite", CustomTabs.tabBluePowerLighting);
     }
     
 }

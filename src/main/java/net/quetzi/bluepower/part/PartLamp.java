@@ -2,8 +2,10 @@ package net.quetzi.bluepower.part;
 
 import java.util.List;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.quetzi.bluepower.api.part.BPPartFace;
@@ -11,12 +13,13 @@ import net.quetzi.bluepower.api.part.RedstoneConnection;
 import net.quetzi.bluepower.api.vec.Vector3;
 import net.quetzi.bluepower.helper.RedstoneHelper;
 import net.quetzi.bluepower.init.CustomTabs;
+import net.quetzi.bluepower.references.Refs;
 
 import org.lwjgl.opengl.GL11;
 
 public class PartLamp extends BPPartFace {
     
-    private String colorName;
+    protected String colorName;
     private int    colorVal;
     
     private int    power = 0;
@@ -66,13 +69,16 @@ public class PartLamp extends BPPartFace {
     }
     
     @Override
-    public void renderDynamic(Vector3 loc, int pass, float frame) {
+    public boolean renderStatic(Vector3 loc, int pass) {
     
         GL11.glPushMatrix();
         {
-            super.renderDynamic(loc, pass, frame);
+            super.renderStatic(loc, pass);
             
             // Render base here
+            Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/lamps/side.png"));
+            
+            GL11.glEnd();
             
             // Color multiplier
             int redMask = 0xFF0000, greenMask = 0xFF00, blueMask = 0xFF;
@@ -84,6 +90,15 @@ public class PartLamp extends BPPartFace {
             // Render lamp itself here
         }
         GL11.glPopMatrix();
+        return true;
+    }
+    
+    public void renderBottom(int pass){
+    	
+    }
+    
+    public void renderGlass(int pass){
+    	
     }
     
     @Override
