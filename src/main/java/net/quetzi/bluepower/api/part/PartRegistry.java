@@ -230,6 +230,8 @@ public class PartRegistry {
         setPartTab("and", CustomTabs.tabBluePowerCircuits);
         registerPart("timer", GateTimer.class);
         setPartTab("timer", CustomTabs.tabBluePowerCircuits);
+        registerPart("sequencer", GateTimer.class);
+        setPartTab("sequencer", CustomTabs.tabBluePowerCircuits);
         
         // Lamps
         registerPart("lampwhite", PartLamp.class, "white", 0xFFFFFF);

@@ -176,6 +176,11 @@ public abstract class GateBase extends BPPartFace {
         GL11.glPushMatrix();
         {
             
+            if(type == ItemRenderType.INVENTORY){
+                GL11.glTranslated(0, 0.5, 0);
+                GL11.glRotated(-12, -1, 0, 1);
+            }
+            
             /* Top */
             renderTop();
             

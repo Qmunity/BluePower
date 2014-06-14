@@ -70,9 +70,9 @@ public class RenderHelper {
                 GL11.glNormal3d(0, -1, 0);
                 // Bottom
                 addVertexWithTexture(0.5, 0, 1D / 16D, 0.5, 1D / 16D);
-                addVertexWithTexture(0.5 - 1D / 8D, 0, 0.5, 0.5 - 1D / 8D, 0.5);
-                addVertexWithTexture(0.5, 0, 0.5 + 1D / 8D, 0.5, 0.5 + 1D / 8D);
                 addVertexWithTexture(0.5 + 1D / 8D, 0, 0.5, 0.5 + 1D / 8D, 0.5);
+                addVertexWithTexture(0.5, 0, 0.5 + 1D / 8D, 0.5, 0.5 + 1D / 8D);
+                addVertexWithTexture(0.5 - 1D / 8D, 0, 0.5, 0.5 - 1D / 8D, 0.5);
                 GL11.glNormal3d(0, 1, 0);
                 // Top
                 addVertexWithTexture(0.5, 1D/16D, 1D / 16D, 0.5, 1D / 16D);
