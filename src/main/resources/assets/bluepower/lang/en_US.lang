@@ -131,6 +131,10 @@ item.stone_cathode.name=Stone Cathode
 item.stone_pointer.name=Stone Pointer
 item.silicon_chip.name=Silicon Chip
 
+bluepower.part.not.name=NOT Gate
+bluepower.part.and.name=AND Gate
+bluepower.part.timer.name=Timer
+bluepower.part.sequencer.name=Sequencer
 
 itemGroup.tabBluePowerMachines=Blue Power Machines
 itemGroup.tabBluePowerBlocks=Blue Power Blocks
