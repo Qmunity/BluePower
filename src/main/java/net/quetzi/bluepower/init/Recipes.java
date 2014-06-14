@@ -105,7 +105,7 @@ public class Recipes {
         craftManager.addRecipe(new ItemStack(BPItems.stone_wire, 1), new Object[] {"#", "W", '#', Items.redstone, 'W', BPItems.stone_wafer });
         craftManager.addRecipe(new ItemStack(BPItems.stone_anode, 3), new Object[] {" # ", "###", "WWW", '#', Items.redstone, 'W', BPItems.stone_wafer });
         craftManager.addRecipe(new ItemStack(BPItems.stone_cathode, 1), new Object[] {"#", "W", '#', Blocks.redstone_torch, 'W', BPItems.stone_wafer });
-        craftManager.addRecipe(new ItemStack(BPItems.stone_pointer, 1), new Object[] {"S", "#", "W",'S', Blocks.stone, '#', Items.redstone, 'W', BPItems.stone_wafer });
+        craftManager.addRecipe(new ItemStack(BPItems.stone_pointer, 1), new Object[] {"S", "#", "W",'S', Blocks.stone, '#', Blocks.redstone_torch, 'W', BPItems.stone_wafer });
         craftManager.addRecipe(new ItemStack(BPItems.silicon_chip, 1), new Object[] {" # ", "WWW", '#', BPItems.red_doped_wafer, 'W', BPItems.stone_wafer });
         craftManager.addRecipe(new ItemStack(BPItems.plate_assembly, 1), new Object[] {" # ", "SRS", "#C#", '#', BPItems.stone_wafer, 'S', Items.stick, 'R', BPItems.red_alloy_ingot, 'C', BPItems.stone_cathode});
         craftManager.addShapelessRecipe(new ItemStack(BPItems.taintedsilicon_chip, 1), new Object[] {BPItems.silicon_chip, Items.glowstone_dust});
