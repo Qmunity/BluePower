@@ -36,11 +36,11 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockAlloyFurnace extends BlockContainerBase {
     
-    private IIcon textureTop;
-    private IIcon textureBottom;
-    private IIcon textureSide;
-    private IIcon textureFrontOn;
-    private IIcon textureFrontOff;
+    public static IIcon textureTop;
+    private IIcon       textureBottom;
+    private IIcon       textureSide;
+    private IIcon       textureFrontOn;
+    private IIcon       textureFrontOff;
     
     public BlockAlloyFurnace() {
     

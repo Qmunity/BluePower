@@ -18,6 +18,8 @@
 package net.quetzi.bluepower;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.common.MinecraftForge;
+import net.quetzi.bluepower.client.renderers.IconSupplier;
 import net.quetzi.bluepower.client.renderers.Renderers;
 import cpw.mods.fml.client.FMLClientHandler;
 
@@ -31,6 +33,7 @@ public class ClientProxy extends CommonProxy {
     @Override
     public void initRenderers() {
     
+        MinecraftForge.EVENT_BUS.register(new IconSupplier());
         Renderers.init();
     }
     
