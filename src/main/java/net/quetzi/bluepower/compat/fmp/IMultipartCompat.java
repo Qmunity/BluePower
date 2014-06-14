@@ -2,6 +2,7 @@ package net.quetzi.bluepower.compat.fmp;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.quetzi.bluepower.api.part.BPPart;
@@ -14,5 +15,7 @@ public interface IMultipartCompat {
     public int getInput(World w, int x, int y, int z, ForgeDirection side, ForgeDirection face);
     
     public void sendUpdatePacket(BPPart part);
+    
+    public boolean isMultipart(TileEntity te);
     
 }

@@ -142,3 +142,5 @@ itemGroup.tabBluePowerItems=Blue Power Items
 itemGroup.tabBluePowerTools=Blue Power Tools
 itemGroup.tabBluePowerCircuits=Blue Power Logic Gates
 itemGroup.tabBluePowerLighting=Blue Power Lighting
+
+gui.timerInterval=Timer Interval

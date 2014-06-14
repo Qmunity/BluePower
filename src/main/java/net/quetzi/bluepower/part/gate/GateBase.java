@@ -11,6 +11,7 @@ package net.quetzi.bluepower.part.gate;
 import java.util.List;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -29,6 +30,10 @@ import net.quetzi.bluepower.init.CustomTabs;
 import net.quetzi.bluepower.references.Refs;
 
 import org.lwjgl.opengl.GL11;
+
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public abstract class GateBase extends BPPartFace {
     
@@ -260,8 +265,28 @@ public abstract class GateBase extends BPPartFace {
                 setRotation(getRotation() + 1);
             }
             return true;
+        } else if (player.worldObj.isRemote) {
+            if (openGui()) return true;
         }
         return super.onActivated(player, mop, item);
+    }
+    
+    @SideOnly(Side.CLIENT)
+    private boolean openGui() {
+    
+        GuiScreen gui = getGui();
+        if (gui != null) {
+            FMLCommonHandler.instance().showGuiScreen(gui);
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    @SideOnly(Side.CLIENT)
+    protected GuiScreen getGui() {
+    
+        return null;
     }
     
     protected boolean changeMode(RedstoneConnection front, RedstoneConnection left, RedstoneConnection back, RedstoneConnection right) {

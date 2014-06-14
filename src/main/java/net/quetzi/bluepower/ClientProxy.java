@@ -17,16 +17,26 @@
 
 package net.quetzi.bluepower;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.quetzi.bluepower.client.renderers.Renderers;
+import cpw.mods.fml.client.FMLClientHandler;
 
 public class ClientProxy extends CommonProxy {
-
+    
+    @Override
     public void init() {
-
+    
     }
-
+    
+    @Override
     public void initRenderers() {
-
+    
         Renderers.init();
+    }
+    
+    @Override
+    public EntityPlayer getPlayer() {
+    
+        return FMLClientHandler.instance().getClientPlayerEntity();
     }
 }

@@ -50,7 +50,7 @@ public class MultipartBPPart extends TMultiPart implements IRedstonePart, JNorma
     
     }
     
-    protected BPPart getPart() {
+    public BPPart getPart() {
     
         return part;
     }
@@ -135,9 +135,8 @@ public class MultipartBPPart extends TMultiPart implements IRedstonePart, JNorma
         String type = tag.getString("part_id");
         if (getPart() == null) setPart(PartRegistry.createPart(type));
         
-        NBTTagCompound t = new NBTTagCompound();
-        getPart().save(t);
-        tag.setTag("partData", t);
+        NBTTagCompound t = tag.getCompoundTag("partData");
+        getPart().load(t);
     }
     
     @Override
@@ -146,8 +145,9 @@ public class MultipartBPPart extends TMultiPart implements IRedstonePart, JNorma
         super.save(tag);
         tag.setString("part_id", getPart().getType());
         
-        NBTTagCompound t = tag.getCompoundTag("partData");
-        getPart().load(t);
+        NBTTagCompound t = new NBTTagCompound();
+        getPart().save(t);
+        tag.setTag("partData", t);
     }
     
     @Override
@@ -256,9 +256,9 @@ public class MultipartBPPart extends TMultiPart implements IRedstonePart, JNorma
     
     @Override
     public boolean drawHighlight(MovingObjectPosition mop, EntityPlayer player, float frame) {
-        
-        ForgeDirection face = ForgeDirection.getOrientation(mop.sideHit);
     
+        ForgeDirection face = ForgeDirection.getOrientation(mop.sideHit);
+        
         Cuboid6 c = net.quetzi.bluepower.util.RayTracer.getSelectedCuboid(mop, player, face, getSubParts(), true);
         
         if (c == null) return true;

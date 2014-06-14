@@ -17,13 +17,20 @@
 
 package net.quetzi.bluepower;
 
+import net.minecraft.entity.player.EntityPlayer;
+
 public class CommonProxy {
-
+    
     public void init() {
-
+    
     }
-
+    
     public void initRenderers() {
-
+    
+    }
+    
+    public EntityPlayer getPlayer() {
+    
+        return null;
     }
 }

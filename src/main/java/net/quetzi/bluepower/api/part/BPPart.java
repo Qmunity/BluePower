@@ -41,7 +41,7 @@ public abstract class BPPart {
      * 
      * @return Whether it's part of an FMP block or not
      */
-    protected final boolean isFMPMultipart() {
+    public final boolean isFMPMultipart() {
     
         if (Loader.isModLoaded(Dependencies.FMP)) return isFMPMultipart_();
         return false;
@@ -77,6 +77,7 @@ public abstract class BPPart {
      */
     public void update() {
     
+        shouldNotifyUpdates = true;
     }
     
     /**
@@ -267,7 +268,6 @@ public abstract class BPPart {
      */
     public void onAdded() {
     
-        shouldNotifyUpdates = true;
     }
     
     /**
@@ -378,7 +378,8 @@ public abstract class BPPart {
     
     }
     
-    public CreativeTabs getCreativeTab(){
+    public CreativeTabs getCreativeTab() {
+    
         return null;
     }
     

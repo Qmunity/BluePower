@@ -148,4 +148,10 @@ public class CompatModuleFMP extends CompatModule implements IMultipartCompat {
             }
         }
     }
+    
+    @Override
+    public boolean isMultipart(TileEntity te) {
+    
+        return te instanceof TileMultipart;
+    }
 }

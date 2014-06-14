@@ -1,14 +1,20 @@
 package net.quetzi.bluepower.part.gate;
 
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.nbt.NBTTagCompound;
 import net.quetzi.bluepower.api.part.FaceDirection;
 import net.quetzi.bluepower.api.part.RedstoneConnection;
+import net.quetzi.bluepower.client.gui.gate.GuiGateSingleTime;
 import net.quetzi.bluepower.client.renderers.RenderHelper;
+import net.quetzi.bluepower.part.IGuiButtonSensitive;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
-public class GateTimer extends GateBase {
+public class GateTimer extends GateBase implements IGuiButtonSensitive {
     
     private boolean power = false;
     private int     start = -1;
-    private int     time  = 1000;
+    private int     time  = 40;
     private int     ticks = 0;
     
     @Override
@@ -45,15 +51,13 @@ public class GateTimer extends GateBase {
         renderTopTexture(FaceDirection.RIGHT, power);
         renderTopTexture(FaceDirection.BACK, back.getPower() > 0);
         RenderHelper.renderRedstoneTorch(0, 1D / 8D, 0, 13D / 16D, true);
-        RenderHelper.renderPointer(0, 7D / 16D, 0, world != null ? (start >= 0 ? 1 - (((double)(ticks - start + frame))/ ((double)time)) : 0) : 0);
+        RenderHelper.renderPointer(0, 7D / 16D, 0, world != null ? start >= 0 ? 1 - (double) (ticks - start + frame) / (double) time : 0 : 0);
     }
     
     @Override
     public void doLogic(RedstoneConnection front, RedstoneConnection left, RedstoneConnection back, RedstoneConnection right) {
     
         if (power) power = false;
-        
-        time = 100;
         
         power = false;
         
@@ -67,9 +71,9 @@ public class GateTimer extends GateBase {
         
         if (start >= 0) {
             if (ticks >= start + time) {
-                if(back.getPower() > 0){
+                if (back.getPower() > 0) {
                     start = -1;
-                }else{
+                } else {
                     start = ticks;
                 }
                 power = true;
@@ -81,6 +85,46 @@ public class GateTimer extends GateBase {
         right.setPower(power ? 15 : 0);
         
         ticks++;
+    }
+    
+    @Override
+    public void save(NBTTagCompound tag) {
+    
+        super.save(tag);
+        tag.setInteger("start", start);
+        tag.setInteger("ticks", ticks);
+        tag.setInteger("time", time);
+    }
+    
+    @Override
+    public void load(NBTTagCompound tag) {
+    
+        super.load(tag);
+        start = tag.getInteger("start");
+        ticks = tag.getInteger("ticks");
+        time = tag.getInteger("time");
+    }
+    
+    @Override
+    public void onButtonPress(int messageId, int value) {
+    
+        time = value;
+        sendUpdatePacket();
+    }
+    
+    @Override
+    @SideOnly(Side.CLIENT)
+    protected GuiScreen getGui() {
+    
+        return new GuiGateSingleTime(this) {
+            
+            @Override
+            protected int getCurrentIntervalTicks() {
+            
+                return time;
+            }
+            
+        };
     }
     
 }
