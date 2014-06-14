@@ -133,6 +133,6 @@ public class TileBase extends TileEntity {
 
     public ForgeDirection getFacingDirection() {
 
-        return ForgeDirection.getOrientation(blockMetadata);
+        return ForgeDirection.getOrientation(this.getBlockMetadata());
     }
 }

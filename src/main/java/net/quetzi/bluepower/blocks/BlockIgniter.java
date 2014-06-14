@@ -84,7 +84,8 @@ public class BlockIgniter extends BlockContainerBase {
         return GuiIDs.INVALID;
     }
 
-    @Override public boolean isFireSource(World world, int x, int y, int z, ForgeDirection side) {
+    @Override
+    public boolean isFireSource(World world, int x, int y, int z, ForgeDirection side) {
 
         boolean orientation = ForgeDirection.getOrientation(world.getBlockMetadata(x, y, z)) == ForgeDirection.UP;
         TileIgniter tile = (TileIgniter) world.getTileEntity(x, y, z);
