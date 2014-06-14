@@ -18,43 +18,42 @@
 package net.quetzi.bluepower.tileentities.tier1;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockPortal;
+import net.minecraft.init.Blocks;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.quetzi.bluepower.tileentities.TileBase;
 
 public class TileIgniter extends TileBase {
-    
-    boolean isActive;
-    
+
     @Override
     protected void redstoneChanged(boolean newValue) {
-    
+
+        super.redstoneChanged(newValue);
         ForgeDirection direction = this.getFacingDirection();
         if (this.getIsRedstonePowered()) {
-            if (isActive) {
-                Block targetBlock = worldObj.getBlock(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ);
-                if (targetBlock instanceof BlockPortal) {
-                    // TODO: Disable Portal
-                }
-                this.isActive = false;
-            } else {
-                this.isActive = true;
-                ignite(direction);
-            }
+            ignite(direction);
+        } else {
+            extinguish(direction);
         }
     }
-    
+
     private void ignite(ForgeDirection direction) {
-    
-        if (this.isActive) {
-            worldObj.getBlock(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ).isBurning(worldObj,
-                    xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ);
+
+        if (this.getIsRedstonePowered() && worldObj.isAirBlock(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ)) {
+            worldObj.setBlock(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ, Blocks.fire);
         }
     }
-    
+
+    private void extinguish(ForgeDirection direction) {
+
+        Block target = worldObj.getBlock(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ);
+        if (!this.getIsRedstonePowered() && (target == Blocks.fire || target == Blocks.portal)) {
+            worldObj.setBlock(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ, Blocks.air);
+        }
+    }
+
     @Override
     public void updateEntity() {
-    
+
         if (this.getTicker() % 5 == 0) {
             this.ignite(this.getFacingDirection());
         }
