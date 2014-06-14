@@ -27,6 +27,7 @@ import net.quetzi.bluepower.part.gate.GateAnd;
 import net.quetzi.bluepower.part.gate.GateNot;
 import net.quetzi.bluepower.part.gate.GateSequencer;
 import net.quetzi.bluepower.part.gate.GateTimer;
+import net.quetzi.bluepower.part.tube.PneumaticTube;
 import net.quetzi.bluepower.references.Refs;
 
 public class PartRegistry {
@@ -187,7 +188,7 @@ public class PartRegistry {
     
         try {
             for (String s : parts.keySet()) {
-                if (((isMultipart ? Refs.MODID + "_" + s : s)).equals(id)) {
+                if ((isMultipart ? Refs.MODID + "_" + s : s).equals(id)) {
                     try {
                         return parts.get(s);
                     } catch (Exception e) {
@@ -237,6 +238,10 @@ public class PartRegistry {
         // Lamps
         registerPart("lampwhite", PartLamp.class, "white", 0xFFFFFF);
         setPartTab("lampwhite", CustomTabs.tabBluePowerLighting);
+        
+        // Pneumatic Tubes
+        registerPart("pneumaticTube", PneumaticTube.class);
+        setPartTab("pneumaticTube", CustomTabs.tabBluePowerMachines);
     }
     
 }
