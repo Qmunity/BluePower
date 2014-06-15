@@ -12,6 +12,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import net.quetzi.bluepower.api.part.BPPartFace;
 import net.quetzi.bluepower.api.part.RedstoneConnection;
 import net.quetzi.bluepower.api.part.redstone.IBPRedstonePart;
+import net.quetzi.bluepower.api.part.redstone.RedstoneNetwork;
 import net.quetzi.bluepower.api.vec.Vector3;
 import net.quetzi.bluepower.helper.RedstoneHelper;
 import net.quetzi.bluepower.init.CustomTabs;
@@ -147,5 +148,17 @@ public class PartLamp extends BPPartFace {
     
         return null;
     }
+
+	@Override
+	public RedstoneNetwork getNetwork() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setNetwork(RedstoneNetwork network) {
+		// TODO Auto-generated method stub
+		
+	}
     
 }
