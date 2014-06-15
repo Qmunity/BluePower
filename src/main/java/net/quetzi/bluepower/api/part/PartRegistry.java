@@ -22,11 +22,11 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.quetzi.bluepower.init.BPItems;
-import net.quetzi.bluepower.part.PartCageLamp;
 import net.quetzi.bluepower.part.gate.GateAnd;
 import net.quetzi.bluepower.part.gate.GateNot;
 import net.quetzi.bluepower.part.gate.GateSequencer;
 import net.quetzi.bluepower.part.gate.GateTimer;
+import net.quetzi.bluepower.part.lamp.PartCageLamp;
 import net.quetzi.bluepower.part.tube.PneumaticTube;
 import net.quetzi.bluepower.references.Refs;
 

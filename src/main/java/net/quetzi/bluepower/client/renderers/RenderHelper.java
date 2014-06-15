@@ -168,6 +168,65 @@ public class RenderHelper {
         addVertex(vector.getMinX(), vector.getMaxY(), vector.getMaxZ());
     }
     
+    public static void drawTesselatedColoredCube(Vector3Cube vector) {
+    	
+    	Tessellator t = Tessellator.instance;
+    	boolean wasTesselating = false;
+    	
+    	//Check if we were already tesselating
+    	try{
+    		t.startDrawingQuads();
+    	}catch(IllegalStateException e){
+    		wasTesselating = true;
+    	}
+    	
+        //Top side
+        t.setColorRGBA_F(1.0F, 0.0F, 0.0F, 1.0F);
+        t.addVertex(vector.getMinX(), vector.getMaxY(), vector.getMaxZ());
+        t.addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ());
+        t.addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMinZ());
+        t.addVertex(vector.getMinX(), vector.getMaxY(), vector.getMinZ());
+        
+        //Bottom side
+        t.setColorRGBA_F(1.0F, 1.0F, 0.0F, 1.0F);
+        t.addVertex(vector.getMaxX(), vector.getMinY(), vector.getMaxZ());
+        t.addVertex(vector.getMinX(), vector.getMinY(), vector.getMaxZ());
+        t.addVertex(vector.getMinX(), vector.getMinY(), vector.getMinZ());
+        t.addVertex(vector.getMaxX(), vector.getMinY(), vector.getMinZ());
+        
+        //Draw west side:
+        t.setColorRGBA_F(0.0F, 1.0F, 0.0F, 1.0F);
+        t.addVertex(vector.getMinX(), vector.getMinY(), vector.getMaxZ());
+        t.addVertex(vector.getMinX(), vector.getMaxY(), vector.getMaxZ());
+        t.addVertex(vector.getMinX(), vector.getMaxY(), vector.getMinZ());
+        t.addVertex(vector.getMinX(), vector.getMinY(), vector.getMinZ());
+        
+        //Draw east side:
+        t.setColorRGBA_F(0.0F, 1.0F, 1.0F, 1.0F);
+        t.addVertex(vector.getMaxX(), vector.getMinY(), vector.getMinZ());
+        t.addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMinZ());
+        t.addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ());
+        t.addVertex(vector.getMaxX(), vector.getMinY(), vector.getMaxZ());
+        
+        //Draw north side
+        t.setColorRGBA_F(0.0F, 0.0F, 1.0F, 1.0F);
+        t.addVertex(vector.getMinX(), vector.getMinY(), vector.getMinZ());
+        t.addVertex(vector.getMinX(), vector.getMaxY(), vector.getMinZ());
+        t.addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMinZ());
+        t.addVertex(vector.getMaxX(), vector.getMinY(), vector.getMinZ());
+        
+        //Draw south side
+        t.setColorRGBA_F(0.0F, 0.0F, 0.0F, 1.0F);
+        t.addVertex(vector.getMinX(), vector.getMinY(), vector.getMaxZ());
+        t.addVertex(vector.getMaxX(), vector.getMinY(), vector.getMaxZ());
+        t.addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ());
+        t.addVertex(vector.getMinX(), vector.getMaxY(), vector.getMaxZ());
+        
+        if(!wasTesselating){
+        	t.draw();
+        }
+    }
+    
     public static void rotateRenderMatrix(ForgeDirection d) {
     
         switch (d) {
@@ -189,6 +248,8 @@ public class RenderHelper {
             case EAST:
                 GL11.glRotatef(1, 0, 0, 0);
                 break;
+		default:
+			break;
         }
     }
 }

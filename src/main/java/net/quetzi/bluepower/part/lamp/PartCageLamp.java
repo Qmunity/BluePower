@@ -1,4 +1,7 @@
-package net.quetzi.bluepower.part;
+package net.quetzi.bluepower.part.lamp;
+
+import net.quetzi.bluepower.api.vec.Vector3Cube;
+import net.quetzi.bluepower.client.renderers.RenderHelper;
 
 public class PartCageLamp extends PartLamp{
 
@@ -10,7 +13,8 @@ public class PartCageLamp extends PartLamp{
 	
 	@Override
     public void renderBase(int pass){
-    	
+		
+		RenderHelper.drawTesselatedColoredCube(new Vector3Cube(0.0, 0.0, 0.0, 1.0, 1.0, 1.0));
     }
     
 	@Override
