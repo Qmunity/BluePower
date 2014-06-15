@@ -34,6 +34,7 @@ tile.indigo_flower.name=Indigo Flower
 tile.alloyfurnace.name=Alloy Furnace
 tile.block_breaker.name=Block Breaker
 tile.igniter.name=Igniter
+tile.buffer.name=Buffer
 
 tile.lamp_white.name=White Lamp
 tile.invertedlamp_white.name=Inverted White Lamp

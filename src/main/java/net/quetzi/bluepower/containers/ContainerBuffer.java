@@ -15,8 +15,24 @@
  *     along with Blue Power.  If not, see <http://www.gnu.org/licenses/>
  */
 
-package net.quetzi.bluepower.references;
+package net.quetzi.bluepower.containers;
 
-public enum GuiIDs {
-    INVALID, ALLOY_FURNACE, BUFFER;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.Container;
+import net.quetzi.bluepower.tileentities.tier1.TileBuffer;
+
+public class ContainerBuffer extends Container {
+
+    private final TileBuffer tileBuffer;
+
+    public ContainerBuffer(InventoryPlayer invPlayer, TileBuffer buffer) {
+
+        tileBuffer = buffer;
+    }
+
+    @Override public boolean canInteractWith(EntityPlayer player) {
+
+        return true;
+    }
 }
