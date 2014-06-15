@@ -12,14 +12,10 @@ import net.minecraft.world.EnumSkyBlock;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.quetzi.bluepower.api.part.BPPartFace;
 import net.quetzi.bluepower.api.part.RedstoneConnection;
-import net.quetzi.bluepower.api.part.redstone.IBPRedstonePart;
-import net.quetzi.bluepower.api.part.redstone.RedstoneNetwork;
 import net.quetzi.bluepower.api.vec.Vector3;
 import net.quetzi.bluepower.helper.RedstoneHelper;
 import net.quetzi.bluepower.init.CustomTabs;
 import net.quetzi.bluepower.references.Refs;
-
-import org.lwjgl.opengl.GL11;
 
 public class PartLamp extends BPPartFace {
     
@@ -90,15 +86,15 @@ public class PartLamp extends BPPartFace {
         int r = (colorVal & redMask) >> 16;
         int g = (colorVal & greenMask) >> 8;
         int b = (colorVal & blueMask);
-        //GL11.glColor4d(r / 256D, g / 256D, b / 256D, 1);
+        // GL11.glColor4d(r / 256D, g / 256D, b / 256D, 1);
         
         // Render lamp itself here
-        //GL11.glBegin(GL11.GL_QUADS);
+        // GL11.glBegin(GL11.GL_QUADS);
         renderLamp(pass);
-        //GL11.glEnd();
+        // GL11.glEnd();
         
         // Reset color
-        //GL11.glColor4d(1, 1, 1, 1);
+        // GL11.glColor4d(1, 1, 1, 1);
         
         // Re-bind blocks texture
         Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
@@ -143,23 +139,5 @@ public class PartLamp extends BPPartFace {
     
         return CustomTabs.tabBluePowerLighting;
     }
-    
-    @Override
-    public List<IBPRedstonePart> getConnections(ForgeDirection side) {
-    
-        return null;
-    }
-
-	@Override
-	public RedstoneNetwork getNetwork() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void setNetwork(RedstoneNetwork network) {
-		// TODO Auto-generated method stub
-		
-	}
     
 }
