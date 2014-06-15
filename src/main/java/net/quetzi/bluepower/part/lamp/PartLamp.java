@@ -100,7 +100,7 @@ public class PartLamp extends BPPartFace {
         
         t.setColorOpaque(r, g, b);
         // Render lamp itself here
-        renderLamp(pass);
+        renderLamp(pass, r, g, b);
         
         // Reset color
         
@@ -115,7 +115,7 @@ public class PartLamp extends BPPartFace {
     
     }
     
-    public void renderLamp(int pass) {
+    public void renderLamp(int pass, int r, int g, int b) {
     
     }
     

@@ -1,5 +1,8 @@
 package net.quetzi.bluepower.part.lamp;
 
+import org.lwjgl.opengl.GL11;
+
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.IIcon;
 import net.quetzi.bluepower.api.vec.Vector3Cube;
 import net.quetzi.bluepower.client.renderers.IconSupplier;
@@ -21,15 +24,22 @@ public class PartCageLamp extends PartLamp{
     }
     
 	@Override
-    public void renderLamp(int pass){
+    public void renderLamp(int pass, int r, int g, int b){
 		
 		IIcon iconToUse;
 		if(power == 0){
 			iconToUse = IconSupplier.cagedLampLampInactive;
 		}else{
 			iconToUse = IconSupplier.cagedLampLampActive;
+			Tessellator t = Tessellator.instance;
+			t.setColorRGBA(r, g, b, 90);
+			RenderHelper.drawTesselatedCube(new Vector3Cube(pixel * 4.5, pixel * 2, pixel * 4.5, 1.0 - (pixel*4.5), 1.0 - (pixel * 4.5), 1.0 - pixel * 4.5));
+			t.setColorRGBA(r, g, b, 255);
 		}
+		
 		RenderHelper.drawTesselatedTexturedCube(new Vector3Cube(pixel * 5, pixel * 2, pixel * 5, 1.0 - (pixel*5), 1.0 - (pixel * 5), 1.0 - pixel * 5), iconToUse);
+		
+		
     }
 	
 	@Override

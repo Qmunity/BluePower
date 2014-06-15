@@ -300,6 +300,65 @@ public class RenderHelper {
         }
     }
     
+    public static void drawTesselatedCube(Vector3Cube vector){
+    	
+		Tessellator t = Tessellator.instance;
+		boolean wasTesselating = false;
+		
+		//Check if we were already tesselating
+		try{
+			t.startDrawingQuads();
+		}catch(IllegalStateException e){
+			wasTesselating = true;
+		}
+		
+	    //Top side
+	    t.setNormal(0, 1, 0);
+	    t.addVertex(vector.getMinX(), vector.getMaxY(), vector.getMaxZ());
+	    t.addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ());
+	    t.addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMinZ());
+	    t.addVertex(vector.getMinX(), vector.getMaxY(), vector.getMinZ());
+	    
+	    //Bottom side
+	    t.setNormal(0, -1, 0);
+	    t.addVertex(vector.getMaxX(), vector.getMinY(), vector.getMaxZ());
+	    t.addVertex(vector.getMinX(), vector.getMinY(), vector.getMaxZ());
+	    t.addVertex(vector.getMinX(), vector.getMinY(), vector.getMinZ());
+	    t.addVertex(vector.getMaxX(), vector.getMinY(), vector.getMinZ());
+	    
+	    //Draw west side:
+	    t.setNormal(-1, 0, 0);
+	    t.addVertex(vector.getMinX(), vector.getMinY(), vector.getMaxZ());
+	    t.addVertex(vector.getMinX(), vector.getMaxY(), vector.getMaxZ());
+	    t.addVertex(vector.getMinX(), vector.getMaxY(), vector.getMinZ());
+	    t.addVertex(vector.getMinX(), vector.getMinY(), vector.getMinZ());
+	    
+	    //Draw east side:
+	    t.setNormal(1, 0, 0);
+	    t.addVertex(vector.getMaxX(), vector.getMinY(), vector.getMinZ());
+	    t.addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMinZ());
+	    t.addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ());
+	    t.addVertex(vector.getMaxX(), vector.getMinY(), vector.getMaxZ());
+	    
+	    //Draw north side
+	    t.setNormal(0, 0, -1);
+	    t.addVertex(vector.getMinX(), vector.getMinY(), vector.getMinZ());
+	    t.addVertex(vector.getMinX(), vector.getMaxY(), vector.getMinZ());
+	    t.addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMinZ());
+	    t.addVertex(vector.getMaxX(), vector.getMinY(), vector.getMinZ());
+	    
+	    //Draw south side
+	    t.setNormal(0, 0, 1);
+	    t.addVertex(vector.getMinX(), vector.getMinY(), vector.getMaxZ());
+	    t.addVertex(vector.getMaxX(), vector.getMinY(), vector.getMaxZ());
+	    t.addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ());
+	    t.addVertex(vector.getMinX(), vector.getMaxY(), vector.getMaxZ());
+	    
+	    if(!wasTesselating){
+	    	t.draw();
+	    }
+    }
+    
     public static void rotateRenderMatrix(ForgeDirection d) {
     
         switch (d) {
