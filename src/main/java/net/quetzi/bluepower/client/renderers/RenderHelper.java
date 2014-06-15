@@ -8,6 +8,7 @@ import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.quetzi.bluepower.api.vec.Vector3Cube;
@@ -205,6 +206,7 @@ public class RenderHelper {
         t.addVertex(vector.getMinX(), vector.getMinY(), vector.getMinZ());
         
         //Draw east side:
+        t.setColorRGBA_F(0.0F, 1.0F, 1.0F, 1.0F);
         t.setNormal(1, 0, 0);
         t.addVertex(vector.getMaxX(), vector.getMinY(), vector.getMinZ());
         t.addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMinZ());
@@ -226,6 +228,72 @@ public class RenderHelper {
         t.addVertex(vector.getMaxX(), vector.getMinY(), vector.getMaxZ());
         t.addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ());
         t.addVertex(vector.getMinX(), vector.getMaxY(), vector.getMaxZ());
+        
+        if(!wasTesselating){
+        	t.draw();
+        }
+    }
+    
+    public static void drawTesselatedTexturedCube(Vector3Cube vector, IIcon iconToUse){
+    	
+    	Tessellator t = Tessellator.instance;
+    	boolean wasTesselating = false;
+    	
+    	//Check if we were already tesselating
+    	try{
+    		t.startDrawingQuads();
+    	}catch(IllegalStateException e){
+    		wasTesselating = true;
+    	}
+    	
+    	double minU = iconToUse.getMinU();
+        double maxU = iconToUse.getMaxU();
+        double minV = iconToUse.getMinV();
+        double maxV = iconToUse.getMaxV();
+    	
+        //Top side
+        t.setNormal(0, 1, 0);
+        t.addVertexWithUV(vector.getMinX(), vector.getMaxY(), vector.getMaxZ(), minU, maxV);
+        t.addVertexWithUV(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ(), minU, minV);
+        t.addVertexWithUV(vector.getMaxX(), vector.getMaxY(), vector.getMinZ(), maxU, minV);
+        t.addVertexWithUV(vector.getMinX(), vector.getMaxY(), vector.getMinZ(), maxU, maxV);
+        
+        //Bottom side
+        t.setNormal(0, -1, 0);
+        t.addVertexWithUV(vector.getMaxX(), vector.getMinY(), vector.getMaxZ(), minU, maxV);
+        t.addVertexWithUV(vector.getMinX(), vector.getMinY(), vector.getMaxZ(), minU, minV);
+        t.addVertexWithUV(vector.getMinX(), vector.getMinY(), vector.getMinZ(), maxU, minV);
+        t.addVertexWithUV(vector.getMaxX(), vector.getMinY(), vector.getMinZ(), maxU, maxV);
+        
+        
+        //Draw west side:
+        t.setNormal(-1, 0, 0);
+        t.addVertexWithUV(vector.getMinX(), vector.getMinY(), vector.getMaxZ(), minU, maxV);
+        t.addVertexWithUV(vector.getMinX(), vector.getMaxY(), vector.getMaxZ(), minU, minV);
+        t.addVertexWithUV(vector.getMinX(), vector.getMaxY(), vector.getMinZ(), maxU, minV);
+        t.addVertexWithUV(vector.getMinX(), vector.getMinY(), vector.getMinZ(), maxU, maxV);
+        
+        //Draw east side:
+        t.setNormal(1, 0, 0);
+        t.addVertexWithUV(vector.getMaxX(), vector.getMinY(), vector.getMinZ(), minU, maxV);
+        t.addVertexWithUV(vector.getMaxX(), vector.getMaxY(), vector.getMinZ(), minU, minV);
+        t.addVertexWithUV(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ(), maxU, minV);
+        t.addVertexWithUV(vector.getMaxX(), vector.getMinY(), vector.getMaxZ(), maxU, maxV);
+        
+        //Draw north side
+        t.setNormal(0, 0, -1);
+        t.addVertexWithUV(vector.getMinX(), vector.getMinY(), vector.getMinZ(), minU, maxV);
+        t.addVertexWithUV(vector.getMinX(), vector.getMaxY(), vector.getMinZ(), minU, minV);
+        t.addVertexWithUV(vector.getMaxX(), vector.getMaxY(), vector.getMinZ(), maxU, minV);
+        t.addVertexWithUV(vector.getMaxX(), vector.getMinY(), vector.getMinZ(), maxU, maxV);
+        
+        
+        //Draw south side
+        t.setNormal(0, 0, 1);
+        t.addVertexWithUV(vector.getMinX(), vector.getMinY(), vector.getMaxZ(), minU, maxV);
+        t.addVertexWithUV(vector.getMaxX(), vector.getMinY(), vector.getMaxZ(), minU, minV);
+        t.addVertexWithUV(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ(), maxU, minV);
+        t.addVertexWithUV(vector.getMinX(), vector.getMaxY(), vector.getMaxZ(), maxU, maxV);
         
         if(!wasTesselating){
         	t.draw();

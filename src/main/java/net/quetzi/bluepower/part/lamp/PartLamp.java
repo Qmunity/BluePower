@@ -2,12 +2,9 @@ package net.quetzi.bluepower.part.lamp;
 
 import java.util.List;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.quetzi.bluepower.api.part.BPPartFace;
@@ -15,14 +12,13 @@ import net.quetzi.bluepower.api.part.RedstoneConnection;
 import net.quetzi.bluepower.api.vec.Vector3;
 import net.quetzi.bluepower.helper.RedstoneHelper;
 import net.quetzi.bluepower.init.CustomTabs;
-import net.quetzi.bluepower.references.Refs;
 
 public class PartLamp extends BPPartFace {
     
     protected String colorName;
     private int      colorVal;
     
-    private int      power = 0;
+    protected int      power = 0;
     
     public PartLamp(String colorName, Integer colorVal) {
     
@@ -59,7 +55,8 @@ public class PartLamp extends BPPartFace {
     @Override
     public void addSelectionBoxes(List<AxisAlignedBB> boxes) {
     
-        boxes.add(AxisAlignedBB.getBoundingBox(1D / 4D, 0, 1D / 4D, 3D / 4D, 3D / 8D, 3D / 4D));
+        boxes.add(AxisAlignedBB.getBoundingBox(pixel * 3, 0.0, pixel * 3, 1.0 - (pixel*3), pixel * 2, 1.0 - pixel * 3));
+        boxes.add(AxisAlignedBB.getBoundingBox(pixel * 4, pixel * 2, pixel * 4, 1.0 - (pixel*4), 1.0 - (pixel * 4), 1.0 - pixel * 4));
     }
     
     @Override
@@ -76,7 +73,7 @@ public class PartLamp extends BPPartFace {
         t.setColorOpaque_F(1, 1, 1);
         translateStatic(loc, pass);
         // Render base here
-        Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/lamps/side.png"));
+        //Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/lamps/side.png"));
         
         // Render base
         renderBase(pass);
@@ -87,13 +84,14 @@ public class PartLamp extends BPPartFace {
         int g = (colorVal & greenMask) >> 8;
         int b = (colorVal & blueMask);
         
+        t.setColorOpaque(r, g, b);
         // Render lamp itself here
         renderLamp(pass);
         
         // Reset color
         
         // Re-bind blocks texture
-        Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
+        //Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
 
         undoTranslateStatic(loc, pass);
         return true;
@@ -135,5 +133,6 @@ public class PartLamp extends BPPartFace {
     
         return CustomTabs.tabBluePowerLighting;
     }
+
     
 }
