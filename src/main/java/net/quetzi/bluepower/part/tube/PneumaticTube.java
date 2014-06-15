@@ -8,6 +8,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -128,18 +129,19 @@ public class PneumaticTube extends BPPart {
                 getTileCache()[i].update();
                 ForgeDirection d = ForgeDirection.getOrientation(i);
                 TileEntity neighbor = getTileCache()[i].getTileEntity();
-                connections[i] = IOHelper.canInterfaceWith(neighbor, ForgeDirection.getOrientation(i).getOpposite());
+                connections[i] = IOHelper.canInterfaceWith(neighbor, ForgeDirection.getOrientation(i).getOpposite(), this);
                 
                 if (connections[i]) {
-                    connections[i] = isConnected(d);
+                    connections[i] = isConnected(d, null);
                 }
             }
             sendUpdatePacket();
         }
     }
     
-    public boolean isConnected(ForgeDirection dir) {
+    public boolean isConnected(ForgeDirection dir, PneumaticTube otherTube) {
     
+        if (otherTube != null && otherTube.color != TubeColor.NONE && color != TubeColor.NONE && color != otherTube.color) return false;
         if (dir == ForgeDirection.UP || dir == ForgeDirection.DOWN) dir = dir.getOpposite();
         return world == null || !checkOcclusion(sideBB.clone().rotate90Degrees(dir).toAABB());
     }
@@ -177,14 +179,16 @@ public class PneumaticTube extends BPPart {
     public boolean onActivated(EntityPlayer player, ItemStack item) {
     
         if (!world.isRemote) {
-            if (color == TubeColor.NONE) {
-                color = TubeColor.values()[0];
-            } else {
-                color = TubeColor.values()[color.ordinal() + 1];
+            if (item != null && item.getItem() == Items.dye) {
+                if (item.getItemDamage() < 16) {
+                    color = TubeColor.values()[item.getItemDamage()];
+                    updateConnections();
+                    notifyUpdate();
+                    return true;
+                }
             }
-            updateConnections();
         }
-        return true;
+        return false;
     }
     
     /**
