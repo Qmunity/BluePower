@@ -17,6 +17,8 @@ public class IconSupplier {
     public static IIcon cagedLampCageTop;
     public static IIcon cagedLampLampActive;
     public static IIcon cagedLampLampInactive;
+    public static IIcon cagedLampLampActiveTop;
+    public static IIcon cagedLampLampInactiveTop;
     
     @SubscribeEvent
     public void onTextureStitch(TextureStitchEvent.Pre event) {
@@ -29,11 +31,14 @@ public class IconSupplier {
             
             cagedLampFootSide = event.map.registerIcon(Refs.MODID + ":lamps/cage_foot_side");
             cagedLampFootTop = event.map.registerIcon(Refs.MODID + ":lamps/cage_foot_top");
-            cagedLampCageSide = event.map.registerIcon(Refs.MODID + ":lamps/cage_side");
+            cagedLampCageSide = event.map.registerIcon(Refs.MODID + ":lamps/cage");
             cagedLampCageTop = event.map.registerIcon(Refs.MODID + ":lamps/cage_top");
             
-            cagedLampLampActive = event.map.registerIcon(Refs.MODID + ":lamps/cage_lamp_white_on");
-            cagedLampLampInactive = event.map.registerIcon(Refs.MODID + ":lamps/cage_lamp_white_off");
+            cagedLampLampActive = event.map.registerIcon(Refs.MODID + ":lamps/cage_lamp_on");
+            cagedLampLampInactive = event.map.registerIcon(Refs.MODID + ":lamps/cage_lamp_off");
+            
+            cagedLampLampActiveTop = event.map.registerIcon(Refs.MODID + ":lamps/cage_lamp_on_top");
+            cagedLampLampInactiveTop = event.map.registerIcon(Refs.MODID + ":lamps/cage_lamp_off_top");
         }
     }
 }
