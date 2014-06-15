@@ -47,4 +47,17 @@ public class DummyRedstonePart implements IBPRedstonePart {
         return null;
     }
     
+    private RedstoneNetwork net;
+
+    @Override
+    public RedstoneNetwork getNetwork() {
+    
+        return net;
+    }
+
+    @Override
+    public void setNetwork(RedstoneNetwork network) {
+        this.net = network;
+    }
+    
 }
