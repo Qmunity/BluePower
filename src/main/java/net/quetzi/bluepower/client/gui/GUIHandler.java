@@ -22,8 +22,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.quetzi.bluepower.containers.ContainerAlloyFurnace;
+import net.quetzi.bluepower.containers.ContainerBuffer;
 import net.quetzi.bluepower.references.GuiIDs;
 import net.quetzi.bluepower.tileentities.tier1.TileAlloyFurnace;
+import net.quetzi.bluepower.tileentities.tier1.TileBuffer;
 
 public class GUIHandler implements IGuiHandler {
 
@@ -39,6 +41,11 @@ public class GUIHandler implements IGuiHandler {
                     return new ContainerAlloyFurnace(player.inventory, (TileAlloyFurnace) ent);
                 }
             }
+            if (ID == GuiIDs.BUFFER.ordinal()) {
+                if (ent instanceof TileBuffer) {
+                    return new ContainerBuffer(player.inventory, (TileBuffer) ent);
+                }
+            }
         }
         return null;
     }
@@ -52,6 +59,11 @@ public class GUIHandler implements IGuiHandler {
             if (ID == GuiIDs.ALLOY_FURNACE.ordinal()) {
                 if (ent instanceof TileAlloyFurnace) { // Just a sanity check.
                     return new GuiAlloyFurnace(player.inventory, (TileAlloyFurnace) ent);
+                }
+            }
+            if (ID == GuiIDs.BUFFER.ordinal()) {
+                if (ent instanceof TileBuffer) {
+                    return new GuiBuffer(player.inventory, (TileBuffer) ent);
                 }
             }
         }

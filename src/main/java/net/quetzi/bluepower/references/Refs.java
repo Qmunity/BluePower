@@ -165,6 +165,7 @@ public class Refs {
     public static final String ITEMPLATEASSEMBLY_NAME      = "plate_assembly";
     public static final String ITEMSTONEBUNDLE_NAME        = "stone_bundle";
     public static final String ITEMSCREWDRIVERHANDLE_NAME  = "screwdriver_handle";
+    public static final String BLOCKBUFFER_NAME            = "buffer";
 
     public static String fullVersionString() {
 
