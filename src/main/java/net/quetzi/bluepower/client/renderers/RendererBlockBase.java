@@ -3,16 +3,31 @@ package net.quetzi.bluepower.client.renderers;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.RenderBlocks;
+import net.minecraft.init.Blocks;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 
 public class RendererBlockBase implements ISimpleBlockRenderingHandler {
 
-    public static final int RENDER_ID = RenderingRegistry.getNextAvailableRenderId();
+    public static final int   RENDER_ID         = RenderingRegistry.getNextAvailableRenderId();
+    public static final Block FAKE_RENDER_BLOCK = new Block(Material.rock) {
+
+        @Override
+        public IIcon getIcon(int meta, int side) {
+
+            return currentBlockToRender.getIcon(meta, side);
+        }
+    };
+
+    public static Block currentBlockToRender = Blocks.stone;
 
     @Override
     public void renderInventoryBlock(Block block, int metadata, int modelId, RenderBlocks renderer) {
 
+        currentBlockToRender = block;
+        renderer.renderBlockAsItem(FAKE_RENDER_BLOCK, 1, 1.0F);
     }
 
     /*
