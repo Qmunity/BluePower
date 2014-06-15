@@ -22,4 +22,8 @@ public interface IBPRedstonePart {
     
     public List<IBPRedstonePart> getConnections(ForgeDirection side);
     
+    public RedstoneNetwork getNetwork();
+    
+    public void setNetwork(RedstoneNetwork network);
+    
 }
