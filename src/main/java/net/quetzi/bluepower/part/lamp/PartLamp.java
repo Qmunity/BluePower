@@ -74,7 +74,7 @@ public class PartLamp extends BPPartFace {
         super.renderStatic(loc, pass);
         Tessellator t = Tessellator.instance;
         t.setColorOpaque_F(1, 1, 1);
-        t.addTranslation((float) loc.getX(), (float) loc.getY(), (float) loc.getZ());
+        translateStatic(loc, pass);
         // Render base here
         Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/lamps/side.png"));
         
@@ -86,20 +86,16 @@ public class PartLamp extends BPPartFace {
         int r = (colorVal & redMask) >> 16;
         int g = (colorVal & greenMask) >> 8;
         int b = (colorVal & blueMask);
-        // GL11.glColor4d(r / 256D, g / 256D, b / 256D, 1);
         
         // Render lamp itself here
-        // GL11.glBegin(GL11.GL_QUADS);
         renderLamp(pass);
-        // GL11.glEnd();
         
         // Reset color
-        // GL11.glColor4d(1, 1, 1, 1);
         
         // Re-bind blocks texture
         Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
-        
-        t.addTranslation((float) -loc.getX(), (float) -loc.getY(), (float) -loc.getZ());
+
+        undoTranslateStatic(loc, pass);
         return true;
     }
     

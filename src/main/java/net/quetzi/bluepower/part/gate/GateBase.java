@@ -94,7 +94,7 @@ public abstract class GateBase extends BPPartFace {
     
         GL11.glPushMatrix();
         {
-            super.renderDynamic(loc, pass, frame);
+            super.rotateAndTranslateDynamic(loc, pass, frame);
             
             /* Top */
             renderTop(frame);

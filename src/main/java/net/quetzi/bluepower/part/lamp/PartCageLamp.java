@@ -14,7 +14,7 @@ public class PartCageLamp extends PartLamp{
 	@Override
     public void renderBase(int pass){
 		
-		RenderHelper.drawTesselatedColoredCube(new Vector3Cube(0.0, 0.0, 0.0, 1.0, 1.0, 1.0));
+		RenderHelper.drawTesselatedColoredCube(new Vector3Cube(0.25, 0.0, 0.25, 0.75, 0.375, 0.75));
     }
     
 	@Override

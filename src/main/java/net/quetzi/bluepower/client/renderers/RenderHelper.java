@@ -182,6 +182,7 @@ public class RenderHelper {
     	
         //Top side
         t.setColorRGBA_F(1.0F, 0.0F, 0.0F, 1.0F);
+        t.setNormal(0, 1, 0);
         t.addVertex(vector.getMinX(), vector.getMaxY(), vector.getMaxZ());
         t.addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ());
         t.addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMinZ());
@@ -189,6 +190,7 @@ public class RenderHelper {
         
         //Bottom side
         t.setColorRGBA_F(1.0F, 1.0F, 0.0F, 1.0F);
+        t.setNormal(0, -1, 0);
         t.addVertex(vector.getMaxX(), vector.getMinY(), vector.getMaxZ());
         t.addVertex(vector.getMinX(), vector.getMinY(), vector.getMaxZ());
         t.addVertex(vector.getMinX(), vector.getMinY(), vector.getMinZ());
@@ -196,13 +198,14 @@ public class RenderHelper {
         
         //Draw west side:
         t.setColorRGBA_F(0.0F, 1.0F, 0.0F, 1.0F);
+        t.setNormal(-1, 0, 0);
         t.addVertex(vector.getMinX(), vector.getMinY(), vector.getMaxZ());
         t.addVertex(vector.getMinX(), vector.getMaxY(), vector.getMaxZ());
         t.addVertex(vector.getMinX(), vector.getMaxY(), vector.getMinZ());
         t.addVertex(vector.getMinX(), vector.getMinY(), vector.getMinZ());
         
         //Draw east side:
-        t.setColorRGBA_F(0.0F, 1.0F, 1.0F, 1.0F);
+        t.setNormal(1, 0, 0);
         t.addVertex(vector.getMaxX(), vector.getMinY(), vector.getMinZ());
         t.addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMinZ());
         t.addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ());
@@ -210,6 +213,7 @@ public class RenderHelper {
         
         //Draw north side
         t.setColorRGBA_F(0.0F, 0.0F, 1.0F, 1.0F);
+        t.setNormal(0, 0, -1);
         t.addVertex(vector.getMinX(), vector.getMinY(), vector.getMinZ());
         t.addVertex(vector.getMinX(), vector.getMaxY(), vector.getMinZ());
         t.addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMinZ());
@@ -217,6 +221,7 @@ public class RenderHelper {
         
         //Draw south side
         t.setColorRGBA_F(0.0F, 0.0F, 0.0F, 1.0F);
+        t.setNormal(0, 0, 1);
         t.addVertex(vector.getMinX(), vector.getMinY(), vector.getMaxZ());
         t.addVertex(vector.getMaxX(), vector.getMinY(), vector.getMaxZ());
         t.addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ());

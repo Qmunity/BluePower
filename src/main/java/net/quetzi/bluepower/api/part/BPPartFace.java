@@ -11,6 +11,7 @@ package net.quetzi.bluepower.api.part;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
@@ -165,6 +166,10 @@ public abstract class BPPartFace extends BPPart implements IBPFacePart, IBPRedst
     @Override
     public void renderDynamic(Vector3 loc, int pass, float frame) {
     
+    }
+    
+    public void rotateAndTranslateDynamic(Vector3 loc, int pass, float frame) {
+    
         GL11.glTranslated(loc.getX(), loc.getY(), loc.getZ());
         
         GL11.glTranslated(0.5, 0.5, 0.5);
@@ -192,6 +197,20 @@ public abstract class BPPartFace extends BPPart implements IBPFacePart, IBPRedst
             GL11.glRotated(90 * (rotation == 0 || rotation == 2 ? (rotation + 2) % 4 : rotation), 0, 1, 0);
         }
         GL11.glTranslated(-0.5, -0.5, -0.5);
+    }
+    
+    public void translateStatic(Vector3 loc, int pass) {
+    
+        Tessellator tess = Tessellator.instance;
+        
+        tess.addTranslation((float) loc.getX(), (float) loc.getY(), (float) loc.getZ());
+    }
+    
+    public void undoTranslateStatic(Vector3 loc, int pass) {
+    
+        Tessellator tess = Tessellator.instance;
+        
+        tess.addTranslation((float) -loc.getX(), (float) -loc.getY(), (float) -loc.getZ());
     }
     
     public RedstoneConnection getConnection(FaceDirection dir) {
