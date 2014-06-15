@@ -145,6 +145,10 @@ public abstract class BPPart {
     
     }
     
+    public boolean shouldRenderDynamicOnPass(int pass){
+        return pass == 0;
+    }
+    
     /**
      * This render method gets called whenever there's a block update in the chunk. You should use this to remove load from the renderer if a part of
      * the rendering code doesn't need to get called too often or just doesn't change at all. To call a render update to re-render this just call
@@ -161,6 +165,10 @@ public abstract class BPPart {
         return false;
     }
     
+    public boolean shouldRenderStaticOnPass(int pass){
+        return pass == 0;
+    }
+    
     /**
      * Used to render the item when it's not placed in the world (in the player's hand, as a dropped item, in an inventory...)
      * 
@@ -175,12 +183,27 @@ public abstract class BPPart {
     
     }
     
+    private boolean shouldReRender = true;
+    
     /**
      * Marks the part (and the entire chunk) for a render update on the next render tick
      */
     public final void markPartForRenderUpdate() {
     
-        world.markBlockRangeForRenderUpdate(x, y, z, x, y, z);
+        shouldReRender = true;
+    }
+
+    /**
+     * If this part was marked for a render update, unmarks it
+     */
+    public final void resetRenderUpdate() {
+    
+        shouldReRender = false;
+    }
+    
+    public final boolean shouldReRender() {
+    
+        return shouldReRender;
     }
     
     /**
