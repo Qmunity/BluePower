@@ -1,5 +1,22 @@
 Blocks
 ******
+Lamps:
+    cage_foot_side: 10x2
+    cage_foot_top: 10x10
+    cage: 8x10
+    cage_top: 8x8
+    cage_lamp_on: 6x9
+    cage_lamp_off: 6x9
+    cage_lamp_on_top: 6x6
+    cage_lamp_off_top: 6x6
+    fixture_foot_side: 12x2
+    fixture_foot_top: 12x12
+    fixture_lamp_on: 10x6
+    fixture_lamp_off: 10x6
+    fixture_lamp_on_top: 10x10
+    fixture_lamp_off_top: 10x0
+    lamp_on: 16x16
+    lamp_off: 16x16
 
 
 Items
