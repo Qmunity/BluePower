@@ -17,12 +17,15 @@
 
 package net.quetzi.bluepower.blocks;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import net.quetzi.bluepower.client.renderers.RendererBlockBase;
 import net.quetzi.bluepower.init.CustomTabs;
 
 public abstract class BlockBase extends Block {
@@ -78,5 +81,19 @@ public abstract class BlockBase extends Block {
     protected boolean canRotateVertical() {
     
         return true;
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public boolean renderAsNormalBlock() {
+
+        return false;
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public int getRenderType() {
+
+        return RendererBlockBase.RENDER_ID;
     }
 }

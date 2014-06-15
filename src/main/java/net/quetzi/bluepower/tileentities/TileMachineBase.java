@@ -109,7 +109,6 @@ public class TileMachineBase extends TileBase {
     public List<ItemStack> getDrops() {
 
         List<ItemStack> drops = super.getDrops();
-        System.out.println(internalItemStackBuffer);
         drops.addAll(internalItemStackBuffer);
         return drops;
     }
