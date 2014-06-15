@@ -3,7 +3,7 @@ Blocks
 Lamps:
     cage_foot_side: 10x2
     cage_foot_top: 10x10
-    cage: 8x10
+    cage_side: 8x10
     cage_top: 8x8
     cage_lamp_on: 6x9
     cage_lamp_off: 6x9
