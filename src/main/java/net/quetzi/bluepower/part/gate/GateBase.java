@@ -48,7 +48,8 @@ public abstract class GateBase extends BPPartFace {
         for (int i = 0; i < 4; i++)
             connections[i] = new RedstoneConnection(this, i + "", true, false);
         
-        initializeConnections(getConnection(FaceDirection.FRONT), getConnection(FaceDirection.LEFT), getConnection(FaceDirection.BACK), getConnection(FaceDirection.RIGHT));
+        initializeConnections(getConnection(FaceDirection.FRONT), getConnection(FaceDirection.LEFT), getConnection(FaceDirection.BACK),
+                getConnection(FaceDirection.RIGHT));
     }
     
     public abstract void initializeConnections(RedstoneConnection front, RedstoneConnection left, RedstoneConnection back, RedstoneConnection right);
@@ -179,7 +180,7 @@ public abstract class GateBase extends BPPartFace {
         GL11.glPushMatrix();
         {
             
-            if(type == ItemRenderType.INVENTORY){
+            if (type == ItemRenderType.INVENTORY) {
                 GL11.glTranslated(0, 0.5, 0);
                 GL11.glRotated(-12, -1, 0, 1);
             }
@@ -230,27 +231,32 @@ public abstract class GateBase extends BPPartFace {
     public void renderTop(float frame) {
     
         renderTopTexture(Refs.MODID + ":textures/blocks/gates/" + getType() + "/base.png");
-        renderTop(getConnection(FaceDirection.FRONT), getConnection(FaceDirection.LEFT), getConnection(FaceDirection.BACK), getConnection(FaceDirection.RIGHT), frame);
+        renderTop(getConnection(FaceDirection.FRONT), getConnection(FaceDirection.LEFT), getConnection(FaceDirection.BACK),
+                getConnection(FaceDirection.RIGHT), frame);
     }
     
     public void renderTop() {
     
         renderTopTexture(Refs.MODID + ":textures/blocks/gates/" + getType() + "/base.png");
-        renderTopItem(getConnection(FaceDirection.FRONT), getConnection(FaceDirection.LEFT), getConnection(FaceDirection.BACK), getConnection(FaceDirection.RIGHT));
+        renderTopItem(getConnection(FaceDirection.FRONT), getConnection(FaceDirection.LEFT), getConnection(FaceDirection.BACK),
+                getConnection(FaceDirection.RIGHT));
     }
     
     protected void renderTopItem(RedstoneConnection front, RedstoneConnection left, RedstoneConnection back, RedstoneConnection right) {
     
-        renderTop(getConnection(FaceDirection.FRONT), getConnection(FaceDirection.LEFT), getConnection(FaceDirection.BACK), getConnection(FaceDirection.RIGHT), 0);
+        renderTop(getConnection(FaceDirection.FRONT), getConnection(FaceDirection.LEFT), getConnection(FaceDirection.BACK),
+                getConnection(FaceDirection.RIGHT), 0);
     }
     
-    protected abstract void renderTop(RedstoneConnection front, RedstoneConnection left, RedstoneConnection back, RedstoneConnection right, float frame);
+    protected abstract void renderTop(RedstoneConnection front, RedstoneConnection left, RedstoneConnection back, RedstoneConnection right,
+            float frame);
     
     @Override
     public void update() {
     
         super.update();
-        doLogic(getConnection(FaceDirection.FRONT), getConnection(FaceDirection.LEFT), getConnection(FaceDirection.BACK), getConnection(FaceDirection.RIGHT));
+        doLogic(getConnection(FaceDirection.FRONT), getConnection(FaceDirection.LEFT), getConnection(FaceDirection.BACK),
+                getConnection(FaceDirection.RIGHT));
     }
     
     public abstract void doLogic(RedstoneConnection front, RedstoneConnection left, RedstoneConnection back, RedstoneConnection right);
@@ -261,7 +267,8 @@ public abstract class GateBase extends BPPartFace {
         if (item != null && item.getItem() == BPItems.screwdriver) {
             if (player.isSneaking()) {
                 if (!world.isRemote) {
-                    if (changeMode(getConnection(FaceDirection.FRONT), getConnection(FaceDirection.LEFT), getConnection(FaceDirection.BACK), getConnection(FaceDirection.RIGHT))) {
+                    if (changeMode(getConnection(FaceDirection.FRONT), getConnection(FaceDirection.LEFT), getConnection(FaceDirection.BACK),
+                            getConnection(FaceDirection.RIGHT))) {
                         notifyUpdate();
                         sendUpdatePacket();
                         return true;
@@ -311,7 +318,7 @@ public abstract class GateBase extends BPPartFace {
     @Override
     public List<IBPRedstonePart> getConnections(ForgeDirection side) {
     
-        return null;//FIXME BLUEPOWER IMPORTANT!! Correctly get connections!
+        return null;// FIXME BLUEPOWER IMPORTANT!! Correctly get connections!
     }
     
     private RedstoneNetwork net;
@@ -324,6 +331,7 @@ public abstract class GateBase extends BPPartFace {
     
     @Override
     public void setNetwork(RedstoneNetwork network) {
+    
         this.net = network;
     }
     
