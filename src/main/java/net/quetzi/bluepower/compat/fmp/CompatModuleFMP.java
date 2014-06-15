@@ -171,6 +171,7 @@ public class CompatModuleFMP extends CompatModule implements IMultipartCompat {
         
     }
     
+    @SuppressWarnings("unchecked")
     @Override
     public <T> T getBPPart(TileEntity te, Class<T> searchedClass) {
     
@@ -182,7 +183,8 @@ public class CompatModuleFMP extends CompatModule implements IMultipartCompat {
         }
         return null;
     }
-    
+
+    @SuppressWarnings("unchecked")
     public static <T> T getMultiPart(TileMultipart t, Class<T> searchedClass) {
     
         for (TMultiPart part : t.jPartList()) {
@@ -190,7 +192,8 @@ public class CompatModuleFMP extends CompatModule implements IMultipartCompat {
         }
         return null;
     }
-    
+
+    @SuppressWarnings("unchecked")
     public static <T> Iterable<T> getMultiParts(TileMultipart t, Class<T> searchedClass) {
     
         List<T> parts = new ArrayList<T>();

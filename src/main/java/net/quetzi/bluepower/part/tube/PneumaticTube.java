@@ -221,7 +221,7 @@ public class PneumaticTube extends BPPart {
             double maxY = icon.getInterpolatedV(aabb.maxY * 16);
             
             t.setNormal(0, 0, -1);
-            if (connections[4]) {//or 5
+            if (connections[4]) {// or 5
                 t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.minZ, minX, maxY);// minZ
                 t.addVertexWithUV(aabb.minX, aabb.minY, aabb.minZ, minX, minY);
                 t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.minZ, maxX, minY);
@@ -250,7 +250,7 @@ public class PneumaticTube extends BPPart {
             double minY = icon.getInterpolatedV(aabb.minY * 16);
             double maxY = icon.getInterpolatedV(aabb.maxY * 16);
             t.setNormal(0, 0, 1);
-            if (connections[4]) {//or 5
+            if (connections[4]) {// or 5
                 t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.maxZ, maxX, maxY);
                 t.addVertexWithUV(aabb.minX, aabb.minY, aabb.maxZ, minX, maxY);// maxZ
                 t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.maxZ, minX, minY);
@@ -279,7 +279,7 @@ public class PneumaticTube extends BPPart {
             double minZ = icon.getInterpolatedV(aabb.minZ * 16);
             double maxZ = icon.getInterpolatedV(aabb.maxZ * 16);
             t.setNormal(0, -1, 0);
-            if (connections[4]) {//or 5
+            if (connections[4]) {// or 5
                 t.addVertexWithUV(aabb.minX, aabb.minY, aabb.minZ, maxX, maxZ);// bottom
                 t.addVertexWithUV(aabb.minX, aabb.minY, aabb.maxZ, minX, maxZ);
                 t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.maxZ, minX, minZ);
@@ -303,7 +303,7 @@ public class PneumaticTube extends BPPart {
             double minZ = icon.getInterpolatedV(aabb.minZ * 16);
             double maxZ = icon.getInterpolatedV(aabb.maxZ * 16);
             t.setNormal(0, 1, 0);
-            if (connections[4]) {//or 5
+            if (connections[4]) {// or 5
                 t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.minZ, maxX, maxZ);// top
                 t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.minZ, maxX, minZ);
                 t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.maxZ, minX, minZ);
@@ -507,6 +507,7 @@ public class PneumaticTube extends BPPart {
     
         Tessellator t = Tessellator.instance;
         t.addTranslation((float) loc.getX(), (float) loc.getY(), (float) loc.getZ());
+        
         List<AxisAlignedBB> aabbs = getSelectionBoxes();
         
         boolean shouldRenderNode = false;

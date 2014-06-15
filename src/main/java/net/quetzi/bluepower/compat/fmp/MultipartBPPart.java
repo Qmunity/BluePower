@@ -20,8 +20,8 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.quetzi.bluepower.api.part.BPPart;
-import net.quetzi.bluepower.api.part.IBPRedstonePart;
 import net.quetzi.bluepower.api.part.PartRegistry;
+import net.quetzi.bluepower.api.part.redstone.IBPRedstonePart;
 import net.quetzi.bluepower.references.Refs;
 
 import org.lwjgl.opengl.GL11;

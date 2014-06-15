@@ -16,6 +16,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraftforge.common.util.ForgeDirection;
+import net.quetzi.bluepower.api.part.redstone.IBPRedstonePart;
 import net.quetzi.bluepower.api.vec.Vector3;
 import net.quetzi.bluepower.api.vec.Vector3Cube;
 import net.quetzi.bluepower.helper.RedstoneHelper;

@@ -11,6 +11,7 @@ import net.minecraft.world.EnumSkyBlock;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.quetzi.bluepower.api.part.BPPartFace;
 import net.quetzi.bluepower.api.part.RedstoneConnection;
+import net.quetzi.bluepower.api.part.redstone.IBPRedstonePart;
 import net.quetzi.bluepower.api.vec.Vector3;
 import net.quetzi.bluepower.helper.RedstoneHelper;
 import net.quetzi.bluepower.init.CustomTabs;
@@ -139,6 +140,12 @@ public class PartLamp extends BPPartFace {
     public CreativeTabs getCreativeTab() {
     
         return CustomTabs.tabBluePowerLighting;
+    }
+    
+    @Override
+    public List<IBPRedstonePart> getConnections(ForgeDirection side) {
+    
+        return null;
     }
     
 }
