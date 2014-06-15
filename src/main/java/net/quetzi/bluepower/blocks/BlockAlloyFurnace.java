@@ -163,4 +163,10 @@ public class BlockAlloyFurnace extends BlockContainerBase {
     
         return false;
     }
+
+    @Override
+    public int getRenderType() {
+
+        return 0;
+    }
 }

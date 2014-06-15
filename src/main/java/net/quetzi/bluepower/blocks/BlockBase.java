@@ -85,13 +85,6 @@ public abstract class BlockBase extends Block {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public boolean renderAsNormalBlock() {
-
-        return false;
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
     public int getRenderType() {
 
         return RendererBlockBase.RENDER_ID;
