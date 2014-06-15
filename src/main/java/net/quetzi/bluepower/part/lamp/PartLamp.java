@@ -2,6 +2,8 @@ package net.quetzi.bluepower.part.lamp;
 
 import java.util.List;
 
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureMap;
@@ -71,18 +73,23 @@ public class PartLamp extends BPPartFace {
     
     @Override
     public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
-    	Tessellator t = Tessellator.instance;
+        GL11.glPushMatrix();
+        GL11.glTranslated(0.5, 0.5, 0.5);
+        GL11.glRotated(180, 1, 0, 0);
+        GL11.glTranslated(-0.5, -0.5, -0.5);
+        Tessellator t = Tessellator.instance;
         Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
         t.startDrawingQuads();
         renderStatic(new Vector3(0, 0, 0), 0);
         t.draw();
         Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationItemsTexture);
+        GL11.glPopMatrix();
     }
     
     @Override
     public boolean renderStatic(Vector3 loc, int pass) {
     
-        super.renderStatic(loc, pass);
+        rotateAndTranslateDynamic(loc, pass, 0);
         Tessellator t = Tessellator.instance;
         t.setColorOpaque_F(1, 1, 1);
         translateStatic(loc, pass);
