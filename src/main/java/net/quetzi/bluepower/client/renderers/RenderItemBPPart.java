@@ -61,6 +61,8 @@ public class RenderItemBPPart implements IItemRenderer {
                 case ENTITY:
                     GL11.glScaled(0.5, 0.5, 0.5);
                     GL11.glTranslated(-0.5, 0, -0.5);
+                    if(item.getItemFrame() != null)
+                        GL11.glTranslated(0, -0.25, 0);
                     break;
                 case EQUIPPED:
                     break;

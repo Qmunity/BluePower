@@ -1,6 +1,7 @@
 package net.quetzi.bluepower.part.tube;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import net.minecraft.client.Minecraft;
@@ -191,30 +192,18 @@ public class PneumaticTube extends BPPart {
         return false;
     }
     
-    /**
-     * This render method gets called every tick. You should use this if you're doing animations
-     * 
-     * @param loc
-     *            Distance from the player's position
-     * @param pass
-     *            Render pass (0 or 1)
-     * @param frame
-     *            Partial tick for smoother animations
-     */
-    @Override
-    public void renderDynamic(Vector3 loc, int pass, float frame) {
-    
-    }
-    
     @Override
     public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
-    
-        connections[0] = true;
         
         Tessellator t = Tessellator.instance;
         Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
         t.startDrawingQuads();
+        
+        connections[0] = true;
+        connections[1] = true;
+        
         renderStatic(new Vector3(0, 0, 0), 0);
+        
         t.draw();
         Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationItemsTexture);
     }
