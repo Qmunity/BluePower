@@ -85,10 +85,14 @@ public class ItemBPMultipart extends JItemMultiPart {
         return ItemBPPart.getUnlocalizedName_(item);
     }
     
-    @SuppressWarnings({ "rawtypes" })
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
     public void getSubItems(Item unused, CreativeTabs tab, List l) {
     
+        // NEI
+        if (tab == null) for (CreativeTabs t : CreativeTabs.creativeTabArray)
+            for (String s : PartRegistry.getRegisteredPartsForTab(t))
+                l.add(PartRegistry.getItemForPart(s));
     }
     
 }
