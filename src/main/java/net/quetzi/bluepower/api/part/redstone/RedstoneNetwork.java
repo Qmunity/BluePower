@@ -7,6 +7,6 @@ public class RedstoneNetwork {
     
     private List<IBPRedstonePart> parts = new ArrayList<IBPRedstonePart>();
     
-    
+    private IBPRedstonePart       main;
     
 }

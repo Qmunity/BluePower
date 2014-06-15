@@ -26,4 +26,6 @@ public interface IBPRedstonePart {
     
     public void setNetwork(RedstoneNetwork network);
     
+    public void update();
+    
 }
