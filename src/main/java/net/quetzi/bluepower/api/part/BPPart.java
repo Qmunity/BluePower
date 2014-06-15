@@ -72,7 +72,7 @@ public abstract class BPPart {
         return true;
     }
     
-    private int tick = 0;
+    protected int tick = 0;
     
     /**
      * Called every tick to update the part
