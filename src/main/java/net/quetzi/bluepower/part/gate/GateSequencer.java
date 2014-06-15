@@ -128,4 +128,10 @@ public class GateSequencer extends GateBase implements IGuiButtonSensitive {
             
         };
     }
+
+    @Override
+    protected boolean hasGUI() {
+
+        return true;
+    }
 }

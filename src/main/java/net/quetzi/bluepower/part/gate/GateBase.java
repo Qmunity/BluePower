@@ -277,28 +277,24 @@ public abstract class GateBase extends BPPartFace {
                 setRotation(getRotation() + 1);
             }
             return true;
-        } else if (player.worldObj.isRemote) {
-            if (openGui()) return true;
+        } else if (hasGUI()) {
+            if (world.isRemote) {
+                FMLCommonHandler.instance().showGuiScreen(getGui());
+            }
+            return true;
         }
         return super.onActivated(player, mop, item);
-    }
-    
-    @SideOnly(Side.CLIENT)
-    private boolean openGui() {
-    
-        GuiScreen gui = getGui();
-        if (gui != null) {
-            FMLCommonHandler.instance().showGuiScreen(gui);
-            return true;
-        } else {
-            return false;
-        }
     }
     
     @SideOnly(Side.CLIENT)
     protected GuiScreen getGui() {
     
         return null;
+    }
+
+    protected boolean hasGUI() {
+
+        return false;
     }
     
     protected boolean changeMode(RedstoneConnection front, RedstoneConnection left, RedstoneConnection back, RedstoneConnection right) {

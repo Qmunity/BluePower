@@ -109,5 +109,10 @@ public class GateTimer extends GateBase implements IGuiButtonSensitive {
             
         };
     }
-    
+
+    @Override
+    protected boolean hasGUI() {
+
+        return true;
+    }
 }
