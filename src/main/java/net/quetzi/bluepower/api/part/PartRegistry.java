@@ -44,20 +44,20 @@ public class PartRegistry {
     /**
      * Register a part
      * 
-     * @param id
-     *            Part identifier (same as the one returned by the part)
      * @param part
      *            Part class
      */
-    public static void registerPart(String id, Class<? extends BPPart> part, Object... constructorArgs) {
+    public static void registerPart(Class<? extends BPPart> part, Object... constructorArgs) {
     
-        if (id == null || id.trim().isEmpty()) return;
         if (part == null) return;
         Entry<Class<? extends BPPart>, Object[]> e = new AbstractMap.SimpleEntry<Class<? extends BPPart>, Object[]>(part, constructorArgs);
         if (parts.containsKey(e)) return;
         
-        parts.put(id, e);
-        samples.put(id, createPart(id));
+        parts.put("tmp", e);
+        BPPart p = createPart("tmp");
+        samples.put(p.getType(), p);
+        parts.remove("tmp");
+        parts.put(p.getType(), e);
     }
     
     /**
@@ -203,39 +203,43 @@ public class PartRegistry {
      */
     public static String getPartIdFromItem(ItemStack is) {
     
-        NBTTagCompound tag = is.getTagCompound();
-        return tag.getString("id");
+        try {
+            NBTTagCompound tag = is.getTagCompound();
+            return tag.getString("id");
+        } catch (Exception ex) {
+        }
+        return null;
     }
     
     public static void init() {
     
-        ICON_PART = "not";
+        ICON_PART = "timer";
         // Gates
-        registerPart("not", GateNot.class);
-        registerPart("and", GateAnd.class);
-        registerPart("timer", GateTimer.class);
-        registerPart("sequencer", GateSequencer.class);
+        registerPart(GateNot.class);
+        registerPart(GateAnd.class);
+        registerPart(GateTimer.class);
+        registerPart(GateSequencer.class);
         
         // Lamps
-        registerPart("cagelampwhite", 		PartCageLamp.class, "white", 		0xDDDDDD);
-        registerPart("cagelamporange", 		PartCageLamp.class, "orange", 		0xDB7D3E);
-        registerPart("cagelampmagenta", 	PartCageLamp.class, "magenta", 		0xB350BC);
-        registerPart("cagelamplightblue", 	PartCageLamp.class, "lightblue", 	0x6B8AC9);
-        registerPart("cagelampyellow", 		PartCageLamp.class, "yellow", 		0xB1A627);
-        registerPart("cagelamplime", 		PartCageLamp.class, "lime", 		0x41AE38);
-        registerPart("cagelamppink", 		PartCageLamp.class, "pink", 		0xD08499);
-        registerPart("cagelampgray", 		PartCageLamp.class, "gray", 		0x404040);
-        registerPart("cagelamplightgray", 	PartCageLamp.class, "lightgray", 	0x9AA1A1);
-        registerPart("cagelampcyan", 		PartCageLamp.class, "cyan", 		0x2E6E89);
-        registerPart("cagelamppurple", 		PartCageLamp.class, "purple", 		0x7E3DB5);
-        registerPart("cagelampblue", 		PartCageLamp.class, "blue", 		0x2E388D);
-        registerPart("cagelampbrown", 		PartCageLamp.class, "brown", 		0x4F321F);
-        registerPart("cagelampgreen", 		PartCageLamp.class, "green", 		0x35461B);
-        registerPart("cagelampred", 		PartCageLamp.class, "red", 			0x963430);
-        registerPart("cagelampblack", 		PartCageLamp.class, "black", 		0x191616);
+        registerPart(PartCageLamp.class, "white", 0xDDDDDD);
+        registerPart(PartCageLamp.class, "orange", 0xDB7D3E);
+        registerPart(PartCageLamp.class, "magenta", 0xB350BC);
+        registerPart(PartCageLamp.class, "lightblue", 0x6B8AC9);
+        registerPart(PartCageLamp.class, "yellow", 0xB1A627);
+        registerPart(PartCageLamp.class, "lime", 0x41AE38);
+        registerPart(PartCageLamp.class, "pink", 0xD08499);
+        registerPart(PartCageLamp.class, "gray", 0x404040);
+        registerPart(PartCageLamp.class, "lightgray", 0x9AA1A1);
+        registerPart(PartCageLamp.class, "cyan", 0x2E6E89);
+        registerPart(PartCageLamp.class, "purple", 0x7E3DB5);
+        registerPart(PartCageLamp.class, "blue", 0x2E388D);
+        registerPart(PartCageLamp.class, "brown", 0x4F321F);
+        registerPart(PartCageLamp.class, "green", 0x35461B);
+        registerPart(PartCageLamp.class, "red", 0x963430);
+        registerPart(PartCageLamp.class, "black", 0x191616);
         
         // Pneumatic Tubes
-        registerPart("pneumaticTube", PneumaticTube.class);
+        registerPart(PneumaticTube.class);
     }
     
 }
