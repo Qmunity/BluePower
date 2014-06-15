@@ -12,7 +12,9 @@ public class IconSupplier {
     public static IIcon pneumaticTubeColorNode;
     public static IIcon pneumaticTubeColorSide;
     public static IIcon cagedLampFootSide;
-    public static IIcon cagedLampCage;
+    public static IIcon cagedLampFootTop;
+    public static IIcon cagedLampCageSide;
+    public static IIcon cagedLampCageTop;
     public static IIcon cagedLampLampActive;
     public static IIcon cagedLampLampInactive;
     
@@ -25,10 +27,13 @@ public class IconSupplier {
             pneumaticTubeColorSide = event.map.registerIcon(Refs.MODID + ":tubes/tube_color_side");
             pneumaticTubeColorNode = event.map.registerIcon(Refs.MODID + ":/tubes/tube_color_end");
             
-            cagedLampFootSide = event.map.registerIcon(Refs.MODID + ":lamps/foot_side");
-            cagedLampCage = event.map.registerIcon(Refs.MODID + ":lamps/cage");
-            cagedLampLampActive = event.map.registerIcon(Refs.MODID + ":lamps/white_lamp_on");
-            cagedLampLampInactive = event.map.registerIcon(Refs.MODID + ":lamps/white_lamp_off");
+            cagedLampFootSide = event.map.registerIcon(Refs.MODID + ":lamps/cage_foot_side");
+            cagedLampFootTop = event.map.registerIcon(Refs.MODID + ":lamps/cage_foot_top");
+            cagedLampCageSide = event.map.registerIcon(Refs.MODID + ":lamps/cage_side");
+            cagedLampCageTop = event.map.registerIcon(Refs.MODID + ":lamps/cage_top");
+            
+            cagedLampLampActive = event.map.registerIcon(Refs.MODID + ":lamps/cage_lamp_white_on");
+            cagedLampLampInactive = event.map.registerIcon(Refs.MODID + ":lamps/cage_lamp_white_off");
         }
     }
 }
