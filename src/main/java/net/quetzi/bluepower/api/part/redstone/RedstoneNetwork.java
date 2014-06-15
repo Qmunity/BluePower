@@ -5,8 +5,16 @@ import java.util.List;
 
 public class RedstoneNetwork {
     
-    private List<IBPRedstonePart> parts = new ArrayList<IBPRedstonePart>();
+    // Static
     
-    private IBPRedstonePart       main;
+    public static final List<RedstoneNetwork> networks = new ArrayList<RedstoneNetwork>();
+    
+    // Non-static
+    
+    private List<IBPRedstonePart>             parts    = new ArrayList<IBPRedstonePart>();
+    
+    public void tick(){
+        
+    }
     
 }

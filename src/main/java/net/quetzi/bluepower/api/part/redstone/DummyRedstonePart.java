@@ -1,7 +1,5 @@
 package net.quetzi.bluepower.api.part.redstone;
 
-import java.util.List;
-
 import net.minecraft.block.Block;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -39,31 +37,6 @@ public class DummyRedstonePart implements IBPRedstonePart {
     public int getWeakOutput(ForgeDirection side) {
     
         return b.isProvidingWeakPower(w, x, y, z, ForgeDirectionUtils.getSide(side));
-    }
-    
-    @Override
-    public List<IBPRedstonePart> getConnections(ForgeDirection side) {
-    
-        return null;
-    }
-    
-    private RedstoneNetwork net;
-    
-    @Override
-    public RedstoneNetwork getNetwork() {
-    
-        return net;
-    }
-    
-    @Override
-    public void setNetwork(RedstoneNetwork network) {
-    
-        this.net = network;
-    }
-
-    @Override
-    public void update() {
-    
     }
     
 }

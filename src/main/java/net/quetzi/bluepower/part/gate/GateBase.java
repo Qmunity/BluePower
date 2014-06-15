@@ -19,12 +19,9 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
-import net.minecraftforge.common.util.ForgeDirection;
 import net.quetzi.bluepower.api.part.BPPartFace;
 import net.quetzi.bluepower.api.part.FaceDirection;
 import net.quetzi.bluepower.api.part.RedstoneConnection;
-import net.quetzi.bluepower.api.part.redstone.IBPRedstonePart;
-import net.quetzi.bluepower.api.part.redstone.RedstoneNetwork;
 import net.quetzi.bluepower.api.vec.Vector3;
 import net.quetzi.bluepower.api.vec.Vector3Cube;
 import net.quetzi.bluepower.client.renderers.RenderHelper;
@@ -313,26 +310,6 @@ public abstract class GateBase extends BPPartFace {
     public CreativeTabs getCreativeTab() {
     
         return CustomTabs.tabBluePowerCircuits;
-    }
-    
-    @Override
-    public List<IBPRedstonePart> getConnections(ForgeDirection side) {
-    
-        return null;// FIXME BLUEPOWER IMPORTANT!! Correctly get connections!
-    }
-    
-    private RedstoneNetwork net;
-    
-    @Override
-    public RedstoneNetwork getNetwork() {
-    
-        return net;
-    }
-    
-    @Override
-    public void setNetwork(RedstoneNetwork network) {
-    
-        this.net = network;
     }
     
 }
