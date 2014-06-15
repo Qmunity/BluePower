@@ -217,7 +217,22 @@ public class PartRegistry {
         registerPart("sequencer", GateSequencer.class);
         
         // Lamps
-        registerPart("cagelampwhite", PartCageLamp.class, "white", 0xFFFFFF);
+        registerPart("cagelampwhite", 		PartCageLamp.class, "white", 		0xDDDDDD);
+        registerPart("cagelamporange", 		PartCageLamp.class, "orange", 		0xDB7D3E);
+        registerPart("cagelampmagenta", 	PartCageLamp.class, "magenta", 		0xB350BC);
+        registerPart("cagelamplightblue", 	PartCageLamp.class, "lightblue", 	0x6B8AC9);
+        registerPart("cagelampyellow", 		PartCageLamp.class, "yellow", 		0xB1A627);
+        registerPart("cagelamplime", 		PartCageLamp.class, "lime", 		0x41AE38);
+        registerPart("cagelamppink", 		PartCageLamp.class, "pink", 		0xD08499);
+        registerPart("cagelampgray", 		PartCageLamp.class, "gray", 		0x404040);
+        registerPart("cagelamplightgray", 	PartCageLamp.class, "lightgray", 	0x9AA1A1);
+        registerPart("cagelampcyan", 		PartCageLamp.class, "cyan", 		0x2E6E89);
+        registerPart("cagelamppurple", 		PartCageLamp.class, "purple", 		0x7E3DB5);
+        registerPart("cagelampblue", 		PartCageLamp.class, "blue", 		0x2E388D);
+        registerPart("cagelampbrown", 		PartCageLamp.class, "brown", 		0x4F321F);
+        registerPart("cagelampgreen", 		PartCageLamp.class, "green", 		0x35461B);
+        registerPart("cagelampred", 		PartCageLamp.class, "red", 			0x963430);
+        registerPart("cagelampblack", 		PartCageLamp.class, "black", 		0x191616);
         
         // Pneumatic Tubes
         registerPart("pneumaticTube", PneumaticTube.class);

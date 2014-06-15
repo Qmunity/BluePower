@@ -2,10 +2,14 @@ package net.quetzi.bluepower.part.lamp;
 
 import java.util.List;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.EnumSkyBlock;
+import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.quetzi.bluepower.api.part.BPPartFace;
 import net.quetzi.bluepower.api.part.RedstoneConnection;
@@ -63,6 +67,16 @@ public class PartLamp extends BPPartFace {
     public void addOcclusionBoxes(List<AxisAlignedBB> boxes) {
     
         addSelectionBoxes(boxes);
+    }
+    
+    @Override
+    public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
+    	Tessellator t = Tessellator.instance;
+        Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
+        t.startDrawingQuads();
+        renderStatic(new Vector3(0, 0, 0), 0);
+        t.draw();
+        Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationItemsTexture);
     }
     
     @Override
