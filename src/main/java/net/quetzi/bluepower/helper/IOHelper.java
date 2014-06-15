@@ -8,9 +8,11 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import net.quetzi.bluepower.api.tube.IPneumaticTube.TubeColor;
 import net.quetzi.bluepower.compat.CompatibilityUtils;
 import net.quetzi.bluepower.compat.fmp.IMultipartCompat;
 import net.quetzi.bluepower.part.tube.PneumaticTube;
+import net.quetzi.bluepower.part.tube.TubeLogic;
 import net.quetzi.bluepower.references.Dependencies;
 
 public class IOHelper {
@@ -49,7 +51,18 @@ public class IOHelper {
     
     public static ItemStack insert(TileEntity tile, ItemStack itemStack, ForgeDirection direction, boolean simulate) {
     
+        return insert(tile, itemStack, direction, TubeColor.NONE, simulate);
+    }
+    
+    public static ItemStack insert(TileEntity tile, ItemStack itemStack, ForgeDirection direction, TubeColor color, boolean simulate) {
+    
         if (tile instanceof IInventory) { return insert((IInventory) tile, itemStack, direction.ordinal(), simulate); }
+        IMultipartCompat compat = (IMultipartCompat) CompatibilityUtils.getModule(Dependencies.FMP);
+        PneumaticTube tube = compat.getBPPart(tile, PneumaticTube.class);
+        if (tube != null) {//we don't need to check connections, that's catched earlier.
+            TubeLogic logic = tube.getLogic();
+            return logic.injectStack(itemStack, direction, color, simulate);
+        }
         return itemStack;
     }
     

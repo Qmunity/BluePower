@@ -1,7 +1,6 @@
 package net.quetzi.bluepower.part.tube;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import net.minecraft.client.Minecraft;
@@ -29,10 +28,15 @@ import net.quetzi.bluepower.init.CustomTabs;
 
 public class PneumaticTube extends BPPart {
     
-    private final boolean[]   connections = new boolean[6];
+    public final boolean[]    connections = new boolean[6];
+    /**
+     * true when != 2 connections, when this is true the logic doesn't have to 'think' which way an item should go.
+     */
+    public boolean            isCrossOver;
     private final Vector3Cube sideBB      = new Vector3Cube(AxisAlignedBB.getBoundingBox(0.25, 0, 0.25, 0.75, 0.25, 0.75));
     private TileEntityCache[] tileCache;
     private TubeColor         color       = TubeColor.NONE;
+    private final TubeLogic   logic       = new TubeLogic(this);
     
     // private final ResourceLocation tubeSideTexture = new ResourceLocation(Refs.MODID + ":textures/blocks/Tubes/pneumatic_tube_side.png");
     // private final ResourceLocation tubeNodeTexture = new ResourceLocation(Refs.MODID + ":textures/blocks/Tubes/tube_end.png");
@@ -96,6 +100,13 @@ public class PneumaticTube extends BPPart {
     @Override
     public void update() {
     
+        if (tick == 0) {
+            logic.world = world;
+            logic.x = x;
+            logic.y = y;
+            logic.z = z;
+        }
+        logic.update();
         super.update();
         if (tick == 3) updateConnections();
     }
@@ -115,7 +126,7 @@ public class PneumaticTube extends BPPart {
         updateConnections();
     }
     
-    private TileEntityCache[] getTileCache() {
+    public TileEntityCache[] getTileCache() {
     
         if (tileCache == null) {
             tileCache = TileEntityCache.getDefaultCache(world, x, y, z);
@@ -123,9 +134,15 @@ public class PneumaticTube extends BPPart {
         return tileCache;
     }
     
+    public TubeLogic getLogic() {
+    
+        return logic;
+    }
+    
     private void updateConnections() {
     
         if (world != null && !world.isRemote) {
+            int connectionCount = 0;
             for (int i = 0; i < 6; i++) {
                 getTileCache()[i].update();
                 ForgeDirection d = ForgeDirection.getOrientation(i);
@@ -135,7 +152,9 @@ public class PneumaticTube extends BPPart {
                 if (connections[i]) {
                     connections[i] = isConnected(d, null);
                 }
+                if (connections[i]) connectionCount++;
             }
+            isCrossOver = connectionCount != 2;
             sendUpdatePacket();
         }
     }
@@ -155,16 +174,26 @@ public class PneumaticTube extends BPPart {
             tag.setBoolean("connections" + i, connections[i]);
         }
         tag.setByte("tubeColor", (byte) color.ordinal());
+        
+        NBTTagCompound logicTag = new NBTTagCompound();
+        logic.writeToNBT(logicTag);
+        tag.setTag("logic", logicTag);
     }
     
     @Override
     public void load(NBTTagCompound tag) {
     
         super.load(tag);
+        int connectionCount = 0;
         for (int i = 0; i < 6; i++) {
             connections[i] = tag.getBoolean("connections" + i);
+            if (connections[i]) connectionCount++;
         }
+        isCrossOver = connectionCount != 2;
         color = TubeColor.values()[tag.getByte("tubeColor")];
+        
+        NBTTagCompound logicTag = tag.getCompoundTag("logic");
+        logic.readFromNBT(logicTag);
     }
     
     /**
@@ -179,25 +208,54 @@ public class PneumaticTube extends BPPart {
     @Override
     public boolean onActivated(EntityPlayer player, ItemStack item) {
     
-        if(world == null)
-            return false;
+        if (world == null) return false;
         
         if (!world.isRemote) {
+            
             if (item != null && item.getItem() == Items.dye) {
+                
                 if (item.getItemDamage() < 16) {
                     color = TubeColor.values()[item.getItemDamage()];
                     updateConnections();
                     notifyUpdate();
                     return true;
                 }
+            } else if (item != null) {
+                logic.injectStack(item, ForgeDirection.DOWN, TubeColor.NONE, false);
             }
         }
         return false;
     }
     
     @Override
+    public List<ItemStack> getDrops() {
+    
+        List<ItemStack> drops = super.getDrops();
+        for (TubeStack stack : logic.tubeStacks) {
+            drops.add(stack.stack);
+        }
+        return drops;
+    }
+    
+    /**
+     * This render method gets called every tick. You should use this if you're doing animations
+     * 
+     * @param loc
+     *            Distance from the player's position
+     * @param pass
+     *            Render pass (0 or 1)
+     * @param frame
+     *            Partial tick for smoother animations
+     */
+    @Override
+    public void renderDynamic(Vector3 loc, int pass, float frame) {
+    
+        logic.renderDynamic(loc, frame);
+    }
+    
+    @Override
     public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
-        
+    
         Tessellator t = Tessellator.instance;
         Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
         t.startDrawingQuads();
