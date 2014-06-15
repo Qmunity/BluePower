@@ -128,6 +128,7 @@ public class RenderHelper {
     
         //Top side
         GL11.glColor3f(1.0F, 0.0F, 0.0F);
+        GL11.glNormal3d(0, 1, 0);
         addVertex(vector.getMinX(), vector.getMaxY(), vector.getMaxZ());
         addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ());
         addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMinZ());
@@ -135,6 +136,7 @@ public class RenderHelper {
         
         //Bottom side
         GL11.glColor3f(1.0F, 1.0F, 0.0F);
+        GL11.glNormal3d(0, -1, 0);
         addVertex(vector.getMaxX(), vector.getMinY(), vector.getMaxZ());
         addVertex(vector.getMinX(), vector.getMinY(), vector.getMaxZ());
         addVertex(vector.getMinX(), vector.getMinY(), vector.getMinZ());
@@ -142,6 +144,7 @@ public class RenderHelper {
         
         //Draw west side:
         GL11.glColor3f(0.0F, 1.0F, 0.0F);
+        GL11.glNormal3d(-1, 0, 0);
         addVertex(vector.getMinX(), vector.getMinY(), vector.getMaxZ());
         addVertex(vector.getMinX(), vector.getMaxY(), vector.getMaxZ());
         addVertex(vector.getMinX(), vector.getMaxY(), vector.getMinZ());
@@ -149,6 +152,7 @@ public class RenderHelper {
         
         //Draw east side:
         GL11.glColor3f(0.0F, 1.0F, 1.0F);
+        GL11.glNormal3d(1, 0, 0);
         addVertex(vector.getMaxX(), vector.getMinY(), vector.getMinZ());
         addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMinZ());
         addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ());
@@ -156,6 +160,7 @@ public class RenderHelper {
         
         //Draw north side
         GL11.glColor3f(0.0F, 0.0F, 1.0F);
+        GL11.glNormal3d(0, 0, -1);
         addVertex(vector.getMinX(), vector.getMinY(), vector.getMinZ());
         addVertex(vector.getMinX(), vector.getMaxY(), vector.getMinZ());
         addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMinZ());
@@ -163,6 +168,7 @@ public class RenderHelper {
         
         //Draw south side
         GL11.glColor3f(0.0F, 0.0F, 0.0F);
+        GL11.glNormal3d(0, 0, 1);
         addVertex(vector.getMinX(), vector.getMinY(), vector.getMaxZ());
         addVertex(vector.getMaxX(), vector.getMinY(), vector.getMaxZ());
         addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ());

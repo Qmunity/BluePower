@@ -11,6 +11,9 @@ package net.quetzi.bluepower.compat.fmp;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -242,16 +245,80 @@ public class MultipartBPPart extends TMultiPart implements IRedstonePart, JNorma
     
     // Rendering
     
-    @Override
-    public void renderDynamic(Vector3 pos, float frame, int pass) {
-    
-        getPart().renderDynamic(new net.quetzi.bluepower.api.vec.Vector3(pos.x, pos.y, pos.z), pass, frame);
-    }
+    private static int emptyStaticRender = -1;
+    private int        staticRender0     = -1;
+    private int        staticRender1     = -1;
     
     @Override
     public boolean renderStatic(Vector3 pos, int pass) {
     
-        return getPart().renderStatic(new net.quetzi.bluepower.api.vec.Vector3(pos.x, pos.y, pos.z), pass);
+        if (getPart().shouldRenderStaticOnPass(pass)) getPart().markPartForRenderUpdate();
+        return false;
+    }
+    
+    @Override
+    public void renderDynamic(Vector3 pos, float frame, int pass) {
+    
+        getPart().renderDynamic(new net.quetzi.bluepower.api.vec.Vector3(pos.x, pos.y, pos.z), pass, frame);
+        
+        if (emptyStaticRender == -1) {
+            emptyStaticRender = GL11.glGenLists(1);
+            GL11.glNewList(emptyStaticRender, GL11.GL_COMPILE);
+            GL11.glEndList();
+        }
+        if (staticRender0 == -1 || getPart().shouldReRender()) reRenderStatic(new Vector3(0, 0, 0), pass);
+        if (staticRender1 == -1 || getPart().shouldReRender()) reRenderStatic(new Vector3(0, 0, 0), pass);
+        if (getPart().shouldReRender()) getPart().resetRenderUpdate();
+        
+        if (getPart().shouldRenderStaticOnPass(pass)) {
+            GL11.glPushMatrix();
+            {
+                GL11.glTranslated(pos.x, pos.y, pos.z);
+                if (pass == 0) {
+                    GL11.glCallList(staticRender0);
+                } else {
+                    GL11.glCallList(staticRender1);
+                }
+            }
+            GL11.glPopMatrix();
+        }
+        
+    }
+    
+    protected void reRenderStatic(Vector3 pos, int pass) {
+    
+        System.out.println("Re-rendering: " + pass);
+        
+        if (pass == 0) {
+            if (staticRender0 == -1 || staticRender0 == emptyStaticRender) staticRender0 = GL11.glGenLists(1);
+            GL11.glNewList(staticRender0, GL11.GL_COMPILE);
+        } else {
+            if (staticRender1 == -1 || staticRender1 == emptyStaticRender) staticRender1 = GL11.glGenLists(1);
+            GL11.glNewList(staticRender1, GL11.GL_COMPILE);
+        }
+        GL11.glPushMatrix();
+        
+        boolean result = getPart().shouldRenderStaticOnPass(pass);
+        
+        if (result) {
+            Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
+            Tessellator t = Tessellator.instance;
+            t.setTranslation(0, 0, 0);
+            t.startDrawingQuads();
+            result = getPart().renderStatic(new net.quetzi.bluepower.api.vec.Vector3(pos.x, pos.y, pos.z), pass);
+            t.draw();
+            t.setTranslation(0, 0, 0);
+        }
+        
+        GL11.glPopMatrix();
+        GL11.glEndList();
+        if (!result) {
+            if (pass == 0) {
+                staticRender0 = emptyStaticRender;
+            } else {
+                staticRender1 = emptyStaticRender;
+            }
+        }
     }
     
     @Override
@@ -265,7 +332,8 @@ public class MultipartBPPart extends TMultiPart implements IRedstonePart, JNorma
         
         GL11.glPushMatrix();
         {
-            GL11.glTranslated(x() - TileEntityRendererDispatcher.staticPlayerX, y() - TileEntityRendererDispatcher.staticPlayerY, z() - TileEntityRendererDispatcher.staticPlayerZ);
+            GL11.glTranslated(x() - TileEntityRendererDispatcher.staticPlayerX, y() - TileEntityRendererDispatcher.staticPlayerY, z()
+                    - TileEntityRendererDispatcher.staticPlayerZ);
             GL11.glDisable(GL11.GL_TEXTURE_2D);
             GL11.glColor4d(0, 0, 0, 0);
             RenderUtils.drawCuboidOutline(new Cuboid6(c).expand(0.001));

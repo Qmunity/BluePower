@@ -179,6 +179,9 @@ public class PneumaticTube extends BPPart {
     @Override
     public boolean onActivated(EntityPlayer player, ItemStack item) {
     
+        if(world == null)
+            return false;
+        
         if (!world.isRemote) {
             if (item != null && item.getItem() == Items.dye) {
                 if (item.getItemDamage() < 16) {
