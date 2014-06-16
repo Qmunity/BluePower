@@ -37,6 +37,11 @@ public abstract class BPPart {
     public int   z     = 0;
     
     /**
+     * Holds the exact width of 1 pixel, texturewise
+     */
+    protected static double 		pixel 		   = 1.0/16.0;
+    
+    /**
      * Checks if this tile is part of an FMP block
      * 
      * @return Whether it's part of an FMP block or not

@@ -27,8 +27,6 @@ import org.lwjgl.opengl.GL11;
 
 public abstract class BPPartFace extends BPPart implements IBPFacePart, IBPRedstonePart {
 	
-	protected static double 		pixel 		   = 1.0/16.0;
-	
     private int                     face           = 0;
     private int                     rotation       = 0;
     
