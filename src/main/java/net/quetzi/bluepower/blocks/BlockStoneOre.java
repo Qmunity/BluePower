@@ -47,7 +47,13 @@ public class BlockStoneOre extends Block {
             this.setResistance(1.0F);
             this.setHarvestLevel("pickaxe", 1);
             this.setHardness(1.5F);
-        } else {
+        } else if (name == Refs.TUNGSTENORE_NAME) {
+        	this.setResistance(6.0F);
+        	this.setHarvestLevel("pickaxe", 3);
+        }else if (name == Refs.TUNGSTENBLOCK_NAME) {
+        	this.setResistance(25.0F);
+        	this.setHarvestLevel("pickaxe", 3);
+        }else {
             this.setResistance(5.0F);
             this.setHarvestLevel("pickaxe", 2);
         }
@@ -76,6 +82,6 @@ public class BlockStoneOre extends Block {
     public boolean isBeaconBase(IBlockAccess worldObj, int x, int y, int z, int beaconX, int beaconY, int beaconZ) {
 
         return this == BPBlocks.amethyst_block || this == BPBlocks.ruby_block || this == BPBlocks.sapphire_block || this == BPBlocks.copper_block
-                || this == BPBlocks.tin_block || this == BPBlocks.silver_block;
+                || this == BPBlocks.tin_block || this == BPBlocks.silver_block || this == BPBlocks.tungsten_block;
     }
 }

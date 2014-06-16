@@ -52,12 +52,15 @@ public class Refs {
     public static final String COPPERORE_NAME         = "copper_ore";
     public static final String SILVERORE_NAME         = "silver_ore";
     public static final String TINORE_NAME            = "tin_ore";
+    public static final String TUNGSTENORE_NAME       = "tungsten_ore";
     public static final String COPPERBLOCK_NAME       = "copper_block";
     public static final String SILVERBLOCK_NAME       = "silver_block";
     public static final String TINBLOCK_NAME          = "tin_block";
+    public static final String TUNGSTENBLOCK_NAME     = "tungsten_block";
     public static final String ITEMCOPPERINGOT_NAME   = "copper_ingot";
     public static final String ITEMSILVERINGOT_NAME   = "silver_ingot";
     public static final String ITEMTININGOT_NAME      = "tin_ingot";
+    public static final String TUNGSTENINGOT_NAME     = "tungsten_ingot";
     public static final String AMETHYSTSAW_NAME       = "amethyst_saw";
     public static final String SAPPHIRESAW_NAME       = "sapphire_saw";
     public static final String RUBYSAW_NAME           = "ruby_saw";
