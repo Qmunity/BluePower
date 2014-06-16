@@ -4,8 +4,11 @@ import cpw.mods.fml.common.Optional;
 import dan200.computercraft.api.lua.ILuaContext;
 import dan200.computercraft.api.peripheral.IComputerAccess;
 import dan200.computercraft.api.peripheral.IPeripheral;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemDye;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.oredict.OreDictionary;
 import net.quetzi.bluepower.references.Dependencies;
 import net.quetzi.bluepower.tileentities.TileMachineBase;
 
@@ -19,6 +22,7 @@ public class TileSortron extends TileMachineBase implements IPeripheral{
 
     private Set<IComputerAccess> connectedComputers = new HashSet<IComputerAccess>();
     private List<Byte>           acceptedColors     = new ArrayList<Byte>();
+    private List<ItemStack>      acceptedStacks     = new ArrayList<ItemStack>();
 
     @Override
     @Optional.Method(modid = Dependencies.COMPUTER_CRAFT)
@@ -106,8 +110,75 @@ public class TileSortron extends TileMachineBase implements IPeripheral{
                     arr[i] = acceptedColors.get(i);
                 }
                 return arr;
+            case 3:
+                if (arguments.length > 0 && arguments[0] instanceof String) {
+                    String unlocalizedName = ((String) arguments[0]);
+                    Item item = (Item) Item.itemRegistry.getObject(unlocalizedName);
+                    if (item != null) {
+                        ItemStack stack;
+                        if (arguments.length > 1 && arguments[1] instanceof Double) {
+                            int meta = ((Double)arguments[1]).intValue();
+                            if (meta >= 0) {
+                                stack = new ItemStack(item, 1, meta);
+                            } else {
+                                throw new IllegalArgumentException("Metadata must be greater than or equal to 0");
+                            }
+                        } else {
+                            stack = new ItemStack(item, 1, OreDictionary.WILDCARD_VALUE);
+                        }
+                        if (!acceptedStacks.contains(stack)) {
+                            acceptedStacks.add(stack);
+                            return new Boolean[] { true };
+                        }
+                        return new Boolean[] { false };
+                    }
+                    throw new IllegalArgumentException("Item not found");
+                }
+                throw new IllegalArgumentException("No expected argument was given");
+            case 4:
+                if (arguments.length > 0 && arguments[0] instanceof String) {
+                    String unlocalizedName = ((String) arguments[0]);
+                    Item item = (Item) Item.itemRegistry.getObject(unlocalizedName);
+                    if (item != null) {
+                        ItemStack stack;
+                        if (arguments.length > 1 && arguments[1] instanceof Double) {
+                            int meta = ((Double)arguments[1]).intValue();
+                            if (meta >= 0) {
+                                stack = new ItemStack(item, 1, meta);
+                            } else {
+                                throw new IllegalArgumentException("Metadata must be greater than or equal to 0");
+                            }
+                        } else {
+                            stack = new ItemStack(item, 1, OreDictionary.WILDCARD_VALUE);
+                        }
+                        if (acceptedStacks.contains(stack)) {
+                            acceptedStacks.remove(stack);
+                            return new Boolean[] { true };
+                        }
+                        return new Boolean[] { false };
+                    }
+                    throw new IllegalArgumentException("Item not found");
+                }
+                throw new IllegalArgumentException("No expected argument was given");
+            case 5:
+                List<Object> list = new ArrayList<Object>();
+                for (ItemStack stack : acceptedStacks) {
+                    list.add(getStringFromStack(stack));
+                }
+                return list.toArray();
         }
         return new Object[0];
+    }
+
+    public static String getStringFromStack(ItemStack stack) {
+        if (stack != null) {
+            String string = Item.itemRegistry.getNameForObject(stack.getItem());
+            if (stack.getItemDamage() != OreDictionary.WILDCARD_VALUE) {
+                string += " " + stack.getItemDamage();
+            }
+            return string;
+        }
+        return null;
     }
 
     @Override
