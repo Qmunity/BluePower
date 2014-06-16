@@ -45,7 +45,6 @@ public class BPItems {
     public static Item          blue_alloy_ingot;
     public static Item          red_alloy_ingot;
     public static Item          tungsten_ingot;
-    public static Item          tungsten_carbite;
     public static Item          ruby_axe;
     public static Item          ruby_sword;
     public static Item          ruby_pickaxe;
@@ -67,13 +66,6 @@ public class BPItems {
     public static Item          amethyst_hoe;
     public static Item          amethyst_sickle;
     public static Item          amethyst_saw;
-    public static Item          tungcarb_axe;
-    public static Item          tungcarb_sword;
-    public static Item          tungcarb_pickaxe;
-    public static Item          tungcarb_spade;
-    public static Item          tungcarb_hoe;
-    public static Item          tungcarb_sickle;
-    public static Item          tungcarb_saw;
     public static Item          wood_sickle;
     public static Item          stone_sickle;
     public static Item          iron_sickle;
@@ -99,7 +91,6 @@ public class BPItems {
     public static Item          silicon_chip;
 
     private static ToolMaterial gemMaterial = EnumHelper.addToolMaterial("GEM", 2, 750, 6.0F, 2.0F, 18);
-    private static ToolMaterial tungstenMaterial = EnumHelper.addToolMaterial("TUNGSTEN", 3, 2500, 9.0F, 3.0F, 14);
     
     public static void init() {
     
@@ -114,7 +105,6 @@ public class BPItems {
         brass_ingot = new ItemIngot(Refs.ITEMBRASSINGOT_NAME);
         blue_alloy_ingot = new ItemIngot(Refs.ITEMBLUEALLOYINGOT_NAME);
         red_alloy_ingot = new ItemIngot(Refs.ITEMREDALLOYINGOT_NAME);
-        tungsten_carbite = new ItemIngot(Refs.TUNGSTENCARBITE_NAME);
         
         ruby_axe = new ItemGemAxe(gemMaterial, Refs.RUBYAXE_NAME);
         ruby_sword = new ItemGemSword(gemMaterial, Refs.RUBYSWORD_NAME);
@@ -137,13 +127,6 @@ public class BPItems {
         amethyst_hoe = new ItemGemHoe(gemMaterial, Refs.AMETHYSTHOE_NAME);
         amethyst_sickle = new ItemSickle(gemMaterial, Refs.AMETHYSTSICKLE_NAME);
         
-        tungcarb_axe = new ItemTungCarbAxe(tungstenMaterial, Refs.TUNGCARBAXE_NAME);
-        tungcarb_sword = new ItemTungCarbSword(tungstenMaterial, Refs.TUNGCARBSWORD_NAME);
-        tungcarb_pickaxe = new ItemTungCarbPickaxe(tungstenMaterial, Refs.TUNGCARBPICKAXE_NAME);
-        tungcarb_spade = new ItemTungCarbSpade(tungstenMaterial, Refs.TUNGCARBSPADE_NAME);
-        tungcarb_hoe = new ItemTungCarbHoe(tungstenMaterial, Refs.TUNGCARBHOE_NAME);
-        tungcarb_sickle = new ItemSickle(tungstenMaterial, Refs.TUNGCARBSICKLE_NAME);
-        
         wood_sickle = new ItemSickle(ToolMaterial.WOOD, Refs.WOODSICKLE_NAME);
         stone_sickle = new ItemSickle(ToolMaterial.STONE, Refs.STONESICKLE_NAME);
         iron_sickle = new ItemSickle(ToolMaterial.IRON, Refs.IRONSICKLE_NAME);
@@ -156,7 +139,6 @@ public class BPItems {
         ruby_saw = new ItemSaw(1, Refs.RUBYSAW_NAME);
         amethyst_saw = new ItemSaw(1, Refs.AMETHYSTSAW_NAME);
         sapphire_saw = new ItemSaw(1, Refs.SAPPHIRESAW_NAME);
-        tungcarb_saw = new ItemSaw(2, Refs.AMETHYSTSAW_NAME);
         iron_saw = new ItemSaw(1, Refs.IRONSAW_NAME);
         diamond_saw = new ItemSaw(2, Refs.DIAMONDSAW_NAME);
         
@@ -202,7 +184,6 @@ public class BPItems {
         GameRegistry.registerItem(brass_ingot, Refs.ITEMBRASSINGOT_NAME);
         GameRegistry.registerItem(blue_alloy_ingot, Refs.ITEMBLUEALLOYINGOT_NAME);
         GameRegistry.registerItem(red_alloy_ingot, Refs.ITEMREDALLOYINGOT_NAME);
-        GameRegistry.registerItem(tungsten_carbite, Refs.TUNGSTENCARBITE_NAME);
         
         GameRegistry.registerItem(ruby_axe, Refs.RUBYAXE_NAME);
         GameRegistry.registerItem(ruby_sword, Refs.RUBYSWORD_NAME);
@@ -224,14 +205,7 @@ public class BPItems {
         GameRegistry.registerItem(amethyst_spade, Refs.AMETHYSTSPADE_NAME);
         GameRegistry.registerItem(amethyst_hoe, Refs.AMETHYSTHOE_NAME);
         GameRegistry.registerItem(amethyst_sickle, Refs.AMETHYSTSICKLE_NAME);
-        
-        GameRegistry.registerItem(tungcarb_axe, Refs.TUNGCARBAXE_NAME);
-        GameRegistry.registerItem(tungcarb_sword, Refs.TUNGCARBSWORD_NAME);
-        GameRegistry.registerItem(tungcarb_pickaxe, Refs.TUNGCARBPICKAXE_NAME);
-        GameRegistry.registerItem(tungcarb_spade, Refs.TUNGCARBSPADE_NAME);
-        GameRegistry.registerItem(tungcarb_hoe, Refs.TUNGCARBHOE_NAME);
-        GameRegistry.registerItem(tungcarb_sickle, Refs.TUNGCARBSICKLE_NAME);
-        
+
         GameRegistry.registerItem(wood_sickle, Refs.WOODSICKLE_NAME);
         GameRegistry.registerItem(stone_sickle, Refs.STONESICKLE_NAME);
         GameRegistry.registerItem(iron_sickle, Refs.IRONSICKLE_NAME);
@@ -243,7 +217,6 @@ public class BPItems {
         GameRegistry.registerItem(ruby_saw, Refs.RUBYSAW_NAME);
         GameRegistry.registerItem(sapphire_saw, Refs.SAPPHIRESAW_NAME);
         GameRegistry.registerItem(amethyst_saw, Refs.AMETHYSTSAW_NAME);
-        GameRegistry.registerItem(tungcarb_saw, Refs.TUNGCARBSAW_NAME);
         
         GameRegistry.registerItem(flax_seed, Refs.FLAXSEED_NAME);
         GameRegistry.registerItem(indigo_dye, Refs.INDIGODYE_NAME);
