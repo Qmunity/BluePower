@@ -1,0 +1,15 @@
+package net.quetzi.bluepower.part.tube;
+
+import net.minecraftforge.common.util.ForgeDirection;
+
+public interface ITubeConnection {
+    
+    public boolean isConnectedTo(ForgeDirection from);
+    
+    /**
+     * 
+     * @param stack TubeStack, as it needs to save the color if it bounced into the buffer.
+     * @param from
+     */
+    public void acceptItemFromTube(TubeStack stack, ForgeDirection from);
+}

@@ -23,7 +23,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class TubeStack {
     
     public ItemStack          stack;
-    private final TubeColor   color;
+    public final TubeColor    color;
     public double             progress;        //0 at the start, 0.5 on an intersection, 1 at the end.
     public double             oldProgress;
     public ForgeDirection     heading;

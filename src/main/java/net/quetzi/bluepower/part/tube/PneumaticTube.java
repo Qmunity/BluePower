@@ -148,8 +148,9 @@ public class PneumaticTube extends BPPart {
                 getTileCache()[i].update();
                 ForgeDirection d = ForgeDirection.getOrientation(i);
                 TileEntity neighbor = getTileCache()[i].getTileEntity();
-                connections[i] = IOHelper.canInterfaceWith(neighbor, ForgeDirection.getOrientation(i).getOpposite(), this);
+                connections[i] = IOHelper.canInterfaceWith(neighbor, d.getOpposite(), this);
                 
+                if (!connections[i]) connections[i] = neighbor instanceof ITubeConnection && ((ITubeConnection) neighbor).isConnectedTo(d.getOpposite());
                 if (connections[i]) {
                     connections[i] = isConnected(d, null);
                 }
