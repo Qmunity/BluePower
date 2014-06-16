@@ -18,5 +18,5 @@
 package net.quetzi.bluepower.references;
 
 public enum GuiIDs {
-    INVALID, ALLOY_FURNACE, BUFFER;
+    INVALID, ALLOY_FURNACE, BUFFER, SEEDBAG;
 }

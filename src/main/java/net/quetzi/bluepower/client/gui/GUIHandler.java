@@ -23,6 +23,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.quetzi.bluepower.containers.ContainerAlloyFurnace;
 import net.quetzi.bluepower.containers.ContainerBuffer;
+import net.quetzi.bluepower.containers.ContainerSeedBag;
+import net.quetzi.bluepower.items.ItemSeedBag;
 import net.quetzi.bluepower.references.GuiIDs;
 import net.quetzi.bluepower.tileentities.tier1.TileAlloyFurnace;
 import net.quetzi.bluepower.tileentities.tier1.TileBuffer;
@@ -47,6 +49,14 @@ public class GUIHandler implements IGuiHandler {
                 }
             }
         }
+        
+        if (ID==GuiIDs.SEEDBAG.ordinal())
+        {
+            if (player.getCurrentEquippedItem()!=null && player.getCurrentEquippedItem().getItem() instanceof ItemSeedBag)
+            {
+                return new ContainerSeedBag(player.inventory,ItemSeedBag.getSeedBagInv(player));
+            }
+        } 
         return null;
     }
 
@@ -65,6 +75,14 @@ public class GUIHandler implements IGuiHandler {
                 if (ent instanceof TileBuffer) {
                     return new GuiBuffer(player.inventory, (TileBuffer) ent);
                 }
+            }
+        }
+        
+        if (ID==GuiIDs.SEEDBAG.ordinal())
+        {
+            if (player.getCurrentEquippedItem()!=null && player.getCurrentEquippedItem().getItem() instanceof ItemSeedBag)
+            {
+                return new GuiSeedBag(player.inventory,ItemSeedBag.getSeedBagInv(player));
             }
         }
         return null;

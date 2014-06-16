@@ -170,6 +170,7 @@ public class Refs {
     public static final String ITEMSCREWDRIVERHANDLE_NAME  = "screwdriver_handle";
     public static final String BLOCKBUFFER_NAME            = "buffer";
     public static final String BLOCKSORTRON_NAME           = "sortron";
+    public static final String SEEDBAG_NAME                = "seed_bag";
 
     public static String fullVersionString() {
 
