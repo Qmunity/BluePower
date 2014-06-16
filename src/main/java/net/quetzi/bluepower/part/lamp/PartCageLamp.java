@@ -6,6 +6,11 @@ import net.quetzi.bluepower.api.vec.Vector3Cube;
 import net.quetzi.bluepower.client.renderers.IconSupplier;
 import net.quetzi.bluepower.client.renderers.RenderHelper;
 
+/**
+ * 
+ * @author Koen Beckers (K4Unl)
+ *
+ */
 public class PartCageLamp extends PartLamp{
 
 	public PartCageLamp(String colorName, Integer colorVal) {
@@ -159,7 +164,7 @@ public class PartCageLamp extends PartLamp{
 			iconToUseTop = IconSupplier.cagedLampLampActiveTop;
 			
 			t.setColorRGBA(r, g, b, 20);
-			//RenderHelper.drawTesselatedCube(new Vector3Cube(pixel * 4.5, pixel * 2, pixel * 4.5, 1.0 - (pixel*4.5), 1.0 - (pixel * 4.5), 1.0 - pixel * 4.5));
+			RenderHelper.drawTesselatedCube(new Vector3Cube(pixel * 4.5, pixel * 2, pixel * 4.5, 1.0 - (pixel*4.5), 1.0 - (pixel * 4.5), 1.0 - pixel * 4.5));
 			t.setColorRGBA(r, g, b, 255);
 		}
 		

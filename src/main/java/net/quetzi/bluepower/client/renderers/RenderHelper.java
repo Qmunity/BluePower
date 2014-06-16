@@ -17,11 +17,27 @@ import org.lwjgl.opengl.GL11;
 
 public class RenderHelper {
     
+	/**
+	 * Adds a vertex. Just a wrapper function for openGL
+	 * @author Koen Beckers (K4Unl)
+	 * @param x
+	 * @param y
+	 * @param z
+	 */
     public static void addVertex(double x, double y, double z) {
     
         GL11.glVertex3d(x, y, z);
     }
     
+    /**
+     * Adds a vertex with a texture.
+     * @author Koen Beckers (K4Unl)
+     * @param x
+     * @param y
+     * @param z
+     * @param tx
+     * @param ty
+     */
     public static void addVertexWithTexture(double x, double y, double z, double tx, double ty) {
     
         GL11.glTexCoord2d(tx, ty);
@@ -30,6 +46,14 @@ public class RenderHelper {
     
     private static RenderBlocks rb = new RenderBlocks();
     
+    /**
+     * @author amadornes
+     * @param x
+     * @param y
+     * @param z
+     * @param height
+     * @param state
+     */
     public static void renderRedstoneTorch(double x, double y, double z, double height, boolean state) {
     
         Block b = null;
@@ -55,6 +79,13 @@ public class RenderHelper {
         GL11.glTranslated(-x, -y, -z);
     }
     
+    /**
+     * @author amadornes
+     * @param x
+     * @param y
+     * @param z
+     * @param angle
+     */
     public static void renderPointer(double x, double y, double z, double angle) {
     
         GL11.glPushMatrix();
@@ -111,6 +142,20 @@ public class RenderHelper {
         
     }
     
+    /**
+     * @author amadornes
+     * @param x1
+     * @param y1
+     * @param z1
+     * @param x2
+     * @param y2
+     * @param z2
+     * @param x3
+     * @param y3
+     * @param z3
+     * @return
+     * TODO: Maybe move this function?
+     */
     public static DoubleBuffer planeEquation(double x1, double y1, double z1, double x2, double y2, double z2, double x3, double y3, double z3) {
     
         double[] eq = new double[4];
@@ -123,6 +168,13 @@ public class RenderHelper {
         return b;
     }
     
+    /**
+     * Draws a colored cube with the size of vector.
+     * Every face has a different color
+     * This uses OpenGL
+     * @author Koen Beckers (K4Unl)
+     * @param vector
+     */
     public static void drawColoredCube(Vector3Cube vector) {
     
         //Top side
@@ -174,6 +226,13 @@ public class RenderHelper {
         addVertex(vector.getMinX(), vector.getMaxY(), vector.getMaxZ());
     }
     
+    /**
+     * Draws a colored cube with the size of vector.
+     * Every face has a different color
+     * This uses the Tessellator
+     * @author Koen Beckers (K4Unl)
+     * @param vector
+     */
     public static void drawTesselatedColoredCube(Vector3Cube vector) {
     
         Tessellator t = Tessellator.instance;
@@ -239,6 +298,13 @@ public class RenderHelper {
         }
     }
     
+    /**
+     * Draws a cube with the size of vector.
+     * It uses the texture that is already bound and maps that completely
+     * This uses the Tessellator
+     * @author Koen Beckers (K4Unl)
+     * @param vector
+     */
     public static void drawTesselatedTexturedCube(Vector3Cube vector) {
     
         Tessellator t = Tessellator.instance;
@@ -303,6 +369,13 @@ public class RenderHelper {
         }
     }
     
+    /**
+     * Draws a cube with the size of vector.
+     * Every face has the same color
+     * This uses the Tessellator
+     * @author Koen Beckers (K4Unl)
+     * @param vector
+     */
     public static void drawTesselatedCube(Vector3Cube vector) {
     
         Tessellator t = Tessellator.instance;
@@ -362,6 +435,11 @@ public class RenderHelper {
         }
     }
     
+    /**
+     * ???
+     * @author ???
+     * @param vector
+     */
     public static void drawTesselatedCubeWithoutNormals(Vector3Cube vector) {
     
         Tessellator t = Tessellator.instance;
@@ -415,6 +493,11 @@ public class RenderHelper {
         }
     }
     
+    /**
+     * ???
+     * @author amadornes
+     * @param d
+     */
     public static void rotateRenderMatrix(ForgeDirection d) {
     
         switch (d) {

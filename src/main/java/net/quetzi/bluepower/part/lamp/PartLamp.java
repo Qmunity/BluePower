@@ -19,6 +19,11 @@ import net.quetzi.bluepower.api.vec.Vector3;
 import net.quetzi.bluepower.helper.RedstoneHelper;
 import net.quetzi.bluepower.init.CustomTabs;
 
+/**
+ * Base class for the lamps that are multiparts.
+ * @author Koen Beckers (K4Unl)
+ *
+ */
 public class PartLamp extends BPPartFace {
     
     protected String colorName;
@@ -26,6 +31,11 @@ public class PartLamp extends BPPartFace {
     
     protected int      power = 0;
     
+    /**
+     * @author amadornes
+     * @param colorName
+     * @param colorVal
+     */
     public PartLamp(String colorName, Integer colorVal) {
     
         this.colorName = colorName;
@@ -46,17 +56,27 @@ public class PartLamp extends BPPartFace {
         return "lamp" + colorName;
     }
     
+    /**
+     * @author amadornes
+     */
     @Override
     public String getUnlocalizedName() {
     
         return "lamp." + colorName;
     }
     
+    /**
+     * @author amadornes
+     */
     @Override
     public void addCollisionBoxes(List<AxisAlignedBB> boxes) {
     
         addSelectionBoxes(boxes);
     }
+    
+    /**
+     * @author Koen Beckers (K4Unl)
+     */
     
     @Override
     public void addSelectionBoxes(List<AxisAlignedBB> boxes) {
@@ -65,12 +85,18 @@ public class PartLamp extends BPPartFace {
         boxes.add(AxisAlignedBB.getBoundingBox(pixel * 4, pixel * 2, pixel * 4, 1.0 - (pixel*4), 1.0 - (pixel * 4), 1.0 - pixel * 4));
     }
     
+    /**
+     * @author amadornes
+     */
     @Override
     public void addOcclusionBoxes(List<AxisAlignedBB> boxes) {
     
         addSelectionBoxes(boxes);
     }
     
+    /**
+     * @author Koen Beckers (K4Unl)
+     */
     @Override
     public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
         GL11.glPushMatrix();
@@ -86,6 +112,9 @@ public class PartLamp extends BPPartFace {
         GL11.glPopMatrix();
     }
     
+    /**
+     * @author Koen Beckers (K4Unl)
+     */
     @Override
     public boolean renderStatic(Vector3 loc, int pass) {
     
@@ -118,10 +147,24 @@ public class PartLamp extends BPPartFace {
         return true;
     }
     
+    /**
+     * Code to render the base portion of the lamp. Will not be colored
+     * @author Koen Beckers (K4Unl)
+     * @param pass The pass that is rendered now. Pass 1 for solids. Pass 2 for transparents
+     */
     public void renderBase(int pass) {
     
     }
     
+    /**
+     * Code to render the actual lamp portion of the lamp. Will be colored
+     * 
+     * @author Koen Beckers (K4Unl)
+     * @param pass The pass that is rendered now. Pass 1 for solids. Pass 2 for transparents
+     * @param r The ammount of red in the lamp
+     * @param g The ammount of green in the lamp
+     * @param b The ammount of blue in the lamp
+     */
     public void renderLamp(int pass, int r, int g, int b) {
     
     }
@@ -132,6 +175,10 @@ public class PartLamp extends BPPartFace {
         return power;
     }
     
+    
+    /**
+     * @author amadornes
+     */
     @Override
     public void update() {
     
@@ -149,6 +196,9 @@ public class PartLamp extends BPPartFace {
         }
     }
     
+    /**
+     * @author amadornes
+     */
     @Override
     public CreativeTabs getCreativeTab() {
     
