@@ -19,6 +19,7 @@ package net.quetzi.bluepower.tileentities;
 
 import net.quetzi.bluepower.tileentities.tier1.TileAlloyFurnace;
 import net.quetzi.bluepower.tileentities.tier1.TileBlockBreaker;
+import net.quetzi.bluepower.tileentities.tier1.TileBuffer;
 import net.quetzi.bluepower.tileentities.tier1.TileIgniter;
 import cpw.mods.fml.common.registry.GameRegistry;
 
@@ -32,5 +33,6 @@ public class TileEntities {
         GameRegistry.registerTileEntity(TileAlloyFurnace.class, "tileAlloyFurnace");
         GameRegistry.registerTileEntity(TileBlockBreaker.class, "tileBlockBreaker");
         GameRegistry.registerTileEntity(TileIgniter.class, "tileIgniter");
+        GameRegistry.registerTileEntity(TileBuffer.class, "tileBuffer");
     }
 }

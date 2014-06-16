@@ -17,118 +17,160 @@
 
 package net.quetzi.bluepower.tileentities.tier1;
 
+import java.util.List;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.quetzi.bluepower.tileentities.TileMachineBase;
 
 public class TileBuffer extends TileMachineBase implements IInventory {
-
+    
     private ItemStack[] allInventories;
     private ItemStack[] side1Inventory;
     private ItemStack[] side2Inventory;
     private ItemStack[] side3Inventory;
     private ItemStack[] side4Inventory;
     private ItemStack[] side5Inventory;
-
-
+    
+    /**
+     * This function gets called whenever the world/chunk loads
+     */
+    @Override
+    public void readFromNBT(NBTTagCompound tCompound) {
+    
+        super.readFromNBT(tCompound);
+        
+        for (int i = 0; i < 20; i++) {
+            NBTTagCompound tc = tCompound.getCompoundTag("inventory" + i);
+            allInventories[i] = ItemStack.loadItemStackFromNBT(tc);
+        }
+    }
+    
+    /**
+     * This function gets called whenever the world/chunk is saved
+     */
+    @Override
+    public void writeToNBT(NBTTagCompound tCompound) {
+    
+        super.writeToNBT(tCompound);
+        
+        for (int i = 0; i < 20; i++) {
+            if (allInventories[i] != null) {
+                NBTTagCompound tc = new NBTTagCompound();
+                allInventories[i].writeToNBT(tc);
+                tCompound.setTag("inventory" + i, tc);
+            }
+        }
+    }
+    
     private ItemStack[] getInventoryForSide(int i) {
+    
         if ((i >= 0) && (i < 4)) {
-            for (int j=0; j<4;j++) {
+            for (int j = 0; j < 4; j++) {
                 side1Inventory[j] = allInventories[i];
             }
             return side1Inventory;
         } else if ((i > 3) && (i < 8)) {
-            for (int j=0; j<4;j++) {
-                side2Inventory[j] = allInventories[i+4];
+            for (int j = 0; j < 4; j++) {
+                side2Inventory[j] = allInventories[i + 4];
             }
             return side2Inventory;
         } else if ((i > 7) && (i < 12)) {
-            for (int j=0; j<4;j++) {
-                side3Inventory[j] = allInventories[i+8];
+            for (int j = 0; j < 4; j++) {
+                side3Inventory[j] = allInventories[i + 8];
             }
             return side3Inventory;
         } else if ((i > 11) && (i < 16)) {
-            for (int j=0; j<4;j++) {
-                side4Inventory[j] = allInventories[i+12];
+            for (int j = 0; j < 4; j++) {
+                side4Inventory[j] = allInventories[i + 12];
             }
             return side4Inventory;
         } else if ((i > 15) && (i < 20)) {
-            for (int j=0; j<4;j++) {
-                side5Inventory[j] = allInventories[i+16];
+            for (int j = 0; j < 4; j++) {
+                side5Inventory[j] = allInventories[i + 16];
             }
             return side5Inventory;
         }
         return allInventories;
     }
-
-
+    
     @Override
     public int getSizeInventory() {
-
+    
         return 20;
     }
-
+    
     @Override
     public ItemStack getStackInSlot(int i) {
-
+    
         return allInventories[i];
     }
-
+    
     @Override
     public ItemStack decrStackSize(int i, int i2) {
-
+    
         return null;
     }
-
+    
     @Override
     public ItemStack getStackInSlotOnClosing(int i) {
-
-        return null;
+    
+        return getStackInSlot(i);
     }
-
+    
     @Override
     public void setInventorySlotContents(int i, ItemStack itemStack) {
-
+    
     }
-
+    
     @Override
     public String getInventoryName() {
-
-        return null;
+    
+        return "tile.buffer.name";
     }
-
+    
     @Override
     public boolean hasCustomInventoryName() {
-
-        return false;
+    
+        return true;
     }
-
+    
     @Override
     public int getInventoryStackLimit() {
-
-        return 0;
+    
+        return 64;
     }
-
+    
     @Override
     public boolean isUseableByPlayer(EntityPlayer player) {
-
-        return false;
+    
+        return true;
     }
-
+    
     @Override
     public void openInventory() {
-
+    
     }
-
+    
     @Override
     public void closeInventory() {
-
+    
     }
-
+    
     @Override
     public boolean isItemValidForSlot(int i, ItemStack itemStack) {
-
-        return false;
+    
+        return true;
+    }
+    
+    @Override
+    public List<ItemStack> getDrops() {
+    
+        List<ItemStack> drops = super.getDrops();
+        for (ItemStack stack : allInventories)
+            if (stack != null) drops.add(stack);
+        return drops;
     }
 }

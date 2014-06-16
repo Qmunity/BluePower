@@ -44,6 +44,7 @@ public class BPItems {
     public static Item          brass_ingot;
     public static Item          blue_alloy_ingot;
     public static Item          red_alloy_ingot;
+    public static Item          tungsten_ingot;
     public static Item          ruby_axe;
     public static Item          ruby_sword;
     public static Item          ruby_pickaxe;
@@ -105,6 +106,7 @@ public class BPItems {
         copper_ingot = new ItemIngot(Refs.ITEMCOPPERINGOT_NAME);
         silver_ingot = new ItemIngot(Refs.ITEMSILVERINGOT_NAME);
         tin_ingot = new ItemIngot(Refs.ITEMTININGOT_NAME);
+        tungsten_ingot = new ItemIngot(Refs.TUNGSTENINGOT_NAME);
         brass_ingot = new ItemIngot(Refs.ITEMBRASSINGOT_NAME);
         blue_alloy_ingot = new ItemIngot(Refs.ITEMBLUEALLOYINGOT_NAME);
         red_alloy_ingot = new ItemIngot(Refs.ITEMREDALLOYINGOT_NAME);
@@ -188,6 +190,7 @@ public class BPItems {
         GameRegistry.registerItem(copper_ingot, Refs.ITEMCOPPERINGOT_NAME);
         GameRegistry.registerItem(silver_ingot, Refs.ITEMSILVERINGOT_NAME);
         GameRegistry.registerItem(tin_ingot, Refs.ITEMTININGOT_NAME);
+        GameRegistry.registerItem(tungsten_ingot, Refs.TUNGSTENINGOT_NAME);
         GameRegistry.registerItem(brass_ingot, Refs.ITEMBRASSINGOT_NAME);
         GameRegistry.registerItem(blue_alloy_ingot, Refs.ITEMBLUEALLOYINGOT_NAME);
         GameRegistry.registerItem(red_alloy_ingot, Refs.ITEMREDALLOYINGOT_NAME);
