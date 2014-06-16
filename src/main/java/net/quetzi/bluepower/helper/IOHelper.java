@@ -61,7 +61,7 @@ public class IOHelper {
         PneumaticTube tube = compat.getBPPart(tile, PneumaticTube.class);
         if (tube != null) {//we don't need to check connections, that's catched earlier.
             TubeLogic logic = tube.getLogic();
-            return logic.injectStack(itemStack, direction, color, simulate);
+            return logic.injectStack(itemStack, direction.getOpposite(), color, simulate);
         }
         return itemStack;
     }
