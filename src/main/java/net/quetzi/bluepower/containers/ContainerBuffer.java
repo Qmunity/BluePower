@@ -30,7 +30,11 @@ public class ContainerBuffer extends Container {
     public ContainerBuffer(InventoryPlayer invPlayer, TileBuffer buffer) {
 
         tileBuffer = buffer;
-
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 5; j++) {
+                addSlotToContainer(new Slot(buffer, i * 5 + j, 44 + j * 18, 9 + i * 18));
+            }
+        }
         bindPlayerInventory(invPlayer);
     }
 

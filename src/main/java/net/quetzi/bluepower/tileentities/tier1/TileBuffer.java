@@ -23,16 +23,16 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.quetzi.bluepower.tileentities.TileMachineBase;
+import net.quetzi.bluepower.tileentities.TileBase;
 
-public class TileBuffer extends TileMachineBase implements IInventory {
+public class TileBuffer extends TileBase implements IInventory {
     
-    private ItemStack[] allInventories;
-    private ItemStack[] side1Inventory;
-    private ItemStack[] side2Inventory;
-    private ItemStack[] side3Inventory;
-    private ItemStack[] side4Inventory;
-    private ItemStack[] side5Inventory;
+    private ItemStack[] allInventories = new ItemStack[20];
+    private ItemStack[] side1Inventory = new ItemStack[4];
+    private ItemStack[] side2Inventory = new ItemStack[4];
+    private ItemStack[] side3Inventory = new ItemStack[4];
+    private ItemStack[] side4Inventory = new ItemStack[4];
+    private ItemStack[] side5Inventory = new ItemStack[4];
     
     /**
      * This function gets called whenever the world/chunk loads
@@ -99,19 +99,31 @@ public class TileBuffer extends TileMachineBase implements IInventory {
     @Override
     public int getSizeInventory() {
     
-        return 20;
+        return allInventories.length;
     }
     
     @Override
     public ItemStack getStackInSlot(int i) {
     
-        return allInventories[i];
+        return this.allInventories[i];
     }
     
     @Override
-    public ItemStack decrStackSize(int i, int i2) {
-    
-        return null;
+    public ItemStack decrStackSize(int slot, int amount) {
+
+        ItemStack itemStack = getStackInSlot(slot);
+        if (itemStack != null) {
+            if (itemStack.stackSize <= amount) {
+                setInventorySlotContents(slot, null);
+            } else {
+                itemStack = itemStack.splitStack(amount);
+                if (itemStack.stackSize == 0) {
+                    setInventorySlotContents(slot, null);
+                }
+            }
+        }
+
+        return itemStack;
     }
     
     @Override
