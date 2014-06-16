@@ -24,6 +24,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.quetzi.bluepower.init.BPItems;
 import net.quetzi.bluepower.part.gate.GateAnd;
 import net.quetzi.bluepower.part.gate.GateBuffer;
+import net.quetzi.bluepower.part.gate.GateCounter;
 import net.quetzi.bluepower.part.gate.GateNot;
 import net.quetzi.bluepower.part.gate.GateSequencer;
 import net.quetzi.bluepower.part.gate.GateTimer;
@@ -239,6 +240,7 @@ public class PartRegistry {
         registerPart(GateTimer.class);
         registerPart(GateSequencer.class);
         registerPart(GateBuffer.class);
+        registerPart(GateCounter.class);
         
         // Lamps
         registerPart(PartCageLamp.class, "white", 0xDDDDDD);
