@@ -67,6 +67,7 @@ public class BPBlocks {
     public static Block block_breaker;
     public static Block igniter;
     public static Block buffer;
+    public static Block sortron;
     
     public static Block multipart;// DO NOT GENERATE OR REMOVE THIS BLOCK!
 
@@ -113,6 +114,7 @@ public class BPBlocks {
         block_breaker = new BlockBlockBreaker();
         igniter = new BlockIgniter();
         buffer = new BlockBuffer();
+        sortron = new BlockSortron();
 
         registerBlocks();
     }
@@ -161,5 +163,6 @@ public class BPBlocks {
         GameRegistry.registerBlock(block_breaker, Refs.BLOCKBREAKER_NAME);
         GameRegistry.registerBlock(igniter, Refs.BLOCKIGNITER_NAME);
         GameRegistry.registerBlock(buffer, Refs.BLOCKBUFFER_NAME);
+        GameRegistry.registerBlock(sortron, Refs.BLOCKSORTRON_NAME);
     }
 }
