@@ -12,6 +12,7 @@ import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import net.quetzi.bluepower.compat.cc.CompatModuleCC;
 import net.quetzi.bluepower.compat.fmp.CompatModuleFMP;
 import net.quetzi.bluepower.compat.fmp.CompatModuleFMPAlt;
 import net.quetzi.bluepower.references.Dependencies;
@@ -96,6 +97,7 @@ public class CompatibilityUtils {
      */
     static {
         registerModule(Dependencies.FMP, CompatModuleFMP.class, CompatModuleFMPAlt.class);
+        registerModule(Dependencies.COMPUTER_CRAFT, CompatModuleCC.class, null);
     }
     
 }

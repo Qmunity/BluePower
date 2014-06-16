@@ -20,5 +20,6 @@ package net.quetzi.bluepower.references;
 public class Dependencies {
 
     public static final String FMP = "ForgeMultipart";
+    public static final String COMPUTER_CRAFT = "ComputerCraft";
 
 }

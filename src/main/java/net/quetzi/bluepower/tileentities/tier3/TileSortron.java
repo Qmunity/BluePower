@@ -1,11 +1,12 @@
 package net.quetzi.bluepower.tileentities.tier3;
 
+import cpw.mods.fml.common.Optional;
 import dan200.computercraft.api.lua.ILuaContext;
 import dan200.computercraft.api.peripheral.IComputerAccess;
 import dan200.computercraft.api.peripheral.IPeripheral;
 import net.minecraft.item.ItemDye;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
+import net.quetzi.bluepower.references.Dependencies;
 import net.quetzi.bluepower.tileentities.TileMachineBase;
 
 import java.util.ArrayList;
@@ -13,18 +14,21 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class TileSortron extends TileMachineBase implements IPeripheral {
+@Optional.Interface(iface = "dan200.computercraft.api.peripheral.IPeripheral", modid = Dependencies.COMPUTER_CRAFT)
+public class TileSortron extends TileMachineBase implements IPeripheral{
 
     private Set<IComputerAccess> connectedComputers = new HashSet<IComputerAccess>();
     private List<Byte>           acceptedColors     = new ArrayList<Byte>();
 
     @Override
+    @Optional.Method(modid = Dependencies.COMPUTER_CRAFT)
     public String getType() {
 
         return "BluePower.Sortron";
     }
 
     @Override
+    @Optional.Method(modid = Dependencies.COMPUTER_CRAFT)
     public String[] getMethodNames() {
 
         return new String[] { "addAcceptedCol", "removeAcceptedCol", "getAcceptedCols", "addAcceptedItem", "removeAcceptedItem", "getAcceptedItems",
@@ -32,6 +36,7 @@ public class TileSortron extends TileMachineBase implements IPeripheral {
     }
 
     @Override
+    @Optional.Method(modid = Dependencies.COMPUTER_CRAFT)
     public Object[] callMethod(IComputerAccess computer, ILuaContext context, int method, Object[] arguments) throws Exception {
 
         switch (method) {
@@ -106,18 +111,21 @@ public class TileSortron extends TileMachineBase implements IPeripheral {
     }
 
     @Override
+    @Optional.Method(modid = Dependencies.COMPUTER_CRAFT)
     public void attach(IComputerAccess computer) {
 
         connectedComputers.add(computer);
     }
 
     @Override
+    @Optional.Method(modid = Dependencies.COMPUTER_CRAFT)
     public void detach(IComputerAccess computer) {
 
         connectedComputers.remove(computer);
     }
 
     @Override
+    @Optional.Method(modid = Dependencies.COMPUTER_CRAFT)
     public boolean equals(IPeripheral other) {
 
         return other.getType().equals(this.getType());
