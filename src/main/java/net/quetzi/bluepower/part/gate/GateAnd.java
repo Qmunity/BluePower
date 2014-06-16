@@ -1,5 +1,8 @@
 package net.quetzi.bluepower.part.gate;
 
+import java.util.List;
+
+import net.minecraft.util.AxisAlignedBB;
 import net.quetzi.bluepower.api.part.FaceDirection;
 import net.quetzi.bluepower.api.part.RedstoneConnection;
 import net.quetzi.bluepower.client.renderers.RenderHelper;
@@ -49,6 +52,14 @@ public class GateAnd extends GateBase {
     }
     
     @Override
+    public void addOcclusionBoxes(List<AxisAlignedBB> boxes) {
+    
+        super.addOcclusionBoxes(boxes);
+        
+        boxes.add(AxisAlignedBB.getBoundingBox(7D / 16D, 2D / 16D, 7D / 16D, 9D / 16D, 9D / 16D, 9D / 16D));
+    }
+    
+    @Override
     public void doLogic(RedstoneConnection front, RedstoneConnection left, RedstoneConnection back, RedstoneConnection right) {
     
         power = true;
@@ -81,7 +92,7 @@ public class GateAnd extends GateBase {
         } else if (back.isEnabled()) {
             back.disable();
             right.enable();
-        } else {//right enabled
+        } else {// right enabled
             left.enable();
             back.enable();
         }

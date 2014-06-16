@@ -1,9 +1,11 @@
 package net.quetzi.bluepower.part.gate;
 
 import java.util.Arrays;
+import java.util.List;
 
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.AxisAlignedBB;
 import net.quetzi.bluepower.api.part.RedstoneConnection;
 import net.quetzi.bluepower.client.gui.gate.GuiGateSingleTime;
 import net.quetzi.bluepower.client.renderers.RenderHelper;
@@ -54,6 +56,14 @@ public class GateSequencer extends GateBase implements IGuiButtonSensitive {
         
         RenderHelper.renderRedstoneTorch(0, 1D / 8D, 0, 13D / 16D, true);
         RenderHelper.renderPointer(0, 7D / 16D, 0, world != null ? start >= 0 ? 1 - (double) (ticks - start + frame) / (double) time : 0 : 0);
+    }
+    
+    @Override
+    public void addOcclusionBoxes(List<AxisAlignedBB> boxes) {
+    
+        super.addOcclusionBoxes(boxes);
+        
+        boxes.add(AxisAlignedBB.getBoundingBox(7D / 16D, 2D / 16D, 7D / 16D, 9D / 16D, 12D / 16D, 9D / 16D));
     }
     
     @Override
@@ -128,10 +138,10 @@ public class GateSequencer extends GateBase implements IGuiButtonSensitive {
             
         };
     }
-
+    
     @Override
     protected boolean hasGUI() {
-
+    
         return true;
     }
 }

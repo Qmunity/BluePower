@@ -95,4 +95,10 @@ public class ItemBPMultipart extends JItemMultiPart {
                 l.add(PartRegistry.getItemForPart(s));
     }
     
+    @Override
+    public int getDamage(ItemStack stack) {
+    
+        return 0;//PartRegistry.getStackMetadata(stack);
+    }
+    
 }

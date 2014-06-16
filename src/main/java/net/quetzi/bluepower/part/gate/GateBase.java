@@ -37,8 +37,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public abstract class GateBase extends BPPartFace {
     
-    private static Vector3Cube HITBOX    = new Vector3Cube(0, 0, 0, 1, 1D / 8D, 1);
-    private static Vector3Cube OCCLUSION = new Vector3Cube(1D / 8D, 0, 1D / 8D, 7D / 8D, 1D / 8D, 7D / 8D);
+    protected static Vector3Cube BOX = new Vector3Cube(0, 0, 0, 1, 1D / 8D, 1);
     
     public GateBase() {
     
@@ -74,19 +73,19 @@ public abstract class GateBase extends BPPartFace {
     @Override
     public void addCollisionBoxes(List<AxisAlignedBB> boxes) {
     
-        boxes.add(HITBOX.clone().toAABB());
+        boxes.add(BOX.clone().toAABB());
     }
     
     @Override
     public void addOcclusionBoxes(List<AxisAlignedBB> boxes) {
     
-        boxes.add(OCCLUSION.clone().toAABB());
+        boxes.add(BOX.clone().toAABB());
     }
     
     @Override
     public void addSelectionBoxes(List<AxisAlignedBB> boxes) {
     
-        boxes.add(HITBOX.clone().toAABB());
+        boxes.add(BOX.clone().toAABB());
     }
     
     @Override
@@ -291,9 +290,9 @@ public abstract class GateBase extends BPPartFace {
     
         return null;
     }
-
+    
     protected boolean hasGUI() {
-
+    
         return false;
     }
     

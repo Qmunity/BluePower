@@ -34,7 +34,7 @@ public class MultipartFaceBPPart extends MultipartBPPart implements TFacePart, I
     @Override
     public int getSlotMask() {
     
-        return 1 << this.facePart.getFace();
+        return 1 << getFace();
     }
     
     @Override

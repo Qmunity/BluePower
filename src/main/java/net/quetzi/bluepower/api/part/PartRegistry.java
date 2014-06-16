@@ -23,6 +23,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.quetzi.bluepower.init.BPItems;
 import net.quetzi.bluepower.part.gate.GateAnd;
+import net.quetzi.bluepower.part.gate.GateBuffer;
 import net.quetzi.bluepower.part.gate.GateNot;
 import net.quetzi.bluepower.part.gate.GateSequencer;
 import net.quetzi.bluepower.part.gate.GateTimer;
@@ -211,6 +212,24 @@ public class PartRegistry {
         return null;
     }
     
+    /**
+     * Gets the metadata for the multipart itemstack passed as an argument
+     * @param is
+     *            ItemsStack to get the metadata from
+     * @return The metadata that stack should have
+     */
+    public static int getStackMetadata(ItemStack is) {
+    
+        String id = getPartIdFromItem(is);
+        if (id == null) return 0;
+        int i = 0;
+        for (String s : parts.keySet()) {
+            if (s.equals(id)) break;
+            i++;
+        }
+        return i;
+    }
+    
     public static void init() {
     
         ICON_PART = "timer";
@@ -219,6 +238,7 @@ public class PartRegistry {
         registerPart(GateAnd.class);
         registerPart(GateTimer.class);
         registerPart(GateSequencer.class);
+        registerPart(GateBuffer.class);
         
         // Lamps
         registerPart(PartCageLamp.class, "white", 0xDDDDDD);

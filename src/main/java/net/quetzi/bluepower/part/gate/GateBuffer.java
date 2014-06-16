@@ -6,10 +6,11 @@ import net.minecraft.util.AxisAlignedBB;
 import net.quetzi.bluepower.api.part.FaceDirection;
 import net.quetzi.bluepower.api.part.RedstoneConnection;
 import net.quetzi.bluepower.client.renderers.RenderHelper;
+import net.quetzi.bluepower.references.Refs;
 
-public class GateNot extends GateBase {
+public class GateBuffer extends GateBase {
     
-    private boolean power = false;
+    private boolean[] power = new boolean[] { false, false, false };
     
     @Override
     public void initializeConnections(RedstoneConnection front, RedstoneConnection left, RedstoneConnection back, RedstoneConnection right) {
@@ -34,17 +35,18 @@ public class GateNot extends GateBase {
     @Override
     public String getGateID() {
     
-        return "not";
+        return "buffer";
     }
     
     @Override
     public void renderTop(RedstoneConnection front, RedstoneConnection left, RedstoneConnection back, RedstoneConnection right, float frame) {
     
-        renderTopTexture(FaceDirection.FRONT, !power);
-        renderTopTexture(FaceDirection.LEFT, !power);
-        renderTopTexture(FaceDirection.RIGHT, !power);
+        renderTopTexture(Refs.MODID + ":textures/blocks/gates/" + getType() + "/center_" + (!power[1] ? "on" : "off") + ".png");
+        renderTopTexture(FaceDirection.LEFT, power[0]);
+        renderTopTexture(FaceDirection.RIGHT, power[0]);
         renderTopTexture(FaceDirection.BACK, back.getPower() > 0);
-        RenderHelper.renderRedstoneTorch(0, 1D / 8D, 0, 9D / 16D, !power);
+        RenderHelper.renderRedstoneTorch(0, 1D / 8D, 0, 8D / 16D, !power[1]);
+        RenderHelper.renderRedstoneTorch(0, 1D / 8D, -4D/16D, 10D / 16D, power[0]);
     }
     
     @Override
@@ -58,11 +60,15 @@ public class GateNot extends GateBase {
     @Override
     public void doLogic(RedstoneConnection front, RedstoneConnection left, RedstoneConnection back, RedstoneConnection right) {
     
-        power = back.getPower() > 0;
+        power[2] = back.getPower() > 0;
         
-        left.setPower(!power ? 15 : 0);
-        front.setPower(!power ? 15 : 0);
-        right.setPower(!power ? 15 : 0);
+        left.setPower(power[0] ? 15 : 0);
+        front.setPower(power[0] ? 15 : 0);
+        right.setPower(power[0] ? 15 : 0);
+        
+        power[0] = power[1];
+        power[1] = power[2];
+        power[2] = false;
     }
     
 }
