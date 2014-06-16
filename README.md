@@ -14,6 +14,6 @@ Blue Power is a collaborative effort to revive some of the things that are missi
 ## Contributions
 
 Contributions and bug fixes are welcome. If you plan to add any features check with the team before starting as there may already be somebody working on it. PR's are not guaranteed to be accepted and should follow existing naming conventions etc. If in doubt join the irc channel `#bluepower` on esper.net
-
+When adding code. Please use proper javadoc and always include an @author tag. 
 ##### Note
 The project is in active development and may not always be stable!
