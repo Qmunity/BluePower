@@ -23,30 +23,23 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntityFurnace;
-import net.quetzi.bluepower.containers.slots.SlotMachineInput;
-import net.quetzi.bluepower.containers.slots.SlotMachineOutput;
-import net.quetzi.bluepower.tileentities.tier1.TileAlloyFurnace;
+import net.quetzi.bluepower.tileentities.tier2.TileSortingMachine;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class ContainerAlloyFurnace extends Container {
+public class ContainerSortingMachine extends Container {
     
-    private final TileAlloyFurnace tileFurnace;
+    private final TileSortingMachine sortingMachine;
     
-    private int                    currentBurnTime;
-    private int                    maxBurnTime;
-    private int                    currentProcessTime;
+    private int                      pullMode, sortMode, curColumn;
     
-    public ContainerAlloyFurnace(InventoryPlayer invPlayer, TileAlloyFurnace furnace) {
+    public ContainerSortingMachine(InventoryPlayer invPlayer, TileSortingMachine sortingMachine) {
     
-        tileFurnace = furnace;
+        this.sortingMachine = sortingMachine;
         
-        addSlotToContainer(new SlotMachineInput(furnace, 0, 21, 35));
-        addSlotToContainer(new SlotMachineOutput(furnace, 1, 134, 35));
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                addSlotToContainer(new SlotMachineInput(furnace, i * 3 + j + 2, 47 + j * 18, 17 + i * 18));
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 8; j++) {
+                addSlotToContainer(new Slot(sortingMachine, i * 8 + j, 26 + j * 18, 18 + i * 18));
             }
         }
         bindPlayerInventory(invPlayer);
@@ -55,16 +48,17 @@ public class ContainerAlloyFurnace extends Container {
     
     protected void bindPlayerInventory(InventoryPlayer invPlayer) {
     
+        int offset = 140;
         // Render inventory
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 9; j++) {
-                addSlotToContainer(new Slot(invPlayer, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
+                addSlotToContainer(new Slot(invPlayer, j + i * 9 + 9, 8 + j * 18, offset + i * 18));
             }
         }
         
         // Render hotbar
         for (int j = 0; j < 9; j++) {
-            addSlotToContainer(new Slot(invPlayer, j, 8 + j * 18, 142));
+            addSlotToContainer(new Slot(invPlayer, j, 8 + j * 18, 58 + offset));
         }
     }
     
@@ -78,13 +72,11 @@ public class ContainerAlloyFurnace extends Container {
             ItemStack var5 = var4.getStack();
             var3 = var5.copy();
             
-            if (par2 < 11) {
-                if (!mergeItemStack(var5, 11, 47, false)) return null;
+            if (par2 < 40) {
+                if (!mergeItemStack(var5, 40, 76, false)) return null;
                 var4.onSlotChange(var5, var3);
             } else {
-                if (TileEntityFurnace.isItemFuel(var5) && mergeItemStack(var5, 0, 1, false)) {
-                    
-                } else if (!mergeItemStack(var5, 2, 11, false)) return null;
+                if (!mergeItemStack(var5, 0, 40, false)) return null;
                 var4.onSlotChange(var5, var3);
             }
             
@@ -113,45 +105,45 @@ public class ContainerAlloyFurnace extends Container {
         for (Object crafter : crafters) {
             ICrafting icrafting = (ICrafting) crafter;
             
-            if (currentBurnTime != tileFurnace.currentBurnTime) {
-                icrafting.sendProgressBarUpdate(this, 0, tileFurnace.currentBurnTime);
+            if (pullMode != sortingMachine.pullMode.ordinal()) {
+                icrafting.sendProgressBarUpdate(this, 0, sortingMachine.pullMode.ordinal());
             }
             
-            if (maxBurnTime != tileFurnace.maxBurnTime) {
-                icrafting.sendProgressBarUpdate(this, 1, tileFurnace.maxBurnTime);
+            if (sortMode != sortingMachine.sortMode.ordinal()) {
+                icrafting.sendProgressBarUpdate(this, 1, sortingMachine.sortMode.ordinal());
             }
             
-            if (currentProcessTime != tileFurnace.currentProcessTime) {
-                icrafting.sendProgressBarUpdate(this, 2, tileFurnace.currentProcessTime);
+            if (curColumn != sortingMachine.curColumn) {
+                icrafting.sendProgressBarUpdate(this, 2, curColumn);
             }
         }
         
-        currentBurnTime = tileFurnace.currentBurnTime;
-        maxBurnTime = tileFurnace.maxBurnTime;
-        currentProcessTime = tileFurnace.currentProcessTime;
+        pullMode = sortingMachine.pullMode.ordinal();
+        sortMode = sortingMachine.sortMode.ordinal();
+        curColumn = sortingMachine.curColumn;
     }
     
     @Override
     @SideOnly(Side.CLIENT)
-    public void updateProgressBar(int par1, int par2) {
+    public void updateProgressBar(int id, int value) {
     
-        if (par1 == 0) {
-            tileFurnace.currentBurnTime = par2;
+        if (id == 0) {
+            sortingMachine.pullMode = TileSortingMachine.PullMode.values()[value];
         }
         
-        if (par1 == 1) {
-            tileFurnace.maxBurnTime = par2;
+        if (id == 1) {
+            sortingMachine.sortMode = TileSortingMachine.SortMode.values()[value];
         }
         
-        if (par1 == 2) {
-            tileFurnace.currentProcessTime = par2;
+        if (id == 2) {
+            sortingMachine.curColumn = value;
         }
     }
     
     @Override
     public boolean canInteractWith(EntityPlayer entityplayer) {
     
-        return tileFurnace.isUseableByPlayer(entityplayer);
+        return sortingMachine.isUseableByPlayer(entityplayer);
     }
     
 }
