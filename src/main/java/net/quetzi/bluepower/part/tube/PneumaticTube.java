@@ -2,6 +2,7 @@ package net.quetzi.bluepower.part.tube;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
@@ -221,7 +222,8 @@ public class PneumaticTube extends BPPart {
                     return true;
                 }
             } else if (item != null) {
-                logic.injectStack(item, ForgeDirection.DOWN, TubeColor.NONE, false);
+                
+                logic.injectStack(item, ForgeDirection.DOWN, TubeColor.values()[new Random().nextInt(16)], false);
             }
         }
         return false;

@@ -1,12 +1,18 @@
 package net.quetzi.bluepower.part.tube;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.quetzi.bluepower.api.tube.IPneumaticTube.TubeColor;
+import net.quetzi.bluepower.api.vec.Vector3Cube;
+import net.quetzi.bluepower.client.renderers.RenderHelper;
+import net.quetzi.bluepower.references.Refs;
 
 import org.lwjgl.opengl.GL11;
 
@@ -90,6 +96,25 @@ public class TubeStack {
         GL11.glPushMatrix();
         GL11.glTranslated(heading.offsetX * renderProgress * 0.5, heading.offsetY * renderProgress * 0.5, heading.offsetZ * renderProgress * 0.5);
         customRenderItem.doRender(renderedItem, 0, 0, 0, 0, 0);
+        
+        if (color != TubeColor.NONE) {
+            
+            float size = 0.2F;
+            
+            int colorInt = ItemDye.field_150922_c[color.ordinal()];
+            float red = (colorInt >> 16) / 256F;
+            float green = (colorInt >> 8 & 255) / 256F;
+            float blue = (colorInt & 255) / 256F;
+            
+            GL11.glDisable(GL11.GL_CULL_FACE);
+            GL11.glDisable(GL11.GL_LIGHTING);
+            GL11.glColor3f(red, green, blue);
+            Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID, "textures/blocks/tubes/inside_color_border.png"));
+            RenderHelper.drawTesselatedTexturedCube(new Vector3Cube(-size, -size, -size, size, size, size));
+            GL11.glEnable(GL11.GL_CULL_FACE);
+            GL11.glEnable(GL11.GL_LIGHTING);
+        }
+        
         GL11.glPopMatrix();
     }
 }
