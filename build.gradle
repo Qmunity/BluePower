@@ -21,9 +21,20 @@ project.ext {
     major = "0"
     minor = "0"
 }
-version = "1.7.2-${project.ext.major}.${project.minor}.${System.getenv("BUILD_NUMBER") ?:0}"
+
+
+version = "1.7.2-${project.ext.major}.${project.minor}"
 group= "net.quetzi.bluepower" 
 archivesBaseName = "BluePower"
+
+
+if (System.getenv().BUILD_NUMBER != null){
+    version += ".${System.getenv().BUILD_NUMBER}"
+}else{
+    version += " - err"
+}
+
+
 
 dependencies {
     def f = new File('dep/')
@@ -56,7 +67,12 @@ minecraft {
 	replace '@MAJOR@', project.major
 	replace '@MINOR@', project.minor
 	replace '@MC_VERSION@', version
-	replace '@BUILD_NUMBER@', System.getenv("BUILD_NUMBER")
+    if(System.getenv("BUILD_NUMBER") != null){
+	    replace '@BUILD_NUMBER@', System.getenv("BUILD_NUMBER")
+    }else{
+        replace '@BUILD_NUMBER@', 0
+    }
+
 }
 
 processResources
