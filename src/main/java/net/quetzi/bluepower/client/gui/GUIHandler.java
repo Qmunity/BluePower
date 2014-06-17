@@ -52,6 +52,8 @@ public class GUIHandler implements IGuiHandler {
                     return new ContainerSeedBag(player.inventory,ItemSeedBag.getSeedBagInv(player));
                 }
                 break;
+			default:
+				break;
         }
         return null;
     }
@@ -73,6 +75,8 @@ public class GUIHandler implements IGuiHandler {
                 {
                     return new GuiSeedBag(player.inventory,ItemSeedBag.getSeedBagInv(player));
                 }
+			default:
+				break;
         }
         return null;
     }

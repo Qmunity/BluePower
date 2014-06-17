@@ -31,12 +31,9 @@ import net.quetzi.bluepower.tileentities.tier1.TileIgniter;
 
 public class BlockIgniter extends BlockContainerBase {
 
-    @SuppressWarnings("unused")
     private IIcon textureFrontOn;
     private IIcon textureFrontOff;
-    @SuppressWarnings("unused")
     private IIcon textureSide1;
-    @SuppressWarnings("unused")
     private IIcon textureSide2;
     private IIcon textureBack;
 
