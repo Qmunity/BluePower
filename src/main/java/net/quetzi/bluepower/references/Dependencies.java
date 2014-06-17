@@ -21,5 +21,6 @@ public class Dependencies {
 
     public static final String FMP = "ForgeMultipart";
     public static final String COMPUTER_CRAFT = "ComputerCraft";
+    public static final String OPEN_COMPUTERS = "OpenComputers";
 
 }

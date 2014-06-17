@@ -4,7 +4,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 public enum FaceDirection {
     
-    FRONT("Front"), BACK("Back"), LEFT("Left"), RIGHT("Right");
+    FRONT("front"), BACK("back"), LEFT("left"), RIGHT("right");
     
     private FaceDirection(String name) {
     

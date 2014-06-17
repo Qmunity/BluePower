@@ -13,12 +13,12 @@
  *
  *     You should have received a copy of the GNU General Public License
  *     along with Blue Power.  If not, see <http://www.gnu.org/licenses/>
+ *     
+ *     @author Quetzi
  */
 
 package net.quetzi.bluepower.blocks;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.tileentity.TileEntity;
@@ -28,6 +28,8 @@ import net.quetzi.bluepower.init.CustomTabs;
 import net.quetzi.bluepower.references.GuiIDs;
 import net.quetzi.bluepower.references.Refs;
 import net.quetzi.bluepower.tileentities.tier1.TileBuffer;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockBuffer extends BlockContainerBase {
 
@@ -41,12 +43,14 @@ public class BlockBuffer extends BlockContainerBase {
         this.setCreativeTab(CustomTabs.tabBluePowerMachines);
     }
 
-    @Override protected Class<? extends TileEntity> getTileEntity() {
+    @Override
+    protected Class<? extends TileEntity> getTileEntity() {
 
         return TileBuffer.class;
     }
 
-    @Override public GuiIDs getGuiID() {
+    @Override
+    public GuiIDs getGuiID() {
 
         return GuiIDs.BUFFER;
     }
@@ -67,9 +71,7 @@ public class BlockBuffer extends BlockContainerBase {
         ForgeDirection direction = ForgeDirection.getOrientation(meta);
         if (side == direction.ordinal()) {
             return textureFront;
-        } else if (side == direction.getOpposite().ordinal()) {
-            return textureBack;
-        }
+        } else if (side == direction.getOpposite().ordinal()) { return textureBack; }
         return blockIcon;
     }
 }

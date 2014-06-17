@@ -54,8 +54,10 @@ dependencies {
     file("dep/CodeChickenCore-1.7.2-1.0.0-dev.jar").renameTo(file("dep/ccc.jar"))
     ant.get(src: "http://www.chickenbones.craftsaddle.org/Files/New_Versions/1.7.2/NotEnoughItems-1.7.2-1.0.1-dev.jar", dest: "dep")
     file("dep/NotEnoughItems-1.7.2-1.0.1-dev.jar").renameTo(file("dep/nei.jar"))
+	ant.get(src: "http://ci.cil.li/job/OpenComputers-MC1.7/190/artifact/build/libs/OpenComputers-MC1.7.2-1.3.0.190-beta.1-deobf.jar", dest: "dep")
+    file("dep/OpenComputers-MC1.7.2-1.3.0.190-beta.1-deobf.jar").renameTo(file("dep/oc.jar"))
 	println("  Adding dependencies!")
-    compile files("dep/ccl.jar", "dep/fmp.jar", "dep/nei.jar", "dep/ccc.jar")
+    compile files("dep/ccl.jar", "dep/fmp.jar", "dep/nei.jar", "dep/ccc.jar", "dep/oc.jar")
 	println("  Finished adding dependencies!")
 }
 

@@ -1,7 +1,10 @@
 package net.quetzi.bluepower.part.gate;
 
+import java.util.List;
+
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.AxisAlignedBB;
 import net.quetzi.bluepower.api.part.FaceDirection;
 import net.quetzi.bluepower.api.part.RedstoneConnection;
 import net.quetzi.bluepower.client.gui.gate.GuiGateSingleTime;
@@ -45,12 +48,20 @@ public class GateTimer extends GateBase implements IGuiButtonSensitive {
     @Override
     public void renderTop(RedstoneConnection front, RedstoneConnection left, RedstoneConnection back, RedstoneConnection right, float frame) {
     
-        //renderTopTexture(FaceDirection.FRONT, power);
+        // renderTopTexture(FaceDirection.FRONT, power);
         renderTopTexture(FaceDirection.LEFT, power);
         renderTopTexture(FaceDirection.RIGHT, power);
         renderTopTexture(FaceDirection.BACK, back.getPower() > 0);
         RenderHelper.renderRedstoneTorch(0, 1D / 8D, 0, 13D / 16D, true);
         RenderHelper.renderPointer(0, 7D / 16D, 0, world != null ? back.getPower() == 0 ? 1 - (double) (ticks + frame) / (double) time : 0 : 0);
+    }
+    
+    @Override
+    public void addOcclusionBoxes(List<AxisAlignedBB> boxes) {
+    
+        super.addOcclusionBoxes(boxes);
+        
+        boxes.add(AxisAlignedBB.getBoundingBox(7D / 16D, 2D / 16D, 7D / 16D, 9D / 16D, 12D / 16D, 9D / 16D));
     }
     
     @Override
@@ -109,10 +120,10 @@ public class GateTimer extends GateBase implements IGuiButtonSensitive {
             
         };
     }
-
+    
     @Override
     protected boolean hasGUI() {
-
+    
         return true;
     }
 }

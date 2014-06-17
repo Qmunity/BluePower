@@ -17,59 +17,30 @@
 
 package net.quetzi.bluepower.blocks;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
-import net.minecraftforge.common.util.ForgeDirection;
 import net.quetzi.bluepower.references.GuiIDs;
 import net.quetzi.bluepower.references.Refs;
 import net.quetzi.bluepower.tileentities.tier1.TileBlockBreaker;
 
-public class BlockBlockBreaker extends BlockContainerBase {
-
-    private IIcon textureFront;
-    private IIcon textureBack;
-
+public class BlockBlockBreaker extends BlockContainer6Sided {
+    
     public BlockBlockBreaker() {
-
+    
         super(Material.rock);
-        this.setBlockName(Refs.BLOCKBREAKER_NAME);
+        setBlockName(Refs.BLOCKBREAKER_NAME);
     }
-
+    
     @Override
     protected Class<? extends TileEntity> getTileEntity() {
-
+    
         return TileBlockBreaker.class;
     }
-
+    
     @Override
     public GuiIDs getGuiID() {
-
+    
         return GuiIDs.INVALID; // TODO: Not sure what to return if it has no gui
     }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerBlockIcons(IIconRegister iconRegister) {
-
-        this.textureFront = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + Refs.BLOCKBREAKER_NAME + "_front");
-        this.textureBack = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + Refs.BLOCKBREAKER_NAME + "_back");
-        this.blockIcon = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + Refs.BLOCKBREAKER_NAME + "_side");
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public IIcon getIcon(int side, int meta) {
-
-        ForgeDirection direction = ForgeDirection.getOrientation(meta);
-        if (side == direction.ordinal()) {
-            return textureFront;
-        } else if (side == direction.getOpposite().ordinal()) {
-            return textureBack;
-        }
-        return blockIcon;
-    }
+    
 }

@@ -286,7 +286,7 @@ public class MultipartBPPart extends TMultiPart implements IRedstonePart, JNorma
     }
     
     protected void reRenderStatic(Vector3 pos, int pass) {
-        
+    
         if (pass == 0) {
             if (staticRender0 == -1 || staticRender0 == emptyStaticRender) staticRender0 = GL11.glGenLists(1);
             GL11.glNewList(staticRender0, GL11.GL_COMPILE);
