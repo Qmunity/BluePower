@@ -42,17 +42,6 @@ public class ItemSeedBag extends Item {
         this.setTextureName(Refs.MODID + ":" + name);
     }
     
-    public static IInventory getSeedBagInv(EntityPlayer player) {
-    
-        ItemStack seedBag;
-        IInventory inventorySeedBag = null;
-        seedBag = player.getCurrentEquippedItem();
-        
-        if (seedBag != null && seedBag.getItem() instanceof ItemSeedBag) { return getSeedBagInv(player, seedBag); }
-        
-        return inventorySeedBag;
-    }
-    
     public double getDurabilityForDisplay(ItemStack stack) {
     
         return 1D - (double) getItemDamageForDisplay(stack) / (double) 576;
@@ -66,7 +55,7 @@ public class ItemSeedBag extends Item {
     public int getItemDamageForDisplay(ItemStack stack) {
     
         int items = 0;
-        IInventory seedBagInventory = getSeedBagInv(null, stack);
+        IInventory seedBagInventory = InventoryItem.getItemInventory(stack, "Seed Bag", 9);
         seedBagInventory.openInventory();
         for (int i = 0; i < seedBagInventory.getSizeInventory(); i++) {
             ItemStack is = seedBagInventory.getStackInSlot(i);
@@ -80,17 +69,6 @@ public class ItemSeedBag extends Item {
     public int getMaxDamage(ItemStack stack) {
     
         return 576;
-    }
-    
-    public static IInventory getSeedBagInv(EntityPlayer player, ItemStack seedBag) {
-    
-        IInventory inventorySeedBag = null;
-        
-        if (seedBag != null && seedBag.getItem() instanceof ItemSeedBag) {
-            inventorySeedBag = new InventoryItem(player, seedBag, "Seed Bag", false, 9);
-        }
-        
-        return inventorySeedBag;
     }
     
     @Override
@@ -109,7 +87,7 @@ public class ItemSeedBag extends Item {
     
         if (par2EntityPlayer.isSneaking()) { return false; }
         
-        IInventory seedBagInventory = getSeedBagInv(par2EntityPlayer, par1ItemStack);
+        IInventory seedBagInventory = InventoryItem.getItemInventory(par2EntityPlayer,par2EntityPlayer.getCurrentEquippedItem(), "Seed Bag", 9);
         seedBagInventory.openInventory();
         
         ItemStack seed = null;

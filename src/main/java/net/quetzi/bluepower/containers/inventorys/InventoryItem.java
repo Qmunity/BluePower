@@ -44,6 +44,16 @@ public class InventoryItem extends InventoryBasic {
         }
     }
     
+    public static InventoryItem getItemInventory(ItemStack is, String name, int size) {
+    
+        return getItemInventory(null, is, name, size);
+    }
+    
+    public static InventoryItem getItemInventory(EntityPlayer player, ItemStack is, String name, int size) {
+    
+        return new InventoryItem(player, is, name, false, size);
+    }
+    
     @Override
     public void openInventory() {
     

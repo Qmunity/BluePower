@@ -172,6 +172,7 @@ public class Refs {
     public static final String  BLOCKBUFFER_NAME            = "buffer";
     public static final String  BLOCKSORTRON_NAME           = "sortron";
     public static final String  SEEDBAG_NAME                = "seed_bag";
+    public static final String  CANVASBAG_NAME              = "canvas_bag";
     
     public static String fullVersionString() {
     

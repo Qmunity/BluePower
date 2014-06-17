@@ -22,8 +22,11 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.quetzi.bluepower.containers.ContainerAlloyFurnace;
 import net.quetzi.bluepower.containers.ContainerBuffer;
+import net.quetzi.bluepower.containers.ContainerCanvasBag;
 import net.quetzi.bluepower.containers.ContainerSortingMachine;
 import net.quetzi.bluepower.containers.ContainerSeedBag;
+import net.quetzi.bluepower.containers.inventorys.InventoryItem;
+import net.quetzi.bluepower.items.ItemCanvasBag;
 import net.quetzi.bluepower.items.ItemSeedBag;
 import net.quetzi.bluepower.references.GuiIDs;
 import net.quetzi.bluepower.tileentities.tier1.TileAlloyFurnace;
@@ -47,10 +50,12 @@ public class GUIHandler implements IGuiHandler {
             case SORTING_MACHINE:
                 return new ContainerSortingMachine(player.inventory, (TileSortingMachine) ent);
             case SEEDBAG:
-                if (player.getCurrentEquippedItem()!=null && player.getCurrentEquippedItem().getItem() instanceof ItemSeedBag)
-                {
-                    return new ContainerSeedBag(player.inventory,ItemSeedBag.getSeedBagInv(player));
-                }
+                if (player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() instanceof ItemSeedBag) { return new ContainerSeedBag(
+                        player.inventory, InventoryItem.getItemInventory(player,player.getCurrentEquippedItem(), "Seed Bag", 9)); }
+                break;
+            case CANVAS_BAG:
+                if (player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() instanceof ItemCanvasBag) { return new ContainerCanvasBag(
+                        player.inventory, InventoryItem.getItemInventory(player,player.getCurrentEquippedItem(), "Canvas Bag", 27)); }
                 break;
         }
         return null;
@@ -69,10 +74,12 @@ public class GUIHandler implements IGuiHandler {
             case SORTING_MACHINE:
                 return new GuiSortingMachine(player.inventory, (TileSortingMachine) ent);
             case SEEDBAG:
-                if (player.getCurrentEquippedItem()!=null && player.getCurrentEquippedItem().getItem() instanceof ItemSeedBag)
-                {
-                    return new GuiSeedBag(player.inventory,ItemSeedBag.getSeedBagInv(player));
-                }
+                if (player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() instanceof ItemSeedBag) { return new GuiSeedBag(
+                        player.inventory, InventoryItem.getItemInventory(player,player.getCurrentEquippedItem(), "Seed Bag", 9)); }
+            case CANVAS_BAG:
+                if (player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() instanceof ItemCanvasBag) { return new GuiCanvasBag(
+                        player.inventory, InventoryItem.getItemInventory(player,player.getCurrentEquippedItem(), "Canvas Bag", 27)); }
+                break;
         }
         return null;
     }
