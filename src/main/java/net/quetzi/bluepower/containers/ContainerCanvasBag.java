@@ -25,47 +25,48 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.quetzi.bluepower.containers.inventorys.InventoryItem;
+import net.quetzi.bluepower.containers.slots.SlotExclude;
 import net.quetzi.bluepower.containers.slots.SlotLocked;
-import net.quetzi.bluepower.containers.slots.SlotSeedBag;
-import net.quetzi.bluepower.items.ItemSeedBag;
+import net.quetzi.bluepower.init.BPItems;
 
-public class ContainerSeedBag extends Container {
+public class ContainerCanvasBag extends Container {
     
-    IInventory seedBagInventory;
+    IInventory canvasBagInventory;
     ItemStack bag;
     
-    public ContainerSeedBag(ItemStack bag,IInventory playerInventory, IInventory seedBagInventory) {
+    public ContainerCanvasBag(ItemStack bag, IInventory playerInventory, IInventory canvasBagInventory) {
     
-        this.seedBagInventory = seedBagInventory;
         this.bag = bag;
-        
-        for (int i = 0; i < 3; ++i) {
-            for (int j = 0; j < 3; ++j) {
-                this.addSlotToContainer(new SlotSeedBag(seedBagInventory, j + i * 3, 62 + j * 18, 17 + i * 18));
+        int i = -1 * 18;
+        canvasBagInventory.openInventory();
+        for (int j = 0; j < 3; ++j) {
+            for (int k = 0; k < 9; ++k) {
+                this.addSlotToContainer(new SlotExclude(canvasBagInventory, k + j * 9, 8 + k * 18, 18 + j * 18, BPItems.canvas_bag));
             }
         }
         
-        for (int i = 0; i < 3; ++i) {
-            for (int j = 0; j < 9; ++j) {
-                this.addSlotToContainer(new Slot(playerInventory, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
+        for (int j = 0; j < 3; ++j) {
+            for (int k = 0; k < 9; ++k) {
+                this.addSlotToContainer(new Slot(playerInventory, k + j * 9 + 9, 8 + k * 18, 103 + j * 18 + i));
             }
         }
         
-        for (int i = 0; i < 9; ++i) {
-            if (playerInventory.getStackInSlot(i) == ((InventoryItem) seedBagInventory).getItem()) {
-                this.addSlotToContainer(new SlotLocked(playerInventory, i, 8 + i * 18, 142));
+        for (int j = 0; j < 9; ++j) {
+            if (playerInventory.getStackInSlot(j) == ((InventoryItem) canvasBagInventory).getItem()) {
+                this.addSlotToContainer(new SlotLocked(playerInventory, j, 8 + j * 18, 161 + i));
             } else {
-                this.addSlotToContainer(new Slot(playerInventory, i, 8 + i * 18, 142));
+                this.addSlotToContainer(new Slot(playerInventory, j, 8 + j * 18, 161 + i));
             }
+            this.addSlotToContainer(new Slot(playerInventory, j, 8 + j * 18, 161 + i));
         }
         
-        seedBagInventory.openInventory();
+        this.canvasBagInventory = canvasBagInventory;
     }
     
     @Override
     public boolean canInteractWith(EntityPlayer player) {
     
-        return player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() instanceof ItemSeedBag;
+        return ItemStack.areItemStacksEqual(player.getCurrentEquippedItem(),bag);
     }
     
     @Override
@@ -78,9 +79,9 @@ public class ContainerSeedBag extends Container {
             ItemStack itemstack1 = slot.getStack();
             itemstack = itemstack1.copy();
             
-            if (par2 < 9) {
-                if (!this.mergeItemStack(itemstack1, 9, 45, true)) { return null; }
-            } else if (!this.mergeItemStack(itemstack1, 0, 9, false)) { return null; }
+            if (par2 < 27) {
+                if (!this.mergeItemStack(itemstack1, 27, 63, true)) { return null; }
+            } else if (!this.mergeItemStack(itemstack1, 0, 27, false)) { return null; }
             
             if (itemstack1.stackSize == 0) {
                 slot.putStack((ItemStack) null);

@@ -31,6 +31,5 @@ stone_bundle
 silicon_chip
 taintedsilicon_chip
 stone_pointer
-seedBag
 
 paint_brush (instead of all 16 types you could make one base texture, and also create an overlay that only contains white pixels at the places where the color should be)

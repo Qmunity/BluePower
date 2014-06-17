@@ -23,16 +23,19 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.quetzi.bluepower.containers.ContainerSeedBag;
+import net.quetzi.bluepower.containers.ContainerCanvasBag;
 import net.quetzi.bluepower.references.Refs;
 
-public class GuiSeedBag extends GuiBase {
+public class GuiCanvasBag extends GuiBase {
     
-    private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/GUI/seedBag.png");
+    private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/GUI/canvas_bag.png");
+    ItemStack bag;
     
-    public GuiSeedBag(ItemStack bag,IInventory playerInventory, IInventory seedBagInventory) {
+    public GuiCanvasBag(ItemStack bag,IInventory playerInventory, IInventory canvasBagInventory) {
     
-        super(new ContainerSeedBag(bag,playerInventory, seedBagInventory), resLoc);
+        super(new ContainerCanvasBag(bag,playerInventory, canvasBagInventory), resLoc);
+        
+        this.bag = bag;
     }
     
     @Override
@@ -40,6 +43,6 @@ public class GuiSeedBag extends GuiBase {
     
         super.drawGuiContainerForegroundLayer(mouseX, mouseY);
         
-        this.drawString(60, 5, I18n.format("item.seed_bag.name", new Object[] {}), false);
+        this.fontRendererObj.drawString(bag.hasDisplayName()?bag.getDisplayName():I18n.format("item.canvas_bag.name", new Object[] {}), 8, 6, 4210752);
     }
 }

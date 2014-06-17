@@ -119,6 +119,23 @@ item.sapphire_saw.name=Sapphire Saw
 item.sapphire_saw.name=Sapphire Saw
 item.diamond_saw.name=Diamond Saw
 
+item.canvas_bag.white.name=Canvas Bag
+item.canvas_bag.orange.name=Orange Canvas Bag
+item.canvas_bag.magenta.name=Magenta Canvas Bag
+item.canvas_bag.lightBlue.name=Light Blue Canvas Bag
+item.canvas_bag.yellow.name=Yellow Canvas Bag
+item.canvas_bag.lime.name=Lime Canvas Bag
+item.canvas_bag.pink.name=Pink Canvas Bag
+item.canvas_bag.gray.name=Gray Canvas Bag
+item.canvas_bag.silver.name=Light Gray Canvas Bag
+item.canvas_bag.cyan.name=Cyan Canvas Bag
+item.canvas_bag.purple.name=Purple Canvas Bag
+item.canvas_bag.blue.name=Blue Canvas Bag
+item.canvas_bag.brown.name=Brown Canvas Bag
+item.canvas_bag.green.name=Green Canvas Bag
+item.canvas_bag.red.name=Red Canvas Bag
+item.canvas_bag.black.name=Black Canvas Bag
+
 item.silicon_boule.name=Silicon Boule
 item.silicon_wafer.name=Silicon Wafer
 item.blue_doped_wafer.name=Blue Doped Wafer
@@ -138,6 +155,7 @@ item.stone_redwire.name=Stone Redwire
 item.stone_bundle.name=Stone Bundle
 item.screwdriver_handle.name=Screwdriver Handle
 item.seed_bag.name=Seed Bag
+item.canvas_bag.name=Canvas Bag
 
 bluepower.part.and.name=AND Gate
 bluepower.part.buffer.name=Buffer Gate

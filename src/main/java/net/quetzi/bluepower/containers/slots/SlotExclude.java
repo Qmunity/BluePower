@@ -13,10 +13,30 @@
  *
  *     You should have received a copy of the GNU General Public License
  *     along with Blue Power.  If not, see <http://www.gnu.org/licenses/>
+ *     
+ *     @author Lumien
  */
 
-package net.quetzi.bluepower.references;
+package net.quetzi.bluepower.containers.slots;
 
-public enum GuiIDs {
-    INVALID, ALLOY_FURNACE, BUFFER, SORTING_MACHINE, SEEDBAG, CANVAS_BAG;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.Slot;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+
+public class SlotExclude extends Slot {
+    
+    Item filter;
+    
+    public SlotExclude(IInventory par1iInventory, int par2, int par3, int par4, Item filter) {
+    
+        super(par1iInventory, par2, par3, par4);
+        
+        this.filter = filter;
+    }
+    
+    public boolean isItemValid(ItemStack par1ItemStack) {
+    
+        return !(par1ItemStack.getItem() == filter);
+    }
 }

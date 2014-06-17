@@ -25,6 +25,7 @@ import net.minecraft.item.crafting.CraftingManager;
 import net.quetzi.bluepower.api.BPRegistry;
 import net.quetzi.bluepower.api.part.PartRegistry;
 import net.quetzi.bluepower.api.recipe.IAlloyFurnaceRegistry;
+import net.quetzi.bluepower.recipe.CanvasBagRecipe;
 
 public class Recipes {
     
@@ -150,6 +151,8 @@ public class Recipes {
         craftManager.addRecipe(new ItemStack(BPBlocks.alloy_furnace, 1), new Object[] {"###", "# #", "###", '#', Blocks.brick_block});
         craftManager.addRecipe(new ItemStack(BPBlocks.block_breaker, 1), new Object[] {"#A#", "#P#", "#R#", '#', Blocks.cobblestone, 'A', Items.iron_pickaxe, 'P', Blocks.piston, 'R', Items.redstone});
 
+        GameRegistry.addRecipe(new CanvasBagRecipe());
+        
         // Alloy furnace
         IAlloyFurnaceRegistry af = BPRegistry.alloyFurnaceRegistry;
         af.addRecipe(new ItemStack(BPItems.red_alloy_ingot, 1), new ItemStack(Items.redstone, 4), Items.iron_ingot);
