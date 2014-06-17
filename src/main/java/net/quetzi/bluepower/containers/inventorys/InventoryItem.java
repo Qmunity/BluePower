@@ -44,6 +44,11 @@ public class InventoryItem extends InventoryBasic {
         }
     }
     
+    public ItemStack getItem() {
+    
+        return item;
+    }
+    
     @Override
     public void openInventory() {
     

@@ -39,6 +39,6 @@ public class GuiSeedBag extends GuiBase {
     
         super.drawGuiContainerForegroundLayer(mouseX, mouseY);
         
-        this.drawString(60, 5, I18n.format("item.seedBag.name", new Object[] {}), false);
+        this.drawString(60, 5, I18n.format("item.seed_bag.name", new Object[] {}), false);
     }
 }
