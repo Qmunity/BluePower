@@ -24,6 +24,8 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import net.quetzi.bluepower.containers.inventorys.InventoryItem;
+import net.quetzi.bluepower.containers.slots.SlotLocked;
 import net.quetzi.bluepower.containers.slots.SlotSeedBag;
 import net.quetzi.bluepower.items.ItemSeedBag;
 
@@ -48,7 +50,11 @@ public class ContainerSeedBag extends Container {
         }
         
         for (int i = 0; i < 9; ++i) {
-            this.addSlotToContainer(new Slot(playerInventory, i, 8 + i * 18, 142));
+            if (playerInventory.getStackInSlot(i) == ((InventoryItem) seedBagInventory).getItem()) {
+                this.addSlotToContainer(new SlotLocked(playerInventory, i, 8 + i * 18, 142));
+            } else {
+                this.addSlotToContainer(new Slot(playerInventory, i, 8 + i * 18, 142));
+            }
         }
         
         seedBagInventory.openInventory();

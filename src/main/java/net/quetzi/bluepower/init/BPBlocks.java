@@ -17,6 +17,7 @@
 
 package net.quetzi.bluepower.init;
 
+import cpw.mods.fml.common.Loader;
 import net.minecraft.block.Block;
 import net.quetzi.bluepower.blocks.BlockAlloyFurnace;
 import net.quetzi.bluepower.blocks.BlockBlockBreaker;
@@ -30,6 +31,7 @@ import net.quetzi.bluepower.blocks.BlockSortingMachine;
 import net.quetzi.bluepower.blocks.BlockSortron;
 import net.quetzi.bluepower.blocks.BlockStoneOre;
 import net.quetzi.bluepower.blocks.BlockStoneOreConnected;
+import net.quetzi.bluepower.references.Dependencies;
 import net.quetzi.bluepower.references.Refs;
 import cpw.mods.fml.common.registry.GameRegistry;
 
@@ -127,9 +129,9 @@ public class BPBlocks {
         block_breaker = new BlockBlockBreaker();
         igniter = new BlockIgniter();
         buffer = new BlockBuffer();
-        sortron = new BlockSortron();
         
         registerBlocks();
+        initModDependantBlocks();
     }
     
     private static void registerBlocks() {
@@ -177,6 +179,13 @@ public class BPBlocks {
         GameRegistry.registerBlock(block_breaker, Refs.BLOCKBREAKER_NAME);
         GameRegistry.registerBlock(igniter, Refs.BLOCKIGNITER_NAME);
         GameRegistry.registerBlock(buffer, Refs.BLOCKBUFFER_NAME);
-        GameRegistry.registerBlock(sortron, Refs.BLOCKSORTRON_NAME);
+    }
+
+    private static void initModDependantBlocks() {
+
+        if (Loader.isModLoaded(Dependencies.COMPUTER_CRAFT) || Loader.isModLoaded(Dependencies.OPEN_COMPUTERS)) {
+            sortron = new BlockSortron();
+            GameRegistry.registerBlock(sortron, Refs.BLOCKSORTRON_NAME);
+        }
     }
 }

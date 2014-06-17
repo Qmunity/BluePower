@@ -9,12 +9,14 @@
 package net.quetzi.bluepower;
 
 import net.minecraft.item.crafting.CraftingManager;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.quetzi.bluepower.api.BPRegistry;
 import net.quetzi.bluepower.api.part.PartRegistry;
 import net.quetzi.bluepower.api.part.redstone.RedstoneNetworkTickHandler;
 import net.quetzi.bluepower.client.gui.GUIHandler;
 import net.quetzi.bluepower.compat.CompatibilityUtils;
+import net.quetzi.bluepower.events.BPEventHandler;
 import net.quetzi.bluepower.init.BPBlocks;
 import net.quetzi.bluepower.init.BPItems;
 import net.quetzi.bluepower.init.Config;
@@ -77,6 +79,7 @@ public class BluePower {
         CompatibilityUtils.preInit(event);
         
         FMLCommonHandler.instance().bus().register(new RedstoneNetworkTickHandler());
+        MinecraftForge.EVENT_BUS.register(new BPEventHandler());
     }
     
     @EventHandler

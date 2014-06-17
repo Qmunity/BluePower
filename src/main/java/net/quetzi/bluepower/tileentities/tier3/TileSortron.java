@@ -26,6 +26,9 @@ import net.quetzi.bluepower.tileentities.TileMachineBase;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * @author Dynious
+ */
 @Optional.InterfaceList(value = {@Optional.Interface(iface = "dan200.computercraft.api.peripheral.IPeripheral", modid = Dependencies.COMPUTER_CRAFT),
         @Optional.Interface(iface = "li.cil.oc.api.network.SimpleComponent", modid = Dependencies.OPEN_COMPUTERS)})
 public class TileSortron extends TileMachineBase implements IPeripheral, SimpleComponent {
@@ -218,11 +221,9 @@ public class TileSortron extends TileMachineBase implements IPeripheral, SimpleC
 
     private void removeFromAcceptedStack(int amount) {
         acceptedStackSize -= amount;
-        if (acceptedStackSize <= 0) {
-            if (Loader.isModLoaded(Dependencies.COMPUTER_CRAFT)) {
-                for (IComputerAccess computer : connectedComputers) {
-                    computer.queueEvent("sortFinished", null);
-                }
+        if (Loader.isModLoaded(Dependencies.COMPUTER_CRAFT)) {
+            for (IComputerAccess computer : connectedComputers) {
+                computer.queueEvent("sortChange", new Integer[] { acceptedStackSize });
             }
         }
     }
@@ -256,6 +257,18 @@ public class TileSortron extends TileMachineBase implements IPeripheral, SimpleC
     @Override
     public void readFromNBT(NBTTagCompound compound) {
 
+        super.writeToNBT(compound);
+        acceptedColor = compound.getByte("acceptedCol");
+        if (compound.hasKey("ItemStack")) {
+            NBTTagList list = compound.getTagList("ItemStack", 10);
+            acceptedStack = ItemStack.loadItemStackFromNBT(list.getCompoundTagAt(0));
+        }
+        acceptedStackSize = compound.getInteger("stackSize");
+    }
+
+    @Override
+    public void writeToNBT(NBTTagCompound compound) {
+
         super.readFromNBT(compound);
         compound.setByte("acceptedCol", acceptedColor);
         if (acceptedStack != null) {
@@ -266,18 +279,6 @@ public class TileSortron extends TileMachineBase implements IPeripheral, SimpleC
             compound.setTag("ItemStack", list);
         }
         compound.setInteger("stackSize", acceptedStackSize);
-    }
-
-    @Override
-    public void writeToNBT(NBTTagCompound compound) {
-
-        super.writeToNBT(compound);
-        acceptedColor = compound.getByte("acceptedCol");
-        if (compound.hasKey("ItemStack")) {
-            NBTTagList list = compound.getTagList("ItemStack", 10);
-            acceptedStack = ItemStack.loadItemStackFromNBT(list.getCompoundTagAt(0));
-        }
-        acceptedStackSize = compound.getInteger("stackSize");
     }
 
     /*

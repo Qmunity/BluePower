@@ -42,6 +42,22 @@ public class ItemSeedBag extends Item {
         this.setTextureName(Refs.MODID + ":" + name);
     }
     
+    public static ItemStack getSeedType(ItemStack seedBag)
+    {
+        ItemStack seed = null;
+        
+        IInventory seedBagInventory = InventoryItem.getItemInventory(seedBag, "Seed Bag", 9);
+        seedBagInventory.openInventory();
+        for (int i = 0; i < seedBagInventory.getSizeInventory(); i++) {
+            ItemStack is = seedBagInventory.getStackInSlot(i);
+            if (is != null) {
+                seed = is;
+            }
+        }
+        
+        return seed;
+    }
+    
     public double getDurabilityForDisplay(ItemStack stack) {
     
         return 1D - (double) getItemDamageForDisplay(stack) / (double) 576;
@@ -90,13 +106,7 @@ public class ItemSeedBag extends Item {
         IInventory seedBagInventory = InventoryItem.getItemInventory(par2EntityPlayer,par2EntityPlayer.getCurrentEquippedItem(), "Seed Bag", 9);
         seedBagInventory.openInventory();
         
-        ItemStack seed = null;
-        for (int i = 0; i < seedBagInventory.getSizeInventory(); i++) {
-            ItemStack is = seedBagInventory.getStackInSlot(i);
-            if (is != null) {
-                seed = is;
-            }
-        }
+        ItemStack seed = getSeedType(par1ItemStack);
         if (seed != null && seed.getItem() instanceof IPlantable) {
             IPlantable plant = (IPlantable) seed.getItem();
             for (int modX = -2; modX < 3; modX++) {
