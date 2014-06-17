@@ -1,3 +1,22 @@
+/*
+ * This file is part of Blue Power.
+ *
+ *     Blue Power is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     Blue Power is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with Blue Power.  If not, see <http://www.gnu.org/licenses/>
+ *     
+ *     @author Lumien
+ */
+
 package net.quetzi.bluepower.containers;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -6,20 +25,23 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.quetzi.bluepower.containers.inventorys.InventoryItem;
+import net.quetzi.bluepower.containers.slots.SlotExclude;
 import net.quetzi.bluepower.containers.slots.SlotLocked;
-import net.quetzi.bluepower.items.ItemCanvasBag;
+import net.quetzi.bluepower.init.BPItems;
 
 public class ContainerCanvasBag extends Container {
     
     IInventory canvasBagInventory;
+    ItemStack bag;
     
-    public ContainerCanvasBag(IInventory playerInventory, IInventory canvasBagInventory) {
+    public ContainerCanvasBag(ItemStack bag, IInventory playerInventory, IInventory canvasBagInventory) {
     
+        this.bag = bag;
         int i = -1 * 18;
         canvasBagInventory.openInventory();
         for (int j = 0; j < 3; ++j) {
             for (int k = 0; k < 9; ++k) {
-                this.addSlotToContainer(new Slot(canvasBagInventory, k + j * 9, 8 + k * 18, 18 + j * 18));
+                this.addSlotToContainer(new SlotExclude(canvasBagInventory, k + j * 9, 8 + k * 18, 18 + j * 18, BPItems.canvas_bag));
             }
         }
         
@@ -30,10 +52,10 @@ public class ContainerCanvasBag extends Container {
         }
         
         for (int j = 0; j < 9; ++j) {
-            if (playerInventory.getStackInSlot(i) == ((InventoryItem) canvasBagInventory).getItem()) {
-                this.addSlotToContainer(new SlotLocked(playerInventory, j, 8 + j * 18, 161+i));
+            if (playerInventory.getStackInSlot(j) == ((InventoryItem) canvasBagInventory).getItem()) {
+                this.addSlotToContainer(new SlotLocked(playerInventory, j, 8 + j * 18, 161 + i));
             } else {
-                this.addSlotToContainer(new Slot(playerInventory, j, 8 + j * 18, 161+i));
+                this.addSlotToContainer(new Slot(playerInventory, j, 8 + j * 18, 161 + i));
             }
             this.addSlotToContainer(new Slot(playerInventory, j, 8 + j * 18, 161 + i));
         }
@@ -44,7 +66,7 @@ public class ContainerCanvasBag extends Container {
     @Override
     public boolean canInteractWith(EntityPlayer player) {
     
-        return player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() instanceof ItemCanvasBag;
+        return ItemStack.areItemStacksEqual(player.getCurrentEquippedItem(),bag);
     }
     
     @Override

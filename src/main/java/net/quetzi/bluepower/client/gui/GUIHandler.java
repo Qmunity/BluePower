@@ -51,11 +51,13 @@ public class GUIHandler implements IGuiHandler {
                 return new ContainerSortingMachine(player.inventory, (TileSortingMachine) ent);
             case SEEDBAG:
                 if (player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() instanceof ItemSeedBag) { return new ContainerSeedBag(
-                        player.inventory, InventoryItem.getItemInventory(player,player.getCurrentEquippedItem(), "Seed Bag", 9)); }
+                        player.getCurrentEquippedItem(), player.inventory, InventoryItem.getItemInventory(player, player.getCurrentEquippedItem(),
+                                "Seed Bag", 9)); }
                 break;
             case CANVAS_BAG:
                 if (player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() instanceof ItemCanvasBag) { return new ContainerCanvasBag(
-                        player.inventory, InventoryItem.getItemInventory(player,player.getCurrentEquippedItem(), "Canvas Bag", 27)); }
+                        player.getCurrentEquippedItem(), player.inventory, InventoryItem.getItemInventory(player, player.getCurrentEquippedItem(),
+                                "Canvas Bag", 27)); }
                 break;
         }
         return null;
@@ -75,10 +77,12 @@ public class GUIHandler implements IGuiHandler {
                 return new GuiSortingMachine(player.inventory, (TileSortingMachine) ent);
             case SEEDBAG:
                 if (player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() instanceof ItemSeedBag) { return new GuiSeedBag(
-                        player.inventory, InventoryItem.getItemInventory(player,player.getCurrentEquippedItem(), "Seed Bag", 9)); }
+                        player.getCurrentEquippedItem(), player.inventory, InventoryItem.getItemInventory(player, player.getCurrentEquippedItem(),
+                                "Seed Bag", 9)); }
             case CANVAS_BAG:
                 if (player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() instanceof ItemCanvasBag) { return new GuiCanvasBag(
-                        player.inventory, InventoryItem.getItemInventory(player,player.getCurrentEquippedItem(), "Canvas Bag", 27)); }
+                        player.getCurrentEquippedItem(), player.inventory, InventoryItem.getItemInventory(player, player.getCurrentEquippedItem(),
+                                "Canvas Bag", 27)); }
                 break;
         }
         return null;

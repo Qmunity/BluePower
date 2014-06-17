@@ -32,10 +32,12 @@ import net.quetzi.bluepower.items.ItemSeedBag;
 public class ContainerSeedBag extends Container {
     
     IInventory seedBagInventory;
+    ItemStack bag;
     
-    public ContainerSeedBag(IInventory playerInventory, IInventory seedBagInventory) {
+    public ContainerSeedBag(ItemStack bag,IInventory playerInventory, IInventory seedBagInventory) {
     
         this.seedBagInventory = seedBagInventory;
+        this.bag = bag;
         
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 3; ++j) {

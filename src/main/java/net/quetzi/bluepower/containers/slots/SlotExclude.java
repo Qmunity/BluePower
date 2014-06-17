@@ -17,29 +17,26 @@
  *     @author Lumien
  */
 
-package net.quetzi.bluepower.client.gui;
+package net.quetzi.bluepower.containers.slots;
 
-import net.minecraft.client.resources.I18n;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.Slot;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.quetzi.bluepower.containers.ContainerSeedBag;
-import net.quetzi.bluepower.references.Refs;
 
-public class GuiSeedBag extends GuiBase {
+public class SlotExclude extends Slot {
     
-    private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/GUI/seedBag.png");
+    Item filter;
     
-    public GuiSeedBag(ItemStack bag,IInventory playerInventory, IInventory seedBagInventory) {
+    public SlotExclude(IInventory par1iInventory, int par2, int par3, int par4, Item filter) {
     
-        super(new ContainerSeedBag(bag,playerInventory, seedBagInventory), resLoc);
+        super(par1iInventory, par2, par3, par4);
+        
+        this.filter = filter;
     }
     
-    @Override
-    protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
+    public boolean isItemValid(ItemStack par1ItemStack) {
     
-        super.drawGuiContainerForegroundLayer(mouseX, mouseY);
-        
-        this.drawString(60, 5, I18n.format("item.seed_bag.name", new Object[] {}), false);
+        return !(par1ItemStack.getItem() == filter);
     }
 }
