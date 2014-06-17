@@ -14,6 +14,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.oredict.OreDictionary;
 import net.quetzi.bluepower.api.tube.IPneumaticTube;
+import net.quetzi.bluepower.part.tube.TubeStack;
 import net.quetzi.bluepower.references.Dependencies;
 import net.quetzi.bluepower.tileentities.TileMachineBase;
 
@@ -167,6 +168,22 @@ public class TileSortron extends TileMachineBase implements IPeripheral{
             throw new IllegalArgumentException("Given String is not a color");
         }
         throw new IllegalArgumentException("No expected argument was given");
+    }
+
+    @Override
+    public TubeStack acceptItemFromTube(TubeStack stack, ForgeDirection from) {
+
+        if (acceptedStack == null || doItemStacksMatch(stack.stack, acceptedStack)) {
+            return super.acceptItemFromTube(stack, from);
+        }
+        return stack;
+    }
+
+    public static boolean doItemStacksMatch(ItemStack itemStack1, ItemStack itemStack2) {
+
+        return (itemStack1 == null && itemStack2 == null) || ( !(itemStack1 == null || itemStack2 == null) && itemStack1.getItem().equals(itemStack2.getItem())
+                && (itemStack1.getItemDamage() == OreDictionary.WILDCARD_VALUE || itemStack2.getItemDamage() == OreDictionary.WILDCARD_VALUE
+                || itemStack1.getItemDamage() == itemStack2.getItemDamage()));
     }
 
     @Override

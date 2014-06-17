@@ -18,6 +18,7 @@ import net.quetzi.bluepower.part.tube.TubeStack;
 public class TileMachineBase extends TileBase implements ITubeConnection {
     
     protected boolean             spawnItemsInWorld       = true;
+    protected boolean             acceptsTubeItems        = true;
     private final List<TubeStack> internalItemStackBuffer = new ArrayList<TubeStack>();
     protected TileEntity          tileAtOutput;
     
@@ -149,13 +150,15 @@ public class TileMachineBase extends TileBase implements ITubeConnection {
     
     @Override
     public boolean isConnectedTo(ForgeDirection from) {
-    
-        return from == ForgeDirection.getOrientation(blockMetadata).getOpposite();
+
+        ForgeDirection dir = ForgeDirection.getOrientation(getBlockMetadata());
+        return from == dir.getOpposite() || (acceptsTubeItems && from == dir);
     }
     
     @Override
-    public void acceptItemFromTube(TubeStack stack, ForgeDirection from) {
+    public TubeStack acceptItemFromTube(TubeStack stack, ForgeDirection from) {
     
         internalItemStackBuffer.add(stack);
+        return null;
     }
 }
