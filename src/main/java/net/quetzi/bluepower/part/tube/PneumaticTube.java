@@ -26,8 +26,6 @@ import net.quetzi.bluepower.client.renderers.IconSupplier;
 import net.quetzi.bluepower.helper.IOHelper;
 import net.quetzi.bluepower.helper.TileEntityCache;
 import net.quetzi.bluepower.init.CustomTabs;
-import net.quetzi.bluepower.part.tube.TubeLogic.TubeEdge;
-import net.quetzi.bluepower.part.tube.TubeLogic.TubeNode;
 
 /**
  * 
@@ -164,13 +162,13 @@ public class PneumaticTube extends BPPart {
                 }
                 if (connections[i]) connectionCount++;
                 if (oldState != connections[i]) {
-                    TubeNode node = getLogic().getNode();
+                    /*TubeNode node = getLogic().getNode();
                     getLogic().clearNodeCache();
                     for (TubeEdge edge : node.edges) {
                         if (edge != null && edge.target.target instanceof PneumaticTube) {
                             ((PneumaticTube) edge.target.target).getLogic().clearNodeCache();
                         }
-                    }
+                    }*/
                 }
             }
             isCrossOver = connectionCount != 2;
