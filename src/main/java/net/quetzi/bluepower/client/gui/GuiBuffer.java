@@ -13,6 +13,8 @@
  *
  *     You should have received a copy of the GNU General Public License
  *     along with Blue Power.  If not, see <http://www.gnu.org/licenses/>
+ *     
+ *     @author Quetzi
  */
 
 package net.quetzi.bluepower.client.gui;
@@ -26,7 +28,7 @@ import net.quetzi.bluepower.tileentities.tier1.TileBuffer;
 public class GuiBuffer extends GuiBase {
 
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/GUI/buffer.png");
-    private final TileBuffer buffer;
+    private final TileBuffer              buffer;
 
     public GuiBuffer(InventoryPlayer invPlayer, TileBuffer buffer) {
 

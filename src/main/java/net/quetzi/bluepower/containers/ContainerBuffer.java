@@ -54,36 +54,34 @@ public class ContainerBuffer extends Container {
         }
     }
 
-    @Override public boolean canInteractWith(EntityPlayer player) {
+    @Override
+    public boolean canInteractWith(EntityPlayer player) {
 
         return tileBuffer.isUseableByPlayer(player);
     }
 
     @Override
-    public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int par2) {
+    public ItemStack transferStackInSlot(EntityPlayer player, int par2) {
 
-        ItemStack var3 = null;
-        Slot var4 = (Slot) inventorySlots.get(par2);
-
-        if (var4 != null && var4.getHasStack()) {
-            ItemStack var5 = var4.getStack();
-            var3 = var5.copy();
-
+        ItemStack itemstack = null;
+        Slot slot = this.getSlotFromInventory(this.tileBuffer, par2);
+        if ((slot != null) && (slot.getHasStack())) {
+            ItemStack itemstack1 = slot.getStack();
+            itemstack = itemstack1.copy();
             if (par2 < 20) {
-                if (!mergeItemStack(var5, 11, 47, false)) return null;
-                var4.onSlotChange(var5, var3);
-            }
-            if (var5.stackSize == 0) {
-                var4.putStack(null);
+                if (!mergeItemStack(itemstack1, 20, 56, true)) return null;
+            } else if (!mergeItemStack(itemstack1, 0, 20, false)) { return null; }
+            if (itemstack1.stackSize == 0) {
+                slot.putStack(null);
             } else {
-                var4.onSlotChanged();
+                slot.onSlotChanged();
             }
-
-            if (var5.stackSize == var3.stackSize) return null;
-
-            var4.onPickupFromSlot(par1EntityPlayer, var5);
+            if (itemstack1.stackSize != itemstack.stackSize) {
+                slot.onPickupFromSlot(player, itemstack1);
+            } else {
+                return null;
+            }
         }
-
-        return var3;
+        return itemstack;
     }
 }
