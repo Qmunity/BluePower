@@ -17,6 +17,7 @@ Lamps:
     fixture_lamp_off_top: 10x0
     lamp_on: 16x16
     lamp_off: 16x16
+Sortron
 
 
 Items

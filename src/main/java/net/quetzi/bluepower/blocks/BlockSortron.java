@@ -6,6 +6,9 @@ import net.quetzi.bluepower.references.GuiIDs;
 import net.quetzi.bluepower.references.Refs;
 import net.quetzi.bluepower.tileentities.tier3.TileSortron;
 
+/**
+ * @author Dynious
+ */
 public class BlockSortron extends BlockContainerBase {
 
     public BlockSortron() {
