@@ -85,7 +85,7 @@ public class TileMachineBase extends TileBase implements ITubeConnection {
     public void onBlockNeighbourChanged() {
     
         super.onBlockNeighbourChanged();
-        ForgeDirection direction = ForgeDirection.getOrientation(blockMetadata).getOpposite();
+        ForgeDirection direction = ForgeDirection.getOrientation(getBlockMetadata()).getOpposite();
         if (direction != ForgeDirection.UNKNOWN) {
             tileAtOutput = worldObj.getTileEntity(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ);
         } else {

@@ -10,21 +10,12 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.quetzi.bluepower.compat.CompatModule;
 
-public class CompatModuleCC extends CompatModule implements IPeripheralProvider {
-
-    @Override
-    public IPeripheral getPeripheral(World world, int x, int y, int z, int side) {
-
-        TileEntity tile = world.getTileEntity(x, y, z);
-        if(tile instanceof IPeripheral)
-            return (IPeripheral) tile;
-        return null;
-    }
+public class CompatModuleCC extends CompatModule{
 
     @Override
     public void preInit(FMLPreInitializationEvent ev) {
 
-        ComputerCraftAPI.registerPeripheralProvider(this);
+        ComputerCraftAPI.registerPeripheralProvider(PeripheralProvider.INSTANCE);
     }
 
     @Override
