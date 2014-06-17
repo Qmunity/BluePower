@@ -1,9 +1,14 @@
 package net.quetzi.bluepower.tileentities.tier3;
 
+import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Optional;
 import dan200.computercraft.api.lua.ILuaContext;
 import dan200.computercraft.api.peripheral.IComputerAccess;
 import dan200.computercraft.api.peripheral.IPeripheral;
+import li.cil.oc.api.network.Arguments;
+import li.cil.oc.api.network.Callback;
+import li.cil.oc.api.network.Context;
+import li.cil.oc.api.network.SimpleComponent;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemDye;
@@ -21,9 +26,11 @@ import net.quetzi.bluepower.tileentities.TileMachineBase;
 import java.util.HashSet;
 import java.util.Set;
 
-@Optional.Interface(iface = "dan200.computercraft.api.peripheral.IPeripheral", modid = Dependencies.COMPUTER_CRAFT)
-public class TileSortron extends TileMachineBase implements IPeripheral{
+@Optional.InterfaceList(value = {@Optional.Interface(iface = "dan200.computercraft.api.peripheral.IPeripheral", modid = Dependencies.COMPUTER_CRAFT),
+        @Optional.Interface(iface = "li.cil.oc.api.network.SimpleComponent", modid = Dependencies.OPEN_COMPUTERS)})
+public class TileSortron extends TileMachineBase implements IPeripheral, SimpleComponent {
 
+    private static final String NAME = "BluePower.Sortron";
     private Set<IComputerAccess> connectedComputers = new HashSet<IComputerAccess>();
     private IInventory connectedInventory;
     private byte       acceptedColor = -1;
@@ -41,114 +48,127 @@ public class TileSortron extends TileMachineBase implements IPeripheral{
         }
     }
 
-    @Override
-    @Optional.Method(modid = Dependencies.COMPUTER_CRAFT)
-    public String getType() {
+    /*
+    Sortron functions
+     */
 
-        return "BluePower.Sortron";
-    }
+    public Object[] setAcceptedCol(Object[] arguments) throws Exception {
 
-    @Override
-    @Optional.Method(modid = Dependencies.COMPUTER_CRAFT)
-    public String[] getMethodNames() {
-
-        return new String[] { "setAcceptedCol", "getAcceptedCol", "setAcceptedItem", "getAcceptedItem",
-                "getNumSlots", "getSlotContents", "pullFromSlot", "sort" };
-    }
-
-    @Override
-    @Optional.Method(modid = Dependencies.COMPUTER_CRAFT)
-    public Object[] callMethod(IComputerAccess computer, ILuaContext context, int method, Object[] arguments) throws Exception {
-
-        switch (method) {
-            case 0:
-                if (arguments.length > 0) {
-                    acceptedColor = parseColorFromObject(arguments[0]);
-                    return new Boolean[] { true };
-                }
-                throw new IllegalArgumentException("No expected argument was given");
-            case 1:
-                return new Integer[] { (int) acceptedColor };
-            case 2:
-                if (arguments.length > 0 && arguments[0] instanceof String) {
-                    String unlocalizedName = ((String) arguments[0]);
-                    if (unlocalizedName.isEmpty()) {
-                        acceptedStack = null;
-                        return new Boolean[] { true };
-                    }
-                    Item item = (Item) Item.itemRegistry.getObject(unlocalizedName);
-                    if (item != null) {
-                        ItemStack stack;
-                        if (arguments.length > 1 && arguments[1] instanceof Double) {
-                            int meta = ((Double)arguments[1]).intValue();
-                            if (meta >= 0) {
-                                stack = new ItemStack(item, 0, meta);
-                            } else {
-                                throw new IllegalArgumentException("Metadata must be greater than or equal to 0");
-                            }
-                        } else {
-                            stack = new ItemStack(item, 0, OreDictionary.WILDCARD_VALUE);
-                        }
-                        acceptedStack = stack;
-                        return new Boolean[] { true };
-                    }
-                    throw new IllegalArgumentException("Item not found");
-                }
-                throw new IllegalArgumentException("No expected argument was given");
-            case 3:
-                return new String[]{ getStringFromStack(acceptedStack) };
-            case 4:
-                if (connectedInventory != null) {
-                    return new Integer[] { connectedInventory.getSizeInventory() };
-                }
-                throw new Exception("Sortron has no connected Inventory");
-            case 5:
-                if (connectedInventory != null) {
-                    if (arguments.length > 0 && arguments[0] instanceof Double) {
-                        int slot = ((Double)arguments[0]).intValue();
-                        if (slot >= 0 && slot < connectedInventory.getSizeInventory()) {
-                            return new String[] { getStringFromStack(connectedInventory.getStackInSlot(slot))};
-                        }
-                        throw new IllegalArgumentException("Slot value should be greater than or equal to 0 and smaller than the number of slots");
-                    }
-                    throw new IllegalArgumentException("No expected argument was given");
-                }
-                throw new Exception("Sortron has no connected Inventory");
-            case 6:
-                if (connectedInventory != null) {
-                    if (arguments.length > 0 && arguments[0] instanceof Double) {
-                        int slot = ((Double)arguments[0]).intValue();
-                        if (slot >= 0 && slot < connectedInventory.getSizeInventory()) {
-                            ItemStack stack = connectedInventory.getStackInSlot(slot);
-                            if (stack != null) {
-                                if (arguments.length > 1) {
-                                    byte color = parseColorFromObject(arguments[1]);
-                                    addItemToOutputBuffer(stack, IPneumaticTube.TubeColor.values()[color]);
-                                } else {
-                                    addItemToOutputBuffer(stack);
-                                }
-                                connectedInventory.setInventorySlotContents(slot, null);
-                                return new String[] { getStringFromStack(stack) };
-                            }
-                        }
-                        throw new IllegalArgumentException("Slot value should be greater than or equal to 0 and smaller than the number of slots");
-                    }
-                    throw new IllegalArgumentException("No expected argument was given");
-                }
-                throw new Exception("Sortron has no connected Inventory");
-            case 7:
-                if (arguments.length > 0 && arguments[0] instanceof Double) {
-                    int stackSize = ((Double)arguments[0]).intValue();
-                    if (stackSize >= 0) {
-                        acceptedStackSize = stackSize;
-                        return new Boolean[] { true };
-                    }
-                    throw new IllegalArgumentException("StackSize value must be greater than or equal to 0");
-                }
-                throw new IllegalArgumentException("No expected argument was given");
+        if (arguments.length > 0) {
+            acceptedColor = parseColorFromObject(arguments[0]);
+            return new Boolean[] { true };
         }
-        return new Object[0];
+        throw new IllegalArgumentException("No expected argument was given");
     }
+
+    public Object[] getAcceptedCol(Object[] arguments) throws Exception {
+
+        return new Integer[] { (int) acceptedColor };
+    }
+
+    public Object[] setAcceptedItem(Object[] arguments) throws Exception {
+
+        if (arguments.length > 0 && arguments[0] instanceof String) {
+            String unlocalizedName = ((String) arguments[0]);
+            if (unlocalizedName.isEmpty()) {
+                acceptedStack = null;
+                return new Boolean[] { true };
+            }
+            Item item = (Item) Item.itemRegistry.getObject(unlocalizedName);
+            if (item != null) {
+                ItemStack stack;
+                if (arguments.length > 1 && arguments[1] instanceof Double) {
+                    int meta = ((Double)arguments[1]).intValue();
+                    if (meta >= 0) {
+                        stack = new ItemStack(item, 0, meta);
+                    } else {
+                        throw new IllegalArgumentException("Metadata must be greater than or equal to 0");
+                    }
+                } else {
+                    stack = new ItemStack(item, 0, OreDictionary.WILDCARD_VALUE);
+                }
+                acceptedStack = stack;
+                return new Boolean[] { true };
+            }
+            throw new IllegalArgumentException("Item not found");
+        }
+        throw new IllegalArgumentException("No expected argument was given");
+    }
+
+    public Object[] getAcceptedItem(Object[] arguments) throws Exception {
+
+        return new String[]{ getStringFromStack(acceptedStack) };
+    }
+
+    public Object[] getNumSlots(Object[] arguments) throws Exception {
+
+        if (connectedInventory != null) {
+            return new Integer[] { connectedInventory.getSizeInventory() };
+        }
+        throw new Exception("Sortron has no connected Inventory");
+    }
+
+    public Object[] getSlotContents(Object[] arguments) throws Exception {
+
+        if (connectedInventory != null) {
+            if (arguments.length > 0 && arguments[0] instanceof Double) {
+                int slot = ((Double)arguments[0]).intValue();
+                if (slot >= 0 && slot < connectedInventory.getSizeInventory()) {
+                    return new String[] { getStringFromStack(connectedInventory.getStackInSlot(slot))};
+                }
+                throw new IllegalArgumentException("Slot value should be greater than or equal to 0 and smaller than the number of slots");
+            }
+            throw new IllegalArgumentException("No expected argument was given");
+        }
+        throw new Exception("Sortron has no connected Inventory");
+    }
+
+    public Object[] pullFromSlot(Object[] arguments) throws Exception {
+
+        if (connectedInventory != null) {
+            if (arguments.length > 0 && arguments[0] instanceof Double) {
+                int slot = ((Double)arguments[0]).intValue();
+                if (slot >= 0 && slot < connectedInventory.getSizeInventory()) {
+                    ItemStack stack = connectedInventory.getStackInSlot(slot);
+                    if (stack != null) {
+                        if (arguments.length > 1) {
+                            byte color = parseColorFromObject(arguments[1]);
+                            addItemToOutputBuffer(stack, IPneumaticTube.TubeColor.values()[color]);
+                        } else {
+                            addItemToOutputBuffer(stack);
+                        }
+                        connectedInventory.setInventorySlotContents(slot, null);
+                        return new String[] { getStringFromStack(stack) };
+                    }
+                }
+                throw new IllegalArgumentException("Slot value should be greater than or equal to 0 and smaller than the number of slots");
+            }
+            throw new IllegalArgumentException("No expected argument was given");
+        }
+        throw new Exception("Sortron has no connected Inventory");
+    }
+
+    public Object[] sort(Object[] arguments) throws Exception {
+
+        if (arguments.length > 0 && arguments[0] instanceof Double) {
+            int stackSize = ((Double)arguments[0]).intValue();
+            if (stackSize >= 0) {
+                acceptedStackSize = stackSize;
+                return new Boolean[] { true };
+            }
+            throw new IllegalArgumentException("StackSize value must be greater than or equal to 0");
+        }
+        throw new IllegalArgumentException("No expected argument was given");
+    }
+
+    public Object[] getStackSizeLeft(Object[] arguments) throws Exception {
+
+        return new Integer[] { acceptedStackSize };
+    }
+
+    /*
+    Sortron helper functions
+     */
 
     public static String getStringFromStack(ItemStack stack) {
 
@@ -189,6 +209,28 @@ public class TileSortron extends TileMachineBase implements IPeripheral{
         throw new IllegalArgumentException("No expected argument was given");
     }
 
+    public static boolean doItemStacksMatch(ItemStack itemStack1, ItemStack itemStack2) {
+
+        return (itemStack1 == null && itemStack2 == null) || ( !(itemStack1 == null || itemStack2 == null) && itemStack1.getItem().equals(itemStack2.getItem())
+                && (itemStack1.getItemDamage() == OreDictionary.WILDCARD_VALUE || itemStack2.getItemDamage() == OreDictionary.WILDCARD_VALUE
+                || itemStack1.getItemDamage() == itemStack2.getItemDamage()));
+    }
+
+    private void removeFromAcceptedStack(int amount) {
+        acceptedStackSize -= amount;
+        if (acceptedStackSize <= 0) {
+            if (Loader.isModLoaded(Dependencies.COMPUTER_CRAFT)) {
+                for (IComputerAccess computer : connectedComputers) {
+                    computer.queueEvent("sortFinished", null);
+                }
+            }
+        }
+    }
+
+    /*
+    ITubeConnection implementation
+     */
+
     @Override
     public TubeStack acceptItemFromTube(TubeStack stack, ForgeDirection from) {
 
@@ -196,7 +238,7 @@ public class TileSortron extends TileMachineBase implements IPeripheral{
 
         if ((acceptedStack == null || doItemStacksMatch(stack.stack, acceptedStack)) && (acceptedColor == -1 || acceptedColor == stack.color.ordinal())) {
             int acceptedSize = Math.min(stack.stack.stackSize, acceptedStackSize);
-            acceptedStackSize -= acceptedSize;
+            removeFromAcceptedStack(acceptedSize);
             ItemStack stack1 = stack.stack.splitStack(acceptedSize);
             TubeStack tubeStack = super.acceptItemFromTube(new TubeStack(stack1, from, stack.color), from);
             if (tubeStack != null)
@@ -207,33 +249,9 @@ public class TileSortron extends TileMachineBase implements IPeripheral{
         return stack;
     }
 
-    public static boolean doItemStacksMatch(ItemStack itemStack1, ItemStack itemStack2) {
-
-        return (itemStack1 == null && itemStack2 == null) || ( !(itemStack1 == null || itemStack2 == null) && itemStack1.getItem().equals(itemStack2.getItem())
-                && (itemStack1.getItemDamage() == OreDictionary.WILDCARD_VALUE || itemStack2.getItemDamage() == OreDictionary.WILDCARD_VALUE
-                || itemStack1.getItemDamage() == itemStack2.getItemDamage()));
-    }
-
-    @Override
-    @Optional.Method(modid = Dependencies.COMPUTER_CRAFT)
-    public void attach(IComputerAccess computer) {
-
-        connectedComputers.add(computer);
-    }
-
-    @Override
-    @Optional.Method(modid = Dependencies.COMPUTER_CRAFT)
-    public void detach(IComputerAccess computer) {
-
-        connectedComputers.remove(computer);
-    }
-
-    @Override
-    @Optional.Method(modid = Dependencies.COMPUTER_CRAFT)
-    public boolean equals(IPeripheral other) {
-
-        return other.getType().equals(this.getType());
-    }
+    /*
+    NBT saving
+     */
 
     @Override
     public void readFromNBT(NBTTagCompound compound) {
@@ -260,5 +278,173 @@ public class TileSortron extends TileMachineBase implements IPeripheral{
             acceptedStack = ItemStack.loadItemStackFromNBT(list.getCompoundTagAt(0));
         }
         acceptedStackSize = compound.getInteger("stackSize");
+    }
+
+    /*
+    ComputerCraft implementation
+     */
+
+    @Override
+    @Optional.Method(modid = Dependencies.COMPUTER_CRAFT)
+    public String getType() {
+
+        return NAME;
+    }
+
+    @Override
+    @Optional.Method(modid = Dependencies.COMPUTER_CRAFT)
+    public String[] getMethodNames() {
+
+        return new String[] { "setAcceptedCol", "getAcceptedCol", "setAcceptedItem", "getAcceptedItem",
+                "getNumSlots", "getSlotContents", "pullFromSlot", "sort", "getStackSizeLeft" };
+    }
+
+    @Override
+    @Optional.Method(modid = Dependencies.COMPUTER_CRAFT)
+    public Object[] callMethod(IComputerAccess computer, ILuaContext context, int method, Object[] arguments) throws Exception {
+
+        switch (method) {
+            case 0:
+                return setAcceptedCol(arguments);
+            case 1:
+                return getAcceptedCol(arguments);
+            case 2:
+                return setAcceptedItem(arguments);
+            case 3:
+                return getAcceptedItem(arguments);
+            case 4:
+                return getNumSlots(arguments);
+            case 5:
+                return getSlotContents(arguments);
+            case 6:
+                return pullFromSlot(arguments);
+            case 7:
+                return sort(arguments);
+            case 8:
+                return getStackSizeLeft(arguments);
+        }
+        return new Object[0];
+    }
+
+    @Override
+    @Optional.Method(modid = Dependencies.COMPUTER_CRAFT)
+    public void attach(IComputerAccess computer) {
+
+        connectedComputers.add(computer);
+    }
+
+    @Override
+    @Optional.Method(modid = Dependencies.COMPUTER_CRAFT)
+    public void detach(IComputerAccess computer) {
+
+        connectedComputers.remove(computer);
+    }
+
+    @Override
+    @Optional.Method(modid = Dependencies.COMPUTER_CRAFT)
+    public boolean equals(IPeripheral other) {
+
+        return other.getType().equals(this.getType());
+    }
+
+    /*
+    OpenComputers implementation
+     */
+
+    @Override
+    @Optional.Method(modid = Dependencies.OPEN_COMPUTERS)
+    public String getComponentName() {
+
+        return NAME;
+    }
+
+    @Callback
+    @Optional.Method(modid = Dependencies.OPEN_COMPUTERS)
+    public Object[] setAcceptedCol(Context context, Arguments arguments) throws Exception {
+        Object[] args = new Object[arguments.count()];
+        for (int i = 0; i < args.length; i++) {
+            args[i] = arguments.checkAny(i);
+        }
+        return setAcceptedCol(args);
+    }
+
+    @Callback
+    @Optional.Method(modid = Dependencies.OPEN_COMPUTERS)
+    public Object[] getAcceptedCol(Context context, Arguments arguments) throws Exception {
+        Object[] args = new Object[arguments.count()];
+        for (int i = 0; i < args.length; i++) {
+            args[i] = arguments.checkAny(i);
+        }
+        return getAcceptedCol(args);
+    }
+
+    @Callback
+    @Optional.Method(modid = Dependencies.OPEN_COMPUTERS)
+    public Object[] setAcceptedItem(Context context, Arguments arguments) throws Exception {
+        Object[] args = new Object[arguments.count()];
+        for (int i = 0; i < args.length; i++) {
+            args[i] = arguments.checkAny(i);
+        }
+        return setAcceptedItem(args);
+    }
+
+    @Callback
+    @Optional.Method(modid = Dependencies.OPEN_COMPUTERS)
+    public Object[] getAcceptedItem(Context context, Arguments arguments) throws Exception {
+        Object[] args = new Object[arguments.count()];
+        for (int i = 0; i < args.length; i++) {
+            args[i] = arguments.checkAny(i);
+        }
+        return getAcceptedItem(args);
+    }
+
+    @Callback
+    @Optional.Method(modid = Dependencies.OPEN_COMPUTERS)
+    public Object[] getNumSlots(Context context, Arguments arguments) throws Exception {
+        Object[] args = new Object[arguments.count()];
+        for (int i = 0; i < args.length; i++) {
+            args[i] = arguments.checkAny(i);
+        }
+        return getNumSlots(args);
+    }
+
+    @Callback
+    @Optional.Method(modid = Dependencies.OPEN_COMPUTERS)
+    public Object[] getSlotContents(Context context, Arguments arguments) throws Exception {
+        Object[] args = new Object[arguments.count()];
+        for (int i = 0; i < args.length; i++) {
+            args[i] = arguments.checkAny(i);
+        }
+        return getSlotContents(args);
+    }
+
+    @Callback
+    @Optional.Method(modid = Dependencies.OPEN_COMPUTERS)
+    public Object[] pullFromSlot(Context context, Arguments arguments) throws Exception {
+        Object[] args = new Object[arguments.count()];
+        for (int i = 0; i < args.length; i++) {
+            args[i] = arguments.checkAny(i);
+        }
+        return pullFromSlot(args);
+    }
+
+    @Callback
+    @Optional.Method(modid = Dependencies.OPEN_COMPUTERS)
+    public Object[] sort(Context context, Arguments arguments) throws Exception {
+        Object[] args = new Object[arguments.count()];
+        for (int i = 0; i < args.length; i++) {
+            args[i] = arguments.checkAny(i);
+        }
+        return sort(args);
+    }
+
+    @Callback
+    @Optional.Method(modid = Dependencies.OPEN_COMPUTERS)
+    public Object[] getStackSizeLeft(Context context, Arguments arguments) throws Exception {
+        Object[] args = new Object[arguments.count()];
+        for (int i = 0; i < args.length; i++) {
+            args[i] = arguments.checkAny(i);
+        }
+        return getStackSizeLeft(args);
     }
 }
