@@ -136,6 +136,7 @@ item.plate_assembly.name=Plate Assembly
 item.stone_redwire.name=Stone Redwire
 item.stone_bundle.name=Stone Bundle
 item.screwdriver_handle.name=Screwdriver Handle
+item.seed_bag.name=Seed Bag
 
 bluepower.part.and.name=AND Gate
 bluepower.part.buffer.name=Buffer Gate

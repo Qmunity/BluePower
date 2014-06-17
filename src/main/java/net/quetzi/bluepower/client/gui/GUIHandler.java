@@ -23,6 +23,8 @@ import net.minecraft.world.World;
 import net.quetzi.bluepower.containers.ContainerAlloyFurnace;
 import net.quetzi.bluepower.containers.ContainerBuffer;
 import net.quetzi.bluepower.containers.ContainerSortingMachine;
+import net.quetzi.bluepower.containers.ContainerSeedBag;
+import net.quetzi.bluepower.items.ItemSeedBag;
 import net.quetzi.bluepower.references.GuiIDs;
 import net.quetzi.bluepower.tileentities.tier1.TileAlloyFurnace;
 import net.quetzi.bluepower.tileentities.tier1.TileBuffer;
@@ -44,6 +46,12 @@ public class GUIHandler implements IGuiHandler {
                 return new ContainerBuffer(player.inventory, (TileBuffer) ent);
             case SORTING_MACHINE:
                 return new ContainerSortingMachine(player.inventory, (TileSortingMachine) ent);
+            case SEEDBAG:
+                if (player.getCurrentEquippedItem()!=null && player.getCurrentEquippedItem().getItem() instanceof ItemSeedBag)
+                {
+                    return new ContainerSeedBag(player.inventory,ItemSeedBag.getSeedBagInv(player));
+                }
+                break;
         }
         return null;
     }
@@ -60,6 +68,11 @@ public class GUIHandler implements IGuiHandler {
                 return new GuiBuffer(player.inventory, (TileBuffer) ent);
             case SORTING_MACHINE:
                 return new GuiSortingMachine(player.inventory, (TileSortingMachine) ent);
+            case SEEDBAG:
+                if (player.getCurrentEquippedItem()!=null && player.getCurrentEquippedItem().getItem() instanceof ItemSeedBag)
+                {
+                    return new GuiSeedBag(player.inventory,ItemSeedBag.getSeedBagInv(player));
+                }
         }
         return null;
     }
