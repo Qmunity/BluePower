@@ -7,10 +7,8 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 
 /**
- * MineChess
+ * 
  * @author MineMaarten
- * www.minemaarten.com
- * @license Lesser GNU Public License v3 (http://www.gnu.org/licenses/lgpl.html)
  */
 
 public abstract class LocationIntPacket<REQ extends IMessage> extends AbstractPacket<REQ> {

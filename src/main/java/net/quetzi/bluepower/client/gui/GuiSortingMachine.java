@@ -23,6 +23,11 @@ import net.quetzi.bluepower.containers.ContainerSortingMachine;
 import net.quetzi.bluepower.references.Refs;
 import net.quetzi.bluepower.tileentities.tier2.TileSortingMachine;
 
+/**
+ * 
+ * @author MineMaarten
+ */
+
 public class GuiSortingMachine extends GuiBase {
     
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/GUI/sorting_machine.png");

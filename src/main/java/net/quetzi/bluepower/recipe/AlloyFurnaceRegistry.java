@@ -41,6 +41,11 @@ import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.ModContainer;
 import cpw.mods.fml.common.registry.GameData;
 
+/**
+ * 
+ * @author MineMaarten
+ */
+
 public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
     
     private static AlloyFurnaceRegistry     INSTANCE               = new AlloyFurnaceRegistry();

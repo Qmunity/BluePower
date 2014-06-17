@@ -8,6 +8,11 @@ import net.minecraft.nbt.NBTTagList;
 import net.quetzi.bluepower.references.Refs;
 import net.quetzi.bluepower.tileentities.TileMachineBase;
 
+/**
+ * 
+ * @author MineMaarten
+ */
+
 public class TileSortingMachine extends TileMachineBase implements ISidedInventory {
     
     private ItemStack[] inventory = new ItemStack[40];

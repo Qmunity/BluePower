@@ -4,6 +4,11 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.ResourceLocation;
 import cpw.mods.fml.client.FMLClientHandler;
 
+/**
+ * 
+ * @author MineMaarten
+ */
+
 public abstract class GuiScreenBase extends GuiScreen {
     
     protected int guiLeft, guiTop, xSize, ySize;

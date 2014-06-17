@@ -91,7 +91,6 @@ public class BlockAlloyFurnace extends BlockContainerBase {
     }
     
     @Override
-    @SuppressWarnings("cast")
     @SideOnly(Side.CLIENT)
     public void randomDisplayTick(World world, int x, int y, int z, Random rnd) {
     

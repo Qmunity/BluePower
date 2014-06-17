@@ -30,6 +30,11 @@ import net.quetzi.bluepower.tileentities.TileBase;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+/**
+ * 
+ * @author MineMaarten, Koen Beckers (K-4U)
+ */
+
 public class TileAlloyFurnace extends TileBase implements IInventory {
     
     private boolean     isActive;

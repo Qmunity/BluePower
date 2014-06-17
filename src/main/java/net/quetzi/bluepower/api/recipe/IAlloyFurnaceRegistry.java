@@ -19,6 +19,11 @@ package net.quetzi.bluepower.api.recipe;
 
 import net.minecraft.item.ItemStack;
 
+/**
+ * 
+ * @author MineMaarten
+ */
+
 public interface IAlloyFurnaceRegistry {
     
     /**

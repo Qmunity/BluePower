@@ -59,6 +59,8 @@ public class GUIHandler implements IGuiHandler {
                         player.getCurrentEquippedItem(), player.inventory, InventoryItem.getItemInventory(player, player.getCurrentEquippedItem(),
                                 "Canvas Bag", 27)); }
                 break;
+            default:
+                break;
         }
         return null;
     }
@@ -83,6 +85,8 @@ public class GUIHandler implements IGuiHandler {
                 if (player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() instanceof ItemCanvasBag) { return new GuiCanvasBag(
                         player.getCurrentEquippedItem(), player.inventory, InventoryItem.getItemInventory(player, player.getCurrentEquippedItem(),
                                 "Canvas Bag", 27)); }
+                break;
+            default:
                 break;
         }
         return null;

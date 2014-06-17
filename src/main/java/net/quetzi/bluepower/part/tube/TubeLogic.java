@@ -23,6 +23,11 @@ import org.lwjgl.opengl.GL11;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+/**
+ * 
+ * @author MineMaarten
+ */
+
 public class TubeLogic implements IPneumaticTube {
     
     private final PneumaticTube tube;
@@ -64,7 +69,7 @@ public class TubeLogic implements IPneumaticTube {
                     logic.tubeStacks.add(tubeStack);//transfer to another tube.
                 } else if (!world.isRemote) {
                     ItemStack remainder = IOHelper.insert(output, tubeStack.stack, tubeStack.heading.getOpposite(), tubeStack.color, false);
-
+                    
                     if (remainder != null) {
                         EntityItem entity = new EntityItem(world, x + 0.5 + tubeStack.heading.offsetX * tubeStack.progress * 0.5, y + 0.5 + tubeStack.heading.offsetY * tubeStack.progress * 0.5, z + 0.5 + tubeStack.heading.offsetX * tubeStack.progress * 0.5, remainder);
                         world.spawnEntityInWorld(entity);

@@ -5,6 +5,11 @@ import net.quetzi.bluepower.network.NetworkHandler;
 import net.quetzi.bluepower.network.messages.MessageGuiUpdate;
 import net.quetzi.bluepower.part.gate.GateBase;
 
+/**
+ * 
+ * @author MineMaarten
+ */
+
 public abstract class GuiGate extends GuiScreenBase {
     
     private final GateBase gate;
