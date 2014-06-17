@@ -186,11 +186,15 @@ public class IOHelper {
     }
     
     public static boolean canInterfaceWith(TileEntity tile, ForgeDirection direction, PneumaticTube requester) {
-    
+
         IMultipartCompat compat = (IMultipartCompat) CompatibilityUtils.getModule(Dependencies.FMP);
-        PneumaticTube tube = compat.getBPPart(tile, PneumaticTube.class);
-        if (tube != null && tube.isConnected(direction, requester)) return true;
-        if (tile instanceof IInventory) { return !(tile instanceof ISidedInventory) || ((ISidedInventory) tile).getAccessibleSlotsFromSide(direction.ordinal()).length > 0; }
+        if (tile != null) {
+            PneumaticTube tube = compat.getBPPart(tile, PneumaticTube.class);
+            if (tube != null && tube.isConnected(direction, requester)) return true;
+            if (tile instanceof IInventory) {
+                return !(tile instanceof ISidedInventory) || ((ISidedInventory) tile).getAccessibleSlotsFromSide(direction.ordinal()).length > 0;
+            }
+        }
         return false;
     }
 }
