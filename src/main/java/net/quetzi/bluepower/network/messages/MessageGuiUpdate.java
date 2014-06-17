@@ -17,6 +17,11 @@ import codechicken.multipart.TMultiPart;
 import codechicken.multipart.TileMultipart;
 import cpw.mods.fml.common.Optional;
 
+/**
+ * 
+ * @author MineMaarten
+ */
+
 public class MessageGuiUpdate extends LocationIntPacket<MessageGuiUpdate> {
     
     private int partId;

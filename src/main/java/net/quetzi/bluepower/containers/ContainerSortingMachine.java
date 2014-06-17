@@ -27,6 +27,10 @@ import net.quetzi.bluepower.tileentities.tier2.TileSortingMachine;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+/**
+ * 
+ * @author MineMaarten
+ */
 public class ContainerSortingMachine extends Container {
     
     private final TileSortingMachine sortingMachine;

@@ -6,6 +6,11 @@ import net.minecraft.util.ResourceLocation;
 import net.quetzi.bluepower.part.gate.GateBase;
 import net.quetzi.bluepower.references.Refs;
 
+/**
+ * 
+ * @author MineMaarten
+ */
+
 public abstract class GuiGateSingleTime extends GuiGate {
     
     private static final ResourceLocation resLoc        = new ResourceLocation(Refs.MODID, "textures/GUI/gate.png");

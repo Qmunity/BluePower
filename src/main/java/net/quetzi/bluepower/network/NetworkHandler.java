@@ -28,6 +28,11 @@ import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import cpw.mods.fml.relauncher.Side;
 
+/**
+ * 
+ * @author MineMaarten
+ */
+
 public class NetworkHandler {
     
     public static final SimpleNetworkWrapper INSTANCE = NetworkRegistry.INSTANCE.newSimpleChannel(Refs.MODID);
@@ -61,13 +66,13 @@ public class NetworkHandler {
     
         sendToAllAround(message, message.getTargetPoint(world, distance));
     }
-
+    
     @SuppressWarnings("rawtypes")
     public static void sendToAllAround(LocationIntPacket message, World world) {
     
         sendToAllAround(message, message.getTargetPoint(world));
     }
-
+    
     @SuppressWarnings("rawtypes")
     public static void sendToAllAround(LocationDoublePacket message, World world) {
     

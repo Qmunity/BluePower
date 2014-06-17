@@ -22,6 +22,11 @@ import java.util.List;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
+/**
+ * 
+ * @author MineMaarten
+ */
+
 public class ItemStackUtils {
     
     public static boolean isItemFuzzyEqual(ItemStack stack1, ItemStack stack2) {
@@ -33,7 +38,7 @@ public class ItemStackUtils {
     public static boolean isSameOreDictStack(ItemStack stack1, ItemStack stack2) {
     
         int ids[] = OreDictionary.getOreIDs(stack1);
-        for(int id = 0; id < ids.length; id++){
+        for (int id = 0; id < ids.length; id++) {
             if (id >= 0) {
                 List<ItemStack> oreDictStacks = OreDictionary.getOres(OreDictionary.getOreName(id));
                 for (ItemStack oreDictStack : oreDictStacks) {

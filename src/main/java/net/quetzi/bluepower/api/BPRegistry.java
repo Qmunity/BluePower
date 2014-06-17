@@ -19,8 +19,13 @@ package net.quetzi.bluepower.api;
 
 import net.quetzi.bluepower.api.recipe.IAlloyFurnaceRegistry;
 
+/**
+ * 
+ * @author MineMaarten
+ */
+
 public class BPRegistry {
-
+    
     public static IAlloyFurnaceRegistry alloyFurnaceRegistry;
-
+    
 }

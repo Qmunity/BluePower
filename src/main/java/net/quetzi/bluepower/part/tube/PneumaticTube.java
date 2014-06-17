@@ -27,6 +27,11 @@ import net.quetzi.bluepower.helper.IOHelper;
 import net.quetzi.bluepower.helper.TileEntityCache;
 import net.quetzi.bluepower.init.CustomTabs;
 
+/**
+ * 
+ * @author MineMaarten
+ */
+
 public class PneumaticTube extends BPPart {
     
     public final boolean[]    connections = new boolean[6];

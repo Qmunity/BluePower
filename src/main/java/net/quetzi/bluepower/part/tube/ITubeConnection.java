@@ -2,6 +2,11 @@ package net.quetzi.bluepower.part.tube;
 
 import net.minecraftforge.common.util.ForgeDirection;
 
+/**
+ * 
+ * @author MineMaarten
+ */
+
 public interface ITubeConnection {
     
     public boolean isConnectedTo(ForgeDirection from);

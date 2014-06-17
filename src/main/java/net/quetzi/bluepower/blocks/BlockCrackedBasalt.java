@@ -28,6 +28,11 @@ import net.quetzi.bluepower.init.BPBlocks;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+/**
+ * 
+ * @author MineMaarten
+ */
+
 public class BlockCrackedBasalt extends BlockStoneOre {
     
     public BlockCrackedBasalt(String name) {
