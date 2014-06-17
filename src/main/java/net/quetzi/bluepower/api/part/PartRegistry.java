@@ -27,6 +27,7 @@ import net.quetzi.bluepower.part.gate.GateBuffer;
 import net.quetzi.bluepower.part.gate.GateCounter;
 import net.quetzi.bluepower.part.gate.GateMux;
 import net.quetzi.bluepower.part.gate.GateNand;
+import net.quetzi.bluepower.part.gate.GateNor;
 import net.quetzi.bluepower.part.gate.GateNot;
 import net.quetzi.bluepower.part.gate.GateOr;
 import net.quetzi.bluepower.part.gate.GateSequencer;
@@ -247,6 +248,7 @@ public class PartRegistry {
         registerPart(GateMux.class);
         registerPart(GateNand.class);
         registerPart(GateOr.class);
+        registerPart(GateNor.class);
         
         // Lamps
         registerPart(PartCageLamp.class, "white", 0xDDDDDD);
