@@ -26,8 +26,9 @@ public class TileSortron extends TileMachineBase implements IPeripheral{
 
     private Set<IComputerAccess> connectedComputers = new HashSet<IComputerAccess>();
     private IInventory connectedInventory;
-    private byte       acceptedColor;
-    private ItemStack  acceptedStack;
+    private byte       acceptedColor = -1;
+    private ItemStack  acceptedStack = null;
+    private int        acceptedStackSize = 0;
 
     @Override
     public void onBlockNeighbourChanged() {
@@ -52,7 +53,7 @@ public class TileSortron extends TileMachineBase implements IPeripheral{
     public String[] getMethodNames() {
 
         return new String[] { "setAcceptedCol", "getAcceptedCol", "setAcceptedItem", "getAcceptedItem",
-                "getNumSlots", "getSlotContents", "pullFromSlot" };
+                "getNumSlots", "getSlotContents", "pullFromSlot", "sort" };
     }
 
     @Override
@@ -71,6 +72,10 @@ public class TileSortron extends TileMachineBase implements IPeripheral{
             case 2:
                 if (arguments.length > 0 && arguments[0] instanceof String) {
                     String unlocalizedName = ((String) arguments[0]);
+                    if (unlocalizedName.isEmpty()) {
+                        acceptedStack = null;
+                        return new Boolean[] { true };
+                    }
                     Item item = (Item) Item.itemRegistry.getObject(unlocalizedName);
                     if (item != null) {
                         ItemStack stack;
@@ -131,6 +136,16 @@ public class TileSortron extends TileMachineBase implements IPeripheral{
                     throw new IllegalArgumentException("No expected argument was given");
                 }
                 throw new Exception("Sortron has no connected Inventory");
+            case 7:
+                if (arguments.length > 0 && arguments[0] instanceof Double) {
+                    int stackSize = ((Double)arguments[0]).intValue();
+                    if (stackSize >= 0) {
+                        acceptedStackSize = stackSize;
+                        return new Boolean[] { true };
+                    }
+                    throw new IllegalArgumentException("StackSize value must be greater than or equal to 0");
+                }
+                throw new IllegalArgumentException("No expected argument was given");
         }
         return new Object[0];
     }
@@ -154,14 +169,18 @@ public class TileSortron extends TileMachineBase implements IPeripheral{
 
         if (argument instanceof Double) {
             byte color = ((Double) argument).byteValue();
-            if (color >= 0 && color < 16) {
+            if (color >= -1 && color < 16) {
                 return color;
             }
-            throw new IllegalArgumentException("Color values should be greater than or equal to 0 and smaller than 16");
+            throw new IllegalArgumentException("Color values should be greater than or equal to -1 and smaller than 16");
         } else if (argument instanceof String) {
+            String input = (String) argument;
+            if (input.isEmpty()) {
+                return -1;
+            }
             for (byte color = 0; color < ItemDye.field_150923_a.length; color++) {
                 String colorName = ItemDye.field_150923_a[color];
-                if (colorName.equals(argument)) {
+                if (colorName.equals(input)) {
                     return color;
                 }
             }
@@ -173,8 +192,17 @@ public class TileSortron extends TileMachineBase implements IPeripheral{
     @Override
     public TubeStack acceptItemFromTube(TubeStack stack, ForgeDirection from) {
 
-        if (acceptedStack == null || doItemStacksMatch(stack.stack, acceptedStack)) {
-            return super.acceptItemFromTube(stack, from);
+        if (acceptedStackSize <= 0) return stack;
+
+        if ((acceptedStack == null || doItemStacksMatch(stack.stack, acceptedStack)) && (acceptedColor == -1 || acceptedColor == stack.color.ordinal())) {
+            int acceptedSize = Math.min(stack.stack.stackSize, acceptedStackSize);
+            acceptedStackSize -= acceptedSize;
+            ItemStack stack1 = stack.stack.splitStack(acceptedSize);
+            TubeStack tubeStack = super.acceptItemFromTube(new TubeStack(stack1, from, stack.color), from);
+            if (tubeStack != null)
+                stack.stack.stackSize += tubeStack.stack.stackSize;
+            if (stack.stack.stackSize == 0) return null;
+            return stack;
         }
         return stack;
     }
@@ -219,16 +247,18 @@ public class TileSortron extends TileMachineBase implements IPeripheral{
             list.appendTag(compound1);
             compound.setTag("ItemStack", list);
         }
+        compound.setInteger("stackSize", acceptedStackSize);
     }
 
     @Override
     public void writeToNBT(NBTTagCompound compound) {
 
         super.writeToNBT(compound);
-        compound.getByte("acceptedCol");
+        acceptedColor = compound.getByte("acceptedCol");
         if (compound.hasKey("ItemStack")) {
             NBTTagList list = compound.getTagList("ItemStack", 10);
             acceptedStack = ItemStack.loadItemStackFromNBT(list.getCompoundTagAt(0));
         }
+        acceptedStackSize = compound.getInteger("stackSize");
     }
 }
