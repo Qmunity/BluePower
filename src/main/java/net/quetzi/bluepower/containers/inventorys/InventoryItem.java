@@ -58,7 +58,12 @@ public class InventoryItem extends InventoryBasic {
     @Override
     public void closeInventory() {
     
-        saveInventory();
+        closeInventory(null);
+    }
+    
+    public void closeInventory(ItemStack is) {
+    
+        saveInventory(is);
     }
     
     private boolean hasInventory() {
@@ -102,16 +107,18 @@ public class InventoryItem extends InventoryBasic {
         super.markDirty();
         
         if (!reading) {
-            saveInventory();
+            saveInventory(null);
         }
     }
     
-    protected void setNBT() {
+    protected void setNBT(ItemStack is) {
     
-        ItemStack itemStack = player.getCurrentEquippedItem();
+        if (is == null && player!=null) {
+            is = player.getCurrentEquippedItem();
+        }
         
-        if (itemStack != null && itemStack.getItem() == this.item.getItem()) {
-            itemStack.setTagCompound(item.getTagCompound());
+        if (is != null && is.getItem() == this.item.getItem()) {
+            is.setTagCompound(item.getTagCompound());
         }
     }
     
@@ -131,9 +138,9 @@ public class InventoryItem extends InventoryBasic {
         reading = false;
     }
     
-    public void saveInventory() {
+    public void saveInventory(ItemStack is) {
     
         writeToNBT();
-        setNBT();
+        setNBT(is);
     }
 }
