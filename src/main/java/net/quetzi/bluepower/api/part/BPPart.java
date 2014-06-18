@@ -9,6 +9,7 @@
 package net.quetzi.bluepower.api.part;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import net.minecraft.creativetab.CreativeTabs;
@@ -31,15 +32,15 @@ import cpw.mods.fml.common.Optional;
 
 public abstract class BPPart {
     
-    public World world = null;
-    public int   x     = 0;
-    public int   y     = 0;
-    public int   z     = 0;
+    public World            world = null;
+    public int              x     = 0;
+    public int              y     = 0;
+    public int              z     = 0;
     
     /**
      * Holds the exact width of 1 pixel, texturewise
      */
-    protected static double 		pixel 		   = 1.0/16.0;
+    protected static double pixel = 1.0 / 16.0;
     
     /**
      * Checks if this tile is part of an FMP block
@@ -150,7 +151,8 @@ public abstract class BPPart {
     
     }
     
-    public boolean shouldRenderDynamicOnPass(int pass){
+    public boolean shouldRenderDynamicOnPass(int pass) {
+    
         return pass == 0;
     }
     
@@ -170,7 +172,8 @@ public abstract class BPPart {
         return false;
     }
     
-    public boolean shouldRenderStaticOnPass(int pass){
+    public boolean shouldRenderStaticOnPass(int pass) {
+    
         return pass == 0;
     }
     
@@ -197,7 +200,7 @@ public abstract class BPPart {
     
         shouldReRender = true;
     }
-
+    
     /**
      * If this part was marked for a render update, unmarks it
      */
@@ -438,12 +441,32 @@ public abstract class BPPart {
     }
     
     /**
+     * Gets the creative tab index to display on
+     * @return The index in the creative tab to display on
+     */
+    public int getCreativeTabIndex() {
+    
+        return 0;
+    }
+    
+    /**
      * Gets the creative tabs to display on
      * @return The creative tab instances
      */
     public CreativeTabs[] getCreativeTabs() {
     
         return new CreativeTabs[] { getCreativeTab() };
+    }
+    
+    /**
+     * Gets the creative tab indexes to display on
+     * @return The indexes in the creative tabs to display on
+     */
+    public int[] getCreativeTabIndexes() {
+    
+        int[] indexes = new int[getCreativeTabs().length];
+        Arrays.fill(indexes, getCreativeTabIndex());
+        return indexes;
     }
     
     /**

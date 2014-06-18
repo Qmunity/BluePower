@@ -19,9 +19,11 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.quetzi.bluepower.init.BPItems;
+import net.quetzi.bluepower.part.cable.RedAlloyWire;
 import net.quetzi.bluepower.part.gate.GateAnd;
 import net.quetzi.bluepower.part.gate.GateBuffer;
 import net.quetzi.bluepower.part.gate.GateCounter;
@@ -125,14 +127,18 @@ public class PartRegistry {
     
     public static List<String> getRegisteredPartsForTab(CreativeTabs tab) {
     
-        List<String> parts = new ArrayList<String>();
+        List<String> partIds = new ArrayList<String>();
+        List<BPPart> parts = new ArrayList<BPPart>();
         
         if (tab != null) {
-            for (String s : PartRegistry.samples.keySet())
-                if (Arrays.asList(samples.get(s).getCreativeTabs()).contains(tab)) parts.add(s);
+            for (BPPart p : PartRegistry.samples.values())
+                if (Arrays.asList(p.getCreativeTabs()).contains(tab)) parts.add(p);
+            Collections.sort(parts, new ComparatorCreativeTabIndex(tab));
+            for (BPPart p : parts)
+                partIds.add(p.getType());
         }
         
-        return Collections.unmodifiableList(new ArrayList<String>(parts));
+        return Collections.unmodifiableList(new ArrayList<String>(partIds));
     }
     
     /**
@@ -252,22 +258,8 @@ public class PartRegistry {
         registerPart(GateNor.class);
         
         // Lamps
-        registerPart(PartCageLamp.class, "white", 0xDDDDDD);
-        registerPart(PartCageLamp.class, "orange", 0xDB7D3E);
-        registerPart(PartCageLamp.class, "magenta", 0xB350BC);
-        registerPart(PartCageLamp.class, "lightblue", 0x6B8AC9);
-        registerPart(PartCageLamp.class, "yellow", 0xB1A627);
-        registerPart(PartCageLamp.class, "lime", 0x41AE38);
-        registerPart(PartCageLamp.class, "pink", 0xD08499);
-        registerPart(PartCageLamp.class, "gray", 0x404040);
-        registerPart(PartCageLamp.class, "lightgray", 0x9AA1A1);
-        registerPart(PartCageLamp.class, "cyan", 0x2E6E89);
-        registerPart(PartCageLamp.class, "purple", 0x7E3DB5);
-        registerPart(PartCageLamp.class, "blue", 0x2E388D);
-        registerPart(PartCageLamp.class, "brown", 0x4F321F);
-        registerPart(PartCageLamp.class, "green", 0x35461B);
-        registerPart(PartCageLamp.class, "red", 0x963430);
-        registerPart(PartCageLamp.class, "black", 0x191616);
+        for (int i = 0; i < ItemDye.field_150922_c.length; i++)
+            registerPart(PartCageLamp.class, ItemDye.field_150921_b[i].toLowerCase(), ItemDye.field_150922_c[i]);
         
         registerPart(PartLamp.class, "white", 0xDDDDDD);
         registerPart(PartLamp.class, "orange", 0xDB7D3E);
@@ -288,6 +280,11 @@ public class PartRegistry {
         
         // Pneumatic Tubes
         registerPart(PneumaticTube.class);
+        
+        // Red alloy
+        registerPart(RedAlloyWire.class); // Uncovered
+        for (int i = 0; i < ItemDye.field_150922_c.length; i++)
+            registerPart(RedAlloyWire.class, ItemDye.field_150921_b[i].toLowerCase(), ItemDye.field_150922_c[i]); // Covered
     }
     
 }
