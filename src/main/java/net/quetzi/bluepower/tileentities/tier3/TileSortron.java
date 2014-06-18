@@ -2,6 +2,8 @@ package net.quetzi.bluepower.tileentities.tier3;
 
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Optional;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import dan200.computercraft.api.lua.ILuaContext;
 import dan200.computercraft.api.peripheral.IComputerAccess;
 import dan200.computercraft.api.peripheral.IPeripheral;
@@ -35,10 +37,12 @@ public class TileSortron extends TileMachineBase implements IPeripheral, SimpleC
 
     private static final String NAME = "BluePower.Sortron";
     private Set<IComputerAccess> connectedComputers = new HashSet<IComputerAccess>();
+    private Set<Context> contexts = new HashSet<Context>();
     private IInventory connectedInventory;
     private byte       acceptedColor = -1;
     private ItemStack  acceptedStack = null;
     private int        acceptedStackSize = 0;
+    private byte       ticksLeftToShowItemTransport = 0;
 
     @Override
     public void onBlockNeighbourChanged() {
@@ -49,6 +53,39 @@ public class TileSortron extends TileMachineBase implements IPeripheral, SimpleC
         if (tile instanceof IInventory) {
             connectedInventory = (IInventory) tile;
         }
+    }
+
+    @Override
+    protected void onItemOutputted() {
+
+        super.onItemOutputted();
+        worldObj.addBlockEvent(xCoord, yCoord, zCoord, getBlockType(), 1, 0);
+    }
+
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public boolean receiveClientEvent(int id, int data) {
+
+        switch (id) {
+            case 1:
+                ticksLeftToShowItemTransport = 10;
+                worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+                return true;
+        }
+        return super.receiveClientEvent(id, data);
+    }
+
+    @Override
+    public void updateEntity() {
+
+        super.updateEntity();
+        if (worldObj.isRemote && ticksLeftToShowItemTransport > 0) ticksLeftToShowItemTransport--;
+    }
+
+    public boolean showOutPutAnimation() {
+
+        return ticksLeftToShowItemTransport > 0;
     }
 
     /*
@@ -447,5 +484,12 @@ public class TileSortron extends TileMachineBase implements IPeripheral, SimpleC
             args[i] = arguments.checkAny(i);
         }
         return getStackSizeLeft(args);
+    }
+
+    @Callback
+    @Optional.Method(modid = Dependencies.OPEN_COMPUTERS)
+    public Object[] greet(Context context, Arguments arguments) {
+        contexts.add(context);
+        return null;
     }
 }

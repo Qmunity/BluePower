@@ -35,8 +35,10 @@ public class TileMachineBase extends TileBase implements ITubeConnection {
                         ItemStack returnedStack = IOHelper.insert(tileAtOutput, tubeStack.stack, getFacingDirection(), tubeStack.color, false);
                         if (returnedStack == null) {
                             iterator.remove();
+                            onItemOutputted();
                             markDirty();
                         } else if (returnedStack.stackSize != tubeStack.stack.stackSize) {
+                            onItemOutputted();
                             markDirty();
                         }
                     }
@@ -46,6 +48,7 @@ public class TileMachineBase extends TileBase implements ITubeConnection {
                         for (Iterator<TubeStack> iterator = internalItemStackBuffer.iterator(); iterator.hasNext();) {
                             ItemStack itemStack = iterator.next().stack;
                             ejectItemInWorld(itemStack, direction);
+                            onItemOutputted();
                             iterator.remove();
                         }
                     }
@@ -80,6 +83,13 @@ public class TileMachineBase extends TileBase implements ITubeConnection {
     protected boolean isBufferEmpty() {
     
         return internalItemStackBuffer.isEmpty();
+    }
+
+    /**
+     * Called when an item is outputted from this block, can be used for animation (See Sortron)
+     */
+    protected void onItemOutputted() {
+
     }
     
     @Override

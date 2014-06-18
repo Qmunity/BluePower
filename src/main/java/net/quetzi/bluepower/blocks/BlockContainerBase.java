@@ -34,6 +34,7 @@ public abstract class BlockContainerBase extends BlockBase implements ITileEntit
     public BlockContainerBase(Material material) {
 
         super(material);
+        this.isBlockContainer = true;
     }
 
     @Override
@@ -93,6 +94,15 @@ public abstract class BlockContainerBase extends BlockBase implements ITileEntit
             IOHelper.spawnItemInWorld(world, stack, x + 0.5F, y + 0.5F, z + 0.5F);
         }
         super.breakBlock(world, x, y, z, block, meta);
+        world.removeTileEntity(x, y, z);
+    }
+
+    @Override
+    public boolean onBlockEventReceived(World world, int x, int y, int z, int id, int data)
+    {
+        super.onBlockEventReceived(world, x, y, z, id, data);
+        TileEntity tileentity = world.getTileEntity(x, y, z);
+        return tileentity != null && tileentity.receiveClientEvent(id, data);
     }
 
     /**
