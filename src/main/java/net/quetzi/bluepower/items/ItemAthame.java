@@ -38,8 +38,8 @@ public class ItemAthame extends ItemSword {
         super(athameMaterial);
         this.setCreativeTab(CustomTabs.tabBluePowerTools);
         this.setMaxDamage(100);
-        this.setUnlocalizedName(Refs.ITEMATHAME_NAME);
-        this.setTextureName(Refs.MODID + ":" + Refs.ITEMATHAME_NAME);
+        this.setUnlocalizedName(Refs.ATHAME_NAME);
+        this.setTextureName(Refs.MODID + ":" + Refs.ATHAME_NAME);
         this.maxStackSize = 1;
         this.setFull3D();
     }

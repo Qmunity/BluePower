@@ -8,9 +8,9 @@ public class ItemTinPlate extends Item {
     
     public ItemTinPlate() {
     
-        this.setUnlocalizedName(Refs.ITEMTINPLATE_NAME);
+        this.setUnlocalizedName(Refs.TINPLATE_NAME);
         this.setCreativeTab(CustomTabs.tabBluePowerItems);
-        this.setTextureName(Refs.MODID + ":" + Refs.ITEMTINPLATE_NAME);
+        this.setTextureName(Refs.MODID + ":" + Refs.TINPLATE_NAME);
     }
     
 }

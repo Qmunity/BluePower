@@ -26,8 +26,8 @@ public class ItemNikolite extends Item {
     public ItemNikolite() {
 
         super();
-        this.setUnlocalizedName(Refs.ITEMNIKOLITE_NAME);
+        this.setUnlocalizedName(Refs.NIKOLITE_NAME);
         this.setCreativeTab(CustomTabs.tabBluePowerItems);
-        this.setTextureName(Refs.MODID + ":" + Refs.ITEMNIKOLITE_NAME);
+        this.setTextureName(Refs.MODID + ":" + Refs.NIKOLITE_NAME);
     }
 }

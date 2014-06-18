@@ -20,9 +20,9 @@ package net.quetzi.bluepower.items;
 import net.quetzi.bluepower.init.CustomTabs;
 import net.quetzi.bluepower.references.Refs;
 
-public class ItemStoneWafer extends net.minecraft.item.Item {
+public class ItemCrafting extends net.minecraft.item.Item {
 
-    public ItemStoneWafer(String name) {
+    public ItemCrafting(String name) {
         this.setCreativeTab(CustomTabs.tabBluePowerItems);
         this.setUnlocalizedName(name);
         this.setTextureName(Refs.MODID + ":" + name);
