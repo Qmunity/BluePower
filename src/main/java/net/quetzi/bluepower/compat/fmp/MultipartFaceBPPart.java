@@ -14,6 +14,7 @@ import net.quetzi.bluepower.api.part.BPPart;
 import net.quetzi.bluepower.api.part.BPPartFace;
 import net.quetzi.bluepower.api.part.FaceDirection;
 import net.quetzi.bluepower.api.part.IBPFacePart;
+import net.quetzi.bluepower.api.part.RedstoneConnection;
 import codechicken.lib.data.MCDataInput;
 import codechicken.lib.data.MCDataOutput;
 import codechicken.lib.vec.Vector3;
@@ -82,7 +83,14 @@ public class MultipartFaceBPPart extends MultipartBPPart implements TFacePart, I
         packet.writeInt(facePart.getFace());
         packet.writeInt(facePart.getRotation());
         for (int i = 0; i < 4; i++) {
-            packet.writeNBTTagCompound(((BPPartFace) getPart()).getConnection(FaceDirection.getDirection(i)).getNBTTag());
+            RedstoneConnection c = ((BPPartFace) getPart()).getConnection(FaceDirection.getDirection(i));
+            if (c != null) {
+                packet.writeNBTTagCompound(c.getNBTTag());
+            } else {
+                NBTTagCompound t = new NBTTagCompound();
+                t.setBoolean("___error", true);
+                packet.writeNBTTagCompound(t);
+            }
         }
     }
     
@@ -93,7 +101,16 @@ public class MultipartFaceBPPart extends MultipartBPPart implements TFacePart, I
         facePart.setFace(packet.readInt());
         facePart.setRotation(packet.readInt());
         for (int i = 0; i < 4; i++) {
-            ((BPPartFace) getPart()).getConnection(FaceDirection.getDirection(i)).load(packet.readNBTTagCompound());
+            RedstoneConnection c = ((BPPartFace) getPart()).getConnection(FaceDirection.getDirection(i));
+            NBTTagCompound t = packet.readNBTTagCompound();
+            if (t.hasKey("___error") && t.getBoolean("___error")) {
+                continue;
+            } else {
+                if (c == null) {
+                    c = ((BPPartFace) getPart()).getConnectionOrCreate(FaceDirection.getDirection(i));
+                }
+                c.load(t);
+            }
         }
     }
     
@@ -104,7 +121,14 @@ public class MultipartFaceBPPart extends MultipartBPPart implements TFacePart, I
         tag.setInteger("face", facePart.getFace());
         tag.setInteger("rotation", facePart.getRotation());
         for (int i = 0; i < 4; i++) {
-            tag.setTag("con_" + i, ((BPPartFace) getPart()).getConnection(FaceDirection.getDirection(i)).getNBTTag());
+            RedstoneConnection c = ((BPPartFace) getPart()).getConnection(FaceDirection.getDirection(i));
+            if (c != null) {
+                tag.setTag("con_" + i, c.getNBTTag());
+            } else {
+                NBTTagCompound t = new NBTTagCompound();
+                t.setBoolean("___error", true);
+                tag.setTag("con_" + i, t);
+            }
         }
     }
     
@@ -115,7 +139,16 @@ public class MultipartFaceBPPart extends MultipartBPPart implements TFacePart, I
         facePart.setFace(tag.getInteger("face"));
         facePart.setRotation(tag.getInteger("rotation"));
         for (int i = 0; i < 4; i++) {
-            ((BPPartFace) getPart()).getConnection(FaceDirection.getDirection(i)).load(tag.getCompoundTag("con_" + i));
+            RedstoneConnection c = ((BPPartFace) getPart()).getConnection(FaceDirection.getDirection(i));
+            NBTTagCompound t = tag.getCompoundTag("con_" + i);
+            if (t.hasKey("___error") && t.getBoolean("___error")) {
+                continue;
+            } else {
+                if (c == null) {
+                    c = ((BPPartFace) getPart()).getConnectionOrCreate(FaceDirection.getDirection(i));
+                }
+                c.load(t);
+            }
         }
     }
     

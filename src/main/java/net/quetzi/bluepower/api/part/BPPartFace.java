@@ -26,7 +26,7 @@ import net.quetzi.bluepower.util.ForgeDirectionUtils;
 import org.lwjgl.opengl.GL11;
 
 public abstract class BPPartFace extends BPPart implements IBPFacePart, IBPRedstonePart {
-	
+    
     private int                     face           = 0;
     private int                     rotation       = 0;
     
@@ -222,6 +222,17 @@ public abstract class BPPartFace extends BPPart implements IBPFacePart, IBPRedst
         } catch (Exception ex) {
         }
         return null;
+    }
+    
+    public RedstoneConnection getConnectionOrCreate(FaceDirection dir) {
+    
+        if (dir == null) return null;
+        
+        RedstoneConnection c = getConnection(dir);
+        
+        if (c == null) c = connections[dir.getDirection()] = new RedstoneConnection(this, dir.getDirection() + "");
+        
+        return c;
     }
     
     public RedstoneConnection getConnection(ForgeDirection dir) {

@@ -12,6 +12,8 @@ public interface IBPRedstoneConductor {
     
     public void setNetwork(RedstoneNetwork network);
     
-    public void update();
+    public void onUpdateConnection();
+    
+    public void onRedstoneUpdate();
     
 }
