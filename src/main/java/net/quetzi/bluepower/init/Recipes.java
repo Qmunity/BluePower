@@ -159,7 +159,9 @@ public class Recipes {
         for (int i = 1; i < 16; i++) {
             craftManager.addRecipe(new ItemStack(BPItems.canvas_bag, 1, i), new Object[] {"CCC", "CDC", "CCC", 'C', BPItems.canvas, 'D', OreDictionary.getOreID(Refs.oreDictDyes[i])});
         }
-        
+        for (int i = 1; i < 16; i++) {
+            craftManager.addRecipe(new ItemStack(BPItems.lumar, 1, i), new Object[] {"RD", "DG", 'R', Items.redstone, 'D', OreDictionary.getOreID(Refs.oreDictDyes[i]), 'G', Items.glowstone_dust});
+        }
         GameRegistry.addRecipe(new CanvasBagRecipe());
         
         // Alloy furnace

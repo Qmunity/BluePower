@@ -26,6 +26,7 @@ import net.minecraftforge.common.util.EnumHelper;
 import net.quetzi.bluepower.compat.fmp.ItemBPMultipart;
 import net.quetzi.bluepower.items.ItemAthame;
 import net.quetzi.bluepower.items.ItemCanvasBag;
+import net.quetzi.bluepower.items.ItemCrafting;
 import net.quetzi.bluepower.items.ItemCropSeed;
 import net.quetzi.bluepower.items.ItemGem;
 import net.quetzi.bluepower.items.ItemGemAxe;
@@ -36,6 +37,7 @@ import net.quetzi.bluepower.items.ItemGemSword;
 import net.quetzi.bluepower.items.ItemHandle;
 import net.quetzi.bluepower.items.ItemIndigoDye;
 import net.quetzi.bluepower.items.ItemIngot;
+import net.quetzi.bluepower.items.ItemLumar;
 import net.quetzi.bluepower.items.ItemNikolite;
 import net.quetzi.bluepower.items.ItemSaw;
 import net.quetzi.bluepower.items.ItemScrewdriver;
@@ -43,7 +45,6 @@ import net.quetzi.bluepower.items.ItemSeedBag;
 import net.quetzi.bluepower.items.ItemSickle;
 import net.quetzi.bluepower.items.ItemSiliconBoule;
 import net.quetzi.bluepower.items.ItemSiliconWafer;
-import net.quetzi.bluepower.items.ItemCrafting;
 import net.quetzi.bluepower.items.ItemTinPlate;
 import net.quetzi.bluepower.part.ItemBPPart;
 import net.quetzi.bluepower.references.Dependencies;
@@ -117,6 +118,7 @@ public class BPItems {
     public static Item          seedBag;
     public static Item          canvas_bag;
     public static Item          canvas;
+    public static Item          lumar;
 
     private static ToolMaterial gemMaterial = EnumHelper.addToolMaterial("GEM", 2, 750, 6.0F, 2.0F, 18);
 
@@ -191,6 +193,7 @@ public class BPItems {
         seedBag = new ItemSeedBag(Refs.SEEDBAG_NAME);
         canvas_bag = new ItemCanvasBag(Refs.CANVASBAG_NAME);
         canvas = new ItemCrafting(Refs.CANVAS_NAME);
+        lumar = new ItemLumar();
 
         if (!Loader.isModLoaded(Dependencies.FMP)) {
             multipart = new ItemBPPart();
@@ -278,6 +281,7 @@ public class BPItems {
         GameRegistry.registerItem(seedBag, Refs.SEEDBAG_NAME);
         GameRegistry.registerItem(canvas_bag, Refs.CANVASBAG_NAME);
         GameRegistry.registerItem(canvas, Refs.CANVAS_NAME);
+        GameRegistry.registerItem(lumar, Refs.LUMAR_NAME);
 
         MinecraftForge.addGrassSeed(new ItemStack(flax_seed), 5);
 
