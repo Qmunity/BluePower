@@ -182,6 +182,7 @@ bluepower.part.toggle.name=Toggle Latch
 bluepower.part.transparent.name=Transparent Latch
 bluepower.part.xnor.name=XNOR Gate
 bluepower.part.xor.name=XOR Gate
+bluepower.part.pneumaticTube.name=Pneumatic Tube
 
 itemGroup.tabBluePowerMachines=Blue Power Machines
 itemGroup.tabBluePowerBlocks=Blue Power Blocks
