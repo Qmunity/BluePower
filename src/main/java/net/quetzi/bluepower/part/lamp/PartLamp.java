@@ -2,8 +2,6 @@ package net.quetzi.bluepower.part.lamp;
 
 import java.util.List;
 
-import org.lwjgl.opengl.GL11;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureMap;
@@ -23,17 +21,19 @@ import net.quetzi.bluepower.client.renderers.RenderHelper;
 import net.quetzi.bluepower.helper.RedstoneHelper;
 import net.quetzi.bluepower.init.CustomTabs;
 
+import org.lwjgl.opengl.GL11;
+
 /**
  * Base class for the lamps that are multiparts.
  * @author Koen Beckers (K4Unl)
- *
+ * 
  */
 public class PartLamp extends BPPartFace {
     
     protected String colorName;
     private int      colorVal;
     
-    protected int      power = 0;
+    protected int    power = 0;
     
     /**
      * @author amadornes
@@ -102,6 +102,7 @@ public class PartLamp extends BPPartFace {
      */
     @Override
     public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
+    
         GL11.glPushMatrix();
         GL11.glTranslated(0.5, 0.5, 0.5);
         GL11.glRotated(180, 1, 0, 0);
@@ -124,9 +125,6 @@ public class PartLamp extends BPPartFace {
         rotateAndTranslateDynamic(loc, pass, 0);
         Tessellator t = Tessellator.instance;
         t.setColorOpaque_F(1, 1, 1);
-        translateStatic(loc, pass);
-        // Render base here
-        //Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/lamps/side.png"));
         
         // Render base
         renderBase(pass);
@@ -141,89 +139,114 @@ public class PartLamp extends BPPartFace {
         // Render lamp itself here
         renderLamp(pass, r, g, b);
         
-        // Reset color
-        
-        // Re-bind blocks texture
-        //Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
-
-        undoTranslateStatic(loc, pass);
+        return true;
+    }
+    
+    @Override
+    public boolean shouldRenderStaticOnPass(int pass) {
+    
         return true;
     }
     
     /**
      * Code to render the base portion of the lamp. Will not be colored
      * @author Koen Beckers (K4Unl)
-     * @param pass The pass that is rendered now. Pass 1 for solids. Pass 2 for transparents
+     * @param pass
+     *            The pass that is rendered now. Pass 1 for solids. Pass 2 for transparents
      */
     public void renderBase(int pass) {
-    	
+    
     }
     
     /**
      * Code to render the actual lamp portion of the lamp. Will be colored
      * 
      * @author Koen Beckers (K4Unl)
-     * @param pass The pass that is rendered now. Pass 1 for solids. Pass 2 for transparents
-     * @param r The ammount of red in the lamp
-     * @param g The ammount of green in the lamp
-     * @param b The ammount of blue in the lamp
+     * @param pass
+     *            The pass that is rendered now. Pass 1 for solids. Pass 2 for transparents
+     * @param r
+     *            The ammount of red in the lamp
+     * @param g
+     *            The ammount of green in the lamp
+     * @param b
+     *            The ammount of blue in the lamp
      */
     public void renderLamp(int pass, int r, int g, int b) {
-    	Tessellator t = Tessellator.instance;
-		IIcon iconToUse;
-		if(power == 0){
-			iconToUse = IconSupplier.lampOff;
-		}else{
-			iconToUse = IconSupplier.lampOn;
-			
-			/*
-			t.setColorRGBA(r, g, b, 20);
-			RenderHelper.drawTesselatedCube(new Vector3Cube(pixel * 4.5, pixel * 2, pixel * 4.5, 1.0 - (pixel*4.5), 1.0 - (pixel * 4.5), 1.0 - pixel * 4.5));
-			t.setColorRGBA(r, g, b, 255);*/
-		}
-		
-		Vector3Cube vector = new Vector3Cube(0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
-		
-		double minU = iconToUse.getMinU();
-        double maxU = iconToUse.getMaxU();
-        double minV = iconToUse.getMinV();
-        double maxV = iconToUse.getMaxV();
-    	
-        //Top side
-        t.setNormal(0, 1, 0);
-        t.addVertexWithUV(vector.getMinX(), vector.getMaxY(), vector.getMaxZ(), minU, maxV);
-        t.addVertexWithUV(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ(), minU, minV);
-        t.addVertexWithUV(vector.getMaxX(), vector.getMaxY(), vector.getMinZ(), maxU, minV);
-        t.addVertexWithUV(vector.getMinX(), vector.getMaxY(), vector.getMinZ(), maxU, maxV);
+    
+        Vector3Cube vector = new Vector3Cube(0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
         
-        //Draw west side:
-        t.setNormal(-1, 0, 0);
-        t.addVertexWithUV(vector.getMinX(), vector.getMinY(), vector.getMaxZ(), minU, maxV);
-        t.addVertexWithUV(vector.getMinX(), vector.getMaxY(), vector.getMaxZ(), minU, minV);
-        t.addVertexWithUV(vector.getMinX(), vector.getMaxY(), vector.getMinZ(), maxU, minV);
-        t.addVertexWithUV(vector.getMinX(), vector.getMinY(), vector.getMinZ(), maxU, maxV);
+        if (pass == 0) {
+            Tessellator t = Tessellator.instance;
+            IIcon iconToUse;
+            if (power == 0) {
+                iconToUse = IconSupplier.lampOff;
+            } else {
+                iconToUse = IconSupplier.lampOn;
+                
+                /*
+                 * t.setColorRGBA(r, g, b, 20); RenderHelper.drawTesselatedCube(new Vector3Cube(pixel * 4.5, pixel * 2, pixel * 4.5, 1.0 -
+                 * (pixel*4.5), 1.0 - (pixel * 4.5), 1.0 - pixel * 4.5)); t.setColorRGBA(r, g, b, 255);
+                 */
+            }
+            
+            double minU = iconToUse.getMinU();
+            double maxU = iconToUse.getMaxU();
+            double minV = iconToUse.getMinV();
+            double maxV = iconToUse.getMaxV();
+            
+            // Top side
+            t.setNormal(0, 1, 0);
+            t.addVertexWithUV(vector.getMinX(), vector.getMaxY(), vector.getMaxZ(), minU, maxV);
+            t.addVertexWithUV(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ(), minU, minV);
+            t.addVertexWithUV(vector.getMaxX(), vector.getMaxY(), vector.getMinZ(), maxU, minV);
+            t.addVertexWithUV(vector.getMinX(), vector.getMaxY(), vector.getMinZ(), maxU, maxV);
+            
+            // Draw west side:
+            t.setNormal(-1, 0, 0);
+            t.addVertexWithUV(vector.getMinX(), vector.getMinY(), vector.getMaxZ(), minU, maxV);
+            t.addVertexWithUV(vector.getMinX(), vector.getMaxY(), vector.getMaxZ(), minU, minV);
+            t.addVertexWithUV(vector.getMinX(), vector.getMaxY(), vector.getMinZ(), maxU, minV);
+            t.addVertexWithUV(vector.getMinX(), vector.getMinY(), vector.getMinZ(), maxU, maxV);
+            
+            // Draw east side:
+            t.setNormal(1, 0, 0);
+            t.addVertexWithUV(vector.getMaxX(), vector.getMinY(), vector.getMinZ(), minU, maxV);
+            t.addVertexWithUV(vector.getMaxX(), vector.getMaxY(), vector.getMinZ(), minU, minV);
+            t.addVertexWithUV(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ(), maxU, minV);
+            t.addVertexWithUV(vector.getMaxX(), vector.getMinY(), vector.getMaxZ(), maxU, maxV);
+            
+            // Draw north side
+            t.setNormal(0, 0, -1);
+            t.addVertexWithUV(vector.getMinX(), vector.getMinY(), vector.getMinZ(), minU, maxV);
+            t.addVertexWithUV(vector.getMinX(), vector.getMaxY(), vector.getMinZ(), minU, minV);
+            t.addVertexWithUV(vector.getMaxX(), vector.getMaxY(), vector.getMinZ(), maxU, minV);
+            t.addVertexWithUV(vector.getMaxX(), vector.getMinY(), vector.getMinZ(), maxU, maxV);
+            
+            // Draw south side
+            t.setNormal(0, 0, 1);
+            t.addVertexWithUV(vector.getMinX(), vector.getMinY(), vector.getMaxZ(), minU, maxV);
+            t.addVertexWithUV(vector.getMaxX(), vector.getMinY(), vector.getMaxZ(), maxU, maxV);
+            t.addVertexWithUV(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ(), maxU, minV);
+            t.addVertexWithUV(vector.getMinX(), vector.getMaxY(), vector.getMaxZ(), minU, minV);
+        }
         
-        //Draw east side:
-        t.setNormal(1, 0, 0);
-        t.addVertexWithUV(vector.getMaxX(), vector.getMinY(), vector.getMinZ(), minU, maxV);
-        t.addVertexWithUV(vector.getMaxX(), vector.getMaxY(), vector.getMinZ(), minU, minV);
-        t.addVertexWithUV(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ(), maxU, minV);
-        t.addVertexWithUV(vector.getMaxX(), vector.getMinY(), vector.getMaxZ(), maxU, maxV);
-        
-        //Draw north side
-        t.setNormal(0, 0, -1);
-        t.addVertexWithUV(vector.getMinX(), vector.getMinY(), vector.getMinZ(), minU, maxV);
-        t.addVertexWithUV(vector.getMinX(), vector.getMaxY(), vector.getMinZ(), minU, minV);
-        t.addVertexWithUV(vector.getMaxX(), vector.getMaxY(), vector.getMinZ(), maxU, minV);
-        t.addVertexWithUV(vector.getMaxX(), vector.getMinY(), vector.getMinZ(), maxU, maxV);
-        
-        
-        //Draw south side
-        t.setNormal(0, 0, 1);
-        t.addVertexWithUV(vector.getMinX(), vector.getMinY(), vector.getMaxZ(), minU, maxV);
-        t.addVertexWithUV(vector.getMaxX(), vector.getMinY(), vector.getMaxZ(), maxU, maxV);
-        t.addVertexWithUV(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ(), maxU, minV);
-        t.addVertexWithUV(vector.getMinX(), vector.getMaxY(), vector.getMaxZ(), minU, minV);
+        if (power > 0 && pass == 1) {
+            GL11.glEnable(GL11.GL_BLEND);
+            GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
+            GL11.glDisable(GL11.GL_TEXTURE_2D);
+            GL11.glDisable(GL11.GL_LIGHTING);
+            // GL11.glDisable(GL11.GL_CULL_FACE);
+            GL11.glDepthMask(false);
+            GL11.glBegin(GL11.GL_QUADS);
+            RenderHelper.drawColoredCube(vector.clone().expand(0.5 / 16D), r / 256D, g / 256D, b / 256D, (power / 15D) * 0.625);
+            GL11.glEnd();
+            GL11.glDepthMask(true);
+            GL11.glEnable(GL11.GL_CULL_FACE);
+            GL11.glEnable(GL11.GL_LIGHTING);
+            GL11.glEnable(GL11.GL_TEXTURE_2D);
+            GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+            GL11.glDisable(GL11.GL_BLEND);
+        }
     }
     
     @Override
@@ -231,7 +254,6 @@ public class PartLamp extends BPPartFace {
     
         return power;
     }
-    
     
     /**
      * @author amadornes
@@ -261,6 +283,5 @@ public class PartLamp extends BPPartFace {
     
         return CustomTabs.tabBluePowerLighting;
     }
-
     
 }

@@ -252,7 +252,7 @@ public class MultipartBPPart extends TMultiPart implements IRedstonePart, JNorma
     @Override
     public boolean renderStatic(Vector3 pos, int pass) {
     
-        if (getPart().shouldRenderStaticOnPass(pass)) getPart().markPartForRenderUpdate();
+        if (getPart().shouldRenderStaticOnPass(0)) getPart().markPartForRenderUpdate();
         return false;
     }
     
@@ -266,8 +266,8 @@ public class MultipartBPPart extends TMultiPart implements IRedstonePart, JNorma
             GL11.glNewList(emptyStaticRender, GL11.GL_COMPILE);
             GL11.glEndList();
         }
-        if (staticRender0 == -1 || getPart().shouldReRender()) reRenderStatic(new Vector3(0, 0, 0), pass);
-        if (staticRender1 == -1 || getPart().shouldReRender()) reRenderStatic(new Vector3(0, 0, 0), pass);
+        if (staticRender0 == -1 || getPart().shouldReRender()) reRenderStatic(new Vector3(0, 0, 0), 0);
+        if (staticRender1 == -1 || getPart().shouldReRender()) reRenderStatic(new Vector3(0, 0, 0), 1);
         if (getPart().shouldReRender()) getPart().resetRenderUpdate();
         
         if (getPart().shouldRenderStaticOnPass(pass)) {

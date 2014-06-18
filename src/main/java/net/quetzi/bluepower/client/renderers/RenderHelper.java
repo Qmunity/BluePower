@@ -17,13 +17,13 @@ import org.lwjgl.opengl.GL11;
 
 public class RenderHelper {
     
-	/**
-	 * Adds a vertex. Just a wrapper function for openGL
-	 * @author Koen Beckers (K4Unl)
-	 * @param x
-	 * @param y
-	 * @param z
-	 */
+    /**
+     * Adds a vertex. Just a wrapper function for openGL
+     * @author Koen Beckers (K4Unl)
+     * @param x
+     * @param y
+     * @param z
+     */
     public static void addVertex(double x, double y, double z) {
     
         GL11.glVertex3d(x, y, z);
@@ -153,8 +153,7 @@ public class RenderHelper {
      * @param x3
      * @param y3
      * @param z3
-     * @return
-     * TODO: Maybe move this function?
+     * @return TODO: Maybe move this function?
      */
     public static DoubleBuffer planeEquation(double x1, double y1, double z1, double x2, double y2, double z2, double x3, double y3, double z3) {
     
@@ -169,15 +168,13 @@ public class RenderHelper {
     }
     
     /**
-     * Draws a colored cube with the size of vector.
-     * Every face has a different color
-     * This uses OpenGL
+     * Draws a colored cube with the size of vector. Every face has a different color This uses OpenGL
      * @author Koen Beckers (K4Unl)
      * @param vector
      */
     public static void drawColoredCube(Vector3Cube vector) {
     
-        //Top side
+        // Top side
         GL11.glColor3f(1.0F, 0.0F, 0.0F);
         GL11.glNormal3d(0, 1, 0);
         addVertex(vector.getMinX(), vector.getMaxY(), vector.getMaxZ());
@@ -185,7 +182,7 @@ public class RenderHelper {
         addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMinZ());
         addVertex(vector.getMinX(), vector.getMaxY(), vector.getMinZ());
         
-        //Bottom side
+        // Bottom side
         GL11.glColor3f(1.0F, 1.0F, 0.0F);
         GL11.glNormal3d(0, -1, 0);
         addVertex(vector.getMaxX(), vector.getMinY(), vector.getMaxZ());
@@ -193,7 +190,7 @@ public class RenderHelper {
         addVertex(vector.getMinX(), vector.getMinY(), vector.getMinZ());
         addVertex(vector.getMaxX(), vector.getMinY(), vector.getMinZ());
         
-        //Draw west side:
+        // Draw west side:
         GL11.glColor3f(0.0F, 1.0F, 0.0F);
         GL11.glNormal3d(-1, 0, 0);
         addVertex(vector.getMinX(), vector.getMinY(), vector.getMaxZ());
@@ -201,7 +198,7 @@ public class RenderHelper {
         addVertex(vector.getMinX(), vector.getMaxY(), vector.getMinZ());
         addVertex(vector.getMinX(), vector.getMinY(), vector.getMinZ());
         
-        //Draw east side:
+        // Draw east side:
         GL11.glColor3f(0.0F, 1.0F, 1.0F);
         GL11.glNormal3d(1, 0, 0);
         addVertex(vector.getMaxX(), vector.getMinY(), vector.getMinZ());
@@ -209,7 +206,7 @@ public class RenderHelper {
         addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ());
         addVertex(vector.getMaxX(), vector.getMinY(), vector.getMaxZ());
         
-        //Draw north side
+        // Draw north side
         GL11.glColor3f(0.0F, 0.0F, 1.0F);
         GL11.glNormal3d(0, 0, -1);
         addVertex(vector.getMinX(), vector.getMinY(), vector.getMinZ());
@@ -217,7 +214,7 @@ public class RenderHelper {
         addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMinZ());
         addVertex(vector.getMaxX(), vector.getMinY(), vector.getMinZ());
         
-        //Draw south side
+        // Draw south side
         GL11.glColor3f(0.0F, 0.0F, 0.0F);
         GL11.glNormal3d(0, 0, 1);
         addVertex(vector.getMinX(), vector.getMinY(), vector.getMaxZ());
@@ -227,9 +224,62 @@ public class RenderHelper {
     }
     
     /**
-     * Draws a colored cube with the size of vector.
-     * Every face has a different color
-     * This uses the Tessellator
+     * Draws a colored cube with the size of vector. All faces have the specified color. This uses OpenGL
+     * @author Koen Beckers (K4Unl) and Amadornes
+     * @param vector
+     * @param color
+     */
+    public static void drawColoredCube(Vector3Cube vector, double r, double g, double b, double a) {
+    
+        GL11.glColor4d(r, g, b, a);
+        
+        // Top side
+        GL11.glNormal3d(0, 1, 0);
+        addVertex(vector.getMinX(), vector.getMaxY(), vector.getMaxZ());
+        addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ());
+        addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMinZ());
+        addVertex(vector.getMinX(), vector.getMaxY(), vector.getMinZ());
+        
+        // Bottom side
+        GL11.glNormal3d(0, -1, 0);
+        addVertex(vector.getMaxX(), vector.getMinY(), vector.getMaxZ());
+        addVertex(vector.getMinX(), vector.getMinY(), vector.getMaxZ());
+        addVertex(vector.getMinX(), vector.getMinY(), vector.getMinZ());
+        addVertex(vector.getMaxX(), vector.getMinY(), vector.getMinZ());
+        
+        // Draw west side:
+        GL11.glNormal3d(-1, 0, 0);
+        addVertex(vector.getMinX(), vector.getMinY(), vector.getMaxZ());
+        addVertex(vector.getMinX(), vector.getMaxY(), vector.getMaxZ());
+        addVertex(vector.getMinX(), vector.getMaxY(), vector.getMinZ());
+        addVertex(vector.getMinX(), vector.getMinY(), vector.getMinZ());
+        
+        // Draw east side:
+        GL11.glNormal3d(1, 0, 0);
+        addVertex(vector.getMaxX(), vector.getMinY(), vector.getMinZ());
+        addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMinZ());
+        addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ());
+        addVertex(vector.getMaxX(), vector.getMinY(), vector.getMaxZ());
+        
+        // Draw north side
+        GL11.glNormal3d(0, 0, -1);
+        addVertex(vector.getMinX(), vector.getMinY(), vector.getMinZ());
+        addVertex(vector.getMinX(), vector.getMaxY(), vector.getMinZ());
+        addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMinZ());
+        addVertex(vector.getMaxX(), vector.getMinY(), vector.getMinZ());
+        
+        // Draw south side
+        GL11.glNormal3d(0, 0, 1);
+        addVertex(vector.getMinX(), vector.getMinY(), vector.getMaxZ());
+        addVertex(vector.getMaxX(), vector.getMinY(), vector.getMaxZ());
+        addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ());
+        addVertex(vector.getMinX(), vector.getMaxY(), vector.getMaxZ());
+        
+        GL11.glColor4d(1, 1, 1, 1);
+    }
+    
+    /**
+     * Draws a colored cube with the size of vector. Every face has a different color This uses the Tessellator
      * @author Koen Beckers (K4Unl)
      * @param vector
      */
@@ -238,14 +288,14 @@ public class RenderHelper {
         Tessellator t = Tessellator.instance;
         boolean wasTesselating = false;
         
-        //Check if we were already tesselating
+        // Check if we were already tesselating
         try {
             t.startDrawingQuads();
         } catch (IllegalStateException e) {
             wasTesselating = true;
         }
         
-        //Top side
+        // Top side
         t.setColorRGBA_F(1.0F, 0.0F, 0.0F, 1.0F);
         t.setNormal(0, 1, 0);
         t.addVertex(vector.getMinX(), vector.getMaxY(), vector.getMaxZ());
@@ -253,7 +303,7 @@ public class RenderHelper {
         t.addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMinZ());
         t.addVertex(vector.getMinX(), vector.getMaxY(), vector.getMinZ());
         
-        //Bottom side
+        // Bottom side
         t.setColorRGBA_F(1.0F, 1.0F, 0.0F, 1.0F);
         t.setNormal(0, -1, 0);
         t.addVertex(vector.getMaxX(), vector.getMinY(), vector.getMaxZ());
@@ -261,7 +311,7 @@ public class RenderHelper {
         t.addVertex(vector.getMinX(), vector.getMinY(), vector.getMinZ());
         t.addVertex(vector.getMaxX(), vector.getMinY(), vector.getMinZ());
         
-        //Draw west side:
+        // Draw west side:
         t.setColorRGBA_F(0.0F, 1.0F, 0.0F, 1.0F);
         t.setNormal(-1, 0, 0);
         t.addVertex(vector.getMinX(), vector.getMinY(), vector.getMaxZ());
@@ -269,7 +319,7 @@ public class RenderHelper {
         t.addVertex(vector.getMinX(), vector.getMaxY(), vector.getMinZ());
         t.addVertex(vector.getMinX(), vector.getMinY(), vector.getMinZ());
         
-        //Draw east side:
+        // Draw east side:
         t.setColorRGBA_F(0.0F, 1.0F, 1.0F, 1.0F);
         t.setNormal(1, 0, 0);
         t.addVertex(vector.getMaxX(), vector.getMinY(), vector.getMinZ());
@@ -277,7 +327,7 @@ public class RenderHelper {
         t.addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ());
         t.addVertex(vector.getMaxX(), vector.getMinY(), vector.getMaxZ());
         
-        //Draw north side
+        // Draw north side
         t.setColorRGBA_F(0.0F, 0.0F, 1.0F, 1.0F);
         t.setNormal(0, 0, -1);
         t.addVertex(vector.getMinX(), vector.getMinY(), vector.getMinZ());
@@ -285,7 +335,7 @@ public class RenderHelper {
         t.addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMinZ());
         t.addVertex(vector.getMaxX(), vector.getMinY(), vector.getMinZ());
         
-        //Draw south side
+        // Draw south side
         t.setColorRGBA_F(0.0F, 0.0F, 0.0F, 1.0F);
         t.setNormal(0, 0, 1);
         t.addVertex(vector.getMinX(), vector.getMinY(), vector.getMaxZ());
@@ -299,9 +349,7 @@ public class RenderHelper {
     }
     
     /**
-     * Draws a cube with the size of vector.
-     * It uses the texture that is already bound and maps that completely
-     * This uses the Tessellator
+     * Draws a cube with the size of vector. It uses the texture that is already bound and maps that completely This uses the Tessellator
      * @author Koen Beckers (K4Unl)
      * @param vector
      */
@@ -310,7 +358,7 @@ public class RenderHelper {
         Tessellator t = Tessellator.instance;
         boolean wasTesselating = false;
         
-        //Check if we were already tesselating
+        // Check if we were already tesselating
         try {
             t.startDrawingQuads();
         } catch (IllegalStateException e) {
@@ -322,42 +370,42 @@ public class RenderHelper {
         double minV = 0;
         double maxV = 1;
         
-        //Top side
+        // Top side
         t.setNormal(0, 1, 0);
         t.addVertexWithUV(vector.getMinX(), vector.getMaxY(), vector.getMaxZ(), minU, maxV);
         t.addVertexWithUV(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ(), minU, minV);
         t.addVertexWithUV(vector.getMaxX(), vector.getMaxY(), vector.getMinZ(), maxU, minV);
         t.addVertexWithUV(vector.getMinX(), vector.getMaxY(), vector.getMinZ(), maxU, maxV);
         
-        //Bottom side
+        // Bottom side
         t.setNormal(0, -1, 0);
         t.addVertexWithUV(vector.getMaxX(), vector.getMinY(), vector.getMaxZ(), minU, maxV);
         t.addVertexWithUV(vector.getMinX(), vector.getMinY(), vector.getMaxZ(), minU, minV);
         t.addVertexWithUV(vector.getMinX(), vector.getMinY(), vector.getMinZ(), maxU, minV);
         t.addVertexWithUV(vector.getMaxX(), vector.getMinY(), vector.getMinZ(), maxU, maxV);
         
-        //Draw west side:
+        // Draw west side:
         t.setNormal(-1, 0, 0);
         t.addVertexWithUV(vector.getMinX(), vector.getMinY(), vector.getMaxZ(), minU, maxV);
         t.addVertexWithUV(vector.getMinX(), vector.getMaxY(), vector.getMaxZ(), minU, minV);
         t.addVertexWithUV(vector.getMinX(), vector.getMaxY(), vector.getMinZ(), maxU, minV);
         t.addVertexWithUV(vector.getMinX(), vector.getMinY(), vector.getMinZ(), maxU, maxV);
         
-        //Draw east side:
+        // Draw east side:
         t.setNormal(1, 0, 0);
         t.addVertexWithUV(vector.getMaxX(), vector.getMinY(), vector.getMinZ(), minU, maxV);
         t.addVertexWithUV(vector.getMaxX(), vector.getMaxY(), vector.getMinZ(), minU, minV);
         t.addVertexWithUV(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ(), maxU, minV);
         t.addVertexWithUV(vector.getMaxX(), vector.getMinY(), vector.getMaxZ(), maxU, maxV);
         
-        //Draw north side
+        // Draw north side
         t.setNormal(0, 0, -1);
         t.addVertexWithUV(vector.getMinX(), vector.getMinY(), vector.getMinZ(), minU, maxV);
         t.addVertexWithUV(vector.getMinX(), vector.getMaxY(), vector.getMinZ(), minU, minV);
         t.addVertexWithUV(vector.getMaxX(), vector.getMaxY(), vector.getMinZ(), maxU, minV);
         t.addVertexWithUV(vector.getMaxX(), vector.getMinY(), vector.getMinZ(), maxU, maxV);
         
-        //Draw south side
+        // Draw south side
         t.setNormal(0, 0, 1);
         t.addVertexWithUV(vector.getMinX(), vector.getMinY(), vector.getMaxZ(), minU, maxV);
         t.addVertexWithUV(vector.getMaxX(), vector.getMinY(), vector.getMaxZ(), minU, minV);
@@ -370,9 +418,7 @@ public class RenderHelper {
     }
     
     /**
-     * Draws a cube with the size of vector.
-     * Every face has the same color
-     * This uses the Tessellator
+     * Draws a cube with the size of vector. Every face has the same color This uses the Tessellator
      * @author Koen Beckers (K4Unl)
      * @param vector
      */
@@ -381,49 +427,49 @@ public class RenderHelper {
         Tessellator t = Tessellator.instance;
         boolean wasTesselating = false;
         
-        //Check if we were already tesselating
+        // Check if we were already tesselating
         try {
             t.startDrawingQuads();
         } catch (IllegalStateException e) {
             wasTesselating = true;
         }
         
-        //Top side
+        // Top side
         t.setNormal(0, 1, 0);
         t.addVertex(vector.getMinX(), vector.getMaxY(), vector.getMaxZ());
         t.addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ());
         t.addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMinZ());
         t.addVertex(vector.getMinX(), vector.getMaxY(), vector.getMinZ());
         
-        //Bottom side
+        // Bottom side
         t.setNormal(0, -1, 0);
         t.addVertex(vector.getMaxX(), vector.getMinY(), vector.getMaxZ());
         t.addVertex(vector.getMinX(), vector.getMinY(), vector.getMaxZ());
         t.addVertex(vector.getMinX(), vector.getMinY(), vector.getMinZ());
         t.addVertex(vector.getMaxX(), vector.getMinY(), vector.getMinZ());
         
-        //Draw west side:
+        // Draw west side:
         t.setNormal(-1, 0, 0);
         t.addVertex(vector.getMinX(), vector.getMinY(), vector.getMaxZ());
         t.addVertex(vector.getMinX(), vector.getMaxY(), vector.getMaxZ());
         t.addVertex(vector.getMinX(), vector.getMaxY(), vector.getMinZ());
         t.addVertex(vector.getMinX(), vector.getMinY(), vector.getMinZ());
         
-        //Draw east side:
+        // Draw east side:
         t.setNormal(1, 0, 0);
         t.addVertex(vector.getMaxX(), vector.getMinY(), vector.getMinZ());
         t.addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMinZ());
         t.addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ());
         t.addVertex(vector.getMaxX(), vector.getMinY(), vector.getMaxZ());
         
-        //Draw north side
+        // Draw north side
         t.setNormal(0, 0, -1);
         t.addVertex(vector.getMinX(), vector.getMinY(), vector.getMinZ());
         t.addVertex(vector.getMinX(), vector.getMaxY(), vector.getMinZ());
         t.addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMinZ());
         t.addVertex(vector.getMaxX(), vector.getMinY(), vector.getMinZ());
         
-        //Draw south side
+        // Draw south side
         t.setNormal(0, 0, 1);
         t.addVertex(vector.getMinX(), vector.getMinY(), vector.getMaxZ());
         t.addVertex(vector.getMaxX(), vector.getMinY(), vector.getMaxZ());
@@ -445,44 +491,44 @@ public class RenderHelper {
         Tessellator t = Tessellator.instance;
         boolean wasTesselating = false;
         
-        //Check if we were already tesselating
+        // Check if we were already tesselating
         try {
             t.startDrawingQuads();
         } catch (IllegalStateException e) {
             wasTesselating = true;
         }
         
-        //Top side
+        // Top side
         t.addVertex(vector.getMinX(), vector.getMaxY(), vector.getMaxZ());
         t.addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ());
         t.addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMinZ());
         t.addVertex(vector.getMinX(), vector.getMaxY(), vector.getMinZ());
         
-        //Bottom side
+        // Bottom side
         t.addVertex(vector.getMaxX(), vector.getMinY(), vector.getMaxZ());
         t.addVertex(vector.getMinX(), vector.getMinY(), vector.getMaxZ());
         t.addVertex(vector.getMinX(), vector.getMinY(), vector.getMinZ());
         t.addVertex(vector.getMaxX(), vector.getMinY(), vector.getMinZ());
         
-        //Draw west side:
+        // Draw west side:
         t.addVertex(vector.getMinX(), vector.getMinY(), vector.getMaxZ());
         t.addVertex(vector.getMinX(), vector.getMaxY(), vector.getMaxZ());
         t.addVertex(vector.getMinX(), vector.getMaxY(), vector.getMinZ());
         t.addVertex(vector.getMinX(), vector.getMinY(), vector.getMinZ());
         
-        //Draw east side:
+        // Draw east side:
         t.addVertex(vector.getMaxX(), vector.getMinY(), vector.getMinZ());
         t.addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMinZ());
         t.addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ());
         t.addVertex(vector.getMaxX(), vector.getMinY(), vector.getMaxZ());
         
-        //Draw north side
+        // Draw north side
         t.addVertex(vector.getMinX(), vector.getMinY(), vector.getMinZ());
         t.addVertex(vector.getMinX(), vector.getMaxY(), vector.getMinZ());
         t.addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMinZ());
         t.addVertex(vector.getMaxX(), vector.getMinY(), vector.getMinZ());
         
-        //Draw south side
+        // Draw south side
         t.addVertex(vector.getMinX(), vector.getMinY(), vector.getMaxZ());
         t.addVertex(vector.getMaxX(), vector.getMinY(), vector.getMaxZ());
         t.addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ());

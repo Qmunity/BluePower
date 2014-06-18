@@ -32,8 +32,8 @@ public class Vector3Cube {
         double maxY = Math.max(a.getY(), b.getY());
         double maxZ = Math.max(a.getZ(), b.getZ());
         
-        this.min = new Vector3(minX, minY, minZ, w);
-        this.max = new Vector3(maxX, maxY, maxZ, w);
+        min = new Vector3(minX, minY, minZ, w);
+        max = new Vector3(maxX, maxY, maxZ, w);
     }
     
     public Vector3Cube(AxisAlignedBB aabb) {
@@ -95,6 +95,14 @@ public class Vector3Cube {
     public Vector3Cube clone() {
     
         return new Vector3Cube(min.clone(), max.clone());
+    }
+    
+    public Vector3Cube expand(double size) {
+    
+        min.subtract(size, size, size);
+        max.add(size, size, size);
+        
+        return this;
     }
     
     private ForgeDirection last = ForgeDirection.UNKNOWN;
