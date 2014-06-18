@@ -48,6 +48,14 @@ public class MessageGuiUpdate extends LocationIntPacket<MessageGuiUpdate> {
         this.value = value;
     }
     
+    public MessageGuiUpdate(TileEntity tile, int messageId, int value) {
+    
+        super(tile.xCoord, tile.yCoord, tile.zCoord);
+        partId = -1;
+        this.messageId = messageId;
+        this.value = value;
+    }
+    
     @Optional.Method(modid = Dependencies.FMP)
     private int getPartId(BPPart part) {
     
@@ -90,6 +98,10 @@ public class MessageGuiUpdate extends LocationIntPacket<MessageGuiUpdate> {
         TileEntity te = player.worldObj.getTileEntity(message.x, message.y, message.z);
         if (compat.isMultipart(te)) {
             messagePart(te, message);
+        } else {
+            if (te instanceof IGuiButtonSensitive) {
+                ((IGuiButtonSensitive) te).onButtonPress(message.messageId, message.value);
+            }
         }
     }
     

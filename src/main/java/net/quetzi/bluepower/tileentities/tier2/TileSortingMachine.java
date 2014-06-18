@@ -5,6 +5,8 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.quetzi.bluepower.api.tube.IPneumaticTube.TubeColor;
+import net.quetzi.bluepower.part.IGuiButtonSensitive;
 import net.quetzi.bluepower.references.Refs;
 import net.quetzi.bluepower.tileentities.TileMachineBase;
 
@@ -13,19 +15,64 @@ import net.quetzi.bluepower.tileentities.TileMachineBase;
  * @author MineMaarten
  */
 
-public class TileSortingMachine extends TileMachineBase implements ISidedInventory {
+public class TileSortingMachine extends TileMachineBase implements ISidedInventory, IGuiButtonSensitive {
     
-    private ItemStack[] inventory = new ItemStack[40];
-    public int          curColumn = 0;
-    public PullMode     pullMode  = PullMode.SINGLE_STEP;
-    public SortMode     sortMode  = SortMode.ANYSTACK_SEQUENTIAL;
+    private ItemStack[]      inventory = new ItemStack[40];
+    public int               curColumn = 0;
+    public PullMode          pullMode  = PullMode.SINGLE_STEP;
+    public SortMode          sortMode  = SortMode.ANYSTACK_SEQUENTIAL;
+    public final TubeColor[] colors    = new TubeColor[8];
+    
+    public TileSortingMachine() {
+    
+        for (int i = 0; i < 8; i++)
+            colors[i] = TubeColor.NONE;
+    }
     
     public enum PullMode {
-        SINGLE_STEP, AUTOMATIC, SINGLE_SWEEP
+        SINGLE_STEP("single_step"), AUTOMATIC("automatic"), SINGLE_SWEEP("single_sweep");
+        
+        private final String name;
+        
+        private PullMode(String name) {
+        
+            this.name = name;
+        }
+        
+        @Override
+        public String toString() {
+        
+            return "gui.pullMode." + name;
+        }
     }
     
     public enum SortMode {
-        ANYSTACK_SEQUENTIAL, ALLSTACK_SEQUENTIAL, RANDOM_ALLSTACKS, ANY_ITEM, ANY_ITEM_DEFAULT, ANY_STACK, ANY_STACK_DEFAULT
+        ANYSTACK_SEQUENTIAL("any_stack_sequential"), ALLSTACK_SEQUENTIAL("all_stack_sequential"), RANDOM_ALLSTACKS("all_stacks_random"), ANY_ITEM("any_item"), ANY_ITEM_DEFAULT("any_item_default"), ANY_STACK("any_stack"), ANY_STACK_DEFAULT("any_stack_default");
+        
+        private final String name;
+        
+        private SortMode(String name) {
+        
+            this.name = name;
+        }
+        
+        @Override
+        public String toString() {
+        
+            return "gui.sortMode." + name;
+        }
+    }
+    
+    @Override
+    public void onButtonPress(int messageId, int value) {
+    
+        if (messageId < 8) {
+            colors[messageId] = TubeColor.values()[value];
+        } else if (messageId == 9) {
+            pullMode = PullMode.values()[value];
+        } else {
+            sortMode = SortMode.values()[value];
+        }
     }
     
     @Override

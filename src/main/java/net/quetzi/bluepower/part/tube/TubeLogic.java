@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
+import java.util.Stack;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import net.minecraft.entity.item.EntityItem;
@@ -21,8 +22,11 @@ import net.quetzi.bluepower.api.vec.Vector3;
 import net.quetzi.bluepower.compat.CompatibilityUtils;
 import net.quetzi.bluepower.compat.fmp.IMultipartCompat;
 import net.quetzi.bluepower.helper.IOHelper;
+import net.quetzi.bluepower.helper.TileEntityCache;
 import net.quetzi.bluepower.references.Dependencies;
 
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 import org.lwjgl.opengl.GL11;
 
 import cpw.mods.fml.relauncher.Side;
@@ -48,7 +52,35 @@ public class TubeLogic implements IPneumaticTube {
         this.tube = tube;
     }
     
-    public void clearNodeCache() {
+    public void clearNodeCaches() {
+    
+        List<PneumaticTube> clearedTubes = new ArrayList<PneumaticTube>();
+        Stack<PneumaticTube> todoTubes = new Stack<PneumaticTube>();
+        
+        IMultipartCompat compat = (IMultipartCompat) CompatibilityUtils.getModule(Dependencies.FMP);
+        
+        clearNodeCache();
+        boolean firstRun = true;
+        todoTubes.push(tube);
+        
+        while (!todoTubes.isEmpty()) {
+            
+            for (TileEntityCache cache : todoTubes.pop().getTileCache()) {
+                PneumaticTube neighbor = compat.getBPPart(cache.getTileEntity(), PneumaticTube.class);
+                if (neighbor != null) {
+                    if (!clearedTubes.contains(neighbor)) {
+                        neighbor.getLogic().clearNodeCache();
+                        clearedTubes.add(neighbor);
+                        if (firstRun || !neighbor.isCrossOver) todoTubes.push(neighbor);
+                    }
+                }
+            }
+            firstRun = false;
+        }
+        
+    }
+    
+    private void clearNodeCache() {
     
         connectionNode = null;
     }
@@ -64,6 +96,7 @@ public class TubeLogic implements IPneumaticTube {
     
     public void update() {
     
+        clearNodeCache();
         Iterator<TubeStack> iterator = tubeStacks.iterator();
         while (iterator.hasNext()) {
             TubeStack tubeStack = iterator.next();
@@ -77,17 +110,21 @@ public class TubeLogic implements IPneumaticTube {
                     }
                 } else {//when we are at an intersection
                     if (!world.isRemote) {
-                        tubeStack.heading = getHeadingForItem(tubeStack);
-                        if (tubeStack.heading == ForgeDirection.UNKNOWN) {//if no valid destination
+                        Pair<ForgeDirection, TileEntity> heading = getHeadingForItem(tubeStack, false);
+                        if (heading == null) {//if no valid destination
                             for (int i = 0; i < 6; i++) {
                                 if (tube.connections[i]) {
-                                    tubeStack.heading = ForgeDirection.getOrientation(i);//just randomly bounce
+                                    tubeStack.heading = ForgeDirection.getOrientation(i);//just a specific direction for now.
                                     break;
                                 }
                                 
                             }
+                        } else {
+                            tubeStack.heading = heading.getKey();
                         }
                         tube.sendUpdatePacket();
+                    } else {
+                        tubeStack.enabled = false;
                     }
                 }
             } else if (tubeStack.progress >= 1) {//when the item reached the end of the tube.
@@ -112,7 +149,14 @@ public class TubeLogic implements IPneumaticTube {
         }
     }
     
-    private ForgeDirection getHeadingForItem(TubeStack stack) {
+    /**
+    This method gets the end target and heading for a TubeStack.
+    When the tubestack's target variable is null, this is an exporting item, meaning the returned target will be the TileEntity the item is going to transport to.
+    When the tubestack's target variable is not not, the item is being retrieved to this inventory. The returned target is the inventory the item came/should come from.
+    @param simulate The only difference between simulate and not simulate is the fact that the round robin handling will be updated in non-simulate.
+
+    */
+    private Pair<ForgeDirection, TileEntity> getHeadingForItem(TubeStack stack, boolean simulate) {
     
         Map<TubeNode, Integer> distances = new HashMap<TubeNode, Integer>();
         Queue<TubeNode> traversingNodes = new LinkedBlockingQueue<TubeNode>();
@@ -137,7 +181,7 @@ public class TubeLogic implements IPneumaticTube {
                         if (edge.target.target instanceof PneumaticTube) {
                             traversingNodes.add(edge.target);
                             trackingExportDirection.add(heading);
-                        } else if (edge.isValidForExportItem(stack.stack)) {
+                        } else if (stack.getTarget(world) == null && edge.isValidForExportItem(stack.stack) || stack.getTarget(world) != null && edge.isValidForImportItem(stack.stack)) {
                             validDestinations.put(edge, heading);
                         }
                     }
@@ -156,17 +200,25 @@ public class TubeLogic implements IPneumaticTube {
             if (isDoneSearching) break;
         }
         
-        if (validDestinations.size() == 0) return ForgeDirection.UNKNOWN;
+        if (validDestinations.size() == 0) {
+            if (stack.getTarget(world) != null && !simulate) {
+                stack.setTarget(null);//if we can't reach the retrieving target anymore, reroute as normal.
+                return getHeadingForItem(stack, simulate);
+            } else {
+                return null;
+            }
+        }
         
-        List<ForgeDirection> validDirections = new ArrayList<ForgeDirection>();
+        List<Pair<ForgeDirection, TileEntity>> validDirections = new ArrayList<Pair<ForgeDirection, TileEntity>>();
         for (Map.Entry<TubeEdge, ForgeDirection> entry : validDestinations.entrySet()) {
             if (distances.get(entry.getKey().target) == closestDest) {
-                validDirections.add(entry.getValue());
+                validDirections.add(new ImmutablePair(entry.getValue(), entry.getKey().target));
             }
         }
         
         //handle round robin
-        if (++roundRobinCounter >= validDirections.size()) roundRobinCounter = 0;
+        if (!simulate) roundRobinCounter++;
+        if (roundRobinCounter >= validDirections.size()) roundRobinCounter = 0;
         return validDirections.get(roundRobinCounter);
     }
     
@@ -188,13 +240,20 @@ public class TubeLogic implements IPneumaticTube {
     }
     
     @Override
-    public ItemStack injectStack(ItemStack stack, ForgeDirection from, TubeColor itemColor, boolean simulate) {
+    public boolean injectStack(ItemStack stack, ForgeDirection from, TubeColor itemColor, boolean simulate) {
     
         if (world.isRemote) throw new IllegalArgumentException("[Pneumatic Tube] You can't inject items from the client side!");
-        TubeStack tubeStack = new TubeStack(stack, from, itemColor);
-        tubeStacks.add(tubeStack);
-        tube.sendUpdatePacket();
-        return null;
+        TubeStack tubeStack = new TubeStack(stack.copy(), from, itemColor);
+        Pair<ForgeDirection, TileEntity> heading = getHeadingForItem(tubeStack, simulate);
+        if (heading != null && heading.getKey() != from) {
+            if (!simulate) {
+                tubeStacks.add(tubeStack);
+                tube.sendUpdatePacket();
+            }
+            return true;
+        } else {
+            return false;
+        }
     }
     
     public void writeToNBT(NBTTagCompound tag) {
@@ -206,6 +265,8 @@ public class TubeLogic implements IPneumaticTube {
             tagList.appendTag(stackTag);
         }
         tag.setTag("tubeStacks", tagList);
+        
+        tag.setInteger("roundRobinCounter", roundRobinCounter);
     }
     
     public void readFromNBT(NBTTagCompound tag) {
@@ -216,6 +277,8 @@ public class TubeLogic implements IPneumaticTube {
             NBTTagCompound stackTag = tagList.getCompoundTagAt(i);
             tubeStacks.add(TubeStack.loadFromNBT(stackTag));
         }
+        
+        roundRobinCounter = tag.getInteger("roundRobinCounter");
     }
     
     @SideOnly(Side.CLIENT)

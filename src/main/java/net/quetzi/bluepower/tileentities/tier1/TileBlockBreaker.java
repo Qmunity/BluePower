@@ -33,7 +33,7 @@ public class TileBlockBreaker extends TileMachineBase {
     
         super.redstoneChanged(newValue);
         
-        if (newValue && isBufferEmpty()) {
+        if (!worldObj.isRemote && newValue && isBufferEmpty()) {
             ForgeDirection direction = getFacingDirection();
             ForgeDirection oppDirection = direction.getOpposite();
             Block breakBlock = worldObj.getBlock(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ);

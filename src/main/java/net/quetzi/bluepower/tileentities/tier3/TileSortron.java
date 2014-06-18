@@ -270,7 +270,7 @@ public class TileSortron extends TileMachineBase implements IPeripheral, SimpleC
      */
 
     @Override
-    public TubeStack acceptItemFromTube(TubeStack stack, ForgeDirection from) {
+    public TubeStack acceptItemFromTube(TubeStack stack, ForgeDirection from, boolean simulate) {
 
         if (acceptedStackSize <= 0) return stack;
 
@@ -278,7 +278,7 @@ public class TileSortron extends TileMachineBase implements IPeripheral, SimpleC
             int acceptedSize = Math.min(stack.stack.stackSize, acceptedStackSize);
             removeFromAcceptedStack(acceptedSize);
             ItemStack stack1 = stack.stack.splitStack(acceptedSize);
-            TubeStack tubeStack = super.acceptItemFromTube(new TubeStack(stack1, from, stack.color), from);
+            TubeStack tubeStack = super.acceptItemFromTube(new TubeStack(stack1, from, stack.color), from, simulate);
             if (tubeStack != null)
                 stack.stack.stackSize += tubeStack.stack.stackSize;
             if (stack.stack.stackSize == 0) return null;

@@ -149,6 +149,7 @@ public class PneumaticTube extends BPPart {
     
         if (world != null && !world.isRemote) {
             int connectionCount = 0;
+            boolean clearedCache = false;
             for (int i = 0; i < 6; i++) {
                 boolean oldState = connections[i];
                 getTileCache()[i].update();
@@ -161,14 +162,9 @@ public class PneumaticTube extends BPPart {
                     connections[i] = isConnected(d, null);
                 }
                 if (connections[i]) connectionCount++;
-                if (oldState != connections[i]) {
-                    /*TubeNode node = getLogic().getNode();
-                    getLogic().clearNodeCache();
-                    for (TubeEdge edge : node.edges) {
-                        if (edge != null && edge.target.target instanceof PneumaticTube) {
-                            ((PneumaticTube) edge.target.target).getLogic().clearNodeCache();
-                        }
-                    }*/
+                if (!clearedCache && oldState != connections[i]) {
+                    // getLogic().clearNodeCaches();
+                    clearedCache = true;
                 }
             }
             isCrossOver = connectionCount != 2;

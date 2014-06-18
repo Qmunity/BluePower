@@ -84,12 +84,12 @@ public class TileMachineBase extends TileBase implements ITubeConnection {
     
         return internalItemStackBuffer.isEmpty();
     }
-
+    
     /**
      * Called when an item is outputted from this block, can be used for animation (See Sortron)
      */
     protected void onItemOutputted() {
-
+    
     }
     
     @Override
@@ -166,9 +166,9 @@ public class TileMachineBase extends TileBase implements ITubeConnection {
     }
     
     @Override
-    public TubeStack acceptItemFromTube(TubeStack stack, ForgeDirection from) {
+    public TubeStack acceptItemFromTube(TubeStack stack, ForgeDirection from, boolean simulate) {
     
-        internalItemStackBuffer.add(stack);
+        if (!simulate) internalItemStackBuffer.add(stack);
         return null;
     }
 }

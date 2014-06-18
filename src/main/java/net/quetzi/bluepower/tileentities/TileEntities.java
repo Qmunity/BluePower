@@ -21,8 +21,9 @@ import net.quetzi.bluepower.tileentities.tier1.TileAlloyFurnace;
 import net.quetzi.bluepower.tileentities.tier1.TileBlockBreaker;
 import net.quetzi.bluepower.tileentities.tier1.TileBuffer;
 import net.quetzi.bluepower.tileentities.tier1.TileIgniter;
-import cpw.mods.fml.common.registry.GameRegistry;
+import net.quetzi.bluepower.tileentities.tier2.TileSortingMachine;
 import net.quetzi.bluepower.tileentities.tier3.TileSortron;
+import cpw.mods.fml.common.registry.GameRegistry;
 
 public class TileEntities {
     
@@ -35,6 +36,7 @@ public class TileEntities {
         GameRegistry.registerTileEntity(TileBlockBreaker.class, "tileBlockBreaker");
         GameRegistry.registerTileEntity(TileIgniter.class, "tileIgniter");
         GameRegistry.registerTileEntity(TileBuffer.class, "tileBuffer");
+        GameRegistry.registerTileEntity(TileSortingMachine.class, "tileSortingMachine");
         GameRegistry.registerTileEntity(TileSortron.class, "tileSortron");
     }
 }
