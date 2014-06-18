@@ -22,12 +22,10 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
-import net.minecraftforge.oredict.OreDictionary;
 import net.quetzi.bluepower.api.BPRegistry;
 import net.quetzi.bluepower.api.part.PartRegistry;
 import net.quetzi.bluepower.api.recipe.IAlloyFurnaceRegistry;
 import net.quetzi.bluepower.recipe.CanvasBagRecipe;
-import net.quetzi.bluepower.references.Refs;
 
 public class Recipes {
     
@@ -154,14 +152,7 @@ public class Recipes {
         craftManager.addRecipe(new ItemStack(BPBlocks.block_breaker, 1), new Object[] {"#A#", "#P#", "#R#", '#', Blocks.cobblestone, 'A', Items.iron_pickaxe, 'P', Blocks.piston, 'R', Items.redstone});
         craftManager.addRecipe(new ItemStack(BPItems.canvas, 1), new Object[] {"SSS", "S S", "SSS", 'S', Items.string});
         craftManager.addRecipe(new ItemStack(BPItems.seedBag, 1), new Object[] {" S ", "C C", "CCC", 'S', Items.string, 'C', BPItems.canvas });
-        craftManager.addRecipe(new ItemStack(BPItems.canvas_bag, 1, 0), new Object[] {"CCC", "C C", "CCC", 'C', BPItems.canvas_bag});
-        
-        for (int i = 1; i < 16; i++) {
-            craftManager.addRecipe(new ItemStack(BPItems.canvas_bag, 1, i), new Object[] {"CCC", "CDC", "CCC", 'C', BPItems.canvas, 'D', OreDictionary.getOreID(Refs.oreDictDyes[i])});
-        }
-        for (int i = 1; i < 16; i++) {
-            craftManager.addRecipe(new ItemStack(BPItems.lumar, 1, i), new Object[] {"RD", "DG", 'R', Items.redstone, 'D', OreDictionary.getOreID(Refs.oreDictDyes[i]), 'G', Items.glowstone_dust});
-        }
+
         GameRegistry.addRecipe(new CanvasBagRecipe());
         
         // Alloy furnace
