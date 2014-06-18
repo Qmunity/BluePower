@@ -85,8 +85,7 @@ public class PartLamp extends BPPartFace {
     @Override
     public void addSelectionBoxes(List<AxisAlignedBB> boxes) {
     
-        boxes.add(AxisAlignedBB.getBoundingBox(pixel * 2, 0.0, pixel * 2, 1.0 - (pixel*2), pixel * 2, 1.0 - pixel * 2));
-        boxes.add(AxisAlignedBB.getBoundingBox(pixel * 3, pixel * 2, pixel * 3, 1.0 - (pixel*3), pixel * 8, 1.0 - pixel * 3));
+        boxes.add(AxisAlignedBB.getBoundingBox(0.0, 0.0, 0.0, 1.0, 1.0, 1.0));
     }
     
     /**
@@ -158,57 +157,6 @@ public class PartLamp extends BPPartFace {
      */
     public void renderBase(int pass) {
     	
-    	Tessellator t = Tessellator.instance;
-		Vector3Cube vector = new Vector3Cube(pixel * 2, 0.0, pixel * 2, 1.0 - (pixel*2), pixel * 2, 1.0 - pixel * 2);
-		IIcon topIcon = IconSupplier.fixtureFootTop;
-		//IIcon sideIcon = IconSupplier.fixtureFootSide;
-		
-		double minU = topIcon.getInterpolatedU(vector.getMinX() * 16);
-        double maxU = topIcon.getInterpolatedU(vector.getMaxX() * 16);
-        double minV = topIcon.getInterpolatedV(vector.getMinZ() * 16);
-        double maxV = topIcon.getInterpolatedV(vector.getMaxZ() * 16);
-    	
-        //Top side
-        t.setNormal(0, 1, 0);
-        t.addVertexWithUV(vector.getMinX(), vector.getMaxY(), vector.getMaxZ(), minU, maxV);
-        t.addVertexWithUV(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ(), minU, minV);
-        t.addVertexWithUV(vector.getMaxX(), vector.getMaxY(), vector.getMinZ(), maxU, minV);
-        t.addVertexWithUV(vector.getMinX(), vector.getMaxY(), vector.getMinZ(), maxU, maxV);
-        
-        //FIXME: Icons for the side aren't rendered..
-        
-        /*minU = sideIcon.getInterpolatedU(vector.getMinX() * 16);
-        maxU = sideIcon.getInterpolatedU(vector.getMaxX() * 16);
-        minV = sideIcon.getInterpolatedV((vector.getMinY() + (3*pixel) )* 16);
-        maxV = sideIcon.getInterpolatedV((vector.getMaxY() + (3*pixel) )* 16);*/
-        //Draw west side:
-        t.setNormal(-1, 0, 0);
-        t.addVertexWithUV(vector.getMinX(), vector.getMinY(), vector.getMaxZ(), minU, maxV);
-        t.addVertexWithUV(vector.getMinX(), vector.getMaxY(), vector.getMaxZ(), minU, minV);
-        t.addVertexWithUV(vector.getMinX(), vector.getMaxY(), vector.getMinZ(), maxU, minV);
-        t.addVertexWithUV(vector.getMinX(), vector.getMinY(), vector.getMinZ(), maxU, maxV);
-        
-        //Draw east side:
-        t.setNormal(1, 0, 0);
-        t.addVertexWithUV(vector.getMaxX(), vector.getMinY(), vector.getMinZ(), minU, maxV);
-        t.addVertexWithUV(vector.getMaxX(), vector.getMaxY(), vector.getMinZ(), minU, minV);
-        t.addVertexWithUV(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ(), maxU, minV);
-        t.addVertexWithUV(vector.getMaxX(), vector.getMinY(), vector.getMaxZ(), maxU, maxV);
-        
-        //Draw north side
-        t.setNormal(0, 0, -1);
-        t.addVertexWithUV(vector.getMinX(), vector.getMinY(), vector.getMinZ(), minU, maxV);
-        t.addVertexWithUV(vector.getMinX(), vector.getMaxY(), vector.getMinZ(), minU, minV);
-        t.addVertexWithUV(vector.getMaxX(), vector.getMaxY(), vector.getMinZ(), maxU, minV);
-        t.addVertexWithUV(vector.getMaxX(), vector.getMinY(), vector.getMinZ(), maxU, maxV);
-        
-        
-        //Draw south side
-        t.setNormal(0, 0, 1);
-        t.addVertexWithUV(vector.getMinX(), vector.getMinY(), vector.getMaxZ(), minU, maxV);
-        t.addVertexWithUV(vector.getMaxX(), vector.getMinY(), vector.getMaxZ(), minU, minV);
-        t.addVertexWithUV(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ(), maxU, minV);
-        t.addVertexWithUV(vector.getMinX(), vector.getMaxY(), vector.getMaxZ(), maxU, maxV);
     }
     
     /**
@@ -222,26 +170,24 @@ public class PartLamp extends BPPartFace {
      */
     public void renderLamp(int pass, int r, int g, int b) {
     	Tessellator t = Tessellator.instance;
-		IIcon iconToUseTop;
-		IIcon iconToUseSide;
+		IIcon iconToUse;
 		if(power == 0){
-			iconToUseSide = IconSupplier.fixtureLampSideOff;
-			iconToUseTop = IconSupplier.fixtureLampTopOff;
+			iconToUse = IconSupplier.lampOff;
 		}else{
-			iconToUseSide = IconSupplier.fixtureLampSideOn;
-			iconToUseTop = IconSupplier.fixtureLampTopOn;
+			iconToUse = IconSupplier.lampOn;
 			
+			/*
 			t.setColorRGBA(r, g, b, 20);
 			RenderHelper.drawTesselatedCube(new Vector3Cube(pixel * 4.5, pixel * 2, pixel * 4.5, 1.0 - (pixel*4.5), 1.0 - (pixel * 4.5), 1.0 - pixel * 4.5));
-			t.setColorRGBA(r, g, b, 255);
+			t.setColorRGBA(r, g, b, 255);*/
 		}
 		
-		Vector3Cube vector = new Vector3Cube(pixel * 3, pixel * 2, pixel * 3, 1.0 - (pixel*3), pixel * 8, 1.0 - pixel * 3);
+		Vector3Cube vector = new Vector3Cube(0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
 		
-		double minU = iconToUseTop.getInterpolatedU(vector.getMinX() * 16);
-        double maxU = iconToUseTop.getInterpolatedU(vector.getMaxX() * 16);
-        double minV = iconToUseTop.getInterpolatedV(vector.getMinZ() * 16);
-        double maxV = iconToUseTop.getInterpolatedV(vector.getMaxZ() * 16);
+		double minU = iconToUse.getMinU();
+        double maxU = iconToUse.getMaxU();
+        double minV = iconToUse.getMinV();
+        double maxV = iconToUse.getMaxV();
     	
         //Top side
         t.setNormal(0, 1, 0);
@@ -249,13 +195,6 @@ public class PartLamp extends BPPartFace {
         t.addVertexWithUV(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ(), minU, minV);
         t.addVertexWithUV(vector.getMaxX(), vector.getMaxY(), vector.getMinZ(), maxU, minV);
         t.addVertexWithUV(vector.getMinX(), vector.getMaxY(), vector.getMinZ(), maxU, maxV);
-        
-
-        //I think there might be something wrong with the textures here..
-        minU = iconToUseSide.getInterpolatedU(vector.getMinZ() * 16);
-        maxU = iconToUseSide.getInterpolatedU(vector.getMaxZ() * 16);
-        minV = iconToUseSide.getInterpolatedV((vector.getMinY() + (3*pixel) )* 16);
-        maxV = iconToUseSide.getInterpolatedV((vector.getMaxY() + (3*pixel) )* 16);
         
         //Draw west side:
         t.setNormal(-1, 0, 0);

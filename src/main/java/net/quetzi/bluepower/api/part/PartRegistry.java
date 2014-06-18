@@ -35,6 +35,7 @@ import net.quetzi.bluepower.part.gate.GateOr;
 import net.quetzi.bluepower.part.gate.GateSequencer;
 import net.quetzi.bluepower.part.gate.GateTimer;
 import net.quetzi.bluepower.part.lamp.PartCageLamp;
+import net.quetzi.bluepower.part.lamp.PartFixture;
 import net.quetzi.bluepower.part.lamp.PartLamp;
 import net.quetzi.bluepower.part.tube.PneumaticTube;
 import net.quetzi.bluepower.references.Refs;
@@ -258,25 +259,11 @@ public class PartRegistry {
         registerPart(GateNor.class);
         
         // Lamps
-        for (int i = 0; i < ItemDye.field_150922_c.length; i++)
+        for (int i = 0; i < ItemDye.field_150922_c.length; i++){
             registerPart(PartCageLamp.class, ItemDye.field_150921_b[i].toLowerCase(), ItemDye.field_150922_c[i]);
-        
-        registerPart(PartLamp.class, "white", 0xDDDDDD);
-        registerPart(PartLamp.class, "orange", 0xDB7D3E);
-        registerPart(PartLamp.class, "magenta", 0xB350BC);
-        registerPart(PartLamp.class, "lightblue", 0x6B8AC9);
-        registerPart(PartLamp.class, "yellow", 0xB1A627);
-        registerPart(PartLamp.class, "lime", 0x41AE38);
-        registerPart(PartLamp.class, "pink", 0xD08499);
-        registerPart(PartLamp.class, "gray", 0x404040);
-        registerPart(PartLamp.class, "lightgray", 0x9AA1A1);
-        registerPart(PartLamp.class, "cyan", 0x2E6E89);
-        registerPart(PartLamp.class, "purple", 0x7E3DB5);
-        registerPart(PartLamp.class, "blue", 0x2E388D);
-        registerPart(PartLamp.class, "brown", 0x4F321F);
-        registerPart(PartLamp.class, "green", 0x35461B);
-        registerPart(PartLamp.class, "red", 0x963430);
-        registerPart(PartLamp.class, "black", 0x191616);
+            registerPart(PartLamp.class, ItemDye.field_150921_b[i].toLowerCase(), ItemDye.field_150922_c[i]);
+            registerPart(PartFixture.class, ItemDye.field_150921_b[i].toLowerCase(), ItemDye.field_150922_c[i]);
+        }
         
         // Pneumatic Tubes
         registerPart(PneumaticTube.class);
