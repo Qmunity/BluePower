@@ -22,7 +22,7 @@ public class BPEventHandler {
                 if (is != null && is.getItem() instanceof ItemSeedBag) {
                     ItemStack seedType = ItemSeedBag.getSeedType(is);
                     if (seedType != null && seedType.isItemEqual(pickUp)) {
-                        InventoryItem inventory = (InventoryItem) InventoryItem.getItemInventory(is, "Seed Bag", 9);
+                        InventoryItem inventory = InventoryItem.getItemInventory(is, "Seed Bag", 9);
                         inventory.openInventory();
                         ItemStack pickedUp = TileEntityHopper.func_145889_a(inventory, pickUp, -1);
                         inventory.closeInventory(is);

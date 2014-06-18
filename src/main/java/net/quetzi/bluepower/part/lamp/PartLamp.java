@@ -161,7 +161,7 @@ public class PartLamp extends BPPartFace {
     	Tessellator t = Tessellator.instance;
 		Vector3Cube vector = new Vector3Cube(pixel * 2, 0.0, pixel * 2, 1.0 - (pixel*2), pixel * 2, 1.0 - pixel * 2);
 		IIcon topIcon = IconSupplier.fixtureFootTop;
-		IIcon sideIcon = IconSupplier.fixtureFootSide;
+		//IIcon sideIcon = IconSupplier.fixtureFootSide;
 		
 		double minU = topIcon.getInterpolatedU(vector.getMinX() * 16);
         double maxU = topIcon.getInterpolatedU(vector.getMaxX() * 16);
