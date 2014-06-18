@@ -19,6 +19,12 @@ public class IconSupplier {
     public static IIcon cagedLampLampInactive;
     public static IIcon cagedLampLampActiveTop;
     public static IIcon cagedLampLampInactiveTop;
+    public static IIcon fixtureFootSide;
+    public static IIcon fixtureFootTop;
+    public static IIcon fixtureLampSideOn;
+    public static IIcon fixtureLampTopOn;
+    public static IIcon fixtureLampSideOff;
+    public static IIcon fixtureLampTopOff;
     
     @SubscribeEvent
     public void onTextureStitch(TextureStitchEvent.Pre event) {
@@ -39,6 +45,14 @@ public class IconSupplier {
             
             cagedLampLampActiveTop = event.map.registerIcon(Refs.MODID + ":lamps/cage_lamp_on_top");
             cagedLampLampInactiveTop = event.map.registerIcon(Refs.MODID + ":lamps/cage_lamp_off_top");
+            
+            fixtureFootSide = event.map.registerIcon(Refs.MODID + ":lamps/fixture_foot_side");
+            fixtureFootTop = event.map.registerIcon(Refs.MODID + ":lamps/fixture_foot_top");
+            fixtureLampSideOn = event.map.registerIcon(Refs.MODID + ":lamps/fixture_lamp_on");
+            fixtureLampTopOn = event.map.registerIcon(Refs.MODID + ":lamps/fixture_lamp_on_top");
+            
+            fixtureLampSideOff = event.map.registerIcon(Refs.MODID + ":lamps/fixture_lamp_off");
+            fixtureLampTopOff = event.map.registerIcon(Refs.MODID + ":lamps/fixture_lamp_off_top");
         }
     }
 }

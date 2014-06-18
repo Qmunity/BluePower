@@ -1,6 +1,9 @@
 package net.quetzi.bluepower.part.lamp;
 
+import java.util.List;
+
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
 import net.quetzi.bluepower.api.vec.Vector3Cube;
 import net.quetzi.bluepower.client.renderers.IconSupplier;
@@ -18,6 +21,16 @@ public class PartCageLamp extends PartLamp{
 		super(colorName, colorVal);
 	}
 	
+	/**
+     * @author Koen Beckers (K4Unl)
+     */
+    
+    @Override
+    public void addSelectionBoxes(List<AxisAlignedBB> boxes) {
+    
+        boxes.add(AxisAlignedBB.getBoundingBox(pixel * 3, 0.0, pixel * 3, 1.0 - (pixel*3), pixel * 2, 1.0 - pixel * 3));
+        boxes.add(AxisAlignedBB.getBoundingBox(pixel * 4, pixel * 2, pixel * 4, 1.0 - (pixel*4), 1.0 - (pixel * 4), 1.0 - pixel * 4));
+    }
 	
 	@Override
     public void renderBase(int pass){
@@ -40,10 +53,10 @@ public class PartCageLamp extends PartLamp{
         t.addVertexWithUV(vector.getMaxX(), vector.getMaxY(), vector.getMinZ(), maxU, minV);
         t.addVertexWithUV(vector.getMinX(), vector.getMaxY(), vector.getMinZ(), maxU, maxV);
         
-//        minU = sideIcon.getInterpolatedU(vector.getMinX() * 16);
-//        maxU = sideIcon.getInterpolatedU(vector.getMaxX() * 16);
-//        minV = sideIcon.getInterpolatedV(vector.getMinY() * 16);
-//        maxV = sideIcon.getInterpolatedV(vector.getMaxY() * 16);
+        /*minU = sideIcon.getInterpolatedU(vector.getMinX() * 16);
+        maxU = sideIcon.getInterpolatedU(vector.getMaxX() * 16);
+        minV = sideIcon.getInterpolatedV(vector.getMinY() * 16);
+        maxV = sideIcon.getInterpolatedV(vector.getMaxY() * 16);*/
         //Draw west side:
         t.setNormal(-1, 0, 0);
         t.addVertexWithUV(vector.getMinX(), vector.getMinY(), vector.getMaxZ(), minU, maxV);
