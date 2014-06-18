@@ -38,7 +38,7 @@ public class ItemLumar extends Item {
         this.setCreativeTab(CustomTabs.tabBluePowerItems);
         this.setHasSubtypes(true);
         this.setUnlocalizedName(Refs.LUMAR_NAME);
-        this.setTextureName(Refs.LUMAR_NAME);
+        this.setTextureName(Refs.MODID + ":" + Refs.LUMAR_NAME);
     }
 
     @Override
@@ -52,7 +52,7 @@ public class ItemLumar extends Item {
     public int getColorFromItemStack(ItemStack itemStack, int colour) {
 
         int damage = itemStack.getItemDamage();
-        if (damage >= 0 && damage < Refs.oreDictDyes.length) { return ItemDye.field_150922_c[15 - damage]; }
+        if (damage >= 0 && damage < ItemDye.field_150922_c.length) { return ItemDye.field_150922_c[15 - damage]; }
         return 16777215;
     }
 

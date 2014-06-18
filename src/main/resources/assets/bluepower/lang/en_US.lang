@@ -184,6 +184,23 @@ bluepower.part.xnor.name=XNOR Gate
 bluepower.part.xor.name=XOR Gate
 bluepower.part.pneumaticTube.name=Pneumatic Tube
 
+item.lumar.white.name=White Lumar
+item.lumar.orange.name=Orange Lumar
+item.lumar.magenta.name=Magenta Lumar
+item.lumar.lightblue.name=Light Blue Lumar
+item.lumar.yellow.name=Yellow Lumar
+item.lumar.lime.name=Lime Lumar
+item.lumar.pink.name=Pink Lumar
+item.lumar.gray.name=Gray Lumar
+item.lumar.lightgray.name=Light Gray Lumar
+item.lumar.cyan.name=Cyan Lumar
+item.lumar.purple.name=Purple Lumar
+item.lumar.blue.name=Blue Lumar
+item.lumar.brown.name=Brown Lumar
+item.lumar.green.name=Green Lumar
+item.lumar.red.name=Red Lumar
+item.lumar.black.name=Black Lumar
+
 itemGroup.tabBluePowerMachines=Blue Power Machines
 itemGroup.tabBluePowerBlocks=Blue Power Blocks
 itemGroup.tabBluePowerItems=Blue Power Items
