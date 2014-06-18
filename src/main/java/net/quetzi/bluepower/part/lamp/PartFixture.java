@@ -178,7 +178,7 @@ public class PartFixture extends PartLamp {
             // GL11.glDisable(GL11.GL_CULL_FACE);
             GL11.glDepthMask(false);
             GL11.glBegin(GL11.GL_QUADS);
-            RenderHelper.drawColoredCube(vector.clone().expand(0.5 / 16D), r / 256D, g / 256D, b / 256D, (power / 15D) * 0.625);
+            RenderHelper.drawColoredCube(vector.clone().expand(0.8 / 16D), r / 256D, g / 256D, b / 256D, (power / 15D) * 0.625);
             GL11.glEnd();
             GL11.glDepthMask(true);
             GL11.glEnable(GL11.GL_CULL_FACE);
