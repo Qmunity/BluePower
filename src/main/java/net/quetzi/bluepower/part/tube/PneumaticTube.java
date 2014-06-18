@@ -150,6 +150,7 @@ public class PneumaticTube extends BPPart {
         if (world != null && !world.isRemote) {
             int connectionCount = 0;
             for (int i = 0; i < 6; i++) {
+                boolean oldState = connections[i];
                 getTileCache()[i].update();
                 ForgeDirection d = ForgeDirection.getOrientation(i);
                 TileEntity neighbor = getTileCache()[i].getTileEntity();
@@ -160,6 +161,15 @@ public class PneumaticTube extends BPPart {
                     connections[i] = isConnected(d, null);
                 }
                 if (connections[i]) connectionCount++;
+                if (oldState != connections[i]) {
+                    /*TubeNode node = getLogic().getNode();
+                    getLogic().clearNodeCache();
+                    for (TubeEdge edge : node.edges) {
+                        if (edge != null && edge.target.target instanceof PneumaticTube) {
+                            ((PneumaticTube) edge.target.target).getLogic().clearNodeCache();
+                        }
+                    }*/
+                }
             }
             isCrossOver = connectionCount != 2;
             sendUpdatePacket();
@@ -243,6 +253,20 @@ public class PneumaticTube extends BPPart {
             drops.add(stack.stack);
         }
         return drops;
+    }
+    
+    /**
+     * How 'dense' the tube is to the pathfinding algorithm. Is altered in the RestrictionTube
+     * @return
+     */
+    public int getWeigth() {
+    
+        return 1;
+    }
+    
+    public TubeColor getColor() {
+    
+        return color;
     }
     
     /**

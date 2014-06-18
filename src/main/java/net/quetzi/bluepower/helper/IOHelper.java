@@ -51,6 +51,34 @@ public class IOHelper {
         return null;
     }
     
+    public static ItemStack extract(TileEntity tile, ForgeDirection direction, ItemStack requestedStack, boolean simulate) {
+    
+        if (requestedStack == null) return requestedStack;
+        if (tile instanceof ISidedInventory) {
+            ISidedInventory isidedinventory = (ISidedInventory) tile;
+            int[] accessibleSlotsFromSide = isidedinventory.getAccessibleSlotsFromSide(direction.ordinal());
+            
+            for (int anAccessibleSlotsFromSide : accessibleSlotsFromSide) {
+                if (isidedinventory.getStackInSlot(anAccessibleSlotsFromSide) != null && isidedinventory.getStackInSlot(anAccessibleSlotsFromSide).isItemEqual(requestedStack)) {
+                    ItemStack stack = extract(isidedinventory, direction, anAccessibleSlotsFromSide);
+                    if (stack != null) return stack;
+                }
+            }
+        } else if (tile instanceof IInventory) {
+            IInventory inventory = (IInventory) tile;
+            int j = inventory.getSizeInventory();
+            
+            for (int k = 0; k < j; ++k) {
+                if (inventory.getStackInSlot(k) != null && inventory.getStackInSlot(k).isItemEqual(requestedStack)) {
+                    ItemStack stack = extract(inventory, direction, k);
+                    if (stack != null) return stack;
+                }
+            }
+        }
+        return null;
+        
+    }
+    
     public static ItemStack insert(TileEntity tile, ItemStack itemStack, ForgeDirection direction, boolean simulate) {
     
         return insert(tile, itemStack, direction, TubeColor.NONE, simulate);
@@ -61,7 +89,7 @@ public class IOHelper {
         if (tile instanceof IInventory) {
             return insert((IInventory) tile, itemStack, direction.ordinal(), simulate);
         } else if (tile instanceof ITubeConnection) {
-            TubeStack tubeStack = ((ITubeConnection)tile).acceptItemFromTube(new TubeStack(itemStack, direction.getOpposite(), color), direction);
+            TubeStack tubeStack = ((ITubeConnection) tile).acceptItemFromTube(new TubeStack(itemStack, direction.getOpposite(), color), direction);
             if (tubeStack == null) return null;
             return tubeStack.stack;
         }

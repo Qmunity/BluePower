@@ -56,7 +56,7 @@ public class TileMachineBase extends TileBase implements ITubeConnection {
     
     protected void addItemToOutputBuffer(ItemStack stack, TubeColor color) {
     
-        internalItemStackBuffer.add(new TubeStack(stack, ForgeDirection.getOrientation(blockMetadata).getOpposite(), color));
+        internalItemStackBuffer.add(new TubeStack(stack, ForgeDirection.getOrientation(getBlockMetadata()).getOpposite(), color));
     }
     
     protected void addItemToOutputBuffer(ItemStack stack) {
@@ -150,9 +150,9 @@ public class TileMachineBase extends TileBase implements ITubeConnection {
     
     @Override
     public boolean isConnectedTo(ForgeDirection from) {
-
+    
         ForgeDirection dir = ForgeDirection.getOrientation(getBlockMetadata());
-        return from == dir.getOpposite() || (acceptsTubeItems && from == dir);
+        return from == dir.getOpposite() || acceptsTubeItems && from == dir;
     }
     
     @Override
