@@ -17,13 +17,13 @@
 
 package net.quetzi.bluepower.tileentities;
 
+import cpw.mods.fml.common.registry.GameRegistry;
 import net.quetzi.bluepower.tileentities.tier1.TileAlloyFurnace;
 import net.quetzi.bluepower.tileentities.tier1.TileBlockBreaker;
 import net.quetzi.bluepower.tileentities.tier1.TileBuffer;
 import net.quetzi.bluepower.tileentities.tier1.TileIgniter;
 import net.quetzi.bluepower.tileentities.tier2.TileSortingMachine;
-import net.quetzi.bluepower.tileentities.tier3.TileSortron;
-import cpw.mods.fml.common.registry.GameRegistry;
+import net.quetzi.bluepower.tileentities.tier3.*;
 
 public class TileEntities {
     
