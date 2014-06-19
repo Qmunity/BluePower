@@ -3,8 +3,10 @@ Blocks
 
 Items
 *****
-stone_redwire
-stone_bundle
-canvas
+stone_redwire (is called Stone_wire)
+stone_bundle(done)
+canvas(done)
 
-paint_brush (instead of all 16 types you could make one base texture, and also create an overlay that only contains white pixels at the places where the color should be)
+paint_brush (instead of all 16 types you could make one base texture, and also create an overlay that only contains white pixels at the places where the color should be) (done)
+
+Canvas bag has color overlay file (done)
