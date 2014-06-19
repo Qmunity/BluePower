@@ -25,6 +25,7 @@ import net.quetzi.bluepower.blocks.BlockBuffer;
 import net.quetzi.bluepower.blocks.BlockCrackedBasalt;
 import net.quetzi.bluepower.blocks.BlockCrop;
 import net.quetzi.bluepower.blocks.BlockCustomFlower;
+import net.quetzi.bluepower.blocks.BlockEngine;
 import net.quetzi.bluepower.blocks.BlockIgniter;
 import net.quetzi.bluepower.blocks.BlockItemOre;
 import net.quetzi.bluepower.blocks.BlockSortingMachine;
@@ -84,7 +85,9 @@ public class BPBlocks {
     public static Block sortron;
     
     public static Block multipart;          // DO NOT GENERATE OR REMOVE THIS BLOCK!
-                                             
+    
+    
+    public static Block engine;
     public static void init() {
     
         basalt = new BlockStoneOre(Refs.BASALT_NAME);
@@ -129,6 +132,7 @@ public class BPBlocks {
         block_breaker = new BlockBlockBreaker();
         igniter = new BlockIgniter();
         buffer = new BlockBuffer();
+        engine = new BlockEngine();
         
         registerBlocks();
         initModDependantBlocks();
@@ -179,6 +183,7 @@ public class BPBlocks {
         GameRegistry.registerBlock(block_breaker, Refs.BLOCKBREAKER_NAME);
         GameRegistry.registerBlock(igniter, Refs.BLOCKIGNITER_NAME);
         GameRegistry.registerBlock(buffer, Refs.BLOCKBUFFER_NAME);
+        GameRegistry.registerBlock(engine, Refs.ENGINE_NAME);
     }
 
     private static void initModDependantBlocks() {
