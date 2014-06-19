@@ -22,16 +22,27 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.quetzi.bluepower.containers.ContainerAlloyFurnace;
 import net.quetzi.bluepower.containers.ContainerBuffer;
+import net.quetzi.bluepower.containers.ContainerCPU;
 import net.quetzi.bluepower.containers.ContainerCanvasBag;
+import net.quetzi.bluepower.containers.ContainerDiskDrive;
+import net.quetzi.bluepower.containers.ContainerIOExpander;
+import net.quetzi.bluepower.containers.ContainerMonitor;
+import net.quetzi.bluepower.containers.ContainerRedbusID;
 import net.quetzi.bluepower.containers.ContainerSortingMachine;
 import net.quetzi.bluepower.containers.ContainerSeedBag;
 import net.quetzi.bluepower.containers.inventorys.InventoryItem;
 import net.quetzi.bluepower.items.ItemCanvasBag;
+import net.quetzi.bluepower.items.ItemScrewdriver;
 import net.quetzi.bluepower.items.ItemSeedBag;
 import net.quetzi.bluepower.references.GuiIDs;
 import net.quetzi.bluepower.tileentities.tier1.TileAlloyFurnace;
 import net.quetzi.bluepower.tileentities.tier1.TileBuffer;
 import net.quetzi.bluepower.tileentities.tier2.TileSortingMachine;
+import net.quetzi.bluepower.tileentities.tier3.IRedBusWindow;
+import net.quetzi.bluepower.tileentities.tier3.TileCPU;
+import net.quetzi.bluepower.tileentities.tier3.TileDiskDrive;
+import net.quetzi.bluepower.tileentities.tier3.TileIOExpander;
+import net.quetzi.bluepower.tileentities.tier3.TileMonitor;
 import cpw.mods.fml.common.network.IGuiHandler;
 
 public class GUIHandler implements IGuiHandler {
@@ -59,6 +70,24 @@ public class GUIHandler implements IGuiHandler {
                         player.getCurrentEquippedItem(), player.inventory, InventoryItem.getItemInventory(player, player.getCurrentEquippedItem(),
                                 "Canvas Bag", 27)); }
                 break;
+            case CPU:
+            	return new ContainerCPU(player.inventory, (TileCPU) ent);
+            case MONITOR:
+            	if (player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() instanceof ItemScrewdriver) {
+            		return new ContainerRedbusID(player.inventory, (IRedBusWindow) ent);
+            	}
+            	return new ContainerMonitor(player.inventory, (TileMonitor) ent);
+            case DISK_DRIVE:
+            	if (player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() instanceof ItemScrewdriver) {
+            		return new ContainerRedbusID(player.inventory, (IRedBusWindow) ent);
+            	}
+            	return new ContainerDiskDrive(player.inventory, (TileDiskDrive) ent);
+            case IO_EXPANDER:
+            	if (player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() instanceof ItemScrewdriver) {
+            		return new ContainerRedbusID(player.inventory, (IRedBusWindow) ent);
+            	}
+            	return new ContainerIOExpander(player.inventory, (TileIOExpander) ent);
+            
             default:
                 break;
         }
@@ -86,6 +115,23 @@ public class GUIHandler implements IGuiHandler {
                         player.getCurrentEquippedItem(), player.inventory, InventoryItem.getItemInventory(player, player.getCurrentEquippedItem(),
                                 "Canvas Bag", 27)); }
                 break;
+            case CPU:
+            	return new GuiCPU(player.inventory, (TileCPU) ent);
+            case MONITOR:
+            	if (player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() instanceof ItemScrewdriver) {
+            		return new GuiRedbusID(player.inventory, (IRedBusWindow) ent);
+            	}
+            	return new GuiMonitor(player.inventory, (TileMonitor) ent);
+            case DISK_DRIVE:
+            	if (player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() instanceof ItemScrewdriver) {
+            		return new GuiRedbusID(player.inventory, (IRedBusWindow) ent);
+            	}
+            	return new GuiDiskDrive(player.inventory, (TileDiskDrive) ent);
+            case IO_EXPANDER:
+            	if (player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() instanceof ItemScrewdriver) {
+            		return new GuiRedbusID(player.inventory, (IRedBusWindow) ent);
+            	}
+            	return new GuiIOExpander(player.inventory, (TileIOExpander) ent);
             default:
                 break;
         }

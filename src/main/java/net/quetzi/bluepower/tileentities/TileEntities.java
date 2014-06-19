@@ -38,5 +38,9 @@ public class TileEntities {
         GameRegistry.registerTileEntity(TileBuffer.class, "tileBuffer");
         GameRegistry.registerTileEntity(TileSortingMachine.class, "tileSortingMachine");
         GameRegistry.registerTileEntity(TileSortron.class, "tileSortron");
+        GameRegistry.registerTileEntity(TileCPU.class, "tileCPU");
+    	GameRegistry.registerTileEntity(TileMonitor.class, "tileMonitor");
+    	GameRegistry.registerTileEntity(TileDiskDrive.class, "tileDiskDrive");
+    	GameRegistry.registerTileEntity(TileIOExpander.class, "tileIOExpander");
     }
 }

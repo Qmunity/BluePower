@@ -22,11 +22,15 @@ import net.minecraft.block.Block;
 import net.quetzi.bluepower.blocks.BlockAlloyFurnace;
 import net.quetzi.bluepower.blocks.BlockBlockBreaker;
 import net.quetzi.bluepower.blocks.BlockBuffer;
+import net.quetzi.bluepower.blocks.BlockCPU;
 import net.quetzi.bluepower.blocks.BlockCrackedBasalt;
 import net.quetzi.bluepower.blocks.BlockCrop;
 import net.quetzi.bluepower.blocks.BlockCustomFlower;
+import net.quetzi.bluepower.blocks.BlockDiskDrive;
+import net.quetzi.bluepower.blocks.BlockIOExpander;
 import net.quetzi.bluepower.blocks.BlockIgniter;
 import net.quetzi.bluepower.blocks.BlockItemOre;
+import net.quetzi.bluepower.blocks.BlockMonitor;
 import net.quetzi.bluepower.blocks.BlockSortingMachine;
 import net.quetzi.bluepower.blocks.BlockSortron;
 import net.quetzi.bluepower.blocks.BlockStoneOre;
@@ -82,6 +86,10 @@ public class BPBlocks {
     public static Block buffer;
     public static Block sorting_machine;
     public static Block sortron;
+    public static Block cpu;
+    public static Block monitor;
+    public static Block disk_drive;
+    public static Block io_expander;
     
     public static Block multipart;          // DO NOT GENERATE OR REMOVE THIS BLOCK!
                                              
@@ -129,6 +137,11 @@ public class BPBlocks {
         block_breaker = new BlockBlockBreaker();
         igniter = new BlockIgniter();
         buffer = new BlockBuffer();
+        
+        cpu = new BlockCPU();
+        monitor = new BlockMonitor();
+        disk_drive = new BlockDiskDrive();
+        io_expander = new BlockIOExpander();
         
         registerBlocks();
         initModDependantBlocks();
@@ -179,6 +192,11 @@ public class BPBlocks {
         GameRegistry.registerBlock(block_breaker, Refs.BLOCKBREAKER_NAME);
         GameRegistry.registerBlock(igniter, Refs.BLOCKIGNITER_NAME);
         GameRegistry.registerBlock(buffer, Refs.BLOCKBUFFER_NAME);
+        
+        GameRegistry.registerBlock(cpu, Refs.BLOCKCPU_NAME);
+        GameRegistry.registerBlock(monitor, Refs.BLOCKMONITOR_NAME);
+        GameRegistry.registerBlock(disk_drive, Refs.BLOCKDISKDRIVE_NAME);
+        GameRegistry.registerBlock(io_expander, Refs.BLOCKIOEXPANDER_NAME);
     }
 
     private static void initModDependantBlocks() {

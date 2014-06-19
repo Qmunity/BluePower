@@ -17,6 +17,8 @@
 
 package net.quetzi.bluepower.references;
 
+import cpw.mods.fml.common.registry.GameRegistry;
+
 public class Refs {
 
     public static final String   NAME                     = "Blue Power";
@@ -175,6 +177,11 @@ public class Refs {
     public static final String   CANVASBAG_NAME           = "canvas_bag";
     public static final String   CANVAS_NAME              = "canvas";
     public static final String   LUMAR_NAME               = "lumar";
+    
+    public static final String   BLOCKCPU_NAME            = "cpu";
+    public static final String   BLOCKMONITOR_NAME        = "monitor";
+    public static final String   BLOCKDISKDRIVE_NAME      = "disk_drive";
+    public static final String   BLOCKIOEXPANDER_NAME     = "io_expander";
 
     public static final String[] oreDictDyes              = new String[] { "dyeBlack", "dyeRed", "dyeGreen", "dyeBrown", "dyeBlue", "dyePurple", "dyeCyan", "dyeLightGray", "dyeGray", "dyePink",
             "dyeLime", "dyeYellow", "dyeLightBlue", "dyeMagenta", "dyeOrange", "dyeWhite" };
