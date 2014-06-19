@@ -13,14 +13,16 @@ import net.minecraftforge.common.util.ForgeDirection;
 import net.quetzi.bluepower.api.tube.IPneumaticTube.TubeColor;
 import net.quetzi.bluepower.helper.IOHelper;
 import net.quetzi.bluepower.part.tube.ITubeConnection;
+import net.quetzi.bluepower.part.tube.IWeightedTubeInventory;
 import net.quetzi.bluepower.part.tube.TubeStack;
 
-public class TileMachineBase extends TileBase implements ITubeConnection {
+public class TileMachineBase extends TileBase implements ITubeConnection, IWeightedTubeInventory {
     
     protected boolean             spawnItemsInWorld       = true;
     protected boolean             acceptsTubeItems        = true;
     private final List<TubeStack> internalItemStackBuffer = new ArrayList<TubeStack>();
     protected TileEntity          tileAtOutput;
+    public static final int       BUFFER_EMPTY_INTERVAL   = 10;
     
     @Override
     public void updateEntity() {
@@ -28,29 +30,27 @@ public class TileMachineBase extends TileBase implements ITubeConnection {
         super.updateEntity();
         
         if (!worldObj.isRemote) {
-            if (getTicker() % 10 == 0 && !internalItemStackBuffer.isEmpty()) {
+            if (getTicker() % BUFFER_EMPTY_INTERVAL == 0 && !internalItemStackBuffer.isEmpty()) {
                 if (IOHelper.canInterfaceWith(tileAtOutput, getFacingDirection())) {
-                    for (Iterator<TubeStack> iterator = internalItemStackBuffer.iterator(); iterator.hasNext();) {
-                        TubeStack tubeStack = iterator.next();
-                        ItemStack returnedStack = IOHelper.insert(tileAtOutput, tubeStack.stack, getFacingDirection(), tubeStack.color, false);
-                        if (returnedStack == null) {
-                            iterator.remove();
-                            onItemOutputted();
-                            markDirty();
-                        } else if (returnedStack.stackSize != tubeStack.stack.stackSize) {
-                            onItemOutputted();
-                            markDirty();
-                        }
+                    TubeStack tubeStack = internalItemStackBuffer.get(0);
+                    ItemStack returnedStack = IOHelper.insert(tileAtOutput, tubeStack.stack, getFacingDirection(), tubeStack.color, false);
+                    if (returnedStack == null) {
+                        internalItemStackBuffer.remove(0);
+                        onItemOutputted();
+                        markDirty();
+                    } else if (returnedStack.stackSize != tubeStack.stack.stackSize) {
+                        onItemOutputted();
+                        markDirty();
                     }
-                } else if (spawnItemsInWorld) {
-                    ForgeDirection direction = getFacingDirection().getOpposite();
-                    if (worldObj.isAirBlock(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ)) {
-                        for (Iterator<TubeStack> iterator = internalItemStackBuffer.iterator(); iterator.hasNext();) {
-                            ItemStack itemStack = iterator.next().stack;
-                            ejectItemInWorld(itemStack, direction);
-                            onItemOutputted();
-                            iterator.remove();
-                        }
+                }
+            } else if (spawnItemsInWorld) {
+                ForgeDirection direction = getFacingDirection().getOpposite();
+                if (worldObj.isAirBlock(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ)) {
+                    for (Iterator<TubeStack> iterator = internalItemStackBuffer.iterator(); iterator.hasNext();) {
+                        ItemStack itemStack = iterator.next().stack;
+                        ejectItemInWorld(itemStack, direction);
+                        onItemOutputted();
+                        iterator.remove();
                     }
                 }
             }
@@ -170,5 +170,11 @@ public class TileMachineBase extends TileBase implements ITubeConnection {
     
         if (!simulate) internalItemStackBuffer.add(stack);
         return null;
+    }
+    
+    @Override
+    public int getWeigth(ForgeDirection from) {
+    
+        return from == ForgeDirection.getOrientation(getBlockMetadata()) ? 1000000 : 0;//make the buffer side the last place to go
     }
 }
