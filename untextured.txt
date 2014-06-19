@@ -5,5 +5,6 @@ Items
 *****
 stone_redwire
 stone_bundle
+canvas
 
 paint_brush (instead of all 16 types you could make one base texture, and also create an overlay that only contains white pixels at the places where the color should be)
