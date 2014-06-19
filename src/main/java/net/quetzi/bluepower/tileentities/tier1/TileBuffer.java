@@ -138,6 +138,8 @@ public class TileBuffer extends TileBase implements IInventory {
     @Override
     public void setInventorySlotContents(int i, ItemStack itemStack) {
 
+        this.allInventories[i] = itemStack;
+        worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
     }
 
     @Override
