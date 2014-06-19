@@ -42,7 +42,7 @@ public class PartLamp extends BPPartFace {
      * @param colorVal
      * @param inverted TODO
      */
-    public PartLamp(String colorName, int colorVal, boolean inverted) {
+    public PartLamp(String colorName, Integer colorVal, Boolean inverted) {
     
         this.colorName = colorName;
         this.colorVal = colorVal;
@@ -273,8 +273,8 @@ public class PartLamp extends BPPartFace {
         for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS)
             power = Math.max(power, RedstoneHelper.getInput(world, x, y, z, d));
         
-        if(inverted && power > 0){
-        	power = 15;
+        if(inverted){
+        	power = 15 - power;
         }
         
         if (old != power) {

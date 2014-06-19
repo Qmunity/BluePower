@@ -18,7 +18,7 @@ import org.lwjgl.opengl.GL11;
  */
 public class PartFixture extends PartLamp {
     
-    public PartFixture(String colorName, int colorVal, boolean inverted) {
+    public PartFixture(String colorName, Integer colorVal, Boolean inverted) {
     
         super(colorName, colorVal, inverted);
     }
@@ -49,6 +49,7 @@ public class PartFixture extends PartLamp {
     @Override
     public void renderBase(int pass) {
     
+    	if(pass != 0) return;
         Tessellator t = Tessellator.instance;
         Vector3Cube vector = new Vector3Cube(pixel * 2, 0.0, pixel * 2, 1.0 - (pixel * 2), pixel * 2, 1.0 - pixel * 2);
         IIcon topIcon = IconSupplier.fixtureFootTop;

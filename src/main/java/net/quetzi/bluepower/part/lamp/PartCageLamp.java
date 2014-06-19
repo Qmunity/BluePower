@@ -18,7 +18,7 @@ import org.lwjgl.opengl.GL11;
  */
 public class PartCageLamp extends PartLamp {
     
-    public PartCageLamp(String colorName, int colorVal, boolean inverted) {
+    public PartCageLamp(String colorName, Integer colorVal, Boolean inverted) {
     
         super(colorName, colorVal, inverted);
     }
@@ -37,6 +37,7 @@ public class PartCageLamp extends PartLamp {
     @Override
     public void renderBase(int pass) {
     
+    	if(pass != 0) return;
         Tessellator t = Tessellator.instance;
         Vector3Cube vector = new Vector3Cube(pixel * 3, 0.0, pixel * 3, 1.0 - (pixel * 3), pixel * 2, 1.0 - pixel * 3);
         IIcon topIcon = IconSupplier.cagedLampFootTop;
