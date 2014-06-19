@@ -20,12 +20,13 @@ package net.quetzi.bluepower.tileentities.tier1;
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.quetzi.bluepower.tileentities.TileBase;
 
-public class TileBuffer extends TileBase implements IInventory {
+public class TileBuffer extends TileBase implements ISidedInventory {
 
     private final ItemStack[] allInventories = new ItemStack[20];
     private ItemStack[]       side1Inventory;
@@ -63,37 +64,6 @@ public class TileBuffer extends TileBase implements IInventory {
                 tCompound.setTag("inventory" + i, tc);
             }
         }
-    }
-
-    private ItemStack[] getInventoryForSide(int i) {
-
-        if ((i >= 0) && (i < 4)) {
-            for (int j = 0; j < 4; j++) {
-                side1Inventory[j] = allInventories[i];
-            }
-            return side1Inventory;
-        } else if ((i > 3) && (i < 8)) {
-            for (int j = 0; j < 4; j++) {
-                side2Inventory[j] = allInventories[i + 4];
-            }
-            return side2Inventory;
-        } else if ((i > 7) && (i < 12)) {
-            for (int j = 0; j < 4; j++) {
-                side3Inventory[j] = allInventories[i + 8];
-            }
-            return side3Inventory;
-        } else if ((i > 11) && (i < 16)) {
-            for (int j = 0; j < 4; j++) {
-                side4Inventory[j] = allInventories[i + 12];
-            }
-            return side4Inventory;
-        } else if ((i > 15) && (i < 20)) {
-            for (int j = 0; j < 4; j++) {
-                side5Inventory[j] = allInventories[i + 16];
-            }
-            return side5Inventory;
-        }
-        return allInventories;
     }
 
     @Override
@@ -189,5 +159,39 @@ public class TileBuffer extends TileBase implements IInventory {
         for (ItemStack stack : allInventories)
             if (stack != null) drops.add(stack);
         return drops;
+    }
+
+    @Override
+    public int[] getAccessibleSlotsFromSide(int var1) {
+
+        if (ForgeDirection.getOrientation(var1) == ForgeDirection.DOWN) {
+            return new int[] { 0, 1, 2, 3 };
+        } else if (ForgeDirection.getOrientation(var1) == ForgeDirection.NORTH) {
+            return new int[] { 4, 5, 6, 7 };
+        } else if (ForgeDirection.getOrientation(var1) == ForgeDirection.SOUTH) {
+            return new int[] { 8, 9, 10, 11 };
+        } else if (ForgeDirection.getOrientation(var1) == ForgeDirection.EAST) {
+            return new int[] { 12, 13, 14, 15 };
+        } else if (ForgeDirection.getOrientation(var1) == ForgeDirection.WEST) { 
+            return new int[] { 16, 17, 18, 19 }; }
+        return new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19 };
+    }
+
+    @Override
+    public boolean canInsertItem(int slot, ItemStack itemStack, int side) {
+
+        for (int i : this.getAccessibleSlotsFromSide(side)) {
+            if (slot == i) { return true; }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean canExtractItem(int slot, ItemStack itemStack, int side) {
+
+        for (int i : this.getAccessibleSlotsFromSide(side)) {
+            if (slot == i) { return true; }
+        }
+        return false;
     }
 }
