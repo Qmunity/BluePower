@@ -57,6 +57,15 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
         }
     }
     
+    @Override
+    public void onBlockNeighbourChanged() {
+    
+        super.onBlockNeighbourChanged();
+        for (TileEntityCache cache : getTileCache()) {
+            cache.update();
+        }
+    }
+    
     protected void addItemToOutputBuffer(ItemStack stack, TubeColor color) {
     
         internalItemStackBuffer.add(new TubeStack(stack, getOutputDirection().getOpposite(), color));

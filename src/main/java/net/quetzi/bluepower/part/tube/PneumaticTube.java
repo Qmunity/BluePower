@@ -117,6 +117,9 @@ public class PneumaticTube extends BPPart {
     @Override
     public void onNeighborUpdate() {
     
+        for (TileEntityCache cache : getTileCache()) {
+            cache.update();
+        }
         updateConnections();
     }
     
