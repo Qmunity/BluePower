@@ -1,11 +1,15 @@
 package net.quetzi.bluepower.tileentities.tier2;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.quetzi.bluepower.api.tube.IPneumaticTube.TubeColor;
+import net.quetzi.bluepower.helper.IOHelper;
 import net.quetzi.bluepower.part.IGuiButtonSensitive;
 import net.quetzi.bluepower.references.Refs;
 import net.quetzi.bluepower.tileentities.TileMachineBase;
@@ -21,6 +25,7 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
     public int               curColumn = 0;
     public PullMode          pullMode  = PullMode.SINGLE_STEP;
     public SortMode          sortMode  = SortMode.ANYSTACK_SEQUENTIAL;
+    private boolean          sweepTriggered;
     public final TubeColor[] colors    = new TubeColor[8];
     
     public TileSortingMachine() {
@@ -64,6 +69,150 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
     }
     
     @Override
+    public void updateEntity() {
+    
+        if (!worldObj.isRemote && worldObj.getWorldTime() % TileMachineBase.BUFFER_EMPTY_INTERVAL == 0 && (pullMode == PullMode.SINGLE_SWEEP && sweepTriggered || pullMode == PullMode.AUTOMATIC)) {
+            triggerSorting();
+        }
+        
+    }
+    
+    @Override
+    protected void redstoneChanged(boolean newValue) {
+    
+        if (newValue) {
+            if (pullMode == PullMode.SINGLE_STEP) triggerSorting();
+            if (pullMode == PullMode.SINGLE_SWEEP) sweepTriggered = true;
+        }
+        
+    }
+    
+    private void triggerSorting() {
+    
+        if (isBufferEmpty()) {
+            ForgeDirection dir = getOutputDirection().getOpposite();
+            TileEntity inputTE = getTileCache()[dir.ordinal()].getTileEntity();//might need opposite
+            
+            if (inputTE instanceof IInventory) {
+                IInventory inputInv = (IInventory) inputTE;
+                int[] accessibleSlots;
+                if (inputInv instanceof ISidedInventory) {
+                    accessibleSlots = ((ISidedInventory) inputInv).getAccessibleSlotsFromSide(dir.ordinal());
+                } else {
+                    accessibleSlots = new int[inputInv.getSizeInventory()];
+                    for (int i = 0; i < accessibleSlots.length; i++)
+                        accessibleSlots[i] = i;
+                }
+                boolean[] satisfiedFilters = new boolean[5];
+                for (int slot : accessibleSlots) {
+                    ItemStack stack = inputInv.getStackInSlot(slot);
+                    if (stack != null && IOHelper.canExtractItemFromInventory(inputInv, stack, slot, dir.ordinal())) {
+                        if (tryProcessItem(stack)) {
+                            if (stack.stackSize == 0) inputInv.setInventorySlotContents(slot, null);
+                            return;
+                        } else {
+                            for (int i = 0; i < 5; i++) {
+                                if (!satisfiedFilters[i]) {
+                                    ItemStack filterStack = inventory[curColumn + 8 * i];
+                                    if (filterStack != null && filterStack.isItemEqual(stack) && stack.stackSize >= filterStack.stackSize) {
+                                        satisfiedFilters[i] = true;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                
+                for (int i = 0; i < satisfiedFilters.length; i++) {
+                    if (sortMode == SortMode.ALLSTACK_SEQUENTIAL && !satisfiedFilters[i] && inventory[curColumn + 8 * i] != null) return;
+                }
+                for (int i = 0; i < satisfiedFilters.length; i++) {
+                    if (satisfiedFilters[i]) {
+                        ItemStack filter = inventory[curColumn + 8 * i];
+                        addItemToOutputBuffer(filter.copy(), TubeColor.values()[curColumn]);
+                        IOHelper.extract(inputTE, dir, filter, false);
+                    }
+                }
+                gotoNextNonEmptyColumn();
+            }
+        }
+        
+    }
+    
+    private boolean tryProcessItem(ItemStack stack) {
+    
+        switch (sortMode) {
+            case ANYSTACK_SEQUENTIAL:
+                for (int i = curColumn; i < inventory.length; i += 8) {
+                    if (inventory[i] != null && stack.isItemEqual(inventory[i])) {
+                        addItemToOutputBuffer(stack.copy(), colors[i % 8]);
+                        stack.stackSize = 0;
+                        gotoNextNonEmptyColumn();
+                        return true;
+                    }
+                }
+                break;
+            case ALLSTACK_SEQUENTIAL:
+                break;
+            case RANDOM_ALLSTACKS:
+                break;
+            case ANY_ITEM:
+            case ANY_ITEM_DEFAULT:
+                for (int i = 0; i < inventory.length; i++) {
+                    ItemStack filter = inventory[i];
+                    if (filter != null && stack.isItemEqual(filter) && stack.stackSize >= filter.stackSize) {
+                        addItemToOutputBuffer(filter.copy(), colors[i % 8]);
+                        stack.stackSize -= filter.stackSize;
+                        return true;
+                    }
+                }
+                if (sortMode == SortMode.ANY_ITEM_DEFAULT) {
+                    addItemToOutputBuffer(stack.copy(), colors[8]);
+                    stack.stackSize = 0;
+                    return true;
+                }
+                break;
+            case ANY_STACK:
+            case ANY_STACK_DEFAULT:
+                for (int i = 0; i < inventory.length; i++) {
+                    ItemStack filter = inventory[i];
+                    if (filter != null && stack.isItemEqual(filter)) {
+                        addItemToOutputBuffer(stack.copy(), colors[i % 8]);
+                        stack.stackSize = 0;
+                        return true;
+                    }
+                }
+                if (sortMode == SortMode.ANY_STACK_DEFAULT) {
+                    addItemToOutputBuffer(stack.copy(), colors[8]);
+                    stack.stackSize = 0;
+                    return true;
+                }
+                break;
+        
+        }
+        return false;
+    }
+    
+    private void gotoNextNonEmptyColumn() {
+    
+        int oldColumn = curColumn++;
+        if (curColumn > 7) {
+            curColumn = 0;
+            sweepTriggered = false;
+        }
+        while (oldColumn != curColumn) {
+            for (int i = curColumn; i < inventory.length; i += 8) {
+                if (inventory[i] != null) return;
+            }
+            if (++curColumn > 7) {
+                curColumn = 0;
+                sweepTriggered = false;
+            }
+        }
+        curColumn = 0;
+    }
+    
+    @Override
     public void onButtonPress(int messageId, int value) {
     
         if (messageId < 8) {
@@ -73,6 +222,7 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
         } else {
             sortMode = SortMode.values()[value];
         }
+        worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
     }
     
     @Override

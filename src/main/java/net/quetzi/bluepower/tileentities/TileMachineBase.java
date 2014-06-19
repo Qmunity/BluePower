@@ -8,10 +8,10 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.quetzi.bluepower.api.tube.IPneumaticTube.TubeColor;
 import net.quetzi.bluepower.helper.IOHelper;
+import net.quetzi.bluepower.helper.TileEntityCache;
 import net.quetzi.bluepower.part.tube.ITubeConnection;
 import net.quetzi.bluepower.part.tube.IWeightedTubeInventory;
 import net.quetzi.bluepower.part.tube.TubeStack;
@@ -21,7 +21,7 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
     protected boolean             spawnItemsInWorld       = true;
     protected boolean             acceptsTubeItems        = true;
     private final List<TubeStack> internalItemStackBuffer = new ArrayList<TubeStack>();
-    protected TileEntity          tileAtOutput;
+    private TileEntityCache[]     tileCache;
     public static final int       BUFFER_EMPTY_INTERVAL   = 10;
     
     @Override
@@ -31,9 +31,9 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
         
         if (!worldObj.isRemote) {
             if (getTicker() % BUFFER_EMPTY_INTERVAL == 0 && !internalItemStackBuffer.isEmpty()) {
-                if (IOHelper.canInterfaceWith(tileAtOutput, getFacingDirection())) {
+                if (IOHelper.canInterfaceWith(getTileCache()[getOutputDirection().ordinal()].getTileEntity(), getFacingDirection())) {
                     TubeStack tubeStack = internalItemStackBuffer.get(0);
-                    ItemStack returnedStack = IOHelper.insert(tileAtOutput, tubeStack.stack, getFacingDirection(), tubeStack.color, false);
+                    ItemStack returnedStack = IOHelper.insert(getTileCache()[getOutputDirection().ordinal()].getTileEntity(), tubeStack.stack, getFacingDirection(), tubeStack.color, false);
                     if (returnedStack == null) {
                         internalItemStackBuffer.remove(0);
                         onItemOutputted();
@@ -59,7 +59,7 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
     
     protected void addItemToOutputBuffer(ItemStack stack, TubeColor color) {
     
-        internalItemStackBuffer.add(new TubeStack(stack, ForgeDirection.getOrientation(getBlockMetadata()).getOpposite(), color));
+        internalItemStackBuffer.add(new TubeStack(stack, getOutputDirection().getOpposite(), color));
     }
     
     protected void addItemToOutputBuffer(ItemStack stack) {
@@ -92,16 +92,17 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
     
     }
     
-    @Override
-    public void onBlockNeighbourChanged() {
+    public TileEntityCache[] getTileCache() {
     
-        super.onBlockNeighbourChanged();
-        ForgeDirection direction = ForgeDirection.getOrientation(getBlockMetadata()).getOpposite();
-        if (direction != ForgeDirection.UNKNOWN) {
-            tileAtOutput = worldObj.getTileEntity(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ);
-        } else {
-            tileAtOutput = null;
+        if (tileCache == null) {
+            tileCache = TileEntityCache.getDefaultCache(worldObj, xCoord, yCoord, zCoord);
         }
+        return tileCache;
+    }
+    
+    public ForgeDirection getOutputDirection() {
+    
+        return ForgeDirection.getOrientation(getBlockMetadata());
     }
     
     @Override
@@ -161,7 +162,7 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
     @Override
     public boolean isConnectedTo(ForgeDirection from) {
     
-        ForgeDirection dir = ForgeDirection.getOrientation(getBlockMetadata());
+        ForgeDirection dir = getOutputDirection();
         return from == dir.getOpposite() || acceptsTubeItems && from == dir;
     }
     
@@ -175,6 +176,6 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
     @Override
     public int getWeigth(ForgeDirection from) {
     
-        return from == ForgeDirection.getOrientation(getBlockMetadata()) ? 1000000 : 0;//make the buffer side the last place to go
+        return from == getOutputDirection() ? 1000000 : 0;//make the buffer side the last place to go
     }
 }
