@@ -18,9 +18,9 @@ import org.lwjgl.opengl.GL11;
  */
 public class PartCageLamp extends PartLamp {
     
-    public PartCageLamp(String colorName, Integer colorVal) {
+    public PartCageLamp(String colorName, int colorVal, boolean inverted) {
     
-        super(colorName, colorVal);
+        super(colorName, colorVal, inverted);
     }
     
     /**
@@ -252,13 +252,13 @@ public class PartCageLamp extends PartLamp {
     @Override
     public String getType() {
     
-        return "cagelamp" + colorName;
+        return (this.inverted ? "inverted" : "") + "cagelamp" + colorName;
     }
     
     @Override
     public String getUnlocalizedName() {
     
-        return "cagelamp." + colorName;
+        return (this.inverted ? "inverted" : "") + "cagelamp." + colorName;
     }
     
 }

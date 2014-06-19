@@ -18,9 +18,9 @@ import org.lwjgl.opengl.GL11;
  */
 public class PartFixture extends PartLamp {
     
-    public PartFixture(String colorName, Integer colorVal) {
+    public PartFixture(String colorName, int colorVal, boolean inverted) {
     
-        super(colorName, colorVal);
+        super(colorName, colorVal, inverted);
     }
     
     /**
@@ -37,13 +37,13 @@ public class PartFixture extends PartLamp {
     @Override
     public String getType() {
     
-        return "fixture" + colorName;
+        return (this.inverted ? "inverted" : "") + "fixture" + colorName;
     }
     
     @Override
     public String getUnlocalizedName() {
     
-        return "fixture." + colorName;
+        return (this.inverted ? "inverted" : "") + "fixture." + colorName;
     }
     
     @Override

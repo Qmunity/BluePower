@@ -32,6 +32,7 @@ public class PartLamp extends BPPartFace {
     
     protected String colorName;
     private int      colorVal;
+    protected boolean inverted;
     
     protected int    power = 0;
     
@@ -39,11 +40,13 @@ public class PartLamp extends BPPartFace {
      * @author amadornes
      * @param colorName
      * @param colorVal
+     * @param inverted TODO
      */
-    public PartLamp(String colorName, Integer colorVal) {
+    public PartLamp(String colorName, int colorVal, boolean inverted) {
     
         this.colorName = colorName;
-        this.colorVal = colorVal.intValue();
+        this.colorVal = colorVal;
+        this.inverted = inverted;
         
         for (int i = 0; i < 4; i++)
             connections[i] = new RedstoneConnection(this, i + "", true, false);
@@ -57,7 +60,7 @@ public class PartLamp extends BPPartFace {
     @Override
     public String getType() {
     
-        return "lamp" + colorName;
+        return (this.inverted ? "inverted" : "") + "lamp" + colorName;
     }
     
     /**
@@ -66,7 +69,7 @@ public class PartLamp extends BPPartFace {
     @Override
     public String getUnlocalizedName() {
     
-        return "lamp." + colorName;
+        return (this.inverted ? "inverted" : "") + "lamp." + colorName;
     }
     
     /**
@@ -265,9 +268,14 @@ public class PartLamp extends BPPartFace {
         
         int old = power;
         
+        
         power = 0;
         for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS)
             power = Math.max(power, RedstoneHelper.getInput(world, x, y, z, d));
+        
+        if(inverted && power > 0){
+        	power = 15;
+        }
         
         if (old != power) {
             notifyUpdate();
