@@ -29,11 +29,6 @@ import net.quetzi.bluepower.tileentities.TileBase;
 public class TileBuffer extends TileBase implements ISidedInventory {
 
     private final ItemStack[] allInventories = new ItemStack[20];
-    private ItemStack[]       side1Inventory;
-    private ItemStack[]       side2Inventory;
-    private ItemStack[]       side3Inventory;
-    private ItemStack[]       side4Inventory;
-    private ItemStack[]       side5Inventory;
 
     /**
      * This function gets called whenever the world/chunk loads
@@ -69,14 +64,12 @@ public class TileBuffer extends TileBase implements ISidedInventory {
     @Override
     public int getSizeInventory() {
 
-        // This should return 20 for the front face and 4 for all other sides
         return allInventories.length;
     }
 
     @Override
     public ItemStack getStackInSlot(int i) {
 
-        // this should return the correct slots for the side accessed
         return this.allInventories[i];
     }
 
@@ -173,7 +166,8 @@ public class TileBuffer extends TileBase implements ISidedInventory {
         } else if (ForgeDirection.getOrientation(var1) == ForgeDirection.EAST) {
             return new int[] { 12, 13, 14, 15 };
         } else if (ForgeDirection.getOrientation(var1) == ForgeDirection.WEST) { 
-            return new int[] { 16, 17, 18, 19 }; }
+            return new int[] { 16, 17, 18, 19 }; 
+        }
         return new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19 };
     }
 
