@@ -33,7 +33,7 @@ public class ContainerBuffer extends Container {
         tileBuffer = buffer;
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 5; j++) {
-                addSlotToContainer(new Slot(buffer, i * 5 + j, 44 + j * 18, 9 + i * 18));
+                addSlotToContainer(new Slot(buffer, i * 5 + j, 45 + j * 18, 18 + i * 18));
             }
         }
         bindPlayerInventory(invPlayer);
@@ -44,13 +44,13 @@ public class ContainerBuffer extends Container {
         // Render inventory
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 9; j++) {
-                addSlotToContainer(new Slot(invPlayer, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
+                addSlotToContainer(new Slot(invPlayer, j + i * 9 + 9, 8 + j * 18, 104 + i * 18));
             }
         }
 
         // Render hotbar
         for (int j = 0; j < 9; j++) {
-            addSlotToContainer(new Slot(invPlayer, j, 8 + j * 18, 142));
+            addSlotToContainer(new Slot(invPlayer, j, 8 + j * 18, 162));
         }
     }
 

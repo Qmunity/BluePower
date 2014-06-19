@@ -34,5 +34,6 @@ public class GuiBuffer extends GuiBase {
 
         super(new ContainerBuffer(invPlayer, buffer), resLoc);
         this.buffer = buffer;
+        this.ySize = 186;
     }
 }
