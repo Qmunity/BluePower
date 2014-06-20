@@ -182,6 +182,7 @@ public class Refs {
     public static final String   BLOCKMONITOR_NAME        = "monitor";
     public static final String   BLOCKDISKDRIVE_NAME      = "disk_drive";
     public static final String   BLOCKIOEXPANDER_NAME     = "io_expander";
+    public static final String   FLOPPY_DISK              = "floppy_disk";
 
     public static final String[] oreDictDyes              = new String[] { "dyeBlack", "dyeRed", "dyeGreen", "dyeBrown", "dyeBlue", "dyePurple", "dyeCyan", "dyeLightGray", "dyeGray", "dyePink",
             "dyeLime", "dyeYellow", "dyeLightBlue", "dyeMagenta", "dyeOrange", "dyeWhite" };

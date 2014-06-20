@@ -22,10 +22,12 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import net.quetzi.bluepower.BluePower;
 import net.quetzi.bluepower.api.part.BPPart;
 import net.quetzi.bluepower.api.vec.Vector3;
 import net.quetzi.bluepower.compat.CompatibilityUtils;
@@ -33,7 +35,9 @@ import net.quetzi.bluepower.compat.fmp.IMultipartCompat;
 import net.quetzi.bluepower.init.BPBlocks;
 import net.quetzi.bluepower.init.CustomTabs;
 import net.quetzi.bluepower.references.Dependencies;
+import net.quetzi.bluepower.references.GuiIDs;
 import net.quetzi.bluepower.references.Refs;
+import net.quetzi.bluepower.tileentities.tier3.IRedBusWindow;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -62,6 +66,11 @@ public class ItemScrewdriver extends Item {
             }
             
             return false;
+        }
+        
+        TileEntity te = world.getTileEntity(x, y, z);
+        if (te != null && te instanceof IRedBusWindow && player.isSneaking()) {
+        	player.openGui(BluePower.instance, GuiIDs.REDBUS_ID.ordinal(), world, x, y, z);
         }
         
         block.rotateBlock(world, x, y, z, ForgeDirection.getOrientation(side));

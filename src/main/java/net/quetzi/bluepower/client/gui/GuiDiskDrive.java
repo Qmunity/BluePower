@@ -2,6 +2,7 @@ package net.quetzi.bluepower.client.gui;
 
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.StatCollector;
 import net.quetzi.bluepower.containers.ContainerDiskDrive;
 import net.quetzi.bluepower.references.Refs;
 import net.quetzi.bluepower.tileentities.tier3.TileDiskDrive;
@@ -15,4 +16,8 @@ private final TileDiskDrive diskDrive;
 		super(new ContainerDiskDrive(invPlayer, diskDrive), resLoc);
 		this.diskDrive = diskDrive;
 	}
+	
+	@Override
+    protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
+    }
 }

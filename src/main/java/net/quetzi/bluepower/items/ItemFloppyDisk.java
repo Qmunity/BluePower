@@ -15,8 +15,16 @@
  *     along with Blue Power.  If not, see <http://www.gnu.org/licenses/>
  */
 
-package net.quetzi.bluepower.references;
+package net.quetzi.bluepower.items;
 
-public enum GuiIDs {
-    INVALID, ALLOY_FURNACE, BUFFER, SORTING_MACHINE, SEEDBAG, CANVAS_BAG, CPU, MONITOR, DISK_DRIVE, IO_EXPANDER, REDBUS_ID;
+import net.minecraft.item.Item;
+import net.quetzi.bluepower.references.Refs;
+
+public class ItemFloppyDisk extends Item {
+
+    public ItemFloppyDisk(String name) {
+
+        this.setUnlocalizedName(name);
+        this.setTextureName(Refs.MODID + ":" + name);
+    }
 }
