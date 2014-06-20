@@ -123,4 +123,10 @@ public class GuiBase extends GuiContainer implements IWidgetListener {
     
     }
     
+    public void redraw() {
+    
+        buttonList.clear();
+        widgets.clear();
+        initGui();
+    }
 }

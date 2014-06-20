@@ -1,7 +1,5 @@
 package net.quetzi.bluepower.tileentities.tier2;
 
-import java.util.Random;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
@@ -28,11 +26,11 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
     public PullMode          pullMode  = PullMode.SINGLE_STEP;
     public SortMode          sortMode  = SortMode.ANYSTACK_SEQUENTIAL;
     private boolean          sweepTriggered;
-    public final TubeColor[] colors    = new TubeColor[8];
+    public final TubeColor[] colors    = new TubeColor[9];
     
     public TileSortingMachine() {
     
-        for (int i = 0; i < 8; i++)
+        for (int i = 0; i < colors.length; i++)
             colors[i] = TubeColor.NONE;
     }
     
@@ -148,7 +146,7 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
             case ANYSTACK_SEQUENTIAL:
                 for (int i = curColumn; i < inventory.length; i += 8) {
                     if (inventory[i] != null && stack.isItemEqual(inventory[i])) {
-                        addItemToOutputBuffer(stack.copy(), /*colors[i % 8]*/TubeColor.values()[new Random().nextInt(16)]);
+                        addItemToOutputBuffer(stack.copy(), colors[i % 8]);
                         stack.stackSize = 0;
                         gotoNextNonEmptyColumn();
                         return true;
@@ -218,14 +216,13 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
     @Override
     public void onButtonPress(int messageId, int value) {
     
-        if (messageId < 8) {
+        if (messageId < 9) {
             colors[messageId] = TubeColor.values()[value];
         } else if (messageId == 9) {
             pullMode = PullMode.values()[value];
         } else {
             sortMode = SortMode.values()[value];
         }
-        worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
     }
     
     @Override

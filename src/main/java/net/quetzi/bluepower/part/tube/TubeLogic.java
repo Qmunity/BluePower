@@ -17,7 +17,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
-import net.quetzi.bluepower.BluePower;
 import net.quetzi.bluepower.api.tube.IPneumaticTube;
 import net.quetzi.bluepower.api.vec.Vector3;
 import net.quetzi.bluepower.compat.CompatibilityUtils;
@@ -384,17 +383,7 @@ public class TubeLogic implements IPneumaticTube {
             this.target = target;
             this.targetConnectionSide = targetConnectionSide;
             this.distance = distance;
-            boolean was = colorMask > 0;
-            if (was) {
-                BluePower.log.info("---");
-                BluePower.log.info(Integer.toBinaryString(colorMask));
-            }
-            this.colorMask = colorMask;//~
-            /*  if (was) BluePower.log.info(Integer.toBinaryString(this.colorMask));
-              int mask = 65535;
-              if (was) BluePower.log.info("maks:" + Integer.toBinaryString(mask));
-              this.colorMask = this.colorMask & mask;
-              if (was) BluePower.log.info(Integer.toBinaryString(this.colorMask));*/
+            this.colorMask = colorMask;
         }
         
         public boolean isValidForExportItem(ItemStack stack) {

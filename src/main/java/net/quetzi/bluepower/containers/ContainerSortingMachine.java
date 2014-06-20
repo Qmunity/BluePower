@@ -23,7 +23,9 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import net.quetzi.bluepower.ClientProxy;
 import net.quetzi.bluepower.api.tube.IPneumaticTube.TubeColor;
+import net.quetzi.bluepower.client.gui.GuiBase;
 import net.quetzi.bluepower.containers.slots.IPhantomSlot;
 import net.quetzi.bluepower.containers.slots.SlotPhantom;
 import net.quetzi.bluepower.tileentities.tier2.TileSortingMachine;
@@ -39,7 +41,7 @@ public class ContainerSortingMachine extends Container {
     private final TileSortingMachine sortingMachine;
     
     private int                      pullMode, sortMode, curColumn;
-    private final int[]              colors = new int[8];
+    private final int[]              colors = new int[9];
     
     public ContainerSortingMachine(InventoryPlayer invPlayer, TileSortingMachine sortingMachine) {
     
@@ -113,47 +115,51 @@ public class ContainerSortingMachine extends Container {
         for (Object crafter : crafters) {
             ICrafting icrafting = (ICrafting) crafter;
             
-            for (int i = 0; i < 8; i++) {
+            for (int i = 0; i < 9; i++) {
                 if (colors[i] != sortingMachine.colors[i].ordinal()) {
                     icrafting.sendProgressBarUpdate(this, i, sortingMachine.colors[i].ordinal());
                 }
             }
             
             if (pullMode != sortingMachine.pullMode.ordinal()) {
-                icrafting.sendProgressBarUpdate(this, 8, sortingMachine.pullMode.ordinal());
+                icrafting.sendProgressBarUpdate(this, 9, sortingMachine.pullMode.ordinal());
             }
             
             if (sortMode != sortingMachine.sortMode.ordinal()) {
-                icrafting.sendProgressBarUpdate(this, 9, sortingMachine.sortMode.ordinal());
+                icrafting.sendProgressBarUpdate(this, 10, sortingMachine.sortMode.ordinal());
             }
             
             if (curColumn != sortingMachine.curColumn) {
-                icrafting.sendProgressBarUpdate(this, 10, curColumn);
+                icrafting.sendProgressBarUpdate(this, 11, curColumn);
             }
         }
         
         pullMode = sortingMachine.pullMode.ordinal();
         sortMode = sortingMachine.sortMode.ordinal();
         curColumn = sortingMachine.curColumn;
+        for (int i = 0; i < colors.length; i++) {
+            colors[i] = sortingMachine.colors[i].ordinal();
+        }
     }
     
     @Override
     @SideOnly(Side.CLIENT)
     public void updateProgressBar(int id, int value) {
     
-        if (id < 8) {
+        if (id < 9) {
             sortingMachine.colors[id] = TubeColor.values()[value];
         }
         
-        if (id == 8) {
+        if (id == 9) {
             sortingMachine.pullMode = TileSortingMachine.PullMode.values()[value];
         }
         
-        if (id == 9) {
+        if (id == 10) {
             sortingMachine.sortMode = TileSortingMachine.SortMode.values()[value];
+            ((GuiBase) ClientProxy.getOpenedGui()).redraw();
         }
         
-        if (id == 10) {
+        if (id == 11) {
             sortingMachine.curColumn = value;
         }
     }

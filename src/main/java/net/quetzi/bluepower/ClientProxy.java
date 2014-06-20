@@ -17,6 +17,7 @@
 
 package net.quetzi.bluepower;
 
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.MinecraftForge;
 import net.quetzi.bluepower.client.renderers.IconSupplier;
@@ -41,5 +42,10 @@ public class ClientProxy extends CommonProxy {
     public EntityPlayer getPlayer() {
     
         return FMLClientHandler.instance().getClientPlayerEntity();
+    }
+    
+    public static GuiScreen getOpenedGui() {
+    
+        return FMLClientHandler.instance().getClient().currentScreen;
     }
 }
