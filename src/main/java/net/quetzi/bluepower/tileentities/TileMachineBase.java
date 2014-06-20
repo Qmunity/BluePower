@@ -111,7 +111,7 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
     
     public ForgeDirection getOutputDirection() {
     
-        return ForgeDirection.getOrientation(getBlockMetadata());
+        return ForgeDirection.getOrientation(getBlockMetadata()).getOpposite();
     }
     
     @Override
@@ -185,6 +185,6 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
     @Override
     public int getWeight(ForgeDirection from) {
     
-        return from == getOutputDirection() ? 1000000 : 0;//make the buffer side the last place to go
+        return from == getOutputDirection().getOpposite() ? 1000000 : 0;//make the buffer side the last place to go
     }
 }
