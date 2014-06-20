@@ -39,19 +39,21 @@ public class TileCPU extends TileBase implements IRedBusWindow {
 	private boolean flag_C; // carry
 	private boolean flag_D; // ?
 	private boolean flag_E; // E flag 65C816
-	private boolean flag_M; // M flag 65C816
+	private boolean flag_M; // M flag 65C816 (true 8 bit mode, false = 16bit)
 	private boolean flag_N; // negative
 	private boolean flag_O; // overflow
 	private boolean flag_X; // ?
 	private boolean flag_Z; // zero
 	private boolean flag_BRK; // break flag
-	private boolean flag_WAI = false;
+	private boolean flag_WAI; // wait flag (for virtual IRQ)
 	// redbus
 	private int redbus_remote_address; // current remote redbus device
 	private boolean redbus_timeout;
+	private boolean redbus_window_enabled = true;
 	private Object redbus_cache;
 	
 	private int availableCycles;
+	public int rtc = 0;
 	
 	// used in decoding opcodes
 	private int effectiveAddress;
@@ -66,14 +68,14 @@ public class TileCPU extends TileBase implements IRedBusWindow {
 	public void powerOnReset () {
 		//TODO: set start addresses
 		this.programCounter = 1024;
-		BRKaddress = 8192;
+		BRKaddress = 1024; //8192;
 		stackPointer = 512;
 		reg_R = 768;
 		//front panel switches
 		//TODO: read frontpanel from NBT data
 		this.memory[0] = this.discDriveID;
 		this.memory[1] = this.screenID;
-		this.memory[2] = this.redbus_id; //redbus address
+		this.memory[2] = this.redbus_id; // own redbus address
 		// clear registers
 		reg_A = reg_Y = reg_A = 0;
 		//TODO: reset internal CPU flags
@@ -97,7 +99,7 @@ public class TileCPU extends TileBase implements IRedBusWindow {
 		
 		try {
 			BluePower.log.info("[BluePowerControl] CPU loaded bootloader "+bootLoader);
-			//loads 1K boot loader into memory
+			//loads 256byte boot loader into memory
 			disc.read(this.memory, 1024, 256);
 			disc.close();
 		}
@@ -116,6 +118,7 @@ public class TileCPU extends TileBase implements IRedBusWindow {
 	public void updateEntity() {
 		// 20 ticks per second = 20khz
 		if (halt) return;
+		this.rtc += 1;
 		
 		this.flag_WAI = false;
 		this.redbus_timeout = false;
@@ -125,8 +128,8 @@ public class TileCPU extends TileBase implements IRedBusWindow {
 			availableCycles = cpuStoredCycles;
 		}
 		while (availableCycles > 0 && !this.flag_WAI && !this.redbus_timeout) {
-			// executeInstruction();
-			dumpMemory();
+			executeInstruction();
+			// dumpMemory();
 		}
 	}
 	
@@ -463,9 +466,99 @@ public class TileCPU extends TileBase implements IRedBusWindow {
 		case 0x60:// 6502 RTS
 			invalid(opcode);
 			break;
+		case 0x61:// 6502 ADC (indirect,X)
+			invalid(opcode);
+			break;
+		case 0x62:// 65C816 PER relative
+			invalid(opcode);
+			break;
+		case 0x63:// 65C816 ADC r,S
+			invalid(opcode);
+			break;
+		case 0x64:// 65C02 STZ zeropage
+			invalid(opcode);
+			break;
+		case 0x65:// 6502 ADC zeropage
+			invalid(opcode);
+			break;
+		case 0x66:// 6502 ROR zeropage
+			invalid(opcode);
+			break;
+		case 0x67:// 65EL02 ADC r,R
+			invalid(opcode);
+			break;
+		case 0x68:// 6502 PLA
+			invalid(opcode);
+			break;
+		case 0x69:// 6502 ADC #
+			invalid(opcode);
+			break;
+		case 0x6A:// 6502 ROR A
+			invalid(opcode);
+			break;
+		case 0x6B:// 65EL02 RLA
+			invalid(opcode);
+			break;
+		case 0x6C:// 6502 JMP (indirect)
+			invalid(opcode);
+			break;
+		case 0x6D:// 6502 ADC absolute
+			invalid(opcode);
+			break;
+		case 0x6E:// 6502 ROR absolute
+			invalid(opcode);
+			break;
+		case 0x6F:// 6502 DIV absolute
+			invalid(opcode);
+			break;
 			
 		// row 7
 		case 0x70:// 6502 BVS relative
+			invalid(opcode);
+			break;
+		case 0x71:// 6502 ADC (indirect),Y
+			invalid(opcode);
+			break;
+		case 0x72:// 65C02 ADC (indirect)
+			invalid(opcode);
+			break;
+		case 0x73:// 65C816 ADC (r,S),Y
+			invalid(opcode);
+			break;
+		case 0x74:// 65C02 STZ zeropage,X
+			invalid(opcode);
+			break;
+		case 0x75:// 6502 ADC zeropage,X
+			invalid(opcode);
+			break;
+		case 0x76:// 6502 ROR zeropage,X
+			invalid(opcode);
+			break;
+		case 0x77:// 65EL02 ADC (r,R),Y
+			invalid(opcode);
+			break;
+		case 0x78:// 6502 SEI
+			invalid(opcode);
+			break;
+		case 0x79:// 6502 ADC absolute,Y
+			invalid(opcode);
+			break;
+		case 0x7A:// 65C02 PLY
+			invalid(opcode);
+			break;
+		case 0x7B:// 65EL02 RLY
+			invalid(opcode);
+			break;
+		case 0x7C:// 65C02 JMP (absolute,X)
+			invalid(opcode);
+			break;
+		case 0x7D:// 6502 ADC absolute,X
+			invalid(opcode);
+			break;
+		case 0x7E:// 6502 ROR absolute,X
+			invalid(opcode);
+			break;
+		case 0x7F:// 6502 DIV absolute,X
 			invalid(opcode);
 			break;
 			
@@ -817,7 +910,7 @@ public class TileCPU extends TileBase implements IRedBusWindow {
 			invalid(opcode);
 			break;
 		case 0xEF:// 65EL02 MMU
-			opMMU1(readMemory(this.programCounter));
+			opMMU(readMemory(this.programCounter));
 			break;
 			
 		// row F
@@ -886,20 +979,11 @@ public class TileCPU extends TileBase implements IRedBusWindow {
 		// 65C816 TXY
 		this.reg_Y = this.reg_X;
 	}
-	
-	public void opMMU() { // 65EL02
-		int t = this.reg_A & 0xFF;
-	    if (t != this.redbus_remote_address) {
-	    	// if output buffer full
-	    	if (this.redbus_cache != null) {
-	    		this.redbus_timeout = true;
-	    	}
-	        this.redbus_remote_address = t;
-	    }
-	}
 	public void opSTP() {// 65EL02 modified
 		availableCycles = -1;
-		if ( this.worldObj.getBlock(this.xCoord, this.yCoord, this.zCoord) == this.blockType) {
+		halt = true;
+		BluePower.log.info("self block=" + this.blockType);
+		if ( this.worldObj.getBlock(this.xCoord, this.yCoord, this.zCoord) != null) {
 			//set CPU on fire for the lolz
 			this.worldObj.playSoundEffect((double)this.xCoord + 0.5D, (double)this.yCoord + 0.5D, (double)this.zCoord + 0.5D, "fire.ignite", 1.0F, this.worldObj.rand.nextFloat() * 0.4F + 0.8F);
 			this.worldObj.setBlock(this.xCoord, this.yCoord+1, this.zCoord, Blocks.fire);
@@ -934,19 +1018,27 @@ public class TileCPU extends TileBase implements IRedBusWindow {
 	}
 				
 	
-	public void opMMU1(int mode) {
+	public void opMMU(int mode) {
 		this.programCounter++;
 		
 		switch (mode) {
 			case 0:
 				// set remote redbus address
-				opMMU();
+				int t = this.reg_A & 0xFF;
+			    if (t != this.redbus_remote_address) {
+			    	// if output buffer full
+			    	if (this.redbus_cache != null) {
+			    		this.redbus_timeout = true;
+			    	}
+			        this.redbus_remote_address = t;
+			    }
 				break;
 			case 1:
 				// set redbus window to memory address in A
 				break;
 			case 2:
 				// enable redbus window
+				redbus_window_enabled = true;
 				break;
 			case 3:
 				// set external memory mapped window to A.
@@ -970,6 +1062,7 @@ public class TileCPU extends TileBase implements IRedBusWindow {
 				break;
 			case 0x82:
 				// disable redbus window
+				redbus_window_enabled = false;
 				break;
 			case 0x83:
 				// get external memory mapped window to A.
@@ -985,6 +1078,8 @@ public class TileCPU extends TileBase implements IRedBusWindow {
 				break;
 			case 0x87:
 				// get RTC to A and D
+				this.reg_A = (this.rtc & 0xFFFF);
+			    this.reg_D = (this.rtc >> 16 & 0xFFFF);
 				break;
 			case 0xFF:
 				// Output A register to MC logfile.
