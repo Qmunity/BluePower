@@ -77,14 +77,20 @@ public class TileCPU extends TileBase implements IRedBusWindow {
 		reg_A = reg_Y = reg_A = 0;
 		//TODO: reset internal CPU flags
 		flag_BRK = false;
+		
+		boolean preloadRam = true;
+		if (preloadRam) {
+			preLoadRAM();
+			return;
+		}
+		
+		
 		//load program/OS into memory
 		String bootLoader = "/assets/bluepower/software/rpcboot.bin";
 		InputStream disc = BluePower.class.getResourceAsStream(bootLoader);
 		
 		if (disc == null) {
 			BluePower.log.info("[BluePowerControl] CPU failed to load bootloader "+bootLoader);
-			
-			preLoadRAM();
 			return;
 		}
 		
@@ -434,6 +440,51 @@ public class TileCPU extends TileBase implements IRedBusWindow {
 			
 		// row B
 		case 0xB0:// 6502 BCS relative
+			invalid(opcode);
+			break;
+		case 0xB1:// 6502 LDA (indirect), Y
+			invalid(opcode);
+			break;
+		case 0xB2:// 65C02 LDA (indirect)
+			invalid(opcode);
+			break;
+		case 0xB3:// 65C816 LDA (r, S), Y
+			invalid(opcode);
+			break;
+		case 0xB4:// 6502 LDY zeropage, X
+			invalid(opcode);
+			break;
+		case 0xB5:// 6502 LDA zeropage, X
+			invalid(opcode);
+			break;
+		case 0xB6:// 6502 LDX zeropage, Y
+			invalid(opcode);
+			break;
+		case 0xB7:// 65EL02 LDA (r, R), Y
+			invalid(opcode);
+			break;
+		case 0xB8:// 6502 CLV
+			invalid(opcode);
+			break;
+		case 0xB9:// 6502 LDA absolute, Y
+			invalid(opcode);
+			break;
+		case 0xBA:// 6502 TSX
+			invalid(opcode);
+			break;
+		case 0xBB:// 65C816 TYX
+			invalid(opcode);
+			break;
+		case 0xBC:// 6502 LDY absolute, X
+			invalid(opcode);
+			break;
+		case 0xBD:// 6502 LDA absolute, X
+			invalid(opcode);
+			break;
+		case 0xBE:// 6502 LDX absolute, Y
+			invalid(opcode);
+			break;
+		case 0xBF:// 65EL02 TAD
 			invalid(opcode);
 			break;
 			
