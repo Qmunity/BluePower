@@ -26,6 +26,7 @@ import net.quetzi.bluepower.blocks.BlockCrackedBasalt;
 import net.quetzi.bluepower.blocks.BlockCrop;
 import net.quetzi.bluepower.blocks.BlockCustomFlower;
 import net.quetzi.bluepower.blocks.BlockDiskDrive;
+import net.quetzi.bluepower.blocks.BlockEngine;
 import net.quetzi.bluepower.blocks.BlockIOExpander;
 import net.quetzi.bluepower.blocks.BlockIgniter;
 import net.quetzi.bluepower.blocks.BlockItemOre;
@@ -98,6 +99,8 @@ public class BPBlocks {
 
     public static Block multipart;          // DO NOT GENERATE OR REMOVE THIS BLOCK!
 
+    public static Block engine;
+
     public static void init() {
 
         basalt = new BlockStoneOre(Refs.BASALT_NAME);
@@ -150,6 +153,7 @@ public class BPBlocks {
         disk_drive = new BlockDiskDrive();
         io_expander = new BlockIOExpander();
 
+        engine = new BlockEngine();
         registerBlocks();
         initModDependantBlocks();
     }
@@ -207,6 +211,8 @@ public class BPBlocks {
         GameRegistry.registerBlock(monitor, Refs.BLOCKMONITOR_NAME);
         GameRegistry.registerBlock(disk_drive, Refs.BLOCKDISKDRIVE_NAME);
         GameRegistry.registerBlock(io_expander, Refs.BLOCKIOEXPANDER_NAME);
+
+        GameRegistry.registerBlock(engine, Refs.ENGINE_NAME);
     }
 
     private static void initModDependantBlocks() {
