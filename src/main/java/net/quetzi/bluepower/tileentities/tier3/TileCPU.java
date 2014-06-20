@@ -5,6 +5,7 @@ import java.io.InputStream;
 
 import org.apache.logging.log4j.Level;
 
+import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
 import net.quetzi.bluepower.BluePower;
 import net.quetzi.bluepower.tileentities.TileBase;
@@ -13,11 +14,14 @@ import net.quetzi.bluepower.tileentities.TileBase;
  * @author fabricator77
  */
 public class TileCPU extends TileBase implements IRedBusWindow {
+	//config option
+	public int cpuStoredCycles = 100000;
+	public int cpuForTickCycles = 1; // default is 1000 for 20khz
 	//front panel switches
 	public byte deviceID = 0;
 	public byte screenID = 1;
 	public byte discDriveID = 2;
-	public boolean halt = true;
+	public boolean halt = false;;
 	
 	private byte[] memory;
 	// registers
@@ -29,23 +33,27 @@ public class TileCPU extends TileBase implements IRedBusWindow {
 	private int reg_A; // accumulator
 	private int reg_B; // 65EL02 ?
 	private int reg_D; // ???
+	private int reg_I; // 65EL02
 	private int reg_R; // 65EL02 ?
 	// flags
 	private boolean flag_C; // carry
 	private boolean flag_D; // ?
 	private boolean flag_E; // E flag 65C816
-	private boolean flag_M; // M flag 65C816
+	private boolean flag_M; // M flag 65C816 (true 8 bit mode, false = 16bit)
 	private boolean flag_N; // negative
 	private boolean flag_O; // overflow
 	private boolean flag_X; // ?
 	private boolean flag_Z; // zero
 	private boolean flag_BRK; // break flag
+	private boolean flag_WAI; // wait flag (for virtual IRQ)
 	// redbus
 	private int redbus_remote_address; // current remote redbus device
 	private boolean redbus_timeout;
+	private boolean redbus_window_enabled = true;
 	private Object redbus_cache;
 	
 	private int availableCycles;
+	public int rtc = 0;
 	
 	// used in decoding opcodes
 	private int effectiveAddress;
@@ -60,18 +68,26 @@ public class TileCPU extends TileBase implements IRedBusWindow {
 	public void powerOnReset () {
 		//TODO: set start addresses
 		this.programCounter = 1024;
-		BRKaddress = 8192;
+		BRKaddress = 1024; //8192;
 		stackPointer = 512;
 		reg_R = 768;
 		//front panel switches
 		//TODO: read frontpanel from NBT data
 		this.memory[0] = this.discDriveID;
 		this.memory[1] = this.screenID;
-		this.memory[2] = this.redbus_id; //redbus address
+		this.memory[2] = this.redbus_id; // own redbus address
 		// clear registers
 		reg_A = reg_Y = reg_A = 0;
 		//TODO: reset internal CPU flags
 		flag_BRK = false;
+		
+		boolean preloadRam = true;
+		if (preloadRam) {
+			preLoadRAM();
+			return;
+		}
+		
+		
 		//load program/OS into memory
 		String bootLoader = "/assets/bluepower/software/rpcboot.bin";
 		InputStream disc = BluePower.class.getResourceAsStream(bootLoader);
@@ -83,7 +99,7 @@ public class TileCPU extends TileBase implements IRedBusWindow {
 		
 		try {
 			BluePower.log.info("[BluePowerControl] CPU loaded bootloader "+bootLoader);
-			//loads 1K boot loader into memory
+			//loads 256byte boot loader into memory
 			disc.read(this.memory, 1024, 256);
 			disc.close();
 		}
@@ -92,17 +108,28 @@ public class TileCPU extends TileBase implements IRedBusWindow {
 		}
 	}
 	
+	// temp to load data into memory for testing
+	private void preLoadRAM () {
+		this.memory[1024] = (byte)0xDB; // STP
+	}
+	
 	//TODO: NBT read/write
 	
 	public void updateEntity() {
 		// 20 ticks per second = 20khz
 		if (halt) return;
+		this.rtc += 1;
 		
-		//availableCycles += 1000;
-		availableCycles += 1;
-		while (availableCycles > 0) {
-			// executeInstruction();
-			dumpMemory();
+		this.flag_WAI = false;
+		this.redbus_timeout = false;
+		
+		availableCycles += cpuForTickCycles;
+		if (availableCycles > cpuStoredCycles) {
+			availableCycles = cpuStoredCycles;
+		}
+		while (availableCycles > 0 && !this.flag_WAI && !this.redbus_timeout) {
+			executeInstruction();
+			// dumpMemory();
 		}
 	}
 	
@@ -133,8 +160,9 @@ public class TileCPU extends TileBase implements IRedBusWindow {
 		//TODO: sort instruction according to frequency of usage
 		// for speed reasons
 		// Octal numbers for ease of lookup in documentation.
+		// Reference http://www.eloraam.com/nonwp/redcpu.php
 		switch (opcode) {
-		//row 1
+		// row 0
 		case 0:// 6502 BRK (calls 65EL02 MMU #0)
 			opBRK();
 			break;
@@ -184,7 +212,7 @@ public class TileCPU extends TileBase implements IRedBusWindow {
 			invalid(opcode);
 			break;
 			
-		// row 2
+		// row 1
 		case 0x10:// 6502 BPL relative
 			invalid(opcode);
 			break;
@@ -234,7 +262,7 @@ public class TileCPU extends TileBase implements IRedBusWindow {
 			invalid(opcode);
 			break;
 			
-		// row 3
+		// row 2
 		case 0x20:// 6502 JSR absolute
 			invalid(opcode);
 			break;
@@ -284,7 +312,7 @@ public class TileCPU extends TileBase implements IRedBusWindow {
 			invalid(opcode);
 			break;
 			
-		// row 4
+		// row 3
 		case 0x30:// 6502 BMI relative
 			invalid(opcode);
 			break;
@@ -333,40 +361,405 @@ public class TileCPU extends TileBase implements IRedBusWindow {
 		case 0x3F:// 65EL02 MUL absolute, X
 			invalid(opcode);
 			break;
-			
+		
+		// row 4
 		case 0x40:// 6502 RTI
 			invalid(opcode);
 			break;
-			
+		case 0x41:// 6502 EOR (indirect,X)
+			invalid(opcode);
+			break;
+		case 0x42:// 65EL02 NXA
+			invalid(opcode);
+			break;
+		case 0x43:// 65C816 EOR r,S
+			invalid(opcode);
+			break;
+		case 0x44:// 65EL02 REA absolute
+			invalid(opcode);
+			break;	
+		case 0x45:// 6502 EOR zeropage
+			invalid(opcode);
+			break;
+		case 0x46:// 6502 LSR zeropage
+			invalid(opcode);
+			break;
+		case 0x47:// 65EL02 EOR r,R
+			invalid(opcode);
+			break;
+		case 0x48:// 6502 PHA
+			invalid(opcode);
+			break;
+		case 0x49:// 6502 EOR #
+			invalid(opcode);
+			break;
+		case 0x4A:// 6502 LSR A
+			invalid(opcode);
+			break;
+		case 0x4B:// 65EL02 RHA
+			invalid(opcode);
+			break;
+		case 0x4C:// 6502 JMP absolute
+			invalid(opcode);
+			break;
+		case 0x4D:// 6502 EOR absolute
+			invalid(opcode);
+			break;
+		case 0x4E:// 6502 LSR absolute
+			invalid(opcode);
+			break;
+		case 0x4F:// 65EL02 DIV zeropage
+			invalid(opcode);
+			break;
+		
+		// row 5
 		case 0x50:// 6502 BVC relative
 			invalid(opcode);
 			break;
+		case 0x51:// 6502 EOR (indirect),Y
+			invalid(opcode);
+			break;
+		case 0x52:// 65C02 EOR indirect
+			invalid(opcode);
+			break;
+		case 0x53:// 65C816 EOR (r,S),Y
+			invalid(opcode);
+			break;
+		case 0x54:// 65EL02 REI (zeropage)
+			invalid(opcode);
+			break;
+		case 0x55:// 6502 EOR zeropage,X
+			invalid(opcode);
+			break;
+		case 0x56:// 6502 LSR zeropage,X
+			invalid(opcode);
+			break;
+		case 0x57:// 65EL02 EOR (r,R),Y
+			invalid(opcode);
+			break;
+		case 0x58:// 6502 CLI
+			invalid(opcode);
+			break;
+		case 0x59:// 6502 EOR absolute,Y
+			invalid(opcode);
+			break;
+		case 0x5A:// 65C02 PHY
+			invalid(opcode);
+			break;
+		case 0x5B:// 65EL02 RHY
+			invalid(opcode);
+			break;
+		case 0x5C:// 65EL02 TXI
+			opTXI();
+			break;
+		case 0x5D:// 6502 EOR absolute,X
+			invalid(opcode);
+			break;
+		case 0x5E:// 6502 LSR absolute,X
+			invalid(opcode);
+			break;
+		case 0x5F:// 65EL02 DIV zeropage,X
+			invalid(opcode);
+			break;
 			
+		// row 6
 		case 0x60:// 6502 RTS
 			invalid(opcode);
 			break;
+		case 0x61:// 6502 ADC (indirect,X)
+			invalid(opcode);
+			break;
+		case 0x62:// 65C816 PER relative
+			invalid(opcode);
+			break;
+		case 0x63:// 65C816 ADC r,S
+			invalid(opcode);
+			break;
+		case 0x64:// 65C02 STZ zeropage
+			invalid(opcode);
+			break;
+		case 0x65:// 6502 ADC zeropage
+			invalid(opcode);
+			break;
+		case 0x66:// 6502 ROR zeropage
+			invalid(opcode);
+			break;
+		case 0x67:// 65EL02 ADC r,R
+			invalid(opcode);
+			break;
+		case 0x68:// 6502 PLA
+			invalid(opcode);
+			break;
+		case 0x69:// 6502 ADC #
+			invalid(opcode);
+			break;
+		case 0x6A:// 6502 ROR A
+			invalid(opcode);
+			break;
+		case 0x6B:// 65EL02 RLA
+			invalid(opcode);
+			break;
+		case 0x6C:// 6502 JMP (indirect)
+			invalid(opcode);
+			break;
+		case 0x6D:// 6502 ADC absolute
+			invalid(opcode);
+			break;
+		case 0x6E:// 6502 ROR absolute
+			invalid(opcode);
+			break;
+		case 0x6F:// 6502 DIV absolute
+			invalid(opcode);
+			break;
 			
+		// row 7
 		case 0x70:// 6502 BVS relative
 			invalid(opcode);
 			break;
+		case 0x71:// 6502 ADC (indirect),Y
+			invalid(opcode);
+			break;
+		case 0x72:// 65C02 ADC (indirect)
+			invalid(opcode);
+			break;
+		case 0x73:// 65C816 ADC (r,S),Y
+			invalid(opcode);
+			break;
+		case 0x74:// 65C02 STZ zeropage,X
+			invalid(opcode);
+			break;
+		case 0x75:// 6502 ADC zeropage,X
+			invalid(opcode);
+			break;
+		case 0x76:// 6502 ROR zeropage,X
+			invalid(opcode);
+			break;
+		case 0x77:// 65EL02 ADC (r,R),Y
+			invalid(opcode);
+			break;
+		case 0x78:// 6502 SEI
+			invalid(opcode);
+			break;
+		case 0x79:// 6502 ADC absolute,Y
+			invalid(opcode);
+			break;
+		case 0x7A:// 65C02 PLY
+			invalid(opcode);
+			break;
+		case 0x7B:// 65EL02 RLY
+			invalid(opcode);
+			break;
+		case 0x7C:// 65C02 JMP (absolute,X)
+			invalid(opcode);
+			break;
+		case 0x7D:// 6502 ADC absolute,X
+			invalid(opcode);
+			break;
+		case 0x7E:// 6502 ROR absolute,X
+			invalid(opcode);
+			break;
+		case 0x7F:// 6502 DIV absolute,X
+			invalid(opcode);
+			break;
 			
+		// row 8
 		case 0x80:// 65C02 BRA relative
 			invalid(opcode);
 			break;
+		case 0x81:// 6502 STA (indirect,X)
+			invalid(opcode);
+			break;
+		case 0x82:// 65EL02 RER relative
+			invalid(opcode);
+			break;
+		case 0x83:// 65C816 STA (r,S)
+			invalid(opcode);
+			break;
+		case 0x84:// 6502 STY zeropage
+			invalid(opcode);
+			break;
+		case 0x85:// 6502 STA zeropage
+			invalid(opcode);
+			break;
+		case 0x86:// 6502 STX zeropage
+			invalid(opcode);
+			break;
+		case 0x87:// 65EL02 STA r,R
+			invalid(opcode);
+			break;
+		case 0x88:// 6502 DEY
+			invalid(opcode);
+			break;
+		case 0x89:// 65C02 BIT #
+			invalid(opcode);
+			break;
+		case 0x8A:// 6502 TXA
+			opTXA();
+			break;
+		case 0x8B:// 65EL02 TXR
+			opTXR();
+			break;
+		case 0x8C:// 6502 STY absolute
+			invalid(opcode);
+			break;
+		case 0x8D:// 6502 STA absolute
+			invalid(opcode);
+			break;
+		case 0x8E:// 6502 STX absolute
+			invalid(opcode);
+			break;
+		case 0x8F:// 65EL02 SEA
+			opTXR();
+			break;
 			
+		// row 9
 		case 0x90:// 6502 BCC relative
 			invalid(opcode);
 			break;
+		case 0x91:// 6502 STA (indirect),Y
+			invalid(opcode);
+			break;
+		case 0x92:// 65C02 STA (indirect)
+			invalid(opcode);
+			break;
+		case 0x93:// 65C816 STA (r, S),Y
+			invalid(opcode);
+			break;
+		case 0x94:// 6502 STY zeropage,X
+			invalid(opcode);
+			break;
+		case 0x95:// 6502 STA zeropage,X
+			invalid(opcode);
+			break;
+		case 0x96:// 6502 STX zeropage,Y
+			invalid(opcode);
+			break;
+		case 0x97:// 65EL02 STA (r,R),X
+			invalid(opcode);
+			break;
+		case 0x98:// 6502 TYA
+			opTYA();
+			break;
+		case 0x99:// 6502 STA absolute,Y
+			invalid(opcode);
+			break;
+		case 0x9A:// 6502 TXS
+			opTXS();
+			break;
+		case 0x9B:// 65C816 TXY
+			opTXY();
+			break;
+		case 0x9C:// 65C02 STZ absolute
+			invalid(opcode);
+			break;
+		case 0x9D:// 6502 STA absolute,X
+			invalid(opcode);
+			break;
+		case 0x9E:// 65C02 STZ absolute,X
+			invalid(opcode);
+			break;
+		case 0x9F:// 65EL02 SEA
+			invalid(opcode);
+			break;
 			
+		// row A
 		case 0xA0:// 6502 LDY #
 			invalid(opcode);
 			break;
+		case 0xA1:// 6502 LDA (indirect),X
+			invalid(opcode);
+			break;
+		case 0xA2:// 6502 LDA #
+			invalid(opcode);
+			break;
+		case 0xA3:// 65C816 LDA r,S
+			invalid(opcode);
+			break;
+		case 0xA4:// 6502 LDY zeropage
+			invalid(opcode);
+			break;			
 		case 0xA5:// 6502 LDA zeropage
 			opLDA();
 			break;
+		case 0xA6:// 6502 LDY zeropage
+			invalid(opcode);
+			break;
+		case 0xA7:// 65EL02 LDA r,R
+			invalid(opcode);
+			break;
+		case 0xA8:// 6502 TAY
+			opTAY();
+			break;
+		case 0xA9:// 6502 LDA #
+			invalid(opcode);
+			break;
+		case 0xAA:// 6502 TAX
+			opTAY();
+			break;
+		case 0xAB:// 65EL02 TRX
+			opTRX();
+			break;
+		case 0xAC:// 6502 LDY absolute
+			invalid(opcode);
+			break;
+		case 0xAD:// 6502 LDA absolute
+			invalid(opcode);
+			break;
+		case 0xAE:// 6502 LDX absolute
+			invalid(opcode);
+			break;
+		case 0xAF:// 65EL02 TDA
+			opTDA();
+			break;
 			
+		// row B
 		case 0xB0:// 6502 BCS relative
 			invalid(opcode);
+			break;
+		case 0xB1:// 6502 LDA (indirect), Y
+			invalid(opcode);
+			break;
+		case 0xB2:// 65C02 LDA (indirect)
+			invalid(opcode);
+			break;
+		case 0xB3:// 65C816 LDA (r, S), Y
+			invalid(opcode);
+			break;
+		case 0xB4:// 6502 LDY zeropage, X
+			invalid(opcode);
+			break;
+		case 0xB5:// 6502 LDA zeropage, X
+			invalid(opcode);
+			break;
+		case 0xB6:// 6502 LDX zeropage, Y
+			invalid(opcode);
+			break;
+		case 0xB7:// 65EL02 LDA (r, R), Y
+			invalid(opcode);
+			break;
+		case 0xB8:// 6502 CLV
+			invalid(opcode);
+			break;
+		case 0xB9:// 6502 LDA absolute, Y
+			invalid(opcode);
+			break;
+		case 0xBA:// 6502 TSX
+			opTSX();
+			break;
+		case 0xBB:// 65C816 TYX
+			opTYX();
+			break;
+		case 0xBC:// 6502 LDY absolute, X
+			invalid(opcode);
+			break;
+		case 0xBD:// 6502 LDA absolute, X
+			invalid(opcode);
+			break;
+		case 0xBE:// 6502 LDX absolute, Y
+			invalid(opcode);
+			break;
+		case 0xBF:// 65EL02 TAD
+			opTAD();
 			break;
 			
 		// row C
@@ -379,18 +772,148 @@ public class TileCPU extends TileBase implements IRedBusWindow {
 		case 0xC2:// 65C816 REP #
 			opREP();
 			break;
+		case 0xC3:// 65C816 CMP r, S
+			invalid(opcode);
+			break;
+		case 0xC4:// 6502 CPY zeropage
+			invalid(opcode);
+			break;
+		case 0xC5:// 6502 CMP zeropage
+			invalid(opcode);
+			break;
+		case 0xC6:// 6502 DEC zeropage
+			invalid(opcode);
+			break;
+		case 0xC7:// 65EL02 CMP r,R
+			invalid(opcode);
+			break;
+		case 0xC8:// 6502 INY
+			invalid(opcode);
+			break;
+		case 0xC9:// 6502 CMP #
+			invalid(opcode);
+			break;
+		case 0xCA:// 6502 DEX
+			invalid(opcode);
+			break;
+		case 0xCB:// 65C02 WAI
+			opWAI();
+			break;
+		case 0xCC:// 6502 CPY absolute
+			invalid(opcode);
+			break;
+		case 0xCD:// 6502 CMP absolute
+			invalid(opcode);
+			break;
+		case 0xCE:// 6502 DEC absolute
+			invalid(opcode);
+			break;
+		case 0xCF:// 65EL02 PLD
+			invalid(opcode);
+			break;
 			
+		// row D
 		case 0xD0:// 6502 BNE relative
 			invalid(opcode);
 			break;
+		case 0xD1:// 6502 CMP (indirect), Y
+			invalid(opcode);
+			break;
+		case 0xD2:// 65C02 CMP (indirect)
+			invalid(opcode);
+			break;
+		case 0xD3:// 65C816 CMP (r, S), Y
+			invalid(opcode);
+			break;
+		case 0xD4:// 65C816 PEI (zeropage)
+			invalid(opcode);
+			break;
+		case 0xD5:// 6502 CMP zeropage, X
+			invalid(opcode);
+			break;
+		case 0xD6:// 6502 DEC zeropage, X
+			invalid(opcode);
+			break;
+		case 0xD7:// 65EL02 CMP (r, R), Y
+			invalid(opcode);
+			break;
+		case 0xD8:// 6502 CLD
+			invalid(opcode);
+			break;
+		case 0xD9:// 6502 CMP absolute, Y
+			invalid(opcode);
+			break;
+		case 0xDA:// 65C02 PHX
+			invalid(opcode);
+			break;
+		case 0xDB:// 65C02 STP
+			opSTP();
+			break;
+		case 0xDC:// 65EL02 TIX
+			opTIX();
+			break;
+		case 0xDD:// 6502 CMP absolute, X
+			invalid(opcode);
+			break;
+		case 0xDE:// 6502 DEC absolute, X
+			invalid(opcode);
+			break;
+		case 0xDF:// 65EL02 PHD
+			invalid(opcode);
+			break;
 			
+		// row E
 		case 0xE0:// 6502 CPX #
 			invalid(opcode);
 			break;
+		case 0xE1:// 6502 SBC (indirect, X)
+			invalid(opcode);
+			break;
+		case 0xE2:// 65C816 SEP #
+			invalid(opcode);
+			break;
+		case 0xE3:// 65C816 SBC r, S
+			invalid(opcode);
+			break;
+		case 0xE4:// 6502 CPX zeropage
+			invalid(opcode);
+			break;
+		case 0xE5:// 6502 SBC zeropage
+			invalid(opcode);
+			break;
+		case 0xE6:// 6502 INC zeropage
+			invalid(opcode);
+			break;
+		case 0xE7:// 65EL02 SBC r, R
+			invalid(opcode);
+			break;
+		case 0xE8:// 6502 INX
+			invalid(opcode);
+			break;
+		case 0xE9:// 6502 SBC #
+			invalid(opcode);
+			break;
+		case 0xEA:// 6502 NOP
+			// No OPerand
+			// do nothing this cycle
+			break;
+		case 0xEB:// 65C816 XBA
+			invalid(opcode);
+			break;
+		case 0xEC:// 6502 CPX absolute
+			invalid(opcode);
+			break;
+		case 0xED:// 6502 SBC absolute
+			invalid(opcode);
+			break;
+		case 0xEE:// 6502 INC absolute
+			invalid(opcode);
+			break;
 		case 0xEF:// 65EL02 MMU
-			opMMU1(readMemory(this.programCounter));
+			opMMU(readMemory(this.programCounter));
 			break;
 			
+		// row F
 		case 0xF0:// 6502 BEQ relative
 			invalid(opcode);
 			break;
@@ -448,32 +971,74 @@ public class TileCPU extends TileBase implements IRedBusWindow {
 		// 65C816 Reset Processor Status Flag
 		setFlags(getFlags() & (readMemory(this.programCounter) ^ 0xFFFFFFFF));
 	}
-	
-	// 65EL02
-	public void opMMU() {
-		int t = this.reg_A & 0xFF;
-	    if (t != this.redbus_remote_address) {
-	    	// if output buffer full
-	    	if (this.redbus_cache != null) {
-	    		this.redbus_timeout = true;
-	    	}
-	        this.redbus_remote_address = t;
-	    }
+	private void opTYX() {
+		// 65C816 TYX
+		this.reg_X = this.reg_Y;
 	}
+	private void opTXY() {
+		// 65C816 TXY
+		this.reg_Y = this.reg_X;
+	}
+	public void opSTP() {// 65EL02 modified
+		availableCycles = -1;
+		halt = true;
+		BluePower.log.info("self block=" + this.blockType);
+		if ( this.worldObj.getBlock(this.xCoord, this.yCoord, this.zCoord) != null) {
+			//set CPU on fire for the lolz
+			this.worldObj.playSoundEffect((double)this.xCoord + 0.5D, (double)this.yCoord + 0.5D, (double)this.zCoord + 0.5D, "fire.ignite", 1.0F, this.worldObj.rand.nextFloat() * 0.4F + 0.8F);
+			this.worldObj.setBlock(this.xCoord, this.yCoord+1, this.zCoord, Blocks.fire);
+		}
+	}
+	public void opTRX() {// 65EL02
+		// TRX opcode
+		// tranfer R to X
+		this.reg_X = this.reg_R;
+	}
+	public void opTXR() {// 65EL02
+		// TXR opcode
+		// transfer X to R
+		this.reg_R = this.reg_X;
+	}
+	public void opTAD() {// 65EL02
+		// 65LE02 TAD
+		// transfer A to D
+		this.reg_D = this.reg_A;
+	}
+	public void opTDA() {
+		// 65EL02 TDA
+		this.reg_A = this.reg_D;
+	}
+	public void opTIX() {
+		// 65EL02 TIX
+		this.reg_X = this.reg_I;
+	}
+	public void opTXI() {
+		// 65EL02 TXI
+		this.reg_I = this.reg_X;
+	}
+				
 	
-	public void opMMU1(int mode) {
+	public void opMMU(int mode) {
 		this.programCounter++;
 		
 		switch (mode) {
 			case 0:
 				// set remote redbus address
-				opMMU();
+				int t = this.reg_A & 0xFF;
+			    if (t != this.redbus_remote_address) {
+			    	// if output buffer full
+			    	if (this.redbus_cache != null) {
+			    		this.redbus_timeout = true;
+			    	}
+			        this.redbus_remote_address = t;
+			    }
 				break;
 			case 1:
 				// set redbus window to memory address in A
 				break;
 			case 2:
 				// enable redbus window
+				redbus_window_enabled = true;
 				break;
 			case 3:
 				// set external memory mapped window to A.
@@ -497,6 +1062,7 @@ public class TileCPU extends TileBase implements IRedBusWindow {
 				break;
 			case 0x82:
 				// disable redbus window
+				redbus_window_enabled = false;
 				break;
 			case 0x83:
 				// get external memory mapped window to A.
@@ -512,6 +1078,8 @@ public class TileCPU extends TileBase implements IRedBusWindow {
 				break;
 			case 0x87:
 				// get RTC to A and D
+				this.reg_A = (this.rtc & 0xFFFF);
+			    this.reg_D = (this.rtc >> 16 & 0xFFFF);
 				break;
 			case 0xFF:
 				// Output A register to MC logfile.
@@ -536,6 +1104,11 @@ public class TileCPU extends TileBase implements IRedBusWindow {
 		this.reg_A = readMemory(effectiveAddress);
 		this.programCounter++;
 	}
+	
+	private void opWAI() {//65C02
+		// wait for interrupt (actually waits for next world tick)
+		this.flag_WAI = true;
+	}
 
 	// Modfied from sysmon
 	private void opBIT() {
@@ -545,10 +1118,40 @@ public class TileCPU extends TileBase implements IRedBusWindow {
 		flag_N = ((tmp & 0x80) != 0);
 		flag_O = ((tmp & 0x40) != 0);
 	}
-	
 	private void opCLC() {
 		// CLC opcode
 		flag_C = false;
+	}
+	private void opTAX(){// 6502
+		// TAX opcode
+		// transfer A to X
+		this.reg_X = this.reg_A;
+	}
+	private void opTXA(){// 6502
+		// TXA opcode
+		// transfer X to A
+		this.reg_A = this.reg_X;
+	}
+	private void opTAY(){// 6502
+		// TAY opcode
+		// transfer A to Y
+		this.reg_Y = this.reg_A;
+	}
+	private void opTYA() {//6502
+		// TYA opcode
+		// transfer Y to A
+		this.reg_A = this.reg_Y;
+	}
+	private void opTSX() {// 6502
+		// TSX opcode
+		// transfer stack pointer to X
+		this.reg_X = this.stackPointer;
+	}
+	 
+	private void opTXS() {// 6502
+		// TXS opcode
+		// transfer X to stack pointer
+		this.stackPointer = this.reg_X;
 	}
 
 	private int readMemory(int pc) {
@@ -570,6 +1173,7 @@ public class TileCPU extends TileBase implements IRedBusWindow {
 	
 	// Opcode functions
 	private void invalid(int op) {
-		throw new InvalidOPCodeException(Integer.toHexString(op));
+		this.halt = true;
+		BluePower.log.error("BluePower CPU, Invalid OP code:"+Integer.toHexString(op));
 	}
 }
