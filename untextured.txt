@@ -9,7 +9,8 @@ cpu_top
 cpu_bottom
 disk_drive_front (red dots are activity lights, so need unlit version as well)
 monitor_front (for some reason mirrored on the block)
-io_expander ()
+io_expander_front (temp textures needed, final design relies on implementation of activity lights and also should be half height block)
+io_expander_back (temp textures needed, final design relies on bundled cable shape/texture and also should be half height block))
 
 Items
 *****
