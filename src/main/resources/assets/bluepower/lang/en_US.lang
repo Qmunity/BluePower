@@ -208,6 +208,9 @@ item.canvas_bag.green.name=Green Canvas Bag
 item.canvas_bag.red.name=Red Canvas Bag
 item.canvas_bag.black.name=Black Canvas Bag
 
+item.fine_wire.iron.name=Fine Iron Wire
+item.fine_wire.copper.name=Fine Copper Wire
+
 item.silicon_boule.name=Silicon Boule
 item.silicon_wafer.name=Silicon Wafer
 item.blue_doped_wafer.name=Blue Doped Wafer
@@ -229,6 +232,8 @@ item.screwdriver_handle.name=Screwdriver Handle
 item.seed_bag.name=Seed Bag
 item.canvas_bag.name=Canvas Bag
 item.canvas.name=Canvas
+item.wool_card.name=Wool Card
+item.diamond_drawPlate.name=Diamond Drawplate
 
 bluepower.part.and.name=AND Gate
 bluepower.part.buffer.name=Buffer Gate
@@ -282,3 +287,12 @@ itemGroup.tabBluePowerCircuits=Blue Power Logic Gates
 itemGroup.tabBluePowerLighting=Blue Power Lighting
 
 gui.timerInterval=Timer Interval
+gui.connections=Connections
+
+direction.front=Front
+direction.left=Left
+direction.back=Back
+direction.right=Right
+
+random.enabled=Enabled
+random.disabled=Disabled

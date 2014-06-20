@@ -491,4 +491,14 @@ public abstract class BPPart {
         return ((IMultipartCompat) CompatibilityUtils.getModule(Dependencies.FMP)).checkOcclusion(world.getTileEntity(x, y, z), cube);
     }
     
+    /**
+     * Adds information to the waila tooltip
+     * @author amadornes
+     * 
+     * @param info
+     */
+    public void addWailaInfo(List<String> info) {
+    
+    }
+    
 }

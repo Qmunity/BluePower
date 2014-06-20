@@ -41,6 +41,7 @@ public class CompatModuleFMP extends CompatModule implements IMultipartCompat {
     @Override
     public void preInit(FMLPreInitializationEvent ev) {
     
+        MultipartCompat.tile = TileMultipart.class;
     }
     
     @Override
@@ -183,7 +184,7 @@ public class CompatModuleFMP extends CompatModule implements IMultipartCompat {
         }
         return null;
     }
-
+    
     @SuppressWarnings("unchecked")
     public static <T> T getMultiPart(TileMultipart t, Class<T> searchedClass) {
     
@@ -192,7 +193,7 @@ public class CompatModuleFMP extends CompatModule implements IMultipartCompat {
         }
         return null;
     }
-
+    
     @SuppressWarnings("unchecked")
     public static <T> Iterable<T> getMultiParts(TileMultipart t, Class<T> searchedClass) {
     

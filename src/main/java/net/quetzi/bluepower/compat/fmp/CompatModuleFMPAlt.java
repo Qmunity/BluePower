@@ -9,6 +9,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import net.quetzi.bluepower.api.part.BPPart;
 import net.quetzi.bluepower.api.vec.Vector3;
 import net.quetzi.bluepower.compat.CompatModule;
+import net.quetzi.bluepower.tileentities.BPTileMultipart;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
@@ -18,6 +19,7 @@ public class CompatModuleFMPAlt extends CompatModule implements IMultipartCompat
     @Override
     public void preInit(FMLPreInitializationEvent ev) {
     
+        MultipartCompat.tile = BPTileMultipart.class;
     }
     
     @Override
@@ -77,7 +79,7 @@ public class CompatModuleFMPAlt extends CompatModule implements IMultipartCompat
     @Override
     public <T> T getBPPart(TileEntity te, Class<T> searchedClass) {
     
-        return null;//TODO return non-FMP part
+        return null;// TODO return non-FMP part
     }
     
 }

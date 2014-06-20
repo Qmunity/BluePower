@@ -79,7 +79,10 @@ public class BluePower {
         CompatibilityUtils.preInit(event);
         
         FMLCommonHandler.instance().bus().register(new RedstoneNetworkTickHandler());
-        MinecraftForge.EVENT_BUS.register(new BPEventHandler());
+        
+        BPEventHandler eventHandler =new BPEventHandler();
+        MinecraftForge.EVENT_BUS.register(eventHandler);
+        FMLCommonHandler.instance().bus().register(eventHandler);
     }
     
     @EventHandler

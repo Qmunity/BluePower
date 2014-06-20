@@ -46,10 +46,9 @@ public class GateMux extends GateBase {
         RenderHelper.renderRedstoneTorch(0, 1D / 8D, 2 / 16D, 9D / 16D, back.getPower() == 0);
         boolean frontLeft = !(left.getPower() > 0 || back.getPower() == 0);
         boolean frontRight = !(right.getPower() > 0 || back.getPower() > 0);
-        RenderHelper.renderRedstoneTorch(4/16D, 1D / 8D, -1 / 16D, 9D / 16D, frontRight);
-        RenderHelper.renderRedstoneTorch(-4/16D, 1D / 8D, -1 / 16D, 9D / 16D, frontLeft);
+        RenderHelper.renderRedstoneTorch(4 / 16D, 1D / 8D, -1 / 16D, 9D / 16D, frontRight);
+        RenderHelper.renderRedstoneTorch(-4 / 16D, 1D / 8D, -1 / 16D, 9D / 16D, frontLeft);
         
-
         renderTopTexture(Refs.MODID + ":textures/blocks/gates/" + getType() + "/frontleft_" + (frontLeft ? "on" : "off") + ".png");
         renderTopTexture(Refs.MODID + ":textures/blocks/gates/" + getType() + "/frontright_" + (frontRight ? "on" : "off") + ".png");
         RenderHelper.renderRedstoneTorch(0, 1D / 8D, -4 / 16D, 9D / 16D, !frontLeft && !frontRight);
@@ -76,6 +75,11 @@ public class GateMux extends GateBase {
         }
         
         front.setPower(out);
+    }
+    
+    @Override
+    public void addWailaInfo(List<String> info) {
+    
     }
     
 }

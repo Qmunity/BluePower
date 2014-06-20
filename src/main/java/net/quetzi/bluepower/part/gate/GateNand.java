@@ -98,4 +98,9 @@ public class GateNand extends GateBase {
         return true;
     }
     
+    @Override
+    public void addWailaInfo(List<String> info) {
+    
+    }
+    
 }

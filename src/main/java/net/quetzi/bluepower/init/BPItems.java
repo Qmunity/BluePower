@@ -28,6 +28,7 @@ import net.quetzi.bluepower.items.ItemAthame;
 import net.quetzi.bluepower.items.ItemCanvasBag;
 import net.quetzi.bluepower.items.ItemCrafting;
 import net.quetzi.bluepower.items.ItemCropSeed;
+import net.quetzi.bluepower.items.ItemFineWire;
 import net.quetzi.bluepower.items.ItemGem;
 import net.quetzi.bluepower.items.ItemGemAxe;
 import net.quetzi.bluepower.items.ItemGemHoe;
@@ -37,6 +38,7 @@ import net.quetzi.bluepower.items.ItemGemSword;
 import net.quetzi.bluepower.items.ItemHandle;
 import net.quetzi.bluepower.items.ItemIndigoDye;
 import net.quetzi.bluepower.items.ItemIngot;
+import net.quetzi.bluepower.items.ItemLimitedCrafting;
 import net.quetzi.bluepower.items.ItemLumar;
 import net.quetzi.bluepower.items.ItemNikolite;
 import net.quetzi.bluepower.items.ItemSaw;
@@ -119,6 +121,9 @@ public class BPItems {
     public static Item          canvas_bag;
     public static Item          canvas;
     public static Item          lumar;
+    public static Item          fine_wire;
+    public static Item          wool_card;
+    public static Item          diamond_drawPlate;
 
     private static ToolMaterial gemMaterial = EnumHelper.addToolMaterial("GEM", 2, 750, 6.0F, 2.0F, 18);
 
@@ -194,6 +199,9 @@ public class BPItems {
         canvas_bag = new ItemCanvasBag(Refs.CANVASBAG_NAME);
         canvas = new ItemCrafting(Refs.CANVAS_NAME);
         lumar = new ItemLumar();
+        fine_wire = new ItemFineWire(Refs.FINEWIRE_NAME);
+        wool_card = new ItemLimitedCrafting(Refs.WOOLCARD_NAME,64);
+        diamond_drawPlate = new ItemLimitedCrafting(Refs.DIAMONDDRAWPLATE_NAME,256);
 
         if (!Loader.isModLoaded(Dependencies.FMP)) {
             multipart = new ItemBPPart();
@@ -282,6 +290,8 @@ public class BPItems {
         GameRegistry.registerItem(canvas_bag, Refs.CANVASBAG_NAME);
         GameRegistry.registerItem(canvas, Refs.CANVAS_NAME);
         GameRegistry.registerItem(lumar, Refs.LUMAR_NAME);
+        GameRegistry.registerItem(wool_card, Refs.WOOLCARD_NAME);
+        GameRegistry.registerItem(diamond_drawPlate, Refs.DIAMONDDRAWPLATE_NAME);
 
         MinecraftForge.addGrassSeed(new ItemStack(flax_seed), 5);
 

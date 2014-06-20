@@ -109,6 +109,7 @@ public class PneumaticTube extends BPPart {
         if (initialized) logic.update();
         super.update();
         if (tick == 3) updateConnections();
+        if (world.isRemote && tick % 40 == 0) tileCache = null;//reset on the client, as it doesn't get update on neighbor block updates (as the method isn't called on the client)
     }
     
     /**

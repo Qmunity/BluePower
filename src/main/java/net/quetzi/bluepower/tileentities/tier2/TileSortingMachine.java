@@ -71,6 +71,7 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
     @Override
     public void updateEntity() {
     
+        super.updateEntity();
         if (!worldObj.isRemote && worldObj.getWorldTime() % TileMachineBase.BUFFER_EMPTY_INTERVAL == 0 && (pullMode == PullMode.SINGLE_SWEEP && sweepTriggered || pullMode == PullMode.AUTOMATIC)) {
             triggerSorting();
         }
