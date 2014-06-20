@@ -119,7 +119,9 @@ public class CanvasBagRecipe extends ShapelessOreRecipe {
                 }
             }
         }
-        
+        if (canvasBag == null) {
+        	return null;
+        }
         if (dye != null) {
             for (int i = 0; i < Refs.oreDictDyes.length; i++) {
                 int[] ids = OreDictionary.getOreIDs(dye);
