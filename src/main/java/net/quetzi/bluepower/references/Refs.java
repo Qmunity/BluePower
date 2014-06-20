@@ -17,7 +17,6 @@
 
 package net.quetzi.bluepower.references;
 
-import cpw.mods.fml.common.registry.GameRegistry;
 
 public class Refs {
 
@@ -29,7 +28,9 @@ public class Refs {
     private static final String  MCVERSION                = "1.7.2";
 
     public static final String   MACHINE_TEXTURE_LOCATION = "machines/";
-
+    public static final String 	 MODEL_LOCATION 		  = "models/";
+    public static final String 	 MODEL_TEXTURE_LOCATION   = "textures/blocks/models/";
+    
     public static final double   PACKET_UPDATE_DISTANCE   = 64;
     public static final String   PROXY_LOCATION           = "net.quetzi.bluepower";
     public static final String   MARBLE_NAME              = "marble";
@@ -74,6 +75,8 @@ public class Refs {
     public static final String   REDDOPEDWAFER_NAME       = "red_doped_wafer";
     public static final String   BLOCKBREAKER_NAME        = "block_breaker";
     public static final String   SORTING_MACHINE_NAME     = "sorting_machine";
+    public static final String   TRANSPOSER_NAME          = "transposer";
+    public static final String 	 ENGINE_NAME			  = "engine";
 
     public static final String   BRASSINGOT_NAME          = "brass_ingot";
     public static final String   BLUEALLOYINGOT_NAME      = "blue_alloy_ingot";
@@ -177,7 +180,8 @@ public class Refs {
     public static final String   CANVASBAG_NAME           = "canvas_bag";
     public static final String   CANVAS_NAME              = "canvas";
     public static final String   LUMAR_NAME               = "lumar";
-    
+    public static final String   PROJECTTABLE_NAME        = "projecttable";
+
     public static final String   BLOCKCPU_NAME            = "cpu";
     public static final String   BLOCKMONITOR_NAME        = "monitor";
     public static final String   BLOCKDISKDRIVE_NAME      = "disk_drive";

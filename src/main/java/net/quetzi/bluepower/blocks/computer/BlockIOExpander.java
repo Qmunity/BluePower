@@ -1,4 +1,4 @@
-package net.quetzi.bluepower.blocks;
+package net.quetzi.bluepower.blocks.computer;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -9,11 +9,12 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.util.ForgeDirection;
+import net.quetzi.bluepower.blocks.BlockContainerBase;
 import net.quetzi.bluepower.references.GuiIDs;
 import net.quetzi.bluepower.references.Refs;
-import net.quetzi.bluepower.tileentities.tier3.TileDiskDrive;
+import net.quetzi.bluepower.tileentities.tier3.TileIOExpander;
 
-public class BlockDiskDrive extends BlockContainerBase {
+public class BlockIOExpander extends BlockContainerBase {
 	
 	@SideOnly(Side.CLIENT)
     protected IIcon topTexture;
@@ -26,14 +27,14 @@ public class BlockDiskDrive extends BlockContainerBase {
     @SideOnly(Side.CLIENT)
     protected IIcon bottomTexture;
 
-	public BlockDiskDrive() {
+	public BlockIOExpander() {
 		super(Material.iron);
-		setBlockName(Refs.BLOCKDISKDRIVE_NAME);
+		setBlockName(Refs.BLOCKIOEXPANDER_NAME);
 	}
-	
+
 	@Override
     public GuiIDs getGuiID() {
-        return GuiIDs.DISK_DRIVE;
+        return GuiIDs.IO_EXPANDER;
     }
 	
 	@Override
@@ -60,7 +61,7 @@ public class BlockDiskDrive extends BlockContainerBase {
     @SideOnly(Side.CLIENT)
     public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
 
-		TileDiskDrive tile = (TileDiskDrive) world.getTileEntity(x, y, z);
+		TileIOExpander tile = (TileIOExpander) world.getTileEntity(x, y, z);
         ForgeDirection dir = tile.getFacingDirection();
         
         if (dir.ordinal() == side) {
@@ -84,16 +85,15 @@ public class BlockDiskDrive extends BlockContainerBase {
 	 public void registerBlockIcons(IIconRegister iconRegister)
 	 {
 		 int i = 0;
-	     this.frontTexture = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + "disk_drive_front");
+	     this.frontTexture = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + "io_expander_front");
 	     this.sideTexture = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + "cpu_side");
 	     this.topTexture = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + "cpu_top");
-	     this.backTexture = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + "cpu_back");
+	     this.backTexture = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + "io_expander_back");
 	     this.bottomTexture = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + "cpu_bottom");
 	 }
 	
 	@Override
 	protected Class<? extends TileEntity> getTileEntity() {
-		return TileDiskDrive.class;
+		return TileIOExpander.class;
 	}
-
 }

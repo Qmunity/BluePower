@@ -17,23 +17,26 @@
  *     @author Quetzi
  */
 
-package net.quetzi.bluepower.client.gui;
+package net.quetzi.bluepower.tileentities.tier1;
 
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.util.ResourceLocation;
-import net.quetzi.bluepower.containers.ContainerBuffer;
-import net.quetzi.bluepower.references.Refs;
-import net.quetzi.bluepower.tileentities.tier1.TileBuffer;
+import net.quetzi.bluepower.tileentities.TileMachineBase;
 
-public class GuiBuffer extends GuiBase {
+public class TileTransposer extends TileMachineBase {
 
-    private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/buffer.png");
-    private final TileBuffer              buffer;
+    private boolean isPowered;
 
-    public GuiBuffer(InventoryPlayer invPlayer, TileBuffer buffer) {
+    @Override
+    public void updateEntity() {
 
-        super(new ContainerBuffer(invPlayer, buffer), resLoc);
-        this.buffer = buffer;
-        this.ySize = 186;
+        super.updateEntity();
+
     }
+
+    @Override
+    protected void redstoneChanged(boolean newValue) {
+
+        super.redstoneChanged(newValue);
+
+    }
+
 }

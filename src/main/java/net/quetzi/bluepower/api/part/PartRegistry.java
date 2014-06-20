@@ -13,7 +13,7 @@ import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -32,6 +32,8 @@ import net.quetzi.bluepower.part.gate.GateNand;
 import net.quetzi.bluepower.part.gate.GateNor;
 import net.quetzi.bluepower.part.gate.GateNot;
 import net.quetzi.bluepower.part.gate.GateOr;
+import net.quetzi.bluepower.part.gate.GatePulseFormer;
+import net.quetzi.bluepower.part.gate.GateRandomizer;
 import net.quetzi.bluepower.part.gate.GateSequencer;
 import net.quetzi.bluepower.part.gate.GateTimer;
 import net.quetzi.bluepower.part.lamp.PartCageLamp;
@@ -42,8 +44,8 @@ import net.quetzi.bluepower.references.Refs;
 
 public class PartRegistry {
     
-    private static Map<String, Entry<Class<? extends BPPart>, Object[]>> parts   = new HashMap<String, Entry<Class<? extends BPPart>, Object[]>>();
-    private static Map<String, BPPart>                                   samples = new HashMap<String, BPPart>();
+    private static Map<String, Entry<Class<? extends BPPart>, Object[]>> parts   = new LinkedHashMap<String, Entry<Class<? extends BPPart>, Object[]>>();
+    private static Map<String, BPPart>                                   samples = new LinkedHashMap<String, BPPart>();
     
     public static String                                                 ICON_PART;
     
@@ -257,9 +259,11 @@ public class PartRegistry {
         registerPart(GateNand.class);
         registerPart(GateOr.class);
         registerPart(GateNor.class);
+        registerPart(GatePulseFormer.class);
+        registerPart(GateRandomizer.class);
         
         // Lamps
-        for (int i = 0; i < ItemDye.field_150922_c.length; i++){
+        for (int i = 0; i < ItemDye.field_150922_c.length; i++) {
             registerPart(PartCageLamp.class, ItemDye.field_150921_b[i].toLowerCase(), ItemDye.field_150922_c[i], false);
             registerPart(PartLamp.class, ItemDye.field_150921_b[i].toLowerCase(), ItemDye.field_150922_c[i], false);
             registerPart(PartFixture.class, ItemDye.field_150921_b[i].toLowerCase(), ItemDye.field_150922_c[i], false);

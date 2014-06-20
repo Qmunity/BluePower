@@ -17,15 +17,22 @@
 
 package net.quetzi.bluepower.client.renderers;
 
+import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
+import net.minecraft.item.Item;
 import net.minecraftforge.client.MinecraftForgeClient;
+import net.quetzi.bluepower.init.BPBlocks;
 import net.quetzi.bluepower.init.BPItems;
+import net.quetzi.bluepower.tileentities.tier1.TileEngine;
 
 public class Renderers {
 
     public static void init() {
-
+    	
         MinecraftForgeClient.registerItemRenderer(BPItems.multipart, new RenderItemBPPart());
         RenderingRegistry.registerBlockHandler(new RendererBlockBase());
+        
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEngine.class, new RenderEngine());
+        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BPBlocks.engine), new RenderItemEngine());
     }
 }

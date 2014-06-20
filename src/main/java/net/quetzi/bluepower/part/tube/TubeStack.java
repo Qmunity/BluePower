@@ -60,8 +60,8 @@ public class TubeStack {
      */
     public boolean update(double move) {
     
+        oldProgress = progress;
         if (enabled) {
-            oldProgress = progress;
             boolean isEntering = progress < 0.5;
             progress += move;
             return progress >= 0.5 && isEntering;

@@ -15,7 +15,7 @@
  *     along with Blue Power.  If not, see <http://www.gnu.org/licenses/>
  */
 
-package net.quetzi.bluepower.blocks;
+package net.quetzi.bluepower.blocks.worldgen;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

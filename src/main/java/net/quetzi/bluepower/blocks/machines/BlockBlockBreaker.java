@@ -15,10 +15,11 @@
  *     along with Blue Power.  If not, see <http://www.gnu.org/licenses/>
  */
 
-package net.quetzi.bluepower.blocks;
+package net.quetzi.bluepower.blocks.machines;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.tileentity.TileEntity;
+import net.quetzi.bluepower.blocks.BlockContainer6Sided;
 import net.quetzi.bluepower.references.GuiIDs;
 import net.quetzi.bluepower.references.Refs;
 import net.quetzi.bluepower.tileentities.tier1.TileBlockBreaker;

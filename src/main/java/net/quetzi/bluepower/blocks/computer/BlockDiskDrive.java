@@ -1,28 +1,21 @@
-package net.quetzi.bluepower.blocks;
-
-import java.util.Random;
-
-import org.apache.logging.log4j.Level;
+package net.quetzi.bluepower.blocks.computer;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
-import net.quetzi.bluepower.BluePower;
+import net.quetzi.bluepower.blocks.BlockContainerBase;
 import net.quetzi.bluepower.references.GuiIDs;
 import net.quetzi.bluepower.references.Refs;
-import net.quetzi.bluepower.tileentities.tier3.TileMonitor;
+import net.quetzi.bluepower.tileentities.tier3.TileDiskDrive;
 
-public class BlockMonitor extends BlockContainerBase {
+public class BlockDiskDrive extends BlockContainerBase {
+	
 	@SideOnly(Side.CLIENT)
     protected IIcon topTexture;
     @SideOnly(Side.CLIENT)
@@ -33,30 +26,15 @@ public class BlockMonitor extends BlockContainerBase {
     protected IIcon backTexture;
     @SideOnly(Side.CLIENT)
     protected IIcon bottomTexture;
-	
-	public BlockMonitor() {
+
+	public BlockDiskDrive() {
 		super(Material.iron);
-		setBlockName(Refs.BLOCKMONITOR_NAME);
+		setBlockName(Refs.BLOCKDISKDRIVE_NAME);
 	}
-	
-	public void updateTick(World world, int x, int y, int z, Random random)
-    {
-		TileEntity tileEntity = world.getTileEntity(x, y, z);
-		if (tileEntity instanceof TileMonitor) {
-			//((TileCPU)tileEntity).updateEntity();
-			//Logs.log(Level.INFO, "[BluePowerControl] CPU TE ticked");
-		}
-    }
 	
 	@Override
     public GuiIDs getGuiID() {
-        return GuiIDs.MONITOR;
-    }
-	
-	@Override
-	public int tickRate(World world)
-    {
-        return 1;
+        return GuiIDs.DISK_DRIVE;
     }
 	
 	@Override
@@ -83,7 +61,7 @@ public class BlockMonitor extends BlockContainerBase {
     @SideOnly(Side.CLIENT)
     public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
 
-		TileMonitor tile = (TileMonitor) world.getTileEntity(x, y, z);
+		TileDiskDrive tile = (TileDiskDrive) world.getTileEntity(x, y, z);
         ForgeDirection dir = tile.getFacingDirection();
         
         if (dir.ordinal() == side) {
@@ -107,16 +85,16 @@ public class BlockMonitor extends BlockContainerBase {
 	 public void registerBlockIcons(IIconRegister iconRegister)
 	 {
 		 int i = 0;
-	     this.frontTexture = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + "monitor_front");
+	     this.frontTexture = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + "disk_drive_front");
 	     this.sideTexture = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + "cpu_side");
 	     this.topTexture = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + "cpu_top");
 	     this.backTexture = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + "cpu_back");
 	     this.bottomTexture = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + "cpu_bottom");
-	     //this.frontTexture = this.blockIcon;
 	 }
-
+	
 	@Override
 	protected Class<? extends TileEntity> getTileEntity() {
-		return TileMonitor.class;
+		return TileDiskDrive.class;
 	}
+
 }
