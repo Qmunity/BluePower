@@ -363,14 +363,100 @@ public class TileCPU extends TileBase implements IRedBusWindow {
 		case 0x40:// 6502 RTI
 			invalid(opcode);
 			break;
+		case 0x41:// 6502 EOR (indirect,X)
+			invalid(opcode);
+			break;
+		case 0x42:// 65EL02 NXA
+			invalid(opcode);
+			break;
+		case 0x43:// 65C816 EOR r,S
+			invalid(opcode);
+			break;
+		case 0x44:// 65EL02 REA absolute
+			invalid(opcode);
+			break;	
+		case 0x45:// 6502 EOR zeropage
+			invalid(opcode);
+			break;
+		case 0x46:// 6502 LSR zeropage
+			invalid(opcode);
+			break;
+		case 0x47:// 65EL02 EOR r,R
+			invalid(opcode);
+			break;
+		case 0x48:// 6502 PHA
+			invalid(opcode);
+			break;
+		case 0x49:// 6502 EOR #
+			invalid(opcode);
+			break;
+		case 0x4A:// 6502 LSR A
+			invalid(opcode);
+			break;
+		case 0x4B:// 65EL02 RHA
+			invalid(opcode);
+			break;
+		case 0x4C:// 6502 JMP absolute
+			invalid(opcode);
+			break;
+		case 0x4D:// 6502 EOR absolute
+			invalid(opcode);
+			break;
+		case 0x4E:// 6502 LSR absolute
+			invalid(opcode);
+			break;
+		case 0x4F:// 65EL02 DIV zeropage
+			invalid(opcode);
+			break;
 		
 		// row 5
 		case 0x50:// 6502 BVC relative
 			invalid(opcode);
 			break;
-			
+		case 0x51:// 6502 EOR (indirect),Y
+			invalid(opcode);
+			break;
+		case 0x52:// 65C02 EOR indirect
+			invalid(opcode);
+			break;
+		case 0x53:// 65C816 EOR (r,S),Y
+			invalid(opcode);
+			break;
+		case 0x54:// 65EL02 REI (zeropage)
+			invalid(opcode);
+			break;
+		case 0x55:// 6502 EOR zeropage,X
+			invalid(opcode);
+			break;
+		case 0x56:// 6502 LSR zeropage,X
+			invalid(opcode);
+			break;
+		case 0x57:// 65EL02 EOR (r,R),Y
+			invalid(opcode);
+			break;
+		case 0x58:// 6502 CLI
+			invalid(opcode);
+			break;
+		case 0x59:// 6502 EOR absolute,Y
+			invalid(opcode);
+			break;
+		case 0x5A:// 65C02 PHY
+			invalid(opcode);
+			break;
+		case 0x5B:// 65EL02 RHY
+			invalid(opcode);
+			break;
 		case 0x5C:// 65EL02 TXI
 			opTXI();
+			break;
+		case 0x5D:// 6502 EOR absolute,X
+			invalid(opcode);
+			break;
+		case 0x5E:// 6502 LSR absolute,X
+			invalid(opcode);
+			break;
+		case 0x5F:// 65EL02 DIV zeropage,X
+			invalid(opcode);
 			break;
 			
 		// row 6
