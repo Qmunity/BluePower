@@ -38,6 +38,7 @@ import net.quetzi.bluepower.references.Dependencies;
 import net.quetzi.bluepower.references.GuiIDs;
 import net.quetzi.bluepower.references.Refs;
 import net.quetzi.bluepower.tileentities.tier3.IRedBusWindow;
+import net.quetzi.bluepower.tileentities.tier3.TileCPU;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -69,7 +70,7 @@ public class ItemScrewdriver extends Item {
         }
         
         TileEntity te = world.getTileEntity(x, y, z);
-        if (te != null && te instanceof IRedBusWindow && player.isSneaking()) {
+        if (te != null && te instanceof IRedBusWindow && player.isSneaking() && !(te instanceof TileCPU)) {
         	player.openGui(BluePower.instance, GuiIDs.REDBUS_ID.ordinal(), world, x, y, z);
         }
         
