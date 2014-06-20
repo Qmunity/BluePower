@@ -167,7 +167,15 @@ public class Recipes {
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.wool_card,1,0),"f","p","s",'f',ItemFineWire.WireType.IRON.is,'p',"plankWood",'s',"stickWood"));
         
         for (int i=0; i<Refs.oreDictDyes.length; i++) {
-        	GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(BPItems.lumar,1,15-i), new ItemStack(Items.redstone,1), new ItemStack(Items.glowstone_dust,1), Refs.oreDictDyes[i], Refs.oreDictDyes[i]));
+        	GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(BPItems.lumar,2,15-i), new ItemStack(Items.redstone,1), new ItemStack(Items.glowstone_dust,1), Refs.oreDictDyes[i], Refs.oreDictDyes[i]));
+        	// block lamp recipe (change when made into actual block)
+        	craftManager.addRecipe(PartRegistry.getItemForPart("lamp"+ItemDye.field_150921_b[i].toLowerCase()), new Object[]{"gLg","gLg","gRg", 'g', Blocks.glass_pane, 'L', new ItemStack(BPItems.lumar,1,15-i), 'R', Items.redstone});
+        	craftManager.addRecipe(PartRegistry.getItemForPart("invertedlamp"+ItemDye.field_150921_b[i].toLowerCase()), new Object[]{"gLg","gLg","gRg", 'g', Blocks.glass_pane, 'L', new ItemStack(BPItems.lumar,1,15-i), 'R', Blocks.redstone_torch});
+        	// other multipart lamps
+        	craftManager.addRecipe(PartRegistry.getItemForPart("fixture"+ItemDye.field_150921_b[i].toLowerCase()), new Object[]{"gLg","gLg","sRs", 'g', Blocks.glass_pane, 's', new ItemStack(Blocks.stone_slab,1,0), 'L', new ItemStack(BPItems.lumar,1,15-i), 'R', Items.redstone});
+        	craftManager.addRecipe(PartRegistry.getItemForPart("invertedfixture"+ItemDye.field_150921_b[i].toLowerCase()), new Object[]{"gLg","gLg","sRs", 'g', Blocks.glass_pane, 's', new ItemStack(Blocks.stone_slab,1,0), 'L', new ItemStack(BPItems.lumar,1,15-i), 'R', Blocks.redstone_torch});
+        	craftManager.addRecipe(PartRegistry.getItemForPart("cagelamp"+ItemDye.field_150921_b[i].toLowerCase()), new Object[]{"cLc","gLg","sRs", 'g', Blocks.glass_pane, 'c', Blocks.iron_bars, 's', new ItemStack(Blocks.stone_slab,1,0), 'L', new ItemStack(BPItems.lumar,1,15-i), 'R', Items.redstone});
+        	craftManager.addRecipe(PartRegistry.getItemForPart("invertedcagelamp"+ItemDye.field_150921_b[i].toLowerCase()), new Object[]{"cLc","gLg","sRs", 'g', Blocks.glass_pane, 'c', Blocks.iron_bars, 's', new ItemStack(Blocks.stone_slab,1,0), 'L', new ItemStack(BPItems.lumar,1,15-i), 'R', Blocks.redstone_torch});
         }
         
         // Alloy furnace
