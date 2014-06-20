@@ -17,7 +17,6 @@
 
 package net.quetzi.bluepower.references;
 
-import cpw.mods.fml.common.registry.GameRegistry;
 
 public class Refs {
 
@@ -74,6 +73,7 @@ public class Refs {
     public static final String   REDDOPEDWAFER_NAME       = "red_doped_wafer";
     public static final String   BLOCKBREAKER_NAME        = "block_breaker";
     public static final String   SORTING_MACHINE_NAME     = "sorting_machine";
+    public static final String   TRANSPOSER_NAME          = "transposer";
 
     public static final String   BRASSINGOT_NAME          = "brass_ingot";
     public static final String   BLUEALLOYINGOT_NAME      = "blue_alloy_ingot";
@@ -177,7 +177,7 @@ public class Refs {
     public static final String   CANVASBAG_NAME           = "canvas_bag";
     public static final String   CANVAS_NAME              = "canvas";
     public static final String   LUMAR_NAME               = "lumar";
-    
+
     public static final String   BLOCKCPU_NAME            = "cpu";
     public static final String   BLOCKMONITOR_NAME        = "monitor";
     public static final String   BLOCKDISKDRIVE_NAME      = "disk_drive";

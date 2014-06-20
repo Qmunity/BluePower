@@ -335,7 +335,7 @@ public class TubeLogic implements IPneumaticTube {
                             if (neighbor != null) {
                                 tube = compat.getBPPart(neighbor, PneumaticTube.class);
                                 if (tube == null) {
-                                    edges[i] = new TubeEdge(new TubeNode(neighbor), curDir, colorMask, dist + (neighbor instanceof IWeightedTubeInventory ? ((IWeightedTubeInventory) neighbor).getWeigth(curDir) : 0));
+                                    edges[i] = new TubeEdge(new TubeNode(neighbor), curDir, colorMask, dist + (neighbor instanceof IWeightedTubeInventory ? ((IWeightedTubeInventory) neighbor).getWeight(curDir) : 0));
                                     break;
                                 } else {
                                     if (!tube.initialized) break;
@@ -347,7 +347,7 @@ public class TubeLogic implements IPneumaticTube {
                         if (tube != null && tube != nodeTube) edges[i] = new TubeEdge(tube.getLogic().getNode(), curDir, colorMask, dist);//only add an edge that isn't just connected to itself.
                         
                     } else if (neighbor != null) {
-                        edges[i] = new TubeEdge(new TubeNode(neighbor), ForgeDirection.getOrientation(i), (short) 0, neighbor instanceof IWeightedTubeInventory ? ((IWeightedTubeInventory) neighbor).getWeigth(ForgeDirection.getOrientation(i)) : 0);
+                        edges[i] = new TubeEdge(new TubeNode(neighbor), ForgeDirection.getOrientation(i), (short) 0, neighbor instanceof IWeightedTubeInventory ? ((IWeightedTubeInventory) neighbor).getWeight(ForgeDirection.getOrientation(i)) : 0);
                     }
                 }
             }

@@ -183,7 +183,7 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
     }
     
     @Override
-    public int getWeigth(ForgeDirection from) {
+    public int getWeight(ForgeDirection from) {
     
         return from == getOutputDirection() ? 1000000 : 0;//make the buffer side the last place to go
     }

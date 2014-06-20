@@ -13,23 +13,36 @@
  *
  *     You should have received a copy of the GNU General Public License
  *     along with Blue Power.  If not, see <http://www.gnu.org/licenses/>
+ *     
+ *     @author Quetzi
  */
-package net.quetzi.bluepower.part.tube;
 
-import net.minecraftforge.common.util.ForgeDirection;
+package net.quetzi.bluepower.blocks;
 
-/**
-    This interface is implemented by inventories with a buffer inventory, in which the tube _can_ but doesn't prefer to
-    insert items back into the buffer. An arbitrarily large number is returned, 1000000. A Restriction Tube has a weight
-    of 1000, a normal tube 1.
-    @author MineMaarten
-*/
-public interface IWeightedTubeInventory {
-    
-    /**
-        By default this can be seen as 0 for non implementing inventories. return a high value to make it less prefered
-        by the tubes.
-    */
-    public int getWeight(ForgeDirection from);
-    
+import net.minecraft.block.material.Material;
+import net.minecraft.tileentity.TileEntity;
+import net.quetzi.bluepower.references.GuiIDs;
+import net.quetzi.bluepower.references.Refs;
+import net.quetzi.bluepower.tileentities.tier1.TileTransposer;
+
+public class BlockTransposer extends BlockContainer6Sided {
+
+    public BlockTransposer() {
+
+        super(Material.rock);
+        this.setBlockName(Refs.TRANSPOSER_NAME);
+    }
+
+    @Override
+    protected Class<? extends TileEntity> getTileEntity() {
+
+        return TileTransposer.class;
+    }
+
+    @Override
+    public GuiIDs getGuiID() {
+
+        return GuiIDs.INVALID;
+    }
+
 }
