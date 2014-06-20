@@ -9,6 +9,9 @@ import net.minecraft.tileentity.TileEntity;
 import net.quetzi.bluepower.BluePower;
 import net.quetzi.bluepower.tileentities.TileBase;
 
+/**
+ * @author fabricator77
+ */
 public class TileCPU extends TileBase implements IRedBusWindow {
 	//front panel switches
 	public byte deviceID = 0;
@@ -61,9 +64,10 @@ public class TileCPU extends TileBase implements IRedBusWindow {
 		stackPointer = 512;
 		reg_R = 768;
 		//front panel switches
-		this.memory[0] = discDriveID;
-		this.memory[1] = screenID;
-		// this.memory[2] = deviceID; //redbus address
+		//TODO: read frontpanel from NBT data
+		this.memory[0] = this.discDriveID;
+		this.memory[1] = this.screenID;
+		this.memory[2] = this.redbus_id; //redbus address
 		// clear registers
 		reg_A = reg_Y = reg_A = 0;
 		//TODO: reset internal CPU flags

@@ -3,6 +3,9 @@ package net.quetzi.bluepower.tileentities.tier3;
 import net.minecraft.tileentity.TileEntity;
 import net.quetzi.bluepower.tileentities.TileBase;
 
+/**
+ * @author fabricator77
+ */
 public class TileMonitor extends TileBase implements IRedBusWindow  {
 	public byte framebufferRow = 0;
 	public byte cursorX = 0;
@@ -17,8 +20,7 @@ public class TileMonitor extends TileBase implements IRedBusWindow  {
 	public byte blit_rectHeight = 0;
 	
 	public byte[] framebuffer = new byte[80];
-	public byte[] keybuffer = new byte[16]; //TODO: check length against specs
-	
+	public byte[] keybuffer = new byte[16];
 	//Also used by GUI
 	public byte[] screenMemory = new byte[4000];
 	public static boolean mode80x40 = false;
@@ -55,7 +57,8 @@ public class TileMonitor extends TileBase implements IRedBusWindow  {
 	}
 	
 	public byte[] getRedbusMemory () {
-		return new byte[95];
+		//return new byte[95];
+		return redBus_memory;
 		// first 16 addresses for control
 		// remaining 80 char FrameBuffer data window
 	}
