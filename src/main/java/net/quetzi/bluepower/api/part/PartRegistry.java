@@ -13,7 +13,7 @@ import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -42,8 +42,8 @@ import net.quetzi.bluepower.references.Refs;
 
 public class PartRegistry {
     
-    private static Map<String, Entry<Class<? extends BPPart>, Object[]>> parts   = new HashMap<String, Entry<Class<? extends BPPart>, Object[]>>();
-    private static Map<String, BPPart>                                   samples = new HashMap<String, BPPart>();
+    private static Map<String, Entry<Class<? extends BPPart>, Object[]>> parts   = new LinkedHashMap<String, Entry<Class<? extends BPPart>, Object[]>>();
+    private static Map<String, BPPart>                                   samples = new LinkedHashMap<String, BPPart>();
     
     public static String                                                 ICON_PART;
     
