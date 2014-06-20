@@ -26,6 +26,13 @@ public class TileTransposer extends TileMachineBase {
     private boolean isPowered;
 
     @Override
+    public void updateEntity() {
+
+        super.updateEntity();
+
+    }
+
+    @Override
     protected void redstoneChanged(boolean newValue) {
 
         super.redstoneChanged(newValue);

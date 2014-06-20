@@ -20,6 +20,7 @@ package net.quetzi.bluepower.tileentities;
 import net.quetzi.bluepower.tileentities.tier1.TileAlloyFurnace;
 import net.quetzi.bluepower.tileentities.tier1.TileBlockBreaker;
 import net.quetzi.bluepower.tileentities.tier1.TileBuffer;
+import net.quetzi.bluepower.tileentities.tier1.TileEngine;
 import net.quetzi.bluepower.tileentities.tier1.TileIgniter;
 import net.quetzi.bluepower.tileentities.tier1.TileTransposer;
 import net.quetzi.bluepower.tileentities.tier2.TileSortingMachine;
@@ -48,5 +49,6 @@ public class TileEntities {
         GameRegistry.registerTileEntity(TileMonitor.class, "tileMonitor");
         GameRegistry.registerTileEntity(TileDiskDrive.class, "tileDiskDrive");
         GameRegistry.registerTileEntity(TileIOExpander.class, "tileIOExpander");
+        GameRegistry.registerTileEntity(TileEngine.class, "tileEngine");
     }
 }

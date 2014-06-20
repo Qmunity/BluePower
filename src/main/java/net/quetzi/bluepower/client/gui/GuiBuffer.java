@@ -27,7 +27,7 @@ import net.quetzi.bluepower.tileentities.tier1.TileBuffer;
 
 public class GuiBuffer extends GuiBase {
 
-    private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/GUI/buffer.png");
+    private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/buffer.png");
     private final TileBuffer              buffer;
 
     public GuiBuffer(InventoryPlayer invPlayer, TileBuffer buffer) {

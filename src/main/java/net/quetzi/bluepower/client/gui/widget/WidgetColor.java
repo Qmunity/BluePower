@@ -28,7 +28,7 @@ import org.lwjgl.opengl.GL11;
  * @author MineMaarten
  */
 public class WidgetColor extends BaseWidget {
-    
+
     /**
      * @param id
      * @param x
@@ -38,15 +38,15 @@ public class WidgetColor extends BaseWidget {
      * @param textureLoc
      */
     public int value = 16;
-    
+
     public WidgetColor(int id, int x, int y) {
-    
-        super(id, x, y, 14, 14, Refs.MODID + ":textures/GUI/widgets/color_widget.png");
+
+        super(id, x, y, 14, 14, Refs.MODID + ":textures/gui/widgets/color_widget.png");
     }
-    
+
     @Override
     public void onMouseClicked(int mouseX, int mouseY, int button) {
-    
+
         if (button == 0) {
             if (++value > 16) value = 0;
         } else if (button == 1) {
@@ -54,20 +54,20 @@ public class WidgetColor extends BaseWidget {
         }
         super.onMouseClicked(mouseX, mouseY, button);
     }
-    
+
     @Override
     public void render(int mouseX, int mouseY) {
-    
+
         super.render(mouseX, mouseY);
         if (value < 16) {
             Gui.drawRect(x + 5, y + 5, x + 9, y + 9, 0xFF000000 + ItemDye.field_150922_c[value]);
             GL11.glColor4d(1, 1, 1, 1);
         }
     }
-    
+
     @Override
     public void addTooltip(List<String> curTooltip) {
-    
+
         curTooltip.add("Paint item:");
         if (value < 16) {
             curTooltip.add(ItemDye.field_150923_a[value]);
@@ -75,5 +75,5 @@ public class WidgetColor extends BaseWidget {
             curTooltip.add("None");
         }
     }
-    
+
 }

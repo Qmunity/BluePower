@@ -27,22 +27,22 @@ import net.quetzi.bluepower.containers.ContainerCanvasBag;
 import net.quetzi.bluepower.references.Refs;
 
 public class GuiCanvasBag extends GuiBase {
-    
-    private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/GUI/canvas_bag.png");
-    ItemStack bag;
-    
-    public GuiCanvasBag(ItemStack bag,IInventory playerInventory, IInventory canvasBagInventory) {
-    
-        super(new ContainerCanvasBag(bag,playerInventory, canvasBagInventory), resLoc);
-        
+
+    private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/canvas_bag.png");
+    ItemStack                             bag;
+
+    public GuiCanvasBag(ItemStack bag, IInventory playerInventory, IInventory canvasBagInventory) {
+
+        super(new ContainerCanvasBag(bag, playerInventory, canvasBagInventory), resLoc);
+
         this.bag = bag;
     }
-    
+
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-    
+
         super.drawGuiContainerForegroundLayer(mouseX, mouseY);
-        
-        this.fontRendererObj.drawString(bag.hasDisplayName()?bag.getDisplayName():I18n.format("item.canvas_bag.name", new Object[] {}), 8, 6, 4210752);
+
+        this.fontRendererObj.drawString(bag.hasDisplayName() ? bag.getDisplayName() : I18n.format("item.canvas_bag.name", new Object[] {}), 8, 6, 4210752);
     }
 }
