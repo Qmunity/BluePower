@@ -307,4 +307,7 @@ public abstract class GateBase extends BPPartFace {
         return CustomTabs.tabBluePowerCircuits;
     }
     
+    @Override
+    public abstract void addWailaInfo(List<String> info);
+    
 }

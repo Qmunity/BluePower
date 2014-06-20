@@ -69,4 +69,9 @@ public class GatePulseFormer extends GateBase {
         
     }
     
+    @Override
+    public void addWailaInfo(List<String> info) {
+    
+    }
+    
 }

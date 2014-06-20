@@ -3,6 +3,7 @@ package net.quetzi.bluepower.part.gate;
 import java.util.List;
 
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.quetzi.bluepower.api.part.FaceDirection;
@@ -125,5 +126,20 @@ public class GateTimer extends GateBase implements IGuiButtonSensitive {
     protected boolean hasGUI() {
     
         return true;
+    }
+    
+    @Override
+    public void addWailaInfo(List<String> info) {
+    
+        String t = "";
+        
+        int time = this.time * 50;
+        if (time >= 1000) {
+            t = time / 1000 + "." + time % 1000 + "s";
+        } else {
+            t = time + "ms";
+        }
+        
+        info.add(I18n.format("gui.timerInterval") + ": " + t);
     }
 }

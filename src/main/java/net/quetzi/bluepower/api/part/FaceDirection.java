@@ -1,5 +1,6 @@
 package net.quetzi.bluepower.api.part;
 
+import net.minecraft.client.resources.I18n;
 import net.minecraftforge.common.util.ForgeDirection;
 
 public enum FaceDirection {
@@ -11,7 +12,7 @@ public enum FaceDirection {
         this.name = name;
     }
     
-    private String name; //used in texture paths
+    private String name; // used in texture paths
                          
     public FaceDirection getOpposite() {
     
@@ -36,6 +37,11 @@ public enum FaceDirection {
     public String getName() {
     
         return name;
+    }
+    
+    public String getLocalizedName() {
+    
+        return I18n.format("direction." + getName());
     }
     
     public static FaceDirection getDirection(int id) {

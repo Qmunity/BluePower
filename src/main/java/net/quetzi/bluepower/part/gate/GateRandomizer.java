@@ -103,4 +103,9 @@ public class GateRandomizer extends GateBase {
         out[1] = tag.getBoolean("out_1");
         out[2] = tag.getBoolean("out_2");
     }
+    
+    @Override
+    public void addWailaInfo(List<String> info) {
+    
+    }
 }

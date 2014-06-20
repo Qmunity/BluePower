@@ -45,7 +45,7 @@ public class GateNor extends GateBase {
         renderTopTexture(FaceDirection.RIGHT, right.getPower() > 0);
         renderTopTexture(FaceDirection.BACK, back.getPower() > 0);
         RenderHelper.renderRedstoneTorch(0, 1D / 8D, 0, 9D / 16D, !power);
-        //RenderHelper.renderRedstoneTorch(0, 1D / 8D, -6D/16D, 9D / 16D, power);
+        // RenderHelper.renderRedstoneTorch(0, 1D / 8D, -6D/16D, 9D / 16D, power);
     }
     
     @Override
@@ -62,6 +62,11 @@ public class GateNor extends GateBase {
         power = back.getPower() > 0 || left.getPower() > 0 || right.getPower() > 0;
         
         front.setPower(!power ? 15 : 0);
+    }
+    
+    @Override
+    public void addWailaInfo(List<String> info) {
+    
     }
     
 }

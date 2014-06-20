@@ -287,3 +287,12 @@ itemGroup.tabBluePowerCircuits=Blue Power Logic Gates
 itemGroup.tabBluePowerLighting=Blue Power Lighting
 
 gui.timerInterval=Timer Interval
+gui.connections=Connections
+
+direction.front=Front
+direction.left=Left
+direction.back=Back
+direction.right=Right
+
+random.enabled=Enabled
+random.disabled=Disabled

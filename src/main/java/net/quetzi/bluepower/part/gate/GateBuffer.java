@@ -46,7 +46,7 @@ public class GateBuffer extends GateBase {
         renderTopTexture(FaceDirection.RIGHT, power[0]);
         renderTopTexture(FaceDirection.BACK, back.getPower() > 0);
         RenderHelper.renderRedstoneTorch(0, 1D / 8D, 0, 8D / 16D, !power[1]);
-        RenderHelper.renderRedstoneTorch(0, 1D / 8D, -4D/16D, 10D / 16D, power[0]);
+        RenderHelper.renderRedstoneTorch(0, 1D / 8D, -4D / 16D, 10D / 16D, power[0]);
     }
     
     @Override
@@ -69,6 +69,11 @@ public class GateBuffer extends GateBase {
         power[0] = power[1];
         power[1] = power[2];
         power[2] = false;
+    }
+    
+    @Override
+    public void addWailaInfo(List<String> info) {
+    
     }
     
 }

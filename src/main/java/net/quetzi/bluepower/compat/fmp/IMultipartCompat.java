@@ -23,4 +23,10 @@ public interface IMultipartCompat {
     
     public <T> T getBPPart(TileEntity te, Class<T> searchedClass);
     
+    public static final class MultipartCompat {
+        
+        public static Class<? extends TileEntity> tile = null;
+        
+    }
+    
 }

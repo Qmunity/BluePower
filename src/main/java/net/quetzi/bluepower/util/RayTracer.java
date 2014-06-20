@@ -17,7 +17,10 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraftforge.common.util.ForgeDirection;
+import net.quetzi.bluepower.api.part.BPPart;
 import net.quetzi.bluepower.api.vec.Vector3;
+import net.quetzi.bluepower.compat.CompatibilityUtils;
+import net.quetzi.bluepower.compat.fmp.IMultipartCompat;
 import net.quetzi.bluepower.references.Dependencies;
 import codechicken.lib.raytracer.IndexedCuboid6;
 import codechicken.lib.vec.Cuboid6;
@@ -104,6 +107,23 @@ public class RayTracer {
         }
         
         return null;
+    }
+    
+    /**
+     * @author amadornes
+     * 
+     * @return
+     */
+    public static BPPart getSelectedPart(MovingObjectPosition mop, EntityPlayer player, ForgeDirection face) {
+    
+        return ((IMultipartCompat) CompatibilityUtils.getModule(Dependencies.FMP)).getClickedPart(new Vector3(mop.blockX, mop.blockY, mop.blockZ,
+                player.worldObj), new Vector3(mop.hitVec, player.worldObj).subtract(mop.blockX, mop.blockY, mop.blockZ), null, player);
+    }
+    
+    private static boolean isSameBox(AxisAlignedBB a, AxisAlignedBB b) {
+    
+        if (a.minX == b.minX && a.minY == b.minY && a.minZ == b.minZ && a.maxX == b.maxX && a.maxY == b.maxY && a.maxZ == b.maxZ) return true;
+        return false;
     }
     
     /*
