@@ -70,7 +70,7 @@ public class GateRandomizer extends GateBase {
     
         if (!world.isRemote) {
             if (back.getPower() > 0) {
-                if (ticks % 10 == 0) {
+                if (ticks % 5 == 0) {
                     out[0] = random.nextBoolean();
                     out[1] = random.nextBoolean();
                     out[2] = random.nextBoolean();
