@@ -32,6 +32,8 @@ import net.quetzi.bluepower.part.gate.GateNand;
 import net.quetzi.bluepower.part.gate.GateNor;
 import net.quetzi.bluepower.part.gate.GateNot;
 import net.quetzi.bluepower.part.gate.GateOr;
+import net.quetzi.bluepower.part.gate.GatePulseFormer;
+import net.quetzi.bluepower.part.gate.GateRandomizer;
 import net.quetzi.bluepower.part.gate.GateSequencer;
 import net.quetzi.bluepower.part.gate.GateTimer;
 import net.quetzi.bluepower.part.lamp.PartCageLamp;
@@ -257,9 +259,11 @@ public class PartRegistry {
         registerPart(GateNand.class);
         registerPart(GateOr.class);
         registerPart(GateNor.class);
+        registerPart(GatePulseFormer.class);
+        registerPart(GateRandomizer.class);
         
         // Lamps
-        for (int i = 0; i < ItemDye.field_150922_c.length; i++){
+        for (int i = 0; i < ItemDye.field_150922_c.length; i++) {
             registerPart(PartCageLamp.class, ItemDye.field_150921_b[i].toLowerCase(), ItemDye.field_150922_c[i], false);
             registerPart(PartLamp.class, ItemDye.field_150921_b[i].toLowerCase(), ItemDye.field_150922_c[i], false);
             registerPart(PartFixture.class, ItemDye.field_150921_b[i].toLowerCase(), ItemDye.field_150922_c[i], false);

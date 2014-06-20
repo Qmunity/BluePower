@@ -11,6 +11,8 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.quetzi.bluepower.api.vec.Vector3Cube;
+import net.quetzi.bluepower.part.gate.GateBase;
+import net.quetzi.bluepower.references.Refs;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
@@ -77,6 +79,50 @@ public class RenderHelper {
         GL11.glDisable(GL11.GL_CLIP_PLANE0);
         
         GL11.glTranslated(-x, -y, -z);
+    }
+    
+    /**
+     * @author amadornes
+     * @param gate
+     * @param x
+     * @param y
+     * @param z
+     * @param state
+     */
+    public static void renderRandomizerButton(GateBase gate, double x, double y, double z, boolean state) {
+    
+        String res = Refs.MODID + ":textures/blocks/gates/randomizer/button_" + (state ? "on" : "off") + ".png";
+        String resSide = Refs.MODID + ":textures/blocks/gates/randomizer/button_side.png";
+        
+        GL11.glPushMatrix();
+        {
+            GL11.glTranslated(x, y, z);
+            
+            GL11.glPushMatrix();
+            {
+                GL11.glTranslated(6 / 16D, 2 / 16D, 4 / 16D);
+                Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(resSide));
+                for (int i = 0; i < 4; i++) {
+                    GL11.glTranslated(2 / 16D, 0, 2 / 16D);
+                    GL11.glRotated(90, 0, 1, 0);
+                    GL11.glTranslated(-2 / 16D, 0, -2 / 16D);
+                    GL11.glBegin(GL11.GL_QUADS);
+                    {
+                        GL11.glNormal3d(1, 0, 0);
+                        addVertexWithTexture(0, 0, 0, 0, 0);
+                        addVertexWithTexture(0, 1 / 16D, 0, 0, 1);
+                        addVertexWithTexture(4 / 16D, 1 / 16D, 0, 1, 1);
+                        addVertexWithTexture(4 / 16D, 0, 0, 1, 0);
+                    }
+                    GL11.glEnd();
+                }
+            }
+            GL11.glPopMatrix();
+            
+            GL11.glTranslated(0, 1 / 16D, 0);
+            gate.renderTopTexture(res);
+        }
+        GL11.glPopMatrix();
     }
     
     /**
