@@ -33,6 +33,7 @@ public class TileCPU extends TileBase implements IRedBusWindow {
 	private int reg_A; // accumulator
 	private int reg_B; // 65EL02 ?
 	private int reg_D; // ???
+	private int reg_I; // 65EL02
 	private int reg_R; // 65EL02 ?
 	// flags
 	private boolean flag_C; // carry
@@ -368,6 +369,10 @@ public class TileCPU extends TileBase implements IRedBusWindow {
 			invalid(opcode);
 			break;
 			
+		case 0x5C:// 65EL02 TXI
+			opTXI();
+			break;
+			
 		// row 6
 		case 0x60:// 6502 RTS
 			invalid(opcode);
@@ -382,9 +387,99 @@ public class TileCPU extends TileBase implements IRedBusWindow {
 		case 0x80:// 65C02 BRA relative
 			invalid(opcode);
 			break;
+		case 0x81:// 6502 STA (indirect,X)
+			invalid(opcode);
+			break;
+		case 0x82:// 65EL02 RER relative
+			invalid(opcode);
+			break;
+		case 0x83:// 65C816 STA (r,S)
+			invalid(opcode);
+			break;
+		case 0x84:// 6502 STY zeropage
+			invalid(opcode);
+			break;
+		case 0x85:// 6502 STA zeropage
+			invalid(opcode);
+			break;
+		case 0x86:// 6502 STX zeropage
+			invalid(opcode);
+			break;
+		case 0x87:// 65EL02 STA r,R
+			invalid(opcode);
+			break;
+		case 0x88:// 6502 DEY
+			invalid(opcode);
+			break;
+		case 0x89:// 65C02 BIT #
+			invalid(opcode);
+			break;
+		case 0x8A:// 6502 TXA
+			opTXA();
+			break;
+		case 0x8B:// 65EL02 TXR
+			opTXR();
+			break;
+		case 0x8C:// 6502 STY absolute
+			invalid(opcode);
+			break;
+		case 0x8D:// 6502 STA absolute
+			invalid(opcode);
+			break;
+		case 0x8E:// 6502 STX absolute
+			invalid(opcode);
+			break;
+		case 0x8F:// 65EL02 SEA
+			opTXR();
+			break;
 			
 		// row 9
 		case 0x90:// 6502 BCC relative
+			invalid(opcode);
+			break;
+		case 0x91:// 6502 STA (indirect),Y
+			invalid(opcode);
+			break;
+		case 0x92:// 65C02 STA (indirect)
+			invalid(opcode);
+			break;
+		case 0x93:// 65C816 STA (r, S),Y
+			invalid(opcode);
+			break;
+		case 0x94:// 6502 STY zeropage,X
+			invalid(opcode);
+			break;
+		case 0x95:// 6502 STA zeropage,X
+			invalid(opcode);
+			break;
+		case 0x96:// 6502 STX zeropage,Y
+			invalid(opcode);
+			break;
+		case 0x97:// 65EL02 STA (r,R),X
+			invalid(opcode);
+			break;
+		case 0x98:// 6502 TYA
+			opTYA();
+			break;
+		case 0x99:// 6502 STA absolute,Y
+			invalid(opcode);
+			break;
+		case 0x9A:// 6502 TXS
+			opTXS();
+			break;
+		case 0x9B:// 65C816 TXY
+			opTXY();
+			break;
+		case 0x9C:// 65C02 STZ absolute
+			invalid(opcode);
+			break;
+		case 0x9D:// 6502 STA absolute,X
+			invalid(opcode);
+			break;
+		case 0x9E:// 65C02 STZ absolute,X
+			invalid(opcode);
+			break;
+		case 0x9F:// 65EL02 SEA
 			invalid(opcode);
 			break;
 			
@@ -392,13 +487,13 @@ public class TileCPU extends TileBase implements IRedBusWindow {
 		case 0xA0:// 6502 LDY #
 			invalid(opcode);
 			break;
-		case 0xA1:// 6502 LDA (indirect), X
+		case 0xA1:// 6502 LDA (indirect),X
 			invalid(opcode);
 			break;
 		case 0xA2:// 6502 LDA #
 			invalid(opcode);
 			break;
-		case 0xA3:// 65C816 LDA r, S
+		case 0xA3:// 65C816 LDA r,S
 			invalid(opcode);
 			break;
 		case 0xA4:// 6502 LDY zeropage
@@ -410,7 +505,7 @@ public class TileCPU extends TileBase implements IRedBusWindow {
 		case 0xA6:// 6502 LDY zeropage
 			invalid(opcode);
 			break;
-		case 0xA7:// 65EL02 LDA r, R
+		case 0xA7:// 65EL02 LDA r,R
 			invalid(opcode);
 			break;
 		case 0xA8:// 6502 TAY
@@ -423,7 +518,7 @@ public class TileCPU extends TileBase implements IRedBusWindow {
 			opTAY();
 			break;
 		case 0xAB:// 65EL02 TRX
-			invalid(opcode);
+			opTRX();
 			break;
 		case 0xAC:// 6502 LDY absolute
 			invalid(opcode);
@@ -435,7 +530,7 @@ public class TileCPU extends TileBase implements IRedBusWindow {
 			invalid(opcode);
 			break;
 		case 0xAF:// 65EL02 TDA
-			invalid(opcode);
+			opTDA();
 			break;
 			
 		// row B
@@ -470,10 +565,10 @@ public class TileCPU extends TileBase implements IRedBusWindow {
 			invalid(opcode);
 			break;
 		case 0xBA:// 6502 TSX
-			invalid(opcode);
+			opTSX();
 			break;
 		case 0xBB:// 65C816 TYX
-			invalid(opcode);
+			opTYX();
 			break;
 		case 0xBC:// 6502 LDY absolute, X
 			invalid(opcode);
@@ -485,7 +580,7 @@ public class TileCPU extends TileBase implements IRedBusWindow {
 			invalid(opcode);
 			break;
 		case 0xBF:// 65EL02 TAD
-			invalid(opcode);
+			opTAD();
 			break;
 			
 		// row C
@@ -576,7 +671,7 @@ public class TileCPU extends TileBase implements IRedBusWindow {
 			opSTP();
 			break;
 		case 0xDC:// 65EL02 TIX
-			invalid(opcode);
+			opTIX();
 			break;
 		case 0xDD:// 6502 CMP absolute, X
 			invalid(opcode);
@@ -697,9 +792,16 @@ public class TileCPU extends TileBase implements IRedBusWindow {
 		// 65C816 Reset Processor Status Flag
 		setFlags(getFlags() & (readMemory(this.programCounter) ^ 0xFFFFFFFF));
 	}
+	private void opTYX() {
+		// 65C816 TYX
+		this.reg_X = this.reg_Y;
+	}
+	private void opTXY() {
+		// 65C816 TXY
+		this.reg_Y = this.reg_X;
+	}
 	
-	// 65EL02
-	public void opMMU() {
+	public void opMMU() { // 65EL02
 		int t = this.reg_A & 0xFF;
 	    if (t != this.redbus_remote_address) {
 	    	// if output buffer full
@@ -709,7 +811,7 @@ public class TileCPU extends TileBase implements IRedBusWindow {
 	        this.redbus_remote_address = t;
 	    }
 	}
-	public void opSTP() {
+	public void opSTP() {// 65EL02 modified
 		availableCycles = -1;
 		if ( this.worldObj.getBlock(this.xCoord, this.yCoord, this.zCoord) == this.blockType) {
 			//set CPU on fire for the lolz
@@ -717,6 +819,34 @@ public class TileCPU extends TileBase implements IRedBusWindow {
 			this.worldObj.setBlock(this.xCoord, this.yCoord+1, this.zCoord, Blocks.fire);
 		}
 	}
+	public void opTRX() {// 65EL02
+		// TRX opcode
+		// tranfer R to X
+		this.reg_X = this.reg_R;
+	}
+	public void opTXR() {// 65EL02
+		// TXR opcode
+		// transfer X to R
+		this.reg_R = this.reg_X;
+	}
+	public void opTAD() {// 65EL02
+		// 65LE02 TAD
+		// transfer A to D
+		this.reg_D = this.reg_A;
+	}
+	public void opTDA() {
+		// 65EL02 TDA
+		this.reg_A = this.reg_D;
+	}
+	public void opTIX() {
+		// 65EL02 TIX
+		this.reg_X = this.reg_I;
+	}
+	public void opTXI() {
+		// 65EL02 TXI
+		this.reg_I = this.reg_X;
+	}
+				
 	
 	public void opMMU1(int mode) {
 		this.programCounter++;
@@ -816,10 +946,31 @@ public class TileCPU extends TileBase implements IRedBusWindow {
 		// transfer A to X
 		this.reg_X = this.reg_A;
 	}
+	private void opTXA(){// 6502
+		// TXA opcode
+		// transfer X to A
+		this.reg_A = this.reg_X;
+	}
 	private void opTAY(){// 6502
 		// TAY opcode
 		// transfer A to Y
 		this.reg_Y = this.reg_A;
+	}
+	private void opTYA() {//6502
+		// TYA opcode
+		// transfer Y to A
+		this.reg_A = this.reg_Y;
+	}
+	private void opTSX() {// 6502
+		// TSX opcode
+		// transfer stack pointer to X
+		this.reg_X = this.stackPointer;
+	}
+	 
+	private void opTXS() {// 6502
+		// TXS opcode
+		// transfer X to stack pointer
+		this.stackPointer = this.reg_X;
 	}
 
 	private int readMemory(int pc) {
