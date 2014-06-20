@@ -27,6 +27,7 @@ import net.quetzi.bluepower.blocks.BlockCrop;
 import net.quetzi.bluepower.blocks.BlockCustomFlower;
 import net.quetzi.bluepower.blocks.BlockIgniter;
 import net.quetzi.bluepower.blocks.BlockItemOre;
+import net.quetzi.bluepower.blocks.BlockProjectTable;
 import net.quetzi.bluepower.blocks.BlockSortingMachine;
 import net.quetzi.bluepower.blocks.BlockSortron;
 import net.quetzi.bluepower.blocks.BlockStoneOre;
@@ -82,6 +83,7 @@ public class BPBlocks {
     public static Block buffer;
     public static Block sorting_machine;
     public static Block sortron;
+    public static Block project_table;
     
     public static Block multipart;          // DO NOT GENERATE OR REMOVE THIS BLOCK!
                                              
@@ -129,6 +131,8 @@ public class BPBlocks {
         block_breaker = new BlockBlockBreaker();
         igniter = new BlockIgniter();
         buffer = new BlockBuffer();
+        
+        project_table = new BlockProjectTable();
         
         registerBlocks();
         initModDependantBlocks();
@@ -179,6 +183,8 @@ public class BPBlocks {
         GameRegistry.registerBlock(block_breaker, Refs.BLOCKBREAKER_NAME);
         GameRegistry.registerBlock(igniter, Refs.BLOCKIGNITER_NAME);
         GameRegistry.registerBlock(buffer, Refs.BLOCKBUFFER_NAME);
+        
+        GameRegistry.registerBlock(project_table, Refs.PROJECTTABLE_NAME);
     }
 
     private static void initModDependantBlocks() {

@@ -175,6 +175,7 @@ public class Refs {
     public static final String   CANVASBAG_NAME           = "canvas_bag";
     public static final String   CANVAS_NAME              = "canvas";
     public static final String   LUMAR_NAME               = "lumar";
+    public static final String   PROJECTTABLE_NAME        = "projecttable";
 
     public static final String[] oreDictDyes              = new String[] { "dyeBlack", "dyeRed", "dyeGreen", "dyeBrown", "dyeBlue", "dyePurple", "dyeCyan", "dyeLightGray", "dyeGray", "dyePink",
             "dyeLime", "dyeYellow", "dyeLightBlue", "dyeMagenta", "dyeOrange", "dyeWhite" };
