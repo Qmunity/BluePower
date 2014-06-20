@@ -1,5 +1,7 @@
 package net.quetzi.bluepower.tileentities.tier2;
 
+import java.util.Random;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
@@ -146,7 +148,7 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
             case ANYSTACK_SEQUENTIAL:
                 for (int i = curColumn; i < inventory.length; i += 8) {
                     if (inventory[i] != null && stack.isItemEqual(inventory[i])) {
-                        addItemToOutputBuffer(stack.copy(), colors[i % 8]);
+                        addItemToOutputBuffer(stack.copy(), /*colors[i % 8]*/TubeColor.values()[new Random().nextInt(16)]);
                         stack.stackSize = 0;
                         gotoNextNonEmptyColumn();
                         return true;
