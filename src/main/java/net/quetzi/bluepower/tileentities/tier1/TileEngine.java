@@ -15,15 +15,41 @@ import net.quetzi.bluepower.tileentities.TileMachineBase;
 public class TileEngine extends TileMachineBase{
 
 	public boolean isActive = false;
-	
+	public byte pumpTick;
+	public byte pumpSpeed;
+	public byte gearSpeed;
+	public byte gearTick;
 	public TileEngine(){
 		
+		pumpTick  = 0;
+		pumpSpeed = 16;
+		gearSpeed = 16;
 		
 	}
 	
 	@Override
 	public void updateEntity() {
-		isActive = worldObj.provider.isDaytime();
+		
+		if(worldObj.isRemote){
+			if(isActive){
+				gearTick++;
+				pumpTick++;
+				if(pumpTick >= pumpSpeed *2){
+					pumpTick = 0;
+					if(pumpSpeed > 4){
+						pumpSpeed--;
+					}
+				}
+				
+			}else{
+				pumpTick = 0;
+			}
+			
+		}
+		
+		
+		
+		isActive = true;
 	}
 	
 	
