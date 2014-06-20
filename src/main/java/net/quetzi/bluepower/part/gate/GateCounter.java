@@ -3,6 +3,7 @@ package net.quetzi.bluepower.part.gate;
 import java.util.List;
 
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.quetzi.bluepower.api.part.FaceDirection;
@@ -11,6 +12,7 @@ import net.quetzi.bluepower.client.gui.gate.GuiGateCounter;
 import net.quetzi.bluepower.client.renderers.RenderHelper;
 import net.quetzi.bluepower.part.IGuiButtonSensitive;
 import net.quetzi.bluepower.references.Refs;
+import net.quetzi.bluepower.util.Color;
 
 import org.lwjgl.opengl.GL11;
 
@@ -150,8 +152,6 @@ public class GateCounter extends GateBase implements IGuiButtonSensitive {
     @SideOnly(Side.CLIENT)
     protected GuiScreen getGui() {
     
-        System.out.println(count + " - " + max);
-        
         return new GuiGateCounter(this) {
             
             @Override
@@ -184,6 +184,10 @@ public class GateCounter extends GateBase implements IGuiButtonSensitive {
     @Override
     public void addWailaInfo(List<String> info) {
     
+        info.add(I18n.format("gui.counterMax") + ": " + Color.YELLOW + max);
+        info.add(I18n.format("gui.counterCount") + ": " + Color.YELLOW + count);
+        info.add(I18n.format("gui.counterIncrement") + ": " + Color.WHITE + increment);
+        info.add(I18n.format("gui.counterDecrement") + ": " + Color.WHITE + decrement);
     }
     
 }

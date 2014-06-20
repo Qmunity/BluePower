@@ -287,7 +287,12 @@ itemGroup.tabBluePowerCircuits=Blue Power Logic Gates
 itemGroup.tabBluePowerLighting=Blue Power Lighting
 
 gui.timerInterval=Timer Interval
+gui.counterMax=Maximum
+gui.counterIncrement=Increment
+gui.counterDecrement=Decrement
+gui.counterCount=Count
 gui.connections=Connections
+gui.passThrough=Passing through
 
 direction.front=Front
 direction.left=Left
