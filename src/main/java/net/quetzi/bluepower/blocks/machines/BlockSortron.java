@@ -1,4 +1,4 @@
-package net.quetzi.bluepower.blocks;
+package net.quetzi.bluepower.blocks.machines;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -8,6 +8,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.util.ForgeDirection;
+import net.quetzi.bluepower.blocks.BlockContainerBase;
 import net.quetzi.bluepower.references.GuiIDs;
 import net.quetzi.bluepower.references.Refs;
 import net.quetzi.bluepower.tileentities.tier3.TileSortron;

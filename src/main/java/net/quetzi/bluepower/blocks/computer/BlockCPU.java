@@ -1,19 +1,27 @@
-package net.quetzi.bluepower.blocks;
+package net.quetzi.bluepower.blocks.computer;
+
+import java.util.Random;
+
+import org.apache.logging.log4j.Level;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import net.quetzi.bluepower.blocks.BlockContainerBase;
 import net.quetzi.bluepower.references.GuiIDs;
 import net.quetzi.bluepower.references.Refs;
-import net.quetzi.bluepower.tileentities.tier3.TileIOExpander;
+import net.quetzi.bluepower.tileentities.tier3.TileCPU;
 
-public class BlockIOExpander extends BlockContainerBase {
+public class BlockCPU extends BlockContainerBase {
 	
 	@SideOnly(Side.CLIENT)
     protected IIcon topTexture;
@@ -25,17 +33,29 @@ public class BlockIOExpander extends BlockContainerBase {
     protected IIcon backTexture;
     @SideOnly(Side.CLIENT)
     protected IIcon bottomTexture;
-
-	public BlockIOExpander() {
+	
+	public BlockCPU() {
 		super(Material.iron);
-		setBlockName(Refs.BLOCKIOEXPANDER_NAME);
+		setBlockName(Refs.BLOCKCPU_NAME);
 	}
-
-	@Override
-    public GuiIDs getGuiID() {
-        return GuiIDs.IO_EXPANDER;
+	
+	public void updateTick(World world, int x, int y, int z, Random random)
+    {
+		TileEntity tileEntity = world.getTileEntity(x, y, z);
+		if (tileEntity instanceof TileCPU) {
+		}
     }
 	
+	@Override
+    public GuiIDs getGuiID() {
+        return GuiIDs.CPU;
+    }
+	
+	@Override
+	public int tickRate(World world)
+    {
+        return 1;
+    }
 	@Override
     @SideOnly(Side.CLIENT)
     public IIcon getIcon(int side, int meta) {
@@ -60,7 +80,7 @@ public class BlockIOExpander extends BlockContainerBase {
     @SideOnly(Side.CLIENT)
     public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
 
-		TileIOExpander tile = (TileIOExpander) world.getTileEntity(x, y, z);
+		TileCPU tile = (TileCPU) world.getTileEntity(x, y, z);
         ForgeDirection dir = tile.getFacingDirection();
         
         if (dir.ordinal() == side) {
@@ -84,15 +104,15 @@ public class BlockIOExpander extends BlockContainerBase {
 	 public void registerBlockIcons(IIconRegister iconRegister)
 	 {
 		 int i = 0;
-	     this.frontTexture = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + "io_expander_front");
+	     this.frontTexture = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + "cpu_front");
 	     this.sideTexture = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + "cpu_side");
 	     this.topTexture = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + "cpu_top");
-	     this.backTexture = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + "io_expander_back");
+	     this.backTexture = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + "cpu_back");
 	     this.bottomTexture = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + "cpu_bottom");
 	 }
-	
+
 	@Override
 	protected Class<? extends TileEntity> getTileEntity() {
-		return TileIOExpander.class;
+		return TileCPU.class;
 	}
 }

@@ -15,7 +15,7 @@
  *     along with Blue Power.  If not, see <http://www.gnu.org/licenses/>
  */
 
-package net.quetzi.bluepower.blocks;
+package net.quetzi.bluepower.blocks.worldgen;
 
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.util.IIcon;

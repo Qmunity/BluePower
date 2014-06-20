@@ -13,34 +13,37 @@
  *
  *     You should have received a copy of the GNU General Public License
  *     along with Blue Power.  If not, see <http://www.gnu.org/licenses/>
+ *     
+ *     @author Quetzi
  */
 
-package net.quetzi.bluepower.blocks;
+package net.quetzi.bluepower.blocks.machines;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.tileentity.TileEntity;
+import net.quetzi.bluepower.blocks.BlockContainer6Sided;
 import net.quetzi.bluepower.references.GuiIDs;
 import net.quetzi.bluepower.references.Refs;
-import net.quetzi.bluepower.tileentities.tier1.TileBlockBreaker;
+import net.quetzi.bluepower.tileentities.tier1.TileTransposer;
 
-public class BlockBlockBreaker extends BlockContainer6Sided {
-    
-    public BlockBlockBreaker() {
-    
+public class BlockTransposer extends BlockContainer6Sided {
+
+    public BlockTransposer() {
+
         super(Material.rock);
-        setBlockName(Refs.BLOCKBREAKER_NAME);
+        this.setBlockName(Refs.TRANSPOSER_NAME);
     }
-    
+
     @Override
     protected Class<? extends TileEntity> getTileEntity() {
-    
-        return TileBlockBreaker.class;
+
+        return TileTransposer.class;
     }
-    
+
     @Override
     public GuiIDs getGuiID() {
-    
-        return GuiIDs.INVALID; // TODO: Not sure what to return if it has no gui
+
+        return GuiIDs.INVALID;
     }
-    
+
 }

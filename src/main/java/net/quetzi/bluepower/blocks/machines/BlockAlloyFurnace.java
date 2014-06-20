@@ -15,7 +15,7 @@
  *     along with Blue Power.  If not, see <http://www.gnu.org/licenses/>
  */
 
-package net.quetzi.bluepower.blocks;
+package net.quetzi.bluepower.blocks.machines;
 
 import java.util.Random;
 
@@ -27,6 +27,7 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import net.quetzi.bluepower.blocks.BlockContainerBase;
 import net.quetzi.bluepower.init.BPBlocks;
 import net.quetzi.bluepower.references.GuiIDs;
 import net.quetzi.bluepower.references.Refs;
@@ -34,19 +35,20 @@ import net.quetzi.bluepower.tileentities.tier1.TileAlloyFurnace;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class BlockProjectTable extends BlockContainerBase {
+public class BlockAlloyFurnace extends BlockContainerBase {
     
     public static IIcon textureTop;
     private IIcon       textureBottom;
     private IIcon       textureSide;
-    private IIcon       textureFront;
+    private IIcon       textureFrontOn;
+    private IIcon       textureFrontOff;
     
-    public BlockProjectTable() {
+    public BlockAlloyFurnace() {
     
         super(Material.rock);
-        setBlockName(Refs.PROJECTTABLE_NAME);
+        setBlockName(Refs.ALLOYFURNACE_NAME);
         // This might not be needed actually.
-        setBlockTextureName(Refs.PROJECTTABLE_NAME + "_front");
+        setBlockTextureName(Refs.ALLOYFURNACE_NAME + "_front");
         
     }
     
@@ -57,8 +59,13 @@ public class BlockProjectTable extends BlockContainerBase {
         ForgeDirection s = ForgeDirection.getOrientation(side);
         // If is facing
         
-        if (meta == side) {
-            return textureFront;
+        if ((meta & 7) == side) {
+            // Do some bitmasking
+            if ((meta & 8) != 0) {
+                return textureFrontOn;
+            } else {
+                return textureFrontOff;
+            }
         }
         switch (s) {
             case UP:
@@ -84,12 +91,40 @@ public class BlockProjectTable extends BlockContainerBase {
         return true;
     }
     
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void randomDisplayTick(World world, int x, int y, int z, Random rnd) {
+    
+        int metadata = world.getBlockMetadata(x, y, z);
+        if ((metadata & 8) != 0) {
+            int l = world.getBlockMetadata(x, y, z) & 7;
+            float f = x + 0.5F;
+            float f1 = y + 0.0F + rnd.nextFloat() * 6.0F / 16.0F;
+            float f2 = z + 0.5F;
+            float f3 = 0.52F;
+            float f4 = rnd.nextFloat() * 0.6F - 0.3F;
+            
+            if (l == 4) {
+                world.spawnParticle("smoke", f - f3, f1, f2 + f4, 0.0D, 0.0D, 0.0D);
+                world.spawnParticle("flame", f - f3, f1, f2 + f4, 0.0D, 0.0D, 0.0D);
+            } else if (l == 5) {
+                world.spawnParticle("smoke", f + f3, f1, f2 + f4, 0.0D, 0.0D, 0.0D);
+                world.spawnParticle("flame", f + f3, f1, f2 + f4, 0.0D, 0.0D, 0.0D);
+            } else if (l == 2) {
+                world.spawnParticle("smoke", f + f4, f1, f2 - f3, 0.0D, 0.0D, 0.0D);
+                world.spawnParticle("flame", f + f4, f1, f2 - f3, 0.0D, 0.0D, 0.0D);
+            } else if (l == 3) {
+                world.spawnParticle("smoke", f + f4, f1, f2 + f3, 0.0D, 0.0D, 0.0D);
+                world.spawnParticle("flame", f + f4, f1, f2 + f3, 0.0D, 0.0D, 0.0D);
+            }
+        }
+    }
     
     // Not sure if you need this function.
     @Override
     public Item getItemDropped(int p_149650_1_, Random random, int p_149650_3_) {
     
-        return Item.getItemFromBlock(BPBlocks.project_table);
+        return Item.getItemFromBlock(BPBlocks.alloy_furnace);
     }
     
     @Override
@@ -99,7 +134,8 @@ public class BlockProjectTable extends BlockContainerBase {
         textureTop = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + getUnlocalizedName().substring(5) + "_top");
         textureBottom = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + getUnlocalizedName().substring(5) + "_bottom");
         textureSide = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + getUnlocalizedName().substring(5) + "_side");
-        textureFront = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + getUnlocalizedName().substring(5) + "_front");
+        textureFrontOn = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + getUnlocalizedName().substring(5) + "_front_on");
+        textureFrontOff = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + getUnlocalizedName().substring(5) + "_front_off");
     }
     
     @Override
@@ -119,7 +155,7 @@ public class BlockProjectTable extends BlockContainerBase {
     @Override
     public GuiIDs getGuiID() {
     
-        return GuiIDs.INVALID;
+        return GuiIDs.ALLOY_FURNACE;
     }
     
     @Override
