@@ -1,6 +1,17 @@
 Blocks
 ******
 
+[computer blocks] most have existing basic texture to work from. 
+cpu_front (up for debate as to what design, for some reason mirrored on the block)
+cpu_side (for some reason it's rotated on the block though)
+cpu_back
+cpu_top
+cpu_bottom
+disk_drive_front (red dots are activity lights, so need unlit version as well)
+monitor_front (for some reason mirrored on the block)
+io_expander_front (temp textures needed, final design relies on implementation of activity lights and also should be half height block)
+io_expander_back (temp textures needed, final design relies on bundled cable shape/texture and also should be half height block))
+
 Items
 *****
 stone_redwire (is called Stone_wire)
@@ -10,3 +21,5 @@ canvas(done)
 paint_brush (instead of all 16 types you could make one base texture, and also create an overlay that only contains white pixels at the places where the color should be) (done)
 
 Canvas bag has color overlay file (done)
+
+floppy_disk (no existing texture)

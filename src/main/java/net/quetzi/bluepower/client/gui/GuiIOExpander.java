@@ -15,4 +15,8 @@ private final TileIOExpander ioExpander;
 		super(new ContainerIOExpander (invPlayer, ioExpander), resLoc);
 		this.ioExpander = ioExpander;
 	}
+	
+	@Override
+    protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
+    }
 }

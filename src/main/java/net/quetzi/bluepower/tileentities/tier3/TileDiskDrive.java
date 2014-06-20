@@ -3,6 +3,9 @@ package net.quetzi.bluepower.tileentities.tier3;
 import net.minecraft.tileentity.TileEntity;
 import net.quetzi.bluepower.tileentities.TileBase;
 
+/**
+ * @author fabricator77
+ */
 public class TileDiskDrive extends TileBase implements IRedBusWindow {
 	/** redbus memory block
 	 * addr size function
