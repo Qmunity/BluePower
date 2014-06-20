@@ -27,19 +27,19 @@ import net.quetzi.bluepower.containers.ContainerSeedBag;
 import net.quetzi.bluepower.references.Refs;
 
 public class GuiSeedBag extends GuiBase {
-    
-    private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/GUI/seedBag.png");
-    
-    public GuiSeedBag(ItemStack bag,IInventory playerInventory, IInventory seedBagInventory) {
-    
-        super(new ContainerSeedBag(bag,playerInventory, seedBagInventory), resLoc);
+
+    private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/seedBag.png");
+
+    public GuiSeedBag(ItemStack bag, IInventory playerInventory, IInventory seedBagInventory) {
+
+        super(new ContainerSeedBag(bag, playerInventory, seedBagInventory), resLoc);
     }
-    
+
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-    
+
         super.drawGuiContainerForegroundLayer(mouseX, mouseY);
-        
+
         this.drawString(60, 5, I18n.format("item.seed_bag.name", new Object[] {}), false);
     }
 }
