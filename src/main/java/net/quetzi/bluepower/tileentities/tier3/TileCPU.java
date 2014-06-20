@@ -5,6 +5,7 @@ import java.io.InputStream;
 
 import org.apache.logging.log4j.Level;
 
+import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
 import net.quetzi.bluepower.BluePower;
 import net.quetzi.bluepower.tileentities.TileBase;
@@ -20,7 +21,7 @@ public class TileCPU extends TileBase implements IRedBusWindow {
 	public byte deviceID = 0;
 	public byte screenID = 1;
 	public byte discDriveID = 2;
-	public boolean halt = true;
+	public boolean halt = false;;
 	
 	private byte[] memory;
 	// registers
@@ -82,6 +83,8 @@ public class TileCPU extends TileBase implements IRedBusWindow {
 		
 		if (disc == null) {
 			BluePower.log.info("[BluePowerControl] CPU failed to load bootloader "+bootLoader);
+			
+			preLoadRAM();
 			return;
 		}
 		
@@ -94,6 +97,11 @@ public class TileCPU extends TileBase implements IRedBusWindow {
 		catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	// temp to load data into memory for testing
+	private void preLoadRAM () {
+		this.memory[1024] = (byte)0xDB; // STP
 	}
 	
 	//TODO: NBT read/write
@@ -142,6 +150,7 @@ public class TileCPU extends TileBase implements IRedBusWindow {
 		//TODO: sort instruction according to frequency of usage
 		// for speed reasons
 		// Octal numbers for ease of lookup in documentation.
+		// Reference http://www.eloraam.com/nonwp/redcpu.php
 		switch (opcode) {
 		// row 0
 		case 0:// 6502 BRK (calls 65EL02 MMU #0)
@@ -488,6 +497,45 @@ public class TileCPU extends TileBase implements IRedBusWindow {
 		case 0xD2:// 65C02 CMP (indirect)
 			invalid(opcode);
 			break;
+		case 0xD3:// 65C816 CMP (r, S), Y
+			invalid(opcode);
+			break;
+		case 0xD4:// 65C816 PEI (zeropage)
+			invalid(opcode);
+			break;
+		case 0xD5:// 6502 CMP zeropage, X
+			invalid(opcode);
+			break;
+		case 0xD6:// 6502 DEC zeropage, X
+			invalid(opcode);
+			break;
+		case 0xD7:// 65EL02 CMP (r, R), Y
+			invalid(opcode);
+			break;
+		case 0xD8:// 6502 CLD
+			invalid(opcode);
+			break;
+		case 0xD9:// 6502 CMP absolute, Y
+			invalid(opcode);
+			break;
+		case 0xDA:// 65C02 PHX
+			invalid(opcode);
+			break;
+		case 0xDB:// 65C02 STP
+			opSTP();
+			break;
+		case 0xDC:// 65EL02 TIX
+			invalid(opcode);
+			break;
+		case 0xDD:// 6502 CMP absolute, X
+			invalid(opcode);
+			break;
+		case 0xDE:// 6502 DEC absolute, X
+			invalid(opcode);
+			break;
+		case 0xDF:// 65EL02 PHD
+			invalid(opcode);
+			break;
 			
 		// row E
 		case 0xE0:// 6502 CPX #
@@ -609,6 +657,14 @@ public class TileCPU extends TileBase implements IRedBusWindow {
 	    	}
 	        this.redbus_remote_address = t;
 	    }
+	}
+	public void opSTP() {
+		availableCycles = -1;
+		if ( this.worldObj.getBlock(this.xCoord, this.yCoord, this.zCoord) == this.blockType) {
+			//set CPU on fire for the lolz
+			this.worldObj.playSoundEffect((double)this.xCoord + 0.5D, (double)this.yCoord + 0.5D, (double)this.zCoord + 0.5D, "fire.ignite", 1.0F, this.worldObj.rand.nextFloat() * 0.4F + 0.8F);
+			this.worldObj.setBlock(this.xCoord, this.yCoord+1, this.zCoord, Blocks.fire);
+		}
 	}
 	
 	public void opMMU1(int mode) {
@@ -734,6 +790,7 @@ public class TileCPU extends TileBase implements IRedBusWindow {
 	
 	// Opcode functions
 	private void invalid(int op) {
-		throw new InvalidOPCodeException(Integer.toHexString(op));
+		this.halt = true;
+		BluePower.log.error("BluePower CPU, Invalid OP code:"+Integer.toHexString(op));
 	}
 }
