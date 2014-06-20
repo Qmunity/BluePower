@@ -166,7 +166,9 @@ public class Recipes {
         GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(Items.string,4,0),new ItemStack(BPItems.wool_card,1,OreDictionary.WILDCARD_VALUE),new ItemStack(Blocks.wool,1,OreDictionary.WILDCARD_VALUE)));
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.wool_card,1,0),"f","p","s",'f',ItemFineWire.WireType.IRON.is,'p',"plankWood",'s',"stickWood"));
         
-        GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(Items.string,4,0),new ItemStack(BPItems.wool_card,1,OreDictionary.WILDCARD_VALUE),new ItemStack(Blocks.wool,1,OreDictionary.WILDCARD_VALUE)));
+        for (int i=0; i<Refs.oreDictDyes.length; i++) {
+        	GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(BPItems.lumar,1,15-i), new ItemStack(Items.redstone,1), new ItemStack(Items.glowstone_dust,1), Refs.oreDictDyes[i], Refs.oreDictDyes[i]));
+        }
         
         // Alloy furnace
         IAlloyFurnaceRegistry af = BPRegistry.alloyFurnaceRegistry;
