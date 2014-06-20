@@ -158,15 +158,15 @@ public class TileBuffer extends TileBase implements ISidedInventory {
     public int[] getAccessibleSlotsFromSide(int var1) {
 
         if (ForgeDirection.getOrientation(var1) == ForgeDirection.DOWN) {
-            return new int[] { 0, 1, 2, 3 };
+            return new int[] { 0, 5, 10, 15 };
         } else if (ForgeDirection.getOrientation(var1) == ForgeDirection.NORTH) {
-            return new int[] { 4, 5, 6, 7 };
+            return new int[] { 1, 6, 11, 16 };
         } else if (ForgeDirection.getOrientation(var1) == ForgeDirection.SOUTH) {
-            return new int[] { 8, 9, 10, 11 };
+            return new int[] { 2, 7, 12, 17 };
         } else if (ForgeDirection.getOrientation(var1) == ForgeDirection.EAST) {
-            return new int[] { 12, 13, 14, 15 };
+            return new int[] { 3, 8, 13, 18 };
         } else if (ForgeDirection.getOrientation(var1) == ForgeDirection.WEST) { 
-            return new int[] { 16, 17, 18, 19 }; 
+            return new int[] { 4, 9, 14, 19 };
         }
         return new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19 };
     }

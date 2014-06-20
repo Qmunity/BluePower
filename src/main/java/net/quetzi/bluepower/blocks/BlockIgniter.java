@@ -59,6 +59,8 @@ public class BlockIgniter extends BlockContainerBase {
             return textureFrontOff;
         } else if (side == direction.getOpposite().ordinal()) {
             return textureBack;
+        } if ((side == 3) || (side == 2)) {
+            return textureSide2;
         }
         return blockIcon;
     }

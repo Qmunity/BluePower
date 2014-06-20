@@ -17,6 +17,7 @@
 
 package net.quetzi.bluepower.references;
 
+
 public class Refs {
 
     public static final String   NAME                     = "Blue Power";
@@ -72,6 +73,7 @@ public class Refs {
     public static final String   REDDOPEDWAFER_NAME       = "red_doped_wafer";
     public static final String   BLOCKBREAKER_NAME        = "block_breaker";
     public static final String   SORTING_MACHINE_NAME     = "sorting_machine";
+    public static final String   TRANSPOSER_NAME          = "transposer";
 
     public static final String   BRASSINGOT_NAME          = "brass_ingot";
     public static final String   BLUEALLOYINGOT_NAME      = "blue_alloy_ingot";
@@ -176,6 +178,12 @@ public class Refs {
     public static final String   CANVAS_NAME              = "canvas";
     public static final String   LUMAR_NAME               = "lumar";
     public static final String   PROJECTTABLE_NAME        = "projecttable";
+
+    public static final String   BLOCKCPU_NAME            = "cpu";
+    public static final String   BLOCKMONITOR_NAME        = "monitor";
+    public static final String   BLOCKDISKDRIVE_NAME      = "disk_drive";
+    public static final String   BLOCKIOEXPANDER_NAME     = "io_expander";
+    public static final String   FLOPPY_DISK              = "floppy_disk";
 
     public static final String[] oreDictDyes              = new String[] { "dyeBlack", "dyeRed", "dyeGreen", "dyeBrown", "dyeBlue", "dyePurple", "dyeCyan", "dyeLightGray", "dyeGray", "dyePink",
             "dyeLime", "dyeYellow", "dyeLightBlue", "dyeMagenta", "dyeOrange", "dyeWhite" };

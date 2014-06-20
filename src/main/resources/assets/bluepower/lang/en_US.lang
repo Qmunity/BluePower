@@ -30,13 +30,19 @@ tile.silver_block.name=Silver Block
 tile.tin_block.name=Tin Block
 tile.flax_crop.name=Flax
 tile.indigo_flower.name=Indigo Flower
+tile.tungsten_ore.name=Tungsten Ore
 
 tile.alloyfurnace.name=Alloy Furnace
 tile.block_breaker.name=Block Breaker
 tile.igniter.name=Igniter
 tile.buffer.name=Buffer
+tile.transposer.name=Transposer
 tile.sortron.name=Sortron
 tile.sorting_machine.name=Sorting Machine
+tile.cpu.name=CPU
+tile.monitor.name=Monitor
+tile.disk_drive.name=Disk Drive
+tile.io_expander.name=IO Expander
 
 bluepower.part.lampwhite.name=White Lamp
 bluepower.part.invertedlampwhite.name=Inverted White Lamp
@@ -145,6 +151,7 @@ item.tin_ingot.name=Tin Ingot
 item.red_alloy_ingot.name=Red Alloy Ingot
 item.blue_alloy_ingot.name=Blue Alloy Ingot
 item.brass_ingot.name=Brass Ingot
+item.tungsten_ingot.name=Tungsten Ingot
 
 item.flax_seeds.name=Flax Seeds
 item.indigo_flower.name=Indigo Flower

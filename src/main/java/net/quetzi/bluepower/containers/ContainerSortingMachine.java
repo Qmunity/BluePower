@@ -23,6 +23,9 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import net.quetzi.bluepower.api.tube.IPneumaticTube.TubeColor;
+import net.quetzi.bluepower.containers.slots.IPhantomSlot;
+import net.quetzi.bluepower.containers.slots.SlotPhantom;
 import net.quetzi.bluepower.tileentities.tier2.TileSortingMachine;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -36,6 +39,7 @@ public class ContainerSortingMachine extends Container {
     private final TileSortingMachine sortingMachine;
     
     private int                      pullMode, sortMode, curColumn;
+    private final int[]              colors = new int[8];
     
     public ContainerSortingMachine(InventoryPlayer invPlayer, TileSortingMachine sortingMachine) {
     
@@ -43,7 +47,7 @@ public class ContainerSortingMachine extends Container {
         
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 8; j++) {
-                addSlotToContainer(new Slot(sortingMachine, i * 8 + j, 26 + j * 18, 18 + i * 18));
+                addSlotToContainer(new SlotPhantom(sortingMachine, i * 8 + j, 26 + j * 18, 18 + i * 18));
             }
         }
         bindPlayerInventory(invPlayer);
@@ -109,16 +113,22 @@ public class ContainerSortingMachine extends Container {
         for (Object crafter : crafters) {
             ICrafting icrafting = (ICrafting) crafter;
             
+            for (int i = 0; i < 8; i++) {
+                if (colors[i] != sortingMachine.colors[i].ordinal()) {
+                    icrafting.sendProgressBarUpdate(this, i, sortingMachine.colors[i].ordinal());
+                }
+            }
+            
             if (pullMode != sortingMachine.pullMode.ordinal()) {
-                icrafting.sendProgressBarUpdate(this, 0, sortingMachine.pullMode.ordinal());
+                icrafting.sendProgressBarUpdate(this, 8, sortingMachine.pullMode.ordinal());
             }
             
             if (sortMode != sortingMachine.sortMode.ordinal()) {
-                icrafting.sendProgressBarUpdate(this, 1, sortingMachine.sortMode.ordinal());
+                icrafting.sendProgressBarUpdate(this, 9, sortingMachine.sortMode.ordinal());
             }
             
             if (curColumn != sortingMachine.curColumn) {
-                icrafting.sendProgressBarUpdate(this, 2, curColumn);
+                icrafting.sendProgressBarUpdate(this, 10, curColumn);
             }
         }
         
@@ -131,15 +141,19 @@ public class ContainerSortingMachine extends Container {
     @SideOnly(Side.CLIENT)
     public void updateProgressBar(int id, int value) {
     
-        if (id == 0) {
+        if (id < 8) {
+            sortingMachine.colors[id] = TubeColor.values()[value];
+        }
+        
+        if (id == 8) {
             sortingMachine.pullMode = TileSortingMachine.PullMode.values()[value];
         }
         
-        if (id == 1) {
+        if (id == 9) {
             sortingMachine.sortMode = TileSortingMachine.SortMode.values()[value];
         }
         
-        if (id == 2) {
+        if (id == 10) {
             sortingMachine.curColumn = value;
         }
     }
@@ -150,4 +164,111 @@ public class ContainerSortingMachine extends Container {
         return sortingMachine.isUseableByPlayer(entityplayer);
     }
     
+    /**
+     * This class is copied from the BuildCraft code, which can be found here: https://github.com/BuildCraft/BuildCraft
+     * @author CovertJaguar <http://www.railcraft.info>
+     */
+    @Override
+    public ItemStack slotClick(int slotNum, int mouseButton, int modifier, EntityPlayer player) {
+    
+        Slot slot = slotNum < 0 ? null : (Slot) inventorySlots.get(slotNum);
+        if (slot instanceof IPhantomSlot) { return slotClickPhantom(slot, mouseButton, modifier, player); }
+        return super.slotClick(slotNum, mouseButton, modifier, player);
+    }
+    
+    /**
+     * This method is copied from the BuildCraft code, which can be found here: https://github.com/BuildCraft/BuildCraft
+     * @author CovertJaguar <http://www.railcraft.info>
+     */
+    private ItemStack slotClickPhantom(Slot slot, int mouseButton, int modifier, EntityPlayer player) {
+    
+        ItemStack stack = null;
+        
+        if (mouseButton == 2) {
+            if (((IPhantomSlot) slot).canAdjust()) {
+                slot.putStack(null);
+            }
+        } else if (mouseButton == 0 || mouseButton == 1) {
+            InventoryPlayer playerInv = player.inventory;
+            slot.onSlotChanged();
+            ItemStack stackSlot = slot.getStack();
+            ItemStack stackHeld = playerInv.getItemStack();
+            
+            if (stackSlot != null) {
+                stack = stackSlot.copy();
+            }
+            
+            if (stackSlot == null) {
+                if (stackHeld != null && slot.isItemValid(stackHeld)) {
+                    fillPhantomSlot(slot, stackHeld, mouseButton, modifier);
+                }
+            } else if (stackHeld == null) {
+                adjustPhantomSlot(slot, mouseButton, modifier);
+                slot.onPickupFromSlot(player, playerInv.getItemStack());
+            } else if (slot.isItemValid(stackHeld)) {
+                if (canStacksMerge(stackSlot, stackHeld)) {
+                    adjustPhantomSlot(slot, mouseButton, modifier);
+                } else {
+                    fillPhantomSlot(slot, stackHeld, mouseButton, modifier);
+                }
+            }
+        }
+        return stack;
+    }
+    
+    /**
+     * This method is copied from the BuildCraft code, which can be found here: https://github.com/BuildCraft/BuildCraft
+     * @author CovertJaguar <http://www.railcraft.info>
+     */
+    public boolean canStacksMerge(ItemStack stack1, ItemStack stack2) {
+    
+        if (stack1 == null || stack2 == null) return false;
+        if (!stack1.isItemEqual(stack2)) return false;
+        if (!ItemStack.areItemStackTagsEqual(stack1, stack2)) return false;
+        return true;
+        
+    }
+    
+    /**
+     * This method is copied from the BuildCraft code, which can be found here: https://github.com/BuildCraft/BuildCraft
+     * @author CovertJaguar <http://www.railcraft.info>
+     */
+    protected void adjustPhantomSlot(Slot slot, int mouseButton, int modifier) {
+    
+        if (!((IPhantomSlot) slot).canAdjust()) { return; }
+        ItemStack stackSlot = slot.getStack();
+        int stackSize;
+        if (modifier == 1) {
+            stackSize = mouseButton == 0 ? (stackSlot.stackSize + 1) / 2 : stackSlot.stackSize * 2;
+        } else {
+            stackSize = mouseButton == 0 ? stackSlot.stackSize - 1 : stackSlot.stackSize + 1;
+        }
+        
+        if (stackSize > slot.getSlotStackLimit()) {
+            stackSize = slot.getSlotStackLimit();
+        }
+        
+        stackSlot.stackSize = stackSize;
+        
+        if (stackSlot.stackSize <= 0) {
+            slot.putStack((ItemStack) null);
+        }
+    }
+    
+    /**
+     * This method is copied from the BuildCraft code, which can be found here: https://github.com/BuildCraft/BuildCraft
+     * @author CovertJaguar <http://www.railcraft.info>
+     */
+    protected void fillPhantomSlot(Slot slot, ItemStack stackHeld, int mouseButton, int modifier) {
+    
+        if (!((IPhantomSlot) slot).canAdjust()) { return; }
+        int stackSize = mouseButton == 0 ? stackHeld.stackSize : 1;
+        if (stackSize > slot.getSlotStackLimit()) {
+            stackSize = slot.getSlotStackLimit();
+        }
+        ItemStack phantomStack = stackHeld.copy();
+        phantomStack.stackSize = stackSize;
+        
+        slot.putStack(phantomStack);
+    }
 }

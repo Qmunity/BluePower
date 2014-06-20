@@ -15,5 +15,13 @@ public interface IPneumaticTube {
         BLACK, RED, GREEN, BROWN, BLUE, PURPLE, CYAN, SILVER, GRAY, PINK, LIME, YELLOW, LIGHT_BLUE, MAGENTA, ORANGE, WHITE, NONE
     }
     
-    public ItemStack injectStack(ItemStack stack, ForgeDirection from, TubeColor itemColor, boolean simulate);
+    /**
+     * Returns true if the network accepted the stack.
+     * @param stack
+     * @param from
+     * @param itemColor
+     * @param simulate
+     * @return
+     */
+    public boolean injectStack(ItemStack stack, ForgeDirection from, TubeColor itemColor, boolean simulate);
 }

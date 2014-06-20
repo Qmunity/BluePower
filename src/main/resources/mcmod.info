@@ -7,8 +7,13 @@
   "mcversion": "$mcversion",
   "url": "Not yet released",
   "updateUrl": "",
-  "authors": [
-    "Quetzi"
+  "authorList": [
+    "Quetzi",
+    "Zness",
+    "MineMaarten",
+    "K4Unl",
+    "Dynious",
+    "Amadornes"
   ],
   "credits": "Quetzi, Zness, Minemaarten, K-4U, Dynious, Amadornes",
   "logoFile": "",

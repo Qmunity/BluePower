@@ -26,6 +26,7 @@ import net.quetzi.bluepower.api.BPRegistry;
 import net.quetzi.bluepower.api.part.PartRegistry;
 import net.quetzi.bluepower.api.recipe.IAlloyFurnaceRegistry;
 import net.quetzi.bluepower.recipe.CanvasBagRecipe;
+import net.quetzi.bluepower.references.Refs;
 
 public class Recipes {
     
@@ -150,10 +151,13 @@ public class Recipes {
 
         craftManager.addRecipe(new ItemStack(BPBlocks.alloy_furnace, 1), new Object[] {"###", "# #", "###", '#', Blocks.brick_block});
         craftManager.addRecipe(new ItemStack(BPBlocks.block_breaker, 1), new Object[] {"#A#", "#P#", "#R#", '#', Blocks.cobblestone, 'A', Items.iron_pickaxe, 'P', Blocks.piston, 'R', Items.redstone});
+        craftManager.addRecipe(new ItemStack(BPBlocks.buffer, 1), new Object[] {"#P#", "P P", "#P#", '#', Blocks.iron_bars, 'P', Blocks.planks});
         craftManager.addRecipe(new ItemStack(BPItems.canvas, 1), new Object[] {"SSS", "S S", "SSS", 'S', Items.string});
         craftManager.addRecipe(new ItemStack(BPItems.seedBag, 1), new Object[] {" S ", "C C", "CCC", 'S', Items.string, 'C', BPItems.canvas });
-
-        GameRegistry.addRecipe(new CanvasBagRecipe());
+        craftManager.addRecipe(new ItemStack(BPItems.canvas_bag,1,0), new Object[] {"SSS", "S S", "SSS", 'S', BPItems.canvas});
+        
+        registerCanvasBagRecipes(new ItemStack(BPItems.canvas_bag));
+        
         
         // Alloy furnace
         IAlloyFurnaceRegistry af = BPRegistry.alloyFurnaceRegistry;
@@ -172,5 +176,24 @@ public class Recipes {
         af.addRecyclingRecipe(new ItemStack(Items.iron_ingot));
         af.addRecyclingRecipe(new ItemStack(Items.gold_ingot));
         
+    }
+    
+    private static void registerCanvasBagRecipes(ItemStack is)
+    {
+        for (int damage=Refs.oreDictDyes.length-1;damage>=0;damage--)
+        {
+            ItemStack input = is.copy();
+            input.setItemDamage(15-damage);
+            
+            for (int dye=0;dye<Refs.oreDictDyes.length;dye++)
+            {
+                if (15-dye!=input.getItemDamage())
+                {
+                    ItemStack output = is.copy();
+                    output.setItemDamage(15-dye);
+                    GameRegistry.addRecipe(new CanvasBagRecipe(output,input,Refs.oreDictDyes[dye]));
+                }
+            }
+        }
     }
 }

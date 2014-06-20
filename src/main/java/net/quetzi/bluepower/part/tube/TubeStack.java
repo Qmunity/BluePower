@@ -7,7 +7,9 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.quetzi.bluepower.api.tube.IPneumaticTube.TubeColor;
 import net.quetzi.bluepower.api.vec.Vector3Cube;
@@ -32,6 +34,9 @@ public class TubeStack {
     public double             progress;        //0 at the start, 0.5 on an intersection, 1 at the end.
     public double             oldProgress;
     public ForgeDirection     heading;
+    public boolean            enabled = true;  //will be disabled when the client sided stack is at an intersection, at which point it needs to wait for server input. This just serves a visual purpose.
+    private TileEntity        target;          //only should have a value when retrieving items. this is the target the item wants to go to.
+    private int               targetX, targetY, targetZ;
     
     @SideOnly(Side.CLIENT)
     private static RenderItem customRenderItem;
@@ -56,9 +61,35 @@ public class TubeStack {
     public boolean update(double move) {
     
         oldProgress = progress;
-        boolean isEntering = progress < 0.5;
-        progress += move;
-        return progress >= 0.5 && isEntering;
+        if (enabled) {
+            boolean isEntering = progress < 0.5;
+            progress += move;
+            return progress >= 0.5 && isEntering;
+        } else {
+            return false;
+        }
+    }
+    
+    public TileEntity getTarget(World world) {
+    
+        if (target == null && (targetX != 0 || targetY != 0 || targetZ != 0)) {
+            target = world.getTileEntity(targetX, targetY, targetZ);
+        }
+        return target;
+    }
+    
+    public void setTarget(TileEntity tileEntity) {
+    
+        target = tileEntity;
+        if (target != null) {
+            targetX = target.xCoord;
+            targetY = target.yCoord;
+            targetZ = target.zCoord;
+        } else {
+            targetX = 0;
+            targetY = 0;
+            targetZ = 0;
+        }
     }
     
     public void writeToNBT(NBTTagCompound tag) {
@@ -67,12 +98,18 @@ public class TubeStack {
         tag.setByte("color", (byte) color.ordinal());
         tag.setByte("heading", (byte) heading.ordinal());
         tag.setDouble("progress", progress);
+        tag.setInteger("targetX", targetX);
+        tag.setInteger("targetY", targetY);
+        tag.setInteger("targetZ", targetZ);
     }
     
     public static TubeStack loadFromNBT(NBTTagCompound tag) {
     
         TubeStack stack = new TubeStack(ItemStack.loadItemStackFromNBT(tag), ForgeDirection.getOrientation(tag.getByte("heading")), TubeColor.values()[tag.getByte("color")]);
         stack.progress = tag.getDouble("progress");
+        stack.targetX = tag.getInteger("targetX");
+        stack.targetY = tag.getInteger("targetY");
+        stack.targetZ = tag.getInteger("targetZ");
         return stack;
     }
     

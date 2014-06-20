@@ -18,11 +18,13 @@
 package net.quetzi.bluepower.tileentities.tier1;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
+import net.quetzi.bluepower.api.tube.IPneumaticTube.TubeColor;
 import net.quetzi.bluepower.helper.IOHelper;
 import net.quetzi.bluepower.tileentities.TileMachineBase;
 
@@ -33,7 +35,7 @@ public class TileBlockBreaker extends TileMachineBase {
     
         super.redstoneChanged(newValue);
         
-        if (newValue && isBufferEmpty()) {
+        if (!worldObj.isRemote && newValue && isBufferEmpty()) {
             ForgeDirection direction = getFacingDirection();
             ForgeDirection oppDirection = direction.getOpposite();
             Block breakBlock = worldObj.getBlock(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ);
@@ -45,7 +47,7 @@ public class TileBlockBreaker extends TileMachineBase {
             
             if (IOHelper.canInterfaceWith(tileEntity, direction)) {
                 for (ItemStack breakStack : breakStacks) {
-                    ItemStack returnedStack = IOHelper.insert(tileEntity, breakStack, direction, false);
+                    ItemStack returnedStack = IOHelper.insert(tileEntity, breakStack, direction, TubeColor.values()[new Random().nextInt(16)], false);
                     if (returnedStack != null) {
                         this.addItemToOutputBuffer(returnedStack);
                     }

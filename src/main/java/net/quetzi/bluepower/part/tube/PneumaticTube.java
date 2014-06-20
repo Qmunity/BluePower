@@ -2,7 +2,6 @@ package net.quetzi.bluepower.part.tube;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
@@ -43,7 +42,8 @@ public class PneumaticTube extends BPPart {
     private TileEntityCache[] tileCache;
     private TubeColor         color       = TubeColor.NONE;
     private final TubeLogic   logic       = new TubeLogic(this);
-    
+    public boolean            initialized;                                                                                 //workaround to the connections not properly initialized, but being tried to be used.
+                                                                                                                            
     // private final ResourceLocation tubeSideTexture = new ResourceLocation(Refs.MODID + ":textures/blocks/Tubes/pneumatic_tube_side.png");
     // private final ResourceLocation tubeNodeTexture = new ResourceLocation(Refs.MODID + ":textures/blocks/Tubes/tube_end.png");
     
@@ -106,13 +106,7 @@ public class PneumaticTube extends BPPart {
     @Override
     public void update() {
     
-        if (tick == 0) {
-            logic.world = world;
-            logic.x = x;
-            logic.y = y;
-            logic.z = z;
-        }
-        logic.update();
+        if (initialized) logic.update();
         super.update();
         if (tick == 3) updateConnections();
     }
@@ -123,6 +117,9 @@ public class PneumaticTube extends BPPart {
     @Override
     public void onNeighborUpdate() {
     
+        for (TileEntityCache cache : getTileCache()) {
+            cache.update();
+        }
         updateConnections();
     }
     
@@ -149,6 +146,7 @@ public class PneumaticTube extends BPPart {
     
         if (world != null && !world.isRemote) {
             int connectionCount = 0;
+            boolean clearedCache = false;
             for (int i = 0; i < 6; i++) {
                 boolean oldState = connections[i];
                 getTileCache()[i].update();
@@ -161,19 +159,15 @@ public class PneumaticTube extends BPPart {
                     connections[i] = isConnected(d, null);
                 }
                 if (connections[i]) connectionCount++;
-                if (oldState != connections[i]) {
-                    /*TubeNode node = getLogic().getNode();
-                    getLogic().clearNodeCache();
-                    for (TubeEdge edge : node.edges) {
-                        if (edge != null && edge.target.target instanceof PneumaticTube) {
-                            ((PneumaticTube) edge.target.target).getLogic().clearNodeCache();
-                        }
-                    }*/
+                if (!clearedCache && oldState != connections[i]) {
+                    // getLogic().clearNodeCaches();
+                    clearedCache = true;
                 }
             }
             isCrossOver = connectionCount != 2;
             sendUpdatePacket();
         }
+        initialized = true;
     }
     
     public boolean isConnected(ForgeDirection dir, PneumaticTube otherTube) {
@@ -237,9 +231,6 @@ public class PneumaticTube extends BPPart {
                     notifyUpdate();
                     return true;
                 }
-            } else if (item != null) {
-                
-                logic.injectStack(item, ForgeDirection.DOWN, TubeColor.values()[new Random().nextInt(16)], false);
             }
         }
         return false;

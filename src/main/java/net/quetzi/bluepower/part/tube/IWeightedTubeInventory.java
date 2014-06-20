@@ -30,6 +30,6 @@ public interface IWeightedTubeInventory {
         By default this can be seen as 0 for non implementing inventories. return a high value to make it less prefered
         by the tubes.
     */
-    public int getWeigth(ForgeDirection from);
+    public int getWeight(ForgeDirection from);
     
 }
