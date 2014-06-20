@@ -17,6 +17,8 @@
 
 package net.quetzi.bluepower.references;
 
+import scala.collection.parallel.ParSeqLike.Updated;
+
 
 public class Refs {
 
@@ -180,11 +182,12 @@ public class Refs {
     public static final String   CANVASBAG_NAME           = "canvas_bag";
     public static final String   CANVAS_NAME              = "canvas";
     public static final String   LUMAR_NAME               = "lumar";
-    public static final String   PROJECTTABLE_NAME        = "projecttable";
     public static final String   FINEWIRE_NAME            = "fine_wire";
     public static final String   WOOLCARD_NAME            = "wool_card";
     public static final String   DIAMONDDRAWPLATE_NAME    = "diamond_drawPlate";
     
+    public static final String   PROJECTTABLE_NAME        = "project_table";
+
     public static final String   BLOCKCPU_NAME            = "cpu";
     public static final String   BLOCKMONITOR_NAME        = "monitor";
     public static final String   BLOCKDISKDRIVE_NAME      = "disk_drive";

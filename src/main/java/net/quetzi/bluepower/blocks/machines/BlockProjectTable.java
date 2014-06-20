@@ -97,10 +97,10 @@ public class BlockProjectTable extends BlockContainerBase {
     @SideOnly(Side.CLIENT)
     public void registerBlockIcons(IIconRegister iconRegister) {
     
-        textureTop = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + getUnlocalizedName().substring(5) + "_top");
-        textureBottom = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + getUnlocalizedName().substring(5) + "_bottom");
-        textureSide = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + getUnlocalizedName().substring(5) + "_side");
-        textureFront = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + getUnlocalizedName().substring(5) + "_front");
+        textureTop = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + Refs.PROJECTTABLE_NAME + "_top");
+        textureBottom = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + Refs.PROJECTTABLE_NAME + "_bottom");
+        textureSide = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + Refs.PROJECTTABLE_NAME + "_side");
+        textureFront = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + Refs.PROJECTTABLE_NAME + "_front");
     }
     
     @Override
