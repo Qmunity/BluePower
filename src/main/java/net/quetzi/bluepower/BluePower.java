@@ -18,6 +18,7 @@ import net.quetzi.bluepower.client.gui.GUIHandler;
 import net.quetzi.bluepower.compat.CompatibilityUtils;
 import net.quetzi.bluepower.events.BPEventHandler;
 import net.quetzi.bluepower.init.BPBlocks;
+import net.quetzi.bluepower.init.BPEnchantments;
 import net.quetzi.bluepower.init.BPItems;
 import net.quetzi.bluepower.init.Config;
 import net.quetzi.bluepower.init.CustomTabs;
@@ -73,6 +74,8 @@ public class BluePower {
         TileEntities.init();
         OreDictionarySetup.init();
         GameRegistry.registerWorldGenerator(new WorldGenerationHandler(), 0);
+        
+        BPEnchantments.init();
         
         PartRegistry.init();
         

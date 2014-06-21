@@ -279,6 +279,9 @@ item.lumar.green.name=Green Lumar
 item.lumar.red.name=Red Lumar
 item.lumar.black.name=Black Lumar
 
+enchantment.vorpal.name=Vorpal
+enchantment.disjunction.name=Disjunction
+
 itemGroup.tabBluePowerMachines=Blue Power Machines
 itemGroup.tabBluePowerBlocks=Blue Power Blocks
 itemGroup.tabBluePowerItems=Blue Power Items
