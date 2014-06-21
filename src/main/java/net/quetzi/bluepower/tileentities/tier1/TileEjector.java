@@ -20,61 +20,126 @@ package net.quetzi.bluepower.tileentities.tier1;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.quetzi.bluepower.tileentities.TileBase;
+import net.minecraft.nbt.NBTTagCompound;
+import net.quetzi.bluepower.tileentities.TileMachineBase;
 
-public class TileEjector extends TileBase implements IInventory {
+import java.util.List;
+
+public class TileEjector extends TileMachineBase implements IInventory {
 
     private final ItemStack[] inventory = new ItemStack[9];
+
+    @Override
+    protected void redstoneChanged(boolean newValue) {
+
+        super.redstoneChanged(newValue);
+
+        if (newValue) {
+            for (int i=0; i < inventory.length; i++) {
+                if (inventory[i] != null && inventory[i].stackSize > 0) {
+                    ItemStack output = inventory[i].copy();
+                    output.stackSize = 1;
+                    addItemToOutputBuffer(output);
+                    inventory[i].stackSize--;
+                    break;
+                }
+            }
+        }
+    }
+
+    /**
+     * This function gets called whenever the world/chunk loads
+     */
+    @Override
+    public void readFromNBT(NBTTagCompound tCompound) {
+
+        super.readFromNBT(tCompound);
+
+        for (int i = 0; i < 9; i++) {
+            NBTTagCompound tc = tCompound.getCompoundTag("inventory" + i);
+            inventory[i] = ItemStack.loadItemStackFromNBT(tc);
+        }
+    }
+
+    /**
+     * This function gets called whenever the world/chunk is saved
+     */
+    @Override
+    public void writeToNBT(NBTTagCompound tCompound) {
+
+        super.writeToNBT(tCompound);
+
+        for (int i = 0; i < 9; i++) {
+            if (inventory[i] != null) {
+                NBTTagCompound tc = new NBTTagCompound();
+                inventory[i].writeToNBT(tc);
+                tCompound.setTag("inventory" + i, tc);
+            }
+        }
+    }
 
     /**
      * Returns the number of slots in the inventory.
      */
     @Override public int getSizeInventory() {
 
-        return 0;
+        return inventory.length;
     }
 
     /**
      * Returns the stack in slot i
      *
-     * @param var1
+     * @param slot
      */
-    @Override public ItemStack getStackInSlot(int var1) {
+    @Override public ItemStack getStackInSlot(int slot) {
 
-        return null;
+        return inventory[slot];
     }
 
     /**
      * Removes from an inventory slot (first arg) up to a specified number (second arg) of items and returns them in a
      * new stack.
      *
-     * @param var1
-     * @param var2
+     * @param slot
+     * @param amount
      */
-    @Override public ItemStack decrStackSize(int var1, int var2) {
+    @Override public ItemStack decrStackSize(int slot, int amount) {
 
-        return null;
+        ItemStack itemStack = getStackInSlot(slot);
+        if (itemStack != null) {
+            if (itemStack.stackSize <= amount) {
+                setInventorySlotContents(slot, null);
+            } else {
+                itemStack = itemStack.splitStack(amount);
+                if (itemStack.stackSize == 0) {
+                    setInventorySlotContents(slot, null);
+                }
+            }
+        }
+
+        return itemStack;
     }
 
     /**
      * When some containers are closed they call this on each slot, then drop whatever it returns as an EntityItem -
      * like when you close a workbench GUI.
      *
-     * @param var1
+     * @param slot
      */
-    @Override public ItemStack getStackInSlotOnClosing(int var1) {
+    @Override public ItemStack getStackInSlotOnClosing(int slot) {
 
-        return null;
+        return getStackInSlot(slot);
     }
 
     /**
      * Sets the given item stack to the specified slot in the inventory (can be crafting or armor sections).
      *
-     * @param var1
-     * @param var2
+     * @param slot
+     * @param itemStack
      */
-    @Override public void setInventorySlotContents(int var1, ItemStack var2) {
+    @Override public void setInventorySlotContents(int slot, ItemStack itemStack) {
 
+        inventory[slot] = itemStack;
     }
 
     /**
@@ -82,7 +147,7 @@ public class TileEjector extends TileBase implements IInventory {
      */
     @Override public String getInventoryName() {
 
-        return null;
+        return "tile.relay.name";
     }
 
     /**
@@ -90,7 +155,7 @@ public class TileEjector extends TileBase implements IInventory {
      */
     @Override public boolean hasCustomInventoryName() {
 
-        return false;
+        return true;
     }
 
     /**
@@ -98,7 +163,7 @@ public class TileEjector extends TileBase implements IInventory {
      */
     @Override public int getInventoryStackLimit() {
 
-        return 0;
+        return 64;
     }
 
     /**
@@ -108,7 +173,7 @@ public class TileEjector extends TileBase implements IInventory {
      */
     @Override public boolean isUseableByPlayer(EntityPlayer var1) {
 
-        return false;
+        return true;
     }
 
     @Override public void openInventory() {
@@ -127,6 +192,15 @@ public class TileEjector extends TileBase implements IInventory {
      */
     @Override public boolean isItemValidForSlot(int var1, ItemStack var2) {
 
-        return false;
+        return true;
+    }
+
+    @Override
+    public List<ItemStack> getDrops() {
+
+        List<ItemStack> drops = super.getDrops();
+        for (ItemStack stack : inventory)
+            if (stack != null) drops.add(stack);
+        return drops;
     }
 }

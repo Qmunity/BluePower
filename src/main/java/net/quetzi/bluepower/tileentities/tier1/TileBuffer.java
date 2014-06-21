@@ -76,7 +76,6 @@ public class TileBuffer extends TileBase implements ISidedInventory {
     @Override
     public ItemStack decrStackSize(int slot, int amount) {
     
-        // this needs to be side aware as well
         ItemStack itemStack = getStackInSlot(slot);
         if (itemStack != null) {
             if (itemStack.stackSize <= amount) {

@@ -23,11 +23,16 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
 import net.quetzi.bluepower.tileentities.tier1.TileEjector;
 
 public class ContainerEjector extends Container {
 
+    private final TileEjector tileEjector;
+
     public ContainerEjector(InventoryPlayer invPlayer, TileEjector ejector) {
+
+        this.tileEjector = ejector;
 
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 3; ++j) {
@@ -42,18 +47,43 @@ public class ContainerEjector extends Container {
         // Render inventory
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 9; j++) {
-                addSlotToContainer(new Slot(invPlayer, j + i * 9 + 9, 8 + j * 18, 104 + i * 18));
+                addSlotToContainer(new Slot(invPlayer, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
             }
         }
 
         // Render hotbar
         for (int j = 0; j < 9; j++) {
-            addSlotToContainer(new Slot(invPlayer, j, 8 + j * 18, 162));
+            addSlotToContainer(new Slot(invPlayer, j, 8 + j * 18, 142));
         }
     }
 
-    @Override public boolean canInteractWith(EntityPlayer var1) {
+    @Override public boolean canInteractWith(EntityPlayer player) {
 
-        return true;
+        return tileEjector.isUseableByPlayer(player);
+    }
+
+    @Override
+    public ItemStack transferStackInSlot(EntityPlayer player, int par2) {
+
+        ItemStack itemstack = null;
+        Slot slot = (Slot) inventorySlots.get(par2);
+        if (slot != null && slot.getHasStack()) {
+            ItemStack itemstack1 = slot.getStack();
+            itemstack = itemstack1.copy();
+            if (par2 < 20) {
+                if (!mergeItemStack(itemstack1, 20, 56, true)) return null;
+            } else if (!mergeItemStack(itemstack1, 0, 20, false)) { return null; }
+            if (itemstack1.stackSize == 0) {
+                slot.putStack(null);
+            } else {
+                slot.onSlotChanged();
+            }
+            if (itemstack1.stackSize != itemstack.stackSize) {
+                slot.onPickupFromSlot(player, itemstack1);
+            } else {
+                return null;
+            }
+        }
+        return itemstack;
     }
 }
