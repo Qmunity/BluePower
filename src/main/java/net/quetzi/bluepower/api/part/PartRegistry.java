@@ -263,15 +263,19 @@ public class PartRegistry {
         registerPart(GateRandomizer.class);
         
         // Lamps
-        for (int i = 0; i < ItemDye.field_150922_c.length; i++) {
+        for (int i = 0; i < ItemDye.field_150922_c.length; i++)
             registerPart(PartCageLamp.class, ItemDye.field_150921_b[i].toLowerCase(), ItemDye.field_150922_c[i], false);
+        for (int i = 0; i < ItemDye.field_150922_c.length; i++)
             registerPart(PartLamp.class, ItemDye.field_150921_b[i].toLowerCase(), ItemDye.field_150922_c[i], false);
+        for (int i = 0; i < ItemDye.field_150922_c.length; i++)
             registerPart(PartFixture.class, ItemDye.field_150921_b[i].toLowerCase(), ItemDye.field_150922_c[i], false);
-            
+        
+        for (int i = 0; i < ItemDye.field_150922_c.length; i++)
             registerPart(PartCageLamp.class, ItemDye.field_150921_b[i].toLowerCase(), ItemDye.field_150922_c[i], true);
+        for (int i = 0; i < ItemDye.field_150922_c.length; i++)
             registerPart(PartLamp.class, ItemDye.field_150921_b[i].toLowerCase(), ItemDye.field_150922_c[i], true);
+        for (int i = 0; i < ItemDye.field_150922_c.length; i++)
             registerPart(PartFixture.class, ItemDye.field_150921_b[i].toLowerCase(), ItemDye.field_150922_c[i], true);
-        }
         
         // Pneumatic Tubes
         registerPart(PneumaticTube.class);
