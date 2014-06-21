@@ -79,6 +79,30 @@ public class IOHelper {
         
     }
     
+    public ItemStack extractOneItem(TileEntity inputTE, ForgeDirection dir) {
+    
+        if (inputTE instanceof IInventory) {
+            IInventory inputInv = (IInventory) inputTE;
+            int[] accessibleSlots;
+            if (inputInv instanceof ISidedInventory) {
+                accessibleSlots = ((ISidedInventory) inputInv).getAccessibleSlotsFromSide(dir.ordinal());
+            } else {
+                accessibleSlots = new int[inputInv.getSizeInventory()];
+                for (int i = 0; i < accessibleSlots.length; i++)
+                    accessibleSlots[i] = i;
+            }
+            for (int slot : accessibleSlots) {
+                ItemStack stack = inputInv.getStackInSlot(slot);
+                if (stack != null && IOHelper.canExtractItemFromInventory(inputInv, stack, slot, dir.ordinal())) {
+                    ItemStack ret = stack.splitStack(1);
+                    if (stack.stackSize == 0) inputInv.setInventorySlotContents(slot, null);
+                    return ret;
+                }
+            }
+        }
+        return null;
+    }
+    
     public static ItemStack insert(TileEntity tile, ItemStack itemStack, ForgeDirection direction, boolean simulate) {
     
         return insert(tile, itemStack, direction, TubeColor.NONE, simulate);
