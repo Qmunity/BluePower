@@ -2,11 +2,7 @@ package net.quetzi.bluepower.tileentities.tier3;
 
 import java.io.IOException;
 import java.io.InputStream;
-
-import org.apache.logging.log4j.Level;
-
 import net.minecraft.init.Blocks;
-import net.minecraft.tileentity.TileEntity;
 import net.quetzi.bluepower.BluePower;
 import net.quetzi.bluepower.tileentities.TileBase;
 
