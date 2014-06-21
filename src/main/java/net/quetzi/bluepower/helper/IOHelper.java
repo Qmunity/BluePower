@@ -79,7 +79,7 @@ public class IOHelper {
         
     }
     
-    public ItemStack extractOneItem(TileEntity inputTE, ForgeDirection dir) {
+    public static ItemStack extractOneItem(TileEntity inputTE, ForgeDirection dir) {
     
         if (inputTE instanceof IInventory) {
             IInventory inputInv = (IInventory) inputTE;
