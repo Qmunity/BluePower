@@ -39,7 +39,7 @@ public class TileTransposer extends TileMachineBase {
     public void updateEntity() {
     
         super.updateEntity();
-        if (isBufferEmpty()) {
+        if (isBufferEmpty() && !worldObj.isRemote) {
             suckEntity(worldObj, xCoord,yCoord,zCoord);
         }
         
@@ -75,7 +75,9 @@ public class TileTransposer extends TileMachineBase {
     }
 
     private boolean suckEntity(World world, int x, int y, int z) {
-        AxisAlignedBB box = AxisAlignedBB.getBoundingBox(0,0,0,1,1,1);
+
+        ForgeDirection direction = getFacingDirection();
+        AxisAlignedBB box = AxisAlignedBB.getBoundingBox(x + direction.offsetX, y + direction.offsetY, z + direction.offsetZ, x + direction.offsetX + 1, y + direction.offsetY + 1, z + direction.offsetZ + 1);
         if (!world.getEntitiesWithinAABB(EntityItem.class, box).isEmpty()) {
             for (Entity entity : (List<Entity>)world.getEntitiesWithinAABB(EntityItem.class, box)) {
                 ItemStack stack = ((EntityItem)entity).getEntityItem();
