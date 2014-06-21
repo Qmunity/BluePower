@@ -102,7 +102,6 @@ public class TileBuffer extends TileBase implements ISidedInventory {
     public void setInventorySlotContents(int i, ItemStack itemStack) {
     
         allInventories[i] = itemStack;
-        worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
     }
     
     @Override
@@ -165,34 +164,23 @@ public class TileBuffer extends TileBase implements ISidedInventory {
                 allSlots[i] = i;
             return allSlots;
         }
-        
-        if (ForgeDirection.getOrientation(var1) == ForgeDirection.DOWN) {
-            return new int[] { 0, 5, 10, 15 };
-        } else if (ForgeDirection.getOrientation(var1) == ForgeDirection.NORTH) {
-            return new int[] { 1, 6, 11, 16 };
-        } else if (ForgeDirection.getOrientation(var1) == ForgeDirection.SOUTH) {
-            return new int[] { 2, 7, 12, 17 };
-        } else if (ForgeDirection.getOrientation(var1) == ForgeDirection.EAST) {
-            return new int[] { 3, 8, 13, 18 };
-        } else if (ForgeDirection.getOrientation(var1) == ForgeDirection.WEST) { return new int[] { 4, 9, 14, 19 }; }
-        return new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19 };
+        if (var1 > dir.getOpposite().ordinal()) var1--;
+        int[] slots = new int[4];
+        for (int i = 0; i < 4; i++) {
+            slots[i] = var1 + i * 5;
+        }
+        return slots;
     }
     
     @Override
     public boolean canInsertItem(int slot, ItemStack itemStack, int side) {
     
-        for (int i : getAccessibleSlotsFromSide(side)) {
-            if (slot == i) { return true; }
-        }
-        return false;
+        return true;
     }
     
     @Override
     public boolean canExtractItem(int slot, ItemStack itemStack, int side) {
     
-        for (int i : getAccessibleSlotsFromSide(side)) {
-            if (slot == i) { return true; }
-        }
-        return false;
+        return true;
     }
 }
