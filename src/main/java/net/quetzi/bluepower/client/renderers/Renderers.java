@@ -13,6 +13,7 @@ import net.minecraftforge.client.MinecraftForgeClient;
 import net.quetzi.bluepower.init.BPBlocks;
 import net.quetzi.bluepower.init.BPItems;
 import net.quetzi.bluepower.tileentities.tier1.TileEngine;
+import net.quetzi.bluepower.tileentities.tier1.TileWindmill;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 
@@ -25,5 +26,7 @@ public class Renderers {
         
         ClientRegistry.bindTileEntitySpecialRenderer(TileEngine.class, new RenderEngine());
         MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BPBlocks.engine), new RenderItemEngine());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileWindmill.class, new RenderWindmill());
+        
     }
 }

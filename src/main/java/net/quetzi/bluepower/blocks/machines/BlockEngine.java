@@ -1,4 +1,4 @@
-package net.quetzi.bluepower.blocks;
+package net.quetzi.bluepower.blocks.machines;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;

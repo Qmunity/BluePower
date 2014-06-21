@@ -78,8 +78,11 @@ public class Refs {
     public static final String   BLOCKBREAKER_NAME        = "block_breaker";
     public static final String   SORTING_MACHINE_NAME     = "sorting_machine";
     public static final String   TRANSPOSER_NAME          = "transposer";
+    
     public static final String 	 ENGINE_NAME			  = "engine";
-
+    public static final String   KINECT_NAME			  = "kinect_generator";
+    public static final String   WINDMILL_NAME            = "windmill";
+    
     public static final String   BRASSINGOT_NAME          = "brass_ingot";
     public static final String   BLUEALLOYINGOT_NAME      = "blue_alloy_ingot";
     public static final String   REDALLOYINGOT_NAME       = "red_alloy_ingot";
@@ -177,6 +180,7 @@ public class Refs {
     public static final String   STONEBUNDLE_NAME         = "stone_bundle";
     public static final String   SCREWDRIVERHANDLE_NAME   = "screwdriver_handle";
     public static final String   BLOCKBUFFER_NAME         = "buffer";
+    public static final String   BLOCKDEPLOYER_NAME       = "deployer";
     public static final String   BLOCKSORTRON_NAME        = "sortron";
     public static final String   SEEDBAG_NAME             = "seed_bag";
     public static final String   CANVASBAG_NAME           = "canvas_bag";
