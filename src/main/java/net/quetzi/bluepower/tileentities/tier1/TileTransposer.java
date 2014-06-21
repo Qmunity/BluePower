@@ -24,7 +24,6 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.quetzi.bluepower.helper.IOHelper;
 import net.quetzi.bluepower.tileentities.TileMachineBase;
@@ -33,14 +32,12 @@ import java.util.List;
 
 public class TileTransposer extends TileMachineBase {
     
-    private boolean isPowered;
-    
     @Override
     public void updateEntity() {
     
         super.updateEntity();
         if (isBufferEmpty() && !worldObj.isRemote) {
-            suckEntity(worldObj, xCoord,yCoord,zCoord);
+            suckEntity();
         }
         
     }
@@ -67,22 +64,33 @@ public class TileTransposer extends TileMachineBase {
         }
     }
     
-    private void suckItems() {
-
-        if (isBufferEmpty()) {
-
-        }
-    }
-
-    private boolean suckEntity(World world, int x, int y, int z) {
-
+    private boolean suckItems() {
+        // TODO: Set bounding box correctly to do a 3x3x1 area.
         ForgeDirection direction = getFacingDirection();
-        AxisAlignedBB box = AxisAlignedBB.getBoundingBox(x + direction.offsetX, y + direction.offsetY, z + direction.offsetZ, x + direction.offsetX + 1, y + direction.offsetY + 1, z + direction.offsetZ + 1);
-        if (!world.getEntitiesWithinAABB(EntityItem.class, box).isEmpty()) {
-            for (Entity entity : (List<Entity>)world.getEntitiesWithinAABB(EntityItem.class, box)) {
+        AxisAlignedBB box = AxisAlignedBB.getBoundingBox(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ, xCoord + direction.offsetX + 1, yCoord + direction.offsetY + 1, zCoord + direction.offsetZ + 1);
+        if (!worldObj.getEntitiesWithinAABB(EntityItem.class, box).isEmpty()) {
+            for (Entity entity : (List<Entity>)worldObj.getEntitiesWithinAABB(EntityItem.class, box)) {
                 ItemStack stack = ((EntityItem)entity).getEntityItem();
                 addItemToOutputBuffer(stack);
                 entity.setDead();
+                worldObj.playSoundEffect(xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D, "random.click", 0.3F, 0.4F);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean suckEntity() {
+
+        ForgeDirection direction = getFacingDirection();
+        AxisAlignedBB box = AxisAlignedBB.getBoundingBox(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ, xCoord + direction.offsetX + 1, yCoord + direction.offsetY + 1, zCoord + direction.offsetZ + 1);
+        if (!worldObj.getEntitiesWithinAABB(EntityItem.class, box).isEmpty()) {
+            for (Entity entity : (List<Entity>)worldObj.getEntitiesWithinAABB(EntityItem.class, box)) {
+                ItemStack stack = ((EntityItem)entity).getEntityItem();
+                addItemToOutputBuffer(stack);
+                entity.setDead();
+                worldObj.playSoundEffect(xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D, "random.click", 0.3F, 0.6F);
+                return true;
             }
         }
         return false;
