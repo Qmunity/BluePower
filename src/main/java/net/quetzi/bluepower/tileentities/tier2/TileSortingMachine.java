@@ -233,6 +233,12 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
         tag.setByte("pullMode", (byte) pullMode.ordinal());
         tag.setByte("sortMode", (byte) sortMode.ordinal());
         
+        int[] colorArray = new int[colors.length];
+        for (int i = 0; i < colorArray.length; i++) {
+            colorArray[i] = colors[i].ordinal();
+        }
+        tag.setIntArray("colors", colorArray);
+        
         NBTTagList tagList = new NBTTagList();
         for (int currentIndex = 0; currentIndex < inventory.length; ++currentIndex) {
             if (inventory[currentIndex] != null) {
@@ -252,6 +258,11 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
         
         pullMode = PullMode.values()[tag.getByte("pullMode")];
         sortMode = SortMode.values()[tag.getByte("sortMode")];
+        
+        int[] colorArray = tag.getIntArray("colors");
+        for (int i = 0; i < colorArray.length; i++) {
+            colors[i] = TubeColor.values()[colorArray[i]];
+        }
         
         NBTTagList tagList = tag.getTagList("Items", 10);
         inventory = new ItemStack[40];
