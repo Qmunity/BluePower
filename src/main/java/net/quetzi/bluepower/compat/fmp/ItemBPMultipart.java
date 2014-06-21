@@ -12,6 +12,8 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -98,7 +100,25 @@ public class ItemBPMultipart extends JItemMultiPart {
     @Override
     public int getDamage(ItemStack stack) {
     
-        return 0;//PartRegistry.getStackMetadata(stack);
+        return super.getDamage(stack);// PartRegistry.getStackMetadata(stack);
+    }
+    
+    @Override
+    public boolean hasCustomEntity(ItemStack stack) {
+    
+        return PartRegistry.hasCustomItemEntity(stack);
+    }
+    
+    @Override
+    public Entity createEntity(World world, Entity location, ItemStack itemstack) {
+    
+        if (PartRegistry.hasCustomItemEntity(itemstack)) {
+            EntityItem e = PartRegistry.createItemEntityForStack(world, location.posX, location.posY, location.posZ, itemstack);
+            e.delayBeforeCanPickup = 50;
+            return e;
+        }
+        
+        return super.createEntity(world, location, itemstack);
     }
     
 }

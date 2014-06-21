@@ -17,7 +17,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
-import net.quetzi.bluepower.BluePower;
 import net.quetzi.bluepower.api.tube.IPneumaticTube;
 import net.quetzi.bluepower.api.vec.Vector3;
 import net.quetzi.bluepower.compat.CompatibilityUtils;
@@ -95,7 +94,7 @@ public class TubeLogic implements IPneumaticTube {
     
     public void update() {
     
-        clearNodeCache();
+        clearNodeCache();//TODO remove this line, which will enable node caching. Disabled for now, because I want to test stability with the non-cached system first. 
         Iterator<TubeStack> iterator = tubeStacks.iterator();
         while (iterator.hasNext()) {
             TubeStack tubeStack = iterator.next();
@@ -112,11 +111,14 @@ public class TubeLogic implements IPneumaticTube {
                         Pair<ForgeDirection, TileEntity> heading = getHeadingForItem(tubeStack, false);
                         if (heading == null) {//if no valid destination
                             for (int i = 0; i < 6; i++) {
-                                if (tube.connections[i]) {
-                                    tubeStack.heading = ForgeDirection.getOrientation(i);//just a specific direction for now.
-                                    break;
+                                TubeEdge edge = getNode().edges[i];
+                                if (edge != null) {
+                                    tubeStack.heading = ForgeDirection.getOrientation(i);//this will allow the item to ignore the color mask when there's really no option left.
+                                    if (canPassThroughMask(tubeStack.color, edge.colorMask)) {
+                                        tubeStack.heading = ForgeDirection.getOrientation(i);//just a specific direction for now.
+                                        break;
+                                    }
                                 }
-                                
                             }
                         } else {
                             tubeStack.heading = heading.getKey();
@@ -137,7 +139,13 @@ public class TubeLogic implements IPneumaticTube {
                     logic.tubeStacks.add(tubeStack);//transfer to another tube.
                     iterator.remove();
                 } else if (!this.tube.world.isRemote) {
-                    ItemStack remainder = IOHelper.insert(output, tubeStack.stack, tubeStack.heading.getOpposite(), tubeStack.color, false);
+                    ItemStack remainder = tubeStack.stack;
+                    if (output instanceof ITubeConnection && ((ITubeConnection) output).isConnectedTo(tubeStack.heading.getOpposite())) {
+                        TubeStack rem = ((ITubeConnection) output).acceptItemFromTube(tubeStack, tubeStack.heading.getOpposite(), false);
+                        if (rem != null) remainder = rem.stack;
+                        else remainder = null;
+                    }
+                    if (remainder != null) remainder = IOHelper.insert(output, tubeStack.stack, tubeStack.heading.getOpposite(), tubeStack.color, false);
                     if (remainder != null) {
                         if (injectStack(remainder, tubeStack.heading.getOpposite(), tubeStack.color, true)) {
                             tubeStack.stack = remainder;
@@ -167,7 +175,7 @@ public class TubeLogic implements IPneumaticTube {
     When the tubestack's target variable is null, this is an exporting item, meaning the returned target will be the TileEntity the item is going to transport to.
     When the tubestack's target variable is not not, the item is being retrieved to this inventory. The returned target is the inventory the item came/should come from.
     @param simulate The only difference between simulate and not simulate is the fact that the round robin handling will be updated in non-simulate.
-
+    @param from The direction this item came from, this direction will never be a valid heading. Is null in normal item routing, as the from direction IS a valid output.
     */
     private Pair<ForgeDirection, TileEntity> getHeadingForItem(TubeStack stack, boolean simulate) {
     
@@ -187,7 +195,7 @@ public class TubeLogic implements IPneumaticTube {
             for (int i = 0; i < 6; i++) {
                 if (firstRun) heading = ForgeDirection.getOrientation(i);
                 TubeEdge edge = node.edges[i];
-                if (edge != null && (stack.color == TubeColor.NONE || Integer.bitCount(edge.colorMask) == 0 || Integer.bitCount(edge.colorMask) == 1 && (edge.colorMask & 1 << stack.color.ordinal()) != 0)) {//if this item can travel through this color mask proceed. 
+                if (edge != null && canPassThroughMask(stack.color, edge.colorMask)) {//if this item can travel through this color mask proceed. 
                     Integer distance = distances.get(edge.target);
                     if (distance == null || distances.get(node) + edge.distance < distance) {
                         distances.put(edge.target, distances.get(node) + edge.distance);
@@ -234,6 +242,11 @@ public class TubeLogic implements IPneumaticTube {
         if (!simulate) roundRobinCounter++;
         if (roundRobinCounter >= validDirections.size()) roundRobinCounter = 0;
         return validDirections.get(roundRobinCounter);
+    }
+    
+    private boolean canPassThroughMask(TubeColor color, int colorMask) {
+    
+        return color == TubeColor.NONE || Integer.bitCount(colorMask) == 0 || Integer.bitCount(colorMask) == 1 && (colorMask & 1 << color.ordinal()) != 0;
     }
     
     /**
@@ -384,22 +397,13 @@ public class TubeLogic implements IPneumaticTube {
             this.target = target;
             this.targetConnectionSide = targetConnectionSide;
             this.distance = distance;
-            boolean was = colorMask > 0;
-            if (was) {
-                BluePower.log.info("---");
-                BluePower.log.info(Integer.toBinaryString(colorMask));
-            }
-            this.colorMask = colorMask;//~
-            /*  if (was) BluePower.log.info(Integer.toBinaryString(this.colorMask));
-              int mask = 65535;
-              if (was) BluePower.log.info("maks:" + Integer.toBinaryString(mask));
-              this.colorMask = this.colorMask & mask;
-              if (was) BluePower.log.info(Integer.toBinaryString(this.colorMask));*/
+            this.colorMask = colorMask;
         }
         
         public boolean isValidForExportItem(ItemStack stack) {
         
             if (target.target instanceof PneumaticTube) return false;
+            if (target.target instanceof IWeightedTubeInventory && ((IWeightedTubeInventory) target.target).getWeight(targetConnectionSide) > 10000) return true;
             ItemStack remainder = IOHelper.insert((TileEntity) target.target, stack.copy(), targetConnectionSide.getOpposite(), true);
             return remainder == null || remainder.stackSize < stack.stackSize;
         }

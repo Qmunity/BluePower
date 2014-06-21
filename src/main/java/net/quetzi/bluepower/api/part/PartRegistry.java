@@ -19,9 +19,11 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
 import net.quetzi.bluepower.init.BPItems;
 import net.quetzi.bluepower.part.cable.RedAlloyWire;
 import net.quetzi.bluepower.part.gate.GateAnd;
@@ -245,6 +247,28 @@ public class PartRegistry {
         return i;
     }
     
+    public static boolean hasCustomItemEntity(ItemStack is) {
+    
+        String id = getPartIdFromItem(is);
+        BPPart part = samples.get(id);
+        return part != null && part.hasCustomItemEntity();
+    }
+    
+    public static EntityItem createItemEntityForPart(String id, World w, double x, double y, double z, ItemStack item) {
+    
+        BPPart part = samples.get(id);
+        if (part == null) return null;
+        return part.createItemEntity(w, x, y, z, item);
+    }
+    
+    public static EntityItem createItemEntityForStack(World w, double x, double y, double z, ItemStack item) {
+    
+        String id = getPartIdFromItem(item);
+        BPPart part = samples.get(id);
+        if (part == null) return null;
+        return part.createItemEntity(w, x, y, z, item);
+    }
+    
     public static void init() {
     
         ICON_PART = "timer";
@@ -263,15 +287,19 @@ public class PartRegistry {
         registerPart(GateRandomizer.class);
         
         // Lamps
-        for (int i = 0; i < ItemDye.field_150922_c.length; i++) {
+        for (int i = 0; i < ItemDye.field_150922_c.length; i++)
             registerPart(PartCageLamp.class, ItemDye.field_150921_b[i].toLowerCase(), ItemDye.field_150922_c[i], false);
+        for (int i = 0; i < ItemDye.field_150922_c.length; i++)
             registerPart(PartLamp.class, ItemDye.field_150921_b[i].toLowerCase(), ItemDye.field_150922_c[i], false);
+        for (int i = 0; i < ItemDye.field_150922_c.length; i++)
             registerPart(PartFixture.class, ItemDye.field_150921_b[i].toLowerCase(), ItemDye.field_150922_c[i], false);
-            
+        
+        for (int i = 0; i < ItemDye.field_150922_c.length; i++)
             registerPart(PartCageLamp.class, ItemDye.field_150921_b[i].toLowerCase(), ItemDye.field_150922_c[i], true);
+        for (int i = 0; i < ItemDye.field_150922_c.length; i++)
             registerPart(PartLamp.class, ItemDye.field_150921_b[i].toLowerCase(), ItemDye.field_150922_c[i], true);
+        for (int i = 0; i < ItemDye.field_150922_c.length; i++)
             registerPart(PartFixture.class, ItemDye.field_150921_b[i].toLowerCase(), ItemDye.field_150922_c[i], true);
-        }
         
         // Pneumatic Tubes
         registerPart(PneumaticTube.class);

@@ -21,7 +21,6 @@ package net.quetzi.bluepower.client.gui.widget;
  */
 public class WidgetMode extends BaseWidget {
     
-    public int       value = 0;
     public final int maxMode;
     
     public WidgetMode(int id, int x, int y, int textureX, int maxMode, String texture) {
