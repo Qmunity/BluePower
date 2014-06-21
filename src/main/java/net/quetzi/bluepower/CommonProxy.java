@@ -33,4 +33,9 @@ public class CommonProxy {
     
         return null;
     }
+    
+    public boolean isSneakingInGui() {
+    
+        return false;
+    }
 }

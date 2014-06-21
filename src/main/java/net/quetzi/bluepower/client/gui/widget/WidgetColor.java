@@ -56,13 +56,12 @@ public class WidgetColor extends BaseWidget {
     }
     
     @Override
-    public void addTooltip(List<String> curTooltip) {
+    public void addTooltip(List<String> curTooltip, boolean shiftPressed) {
     
-        curTooltip.add("Paint item:");
         if (value < 16) {
-            curTooltip.add(ItemDye.field_150923_a[value]);
+            curTooltip.add("gui.widget.color." + ItemDye.field_150923_a[value]);
         } else {
-            curTooltip.add("None");
+            curTooltip.add("gui.widget.color.none");
         }
     }
     

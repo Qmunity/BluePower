@@ -17,11 +17,15 @@
 
 package net.quetzi.bluepower;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.MinecraftForge;
 import net.quetzi.bluepower.client.renderers.IconSupplier;
 import net.quetzi.bluepower.client.renderers.Renderers;
+
+import org.lwjgl.input.Keyboard;
+
 import cpw.mods.fml.client.FMLClientHandler;
 
 public class ClientProxy extends CommonProxy {
@@ -42,6 +46,12 @@ public class ClientProxy extends CommonProxy {
     public EntityPlayer getPlayer() {
     
         return FMLClientHandler.instance().getClientPlayerEntity();
+    }
+    
+    @Override
+    public boolean isSneakingInGui() {
+    
+        return Keyboard.isKeyDown(Minecraft.getMinecraft().gameSettings.keyBindSneak.getKeyCode());
     }
     
     public static GuiScreen getOpenedGui() {

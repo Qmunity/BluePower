@@ -33,7 +33,7 @@ public class WidgetMode extends BaseWidget {
     public void onMouseClicked(int mouseX, int mouseY, int button) {
     
         if (button == 0) {
-            if (++value > maxMode) value = 0;
+            if (++value >= maxMode) value = 0;
         } else if (button == 1) {
             if (--value < 0) value = 16;
         }

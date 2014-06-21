@@ -52,7 +52,7 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
     }
     
     public enum SortMode {
-        ANYSTACK_SEQUENTIAL("any_stack_sequential"), ALLSTACK_SEQUENTIAL("all_stack_sequential"), RANDOM_ALLSTACKS("all_stacks_random"), ANY_ITEM("any_item"), ANY_ITEM_DEFAULT("any_item_default"), ANY_STACK("any_stack"), ANY_STACK_DEFAULT("any_stack_default");
+        ANYSTACK_SEQUENTIAL("any_stack_sequential"), ALLSTACK_SEQUENTIAL("all_stacks_sequential"), RANDOM_ALLSTACKS("all_stacks_random"), ANY_ITEM("any_item"), ANY_ITEM_DEFAULT("any_item_default"), ANY_STACK("any_stack"), ANY_STACK_DEFAULT("any_stack_default");
         
         private final String name;
         
@@ -81,6 +81,7 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
     @Override
     protected void redstoneChanged(boolean newValue) {
     
+        super.redstoneChanged(newValue);
         if (newValue) {
             if (pullMode == PullMode.SINGLE_STEP) triggerSorting();
             if (pullMode == PullMode.SINGLE_SWEEP) sweepTriggered = true;
