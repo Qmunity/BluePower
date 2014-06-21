@@ -59,10 +59,10 @@ public class BlockSortron extends BlockContainerBase {
             return icons[0];
         } else if (dir.getOpposite().ordinal() == side) {
             return icons[1];
-        } else if (tile.showOutPutAnimation()) { // && isPowered
-            return icons[4];
         } else if ((side == 1 && dir.ordinal() != 1 && dir.getOpposite().ordinal() != 1) || (side == 3 && (dir.ordinal() == 1 || dir.getOpposite().ordinal() == 1))) { // && isPowered
             return icons[6];
+        } else if (tile.showOutPutAnimation()) { // && isPowered
+            return icons[4];
         } else { // && isPowered
             return icons[3];
         }
