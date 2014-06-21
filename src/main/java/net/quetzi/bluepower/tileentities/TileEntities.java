@@ -17,15 +17,7 @@
 
 package net.quetzi.bluepower.tileentities;
 
-import net.quetzi.bluepower.tileentities.tier1.TileAlloyFurnace;
-import net.quetzi.bluepower.tileentities.tier1.TileBlockBreaker;
-import net.quetzi.bluepower.tileentities.tier1.TileBuffer;
-import net.quetzi.bluepower.tileentities.tier1.TileDeployer;
-import net.quetzi.bluepower.tileentities.tier1.TileEngine;
-import net.quetzi.bluepower.tileentities.tier1.TileIgniter;
-import net.quetzi.bluepower.tileentities.tier1.TileKinectGenerator;
-import net.quetzi.bluepower.tileentities.tier1.TileTransposer;
-import net.quetzi.bluepower.tileentities.tier1.TileWindmill;
+import net.quetzi.bluepower.tileentities.tier1.*;
 import net.quetzi.bluepower.tileentities.tier2.TileSortingMachine;
 import net.quetzi.bluepower.tileentities.tier3.TileCPU;
 import net.quetzi.bluepower.tileentities.tier3.TileDiskDrive;
@@ -56,5 +48,7 @@ public class TileEntities {
         GameRegistry.registerTileEntity(TileWindmill.class, "windmill");
         GameRegistry.registerTileEntity(TileKinectGenerator.class, "kinectgenerator");
         GameRegistry.registerTileEntity(TileDeployer.class, "deployer");
+        GameRegistry.registerTileEntity(TileEjector.class, "ejector");
+        GameRegistry.registerTileEntity(TileRelay.class, "relay");
     }
 }
