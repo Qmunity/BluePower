@@ -19,7 +19,6 @@ package net.quetzi.bluepower.init;
 
 import net.minecraft.block.Block;
 import net.quetzi.bluepower.blocks.BlockBuffer;
-import net.quetzi.bluepower.blocks.BlockEngine;
 import net.quetzi.bluepower.blocks.BlockItemOre;
 import net.quetzi.bluepower.blocks.computer.BlockCPU;
 import net.quetzi.bluepower.blocks.computer.BlockDiskDrive;
@@ -27,11 +26,15 @@ import net.quetzi.bluepower.blocks.computer.BlockIOExpander;
 import net.quetzi.bluepower.blocks.computer.BlockMonitor;
 import net.quetzi.bluepower.blocks.machines.BlockAlloyFurnace;
 import net.quetzi.bluepower.blocks.machines.BlockBlockBreaker;
+import net.quetzi.bluepower.blocks.machines.BlockDeployer;
+import net.quetzi.bluepower.blocks.machines.BlockEngine;
 import net.quetzi.bluepower.blocks.machines.BlockIgniter;
+import net.quetzi.bluepower.blocks.machines.BlockKinectGenerator;
 import net.quetzi.bluepower.blocks.machines.BlockProjectTable;
 import net.quetzi.bluepower.blocks.machines.BlockSortingMachine;
 import net.quetzi.bluepower.blocks.machines.BlockSortron;
 import net.quetzi.bluepower.blocks.machines.BlockTransposer;
+import net.quetzi.bluepower.blocks.machines.BlockWindmill;
 import net.quetzi.bluepower.blocks.worldgen.BlockCrackedBasalt;
 import net.quetzi.bluepower.blocks.worldgen.BlockCrop;
 import net.quetzi.bluepower.blocks.worldgen.BlockCustomFlower;
@@ -87,6 +90,7 @@ public class BPBlocks {
     public static Block block_breaker;
     public static Block igniter;
     public static Block buffer;
+    public static Block Deployer;
     public static Block transposer;
     public static Block sorting_machine;
     public static Block sortron;
@@ -100,7 +104,8 @@ public class BPBlocks {
     public static Block multipart;          // DO NOT GENERATE OR REMOVE THIS BLOCK!
 
     public static Block engine;
-
+    public static Block KinectGenerator;
+    public static Block Windmill;
     public static void init() {
 
         basalt = new BlockStoneOre(Refs.BASALT_NAME);
@@ -145,6 +150,7 @@ public class BPBlocks {
         block_breaker = new BlockBlockBreaker();
         igniter = new BlockIgniter();
         buffer = new BlockBuffer();
+        Deployer = new BlockDeployer();
         project_table = new BlockProjectTable();
         transposer = new BlockTransposer();
 
@@ -154,6 +160,9 @@ public class BPBlocks {
         io_expander = new BlockIOExpander();
 
         engine = new BlockEngine();
+        KinectGenerator = new BlockKinectGenerator();
+        Windmill = new BlockWindmill();
+        
         registerBlocks();
         initModDependantBlocks();
     }
@@ -203,7 +212,7 @@ public class BPBlocks {
         GameRegistry.registerBlock(block_breaker, Refs.BLOCKBREAKER_NAME);
         GameRegistry.registerBlock(igniter, Refs.BLOCKIGNITER_NAME);
         GameRegistry.registerBlock(buffer, Refs.BLOCKBUFFER_NAME);
-        
+        GameRegistry.registerBlock(Deployer, Refs.BLOCKDEPLOYER_NAME);
         GameRegistry.registerBlock(project_table, Refs.PROJECTTABLE_NAME);
         GameRegistry.registerBlock(transposer, Refs.TRANSPOSER_NAME);
 
@@ -213,6 +222,8 @@ public class BPBlocks {
         GameRegistry.registerBlock(io_expander, Refs.BLOCKIOEXPANDER_NAME);
 
         GameRegistry.registerBlock(engine, Refs.ENGINE_NAME);
+        GameRegistry.registerBlock(KinectGenerator, Refs.KINECT_NAME);
+        GameRegistry.registerBlock(Windmill, "windmill");
     }
 
     private static void initModDependantBlocks() {

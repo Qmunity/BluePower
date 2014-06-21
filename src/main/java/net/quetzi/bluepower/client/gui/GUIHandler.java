@@ -24,8 +24,10 @@ import net.quetzi.bluepower.containers.ContainerAlloyFurnace;
 import net.quetzi.bluepower.containers.ContainerBuffer;
 import net.quetzi.bluepower.containers.ContainerCPU;
 import net.quetzi.bluepower.containers.ContainerCanvasBag;
+import net.quetzi.bluepower.containers.ContainerDeployer;
 import net.quetzi.bluepower.containers.ContainerDiskDrive;
 import net.quetzi.bluepower.containers.ContainerIOExpander;
+import net.quetzi.bluepower.containers.ContainerKinect;
 import net.quetzi.bluepower.containers.ContainerMonitor;
 import net.quetzi.bluepower.containers.ContainerRedbusID;
 import net.quetzi.bluepower.containers.ContainerSortingMachine;
@@ -38,6 +40,8 @@ import net.quetzi.bluepower.items.ItemSeedBag;
 import net.quetzi.bluepower.references.GuiIDs;
 import net.quetzi.bluepower.tileentities.tier1.TileAlloyFurnace;
 import net.quetzi.bluepower.tileentities.tier1.TileBuffer;
+import net.quetzi.bluepower.tileentities.tier1.TileDeployer;
+import net.quetzi.bluepower.tileentities.tier1.TileKinectGenerator;
 import net.quetzi.bluepower.tileentities.tier2.TileSortingMachine;
 import net.quetzi.bluepower.tileentities.tier3.IRedBusWindow;
 import net.quetzi.bluepower.tileentities.tier3.TileCPU;
@@ -92,7 +96,11 @@ public class GUIHandler implements IGuiHandler {
             	
             case REDBUS_ID:
             	return new ContainerRedbusID(player.inventory, (IRedBusWindow) ent);
-            
+            	
+            case KINECT_ID:
+            	return new ContainerKinect(player.inventory, (TileKinectGenerator) ent);
+            case DEPLOYER_ID:
+            	return new ContainerDeployer(player.inventory, (TileDeployer) ent);
             default:
                 break;
         }
@@ -140,6 +148,10 @@ public class GUIHandler implements IGuiHandler {
             	return new GuiIOExpander(player.inventory, (TileIOExpander) ent);
             case REDBUS_ID:
             	return new GuiRedbusID(player.inventory, (IRedBusWindow) ent);
+            case KINECT_ID:
+            	return new GuiKinect(player.inventory, (TileKinectGenerator) ent);
+            case DEPLOYER_ID:
+            	return new GuiDeployer(player.inventory, (TileDeployer) ent);
             default:
                 break;
         }
