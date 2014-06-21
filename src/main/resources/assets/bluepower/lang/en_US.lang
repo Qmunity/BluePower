@@ -286,6 +286,9 @@ itemGroup.tabBluePowerTools=Blue Power Tools
 itemGroup.tabBluePowerCircuits=Blue Power Logic Gates
 itemGroup.tabBluePowerLighting=Blue Power Lighting
 
+enchantment.vorpal.name=Vorpal
+enchantment.disjunction.name=Disjunction
+
 gui.timerInterval=Timer Interval
 gui.counterMax=Maximum
 gui.counterIncrement=Increment
