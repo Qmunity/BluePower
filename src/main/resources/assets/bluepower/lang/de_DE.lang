@@ -87,7 +87,7 @@ item.ruby_shovel.name=Rubinschaufel
 item.ruby_axe.name=Rubinaxt
 item.ruby_pickaxe.name=Rubinspitzhacke
 item.ruby_hoe.name=Rubinhacke
-item.ruby_sickle.name=Rubysichel
+item.ruby_sickle.name=Rubinsichel
 
 item.sapphire_sword.name=Saphirschwert
 item.sapphire_shovel.name=Saphirschaufel
@@ -130,6 +130,8 @@ item.stone_cathode.name=Steinkathode
 item.stone_pointer.name=Steinzeiger
 item.silicon_chip.name=Silikon Chip
 
+enchantment.vorpal.name=K\u00FCpfen
+enchantment.disjunction.name=Disjunktion
 
 itemGroup.tabBluePowerMachines=Blue Power Machines
 itemGroup.tabBluePowerBlocks=Blue Power Blocks
