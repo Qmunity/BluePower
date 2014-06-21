@@ -79,23 +79,24 @@ public class IOHelper {
         
     }
     
-    public static ItemStack extractOneItem(TileEntity inputTE, ForgeDirection dir) {
+    public static ItemStack extractOneItem(TileEntity tile, ForgeDirection dir) {
     
-        if (inputTE instanceof IInventory) {
-            IInventory inputInv = (IInventory) inputTE;
+        if (tile instanceof IInventory) {
+            IInventory inv = (IInventory) tile;
             int[] accessibleSlots;
-            if (inputInv instanceof ISidedInventory) {
-                accessibleSlots = ((ISidedInventory) inputInv).getAccessibleSlotsFromSide(dir.ordinal());
+            if (inv instanceof ISidedInventory) {
+                accessibleSlots = ((ISidedInventory) inv).getAccessibleSlotsFromSide(dir.ordinal());
             } else {
-                accessibleSlots = new int[inputInv.getSizeInventory()];
+                accessibleSlots = new int[inv.getSizeInventory()];
                 for (int i = 0; i < accessibleSlots.length; i++)
                     accessibleSlots[i] = i;
             }
             for (int slot : accessibleSlots) {
-                ItemStack stack = inputInv.getStackInSlot(slot);
-                if (stack != null && IOHelper.canExtractItemFromInventory(inputInv, stack, slot, dir.ordinal())) {
+                ItemStack stack = inv.getStackInSlot(slot);
+                if (stack != null && IOHelper.canExtractItemFromInventory(inv, stack, slot, dir.ordinal())) {
                     ItemStack ret = stack.splitStack(1);
-                    if (stack.stackSize == 0) inputInv.setInventorySlotContents(slot, null);
+                    if (stack.stackSize == 0) inv.setInventorySlotContents(slot, null);
+                    tile.markDirty();
                     return ret;
                 }
             }

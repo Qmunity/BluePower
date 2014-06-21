@@ -27,31 +27,31 @@ import net.minecraftforge.common.util.ForgeDirection;
 import net.quetzi.bluepower.tileentities.TileBase;
 
 public class TileBuffer extends TileBase implements ISidedInventory {
-
+    
     private final ItemStack[] allInventories = new ItemStack[20];
-
+    
     /**
      * This function gets called whenever the world/chunk loads
      */
     @Override
     public void readFromNBT(NBTTagCompound tCompound) {
-
+    
         super.readFromNBT(tCompound);
-
+        
         for (int i = 0; i < 20; i++) {
             NBTTagCompound tc = tCompound.getCompoundTag("inventory" + i);
             allInventories[i] = ItemStack.loadItemStackFromNBT(tc);
         }
     }
-
+    
     /**
      * This function gets called whenever the world/chunk is saved
      */
     @Override
     public void writeToNBT(NBTTagCompound tCompound) {
-
+    
         super.writeToNBT(tCompound);
-
+        
         for (int i = 0; i < 20; i++) {
             if (allInventories[i] != null) {
                 NBTTagCompound tc = new NBTTagCompound();
@@ -60,22 +60,22 @@ public class TileBuffer extends TileBase implements ISidedInventory {
             }
         }
     }
-
+    
     @Override
     public int getSizeInventory() {
-
+    
         return allInventories.length;
     }
-
+    
     @Override
     public ItemStack getStackInSlot(int i) {
-
-        return this.allInventories[i];
+    
+        return allInventories[i];
     }
-
+    
     @Override
     public ItemStack decrStackSize(int slot, int amount) {
-
+    
         // this needs to be side aware as well
         ItemStack itemStack = getStackInSlot(slot);
         if (itemStack != null) {
@@ -88,75 +88,84 @@ public class TileBuffer extends TileBase implements ISidedInventory {
                 }
             }
         }
-
+        
         return itemStack;
     }
-
+    
     @Override
     public ItemStack getStackInSlotOnClosing(int i) {
-
+    
         return getStackInSlot(i);
     }
-
+    
     @Override
     public void setInventorySlotContents(int i, ItemStack itemStack) {
-
-        this.allInventories[i] = itemStack;
+    
+        allInventories[i] = itemStack;
         worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
     }
-
+    
     @Override
     public String getInventoryName() {
-
+    
         return "tile.buffer.name";
     }
-
+    
     @Override
     public boolean hasCustomInventoryName() {
-
+    
         return true;
     }
-
+    
     @Override
     public int getInventoryStackLimit() {
-
+    
         return 64;
     }
-
+    
     @Override
     public boolean isUseableByPlayer(EntityPlayer player) {
-
+    
         return true;
     }
-
+    
     @Override
     public void openInventory() {
-
+    
     }
-
+    
     @Override
     public void closeInventory() {
-
+    
     }
-
+    
     @Override
     public boolean isItemValidForSlot(int i, ItemStack itemStack) {
-
+    
         return true;
     }
-
+    
     @Override
     public List<ItemStack> getDrops() {
-
+    
         List<ItemStack> drops = super.getDrops();
         for (ItemStack stack : allInventories)
             if (stack != null) drops.add(stack);
         return drops;
     }
-
+    
     @Override
     public int[] getAccessibleSlotsFromSide(int var1) {
-
+    
+        ForgeDirection access = ForgeDirection.getOrientation(var1);
+        ForgeDirection dir = ForgeDirection.getOrientation(getBlockMetadata());
+        if (access == dir) {
+            int[] allSlots = new int[allInventories.length];
+            for (int i = 0; i < allSlots.length; i++)
+                allSlots[i] = i;
+            return allSlots;
+        }
+        
         if (ForgeDirection.getOrientation(var1) == ForgeDirection.DOWN) {
             return new int[] { 0, 5, 10, 15 };
         } else if (ForgeDirection.getOrientation(var1) == ForgeDirection.NORTH) {
@@ -165,25 +174,23 @@ public class TileBuffer extends TileBase implements ISidedInventory {
             return new int[] { 2, 7, 12, 17 };
         } else if (ForgeDirection.getOrientation(var1) == ForgeDirection.EAST) {
             return new int[] { 3, 8, 13, 18 };
-        } else if (ForgeDirection.getOrientation(var1) == ForgeDirection.WEST) { 
-            return new int[] { 4, 9, 14, 19 };
-        }
+        } else if (ForgeDirection.getOrientation(var1) == ForgeDirection.WEST) { return new int[] { 4, 9, 14, 19 }; }
         return new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19 };
     }
-
+    
     @Override
     public boolean canInsertItem(int slot, ItemStack itemStack, int side) {
-
-        for (int i : this.getAccessibleSlotsFromSide(side)) {
+    
+        for (int i : getAccessibleSlotsFromSide(side)) {
             if (slot == i) { return true; }
         }
         return false;
     }
-
+    
     @Override
     public boolean canExtractItem(int slot, ItemStack itemStack, int side) {
-
-        for (int i : this.getAccessibleSlotsFromSide(side)) {
+    
+        for (int i : getAccessibleSlotsFromSide(side)) {
             if (slot == i) { return true; }
         }
         return false;

@@ -17,6 +17,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
+import net.quetzi.bluepower.BluePower;
 import net.quetzi.bluepower.api.tube.IPneumaticTube;
 import net.quetzi.bluepower.api.vec.Vector3;
 import net.quetzi.bluepower.compat.CompatibilityUtils;
@@ -198,6 +199,7 @@ public class TubeLogic implements IPneumaticTube {
                 if (edge != null && canPassThroughMask(stack.color, edge.colorMask)) {//if this item can travel through this color mask proceed. 
                     Integer distance = distances.get(edge.target);
                     if (distance == null || distances.get(node) + edge.distance < distance) {
+                        if (distance != null) BluePower.log.info("old: " + distance + ", new: " + (distances.get(node) + edge.distance));
                         distances.put(edge.target, distances.get(node) + edge.distance);
                         if (edge.target.target instanceof PneumaticTube) {
                             traversingNodes.add(edge.target);
