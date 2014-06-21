@@ -99,7 +99,7 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
                 IInventory inputInv = (IInventory) inputTE;
                 int[] accessibleSlots;
                 if (inputInv instanceof ISidedInventory) {
-                    accessibleSlots = ((ISidedInventory) inputInv).getAccessibleSlotsFromSide(dir.ordinal());
+                    accessibleSlots = ((ISidedInventory) inputInv).getAccessibleSlotsFromSide(dir.getOpposite().ordinal());
                 } else {
                     accessibleSlots = new int[inputInv.getSizeInventory()];
                     for (int i = 0; i < accessibleSlots.length; i++)
@@ -108,7 +108,7 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
                 boolean[] satisfiedFilters = new boolean[5];
                 for (int slot : accessibleSlots) {
                     ItemStack stack = inputInv.getStackInSlot(slot);
-                    if (stack != null && IOHelper.canExtractItemFromInventory(inputInv, stack, slot, dir.ordinal())) {
+                    if (stack != null && IOHelper.canExtractItemFromInventory(inputInv, stack, slot, dir.getOpposite().ordinal())) {
                         if (tryProcessItem(stack)) {
                             if (stack.stackSize == 0) inputInv.setInventorySlotContents(slot, null);
                             return;

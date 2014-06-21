@@ -19,6 +19,8 @@ package net.quetzi.bluepower.client.gui;
 
 import java.util.List;
 
+import net.minecraft.client.gui.Gui;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.quetzi.bluepower.client.gui.widget.BaseWidget;
@@ -114,7 +116,7 @@ public class GuiSortingMachine extends GuiBase {
     
         super.drawGuiContainerForegroundLayer(mouseX, mouseY);
         // fontRenderer.drawString(pump.getInvName(), 8, 6, 0xFFFFFF);
-        drawHorizontalAlignedString(7, 3, xSize - 14, sortingMachine.getInventoryName(), true);
+        drawHorizontalAlignedString(7, 6, xSize - 14, I18n.format("tile." + sortingMachine.getInventoryName() + ".name"), false);
         
     }
     
@@ -123,6 +125,7 @@ public class GuiSortingMachine extends GuiBase {
     
         super.drawGuiContainerBackgroundLayer(f, i, j);
         
+        Gui.func_146110_a(guiLeft + 24 + sortingMachine.curColumn * 18, guiTop + 16, 176, 0, 20, 92, 256, 256);
     }
     
 }

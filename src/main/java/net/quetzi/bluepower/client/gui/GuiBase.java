@@ -97,6 +97,10 @@ public class GuiBase extends GuiContainer implements IWidgetListener {
         int y = (height - ySize) / 2;
         
         drawTexturedModalRect(x, y, 0, 0, xSize, ySize);
+        
+        for (IGuiWidget widget : widgets) {
+            widget.render(i, j);
+        }
     }
     
     @Override
@@ -106,7 +110,6 @@ public class GuiBase extends GuiContainer implements IWidgetListener {
         List<String> tooltip = new ArrayList<String>();
         boolean shift = BluePower.proxy.isSneakingInGui();
         for (IGuiWidget widget : widgets) {
-            widget.render(x, y);
             if (widget.getBounds().contains(x, y)) widget.addTooltip(tooltip, shift);
         }
         if (!tooltip.isEmpty()) {
