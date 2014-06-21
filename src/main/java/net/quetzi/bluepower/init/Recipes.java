@@ -156,6 +156,10 @@ public class Recipes {
         craftManager.addRecipe(new ItemStack(BPBlocks.alloy_furnace, 1), new Object[] { "###", "# #", "###", '#', Blocks.brick_block });
         craftManager.addRecipe(new ItemStack(BPBlocks.block_breaker, 1), new Object[] { "#A#", "#P#", "#R#", '#', Blocks.cobblestone, 'A', Items.iron_pickaxe, 'P', Blocks.piston, 'R', Items.redstone });
         craftManager.addRecipe(new ItemStack(BPBlocks.buffer, 1), new Object[] { "#P#", "P P", "#P#", '#', Blocks.iron_bars, 'P', Blocks.planks });
+        craftManager.addRecipe(new ItemStack(BPBlocks.ejector, 1), new Object[] { "PBP", "PTP", "#R#", '#', Blocks.cobblestone, 'P', Blocks.planks, 'B', BPBlocks.buffer, 'T', BPBlocks.transposer, 'R', Items.redstone });
+        craftManager.addRecipe(new ItemStack(BPBlocks.relay, 1), new Object[] { "PBP", "PTP", "#W#", '#', Blocks.cobblestone, 'P', Blocks.planks, 'B', BPBlocks.buffer, 'T', BPBlocks.transposer, 'W', BPItems.red_doped_wafer });
+        craftManager.addRecipe(new ItemStack(BPBlocks.transposer, 1), new Object[] { "###", "WPW", "#R#", '#', Blocks.cobblestone, 'P', Blocks.piston, 'R', Items.redstone });
+
         craftManager.addRecipe(new ItemStack(BPItems.canvas, 1), new Object[] { "SSS", "S S", "SSS", 'S', Items.string });
         craftManager.addRecipe(new ItemStack(BPItems.seedBag, 1), new Object[] { " S ", "C C", "CCC", 'S', Items.string, 'C', BPItems.canvas });
         craftManager.addRecipe(new ItemStack(BPItems.canvas_bag, 1, 0), new Object[] { "SSS", "S S", "SSS", 'S', BPItems.canvas });

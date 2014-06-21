@@ -71,8 +71,8 @@ public class ContainerRelay extends Container {
             ItemStack itemstack1 = slot.getStack();
             itemstack = itemstack1.copy();
             if (par2 < 20) {
-                if (!mergeItemStack(itemstack1, 20, 56, true)) return null;
-            } else if (!mergeItemStack(itemstack1, 0, 20, false)) { return null; }
+                if (!mergeItemStack(itemstack1, 9, 45, true)) return null;
+            } else if (!mergeItemStack(itemstack1, 0, 9, false)) { return null; }
             if (itemstack1.stackSize == 0) {
                 slot.putStack(null);
             } else {
