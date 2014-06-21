@@ -244,7 +244,7 @@ public class TileCPU extends TileBase implements IRedBusWindow {
 			invalid(opcode);
 			break;
 		case 0x1A:// 65C02 INC A
-			invalid(opcode);
+			opINC(this.reg_A);
 			break;
 		case 0x1B:// 65EL02 RHX
 			invalid(opcode);
@@ -344,7 +344,7 @@ public class TileCPU extends TileBase implements IRedBusWindow {
 			invalid(opcode);
 			break;
 		case 0x3A:// 65C02 DEC A
-			invalid(opcode); 
+			opDEC(this.reg_A); 
 			break;
 		case 0x3B:// 65EL02 RLX
 			invalid(opcode);
@@ -782,7 +782,7 @@ public class TileCPU extends TileBase implements IRedBusWindow {
 			invalid(opcode);
 			break;
 		case 0xC6:// 6502 DEC zeropage
-			invalid(opcode);
+			opDEC(AddressMode.ZEROPAGE);
 			break;
 		case 0xC7:// 65EL02 CMP r,R
 			invalid(opcode);
@@ -806,7 +806,7 @@ public class TileCPU extends TileBase implements IRedBusWindow {
 			invalid(opcode);
 			break;
 		case 0xCE:// 6502 DEC absolute
-			invalid(opcode);
+			opDEC(AddressMode.ABSOLUTE);
 			break;
 		case 0xCF:// 65EL02 PLD
 			invalid(opcode);
@@ -832,7 +832,7 @@ public class TileCPU extends TileBase implements IRedBusWindow {
 			invalid(opcode);
 			break;
 		case 0xD6:// 6502 DEC zeropage, X
-			invalid(opcode);
+			opDEC(AddressMode.ZEROPAGE,this.reg_X);
 			break;
 		case 0xD7:// 65EL02 CMP (r, R), Y
 			invalid(opcode);
@@ -856,7 +856,7 @@ public class TileCPU extends TileBase implements IRedBusWindow {
 			invalid(opcode);
 			break;
 		case 0xDE:// 6502 DEC absolute, X
-			invalid(opcode);
+			opDEC(AddressMode.ABSOLUTE,this.reg_X);
 			break;
 		case 0xDF:// 65EL02 PHD
 			invalid(opcode);
@@ -882,7 +882,7 @@ public class TileCPU extends TileBase implements IRedBusWindow {
 			invalid(opcode);
 			break;
 		case 0xE6:// 6502 INC zeropage
-			invalid(opcode);
+			opINC(AddressMode.ZEROPAGE);
 			break;
 		case 0xE7:// 65EL02 SBC r, R
 			invalid(opcode);
@@ -907,7 +907,7 @@ public class TileCPU extends TileBase implements IRedBusWindow {
 			invalid(opcode);
 			break;
 		case 0xEE:// 6502 INC absolute
-			invalid(opcode);
+			opINC(AddressMode.ABSOLUTE);
 			break;
 		case 0xEF:// 65EL02 MMU
 			opMMU(readMemory(this.programCounter));
@@ -933,7 +933,7 @@ public class TileCPU extends TileBase implements IRedBusWindow {
 			invalid(opcode);
 			break;
 		case 0xF6:// 6502 INC zeropage,X
-			invalid(opcode);
+			opINC(AddressMode.ZEROPAGE,this.reg_X);
 			break;
 		case 0xF7:// 65EL02 SBC (r,R),Y
 			invalid(opcode);
@@ -957,7 +957,7 @@ public class TileCPU extends TileBase implements IRedBusWindow {
 			invalid(opcode);
 			break;
 		case 0xFE:// 6502 INC absolute,X
-			invalid(opcode);
+			opINC(AddressMode.ABSOLUTE,this.reg_X);
 			break;
 		case 0xFF:// invalid
 			invalid(opcode);
@@ -1153,13 +1153,61 @@ public class TileCPU extends TileBase implements IRedBusWindow {
 		// transfer X to stack pointer
 		this.stackPointer = this.reg_X;
 	}
+	
+	private void opINC(AddressMode mode) {
+		
+	}
+	private void opINC(AddressMode mode, int offset) {
+		
+	}
+	private void opINC(int pc){
+		int i = readMemory(pc);
+		i = i + 1 & maskMemory();
+		writeMemory(pc, i);
+		setArithmeticFlags(i);
+	}
+	
+	private void opDEC(AddressMode mode) {
+		
+	}
+	private void opDEC(AddressMode mode, int offset) {
+		
+	}
+	private void opDEC(int pc){
+		int i = readMemory(pc);
+		i = i - 1 & maskMemory();
+		writeMemory(pc, i);
+		setArithmeticFlags(i);
+	}
+	
+	private void setArithmeticFlags(int reg) {
+        this.flag_Z = (reg == 0);
+        this.flag_N = (reg & 0x80) != 0;
+    }
 
 	private int readMemory(int pc) {
 		//TODO: redbus memory
 		if (pc < memory.length) {//do not try to access more memory than we have.
-			return (int)this.memory[pc] & 0xFF;
+			return (int)this.memory[pc] & 0xFF;//TODO: likely issues with forcing 8bit mod here
 		}
 		//TODO: throw error here
+		return 0;
+	}
+	private void writeMemory(int pc, int data) {
+		//TODO: redbus memory
+		if (pc < memory.length) {//do not try to access more memory than we have.
+			this.memory[pc] =  (byte)(data & 0xFF);//TODO: likely issues with forcing 8bit mod here
+			return;
+		}
+		//TODO: throw error here
+		return;
+	}
+	
+	private int maskMemory() {//TODO: maybe faster to simply change a stored int whenever 8/16it mode is toggled.
+		if (this.flag_M) return 255;// 8 bit
+		else return 65535;// 16 bit
+	}
+	private int decodeMemoryMode () {
 		return 0;
 	}
 	
@@ -1176,4 +1224,9 @@ public class TileCPU extends TileBase implements IRedBusWindow {
 		this.halt = true;
 		BluePower.log.error("BluePower CPU, Invalid OP code:"+Integer.toHexString(op));
 	}
+	
+	public static enum AddressMode{
+		ABSOLUTE, INDIRECT, RELATIVE, ZEROPAGE
+	}
 }
+
