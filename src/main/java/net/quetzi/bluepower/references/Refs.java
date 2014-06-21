@@ -78,6 +78,8 @@ public class Refs {
     public static final String   BLOCKBREAKER_NAME        = "block_breaker";
     public static final String   SORTING_MACHINE_NAME     = "sorting_machine";
     public static final String   TRANSPOSER_NAME          = "transposer";
+    public static final String   EJECTOR_NAME             = "ejector";
+    public static final String   RELAY_NAME               = "relay";
     
     public static final String 	 ENGINE_NAME			  = "engine";
     public static final String   KINECT_NAME			  = "kinect_generator";
