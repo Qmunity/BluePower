@@ -20,6 +20,18 @@ canvas(done)
 
 paint_brush (instead of all 16 types you could make one base texture, and also create an overlay that only contains white pixels at the places where the color should be) (done)
 
+fine_wire_coil
+fine_wire_wire // Gets color multiplied based on material
+wool_card
+diamond_drawPlate
+
 Canvas bag has color overlay file (done)
 
 floppy_disk (no existing texture)
+
+
+Sorting Machine:
+Sorting Machine has some missing mode icons. All pull modes are missing, and the last 2 sort modes. This is based on http://integratedredstone.wikispaces.com/Redpower+Machine#Blutricity-Sorting Machine
+If you add them to the texture file, it would be nice if you could place the pull modes in the gap I made, and the last two sort modes under the other ones. All in order would be nice :) tnx! MineMaarten
+
+Also, color widgets in GUI's are now rendered in code, so they don't have to be hard-placed in GUI textures :)

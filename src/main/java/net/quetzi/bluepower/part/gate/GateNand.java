@@ -2,10 +2,12 @@ package net.quetzi.bluepower.part.gate;
 
 import java.util.List;
 
+import net.minecraft.client.resources.I18n;
 import net.minecraft.util.AxisAlignedBB;
 import net.quetzi.bluepower.api.part.FaceDirection;
 import net.quetzi.bluepower.api.part.RedstoneConnection;
 import net.quetzi.bluepower.client.renderers.RenderHelper;
+import net.quetzi.bluepower.util.Color;
 
 public class GateNand extends GateBase {
     
@@ -96,6 +98,27 @@ public class GateNand extends GateBase {
             back.enable();
         }
         return true;
+    }
+    
+    @Override
+    public void addWailaInfo(List<String> info) {
+    
+        info.add(Color.YELLOW + I18n.format("gui.connections") + ":");
+        info.add("  "
+                + FaceDirection.LEFT.getLocalizedName()
+                + ": "
+                + (getConnection(FaceDirection.LEFT).isEnabled() ? Color.GREEN + I18n.format("random.enabled") : Color.RED
+                        + I18n.format("random.disabled")));
+        info.add("  "
+                + FaceDirection.BACK.getLocalizedName()
+                + ": "
+                + (getConnection(FaceDirection.BACK).isEnabled() ? Color.GREEN + I18n.format("random.enabled") : Color.RED
+                        + I18n.format("random.disabled")));
+        info.add("  "
+                + FaceDirection.RIGHT.getLocalizedName()
+                + ": "
+                + (getConnection(FaceDirection.RIGHT).isEnabled() ? Color.GREEN + I18n.format("random.enabled") : Color.RED
+                        + I18n.format("random.disabled")));
     }
     
 }

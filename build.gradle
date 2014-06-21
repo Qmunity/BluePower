@@ -34,7 +34,10 @@ if (System.getenv().BUILD_NUMBER != null){
     version += " - err"
 }
 
-
+def grabDep(name, url){
+	ant.get(src: url, dest: 'dep')
+	file("dep/" + url.substring(url.lastIndexOf("/"))).renameTo(file("dep/" + name + ".jar"))
+}
 
 dependencies {
     def f = new File('dep/')
@@ -46,18 +49,17 @@ dependencies {
         f.mkdir()
     }
 	println("  Downloading dependencies!")
-    ant.get(src: 'http://files.minecraftforge.net/maven/codechicken/CodeChickenLib/1.7.2-1.1.1.81/CodeChickenLib-1.7.2-1.1.1.81-dev.jar', dest: 'dep')
-	file("dep/CodeChickenLib-1.7.2-1.1.1.81-dev.jar").renameTo(file("dep/ccl.jar"))
-    ant.get(src: 'http://files.minecraftforge.net/maven/codechicken/ForgeMultipart/1.7.2-1.1.0.282/ForgeMultipart-1.7.2-1.1.0.282-dev.jar', dest: 'dep')
-	file("dep/ForgeMultipart-1.7.2-1.1.0.282-dev.jar").renameTo(file("dep/fmp.jar"))
-    ant.get(src: "http://www.chickenbones.craftsaddle.org/Files/New_Versions/1.7.2/CodeChickenCore-1.7.2-1.0.0-dev.jar", dest: 'dep')
-    file("dep/CodeChickenCore-1.7.2-1.0.0-dev.jar").renameTo(file("dep/ccc.jar"))
-    ant.get(src: "http://www.chickenbones.craftsaddle.org/Files/New_Versions/1.7.2/NotEnoughItems-1.7.2-1.0.1-dev.jar", dest: "dep")
-    file("dep/NotEnoughItems-1.7.2-1.0.1-dev.jar").renameTo(file("dep/nei.jar"))
-	ant.get(src: "http://ci.cil.li/job/OpenComputers-MC1.7/190/artifact/build/libs/OpenComputers-MC1.7.2-1.3.0.190-beta.1-deobf.jar", dest: "dep")
-    file("dep/OpenComputers-MC1.7.2-1.3.0.190-beta.1-deobf.jar").renameTo(file("dep/oc.jar"))
+	grabDep('ccl', 'http://files.minecraftforge.net/maven/codechicken/CodeChickenLib/1.7.2-1.1.1.81/CodeChickenLib-1.7.2-1.1.1.81-dev.jar')
+	grabDep('fmp', 'http://files.minecraftforge.net/maven/codechicken/ForgeMultipart/1.7.2-1.1.0.282/ForgeMultipart-1.7.2-1.1.0.282-dev.jar')
+	grabDep('ccc', 'http://www.chickenbones.craftsaddle.org/Files/New_Versions/1.7.2/CodeChickenCore-1.7.2-1.0.0-dev.jar')
+	grabDep('nei', 'http://www.chickenbones.craftsaddle.org/Files/New_Versions/1.7.2/NotEnoughItems-1.7.2-1.0.1-dev.jar')
+	grabDep('ccc', 'http://www.chickenbones.craftsaddle.org/Files/New_Versions/1.7.2/CodeChickenCore-1.7.2-1.0.0-dev.jar')
+	
+	grabDep('oc', 'http://ci.cil.li/job/OpenComputers-MC1.7/190/artifact/build/libs/OpenComputers-MC1.7.2-1.3.0.190-beta.1-deobf.jar')
+	grabDep('waila', 'http://mobiusstrip.eu/maven/mcp/mobius/waila/Waila/1.5.2a/Waila-1.5.2a-dev.jar')
+	
 	println("  Adding dependencies!")
-    compile files("dep/ccl.jar", "dep/fmp.jar", "dep/nei.jar", "dep/ccc.jar", "dep/oc.jar")
+    compile files("dep/ccl.jar", "dep/fmp.jar", "dep/nei.jar", "dep/ccc.jar", "dep/oc.jar", "dep/waila.jar")
 	println("  Finished adding dependencies!")
 }
 

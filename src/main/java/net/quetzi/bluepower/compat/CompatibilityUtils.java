@@ -8,16 +8,21 @@
 
 package net.quetzi.bluepower.compat;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import net.quetzi.bluepower.compat.cc.CompatModuleCC;
+import net.quetzi.bluepower.compat.fmp.CompatModuleFMP;
+import net.quetzi.bluepower.compat.fmp.CompatModuleFMPAlt;
+import net.quetzi.bluepower.compat.waila.CompatModuleWaila;
+import net.quetzi.bluepower.references.Dependencies;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import net.quetzi.bluepower.compat.cc.CompatModuleCC;
-import net.quetzi.bluepower.compat.fmp.CompatModuleFMP;
-import net.quetzi.bluepower.compat.fmp.CompatModuleFMPAlt;
-import net.quetzi.bluepower.references.Dependencies;
-
-import java.util.*;
 
 public class CompatibilityUtils {
     
@@ -49,7 +54,7 @@ public class CompatibilityUtils {
             e.printStackTrace();
         }
         
-        if(alternate == null || alternate.trim().isEmpty()) return;
+        if (alternate == null || alternate.trim().isEmpty()) return;
         
         Class<?> c2;
         try {
@@ -66,10 +71,12 @@ public class CompatibilityUtils {
         return Collections.unmodifiableList(new ArrayList<CompatModule>(modules.values()));
     }
     
-    public static CompatModule getModule(String modid){
-        try{
+    public static CompatModule getModule(String modid) {
+    
+        try {
             return modules.get(modid);
-        }catch(Exception ex){}
+        } catch (Exception ex) {
+        }
         
         return null;
     }
@@ -98,6 +105,7 @@ public class CompatibilityUtils {
     static {
         registerModule(Dependencies.FMP, CompatModuleFMP.class, CompatModuleFMPAlt.class);
         registerModule(Dependencies.COMPUTER_CRAFT, CompatModuleCC.class, null);
+        registerModule(Dependencies.WAILA, CompatModuleWaila.class, null);
     }
     
 }

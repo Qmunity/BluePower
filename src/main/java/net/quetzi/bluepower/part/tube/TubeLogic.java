@@ -134,15 +134,29 @@ public class TubeLogic implements IPneumaticTube {
                     tubeStack.progress = 0;
                     tubeStack.oldProgress = -ITEM_SPEED;
                     logic.tubeStacks.add(tubeStack);//transfer to another tube.
+                    iterator.remove();
                 } else if (!this.tube.world.isRemote) {
                     ItemStack remainder = IOHelper.insert(output, tubeStack.stack, tubeStack.heading.getOpposite(), tubeStack.color, false);
-                    if (remainder != null /*&& !injectStack(remainder, tubeStack.heading.getOpposite(), tubeStack.color, false)*/) {
-                        EntityItem entity = new EntityItem(this.tube.world, this.tube.x + 0.5 + tubeStack.heading.offsetX * tubeStack.progress * 0.5, this.tube.y + 0.5 + tubeStack.heading.offsetY * tubeStack.progress * 0.5, this.tube.z + 0.5 + tubeStack.heading.offsetX * tubeStack.progress * 0.5,
-                                remainder);
-                        this.tube.world.spawnEntityInWorld(entity);
+                    if (remainder != null) {
+                        if (injectStack(remainder, tubeStack.heading.getOpposite(), tubeStack.color, true)) {
+                            tubeStack.stack = remainder;
+                            tubeStack.progress = 0;
+                            tubeStack.oldProgress = 0;
+                            tubeStack.heading = tubeStack.heading.getOpposite();
+                            this.tube.sendUpdatePacket();
+                        } else {
+                            EntityItem entity = new EntityItem(this.tube.world, this.tube.x + 0.5 + tubeStack.heading.offsetX * tubeStack.progress * 0.5, this.tube.y + 0.5 + tubeStack.heading.offsetY * tubeStack.progress * 0.5, this.tube.z + 0.5 + tubeStack.heading.offsetX * tubeStack.progress
+                                    * 0.5, remainder);
+                            this.tube.world.spawnEntityInWorld(entity);
+                            iterator.remove();
+                        }
+                    } else {
+                        iterator.remove();
                     }
+                } else {
+                    iterator.remove();
                 }
-                iterator.remove();
+                
             }
         }
     }
@@ -172,7 +186,7 @@ public class TubeLogic implements IPneumaticTube {
             for (int i = 0; i < 6; i++) {
                 if (firstRun) heading = ForgeDirection.getOrientation(i);
                 TubeEdge edge = node.edges[i];
-                if (edge != null && (edge.colorMask & 1 << stack.color.ordinal()) == 0) {//if this item can travel through this color mask proceed. If the tubestack's color == NONE, the bitshift will go beyond the mask, and returns 0.
+                if (edge != null && (stack.color == TubeColor.NONE || Integer.bitCount(edge.colorMask) == 0 || Integer.bitCount(edge.colorMask) == 1 && (edge.colorMask & 1 << stack.color.ordinal()) != 0)) {//if this item can travel through this color mask proceed. 
                     Integer distance = distances.get(edge.target);
                     if (distance == null || distances.get(node) + edge.distance < distance) {
                         distances.put(edge.target, distances.get(node) + edge.distance);
@@ -322,7 +336,8 @@ public class TubeLogic implements IPneumaticTube {
                     
                     if (tube != null) {
                         int dist = tube.getWeigth();
-                        short colorMask = tube.getColor() != TubeColor.NONE ? (short) (1 << tube.getColor().ordinal()) : (short) 0;
+                        int colorMask = 0;
+                        if (tube.getColor() != TubeColor.NONE) colorMask = colorMask | 1 << tube.getColor().ordinal();
                         ForgeDirection curDir = ForgeDirection.getOrientation(i);
                         while (!tube.isCrossOver && tube.initialized) {//traverse the tubes
                             for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
@@ -340,14 +355,16 @@ public class TubeLogic implements IPneumaticTube {
                                 } else {
                                     if (!tube.initialized) break;
                                     dist += tube.getWeigth();
-                                    if (tube.getColor() != TubeColor.NONE) colorMask = (short) (colorMask | 1 << tube.getColor().ordinal());
+                                    if (tube.getColor() != TubeColor.NONE) {
+                                        colorMask = colorMask | 1 << tube.getColor().ordinal();
+                                    }
                                 }
                             }
                         }
                         if (tube != null && tube != nodeTube) edges[i] = new TubeEdge(tube.getLogic().getNode(), curDir, colorMask, dist);//only add an edge that isn't just connected to itself.
                         
                     } else if (neighbor != null) {
-                        edges[i] = new TubeEdge(new TubeNode(neighbor), ForgeDirection.getOrientation(i), (short) 0, neighbor instanceof IWeightedTubeInventory ? ((IWeightedTubeInventory) neighbor).getWeight(ForgeDirection.getOrientation(i)) : 0);
+                        edges[i] = new TubeEdge(new TubeNode(neighbor), ForgeDirection.getOrientation(i), 0, neighbor instanceof IWeightedTubeInventory ? ((IWeightedTubeInventory) neighbor).getWeight(ForgeDirection.getOrientation(i)) : 0);
                     }
                 }
             }
@@ -359,9 +376,9 @@ public class TubeLogic implements IPneumaticTube {
         public TubeNode              target;
         private final ForgeDirection targetConnectionSide;
         public final int             distance;
-        public final short           colorMask;           //bitmask of disallowed colored items through the tube. Least significant bit is TubeColor.values()[0].
+        public int                   colorMask;           //bitmask of disallowed colored items through the tube. Least significant bit is TubeColor.values()[0]. only least significant 16 bits are used
                                                            
-        public TubeEdge(TubeNode target, ForgeDirection targetConnectionSide, short colorMask, int distance) {
+        public TubeEdge(TubeNode target, ForgeDirection targetConnectionSide, int colorMask, int distance) {
         
             this.target = target;
             this.targetConnectionSide = targetConnectionSide;

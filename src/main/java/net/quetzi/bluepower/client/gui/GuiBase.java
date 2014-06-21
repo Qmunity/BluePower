@@ -32,7 +32,7 @@ import org.lwjgl.opengl.GL11;
 
 public class GuiBase extends GuiContainer implements IWidgetListener {
     
-    private static final int       COLOR_TEXT = 0xFFFFFFFF;
+    private static final int       COLOR_TEXT = 4210752;
     private final List<IGuiWidget> widgets    = new ArrayList<IGuiWidget>();
     private final ResourceLocation resLoc;
     
@@ -123,4 +123,10 @@ public class GuiBase extends GuiContainer implements IWidgetListener {
     
     }
     
+    public void redraw() {
+    
+        buttonList.clear();
+        widgets.clear();
+        initGui();
+    }
 }

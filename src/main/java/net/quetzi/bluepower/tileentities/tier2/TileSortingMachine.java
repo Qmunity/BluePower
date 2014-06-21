@@ -26,11 +26,11 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
     public PullMode          pullMode  = PullMode.SINGLE_STEP;
     public SortMode          sortMode  = SortMode.ANYSTACK_SEQUENTIAL;
     private boolean          sweepTriggered;
-    public final TubeColor[] colors    = new TubeColor[8];
+    public final TubeColor[] colors    = new TubeColor[9];
     
     public TileSortingMachine() {
     
-        for (int i = 0; i < 8; i++)
+        for (int i = 0; i < colors.length; i++)
             colors[i] = TubeColor.NONE;
     }
     
@@ -71,6 +71,7 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
     @Override
     public void updateEntity() {
     
+        super.updateEntity();
         if (!worldObj.isRemote && worldObj.getWorldTime() % TileMachineBase.BUFFER_EMPTY_INTERVAL == 0 && (pullMode == PullMode.SINGLE_SWEEP && sweepTriggered || pullMode == PullMode.AUTOMATIC)) {
             triggerSorting();
         }
@@ -215,14 +216,13 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
     @Override
     public void onButtonPress(int messageId, int value) {
     
-        if (messageId < 8) {
+        if (messageId < 9) {
             colors[messageId] = TubeColor.values()[value];
         } else if (messageId == 9) {
             pullMode = PullMode.values()[value];
         } else {
             sortMode = SortMode.values()[value];
         }
-        worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
     }
     
     @Override

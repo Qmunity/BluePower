@@ -22,9 +22,13 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
+import net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.oredict.ShapedOreRecipe;
+import net.minecraftforge.oredict.ShapelessOreRecipe;
 import net.quetzi.bluepower.api.BPRegistry;
 import net.quetzi.bluepower.api.part.PartRegistry;
 import net.quetzi.bluepower.api.recipe.IAlloyFurnaceRegistry;
+import net.quetzi.bluepower.items.ItemFineWire;
 import net.quetzi.bluepower.recipe.CanvasBagRecipe;
 import net.quetzi.bluepower.references.Refs;
 
@@ -157,7 +161,10 @@ public class Recipes {
         craftManager.addRecipe(new ItemStack(BPItems.canvas_bag,1,0), new Object[] {"SSS", "S S", "SSS", 'S', BPItems.canvas});
         
         registerCanvasBagRecipes(new ItemStack(BPItems.canvas_bag));
+        ItemFineWire.registerRecipes();
         
+        GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(Items.string,4,0),new ItemStack(BPItems.wool_card,1,OreDictionary.WILDCARD_VALUE),new ItemStack(Blocks.wool,1,OreDictionary.WILDCARD_VALUE)));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.wool_card,1,0),"f","p","s",'f',ItemFineWire.WireType.IRON.is,'p',"plankWood",'s',"stickWood"));
         
         // Alloy furnace
         IAlloyFurnaceRegistry af = BPRegistry.alloyFurnaceRegistry;

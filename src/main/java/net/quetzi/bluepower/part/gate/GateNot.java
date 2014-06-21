@@ -65,4 +65,9 @@ public class GateNot extends GateBase {
         right.setPower(!power ? 15 : 0);
     }
     
+    @Override
+    public void addWailaInfo(List<String> info) {
+    
+    }
+    
 }

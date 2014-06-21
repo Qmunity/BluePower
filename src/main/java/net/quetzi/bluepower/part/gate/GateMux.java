@@ -2,11 +2,13 @@ package net.quetzi.bluepower.part.gate;
 
 import java.util.List;
 
+import net.minecraft.client.resources.I18n;
 import net.minecraft.util.AxisAlignedBB;
 import net.quetzi.bluepower.api.part.FaceDirection;
 import net.quetzi.bluepower.api.part.RedstoneConnection;
 import net.quetzi.bluepower.client.renderers.RenderHelper;
 import net.quetzi.bluepower.references.Refs;
+import net.quetzi.bluepower.util.Color;
 
 public class GateMux extends GateBase {
     
@@ -46,10 +48,9 @@ public class GateMux extends GateBase {
         RenderHelper.renderRedstoneTorch(0, 1D / 8D, 2 / 16D, 9D / 16D, back.getPower() == 0);
         boolean frontLeft = !(left.getPower() > 0 || back.getPower() == 0);
         boolean frontRight = !(right.getPower() > 0 || back.getPower() > 0);
-        RenderHelper.renderRedstoneTorch(4/16D, 1D / 8D, -1 / 16D, 9D / 16D, frontRight);
-        RenderHelper.renderRedstoneTorch(-4/16D, 1D / 8D, -1 / 16D, 9D / 16D, frontLeft);
+        RenderHelper.renderRedstoneTorch(4 / 16D, 1D / 8D, -1 / 16D, 9D / 16D, frontRight);
+        RenderHelper.renderRedstoneTorch(-4 / 16D, 1D / 8D, -1 / 16D, 9D / 16D, frontLeft);
         
-
         renderTopTexture(Refs.MODID + ":textures/blocks/gates/" + getType() + "/frontleft_" + (frontLeft ? "on" : "off") + ".png");
         renderTopTexture(Refs.MODID + ":textures/blocks/gates/" + getType() + "/frontright_" + (frontRight ? "on" : "off") + ".png");
         RenderHelper.renderRedstoneTorch(0, 1D / 8D, -4 / 16D, 9D / 16D, !frontLeft && !frontRight);
@@ -76,6 +77,13 @@ public class GateMux extends GateBase {
         }
         
         front.setPower(out);
+    }
+    
+    @Override
+    public void addWailaInfo(List<String> info) {
+    
+        info.add(I18n.format("gui.passThrough") + ": " + Color.YELLOW
+                + (getConnection(FaceDirection.BACK).getPower() > 0 ? FaceDirection.LEFT.getLocalizedName() : FaceDirection.RIGHT.getLocalizedName()));
     }
     
 }
