@@ -14,6 +14,7 @@ import java.util.List;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -499,6 +500,16 @@ public abstract class BPPart {
      */
     public void addWailaInfo(List<String> info) {
     
+    }
+    
+    public boolean hasCustomItemEntity() {
+    
+        return false;
+    }
+    
+    public EntityItem createItemEntity(World w, double x, double y, double z, ItemStack item) {
+    
+        return null;
     }
     
 }
