@@ -1,6 +1,5 @@
 package net.quetzi.bluepower.tileentities.tier3;
 
-import net.minecraft.tileentity.TileEntity;
 import net.quetzi.bluepower.tileentities.TileBase;
 
 /**

@@ -86,6 +86,7 @@ public class BPBlockMultipart extends BlockContainer {
         
         if (mop == null) return null;
         
+        @SuppressWarnings("unused")
         EntityPlayer p = null;// FIXME BLUEPOWER Return the player that's raytracing
         
         hovered = null;// FIXME BLUEPOWER Get selected part

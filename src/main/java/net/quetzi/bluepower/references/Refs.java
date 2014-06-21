@@ -17,7 +17,6 @@
 
 package net.quetzi.bluepower.references;
 
-import scala.collection.parallel.ParSeqLike.Updated;
 
 
 public class Refs {

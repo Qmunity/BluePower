@@ -1,10 +1,9 @@
 package net.quetzi.bluepower.containers;
 
-import net.quetzi.bluepower.tileentities.tier3.TileCPU;
-import net.quetzi.bluepower.tileentities.tier3.TileDiskDrive;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
+import net.quetzi.bluepower.tileentities.tier3.TileDiskDrive;
 
 public class ContainerDiskDrive extends Container {
 

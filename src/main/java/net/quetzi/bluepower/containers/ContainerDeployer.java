@@ -20,14 +20,8 @@ package net.quetzi.bluepower.containers;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import net.quetzi.bluepower.containers.inventorys.InventoryItem;
-import net.quetzi.bluepower.containers.slots.SlotLocked;
-import net.quetzi.bluepower.containers.slots.SlotSeedBag;
-import net.quetzi.bluepower.items.ItemSeedBag;
-import net.quetzi.bluepower.tileentities.tier1.TileBuffer;
 import net.quetzi.bluepower.tileentities.tier1.TileDeployer;
 
 public class ContainerDeployer extends Container {

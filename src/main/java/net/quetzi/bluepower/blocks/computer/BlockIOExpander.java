@@ -1,8 +1,5 @@
 package net.quetzi.bluepower.blocks.computer;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.tileentity.TileEntity;
@@ -13,6 +10,8 @@ import net.quetzi.bluepower.blocks.BlockContainerBase;
 import net.quetzi.bluepower.references.GuiIDs;
 import net.quetzi.bluepower.references.Refs;
 import net.quetzi.bluepower.tileentities.tier3.TileIOExpander;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockIOExpander extends BlockContainerBase {
 	
@@ -28,12 +27,14 @@ public class BlockIOExpander extends BlockContainerBase {
     protected IIcon bottomTexture;
 
 	public BlockIOExpander() {
+		
 		super(Material.iron);
 		setBlockName(Refs.BLOCKIOEXPANDER_NAME);
 	}
 
 	@Override
     public GuiIDs getGuiID() {
+		
         return GuiIDs.IO_EXPANDER;
     }
 	
@@ -82,9 +83,8 @@ public class BlockIOExpander extends BlockContainerBase {
     }
 	
 	 @SideOnly(Side.CLIENT)
-	 public void registerBlockIcons(IIconRegister iconRegister)
-	 {
-		 int i = 0;
+	 public void registerBlockIcons(IIconRegister iconRegister){
+		 
 	     this.frontTexture = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + "io_expander_front");
 	     this.sideTexture = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + "cpu_side");
 	     this.topTexture = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + "cpu_top");
@@ -94,6 +94,7 @@ public class BlockIOExpander extends BlockContainerBase {
 	
 	@Override
 	protected Class<? extends TileEntity> getTileEntity() {
+		
 		return TileIOExpander.class;
 	}
 }

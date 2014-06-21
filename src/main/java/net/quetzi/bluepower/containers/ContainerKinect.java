@@ -19,12 +19,9 @@ package net.quetzi.bluepower.containers;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.init.Items;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.quetzi.bluepower.tileentities.tier1.TileBuffer;
 import net.quetzi.bluepower.tileentities.tier1.TileKinectGenerator;
 
 public class ContainerKinect extends Container {

@@ -2,26 +2,19 @@ package net.quetzi.bluepower.blocks.computer;
 
 import java.util.Random;
 
-import org.apache.logging.log4j.Level;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
-import net.quetzi.bluepower.BluePower;
 import net.quetzi.bluepower.blocks.BlockContainerBase;
 import net.quetzi.bluepower.references.GuiIDs;
 import net.quetzi.bluepower.references.Refs;
 import net.quetzi.bluepower.tileentities.tier3.TileMonitor;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockMonitor extends BlockContainerBase {
 	@SideOnly(Side.CLIENT)
@@ -40,8 +33,8 @@ public class BlockMonitor extends BlockContainerBase {
 		setBlockName(Refs.BLOCKMONITOR_NAME);
 	}
 	
-	public void updateTick(World world, int x, int y, int z, Random random)
-    {
+	public void updateTick(World world, int x, int y, int z, Random random){
+		
 		TileEntity tileEntity = world.getTileEntity(x, y, z);
 		if (tileEntity instanceof TileMonitor) {
 			//((TileCPU)tileEntity).updateEntity();
@@ -51,6 +44,7 @@ public class BlockMonitor extends BlockContainerBase {
 	
 	@Override
     public GuiIDs getGuiID() {
+		
         return GuiIDs.MONITOR;
     }
 	
@@ -105,9 +99,8 @@ public class BlockMonitor extends BlockContainerBase {
     }
 	
 	 @SideOnly(Side.CLIENT)
-	 public void registerBlockIcons(IIconRegister iconRegister)
-	 {
-		 int i = 0;
+	 public void registerBlockIcons(IIconRegister iconRegister){
+		 
 	     this.frontTexture = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + "monitor_front");
 	     this.sideTexture = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + "cpu_side");
 	     this.topTexture = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + "cpu_top");
@@ -118,6 +111,7 @@ public class BlockMonitor extends BlockContainerBase {
 
 	@Override
 	protected Class<? extends TileEntity> getTileEntity() {
+		
 		return TileMonitor.class;
 	}
 }

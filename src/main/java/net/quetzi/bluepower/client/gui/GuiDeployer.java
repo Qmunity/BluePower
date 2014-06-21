@@ -21,10 +21,8 @@ package net.quetzi.bluepower.client.gui;
 
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
-import net.quetzi.bluepower.containers.ContainerBuffer;
 import net.quetzi.bluepower.containers.ContainerDeployer;
 import net.quetzi.bluepower.references.Refs;
-import net.quetzi.bluepower.tileentities.tier1.TileBuffer;
 import net.quetzi.bluepower.tileentities.tier1.TileDeployer;
 
 public class GuiDeployer extends GuiBase {

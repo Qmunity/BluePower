@@ -1,8 +1,5 @@
 package net.quetzi.bluepower.blocks.machines;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.EntityLivingBase;
@@ -10,16 +7,15 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
-import net.quetzi.bluepower.blocks.BlockContainer6Sided;
 import net.quetzi.bluepower.blocks.BlockContainerBase;
 import net.quetzi.bluepower.init.CustomTabs;
 import net.quetzi.bluepower.references.GuiIDs;
 import net.quetzi.bluepower.references.Refs;
 import net.quetzi.bluepower.tileentities.tier1.TileDeployer;
-import net.quetzi.bluepower.tileentities.tier1.TileEngine;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 /**
  * 
  * @author TheFjong
@@ -32,6 +28,7 @@ public class BlockDeployer extends BlockContainerBase{
 	private IIcon textureBack;
 	
 	public BlockDeployer() {
+		
 		super(Material.rock);
 		setCreativeTab(CustomTabs.tabBluePowerMachines);
 		setBlockName(Refs.BLOCKDEPLOYER_NAME);
@@ -39,11 +36,13 @@ public class BlockDeployer extends BlockContainerBase{
 
 	@Override
 	protected Class<? extends TileEntity> getTileEntity() {
+		
 		return TileDeployer.class;
 	}
 
 	@Override
 	public GuiIDs getGuiID() {
+		
 		return GuiIDs.DEPLOYER_ID;
 	}
 
@@ -75,6 +74,7 @@ public class BlockDeployer extends BlockContainerBase{
 		
 	}
 	
+	@SuppressWarnings("cast")
 	@Override
     public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase player, ItemStack stack)
     {
