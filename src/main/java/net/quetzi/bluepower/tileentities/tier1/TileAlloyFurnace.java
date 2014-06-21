@@ -32,7 +32,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * 
- * @author MineMaarten, Koen Beckers (K-4U)
+ * @author MineMaarten, Koen Beckers (K4Unl)
  */
 
 public class TileAlloyFurnace extends TileBase implements IInventory {

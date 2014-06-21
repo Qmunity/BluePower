@@ -19,10 +19,14 @@ import cpw.mods.fml.client.registry.RenderingRegistry;
 
 public class Renderers {
     
+    public static int RenderIdLamps;
+    
     public static void init() {
     
         MinecraftForgeClient.registerItemRenderer(BPItems.multipart, new RenderItemBPPart());
         RenderingRegistry.registerBlockHandler(new RendererBlockBase());
+        
+        RenderingRegistry.registerBlockHandler(new RenderLamp());
         
         ClientRegistry.bindTileEntitySpecialRenderer(TileEngine.class, new RenderEngine());
         MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BPBlocks.engine), new RenderItemEngine());

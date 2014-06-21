@@ -201,6 +201,7 @@ public class Refs {
 
     public static final String[] oreDictDyes              = new String[] { "dyeBlack", "dyeRed", "dyeGreen", "dyeBrown", "dyeBlue", "dyePurple", "dyeCyan", "dyeLightGray", "dyeGray", "dyePink",
             "dyeLime", "dyeYellow", "dyeLightBlue", "dyeMagenta", "dyeOrange", "dyeWhite" };
+    public static final String LAMP_NAME = "lamp";
 
     public static String fullVersionString() {
 
