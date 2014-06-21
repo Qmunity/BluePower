@@ -19,8 +19,6 @@
 
 package net.quetzi.bluepower.tileentities.tier1;
 
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -28,57 +26,37 @@ import net.quetzi.bluepower.helper.IOHelper;
 import net.quetzi.bluepower.tileentities.TileMachineBase;
 
 public class TileTransposer extends TileMachineBase {
-
+    
     private boolean isPowered;
-
+    
     @Override
     public void updateEntity() {
-
+    
         super.updateEntity();
-
+        
     }
-
+    
     @Override
     protected void redstoneChanged(boolean newValue) {
-
+    
         if (newValue) {
             suckItems();
             pullItem();
         }
-
+        
     }
-
+    
     private void pullItem() {
-
-        if(isBufferEmpty()) {
+    
+        if (isBufferEmpty()) {
             ForgeDirection dir = getOutputDirection().getOpposite();
             TileEntity inputTE = getTileCache()[dir.ordinal()].getTileEntity();
-
-            if (inputTE instanceof IInventory) {
-                IInventory inputInv = (IInventory) inputTE;
-                int[] accessibleSlots;
-                if (inputInv instanceof ISidedInventory) {
-                    accessibleSlots = ((ISidedInventory) inputInv).getAccessibleSlotsFromSide(dir.ordinal());
-                } else {
-                    accessibleSlots = new int[inputInv.getSizeInventory()];
-                    for (int i = 0; i < accessibleSlots.length; i++) {
-                        accessibleSlots[i] = i;
-                    }
-                }
-                for (int slot : accessibleSlots) {
-                    ItemStack stack = inputInv.getStackInSlot(slot);
-                    if (stack != null && IOHelper.canExtractItemFromInventory(inputInv, stack, slot, dir.ordinal())) {
-                        stack.stackSize = 1;
-                        addItemToOutputBuffer(stack);
-                        IOHelper.extractOneItem(inputTE, dir);
-                        break;
-                    }
-                }
-            }
+            ItemStack extractedStack = IOHelper.extractOneItem(inputTE, dir);
+            if (extractedStack != null) addItemToOutputBuffer(extractedStack);
         }
     }
-
+    
     private void suckItems() {
-
+    
     }
 }
