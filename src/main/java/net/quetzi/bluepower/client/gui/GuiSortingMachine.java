@@ -33,6 +33,7 @@ import net.quetzi.bluepower.network.messages.MessageGuiUpdate;
 import net.quetzi.bluepower.references.Refs;
 import net.quetzi.bluepower.tileentities.tier2.TileSortingMachine;
 import net.quetzi.bluepower.tileentities.tier2.TileSortingMachine.PullMode;
+import net.quetzi.bluepower.tileentities.tier2.TileSortingMachine.SortMode;
 
 /**
  * 
@@ -125,7 +126,7 @@ public class GuiSortingMachine extends GuiBase {
     
         super.drawGuiContainerBackgroundLayer(f, i, j);
         
-        Gui.func_146110_a(guiLeft + 24 + sortingMachine.curColumn * 18, guiTop + 16, 176, 0, 20, 92, 256, 256);
+        if (sortingMachine.sortMode == SortMode.ALLSTACK_SEQUENTIAL || sortingMachine.sortMode == SortMode.ANYSTACK_SEQUENTIAL) Gui.func_146110_a(guiLeft + 24 + sortingMachine.curColumn * 18, guiTop + 16, 176, 0, 20, 92, 256, 256);
     }
     
 }
