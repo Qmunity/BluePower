@@ -17,34 +17,20 @@
 
 package net.quetzi.bluepower.client.gui;
 
+import cpw.mods.fml.common.network.IGuiHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import net.quetzi.bluepower.containers.ContainerAlloyFurnace;
-import net.quetzi.bluepower.containers.ContainerBuffer;
-import net.quetzi.bluepower.containers.ContainerCPU;
-import net.quetzi.bluepower.containers.ContainerCanvasBag;
-import net.quetzi.bluepower.containers.ContainerDiskDrive;
-import net.quetzi.bluepower.containers.ContainerIOExpander;
-import net.quetzi.bluepower.containers.ContainerMonitor;
-import net.quetzi.bluepower.containers.ContainerRedbusID;
-import net.quetzi.bluepower.containers.ContainerSortingMachine;
-import net.quetzi.bluepower.containers.ContainerSeedBag;
+import net.quetzi.bluepower.containers.*;
 import net.quetzi.bluepower.containers.inventorys.InventoryItem;
 import net.quetzi.bluepower.items.ItemCanvasBag;
 import net.quetzi.bluepower.items.ItemFloppyDisk;
 import net.quetzi.bluepower.items.ItemScrewdriver;
 import net.quetzi.bluepower.items.ItemSeedBag;
 import net.quetzi.bluepower.references.GuiIDs;
-import net.quetzi.bluepower.tileentities.tier1.TileAlloyFurnace;
-import net.quetzi.bluepower.tileentities.tier1.TileBuffer;
+import net.quetzi.bluepower.tileentities.tier1.*;
 import net.quetzi.bluepower.tileentities.tier2.TileSortingMachine;
-import net.quetzi.bluepower.tileentities.tier3.IRedBusWindow;
-import net.quetzi.bluepower.tileentities.tier3.TileCPU;
-import net.quetzi.bluepower.tileentities.tier3.TileDiskDrive;
-import net.quetzi.bluepower.tileentities.tier3.TileIOExpander;
-import net.quetzi.bluepower.tileentities.tier3.TileMonitor;
-import cpw.mods.fml.common.network.IGuiHandler;
+import net.quetzi.bluepower.tileentities.tier3.*;
 
 public class GUIHandler implements IGuiHandler {
     
@@ -92,7 +78,15 @@ public class GUIHandler implements IGuiHandler {
             	
             case REDBUS_ID:
             	return new ContainerRedbusID(player.inventory, (IRedBusWindow) ent);
-            
+            	
+            case KINECT_ID:
+            	return new ContainerKinect(player.inventory, (TileKinectGenerator) ent);
+            case DEPLOYER_ID:
+            	return new ContainerDeployer(player.inventory, (TileDeployer) ent);
+            case RELAY_ID:
+                return new ContainerRelay(player.inventory, (TileRelay) ent);
+            case EJECTOR_ID:
+                return new ContainerEjector(player.inventory, (TileEjector) ent);
             default:
                 break;
         }
@@ -140,6 +134,14 @@ public class GUIHandler implements IGuiHandler {
             	return new GuiIOExpander(player.inventory, (TileIOExpander) ent);
             case REDBUS_ID:
             	return new GuiRedbusID(player.inventory, (IRedBusWindow) ent);
+            case KINECT_ID:
+            	return new GuiKinect(player.inventory, (TileKinectGenerator) ent);
+            case DEPLOYER_ID:
+            	return new GuiDeployer(player.inventory, (TileDeployer) ent);
+            case RELAY_ID:
+                return new GuiRelay(player.inventory, (TileRelay) ent);
+            case EJECTOR_ID:
+                return new GuiEjector(player.inventory, (TileEjector) ent);
             default:
                 break;
         }

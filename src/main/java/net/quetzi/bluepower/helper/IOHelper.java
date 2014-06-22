@@ -54,29 +54,67 @@ public class IOHelper {
     public static ItemStack extract(TileEntity tile, ForgeDirection direction, ItemStack requestedStack, boolean simulate) {
     
         if (requestedStack == null) return requestedStack;
-        if (tile instanceof ISidedInventory) {
-            ISidedInventory isidedinventory = (ISidedInventory) tile;
-            int[] accessibleSlotsFromSide = isidedinventory.getAccessibleSlotsFromSide(direction.ordinal());
-            
-            for (int anAccessibleSlotsFromSide : accessibleSlotsFromSide) {
-                if (isidedinventory.getStackInSlot(anAccessibleSlotsFromSide) != null && isidedinventory.getStackInSlot(anAccessibleSlotsFromSide).isItemEqual(requestedStack)) {
-                    ItemStack stack = extract(isidedinventory, direction, anAccessibleSlotsFromSide);
-                    if (stack != null) return stack;
+        if (tile instanceof IInventory) {
+            IInventory inv = (IInventory) tile;
+            int[] accessibleSlots;
+            if (inv instanceof ISidedInventory) {
+                accessibleSlots = ((ISidedInventory) inv).getAccessibleSlotsFromSide(direction.ordinal());
+            } else {
+                accessibleSlots = new int[inv.getSizeInventory()];
+                for (int i = 0; i < accessibleSlots.length; i++)
+                    accessibleSlots[i] = i;
+            }
+            int itemsFound = 0;
+            for (int slot : accessibleSlots) {
+                ItemStack stack = inv.getStackInSlot(slot);
+                if (stack != null && stack.isItemEqual(requestedStack) && IOHelper.canExtractItemFromInventory(inv, stack, slot, direction.ordinal())) {
+                    itemsFound += stack.stackSize;
                 }
             }
-        } else if (tile instanceof IInventory) {
-            IInventory inventory = (IInventory) tile;
-            int j = inventory.getSizeInventory();
-            
-            for (int k = 0; k < j; ++k) {
-                if (inventory.getStackInSlot(k) != null && inventory.getStackInSlot(k).isItemEqual(requestedStack)) {
-                    ItemStack stack = extract(inventory, direction, k);
-                    if (stack != null) return stack;
+            if (itemsFound >= requestedStack.stackSize) {
+                int itemsNeeded = requestedStack.stackSize;
+                for (int slot : accessibleSlots) {
+                    ItemStack stack = inv.getStackInSlot(slot);
+                    if (stack != null && stack.isItemEqual(requestedStack) && IOHelper.canExtractItemFromInventory(inv, stack, slot, direction.ordinal())) {
+                        int itemsSubstracted = Math.min(itemsNeeded, stack.stackSize);
+                        itemsNeeded -= itemsSubstracted;
+                        if (!simulate) {
+                            stack.stackSize -= itemsSubstracted;
+                            if (stack.stackSize == 0) inv.setInventorySlotContents(slot, null);
+                            tile.markDirty();
+                        }
+                    }
                 }
+                return requestedStack.copy();
             }
         }
         return null;
         
+    }
+    
+    public static ItemStack extractOneItem(TileEntity tile, ForgeDirection dir) {
+    
+        if (tile instanceof IInventory) {
+            IInventory inv = (IInventory) tile;
+            int[] accessibleSlots;
+            if (inv instanceof ISidedInventory) {
+                accessibleSlots = ((ISidedInventory) inv).getAccessibleSlotsFromSide(dir.ordinal());
+            } else {
+                accessibleSlots = new int[inv.getSizeInventory()];
+                for (int i = 0; i < accessibleSlots.length; i++)
+                    accessibleSlots[i] = i;
+            }
+            for (int slot : accessibleSlots) {
+                ItemStack stack = inv.getStackInSlot(slot);
+                if (stack != null && IOHelper.canExtractItemFromInventory(inv, stack, slot, dir.ordinal())) {
+                    ItemStack ret = stack.splitStack(1);
+                    if (stack.stackSize == 0) inv.setInventorySlotContents(slot, null);
+                    tile.markDirty();
+                    return ret;
+                }
+            }
+        }
+        return null;
     }
     
     public static ItemStack insert(TileEntity tile, ItemStack itemStack, ForgeDirection direction, boolean simulate) {

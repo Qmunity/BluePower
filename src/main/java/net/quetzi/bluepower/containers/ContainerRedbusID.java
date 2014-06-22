@@ -4,7 +4,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.quetzi.bluepower.tileentities.tier3.IRedBusWindow;
-import net.quetzi.bluepower.tileentities.tier3.TileCPU;
 
 public class ContainerRedbusID extends Container {
 

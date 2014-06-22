@@ -32,7 +32,7 @@ import net.quetzi.bluepower.init.BPItems;
 public class ContainerCanvasBag extends Container {
     
     IInventory canvasBagInventory;
-    ItemStack bag;
+    ItemStack  bag;
     
     public ContainerCanvasBag(ItemStack bag, IInventory playerInventory, IInventory canvasBagInventory) {
     
@@ -41,23 +41,23 @@ public class ContainerCanvasBag extends Container {
         canvasBagInventory.openInventory();
         for (int j = 0; j < 3; ++j) {
             for (int k = 0; k < 9; ++k) {
-                this.addSlotToContainer(new SlotExclude(canvasBagInventory, k + j * 9, 8 + k * 18, 18 + j * 18, BPItems.canvas_bag));
+                addSlotToContainer(new SlotExclude(canvasBagInventory, k + j * 9, 8 + k * 18, 18 + j * 18, BPItems.canvas_bag));
             }
         }
         
         for (int j = 0; j < 3; ++j) {
             for (int k = 0; k < 9; ++k) {
-                this.addSlotToContainer(new Slot(playerInventory, k + j * 9 + 9, 8 + k * 18, 103 + j * 18 + i));
+                addSlotToContainer(new Slot(playerInventory, k + j * 9 + 9, 8 + k * 18, 103 + j * 18 + i));
             }
         }
         
         for (int j = 0; j < 9; ++j) {
             if (playerInventory.getStackInSlot(j) == ((InventoryItem) canvasBagInventory).getItem()) {
-                this.addSlotToContainer(new SlotLocked(playerInventory, j, 8 + j * 18, 161 + i));
+                addSlotToContainer(new SlotLocked(playerInventory, j, 8 + j * 18, 161 + i));
             } else {
-                this.addSlotToContainer(new Slot(playerInventory, j, 8 + j * 18, 161 + i));
+                addSlotToContainer(new Slot(playerInventory, j, 8 + j * 18, 161 + i));
             }
-            this.addSlotToContainer(new Slot(playerInventory, j, 8 + j * 18, 161 + i));
+            addSlotToContainer(new Slot(playerInventory, j, 8 + j * 18, 161 + i));
         }
         
         this.canvasBagInventory = canvasBagInventory;
@@ -66,22 +66,32 @@ public class ContainerCanvasBag extends Container {
     @Override
     public boolean canInteractWith(EntityPlayer player) {
     
-        return ItemStack.areItemStacksEqual(player.getCurrentEquippedItem(),bag);
+        return ItemStack.areItemStacksEqual(player.getCurrentEquippedItem(), bag);
+    }
+    
+    @Override
+    public ItemStack slotClick(int par1, int par2, int par3, EntityPlayer player) {
+    
+        if (par3 != 2 || player.inventory.currentItem != par2) {
+            return super.slotClick(par1, par2, par3, player);
+        } else {
+            return null;
+        }
     }
     
     @Override
     public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int par2) {
     
         ItemStack itemstack = null;
-        Slot slot = (Slot) this.inventorySlots.get(par2);
+        Slot slot = (Slot) inventorySlots.get(par2);
         
         if (slot != null && slot.getHasStack()) {
             ItemStack itemstack1 = slot.getStack();
             itemstack = itemstack1.copy();
             
             if (par2 < 27) {
-                if (!this.mergeItemStack(itemstack1, 27, 63, true)) { return null; }
-            } else if (!this.mergeItemStack(itemstack1, 0, 27, false)) { return null; }
+                if (!mergeItemStack(itemstack1, 27, 63, true)) { return null; }
+            } else if (!mergeItemStack(itemstack1, 0, 27, false)) { return null; }
             
             if (itemstack1.stackSize == 0) {
                 slot.putStack((ItemStack) null);
@@ -112,12 +122,10 @@ public class ContainerCanvasBag extends Container {
         
         if (par1ItemStack.isStackable()) {
             while (par1ItemStack.stackSize > 0 && (!par4 && k < par3 || par4 && k >= par2)) {
-                slot = (Slot) this.inventorySlots.get(k);
+                slot = (Slot) inventorySlots.get(k);
                 itemstack1 = slot.getStack();
                 
-                if (itemstack1 != null && itemstack1.getItem() == par1ItemStack.getItem()
-                        && (!par1ItemStack.getHasSubtypes() || par1ItemStack.getItemDamage() == itemstack1.getItemDamage())
-                        && ItemStack.areItemStackTagsEqual(par1ItemStack, itemstack1) && slot.isItemValid(par1ItemStack)) {
+                if (itemstack1 != null && itemstack1.getItem() == par1ItemStack.getItem() && (!par1ItemStack.getHasSubtypes() || par1ItemStack.getItemDamage() == itemstack1.getItemDamage()) && ItemStack.areItemStackTagsEqual(par1ItemStack, itemstack1) && slot.isItemValid(par1ItemStack)) {
                     int l = itemstack1.stackSize + par1ItemStack.stackSize;
                     
                     if (l <= par1ItemStack.getMaxStackSize()) {
@@ -149,7 +157,7 @@ public class ContainerCanvasBag extends Container {
             }
             
             while (!par4 && k < par3 || par4 && k >= par2) {
-                slot = (Slot) this.inventorySlots.get(k);
+                slot = (Slot) inventorySlots.get(k);
                 itemstack1 = slot.getStack();
                 
                 if (itemstack1 == null && slot.isItemValid(par1ItemStack)) {

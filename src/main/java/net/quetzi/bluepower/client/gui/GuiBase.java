@@ -22,12 +22,15 @@ import java.util.List;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.inventory.Container;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
+import net.quetzi.bluepower.BluePower;
 import net.quetzi.bluepower.client.gui.widget.IGuiWidget;
 import net.quetzi.bluepower.client.gui.widget.IWidgetListener;
 
+import org.apache.commons.lang3.text.WordUtils;
 import org.lwjgl.opengl.GL11;
 
 public class GuiBase extends GuiContainer implements IWidgetListener {
@@ -94,6 +97,10 @@ public class GuiBase extends GuiContainer implements IWidgetListener {
         int y = (height - ySize) / 2;
         
         drawTexturedModalRect(x, y, 0, 0, xSize, ySize);
+        
+        for (IGuiWidget widget : widgets) {
+            widget.render(i, j);
+        }
     }
     
     @Override
@@ -101,11 +108,21 @@ public class GuiBase extends GuiContainer implements IWidgetListener {
     
         super.drawScreen(x, y, partialTick);
         List<String> tooltip = new ArrayList<String>();
+        boolean shift = BluePower.proxy.isSneakingInGui();
         for (IGuiWidget widget : widgets) {
-            widget.render(x, y);
-            if (widget.getBounds().contains(x, y)) widget.addTooltip(tooltip);
+            if (widget.getBounds().contains(x, y)) widget.addTooltip(tooltip, shift);
         }
-        if (!tooltip.isEmpty()) drawHoveringText(tooltip, x, y, fontRendererObj);
+        if (!tooltip.isEmpty()) {
+            List<String> localizedTooltip = new ArrayList<String>();
+            for (String line : tooltip) {
+                String localizedLine = I18n.format(line);
+                String[] lines = WordUtils.wrap(localizedLine, 50).split(System.getProperty("line.separator"));
+                for (String locLine : lines) {
+                    localizedTooltip.add(locLine);
+                }
+            }
+            drawHoveringText(localizedTooltip, x, y, fontRendererObj);
+        }
         
     }
     

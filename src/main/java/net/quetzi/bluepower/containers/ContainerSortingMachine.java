@@ -130,7 +130,7 @@ public class ContainerSortingMachine extends Container {
             }
             
             if (curColumn != sortingMachine.curColumn) {
-                icrafting.sendProgressBarUpdate(this, 11, curColumn);
+                icrafting.sendProgressBarUpdate(this, 11, sortingMachine.curColumn);
             }
         }
         

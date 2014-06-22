@@ -18,25 +18,20 @@
 package net.quetzi.bluepower.init;
 
 import net.minecraft.block.Block;
-import net.quetzi.bluepower.blocks.BlockBuffer;
-import net.quetzi.bluepower.blocks.BlockEngine;
+import net.minecraft.item.ItemDye;
+import net.quetzi.bluepower.blocks.machines.BlockBuffer;
 import net.quetzi.bluepower.blocks.BlockItemOre;
 import net.quetzi.bluepower.blocks.computer.BlockCPU;
 import net.quetzi.bluepower.blocks.computer.BlockDiskDrive;
 import net.quetzi.bluepower.blocks.computer.BlockIOExpander;
 import net.quetzi.bluepower.blocks.computer.BlockMonitor;
-import net.quetzi.bluepower.blocks.machines.BlockAlloyFurnace;
-import net.quetzi.bluepower.blocks.machines.BlockBlockBreaker;
-import net.quetzi.bluepower.blocks.machines.BlockIgniter;
-import net.quetzi.bluepower.blocks.machines.BlockProjectTable;
-import net.quetzi.bluepower.blocks.machines.BlockSortingMachine;
-import net.quetzi.bluepower.blocks.machines.BlockSortron;
-import net.quetzi.bluepower.blocks.machines.BlockTransposer;
+import net.quetzi.bluepower.blocks.machines.*;
 import net.quetzi.bluepower.blocks.worldgen.BlockCrackedBasalt;
 import net.quetzi.bluepower.blocks.worldgen.BlockCrop;
 import net.quetzi.bluepower.blocks.worldgen.BlockCustomFlower;
 import net.quetzi.bluepower.blocks.worldgen.BlockStoneOre;
 import net.quetzi.bluepower.blocks.worldgen.BlockStoneOreConnected;
+import net.quetzi.bluepower.part.lamp.PartLamp;
 import net.quetzi.bluepower.references.Dependencies;
 import net.quetzi.bluepower.references.Refs;
 import cpw.mods.fml.common.Loader;
@@ -87,11 +82,14 @@ public class BPBlocks {
     public static Block block_breaker;
     public static Block igniter;
     public static Block buffer;
+    public static Block Deployer;
     public static Block transposer;
     public static Block sorting_machine;
     public static Block sortron;
     public static Block project_table;
-    
+    public static Block ejector;
+    public static Block relay;
+
     public static Block cpu;
     public static Block monitor;
     public static Block disk_drive;
@@ -100,6 +98,10 @@ public class BPBlocks {
     public static Block multipart;          // DO NOT GENERATE OR REMOVE THIS BLOCK!
 
     public static Block engine;
+    public static Block kinetic_generator;
+    public static Block windmill;
+    public static Block[] blockLamp;
+    public static Block[] blockLampInverted;
 
     public static void init() {
 
@@ -145,8 +147,11 @@ public class BPBlocks {
         block_breaker = new BlockBlockBreaker();
         igniter = new BlockIgniter();
         buffer = new BlockBuffer();
+        Deployer = new BlockDeployer();
         project_table = new BlockProjectTable();
         transposer = new BlockTransposer();
+        ejector = new BlockEjector();
+        relay = new BlockRelay();
 
         cpu = new BlockCPU();
         monitor = new BlockMonitor();
@@ -154,6 +159,18 @@ public class BPBlocks {
         io_expander = new BlockIOExpander();
 
         engine = new BlockEngine();
+        kinetic_generator = new BlockKinectGenerator();
+        windmill = new BlockWindmill();
+        
+        blockLamp = new Block[ItemDye.field_150922_c.length];
+        blockLampInverted = new Block[ItemDye.field_150922_c.length];
+        
+        for (int i = 0; i < ItemDye.field_150922_c.length; i++){
+            blockLamp[i] = new BlockLamp(false, ItemDye.field_150921_b[i].toLowerCase(), ItemDye.field_150922_c[i]);
+            //registerPart(PartLamp.class, ItemDye.field_150921_b[i].toLowerCase(), ItemDye.field_150922_c[i], false);
+            
+        }
+        
         registerBlocks();
         initModDependantBlocks();
     }
@@ -203,9 +220,11 @@ public class BPBlocks {
         GameRegistry.registerBlock(block_breaker, Refs.BLOCKBREAKER_NAME);
         GameRegistry.registerBlock(igniter, Refs.BLOCKIGNITER_NAME);
         GameRegistry.registerBlock(buffer, Refs.BLOCKBUFFER_NAME);
-        
+        GameRegistry.registerBlock(Deployer, Refs.BLOCKDEPLOYER_NAME);
         GameRegistry.registerBlock(project_table, Refs.PROJECTTABLE_NAME);
         GameRegistry.registerBlock(transposer, Refs.TRANSPOSER_NAME);
+        GameRegistry.registerBlock(ejector, Refs.EJECTOR_NAME);
+        GameRegistry.registerBlock(relay, Refs.RELAY_NAME);
 
         GameRegistry.registerBlock(cpu, Refs.BLOCKCPU_NAME);
         GameRegistry.registerBlock(monitor, Refs.BLOCKMONITOR_NAME);
@@ -213,6 +232,12 @@ public class BPBlocks {
         GameRegistry.registerBlock(io_expander, Refs.BLOCKIOEXPANDER_NAME);
 
         GameRegistry.registerBlock(engine, Refs.ENGINE_NAME);
+        GameRegistry.registerBlock(kinetic_generator, Refs.KINECT_NAME);
+        GameRegistry.registerBlock(windmill, Refs.WINDMILL_NAME);
+        
+        for (int i = 0; i < ItemDye.field_150922_c.length; i++){
+            GameRegistry.registerBlock(blockLamp[i], blockLamp[i].getUnlocalizedName());
+        }
     }
 
     private static void initModDependantBlocks() {

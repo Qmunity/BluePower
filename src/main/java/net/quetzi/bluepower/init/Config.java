@@ -64,6 +64,8 @@ public class Config {
     public static double   volcanoActiveToInactiveRatio;
     public static double   volcanoSpawnChance;          // chance of a volcano spawning per chunk.
     public static boolean  useAltScrewdriverRecipe;
+    public static int      vorpalEnchantmentId;
+    public static int 	   disjunctionEnchantmentId;
 
     public static String[] alloyFurnaceBlacklist;
     
@@ -116,5 +118,9 @@ public class Config {
         
         config.addCustomCategoryComment("Recipe Enabling", "Toggle recipes to be enabled or not");
         alloyFurnaceBlacklist = config.get("Recipe Enabling", "alloyFurnaceBlacklist", new String[0]).getStringList();
+        
+        config.addCustomCategoryComment("Enchantment IDs", "Toggle enchantment ids");
+        vorpalEnchantmentId = config.get("Enchantment IDs", "vorpalEnchantmentId", 100).getInt();
+        disjunctionEnchantmentId = config.get("Enchantment IDs", "disjunctionEnchantmentId", 101).getInt();
     }
 }

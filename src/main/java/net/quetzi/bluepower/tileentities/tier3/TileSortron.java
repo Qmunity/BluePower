@@ -36,6 +36,7 @@ import java.util.Set;
 public class TileSortron extends TileMachineBase implements IPeripheral, SimpleComponent {
 
     private static final String NAME = "BluePower.Sortron";
+    private static final int ANIMATION_TIME = 10;
     private Set<IComputerAccess> connectedComputers = new HashSet<IComputerAccess>();
     private Set<Context> contexts = new HashSet<Context>();
     private IInventory connectedInventory;
@@ -53,6 +54,10 @@ public class TileSortron extends TileMachineBase implements IPeripheral, SimpleC
         if (tile instanceof IInventory) {
             connectedInventory = (IInventory) tile;
         }
+        else
+        {
+            connectedInventory = null;
+        }
     }
 
     @Override
@@ -69,7 +74,7 @@ public class TileSortron extends TileMachineBase implements IPeripheral, SimpleC
 
         switch (id) {
             case 1:
-                ticksLeftToShowItemTransport = 10;
+                ticksLeftToShowItemTransport = ANIMATION_TIME;
                 worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
                 return true;
         }
@@ -80,7 +85,12 @@ public class TileSortron extends TileMachineBase implements IPeripheral, SimpleC
     public void updateEntity() {
 
         super.updateEntity();
-        if (worldObj.isRemote && ticksLeftToShowItemTransport > 0) ticksLeftToShowItemTransport--;
+        if (worldObj.isRemote && ticksLeftToShowItemTransport > 0) {
+            ticksLeftToShowItemTransport--;
+            if (ticksLeftToShowItemTransport == 0) {
+                worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+            }
+        }
     }
 
     public boolean showOutPutAnimation() {
@@ -180,6 +190,7 @@ public class TileSortron extends TileMachineBase implements IPeripheral, SimpleC
                         connectedInventory.setInventorySlotContents(slot, null);
                         return new String[] { getStringFromStack(stack) };
                     }
+                    return new Boolean[] { false };
                 }
                 throw new IllegalArgumentException("Slot value should be greater than or equal to 0 and smaller than the number of slots");
             }
@@ -294,7 +305,7 @@ public class TileSortron extends TileMachineBase implements IPeripheral, SimpleC
     @Override
     public void readFromNBT(NBTTagCompound compound) {
 
-        super.writeToNBT(compound);
+        super.readFromNBT(compound);
         acceptedColor = compound.getByte("acceptedCol");
         if (compound.hasKey("ItemStack")) {
             NBTTagList list = compound.getTagList("ItemStack", 10);
@@ -306,7 +317,7 @@ public class TileSortron extends TileMachineBase implements IPeripheral, SimpleC
     @Override
     public void writeToNBT(NBTTagCompound compound) {
 
-        super.readFromNBT(compound);
+        super.writeToNBT(compound);
         compound.setByte("acceptedCol", acceptedColor);
         if (acceptedStack != null) {
             NBTTagList list = new NBTTagList();

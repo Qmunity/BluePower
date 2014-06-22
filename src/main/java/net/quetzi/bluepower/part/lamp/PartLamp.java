@@ -6,6 +6,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
@@ -30,17 +31,18 @@ import org.lwjgl.opengl.GL11;
  */
 public class PartLamp extends BPPartFace {
     
-    protected String colorName;
-    private int      colorVal;
+    protected String  colorName;
+    private int       colorVal;
     protected boolean inverted;
     
-    protected int    power = 0;
+    protected int     power = 0;
     
     /**
      * @author amadornes
      * @param colorName
      * @param colorVal
-     * @param inverted TODO
+     * @param inverted
+     *            TODO
      */
     public PartLamp(String colorName, Integer colorVal, Boolean inverted) {
     
@@ -60,7 +62,7 @@ public class PartLamp extends BPPartFace {
     @Override
     public String getType() {
     
-        return (this.inverted ? "inverted" : "") + "lamp" + colorName;
+        return (inverted ? "inverted" : "") + "lamp" + colorName;
     }
     
     /**
@@ -69,7 +71,7 @@ public class PartLamp extends BPPartFace {
     @Override
     public String getUnlocalizedName() {
     
-        return (this.inverted ? "inverted" : "") + "lamp." + colorName;
+        return (inverted ? "inverted" : "") + "lamp." + colorName;
     }
     
     /**
@@ -106,15 +108,24 @@ public class PartLamp extends BPPartFace {
     @Override
     public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
     
+        power = inverted ? 15 : 0;
+        
         GL11.glPushMatrix();
         GL11.glTranslated(0.5, 0.5, 0.5);
         GL11.glRotated(180, 1, 0, 0);
         GL11.glTranslated(-0.5, -0.5, -0.5);
         Tessellator t = Tessellator.instance;
         Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
+        GL11.glPushMatrix();
         t.startDrawingQuads();
         renderStatic(new Vector3(0, 0, 0), 0);
         t.draw();
+        GL11.glPopMatrix();
+        GL11.glPushMatrix();
+        t.startDrawingQuads();
+        renderStatic(new Vector3(0, 0, 0), 1);
+        t.draw();
+        GL11.glPopMatrix();
         Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationItemsTexture);
         GL11.glPopMatrix();
     }
@@ -268,13 +279,12 @@ public class PartLamp extends BPPartFace {
         
         int old = power;
         
-        
         power = 0;
         for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS)
             power = Math.max(power, RedstoneHelper.getInput(world, x, y, z, d));
         
-        if(inverted){
-        	power = 15 - power;
+        if (inverted) {
+            power = 15 - power;
         }
         
         if (old != power) {
@@ -291,5 +301,6 @@ public class PartLamp extends BPPartFace {
     
         return CustomTabs.tabBluePowerLighting;
     }
+    
     
 }

@@ -35,7 +35,7 @@ public class IconSupplier {
             pneumaticTubeSide = event.map.registerIcon(Refs.MODID + ":tubes/pneumatic_tube_side");
             pneumaticTubeNode = event.map.registerIcon(Refs.MODID + ":tubes/tube_end");
             pneumaticTubeColorSide = event.map.registerIcon(Refs.MODID + ":tubes/tube_color_side");
-            pneumaticTubeColorNode = event.map.registerIcon(Refs.MODID + ":/tubes/tube_color_end");
+            pneumaticTubeColorNode = event.map.registerIcon(Refs.MODID + ":tubes/tube_color_end");
             
             cagedLampFootSide = event.map.registerIcon(Refs.MODID + ":lamps/cage_foot_side");
             cagedLampFootTop = event.map.registerIcon(Refs.MODID + ":lamps/cage_foot_top");

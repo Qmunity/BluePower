@@ -19,6 +19,8 @@ package net.quetzi.bluepower.client.gui;
 
 import java.util.List;
 
+import net.minecraft.client.gui.Gui;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.quetzi.bluepower.client.gui.widget.BaseWidget;
@@ -31,6 +33,7 @@ import net.quetzi.bluepower.network.messages.MessageGuiUpdate;
 import net.quetzi.bluepower.references.Refs;
 import net.quetzi.bluepower.tileentities.tier2.TileSortingMachine;
 import net.quetzi.bluepower.tileentities.tier2.TileSortingMachine.PullMode;
+import net.quetzi.bluepower.tileentities.tier2.TileSortingMachine.SortMode;
 
 /**
  * 
@@ -70,10 +73,15 @@ public class GuiSortingMachine extends GuiBase {
         WidgetMode pullModeWidget = new WidgetMode(9, guiLeft + 7, guiTop + 90, 196, PullMode.values().length, Refs.MODID + ":textures/GUI/sorting_machine.png") {
             
             @Override
-            public void addTooltip(List<String> curTip) {
+            public void addTooltip(List<String> curTip, boolean shiftPressed) {
             
                 curTip.add("gui.pullMode");
                 curTip.add(PullMode.values()[value].toString());
+                if (shiftPressed) {
+                    curTip.add(PullMode.values()[value].toString() + ".info");
+                } else {
+                    curTip.add("gui.sneakForInfo");
+                }
             }
         };
         pullModeWidget.value = sortingMachine.pullMode.ordinal();
@@ -82,10 +90,15 @@ public class GuiSortingMachine extends GuiBase {
         WidgetMode sortModeWidget = new WidgetMode(10, guiLeft + 7, guiTop + 106, 210, TileSortingMachine.SortMode.values().length, Refs.MODID + ":textures/GUI/sorting_machine.png") {
             
             @Override
-            public void addTooltip(List<String> curTip) {
+            public void addTooltip(List<String> curTip, boolean shiftPressed) {
             
                 curTip.add("gui.sortMode");
                 curTip.add(TileSortingMachine.SortMode.values()[value].toString());
+                if (shiftPressed) {
+                    curTip.add(TileSortingMachine.SortMode.values()[value].toString() + ".info");
+                } else {
+                    curTip.add("gui.sneakForInfo");
+                }
             }
         };
         sortModeWidget.value = sortingMachine.sortMode.ordinal();
@@ -104,7 +117,7 @@ public class GuiSortingMachine extends GuiBase {
     
         super.drawGuiContainerForegroundLayer(mouseX, mouseY);
         // fontRenderer.drawString(pump.getInvName(), 8, 6, 0xFFFFFF);
-        drawHorizontalAlignedString(7, 3, xSize - 14, sortingMachine.getInventoryName(), true);
+        drawHorizontalAlignedString(7, 6, xSize - 14, I18n.format("tile." + sortingMachine.getInventoryName() + ".name"), false);
         
     }
     
@@ -113,6 +126,7 @@ public class GuiSortingMachine extends GuiBase {
     
         super.drawGuiContainerBackgroundLayer(f, i, j);
         
+        if (sortingMachine.sortMode == SortMode.ALLSTACK_SEQUENTIAL || sortingMachine.sortMode == SortMode.ANYSTACK_SEQUENTIAL) Gui.func_146110_a(guiLeft + 24 + sortingMachine.curColumn * 18, guiTop + 16, 176, 0, 20, 92, 256, 256);
     }
     
 }
