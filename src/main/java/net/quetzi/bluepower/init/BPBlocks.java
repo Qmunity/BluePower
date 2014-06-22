@@ -24,21 +24,8 @@ import net.quetzi.bluepower.blocks.computer.BlockCPU;
 import net.quetzi.bluepower.blocks.computer.BlockDiskDrive;
 import net.quetzi.bluepower.blocks.computer.BlockIOExpander;
 import net.quetzi.bluepower.blocks.computer.BlockMonitor;
-import net.quetzi.bluepower.blocks.machines.BlockAlloyFurnace;
-import net.quetzi.bluepower.blocks.machines.BlockBlockBreaker;
-import net.quetzi.bluepower.blocks.machines.BlockBuffer;
-import net.quetzi.bluepower.blocks.machines.BlockDeployer;
-import net.quetzi.bluepower.blocks.machines.BlockEjector;
-import net.quetzi.bluepower.blocks.machines.BlockEngine;
-import net.quetzi.bluepower.blocks.machines.BlockIgniter;
-import net.quetzi.bluepower.blocks.machines.BlockKinectGenerator;
-import net.quetzi.bluepower.blocks.machines.BlockLamp;
-import net.quetzi.bluepower.blocks.machines.BlockProjectTable;
-import net.quetzi.bluepower.blocks.machines.BlockRelay;
-import net.quetzi.bluepower.blocks.machines.BlockSortingMachine;
-import net.quetzi.bluepower.blocks.machines.BlockSortron;
-import net.quetzi.bluepower.blocks.machines.BlockTransposer;
-import net.quetzi.bluepower.blocks.machines.BlockWindmill;
+import net.quetzi.bluepower.blocks.machines.*;
+import net.quetzi.bluepower.blocks.machines.BlockKineticGenerator;
 import net.quetzi.bluepower.blocks.worldgen.BlockCrackedBasalt;
 import net.quetzi.bluepower.blocks.worldgen.BlockCrop;
 import net.quetzi.bluepower.blocks.worldgen.BlockCustomFlower;
@@ -171,7 +158,7 @@ public class BPBlocks {
         io_expander = new BlockIOExpander();
 
         engine = new BlockEngine();
-        kinetic_generator = new BlockKinectGenerator();
+        kinetic_generator = new BlockKineticGenerator();
         windmill = new BlockWindmill();
         
         blockLamp = new Block[ItemDye.field_150922_c.length];
@@ -245,7 +232,7 @@ public class BPBlocks {
         GameRegistry.registerBlock(io_expander, Refs.BLOCKIOEXPANDER_NAME);
 
         GameRegistry.registerBlock(engine, Refs.ENGINE_NAME);
-        GameRegistry.registerBlock(kinetic_generator, Refs.KINECT_NAME);
+        GameRegistry.registerBlock(kinetic_generator, Refs.KINETICGENERATOR_NAME);
         GameRegistry.registerBlock(windmill, Refs.WINDMILL_NAME);
         
         for (int i = 0; i < ItemDye.field_150922_c.length; i++){

@@ -64,7 +64,7 @@ public class GUIHandler implements IGuiHandler {
             		return null;
             	}
             	return new ContainerMonitor(player.inventory, (TileMonitor) ent);
-            case DISK_DRIVE:
+            case DISK_DRIVE: // FIXME: this conditional will always be false (for fabricator77)
             	if (player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() instanceof ItemScrewdriver
             		&& player.getCurrentEquippedItem().getItem() instanceof ItemFloppyDisk) {
             		return null;
@@ -79,7 +79,7 @@ public class GUIHandler implements IGuiHandler {
             case REDBUS_ID:
             	return new ContainerRedbusID(player.inventory, (IRedBusWindow) ent);
             	
-            case KINECT_ID:
+            case KINETICGENERATOR_ID:
             	return new ContainerKinect(player.inventory, (TileKinectGenerator) ent);
             case DEPLOYER_ID:
             	return new ContainerDeployer(player.inventory, (TileDeployer) ent);
@@ -121,7 +121,7 @@ public class GUIHandler implements IGuiHandler {
             		return null;
             	}
             	return new GuiMonitor(player.inventory, (TileMonitor) ent);
-            case DISK_DRIVE:
+            case DISK_DRIVE: // FIXME: this conditional will always be false (for fabricator77)
             	if (player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() instanceof ItemScrewdriver
             	&& player.getCurrentEquippedItem().getItem() instanceof ItemFloppyDisk) {
             		return null;
@@ -134,7 +134,7 @@ public class GUIHandler implements IGuiHandler {
             	return new GuiIOExpander(player.inventory, (TileIOExpander) ent);
             case REDBUS_ID:
             	return new GuiRedbusID(player.inventory, (IRedBusWindow) ent);
-            case KINECT_ID:
+            case KINETICGENERATOR_ID:
             	return new GuiKinect(player.inventory, (TileKinectGenerator) ent);
             case DEPLOYER_ID:
             	return new GuiDeployer(player.inventory, (TileDeployer) ent);

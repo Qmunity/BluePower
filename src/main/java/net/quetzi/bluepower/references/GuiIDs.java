@@ -29,7 +29,7 @@ public enum GuiIDs {
     DISK_DRIVE,
     IO_EXPANDER,
     REDBUS_ID,
-    KINECT_ID,
+    KINETICGENERATOR_ID,
     DEPLOYER_ID,
     RELAY_ID,
     EJECTOR_ID;

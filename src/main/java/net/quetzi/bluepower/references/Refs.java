@@ -81,7 +81,7 @@ public class Refs {
     public static final String   RELAY_NAME               = "relay";
     
     public static final String 	 ENGINE_NAME			  = "engine";
-    public static final String   KINECT_NAME			  = "kinect_generator";
+    public static final String   KINETICGENERATOR_NAME	  = "kinetic_generator";
     public static final String   WINDMILL_NAME            = "windmill";
     
     public static final String   BRASSINGOT_NAME          = "brass_ingot";

@@ -13,13 +13,14 @@ import net.quetzi.bluepower.tileentities.tier1.TileKinectGenerator;
  * @author TheFjong
  * 
  */
-public class BlockKinectGenerator extends BlockContainerBase {
+public class BlockKineticGenerator extends BlockContainerBase {
 
-    public BlockKinectGenerator() {
+    public BlockKineticGenerator() {
         
         super(Material.iron);
         setCreativeTab(CustomTabs.tabBluePowerMachines);
-        setBlockName(Refs.KINECT_NAME);
+        setBlockName(Refs.KINETICGENERATOR_NAME);
+        this.setBlockTextureName(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + Refs.KINETICGENERATOR_NAME + "_front");
     }
 
     @Override
@@ -31,7 +32,7 @@ public class BlockKinectGenerator extends BlockContainerBase {
     @Override
     public GuiIDs getGuiID() {
 
-        return GuiIDs.KINECT_ID;
+        return GuiIDs.KINETICGENERATOR_ID;
     }
 
 }
