@@ -152,7 +152,8 @@ public class Recipes {
         //        craftManager.addRecipe(PartRegistry.getItemForPart("transparent"), new Object[] {"ACW", "CCC", "CW#", '#', BPItems.stone_wafer, 'A', BPItems.stone_anode, 'C', BPItems.stone_cathode, 'W', BPItems.stone_wire});
         //        craftManager.addRecipe(PartRegistry.getItemForPart("xnor"), new Object[] {"ACA", "CAC", "WCW", 'A', BPItems.stone_anode, 'C', BPItems.stone_cathode, 'W', BPItems.stone_wire});
         //        craftManager.addRecipe(PartRegistry.getItemForPart("xor"), new Object[] {"AWA", "CAC", "WCW", 'A', BPItems.stone_anode, 'C', BPItems.stone_cathode, 'W', BPItems.stone_wire});
-        
+
+        craftManager.addRecipe(PartRegistry.getItemForPart("pneumaticTube"), new Object[] {"BGB", 'B', BPItems.brass_ingot, 'G', Blocks.glass});
         craftManager.addRecipe(new ItemStack(BPBlocks.alloy_furnace, 1), new Object[] { "###", "# #", "###", '#', Blocks.brick_block });
         craftManager.addRecipe(new ItemStack(BPBlocks.block_breaker, 1), new Object[] { "#A#", "#P#", "#R#", '#', Blocks.cobblestone, 'A', Items.iron_pickaxe, 'P', Blocks.piston, 'R', Items.redstone });
         craftManager.addRecipe(new ItemStack(BPBlocks.buffer, 1), new Object[] { "#P#", "P P", "#P#", '#', Blocks.iron_bars, 'P', Blocks.planks });
