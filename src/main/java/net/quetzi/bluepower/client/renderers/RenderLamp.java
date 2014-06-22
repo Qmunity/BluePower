@@ -111,6 +111,13 @@ public class RenderLamp implements ISimpleBlockRenderingHandler {
         double minV = iconToUse.getMinV();
         double maxV = iconToUse.getMaxV();
         
+        // Bottom side
+        t.setNormal(0, -1, 0);
+        t.addVertexWithUV(vector.getMaxX(), vector.getMinY(), vector.getMaxZ(), minU, maxV);
+        t.addVertexWithUV(vector.getMinX(), vector.getMinY(), vector.getMaxZ(), minU, minV);
+        t.addVertexWithUV(vector.getMinX(), vector.getMinY(), vector.getMinZ(), maxU, minV);
+        t.addVertexWithUV(vector.getMaxX(), vector.getMinY(), vector.getMinZ(), maxU, maxV);
+        
         // Top side
         t.setNormal(0, 1, 0);
         t.addVertexWithUV(vector.getMinX(), vector.getMaxY(), vector.getMaxZ(), minU, maxV);

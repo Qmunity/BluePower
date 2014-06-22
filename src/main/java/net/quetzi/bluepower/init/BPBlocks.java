@@ -19,19 +19,31 @@ package net.quetzi.bluepower.init;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemDye;
-import net.quetzi.bluepower.blocks.machines.BlockBuffer;
 import net.quetzi.bluepower.blocks.BlockItemOre;
 import net.quetzi.bluepower.blocks.computer.BlockCPU;
 import net.quetzi.bluepower.blocks.computer.BlockDiskDrive;
 import net.quetzi.bluepower.blocks.computer.BlockIOExpander;
 import net.quetzi.bluepower.blocks.computer.BlockMonitor;
-import net.quetzi.bluepower.blocks.machines.*;
+import net.quetzi.bluepower.blocks.machines.BlockAlloyFurnace;
+import net.quetzi.bluepower.blocks.machines.BlockBlockBreaker;
+import net.quetzi.bluepower.blocks.machines.BlockBuffer;
+import net.quetzi.bluepower.blocks.machines.BlockDeployer;
+import net.quetzi.bluepower.blocks.machines.BlockEjector;
+import net.quetzi.bluepower.blocks.machines.BlockEngine;
+import net.quetzi.bluepower.blocks.machines.BlockIgniter;
+import net.quetzi.bluepower.blocks.machines.BlockKinectGenerator;
+import net.quetzi.bluepower.blocks.machines.BlockLamp;
+import net.quetzi.bluepower.blocks.machines.BlockProjectTable;
+import net.quetzi.bluepower.blocks.machines.BlockRelay;
+import net.quetzi.bluepower.blocks.machines.BlockSortingMachine;
+import net.quetzi.bluepower.blocks.machines.BlockSortron;
+import net.quetzi.bluepower.blocks.machines.BlockTransposer;
+import net.quetzi.bluepower.blocks.machines.BlockWindmill;
 import net.quetzi.bluepower.blocks.worldgen.BlockCrackedBasalt;
 import net.quetzi.bluepower.blocks.worldgen.BlockCrop;
 import net.quetzi.bluepower.blocks.worldgen.BlockCustomFlower;
 import net.quetzi.bluepower.blocks.worldgen.BlockStoneOre;
 import net.quetzi.bluepower.blocks.worldgen.BlockStoneOreConnected;
-import net.quetzi.bluepower.part.lamp.PartLamp;
 import net.quetzi.bluepower.references.Dependencies;
 import net.quetzi.bluepower.references.Refs;
 import cpw.mods.fml.common.Loader;
@@ -167,8 +179,9 @@ public class BPBlocks {
         
         for (int i = 0; i < ItemDye.field_150922_c.length; i++){
             blockLamp[i] = new BlockLamp(false, ItemDye.field_150921_b[i].toLowerCase(), ItemDye.field_150922_c[i]);
-            //registerPart(PartLamp.class, ItemDye.field_150921_b[i].toLowerCase(), ItemDye.field_150922_c[i], false);
-            
+        }
+        for (int i = 0; i < ItemDye.field_150922_c.length; i++){
+            blockLampInverted[i] = new BlockLamp(true, ItemDye.field_150921_b[i].toLowerCase(), ItemDye.field_150922_c[i]);
         }
         
         registerBlocks();
@@ -237,6 +250,9 @@ public class BPBlocks {
         
         for (int i = 0; i < ItemDye.field_150922_c.length; i++){
             GameRegistry.registerBlock(blockLamp[i], blockLamp[i].getUnlocalizedName());
+        }
+        for (int i = 0; i < ItemDye.field_150922_c.length; i++){
+            GameRegistry.registerBlock(blockLampInverted[i], blockLampInverted[i].getUnlocalizedName());
         }
     }
 

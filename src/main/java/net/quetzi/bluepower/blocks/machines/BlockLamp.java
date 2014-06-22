@@ -29,7 +29,7 @@ public class BlockLamp extends BlockContainerBase {
         setInverted(_isInverted);
         colorName = _colorName;
         setColor(_color);
-        setBlockName(Refs.LAMP_NAME + colorName);
+        setBlockName(Refs.LAMP_NAME + (isInverted ? "inverted" : "") + colorName);
         setCreativeTab(CustomTabs.tabBluePowerLighting);
         
     }
