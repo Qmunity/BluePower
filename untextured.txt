@@ -14,7 +14,7 @@ io_expander_back (temp textures needed, final design relies on bundled cable sha
 
 Items
 *****
-stone_redwire (is called Stone_wire)
+stone_redwire (is called Stone_wire) stone_wire and stone_redwire are different, stone_redwire should be thicker (difference between red alloy wire and redstone in the recipe)
 stone_bundle(done)
 canvas(done)
 
@@ -35,3 +35,5 @@ Sorting Machine has some missing mode icons. All pull modes are missing, and the
 If you add them to the texture file, it would be nice if you could place the pull modes in the gap I made, and the last two sort modes under the other ones. All in order would be nice :) tnx! MineMaarten
 
 Also, color widgets in GUI's are now rendered in code, so they don't have to be hard-placed in GUI textures :)
+
+deployer_front_active missing an mcmeta file?
