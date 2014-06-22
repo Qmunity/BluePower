@@ -167,6 +167,23 @@ public class PartRegistry {
         
         return null;
     }
+
+    public static ItemStack getItemForPart(String id, int stacksize) {
+
+        if (parts.containsKey(id)) {
+            ItemStack is = new ItemStack(BPItems.multipart);
+
+            NBTTagCompound tag = new NBTTagCompound();
+            tag.setString("id", id);
+
+            is.setTagCompound(tag);
+            is.stackSize = stacksize;
+
+            return is;
+        }
+
+        return null;
+    }
     
     /**
      * Gets the part id stored in the item and creates a new part with that id
