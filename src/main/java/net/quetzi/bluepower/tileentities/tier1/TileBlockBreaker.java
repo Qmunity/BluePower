@@ -38,8 +38,13 @@ public class TileBlockBreaker extends TileMachineBase {
             ForgeDirection oppDirection = direction.getOpposite();
             Block breakBlock = worldObj.getBlock(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ);
             int breakMeta = worldObj.getBlockMetadata(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ);
+            float breakHardness = breakBlock.getBlockHardness(worldObj, xCoord, yCoord, zCoord);
             ArrayList<ItemStack> breakStacks = breakBlock.getDrops(worldObj, xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ, breakMeta, 0);
             TileEntity tileEntity = worldObj.getTileEntity(xCoord + oppDirection.offsetX, yCoord + oppDirection.offsetY, zCoord + oppDirection.offsetZ);
+                        
+            if(breakHardness == -1.0F) {
+            	return;
+            }
             
             worldObj.func_147480_a(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ, false); //destroyBlock
             
