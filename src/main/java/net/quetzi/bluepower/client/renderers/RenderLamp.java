@@ -27,6 +27,7 @@ public class RenderLamp implements ISimpleBlockRenderingHandler {
         
         // if (pass == 0) {
         Tessellator t = Tessellator.instance;
+        t.startDrawingQuads();
         t.setColorOpaque(r, g, b);
         IIcon iconToUse;
         int power = 0;
@@ -75,6 +76,8 @@ public class RenderLamp implements ISimpleBlockRenderingHandler {
         t.addVertexWithUV(vector.getMaxX(), vector.getMinY(), vector.getMaxZ(), maxU, maxV);
         t.addVertexWithUV(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ(), maxU, minV);
         t.addVertexWithUV(vector.getMinX(), vector.getMaxY(), vector.getMaxZ(), minU, minV);
+        
+        t.draw();
         // }
     }
     
