@@ -6,7 +6,7 @@ import net.quetzi.bluepower.tileentities.TileBase;
 
 /**
  * @author Koen Beckers (K4Unl)
- * 
+ * Yes. I only need this class to do the getPower() function.. damn :(
  */
 public class TileLamp extends TileBase {
     
@@ -18,10 +18,4 @@ public class TileLamp extends TileBase {
         }
         return power;
     }
-    
-    public int getLightLevel() {
-    
-        return 0;
-    }
-    
 }

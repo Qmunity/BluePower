@@ -21,6 +21,7 @@ public class RenderHelper {
     
     /**
      * Adds a vertex. Just a wrapper function for openGL
+     * 
      * @author Koen Beckers (K4Unl)
      * @param x
      * @param y
@@ -33,6 +34,7 @@ public class RenderHelper {
     
     /**
      * Adds a vertex with a texture.
+     * 
      * @author Koen Beckers (K4Unl)
      * @param x
      * @param y
@@ -215,6 +217,7 @@ public class RenderHelper {
     
     /**
      * Draws a colored cube with the size of vector. Every face has a different color This uses OpenGL
+     * 
      * @author Koen Beckers (K4Unl)
      * @param vector
      */
@@ -271,6 +274,7 @@ public class RenderHelper {
     
     /**
      * Draws a colored cube with the size of vector. All faces have the specified color. This uses OpenGL
+     * 
      * @author Koen Beckers (K4Unl) and Amadornes
      * @param vector
      * @param color
@@ -325,7 +329,78 @@ public class RenderHelper {
     }
     
     /**
+     * Draws a colored cube with the size of vector. All faces have the specified color. This uses Tesselator
+     * 
+     * @author Koen Beckers (K4Unl) and Amadornes
+     * @param vector
+     * @param color
+     */
+    public static void drawTesselatedColoredCube(Vector3Cube vector, int r, int g, int b, int a) {
+    
+        Tessellator t = Tessellator.instance;
+        boolean wasTesselating = false;
+        
+        // Check if we were already tesselating
+        try {
+            t.startDrawingQuads();
+        } catch (IllegalStateException e) {
+            wasTesselating = true;
+            
+        }
+        
+        t.setColorRGBA(r, g, b, a);
+        
+        t.setNormal(0, 1, 0);
+        t.addVertex(vector.getMinX(), vector.getMaxY(), vector.getMaxZ());
+        t.addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ());
+        t.addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMinZ());
+        t.addVertex(vector.getMinX(), vector.getMaxY(), vector.getMinZ());
+        
+        // Bottom side
+        t.setNormal(0, -1, 0);
+        t.addVertex(vector.getMaxX(), vector.getMinY(), vector.getMaxZ());
+        t.addVertex(vector.getMinX(), vector.getMinY(), vector.getMaxZ());
+        t.addVertex(vector.getMinX(), vector.getMinY(), vector.getMinZ());
+        t.addVertex(vector.getMaxX(), vector.getMinY(), vector.getMinZ());
+        
+        // Draw west side:
+        t.setNormal(-1, 0, 0);
+        t.addVertex(vector.getMinX(), vector.getMinY(), vector.getMaxZ());
+        t.addVertex(vector.getMinX(), vector.getMaxY(), vector.getMaxZ());
+        t.addVertex(vector.getMinX(), vector.getMaxY(), vector.getMinZ());
+        t.addVertex(vector.getMinX(), vector.getMinY(), vector.getMinZ());
+        
+        // Draw east side:
+        t.setNormal(1, 0, 0);
+        t.addVertex(vector.getMaxX(), vector.getMinY(), vector.getMinZ());
+        t.addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMinZ());
+        t.addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ());
+        t.addVertex(vector.getMaxX(), vector.getMinY(), vector.getMaxZ());
+        
+        // Draw north side
+        t.setNormal(0, 0, -1);
+        t.addVertex(vector.getMinX(), vector.getMinY(), vector.getMinZ());
+        t.addVertex(vector.getMinX(), vector.getMaxY(), vector.getMinZ());
+        t.addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMinZ());
+        t.addVertex(vector.getMaxX(), vector.getMinY(), vector.getMinZ());
+        
+        // Draw south side
+        t.setNormal(0, 0, 1);
+        t.addVertex(vector.getMinX(), vector.getMinY(), vector.getMaxZ());
+        t.addVertex(vector.getMaxX(), vector.getMinY(), vector.getMaxZ());
+        t.addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ());
+        t.addVertex(vector.getMinX(), vector.getMaxY(), vector.getMaxZ());
+        
+        GL11.glColor4d(1, 1, 1, 1);
+        
+        if(!wasTesselating){
+            t.draw();
+        }
+    }
+    
+    /**
      * Draws a colored cube with the size of vector. Every face has a different color This uses the Tessellator
+     * 
      * @author Koen Beckers (K4Unl)
      * @param vector
      */
@@ -396,6 +471,7 @@ public class RenderHelper {
     
     /**
      * Draws a cube with the size of vector. It uses the texture that is already bound and maps that completely This uses the Tessellator
+     * 
      * @author Koen Beckers (K4Unl)
      * @param vector
      */
@@ -465,6 +541,7 @@ public class RenderHelper {
     
     /**
      * Draws a cube with the size of vector. Every face has the same color This uses the Tessellator
+     * 
      * @author Koen Beckers (K4Unl)
      * @param vector
      */
@@ -529,6 +606,7 @@ public class RenderHelper {
     
     /**
      * ???
+     * 
      * @author ???
      * @param vector
      */
@@ -587,6 +665,7 @@ public class RenderHelper {
     
     /**
      * ???
+     * 
      * @author amadornes
      * @param d
      */

@@ -59,7 +59,12 @@ public class BlockLamp extends BlockContainerBase {
     
         TileLamp tileEntity = (TileLamp) w.getTileEntity(x, y, z);
         if (tileEntity != null) {
-            return tileEntity.getLightLevel();
+            int power = tileEntity.getPower();
+            
+            if (isInverted()) {
+                power = 15 - power;
+            }
+            return power;
         } else {
             return 0;
         }

@@ -40,7 +40,6 @@ import net.quetzi.bluepower.part.gate.GateSequencer;
 import net.quetzi.bluepower.part.gate.GateTimer;
 import net.quetzi.bluepower.part.lamp.PartCageLamp;
 import net.quetzi.bluepower.part.lamp.PartFixture;
-import net.quetzi.bluepower.part.lamp.PartLamp;
 import net.quetzi.bluepower.part.tube.PneumaticTube;
 import net.quetzi.bluepower.references.Refs;
 
@@ -296,8 +295,10 @@ public class PartRegistry {
         
         for (int i = 0; i < ItemDye.field_150922_c.length; i++)
             registerPart(PartCageLamp.class, ItemDye.field_150921_b[i].toLowerCase(), ItemDye.field_150922_c[i], true);
-        /*for (int i = 0; i < ItemDye.field_150922_c.length; i++)
-            registerPart(PartLamp.class, ItemDye.field_150921_b[i].toLowerCase(), ItemDye.field_150922_c[i], true);*/
+        /*
+         * for (int i = 0; i < ItemDye.field_150922_c.length; i++)
+         * registerPart(PartLamp.class, ItemDye.field_150921_b[i].toLowerCase(), ItemDye.field_150922_c[i], true);
+         */
         for (int i = 0; i < ItemDye.field_150922_c.length; i++)
             registerPart(PartFixture.class, ItemDye.field_150921_b[i].toLowerCase(), ItemDye.field_150922_c[i], true);
         

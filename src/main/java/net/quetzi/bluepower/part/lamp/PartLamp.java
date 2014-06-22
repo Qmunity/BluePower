@@ -6,7 +6,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
@@ -26,6 +25,7 @@ import org.lwjgl.opengl.GL11;
 
 /**
  * Base class for the lamps that are multiparts.
+ * 
  * @author Koen Beckers (K4Unl)
  * 
  */
@@ -164,6 +164,7 @@ public class PartLamp extends BPPartFace {
     
     /**
      * Code to render the base portion of the lamp. Will not be colored
+     * 
      * @author Koen Beckers (K4Unl)
      * @param pass
      *            The pass that is rendered now. Pass 1 for solids. Pass 2 for transparents
@@ -301,6 +302,5 @@ public class PartLamp extends BPPartFace {
     
         return CustomTabs.tabBluePowerLighting;
     }
-    
     
 }
