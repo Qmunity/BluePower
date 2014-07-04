@@ -23,7 +23,7 @@ project.ext {
 }
 
 
-version = "1.7.2-${project.ext.major}.${project.minor}"
+version = "1.7.10-${project.ext.major}.${project.minor}"
 group= "net.quetzi.bluepower" 
 archivesBaseName = "BluePower"
 
@@ -49,13 +49,12 @@ dependencies {
         f.mkdir()
     }
 	println("  Downloading dependencies!")
-	grabDep('ccl', 'http://files.minecraftforge.net/maven/codechicken/CodeChickenLib/1.7.2-1.1.1.81/CodeChickenLib-1.7.2-1.1.1.81-dev.jar')
-	grabDep('fmp', 'http://files.minecraftforge.net/maven/codechicken/ForgeMultipart/1.7.2-1.1.0.282/ForgeMultipart-1.7.2-1.1.0.282-dev.jar')
-	grabDep('ccc', 'http://www.chickenbones.craftsaddle.org/Files/New_Versions/1.7.2/CodeChickenCore-1.7.2-1.0.0-dev.jar')
-	grabDep('nei', 'http://www.chickenbones.craftsaddle.org/Files/New_Versions/1.7.2/NotEnoughItems-1.7.2-1.0.1-dev.jar')
-	grabDep('ccc', 'http://www.chickenbones.craftsaddle.org/Files/New_Versions/1.7.2/CodeChickenCore-1.7.2-1.0.0-dev.jar')
+	grabDep('ccl', 'http://files.minecraftforge.net/maven/codechicken/CodeChickenLib/1.7.10-1.1.1.93/CodeChickenLib-1.7.10-1.1.1.93-dev.jar')
+	grabDep('fmp', 'http://files.minecraftforge.net/maven/codechicken/ForgeMultipart/1.7.2-1.1.0.294/ForgeMultipart-1.7.2-1.1.0.294-dev.jar')
+	grabDep('ccc', 'http://www.chickenbones.craftsaddle.org/Files/New_Versions/1.7.10/CodeChickenCore-1.7.10-1.0.1.8-dev.jar')
+	grabDep('nei', 'http://www.chickenbones.craftsaddle.org/Files/New_Versions/1.7.10/NotEnoughItems-1.7.10-1.0.2.15-dev.jar')
 	
-	grabDep('oc', 'http://ci.cil.li/job/OpenComputers-MC1.7/190/artifact/build/libs/OpenComputers-MC1.7.2-1.3.0.190-beta.1-deobf.jar')
+	grabDep('oc', 'http://ci.cil.li/job/OpenComponents-MC1.7/lastSuccessfulBuild/artifact/build/libs/OpenComponents-MC1.7.2-0.2.0.9-deobf.jar')
 	grabDep('waila', 'http://mobiusstrip.eu/maven/mcp/mobius/waila/Waila/1.5.2a/Waila-1.5.2a-dev.jar')
 	
 	println("  Adding dependencies!")
@@ -64,7 +63,7 @@ dependencies {
 }
 
 minecraft {
-    version = "1.7.2-10.12.2.1121"
+    version = "1.7.10-10.13.0.1160"
     assetDir = "eclipse/assets"
     
 	// replacing stuff in the source
