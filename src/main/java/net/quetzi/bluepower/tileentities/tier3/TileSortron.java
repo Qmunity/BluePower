@@ -33,7 +33,7 @@ import java.util.Set;
  */
 @Optional.InterfaceList(value = {@Optional.Interface(iface = "dan200.computercraft.api.peripheral.IPeripheral", modid = Dependencies.COMPUTER_CRAFT),
         @Optional.Interface(iface = "li.cil.oc.api.network.SimpleComponent", modid = Dependencies.OPEN_COMPUTERS)})
-public class TileSortron extends TileMachineBase { //implements IPeripheral, SimpleComponent {
+public class TileSortron extends TileMachineBase implements IPeripheral, SimpleComponent {
 
     private static final String NAME = "BluePower.Sortron";
     private static final int ANIMATION_TIME = 10;
@@ -333,174 +333,174 @@ public class TileSortron extends TileMachineBase { //implements IPeripheral, Sim
     ComputerCraft implementation
      */
 
-//    @Override
-//    @Optional.Method(modid = Dependencies.COMPUTER_CRAFT)
-//    public String getType() {
-//
-//        return NAME;
-//    }
-//
-//    @Override
-//    @Optional.Method(modid = Dependencies.COMPUTER_CRAFT)
-//    public String[] getMethodNames() {
-//
-//        return new String[] { "setAcceptedCol", "getAcceptedCol", "setAcceptedItem", "getAcceptedItem",
-//                "getNumSlots", "getSlotContents", "pullFromSlot", "sort", "getStackSizeLeft" };
-//    }
-//
-//    @Override
-//    @Optional.Method(modid = Dependencies.COMPUTER_CRAFT)
-//    public Object[] callMethod(IComputerAccess computer, ILuaContext context, int method, Object[] arguments) throws Exception {
-//
-//        switch (method) {
-//            case 0:
-//                return setAcceptedCol(arguments);
-//            case 1:
-//                return getAcceptedCol(arguments);
-//            case 2:
-//                return setAcceptedItem(arguments);
-//            case 3:
-//                return getAcceptedItem(arguments);
-//            case 4:
-//                return getNumSlots(arguments);
-//            case 5:
-//                return getSlotContents(arguments);
-//            case 6:
-//                return pullFromSlot(arguments);
-//            case 7:
-//                return sort(arguments);
-//            case 8:
-//                return getStackSizeLeft(arguments);
-//        }
-//        return new Object[0];
-//    }
-//
-//    @Override
-//    @Optional.Method(modid = Dependencies.COMPUTER_CRAFT)
-//    public void attach(IComputerAccess computer) {
-//
-//        connectedComputers.add(computer);
-//    }
-//
-//    @Override
-//    @Optional.Method(modid = Dependencies.COMPUTER_CRAFT)
-//    public void detach(IComputerAccess computer) {
-//
-//        connectedComputers.remove(computer);
-//    }
-//
-//    @Override
-//    @Optional.Method(modid = Dependencies.COMPUTER_CRAFT)
-//    public boolean equals(IPeripheral other) {
-//
-//        return other.getType().equals(this.getType());
-//    }
-//
-//    /*
-//    OpenComputers implementation
-//     */
-//
-//    @Override
-//    @Optional.Method(modid = Dependencies.OPEN_COMPUTERS)
-//    public String getComponentName() {
-//
-//        return NAME;
-//    }
-//
-//    @Callback
-//    @Optional.Method(modid = Dependencies.OPEN_COMPUTERS)
-//    public Object[] setAcceptedCol(Context context, Arguments arguments) throws Exception {
-//        Object[] args = new Object[arguments.count()];
-//        for (int i = 0; i < args.length; i++) {
-//            args[i] = arguments.checkAny(i);
-//        }
-//        return setAcceptedCol(args);
-//    }
-//
-//    @Callback
-//    @Optional.Method(modid = Dependencies.OPEN_COMPUTERS)
-//    public Object[] getAcceptedCol(Context context, Arguments arguments) throws Exception {
-//        Object[] args = new Object[arguments.count()];
-//        for (int i = 0; i < args.length; i++) {
-//            args[i] = arguments.checkAny(i);
-//        }
-//        return getAcceptedCol(args);
-//    }
-//
-//    @Callback
-//    @Optional.Method(modid = Dependencies.OPEN_COMPUTERS)
-//    public Object[] setAcceptedItem(Context context, Arguments arguments) throws Exception {
-//        Object[] args = new Object[arguments.count()];
-//        for (int i = 0; i < args.length; i++) {
-//            args[i] = arguments.checkAny(i);
-//        }
-//        return setAcceptedItem(args);
-//    }
-//
-//    @Callback
-//    @Optional.Method(modid = Dependencies.OPEN_COMPUTERS)
-//    public Object[] getAcceptedItem(Context context, Arguments arguments) throws Exception {
-//        Object[] args = new Object[arguments.count()];
-//        for (int i = 0; i < args.length; i++) {
-//            args[i] = arguments.checkAny(i);
-//        }
-//        return getAcceptedItem(args);
-//    }
-//
-//    @Callback
-//    @Optional.Method(modid = Dependencies.OPEN_COMPUTERS)
-//    public Object[] getNumSlots(Context context, Arguments arguments) throws Exception {
-//        Object[] args = new Object[arguments.count()];
-//        for (int i = 0; i < args.length; i++) {
-//            args[i] = arguments.checkAny(i);
-//        }
-//        return getNumSlots(args);
-//    }
-//
-//    @Callback
-//    @Optional.Method(modid = Dependencies.OPEN_COMPUTERS)
-//    public Object[] getSlotContents(Context context, Arguments arguments) throws Exception {
-//        Object[] args = new Object[arguments.count()];
-//        for (int i = 0; i < args.length; i++) {
-//            args[i] = arguments.checkAny(i);
-//        }
-//        return getSlotContents(args);
-//    }
-//
-//    @Callback
-//    @Optional.Method(modid = Dependencies.OPEN_COMPUTERS)
-//    public Object[] pullFromSlot(Context context, Arguments arguments) throws Exception {
-//        Object[] args = new Object[arguments.count()];
-//        for (int i = 0; i < args.length; i++) {
-//            args[i] = arguments.checkAny(i);
-//        }
-//        return pullFromSlot(args);
-//    }
-//
-//    @Callback
-//    @Optional.Method(modid = Dependencies.OPEN_COMPUTERS)
-//    public Object[] sort(Context context, Arguments arguments) throws Exception {
-//        Object[] args = new Object[arguments.count()];
-//        for (int i = 0; i < args.length; i++) {
-//            args[i] = arguments.checkAny(i);
-//        }
-//        return sort(args);
-//    }
-//
-//    @Callback
-//    @Optional.Method(modid = Dependencies.OPEN_COMPUTERS)
-//    public Object[] getStackSizeLeft(Context context, Arguments arguments) throws Exception {
-//        Object[] args = new Object[arguments.count()];
-//        for (int i = 0; i < args.length; i++) {
-//            args[i] = arguments.checkAny(i);
-//        }
-//        return getStackSizeLeft(args);
-//    }
-//
-//    @Callback
-//    @Optional.Method(modid = Dependencies.OPEN_COMPUTERS)
-//    public Object[] greet(Context context, Arguments arguments) {
-//        contexts.add(context);
-//        return null;
-//    }
+    @Override
+    @Optional.Method(modid = Dependencies.COMPUTER_CRAFT)
+    public String getType() {
+
+        return NAME;
+    }
+
+    @Override
+    @Optional.Method(modid = Dependencies.COMPUTER_CRAFT)
+    public String[] getMethodNames() {
+
+        return new String[] { "setAcceptedCol", "getAcceptedCol", "setAcceptedItem", "getAcceptedItem",
+                "getNumSlots", "getSlotContents", "pullFromSlot", "sort", "getStackSizeLeft" };
+    }
+
+    @Override
+    @Optional.Method(modid = Dependencies.COMPUTER_CRAFT)
+    public Object[] callMethod(IComputerAccess computer, ILuaContext context, int method, Object[] arguments) throws Exception {
+
+        switch (method) {
+            case 0:
+                return setAcceptedCol(arguments);
+            case 1:
+                return getAcceptedCol(arguments);
+            case 2:
+                return setAcceptedItem(arguments);
+            case 3:
+                return getAcceptedItem(arguments);
+            case 4:
+                return getNumSlots(arguments);
+            case 5:
+                return getSlotContents(arguments);
+            case 6:
+                return pullFromSlot(arguments);
+            case 7:
+                return sort(arguments);
+            case 8:
+                return getStackSizeLeft(arguments);
+        }
+        return new Object[0];
+    }
+
+    @Override
+    @Optional.Method(modid = Dependencies.COMPUTER_CRAFT)
+    public void attach(IComputerAccess computer) {
+
+        connectedComputers.add(computer);
+    }
+
+    @Override
+    @Optional.Method(modid = Dependencies.COMPUTER_CRAFT)
+    public void detach(IComputerAccess computer) {
+
+        connectedComputers.remove(computer);
+    }
+
+    @Override
+    @Optional.Method(modid = Dependencies.COMPUTER_CRAFT)
+    public boolean equals(IPeripheral other) {
+
+        return other.getType().equals(this.getType());
+    }
+
+    /*
+    OpenComputers implementation
+     */
+
+    @Override
+    @Optional.Method(modid = Dependencies.OPEN_COMPUTERS)
+    public String getComponentName() {
+
+        return NAME;
+    }
+
+    @Callback
+    @Optional.Method(modid = Dependencies.OPEN_COMPUTERS)
+    public Object[] setAcceptedCol(Context context, Arguments arguments) throws Exception {
+        Object[] args = new Object[arguments.count()];
+        for (int i = 0; i < args.length; i++) {
+            args[i] = arguments.checkAny(i);
+        }
+        return setAcceptedCol(args);
+    }
+
+    @Callback
+    @Optional.Method(modid = Dependencies.OPEN_COMPUTERS)
+    public Object[] getAcceptedCol(Context context, Arguments arguments) throws Exception {
+        Object[] args = new Object[arguments.count()];
+        for (int i = 0; i < args.length; i++) {
+            args[i] = arguments.checkAny(i);
+        }
+        return getAcceptedCol(args);
+    }
+
+    @Callback
+    @Optional.Method(modid = Dependencies.OPEN_COMPUTERS)
+    public Object[] setAcceptedItem(Context context, Arguments arguments) throws Exception {
+        Object[] args = new Object[arguments.count()];
+        for (int i = 0; i < args.length; i++) {
+            args[i] = arguments.checkAny(i);
+        }
+        return setAcceptedItem(args);
+    }
+
+    @Callback
+    @Optional.Method(modid = Dependencies.OPEN_COMPUTERS)
+    public Object[] getAcceptedItem(Context context, Arguments arguments) throws Exception {
+        Object[] args = new Object[arguments.count()];
+        for (int i = 0; i < args.length; i++) {
+            args[i] = arguments.checkAny(i);
+        }
+        return getAcceptedItem(args);
+    }
+
+    @Callback
+    @Optional.Method(modid = Dependencies.OPEN_COMPUTERS)
+    public Object[] getNumSlots(Context context, Arguments arguments) throws Exception {
+        Object[] args = new Object[arguments.count()];
+        for (int i = 0; i < args.length; i++) {
+            args[i] = arguments.checkAny(i);
+        }
+        return getNumSlots(args);
+    }
+
+    @Callback
+    @Optional.Method(modid = Dependencies.OPEN_COMPUTERS)
+    public Object[] getSlotContents(Context context, Arguments arguments) throws Exception {
+        Object[] args = new Object[arguments.count()];
+        for (int i = 0; i < args.length; i++) {
+            args[i] = arguments.checkAny(i);
+        }
+        return getSlotContents(args);
+    }
+
+    @Callback
+    @Optional.Method(modid = Dependencies.OPEN_COMPUTERS)
+    public Object[] pullFromSlot(Context context, Arguments arguments) throws Exception {
+        Object[] args = new Object[arguments.count()];
+        for (int i = 0; i < args.length; i++) {
+            args[i] = arguments.checkAny(i);
+        }
+        return pullFromSlot(args);
+    }
+
+    @Callback
+    @Optional.Method(modid = Dependencies.OPEN_COMPUTERS)
+    public Object[] sort(Context context, Arguments arguments) throws Exception {
+        Object[] args = new Object[arguments.count()];
+        for (int i = 0; i < args.length; i++) {
+            args[i] = arguments.checkAny(i);
+        }
+        return sort(args);
+    }
+
+    @Callback
+    @Optional.Method(modid = Dependencies.OPEN_COMPUTERS)
+    public Object[] getStackSizeLeft(Context context, Arguments arguments) throws Exception {
+        Object[] args = new Object[arguments.count()];
+        for (int i = 0; i < args.length; i++) {
+            args[i] = arguments.checkAny(i);
+        }
+        return getStackSizeLeft(args);
+    }
+
+    @Callback
+    @Optional.Method(modid = Dependencies.OPEN_COMPUTERS)
+    public Object[] greet(Context context, Arguments arguments) {
+        contexts.add(context);
+        return null;
+    }
 }
