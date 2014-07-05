@@ -17,7 +17,11 @@
 
 package net.quetzi.bluepower.init;
 
+import cpw.mods.fml.client.event.ConfigChangedEvent;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.common.config.Configuration;
+import net.quetzi.bluepower.BluePower;
+import net.quetzi.bluepower.references.Refs;
 
 public class Config {
     
@@ -69,8 +73,8 @@ public class Config {
 
     public static String[] alloyFurnaceBlacklist;
     
-    public static void setUp(Configuration config) {
-    
+    public static void syncConfig(Configuration config) {
+
         config.addCustomCategoryComment("World Gen", "Toggle blocks being generated into the world");
         generateTungsten = config.get("World Gen Tungsten", "generateTungsten", true).getBoolean(true);
         minTungstenY = config.get("World Gen Tungsten", "minTungstenY", 5).getInt();
@@ -122,5 +126,15 @@ public class Config {
         config.addCustomCategoryComment("Enchantment IDs", "Toggle enchantment ids");
         vorpalEnchantmentId = config.get("Enchantment IDs", "vorpalEnchantmentId", 100).getInt();
         disjunctionEnchantmentId = config.get("Enchantment IDs", "disjunctionEnchantmentId", 101).getInt();
+
+        if(config.hasChanged()) {
+            config.save();
+        }
+    }
+    @SubscribeEvent
+    public void onConfigChanged(ConfigChangedEvent event) {
+        if (event.modID.equals(Refs.MODID)) {
+            syncConfig(BluePower.config);
+        }
     }
 }

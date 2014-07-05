@@ -8,6 +8,8 @@
 
 package net.quetzi.bluepower;
 
+import cpw.mods.fml.client.event.ConfigChangedEvent;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
@@ -44,7 +46,7 @@ import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 
-@Mod(modid = Refs.MODID, name = Refs.NAME)
+@Mod(modid = Refs.MODID, name = Refs.NAME, guiFactory = Refs.GUIFACTORY)
 public class BluePower {
     
     @Instance(Refs.MODID)
@@ -53,6 +55,7 @@ public class BluePower {
     @SidedProxy(clientSide = Refs.PROXY_LOCATION + ".ClientProxy", serverSide = Refs.PROXY_LOCATION + ".CommonProxy")
     public static CommonProxy proxy;
     public static Logger      log;
+    public static Configuration config;
     
     @EventHandler
     public void PreInit(FMLPreInitializationEvent event) {
@@ -60,13 +63,11 @@ public class BluePower {
         event.getModMetadata().version = Refs.fullVersionString();
         
         log = event.getModLog();
-        Configuration config = new Configuration(event.getSuggestedConfigurationFile());
+        config = new Configuration(event.getSuggestedConfigurationFile());
         
         CustomTabs.init();
         // Load configs
-        config.load();
-        Config.setUp(config);
-        config.save();
+        Config.syncConfig(config);
         BPBlocks.init();
         BPItems.init();
         BPRegistry.alloyFurnaceRegistry = AlloyFurnaceRegistry.getInstance();
@@ -82,7 +83,7 @@ public class BluePower {
         CompatibilityUtils.preInit(event);
         
         FMLCommonHandler.instance().bus().register(new RedstoneNetworkTickHandler());
-        
+        FMLCommonHandler.instance().bus().register(new Config());
         BPEventHandler eventHandler =new BPEventHandler();
         MinecraftForge.EVENT_BUS.register(eventHandler);
         FMLCommonHandler.instance().bus().register(eventHandler);
