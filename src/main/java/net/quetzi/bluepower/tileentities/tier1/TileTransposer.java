@@ -65,15 +65,26 @@ public class TileTransposer extends TileMachineBase {
     }
     
     private boolean suckItems() {
-        // TODO: Set bounding box correctly to do a 3x3x1 area.
         ForgeDirection direction = getFacingDirection();
         AxisAlignedBB box = AxisAlignedBB.getBoundingBox(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ, xCoord + direction.offsetX + 1, yCoord + direction.offsetY + 1, zCoord + direction.offsetZ + 1);
+        if (direction == ForgeDirection.DOWN) {
+            box = AxisAlignedBB.getBoundingBox(xCoord -1, yCoord -1, zCoord -1, xCoord +1, yCoord -1, zCoord +1);
+        } else if (direction == ForgeDirection.UP) {
+            box = AxisAlignedBB.getBoundingBox(xCoord -1, yCoord +1, zCoord -1, xCoord +1, yCoord +1, zCoord +1);
+        } else if (direction == ForgeDirection.NORTH) {
+            box = AxisAlignedBB.getBoundingBox(xCoord -1, yCoord -1, zCoord +1, xCoord +1, yCoord +1, zCoord +1);
+        } else if (direction == ForgeDirection.SOUTH) {
+            box = AxisAlignedBB.getBoundingBox(xCoord -1, yCoord -1, zCoord -1, xCoord +1, yCoord +1, zCoord -1);
+        } else if (direction == ForgeDirection.WEST) {
+            box = AxisAlignedBB.getBoundingBox(xCoord -1, yCoord -1, zCoord -1, xCoord -1, yCoord +1, zCoord +1);
+        } else if (direction == ForgeDirection.EAST) {
+            box = AxisAlignedBB.getBoundingBox(xCoord +1, yCoord -1, zCoord -1, xCoord +1, yCoord +1, zCoord +1);
+        }
         if (!worldObj.getEntitiesWithinAABB(EntityItem.class, box).isEmpty()) {
             for (Entity entity : (List<Entity>)worldObj.getEntitiesWithinAABB(EntityItem.class, box)) {
                 ItemStack stack = ((EntityItem)entity).getEntityItem();
                 addItemToOutputBuffer(stack);
                 entity.setDead();
-                worldObj.playSoundEffect(xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D, "random.click", 0.3F, 0.4F);
                 return true;
             }
         }
@@ -89,7 +100,6 @@ public class TileTransposer extends TileMachineBase {
                 ItemStack stack = ((EntityItem)entity).getEntityItem();
                 addItemToOutputBuffer(stack);
                 entity.setDead();
-                worldObj.playSoundEffect(xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D, "random.click", 0.3F, 0.6F);
                 return true;
             }
         }
