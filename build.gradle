@@ -85,8 +85,8 @@ dependencies {
 }
 
 minecraft {
-    version = "1.7.10-10.13.0.1160"
-    assetDir = "eclipse/assets"
+    version = "1.7.10-10.13.0.1179"
+    runDir = "eclipse/assets"
     
 	// replacing stuff in the source
 	replace '@MAJOR@', project.major
