@@ -17,10 +17,9 @@
 
 package net.quetzi.bluepower.items;
 
-import net.minecraft.item.Item;
 import net.quetzi.bluepower.references.Refs;
 
-public class ItemSiliconWafer extends Item {
+public class ItemSiliconWafer extends ItemBase {
 
     public ItemSiliconWafer(String name) {
 

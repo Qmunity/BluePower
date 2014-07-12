@@ -1,6 +1,5 @@
 package net.quetzi.bluepower.blocks.machines;
 
-import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.EntityLivingBase;
@@ -12,8 +11,10 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import net.quetzi.bluepower.blocks.BlockContainerBase;
 import net.quetzi.bluepower.init.BPItems;
 import net.quetzi.bluepower.init.CustomTabs;
+import net.quetzi.bluepower.references.GuiIDs;
 import net.quetzi.bluepower.references.Refs;
 import net.quetzi.bluepower.tileentities.tier1.TileEngine;
 
@@ -22,7 +23,7 @@ import net.quetzi.bluepower.tileentities.tier1.TileEngine;
  * @author TheFjong
  * 
  */
-public class BlockEngine extends BlockContainer {
+public class BlockEngine extends BlockContainerBase {
 
     public BlockEngine() {
 
@@ -102,6 +103,16 @@ public class BlockEngine extends BlockContainer {
         return new TileEngine();
     }
 
+    /**
+     * Method to be overwritten to fetch the TileEntity Class that goes with the block
+     *
+     * @return a .class
+     */
+    @Override protected Class<? extends TileEntity> getTileEntity() {
+
+        return TileEngine.class;
+    }
+
     @Override
     public IIcon getIcon(int p_149691_1_, int p_149691_2_) {
 
@@ -119,9 +130,8 @@ public class BlockEngine extends BlockContainer {
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int p_149727_6_, float p_149727_7_, float p_149727_8_,
             float p_149727_9_) {
 
-        Item item = player.inventory.getCurrentItem().getItem();
-
-        if (item != null) {
+        if (player.inventory.getCurrentItem() != null) {
+            Item item = player.inventory.getCurrentItem().getItem();
             if (item == BPItems.screwdriver) {
                 if (!world.isRemote) {
                     int direction = 0;
@@ -172,5 +182,15 @@ public class BlockEngine extends BlockContainer {
         }
 
         return false;
+    }
+
+    /**
+     * Method to be overwritten that returns a GUI ID
+     *
+     * @return
+     */
+    @Override public GuiIDs getGuiID() {
+
+        return GuiIDs.INVALID;
     }
 }

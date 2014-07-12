@@ -36,6 +36,7 @@ import net.quetzi.bluepower.references.Refs;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.registry.GameRegistry;
 
+@GameRegistry.ObjectHolder(Refs.MODID)
 public class BPBlocks {
 
     public static Block basalt;
@@ -236,10 +237,10 @@ public class BPBlocks {
         GameRegistry.registerBlock(windmill, Refs.WINDMILL_NAME);
         
         for (int i = 0; i < ItemDye.field_150922_c.length; i++){
-            GameRegistry.registerBlock(blockLamp[i], blockLamp[i].getUnlocalizedName());
+            GameRegistry.registerBlock(blockLamp[i], blockLamp[i].getUnlocalizedName().substring(blockLamp[i].getUnlocalizedName().indexOf(":") +1));
         }
         for (int i = 0; i < ItemDye.field_150922_c.length; i++){
-            GameRegistry.registerBlock(blockLampInverted[i], blockLampInverted[i].getUnlocalizedName());
+            GameRegistry.registerBlock(blockLampInverted[i], blockLampInverted[i].getUnlocalizedName().substring(blockLampInverted[i].getUnlocalizedName().indexOf(":") +1));
         }
     }
 

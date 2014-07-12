@@ -19,13 +19,13 @@
 
 package net.quetzi.bluepower.items;
 
-import java.util.Random;
-
 import net.minecraft.item.ItemStack;
 import net.quetzi.bluepower.init.CustomTabs;
 import net.quetzi.bluepower.references.Refs;
 
-public class ItemLimitedCrafting extends net.minecraft.item.Item {
+import java.util.Random;
+
+public class ItemLimitedCrafting extends ItemBase {
     
     public ItemLimitedCrafting(String name, int uses) {
     

@@ -22,7 +22,6 @@ package net.quetzi.bluepower.items;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IPlantable;
@@ -33,7 +32,7 @@ import net.quetzi.bluepower.init.CustomTabs;
 import net.quetzi.bluepower.references.GuiIDs;
 import net.quetzi.bluepower.references.Refs;
 
-public class ItemSeedBag extends Item {
+public class ItemSeedBag extends ItemBase {
     
     public ItemSeedBag(String name) {
     

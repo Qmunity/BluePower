@@ -17,11 +17,10 @@
 
 package net.quetzi.bluepower.items;
 
-import net.minecraft.item.Item;
 import net.quetzi.bluepower.init.CustomTabs;
 import net.quetzi.bluepower.references.Refs;
 
-public class ItemNikolite extends Item {
+public class ItemNikolite extends ItemBase {
 
     public ItemNikolite() {
 

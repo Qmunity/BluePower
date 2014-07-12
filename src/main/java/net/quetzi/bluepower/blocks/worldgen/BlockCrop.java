@@ -59,6 +59,17 @@ public class BlockCrop extends BlockCrops implements IGrowable {
     }
 
     @Override
+    public String getUnlocalizedName() {
+
+        return String.format("tile.%s:%s", Refs.MODID, getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
+    }
+
+    protected String getUnwrappedUnlocalizedName(String name) {
+
+        return name.substring(name.indexOf(".") + 1);
+    }
+
+    @Override
     public void setBlockBoundsBasedOnState(IBlockAccess world, int x, int y, int z) {
 
         int l = world.getBlockMetadata(x, y, z);

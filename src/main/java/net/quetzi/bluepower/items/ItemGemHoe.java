@@ -30,5 +30,4 @@ public class ItemGemHoe extends ItemHoe {
         this.setCreativeTab(CustomTabs.tabBluePowerTools);
         this.setTextureName(Refs.MODID + ":" + name);
     }
-
 }

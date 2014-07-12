@@ -17,7 +17,6 @@
 
 package net.quetzi.bluepower.blocks;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
 import net.minecraft.util.MathHelper;
@@ -29,7 +28,7 @@ import net.quetzi.bluepower.references.Refs;
 
 import java.util.Random;
 
-public class BlockItemOre extends Block {
+public class BlockItemOre extends BlockBase {
 
     private Random rand = new Random();
 

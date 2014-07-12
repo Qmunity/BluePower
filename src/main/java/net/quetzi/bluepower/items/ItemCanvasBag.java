@@ -19,8 +19,8 @@
 
 package net.quetzi.bluepower.items;
 
-import java.util.List;
-
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -31,10 +31,10 @@ import net.quetzi.bluepower.BluePower;
 import net.quetzi.bluepower.init.CustomTabs;
 import net.quetzi.bluepower.references.GuiIDs;
 import net.quetzi.bluepower.references.Refs;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
-public class ItemCanvasBag extends Item {
+import java.util.List;
+
+public class ItemCanvasBag extends ItemBase {
     
     public ItemCanvasBag(String name) {
     

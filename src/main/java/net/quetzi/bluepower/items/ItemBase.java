@@ -13,17 +13,33 @@
  *
  *     You should have received a copy of the GNU General Public License
  *     along with Blue Power.  If not, see <http://www.gnu.org/licenses/>
+ *
+ */
+
+/*
+ * @author Quetzi
  */
 
 package net.quetzi.bluepower.items;
 
-import net.quetzi.bluepower.init.CustomTabs;
+import net.minecraft.item.Item;
 import net.quetzi.bluepower.references.Refs;
 
-public class ItemHandle extends ItemBase {
-    public ItemHandle(String name) {
-        this.setUnlocalizedName(name);
-        this.setTextureName(Refs.MODID + ":" + name);
-        this.setCreativeTab(CustomTabs.tabBluePowerItems);
+public class ItemBase extends Item {
+
+    public ItemBase() {
+
+        super();
+    }
+
+    @Override
+    public String getUnlocalizedName() {
+
+        return String.format("item.%s:%s", Refs.MODID, getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
+    }
+
+    protected String getUnwrappedUnlocalizedName(String name) {
+
+        return name.substring(name.indexOf(".") + 1);
     }
 }

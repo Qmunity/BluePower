@@ -30,5 +30,4 @@ public class ItemGemAxe extends ItemAxe {
         this.setCreativeTab(CustomTabs.tabBluePowerTools);
         this.setTextureName(Refs.MODID + ":" + name);
     }
-
 }

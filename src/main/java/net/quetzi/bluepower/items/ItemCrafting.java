@@ -20,7 +20,7 @@ package net.quetzi.bluepower.items;
 import net.quetzi.bluepower.init.CustomTabs;
 import net.quetzi.bluepower.references.Refs;
 
-public class ItemCrafting extends net.minecraft.item.Item {
+public class ItemCrafting extends ItemBase {
 
     public ItemCrafting(String name) {
         this.setCreativeTab(CustomTabs.tabBluePowerItems);

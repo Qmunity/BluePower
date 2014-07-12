@@ -17,10 +17,9 @@
 
 package net.quetzi.bluepower.items;
 
-import net.minecraft.item.Item;
 import net.quetzi.bluepower.references.Refs;
 
-public class ItemSiliconBoule extends Item {
+public class ItemSiliconBoule extends ItemBase {
 
     public ItemSiliconBoule(String name) {
 

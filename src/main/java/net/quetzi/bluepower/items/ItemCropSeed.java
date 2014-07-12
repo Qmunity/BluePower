@@ -33,16 +33,26 @@ public class ItemCropSeed extends ItemSeeds implements IPlantable {
 
     public static Block field_150925_a;
 
-    @SuppressWarnings("static-access")
     public ItemCropSeed(Block blockCrop, Block blockSoil) {
 
         super(blockCrop, blockSoil);
-        this.field_150925_a = blockCrop;
+        field_150925_a = blockCrop;
         this.setCreativeTab(CustomTabs.tabBluePowerItems);
         this.setTextureName(Refs.MODID + ":" + Refs.FLAXSEED_NAME);
     }
 
-    @SuppressWarnings("static-access")
+    @Override
+    public String getUnlocalizedName() {
+
+        return String.format("item.%s:%s", Refs.MODID, getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
+    }
+
+    protected String getUnwrappedUnlocalizedName(String name) {
+
+        return name.substring(name.indexOf(".") + 1);
+    }
+
+    @Override
     public boolean onItemUse(ItemStack itemStack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
 
         if (side != 1) {
@@ -50,7 +60,7 @@ public class ItemCropSeed extends ItemSeeds implements IPlantable {
         } else if (player.canPlayerEdit(x, y, z, side, itemStack) && player.canPlayerEdit(x, y + 1, z, side, itemStack)) {
             if (world.getBlock(x, y, z).canSustainPlant(world, x, y, z, ForgeDirection.UP, this) && world.isAirBlock(x, y + 1, z)
                     && (world.getBlock(x, y, z).isFertile(world, x, y, z))) {
-                world.setBlock(x, y + 1, z, this.field_150925_a, 0, 2);
+                world.setBlock(x, y + 1, z, field_150925_a, 0, 2);
                 --itemStack.stackSize;
                 return true;
             } else {

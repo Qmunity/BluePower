@@ -46,6 +46,17 @@ public class BlockCustomFlower extends BlockBush {
         this.setBlockName(name);
     }
 
+    @Override
+    public String getUnlocalizedName() {
+
+        return String.format("tile.%s:%s", Refs.MODID, getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
+    }
+
+    protected String getUnwrappedUnlocalizedName(String name) {
+
+        return name.substring(name.indexOf(".") + 1);
+    }
+
     public static BlockFlower func_149857_e(String name) {
 
         String[] astring = field_149858_b;
@@ -98,6 +109,6 @@ public class BlockCustomFlower extends BlockBush {
     @Override
     public void registerBlockIcons(IIconRegister iconRegister) {
 
-        this.icon = iconRegister.registerIcon(Refs.MODID + ":" + this.getUnlocalizedName().substring(5));
+        this.icon = iconRegister.registerIcon(Refs.MODID + ":" + Refs.INDIGOFLOWER_NAME);
     }
 }

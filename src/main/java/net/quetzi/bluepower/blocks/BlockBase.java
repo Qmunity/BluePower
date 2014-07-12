@@ -27,8 +27,11 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.quetzi.bluepower.client.renderers.RendererBlockBase;
 import net.quetzi.bluepower.init.CustomTabs;
+import net.quetzi.bluepower.references.Refs;
 
 public abstract class BlockBase extends Block {
+
+    private String unlocalizedName;
     
     public BlockBase(Material material) {
     
@@ -37,7 +40,18 @@ public abstract class BlockBase extends Block {
         setCreativeTab(CustomTabs.tabBluePowerMachines);
         blockHardness = 3.0F;
     }
-    
+
+    @Override
+    public String getUnlocalizedName() {
+
+        return String.format("tile.%s:%s", Refs.MODID, getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
+    }
+
+    protected String getUnwrappedUnlocalizedName(String name) {
+
+        return name.substring(name.indexOf(".") + 1);
+    }
+
     /**
      * Method to detect how the block was placed, and what way it's facing.
      */

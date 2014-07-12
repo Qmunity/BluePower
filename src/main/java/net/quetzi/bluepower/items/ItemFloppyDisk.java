@@ -17,10 +17,9 @@
 
 package net.quetzi.bluepower.items;
 
-import net.minecraft.item.Item;
 import net.quetzi.bluepower.references.Refs;
 
-public class ItemFloppyDisk extends Item {
+public class ItemFloppyDisk extends ItemBase {
 
     public ItemFloppyDisk(String name) {
 

@@ -34,12 +34,9 @@ import java.util.Set;
 
 public class ItemSickle extends ItemTool {
 
-    @SuppressWarnings("rawtypes")
     private static final Set toolBlocks = Sets.newHashSet(new Block[] { Blocks.leaves, Blocks.leaves2, Blocks.wheat, Blocks.potatoes, Blocks.carrots,
             Blocks.nether_wart, Blocks.red_mushroom, Blocks.brown_mushroom, Blocks.reeds, Blocks.tallgrass, Blocks.vine, Blocks.waterlily,
             Blocks.red_flower, Blocks.yellow_flower });
-    private              int cropRadius = 2;
-    private              int leafRadius = 1;
 
     public ItemSickle(ToolMaterial material, String name) {
 
@@ -49,10 +46,21 @@ public class ItemSickle extends ItemTool {
         this.setTextureName(Refs.MODID + ":" + name);
     }
 
-    @SuppressWarnings("static-access")
+    @Override
+    public String getUnlocalizedName() {
+
+        return String.format("item.%s:%s", Refs.MODID, getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
+    }
+
+    protected String getUnwrappedUnlocalizedName(String name) {
+
+        return name.substring(name.indexOf(".") + 1);
+    }
+
     public float func_150893_a(ItemStack itemStack, Block block) {
 
-        if ((block.getMaterial() == Material.leaves) || (block.getMaterial() == Material.plants) || (block.getMaterial() == Material.grass) || this.toolBlocks.contains(block)) {
+        if ((block.getMaterial() == Material.leaves) || (block.getMaterial() == Material.plants) || (block.getMaterial() == Material.grass)
+                || toolBlocks.contains(block)) {
 
             return this.efficiencyOnProperMaterial;
         }
@@ -73,9 +81,9 @@ public class ItemSickle extends ItemTool {
         EntityPlayer player = (EntityPlayer) entityLiving;
 
         if ((block != null) && (block.isLeaves(world, x, y, z))) {
-            for (int i = -this.leafRadius; i <= this.leafRadius; i++) {
-                for (int j = -this.leafRadius; j <= this.leafRadius; j++) {
-                    for (int k = -this.leafRadius; k <= this.leafRadius; k++) {
+            for (int i = -1; i <= 1; i++) {
+                for (int j = -1; j <= 1; j++) {
+                    for (int k = -1; k <= 1; k++) {
                         Block blockToCheck = world.getBlock(x + i, y + j, z + k);
                         int meta = world.getBlockMetadata(x + i, y + j, z + k);
                         if ((blockToCheck != null) && (blockToCheck.isLeaves(world, x + i, y + j, z + k))) {
@@ -94,8 +102,8 @@ public class ItemSickle extends ItemTool {
             return used;
         }
 
-        for (int i = -this.cropRadius; i <= this.cropRadius; i++)
-            for (int j = -this.cropRadius; j <= this.cropRadius; j++) {
+        for (int i = -2; i <= 2; i++)
+            for (int j = -2; j <= 2; j++) {
                 Block blockToCheck = world.getBlock(x + i, y, z + j);
                 int meta = world.getBlockMetadata(x + i, y, z + j);
                 if (blockToCheck != null) {

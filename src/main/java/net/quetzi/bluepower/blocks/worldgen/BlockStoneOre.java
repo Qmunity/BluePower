@@ -62,6 +62,18 @@ public class BlockStoneOre extends Block {
         this.setStepSound(soundTypeStone);
     }
 
+
+    @Override
+    public String getUnlocalizedName() {
+
+        return String.format("tile.%s:%s", Refs.MODID, getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
+    }
+
+    protected String getUnwrappedUnlocalizedName(String name) {
+
+        return name.substring(name.indexOf(".") + 1);
+    }
+
     @Override
     public Item getItemDropped(int par1, Random par2, int par3) {
 

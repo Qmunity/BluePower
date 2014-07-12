@@ -20,12 +20,11 @@ package net.quetzi.bluepower.items;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.quetzi.bluepower.init.CustomTabs;
 import net.quetzi.bluepower.references.Refs;
 
-public class ItemIndigoDye extends Item {
+public class ItemIndigoDye extends ItemBase {
 
     public ItemIndigoDye(String name) {
 

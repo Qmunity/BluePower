@@ -17,10 +17,11 @@
 
 package net.quetzi.bluepower.items;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumAction;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MovingObjectPosition;
@@ -39,10 +40,8 @@ import net.quetzi.bluepower.references.GuiIDs;
 import net.quetzi.bluepower.references.Refs;
 import net.quetzi.bluepower.tileentities.tier3.IRedBusWindow;
 import net.quetzi.bluepower.tileentities.tier3.TileCPU;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
-public class ItemScrewdriver extends Item {
+public class ItemScrewdriver extends ItemBase {
     
     public ItemScrewdriver() {
     
@@ -50,7 +49,7 @@ public class ItemScrewdriver extends Item {
         setCreativeTab(CustomTabs.tabBluePowerTools);
         setMaxDamage(250);
         setMaxStackSize(1);
-        setTextureName(Refs.MODID + ":" + this.getUnlocalizedName().substring(5));
+        setTextureName(Refs.MODID + ":" + Refs.SCREWDRIVER_NAME);
     }
     
     @Override
