@@ -353,3 +353,15 @@ direction.right=Right
 
 random.enabled=Enabled
 random.disabled=Disabled
+
+bluepower.config.settings.tooltip=General mod settings.
+bluepower.config.recipes.tooltip=Recipe settings.
+bluepower.config.enchantments.tooltip=Enchantment settings.
+bluepower.config.copper.tooltip=Adjust copper world generation.
+bluepower.config.tin.tooltip=Adjust tin world generation.
+bluepower.config.silver.tooltip=Adjust silver world generation.
+bluepower.config.tungsten.tooltip=Adjust tungsten world generation.
+bluepower.config.ruby.tooltip=Adjust ruby world generation.
+bluepower.config.amethyst.tooltip=Adjust amethyst world generation.
+bluepower.config.sapphire.tooltip=Adjust sapphire world generation.
+bluepower.config.nikolite.tooltip=Adjust nikolite world generation.
