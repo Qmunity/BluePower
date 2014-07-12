@@ -200,10 +200,22 @@ public class Refs {
     public static final String BLOCKIOEXPANDER_NAME = "io_expander";
     public static final String FLOPPY_DISK          = "floppy_disk";
 
-    public static final String[] oreDictDyes = new String[] { "dyeBlack", "dyeRed", "dyeGreen", "dyeBrown", "dyeBlue", "dyePurple", "dyeCyan",
+    public static final String[] oreDictDyes     = new String[] { "dyeBlack", "dyeRed", "dyeGreen", "dyeBrown", "dyeBlue", "dyePurple", "dyeCyan",
             "dyeLightGray", "dyeGray", "dyePink",
             "dyeLime", "dyeYellow", "dyeLightBlue", "dyeMagenta", "dyeOrange", "dyeWhite" };
-    public static final String   LAMP_NAME   = "lamp";
+    public static final String   LAMP_NAME       = "lamp";
+    public static final String   CONFIG_WORLDGEN = "world gen";
+    public static final String   CONFIG_TUNGSTEN = "tungsten";
+    public static final String   CONFIG_COPPER   = "copper";
+    public static final String   CONFIG_TIN      = "tin";
+    public static final String   CONFIG_SILVER   = "silver";
+    public static final String   CONFIG_NIKOLITE = "nikolite";
+    public static final String   CONFIG_RUBY     = "ruby";
+    public static final String   CONFIG_AMETHYST = "amethyst";
+    public static final String   CONFIG_SAPPHIRE = "sapphire";
+    public static final String   CONFIG_SETTINGS = "settings";
+    public static final String   CONFIG_RECIPES  = "recipe enabling";
+    public static final String      CONFIG_ENCHANTS = "enchantment ids";
 
     public static String fullVersionString() {
 

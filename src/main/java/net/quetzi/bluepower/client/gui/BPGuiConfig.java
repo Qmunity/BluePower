@@ -21,14 +21,59 @@
 
 package net.quetzi.bluepower.client.gui;
 
+import cpw.mods.fml.client.config.DummyConfigElement;
 import cpw.mods.fml.client.config.GuiConfig;
+import cpw.mods.fml.client.config.IConfigElement;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.world.World;
 import net.minecraftforge.common.config.ConfigElement;
 import net.quetzi.bluepower.BluePower;
 import net.quetzi.bluepower.references.Refs;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class BPGuiConfig extends GuiConfig {
+
     public BPGuiConfig(GuiScreen parent) {
-        super(parent, new ConfigElement(BluePower.config.getCategory("World Gen")).getChildElements(), Refs.MODID, false, false, GuiConfig.getAbridgedConfigPath(BluePower.config.toString()));
+
+        super(parent,
+                BPGuiConfig.getConfigElements(),
+                Refs.MODID,
+                false,
+                false,
+                GuiConfig.getAbridgedConfigPath(BluePower.config.toString()));
+    }
+
+    private static List<IConfigElement> getConfigElements() {
+
+        List<IConfigElement> list = new ArrayList<IConfigElement>();
+        List<IConfigElement> listTin = new ConfigElement(BluePower.config.getCategory(Refs.CONFIG_TIN)).getChildElements();
+        List<IConfigElement> listCopper = new ConfigElement(BluePower.config.getCategory(Refs.CONFIG_COPPER)).getChildElements();
+        List<IConfigElement> listSilver = new ConfigElement(BluePower.config.getCategory(Refs.CONFIG_SILVER)).getChildElements();
+        List<IConfigElement> listTungsten = new ConfigElement(BluePower.config.getCategory(Refs.CONFIG_TUNGSTEN)).getChildElements();
+        List<IConfigElement> listRuby = new ConfigElement(BluePower.config.getCategory(Refs.CONFIG_RUBY)).getChildElements();
+        List<IConfigElement> listAmethyst = new ConfigElement(BluePower.config.getCategory(Refs.CONFIG_AMETHYST)).getChildElements();
+        List<IConfigElement> listSapphire = new ConfigElement(BluePower.config.getCategory(Refs.CONFIG_SAPPHIRE)).getChildElements();
+        List<IConfigElement> listNikolite = new ConfigElement(BluePower.config.getCategory(Refs.CONFIG_NIKOLITE)).getChildElements();
+        List<IConfigElement> listWorldGen = new ConfigElement(BluePower.config.getCategory(Refs.CONFIG_WORLDGEN)).getChildElements();
+        List<IConfigElement> listSettings = new ConfigElement(BluePower.config.getCategory(Refs.CONFIG_SETTINGS)).getChildElements();
+        List<IConfigElement> listRecipes = new ConfigElement(BluePower.config.getCategory(Refs.CONFIG_RECIPES)).getChildElements();
+        List<IConfigElement> listEnchants = new ConfigElement(BluePower.config.getCategory(Refs.CONFIG_ENCHANTS)).getChildElements();
+
+        list.add(new DummyConfigElement.DummyCategoryElement("World Gen", "bluepower.config.worldgen", listWorldGen));
+        list.add(new DummyConfigElement.DummyCategoryElement("Settings", "bluepower.config.settings", listSettings));
+        list.add(new DummyConfigElement.DummyCategoryElement("Recipes", "bluepower.config.recipes", listRecipes));
+        list.add(new DummyConfigElement.DummyCategoryElement("Enchantments", "bluepower.config.enchantments", listEnchants));
+        list.add(new DummyConfigElement.DummyCategoryElement("Copper", "bluepower.config.copper", listCopper));
+        list.add(new DummyConfigElement.DummyCategoryElement("Tin", "bluepower.config.tin", listTin));
+        list.add(new DummyConfigElement.DummyCategoryElement("Silver", "bluepower.config.silver", listSilver));
+        list.add(new DummyConfigElement.DummyCategoryElement("Tungsten", "bluepower.config.tungsten", listTungsten));
+        list.add(new DummyConfigElement.DummyCategoryElement("Ruby", "bluepower.config.ruby", listRuby));
+        list.add(new DummyConfigElement.DummyCategoryElement("Amethyst", "bluepower.config.amethyst", listAmethyst));
+        list.add(new DummyConfigElement.DummyCategoryElement("Sapphire", "bluepower.config.sapphire", listSapphire));
+        list.add(new DummyConfigElement.DummyCategoryElement("Nikolite", "bluepower.config.nikolite", listNikolite));
+
+        return list;
     }
 }
