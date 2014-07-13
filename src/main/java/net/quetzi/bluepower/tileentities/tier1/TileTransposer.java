@@ -19,7 +19,6 @@
 
 package net.quetzi.bluepower.tileentities.tier1;
 
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -68,21 +67,21 @@ public class TileTransposer extends TileMachineBase {
     private boolean suckItems() {
         ForgeDirection direction = getFacingDirection();
         AxisAlignedBB box = AxisAlignedBB.getBoundingBox(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ, xCoord + direction.offsetX + 1, yCoord + direction.offsetY + 1, zCoord + direction.offsetZ + 1);
+
+        // FIXME: This should work? -Q
         if (direction.offsetX != 0) {
             box = AxisAlignedBB.getBoundingBox(xCoord + direction.offsetX, yCoord -1, zCoord -1, xCoord + direction.offsetX, yCoord +1, zCoord +1);
-//            BluePower.log.info(box.minX + "," + box.minY + "," + box.minZ + " - " + box.maxX + "," + box.maxY + "," + box.maxZ);
         }
         if (direction.offsetY != 0) {
             box = AxisAlignedBB.getBoundingBox(xCoord -1, yCoord + direction.offsetY, zCoord -1, xCoord +1, yCoord + direction.offsetY, zCoord +1);
-            BluePower.log.info("Y");
         }
         if (direction.offsetZ != 0) {
             box = AxisAlignedBB.getBoundingBox(xCoord -1, yCoord -1, zCoord + direction.offsetZ, xCoord +1, yCoord +1, zCoord + direction.offsetZ);
-            BluePower.log.info("Z");
         }
+//        BluePower.log.info(box.minX + "," + box.minY + "," + box.minZ + " - " + box.maxX + "," + box.maxY + "," + box.maxZ);
         if (!worldObj.getEntitiesWithinAABB(EntityItem.class, box).isEmpty()) {
-            for (Entity entity : (List<Entity>)worldObj.getEntitiesWithinAABB(EntityItem.class, box)) {
-                ItemStack stack = ((EntityItem)entity).getEntityItem();
+            for (EntityItem entity : (List<EntityItem>)worldObj.getEntitiesWithinAABB(EntityItem.class, box)) {
+                ItemStack stack = entity.getEntityItem();
                 addItemToOutputBuffer(stack);
                 entity.setDead();
                 return true;
@@ -96,8 +95,8 @@ public class TileTransposer extends TileMachineBase {
         ForgeDirection direction = getFacingDirection();
         AxisAlignedBB box = AxisAlignedBB.getBoundingBox(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ, xCoord + direction.offsetX + 1, yCoord + direction.offsetY + 1, zCoord + direction.offsetZ + 1);
         if (!worldObj.getEntitiesWithinAABB(EntityItem.class, box).isEmpty()) {
-            for (Entity entity : (List<Entity>)worldObj.getEntitiesWithinAABB(EntityItem.class, box)) {
-                ItemStack stack = ((EntityItem)entity).getEntityItem();
+            for (EntityItem entity : (List<EntityItem>)worldObj.getEntitiesWithinAABB(EntityItem.class, box)) {
+                ItemStack stack = entity.getEntityItem();
                 addItemToOutputBuffer(stack);
                 entity.setDead();
                 return true;
