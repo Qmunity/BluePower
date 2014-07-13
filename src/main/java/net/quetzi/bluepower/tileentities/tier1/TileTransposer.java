@@ -25,6 +25,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.common.util.ForgeDirection;
+import net.quetzi.bluepower.BluePower;
 import net.quetzi.bluepower.helper.IOHelper;
 import net.quetzi.bluepower.tileentities.TileMachineBase;
 
@@ -46,7 +47,7 @@ public class TileTransposer extends TileMachineBase {
     protected void redstoneChanged(boolean newValue) {
 
         super.redstoneChanged(newValue);
-    
+
         if (newValue) {
             suckItems();
             pullItem();
@@ -67,18 +68,17 @@ public class TileTransposer extends TileMachineBase {
     private boolean suckItems() {
         ForgeDirection direction = getFacingDirection();
         AxisAlignedBB box = AxisAlignedBB.getBoundingBox(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ, xCoord + direction.offsetX + 1, yCoord + direction.offsetY + 1, zCoord + direction.offsetZ + 1);
-        if (direction == ForgeDirection.DOWN) {
-            box = AxisAlignedBB.getBoundingBox(xCoord -1, yCoord -1, zCoord -1, xCoord +1, yCoord -1, zCoord +1);
-        } else if (direction == ForgeDirection.UP) {
-            box = AxisAlignedBB.getBoundingBox(xCoord -1, yCoord +1, zCoord -1, xCoord +1, yCoord +1, zCoord +1);
-        } else if (direction == ForgeDirection.NORTH) {
-            box = AxisAlignedBB.getBoundingBox(xCoord -1, yCoord -1, zCoord +1, xCoord +1, yCoord +1, zCoord +1);
-        } else if (direction == ForgeDirection.SOUTH) {
-            box = AxisAlignedBB.getBoundingBox(xCoord -1, yCoord -1, zCoord -1, xCoord +1, yCoord +1, zCoord -1);
-        } else if (direction == ForgeDirection.WEST) {
-            box = AxisAlignedBB.getBoundingBox(xCoord -1, yCoord -1, zCoord -1, xCoord -1, yCoord +1, zCoord +1);
-        } else if (direction == ForgeDirection.EAST) {
-            box = AxisAlignedBB.getBoundingBox(xCoord +1, yCoord -1, zCoord -1, xCoord +1, yCoord +1, zCoord +1);
+        if (direction.offsetX != 0) {
+            box = AxisAlignedBB.getBoundingBox(xCoord + direction.offsetX, yCoord -1, zCoord -1, xCoord + direction.offsetX, yCoord +1, zCoord +1);
+//            BluePower.log.info(box.minX + "," + box.minY + "," + box.minZ + " - " + box.maxX + "," + box.maxY + "," + box.maxZ);
+        }
+        if (direction.offsetY != 0) {
+            box = AxisAlignedBB.getBoundingBox(xCoord -1, yCoord + direction.offsetY, zCoord -1, xCoord +1, yCoord + direction.offsetY, zCoord +1);
+            BluePower.log.info("Y");
+        }
+        if (direction.offsetZ != 0) {
+            box = AxisAlignedBB.getBoundingBox(xCoord -1, yCoord -1, zCoord + direction.offsetZ, xCoord +1, yCoord +1, zCoord + direction.offsetZ);
+            BluePower.log.info("Z");
         }
         if (!worldObj.getEntitiesWithinAABB(EntityItem.class, box).isEmpty()) {
             for (Entity entity : (List<Entity>)worldObj.getEntitiesWithinAABB(EntityItem.class, box)) {
