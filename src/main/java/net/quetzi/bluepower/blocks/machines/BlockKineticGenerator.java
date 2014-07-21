@@ -6,7 +6,7 @@ import net.quetzi.bluepower.blocks.BlockContainerBase;
 import net.quetzi.bluepower.init.CustomTabs;
 import net.quetzi.bluepower.references.GuiIDs;
 import net.quetzi.bluepower.references.Refs;
-import net.quetzi.bluepower.tileentities.tier1.TileKinectGenerator;
+import net.quetzi.bluepower.tileentities.tier3.TileKinectGenerator;
 
 /**
  * 

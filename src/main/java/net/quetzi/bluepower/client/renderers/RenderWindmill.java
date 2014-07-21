@@ -8,7 +8,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.AdvancedModelLoader;
 import net.minecraftforge.client.model.IModelCustom;
 import net.quetzi.bluepower.references.Refs;
-import net.quetzi.bluepower.tileentities.tier1.TileWindmill;
+import net.quetzi.bluepower.tileentities.tier2.TileWindmill;
 
 public class RenderWindmill extends TileEntitySpecialRenderer {
 

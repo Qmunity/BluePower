@@ -1,4 +1,4 @@
-package net.quetzi.bluepower.tileentities.tier1;
+package net.quetzi.bluepower.tileentities.tier3;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;

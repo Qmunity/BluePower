@@ -16,7 +16,7 @@ import net.quetzi.bluepower.init.BPItems;
 import net.quetzi.bluepower.init.CustomTabs;
 import net.quetzi.bluepower.references.GuiIDs;
 import net.quetzi.bluepower.references.Refs;
-import net.quetzi.bluepower.tileentities.tier1.TileEngine;
+import net.quetzi.bluepower.tileentities.tier3.TileEngine;
 
 /**
  * 

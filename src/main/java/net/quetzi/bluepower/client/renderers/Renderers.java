@@ -12,9 +12,9 @@ import net.minecraft.item.Item;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.quetzi.bluepower.init.BPBlocks;
 import net.quetzi.bluepower.init.BPItems;
-import net.quetzi.bluepower.tileentities.tier1.TileEngine;
+import net.quetzi.bluepower.tileentities.tier3.TileEngine;
 import net.quetzi.bluepower.tileentities.tier1.TileLamp;
-import net.quetzi.bluepower.tileentities.tier1.TileWindmill;
+import net.quetzi.bluepower.tileentities.tier2.TileWindmill;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 

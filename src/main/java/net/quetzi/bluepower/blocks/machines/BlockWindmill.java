@@ -7,7 +7,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.quetzi.bluepower.init.CustomTabs;
 import net.quetzi.bluepower.references.Refs;
-import net.quetzi.bluepower.tileentities.tier1.TileWindmill;
+import net.quetzi.bluepower.tileentities.tier2.TileWindmill;
 
 /**
  * 

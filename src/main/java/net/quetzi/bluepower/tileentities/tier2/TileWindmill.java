@@ -1,4 +1,4 @@
-package net.quetzi.bluepower.tileentities.tier1;
+package net.quetzi.bluepower.tileentities.tier2;
 
 import net.minecraft.tileentity.TileEntity;
 

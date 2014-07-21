@@ -70,7 +70,7 @@ dependencies {
 	//grabDep('nei', 'http://www.chickenbones.craftsaddle.org/Files/New_Versions/1.7.10/NotEnoughItems-1.7.10-1.0.2.15-dev.jar')
 	
 	//grabDep('oc', 'http://ci.cil.li/job/OpenComputers-1.3-MC1.7.10/20/artifact/build/libs/OpenComputers-MC1.7.10-1.3.0.20-deobf.jar')
-	//grabDep('waila', 'http://mobiusstrip.eu/maven/mcp/mobius/waila/Waila/1.5.2a/Waila-1.5.2a-dev.jar')
+	//grabDep('waila', 'http://mobiusstrip.eu/maven/mcp/mobius/waila/Waila/1.5.3_1.7.10/Waila-1.5.3_1.7.10-dev.jar')
 	
 	println("  Adding dependencies!")
     //compile files("dep/ccl.jar", "dep/fmp.jar", "dep/nei.jar", "dep/ccc.jar", "dep/oc.jar", "dep/waila.jar")
@@ -78,7 +78,7 @@ dependencies {
     compile "codechicken:CodeChickenCore:1.7.10-1.0.2.11:dev"
     compile "codechicken:NotEnoughItems:1.7.10-1.0.2.26:dev"
     compile "codechicken:ForgeMultipart:1.7.10-1.1.0.297:dev"
-    compile "mcp.mobius.waila:Waila:1.5.2a"
+    compile "mcp.mobius.waila:Waila:1.5.3_1.7.10"
     compile "li.cil.oc:OpenComputers:MC1.7.10-1.3.0.20:api"
 
 	println("  Finished adding dependencies!")

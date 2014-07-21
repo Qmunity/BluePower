@@ -19,11 +19,8 @@ package net.quetzi.bluepower.tileentities;
 
 import net.quetzi.bluepower.tileentities.tier1.*;
 import net.quetzi.bluepower.tileentities.tier2.TileSortingMachine;
-import net.quetzi.bluepower.tileentities.tier3.TileCPU;
-import net.quetzi.bluepower.tileentities.tier3.TileDiskDrive;
-import net.quetzi.bluepower.tileentities.tier3.TileIOExpander;
-import net.quetzi.bluepower.tileentities.tier3.TileMonitor;
-import net.quetzi.bluepower.tileentities.tier3.TileSortron;
+import net.quetzi.bluepower.tileentities.tier2.TileWindmill;
+import net.quetzi.bluepower.tileentities.tier3.*;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public class TileEntities {

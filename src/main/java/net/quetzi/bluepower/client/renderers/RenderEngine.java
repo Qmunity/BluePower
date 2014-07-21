@@ -7,7 +7,7 @@ import net.minecraftforge.client.model.AdvancedModelLoader;
 import net.minecraftforge.client.model.IModelCustom;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.quetzi.bluepower.references.Refs;
-import net.quetzi.bluepower.tileentities.tier1.TileEngine;
+import net.quetzi.bluepower.tileentities.tier3.TileEngine;
 
 import org.lwjgl.opengl.GL11;
 

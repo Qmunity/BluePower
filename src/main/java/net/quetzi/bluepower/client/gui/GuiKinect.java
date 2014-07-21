@@ -23,7 +23,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.quetzi.bluepower.containers.ContainerKinect;
 import net.quetzi.bluepower.references.Refs;
-import net.quetzi.bluepower.tileentities.tier1.TileKinectGenerator;
+import net.quetzi.bluepower.tileentities.tier3.TileKinectGenerator;
 
 public class GuiKinect extends GuiBase {
 
