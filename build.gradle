@@ -39,7 +39,7 @@ project.ext {
 
 
 version = "1.7.10-${project.ext.major}.${project.minor}"
-group= "net.quetzi.bluepower" 
+group= "com.bluepowermod"
 archivesBaseName = "BluePower"
 
 
