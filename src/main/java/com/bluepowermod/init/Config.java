@@ -24,55 +24,55 @@ import com.bluepowermod.BluePower;
 import com.bluepowermod.references.Refs;
 
 public class Config {
-    
-	public static boolean  generateTungsten;
-	public static int      minTungstenY;
-	public static int      maxTungstenY;
-	public static int      veinCountTungsten;
-	public static int      veinSizeTungsten;
-    public static boolean  generateCopper;
-    public static int      minCopperY;
-    public static int      maxCopperY;
-    public static int      veinCountCopper;
-    public static int      veinSizeCopper;
-    public static boolean  generateSilver;
-    public static int      minSilverY;
-    public static int      maxSilverY;
-    public static int      veinCountSilver;
-    public static int      veinSizeSilver;
-    public static boolean  generateTin;
-    public static int      minTinY;
-    public static int      maxTinY;
-    public static int      veinCountTin;
-    public static int      veinSizeTin;
-    public static boolean  generateNikolite;
-    public static int      minNikoliteY;
-    public static int      maxNikoliteY;
-    public static int      veinCountNikolite;
-    public static int      veinSizeNikolite;
-    public static boolean  generateRuby;
-    public static int      minRubyY;
-    public static int      maxRubyY;
-    public static int      veinCountRuby;
-    public static int      veinSizeRuby;
-    public static boolean  generateAmethyst;
-    public static int      minAmethystY;
-    public static int      maxAmethystY;
-    public static int      veinCountAmethyst;
-    public static int      veinSizeAmethyst;
-    public static boolean  generateSapphire;
-    public static int      minSapphireY;
-    public static int      maxSapphireY;
-    public static int      veinCountSapphire;
-    public static int      veinSizeSapphire;
-    public static double   volcanoActiveToInactiveRatio;
-    public static double   volcanoSpawnChance;          // chance of a volcano spawning per chunk.
-    public static boolean  useAltScrewdriverRecipe;
-    public static int      vorpalEnchantmentId;
-    public static int 	   disjunctionEnchantmentId;
+
+    public static boolean generateTungsten;
+    public static int     minTungstenY;
+    public static int     maxTungstenY;
+    public static int     veinCountTungsten;
+    public static int     veinSizeTungsten;
+    public static boolean generateCopper;
+    public static int     minCopperY;
+    public static int     maxCopperY;
+    public static int     veinCountCopper;
+    public static int     veinSizeCopper;
+    public static boolean generateSilver;
+    public static int     minSilverY;
+    public static int     maxSilverY;
+    public static int     veinCountSilver;
+    public static int     veinSizeSilver;
+    public static boolean generateZinc;
+    public static int     minZincY;
+    public static int     maxZincY;
+    public static int     veinCountZinc;
+    public static int     veinSizeZinc;
+    public static boolean generateNikolite;
+    public static int     minNikoliteY;
+    public static int     maxNikoliteY;
+    public static int     veinCountNikolite;
+    public static int     veinSizeNikolite;
+    public static boolean generateRuby;
+    public static int     minRubyY;
+    public static int     maxRubyY;
+    public static int     veinCountRuby;
+    public static int     veinSizeRuby;
+    public static boolean generateAmethyst;
+    public static int     minAmethystY;
+    public static int     maxAmethystY;
+    public static int     veinCountAmethyst;
+    public static int     veinSizeAmethyst;
+    public static boolean generateSapphire;
+    public static int     minSapphireY;
+    public static int     maxSapphireY;
+    public static int     veinCountSapphire;
+    public static int     veinSizeSapphire;
+    public static double  volcanoActiveToInactiveRatio;
+    public static double  volcanoSpawnChance;          // chance of a volcano spawning per chunk.
+    public static boolean useAltScrewdriverRecipe;
+    public static int     vorpalEnchantmentId;
+    public static int     disjunctionEnchantmentId;
 
     public static String[] alloyFurnaceBlacklist;
-    
+
     public static void syncConfig(Configuration config) {
 
         config.addCustomCategoryComment(Refs.CONFIG_WORLDGEN, "Toggle blocks being generated into the world");
@@ -86,11 +86,11 @@ public class Config {
         maxCopperY = config.get(Refs.CONFIG_COPPER, "maxCopperY", 64).getInt();
         veinCountCopper = config.get(Refs.CONFIG_COPPER, "veinCountCopper", 20).getInt();
         veinSizeCopper = config.get(Refs.CONFIG_COPPER, "veinSizeCopper", 10).getInt();
-        generateTin = config.get(Refs.CONFIG_TIN, "generateTin", true).getBoolean(true);
-        minTinY = config.get(Refs.CONFIG_TIN, "minTinY", 0).getInt();
-        maxTinY = config.get(Refs.CONFIG_TIN, "maxTinY", 48).getInt();
-        veinCountTin = config.get(Refs.CONFIG_TIN, "veinCountTin", 10).getInt();
-        veinSizeTin = config.get(Refs.CONFIG_TIN, "veinSizeTin", 8).getInt();
+        generateZinc = config.get(Refs.CONFIG_ZINC, "generateZinc", true).getBoolean(true);
+        minZincY = config.get(Refs.CONFIG_ZINC, "minZincY", 0).getInt();
+        maxZincY = config.get(Refs.CONFIG_ZINC, "maxZincY", 48).getInt();
+        veinCountZinc = config.get(Refs.CONFIG_ZINC, "veinCountZinc", 10).getInt();
+        veinSizeZinc = config.get(Refs.CONFIG_ZINC, "veinSizeZinc", 8).getInt();
         generateSilver = config.get(Refs.CONFIG_SILVER, "generateSilver", true).getBoolean(true);
         minSilverY = config.get(Refs.CONFIG_SILVER, "minSilverY", 0).getInt();
         maxSilverY = config.get(Refs.CONFIG_SILVER, "maxSilverY", 32).getInt();

@@ -63,7 +63,7 @@ public class BPBlocks {
 
     public static Block copper_ore;
     public static Block silver_ore;
-    public static Block tin_ore;
+    public static Block zinc_ore;
     public static Block tungsten_ore;
 
     public static Block ruby_block;
@@ -72,7 +72,7 @@ public class BPBlocks {
     public static Block nikolite_block;
     public static Block copper_block;
     public static Block silver_block;
-    public static Block tin_block;
+    public static Block zinc_block;
     public static Block tungsten_block;
 
     public static Block flax_crop;
@@ -97,9 +97,9 @@ public class BPBlocks {
 
     public static Block multipart;          // DO NOT GENERATE OR REMOVE THIS BLOCK!
 
-    public static Block engine;
-    public static Block kinetic_generator;
-    public static Block windmill;
+    public static Block   engine;
+    public static Block   kinetic_generator;
+    public static Block   windmill;
     public static Block[] blockLamp;
     public static Block[] blockLampInverted;
 
@@ -127,7 +127,7 @@ public class BPBlocks {
         amethyst_ore = new BlockItemOre(Refs.AMETHYSTORE_NAME);
         copper_ore = new BlockStoneOre(Refs.COPPERORE_NAME);
         silver_ore = new BlockStoneOre(Refs.SILVERORE_NAME);
-        tin_ore = new BlockStoneOre(Refs.TINORE_NAME);
+        zinc_ore = new BlockStoneOre(Refs.ZINCORE_NAME);
         tungsten_ore = new BlockStoneOre(Refs.TUNGSTENORE_NAME);
 
         ruby_block = new BlockStoneOre(Refs.RUBYBLOCK_NAME);
@@ -136,7 +136,7 @@ public class BPBlocks {
         nikolite_block = new BlockStoneOre(Refs.NIKOLITEBLOCK_NAME);
         copper_block = new BlockStoneOre(Refs.COPPERBLOCK_NAME);
         silver_block = new BlockStoneOre(Refs.SILVERBLOCK_NAME);
-        tin_block = new BlockStoneOre(Refs.TINBLOCK_NAME);
+        zinc_block = new BlockStoneOre(Refs.ZINCBLOCK_NAME);
         tungsten_block = new BlockStoneOre(Refs.TUNGSTENBLOCK_NAME);
 
         flax_crop = new BlockCrop().setBlockName(Refs.FLAXCROP_NAME);
@@ -198,7 +198,7 @@ public class BPBlocks {
         GameRegistry.registerBlock(nikolite_ore, Refs.NIKOLITEORE_NAME);
         GameRegistry.registerBlock(copper_ore, Refs.COPPERORE_NAME);
         GameRegistry.registerBlock(silver_ore, Refs.SILVERORE_NAME);
-        GameRegistry.registerBlock(tin_ore, Refs.TINORE_NAME);
+        GameRegistry.registerBlock(zinc_ore, Refs.ZINCORE_NAME);
         GameRegistry.registerBlock(tungsten_ore, Refs.TUNGSTENORE_NAME);
         GameRegistry.registerBlock(ruby_ore, Refs.RUBYORE_NAME);
         GameRegistry.registerBlock(sapphire_ore, Refs.SAPPHIREORE_NAME);
@@ -210,7 +210,7 @@ public class BPBlocks {
         GameRegistry.registerBlock(nikolite_block, Refs.NIKOLITEBLOCK_NAME);
         GameRegistry.registerBlock(copper_block, Refs.COPPERBLOCK_NAME);
         GameRegistry.registerBlock(silver_block, Refs.SILVERBLOCK_NAME);
-        GameRegistry.registerBlock(tin_block, Refs.TINBLOCK_NAME);
+        GameRegistry.registerBlock(zinc_block, Refs.ZINCBLOCK_NAME);
         GameRegistry.registerBlock(tungsten_block, Refs.TUNGSTENBLOCK_NAME);
 
         GameRegistry.registerBlock(flax_crop, Refs.FLAXCROP_NAME);

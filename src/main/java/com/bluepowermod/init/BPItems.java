@@ -41,7 +41,7 @@ public class BPItems {
     public static ItemBase nikolite;
     public static ItemBase copper_ingot;
     public static ItemBase silver_ingot;
-    public static ItemBase tin_ingot;
+    public static ItemBase zinc_ingot;
     public static ItemBase brass_ingot;
     public static ItemBase blue_alloy_ingot;
     public static ItemBase red_alloy_ingot;
@@ -83,7 +83,7 @@ public class BPItems {
     public static ItemBase blue_doped_wafer;
     public static ItemBase screwdriver;
     public static Item     athame;
-    public static ItemBase tinplate;
+    public static ItemBase zincplate;
     public static ItemBase stone_wafer;
     public static ItemBase stone_wire;
     public static ItemBase stone_anode;
@@ -114,7 +114,7 @@ public class BPItems {
         nikolite = new ItemNikolite();
         copper_ingot = new ItemIngot(Refs.COPPERINGOT_NAME);
         silver_ingot = new ItemIngot(Refs.SILVERINGOT_NAME);
-        tin_ingot = new ItemIngot(Refs.TININGOT_NAME);
+        zinc_ingot = new ItemIngot(Refs.ZINCINGOT_NAME);
         tungsten_ingot = new ItemIngot(Refs.TUNGSTENINGOT_NAME);
         brass_ingot = new ItemIngot(Refs.BRASSINGOT_NAME);
         blue_alloy_ingot = new ItemIngot(Refs.BLUEALLOYINGOT_NAME);
@@ -162,7 +162,7 @@ public class BPItems {
         red_doped_wafer = new ItemSiliconWafer(Refs.REDDOPEDWAFER_NAME);
         screwdriver = new ItemScrewdriver();
         athame = new ItemAthame();
-        tinplate = new ItemTinPlate();
+        zincplate = new ItemZincPlate();
         stone_wafer = new ItemCrafting(Refs.STONEWAFER_NAME);
         stone_wire = new ItemCrafting(Refs.STONEWIRE_NAME);
         stone_anode = new ItemCrafting(Refs.STONEANODE_NAME);
@@ -206,7 +206,7 @@ public class BPItems {
         GameRegistry.registerItem(nikolite, Refs.NIKOLITE_NAME);
         GameRegistry.registerItem(copper_ingot, Refs.COPPERINGOT_NAME);
         GameRegistry.registerItem(silver_ingot, Refs.SILVERINGOT_NAME);
-        GameRegistry.registerItem(tin_ingot, Refs.TININGOT_NAME);
+        GameRegistry.registerItem(zinc_ingot, Refs.ZINCINGOT_NAME);
         GameRegistry.registerItem(tungsten_ingot, Refs.TUNGSTENINGOT_NAME);
         GameRegistry.registerItem(brass_ingot, Refs.BRASSINGOT_NAME);
         GameRegistry.registerItem(blue_alloy_ingot, Refs.BLUEALLOYINGOT_NAME);
@@ -253,7 +253,7 @@ public class BPItems {
         GameRegistry.registerItem(red_doped_wafer, Refs.REDDOPEDWAFER_NAME);
         GameRegistry.registerItem(screwdriver, Refs.SCREWDRIVER_NAME);
         GameRegistry.registerItem(athame, Refs.ATHAME_NAME);
-        GameRegistry.registerItem(tinplate, Refs.TINPLATE_NAME);
+        GameRegistry.registerItem(zincplate, Refs.ZINCPLATE_NAME);
 
         GameRegistry.registerItem(stone_wafer, Refs.STONEWAFER_NAME);
         GameRegistry.registerItem(stone_wire, Refs.STONEWIRE_NAME);

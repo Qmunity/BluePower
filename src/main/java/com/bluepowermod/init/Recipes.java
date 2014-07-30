@@ -38,7 +38,7 @@ public class Recipes {
     
         GameRegistry.addSmelting(BPBlocks.basalt_cobble, new ItemStack(BPBlocks.basalt), 0);
         GameRegistry.addSmelting(BPBlocks.copper_ore, new ItemStack(BPItems.copper_ingot), 0.5F);
-        GameRegistry.addSmelting(BPBlocks.tin_ore, new ItemStack(BPItems.tin_ingot), 0.5F);
+        GameRegistry.addSmelting(BPBlocks.zinc_ore, new ItemStack(BPItems.zinc_ingot), 0.5F);
         GameRegistry.addSmelting(BPBlocks.silver_ore, new ItemStack(BPItems.silver_ingot), 0.7F);
         GameRegistry.addSmelting(BPBlocks.tungsten_block, new ItemStack(BPItems.tungsten_ingot), 0.8F);
         GameRegistry.addSmelting(BPBlocks.basalt, new ItemStack(BPBlocks.basalt_tile), 0);
@@ -50,7 +50,7 @@ public class Recipes {
         craftManager.addRecipe(new ItemStack(BPBlocks.marble_brick, 4), new Object[] { "##", "##", '#', BPBlocks.marble });
         craftManager.addRecipe(new ItemStack(BPBlocks.copper_block, 1), new Object[] { "###", "###", "###", '#', BPItems.copper_ingot });
         craftManager.addRecipe(new ItemStack(BPBlocks.silver_block, 1), new Object[] { "###", "###", "###", '#', BPItems.silver_ingot });
-        craftManager.addRecipe(new ItemStack(BPBlocks.tin_block, 1), new Object[] { "###", "###", "###", '#', BPItems.tin_ingot });
+        craftManager.addRecipe(new ItemStack(BPBlocks.zinc_block, 1), new Object[] { "###", "###", "###", '#', BPItems.zinc_ingot });
         craftManager.addRecipe(new ItemStack(BPBlocks.tungsten_block, 1), new Object[] { "###", "###", "###", '#', BPItems.tungsten_ingot });
         
         craftManager.addRecipe(new ItemStack(BPItems.ruby_axe, 1), new Object[] { "GG ", "GS ", " S ", 'G', BPItems.ruby, 'S', Items.stick });
@@ -106,7 +106,7 @@ public class Recipes {
         craftManager.addRecipe(new ItemStack(BPItems.ruby, 9), new Object[] { "#", '#', BPBlocks.ruby_block });
         craftManager.addRecipe(new ItemStack(BPItems.silver_ingot, 9), new Object[] { "#", '#', BPBlocks.silver_block });
         craftManager.addRecipe(new ItemStack(BPItems.copper_ingot, 9), new Object[] { "#", '#', BPBlocks.copper_block });
-        craftManager.addRecipe(new ItemStack(BPItems.tin_ingot, 9), new Object[] { "#", '#', BPBlocks.tin_block });
+        craftManager.addRecipe(new ItemStack(BPItems.zinc_ingot, 9), new Object[] { "#", '#', BPBlocks.zinc_block });
         craftManager.addRecipe(new ItemStack(BPItems.tungsten_ingot, 9), new Object[] { " # ", '#', BPBlocks.tungsten_block });
         
         if (Config.useAltScrewdriverRecipe) {
@@ -191,13 +191,13 @@ public class Recipes {
         IAlloyFurnaceRegistry af = BPRegistry.alloyFurnaceRegistry;
         af.addRecipe(new ItemStack(BPItems.red_alloy_ingot, 1), new ItemStack(Items.redstone, 4), Items.iron_ingot);
         af.addRecipe(new ItemStack(BPItems.red_alloy_ingot, 1), new ItemStack(Items.redstone, 4), BPItems.copper_ingot);
-        af.addRecipe(new ItemStack(BPItems.brass_ingot, 4), new ItemStack(BPItems.copper_ingot, 3), BPItems.tin_ingot);
+        af.addRecipe(new ItemStack(BPItems.brass_ingot, 4), new ItemStack(BPItems.copper_ingot, 3), BPItems.zinc_ingot);
         af.addRecipe(new ItemStack(BPItems.blue_alloy_ingot, 1), new ItemStack(BPItems.nikolite, 4), BPItems.silver_ingot);
         af.addRecipe(new ItemStack(BPItems.silicon_boule, 1), new ItemStack(Items.coal, 8), new ItemStack(Blocks.sand, 8));
         
         af.addRecipe(new ItemStack(BPItems.red_doped_wafer, 1), new ItemStack(Items.redstone, 4), BPItems.silicon_wafer);
         af.addRecipe(new ItemStack(BPItems.blue_doped_wafer, 1), new ItemStack(BPItems.nikolite, 4), BPItems.silicon_wafer);
-        af.addRecipe(new ItemStack(BPItems.tinplate, 4), new ItemStack(BPItems.tin_ingot, 1), new ItemStack(Items.iron_ingot, 2));
+        af.addRecipe(new ItemStack(BPItems.zincplate, 4), new ItemStack(BPItems.zinc_ingot, 1), new ItemStack(Items.iron_ingot, 2));
         
         af.addRecyclingRecipe(new ItemStack(Blocks.iron_block));
         af.addRecyclingRecipe(new ItemStack(Blocks.gold_block));

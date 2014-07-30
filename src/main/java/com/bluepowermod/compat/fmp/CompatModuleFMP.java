@@ -81,7 +81,7 @@ public class CompatModuleFMP extends CompatModule implements IMultipartCompat {
         registerBlockAsMicroblock(BPBlocks.sapphire_block);
         registerBlockAsMicroblock(BPBlocks.copper_block);
         registerBlockAsMicroblock(BPBlocks.silver_block);
-        registerBlockAsMicroblock(BPBlocks.tin_block);
+        registerBlockAsMicroblock(BPBlocks.zinc_block);
     }
     
     private void registerBlockAsMicroblock(Block b) {

@@ -58,8 +58,8 @@ public class WorldGenerationHandler implements IWorldGenerator {
             this.addOreToGenerate(random, Config.veinCountNikolite, Config.veinSizeNikolite, Config.minNikoliteY, Config.maxNikoliteY, BPBlocks.nikolite_ore,
                     world, chunkX, chunkZ);
         }
-        if (Config.generateTin) {
-            this.addOreToGenerate(random, Config.veinCountTin, Config.veinSizeTin, Config.minTinY, Config.maxTinY, BPBlocks.tin_ore, world, chunkX, chunkZ);
+        if (Config.generateZinc) {
+            this.addOreToGenerate(random, Config.veinCountZinc, Config.veinSizeZinc, Config.minZincY, Config.maxZincY, BPBlocks.zinc_ore, world, chunkX, chunkZ);
         }
         if (Config.generateCopper) {
             this.addOreToGenerate(random, Config.veinCountCopper, Config.veinSizeCopper, Config.minCopperY, Config.maxCopperY, BPBlocks.copper_ore, world,

@@ -94,6 +94,6 @@ public class BlockStoneOre extends Block {
     public boolean isBeaconBase(IBlockAccess worldObj, int x, int y, int z, int beaconX, int beaconY, int beaconZ) {
 
         return this == BPBlocks.amethyst_block || this == BPBlocks.ruby_block || this == BPBlocks.sapphire_block || this == BPBlocks.copper_block
-                || this == BPBlocks.tin_block || this == BPBlocks.silver_block || this == BPBlocks.tungsten_block;
+                || this == BPBlocks.zinc_block || this == BPBlocks.silver_block || this == BPBlocks.tungsten_block;
     }
 }

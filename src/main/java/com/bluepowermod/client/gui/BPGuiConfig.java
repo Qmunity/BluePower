@@ -47,7 +47,7 @@ public class BPGuiConfig extends GuiConfig {
     private static List<IConfigElement> getConfigElements() {
 
         List<IConfigElement> list = new ArrayList<IConfigElement>();
-        List<IConfigElement> listTin = new ConfigElement(BluePower.config.getCategory(Refs.CONFIG_TIN)).getChildElements();
+        List<IConfigElement> listZinc = new ConfigElement(BluePower.config.getCategory(Refs.CONFIG_ZINC)).getChildElements();
         List<IConfigElement> listCopper = new ConfigElement(BluePower.config.getCategory(Refs.CONFIG_COPPER)).getChildElements();
         List<IConfigElement> listSilver = new ConfigElement(BluePower.config.getCategory(Refs.CONFIG_SILVER)).getChildElements();
         List<IConfigElement> listTungsten = new ConfigElement(BluePower.config.getCategory(Refs.CONFIG_TUNGSTEN)).getChildElements();
@@ -65,7 +65,7 @@ public class BPGuiConfig extends GuiConfig {
         list.add(new DummyConfigElement.DummyCategoryElement("Recipes", "bluepower.config.recipes", listRecipes));
         list.add(new DummyConfigElement.DummyCategoryElement("Enchantments", "bluepower.config.enchantments", listEnchants));
         list.add(new DummyConfigElement.DummyCategoryElement("Copper", "bluepower.config.copper", listCopper));
-        list.add(new DummyConfigElement.DummyCategoryElement("Tin", "bluepower.config.tin", listTin));
+        list.add(new DummyConfigElement.DummyCategoryElement("Zinc", "bluepower.config.zinc", listZinc));
         list.add(new DummyConfigElement.DummyCategoryElement("Silver", "bluepower.config.silver", listSilver));
         list.add(new DummyConfigElement.DummyCategoryElement("Tungsten", "bluepower.config.tungsten", listTungsten));
         list.add(new DummyConfigElement.DummyCategoryElement("Ruby", "bluepower.config.ruby", listRuby));

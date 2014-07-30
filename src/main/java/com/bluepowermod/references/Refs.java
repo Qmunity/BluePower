@@ -55,15 +55,15 @@ public class Refs {
     public static final String NIKOLITE_NAME        = "nikolite_dust";
     public static final String COPPERORE_NAME       = "copper_ore";
     public static final String SILVERORE_NAME       = "silver_ore";
-    public static final String TINORE_NAME          = "tin_ore";
+    public static final String ZINCORE_NAME         = "zinc_ore";
     public static final String TUNGSTENORE_NAME     = "tungsten_ore";
     public static final String COPPERBLOCK_NAME     = "copper_block";
     public static final String SILVERBLOCK_NAME     = "silver_block";
-    public static final String TINBLOCK_NAME        = "tin_block";
+    public static final String ZINCBLOCK_NAME       = "zinc_block";
     public static final String TUNGSTENBLOCK_NAME   = "tungsten_block";
     public static final String COPPERINGOT_NAME     = "copper_ingot";
     public static final String SILVERINGOT_NAME     = "silver_ingot";
-    public static final String TININGOT_NAME        = "tin_ingot";
+    public static final String ZINCINGOT_NAME       = "zinc_ingot";
     public static final String TUNGSTENINGOT_NAME   = "tungsten_ingot";
     public static final String AMETHYSTSAW_NAME     = "amethyst_saw";
     public static final String SAPPHIRESAW_NAME     = "sapphire_saw";
@@ -87,7 +87,7 @@ public class Refs {
     public static final String BRASSINGOT_NAME     = "brass_ingot";
     public static final String BLUEALLOYINGOT_NAME = "blue_alloy_ingot";
     public static final String REDALLOYINGOT_NAME  = "red_alloy_ingot";
-    public static final String TINPLATE_NAME       = "tinplate";
+    public static final String ZINCPLATE_NAME      = "zincplate";
 
     public static final String RUBYAXE_NAME     = "ruby_axe";
     public static final String RUBYSWORD_NAME   = "ruby_sword";
@@ -207,7 +207,7 @@ public class Refs {
     public static final String   CONFIG_WORLDGEN = "world gen";
     public static final String   CONFIG_TUNGSTEN = "tungsten";
     public static final String   CONFIG_COPPER   = "copper";
-    public static final String   CONFIG_TIN      = "tin";
+    public static final String   CONFIG_ZINC     = "zinc";
     public static final String   CONFIG_SILVER   = "silver";
     public static final String   CONFIG_NIKOLITE = "nikolite";
     public static final String   CONFIG_RUBY     = "ruby";
@@ -215,7 +215,7 @@ public class Refs {
     public static final String   CONFIG_SAPPHIRE = "sapphire";
     public static final String   CONFIG_SETTINGS = "settings";
     public static final String   CONFIG_RECIPES  = "recipe enabling";
-    public static final String      CONFIG_ENCHANTS = "enchantment ids";
+    public static final String   CONFIG_ENCHANTS = "enchantment ids";
 
     public static String fullVersionString() {
 
