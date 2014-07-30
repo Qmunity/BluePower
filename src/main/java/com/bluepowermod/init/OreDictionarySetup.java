@@ -24,7 +24,7 @@ public class OreDictionarySetup {
     public static void init() {
 
         OreDictionary.registerOre("oreCopper", BPBlocks.copper_ore);
-        OreDictionary.registerOre("oreTin", BPBlocks.zinc_ore);
+        OreDictionary.registerOre("oreZinc", BPBlocks.zinc_ore);
         OreDictionary.registerOre("oreSilver", BPBlocks.silver_ore);
         OreDictionary.registerOre("oreTungsten", BPBlocks.tungsten_ore);
 
@@ -33,8 +33,9 @@ public class OreDictionarySetup {
         OreDictionary.registerOre("gemSapphire", BPItems.sapphire);
         OreDictionary.registerOre("dustNikolite", BPItems.nikolite);
         OreDictionary.registerOre("ingotCopper", BPItems.copper_ingot);
-        OreDictionary.registerOre("ingotTin", BPItems.zinc_ingot);
+        OreDictionary.registerOre("ingotZinc", BPItems.zinc_ingot);
         OreDictionary.registerOre("ingotSilver", BPItems.silver_ingot);
+        OreDictionary.registerOre("ingotBrass", BPItems.brass_ingot);
         OreDictionary.registerOre("dyePurple", BPItems.indigo_dye);
     }
 }
