@@ -19,15 +19,17 @@
 
 package com.bluepowermod.tileentities.tier1;
 
+import java.util.List;
+
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.common.util.ForgeDirection;
+
+import com.bluepowermod.BluePower;
 import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.tileentities.TileMachineBase;
-
-import java.util.List;
 
 public class TileTransposer extends TileMachineBase {
     
@@ -63,28 +65,23 @@ public class TileTransposer extends TileMachineBase {
         }
     }
     
+    private static AxisAlignedBB[] ITEM_SUCK_AABBS;
+    static{
+        ITEM_SUCK_AABBS = new AxisAlignedBB[6];
+        ITEM_SUCK_AABBS[0] = AxisAlignedBB.getBoundingBox(-1, -1, -1, 2, 0, 2);
+        ITEM_SUCK_AABBS[1] = AxisAlignedBB.getBoundingBox(-1, 1, -1, 2, 2, 2);
+        ITEM_SUCK_AABBS[2] = AxisAlignedBB.getBoundingBox(-1, -1, -1, 2, 2, 0);
+        ITEM_SUCK_AABBS[3] = AxisAlignedBB.getBoundingBox(-1, -1, 1, 2, 2, 2);
+        ITEM_SUCK_AABBS[4] = AxisAlignedBB.getBoundingBox(-1, -1, -1, 0, 2, 2);
+        ITEM_SUCK_AABBS[5] = AxisAlignedBB.getBoundingBox(1, -1, -1, 2, 2, 2);
+    }
+    
     private boolean suckItems() {
-        ForgeDirection direction = getFacingDirection();
-        AxisAlignedBB box = AxisAlignedBB.getBoundingBox(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ, xCoord + direction.offsetX + 1, yCoord + direction.offsetY + 1, zCoord + direction.offsetZ + 1);
-
-        // FIXME: This should work? -Q
-        if (direction.offsetX != 0) {
-            box = AxisAlignedBB.getBoundingBox(xCoord + direction.offsetX, yCoord -1, zCoord -1, xCoord + direction.offsetX, yCoord +1, zCoord +1);
-        }
-        if (direction.offsetY != 0) {
-            box = AxisAlignedBB.getBoundingBox(xCoord -1, yCoord + direction.offsetY, zCoord -1, xCoord +1, yCoord + direction.offsetY, zCoord +1);
-        }
-        if (direction.offsetZ != 0) {
-            box = AxisAlignedBB.getBoundingBox(xCoord -1, yCoord -1, zCoord + direction.offsetZ, xCoord +1, yCoord +1, zCoord + direction.offsetZ);
-        }
-//        BluePower.log.info(box.minX + "," + box.minY + "," + box.minZ + " - " + box.maxX + "," + box.maxY + "," + box.maxZ);
-        if (!worldObj.getEntitiesWithinAABB(EntityItem.class, box).isEmpty()) {
-            for (EntityItem entity : (List<EntityItem>)worldObj.getEntitiesWithinAABB(EntityItem.class, box)) {
-                ItemStack stack = entity.getEntityItem();
-                addItemToOutputBuffer(stack);
-                entity.setDead();
-                return true;
-            }
+        for (EntityItem entity : (List<EntityItem>)worldObj.getEntitiesWithinAABB(EntityItem.class, ITEM_SUCK_AABBS[getFacingDirection().ordinal()].copy().offset(xCoord, yCoord, zCoord))) {
+            ItemStack stack = entity.getEntityItem();
+            addItemToOutputBuffer(stack);
+            entity.setDead();
+            return true;
         }
         return false;
     }
