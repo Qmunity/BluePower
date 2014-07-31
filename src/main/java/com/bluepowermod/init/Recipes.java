@@ -110,20 +110,20 @@ public class Recipes {
         craftManager.addRecipe(new ItemStack(BPItems.tungsten_ingot, 9), " # ", '#', BPBlocks.tungsten_block);
         
         if (Config.useAltScrewdriverRecipe) {
-            craftManager.addRecipe(new ItemStack(BPItems.screwdriver_handle), "#", '#', Items.stick);
-            craftManager.addRecipe(new ItemStack(BPItems.screwdriver, 1), "# ", " S", '#', Items.iron_ingot, 'S', BPItems.screwdriver_handle);
+            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.screwdriver_handle), "#", '#', "stickWood"));
+            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.screwdriver, 1), "# ", " S", '#', "ingotIron", 'S', BPItems.screwdriver_handle));
         } else {
-            craftManager.addRecipe(new ItemStack(BPItems.screwdriver, 1), "# ", " S", '#', Items.iron_ingot, 'S', Items.stick);
+            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.screwdriver, 1), "# ", " S", '#', "ingotIron", 'S', "stickWood"));
         }
         
-        craftManager.addRecipe(new ItemStack(BPItems.athame, 1), "# ", " S", '#', BPItems.silver_ingot, 'S', Items.stick);
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.athame, 1), "# ", " S", '#', "ingotSilver", 'S', "stickWood"));
         
-        craftManager.addRecipe(new ItemStack(BPItems.stone_wire, 1), "#", "W", '#', Items.redstone, 'W', BPItems.stone_wafer);
-        craftManager.addRecipe(new ItemStack(BPItems.stone_anode, 3), " # ", "###", "WWW", '#', Items.redstone, 'W', BPItems.stone_wafer);
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.stone_wire, 1), "#", "W", '#', "dustRedstone", 'W', BPItems.stone_wafer));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.stone_anode, 3), " # ", "###", "WWW", '#', "dustRedstone", 'W', BPItems.stone_wafer));
         craftManager.addRecipe(new ItemStack(BPItems.stone_cathode, 1), "#", "W", '#', Blocks.redstone_torch, 'W', BPItems.stone_wafer);
-        craftManager.addRecipe(new ItemStack(BPItems.stone_pointer, 1), "S", "#", "W", 'S', Blocks.stone, '#', Blocks.redstone_torch, 'W', BPItems.stone_wafer);
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.stone_pointer, 1), "S", "#", "W", 'S', "stone", '#', Blocks.redstone_torch, 'W', BPItems.stone_wafer));
         craftManager.addRecipe(new ItemStack(BPItems.silicon_chip, 1), " # ", "WWW", '#', BPItems.red_doped_wafer, 'W', BPItems.stone_wafer);
-        craftManager.addRecipe(new ItemStack(BPItems.plate_assembly, 1), " # ", "SRS", "#C#", '#', BPItems.stone_wafer, 'S', Items.stick, 'R', BPItems.red_alloy_ingot, 'C', BPItems.stone_cathode);
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.plate_assembly, 1), " # ", "SRS", "#C#", '#', BPItems.stone_wafer, 'S', "stickWood", 'R', BPItems.red_alloy_ingot, 'C', BPItems.stone_cathode));
         craftManager.addShapelessRecipe(new ItemStack(BPItems.taintedsilicon_chip, 1), BPItems.silicon_chip, Items.glowstone_dust);
         //        TODO: stone_redwire recipe and stone_bundle recipe
         
