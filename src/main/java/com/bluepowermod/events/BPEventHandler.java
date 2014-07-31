@@ -1,7 +1,9 @@
 package com.bluepowermod.events;
 
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.monster.EntityCreeper;
+import net.minecraft.entity.monster.EntityEnderman;
 import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.player.EntityPlayer;
@@ -10,12 +12,15 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntityHopper;
 import net.minecraft.util.EntityDamageSource;
+import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
+
 import com.bluepowermod.containers.ContainerSeedBag;
 import com.bluepowermod.containers.inventorys.InventoryItem;
 import com.bluepowermod.init.BPEnchantments;
 import com.bluepowermod.items.ItemSeedBag;
+
 import cpw.mods.fml.common.eventhandler.Event.Result;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
@@ -47,6 +52,31 @@ public class BPEventHandler {
                 }
             }
         }
+    }
+    
+    private boolean isAttacking = false;
+    @SubscribeEvent
+    public void onEntityAttack(LivingAttackEvent event){
+        if(!isAttacking && event.source instanceof EntityDamageSource) {//this event will be trigger recursively by EntityLiving#attackEntityFrom, so we need to stop the loop.
+            EntityDamageSource entitySource = (EntityDamageSource) event.source;
+            
+            if(entitySource.getEntity() instanceof EntityPlayer) {
+                EntityPlayer killer = (EntityPlayer) entitySource.getEntity();
+                
+                if(killer.inventory.getCurrentItem() != null) { 
+                    if(EnchantmentHelper.getEnchantments(killer.inventory.getCurrentItem()).containsKey(BPEnchantments.disjunction.effectId)) {
+                        if(event.entityLiving instanceof EntityEnderman || event.entityLiving instanceof EntityDragon){
+                            int level = EnchantmentHelper.getEnchantmentLevel(BPEnchantments.disjunction.effectId, killer.inventory.getCurrentItem());
+                            isAttacking = true;
+                            event.entityLiving.attackEntityFrom(event.source, event.ammount * (level * 0.5F + 1));
+                            isAttacking = false;
+                            event.setCanceled(true);
+                        }
+                    }
+                }
+            }
+        }
+        
     }
     
     @SubscribeEvent
