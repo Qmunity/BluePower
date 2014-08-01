@@ -17,79 +17,80 @@
 
 package com.bluepowermod.blocks.machines;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraftforge.common.util.ForgeDirection;
+
 import com.bluepowermod.blocks.BlockContainerBase;
+import com.bluepowermod.client.renderers.RendererBlockBase.EnumFaceType;
 import com.bluepowermod.init.CustomTabs;
 import com.bluepowermod.references.GuiIDs;
 import com.bluepowermod.references.Refs;
+import com.bluepowermod.tileentities.IRotatable;
 import com.bluepowermod.tileentities.tier1.TileRelay;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 public class BlockRelay extends BlockContainerBase {
-
-    private IIcon textureFront;
-    private IIcon textureBack;
-    private IIcon textureSide1;
-    private IIcon textureSide2;
-    private IIcon textureSide2Active;
-    public boolean isActive = false;
-
+    
     public BlockRelay() {
-
+    
         super(Material.rock);
-        this.setBlockName(Refs.RELAY_NAME);
-        this.setCreativeTab(CustomTabs.tabBluePowerMachines);
+        setBlockName(Refs.RELAY_NAME);
+        setCreativeTab(CustomTabs.tabBluePowerMachines);
     }
-
+    
     /**
      * Method to be overwritten to fetch the TileEntity Class that goes with the block
      *
      * @return a .class
      */
-    @Override protected Class<? extends TileEntity> getTileEntity() {
-
+    @Override
+    protected Class<? extends TileEntity> getTileEntity() {
+    
         return TileRelay.class;
     }
-
+    
     /**
      * Method to be overwritten that returns a GUI ID
      *
      * @return
      */
-    @Override public GuiIDs getGuiID() {
-
+    @Override
+    public GuiIDs getGuiID() {
+    
         return GuiIDs.RELAY_ID;
     }
-
+    
     @Override
     @SideOnly(Side.CLIENT)
     public void registerBlockIcons(IIconRegister iconRegister) {
-
-        this.textureFront = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + Refs.RELAY_NAME + "_front");
-        this.textureBack = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + Refs.RELAY_NAME + "_back");
-        this.textureSide1 = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + Refs.RELAY_NAME + "_side_0");
-        this.textureSide2 = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + Refs.RELAY_NAME + "_side_1");
-        this.textureSide2Active = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + Refs.RELAY_NAME + "_side_1_active");
-        this.blockIcon = this.textureSide1;
+    
+        super.registerBlockIcons(iconRegister);
+        blockIcon = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + Refs.RELAY_NAME + "_side_0");
     }
-
+    
     @Override
     @SideOnly(Side.CLIENT)
     public IIcon getIcon(int side, int meta) {
-
-        ForgeDirection direction = ForgeDirection.getOrientation(meta);
-        if (side == direction.ordinal()) {
-            return textureFront;
-        } else if (side == direction.getOpposite().ordinal()) {
-            return textureBack;
-        } if ((side == 3) || (side == 2)) {
-            return isActive ? textureSide2Active : textureSide2;
+    
+        return side == 2 || side == 3 ? blockIcon : super.getIcon(side, meta);
+    }
+    
+    @Override
+    protected IIcon getIcon(EnumFaceType faceType, boolean ejecting, boolean powered, int side, TileEntity te) {
+    
+        if (faceType == EnumFaceType.SIDE) {
+            ForgeDirection orientation = ((IRotatable) te).getFacingDirection();
+            if (orientation.ordinal() < 2) {
+                if (side == ForgeDirection.WEST.ordinal() || side == ForgeDirection.EAST.ordinal()) return blockIcon;
+            } else {
+                if (side == ForgeDirection.UP.ordinal() || side == ForgeDirection.DOWN.ordinal()) return blockIcon;
+            }
         }
-        return blockIcon;
+        return super.getIcon(faceType, ejecting, powered, side, te);
     }
 }

@@ -24,9 +24,11 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntityFurnace;
+
 import com.bluepowermod.api.recipe.IAlloyFurnaceRecipe;
 import com.bluepowermod.recipe.AlloyFurnaceRegistry;
 import com.bluepowermod.tileentities.TileBase;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -196,10 +198,6 @@ public class TileAlloyFurnace extends TileBase implements IInventory {
     public void setIsActive(boolean _isActive) {
     
         isActive = _isActive;
-        int newMeta = getBlockMetadata();
-        newMeta = newMeta & 7;
-        newMeta |= _isActive == true ? 8 : 0;
-        getWorldObj().setBlockMetadataWithNotify(xCoord, yCoord, zCoord, newMeta, 2);
     }
     
     /**

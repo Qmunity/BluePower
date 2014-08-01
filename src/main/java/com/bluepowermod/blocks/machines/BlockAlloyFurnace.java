@@ -27,11 +27,13 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+
 import com.bluepowermod.blocks.BlockContainerBase;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.references.GuiIDs;
 import com.bluepowermod.references.Refs;
 import com.bluepowermod.tileentities.tier1.TileAlloyFurnace;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -47,9 +49,19 @@ public class BlockAlloyFurnace extends BlockContainerBase {
     
         super(Material.rock);
         setBlockName(Refs.ALLOYFURNACE_NAME);
-        // This might not be needed actually.
-        setBlockTextureName(Refs.ALLOYFURNACE_NAME + "_front");
         
+    }
+    
+    @Override
+    @SideOnly(Side.CLIENT)
+    public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
+    
+        TileAlloyFurnace te = (TileAlloyFurnace) world.getTileEntity(x, y, z);
+        ForgeDirection forgeSide = ForgeDirection.getOrientation(side);
+        if (forgeSide == ForgeDirection.UP) return textureTop;
+        if (forgeSide == ForgeDirection.DOWN) return textureBottom;
+        if (forgeSide == te.getFacingDirection()) return te.getIsActive() ? textureFrontOn : textureFrontOff;
+        return textureSide;
     }
     
     @Override
@@ -59,14 +71,7 @@ public class BlockAlloyFurnace extends BlockContainerBase {
         ForgeDirection s = ForgeDirection.getOrientation(side);
         // If is facing
         
-        if ((meta & 7) == side) {
-            // Do some bitmasking
-            if ((meta & 8) != 0) {
-                return textureFrontOn;
-            } else {
-                return textureFrontOff;
-            }
-        }
+        if (3 == side) { return textureFrontOff; }
         switch (s) {
             case UP:
                 return textureTop;
@@ -95,9 +100,9 @@ public class BlockAlloyFurnace extends BlockContainerBase {
     @SideOnly(Side.CLIENT)
     public void randomDisplayTick(World world, int x, int y, int z, Random rnd) {
     
-        int metadata = world.getBlockMetadata(x, y, z);
-        if ((metadata & 8) != 0) {
-            int l = world.getBlockMetadata(x, y, z) & 7;
+        TileAlloyFurnace te = (TileAlloyFurnace) world.getTileEntity(x, y, z);
+        if (te.getIsActive()) {
+            int l = te.getFacingDirection().ordinal();
             float f = x + 0.5F;
             float f1 = y + 0.0F + rnd.nextFloat() * 6.0F / 16.0F;
             float f2 = z + 0.5F;
@@ -141,9 +146,8 @@ public class BlockAlloyFurnace extends BlockContainerBase {
     @Override
     public int getLightValue(IBlockAccess world, int x, int y, int z) {
     
-        int metadata = world.getBlockMetadata(x, y, z);
-        if ((metadata & 8) != 0) { return 13; }
-        return 0;
+        TileAlloyFurnace te = (TileAlloyFurnace) world.getTileEntity(x, y, z);
+        return te.getIsActive() ? 13 : 0;
     }
     
     @Override
@@ -163,10 +167,10 @@ public class BlockAlloyFurnace extends BlockContainerBase {
     
         return false;
     }
-
+    
     @Override
     public int getRenderType() {
-
+    
         return 0;
     }
 }

@@ -18,16 +18,12 @@
 package com.bluepowermod.blocks.machines;
 
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
-import net.minecraftforge.common.util.ForgeDirection;
+
 import com.bluepowermod.blocks.BlockContainerBase;
 import com.bluepowermod.references.GuiIDs;
 import com.bluepowermod.references.Refs;
 import com.bluepowermod.tileentities.tier2.TileSortingMachine;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * 
@@ -35,9 +31,6 @@ import cpw.mods.fml.relauncher.SideOnly;
  */
 
 public class BlockSortingMachine extends BlockContainerBase {
-    
-    private IIcon textureFront;
-    private IIcon textureBack;
     
     public BlockSortingMachine() {
     
@@ -55,25 +48,5 @@ public class BlockSortingMachine extends BlockContainerBase {
     public GuiIDs getGuiID() {
     
         return GuiIDs.SORTING_MACHINE;
-    }
-    
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerBlockIcons(IIconRegister iconRegister) {
-    
-        textureFront = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + Refs.SORTING_MACHINE_NAME + "_front");
-        textureBack = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + Refs.SORTING_MACHINE_NAME + "_back_1");
-        blockIcon = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + Refs.SORTING_MACHINE_NAME + "_side_1");
-    }
-    
-    @Override
-    @SideOnly(Side.CLIENT)
-    public IIcon getIcon(int side, int meta) {
-    
-        ForgeDirection direction = ForgeDirection.getOrientation(meta);
-        if (side == direction.ordinal()) {
-            return textureFront;
-        } else if (side == direction.getOpposite().ordinal()) { return textureBack; }
-        return blockIcon;
     }
 }

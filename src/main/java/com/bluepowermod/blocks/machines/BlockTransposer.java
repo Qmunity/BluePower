@@ -20,62 +20,30 @@
 package com.bluepowermod.blocks.machines;
 
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
-import net.minecraftforge.common.util.ForgeDirection;
+
 import com.bluepowermod.blocks.BlockContainerBase;
 import com.bluepowermod.references.GuiIDs;
 import com.bluepowermod.references.Refs;
 import com.bluepowermod.tileentities.tier1.TileTransposer;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockTransposer extends BlockContainerBase {
-
-    private IIcon textureFront;
-    private IIcon textureSide;
-    private IIcon textureSideActive;
-    private IIcon textureBack;
-
+    
     public BlockTransposer() {
-
+    
         super(Material.rock);
-        this.setBlockName(Refs.TRANSPOSER_NAME);
+        setBlockName(Refs.TRANSPOSER_NAME);
     }
-
+    
     @Override
     protected Class<? extends TileEntity> getTileEntity() {
-
+    
         return TileTransposer.class;
     }
-
+    
     @Override
     public GuiIDs getGuiID() {
-
+    
         return GuiIDs.INVALID;
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public IIcon getIcon(int side, int meta) {
-
-        ForgeDirection direction = ForgeDirection.getOrientation(meta);
-        if (side == direction.ordinal()) {
-            return textureFront;
-        } else if (side == direction.getOpposite().ordinal()) { return textureBack; }
-        // if () { return textureSideActive; } TODO: Check if block is powered
-        return blockIcon;
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerBlockIcons(IIconRegister iconRegister) {
-
-        this.textureFront = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + Refs.TRANSPOSER_NAME + "_front");
-        this.textureBack = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + Refs.TRANSPOSER_NAME + "_back");
-        this.textureSide = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + Refs.TRANSPOSER_NAME + "_side_0");
-        this.textureSideActive = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + Refs.TRANSPOSER_NAME + "_side_0_active");
-        this.blockIcon = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + Refs.TRANSPOSER_NAME + "_side_0");
     }
 }

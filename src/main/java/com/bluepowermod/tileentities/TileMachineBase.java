@@ -9,6 +9,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.util.ForgeDirection;
+
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
 import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.helper.TileEntityCache;
@@ -16,13 +17,16 @@ import com.bluepowermod.part.tube.ITubeConnection;
 import com.bluepowermod.part.tube.IWeightedTubeInventory;
 import com.bluepowermod.part.tube.TubeStack;
 
-public class TileMachineBase extends TileBase implements ITubeConnection, IWeightedTubeInventory {
+public class TileMachineBase extends TileBase implements ITubeConnection, IWeightedTubeInventory, IEjectAnimator {
     
     protected boolean             spawnItemsInWorld       = true;
     protected boolean             acceptsTubeItems        = true;
     private final List<TubeStack> internalItemStackBuffer = new ArrayList<TubeStack>();
     private TileEntityCache[]     tileCache;
     public static final int       BUFFER_EMPTY_INTERVAL   = 10;
+    private byte                  animationTicker         = -1;
+    private static final int      ANIMATION_TIME          = 7;
+    private boolean               isAnimating;
     
     @Override
     public void updateEntity() {
@@ -36,10 +40,8 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
                     ItemStack returnedStack = IOHelper.insert(getTileCache()[getOutputDirection().ordinal()].getTileEntity(), tubeStack.stack, getFacingDirection(), tubeStack.color, false);
                     if (returnedStack == null) {
                         internalItemStackBuffer.remove(0);
-                        onItemOutputted();
                         markDirty();
                     } else if (returnedStack.stackSize != tubeStack.stack.stackSize) {
-                        onItemOutputted();
                         markDirty();
                     }
                 }
@@ -49,9 +51,15 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
                     for (Iterator<TubeStack> iterator = internalItemStackBuffer.iterator(); iterator.hasNext();) {
                         ItemStack itemStack = iterator.next().stack;
                         ejectItemInWorld(itemStack, direction);
-                        onItemOutputted();
                         iterator.remove();
+                        markDirty();
                     }
+                }
+            }
+            if (animationTicker >= 0 && isBufferEmpty()) {
+                if (++animationTicker > ANIMATION_TIME) {
+                    animationTicker = -1;
+                    sendUpdatePacket();
                 }
             }
         }
@@ -68,7 +76,11 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
     
     protected void addItemToOutputBuffer(ItemStack stack, TubeColor color) {
     
-        if (!worldObj.isRemote) internalItemStackBuffer.add(new TubeStack(stack, getOutputDirection().getOpposite(), color));
+        if (!worldObj.isRemote) {
+            internalItemStackBuffer.add(new TubeStack(stack, getOutputDirection().getOpposite(), color));
+            animationTicker = 0;
+            sendUpdatePacket();
+        }
     }
     
     protected void addItemToOutputBuffer(ItemStack stack) {
@@ -111,7 +123,7 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
     
     public ForgeDirection getOutputDirection() {
     
-        return ForgeDirection.getOrientation(getBlockMetadata()).getOpposite();
+        return getFacingDirection().getOpposite();
     }
     
     @Override
@@ -142,6 +154,24 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
         }
         
         compound.setTag("ItemBuffer", nbttaglist);
+    }
+    
+    @Override
+    public void writeToPacketNBT(NBTTagCompound compound) {
+    
+        super.writeToPacketNBT(compound);
+        compound.setBoolean("animating", animationTicker >= 0);
+    }
+    
+    @Override
+    public void readFromPacketNBT(NBTTagCompound compound) {
+    
+        super.readFromPacketNBT(compound);
+        boolean wasAnimating = isEjecting();
+        isAnimating = compound.getBoolean("animating");
+        if (worldObj != null && wasAnimating != isEjecting()) {
+            markForRenderUpdate();
+        }
     }
     
     public void ejectItemInWorld(ItemStack stack, ForgeDirection oppDirection) {
@@ -186,5 +216,11 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
     public int getWeight(ForgeDirection from) {
     
         return from == getOutputDirection().getOpposite() ? 1000000 : 0;//make the buffer side the last place to go
+    }
+    
+    @Override
+    public boolean isEjecting() {
+    
+        return isAnimating;
     }
 }

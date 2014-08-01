@@ -19,44 +19,72 @@ package com.bluepowermod.tileentities.tier1;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
+
+import com.bluepowermod.tileentities.IEjectAnimator;
 import com.bluepowermod.tileentities.TileBase;
 
-public class TileIgniter extends TileBase {
-
+public class TileIgniter extends TileBase implements IEjectAnimator {
+    
+    private boolean isActive;
+    
     @Override
     protected void redstoneChanged(boolean newValue) {
-
+    
         super.redstoneChanged(newValue);
-        ForgeDirection direction = this.getFacingDirection();
-        if (this.getIsRedstonePowered()) {
+        isActive = newValue;
+        sendUpdatePacket();
+        ForgeDirection direction = getFacingDirection();
+        if (getIsRedstonePowered()) {
             ignite(direction);
         } else {
             extinguish(direction);
         }
     }
-
+    
+    @Override
+    public void writeToPacketNBT(NBTTagCompound tCompound) {
+    
+        super.writeToPacketNBT(tCompound);
+        tCompound.setBoolean("isActive", isActive);
+    }
+    
+    @Override
+    public void readFromPacketNBT(NBTTagCompound tCompound) {
+    
+        super.readFromPacketNBT(tCompound);
+        isActive = tCompound.getBoolean("isActive");
+        if (worldObj != null) markForRenderUpdate();
+    }
+    
     private void ignite(ForgeDirection direction) {
-
-        if (this.getIsRedstonePowered() && worldObj.isAirBlock(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ)) {
+    
+        if (getIsRedstonePowered() && worldObj.isAirBlock(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ)) {
             worldObj.setBlock(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ, Blocks.fire);
         }
     }
-
+    
     private void extinguish(ForgeDirection direction) {
-
+    
         Block target = worldObj.getBlock(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ);
-        if (!this.getIsRedstonePowered() && (target == Blocks.fire || target == Blocks.portal)) {
+        if (!getIsRedstonePowered() && (target == Blocks.fire || target == Blocks.portal)) {
             worldObj.setBlock(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ, Blocks.air);
         }
     }
-
+    
     @Override
     public void updateEntity() {
-
-        if (this.getTicker() % 5 == 0) {
-            this.ignite(this.getFacingDirection());
+    
+        if (getTicker() % 5 == 0) {
+            ignite(getFacingDirection());
         }
         super.updateEntity();
+    }
+    
+    @Override
+    public boolean isEjecting() {
+    
+        return isActive;
     }
 }

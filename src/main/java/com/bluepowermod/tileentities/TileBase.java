@@ -22,13 +22,17 @@ import java.util.List;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.Packet;
+import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 
-public class TileBase extends TileEntity {
+public class TileBase extends TileEntity implements IRotatable {
     
-    private boolean isRedstonePowered;
-    private int     ticker = 0;
+    private boolean        isRedstonePowered;
+    private int            ticker   = 0;
+    private ForgeDirection rotation = ForgeDirection.UNKNOWN;
     
     /*************** BASIC TE FUNCTIONS **************/
     
@@ -40,6 +44,7 @@ public class TileBase extends TileEntity {
     
         super.readFromNBT(tCompound);
         isRedstonePowered = tCompound.getBoolean("isRedstonePowered");
+        readFromPacketNBT(tCompound);
     }
     
     /**
@@ -50,6 +55,52 @@ public class TileBase extends TileEntity {
     
         super.writeToNBT(tCompound);
         tCompound.setBoolean("isRedstonePowered", isRedstonePowered);
+        writeToPacketNBT(tCompound);
+    }
+    
+    /**
+     * Tags written in here are synced upon markBlockForUpdate.
+     * @param tCompound
+     */
+    protected void writeToPacketNBT(NBTTagCompound tCompound) {
+    
+        tCompound.setByte("rotation", (byte) rotation.ordinal());
+        
+    }
+    
+    protected void readFromPacketNBT(NBTTagCompound tCompound) {
+    
+        rotation = ForgeDirection.getOrientation(tCompound.getByte("rotation"));
+        
+    }
+    
+    @Override
+    public Packet getDescriptionPacket() {
+    
+        NBTTagCompound tCompound = new NBTTagCompound();
+        writeToPacketNBT(tCompound);
+        return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, 0, tCompound);
+    }
+    
+    @Override
+    public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
+    
+        readFromPacketNBT(pkt.func_148857_g());
+    }
+    
+    protected void sendUpdatePacket() {
+    
+        if (!worldObj.isRemote) worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+    }
+    
+    protected void markForRenderUpdate() {
+    
+        worldObj.markBlockRangeForRenderUpdate(xCoord, yCoord, zCoord, xCoord, yCoord, zCoord);
+    }
+    
+    protected void notifyNeighborBlockUpdate() {
+    
+        worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, getBlockType());
     }
     
     /**
@@ -131,8 +182,19 @@ public class TileBase extends TileEntity {
         return new ArrayList<ItemStack>();
     }
     
+    @Override
+    public void setFacingDirection(ForgeDirection dir) {
+    
+        rotation = dir;
+        if (worldObj != null) {
+            sendUpdatePacket();
+            notifyNeighborBlockUpdate();
+        }
+    }
+    
+    @Override
     public ForgeDirection getFacingDirection() {
     
-        return ForgeDirection.getOrientation(getBlockMetadata());
+        return rotation;
     }
 }

@@ -17,24 +17,17 @@
 
 package com.bluepowermod.blocks.machines;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
-import net.minecraftforge.common.util.ForgeDirection;
+
 import com.bluepowermod.blocks.BlockContainerBase;
+import com.bluepowermod.client.renderers.RendererBlockBase.EnumFaceType;
 import com.bluepowermod.references.GuiIDs;
 import com.bluepowermod.references.Refs;
 import com.bluepowermod.tileentities.tier1.TileBlockBreaker;
 
 public class BlockBlockBreaker extends BlockContainerBase {
-
-    private IIcon textureFront;
-    private IIcon textureBack;
-    private IIcon textureSide1;
-
+    
     public BlockBlockBreaker() {
     
         super(Material.rock);
@@ -50,30 +43,17 @@ public class BlockBlockBreaker extends BlockContainerBase {
     @Override
     public GuiIDs getGuiID() {
     
-        return GuiIDs.INVALID; // TODO: Not sure what to return if it has no gui
+        return GuiIDs.INVALID;
     }
-
+    
     @Override
-    @SideOnly(Side.CLIENT)
-    public IIcon getIcon(int side, int meta) {
-
-        // TODO: Set textures correctly
-        ForgeDirection direction = ForgeDirection.getOrientation(meta);
-        if (side == direction.ordinal()) {
-            return textureFront;
-        } else if (side == direction.getOpposite().ordinal()) {
-            return textureBack;
+    protected String getIconName(EnumFaceType faceType, boolean ejecting, boolean powered) {
+    
+        String iconName = textureName + "_" + faceType.toString().toLowerCase();
+        if (faceType == EnumFaceType.FRONT) {
+            if (ejecting) iconName += "_active";
         }
-        return textureSide1;
+        return iconName;
     }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerBlockIcons(IIconRegister iconRegister) {
-
-        this.textureFront = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + Refs.BLOCKBREAKER_NAME + "_front");
-        this.textureBack = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + Refs.BLOCKBREAKER_NAME + "_back");
-        this.textureSide1 = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + Refs.BLOCKBREAKER_NAME + "_side");
-        this.blockIcon = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + Refs.BLOCKBREAKER_NAME + "_side");
-    }
+    
 }
