@@ -2,7 +2,9 @@ package com.bluepowermod.client.renderers;
 
 import net.minecraft.util.IIcon;
 import net.minecraftforge.client.event.TextureStitchEvent;
+
 import com.bluepowermod.references.Refs;
+
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class IconSupplier {
@@ -11,6 +13,8 @@ public class IconSupplier {
     public static IIcon pneumaticTubeNode;
     public static IIcon pneumaticTubeColorNode;
     public static IIcon pneumaticTubeColorSide;
+    public static IIcon restrictionTubeNode;
+    public static IIcon restrictionTubeSide;
     public static IIcon cagedLampFootSide;
     public static IIcon cagedLampFootTop;
     public static IIcon cagedLampCageSide;
@@ -36,6 +40,8 @@ public class IconSupplier {
             pneumaticTubeNode = event.map.registerIcon(Refs.MODID + ":tubes/tube_end");
             pneumaticTubeColorSide = event.map.registerIcon(Refs.MODID + ":tubes/tube_color_side");
             pneumaticTubeColorNode = event.map.registerIcon(Refs.MODID + ":tubes/tube_color_end");
+            restrictionTubeNode = event.map.registerIcon(Refs.MODID + ":tubes/restriction_tube_end");
+            restrictionTubeSide = event.map.registerIcon(Refs.MODID + ":tubes/restriction_tube_side");
             
             cagedLampFootSide = event.map.registerIcon(Refs.MODID + ":lamps/cage_foot_side");
             cagedLampFootTop = event.map.registerIcon(Refs.MODID + ":lamps/cage_foot_top");

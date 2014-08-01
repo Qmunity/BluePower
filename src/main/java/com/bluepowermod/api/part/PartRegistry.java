@@ -42,19 +42,20 @@ import com.bluepowermod.part.gate.GateTimer;
 import com.bluepowermod.part.lamp.PartCageLamp;
 import com.bluepowermod.part.lamp.PartFixture;
 import com.bluepowermod.part.tube.PneumaticTube;
+import com.bluepowermod.part.tube.RestrictionTube;
 import com.bluepowermod.references.Refs;
 
 public class PartRegistry {
-
-    private static Map<String, Entry<Class<? extends BPPart>, Object[]>> parts = new LinkedHashMap<String, Entry<Class<? extends BPPart>, Object[]>>();
-    private static Map<String, BPPart> samples = new LinkedHashMap<String, BPPart>();
-
-    public static String ICON_PART;
-
+    
+    private static Map<String, Entry<Class<? extends BPPart>, Object[]>> parts   = new LinkedHashMap<String, Entry<Class<? extends BPPart>, Object[]>>();
+    private static Map<String, BPPart>                                   samples = new LinkedHashMap<String, BPPart>();
+    
+    public static String                                                 ICON_PART;
+    
     private PartRegistry() {
-
+    
     }
-
+    
     /**
      * Register a part
      * 
@@ -62,20 +63,18 @@ public class PartRegistry {
      *            Part class
      */
     public static void registerPart(Class<? extends BPPart> part, Object... constructorArgs) {
-
-        if (part == null)
-            return;
+    
+        if (part == null) return;
         Entry<Class<? extends BPPart>, Object[]> e = new AbstractMap.SimpleEntry<Class<? extends BPPart>, Object[]>(part, constructorArgs);
-        if (parts.containsKey(e))
-            return;
-
+        if (parts.containsKey(e)) return;
+        
         parts.put("tmp", e);
         BPPart p = createPart("tmp");
         samples.put(p.getType(), p);
         parts.remove("tmp");
         parts.put(p.getType(), e);
     }
-
+    
     /**
      * Creates a part from its ID
      * 
@@ -86,31 +85,30 @@ public class PartRegistry {
      * @return A new instance of the part or null if it couldn't be found
      */
     public static BPPart createPart(String id, boolean isMultipart) {
-
+    
         try {
             Entry<Class<? extends BPPart>, Object[]> e = getPartData(id, isMultipart);
-            if (e == null)
-                return null;
+            if (e == null) return null;
             Class<? extends BPPart> c = e.getKey();
             Object[] args = e.getValue();
             Class<?>[] argsClasses = new Class<?>[args.length];
             for (int i = 0; i < args.length; i++)
                 argsClasses[i] = args[i].getClass();
-
+            
             Constructor<? extends BPPart> cons = c.getConstructor(argsClasses);
             boolean wasAccessible = cons.isAccessible();
             cons.setAccessible(true);
             BPPart inst = cons.newInstance(args);
             cons.setAccessible(wasAccessible);
-
+            
             return inst;
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-
+        
         return null;
     }
-
+    
     /**
      * Creates a part from its ID
      * 
@@ -119,37 +117,36 @@ public class PartRegistry {
      * @return A new instance of the part or null if it couldn't be found
      */
     public static BPPart createPart(String id) {
-
+    
         return createPart(id, false);
     }
-
+    
     public static Map<String, Entry<Class<? extends BPPart>, Object[]>> getMappings() {
-
+    
         return Collections.unmodifiableMap(parts);
     }
-
+    
     public static List<String> getRegisteredParts() {
-
+    
         return Collections.unmodifiableList(new ArrayList<String>(parts.keySet()));
     }
-
+    
     public static List<String> getRegisteredPartsForTab(CreativeTabs tab) {
-
+    
         List<String> partIds = new ArrayList<String>();
         List<BPPart> parts = new ArrayList<BPPart>();
-
+        
         if (tab != null) {
             for (BPPart p : PartRegistry.samples.values())
-                if (Arrays.asList(p.getCreativeTabs()).contains(tab))
-                    parts.add(p);
+                if (Arrays.asList(p.getCreativeTabs()).contains(tab)) parts.add(p);
             Collections.sort(parts, new ComparatorCreativeTabIndex(tab));
             for (BPPart p : parts)
                 partIds.add(p.getType());
         }
-
+        
         return Collections.unmodifiableList(new ArrayList<String>(partIds));
     }
-
+    
     /**
      * Gets the part's item from an ID
      * 
@@ -158,38 +155,38 @@ public class PartRegistry {
      * @return An item with the part ID
      */
     public static ItemStack getItemForPart(String id) {
-
+    
         if (parts.containsKey(id)) {
             ItemStack is = new ItemStack(BPItems.multipart);
-
+            
             NBTTagCompound tag = new NBTTagCompound();
             tag.setString("id", id);
-
+            
             is.setTagCompound(tag);
-
+            
             return is;
         }
-
+        
         return null;
     }
-
+    
     public static ItemStack getItemForPart(String id, int stacksize) {
-
+    
         if (parts.containsKey(id)) {
             ItemStack is = new ItemStack(BPItems.multipart);
-
+            
             NBTTagCompound tag = new NBTTagCompound();
             tag.setString("id", id);
-
+            
             is.setTagCompound(tag);
             is.stackSize = stacksize;
-
+            
             return is;
         }
-
+        
         return null;
     }
-
+    
     /**
      * Gets the part id stored in the item and creates a new part with that id
      * 
@@ -198,18 +195,18 @@ public class PartRegistry {
      * @return A new instance of the part or null if it couldn't be found
      */
     public static BPPart createPartFromItem(ItemStack is) {
-
+    
         String id = getPartIdFromItem(is);
         return createPart(id);
     }
-
+    
     public static Entry<Class<? extends BPPart>, Object[]> getPartData(String id) {
-
+    
         return getPartData(id, false);
     }
-
+    
     public static Entry<Class<? extends BPPart>, Object[]> getPartData(String id, boolean isMultipart) {
-
+    
         try {
             for (String s : parts.keySet()) {
                 if ((isMultipart ? Refs.MODID + "_" + s : s).equals(id)) {
@@ -223,16 +220,16 @@ public class PartRegistry {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
+        
         return null;
     }
-
+    
     public static Entry<Class<? extends BPPart>, Object[]> getPartDataFromItem(ItemStack is) {
-
+    
         String id = getPartIdFromItem(is);
         return getPartData(id);
     }
-
+    
     /**
      * Gets the part ID stored in the item
      * 
@@ -241,7 +238,7 @@ public class PartRegistry {
      * @return The part ID
      */
     public static String getPartIdFromItem(ItemStack is) {
-
+    
         try {
             NBTTagCompound tag = is.getTagCompound();
             return tag.getString("id");
@@ -249,7 +246,7 @@ public class PartRegistry {
         }
         return null;
     }
-
+    
     /**
      * Gets the metadata for the multipart itemstack passed as an argument
      * 
@@ -258,45 +255,41 @@ public class PartRegistry {
      * @return The metadata that stack should have
      */
     public static int getStackMetadata(ItemStack is) {
-
+    
         String id = getPartIdFromItem(is);
-        if (id == null)
-            return 0;
+        if (id == null) return 0;
         int i = 0;
         for (String s : parts.keySet()) {
-            if (s.equals(id))
-                break;
+            if (s.equals(id)) break;
             i++;
         }
         return i;
     }
-
+    
     public static boolean hasCustomItemEntity(ItemStack is) {
-
+    
         String id = getPartIdFromItem(is);
         BPPart part = samples.get(id);
         return part != null && part.hasCustomItemEntity();
     }
-
+    
     public static EntityItem createItemEntityForPart(String id, World w, double x, double y, double z, ItemStack item) {
-
+    
         BPPart part = samples.get(id);
-        if (part == null)
-            return null;
+        if (part == null) return null;
         return part.createItemEntity(w, x, y, z, item);
     }
-
+    
     public static EntityItem createItemEntityForStack(World w, double x, double y, double z, ItemStack item) {
-
+    
         String id = getPartIdFromItem(item);
         BPPart part = samples.get(id);
-        if (part == null)
-            return null;
+        if (part == null) return null;
         return part.createItemEntity(w, x, y, z, item);
     }
-
+    
     public static void init() {
-
+    
         ICON_PART = "timer";
         // Gates
         registerPart(GateNot.class);
@@ -311,14 +304,14 @@ public class PartRegistry {
         registerPart(GateNor.class);
         registerPart(GatePulseFormer.class);
         registerPart(GateRandomizer.class);
-
+        
         // Lamps
         for (int i = 0; i < ItemDye.field_150922_c.length; i++)
             registerPart(PartCageLamp.class, ItemDye.field_150921_b[i].toLowerCase(), ItemDye.field_150922_c[i], false);
-
+        
         for (int i = 0; i < ItemDye.field_150922_c.length; i++)
             registerPart(PartFixture.class, ItemDye.field_150921_b[i].toLowerCase(), ItemDye.field_150922_c[i], false);
-
+        
         for (int i = 0; i < ItemDye.field_150922_c.length; i++)
             registerPart(PartCageLamp.class, ItemDye.field_150921_b[i].toLowerCase(), ItemDye.field_150922_c[i], true);
         /*
@@ -327,10 +320,11 @@ public class PartRegistry {
          */
         for (int i = 0; i < ItemDye.field_150922_c.length; i++)
             registerPart(PartFixture.class, ItemDye.field_150921_b[i].toLowerCase(), ItemDye.field_150922_c[i], true);
-
+        
         // Pneumatic Tubes
         registerPart(PneumaticTube.class);
-
+        registerPart(RestrictionTube.class);
+        
         // Test cable
         registerPart(CableWallImpl.class);
         /*

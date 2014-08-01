@@ -411,7 +411,7 @@ public class PneumaticTube extends BPPart {
         Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationItemsTexture);
     }
     
-    private void renderMiddle(AxisAlignedBB aabb, IIcon icon) {
+    protected void renderMiddle(AxisAlignedBB aabb, IIcon icon) {
     
         Tessellator t = Tessellator.instance;
         
@@ -842,14 +842,14 @@ public class PneumaticTube extends BPPart {
             if (connections[i + 1]) connectionCount++;
         }
         if (shouldRenderNode || connectionCount == 0 || connectionCount > 2) {
-            renderMiddle(aabbs.get(0), IconSupplier.pneumaticTubeNode);
+            renderMiddle(aabbs.get(0), getNodeIcon());
             if (color != TubeColor.NONE) {
                 t.setColorOpaque_I(ItemDye.field_150922_c[color.ordinal()]);
                 renderMiddle(aabbs.get(0), IconSupplier.pneumaticTubeColorNode);
                 t.setColorOpaque_F(1, 1, 1);
             }
         } else {
-            renderMiddle(aabbs.get(0), IconSupplier.pneumaticTubeSide);
+            renderMiddle(aabbs.get(0), getSideIcon());
             if (color != TubeColor.NONE) {
                 t.setColorOpaque_I(ItemDye.field_150922_c[color.ordinal()]);
                 renderMiddle(aabbs.get(0), IconSupplier.pneumaticTubeColorSide);
@@ -857,7 +857,7 @@ public class PneumaticTube extends BPPart {
             }
         }
         for (int i = 1; i < aabbs.size(); i++) {
-            renderTexturedCuboid(aabbs.get(i), IconSupplier.pneumaticTubeSide);
+            renderTexturedCuboid(aabbs.get(i), getSideIcon());
             if (color != TubeColor.NONE) {
                 t.setColorOpaque_I(ItemDye.field_150922_c[color.ordinal()]);
                 renderTexturedCuboid(aabbs.get(i), IconSupplier.pneumaticTubeColorSide);
@@ -866,6 +866,16 @@ public class PneumaticTube extends BPPart {
         }
         t.addTranslation((float) -loc.getX(), (float) -loc.getY(), (float) -loc.getZ());
         return true;
+    }
+    
+    protected IIcon getSideIcon() {
+    
+        return IconSupplier.pneumaticTubeSide;
+    }
+    
+    protected IIcon getNodeIcon() {
+    
+        return IconSupplier.pneumaticTubeNode;
     }
     
     @Override
