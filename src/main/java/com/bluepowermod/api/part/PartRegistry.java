@@ -26,6 +26,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
 import com.bluepowermod.init.BPItems;
+import com.bluepowermod.part.cable.CableWallImpl;
 import com.bluepowermod.part.gate.GateAnd;
 import com.bluepowermod.part.gate.GateBuffer;
 import com.bluepowermod.part.gate.GateCounter;
@@ -330,10 +331,11 @@ public class PartRegistry {
         // Pneumatic Tubes
         registerPart(PneumaticTube.class);
 
+        // Test cable
+        registerPart(CableWallImpl.class);
         /*
          * // Red alloy registerPart(CableWall.class); // Uncovered for (int i = 0; i < ItemDye.field_150922_c.length; i++)
          * registerPart(CableWall.class, ItemDye.field_150921_b[i].toLowerCase(), ItemDye.field_150922_c[i]); // Covered
          */
     }
-
 }
