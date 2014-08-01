@@ -413,15 +413,19 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
     @Override
     public TubeStack acceptItemFromTube(TubeStack stack, ForgeDirection from, boolean simulate) {
     
-        boolean success = tryProcessItem(stack.stack, simulate);
-        if (success) {
-            if (stack.stack.stackSize <= 0) {
-                return null;
+        if (from == getOutputDirection()) {
+            return super.acceptItemFromTube(stack, from, simulate);
+        } else {
+            boolean success = tryProcessItem(stack.stack, simulate);
+            if (success) {
+                if (stack.stack.stackSize <= 0) {
+                    return null;
+                } else {
+                    return stack;
+                }
             } else {
                 return stack;
             }
-        } else {
-            return stack;
         }
         
     }

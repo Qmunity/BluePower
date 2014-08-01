@@ -201,7 +201,8 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
     @Override
     public TubeStack acceptItemFromTube(TubeStack stack, ForgeDirection from, boolean simulate) {
     
-        if (!simulate) internalItemStackBuffer.add(stack);
+        if (from == getFacingDirection() && !isBufferEmpty()) return stack;
+        if (!simulate) this.addItemToOutputBuffer(stack.stack, stack.color);
         return null;
     }
     
