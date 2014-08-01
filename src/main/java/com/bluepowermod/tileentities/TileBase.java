@@ -71,7 +71,7 @@ public class TileBase extends TileEntity implements IRotatable {
     protected void readFromPacketNBT(NBTTagCompound tCompound) {
     
         rotation = ForgeDirection.getOrientation(tCompound.getByte("rotation"));
-        
+        if (worldObj != null) markForRenderUpdate();
     }
     
     @Override

@@ -140,6 +140,24 @@ public abstract class BlockContainerBase extends BlockBase implements ITileEntit
     }
     
     @Override
+    public boolean rotateBlock(World worldObj, int x, int y, int z, ForgeDirection axis) {
+    
+        TileEntity te = worldObj.getTileEntity(x, y, z);
+        if (te instanceof IRotatable) {
+            IRotatable rotatable = (IRotatable) te;
+            ForgeDirection dir = rotatable.getFacingDirection();
+            
+            do {
+                dir = ForgeDirection.getOrientation(dir.ordinal() + 1);
+                if (dir == ForgeDirection.UNKNOWN) dir = ForgeDirection.DOWN;
+            } while (!canRotateVertical() && (dir == ForgeDirection.UP || dir == ForgeDirection.DOWN));
+            rotatable.setFacingDirection(dir);
+            return true;
+        }
+        return false;
+    }
+    
+    @Override
     @SideOnly(Side.CLIENT)
     public void registerBlockIcons(IIconRegister iconRegister) {
     

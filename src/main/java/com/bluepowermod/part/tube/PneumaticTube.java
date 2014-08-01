@@ -114,6 +114,12 @@ public class PneumaticTube extends BPPart {
         if (world.isRemote && tick % 40 == 0) tileCache = null;//reset on the client, as it doesn't get update on neighbor block updates (as the method isn't called on the client)
     }
     
+    @Override
+    public void onNeighborUpdate() {
+    
+        onNeighborTileUpdate();
+    }
+    
     /**
      * Event called whenever a nearby block updates
      */
