@@ -24,53 +24,55 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+
 import com.bluepowermod.tileentities.tier1.TileEjector;
 
 public class ContainerEjector extends Container {
-
+    
     private final TileEjector tileEjector;
-
+    
     public ContainerEjector(InventoryPlayer invPlayer, TileEjector ejector) {
-
-        this.tileEjector = ejector;
-
+    
+        tileEjector = ejector;
+        
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 3; ++j) {
-                this.addSlotToContainer(new Slot(ejector, j + i * 3, 62 + j * 18, 17 + i * 18));
+                addSlotToContainer(new Slot(ejector, j + i * 3, 62 + j * 18, 17 + i * 18));
             }
         }
         bindPlayerInventory(invPlayer);
     }
-
+    
     protected void bindPlayerInventory(InventoryPlayer invPlayer) {
-
+    
         // Render inventory
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 9; j++) {
                 addSlotToContainer(new Slot(invPlayer, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
             }
         }
-
+        
         // Render hotbar
         for (int j = 0; j < 9; j++) {
             addSlotToContainer(new Slot(invPlayer, j, 8 + j * 18, 142));
         }
     }
-
-    @Override public boolean canInteractWith(EntityPlayer player) {
-
+    
+    @Override
+    public boolean canInteractWith(EntityPlayer player) {
+    
         return tileEjector.isUseableByPlayer(player);
     }
-
+    
     @Override
     public ItemStack transferStackInSlot(EntityPlayer player, int par2) {
-
+    
         ItemStack itemstack = null;
         Slot slot = (Slot) inventorySlots.get(par2);
         if (slot != null && slot.getHasStack()) {
             ItemStack itemstack1 = slot.getStack();
             itemstack = itemstack1.copy();
-            if (par2 < 20) {
+            if (par2 < 9) {
                 if (!mergeItemStack(itemstack1, 9, 45, true)) return null;
             } else if (!mergeItemStack(itemstack1, 0, 9, false)) { return null; }
             if (itemstack1.stackSize == 0) {
