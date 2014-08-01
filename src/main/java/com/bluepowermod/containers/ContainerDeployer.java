@@ -22,33 +22,34 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+
 import com.bluepowermod.tileentities.tier1.TileDeployer;
 
 public class ContainerDeployer extends Container {
-
+    
     private final TileDeployer tileDeployer;
-
+    
     public ContainerDeployer(InventoryPlayer invPlayer, TileDeployer deployer) {
-        
-    	bindPlayerInventory(invPlayer);
-        this.tileDeployer= deployer;
+    
+        tileDeployer = deployer;
         
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 3; ++j) {
-                this.addSlotToContainer(new Slot(deployer, j + i * 3, 62 + j * 18, 17 + i * 18));
+                addSlotToContainer(new Slot(deployer, j + i * 3, 62 + j * 18, 17 + i * 18));
             }
         }
+        bindPlayerInventory(invPlayer);
     }
- 
+    
     protected void bindPlayerInventory(InventoryPlayer invPlayer) {
-
+    
         // Render inventory
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 9; j++) {
                 addSlotToContainer(new Slot(invPlayer, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
             }
         }
-
+        
         // Render hotbar
         for (int j = 0; j < 9; j++) {
             addSlotToContainer(new Slot(invPlayer, j, 8 + j * 18, 142));
@@ -56,25 +57,25 @@ public class ContainerDeployer extends Container {
         
     }
     
-    
     @Override
     public boolean canInteractWith(EntityPlayer player) {
     
         return tileDeployer.isUseableByPlayer(player);
     }
+    
     @Override
     public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int par2) {
     
         ItemStack itemstack = null;
-        Slot slot = (Slot) this.inventorySlots.get(par2);
+        Slot slot = (Slot) inventorySlots.get(par2);
         
         if (slot != null && slot.getHasStack()) {
             ItemStack itemstack1 = slot.getStack();
             itemstack = itemstack1.copy();
             
             if (par2 < 9) {
-                if (!this.mergeItemStack(itemstack1, 9, 45, true)) { return null; }
-            } else if (!this.mergeItemStack(itemstack1, 0, 9, false)) { return null; }
+                if (!mergeItemStack(itemstack1, 9, 45, true)) { return null; }
+            } else if (!mergeItemStack(itemstack1, 0, 9, false)) { return null; }
             
             if (itemstack1.stackSize == 0) {
                 slot.putStack((ItemStack) null);
@@ -105,12 +106,10 @@ public class ContainerDeployer extends Container {
         
         if (par1ItemStack.isStackable()) {
             while (par1ItemStack.stackSize > 0 && (!par4 && k < par3 || par4 && k >= par2)) {
-                slot = (Slot) this.inventorySlots.get(k);
+                slot = (Slot) inventorySlots.get(k);
                 itemstack1 = slot.getStack();
                 
-                if (itemstack1 != null && itemstack1.getItem() == par1ItemStack.getItem()
-                        && (!par1ItemStack.getHasSubtypes() || par1ItemStack.getItemDamage() == itemstack1.getItemDamage())
-                        && ItemStack.areItemStackTagsEqual(par1ItemStack, itemstack1) && slot.isItemValid(par1ItemStack)) {
+                if (itemstack1 != null && itemstack1.getItem() == par1ItemStack.getItem() && (!par1ItemStack.getHasSubtypes() || par1ItemStack.getItemDamage() == itemstack1.getItemDamage()) && ItemStack.areItemStackTagsEqual(par1ItemStack, itemstack1) && slot.isItemValid(par1ItemStack)) {
                     int l = itemstack1.stackSize + par1ItemStack.stackSize;
                     
                     if (l <= par1ItemStack.getMaxStackSize()) {
@@ -142,7 +141,7 @@ public class ContainerDeployer extends Container {
             }
             
             while (!par4 && k < par3 || par4 && k >= par2) {
-                slot = (Slot) this.inventorySlots.get(k);
+                slot = (Slot) inventorySlots.get(k);
                 itemstack1 = slot.getStack();
                 
                 if (itemstack1 == null && slot.isItemValid(par1ItemStack)) {
