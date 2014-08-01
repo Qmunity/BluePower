@@ -291,7 +291,7 @@ public class PneumaticTube extends BPPart {
         
         List<AxisAlignedBB> aabbs = getSelectionBoxes();
         
-        renderMiddle(aabbs.get(0), IconSupplier.pneumaticTubeSide);
+        renderMiddle(aabbs.get(0), getSideIcon());
         for (int i = 1; i < aabbs.size(); i++) {
             AxisAlignedBB aabb = aabbs.get(i);
             IIcon icon = IconSupplier.pneumaticTubeNode;
@@ -333,7 +333,7 @@ public class PneumaticTube extends BPPart {
                 t.addVertexWithUV(aabb.minX, aabb.minY, aabb.maxZ, minX, maxY);// maxZ
             }
             
-            icon = IconSupplier.pneumaticTubeSide;
+            icon = getSideIcon();
             if (!connections[0]) {
                 double minX = icon.getInterpolatedU(aabb.minX * 16);
                 double maxX = icon.getInterpolatedU(aabb.maxX * 16);
