@@ -22,12 +22,14 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
+import codechicken.multipart.BlockMultipart;
+
 import com.bluepowermod.api.vec.Vector3;
 import com.bluepowermod.compat.CompatibilityUtils;
 import com.bluepowermod.compat.fmp.IMultipartCompat;
 import com.bluepowermod.references.Dependencies;
 import com.bluepowermod.util.RayTracer;
-import codechicken.multipart.BlockMultipart;
+
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Optional;
 
@@ -343,6 +345,13 @@ public abstract class BPPart {
      * Event called whenever a nearby block updates
      */
     public void onNeighborUpdate() {
+    
+    }
+    
+    /**
+     * Event called whenever a nearby TileEntity updates
+     */
+    public void onNeighborTileUpdate() {
     
     }
     

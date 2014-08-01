@@ -1,4 +1,4 @@
-tile.bluepower:basalt.name=Basalt
+﻿tile.bluepower:basalt.name=Basalt
 tile.bluepower:marble.name=Marble
 tile.bluepower:basalt_brick.name=Basalt Brick
 tile.bluepower:marble_brick.name=Marble Brick
@@ -365,3 +365,5 @@ bluepower.config.ruby.tooltip=Adjust ruby world generation.
 bluepower.config.amethyst.tooltip=Adjust amethyst world generation.
 bluepower.config.sapphire.tooltip=Adjust sapphire world generation.
 bluepower.config.nikolite.tooltip=Adjust nikolite world generation.
+
+waila.pneumaticTube.color=Color:

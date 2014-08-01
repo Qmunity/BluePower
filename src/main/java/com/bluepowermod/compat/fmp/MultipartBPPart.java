@@ -22,10 +22,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraftforge.common.util.ForgeDirection;
-import com.bluepowermod.api.part.BPPart;
-import com.bluepowermod.api.part.PartRegistry;
-import com.bluepowermod.api.part.redstone.IBPRedstonePart;
-import com.bluepowermod.references.Refs;
 
 import org.lwjgl.opengl.GL11;
 
@@ -35,12 +31,18 @@ import codechicken.lib.raytracer.IndexedCuboid6;
 import codechicken.lib.render.RenderUtils;
 import codechicken.lib.vec.Cuboid6;
 import codechicken.lib.vec.Vector3;
+import codechicken.multipart.INeighborTileChange;
 import codechicken.multipart.IRedstonePart;
 import codechicken.multipart.JNormalOcclusion;
 import codechicken.multipart.NormalOcclusionTest;
 import codechicken.multipart.TMultiPart;
 
-public class MultipartBPPart extends TMultiPart implements IRedstonePart, JNormalOcclusion {
+import com.bluepowermod.api.part.BPPart;
+import com.bluepowermod.api.part.PartRegistry;
+import com.bluepowermod.api.part.redstone.IBPRedstonePart;
+import com.bluepowermod.references.Refs;
+
+public class MultipartBPPart extends TMultiPart implements IRedstonePart, JNormalOcclusion, INeighborTileChange {
     
     private BPPart part;
     
@@ -238,6 +240,18 @@ public class MultipartBPPart extends TMultiPart implements IRedstonePart, JNorma
     }
     
     @Override
+    public void onNeighborTileChanged(int arg0, boolean arg1) {
+    
+        getPart().onNeighborTileUpdate();
+    }
+    
+    @Override
+    public boolean weakTileChanges() {
+    
+        return false;
+    }
+    
+    @Override
     public boolean activate(EntityPlayer player, MovingObjectPosition hit, ItemStack item) {
     
         return getPart().onActivated(player, hit, item);
@@ -330,8 +344,7 @@ public class MultipartBPPart extends TMultiPart implements IRedstonePart, JNorma
         
         GL11.glPushMatrix();
         {
-            GL11.glTranslated(x() - TileEntityRendererDispatcher.staticPlayerX, y() - TileEntityRendererDispatcher.staticPlayerY, z()
-                    - TileEntityRendererDispatcher.staticPlayerZ);
+            GL11.glTranslated(x() - TileEntityRendererDispatcher.staticPlayerX, y() - TileEntityRendererDispatcher.staticPlayerY, z() - TileEntityRendererDispatcher.staticPlayerZ);
             GL11.glDisable(GL11.GL_TEXTURE_2D);
             GL11.glColor4d(0, 0, 0, 0);
             RenderUtils.drawCuboidOutline(new Cuboid6(c).expand(0.001));

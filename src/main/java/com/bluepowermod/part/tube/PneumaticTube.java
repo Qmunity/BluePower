@@ -6,6 +6,7 @@ import java.util.List;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -17,6 +18,7 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 import net.minecraftforge.common.util.ForgeDirection;
+
 import com.bluepowermod.api.part.BPPart;
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
 import com.bluepowermod.api.vec.Vector3;
@@ -116,7 +118,7 @@ public class PneumaticTube extends BPPart {
      * Event called whenever a nearby block updates
      */
     @Override
-    public void onNeighborUpdate() {
+    public void onNeighborTileUpdate() {
     
         for (TileEntityCache cache : getTileCache()) {
             cache.update();
@@ -870,5 +872,17 @@ public class PneumaticTube extends BPPart {
     public CreativeTabs getCreativeTab() {
     
         return CustomTabs.tabBluePowerMachines;
+    }
+    
+    /**
+     * Adds information to the waila tooltip
+     * @author amadornes
+     * 
+     * @param info
+     */
+    @Override
+    public void addWailaInfo(List<String> info) {
+    
+        if (color != TubeColor.NONE) info.add(I18n.format("waila.pneumaticTube.color") + " " + I18n.format("gui.widget.color." + ItemDye.field_150923_a[color.ordinal()]));
     }
 }
