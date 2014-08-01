@@ -193,6 +193,9 @@ public class Refs {
     public static final String   WOOLCARD_NAME            = "wool_card";
     public static final String   DIAMONDDRAWPLATE_NAME    = "diamond_drawplate";
     
+    public static final String   PAINTCAN_NAME            = "paint_can";
+    public static final String   PAINTBRUSH_NAME          = "paint_brush";
+    
     public static final String   PROJECTTABLE_NAME        = "project_table";
     
     public static final String   BLOCKCPU_NAME            = "cpu";

@@ -19,67 +19,27 @@
 
 package com.bluepowermod.items;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+
 import com.bluepowermod.BluePower;
-import com.bluepowermod.init.CustomTabs;
 import com.bluepowermod.references.GuiIDs;
-import com.bluepowermod.references.Refs;
 
-import java.util.List;
-
-public class ItemCanvasBag extends ItemBase {
+public class ItemCanvasBag extends ItemColorableOverlay {
     
     public ItemCanvasBag(String name) {
     
-        this.setCreativeTab(CustomTabs.tabBluePowerItems);
-        this.setUnlocalizedName(name);
-        this.setTextureName(Refs.MODID + ":" + name);
-        this.setHasSubtypes(true);
-        
-        this.setMaxStackSize(1);
+        super(name);
     }
     
     @Override
     public ItemStack onItemRightClick(ItemStack itemstack, World worldObj, EntityPlayer playerEntity) {
     
         if (!worldObj.isRemote) {
-            playerEntity.openGui(BluePower.instance, GuiIDs.CANVAS_BAG.ordinal(), worldObj, (int) playerEntity.posX, (int) playerEntity.posY,
-                    (int) playerEntity.posZ);
+            playerEntity.openGui(BluePower.instance, GuiIDs.CANVAS_BAG.ordinal(), worldObj, (int) playerEntity.posX, (int) playerEntity.posY, (int) playerEntity.posZ);
         }
         return itemstack;
     }
     
-    @Override
-    public String getUnlocalizedName(ItemStack par1ItemStack)
-    {
-        return super.getUnlocalizedName() + "." + ItemDye.field_150923_a[15-par1ItemStack.getItemDamage()];
-    }
-    
-    @SideOnly(Side.CLIENT)
-    public int getColorFromItemStack(ItemStack par1ItemStack, int par2)
-    {
-        int damage = par1ItemStack.getItemDamage();
-        if (damage>=0 && damage < ItemDye.field_150922_c.length)
-        {
-            return ItemDye.field_150922_c[15-damage];
-        }
-        return 16777215;
-    }
-    
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void getSubItems(Item p_150895_1_, CreativeTabs p_150895_2_, List p_150895_3_)
-    {
-        for (int i=0;i<ItemDye.field_150922_c.length;i++)
-        {
-            p_150895_3_.add(new ItemStack(this,1,i));
-        }
-    }
 }

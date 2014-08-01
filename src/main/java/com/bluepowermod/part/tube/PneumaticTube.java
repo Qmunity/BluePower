@@ -9,7 +9,6 @@ import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -26,7 +25,9 @@ import com.bluepowermod.api.vec.Vector3Cube;
 import com.bluepowermod.client.renderers.IconSupplier;
 import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.helper.TileEntityCache;
+import com.bluepowermod.init.BPItems;
 import com.bluepowermod.init.CustomTabs;
+import com.bluepowermod.items.ItemDamageableColorableOverlay;
 
 /**
  * 
@@ -233,14 +234,11 @@ public class PneumaticTube extends BPPart {
         
         if (!getWorld().isRemote) {
             
-            if (item != null && item.getItem() == Items.dye) {
-                
-                if (item.getItemDamage() < 16) {
-                    color = TubeColor.values()[item.getItemDamage()];
-                    updateConnections();
-                    notifyUpdate();
-                    return true;
-                }
+            if (item != null && item.getItem() == BPItems.paint_brush && ((ItemDamageableColorableOverlay) BPItems.paint_brush).tryUseItem(item)) {
+                color = TubeColor.values()[item.getItemDamage()];
+                updateConnections();
+                notifyUpdate();
+                return true;
             }
         }
         return false;
