@@ -15,12 +15,28 @@
  *     along with Blue Power.  If not, see <http://www.gnu.org/licenses/>
  */
 
-package com.bluepowermod.tileentities;
+package com.bluepowermod.init;
 
-import com.bluepowermod.tileentities.tier1.*;
+import com.bluepowermod.tileentities.tier1.TileAlloyFurnace;
+import com.bluepowermod.tileentities.tier1.TileBlockBreaker;
+import com.bluepowermod.tileentities.tier1.TileBuffer;
+import com.bluepowermod.tileentities.tier1.TileDeployer;
+import com.bluepowermod.tileentities.tier1.TileEjector;
+import com.bluepowermod.tileentities.tier1.TileIgniter;
+import com.bluepowermod.tileentities.tier1.TileLamp;
+import com.bluepowermod.tileentities.tier1.TileRelay;
+import com.bluepowermod.tileentities.tier1.TileTransposer;
+import com.bluepowermod.tileentities.tier2.TileFilter;
 import com.bluepowermod.tileentities.tier2.TileSortingMachine;
 import com.bluepowermod.tileentities.tier2.TileWindmill;
-import com.bluepowermod.tileentities.tier3.*;
+import com.bluepowermod.tileentities.tier3.TileCPU;
+import com.bluepowermod.tileentities.tier3.TileDiskDrive;
+import com.bluepowermod.tileentities.tier3.TileEngine;
+import com.bluepowermod.tileentities.tier3.TileIOExpander;
+import com.bluepowermod.tileentities.tier3.TileKinectGenerator;
+import com.bluepowermod.tileentities.tier3.TileMonitor;
+import com.bluepowermod.tileentities.tier3.TileSortron;
+
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public class TileEntities {
@@ -47,6 +63,7 @@ public class TileEntities {
         GameRegistry.registerTileEntity(TileDeployer.class, "deployer");
         GameRegistry.registerTileEntity(TileEjector.class, "ejector");
         GameRegistry.registerTileEntity(TileRelay.class, "relay");
+        GameRegistry.registerTileEntity(TileFilter.class, "filter");
         GameRegistry.registerTileEntity(TileLamp.class, "tileLamp");
     }
 }

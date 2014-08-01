@@ -17,20 +17,46 @@
 
 package com.bluepowermod.client.gui;
 
-import cpw.mods.fml.common.network.IGuiHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import com.bluepowermod.containers.*;
+
+import com.bluepowermod.containers.ContainerAlloyFurnace;
+import com.bluepowermod.containers.ContainerBuffer;
+import com.bluepowermod.containers.ContainerCPU;
+import com.bluepowermod.containers.ContainerCanvasBag;
+import com.bluepowermod.containers.ContainerDeployer;
+import com.bluepowermod.containers.ContainerDiskDrive;
+import com.bluepowermod.containers.ContainerEjector;
+import com.bluepowermod.containers.ContainerFilter;
+import com.bluepowermod.containers.ContainerIOExpander;
+import com.bluepowermod.containers.ContainerKinect;
+import com.bluepowermod.containers.ContainerMonitor;
+import com.bluepowermod.containers.ContainerRedbusID;
+import com.bluepowermod.containers.ContainerRelay;
+import com.bluepowermod.containers.ContainerSeedBag;
+import com.bluepowermod.containers.ContainerSortingMachine;
 import com.bluepowermod.containers.inventorys.InventoryItem;
 import com.bluepowermod.items.ItemCanvasBag;
 import com.bluepowermod.items.ItemFloppyDisk;
 import com.bluepowermod.items.ItemScrewdriver;
 import com.bluepowermod.items.ItemSeedBag;
 import com.bluepowermod.references.GuiIDs;
-import com.bluepowermod.tileentities.tier1.*;
+import com.bluepowermod.tileentities.tier1.TileAlloyFurnace;
+import com.bluepowermod.tileentities.tier1.TileBuffer;
+import com.bluepowermod.tileentities.tier1.TileDeployer;
+import com.bluepowermod.tileentities.tier1.TileEjector;
+import com.bluepowermod.tileentities.tier1.TileRelay;
+import com.bluepowermod.tileentities.tier2.TileFilter;
 import com.bluepowermod.tileentities.tier2.TileSortingMachine;
-import com.bluepowermod.tileentities.tier3.*;
+import com.bluepowermod.tileentities.tier3.IRedBusWindow;
+import com.bluepowermod.tileentities.tier3.TileCPU;
+import com.bluepowermod.tileentities.tier3.TileDiskDrive;
+import com.bluepowermod.tileentities.tier3.TileIOExpander;
+import com.bluepowermod.tileentities.tier3.TileKinectGenerator;
+import com.bluepowermod.tileentities.tier3.TileMonitor;
+
+import cpw.mods.fml.common.network.IGuiHandler;
 
 public class GUIHandler implements IGuiHandler {
     
@@ -48,45 +74,37 @@ public class GUIHandler implements IGuiHandler {
             case SORTING_MACHINE:
                 return new ContainerSortingMachine(player.inventory, (TileSortingMachine) ent);
             case SEEDBAG:
-                if (player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() instanceof ItemSeedBag) { return new ContainerSeedBag(
-                        player.getCurrentEquippedItem(), player.inventory, InventoryItem.getItemInventory(player, player.getCurrentEquippedItem(),
-                                "Seed Bag", 9)); }
+                if (player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() instanceof ItemSeedBag) { return new ContainerSeedBag(player.getCurrentEquippedItem(), player.inventory, InventoryItem.getItemInventory(player, player.getCurrentEquippedItem(), "Seed Bag", 9)); }
                 break;
             case CANVAS_BAG:
-                if (player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() instanceof ItemCanvasBag) { return new ContainerCanvasBag(
-                        player.getCurrentEquippedItem(), player.inventory, InventoryItem.getItemInventory(player, player.getCurrentEquippedItem(),
-                                "Canvas Bag", 27)); }
+                if (player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() instanceof ItemCanvasBag) { return new ContainerCanvasBag(player.getCurrentEquippedItem(), player.inventory, InventoryItem.getItemInventory(player, player.getCurrentEquippedItem(), "Canvas Bag",
+                        27)); }
                 break;
             case CPU:
-            	return new ContainerCPU(player.inventory, (TileCPU) ent);
+                return new ContainerCPU(player.inventory, (TileCPU) ent);
             case MONITOR:
-            	if (player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() instanceof ItemScrewdriver) {
-            		return null;
-            	}
-            	return new ContainerMonitor(player.inventory, (TileMonitor) ent);
+                if (player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() instanceof ItemScrewdriver) { return null; }
+                return new ContainerMonitor(player.inventory, (TileMonitor) ent);
             case DISK_DRIVE: // FIXME: this conditional will always be false (for fabricator77)
-            	if (player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() instanceof ItemScrewdriver
-            		&& player.getCurrentEquippedItem().getItem() instanceof ItemFloppyDisk) {
-            		return null;
-            	}
-            	return new ContainerDiskDrive(player.inventory, (TileDiskDrive) ent);
+                if (player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() instanceof ItemScrewdriver && player.getCurrentEquippedItem().getItem() instanceof ItemFloppyDisk) { return null; }
+                return new ContainerDiskDrive(player.inventory, (TileDiskDrive) ent);
             case IO_EXPANDER:
-            	if (player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() instanceof ItemScrewdriver) {
-            		return null;
-            	}
-            	return new ContainerIOExpander(player.inventory, (TileIOExpander) ent);
-            	
+                if (player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() instanceof ItemScrewdriver) { return null; }
+                return new ContainerIOExpander(player.inventory, (TileIOExpander) ent);
+                
             case REDBUS_ID:
-            	return new ContainerRedbusID(player.inventory, (IRedBusWindow) ent);
-            	
+                return new ContainerRedbusID(player.inventory, (IRedBusWindow) ent);
+                
             case KINETICGENERATOR_ID:
-            	return new ContainerKinect(player.inventory, (TileKinectGenerator) ent);
+                return new ContainerKinect(player.inventory, (TileKinectGenerator) ent);
             case DEPLOYER_ID:
-            	return new ContainerDeployer(player.inventory, (TileDeployer) ent);
+                return new ContainerDeployer(player.inventory, (TileDeployer) ent);
             case RELAY_ID:
                 return new ContainerRelay(player.inventory, (TileRelay) ent);
             case EJECTOR_ID:
                 return new ContainerEjector(player.inventory, (TileEjector) ent);
+            case FILTER_ID:
+                return new ContainerFilter(player.inventory, (TileFilter) ent);
             default:
                 break;
         }
@@ -106,42 +124,33 @@ public class GUIHandler implements IGuiHandler {
             case SORTING_MACHINE:
                 return new GuiSortingMachine(player.inventory, (TileSortingMachine) ent);
             case SEEDBAG:
-                if (player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() instanceof ItemSeedBag) { return new GuiSeedBag(
-                        player.getCurrentEquippedItem(), player.inventory, InventoryItem.getItemInventory(player, player.getCurrentEquippedItem(),
-                                "Seed Bag", 9)); }
+                if (player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() instanceof ItemSeedBag) { return new GuiSeedBag(player.getCurrentEquippedItem(), player.inventory, InventoryItem.getItemInventory(player, player.getCurrentEquippedItem(), "Seed Bag", 9)); }
             case CANVAS_BAG:
-                if (player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() instanceof ItemCanvasBag) { return new GuiCanvasBag(
-                        player.getCurrentEquippedItem(), player.inventory, InventoryItem.getItemInventory(player, player.getCurrentEquippedItem(),
-                                "Canvas Bag", 27)); }
+                if (player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() instanceof ItemCanvasBag) { return new GuiCanvasBag(player.getCurrentEquippedItem(), player.inventory, InventoryItem.getItemInventory(player, player.getCurrentEquippedItem(), "Canvas Bag", 27)); }
                 break;
             case CPU:
-            	return new GuiCPU(player.inventory, (TileCPU) ent);
+                return new GuiCPU(player.inventory, (TileCPU) ent);
             case MONITOR:
-            	if (player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() instanceof ItemScrewdriver) {
-            		return null;
-            	}
-            	return new GuiMonitor(player.inventory, (TileMonitor) ent);
+                if (player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() instanceof ItemScrewdriver) { return null; }
+                return new GuiMonitor(player.inventory, (TileMonitor) ent);
             case DISK_DRIVE: // FIXME: this conditional will always be false (for fabricator77)
-            	if (player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() instanceof ItemScrewdriver
-            	&& player.getCurrentEquippedItem().getItem() instanceof ItemFloppyDisk) {
-            		return null;
-            	}
-            	return new GuiDiskDrive(player.inventory, (TileDiskDrive) ent);
+                if (player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() instanceof ItemScrewdriver && player.getCurrentEquippedItem().getItem() instanceof ItemFloppyDisk) { return null; }
+                return new GuiDiskDrive(player.inventory, (TileDiskDrive) ent);
             case IO_EXPANDER:
-            	if (player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() instanceof ItemScrewdriver) {
-            		return null;
-            	}
-            	return new GuiIOExpander(player.inventory, (TileIOExpander) ent);
+                if (player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() instanceof ItemScrewdriver) { return null; }
+                return new GuiIOExpander(player.inventory, (TileIOExpander) ent);
             case REDBUS_ID:
-            	return new GuiRedbusID(player.inventory, (IRedBusWindow) ent);
+                return new GuiRedbusID(player.inventory, (IRedBusWindow) ent);
             case KINETICGENERATOR_ID:
-            	return new GuiKinect(player.inventory, (TileKinectGenerator) ent);
+                return new GuiKinect(player.inventory, (TileKinectGenerator) ent);
             case DEPLOYER_ID:
-            	return new GuiDeployer(player.inventory, (TileDeployer) ent);
+                return new GuiDeployer(player.inventory, (TileDeployer) ent);
             case RELAY_ID:
                 return new GuiRelay(player.inventory, (TileRelay) ent);
             case EJECTOR_ID:
                 return new GuiEjector(player.inventory, (TileEjector) ent);
+            case FILTER_ID:
+                return new GuiFilter(player.inventory, (TileFilter) ent);
             default:
                 break;
         }

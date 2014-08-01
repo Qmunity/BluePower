@@ -11,6 +11,7 @@ package com.bluepowermod;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
+
 import com.bluepowermod.api.BPRegistry;
 import com.bluepowermod.api.part.PartRegistry;
 import com.bluepowermod.api.part.redstone.RedstoneNetworkTickHandler;
@@ -24,10 +25,10 @@ import com.bluepowermod.init.Config;
 import com.bluepowermod.init.CustomTabs;
 import com.bluepowermod.init.OreDictionarySetup;
 import com.bluepowermod.init.Recipes;
+import com.bluepowermod.init.TileEntities;
 import com.bluepowermod.network.NetworkHandler;
 import com.bluepowermod.recipe.AlloyFurnaceRegistry;
 import com.bluepowermod.references.Refs;
-import com.bluepowermod.tileentities.TileEntities;
 import com.bluepowermod.world.WorldGenerationHandler;
 
 import org.apache.logging.log4j.Logger;

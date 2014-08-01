@@ -27,6 +27,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
 import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.part.tube.TubeStack;
 import com.bluepowermod.tileentities.TileMachineBase;
@@ -48,7 +49,7 @@ public class TileTransposer extends TileMachineBase {
     
         super.redstoneChanged(newValue);
         
-        if (newValue) {
+        if (isBufferEmpty() && newValue) {
             suckItems();
             pullItem();
         }
@@ -63,14 +64,12 @@ public class TileTransposer extends TileMachineBase {
         
     }
     
-    private void pullItem() {
+    protected void pullItem() {
     
-        if (isBufferEmpty()) {
-            ForgeDirection dir = getOutputDirection().getOpposite();
-            TileEntity inputTE = getTileCache()[dir.ordinal()].getTileEntity();
-            ItemStack extractedStack = IOHelper.extractOneItem(inputTE, dir.getOpposite());
-            if (extractedStack != null) addItemToOutputBuffer(extractedStack);
-        }
+        ForgeDirection dir = getOutputDirection().getOpposite();
+        TileEntity inputTE = getTileCache()[dir.ordinal()].getTileEntity();
+        ItemStack extractedStack = IOHelper.extractOneItem(inputTE, dir.getOpposite());
+        if (extractedStack != null) addItemToOutputBuffer(extractedStack);
     }
     
     private static AxisAlignedBB[] ITEM_SUCK_AABBS;
@@ -84,29 +83,37 @@ public class TileTransposer extends TileMachineBase {
         ITEM_SUCK_AABBS[5] = AxisAlignedBB.getBoundingBox(1, -1, -1, 2, 2, 2);
     }
     
-    private boolean suckItems() {
+    private void suckItems() {
     
         for (EntityItem entity : (List<EntityItem>) worldObj.getEntitiesWithinAABB(EntityItem.class, ITEM_SUCK_AABBS[getFacingDirection().ordinal()].copy().offset(xCoord, yCoord, zCoord))) {
             ItemStack stack = entity.getEntityItem();
-            addItemToOutputBuffer(stack);
-            entity.setDead();
-            return true;
+            if (isItemAccepted(stack)) {
+                addItemToOutputBuffer(stack, getAcceptedItemColor(stack));
+                entity.setDead();
+            }
         }
-        return false;
     }
     
-    private boolean suckEntity() {
+    private void suckEntity() {
     
         ForgeDirection direction = getFacingDirection();
         AxisAlignedBB box = AxisAlignedBB.getBoundingBox(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ, xCoord + direction.offsetX + 1, yCoord + direction.offsetY + 1, zCoord + direction.offsetZ + 1);
-        if (!worldObj.getEntitiesWithinAABB(EntityItem.class, box).isEmpty()) {
-            for (EntityItem entity : (List<EntityItem>) worldObj.getEntitiesWithinAABB(EntityItem.class, box)) {
-                ItemStack stack = entity.getEntityItem();
-                addItemToOutputBuffer(stack);
+        for (EntityItem entity : (List<EntityItem>) worldObj.getEntitiesWithinAABB(EntityItem.class, box)) {
+            ItemStack stack = entity.getEntityItem();
+            if (isItemAccepted(stack)) {
+                addItemToOutputBuffer(stack, getAcceptedItemColor(stack));
                 entity.setDead();
-                return true;
             }
         }
-        return false;
+    }
+    
+    protected boolean isItemAccepted(ItemStack item) {
+    
+        return true;
+    }
+    
+    protected TubeColor getAcceptedItemColor(ItemStack item) {
+    
+        return TubeColor.NONE;
     }
 }

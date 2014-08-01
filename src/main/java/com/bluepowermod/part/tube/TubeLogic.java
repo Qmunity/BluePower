@@ -17,6 +17,11 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
+
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
+import org.lwjgl.opengl.GL11;
+
 import com.bluepowermod.api.tube.IPneumaticTube;
 import com.bluepowermod.api.vec.Vector3;
 import com.bluepowermod.compat.CompatibilityUtils;
@@ -24,10 +29,6 @@ import com.bluepowermod.compat.fmp.IMultipartCompat;
 import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.helper.TileEntityCache;
 import com.bluepowermod.references.Dependencies;
-
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
-import org.lwjgl.opengl.GL11;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -411,7 +412,7 @@ public class TubeLogic implements IPneumaticTube {
         public boolean isValidForImportItem(ItemStack stack) {
         
             if (target.target instanceof PneumaticTube) return false;
-            ItemStack extractedItems = IOHelper.extract((TileEntity) target.target, targetConnectionSide, stack, true);
+            ItemStack extractedItems = IOHelper.extract((TileEntity) target.target, targetConnectionSide, stack, true, true);
             return extractedItems != null;
         }
     }

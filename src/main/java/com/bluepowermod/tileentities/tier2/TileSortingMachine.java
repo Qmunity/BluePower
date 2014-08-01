@@ -129,7 +129,7 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
                     for (int i = curColumn; i < inventory.length; i += 8) {
                         ItemStack filterStack = inventory[i];
                         if (filterStack != null) {
-                            ItemStack extractedStack = IOHelper.extract(inputTE, dir.getOpposite(), filterStack, false);
+                            ItemStack extractedStack = IOHelper.extract(inputTE, dir.getOpposite(), filterStack, true, false);
                             if (extractedStack != null) {
                                 addItemToOutputBuffer(extractedStack.copy(), colors[curColumn]);
                                 gotoNextNonEmptyColumn();

@@ -8,6 +8,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
 import com.bluepowermod.compat.CompatibilityUtils;
 import com.bluepowermod.compat.fmp.IMultipartCompat;
@@ -18,6 +19,12 @@ import com.bluepowermod.part.tube.TubeStack;
 import com.bluepowermod.references.Dependencies;
 
 public class IOHelper {
+    
+    public static ItemStack extract(TileEntity inventory, ForgeDirection direction) {
+    
+        if (inventory instanceof IInventory) return extract((IInventory) inventory, direction);
+        return null;
+    }
     
     public static ItemStack extract(IInventory inventory, ForgeDirection direction) {
     
@@ -51,7 +58,16 @@ public class IOHelper {
         return null;
     }
     
-    public static ItemStack extract(TileEntity tile, ForgeDirection direction, ItemStack requestedStack, boolean simulate) {
+    /**
+     * Retrieves an item from the specified inventory. This item can be specified.
+     * @param tile
+     * @param direction
+     * @param requestedStack
+     * @param useItemCount if true, it'll only retrieve the stack of the exact item count given. it'll look in multiple slots of the inventory. if false, the first matching stack, ignoring item count, will be returned.
+     * @param simulate
+     * @return
+     */
+    public static ItemStack extract(TileEntity tile, ForgeDirection direction, ItemStack requestedStack, boolean useItemCount, boolean simulate) {
     
         if (requestedStack == null) return requestedStack;
         if (tile instanceof IInventory) {
@@ -68,6 +84,12 @@ public class IOHelper {
             for (int slot : accessibleSlots) {
                 ItemStack stack = inv.getStackInSlot(slot);
                 if (stack != null && stack.isItemEqual(requestedStack) && IOHelper.canExtractItemFromInventory(inv, stack, slot, direction.ordinal())) {
+                    if (!useItemCount) {
+                        if (!simulate) {
+                            inv.setInventorySlotContents(slot, null);
+                        }
+                        return stack;
+                    }
                     itemsFound += stack.stackSize;
                 }
             }
