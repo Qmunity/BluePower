@@ -23,12 +23,14 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+
 import com.bluepowermod.ClientProxy;
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
 import com.bluepowermod.client.gui.GuiBase;
 import com.bluepowermod.containers.slots.IPhantomSlot;
 import com.bluepowermod.containers.slots.SlotPhantom;
 import com.bluepowermod.tileentities.tier2.TileSortingMachine;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -40,7 +42,7 @@ public class ContainerSortingMachine extends Container {
     
     private final TileSortingMachine sortingMachine;
     
-    private int                      pullMode, sortMode, curColumn;
+    private int                      pullMode, sortMode, curColumn = -1;
     private final int[]              colors = new int[9];
     
     public ContainerSortingMachine(InventoryPlayer invPlayer, TileSortingMachine sortingMachine) {

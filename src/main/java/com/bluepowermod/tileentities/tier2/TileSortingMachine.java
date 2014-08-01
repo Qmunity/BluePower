@@ -12,6 +12,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
+
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
 import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.part.IGuiButtonSensitive;
@@ -31,6 +32,7 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
     public PullMode          pullMode  = PullMode.SINGLE_STEP;
     public SortMode          sortMode  = SortMode.ANYSTACK_SEQUENTIAL;
     private boolean          sweepTriggered;
+    private int              savedPulses;
     public final TubeColor[] colors    = new TubeColor[9];
     
     public TileSortingMachine() {
@@ -77,6 +79,10 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
     public void updateEntity() {
     
         super.updateEntity();
+        if (!sweepTriggered && savedPulses > 0) {
+            savedPulses--;
+            sweepTriggered = true;
+        }
         if (!worldObj.isRemote && worldObj.getWorldTime() % TileMachineBase.BUFFER_EMPTY_INTERVAL == 0 && (pullMode == PullMode.SINGLE_SWEEP && sweepTriggered || pullMode == PullMode.AUTOMATIC)) {
             triggerSorting();
         }
@@ -89,7 +95,7 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
         super.redstoneChanged(newValue);
         if (newValue) {
             if (pullMode == PullMode.SINGLE_STEP) triggerSorting();
-            if (pullMode == PullMode.SINGLE_SWEEP) sweepTriggered = true;
+            if (pullMode == PullMode.SINGLE_SWEEP) savedPulses++;
         }
         
     }
@@ -121,12 +127,13 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
                 }
                 if (sortMode == SortMode.ANYSTACK_SEQUENTIAL) {
                     for (int i = curColumn; i < inventory.length; i += 8) {
-                        ItemStack filterStack = inventory[curColumn];
+                        ItemStack filterStack = inventory[i];
                         if (filterStack != null) {
                             ItemStack extractedStack = IOHelper.extract(inputTE, dir.getOpposite(), filterStack, false);
                             if (extractedStack != null) {
-                                addItemToOutputBuffer(extractedStack.copy(), colors[i % 8]);
+                                addItemToOutputBuffer(extractedStack.copy(), colors[curColumn]);
                                 gotoNextNonEmptyColumn();
+                                break;
                             }
                         }
                     }
@@ -184,17 +191,19 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
         if (requirements.isEmpty()) {
             for (ItemStack stack : copy) {
                 for (int slot : accessibleSlots) {
-                    ItemStack invStack = inputInventory.getStackInSlot(slot);
-                    if (invStack != null && invStack.isItemEqual(stack)) {
-                        int substracted = Math.min(stack.stackSize, invStack.stackSize);
-                        stack.stackSize -= substracted;
-                        invStack.stackSize -= substracted;
-                        if (invStack.stackSize <= 0) {
-                            inputInventory.setInventorySlotContents(slot, null);
+                    if (stack.stackSize > 0) {
+                        ItemStack invStack = inputInventory.getStackInSlot(slot);
+                        if (invStack != null && invStack.isItemEqual(stack)) {
+                            int substracted = Math.min(stack.stackSize, invStack.stackSize);
+                            stack.stackSize -= substracted;
+                            invStack.stackSize -= substracted;
+                            if (invStack.stackSize <= 0) {
+                                inputInventory.setInventorySlotContents(slot, null);
+                            }
+                            ItemStack bufferStack = invStack.copy();
+                            bufferStack.stackSize = substracted;
+                            addItemToOutputBuffer(bufferStack, colors[column]);
                         }
-                        ItemStack bufferStack = invStack.copy();
-                        bufferStack.stackSize = substracted;
-                        addItemToOutputBuffer(bufferStack, TubeColor.values()[column]);
                     }
                 }
             }
@@ -299,6 +308,7 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
         
         tag.setByte("pullMode", (byte) pullMode.ordinal());
         tag.setByte("sortMode", (byte) sortMode.ordinal());
+        tag.setInteger("savedPulses", savedPulses);
         
         int[] colorArray = new int[colors.length];
         for (int i = 0; i < colorArray.length; i++) {
@@ -325,6 +335,7 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
         
         pullMode = PullMode.values()[tag.getByte("pullMode")];
         sortMode = SortMode.values()[tag.getByte("sortMode")];
+        savedPulses = tag.getInteger("savedPulses");
         
         int[] colorArray = tag.getIntArray("colors");
         for (int i = 0; i < colorArray.length; i++) {
@@ -464,7 +475,7 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
     @Override
     public String getInventoryName() {
     
-        return Refs.SORTING_MACHINE_NAME;
+        return "bluepower:" + Refs.SORTING_MACHINE_NAME;
     }
     
     @Override

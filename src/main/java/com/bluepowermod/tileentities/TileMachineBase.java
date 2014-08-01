@@ -106,13 +106,6 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
         return internalItemStackBuffer.isEmpty();
     }
     
-    /**
-     * Called when an item is outputted from this block, can be used for animation (See Sortron)
-     */
-    protected void onItemOutputted() {
-    
-    }
-    
     public TileEntityCache[] getTileCache() {
     
         if (tileCache == null) {
