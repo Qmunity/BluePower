@@ -16,6 +16,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import com.bluepowermod.api.part.redstone.IBPRedstonePart;
 import com.bluepowermod.api.vec.Vector3;
@@ -65,10 +66,10 @@ public abstract class BPPartFace extends BPPart implements IBPFacePart, IBPRedst
     @Override
     public boolean canPlacePart(ItemStack is, EntityPlayer player, Vector3 block, MovingObjectPosition mop) {
     
-        world = block.getWorld();
-        x = block.getBlockX();
-        y = block.getBlockY();
-        z = block.getBlockZ();
+        World world = block.getWorld();
+        int x = block.getBlockX();
+        int y = block.getBlockY();
+        int z = block.getBlockZ();
         
         ForgeDirection dir = ForgeDirection.getOrientation(mop.sideHit).getOpposite();
         if (dir == ForgeDirection.DOWN) {
@@ -132,7 +133,7 @@ public abstract class BPPartFace extends BPPart implements IBPFacePart, IBPRedst
         
         if (d == ForgeDirection.UP || d == ForgeDirection.DOWN) d = d.getOpposite();
         
-        return world.isSideSolid(x + d.offsetX, y + d.offsetY, z + d.offsetZ, d.getOpposite());
+        return getWorld().isSideSolid(getX() + d.offsetX, getY() + d.offsetY, getZ() + d.offsetZ, d.getOpposite());
     }
     
     @Override
@@ -158,7 +159,7 @@ public abstract class BPPartFace extends BPPart implements IBPFacePart, IBPRedst
         
         ForgeDirection face = ForgeDirection.getOrientation(getFace()).getOpposite();
         
-        int p = RedstoneHelper.setOutput(world, x, y, z, side, face, con.getPower());
+        int p = RedstoneHelper.setOutput(getWorld(), getX(), getY(), getZ(), side, face, con.getPower());
         
         return con.isOutput() ? p : 0;
     }
@@ -250,7 +251,7 @@ public abstract class BPPartFace extends BPPart implements IBPFacePart, IBPRedst
         for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
             RedstoneConnection rc = getConnection(d);
             if (rc != null && rc.isInput()) {
-                rc.setPower(RedstoneHelper.getInput(world, x, y, z, d, face));
+                rc.setPower(RedstoneHelper.getInput(getWorld(), getX(), getY(), getZ(), d, face));
             }
         }
     }

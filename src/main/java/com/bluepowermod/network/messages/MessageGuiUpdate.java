@@ -40,7 +40,7 @@ public class MessageGuiUpdate extends LocationIntPacket<MessageGuiUpdate> {
      */
     public MessageGuiUpdate(BPPart part, int messageId, int value) {
     
-        super(part.x, part.y, part.z);
+        super(part.getX(), part.getY(), part.getZ());
         if (part.isFMPMultipart()) {
             partId = getPartId(part);
         }
@@ -59,7 +59,7 @@ public class MessageGuiUpdate extends LocationIntPacket<MessageGuiUpdate> {
     @Optional.Method(modid = Dependencies.FMP)
     private int getPartId(BPPart part) {
     
-        List<TMultiPart> parts = ((TileMultipart) part.world.getTileEntity(part.x, part.y, part.z)).jPartList();
+        List<TMultiPart> parts = ((TileMultipart) part.getWorld().getTileEntity(part.getX(), part.getY(), part.getZ())).jPartList();
         for (int i = 0; i < parts.size(); i++) {
             if (parts.get(i) instanceof MultipartBPPart) {
                 if (((MultipartBPPart) parts.get(i)).getPart() == part) return i;

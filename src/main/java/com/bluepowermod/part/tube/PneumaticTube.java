@@ -111,7 +111,8 @@ public class PneumaticTube extends BPPart {
         if (initialized) logic.update();
         super.update();
         if (tick == 3) updateConnections();
-        if (world.isRemote && tick % 40 == 0) tileCache = null;//reset on the client, as it doesn't get update on neighbor block updates (as the method isn't called on the client)
+        if (getWorld().isRemote && tick % 40 == 0) tileCache = null;//reset on the client, as it doesn't get update on neighbor block updates (as the
+        // method isn't called on the client)
     }
     
     @Override
@@ -141,7 +142,7 @@ public class PneumaticTube extends BPPart {
     public TileEntityCache[] getTileCache() {
     
         if (tileCache == null) {
-            tileCache = TileEntityCache.getDefaultCache(world, x, y, z);
+            tileCache = TileEntityCache.getDefaultCache(getWorld(), getX(), getY(), getZ());
         }
         return tileCache;
     }
@@ -153,7 +154,7 @@ public class PneumaticTube extends BPPart {
     
     private void updateConnections() {
     
-        if (world != null && !world.isRemote) {
+        if (getWorld() != null && !getWorld().isRemote) {
             int connectionCount = 0;
             boolean clearedCache = false;
             for (int i = 0; i < 6; i++) {
@@ -183,7 +184,7 @@ public class PneumaticTube extends BPPart {
     
         if (otherTube != null && otherTube.color != TubeColor.NONE && color != TubeColor.NONE && color != otherTube.color) return false;
         if (dir == ForgeDirection.UP || dir == ForgeDirection.DOWN) dir = dir.getOpposite();
-        return world == null || !checkOcclusion(sideBB.clone().rotate90Degrees(dir).toAABB());
+        return getWorld() == null || !checkOcclusion(sideBB.clone().rotate90Degrees(dir).toAABB());
     }
     
     @Override
@@ -228,9 +229,9 @@ public class PneumaticTube extends BPPart {
     @Override
     public boolean onActivated(EntityPlayer player, ItemStack item) {
     
-        if (world == null) return false;
+        if (getWorld() == null) return false;
         
-        if (!world.isRemote) {
+        if (!getWorld().isRemote) {
             
             if (item != null && item.getItem() == Items.dye) {
                 

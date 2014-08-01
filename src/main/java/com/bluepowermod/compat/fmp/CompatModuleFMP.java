@@ -141,7 +141,7 @@ public class CompatModuleFMP extends CompatModule implements IMultipartCompat {
     @Override
     public void sendUpdatePacket(BPPart part) {
 
-        TileEntity tile = part.world.getTileEntity(part.x, part.y, part.z);
+        TileEntity tile = part.getWorld().getTileEntity(part.getX(), part.getY(), part.getZ());
         if (tile != null && tile instanceof TileMultipart) {
             TileMultipart te = (TileMultipart) tile;
             for (TMultiPart p : te.jPartList()) {

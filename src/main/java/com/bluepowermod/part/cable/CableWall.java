@@ -80,8 +80,8 @@ public abstract class CableWall extends BPPartFace {
 
     public void onUpdate() {
 
-        if (loc == null || loc.getBlockX() != x || loc.getBlockY() != y || loc.getBlockZ() != z || loc.getWorld() != world)
-            loc = new Vector3(x, y, z, world);
+        if (loc == null || loc.getBlockX() != getX() || loc.getBlockY() != getY() || loc.getBlockZ() != getZ() || loc.getWorld() != getWorld())
+            loc = new Vector3(getX(), getY(), getZ(), getWorld());
 
         for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
             if (!canConnectOnSide(d))

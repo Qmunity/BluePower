@@ -282,7 +282,7 @@ public class PartLamp extends BPPartFace {
         
         power = 0;
         for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS)
-            power = Math.max(power, RedstoneHelper.getInput(world, x, y, z, d));
+            power = Math.max(power, RedstoneHelper.getInput(getWorld(), getX(), getY(), getZ(), d));
         
         if (inverted) {
             power = 15 - power;
@@ -290,7 +290,7 @@ public class PartLamp extends BPPartFace {
         
         if (old != power) {
             notifyUpdate();
-            world.updateLightByType(EnumSkyBlock.Block, x, y, z);
+            getWorld().updateLightByType(EnumSkyBlock.Block, getX(), getY(), getZ());
         }
     }
     

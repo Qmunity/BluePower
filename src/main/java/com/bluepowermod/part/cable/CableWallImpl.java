@@ -60,7 +60,7 @@ public class CableWallImpl extends CableWall {
     @Override
     public boolean onActivated(EntityPlayer player, ItemStack item) {
 
-        player.addChatMessage(new ChatComponentText((world.isRemote ? "Client" : "Server") + ": " + Arrays.asList(connections)));
+        player.addChatMessage(new ChatComponentText((getWorld().isRemote ? "Client" : "Server") + ": " + Arrays.asList(connections)));
         return true;
     }
 

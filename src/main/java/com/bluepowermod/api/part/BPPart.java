@@ -35,10 +35,10 @@ import cpw.mods.fml.common.Optional;
 
 public abstract class BPPart {
 
-    public World world = null;
-    public int x = 0;
-    public int y = 0;
-    public int z = 0;
+    private World world = null;
+    private int x = 0;
+    private int y = 0;
+    private int z = 0;
 
     /**
      * Holds the exact width of 1 pixel, texturewise
@@ -541,4 +541,81 @@ public abstract class BPPart {
         return null;
     }
 
+    /**
+     * @author Koen Beckers (K4Unl)
+     * @return x coordinate of the block containing this part.
+     */
+    public int getX(){
+
+        return x;
+    }
+
+    /**
+     * Sets the X Coordinate of the block containing this part.
+     * @author Koen Beckers (K4Unl)
+     * @param x
+     */
+    public void setX(int x){
+
+        this.x = x;
+    }
+
+    /**
+     * @author Koen Beckers (K4Unl)
+     * @return y coordinate of the block containing this part.
+     */
+    public int getY(){
+
+        return y;
+    }
+
+
+    /**
+     * Sets the Y Coordinate of the block containing this part.
+     * @author Koen Beckers (K4Unl)
+     * @param y
+     */
+    public void setY(int y){
+
+        this.y = y;
+    }
+
+    /**
+     * @author Koen Beckers (K4Unl)
+     * @return z coordinate of the block containing this part.
+     */
+    public int getZ(){
+
+        return z;
+    }
+
+
+    /**
+     * Sets the Z Coordinate of the block containing this part.
+     * @author Koen Beckers (K4Unl)
+     * @param z
+     */
+    public void setZ(int z){
+
+        this.z = z;
+    }
+
+    /**
+     * @author Koen Beckers (K4Unl)
+     * @return worldObject of the block containing this part.
+     */
+    public World getWorld(){
+
+        return world;
+    }
+
+    /**
+     * Sets the world object of the block containing this part.
+     * @author Koen Beckers (K4Unl)
+     * @param world
+     */
+    public void setWorld(World world) {
+
+        this.world = world;
+    }
 }

@@ -86,7 +86,7 @@ public class TubeLogic implements IPneumaticTube {
     
     TubeNode getNode() {
     
-        if (connectionNode == null && tube.world != null) {
+        if (connectionNode == null && tube.getWorld() != null) {
             connectionNode = new TubeNode(tube);
             connectionNode.init();
         }
@@ -108,7 +108,7 @@ public class TubeLogic implements IPneumaticTube {
                         }
                     }
                 } else {//when we are at an intersection
-                    if (!tube.world.isRemote) {
+                    if (!tube.getWorld().isRemote) {
                         Pair<ForgeDirection, TileEntity> heading = getHeadingForItem(tubeStack, false);
                         if (heading == null) {//if no valid destination
                             for (int i = 0; i < 6; i++) {
@@ -139,7 +139,7 @@ public class TubeLogic implements IPneumaticTube {
                     tubeStack.oldProgress = -ITEM_SPEED;
                     logic.tubeStacks.add(tubeStack);//transfer to another tube.
                     iterator.remove();
-                } else if (!this.tube.world.isRemote) {
+                } else if (!this.tube.getWorld().isRemote) {
                     ItemStack remainder = tubeStack.stack;
                     if (output instanceof ITubeConnection && ((ITubeConnection) output).isConnectedTo(tubeStack.heading.getOpposite())) {
                         TubeStack rem = ((ITubeConnection) output).acceptItemFromTube(tubeStack, tubeStack.heading.getOpposite(), false);
@@ -155,9 +155,11 @@ public class TubeLogic implements IPneumaticTube {
                             tubeStack.heading = tubeStack.heading.getOpposite();
                             this.tube.sendUpdatePacket();
                         } else {
-                            EntityItem entity = new EntityItem(this.tube.world, this.tube.x + 0.5 + tubeStack.heading.offsetX * tubeStack.progress * 0.5, this.tube.y + 0.5 + tubeStack.heading.offsetY * tubeStack.progress * 0.5, this.tube.z + 0.5 + tubeStack.heading.offsetX * tubeStack.progress
+                            EntityItem entity = new EntityItem(this.tube.getWorld(), this.tube.getX() + 0.5 + tubeStack.heading.offsetX * tubeStack
+                              .progress * 0.5, this.tube.getY() + 0.5 + tubeStack.heading.offsetY * tubeStack.progress * 0.5,
+                              this.tube.getZ() + 0.5 + tubeStack.heading.offsetX * tubeStack.progress
                                     * 0.5, remainder);
-                            this.tube.world.spawnEntityInWorld(entity);
+                            this.tube.getWorld().spawnEntityInWorld(entity);
                             iterator.remove();
                         }
                     } else {
@@ -203,7 +205,9 @@ public class TubeLogic implements IPneumaticTube {
                         if (edge.target.target instanceof PneumaticTube) {
                             traversingNodes.add(edge.target);
                             trackingExportDirection.add(heading);
-                        } else if (stack.getTarget(tube.world) == null && edge.isValidForExportItem(stack.stack) || stack.getTarget(tube.world) != null && edge.isValidForImportItem(stack.stack)) {
+                        } else if (stack.getTarget(tube.getWorld()) == null && edge.isValidForExportItem(stack.stack) || stack.getTarget(tube.getWorld()) !=
+                          null
+                          && edge.isValidForImportItem(stack.stack)) {
                             validDestinations.put(edge, heading);
                         }
                     }
@@ -224,7 +228,7 @@ public class TubeLogic implements IPneumaticTube {
         }
         
         if (validDestinations.size() == 0) {
-            if (stack.getTarget(tube.world) != null && !simulate) {
+            if (stack.getTarget(tube.getWorld()) != null && !simulate) {
                 stack.setTarget(null);//if we can't reach the retrieving target anymore, reroute as normal.
                 return getHeadingForItem(stack, simulate);
             } else {
@@ -270,7 +274,7 @@ public class TubeLogic implements IPneumaticTube {
     @Override
     public boolean injectStack(ItemStack stack, ForgeDirection from, TubeColor itemColor, boolean simulate) {
     
-        if (tube.world.isRemote) throw new IllegalArgumentException("[Pneumatic Tube] You can't inject items from the client side!");
+        if (tube.getWorld().isRemote) throw new IllegalArgumentException("[Pneumatic Tube] You can't inject items from the client side!");
         TubeStack tubeStack = new TubeStack(stack.copy(), from, itemColor);
         Pair<ForgeDirection, TileEntity> heading = getHeadingForItem(tubeStack, simulate);
         if (heading != null && heading.getKey() != from.getOpposite()) {
