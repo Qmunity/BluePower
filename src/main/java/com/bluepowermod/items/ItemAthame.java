@@ -60,4 +60,15 @@ public class ItemAthame extends ItemSword {
         entity.attackEntityFrom(DamageSource.causePlayerDamage((EntityPlayer) player), this.damageDealt);
         return super.hitEntity(stack, entity, player);
     }
+
+    @Override
+    public String getUnlocalizedName(ItemStack stack) {
+
+        return String.format("item.%s:%s", Refs.MODID, getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
+    }
+
+    protected String getUnwrappedUnlocalizedName(String name) {
+
+        return name.substring(name.indexOf(".") + 1);
+    }
 }

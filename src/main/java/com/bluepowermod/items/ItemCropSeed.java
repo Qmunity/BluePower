@@ -42,17 +42,6 @@ public class ItemCropSeed extends ItemSeeds implements IPlantable {
     }
 
     @Override
-    public String getUnlocalizedName() {
-
-        return String.format("item.%s:%s", Refs.MODID, getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
-    }
-
-    protected String getUnwrappedUnlocalizedName(String name) {
-
-        return name.substring(name.indexOf(".") + 1);
-    }
-
-    @Override
     public boolean onItemUse(ItemStack itemStack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
 
         if (side != 1) {
@@ -87,5 +76,16 @@ public class ItemCropSeed extends ItemSeeds implements IPlantable {
     public int getPlantMetadata(IBlockAccess world, int x, int y, int z) {
 
         return 0;
+    }
+
+    @Override
+    public String getUnlocalizedName(ItemStack stack) {
+
+        return String.format("item.%s:%s", Refs.MODID, getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
+    }
+
+    protected String getUnwrappedUnlocalizedName(String name) {
+
+        return name.substring(name.indexOf(".") + 1);
     }
 }

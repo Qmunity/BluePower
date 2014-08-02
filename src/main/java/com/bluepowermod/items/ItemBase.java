@@ -24,6 +24,7 @@ package com.bluepowermod.items;
 
 import net.minecraft.item.Item;
 import com.bluepowermod.references.Refs;
+import net.minecraft.item.ItemStack;
 
 public class ItemBase extends Item {
 
@@ -34,6 +35,12 @@ public class ItemBase extends Item {
 
     @Override
     public String getUnlocalizedName() {
+
+        return String.format("item.%s:%s", Refs.MODID, getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
+    }
+
+    @Override
+    public String getUnlocalizedName(ItemStack stack) {
 
         return String.format("item.%s:%s", Refs.MODID, getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
     }

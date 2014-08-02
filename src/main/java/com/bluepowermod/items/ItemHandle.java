@@ -19,6 +19,7 @@ package com.bluepowermod.items;
 
 import com.bluepowermod.init.CustomTabs;
 import com.bluepowermod.references.Refs;
+import net.minecraft.item.ItemStack;
 
 public class ItemHandle extends ItemBase {
     public ItemHandle(String name) {
