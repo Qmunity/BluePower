@@ -294,6 +294,7 @@ public class PartRegistry {
         registerPart(GatePulseFormer.class);
         registerPart(GateRandomizer.class);
         registerPart(GateLightCell.class);
+        registerPart(GateToggleLatch.class);
         
         // Lamps
         for (int i = 0; i < ItemDye.field_150922_c.length; i++)
