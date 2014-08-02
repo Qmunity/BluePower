@@ -27,7 +27,7 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
-import com.bluepowermod.tileentities.tier2.TileFilter;
+import com.bluepowermod.tileentities.tier1.TileFilter;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

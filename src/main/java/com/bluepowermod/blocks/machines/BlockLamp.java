@@ -2,14 +2,14 @@ package com.bluepowermod.blocks.machines;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
+
 import com.bluepowermod.blocks.BlockContainerBase;
 import com.bluepowermod.client.renderers.RenderLamp;
 import com.bluepowermod.init.CustomTabs;
-import com.bluepowermod.references.GuiIDs;
 import com.bluepowermod.references.Refs;
 import com.bluepowermod.tileentities.tier1.TileLamp;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -19,31 +19,19 @@ import cpw.mods.fml.relauncher.SideOnly;
  */
 public class BlockLamp extends BlockContainerBase {
     
-    private boolean isInverted;
-    private String  colorName;
-    private int     color;
+    private boolean      isInverted;
+    private final String colorName;
+    private int          color;
     
     public BlockLamp(boolean _isInverted, String _colorName, int _color) {
     
-        super(Material.iron);
+        super(Material.iron, TileLamp.class);
         setInverted(_isInverted);
         colorName = _colorName;
         setColor(_color);
         setBlockName(Refs.LAMP_NAME + (isInverted ? "inverted" : "") + colorName);
         setCreativeTab(CustomTabs.tabBluePowerLighting);
         
-    }
-    
-    @Override
-    protected Class<? extends TileEntity> getTileEntity() {
-    
-        return TileLamp.class;
-    }
-    
-    @Override
-    public GuiIDs getGuiID() {
-    
-        return GuiIDs.INVALID;
     }
     
     @Override

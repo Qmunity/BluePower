@@ -29,7 +29,7 @@ import com.bluepowermod.containers.ContainerFilter;
 import com.bluepowermod.network.NetworkHandler;
 import com.bluepowermod.network.messages.MessageGuiUpdate;
 import com.bluepowermod.references.Refs;
-import com.bluepowermod.tileentities.tier2.TileFilter;
+import com.bluepowermod.tileentities.tier1.TileFilter;
 
 public class GuiFilter extends GuiBase {
     

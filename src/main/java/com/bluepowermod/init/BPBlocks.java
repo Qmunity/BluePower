@@ -18,28 +18,24 @@
 package com.bluepowermod.init;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemDye;
 
+import com.bluepowermod.blocks.BlockContainerBase;
 import com.bluepowermod.blocks.BlockItemOre;
 import com.bluepowermod.blocks.computer.BlockCPU;
 import com.bluepowermod.blocks.computer.BlockDiskDrive;
 import com.bluepowermod.blocks.computer.BlockIOExpander;
 import com.bluepowermod.blocks.computer.BlockMonitor;
 import com.bluepowermod.blocks.machines.BlockAlloyFurnace;
-import com.bluepowermod.blocks.machines.BlockBlockBreaker;
-import com.bluepowermod.blocks.machines.BlockBuffer;
-import com.bluepowermod.blocks.machines.BlockDeployer;
-import com.bluepowermod.blocks.machines.BlockEjector;
+import com.bluepowermod.blocks.machines.BlockContainerFrontRender;
+import com.bluepowermod.blocks.machines.BlockContainerTwoSideRender;
 import com.bluepowermod.blocks.machines.BlockEngine;
-import com.bluepowermod.blocks.machines.BlockFilter;
 import com.bluepowermod.blocks.machines.BlockIgniter;
 import com.bluepowermod.blocks.machines.BlockKineticGenerator;
 import com.bluepowermod.blocks.machines.BlockLamp;
 import com.bluepowermod.blocks.machines.BlockProjectTable;
-import com.bluepowermod.blocks.machines.BlockRelay;
-import com.bluepowermod.blocks.machines.BlockSortingMachine;
 import com.bluepowermod.blocks.machines.BlockSortron;
-import com.bluepowermod.blocks.machines.BlockTransposer;
 import com.bluepowermod.blocks.machines.BlockWindmill;
 import com.bluepowermod.blocks.worldgen.BlockCrackedBasalt;
 import com.bluepowermod.blocks.worldgen.BlockCrop;
@@ -47,7 +43,17 @@ import com.bluepowermod.blocks.worldgen.BlockCustomFlower;
 import com.bluepowermod.blocks.worldgen.BlockStoneOre;
 import com.bluepowermod.blocks.worldgen.BlockStoneOreConnected;
 import com.bluepowermod.references.Dependencies;
+import com.bluepowermod.references.GuiIDs;
 import com.bluepowermod.references.Refs;
+import com.bluepowermod.tileentities.tier1.TileBlockBreaker;
+import com.bluepowermod.tileentities.tier1.TileBuffer;
+import com.bluepowermod.tileentities.tier1.TileDeployer;
+import com.bluepowermod.tileentities.tier1.TileEjector;
+import com.bluepowermod.tileentities.tier1.TileFilter;
+import com.bluepowermod.tileentities.tier1.TileRelay;
+import com.bluepowermod.tileentities.tier1.TileTransposer;
+import com.bluepowermod.tileentities.tier2.TileRetriever;
+import com.bluepowermod.tileentities.tier2.TileSortingMachine;
 
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -106,6 +112,7 @@ public class BPBlocks {
     public static Block   ejector;
     public static Block   relay;
     public static Block   filter;
+    public static Block   retriever;
     
     public static Block   cpu;
     public static Block   monitor;
@@ -160,16 +167,17 @@ public class BPBlocks {
         indigo_flower = new BlockCustomFlower(Refs.INDIGOFLOWER_NAME);
         
         alloy_furnace = new BlockAlloyFurnace();
-        sorting_machine = new BlockSortingMachine();
-        block_breaker = new BlockBlockBreaker();
+        sorting_machine = new BlockContainerBase(Material.rock, TileSortingMachine.class).setGuiId(GuiIDs.SORTING_MACHINE).setBlockName(Refs.SORTING_MACHINE_NAME);
+        block_breaker = new BlockContainerFrontRender(Material.rock, TileBlockBreaker.class).setBlockName(Refs.BLOCKBREAKER_NAME);
         igniter = new BlockIgniter();
-        buffer = new BlockBuffer();
-        Deployer = new BlockDeployer();
+        buffer = new BlockContainerBase(Material.rock, TileBuffer.class).setGuiId(GuiIDs.BUFFER).setBlockName(Refs.BLOCKBUFFER_NAME);
+        Deployer = new BlockContainerFrontRender(Material.rock, TileDeployer.class).setGuiId(GuiIDs.DEPLOYER_ID).setBlockName(Refs.BLOCKDEPLOYER_NAME);
         project_table = new BlockProjectTable();
-        transposer = new BlockTransposer();
-        ejector = new BlockEjector();
-        relay = new BlockRelay();
-        filter = new BlockFilter();
+        transposer = new BlockContainerBase(Material.rock, TileTransposer.class).setBlockName(Refs.TRANSPOSER_NAME);
+        ejector = new BlockContainerTwoSideRender(Material.rock, TileEjector.class).setGuiId(GuiIDs.EJECTOR_ID).setBlockName(Refs.EJECTOR_NAME);
+        relay = new BlockContainerTwoSideRender(Material.rock, TileRelay.class).setGuiId(GuiIDs.RELAY_ID).setBlockName(Refs.RELAY_NAME);
+        filter = new BlockContainerBase(Material.rock, TileFilter.class).setGuiId(GuiIDs.FILTER_ID).setBlockName(Refs.FILTER_NAME);
+        retriever = new BlockContainerBase(Material.rock, TileRetriever.class).setGuiId(GuiIDs.RETRIEVER_ID).setBlockName(Refs.RETRIEVER_NAME);
         
         cpu = new BlockCPU();
         monitor = new BlockMonitor();
@@ -245,6 +253,7 @@ public class BPBlocks {
         GameRegistry.registerBlock(ejector, Refs.EJECTOR_NAME);
         GameRegistry.registerBlock(relay, Refs.RELAY_NAME);
         GameRegistry.registerBlock(filter, Refs.FILTER_NAME);
+        GameRegistry.registerBlock(retriever, Refs.RETRIEVER_NAME);
         
         GameRegistry.registerBlock(cpu, Refs.BLOCKCPU_NAME);
         GameRegistry.registerBlock(monitor, Refs.BLOCKMONITOR_NAME);

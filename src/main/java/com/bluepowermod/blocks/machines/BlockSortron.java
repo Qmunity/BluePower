@@ -2,7 +2,6 @@ package com.bluepowermod.blocks.machines;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -23,14 +22,8 @@ public class BlockSortron extends BlockContainerBase {
     
     public BlockSortron() {
     
-        super(Material.rock);
+        super(Material.rock, TileSortron.class);
         setBlockName(Refs.BLOCKSORTRON_NAME);
-    }
-    
-    @Override
-    protected Class<? extends TileEntity> getTileEntity() {
-    
-        return TileSortron.class;
     }
     
     @Override

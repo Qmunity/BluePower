@@ -48,15 +48,30 @@ import com.bluepowermod.util.ForgeDirectionUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public abstract class BlockContainerBase extends BlockBase implements ITileEntityProvider {
+public class BlockContainerBase extends BlockBase implements ITileEntityProvider {
     
     @SideOnly(Side.CLIENT)
-    private Map<String, IIcon> textures;
+    private Map<String, IIcon>          textures;
+    private GuiIDs                      guiId = GuiIDs.INVALID;
+    private Class<? extends TileEntity> tileEntityClass;
     
-    public BlockContainerBase(Material material) {
+    public BlockContainerBase(Material material, Class<? extends TileEntity> tileEntityClass) {
     
         super(material);
         isBlockContainer = true;
+        setTileEntityClass(tileEntityClass);
+    }
+    
+    public BlockContainerBase setGuiId(GuiIDs guiId) {
+    
+        this.guiId = guiId;
+        return this;
+    }
+    
+    public BlockContainerBase setTileEntityClass(Class<? extends TileEntity> tileEntityClass) {
+    
+        this.tileEntityClass = tileEntityClass;
+        return this;
     }
     
     @Override
@@ -70,11 +85,14 @@ public abstract class BlockContainerBase extends BlockBase implements ITileEntit
     }
     
     /**
-     * Method to be overwritten to fetch the TileEntity Class that goes with the block
+     * Fetches the TileEntity Class that goes with the block
      *
      * @return a .class
      */
-    protected abstract Class<? extends TileEntity> getTileEntity();
+    protected Class<? extends TileEntity> getTileEntity() {
+    
+        return tileEntityClass;
+    }
     
     @Override
     public void onNeighborBlockChange(World world, int x, int y, int z, Block block) {
@@ -250,10 +268,8 @@ public abstract class BlockContainerBase extends BlockBase implements ITileEntit
         return RendererBlockBase.RENDER_ID;
     }
     
-    /**
-     * Method to be overwritten that returns a GUI ID
-     *
-     * @return
-     */
-    public abstract GuiIDs getGuiID();
+    public GuiIDs getGuiID() {
+    
+        return guiId;
+    }
 }
