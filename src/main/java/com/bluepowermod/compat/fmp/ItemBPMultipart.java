@@ -35,7 +35,7 @@ public class ItemBPMultipart extends JItemMultiPart {
     public ItemBPMultipart() {
     
         super();
-        setUnlocalizedName(Refs.MODID + ".part");
+        setUnlocalizedName("part." + Refs.MODID + ":");
         setCreativeTab(CustomTabs.tabBluePowerCircuits);
     }
     
