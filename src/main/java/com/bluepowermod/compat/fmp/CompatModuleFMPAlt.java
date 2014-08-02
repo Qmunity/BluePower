@@ -96,7 +96,7 @@ public class CompatModuleFMPAlt extends CompatModule implements IMultipartCompat
     @Override
     public int getMOPData(MovingObjectPosition mop) {
     
-        return (int) mop.hitInfo;//TODO assign the subpart index hit to right clicking (for the Pneumatic Tube).
+        return (Integer) mop.hitInfo;//TODO assign the subpart index hit to right clicking (for the Pneumatic Tube).
     }
     
 }

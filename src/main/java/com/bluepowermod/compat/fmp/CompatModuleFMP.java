@@ -221,6 +221,6 @@ public class CompatModuleFMP extends CompatModule implements IMultipartCompat {
     @Override
     public int getMOPData(MovingObjectPosition mop) {
     
-        return (int) ((ExtendedMOP) mop).data;
+        return (Integer) ((ExtendedMOP) mop).data;
     }
 }
