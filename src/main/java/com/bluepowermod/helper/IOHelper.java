@@ -1,5 +1,7 @@
 package com.bluepowermod.helper;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockChest;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
@@ -20,9 +22,24 @@ import com.bluepowermod.references.Dependencies;
 
 public class IOHelper {
     
+    private static IInventory getInventoryForTE(TileEntity te) {
+    
+        if (te instanceof IInventory) {
+            IInventory inv = (IInventory) te;
+            Block block = te.getBlockType();
+            if (block instanceof BlockChest) {
+                inv = ((BlockChest) block).func_149951_m(te.getWorldObj(), te.xCoord, te.yCoord, te.zCoord);
+            }
+            return inv;
+        } else {
+            return null;
+        }
+    }
+    
     public static ItemStack extract(TileEntity inventory, ForgeDirection direction) {
     
-        if (inventory instanceof IInventory) return extract((IInventory) inventory, direction);
+        IInventory inv = getInventoryForTE(inventory);
+        if (inv != null) return extract(inv, direction);
         return null;
     }
     
@@ -70,8 +87,8 @@ public class IOHelper {
     public static ItemStack extract(TileEntity tile, ForgeDirection direction, ItemStack requestedStack, boolean useItemCount, boolean simulate) {
     
         if (requestedStack == null) return requestedStack;
-        if (tile instanceof IInventory) {
-            IInventory inv = (IInventory) tile;
+        IInventory inv = getInventoryForTE(tile);
+        if (inv != null) {
             int[] accessibleSlots;
             if (inv instanceof ISidedInventory) {
                 accessibleSlots = ((ISidedInventory) inv).getAccessibleSlotsFromSide(direction.ordinal());
@@ -116,8 +133,8 @@ public class IOHelper {
     
     public static ItemStack extractOneItem(TileEntity tile, ForgeDirection dir) {
     
-        if (tile instanceof IInventory) {
-            IInventory inv = (IInventory) tile;
+        IInventory inv = getInventoryForTE(tile);
+        if (inv != null) {
             int[] accessibleSlots;
             if (inv instanceof ISidedInventory) {
                 accessibleSlots = ((ISidedInventory) inv).getAccessibleSlotsFromSide(dir.ordinal());
@@ -146,8 +163,9 @@ public class IOHelper {
     
     public static ItemStack insert(TileEntity tile, ItemStack itemStack, ForgeDirection direction, TubeColor color, boolean simulate) {
     
-        if (tile instanceof IInventory) {
-            return insert((IInventory) tile, itemStack, direction.ordinal(), simulate);
+        IInventory inv = getInventoryForTE(tile);
+        if (inv != null) {
+            return insert(inv, itemStack, direction.ordinal(), simulate);
         } else if (tile instanceof ITubeConnection) {
             TubeStack tubeStack = ((ITubeConnection) tile).acceptItemFromTube(new TubeStack(itemStack, direction.getOpposite(), color), direction, simulate);
             if (tubeStack == null) return null;
