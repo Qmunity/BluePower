@@ -26,7 +26,9 @@ import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
+import com.bluepowermod.ClientProxy;
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
+import com.bluepowermod.client.gui.GuiBase;
 import com.bluepowermod.tileentities.tier1.TileFilter;
 
 import cpw.mods.fml.relauncher.Side;
@@ -86,7 +88,10 @@ public class ContainerFilter extends Container {
     @SideOnly(Side.CLIENT)
     public void updateProgressBar(int id, int value) {
     
-        tileFilter.filterColor = TubeColor.values()[value];
+        if (id == 0) {
+            tileFilter.filterColor = TubeColor.values()[value];
+            ((GuiBase) ClientProxy.getOpenedGui()).redraw();
+        }
         
     }
     

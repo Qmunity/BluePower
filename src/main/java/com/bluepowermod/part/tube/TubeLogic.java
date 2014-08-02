@@ -171,30 +171,30 @@ public class TubeLogic implements IPneumaticTube {
         }
     }
     
-    public boolean retrieveStack(TileEntity target, ItemStack filter) {
+    public boolean retrieveStack(TileEntity target, ForgeDirection dirToRetrieveInto, ItemStack filter) {
     
-        return retrieveStack(target, filter, TubeColor.NONE);
+        return retrieveStack(target, dirToRetrieveInto, filter, TubeColor.NONE);
     }
     
-    public boolean retrieveStack(TileEntity target, ItemStack filter, TubeColor color) {
+    public boolean retrieveStack(TileEntity target, ForgeDirection dirToRetrieveInto, ItemStack filter, TubeColor color) {
     
         if (tube.getWorld() == null) return false;
         TubeStack stack = new TubeStack(filter, null, color);
-        stack.setTarget(target);
+        stack.setTarget(target, dirToRetrieveInto);
         
-        Pair<ForgeDirection, TileEntity> result = getHeadingForItem(stack, true);
+        Pair<ForgeDirection, TileEntity> result = getHeadingForItem(stack, false);
         if (result == null) return false;
         
         ItemStack extractedItem = null;
         if (filter != null) {
-            extractedItem = IOHelper.extract(result.getValue(), result.getKey(), filter, true, false);
+            extractedItem = IOHelper.extract(result.getValue(), result.getKey().getOpposite(), filter, true, false);
         } else {
-            extractedItem = IOHelper.extract(result.getValue(), result.getKey(), false);
+            extractedItem = IOHelper.extract(result.getValue(), result.getKey().getOpposite(), false);
         }
         if (extractedItem == null) throw new IllegalArgumentException("This isn't possible!");
         
         stack = new TubeStack(extractedItem, result.getKey().getOpposite(), color);
-        stack.setTarget(target);
+        stack.setTarget(target, dirToRetrieveInto);
         
         IMultipartCompat compat = (IMultipartCompat) CompatibilityUtils.getModule(Dependencies.FMP);
         TileEntity te = tube.getWorld().getTileEntity(result.getValue().xCoord - result.getKey().offsetX, result.getValue().yCoord - result.getKey().offsetY, result.getValue().zCoord - result.getKey().offsetZ);
@@ -235,7 +235,8 @@ public class TubeLogic implements IPneumaticTube {
                         if (edge.target.target instanceof PneumaticTube) {
                             traversingNodes.add(edge.target);
                             trackingExportDirection.add(heading);
-                        } else if (stack.getTarget(tube.getWorld()) == null && edge.isValidForExportItem(stack.stack) || stack.heading == null && edge.isValidForImportItem(stack.stack) || stack.heading != null && stack.getTarget(tube.getWorld()) == edge.target.target) {
+                        } else if (stack.getTarget(tube.getWorld()) == null && edge.isValidForExportItem(stack.stack) || stack.heading == null && edge.isValidForImportItem(stack.stack) || stack.heading != null && stack.getTarget(tube.getWorld()) == edge.target.target
+                                && edge.targetConnectionSide.getOpposite() == stack.getTargetEntryDir()) {
                             validDestinations.put(edge, stack.heading == null ? edge.targetConnectionSide : heading);
                         }
                     }
@@ -256,8 +257,8 @@ public class TubeLogic implements IPneumaticTube {
         }
         
         if (validDestinations.size() == 0) {
-            if (stack.getTarget(tube.getWorld()) != null && !simulate) {
-                stack.setTarget(null);//if we can't reach the retrieving target anymore, reroute as normal.
+            if (stack.getTarget(tube.getWorld()) != null && stack.heading != null && !simulate) {
+                stack.setTarget(null, ForgeDirection.UNKNOWN);//if we can't reach the retrieving target anymore, reroute as normal.
                 return getHeadingForItem(stack, simulate);
             } else {
                 return null;
@@ -453,9 +454,9 @@ public class TubeLogic implements IPneumaticTube {
             if (target.target instanceof PneumaticTube) return false;
             
             if (stack != null) {
-                return IOHelper.extract((TileEntity) target.target, targetConnectionSide, stack, true, true) != null;
+                return IOHelper.extract((TileEntity) target.target, targetConnectionSide.getOpposite(), stack, true, true) != null;
             } else {
-                return IOHelper.extract((TileEntity) target.target, targetConnectionSide, true) != null;
+                return IOHelper.extract((TileEntity) target.target, targetConnectionSide.getOpposite(), true) != null;
             }
         }
     }

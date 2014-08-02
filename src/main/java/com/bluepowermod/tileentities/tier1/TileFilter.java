@@ -16,8 +16,8 @@ import com.bluepowermod.part.tube.TubeStack;
 
 public class TileFilter extends TileTransposer implements ISidedInventory, IGuiButtonSensitive {
     
-    private final ItemStack[] inventory   = new ItemStack[9];
-    public TubeColor          filterColor = TubeColor.NONE;
+    protected final ItemStack[] inventory   = new ItemStack[9];
+    public TubeColor            filterColor = TubeColor.NONE;
     
     @Override
     public TubeStack acceptItemFromTube(TubeStack stack, ForgeDirection from, boolean simulate) {
@@ -226,6 +226,6 @@ public class TileFilter extends TileTransposer implements ISidedInventory, IGuiB
     @Override
     public void onButtonPress(int messageId, int value) {
     
-        filterColor = TubeColor.values()[value];
+        if (messageId == 0) filterColor = TubeColor.values()[value];
     }
 }

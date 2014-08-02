@@ -34,7 +34,13 @@ import com.bluepowermod.tileentities.tier1.TileFilter;
 public class GuiFilter extends GuiBase {
     
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/seedBag.png");
-    private final TileFilter              filter;
+    protected TileFilter                  filter;
+    
+    public GuiFilter(ContainerFilter container, TileFilter filter, ResourceLocation resLoc) {
+    
+        super(container, resLoc);
+        this.filter = filter;
+    }
     
     public GuiFilter(InventoryPlayer invPlayer, TileFilter filter) {
     

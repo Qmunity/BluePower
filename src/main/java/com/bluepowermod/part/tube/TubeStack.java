@@ -11,12 +11,13 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+
+import org.lwjgl.opengl.GL11;
+
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
 import com.bluepowermod.api.vec.Vector3Cube;
 import com.bluepowermod.client.renderers.RenderHelper;
 import com.bluepowermod.references.Refs;
-
-import org.lwjgl.opengl.GL11;
 
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.relauncher.Side;
@@ -31,13 +32,14 @@ public class TubeStack {
     
     public ItemStack          stack;
     public final TubeColor    color;
-    public double             progress;        //0 at the start, 0.5 on an intersection, 1 at the end.
+    public double             progress;                               //0 at the start, 0.5 on an intersection, 1 at the end.
     public double             oldProgress;
     public ForgeDirection     heading;
-    public boolean            enabled = true;  //will be disabled when the client sided stack is at an intersection, at which point it needs to wait for server input. This just serves a visual purpose.
-    private TileEntity        target;          //only should have a value when retrieving items. this is the target the item wants to go to.
+    public boolean            enabled        = true;                  //will be disabled when the client sided stack is at an intersection, at which point it needs to wait for server input. This just serves a visual purpose.
+    private TileEntity        target;                                 //only should have a value when retrieving items. this is the target the item wants to go to.
     private int               targetX, targetY, targetZ;
-    
+    private ForgeDirection    targetEntryDir = ForgeDirection.UNKNOWN; //Which side should this item make its entry.
+                                                                       
     @SideOnly(Side.CLIENT)
     private static RenderItem customRenderItem;
     private static EntityItem renderedItem;
@@ -78,8 +80,14 @@ public class TubeStack {
         return target;
     }
     
-    public void setTarget(TileEntity tileEntity) {
+    public ForgeDirection getTargetEntryDir() {
     
+        return targetEntryDir;
+    }
+    
+    public void setTarget(TileEntity tileEntity, ForgeDirection targetEntryDir) {
+    
+        this.targetEntryDir = targetEntryDir;
         target = tileEntity;
         if (target != null) {
             targetX = target.xCoord;
@@ -101,6 +109,7 @@ public class TubeStack {
         tag.setInteger("targetX", targetX);
         tag.setInteger("targetY", targetY);
         tag.setInteger("targetZ", targetZ);
+        tag.setByte("targetEntryDir", (byte) targetEntryDir.ordinal());
     }
     
     public static TubeStack loadFromNBT(NBTTagCompound tag) {
@@ -110,6 +119,7 @@ public class TubeStack {
         stack.targetX = tag.getInteger("targetX");
         stack.targetY = tag.getInteger("targetY");
         stack.targetZ = tag.getInteger("targetZ");
+        stack.targetEntryDir = ForgeDirection.getOrientation(tag.getByte("targetEntryDir"));
         return stack;
     }
     

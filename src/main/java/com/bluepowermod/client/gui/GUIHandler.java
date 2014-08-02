@@ -34,6 +34,7 @@ import com.bluepowermod.containers.ContainerKinect;
 import com.bluepowermod.containers.ContainerMonitor;
 import com.bluepowermod.containers.ContainerRedbusID;
 import com.bluepowermod.containers.ContainerRelay;
+import com.bluepowermod.containers.ContainerRetriever;
 import com.bluepowermod.containers.ContainerSeedBag;
 import com.bluepowermod.containers.ContainerSortingMachine;
 import com.bluepowermod.containers.inventorys.InventoryItem;
@@ -48,6 +49,7 @@ import com.bluepowermod.tileentities.tier1.TileDeployer;
 import com.bluepowermod.tileentities.tier1.TileEjector;
 import com.bluepowermod.tileentities.tier1.TileFilter;
 import com.bluepowermod.tileentities.tier1.TileRelay;
+import com.bluepowermod.tileentities.tier2.TileRetriever;
 import com.bluepowermod.tileentities.tier2.TileSortingMachine;
 import com.bluepowermod.tileentities.tier3.IRedBusWindow;
 import com.bluepowermod.tileentities.tier3.TileCPU;
@@ -104,8 +106,9 @@ public class GUIHandler implements IGuiHandler {
             case EJECTOR_ID:
                 return new ContainerEjector(player.inventory, (TileEjector) ent);
             case FILTER_ID:
-            case RETRIEVER_ID:
                 return new ContainerFilter(player.inventory, (TileFilter) ent);
+            case RETRIEVER_ID:
+                return new ContainerRetriever(player.inventory, (TileRetriever) ent);
             default:
                 break;
         }
@@ -151,8 +154,9 @@ public class GUIHandler implements IGuiHandler {
             case EJECTOR_ID:
                 return new GuiEjector(player.inventory, (TileEjector) ent);
             case FILTER_ID:
-            case RETRIEVER_ID:
                 return new GuiFilter(player.inventory, (TileFilter) ent);
+            case RETRIEVER_ID:
+                return new GuiRetriever(player.inventory, (TileRetriever) ent);
             default:
                 break;
         }
