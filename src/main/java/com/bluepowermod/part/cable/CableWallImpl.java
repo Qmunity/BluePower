@@ -11,6 +11,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.ChatComponentText;
+import net.minecraftforge.common.util.ForgeDirection;
 import scala.actors.threadpool.Arrays;
 
 import com.bluepowermod.api.vec.Vector3;
@@ -60,7 +61,8 @@ public class CableWallImpl extends CableWall {
     @Override
     public boolean onActivated(EntityPlayer player, ItemStack item) {
 
-        player.addChatMessage(new ChatComponentText((world.isRemote ? "Client" : "Server") + ": " + Arrays.asList(connections)));
+        player.addChatMessage(new ChatComponentText((world.isRemote ? "Client" : "Server") + ": " + Arrays.asList(connections) + " Face: "
+                + getFace() + "(" + ForgeDirection.getOrientation(getFace()) + ")"));
         return true;
     }
 

@@ -8,6 +8,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import com.bluepowermod.api.part.BPPartFace;
 import com.bluepowermod.api.vec.Vector3;
+import com.bluepowermod.api.vec.Vector3Cube;
 import com.bluepowermod.compat.CompatibilityUtils;
 import com.bluepowermod.compat.fmp.IMultipartCompat;
 import com.bluepowermod.references.Dependencies;
@@ -114,17 +115,32 @@ public abstract class CableWall extends BPPartFace {
     private CableWall getCableOnSide(ForgeDirection dir) {
 
         Vector3 vec = loc.getRelative(dir);
+        Vector3 vec2 = loc.getRelative(ForgeDirection.getOrientation(getFace()));
+        IMultipartCompat compat = ((IMultipartCompat) CompatibilityUtils.getModule(Dependencies.FMP));
 
-        List<CableWall> l = ((IMultipartCompat) CompatibilityUtils.getModule(Dependencies.FMP)).getBPParts(vec.getTileEntity(), CableWall.class);
+        List<CableWall> l = compat.getBPParts(vec.getTileEntity(), CableWall.class);
         for (CableWall c : l)
             if (c.getFace() == getFace())
                 return c;
         l.clear();
 
-        l = ((IMultipartCompat) CompatibilityUtils.getModule(Dependencies.FMP)).getBPParts(loc.getTileEntity(), CableWall.class);
+        if (compat.checkOcclusion(loc.getTileEntity(), new Vector3Cube(0, 0, 0, 1 / 8D, 1 / 8D, 1).rotate90Degrees(dir).toAABB()))
+            return null;
+
+        l = compat.getBPParts(loc.getTileEntity(), CableWall.class);
         for (CableWall c : l)
             if (ForgeDirection.getOrientation(c.getFace()) == dir)
                 return c;
+        l.clear();
+
+        vec = vec.getRelative(ForgeDirection.getOrientation(getFace()));
+        l = compat.getBPParts(vec.getTileEntity(), CableWall.class);
+        for (CableWall c : l) {
+            if (ForgeDirection.getOrientation(c.getFace()) == vec.getDirectionTo(vec2)) {
+                c.connections[ForgeDirectionUtils.getSide(dir.getOpposite())] = this;
+                return c;
+            }
+        }
 
         return null;
     }
