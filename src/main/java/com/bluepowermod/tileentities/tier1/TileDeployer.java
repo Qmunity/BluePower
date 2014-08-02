@@ -1,5 +1,6 @@
 package com.bluepowermod.tileentities.tier1;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.block.Block;
@@ -8,6 +9,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -28,8 +30,13 @@ import com.bluepowermod.tileentities.TileBase;
 
 public class TileDeployer extends TileBase implements ISidedInventory, IEjectAnimator {
     
-    private int               animationTimer = -1;
-    private final ItemStack[] inventory      = new ItemStack[9];
+    private int                     animationTimer   = -1;
+    private final ItemStack[]       inventory        = new ItemStack[9];
+    private static final List<Item> blacklistedItems = new ArrayList<Item>();
+    
+    static {
+        blacklistedItems.add(Items.ender_pearl);
+    }
     
     @Override
     public void updateEntity() {
@@ -39,6 +46,11 @@ public class TileDeployer extends TileBase implements ISidedInventory, IEjectAni
                 animationTimer = -1;
             }
         }
+    }
+    
+    private boolean canDeployItem(ItemStack stack) {
+    
+        return stack != null && !blacklistedItems.contains(stack.getItem());
     }
     
     @Override
@@ -52,27 +64,26 @@ public class TileDeployer extends TileBase implements ISidedInventory, IEjectAni
             FakePlayer player = FakePlayerFactory.getMinecraft((WorldServer) worldObj);
             for (int i = 0; i < inventory.length; i++) {
                 ItemStack stack = inventory[i];
-                if (stack != null) {
-                    player.setCurrentItemOrArmor(0, stack);
-                    if (rightClick(player, stack)) {
-                        stack = player.getCurrentEquippedItem();
-                        if (stack == null || stack.stackSize <= 0) {
-                            inventory[i] = null;
-                        } else {
-                            inventory[i] = stack;
-                        }
-                        player.setCurrentItemOrArmor(0, null);
-                        markDirty();
-                        break;
-                    }
+                player.inventory.setInventorySlotContents(i, stack);
+            }
+            
+            rightClick(player, 9);
+            
+            for (int i = 0; i < inventory.length; i++) {
+                ItemStack stack = player.inventory.getStackInSlot(i);
+                if (stack == null || stack.stackSize <= 0) {
+                    inventory[i] = null;
+                } else {
+                    inventory[i] = stack;
                 }
+                player.inventory.setInventorySlotContents(i, null);
             }
             for (int i = 0; i < player.inventory.getSizeInventory(); i++) {
                 ItemStack stack = player.inventory.getStackInSlot(i);
                 if (stack != null && stack.stackSize > 0) {
                     ItemStack remainder = IOHelper.insert(this, stack, getFacingDirection().getOpposite(), false);
                     if (remainder != null) {
-                        worldObj.spawnEntityInWorld(new EntityItem(worldObj, xCoord + 0.5, yCoord + 3, zCoord + 0.5, remainder));
+                        worldObj.spawnEntityInWorld(new EntityItem(worldObj, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, remainder));
                     }
                     player.inventory.setInventorySlotContents(i, null);
                 }
@@ -80,8 +91,17 @@ public class TileDeployer extends TileBase implements ISidedInventory, IEjectAni
         }
     }
     
-    private boolean rightClick(FakePlayer player, ItemStack stack) {
+    /**
+     * Be sure to set up the fake player's hotbar with the right clicked items. starting with hotbar slot 0.
+     * @param player
+     * @param useItems this method will set the current selected slot of the fake player to 0, and move on to the next slot useItems - 1 times.
+     *          So to use the first slot only, pass 1, to use the full hotbar, 9.
+     * @return
+     */
+    protected boolean rightClick(FakePlayer player, int useItems) {
     
+        if (useItems > 9) throw new IllegalArgumentException("Hotbar is 9 items in width! You're trying " + useItems + "!");
+        
         ForgeDirection faceDir = getFacingDirection();
         int dx = faceDir.offsetX;
         int dy = faceDir.offsetY;
@@ -90,26 +110,67 @@ public class TileDeployer extends TileBase implements ISidedInventory, IEjectAni
         int y = yCoord + dy;
         int z = zCoord + dz;
         
+        player.setPosition(x, y, z);
+        player.rotationPitch = faceDir.offsetY * -90;
+        switch (faceDir) {
+            case NORTH:
+                player.rotationYaw = 180;
+                break;
+            case SOUTH:
+                player.rotationYaw = 0;
+                break;
+            case WEST:
+                player.rotationYaw = 90;
+                break;
+            case EAST:
+                player.rotationYaw = -90;
+        }
+        
         try {
-            player.setPosition(x, y, z);
-            
             PlayerInteractEvent event = ForgeEventFactory.onPlayerInteract(player, Action.RIGHT_CLICK_AIR, x, y, z, faceDir.ordinal(), worldObj);
             if (event.isCanceled()) return false;
             
             Block block = worldObj.getBlock(x, y, z);
             List<EntityLivingBase> detectedEntities = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, AxisAlignedBB.getBoundingBox(x, y, z, x + 1, y + 1, z + 1));
-            Item item = stack.getItem();
             
             Entity entity = detectedEntities.isEmpty() ? null : detectedEntities.get(worldObj.rand.nextInt(detectedEntities.size()));
             
-            if (entity != null && (item.itemInteractionForEntity(stack, player, (EntityLivingBase) entity) || !(entity instanceof EntityAnimal) || ((EntityAnimal) entity).interact(player))) { return true; }
+            if (entity != null) {
+                for (int i = 0; i < useItems; i++) {
+                    player.inventory.currentItem = i;
+                    ItemStack stack = player.getCurrentEquippedItem();
+                    if (canDeployItem(stack) && stack.getItem().itemInteractionForEntity(stack, player, (EntityLivingBase) entity)) return true;
+                    if (entity instanceof EntityAnimal && ((EntityAnimal) entity).interact(player)) return true;
+                }
+            }
             
-            if (item.onItemUseFirst(stack, player, worldObj, x, y, z, faceDir.ordinal(), dx, dy, dz)) return true;
-            if (!worldObj.isAirBlock(x, y, x) && block.onBlockActivated(worldObj, x, y, z, player, faceDir.ordinal(), dx, dy, dz)) return true;
-            if (item.onItemUse(stack, player, worldObj, x, y, z, faceDir.ordinal(), dx, dy, dz)) return true;
-            ItemStack copy = stack.copy();
-            item.onItemRightClick(stack, worldObj, player);
-            return !stack.equals(copy);
+            for (int i = 0; i < useItems; i++) {
+                player.inventory.currentItem = i;
+                ItemStack stack = player.getCurrentEquippedItem();
+                if (canDeployItem(stack) && stack.getItem().onItemUseFirst(stack, player, worldObj, x, y, z, faceDir.ordinal(), dx, dy, dz)) return true;
+            }
+            
+            for (int i = 0; i < useItems; i++) {
+                player.inventory.currentItem = i;
+                if (!worldObj.isAirBlock(x, y, x) && block.onBlockActivated(worldObj, x, y, z, player, faceDir.ordinal(), dx, dy, dz)) return true;
+            }
+            
+            for (int i = 0; i < useItems; i++) {
+                player.inventory.currentItem = i;
+                ItemStack stack = player.getCurrentEquippedItem();
+                if (canDeployItem(stack) && stack.getItem().onItemUse(stack, player, worldObj, x, y, z, faceDir.ordinal(), dx, dy, dz)) return true;
+            }
+            
+            for (int i = 0; i < useItems; i++) {
+                player.inventory.currentItem = i;
+                ItemStack stack = player.getCurrentEquippedItem();
+                if (canDeployItem(stack)) {
+                    ItemStack copy = stack.copy();
+                    stack.getItem().onItemRightClick(stack, worldObj, player);
+                    if (!copy.isItemEqual(stack)) return true;
+                }
+            }
+            return false;
         } catch (Throwable e) {
             BluePower.log.error("Deployer crashed! Stacktrace: ");
             e.printStackTrace();
