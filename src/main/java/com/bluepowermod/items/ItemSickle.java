@@ -47,6 +47,12 @@ public class ItemSickle extends ItemTool {
     }
 
     @Override
+    public String getUnlocalizedName(ItemStack stack) {
+
+        return String.format("item.%s:%s", Refs.MODID, getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
+    }
+
+    @Override
     public String getUnlocalizedName() {
 
         return String.format("item.%s:%s", Refs.MODID, getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
@@ -121,4 +127,6 @@ public class ItemSickle extends ItemTool {
         }
         return used;
     }
+
+
 }

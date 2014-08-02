@@ -54,7 +54,7 @@ public class GateTimer extends GateBase implements IGuiButtonSensitive {
         renderTopTexture(FaceDirection.RIGHT, power);
         renderTopTexture(FaceDirection.BACK, back.getPower() > 0);
         RenderHelper.renderRedstoneTorch(0, 1D / 8D, 0, 13D / 16D, true);
-        RenderHelper.renderPointer(0, 7D / 16D, 0, world != null ? back.getPower() == 0 ? 1 - (double) (ticks + frame) / (double) time : 0 : 0);
+        RenderHelper.renderPointer(0, 7D / 16D, 0, getWorld() != null ? back.getPower() == 0 ? 1 - (double) (ticks + frame) / (double) time : 0 : 0);
     }
     
     @Override

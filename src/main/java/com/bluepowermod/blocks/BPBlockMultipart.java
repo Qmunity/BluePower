@@ -100,7 +100,7 @@ public class BPBlockMultipart extends BlockContainer {
         BPTileMultipart t = getTile(w, x, y, z);
         if (t == null) return 0;
         
-        if (hovered != null && hovered.world == w && hovered.x == x && hovered.y == y && hovered.z == z) {
+        if (hovered != null && hovered.getWorld() == w && hovered.getX() == x && hovered.getY() == y && hovered.getZ() == z) {
             EntityPlayer player = null;// FIXME BLUEPOWER Get player that's breaking it
             
             return hovered.getHardness(t.rayTrace(new Vector3(RayTracer.getCorrectedHeadVec(player)), new Vector3(RayTracer.getEndVec(player))),

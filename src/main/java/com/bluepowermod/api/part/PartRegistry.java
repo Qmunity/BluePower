@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import com.bluepowermod.part.gate.*;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemDye;
@@ -27,18 +28,6 @@ import net.minecraft.world.World;
 
 import com.bluepowermod.init.BPItems;
 import com.bluepowermod.part.cable.CableWallImpl;
-import com.bluepowermod.part.gate.GateAnd;
-import com.bluepowermod.part.gate.GateBuffer;
-import com.bluepowermod.part.gate.GateCounter;
-import com.bluepowermod.part.gate.GateMux;
-import com.bluepowermod.part.gate.GateNand;
-import com.bluepowermod.part.gate.GateNor;
-import com.bluepowermod.part.gate.GateNot;
-import com.bluepowermod.part.gate.GateOr;
-import com.bluepowermod.part.gate.GatePulseFormer;
-import com.bluepowermod.part.gate.GateRandomizer;
-import com.bluepowermod.part.gate.GateSequencer;
-import com.bluepowermod.part.gate.GateTimer;
 import com.bluepowermod.part.lamp.PartCageLamp;
 import com.bluepowermod.part.lamp.PartFixture;
 import com.bluepowermod.part.tube.PneumaticTube;
@@ -304,6 +293,7 @@ public class PartRegistry {
         registerPart(GateNor.class);
         registerPart(GatePulseFormer.class);
         registerPart(GateRandomizer.class);
+        registerPart(GateLightCell.class);
         
         // Lamps
         for (int i = 0; i < ItemDye.field_150922_c.length; i++)

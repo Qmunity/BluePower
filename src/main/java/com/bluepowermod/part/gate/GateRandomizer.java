@@ -68,21 +68,21 @@ public class GateRandomizer extends GateBase {
     @Override
     public void doLogic(RedstoneConnection front, RedstoneConnection left, RedstoneConnection back, RedstoneConnection right) {
     
-        if (!world.isRemote) {
+        if (!getWorld().isRemote) {
             if (back.getPower() > 0) {
                 if (ticks % 5 == 0) {
                     out[0] = random.nextBoolean();
                     out[1] = random.nextBoolean();
                     out[2] = random.nextBoolean();
+                    left.setPower(out[0] ? 15 : 0);
+                    front.setPower(out[1] ? 15 : 0);
+                    right.setPower(out[2] ? 15 : 0);
                     sendUpdatePacket();
                 }
                 ticks++;
             } else {
                 ticks = 0;
             }
-            left.setPower(out[0] ? 15 : 0);
-            front.setPower(out[1] ? 15 : 0);
-            right.setPower(out[2] ? 15 : 0);
         }
     }
     

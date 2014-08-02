@@ -61,7 +61,7 @@ public class GatePulseFormer extends GateBase {
         power[1] = power[0];
         power[0] = back.getPower() > 0;
         
-        if (power[2] && !power[3]) {
+        if (!power[2] && power[1]) {
             front.setPower(15);
         } else {
             front.setPower(0);

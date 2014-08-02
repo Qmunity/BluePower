@@ -35,7 +35,7 @@ public class ItemBPMultipart extends JItemMultiPart {
     public ItemBPMultipart() {
     
         super();
-        setUnlocalizedName(Refs.MODID + ".part");
+        setUnlocalizedName("part." + Refs.MODID + ":");
         setCreativeTab(CustomTabs.tabBluePowerCircuits);
     }
     
@@ -63,10 +63,10 @@ public class ItemBPMultipart extends JItemMultiPart {
             w.playSoundEffect(x + 0.5, y + 0.5, z + 0.5, Block.soundTypeStone.getBreakSound(), Block.soundTypeStone.getVolume(),
                     Block.soundTypeStone.getPitch());
             
-            p.world = w;
-            p.x = x;
-            p.y = y;
-            p.z = z;
+            p.setWorld(w);
+            p.setX(x);
+            p.setY(y);
+            p.setZ(z);
             p.onAdded();
             
             return true;

@@ -24,12 +24,12 @@ public class ItemBPPart extends Item {
     public ItemBPPart() {
     
         super();
-        setUnlocalizedName(Refs.MODID + ".part");
+        setUnlocalizedName("part." + Refs.MODID + ":");
     }
     
     public static String getUnlocalizedName_(ItemStack item) {
     
-        return Refs.MODID + ".part." + PartRegistry.getPartIdFromItem(item);// TODO Unlocalized names for parts
+        return "part." + Refs.MODID + ":" + PartRegistry.getPartIdFromItem(item);// TODO Unlocalized names for parts
     }
     
     @SuppressWarnings({ "rawtypes", "unchecked" })

@@ -20,6 +20,7 @@ package com.bluepowermod.items;
 import net.minecraft.item.ItemSpade;
 import com.bluepowermod.init.CustomTabs;
 import com.bluepowermod.references.Refs;
+import net.minecraft.item.ItemStack;
 
 public class ItemGemSpade extends ItemSpade {
 
@@ -29,5 +30,16 @@ public class ItemGemSpade extends ItemSpade {
         this.setUnlocalizedName(name);
         this.setCreativeTab(CustomTabs.tabBluePowerTools);
         this.setTextureName(Refs.MODID + ":" + name);
+    }
+
+    @Override
+    public String getUnlocalizedName(ItemStack stack) {
+
+        return String.format("item.%s:%s", Refs.MODID, getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
+    }
+
+    protected String getUnwrappedUnlocalizedName(String name) {
+
+        return name.substring(name.indexOf(".") + 1);
     }
 }

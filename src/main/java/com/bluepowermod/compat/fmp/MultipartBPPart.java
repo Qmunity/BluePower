@@ -359,10 +359,10 @@ public class MultipartBPPart extends TMultiPart implements IRedstonePart, JNorma
     @Override
     public void update() {
     
-        getPart().world = world();
-        getPart().x = x();
-        getPart().y = y();
-        getPart().z = z();
+        getPart().setWorld(world());
+        getPart().setX(x());
+        getPart().setY(y());
+        getPart().setZ(z());
         
         getPart().update();
     }

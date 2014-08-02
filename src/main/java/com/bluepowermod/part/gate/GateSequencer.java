@@ -56,7 +56,7 @@ public class GateSequencer extends GateBase implements IGuiButtonSensitive {
         RenderHelper.renderRedstoneTorch(-5D / 16D, 1D / 8D, 0, 8D / 16D, power[0]);
         
         RenderHelper.renderRedstoneTorch(0, 1D / 8D, 0, 13D / 16D, true);
-        RenderHelper.renderPointer(0, 7D / 16D, 0, world != null ? start >= 0 ? 1 - (double) (ticks - start + frame) / (double) time : 0 : 0);
+        RenderHelper.renderPointer(0, 7D / 16D, 0, getWorld() != null ? start >= 0 ? 1 - (double) (ticks - start + frame) / (double) time : 0 : 0);
     }
     
     @Override
