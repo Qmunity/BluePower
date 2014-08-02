@@ -165,6 +165,16 @@ public class RayTracer {
         return headVec.addVector(lookVec.xCoord * reach, lookVec.yCoord * reach, lookVec.zCoord * reach);
     }
 
+    public static Vector3 getStartVector(EntityPlayer player) {
+
+        return new Vector3(getCorrectedHeadVec(player));
+    }
+
+    public static Vector3 getEndVector(EntityPlayer player) {
+
+        return new Vector3(getEndVec(player));
+    }
+
     private static double minX;
     private static double minY;
     private static double minZ;
@@ -172,12 +182,12 @@ public class RayTracer {
     private static double maxY;
     private static double maxZ;
 
-    public static BPMop rayTrace(int x, int y, int z, EntityPlayer player, AxisAlignedBB aabb) {
+    public static BPMop rayTrace(double x, double y, double z, EntityPlayer player, AxisAlignedBB aabb) {
 
         return rayTrace(x, y, z, new Vector3(getStartVec(player)), new Vector3(getEndVec(player)), aabb);
     }
 
-    public static BPMop rayTrace(int x, int y, int z, Vector3 start, Vector3 end, AxisAlignedBB aabb) {
+    public static BPMop rayTrace(double x, double y, double z, Vector3 start, Vector3 end, AxisAlignedBB aabb) {
 
         minX = aabb.minX;
         minY = aabb.minY;
@@ -248,16 +258,16 @@ public class RayTracer {
             aabb.maxY += y;
             aabb.maxZ += z;
 
-            return new BPMop(new MovingObjectPosition(x, y, z, b0, vec.add(x, y, z).toVec3()), aabb);
+            return new BPMop(new MovingObjectPosition((int) x, (int) y, (int) z, b0, vec.add(x, y, z).toVec3()), aabb);
         }
     }
 
-    public static BPMop rayTrace(int x, int y, int z, EntityPlayer player, List<AxisAlignedBB> aabb) {
+    public static BPMop rayTrace(double x, double y, double z, EntityPlayer player, List<AxisAlignedBB> aabb) {
 
         return rayTrace(x, y, z, new Vector3(getStartVec(player)), new Vector3(getEndVec(player)), aabb);
     }
 
-    public static BPMop rayTrace(int x, int y, int z, Vector3 start, Vector3 end, List<AxisAlignedBB> aabbs) {
+    public static BPMop rayTrace(double x, double y, double z, Vector3 start, Vector3 end, List<AxisAlignedBB> aabbs) {
 
         BPMop mop = null;
         double dist = Double.POSITIVE_INFINITY;

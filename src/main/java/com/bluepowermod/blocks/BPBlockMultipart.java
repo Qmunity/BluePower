@@ -1,6 +1,7 @@
 package com.bluepowermod.blocks;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.block.Block;
@@ -17,16 +18,15 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.client.event.DrawBlockHighlightEvent;
-import net.minecraftforge.common.MinecraftForge;
 
 import com.bluepowermod.api.part.BPPart;
+import com.bluepowermod.api.vec.Vector3;
 import com.bluepowermod.client.renderers.RenderMultipart;
-import com.bluepowermod.raytrace.BPMop;
 import com.bluepowermod.raytrace.RayTracer;
 import com.bluepowermod.tileentities.BPTileMultipart;
+import com.bluepowermod.util.AABBUtils;
+import com.bluepowermod.util.ComparatorMOP;
 
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -35,7 +35,7 @@ public class BPBlockMultipart extends BlockContainer {
     public BPBlockMultipart() {
 
         super(Material.rock);
-        MinecraftForge.EVENT_BUS.register(this);
+        // MinecraftForge.EVENT_BUS.register(this);
     }
 
     @Override
@@ -99,13 +99,12 @@ public class BPBlockMultipart extends BlockContainer {
     @Override
     public MovingObjectPosition collisionRayTrace(World w, int x, int y, int z, Vec3 start, Vec3 end) {
 
-        // BPTileMultipart t = getTile(w, x, y, z);
-        // if (t != null) {
-        // BPMop mop = RayTracer.rayTrace(x, y, z, Minecraft.getMinecraft().thePlayer, t.getSelectionBoxes());
-        // if (mop != null)
-        // return mop;
-        // }
-        // return null;
+        BPTileMultipart t = getTile(w, x, y, z);
+        if (t != null) {
+            EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+            rayTrace(w, x, y, z, RayTracer.getStartVector(player), RayTracer.getEndVector(player), t.getSelectionBoxes());
+        }
+
         return super.collisionRayTrace(w, x, y, z, start, end);
     }
 
@@ -178,19 +177,13 @@ public class BPBlockMultipart extends BlockContainer {
         if (t == null)
             return super.getSelectedBoundingBoxFromPool(w, x, y, z);
 
-        BPMop mop = RayTracer.rayTrace(x, y, z, Minecraft.getMinecraft().thePlayer, t.getSelectionBoxes());
-        if (mop != null)
-            return mop.getCubeHit();
+        EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+        MovingObjectPosition mop = rayTrace(w, x, y, z, RayTracer.getStartVector(player), RayTracer.getEndVector(player), t.getSelectionBoxes());
+        if (mop != null) {
+            return AABBUtils.translate((AxisAlignedBB) mop.hitInfo, x, y, z);
+        }
 
         return super.getSelectedBoundingBoxFromPool(w, x, y, z);
-    }
-
-    @Override
-    public AxisAlignedBB getCollisionBoundingBoxFromPool(World w, int x, int y, int z) {
-
-        // setBlockBounds(0, 0, 0, 1, 1, 1);
-
-        return super.getCollisionBoundingBoxFromPool(w, x, y, z);
     }
 
     @Override
@@ -205,33 +198,33 @@ public class BPBlockMultipart extends BlockContainer {
         return false;
     }
 
-    @SubscribeEvent
-    @SideOnly(Side.CLIENT)
-    public void onBlockHighlight(DrawBlockHighlightEvent event) {
-
-        // if (event.target.typeOfHit == MovingObjectType.BLOCK
-        // && event.player.worldObj.getBlock(event.target.blockX, event.target.blockY, event.target.blockZ) == this) {
-        //
-        // BPTileMultipart t = getTile(event.player.worldObj, event.target.blockX, event.target.blockY, event.target.blockZ);
-        // if (t == null)
-        // return;
-        // MovingObjectPosition mop = RayTracer.reTraceBlock(new Vector3(event.target.blockX, event.target.blockY, event.target.blockZ,
-        // event.player.worldObj), event.player);
-        // if (mop == null)
-        // return;
-        // AxisAlignedBB aabb = RayTracer.getSelectedBox(mop, event.player, ForgeDirection.getOrientation(mop.sideHit), t.getSelectionBoxes());
-        // if (aabb == null)
-        // return;
-        //
-        // setBlockBounds((float) aabb.minX, (float) aabb.minY, (float) aabb.minZ, (float) aabb.maxX, (float) aabb.maxY, (float) aabb.maxZ);
-        //
-        // RayTracer.reTraceBlock(new Vector3(event.target.blockX, event.target.blockY, event.target.blockZ, event.player.worldObj), event.player);
-        // }
-    }
-
     @Override
     public int getRenderType() {
 
         return RenderMultipart.renderId;
+    }
+
+    public void setBlockBounds(AxisAlignedBB aabb) {
+
+        setBlockBounds((float) aabb.minX, (float) aabb.minY, (float) aabb.minZ, (float) aabb.maxX, (float) aabb.maxY, (float) aabb.maxZ);
+    }
+
+    private MovingObjectPosition rayTrace(World w, int x, int y, int z, Vector3 start, Vector3 end, List<AxisAlignedBB> aabbs) {
+
+        List<MovingObjectPosition> mops = new ArrayList<MovingObjectPosition>();
+        for (AxisAlignedBB aabb : aabbs) {
+            setBlockBounds(aabb);
+            MovingObjectPosition mop = super.collisionRayTrace(w, x, y, z, start.toVec3(), end.toVec3());
+            if (mop != null) {
+                mop.hitInfo = aabb;
+                mops.add(mop);
+            }
+        }
+        Collections.sort(mops, new ComparatorMOP(start));
+        if (mops.isEmpty())
+            return null;
+        MovingObjectPosition mop = mops.get(0);
+        setBlockBounds((AxisAlignedBB) mop.hitInfo);
+        return mop;
     }
 }
