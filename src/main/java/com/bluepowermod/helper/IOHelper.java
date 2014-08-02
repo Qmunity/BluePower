@@ -36,40 +36,40 @@ public class IOHelper {
         }
     }
     
-    public static ItemStack extract(TileEntity inventory, ForgeDirection direction) {
+    public static ItemStack extract(TileEntity inventory, ForgeDirection direction, boolean simulate) {
     
         IInventory inv = getInventoryForTE(inventory);
-        if (inv != null) return extract(inv, direction);
+        if (inv != null) return extract(inv, direction, simulate);
         return null;
     }
     
-    public static ItemStack extract(IInventory inventory, ForgeDirection direction) {
+    public static ItemStack extract(IInventory inventory, ForgeDirection direction, boolean simulate) {
     
         if (inventory instanceof ISidedInventory) {
             ISidedInventory isidedinventory = (ISidedInventory) inventory;
             int[] accessibleSlotsFromSide = isidedinventory.getAccessibleSlotsFromSide(direction.ordinal());
             
             for (int anAccessibleSlotsFromSide : accessibleSlotsFromSide) {
-                ItemStack stack = extract(inventory, direction, anAccessibleSlotsFromSide);
+                ItemStack stack = extract(inventory, direction, anAccessibleSlotsFromSide, simulate);
                 if (stack != null) return stack;
             }
         } else {
             int j = inventory.getSizeInventory();
             
             for (int k = 0; k < j; ++k) {
-                ItemStack stack = extract(inventory, direction, k);
+                ItemStack stack = extract(inventory, direction, k, simulate);
                 if (stack != null) return stack;
             }
         }
         return null;
     }
     
-    public static ItemStack extract(IInventory inventory, ForgeDirection direction, int slot) {
+    public static ItemStack extract(IInventory inventory, ForgeDirection direction, int slot, boolean simulate) {
     
         ItemStack itemstack = inventory.getStackInSlot(slot);
         
         if (itemstack != null && canExtractItemFromInventory(inventory, itemstack, slot, direction.ordinal())) {
-            inventory.setInventorySlotContents(slot, null);
+            if (!simulate) inventory.setInventorySlotContents(slot, null);
             return itemstack;
         }
         return null;
