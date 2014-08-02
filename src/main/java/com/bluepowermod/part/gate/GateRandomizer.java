@@ -74,15 +74,15 @@ public class GateRandomizer extends GateBase {
                     out[0] = random.nextBoolean();
                     out[1] = random.nextBoolean();
                     out[2] = random.nextBoolean();
+                    left.setPower(out[0] ? 15 : 0);
+                    front.setPower(out[1] ? 15 : 0);
+                    right.setPower(out[2] ? 15 : 0);
                     sendUpdatePacket();
                 }
                 ticks++;
             } else {
                 ticks = 0;
             }
-            left.setPower(out[0] ? 15 : 0);
-            front.setPower(out[1] ? 15 : 0);
-            right.setPower(out[2] ? 15 : 0);
         }
     }
     
