@@ -6,6 +6,7 @@ import java.util.List;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -101,6 +102,12 @@ public class CompatModuleFMPAlt extends CompatModule implements IMultipartCompat
             }
         }
         return l;
+    }
+
+    @Override
+    public int getMOPData(MovingObjectPosition mop) {
+
+        return (Integer) mop.hitInfo;// TODO assign the subpart index hit to right clicking (for the Pneumatic Tube).
     }
 
 }

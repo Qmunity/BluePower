@@ -23,11 +23,12 @@ import com.bluepowermod.tileentities.tier1.TileBlockBreaker;
 import com.bluepowermod.tileentities.tier1.TileBuffer;
 import com.bluepowermod.tileentities.tier1.TileDeployer;
 import com.bluepowermod.tileentities.tier1.TileEjector;
+import com.bluepowermod.tileentities.tier1.TileFilter;
 import com.bluepowermod.tileentities.tier1.TileIgniter;
 import com.bluepowermod.tileentities.tier1.TileLamp;
 import com.bluepowermod.tileentities.tier1.TileRelay;
 import com.bluepowermod.tileentities.tier1.TileTransposer;
-import com.bluepowermod.tileentities.tier2.TileFilter;
+import com.bluepowermod.tileentities.tier2.TileRetriever;
 import com.bluepowermod.tileentities.tier2.TileSortingMachine;
 import com.bluepowermod.tileentities.tier2.TileWindmill;
 import com.bluepowermod.tileentities.tier3.TileCPU;
@@ -65,6 +66,7 @@ public class TileEntities {
         GameRegistry.registerTileEntity(TileEjector.class, "ejector");
         GameRegistry.registerTileEntity(TileRelay.class, "relay");
         GameRegistry.registerTileEntity(TileFilter.class, "filter");
+        GameRegistry.registerTileEntity(TileRetriever.class, "retriever");
         GameRegistry.registerTileEntity(TileLamp.class, "tileLamp");
         GameRegistry.registerTileEntity(BPTileMultipart.class, "tileMultipart");
     }

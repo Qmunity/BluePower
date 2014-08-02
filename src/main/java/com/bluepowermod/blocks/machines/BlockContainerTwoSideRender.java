@@ -36,35 +36,11 @@ import com.bluepowermod.tileentities.tier1.TileEjector;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class BlockEjector extends BlockContainerBase {
+public class BlockContainerTwoSideRender extends BlockContainerBase {
     
-    public BlockEjector() {
-    
-        super(Material.rock);
-        setBlockName(Refs.EJECTOR_NAME);
-        setCreativeTab(CustomTabs.tabBluePowerMachines);
-    }
-    
-    /**
-     * Method to be overwritten to fetch the TileEntity Class that goes with the block
-     *
-     * @return a .class
-     */
-    @Override
-    protected Class<? extends TileEntity> getTileEntity() {
-    
-        return TileEjector.class;
-    }
-    
-    /**
-     * Method to be overwritten that returns a GUI ID
-     *
-     * @return
-     */
-    @Override
-    public GuiIDs getGuiID() {
-    
-        return GuiIDs.EJECTOR_ID;
+    public BlockContainerTwoSideRender(Material material, Class<? extends TileEntity> tileEntityClass) {
+        
+        super(material, tileEntityClass);
     }
     
     @Override
@@ -72,7 +48,7 @@ public class BlockEjector extends BlockContainerBase {
     public void registerBlockIcons(IIconRegister iconRegister) {
     
         super.registerBlockIcons(iconRegister);
-        blockIcon = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + Refs.EJECTOR_NAME + "_side_0");
+        blockIcon = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + getUnwrappedUnlocalizedName(getUnlocalizedName()) + "_side_0");
     }
     
     @Override

@@ -22,7 +22,6 @@ import java.util.Random;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.Item;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -47,7 +46,7 @@ public class BlockAlloyFurnace extends BlockContainerBase {
     
     public BlockAlloyFurnace() {
     
-        super(Material.rock);
+        super(Material.rock, TileAlloyFurnace.class);
         setBlockName(Refs.ALLOYFURNACE_NAME);
         
     }
@@ -148,12 +147,6 @@ public class BlockAlloyFurnace extends BlockContainerBase {
     
         TileAlloyFurnace te = (TileAlloyFurnace) world.getTileEntity(x, y, z);
         return te.getIsActive() ? 13 : 0;
-    }
-    
-    @Override
-    protected Class<? extends TileEntity> getTileEntity() {
-    
-        return TileAlloyFurnace.class;
     }
     
     @Override

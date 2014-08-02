@@ -5,6 +5,7 @@ import java.util.List;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -26,6 +27,8 @@ public interface IMultipartCompat {
     public <T> T getBPPart(TileEntity te, Class<T> searchedClass);
 
     public <T> List<T> getBPParts(TileEntity te, Class<T> searchedClass);
+
+    public int getMOPData(MovingObjectPosition mop);
 
     public static final class MultipartCompat {
 

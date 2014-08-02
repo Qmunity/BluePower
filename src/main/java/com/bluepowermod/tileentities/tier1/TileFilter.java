@@ -1,4 +1,4 @@
-package com.bluepowermod.tileentities.tier2;
+package com.bluepowermod.tileentities.tier1;
 
 import java.util.List;
 
@@ -13,7 +13,6 @@ import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
 import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.part.IGuiButtonSensitive;
 import com.bluepowermod.part.tube.TubeStack;
-import com.bluepowermod.tileentities.tier1.TileTransposer;
 
 public class TileFilter extends TileTransposer implements ISidedInventory, IGuiButtonSensitive {
     
@@ -66,7 +65,7 @@ public class TileFilter extends TileTransposer implements ISidedInventory, IGuiB
                 }
             }
             if (everythingNull) {
-                ItemStack extractedStack = IOHelper.extract(tile, direction);
+                ItemStack extractedStack = IOHelper.extract(tile, direction, false);
                 if (extractedStack != null) {
                     this.addItemToOutputBuffer(extractedStack, filterColor);
                 }

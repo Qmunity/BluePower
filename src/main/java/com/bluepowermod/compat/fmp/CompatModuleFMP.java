@@ -16,6 +16,7 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import codechicken.lib.raytracer.ExtendedMOP;
@@ -221,5 +222,11 @@ public class CompatModuleFMP extends CompatModule implements IMultipartCompat {
                 parts.add((T) part);
         }
         return parts;
+    }
+
+    @Override
+    public int getMOPData(MovingObjectPosition mop) {
+
+        return (Integer) ((ExtendedMOP) mop).data;
     }
 }

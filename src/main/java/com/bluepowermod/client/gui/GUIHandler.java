@@ -46,8 +46,8 @@ import com.bluepowermod.tileentities.tier1.TileAlloyFurnace;
 import com.bluepowermod.tileentities.tier1.TileBuffer;
 import com.bluepowermod.tileentities.tier1.TileDeployer;
 import com.bluepowermod.tileentities.tier1.TileEjector;
+import com.bluepowermod.tileentities.tier1.TileFilter;
 import com.bluepowermod.tileentities.tier1.TileRelay;
-import com.bluepowermod.tileentities.tier2.TileFilter;
 import com.bluepowermod.tileentities.tier2.TileSortingMachine;
 import com.bluepowermod.tileentities.tier3.IRedBusWindow;
 import com.bluepowermod.tileentities.tier3.TileCPU;
@@ -104,6 +104,7 @@ public class GUIHandler implements IGuiHandler {
             case EJECTOR_ID:
                 return new ContainerEjector(player.inventory, (TileEjector) ent);
             case FILTER_ID:
+            case RETRIEVER_ID:
                 return new ContainerFilter(player.inventory, (TileFilter) ent);
             default:
                 break;
@@ -150,6 +151,7 @@ public class GUIHandler implements IGuiHandler {
             case EJECTOR_ID:
                 return new GuiEjector(player.inventory, (TileEjector) ent);
             case FILTER_ID:
+            case RETRIEVER_ID:
                 return new GuiFilter(player.inventory, (TileFilter) ent);
             default:
                 break;

@@ -80,6 +80,7 @@ public class Refs {
     public static final String   EJECTOR_NAME             = "ejector";
     public static final String   RELAY_NAME               = "relay";
     public static final String   FILTER_NAME              = "filter";
+    public static final String   RETRIEVER_NAME           = "retriever";
     
     public static final String   ENGINE_NAME              = "engine";
     public static final String   KINETICGENERATOR_NAME    = "kinetic_generator";

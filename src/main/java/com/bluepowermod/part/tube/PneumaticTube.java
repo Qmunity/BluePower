@@ -15,6 +15,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -23,11 +24,14 @@ import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
 import com.bluepowermod.api.vec.Vector3;
 import com.bluepowermod.api.vec.Vector3Cube;
 import com.bluepowermod.client.renderers.IconSupplier;
+import com.bluepowermod.compat.CompatibilityUtils;
+import com.bluepowermod.compat.fmp.IMultipartCompat;
 import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.helper.TileEntityCache;
 import com.bluepowermod.init.BPItems;
 import com.bluepowermod.init.CustomTabs;
 import com.bluepowermod.items.ItemDamageableColorableOverlay;
+import com.bluepowermod.references.Dependencies;
 
 /**
  * 
@@ -43,10 +47,10 @@ public class PneumaticTube extends BPPart {
     public boolean            isCrossOver;
     private final Vector3Cube sideBB      = new Vector3Cube(AxisAlignedBB.getBoundingBox(0.25, 0, 0.25, 0.75, 0.25, 0.75));
     private TileEntityCache[] tileCache;
-    private TubeColor         color       = TubeColor.NONE;
+    private final TubeColor[] color       = { TubeColor.NONE, TubeColor.NONE, TubeColor.NONE, TubeColor.NONE, TubeColor.NONE, TubeColor.NONE };
     private final TubeLogic   logic       = new TubeLogic(this);
-    public boolean            initialized;                                                                                 //workaround to the connections not properly initialized, but being tried to be used.
-                                                                                                                            
+    public boolean            initialized;                                                                                                     //workaround to the connections not properly initialized, but being tried to be used.
+                                                                                                                                                
     // private final ResourceLocation tubeSideTexture = new ResourceLocation(Refs.MODID + ":textures/blocks/Tubes/pneumatic_tube_side.png");
     // private final ResourceLocation tubeNodeTexture = new ResourceLocation(Refs.MODID + ":textures/blocks/Tubes/tube_end.png");
     
@@ -183,7 +187,8 @@ public class PneumaticTube extends BPPart {
     
     public boolean isConnected(ForgeDirection dir, PneumaticTube otherTube) {
     
-        if (otherTube != null && otherTube.color != TubeColor.NONE && color != TubeColor.NONE && color != otherTube.color) return false;
+        TubeColor otherTubeColor = otherTube != null ? otherTube.getColor(dir.getOpposite()) : null;
+        if (otherTube != null && otherTubeColor != TubeColor.NONE && getColor(dir) != TubeColor.NONE && getColor(dir) != otherTubeColor) return false;
         if (dir == ForgeDirection.UP || dir == ForgeDirection.DOWN) dir = dir.getOpposite();
         return getWorld() == null || !checkOcclusion(sideBB.clone().rotate90Degrees(dir).toAABB());
     }
@@ -195,7 +200,9 @@ public class PneumaticTube extends BPPart {
         for (int i = 0; i < 6; i++) {
             tag.setBoolean("connections" + i, connections[i]);
         }
-        tag.setByte("tubeColor", (byte) color.ordinal());
+        for (int i = 0; i < color.length; i++) {
+            tag.setByte("tubeColor" + i, (byte) color[i].ordinal());
+        }
         
         NBTTagCompound logicTag = new NBTTagCompound();
         logic.writeToNBT(logicTag);
@@ -212,7 +219,9 @@ public class PneumaticTube extends BPPart {
             if (connections[i]) connectionCount++;
         }
         isCrossOver = connectionCount != 2;
-        color = TubeColor.values()[tag.getByte("tubeColor")];
+        for (int i = 0; i < color.length; i++) {
+            color[i] = TubeColor.values()[tag.getByte("tubeColor" + i)];
+        }
         
         NBTTagCompound logicTag = tag.getCompoundTag("logic");
         logic.readFromNBT(logicTag);
@@ -228,14 +237,20 @@ public class PneumaticTube extends BPPart {
      * @return Whether or not an action occurred
      */
     @Override
-    public boolean onActivated(EntityPlayer player, ItemStack item) {
+    public boolean onActivated(EntityPlayer player, MovingObjectPosition mop, ItemStack item) {
     
         if (getWorld() == null) return false;
         
         if (!getWorld().isRemote) {
             
             if (item != null && item.getItem() == BPItems.paint_brush && ((ItemDamageableColorableOverlay) BPItems.paint_brush).tryUseItem(item)) {
-                color = TubeColor.values()[item.getItemDamage()];
+                int subPartHit = ((IMultipartCompat) CompatibilityUtils.getModule(Dependencies.FMP)).getMOPData(mop);
+                if (subPartHit == 0) {
+                    subPartHit = mop.sideHit;
+                } else {
+                    subPartHit = getSideFromAABBIndex(subPartHit);
+                }
+                color[subPartHit] = TubeColor.values()[item.getItemDamage()];
                 updateConnections();
                 notifyUpdate();
                 return true;
@@ -263,9 +278,9 @@ public class PneumaticTube extends BPPart {
         return 1;
     }
     
-    public TubeColor getColor() {
+    public TubeColor getColor(ForgeDirection dir) {
     
-        return color;
+        return color[dir.ordinal()];
     }
     
     /**
@@ -427,26 +442,31 @@ public class PneumaticTube extends BPPart {
             double maxY = icon.getInterpolatedV(aabb.maxY * 16);
             
             t.setNormal(0, 0, -1);
-            if (connections[4]) {// or 5
-                t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.minZ, minX, maxY);// minZ
-                t.addVertexWithUV(aabb.minX, aabb.minY, aabb.minZ, minX, minY);
-                t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.minZ, maxX, minY);
-                t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.minZ, maxX, maxY);
-                
-                t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.minZ, minX, maxY);// minZ
-                t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.minZ, maxX, maxY);
-                t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.minZ, maxX, minY);
-                t.addVertexWithUV(aabb.minX, aabb.minY, aabb.minZ, minX, minY);
-            } else {
-                t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.minZ, minX, maxY);// minZ
-                t.addVertexWithUV(aabb.minX, aabb.minY, aabb.minZ, maxX, maxY);
-                t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.minZ, maxX, minY);
-                t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.minZ, minX, minY);
-                
-                t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.minZ, minX, maxY);// minZ
-                t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.minZ, minX, minY);
-                t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.minZ, maxX, minY);
-                t.addVertexWithUV(aabb.minX, aabb.minY, aabb.minZ, maxX, maxY);
+            if ((icon == IconSupplier.pneumaticTubeColorSide || icon == IconSupplier.pneumaticTubeColorNode) && color[2] != TubeColor.NONE) {
+                t.setColorOpaque_I(ItemDye.field_150922_c[color[2].ordinal()]);
+            }
+            if (icon != IconSupplier.pneumaticTubeColorSide && icon != IconSupplier.pneumaticTubeColorNode || color[2] != TubeColor.NONE) {
+                if (connections[4]) {// or 5
+                    t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.minZ, minX, maxY);// minZ
+                    t.addVertexWithUV(aabb.minX, aabb.minY, aabb.minZ, minX, minY);
+                    t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.minZ, maxX, minY);
+                    t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.minZ, maxX, maxY);
+                    
+                    t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.minZ, minX, maxY);// minZ
+                    t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.minZ, maxX, maxY);
+                    t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.minZ, maxX, minY);
+                    t.addVertexWithUV(aabb.minX, aabb.minY, aabb.minZ, minX, minY);
+                } else {
+                    t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.minZ, minX, maxY);// minZ
+                    t.addVertexWithUV(aabb.minX, aabb.minY, aabb.minZ, maxX, maxY);
+                    t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.minZ, maxX, minY);
+                    t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.minZ, minX, minY);
+                    
+                    t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.minZ, minX, maxY);// minZ
+                    t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.minZ, minX, minY);
+                    t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.minZ, maxX, minY);
+                    t.addVertexWithUV(aabb.minX, aabb.minY, aabb.minZ, maxX, maxY);
+                }
             }
         }
         
@@ -456,26 +476,31 @@ public class PneumaticTube extends BPPart {
             double minY = icon.getInterpolatedV(aabb.minY * 16);
             double maxY = icon.getInterpolatedV(aabb.maxY * 16);
             t.setNormal(0, 0, 1);
-            if (connections[4]) {// or 5
-                t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.maxZ, maxX, maxY);
-                t.addVertexWithUV(aabb.minX, aabb.minY, aabb.maxZ, minX, maxY);// maxZ
-                t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.maxZ, minX, minY);
-                t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.maxZ, maxX, minY);
-                
-                t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.maxZ, maxX, maxY);
-                t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.maxZ, maxX, minY);
-                t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.maxZ, minX, minY);
-                t.addVertexWithUV(aabb.minX, aabb.minY, aabb.maxZ, minX, maxY);// maxZ
-            } else {
-                t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.maxZ, minX, minY);
-                t.addVertexWithUV(aabb.minX, aabb.minY, aabb.maxZ, minX, maxY);// maxZ
-                t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.maxZ, maxX, maxY);
-                t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.maxZ, maxX, minY);
-                
-                t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.maxZ, minX, minY);
-                t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.maxZ, maxX, minY);
-                t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.maxZ, maxX, maxY);
-                t.addVertexWithUV(aabb.minX, aabb.minY, aabb.maxZ, minX, maxY);// maxZ
+            if ((icon == IconSupplier.pneumaticTubeColorSide || icon == IconSupplier.pneumaticTubeColorNode) && color[3] != TubeColor.NONE) {
+                t.setColorOpaque_I(ItemDye.field_150922_c[color[3].ordinal()]);
+            }
+            if (icon != IconSupplier.pneumaticTubeColorSide && icon != IconSupplier.pneumaticTubeColorNode || color[3] != TubeColor.NONE) {
+                if (connections[4]) {// or 5
+                    t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.maxZ, maxX, maxY);
+                    t.addVertexWithUV(aabb.minX, aabb.minY, aabb.maxZ, minX, maxY);// maxZ
+                    t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.maxZ, minX, minY);
+                    t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.maxZ, maxX, minY);
+                    
+                    t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.maxZ, maxX, maxY);
+                    t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.maxZ, maxX, minY);
+                    t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.maxZ, minX, minY);
+                    t.addVertexWithUV(aabb.minX, aabb.minY, aabb.maxZ, minX, maxY);// maxZ
+                } else {
+                    t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.maxZ, minX, minY);
+                    t.addVertexWithUV(aabb.minX, aabb.minY, aabb.maxZ, minX, maxY);// maxZ
+                    t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.maxZ, maxX, maxY);
+                    t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.maxZ, maxX, minY);
+                    
+                    t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.maxZ, minX, minY);
+                    t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.maxZ, maxX, minY);
+                    t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.maxZ, maxX, maxY);
+                    t.addVertexWithUV(aabb.minX, aabb.minY, aabb.maxZ, minX, maxY);// maxZ
+                }
             }
         }
         
@@ -485,26 +510,31 @@ public class PneumaticTube extends BPPart {
             double minZ = icon.getInterpolatedV(aabb.minZ * 16);
             double maxZ = icon.getInterpolatedV(aabb.maxZ * 16);
             t.setNormal(0, -1, 0);
-            if (connections[4]) {// or 5
-                t.addVertexWithUV(aabb.minX, aabb.minY, aabb.minZ, maxX, maxZ);// bottom
-                t.addVertexWithUV(aabb.minX, aabb.minY, aabb.maxZ, minX, maxZ);
-                t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.maxZ, minX, minZ);
-                t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.minZ, maxX, minZ);
-                
-                t.addVertexWithUV(aabb.minX, aabb.minY, aabb.minZ, maxX, maxZ);// bottom
-                t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.minZ, maxX, minZ);
-                t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.maxZ, minX, minZ);
-                t.addVertexWithUV(aabb.minX, aabb.minY, aabb.maxZ, minX, maxZ);
-            } else {
-                t.addVertexWithUV(aabb.minX, aabb.minY, aabb.minZ, maxX, maxZ);// bottom
-                t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.minZ, minX, maxZ);
-                t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.maxZ, minX, minZ);
-                t.addVertexWithUV(aabb.minX, aabb.minY, aabb.maxZ, maxX, minZ);
-                
-                t.addVertexWithUV(aabb.minX, aabb.minY, aabb.minZ, maxX, maxZ);// bottom
-                t.addVertexWithUV(aabb.minX, aabb.minY, aabb.maxZ, maxX, minZ);
-                t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.maxZ, minX, minZ);
-                t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.minZ, minX, maxZ);
+            if ((icon == IconSupplier.pneumaticTubeColorSide || icon == IconSupplier.pneumaticTubeColorNode) && color[0] != TubeColor.NONE) {
+                t.setColorOpaque_I(ItemDye.field_150922_c[color[0].ordinal()]);
+            }
+            if (icon != IconSupplier.pneumaticTubeColorSide && icon != IconSupplier.pneumaticTubeColorNode || color[0] != TubeColor.NONE) {
+                if (connections[4]) {// or 5
+                    t.addVertexWithUV(aabb.minX, aabb.minY, aabb.minZ, maxX, maxZ);// bottom
+                    t.addVertexWithUV(aabb.minX, aabb.minY, aabb.maxZ, minX, maxZ);
+                    t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.maxZ, minX, minZ);
+                    t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.minZ, maxX, minZ);
+                    
+                    t.addVertexWithUV(aabb.minX, aabb.minY, aabb.minZ, maxX, maxZ);// bottom
+                    t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.minZ, maxX, minZ);
+                    t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.maxZ, minX, minZ);
+                    t.addVertexWithUV(aabb.minX, aabb.minY, aabb.maxZ, minX, maxZ);
+                } else {
+                    t.addVertexWithUV(aabb.minX, aabb.minY, aabb.minZ, maxX, maxZ);// bottom
+                    t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.minZ, minX, maxZ);
+                    t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.maxZ, minX, minZ);
+                    t.addVertexWithUV(aabb.minX, aabb.minY, aabb.maxZ, maxX, minZ);
+                    
+                    t.addVertexWithUV(aabb.minX, aabb.minY, aabb.minZ, maxX, maxZ);// bottom
+                    t.addVertexWithUV(aabb.minX, aabb.minY, aabb.maxZ, maxX, minZ);
+                    t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.maxZ, minX, minZ);
+                    t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.minZ, minX, maxZ);
+                }
             }
         }
         
@@ -514,26 +544,31 @@ public class PneumaticTube extends BPPart {
             double minZ = icon.getInterpolatedV(aabb.minZ * 16);
             double maxZ = icon.getInterpolatedV(aabb.maxZ * 16);
             t.setNormal(0, 1, 0);
-            if (connections[4]) {// or 5
-                t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.minZ, maxX, maxZ);// top
-                t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.minZ, maxX, minZ);
-                t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.maxZ, minX, minZ);
-                t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.maxZ, minX, maxZ);
-                
-                t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.minZ, maxX, maxZ);// top
-                t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.maxZ, minX, maxZ);
-                t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.maxZ, minX, minZ);
-                t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.minZ, maxX, minZ);
-            } else {
-                t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.minZ, maxX, minZ);// top
-                t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.minZ, minX, minZ);
-                t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.maxZ, minX, maxZ);
-                t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.maxZ, maxX, maxZ);
-                
-                t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.minZ, maxX, minZ);// top
-                t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.maxZ, maxX, maxZ);
-                t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.maxZ, minX, maxZ);
-                t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.minZ, minX, minZ);
+            if ((icon == IconSupplier.pneumaticTubeColorSide || icon == IconSupplier.pneumaticTubeColorNode) && color[1] != TubeColor.NONE) {
+                t.setColorOpaque_I(ItemDye.field_150922_c[color[1].ordinal()]);
+            }
+            if (icon != IconSupplier.pneumaticTubeColorSide && icon != IconSupplier.pneumaticTubeColorNode || color[1] != TubeColor.NONE) {
+                if (connections[4]) {// or 5
+                    t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.minZ, maxX, maxZ);// top
+                    t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.minZ, maxX, minZ);
+                    t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.maxZ, minX, minZ);
+                    t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.maxZ, minX, maxZ);
+                    
+                    t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.minZ, maxX, maxZ);// top
+                    t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.maxZ, minX, maxZ);
+                    t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.maxZ, minX, minZ);
+                    t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.minZ, maxX, minZ);
+                } else {
+                    t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.minZ, maxX, minZ);// top
+                    t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.minZ, minX, minZ);
+                    t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.maxZ, minX, maxZ);
+                    t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.maxZ, maxX, maxZ);
+                    
+                    t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.minZ, maxX, minZ);// top
+                    t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.maxZ, maxX, maxZ);
+                    t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.maxZ, minX, maxZ);
+                    t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.minZ, minX, minZ);
+                }
             }
         }
         
@@ -543,26 +578,31 @@ public class PneumaticTube extends BPPart {
             double minZ = icon.getInterpolatedV(aabb.minZ * 16);
             double maxZ = icon.getInterpolatedV(aabb.maxZ * 16);
             t.setNormal(-1, 0, 0);
-            if (connections[0]) {
-                t.addVertexWithUV(aabb.minX, aabb.minY, aabb.minZ, maxY, maxZ);// minX
-                t.addVertexWithUV(aabb.minX, aabb.minY, aabb.maxZ, minY, maxZ);
-                t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.maxX, minY, minZ);
-                t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.minZ, maxY, minZ);
-                
-                t.addVertexWithUV(aabb.minX, aabb.minY, aabb.minZ, maxY, maxZ);// minX
-                t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.minZ, maxY, minZ);
-                t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.maxX, minY, minZ);
-                t.addVertexWithUV(aabb.minX, aabb.minY, aabb.maxZ, minY, maxZ);
-            } else {
-                t.addVertexWithUV(aabb.minX, aabb.minY, aabb.minZ, minY, minZ);// minX
-                t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.minZ, maxY, minZ);
-                t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.maxX, maxY, maxZ);
-                t.addVertexWithUV(aabb.minX, aabb.minY, aabb.maxZ, minY, maxZ);
-                
-                t.addVertexWithUV(aabb.minX, aabb.minY, aabb.minZ, minY, minZ);// minX
-                t.addVertexWithUV(aabb.minX, aabb.minY, aabb.maxZ, minY, maxZ);
-                t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.maxX, maxY, maxZ);
-                t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.minZ, maxY, minZ);
+            if ((icon == IconSupplier.pneumaticTubeColorSide || icon == IconSupplier.pneumaticTubeColorNode) && color[4] != TubeColor.NONE) {
+                t.setColorOpaque_I(ItemDye.field_150922_c[color[4].ordinal()]);
+            }
+            if (icon != IconSupplier.pneumaticTubeColorSide && icon != IconSupplier.pneumaticTubeColorNode || color[4] != TubeColor.NONE) {
+                if (connections[0]) {
+                    t.addVertexWithUV(aabb.minX, aabb.minY, aabb.minZ, maxY, maxZ);// minX
+                    t.addVertexWithUV(aabb.minX, aabb.minY, aabb.maxZ, minY, maxZ);
+                    t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.maxX, minY, minZ);
+                    t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.minZ, maxY, minZ);
+                    
+                    t.addVertexWithUV(aabb.minX, aabb.minY, aabb.minZ, maxY, maxZ);// minX
+                    t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.minZ, maxY, minZ);
+                    t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.maxX, minY, minZ);
+                    t.addVertexWithUV(aabb.minX, aabb.minY, aabb.maxZ, minY, maxZ);
+                } else {
+                    t.addVertexWithUV(aabb.minX, aabb.minY, aabb.minZ, minY, minZ);// minX
+                    t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.minZ, maxY, minZ);
+                    t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.maxX, maxY, maxZ);
+                    t.addVertexWithUV(aabb.minX, aabb.minY, aabb.maxZ, minY, maxZ);
+                    
+                    t.addVertexWithUV(aabb.minX, aabb.minY, aabb.minZ, minY, minZ);// minX
+                    t.addVertexWithUV(aabb.minX, aabb.minY, aabb.maxZ, minY, maxZ);
+                    t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.maxX, maxY, maxZ);
+                    t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.minZ, maxY, minZ);
+                }
             }
         }
         
@@ -572,26 +612,31 @@ public class PneumaticTube extends BPPart {
             double minZ = icon.getInterpolatedV(aabb.minZ * 16);
             double maxZ = icon.getInterpolatedV(aabb.maxZ * 16);
             t.setNormal(1, 0, 0);
-            if (connections[0]) {
-                t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.minZ, minY, maxZ);// maxX
-                t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.minZ, minY, minZ);
-                t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.maxZ, maxY, minZ);
-                t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.maxZ, maxY, maxZ);
-                
-                t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.minZ, minY, maxZ);// maxX
-                t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.maxZ, maxY, maxZ);
-                t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.maxZ, maxY, minZ);
-                t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.minZ, minY, minZ);
-            } else {
-                t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.minZ, minY, maxZ);// maxX
-                t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.minZ, maxY, maxZ);
-                t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.maxZ, maxY, minZ);
-                t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.maxZ, minY, minZ);
-                
-                t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.minZ, minY, maxZ);// maxX
-                t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.maxZ, minY, minZ);
-                t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.maxZ, maxY, minZ);
-                t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.minZ, maxY, maxZ);
+            if ((icon == IconSupplier.pneumaticTubeColorSide || icon == IconSupplier.pneumaticTubeColorNode || icon == IconSupplier.pneumaticTubeColorNode) && color[5] != TubeColor.NONE) {
+                t.setColorOpaque_I(ItemDye.field_150922_c[color[5].ordinal()]);
+            }
+            if (icon != IconSupplier.pneumaticTubeColorSide && icon != IconSupplier.pneumaticTubeColorNode && icon != IconSupplier.pneumaticTubeColorNode || color[5] != TubeColor.NONE) {
+                if (connections[0]) {
+                    t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.minZ, minY, maxZ);// maxX
+                    t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.minZ, minY, minZ);
+                    t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.maxZ, maxY, minZ);
+                    t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.maxZ, maxY, maxZ);
+                    
+                    t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.minZ, minY, maxZ);// maxX
+                    t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.maxZ, maxY, maxZ);
+                    t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.maxZ, maxY, minZ);
+                    t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.minZ, minY, minZ);
+                } else {
+                    t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.minZ, minY, maxZ);// maxX
+                    t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.minZ, maxY, maxZ);
+                    t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.maxZ, maxY, minZ);
+                    t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.maxZ, minY, minZ);
+                    
+                    t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.minZ, minY, maxZ);// maxX
+                    t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.maxZ, minY, minZ);
+                    t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.maxZ, maxY, minZ);
+                    t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.minZ, maxY, maxZ);
+                }
             }
         }
     }
@@ -848,29 +893,40 @@ public class PneumaticTube extends BPPart {
         }
         if (shouldRenderNode || connectionCount == 0 || connectionCount > 2) {
             renderMiddle(aabbs.get(0), getNodeIcon());
-            if (color != TubeColor.NONE) {
-                t.setColorOpaque_I(ItemDye.field_150922_c[color.ordinal()]);
-                renderMiddle(aabbs.get(0), IconSupplier.pneumaticTubeColorNode);
-                t.setColorOpaque_F(1, 1, 1);
-            }
+            renderMiddle(aabbs.get(0), IconSupplier.pneumaticTubeColorNode);
+            t.setColorOpaque_F(1, 1, 1);
         } else {
             renderMiddle(aabbs.get(0), getSideIcon());
-            if (color != TubeColor.NONE) {
-                t.setColorOpaque_I(ItemDye.field_150922_c[color.ordinal()]);
-                renderMiddle(aabbs.get(0), IconSupplier.pneumaticTubeColorSide);
-                t.setColorOpaque_F(1, 1, 1);
-            }
+            renderMiddle(aabbs.get(0), IconSupplier.pneumaticTubeColorSide);
+            t.setColorOpaque_F(1, 1, 1);
         }
         for (int i = 1; i < aabbs.size(); i++) {
             renderTexturedCuboid(aabbs.get(i), getSideIcon());
-            if (color != TubeColor.NONE) {
-                t.setColorOpaque_I(ItemDye.field_150922_c[color.ordinal()]);
+            TubeColor sideColor = color[getSideFromAABBIndex(i)];
+            if (sideColor != TubeColor.NONE) {
+                t.setColorOpaque_I(ItemDye.field_150922_c[sideColor.ordinal()]);
                 renderTexturedCuboid(aabbs.get(i), IconSupplier.pneumaticTubeColorSide);
                 t.setColorOpaque_F(1, 1, 1);
             }
         }
         t.addTranslation((float) -loc.getX(), (float) -loc.getY(), (float) -loc.getZ());
         return true;
+    }
+    
+    /**
+     * Hacky method to get the right side
+     * @return
+     */
+    private int getSideFromAABBIndex(int index) {
+    
+        int curIndex = 0;
+        for (int side = 0; side < 6; side++) {
+            if (connections[side]) {
+                curIndex++;
+                if (index == curIndex) return side;
+            }
+        }
+        return 0;
     }
     
     protected IIcon getSideIcon() {
@@ -898,6 +954,6 @@ public class PneumaticTube extends BPPart {
     @Override
     public void addWailaInfo(List<String> info) {
     
-        if (color != TubeColor.NONE) info.add(I18n.format("waila.pneumaticTube.color") + " " + I18n.format("gui.widget.color." + ItemDye.field_150923_a[color.ordinal()]));
+        if (color[0] != TubeColor.NONE) info.add(I18n.format("waila.pneumaticTube.color") + " " + I18n.format("gui.widget.color." + ItemDye.field_150923_a[color[0].ordinal()]));
     }
 }
