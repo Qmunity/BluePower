@@ -77,8 +77,10 @@ public class MultipartBPPart extends TMultiPart implements IRedstonePart, JNorma
         List<IndexedCuboid6> cubes = new ArrayList<IndexedCuboid6>();
         List<AxisAlignedBB> aabbs = getPart().getSelectionBoxes();
         if (aabbs == null) return cubes;
-        for (AxisAlignedBB aabb : aabbs)
-            cubes.add(new IndexedCuboid6(0, new Cuboid6(aabb)));
+        for (int i = 0; i < aabbs.size(); i++) {
+            AxisAlignedBB aabb = aabbs.get(i);
+            cubes.add(new IndexedCuboid6(i, new Cuboid6(aabb)));
+        }
         return cubes;
     }
     

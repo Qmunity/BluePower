@@ -155,10 +155,8 @@ public class TubeLogic implements IPneumaticTube {
                             tubeStack.heading = tubeStack.heading.getOpposite();
                             this.tube.sendUpdatePacket();
                         } else {
-                            EntityItem entity = new EntityItem(this.tube.getWorld(), this.tube.getX() + 0.5 + tubeStack.heading.offsetX * tubeStack
-                              .progress * 0.5, this.tube.getY() + 0.5 + tubeStack.heading.offsetY * tubeStack.progress * 0.5,
-                              this.tube.getZ() + 0.5 + tubeStack.heading.offsetX * tubeStack.progress
-                                    * 0.5, remainder);
+                            EntityItem entity = new EntityItem(this.tube.getWorld(), this.tube.getX() + 0.5 + tubeStack.heading.offsetX * tubeStack.progress * 0.5, this.tube.getY() + 0.5 + tubeStack.heading.offsetY * tubeStack.progress * 0.5, this.tube.getZ() + 0.5 + tubeStack.heading.offsetX
+                                    * tubeStack.progress * 0.5, remainder);
                             this.tube.getWorld().spawnEntityInWorld(entity);
                             iterator.remove();
                         }
@@ -205,9 +203,7 @@ public class TubeLogic implements IPneumaticTube {
                         if (edge.target.target instanceof PneumaticTube) {
                             traversingNodes.add(edge.target);
                             trackingExportDirection.add(heading);
-                        } else if (stack.getTarget(tube.getWorld()) == null && edge.isValidForExportItem(stack.stack) || stack.getTarget(tube.getWorld()) !=
-                          null
-                          && edge.isValidForImportItem(stack.stack)) {
+                        } else if (stack.getTarget(tube.getWorld()) == null && edge.isValidForExportItem(stack.stack) || stack.getTarget(tube.getWorld()) != null && edge.isValidForImportItem(stack.stack)) {
                             validDestinations.put(edge, heading);
                         }
                     }
@@ -353,10 +349,10 @@ public class TubeLogic implements IPneumaticTube {
                     IMultipartCompat compat = (IMultipartCompat) CompatibilityUtils.getModule(Dependencies.FMP);
                     PneumaticTube tube = compat.getBPPart(neighbor, PneumaticTube.class);
                     
+                    int colorMask = nodeTube.getColor(ForgeDirection.getOrientation(i)) != TubeColor.NONE ? 1 << nodeTube.getColor(ForgeDirection.getOrientation(i)).ordinal() : 0;
                     if (tube != null) {
                         int dist = tube.getWeigth();
-                        int colorMask = 0;
-                        if (tube.getColor() != TubeColor.NONE) colorMask = colorMask | 1 << tube.getColor().ordinal();
+                        if (tube.getColor(ForgeDirection.getOrientation(i).getOpposite()) != TubeColor.NONE) colorMask = colorMask | 1 << tube.getColor(ForgeDirection.getOrientation(i).getOpposite()).ordinal();
                         ForgeDirection curDir = ForgeDirection.getOrientation(i);
                         while (!tube.isCrossOver && tube.initialized) {//traverse the tubes
                             for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
@@ -367,6 +363,9 @@ public class TubeLogic implements IPneumaticTube {
                             }
                             neighbor = tube.getTileCache()[curDir.ordinal()].getTileEntity();
                             if (neighbor != null) {
+                                if (tube.getColor(curDir) != TubeColor.NONE) {
+                                    colorMask = colorMask | 1 << tube.getColor(curDir).ordinal();
+                                }
                                 tube = compat.getBPPart(neighbor, PneumaticTube.class);
                                 if (tube == null) {
                                     edges[i] = new TubeEdge(new TubeNode(neighbor), curDir, colorMask, dist + (neighbor instanceof IWeightedTubeInventory ? ((IWeightedTubeInventory) neighbor).getWeight(curDir) : 0));
@@ -374,8 +373,8 @@ public class TubeLogic implements IPneumaticTube {
                                 } else {
                                     if (!tube.initialized) break;
                                     dist += tube.getWeigth();
-                                    if (tube.getColor() != TubeColor.NONE) {
-                                        colorMask = colorMask | 1 << tube.getColor().ordinal();
+                                    if (tube.getColor(curDir.getOpposite()) != TubeColor.NONE) {
+                                        colorMask = colorMask | 1 << tube.getColor(curDir.getOpposite()).ordinal();
                                     }
                                 }
                             }
@@ -383,7 +382,7 @@ public class TubeLogic implements IPneumaticTube {
                         if (tube != null && tube != nodeTube) edges[i] = new TubeEdge(tube.getLogic().getNode(), curDir, colorMask, dist);//only add an edge that isn't just connected to itself.
                         
                     } else if (neighbor != null) {
-                        edges[i] = new TubeEdge(new TubeNode(neighbor), ForgeDirection.getOrientation(i), 0, neighbor instanceof IWeightedTubeInventory ? ((IWeightedTubeInventory) neighbor).getWeight(ForgeDirection.getOrientation(i)) : 0);
+                        edges[i] = new TubeEdge(new TubeNode(neighbor), ForgeDirection.getOrientation(i), colorMask, neighbor instanceof IWeightedTubeInventory ? ((IWeightedTubeInventory) neighbor).getWeight(ForgeDirection.getOrientation(i)) : 0);
                     }
                 }
             }
