@@ -124,6 +124,7 @@ public class Refs {
     
     public static final String   SCREWDRIVER_NAME         = "screwdriver";
     public static final String   MULTIPART_NAME           = "bluepower_multipart";
+    public static final String   MULTIPART_BLOCK_NAME           = "bluepower_multipart_block";
     
     public static final String   CRACKEDBASALTBRICK_NAME  = "basaltbrick_cracked";
     public static final String   SMALLBASALTBRICK_NAME    = "basalt_brick_small";

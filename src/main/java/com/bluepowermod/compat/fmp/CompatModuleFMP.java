@@ -14,7 +14,6 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
@@ -32,7 +31,7 @@ import com.bluepowermod.api.part.BPPart;
 import com.bluepowermod.api.vec.Vector3;
 import com.bluepowermod.compat.CompatModule;
 import com.bluepowermod.init.BPBlocks;
-import com.bluepowermod.util.RayTracer;
+import com.bluepowermod.raytrace.RayTracer;
 
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
@@ -107,9 +106,12 @@ public class CompatModuleFMP extends CompatModule implements IMultipartCompat {
     }
 
     @Override
-    public BPPart getClickedPart(Vector3 loc, Vector3 subLoc, ItemStack item, EntityPlayer player) {
+    public BPPart getClickedPart(Vector3 loc, Vector3 subLoc, EntityPlayer player, TileEntity tile) {
 
         TileMultipart te = (TileMultipart) loc.getTileEntity();
+
+        if (tile != null && te != tile)
+            return null;
 
         List<ExtendedMOP> mops = new ArrayList<ExtendedMOP>();
         for (int i = 0; i < te.jPartList().size(); i++) {

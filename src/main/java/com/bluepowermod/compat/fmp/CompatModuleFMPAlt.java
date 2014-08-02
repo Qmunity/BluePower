@@ -1,9 +1,9 @@
 package com.bluepowermod.compat.fmp;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
@@ -52,7 +52,7 @@ public class CompatModuleFMPAlt extends CompatModule implements IMultipartCompat
     }
 
     @Override
-    public BPPart getClickedPart(Vector3 loc, Vector3 subLoc, ItemStack item, EntityPlayer player) {
+    public BPPart getClickedPart(Vector3 loc, Vector3 subLoc, EntityPlayer player, TileEntity tile) {
 
         return null;
     }
@@ -71,7 +71,7 @@ public class CompatModuleFMPAlt extends CompatModule implements IMultipartCompat
     @Override
     public boolean isMultipart(TileEntity te) {
 
-        return false;
+        return te instanceof BPTileMultipart;
     }
 
     @Override
@@ -83,13 +83,24 @@ public class CompatModuleFMPAlt extends CompatModule implements IMultipartCompat
     @Override
     public <T> T getBPPart(TileEntity te, Class<T> searchedClass) {
 
-        return null;
+        List<T> l = getBPParts(te, searchedClass);
+        return l.size() > 0 ? l.get(0) : null;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public <T> List<T> getBPParts(TileEntity te, Class<T> searchedClass) {
 
-        return null;
+        if (!isMultipart(te))
+            return null;
+        List<T> l = new ArrayList<T>();
+        BPTileMultipart t = (BPTileMultipart) te;
+        for (BPPart p : t.getParts()) {
+            if (searchedClass.isAssignableFrom(p.getClass())) {
+                l.add((T) p);
+            }
+        }
+        return l;
     }
 
 }

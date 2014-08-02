@@ -27,8 +27,8 @@ import codechicken.multipart.BlockMultipart;
 import com.bluepowermod.api.vec.Vector3;
 import com.bluepowermod.compat.CompatibilityUtils;
 import com.bluepowermod.compat.fmp.IMultipartCompat;
+import com.bluepowermod.raytrace.RayTracer;
 import com.bluepowermod.references.Dependencies;
-import com.bluepowermod.util.RayTracer;
 
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Optional;
@@ -145,7 +145,7 @@ public abstract class BPPart {
      */
     public MovingObjectPosition rayTrace(Vector3 start, Vector3 end) {
 
-        return RayTracer.rayTrace(start, end, getSelectionBoxes(), x, y, z);
+        return RayTracer.rayTrace(x, y, z, start, end, getSelectionBoxes());
     }
 
     /**
@@ -545,17 +545,18 @@ public abstract class BPPart {
      * @author Koen Beckers (K4Unl)
      * @return x coordinate of the block containing this part.
      */
-    public int getX(){
+    public int getX() {
 
         return x;
     }
 
     /**
      * Sets the X Coordinate of the block containing this part.
+     * 
      * @author Koen Beckers (K4Unl)
      * @param x
      */
-    public void setX(int x){
+    public void setX(int x) {
 
         this.x = x;
     }
@@ -564,18 +565,18 @@ public abstract class BPPart {
      * @author Koen Beckers (K4Unl)
      * @return y coordinate of the block containing this part.
      */
-    public int getY(){
+    public int getY() {
 
         return y;
     }
 
-
     /**
      * Sets the Y Coordinate of the block containing this part.
+     * 
      * @author Koen Beckers (K4Unl)
      * @param y
      */
-    public void setY(int y){
+    public void setY(int y) {
 
         this.y = y;
     }
@@ -584,18 +585,18 @@ public abstract class BPPart {
      * @author Koen Beckers (K4Unl)
      * @return z coordinate of the block containing this part.
      */
-    public int getZ(){
+    public int getZ() {
 
         return z;
     }
 
-
     /**
      * Sets the Z Coordinate of the block containing this part.
+     * 
      * @author Koen Beckers (K4Unl)
      * @param z
      */
-    public void setZ(int z){
+    public void setZ(int z) {
 
         this.z = z;
     }
@@ -604,13 +605,14 @@ public abstract class BPPart {
      * @author Koen Beckers (K4Unl)
      * @return worldObject of the block containing this part.
      */
-    public World getWorld(){
+    public World getWorld() {
 
         return world;
     }
 
     /**
      * Sets the world object of the block containing this part.
+     * 
      * @author Koen Beckers (K4Unl)
      * @param world
      */

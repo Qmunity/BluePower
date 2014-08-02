@@ -16,50 +16,52 @@ import mcp.mobius.waila.api.IWailaDataProvider;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MovingObjectPosition;
-import net.minecraftforge.common.util.ForgeDirection;
+
 import com.bluepowermod.api.part.BPPart;
-import com.bluepowermod.util.RayTracer;
+import com.bluepowermod.raytrace.RayTracer;
 
 /**
  * @author amadornes
  * 
  */
 public class WailaProviderPart implements IWailaDataProvider {
-    
+
     private List<String> info = new ArrayList<String>();
-    
+
     @Override
     public List<String> getWailaBody(ItemStack item, List<String> tip, IWailaDataAccessor accessor, IWailaConfigHandler config) {
-    
+
         EntityPlayer p = accessor.getPlayer();
         MovingObjectPosition mop = p.rayTrace(p.capabilities.isCreativeMode ? 5 : 4.5, 0);
-        if (mop == null) return tip;
-        
-        BPPart hovered = RayTracer.getSelectedPart(mop, p, ForgeDirection.getOrientation(mop.sideHit));
-        if (hovered == null) return tip;
-        
+        if (mop == null)
+            return tip;
+
+        BPPart hovered = RayTracer.getSelectedPart(mop, p);
+        if (hovered == null)
+            return tip;
+
         hovered.addWailaInfo(info);
         tip.addAll(info);
         info.clear();
-        
+
         return tip;
     }
-    
+
     @Override
     public List<String> getWailaHead(ItemStack item, List<String> tip, IWailaDataAccessor accessor, IWailaConfigHandler config) {
-    
+
         return tip;
     }
-    
+
     @Override
     public List<String> getWailaTail(ItemStack item, List<String> tip, IWailaDataAccessor accessor, IWailaConfigHandler config) {
-    
+
         return tip;
     }
-    
+
     @Override
     public ItemStack getWailaStack(IWailaDataAccessor accessor, IWailaConfigHandler config) {
-    
+
         return null;
     }
 }

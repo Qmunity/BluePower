@@ -338,7 +338,7 @@ public class MultipartBPPart extends TMultiPart implements IRedstonePart, JNorma
     
         ForgeDirection face = ForgeDirection.getOrientation(mop.sideHit);
         
-        AxisAlignedBB c = com.bluepowermod.util.RayTracer.getSelectedCuboid(mop, player, face, getSubParts(), true);
+        AxisAlignedBB c = com.bluepowermod.raytrace.RayTracer.getSelectedCuboid(mop, player, face, getSubParts(), true);
         
         if (c == null) return true;
         

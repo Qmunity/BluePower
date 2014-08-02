@@ -10,30 +10,33 @@ package com.bluepowermod.client.renderers;
 
 import net.minecraft.item.Item;
 import net.minecraftforge.client.MinecraftForgeClient;
+
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.init.BPItems;
-import com.bluepowermod.tileentities.tier3.TileEngine;
 import com.bluepowermod.tileentities.tier1.TileLamp;
 import com.bluepowermod.tileentities.tier2.TileWindmill;
+import com.bluepowermod.tileentities.tier3.TileEngine;
+
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 
 public class Renderers {
-    
+
     public static int RenderIdLamps;
-    
+
     public static void init() {
-    
+
         MinecraftForgeClient.registerItemRenderer(BPItems.multipart, new RenderItemBPPart());
         RenderingRegistry.registerBlockHandler(new RendererBlockBase());
-        
+
         RenderingRegistry.registerBlockHandler(new RenderLamp());
-        
+
         ClientRegistry.bindTileEntitySpecialRenderer(TileEngine.class, new RenderEngine());
         MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BPBlocks.engine), new RenderItemEngine());
         ClientRegistry.bindTileEntitySpecialRenderer(TileWindmill.class, new RenderWindmill());
-        
+
         ClientRegistry.bindTileEntitySpecialRenderer(TileLamp.class, new RenderLamp());
-        
+
+        RenderMultipart.init();
     }
 }
