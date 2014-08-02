@@ -295,7 +295,8 @@ public class PartRegistry {
         registerPart(GateRandomizer.class);
         registerPart(GateLightCell.class);
         registerPart(GateToggleLatch.class);
-        
+        registerPart(GateRSLatch.class);
+
         // Lamps
         for (int i = 0; i < ItemDye.field_150922_c.length; i++)
             registerPart(PartCageLamp.class, ItemDye.field_150921_b[i].toLowerCase(), ItemDye.field_150922_c[i], false);
