@@ -27,11 +27,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import com.bluepowermod.blocks.BlockContainerBase;
 import com.bluepowermod.client.renderers.RendererBlockBase.EnumFaceType;
-import com.bluepowermod.init.CustomTabs;
-import com.bluepowermod.references.GuiIDs;
-import com.bluepowermod.references.Refs;
 import com.bluepowermod.tileentities.IRotatable;
-import com.bluepowermod.tileentities.tier1.TileEjector;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -39,7 +35,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class BlockContainerTwoSideRender extends BlockContainerBase {
     
     public BlockContainerTwoSideRender(Material material, Class<? extends TileEntity> tileEntityClass) {
-        
+    
         super(material, tileEntityClass);
     }
     
@@ -48,7 +44,7 @@ public class BlockContainerTwoSideRender extends BlockContainerBase {
     public void registerBlockIcons(IIconRegister iconRegister) {
     
         super.registerBlockIcons(iconRegister);
-        blockIcon = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + getUnwrappedUnlocalizedName(getUnlocalizedName()) + "_side_0");
+        blockIcon = iconRegister.registerIcon(getTextureName() + "_side_0");
     }
     
     @Override

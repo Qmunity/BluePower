@@ -55,9 +55,9 @@ public class TileRetriever extends TileFilter {
     @Override
     public void onButtonPress(int messageId, int value) {
     
-        if (messageId == 1 && ++mode > 1) {
-            mode = 0;
-        } else if (messageId == 2) {
+        if (messageId == 1) {
+            mode = value;
+        } else {
             super.onButtonPress(messageId, value);
         }
     }

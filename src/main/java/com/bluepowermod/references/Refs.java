@@ -81,6 +81,7 @@ public class Refs {
     public static final String   RELAY_NAME               = "relay";
     public static final String   FILTER_NAME              = "filter";
     public static final String   RETRIEVER_NAME           = "retriever";
+    public static final String   REGULATOR_NAME           = "regulator";
     
     public static final String   ENGINE_NAME              = "engine";
     public static final String   KINETICGENERATOR_NAME    = "kinetic_generator";
@@ -125,7 +126,7 @@ public class Refs {
     
     public static final String   SCREWDRIVER_NAME         = "screwdriver";
     public static final String   MULTIPART_NAME           = "bluepower_multipart";
-    public static final String   MULTIPART_BLOCK_NAME           = "bluepower_multipart_block";
+    public static final String   MULTIPART_BLOCK_NAME     = "bluepower_multipart_block";
     
     public static final String   CRACKEDBASALTBRICK_NAME  = "basaltbrick_cracked";
     public static final String   SMALLBASALTBRICK_NAME    = "basalt_brick_small";
