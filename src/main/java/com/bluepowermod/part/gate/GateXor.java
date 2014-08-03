@@ -41,10 +41,16 @@ public class GateXor extends GateBase {
         renderTopTexture(FaceDirection.FRONT, q);
         renderTopTexture(FaceDirection.LEFT, left.getPower() > 0);
         renderTopTexture(FaceDirection.RIGHT, right.getPower() > 0);
-        
-        RenderHelper.renderRedstoneTorch(pixel * 4, pixel*2, 0, 9D/16D, q);
-        RenderHelper.renderRedstoneTorch(pixel * -4, pixel*2, 0, 9D/16D, q);
-        if(!(left.getPower() > 0) && !(right.getPower() > 0)){
+        boolean lp = left.getPower() > 0;
+        boolean rp = right.getPower() > 0;
+
+        //Right
+        RenderHelper.renderRedstoneTorch(pixel * 4, pixel*2, 0, 9D/16D, !rp && lp);
+        //Left
+        RenderHelper.renderRedstoneTorch(pixel * -4, pixel*2, 0, 9D/16D, !lp && rp);
+
+
+        if(!lp && !rp){
             renderTopTexture(Refs.MODID + ":textures/blocks/gates/" + getType() + "/center_on.png");
             RenderHelper.renderRedstoneTorch(0, pixel*2, pixel * 4, 9D/16D, true);
         }else{
