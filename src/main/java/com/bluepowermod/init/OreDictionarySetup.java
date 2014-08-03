@@ -37,5 +37,7 @@ public class OreDictionarySetup {
         OreDictionary.registerOre("ingotSilver", BPItems.silver_ingot);
         OreDictionary.registerOre("ingotBrass", BPItems.brass_ingot);
         OreDictionary.registerOre("dyePurple", BPItems.indigo_dye);
+        OreDictionary.registerOre("ingotBlueAlloy", BPItems.blue_alloy_ingot);
+        OreDictionary.registerOre("ingotRedAlloy", BPItems.red_alloy_ingot);
     }
 }
