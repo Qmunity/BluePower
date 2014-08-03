@@ -20,82 +20,84 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 
 public class CompatModuleFMPAlt extends CompatModule implements IMultipartCompat {
-
+    
     @Override
     public void preInit(FMLPreInitializationEvent ev) {
-
+    
         MultipartCompat.tile = BPTileMultipart.class;
     }
-
+    
     @Override
     public void init(FMLInitializationEvent ev) {
-
+    
     }
-
+    
     @Override
     public void postInit(FMLPostInitializationEvent ev) {
-
+    
     }
-
+    
     @Override
     public void registerBlocks() {
-
+    
     }
-
+    
     @Override
     public void registerItems() {
-
+    
     }
-
+    
     @Override
     public void registerRenders() {
-
+    
     }
-
+    
     @Override
     public BPPart getClickedPart(Vector3 loc, Vector3 subLoc, EntityPlayer player, TileEntity tile) {
-
+    
         return null;
     }
-
+    
     @Override
     public int getInput(World w, int x, int y, int z, ForgeDirection side, ForgeDirection face) {
-
+    
         return 0;
     }
-
+    
     @Override
     public void sendUpdatePacket(BPPart part) {
-
+    
+        TileEntity te = part.getWorld().getTileEntity(part.getX(), part.getY(), part.getZ());
+        if (isMultipart(te)) {
+            ((BPTileMultipart) te).sendUpdatePacket();
+        }
     }
-
+    
     @Override
     public boolean isMultipart(TileEntity te) {
-
+    
         return te instanceof BPTileMultipart;
     }
-
+    
     @Override
     public boolean checkOcclusion(TileEntity tile, AxisAlignedBB box) {
-
+    
         return false;
     }
-
+    
     @Override
     public <T> T getBPPart(TileEntity te, Class<T> searchedClass) {
-
+    
         List<T> l = getBPParts(te, searchedClass);
-        if (l == null)
-            return null;
+        if (l == null) return null;
         return l.size() > 0 ? l.get(0) : null;
     }
-
+    
     @SuppressWarnings("unchecked")
     @Override
     public <T> List<T> getBPParts(TileEntity te, Class<T> searchedClass) {
-
-        if (!isMultipart(te))
-            return null;
+    
+        if (!isMultipart(te)) return null;
         List<T> l = new ArrayList<T>();
         BPTileMultipart t = (BPTileMultipart) te;
         for (BPPart p : t.getParts()) {
@@ -105,11 +107,11 @@ public class CompatModuleFMPAlt extends CompatModule implements IMultipartCompat
         }
         return l;
     }
-
+    
     @Override
     public int getMOPData(MovingObjectPosition mop) {
-
+    
         return (Integer) mop.hitInfo;// TODO assign the subpart index hit to right clicking (for the Pneumatic Tube).
     }
-
+    
 }

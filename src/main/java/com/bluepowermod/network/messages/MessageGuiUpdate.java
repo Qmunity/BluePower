@@ -6,16 +6,13 @@ import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
+
 import com.bluepowermod.BluePower;
 import com.bluepowermod.api.part.BPPart;
 import com.bluepowermod.compat.CompatibilityUtils;
 import com.bluepowermod.compat.fmp.IMultipartCompat;
-import com.bluepowermod.compat.fmp.MultipartBPPart;
 import com.bluepowermod.part.IGuiButtonSensitive;
 import com.bluepowermod.references.Dependencies;
-import codechicken.multipart.TMultiPart;
-import codechicken.multipart.TileMultipart;
-import cpw.mods.fml.common.Optional;
 
 /**
  * 
@@ -43,6 +40,7 @@ public class MessageGuiUpdate extends LocationIntPacket<MessageGuiUpdate> {
         super(part.getX(), part.getY(), part.getZ());
         if (part.isFMPMultipart()) {
             partId = getPartId(part);
+            if (partId == -1) BluePower.log.warn("[MessageGuiUpdate] BPPart couldn't be found");
         }
         this.messageId = messageId;
         this.value = value;
@@ -56,16 +54,10 @@ public class MessageGuiUpdate extends LocationIntPacket<MessageGuiUpdate> {
         this.value = value;
     }
     
-    @Optional.Method(modid = Dependencies.FMP)
     private int getPartId(BPPart part) {
     
-        List<TMultiPart> parts = ((TileMultipart) part.getWorld().getTileEntity(part.getX(), part.getY(), part.getZ())).jPartList();
-        for (int i = 0; i < parts.size(); i++) {
-            if (parts.get(i) instanceof MultipartBPPart) {
-                if (((MultipartBPPart) parts.get(i)).getPart() == part) return i;
-            }
-        }
-        throw new IllegalArgumentException("[BluePower][MessageGuiPacket] No part found for sent GUI packet");
+        List<BPPart> parts = ((IMultipartCompat) CompatibilityUtils.getModule(Dependencies.FMP)).getBPParts(part.getWorld().getTileEntity(part.getX(), part.getY(), part.getZ()), BPPart.class);
+        return parts.indexOf(part);
     }
     
     @Override
@@ -105,18 +97,15 @@ public class MessageGuiUpdate extends LocationIntPacket<MessageGuiUpdate> {
         }
     }
     
-    @Optional.Method(modid = Dependencies.FMP)
     private void messagePart(TileEntity te, MessageGuiUpdate message) {
     
-        List<TMultiPart> parts = ((TileMultipart) te).jPartList();
+        List<BPPart> parts = ((IMultipartCompat) CompatibilityUtils.getModule(Dependencies.FMP)).getBPParts(te, BPPart.class);
         if (message.partId < parts.size()) {
-            TMultiPart part = parts.get(message.partId);
-            if (part instanceof MultipartBPPart) {
-                if (((MultipartBPPart) part).getPart() instanceof IGuiButtonSensitive) {
-                    ((IGuiButtonSensitive) ((MultipartBPPart) part).getPart()).onButtonPress(message.messageId, message.value);
-                } else {
-                    BluePower.log.error("[BluePower][MessageGuiPacket] Part doesn't implement IGuiButtonSensitive");
-                }
+            BPPart part = parts.get(message.partId);
+            if (part instanceof IGuiButtonSensitive) {
+                ((IGuiButtonSensitive) part).onButtonPress(message.messageId, message.value);
+            } else {
+                BluePower.log.error("[BluePower][MessageGuiPacket] Part doesn't implement IGuiButtonSensitive");
             }
         }
     }
