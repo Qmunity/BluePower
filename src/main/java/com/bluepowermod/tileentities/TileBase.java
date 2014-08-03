@@ -33,7 +33,7 @@ public class TileBase extends TileEntity implements IRotatable {
     private boolean        isRedstonePowered;
     private int            outputtingRedstone;
     private int            ticker   = 0;
-    private ForgeDirection rotation = ForgeDirection.UNKNOWN;
+    private ForgeDirection rotation = ForgeDirection.UP;
     
     /*************** BASIC TE FUNCTIONS **************/
     
