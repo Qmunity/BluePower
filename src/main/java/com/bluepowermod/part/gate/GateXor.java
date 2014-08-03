@@ -1,0 +1,79 @@
+package com.bluepowermod.part.gate;
+
+import com.bluepowermod.api.part.FaceDirection;
+import com.bluepowermod.api.part.RedstoneConnection;
+import com.bluepowermod.client.renderers.RenderHelper;
+import com.bluepowermod.references.Refs;
+import net.minecraft.util.AxisAlignedBB;
+
+import java.util.List;
+
+public class GateXor extends GateBase {
+    
+    private boolean q = false;
+    
+    @Override
+    public void initializeConnections(RedstoneConnection front, RedstoneConnection left, RedstoneConnection back, RedstoneConnection right) {
+    
+        // Init front
+        front.enable();
+        front.setOutput();
+        
+        // Init left
+        left.enable();
+        left.setInput();
+        
+        // Init right
+        right.enable();
+        right.setInput();
+    }
+    
+    @Override
+    public String getGateID() {
+    
+        return "xor";
+    }
+    
+    @Override
+    public void renderTop(RedstoneConnection front, RedstoneConnection left, RedstoneConnection back, RedstoneConnection right, float frame) {
+
+
+        renderTopTexture(FaceDirection.FRONT, q);
+        renderTopTexture(FaceDirection.LEFT, left.getPower() > 0);
+        renderTopTexture(FaceDirection.RIGHT, right.getPower() > 0);
+        
+        RenderHelper.renderRedstoneTorch(pixel * 4, pixel*2, 0, 9D/16D, q);
+        RenderHelper.renderRedstoneTorch(pixel * -4, pixel*2, 0, 9D/16D, q);
+        if(!(left.getPower() > 0) && !(right.getPower() > 0)){
+            renderTopTexture(Refs.MODID + ":textures/blocks/gates/" + getType() + "/center_on.png");
+            RenderHelper.renderRedstoneTorch(0, pixel*2, pixel * 4, 9D/16D, true);
+        }else{
+            renderTopTexture(Refs.MODID + ":textures/blocks/gates/" + getType() + "/center_off.png");
+            RenderHelper.renderRedstoneTorch(0, pixel*2, pixel * 4, 9D/16D, false);
+        }
+    }
+    
+    @Override
+    public void addOcclusionBoxes(List<AxisAlignedBB> boxes) {
+    
+        super.addOcclusionBoxes(boxes);
+        
+        boxes.add(AxisAlignedBB.getBoundingBox(7D / 16D, 2D / 16D, 7D / 16D, 9D / 16D, 8D / 16D, 9D / 16D));
+    }
+    
+    @Override
+    public void doLogic(RedstoneConnection front, RedstoneConnection left, RedstoneConnection back, RedstoneConnection right) {
+
+        boolean p1 = right.getPower() > 0;
+        boolean p2 = left.getPower() > 0;
+        q = (p1 && !p2) || (!p1 && p2);
+        
+        front.setPower(q ? 15 : 0);
+    }
+    
+    @Override
+    public void addWailaInfo(List<String> info) {
+    
+    }
+    
+}
