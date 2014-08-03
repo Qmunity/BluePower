@@ -39,7 +39,9 @@ public class TubeStack {
     private TileEntity        target;                                 //only should have a value when retrieving items. this is the target the item wants to go to.
     private int               targetX, targetY, targetZ;
     private ForgeDirection    targetEntryDir = ForgeDirection.UNKNOWN; //Which side should this item make its entry.
-                                                                       
+    static final double       ITEM_SPEED     = 0.04;
+    private double            speed          = ITEM_SPEED;
+    
     @SideOnly(Side.CLIENT)
     private static RenderItem customRenderItem;
     private static EntityItem renderedItem;
@@ -56,16 +58,21 @@ public class TubeStack {
         this.color = color;
     }
     
+    public void setSpeed(double speed) {
+    
+        this.speed = speed;
+    }
+    
     /**
      * Updates the movement by the given m/tick.
      * @return true if the stack has gone past the center, meaning logic needs to be triggered.
      */
-    public boolean update(double move) {
+    public boolean update() {
     
         oldProgress = progress;
         if (enabled) {
             boolean isEntering = progress < 0.5;
-            progress += move;
+            progress += speed;
             return progress >= 0.5 && isEntering;
         } else {
             return false;
@@ -113,6 +120,7 @@ public class TubeStack {
         tag.setByte("color", (byte) color.ordinal());
         tag.setByte("heading", (byte) heading.ordinal());
         tag.setDouble("progress", progress);
+        tag.setDouble("speed", speed);
         tag.setInteger("targetX", targetX);
         tag.setInteger("targetY", targetY);
         tag.setInteger("targetZ", targetZ);
@@ -123,6 +131,7 @@ public class TubeStack {
     
         TubeStack stack = new TubeStack(ItemStack.loadItemStackFromNBT(tag), ForgeDirection.getOrientation(tag.getByte("heading")), TubeColor.values()[tag.getByte("color")]);
         stack.progress = tag.getDouble("progress");
+        stack.speed = tag.getDouble("speed");
         stack.targetX = tag.getInteger("targetX");
         stack.targetY = tag.getInteger("targetY");
         stack.targetZ = tag.getInteger("targetZ");

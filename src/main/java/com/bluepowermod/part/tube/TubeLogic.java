@@ -43,7 +43,6 @@ public class TubeLogic implements IPneumaticTube {
     private final PneumaticTube tube;
     private TubeNode            connectionNode;                         //contains a cache of connected TileEntities (not necessarily directly adjacent, but nodes, intersections, or inventories). Also contains a colormask and distance.
     public List<TubeStack>      tubeStacks = new ArrayList<TubeStack>();
-    private static final double ITEM_SPEED = 0.04;
     private int                 roundRobinCounter;
     
     public TubeLogic(PneumaticTube tube) {
@@ -99,7 +98,7 @@ public class TubeLogic implements IPneumaticTube {
         Iterator<TubeStack> iterator = tubeStacks.iterator();
         while (iterator.hasNext()) {
             TubeStack tubeStack = iterator.next();
-            if (tubeStack.update(ITEM_SPEED)) {
+            if (tubeStack.update()) {
                 if (!tube.isCrossOver) {
                     for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
                         if (tube.connections[dir.ordinal()] && dir != tubeStack.heading.getOpposite()) {
@@ -136,7 +135,7 @@ public class TubeLogic implements IPneumaticTube {
                 if (tube != null) {//we don't need to check connections, that's catched earlier.
                     TubeLogic logic = tube.getLogic();
                     tubeStack.progress = 0;
-                    tubeStack.oldProgress = -ITEM_SPEED;
+                    tubeStack.oldProgress = -TubeStack.ITEM_SPEED;
                     logic.tubeStacks.add(tubeStack);//transfer to another tube.
                     iterator.remove();
                 } else if (!this.tube.getWorld().isRemote) {

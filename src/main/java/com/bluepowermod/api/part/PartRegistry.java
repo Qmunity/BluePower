@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import com.bluepowermod.part.gate.*;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemDye;
@@ -28,8 +27,27 @@ import net.minecraft.world.World;
 
 import com.bluepowermod.init.BPItems;
 import com.bluepowermod.part.cable.CableWallImpl;
+import com.bluepowermod.part.gate.GateAnd;
+import com.bluepowermod.part.gate.GateBuffer;
+import com.bluepowermod.part.gate.GateCounter;
+import com.bluepowermod.part.gate.GateLightCell;
+import com.bluepowermod.part.gate.GateMux;
+import com.bluepowermod.part.gate.GateNand;
+import com.bluepowermod.part.gate.GateNor;
+import com.bluepowermod.part.gate.GateNot;
+import com.bluepowermod.part.gate.GateOr;
+import com.bluepowermod.part.gate.GatePulseFormer;
+import com.bluepowermod.part.gate.GateRSLatch;
+import com.bluepowermod.part.gate.GateRandomizer;
+import com.bluepowermod.part.gate.GateSequencer;
+import com.bluepowermod.part.gate.GateTimer;
+import com.bluepowermod.part.gate.GateToggleLatch;
+import com.bluepowermod.part.gate.GateXnor;
+import com.bluepowermod.part.gate.GateXor;
 import com.bluepowermod.part.lamp.PartCageLamp;
 import com.bluepowermod.part.lamp.PartFixture;
+import com.bluepowermod.part.tube.Accelerator;
+import com.bluepowermod.part.tube.MagTube;
 import com.bluepowermod.part.tube.PneumaticTube;
 import com.bluepowermod.part.tube.RestrictionTube;
 import com.bluepowermod.references.Refs;
@@ -319,6 +337,8 @@ public class PartRegistry {
         // Pneumatic Tubes
         registerPart(PneumaticTube.class);
         registerPart(RestrictionTube.class);
+        registerPart(MagTube.class);
+        registerPart(Accelerator.class);
         
         // Test cable
         registerPart(CableWallImpl.class);

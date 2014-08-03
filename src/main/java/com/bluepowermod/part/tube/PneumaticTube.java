@@ -40,17 +40,17 @@ import com.bluepowermod.references.Dependencies;
 
 public class PneumaticTube extends BPPart {
     
-    public final boolean[]    connections = new boolean[6];
+    public final boolean[]      connections = new boolean[6];
     /**
      * true when != 2 connections, when this is true the logic doesn't have to 'think' which way an item should go.
      */
-    public boolean            isCrossOver;
-    private final Vector3Cube sideBB      = new Vector3Cube(AxisAlignedBB.getBoundingBox(0.25, 0, 0.25, 0.75, 0.25, 0.75));
-    private TileEntityCache[] tileCache;
-    private final TubeColor[] color       = { TubeColor.NONE, TubeColor.NONE, TubeColor.NONE, TubeColor.NONE, TubeColor.NONE, TubeColor.NONE };
-    private final TubeLogic   logic       = new TubeLogic(this);
-    public boolean            initialized;                                                                                                     //workaround to the connections not properly initialized, but being tried to be used.
-                                                                                                                                                
+    public boolean              isCrossOver;
+    protected final Vector3Cube sideBB      = new Vector3Cube(AxisAlignedBB.getBoundingBox(0.25, 0, 0.25, 0.75, 0.25, 0.75));
+    private TileEntityCache[]   tileCache;
+    private final TubeColor[]   color       = { TubeColor.NONE, TubeColor.NONE, TubeColor.NONE, TubeColor.NONE, TubeColor.NONE, TubeColor.NONE };
+    private final TubeLogic     logic       = new TubeLogic(this);
+    public boolean              initialized;                                                                                                     //workaround to the connections not properly initialized, but being tried to be used.
+                                                                                                                                                  
     // private final ResourceLocation tubeSideTexture = new ResourceLocation(Refs.MODID + ":textures/blocks/Tubes/pneumatic_tube_side.png");
     // private final ResourceLocation tubeNodeTexture = new ResourceLocation(Refs.MODID + ":textures/blocks/Tubes/tube_end.png");
     
@@ -84,6 +84,11 @@ public class PneumaticTube extends BPPart {
      */
     @Override
     public List<AxisAlignedBB> getSelectionBoxes() {
+    
+        return getTubeBoxes();
+    }
+    
+    private List<AxisAlignedBB> getTubeBoxes() {
     
         List<AxisAlignedBB> aabbs = getOcclusionBoxes();
         for (int i = 0; i < 6; i++) {
@@ -187,8 +192,11 @@ public class PneumaticTube extends BPPart {
     
     public boolean isConnected(ForgeDirection dir, PneumaticTube otherTube) {
     
-        TubeColor otherTubeColor = otherTube != null ? otherTube.getColor(dir.getOpposite()) : null;
-        if (otherTube != null && otherTubeColor != TubeColor.NONE && getColor(dir) != TubeColor.NONE && getColor(dir) != otherTubeColor) return false;
+        if (otherTube != null) {
+            if (!(this instanceof Accelerator) && this instanceof MagTube != otherTube instanceof MagTube && !(otherTube instanceof Accelerator)) return false;
+            TubeColor otherTubeColor = otherTube.getColor(dir.getOpposite());
+            if (otherTubeColor != TubeColor.NONE && getColor(dir) != TubeColor.NONE && getColor(dir) != otherTubeColor) return false;
+        }
         if (dir == ForgeDirection.UP || dir == ForgeDirection.DOWN) dir = dir.getOpposite();
         return getWorld() == null || !checkOcclusion(sideBB.clone().rotate90Degrees(dir).toAABB());
     }
@@ -309,48 +317,49 @@ public class PneumaticTube extends BPPart {
         connections[2] = true;
         connections[3] = true;
         
-        List<AxisAlignedBB> aabbs = getSelectionBoxes();
+        List<AxisAlignedBB> aabbs = getTubeBoxes();
         
         renderMiddle(aabbs.get(0), getSideIcon());
         for (int i = 1; i < aabbs.size(); i++) {
             AxisAlignedBB aabb = aabbs.get(i);
-            IIcon icon = IconSupplier.pneumaticTubeNode;
-            
-            if (aabb.minZ == 0) {
-                double minX = icon.getInterpolatedU(aabb.minX * 16);
-                double maxX = icon.getInterpolatedU(aabb.maxX * 16);
-                double minY = icon.getInterpolatedV(aabb.minY * 16);
-                double maxY = icon.getInterpolatedV(aabb.maxY * 16);
+            IIcon icon = this instanceof MagTube ? getNodeIcon() : IconSupplier.pneumaticTubeNode;
+            if (icon != null) {
+                if (aabb.minZ == 0) {
+                    double minX = icon.getInterpolatedU(aabb.minX * 16);
+                    double maxX = icon.getInterpolatedU(aabb.maxX * 16);
+                    double minY = icon.getInterpolatedV(aabb.minY * 16);
+                    double maxY = icon.getInterpolatedV(aabb.maxY * 16);
+                    
+                    t.setNormal(0, 0, -1);
+                    
+                    t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.minZ, minX, maxY);// minZ
+                    t.addVertexWithUV(aabb.minX, aabb.minY, aabb.minZ, maxX, maxY);
+                    t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.minZ, maxX, minY);
+                    t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.minZ, minX, minY);
+                    
+                    t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.minZ, minX, maxY);// minZ
+                    t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.minZ, minX, minY);
+                    t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.minZ, maxX, minY);
+                    t.addVertexWithUV(aabb.minX, aabb.minY, aabb.minZ, maxX, maxY);
+                }
                 
-                t.setNormal(0, 0, -1);
-                
-                t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.minZ, minX, maxY);// minZ
-                t.addVertexWithUV(aabb.minX, aabb.minY, aabb.minZ, maxX, maxY);
-                t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.minZ, maxX, minY);
-                t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.minZ, minX, minY);
-                
-                t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.minZ, minX, maxY);// minZ
-                t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.minZ, minX, minY);
-                t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.minZ, maxX, minY);
-                t.addVertexWithUV(aabb.minX, aabb.minY, aabb.minZ, maxX, maxY);
-            }
-            
-            if (aabb.maxZ == 1) {
-                double minX = icon.getInterpolatedU(aabb.minX * 16);
-                double maxX = icon.getInterpolatedU(aabb.maxX * 16);
-                double minY = icon.getInterpolatedV(aabb.minY * 16);
-                double maxY = icon.getInterpolatedV(aabb.maxY * 16);
-                t.setNormal(0, 0, 1);
-                
-                t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.maxZ, minX, minY);
-                t.addVertexWithUV(aabb.minX, aabb.minY, aabb.maxZ, minX, maxY);// maxZ
-                t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.maxZ, maxX, maxY);
-                t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.maxZ, maxX, minY);
-                
-                t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.maxZ, minX, minY);
-                t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.maxZ, maxX, minY);
-                t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.maxZ, maxX, maxY);
-                t.addVertexWithUV(aabb.minX, aabb.minY, aabb.maxZ, minX, maxY);// maxZ
+                if (aabb.maxZ == 1) {
+                    double minX = icon.getInterpolatedU(aabb.minX * 16);
+                    double maxX = icon.getInterpolatedU(aabb.maxX * 16);
+                    double minY = icon.getInterpolatedV(aabb.minY * 16);
+                    double maxY = icon.getInterpolatedV(aabb.maxY * 16);
+                    t.setNormal(0, 0, 1);
+                    
+                    t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.maxZ, minX, minY);
+                    t.addVertexWithUV(aabb.minX, aabb.minY, aabb.maxZ, minX, maxY);// maxZ
+                    t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.maxZ, maxX, maxY);
+                    t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.maxZ, maxX, minY);
+                    
+                    t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.maxZ, minX, minY);
+                    t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.maxZ, maxX, minY);
+                    t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.maxZ, maxX, maxY);
+                    t.addVertexWithUV(aabb.minX, aabb.minY, aabb.maxZ, minX, maxY);// maxZ
+                }
             }
             
             icon = getSideIcon();
@@ -427,6 +436,7 @@ public class PneumaticTube extends BPPart {
             }
         }
         
+        renderSide();
         t.draw();
         Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationItemsTexture);
     }
@@ -861,6 +871,21 @@ public class PneumaticTube extends BPPart {
         }
     }
     
+    protected boolean shouldRenderNode() {
+    
+        boolean shouldRenderNode = false;
+        int connectionCount = 0;
+        for (int i = 0; i < 6; i += 2) {
+            if (connections[i] != connections[i + 1]) {
+                shouldRenderNode = true;
+                break;
+            }
+            if (connections[i]) connectionCount++;
+            if (connections[i + 1]) connectionCount++;
+        }
+        return shouldRenderNode || connectionCount == 0 || connectionCount > 2;
+    }
+    
     /**
      * This render method gets called whenever there's a block update in the chunk. You should use this to remove load from the renderer if a part of
      * the rendering code doesn't need to get called too often or just doesn't change at all. To call a render update to re-render this just call
@@ -879,29 +904,20 @@ public class PneumaticTube extends BPPart {
         t.setColorOpaque_F(1, 1, 1);
         t.addTranslation((float) loc.getX(), (float) loc.getY(), (float) loc.getZ());
         
-        List<AxisAlignedBB> aabbs = getSelectionBoxes();
+        List<AxisAlignedBB> aabbs = getTubeBoxes();
         
-        boolean shouldRenderNode = false;
-        int connectionCount = 0;
-        for (int i = 0; i < 6; i += 2) {
-            if (connections[i] != connections[i + 1]) {
-                shouldRenderNode = true;
-                break;
-            }
-            if (connections[i]) connectionCount++;
-            if (connections[i + 1]) connectionCount++;
-        }
-        if (shouldRenderNode || connectionCount == 0 || connectionCount > 2) {
-            renderMiddle(aabbs.get(0), getNodeIcon());
+        if (shouldRenderNode()) {
+            if (getNodeIcon() != null) renderMiddle(aabbs.get(0), getNodeIcon());
             renderMiddle(aabbs.get(0), IconSupplier.pneumaticTubeColorNode);
             t.setColorOpaque_F(1, 1, 1);
         } else {
             renderMiddle(aabbs.get(0), getSideIcon());
             renderMiddle(aabbs.get(0), IconSupplier.pneumaticTubeColorSide);
             t.setColorOpaque_F(1, 1, 1);
+            renderSide();
         }
         for (int i = 1; i < aabbs.size(); i++) {
-            renderTexturedCuboid(aabbs.get(i), getSideIcon());
+            renderTexturedCuboid(aabbs.get(i), getSideIcon(ForgeDirection.getOrientation(getSideFromAABBIndex(i))));
             TubeColor sideColor = color[getSideFromAABBIndex(i)];
             if (sideColor != TubeColor.NONE) {
                 t.setColorOpaque_I(ItemDye.field_150922_c[sideColor.ordinal()]);
@@ -911,6 +927,10 @@ public class PneumaticTube extends BPPart {
         }
         t.addTranslation((float) -loc.getX(), (float) -loc.getY(), (float) -loc.getZ());
         return true;
+    }
+    
+    protected void renderSide() {
+    
     }
     
     /**
@@ -927,6 +947,11 @@ public class PneumaticTube extends BPPart {
             }
         }
         return 0;
+    }
+    
+    protected IIcon getSideIcon(ForgeDirection side) {
+    
+        return getSideIcon();
     }
     
     protected IIcon getSideIcon() {

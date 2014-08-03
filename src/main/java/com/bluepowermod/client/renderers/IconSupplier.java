@@ -13,8 +13,21 @@ public class IconSupplier {
     public static IIcon pneumaticTubeNode;
     public static IIcon pneumaticTubeColorNode;
     public static IIcon pneumaticTubeColorSide;
+    
     public static IIcon restrictionTubeNode;
     public static IIcon restrictionTubeSide;
+    
+    public static IIcon magTubeNode;
+    public static IIcon magTubeSide;
+    public static IIcon magCoilSide;
+    public static IIcon magCoilFront;
+    
+    public static IIcon acceleratorFront;
+    public static IIcon acceleratorSide;
+    public static IIcon acceleratorFrontPowered;
+    public static IIcon acceleratorSidePowered;
+    public static IIcon acceleratorInside;
+    
     public static IIcon cagedLampFootSide;
     public static IIcon cagedLampFootTop;
     public static IIcon cagedLampCageSide;
@@ -42,6 +55,15 @@ public class IconSupplier {
             pneumaticTubeColorNode = event.map.registerIcon(Refs.MODID + ":tubes/tube_color_end");
             restrictionTubeNode = event.map.registerIcon(Refs.MODID + ":tubes/restriction_tube_end");
             restrictionTubeSide = event.map.registerIcon(Refs.MODID + ":tubes/restriction_tube_side");
+            magTubeNode = event.map.registerIcon(Refs.MODID + ":tubes/mag_end");
+            magTubeSide = event.map.registerIcon(Refs.MODID + ":tubes/mag_side");
+            magCoilSide = event.map.registerIcon(Refs.MODID + ":tubes/mag_casing");
+            magCoilFront = event.map.registerIcon(Refs.MODID + ":tubes/mag_casing_end");
+            acceleratorFront = event.map.registerIcon(Refs.MODID + ":machines/accelerator_front");
+            acceleratorFrontPowered = event.map.registerIcon(Refs.MODID + ":machines/accelerator_front_powered");
+            acceleratorSide = event.map.registerIcon(Refs.MODID + ":machines/accelerator_side");
+            acceleratorSidePowered = event.map.registerIcon(Refs.MODID + ":machines/accelerator_side_powered");
+            acceleratorInside = event.map.registerIcon(Refs.MODID + ":machines/accelerator_inside");
             
             cagedLampFootSide = event.map.registerIcon(Refs.MODID + ":lamps/cage_foot_side");
             cagedLampFootTop = event.map.registerIcon(Refs.MODID + ":lamps/cage_foot_top");
