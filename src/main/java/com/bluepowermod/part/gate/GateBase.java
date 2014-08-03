@@ -19,6 +19,9 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
+
+import org.lwjgl.opengl.GL11;
+
 import com.bluepowermod.api.part.BPPartFace;
 import com.bluepowermod.api.part.FaceDirection;
 import com.bluepowermod.api.part.RedstoneConnection;
@@ -29,75 +32,73 @@ import com.bluepowermod.init.BPItems;
 import com.bluepowermod.init.CustomTabs;
 import com.bluepowermod.references.Refs;
 
-import org.lwjgl.opengl.GL11;
-
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public abstract class GateBase extends BPPartFace {
-    
+
     protected static Vector3Cube BOX = new Vector3Cube(0, 0, 0, 1, 1D / 8D, 1);
-    
+
     public GateBase() {
-    
+
         for (int i = 0; i < 4; i++)
             connections[i] = new RedstoneConnection(this, i + "", true, false);
-        
+
         initializeConnections(getConnection(FaceDirection.FRONT), getConnection(FaceDirection.LEFT), getConnection(FaceDirection.BACK),
                 getConnection(FaceDirection.RIGHT));
     }
-    
+
     public abstract void initializeConnections(RedstoneConnection front, RedstoneConnection left, RedstoneConnection back, RedstoneConnection right);
-    
+
     @Override
     public void setFace(int face) {
-    
+
         super.setFace(face);
     }
-    
+
     @Override
     public String getType() {
-    
+
         return getGateID();
     }
-    
+
     @Override
     public String getUnlocalizedName() {
-    
+
         return "gate." + getGateID();
     }
-    
+
     public abstract String getGateID();
-    
+
     @Override
     public void addCollisionBoxes(List<AxisAlignedBB> boxes) {
-    
+
         boxes.add(BOX.clone().toAABB());
     }
-    
+
     @Override
     public void addOcclusionBoxes(List<AxisAlignedBB> boxes) {
-    
+
         boxes.add(BOX.clone().toAABB());
     }
-    
+
     @Override
     public void addSelectionBoxes(List<AxisAlignedBB> boxes) {
-    
+
         boxes.add(BOX.clone().toAABB());
     }
-    
+
     @Override
     public final void renderDynamic(Vector3 loc, int pass, float frame) {
-    
+
         GL11.glPushMatrix();
         {
             super.rotateAndTranslateDynamic(loc, pass, frame);
-            
+
             /* Top */
             renderTop(frame);
-            
+
             Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/gates/bottom.png"));
             GL11.glBegin(GL11.GL_QUADS);
             /* Bottom */
@@ -137,23 +138,23 @@ public abstract class GateBase extends BPPartFace {
         }
         GL11.glPopMatrix();
     }
-    
+
     protected void renderTopTexture(FaceDirection side, RedstoneConnection connection) {
-    
+
         if (connection.isEnabled()) {
             renderTopTexture(side, connection.getPower() > 0);
         } else {
             renderTopTexture(Refs.MODID + ":textures/blocks/gates/" + getType() + "/" + side.getName() + "_disabled.png");
         }
     }
-    
+
     protected void renderTopTexture(FaceDirection side, boolean state) {
-    
+
         renderTopTexture(Refs.MODID + ":textures/blocks/gates/" + getType() + "/" + side.getName() + "_" + (state ? "on" : "off") + ".png");
     }
-    
+
     public void renderTopTexture(String texture) {
-    
+
         Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(texture));
         GL11.glBegin(GL11.GL_QUADS);
         GL11.glNormal3d(0, 1, 0);
@@ -163,27 +164,27 @@ public abstract class GateBase extends BPPartFace {
         RenderHelper.addVertexWithTexture(1, 1D / 8D, 0, 1, 0);
         GL11.glEnd();
     }
-    
+
     @Override
     public final boolean renderStatic(Vector3 loc, int pass) {
-    
+
         return super.renderStatic(loc, pass);
     }
-    
+
     @Override
     public final void renderItem(ItemRenderType type, ItemStack item, Object... data) {
-    
+
         GL11.glPushMatrix();
         {
-            
+
             if (type == ItemRenderType.INVENTORY) {
                 GL11.glTranslated(0, 0.5, 0);
                 GL11.glRotated(-12, -1, 0, 1);
             }
-            
+
             /* Top */
             renderTop();
-            
+
             Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/gates/bottom.png"));
             GL11.glBegin(GL11.GL_QUADS);
             /* Bottom */
@@ -223,43 +224,43 @@ public abstract class GateBase extends BPPartFace {
         }
         GL11.glPopMatrix();
     }
-    
+
     public void renderTop(float frame) {
-    
+
         renderTopTexture(Refs.MODID + ":textures/blocks/gates/" + getType() + "/base.png");
         renderTop(getConnection(FaceDirection.FRONT), getConnection(FaceDirection.LEFT), getConnection(FaceDirection.BACK),
                 getConnection(FaceDirection.RIGHT), frame);
     }
-    
+
     public void renderTop() {
-    
+
         renderTopTexture(Refs.MODID + ":textures/blocks/gates/" + getType() + "/base.png");
         renderTopItem(getConnection(FaceDirection.FRONT), getConnection(FaceDirection.LEFT), getConnection(FaceDirection.BACK),
                 getConnection(FaceDirection.RIGHT));
     }
-    
+
     protected void renderTopItem(RedstoneConnection front, RedstoneConnection left, RedstoneConnection back, RedstoneConnection right) {
-    
+
         renderTop(getConnection(FaceDirection.FRONT), getConnection(FaceDirection.LEFT), getConnection(FaceDirection.BACK),
                 getConnection(FaceDirection.RIGHT), 0);
     }
-    
+
     protected abstract void renderTop(RedstoneConnection front, RedstoneConnection left, RedstoneConnection back, RedstoneConnection right,
             float frame);
-    
+
     @Override
     public void update() {
-    
+
         super.update();
         doLogic(getConnection(FaceDirection.FRONT), getConnection(FaceDirection.LEFT), getConnection(FaceDirection.BACK),
                 getConnection(FaceDirection.RIGHT));
     }
-    
+
     public abstract void doLogic(RedstoneConnection front, RedstoneConnection left, RedstoneConnection back, RedstoneConnection right);
-    
+
     @Override
     public boolean onActivated(EntityPlayer player, MovingObjectPosition mop, ItemStack item) {
-    
+
         if (item != null && item.getItem() == BPItems.screwdriver) {
             if (player.isSneaking()) {
                 if (!getWorld().isRemote) {
@@ -284,30 +285,30 @@ public abstract class GateBase extends BPPartFace {
         }
         return super.onActivated(player, mop, item);
     }
-    
+
     @SideOnly(Side.CLIENT)
     protected GuiScreen getGui() {
-    
+
         return null;
     }
-    
+
     protected boolean hasGUI() {
-    
+
         return false;
     }
-    
+
     protected boolean changeMode(RedstoneConnection front, RedstoneConnection left, RedstoneConnection back, RedstoneConnection right) {
-    
+
         return false;
     }
-    
+
     @Override
     public CreativeTabs getCreativeTab() {
-    
+
         return CustomTabs.tabBluePowerCircuits;
     }
-    
+
     @Override
     public abstract void addWailaInfo(List<String> info);
-    
+
 }

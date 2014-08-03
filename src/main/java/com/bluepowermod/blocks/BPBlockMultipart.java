@@ -18,15 +18,21 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 
 import com.bluepowermod.api.part.BPPart;
 import com.bluepowermod.api.vec.Vector3;
 import com.bluepowermod.client.renderers.RenderMultipart;
+import com.bluepowermod.raytrace.BPMop;
 import com.bluepowermod.raytrace.RayTracer;
 import com.bluepowermod.tileentities.BPTileMultipart;
 import com.bluepowermod.util.AABBUtils;
 import com.bluepowermod.util.ComparatorMOP;
 
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -35,7 +41,7 @@ public class BPBlockMultipart extends BlockContainer {
     public BPBlockMultipart() {
 
         super(Material.rock);
-        // MinecraftForge.EVENT_BUS.register(this);
+        MinecraftForge.EVENT_BUS.register(this);
     }
 
     @Override
@@ -87,7 +93,7 @@ public class BPBlockMultipart extends BlockContainer {
         if (t == null)
             return false;
 
-        return super.canConnectRedstone(w, x, y, z, side);
+        return t.canConnectRedstone(ForgeDirection.getOrientation(side));
     }
 
     @Override
@@ -102,7 +108,9 @@ public class BPBlockMultipart extends BlockContainer {
         BPTileMultipart t = getTile(w, x, y, z);
         if (t != null) {
             EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-            rayTrace(w, x, y, z, RayTracer.getStartVector(player), RayTracer.getEndVector(player), t.getSelectionBoxes());
+            BPMop mop = rayTrace(w, x, y, z, RayTracer.getStartVector(player), RayTracer.getEndVector(player), t.getSelectionBoxes(), false);
+            if (mop != null)
+                setBlockBounds(mop.getCubeHit());
         }
 
         return super.collisionRayTrace(w, x, y, z, start, end);
@@ -160,16 +168,6 @@ public class BPBlockMultipart extends BlockContainer {
     }
 
     @Override
-    public ItemStack getPickBlock(MovingObjectPosition target, World w, int x, int y, int z) {
-
-        BPTileMultipart t = getTile(w, x, y, z);
-        if (t == null)
-            return null;
-
-        return null;// FIXME t.getPickedItem(target);
-    }
-
-    @Override
     @SideOnly(Side.CLIENT)
     public AxisAlignedBB getSelectedBoundingBoxFromPool(World w, int x, int y, int z) {
 
@@ -178,9 +176,10 @@ public class BPBlockMultipart extends BlockContainer {
             return super.getSelectedBoundingBoxFromPool(w, x, y, z);
 
         EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-        MovingObjectPosition mop = rayTrace(w, x, y, z, RayTracer.getStartVector(player), RayTracer.getEndVector(player), t.getSelectionBoxes());
+        BPMop mop = rayTrace(w, x, y, z, RayTracer.getStartVector(player), RayTracer.getEndVector(player), t.getSelectionBoxes(), false);
         if (mop != null) {
-            return AABBUtils.translate((AxisAlignedBB) mop.hitInfo, x, y, z);
+            setBlockBounds(mop.getCubeHit());
+            return AABBUtils.translate(mop.getCubeHit(), x, y, z);
         }
 
         return super.getSelectedBoundingBoxFromPool(w, x, y, z);
@@ -204,27 +203,130 @@ public class BPBlockMultipart extends BlockContainer {
         return RenderMultipart.renderId;
     }
 
-    public void setBlockBounds(AxisAlignedBB aabb) {
+    @SubscribeEvent
+    public void onInteract(PlayerInteractEvent event) {
 
-        setBlockBounds((float) aabb.minX, (float) aabb.minY, (float) aabb.minZ, (float) aabb.maxX, (float) aabb.maxY, (float) aabb.maxZ);
+        Vector3 v = new Vector3(event.x, event.y, event.z, event.world);
+        if (v.getBlock() != this)
+            return;
+        BPTileMultipart te = (BPTileMultipart) v.getTileEntity();
+        if (te == null)
+            return;
+        System.out.println(te.getParts().size() + " - " + FMLCommonHandler.instance().getEffectiveSide());
+        BPMop mop = rayTrace(event.world, event.x, event.y, event.z, RayTracer.getStartVector(event.entityPlayer),
+                RayTracer.getEndVector(event.entityPlayer), te.getParts());
+
+        if (event.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) {
+            if (mop != null)
+                te.onActivated(event.entityPlayer, mop, event.entityPlayer.getItemInUse());
+        }
     }
 
-    private MovingObjectPosition rayTrace(World w, int x, int y, int z, Vector3 start, Vector3 end, List<AxisAlignedBB> aabbs) {
+    public BPMop rayTrace(World w, int x, int y, int z, Vector3 start, Vector3 end, List<AxisAlignedBB> aabbs, boolean unused) {
 
-        List<MovingObjectPosition> mops = new ArrayList<MovingObjectPosition>();
+        List<BPMop> mops = new ArrayList<BPMop>();
         for (AxisAlignedBB aabb : aabbs) {
             setBlockBounds(aabb);
             MovingObjectPosition mop = super.collisionRayTrace(w, x, y, z, start.toVec3(), end.toVec3());
             if (mop != null) {
-                mop.hitInfo = aabb;
-                mops.add(mop);
+                mops.add(new BPMop(mop, aabb));
             }
         }
         Collections.sort(mops, new ComparatorMOP(start));
         if (mops.isEmpty())
             return null;
-        MovingObjectPosition mop = mops.get(0);
-        setBlockBounds((AxisAlignedBB) mop.hitInfo);
+        BPMop mop = mops.get(0);
         return mop;
+    }
+
+    public BPMop rayTrace(World w, int x, int y, int z, Vector3 start, Vector3 end, List<BPPart> parts) {
+
+        List<BPMop> mops = new ArrayList<BPMop>();
+        for (BPPart part : parts) {
+            for (AxisAlignedBB aabb : part.getSelectionBoxes()) {
+                setBlockBounds(aabb);
+                MovingObjectPosition mop = super.collisionRayTrace(w, x, y, z, start.toVec3(), end.toVec3());
+                if (mop != null) {
+                    mops.add(new BPMop(mop, part, aabb));
+                }
+            }
+        }
+        Collections.sort(mops, new ComparatorMOP(start));
+        if (mops.isEmpty())
+            return null;
+        BPMop mop = mops.get(0);
+        return mop;
+    }
+
+    public void setBlockBounds(AxisAlignedBB aabb) {
+
+        setBlockBounds((float) aabb.minX, (float) aabb.minY, (float) aabb.minZ, (float) aabb.maxX, (float) aabb.maxY, (float) aabb.maxZ);
+    }
+
+    @Override
+    public boolean isBlockSolid(IBlockAccess w, int x, int y, int z, int side) {
+
+        return isSideSolid(w, x, y, z, ForgeDirection.getOrientation(side));
+    }
+
+    @Override
+    public boolean isSideSolid(IBlockAccess w, int x, int y, int z, ForgeDirection side) {
+
+        BPTileMultipart te = getTile(w, x, y, z);
+        if (te == null)
+            return false;
+
+        return te.isFaceSolid(side);
+    }
+
+    @Override
+    public void onNeighborBlockChange(World w, int x, int y, int z, Block b) {
+
+        BPTileMultipart te = getTile(w, x, y, z);
+        if (te == null)
+            return;
+        te.onNeighborUpdate();
+    }
+
+    @Override
+    public void onNeighborChange(IBlockAccess w, int x, int y, int z, int tileX, int tileY, int tileZ) {
+
+        BPTileMultipart te = getTile(w, x, y, z);
+        if (te == null)
+            return;
+        te.onNeighborUpdate();
+    }
+
+    @Override
+    public boolean removedByPlayer(World w, EntityPlayer player, int x, int y, int z, boolean willHarvest) {
+
+        BPTileMultipart te = getTile(w, x, y, z);
+        if (te == null)
+            return false;
+        BPMop mop = rayTrace(w, x, y, z, RayTracer.getStartVector(player), RayTracer.getEndVector(player), te.getParts());
+        if (mop != null) {
+            te.removePart(mop.getPartHit());
+            if (te.getParts().size() > 0) {
+            } else {
+                return super.removedByPlayer(w, player, x, y, z, willHarvest);
+            }
+            return false;
+        }
+
+        return super.removedByPlayer(w, player, x, y, z, willHarvest);
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public ItemStack getPickBlock(MovingObjectPosition target, World w, int x, int y, int z) {
+
+        BPTileMultipart te = getTile(w, x, y, z);
+        if (te == null)
+            return null;
+        BPMop mop = rayTrace(w, x, y, z, RayTracer.getStartVector(Minecraft.getMinecraft().thePlayer),
+                RayTracer.getEndVector(Minecraft.getMinecraft().thePlayer), te.getParts());
+        if (mop == null)
+            return null;
+        return mop.getPartHit().getPickedItem(mop);
     }
 }

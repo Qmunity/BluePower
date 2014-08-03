@@ -85,6 +85,8 @@ public class CompatModuleFMPAlt extends CompatModule implements IMultipartCompat
     public <T> T getBPPart(TileEntity te, Class<T> searchedClass) {
 
         List<T> l = getBPParts(te, searchedClass);
+        if (l == null)
+            return null;
         return l.size() > 0 ? l.get(0) : null;
     }
 
