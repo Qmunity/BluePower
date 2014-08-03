@@ -28,12 +28,14 @@ import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import com.bluepowermod.BluePower;
+
 public class TileBase extends TileEntity implements IRotatable {
     
     private boolean        isRedstonePowered;
     private int            outputtingRedstone;
     private int            ticker   = 0;
-    private ForgeDirection rotation = ForgeDirection.UNKNOWN;
+    private ForgeDirection rotation = ForgeDirection.UP;
     
     /*************** BASIC TE FUNCTIONS **************/
     
@@ -73,6 +75,10 @@ public class TileBase extends TileEntity implements IRotatable {
     protected void readFromPacketNBT(NBTTagCompound tCompound) {
     
         rotation = ForgeDirection.getOrientation(tCompound.getByte("rotation"));
+        if (rotation.ordinal() > 5) {
+            BluePower.log.warn("invalid rotation!");
+            rotation = ForgeDirection.UP;
+        }
         outputtingRedstone = tCompound.getByte("outputtingRedstone");
         if (worldObj != null) markForRenderUpdate();
     }

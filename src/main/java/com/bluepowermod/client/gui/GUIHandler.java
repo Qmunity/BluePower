@@ -30,6 +30,7 @@ import com.bluepowermod.containers.ContainerDiskDrive;
 import com.bluepowermod.containers.ContainerEjector;
 import com.bluepowermod.containers.ContainerFilter;
 import com.bluepowermod.containers.ContainerIOExpander;
+import com.bluepowermod.containers.ContainerItemDetector;
 import com.bluepowermod.containers.ContainerKinect;
 import com.bluepowermod.containers.ContainerMonitor;
 import com.bluepowermod.containers.ContainerRedbusID;
@@ -49,6 +50,7 @@ import com.bluepowermod.tileentities.tier1.TileBuffer;
 import com.bluepowermod.tileentities.tier1.TileDeployer;
 import com.bluepowermod.tileentities.tier1.TileEjector;
 import com.bluepowermod.tileentities.tier1.TileFilter;
+import com.bluepowermod.tileentities.tier1.TileItemDetector;
 import com.bluepowermod.tileentities.tier1.TileRelay;
 import com.bluepowermod.tileentities.tier2.TileRegulator;
 import com.bluepowermod.tileentities.tier2.TileRetriever;
@@ -113,6 +115,8 @@ public class GUIHandler implements IGuiHandler {
                 return new ContainerRetriever(player.inventory, (TileRetriever) ent);
             case REGULATOR_ID:
                 return new ContainerRegulator(player.inventory, (TileRegulator) ent);
+            case ITEMDETECTOR_ID:
+                return new ContainerItemDetector(player.inventory, (TileItemDetector) ent);
             default:
                 break;
         }
@@ -163,6 +167,8 @@ public class GUIHandler implements IGuiHandler {
                 return new GuiRetriever(player.inventory, (TileRetriever) ent);
             case REGULATOR_ID:
                 return new GuiRegulator(player.inventory, (TileRegulator) ent);
+            case ITEMDETECTOR_ID:
+                return new GuiItemDetector(player.inventory, (TileItemDetector) ent);
             default:
                 break;
         }

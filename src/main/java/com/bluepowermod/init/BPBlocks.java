@@ -51,6 +51,7 @@ import com.bluepowermod.tileentities.tier1.TileBuffer;
 import com.bluepowermod.tileentities.tier1.TileDeployer;
 import com.bluepowermod.tileentities.tier1.TileEjector;
 import com.bluepowermod.tileentities.tier1.TileFilter;
+import com.bluepowermod.tileentities.tier1.TileItemDetector;
 import com.bluepowermod.tileentities.tier1.TileRelay;
 import com.bluepowermod.tileentities.tier1.TileTransposer;
 import com.bluepowermod.tileentities.tier2.TileRegulator;
@@ -116,6 +117,7 @@ public class BPBlocks {
     public static Block   filter;
     public static Block   retriever;
     public static Block   regulator;
+    public static Block   item_detector;
     
     public static Block   cpu;
     public static Block   monitor;
@@ -183,6 +185,7 @@ public class BPBlocks {
         filter = new BlockContainerBase(Material.rock, TileFilter.class).setGuiId(GuiIDs.FILTER_ID).setBlockName(Refs.FILTER_NAME);
         retriever = new BlockContainerBase(Material.rock, TileRetriever.class).setGuiId(GuiIDs.RETRIEVER_ID).setBlockName(Refs.RETRIEVER_NAME);
         regulator = new BlockContainerTwoSideRender(Material.rock, TileRegulator.class).setGuiId(GuiIDs.REGULATOR_ID).emitsRedstone().setBlockName(Refs.REGULATOR_NAME);
+        item_detector = new BlockContainerTwoSideRender(Material.rock, TileItemDetector.class).setGuiId(GuiIDs.ITEMDETECTOR_ID).emitsRedstone().setBlockName(Refs.ITEMDETECTOR_NAME);
         
         cpu = new BlockCPU();
         monitor = new BlockMonitor();
@@ -262,6 +265,7 @@ public class BPBlocks {
         GameRegistry.registerBlock(filter, Refs.FILTER_NAME);
         GameRegistry.registerBlock(retriever, Refs.RETRIEVER_NAME);
         GameRegistry.registerBlock(regulator, Refs.REGULATOR_NAME);
+        GameRegistry.registerBlock(item_detector, Refs.ITEMDETECTOR_NAME);
         
         GameRegistry.registerBlock(cpu, Refs.BLOCKCPU_NAME);
         GameRegistry.registerBlock(monitor, Refs.BLOCKMONITOR_NAME);

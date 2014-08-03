@@ -25,6 +25,7 @@ import com.bluepowermod.tileentities.tier1.TileDeployer;
 import com.bluepowermod.tileentities.tier1.TileEjector;
 import com.bluepowermod.tileentities.tier1.TileFilter;
 import com.bluepowermod.tileentities.tier1.TileIgniter;
+import com.bluepowermod.tileentities.tier1.TileItemDetector;
 import com.bluepowermod.tileentities.tier1.TileLamp;
 import com.bluepowermod.tileentities.tier1.TileRelay;
 import com.bluepowermod.tileentities.tier1.TileTransposer;
@@ -49,18 +50,18 @@ public class TileEntities {
      */
     public static void init() {
     
-        GameRegistry.registerTileEntity(TileAlloyFurnace.class, "tileAlloyFurnace");
-        GameRegistry.registerTileEntity(TileBlockBreaker.class, "tileBlockBreaker");
-        GameRegistry.registerTileEntity(TileIgniter.class, "tileIgniter");
-        GameRegistry.registerTileEntity(TileBuffer.class, "tileBuffer");
-        GameRegistry.registerTileEntity(TileTransposer.class, "tileTransposer");
-        GameRegistry.registerTileEntity(TileSortingMachine.class, "tileSortingMachine");
-        GameRegistry.registerTileEntity(TileSortron.class, "tileSortron");
-        GameRegistry.registerTileEntity(TileCPU.class, "tileCPU");
-        GameRegistry.registerTileEntity(TileMonitor.class, "tileMonitor");
-        GameRegistry.registerTileEntity(TileDiskDrive.class, "tileDiskDrive");
-        GameRegistry.registerTileEntity(TileIOExpander.class, "tileIOExpander");
-        GameRegistry.registerTileEntity(TileEngine.class, "tileEngine");
+        GameRegistry.registerTileEntity(TileAlloyFurnace.class, "alloyFurnace");
+        GameRegistry.registerTileEntity(TileBlockBreaker.class, "blockBreaker");
+        GameRegistry.registerTileEntity(TileIgniter.class, "igniter");
+        GameRegistry.registerTileEntity(TileBuffer.class, "buffer");
+        GameRegistry.registerTileEntity(TileTransposer.class, "transposer");
+        GameRegistry.registerTileEntity(TileSortingMachine.class, "sortingMachine");
+        GameRegistry.registerTileEntity(TileSortron.class, "sortron");
+        GameRegistry.registerTileEntity(TileCPU.class, "CPU");
+        GameRegistry.registerTileEntity(TileMonitor.class, "monitor");
+        GameRegistry.registerTileEntity(TileDiskDrive.class, "diskDrive");
+        GameRegistry.registerTileEntity(TileIOExpander.class, "IOExpander");
+        GameRegistry.registerTileEntity(TileEngine.class, "engine");
         GameRegistry.registerTileEntity(TileWindmill.class, "windmill");
         GameRegistry.registerTileEntity(TileKinectGenerator.class, "kinectgenerator");
         GameRegistry.registerTileEntity(TileDeployer.class, "deployer");
@@ -69,7 +70,8 @@ public class TileEntities {
         GameRegistry.registerTileEntity(TileFilter.class, "filter");
         GameRegistry.registerTileEntity(TileRetriever.class, "retriever");
         GameRegistry.registerTileEntity(TileRegulator.class, "regulator");
-        GameRegistry.registerTileEntity(TileLamp.class, "tileLamp");
-        GameRegistry.registerTileEntity(BPTileMultipart.class, "tileMultipart");
+        GameRegistry.registerTileEntity(TileItemDetector.class, "itemDetector");
+        GameRegistry.registerTileEntity(TileLamp.class, "lamp");
+        GameRegistry.registerTileEntity(BPTileMultipart.class, "multipart");
     }
 }

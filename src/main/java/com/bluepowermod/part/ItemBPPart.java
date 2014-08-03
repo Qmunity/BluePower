@@ -57,7 +57,7 @@ public class ItemBPPart extends Item {
             Vector3 v = new Vector3(x, y, z, w);
             if ((v.getTileEntity() != null && v.getTileEntity() instanceof BPTileMultipart) && !player.isSneaking()) {
                 BPTileMultipart te = (BPTileMultipart) v.getTileEntity();
-                te.getParts().add(PartRegistry.createPartFromItem(stack));
+                te.addPart(PartRegistry.createPartFromItem(stack));
             } else {
                 v.add(ForgeDirection.getOrientation(side));
                 if (v.getBlock(true) == null) {

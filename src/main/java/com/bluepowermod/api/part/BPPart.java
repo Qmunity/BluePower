@@ -22,12 +22,12 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
+import net.minecraftforge.common.util.ForgeDirection;
 import codechicken.multipart.BlockMultipart;
 
 import com.bluepowermod.api.vec.Vector3;
 import com.bluepowermod.compat.CompatibilityUtils;
 import com.bluepowermod.compat.fmp.IMultipartCompat;
-import com.bluepowermod.raytrace.RayTracer;
 import com.bluepowermod.references.Dependencies;
 
 import cpw.mods.fml.common.Loader;
@@ -145,7 +145,7 @@ public abstract class BPPart {
      */
     public MovingObjectPosition rayTrace(Vector3 start, Vector3 end) {
 
-        return RayTracer.rayTrace(x, y, z, start, end, getSelectionBoxes());
+        return null;// FIXME RayTracer.rayTrace(x, y, z, start, end, getSelectionBoxes());
     }
 
     /**
@@ -619,5 +619,10 @@ public abstract class BPPart {
     public void setWorld(World world) {
 
         this.world = world;
+    }
+
+    public boolean isFaceSolid(ForgeDirection orientation) {
+
+        return false;
     }
 }
