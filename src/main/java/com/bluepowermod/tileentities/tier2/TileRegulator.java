@@ -3,13 +3,17 @@ package com.bluepowermod.tileentities.tier2;
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraftforge.common.util.ForgeDirection;
 
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
+import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.part.IGuiButtonSensitive;
+import com.bluepowermod.part.tube.TubeStack;
 import com.bluepowermod.tileentities.TileMachineBase;
 
 public class TileRegulator extends TileMachineBase implements ISidedInventory, IGuiButtonSensitive {
@@ -17,6 +21,164 @@ public class TileRegulator extends TileMachineBase implements ISidedInventory, I
     private ItemStack[] inventory = new ItemStack[27];
     public TubeColor    color     = TubeColor.NONE;
     public int          mode;
+    
+    private enum EnumSection {
+        INPUT_FILTER, BUFFER, OUTPUT_FILTER
+    }
+    
+    @Override
+    public void updateEntity() {
+    
+        super.updateEntity();
+        if (!worldObj.isRemote && isBufferEmpty()) {
+            boolean ratiosMatch = true;
+            for (int i = 0; i < 9; i++) {
+                if (inventory[i] != null) {
+                    int inputFilterItems = getItemsInSection(inventory[i], EnumSection.INPUT_FILTER);
+                    int bufferItems = getItemsInSection(inventory[i], EnumSection.BUFFER);
+                    if (bufferItems < inputFilterItems) {
+                        ratiosMatch = false;
+                        break;
+                    }
+                }
+            }
+            if (ratiosMatch && !isEjecting()) checkIndividualOutputFilterAndEject();
+            
+            if (mode == 1 && !isEjecting()) {//supply mode
+                IInventory inv = IOHelper.getInventoryForTE(getTileCache()[getOutputDirection().ordinal()].getTileEntity());
+                if (inv != null) {
+                    int[] accessibleSlots;
+                    if (inv instanceof ISidedInventory) {
+                        accessibleSlots = ((ISidedInventory) inv).getAccessibleSlotsFromSide(getFacingDirection().ordinal());
+                    } else {
+                        accessibleSlots = new int[inv.getSizeInventory()];
+                        for (int i = 0; i < accessibleSlots.length; i++)
+                            accessibleSlots[i] = i;
+                    }
+                    for (int i = 18; i < 27; i++) {
+                        if (inventory[i] != null) {
+                            int outputFilterItems = getItemsInSection(inventory[i], EnumSection.OUTPUT_FILTER);
+                            int supplyingInvCount = 0;
+                            for (int slot : accessibleSlots) {
+                                ItemStack stackInSlot = inv.getStackInSlot(slot);
+                                if (stackInSlot != null && stackInSlot.isItemEqual(inventory[i]) && IOHelper.canInsertItemToInventory(inv, inventory[i], slot, getFacingDirection().ordinal())) {
+                                    supplyingInvCount += stackInSlot.stackSize;
+                                }
+                            }
+                            if (supplyingInvCount < outputFilterItems) {
+                                ItemStack requestedStack = inventory[i].copy();
+                                requestedStack.stackSize = outputFilterItems - supplyingInvCount;
+                                ItemStack bufferItems = IOHelper.extract(this, ForgeDirection.UNKNOWN, requestedStack, true, false);//try to extract the items needed to fully supply the inventory from the buffer.
+                                if (bufferItems != null) {
+                                    ItemStack remainder = IOHelper.insert(inv, bufferItems, getFacingDirection().ordinal(), false);//insert into supplying inv.
+                                    if (remainder != null) {
+                                        IOHelper.insert(this, remainder, ForgeDirection.UNKNOWN, false);//when not every item can be supplied, return those to the buffer.
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            boolean shouldEmitRedstone = isSatisfied() || animationTicker >= 0;
+            if (isEjecting() != shouldEmitRedstone) {
+                setOutputtingRedstone(shouldEmitRedstone);
+                sendUpdatePacket();
+            }
+        }
+    }
+    
+    @Override
+    public boolean isEjecting() {
+    
+        return super.isEjecting() || getOutputtingRedstone() > 0;
+    }
+    
+    /**
+     * Returns true if the supplying inventory has the items stated in the output filter.
+     * @return
+     */
+    private boolean isSatisfied() {
+    
+        IInventory inv = IOHelper.getInventoryForTE(getTileCache()[getOutputDirection().ordinal()].getTileEntity());
+        if (inv != null) {
+            int[] accessibleSlots;
+            if (inv instanceof ISidedInventory) {
+                accessibleSlots = ((ISidedInventory) inv).getAccessibleSlotsFromSide(getFacingDirection().ordinal());
+            } else {
+                accessibleSlots = new int[inv.getSizeInventory()];
+                for (int i = 0; i < accessibleSlots.length; i++)
+                    accessibleSlots[i] = i;
+            }
+            boolean everythingNull = true;
+            for (int i = 18; i < 27; i++) {
+                if (inventory[i] != null) {
+                    everythingNull = false;
+                    int outputFilterItems = getItemsInSection(inventory[i], EnumSection.OUTPUT_FILTER);
+                    int supplyingInvCount = 0;
+                    for (int slot : accessibleSlots) {
+                        ItemStack stackInSlot = inv.getStackInSlot(slot);
+                        if (stackInSlot != null && stackInSlot.isItemEqual(inventory[i]) && IOHelper.canInsertItemToInventory(inv, inventory[i], slot, getFacingDirection().ordinal())) {
+                            supplyingInvCount += stackInSlot.stackSize;
+                        }
+                    }
+                    if (supplyingInvCount < outputFilterItems) return false;
+                }
+            }
+            return !everythingNull;
+        }
+        return false;
+    }
+    
+    private void checkIndividualOutputFilterAndEject() {
+    
+        //Check in output filter for every slot and look if the items are present in the buffer.
+        for (int i = 0; i < 9; i++) {
+            if (inventory[i] != null) {
+                int inputFilterItems = getItemsInSection(inventory[i], EnumSection.INPUT_FILTER);
+                int bufferItems = getItemsInSection(inventory[i], EnumSection.BUFFER);
+                if (bufferItems >= inputFilterItems) {
+                    ItemStack stackFromBuffer = IOHelper.extract(this, ForgeDirection.UNKNOWN, inventory[i], true, false);
+                    this.addItemToOutputBuffer(stackFromBuffer, color);
+                }
+            }
+        }
+    }
+    
+    @Override
+    public TubeStack acceptItemFromTube(TubeStack stack, ForgeDirection from, boolean simulate) {
+    
+        if (from == getFacingDirection() && isBufferEmpty()) {
+            stack = stack.copy();
+            int bufferItems = getItemsInSection(stack.stack, EnumSection.BUFFER);
+            int inputFilterItems = getItemsInSection(stack.stack, EnumSection.INPUT_FILTER);
+            int allowedItems = inputFilterItems - bufferItems;
+            if (allowedItems <= 0) return stack;
+            if (stack.stack.stackSize <= allowedItems) {
+                ItemStack remainder = IOHelper.insert(this, stack.stack, ForgeDirection.UNKNOWN.ordinal(), simulate);
+                if (remainder == null) return null;
+                stack.stack = remainder;
+                return stack;
+            }
+            ItemStack acceptedStack = stack.stack.splitStack(allowedItems);
+            ItemStack remainder = IOHelper.insert(this, acceptedStack, ForgeDirection.UNKNOWN.ordinal(), simulate);
+            if (remainder != null) {
+                stack.stack.stackSize += remainder.stackSize;
+            }
+            return stack;
+        } else {
+            return super.acceptItemFromTube(stack, from, simulate);
+        }
+    }
+    
+    private int getItemsInSection(ItemStack type, EnumSection section) {
+    
+        int count = 0;
+        for (int i = section.ordinal() * 9; i < section.ordinal() * 9 + 9; i++) {
+            if (inventory[i] != null && inventory[i].isItemEqual(type)) count += inventory[i].stackSize;
+        }
+        return count;
+    }
     
     @Override
     public void onButtonPress(int messageId, int value) {
@@ -164,8 +326,9 @@ public class TileRegulator extends TileMachineBase implements ISidedInventory, I
     }
     
     @Override
-    public int[] getAccessibleSlotsFromSide(int p_94128_1_) {
+    public int[] getAccessibleSlotsFromSide(int side) {
     
+        if (side == getFacingDirection().ordinal() || side == getOutputDirection().ordinal()) return new int[0];
         int[] slots = new int[9];
         for (int i = 9; i < 18; i++)
             slots[i - 9] = i;

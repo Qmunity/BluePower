@@ -31,6 +31,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 public class TileBase extends TileEntity implements IRotatable {
     
     private boolean        isRedstonePowered;
+    private int            outputtingRedstone;
     private int            ticker   = 0;
     private ForgeDirection rotation = ForgeDirection.UNKNOWN;
     
@@ -55,6 +56,7 @@ public class TileBase extends TileEntity implements IRotatable {
     
         super.writeToNBT(tCompound);
         tCompound.setBoolean("isRedstonePowered", isRedstonePowered);
+        
         writeToPacketNBT(tCompound);
     }
     
@@ -65,12 +67,13 @@ public class TileBase extends TileEntity implements IRotatable {
     protected void writeToPacketNBT(NBTTagCompound tCompound) {
     
         tCompound.setByte("rotation", (byte) rotation.ordinal());
-        
+        tCompound.setByte("outputtingRedstone", (byte) outputtingRedstone);
     }
     
     protected void readFromPacketNBT(NBTTagCompound tCompound) {
     
         rotation = ForgeDirection.getOrientation(tCompound.getByte("rotation"));
+        outputtingRedstone = tCompound.getByte("outputtingRedstone");
         if (worldObj != null) markForRenderUpdate();
     }
     
@@ -136,6 +139,34 @@ public class TileBase extends TileEntity implements IRotatable {
         } else if (getIsRedstonePowered() && !isIndirectlyPowered) {
             redstoneChanged(false);
         }
+    }
+    
+    /**
+     * Before being able to use this, remember to mark the block as redstone emitter by calling BlockContainerBase#emitsRedstone()
+     * @param newValue
+     */
+    public void setOutputtingRedstone(boolean newValue) {
+    
+        setOutputtingRedstone(newValue ? 15 : 0);
+    }
+    
+    /**
+     * Before being able to use this, remember to mark the block as redstone emitter by calling BlockContainerBase#emitsRedstone()
+     * @param value
+     */
+    public void setOutputtingRedstone(int value) {
+    
+        value = Math.max(0, value);
+        value = Math.min(15, value);
+        if (outputtingRedstone != value) {
+            outputtingRedstone = value;
+            notifyNeighborBlockUpdate();
+        }
+    }
+    
+    public int getOutputtingRedstone() {
+    
+        return outputtingRedstone;
     }
     
     /**

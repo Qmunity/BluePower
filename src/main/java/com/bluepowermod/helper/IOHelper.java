@@ -22,7 +22,7 @@ import com.bluepowermod.references.Dependencies;
 
 public class IOHelper {
     
-    private static IInventory getInventoryForTE(TileEntity te) {
+    public static IInventory getInventoryForTE(TileEntity te) {
     
         if (te instanceof IInventory) {
             IInventory inv = (IInventory) te;
@@ -163,14 +163,13 @@ public class IOHelper {
     
     public static ItemStack insert(TileEntity tile, ItemStack itemStack, ForgeDirection direction, TubeColor color, boolean simulate) {
     
-        IInventory inv = getInventoryForTE(tile);
-        if (inv != null) {
-            return insert(inv, itemStack, direction.ordinal(), simulate);
-        } else if (tile instanceof ITubeConnection) {
+        if (tile instanceof ITubeConnection) {
             TubeStack tubeStack = ((ITubeConnection) tile).acceptItemFromTube(new TubeStack(itemStack, direction.getOpposite(), color), direction, simulate);
             if (tubeStack == null) return null;
             return tubeStack.stack;
         }
+        IInventory inv = getInventoryForTE(tile);
+        if (inv != null) return insert(inv, itemStack, direction.ordinal(), simulate);
         IMultipartCompat compat = (IMultipartCompat) CompatibilityUtils.getModule(Dependencies.FMP);
         PneumaticTube tube = compat.getBPPart(tile, PneumaticTube.class);
         if (tube != null) {//we don't need to check connections, that's catched earlier.

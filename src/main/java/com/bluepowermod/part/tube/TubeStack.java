@@ -100,6 +100,13 @@ public class TubeStack {
         }
     }
     
+    public TubeStack copy() {
+    
+        NBTTagCompound tag = new NBTTagCompound();
+        writeToNBT(tag);
+        return loadFromNBT(tag);
+    }
+    
     public void writeToNBT(NBTTagCompound tag) {
     
         stack.writeToNBT(tag);

@@ -54,6 +54,7 @@ public class BlockContainerBase extends BlockBase implements ITileEntityProvider
     private Map<String, IIcon>          textures;
     private GuiIDs                      guiId = GuiIDs.INVALID;
     private Class<? extends TileEntity> tileEntityClass;
+    private boolean                     isRedstoneEmitter;
     
     public BlockContainerBase(Material material, Class<? extends TileEntity> tileEntityClass) {
     
@@ -71,6 +72,12 @@ public class BlockContainerBase extends BlockBase implements ITileEntityProvider
     public BlockContainerBase setTileEntityClass(Class<? extends TileEntity> tileEntityClass) {
     
         this.tileEntityClass = tileEntityClass;
+        return this;
+    }
+    
+    public BlockContainerBase emitsRedstone() {
+    
+        isRedstoneEmitter = true;
         return this;
     }
     
@@ -108,6 +115,23 @@ public class BlockContainerBase extends BlockBase implements ITileEntityProvider
     }
     
     @Override
+    public boolean canProvidePower() {
+    
+        return isRedstoneEmitter;
+    }
+    
+    @Override
+    public int isProvidingWeakPower(IBlockAccess par1IBlockAccess, int par2, int par3, int par4, int par5) {
+    
+        TileEntity te = par1IBlockAccess.getTileEntity(par2, par3, par4);
+        if (te instanceof TileBase) {
+            TileBase tileBase = (TileBase) te;
+            return tileBase.getOutputtingRedstone();
+        }
+        return 0;
+    }
+    
+    @Override
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int par6, float par7, float par8, float par9) {
     
         if (player.isSneaking()) { return false; }
@@ -133,13 +157,6 @@ public class BlockContainerBase extends BlockBase implements ITileEntityProvider
         world.removeTileEntity(x, y, z);
     }
     
-    /*  @Override
-      public boolean onBlockEventReceived(World world, int x, int y, int z, int id, int data)
-      {
-          super.onBlockEventReceived(world, x, y, z, id, data);
-          TileEntity tileentity = world.getTileEntity(x, y, z);
-          return tileentity != null && tileentity.receiveClientEvent(id, data);
-      }*/
     /**
      * Method to detect how the block was placed, and what way it's facing.
      */

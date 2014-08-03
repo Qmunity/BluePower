@@ -24,7 +24,7 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
     private final List<TubeStack> internalItemStackBuffer = new ArrayList<TubeStack>();
     private TileEntityCache[]     tileCache;
     public static final int       BUFFER_EMPTY_INTERVAL   = 10;
-    private byte                  animationTicker         = -1;
+    protected byte                animationTicker         = -1;
     private static final int      ANIMATION_TIME          = 7;
     private boolean               isAnimating;
     
