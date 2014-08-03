@@ -298,6 +298,7 @@ public class PartRegistry {
         registerPart(GateToggleLatch.class);
         registerPart(GateRSLatch.class);
         registerPart(GateXor.class);
+        registerPart(GateXnor.class);
         
         // Lamps
         for (int i = 0; i < ItemDye.field_150922_c.length; i++)
