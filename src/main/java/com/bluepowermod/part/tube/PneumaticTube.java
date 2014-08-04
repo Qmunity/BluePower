@@ -162,6 +162,11 @@ public class PneumaticTube extends BPPart {
         return logic;
     }
     
+    protected boolean canConnectToInventories() {
+    
+        return true;
+    }
+    
     private void updateConnections() {
     
         if (getWorld() != null && !getWorld().isRemote) {
@@ -172,7 +177,7 @@ public class PneumaticTube extends BPPart {
                 getTileCache()[i].update();
                 ForgeDirection d = ForgeDirection.getOrientation(i);
                 TileEntity neighbor = getTileCache()[i].getTileEntity();
-                connections[i] = IOHelper.canInterfaceWith(neighbor, d.getOpposite(), this);
+                connections[i] = IOHelper.canInterfaceWith(neighbor, d.getOpposite(), this, canConnectToInventories());
                 
                 if (!connections[i]) connections[i] = neighbor instanceof ITubeConnection && ((ITubeConnection) neighbor).isConnectedTo(d.getOpposite());
                 if (connections[i]) {
@@ -911,7 +916,7 @@ public class PneumaticTube extends BPPart {
             renderMiddle(aabbs.get(0), IconSupplier.pneumaticTubeColorNode);
             t.setColorOpaque_F(1, 1, 1);
         } else {
-            renderMiddle(aabbs.get(0), getSideIcon());
+            if (getNodeIcon() != null) renderMiddle(aabbs.get(0), getSideIcon());
             renderMiddle(aabbs.get(0), IconSupplier.pneumaticTubeColorSide);
             t.setColorOpaque_F(1, 1, 1);
             renderSide();

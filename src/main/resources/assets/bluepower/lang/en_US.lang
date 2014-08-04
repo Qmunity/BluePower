@@ -283,6 +283,8 @@ part.bluepower:xnor.name=XNOR Gate
 part.bluepower:xor.name=XOR Gate
 part.bluepower:pneumaticTube.name=Pneumatic Tube
 part.bluepower:restrictionTube.name=Restriction Tube
+part.bluepower:magTube.name=Magtube
+part.bluepower:accelerator.name=Accelerator
 
 item.bluepower:lumar.white.name=White Lumar
 item.bluepower:lumar.orange.name=Orange Lumar

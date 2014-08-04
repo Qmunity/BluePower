@@ -30,21 +30,21 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class TubeStack {
     
-    public ItemStack          stack;
-    public final TubeColor    color;
-    public double             progress;                               //0 at the start, 0.5 on an intersection, 1 at the end.
-    public double             oldProgress;
-    public ForgeDirection     heading;
-    public boolean            enabled        = true;                  //will be disabled when the client sided stack is at an intersection, at which point it needs to wait for server input. This just serves a visual purpose.
-    private TileEntity        target;                                 //only should have a value when retrieving items. this is the target the item wants to go to.
-    private int               targetX, targetY, targetZ;
-    private ForgeDirection    targetEntryDir = ForgeDirection.UNKNOWN; //Which side should this item make its entry.
-    static final double       ITEM_SPEED     = 0.04;
-    private double            speed          = ITEM_SPEED;
+    public ItemStack           stack;
+    public final TubeColor     color;
+    public double              progress;                               //0 at the start, 0.5 on an intersection, 1 at the end.
+    public double              oldProgress;
+    public ForgeDirection      heading;
+    public boolean             enabled        = true;                  //will be disabled when the client sided stack is at an intersection, at which point it needs to wait for server input. This just serves a visual purpose.
+    private TileEntity         target;                                 //only should have a value when retrieving items. this is the target the item wants to go to.
+    private int                targetX, targetY, targetZ;
+    private ForgeDirection     targetEntryDir = ForgeDirection.UNKNOWN; //Which side should this item make its entry.
+    public static final double ITEM_SPEED     = 0.04;
+    private double             speed          = ITEM_SPEED;
     
     @SideOnly(Side.CLIENT)
-    private static RenderItem customRenderItem;
-    private static EntityItem renderedItem;
+    private static RenderItem  customRenderItem;
+    private static EntityItem  renderedItem;
     
     public TubeStack(ItemStack stack, ForgeDirection from) {
     

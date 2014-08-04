@@ -295,14 +295,15 @@ public class IOHelper {
     
     public static boolean canInterfaceWith(TileEntity tile, ForgeDirection direction) {
     
-        return canInterfaceWith(tile, direction, null);
+        return canInterfaceWith(tile, direction, null, true);
     }
     
-    public static boolean canInterfaceWith(TileEntity tile, ForgeDirection direction, PneumaticTube requester) {
+    public static boolean canInterfaceWith(TileEntity tile, ForgeDirection direction, PneumaticTube requester, boolean canInterfaceWithIInventory) {
     
         IMultipartCompat compat = (IMultipartCompat) CompatibilityUtils.getModule(Dependencies.FMP);
         PneumaticTube tube = compat.getBPPart(tile, PneumaticTube.class);
         if (tube != null && tube.isConnected(direction, requester)) return true;
+        if (!canInterfaceWithIInventory) return false;
         if (tile instanceof IInventory) { return !(tile instanceof ISidedInventory) || ((ISidedInventory) tile).getAccessibleSlotsFromSide(direction.ordinal()).length > 0; }
         return false;
     }

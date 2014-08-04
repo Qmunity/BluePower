@@ -157,6 +157,9 @@ public class Recipes {
         
         GameRegistry.addRecipe(new ShapedOreRecipe(PartRegistry.getItemForPart("pneumaticTube", 8), "BGB", 'B', "ingotBrass", 'G', "blockGlass"));
         GameRegistry.addRecipe(new ShapelessOreRecipe(PartRegistry.getItemForPart("restrictionTube", 1), "ingotIron", PartRegistry.getItemForPart("pneumaticTube")));
+        GameRegistry.addRecipe(new ShapedOreRecipe(PartRegistry.getItemForPart("magTube", 8), "CCC", "BGB", "CCC", 'B', Blocks.obsidian, 'G', "blockGlass", 'C', BPItems.copper_wire));
+        GameRegistry.addRecipe(new ShapedOreRecipe(PartRegistry.getItemForPart("accelerator", 8), "OIO", "I I", "OIO", 'O', Blocks.obsidian, 'I', BPItems.blue_alloy_ingot));
+        GameRegistry.addRecipe(new ShapedOreRecipe(PartRegistry.getItemForPart("accelerator", 8), "IOI", "O O", "IOI", 'O', Blocks.obsidian, 'I', BPItems.blue_alloy_ingot));
         craftManager.addRecipe(new ItemStack(BPBlocks.alloy_furnace, 1), "###", "# #", "###", '#', Blocks.brick_block);
         
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPBlocks.block_breaker, 1), "#A#", "#P#", "#R#", '#', "cobblestone", 'A', Items.iron_pickaxe, 'P', Blocks.piston, 'R', "dustRedstone"));

@@ -1,11 +1,16 @@
 package com.bluepowermod.part.tube;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
@@ -46,13 +51,42 @@ public class Accelerator extends PneumaticTube {
         return super.canPlacePart(is, player, block, mop);
     }
     
+    /**
+     * Gets all the occlusion boxes for this block
+     * 
+     * @return A list with the occlusion boxes
+     */
+    @Override
+    public List<AxisAlignedBB> getOcclusionBoxes() {
+    
+        List<AxisAlignedBB> aabbs = new ArrayList<AxisAlignedBB>();
+        
+        if (rotation == ForgeDirection.DOWN || rotation == ForgeDirection.UP) {
+            aabbs.add(AxisAlignedBB.getBoundingBox(0, 4 / 16D, 0, 1, 12 / 16D, 1));
+        } else if (rotation == ForgeDirection.NORTH || rotation == ForgeDirection.SOUTH) {
+            aabbs.add(AxisAlignedBB.getBoundingBox(0, 0, 4 / 16D, 1, 1, 12 / 16D));
+        } else {
+            aabbs.add(AxisAlignedBB.getBoundingBox(4 / 16D, 0, 0, 12 / 16D, 1, 1));
+        }
+        return aabbs;
+    }
+    
     @Override
     public void update() {
     
         super.update();
         TubeLogic logic = getLogic();
-        for (TubeStack stack : logic.tubeStacks)
-            stack.setSpeed(0.25);
+        for (TubeStack stack : logic.tubeStacks) {
+            TileEntity te = getTileCache()[stack.heading.ordinal()].getTileEntity();
+            IMultipartCompat compat = (IMultipartCompat) CompatibilityUtils.getModule(Dependencies.FMP);
+            PneumaticTube tube = compat.getBPPart(te, PneumaticTube.class);
+            if (tube instanceof MagTube && isPowered()) {
+                stack.setSpeed(0.25);
+            } else {
+                stack.setSpeed(TubeStack.ITEM_SPEED);
+            }
+        }
+        
     }
     
     @Override
