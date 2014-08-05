@@ -402,6 +402,13 @@ direction.left=Left
 direction.back=Back
 direction.right=Right
 
+rotation.north=North
+rotation.south=South
+rotation.up=Up
+rotation.down=Down
+rotation.west=West
+rotation.east=East
+
 random.enabled=Enabled
 random.disabled=Disabled
 
@@ -417,5 +424,6 @@ bluepower.config.amethyst.tooltip=Adjust amethyst world generation.
 bluepower.config.sapphire.tooltip=Adjust sapphire world generation.
 bluepower.config.nikolite.tooltip=Adjust nikolite world generation.
 
-waila.pneumaticTube.color=Color:
+waila.pneumaticTube.color=Colors
 waila.machine.stuffed=Stuffed
+

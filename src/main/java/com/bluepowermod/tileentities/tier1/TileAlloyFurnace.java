@@ -26,6 +26,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntityFurnace;
 
 import com.bluepowermod.api.recipe.IAlloyFurnaceRecipe;
+import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.recipe.AlloyFurnaceRegistry;
 import com.bluepowermod.tileentities.TileBase;
 
@@ -271,7 +272,7 @@ public class TileAlloyFurnace extends TileBase implements IInventory {
     @Override
     public String getInventoryName() {
     
-        return null;
+        return BPBlocks.alloy_furnace.getUnlocalizedName();
     }
     
     @Override

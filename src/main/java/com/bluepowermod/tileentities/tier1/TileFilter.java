@@ -11,6 +11,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
 import com.bluepowermod.helper.IOHelper;
+import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.part.IGuiButtonSensitive;
 import com.bluepowermod.part.tube.TubeStack;
 
@@ -156,7 +157,7 @@ public class TileFilter extends TileTransposer implements ISidedInventory, IGuiB
     @Override
     public String getInventoryName() {
     
-        return "tile.filter.name";
+        return BPBlocks.filter.getUnlocalizedName();
     }
     
     @Override

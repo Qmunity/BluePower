@@ -8,6 +8,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.part.IGuiButtonSensitive;
 import com.bluepowermod.part.tube.TubeStack;
 import com.bluepowermod.tileentities.TileMachineBase;
@@ -156,7 +157,7 @@ public class TileItemDetector extends TileMachineBase implements ISidedInventory
     @Override
     public String getInventoryName() {
     
-        return "tile.item_detector.name";
+        return BPBlocks.item_detector.getUnlocalizedName();
     }
     
     @Override

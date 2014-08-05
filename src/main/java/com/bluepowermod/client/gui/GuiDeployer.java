@@ -27,14 +27,14 @@ import com.bluepowermod.containers.ContainerDeployer;
 import com.bluepowermod.tileentities.tier1.TileDeployer;
 
 public class GuiDeployer extends GuiBase {
-
+    
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/deployer.png");
-    private final TileDeployer deployer;
-
+    private final TileDeployer            deployer;
+    
     public GuiDeployer(InventoryPlayer invPlayer, TileDeployer deployer) {
-
-        super(new ContainerDeployer(invPlayer, deployer), resLoc);
+    
+        super(deployer, new ContainerDeployer(invPlayer, deployer), resLoc);
         this.deployer = deployer;
-        this.ySize = 166;
+        ySize = 166;
     }
 }

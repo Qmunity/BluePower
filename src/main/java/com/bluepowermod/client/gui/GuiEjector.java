@@ -27,11 +27,11 @@ import com.bluepowermod.containers.ContainerEjector;
 import com.bluepowermod.tileentities.tier1.TileEjector;
 
 public class GuiEjector extends GuiBase {
-
+    
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/seedBag.png");
-
+    
     public GuiEjector(InventoryPlayer invPlayer, TileEjector ejector) {
-
-        super(new ContainerEjector(invPlayer, ejector), resLoc);
+    
+        super(ejector, new ContainerEjector(invPlayer, ejector), resLoc);
     }
 }

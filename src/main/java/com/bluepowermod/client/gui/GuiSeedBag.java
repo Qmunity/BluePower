@@ -19,7 +19,6 @@
 
 package com.bluepowermod.client.gui;
 
-import net.minecraft.client.resources.I18n;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -28,19 +27,11 @@ import com.bluepowermod.api.Refs;
 import com.bluepowermod.containers.ContainerSeedBag;
 
 public class GuiSeedBag extends GuiBase {
-
+    
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/seedBag.png");
-
+    
     public GuiSeedBag(ItemStack bag, IInventory playerInventory, IInventory seedBagInventory) {
-
-        super(new ContainerSeedBag(bag, playerInventory, seedBagInventory), resLoc);
-    }
-
-    @Override
-    protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-
-        super.drawGuiContainerForegroundLayer(mouseX, mouseY);
-
-        this.drawString(60, 5, I18n.format("item.seed_bag.name", new Object[] {}), false);
+    
+        super(seedBagInventory, new ContainerSeedBag(bag, playerInventory, seedBagInventory), resLoc);
     }
 }

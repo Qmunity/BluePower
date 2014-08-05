@@ -163,6 +163,7 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
         super.readFromPacketNBT(compound);
         boolean wasAnimating = isEjecting();
         isAnimating = compound.getBoolean("animating");
+        if (isAnimating) animationTicker = 0;
         if (worldObj != null && wasAnimating != isEjecting()) {
             markForRenderUpdate();
         }

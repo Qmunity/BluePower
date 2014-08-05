@@ -25,6 +25,7 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action;
 
 import com.bluepowermod.BluePower;
 import com.bluepowermod.helper.IOHelper;
+import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.tileentities.IEjectAnimator;
 import com.bluepowermod.tileentities.TileBase;
 
@@ -271,7 +272,7 @@ public class TileDeployer extends TileBase implements ISidedInventory, IEjectAni
     @Override
     public String getInventoryName() {
     
-        return "tile.buffer.name";
+        return BPBlocks.deployer.getUnlocalizedName();
     }
     
     @Override

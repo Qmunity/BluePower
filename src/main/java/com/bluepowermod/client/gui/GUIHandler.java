@@ -41,6 +41,7 @@ import com.bluepowermod.containers.ContainerRetriever;
 import com.bluepowermod.containers.ContainerSeedBag;
 import com.bluepowermod.containers.ContainerSortingMachine;
 import com.bluepowermod.containers.inventorys.InventoryItem;
+import com.bluepowermod.init.BPItems;
 import com.bluepowermod.items.ItemCanvasBag;
 import com.bluepowermod.items.ItemFloppyDisk;
 import com.bluepowermod.items.ItemScrewdriver;
@@ -140,9 +141,11 @@ public class GUIHandler implements IGuiHandler {
             case SORTING_MACHINE:
                 return new GuiSortingMachine(player.inventory, (TileSortingMachine) ent);
             case SEEDBAG:
-                if (player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() instanceof ItemSeedBag) { return new GuiSeedBag(player.getCurrentEquippedItem(), player.inventory, InventoryItem.getItemInventory(player, player.getCurrentEquippedItem(), "Seed Bag", 9)); }
+                if (player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() instanceof ItemSeedBag) { return new GuiSeedBag(player.getCurrentEquippedItem(), player.inventory, InventoryItem.getItemInventory(player, player.getCurrentEquippedItem(),
+                        BPItems.seedBag.getUnlocalizedName(), 9)); }
             case CANVAS_BAG:
-                if (player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() instanceof ItemCanvasBag) { return new GuiCanvasBag(player.getCurrentEquippedItem(), player.inventory, InventoryItem.getItemInventory(player, player.getCurrentEquippedItem(), "Canvas Bag", 27)); }
+                if (player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() instanceof ItemCanvasBag) { return new GuiCanvasBag(player.getCurrentEquippedItem(), player.inventory, InventoryItem.getItemInventory(player, player.getCurrentEquippedItem(),
+                        BPItems.canvas_bag.getUnlocalizedName(), 27)); }
                 break;
             case CPU:
                 return new GuiCPU(player.inventory, (TileCPU) ent);

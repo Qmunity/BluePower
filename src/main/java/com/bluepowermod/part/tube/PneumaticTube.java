@@ -32,6 +32,7 @@ import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.init.BPItems;
 import com.bluepowermod.init.CustomTabs;
 import com.bluepowermod.items.ItemDamageableColorableOverlay;
+import com.bluepowermod.util.Color;
 
 /**
  * 
@@ -984,6 +985,20 @@ public class PneumaticTube extends BPPart {
     @Override
     public void addWailaInfo(List<String> info) {
     
-        if (color[0] != TubeColor.NONE) info.add(I18n.format("waila.pneumaticTube.color") + " " + I18n.format("gui.widget.color." + ItemDye.field_150923_a[color[0].ordinal()]));
+        boolean addTooltip = false;
+        for (TubeColor col : color) {
+            if (col != TubeColor.NONE) {
+                addTooltip = true;
+                break;
+            }
+        }
+        if (addTooltip) {
+            info.add(Color.YELLOW + I18n.format("waila.pneumaticTube.color"));
+            for (int i = 0; i < 6; i++) {
+                if (color[i] != TubeColor.NONE) {
+                    if (color[0] != TubeColor.NONE) info.add(I18n.format("waila.pneumaticTube.color") + " " + I18n.format("gui.widget.color." + ItemDye.field_150923_a[color[0].ordinal()]));
+                }
+            }
+        }
     }
 }

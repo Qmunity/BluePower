@@ -27,13 +27,13 @@ import com.bluepowermod.containers.ContainerProjectTable;
 import com.bluepowermod.tileentities.tier1.TileProjectTable;
 
 public class GuiProjectTable extends GuiBase {
-
+    
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/project_table.png");
-    private final TileProjectTable deployer;
-
+    private final TileProjectTable        deployer;
+    
     public GuiProjectTable(InventoryPlayer invPlayer, TileProjectTable deployer) {
-
-        super(new ContainerProjectTable(invPlayer, deployer), resLoc);
+    
+        super(deployer, new ContainerProjectTable(invPlayer, deployer), resLoc);
         this.deployer = deployer;
         ySize = 208;
     }

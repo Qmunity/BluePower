@@ -19,7 +19,7 @@ public class GuiItemDetector extends GuiBase {
     
     public GuiItemDetector(InventoryPlayer invPlayer, TileItemDetector itemDetector) {
     
-        super(new ContainerItemDetector(invPlayer, itemDetector), resLoc);
+        super(itemDetector, new ContainerItemDetector(invPlayer, itemDetector), resLoc);
         this.itemDetector = itemDetector;
     }
     

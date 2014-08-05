@@ -20,7 +20,6 @@ package com.bluepowermod.client.gui;
 import java.util.List;
 
 import net.minecraft.client.gui.Gui;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 
@@ -48,7 +47,7 @@ public class GuiSortingMachine extends GuiBase {
     
     public GuiSortingMachine(InventoryPlayer invPlayer, TileSortingMachine sortingMachine) {
     
-        super(new ContainerSortingMachine(invPlayer, sortingMachine), resLoc);
+        super(sortingMachine, new ContainerSortingMachine(invPlayer, sortingMachine), resLoc);
         this.sortingMachine = sortingMachine;
         ySize = 222;
     }
@@ -111,15 +110,6 @@ public class GuiSortingMachine extends GuiBase {
     
         BaseWidget baseWidget = (BaseWidget) widget;
         NetworkHandler.sendToServer(new MessageGuiUpdate(sortingMachine, widget.getID(), baseWidget.value));
-    }
-    
-    @Override
-    protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-    
-        super.drawGuiContainerForegroundLayer(mouseX, mouseY);
-        // fontRenderer.drawString(pump.getInvName(), 8, 6, 0xFFFFFF);
-        drawHorizontalAlignedString(7, 6, xSize - 14, I18n.format("tile." + sortingMachine.getInventoryName() + ".name"), false);
-        
     }
     
     @Override

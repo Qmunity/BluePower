@@ -27,14 +27,14 @@ import com.bluepowermod.containers.ContainerBuffer;
 import com.bluepowermod.tileentities.tier1.TileBuffer;
 
 public class GuiBuffer extends GuiBase {
-
+    
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/buffer.png");
     private final TileBuffer              buffer;
-
+    
     public GuiBuffer(InventoryPlayer invPlayer, TileBuffer buffer) {
-
-        super(new ContainerBuffer(invPlayer, buffer), resLoc);
+    
+        super(buffer, new ContainerBuffer(invPlayer, buffer), resLoc);
         this.buffer = buffer;
-        this.ySize = 186;
+        ySize = 186;
     }
 }

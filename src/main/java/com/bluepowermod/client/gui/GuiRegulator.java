@@ -39,7 +39,7 @@ public class GuiRegulator extends GuiBase {
     
     public GuiRegulator(InventoryPlayer invPlayer, TileRegulator regulator) {
     
-        super(new ContainerRegulator(invPlayer, regulator), resLoc);
+        super(regulator, new ContainerRegulator(invPlayer, regulator), resLoc);
         this.regulator = regulator;
         xSize = 212;
     }

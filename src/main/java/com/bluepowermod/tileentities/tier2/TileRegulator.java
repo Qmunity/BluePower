@@ -12,6 +12,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
 import com.bluepowermod.helper.IOHelper;
+import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.part.IGuiButtonSensitive;
 import com.bluepowermod.part.tube.TubeStack;
 import com.bluepowermod.tileentities.TileMachineBase;
@@ -288,7 +289,7 @@ public class TileRegulator extends TileMachineBase implements ISidedInventory, I
     @Override
     public String getInventoryName() {
     
-        return "tile.regulator.name";
+        return BPBlocks.regulator.getUnlocalizedName();
     }
     
     @Override

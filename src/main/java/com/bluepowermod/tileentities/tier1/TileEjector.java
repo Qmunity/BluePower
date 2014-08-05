@@ -24,6 +24,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
+import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.tileentities.TileMachineBase;
 
 public class TileEjector extends TileMachineBase implements IInventory {
@@ -154,7 +155,7 @@ public class TileEjector extends TileMachineBase implements IInventory {
     @Override
     public String getInventoryName() {
     
-        return "tile.relay.name";
+        return BPBlocks.ejector.getUnlocalizedName();
     }
     
     /**

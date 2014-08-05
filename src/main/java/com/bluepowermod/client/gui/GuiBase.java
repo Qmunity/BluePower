@@ -24,6 +24,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.inventory.Container;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 
@@ -39,11 +40,18 @@ public class GuiBase extends GuiContainer implements IWidgetListener {
     private static final int       COLOR_TEXT = 4210752;
     private final List<IGuiWidget> widgets    = new ArrayList<IGuiWidget>();
     private final ResourceLocation resLoc;
+    private IInventory             inventory;
     
     public GuiBase(Container mainContainer, ResourceLocation _resLoc) {
     
         super(mainContainer);
         resLoc = _resLoc;
+    }
+    
+    public GuiBase(IInventory inventory, Container mainContainer, ResourceLocation _resLoc) {
+    
+        this(mainContainer, _resLoc);
+        this.inventory = inventory;
     }
     
     protected void addWidget(IGuiWidget widget) {
@@ -86,6 +94,9 @@ public class GuiBase extends GuiContainer implements IWidgetListener {
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
     
         fontRendererObj.drawString(StatCollector.translateToLocal("container.inventory"), 8, ySize - 94 + 2, COLOR_TEXT);
+        if (inventory != null) {
+            drawHorizontalAlignedString(7, 5, xSize - 14, I18n.format(inventory.getInventoryName() + ".name"), false);
+        }
     }
     
     @Override

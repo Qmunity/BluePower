@@ -25,6 +25,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.tileentities.TileBase;
 
 public class TileBuffer extends TileBase implements ISidedInventory {
@@ -107,7 +108,7 @@ public class TileBuffer extends TileBase implements ISidedInventory {
     @Override
     public String getInventoryName() {
     
-        return "tile.buffer.name";
+        return BPBlocks.buffer.getUnlocalizedName();
     }
     
     @Override

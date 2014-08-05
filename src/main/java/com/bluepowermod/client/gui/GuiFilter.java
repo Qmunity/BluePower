@@ -38,13 +38,13 @@ public class GuiFilter extends GuiBase {
     
     public GuiFilter(ContainerFilter container, TileFilter filter, ResourceLocation resLoc) {
     
-        super(container, resLoc);
+        super(filter, container, resLoc);
         this.filter = filter;
     }
     
     public GuiFilter(InventoryPlayer invPlayer, TileFilter filter) {
     
-        super(new ContainerFilter(invPlayer, filter), resLoc);
+        super(filter, new ContainerFilter(invPlayer, filter), resLoc);
         this.filter = filter;
     }
     
