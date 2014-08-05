@@ -17,11 +17,13 @@
 
 package com.bluepowermod.init;
 
+import net.minecraftforge.common.config.Configuration;
+
+import com.bluepowermod.BluePower;
+import com.bluepowermod.api.Refs;
+
 import cpw.mods.fml.client.event.ConfigChangedEvent;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.common.config.Configuration;
-import com.bluepowermod.BluePower;
-import com.bluepowermod.references.Refs;
 
 public class Config {
 

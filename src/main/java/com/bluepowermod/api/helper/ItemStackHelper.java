@@ -1,4 +1,4 @@
-package com.bluepowermod.helper;
+package com.bluepowermod.api.helper;
 
 import net.minecraft.item.ItemStack;
 

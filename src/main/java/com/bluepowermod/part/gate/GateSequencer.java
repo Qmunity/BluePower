@@ -7,10 +7,12 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
+
 import com.bluepowermod.api.part.RedstoneConnection;
 import com.bluepowermod.client.gui.gate.GuiGateSingleTime;
 import com.bluepowermod.client.renderers.RenderHelper;
 import com.bluepowermod.part.IGuiButtonSensitive;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

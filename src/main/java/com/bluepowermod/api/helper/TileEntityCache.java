@@ -1,4 +1,4 @@
-package com.bluepowermod.helper;
+package com.bluepowermod.api.helper;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;

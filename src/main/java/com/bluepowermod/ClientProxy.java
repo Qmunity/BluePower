@@ -21,10 +21,11 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.MinecraftForge;
-import com.bluepowermod.client.renderers.IconSupplier;
-import com.bluepowermod.client.renderers.Renderers;
 
 import org.lwjgl.input.Keyboard;
+
+import com.bluepowermod.client.renderers.IconSupplier;
+import com.bluepowermod.client.renderers.Renderers;
 
 import cpw.mods.fml.client.FMLClientHandler;
 

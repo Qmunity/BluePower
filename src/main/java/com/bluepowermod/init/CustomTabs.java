@@ -24,6 +24,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
+
 import com.bluepowermod.api.part.PartRegistry;
 
 public class CustomTabs {

@@ -24,6 +24,7 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+
 import com.bluepowermod.containers.inventorys.InventoryItem;
 import com.bluepowermod.containers.slots.SlotExclude;
 import com.bluepowermod.containers.slots.SlotLocked;

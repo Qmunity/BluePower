@@ -8,18 +8,8 @@
 
 package com.bluepowermod.part.gate;
 
-import com.bluepowermod.api.part.BPPartFace;
-import com.bluepowermod.api.part.FaceDirection;
-import com.bluepowermod.api.part.RedstoneConnection;
-import com.bluepowermod.api.vec.Vector3;
-import com.bluepowermod.api.vec.Vector3Cube;
-import com.bluepowermod.client.renderers.RenderHelper;
-import com.bluepowermod.init.BPItems;
-import com.bluepowermod.init.CustomTabs;
-import com.bluepowermod.references.Refs;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import java.util.List;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.creativetab.CreativeTabs;
@@ -29,9 +19,22 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
+
 import org.lwjgl.opengl.GL11;
 
-import java.util.List;
+import com.bluepowermod.api.Refs;
+import com.bluepowermod.api.part.BPPartFace;
+import com.bluepowermod.api.part.FaceDirection;
+import com.bluepowermod.api.part.RedstoneConnection;
+import com.bluepowermod.api.vec.Vector3;
+import com.bluepowermod.api.vec.Vector3Cube;
+import com.bluepowermod.client.renderers.RenderHelper;
+import com.bluepowermod.init.BPItems;
+import com.bluepowermod.init.CustomTabs;
+
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public abstract class GateBase extends BPPartFace {
 

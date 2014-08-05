@@ -37,10 +37,10 @@ import codechicken.multipart.JNormalOcclusion;
 import codechicken.multipart.NormalOcclusionTest;
 import codechicken.multipart.TMultiPart;
 
+import com.bluepowermod.api.Refs;
 import com.bluepowermod.api.part.BPPart;
 import com.bluepowermod.api.part.PartRegistry;
 import com.bluepowermod.api.part.redstone.IBPRedstonePart;
-import com.bluepowermod.references.Refs;
 
 public class MultipartBPPart extends TMultiPart implements IRedstonePart, JNormalOcclusion, INeighborTileChange {
     

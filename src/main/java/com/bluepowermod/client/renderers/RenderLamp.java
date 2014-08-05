@@ -7,11 +7,12 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
+
+import org.lwjgl.opengl.GL11;
+
 import com.bluepowermod.api.vec.Vector3Cube;
 import com.bluepowermod.blocks.machines.BlockLamp;
 import com.bluepowermod.tileentities.tier1.TileLamp;
-
-import org.lwjgl.opengl.GL11;
 
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import cpw.mods.fml.client.registry.RenderingRegistry;

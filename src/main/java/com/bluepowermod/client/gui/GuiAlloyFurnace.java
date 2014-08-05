@@ -19,8 +19,9 @@ package com.bluepowermod.client.gui;
 
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
+
+import com.bluepowermod.api.Refs;
 import com.bluepowermod.containers.ContainerAlloyFurnace;
-import com.bluepowermod.references.Refs;
 import com.bluepowermod.tileentities.tier1.TileAlloyFurnace;
 
 public class GuiAlloyFurnace extends GuiBase {

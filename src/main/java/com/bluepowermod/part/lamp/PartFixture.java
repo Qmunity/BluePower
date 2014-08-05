@@ -5,11 +5,12 @@ import java.util.List;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
+
+import org.lwjgl.opengl.GL11;
+
 import com.bluepowermod.api.vec.Vector3Cube;
 import com.bluepowermod.client.renderers.IconSupplier;
 import com.bluepowermod.client.renderers.RenderHelper;
-
-import org.lwjgl.opengl.GL11;
 
 /**
  * 

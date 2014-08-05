@@ -1,13 +1,14 @@
 package com.bluepowermod.client.renderers;
 
-import org.lwjgl.opengl.GL11;
-
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.AdvancedModelLoader;
 import net.minecraftforge.client.model.IModelCustom;
-import com.bluepowermod.references.Refs;
+
+import org.lwjgl.opengl.GL11;
+
+import com.bluepowermod.api.Refs;
 import com.bluepowermod.tileentities.tier2.TileWindmill;
 
 public class RenderWindmill extends TileEntitySpecialRenderer {

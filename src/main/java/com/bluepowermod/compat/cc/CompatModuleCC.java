@@ -1,6 +1,7 @@
 package com.bluepowermod.compat.cc;
 
 import com.bluepowermod.compat.CompatModule;
+
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;

@@ -3,13 +3,13 @@ package com.bluepowermod.client.gui;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 
+import com.bluepowermod.api.Refs;
 import com.bluepowermod.client.gui.widget.BaseWidget;
 import com.bluepowermod.client.gui.widget.IGuiWidget;
 import com.bluepowermod.client.gui.widget.WidgetMode;
 import com.bluepowermod.containers.ContainerItemDetector;
 import com.bluepowermod.network.NetworkHandler;
 import com.bluepowermod.network.messages.MessageGuiUpdate;
-import com.bluepowermod.references.Refs;
 import com.bluepowermod.tileentities.tier1.TileItemDetector;
 
 public class GuiItemDetector extends GuiBase {

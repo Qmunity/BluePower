@@ -23,8 +23,9 @@
 package com.bluepowermod.items;
 
 import net.minecraft.item.Item;
-import com.bluepowermod.references.Refs;
 import net.minecraft.item.ItemStack;
+
+import com.bluepowermod.api.Refs;
 
 public class ItemBase extends Item {
 

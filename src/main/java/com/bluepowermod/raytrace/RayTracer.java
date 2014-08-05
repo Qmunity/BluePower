@@ -21,11 +21,11 @@ import net.minecraftforge.common.util.ForgeDirection;
 import codechicken.lib.raytracer.IndexedCuboid6;
 import codechicken.lib.vec.Cuboid6;
 
+import com.bluepowermod.api.Dependencies;
+import com.bluepowermod.api.compat.IMultipartCompat;
 import com.bluepowermod.api.part.BPPart;
 import com.bluepowermod.api.vec.Vector3;
 import com.bluepowermod.compat.CompatibilityUtils;
-import com.bluepowermod.compat.fmp.IMultipartCompat;
-import com.bluepowermod.references.Dependencies;
 
 import cpw.mods.fml.common.Optional;
 

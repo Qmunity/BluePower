@@ -21,6 +21,8 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemDye;
 
+import com.bluepowermod.api.Dependencies;
+import com.bluepowermod.api.Refs;
 import com.bluepowermod.blocks.BPBlockMultipart;
 import com.bluepowermod.blocks.BlockContainerBase;
 import com.bluepowermod.blocks.BlockItemOre;
@@ -43,9 +45,7 @@ import com.bluepowermod.blocks.worldgen.BlockCrop;
 import com.bluepowermod.blocks.worldgen.BlockCustomFlower;
 import com.bluepowermod.blocks.worldgen.BlockStoneOre;
 import com.bluepowermod.blocks.worldgen.BlockStoneOreConnected;
-import com.bluepowermod.references.Dependencies;
 import com.bluepowermod.references.GuiIDs;
-import com.bluepowermod.references.Refs;
 import com.bluepowermod.tileentities.tier1.TileBlockBreaker;
 import com.bluepowermod.tileentities.tier1.TileBuffer;
 import com.bluepowermod.tileentities.tier1.TileDeployer;

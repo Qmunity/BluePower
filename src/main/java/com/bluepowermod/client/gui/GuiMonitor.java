@@ -3,11 +3,12 @@ package com.bluepowermod.client.gui;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
-import com.bluepowermod.containers.ContainerMonitor;
-import com.bluepowermod.references.Refs;
-import com.bluepowermod.tileentities.tier3.TileMonitor;
 
 import org.lwjgl.opengl.GL11;
+
+import com.bluepowermod.api.Refs;
+import com.bluepowermod.containers.ContainerMonitor;
+import com.bluepowermod.tileentities.tier3.TileMonitor;
 
 public class GuiMonitor extends GuiBase {
     

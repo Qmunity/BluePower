@@ -10,12 +10,13 @@ import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.ForgeDirection;
-import com.bluepowermod.api.vec.Vector3Cube;
-import com.bluepowermod.part.gate.GateBase;
-import com.bluepowermod.references.Refs;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
+
+import com.bluepowermod.api.Refs;
+import com.bluepowermod.api.vec.Vector3Cube;
+import com.bluepowermod.part.gate.GateBase;
 
 public class RenderHelper {
     

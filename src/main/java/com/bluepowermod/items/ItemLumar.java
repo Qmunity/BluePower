@@ -19,16 +19,18 @@
 
 package com.bluepowermod.items;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import java.util.List;
+
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
-import com.bluepowermod.init.CustomTabs;
-import com.bluepowermod.references.Refs;
 
-import java.util.List;
+import com.bluepowermod.api.Refs;
+import com.bluepowermod.init.CustomTabs;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemLumar extends ItemBase {
 

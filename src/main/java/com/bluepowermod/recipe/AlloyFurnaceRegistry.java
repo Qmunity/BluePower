@@ -32,11 +32,13 @@ import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
+
 import com.bluepowermod.BluePower;
 import com.bluepowermod.api.recipe.IAlloyFurnaceRecipe;
 import com.bluepowermod.api.recipe.IAlloyFurnaceRegistry;
 import com.bluepowermod.init.Config;
 import com.bluepowermod.util.ItemStackUtils;
+
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.ModContainer;
 import cpw.mods.fml.common.registry.GameData;

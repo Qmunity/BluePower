@@ -1,4 +1,4 @@
-package com.bluepowermod.compat.fmp;
+package com.bluepowermod.api.compat;
 
 import java.util.List;
 

@@ -28,15 +28,15 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import com.bluepowermod.BluePower;
+import com.bluepowermod.api.Dependencies;
+import com.bluepowermod.api.Refs;
+import com.bluepowermod.api.compat.IMultipartCompat;
 import com.bluepowermod.api.part.BPPart;
 import com.bluepowermod.api.vec.Vector3;
 import com.bluepowermod.compat.CompatibilityUtils;
-import com.bluepowermod.compat.fmp.IMultipartCompat;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.init.CustomTabs;
-import com.bluepowermod.references.Dependencies;
 import com.bluepowermod.references.GuiIDs;
-import com.bluepowermod.references.Refs;
 import com.bluepowermod.tileentities.tier3.IRedBusWindow;
 import com.bluepowermod.tileentities.tier3.TileCPU;
 

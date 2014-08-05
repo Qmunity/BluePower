@@ -13,10 +13,11 @@ import java.util.List;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer;
-import com.bluepowermod.api.part.BPPart;
-import com.bluepowermod.api.part.PartRegistry;
 
 import org.lwjgl.opengl.GL11;
+
+import com.bluepowermod.api.part.BPPart;
+import com.bluepowermod.api.part.PartRegistry;
 
 public class RenderItemBPPart implements IItemRenderer {
     

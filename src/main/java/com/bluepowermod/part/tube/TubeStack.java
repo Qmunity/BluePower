@@ -14,10 +14,10 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import org.lwjgl.opengl.GL11;
 
+import com.bluepowermod.api.Refs;
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
 import com.bluepowermod.api.vec.Vector3Cube;
 import com.bluepowermod.client.renderers.RenderHelper;
-import com.bluepowermod.references.Refs;
 
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.relauncher.Side;

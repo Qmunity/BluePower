@@ -18,11 +18,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import com.bluepowermod.api.Refs;
 import com.bluepowermod.api.part.BPPart;
 import com.bluepowermod.api.part.PartRegistry;
 import com.bluepowermod.api.vec.Vector3;
 import com.bluepowermod.init.BPBlocks;
-import com.bluepowermod.references.Refs;
 import com.bluepowermod.tileentities.BPTileMultipart;
 
 public class ItemBPPart extends Item {

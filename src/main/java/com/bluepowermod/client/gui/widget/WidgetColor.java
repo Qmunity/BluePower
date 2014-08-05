@@ -20,9 +20,10 @@ import java.util.List;
 
 import net.minecraft.client.gui.Gui;
 import net.minecraft.item.ItemDye;
-import com.bluepowermod.references.Refs;
 
 import org.lwjgl.opengl.GL11;
+
+import com.bluepowermod.api.Refs;
 
 /**
  * @author MineMaarten

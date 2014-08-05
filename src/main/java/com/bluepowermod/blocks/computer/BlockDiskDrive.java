@@ -6,9 +6,9 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import com.bluepowermod.api.Refs;
 import com.bluepowermod.blocks.BlockContainerBase;
 import com.bluepowermod.references.GuiIDs;
-import com.bluepowermod.references.Refs;
 import com.bluepowermod.tileentities.tier3.TileDiskDrive;
 
 import cpw.mods.fml.relauncher.Side;

@@ -3,10 +3,11 @@ package com.bluepowermod.part.gate;
 import java.util.List;
 
 import net.minecraft.util.AxisAlignedBB;
+
+import com.bluepowermod.api.Refs;
 import com.bluepowermod.api.part.FaceDirection;
 import com.bluepowermod.api.part.RedstoneConnection;
 import com.bluepowermod.client.renderers.RenderHelper;
-import com.bluepowermod.references.Refs;
 
 public class GateBuffer extends GateBase {
     

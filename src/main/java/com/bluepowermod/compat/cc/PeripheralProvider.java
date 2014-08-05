@@ -1,9 +1,9 @@
 package com.bluepowermod.compat.cc;
 
-import dan200.computercraft.api.peripheral.IPeripheral;
-import dan200.computercraft.api.peripheral.IPeripheralProvider;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import dan200.computercraft.api.peripheral.IPeripheral;
+import dan200.computercraft.api.peripheral.IPeripheralProvider;
 
 public class PeripheralProvider implements IPeripheralProvider {
 

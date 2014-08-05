@@ -17,16 +17,17 @@
 
 package com.bluepowermod.blocks.worldgen;
 
+import java.util.Random;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.Item;
 import net.minecraft.world.IBlockAccess;
+
+import com.bluepowermod.api.Refs;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.init.CustomTabs;
-import com.bluepowermod.references.Refs;
-
-import java.util.Random;
 
 public class BlockStoneOre extends Block {
 

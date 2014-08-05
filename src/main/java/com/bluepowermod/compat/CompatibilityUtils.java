@@ -14,11 +14,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.bluepowermod.api.Dependencies;
 import com.bluepowermod.compat.cc.CompatModuleCC;
 import com.bluepowermod.compat.fmp.CompatModuleFMP;
 import com.bluepowermod.compat.fmp.CompatModuleFMPAlt;
 import com.bluepowermod.compat.waila.CompatModuleWaila;
-import com.bluepowermod.references.Dependencies;
 
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.event.FMLInitializationEvent;

@@ -10,9 +10,9 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import com.bluepowermod.api.helper.TileEntityCache;
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
 import com.bluepowermod.helper.IOHelper;
-import com.bluepowermod.helper.TileEntityCache;
 import com.bluepowermod.part.tube.ITubeConnection;
 import com.bluepowermod.part.tube.IWeightedTubeInventory;
 import com.bluepowermod.part.tube.TubeStack;

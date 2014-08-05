@@ -17,17 +17,19 @@
 
 package com.bluepowermod.blocks.worldgen;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.BlockFlower;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.EnumPlantType;
+
+import com.bluepowermod.api.Refs;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.init.CustomTabs;
-import com.bluepowermod.references.Refs;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockCustomFlower extends BlockBush {
 

@@ -1,9 +1,10 @@
 package com.bluepowermod.containers;
 
-import com.bluepowermod.tileentities.tier3.TileCPU;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
+
+import com.bluepowermod.tileentities.tier3.TileCPU;
 
 public class ContainerCPU extends Container {
 

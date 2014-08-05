@@ -3,8 +3,9 @@ package com.bluepowermod.client.gui;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
+
+import com.bluepowermod.api.Refs;
 import com.bluepowermod.containers.ContainerRedbusID;
-import com.bluepowermod.references.Refs;
 import com.bluepowermod.tileentities.tier3.IRedBusWindow;
 
 public class GuiRedbusID extends GuiBase {

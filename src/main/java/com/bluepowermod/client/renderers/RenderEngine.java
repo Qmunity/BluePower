@@ -6,10 +6,11 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.AdvancedModelLoader;
 import net.minecraftforge.client.model.IModelCustom;
 import net.minecraftforge.common.util.ForgeDirection;
-import com.bluepowermod.references.Refs;
-import com.bluepowermod.tileentities.tier3.TileEngine;
 
 import org.lwjgl.opengl.GL11;
+
+import com.bluepowermod.api.Refs;
+import com.bluepowermod.tileentities.tier3.TileEngine;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

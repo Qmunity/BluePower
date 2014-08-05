@@ -24,6 +24,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.EnumHelper;
 
+import com.bluepowermod.api.Dependencies;
+import com.bluepowermod.api.Refs;
 import com.bluepowermod.compat.fmp.ItemBPMultipart;
 import com.bluepowermod.items.ItemAthame;
 import com.bluepowermod.items.ItemBase;
@@ -52,8 +54,6 @@ import com.bluepowermod.items.ItemSiliconBoule;
 import com.bluepowermod.items.ItemSiliconWafer;
 import com.bluepowermod.items.ItemZincPlate;
 import com.bluepowermod.part.ItemBPPart;
-import com.bluepowermod.references.Dependencies;
-import com.bluepowermod.references.Refs;
 
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Optional;

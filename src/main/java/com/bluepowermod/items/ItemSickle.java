@@ -17,7 +17,8 @@
 
 package com.bluepowermod.items;
 
-import com.google.common.collect.Sets;
+import java.util.Set;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.material.Material;
@@ -27,10 +28,10 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTool;
 import net.minecraft.world.World;
-import com.bluepowermod.init.CustomTabs;
-import com.bluepowermod.references.Refs;
 
-import java.util.Set;
+import com.bluepowermod.api.Refs;
+import com.bluepowermod.init.CustomTabs;
+import com.google.common.collect.Sets;
 
 public class ItemSickle extends ItemTool {
 

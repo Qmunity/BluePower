@@ -4,10 +4,10 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.world.IBlockAccess;
 
+import com.bluepowermod.api.Refs;
 import com.bluepowermod.blocks.BlockContainerBase;
 import com.bluepowermod.client.renderers.RenderLamp;
 import com.bluepowermod.init.CustomTabs;
-import com.bluepowermod.references.Refs;
 import com.bluepowermod.tileentities.tier1.TileLamp;
 
 import cpw.mods.fml.relauncher.Side;

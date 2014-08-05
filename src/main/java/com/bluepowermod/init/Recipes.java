@@ -27,10 +27,10 @@ import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 
 import com.bluepowermod.api.BPRegistry;
+import com.bluepowermod.api.Refs;
 import com.bluepowermod.api.part.PartRegistry;
 import com.bluepowermod.api.recipe.IAlloyFurnaceRegistry;
 import com.bluepowermod.recipe.CanvasBagRecipe;
-import com.bluepowermod.references.Refs;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 

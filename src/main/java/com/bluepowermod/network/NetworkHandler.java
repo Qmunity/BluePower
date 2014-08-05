@@ -20,11 +20,11 @@ package com.bluepowermod.network;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.World;
 
+import com.bluepowermod.api.Refs;
 import com.bluepowermod.network.messages.LocationDoublePacket;
 import com.bluepowermod.network.messages.LocationIntPacket;
 import com.bluepowermod.network.messages.MessageGuiUpdate;
 import com.bluepowermod.network.messages.MessageMultipartRemove;
-import com.bluepowermod.references.Refs;
 
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;

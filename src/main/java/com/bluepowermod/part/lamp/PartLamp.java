@@ -12,16 +12,17 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 import net.minecraftforge.common.util.ForgeDirection;
+
+import org.lwjgl.opengl.GL11;
+
+import com.bluepowermod.api.helper.RedstoneHelper;
 import com.bluepowermod.api.part.BPPartFace;
 import com.bluepowermod.api.part.RedstoneConnection;
 import com.bluepowermod.api.vec.Vector3;
 import com.bluepowermod.api.vec.Vector3Cube;
 import com.bluepowermod.client.renderers.IconSupplier;
 import com.bluepowermod.client.renderers.RenderHelper;
-import com.bluepowermod.helper.RedstoneHelper;
 import com.bluepowermod.init.CustomTabs;
-
-import org.lwjgl.opengl.GL11;
 
 /**
  * Base class for the lamps that are multiparts.

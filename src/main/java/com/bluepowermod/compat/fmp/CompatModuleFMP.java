@@ -28,6 +28,7 @@ import codechicken.multipart.TMultiPart;
 import codechicken.multipart.TileMultipart;
 import codechicken.multipart.handler.MultipartProxy;
 
+import com.bluepowermod.api.compat.IMultipartCompat;
 import com.bluepowermod.api.part.BPPart;
 import com.bluepowermod.api.vec.Vector3;
 import com.bluepowermod.compat.CompatModule;
@@ -52,6 +53,8 @@ public class CompatModuleFMP extends CompatModule implements IMultipartCompat {
         RegisterMultiparts.register();
 
         registerBlocksAsMicroblock();
+
+        PartRegister.registerParts();
     }
 
     @Override

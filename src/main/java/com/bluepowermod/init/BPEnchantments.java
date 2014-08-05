@@ -1,6 +1,7 @@
 package com.bluepowermod.init;
 
 import net.minecraft.enchantment.Enchantment;
+
 import com.bluepowermod.enchantments.EnchantmentDisjunction;
 import com.bluepowermod.enchantments.EnchantmentVorpal;
 

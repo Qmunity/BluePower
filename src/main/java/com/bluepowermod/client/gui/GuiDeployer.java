@@ -21,8 +21,9 @@ package com.bluepowermod.client.gui;
 
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
+
+import com.bluepowermod.api.Refs;
 import com.bluepowermod.containers.ContainerDeployer;
-import com.bluepowermod.references.Refs;
 import com.bluepowermod.tileentities.tier1.TileDeployer;
 
 public class GuiDeployer extends GuiBase {

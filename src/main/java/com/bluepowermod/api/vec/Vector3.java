@@ -21,7 +21,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import codechicken.lib.math.MathHelper;
 import codechicken.lib.vec.BlockCoord;
 
-import com.bluepowermod.references.Dependencies;
+import com.bluepowermod.api.Dependencies;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Optional;

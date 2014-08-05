@@ -22,6 +22,7 @@ package com.bluepowermod.recipe;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
+
 import com.bluepowermod.items.ItemCanvasBag;
 
 public class CanvasBagRecipe extends ShapelessOreRecipe {

@@ -22,6 +22,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+
 import com.bluepowermod.tileentities.tier3.TileKinectGenerator;
 
 public class ContainerKinect extends Container {

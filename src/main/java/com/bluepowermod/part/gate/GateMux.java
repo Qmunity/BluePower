@@ -4,10 +4,11 @@ import java.util.List;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.AxisAlignedBB;
+
+import com.bluepowermod.api.Refs;
 import com.bluepowermod.api.part.FaceDirection;
 import com.bluepowermod.api.part.RedstoneConnection;
 import com.bluepowermod.client.renderers.RenderHelper;
-import com.bluepowermod.references.Refs;
 import com.bluepowermod.util.Color;
 
 public class GateMux extends GateBase {

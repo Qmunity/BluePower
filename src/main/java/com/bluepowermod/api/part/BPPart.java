@@ -25,10 +25,9 @@ import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 import net.minecraftforge.common.util.ForgeDirection;
 import codechicken.multipart.BlockMultipart;
 
+import com.bluepowermod.api.BPApi;
+import com.bluepowermod.api.Dependencies;
 import com.bluepowermod.api.vec.Vector3;
-import com.bluepowermod.compat.CompatibilityUtils;
-import com.bluepowermod.compat.fmp.IMultipartCompat;
-import com.bluepowermod.references.Dependencies;
 
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Optional;
@@ -431,7 +430,7 @@ public abstract class BPPart {
         if (world == null)
             return;
 
-        ((IMultipartCompat) CompatibilityUtils.getModule(Dependencies.FMP)).sendUpdatePacket(this);
+        BPApi.getMultipartCompat().sendUpdatePacket(this);
     }
 
     /**
@@ -517,7 +516,7 @@ public abstract class BPPart {
      */
     public boolean checkOcclusion(AxisAlignedBB cube) {
 
-        return ((IMultipartCompat) CompatibilityUtils.getModule(Dependencies.FMP)).checkOcclusion(world.getTileEntity(x, y, z), cube);
+        return BPApi.getMultipartCompat().checkOcclusion(world.getTileEntity(x, y, z), cube);
     }
 
     /**

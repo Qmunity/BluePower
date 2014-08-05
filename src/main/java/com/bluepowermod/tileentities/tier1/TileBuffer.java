@@ -24,6 +24,7 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
+
 import com.bluepowermod.tileentities.TileBase;
 
 public class TileBuffer extends TileBase implements ISidedInventory {

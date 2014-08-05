@@ -27,6 +27,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
+
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.init.Config;
 

@@ -4,6 +4,7 @@ import java.util.Comparator;
 
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
+
 import com.bluepowermod.api.vec.Vector3;
 
 public class ComparatorMOP implements Comparator<MovingObjectPosition> {

@@ -20,15 +20,16 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
-import com.bluepowermod.api.part.BPPart;
-import com.bluepowermod.api.part.PartRegistry;
-import com.bluepowermod.init.CustomTabs;
-import com.bluepowermod.part.ItemBPPart;
-import com.bluepowermod.references.Refs;
 import codechicken.lib.vec.BlockCoord;
 import codechicken.lib.vec.Vector3;
 import codechicken.multipart.JItemMultiPart;
 import codechicken.multipart.TMultiPart;
+
+import com.bluepowermod.api.Refs;
+import com.bluepowermod.api.part.BPPart;
+import com.bluepowermod.api.part.PartRegistry;
+import com.bluepowermod.init.CustomTabs;
+import com.bluepowermod.part.ItemBPPart;
 
 public class ItemBPMultipart extends JItemMultiPart {
     

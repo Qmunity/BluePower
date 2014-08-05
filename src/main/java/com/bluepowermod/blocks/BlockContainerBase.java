@@ -34,16 +34,16 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import com.bluepowermod.BluePower;
+import com.bluepowermod.api.Refs;
+import com.bluepowermod.api.util.ForgeDirectionUtils;
 import com.bluepowermod.client.renderers.RendererBlockBase;
 import com.bluepowermod.client.renderers.RendererBlockBase.EnumFaceType;
 import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.references.GuiIDs;
-import com.bluepowermod.references.Refs;
 import com.bluepowermod.tileentities.IBluePowered;
 import com.bluepowermod.tileentities.IEjectAnimator;
 import com.bluepowermod.tileentities.IRotatable;
 import com.bluepowermod.tileentities.TileBase;
-import com.bluepowermod.util.ForgeDirectionUtils;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

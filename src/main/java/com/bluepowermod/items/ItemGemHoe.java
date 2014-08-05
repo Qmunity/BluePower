@@ -18,9 +18,10 @@
 package com.bluepowermod.items;
 
 import net.minecraft.item.ItemHoe;
-import com.bluepowermod.init.CustomTabs;
-import com.bluepowermod.references.Refs;
 import net.minecraft.item.ItemStack;
+
+import com.bluepowermod.api.Refs;
+import com.bluepowermod.init.CustomTabs;
 
 public class ItemGemHoe extends ItemHoe {
 

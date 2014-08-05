@@ -1,7 +1,8 @@
 package com.bluepowermod.tileentities.tier1;
 
 import net.minecraftforge.common.util.ForgeDirection;
-import com.bluepowermod.helper.RedstoneHelper;
+
+import com.bluepowermod.api.helper.RedstoneHelper;
 import com.bluepowermod.tileentities.TileBase;
 
 /**

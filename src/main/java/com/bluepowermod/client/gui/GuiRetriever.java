@@ -4,9 +4,9 @@ import net.minecraft.client.gui.Gui;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 
+import com.bluepowermod.api.Refs;
 import com.bluepowermod.client.gui.widget.WidgetMode;
 import com.bluepowermod.containers.ContainerRetriever;
-import com.bluepowermod.references.Refs;
 import com.bluepowermod.tileentities.tier2.TileRetriever;
 
 public class GuiRetriever extends GuiFilter {

@@ -5,9 +5,10 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.IItemRenderer;
 import net.minecraftforge.client.model.AdvancedModelLoader;
 import net.minecraftforge.client.model.IModelCustom;
-import com.bluepowermod.references.Refs;
 
 import org.lwjgl.opengl.GL11;
+
+import com.bluepowermod.api.Refs;
 
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.relauncher.Side;

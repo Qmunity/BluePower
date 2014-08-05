@@ -21,16 +21,18 @@
 
 package com.bluepowermod.client.gui;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraftforge.common.config.ConfigElement;
+
+import com.bluepowermod.BluePower;
+import com.bluepowermod.api.Refs;
+
 import cpw.mods.fml.client.config.DummyConfigElement;
 import cpw.mods.fml.client.config.GuiConfig;
 import cpw.mods.fml.client.config.IConfigElement;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraftforge.common.config.ConfigElement;
-import com.bluepowermod.BluePower;
-import com.bluepowermod.references.Refs;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class BPGuiConfig extends GuiConfig {
 

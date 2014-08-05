@@ -2,7 +2,9 @@ package com.bluepowermod.tileentities.tier3;
 
 import java.io.IOException;
 import java.io.InputStream;
+
 import net.minecraft.init.Blocks;
+
 import com.bluepowermod.BluePower;
 import com.bluepowermod.tileentities.TileBase;
 

@@ -22,8 +22,8 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import com.bluepowermod.api.Refs;
 import com.bluepowermod.client.renderers.RendererBlockBase.EnumFaceType;
-import com.bluepowermod.references.Refs;
 import com.bluepowermod.tileentities.tier1.TileIgniter;
 
 import cpw.mods.fml.relauncher.Side;

@@ -19,8 +19,9 @@ package com.bluepowermod.items;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
+
+import com.bluepowermod.api.Refs;
 import com.bluepowermod.init.CustomTabs;
-import com.bluepowermod.references.Refs;
 
 public class ItemGemSword extends ItemSword {
 

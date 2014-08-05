@@ -15,7 +15,7 @@
  *     along with Blue Power.  If not, see <http://www.gnu.org/licenses/>
  */
 
-package com.bluepowermod.references;
+package com.bluepowermod.api;
 
 public class Refs {
     

@@ -5,6 +5,7 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
+
 import com.bluepowermod.tileentities.TileBase;
 
 public class TileProjectTable extends TileBase implements IInventory {

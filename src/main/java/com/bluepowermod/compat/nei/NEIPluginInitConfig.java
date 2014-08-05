@@ -1,8 +1,9 @@
 package com.bluepowermod.compat.nei;
 
-import com.bluepowermod.references.Refs;
 import codechicken.nei.api.API;
 import codechicken.nei.api.IConfigureNEI;
+
+import com.bluepowermod.api.Refs;
 
 /**
  * 

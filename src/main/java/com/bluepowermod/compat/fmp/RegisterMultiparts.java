@@ -20,10 +20,11 @@ package com.bluepowermod.compat.fmp;
 import codechicken.multipart.MultiPartRegistry;
 import codechicken.multipart.MultiPartRegistry.IPartFactory;
 import codechicken.multipart.TMultiPart;
+
+import com.bluepowermod.api.Refs;
 import com.bluepowermod.api.part.BPPart;
 import com.bluepowermod.api.part.IBPFacePart;
 import com.bluepowermod.api.part.PartRegistry;
-import com.bluepowermod.references.Refs;
 
 public class RegisterMultiparts implements IPartFactory {
 

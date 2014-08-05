@@ -8,9 +8,11 @@
 package com.bluepowermod.compat.waila;
 
 import mcp.mobius.waila.api.IWailaRegistrar;
+
+import com.bluepowermod.api.Dependencies;
+import com.bluepowermod.api.compat.IMultipartCompat.MultipartCompat;
 import com.bluepowermod.compat.CompatModule;
-import com.bluepowermod.compat.fmp.IMultipartCompat.MultipartCompat;
-import com.bluepowermod.references.Dependencies;
+
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLInterModComms;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;

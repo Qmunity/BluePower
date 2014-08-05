@@ -3,7 +3,7 @@ package com.bluepowermod.client.renderers;
 import net.minecraft.util.IIcon;
 import net.minecraftforge.client.event.TextureStitchEvent;
 
-import com.bluepowermod.references.Refs;
+import com.bluepowermod.api.Refs;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 

@@ -1,4 +1,4 @@
-package com.bluepowermod.util;
+package com.bluepowermod.api.util;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraftforge.common.util.ForgeDirection;

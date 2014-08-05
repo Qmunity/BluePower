@@ -24,9 +24,11 @@ import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityFurnace;
+
 import com.bluepowermod.containers.slots.SlotMachineInput;
 import com.bluepowermod.containers.slots.SlotMachineOutput;
 import com.bluepowermod.tileentities.tier1.TileAlloyFurnace;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

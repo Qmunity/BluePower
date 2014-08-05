@@ -10,11 +10,11 @@
 
 package com.bluepowermod.part.gate;
 
+import java.util.List;
+
+import com.bluepowermod.api.Refs;
 import com.bluepowermod.api.part.RedstoneConnection;
 import com.bluepowermod.client.renderers.RenderHelper;
-import com.bluepowermod.references.Refs;
-
-import java.util.List;
 
 public class GateToggleLatch extends GateBase {
 

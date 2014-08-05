@@ -23,8 +23,9 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+
+import com.bluepowermod.api.Refs;
 import com.bluepowermod.containers.ContainerCanvasBag;
-import com.bluepowermod.references.Refs;
 
 public class GuiCanvasBag extends GuiBase {
 

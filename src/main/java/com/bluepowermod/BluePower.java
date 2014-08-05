@@ -12,8 +12,10 @@ import net.minecraft.item.crafting.CraftingManager;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 
+import org.apache.logging.log4j.Logger;
+
 import com.bluepowermod.api.BPRegistry;
-import com.bluepowermod.api.part.PartRegistry;
+import com.bluepowermod.api.Refs;
 import com.bluepowermod.api.part.redstone.RedstoneNetworkTickHandler;
 import com.bluepowermod.client.gui.GUIHandler;
 import com.bluepowermod.compat.CompatibilityUtils;
@@ -28,10 +30,7 @@ import com.bluepowermod.init.Recipes;
 import com.bluepowermod.init.TileEntities;
 import com.bluepowermod.network.NetworkHandler;
 import com.bluepowermod.recipe.AlloyFurnaceRegistry;
-import com.bluepowermod.references.Refs;
 import com.bluepowermod.world.WorldGenerationHandler;
-
-import org.apache.logging.log4j.Logger;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
@@ -47,68 +46,66 @@ import cpw.mods.fml.common.registry.GameRegistry;
 
 @Mod(modid = Refs.MODID, name = Refs.NAME, guiFactory = Refs.GUIFACTORY)
 public class BluePower {
-    
+
     @Instance(Refs.MODID)
-    public static BluePower   instance;
-    
+    public static BluePower instance;
+
     @SidedProxy(clientSide = Refs.PROXY_LOCATION + ".ClientProxy", serverSide = Refs.PROXY_LOCATION + ".CommonProxy")
     public static CommonProxy proxy;
-    public static Logger      log;
+    public static Logger log;
     public static Configuration config;
-    
+
     @EventHandler
-    public void PreInit(FMLPreInitializationEvent event) {
-    
+    public void preInit(FMLPreInitializationEvent event) {
+
         event.getModMetadata().version = Refs.fullVersionString();
-        
+
         log = event.getModLog();
         config = new Configuration(event.getSuggestedConfigurationFile());
-        
+
         CustomTabs.init();
         // Load configs
         Config.syncConfig(config);
         BPBlocks.init();
         BPItems.init();
         BPRegistry.alloyFurnaceRegistry = AlloyFurnaceRegistry.getInstance();
-        
+
         TileEntities.init();
         OreDictionarySetup.init();
         GameRegistry.registerWorldGenerator(new WorldGenerationHandler(), 0);
-        
+
         BPEnchantments.init();
-        
-        PartRegistry.init();
-        
+
         CompatibilityUtils.preInit(event);
-        
+
         FMLCommonHandler.instance().bus().register(new RedstoneNetworkTickHandler());
         FMLCommonHandler.instance().bus().register(new Config());
-        BPEventHandler eventHandler =new BPEventHandler();
+        BPEventHandler eventHandler = new BPEventHandler();
         MinecraftForge.EVENT_BUS.register(eventHandler);
         FMLCommonHandler.instance().bus().register(eventHandler);
     }
-    
+
     @EventHandler
-    public void Init(FMLInitializationEvent event) {
-    
+    public void init(FMLInitializationEvent event) {
+
         Recipes.init(CraftingManager.getInstance());
         proxy.init();
         NetworkHandler.init();
         NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GUIHandler());
         CompatibilityUtils.init(event);
     }
-    
+
     @EventHandler
-    public void PostInit(FMLPostInitializationEvent event) {
-    
+    public void postInit(FMLPostInitializationEvent event) {
+
         CompatibilityUtils.postInit(event);
         AlloyFurnaceRegistry.getInstance().generateRecyclingRecipes();
         proxy.initRenderers();
     }
-    
+
     @EventHandler
-    public void ServerStarting(FMLServerStartingEvent event) {
-    
+    public void serverStarting(FMLServerStartingEvent event) {
+
         // register commands
     }
 }

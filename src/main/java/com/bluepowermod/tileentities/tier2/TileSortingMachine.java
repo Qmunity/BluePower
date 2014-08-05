@@ -13,11 +13,11 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import com.bluepowermod.api.Refs;
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
 import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.part.IGuiButtonSensitive;
 import com.bluepowermod.part.tube.TubeStack;
-import com.bluepowermod.references.Refs;
 import com.bluepowermod.tileentities.TileMachineBase;
 
 /**

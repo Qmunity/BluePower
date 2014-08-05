@@ -17,12 +17,13 @@
 
 package com.bluepowermod.blocks.worldgen;
 
+import java.util.Arrays;
+
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
-import com.bluepowermod.references.Refs;
 
-import java.util.Arrays;
+import com.bluepowermod.api.Refs;
 
 public class BlockStoneOreConnected extends BlockStoneOre {
 

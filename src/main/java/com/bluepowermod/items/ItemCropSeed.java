@@ -26,8 +26,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.EnumPlantType;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.util.ForgeDirection;
+
+import com.bluepowermod.api.Refs;
 import com.bluepowermod.init.CustomTabs;
-import com.bluepowermod.references.Refs;
 
 public class ItemCropSeed extends ItemSeeds implements IPlantable {
 

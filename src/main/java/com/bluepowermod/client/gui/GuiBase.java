@@ -26,12 +26,13 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.inventory.Container;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
-import com.bluepowermod.BluePower;
-import com.bluepowermod.client.gui.widget.IGuiWidget;
-import com.bluepowermod.client.gui.widget.IWidgetListener;
 
 import org.apache.commons.lang3.text.WordUtils;
 import org.lwjgl.opengl.GL11;
+
+import com.bluepowermod.BluePower;
+import com.bluepowermod.client.gui.widget.IGuiWidget;
+import com.bluepowermod.client.gui.widget.IWidgetListener;
 
 public class GuiBase extends GuiContainer implements IWidgetListener {
     

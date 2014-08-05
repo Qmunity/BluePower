@@ -2,10 +2,6 @@ package com.bluepowermod.enchantments;
 
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnumEnchantmentType;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.EnumCreatureAttribute;
-import net.minecraft.entity.monster.EntityEnderman;
-import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.util.StatCollector;
 
 public class EnchantmentDisjunction extends Enchantment {

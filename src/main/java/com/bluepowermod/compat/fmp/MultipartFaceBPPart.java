@@ -10,17 +10,18 @@ package com.bluepowermod.compat.fmp;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import com.bluepowermod.api.part.BPPart;
-import com.bluepowermod.api.part.BPPartFace;
-import com.bluepowermod.api.part.FaceDirection;
-import com.bluepowermod.api.part.IBPFacePart;
-import com.bluepowermod.api.part.RedstoneConnection;
 import codechicken.lib.data.MCDataInput;
 import codechicken.lib.data.MCDataOutput;
 import codechicken.lib.vec.Vector3;
 import codechicken.multipart.IFaceRedstonePart;
 import codechicken.multipart.TFacePart;
 import codechicken.multipart.TileMultipart;
+
+import com.bluepowermod.api.part.BPPart;
+import com.bluepowermod.api.part.BPPartFace;
+import com.bluepowermod.api.part.FaceDirection;
+import com.bluepowermod.api.part.IBPFacePart;
+import com.bluepowermod.api.part.RedstoneConnection;
 
 public class MultipartFaceBPPart extends MultipartBPPart implements TFacePart, IFaceRedstonePart {
     
