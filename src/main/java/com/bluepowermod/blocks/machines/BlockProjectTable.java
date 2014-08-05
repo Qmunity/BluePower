@@ -28,9 +28,8 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import com.bluepowermod.blocks.BlockContainerBase;
 import com.bluepowermod.init.BPBlocks;
-import com.bluepowermod.references.GuiIDs;
 import com.bluepowermod.references.Refs;
-import com.bluepowermod.tileentities.tier1.TileAlloyFurnace;
+import com.bluepowermod.tileentities.tier1.TileProjectTable;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -44,7 +43,7 @@ public class BlockProjectTable extends BlockContainerBase {
     
     public BlockProjectTable() {
     
-        super(Material.rock, TileAlloyFurnace.class);
+        super(Material.rock, TileProjectTable.class);
         setBlockName(Refs.PROJECTTABLE_NAME);
         // This might not be needed actually.
         setBlockTextureName(Refs.PROJECTTABLE_NAME + "_front");
@@ -106,12 +105,6 @@ public class BlockProjectTable extends BlockContainerBase {
         int metadata = world.getBlockMetadata(x, y, z);
         if ((metadata & 8) != 0) { return 13; }
         return 0;
-    }
-    
-    @Override
-    public GuiIDs getGuiID() {
-    
-        return GuiIDs.INVALID;
     }
     
     @Override

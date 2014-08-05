@@ -33,6 +33,7 @@ import com.bluepowermod.containers.ContainerIOExpander;
 import com.bluepowermod.containers.ContainerItemDetector;
 import com.bluepowermod.containers.ContainerKinect;
 import com.bluepowermod.containers.ContainerMonitor;
+import com.bluepowermod.containers.ContainerProjectTable;
 import com.bluepowermod.containers.ContainerRedbusID;
 import com.bluepowermod.containers.ContainerRegulator;
 import com.bluepowermod.containers.ContainerRelay;
@@ -51,6 +52,7 @@ import com.bluepowermod.tileentities.tier1.TileDeployer;
 import com.bluepowermod.tileentities.tier1.TileEjector;
 import com.bluepowermod.tileentities.tier1.TileFilter;
 import com.bluepowermod.tileentities.tier1.TileItemDetector;
+import com.bluepowermod.tileentities.tier1.TileProjectTable;
 import com.bluepowermod.tileentities.tier1.TileRelay;
 import com.bluepowermod.tileentities.tier2.TileRegulator;
 import com.bluepowermod.tileentities.tier2.TileRetriever;
@@ -117,6 +119,8 @@ public class GUIHandler implements IGuiHandler {
                 return new ContainerRegulator(player.inventory, (TileRegulator) ent);
             case ITEMDETECTOR_ID:
                 return new ContainerItemDetector(player.inventory, (TileItemDetector) ent);
+            case PROJECTTABLE_ID:
+                return new ContainerProjectTable(player.inventory, (TileProjectTable) ent);
             default:
                 break;
         }
@@ -169,6 +173,8 @@ public class GUIHandler implements IGuiHandler {
                 return new GuiRegulator(player.inventory, (TileRegulator) ent);
             case ITEMDETECTOR_ID:
                 return new GuiItemDetector(player.inventory, (TileItemDetector) ent);
+            case PROJECTTABLE_ID:
+                return new GuiProjectTable(player.inventory, (TileProjectTable) ent);
             default:
                 break;
         }

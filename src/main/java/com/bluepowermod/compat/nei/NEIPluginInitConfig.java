@@ -1,8 +1,10 @@
 package com.bluepowermod.compat.nei;
 
-import com.bluepowermod.references.Refs;
 import codechicken.nei.api.API;
 import codechicken.nei.api.IConfigureNEI;
+
+import com.bluepowermod.client.gui.GuiProjectTable;
+import com.bluepowermod.references.Refs;
 
 /**
  * 
@@ -16,6 +18,7 @@ public class NEIPluginInitConfig implements IConfigureNEI {
     
         API.registerUsageHandler(new AlloyFurnaceHandler());
         API.registerRecipeHandler(new AlloyFurnaceHandler());
+        API.registerGuiOverlayHandler(GuiProjectTable.class, new ProjectTableOverlayHandler(), "crafting");
     }
     
     @Override
