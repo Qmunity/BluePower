@@ -44,6 +44,8 @@ public class IconSupplier {
     public static IIcon fixtureLampTopOff;
     public static IIcon lampOn;
     public static IIcon lampOff;
+    public static IIcon bluestoneTorchOn;
+    public static IIcon bluestoneTorchOff;
     
     @SubscribeEvent
     public void onTextureStitch(TextureStitchEvent.Pre event) {
@@ -86,6 +88,9 @@ public class IconSupplier {
             
             lampOn = event.map.registerIcon(Refs.MODID + ":lamps/lamp_off");
             lampOff = event.map.registerIcon(Refs.MODID + ":lamps/lamp_on");
+
+            bluestoneTorchOff = event.map.registerIcon(Refs.MODID + ":bluestone_torch_off");
+            bluestoneTorchOn = event.map.registerIcon(Refs.MODID + ":bluestone_torch_on");
         }
     }
 }

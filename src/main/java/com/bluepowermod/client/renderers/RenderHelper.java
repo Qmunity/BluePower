@@ -1,7 +1,8 @@
 package com.bluepowermod.client.renderers;
 
-import java.nio.DoubleBuffer;
-
+import com.bluepowermod.api.Refs;
+import com.bluepowermod.api.vec.Vector3Cube;
+import com.bluepowermod.part.gate.GateBase;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
@@ -10,13 +11,10 @@ import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.ForgeDirection;
-
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 
-import com.bluepowermod.api.Refs;
-import com.bluepowermod.api.vec.Vector3Cube;
-import com.bluepowermod.part.gate.GateBase;
+import java.nio.DoubleBuffer;
 
 public class RenderHelper {
     
@@ -66,9 +64,16 @@ public class RenderHelper {
         else b = Blocks.unlit_redstone_torch;
         
         GL11.glTranslated(x, y, z);
-        
+
         Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
-        
+        //Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/bluestone_torch_on"));
+
+        if(state){
+            rb.setOverrideBlockTexture(IconSupplier.bluestoneTorchOn);
+        }else{
+            rb.setOverrideBlockTexture(IconSupplier.bluestoneTorchOff);
+        }
+
         GL11.glEnable(GL11.GL_CLIP_PLANE0);
         GL11.glClipPlane(GL11.GL_CLIP_PLANE0, planeEquation(0, 0, 0, 0, 0, 1, 1, 0, 1));
         
