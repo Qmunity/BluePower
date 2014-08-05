@@ -23,6 +23,7 @@ import net.minecraft.world.World;
 import com.bluepowermod.network.messages.LocationDoublePacket;
 import com.bluepowermod.network.messages.LocationIntPacket;
 import com.bluepowermod.network.messages.MessageGuiUpdate;
+import com.bluepowermod.network.messages.MessageMultipartRemove;
 import com.bluepowermod.network.messages.MessageMultipartUpdate;
 import com.bluepowermod.references.Refs;
 
@@ -48,7 +49,7 @@ public class NetworkHandler {
 
         INSTANCE.registerMessage(MessageGuiUpdate.class, MessageGuiUpdate.class, discriminant++, Side.SERVER);
         INSTANCE.registerMessage(MessageMultipartUpdate.class, MessageMultipartUpdate.class, discriminant++, Side.CLIENT);
-
+        INSTANCE.registerMessage(MessageMultipartRemove.class, MessageMultipartRemove.class, discriminant++, Side.SERVER);
     }
 
     /*

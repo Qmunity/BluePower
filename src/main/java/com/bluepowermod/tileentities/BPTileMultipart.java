@@ -2,10 +2,15 @@ package com.bluepowermod.tileentities;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.UUID;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -27,148 +32,172 @@ import com.bluepowermod.raytrace.RayTracer;
 import com.bluepowermod.util.ComparatorMOP;
 
 public class BPTileMultipart extends TileEntity {
-    
-    private final List<BPPart> parts          = new ArrayList<BPPart>();
-    private boolean            shouldReRender = false;
-    
+
+    private List<BPPart> parts = new ArrayList<BPPart>();
+    private Map<BPPart, UUID> partIds = new HashMap<BPPart, UUID>();
+    private boolean shouldReRender = false;
+
     public List<AxisAlignedBB> getCollisionBoxes() {
-    
+
         List<AxisAlignedBB> aabbs = new ArrayList<AxisAlignedBB>();
         for (BPPart p : parts)
             aabbs.addAll(p.getCollisionBoxes());
         return aabbs;
     }
-    
+
     public List<AxisAlignedBB> getSelectionBoxes() {
-    
+
         List<AxisAlignedBB> aabbs = new ArrayList<AxisAlignedBB>();
         for (BPPart p : parts)
             aabbs.addAll(p.getSelectionBoxes());
         return aabbs;
     }
-    
+
     public List<AxisAlignedBB> getOcclusionBoxes() {
-    
+
         List<AxisAlignedBB> aabbs = new ArrayList<AxisAlignedBB>();
         for (BPPart p : parts)
             aabbs.addAll(p.getOcclusionBoxes());
         return aabbs;
     }
-    
+
     public MovingObjectPosition rayTrace(Vector3 start, Vector3 end) {
-    
+
         List<MovingObjectPosition> mops = new ArrayList<MovingObjectPosition>();
-        
+
         for (BPPart p : parts) {
             MovingObjectPosition mop = p.rayTrace(start, end);
-            if (mop != null) mops.add(mop);
+            if (mop != null)
+                mops.add(mop);
         }
-        
+
         Collections.sort(mops, new ComparatorMOP(start));
-        
-        if (mops.isEmpty()) return null;
-        
+
+        if (mops.isEmpty())
+            return null;
+
         return mops.get(0);
     }
-    
+
     public void renderDynamic(Vector3 loc, int pass, float frame) {
-    
+
         for (BPPart p : parts) {
             GL11.glPushMatrix();
             p.renderDynamic(loc, pass, frame);
             GL11.glPopMatrix();
         }
     }
-    
+
     public void renderStatic(Vector3 loc, int pass) {
-    
+
         for (BPPart p : parts) {
             GL11.glPushMatrix();
             p.renderStatic(loc, pass);
             GL11.glPopMatrix();
         }
     }
-    
+
     public int getLightValue() {
-    
+
         int val = 0;
-        
+
         for (BPPart p : parts)
             val = Math.max(val, p.getLightValue());
-        
+
         return Math.max(0, Math.min(val, 15));
     }
-    
+
     public float getHardness(MovingObjectPosition mop, EntityPlayer player) {
-    
+
         BPPart p = RayTracer.getSelectedPart(mop, player);
-        if (p != null) return p.getHardness(mop, player);
-        return -1;
+        if (p != null)
+            return p.getHardness(mop, player);
+        return 0.1F;
     }
-    
+
     public float getExplosionResistance() {
-    
+
         float res = 0;
-        
+
         for (BPPart p : parts)
             res = Math.max(res, p.getExplosionResistance());
-        
+
         return res;
     }
-    
+
     public ItemStack getPickedItem(MovingObjectPosition mop, EntityPlayer player) {
-    
+
         BPPart p = RayTracer.getSelectedPart(mop, player);
-        if (p != null) return p.getPickedItem(mop);
+        if (p != null)
+            return p.getPickedItem(mop);
         return null;
     }
-    
+
     public List<ItemStack> getDrops() {
-    
+
         List<ItemStack> items = new ArrayList<ItemStack>();
-        
+
         return items;
     }
-    
+
     public void notifyPartChange(BPPart part) {
-    
+
         for (BPPart p : parts) {
-            if (p == part) continue;
+            if (p == part)
+                continue;
             p.onPartChanged();
         }
     }
-    
+
     public void onEntityCollision(Entity entity) {
-    
+
         for (BPPart p : parts) {
+            p.setWorld(worldObj);
+            p.setX(xCoord);
+            p.setY(yCoord);
+            p.setZ(zCoord);
             p.onEntityCollision(entity);// FIXME BLUEPOWER Check if entity is actually colliding
         }
     }
-    
+
     public void onNeighborUpdate() {
-    
-        for (BPPart p : parts)
+
+        for (BPPart p : parts) {
+            p.setWorld(worldObj);
+            p.setX(xCoord);
+            p.setY(yCoord);
+            p.setZ(zCoord);
             p.onNeighborUpdate();
+        }
+
+        shouldReRender = true;
     }
-    
+
     public boolean canConnectRedstone(ForgeDirection side) {
-    
-        for (BPPart p : parts)
-            if (p instanceof IBPRedstonePart) if (((IBPRedstonePart) p).canConnect(side)) return true;
-        
+
+        for (BPPart p : parts) {
+            p.setWorld(worldObj);
+            p.setX(xCoord);
+            p.setY(yCoord);
+            p.setZ(zCoord);
+            if (p instanceof IBPRedstonePart)
+                if (((IBPRedstonePart) p).canConnect(side))
+                    return true;
+        }
+
         return false;
     }
-    
+
     public boolean onActivated(EntityPlayer player, BPMop mop, ItemStack item) {
-    
+
         return mop.getPartHit().onActivated(player, mop, item);
     }
-    
+
     @Override
     public void writeToNBT(NBTTagCompound tag) {
-    
+
         super.writeToNBT(tag);
-        
+
         int i = 0;
         for (BPPart p : parts) {
             NBTTagCompound t = new NBTTagCompound();
@@ -179,10 +208,10 @@ public class BPTileMultipart extends TileEntity {
         }
         tag.setInteger("partAmount", i);
     }
-    
+
     @Override
     public void readFromNBT(NBTTagCompound tag) {
-    
+
         super.readFromNBT(tag);
         int amt = tag.getInteger("partAmount");
         for (int i = 0; i < amt; i++) {
@@ -190,110 +219,180 @@ public class BPTileMultipart extends TileEntity {
             NBTTagCompound t = tag.getCompoundTag("part" + i);
             BPPart p = PartRegistry.createPart(type);
             p.load(t);
+            addPart(p);
         }
     }
-    
+
     public boolean drawHighlight(AxisAlignedBB cube, MovingObjectPosition mop, EntityPlayer player) {
-    
+
         BPPart p = RayTracer.getSelectedPart(mop, player);
-        if (p != null) return p.drawHighlight(cube, mop);
+        if (p != null)
+            return p.drawHighlight(cube, mop);
         return false;
     }
-    
+
+    private boolean firstTick = true;
+
     @Override
     public void updateEntity() {
-    
+
+        if (parts.size() == 0 && !worldObj.isRemote) {
+            worldObj.setBlock(xCoord, yCoord, zCoord, Blocks.air);
+            worldObj.setTileEntity(xCoord, yCoord, zCoord, null);
+            return;
+        }
+
         List<BPPart> removed = new ArrayList<BPPart>();
         for (BPPart p : parts) {
             p.setWorld(worldObj);
             p.setX(xCoord);
             p.setY(yCoord);
             p.setZ(zCoord);
-            if (p instanceof BPPartFace) if (!((BPPartFace) p).canStay()) removed.add(p);
+            if (p instanceof BPPartFace)
+                if (!((BPPartFace) p).canStay())
+                    removed.add(p);
         }
         for (BPPart p : removed)
             removePart(p);
         removed.clear();
-        
+
         for (BPPart p : parts)
             p.update();
-        
+
         if (shouldReRender) {
             worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-            worldObj.markBlockRangeForRenderUpdate(xCoord, yCoord, zCoord, xCoord, yCoord, zCoord);
+            worldObj.markBlockRangeForRenderUpdate(xCoord - 1, yCoord - 1, zCoord - 1, xCoord + 1, yCoord + 1, zCoord + 1);
             shouldReRender = false;
         }
+
+        if (firstTick) {
+            sendUpdatePacket();
+            shouldReRender = true;
+            firstTick = false;
+        }
     }
-    
+
     public List<BPPart> getParts() {
-    
+
         return parts;
     }
-    
-    public void addPart(BPPart part) {
-    
+
+    private void addPart(BPPart part, UUID id) {
+
         parts.add(part);
+        partIds.put(part, id);
         shouldReRender = true;
         for (BPPart p : parts)
-            if (p != part) p.onPartChanged();
+            if (p != part)
+                p.onPartChanged();
         sendUpdatePacket();
     }
-    
+
+    public void addPart(BPPart part) {
+
+        addPart(part, UUID.randomUUID());
+    }
+
     public void removePart(BPPart part) {
-    
+
         parts.remove(part);
+        partIds.remove(part);
         shouldReRender = true;
         for (BPPart p : parts)
-            if (p != part) p.onPartChanged();
+            if (p != part)
+                p.onPartChanged();
         sendUpdatePacket();
     }
-    
+
     public boolean isFaceSolid(ForgeDirection orientation) {
-    
+
         for (BPPart p : parts)
-            if (p.isFaceSolid(orientation)) return true;
-        
+            if (p.isFaceSolid(orientation))
+                return true;
+
         return false;
     }
-    
+
     public void sendUpdatePacket() {
-    
-        if (worldObj == null) return;
-        if (worldObj.isRemote) return;
+
+        if (worldObj == null)
+            return;
+        if (worldObj.isRemote)
+            return;
         NetworkHandler.sendToAllAround(new MessageMultipartUpdate(this, getUpdatePacketData()), worldObj);
     }
-    
+
     public NBTTagCompound getUpdatePacketData() {
-    
+
         NBTTagCompound tag = new NBTTagCompound();
-        
+
         int i = 0;
         for (BPPart p : parts) {
             NBTTagCompound t = new NBTTagCompound();
             p.save(t);
             tag.setString("partType" + i, p.getType());
+            tag.setString("partId" + i, partIds.get(p).toString());
             tag.setTag("part" + i, t);
             i++;
         }
         tag.setInteger("partAmount", i);
-        
+
         return tag;
     }
-    
+
     public void readUpdatePacketData(NBTTagCompound tag) {
-    
+
         int amt = tag.getInteger("partAmount");
+        List<BPPart> found = new ArrayList<BPPart>();
         for (int i = 0; i < amt; i++) {
             String type = tag.getString("partType" + i);
+            UUID id = UUID.fromString(tag.getString("partId" + i));
             NBTTagCompound t = tag.getCompoundTag("part" + i);
-            BPPart p = null;
-            if (i < parts.size()) {
-                p = parts.get(i);
-            } else {
-                p = PartRegistry.createPart(type);
-            }
+            BPPart p = getPartForId(id);
+            if (p == null)
+                addPart(p = PartRegistry.createPart(type), id);
             p.load(t);
+            found.add(p);
         }
+        List<BPPart> removed = new ArrayList<BPPart>();
+        for (BPPart p : getParts()) {
+            if (!found.contains(p)) {
+                removed.add(p);
+            }
+        }
+        for (BPPart p : removed)
+            removePart(p);
+
+        found.clear();
+        removed.clear();
+
+        shouldReRender = true;
     }
-    
+
+    private BPPart getPartForId(UUID id) {
+
+        for (Entry<BPPart, UUID> e : partIds.entrySet())
+            if (e.getValue().equals(id))
+                return e.getKey();
+
+        return null;
+    }
+
+    public void onClientBreakPart(UUID id) {
+
+        BPPart p = getPartForId(id);
+        if (p != null)
+            removePart(p);
+        sendUpdatePacket();
+    }
+
+    public UUID getPartId(BPPart part) {
+
+        try {
+            return partIds.get(part);
+        } catch (Exception ex) {
+        }
+        return null;
+    }
+
 }

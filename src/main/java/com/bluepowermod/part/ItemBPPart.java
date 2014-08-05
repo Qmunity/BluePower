@@ -54,21 +54,23 @@ public class ItemBPPart extends Item {
             w.playSoundEffect(x + 0.5, y + 0.5, z + 0.5, Block.soundTypeWood.soundName, Block.soundTypeWood.getVolume(),
                     Block.soundTypeWood.getPitch());
 
-            Vector3 v = new Vector3(x, y, z, w);
-            if ((v.getTileEntity() != null && v.getTileEntity() instanceof BPTileMultipart) && !player.isSneaking()) {
-                BPTileMultipart te = (BPTileMultipart) v.getTileEntity();
-                te.addPart(PartRegistry.createPartFromItem(stack));
-            } else {
-                v.add(ForgeDirection.getOrientation(side));
-                if (v.getBlock(true) == null) {
-                    w.setBlock(v.getBlockX(), v.getBlockY(), v.getBlockZ(), BPBlocks.multipart);
-                    BPTileMultipart te = new BPTileMultipart();
-                    BPPart part = PartRegistry.createPartFromItem(stack);
-                    if (part.canPlacePart(stack, player, v.getRelative(ForgeDirection.getOrientation(side).getOpposite()),
-                            player.rayTrace(player.capabilities.isCreativeMode ? 5 : 4.5, 0))) {
-                        te.addPart(part);
-                        w.setTileEntity(v.getBlockX(), v.getBlockY(), v.getBlockZ(), te);
-                        w.markBlockForUpdate(v.getBlockX(), v.getBlockY(), v.getBlockZ());
+            if (!w.isRemote) {
+                Vector3 v = new Vector3(x, y, z, w);
+                if ((v.getTileEntity() != null && v.getTileEntity() instanceof BPTileMultipart) && !player.isSneaking()) {
+                    BPTileMultipart te = (BPTileMultipart) v.getTileEntity();
+                    te.addPart(PartRegistry.createPartFromItem(stack));
+                } else {
+                    v.add(ForgeDirection.getOrientation(side));
+                    if (v.getBlock(true) == null) {
+                        w.setBlock(v.getBlockX(), v.getBlockY(), v.getBlockZ(), BPBlocks.multipart);
+                        BPTileMultipart te = new BPTileMultipart();
+                        BPPart part = PartRegistry.createPartFromItem(stack);
+                        if (part.canPlacePart(stack, player, v.getRelative(ForgeDirection.getOrientation(side).getOpposite()),
+                                player.rayTrace(player.capabilities.isCreativeMode ? 5 : 4.5, 0))) {
+                            te.addPart(part);
+                            w.setTileEntity(v.getBlockX(), v.getBlockY(), v.getBlockZ(), te);
+                            w.markBlockForUpdate(v.getBlockX(), v.getBlockY(), v.getBlockZ());
+                        }
                     }
                 }
             }
