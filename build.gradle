@@ -15,16 +15,32 @@ buildscript {
     }
 }
 
+repositories {
+    maven { // The repo from which to get waila
+        name "Mobius Repo"
+        url "http://mobiusstrip.eu/maven"
+    }
+    maven { // the repo from which to get NEI and stuff 
+        name 'CB Repo'
+        url "http://chickenbones.net/maven/"
+    }
+    maven {
+        name 'OpenComputers'
+        url = "http://maven.cil.li/"
+    }
+}
+
 apply plugin: 'forge'
 
 project.ext {
     major = "0"
     minor = "0"
+    mcVersion = "1.7.10"
 }
 
 
-version = "1.7.2-${project.ext.major}.${project.minor}"
-group= "net.quetzi.bluepower" 
+version = "${project.ext.major}.${project.minor}"
+group= "com.bluepowermod"
 archivesBaseName = "BluePower"
 
 
@@ -49,23 +65,29 @@ dependencies {
         f.mkdir()
     }
 	println("  Downloading dependencies!")
-	grabDep('ccl', 'http://files.minecraftforge.net/maven/codechicken/CodeChickenLib/1.7.2-1.1.1.81/CodeChickenLib-1.7.2-1.1.1.81-dev.jar')
-	grabDep('fmp', 'http://files.minecraftforge.net/maven/codechicken/ForgeMultipart/1.7.2-1.1.0.282/ForgeMultipart-1.7.2-1.1.0.282-dev.jar')
-	grabDep('ccc', 'http://www.chickenbones.craftsaddle.org/Files/New_Versions/1.7.2/CodeChickenCore-1.7.2-1.0.0-dev.jar')
-	grabDep('nei', 'http://www.chickenbones.craftsaddle.org/Files/New_Versions/1.7.2/NotEnoughItems-1.7.2-1.0.1-dev.jar')
-	grabDep('ccc', 'http://www.chickenbones.craftsaddle.org/Files/New_Versions/1.7.2/CodeChickenCore-1.7.2-1.0.0-dev.jar')
+	//grabDep('ccl', 'http://files.minecraftforge.net/maven/codechicken/CodeChickenLib/1.7.10-1.1.1.93/CodeChickenLib-1.7.10-1.1.1.93-dev.jar')
+	//grabDep('fmp', 'http://files.minecraftforge.net/maven/codechicken/ForgeMultipart/1.7.2-1.1.0.294/ForgeMultipart-1.7.2-1.1.0.294-dev.jar')
+	//grabDep('ccc', 'http://www.chickenbones.craftsaddle.org/Files/New_Versions/1.7.10/CodeChickenCore-1.7.10-1.0.1.8-dev.jar')
+	//grabDep('nei', 'http://www.chickenbones.craftsaddle.org/Files/New_Versions/1.7.10/NotEnoughItems-1.7.10-1.0.2.15-dev.jar')
 	
-	grabDep('oc', 'http://ci.cil.li/job/OpenComputers-MC1.7/190/artifact/build/libs/OpenComputers-MC1.7.2-1.3.0.190-beta.1-deobf.jar')
-	grabDep('waila', 'http://mobiusstrip.eu/maven/mcp/mobius/waila/Waila/1.5.2a/Waila-1.5.2a-dev.jar')
+	//grabDep('oc', 'http://ci.cil.li/job/OpenComputers-1.3-MC1.7.10/20/artifact/build/libs/OpenComputers-MC1.7.10-1.3.0.20-deobf.jar')
+	//grabDep('waila', 'http://mobiusstrip.eu/maven/mcp/mobius/waila/Waila/1.5.3_1.7.10/Waila-1.5.3_1.7.10-dev.jar')
 	
 	println("  Adding dependencies!")
-    compile files("dep/ccl.jar", "dep/fmp.jar", "dep/nei.jar", "dep/ccc.jar", "dep/oc.jar", "dep/waila.jar")
+    //compile files("dep/ccl.jar", "dep/fmp.jar", "dep/nei.jar", "dep/ccc.jar", "dep/oc.jar", "dep/waila.jar")
+    compile "codechicken:CodeChickenLib:1.7.10-1.1.1.95:dev"
+    compile "codechicken:CodeChickenCore:1.7.10-1.0.2.11:dev"
+    compile "codechicken:NotEnoughItems:1.7.10-1.0.2.26:dev"
+    compile "codechicken:ForgeMultipart:1.7.10-1.1.0.297:dev"
+    compile "mcp.mobius.waila:Waila:1.5.3_1.7.10"
+    compile "li.cil.oc:OpenComputers:MC1.7.10-1.3.0.20:api"
+
 	println("  Finished adding dependencies!")
 }
 
 minecraft {
-    version = "1.7.2-10.12.2.1121"
-    assetDir = "eclipse/assets"
+    version = "${project.ext.mcVersion}-10.13.0.1180"
+    runDir = "eclipse/assets"
     
 	// replacing stuff in the source
 	replace '@MAJOR@', project.major
@@ -97,4 +119,39 @@ processResources
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
     }
+}
+
+
+jar {
+    appendix = "${project.ext.mcVersion}"
+    classifier = "universal"
+}
+
+task deobfJar(type: Jar) {
+    from(sourceSets.main.output) {
+        appendix = "${project.ext.mcVersion}"
+        classifier = "deobf"
+    }
+}
+
+// add a source jar
+task sourceJar(type: Jar) {
+    from sourceSets.main.resources.srcDirs{
+        appendix = "${project.ext.mcVersion}"
+        classifier = "src"
+    }
+}
+
+// add a javadoc jar
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    appendix = "${project.ext.mcVersion}"
+    classifier = "javadoc"
+
+    from 'build/docs/javadoc'
+}
+
+artifacts {
+    archives sourceJar
+    archives deobfJar
+    archives javadocJar
 }
