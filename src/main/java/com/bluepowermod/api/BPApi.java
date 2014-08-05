@@ -11,7 +11,7 @@ public class BPApi {
 
         try {
             Class c = Class.forName("com.bluepowermod.compat.CompatibilityUtils");
-            return (IMultipartCompat) c.getDeclaredMethod("getModule").invoke(c, Dependencies.FMP);
+            return (IMultipartCompat) c.getDeclaredMethod("getModule", String.class).invoke(c, Dependencies.FMP);
         } catch (Exception e) {
         }
         return null;
