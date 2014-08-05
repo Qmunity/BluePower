@@ -177,7 +177,7 @@ public class BPBlocks {
         igniter = new BlockIgniter();
         buffer = new BlockContainerBase(Material.rock, TileBuffer.class).setGuiId(GuiIDs.BUFFER).setBlockName(Refs.BLOCKBUFFER_NAME);
         deployer = new BlockContainerFrontRender(Material.rock, TileDeployer.class).setGuiId(GuiIDs.DEPLOYER_ID).setBlockName(Refs.BLOCKDEPLOYER_NAME);
-        project_table = new BlockProjectTable();
+        project_table = new BlockProjectTable().setGuiId(GuiIDs.PROJECTTABLE_ID);
         
         transposer = new BlockContainerBase(Material.rock, TileTransposer.class).setBlockName(Refs.TRANSPOSER_NAME);
         ejector = new BlockContainerTwoSideRender(Material.rock, TileEjector.class).setGuiId(GuiIDs.EJECTOR_ID).setBlockName(Refs.EJECTOR_NAME);

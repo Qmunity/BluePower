@@ -27,6 +27,7 @@ import com.bluepowermod.tileentities.tier1.TileFilter;
 import com.bluepowermod.tileentities.tier1.TileIgniter;
 import com.bluepowermod.tileentities.tier1.TileItemDetector;
 import com.bluepowermod.tileentities.tier1.TileLamp;
+import com.bluepowermod.tileentities.tier1.TileProjectTable;
 import com.bluepowermod.tileentities.tier1.TileRelay;
 import com.bluepowermod.tileentities.tier1.TileTransposer;
 import com.bluepowermod.tileentities.tier2.TileRegulator;
@@ -71,6 +72,7 @@ public class TileEntities {
         GameRegistry.registerTileEntity(TileRetriever.class, "retriever");
         GameRegistry.registerTileEntity(TileRegulator.class, "regulator");
         GameRegistry.registerTileEntity(TileItemDetector.class, "itemDetector");
+        GameRegistry.registerTileEntity(TileProjectTable.class, "projectTable");
         GameRegistry.registerTileEntity(TileLamp.class, "lamp");
         GameRegistry.registerTileEntity(BPTileMultipart.class, "multipart");
     }

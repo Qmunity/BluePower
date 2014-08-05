@@ -35,10 +35,11 @@ apply plugin: 'forge'
 project.ext {
     major = "0"
     minor = "0"
+    mcVersion = "1.7.10"
 }
 
 
-version = "1.7.10-${project.ext.major}.${project.minor}"
+version = "${project.ext.major}.${project.minor}"
 group= "com.bluepowermod"
 archivesBaseName = "BluePower"
 
@@ -85,7 +86,7 @@ dependencies {
 }
 
 minecraft {
-    version = "1.7.10-10.13.0.1180"
+    version = "${project.ext.mcVersion}-10.13.0.1180"
     runDir = "eclipse/assets"
     
 	// replacing stuff in the source
@@ -118,4 +119,39 @@ processResources
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
     }
+}
+
+
+jar {
+    appendix = "${project.ext.mcVersion}"
+    classifier = "universal"
+}
+
+task deobfJar(type: Jar) {
+    from(sourceSets.main.output) {
+        appendix = "${project.ext.mcVersion}"
+        classifier = "deobf"
+    }
+}
+
+// add a source jar
+task sourceJar(type: Jar) {
+    from sourceSets.main.resources.srcDirs{
+        appendix = "${project.ext.mcVersion}"
+        classifier = "src"
+    }
+}
+
+// add a javadoc jar
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    appendix = "${project.ext.mcVersion}"
+    classifier = "javadoc"
+
+    from 'build/docs/javadoc'
+}
+
+artifacts {
+    archives sourceJar
+    archives deobfJar
+    archives javadocJar
 }
