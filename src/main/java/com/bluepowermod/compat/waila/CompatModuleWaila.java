@@ -7,16 +7,15 @@
  */
 package com.bluepowermod.compat.waila;
 
-import mcp.mobius.waila.api.IWailaRegistrar;
-
 import com.bluepowermod.api.Dependencies;
 import com.bluepowermod.api.compat.IMultipartCompat.MultipartCompat;
 import com.bluepowermod.compat.CompatModule;
-
+import com.bluepowermod.tileentities.TileMachineBase;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLInterModComms;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import mcp.mobius.waila.api.IWailaRegistrar;
 
 /**
  * @author amadornes
@@ -57,7 +56,8 @@ public class CompatModuleWaila extends CompatModule {
     }
     
     public static void callbackRegister(IWailaRegistrar registrar) {
-    
+
+        registrar.registerBodyProvider(new WailaProviderMachines(), TileMachineBase.class);
         registrar.registerBodyProvider(new WailaProviderPart(), MultipartCompat.tile);
     }
 }

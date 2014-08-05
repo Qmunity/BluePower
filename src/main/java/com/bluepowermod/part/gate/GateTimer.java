@@ -1,20 +1,19 @@
 package com.bluepowermod.part.gate;
 
-import java.util.List;
-
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.AxisAlignedBB;
-
 import com.bluepowermod.api.part.FaceDirection;
 import com.bluepowermod.api.part.RedstoneConnection;
 import com.bluepowermod.client.gui.gate.GuiGateSingleTime;
 import com.bluepowermod.client.renderers.RenderHelper;
 import com.bluepowermod.part.IGuiButtonSensitive;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import mcp.mobius.waila.api.SpecialChars;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.AxisAlignedBB;
+
+import java.util.List;
 
 public class GateTimer extends GateBase implements IGuiButtonSensitive {
     
@@ -142,6 +141,6 @@ public class GateTimer extends GateBase implements IGuiButtonSensitive {
             t = time + "ms";
         }
         
-        info.add(I18n.format("gui.timerInterval") + ": " + t);
+        info.add(I18n.format("gui.timerInterval") + ": " + SpecialChars.WHITE + t);
     }
 }

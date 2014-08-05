@@ -1,21 +1,22 @@
 package com.bluepowermod.tileentities;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraftforge.common.util.ForgeDirection;
-
 import com.bluepowermod.api.helper.TileEntityCache;
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
 import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.part.tube.ITubeConnection;
 import com.bluepowermod.part.tube.IWeightedTubeInventory;
 import com.bluepowermod.part.tube.TubeStack;
+import mcp.mobius.waila.api.SpecialChars;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraftforge.common.util.ForgeDirection;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 public class TileMachineBase extends TileBase implements ITubeConnection, IWeightedTubeInventory, IEjectAnimator {
     
@@ -216,5 +217,20 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
     public boolean isEjecting() {
     
         return isAnimating;
+    }
+
+    /**
+     * Adds information to the waila tooltip
+     * @author Koen Beckers (K4Unl)
+     *
+     * @param info
+     */
+
+    public void addWailaInfo(List<String> info) {
+
+        if(isEjecting()){
+            info.add(SpecialChars.RED + "[" + I18n.format("waila.machine.stuffed") + "]");
+        }
+
     }
 }

@@ -7,14 +7,11 @@
  */
 package com.bluepowermod.compat.waila;
 
-import com.bluepowermod.api.part.BPPart;
-import com.bluepowermod.raytrace.RayTracer;
+import com.bluepowermod.tileentities.TileMachineBase;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 import mcp.mobius.waila.api.IWailaDataProvider;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.MovingObjectPosition;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,23 +20,16 @@ import java.util.List;
  * @author amadornes
  * 
  */
-public class WailaProviderPart implements IWailaDataProvider {
+public class WailaProviderMachines implements IWailaDataProvider {
 
     private List<String> info = new ArrayList<String>();
 
     @Override
     public List<String> getWailaBody(ItemStack item, List<String> tip, IWailaDataAccessor accessor, IWailaConfigHandler config) {
 
-        EntityPlayer p = accessor.getPlayer();
-        MovingObjectPosition mop = p.rayTrace(p.capabilities.isCreativeMode ? 5 : 4.5, 0);
-        if (mop == null)
-            return tip;
+        TileMachineBase machine = (TileMachineBase) accessor.getTileEntity();
 
-        BPPart hovered = RayTracer.getSelectedPart(mop, p);
-        if (hovered == null)
-            return tip;
-
-        hovered.addWailaInfo(info);
+        machine.addWailaInfo(info);
         tip.addAll(info);
         info.clear();
 
