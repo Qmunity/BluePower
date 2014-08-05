@@ -13,6 +13,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.Packet;
+import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MovingObjectPosition;
@@ -22,14 +25,17 @@ import org.lwjgl.opengl.GL11;
 
 import com.bluepowermod.api.part.BPPart;
 import com.bluepowermod.api.part.BPPartFace;
+import com.bluepowermod.api.part.IBPFacePart;
 import com.bluepowermod.api.part.PartRegistry;
 import com.bluepowermod.api.part.redstone.IBPRedstonePart;
 import com.bluepowermod.api.vec.Vector3;
-import com.bluepowermod.network.NetworkHandler;
-import com.bluepowermod.network.messages.MessageMultipartUpdate;
+import com.bluepowermod.blocks.BPBlockMultipart;
 import com.bluepowermod.raytrace.BPMop;
 import com.bluepowermod.raytrace.RayTracer;
 import com.bluepowermod.util.ComparatorMOP;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class BPTileMultipart extends TileEntity {
 
@@ -79,6 +85,7 @@ public class BPTileMultipart extends TileEntity {
         return mops.get(0);
     }
 
+    @SideOnly(Side.CLIENT)
     public void renderDynamic(Vector3 loc, int pass, float frame) {
 
         for (BPPart p : parts) {
@@ -88,6 +95,7 @@ public class BPTileMultipart extends TileEntity {
         }
     }
 
+    @SideOnly(Side.CLIENT)
     public void renderStatic(Vector3 loc, int pass) {
 
         for (BPPart p : parts) {
@@ -109,10 +117,11 @@ public class BPTileMultipart extends TileEntity {
 
     public float getHardness(MovingObjectPosition mop, EntityPlayer player) {
 
-        BPPart p = RayTracer.getSelectedPart(mop, player);
-        if (p != null)
-            return p.getHardness(mop, player);
-        return 0.1F;
+        BPMop bpmop = BPBlockMultipart.rayTrace(worldObj, xCoord, yCoord, zCoord, RayTracer.getStartVector(player), RayTracer.getEndVector(player),
+                getParts());
+        if (bpmop != null)
+            return bpmop.getPartHit().getHardness(mop, player);
+        return -1;
     }
 
     public float getExplosionResistance() {
@@ -123,14 +132,6 @@ public class BPTileMultipart extends TileEntity {
             res = Math.max(res, p.getExplosionResistance());
 
         return res;
-    }
-
-    public ItemStack getPickedItem(MovingObjectPosition mop, EntityPlayer player) {
-
-        BPPart p = RayTracer.getSelectedPart(mop, player);
-        if (p != null)
-            return p.getPickedItem(mop);
-        return null;
     }
 
     public List<ItemStack> getDrops() {
@@ -147,6 +148,7 @@ public class BPTileMultipart extends TileEntity {
                 continue;
             p.onPartChanged();
         }
+        shouldReRender = true;
     }
 
     public void onEntityCollision(Entity entity) {
@@ -180,9 +182,13 @@ public class BPTileMultipart extends TileEntity {
             p.setX(xCoord);
             p.setY(yCoord);
             p.setZ(zCoord);
-            if (p instanceof IBPRedstonePart)
-                if (((IBPRedstonePart) p).canConnect(side))
+            if (p instanceof IBPRedstonePart) {
+                ForgeDirection s = side;
+                if (p instanceof IBPFacePart)
+                    s = s.getRotation(ForgeDirection.getOrientation(((IBPFacePart) p).getFace()));
+                if (((IBPRedstonePart) p).canConnect(s))
                     return true;
+            }
         }
 
         return false;
@@ -223,15 +229,7 @@ public class BPTileMultipart extends TileEntity {
         }
     }
 
-    public boolean drawHighlight(AxisAlignedBB cube, MovingObjectPosition mop, EntityPlayer player) {
-
-        BPPart p = RayTracer.getSelectedPart(mop, player);
-        if (p != null)
-            return p.drawHighlight(cube, mop);
-        return false;
-    }
-
-    private boolean firstTick = true;
+    private long ticks = 0;
 
     @Override
     public void updateEntity() {
@@ -259,17 +257,10 @@ public class BPTileMultipart extends TileEntity {
         for (BPPart p : parts)
             p.update();
 
-        if (shouldReRender) {
-            worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-            worldObj.markBlockRangeForRenderUpdate(xCoord - 1, yCoord - 1, zCoord - 1, xCoord + 1, yCoord + 1, zCoord + 1);
-            shouldReRender = false;
-        }
-
-        if (firstTick) {
-            sendUpdatePacket();
+        if (ticks == 5 || ticks % 200 == 0) {
             shouldReRender = true;
-            firstTick = false;
         }
+        ticks++;
     }
 
     public List<BPPart> getParts() {
@@ -319,7 +310,20 @@ public class BPTileMultipart extends TileEntity {
             return;
         if (worldObj.isRemote)
             return;
-        NetworkHandler.sendToAllAround(new MessageMultipartUpdate(this, getUpdatePacketData()), worldObj);
+
+        worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+    }
+
+    @Override
+    public Packet getDescriptionPacket() {
+
+        return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, 0, getUpdatePacketData());
+    }
+
+    @Override
+    public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
+
+        readUpdatePacketData(pkt.func_148857_g());
     }
 
     public NBTTagCompound getUpdatePacketData() {
@@ -393,6 +397,25 @@ public class BPTileMultipart extends TileEntity {
         } catch (Exception ex) {
         }
         return null;
+    }
+
+    public boolean shouldReRender() {
+
+        boolean should = shouldReRender;
+        for (BPPart p : getParts()) {
+            if (p.shouldReRender()) {
+                should = true;
+                p.resetRenderUpdate();
+            }
+        }
+        shouldReRender = false;
+        return should;
+    }
+
+    @Override
+    public AxisAlignedBB getRenderBoundingBox() {
+
+        return AxisAlignedBB.getBoundingBox(xCoord, yCoord, zCoord, xCoord + 1, yCoord + 1, zCoord + 1);
     }
 
 }

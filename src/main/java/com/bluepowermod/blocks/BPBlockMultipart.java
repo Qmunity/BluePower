@@ -12,6 +12,7 @@ import net.minecraft.client.particle.EffectRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
@@ -27,6 +28,7 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action;
 import com.bluepowermod.api.part.BPPart;
 import com.bluepowermod.api.vec.Vector3;
 import com.bluepowermod.client.renderers.RenderMultipart;
+import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.network.NetworkHandler;
 import com.bluepowermod.network.messages.MessageMultipartRemove;
 import com.bluepowermod.raytrace.BPMop;
@@ -231,12 +233,12 @@ public class BPBlockMultipart extends BlockContainer {
         }
     }
 
-    public BPMop rayTrace(World w, int x, int y, int z, Vector3 start, Vector3 end, List<AxisAlignedBB> aabbs, boolean unused) {
+    public static BPMop rayTrace(World w, int x, int y, int z, Vector3 start, Vector3 end, List<AxisAlignedBB> aabbs, boolean unused) {
 
         List<BPMop> mops = new ArrayList<BPMop>();
         for (AxisAlignedBB aabb : aabbs) {
-            setBlockBounds(aabb);
-            MovingObjectPosition mop = super.collisionRayTrace(w, x, y, z, start.toVec3(), end.toVec3());
+            ((BPBlockMultipart) BPBlocks.multipart).setBlockBounds(aabb);
+            MovingObjectPosition mop = Blocks.stone.collisionRayTrace(w, x, y, z, start.toVec3(), end.toVec3());
             if (mop != null) {
                 mops.add(new BPMop(mop, aabb));
             }
@@ -248,13 +250,13 @@ public class BPBlockMultipart extends BlockContainer {
         return mop;
     }
 
-    public BPMop rayTrace(World w, int x, int y, int z, Vector3 start, Vector3 end, List<BPPart> parts) {
+    public static BPMop rayTrace(World w, int x, int y, int z, Vector3 start, Vector3 end, List<BPPart> parts) {
 
         List<BPMop> mops = new ArrayList<BPMop>();
         for (BPPart part : parts) {
             for (AxisAlignedBB aabb : part.getSelectionBoxes()) {
-                setBlockBounds(aabb);
-                MovingObjectPosition mop = super.collisionRayTrace(w, x, y, z, start.toVec3(), end.toVec3());
+                ((BPBlockMultipart) BPBlocks.multipart).setBlockBounds(aabb);
+                MovingObjectPosition mop = Blocks.stone.collisionRayTrace(w, x, y, z, start.toVec3(), end.toVec3());
                 if (mop != null) {
                     mops.add(new BPMop(mop, part, aabb));
                 }
@@ -381,11 +383,5 @@ public class BPBlockMultipart extends BlockContainer {
             return true;
 
         return false;
-    }
-
-    @Override
-    public boolean canEntityDestroy(IBlockAccess world, int x, int y, int z, Entity entity) {
-
-        return true;
     }
 }

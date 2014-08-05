@@ -24,7 +24,6 @@ import com.bluepowermod.network.messages.LocationDoublePacket;
 import com.bluepowermod.network.messages.LocationIntPacket;
 import com.bluepowermod.network.messages.MessageGuiUpdate;
 import com.bluepowermod.network.messages.MessageMultipartRemove;
-import com.bluepowermod.network.messages.MessageMultipartUpdate;
 import com.bluepowermod.references.Refs;
 
 import cpw.mods.fml.common.network.NetworkRegistry;
@@ -48,7 +47,6 @@ public class NetworkHandler {
     public static void init() {
 
         INSTANCE.registerMessage(MessageGuiUpdate.class, MessageGuiUpdate.class, discriminant++, Side.SERVER);
-        INSTANCE.registerMessage(MessageMultipartUpdate.class, MessageMultipartUpdate.class, discriminant++, Side.CLIENT);
         INSTANCE.registerMessage(MessageMultipartRemove.class, MessageMultipartRemove.class, discriminant++, Side.SERVER);
     }
 

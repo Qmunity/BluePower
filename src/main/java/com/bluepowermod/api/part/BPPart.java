@@ -205,7 +205,7 @@ public abstract class BPPart {
     private boolean shouldReRender = true;
 
     /**
-     * Marks the part (and the entire chunk) for a render update on the next render tick
+     * Marks the part for a render update on the next render tick
      */
     public final void markPartForRenderUpdate() {
 
