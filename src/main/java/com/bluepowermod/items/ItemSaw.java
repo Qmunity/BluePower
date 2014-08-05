@@ -17,23 +17,44 @@
 
 package com.bluepowermod.items;
 
+import net.minecraft.item.ItemStack;
+import codechicken.microblock.Saw;
+
+import com.bluepowermod.api.Dependencies;
 import com.bluepowermod.api.Refs;
 import com.bluepowermod.init.CustomTabs;
 
-public class ItemSaw extends ItemBase {
+import cpw.mods.fml.common.Optional;
+
+@Optional.Interface(modid = Dependencies.FMP, iface = "codechicken.microblock.Saw")
+public class ItemSaw extends ItemBase implements Saw {
 
     private int sawLevel;
 
     public ItemSaw(int sawLevel, String name) {
 
-        this.setCreativeTab(CustomTabs.tabBluePowerTools);
+        setCreativeTab(CustomTabs.tabBluePowerTools);
         this.sawLevel = sawLevel;
-        this.setTextureName(Refs.MODID + ":" + name);
-        this.setUnlocalizedName(name);
-        this.maxStackSize = 1;
+        setTextureName(Refs.MODID + ":" + name);
+        setUnlocalizedName(name);
+        maxStackSize = 1;
     }
 
     public int getSawLevel() {
+
+        return sawLevel;
+    }
+
+    @Override
+    @Optional.Method(modid = Dependencies.FMP)
+    public int getCuttingStrength(ItemStack itemstack) {
+
+        return sawLevel;
+    }
+
+    @Override
+    @Optional.Method(modid = Dependencies.FMP)
+    public int getMaxCuttingStrength() {
 
         return sawLevel;
     }
