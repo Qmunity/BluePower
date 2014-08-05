@@ -124,13 +124,13 @@ processResources
 
 jar {
     appendix = "${project.ext.mcVersion}"
-    classifier = "${project.ext.buildNum}-universal"
+    classifier = "universal"
 }
 
 task deobfJar(type: Jar) {
     from(sourceSets.main.output) {
         appendix = "${project.ext.mcVersion}"
-        classifier = "${project.ext.buildNum}-deobf"
+        classifier = "deobf"
     }
 }
 
@@ -138,14 +138,14 @@ task deobfJar(type: Jar) {
 task sourceJar(type: Jar) {
     from sourceSets.main.allSource{
         appendix = "${project.ext.mcVersion}"
-        classifier = "${project.ext.buildNum}-src"
+        classifier = "src"
     }
 }
 
 // add a javadoc jar
 task javadocJar(type: Jar, dependsOn: javadoc) {
     appendix = "${project.ext.mcVersion}"
-    classifier = "${project.ext.buildNum}-javadoc"
+    classifier = "javadoc"
 
     from 'build/docs/javadoc'
 }
