@@ -8,6 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
@@ -169,7 +170,7 @@ public class ProjectTableOverlayHandler implements IOverlayHandler {
     
         for (Slot slot : (List<Slot>) gui.inventorySlots.inventorySlots)//work out how much we have to go round
         {
-            if (slot.getHasStack() && slot.inventory instanceof TileProjectTable) {
+            if (slot.getHasStack() && (slot.inventory instanceof TileProjectTable || slot.inventory instanceof InventoryPlayer)) {
                 ItemStack pstack = slot.getStack();
                 DistributedIngred istack = findIngred(ingredStacks, pstack);
                 if (istack != null) istack.invAmount += pstack.stackSize;
@@ -197,7 +198,7 @@ public class ProjectTableOverlayHandler implements IOverlayHandler {
             int slotTransferCap = pstack.getMaxStackSize();
             
             for (Slot slot : (List<Slot>) gui.inventorySlots.inventorySlots) {
-                if (!slot.getHasStack() || !(slot.inventory instanceof TileProjectTable)) continue;
+                if (!slot.getHasStack() || !(slot.inventory instanceof TileProjectTable) && !(slot.inventory instanceof InventoryPlayer)) continue;
                 
                 ItemStack stack = slot.getStack();
                 if (!InventoryUtils.canStack(stack, pstack)) continue;
