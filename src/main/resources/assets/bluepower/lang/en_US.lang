@@ -357,6 +357,7 @@ gui.passThrough=Passing through
 
 gui.sortMode=§1Sort Mode
 gui.pullMode=§1Pull Mode
+gui.mode=§1Mode
 gui.sortMode.any_stack_sequential=§3Any Stack, Sequential
 gui.sortMode.any_stack_sequential.info=One stack in the column has to match (including item count). Will pull out this item and move to the next column.
 gui.sortMode.all_stacks_sequential=§3All Stacks, Sequential
@@ -377,6 +378,25 @@ gui.pullMode.automatic=§3Automatic
 gui.pullMode.automatic.info=Automatically pulls items at a regular interval.
 gui.pullMode.single_sweep=§3Single Sweep
 gui.pullMode.single_sweep.info=For every redstone pulse, the machine will try to go through every column. Pulses will be saved.
+
+gui.retriever.mode.sequential=§3Sequential
+gui.retriever.mode.sequential.info=Tries to retrieve the highlighted item with the given item count. Moves on to the next when succeeded.
+gui.retriever.mode.any=§3Any Item
+gui.retriever.mode.any.info=Tries to retrieve any of the filtered items with the given item count.
+
+gui.regulator.mode.ratio=§3Ratio Mode
+gui.regulator.mode.ratio.info=Waits for the middle inventory to have the amount of items specified in the left filter.
+gui.regulator.mode.supply=§3Supply Mode
+gui.regulator.mode.supply.info=This mode, which only applies to Regulators attached to an inventory, has a priority to supply the attached inventory with items. The items that are tried to be supplied are the items specified in the right filter.
+
+gui.itemDetector.mode.item=§3Item Mode
+gui.itemDetector.mode.item.info=Emits a redstone pulse for every single item going through.
+gui.itemDetector.mode.stack=§3Stack Mode
+gui.itemDetector.mode.stack.info=Emits a redstone pulse for every item stack going through.
+gui.itemDetector.mode.stuffed=§3Stuffed Mode
+gui.itemDetector.mode.stuffed.info=Emits a redstone signal as long as the output buffer stuffed inside the machine.
+
+
 gui.sneakForInfo=Sneak for info
 
 gui.widget.color.none=None

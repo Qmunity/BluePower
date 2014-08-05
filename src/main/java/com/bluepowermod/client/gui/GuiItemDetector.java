@@ -1,5 +1,7 @@
 package com.bluepowermod.client.gui;
 
+import java.util.List;
+
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 
@@ -27,7 +29,32 @@ public class GuiItemDetector extends GuiBase {
     public void initGui() {
     
         super.initGui();
-        WidgetMode modeWidget = new WidgetMode(0, guiLeft + 152, guiTop + 10, 176, 3, Refs.MODID + ":textures/gui/item_detector.png");
+        WidgetMode modeWidget = new WidgetMode(0, guiLeft + 152, guiTop + 10, 176, 3, Refs.MODID + ":textures/gui/item_detector.png") {
+            
+            @Override
+            public void addTooltip(List<String> curTip, boolean shiftPressed) {
+            
+                curTip.add("gui.mode");
+                String mode;
+                switch (value) {
+                    case 0:
+                        mode = "gui.itemDetector.mode.item";
+                        break;
+                    case 1:
+                        mode = "gui.itemDetector.mode.stack";
+                        break;
+                    default:
+                        mode = "gui.itemDetector.mode.stuffed";
+                        
+                }
+                curTip.add(mode);
+                if (shiftPressed) {
+                    curTip.add(mode + ".info");
+                } else {
+                    curTip.add("gui.sneakForInfo");
+                }
+            }
+        };
         modeWidget.value = itemDetector.mode;
         addWidget(modeWidget);
     }

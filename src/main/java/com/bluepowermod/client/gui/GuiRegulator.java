@@ -19,6 +19,8 @@
 
 package com.bluepowermod.client.gui;
 
+import java.util.List;
+
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 
@@ -52,7 +54,20 @@ public class GuiRegulator extends GuiBase {
         colorWidget.value = regulator.color.ordinal();
         addWidget(colorWidget);
         
-        WidgetMode modeWidget = new WidgetMode(1, guiLeft + 135, guiTop + 20, 216, 2, Refs.MODID + ":textures/gui/regulator.png");
+        WidgetMode modeWidget = new WidgetMode(1, guiLeft + 135, guiTop + 20, 216, 2, Refs.MODID + ":textures/gui/regulator.png") {
+            
+            @Override
+            public void addTooltip(List<String> curTip, boolean shiftPressed) {
+            
+                curTip.add("gui.mode");
+                curTip.add("gui.regulator.mode." + (value == 0 ? "ratio" : "supply"));
+                if (shiftPressed) {
+                    curTip.add("gui.regulator.mode." + (value == 0 ? "ratio" : "supply") + ".info");
+                } else {
+                    curTip.add("gui.sneakForInfo");
+                }
+            }
+        };
         modeWidget.value = regulator.mode;
         addWidget(modeWidget);
     }
