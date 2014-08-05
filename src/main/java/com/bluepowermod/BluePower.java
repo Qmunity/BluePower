@@ -19,6 +19,7 @@ import com.bluepowermod.api.Refs;
 import com.bluepowermod.api.part.redstone.RedstoneNetworkTickHandler;
 import com.bluepowermod.client.gui.GUIHandler;
 import com.bluepowermod.compat.CompatibilityUtils;
+import com.bluepowermod.compat.fmp.PartRegister;
 import com.bluepowermod.events.BPEventHandler;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.init.BPEnchantments;
@@ -83,6 +84,8 @@ public class BluePower {
         BPEventHandler eventHandler = new BPEventHandler();
         MinecraftForge.EVENT_BUS.register(eventHandler);
         FMLCommonHandler.instance().bus().register(eventHandler);
+
+        PartRegister.registerParts();
     }
 
     @EventHandler

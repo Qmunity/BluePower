@@ -53,8 +53,6 @@ public class CompatModuleFMP extends CompatModule implements IMultipartCompat {
         RegisterMultiparts.register();
 
         registerBlocksAsMicroblock();
-
-        PartRegister.registerParts();
     }
 
     @Override

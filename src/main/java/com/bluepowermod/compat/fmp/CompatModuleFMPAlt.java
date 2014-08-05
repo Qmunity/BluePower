@@ -31,8 +31,6 @@ public class CompatModuleFMPAlt extends CompatModule implements IMultipartCompat
     @Override
     public void init(FMLInitializationEvent ev) {
 
-        PartRegister.registerParts();
-
     }
 
     @Override
