@@ -43,249 +43,261 @@ import com.bluepowermod.part.PartRegistry;
 import com.bluepowermod.util.Refs;
 
 public class MultipartBPPart extends TMultiPart implements IRedstonePart, JNormalOcclusion, INeighborTileChange {
-    
+
     private BPPart part;
-    
+
     public MultipartBPPart(BPPart part) {
-    
+
         setPart(part);
     }
-    
+
     public MultipartBPPart() {
-    
+
     }
-    
+
     public BPPart getPart() {
-    
+
         return part;
     }
-    
+
     protected void setPart(BPPart part) {
-    
+
         this.part = part;
     }
-    
+
     @Override
     public String getType() {
-    
+
         return Refs.MODID + "_" + getPart().getType();
     }
-    
+
     @Override
     public Iterable<IndexedCuboid6> getSubParts() {
-    
+
         List<IndexedCuboid6> cubes = new ArrayList<IndexedCuboid6>();
         List<AxisAlignedBB> aabbs = getPart().getSelectionBoxes();
-        if (aabbs == null) return cubes;
+        if (aabbs == null)
+            return cubes;
         for (int i = 0; i < aabbs.size(); i++) {
             AxisAlignedBB aabb = aabbs.get(i);
             cubes.add(new IndexedCuboid6(i, new Cuboid6(aabb)));
         }
         return cubes;
     }
-    
+
     @Override
     public Iterable<Cuboid6> getCollisionBoxes() {
-    
+
         List<Cuboid6> cubes = new ArrayList<Cuboid6>();
         List<AxisAlignedBB> aabbs = getPart().getCollisionBoxes();
-        if (aabbs == null) return cubes;
+        if (aabbs == null)
+            return cubes;
         for (AxisAlignedBB aabb : aabbs)
             cubes.add(new Cuboid6(aabb));
         return cubes;
     }
-    
+
     @Override
     public Iterable<Cuboid6> getOcclusionBoxes() {
-    
+
         List<Cuboid6> cubes = new ArrayList<Cuboid6>();
         List<AxisAlignedBB> aabbs = getPart().getOcclusionBoxes();
-        if (aabbs == null) return cubes;
+        if (aabbs == null)
+            return cubes;
         for (AxisAlignedBB aabb : aabbs)
             cubes.add(new Cuboid6(aabb));
         return cubes;
     }
-    
+
     @Override
     public boolean occlusionTest(TMultiPart part) {
-    
+
         return NormalOcclusionTest.apply(this, part);
     }
-    
+
     @Override
     public void writeDesc(MCDataOutput packet) {
-    
+
         super.writeDesc(packet);
-        
+
         packet.writeString(getPart().getType());
-        
+
         NBTTagCompound tag = new NBTTagCompound();
-        getPart().save(tag);
+        getPart().writeUpdate(tag);
         packet.writeNBTTagCompound(tag);
     }
-    
+
     @Override
     public void readDesc(MCDataInput packet) {
-    
+
         super.readDesc(packet);
-        
+
         String type = packet.readString();
-        if (getPart() == null) setPart(PartRegistry.getInstance().createPart(type));
-        
-        getPart().load(packet.readNBTTagCompound());
+        if (getPart() == null)
+            setPart(PartRegistry.getInstance().createPart(type));
+
+        getPart().readUpdate(packet.readNBTTagCompound());
     }
-    
+
     @Override
     public void load(NBTTagCompound tag) {
-    
+
         super.load(tag);
         String type = tag.getString("part_id");
-        if (getPart() == null) setPart(PartRegistry.getInstance().createPart(type));
-        
+        if (getPart() == null)
+            setPart(PartRegistry.getInstance().createPart(type));
+
         NBTTagCompound t = tag.getCompoundTag("partData");
         getPart().load(t);
     }
-    
+
     @Override
     public void save(NBTTagCompound tag) {
-    
+
         super.save(tag);
         tag.setString("part_id", getPart().getType());
-        
+
         NBTTagCompound t = new NBTTagCompound();
         getPart().save(t);
         tag.setTag("partData", t);
     }
-    
+
     @Override
     public int getLightValue() {
-    
+
         return getPart().getLightValue();
     }
-    
+
     @Override
     public Iterable<ItemStack> getDrops() {
-    
+
         return getPart().getDrops();
     }
-    
+
     @Override
     public ItemStack pickItem(MovingObjectPosition hit) {
-    
+
         return getPart().getPickedItem(hit);
     }
-    
+
     @Override
     public float getStrength(MovingObjectPosition hit, EntityPlayer player) {
-    
+
         float s = 50;
         float h = getPart().getHardness(hit, player) * (s / 2F);
-        if (h == 0) return s;
-        
+        if (h == 0)
+            return s;
+
         return s / h;
     }
-    
+
     // Redstone
-    
+
     @Override
     public int strongPowerLevel(int side) {
-    
+
         return weakPowerLevel(side);
     }
-    
+
     @Override
     public int weakPowerLevel(int side) {
-    
-        if (getPart() instanceof IBPRedstonePart) return ((IBPRedstonePart) getPart()).getWeakOutput(ForgeDirection.getOrientation(side));
-        
+
+        if (getPart() instanceof IBPRedstonePart)
+            return ((IBPRedstonePart) getPart()).getWeakOutput(ForgeDirection.getOrientation(side));
+
         return 0;
     }
-    
+
     @Override
     public boolean canConnectRedstone(int side) {
-    
-        if (getPart() instanceof IBPRedstonePart) return ((IBPRedstonePart) getPart()).canConnect(ForgeDirection.getOrientation(side));
-        
+
+        if (getPart() instanceof IBPRedstonePart)
+            return ((IBPRedstonePart) getPart()).canConnect(ForgeDirection.getOrientation(side));
+
         return false;
     }
-    
+
     // Events
-    
+
     @Override
     public void onAdded() {
-    
+
         getPart().onAdded();
     }
-    
+
     @Override
     public void onRemoved() {
-    
+
         getPart().onRemoved();
     }
-    
+
     @Override
     public void onPartChanged(TMultiPart part) {
-    
+
         getPart().onPartChanged();
     }
-    
+
     @Override
     public void onEntityCollision(Entity entity) {
-    
+
         getPart().onEntityCollision(entity);
     }
-    
+
     @Override
     public void onNeighborChanged() {
-    
+
         getPart().onNeighborUpdate();
     }
-    
+
     @Override
     public void onNeighborTileChanged(int arg0, boolean arg1) {
-    
+
         getPart().onNeighborTileUpdate();
     }
-    
+
     @Override
     public boolean weakTileChanges() {
-    
+
         return false;
     }
-    
+
     @Override
     public boolean activate(EntityPlayer player, MovingObjectPosition hit, ItemStack item) {
-    
+
         return getPart().onActivated(player, hit, item);
     }
-    
+
     // Rendering
-    
+
     private static int emptyStaticRender = -1;
-    private int        staticRender0     = -1;
-    private int        staticRender1     = -1;
-    
+    private int staticRender0 = -1;
+    private int staticRender1 = -1;
+
     @Override
     public boolean renderStatic(Vector3 pos, int pass) {
-    
-        if (getPart().shouldRenderStaticOnPass(0)) getPart().markPartForRenderUpdate();
+
+        if (getPart().shouldRenderStaticOnPass(0))
+            getPart().markPartForRenderUpdate();
         return false;
     }
-    
+
     @Override
     public void renderDynamic(Vector3 pos, float frame, int pass) {
-    
+
         getPart().renderDynamic(new com.bluepowermod.api.vec.Vector3(pos.x, pos.y, pos.z), pass, frame);
-        
+
         if (emptyStaticRender == -1) {
             emptyStaticRender = GL11.glGenLists(1);
             GL11.glNewList(emptyStaticRender, GL11.GL_COMPILE);
             GL11.glEndList();
         }
-        if (staticRender0 == -1 || getPart().shouldReRender()) reRenderStatic(new Vector3(0, 0, 0), 0);
-        if (staticRender1 == -1 || getPart().shouldReRender()) reRenderStatic(new Vector3(0, 0, 0), 1);
-        if (getPart().shouldReRender()) getPart().resetRenderUpdate();
-        
+        if (staticRender0 == -1 || getPart().shouldReRender())
+            reRenderStatic(new Vector3(0, 0, 0), 0);
+        if (staticRender1 == -1 || getPart().shouldReRender())
+            reRenderStatic(new Vector3(0, 0, 0), 1);
+        if (getPart().shouldReRender())
+            getPart().resetRenderUpdate();
+
         if (getPart().shouldRenderStaticOnPass(pass)) {
             GL11.glPushMatrix();
             {
@@ -298,22 +310,24 @@ public class MultipartBPPart extends TMultiPart implements IRedstonePart, JNorma
             }
             GL11.glPopMatrix();
         }
-        
+
     }
-    
+
     protected void reRenderStatic(Vector3 pos, int pass) {
-    
+
         if (pass == 0) {
-            if (staticRender0 == -1 || staticRender0 == emptyStaticRender) staticRender0 = GL11.glGenLists(1);
+            if (staticRender0 == -1 || staticRender0 == emptyStaticRender)
+                staticRender0 = GL11.glGenLists(1);
             GL11.glNewList(staticRender0, GL11.GL_COMPILE);
         } else {
-            if (staticRender1 == -1 || staticRender1 == emptyStaticRender) staticRender1 = GL11.glGenLists(1);
+            if (staticRender1 == -1 || staticRender1 == emptyStaticRender)
+                staticRender1 = GL11.glGenLists(1);
             GL11.glNewList(staticRender1, GL11.GL_COMPILE);
         }
         GL11.glPushMatrix();
-        
+
         boolean result = getPart().shouldRenderStaticOnPass(pass);
-        
+
         if (result) {
             Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
             Tessellator t = Tessellator.instance;
@@ -323,7 +337,7 @@ public class MultipartBPPart extends TMultiPart implements IRedstonePart, JNorma
             t.draw();
             t.setTranslation(0, 0, 0);
         }
-        
+
         GL11.glPopMatrix();
         GL11.glEndList();
         if (!result) {
@@ -334,19 +348,21 @@ public class MultipartBPPart extends TMultiPart implements IRedstonePart, JNorma
             }
         }
     }
-    
+
     @Override
     public boolean drawHighlight(MovingObjectPosition mop, EntityPlayer player, float frame) {
-    
+
         ForgeDirection face = ForgeDirection.getOrientation(mop.sideHit);
-        
+
         AxisAlignedBB c = com.bluepowermod.raytrace.RayTracer.getSelectedCuboid(mop, player, face, getSubParts(), true);
-        
-        if (c == null) return true;
-        
+
+        if (c == null)
+            return true;
+
         GL11.glPushMatrix();
         {
-            GL11.glTranslated(x() - TileEntityRendererDispatcher.staticPlayerX, y() - TileEntityRendererDispatcher.staticPlayerY, z() - TileEntityRendererDispatcher.staticPlayerZ);
+            GL11.glTranslated(x() - TileEntityRendererDispatcher.staticPlayerX, y() - TileEntityRendererDispatcher.staticPlayerY, z()
+                    - TileEntityRendererDispatcher.staticPlayerZ);
             GL11.glDisable(GL11.GL_TEXTURE_2D);
             GL11.glColor4d(0, 0, 0, 0);
             RenderUtils.drawCuboidOutline(new Cuboid6(c).expand(0.001));
@@ -354,19 +370,19 @@ public class MultipartBPPart extends TMultiPart implements IRedstonePart, JNorma
             GL11.glEnable(GL11.GL_TEXTURE_2D);
         }
         GL11.glPopMatrix();
-        
+
         return true;
     }
-    
+
     @Override
     public void update() {
-    
+
         getPart().setWorld(world());
         getPart().setX(x());
         getPart().setY(y());
         getPart().setZ(z());
-        
+
         getPart().update();
     }
-    
+
 }
