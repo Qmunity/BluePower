@@ -126,7 +126,7 @@ public class Refs {
     public static final String   DIAMONDSICKLE_NAME       = "diamond_sickle";
     
     public static final String   SCREWDRIVER_NAME         = "screwdriver";
-    public static final String   MULTIPART_NAME           = "bluepower_multipart";                                                                                                                                                                                                 //When changing this name, also change the name in the call to GameData in PartRegistry.
+    public static final String   MULTIPART_NAME           = "bluepower_multipart";                                                                                                                                                                                                //When changing this name, also change the name in the call to GameData in PartRegistry.
     public static final String   MULTIPART_BLOCK_NAME     = "bluepower_multipart_block";
     
     public static final String   CRACKEDBASALTBRICK_NAME  = "basaltbrick_cracked";
@@ -138,7 +138,7 @@ public class Refs {
     public static final String   BASALTTILE_NAME          = "basalt_tile";
     public static final String   MARBLEPAVER_NAME         = "marble_paver";
     public static final String   BASALTPAVER_NAME         = "basalt_paver";
-
+    
     public static final String   ATHAME_NAME              = "athame";
     public static final String   BLOCKIGNITER_NAME        = "igniter";
     public static final String   STONETILE_NAME           = "stone_tile";
@@ -189,6 +189,7 @@ public class Refs {
     public static final String   CONFIG_SETTINGS          = "settings";
     public static final String   CONFIG_RECIPES           = "recipe enabling";
     public static final String   CONFIG_ENCHANTS          = "enchantment ids";
+    public static final String   CONFIG_TUBES             = "pneumatic tube options";
     
     public static String fullVersionString() {
     

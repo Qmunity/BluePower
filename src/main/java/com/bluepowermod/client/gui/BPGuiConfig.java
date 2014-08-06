@@ -35,19 +35,14 @@ import cpw.mods.fml.client.config.GuiConfig;
 import cpw.mods.fml.client.config.IConfigElement;
 
 public class BPGuiConfig extends GuiConfig {
-
+    
     public BPGuiConfig(GuiScreen parent) {
-
-        super(parent,
-                BPGuiConfig.getConfigElements(),
-                Refs.MODID,
-                false,
-                false,
-                GuiConfig.getAbridgedConfigPath(BluePower.config.toString()));
+    
+        super(parent, BPGuiConfig.getConfigElements(), Refs.MODID, false, false, GuiConfig.getAbridgedConfigPath(BluePower.config.toString()));
     }
-
+    
     private static List<IConfigElement> getConfigElements() {
-
+    
         List<IConfigElement> list = new ArrayList<IConfigElement>();
         List<IConfigElement> listZinc = new ConfigElement(BluePower.config.getCategory(Refs.CONFIG_ZINC)).getChildElements();
         List<IConfigElement> listCopper = new ConfigElement(BluePower.config.getCategory(Refs.CONFIG_COPPER)).getChildElements();
@@ -61,11 +56,13 @@ public class BPGuiConfig extends GuiConfig {
         List<IConfigElement> listSettings = new ConfigElement(BluePower.config.getCategory(Refs.CONFIG_SETTINGS)).getChildElements();
         List<IConfigElement> listRecipes = new ConfigElement(BluePower.config.getCategory(Refs.CONFIG_RECIPES)).getChildElements();
         List<IConfigElement> listEnchants = new ConfigElement(BluePower.config.getCategory(Refs.CONFIG_ENCHANTS)).getChildElements();
-
+        List<IConfigElement> listPneumaticTube = new ConfigElement(BluePower.config.getCategory(Refs.CONFIG_TUBES)).getChildElements();
+        
         list.add(new DummyConfigElement.DummyCategoryElement("World Gen", "bluepower.config.worldgen", listWorldGen));
         list.add(new DummyConfigElement.DummyCategoryElement("Settings", "bluepower.config.settings", listSettings));
         list.add(new DummyConfigElement.DummyCategoryElement("Recipes", "bluepower.config.recipes", listRecipes));
         list.add(new DummyConfigElement.DummyCategoryElement("Enchantments", "bluepower.config.enchantments", listEnchants));
+        list.add(new DummyConfigElement.DummyCategoryElement("Pneumatic Tubes", "bluepower.config.tubes", listPneumaticTube));
         list.add(new DummyConfigElement.DummyCategoryElement("Copper", "bluepower.config.copper", listCopper));
         list.add(new DummyConfigElement.DummyCategoryElement("Zinc", "bluepower.config.zinc", listZinc));
         list.add(new DummyConfigElement.DummyCategoryElement("Silver", "bluepower.config.silver", listSilver));
@@ -74,7 +71,6 @@ public class BPGuiConfig extends GuiConfig {
         list.add(new DummyConfigElement.DummyCategoryElement("Amethyst", "bluepower.config.amethyst", listAmethyst));
         list.add(new DummyConfigElement.DummyCategoryElement("Sapphire", "bluepower.config.sapphire", listSapphire));
         list.add(new DummyConfigElement.DummyCategoryElement("Teslatite", "bluepower.config.teslatite", listTeslatite));
-
         return list;
     }
 }

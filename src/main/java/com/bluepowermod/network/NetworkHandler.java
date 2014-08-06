@@ -22,6 +22,7 @@ import net.minecraft.world.World;
 
 import com.bluepowermod.network.messages.LocationDoublePacket;
 import com.bluepowermod.network.messages.LocationIntPacket;
+import com.bluepowermod.network.messages.MessageDebugBlock;
 import com.bluepowermod.network.messages.MessageGuiUpdate;
 import com.bluepowermod.network.messages.MessageMultipartRemove;
 import com.bluepowermod.util.Refs;
@@ -37,64 +38,65 @@ import cpw.mods.fml.relauncher.Side;
  */
 
 public class NetworkHandler {
-
+    
     public static final SimpleNetworkWrapper INSTANCE = NetworkRegistry.INSTANCE.newSimpleChannel(Refs.MODID);
-    private static int discriminant;
-
+    private static int                       discriminant;
+    
     /*
      * The integer is the ID of the message, the Side is the side this message will be handled (received) on!
      */
     public static void init() {
-
+    
         INSTANCE.registerMessage(MessageGuiUpdate.class, MessageGuiUpdate.class, discriminant++, Side.SERVER);
         INSTANCE.registerMessage(MessageMultipartRemove.class, MessageMultipartRemove.class, discriminant++, Side.SERVER);
+        INSTANCE.registerMessage(MessageDebugBlock.class, MessageDebugBlock.class, discriminant++, Side.CLIENT);
     }
-
+    
     /*
      * public static void INSTANCE.registerMessage(Class<? extends AbstractPacket<? extends IMessage>> clazz){ INSTANCE.registerMessage(clazz, clazz,
      * discriminant++, Side.SERVER, discriminant++, Side.SERVER); }
      */
-
+    
     public static void sendToAll(IMessage message) {
-
+    
         INSTANCE.sendToAll(message);
     }
-
+    
     public static void sendTo(IMessage message, EntityPlayerMP player) {
-
+    
         INSTANCE.sendTo(message, player);
     }
-
+    
     @SuppressWarnings("rawtypes")
     public static void sendToAllAround(LocationIntPacket message, World world, double distance) {
-
+    
         sendToAllAround(message, message.getTargetPoint(world, distance));
     }
-
+    
     @SuppressWarnings("rawtypes")
     public static void sendToAllAround(LocationIntPacket message, World world) {
-
+    
         sendToAllAround(message, message.getTargetPoint(world));
     }
-
+    
     @SuppressWarnings("rawtypes")
     public static void sendToAllAround(LocationDoublePacket message, World world) {
-
+    
         sendToAllAround(message, message.getTargetPoint(world));
     }
-
+    
     public static void sendToAllAround(IMessage message, NetworkRegistry.TargetPoint point) {
-
+    
         INSTANCE.sendToAllAround(message, point);
     }
-
+    
     public static void sendToDimension(IMessage message, int dimensionId) {
-
+    
         INSTANCE.sendToDimension(message, dimensionId);
     }
-
+    
     public static void sendToServer(IMessage message) {
-
+    
         INSTANCE.sendToServer(message);
     }
 }

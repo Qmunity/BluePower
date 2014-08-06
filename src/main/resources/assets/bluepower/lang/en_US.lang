@@ -435,6 +435,7 @@ random.disabled=Disabled
 bluepower.config.settings.tooltip=General mod settings.
 bluepower.config.recipes.tooltip=Recipe settings.
 bluepower.config.enchantments.tooltip=Enchantment settings.
+bluepower.config.tubes.tooltip=Pneumatic Tube options.
 bluepower.config.copper.tooltip=Adjust copper world generation.
 bluepower.config.zinc.tooltip=Adjust zinc world generation.
 bluepower.config.silver.tooltip=Adjust silver world generation.

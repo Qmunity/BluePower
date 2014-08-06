@@ -18,6 +18,7 @@
 package com.bluepowermod.init;
 
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.common.config.Property;
 
 import com.bluepowermod.BluePower;
 import com.bluepowermod.util.Refs;
@@ -26,57 +27,57 @@ import cpw.mods.fml.client.event.ConfigChangedEvent;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class Config {
-
-    public static boolean generateTungsten;
-    public static int     minTungstenY;
-    public static int     maxTungstenY;
-    public static int     veinCountTungsten;
-    public static int     veinSizeTungsten;
-    public static boolean generateCopper;
-    public static int     minCopperY;
-    public static int     maxCopperY;
-    public static int     veinCountCopper;
-    public static int     veinSizeCopper;
-    public static boolean generateSilver;
-    public static int     minSilverY;
-    public static int     maxSilverY;
-    public static int     veinCountSilver;
-    public static int     veinSizeSilver;
-    public static boolean generateZinc;
-    public static int     minZincY;
-    public static int     maxZincY;
-    public static int     veinCountZinc;
-    public static int     veinSizeZinc;
-    public static boolean generateTeslatite;
-    public static int     minTeslatiteY;
-    public static int     maxTeslatiteY;
-    public static int     veinCountTeslatite;
-    public static int     veinSizeTeslatite;
-    public static boolean generateRuby;
-    public static int     minRubyY;
-    public static int     maxRubyY;
-    public static int     veinCountRuby;
-    public static int     veinSizeRuby;
-    public static boolean generateAmethyst;
-    public static int     minAmethystY;
-    public static int     maxAmethystY;
-    public static int     veinCountAmethyst;
-    public static int     veinSizeAmethyst;
-    public static boolean generateSapphire;
-    public static int     minSapphireY;
-    public static int     maxSapphireY;
-    public static int     veinCountSapphire;
-    public static int     veinSizeSapphire;
-    public static double  volcanoActiveToInactiveRatio;
-    public static double  volcanoSpawnChance;          // chance of a volcano spawning per chunk.
-    public static boolean useAltScrewdriverRecipe;
-    public static int     vorpalEnchantmentId;
-    public static int     disjunctionEnchantmentId;
-
+    
+    public static boolean  generateTungsten;
+    public static int      minTungstenY;
+    public static int      maxTungstenY;
+    public static int      veinCountTungsten;
+    public static int      veinSizeTungsten;
+    public static boolean  generateCopper;
+    public static int      minCopperY;
+    public static int      maxCopperY;
+    public static int      veinCountCopper;
+    public static int      veinSizeCopper;
+    public static boolean  generateSilver;
+    public static int      minSilverY;
+    public static int      maxSilverY;
+    public static int      veinCountSilver;
+    public static int      veinSizeSilver;
+    public static boolean  generateZinc;
+    public static int      minZincY;
+    public static int      maxZincY;
+    public static int      veinCountZinc;
+    public static int      veinSizeZinc;
+    public static boolean  generateTeslatite;
+    public static int      minTeslatiteY;
+    public static int      maxTeslatiteY;
+    public static int      veinCountTeslatite;
+    public static int      veinSizeTeslatite;
+    public static boolean  generateRuby;
+    public static int      minRubyY;
+    public static int      maxRubyY;
+    public static int      veinCountRuby;
+    public static int      veinSizeRuby;
+    public static boolean  generateAmethyst;
+    public static int      minAmethystY;
+    public static int      maxAmethystY;
+    public static int      veinCountAmethyst;
+    public static int      veinSizeAmethyst;
+    public static boolean  generateSapphire;
+    public static int      minSapphireY;
+    public static int      maxSapphireY;
+    public static int      veinCountSapphire;
+    public static int      veinSizeSapphire;
+    public static double   volcanoActiveToInactiveRatio;
+    public static double   volcanoSpawnChance;          // chance of a volcano spawning per chunk.
+    public static boolean  useAltScrewdriverRecipe;
+    public static int      vorpalEnchantmentId;
+    public static int      disjunctionEnchantmentId;
     public static String[] alloyFurnaceBlacklist;
-
+    public static boolean  enableTubeCaching;
+    
     public static void syncConfig(Configuration config) {
-
+    
         config.addCustomCategoryComment(Refs.CONFIG_WORLDGEN, "Toggle blocks being generated into the world");
         generateTungsten = config.get(Refs.CONFIG_TUNGSTEN, "generateTungsten", true).getBoolean(true);
         minTungstenY = config.get(Refs.CONFIG_TUNGSTEN, "minTungstenY", 5).getInt();
@@ -121,20 +122,26 @@ public class Config {
         volcanoSpawnChance = config.get(Refs.CONFIG_WORLDGEN, "volcanoSpawnChance", 0.02).getDouble(0);
         volcanoActiveToInactiveRatio = config.get(Refs.CONFIG_WORLDGEN, "volcanoActiveToInactiveRatio", 0.5).getDouble(0);
         useAltScrewdriverRecipe = config.get(Refs.CONFIG_SETTINGS, "useAltScrewdriverRecipe", false).getBoolean(false);
-
+        
         config.addCustomCategoryComment(Refs.CONFIG_RECIPES, "Toggle recipes to be enabled or not");
         alloyFurnaceBlacklist = config.get(Refs.CONFIG_RECIPES, "alloyFurnaceBlacklist", new String[0]).getStringList();
-
+        
+        Property prop = config.get(Refs.CONFIG_TUBES, "Enable Tube Caching", true);
+        prop.comment = "When enabled, the Tube routing is more friendly for the CPU. In return it uses a bit more RAM. Caching also may contain bugs still.";
+        enableTubeCaching = prop.getBoolean();
+        
         config.addCustomCategoryComment(Refs.CONFIG_ENCHANTS, "Toggle enchantment ids");
         vorpalEnchantmentId = config.get(Refs.CONFIG_ENCHANTS, "vorpalEnchantmentId", 100).getInt();
         disjunctionEnchantmentId = config.get(Refs.CONFIG_ENCHANTS, "disjunctionEnchantmentId", 101).getInt();
-
-        if(config.hasChanged()) {
+        
+        if (config.hasChanged()) {
             config.save();
         }
     }
+    
     @SubscribeEvent
     public void onConfigChanged(ConfigChangedEvent event) {
+    
         if (event.modID.equals(Refs.MODID)) {
             syncConfig(BluePower.config);
         }
