@@ -14,6 +14,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
@@ -1000,7 +1001,7 @@ public class PneumaticTube extends BPPart {
             info.add(Color.YELLOW + I18n.format("waila.pneumaticTube.color"));
             for (int i = 0; i < 6; i++) {
                 if (color[i] != TubeColor.NONE) {
-                    if (color[0] != TubeColor.NONE) info.add(I18n.format("waila.pneumaticTube.color") + " " + I18n.format("gui.widget.color." + ItemDye.field_150923_a[color[0].ordinal()]));
+                    if (color[i] != TubeColor.NONE) info.add(EnumChatFormatting.DARK_AQUA + I18n.format("rotation." + ForgeDirection.getOrientation(i).toString().toLowerCase()) + ": " + EnumChatFormatting.WHITE + I18n.format("gui.widget.color." + ItemDye.field_150923_a[color[i].ordinal()]));
                 }
             }
         }
