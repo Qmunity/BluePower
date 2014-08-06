@@ -111,7 +111,7 @@ public class BPItems {
     public static ItemBase screwdriver;
     public static Item athame;
     public static ItemBase zincplate;
-    public static ItemBase stone_wafer;
+    public static ItemBase stone_tile;
     public static ItemBase stone_wire;
     public static ItemBase stone_anode;
     public static ItemBase stone_cathode;
@@ -194,7 +194,7 @@ public class BPItems {
         screwdriver = new ItemScrewdriver();
         athame = new ItemAthame();
         zincplate = new ItemZincPlate();
-        stone_wafer = new ItemCrafting(Refs.STONEWAFER_NAME);
+        stone_tile = new ItemCrafting(Refs.STONETILE_NAME);
         stone_wire = new ItemCrafting(Refs.STONEWIRE_NAME);
         stone_anode = new ItemCrafting(Refs.STONEANODE_NAME);
         stone_cathode = new ItemCrafting(Refs.STONECATHODE_NAME);
@@ -291,7 +291,7 @@ public class BPItems {
         GameRegistry.registerItem(athame, Refs.ATHAME_NAME);
         GameRegistry.registerItem(zincplate, Refs.ZINCPLATE_NAME);
 
-        GameRegistry.registerItem(stone_wafer, Refs.STONEWAFER_NAME);
+        GameRegistry.registerItem(stone_tile, Refs.STONETILE_NAME);
         GameRegistry.registerItem(stone_wire, Refs.STONEWIRE_NAME);
         GameRegistry.registerItem(stone_anode, Refs.STONEANODE_NAME);
         GameRegistry.registerItem(stone_cathode, Refs.STONECATHODE_NAME);

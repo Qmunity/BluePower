@@ -138,43 +138,10 @@ public class Refs {
     public static final String   BASALTTILE_NAME          = "basalt_tile";
     public static final String   MARBLEPAVER_NAME         = "marble_paver";
     public static final String   BASALTPAVER_NAME         = "basalt_paver";
-    
-    public static final String   LAMP_WHITE               = "lamp_white";
-    public static final String   INVERTEDLAMP_WHITE       = "invertedlamp_white";
-    public static final String   LAMP_ORANGE              = "lamp_orange";
-    public static final String   INVERTEDLAMP_ORANGE      = "invertedlamp_orange";
-    public static final String   LAMP_MAGENTA             = "lamp_magenta";
-    public static final String   INVERTEDLAMP_MAGENTA     = "invertedlamp_magenta";
-    public static final String   LAMP_LIGHTBLUE           = "lamp_lightblue";
-    public static final String   INVERTEDLAMP_LIGHTBLUE   = "invertedlamp_lightblue";
-    public static final String   LAMP_YELLOW              = "lamp_yellow";
-    public static final String   INVERTEDLAMP_YELLOW      = "invertedlamp_yellow";
-    public static final String   LAMP_LIME                = "lamp_lime";
-    public static final String   INVERTEDLAMP_LIME        = "invertedlamp_lime";
-    public static final String   LAMP_PINK                = "lamp_pink";
-    public static final String   INVERTEDLAMP_PINK        = "invertedlamp_pink";
-    public static final String   LAMP_GRAY                = "lamp_gray";
-    public static final String   INVERTEDLAMP_GRAY        = "invertedlamp_gray";
-    public static final String   LAMP_LIGHTGRAY           = "lamp_lightgray";
-    public static final String   INVERTEDLAMP_LIGHTGRAY   = "invertedlamp_lightgray";
-    public static final String   LAMP_CYAN                = "lamp_cyan";
-    public static final String   INVERTEDLAMP_CYAN        = "invertedlamp_cyan";
-    public static final String   LAMP_PURPLE              = "lamp_purple";
-    public static final String   INVERTEDLAMP_PURPLE      = "invertedlamp_purple";
-    public static final String   LAMP_BLUE                = "lamp_blue";
-    public static final String   INVERTEDLAMP_BLUE        = "invertedlamp_blue";
-    public static final String   LAMP_BROWN               = "lamp_brown";
-    public static final String   INVERTEDLAMP_BROWN       = "invertedlamp_brown";
-    public static final String   LAMP_GREEN               = "lamp_green";
-    public static final String   INVERTEDLAMP_GREEN       = "invertedlamp_green";
-    public static final String   LAMP_RED                 = "lamp_red";
-    public static final String   INVERTEDLAMP_RED         = "invertedlamp_red";
-    public static final String   LAMP_BLACK               = "lamp_black";
-    public static final String   INVERTEDLAMP_BLACK       = "invertedlamp_black";
-    
+
     public static final String   ATHAME_NAME              = "athame";
     public static final String   BLOCKIGNITER_NAME        = "igniter";
-    public static final String   STONEWAFER_NAME          = "stone_wafer";
+    public static final String   STONETILE_NAME           = "stone_tile";
     public static final String   STONEWIRE_NAME           = "stone_wire";
     public static final String   STONEANODE_NAME          = "stone_anode";
     public static final String   STONECATHODE_NAME        = "stone_cathode";
