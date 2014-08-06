@@ -23,7 +23,7 @@ import net.minecraft.item.ItemDye;
 
 import org.lwjgl.opengl.GL11;
 
-import com.bluepowermod.api.Refs;
+import com.bluepowermod.util.Refs;
 
 /**
  * @author MineMaarten

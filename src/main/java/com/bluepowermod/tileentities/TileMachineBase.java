@@ -1,11 +1,12 @@
 package com.bluepowermod.tileentities;
 
-import com.bluepowermod.api.helper.TileEntityCache;
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
 import com.bluepowermod.helper.IOHelper;
+import com.bluepowermod.helper.TileEntityCache;
 import com.bluepowermod.part.tube.ITubeConnection;
 import com.bluepowermod.part.tube.IWeightedTubeInventory;
 import com.bluepowermod.part.tube.TubeStack;
+
 import mcp.mobius.waila.api.SpecialChars;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.item.EntityItem;

@@ -17,7 +17,7 @@
 
 package com.bluepowermod.items;
 
-import com.bluepowermod.api.Refs;
+import com.bluepowermod.util.Refs;
 
 public class ItemSiliconBoule extends ItemBase {
 

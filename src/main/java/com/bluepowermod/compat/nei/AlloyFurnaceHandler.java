@@ -10,11 +10,11 @@ import codechicken.nei.NEIClientUtils;
 import codechicken.nei.PositionedStack;
 import codechicken.nei.recipe.FurnaceRecipeHandler;
 
-import com.bluepowermod.api.Refs;
 import com.bluepowermod.api.recipe.IAlloyFurnaceRecipe;
 import com.bluepowermod.client.gui.GuiAlloyFurnace;
 import com.bluepowermod.recipe.AlloyFurnaceRegistry;
 import com.bluepowermod.recipe.AlloyFurnaceRegistry.StandardAlloyFurnaceRecipe;
+import com.bluepowermod.util.Refs;
 
 /**
  * 

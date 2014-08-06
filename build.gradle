@@ -143,15 +143,32 @@ task sourceJar(type: Jar) {
 }
 
 // add a javadoc jar
-task javadocJar(type: Jar, dependsOn: javadoc) {
+task javadocZip(type: Zip, dependsOn: javadoc) {
     appendix = "${project.ext.mcVersion}"
     classifier = "javadoc"
 
+	destinationDir = file 'output'
+	
     from 'build/docs/javadoc'
 }
+
+// Create API library zip
+task apiZip(type: Zip) {
+    from(sourceSets.main.java){
+        include 'com/bluepowermod/api/**'
+
+        destinationDir = file 'output'
+
+        appendix = "${project.ext.mcVersion}"
+        classifier = "api"
+    }
+}
+
+apiZip.mustRunAfter deobfJar
 
 artifacts {
     archives sourceJar
     archives deobfJar
-    archives javadocJar
+    archives javadocZip
+	archives apiZip
 }

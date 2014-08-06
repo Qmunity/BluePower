@@ -3,9 +3,9 @@ package com.bluepowermod.client.gui;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 
-import com.bluepowermod.api.Refs;
 import com.bluepowermod.containers.ContainerCPU;
 import com.bluepowermod.tileentities.tier3.TileCPU;
+import com.bluepowermod.util.Refs;
 
 public class GuiCPU extends GuiBase {
     

@@ -24,10 +24,10 @@ import net.minecraft.item.Item;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 
-import com.bluepowermod.api.Refs;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.init.BPItems;
 import com.bluepowermod.init.CustomTabs;
+import com.bluepowermod.util.Refs;
 
 public class BlockItemOre extends BlockBase {
 

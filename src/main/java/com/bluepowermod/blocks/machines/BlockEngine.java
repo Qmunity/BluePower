@@ -12,12 +12,12 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
-import com.bluepowermod.api.Refs;
 import com.bluepowermod.blocks.BlockContainerBase;
 import com.bluepowermod.init.BPItems;
 import com.bluepowermod.init.CustomTabs;
 import com.bluepowermod.references.GuiIDs;
 import com.bluepowermod.tileentities.tier3.TileEngine;
+import com.bluepowermod.util.Refs;
 
 /**
  * 

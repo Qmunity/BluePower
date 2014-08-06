@@ -11,15 +11,14 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
-import com.bluepowermod.api.Dependencies;
 import com.bluepowermod.api.compat.IMultipartCompat;
-import com.bluepowermod.api.helper.ItemStackHelper;
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
 import com.bluepowermod.compat.CompatibilityUtils;
 import com.bluepowermod.part.tube.ITubeConnection;
 import com.bluepowermod.part.tube.PneumaticTube;
 import com.bluepowermod.part.tube.TubeLogic;
 import com.bluepowermod.part.tube.TubeStack;
+import com.bluepowermod.util.Dependencies;
 
 public class IOHelper {
 

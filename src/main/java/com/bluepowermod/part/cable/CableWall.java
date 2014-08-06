@@ -6,13 +6,13 @@ import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 
-import com.bluepowermod.api.Dependencies;
 import com.bluepowermod.api.compat.IMultipartCompat;
 import com.bluepowermod.api.part.BPPartFace;
 import com.bluepowermod.api.util.ForgeDirectionUtils;
 import com.bluepowermod.api.vec.Vector3;
 import com.bluepowermod.api.vec.Vector3Cube;
 import com.bluepowermod.compat.CompatibilityUtils;
+import com.bluepowermod.util.Dependencies;
 
 /**
  * @author amadornes

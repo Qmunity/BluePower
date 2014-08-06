@@ -28,10 +28,10 @@ import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import com.bluepowermod.BluePower;
-import com.bluepowermod.api.Refs;
 import com.bluepowermod.containers.inventorys.InventoryItem;
 import com.bluepowermod.init.CustomTabs;
 import com.bluepowermod.references.GuiIDs;
+import com.bluepowermod.util.Refs;
 
 public class ItemSeedBag extends ItemBase {
     

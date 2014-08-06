@@ -25,7 +25,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 
-import com.bluepowermod.api.part.PartRegistry;
+import com.bluepowermod.part.PartRegistry;
 
 public class CustomTabs {
     
@@ -79,12 +79,12 @@ public class CustomTabs {
                 }
             }
         };
-
+        
         tabBluePowerTools = new BPCreativeTab("tabBluePowerTools") {
-
+            
             @Override
             public Item getTabIconItem() {
-
+            
                 Item iconItem = BPItems.screwdriver;
                 if (iconItem != null) {
                     return BPItems.screwdriver;
@@ -93,29 +93,30 @@ public class CustomTabs {
                 }
             }
         };
-
+        
         tabBluePowerCircuits = new BPCreativeTab("tabBluePowerCircuits") {
-
+            
             @Override
             public Item getTabIconItem() {
-
+            
                 return BPItems.multipart;
             }
         };
-
+        
         tabBluePowerLighting = new BPCreativeTab("tabBluePowerLighting") {
-
+            
             @Override
             public Item getTabIconItem() {
-
+            
                 return Item.getItemFromBlock(Blocks.redstone_lamp);
             }
         };
     }
     
-    private static abstract class BPCreativeTab extends CreativeTabs{
-
+    private static abstract class BPCreativeTab extends CreativeTabs {
+        
         public BPCreativeTab(String label) {
+        
             super(label);
         }
         
@@ -124,8 +125,8 @@ public class CustomTabs {
         public void displayAllReleventItems(List l) {
         
             super.displayAllReleventItems(l);
-            for(String s : PartRegistry.getRegisteredPartsForTab(this))
-                l.add(PartRegistry.getItemForPart(s));
+            for (String s : PartRegistry.getInstance().getRegisteredPartsForTab(this))
+                l.add(PartRegistry.getInstance().getItemForPart(s));
         }
         
     }

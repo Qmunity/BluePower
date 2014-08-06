@@ -18,8 +18,6 @@
 package com.bluepowermod.items;
 
 import com.bluepowermod.BluePower;
-import com.bluepowermod.api.Dependencies;
-import com.bluepowermod.api.Refs;
 import com.bluepowermod.api.compat.IMultipartCompat;
 import com.bluepowermod.api.part.BPPart;
 import com.bluepowermod.api.vec.Vector3;
@@ -30,6 +28,9 @@ import com.bluepowermod.init.CustomTabs;
 import com.bluepowermod.references.GuiIDs;
 import com.bluepowermod.tileentities.tier3.IRedBusWindow;
 import com.bluepowermod.tileentities.tier3.TileCPU;
+import com.bluepowermod.util.Dependencies;
+import com.bluepowermod.util.Refs;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;

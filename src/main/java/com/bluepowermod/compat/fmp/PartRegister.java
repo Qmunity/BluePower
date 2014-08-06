@@ -2,7 +2,7 @@ package com.bluepowermod.compat.fmp;
 
 import net.minecraft.item.ItemDye;
 
-import com.bluepowermod.api.part.PartRegistry;
+import com.bluepowermod.part.PartRegistry;
 import com.bluepowermod.part.cable.CableWallImpl;
 import com.bluepowermod.part.gate.GateAnd;
 import com.bluepowermod.part.gate.GateBuffer;
@@ -29,57 +29,57 @@ import com.bluepowermod.part.tube.PneumaticTube;
 import com.bluepowermod.part.tube.RestrictionTube;
 
 public class PartRegister {
-
+    
     public static void registerParts() {
-
-        PartRegistry.ICON_PART = "timer";
+    
+        PartRegistry.getInstance().ICON_PART = "timer";
         // Gates
-        PartRegistry.registerPart(GateNot.class);
-        PartRegistry.registerPart(GateAnd.class);
-        PartRegistry.registerPart(GateTimer.class);
-        PartRegistry.registerPart(GateSequencer.class);
-        PartRegistry.registerPart(GateBuffer.class);
-        PartRegistry.registerPart(GateCounter.class);
-        PartRegistry.registerPart(GateMux.class);
-        PartRegistry.registerPart(GateNand.class);
-        PartRegistry.registerPart(GateOr.class);
-        PartRegistry.registerPart(GateNor.class);
-        PartRegistry.registerPart(GatePulseFormer.class);
-        PartRegistry.registerPart(GateRandomizer.class);
-        PartRegistry.registerPart(GateLightCell.class);
-        PartRegistry.registerPart(GateToggleLatch.class);
-        PartRegistry.registerPart(GateRSLatch.class);
-        PartRegistry.registerPart(GateXor.class);
-        PartRegistry.registerPart(GateXnor.class);
-
+        PartRegistry.getInstance().registerPart(GateNot.class);
+        PartRegistry.getInstance().registerPart(GateAnd.class);
+        PartRegistry.getInstance().registerPart(GateTimer.class);
+        PartRegistry.getInstance().registerPart(GateSequencer.class);
+        PartRegistry.getInstance().registerPart(GateBuffer.class);
+        PartRegistry.getInstance().registerPart(GateCounter.class);
+        PartRegistry.getInstance().registerPart(GateMux.class);
+        PartRegistry.getInstance().registerPart(GateNand.class);
+        PartRegistry.getInstance().registerPart(GateOr.class);
+        PartRegistry.getInstance().registerPart(GateNor.class);
+        PartRegistry.getInstance().registerPart(GatePulseFormer.class);
+        PartRegistry.getInstance().registerPart(GateRandomizer.class);
+        PartRegistry.getInstance().registerPart(GateLightCell.class);
+        PartRegistry.getInstance().registerPart(GateToggleLatch.class);
+        PartRegistry.getInstance().registerPart(GateRSLatch.class);
+        PartRegistry.getInstance().registerPart(GateXor.class);
+        PartRegistry.getInstance().registerPart(GateXnor.class);
+        
         // Lamps
         for (int i = 0; i < ItemDye.field_150922_c.length; i++)
-            PartRegistry.registerPart(PartCageLamp.class, ItemDye.field_150921_b[i].toLowerCase(), ItemDye.field_150922_c[i], false);
-
+            PartRegistry.getInstance().registerPart(PartCageLamp.class, ItemDye.field_150921_b[i].toLowerCase(), ItemDye.field_150922_c[i], false);
+        
         for (int i = 0; i < ItemDye.field_150922_c.length; i++)
-            PartRegistry.registerPart(PartFixture.class, ItemDye.field_150921_b[i].toLowerCase(), ItemDye.field_150922_c[i], false);
-
+            PartRegistry.getInstance().registerPart(PartFixture.class, ItemDye.field_150921_b[i].toLowerCase(), ItemDye.field_150922_c[i], false);
+        
         for (int i = 0; i < ItemDye.field_150922_c.length; i++)
-            PartRegistry.registerPart(PartCageLamp.class, ItemDye.field_150921_b[i].toLowerCase(), ItemDye.field_150922_c[i], true);
+            PartRegistry.getInstance().registerPart(PartCageLamp.class, ItemDye.field_150921_b[i].toLowerCase(), ItemDye.field_150922_c[i], true);
         /*
          * for (int i = 0; i < ItemDye.field_150922_c.length; i++) registerPart(PartLamp.class, ItemDye.field_150921_b[i].toLowerCase(),
          * ItemDye.field_150922_c[i], true);
          */
         for (int i = 0; i < ItemDye.field_150922_c.length; i++)
-            PartRegistry.registerPart(PartFixture.class, ItemDye.field_150921_b[i].toLowerCase(), ItemDye.field_150922_c[i], true);
-
+            PartRegistry.getInstance().registerPart(PartFixture.class, ItemDye.field_150921_b[i].toLowerCase(), ItemDye.field_150922_c[i], true);
+        
         // Pneumatic Tubes
-        PartRegistry.registerPart(PneumaticTube.class);
-        PartRegistry.registerPart(RestrictionTube.class);
-        PartRegistry.registerPart(MagTube.class);
-        PartRegistry.registerPart(Accelerator.class);
-
+        PartRegistry.getInstance().registerPart(PneumaticTube.class);
+        PartRegistry.getInstance().registerPart(RestrictionTube.class);
+        PartRegistry.getInstance().registerPart(MagTube.class);
+        PartRegistry.getInstance().registerPart(Accelerator.class);
+        
         // Test cable
-        PartRegistry.registerPart(CableWallImpl.class);
+        PartRegistry.getInstance().registerPart(CableWallImpl.class);
         /*
          * // Red alloy registerPart(CableWall.class); // Uncovered for (int i = 0; i < ItemDye.field_150922_c.length; i++)
          * registerPart(CableWall.class, ItemDye.field_150921_b[i].toLowerCase(), ItemDye.field_150922_c[i]); // Covered
          */
     }
-
+    
 }
