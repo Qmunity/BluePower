@@ -175,6 +175,11 @@ item.bluepower:blue_alloy_ingot.name=Blue Alloy Ingot
 item.bluepower:brass_ingot.name=Brass Ingot
 item.bluepower:tungsten_ingot.name=Tungsten Ingot
 
+item.bluepower:zinc_ore_crushed.name=Crushed Zinc Ore
+item.bluepower:zinc_dust.name=Zinc Dust
+item.bluepower:zinc_tiny_dust.name=Tiny Pile of Zinc Dust
+item.bluepower:zinc_ore_purified.name=Purified Crushed Zinc Ore
+
 item.bluepower:flax_seeds.name=Flax Seeds
 item.bluepower:indigo_flower.name=Indigo Flower
 item.bluepower:indigo_dye.name=Indigo Dye

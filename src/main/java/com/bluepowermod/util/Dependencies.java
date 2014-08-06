@@ -14,5 +14,7 @@ public class Dependencies {
     public static final String COMPUTER_CRAFT = "ComputerCraft";
     public static final String OPEN_COMPUTERS = "OpenComputers";
     public static final String WAILA          = "Waila";
+    public static final String IC2            = "IC2";
+    public static final String HC             = "HydCraft";
     
 }
