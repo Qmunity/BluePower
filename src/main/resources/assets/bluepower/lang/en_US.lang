@@ -215,7 +215,6 @@ item.bluepower:iron_saw.name=Iron Saw
 item.bluepower:amethyst_saw.name=Amethyst Saw
 item.bluepower:ruby_saw.name=Ruby Saw
 item.bluepower:sapphire_saw.name=Sapphire Saw
-item.bluepower:sapphire_saw.name=Sapphire Saw
 item.bluepower:diamond_saw.name=Diamond Saw
 
 item.bluepower:canvas_bag.white.name=Canvas Bag
@@ -360,9 +359,9 @@ gui.counterCount=Count
 gui.connections=Connections
 gui.passThrough=Passing through
 
-gui.sortMode=§1Sort Mode
-gui.pullMode=§1Pull Mode
-gui.mode=§1Mode
+gui.sortMode=§bSort Mode
+gui.pullMode=§bPull Mode
+gui.mode=§bMode
 gui.sortMode.any_stack_sequential=§3Any Stack, Sequential
 gui.sortMode.any_stack_sequential.info=One stack in the column has to match (including item count). Will pull out this item and move to the next column.
 gui.sortMode.all_stacks_sequential=§3All Stacks, Sequential
