@@ -17,49 +17,23 @@
 
 package com.bluepowermod.init;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.item.ItemDye;
-
 import com.bluepowermod.api.Dependencies;
 import com.bluepowermod.api.Refs;
 import com.bluepowermod.blocks.BPBlockMultipart;
 import com.bluepowermod.blocks.BlockContainerBase;
 import com.bluepowermod.blocks.BlockItemOre;
-import com.bluepowermod.blocks.computer.BlockCPU;
-import com.bluepowermod.blocks.computer.BlockDiskDrive;
-import com.bluepowermod.blocks.computer.BlockIOExpander;
-import com.bluepowermod.blocks.computer.BlockMonitor;
-import com.bluepowermod.blocks.machines.BlockAlloyFurnace;
-import com.bluepowermod.blocks.machines.BlockContainerFrontRender;
-import com.bluepowermod.blocks.machines.BlockContainerTwoSideRender;
-import com.bluepowermod.blocks.machines.BlockEngine;
-import com.bluepowermod.blocks.machines.BlockIgniter;
-import com.bluepowermod.blocks.machines.BlockKineticGenerator;
-import com.bluepowermod.blocks.machines.BlockLamp;
-import com.bluepowermod.blocks.machines.BlockProjectTable;
-import com.bluepowermod.blocks.machines.BlockSortron;
-import com.bluepowermod.blocks.machines.BlockWindmill;
-import com.bluepowermod.blocks.worldgen.BlockCrackedBasalt;
-import com.bluepowermod.blocks.worldgen.BlockCrop;
-import com.bluepowermod.blocks.worldgen.BlockCustomFlower;
-import com.bluepowermod.blocks.worldgen.BlockStoneOre;
-import com.bluepowermod.blocks.worldgen.BlockStoneOreConnected;
+import com.bluepowermod.blocks.machines.*;
+import com.bluepowermod.blocks.worldgen.*;
 import com.bluepowermod.references.GuiIDs;
-import com.bluepowermod.tileentities.tier1.TileBlockBreaker;
-import com.bluepowermod.tileentities.tier1.TileBuffer;
-import com.bluepowermod.tileentities.tier1.TileDeployer;
-import com.bluepowermod.tileentities.tier1.TileEjector;
-import com.bluepowermod.tileentities.tier1.TileFilter;
-import com.bluepowermod.tileentities.tier1.TileItemDetector;
-import com.bluepowermod.tileentities.tier1.TileRelay;
-import com.bluepowermod.tileentities.tier1.TileTransposer;
+import com.bluepowermod.tileentities.tier1.*;
 import com.bluepowermod.tileentities.tier2.TileRegulator;
 import com.bluepowermod.tileentities.tier2.TileRetriever;
 import com.bluepowermod.tileentities.tier2.TileSortingMachine;
-
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.item.ItemDye;
 
 @GameRegistry.ObjectHolder(Refs.MODID)
 public class BPBlocks {
@@ -119,10 +93,10 @@ public class BPBlocks {
     public static Block regulator;
     public static Block item_detector;
 
-    public static Block cpu;
+    /*public static Block cpu;
     public static Block monitor;
     public static Block disk_drive;
-    public static Block io_expander;
+    public static Block io_expander;*/
 
     public static Block multipart; // DO NOT GENERATE OR REMOVE THIS BLOCK!
 
@@ -190,11 +164,11 @@ public class BPBlocks {
                 .setBlockName(Refs.REGULATOR_NAME);
         item_detector = new BlockContainerTwoSideRender(Material.rock, TileItemDetector.class).setGuiId(GuiIDs.ITEMDETECTOR_ID).emitsRedstone()
                 .setBlockName(Refs.ITEMDETECTOR_NAME);
-
+/*
         cpu = new BlockCPU();
         monitor = new BlockMonitor();
         disk_drive = new BlockDiskDrive();
-        io_expander = new BlockIOExpander();
+        io_expander = new BlockIOExpander();*/
 
         engine = new BlockEngine();
         kinetic_generator = new BlockKineticGenerator();
@@ -273,10 +247,12 @@ public class BPBlocks {
         GameRegistry.registerBlock(regulator, Refs.REGULATOR_NAME);
         GameRegistry.registerBlock(item_detector, Refs.ITEMDETECTOR_NAME);
 
+        /*
         GameRegistry.registerBlock(cpu, Refs.BLOCKCPU_NAME);
         GameRegistry.registerBlock(monitor, Refs.BLOCKMONITOR_NAME);
         GameRegistry.registerBlock(disk_drive, Refs.BLOCKDISKDRIVE_NAME);
         GameRegistry.registerBlock(io_expander, Refs.BLOCKIOEXPANDER_NAME);
+        */
 
         GameRegistry.registerBlock(engine, Refs.ENGINE_NAME);
         GameRegistry.registerBlock(kinetic_generator, Refs.KINETICGENERATOR_NAME);
