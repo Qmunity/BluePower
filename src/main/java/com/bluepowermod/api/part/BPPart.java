@@ -460,7 +460,7 @@ public abstract class BPPart {
      * @param tag
      *            NBT tag the data will be written to
      */
-    public void writeUpdate(NBTTagCompound tag) {
+    public void writeUpdatePacket(NBTTagCompound tag) {
 
         save(tag);
     }
@@ -471,7 +471,7 @@ public abstract class BPPart {
      * @param tag
      *            NBT tag with the data
      */
-    public void readUpdate(NBTTagCompound tag) {
+    public void readUpdatePacket(NBTTagCompound tag) {
 
         load(tag);
     }

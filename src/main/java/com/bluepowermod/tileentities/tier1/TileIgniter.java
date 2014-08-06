@@ -26,12 +26,12 @@ import com.bluepowermod.tileentities.IEjectAnimator;
 import com.bluepowermod.tileentities.TileBase;
 
 public class TileIgniter extends TileBase implements IEjectAnimator {
-    
+
     private boolean isActive;
-    
+
     @Override
     protected void redstoneChanged(boolean newValue) {
-    
+
         super.redstoneChanged(newValue);
         isActive = newValue;
         sendUpdatePacket();
@@ -42,49 +42,56 @@ public class TileIgniter extends TileBase implements IEjectAnimator {
             extinguish(direction);
         }
     }
-    
+
     @Override
     public void writeToPacketNBT(NBTTagCompound tCompound) {
-    
+
         super.writeToPacketNBT(tCompound);
         tCompound.setBoolean("isActive", isActive);
     }
-    
+
     @Override
     public void readFromPacketNBT(NBTTagCompound tCompound) {
-    
+
         super.readFromPacketNBT(tCompound);
         isActive = tCompound.getBoolean("isActive");
-        if (worldObj != null) markForRenderUpdate();
+        if (worldObj != null)
+            markForRenderUpdate();
     }
-    
+
     private void ignite(ForgeDirection direction) {
-    
+
         if (getIsRedstonePowered() && worldObj.isAirBlock(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ)) {
             worldObj.setBlock(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ, Blocks.fire);
         }
     }
-    
+
     private void extinguish(ForgeDirection direction) {
-    
+
         Block target = worldObj.getBlock(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ);
         if (!getIsRedstonePowered() && (target == Blocks.fire || target == Blocks.portal)) {
             worldObj.setBlock(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ, Blocks.air);
         }
     }
-    
+
     @Override
     public void updateEntity() {
-    
+
         if (getTicker() % 5 == 0) {
             ignite(getFacingDirection());
         }
         super.updateEntity();
     }
-    
+
     @Override
     public boolean isEjecting() {
-    
+
         return isActive;
+    }
+
+    @Override
+    public boolean canConnectRedstone() {
+
+        return true;
     }
 }

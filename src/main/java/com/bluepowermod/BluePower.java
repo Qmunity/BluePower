@@ -15,7 +15,6 @@ import net.minecraftforge.common.config.Configuration;
 import org.apache.logging.log4j.Logger;
 
 import com.bluepowermod.api.BPApi;
-import com.bluepowermod.api.part.redstone.RedstoneNetworkTickHandler;
 import com.bluepowermod.client.gui.GUIHandler;
 import com.bluepowermod.compat.CompatibilityUtils;
 import com.bluepowermod.compat.fmp.PartRegister;
@@ -47,68 +46,67 @@ import cpw.mods.fml.common.registry.GameRegistry;
 
 @Mod(modid = Refs.MODID, name = Refs.NAME, guiFactory = Refs.GUIFACTORY)
 public class BluePower {
-    
+
     @Instance(Refs.MODID)
-    public static BluePower     instance;
-    
+    public static BluePower instance;
+
     @SidedProxy(clientSide = Refs.PROXY_LOCATION + ".ClientProxy", serverSide = Refs.PROXY_LOCATION + ".CommonProxy")
-    public static CommonProxy   proxy;
-    public static Logger        log;
+    public static CommonProxy proxy;
+    public static Logger log;
     public static Configuration config;
-    
+
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
-    
+
         event.getModMetadata().version = Refs.fullVersionString();
-        
+
         log = event.getModLog();
         config = new Configuration(event.getSuggestedConfigurationFile());
-        
+
         BPApi.init(new BluePowerAPI());
         CustomTabs.init();
         // Load configs
         Config.syncConfig(config);
         BPBlocks.init();
         BPItems.init();
-        
+
         TileEntities.init();
         OreDictionarySetup.init();
         GameRegistry.registerWorldGenerator(new WorldGenerationHandler(), 0);
-        
+
         BPEnchantments.init();
-        
+
         CompatibilityUtils.preInit(event);
-        
-        FMLCommonHandler.instance().bus().register(new RedstoneNetworkTickHandler());
+
         FMLCommonHandler.instance().bus().register(new Config());
         BPEventHandler eventHandler = new BPEventHandler();
         MinecraftForge.EVENT_BUS.register(eventHandler);
         FMLCommonHandler.instance().bus().register(eventHandler);
-        
+
         PartRegister.registerParts();
     }
-    
+
     @EventHandler
     public void init(FMLInitializationEvent event) {
-    
+
         Recipes.init(CraftingManager.getInstance());
         proxy.init();
         NetworkHandler.init();
         NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GUIHandler());
         CompatibilityUtils.init(event);
     }
-    
+
     @EventHandler
     public void postInit(FMLPostInitializationEvent event) {
-    
+
         CompatibilityUtils.postInit(event);
         AlloyFurnaceRegistry.getInstance().generateRecyclingRecipes();
         proxy.initRenderers();
     }
-    
+
     @EventHandler
     public void serverStarting(FMLServerStartingEvent event) {
-    
+
         // register commands
     }
 }

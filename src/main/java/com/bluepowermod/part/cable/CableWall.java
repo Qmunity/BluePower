@@ -3,6 +3,7 @@ package com.bluepowermod.part.cable;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -108,6 +109,9 @@ public abstract class CableWall extends BPPartFace {
         if (loc == null || loc.getBlockX() != getX() || loc.getBlockY() != getY() || loc.getBlockZ() != getZ() || loc.getWorld() != getWorld())
             loc = new Vector3(getX(), getY(), getZ(), getWorld());
 
+        if (getWorld() == null || getWorld().isRemote)
+            return;
+
         for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
             if (!canConnectOnSide(d))
                 continue;
@@ -143,6 +147,7 @@ public abstract class CableWall extends BPPartFace {
         updating = false;
 
         sendUpdatePacket();
+        markPartForRenderUpdate();
     }
 
     /**
@@ -164,8 +169,11 @@ public abstract class CableWall extends BPPartFace {
 
         // Check for cables in the same block
         l = compat.getBPParts(loc.getTileEntity(), CableWall.class);
+        ForgeDirection dir2 = dir;
+        if (dir2 == ForgeDirection.UP || dir2 == ForgeDirection.DOWN)
+            dir2 = dir2.getOpposite();
         for (CableWall c : l) {
-            if (ForgeDirection.getOrientation(c.getFace()) == dir)
+            if (ForgeDirection.getOrientation(c.getFace()) == dir2)
                 return c;
         }
         l.clear();
@@ -226,5 +234,41 @@ public abstract class CableWall extends BPPartFace {
      */
     public void onDisconnect(Object o) {
 
+    }
+
+    @Override
+    public void update() {
+
+        super.update();
+
+        if (loc == null || loc.getBlockX() != getX() || loc.getBlockY() != getY() || loc.getBlockZ() != getZ() || loc.getWorld() != getWorld())
+            loc = new Vector3(getX(), getY(), getZ(), getWorld());
+    }
+
+    @Override
+    public void writeUpdatePacket(NBTTagCompound tag) {
+
+        super.writeUpdatePacket(tag);
+
+        for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
+            Vector3 v = null;
+            Object o = connections[ForgeDirectionUtils.getSide(d)];
+            if (o != null) {
+                if (o instanceof Vector3)
+                    v = (Vector3) o;
+                if (o instanceof CableWall)
+                    v = ((CableWall) o).loc;
+            }
+            tag.setString("con_" + d.name(), v == null ? "" : v.toString());
+        }
+    }
+
+    @Override
+    public void readUpdatePacket(NBTTagCompound tag) {
+
+        super.readUpdatePacket(tag);
+
+        for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS)
+            connections[ForgeDirectionUtils.getSide(d)] = Vector3.fromString(tag.getString("con_" + d.name()));
     }
 }

@@ -3,7 +3,7 @@ package com.bluepowermod.compat.fmp;
 import net.minecraft.item.ItemDye;
 
 import com.bluepowermod.part.PartRegistry;
-import com.bluepowermod.part.cable.CableWallImpl;
+import com.bluepowermod.part.cable.WireBluestone;
 import com.bluepowermod.part.gate.GateAnd;
 import com.bluepowermod.part.gate.GateBuffer;
 import com.bluepowermod.part.gate.GateCounter;
@@ -75,7 +75,7 @@ public class PartRegister {
         PartRegistry.getInstance().registerPart(Accelerator.class);
         
         // Test cable
-        PartRegistry.getInstance().registerPart(CableWallImpl.class);
+        PartRegistry.getInstance().registerPart(WireBluestone.class);
         /*
          * // Red alloy registerPart(CableWall.class); // Uncovered for (int i = 0; i < ItemDye.field_150922_c.length; i++)
          * registerPart(CableWall.class, ItemDye.field_150921_b[i].toLowerCase(), ItemDye.field_150922_c[i]); // Covered

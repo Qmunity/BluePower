@@ -26,23 +26,32 @@ import net.minecraftforge.common.util.ForgeDirection;
 import com.bluepowermod.tileentities.TileMachineBase;
 
 public class TileBlockBreaker extends TileMachineBase {
-    
+
     @Override
     protected void redstoneChanged(boolean newValue) {
-    
+
         super.redstoneChanged(newValue);
-        
+
         if (!worldObj.isRemote && newValue && isBufferEmpty()) {
             ForgeDirection direction = getFacingDirection();
             Block breakBlock = worldObj.getBlock(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ);
             int breakMeta = worldObj.getBlockMetadata(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ);
             float breakHardness = breakBlock.getBlockHardness(worldObj, xCoord, yCoord, zCoord);
-            ArrayList<ItemStack> breakStacks = breakBlock.getDrops(worldObj, xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ, breakMeta, 0);
-            
-            if (breakHardness == -1.0F) { return; }
-            
-            worldObj.func_147480_a(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ, false); //destroyBlock
+            ArrayList<ItemStack> breakStacks = breakBlock.getDrops(worldObj, xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord
+                    + direction.offsetZ, breakMeta, 0);
+
+            if (breakHardness == -1.0F) {
+                return;
+            }
+
+            worldObj.func_147480_a(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ, false); // destroyBlock
             addItemsToOutputBuffer(breakStacks);
         }
+    }
+
+    @Override
+    public boolean canConnectRedstone() {
+
+        return true;
     }
 }

@@ -123,7 +123,7 @@ public class MultipartBPPart extends TMultiPart implements IRedstonePart, JNorma
         packet.writeString(getPart().getType());
 
         NBTTagCompound tag = new NBTTagCompound();
-        getPart().writeUpdate(tag);
+        getPart().writeUpdatePacket(tag);
         packet.writeNBTTagCompound(tag);
     }
 
@@ -136,7 +136,7 @@ public class MultipartBPPart extends TMultiPart implements IRedstonePart, JNorma
         if (getPart() == null)
             setPart(PartRegistry.getInstance().createPart(type));
 
-        getPart().readUpdate(packet.readNBTTagCompound());
+        getPart().readUpdatePacket(packet.readNBTTagCompound());
     }
 
     @Override
