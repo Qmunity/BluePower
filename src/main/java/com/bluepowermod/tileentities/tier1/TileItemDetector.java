@@ -13,6 +13,9 @@ import com.bluepowermod.part.IGuiButtonSensitive;
 import com.bluepowermod.part.tube.TubeStack;
 import com.bluepowermod.tileentities.TileMachineBase;
 
+/**
+ * @author MineMaarten
+ */
 public class TileItemDetector extends TileMachineBase implements ISidedInventory, IGuiButtonSensitive {
     
     public int                mode;

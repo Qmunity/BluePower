@@ -37,10 +37,10 @@ import codechicken.multipart.JNormalOcclusion;
 import codechicken.multipart.NormalOcclusionTest;
 import codechicken.multipart.TMultiPart;
 
-import com.bluepowermod.api.Refs;
 import com.bluepowermod.api.part.BPPart;
-import com.bluepowermod.api.part.PartRegistry;
 import com.bluepowermod.api.part.redstone.IBPRedstonePart;
+import com.bluepowermod.part.PartRegistry;
+import com.bluepowermod.util.Refs;
 
 public class MultipartBPPart extends TMultiPart implements IRedstonePart, JNormalOcclusion, INeighborTileChange {
     
@@ -130,7 +130,7 @@ public class MultipartBPPart extends TMultiPart implements IRedstonePart, JNorma
         super.readDesc(packet);
         
         String type = packet.readString();
-        if (getPart() == null) setPart(PartRegistry.createPart(type));
+        if (getPart() == null) setPart(PartRegistry.getInstance().createPart(type));
         
         getPart().load(packet.readNBTTagCompound());
     }
@@ -140,7 +140,7 @@ public class MultipartBPPart extends TMultiPart implements IRedstonePart, JNorma
     
         super.load(tag);
         String type = tag.getString("part_id");
-        if (getPart() == null) setPart(PartRegistry.createPart(type));
+        if (getPart() == null) setPart(PartRegistry.getInstance().createPart(type));
         
         NBTTagCompound t = tag.getCompoundTag("partData");
         getPart().load(t);

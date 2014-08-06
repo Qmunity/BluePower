@@ -17,11 +17,11 @@ import net.minecraftforge.client.IItemRenderer;
 import org.lwjgl.opengl.GL11;
 
 import com.bluepowermod.api.part.BPPart;
-import com.bluepowermod.api.part.PartRegistry;
+import com.bluepowermod.part.PartRegistry;
 
 public class RenderItemBPPart implements IItemRenderer {
     
-    private List<BPPart> parts = new ArrayList<BPPart>();
+    private final List<BPPart> parts = new ArrayList<BPPart>();
     
     @Override
     public boolean handleRenderType(ItemStack item, ItemRenderType type) {
@@ -42,18 +42,18 @@ public class RenderItemBPPart implements IItemRenderer {
         BPPart part = null;
         try {
             for (BPPart p : parts)
-                if (p.getType().equals(PartRegistry.getPartIdFromItem(item))) {
+                if (p.getType().equals(PartRegistry.getInstance().getPartIdFromItem(item))) {
                     part = p;
                     break;
                 }
             if (part == null) {
-                part = PartRegistry.createPartFromItem(item);
+                part = PartRegistry.getInstance().createPartFromItem(item);
                 if (part != null) parts.add(part);
             }
         } catch (Exception ex) {
         }
         if (part == null) {
-            part = PartRegistry.createPart(PartRegistry.ICON_PART);
+            part = PartRegistry.getInstance().createPart(PartRegistry.getInstance().ICON_PART);
         }
         
         GL11.glPushMatrix();
@@ -62,8 +62,7 @@ public class RenderItemBPPart implements IItemRenderer {
                 case ENTITY:
                     GL11.glScaled(0.5, 0.5, 0.5);
                     GL11.glTranslated(-0.5, 0, -0.5);
-                    if(item.getItemFrame() != null)
-                        GL11.glTranslated(0, -0.25, 0);
+                    if (item.getItemFrame() != null) GL11.glTranslated(0, -0.25, 0);
                     break;
                 case EQUIPPED:
                     break;

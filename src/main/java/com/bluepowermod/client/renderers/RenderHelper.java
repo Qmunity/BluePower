@@ -1,8 +1,9 @@
 package com.bluepowermod.client.renderers;
 
-import com.bluepowermod.api.Refs;
 import com.bluepowermod.api.vec.Vector3Cube;
 import com.bluepowermod.part.gate.GateBase;
+import com.bluepowermod.util.Refs;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
@@ -11,6 +12,7 @@ import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.ForgeDirection;
+
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 

@@ -22,7 +22,6 @@ package com.bluepowermod.client.gui;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 
-import com.bluepowermod.api.Refs;
 import com.bluepowermod.client.gui.widget.BaseWidget;
 import com.bluepowermod.client.gui.widget.IGuiWidget;
 import com.bluepowermod.client.gui.widget.WidgetColor;
@@ -30,7 +29,11 @@ import com.bluepowermod.containers.ContainerFilter;
 import com.bluepowermod.network.NetworkHandler;
 import com.bluepowermod.network.messages.MessageGuiUpdate;
 import com.bluepowermod.tileentities.tier1.TileFilter;
+import com.bluepowermod.util.Refs;
 
+/**
+ * @author MineMaarten
+ */
 public class GuiFilter extends GuiBase {
     
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/seedBag.png");

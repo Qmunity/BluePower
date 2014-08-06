@@ -1,8 +1,7 @@
 package com.bluepowermod.part;
 
 /**
- * Implemented by BPParts, this interface can be used to sync client side gui input with server.
- * TODO: make work for ordinary TileEntities
+ * Implemented by BPParts or TileEntities, this interface can be used to sync client side gui input with server.
  * @author MineMaarten
  */
 public interface IGuiButtonSensitive {

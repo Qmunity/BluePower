@@ -20,7 +20,7 @@ package com.bluepowermod.init;
 import net.minecraftforge.common.config.Configuration;
 
 import com.bluepowermod.BluePower;
-import com.bluepowermod.api.Refs;
+import com.bluepowermod.util.Refs;
 
 import cpw.mods.fml.client.event.ConfigChangedEvent;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;

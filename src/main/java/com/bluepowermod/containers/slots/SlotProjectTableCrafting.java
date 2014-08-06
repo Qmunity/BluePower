@@ -8,6 +8,9 @@ import net.minecraft.item.ItemStack;
 import com.bluepowermod.containers.ContainerProjectTable;
 import com.bluepowermod.tileentities.tier1.TileProjectTable;
 
+/**
+ * @author MineMaarten
+ */
 public class SlotProjectTableCrafting extends SlotCrafting {
     
     /** The craft matrix inventory linked to this result slot. */

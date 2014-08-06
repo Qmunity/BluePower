@@ -23,7 +23,6 @@ import net.minecraft.client.gui.Gui;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 
-import com.bluepowermod.api.Refs;
 import com.bluepowermod.client.gui.widget.BaseWidget;
 import com.bluepowermod.client.gui.widget.IGuiWidget;
 import com.bluepowermod.client.gui.widget.WidgetColor;
@@ -34,6 +33,7 @@ import com.bluepowermod.network.messages.MessageGuiUpdate;
 import com.bluepowermod.tileentities.tier2.TileSortingMachine;
 import com.bluepowermod.tileentities.tier2.TileSortingMachine.PullMode;
 import com.bluepowermod.tileentities.tier2.TileSortingMachine.SortMode;
+import com.bluepowermod.util.Refs;
 
 /**
  * 

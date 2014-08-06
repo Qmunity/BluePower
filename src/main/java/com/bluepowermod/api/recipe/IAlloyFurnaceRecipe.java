@@ -20,7 +20,7 @@ package com.bluepowermod.api.recipe;
 import net.minecraft.item.ItemStack;
 
 /**
- * This class only should be used for special recipes, like recipes taht depend on NBT. For normal recipes use
+ * This class only should be used for special recipes, like recipes that depend on NBT. For normal recipes use
  * {@link com.bluepowermod.recipe.AlloyFurnaceRegistry#addRecipe(ItemStack, ItemStack...)}.
  * @author MineMaarten
  */

@@ -6,11 +6,14 @@ import net.minecraft.client.gui.Gui;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 
-import com.bluepowermod.api.Refs;
 import com.bluepowermod.client.gui.widget.WidgetMode;
 import com.bluepowermod.containers.ContainerRetriever;
 import com.bluepowermod.tileentities.tier2.TileRetriever;
+import com.bluepowermod.util.Refs;
 
+/**
+ * @author MineMaarten
+ */
 public class GuiRetriever extends GuiFilter {
     
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/retriever.png");

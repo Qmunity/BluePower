@@ -10,6 +10,9 @@ import com.bluepowermod.tileentities.tier2.TileRetriever;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+/**
+ * @author MineMaarten
+ */
 public class ContainerRetriever extends ContainerFilter {
     
     private int                 slotIndex, mode;

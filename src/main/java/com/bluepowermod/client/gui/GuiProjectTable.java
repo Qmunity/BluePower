@@ -22,10 +22,13 @@ package com.bluepowermod.client.gui;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 
-import com.bluepowermod.api.Refs;
 import com.bluepowermod.containers.ContainerProjectTable;
 import com.bluepowermod.tileentities.tier1.TileProjectTable;
+import com.bluepowermod.util.Refs;
 
+/**
+ * @author MineMaarten
+ */
 public class GuiProjectTable extends GuiBase {
     
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/project_table.png");

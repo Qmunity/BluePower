@@ -4,12 +4,15 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 
-import com.bluepowermod.api.Dependencies;
 import com.bluepowermod.api.compat.IMultipartCompat;
 import com.bluepowermod.compat.CompatibilityUtils;
 import com.bluepowermod.part.tube.PneumaticTube;
 import com.bluepowermod.tileentities.tier1.TileFilter;
+import com.bluepowermod.util.Dependencies;
 
+/**
+ * @author MineMaarten
+ */
 public class TileRetriever extends TileFilter {
     
     public int slotIndex;

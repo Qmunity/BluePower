@@ -32,6 +32,9 @@ import com.bluepowermod.tileentities.tier1.TileAlloyFurnace;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+/**
+ * @author MineMaarten
+ */
 public class ContainerAlloyFurnace extends Container {
     
     private final TileAlloyFurnace tileFurnace;

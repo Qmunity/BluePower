@@ -17,8 +17,8 @@
 
 package com.bluepowermod.items;
 
-import com.bluepowermod.api.Refs;
 import com.bluepowermod.init.CustomTabs;
+import com.bluepowermod.util.Refs;
 
 public class ItemHandle extends ItemBase {
     public ItemHandle(String name) {

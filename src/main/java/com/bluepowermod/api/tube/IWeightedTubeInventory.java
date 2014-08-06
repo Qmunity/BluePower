@@ -14,18 +14,22 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Blue Power.  If not, see <http://www.gnu.org/licenses/>
  */
+package com.bluepowermod.api.tube;
 
-package com.bluepowermod.api;
-
-import com.bluepowermod.api.recipe.IAlloyFurnaceRegistry;
+import net.minecraftforge.common.util.ForgeDirection;
 
 /**
- * 
- * @author MineMaarten
- */
-
-public class BPRegistry {
+    This interface is implemented by inventories with a buffer inventory, in which the tube _can_ but doesn't prefer to
+    insert items back into the buffer. An arbitrarily large number is returned, 1000000. A Restriction Tube has a weight
+    of 5000, a normal tube 1.
+    @author MineMaarten
+*/
+public interface IWeightedTubeInventory {
     
-    public static IAlloyFurnaceRegistry alloyFurnaceRegistry;
+    /**
+        By default this can be seen as 0 for non implementing inventories. return a high value to make it less prefered
+        by the tubes.
+    */
+    public int getWeight(ForgeDirection from);
     
 }

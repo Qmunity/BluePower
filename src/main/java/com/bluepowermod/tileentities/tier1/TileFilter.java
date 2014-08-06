@@ -15,6 +15,9 @@ import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.part.IGuiButtonSensitive;
 import com.bluepowermod.part.tube.TubeStack;
 
+/**
+ * @author MineMaarten
+ */
 public class TileFilter extends TileTransposer implements ISidedInventory, IGuiButtonSensitive {
     
     protected final ItemStack[] inventory   = new ItemStack[9];

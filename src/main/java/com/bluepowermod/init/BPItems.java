@@ -24,8 +24,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.EnumHelper;
 
-import com.bluepowermod.api.Dependencies;
-import com.bluepowermod.api.Refs;
 import com.bluepowermod.compat.fmp.ItemBPMultipart;
 import com.bluepowermod.items.ItemAthame;
 import com.bluepowermod.items.ItemBase;
@@ -54,6 +52,8 @@ import com.bluepowermod.items.ItemSiliconBoule;
 import com.bluepowermod.items.ItemSiliconWafer;
 import com.bluepowermod.items.ItemZincPlate;
 import com.bluepowermod.part.ItemBPPart;
+import com.bluepowermod.util.Dependencies;
+import com.bluepowermod.util.Refs;
 
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Optional;
@@ -111,7 +111,7 @@ public class BPItems {
     public static ItemBase screwdriver;
     public static Item athame;
     public static ItemBase zincplate;
-    public static ItemBase stone_wafer;
+    public static ItemBase stone_tile;
     public static ItemBase stone_wire;
     public static ItemBase stone_anode;
     public static ItemBase stone_cathode;
@@ -194,7 +194,7 @@ public class BPItems {
         screwdriver = new ItemScrewdriver();
         athame = new ItemAthame();
         zincplate = new ItemZincPlate();
-        stone_wafer = new ItemCrafting(Refs.STONEWAFER_NAME);
+        stone_tile = new ItemCrafting(Refs.STONETILE_NAME);
         stone_wire = new ItemCrafting(Refs.STONEWIRE_NAME);
         stone_anode = new ItemCrafting(Refs.STONEANODE_NAME);
         stone_cathode = new ItemCrafting(Refs.STONECATHODE_NAME);
@@ -291,7 +291,7 @@ public class BPItems {
         GameRegistry.registerItem(athame, Refs.ATHAME_NAME);
         GameRegistry.registerItem(zincplate, Refs.ZINCPLATE_NAME);
 
-        GameRegistry.registerItem(stone_wafer, Refs.STONEWAFER_NAME);
+        GameRegistry.registerItem(stone_tile, Refs.STONETILE_NAME);
         GameRegistry.registerItem(stone_wire, Refs.STONEWIRE_NAME);
         GameRegistry.registerItem(stone_anode, Refs.STONEANODE_NAME);
         GameRegistry.registerItem(stone_cathode, Refs.STONECATHODE_NAME);

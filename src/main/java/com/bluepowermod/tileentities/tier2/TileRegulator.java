@@ -17,6 +17,9 @@ import com.bluepowermod.part.IGuiButtonSensitive;
 import com.bluepowermod.part.tube.TubeStack;
 import com.bluepowermod.tileentities.TileMachineBase;
 
+/**
+ * @author MineMaarten
+ */
 public class TileRegulator extends TileMachineBase implements ISidedInventory, IGuiButtonSensitive {
     
     private ItemStack[] inventory = new ItemStack[27];

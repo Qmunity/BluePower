@@ -1,6 +1,8 @@
-package com.bluepowermod.part.tube;
+package com.bluepowermod.api.tube;
 
 import net.minecraftforge.common.util.ForgeDirection;
+
+import com.bluepowermod.part.tube.TubeStack;
 
 /**
  * 
@@ -15,7 +17,7 @@ public interface ITubeConnection {
      * 
      * @param stack TubeStack, as it needs to save the color if it bounced into the buffer.
      * @param from
-     * @param simulate TODO
+     * @param simulate when true, only return what would have been accepted, but don't actually accept.
      * @return The TubeStack that was unable to enter this ITubeConnection
      */
     public TubeStack acceptItemFromTube(TubeStack stack, ForgeDirection from, boolean simulate);

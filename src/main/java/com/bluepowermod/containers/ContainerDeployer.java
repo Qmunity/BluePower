@@ -25,6 +25,9 @@ import net.minecraft.item.ItemStack;
 
 import com.bluepowermod.tileentities.tier1.TileDeployer;
 
+/**
+ * @author MineMaarten
+ */
 public class ContainerDeployer extends Container {
     
     private final TileDeployer tileDeployer;

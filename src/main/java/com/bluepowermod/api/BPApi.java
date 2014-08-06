@@ -1,39 +1,49 @@
 package com.bluepowermod.api;
 
-import net.minecraft.item.Item;
+import net.minecraft.tileentity.TileEntity;
 
 import com.bluepowermod.api.compat.IMultipartCompat;
+import com.bluepowermod.api.part.IPartRegistry;
+import com.bluepowermod.api.recipe.IAlloyFurnaceRegistry;
+import com.bluepowermod.api.tube.IPneumaticTube;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
+/**
+ * This is then main hub where you can interface with BluePower as a modder. Note that the 'instance' in this class will be filled in BluePower's preInit.
+ * This means this class is save to use from the init phase.
+ * @author MineMaarten
+ */
 public class BPApi {
-
-    public static IMultipartCompat getMultipartCompat() {
-
-        try {
-            Class c = Class.forName("com.bluepowermod.compat.CompatibilityUtils");
-            return (IMultipartCompat) c.getDeclaredMethod("getModule", String.class).invoke(c, Dependencies.FMP);
-        } catch (Exception e) {
-        }
-        return null;
+    
+    private static IBPApi instance;
+    
+    public static IBPApi getInstance() {
+    
+        return instance;
     }
-
-    public static Item getItem(String name) {
-
-        try {
-            Class c = Class.forName("com.bluepowermod.init.BPItems");
-            return (Item) c.getDeclaredField(name).get(c);
-        } catch (Exception e) {
-        }
-        return null;
+    
+    public static interface IBPApi {
+        
+        public IMultipartCompat getMultipartCompat();
+        
+        public IPartRegistry getPartRegistry();
+        
+        public IPneumaticTube getPneumaticTube(TileEntity te);
+        
+        public IAlloyFurnaceRegistry getAlloyFurnaceRegistry();
+        
     }
-
-    public static Item getBlock(String name) {
-
-        try {
-            Class c = Class.forName("com.bluepowermod.init.BPBlocks");
-            return (Item) c.getDeclaredField(name).get(c);
-        } catch (Exception e) {
+    
+    /**
+     * For internal use only, don't call it.
+     * @param inst
+     */
+    public static void init(IBPApi inst) {
+    
+        if (instance == null) {
+            instance = inst;
+        } else {
+            throw new IllegalStateException("This method should be called from BluePower only!");
         }
-        return null;
     }
 }

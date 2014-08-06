@@ -32,6 +32,9 @@ import com.bluepowermod.tileentities.IRotatable;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+/**
+ * @author MineMaarten
+ */
 public class BlockContainerTwoSideRender extends BlockContainerBase {
     
     public BlockContainerTwoSideRender(Material material, Class<? extends TileEntity> tileEntityClass) {

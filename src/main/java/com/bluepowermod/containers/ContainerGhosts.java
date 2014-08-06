@@ -8,6 +8,9 @@ import net.minecraft.item.ItemStack;
 
 import com.bluepowermod.containers.slots.IPhantomSlot;
 
+/**
+ * @author MineMaarten
+ */
 public abstract class ContainerGhosts extends Container {
     
     /**

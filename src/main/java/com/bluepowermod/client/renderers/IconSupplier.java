@@ -3,10 +3,13 @@ package com.bluepowermod.client.renderers;
 import net.minecraft.util.IIcon;
 import net.minecraftforge.client.event.TextureStitchEvent;
 
-import com.bluepowermod.api.Refs;
+import com.bluepowermod.util.Refs;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
+/**
+ * @author MineMaarten
+ */
 public class IconSupplier {
     
     public static IIcon pneumaticTubeSide;
@@ -88,7 +91,7 @@ public class IconSupplier {
             
             lampOn = event.map.registerIcon(Refs.MODID + ":lamps/lamp_off");
             lampOff = event.map.registerIcon(Refs.MODID + ":lamps/lamp_on");
-
+            
             bluestoneTorchOff = event.map.registerIcon(Refs.MODID + ":bluestone_torch_off");
             bluestoneTorchOn = event.map.registerIcon(Refs.MODID + ":bluestone_torch_on");
         }

@@ -24,7 +24,6 @@ import java.util.List;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 
-import com.bluepowermod.api.Refs;
 import com.bluepowermod.client.gui.widget.BaseWidget;
 import com.bluepowermod.client.gui.widget.IGuiWidget;
 import com.bluepowermod.client.gui.widget.WidgetColor;
@@ -33,7 +32,11 @@ import com.bluepowermod.containers.ContainerRegulator;
 import com.bluepowermod.network.NetworkHandler;
 import com.bluepowermod.network.messages.MessageGuiUpdate;
 import com.bluepowermod.tileentities.tier2.TileRegulator;
+import com.bluepowermod.util.Refs;
 
+/**
+ * @author MineMaarten
+ */
 public class GuiRegulator extends GuiBase {
     
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/regulator.png");

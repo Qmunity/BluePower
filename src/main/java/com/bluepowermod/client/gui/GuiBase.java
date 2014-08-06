@@ -35,6 +35,10 @@ import com.bluepowermod.BluePower;
 import com.bluepowermod.client.gui.widget.IGuiWidget;
 import com.bluepowermod.client.gui.widget.IWidgetListener;
 
+/**
+ * @author MineMaarten
+ * @author K-4U
+ */
 public class GuiBase extends GuiContainer implements IWidgetListener {
     
     private static final int       COLOR_TEXT = 4210752;

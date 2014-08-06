@@ -34,6 +34,9 @@ import com.bluepowermod.tileentities.tier1.TileFilter;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+/**
+ * @author MineMaarten
+ */
 public class ContainerFilter extends Container {
     
     private final TileFilter tileFilter;

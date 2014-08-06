@@ -4,7 +4,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
 
 /**
- * later there will be a way for API implementers to get an IPneumaticTube for a given TileEntity.
+ * This interface is implemented by the Pneumatic Tube's logic. you can get the tube from a block by doing 
+ * @author MineMaarten
  */
 public interface IPneumaticTube {
     

@@ -9,6 +9,9 @@ import net.minecraft.nbt.NBTTagCompound;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+/**
+ * @author MineMaarten
+ */
 public abstract class ItemDamageableColorableOverlay extends ItemColorableOverlay {
     
     public ItemDamageableColorableOverlay(String name) {

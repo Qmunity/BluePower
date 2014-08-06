@@ -21,25 +21,16 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemDye;
 
-import com.bluepowermod.api.Dependencies;
-import com.bluepowermod.api.Refs;
 import com.bluepowermod.blocks.BPBlockMultipart;
 import com.bluepowermod.blocks.BlockContainerBase;
 import com.bluepowermod.blocks.BlockItemOre;
-import com.bluepowermod.blocks.computer.BlockCPU;
-import com.bluepowermod.blocks.computer.BlockDiskDrive;
-import com.bluepowermod.blocks.computer.BlockIOExpander;
-import com.bluepowermod.blocks.computer.BlockMonitor;
 import com.bluepowermod.blocks.machines.BlockAlloyFurnace;
 import com.bluepowermod.blocks.machines.BlockContainerFrontRender;
 import com.bluepowermod.blocks.machines.BlockContainerTwoSideRender;
-import com.bluepowermod.blocks.machines.BlockEngine;
 import com.bluepowermod.blocks.machines.BlockIgniter;
-import com.bluepowermod.blocks.machines.BlockKineticGenerator;
 import com.bluepowermod.blocks.machines.BlockLamp;
 import com.bluepowermod.blocks.machines.BlockProjectTable;
 import com.bluepowermod.blocks.machines.BlockSortron;
-import com.bluepowermod.blocks.machines.BlockWindmill;
 import com.bluepowermod.blocks.worldgen.BlockCrackedBasalt;
 import com.bluepowermod.blocks.worldgen.BlockCrop;
 import com.bluepowermod.blocks.worldgen.BlockCustomFlower;
@@ -57,6 +48,8 @@ import com.bluepowermod.tileentities.tier1.TileTransposer;
 import com.bluepowermod.tileentities.tier2.TileRegulator;
 import com.bluepowermod.tileentities.tier2.TileRetriever;
 import com.bluepowermod.tileentities.tier2.TileSortingMachine;
+import com.bluepowermod.util.Dependencies;
+import com.bluepowermod.util.Refs;
 
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -64,71 +57,71 @@ import cpw.mods.fml.common.registry.GameRegistry;
 @GameRegistry.ObjectHolder(Refs.MODID)
 public class BPBlocks {
 
-    public static Block basalt;
-    public static Block marble;
-    public static Block basalt_cobble;
-    public static Block basalt_brick;
-    public static Block marble_brick;
-    public static Block cracked_basalt;
+    public static Block   basalt;
+    public static Block   marble;
+    public static Block   basalt_cobble;
+    public static Block   basalt_brick;
+    public static Block   marble_brick;
+    public static Block   cracked_basalt;
 
-    public static Block basaltbrick_cracked;
-    public static Block basalt_brick_small;
-    public static Block marble_brick_small;
-    public static Block fancy_basalt;
-    public static Block fancy_marble;
-    public static Block marble_tile;
-    public static Block basalt_tile;
-    public static Block marble_paver;
-    public static Block basalt_paver;
+    public static Block   basaltbrick_cracked;
+    public static Block   basalt_brick_small;
+    public static Block   marble_brick_small;
+    public static Block   fancy_basalt;
+    public static Block   fancy_marble;
+    public static Block   marble_tile;
+    public static Block   basalt_tile;
+    public static Block   marble_paver;
+    public static Block   basalt_paver;
 
-    public static Block nikolite_ore;
-    public static Block ruby_ore;
-    public static Block sapphire_ore;
-    public static Block amethyst_ore;
+    public static Block   nikolite_ore;
+    public static Block   ruby_ore;
+    public static Block   sapphire_ore;
+    public static Block   amethyst_ore;
 
-    public static Block copper_ore;
-    public static Block silver_ore;
-    public static Block zinc_ore;
-    public static Block tungsten_ore;
+    public static Block   copper_ore;
+    public static Block   silver_ore;
+    public static Block   zinc_ore;
+    public static Block   tungsten_ore;
 
-    public static Block ruby_block;
-    public static Block sapphire_block;
-    public static Block amethyst_block;
-    public static Block nikolite_block;
-    public static Block copper_block;
-    public static Block silver_block;
-    public static Block zinc_block;
-    public static Block tungsten_block;
+    public static Block   ruby_block;
+    public static Block   sapphire_block;
+    public static Block   amethyst_block;
+    public static Block   nikolite_block;
+    public static Block   copper_block;
+    public static Block   silver_block;
+    public static Block   zinc_block;
+    public static Block   tungsten_block;
 
-    public static Block flax_crop;
-    public static Block indigo_flower;
+    public static Block   flax_crop;
+    public static Block   indigo_flower;
 
-    public static Block alloy_furnace;
-    public static Block block_breaker;
-    public static Block igniter;
-    public static Block buffer;
-    public static Block deployer;
-    public static Block transposer;
-    public static Block sorting_machine;
-    public static Block sortron;
-    public static Block project_table;
-    public static Block ejector;
-    public static Block relay;
-    public static Block filter;
-    public static Block retriever;
-    public static Block regulator;
-    public static Block item_detector;
+    public static Block   alloy_furnace;
+    public static Block   block_breaker;
+    public static Block   igniter;
+    public static Block   buffer;
+    public static Block   deployer;
+    public static Block   transposer;
+    public static Block   sorting_machine;
+    public static Block   sortron;
+    public static Block   project_table;
+    public static Block   ejector;
+    public static Block   relay;
+    public static Block   filter;
+    public static Block   retriever;
+    public static Block   regulator;
+    public static Block   item_detector;
 
-    public static Block cpu;
-    public static Block monitor;
-    public static Block disk_drive;
-    public static Block io_expander;
-
-    public static Block multipart; // DO NOT GENERATE OR REMOVE THIS BLOCK!
-
-    public static Block engine;
-    public static Block kinetic_generator;
-    public static Block windmill;
+    public static Block   cpu;
+    public static Block   monitor;
+    public static Block   disk_drive;
+    public static Block   io_expander;
+    
+    public static Block   multipart;
+    
+    public static Block   engine;
+    public static Block   kinetic_generator;
+    public static Block   windmill;
     public static Block[] blockLamp;
     public static Block[] blockLampInverted;
 
@@ -172,13 +165,11 @@ public class BPBlocks {
         indigo_flower = new BlockCustomFlower(Refs.INDIGOFLOWER_NAME);
 
         alloy_furnace = new BlockAlloyFurnace();
-        sorting_machine = new BlockContainerBase(Material.rock, TileSortingMachine.class).setGuiId(GuiIDs.SORTING_MACHINE).setBlockName(
-                Refs.SORTING_MACHINE_NAME);
+        sorting_machine = new BlockContainerBase(Material.rock, TileSortingMachine.class).setGuiId(GuiIDs.SORTING_MACHINE).setBlockName(Refs.SORTING_MACHINE_NAME);
         block_breaker = new BlockContainerFrontRender(Material.rock, TileBlockBreaker.class).setBlockName(Refs.BLOCKBREAKER_NAME);
         igniter = new BlockIgniter();
         buffer = new BlockContainerBase(Material.rock, TileBuffer.class).setGuiId(GuiIDs.BUFFER).setBlockName(Refs.BLOCKBUFFER_NAME);
-        deployer = new BlockContainerFrontRender(Material.rock, TileDeployer.class).setGuiId(GuiIDs.DEPLOYER_ID)
-                .setBlockName(Refs.BLOCKDEPLOYER_NAME);
+        deployer = new BlockContainerFrontRender(Material.rock, TileDeployer.class).setGuiId(GuiIDs.DEPLOYER_ID).setBlockName(Refs.BLOCKDEPLOYER_NAME);
         project_table = new BlockProjectTable().setGuiId(GuiIDs.PROJECTTABLE_ID);
 
         transposer = new BlockContainerBase(Material.rock, TileTransposer.class).setBlockName(Refs.TRANSPOSER_NAME);
@@ -186,19 +177,17 @@ public class BPBlocks {
         relay = new BlockContainerTwoSideRender(Material.rock, TileRelay.class).setGuiId(GuiIDs.RELAY_ID).setBlockName(Refs.RELAY_NAME);
         filter = new BlockContainerBase(Material.rock, TileFilter.class).setGuiId(GuiIDs.FILTER_ID).setBlockName(Refs.FILTER_NAME);
         retriever = new BlockContainerBase(Material.rock, TileRetriever.class).setGuiId(GuiIDs.RETRIEVER_ID).setBlockName(Refs.RETRIEVER_NAME);
-        regulator = new BlockContainerTwoSideRender(Material.rock, TileRegulator.class).setGuiId(GuiIDs.REGULATOR_ID).emitsRedstone()
-                .setBlockName(Refs.REGULATOR_NAME);
-        item_detector = new BlockContainerTwoSideRender(Material.rock, TileItemDetector.class).setGuiId(GuiIDs.ITEMDETECTOR_ID).emitsRedstone()
-                .setBlockName(Refs.ITEMDETECTOR_NAME);
-
-        cpu = new BlockCPU();
+        regulator = new BlockContainerTwoSideRender(Material.rock, TileRegulator.class).setGuiId(GuiIDs.REGULATOR_ID).emitsRedstone().setBlockName(Refs.REGULATOR_NAME);
+        item_detector = new BlockContainerTwoSideRender(Material.rock, TileItemDetector.class).setGuiId(GuiIDs.ITEMDETECTOR_ID).emitsRedstone().setBlockName(Refs.ITEMDETECTOR_NAME);
+        
+        /*cpu = new BlockCPU();
         monitor = new BlockMonitor();
         disk_drive = new BlockDiskDrive();
         io_expander = new BlockIOExpander();
 
         engine = new BlockEngine();
         kinetic_generator = new BlockKineticGenerator();
-        windmill = new BlockWindmill();
+        windmill = new BlockWindmill();*/
 
         blockLamp = new Block[ItemDye.field_150922_c.length];
         blockLampInverted = new Block[ItemDye.field_150922_c.length];
@@ -272,22 +261,21 @@ public class BPBlocks {
         GameRegistry.registerBlock(retriever, Refs.RETRIEVER_NAME);
         GameRegistry.registerBlock(regulator, Refs.REGULATOR_NAME);
         GameRegistry.registerBlock(item_detector, Refs.ITEMDETECTOR_NAME);
-
-        GameRegistry.registerBlock(cpu, Refs.BLOCKCPU_NAME);
+        
+        /*GameRegistry.registerBlock(cpu, Refs.BLOCKCPU_NAME);
         GameRegistry.registerBlock(monitor, Refs.BLOCKMONITOR_NAME);
         GameRegistry.registerBlock(disk_drive, Refs.BLOCKDISKDRIVE_NAME);
         GameRegistry.registerBlock(io_expander, Refs.BLOCKIOEXPANDER_NAME);
 
         GameRegistry.registerBlock(engine, Refs.ENGINE_NAME);
         GameRegistry.registerBlock(kinetic_generator, Refs.KINETICGENERATOR_NAME);
-        GameRegistry.registerBlock(windmill, Refs.WINDMILL_NAME);
+        GameRegistry.registerBlock(windmill, Refs.WINDMILL_NAME);*/
 
         for (int i = 0; i < ItemDye.field_150922_c.length; i++) {
             GameRegistry.registerBlock(blockLamp[i], blockLamp[i].getUnlocalizedName().substring(blockLamp[i].getUnlocalizedName().indexOf(":") + 1));
         }
         for (int i = 0; i < ItemDye.field_150922_c.length; i++) {
-            GameRegistry.registerBlock(blockLampInverted[i],
-                    blockLampInverted[i].getUnlocalizedName().substring(blockLampInverted[i].getUnlocalizedName().indexOf(":") + 1));
+            GameRegistry.registerBlock(blockLampInverted[i], blockLampInverted[i].getUnlocalizedName().substring(blockLampInverted[i].getUnlocalizedName().indexOf(":") + 1));
         }
 
         if (!Loader.isModLoaded(Dependencies.FMP)) {

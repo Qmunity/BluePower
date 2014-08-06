@@ -9,12 +9,15 @@ import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 
-import com.bluepowermod.api.Refs;
 import com.bluepowermod.init.CustomTabs;
+import com.bluepowermod.util.Refs;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+/**
+ * @author MineMaarten
+ */
 public class ItemColorableOverlay extends ItemBase {
     
     private IIcon overlayTexture;

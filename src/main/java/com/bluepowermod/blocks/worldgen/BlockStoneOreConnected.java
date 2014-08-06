@@ -23,7 +23,7 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 
-import com.bluepowermod.api.Refs;
+import com.bluepowermod.util.Refs;
 
 public class BlockStoneOreConnected extends BlockStoneOre {
 

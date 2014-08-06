@@ -26,8 +26,8 @@ import net.minecraft.item.ItemSword;
 import net.minecraft.util.DamageSource;
 import net.minecraftforge.common.util.EnumHelper;
 
-import com.bluepowermod.api.Refs;
 import com.bluepowermod.init.CustomTabs;
+import com.bluepowermod.util.Refs;
 
 public class ItemAthame extends ItemSword {
     

@@ -3,8 +3,8 @@ package com.bluepowermod.compat.nei;
 import codechicken.nei.api.API;
 import codechicken.nei.api.IConfigureNEI;
 
-import com.bluepowermod.api.Refs;
 import com.bluepowermod.client.gui.GuiProjectTable;
+import com.bluepowermod.util.Refs;
 
 /**
  * 

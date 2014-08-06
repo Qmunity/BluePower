@@ -1,4 +1,4 @@
-package com.bluepowermod.api.helper;
+package com.bluepowermod.helper;
 
 public class MathHelper {
     

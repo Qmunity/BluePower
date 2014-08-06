@@ -34,6 +34,9 @@ import com.bluepowermod.tileentities.tier2.TileRegulator;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+/**
+ * @author MineMaarten
+ */
 public class ContainerRegulator extends ContainerGhosts {
     
     private final TileRegulator tileRegulator;

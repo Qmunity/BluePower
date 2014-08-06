@@ -30,6 +30,9 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import com.bluepowermod.BluePower;
 
+/**
+ * @author MineMaarten
+ */
 public class TileBase extends TileEntity implements IRotatable {
     
     private boolean        isRedstonePowered;

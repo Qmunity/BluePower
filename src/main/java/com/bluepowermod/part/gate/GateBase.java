@@ -22,7 +22,6 @@ import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 
 import org.lwjgl.opengl.GL11;
 
-import com.bluepowermod.api.Refs;
 import com.bluepowermod.api.part.BPPartFace;
 import com.bluepowermod.api.part.FaceDirection;
 import com.bluepowermod.api.part.RedstoneConnection;
@@ -31,6 +30,7 @@ import com.bluepowermod.api.vec.Vector3Cube;
 import com.bluepowermod.client.renderers.RenderHelper;
 import com.bluepowermod.init.BPItems;
 import com.bluepowermod.init.CustomTabs;
+import com.bluepowermod.util.Refs;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;

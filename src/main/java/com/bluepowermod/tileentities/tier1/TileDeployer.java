@@ -29,6 +29,9 @@ import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.tileentities.IEjectAnimator;
 import com.bluepowermod.tileentities.TileBase;
 
+/**
+ * @author MineMaarten
+ */
 public class TileDeployer extends TileBase implements ISidedInventory, IEjectAnimator {
     
     private int                     animationTimer   = -1;

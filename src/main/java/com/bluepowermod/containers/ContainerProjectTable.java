@@ -33,6 +33,9 @@ import com.bluepowermod.containers.slots.SlotProjectTableCrafting;
 import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.tileentities.tier1.TileProjectTable;
 
+/**
+ * @author MineMaarten
+ */
 public class ContainerProjectTable extends Container {
     
     private final TileProjectTable  projectTable;
