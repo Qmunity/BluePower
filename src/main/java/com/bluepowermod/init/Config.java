@@ -75,6 +75,7 @@ public class Config {
     public static int      disjunctionEnchantmentId;
     public static String[] alloyFurnaceBlacklist;
     public static boolean  enableTubeCaching;
+    public static boolean  enableGateSounds;
     
     public static void syncConfig(Configuration config) {
     
@@ -133,6 +134,8 @@ public class Config {
         config.addCustomCategoryComment(Refs.CONFIG_ENCHANTS, "Toggle enchantment ids");
         vorpalEnchantmentId = config.get(Refs.CONFIG_ENCHANTS, "vorpalEnchantmentId", 100).getInt();
         disjunctionEnchantmentId = config.get(Refs.CONFIG_ENCHANTS, "disjunctionEnchantmentId", 101).getInt();
+        
+        enableGateSounds = config.get(Refs.CONFIG_SETTINGS, "Enable Gate Ticking Sounds", true).getBoolean();
         
         if (config.hasChanged()) {
             config.save();

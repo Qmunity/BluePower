@@ -68,7 +68,7 @@ public class GateCounter extends GateBase implements IGuiButtonSensitive {
             double min = 0.555;
             double max = 0.385;
             
-            double angle = min + (max * (count / ((double) this.max)));
+            double angle = min + max * (count / (double) this.max);
             
             RenderHelper.renderPointer(0, 7 / 16D, 0, -angle);
         }
@@ -89,12 +89,14 @@ public class GateCounter extends GateBase implements IGuiButtonSensitive {
         if (left.getPower() > 0 && !wasOnLeft) {
             wasOnLeft = true;
             count -= decrement;
+            playTickSound();
         }
         if (left.getPower() == 0) wasOnLeft = false;
         
         if (right.getPower() > 0 && !wasOnRight) {
             wasOnRight = true;
             count += increment;
+            playTickSound();
         }
         if (right.getPower() == 0) wasOnRight = false;
         

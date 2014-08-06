@@ -1,19 +1,21 @@
 package com.bluepowermod.part.gate;
 
-import com.bluepowermod.api.part.RedstoneConnection;
-import com.bluepowermod.client.gui.gate.GuiGateSingleTime;
-import com.bluepowermod.client.renderers.RenderHelper;
-import com.bluepowermod.part.IGuiButtonSensitive;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import java.util.Arrays;
+import java.util.List;
+
 import mcp.mobius.waila.api.SpecialChars;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 
-import java.util.Arrays;
-import java.util.List;
+import com.bluepowermod.api.part.RedstoneConnection;
+import com.bluepowermod.client.gui.gate.GuiGateSingleTime;
+import com.bluepowermod.client.renderers.RenderHelper;
+import com.bluepowermod.part.IGuiButtonSensitive;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class GateSequencer extends GateBase implements IGuiButtonSensitive {
     
@@ -85,12 +87,16 @@ public class GateSequencer extends GateBase implements IGuiButtonSensitive {
         
         if (t >= 1D / 8D && t < 3D / 8D) {
             power[2] = true;
+            if (right.getPower() == 0) playTickSound();
         } else if (t >= 3D / 8D && t < 5D / 8D) {
             power[3] = true;
+            if (back.getPower() == 0) playTickSound();
         } else if (t >= 5D / 8D && t < 7D / 8D) {
             power[0] = true;
+            if (left.getPower() == 0) playTickSound();
         } else if (t >= 7D / 8D && t < 1 || t >= 0 && t < 1D / 8D) {
             power[1] = true;
+            if (front.getPower() == 0) playTickSound();
         }
         
         left.setPower(power[0] ? 15 : 0);
@@ -152,7 +158,7 @@ public class GateSequencer extends GateBase implements IGuiButtonSensitive {
     
         String t = "";
         
-        int time = (this.time / 4) * 50;
+        int time = this.time / 4 * 50;
         if (time >= 1000) {
             t = time / 1000 + "." + time % 1000 + "s";
         } else {
