@@ -47,11 +47,11 @@ public class Config {
     public static int     maxZincY;
     public static int     veinCountZinc;
     public static int     veinSizeZinc;
-    public static boolean generateNikolite;
-    public static int     minNikoliteY;
-    public static int     maxNikoliteY;
-    public static int     veinCountNikolite;
-    public static int     veinSizeNikolite;
+    public static boolean generateTeslatite;
+    public static int     minTeslatiteY;
+    public static int     maxTeslatiteY;
+    public static int     veinCountTeslatite;
+    public static int     veinSizeTeslatite;
     public static boolean generateRuby;
     public static int     minRubyY;
     public static int     maxRubyY;
@@ -98,11 +98,11 @@ public class Config {
         maxSilverY = config.get(Refs.CONFIG_SILVER, "maxSilverY", 32).getInt();
         veinCountSilver = config.get(Refs.CONFIG_SILVER, "veinCountSilver", 4).getInt();
         veinSizeSilver = config.get(Refs.CONFIG_SILVER, "veinSizeSilver", 8).getInt();
-        generateNikolite = config.get(Refs.CONFIG_NIKOLITE, "generateNikolite", true).getBoolean(true);
-        minNikoliteY = config.get(Refs.CONFIG_NIKOLITE, "minNikoliteY", 0).getInt();
-        maxNikoliteY = config.get(Refs.CONFIG_NIKOLITE, "maxNikoliteY", 16).getInt();
-        veinCountNikolite = config.get(Refs.CONFIG_NIKOLITE, "veinCountNikolite", 4).getInt();
-        veinSizeNikolite = config.get(Refs.CONFIG_NIKOLITE, "veinSizeNikolite", 10).getInt();
+        generateTeslatite = config.get(Refs.CONFIG_TESLATITE, "generateTeslatite", true).getBoolean(true);
+        minTeslatiteY = config.get(Refs.CONFIG_TESLATITE, "minTeslatiteY", 0).getInt();
+        maxTeslatiteY = config.get(Refs.CONFIG_TESLATITE, "maxTeslatiteY", 16).getInt();
+        veinCountTeslatite = config.get(Refs.CONFIG_TESLATITE, "veinCountTeslatite", 4).getInt();
+        veinSizeTeslatite = config.get(Refs.CONFIG_TESLATITE, "veinSizeTeslatite", 10).getInt();
         generateRuby = config.get(Refs.CONFIG_RUBY, "generateRuby", true).getBoolean(true);
         minRubyY = config.get(Refs.CONFIG_RUBY, "minRubyY", 0).getInt();
         maxRubyY = config.get(Refs.CONFIG_RUBY, "maxRubyY", 48).getInt();
@@ -121,10 +121,10 @@ public class Config {
         volcanoSpawnChance = config.get(Refs.CONFIG_WORLDGEN, "volcanoSpawnChance", 0.02).getDouble(0);
         volcanoActiveToInactiveRatio = config.get(Refs.CONFIG_WORLDGEN, "volcanoActiveToInactiveRatio", 0.5).getDouble(0);
         useAltScrewdriverRecipe = config.get(Refs.CONFIG_SETTINGS, "useAltScrewdriverRecipe", false).getBoolean(false);
-        
+
         config.addCustomCategoryComment(Refs.CONFIG_RECIPES, "Toggle recipes to be enabled or not");
         alloyFurnaceBlacklist = config.get(Refs.CONFIG_RECIPES, "alloyFurnaceBlacklist", new String[0]).getStringList();
-        
+
         config.addCustomCategoryComment(Refs.CONFIG_ENCHANTS, "Toggle enchantment ids");
         vorpalEnchantmentId = config.get(Refs.CONFIG_ENCHANTS, "vorpalEnchantmentId", 100).getInt();
         disjunctionEnchantmentId = config.get(Refs.CONFIG_ENCHANTS, "disjunctionEnchantmentId", 101).getInt();

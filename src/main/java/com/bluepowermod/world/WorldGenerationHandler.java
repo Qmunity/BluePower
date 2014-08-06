@@ -56,8 +56,8 @@ public class WorldGenerationHandler implements IWorldGenerator {
             this.addOreToGenerate(random, Config.veinCountSilver, Config.veinSizeSilver, Config.minSilverY, Config.maxSilverY, BPBlocks.silver_ore, world,
                     chunkX, chunkZ);
         }
-        if (Config.generateNikolite) {
-            this.addOreToGenerate(random, Config.veinCountNikolite, Config.veinSizeNikolite, Config.minNikoliteY, Config.maxNikoliteY, BPBlocks.nikolite_ore,
+        if (Config.generateTeslatite) {
+            this.addOreToGenerate(random, Config.veinCountTeslatite, Config.veinSizeTeslatite, Config.minTeslatiteY, Config.maxTeslatiteY, BPBlocks.teslatite_ore,
                     world, chunkX, chunkZ);
         }
         if (Config.generateZinc) {

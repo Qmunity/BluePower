@@ -44,15 +44,15 @@ public class Refs {
     public static final String   AMETHYSTORE_NAME         = "amethyst_ore";
     public static final String   RUBYORE_NAME             = "ruby_ore";
     public static final String   SAPPHIREORE_NAME         = "sapphire_ore";
-    public static final String   NIKOLITEORE_NAME         = "nikolite_ore";
+    public static final String   TESLATITEORE_NAME        = "teslatite_ore";
     public static final String   AMETHYSTBLOCK_NAME       = "amethyst_block";
     public static final String   SAPPHIREBLOCK_NAME       = "sapphire_block";
     public static final String   RUBYBLOCK_NAME           = "ruby_block";
-    public static final String   NIKOLITEBLOCK_NAME       = "nikolite_block";
+    public static final String   TESLATITEBLOCK_NAME      = "teslatite_block";
     public static final String   AMETHYST_NAME            = "amethyst_gem";
     public static final String   SAPPHIRE_NAME            = "sapphire_gem";
     public static final String   RUBY_NAME                = "ruby_gem";
-    public static final String   NIKOLITE_NAME            = "nikolite_dust";
+    public static final String   TESLATITE_NAME           = "teslatite_dust";
     public static final String   COPPERORE_NAME           = "copper_ore";
     public static final String   SILVERORE_NAME           = "silver_ore";
     public static final String   ZINCORE_NAME             = "zinc_ore";
@@ -182,7 +182,7 @@ public class Refs {
     public static final String   CONFIG_COPPER            = "copper";
     public static final String   CONFIG_ZINC              = "zinc";
     public static final String   CONFIG_SILVER            = "silver";
-    public static final String   CONFIG_NIKOLITE          = "nikolite";
+    public static final String   CONFIG_TESLATITE         = "teslatite";
     public static final String   CONFIG_RUBY              = "ruby";
     public static final String   CONFIG_AMETHYST          = "amethyst";
     public static final String   CONFIG_SAPPHIRE          = "sapphire";

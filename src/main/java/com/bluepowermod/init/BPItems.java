@@ -17,6 +17,7 @@
 
 package com.bluepowermod.init;
 
+import com.bluepowermod.items.*;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.Item.ToolMaterial;
@@ -25,32 +26,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.EnumHelper;
 
 import com.bluepowermod.compat.fmp.ItemBPMultipart;
-import com.bluepowermod.items.ItemAthame;
-import com.bluepowermod.items.ItemBase;
-import com.bluepowermod.items.ItemCanvasBag;
-import com.bluepowermod.items.ItemCrafting;
-import com.bluepowermod.items.ItemCropSeed;
-import com.bluepowermod.items.ItemGem;
-import com.bluepowermod.items.ItemGemAxe;
-import com.bluepowermod.items.ItemGemHoe;
-import com.bluepowermod.items.ItemGemPickaxe;
-import com.bluepowermod.items.ItemGemSpade;
-import com.bluepowermod.items.ItemGemSword;
-import com.bluepowermod.items.ItemHandle;
-import com.bluepowermod.items.ItemIndigoDye;
-import com.bluepowermod.items.ItemIngot;
-import com.bluepowermod.items.ItemLimitedCrafting;
-import com.bluepowermod.items.ItemLumar;
-import com.bluepowermod.items.ItemNikolite;
-import com.bluepowermod.items.ItemPaintBrush;
-import com.bluepowermod.items.ItemPaintCan;
-import com.bluepowermod.items.ItemSaw;
-import com.bluepowermod.items.ItemScrewdriver;
-import com.bluepowermod.items.ItemSeedBag;
-import com.bluepowermod.items.ItemSickle;
-import com.bluepowermod.items.ItemSiliconBoule;
-import com.bluepowermod.items.ItemSiliconWafer;
-import com.bluepowermod.items.ItemZincPlate;
+import com.bluepowermod.items.ItemTeslatite;
 import com.bluepowermod.part.ItemBPPart;
 import com.bluepowermod.util.Dependencies;
 import com.bluepowermod.util.Refs;
@@ -65,7 +41,7 @@ public class BPItems {
     public static ItemBase amethyst;
     public static ItemBase sapphire;
     public static ItemBase ruby;
-    public static ItemBase nikolite;
+    public static ItemBase teslatite;
     public static ItemBase copper_ingot;
     public static ItemBase silver_ingot;
     public static ItemBase zinc_ingot;
@@ -140,7 +116,7 @@ public class BPItems {
         amethyst = new ItemGem(Refs.AMETHYST_NAME);
         sapphire = new ItemGem(Refs.SAPPHIRE_NAME);
         ruby = new ItemGem(Refs.RUBY_NAME);
-        nikolite = new ItemNikolite();
+        teslatite = new ItemTeslatite();
         copper_ingot = new ItemIngot(Refs.COPPERINGOT_NAME);
         silver_ingot = new ItemIngot(Refs.SILVERINGOT_NAME);
         zinc_ingot = new ItemIngot(Refs.ZINCINGOT_NAME);
@@ -237,7 +213,7 @@ public class BPItems {
         GameRegistry.registerItem(amethyst, Refs.AMETHYST_NAME);
         GameRegistry.registerItem(sapphire, Refs.SAPPHIRE_NAME);
         GameRegistry.registerItem(ruby, Refs.RUBY_NAME);
-        GameRegistry.registerItem(nikolite, Refs.NIKOLITE_NAME);
+        GameRegistry.registerItem(teslatite, Refs.TESLATITE_NAME);
         GameRegistry.registerItem(copper_ingot, Refs.COPPERINGOT_NAME);
         GameRegistry.registerItem(silver_ingot, Refs.SILVERINGOT_NAME);
         GameRegistry.registerItem(zinc_ingot, Refs.ZINCINGOT_NAME);

@@ -56,7 +56,7 @@ public class BPGuiConfig extends GuiConfig {
         List<IConfigElement> listRuby = new ConfigElement(BluePower.config.getCategory(Refs.CONFIG_RUBY)).getChildElements();
         List<IConfigElement> listAmethyst = new ConfigElement(BluePower.config.getCategory(Refs.CONFIG_AMETHYST)).getChildElements();
         List<IConfigElement> listSapphire = new ConfigElement(BluePower.config.getCategory(Refs.CONFIG_SAPPHIRE)).getChildElements();
-        List<IConfigElement> listNikolite = new ConfigElement(BluePower.config.getCategory(Refs.CONFIG_NIKOLITE)).getChildElements();
+        List<IConfigElement> listNikolite = new ConfigElement(BluePower.config.getCategory(Refs.CONFIG_TESLATITE)).getChildElements();
         List<IConfigElement> listWorldGen = new ConfigElement(BluePower.config.getCategory(Refs.CONFIG_WORLDGEN)).getChildElements();
         List<IConfigElement> listSettings = new ConfigElement(BluePower.config.getCategory(Refs.CONFIG_SETTINGS)).getChildElements();
         List<IConfigElement> listRecipes = new ConfigElement(BluePower.config.getCategory(Refs.CONFIG_RECIPES)).getChildElements();
@@ -73,7 +73,7 @@ public class BPGuiConfig extends GuiConfig {
         list.add(new DummyConfigElement.DummyCategoryElement("Ruby", "bluepower.config.ruby", listRuby));
         list.add(new DummyConfigElement.DummyCategoryElement("Amethyst", "bluepower.config.amethyst", listAmethyst));
         list.add(new DummyConfigElement.DummyCategoryElement("Sapphire", "bluepower.config.sapphire", listSapphire));
-        list.add(new DummyConfigElement.DummyCategoryElement("Nikolite", "bluepower.config.nikolite", listNikolite));
+        list.add(new DummyConfigElement.DummyCategoryElement("Nikolite", "bluepower.config.teslatite", listNikolite));
 
         return list;
     }

@@ -47,7 +47,7 @@ public class BlockItemOre extends BlockBase {
     @Override
     public int quantityDropped(Random rand) {
 
-        return this == BPBlocks.nikolite_ore ? 4 + rand.nextInt(2) : 1;
+        return this == BPBlocks.teslatite_ore ? 4 + rand.nextInt(2) : 1;
     }
 
     @Override
@@ -87,7 +87,7 @@ public class BlockItemOre extends BlockBase {
                 j1 = MathHelper.getRandomIntegerInRange(rand, 3, 7);
             } else if (this == BPBlocks.sapphire_ore) {
                 j1 = MathHelper.getRandomIntegerInRange(rand, 3, 7);
-            } else if (this == BPBlocks.nikolite_ore) {
+            } else if (this == BPBlocks.teslatite_ore) {
                 j1 = MathHelper.getRandomIntegerInRange(rand, 2, 5);
             }
             return j1;
@@ -97,8 +97,8 @@ public class BlockItemOre extends BlockBase {
 
     public static Item getDropFromBlockName(String blockName) {
 
-        if (blockName.equalsIgnoreCase(Refs.NIKOLITEORE_NAME)) {
-            return BPItems.nikolite;
+        if (blockName.equalsIgnoreCase(Refs.TESLATITEORE_NAME)) {
+            return BPItems.teslatite;
         } else if (blockName.equalsIgnoreCase(Refs.RUBYORE_NAME)) {
             return BPItems.ruby;
         } else if (blockName.equalsIgnoreCase(Refs.SAPPHIREORE_NAME)) {

@@ -20,13 +20,13 @@ package com.bluepowermod.items;
 import com.bluepowermod.init.CustomTabs;
 import com.bluepowermod.util.Refs;
 
-public class ItemNikolite extends ItemBase {
+public class ItemTeslatite extends ItemBase {
 
-    public ItemNikolite() {
+    public ItemTeslatite() {
 
         super();
-        this.setUnlocalizedName(Refs.NIKOLITE_NAME);
+        this.setUnlocalizedName(Refs.TESLATITE_NAME);
         this.setCreativeTab(CustomTabs.tabBluePowerItems);
-        this.setTextureName(Refs.MODID + ":" + Refs.NIKOLITE_NAME);
+        this.setTextureName(Refs.MODID + ":" + Refs.TESLATITE_NAME);
     }
 }
