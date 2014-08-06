@@ -6,7 +6,7 @@
  * with Blue Power. If not, see <http://www.gnu.org/licenses/>
  */
 
-package com.bluepowermod.api;
+package com.bluepowermod.util;
 
 public class Dependencies {
     

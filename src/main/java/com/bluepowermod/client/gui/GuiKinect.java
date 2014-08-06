@@ -22,9 +22,9 @@ package com.bluepowermod.client.gui;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 
-import com.bluepowermod.api.Refs;
 import com.bluepowermod.containers.ContainerKinect;
 import com.bluepowermod.tileentities.tier3.TileKinectGenerator;
+import com.bluepowermod.util.Refs;
 
 public class GuiKinect extends GuiBase {
 

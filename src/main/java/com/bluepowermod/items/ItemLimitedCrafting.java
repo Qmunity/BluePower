@@ -23,8 +23,8 @@ import java.util.Random;
 
 import net.minecraft.item.ItemStack;
 
-import com.bluepowermod.api.Refs;
 import com.bluepowermod.init.CustomTabs;
+import com.bluepowermod.util.Refs;
 
 public class ItemLimitedCrafting extends ItemBase {
     

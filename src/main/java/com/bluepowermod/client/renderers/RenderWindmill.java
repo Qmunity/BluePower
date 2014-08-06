@@ -8,8 +8,8 @@ import net.minecraftforge.client.model.IModelCustom;
 
 import org.lwjgl.opengl.GL11;
 
-import com.bluepowermod.api.Refs;
 import com.bluepowermod.tileentities.tier2.TileWindmill;
+import com.bluepowermod.util.Refs;
 
 public class RenderWindmill extends TileEntitySpecialRenderer {
 

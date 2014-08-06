@@ -21,42 +21,42 @@ import codechicken.multipart.MultiPartRegistry;
 import codechicken.multipart.MultiPartRegistry.IPartFactory;
 import codechicken.multipart.TMultiPart;
 
-import com.bluepowermod.api.Refs;
 import com.bluepowermod.api.part.BPPart;
 import com.bluepowermod.api.part.IBPFacePart;
-import com.bluepowermod.api.part.PartRegistry;
+import com.bluepowermod.part.PartRegistry;
+import com.bluepowermod.util.Refs;
 
 public class RegisterMultiparts implements IPartFactory {
-
+    
     private RegisterMultiparts() {
-
+    
     }
-
+    
     public static void register() {
-
-        String[] parts = PartRegistry.getRegisteredParts().toArray(new String[0]);
-
+    
+        String[] parts = PartRegistry.getInstance().getRegisteredParts().toArray(new String[0]);
+        
         for (int i = 0; i < parts.length; i++)
             parts[i] = Refs.MODID + "_" + parts[i];
-
+        
         MultiPartRegistry.registerParts(new RegisterMultiparts(), parts);
     }
-
+    
     @Override
     public TMultiPart createPart(String id, boolean client) {
-
+    
         return createPart_(id, client, true);
     }
-
+    
     public static TMultiPart createPart_(String id, boolean client, boolean multipartFactory) {
-
-        BPPart part = PartRegistry.createPart(id, multipartFactory);
-
+    
+        BPPart part = PartRegistry.getInstance().createPart(id, multipartFactory);
+        
         return createPart_(part);
     }
-
+    
     public static TMultiPart createPart_(BPPart part) {
-
+    
         if (part != null) {
             if (part instanceof IBPFacePart) {
                 return new MultipartFaceBPPart((IBPFacePart) part);
@@ -64,8 +64,8 @@ public class RegisterMultiparts implements IPartFactory {
                 return new MultipartBPPart(part);
             }
         }
-
+        
         return null;
     }
-
+    
 }

@@ -22,9 +22,9 @@ package com.bluepowermod.client.gui;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 
-import com.bluepowermod.api.Refs;
 import com.bluepowermod.containers.ContainerDeployer;
 import com.bluepowermod.tileentities.tier1.TileDeployer;
+import com.bluepowermod.util.Refs;
 
 public class GuiDeployer extends GuiBase {
     

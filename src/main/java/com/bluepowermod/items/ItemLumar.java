@@ -26,8 +26,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
 
-import com.bluepowermod.api.Refs;
 import com.bluepowermod.init.CustomTabs;
+import com.bluepowermod.util.Refs;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

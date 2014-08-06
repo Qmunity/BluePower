@@ -10,10 +10,10 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
-import com.bluepowermod.api.Refs;
 import com.bluepowermod.blocks.BlockContainerBase;
 import com.bluepowermod.references.GuiIDs;
 import com.bluepowermod.tileentities.tier3.TileCPU;
+import com.bluepowermod.util.Refs;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

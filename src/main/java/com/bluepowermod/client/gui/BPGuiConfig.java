@@ -28,7 +28,7 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraftforge.common.config.ConfigElement;
 
 import com.bluepowermod.BluePower;
-import com.bluepowermod.api.Refs;
+import com.bluepowermod.util.Refs;
 
 import cpw.mods.fml.client.config.DummyConfigElement;
 import cpw.mods.fml.client.config.GuiConfig;

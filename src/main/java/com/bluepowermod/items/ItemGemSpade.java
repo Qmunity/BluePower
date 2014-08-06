@@ -20,8 +20,8 @@ package com.bluepowermod.items;
 import net.minecraft.item.ItemSpade;
 import net.minecraft.item.ItemStack;
 
-import com.bluepowermod.api.Refs;
 import com.bluepowermod.init.CustomTabs;
+import com.bluepowermod.util.Refs;
 
 public class ItemGemSpade extends ItemSpade {
 

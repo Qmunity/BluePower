@@ -21,8 +21,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemDye;
 
-import com.bluepowermod.api.Dependencies;
-import com.bluepowermod.api.Refs;
 import com.bluepowermod.blocks.BPBlockMultipart;
 import com.bluepowermod.blocks.BlockContainerBase;
 import com.bluepowermod.blocks.BlockItemOre;
@@ -50,6 +48,8 @@ import com.bluepowermod.tileentities.tier1.TileTransposer;
 import com.bluepowermod.tileentities.tier2.TileRegulator;
 import com.bluepowermod.tileentities.tier2.TileRetriever;
 import com.bluepowermod.tileentities.tier2.TileSortingMachine;
+import com.bluepowermod.util.Dependencies;
+import com.bluepowermod.util.Refs;
 
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -116,9 +116,9 @@ public class BPBlocks {
     public static Block   monitor;
     public static Block   disk_drive;
     public static Block   io_expander;
-
-    public static Block   multipart;          // DO NOT GENERATE OR REMOVE THIS BLOCK!
-
+    
+    public static Block   multipart;
+    
     public static Block   engine;
     public static Block   kinetic_generator;
     public static Block   windmill;

@@ -20,9 +20,9 @@ package com.bluepowermod.items;
 import net.minecraft.item.ItemStack;
 import codechicken.microblock.Saw;
 
-import com.bluepowermod.api.Dependencies;
-import com.bluepowermod.api.Refs;
 import com.bluepowermod.init.CustomTabs;
+import com.bluepowermod.util.Dependencies;
+import com.bluepowermod.util.Refs;
 
 import cpw.mods.fml.common.Optional;
 
