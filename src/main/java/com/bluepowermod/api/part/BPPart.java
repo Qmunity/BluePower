@@ -27,7 +27,6 @@ import codechicken.multipart.BlockMultipart;
 
 import com.bluepowermod.api.BPApi;
 import com.bluepowermod.api.vec.Vector3;
-import com.bluepowermod.util.Dependencies;
 
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Optional;
@@ -51,11 +50,11 @@ public abstract class BPPart {
      */
     public final boolean isFMPMultipart() {
     
-        if (Loader.isModLoaded(Dependencies.FMP)) return isFMPMultipart_();
+        if (Loader.isModLoaded("ForgeMultipart")) return isFMPMultipart_();
         return false;
     }
     
-    @Optional.Method(modid = Dependencies.FMP)
+    @Optional.Method(modid = "ForgeMultipart")
     private final boolean isFMPMultipart_() {
     
         return world.getBlock(x, y, z) instanceof BlockMultipart;
