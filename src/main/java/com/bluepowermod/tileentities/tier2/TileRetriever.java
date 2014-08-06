@@ -10,6 +10,9 @@ import com.bluepowermod.part.tube.PneumaticTube;
 import com.bluepowermod.tileentities.tier1.TileFilter;
 import com.bluepowermod.util.Dependencies;
 
+/**
+ * @author MineMaarten
+ */
 public class TileRetriever extends TileFilter {
     
     public int slotIndex;

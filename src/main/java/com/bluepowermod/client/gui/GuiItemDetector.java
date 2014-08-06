@@ -14,6 +14,9 @@ import com.bluepowermod.network.messages.MessageGuiUpdate;
 import com.bluepowermod.tileentities.tier1.TileItemDetector;
 import com.bluepowermod.util.Refs;
 
+/**
+ * @author MineMaarten
+ */
 public class GuiItemDetector extends GuiBase {
     
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/item_detector.png");

@@ -39,14 +39,13 @@ public interface IAlloyFurnaceRegistry {
      *
      * @param output the crafting result
      * @param input  input items. These can be ItemStack, Item or Block objects. You can specify up to 9 input objects.
-     *               You can only specify
+     *               You can only specify one type of item once. Items will automatically be matched against the ore dictionary.
      */
     void addRecipe(ItemStack output, Object... input);
     
     /**
      * Any item added here will cause dynamically generated recipes that allows items to be broken down to this item.
-     * In BluePower, this is called with an iron ingot.
-     * It doesn't matter when you call this, as the recipes will be generated in the postInit.
+     * In BluePower, this is called with an iron ingot.S
      *
      * @param recycledItem
      * @param blacklist list of item registry names ("minecraft:bucket") that shouldn't be added by the generator.

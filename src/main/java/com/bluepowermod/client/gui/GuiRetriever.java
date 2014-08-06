@@ -11,6 +11,9 @@ import com.bluepowermod.containers.ContainerRetriever;
 import com.bluepowermod.tileentities.tier2.TileRetriever;
 import com.bluepowermod.util.Refs;
 
+/**
+ * @author MineMaarten
+ */
 public class GuiRetriever extends GuiFilter {
     
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/retriever.png");

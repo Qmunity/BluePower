@@ -24,6 +24,9 @@ import com.bluepowermod.containers.ContainerAlloyFurnace;
 import com.bluepowermod.tileentities.tier1.TileAlloyFurnace;
 import com.bluepowermod.util.Refs;
 
+/**
+ * @author MineMaarten
+ */
 public class GuiAlloyFurnace extends GuiBase {
     
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/alloy_furnace.png");

@@ -21,6 +21,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import com.bluepowermod.api.compat.IMultipartCompat;
 import com.bluepowermod.api.part.BPPart;
+import com.bluepowermod.api.tube.ITubeConnection;
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
 import com.bluepowermod.api.vec.Vector3;
 import com.bluepowermod.api.vec.Vector3Cube;

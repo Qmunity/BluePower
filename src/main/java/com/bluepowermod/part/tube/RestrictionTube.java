@@ -4,6 +4,9 @@ import net.minecraft.util.IIcon;
 
 import com.bluepowermod.client.renderers.IconSupplier;
 
+/**
+ * @author MineMaarten
+ */
 public class RestrictionTube extends PneumaticTube {
     
     @Override

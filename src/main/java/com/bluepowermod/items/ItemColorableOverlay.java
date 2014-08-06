@@ -15,6 +15,9 @@ import com.bluepowermod.util.Refs;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+/**
+ * @author MineMaarten
+ */
 public class ItemColorableOverlay extends ItemBase {
     
     private IIcon overlayTexture;

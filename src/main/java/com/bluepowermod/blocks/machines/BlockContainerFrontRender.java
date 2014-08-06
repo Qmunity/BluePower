@@ -6,6 +6,9 @@ import net.minecraft.tileentity.TileEntity;
 import com.bluepowermod.blocks.BlockContainerBase;
 import com.bluepowermod.client.renderers.RendererBlockBase.EnumFaceType;
 
+/**
+ * @author MineMaarten
+ */
 public class BlockContainerFrontRender extends BlockContainerBase {
     
     public BlockContainerFrontRender(Material material, Class<? extends TileEntity> tileEntityClass) {

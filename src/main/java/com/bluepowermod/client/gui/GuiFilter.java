@@ -31,6 +31,9 @@ import com.bluepowermod.network.messages.MessageGuiUpdate;
 import com.bluepowermod.tileentities.tier1.TileFilter;
 import com.bluepowermod.util.Refs;
 
+/**
+ * @author MineMaarten
+ */
 public class GuiFilter extends GuiBase {
     
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/seedBag.png");

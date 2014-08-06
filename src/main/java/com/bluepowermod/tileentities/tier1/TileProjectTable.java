@@ -18,6 +18,9 @@ import com.bluepowermod.tileentities.TileBase;
 
 import cpw.mods.fml.relauncher.ReflectionHelper;
 
+/**
+ * @author MineMaarten
+ */
 public class TileProjectTable extends TileBase implements IInventory {
     
     public final IInventory craftResult  = new InventoryCraftResult();

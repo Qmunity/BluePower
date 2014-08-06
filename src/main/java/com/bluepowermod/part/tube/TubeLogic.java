@@ -24,6 +24,8 @@ import org.lwjgl.opengl.GL11;
 
 import com.bluepowermod.api.compat.IMultipartCompat;
 import com.bluepowermod.api.tube.IPneumaticTube;
+import com.bluepowermod.api.tube.ITubeConnection;
+import com.bluepowermod.api.tube.IWeightedTubeInventory;
 import com.bluepowermod.api.vec.Vector3;
 import com.bluepowermod.compat.CompatibilityUtils;
 import com.bluepowermod.helper.IOHelper;

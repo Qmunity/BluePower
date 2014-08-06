@@ -14,6 +14,9 @@ import com.bluepowermod.tileentities.tier1.TileItemDetector;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+/**
+ * @author MineMaarten
+ */
 public class ContainerItemDetector extends Container {
     
     private int                    mode;

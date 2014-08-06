@@ -26,6 +26,9 @@ import com.bluepowermod.containers.ContainerProjectTable;
 import com.bluepowermod.tileentities.tier1.TileProjectTable;
 import com.bluepowermod.util.Refs;
 
+/**
+ * @author MineMaarten
+ */
 public class GuiProjectTable extends GuiBase {
     
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/project_table.png");
