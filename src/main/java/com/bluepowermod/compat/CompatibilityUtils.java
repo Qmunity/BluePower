@@ -18,8 +18,8 @@ import com.bluepowermod.compat.cc.CompatModuleCC;
 import com.bluepowermod.compat.fmp.CompatModuleFMP;
 import com.bluepowermod.compat.fmp.CompatModuleFMPAlt;
 import com.bluepowermod.compat.hydcraft.CompatModuleHydCraft;
+import com.bluepowermod.compat.ic2.CompatModuleIC2;
 import com.bluepowermod.compat.waila.CompatModuleWaila;
-import com.bluepowermod.compatg.ic2.CompatModuleIC2;
 import com.bluepowermod.util.Dependencies;
 
 import cpw.mods.fml.common.Loader;

@@ -1,4 +1,4 @@
-package com.bluepowermod.compatg.ic2;
+package com.bluepowermod.compat.ic2;
 
 import ic2.api.recipe.IRecipeInput;
 
