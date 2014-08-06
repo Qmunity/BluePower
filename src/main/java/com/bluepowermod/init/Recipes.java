@@ -23,6 +23,7 @@ import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.oredict.RecipeSorter;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 
@@ -162,6 +163,7 @@ public class Recipes {
         GameRegistry.addRecipe(new ShapedOreRecipe(PartRegistry.getItemForPart("accelerator", 1), "IOI", "O O", "IOI", 'O', Blocks.obsidian, 'I', BPItems.blue_alloy_ingot));
         craftManager.addRecipe(new ItemStack(BPBlocks.alloy_furnace, 1), "###", "# #", "###", '#', Blocks.brick_block);
         
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPBlocks.project_table), "SSS", "WCW", "WIW", 'S', "stone", 'W', "plankWood", 'C', Blocks.crafting_table, 'I', Blocks.chest));
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPBlocks.block_breaker, 1), "#A#", "#P#", "#R#", '#', "cobblestone", 'A', Items.iron_pickaxe, 'P', Blocks.piston, 'R', "dustRedstone"));
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPBlocks.buffer, 1), "#P#", "P P", "#P#", '#', Blocks.iron_bars, 'P', "plankWood"));
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPBlocks.ejector, 1), "PBP", "PTP", "#R#", '#', "cobblestone", 'P', "plankWood", 'B', BPBlocks.buffer, 'T', BPBlocks.transposer, 'R', "dustRedstone"));
@@ -171,6 +173,7 @@ public class Recipes {
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPBlocks.regulator, 1), "IBI", "WDW", "PBP", 'I', "ingotBrass", 'B', BPBlocks.buffer, 'W', BPItems.red_doped_wafer, 'D', BPBlocks.item_detector, 'P', "plankWood"));
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPBlocks.retriever, 1), "BLB", "EFE", "IAI", 'B', "ingotBrass", 'L', Items.leather, 'E', Items.ender_pearl, 'F', BPBlocks.filter, 'I', "ingotIron", 'A', "ingotBlueAlloy"));
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPBlocks.filter, 1), "CCC", "GPG", "CWC", 'C', "cobblestone", 'G', "ingotGold", 'P', Blocks.piston, 'W', BPItems.red_doped_wafer));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPBlocks.sorting_machine, 1), "CCC", "GPG", "CWC", 'C', "ingotIron", 'G', BPItems.red_doped_wafer, 'P', BPBlocks.filter, 'W', BPItems.blue_alloy_ingot));
         
         craftManager.addRecipe(new ItemStack(BPItems.canvas, 1), "SSS", "S S", "SSS", 'S', Items.string);
         craftManager.addRecipe(new ItemStack(BPItems.seedBag, 1), " S ", "C C", "CCC", 'S', Items.string, 'C', BPItems.canvas);
@@ -224,6 +227,7 @@ public class Recipes {
     
     private static void registerCanvasBagRecipes(ItemStack is) {
     
+        RecipeSorter.register(Refs.MODID + ":canvasBag", CanvasBagRecipe.class, RecipeSorter.Category.SHAPELESS, "after:minecraft:shapeless");
         for (int damage = Refs.oreDictDyes.length - 1; damage >= 0; damage--) {
             ItemStack input = is.copy();
             input.setItemDamage(damage);
