@@ -22,13 +22,13 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.lwjgl.opengl.GL11;
 
-import com.bluepowermod.api.Dependencies;
 import com.bluepowermod.api.compat.IMultipartCompat;
-import com.bluepowermod.api.helper.TileEntityCache;
 import com.bluepowermod.api.tube.IPneumaticTube;
 import com.bluepowermod.api.vec.Vector3;
 import com.bluepowermod.compat.CompatibilityUtils;
 import com.bluepowermod.helper.IOHelper;
+import com.bluepowermod.helper.TileEntityCache;
+import com.bluepowermod.util.Dependencies;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

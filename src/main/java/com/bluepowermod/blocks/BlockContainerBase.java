@@ -17,20 +17,9 @@
 
 package com.bluepowermod.blocks;
 
-import com.bluepowermod.BluePower;
-import com.bluepowermod.api.Refs;
-import com.bluepowermod.api.util.ForgeDirectionUtils;
-import com.bluepowermod.client.renderers.RendererBlockBase;
-import com.bluepowermod.client.renderers.RendererBlockBase.EnumFaceType;
-import com.bluepowermod.helper.IOHelper;
-import com.bluepowermod.init.BPItems;
-import com.bluepowermod.references.GuiIDs;
-import com.bluepowermod.tileentities.IBluePowered;
-import com.bluepowermod.tileentities.IEjectAnimator;
-import com.bluepowermod.tileentities.IRotatable;
-import com.bluepowermod.tileentities.TileBase;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import java.util.HashMap;
+import java.util.Map;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
@@ -44,8 +33,21 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
-import java.util.HashMap;
-import java.util.Map;
+import com.bluepowermod.BluePower;
+import com.bluepowermod.api.util.ForgeDirectionUtils;
+import com.bluepowermod.client.renderers.RendererBlockBase;
+import com.bluepowermod.client.renderers.RendererBlockBase.EnumFaceType;
+import com.bluepowermod.helper.IOHelper;
+import com.bluepowermod.init.BPItems;
+import com.bluepowermod.references.GuiIDs;
+import com.bluepowermod.tileentities.IBluePowered;
+import com.bluepowermod.tileentities.IEjectAnimator;
+import com.bluepowermod.tileentities.IRotatable;
+import com.bluepowermod.tileentities.TileBase;
+import com.bluepowermod.util.Refs;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockContainerBase extends BlockBase implements ITileEntityProvider {
     
@@ -132,16 +134,13 @@ public class BlockContainerBase extends BlockBase implements ITileEntityProvider
     
     @Override
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int par6, float par7, float par8, float par9) {
-
-
-        if(player.isSneaking()){
-            if(player.getHeldItem() != null){
-                if(player.getHeldItem().getItem() == BPItems.screwdriver){
-                    return false;
-                }
+    
+        if (player.isSneaking()) {
+            if (player.getHeldItem() != null) {
+                if (player.getHeldItem().getItem() == BPItems.screwdriver) { return false; }
             }
         }
-
+        
         if (player.isSneaking()) { return false; }
         
         TileEntity entity = world.getTileEntity(x, y, z);

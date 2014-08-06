@@ -9,13 +9,13 @@ import net.minecraft.util.AxisAlignedBB;
 
 import org.lwjgl.opengl.GL11;
 
-import com.bluepowermod.api.Refs;
 import com.bluepowermod.api.part.FaceDirection;
 import com.bluepowermod.api.part.RedstoneConnection;
 import com.bluepowermod.client.gui.gate.GuiGateCounter;
 import com.bluepowermod.client.renderers.RenderHelper;
 import com.bluepowermod.part.IGuiButtonSensitive;
 import com.bluepowermod.util.Color;
+import com.bluepowermod.util.Refs;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

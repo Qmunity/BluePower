@@ -20,8 +20,8 @@ package com.bluepowermod.blocks;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 
-import com.bluepowermod.api.Refs;
 import com.bluepowermod.init.CustomTabs;
+import com.bluepowermod.util.Refs;
 
 public abstract class BlockBase extends Block {
     

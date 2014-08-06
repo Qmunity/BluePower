@@ -2,11 +2,11 @@ package com.bluepowermod.blocks.machines;
 
 import net.minecraft.block.material.Material;
 
-import com.bluepowermod.api.Refs;
 import com.bluepowermod.blocks.BlockContainerBase;
 import com.bluepowermod.init.CustomTabs;
 import com.bluepowermod.references.GuiIDs;
 import com.bluepowermod.tileentities.tier3.TileKinectGenerator;
+import com.bluepowermod.util.Refs;
 
 /**
  * 

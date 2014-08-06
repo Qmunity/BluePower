@@ -1,9 +1,10 @@
 package com.bluepowermod.part.gate;
 
-import com.bluepowermod.api.Refs;
 import com.bluepowermod.api.part.FaceDirection;
 import com.bluepowermod.api.part.RedstoneConnection;
 import com.bluepowermod.client.renderers.RenderHelper;
+import com.bluepowermod.util.Refs;
+
 import net.minecraft.util.AxisAlignedBB;
 
 import java.util.List;

@@ -6,9 +6,9 @@ import net.minecraft.block.material.Material;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
-import com.bluepowermod.api.Refs;
 import com.bluepowermod.init.CustomTabs;
 import com.bluepowermod.tileentities.tier2.TileWindmill;
+import com.bluepowermod.util.Refs;
 
 /**
  * 

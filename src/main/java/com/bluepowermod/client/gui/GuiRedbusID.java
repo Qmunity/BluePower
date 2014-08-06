@@ -4,9 +4,9 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 
-import com.bluepowermod.api.Refs;
 import com.bluepowermod.containers.ContainerRedbusID;
 import com.bluepowermod.tileentities.tier3.IRedBusWindow;
+import com.bluepowermod.util.Refs;
 
 public class GuiRedbusID extends GuiBase {
 private final IRedBusWindow device;
