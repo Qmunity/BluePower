@@ -5,10 +5,12 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import org.lwjgl.opengl.GL11;
@@ -19,7 +21,6 @@ import com.bluepowermod.api.part.RedstoneConnection;
 import com.bluepowermod.api.util.ForgeDirectionUtils;
 import com.bluepowermod.api.vec.Vector3;
 import com.bluepowermod.api.vec.Vector3Cube;
-import com.bluepowermod.client.renderers.RenderHelper;
 import com.bluepowermod.init.CustomTabs;
 import com.bluepowermod.util.Refs;
 
@@ -32,8 +33,8 @@ public class WireBluestone extends CableWall {
     private static ResourceLocation textureOff = new ResourceLocation(Refs.MODID + ":textures/base/bluestoneOff.png");
 
     private boolean propagating = false;
-    private int signal = 15;
-    private int signalSelf = 0;
+    private int power = 15;
+    private int powerSelf = 0;
 
     @Override
     public String getType() {
@@ -104,26 +105,52 @@ public class WireBluestone extends CableWall {
         {
             rotateAndTranslateDynamic(loc, pass, 0);
 
-            if (signal > 0)
+            if (power > 0)
                 Minecraft.getMinecraft().renderEngine.bindTexture(textureOn);
             else
                 Minecraft.getMinecraft().renderEngine.bindTexture(textureOff);
 
             // Render center
-            renderBox(7, 7, 9, 9);
+            renderBox(7, 0, 7, 9, 1, 9);
 
             int[] sides = new int[] { 0, 0, 0, 0 };
 
             ForgeDirection f = ForgeDirection.getOrientation(getFace());
+            int id = 0;
             for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
                 if (d == f || d == f.getOpposite())
                     continue;
 
                 Vector3 v = (Vector3) connections[ForgeDirectionUtils.getSide(d)];
-                if (v == null)
+                if (v == null) {
+                    id++;
                     continue;
+                }
 
                 int val = 1 + (v.distanceTo(this.loc) > 1 ? 1 : BPApi.getInstance().getBluestoneApi().getExtraLength(v, f, d));
+
+                GL11.glPushMatrix();
+                {
+                    int times = 0;
+                    switch (id) {
+                    case 0:
+                        times = 1;
+                        break;
+                    case 1:
+                        times = 3;
+                        break;
+                    case 2:
+                        times = 2;
+                        break;
+                    case 3:
+                        break;
+                    }
+                    GL11.glTranslated(0.5, 0.5, 0.5);
+                    GL11.glRotated(90 * times, 0, 1, 0);
+                    GL11.glTranslated(-0.5, -0.5, -0.5);
+                    BPApi.getInstance().getBluestoneApi().renderExtraCables(v, f, d);
+                }
+                GL11.glPopMatrix();
 
                 switch (f) {
                 case UP:
@@ -237,64 +264,65 @@ public class WireBluestone extends CableWall {
                 default:
                     break;
                 }
+                id++;
             }
 
             if (sides[3] > 0)// East
-                renderBox(0 - (sides[3] - 1), 7, 7, 9);
+                renderBox(0 - (sides[3] - 1), 0, 7, 7, 1, 9);
             if (sides[2] > 0)// West
-                renderBox(9, 7, 16 + (sides[2] - 1), 9);
+                renderBox(9, 0, 7, 16 + (sides[2] - 1), 1, 9);
             if (sides[1] > 0)// South
-                renderBox(7, 0 - (sides[1] - 1), 9, 7);
+                renderBox(7, 0, 0 - (sides[1] - 1), 9, 1, 7);
             if (sides[0] > 0)// North
-                renderBox(7, 9, 9, 16 + (sides[0] - 1));
+                renderBox(7, 0, 9, 9, 1, 16 + (sides[0] - 1));
         }
         GL11.glPopMatrix();
 
         return true;
     }
 
-    private void renderBox(int minx, int minz, int maxx, int maxz) {
+    @Override
+    public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
 
-        GL11.glBegin(GL11.GL_QUADS);
-        {
-            // Top
-            GL11.glNormal3d(0, 1, 0);
-            RenderHelper.addVertexWithTexture(minx / 16D, 1 / 16D, minz / 16D, minx / 16D, minz / 16D);
-            RenderHelper.addVertexWithTexture(minx / 16D, 1 / 16D, maxz / 16D, minx / 16D, maxz / 16D);
-            RenderHelper.addVertexWithTexture(maxx / 16D, 1 / 16D, maxz / 16D, maxx / 16D, maxz / 16D);
-            RenderHelper.addVertexWithTexture(maxx / 16D, 1 / 16D, minz / 16D, maxx / 16D, minz / 16D);
-            // Bottom
-            GL11.glNormal3d(0, -1, 0);
-            RenderHelper.addVertexWithTexture(minx / 16D, 0, minz / 16D, minx / 16D, minz / 16D);
-            RenderHelper.addVertexWithTexture(maxx / 16D, 0, minz / 16D, maxx / 16D, minz / 16D);
-            RenderHelper.addVertexWithTexture(maxx / 16D, 0, maxz / 16D, maxx / 16D, maxz / 16D);
-            RenderHelper.addVertexWithTexture(minx / 16D, 0, maxz / 16D, minx / 16D, maxz / 16D);
-            // South
-            GL11.glNormal3d(1, 0, 0);
-            RenderHelper.addVertexWithTexture(maxx / 16D, 1 / 16D, minz / 16D, minx / 16D, minz / 16D);
-            RenderHelper.addVertexWithTexture(maxx / 16D, 1 / 16D, maxz / 16D, minx / 16D, maxz / 16D);
-            RenderHelper.addVertexWithTexture(maxx / 16D, 0, maxz / 16D, minx / 16D, maxz / 16D);
-            RenderHelper.addVertexWithTexture(maxx / 16D, 0, minz / 16D, minx / 16D, minz / 16D);
-            // North
-            GL11.glNormal3d(-1, 0, 0);
-            RenderHelper.addVertexWithTexture(minx / 16D, 1 / 16D, minz / 16D, minx / 16D, minz / 16D);
-            RenderHelper.addVertexWithTexture(minx / 16D, 0, minz / 16D, minx / 16D, minz / 16D);
-            RenderHelper.addVertexWithTexture(minx / 16D, 0, maxz / 16D, minx / 16D, maxz / 16D);
-            RenderHelper.addVertexWithTexture(minx / 16D, 1 / 16D, maxz / 16D, minx / 16D, maxz / 16D);
-            // East
-            GL11.glNormal3d(0, 1, 0);
-            RenderHelper.addVertexWithTexture(minx / 16D, 0, minz / 16D, minx / 16D, minz / 16D);
-            RenderHelper.addVertexWithTexture(minx / 16D, 1 / 16D, minz / 16D, minx / 16D, minz / 16D);
-            RenderHelper.addVertexWithTexture(maxx / 16D, 1 / 16D, minz / 16D, maxx / 16D, minz / 16D);
-            RenderHelper.addVertexWithTexture(maxx / 16D, 0, minz / 16D, maxx / 16D, minz / 16D);
-            // West
-            GL11.glNormal3d(0, -1, 0);
-            RenderHelper.addVertexWithTexture(minx / 16D, 0, maxz / 16D, minx / 16D, maxz / 16D);
-            RenderHelper.addVertexWithTexture(maxx / 16D, 0, maxz / 16D, maxx / 16D, maxz / 16D);
-            RenderHelper.addVertexWithTexture(maxx / 16D, 1 / 16D, maxz / 16D, maxx / 16D, maxz / 16D);
-            RenderHelper.addVertexWithTexture(minx / 16D, 1 / 16D, maxz / 16D, minx / 16D, maxz / 16D);
+        if (connections[ForgeDirectionUtils.getSide(ForgeDirection.EAST)] == null) {
+            loc = new Vector3(0, 0, 0);
+            for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
+                if (d == ForgeDirection.UP || d == ForgeDirection.DOWN)
+                    continue;
+                connections[ForgeDirectionUtils.getSide(d)] = new Vector3(0, 0, 0).add(d);
+            }
         }
-        GL11.glEnd();
+        GL11.glPushMatrix();
+        {
+            switch (type) {
+            case ENTITY:
+                if (item.getItemFrame() != null) {
+                    GL11.glTranslated(0.5, 0.5, 0.5);
+                    GL11.glRotated(90, 0, 0, -1);
+                    GL11.glTranslated(-0.375, -1, -0.5);
+                }
+                break;
+            case EQUIPPED:
+                GL11.glTranslated(0, -0.5, 0);
+                break;
+            case EQUIPPED_FIRST_PERSON:
+                GL11.glTranslated(-0.5, 0, 0);
+                break;
+            case INVENTORY:
+                GL11.glTranslated(0, -0.625, 0);
+                GL11.glScaled(1.125, 1.125, 1.125);
+                break;
+            default:
+                break;
+            }
+            renderStatic(new Vector3(0, 0, 0), 0);
+        }
+        GL11.glPopMatrix();
+    }
+
+    private void renderBox(int minx, int miny, int minz, int maxx, int maxy, int maxz) {
+
+        BPApi.getInstance().getBluestoneApi().renderBox(minx, miny, minz, maxx, maxy, maxz);
     }
 
     public void propagate(WireBluestone from) {
@@ -306,8 +334,8 @@ public class WireBluestone extends CableWall {
 
         // int amt = 0;
         // if (from != null)
-        // amt = from.signal;
-        // amt = Math.max(amt, signalSelf);
+        // amt = from.power;
+        // amt = Math.max(amt, powerSelf);
         //
         // for (Object o : connections) {
         // if (o == from)
@@ -336,16 +364,16 @@ public class WireBluestone extends CableWall {
 
         super.update();
 
-        // int oldSS = signalSelf;
+        // int oldSS = powerSelf;
         //
-        // signalSelf = 0;
+        // powerSelf = 0;
         // for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
         // if (d == ForgeDirection.getOrientation(getFace()) || d == ForgeDirection.getOrientation(getFace()).getOpposite())
         // continue;
-        // signalSelf = Math.max(signalSelf,
+        // powerSelf = Math.max(powerSelf,
         // RedstoneHelper.getInput(getWorld(), getX(), getY(), getZ(), d, ForgeDirection.getOrientation(getFace())));
         // }
-        // if (signalSelf != oldSS) {
+        // if (powerSelf != oldSS) {
         // propagate(null);
         // }
     }
@@ -355,7 +383,7 @@ public class WireBluestone extends CableWall {
 
         super.writeUpdatePacket(tag);
 
-        tag.setInteger("signal", signal);
+        tag.setInteger("power", power);
     }
 
     @Override
@@ -363,9 +391,14 @@ public class WireBluestone extends CableWall {
 
         super.readUpdatePacket(tag);
 
-        signal = tag.getInteger("signal");
+        power = tag.getInteger("power");
 
         onUpdate();
+    }
+
+    public int getPower() {
+
+        return power;
     }
 
 }
