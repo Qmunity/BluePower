@@ -84,6 +84,8 @@ public class BluePower {
         FMLCommonHandler.instance().bus().register(eventHandler);
 
         PartRegister.registerParts();
+
+        BPApi.getInstance().getBluestoneApi();
     }
 
     @EventHandler

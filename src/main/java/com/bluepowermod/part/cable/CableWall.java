@@ -96,6 +96,7 @@ public abstract class CableWall extends BPPartFace {
     }
 
     private boolean updating = false;
+    private boolean updated = false;
 
     /**
      * @author amadornes
@@ -129,18 +130,24 @@ public abstract class CableWall extends BPPartFace {
                 o = vec;
             }
             Object o2 = connections[ForgeDirectionUtils.getSide(d)];
-            if (o2 != null) {
+            if (o2 != null && o2 != o) {
                 if (o2 instanceof ICableConnect)
                     ((ICableConnect) o2).onDisconnect(this, d);
+                if (o2 instanceof CableWall)
+                    ((CableWall) o2).updated = true;
                 onDisconnect(o2);
+                updated = true;
             }
 
             connections[ForgeDirectionUtils.getSide(d)] = o;
 
-            if (o != null) {
+            if (o != null && o2 != o) {
                 if (o instanceof ICableConnect)
                     ((ICableConnect) o).onConnect(this, d);
+                if (o instanceof CableWall)
+                    ((CableWall) o).updated = true;
                 onConnect(o);
+                updated = true;
             }
         }
 
@@ -243,6 +250,11 @@ public abstract class CableWall extends BPPartFace {
 
         if (loc == null || loc.getBlockX() != getX() || loc.getBlockY() != getY() || loc.getBlockZ() != getZ() || loc.getWorld() != getWorld())
             loc = new Vector3(getX(), getY(), getZ(), getWorld());
+
+        if (updated) {
+            updated = false;
+            sendUpdatePacket();
+        }
     }
 
     @Override

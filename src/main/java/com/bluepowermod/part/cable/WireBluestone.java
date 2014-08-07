@@ -13,6 +13,9 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import org.lwjgl.opengl.GL11;
 
+import com.bluepowermod.api.BPApi;
+import com.bluepowermod.api.part.FaceDirection;
+import com.bluepowermod.api.part.RedstoneConnection;
 import com.bluepowermod.api.util.ForgeDirectionUtils;
 import com.bluepowermod.api.vec.Vector3;
 import com.bluepowermod.api.vec.Vector3Cube;
@@ -53,18 +56,21 @@ public class WireBluestone extends CableWall {
     @Override
     public boolean canConnectToCable(CableWall cable) {
 
-        return cable instanceof WireBluestone;
+        return cable != null && cable instanceof WireBluestone;
     }
 
     @Override
     public boolean canConnectToBlock(Block block, Vector3 location) {
 
+        boolean cc = BPApi.getInstance().getBluestoneApi()
+                .canConnect(location, ForgeDirection.getOrientation(getFace()), loc.getDirectionTo(location));
         try {
-            return block.canConnectRedstone(location.getWorld(), location.getBlockX(), location.getBlockY(), location.getBlockZ(),
-                    ForgeDirectionUtils.getSide(loc.getDirectionTo(location)));
+            return cc
+                    || block.canConnectRedstone(location.getWorld(), location.getBlockX(), location.getBlockY(), location.getBlockZ(),
+                            ForgeDirectionUtils.getSide(loc.getDirectionTo(location)));
         } catch (Exception ex) {
         }
-        return false;
+        return cc;
     }
 
     @Override
@@ -117,7 +123,7 @@ public class WireBluestone extends CableWall {
                 if (v == null)
                     continue;
 
-                int val = 1 + (v.distanceTo(this.loc) > 1 ? 1 : 0);
+                int val = 1 + (v.distanceTo(this.loc) > 1 ? 1 : BPApi.getInstance().getBluestoneApi().getExtraLength(v, f, d));
 
                 switch (f) {
                 case UP:
@@ -315,6 +321,17 @@ public class WireBluestone extends CableWall {
     }
 
     @Override
+    public void onFirstTick() {
+
+        super.onFirstTick();
+
+        for (FaceDirection d : FaceDirection.values()) {
+            RedstoneConnection c = getConnectionOrCreate(d);
+            c.enable();
+        }
+    }
+
+    @Override
     public void update() {
 
         super.update();
@@ -347,6 +364,8 @@ public class WireBluestone extends CableWall {
         super.readUpdatePacket(tag);
 
         signal = tag.getInteger("signal");
+
+        onUpdate();
     }
 
 }
