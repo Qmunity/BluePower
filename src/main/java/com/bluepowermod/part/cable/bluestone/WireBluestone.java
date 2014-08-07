@@ -128,30 +128,31 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
             te = (TileMultipart) wire.getLocation().getTileEntity();
             List<TMultiPart> l = te.jPartList();
             for (TMultiPart p : l) {
-                if (!(p instanceof MultipartBPPart)) {
-                    if (p instanceof IFaceRedstonePart) {
-                        if (ForgeDirection.getOrientation(((IFaceRedstonePart) p).getFace()) == dir) {
-                            return p;
-                        }
-                    }
+                if (p instanceof IFaceRedstonePart) {
+                    ForgeDirection d = dir;
+                    if (p instanceof MultipartBPPart)
+                        d = d.getOpposite();
+                    if (ForgeDirection.getOrientation(((IFaceRedstonePart) p).getFace()) == d)
+                        return p;
                 }
+
             }
         }
 
         ForgeDirection dir2 = ForgeDirection.getOrientation(wire.getFace());
-        if (dir2 == ForgeDirection.UP || dir2 == ForgeDirection.DOWN)
-            dir2 = dir2.getOpposite();
 
         // Check for parts next to this one
         if (vec.hasTileEntity() && vec.getTileEntity() instanceof TileMultipart) {
             te = ((TileMultipart) vec.getTileEntity());
             List<TMultiPart> l = te.jPartList();
-            for (TMultiPart p : l) {
-                if (!(p instanceof MultipartBPPart))
-                    if (p instanceof IFaceRedstonePart)
-                        if (ForgeDirection.getOrientation(((IFaceRedstonePart) p).getFace()) == dir2)
-                            return p;
-            }
+            for (TMultiPart p : l)
+                if (p instanceof IFaceRedstonePart) {
+                    ForgeDirection d = dir2;
+                    if (p instanceof MultipartBPPart)
+                        d = d.getOpposite();
+                    if (ForgeDirection.getOrientation(((IFaceRedstonePart) p).getFace()) == d)
+                        return p;
+                }
         }
 
         return null;

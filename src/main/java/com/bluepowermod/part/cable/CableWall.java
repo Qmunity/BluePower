@@ -5,6 +5,7 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.common.util.ForgeDirection;
 import codechicken.multipart.TMultiPart;
 
@@ -188,8 +189,10 @@ public abstract class CableWall extends BPPartFace {
         // Check for cables next to this one
         List<CableWall> l = compat.getBPParts(vec.getTileEntity(), CableWall.class);
         for (CableWall c : l) {
-            if (c.getFace() == getFace())
-                return c;
+            if (c.getFace() == getFace()) {
+                if (!compat.checkOcclusion(vec.getTileEntity(), getStripHitboxForSide(dir)))
+                    return c;
+            }
         }
         l.clear();
 
@@ -223,6 +226,11 @@ public abstract class CableWall extends BPPartFace {
         l.clear();
 
         return null;
+    }
+
+    private AxisAlignedBB getStripHitboxForSide(ForgeDirection dir) {
+
+        return AxisAlignedBB.getBoundingBox(0, 0, 0, 1, 1, 1);
     }
 
     /**

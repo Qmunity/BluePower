@@ -135,6 +135,7 @@ public class BluestoneApi implements IBluestoneApi {
         BluestoneApi api = getInstance();
 
         api.registerSpecialConnection(new BluestoneConnectVanilla());
+        api.registerSpecialConnection(new BluestoneConnectBPMultipart());
 
         if (Loader.isModLoaded(Dependencies.FMP))
             api.registerSpecialConnection(new BluestoneConnectFMP());
