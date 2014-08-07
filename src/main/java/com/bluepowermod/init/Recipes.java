@@ -58,7 +58,10 @@ public class Recipes {
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPBlocks.silver_block, 1), "###", "###", "###", '#', "ingotSilver"));
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPBlocks.zinc_block, 1), "###", "###", "###", '#', "ingotZinc"));
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPBlocks.tungsten_block, 1), "###", "###", "###", '#', "ingotTungsten"));
-        
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPBlocks.amethyst_block, 1), "###", "###", "###", '#', "gemAmethyst"));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPBlocks.ruby_block, 1), "###", "###", "###", '#', "gemRuby"));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPBlocks.sapphire_block, 1), "###", "###", "###", '#', "gemSapphire"));
+
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.ruby_axe, 1), "GG ", "GS ", " S ", 'G', "gemRuby", 'S', "stickWood"));
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.ruby_axe, 1), " GG", " SG", " S ", 'G', "gemRuby", 'S', "stickWood"));
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.ruby_pickaxe, 1), "GGG", " S ", " S ", 'G', "gemRuby", 'S', "stickWood"));
@@ -124,10 +127,10 @@ public class Recipes {
         
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.athame, 1), "# ", " S", '#', "ingotSilver", 'S', "stickWood"));
         
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.stone_wire, 1), "#", "W", '#', "dustRedstone", 'W', BPItems.stone_tile));
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.stone_anode, 3), " # ", "###", "WWW", '#', "dustRedstone", 'W', BPItems.stone_tile));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.stone_wire, 1), "#", "W", '#', "dustTeslatite", 'W', BPItems.stone_tile));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.stone_anode, 3), " # ", "###", "WWW", '#', "dustTeslatite", 'W', BPItems.stone_tile));
         craftManager.addRecipe(new ItemStack(BPItems.stone_cathode, 1), "#", "W", '#', Blocks.redstone_torch, 'W', BPItems.stone_tile);
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.stone_pointer, 1), "S", "#", "W", 'S', "stone", '#', Blocks.redstone_torch, 'W', BPItems.stone_tile));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.stone_pointer, 1), "S", "#", "W", 'S', Items.quartz, '#', Blocks.redstone_torch, 'W', BPItems.stone_tile));
         craftManager.addRecipe(new ItemStack(BPItems.silicon_chip, 1), " # ", "WWW", '#', BPItems.red_doped_wafer, 'W', BPItems.stone_tile);
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.plate_assembly, 1), " # ", "SRS", "#C#", '#', BPItems.stone_tile, 'S', "stickWood", 'R', BPItems.red_alloy_ingot, 'C', BPItems.stone_cathode));
         craftManager.addShapelessRecipe(new ItemStack(BPItems.taintedsilicon_chip, 1), BPItems.silicon_chip, Items.glowstone_dust);

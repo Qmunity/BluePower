@@ -56,13 +56,24 @@ public class ItemBPPart extends Item {
                 Vector3 v = new Vector3(x, y, z, w);
                 if (v.getTileEntity() != null && v.getTileEntity() instanceof BPTileMultipart && !player.isSneaking()) {
                     BPTileMultipart te = (BPTileMultipart) v.getTileEntity();
-                    te.addPart(PartRegistry.getInstance().createPartFromItem(stack));
+                    BPPart part = PartRegistry.getInstance().createPartFromItem(stack);
+                    part.setWorld(w);
+                    part.setX(x);
+                    part.setY(y);
+                    part.setZ(z);
+                    if (part.canPlacePart(stack, player, v.getRelative(ForgeDirection.getOrientation(side).getOpposite()), player.rayTrace(player.capabilities.isCreativeMode ? 5 : 4.5, 0))) {
+                        te.addPart(part);
+                    }
                 } else {
                     v.add(ForgeDirection.getOrientation(side));
                     if (v.getBlock(true) == null) {
                         w.setBlock(v.getBlockX(), v.getBlockY(), v.getBlockZ(), BPBlocks.multipart);
                         BPTileMultipart te = new BPTileMultipart();
                         BPPart part = PartRegistry.getInstance().createPartFromItem(stack);
+                        part.setWorld(w);
+                        part.setX(x);
+                        part.setY(y);
+                        part.setZ(z);
                         if (part.canPlacePart(stack, player, v.getRelative(ForgeDirection.getOrientation(side).getOpposite()), player.rayTrace(player.capabilities.isCreativeMode ? 5 : 4.5, 0))) {
                             te.addPart(part);
                             w.setTileEntity(v.getBlockX(), v.getBlockY(), v.getBlockZ(), te);
