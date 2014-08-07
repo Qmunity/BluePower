@@ -22,6 +22,7 @@ import codechicken.multipart.TileMultipart;
 import com.bluepowermod.api.BPApi;
 import com.bluepowermod.api.bluestone.IBluestoneWire;
 import com.bluepowermod.api.part.FaceDirection;
+import com.bluepowermod.api.part.ICableSize;
 import com.bluepowermod.api.part.RedstoneConnection;
 import com.bluepowermod.api.util.ForgeDirectionUtils;
 import com.bluepowermod.api.vec.Vector3;
@@ -35,7 +36,7 @@ import com.bluepowermod.util.Refs;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Optional;
 
-public class WireBluestone extends CableWall implements IBluestoneWire {
+public class WireBluestone extends CableWall implements IBluestoneWire, ICableSize {
 
     protected static Vector3Cube SELECTION_BOX = new Vector3Cube(0, 0, 0, 1, 1 / 16D, 1);
     protected static Vector3Cube OCCLUSION_BOX = new Vector3Cube(1 / 8D, 0, 1 / 8D, 15 / 16D, 1 / 8D, 7 / 8D);
@@ -125,20 +126,21 @@ public class WireBluestone extends CableWall implements IBluestoneWire {
         // Check for parts in the same block
         if (wire.getLocation().getTileEntity() instanceof TileMultipart) {
             te = (TileMultipart) wire.getLocation().getTileEntity();
-            ForgeDirection dir2 = dir;
-            if (dir2 == ForgeDirection.UP || dir2 == ForgeDirection.DOWN)
-                dir2 = dir2.getOpposite();
             List<TMultiPart> l = te.jPartList();
             for (TMultiPart p : l) {
                 if (!(p instanceof MultipartBPPart)) {
                     if (p instanceof IFaceRedstonePart) {
-                        if (ForgeDirection.getOrientation(((IFaceRedstonePart) p).getFace()) == dir2) {
+                        if (ForgeDirection.getOrientation(((IFaceRedstonePart) p).getFace()) == dir) {
                             return p;
                         }
                     }
                 }
             }
         }
+
+        ForgeDirection dir2 = ForgeDirection.getOrientation(wire.getFace());
+        if (dir2 == ForgeDirection.UP || dir2 == ForgeDirection.DOWN)
+            dir2 = dir2.getOpposite();
 
         // Check for parts next to this one
         if (vec.hasTileEntity() && vec.getTileEntity() instanceof TileMultipart) {
@@ -147,7 +149,7 @@ public class WireBluestone extends CableWall implements IBluestoneWire {
             for (TMultiPart p : l) {
                 if (!(p instanceof MultipartBPPart))
                     if (p instanceof IFaceRedstonePart)
-                        if (((IFaceRedstonePart) p).getFace() == wire.getFace())
+                        if (ForgeDirection.getOrientation(((IFaceRedstonePart) p).getFace()) == dir2)
                             return p;
             }
         }
@@ -486,6 +488,18 @@ public class WireBluestone extends CableWall implements IBluestoneWire {
     public Vector3 getLocation() {
 
         return loc;
+    }
+
+    @Override
+    public int getCableWidth() {
+
+        return 4;
+    }
+
+    @Override
+    public int getCableHeight() {
+
+        return 2;
     }
 
 }

@@ -20,6 +20,13 @@ public class BluestoneConnectVanilla extends ABluestoneConnect {
 
         if (block.getBlock() == Blocks.lever)
             return 5;
+        if (block.getBlock() == Blocks.wooden_button || block.getBlock() == Blocks.stone_button) {
+            if (cableSide == ForgeDirection.UP || cableSide == ForgeDirection.DOWN) {
+                return 6;
+            } else {
+                return 5;
+            }
+        }
         if (block.getBlock() == Blocks.wooden_pressure_plate || block.getBlock() == Blocks.stone_pressure_plate
                 || block.getBlock() == Blocks.heavy_weighted_pressure_plate || block.getBlock() == Blocks.light_weighted_pressure_plate)
             return 1;

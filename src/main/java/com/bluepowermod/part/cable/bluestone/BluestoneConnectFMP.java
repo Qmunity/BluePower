@@ -4,9 +4,11 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import org.lwjgl.opengl.GL11;
 
+import codechicken.multipart.IFaceRedstonePart;
 import codechicken.multipart.TMultiPart;
 import codechicken.multipart.minecraft.ButtonPart;
 import codechicken.multipart.minecraft.LeverPart;
+import codechicken.multipart.minecraft.RedstoneTorchPart;
 
 import com.bluepowermod.api.bluestone.ABluestoneConnectFMP;
 import com.bluepowermod.api.bluestone.IBluestoneWire;
@@ -15,6 +17,32 @@ public class BluestoneConnectFMP extends ABluestoneConnectFMP {
 
     @Override
     public int getExtraLength(TMultiPart part, IBluestoneWire wire, ForgeDirection cableSide) {
+
+        ForgeDirection f = ForgeDirection.getOrientation(wire.getFace());
+        if (part instanceof LeverPart) {
+            if (((LeverPart) part).getFace() == wire.getFace()) {
+                if (f != ForgeDirection.UP && f != ForgeDirection.DOWN) {
+                    if (cableSide == ForgeDirection.UP || cableSide == ForgeDirection.DOWN) {
+                        return 4;
+                    } else {
+                        return 5;
+                    }
+                } else {
+                    return 5;
+                }
+            }
+        }
+        if (part instanceof ButtonPart) {
+            if (((ButtonPart) part).getFace() == wire.getFace()) {
+                if (f != ForgeDirection.UP && f != ForgeDirection.DOWN) {
+                    if (cableSide == ForgeDirection.UP || cableSide == ForgeDirection.DOWN) {
+                        return 6;
+                    } else {
+                        return 5;
+                    }
+                }
+            }
+        }
 
         return 0;
     }
@@ -32,16 +60,19 @@ public class BluestoneConnectFMP extends ABluestoneConnectFMP {
 
         GL11.glPushMatrix();
 
-        if (part instanceof ButtonPart)
-            renderExtraCablesButton(api, (ButtonPart) part, wire, cableSide);
+        if (part instanceof ButtonPart || part instanceof LeverPart)
+            renderExtraCablesButtonLever(api, (IFaceRedstonePart) part, wire, cableSide);
 
-        if (part instanceof LeverPart)
-            renderExtraCablesLever(api, (LeverPart) part, wire, cableSide);
+        if (part instanceof RedstoneTorchPart)
+            renderExtraCablesRedstoneTorch(api, (RedstoneTorchPart) part, wire, cableSide);
 
         GL11.glPopMatrix();
     }
 
-    private void renderExtraCablesButton(BluestoneApi api, ButtonPart part, IBluestoneWire wire, ForgeDirection cableSide) {
+    private void renderExtraCablesButtonLever(BluestoneApi api, IFaceRedstonePart part, IBluestoneWire wire, ForgeDirection cableSide) {
+
+        if (part.getFace() == wire.getFace())
+            return;
 
         ForgeDirection f = ForgeDirection.getOrientation(wire.getFace());
         switch (f) {
@@ -242,7 +273,7 @@ public class BluestoneConnectFMP extends ABluestoneConnectFMP {
         }
     }
 
-    private void renderExtraCablesLever(BluestoneApi api, LeverPart part, IBluestoneWire wire, ForgeDirection cableSide) {
+    private void renderExtraCablesRedstoneTorch(BluestoneApi api, RedstoneTorchPart part, IBluestoneWire wire, ForgeDirection cableSide) {
 
         ForgeDirection f = ForgeDirection.getOrientation(wire.getFace());
         switch (f) {
@@ -257,24 +288,24 @@ public class BluestoneConnectFMP extends ABluestoneConnectFMP {
                 GL11.glRotated(-90, 0, 1, 0);
                 GL11.glTranslated(-0.5, -0.5, -0.5);
 
-                api.renderBox(7, 1, 15, 9, 6, 16);
+                api.renderBox(7, 1, 15, 9, 3, 16);
                 break;
             case 3:
                 GL11.glTranslated(0.5, 0.5, 0.5);
                 GL11.glRotated(90, 0, 1, 0);
                 GL11.glTranslated(-0.5, -0.5, -0.5);
 
-                api.renderBox(7, 1, 0, 9, 6, 1);
+                api.renderBox(7, 1, 0, 9, 3, 1);
                 break;
             case 4:
                 GL11.glTranslated(0.5, 0.5, 0.5);
                 GL11.glRotated(180, 0, 1, 0);
                 GL11.glTranslated(-0.5, -0.5, -0.5);
 
-                api.renderBox(15, 1, 7, 16, 6, 9);
+                api.renderBox(15, 1, 7, 16, 3, 9);
                 break;
             case 5:
-                api.renderBox(0, 1, 7, 1, 6, 9);
+                api.renderBox(0, 1, 7, 1, 3, 9);
                 break;
             }
             break;
@@ -289,24 +320,24 @@ public class BluestoneConnectFMP extends ABluestoneConnectFMP {
                 GL11.glRotated(-90, 0, 1, 0);
                 GL11.glTranslated(-0.5, -0.5, -0.5);
 
-                api.renderBox(7, 1, 0, 9, 6, 1);
+                api.renderBox(7, 1, 0, 9, 5, 1);
                 break;
             case 3:
                 GL11.glTranslated(0.5, 0.5, 0.5);
                 GL11.glRotated(90, 0, 1, 0);
                 GL11.glTranslated(-0.5, -0.5, -0.5);
 
-                api.renderBox(7, 1, 15, 9, 6, 16);
+                api.renderBox(7, 1, 15, 9, 5, 16);
                 break;
             case 4:
                 GL11.glTranslated(0.5, 0.5, 0.5);
                 GL11.glRotated(180, 0, 1, 0);
                 GL11.glTranslated(-0.5, -0.5, -0.5);
 
-                api.renderBox(15, 1, 7, 16, 6, 9);
+                api.renderBox(15, 1, 7, 16, 5, 9);
                 break;
             case 5:
-                api.renderBox(0, 1, 7, 1, 6, 9);
+                api.renderBox(0, 1, 7, 1, 5, 9);
                 break;
             }
             break;
