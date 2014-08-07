@@ -17,6 +17,7 @@ import net.minecraft.nbt.NBTTagCompound;
 
 import org.lwjgl.opengl.GL11;
 
+import com.bluepowermod.api.part.FaceDirection;
 import com.bluepowermod.api.part.RedstoneConnection;
 import com.bluepowermod.client.renderers.RenderHelper;
 import com.bluepowermod.util.Refs;
@@ -60,7 +61,8 @@ public class GateRSLatch extends GateBase {
             
             GL11.glDisable(GL11.GL_CULL_FACE);
         }
-        super.renderTop(frame);
+        renderTopTexture(Refs.MODID + ":textures/blocks/gates/" + getType() + (mode > 1 ? "2" : "") + "/base.png");
+        renderTop(getConnection(FaceDirection.FRONT), getConnection(FaceDirection.LEFT), getConnection(FaceDirection.BACK), getConnection(FaceDirection.RIGHT), frame);
         if (mode % 2 == 1) {
             GL11.glEnable(GL11.GL_CULL_FACE);
             GL11.glPopMatrix();
@@ -70,8 +72,14 @@ public class GateRSLatch extends GateBase {
     @Override
     protected void renderTop(RedstoneConnection front, RedstoneConnection left, RedstoneConnection back, RedstoneConnection right, float frame) {
     
-        renderTopTexture(Refs.MODID + ":textures/blocks/gates/" + getType() + (mode > 1 ? "2" : "") + "/left_" + (front.getPower() > 0 ? "on" : "off") + ".png");
-        renderTopTexture(Refs.MODID + ":textures/blocks/gates/" + getType() + (mode > 1 ? "2" : "") + "/right_" + (back.getPower() > 0 ? "on" : "off") + ".png");
+        renderTopTexture(Refs.MODID + ":textures/blocks/gates/" + getType() + (mode > 1 ? "2" : "") + "/left_" + ((mode % 2 == 0 ? left.getPower() > 0 : right.getPower() > 0) ? "on" : "off") + ".png");
+        renderTopTexture(Refs.MODID + ":textures/blocks/gates/" + getType() + (mode > 1 ? "2" : "") + "/right_" + ((mode % 2 == 0 ? right.getPower() > 0 : left.getPower() > 0) ? "on" : "off") + ".png");
+        if (mode > 1) {
+            renderTopTexture(Refs.MODID + ":textures/blocks/gates/" + getType() + "2/front" + "_" + (front.getPower() > 0 ? "on" : "off") + ".png");
+            renderTopTexture(Refs.MODID + ":textures/blocks/gates/" + getType() + "2/back" + "_" + (back.getPower() > 0 ? "on" : "off") + ".png");
+            
+        }
+        
         RenderHelper.renderRedstoneTorch(-1D / 8D, 1D / 8D, 2D / 8D, 9D / 16D, front.getPower() == 0);
         RenderHelper.renderRedstoneTorch(1D / 8D, 1D / 8D, -2D / 8D, 9D / 16D, back.getPower() == 0);
     }
