@@ -17,6 +17,7 @@ import com.bluepowermod.part.gate.GatePulseFormer;
 import com.bluepowermod.part.gate.GateRSLatch;
 import com.bluepowermod.part.gate.GateRandomizer;
 import com.bluepowermod.part.gate.GateSequencer;
+import com.bluepowermod.part.gate.GateStateCell;
 import com.bluepowermod.part.gate.GateTimer;
 import com.bluepowermod.part.gate.GateToggleLatch;
 import com.bluepowermod.part.gate.GateXnor;
@@ -51,6 +52,7 @@ public class PartRegister {
         PartRegistry.getInstance().registerPart(GateRSLatch.class);
         PartRegistry.getInstance().registerPart(GateXor.class);
         PartRegistry.getInstance().registerPart(GateXnor.class);
+        PartRegistry.getInstance().registerPart(GateStateCell.class);
         
         // Lamps
         for (int i = 0; i < ItemDye.field_150922_c.length; i++)
