@@ -57,15 +57,16 @@ public class ItemBPMultipart extends JItemMultiPart {
         
         if (p == null) return false;
         
+        p.setWorld(w);
+        p.setX(x);
+        p.setY(y);
+        p.setZ(z);
+        
         if (!p.canPlacePart(stack, player, new com.bluepowermod.api.vec.Vector3(x, y, z, w), new MovingObjectPosition(x, y, z, side, Vec3.createVectorHelper(x + f, y + f2, z + f3), true))) return false;
         
         if (super.onItemUse(stack, player, w, x, y, z, side, f, f2, f3)) {
             w.playSoundEffect(x + 0.5, y + 0.5, z + 0.5, Block.soundTypeStone.getBreakSound(), Block.soundTypeStone.getVolume(), Block.soundTypeStone.getPitch());
             
-            p.setWorld(w);
-            p.setX(x);
-            p.setY(y);
-            p.setZ(z);
             p.onAdded();
             
             return true;
