@@ -449,6 +449,8 @@ bluepower.config.amethyst.tooltip=Adjust amethyst world generation.
 bluepower.config.sapphire.tooltip=Adjust sapphire world generation.
 bluepower.config.teslatite.tooltip=Adjust teslatite world generation.
 
+bluepower.waila.rsLatch.feedback=Feedback
+bluepower.waila.rsLatch.noFeedback=No Feedback
 waila.pneumaticTube.color=Colors
 waila.machine.stuffed=Stuffed
 
