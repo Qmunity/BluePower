@@ -3,7 +3,7 @@ package com.bluepowermod.compat.fmp;
 import net.minecraft.item.ItemDye;
 
 import com.bluepowermod.part.PartRegistry;
-import com.bluepowermod.part.cable.WireBluestone;
+import com.bluepowermod.part.cable.bluestone.WireBluestone;
 import com.bluepowermod.part.gate.GateAnd;
 import com.bluepowermod.part.gate.GateBuffer;
 import com.bluepowermod.part.gate.GateCounter;

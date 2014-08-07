@@ -1,4 +1,4 @@
-package com.bluepowermod.part.cable;
+package com.bluepowermod.part.cable.bluestone;
 
 import java.util.List;
 
@@ -15,16 +15,27 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import org.lwjgl.opengl.GL11;
 
+import codechicken.multipart.IFaceRedstonePart;
+import codechicken.multipart.TMultiPart;
+import codechicken.multipart.TileMultipart;
+
 import com.bluepowermod.api.BPApi;
+import com.bluepowermod.api.bluestone.IBluestoneWire;
 import com.bluepowermod.api.part.FaceDirection;
 import com.bluepowermod.api.part.RedstoneConnection;
 import com.bluepowermod.api.util.ForgeDirectionUtils;
 import com.bluepowermod.api.vec.Vector3;
 import com.bluepowermod.api.vec.Vector3Cube;
+import com.bluepowermod.compat.fmp.MultipartBPPart;
 import com.bluepowermod.init.CustomTabs;
+import com.bluepowermod.part.cable.CableWall;
+import com.bluepowermod.util.Dependencies;
 import com.bluepowermod.util.Refs;
 
-public class WireBluestone extends CableWall {
+import cpw.mods.fml.common.Loader;
+import cpw.mods.fml.common.Optional;
+
+public class WireBluestone extends CableWall implements IBluestoneWire {
 
     protected static Vector3Cube SELECTION_BOX = new Vector3Cube(0, 0, 0, 1, 1 / 16D, 1);
     protected static Vector3Cube OCCLUSION_BOX = new Vector3Cube(1 / 8D, 0, 1 / 8D, 15 / 16D, 1 / 8D, 7 / 8D);
@@ -34,6 +45,7 @@ public class WireBluestone extends CableWall {
 
     private boolean propagating = false;
     private int power = 15;
+    @SuppressWarnings("unused")
     private int powerSelf = 0;
 
     @Override
@@ -63,8 +75,11 @@ public class WireBluestone extends CableWall {
     @Override
     public boolean canConnectToBlock(Block block, Vector3 location) {
 
-        boolean cc = BPApi.getInstance().getBluestoneApi()
-                .canConnect(location, ForgeDirection.getOrientation(getFace()), loc.getDirectionTo(location));
+        if (Loader.isModLoaded(Dependencies.FMP))
+            if (location.hasTileEntity() && isFMPTile(location.getTileEntity()) && !canConnectToTileEntityFMP(location.getTileEntity()))
+                return false;
+
+        boolean cc = BPApi.getInstance().getBluestoneApi().canConnect(location, this, loc.getDirectionTo(location));
         try {
             return cc
                     || block.canConnectRedstone(location.getWorld(), location.getBlockX(), location.getBlockY(), location.getBlockZ(),
@@ -78,6 +93,72 @@ public class WireBluestone extends CableWall {
     public boolean canConnectToTileEntity(TileEntity tile) {
 
         return false;
+    }
+
+    @Optional.Method(modid = Dependencies.FMP)
+    private boolean isFMPTile(TileEntity tile) {
+
+        return tile instanceof TileMultipart;
+    }
+
+    @Optional.Method(modid = Dependencies.FMP)
+    private boolean canConnectToTileEntityFMP(TileEntity tile) {
+
+        // ForgeDirection dir = new Vector3(tile).getDirectionTo(loc);
+
+        return false;
+    }
+
+    @Optional.Method(modid = Dependencies.FMP)
+    @Override
+    public boolean canConnectToPart(TMultiPart part) {
+
+        return false;
+    }
+
+    @Optional.Method(modid = Dependencies.FMP)
+    public static TMultiPart getFMPPartOnSide(IBluestoneWire wire, ForgeDirection dir) {
+
+        Vector3 vec = wire.getLocation().getRelative(dir);
+        TileMultipart te = null;
+
+        // Check for parts in the same block
+        if (wire.getLocation().getTileEntity() instanceof TileMultipart) {
+            te = (TileMultipart) wire.getLocation().getTileEntity();
+            ForgeDirection dir2 = dir;
+            if (dir2 == ForgeDirection.UP || dir2 == ForgeDirection.DOWN)
+                dir2 = dir2.getOpposite();
+            List<TMultiPart> l = te.jPartList();
+            for (TMultiPart p : l) {
+                if (!(p instanceof MultipartBPPart)) {
+                    if (p instanceof IFaceRedstonePart) {
+                        if (ForgeDirection.getOrientation(((IFaceRedstonePart) p).getFace()) == dir2) {
+                            return p;
+                        }
+                    }
+                }
+            }
+        }
+
+        // Check for parts next to this one
+        if (vec.hasTileEntity() && vec.getTileEntity() instanceof TileMultipart) {
+            te = ((TileMultipart) vec.getTileEntity());
+            List<TMultiPart> l = te.jPartList();
+            for (TMultiPart p : l) {
+                if (!(p instanceof MultipartBPPart))
+                    if (p instanceof IFaceRedstonePart)
+                        if (((IFaceRedstonePart) p).getFace() == wire.getFace())
+                            return p;
+            }
+        }
+
+        return null;
+    }
+
+    @Override
+    protected TMultiPart getPartOnSide(ForgeDirection dir) {
+
+        return getFMPPartOnSide(this, dir);
     }
 
     @Override
@@ -127,7 +208,7 @@ public class WireBluestone extends CableWall {
                     continue;
                 }
 
-                int val = 1 + (v.distanceTo(this.loc) > 1 ? 1 : BPApi.getInstance().getBluestoneApi().getExtraLength(v, f, d));
+                int val = 1 + (v.distanceTo(this.loc) > 1 ? 1 : BPApi.getInstance().getBluestoneApi().getExtraLength(v, this, d));
 
                 GL11.glPushMatrix();
                 {
@@ -148,7 +229,7 @@ public class WireBluestone extends CableWall {
                     GL11.glTranslated(0.5, 0.5, 0.5);
                     GL11.glRotated(90 * times, 0, 1, 0);
                     GL11.glTranslated(-0.5, -0.5, -0.5);
-                    BPApi.getInstance().getBluestoneApi().renderExtraCables(v, f, d);
+                    BPApi.getInstance().getBluestoneApi().renderExtraCables(v, this, d);
                 }
                 GL11.glPopMatrix();
 
@@ -252,10 +333,10 @@ public class WireBluestone extends CableWall {
                         sides[0] = val;
                         break;
                     case EAST:
-                        sides[2] = val;
+                        sides[3] = val;
                         break;
                     case WEST:
-                        sides[3] = val;
+                        sides[2] = val;
                         break;
                     default:
                         break;
@@ -399,6 +480,12 @@ public class WireBluestone extends CableWall {
     public int getPower() {
 
         return power;
+    }
+
+    @Override
+    public Vector3 getLocation() {
+
+        return loc;
     }
 
 }

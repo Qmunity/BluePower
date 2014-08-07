@@ -6,13 +6,18 @@ import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
+import codechicken.multipart.TMultiPart;
 
 import com.bluepowermod.api.compat.IMultipartCompat;
 import com.bluepowermod.api.part.BPPartFace;
 import com.bluepowermod.api.util.ForgeDirectionUtils;
 import com.bluepowermod.api.vec.Vector3;
 import com.bluepowermod.compat.CompatibilityUtils;
+import com.bluepowermod.part.cable.bluestone.ICableConnect;
 import com.bluepowermod.util.Dependencies;
+
+import cpw.mods.fml.common.Loader;
+import cpw.mods.fml.common.Optional;
 
 /**
  * @author amadornes
@@ -45,6 +50,12 @@ public abstract class CableWall extends BPPartFace {
     public abstract boolean canConnectToBlock(Block block, Vector3 location);
 
     public abstract boolean canConnectToTileEntity(TileEntity tile);
+
+    @Optional.Method(modid = Dependencies.FMP)
+    public boolean canConnectToPart(TMultiPart part) {
+
+        return false;
+    }
 
     /**
      * @author amadornes
@@ -124,10 +135,18 @@ public abstract class CableWall extends BPPartFace {
             CableWall c = getCableOnSide(d);// Check connection to cables
             if (canConnectToCable(c)) {
                 o = c;
-            } else if (vec.getBlock(true) != null && canConnectToBlock(vec.getBlock(), vec)) {// Check connection to blocks
-                o = vec;
-            } else if (vec.getTileEntity() != null && canConnectToTileEntity(vec.getTileEntity())) {// Check connection to TEs
-                o = vec;
+            }
+            if (o == null) {
+                if (Loader.isModLoaded(Dependencies.FMP)) {
+                    o = getPartOnSide(d);
+                }
+                if (o == null) {
+                    if (vec.getBlock(true) != null && canConnectToBlock(vec.getBlock(), vec)) {// Check connection to blocks
+                        o = vec;
+                    } else if (vec.getTileEntity() != null && canConnectToTileEntity(vec.getTileEntity())) {// Check connection to TEs
+                        o = vec;
+                    }
+                }
             }
             Object o2 = connections[ForgeDirectionUtils.getSide(d)];
             if (o2 != null && o2 != o) {
@@ -210,6 +229,16 @@ public abstract class CableWall extends BPPartFace {
      * @author amadornes
      * 
      */
+    @Optional.Method(modid = Dependencies.FMP)
+    protected TMultiPart getPartOnSide(ForgeDirection dir) {
+
+        return null;
+    }
+
+    /**
+     * @author amadornes
+     * 
+     */
     @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
     public void onRemoved() {
@@ -263,16 +292,32 @@ public abstract class CableWall extends BPPartFace {
         super.writeUpdatePacket(tag);
 
         for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
-            Vector3 v = null;
-            Object o = connections[ForgeDirectionUtils.getSide(d)];
-            if (o != null) {
-                if (o instanceof Vector3)
-                    v = (Vector3) o;
-                if (o instanceof CableWall)
-                    v = ((CableWall) o).loc;
-            }
+            Vector3 v = getConnectionVector(d);
             tag.setString("con_" + d.name(), v == null ? "" : v.toString());
         }
+    }
+
+    private Vector3 getConnectionVector(ForgeDirection d) {
+
+        Object o = connections[ForgeDirectionUtils.getSide(d)];
+        if (o != null) {
+            if (o instanceof Vector3)
+                return (Vector3) o;
+            if (o instanceof CableWall)
+                return ((CableWall) o).loc;
+            if (Loader.isModLoaded(Dependencies.FMP))
+                return getConnectionVectorFMP(d);
+        }
+        return null;
+    }
+
+    @Optional.Method(modid = Dependencies.FMP)
+    private Vector3 getConnectionVectorFMP(ForgeDirection d) {
+
+        Object o = connections[ForgeDirectionUtils.getSide(d)];
+        if (o instanceof TMultiPart)
+            return new Vector3(((TMultiPart) o).tile());
+        return null;
     }
 
     @Override

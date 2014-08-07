@@ -10,7 +10,7 @@ import com.bluepowermod.api.recipe.IAlloyFurnaceRegistry;
 import com.bluepowermod.api.tube.IPneumaticTube;
 import com.bluepowermod.compat.CompatibilityUtils;
 import com.bluepowermod.part.PartRegistry;
-import com.bluepowermod.part.cable.BluestoneApi;
+import com.bluepowermod.part.cable.bluestone.BluestoneApi;
 import com.bluepowermod.part.tube.PneumaticTube;
 import com.bluepowermod.recipe.AlloyFurnaceRegistry;
 import com.bluepowermod.util.Dependencies;

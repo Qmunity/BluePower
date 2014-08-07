@@ -1,4 +1,6 @@
-package com.bluepowermod.part.cable;
+package com.bluepowermod.part.cable.bluestone;
+
+import com.bluepowermod.part.cable.CableWall;
 
 import net.minecraftforge.common.util.ForgeDirection;
 

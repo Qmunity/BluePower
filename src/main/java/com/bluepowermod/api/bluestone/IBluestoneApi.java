@@ -17,13 +17,13 @@ public interface IBluestoneApi {
 
     public void registerSpecialConnection(ABluestoneConnect connection);
 
-    public int getExtraLength(Vector3 block, ForgeDirection cableFace, ForgeDirection cableSide);
+    public int getExtraLength(Vector3 block, IBluestoneWire wire, ForgeDirection cableSide);
 
-    boolean canConnect(Vector3 block, ForgeDirection cableFace, ForgeDirection cableSide);
+    public boolean canConnect(Vector3 block, IBluestoneWire wire, ForgeDirection cableSide);
 
     @SideOnly(Side.CLIENT)
     public void renderBox(int minx, int miny, int minz, int maxx, int maxy, int maxz);
 
-    public void renderExtraCables(Vector3 block, ForgeDirection cableFace, ForgeDirection cableSide);
+    public void renderExtraCables(Vector3 block, IBluestoneWire wire, ForgeDirection side);
 
 }
