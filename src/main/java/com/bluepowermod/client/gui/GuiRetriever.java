@@ -27,7 +27,7 @@ public class GuiRetriever extends GuiFilter {
     public void initGui() {
     
         super.initGui();
-        WidgetMode colorWidget = new WidgetMode(1, guiLeft + 117, guiTop + 20, 202, 2, Refs.MODID + ":textures/GUI/retriever.png") {
+        WidgetMode colorWidget = new WidgetMode(1, guiLeft + 117, guiTop + 20, 202, 2, Refs.MODID + ":textures/gui/retriever.png") {
             
             @Override
             public void addTooltip(List<String> curTip, boolean shiftPressed) {
