@@ -4,6 +4,7 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -185,6 +186,9 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
     @Override
     public boolean renderStatic(Vector3 loc, int pass) {
 
+        Tessellator t = Tessellator.instance;
+        t.draw();
+
         GL11.glPushMatrix();
         {
             rotateAndTranslateDynamic(loc, pass, 0);
@@ -361,6 +365,8 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
                 renderBox(7, 0, 9, 9, 1, 16 + (sides[0] - 1));
         }
         GL11.glPopMatrix();
+
+        t.startDrawingQuads();
 
         return true;
     }
