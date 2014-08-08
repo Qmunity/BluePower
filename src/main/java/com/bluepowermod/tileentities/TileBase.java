@@ -34,117 +34,115 @@ import com.bluepowermod.BluePower;
  * @author MineMaarten
  */
 public class TileBase extends TileEntity implements IRotatable {
-
-    private boolean isRedstonePowered;
-    private int outputtingRedstone;
-    private int ticker = 0;
+    
+    private boolean        isRedstonePowered;
+    private int            outputtingRedstone;
+    private int            ticker   = 0;
     private ForgeDirection rotation = ForgeDirection.UP;
-
+    
     /*************** BASIC TE FUNCTIONS **************/
-
+    
     /**
      * This function gets called whenever the world/chunk loads
      */
     @Override
     public void readFromNBT(NBTTagCompound tCompound) {
-
+    
         super.readFromNBT(tCompound);
         isRedstonePowered = tCompound.getBoolean("isRedstonePowered");
         readFromPacketNBT(tCompound);
     }
-
+    
     /**
      * This function gets called whenever the world/chunk is saved
      */
     @Override
     public void writeToNBT(NBTTagCompound tCompound) {
-
+    
         super.writeToNBT(tCompound);
         tCompound.setBoolean("isRedstonePowered", isRedstonePowered);
-
+        
         writeToPacketNBT(tCompound);
     }
-
+    
     /**
      * Tags written in here are synced upon markBlockForUpdate.
      * 
      * @param tCompound
      */
     protected void writeToPacketNBT(NBTTagCompound tCompound) {
-
+    
         tCompound.setByte("rotation", (byte) rotation.ordinal());
         tCompound.setByte("outputtingRedstone", (byte) outputtingRedstone);
     }
-
+    
     protected void readFromPacketNBT(NBTTagCompound tCompound) {
-
+    
         rotation = ForgeDirection.getOrientation(tCompound.getByte("rotation"));
         if (rotation.ordinal() > 5) {
             BluePower.log.warn("invalid rotation!");
             rotation = ForgeDirection.UP;
         }
         outputtingRedstone = tCompound.getByte("outputtingRedstone");
-        if (worldObj != null)
-            markForRenderUpdate();
+        if (worldObj != null) markForRenderUpdate();
     }
-
+    
     @Override
     public Packet getDescriptionPacket() {
-
+    
         NBTTagCompound tCompound = new NBTTagCompound();
         writeToPacketNBT(tCompound);
         return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, 0, tCompound);
     }
-
+    
     @Override
     public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
-
+    
         readFromPacketNBT(pkt.func_148857_g());
     }
-
+    
     protected void sendUpdatePacket() {
-
-        if (!worldObj.isRemote)
-            worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+    
+        if (!worldObj.isRemote) worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
     }
-
+    
     protected void markForRenderUpdate() {
-
-        worldObj.markBlockRangeForRenderUpdate(xCoord, yCoord, zCoord, xCoord, yCoord, zCoord);
+    
+        if (worldObj != null) worldObj.markBlockRangeForRenderUpdate(xCoord, yCoord, zCoord, xCoord, yCoord, zCoord);
     }
-
+    
     protected void notifyNeighborBlockUpdate() {
-
+    
         worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, getBlockType());
     }
-
+    
     /**
      * Function gets called every tick. Do not forget to call the super method!
      */
     @Override
     public void updateEntity() {
-
+    
         if (ticker == 0) {
             onTileLoaded();
         }
         super.updateEntity();
         ticker++;
     }
-
+    
     /**
      * ************** ADDED FUNCTIONS ****************
      */
-
+    
     public void onBlockNeighbourChanged() {
-
+    
         checkRedstonePower();
     }
-
+    
     /**
      * Checks if redstone has changed.
      */
     public void checkRedstonePower() {
-
+    
         boolean isIndirectlyPowered = getWorldObj().isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord);
         if (isIndirectlyPowered && !getIsRedstonePowered()) {
             redstoneChanged(true);
@@ -152,24 +150,24 @@ public class TileBase extends TileEntity implements IRotatable {
             redstoneChanged(false);
         }
     }
-
+    
     /**
      * Before being able to use this, remember to mark the block as redstone emitter by calling BlockContainerBase#emitsRedstone()
      * 
      * @param newValue
      */
     public void setOutputtingRedstone(boolean newValue) {
-
+    
         setOutputtingRedstone(newValue ? 15 : 0);
     }
-
+    
     /**
      * Before being able to use this, remember to mark the block as redstone emitter by calling BlockContainerBase#emitsRedstone()
      * 
      * @param value
      */
     public void setOutputtingRedstone(int value) {
-
+    
         value = Math.max(0, value);
         value = Math.min(15, value);
         if (outputtingRedstone != value) {
@@ -177,12 +175,12 @@ public class TileBase extends TileEntity implements IRotatable {
             notifyNeighborBlockUpdate();
         }
     }
-
+    
     public int getOutputtingRedstone() {
-
+    
         return outputtingRedstone;
     }
-
+    
     /**
      * This method can be overwritten to get alerted when the redstone level has changed.
      * 
@@ -190,59 +188,59 @@ public class TileBase extends TileEntity implements IRotatable {
      *            The redstone level it is at now
      */
     protected void redstoneChanged(boolean newValue) {
-
+    
         isRedstonePowered = newValue;
     }
-
+    
     /**
      * Check whether or not redstone level is high
      */
     public boolean getIsRedstonePowered() {
-
+    
         return isRedstonePowered;
     }
-
+    
     /**
      * Returns the ticker of the Tile, this number wll increase every tick
      * 
      * @return the ticker
      */
     public int getTicker() {
-
+    
         return ticker;
     }
-
+    
     /**
      * Gets called when the TileEntity ticks for the first time, the world is accessible and updateEntity() has not been ran yet
      */
     protected void onTileLoaded() {
-
+    
         onBlockNeighbourChanged();
     }
-
+    
     public List<ItemStack> getDrops() {
-
+    
         return new ArrayList<ItemStack>();
     }
-
+    
     @Override
     public void setFacingDirection(ForgeDirection dir) {
-
+    
         rotation = dir;
         if (worldObj != null) {
             sendUpdatePacket();
             notifyNeighborBlockUpdate();
         }
     }
-
+    
     @Override
     public ForgeDirection getFacingDirection() {
-
+    
         return rotation;
     }
-
+    
     public boolean canConnectRedstone() {
-
+    
         return false;
     }
 }

@@ -44,7 +44,6 @@ public class TileAlloyFurnace extends TileBase implements IInventory {
     public int          currentBurnTime;
     public int          currentProcessTime;
     public int          maxBurnTime;
-    private boolean     metaSet = false;
     private ItemStack[] inventory;
     private ItemStack   fuelInventory;
     private ItemStack   outputInventory;
@@ -63,8 +62,6 @@ public class TileAlloyFurnace extends TileBase implements IInventory {
     public void readFromNBT(NBTTagCompound tCompound) {
     
         super.readFromNBT(tCompound);
-        isActive = tCompound.getBoolean("isActive");
-        metaSet = false;
         
         for (int i = 0; i < 9; i++) {
             NBTTagCompound tc = tCompound.getCompoundTag("inventory" + i);
@@ -72,6 +69,7 @@ public class TileAlloyFurnace extends TileBase implements IInventory {
         }
         fuelInventory = ItemStack.loadItemStackFromNBT(tCompound.getCompoundTag("fuelInventory"));
         outputInventory = ItemStack.loadItemStackFromNBT(tCompound.getCompoundTag("outputInventory"));
+        
     }
     
     /**
@@ -81,7 +79,6 @@ public class TileAlloyFurnace extends TileBase implements IInventory {
     public void writeToNBT(NBTTagCompound tCompound) {
     
         super.writeToNBT(tCompound);
-        tCompound.setBoolean("isActive", isActive);
         
         for (int i = 0; i < 9; i++) {
             if (inventory[i] != null) {
@@ -101,6 +98,29 @@ public class TileAlloyFurnace extends TileBase implements IInventory {
             outputInventory.writeToNBT(outputCompound);
             tCompound.setTag("outputInventory", outputCompound);
         }
+        
+    }
+    
+    @Override
+    public void readFromPacketNBT(NBTTagCompound tag) {
+    
+        super.readFromPacketNBT(tag);
+        isActive = tag.getBoolean("isActive");
+        
+        currentBurnTime = tag.getInteger("currentBurnTime");
+        currentProcessTime = tag.getInteger("currentProcessTime");
+        maxBurnTime = tag.getInteger("maxBurnTime");
+        markForRenderUpdate();
+    }
+    
+    @Override
+    public void writeToPacketNBT(NBTTagCompound tag) {
+    
+        super.writeToPacketNBT(tag);
+        tag.setInteger("currentBurnTime", currentBurnTime);
+        tag.setInteger("currentProcessTime", currentProcessTime);
+        tag.setInteger("maxBurnTime", maxBurnTime);
+        tag.setBoolean("isActive", isActive);
     }
     
     /**
@@ -110,17 +130,6 @@ public class TileAlloyFurnace extends TileBase implements IInventory {
     public void updateEntity() {
     
         super.updateEntity();
-        
-        // Check if the meta is already set after loading the NBT.
-        if (!metaSet) {
-            metaSet = true;
-            if (isActive) {
-                int newMeta = getBlockMetadata();
-                newMeta = newMeta & 7;
-                newMeta |= isActive == true ? 8 : 0;
-                getWorldObj().setBlockMetadataWithNotify(xCoord, yCoord, zCoord, newMeta, 2);
-            }
-        }
         
         if (!worldObj.isRemote) {
             setIsActive(currentBurnTime > 0);
@@ -152,7 +161,6 @@ public class TileAlloyFurnace extends TileBase implements IInventory {
                         outputInventory = recipe.getCraftingResult(inventory).copy();
                     }
                     recipe.useItems(inventory);
-                    worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
                 }
             } else {
                 currentProcessTime = 0;
@@ -199,6 +207,7 @@ public class TileAlloyFurnace extends TileBase implements IInventory {
     public void setIsActive(boolean _isActive) {
     
         isActive = _isActive;
+        sendUpdatePacket();
     }
     
     /**
