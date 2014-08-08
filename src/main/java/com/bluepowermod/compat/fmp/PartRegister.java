@@ -37,6 +37,7 @@ public class PartRegister {
         PartRegistry.getInstance().registerPart(GateXnor.class);
         PartRegistry.getInstance().registerPart(GateStateCell.class);
         PartRegistry.getInstance().registerPart(GateRepeater.class);
+        PartRegistry.getInstance().registerPart(GateTransparentLatch.class);
         
         // Lamps
         for (int i = 0; i < ItemDye.field_150922_c.length; i++)
