@@ -95,86 +95,88 @@ public class RenderLamp extends TileEntitySpecialRenderer implements ISimpleBloc
     @Override
     public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer) {
 
-        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper
-                .lightmapTexUnit, 240f, 240f);
-        BlockLamp bLamp = (BlockLamp) block;
-        int redMask = 0xFF0000, greenMask = 0xFF00, blueMask = 0xFF;
-        int r = (bLamp.getColor() & redMask) >> 16;
-        int g = (bLamp.getColor() & greenMask) >> 8;
-        int b = (bLamp.getColor() & blueMask);
+        if (pass == 0) {
+            BlockLamp bLamp = (BlockLamp) block;
+            int redMask = 0xFF0000, greenMask = 0xFF00, blueMask = 0xFF;
+            int r = (bLamp.getColor() & redMask) >> 16;
+            int g = (bLamp.getColor() & greenMask) >> 8;
+            int b = (bLamp.getColor() & blueMask);
 
-        Vector3Cube vector = new Vector3Cube(0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
+            Vector3Cube vector = new Vector3Cube(0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
 
-        // if (pass == 0) {
-        Tessellator t = Tessellator.instance;
-        t.addTranslation(x, y, z);
-        t.setColorOpaque(r, g, b);
-        IIcon iconToUse;
-        int power = ((TileLamp) world.getTileEntity(x, y, z)).getPower();
+            // if (pass == 0) {
+            Tessellator t = Tessellator.instance;
+            t.addTranslation(x, y, z);
+            t.setColorOpaque(r, g, b);
+            IIcon iconToUse;
+            int power = ((TileLamp) world.getTileEntity(x, y, z)).getPower();
+            OpenGlHelper.setLightmapTextureCoords(OpenGlHelper
+                    .lightmapTexUnit, 240f, 240f);
+            if (bLamp.isInverted()) {
+                power = 15 - power;
+            }
 
-        if (bLamp.isInverted()) {
-            power = 15 - power;
+            if (power == 0) {
+                iconToUse = IconSupplier.lampOn;
+            } else {
+                iconToUse = IconSupplier.lampOff;
+            }
+
+            double minU = iconToUse.getMinU();
+            double maxU = iconToUse.getMaxU();
+            double minV = iconToUse.getMinV();
+            double maxV = iconToUse.getMaxV();
+
+            // Bottom side
+            t.setNormal(0, -1, 0);
+            t.addVertexWithUV(vector.getMaxX(), vector.getMinY(), vector.getMaxZ(), minU, maxV);
+            t.addVertexWithUV(vector.getMinX(), vector.getMinY(), vector.getMaxZ(), minU, minV);
+            t.addVertexWithUV(vector.getMinX(), vector.getMinY(), vector.getMinZ(), maxU, minV);
+            t.addVertexWithUV(vector.getMaxX(), vector.getMinY(), vector.getMinZ(), maxU, maxV);
+
+            // Top side
+            t.setNormal(0, 1, 0);
+            t.addVertexWithUV(vector.getMinX(), vector.getMaxY(), vector.getMaxZ(), minU, maxV);
+            t.addVertexWithUV(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ(), minU, minV);
+            t.addVertexWithUV(vector.getMaxX(), vector.getMaxY(), vector.getMinZ(), maxU, minV);
+            t.addVertexWithUV(vector.getMinX(), vector.getMaxY(), vector.getMinZ(), maxU, maxV);
+
+            // Draw west side:
+            t.setNormal(-1, 0, 0);
+            t.addVertexWithUV(vector.getMinX(), vector.getMinY(), vector.getMaxZ(), minU, maxV);
+            t.addVertexWithUV(vector.getMinX(), vector.getMaxY(), vector.getMaxZ(), minU, minV);
+            t.addVertexWithUV(vector.getMinX(), vector.getMaxY(), vector.getMinZ(), maxU, minV);
+            t.addVertexWithUV(vector.getMinX(), vector.getMinY(), vector.getMinZ(), maxU, maxV);
+
+            // Draw east side:
+            t.setNormal(1, 0, 0);
+            t.addVertexWithUV(vector.getMaxX(), vector.getMinY(), vector.getMinZ(), minU, maxV);
+            t.addVertexWithUV(vector.getMaxX(), vector.getMaxY(), vector.getMinZ(), minU, minV);
+            t.addVertexWithUV(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ(), maxU, minV);
+            t.addVertexWithUV(vector.getMaxX(), vector.getMinY(), vector.getMaxZ(), maxU, maxV);
+
+            // Draw north side
+            t.setNormal(0, 0, -1);
+            t.addVertexWithUV(vector.getMinX(), vector.getMinY(), vector.getMinZ(), minU, maxV);
+            t.addVertexWithUV(vector.getMinX(), vector.getMaxY(), vector.getMinZ(), minU, minV);
+            t.addVertexWithUV(vector.getMaxX(), vector.getMaxY(), vector.getMinZ(), maxU, minV);
+            t.addVertexWithUV(vector.getMaxX(), vector.getMinY(), vector.getMinZ(), maxU, maxV);
+
+            // Draw south side
+            t.setNormal(0, 0, 1);
+            t.addVertexWithUV(vector.getMinX(), vector.getMinY(), vector.getMaxZ(), minU, maxV);
+            t.addVertexWithUV(vector.getMaxX(), vector.getMinY(), vector.getMaxZ(), maxU, maxV);
+            t.addVertexWithUV(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ(), maxU, minV);
+            t.addVertexWithUV(vector.getMinX(), vector.getMaxY(), vector.getMaxZ(), minU, minV);
+            // }
+
+            // if (power > 0) {
+
+            // }
+            t.addTranslation(-x, -y, -z);
+            return true;
         }
-
-        if (power == 0) {
-            iconToUse = IconSupplier.lampOn;
-        } else {
-            iconToUse = IconSupplier.lampOff;
-        }
-
-        double minU = iconToUse.getMinU();
-        double maxU = iconToUse.getMaxU();
-        double minV = iconToUse.getMinV();
-        double maxV = iconToUse.getMaxV();
-
-        // Bottom side
-        t.setNormal(0, -1, 0);
-        t.addVertexWithUV(vector.getMaxX(), vector.getMinY(), vector.getMaxZ(), minU, maxV);
-        t.addVertexWithUV(vector.getMinX(), vector.getMinY(), vector.getMaxZ(), minU, minV);
-        t.addVertexWithUV(vector.getMinX(), vector.getMinY(), vector.getMinZ(), maxU, minV);
-        t.addVertexWithUV(vector.getMaxX(), vector.getMinY(), vector.getMinZ(), maxU, maxV);
-
-        // Top side
-        t.setNormal(0, 1, 0);
-        t.addVertexWithUV(vector.getMinX(), vector.getMaxY(), vector.getMaxZ(), minU, maxV);
-        t.addVertexWithUV(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ(), minU, minV);
-        t.addVertexWithUV(vector.getMaxX(), vector.getMaxY(), vector.getMinZ(), maxU, minV);
-        t.addVertexWithUV(vector.getMinX(), vector.getMaxY(), vector.getMinZ(), maxU, maxV);
-
-        // Draw west side:
-        t.setNormal(-1, 0, 0);
-        t.addVertexWithUV(vector.getMinX(), vector.getMinY(), vector.getMaxZ(), minU, maxV);
-        t.addVertexWithUV(vector.getMinX(), vector.getMaxY(), vector.getMaxZ(), minU, minV);
-        t.addVertexWithUV(vector.getMinX(), vector.getMaxY(), vector.getMinZ(), maxU, minV);
-        t.addVertexWithUV(vector.getMinX(), vector.getMinY(), vector.getMinZ(), maxU, maxV);
-
-        // Draw east side:
-        t.setNormal(1, 0, 0);
-        t.addVertexWithUV(vector.getMaxX(), vector.getMinY(), vector.getMinZ(), minU, maxV);
-        t.addVertexWithUV(vector.getMaxX(), vector.getMaxY(), vector.getMinZ(), minU, minV);
-        t.addVertexWithUV(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ(), maxU, minV);
-        t.addVertexWithUV(vector.getMaxX(), vector.getMinY(), vector.getMaxZ(), maxU, maxV);
-
-        // Draw north side
-        t.setNormal(0, 0, -1);
-        t.addVertexWithUV(vector.getMinX(), vector.getMinY(), vector.getMinZ(), minU, maxV);
-        t.addVertexWithUV(vector.getMinX(), vector.getMaxY(), vector.getMinZ(), minU, minV);
-        t.addVertexWithUV(vector.getMaxX(), vector.getMaxY(), vector.getMinZ(), maxU, minV);
-        t.addVertexWithUV(vector.getMaxX(), vector.getMinY(), vector.getMinZ(), maxU, maxV);
-
-        // Draw south side
-        t.setNormal(0, 0, 1);
-        t.addVertexWithUV(vector.getMinX(), vector.getMinY(), vector.getMaxZ(), minU, maxV);
-        t.addVertexWithUV(vector.getMaxX(), vector.getMinY(), vector.getMaxZ(), maxU, maxV);
-        t.addVertexWithUV(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ(), maxU, minV);
-        t.addVertexWithUV(vector.getMinX(), vector.getMaxY(), vector.getMaxZ(), minU, minV);
-        // }
-
-        // if (power > 0) {
-
-        // }
-        t.addTranslation(-x, -y, -z);
-        return true;
+        return false;
     }
 
     @Override
