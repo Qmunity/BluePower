@@ -43,7 +43,7 @@ import cpw.mods.fml.common.Optional;
 public class WireBluestone extends CableWall implements IBluestoneWire, ICableSize {
 
     protected static Vector3Cube SELECTION_BOX = new Vector3Cube(0, 0, 0, 1, 1 / 16D, 1);
-    protected static Vector3Cube OCCLUSION_BOX = new Vector3Cube(1 / 8D, 0, 1 / 8D, 15 / 16D, 1 / 8D, 7 / 8D);
+    protected static Vector3Cube OCCLUSION_BOX = new Vector3Cube(3 / 16D, 0 / 16D, 3 / 16D, 12 / 16D, 1 / 16D, 12 / 16D);
 
     private static ResourceLocation textureOn = new ResourceLocation(Refs.MODID + ":textures/base/bluestoneOn.png");
     private static ResourceLocation textureOff = new ResourceLocation(Refs.MODID + ":textures/base/bluestoneOff.png");
@@ -177,7 +177,7 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
     @Override
     public void addOcclusionBoxes(List<AxisAlignedBB> boxes) {
 
-        // boxes.add(OCCLUSION_BOX.clone().toAABB());
+        boxes.add(OCCLUSION_BOX.clone().toAABB());
     }
 
     @Override
