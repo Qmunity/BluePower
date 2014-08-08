@@ -44,7 +44,7 @@ public class GateRepeater extends GateBase {
         RenderHelper.renderRedstoneTorch(pixel*-3, pixel*2, pixel*-6, pixel * 8, !power);
 
         renderTopTexture(FaceDirection.BACK, powerBack);
-        RenderHelper.renderRedstoneTorch(pixel*4, pixel*2, pixel * (5 - location), pixel * 8, (back.getPower() > 0));
+        RenderHelper.renderRedstoneTorch(pixel*4, pixel*2, pixel * (4 - location), pixel * 8, (back.getPower() > 0));
     }
     
     @Override
@@ -74,7 +74,7 @@ public class GateRepeater extends GateBase {
     @Override
     protected boolean changeMode(RedstoneConnection front, RedstoneConnection left, RedstoneConnection back, RedstoneConnection right) {
         location++;
-        if(location == 11){
+        if(location == 9){
             location = 0;
         }
         return true;
