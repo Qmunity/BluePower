@@ -307,7 +307,7 @@ public class BPBlockMultipart extends BlockContainer {
     @Override
     public boolean addDestroyEffects(World world, int x, int y, int z, int meta, EffectRenderer effectRenderer) {
     
-        return false;
+        return true;
     }
     
     @SideOnly(Side.CLIENT)

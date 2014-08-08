@@ -17,6 +17,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -29,6 +30,7 @@ import com.bluepowermod.util.Refs;
 public class ItemBPPart extends Item {
 
     private final List<BPPart> parts = new ArrayList<BPPart>();
+    private boolean secondAttempt;
 
     public ItemBPPart() {
 
@@ -81,34 +83,38 @@ public class ItemBPPart extends Item {
                     Block.soundTypeWood.getPitch());
 
             if (!w.isRemote) {
-                Vector3 v = new Vector3(x, y, z, w);
-                if (v.getTileEntity() != null && v.getTileEntity() instanceof BPTileMultipart && !player.isSneaking()) {
-                    BPTileMultipart te = (BPTileMultipart) v.getTileEntity();
-                    BPPart part = PartRegistry.getInstance().createPartFromItem(stack);
-                    part.setWorld(w);
-                    part.setX(x);
-                    part.setY(y);
-                    part.setZ(z);
-                    if (part.canPlacePart(stack, player, v.getRelative(ForgeDirection.getOrientation(side).getOpposite()),
-                            player.rayTrace(player.capabilities.isCreativeMode ? 5 : 4.5, 0))) {
-                        te.addPart(part);
+                if (!player.isSneaking()) {
+                    Vector3 v = new Vector3(x, y, z, w);
+                    TileEntity te = v.getTileEntity();
+                    BPTileMultipart tileMultipart = null;
+                    if (te instanceof BPTileMultipart) {
+                        tileMultipart = (BPTileMultipart) te;
+                    } else {
+                        //v.add(ForgeDirection.getOrientation(side));
+                        if (v.getBlock(true) == null) {
+                            w.setBlock(v.getBlockX(), v.getBlockY(), v.getBlockZ(), BPBlocks.multipart);
+                            tileMultipart = (BPTileMultipart) v.getTileEntity();
+                        }
                     }
-                } else {
-                    v.add(ForgeDirection.getOrientation(side));
-                    if (v.getBlock(true) == null) {
-                        w.setBlock(v.getBlockX(), v.getBlockY(), v.getBlockZ(), BPBlocks.multipart);
-                        BPTileMultipart te = new BPTileMultipart();
+                    
+                    if (tileMultipart != null) {
                         BPPart part = PartRegistry.getInstance().createPartFromItem(stack);
                         part.setWorld(w);
-                        part.setX(x);
-                        part.setY(y);
-                        part.setZ(z);
-                        if (part.canPlacePart(stack, player, v.getRelative(ForgeDirection.getOrientation(side).getOpposite()),
-                                player.rayTrace(player.capabilities.isCreativeMode ? 5 : 4.5, 0))) {
-                            te.addPart(part);
-                            w.setTileEntity(v.getBlockX(), v.getBlockY(), v.getBlockZ(), te);
+                        part.setX(v.getBlockX());
+                        part.setY(v.getBlockY());
+                        part.setZ(v.getBlockZ());
+                        if (part.canPlacePart(stack, player, v.getRelative(ForgeDirection.getOrientation(side).getOpposite()), player.rayTrace(player.capabilities.isCreativeMode ? 5 : 4.5, 0))) {
+                            tileMultipart.addPart(part);
                             w.markBlockForUpdate(v.getBlockX(), v.getBlockY(), v.getBlockZ());
+                            return true;
                         }
+                    }
+                    if (!secondAttempt) {
+                        v.add(ForgeDirection.getOrientation(side));
+                        secondAttempt = true;
+                        boolean used = onItemUse(stack, player, w, v.getBlockX(), v.getBlockY(), v.getBlockZ(), side, f, f2, f3);
+                        secondAttempt = false;
+                        return used;
                     }
                 }
             }
