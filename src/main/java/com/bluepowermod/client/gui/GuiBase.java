@@ -41,7 +41,7 @@ import com.bluepowermod.client.gui.widget.IWidgetListener;
  */
 public class GuiBase extends GuiContainer implements IWidgetListener {
     
-    private static final int       COLOR_TEXT = 4210752;
+    protected static final int     COLOR_TEXT = 4210752;
     private final List<IGuiWidget> widgets    = new ArrayList<IGuiWidget>();
     private final ResourceLocation resLoc;
     private IInventory             inventory;
