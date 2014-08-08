@@ -26,37 +26,40 @@ import org.lwjgl.input.Keyboard;
 
 import com.bluepowermod.client.renderers.IconSupplier;
 import com.bluepowermod.client.renderers.Renderers;
+import com.bluepowermod.compat.CompatibilityUtils;
 
 import cpw.mods.fml.client.FMLClientHandler;
 
 public class ClientProxy extends CommonProxy {
-    
+
     @Override
     public void init() {
-    
+
     }
-    
+
     @Override
     public void initRenderers() {
-    
+
         MinecraftForge.EVENT_BUS.register(new IconSupplier());
         Renderers.init();
+
+        CompatibilityUtils.registerRenders();
     }
-    
+
     @Override
     public EntityPlayer getPlayer() {
-    
+
         return FMLClientHandler.instance().getClientPlayerEntity();
     }
-    
+
     @Override
     public boolean isSneakingInGui() {
-    
+
         return Keyboard.isKeyDown(Minecraft.getMinecraft().gameSettings.keyBindSneak.getKeyCode());
     }
-    
+
     public static GuiScreen getOpenedGui() {
-    
+
         return FMLClientHandler.instance().getClient().currentScreen;
     }
 }
