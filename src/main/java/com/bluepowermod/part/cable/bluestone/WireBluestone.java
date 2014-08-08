@@ -485,7 +485,7 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
                         if (c != null)
                             c.setPower(val);
                     }
-                    w.getWorld().notifyBlockChange(w.getX(), w.getY(), w.getZ(), w.getWorld().getBlock(w.getX(), w.getY(), w.getZ()));
+                    // w.getWorld().notifyBlockChange(w.getX(), w.getY(), w.getZ(), w.getWorld().getBlock(w.getX(), w.getY(), w.getZ()));
                 }
             }
         }
