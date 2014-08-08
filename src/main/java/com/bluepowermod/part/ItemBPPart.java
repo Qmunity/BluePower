@@ -88,7 +88,6 @@ public class ItemBPPart extends Item {
                     if (te instanceof BPTileMultipart) {
                         tileMultipart = (BPTileMultipart) te;
                     } else {
-                        //v.add(ForgeDirection.getOrientation(side));
                         if (v.getBlock(true) == null) {
                             w.setBlock(v.getBlockX(), v.getBlockY(), v.getBlockZ(), BPBlocks.multipart);
                             tileMultipart = (BPTileMultipart) v.getTileEntity();

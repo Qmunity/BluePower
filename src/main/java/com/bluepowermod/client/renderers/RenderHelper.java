@@ -1,8 +1,6 @@
 package com.bluepowermod.client.renderers;
 
-import com.bluepowermod.api.vec.Vector3Cube;
-import com.bluepowermod.part.gate.GateBase;
-import com.bluepowermod.util.Refs;
+import java.nio.DoubleBuffer;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -10,13 +8,19 @@ import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 
-import java.nio.DoubleBuffer;
+import com.bluepowermod.api.vec.Vector3Cube;
+import com.bluepowermod.init.BPBlocks;
+import com.bluepowermod.part.gate.GateBase;
+import com.bluepowermod.util.Refs;
+
+import cpw.mods.fml.client.FMLClientHandler;
 
 public class RenderHelper {
     
@@ -66,16 +70,16 @@ public class RenderHelper {
         else b = Blocks.unlit_redstone_torch;
         
         GL11.glTranslated(x, y, z);
-
+        
         Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
         //Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/bluestone_torch_on"));
-
-        if(state){
+        
+        if (state) {
             rb.setOverrideBlockTexture(IconSupplier.bluestoneTorchOn);
-        }else{
+        } else {
             rb.setOverrideBlockTexture(IconSupplier.bluestoneTorchOff);
         }
-
+        
         GL11.glEnable(GL11.GL_CLIP_PLANE0);
         GL11.glClipPlane(GL11.GL_CLIP_PLANE0, planeEquation(0, 0, 0, 0, 0, 1, 1, 0, 1));
         
@@ -89,6 +93,93 @@ public class RenderHelper {
         GL11.glDisable(GL11.GL_CLIP_PLANE0);
         
         GL11.glTranslated(-x, -y, -z);
+    }
+    
+    /**
+     * @author MineMaarten
+     * @param gate
+     * @param x
+     * @param y
+     * @param z
+     * @param state
+     */
+    public static void renderLever(GateBase gate, double x, double y, double z, boolean state) {
+    
+        GL11.glPushMatrix();
+        {
+            GL11.glTranslated(x, y, z);
+            
+            RenderBlocks renderBlocks = RenderBlocks.getInstance();
+            Tessellator t = Tessellator.instance;
+            
+            GL11.glPushMatrix();
+            {
+                GL11.glTranslated(-gate.getX(), -gate.getY(), -gate.getZ());
+                
+                renderBlocks.blockAccess = FMLClientHandler.instance().getWorldClient();
+                renderBlocks.setOverrideBlockTexture(renderBlocks.getBlockIcon(Blocks.cobblestone));
+                
+                renderBlocks.setRenderBounds(0, 0, 0, 4 / 16D, 2 / 16D, 8 / 16D);
+                t.startDrawingQuads();
+                renderBlocks.renderStandardBlock(BPBlocks.multipart, gate.getX(), gate.getY(), gate.getZ());
+                t.draw();
+            }
+            GL11.glPopMatrix();
+            
+            GL11.glTranslated(-6 / 16F, 0, 3 / 16F);
+            if (state) {
+                GL11.glRotated(40, 1, 0, 0);
+            } else {
+                GL11.glRotated(-40, 1, 0, 0);
+            }
+            
+            IIcon icon = renderBlocks.getBlockIconFromSide(Blocks.lever, 0);
+            double minU = icon.getMinU();
+            double minV = icon.getMinV();
+            double maxU = icon.getMaxU();
+            double maxV = icon.getMaxV();
+            
+            t.startDrawingQuads();
+            t.addVertexWithUV(0, 0, 0, minU, maxV);
+            t.addVertexWithUV(0, 1, 0, minU, minV);
+            t.addVertexWithUV(1, 1, 0, maxU, minV);
+            t.addVertexWithUV(1, 0, 0, maxU, maxV);
+            
+            t.addTranslation(0, 0, 2 / 16F);
+            t.addVertexWithUV(0, 0, 0, maxU, maxV);
+            t.addVertexWithUV(1, 0, 0, minU, maxV);
+            t.addVertexWithUV(1, 1, 0, minU, minV);
+            t.addVertexWithUV(0, 1, 0, maxU, minV);
+            t.addTranslation(0, 0, -2 / 16F);
+            
+            t.addTranslation(7 / 16F, 0, -7 / 16F);
+            t.addVertexWithUV(0, 0, 0, maxU, maxV);
+            t.addVertexWithUV(0, 0, 1, minU, maxV);
+            t.addVertexWithUV(0, 1, 1, minU, minV);
+            t.addVertexWithUV(0, 1, 0, maxU, minV);
+            t.addTranslation(-7 / 16F, 0, 7 / 16F);
+            
+            t.addTranslation(9 / 16F, 0, -7 / 16F);
+            t.addVertexWithUV(0, 0, 0, minU, maxV);
+            t.addVertexWithUV(0, 1, 0, minU, minV);
+            t.addVertexWithUV(0, 1, 1, maxU, minV);
+            t.addVertexWithUV(0, 0, 1, maxU, maxV);
+            t.addTranslation(-9 / 16F, 0, 7 / 16F);
+            
+            t.addTranslation(7 / 16F, 0, 0);
+            minU = icon.getInterpolatedU(7);
+            maxU = icon.getInterpolatedU(9);
+            minV = icon.getInterpolatedV(6);
+            maxV = icon.getInterpolatedV(8);
+            t.addVertexWithUV(0, 10 / 16D, 0, minU, maxV);
+            t.addVertexWithUV(0, 10 / 16D, 1 / 8D, minU, minV);
+            t.addVertexWithUV(1 / 8D, 10 / 16D, 1 / 8D, maxU, minV);
+            t.addVertexWithUV(1 / 8D, 10 / 16D, 0, maxU, maxV);
+            t.addTranslation(-7 / 16F, 0, 0);
+            t.draw();
+        }
+        GL11.glPopMatrix();
+        
     }
     
     /**
@@ -401,7 +492,7 @@ public class RenderHelper {
         
         GL11.glColor4d(1, 1, 1, 1);
         
-        if(!wasTesselating){
+        if (!wasTesselating) {
             t.draw();
         }
     }
