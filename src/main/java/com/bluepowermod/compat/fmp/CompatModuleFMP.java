@@ -18,6 +18,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
+import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.util.ForgeDirection;
 import codechicken.lib.raytracer.ExtendedMOP;
 import codechicken.lib.vec.Cuboid6;
@@ -33,11 +34,14 @@ import com.bluepowermod.api.part.BPPart;
 import com.bluepowermod.api.vec.Vector3;
 import com.bluepowermod.compat.CompatModule;
 import com.bluepowermod.init.BPBlocks;
+import com.bluepowermod.init.BPItems;
 import com.bluepowermod.raytrace.RayTracer;
 
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class CompatModuleFMP extends CompatModule implements IMultipartCompat {
 
@@ -103,8 +107,13 @@ public class CompatModuleFMP extends CompatModule implements IMultipartCompat {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void registerRenders() {
 
+        SawRenderFMP sawRender = new SawRenderFMP();
+        MinecraftForgeClient.registerItemRenderer(BPItems.ruby_saw, sawRender);
+        MinecraftForgeClient.registerItemRenderer(BPItems.amethyst_saw, sawRender);
+        MinecraftForgeClient.registerItemRenderer(BPItems.sapphire_saw, sawRender);
     }
 
     @Override

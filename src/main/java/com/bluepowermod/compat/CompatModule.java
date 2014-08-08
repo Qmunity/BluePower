@@ -20,6 +20,8 @@ package com.bluepowermod.compat;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public abstract class CompatModule {
 
@@ -30,9 +32,10 @@ public abstract class CompatModule {
     public abstract void postInit(FMLPostInitializationEvent ev);
 
     public abstract void registerBlocks();
-    
+
     public abstract void registerItems();
 
+    @SideOnly(Side.CLIENT)
     public abstract void registerRenders();
 
 }
