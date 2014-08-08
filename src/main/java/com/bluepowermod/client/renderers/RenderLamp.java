@@ -1,6 +1,7 @@
 package com.bluepowermod.client.renderers;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -94,6 +95,8 @@ public class RenderLamp extends TileEntitySpecialRenderer implements ISimpleBloc
     @Override
     public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer) {
 
+        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper
+                .lightmapTexUnit, 240f, 240f);
         BlockLamp bLamp = (BlockLamp) block;
         int redMask = 0xFF0000, greenMask = 0xFF00, blueMask = 0xFF;
         int r = (bLamp.getColor() & redMask) >> 16;
@@ -191,6 +194,8 @@ public class RenderLamp extends TileEntitySpecialRenderer implements ISimpleBloc
     public void renderTileEntityAt(TileEntity te, double x, double y, double z, float f) {
 
         if (pass != 0) {
+            OpenGlHelper.setLightmapTextureCoords(OpenGlHelper
+                    .lightmapTexUnit, 240f, 240f);
             int power = ((TileLamp) te).getPower();
 
             BlockLamp bLamp = (BlockLamp) te.getBlockType();
