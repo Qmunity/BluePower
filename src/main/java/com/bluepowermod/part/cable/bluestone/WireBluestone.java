@@ -24,6 +24,7 @@ import codechicken.multipart.TileMultipart;
 
 import com.bluepowermod.api.BPApi;
 import com.bluepowermod.api.bluestone.IBluestoneWire;
+import com.bluepowermod.api.compat.IMultipartCompat;
 import com.bluepowermod.api.helper.RedstoneHelper;
 import com.bluepowermod.api.part.FaceDirection;
 import com.bluepowermod.api.part.ICableSize;
@@ -34,6 +35,7 @@ import com.bluepowermod.api.vec.Vector3Cube;
 import com.bluepowermod.compat.fmp.MultipartBPPart;
 import com.bluepowermod.init.CustomTabs;
 import com.bluepowermod.part.cable.CableWall;
+import com.bluepowermod.part.gate.GateBase;
 import com.bluepowermod.util.Dependencies;
 import com.bluepowermod.util.Refs;
 
@@ -118,25 +120,29 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
     @Optional.Method(modid = Dependencies.FMP)
     public static TMultiPart getFMPPartOnSide(IBluestoneWire wire, ForgeDirection dir) {
 
+        IMultipartCompat compat = BPApi.getInstance().getMultipartCompat();
+
         Vector3 vec = wire.getLocation().getRelative(dir);
-        TileMultipart te = null;
+        TileMultipart te = (TileMultipart) wire.getLocation().getTileEntity();
+
+        if (te == null)
+            return null;
+
+        if (compat.isOccupied(te, getStripHitboxForSide(ForgeDirection.getOrientation(wire.getFace()), dir)))
+            return null;
 
         // Check for parts in the same block
-        if (wire.getLocation().getTileEntity() instanceof TileMultipart) {
-            te = (TileMultipart) wire.getLocation().getTileEntity();
-            List<TMultiPart> l = te.jPartList();
-            for (TMultiPart p : l) {
-                if (p instanceof IFaceRedstonePart) {
-                    ForgeDirection d = dir;
-                    if (p instanceof MultipartBPPart) {
-                        if (((MultipartBPPart) p).getPart() instanceof WireBluestone)
-                            continue;
-                        d = d.getOpposite();
-                    }
-                    if (ForgeDirection.getOrientation(((IFaceRedstonePart) p).getFace()) == d)
-                        return p;
+        List<TMultiPart> l = te.jPartList();
+        for (TMultiPart p : l) {
+            if (p instanceof IFaceRedstonePart) {
+                ForgeDirection d = dir;
+                if (p instanceof MultipartBPPart) {
+                    if (((MultipartBPPart) p).getPart() instanceof WireBluestone)
+                        continue;
+                    d = d.getOpposite();
                 }
-
+                if (ForgeDirection.getOrientation(((IFaceRedstonePart) p).getFace()) == d)
+                    return p;
             }
         }
 
@@ -145,7 +151,7 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
         // Check for parts next to this one
         if (vec.hasTileEntity() && vec.getTileEntity() instanceof TileMultipart) {
             te = ((TileMultipart) vec.getTileEntity());
-            List<TMultiPart> l = te.jPartList();
+            l = te.jPartList();
             for (TMultiPart p : l)
                 if (p instanceof IFaceRedstonePart) {
                     ForgeDirection d = dir2;
@@ -154,8 +160,13 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
                             continue;
                         d = d.getOpposite();
                     }
-                    if (ForgeDirection.getOrientation(((IFaceRedstonePart) p).getFace()) == d)
-                        return p;
+                    if ((p instanceof MultipartBPPart && ((MultipartBPPart) p).getPart() instanceof GateBase)
+                            || !compat.isOccupied(
+                                    te,
+                                    getStripHitboxForSide(ForgeDirection.getOrientation(((IFaceRedstonePart) p).getFace()).getOpposite(),
+                                            dir.getOpposite())))
+                        if (ForgeDirection.getOrientation(((IFaceRedstonePart) p).getFace()) == d)
+                            return p;
                 }
         }
 
@@ -392,6 +403,7 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
                     continue;
                 connections[ForgeDirectionUtils.getSide(d)] = new Vector3(0, 0, 0).add(d);
             }
+            power = 15;
         }
         GL11.glPushMatrix();
         {
@@ -544,13 +556,13 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
     @Override
     public int getCableWidth() {
 
-        return 4;
+        return 2;
     }
 
     @Override
     public int getCableHeight() {
 
-        return 2;
+        return 1;
     }
 
     @Override
@@ -566,15 +578,15 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
     }
 
     @Override
-    public void onUpdate() {
-
-        super.onUpdate();
-    }
-
-    @Override
     public int getRedstonePower() {
 
         return power;
+    }
+
+    @Override
+    public float getHardness() {
+
+        return 0.25F;
     }
 
 }

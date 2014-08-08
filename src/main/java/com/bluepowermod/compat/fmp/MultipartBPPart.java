@@ -12,14 +12,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.particle.EffectRenderer;
+import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -28,6 +32,7 @@ import org.lwjgl.opengl.GL11;
 import codechicken.lib.data.MCDataInput;
 import codechicken.lib.data.MCDataOutput;
 import codechicken.lib.raytracer.IndexedCuboid6;
+import codechicken.lib.render.EntityDigIconFX;
 import codechicken.lib.render.RenderUtils;
 import codechicken.lib.vec.Cuboid6;
 import codechicken.lib.vec.Vector3;
@@ -383,6 +388,47 @@ public class MultipartBPPart extends TMultiPart implements IRedstonePart, JNorma
         getPart().setZ(z());
 
         getPart().update();
+    }
+
+    @Override
+    public void drawBreaking(RenderBlocks renderBlocks) {
+
+        super.drawBreaking(renderBlocks);
+    }
+
+    @Override
+    public void addHitEffects(MovingObjectPosition hit, EffectRenderer effectRenderer) {
+
+        if (!getPart().addHitEffects(hit, effectRenderer)) {
+            IIcon icon = part.getBreakingIcon();
+            if (icon == null)
+                icon = Blocks.stone.getIcon(0, 0);
+
+            Cuboid6 c = null;
+            for (Cuboid6 cu : getSubParts()) {
+                if (c == null) {
+                    c = cu;
+                } else {
+                    c.expand(cu.min);
+                    c.expand(cu.max);
+                }
+            }
+
+            if (c != null)
+                EntityDigIconFX.addBlockHitEffects(world(), c.copy().add(Vector3.fromTileEntity(tile())), hit.sideHit, icon, effectRenderer);
+        }
+    }
+
+    @Override
+    public void addDestroyEffects(MovingObjectPosition hit, EffectRenderer effectRenderer) {
+
+        if (!getPart().addDestroyEffects(hit, effectRenderer)) {
+            IIcon icon = part.getBreakingIcon();
+            if (icon == null)
+                icon = Blocks.stone.getIcon(0, 0);
+            EntityDigIconFX.addBlockDestroyEffects(world(), Cuboid6.full.copy().add(Vector3.fromTileEntity(tile())), new IIcon[] { icon, icon, icon,
+                    icon, icon, icon }, effectRenderer);
+        }
     }
 
 }

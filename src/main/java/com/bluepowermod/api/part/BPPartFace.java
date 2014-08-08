@@ -131,6 +131,9 @@ public abstract class BPPartFace extends BPPart implements IBPFacePart, IBPRedst
     @Override
     public boolean canStay() {
 
+        if (getWorld() == null)
+            return true;
+
         ForgeDirection d = ForgeDirection.getOrientation(getFace());
 
         if (d == ForgeDirection.UP || d == ForgeDirection.DOWN)
