@@ -17,21 +17,19 @@
 
 package com.bluepowermod.blocks.machines;
 
-import java.util.Random;
-
+import com.bluepowermod.blocks.BlockContainerBase;
+import com.bluepowermod.init.BPBlocks;
+import com.bluepowermod.tileentities.tier1.TileProjectTable;
+import com.bluepowermod.util.Refs;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.Item;
 import net.minecraft.util.IIcon;
 import net.minecraftforge.common.util.ForgeDirection;
 
-import com.bluepowermod.blocks.BlockContainerBase;
-import com.bluepowermod.init.BPBlocks;
-import com.bluepowermod.tileentities.tier1.TileProjectTable;
-import com.bluepowermod.util.Refs;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import java.util.Random;
 
 public class BlockProjectTable extends BlockContainerBase {
     
@@ -42,7 +40,7 @@ public class BlockProjectTable extends BlockContainerBase {
     
     public BlockProjectTable() {
     
-        super(Material.rock, TileProjectTable.class);
+        super(Material.wood, TileProjectTable.class);
         setBlockName(Refs.PROJECTTABLE_NAME);
     }
     
