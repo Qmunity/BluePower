@@ -278,12 +278,16 @@ public abstract class CableWall extends BPPartFace {
         case EAST:
             switch (dir) {
             case UP:
+                aabb = AxisAlignedBB.getBoundingBox(max, max, zer, one, one, one);
                 break;
             case DOWN:
+                aabb = AxisAlignedBB.getBoundingBox(max, zer, zer, one, min, one);
                 break;
             case NORTH:
+                aabb = AxisAlignedBB.getBoundingBox(max, zer, zer, one, one, min);
                 break;
             case SOUTH:
+                aabb = AxisAlignedBB.getBoundingBox(max, zer, max, one, one, one);
                 break;
             default:
                 break;
@@ -292,12 +296,16 @@ public abstract class CableWall extends BPPartFace {
         case WEST:
             switch (dir) {
             case UP:
+                aabb = AxisAlignedBB.getBoundingBox(zer, max, zer, min, one, one);
                 break;
             case DOWN:
+                aabb = AxisAlignedBB.getBoundingBox(zer, zer, zer, min, min, one);
                 break;
             case NORTH:
+                aabb = AxisAlignedBB.getBoundingBox(zer, zer, zer, min, one, min);
                 break;
             case SOUTH:
+                aabb = AxisAlignedBB.getBoundingBox(zer, zer, max, min, one, one);
                 break;
             default:
                 break;
@@ -306,12 +314,16 @@ public abstract class CableWall extends BPPartFace {
         case NORTH:
             switch (dir) {
             case UP:
+                aabb = AxisAlignedBB.getBoundingBox(zer, max, zer, one, one, min);
                 break;
             case DOWN:
+                aabb = AxisAlignedBB.getBoundingBox(zer, zer, zer, one, min, min);
                 break;
             case EAST:
+                aabb = AxisAlignedBB.getBoundingBox(max, zer, zer, one, one, min);
                 break;
             case WEST:
+                aabb = AxisAlignedBB.getBoundingBox(zer, zer, zer, min, one, min);
                 break;
             default:
                 break;
@@ -320,12 +332,16 @@ public abstract class CableWall extends BPPartFace {
         case SOUTH:
             switch (dir) {
             case UP:
+                aabb = AxisAlignedBB.getBoundingBox(zer, max, max, one, one, one);
                 break;
             case DOWN:
+                aabb = AxisAlignedBB.getBoundingBox(zer, zer, max, one, min, one);
                 break;
             case EAST:
+                aabb = AxisAlignedBB.getBoundingBox(max, zer, max, one, one, one);
                 break;
             case WEST:
+                aabb = AxisAlignedBB.getBoundingBox(zer, zer, max, min, one, one);
                 break;
             default:
                 break;

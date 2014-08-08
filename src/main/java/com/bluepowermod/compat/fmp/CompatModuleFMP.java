@@ -169,11 +169,8 @@ public class CompatModuleFMP extends CompatModule implements IMultipartCompat {
     @Override
     public boolean isOccupied(TileEntity tile, AxisAlignedBB box) {
 
-        if (tile != null && tile instanceof TileMultipart) {
-            TileMultipart te = (TileMultipart) tile;
-            NormallyOccludedPart noc = new NormallyOccludedPart(new Cuboid6(box));
-            return !te.canAddPart(noc);
-        }
+        if (tile != null && tile instanceof TileMultipart)
+            return !((TileMultipart) tile).canAddPart(new NormallyOccludedPart(new Cuboid6(box)));
 
         return false;
 

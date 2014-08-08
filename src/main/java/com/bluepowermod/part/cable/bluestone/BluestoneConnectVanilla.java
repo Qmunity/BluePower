@@ -8,6 +8,9 @@ import org.lwjgl.opengl.GL11;
 import com.bluepowermod.api.bluestone.ABluestoneConnect;
 import com.bluepowermod.api.bluestone.IBluestoneWire;
 import com.bluepowermod.api.vec.Vector3;
+import com.bluepowermod.util.Dependencies;
+
+import cpw.mods.fml.common.Loader;
 
 public class BluestoneConnectVanilla extends ABluestoneConnect {
 
@@ -62,7 +65,7 @@ public class BluestoneConnectVanilla extends ABluestoneConnect {
 
         BluestoneApi api = BluestoneApi.getInstance();
 
-        if (block.getBlock() == Blocks.redstone_torch)
+        if (block.getBlock() == Blocks.redstone_torch && !Loader.isModLoaded(Dependencies.FMP))
             renderExtraCablesTorch(api, block, wire, cableSide);
     }
 
