@@ -1,8 +1,10 @@
 package com.bluepowermod.part.cable.bluestone;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockRedstoneWire;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.creativetab.CreativeTabs;
@@ -22,6 +24,7 @@ import codechicken.multipart.TileMultipart;
 
 import com.bluepowermod.api.BPApi;
 import com.bluepowermod.api.bluestone.IBluestoneWire;
+import com.bluepowermod.api.helper.RedstoneHelper;
 import com.bluepowermod.api.part.FaceDirection;
 import com.bluepowermod.api.part.ICableSize;
 import com.bluepowermod.api.part.RedstoneConnection;
@@ -45,12 +48,11 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
     private static ResourceLocation textureOn = new ResourceLocation(Refs.MODID + ":textures/base/bluestoneOn.png");
     private static ResourceLocation textureOff = new ResourceLocation(Refs.MODID + ":textures/base/bluestoneOff.png");
 
-    private boolean propagating = false;
-    private int power = 15;
-    @SuppressWarnings("unused")
+    private int power = 0;
     private int powerSelf = 0;
 
     private boolean isSamplePart = false;
+    private boolean shouldUpdate;
 
     @Override
     public String getType() {
@@ -114,13 +116,6 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
     }
 
     @Optional.Method(modid = Dependencies.FMP)
-    @Override
-    public boolean canConnectToPart(TMultiPart part) {
-
-        return false;
-    }
-
-    @Optional.Method(modid = Dependencies.FMP)
     public static TMultiPart getFMPPartOnSide(IBluestoneWire wire, ForgeDirection dir) {
 
         Vector3 vec = wire.getLocation().getRelative(dir);
@@ -133,8 +128,11 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
             for (TMultiPart p : l) {
                 if (p instanceof IFaceRedstonePart) {
                     ForgeDirection d = dir;
-                    if (p instanceof MultipartBPPart)
+                    if (p instanceof MultipartBPPart) {
+                        if (((MultipartBPPart) p).getPart() instanceof WireBluestone)
+                            continue;
                         d = d.getOpposite();
+                    }
                     if (ForgeDirection.getOrientation(((IFaceRedstonePart) p).getFace()) == d)
                         return p;
                 }
@@ -151,8 +149,11 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
             for (TMultiPart p : l)
                 if (p instanceof IFaceRedstonePart) {
                     ForgeDirection d = dir2;
-                    if (p instanceof MultipartBPPart)
+                    if (p instanceof MultipartBPPart) {
+                        if (((MultipartBPPart) p).getPart() instanceof WireBluestone)
+                            continue;
                         d = d.getOpposite();
+                    }
                     if (ForgeDirection.getOrientation(((IFaceRedstonePart) p).getFace()) == d)
                         return p;
                 }
@@ -427,27 +428,67 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
         BPApi.getInstance().getBluestoneApi().renderBox(minx, miny, minz, maxx, maxy, maxz);
     }
 
-    public void propagate(WireBluestone from) {
+    public void propagate(List<WireBluestone> wires, int[] power) {
 
-        if (propagating)
+        if (getWorld() == null)
             return;
 
-        propagating = true;
+        wires.add(this);
 
-        // int amt = 0;
-        // if (from != null)
-        // amt = from.power;
-        // amt = Math.max(amt, powerSelf);
-        //
-        // for (Object o : connections) {
-        // if (o == from)
-        // continue;
-        // if (o instanceof WireBluestone) {
-        // ((WireBluestone) o).propagate(this);
-        // }
-        // }
+        power[0] = Math.max(power[0], powerSelf);
 
-        propagating = false;
+        for (Object o : connections) {
+            if (wires.contains(o))
+                continue;
+            if (o instanceof WireBluestone)
+                ((WireBluestone) o).propagate(wires, power);
+        }
+    }
+
+    public void propagate(WireBluestone... extras) {
+
+        if (getWorld() == null)
+            return;
+
+        if (!getWorld().isRemote) {
+            int oldPS = powerSelf;
+
+            powerSelf = 0;
+            for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
+                if (d == ForgeDirection.getOrientation(getFace()) || d == ForgeDirection.getOrientation(getFace()).getOpposite())
+                    continue;
+                if (!(new Vector3(getX(), getY(), getZ(), getWorld()).add(d).getBlock() instanceof BlockRedstoneWire)
+                        && !(connections[ForgeDirectionUtils.getSide(d)] != null && connections[ForgeDirectionUtils.getSide(d)] instanceof WireBluestone))
+                    powerSelf = Math.max(powerSelf,
+                            RedstoneHelper.getInput(getWorld(), getX(), getY(), getZ(), d, ForgeDirection.getOrientation(getFace())));
+            }
+
+            if (powerSelf != oldPS || shouldUpdate) {
+                List<WireBluestone> l = new ArrayList<WireBluestone>();
+                int[] power = new int[1];
+                power[0] = 0;
+                propagate(l, power);
+                for (WireBluestone w : extras) {
+                    w.propagate(l, power);
+                    if (!l.contains(w))
+                        l.add(w);
+                }
+                for (WireBluestone w : l) {
+                    w.power = power[0];
+                    w.sendUpdatePacket();
+
+                    for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
+                        int val = 0;
+                        if (w.isConnectedOnSide(d))
+                            val = w.power;
+                        RedstoneConnection c = w.getConnection(d);
+                        if (c != null)
+                            c.setPower(val);
+                    }
+                    w.getWorld().notifyBlockChange(w.getX(), w.getY(), w.getZ(), w.getWorld().getBlock(w.getX(), w.getY(), w.getZ()));
+                }
+            }
+        }
     }
 
     @Override
@@ -458,6 +499,7 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
         for (FaceDirection d : FaceDirection.values()) {
             RedstoneConnection c = getConnectionOrCreate(d);
             c.enable();
+            c.setOutput();
         }
     }
 
@@ -466,18 +508,9 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
 
         super.update();
 
-        // int oldSS = powerSelf;
-        //
-        // powerSelf = 0;
-        // for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
-        // if (d == ForgeDirection.getOrientation(getFace()) || d == ForgeDirection.getOrientation(getFace()).getOpposite())
-        // continue;
-        // powerSelf = Math.max(powerSelf,
-        // RedstoneHelper.getInput(getWorld(), getX(), getY(), getZ(), d, ForgeDirection.getOrientation(getFace())));
-        // }
-        // if (powerSelf != oldSS) {
-        // propagate(null);
-        // }
+        propagate();
+
+        shouldUpdate = false;
     }
 
     @Override
@@ -519,6 +552,24 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
     public int getCableHeight() {
 
         return 2;
+    }
+
+    @Override
+    public void onConnect(Object o) {
+
+        shouldUpdate = true;
+    }
+
+    @Override
+    public void onDisconnect(Object o) {
+
+        shouldUpdate = true;
+    }
+
+    @Override
+    public void onUpdate() {
+
+        super.onUpdate();
     }
 
 }

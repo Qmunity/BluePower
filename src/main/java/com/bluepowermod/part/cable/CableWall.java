@@ -52,12 +52,6 @@ public abstract class CableWall extends BPPartFace {
 
     public abstract boolean canConnectToTileEntity(TileEntity tile);
 
-    @Optional.Method(modid = Dependencies.FMP)
-    public boolean canConnectToPart(TMultiPart part) {
-
-        return false;
-    }
-
     /**
      * @author amadornes
      * 
@@ -230,7 +224,7 @@ public abstract class CableWall extends BPPartFace {
 
     private AxisAlignedBB getStripHitboxForSide(ForgeDirection dir) {
 
-        return AxisAlignedBB.getBoundingBox(0, 0, 0, 1, 1, 1);
+        return AxisAlignedBB.getBoundingBox(0, 0, 0, 0, 0, 0);
     }
 
     /**
