@@ -89,4 +89,14 @@ public class BlockLamp extends BlockContainerBase {
 
         return true;
     }
+
+    @Override
+    public boolean canRenderInPass(int pass){
+        return true;
+    }
+
+    @Override
+    public int getRenderBlockPass(){
+        return 1;
+    }
 }
