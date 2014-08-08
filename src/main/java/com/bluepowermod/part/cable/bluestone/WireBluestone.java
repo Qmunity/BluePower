@@ -47,8 +47,8 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
     protected static Vector3Cube SELECTION_BOX = new Vector3Cube(0, 0, 0, 1, 1 / 16D, 1);
     protected static Vector3Cube OCCLUSION_BOX = new Vector3Cube(3 / 16D, 0 / 16D, 3 / 16D, 12 / 16D, 1 / 16D, 12 / 16D);
 
-    private static ResourceLocation textureOn = new ResourceLocation(Refs.MODID + ":textures/base/bluestoneOn.png");
-    private static ResourceLocation textureOff = new ResourceLocation(Refs.MODID + ":textures/base/bluestoneOff.png");
+    private static ResourceLocation textureOn;
+    private static ResourceLocation textureOff;
 
     private int power = 0;
     private int powerSelf = 0;
@@ -202,6 +202,11 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
 
         Tessellator t = Tessellator.instance;
         t.draw();
+
+        if (textureOn == null)
+            textureOn = new ResourceLocation(Refs.MODID + ":textures/base/bluestoneOn.png");
+        if (textureOff == null)
+            textureOff = new ResourceLocation(Refs.MODID + ":textures/base/bluestoneOff.png");
 
         GL11.glPushMatrix();
         {
