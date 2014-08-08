@@ -1,14 +1,16 @@
 package com.bluepowermod.part.gate;
 
-import java.util.List;
-
-import net.minecraft.util.AxisAlignedBB;
-
 import com.bluepowermod.api.part.FaceDirection;
 import com.bluepowermod.api.part.RedstoneConnection;
 import com.bluepowermod.client.renderers.RenderHelper;
 import com.bluepowermod.util.Refs;
+import net.minecraft.util.AxisAlignedBB;
 
+import java.util.List;
+
+/**
+ * @Author Koen Beckers (K4Unl)
+ */
 public class GateXnor extends GateBase {
     
     private boolean q = false;
