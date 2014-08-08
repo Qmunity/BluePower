@@ -238,8 +238,12 @@ public class Recipes {
             ironStrip.setTagCompound(tag);
             
             craftManager.addRecipe(new ItemStack(BPItems.diamond_drawplate), " i ", "idi", " i ", 'i', ironStrip, 'd', diamondPanel);
+            
+            ItemStack diamondSawFMP = new ItemStack(GameData.getItemRegistry().getObject("ForgeMicroblock:sawDiamond"));
+            GameRegistry.addShapelessRecipe(new ItemStack(BPItems.silicon_wafer, 16), diamondSawFMP, new ItemStack(BPItems.silicon_boule));
         } else {
             GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.diamond_drawplate), "IDI", "IDI", "IDI", 'I', "ingotIron", 'D', "gemDiamond"));
+            GameRegistry.addShapelessRecipe(new ItemStack(BPItems.silicon_wafer, 16), new ItemStack(BPItems.diamond_saw), new ItemStack(BPItems.silicon_boule));
         }
         
         // Alloy furnace
