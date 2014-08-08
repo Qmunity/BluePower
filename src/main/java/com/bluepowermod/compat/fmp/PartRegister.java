@@ -1,27 +1,10 @@
 package com.bluepowermod.compat.fmp;
 
+import com.bluepowermod.part.gate.*;
 import net.minecraft.item.ItemDye;
 
 import com.bluepowermod.part.PartRegistry;
 import com.bluepowermod.part.cable.bluestone.WireBluestone;
-import com.bluepowermod.part.gate.GateAnd;
-import com.bluepowermod.part.gate.GateBuffer;
-import com.bluepowermod.part.gate.GateCounter;
-import com.bluepowermod.part.gate.GateLightCell;
-import com.bluepowermod.part.gate.GateMux;
-import com.bluepowermod.part.gate.GateNand;
-import com.bluepowermod.part.gate.GateNor;
-import com.bluepowermod.part.gate.GateNot;
-import com.bluepowermod.part.gate.GateOr;
-import com.bluepowermod.part.gate.GatePulseFormer;
-import com.bluepowermod.part.gate.GateRSLatch;
-import com.bluepowermod.part.gate.GateRandomizer;
-import com.bluepowermod.part.gate.GateSequencer;
-import com.bluepowermod.part.gate.GateStateCell;
-import com.bluepowermod.part.gate.GateTimer;
-import com.bluepowermod.part.gate.GateToggleLatch;
-import com.bluepowermod.part.gate.GateXnor;
-import com.bluepowermod.part.gate.GateXor;
 import com.bluepowermod.part.lamp.PartCageLamp;
 import com.bluepowermod.part.lamp.PartFixture;
 import com.bluepowermod.part.tube.Accelerator;
@@ -53,6 +36,7 @@ public class PartRegister {
         PartRegistry.getInstance().registerPart(GateXor.class);
         PartRegistry.getInstance().registerPart(GateXnor.class);
         PartRegistry.getInstance().registerPart(GateStateCell.class);
+        PartRegistry.getInstance().registerPart(GateRepeater.class);
         
         // Lamps
         for (int i = 0; i < ItemDye.field_150922_c.length; i++)
@@ -63,10 +47,7 @@ public class PartRegister {
         
         for (int i = 0; i < ItemDye.field_150922_c.length; i++)
             PartRegistry.getInstance().registerPart(PartCageLamp.class, ItemDye.field_150921_b[i].toLowerCase(), ItemDye.field_150922_c[i], true);
-        /*
-         * for (int i = 0; i < ItemDye.field_150922_c.length; i++) registerPart(PartLamp.class, ItemDye.field_150921_b[i].toLowerCase(),
-         * ItemDye.field_150922_c[i], true);
-         */
+
         for (int i = 0; i < ItemDye.field_150922_c.length; i++)
             PartRegistry.getInstance().registerPart(PartFixture.class, ItemDye.field_150921_b[i].toLowerCase(), ItemDye.field_150922_c[i], true);
         
