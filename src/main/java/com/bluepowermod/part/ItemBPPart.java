@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -42,6 +43,11 @@ public class ItemBPPart extends Item {
     public static String getUnlocalizedName_(ItemStack item) {
     
         return "part." + Refs.MODID + ":" + PartRegistry.getInstance().getPartIdFromItem(item);
+    }
+    
+    @Override
+    public void registerIcons(IIconRegister register) {
+    
     }
     
     @Override

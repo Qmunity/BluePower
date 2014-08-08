@@ -17,20 +17,9 @@
 
 package com.bluepowermod.blocks;
 
-import com.bluepowermod.BluePower;
-import com.bluepowermod.api.util.ForgeDirectionUtils;
-import com.bluepowermod.client.renderers.RendererBlockBase;
-import com.bluepowermod.client.renderers.RendererBlockBase.EnumFaceType;
-import com.bluepowermod.helper.IOHelper;
-import com.bluepowermod.init.BPItems;
-import com.bluepowermod.references.GuiIDs;
-import com.bluepowermod.tileentities.IBluePowered;
-import com.bluepowermod.tileentities.IEjectAnimator;
-import com.bluepowermod.tileentities.IRotatable;
-import com.bluepowermod.tileentities.TileBase;
-import com.bluepowermod.util.Refs;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import java.util.HashMap;
+import java.util.Map;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
@@ -44,8 +33,21 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
-import java.util.HashMap;
-import java.util.Map;
+import com.bluepowermod.BluePower;
+import com.bluepowermod.api.util.ForgeDirectionUtils;
+import com.bluepowermod.client.renderers.RendererBlockBase;
+import com.bluepowermod.client.renderers.RendererBlockBase.EnumFaceType;
+import com.bluepowermod.helper.IOHelper;
+import com.bluepowermod.init.BPItems;
+import com.bluepowermod.references.GuiIDs;
+import com.bluepowermod.tileentities.IBluePowered;
+import com.bluepowermod.tileentities.IEjectAnimator;
+import com.bluepowermod.tileentities.IRotatable;
+import com.bluepowermod.tileentities.TileBase;
+import com.bluepowermod.util.Refs;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * @author MineMaarten
@@ -209,14 +211,7 @@ public class BlockContainerBase extends BlockBase implements ITileEntityProvider
         for (EnumFaceType faceType : EnumFaceType.values()) {
             boolean ejecting = false;
             boolean powered = false;
-
-            if (IBluePowered.class.isAssignableFrom(getTileEntity())) {
-                powered = ((IBluePowered) te).isPowered();
-            }
-            if (IEjectAnimator.class.isAssignableFrom(getTileEntity())) {
-                ejecting = ((IEjectAnimator) te).isEjecting();
-            }
-
+            
             do {
                 do {
                     String iconName = getIconName(faceType, ejecting, powered);
@@ -225,9 +220,9 @@ public class BlockContainerBase extends BlockBase implements ITileEntityProvider
                     }
                     
                     powered = !powered;
-                } while (powered == true);
+                } while (powered == true && IBluePowered.class.isAssignableFrom(getTileEntity()));
                 ejecting = !ejecting;
-            } while (ejecting == true);
+            } while (ejecting == true && IEjectAnimator.class.isAssignableFrom(getTileEntity()));
         }
     }
     
@@ -255,7 +250,7 @@ public class BlockContainerBase extends BlockBase implements ITileEntityProvider
         String iconName = textureName + "_" + faceType.toString().toLowerCase();
         if (faceType == EnumFaceType.SIDE) {
             if (ejecting) iconName += "_active";
-
+            
             //TODO: When powersystem is implemented, uncomment this!
             //if (powered) iconName += "_powered";
         }

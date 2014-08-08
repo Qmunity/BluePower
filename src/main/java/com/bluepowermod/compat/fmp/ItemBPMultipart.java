@@ -11,6 +11,7 @@ package com.bluepowermod.compat.fmp;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
@@ -41,6 +42,11 @@ public class ItemBPMultipart extends JItemMultiPart {
     }
     
     private BPPart p;
+    
+    @Override
+    public void registerIcons(IIconRegister register) {
+    
+    }
     
     @Override
     public TMultiPart newPart(ItemStack is, EntityPlayer player, World w, BlockCoord b, int unused, Vector3 unused1) {
