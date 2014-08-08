@@ -17,11 +17,13 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 
 import com.bluepowermod.containers.ContainerSeedBag;
 import com.bluepowermod.containers.inventorys.InventoryItem;
 import com.bluepowermod.init.BPEnchantments;
 import com.bluepowermod.items.ItemSeedBag;
+import com.bluepowermod.items.ItemSickle;
 import com.bluepowermod.util.Dependencies;
 
 import cpw.mods.fml.common.Loader;
@@ -40,6 +42,17 @@ public class BPEventHandler {
             event.player.addChatComponentMessage(new ChatComponentText(EnumChatFormatting.RED + "WARNING: You're running BluePower without having " + EnumChatFormatting.RED + "ForgeMultipart installed. Even though it will work, " + EnumChatFormatting.RED + "ForgeMultipart is "
                     + EnumChatFormatting.BOLD + "highly" + EnumChatFormatting.RESET + EnumChatFormatting.RED + " recommended. Continue at own risk, " + EnumChatFormatting.RED + "expect bugs."));
             warned = true;
+        }
+    }
+    
+    @SubscribeEvent
+    public void onPlayerInteract(PlayerInteractEvent event) {
+    
+        if (event.action == PlayerInteractEvent.Action.LEFT_CLICK_BLOCK && event.entityPlayer.capabilities.isCreativeMode) {
+            ItemStack heldItem = event.entityPlayer.getCurrentEquippedItem();
+            if (heldItem != null && heldItem.getItem() instanceof ItemSickle) {
+                heldItem.getItem().onBlockDestroyed(heldItem, event.world, event.world.getBlock(event.x, event.y, event.z), event.x, event.y, event.z, event.entityPlayer);
+            }
         }
     }
     
