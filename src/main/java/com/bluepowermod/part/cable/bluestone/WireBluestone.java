@@ -177,7 +177,7 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
     @Override
     public void addOcclusionBoxes(List<AxisAlignedBB> boxes) {
 
-        boxes.add(OCCLUSION_BOX.clone().toAABB());
+        // boxes.add(OCCLUSION_BOX.clone().toAABB());
     }
 
     @Override
@@ -485,7 +485,6 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
                         if (c != null)
                             c.setPower(val);
                     }
-                    // w.getWorld().notifyBlockChange(w.getX(), w.getY(), w.getZ(), w.getWorld().getBlock(w.getX(), w.getY(), w.getZ()));
                 }
             }
         }
@@ -570,6 +569,12 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
     public void onUpdate() {
 
         super.onUpdate();
+    }
+
+    @Override
+    public int getRedstonePower() {
+
+        return power;
     }
 
 }

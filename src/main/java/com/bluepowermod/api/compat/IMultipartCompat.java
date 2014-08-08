@@ -22,7 +22,7 @@ public interface IMultipartCompat {
 
     public boolean isMultipart(TileEntity te);
 
-    public boolean checkOcclusion(TileEntity te, AxisAlignedBB box);
+    public boolean isOccupied(TileEntity te, AxisAlignedBB box);
 
     public <T> T getBPPart(TileEntity te, Class<T> searchedClass);
 

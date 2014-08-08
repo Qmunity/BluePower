@@ -184,8 +184,10 @@ public abstract class CableWall extends BPPartFace {
         List<CableWall> l = compat.getBPParts(vec.getTileEntity(), CableWall.class);
         for (CableWall c : l) {
             if (c.getFace() == getFace()) {
-                if (!compat.checkOcclusion(vec.getTileEntity(), getStripHitboxForSide(dir)))
+                if (!compat.isOccupied(loc.getTileEntity(), getStripHitboxForSide(dir))
+                        && !compat.isOccupied(vec.getTileEntity(), getStripHitboxForSide(dir.getOpposite()))) {
                     return c;
+                }
             }
         }
         l.clear();
@@ -197,7 +199,8 @@ public abstract class CableWall extends BPPartFace {
             dir2 = dir2.getOpposite();
         for (CableWall c : l) {
             if (ForgeDirection.getOrientation(c.getFace()) == dir2)
-                return c;
+                if (!compat.isOccupied(loc.getTileEntity(), getStripHitboxForSide(dir)))
+                    return c;
         }
         l.clear();
 
@@ -211,11 +214,14 @@ public abstract class CableWall extends BPPartFace {
             ForgeDirection d = dir;
             if (d != ForgeDirection.UP && d != ForgeDirection.DOWN)
                 d = d.getOpposite();
-            if (ForgeDirection.getOrientation(c.getFace()) == d) {
-                if (!c.updating)
-                    c.onUpdate();
-                return c;
-            }
+            if (ForgeDirection.getOrientation(c.getFace()) == d)
+                if (!compat.isOccupied(loc.getTileEntity(), getStripHitboxForSide(dir))
+                        && !compat.isOccupied(vec.getTileEntity(), getStripHitboxForSide(dir.getOpposite()))
+                        && !compat.isOccupied(vec2.getTileEntity(), getStripHitboxForSide(f.getOpposite()))) {
+                    if (!c.updating)
+                        c.onUpdate();
+                    return c;
+                }
         }
         l.clear();
 
@@ -224,8 +230,227 @@ public abstract class CableWall extends BPPartFace {
 
     private AxisAlignedBB getStripHitboxForSide(ForgeDirection dir) {
 
-        return AxisAlignedBB.getBoundingBox(0, 0, 0, 0, 0, 0);
+        ForgeDirection face = ForgeDirection.getOrientation(getFace());
+        AxisAlignedBB aabb = AxisAlignedBB.getBoundingBox(0, 0, 0, 0, 0, 0);
+
+        double one = 1;
+        double zer = 0;
+        double min = 1 / 8D;
+        double max = 7 / 8D;
+
+        switch (face) {
+        case UP:
+            switch (dir) {
+            case EAST:
+                aabb = AxisAlignedBB.getBoundingBox(max, zer, zer, one, min, one);
+                break;
+            case WEST:
+                aabb = AxisAlignedBB.getBoundingBox(zer, zer, zer, min, min, one);
+                break;
+            case NORTH:
+                aabb = AxisAlignedBB.getBoundingBox(zer, zer, zer, one, min, min);
+                break;
+            case SOUTH:
+                aabb = AxisAlignedBB.getBoundingBox(zer, zer, max, one, min, one);
+                break;
+            default:
+                break;
+            }
+            break;
+        case DOWN:
+            switch (dir) {
+            case EAST:
+                aabb = AxisAlignedBB.getBoundingBox(max, max, zer, one, one, one);
+                break;
+            case WEST:
+                aabb = AxisAlignedBB.getBoundingBox(zer, max, zer, min, one, one);
+                break;
+            case NORTH:
+                aabb = AxisAlignedBB.getBoundingBox(zer, max, zer, one, one, min);
+                break;
+            case SOUTH:
+                aabb = AxisAlignedBB.getBoundingBox(zer, max, max, one, one, one);
+                break;
+            default:
+                break;
+            }
+            break;
+        case EAST:
+            switch (dir) {
+            case UP:
+                break;
+            case DOWN:
+                break;
+            case NORTH:
+                break;
+            case SOUTH:
+                break;
+            default:
+                break;
+            }
+            break;
+        case WEST:
+            switch (dir) {
+            case UP:
+                break;
+            case DOWN:
+                break;
+            case NORTH:
+                break;
+            case SOUTH:
+                break;
+            default:
+                break;
+            }
+            break;
+        case NORTH:
+            switch (dir) {
+            case UP:
+                break;
+            case DOWN:
+                break;
+            case EAST:
+                break;
+            case WEST:
+                break;
+            default:
+                break;
+            }
+            break;
+        case SOUTH:
+            switch (dir) {
+            case UP:
+                break;
+            case DOWN:
+                break;
+            case EAST:
+                break;
+            case WEST:
+                break;
+            default:
+                break;
+            }
+            break;
+        default:
+            break;
+        }
+
+        if (aabb.minX == zer && aabb.maxX == one) {
+            aabb.minX = min;
+            aabb.maxX = max;
+        }
+        if (aabb.minY == zer && aabb.maxY == one) {
+            aabb.minY = min;
+            aabb.maxY = max;
+        }
+        if (aabb.minZ == zer && aabb.maxZ == one) {
+            aabb.minZ = min;
+            aabb.maxZ = max;
+        }
+
+        return aabb;
     }
+
+    // private AxisAlignedBB getStripHitboxForSide(ForgeDirection dir) {
+    //
+    // ForgeDirection face = ForgeDirection.getOrientation(getFace());
+    // AxisAlignedBB aabb = AxisAlignedBB.getBoundingBox(0, 0, 0, 0, 0, 0);
+    //
+    // switch (face) {
+    // case UP:
+    // switch (dir) {
+    // case EAST:
+    // aabb = AxisAlignedBB.getBoundingBox(7 / 8D, 0, 1 / 8D, 1, 1 / 8D, 7 / 8D);
+    // break;
+    // case WEST:
+    // aabb = AxisAlignedBB.getBoundingBox(0, 0, 1 / 8D, 1 / 8D, 1 / 8D, 7 / 8D);
+    // break;
+    // case NORTH:
+    // aabb = AxisAlignedBB.getBoundingBox(1 / 8D, 0, 0, 7 / 8D, 1 / 8D, 1 / 8D);
+    // break;
+    // case SOUTH:
+    // aabb = AxisAlignedBB.getBoundingBox(1 / 8D, 0, 7 / 8D, 7 / 8D, 1 / 8D, 1);
+    // break;
+    // default:
+    // break;
+    // }
+    // break;
+    // case DOWN:
+    // switch (dir) {
+    // case EAST:
+    // break;
+    // case WEST:
+    // break;
+    // case NORTH:
+    // break;
+    // case SOUTH:
+    // break;
+    // default:
+    // break;
+    // }
+    // break;
+    // case EAST:
+    // switch (dir) {
+    // case UP:
+    // break;
+    // case DOWN:
+    // break;
+    // case NORTH:
+    // break;
+    // case SOUTH:
+    // break;
+    // default:
+    // break;
+    // }
+    // break;
+    // case WEST:
+    // switch (dir) {
+    // case UP:
+    // break;
+    // case DOWN:
+    // break;
+    // case NORTH:
+    // break;
+    // case SOUTH:
+    // break;
+    // default:
+    // break;
+    // }
+    // break;
+    // case NORTH:
+    // switch (dir) {
+    // case UP:
+    // break;
+    // case DOWN:
+    // break;
+    // case EAST:
+    // break;
+    // case WEST:
+    // break;
+    // default:
+    // break;
+    // }
+    // break;
+    // case SOUTH:
+    // switch (dir) {
+    // case UP:
+    // break;
+    // case DOWN:
+    // break;
+    // case EAST:
+    // break;
+    // case WEST:
+    // break;
+    // default:
+    // break;
+    // }
+    // break;
+    // default:
+    // break;
+    // }
+    //
+    // return aabb;
+    // }
 
     /**
      * @author amadornes

@@ -10,6 +10,7 @@ package com.bluepowermod.compat.fmp;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.util.ForgeDirection;
 import codechicken.lib.data.MCDataInput;
 import codechicken.lib.data.MCDataOutput;
 import codechicken.lib.vec.Vector3;
@@ -22,44 +23,64 @@ import com.bluepowermod.api.part.BPPartFace;
 import com.bluepowermod.api.part.FaceDirection;
 import com.bluepowermod.api.part.IBPFacePart;
 import com.bluepowermod.api.part.RedstoneConnection;
+import com.bluepowermod.api.part.redstone.IBPRedstonePart;
 
 public class MultipartFaceBPPart extends MultipartBPPart implements TFacePart, IFaceRedstonePart {
-    
+
     private IBPFacePart facePart;
-    
+
     public MultipartFaceBPPart(IBPFacePart part) {
-    
+
         super((BPPart) part);
         facePart = part;
     }
-    
+
     @Override
     public int getSlotMask() {
-    
+
         return 1 << getFace();
     }
-    
+
     @Override
     public int redstoneConductionMap() {
-    
+
         return 0;
     }
-    
+
     @Override
     public boolean solid(int side) {
-    
+
         return false;
     }
-    
+
     @Override
     public int getFace() {
-    
+
         return facePart.getFace() ^ 1;
     }
-    
+
+    @Override
+    public int weakPowerLevel(int side) {
+
+        if (getPart() instanceof IBPRedstonePart)
+            return ((IBPRedstonePart) getPart()).getWeakOutput(ForgeDirection.getOrientation(side));
+
+        if (side == getFace())
+            return getPart().getRedstonePower();
+        return 0;
+    }
+
+    @Override
+    public int strongPowerLevel(int side) {
+
+        if (side == getFace())
+            return getPart().getRedstonePower();
+        return 0;
+    }
+
     @Override
     public void onNeighborChanged() {
-    
+
         if (!facePart.canStay()) {
             for (ItemStack is : getPart().getDrops()) {
                 TileMultipart.dropItem(is, world(), Vector3.fromTileEntityCenter(tile()));
@@ -67,19 +88,19 @@ public class MultipartFaceBPPart extends MultipartBPPart implements TFacePart, I
             tile().remPart(this);
             return;
         }
-        
+
         super.onNeighborChanged();
     }
-    
+
     @Override
     public void update() {
-    
+
         super.update();
     }
-    
+
     @Override
     public void writeDesc(MCDataOutput packet) {
-    
+
         super.writeDesc(packet);
         packet.writeInt(facePart.getFace());
         packet.writeInt(facePart.getRotation());
@@ -94,10 +115,10 @@ public class MultipartFaceBPPart extends MultipartBPPart implements TFacePart, I
             }
         }
     }
-    
+
     @Override
     public void readDesc(MCDataInput packet) {
-    
+
         super.readDesc(packet);
         facePart.setFace(packet.readInt());
         facePart.setRotation(packet.readInt());
@@ -114,10 +135,10 @@ public class MultipartFaceBPPart extends MultipartBPPart implements TFacePart, I
             }
         }
     }
-    
+
     @Override
     public void save(NBTTagCompound tag) {
-    
+
         super.save(tag);
         tag.setInteger("face", facePart.getFace());
         tag.setInteger("rotation", facePart.getRotation());
@@ -132,10 +153,10 @@ public class MultipartFaceBPPart extends MultipartBPPart implements TFacePart, I
             }
         }
     }
-    
+
     @Override
     public void load(NBTTagCompound tag) {
-    
+
         super.load(tag);
         facePart.setFace(tag.getInteger("face"));
         facePart.setRotation(tag.getInteger("rotation"));
@@ -152,5 +173,5 @@ public class MultipartFaceBPPart extends MultipartBPPart implements TFacePart, I
             }
         }
     }
-    
+
 }

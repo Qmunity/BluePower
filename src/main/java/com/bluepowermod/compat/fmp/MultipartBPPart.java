@@ -205,7 +205,7 @@ public class MultipartBPPart extends TMultiPart implements IRedstonePart, JNorma
         if (getPart() instanceof IBPRedstonePart)
             return ((IBPRedstonePart) getPart()).getWeakOutput(ForgeDirection.getOrientation(side));
 
-        return 0;
+        return getPart().getRedstonePower();
     }
 
     @Override

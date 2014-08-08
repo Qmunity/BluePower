@@ -167,7 +167,7 @@ public class CompatModuleFMP extends CompatModule implements IMultipartCompat {
     }
 
     @Override
-    public boolean checkOcclusion(TileEntity tile, AxisAlignedBB box) {
+    public boolean isOccupied(TileEntity tile, AxisAlignedBB box) {
 
         if (tile != null && tile instanceof TileMultipart) {
             TileMultipart te = (TileMultipart) tile;

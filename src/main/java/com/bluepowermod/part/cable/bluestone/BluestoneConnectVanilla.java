@@ -48,10 +48,10 @@ public class BluestoneConnectVanilla extends ABluestoneConnect {
     @Override
     public boolean canConnect(Vector3 block, IBluestoneWire wire, ForgeDirection cableSide) {
 
-        if (block.getBlock() == Blocks.redstone_lamp || block.getBlock() == Blocks.noteblock || block.getBlock() == Blocks.piston
-                || block.getBlock() == Blocks.sticky_piston || block.getBlock() == Blocks.dispenser || block.getBlock() == Blocks.dropper
-                || block.getBlock() == Blocks.hopper || block.getBlock() == Blocks.tnt || block.getBlock() == Blocks.fence_gate
-                || block.getBlock() == Blocks.iron_door || block.getBlock() == Blocks.wooden_door)
+        if (block.getBlock() == Blocks.redstone_lamp || block.getBlock() == Blocks.lit_redstone_lamp || block.getBlock() == Blocks.noteblock
+                || block.getBlock() == Blocks.piston || block.getBlock() == Blocks.sticky_piston || block.getBlock() == Blocks.dispenser
+                || block.getBlock() == Blocks.dropper || block.getBlock() == Blocks.hopper || block.getBlock() == Blocks.tnt
+                || block.getBlock() == Blocks.fence_gate || block.getBlock() == Blocks.iron_door || block.getBlock() == Blocks.wooden_door)
             return true;
 
         return false;
