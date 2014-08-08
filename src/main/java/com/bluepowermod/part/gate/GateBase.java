@@ -186,7 +186,6 @@ public abstract class GateBase extends BPPartFace {
                 GL11.glTranslated(0, 0.5, 0);
                 GL11.glRotated(-12, -1, 0, 1);
             }
-            GL11.glEnable(GL11.GL_BLEND);
             /* Top */
             renderTop();
             
@@ -227,7 +226,6 @@ public abstract class GateBase extends BPPartFace {
             RenderHelper.addVertexWithTexture(0, 1D / 8D, 1, 1, 0);
             GL11.glEnd();
             
-            GL11.glDisable(GL11.GL_BLEND);
         }
         GL11.glPopMatrix();
     }

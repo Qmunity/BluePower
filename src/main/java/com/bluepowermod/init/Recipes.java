@@ -61,7 +61,7 @@ public class Recipes {
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPBlocks.amethyst_block, 1), "###", "###", "###", '#', "gemAmethyst"));
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPBlocks.ruby_block, 1), "###", "###", "###", '#', "gemRuby"));
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPBlocks.sapphire_block, 1), "###", "###", "###", '#', "gemSapphire"));
-
+        
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.ruby_axe, 1), "GG ", "GS ", " S ", 'G', "gemRuby", 'S', "stickWood"));
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.ruby_axe, 1), " GG", " SG", " S ", 'G', "gemRuby", 'S', "stickWood"));
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.ruby_pickaxe, 1), "GGG", " S ", " S ", 'G', "gemRuby", 'S', "stickWood"));
@@ -143,24 +143,23 @@ public class Recipes {
         //        craftManager.addRecipe(PartRegistry.getInstance().getItemForPart("invert"), "#R#", "ROR", "#R#", '#', BPItems.stone_tile, 'O', BPItems.plate_assembly, 'R', BPItems.stone_redwire);
         craftManager.addRecipe(PartRegistry.getInstance().getItemForPart("lightCell"), "#W#", "#B#", "###", '#', BPItems.stone_tile, 'B', BPItems.blue_doped_wafer, 'W', BPItems.stone_wire);
         craftManager.addRecipe(PartRegistry.getInstance().getItemForPart("multiplexer"), "ACA", "C#C", "ACW", '#', BPItems.stone_tile, 'A', BPItems.stone_anode, 'C', BPItems.stone_cathode, 'W', BPItems.stone_wire);
-        //        craftManager.addRecipe(PartRegistry.getInstance().getItemForPart("nand"), "AAA", "CCC", "#W#", '#', BPItems.stone_tile, 'A', BPItems.stone_anode, 'C', BPItems.stone_cathode, 'W', BPItems.stone_wire);
+        craftManager.addRecipe(PartRegistry.getInstance().getItemForPart("nand"), "AAA", "CCC", "#W#", '#', BPItems.stone_tile, 'A', BPItems.stone_anode, 'C', BPItems.stone_cathode, 'W', BPItems.stone_wire);
         //        craftManager.addRecipe(PartRegistry.getInstance().getItemForPart("noninvert"), "#R#", "ROR", "#RC", '#', BPItems.stone_tile, 'C', BPItems.stone_cathode, 'O', BPItems.plate_assembly, 'R', BPItems.stone_redwire);
         craftManager.addRecipe(PartRegistry.getInstance().getItemForPart("nor"), "#A#", "WCW", "#W#", '#', BPItems.stone_tile, 'A', BPItems.stone_anode, 'C', BPItems.stone_cathode, 'W', BPItems.stone_wire);
         craftManager.addRecipe(PartRegistry.getInstance().getItemForPart("not"), "#A#", "ACA", "#W#", '#', BPItems.stone_tile, 'A', BPItems.stone_anode, 'C', BPItems.stone_cathode, 'W', BPItems.stone_wire);
         //        craftManager.addRecipe(PartRegistry.getInstance().getItemForPart("null"), "#R#", "RRR", "#R#", '#', BPItems.stone_tile, 'R', BPItems.stone_redwire);
         craftManager.addRecipe(PartRegistry.getInstance().getItemForPart("or"), "#C#", "WCW", "#W#", '#', BPItems.stone_tile, 'C', BPItems.stone_cathode, 'W', BPItems.stone_wire);
-        craftManager.addRecipe(PartRegistry.getInstance().getItemForPart("pulseformer"), "ACA", "CAC", "WW#", '#', BPItems.stone_tile, 'A', BPItems.stone_anode, 'C', BPItems.stone_cathode, 'W', BPItems.stone_wire);
         craftManager.addRecipe(PartRegistry.getInstance().getItemForPart("randomizer"), "#T#", "WWW", "TWT", '#', BPItems.stone_tile, 'T', BPItems.taintedsilicon_chip, 'W', BPItems.stone_wire);
-        //        craftManager.addRecipe(PartRegistry.getInstance().getItemForPart("repeater"), "#CW", "#AW", "#WC", '#', BPItems.stone_tile, 'A', BPItems.stone_anode, 'C', BPItems.stone_cathode, 'W', BPItems.stone_wire);
-        //        craftManager.addRecipe(PartRegistry.getInstance().getItemForPart("rs"), new Object[] {"WWA", "C#C", "AWW", '#', BPItems.stone_tile, 'A', BPItems.stone_anode, 'C', BPItems.stone_cathode, 'W', BPItems.stone_wire);
+        craftManager.addRecipe(PartRegistry.getInstance().getItemForPart("repeater"), "#CW", "#AW", "#WC", '#', BPItems.stone_tile, 'A', BPItems.stone_anode, 'C', BPItems.stone_cathode, 'W', BPItems.stone_wire);
+        craftManager.addRecipe(PartRegistry.getInstance().getItemForPart("rs"), "WWA", "C#C", "AWW", '#', BPItems.stone_tile, 'A', BPItems.stone_anode, 'C', BPItems.stone_cathode, 'W', BPItems.stone_wire);
         craftManager.addRecipe(PartRegistry.getInstance().getItemForPart("sequencer"), "#C#", "CPC", "#C#", '#', BPItems.stone_tile, 'C', BPItems.stone_cathode, 'P', BPItems.stone_pointer);
-        //        craftManager.addRecipe(PartRegistry.getInstance().getItemForPart("state"), "#AC", "WXP", "#W#", '#', BPItems.stone_tile, 'A', BPItems.stone_anode, 'C', BPItems.stone_cathode, 'P', BPItems.stone_pointer, 'W', BPItems.stone_wire, 'X', BPItems.silicon_chip);
+        craftManager.addRecipe(PartRegistry.getInstance().getItemForPart("state"), "#AC", "WXP", "#W#", '#', BPItems.stone_tile, 'A', BPItems.stone_anode, 'C', BPItems.stone_cathode, 'P', BPItems.stone_pointer, 'W', BPItems.stone_wire, 'X', BPItems.silicon_chip);
         //        craftManager.addRecipe(PartRegistry.getInstance().getItemForPart("synchronizer"), "WCW", "XAX", "WWW", '#', 'A', BPItems.stone_anode, 'C', BPItems.stone_cathode, 'W', BPItems.stone_wire, 'X', BPItems.silicon_chip);
         craftManager.addRecipe(PartRegistry.getInstance().getItemForPart("timer"), "#W#", "WPW", "ACA", '#', BPItems.stone_tile, 'A', BPItems.stone_anode, 'C', BPItems.stone_cathode, 'W', BPItems.stone_wire, 'P', BPItems.stone_pointer);
-        //        craftManager.addRecipe(PartRegistry.getInstance().getItemForPart("toggle"), "#C#", "WLW", "#C#", '#', BPItems.stone_tile, 'C', BPItems.stone_cathode, 'W', BPItems.stone_wire, 'L', Blocks.lever);
-        //        craftManager.addRecipe(PartRegistry.getInstance().getItemForPart("transparent"), "ACW", "CCC", "CW#", '#', BPItems.stone_tile, 'A', BPItems.stone_anode, 'C', BPItems.stone_cathode, 'W', BPItems.stone_wire);
-        //        craftManager.addRecipe(PartRegistry.getInstance().getItemForPart("xnor"), "ACA", "CAC", "WCW", 'A', BPItems.stone_anode, 'C', BPItems.stone_cathode, 'W', BPItems.stone_wire);
-        //        craftManager.addRecipe(PartRegistry.getInstance().getItemForPart("xor"), "AWA", "CAC", "WCW", 'A', BPItems.stone_anode, 'C', BPItems.stone_cathode, 'W', BPItems.stone_wire);
+        craftManager.addRecipe(PartRegistry.getInstance().getItemForPart("toggle"), "#C#", "WLW", "#C#", '#', BPItems.stone_tile, 'C', BPItems.stone_cathode, 'W', BPItems.stone_wire, 'L', Blocks.lever);
+        craftManager.addRecipe(PartRegistry.getInstance().getItemForPart("transparent"), "ACW", "CCC", "CW#", '#', BPItems.stone_tile, 'A', BPItems.stone_anode, 'C', BPItems.stone_cathode, 'W', BPItems.stone_wire);
+        craftManager.addRecipe(PartRegistry.getInstance().getItemForPart("xnor"), "ACA", "CAC", "WCW", 'A', BPItems.stone_anode, 'C', BPItems.stone_cathode, 'W', BPItems.stone_wire);
+        craftManager.addRecipe(PartRegistry.getInstance().getItemForPart("xor"), "AWA", "CAC", "WCW", 'A', BPItems.stone_anode, 'C', BPItems.stone_cathode, 'W', BPItems.stone_wire);
         
         GameRegistry.addRecipe(new ShapedOreRecipe(PartRegistry.getInstance().getItemForPart("pneumaticTube", 8), "BGB", 'B', "ingotBrass", 'G', "blockGlass"));
         GameRegistry.addRecipe(new ShapelessOreRecipe(PartRegistry.getInstance().getItemForPart("restrictionTube", 1), "ingotIron", PartRegistry.getInstance().getItemForPart("pneumaticTube")));
@@ -180,6 +179,8 @@ public class Recipes {
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPBlocks.retriever, 1), "BLB", "EFE", "IAI", 'B', "ingotBrass", 'L', Items.leather, 'E', Items.ender_pearl, 'F', BPBlocks.filter, 'I', "ingotIron", 'A', "ingotBlueAlloy"));
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPBlocks.filter, 1), "CCC", "GPG", "CWC", 'C', "cobblestone", 'G', "ingotGold", 'P', Blocks.piston, 'W', BPItems.red_doped_wafer));
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPBlocks.sorting_machine, 1), "CCC", "GPG", "CWC", 'C', "ingotIron", 'G', BPItems.red_doped_wafer, 'P', BPBlocks.filter, 'W', BPItems.blue_alloy_ingot));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPBlocks.igniter, 1), "NFN", "CDC", "CRC", 'C', "cobblestone", 'N', Blocks.netherrack, 'F', Items.flint_and_steel, 'R', "dustRedstone", 'D', BPBlocks.deployer));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPBlocks.deployer, 1), "CIC", "CPC", "CRC", 'C', "cobblestone", 'I', Blocks.chest, 'P', Blocks.piston, 'R', "dustRedstone"));
         
         craftManager.addRecipe(new ItemStack(BPItems.canvas, 1), "SSS", "S S", "SSS", 'S', Items.string);
         craftManager.addRecipe(new ItemStack(BPItems.seedBag, 1), " S ", "C C", "CCC", 'S', Items.string, 'C', BPItems.canvas);
