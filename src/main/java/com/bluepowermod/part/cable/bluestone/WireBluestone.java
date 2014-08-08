@@ -50,6 +50,8 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
     @SuppressWarnings("unused")
     private int powerSelf = 0;
 
+    private boolean isSamplePart = false;
+
     @Override
     public String getType() {
 
@@ -215,30 +217,36 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
                     continue;
                 }
 
-                int val = 1 + (v.distanceTo(this.loc) > 1 ? 1 : BPApi.getInstance().getBluestoneApi().getExtraLength(v, this, d));
+                int len = 0;
 
-                GL11.glPushMatrix();
-                {
-                    int times = 0;
-                    switch (id) {
-                    case 0:
-                        times = 1;
-                        break;
-                    case 1:
-                        times = 3;
-                        break;
-                    case 2:
-                        times = 2;
-                        break;
-                    case 3:
-                        break;
+                if (!isSamplePart)
+                    len = BPApi.getInstance().getBluestoneApi().getExtraLength(v, this, d);
+                int val = 1 + (v.distanceTo(this.loc) > 1 ? 1 : len);
+
+                if (!isSamplePart) {
+                    GL11.glPushMatrix();
+                    {
+                        int times = 0;
+                        switch (id) {
+                        case 0:
+                            times = 1;
+                            break;
+                        case 1:
+                            times = 3;
+                            break;
+                        case 2:
+                            times = 2;
+                            break;
+                        case 3:
+                            break;
+                        }
+                        GL11.glTranslated(0.5, 0.5, 0.5);
+                        GL11.glRotated(90 * times, 0, 1, 0);
+                        GL11.glTranslated(-0.5, -0.5, -0.5);
+                        BPApi.getInstance().getBluestoneApi().renderExtraCables(v, this, d);
                     }
-                    GL11.glTranslated(0.5, 0.5, 0.5);
-                    GL11.glRotated(90 * times, 0, 1, 0);
-                    GL11.glTranslated(-0.5, -0.5, -0.5);
-                    BPApi.getInstance().getBluestoneApi().renderExtraCables(v, this, d);
+                    GL11.glPopMatrix();
                 }
-                GL11.glPopMatrix();
 
                 switch (f) {
                 case UP:
@@ -374,8 +382,10 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
     @Override
     public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
 
+        isSamplePart = true;
+
         if (connections[ForgeDirectionUtils.getSide(ForgeDirection.EAST)] == null) {
-            loc = new Vector3(0, 0, 0);
+            loc = new Vector3(0, -1, 0);
             for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
                 if (d == ForgeDirection.UP || d == ForgeDirection.DOWN)
                     continue;
@@ -405,7 +415,9 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
             default:
                 break;
             }
+            Tessellator.instance.startDrawingQuads();
             renderStatic(new Vector3(0, 0, 0), 0);
+            Tessellator.instance.draw();
         }
         GL11.glPopMatrix();
     }
