@@ -72,7 +72,9 @@ public class RenderItemBPPart implements IItemRenderer {
                     GL11.glTranslated(0, -0.1, 0);
                     break;
             }
+            GL11.glEnable(GL11.GL_BLEND);
             part.renderItem(type, item, data);
+            GL11.glDisable(GL11.GL_BLEND);
         }
         GL11.glPopMatrix();
     }
