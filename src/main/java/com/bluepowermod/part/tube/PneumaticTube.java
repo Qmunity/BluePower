@@ -124,7 +124,10 @@ public class PneumaticTube extends BPPart {
     
         if (initialized) logic.update();
         super.update();
-        if (tick == 3) updateConnections();
+        if (tick == 3) {
+            tileCache = null;
+            updateConnections();
+        }
         if (getWorld().isRemote && tick % 40 == 0) tileCache = null;//reset on the client, as it doesn't get update on neighbor block updates (as the
         // method isn't called on the client)
     }
@@ -271,6 +274,7 @@ public class PneumaticTube extends BPPart {
                 }
                 color[subPartHit] = TubeColor.values()[item.getItemDamage()];
                 updateConnections();
+                getLogic().clearNodeCaches();
                 notifyUpdate();
                 return true;
             }

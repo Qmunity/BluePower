@@ -266,6 +266,7 @@ public class BPTileMultipart extends TileEntity {
         shouldReRender = true;
         for (BPPart p : parts)
             if (p != part) p.onPartChanged();
+        notifyNeighbors();
         sendUpdatePacket();
     }
     
@@ -290,6 +291,13 @@ public class BPTileMultipart extends TileEntity {
             if (p.isFaceSolid(orientation)) return true;
         
         return false;
+    }
+    
+    public void notifyNeighbors() {
+    
+        if (worldObj != null && !worldObj.isRemote) {
+            worldObj.notifyBlockChange(xCoord, yCoord, zCoord, getBlockType());
+        }
     }
     
     public void sendUpdatePacket() {

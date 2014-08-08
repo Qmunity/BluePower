@@ -151,7 +151,7 @@ public class TileDeployer extends TileBase implements ISidedInventory, IEjectAni
             for (int i = 0; i < useItems; i++) {
                 player.inventory.currentItem = i;
                 ItemStack stack = player.getCurrentEquippedItem();
-                if (canDeployItem(stack) && stack.getItem().onItemUseFirst(stack, player, worldObj, x, y, z, faceDir.ordinal(), dx, dy, dz)) return true;
+                if (canDeployItem(stack) && stack.getItem().onItemUseFirst(stack, player, worldObj, xCoord, yCoord, zCoord, faceDir.ordinal(), dx, dy, dz)) return true;
             }
             
             for (int i = 0; i < useItems; i++) {
@@ -162,7 +162,7 @@ public class TileDeployer extends TileBase implements ISidedInventory, IEjectAni
             for (int i = 0; i < useItems; i++) {
                 player.inventory.currentItem = i;
                 ItemStack stack = player.getCurrentEquippedItem();
-                if (canDeployItem(stack) && stack.getItem().onItemUse(stack, player, worldObj, x, y, z, faceDir.ordinal(), dx, dy, dz)) return true;
+                if (canDeployItem(stack) && stack.getItem().onItemUse(stack, player, worldObj, xCoord, yCoord, zCoord, faceDir.ordinal(), dx, dy, dz)) return true;
             }
             
             for (int i = 0; i < useItems; i++) {
