@@ -17,17 +17,16 @@
 
 package com.bluepowermod.blocks;
 
-import java.util.Random;
-
+import com.bluepowermod.init.BPBlocks;
+import com.bluepowermod.init.BPItems;
+import com.bluepowermod.init.CustomTabs;
+import com.bluepowermod.util.Refs;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 
-import com.bluepowermod.init.BPBlocks;
-import com.bluepowermod.init.BPItems;
-import com.bluepowermod.init.CustomTabs;
-import com.bluepowermod.util.Refs;
+import java.util.Random;
 
 public class BlockItemOre extends BlockBase {
 
@@ -96,7 +95,7 @@ public class BlockItemOre extends BlockBase {
     }
 
     public static Item getDropFromBlockName(String blockName) {
-
+        blockName = blockName.substring(Refs.MODID.length() + 1);
         if (blockName.equalsIgnoreCase(Refs.TESLATITEORE_NAME)) {
             return BPItems.teslatite;
         } else if (blockName.equalsIgnoreCase(Refs.RUBYORE_NAME)) {
