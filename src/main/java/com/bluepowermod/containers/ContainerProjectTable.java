@@ -136,13 +136,13 @@ public class ContainerProjectTable extends Container {
             ItemStack itemstack1 = slot.getStack();
             itemstack = itemstack1.copy();
             if (par2 < 9) {
-                if (!mergeItemStack(itemstack1, 10, 27, true)) return null;
+                if (!mergeItemStack(itemstack1, 10, 28, false)) return null;
             } else if (par2 == 9) {
                 if (!mergeItemStack(itemstack1, 28, 64, false)) return null;
             } else if (par2 < 28) {
                 if (!mergeItemStack(itemstack1, 28, 64, false)) return null;
             } else {
-                if (!mergeItemStack(itemstack1, 10, 27, true)) return null;
+                if (!mergeItemStack(itemstack1, 10, 28, false)) return null;
             }
             if (itemstack1.stackSize == 0) {
                 slot.putStack(null);
