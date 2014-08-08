@@ -151,17 +151,13 @@ public class BPItems {
         tungsten_ingot = new ItemIngot(Refs.TUNGSTENINGOT_NAME);
         brass_ingot = new ItemIngot(Refs.BRASSINGOT_NAME);
         blue_alloy_ingot = new ItemIngot(Refs.BLUEALLOYINGOT_NAME);
-        red_alloy_ingot = new ItemIngot(Refs.REDALLOYINGOT_NAME);
-
-        zinc_dust = new ItemBase().setUnlocalizedName(Refs.ZINCDUST_NAME).setTextureName(Refs.MODID + ":" + Refs.ZINCDUST_NAME)
-                .setCreativeTab(CustomTabs.tabBluePowerItems);
-        zinc_ore_crushed = new ItemBase().setUnlocalizedName(Refs.ZINC_ORE_CRUSHED_NAME)
-                .setTextureName(Refs.MODID + ":" + Refs.ZINC_ORE_CRUSHED_NAME).setCreativeTab(CustomTabs.tabBluePowerItems);
-        zinc_ore_crushed_purified = new ItemBase().setUnlocalizedName(Refs.ZINC_ORE_CRUSHED_PURIFIED_NAME)
-                .setTextureName(Refs.MODID + ":" + Refs.ZINC_ORE_CRUSHED_PURIFIED_NAME).setCreativeTab(CustomTabs.tabBluePowerItems);
-        zinc_dust_tiny = new ItemBase().setUnlocalizedName(Refs.ZINCDUST_TINY_NAME).setTextureName(Refs.MODID + ":" + Refs.ZINCDUST_TINY_NAME)
-                .setCreativeTab(CustomTabs.tabBluePowerItems);
-
+        // red_alloy_ingot = new ItemIngot(Refs.REDALLOYINGOT_NAME);
+        
+        zinc_dust = new ItemBase().setUnlocalizedName(Refs.ZINCDUST_NAME).setTextureName(Refs.MODID + ":" + Refs.ZINCDUST_NAME).setCreativeTab(CustomTabs.tabBluePowerItems);
+        zinc_ore_crushed = new ItemBase().setUnlocalizedName(Refs.ZINC_ORE_CRUSHED_NAME).setTextureName(Refs.MODID + ":" + Refs.ZINC_ORE_CRUSHED_NAME).setCreativeTab(CustomTabs.tabBluePowerItems);
+        zinc_ore_crushed_purified = new ItemBase().setUnlocalizedName(Refs.ZINC_ORE_CRUSHED_PURIFIED_NAME).setTextureName(Refs.MODID + ":" + Refs.ZINC_ORE_CRUSHED_PURIFIED_NAME).setCreativeTab(CustomTabs.tabBluePowerItems);
+        zinc_dust_tiny = new ItemBase().setUnlocalizedName(Refs.ZINCDUST_TINY_NAME).setTextureName(Refs.MODID + ":" + Refs.ZINCDUST_TINY_NAME).setCreativeTab(CustomTabs.tabBluePowerItems);
+        
         ruby_axe = new ItemGemAxe(gemMaterial, Refs.RUBYAXE_NAME);
         ruby_sword = new ItemGemSword(gemMaterial, Refs.RUBYSWORD_NAME);
         ruby_pickaxe = new ItemGemPickaxe(gemMaterial, Refs.RUBYPICKAXE_NAME);
@@ -214,8 +210,8 @@ public class BPItems {
         stone_pointer = new ItemCrafting(Refs.STONEPOINTER_NAME);
         silicon_chip = new ItemCrafting(Refs.SILICONCHIP_NAME);
         taintedsilicon_chip = new ItemCrafting(Refs.TAINTEDSILICONCHIP_NAME);
-        stone_redwire = new ItemCrafting(Refs.STONEREDWIRE_NAME);
-        plate_assembly = new ItemCrafting(Refs.PLATEASSEMBLY_NAME);
+        // stone_redwire = new ItemCrafting(Refs.STONEREDWIRE_NAME);
+        // plate_assembly = new ItemCrafting(Refs.PLATEASSEMBLY_NAME);
         stone_bundle = new ItemCrafting(Refs.STONEBUNDLE_NAME);
         screwdriver_handle = new ItemHandle(Refs.SCREWDRIVERHANDLE_NAME);
         seedBag = new ItemSeedBag(Refs.SEEDBAG_NAME);
@@ -257,8 +253,8 @@ public class BPItems {
         GameRegistry.registerItem(tungsten_ingot, Refs.TUNGSTENINGOT_NAME);
         GameRegistry.registerItem(brass_ingot, Refs.BRASSINGOT_NAME);
         GameRegistry.registerItem(blue_alloy_ingot, Refs.BLUEALLOYINGOT_NAME);
-        GameRegistry.registerItem(red_alloy_ingot, Refs.REDALLOYINGOT_NAME);
-
+        // GameRegistry.registerItem(red_alloy_ingot, Refs.REDALLOYINGOT_NAME);
+        
         GameRegistry.registerItem(zinc_dust, Refs.ZINCDUST_NAME);
         GameRegistry.registerItem(zinc_ore_crushed, Refs.ZINC_ORE_CRUSHED_NAME);
         GameRegistry.registerItem(zinc_ore_crushed_purified, Refs.ZINC_ORE_CRUSHED_PURIFIED_NAME);
@@ -316,8 +312,8 @@ public class BPItems {
         GameRegistry.registerItem(stone_pointer, Refs.STONEPOINTER_NAME);
         GameRegistry.registerItem(silicon_chip, Refs.SILICONCHIP_NAME);
         GameRegistry.registerItem(taintedsilicon_chip, Refs.TAINTEDSILICONCHIP_NAME);
-        GameRegistry.registerItem(stone_redwire, Refs.STONEREDWIRE_NAME);
-        GameRegistry.registerItem(plate_assembly, Refs.PLATEASSEMBLY_NAME);
+        //  GameRegistry.registerItem(stone_redwire, Refs.STONEREDWIRE_NAME);
+        //   GameRegistry.registerItem(plate_assembly, Refs.PLATEASSEMBLY_NAME);
         GameRegistry.registerItem(stone_bundle, Refs.STONEBUNDLE_NAME);
         GameRegistry.registerItem(screwdriver_handle, Refs.SCREWDRIVERHANDLE_NAME);
         GameRegistry.registerItem(seedBag, Refs.SEEDBAG_NAME);

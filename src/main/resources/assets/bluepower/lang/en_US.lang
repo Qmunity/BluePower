@@ -66,6 +66,8 @@ tile.bluepower:io_expander.name=IO Expander
 tile.bluepower:regulator.name=Regulator
 tile.bluepower:item_detector.name=Item Detector
 
+part.bluepower:bluestoneWire.name=Bluestone Wire
+
 tile.bluepower:lampwhite.name=White Lamp
 tile.bluepower:lampinvertedwhite.name=Inverted White Lamp
 part.bluepower:cagelampwhite.name=White Cage Lamp

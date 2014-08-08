@@ -20,14 +20,14 @@ package com.bluepowermod.init;
 import net.minecraftforge.oredict.OreDictionary;
 
 public class OreDictionarySetup {
-
+    
     public static void init() {
-
+    
         OreDictionary.registerOre("oreCopper", BPBlocks.copper_ore);
         OreDictionary.registerOre("oreZinc", BPBlocks.zinc_ore);
         OreDictionary.registerOre("oreSilver", BPBlocks.silver_ore);
         OreDictionary.registerOre("oreTungsten", BPBlocks.tungsten_ore);
-
+        
         OreDictionary.registerOre("gemRuby", BPItems.ruby);
         OreDictionary.registerOre("gemAmethyst", BPItems.amethyst);
         OreDictionary.registerOre("gemSapphire", BPItems.sapphire);
@@ -36,8 +36,10 @@ public class OreDictionarySetup {
         OreDictionary.registerOre("ingotZinc", BPItems.zinc_ingot);
         OreDictionary.registerOre("ingotSilver", BPItems.silver_ingot);
         OreDictionary.registerOre("ingotBrass", BPItems.brass_ingot);
+        OreDictionary.registerOre("ingotTungsten", BPItems.tungsten_ingot);
         OreDictionary.registerOre("dyePurple", BPItems.indigo_dye);
         OreDictionary.registerOre("ingotBlueAlloy", BPItems.blue_alloy_ingot);
-        OreDictionary.registerOre("ingotRedAlloy", BPItems.red_alloy_ingot);
+        //   OreDictionary.registerOre("ingotRedAlloy", BPItems.red_alloy_ingot);
+        
     }
 }
