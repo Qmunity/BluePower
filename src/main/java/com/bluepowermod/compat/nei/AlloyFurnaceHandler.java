@@ -32,7 +32,7 @@ public class AlloyFurnaceHandler extends FurnaceRecipeHandler {
     @Override
     public String getGuiTexture() {
     
-        return Refs.MODID + ":textures/GUI/alloy_furnace.png";
+        return Refs.MODID + ":textures/gui/alloy_furnace.png";
     }
     
     /**
