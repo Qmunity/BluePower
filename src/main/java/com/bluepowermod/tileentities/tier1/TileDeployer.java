@@ -114,7 +114,7 @@ public class TileDeployer extends TileBase implements ISidedInventory, IEjectAni
         int y = yCoord + dy;
         int z = zCoord + dz;
         
-        player.setPosition(x, y, z);
+        player.setPosition(x + 0.5, y + 0.5 - player.eyeHeight, z + 0.5);
         player.rotationPitch = faceDir.offsetY * -90;
         switch (faceDir) {
             case NORTH:
@@ -151,7 +151,7 @@ public class TileDeployer extends TileBase implements ISidedInventory, IEjectAni
             for (int i = 0; i < useItems; i++) {
                 player.inventory.currentItem = i;
                 ItemStack stack = player.getCurrentEquippedItem();
-                if (canDeployItem(stack) && stack.getItem().onItemUseFirst(stack, player, worldObj, xCoord, yCoord, zCoord, faceDir.ordinal(), dx, dy, dz)) return true;
+                if (canDeployItem(stack) && stack.getItem().onItemUseFirst(stack, player, worldObj, x, y, z, faceDir.ordinal(), dx, dy, dz)) return true;
             }
             
             for (int i = 0; i < useItems; i++) {
@@ -162,7 +162,7 @@ public class TileDeployer extends TileBase implements ISidedInventory, IEjectAni
             for (int i = 0; i < useItems; i++) {
                 player.inventory.currentItem = i;
                 ItemStack stack = player.getCurrentEquippedItem();
-                if (canDeployItem(stack) && stack.getItem().onItemUse(stack, player, worldObj, xCoord, yCoord, zCoord, faceDir.ordinal(), dx, dy, dz)) return true;
+                if (canDeployItem(stack) && stack.getItem().onItemUse(stack, player, worldObj, x, y, z, faceDir.ordinal(), dx, dy, dz)) return true;
             }
             
             for (int i = 0; i < useItems; i++) {
@@ -170,7 +170,7 @@ public class TileDeployer extends TileBase implements ISidedInventory, IEjectAni
                 ItemStack stack = player.getCurrentEquippedItem();
                 if (canDeployItem(stack)) {
                     ItemStack copy = stack.copy();
-                    stack.getItem().onItemRightClick(stack, worldObj, player);
+                    player.setCurrentItemOrArmor(0, stack.getItem().onItemRightClick(stack, worldObj, player));
                     if (!copy.isItemEqual(stack)) return true;
                 }
             }
