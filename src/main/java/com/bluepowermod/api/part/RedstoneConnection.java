@@ -4,15 +4,15 @@ import net.minecraft.nbt.NBTTagCompound;
 
 public class RedstoneConnection {
     
-    private final BPPartFace part;
+    private BPPartFace part;
     
-    private boolean          isInput   = true;
+    private boolean    isInput   = true;
     
-    private int              power     = 0;
+    private int        power     = 0;
     
-    private boolean          isEnabled = false;
+    private boolean    isEnabled = false;
     
-    private String           id        = "";
+    private String     id        = "";
     
     public RedstoneConnection(BPPartFace part, String id) {
     
@@ -32,11 +32,16 @@ public class RedstoneConnection {
         this.isEnabled = isEnabled;
     }
     
+    public void setPart(BPPartFace part) {
+    
+        this.part = part;
+    }
+    
     public void setInput() {
     
         if (!isInput) {
             isInput = true;
-            part.notifyUpdate();
+            if (part != null) part.notifyUpdate();
         }
     }
     
@@ -44,7 +49,7 @@ public class RedstoneConnection {
     
         if (isInput) {
             isInput = false;
-            part.notifyUpdate();
+            if (part != null) part.notifyUpdate();
         }
     }
     
@@ -63,8 +68,10 @@ public class RedstoneConnection {
         boolean was = isEnabled;
         
         isEnabled = true;
-        part.notifyUpdate();
-        if (!was) part.notifyUpdate();
+        if (part != null) {
+            part.notifyUpdate();
+            if (!was) part.notifyUpdate();
+        }
     }
     
     public void disable() {
@@ -72,7 +79,7 @@ public class RedstoneConnection {
         boolean was = isEnabled;
         
         isEnabled = false;
-        if (was) part.notifyUpdate();
+        if (was && part != null) part.notifyUpdate();
     }
     
     public boolean isEnabled() {
@@ -86,7 +93,7 @@ public class RedstoneConnection {
         
         this.power = power;
         
-        if (last != power) part.notifyUpdate();
+        if (last != power && part != null) part.notifyUpdate();
     }
     
     public int getPower() {

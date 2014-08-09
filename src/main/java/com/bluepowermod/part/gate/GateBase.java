@@ -8,6 +8,20 @@
 
 package com.bluepowermod.part.gate;
 
+import java.util.List;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.IItemRenderer.ItemRenderType;
+
+import org.lwjgl.opengl.GL11;
+
 import com.bluepowermod.api.part.BPPartFace;
 import com.bluepowermod.api.part.FaceDirection;
 import com.bluepowermod.api.part.RedstoneConnection;
@@ -18,21 +32,10 @@ import com.bluepowermod.init.BPItems;
 import com.bluepowermod.init.Config;
 import com.bluepowermod.init.CustomTabs;
 import com.bluepowermod.util.Refs;
+
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.IItemRenderer.ItemRenderType;
-import org.lwjgl.opengl.GL11;
-
-import java.util.List;
 
 public abstract class GateBase extends BPPartFace {
     
@@ -58,6 +61,11 @@ public abstract class GateBase extends BPPartFace {
     public String getType() {
     
         return getGateID();
+    }
+    
+    protected String getTextureName() {
+    
+        return getType();
     }
     
     @Override
@@ -93,14 +101,15 @@ public abstract class GateBase extends BPPartFace {
     
     @Override
     public final void renderDynamic(Vector3 loc, int pass, float frame) {
-        if(pass == 0){
+    
+        if (pass == 0) {
             GL11.glPushMatrix();
             {
                 super.rotateAndTranslateDynamic(loc, pass, frame);
-
+                
                 /* Top */
                 renderTop(frame);
-
+                
                 Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/gates/bottom.png"));
                 GL11.glBegin(GL11.GL_QUADS);
                 /* Bottom */
@@ -147,13 +156,13 @@ public abstract class GateBase extends BPPartFace {
         if (connection.isEnabled()) {
             renderTopTexture(side, connection.getPower() > 0);
         } else {
-            renderTopTexture(Refs.MODID + ":textures/blocks/gates/" + getType() + "/" + side.getName() + "_disabled.png");
+            renderTopTexture(Refs.MODID + ":textures/blocks/gates/" + getTextureName() + "/" + side.getName() + "_disabled.png");
         }
     }
     
     protected void renderTopTexture(FaceDirection side, boolean state) {
     
-        renderTopTexture(Refs.MODID + ":textures/blocks/gates/" + getType() + "/" + side.getName() + "_" + (state ? "on" : "off") + ".png");
+        renderTopTexture(Refs.MODID + ":textures/blocks/gates/" + getTextureName() + "/" + side.getName() + "_" + (state ? "on" : "off") + ".png");
     }
     
     public void renderTopTexture(String texture) {
@@ -230,13 +239,13 @@ public abstract class GateBase extends BPPartFace {
     
     public void renderTop(float frame) {
     
-        renderTopTexture(Refs.MODID + ":textures/blocks/gates/" + getType() + "/base.png");
+        renderTopTexture(Refs.MODID + ":textures/blocks/gates/" + getTextureName() + "/base.png");
         renderTop(getConnection(FaceDirection.FRONT), getConnection(FaceDirection.LEFT), getConnection(FaceDirection.BACK), getConnection(FaceDirection.RIGHT), frame);
     }
     
     public void renderTop() {
     
-        renderTopTexture(Refs.MODID + ":textures/blocks/gates/" + getType() + "/base.png");
+        renderTopTexture(Refs.MODID + ":textures/blocks/gates/" + getTextureName() + "/base.png");
         renderTopItem(getConnection(FaceDirection.FRONT), getConnection(FaceDirection.LEFT), getConnection(FaceDirection.BACK), getConnection(FaceDirection.RIGHT));
     }
     
