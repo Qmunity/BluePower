@@ -8,10 +8,11 @@
 
 package com.bluepowermod.api.part;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
+import codechicken.multipart.BlockMultipart;
+import com.bluepowermod.api.BPApi;
+import com.bluepowermod.api.vec.Vector3;
+import cpw.mods.fml.common.Loader;
+import cpw.mods.fml.common.Optional;
 import net.minecraft.client.particle.EffectRenderer;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.creativetab.CreativeTabs;
@@ -26,13 +27,10 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 import net.minecraftforge.common.util.ForgeDirection;
-import codechicken.multipart.BlockMultipart;
 
-import com.bluepowermod.api.BPApi;
-import com.bluepowermod.api.vec.Vector3;
-
-import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.common.Optional;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public abstract class BPPart {
 

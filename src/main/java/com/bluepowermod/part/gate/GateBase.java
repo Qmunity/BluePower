@@ -8,20 +8,6 @@
 
 package com.bluepowermod.part.gate;
 
-import java.util.List;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.IItemRenderer.ItemRenderType;
-
-import org.lwjgl.opengl.GL11;
-
 import com.bluepowermod.api.part.BPPartFace;
 import com.bluepowermod.api.part.FaceDirection;
 import com.bluepowermod.api.part.RedstoneConnection;
@@ -32,10 +18,21 @@ import com.bluepowermod.init.BPItems;
 import com.bluepowermod.init.Config;
 import com.bluepowermod.init.CustomTabs;
 import com.bluepowermod.util.Refs;
-
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.IItemRenderer.ItemRenderType;
+import org.lwjgl.opengl.GL11;
+
+import java.util.List;
 
 public abstract class GateBase extends BPPartFace {
     
@@ -96,52 +93,53 @@ public abstract class GateBase extends BPPartFace {
     
     @Override
     public final void renderDynamic(Vector3 loc, int pass, float frame) {
-    
-        GL11.glPushMatrix();
-        {
-            super.rotateAndTranslateDynamic(loc, pass, frame);
-            
-            /* Top */
-            renderTop(frame);
-            
-            Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/gates/bottom.png"));
-            GL11.glBegin(GL11.GL_QUADS);
-            /* Bottom */
-            GL11.glNormal3d(0, -1, 0);
-            RenderHelper.addVertexWithTexture(0, 0, 0, 0, 0);
-            RenderHelper.addVertexWithTexture(1, 0, 0, 1, 0);
-            RenderHelper.addVertexWithTexture(1, 0, 1, 1, 1);
-            RenderHelper.addVertexWithTexture(0, 0, 1, 0, 1);
-            GL11.glEnd();
-            Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/gates/side.png"));
-            GL11.glBegin(GL11.GL_QUADS);
-            /* East */
-            GL11.glNormal3d(1, 0, 0);
-            RenderHelper.addVertexWithTexture(1, 0, 0, 0, 0);
-            RenderHelper.addVertexWithTexture(1, 1D / 8D, 0, 1, 0);
-            RenderHelper.addVertexWithTexture(1, 1D / 8D, 1, 1, 1);
-            RenderHelper.addVertexWithTexture(1, 0, 1, 0, 1);
-            /* West */
-            GL11.glNormal3d(-1, 0, 0);
-            RenderHelper.addVertexWithTexture(0, 0, 0, 0, 0);
-            RenderHelper.addVertexWithTexture(0, 0, 1, 0, 1);
-            RenderHelper.addVertexWithTexture(0, 1D / 8D, 1, 1, 1);
-            RenderHelper.addVertexWithTexture(0, 1D / 8D, 0, 1, 0);
-            /* North */
-            GL11.glNormal3d(0, 0, -1);
-            RenderHelper.addVertexWithTexture(0, 0, 0, 0, 0);
-            RenderHelper.addVertexWithTexture(0, 1D / 8D, 0, 1, 0);
-            RenderHelper.addVertexWithTexture(1, 1D / 8D, 0, 1, 1);
-            RenderHelper.addVertexWithTexture(1, 0, 0, 0, 1);
-            /* South */
-            GL11.glNormal3d(0, 0, 1);
-            RenderHelper.addVertexWithTexture(0, 0, 1, 0, 0);
-            RenderHelper.addVertexWithTexture(1, 0, 1, 0, 1);
-            RenderHelper.addVertexWithTexture(1, 1D / 8D, 1, 1, 1);
-            RenderHelper.addVertexWithTexture(0, 1D / 8D, 1, 1, 0);
-            GL11.glEnd();
+        if(pass == 0){
+            GL11.glPushMatrix();
+            {
+                super.rotateAndTranslateDynamic(loc, pass, frame);
+
+                /* Top */
+                renderTop(frame);
+
+                Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/gates/bottom.png"));
+                GL11.glBegin(GL11.GL_QUADS);
+                /* Bottom */
+                GL11.glNormal3d(0, -1, 0);
+                RenderHelper.addVertexWithTexture(0, 0, 0, 0, 0);
+                RenderHelper.addVertexWithTexture(1, 0, 0, 1, 0);
+                RenderHelper.addVertexWithTexture(1, 0, 1, 1, 1);
+                RenderHelper.addVertexWithTexture(0, 0, 1, 0, 1);
+                GL11.glEnd();
+                Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/gates/side.png"));
+                GL11.glBegin(GL11.GL_QUADS);
+                /* East */
+                GL11.glNormal3d(1, 0, 0);
+                RenderHelper.addVertexWithTexture(1, 0, 0, 0, 0);
+                RenderHelper.addVertexWithTexture(1, 1D / 8D, 0, 1, 0);
+                RenderHelper.addVertexWithTexture(1, 1D / 8D, 1, 1, 1);
+                RenderHelper.addVertexWithTexture(1, 0, 1, 0, 1);
+                /* West */
+                GL11.glNormal3d(-1, 0, 0);
+                RenderHelper.addVertexWithTexture(0, 0, 0, 0, 0);
+                RenderHelper.addVertexWithTexture(0, 0, 1, 0, 1);
+                RenderHelper.addVertexWithTexture(0, 1D / 8D, 1, 1, 1);
+                RenderHelper.addVertexWithTexture(0, 1D / 8D, 0, 1, 0);
+                /* North */
+                GL11.glNormal3d(0, 0, -1);
+                RenderHelper.addVertexWithTexture(0, 0, 0, 0, 0);
+                RenderHelper.addVertexWithTexture(0, 1D / 8D, 0, 1, 0);
+                RenderHelper.addVertexWithTexture(1, 1D / 8D, 0, 1, 1);
+                RenderHelper.addVertexWithTexture(1, 0, 0, 0, 1);
+                /* South */
+                GL11.glNormal3d(0, 0, 1);
+                RenderHelper.addVertexWithTexture(0, 0, 1, 0, 0);
+                RenderHelper.addVertexWithTexture(1, 0, 1, 0, 1);
+                RenderHelper.addVertexWithTexture(1, 1D / 8D, 1, 1, 1);
+                RenderHelper.addVertexWithTexture(0, 1D / 8D, 1, 1, 0);
+                GL11.glEnd();
+            }
+            GL11.glPopMatrix();
         }
-        GL11.glPopMatrix();
     }
     
     protected void renderTopTexture(FaceDirection side, RedstoneConnection connection) {

@@ -1,8 +1,21 @@
 package com.bluepowermod.part.tube;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.bluepowermod.api.compat.IMultipartCompat;
+import com.bluepowermod.api.part.BPPart;
+import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
+import com.bluepowermod.api.tube.ITubeConnection;
+import com.bluepowermod.api.vec.Vector3;
+import com.bluepowermod.api.vec.Vector3Cube;
+import com.bluepowermod.client.renderers.IconSupplier;
+import com.bluepowermod.compat.CompatibilityUtils;
+import com.bluepowermod.helper.IOHelper;
+import com.bluepowermod.helper.TileEntityCache;
+import com.bluepowermod.init.BPItems;
+import com.bluepowermod.init.Config;
+import com.bluepowermod.init.CustomTabs;
+import com.bluepowermod.items.ItemDamageableColorableOverlay;
+import com.bluepowermod.util.Color;
+import com.bluepowermod.util.Dependencies;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureMap;
@@ -20,22 +33,8 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 import net.minecraftforge.common.util.ForgeDirection;
 
-import com.bluepowermod.api.compat.IMultipartCompat;
-import com.bluepowermod.api.part.BPPart;
-import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
-import com.bluepowermod.api.tube.ITubeConnection;
-import com.bluepowermod.api.vec.Vector3;
-import com.bluepowermod.api.vec.Vector3Cube;
-import com.bluepowermod.client.renderers.IconSupplier;
-import com.bluepowermod.compat.CompatibilityUtils;
-import com.bluepowermod.helper.IOHelper;
-import com.bluepowermod.helper.TileEntityCache;
-import com.bluepowermod.init.BPItems;
-import com.bluepowermod.init.Config;
-import com.bluepowermod.init.CustomTabs;
-import com.bluepowermod.items.ItemDamageableColorableOverlay;
-import com.bluepowermod.util.Color;
-import com.bluepowermod.util.Dependencies;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 
@@ -330,8 +329,9 @@ public class PneumaticTube extends BPPart {
      */
     @Override
     public void renderDynamic(Vector3 loc, int pass, float frame) {
-
-        logic.renderDynamic(loc, frame);
+        if(pass == 0){
+            logic.renderDynamic(loc, frame);
+        }
     }
 
     @Override

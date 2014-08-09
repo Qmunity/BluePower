@@ -1,8 +1,11 @@
 package com.bluepowermod.part.tube;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.bluepowermod.api.compat.IMultipartCompat;
+import com.bluepowermod.api.util.ForgeDirectionUtils;
+import com.bluepowermod.api.vec.Vector3;
+import com.bluepowermod.client.renderers.IconSupplier;
+import com.bluepowermod.compat.CompatibilityUtils;
+import com.bluepowermod.util.Dependencies;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureMap;
@@ -15,15 +18,10 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 import net.minecraftforge.common.util.ForgeDirection;
-
 import org.lwjgl.opengl.GL11;
 
-import com.bluepowermod.api.compat.IMultipartCompat;
-import com.bluepowermod.api.util.ForgeDirectionUtils;
-import com.bluepowermod.api.vec.Vector3;
-import com.bluepowermod.client.renderers.IconSupplier;
-import com.bluepowermod.compat.CompatibilityUtils;
-import com.bluepowermod.util.Dependencies;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Accelerator extends PneumaticTube, as that's much easier routing wise.
@@ -150,106 +148,108 @@ public class Accelerator extends PneumaticTube {
 
     @Override
     public boolean renderStatic(Vector3 loc, int pass) {
+        if(pass == 0){
+            Tessellator t = Tessellator.instance;
+            t.draw();
 
-        Tessellator t = Tessellator.instance;
-        t.draw();
+            GL11.glPushMatrix();
+            GL11.glTranslatef((float) loc.getX() + 0.5F, (float) loc.getY() + 0.5F, (float) loc.getZ() + 0.5F);
+            if (rotation == ForgeDirection.NORTH || rotation == ForgeDirection.SOUTH) {
+                GL11.glRotated(90, 1, 0, 0);
+            } else if (rotation == ForgeDirection.EAST || rotation == ForgeDirection.WEST) {
+                GL11.glRotated(90, 0, 0, 1);
+            }
+            GL11.glTranslatef((float) -loc.getX() - 0.5F, (float) -loc.getY() - 0.5F, (float) -loc.getZ() - 0.5F);
 
-        GL11.glPushMatrix();
-        GL11.glTranslatef((float) loc.getX() + 0.5F, (float) loc.getY() + 0.5F, (float) loc.getZ() + 0.5F);
-        if (rotation == ForgeDirection.NORTH || rotation == ForgeDirection.SOUTH) {
-            GL11.glRotated(90, 1, 0, 0);
-        } else if (rotation == ForgeDirection.EAST || rotation == ForgeDirection.WEST) {
-            GL11.glRotated(90, 0, 0, 1);
+            t.startDrawingQuads();
+
+            t.setColorOpaque_F(1, 1, 1);
+            t.addTranslation((float) loc.getX(), (float) loc.getY(), (float) loc.getZ());
+
+            IIcon icon = isPowered() ? IconSupplier.acceleratorFrontPowered : IconSupplier.acceleratorFront;
+
+            double minX = icon.getInterpolatedU(0);
+            double maxX = icon.getInterpolatedU(16);
+            double minY = icon.getInterpolatedV(0);
+            double maxY = icon.getInterpolatedV(16);
+
+            t.setNormal(0, 0, -1);
+            t.addVertexWithUV(0, 4 / 16D, 0, maxX, maxY);// minY
+            t.addVertexWithUV(1, 4 / 16D, 0, minX, maxY);
+            t.addVertexWithUV(1, 4 / 16D, 1, minX, minY);
+            t.addVertexWithUV(0, 4 / 16D, 1, maxX, minY);
+
+            t.setNormal(0, 0, 1);
+            t.addVertexWithUV(0, 12 / 16D, 0, maxX, maxY);// maxY
+            t.addVertexWithUV(0, 12 / 16D, 1, minX, maxY);
+            t.addVertexWithUV(1, 12 / 16D, 1, minX, minY);
+            t.addVertexWithUV(1, 12 / 16D, 0, maxX, minY);
+
+            icon = isPowered() ? IconSupplier.acceleratorSidePowered : IconSupplier.acceleratorSide;
+
+            minX = icon.getInterpolatedU(4);
+            maxX = icon.getInterpolatedU(12);
+            minY = icon.getInterpolatedV(4);
+            maxY = icon.getInterpolatedV(12);
+
+            t.setNormal(0, 0, 1);
+            t.addVertexWithUV(0, 4 / 16D, 1, maxX, minY);// maxZ
+            t.addVertexWithUV(1, 4 / 16D, 1, maxX, maxY);
+            t.addVertexWithUV(1, 12 / 16D, 1, minX, maxY);
+            t.addVertexWithUV(0, 12 / 16D, 1, minX, minY);
+
+            t.setNormal(0, 0, -1);
+            t.addVertexWithUV(0, 4 / 16D, 0, maxX, maxY);// minZ
+            t.addVertexWithUV(0, 12 / 16D, 0, minX, minY);
+            t.addVertexWithUV(1, 12 / 16D, 0, minX, minY);
+            t.addVertexWithUV(1, 4 / 16D, 0, maxX, maxY);
+
+            t.setNormal(-1, 0, 0);
+            t.addVertexWithUV(0, 4 / 16D, 0, maxX, minY);// minX
+            t.addVertexWithUV(0, 4 / 16D, 1, maxX, maxY);
+            t.addVertexWithUV(0, 12 / 16D, 1, minX, maxY);
+            t.addVertexWithUV(0, 12 / 16D, 0, minX, minY);
+
+            t.setNormal(1, 0, 0);
+            t.addVertexWithUV(1, 4 / 16D, 0, maxX, minY);// maxX
+            t.addVertexWithUV(1, 12 / 16D, 0, minX, maxY);
+            t.addVertexWithUV(1, 12 / 16D, 1, minX, maxY);
+            t.addVertexWithUV(1, 4 / 16D, 1, maxX, minY);
+
+            icon = IconSupplier.acceleratorInside;
+
+            minX = icon.getInterpolatedU(4);
+            maxX = icon.getInterpolatedU(12);
+            minY = icon.getInterpolatedV(4);
+            maxY = icon.getInterpolatedV(12);
+
+            t.addVertexWithUV(0, 4 / 16D, 6 / 16D, minX, minY);// inside maxZ
+            t.addVertexWithUV(1, 4 / 16D, 6 / 16D, maxX, maxY);
+            t.addVertexWithUV(1, 12 / 16D, 6 / 16D, maxX, maxY);
+            t.addVertexWithUV(0, 12 / 16D, 6 / 16D, minX, minY);
+
+            t.addVertexWithUV(0, 4 / 16D, 10 / 16D, minX, maxY);// inside minZ
+            t.addVertexWithUV(0, 12 / 16D, 10 / 16D, minX, minY);
+            t.addVertexWithUV(1, 12 / 16D, 10 / 16D, maxX, minY);
+            t.addVertexWithUV(1, 4 / 16D, 10 / 16D, maxX, maxY);
+
+            t.addVertexWithUV(10 / 16D, 4 / 16D, 0, minX, minY);// inside minX
+            t.addVertexWithUV(10 / 16D, 4 / 16D, 1, maxX, maxY);
+            t.addVertexWithUV(10 / 16D, 12 / 16D, 1, maxX, maxY);
+            t.addVertexWithUV(10 / 16D, 12 / 16D, 0, minX, minY);
+
+            t.addVertexWithUV(6 / 16D, 4 / 16D, 0, minX, minY);// inside maxX
+            t.addVertexWithUV(6 / 16D, 12 / 16D, 0, minX, maxY);
+            t.addVertexWithUV(6 / 16D, 12 / 16D, 1, maxX, maxY);
+            t.addVertexWithUV(6 / 16D, 4 / 16D, 1, maxX, minY);
+
+            t.addTranslation((float) -loc.getX(), (float) -loc.getY(), (float) -loc.getZ());
+            t.draw();
+            GL11.glPopMatrix();
+            t.startDrawingQuads();
         }
-        GL11.glTranslatef((float) -loc.getX() - 0.5F, (float) -loc.getY() - 0.5F, (float) -loc.getZ() - 0.5F);
-
-        t.startDrawingQuads();
-
-        t.setColorOpaque_F(1, 1, 1);
-        t.addTranslation((float) loc.getX(), (float) loc.getY(), (float) loc.getZ());
-
-        IIcon icon = isPowered() ? IconSupplier.acceleratorFrontPowered : IconSupplier.acceleratorFront;
-
-        double minX = icon.getInterpolatedU(0);
-        double maxX = icon.getInterpolatedU(16);
-        double minY = icon.getInterpolatedV(0);
-        double maxY = icon.getInterpolatedV(16);
-
-        t.setNormal(0, 0, -1);
-        t.addVertexWithUV(0, 4 / 16D, 0, maxX, maxY);// minY
-        t.addVertexWithUV(1, 4 / 16D, 0, minX, maxY);
-        t.addVertexWithUV(1, 4 / 16D, 1, minX, minY);
-        t.addVertexWithUV(0, 4 / 16D, 1, maxX, minY);
-
-        t.setNormal(0, 0, 1);
-        t.addVertexWithUV(0, 12 / 16D, 0, maxX, maxY);// maxY
-        t.addVertexWithUV(0, 12 / 16D, 1, minX, maxY);
-        t.addVertexWithUV(1, 12 / 16D, 1, minX, minY);
-        t.addVertexWithUV(1, 12 / 16D, 0, maxX, minY);
-
-        icon = isPowered() ? IconSupplier.acceleratorSidePowered : IconSupplier.acceleratorSide;
-
-        minX = icon.getInterpolatedU(4);
-        maxX = icon.getInterpolatedU(12);
-        minY = icon.getInterpolatedV(4);
-        maxY = icon.getInterpolatedV(12);
-
-        t.setNormal(0, 0, 1);
-        t.addVertexWithUV(0, 4 / 16D, 1, maxX, minY);// maxZ
-        t.addVertexWithUV(1, 4 / 16D, 1, maxX, maxY);
-        t.addVertexWithUV(1, 12 / 16D, 1, minX, maxY);
-        t.addVertexWithUV(0, 12 / 16D, 1, minX, minY);
-
-        t.setNormal(0, 0, -1);
-        t.addVertexWithUV(0, 4 / 16D, 0, maxX, maxY);// minZ
-        t.addVertexWithUV(0, 12 / 16D, 0, minX, minY);
-        t.addVertexWithUV(1, 12 / 16D, 0, minX, minY);
-        t.addVertexWithUV(1, 4 / 16D, 0, maxX, maxY);
-
-        t.setNormal(-1, 0, 0);
-        t.addVertexWithUV(0, 4 / 16D, 0, maxX, minY);// minX
-        t.addVertexWithUV(0, 4 / 16D, 1, maxX, maxY);
-        t.addVertexWithUV(0, 12 / 16D, 1, minX, maxY);
-        t.addVertexWithUV(0, 12 / 16D, 0, minX, minY);
-
-        t.setNormal(1, 0, 0);
-        t.addVertexWithUV(1, 4 / 16D, 0, maxX, minY);// maxX
-        t.addVertexWithUV(1, 12 / 16D, 0, minX, maxY);
-        t.addVertexWithUV(1, 12 / 16D, 1, minX, maxY);
-        t.addVertexWithUV(1, 4 / 16D, 1, maxX, minY);
-
-        icon = IconSupplier.acceleratorInside;
-
-        minX = icon.getInterpolatedU(4);
-        maxX = icon.getInterpolatedU(12);
-        minY = icon.getInterpolatedV(4);
-        maxY = icon.getInterpolatedV(12);
-
-        t.addVertexWithUV(0, 4 / 16D, 6 / 16D, minX, minY);// inside maxZ
-        t.addVertexWithUV(1, 4 / 16D, 6 / 16D, maxX, maxY);
-        t.addVertexWithUV(1, 12 / 16D, 6 / 16D, maxX, maxY);
-        t.addVertexWithUV(0, 12 / 16D, 6 / 16D, minX, minY);
-
-        t.addVertexWithUV(0, 4 / 16D, 10 / 16D, minX, maxY);// inside minZ
-        t.addVertexWithUV(0, 12 / 16D, 10 / 16D, minX, minY);
-        t.addVertexWithUV(1, 12 / 16D, 10 / 16D, maxX, minY);
-        t.addVertexWithUV(1, 4 / 16D, 10 / 16D, maxX, maxY);
-
-        t.addVertexWithUV(10 / 16D, 4 / 16D, 0, minX, minY);// inside minX
-        t.addVertexWithUV(10 / 16D, 4 / 16D, 1, maxX, maxY);
-        t.addVertexWithUV(10 / 16D, 12 / 16D, 1, maxX, maxY);
-        t.addVertexWithUV(10 / 16D, 12 / 16D, 0, minX, minY);
-
-        t.addVertexWithUV(6 / 16D, 4 / 16D, 0, minX, minY);// inside maxX
-        t.addVertexWithUV(6 / 16D, 12 / 16D, 0, minX, maxY);
-        t.addVertexWithUV(6 / 16D, 12 / 16D, 1, maxX, maxY);
-        t.addVertexWithUV(6 / 16D, 4 / 16D, 1, maxX, minY);
-
-        t.addTranslation((float) -loc.getX(), (float) -loc.getY(), (float) -loc.getZ());
-        t.draw();
-        GL11.glPopMatrix();
-        t.startDrawingQuads();
         return super.renderStatic(loc, pass);
+
     }
 
     @Override
