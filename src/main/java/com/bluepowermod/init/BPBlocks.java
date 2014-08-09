@@ -21,6 +21,7 @@ import com.bluepowermod.blocks.BPBlockMultipart;
 import com.bluepowermod.blocks.BlockContainerBase;
 import com.bluepowermod.blocks.BlockItemOre;
 import com.bluepowermod.blocks.machines.*;
+import com.bluepowermod.blocks.machines.power.generators.BlockSolarPanel;
 import com.bluepowermod.blocks.worldgen.*;
 import com.bluepowermod.references.GuiIDs;
 import com.bluepowermod.tileentities.tier1.*;
@@ -106,6 +107,8 @@ public class BPBlocks {
     public static Block[] blockLamp;
     public static Block[] blockLampInverted;
 
+    public static Block   blockSolarPanel;
+
     public static void init() {
 
         basalt = new BlockStoneOre(Refs.BASALT_NAME);
@@ -183,6 +186,9 @@ public class BPBlocks {
         if (!Loader.isModLoaded(Dependencies.FMP)) {
             multipart = new BPBlockMultipart();
         }
+
+
+        blockSolarPanel = new BlockSolarPanel();
 
         registerBlocks();
         initModDependantBlocks();
@@ -262,6 +268,8 @@ public class BPBlocks {
         if (!Loader.isModLoaded(Dependencies.FMP)) {
             GameRegistry.registerBlock(multipart, Refs.MULTIPART_BLOCK_NAME);
         }
+
+        GameRegistry.registerBlock(blockSolarPanel, Refs.SOLAR_PANEL_NAME);
     }
 
     private static void initModDependantBlocks() {

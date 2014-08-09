@@ -17,15 +17,14 @@
 
 package com.bluepowermod.init;
 
-import java.util.List;
-
+import com.bluepowermod.part.PartRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 
-import com.bluepowermod.part.PartRegistry;
+import java.util.List;
 
 public class CustomTabs {
     
@@ -35,6 +34,7 @@ public class CustomTabs {
     public static CreativeTabs tabBluePowerTools;
     public static CreativeTabs tabBluePowerCircuits;
     public static CreativeTabs tabBluePowerLighting;
+    public static CreativeTabs tabBluePowerPower;
     
     public static void init() {
     
@@ -109,6 +109,20 @@ public class CustomTabs {
             public Item getTabIconItem() {
             
                 return Item.getItemFromBlock(Blocks.redstone_lamp);
+            }
+        };
+
+        tabBluePowerPower = new BPCreativeTab("tabBluePowerPower") {
+
+            @Override
+            public Item getTabIconItem() {
+
+                Block iconBlock = BPBlocks.marble;
+                if (iconBlock != null) {
+                    return Item.getItemFromBlock(iconBlock);
+                } else {
+                    return Item.getItemFromBlock(Blocks.stone);
+                }
             }
         };
     }
