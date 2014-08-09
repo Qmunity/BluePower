@@ -84,6 +84,7 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
     @Override
     public void addRecipe(ItemStack craftingResult, Object... requiredItems) {
     
+        if (craftingResult == null || craftingResult.getItem() == null) throw new NullPointerException("crafting result was null!");
         ItemStack[] requiredStacks = new ItemStack[requiredItems.length];
         for (int i = 0; i < requiredStacks.length; i++) {
             if (requiredItems[i] instanceof ItemStack) {
