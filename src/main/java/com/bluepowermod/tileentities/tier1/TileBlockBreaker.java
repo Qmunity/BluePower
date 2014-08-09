@@ -20,38 +20,42 @@ package com.bluepowermod.tileentities.tier1;
 import java.util.ArrayList;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockLiquid;
 import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.IFluidBlock;
 
 import com.bluepowermod.tileentities.TileMachineBase;
 
 public class TileBlockBreaker extends TileMachineBase {
-
+    
     @Override
     protected void redstoneChanged(boolean newValue) {
-
+    
         super.redstoneChanged(newValue);
-
+        
         if (!worldObj.isRemote && newValue && isBufferEmpty()) {
             ForgeDirection direction = getFacingDirection();
             Block breakBlock = worldObj.getBlock(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ);
+            if (!canBreakBlock(breakBlock, worldObj, xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ)) return;
             int breakMeta = worldObj.getBlockMetadata(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ);
             float breakHardness = breakBlock.getBlockHardness(worldObj, xCoord, yCoord, zCoord);
-            ArrayList<ItemStack> breakStacks = breakBlock.getDrops(worldObj, xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord
-                    + direction.offsetZ, breakMeta, 0);
-
-            if (breakHardness == -1.0F) {
-                return;
-            }
-
+            ArrayList<ItemStack> breakStacks = breakBlock.getDrops(worldObj, xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ, breakMeta, 0);
+            
             worldObj.func_147480_a(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ, false); // destroyBlock
             addItemsToOutputBuffer(breakStacks);
         }
     }
-
+    
+    private boolean canBreakBlock(Block block, World world, int x, int y, int z) {
+    
+        return !world.isAirBlock(x, y, z) && !(block instanceof BlockLiquid) && !(block instanceof IFluidBlock) && block.getBlockHardness(world, x, y, z) > -1.0F;
+    }
+    
     @Override
     public boolean canConnectRedstone() {
-
+    
         return true;
     }
 }
