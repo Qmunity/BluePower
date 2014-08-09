@@ -353,6 +353,7 @@ itemGroup.tabBluePowerLighting=Blue Power Lighting
 enchantment.vorpal.name=Vorpal
 enchantment.disjunction.name=Disjunction
 
+gui.projectTable.clearGrid=Clear Crafting Grid
 gui.timerInterval=Timer Interval
 gui.counterMax=Maximum
 gui.counterIncrement=Increment

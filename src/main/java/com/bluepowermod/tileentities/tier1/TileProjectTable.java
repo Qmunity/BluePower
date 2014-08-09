@@ -11,9 +11,12 @@ import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraftforge.common.util.ForgeDirection;
 
 import com.bluepowermod.BluePower;
+import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.init.BPBlocks;
+import com.bluepowermod.part.IGuiButtonSensitive;
 import com.bluepowermod.tileentities.TileBase;
 
 import cpw.mods.fml.relauncher.ReflectionHelper;
@@ -21,7 +24,7 @@ import cpw.mods.fml.relauncher.ReflectionHelper;
 /**
  * @author MineMaarten
  */
-public class TileProjectTable extends TileBase implements IInventory {
+public class TileProjectTable extends TileBase implements IInventory, IGuiButtonSensitive {
     
     public final IInventory craftResult  = new InventoryCraftResult();
     
@@ -196,6 +199,16 @@ public class TileProjectTable extends TileBase implements IInventory {
     public boolean isItemValidForSlot(int p_94041_1_, ItemStack p_94041_2_) {
     
         return true;
+    }
+    
+    @Override
+    public void onButtonPress(int messageId, int value) {
+    
+        for (int i = 0; i < craftingGrid.length; i++) {
+            if (craftingGrid[i] != null) {
+                craftingGrid[i] = IOHelper.insert(this, craftingGrid[i], ForgeDirection.UNKNOWN, false);
+            }
+        }
     }
     
 }
