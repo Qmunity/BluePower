@@ -12,6 +12,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemRedstone;
+import net.minecraft.item.ItemReed;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
@@ -162,7 +164,11 @@ public class TileDeployer extends TileBase implements ISidedInventory, IEjectAni
             for (int i = 0; i < useItems; i++) {
                 player.inventory.currentItem = i;
                 ItemStack stack = player.getCurrentEquippedItem();
-                if (canDeployItem(stack) && stack.getItem().onItemUse(stack, player, worldObj, x, y, z, faceDir.ordinal(), dx, dy, dz)) return true;
+                boolean isGoingToShift = stack.getItem() instanceof ItemReed || stack.getItem() instanceof ItemRedstone;
+                int useX = isGoingToShift ? xCoord : x;
+                int useY = isGoingToShift ? yCoord : y;
+                int useZ = isGoingToShift ? zCoord : z;
+                if (canDeployItem(stack) && stack.getItem().onItemUse(stack, player, worldObj, useX, useY, useZ, faceDir.ordinal(), dx, dy, dz)) return true;
             }
             
             for (int i = 0; i < useItems; i++) {
