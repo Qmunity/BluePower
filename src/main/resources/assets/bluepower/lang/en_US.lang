@@ -1,4 +1,4 @@
-﻿/*
+/*
  * This file is part of Blue Power. Blue Power is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
  * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version. Blue Power is
  * distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
@@ -356,6 +356,7 @@ itemGroup.tabBluePowerLighting=Blue Power Lighting
 enchantment.vorpal.name=Vorpal
 enchantment.disjunction.name=Disjunction
 
+gui.projectTable.clearGrid=Clear Crafting Grid
 gui.timerInterval=Timer Interval
 gui.counterMax=Maximum
 gui.counterIncrement=Increment
