@@ -71,6 +71,7 @@ public class GateTimer extends GateBase implements IGuiButtonSensitive {
     @Override
     public void doLogic(RedstoneConnection front, RedstoneConnection left, RedstoneConnection back, RedstoneConnection right) {
     
+        if (!getWorld().isRemote && getWorld().getWorldTime() % 400 == 0) sendUpdatePacket();//Prevent slow desyncing of the timer.
         power = false;
         
         if (back.getPower() == 0) {
