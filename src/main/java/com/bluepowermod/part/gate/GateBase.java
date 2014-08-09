@@ -91,7 +91,7 @@ public abstract class GateBase extends BPPartFace {
     
     protected void playTickSound() {
     
-        if (getWorld().isRemote && Config.enableGateSounds) getWorld().playSound(getX(), getY(), getZ(), "gui.button.press", 1, 0.5F, false);
+        if (getWorld() != null && getWorld().isRemote && Config.enableGateSounds) getWorld().playSound(getX(), getY(), getZ(), "gui.button.press", 1, 0.5F, false);
     }
     
     @Override
