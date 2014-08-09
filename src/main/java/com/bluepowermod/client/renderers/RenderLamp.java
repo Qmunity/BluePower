@@ -1,7 +1,11 @@
 package com.bluepowermod.client.renderers;
 
+import com.bluepowermod.api.vec.Vector3Cube;
+import com.bluepowermod.blocks.machines.BlockLamp;
+import com.bluepowermod.tileentities.tier1.TileLamp;
+import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
+import cpw.mods.fml.client.registry.RenderingRegistry;
 import net.minecraft.block.Block;
-import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -10,15 +14,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.client.IItemRenderer;
-
 import org.lwjgl.opengl.GL11;
-
-import com.bluepowermod.api.vec.Vector3Cube;
-import com.bluepowermod.blocks.machines.BlockLamp;
-import com.bluepowermod.tileentities.tier1.TileLamp;
-
-import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
-import cpw.mods.fml.client.registry.RenderingRegistry;
 
 public class RenderLamp extends TileEntitySpecialRenderer implements ISimpleBlockRenderingHandler, IItemRenderer {
 
@@ -110,8 +106,6 @@ public class RenderLamp extends TileEntitySpecialRenderer implements ISimpleBloc
             t.setColorOpaque(r, g, b);
             IIcon iconToUse;
             int power = ((TileLamp) world.getTileEntity(x, y, z)).getPower();
-            OpenGlHelper.setLightmapTextureCoords(OpenGlHelper
-                    .lightmapTexUnit, 240f, 240f);
             if (bLamp.isInverted()) {
                 power = 15 - power;
             }
@@ -196,8 +190,6 @@ public class RenderLamp extends TileEntitySpecialRenderer implements ISimpleBloc
     public void renderTileEntityAt(TileEntity te, double x, double y, double z, float f) {
 
         if (pass != 0) {
-            OpenGlHelper.setLightmapTextureCoords(OpenGlHelper
-                    .lightmapTexUnit, 240f, 240f);
             int power = ((TileLamp) te).getPower();
 
             BlockLamp bLamp = (BlockLamp) te.getBlockType();

@@ -11,6 +11,7 @@ import com.bluepowermod.api.part.FaceDirection;
 import com.bluepowermod.api.part.RedstoneConnection;
 import com.bluepowermod.part.PartRegistry;
 import com.bluepowermod.part.gate.GateBase;
+import com.bluepowermod.part.gate.GateStateCell;
 
 public abstract class IntegratedCircuit extends GateBase {
     
@@ -29,9 +30,9 @@ public abstract class IntegratedCircuit extends GateBase {
         for (int i = 0; i < gates.length; i++) {
             gates[i] = new GateBase[gates.length];
             
-            /*   for (int j = 0; j < gates[i].length; j++) {
-                   gates[i][j] = new GateTimer();
-               }*/
+            for (int j = 0; j < gates[i].length; j++) {
+                gates[i][j] = new GateStateCell();
+            }
         }
     }
     

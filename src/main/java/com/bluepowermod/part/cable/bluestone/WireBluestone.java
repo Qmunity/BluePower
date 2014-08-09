@@ -1,8 +1,26 @@
 package com.bluepowermod.part.cable.bluestone;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import codechicken.multipart.IFaceRedstonePart;
+import codechicken.multipart.TMultiPart;
+import codechicken.multipart.TileMultipart;
+import com.bluepowermod.api.BPApi;
+import com.bluepowermod.api.bluestone.IBluestoneWire;
+import com.bluepowermod.api.compat.IMultipartCompat;
+import com.bluepowermod.api.helper.RedstoneHelper;
+import com.bluepowermod.api.part.FaceDirection;
+import com.bluepowermod.api.part.ICableSize;
+import com.bluepowermod.api.part.RedstoneConnection;
+import com.bluepowermod.api.util.ForgeDirectionUtils;
+import com.bluepowermod.api.vec.Vector3;
+import com.bluepowermod.api.vec.Vector3Cube;
+import com.bluepowermod.compat.fmp.MultipartBPPart;
+import com.bluepowermod.init.CustomTabs;
+import com.bluepowermod.part.cable.CableWall;
+import com.bluepowermod.part.gate.GateBase;
+import com.bluepowermod.util.Dependencies;
+import com.bluepowermod.util.Refs;
+import cpw.mods.fml.common.Loader;
+import cpw.mods.fml.common.Optional;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRedstoneWire;
 import net.minecraft.client.Minecraft;
@@ -15,38 +33,18 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 import net.minecraftforge.common.util.ForgeDirection;
-
 import org.lwjgl.opengl.GL11;
 
-import codechicken.multipart.IFaceRedstonePart;
-import codechicken.multipart.TMultiPart;
-import codechicken.multipart.TileMultipart;
-
-import com.bluepowermod.api.BPApi;
-import com.bluepowermod.api.bluestone.IBluestoneWire;
-import com.bluepowermod.api.helper.RedstoneHelper;
-import com.bluepowermod.api.part.FaceDirection;
-import com.bluepowermod.api.part.ICableSize;
-import com.bluepowermod.api.part.RedstoneConnection;
-import com.bluepowermod.api.util.ForgeDirectionUtils;
-import com.bluepowermod.api.vec.Vector3;
-import com.bluepowermod.api.vec.Vector3Cube;
-import com.bluepowermod.compat.fmp.MultipartBPPart;
-import com.bluepowermod.init.CustomTabs;
-import com.bluepowermod.part.cable.CableWall;
-import com.bluepowermod.util.Dependencies;
-import com.bluepowermod.util.Refs;
-
-import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.common.Optional;
+import java.util.ArrayList;
+import java.util.List;
 
 public class WireBluestone extends CableWall implements IBluestoneWire, ICableSize {
 
     protected static Vector3Cube SELECTION_BOX = new Vector3Cube(0, 0, 0, 1, 1 / 16D, 1);
     protected static Vector3Cube OCCLUSION_BOX = new Vector3Cube(3 / 16D, 0 / 16D, 3 / 16D, 12 / 16D, 1 / 16D, 12 / 16D);
 
-    private static ResourceLocation textureOn = new ResourceLocation(Refs.MODID + ":textures/base/bluestoneOn.png");
-    private static ResourceLocation textureOff = new ResourceLocation(Refs.MODID + ":textures/base/bluestoneOff.png");
+    private static ResourceLocation textureOn;
+    private static ResourceLocation textureOff;
 
     private int power = 0;
     private int powerSelf = 0;
@@ -118,25 +116,29 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
     @Optional.Method(modid = Dependencies.FMP)
     public static TMultiPart getFMPPartOnSide(IBluestoneWire wire, ForgeDirection dir) {
 
+        IMultipartCompat compat = BPApi.getInstance().getMultipartCompat();
+
         Vector3 vec = wire.getLocation().getRelative(dir);
-        TileMultipart te = null;
+        TileMultipart te = (TileMultipart) wire.getLocation().getTileEntity();
+
+        if (te == null)
+            return null;
+
+        if (compat.isOccupied(te, getStripHitboxForSide(ForgeDirection.getOrientation(wire.getFace()), dir)))
+            return null;
 
         // Check for parts in the same block
-        if (wire.getLocation().getTileEntity() instanceof TileMultipart) {
-            te = (TileMultipart) wire.getLocation().getTileEntity();
-            List<TMultiPart> l = te.jPartList();
-            for (TMultiPart p : l) {
-                if (p instanceof IFaceRedstonePart) {
-                    ForgeDirection d = dir;
-                    if (p instanceof MultipartBPPart) {
-                        if (((MultipartBPPart) p).getPart() instanceof WireBluestone)
-                            continue;
-                        d = d.getOpposite();
-                    }
-                    if (ForgeDirection.getOrientation(((IFaceRedstonePart) p).getFace()) == d)
-                        return p;
+        List<TMultiPart> l = te.jPartList();
+        for (TMultiPart p : l) {
+            if (p instanceof IFaceRedstonePart) {
+                ForgeDirection d = dir;
+                if (p instanceof MultipartBPPart) {
+                    if (((MultipartBPPart) p).getPart() instanceof WireBluestone)
+                        continue;
+                    d = d.getOpposite();
                 }
-
+                if (ForgeDirection.getOrientation(((IFaceRedstonePart) p).getFace()) == d)
+                    return p;
             }
         }
 
@@ -145,7 +147,7 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
         // Check for parts next to this one
         if (vec.hasTileEntity() && vec.getTileEntity() instanceof TileMultipart) {
             te = ((TileMultipart) vec.getTileEntity());
-            List<TMultiPart> l = te.jPartList();
+            l = te.jPartList();
             for (TMultiPart p : l)
                 if (p instanceof IFaceRedstonePart) {
                     ForgeDirection d = dir2;
@@ -154,8 +156,13 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
                             continue;
                         d = d.getOpposite();
                     }
-                    if (ForgeDirection.getOrientation(((IFaceRedstonePart) p).getFace()) == d)
-                        return p;
+                    if ((p instanceof MultipartBPPart && ((MultipartBPPart) p).getPart() instanceof GateBase)
+                            || !compat.isOccupied(
+                                    te,
+                                    getStripHitboxForSide(ForgeDirection.getOrientation(((IFaceRedstonePart) p).getFace()).getOpposite(),
+                                            dir.getOpposite())))
+                        if (ForgeDirection.getOrientation(((IFaceRedstonePart) p).getFace()) == d)
+                            return p;
                 }
         }
 
@@ -188,196 +195,204 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
 
     @Override
     public boolean renderStatic(Vector3 loc, int pass) {
+        if(pass == 0){
+            Tessellator t = Tessellator.instance;
+            t.draw();
 
-        Tessellator t = Tessellator.instance;
-        t.draw();
+            if (textureOn == null)
+                textureOn = new ResourceLocation(Refs.MODID + ":textures/base/bluestoneOn.png");
+            if (textureOff == null)
+                textureOff = new ResourceLocation(Refs.MODID + ":textures/base/bluestoneOff.png");
 
-        GL11.glPushMatrix();
-        {
-            rotateAndTranslateDynamic(loc, pass, 0);
+            GL11.glPushMatrix();
+            {
+                rotateAndTranslateDynamic(loc, pass, 0);
 
-            if (power > 0)
-                Minecraft.getMinecraft().renderEngine.bindTexture(textureOn);
-            else
-                Minecraft.getMinecraft().renderEngine.bindTexture(textureOff);
+                if (power > 0)
+                    Minecraft.getMinecraft().renderEngine.bindTexture(textureOn);
+                else
+                    Minecraft.getMinecraft().renderEngine.bindTexture(textureOff);
 
-            // Render center
-            renderBox(7, 0, 7, 9, 1, 9);
+                // Render center
+                renderBox(7, 0, 7, 9, 1, 9);
 
-            int[] sides = new int[] { 0, 0, 0, 0 };
+                int[] sides = new int[] { 0, 0, 0, 0 };
 
-            ForgeDirection f = ForgeDirection.getOrientation(getFace());
-            int id = 0;
-            for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
-                if (d == f || d == f.getOpposite())
-                    continue;
+                ForgeDirection f = ForgeDirection.getOrientation(getFace());
+                int id = 0;
+                for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
+                    if (d == f || d == f.getOpposite())
+                        continue;
 
-                Vector3 v = (Vector3) connections[ForgeDirectionUtils.getSide(d)];
-                if (v == null) {
-                    id++;
-                    continue;
-                }
+                    Vector3 v = (Vector3) connections[ForgeDirectionUtils.getSide(d)];
+                    if (v == null) {
+                        id++;
+                        continue;
+                    }
 
-                int len = 0;
+                    int len = 0;
 
-                if (!isSamplePart)
-                    len = BPApi.getInstance().getBluestoneApi().getExtraLength(v, this, d);
-                int val = 1 + (v.distanceTo(this.loc) > 1 ? 1 : len);
+                    if (!isSamplePart)
+                        len = BPApi.getInstance().getBluestoneApi().getExtraLength(v, this, d);
+                    int val = 1 + (v.distanceTo(this.loc) > 1 ? 1 : len);
 
-                if (!isSamplePart) {
-                    GL11.glPushMatrix();
-                    {
-                        int times = 0;
-                        switch (id) {
-                        case 0:
-                            times = 1;
+                    if (!isSamplePart) {
+                        GL11.glPushMatrix();
+                        {
+                            int times = 0;
+                            switch (id) {
+                            case 0:
+                                times = 1;
+                                break;
+                            case 1:
+                                times = 3;
+                                break;
+                            case 2:
+                                times = 2;
+                                break;
+                            case 3:
+                                break;
+                            }
+                            GL11.glTranslated(0.5, 0.5, 0.5);
+                            GL11.glRotated(90 * times, 0, 1, 0);
+                            GL11.glTranslated(-0.5, -0.5, -0.5);
+                            BPApi.getInstance().getBluestoneApi().renderExtraCables(v, this, d);
+                        }
+                        GL11.glPopMatrix();
+                    }
+
+                    switch (f) {
+                    case UP:
+                        switch (d) {
+                        case EAST:
+                            sides[3] = val;
                             break;
-                        case 1:
-                            times = 3;
+                        case WEST:
+                            sides[2] = val;
                             break;
-                        case 2:
-                            times = 2;
+                        case NORTH:
+                            sides[0] = val;
                             break;
-                        case 3:
+                        case SOUTH:
+                            sides[1] = val;
+                            break;
+                        default:
                             break;
                         }
-                        GL11.glTranslated(0.5, 0.5, 0.5);
-                        GL11.glRotated(90 * times, 0, 1, 0);
-                        GL11.glTranslated(-0.5, -0.5, -0.5);
-                        BPApi.getInstance().getBluestoneApi().renderExtraCables(v, this, d);
+                        break;
+                    case DOWN:
+                        switch (d) {
+                        case EAST:
+                            sides[3] = val;
+                            break;
+                        case WEST:
+                            sides[2] = val;
+                            break;
+                        case NORTH:
+                            sides[1] = val;
+                            break;
+                        case SOUTH:
+                            sides[0] = val;
+                            break;
+                        default:
+                            break;
+                        }
+                        break;
+                    case EAST:
+                        switch (d) {
+                        case UP:
+                            sides[3] = val;
+                            break;
+                        case DOWN:
+                            sides[2] = val;
+                            break;
+                        case NORTH:
+                            sides[0] = val;
+                            break;
+                        case SOUTH:
+                            sides[1] = val;
+                            break;
+                        default:
+                            break;
+                        }
+                        break;
+                    case WEST:
+                        switch (d) {
+                        case UP:
+                            sides[2] = val;
+                            break;
+                        case DOWN:
+                            sides[3] = val;
+                            break;
+                        case NORTH:
+                            sides[0] = val;
+                            break;
+                        case SOUTH:
+                            sides[1] = val;
+                            break;
+                        default:
+                            break;
+                        }
+                        break;
+                    case NORTH:
+                        switch (d) {
+                        case UP:
+                            sides[0] = val;
+                            break;
+                        case DOWN:
+                            sides[1] = val;
+                            break;
+                        case EAST:
+                            sides[3] = val;
+                            break;
+                        case WEST:
+                            sides[2] = val;
+                            break;
+                        default:
+                            break;
+                        }
+                        break;
+                    case SOUTH:
+                        switch (d) {
+                        case UP:
+                            sides[1] = val;
+                            break;
+                        case DOWN:
+                            sides[0] = val;
+                            break;
+                        case EAST:
+                            sides[3] = val;
+                            break;
+                        case WEST:
+                            sides[2] = val;
+                            break;
+                        default:
+                            break;
+                        }
+                        break;
+                    default:
+                        break;
                     }
-                    GL11.glPopMatrix();
+                    id++;
                 }
 
-                switch (f) {
-                case UP:
-                    switch (d) {
-                    case EAST:
-                        sides[3] = val;
-                        break;
-                    case WEST:
-                        sides[2] = val;
-                        break;
-                    case NORTH:
-                        sides[0] = val;
-                        break;
-                    case SOUTH:
-                        sides[1] = val;
-                        break;
-                    default:
-                        break;
-                    }
-                    break;
-                case DOWN:
-                    switch (d) {
-                    case EAST:
-                        sides[3] = val;
-                        break;
-                    case WEST:
-                        sides[2] = val;
-                        break;
-                    case NORTH:
-                        sides[1] = val;
-                        break;
-                    case SOUTH:
-                        sides[0] = val;
-                        break;
-                    default:
-                        break;
-                    }
-                    break;
-                case EAST:
-                    switch (d) {
-                    case UP:
-                        sides[3] = val;
-                        break;
-                    case DOWN:
-                        sides[2] = val;
-                        break;
-                    case NORTH:
-                        sides[0] = val;
-                        break;
-                    case SOUTH:
-                        sides[1] = val;
-                        break;
-                    default:
-                        break;
-                    }
-                    break;
-                case WEST:
-                    switch (d) {
-                    case UP:
-                        sides[2] = val;
-                        break;
-                    case DOWN:
-                        sides[3] = val;
-                        break;
-                    case NORTH:
-                        sides[0] = val;
-                        break;
-                    case SOUTH:
-                        sides[1] = val;
-                        break;
-                    default:
-                        break;
-                    }
-                    break;
-                case NORTH:
-                    switch (d) {
-                    case UP:
-                        sides[0] = val;
-                        break;
-                    case DOWN:
-                        sides[1] = val;
-                        break;
-                    case EAST:
-                        sides[3] = val;
-                        break;
-                    case WEST:
-                        sides[2] = val;
-                        break;
-                    default:
-                        break;
-                    }
-                    break;
-                case SOUTH:
-                    switch (d) {
-                    case UP:
-                        sides[1] = val;
-                        break;
-                    case DOWN:
-                        sides[0] = val;
-                        break;
-                    case EAST:
-                        sides[3] = val;
-                        break;
-                    case WEST:
-                        sides[2] = val;
-                        break;
-                    default:
-                        break;
-                    }
-                    break;
-                default:
-                    break;
-                }
-                id++;
+                if (sides[3] > 0)// East
+                    renderBox(0 - (sides[3] - 1), 0, 7, 7, 1, 9);
+                if (sides[2] > 0)// West
+                    renderBox(9, 0, 7, 16 + (sides[2] - 1), 1, 9);
+                if (sides[1] > 0)// South
+                    renderBox(7, 0, 0 - (sides[1] - 1), 9, 1, 7);
+                if (sides[0] > 0)// North
+                    renderBox(7, 0, 9, 9, 1, 16 + (sides[0] - 1));
             }
+            GL11.glPopMatrix();
 
-            if (sides[3] > 0)// East
-                renderBox(0 - (sides[3] - 1), 0, 7, 7, 1, 9);
-            if (sides[2] > 0)// West
-                renderBox(9, 0, 7, 16 + (sides[2] - 1), 1, 9);
-            if (sides[1] > 0)// South
-                renderBox(7, 0, 0 - (sides[1] - 1), 9, 1, 7);
-            if (sides[0] > 0)// North
-                renderBox(7, 0, 9, 9, 1, 16 + (sides[0] - 1));
+            t.startDrawingQuads();
+
+            return true;
+        }else{
+            return false;
         }
-        GL11.glPopMatrix();
-
-        t.startDrawingQuads();
-
-        return true;
     }
 
     @Override
@@ -392,6 +407,7 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
                     continue;
                 connections[ForgeDirectionUtils.getSide(d)] = new Vector3(0, 0, 0).add(d);
             }
+            power = 15;
         }
         GL11.glPushMatrix();
         {
@@ -544,13 +560,13 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
     @Override
     public int getCableWidth() {
 
-        return 4;
+        return 2;
     }
 
     @Override
     public int getCableHeight() {
 
-        return 2;
+        return 1;
     }
 
     @Override
@@ -566,15 +582,15 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
     }
 
     @Override
-    public void onUpdate() {
-
-        super.onUpdate();
-    }
-
-    @Override
     public int getRedstonePower() {
 
         return power;
+    }
+
+    @Override
+    public float getHardness() {
+
+        return 0.25F;
     }
 
 }

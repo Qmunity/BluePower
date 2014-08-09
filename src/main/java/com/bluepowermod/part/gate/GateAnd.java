@@ -1,14 +1,13 @@
 package com.bluepowermod.part.gate;
 
-import java.util.List;
-
-import net.minecraft.client.resources.I18n;
-import net.minecraft.util.AxisAlignedBB;
-
 import com.bluepowermod.api.part.FaceDirection;
 import com.bluepowermod.api.part.RedstoneConnection;
 import com.bluepowermod.client.renderers.RenderHelper;
 import com.bluepowermod.util.Color;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.util.AxisAlignedBB;
+
+import java.util.List;
 
 public class GateAnd extends GateBase {
     

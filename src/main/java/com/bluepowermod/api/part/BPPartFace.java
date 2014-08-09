@@ -8,9 +8,11 @@
 
 package com.bluepowermod.api.part;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.bluepowermod.api.helper.RedstoneHelper;
+import com.bluepowermod.api.part.redstone.IBPRedstonePart;
+import com.bluepowermod.api.util.ForgeDirectionUtils;
+import com.bluepowermod.api.vec.Vector3;
+import com.bluepowermod.api.vec.Vector3Cube;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -18,14 +20,10 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
-
 import org.lwjgl.opengl.GL11;
 
-import com.bluepowermod.api.helper.RedstoneHelper;
-import com.bluepowermod.api.part.redstone.IBPRedstonePart;
-import com.bluepowermod.api.util.ForgeDirectionUtils;
-import com.bluepowermod.api.vec.Vector3;
-import com.bluepowermod.api.vec.Vector3Cube;
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class BPPartFace extends BPPart implements IBPFacePart, IBPRedstonePart {
 
@@ -131,6 +129,9 @@ public abstract class BPPartFace extends BPPart implements IBPFacePart, IBPRedst
     @Override
     public boolean canStay() {
 
+        if (getWorld() == null)
+            return true;
+
         ForgeDirection d = ForgeDirection.getOrientation(getFace());
 
         if (d == ForgeDirection.UP || d == ForgeDirection.DOWN)
@@ -175,6 +176,7 @@ public abstract class BPPartFace extends BPPart implements IBPFacePart, IBPRedst
     }
 
     public void rotateAndTranslateDynamic(Vector3 loc, int pass, float frame) {
+
 
         GL11.glTranslated(loc.getX(), loc.getY(), loc.getZ());
 

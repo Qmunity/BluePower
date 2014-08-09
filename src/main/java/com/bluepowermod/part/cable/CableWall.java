@@ -1,14 +1,6 @@
 package com.bluepowermod.part.cable;
 
-import java.util.List;
-
-import net.minecraft.block.Block;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraftforge.common.util.ForgeDirection;
 import codechicken.multipart.TMultiPart;
-
 import com.bluepowermod.api.compat.IMultipartCompat;
 import com.bluepowermod.api.part.BPPartFace;
 import com.bluepowermod.api.util.ForgeDirectionUtils;
@@ -16,9 +8,15 @@ import com.bluepowermod.api.vec.Vector3;
 import com.bluepowermod.compat.CompatibilityUtils;
 import com.bluepowermod.part.cable.bluestone.ICableConnect;
 import com.bluepowermod.util.Dependencies;
-
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Optional;
+import net.minecraft.block.Block;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraftforge.common.util.ForgeDirection;
+
+import java.util.List;
 
 /**
  * @author amadornes
@@ -184,8 +182,9 @@ public abstract class CableWall extends BPPartFace {
         List<CableWall> l = compat.getBPParts(vec.getTileEntity(), CableWall.class);
         for (CableWall c : l) {
             if (c.getFace() == getFace()) {
-                if (!compat.isOccupied(loc.getTileEntity(), getStripHitboxForSide(dir))
-                        && !compat.isOccupied(vec.getTileEntity(), getStripHitboxForSide(dir.getOpposite()))) {
+                if (!compat.isOccupied(loc.getTileEntity(), getStripHitboxForSide(ForgeDirection.getOrientation(getFace()), dir))
+                        && !compat
+                                .isOccupied(vec.getTileEntity(), getStripHitboxForSide(ForgeDirection.getOrientation(getFace()), dir.getOpposite()))) {
                     return c;
                 }
             }
@@ -199,7 +198,7 @@ public abstract class CableWall extends BPPartFace {
             dir2 = dir2.getOpposite();
         for (CableWall c : l) {
             if (ForgeDirection.getOrientation(c.getFace()) == dir2)
-                if (!compat.isOccupied(loc.getTileEntity(), getStripHitboxForSide(dir)))
+                if (!compat.isOccupied(loc.getTileEntity(), getStripHitboxForSide(ForgeDirection.getOrientation(getFace()), dir)))
                     return c;
         }
         l.clear();
@@ -214,23 +213,25 @@ public abstract class CableWall extends BPPartFace {
             ForgeDirection d = dir;
             if (d != ForgeDirection.UP && d != ForgeDirection.DOWN)
                 d = d.getOpposite();
-            if (ForgeDirection.getOrientation(c.getFace()) == d)
-                if (!compat.isOccupied(loc.getTileEntity(), getStripHitboxForSide(dir))
-                        && !compat.isOccupied(vec.getTileEntity(), getStripHitboxForSide(dir.getOpposite()))
-                        && !compat.isOccupied(vec2.getTileEntity(), getStripHitboxForSide(f.getOpposite()))) {
-                    if (!c.updating)
-                        c.onUpdate();
+            if (ForgeDirection.getOrientation(c.getFace()) == d) {
+                boolean isOccluded = compat.isOccupied(loc.getTileEntity(), getStripHitboxForSide(ForgeDirection.getOrientation(getFace()), dir))
+                        || compat.isOccupied(vec.getTileEntity(), getStripHitboxForSide(ForgeDirection.getOrientation(getFace()), dir.getOpposite()));
+                if (vec.getBlock() != null && vec.getBlock().isOpaqueCube())
+                    isOccluded = true;
+                if (!c.updating)
+                    c.onUpdate();
+                if (!isOccluded) {
                     return c;
                 }
+            }
         }
         l.clear();
 
         return null;
     }
 
-    private AxisAlignedBB getStripHitboxForSide(ForgeDirection dir) {
+    protected static AxisAlignedBB getStripHitboxForSide(ForgeDirection face, ForgeDirection dir) {
 
-        ForgeDirection face = ForgeDirection.getOrientation(getFace());
         AxisAlignedBB aabb = AxisAlignedBB.getBoundingBox(0, 0, 0, 0, 0, 0);
 
         double one = 1;
