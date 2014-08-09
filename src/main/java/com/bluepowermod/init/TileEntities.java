@@ -33,24 +33,18 @@ import com.bluepowermod.tileentities.tier1.TileTransposer;
 import com.bluepowermod.tileentities.tier2.TileRegulator;
 import com.bluepowermod.tileentities.tier2.TileRetriever;
 import com.bluepowermod.tileentities.tier2.TileSortingMachine;
-import com.bluepowermod.tileentities.tier2.TileWindmill;
-import com.bluepowermod.tileentities.tier3.TileCPU;
-import com.bluepowermod.tileentities.tier3.TileDiskDrive;
 import com.bluepowermod.tileentities.tier3.TileEngine;
-import com.bluepowermod.tileentities.tier3.TileIOExpander;
-import com.bluepowermod.tileentities.tier3.TileKinectGenerator;
-import com.bluepowermod.tileentities.tier3.TileMonitor;
 import com.bluepowermod.tileentities.tier3.TileSortron;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public class TileEntities {
-    
+
     /**
      * Method to register the TE's to the game. If a TE is not registered, it _will_ cause issues!
      */
     public static void init() {
-    
+
         GameRegistry.registerTileEntity(TileAlloyFurnace.class, "alloyFurnace");
         GameRegistry.registerTileEntity(TileBlockBreaker.class, "blockBreaker");
         GameRegistry.registerTileEntity(TileIgniter.class, "igniter");
@@ -58,13 +52,13 @@ public class TileEntities {
         GameRegistry.registerTileEntity(TileTransposer.class, "transposer");
         GameRegistry.registerTileEntity(TileSortingMachine.class, "sortingMachine");
         GameRegistry.registerTileEntity(TileSortron.class, "sortron");
-        GameRegistry.registerTileEntity(TileCPU.class, "CPU");
-        GameRegistry.registerTileEntity(TileMonitor.class, "monitor");
-        GameRegistry.registerTileEntity(TileDiskDrive.class, "diskDrive");
-        GameRegistry.registerTileEntity(TileIOExpander.class, "IOExpander");
+        // GameRegistry.registerTileEntity(TileCPU.class, "CPU");
+        // GameRegistry.registerTileEntity(TileMonitor.class, "monitor");
+        // GameRegistry.registerTileEntity(TileDiskDrive.class, "diskDrive");
+        // GameRegistry.registerTileEntity(TileIOExpander.class, "IOExpander");
         GameRegistry.registerTileEntity(TileEngine.class, "engine");
-        GameRegistry.registerTileEntity(TileWindmill.class, "windmill");
-        GameRegistry.registerTileEntity(TileKinectGenerator.class, "kinectgenerator");
+        // GameRegistry.registerTileEntity(TileWindmill.class, "windmill");
+        // GameRegistry.registerTileEntity(TileKinectGenerator.class, "kinectgenerator");
         GameRegistry.registerTileEntity(TileDeployer.class, "deployer");
         GameRegistry.registerTileEntity(TileEjector.class, "ejector");
         GameRegistry.registerTileEntity(TileRelay.class, "relay");
