@@ -324,4 +324,10 @@ public class BlockCrop extends BlockCrops implements IGrowable {
         if (world.getBlock(x, y, z) != this) return super.canBlockStay(world, x, y, z);
         return (world.getBlock(x, y - 1, z) instanceof BlockFarmland) || (world.getBlock(x, y - 1, z) instanceof BlockCrop);
     }
+
+    @Override
+    public EnumPlantType getPlantType(IBlockAccess world, int x, int y, int z)
+    {
+    	return EnumPlantType.Crop;
+    }
 }
