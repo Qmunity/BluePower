@@ -191,8 +191,8 @@ public class Accelerator extends PneumaticTube {
             
             minX = icon.getInterpolatedU(4);
             maxX = icon.getInterpolatedU(12);
-            minY = icon.getInterpolatedV(4);
-            maxY = icon.getInterpolatedV(12);
+            minY = icon.getInterpolatedV(0);
+            maxY = icon.getInterpolatedV(16);
             
             t.setNormal(0, 0, 1);
             t.addVertexWithUV(0, 4 / 16D, 1, maxX, minY);// maxZ
