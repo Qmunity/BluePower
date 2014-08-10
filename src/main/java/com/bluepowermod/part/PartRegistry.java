@@ -31,22 +31,22 @@ import com.bluepowermod.init.BPItems;
 import com.bluepowermod.util.Refs;
 
 public class PartRegistry implements IPartRegistry {
-    
-    private static PartRegistry                                         INSTANCE = new PartRegistry();
-    private final Map<String, Entry<Class<? extends BPPart>, Object[]>> parts    = new LinkedHashMap<String, Entry<Class<? extends BPPart>, Object[]>>();
-    private final Map<String, BPPart>                                   samples  = new LinkedHashMap<String, BPPart>();
-    
-    public String                                                       ICON_PART;
-    
+
+    private static PartRegistry INSTANCE = new PartRegistry();
+    private final Map<String, Entry<Class<? extends BPPart>, Object[]>> parts = new LinkedHashMap<String, Entry<Class<? extends BPPart>, Object[]>>();
+    private final Map<String, BPPart> samples = new LinkedHashMap<String, BPPart>();
+
+    public String ICON_PART;
+
     private PartRegistry() {
-    
+
     }
-    
+
     public static PartRegistry getInstance() {
-    
+
         return INSTANCE;
     }
-    
+
     /**
      * Register a part
      * 
@@ -55,18 +55,21 @@ public class PartRegistry implements IPartRegistry {
      */
     @Override
     public void registerPart(Class<? extends BPPart> part, Object... constructorArgs) {
-    
-        if (part == null) return;
+
+        if (part == null)
+            return;
         Entry<Class<? extends BPPart>, Object[]> e = new AbstractMap.SimpleEntry<Class<? extends BPPart>, Object[]>(part, constructorArgs);
-        if (parts.containsKey(e)) return;
-        
+        if (parts.containsKey(e))
+            return;
+
         parts.put("tmp", e);
         BPPart p = createPart("tmp");
+        System.out.println("Registering: " + p);
         samples.put(p.getType(), p);
         parts.remove("tmp");
         parts.put(p.getType(), e);
     }
-    
+
     /**
      * Creates a part from its ID
      * 
@@ -78,30 +81,31 @@ public class PartRegistry implements IPartRegistry {
      */
     @Override
     public BPPart createPart(String id, boolean isMultipart) {
-    
+
         try {
             Entry<Class<? extends BPPart>, Object[]> e = getPartData(id, isMultipart);
-            if (e == null) return null;
+            if (e == null)
+                return null;
             Class<? extends BPPart> c = e.getKey();
             Object[] args = e.getValue();
             Class<?>[] argsClasses = new Class<?>[args.length];
             for (int i = 0; i < args.length; i++)
                 argsClasses[i] = args[i].getClass();
-            
+
             Constructor<? extends BPPart> cons = c.getConstructor(argsClasses);
             boolean wasAccessible = cons.isAccessible();
             cons.setAccessible(true);
             BPPart inst = cons.newInstance(args);
             cons.setAccessible(wasAccessible);
-            
+
             return inst;
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-        
+
         return null;
     }
-    
+
     /**
      * Creates a part from its ID
      * 
@@ -111,39 +115,40 @@ public class PartRegistry implements IPartRegistry {
      */
     @Override
     public BPPart createPart(String id) {
-    
+
         return createPart(id, false);
     }
-    
+
     @Override
     public Map<String, Entry<Class<? extends BPPart>, Object[]>> getMappings() {
-    
+
         return Collections.unmodifiableMap(parts);
     }
-    
+
     @Override
     public List<String> getRegisteredParts() {
-    
+
         return Collections.unmodifiableList(new ArrayList<String>(parts.keySet()));
     }
-    
+
     @Override
     public List<String> getRegisteredPartsForTab(CreativeTabs tab) {
-    
+
         List<String> partIds = new ArrayList<String>();
         List<BPPart> parts = new ArrayList<BPPart>();
-        
+
         if (tab != null) {
             for (BPPart p : samples.values())
-                if (Arrays.asList(p.getCreativeTabs()).contains(tab)) parts.add(p);
+                if (Arrays.asList(p.getCreativeTabs()).contains(tab))
+                    parts.add(p);
             Collections.sort(parts, new ComparatorCreativeTabIndex(tab));
             for (BPPart p : parts)
                 partIds.add(p.getType());
         }
-        
+
         return Collections.unmodifiableList(new ArrayList<String>(partIds));
     }
-    
+
     /**
      * Gets the part's item from an ID
      * 
@@ -153,23 +158,23 @@ public class PartRegistry implements IPartRegistry {
      */
     @Override
     public ItemStack getItemForPart(String id) {
-    
+
         if (parts.containsKey(id)) {
             ItemStack is = new ItemStack(BPItems.multipart);
-            
+
             NBTTagCompound tag = new NBTTagCompound();
             tag.setString("id", id);
-            
+
             is.setTagCompound(tag);
             is.setItemDamage(getStackMetadata(is));
             return is;
         }
         return null;
     }
-    
+
     @Override
     public ItemStack getItemForPart(String id, int stackSize) {
-    
+
         ItemStack is = getItemForPart(id);
         if (is != null) {
             is.stackSize = stackSize;
@@ -178,7 +183,7 @@ public class PartRegistry implements IPartRegistry {
             return null;
         }
     }
-    
+
     /**
      * Gets the part id stored in the item and creates a new part with that id
      * 
@@ -188,20 +193,20 @@ public class PartRegistry implements IPartRegistry {
      */
     @Override
     public BPPart createPartFromItem(ItemStack is) {
-    
+
         String id = getPartIdFromItem(is);
         return createPart(id);
     }
-    
+
     @Override
     public Entry<Class<? extends BPPart>, Object[]> getPartData(String id) {
-    
+
         return getPartData(id, false);
     }
-    
+
     @Override
     public Entry<Class<? extends BPPart>, Object[]> getPartData(String id, boolean isMultipart) {
-    
+
         try {
             for (String s : parts.keySet()) {
                 if ((isMultipart ? Refs.MODID + "_" + s : s).equals(id)) {
@@ -215,17 +220,17 @@ public class PartRegistry implements IPartRegistry {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        
+
         return null;
     }
-    
+
     @Override
     public Entry<Class<? extends BPPart>, Object[]> getPartDataFromItem(ItemStack is) {
-    
+
         String id = getPartIdFromItem(is);
         return getPartData(id);
     }
-    
+
     /**
      * Gets the part ID stored in the item
      * 
@@ -235,7 +240,7 @@ public class PartRegistry implements IPartRegistry {
      */
     @Override
     public String getPartIdFromItem(ItemStack is) {
-    
+
         try {
             NBTTagCompound tag = is.getTagCompound();
             return tag.getString("id");
@@ -243,7 +248,7 @@ public class PartRegistry implements IPartRegistry {
         }
         return null;
     }
-    
+
     /**
      * Gets the metadata for the multipart itemstack passed as an argument
      * 
@@ -253,39 +258,43 @@ public class PartRegistry implements IPartRegistry {
      */
     @Override
     public int getStackMetadata(ItemStack is) {
-    
+
         String id = getPartIdFromItem(is);
-        if (id == null) return 0;
+        if (id == null)
+            return 0;
         int i = 0;
         for (String s : parts.keySet()) {
-            if (s.equals(id)) break;
+            if (s.equals(id))
+                break;
             i++;
         }
         return i;
     }
-    
+
     @Override
     public boolean hasCustomItemEntity(ItemStack is) {
-    
+
         String id = getPartIdFromItem(is);
         BPPart part = samples.get(id);
         return part != null && part.hasCustomItemEntity();
     }
-    
+
     @Override
     public EntityItem createItemEntityForPart(String id, World w, double x, double y, double z, ItemStack item) {
-    
+
         BPPart part = samples.get(id);
-        if (part == null) return null;
+        if (part == null)
+            return null;
         return part.createItemEntity(w, x, y, z, item);
     }
-    
+
     @Override
     public EntityItem createItemEntityForStack(World w, double x, double y, double z, ItemStack item) {
-    
+
         String id = getPartIdFromItem(item);
         BPPart part = samples.get(id);
-        if (part == null) return null;
+        if (part == null)
+            return null;
         return part.createItemEntity(w, x, y, z, item);
     }
 }

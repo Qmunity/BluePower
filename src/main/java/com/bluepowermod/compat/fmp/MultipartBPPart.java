@@ -210,7 +210,7 @@ public class MultipartBPPart extends TMultiPart implements IRedstonePart, JNorma
         if (getPart() instanceof IBPRedstonePart)
             return ((IBPRedstonePart) getPart()).getWeakOutput(ForgeDirection.getOrientation(side));
 
-        return getPart().getRedstonePower();
+        return 0;
     }
 
     @Override
@@ -289,16 +289,17 @@ public class MultipartBPPart extends TMultiPart implements IRedstonePart, JNorma
     @Override
     public void renderDynamic(Vector3 pos, float frame, int pass) {
 
-        getPart().renderDynamic(new com.bluepowermod.api.vec.Vector3(pos.x, pos.y, pos.z), pass, frame);
+        if (getPart().shouldRenderDynamicOnPass(pass))
+            getPart().renderDynamic(new com.bluepowermod.api.vec.Vector3(pos.x, pos.y, pos.z), pass, frame);
 
         if (emptyStaticRender == -1) {
             emptyStaticRender = GL11.glGenLists(1);
             GL11.glNewList(emptyStaticRender, GL11.GL_COMPILE);
             GL11.glEndList();
         }
-        if (staticRender0 == -1 || getPart().shouldReRender())
+        if (staticRender0 == -1 || getPart().shouldReRender() && getPart().canRenderInPass(0))
             reRenderStatic(new Vector3(0, 0, 0), 0);
-        if (staticRender1 == -1 || getPart().shouldReRender())
+        if (staticRender1 == -1 || getPart().shouldReRender() && getPart().canRenderInPass(1))
             reRenderStatic(new Vector3(0, 0, 0), 1);
         if (getPart().shouldReRender())
             getPart().resetRenderUpdate();
@@ -308,9 +309,11 @@ public class MultipartBPPart extends TMultiPart implements IRedstonePart, JNorma
             {
                 GL11.glTranslated(pos.x, pos.y, pos.z);
                 if (pass == 0) {
-                    GL11.glCallList(staticRender0);
+                    if (staticRender0 >= 0)
+                        GL11.glCallList(staticRender0);
                 } else {
-                    GL11.glCallList(staticRender1);
+                    if (staticRender1 >= 0)
+                        GL11.glCallList(staticRender1);
                 }
             }
             GL11.glPopMatrix();

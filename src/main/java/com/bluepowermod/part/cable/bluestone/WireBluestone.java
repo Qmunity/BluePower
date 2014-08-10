@@ -1,8 +1,27 @@
 package com.bluepowermod.part.cable.bluestone;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockRedstoneWire;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.IItemRenderer.ItemRenderType;
+import net.minecraftforge.common.util.ForgeDirection;
+
+import org.lwjgl.opengl.GL11;
+
 import codechicken.multipart.IFaceRedstonePart;
 import codechicken.multipart.TMultiPart;
 import codechicken.multipart.TileMultipart;
+
 import com.bluepowermod.api.BPApi;
 import com.bluepowermod.api.bluestone.IBluestoneWire;
 import com.bluepowermod.api.compat.IMultipartCompat;
@@ -19,32 +38,21 @@ import com.bluepowermod.part.cable.CableWall;
 import com.bluepowermod.part.gate.GateBase;
 import com.bluepowermod.util.Dependencies;
 import com.bluepowermod.util.Refs;
+
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Optional;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockRedstoneWire;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.IItemRenderer.ItemRenderType;
-import net.minecraftforge.common.util.ForgeDirection;
-import org.lwjgl.opengl.GL11;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class WireBluestone extends CableWall implements IBluestoneWire, ICableSize {
 
     protected static Vector3Cube SELECTION_BOX = new Vector3Cube(0, 0, 0, 1, 1 / 16D, 1);
-    protected static Vector3Cube OCCLUSION_BOX = new Vector3Cube(3 / 16D, 0 / 16D, 3 / 16D, 12 / 16D, 1 / 16D, 12 / 16D);
+    protected static Vector3Cube OCCLUSION_BOX = new Vector3Cube(7 / 16D, 0 / 16D, 7 / 16D, 9 / 16D, 1 / 16D, 9 / 16D);
+    protected static Vector3Cube SELECTION_BOX_INSULATED = new Vector3Cube(0, 0, 0, 1, 3 / 16D, 1);
+    protected static Vector3Cube OCCLUSION_BOX_INSULATED = new Vector3Cube(7 / 16D, 0 / 16D, 7 / 16D, 9 / 16D, 3 / 16D, 9 / 16D);
 
     private static ResourceLocation textureOn;
     private static ResourceLocation textureOff;
+    private static ResourceLocation textureInsulationFB;
+    private static ResourceLocation textureInsulationLR;
 
     private int power = 0;
     private int powerSelf = 0;
@@ -52,16 +60,29 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
     private boolean isSamplePart = false;
     private boolean shouldUpdate;
 
+    private int color = -1;
+    private String colorName = null;
+
+    public WireBluestone(Integer color, String colorName) {
+
+        this.color = color.intValue();
+        this.colorName = colorName;
+    }
+
+    public WireBluestone() {
+
+    }
+
     @Override
     public String getType() {
 
-        return "bluestoneWire";
+        return "bluestoneWire" + (colorName != null ? "." + colorName : "");
     }
 
     @Override
     public String getUnlocalizedName() {
 
-        return "bluestoneWire";
+        return "bluestoneWire" + (colorName != null ? "." + colorName : "");
     }
 
     @Override
@@ -73,14 +94,15 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
     @Override
     public boolean canConnectToCable(CableWall cable) {
 
-        return cable != null && cable instanceof WireBluestone;
+        return cable != null && cable instanceof WireBluestone
+                && (((WireBluestone) cable).color == color || ((WireBluestone) cable).color == -1 || color == -1);
     }
 
     @Override
     public boolean canConnectToBlock(Block block, Vector3 location) {
 
         if (Loader.isModLoaded(Dependencies.FMP))
-            if (location.hasTileEntity() && isFMPTile(location.getTileEntity()) && !canConnectToTileEntityFMP(location.getTileEntity()))
+            if (location.hasTileEntity() && isFMPTile(location.getTileEntity()))
                 return false;
 
         boolean cc = BPApi.getInstance().getBluestoneApi().canConnect(location, this, loc.getDirectionTo(location));
@@ -103,14 +125,6 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
     private boolean isFMPTile(TileEntity tile) {
 
         return tile instanceof TileMultipart;
-    }
-
-    @Optional.Method(modid = Dependencies.FMP)
-    private boolean canConnectToTileEntityFMP(TileEntity tile) {
-
-        // ForgeDirection dir = new Vector3(tile).getDirectionTo(loc);
-
-        return false;
     }
 
     @Optional.Method(modid = Dependencies.FMP)
@@ -172,19 +186,19 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
     @Override
     protected TMultiPart getPartOnSide(ForgeDirection dir) {
 
-        return getFMPPartOnSide(this, dir);
+        return null;// getFMPPartOnSide(this, dir);
     }
 
     @Override
     public void addSelectionBoxes(List<AxisAlignedBB> boxes) {
 
-        boxes.add(SELECTION_BOX.clone().toAABB());
+        boxes.add((color == -1 ? SELECTION_BOX : SELECTION_BOX_INSULATED).clone().toAABB());
     }
 
     @Override
     public void addOcclusionBoxes(List<AxisAlignedBB> boxes) {
 
-        boxes.add(OCCLUSION_BOX.clone().toAABB());
+        boxes.add((color == -1 ? OCCLUSION_BOX : OCCLUSION_BOX_INSULATED).clone().toAABB());
     }
 
     @Override
@@ -195,7 +209,8 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
 
     @Override
     public boolean renderStatic(Vector3 loc, int pass) {
-        if(pass == 0){
+
+        if (pass == 0) {
             Tessellator t = Tessellator.instance;
             t.draw();
 
@@ -203,18 +218,14 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
                 textureOn = new ResourceLocation(Refs.MODID + ":textures/base/bluestoneOn.png");
             if (textureOff == null)
                 textureOff = new ResourceLocation(Refs.MODID + ":textures/base/bluestoneOff.png");
+            if (textureInsulationFB == null)
+                textureInsulationFB = new ResourceLocation(Refs.MODID + ":textures/blocks/bluestone/insulation_fb.png");
+            if (textureInsulationLR == null)
+                textureInsulationLR = new ResourceLocation(Refs.MODID + ":textures/blocks/bluestone/insulation_lr.png");
 
             GL11.glPushMatrix();
             {
                 rotateAndTranslateDynamic(loc, pass, 0);
-
-                if (power > 0)
-                    Minecraft.getMinecraft().renderEngine.bindTexture(textureOn);
-                else
-                    Minecraft.getMinecraft().renderEngine.bindTexture(textureOff);
-
-                // Render center
-                renderBox(7, 0, 7, 9, 1, 9);
 
                 int[] sides = new int[] { 0, 0, 0, 0 };
 
@@ -376,6 +387,15 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
                     id++;
                 }
 
+                if (power > 0)
+                    Minecraft.getMinecraft().renderEngine.bindTexture(textureOn);
+                else
+                    Minecraft.getMinecraft().renderEngine.bindTexture(textureOff);
+
+                if (color == -1) {// FIXME
+                    // Render center
+                    renderBox(7, 0, 7, 9, 1, 9);
+                }
                 if (sides[3] > 0)// East
                     renderBox(0 - (sides[3] - 1), 0, 7, 7, 1, 9);
                 if (sides[2] > 0)// West
@@ -384,13 +404,51 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
                     renderBox(7, 0, 0 - (sides[1] - 1), 9, 1, 7);
                 if (sides[0] > 0)// North
                     renderBox(7, 0, 9, 9, 1, 16 + (sides[0] - 1));
+
+                if (color >= 0) {// FIXME
+                    double r = ((color >> 16) & 0xFF) / 255D;
+                    double g = ((color >> 8) & 0xFF) / 255D;
+                    double b = (color & 0xFF) / 255D;
+                    GL11.glColor4d((r * 0.7) + 0.1, (g * 0.7) + 0.1, (b * 0.7) + 0.1, 1);
+                    Minecraft.getMinecraft().renderEngine.bindTexture(textureInsulationLR);
+                    renderBox(7, 0, 7, 9, 3, 9);
+                    if (sides[3] > 0) {// East
+                        Minecraft.getMinecraft().renderEngine.bindTexture(textureInsulationLR);
+                        renderBox(0, 0, 6, 7, 3, 10);
+                    } else {
+                        Minecraft.getMinecraft().renderEngine.bindTexture(textureInsulationFB);
+                        renderBox(6, 0, 7 - (sides[1] == 0 ? 1 : 0), 7, 3, 9 + (sides[0] == 0 ? 1 : 0));
+                    }
+                    if (sides[2] > 0) {// West
+                        Minecraft.getMinecraft().renderEngine.bindTexture(textureInsulationLR);
+                        renderBox(9, 0, 6, 16, 3, 10);
+                    } else {
+                        Minecraft.getMinecraft().renderEngine.bindTexture(textureInsulationFB);
+                        renderBox(9, 0, 7 - (sides[1] == 0 ? 1 : 0), 10, 3, 9 + (sides[0] == 0 ? 1 : 0));
+                    }
+                    if (sides[1] > 0) {// South
+                        Minecraft.getMinecraft().renderEngine.bindTexture(textureInsulationFB);
+                        renderBox(6, 0, 0, 10, 3, 7);
+                    } else {
+                        Minecraft.getMinecraft().renderEngine.bindTexture(textureInsulationLR);
+                        renderBox(7, 0, 6, 9, 3, 7);
+                    }
+                    if (sides[0] > 0) {// North
+                        Minecraft.getMinecraft().renderEngine.bindTexture(textureInsulationFB);
+                        renderBox(6, 0, 9, 10, 3, 16);
+                    } else {
+                        Minecraft.getMinecraft().renderEngine.bindTexture(textureInsulationLR);
+                        renderBox(7, 0, 9, 9, 3, 10);
+                    }
+                    GL11.glColor4d(1D, 1D, 1D, 1D);
+                }
             }
             GL11.glPopMatrix();
 
             t.startDrawingQuads();
 
             return true;
-        }else{
+        } else {
             return false;
         }
     }
@@ -411,6 +469,9 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
         }
         GL11.glPushMatrix();
         {
+            GL11.glTranslated(0.5, 0.5, 0.5);
+            GL11.glRotated(180, 0, 0, -1);
+            GL11.glTranslated(-0.5, -0.5, -0.5);
             switch (type) {
             case ENTITY:
                 if (item.getItemFrame() != null) {
@@ -426,7 +487,7 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
                 GL11.glTranslated(-0.5, 0, 0);
                 break;
             case INVENTORY:
-                GL11.glTranslated(0, -0.625, 0);
+                GL11.glTranslated(-0.125, -0.625, 0);
                 GL11.glScaled(1.125, 1.125, 1.125);
                 break;
             default:
@@ -469,15 +530,7 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
         if (!getWorld().isRemote) {
             int oldPS = powerSelf;
 
-            powerSelf = 0;
-            for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
-                if (d == ForgeDirection.getOrientation(getFace()) || d == ForgeDirection.getOrientation(getFace()).getOpposite())
-                    continue;
-                if (!(new Vector3(getX(), getY(), getZ(), getWorld()).add(d).getBlock() instanceof BlockRedstoneWire)
-                        && !(connections[ForgeDirectionUtils.getSide(d)] != null && connections[ForgeDirectionUtils.getSide(d)] instanceof WireBluestone))
-                    powerSelf = Math.max(powerSelf,
-                            RedstoneHelper.getInput(getWorld(), getX(), getY(), getZ(), d, ForgeDirection.getOrientation(getFace())));
-            }
+            recalculatePower();
 
             if (powerSelf != oldPS || shouldUpdate) {
                 List<WireBluestone> l = new ArrayList<WireBluestone>();
@@ -503,6 +556,29 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
                     }
                 }
             }
+        }
+    }
+
+    private void recalculatePower() {
+
+        for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
+
+            ForgeDirection dir = d.getOpposite();
+            if (dir == ForgeDirection.UP || dir == ForgeDirection.DOWN)
+                dir = dir.getOpposite();
+            if (dir == ForgeDirection.getOrientation(getFace()))
+                continue;
+
+            if (!(new Vector3(getX(), getY(), getZ(), getWorld()).add(d).getBlock() instanceof BlockRedstoneWire)
+                    && !(connections[ForgeDirectionUtils.getSide(d)] != null && connections[ForgeDirectionUtils.getSide(d)] instanceof WireBluestone))
+                if (dir == ForgeDirection.getOrientation(getFace()).getOpposite()) {
+                    int in = RedstoneHelper.getInput(getWorld(), getX(), getY(), getZ(), d, ForgeDirection.getOrientation(getFace()));
+                    if (in > getPower())
+                        powerSelf = Math.max(powerSelf, in);
+                } else {
+                    powerSelf = Math.max(powerSelf,
+                            RedstoneHelper.getInput(getWorld(), getX(), getY(), getZ(), d, ForgeDirection.getOrientation(getFace())));
+                }
         }
     }
 
