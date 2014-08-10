@@ -1,5 +1,6 @@
 package com.bluepowermod.part.gate.ic;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.entity.item.EntityItem;
@@ -22,7 +23,9 @@ import com.bluepowermod.api.vec.Vector3;
 import com.bluepowermod.compat.CompatibilityUtils;
 import com.bluepowermod.init.BPItems;
 import com.bluepowermod.part.PartRegistry;
+import com.bluepowermod.part.cable.bluestone.WireBluestone;
 import com.bluepowermod.part.gate.GateBase;
+import com.bluepowermod.part.gate.GateWire;
 import com.bluepowermod.raytrace.RayTracer;
 import com.bluepowermod.util.Dependencies;
 
@@ -49,8 +52,8 @@ public abstract class IntegratedCircuit extends GateBase {
     public void addSelectionBoxes(List<AxisAlignedBB> boxes) {
     
         super.addSelectionBoxes(boxes);
-        double minY = 2 / 16D;
-        double maxY = 3 / 16D;
+        double minY = 1 / 16D;
+        double maxY = 2 / 16D + 0.01;
         
         double gateWidth = (1.0 - 2 * BORDER_WIDTH) / getCircuitWidth();
         for (int x = 0; x < getCircuitWidth(); x++) {
@@ -130,6 +133,7 @@ public abstract class IntegratedCircuit extends GateBase {
     @Override
     public void doLogic(RedstoneConnection front, RedstoneConnection left, RedstoneConnection back, RedstoneConnection right) {
     
+        updateWires();
         for (int i = 0; i < gates.length; i++) {
             for (int j = 0; j < gates[i].length; j++) {
                 BPPartFace gate = gates[i][j];
@@ -156,7 +160,7 @@ public abstract class IntegratedCircuit extends GateBase {
                             FaceDirection neighborDir = FaceDirection.getDirection(ForgeDirection.UP, forgeDir, neighbor.getRotation()).getOpposite();
                             FaceDirection gateDir = FaceDirection.getDirection(ForgeDirection.UP, forgeDir, gate.getRotation());
                             
-                            if (neighbor.getConnection(neighborDir).isEnabled() && neighbor.getConnection(neighborDir).isOutput()) {
+                            if (neighbor.getConnection(neighborDir).isEnabled() && (neighbor.getConnection(neighborDir).isOutput() || neighbor instanceof GateWire)) {
                                 if (gate.getConnection(gateDir).isEnabled() && gate.getConnection(gateDir).isInput()) {
                                     gate.getConnection(gateDir).setPower(neighbor.getConnection(neighborDir).getPower());
                                 }
@@ -177,6 +181,84 @@ public abstract class IntegratedCircuit extends GateBase {
         if (faceDir == FaceDirection.BACK && y > 0) return gates[x][y - 1];
         if (faceDir == FaceDirection.FRONT && y < getCircuitWidth() - 1) return gates[x][y + 1];
         return null;
+    }
+    
+    private int getOffsetX(FaceDirection faceDir) {
+    
+        return faceDir == FaceDirection.RIGHT ? -1 : faceDir == FaceDirection.LEFT ? 1 : 0;
+    }
+    
+    private int getOffsetY(FaceDirection faceDir) {
+    
+        return faceDir == FaceDirection.BACK ? -1 : faceDir == FaceDirection.FRONT ? 1 : 0;
+    }
+    
+    private void updateWires() {
+    
+        List<GateWire> traversedWires = new ArrayList<GateWire>();
+        for (int i = 0; i < getCircuitWidth(); i++) {
+            for (int j = 0; j < getCircuitWidth(); j++) {
+                if (gates[i][j] instanceof GateWire && !traversedWires.contains(gates[i][j])) {
+                    int startSize = traversedWires.size();
+                    int wirePowaah = traverseWire(traversedWires, i, j);//POWAHH!
+                    /* for (int k = startSize; k < traversedWires.size(); k++) {//check for interfaces with the outside world
+                         GateWire wire = traversedWires.get(k);
+                         int index = getGateIndex(wire);
+                         int x = index / getCircuitWidth();
+                         int y = index % getCircuitWidth();
+                         if(x == 0 )
+                     }*/
+                    for (int k = startSize; k < traversedWires.size(); k++) {
+                        GateWire wire = traversedWires.get(k);
+                        for (FaceDirection dir : FaceDirection.values()) {
+                            wire.getConnection(dir).setPower(wirePowaah);
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    private int traverseWire(List<GateWire> traversedWires, int x, int y) {
+    
+        if (x < 0 || y < 0 || x >= getCircuitWidth() || y >= getCircuitWidth()) return 0;
+        int maxPowaah = 0;
+        GateWire curWire = (GateWire) gates[x][y];
+        traversedWires.add(curWire);
+        for (FaceDirection dir : FaceDirection.values()) {
+            
+            BPPartFace neighbor = getNeighbor(x, y, dir);
+            if (neighbor != null) {
+                ForgeDirection forgeDir = null;
+                switch (dir) {
+                    case FRONT:
+                        forgeDir = ForgeDirection.SOUTH;
+                        break;
+                    case BACK:
+                        forgeDir = ForgeDirection.NORTH;
+                        break;
+                    case LEFT:
+                        forgeDir = ForgeDirection.EAST;
+                        break;
+                    case RIGHT:
+                        forgeDir = ForgeDirection.WEST;
+                        break;
+                }
+                FaceDirection neighborDir = FaceDirection.getDirection(ForgeDirection.UP, forgeDir, neighbor.getRotation()).getOpposite();
+                FaceDirection gateDir = FaceDirection.getDirection(ForgeDirection.UP, forgeDir, curWire.getRotation());
+                if (curWire.getConnection(gateDir).isEnabled()) {
+                    if (neighbor instanceof GateWire) {
+                        if (!traversedWires.contains(neighbor) && neighbor.getConnection(neighborDir).isEnabled()) {
+                            maxPowaah = Math.max(maxPowaah, traverseWire(traversedWires, x + getOffsetX(dir), y + getOffsetY(dir)));
+                        }
+                    } else {
+                        RedstoneConnection connection = neighbor.getConnection(neighborDir);
+                        if (connection.isEnabled() && connection.isOutput()) maxPowaah = Math.max(maxPowaah, connection.getPower());
+                    }
+                }
+            }
+        }
+        return maxPowaah;
     }
     
     private void reflectGates(RedstoneConnection front, RedstoneConnection left, RedstoneConnection back, RedstoneConnection right) {
@@ -301,7 +383,11 @@ public abstract class IntegratedCircuit extends GateBase {
                     if (gates[k][j] != null && gates[k][j].getType().equals(type)) {
                         gate = gates[k][j];
                     } else {
-                        gate = (BPPartFace) PartRegistry.getInstance().createPart(type);
+                        if (type.equals(GateWire.ID)) {
+                            gate = new GateWire();
+                        } else {
+                            gate = (BPPartFace) PartRegistry.getInstance().createPart(type);
+                        }
                         gates[k][j] = gate;
                         gates[k][j].parentCircuit = this;
                     }
@@ -371,6 +457,9 @@ public abstract class IntegratedCircuit extends GateBase {
         int y = getCircuitWidth() - 1 - subPartHit % getCircuitWidth();
         if (gates[x][y] != null) {
             if (!getWorld().isRemote) {
+                if (gates[x][y] instanceof GateWire) {
+                    gates[x][y] = new WireBluestone();
+                }
                 ItemStack partStack = PartRegistry.getInstance().getItemForPart(gates[x][y].getType());
                 getWorld().spawnEntityInWorld(new EntityItem(getWorld(), getX() + 0.5, getY() + 0.5, getZ() + 0.5, partStack));
                 gates[x][y] = null;
@@ -388,6 +477,9 @@ public abstract class IntegratedCircuit extends GateBase {
         for (BPPartFace[] gateArray : gates) {
             for (BPPartFace gate : gateArray) {
                 if (gate != null) {
+                    if (gate instanceof GateWire) {
+                        gate = new WireBluestone();
+                    }
                     ItemStack partStack = PartRegistry.getInstance().getItemForPart(gate.getType());
                     getWorld().spawnEntityInWorld(new EntityItem(getWorld(), getX() + 0.5, getY() + 0.5, getZ() + 0.5, partStack));
                 }
@@ -401,6 +493,9 @@ public abstract class IntegratedCircuit extends GateBase {
     
         if (stack != null && stack.getItem() == BPItems.multipart) {
             BPPart part = PartRegistry.getInstance().createPartFromItem(stack);
+            if (part instanceof WireBluestone) {
+                part = new GateWire();
+            }
             if (part instanceof GateBase && !(part instanceof IntegratedCircuit)) {
                 gates[x][y] = (BPPartFace) part;
                 ((BPPartFace) part).setFace(1);
