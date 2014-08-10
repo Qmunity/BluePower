@@ -26,12 +26,13 @@ import com.bluepowermod.api.part.redstone.IBPRedstonePart;
 import com.bluepowermod.api.util.ForgeDirectionUtils;
 import com.bluepowermod.api.vec.Vector3;
 import com.bluepowermod.api.vec.Vector3Cube;
+import com.bluepowermod.part.gate.ic.IntegratedCircuit;
 
 public abstract class BPPartFace extends BPPart implements IBPFacePart, IBPRedstonePart {
     
     private int                     face           = 0;
     private int                     rotation       = 0;
-    public boolean                  isAttachedToIC;                               //True if attached to integrated circuit.
+    public IntegratedCircuit        parentCircuit;                                //!= null when connected to a circuit
                                                                                    
     protected RedstoneConnection[]  connections    = new RedstoneConnection[4];
     
@@ -250,7 +251,7 @@ public abstract class BPPartFace extends BPPart implements IBPFacePart, IBPRedst
     
         super.update();
         
-        if (!isAttachedToIC) {
+        if (parentCircuit == null) {
             ForgeDirection face = ForgeDirection.getOrientation(getFace()).getOpposite();
             
             for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {

@@ -23,6 +23,7 @@ import com.bluepowermod.compat.CompatibilityUtils;
 import com.bluepowermod.init.BPItems;
 import com.bluepowermod.part.PartRegistry;
 import com.bluepowermod.part.gate.GateBase;
+import com.bluepowermod.raytrace.RayTracer;
 import com.bluepowermod.util.Dependencies;
 
 public abstract class IntegratedCircuit extends GateBase {
@@ -57,6 +58,21 @@ public abstract class IntegratedCircuit extends GateBase {
                 boxes.add(AxisAlignedBB.getBoundingBox(BORDER_WIDTH + x * gateWidth, minY, BORDER_WIDTH + y * gateWidth, BORDER_WIDTH + (x + 1) * gateWidth, maxY, BORDER_WIDTH + (y + 1) * gateWidth));
             }
         }
+    }
+    
+    public int getGateIndex(BPPartFace part) {
+    
+        for (int i = 0; i < getCircuitWidth(); i++) {
+            for (int j = 0; j < getCircuitWidth(); j++) {
+                if (part == gates[i][j]) { return i * getCircuitWidth() + j; }
+            }
+        }
+        throw new IllegalArgumentException("Part not found in Integrated Circuit");
+    }
+    
+    public BPPartFace getPartForIndex(int index) {
+    
+        return gates[index / getCircuitWidth()][index % getCircuitWidth()];
     }
     
     @Override
@@ -275,16 +291,20 @@ public abstract class IntegratedCircuit extends GateBase {
     public void load(NBTTagCompound tag) {
     
         super.load(tag);
-        clearGateArray();
         for (int k = 0; k < gates.length; k++) {
             for (int j = 0; j < gates[k].length; j++) {
                 if (tag.hasKey("gate" + k + "" + j)) {
                     NBTTagCompound gateTag = tag.getCompoundTag("gate" + k + "" + j);
                     
                     String type = gateTag.getString("part_id");
-                    GateBase gate = (GateBase) PartRegistry.getInstance().createPart(type);
-                    gates[k][j] = gate;
-                    gates[k][j].isAttachedToIC = true;
+                    BPPartFace gate;
+                    if (gates[k][j] != null && gates[k][j].getType().equals(type)) {
+                        gate = gates[k][j];
+                    } else {
+                        gate = (BPPartFace) PartRegistry.getInstance().createPart(type);
+                        gates[k][j] = gate;
+                        gates[k][j].parentCircuit = this;
+                    }
                     
                     NBTTagCompound t = gateTag.getCompoundTag("partData");
                     gate.load(t);
@@ -303,6 +323,8 @@ public abstract class IntegratedCircuit extends GateBase {
                             c.load(ta);
                         }
                     }
+                } else {
+                    gates[k][j] = null;
                 }
             }
         }
@@ -317,13 +339,19 @@ public abstract class IntegratedCircuit extends GateBase {
     @Override
     public boolean onActivated(EntityPlayer player, MovingObjectPosition mop, ItemStack item) {
     
-        int subPartHit = ((IMultipartCompat) CompatibilityUtils.getModule(Dependencies.FMP)).getMOPData(mop);
-        if (subPartHit == 0) return super.onActivated(player, mop, item);
+        //int subPartHit = ((IMultipartCompat) CompatibilityUtils.getModule(Dependencies.FMP)).getMOPData(mop);
+        
+        List<AxisAlignedBB> aabbs = getSelectionBoxes();
+        int subPartHit = aabbs.indexOf(RayTracer.getSelectedBox(mop, player, ForgeDirection.getOrientation(getFace()), aabbs));
+        
+        if (subPartHit <= 0) return super.onActivated(player, mop, item);
+        
         subPartHit--;
         int x = getCircuitWidth() - 1 - subPartHit / getCircuitWidth();
         int y = getCircuitWidth() - 1 - subPartHit % getCircuitWidth();
         if (gates[x][y] != null) {
             if (gates[x][y].onActivated(player, mop, item)) {
+                sendUpdatePacket();
                 return true;
             } else {
                 return false;
@@ -376,7 +404,7 @@ public abstract class IntegratedCircuit extends GateBase {
             if (part instanceof BPPartFace && !(part instanceof IntegratedCircuit)) {
                 gates[x][y] = (BPPartFace) part;
                 ((BPPartFace) part).setFace(1);
-                ((BPPartFace) part).isAttachedToIC = true;
+                ((BPPartFace) part).parentCircuit = this;
                 part.setWorld(getWorld());
                 part.setX(getX());
                 part.setY(getY());
