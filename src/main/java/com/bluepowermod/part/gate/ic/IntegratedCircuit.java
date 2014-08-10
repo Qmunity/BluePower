@@ -133,6 +133,8 @@ public abstract class IntegratedCircuit extends GateBase {
     @Override
     public void doLogic(RedstoneConnection front, RedstoneConnection left, RedstoneConnection back, RedstoneConnection right) {
     
+        if (getWorld() != null && !getWorld().isRemote && getWorld().getWorldTime() % 400 == 0) sendUpdatePacket();//Prevent slow desyncing of the timer.
+        
         updateWires();
         for (int i = 0; i < gates.length; i++) {
             for (int j = 0; j < gates[i].length; j++) {
@@ -443,7 +445,7 @@ public abstract class IntegratedCircuit extends GateBase {
                 return false;
             }
         } else {
-            return tryPlaceGate(player, x, y, item);
+            return tryPlaceGate(player, x, y, item, mop);
         }
     }
     
@@ -489,7 +491,7 @@ public abstract class IntegratedCircuit extends GateBase {
         return drops;
     }
     
-    private boolean tryPlaceGate(EntityPlayer player, int x, int y, ItemStack stack) {
+    private boolean tryPlaceGate(EntityPlayer player, int x, int y, ItemStack stack, MovingObjectPosition mop) {
     
         if (stack != null && stack.getItem() == BPItems.multipart) {
             BPPart part = PartRegistry.getInstance().createPartFromItem(stack);
