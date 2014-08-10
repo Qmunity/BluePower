@@ -143,28 +143,28 @@ public class RenderHelper {
 
             t.startDrawingQuads();
             t.addVertexWithUV(0, 0, 0, minU, maxV);
-            t.addVertexWithUV(0, 1, 0, minU, minV);
-            t.addVertexWithUV(1, 1, 0, maxU, minV);
+            t.addVertexWithUV(0, 6F / 8F, 0, minU, minV);
+            t.addVertexWithUV(1, 6F / 8F, 0, maxU, minV);
             t.addVertexWithUV(1, 0, 0, maxU, maxV);
 
             t.addTranslation(0, 0, 2 / 16F);
             t.addVertexWithUV(0, 0, 0, maxU, maxV);
             t.addVertexWithUV(1, 0, 0, minU, maxV);
-            t.addVertexWithUV(1, 1, 0, minU, minV);
-            t.addVertexWithUV(0, 1, 0, maxU, minV);
+            t.addVertexWithUV(1, 6F / 8F, 0, minU, minV);
+            t.addVertexWithUV(0, 6F / 8F, 0, maxU, minV);
             t.addTranslation(0, 0, -2 / 16F);
 
             t.addTranslation(7 / 16F, 0, -7 / 16F);
             t.addVertexWithUV(0, 0, 0, maxU, maxV);
             t.addVertexWithUV(0, 0, 1, minU, maxV);
-            t.addVertexWithUV(0, 1, 1, minU, minV);
-            t.addVertexWithUV(0, 1, 0, maxU, minV);
+            t.addVertexWithUV(0, 6F / 8F, 1, minU, minV);
+            t.addVertexWithUV(0, 6F / 8F, 0, maxU, minV);
             t.addTranslation(-7 / 16F, 0, 7 / 16F);
 
             t.addTranslation(9 / 16F, 0, -7 / 16F);
             t.addVertexWithUV(0, 0, 0, minU, maxV);
-            t.addVertexWithUV(0, 1, 0, minU, minV);
-            t.addVertexWithUV(0, 1, 1, maxU, minV);
+            t.addVertexWithUV(0, 6F / 8F, 0, minU, minV);
+            t.addVertexWithUV(0, 6F / 8F, 1, maxU, minV);
             t.addVertexWithUV(0, 0, 1, maxU, maxV);
             t.addTranslation(-9 / 16F, 0, 7 / 16F);
 
@@ -173,10 +173,10 @@ public class RenderHelper {
             maxU = icon.getInterpolatedU(9);
             minV = icon.getInterpolatedV(6);
             maxV = icon.getInterpolatedV(8);
-            t.addVertexWithUV(0, 10 / 16D, 0, minU, maxV);
-            t.addVertexWithUV(0, 10 / 16D, 1 / 8D, minU, minV);
-            t.addVertexWithUV(1 / 8D, 10 / 16D, 1 / 8D, maxU, minV);
-            t.addVertexWithUV(1 / 8D, 10 / 16D, 0, maxU, maxV);
+            t.addVertexWithUV(0, 15 / 32D, 0, minU, maxV);
+            t.addVertexWithUV(0, 15 / 32D, 1 / 8D, minU, minV);
+            t.addVertexWithUV(1 / 8D, 15 / 32D, 1 / 8D, maxU, minV);
+            t.addVertexWithUV(1 / 8D, 15 / 32D, 0, maxU, maxV);
             t.addTranslation(-7 / 16F, 0, 0);
             t.draw();
         }

@@ -64,6 +64,11 @@ public abstract class GateBase extends BPPartFace {
         return getGateID();
     }
 
+    protected String getTextureName() {
+
+        return getType();
+    }
+
     @Override
     public String getUnlocalizedName() {
 
@@ -94,6 +99,7 @@ public abstract class GateBase extends BPPartFace {
 
         if (getWorld().isRemote && Config.enableGateSounds)
             getWorld().playSound(getX(), getY(), getZ(), "gui.button.press", 0.3F, 0.5F, false);
+
     }
 
     @Override
@@ -154,13 +160,13 @@ public abstract class GateBase extends BPPartFace {
         if (connection.isEnabled()) {
             renderTopTexture(side, connection.getPower() > 0);
         } else {
-            renderTopTexture(Refs.MODID + ":textures/blocks/gates/" + getType() + "/" + side.getName() + "_disabled.png");
+            renderTopTexture(Refs.MODID + ":textures/blocks/gates/" + getTextureName() + "/" + side.getName() + "_disabled.png");
         }
     }
 
     protected void renderTopTexture(FaceDirection side, boolean state) {
 
-        renderTopTexture(Refs.MODID + ":textures/blocks/gates/" + getType() + "/" + side.getName() + "_" + (state ? "on" : "off") + ".png");
+        renderTopTexture(Refs.MODID + ":textures/blocks/gates/" + getTextureName() + "/" + side.getName() + "_" + (state ? "on" : "off") + ".png");
     }
 
     public void renderTopTexture(String texture) {
@@ -237,14 +243,14 @@ public abstract class GateBase extends BPPartFace {
 
     public void renderTop(float frame) {
 
-        renderTopTexture(Refs.MODID + ":textures/blocks/gates/" + getType() + "/base.png");
+        renderTopTexture(Refs.MODID + ":textures/blocks/gates/" + getTextureName() + "/base.png");
         renderTop(getConnection(FaceDirection.FRONT), getConnection(FaceDirection.LEFT), getConnection(FaceDirection.BACK),
                 getConnection(FaceDirection.RIGHT), frame);
     }
 
     public void renderTop() {
 
-        renderTopTexture(Refs.MODID + ":textures/blocks/gates/" + getType() + "/base.png");
+        renderTopTexture(Refs.MODID + ":textures/blocks/gates/" + getTextureName() + "/base.png");
         renderTopItem(getConnection(FaceDirection.FRONT), getConnection(FaceDirection.LEFT), getConnection(FaceDirection.BACK),
                 getConnection(FaceDirection.RIGHT));
     }
@@ -325,6 +331,11 @@ public abstract class GateBase extends BPPartFace {
     public float getHardness() {
 
         return 1;
+    }
+
+    public boolean isCraftableInCircuitTable() {
+
+        return true;
     }
 
 }

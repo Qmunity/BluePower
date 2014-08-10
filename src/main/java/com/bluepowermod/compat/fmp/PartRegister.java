@@ -24,6 +24,9 @@ import com.bluepowermod.part.gate.GateToggleLatch;
 import com.bluepowermod.part.gate.GateTransparentLatch;
 import com.bluepowermod.part.gate.GateXnor;
 import com.bluepowermod.part.gate.GateXor;
+import com.bluepowermod.part.gate.ic.Circuit3x3;
+import com.bluepowermod.part.gate.ic.Circuit5x5;
+import com.bluepowermod.part.gate.ic.Circuit7x7;
 import com.bluepowermod.part.lamp.PartCageLamp;
 import com.bluepowermod.part.lamp.PartFixture;
 import com.bluepowermod.part.tube.Accelerator;
@@ -57,6 +60,10 @@ public class PartRegister {
         PartRegistry.getInstance().registerPart(GateStateCell.class);
         PartRegistry.getInstance().registerPart(GateRepeater.class);
         PartRegistry.getInstance().registerPart(GateTransparentLatch.class);
+
+        PartRegistry.getInstance().registerPart(Circuit3x3.class);
+        PartRegistry.getInstance().registerPart(Circuit5x5.class);
+        PartRegistry.getInstance().registerPart(Circuit7x7.class);
 
         // Lamps
         for (int i = 0; i < ItemDye.field_150922_c.length; i++)

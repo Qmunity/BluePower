@@ -417,6 +417,17 @@ public abstract class BPPart {
     }
 
     /**
+     * Called when player left click.
+     * 
+     * @param player
+     * @param hit
+     * @param item
+     */
+    public void click(EntityPlayer player, MovingObjectPosition hit, ItemStack item) {
+
+    }
+
+    /**
      * Notifies surrounding blocks of a part update in this block
      */
     private boolean shouldNotifyUpdates = false;
@@ -688,8 +699,4 @@ public abstract class BPPart {
         return false;
     }
 
-    public boolean canRenderInPass(int pass) {
-
-        return pass == 0;
-    }
 }

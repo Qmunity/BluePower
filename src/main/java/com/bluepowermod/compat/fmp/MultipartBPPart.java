@@ -272,6 +272,12 @@ public class MultipartBPPart extends TMultiPart implements IRedstonePart, JNorma
         return getPart().onActivated(player, hit, item);
     }
 
+    @Override
+    public void click(EntityPlayer player, MovingObjectPosition hit, ItemStack item) {
+
+        getPart().click(player, hit, item);
+    }
+
     // Rendering
 
     private static int emptyStaticRender = -1;
@@ -297,9 +303,16 @@ public class MultipartBPPart extends TMultiPart implements IRedstonePart, JNorma
             GL11.glNewList(emptyStaticRender, GL11.GL_COMPILE);
             GL11.glEndList();
         }
-        if (staticRender0 == -1 || getPart().shouldReRender() && getPart().canRenderInPass(0))
+        if (staticRender0 == -1 || getPart().shouldReRender() && getPart().shouldRenderStaticOnPass(0))
             reRenderStatic(new Vector3(0, 0, 0), 0);
-        if (staticRender1 == -1 || getPart().shouldReRender() && getPart().canRenderInPass(1))
+        if (staticRender1 == -1 || getPart().shouldReRender() && getPart().shouldRenderStaticOnPass(1))
+            reRenderStatic(new Vector3(0, 0, 0), 1);
+        if (getPart().shouldReRender())
+            getPart().resetRenderUpdate();
+
+        if (staticRender0 == -1 || getPart().shouldReRender())
+            reRenderStatic(new Vector3(0, 0, 0), 0);
+        if (staticRender1 == -1 || getPart().shouldReRender())
             reRenderStatic(new Vector3(0, 0, 0), 1);
         if (getPart().shouldReRender())
             getPart().resetRenderUpdate();

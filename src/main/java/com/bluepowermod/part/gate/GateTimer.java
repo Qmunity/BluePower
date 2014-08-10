@@ -57,6 +57,7 @@ public class GateTimer extends GateBase implements IGuiButtonSensitive {
         renderTopTexture(FaceDirection.RIGHT, power);
         renderTopTexture(FaceDirection.BACK, back.getPower() > 0);
         RenderHelper.renderRedstoneTorch(0, 1D / 8D, 0, 13D / 16D, true);
+        RenderHelper.renderRedstoneTorch(0, 1D / 8D, -5D / 16D, 1D / 2D, power);
         RenderHelper.renderPointer(0, 7D / 16D, 0, getWorld() != null ? back.getPower() == 0 ? 1 - (double) (ticks + frame) / (double) time : 0 : 0);
     }
     
@@ -71,7 +72,7 @@ public class GateTimer extends GateBase implements IGuiButtonSensitive {
     @Override
     public void doLogic(RedstoneConnection front, RedstoneConnection left, RedstoneConnection back, RedstoneConnection right) {
     
-        if (!getWorld().isRemote && getWorld().getWorldTime() % 400 == 0) sendUpdatePacket();//Prevent slow desyncing of the timer.
+        if (getWorld() != null && !getWorld().isRemote && getWorld().getWorldTime() % 400 == 0) sendUpdatePacket();//Prevent slow desyncing of the timer.
         power = false;
         
         if (back.getPower() == 0) {

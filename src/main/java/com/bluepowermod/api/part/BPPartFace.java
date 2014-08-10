@@ -26,11 +26,13 @@ import com.bluepowermod.api.part.redstone.IBPRedstonePart;
 import com.bluepowermod.api.util.ForgeDirectionUtils;
 import com.bluepowermod.api.vec.Vector3;
 import com.bluepowermod.api.vec.Vector3Cube;
+import com.bluepowermod.part.gate.ic.IntegratedCircuit;
 
 public abstract class BPPartFace extends BPPart implements IBPFacePart, IBPRedstonePart {
 
     private int face = 0;
     private int rotation = 0;
+    public IntegratedCircuit parentCircuit; // != null when connected to a circuit
 
     protected RedstoneConnection[] connections = new RedstoneConnection[4];
 
@@ -169,7 +171,7 @@ public abstract class BPPartFace extends BPPart implements IBPFacePart, IBPRedst
 
         int p = RedstoneHelper.setOutput(getWorld(), getX(), getY(), getZ(), side, face, con.getPower());
 
-        return con.isOutput() ? p : 5;
+        return con.isOutput() ? p : 0;
     }
 
     @Override
@@ -257,12 +259,14 @@ public abstract class BPPartFace extends BPPart implements IBPFacePart, IBPRedst
 
         super.update();
 
-        ForgeDirection face = ForgeDirection.getOrientation(getFace()).getOpposite();
+        if (parentCircuit == null) {
+            ForgeDirection face = ForgeDirection.getOrientation(getFace()).getOpposite();
 
-        for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
-            RedstoneConnection rc = getConnection(d);
-            if (rc != null && rc.isInput()) {
-                rc.setPower(RedstoneHelper.getInput(getWorld(), getX(), getY(), getZ(), d, face));
+            for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
+                RedstoneConnection rc = getConnection(d);
+                if (rc != null && rc.isInput()) {
+                    rc.setPower(RedstoneHelper.getInput(getWorld(), getX(), getY(), getZ(), d, face));
+                }
             }
         }
     }
