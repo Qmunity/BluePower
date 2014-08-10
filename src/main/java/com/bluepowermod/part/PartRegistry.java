@@ -64,7 +64,6 @@ public class PartRegistry implements IPartRegistry {
 
         parts.put("tmp", e);
         BPPart p = createPart("tmp");
-        System.out.println("Registering: " + p);
         samples.put(p.getType(), p);
         parts.remove("tmp");
         parts.put(p.getType(), e);

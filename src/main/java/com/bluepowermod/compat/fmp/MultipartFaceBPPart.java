@@ -24,7 +24,6 @@ import com.bluepowermod.api.part.FaceDirection;
 import com.bluepowermod.api.part.IBPFacePart;
 import com.bluepowermod.api.part.RedstoneConnection;
 import com.bluepowermod.api.part.redstone.IBPRedstonePart;
-import com.bluepowermod.part.cable.bluestone.WireBluestone;
 
 public class MultipartFaceBPPart extends MultipartBPPart implements TFacePart, IFaceRedstonePart {
 
@@ -74,9 +73,6 @@ public class MultipartFaceBPPart extends MultipartBPPart implements TFacePart, I
 
     @Override
     public int strongPowerLevel(int side) {
-
-        if (getPart() instanceof WireBluestone)
-            System.out.println(ForgeDirection.getOrientation(side) + " - " + ForgeDirection.getOrientation(getFace()));
 
         if (side == getFace())
             return getPart().getRedstonePower();
