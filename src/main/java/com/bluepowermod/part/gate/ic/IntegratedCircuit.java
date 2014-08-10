@@ -39,9 +39,9 @@ public abstract class IntegratedCircuit extends GateBase {
     
     private void clearGateArray() {
     
-        gates = new GateBase[getCircuitWidth()][];
+        gates = new BPPartFace[getCircuitWidth()][];
         for (int i = 0; i < gates.length; i++) {
-            gates[i] = new GateBase[gates.length];
+            gates[i] = new BPPartFace[gates.length];
         }
     }
     
@@ -401,7 +401,7 @@ public abstract class IntegratedCircuit extends GateBase {
     
         if (stack != null && stack.getItem() == BPItems.multipart) {
             BPPart part = PartRegistry.getInstance().createPartFromItem(stack);
-            if (part instanceof BPPartFace && !(part instanceof IntegratedCircuit)) {
+            if (part instanceof GateBase && !(part instanceof IntegratedCircuit)) {
                 gates[x][y] = (BPPartFace) part;
                 ((BPPartFace) part).setFace(1);
                 ((BPPartFace) part).parentCircuit = this;
