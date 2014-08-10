@@ -26,6 +26,8 @@ public interface IMultipartCompat {
 
     public <T> T getBPPart(TileEntity te, Class<T> searchedClass);
 
+    public <T> T getBPPartOnFace(TileEntity te, Class<T> searchedClass, ForgeDirection face);
+
     public <T> List<T> getBPParts(TileEntity te, Class<T> searchedClass);
 
     public int getMOPData(MovingObjectPosition mop);

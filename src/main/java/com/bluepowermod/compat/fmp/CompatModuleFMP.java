@@ -31,6 +31,7 @@ import codechicken.multipart.handler.MultipartProxy;
 
 import com.bluepowermod.api.compat.IMultipartCompat;
 import com.bluepowermod.api.part.BPPart;
+import com.bluepowermod.api.part.BPPartFace;
 import com.bluepowermod.api.vec.Vector3;
 import com.bluepowermod.compat.CompatModule;
 import com.bluepowermod.init.BPBlocks;
@@ -208,6 +209,17 @@ public class CompatModuleFMP extends CompatModule implements IMultipartCompat {
             }
         }
         return l;
+    }
+
+    @Override
+    public <T> T getBPPartOnFace(TileEntity te, Class<T> searchedClass, ForgeDirection face) {
+
+        List<T> parts = getBPParts(te, searchedClass);
+        for (T p : parts)
+            if (p instanceof BPPartFace)
+                if (ForgeDirection.getOrientation(((BPPartFace) p).getFace()) == face)
+                    return p;
+        return null;
     }
 
     @SuppressWarnings("unchecked")

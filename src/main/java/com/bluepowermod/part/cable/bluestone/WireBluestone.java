@@ -65,7 +65,7 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
     private int color = -1;
     private String colorName = null;
 
-    private boolean disableStrongOutput = false;
+    private boolean firstTick = true;
 
     public WireBluestone(Integer color, String colorName) {
 
@@ -574,8 +574,6 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
 
         powerSelf = 0;
 
-        disableStrongOutput = true;
-
         for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
 
             ForgeDirection dir = d;
@@ -587,14 +585,18 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
             Vector3 l = null;// Get the block in that set of coords
 
             // If it's either disconnected on that side OR connected and it's not bluestone wire
-            if (connections[ForgeDirectionUtils.getSide(d)] != null && !(connections[ForgeDirectionUtils.getSide(d)] instanceof WireBluestone)) {
+            if (dir == ForgeDirection.getOrientation(getFace())
+                    || (connections[ForgeDirectionUtils.getSide(d)] != null && !(connections[ForgeDirectionUtils.getSide(d)] instanceof WireBluestone))) {
                 if (connections[ForgeDirectionUtils.getSide(d)] instanceof Vector3) {
                     l = (Vector3) connections[ForgeDirectionUtils.getSide(d)];
                 } else if (connections[ForgeDirectionUtils.getSide(d)] instanceof BPPart) {
                     BPPart part = (BPPart) connections[ForgeDirectionUtils.getSide(d)];
                     l = new Vector3(part.getX(), part.getY(), part.getZ(), part.getWorld());
                 } else {
-                    continue;
+                    if (connections[ForgeDirectionUtils.getSide(d)] == null)
+                        l = loc.getRelative(d);
+                    else
+                        continue;
                 }
                 if (l.getBlock(true) == null)
                     continue;
@@ -604,16 +606,18 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
                     for (ForgeDirection di : ForgeDirection.VALID_DIRECTIONS) {
                         if (di == d.getOpposite())
                             continue;
-                        powerSelf = Math.max(powerSelf, RedstoneHelper.getInput(l.getWorld(), l.getBlockX(), l.getBlockY(), l.getBlockZ(), di, null,
-                                true, false, dir != ForgeDirection.getOrientation(getFace())));
+                        if (BPApi.getInstance().getMultipartCompat()
+                                .getBPPartOnFace(l.getRelative(di).getTileEntity(), WireBluestone.class, di.getOpposite()) != null)
+                            continue;
+                        int p = RedstoneHelper.getInput(l.getWorld(), l.getBlockX(), l.getBlockY(), l.getBlockZ(), di, null, true, false,
+                                dir != ForgeDirection.getOrientation(getFace()));
+                        powerSelf = Math.max(powerSelf, p);
                     }
                 } else {
                     powerSelf = Math.max(powerSelf, RedstoneHelper.getInput(getWorld(), getX(), getY(), getZ(), d));
                 }
             }
         }
-
-        disableStrongOutput = false;
 
     }
 
@@ -627,6 +631,8 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
             c.enable();
             c.setOutput();
         }
+
+        firstTick = false;
     }
 
     @Override
@@ -671,13 +677,13 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
     @Override
     public int getCableWidth() {
 
-        return 2;
+        return 2 + (color >= 0 ? 2 : 0);
     }
 
     @Override
     public int getCableHeight() {
 
-        return 1;
+        return 1 + (color >= 0 ? 2 : 0);
     }
 
     @Override
@@ -705,12 +711,9 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
     }
 
     @Override
-    public int getStrongOutput(ForgeDirection side) {
+    public boolean canStay() {
 
-        if (disableStrongOutput)
-            return 0;
-
-        return super.getStrongOutput(side);
+        return super.canStay();
     }
 
 }
