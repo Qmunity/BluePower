@@ -25,6 +25,7 @@ import com.bluepowermod.containers.ContainerAlloyFurnace;
 import com.bluepowermod.containers.ContainerBuffer;
 import com.bluepowermod.containers.ContainerCPU;
 import com.bluepowermod.containers.ContainerCanvasBag;
+import com.bluepowermod.containers.ContainerCircuitTable;
 import com.bluepowermod.containers.ContainerDeployer;
 import com.bluepowermod.containers.ContainerDiskDrive;
 import com.bluepowermod.containers.ContainerEjector;
@@ -55,6 +56,7 @@ import com.bluepowermod.tileentities.tier1.TileFilter;
 import com.bluepowermod.tileentities.tier1.TileItemDetector;
 import com.bluepowermod.tileentities.tier1.TileProjectTable;
 import com.bluepowermod.tileentities.tier1.TileRelay;
+import com.bluepowermod.tileentities.tier2.TileCircuitTable;
 import com.bluepowermod.tileentities.tier2.TileRegulator;
 import com.bluepowermod.tileentities.tier2.TileRetriever;
 import com.bluepowermod.tileentities.tier2.TileSortingMachine;
@@ -122,6 +124,8 @@ public class GUIHandler implements IGuiHandler {
                 return new ContainerItemDetector(player.inventory, (TileItemDetector) ent);
             case PROJECTTABLE_ID:
                 return new ContainerProjectTable(player.inventory, (TileProjectTable) ent);
+            case CIRCUITTABLE_ID:
+                return new ContainerCircuitTable(player.inventory, (TileCircuitTable) ent);
             default:
                 break;
         }
@@ -178,6 +182,8 @@ public class GUIHandler implements IGuiHandler {
                 return new GuiItemDetector(player.inventory, (TileItemDetector) ent);
             case PROJECTTABLE_ID:
                 return new GuiProjectTable(player.inventory, (TileProjectTable) ent);
+            case CIRCUITTABLE_ID:
+                return new GuiCircuitTable(player.inventory, (TileCircuitTable) ent);
             default:
                 break;
         }

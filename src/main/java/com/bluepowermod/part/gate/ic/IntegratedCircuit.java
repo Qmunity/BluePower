@@ -353,6 +353,22 @@ public abstract class IntegratedCircuit extends GateBase {
         }
     }
     
+    @Override
+    public List<ItemStack> getDrops() {
+    
+        List<ItemStack> drops = super.getDrops();
+        for (BPPartFace[] gateArray : gates) {
+            for (BPPartFace gate : gateArray) {
+                if (gate != null) {
+                    ItemStack partStack = PartRegistry.getInstance().getItemForPart(gate.getType());
+                    getWorld().spawnEntityInWorld(new EntityItem(getWorld(), getX() + 0.5, getY() + 0.5, getZ() + 0.5, partStack));
+                }
+            }
+        }
+        
+        return drops;
+    }
+    
     private boolean tryPlaceGate(EntityPlayer player, int x, int y, ItemStack stack) {
     
         if (stack != null && stack.getItem() == BPItems.multipart) {
@@ -378,6 +394,12 @@ public abstract class IntegratedCircuit extends GateBase {
     
         // TODO Auto-generated method stub
         
+    }
+    
+    @Override
+    public boolean isCraftableInCircuitTable() {
+    
+        return false;
     }
     
     @Override

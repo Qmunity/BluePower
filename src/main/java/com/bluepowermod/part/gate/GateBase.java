@@ -323,4 +323,9 @@ public abstract class GateBase extends BPPartFace {
         return 1;
     }
     
+    public boolean isCraftableInCircuitTable() {
+    
+        return true;
+    }
+    
 }
