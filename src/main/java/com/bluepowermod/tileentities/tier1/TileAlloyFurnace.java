@@ -206,8 +206,10 @@ public class TileAlloyFurnace extends TileBase implements IInventory {
     
     public void setIsActive(boolean _isActive) {
     
-        isActive = _isActive;
-        sendUpdatePacket();
+        if (_isActive != isActive) {
+            isActive = _isActive;
+            sendUpdatePacket();
+        }
     }
     
     /**
@@ -254,7 +256,6 @@ public class TileAlloyFurnace extends TileBase implements IInventory {
                 }
             }
         }
-        worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
         
         return ret;
     }
@@ -275,7 +276,6 @@ public class TileAlloyFurnace extends TileBase implements IInventory {
         } else {
             inventory[var1 - 2] = itemStack;
         }
-        worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
     }
     
     @Override
