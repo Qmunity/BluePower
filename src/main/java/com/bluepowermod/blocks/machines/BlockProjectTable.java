@@ -21,9 +21,11 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
+import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import com.bluepowermod.blocks.BlockContainerBase;
+import com.bluepowermod.tileentities.IRotatable;
 import com.bluepowermod.tileentities.tier1.TileProjectTable;
 import com.bluepowermod.util.Refs;
 
@@ -50,11 +52,36 @@ public class BlockProjectTable extends BlockContainerBase {
     
     @Override
     @SideOnly(Side.CLIENT)
-    public IIcon getIcon(int side, int meta) {
+    public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
     
+        IRotatable rotatable = (IRotatable) world.getTileEntity(x, y, z);
         ForgeDirection s = ForgeDirection.getOrientation(side);
         // If is facing
         
+        if (rotatable.getFacingDirection() == s) { return textureFront; }
+        switch (s) {
+            case UP:
+                return textureTop;
+            case DOWN:
+                return textureBottom;
+            case EAST:
+            case NORTH:
+            case SOUTH:
+            case WEST:
+            case UNKNOWN:
+                return textureSide;
+            default:
+                break;
+        
+        }
+        return null;
+    }
+    
+    @Override
+    @SideOnly(Side.CLIENT)
+    public IIcon getIcon(int side, int meta) {
+    
+        ForgeDirection s = ForgeDirection.getOrientation(side);
         if (meta == side) { return textureFront; }
         switch (s) {
             case UP:

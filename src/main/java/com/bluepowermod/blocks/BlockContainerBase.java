@@ -232,6 +232,7 @@ public class BlockContainerBase extends BlockBase implements ITileEntityProvider
         return textures.get(getIconName(faceType, ejecting, powered));
     }
     
+    @SideOnly(Side.CLIENT)
     protected IIcon getIcon(EnumFaceType faceType, boolean ejecting, boolean powered, int side, TileEntity te) {
     
         return getIcon(faceType, ejecting, powered);
