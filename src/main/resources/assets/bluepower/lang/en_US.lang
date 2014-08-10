@@ -68,6 +68,22 @@ tile.bluepower:regulator.name=Regulator
 tile.bluepower:item_detector.name=Item Detector
 
 part.bluepower:bluestoneWire.name=Bluestone Wire
+part.bluepower:bluestoneWire.white.name=White Bluestone Wire
+part.bluepower:bluestoneWire.orange.name=Orange Bluestone Wire
+part.bluepower:bluestoneWire.magenta.name=Magenta Bluestone Wire
+part.bluepower:bluestoneWire.light_blue.name=Light Blue Bluestone Wire
+part.bluepower:bluestoneWire.yellow.name=Yellow Bluestone Wire
+part.bluepower:bluestoneWire.lime.name=Lime Bluestone Wire
+part.bluepower:bluestoneWire.pink.name=Pink Bluestone Wire
+part.bluepower:bluestoneWire.gray.name=Gray Bluestone Wire
+part.bluepower:bluestoneWire.silver.name=Light Gray Bluestone Wire
+part.bluepower:bluestoneWire.cyan.name=Cyan Bluestone Wire
+part.bluepower:bluestoneWire.purple.name=Purple Bluestone Wire
+part.bluepower:bluestoneWire.blue.name=Blue Bluestone Wire
+part.bluepower:bluestoneWire.brown.name=Brown Bluestone Wire
+part.bluepower:bluestoneWire.green.name=Green Bluestone Wire
+part.bluepower:bluestoneWire.red.name=Red Bluestone Wire
+part.bluepower:bluestoneWire.black.name=Black Bluestone Wire
 
 tile.bluepower:lampwhite.name=White Lamp
 tile.bluepower:lampinvertedwhite.name=Inverted White Lamp
