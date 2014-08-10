@@ -8,6 +8,7 @@ import net.minecraft.block.BlockRedstoneWire;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -26,6 +27,7 @@ import com.bluepowermod.api.BPApi;
 import com.bluepowermod.api.bluestone.IBluestoneWire;
 import com.bluepowermod.api.compat.IMultipartCompat;
 import com.bluepowermod.api.helper.RedstoneHelper;
+import com.bluepowermod.api.part.BPPart;
 import com.bluepowermod.api.part.FaceDirection;
 import com.bluepowermod.api.part.ICableSize;
 import com.bluepowermod.api.part.RedstoneConnection;
@@ -62,6 +64,8 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
 
     private int color = -1;
     private String colorName = null;
+
+    private boolean disableStrongOutput = false;
 
     public WireBluestone(Integer color, String colorName) {
 
@@ -392,7 +396,7 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
                 else
                     Minecraft.getMinecraft().renderEngine.bindTexture(textureOff);
 
-                if (color == -1) {// FIXME
+                if (color == -1) {
                     // Render center
                     renderBox(7, 0, 7, 9, 1, 9);
                 }
@@ -405,7 +409,7 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
                 if (sides[0] > 0)// North
                     renderBox(7, 0, 9, 9, 1, 16 + (sides[0] - 1));
 
-                if (color >= 0) {// FIXME
+                if (color >= 0) {
                     double r = ((color >> 16) & 0xFF) / 255D;
                     double g = ((color >> 8) & 0xFF) / 255D;
                     double b = (color & 0xFF) / 255D;
@@ -554,6 +558,13 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
                         if (c != null)
                             c.setPower(val);
                     }
+                    if (w.loc != null) {
+                        for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
+                            Vector3 v = w.loc.getRelative(d);
+                            w.getWorld().notifyBlockChange(v.getBlockX(), v.getBlockY(), v.getBlockZ(), Blocks.air);
+                            w.getWorld().markBlockForUpdate(v.getBlockX(), v.getBlockY(), v.getBlockZ());
+                        }
+                    }
                 }
             }
         }
@@ -561,25 +572,49 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
 
     private void recalculatePower() {
 
+        powerSelf = 0;
+
+        disableStrongOutput = true;
+
         for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
 
-            ForgeDirection dir = d.getOpposite();
+            ForgeDirection dir = d;
             if (dir == ForgeDirection.UP || dir == ForgeDirection.DOWN)
                 dir = dir.getOpposite();
-            if (dir == ForgeDirection.getOrientation(getFace()))
+            if (dir == ForgeDirection.getOrientation(getFace()).getOpposite())// If it's in the opposite face, don't do anything
                 continue;
 
-            if (!(new Vector3(getX(), getY(), getZ(), getWorld()).add(d).getBlock() instanceof BlockRedstoneWire)
-                    && !(connections[ForgeDirectionUtils.getSide(d)] != null && connections[ForgeDirectionUtils.getSide(d)] instanceof WireBluestone))
-                if (dir == ForgeDirection.getOrientation(getFace()).getOpposite()) {
-                    int in = RedstoneHelper.getInput(getWorld(), getX(), getY(), getZ(), d, ForgeDirection.getOrientation(getFace()));
-                    if (in > getPower())
-                        powerSelf = Math.max(powerSelf, in);
+            Vector3 l = null;// Get the block in that set of coords
+
+            // If it's either disconnected on that side OR connected and it's not bluestone wire
+            if (connections[ForgeDirectionUtils.getSide(d)] != null && !(connections[ForgeDirectionUtils.getSide(d)] instanceof WireBluestone)) {
+                if (connections[ForgeDirectionUtils.getSide(d)] instanceof Vector3) {
+                    l = (Vector3) connections[ForgeDirectionUtils.getSide(d)];
+                } else if (connections[ForgeDirectionUtils.getSide(d)] instanceof BPPart) {
+                    BPPart part = (BPPart) connections[ForgeDirectionUtils.getSide(d)];
+                    l = new Vector3(part.getX(), part.getY(), part.getZ(), part.getWorld());
                 } else {
-                    powerSelf = Math.max(powerSelf,
-                            RedstoneHelper.getInput(getWorld(), getX(), getY(), getZ(), d, ForgeDirection.getOrientation(getFace())));
+                    continue;
                 }
+                if (l.getBlock(true) == null)
+                    continue;
+                if (l.getBlock() instanceof BlockRedstoneWire)
+                    continue;
+                if (l.getBlock().isOpaqueCube()) {
+                    for (ForgeDirection di : ForgeDirection.VALID_DIRECTIONS) {
+                        if (di == d.getOpposite())
+                            continue;
+                        powerSelf = Math.max(powerSelf, RedstoneHelper.getInput(l.getWorld(), l.getBlockX(), l.getBlockY(), l.getBlockZ(), di, null,
+                                true, false, dir != ForgeDirection.getOrientation(getFace())));
+                    }
+                } else {
+                    powerSelf = Math.max(powerSelf, RedstoneHelper.getInput(getWorld(), getX(), getY(), getZ(), d));
+                }
+            }
         }
+
+        disableStrongOutput = false;
+
     }
 
     @Override
@@ -667,6 +702,15 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
     public float getHardness() {
 
         return 0.25F;
+    }
+
+    @Override
+    public int getStrongOutput(ForgeDirection side) {
+
+        if (disableStrongOutput)
+            return 0;
+
+        return super.getStrongOutput(side);
     }
 
 }

@@ -145,7 +145,7 @@ public abstract class BPPartFace extends BPPart implements IBPFacePart, IBPRedst
     }
 
     @Override
-    public final boolean canConnect(ForgeDirection side) {
+    public boolean canConnect(ForgeDirection side) {
 
         RedstoneConnection con = getConnection(FaceDirection.getDirection(ForgeDirection.getOrientation(getFace()), side, rotation));
         if (con == null)
@@ -155,13 +155,13 @@ public abstract class BPPartFace extends BPPart implements IBPFacePart, IBPRedst
     }
 
     @Override
-    public final int getStrongOutput(ForgeDirection side) {
+    public int getStrongOutput(ForgeDirection side) {
 
         return 0;
     }
 
     @Override
-    public final int getWeakOutput(ForgeDirection side) {
+    public int getWeakOutput(ForgeDirection side) {
 
         RedstoneConnection con = getConnection(side);
         if (con == null)
