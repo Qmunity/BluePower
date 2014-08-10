@@ -2,6 +2,7 @@ package com.bluepowermod.tileentities.tier1;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
@@ -30,15 +31,17 @@ import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.tileentities.IEjectAnimator;
 import com.bluepowermod.tileentities.TileBase;
+import com.mojang.authlib.GameProfile;
 
 /**
  * @author MineMaarten
  */
 public class TileDeployer extends TileBase implements ISidedInventory, IEjectAnimator {
     
-    private int                     animationTimer   = -1;
-    private final ItemStack[]       inventory        = new ItemStack[9];
-    private static final List<Item> blacklistedItems = new ArrayList<Item>();
+    private int                      animationTimer      = -1;
+    private final ItemStack[]        inventory           = new ItemStack[9];
+    private static final List<Item>  blacklistedItems    = new ArrayList<Item>();
+    private static final GameProfile FAKE_PLAYER_PROFILE = new GameProfile(UUID.randomUUID(), "[BP Deployer]");
     
     static {
         blacklistedItems.add(Items.ender_pearl);
@@ -67,7 +70,7 @@ public class TileDeployer extends TileBase implements ISidedInventory, IEjectAni
             animationTimer = 0;
             sendUpdatePacket();
             
-            FakePlayer player = FakePlayerFactory.getMinecraft((WorldServer) worldObj);
+            FakePlayer player = FakePlayerFactory.get((WorldServer) worldObj, FAKE_PLAYER_PROFILE);
             for (int i = 0; i < inventory.length; i++) {
                 ItemStack stack = inventory[i];
                 player.inventory.setInventorySlotContents(i, stack);
