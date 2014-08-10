@@ -1,4 +1,4 @@
-/*
+﻿/*
  * This file is part of Blue Power. Blue Power is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
  * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version. Blue Power is
  * distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
@@ -54,6 +54,7 @@ tile.bluepower:deployer.name=Deployer
 tile.bluepower:filter.name=Filter
 tile.bluepower:retriever.name=Retriever
 tile.bluepower:project_table.name=Project Table
+tile.bluepower:circuit_table.name=Circuit Table
 tile.bluepower:sortron.name=Sortron
 tile.bluepower:sorting_machine.name=Sorting Machine
 tile.bluepower:windmill.name=Vertical Windmill
@@ -287,6 +288,9 @@ part.bluepower:toggle.name=Toggle Latch
 part.bluepower:transparent.name=Transparent Latch
 part.bluepower:xnor.name=XNOR Gate
 part.bluepower:xor.name=XOR Gate
+part.bluepower:integratedCircuit3x3.name=3x3 Integrated Circuit
+part.bluepower:integratedCircuit5x5.name=5x5 Integrated Circuit
+part.bluepower:integratedCircuit7x7.name=7x7 Integrated Circuit
 part.bluepower:pneumaticTube.name=Pneumatic Tube
 part.bluepower:restrictionTube.name=Restriction Tube
 part.bluepower:magTube.name=Magtube

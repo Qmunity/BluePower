@@ -17,31 +17,35 @@
 
 package com.bluepowermod.blocks.machines;
 
-import com.bluepowermod.blocks.BlockContainerBase;
-import com.bluepowermod.init.BPBlocks;
-import com.bluepowermod.tileentities.tier1.TileProjectTable;
-import com.bluepowermod.util.Refs;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.item.Item;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraftforge.common.util.ForgeDirection;
 
-import java.util.Random;
+import com.bluepowermod.blocks.BlockContainerBase;
+import com.bluepowermod.tileentities.tier1.TileProjectTable;
+import com.bluepowermod.util.Refs;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockProjectTable extends BlockContainerBase {
     
-    public static IIcon textureTop;
-    private IIcon       textureBottom;
-    private IIcon       textureSide;
-    private IIcon       textureFront;
+    private IIcon textureTop;
+    private IIcon textureBottom;
+    private IIcon textureSide;
+    private IIcon textureFront;
     
     public BlockProjectTable() {
     
         super(Material.wood, TileProjectTable.class);
         setBlockName(Refs.PROJECTTABLE_NAME);
+    }
+    
+    public BlockProjectTable(Class<? extends TileEntity> tileClass) {
+    
+        super(Material.wood, tileClass);
     }
     
     @Override
@@ -76,21 +80,14 @@ public class BlockProjectTable extends BlockContainerBase {
         return true;
     }
     
-    // Not sure if you need this function.
-    @Override
-    public Item getItemDropped(int p_149650_1_, Random random, int p_149650_3_) {
-    
-        return Item.getItemFromBlock(BPBlocks.project_table);
-    }
-    
     @Override
     @SideOnly(Side.CLIENT)
     public void registerBlockIcons(IIconRegister iconRegister) {
     
-        textureTop = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + Refs.PROJECTTABLE_NAME + "_top");
-        textureBottom = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + Refs.PROJECTTABLE_NAME + "_bottom");
-        textureSide = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + Refs.PROJECTTABLE_NAME + "_side");
-        textureFront = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + Refs.PROJECTTABLE_NAME + "_front");
+        textureTop = iconRegister.registerIcon(getTextureName() + "_top");
+        textureBottom = iconRegister.registerIcon(getTextureName() + "_bottom");
+        textureSide = iconRegister.registerIcon(getTextureName() + "_side");
+        textureFront = iconRegister.registerIcon(getTextureName() + "_front");
     }
     
     @Override
