@@ -186,7 +186,7 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
     @Override
     protected TMultiPart getPartOnSide(ForgeDirection dir) {
 
-        return null;// getFMPPartOnSide(this, dir);
+        return getFMPPartOnSide(this, dir);
     }
 
     @Override
