@@ -62,7 +62,7 @@ public class TileSortron extends TileMachineBase implements IPeripheral, SimpleC
     Sortron functions
      */
     
-    public Object[] setAcceptedCol(Object[] arguments) throws LuaException {
+    public Object[] setAcceptedCol(Object[] arguments) throws Exception {
     
         if (arguments.length > 0) {
             acceptedColor = parseColorFromObject(arguments[0]);
@@ -71,12 +71,12 @@ public class TileSortron extends TileMachineBase implements IPeripheral, SimpleC
         throw new IllegalArgumentException("No expected argument was given");
     }
     
-    public Object[] getAcceptedCol(Object[] arguments) throws LuaException {
+    public Object[] getAcceptedCol(Object[] arguments) throws Exception {
     
         return new Integer[] { (int) acceptedColor };
     }
     
-    public Object[] setAcceptedItem(Object[] arguments) throws LuaException {
+    public Object[] setAcceptedItem(Object[] arguments) throws Exception {
     
         if (arguments.length > 0 && arguments[0] instanceof String) {
             String unlocalizedName = (String) arguments[0];
@@ -105,18 +105,18 @@ public class TileSortron extends TileMachineBase implements IPeripheral, SimpleC
         throw new IllegalArgumentException("No expected argument was given");
     }
     
-    public Object[] getAcceptedItem(Object[] arguments) throws LuaException {
+    public Object[] getAcceptedItem(Object[] arguments) throws Exception {
     
         return new String[] { getStringFromStack(acceptedStack) };
     }
     
-    public Object[] getNumSlots(Object[] arguments) throws LuaException {
+    public Object[] getNumSlots(Object[] arguments) throws Exception {
     
         if (connectedInventory != null) { return new Integer[] { connectedInventory.getSizeInventory() }; }
-        throw new LuaException("Sortron has no connected Inventory");
+        throw new Exception("Sortron has no connected Inventory");
     }
     
-    public Object[] getSlotContents(Object[] arguments) throws LuaException {
+    public Object[] getSlotContents(Object[] arguments) throws Exception {
     
         if (connectedInventory != null) {
             if (arguments.length > 0 && arguments[0] instanceof Double) {
@@ -126,10 +126,10 @@ public class TileSortron extends TileMachineBase implements IPeripheral, SimpleC
             }
             throw new IllegalArgumentException("No expected argument was given");
         }
-        throw new LuaException("Sortron has no connected Inventory");
+        throw new Exception("Sortron has no connected Inventory");
     }
     
-    public Object[] pullFromSlot(Object[] arguments) throws LuaException {
+    public Object[] pullFromSlot(Object[] arguments) throws Exception {
     
         if (connectedInventory != null) {
             if (arguments.length > 0 && arguments[0] instanceof Double) {
@@ -152,10 +152,10 @@ public class TileSortron extends TileMachineBase implements IPeripheral, SimpleC
             }
             throw new IllegalArgumentException("No expected argument was given");
         }
-        throw new LuaException("Sortron has no connected Inventory");
+        throw new Exception("Sortron has no connected Inventory");
     }
     
-    public Object[] sort(Object[] arguments) throws LuaException {
+    public Object[] sort(Object[] arguments) throws Exception {
     
         if (arguments.length > 0 && arguments[0] instanceof Double) {
             int stackSize = ((Double) arguments[0]).intValue();
@@ -168,7 +168,7 @@ public class TileSortron extends TileMachineBase implements IPeripheral, SimpleC
         throw new IllegalArgumentException("No expected argument was given");
     }
     
-    public Object[] getStackSizeLeft(Object[] arguments) throws LuaException {
+    public Object[] getStackSizeLeft(Object[] arguments) throws Exception {
     
         return new Integer[] { acceptedStackSize };
     }
@@ -192,7 +192,7 @@ public class TileSortron extends TileMachineBase implements IPeripheral, SimpleC
         return null;
     }
     
-    public static byte parseColorFromObject(Object argument) throws LuaException {
+    public static byte parseColorFromObject(Object argument) throws Exception {
     
         if (argument instanceof Double) {
             byte color = ((Double) argument).byteValue();
@@ -300,25 +300,29 @@ public class TileSortron extends TileMachineBase implements IPeripheral, SimpleC
     @Optional.Method(modid = Dependencies.COMPUTER_CRAFT)
     public Object[] callMethod(IComputerAccess computer, ILuaContext context, int method, Object[] arguments) throws LuaException, InterruptedException {
     
-        switch (method) {
-            case 0:
-                return setAcceptedCol(arguments);
-            case 1:
-                return getAcceptedCol(arguments);
-            case 2:
-                return setAcceptedItem(arguments);
-            case 3:
-                return getAcceptedItem(arguments);
-            case 4:
-                return getNumSlots(arguments);
-            case 5:
-                return getSlotContents(arguments);
-            case 6:
-                return pullFromSlot(arguments);
-            case 7:
-                return sort(arguments);
-            case 8:
-                return getStackSizeLeft(arguments);
+        try {
+            switch (method) {
+                case 0:
+                    return setAcceptedCol(arguments);
+                case 1:
+                    return getAcceptedCol(arguments);
+                case 2:
+                    return setAcceptedItem(arguments);
+                case 3:
+                    return getAcceptedItem(arguments);
+                case 4:
+                    return getNumSlots(arguments);
+                case 5:
+                    return getSlotContents(arguments);
+                case 6:
+                    return pullFromSlot(arguments);
+                case 7:
+                    return sort(arguments);
+                case 8:
+                    return getStackSizeLeft(arguments);
+            }
+        } catch (Exception e) {
+            throw new LuaException(e.getMessage());
         }
         return new Object[0];
     }
@@ -357,7 +361,7 @@ public class TileSortron extends TileMachineBase implements IPeripheral, SimpleC
     
     @Callback
     @Optional.Method(modid = Dependencies.OPEN_COMPUTERS)
-    public Object[] setAcceptedCol(Context context, Arguments arguments) throws LuaException {
+    public Object[] setAcceptedCol(Context context, Arguments arguments) throws Exception {
     
         Object[] args = new Object[arguments.count()];
         for (int i = 0; i < args.length; i++) {
@@ -368,7 +372,7 @@ public class TileSortron extends TileMachineBase implements IPeripheral, SimpleC
     
     @Callback
     @Optional.Method(modid = Dependencies.OPEN_COMPUTERS)
-    public Object[] getAcceptedCol(Context context, Arguments arguments) throws LuaException {
+    public Object[] getAcceptedCol(Context context, Arguments arguments) throws Exception {
     
         Object[] args = new Object[arguments.count()];
         for (int i = 0; i < args.length; i++) {
@@ -379,7 +383,7 @@ public class TileSortron extends TileMachineBase implements IPeripheral, SimpleC
     
     @Callback
     @Optional.Method(modid = Dependencies.OPEN_COMPUTERS)
-    public Object[] setAcceptedItem(Context context, Arguments arguments) throws LuaException {
+    public Object[] setAcceptedItem(Context context, Arguments arguments) throws Exception {
     
         Object[] args = new Object[arguments.count()];
         for (int i = 0; i < args.length; i++) {
@@ -390,7 +394,7 @@ public class TileSortron extends TileMachineBase implements IPeripheral, SimpleC
     
     @Callback
     @Optional.Method(modid = Dependencies.OPEN_COMPUTERS)
-    public Object[] getAcceptedItem(Context context, Arguments arguments) throws LuaException {
+    public Object[] getAcceptedItem(Context context, Arguments arguments) throws Exception {
     
         Object[] args = new Object[arguments.count()];
         for (int i = 0; i < args.length; i++) {
@@ -401,7 +405,7 @@ public class TileSortron extends TileMachineBase implements IPeripheral, SimpleC
     
     @Callback
     @Optional.Method(modid = Dependencies.OPEN_COMPUTERS)
-    public Object[] getNumSlots(Context context, Arguments arguments) throws LuaException {
+    public Object[] getNumSlots(Context context, Arguments arguments) throws Exception {
     
         Object[] args = new Object[arguments.count()];
         for (int i = 0; i < args.length; i++) {
@@ -412,7 +416,7 @@ public class TileSortron extends TileMachineBase implements IPeripheral, SimpleC
     
     @Callback
     @Optional.Method(modid = Dependencies.OPEN_COMPUTERS)
-    public Object[] getSlotContents(Context context, Arguments arguments) throws LuaException {
+    public Object[] getSlotContents(Context context, Arguments arguments) throws Exception {
     
         Object[] args = new Object[arguments.count()];
         for (int i = 0; i < args.length; i++) {
@@ -423,7 +427,7 @@ public class TileSortron extends TileMachineBase implements IPeripheral, SimpleC
     
     @Callback
     @Optional.Method(modid = Dependencies.OPEN_COMPUTERS)
-    public Object[] pullFromSlot(Context context, Arguments arguments) throws LuaException {
+    public Object[] pullFromSlot(Context context, Arguments arguments) throws Exception {
     
         Object[] args = new Object[arguments.count()];
         for (int i = 0; i < args.length; i++) {
@@ -434,7 +438,7 @@ public class TileSortron extends TileMachineBase implements IPeripheral, SimpleC
     
     @Callback
     @Optional.Method(modid = Dependencies.OPEN_COMPUTERS)
-    public Object[] sort(Context context, Arguments arguments) throws LuaException {
+    public Object[] sort(Context context, Arguments arguments) throws Exception {
     
         Object[] args = new Object[arguments.count()];
         for (int i = 0; i < args.length; i++) {
@@ -445,7 +449,7 @@ public class TileSortron extends TileMachineBase implements IPeripheral, SimpleC
     
     @Callback
     @Optional.Method(modid = Dependencies.OPEN_COMPUTERS)
-    public Object[] getStackSizeLeft(Context context, Arguments arguments) throws LuaException {
+    public Object[] getStackSizeLeft(Context context, Arguments arguments) throws Exception {
     
         Object[] args = new Object[arguments.count()];
         for (int i = 0; i < args.length; i++) {
