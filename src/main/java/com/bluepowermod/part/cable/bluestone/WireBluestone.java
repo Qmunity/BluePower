@@ -182,7 +182,7 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
             }
         }
 
-        ForgeDirection dir2 = ForgeDirection.getOrientation(wire.getFace());
+        // ForgeDirection dir2 = ForgeDirection.getOrientation(wire.getFace());
 
         // Check for parts next to this one
         if (vec.hasTileEntity() && vec.getTileEntity() instanceof TileMultipart) {
@@ -190,7 +190,7 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
             l = te.jPartList();
             for (TMultiPart p : l)
                 if (p instanceof IFaceRedstonePart) {
-                    ForgeDirection d = dir2;
+                    // ForgeDirection d = dir2;
                     // if (p instanceof MultipartBPPart) {
                     // if (((MultipartBPPart) p).getPart() instanceof WireBluestone)
                     // continue;
