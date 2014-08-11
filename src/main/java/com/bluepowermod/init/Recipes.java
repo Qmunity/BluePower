@@ -234,7 +234,7 @@ public class Recipes {
         craftManager.addRecipe(new ItemStack(BPItems.paint_can, 1, 16), "t t", "t t", "ttt", 't', BPItems.zincplate);
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.paint_brush, 1, 16), " w", "s ", 'w', Blocks.wool, 's', "stickWood"));
         
-        GameRegistry.addRecipe(new ShapedOreRecipe(PartRegistry.getInstance().getItemForPart("bluestoneWire", 12), "iii", 'i', BPItems.blue_alloy_ingot));
+//        GameRegistry.addRecipe(new ShapedOreRecipe(PartRegistry.getInstance().getItemForPart("bluestoneWire", 12), "iii", 'i', BPItems.blue_alloy_ingot));
         
         if (Loader.isModLoaded("ForgeMicroblock")) {
             ItemStack diamondPanel = new ItemStack(GameData.getItemRegistry().getObject("ForgeMicroblock:microblock"), 1, 2);
