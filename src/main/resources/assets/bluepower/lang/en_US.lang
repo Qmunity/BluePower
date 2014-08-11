@@ -66,6 +66,7 @@ tile.bluepower:disk_drive.name=Disk Drive
 tile.bluepower:io_expander.name=IO Expander
 tile.bluepower:regulator.name=Regulator
 tile.bluepower:item_detector.name=Item Detector
+tile.bluepower:manager.name=Manager
 
 part.bluepower:bluestoneWire.name=Bluestone Wire
 
