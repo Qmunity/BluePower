@@ -191,11 +191,11 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
             for (TMultiPart p : l)
                 if (p instanceof IFaceRedstonePart) {
                     // ForgeDirection d = dir2;
-                    // if (p instanceof MultipartBPPart) {
-                    // if (((MultipartBPPart) p).getPart() instanceof WireBluestone)
-                    // continue;
+                    if (p instanceof MultipartBPPart) {
+                    if (((MultipartBPPart) p).getPart() instanceof WireBluestone)
+                    continue;
                     // d = d.getOpposite();
-                    // }
+                    }
                     // if ((p instanceof MultipartBPPart && ((MultipartBPPart) p).getPart() instanceof GateBase)
                     // || !compat.isOccupied(
                     // te,
