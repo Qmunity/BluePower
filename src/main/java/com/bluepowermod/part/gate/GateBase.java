@@ -19,6 +19,7 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
+import net.minecraftforge.common.util.ForgeDirection;
 
 import org.lwjgl.opengl.GL11;
 
@@ -336,6 +337,12 @@ public abstract class GateBase extends BPPartFace {
     public boolean isCraftableInCircuitTable() {
 
         return true;
+    }
+
+    @Override
+    public int getStrongOutput(ForgeDirection side) {
+
+        return super.getWeakOutput(side);
     }
 
 }
