@@ -522,12 +522,6 @@ public abstract class IntegratedCircuit extends GateBase {
     }
     
     @Override
-    public boolean isCraftableInCircuitTable() {
-    
-        return false;
-    }
-    
-    @Override
     public void setWorld(World world) {
     
         super.setWorld(world);
