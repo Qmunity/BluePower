@@ -88,12 +88,12 @@ public class Config {
         generateCopper = config.get(Refs.CONFIG_COPPER, "generateCopper", true).getBoolean(true);
         minCopperY = config.get(Refs.CONFIG_COPPER, "minCopperY", 0).getInt();
         maxCopperY = config.get(Refs.CONFIG_COPPER, "maxCopperY", 64).getInt();
-        veinCountCopper = config.get(Refs.CONFIG_COPPER, "veinCountCopper", 20).getInt();
-        veinSizeCopper = config.get(Refs.CONFIG_COPPER, "veinSizeCopper", 10).getInt();
+        veinCountCopper = config.get(Refs.CONFIG_COPPER, "veinCountCopper", 12).getInt();
+        veinSizeCopper = config.get(Refs.CONFIG_COPPER, "veinSizeCopper", 7).getInt();
         generateZinc = config.get(Refs.CONFIG_ZINC, "generateZinc", true).getBoolean(true);
         minZincY = config.get(Refs.CONFIG_ZINC, "minZincY", 0).getInt();
         maxZincY = config.get(Refs.CONFIG_ZINC, "maxZincY", 48).getInt();
-        veinCountZinc = config.get(Refs.CONFIG_ZINC, "veinCountZinc", 10).getInt();
+        veinCountZinc = config.get(Refs.CONFIG_ZINC, "veinCountZinc", 6).getInt();
         veinSizeZinc = config.get(Refs.CONFIG_ZINC, "veinSizeZinc", 8).getInt();
         generateSilver = config.get(Refs.CONFIG_SILVER, "generateSilver", true).getBoolean(true);
         minSilverY = config.get(Refs.CONFIG_SILVER, "minSilverY", 0).getInt();
