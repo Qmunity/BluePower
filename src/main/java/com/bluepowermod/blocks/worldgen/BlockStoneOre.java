@@ -17,17 +17,16 @@
 
 package com.bluepowermod.blocks.worldgen;
 
-import java.util.Random;
-
+import com.bluepowermod.init.BPBlocks;
+import com.bluepowermod.init.CustomTabs;
+import com.bluepowermod.util.Refs;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.Item;
 import net.minecraft.world.IBlockAccess;
 
-import com.bluepowermod.init.BPBlocks;
-import com.bluepowermod.init.CustomTabs;
-import com.bluepowermod.util.Refs;
+import java.util.Random;
 
 public class BlockStoneOre extends Block {
 
@@ -50,6 +49,7 @@ public class BlockStoneOre extends Block {
             this.setHardness(1.5F);
         } else if (name == Refs.TUNGSTENORE_NAME) {
         	this.setResistance(6.0F);
+            this.setHardness(20.0F);
         	this.setHarvestLevel("pickaxe", 3);
         }else if (name == Refs.TUNGSTENBLOCK_NAME) {
         	this.setResistance(25.0F);

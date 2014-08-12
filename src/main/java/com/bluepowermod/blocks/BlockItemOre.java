@@ -41,6 +41,7 @@ public class BlockItemOre extends BlockBase {
         this.setResistance(10.0F);
         this.textureName = Refs.MODID + ":" + type;
         this.setBlockName(type);
+        this.setHarvestLevel("pickaxe", 2);
     }
 
     @Override
