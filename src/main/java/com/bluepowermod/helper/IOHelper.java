@@ -85,6 +85,39 @@ public class IOHelper {
         return extract(tile, direction, requestedStack, useItemCount, simulate, false);
     }
     
+    public static int[] getAccessibleSlotsForInventory(IInventory inv, ForgeDirection side) {
+    
+        int[] accessibleSlots;
+        if (inv != null) {
+            if (inv instanceof ISidedInventory) {
+                accessibleSlots = ((ISidedInventory) inv).getAccessibleSlotsFromSide(side.ordinal());
+            } else {
+                accessibleSlots = new int[inv.getSizeInventory()];
+                for (int i = 0; i < accessibleSlots.length; i++)
+                    accessibleSlots[i] = i;
+            }
+            return accessibleSlots;
+        } else {
+            return new int[0];
+        }
+    }
+    
+    public static int getItemCount(ItemStack type, TileEntity inv, ForgeDirection side) {
+    
+        IInventory inventory = getInventoryForTE(inv);
+        int[] slots = getAccessibleSlotsForInventory(inventory, side);
+        int count = 0;
+        for (int slot : slots) {
+            ItemStack invStack = inventory.getStackInSlot(slot);
+            if (invStack != null) {
+                if (type.isItemEqual(invStack)) {
+                    count += invStack.stackSize;
+                }
+            }
+        }
+        return count;
+    }
+    
     /**
      * Retrieves an item from the specified inventory. This item can be specified.
      * 

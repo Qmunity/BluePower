@@ -269,6 +269,7 @@ public class BPBlocks {
         GameRegistry.registerBlock(retriever, Refs.RETRIEVER_NAME);
         GameRegistry.registerBlock(regulator, Refs.REGULATOR_NAME);
         GameRegistry.registerBlock(item_detector, Refs.ITEMDETECTOR_NAME);
+        GameRegistry.registerBlock(manager, Refs.MANAGER_NAME);
         
         /*GameRegistry.registerBlock(cpu, Refs.BLOCKCPU_NAME);
         GameRegistry.registerBlock(monitor, Refs.BLOCKMONITOR_NAME);

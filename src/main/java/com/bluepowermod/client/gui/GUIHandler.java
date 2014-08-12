@@ -33,6 +33,7 @@ import com.bluepowermod.containers.ContainerFilter;
 import com.bluepowermod.containers.ContainerIOExpander;
 import com.bluepowermod.containers.ContainerItemDetector;
 import com.bluepowermod.containers.ContainerKinect;
+import com.bluepowermod.containers.ContainerManager;
 import com.bluepowermod.containers.ContainerMonitor;
 import com.bluepowermod.containers.ContainerProjectTable;
 import com.bluepowermod.containers.ContainerRedbusID;
@@ -65,6 +66,7 @@ import com.bluepowermod.tileentities.tier3.TileCPU;
 import com.bluepowermod.tileentities.tier3.TileDiskDrive;
 import com.bluepowermod.tileentities.tier3.TileIOExpander;
 import com.bluepowermod.tileentities.tier3.TileKinectGenerator;
+import com.bluepowermod.tileentities.tier3.TileManager;
 import com.bluepowermod.tileentities.tier3.TileMonitor;
 
 import cpw.mods.fml.common.network.IGuiHandler;
@@ -126,6 +128,8 @@ public class GUIHandler implements IGuiHandler {
                 return new ContainerProjectTable(player.inventory, (TileProjectTable) ent);
             case CIRCUITTABLE_ID:
                 return new ContainerCircuitTable(player.inventory, (TileCircuitTable) ent);
+            case MANAGER_ID:
+                return new ContainerManager(player.inventory, (TileManager) ent);
             default:
                 break;
         }
@@ -184,6 +188,8 @@ public class GUIHandler implements IGuiHandler {
                 return new GuiProjectTable(player.inventory, (TileProjectTable) ent);
             case CIRCUITTABLE_ID:
                 return new GuiCircuitTable(player.inventory, (TileCircuitTable) ent);
+            case MANAGER_ID:
+                return new GuiManager(player.inventory, (TileManager) ent);
             default:
                 break;
         }

@@ -30,7 +30,7 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
     private TileEntityCache[]     tileCache;
     public static final int       BUFFER_EMPTY_INTERVAL   = 10;
     protected byte                animationTicker         = -1;
-    private static final int      ANIMATION_TIME          = 7;
+    protected static final int    ANIMATION_TIME          = 7;
     private boolean               isAnimating;
     
     @Override

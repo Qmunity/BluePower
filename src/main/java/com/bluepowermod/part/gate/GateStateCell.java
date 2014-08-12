@@ -20,6 +20,9 @@ import com.bluepowermod.util.Refs;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+/**
+ * @author MineMaarten
+ */
 public class GateStateCell extends GateBase implements IGuiButtonSensitive {
     
     private int     time      = 40;

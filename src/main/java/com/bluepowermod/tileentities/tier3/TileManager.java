@@ -3,41 +3,146 @@ package com.bluepowermod.tileentities.tier3;
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import com.bluepowermod.api.compat.IMultipartCompat;
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
+import com.bluepowermod.compat.CompatibilityUtils;
+import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.part.IGuiButtonSensitive;
+import com.bluepowermod.part.tube.PneumaticTube;
 import com.bluepowermod.part.tube.TubeStack;
+import com.bluepowermod.tileentities.IRejectAnimator;
 import com.bluepowermod.tileentities.TileMachineBase;
+import com.bluepowermod.util.Dependencies;
 
-public class TileManager extends TileMachineBase implements ISidedInventory, IGuiButtonSensitive {
+/**
+ * @author MineMaarten
+ */
+public class TileManager extends TileMachineBase implements ISidedInventory, IGuiButtonSensitive, IRejectAnimator {
     
-    protected final ItemStack[] inventory   = new ItemStack[24];
-    public TubeColor            filterColor = TubeColor.NONE;
-    private int                 priority;
+    protected final ItemStack[] inventory    = new ItemStack[24];
+    public TubeColor            filterColor  = TubeColor.NONE;
+    public int                  priority;
+    public int                  mode;
+    private int                 rejectTicker = -1;
     
     @Override
     public TubeStack acceptItemFromTube(TubeStack stack, ForgeDirection from, boolean simulate) {
     
-        if (from == getFacingDirection() && (!isItemAccepted(stack.stack) || !isBufferEmpty())) return stack;
-        if (!simulate) this.addItemToOutputBuffer(stack.stack, filterColor);
-        return null;
-    }
-    
-    protected boolean isItemAccepted(ItemStack item) {
-    
-        boolean everythingNull = true;
-        for (ItemStack invStack : inventory) {
-            if (invStack != null) {
-                if (item.isItemEqual(invStack)) { return true; }
-                everythingNull = false;
+        if (from == getFacingDirection().getOpposite()) {
+            //    if (!isBufferEmpty()) return stack;
+            int itemsAccepted = acceptedItems(stack.stack);
+            if (itemsAccepted > 0) {
+                if (itemsAccepted >= stack.stack.stackSize) {
+                    ItemStack rejectedStack = IOHelper.insert(getTileCache()[getFacingDirection().ordinal()].getTileEntity(), stack.stack, from, simulate);
+                    if (rejectedStack == null || rejectedStack.stackSize != stack.stack.stackSize) {
+                        if (!simulate) {
+                            rejectTicker = 0;
+                            sendUpdatePacket();
+                        }
+                    }
+                    if (rejectedStack == null) {
+                        return null;
+                    } else {
+                        stack.stack = rejectedStack;
+                        return stack;
+                    }
+                }
+                TubeStack injectedStack = stack.copy();
+                stack.stack.stackSize -= itemsAccepted;
+                
+                injectedStack.stack.stackSize = itemsAccepted;
+                ItemStack rejectedStack = IOHelper.insert(getTileCache()[getFacingDirection().ordinal()].getTileEntity(), injectedStack.stack, from, simulate);
+                if (rejectedStack == null || rejectedStack.stackSize != injectedStack.stack.stackSize) {
+                    if (!simulate) {
+                        rejectTicker = 0;
+                        sendUpdatePacket();
+                    }
+                }
+                if (rejectedStack != null) {
+                    stack.stack.stackSize += rejectedStack.stackSize;
+                }
             }
         }
-        return everythingNull;
+        stack.setTarget(null, null);
+        return super.acceptItemFromTube(stack, from, simulate);
+    }
+    
+    private int acceptedItems(ItemStack item) {
+    
+        if (item == null) return 0;
+        int managerCount = IOHelper.getItemCount(item, this, ForgeDirection.UNKNOWN);
+        if (mode == 1 && managerCount > 0) return item.stackSize;
+        return managerCount - IOHelper.getItemCount(item, getTileCache()[getFacingDirection().ordinal()].getTileEntity(), getFacingDirection().getOpposite());
+    }
+    
+    @Override
+    public void updateEntity() {
+    
+        if (getTicker() % BUFFER_EMPTY_INTERVAL == 0 && isBufferEmpty()) {
+            dumpUnwantedItems();
+            retrieveItemsFromManagers();
+            setOutputtingRedstone(mode == 0 && shouldEmitRedstone());
+        }
+        if (rejectTicker >= 0) {
+            if (++rejectTicker > ANIMATION_TIME) {
+                rejectTicker = -1;
+                markForRenderUpdate();
+            }
+        }
+        super.updateEntity();
+    }
+    
+    private boolean shouldEmitRedstone() {
+    
+        for (ItemStack stack : inventory) {
+            if (stack != null && acceptedItems(stack) > 0) return false;
+        }
+        return true;
+    }
+    
+    private void retrieveItemsFromManagers() {
+    
+        TileEntity extractingInventory = getTileCache()[getOutputDirection().ordinal()].getTileEntity();
+        IMultipartCompat compat = (IMultipartCompat) CompatibilityUtils.getModule(Dependencies.FMP);
+        PneumaticTube tube = compat.getBPPart(extractingInventory, PneumaticTube.class);
+        if (tube != null) {
+            for (ItemStack stack : inventory) {
+                int acceptedItems = acceptedItems(stack);
+                if (acceptedItems > 0) {
+                    ItemStack retrievingStack = stack.copy();
+                    retrievingStack.stackSize = retrievingStack.getMaxStackSize();
+                    if (tube.getLogic().retrieveStack(this, getOutputDirection(), retrievingStack, filterColor)) return;
+                }
+            }
+        }
+    }
+    
+    private void dumpUnwantedItems() {
+    
+        TileEntity te = getTileCache()[getFacingDirection().ordinal()].getTileEntity();
+        IInventory inv = IOHelper.getInventoryForTE(te);
+        int[] slots = IOHelper.getAccessibleSlotsForInventory(inv, getFacingDirection().getOpposite());
+        for (int slot : slots) {
+            ItemStack stack = inv.getStackInSlot(slot);
+            int acceptedItems = acceptedItems(stack);
+            if (acceptedItems < 0) {
+                int rejectedItems = -acceptedItems;
+                ItemStack rejectingStack = stack.copy();
+                rejectingStack.stackSize = Math.min(rejectedItems, rejectingStack.getMaxStackSize());
+                rejectingStack = IOHelper.extract(te, getFacingDirection().getOpposite(), rejectingStack, true, false);
+                if (rejectingStack != null) {
+                    this.addItemToOutputBuffer(rejectingStack, filterColor);
+                }
+            }
+        }
     }
     
     /**
@@ -53,6 +158,8 @@ public class TileManager extends TileMachineBase implements ISidedInventory, IGu
             inventory[i] = ItemStack.loadItemStackFromNBT(tc);
         }
         filterColor = TubeColor.values()[tCompound.getByte("filterColor")];
+        mode = tCompound.getByte("mode");
+        priority = tCompound.getByte("priority");
     }
     
     /**
@@ -72,6 +179,22 @@ public class TileManager extends TileMachineBase implements ISidedInventory, IGu
         }
         
         tCompound.setByte("filterColor", (byte) filterColor.ordinal());
+        tCompound.setByte("mode", (byte) mode);
+        tCompound.setByte("priority", (byte) priority);
+    }
+    
+    @Override
+    public void writeToPacketNBT(NBTTagCompound tag) {
+    
+        super.writeToPacketNBT(tag);
+        tag.setByte("rejectAnimation", (byte) rejectTicker);
+    }
+    
+    @Override
+    public void readFromPacketNBT(NBTTagCompound tag) {
+    
+        super.readFromPacketNBT(tag);
+        rejectTicker = tag.getByte("rejectAnimation");
     }
     
     @Override
@@ -196,12 +319,24 @@ public class TileManager extends TileMachineBase implements ISidedInventory, IGu
     @Override
     public void onButtonPress(int messageId, int value) {
     
-        if (messageId == 0) filterColor = TubeColor.values()[value];
+        if (messageId == 0) {
+            filterColor = TubeColor.values()[value];
+        } else if (messageId == 1) {
+            mode = value;
+        } else {
+            priority = value;
+        }
     }
     
     @Override
     public boolean canConnectRedstone() {
     
         return true;
+    }
+    
+    @Override
+    public boolean isRejecting() {
+    
+        return rejectTicker >= 0;
     }
 }

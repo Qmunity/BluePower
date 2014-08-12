@@ -12,6 +12,9 @@ import com.bluepowermod.tileentities.IRejectAnimator;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+/**
+ * @author MineMaarten
+ */
 public class BlockRejecting extends BlockContainerBase {
     
     public BlockRejecting(Material material, Class<? extends TileEntity> tileEntityClass) {
@@ -24,9 +27,21 @@ public class BlockRejecting extends BlockContainerBase {
     public void registerBlockIcons(IIconRegister iconRegister) {
     
         super.registerBlockIcons(iconRegister);
-        for (String name : textures.keySet()) {
-            if (name.contains("side")) textures.put(name + "_rejecting", iconRegister.registerIcon(name + "_rejecting"));
-        }
+        
+        boolean ejecting = false;
+        boolean powered = false;
+        
+        do {
+            do {
+                String iconName = getIconName(EnumFaceType.SIDE, ejecting, powered) + "_rejecting";
+                if (!textures.containsKey(iconName)) {
+                    textures.put(iconName, iconRegister.registerIcon(iconName));
+                }
+                
+                powered = !powered;
+            } while (powered == true);
+            ejecting = !ejecting;
+        } while (ejecting == true);
     }
     
     @Override
@@ -38,7 +53,7 @@ public class BlockRejecting extends BlockContainerBase {
             String iconName = getIconName(faceType, ejecting, powered);
             return textures.get(iconName + "_rejecting");
         } else {
-            return super.getIcon(faceType, isRejecting, powered, side, te);
+            return super.getIcon(faceType, ejecting, powered, side, te);
         }
     }
 }
