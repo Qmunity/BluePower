@@ -6,6 +6,9 @@ import com.bluepowermod.api.part.FaceDirection;
 import com.bluepowermod.api.part.RedstoneConnection;
 import com.bluepowermod.util.Refs;
 
+/**
+ * @author MineMaarten
+ */
 public class GateWire extends GateBase {
     
     public static final String ID = "icWire";

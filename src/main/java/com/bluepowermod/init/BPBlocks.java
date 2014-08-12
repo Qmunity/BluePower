@@ -30,6 +30,7 @@ import com.bluepowermod.blocks.machines.BlockContainerTwoSideRender;
 import com.bluepowermod.blocks.machines.BlockIgniter;
 import com.bluepowermod.blocks.machines.BlockLamp;
 import com.bluepowermod.blocks.machines.BlockProjectTable;
+import com.bluepowermod.blocks.machines.BlockRejecting;
 import com.bluepowermod.blocks.machines.BlockSortron;
 import com.bluepowermod.blocks.worldgen.BlockCrackedBasalt;
 import com.bluepowermod.blocks.worldgen.BlockCrop;
@@ -49,6 +50,7 @@ import com.bluepowermod.tileentities.tier2.TileCircuitTable;
 import com.bluepowermod.tileentities.tier2.TileRegulator;
 import com.bluepowermod.tileentities.tier2.TileRetriever;
 import com.bluepowermod.tileentities.tier2.TileSortingMachine;
+import com.bluepowermod.tileentities.tier3.TileManager;
 import com.bluepowermod.util.Dependencies;
 import com.bluepowermod.util.Refs;
 
@@ -113,6 +115,7 @@ public class BPBlocks {
     public static Block   retriever;
     public static Block   regulator;
     public static Block   item_detector;
+    public static Block   manager;
     
     public static Block   cpu;
     public static Block   monitor;
@@ -182,6 +185,7 @@ public class BPBlocks {
         retriever = new BlockContainerBase(Material.rock, TileRetriever.class).setGuiId(GuiIDs.RETRIEVER_ID).setBlockName(Refs.RETRIEVER_NAME);
         regulator = new BlockContainerTwoSideRender(Material.rock, TileRegulator.class).setGuiId(GuiIDs.REGULATOR_ID).emitsRedstone().setBlockName(Refs.REGULATOR_NAME);
         item_detector = new BlockContainerTwoSideRender(Material.rock, TileItemDetector.class).setGuiId(GuiIDs.ITEMDETECTOR_ID).emitsRedstone().setBlockName(Refs.ITEMDETECTOR_NAME);
+        manager = new BlockRejecting(Material.rock, TileManager.class).setGuiId(GuiIDs.MANAGER_ID).emitsRedstone().setBlockName(Refs.MANAGER_NAME);
         
         /*cpu = new BlockCPU();
         monitor = new BlockMonitor();
@@ -265,6 +269,7 @@ public class BPBlocks {
         GameRegistry.registerBlock(retriever, Refs.RETRIEVER_NAME);
         GameRegistry.registerBlock(regulator, Refs.REGULATOR_NAME);
         GameRegistry.registerBlock(item_detector, Refs.ITEMDETECTOR_NAME);
+        GameRegistry.registerBlock(manager, Refs.MANAGER_NAME);
         
         /*GameRegistry.registerBlock(cpu, Refs.BLOCKCPU_NAME);
         GameRegistry.registerBlock(monitor, Refs.BLOCKMONITOR_NAME);

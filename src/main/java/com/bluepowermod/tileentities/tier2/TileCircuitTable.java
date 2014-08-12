@@ -18,6 +18,9 @@ import com.bluepowermod.part.gate.GateBase;
 import com.bluepowermod.tileentities.IGUITextFieldSensitive;
 import com.bluepowermod.tileentities.TileBase;
 
+/**
+ * @author MineMaarten
+ */
 public class TileCircuitTable extends TileBase implements IInventory, IGuiButtonSensitive, IGUITextFieldSensitive {
     
     private ItemStack[]         inventory        = new ItemStack[18];

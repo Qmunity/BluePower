@@ -56,7 +56,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class BlockContainerBase extends BlockBase implements ITileEntityProvider {
     
     @SideOnly(Side.CLIENT)
-    private Map<String, IIcon>          textures;
+    protected Map<String, IIcon>        textures;
     private GuiIDs                      guiId = GuiIDs.INVALID;
     private Class<? extends TileEntity> tileEntityClass;
     private boolean                     isRedstoneEmitter;
