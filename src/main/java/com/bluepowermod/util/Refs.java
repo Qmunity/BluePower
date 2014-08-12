@@ -133,6 +133,7 @@ public class Refs {
     public static final String   DIAMONDSICKLE_NAME             = "diamond_sickle";
     
     public static final String   SCREWDRIVER_NAME               = "screwdriver";
+    public static final String   SILKYSCREWDRIVER_NAME          = "silky_screwdriver";
     public static final String   MULTIPART_NAME                 = "bluepower_multipart";                                                                                                                                                                                                //When changing this name, also change the name in the call to GameData in PartRegistry.
     public static final String   MULTIPART_BLOCK_NAME           = "bluepower_multipart_block";
     

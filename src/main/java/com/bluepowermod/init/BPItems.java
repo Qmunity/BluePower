@@ -49,6 +49,7 @@ import com.bluepowermod.items.ItemSeedBag;
 import com.bluepowermod.items.ItemSickle;
 import com.bluepowermod.items.ItemSiliconBoule;
 import com.bluepowermod.items.ItemSiliconWafer;
+import com.bluepowermod.items.ItemSilkyScrewdriver;
 import com.bluepowermod.items.ItemTeslatite;
 import com.bluepowermod.items.ItemZincPlate;
 import com.bluepowermod.part.ItemBPPart;
@@ -113,6 +114,7 @@ public class BPItems {
     public static Item          red_doped_wafer;
     public static Item          blue_doped_wafer;
     public static ItemBase      screwdriver;
+    public static Item          silky_screwdriver;
     public static Item          athame;
     public static ItemBase      zincplate;
     public static ItemBase      stone_tile;
@@ -201,6 +203,7 @@ public class BPItems {
         blue_doped_wafer = new ItemSiliconWafer(Refs.BLUEDOPEDWAFER_NAME).setCreativeTab(CustomTabs.tabBluePowerItems);
         red_doped_wafer = new ItemSiliconWafer(Refs.REDDOPEDWAFER_NAME).setCreativeTab(CustomTabs.tabBluePowerItems);
         screwdriver = new ItemScrewdriver();
+        silky_screwdriver = new ItemSilkyScrewdriver();
         athame = new ItemAthame();
         zincplate = new ItemZincPlate();
         stone_tile = new ItemCrafting(Refs.STONETILE_NAME);
@@ -302,6 +305,7 @@ public class BPItems {
         GameRegistry.registerItem(blue_doped_wafer, Refs.BLUEDOPEDWAFER_NAME);
         GameRegistry.registerItem(red_doped_wafer, Refs.REDDOPEDWAFER_NAME);
         GameRegistry.registerItem(screwdriver, Refs.SCREWDRIVER_NAME);
+        GameRegistry.registerItem(silky_screwdriver, Refs.SILKYSCREWDRIVER_NAME);
         GameRegistry.registerItem(athame, Refs.ATHAME_NAME);
         GameRegistry.registerItem(zincplate, Refs.ZINCPLATE_NAME);
         

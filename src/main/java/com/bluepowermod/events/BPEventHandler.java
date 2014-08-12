@@ -1,5 +1,6 @@
 package com.bluepowermod.events;
 
+import net.minecraft.client.resources.I18n;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.monster.EntityCreeper;
@@ -17,6 +18,7 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
+import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 
 import com.bluepowermod.containers.ContainerSeedBag;
@@ -170,6 +172,14 @@ public class BPEventHandler {
         if (event.entityLiving instanceof EntityZombie) {
             event.entityLiving.entityDropItem(new ItemStack(Items.skull, 1, 2), 0.0F);
             return;
+        }
+    }
+    
+    @SubscribeEvent
+    public void onItemTooltip(ItemTooltipEvent event) {
+    
+        if (event.itemStack.hasTagCompound() && event.itemStack.getTagCompound().hasKey("tileData")) {
+            event.toolTip.add(I18n.format("gui.tooltip.hasSilkyData"));
         }
     }
 }

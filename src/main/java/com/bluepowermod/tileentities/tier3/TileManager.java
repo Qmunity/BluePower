@@ -153,7 +153,7 @@ public class TileManager extends TileMachineBase implements ISidedInventory, IGu
     
         super.readFromNBT(tCompound);
         
-        for (int i = 0; i < 9; i++) {
+        for (int i = 0; i < 24; i++) {
             NBTTagCompound tc = tCompound.getCompoundTag("inventory" + i);
             inventory[i] = ItemStack.loadItemStackFromNBT(tc);
         }
@@ -170,7 +170,7 @@ public class TileManager extends TileMachineBase implements ISidedInventory, IGu
     
         super.writeToNBT(tCompound);
         
-        for (int i = 0; i < 9; i++) {
+        for (int i = 0; i < 24; i++) {
             if (inventory[i] != null) {
                 NBTTagCompound tc = new NBTTagCompound();
                 inventory[i].writeToNBT(tc);

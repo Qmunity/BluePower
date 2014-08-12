@@ -14,6 +14,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import org.lwjgl.opengl.GL11;
 
+import com.bluepowermod.api.block.ISilkyRemovable;
 import com.bluepowermod.api.compat.IMultipartCompat;
 import com.bluepowermod.api.part.BPPart;
 import com.bluepowermod.api.part.BPPartFace;
@@ -29,7 +30,7 @@ import com.bluepowermod.part.gate.GateWire;
 import com.bluepowermod.raytrace.RayTracer;
 import com.bluepowermod.util.Dependencies;
 
-public abstract class IntegratedCircuit extends GateBase {
+public abstract class IntegratedCircuit extends GateBase implements ISilkyRemovable {
     
     private BPPartFace[][] gates;
     private static double  BORDER_WIDTH = 1 / 16D;

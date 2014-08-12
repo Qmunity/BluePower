@@ -34,6 +34,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import com.bluepowermod.BluePower;
+import com.bluepowermod.api.BPApi;
+import com.bluepowermod.api.block.IAdvancedSilkyRemovable;
 import com.bluepowermod.api.util.ForgeDirectionUtils;
 import com.bluepowermod.client.renderers.RendererBlockBase;
 import com.bluepowermod.client.renderers.RendererBlockBase.EnumFaceType;
@@ -53,13 +55,14 @@ import cpw.mods.fml.relauncher.SideOnly;
  * @author MineMaarten
  */
 
-public class BlockContainerBase extends BlockBase implements ITileEntityProvider {
+public class BlockContainerBase extends BlockBase implements ITileEntityProvider, IAdvancedSilkyRemovable {
     
     @SideOnly(Side.CLIENT)
     protected Map<String, IIcon>        textures;
     private GuiIDs                      guiId = GuiIDs.INVALID;
     private Class<? extends TileEntity> tileEntityClass;
     private boolean                     isRedstoneEmitter;
+    private boolean                     isSilkyRemoving;
     
     public BlockContainerBase(Material material, Class<? extends TileEntity> tileEntityClass) {
     
@@ -151,7 +154,7 @@ public class BlockContainerBase extends BlockBase implements ITileEntityProvider
         if (entity == null || !(entity instanceof TileBase)) { return false; }
         
         if (getGuiID() != GuiIDs.INVALID) {
-            player.openGui(BluePower.instance, getGuiID().ordinal(), world, x, y, z);
+            if (!world.isRemote) player.openGui(BluePower.instance, getGuiID().ordinal(), world, x, y, z);
             return true;
         }
         return false;
@@ -160,9 +163,11 @@ public class BlockContainerBase extends BlockBase implements ITileEntityProvider
     @Override
     public void breakBlock(World world, int x, int y, int z, Block block, int meta) {
     
-        TileBase tile = (TileBase) world.getTileEntity(x, y, z);
-        for (ItemStack stack : tile.getDrops()) {
-            IOHelper.spawnItemInWorld(world, stack, x + 0.5F, y + 0.5F, z + 0.5F);
+        if (!isSilkyRemoving) {
+            TileBase tile = (TileBase) world.getTileEntity(x, y, z);
+            for (ItemStack stack : tile.getDrops()) {
+                IOHelper.spawnItemInWorld(world, stack, x + 0.5, y + 0.5, z + 0.5);
+            }
         }
         super.breakBlock(world, x, y, z, block, meta);
         world.removeTileEntity(x, y, z);
@@ -174,6 +179,7 @@ public class BlockContainerBase extends BlockBase implements ITileEntityProvider
     @Override
     public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase player, ItemStack iStack) {
     
+        BPApi.getInstance().loadSilkySettings(world, x, y, z, iStack);
         TileEntity te = world.getTileEntity(x, y, z);
         if (te instanceof IRotatable) {
             ((IRotatable) te).setFacingDirection(ForgeDirectionUtils.getDirectionFacing(player, canRotateVertical()).getOpposite());
@@ -302,5 +308,18 @@ public class BlockContainerBase extends BlockBase implements ITileEntityProvider
     public GuiIDs getGuiID() {
     
         return guiId;
+    }
+    
+    @Override
+    public boolean preSilkyRemoval(World world, int x, int y, int z) {
+    
+        isSilkyRemoving = true;
+        return true;
+    }
+    
+    @Override
+    public void postSilkyRemoval(World world, int x, int y, int z) {
+    
+        isSilkyRemoving = false;
     }
 }
