@@ -6,7 +6,6 @@ import java.util.List;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.InventoryCraftResult;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -26,11 +25,9 @@ import cpw.mods.fml.relauncher.ReflectionHelper;
  */
 public class TileProjectTable extends TileBase implements IInventory, IGuiButtonSensitive {
     
-    public final IInventory craftResult  = new InventoryCraftResult();
-    
-    private ItemStack[]     inventory    = new ItemStack[18];
-    private ItemStack[]     craftingGrid = new ItemStack[9];
-    private static Field    stackListFieldInventoryCrafting;
+    private ItemStack[]  inventory    = new ItemStack[18];
+    private ItemStack[]  craftingGrid = new ItemStack[9];
+    private static Field stackListFieldInventoryCrafting;
     
     public InventoryCrafting getCraftingGrid(Container listener) {
     
