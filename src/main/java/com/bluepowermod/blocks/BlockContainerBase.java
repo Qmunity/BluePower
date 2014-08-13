@@ -56,62 +56,62 @@ import cpw.mods.fml.relauncher.SideOnly;
  */
 
 public class BlockContainerBase extends BlockBase implements ITileEntityProvider, IAdvancedSilkyRemovable {
-    
+
     @SideOnly(Side.CLIENT)
-    protected Map<String, IIcon>        textures;
-    private GuiIDs                      guiId = GuiIDs.INVALID;
-    private Class<? extends TileEntity> tileEntityClass;
-    private boolean                     isRedstoneEmitter;
-    private boolean                     isSilkyRemoving;
-    
-    public BlockContainerBase(Material material, Class<? extends TileEntity> tileEntityClass) {
-    
+    protected Map<String, IIcon> textures;
+    private GuiIDs guiId = GuiIDs.INVALID;
+    private Class<? extends TileBase> tileEntityClass;
+    private boolean isRedstoneEmitter;
+    private boolean isSilkyRemoving;
+
+    public BlockContainerBase(Material material, Class<? extends TileBase> tileEntityClass) {
+
         super(material);
         isBlockContainer = true;
         setTileEntityClass(tileEntityClass);
     }
-    
+
     public BlockContainerBase setGuiId(GuiIDs guiId) {
-    
+
         this.guiId = guiId;
         return this;
     }
-    
-    public BlockContainerBase setTileEntityClass(Class<? extends TileEntity> tileEntityClass) {
-    
+
+    public BlockContainerBase setTileEntityClass(Class<? extends TileBase> tileEntityClass) {
+
         this.tileEntityClass = tileEntityClass;
         return this;
     }
-    
+
     public BlockContainerBase emitsRedstone() {
-    
+
         isRedstoneEmitter = true;
         return this;
     }
-    
+
     @Override
     public TileEntity createNewTileEntity(World world, int metadata) {
-    
+
         try {
             return getTileEntity().newInstance();
         } catch (Exception e) {
             return null;
         }
     }
-    
+
     /**
      * Fetches the TileEntity Class that goes with the block
-     *
+     * 
      * @return a .class
      */
     protected Class<? extends TileEntity> getTileEntity() {
-    
+
         return tileEntityClass;
     }
-    
+
     @Override
     public void onNeighborBlockChange(World world, int x, int y, int z, Block block) {
-    
+
         super.onNeighborBlockChange(world, x, y, z, block);
         // Only do this on the server side.
         if (!world.isRemote) {
@@ -121,16 +121,16 @@ public class BlockContainerBase extends BlockBase implements ITileEntityProvider
             }
         }
     }
-    
+
     @Override
     public boolean canProvidePower() {
-    
+
         return isRedstoneEmitter;
     }
-    
+
     @Override
     public int isProvidingWeakPower(IBlockAccess par1IBlockAccess, int par2, int par3, int par4, int par5) {
-    
+
         TileEntity te = par1IBlockAccess.getTileEntity(par2, par3, par4);
         if (te instanceof TileBase) {
             TileBase tileBase = (TileBase) te;
@@ -138,31 +138,38 @@ public class BlockContainerBase extends BlockBase implements ITileEntityProvider
         }
         return 0;
     }
-    
+
     @Override
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int par6, float par7, float par8, float par9) {
-    
+
         if (player.isSneaking()) {
             if (player.getHeldItem() != null) {
-                if (player.getHeldItem().getItem() == BPItems.screwdriver) { return false; }
+                if (player.getHeldItem().getItem() == BPItems.screwdriver) {
+                    return false;
+                }
             }
         }
-        
-        if (player.isSneaking()) { return false; }
-        
+
+        if (player.isSneaking()) {
+            return false;
+        }
+
         TileEntity entity = world.getTileEntity(x, y, z);
-        if (entity == null || !(entity instanceof TileBase)) { return false; }
-        
+        if (entity == null || !(entity instanceof TileBase)) {
+            return false;
+        }
+
         if (getGuiID() != GuiIDs.INVALID) {
-            if (!world.isRemote) player.openGui(BluePower.instance, getGuiID().ordinal(), world, x, y, z);
+            if (!world.isRemote)
+                player.openGui(BluePower.instance, getGuiID().ordinal(), world, x, y, z);
             return true;
         }
         return false;
     }
-    
+
     @Override
     public void breakBlock(World world, int x, int y, int z, Block block, int meta) {
-    
+
         if (!isSilkyRemoving) {
             TileBase tile = (TileBase) world.getTileEntity(x, y, z);
             for (ItemStack stack : tile.getDrops()) {
@@ -172,111 +179,116 @@ public class BlockContainerBase extends BlockBase implements ITileEntityProvider
         super.breakBlock(world, x, y, z, block, meta);
         world.removeTileEntity(x, y, z);
     }
-    
+
     /**
      * Method to detect how the block was placed, and what way it's facing.
      */
     @Override
     public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase player, ItemStack iStack) {
-    
+
         BPApi.getInstance().loadSilkySettings(world, x, y, z, iStack);
         TileEntity te = world.getTileEntity(x, y, z);
         if (te instanceof IRotatable) {
             ((IRotatable) te).setFacingDirection(ForgeDirectionUtils.getDirectionFacing(player, canRotateVertical()).getOpposite());
         }
     }
-    
+
     protected boolean canRotateVertical() {
-    
+
         return true;
     }
-    
+
     @Override
     public boolean rotateBlock(World worldObj, int x, int y, int z, ForgeDirection axis) {
-    
+
         TileEntity te = worldObj.getTileEntity(x, y, z);
         if (te instanceof IRotatable) {
             IRotatable rotatable = (IRotatable) te;
             ForgeDirection dir = rotatable.getFacingDirection();
-            
+
             do {
                 dir = ForgeDirection.getOrientation(dir.ordinal() + 1);
-                if (dir == ForgeDirection.UNKNOWN) dir = ForgeDirection.DOWN;
+                if (dir == ForgeDirection.UNKNOWN)
+                    dir = ForgeDirection.DOWN;
             } while (!canRotateVertical() && (dir == ForgeDirection.UP || dir == ForgeDirection.DOWN));
             rotatable.setFacingDirection(dir);
             return true;
         }
         return false;
     }
-    
+
     @Override
     @SideOnly(Side.CLIENT)
     public void registerBlockIcons(IIconRegister iconRegister) {
-    
+
         textures = new HashMap<String, IIcon>();
         for (EnumFaceType faceType : EnumFaceType.values()) {
             boolean ejecting = false;
             boolean powered = false;
-            
+
             do {
                 do {
                     String iconName = getIconName(faceType, ejecting, powered);
                     if (!textures.containsKey(iconName)) {
                         textures.put(iconName, iconRegister.registerIcon(iconName));
                     }
-                    
+
                     powered = !powered;
                 } while (powered == true && IBluePowered.class.isAssignableFrom(getTileEntity()));
                 ejecting = !ejecting;
             } while (ejecting == true && IEjectAnimator.class.isAssignableFrom(getTileEntity()));
         }
     }
-    
+
     @SideOnly(Side.CLIENT)
     public IIcon getIcon(EnumFaceType faceType, boolean ejecting, boolean powered) {
-    
+
         return textures.get(getIconName(faceType, ejecting, powered));
     }
-    
+
     @SideOnly(Side.CLIENT)
     protected IIcon getIcon(EnumFaceType faceType, boolean ejecting, boolean powered, int side, TileEntity te) {
-    
+
         return getIcon(faceType, ejecting, powered);
     }
-    
+
     @Override
     public Block setBlockName(String name) {
-    
+
         super.setBlockName(name);
         textureName = Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + name;
         return this;
     }
-    
+
     protected String getIconName(EnumFaceType faceType, boolean ejecting, boolean powered) {
-    
+
         String iconName = textureName + "_" + faceType.toString().toLowerCase();
         if (faceType == EnumFaceType.SIDE) {
-            if (ejecting) iconName += "_active";
-            
-            //TODO: When powersystem is implemented, uncomment this!
-            //if (powered) iconName += "_powered";
+            if (ejecting)
+                iconName += "_active";
+
+            // TODO: When powersystem is implemented, uncomment this!
+            // if (powered) iconName += "_powered";
         }
         return iconName;
     }
-    
+
     @Override
     @SideOnly(Side.CLIENT)
     public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
-    
-        if (textures == null) return super.getIcon(world, x, y, z, side);
+
+        if (textures == null)
+            return super.getIcon(world, x, y, z, side);
         TileEntity te = world.getTileEntity(x, y, z);
         RendererBlockBase.EnumFaceType faceType = EnumFaceType.SIDE;
         boolean powered = false;
         boolean ejecting = false;
         if (te instanceof IRotatable) {
             ForgeDirection rotation = ((IRotatable) te).getFacingDirection();
-            if (rotation.ordinal() == side) faceType = EnumFaceType.FRONT;
-            if (rotation.getOpposite().ordinal() == side) faceType = EnumFaceType.BACK;
+            if (rotation.ordinal() == side)
+                faceType = EnumFaceType.FRONT;
+            if (rotation.getOpposite().ordinal() == side)
+                faceType = EnumFaceType.BACK;
         }
         if (te instanceof IBluePowered) {
             powered = ((IBluePowered) te).isPowered();
@@ -286,40 +298,47 @@ public class BlockContainerBase extends BlockBase implements ITileEntityProvider
         }
         return getIcon(faceType, ejecting, powered, side, te);
     }
-    
+
     /**
      * This method will only be called from the item render method. the meta variable doesn't have any meaning.
      */
     @Override
     @SideOnly(Side.CLIENT)
     public IIcon getIcon(int side, int meta) {
-    
-        if (textures == null) return super.getIcon(side, meta);
+
+        if (textures == null)
+            return super.getIcon(side, meta);
         return getIcon(EnumFaceType.values()[side == 0 ? 2 : side == 1 ? 1 : 0], false, false);
     }
-    
+
     @Override
     @SideOnly(Side.CLIENT)
     public int getRenderType() {
-    
+
         return RendererBlockBase.RENDER_ID;
     }
-    
+
     public GuiIDs getGuiID() {
-    
+
         return guiId;
     }
-    
+
     @Override
     public boolean preSilkyRemoval(World world, int x, int y, int z) {
-    
+
         isSilkyRemoving = true;
         return true;
     }
-    
+
     @Override
     public void postSilkyRemoval(World world, int x, int y, int z) {
-    
+
         isSilkyRemoving = false;
+    }
+
+    @Override
+    public boolean canConnectRedstone(IBlockAccess world, int x, int y, int z, int side) {
+
+        return ((TileBase) world.getTileEntity(x, y, z)).canConnectRedstone();
     }
 }
