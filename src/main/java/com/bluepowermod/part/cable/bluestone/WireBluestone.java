@@ -8,7 +8,6 @@ import net.minecraft.block.BlockRedstoneWire;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -159,6 +158,11 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
         IMultipartCompat compat = BPApi.getInstance().getMultipartCompat();
 
         Vector3 vec = wire.getLocation().getRelative(dir);
+        if (!vec.hasTileEntity())
+            return null;
+        if (!(vec.getTileEntity() instanceof TileMultipart))
+            return null;
+
         TileMultipart te = (TileMultipart) wire.getLocation().getTileEntity();
 
         if (te == null)
@@ -192,9 +196,9 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
                 if (p instanceof IFaceRedstonePart) {
                     // ForgeDirection d = dir2;
                     if (p instanceof MultipartBPPart) {
-                    if (((MultipartBPPart) p).getPart() instanceof WireBluestone)
-                    continue;
-                    // d = d.getOpposite();
+                        if (((MultipartBPPart) p).getPart() instanceof WireBluestone)
+                            continue;
+                        // d = d.getOpposite();
                     }
                     // if ((p instanceof MultipartBPPart && ((MultipartBPPart) p).getPart() instanceof GateBase)
                     // || !compat.isOccupied(
@@ -572,19 +576,21 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
                     w.power = power[0];
                     w.sendUpdatePacket();
 
-                    for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
-                        int val = 0;
-                        if (w.isConnectedOnSide(d))
-                            val = w.power;
-                        RedstoneConnection c = w.getConnection(d);
-                        if (c != null)
-                            c.setPower(val);
-                    }
-                    if (w.loc != null) {
+                    if (w.hasSetFace()) {
                         for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
-                            Vector3 v = w.loc.getRelative(d);
-                            w.getWorld().notifyBlockChange(v.getBlockX(), v.getBlockY(), v.getBlockZ(), Blocks.air);
-                            w.getWorld().markBlockForUpdate(v.getBlockX(), v.getBlockY(), v.getBlockZ());
+                            int val = 0;
+                            if (w.isConnectedOnSide(d))
+                                val = w.power;
+                            RedstoneConnection c = w.getConnection(d);
+                            if (c != null)
+                                c.setPower(val, false);
+                        }
+                        if (w.loc != null) {
+                            for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
+                                Vector3 v = w.loc.getRelative(d);
+                                w.getWorld().notifyBlockChange(v.getBlockX(), v.getBlockY(), v.getBlockZ(), w.loc.getBlock());
+                                w.getWorld().markBlockForUpdate(v.getBlockX(), v.getBlockY(), v.getBlockZ());
+                            }
                         }
                     }
                 }

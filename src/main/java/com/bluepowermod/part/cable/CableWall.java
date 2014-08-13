@@ -1,6 +1,14 @@
 package com.bluepowermod.part.cable;
 
+import java.util.List;
+
+import net.minecraft.block.Block;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraftforge.common.util.ForgeDirection;
 import codechicken.multipart.TMultiPart;
+
 import com.bluepowermod.api.compat.IMultipartCompat;
 import com.bluepowermod.api.part.BPPartFace;
 import com.bluepowermod.api.util.ForgeDirectionUtils;
@@ -8,15 +16,9 @@ import com.bluepowermod.api.vec.Vector3;
 import com.bluepowermod.compat.CompatibilityUtils;
 import com.bluepowermod.part.cable.bluestone.ICableConnect;
 import com.bluepowermod.util.Dependencies;
+
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Optional;
-import net.minecraft.block.Block;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraftforge.common.util.ForgeDirection;
-
-import java.util.List;
 
 /**
  * @author amadornes
@@ -180,15 +182,14 @@ public abstract class CableWall extends BPPartFace {
 
         // Check for cables next to this one
         List<CableWall> l = compat.getBPParts(vec.getTileEntity(), CableWall.class);
-        for (CableWall c : l) {
-            if (c.getFace() == getFace()) {
-                if (!compat.isOccupied(loc.getTileEntity(), getStripHitboxForSide(ForgeDirection.getOrientation(getFace()), dir))
-                        && !compat
-                                .isOccupied(vec.getTileEntity(), getStripHitboxForSide(ForgeDirection.getOrientation(getFace()), dir.getOpposite()))) {
-                    return c;
-                }
-            }
-        }
+        for (CableWall c : l)
+            if (c.getWorld() != null)
+                if (c.getFace() == getFace())
+                    if (!compat.isOccupied(loc.getTileEntity(), getStripHitboxForSide(ForgeDirection.getOrientation(getFace()), dir))
+                            && !compat.isOccupied(vec.getTileEntity(),
+                                    getStripHitboxForSide(ForgeDirection.getOrientation(getFace()), dir.getOpposite())))
+                        if (c.hasSetFace())
+                            return c;
         l.clear();
 
         // Check for cables in the same block
@@ -197,9 +198,11 @@ public abstract class CableWall extends BPPartFace {
         if (dir2 == ForgeDirection.UP || dir2 == ForgeDirection.DOWN)
             dir2 = dir2.getOpposite();
         for (CableWall c : l) {
-            if (ForgeDirection.getOrientation(c.getFace()) == dir2)
-                if (!compat.isOccupied(loc.getTileEntity(), getStripHitboxForSide(ForgeDirection.getOrientation(getFace()), dir)))
-                    return c;
+            if (c.getWorld() != null)
+                if (ForgeDirection.getOrientation(c.getFace()) == dir2)
+                    if (!compat.isOccupied(loc.getTileEntity(), getStripHitboxForSide(ForgeDirection.getOrientation(getFace()), dir)))
+                        if (c.hasSetFace())
+                            return c;
         }
         l.clear();
 
@@ -210,18 +213,23 @@ public abstract class CableWall extends BPPartFace {
         Vector3 vec2 = vec.getRelative(f);
         l = compat.getBPParts(vec2.getTileEntity(), CableWall.class);
         for (CableWall c : l) {
-            ForgeDirection d = dir;
-            if (d != ForgeDirection.UP && d != ForgeDirection.DOWN)
-                d = d.getOpposite();
-            if (ForgeDirection.getOrientation(c.getFace()) == d) {
-                boolean isOccluded = compat.isOccupied(loc.getTileEntity(), getStripHitboxForSide(ForgeDirection.getOrientation(getFace()), dir))
-                        || compat.isOccupied(vec.getTileEntity(), getStripHitboxForSide(ForgeDirection.getOrientation(getFace()), dir.getOpposite()));
-                if (vec.getBlock() != null && vec.getBlock().isOpaqueCube())
-                    isOccluded = true;
-                if (!c.updating)
-                    c.onUpdate();
-                if (!isOccluded) {
-                    return c;
+            if (c.getWorld() != null) {
+                ForgeDirection d = dir;
+                if (d != ForgeDirection.UP && d != ForgeDirection.DOWN)
+                    d = d.getOpposite();
+                if (ForgeDirection.getOrientation(c.getFace()) == d) {
+                    boolean isOccluded = compat.isOccupied(loc.getTileEntity(), getStripHitboxForSide(ForgeDirection.getOrientation(getFace()), dir))
+                            || compat.isOccupied(vec.getTileEntity(),
+                                    getStripHitboxForSide(ForgeDirection.getOrientation(getFace()), dir.getOpposite()));
+                    if (vec.getBlock() != null && vec.getBlock().isOpaqueCube())
+                        isOccluded = true;
+                    if (c.hasSetFace()) {
+                        if (!c.updating)
+                            c.onUpdate();
+                        if (!isOccluded) {
+                            return c;
+                        }
+                    }
                 }
             }
         }
