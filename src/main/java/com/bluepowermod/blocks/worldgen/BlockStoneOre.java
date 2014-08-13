@@ -56,7 +56,7 @@ public class BlockStoneOre extends Block {
         	this.setHarvestLevel("pickaxe", 3);
         }else {
             this.setResistance(5.0F);
-            this.setHarvestLevel("pickaxe", 2);
+            this.setHarvestLevel("pickaxe", 1);
         }
         // this.textureName = Refs.MODID + ":" + name;
         this.setCreativeTab(CustomTabs.tabBluePowerBlocks);
