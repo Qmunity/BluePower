@@ -20,7 +20,9 @@ package com.bluepowermod.client.gui;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 
+import com.bluepowermod.client.renderers.RenderHelper;
 import com.bluepowermod.containers.ContainerAlloyFurnace;
+import com.bluepowermod.init.BPFluids;
 import com.bluepowermod.tileentities.tier1.TileAlloyFurnace;
 import com.bluepowermod.util.Refs;
 
@@ -28,30 +30,37 @@ import com.bluepowermod.util.Refs;
  * @author MineMaarten
  */
 public class GuiAlloyFurnace extends GuiBase {
-    
+
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/alloy_furnace.png");
-    private final TileAlloyFurnace        furnace;
-    
+    private final TileAlloyFurnace furnace;
+
     public GuiAlloyFurnace(InventoryPlayer invPlayer, TileAlloyFurnace furnace) {
-    
+
         super(furnace, new ContainerAlloyFurnace(invPlayer, furnace), resLoc);
         this.furnace = furnace;
     }
-    
+
     @Override
     protected void drawGuiContainerBackgroundLayer(float f, int i, int j) {
-    
+
         super.drawGuiContainerBackgroundLayer(f, i, j);
-        
+
         int x = (width - xSize) / 2;
         int y = (height - ySize) / 2;
-        
+
         int burningPercentage = (int) (furnace.getBurningPercentage() * 14);
         // Todo: Tweak these variables a bit till it lines up perfectly.
         drawTexturedModalRect(x + 22, y + 54 + 14 - burningPercentage, 177, 14 - burningPercentage, 14, burningPercentage + 0);
-        
+
         int processPercentage = (int) (furnace.getProcessPercentage() * 22);
         drawTexturedModalRect(x + 103, y + 35, 178, 14, processPercentage, 15);
+
+        RenderHelper.renderFluidInGui(BPFluids.molten_iron, 10, x + 134, y + 22, 16, 43, true);
+
+        mc.renderEngine.bindTexture(resLoc);
+
+        // Draw tank overlay
+        drawTexturedModalRect(x + 134, y + 22, 177, 34, 16, 43);
     }
-    
+
 }

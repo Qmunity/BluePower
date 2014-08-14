@@ -17,7 +17,7 @@
 
 package com.bluepowermod.api.recipe;
 
-import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidStack;
 
 /**
  * 
@@ -25,31 +25,34 @@ import net.minecraft.item.ItemStack;
  */
 
 public interface IAlloyFurnaceRegistry {
-    
+
     /**
-     * With this you can add recipes that require special handling (like NBT dependent recipes). It's similar to Vanilla's IRecipe
-     * For the normal recipes, use addRecipe(ItemStack output, Object... input).
-     *
+     * With this you can add recipes that require special handling (like NBT dependent recipes). It's similar to Vanilla's IRecipe For the normal
+     * recipes, use addRecipe(ItemStack output, Object... input).
+     * 
      * @param recipe
      */
-    void addRecipe(IAlloyFurnaceRecipe recipe);
-    
+    public void addRecipe(IAlloyFurnaceRecipe recipe);
+
     /**
      * Adds a recipe to the Alloy Furnace.
-     *
-     * @param output the crafting result
-     * @param input  input items. These can be ItemStack, Item or Block objects. You can specify up to 9 input objects.
-     *               You can only specify one type of item once. Items will automatically be matched against the ore dictionary.
+     * 
+     * @param output
+     *            the crafting result
+     * @param input
+     *            input items. These can be ItemStack, Item or Block objects. You can specify up to 9 input objects. You can only specify one type of
+     *            item once. Items will automatically be matched against the ore dictionary.
      */
-    void addRecipe(ItemStack output, Object... input);
-    
+    public void addRecipe(FluidStack result, Object... requiredItems);
+
     /**
-     * Any item added here will cause dynamically generated recipes that allows items to be broken down to this item.
-     * In BluePower, this is called with an iron ingot.S
-     *
+     * Any item added here will cause dynamically generated recipes that allows items to be broken down to this item. In BluePower, this is called
+     * with an iron ingot.S
+     * 
      * @param recycledItem
-     * @param blacklist list of item registry names ("minecraft:bucket") that shouldn't be added by the generator.
-     * As modder you could pass a config entry to this.
+     * @param blacklist
+     *            list of item registry names ("minecraft:bucket") that shouldn't be added by the generator. As modder you could pass a config entry
+     *            to this.
      */
-    void addRecyclingRecipe(ItemStack recycledItem, String... blacklist);
+    public void addRecyclingRecipe(FluidStack recycledItem, String... blacklist);
 }

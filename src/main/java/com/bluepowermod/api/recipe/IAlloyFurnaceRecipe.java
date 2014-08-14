@@ -18,26 +18,28 @@
 package com.bluepowermod.api.recipe;
 
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidStack;
 
 /**
  * This class only should be used for special recipes, like recipes that depend on NBT. For normal recipes use
  * {@link com.bluepowermod.recipe.AlloyFurnaceRegistry#addRecipe(ItemStack, ItemStack...)}.
+ * 
  * @author MineMaarten
  */
 public interface IAlloyFurnaceRecipe {
-    
+
     /**
      * Return true if this recipe can be smelted using the input stacks. The input stacks are the 9 inventory slots, so an element can be null.
-     *
+     * 
      * @param input
      * @return
      */
     boolean matches(ItemStack[] input);
-    
+
     /**
      * The items that are needed in this recipe need to be removed from the input inventory.
      */
     void useItems(ItemStack[] input);
-    
-    ItemStack getCraftingResult(ItemStack[] input);
+
+    FluidStack getResult(ItemStack[] input);
 }

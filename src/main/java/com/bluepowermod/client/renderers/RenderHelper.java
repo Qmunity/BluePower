@@ -11,6 +11,8 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
@@ -794,5 +796,54 @@ public class RenderHelper {
         default:
             break;
         }
+    }
+
+    public static void renderFluidInGui(FluidStack fluid, int x, int y, int width, int height, boolean startFromBottom) {
+
+        renderFluidInGui(fluid.getFluid(), fluid.amount, x, y, width, height, startFromBottom);
+    }
+
+    public static void renderFluidInGui(Fluid fluid, int amount, int x, int y, int width, int height, boolean startFromBottom) {
+
+        Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
+
+        GL11.glPushMatrix();
+        {
+            GL11.glTranslated(x, y, 0);
+
+            IIcon icon = fluid.getStillIcon();
+            double scale = icon.getIconWidth() / ((double) width);
+            GL11.glScaled(scale, scale, 1);
+            if (startFromBottom) {
+                GL11.glTranslated(width / 2D, height / 2D, 1);
+                GL11.glRotated(180, 1, 0, 0);
+                GL11.glTranslated(-(width / 2D), -(height / 2D), 1);
+            }
+
+            int times = (int) Math.ceil((height / (icon.getIconHeight() / scale)) * (amount / 1000D));
+
+            GL11.glDisable(GL11.GL_CULL_FACE);
+            for (int i = 0; i < times; i++) {
+                GL11.glBegin(GL11.GL_QUADS);
+                if (i == times - 1) {
+                    double amt = 10;
+
+                    addVertexWithTexture(0, 0, 0, icon.getMinU(), icon.getMinV());
+                    addVertexWithTexture(0, icon.getIconHeight() * amt, 0, icon.getMinU(), icon.getMinV() + ((icon.getMaxV() - icon.getMinV()) * amt));
+                    addVertexWithTexture(icon.getIconWidth(), icon.getIconHeight() * amt, 0, icon.getMaxU(),
+                            icon.getMinV() + ((icon.getMaxV() - icon.getMinV()) * amt));
+                    addVertexWithTexture(icon.getIconWidth(), 0, 0, icon.getMaxU(), icon.getMinV());
+                } else {
+                    addVertexWithTexture(0, 0, 0, icon.getMinU(), icon.getMinV());
+                    addVertexWithTexture(0, icon.getIconHeight(), 0, icon.getMinU(), icon.getMaxV());
+                    addVertexWithTexture(icon.getIconWidth(), icon.getIconHeight(), 0, icon.getMaxU(), icon.getMaxV());
+                    addVertexWithTexture(icon.getIconWidth(), 0, 0, icon.getMaxU(), icon.getMinV());
+                }
+                GL11.glEnd();
+                GL11.glTranslated(0, icon.getIconHeight(), 0);
+            }
+            GL11.glEnable(GL11.GL_CULL_FACE);
+        }
+        GL11.glPopMatrix();
     }
 }

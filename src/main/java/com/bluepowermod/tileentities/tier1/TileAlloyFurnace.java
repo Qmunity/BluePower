@@ -24,6 +24,12 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntityFurnace;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTank;
+import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.IFluidHandler;
 
 import com.bluepowermod.api.recipe.IAlloyFurnaceRecipe;
 import com.bluepowermod.init.BPBlocks;
@@ -35,51 +41,53 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * 
- * @author MineMaarten, Koen Beckers (K4Unl)
+ * @author MineMaarten, Koen Beckers (K4Unl), Amadornes
  */
 
-public class TileAlloyFurnace extends TileBase implements IInventory {
-    
-    private boolean     isActive;
-    public int          currentBurnTime;
-    public int          currentProcessTime;
-    public int          maxBurnTime;
+public class TileAlloyFurnace extends TileBase implements IInventory, IFluidHandler {
+
+    private boolean isActive;
+    public int currentBurnTime;
+    public int currentProcessTime;
+    public int maxBurnTime;
     private ItemStack[] inventory;
-    private ItemStack   fuelInventory;
-    private ItemStack   outputInventory;
-    
+    private ItemStack fuelInventory;
+    private FluidTank outputTank;
+
     public TileAlloyFurnace() {
-    
+
         inventory = new ItemStack[9];
+        outputTank = new FluidTank(AlloyFurnaceRegistry.TANK_SIZE);
     }
-    
+
     /*************** BASIC TE FUNCTIONS **************/
-    
+
     /**
      * This function gets called whenever the world/chunk loads
      */
     @Override
     public void readFromNBT(NBTTagCompound tCompound) {
-    
+
         super.readFromNBT(tCompound);
-        
+
         for (int i = 0; i < 9; i++) {
             NBTTagCompound tc = tCompound.getCompoundTag("inventory" + i);
             inventory[i] = ItemStack.loadItemStackFromNBT(tc);
         }
         fuelInventory = ItemStack.loadItemStackFromNBT(tCompound.getCompoundTag("fuelInventory"));
-        outputInventory = ItemStack.loadItemStackFromNBT(tCompound.getCompoundTag("outputInventory"));
-        
+        outputTank.drain(outputTank.getCapacity(), true);
+        outputTank.fill(FluidStack.loadFluidStackFromNBT(tCompound.getCompoundTag("outputTank")), true);
+
     }
-    
+
     /**
      * This function gets called whenever the world/chunk is saved
      */
     @Override
     public void writeToNBT(NBTTagCompound tCompound) {
-    
+
         super.writeToNBT(tCompound);
-        
+
         for (int i = 0; i < 9; i++) {
             if (inventory[i] != null) {
                 NBTTagCompound tc = new NBTTagCompound();
@@ -92,51 +100,51 @@ public class TileAlloyFurnace extends TileBase implements IInventory {
             fuelInventory.writeToNBT(fuelCompound);
             tCompound.setTag("fuelInventory", fuelCompound);
         }
-        
-        if (outputInventory != null) {
+
+        if (outputTank.getFluid() != null) {
             NBTTagCompound outputCompound = new NBTTagCompound();
-            outputInventory.writeToNBT(outputCompound);
-            tCompound.setTag("outputInventory", outputCompound);
+            outputTank.getFluid().writeToNBT(outputCompound);
+            tCompound.setTag("outputTank", outputCompound);
         }
-        
+
     }
-    
+
     @Override
     public void readFromPacketNBT(NBTTagCompound tag) {
-    
+
         super.readFromPacketNBT(tag);
         isActive = tag.getBoolean("isActive");
-        
+
         currentBurnTime = tag.getInteger("currentBurnTime");
         currentProcessTime = tag.getInteger("currentProcessTime");
         maxBurnTime = tag.getInteger("maxBurnTime");
         markForRenderUpdate();
     }
-    
+
     @Override
     public void writeToPacketNBT(NBTTagCompound tag) {
-    
+
         super.writeToPacketNBT(tag);
         tag.setInteger("currentBurnTime", currentBurnTime);
         tag.setInteger("currentProcessTime", currentProcessTime);
         tag.setInteger("maxBurnTime", maxBurnTime);
         tag.setBoolean("isActive", isActive);
     }
-    
+
     /**
      * Function gets called every tick. Do not forget to call the super method!
      */
     @Override
     public void updateEntity() {
-    
+
         super.updateEntity();
-        
+
         if (!worldObj.isRemote) {
             setIsActive(currentBurnTime > 0);
             if (isActive) {
                 currentBurnTime--;
             }
-            IAlloyFurnaceRecipe recipe = AlloyFurnaceRegistry.getInstance().getMatchingRecipe(inventory, outputInventory);
+            IAlloyFurnaceRecipe recipe = AlloyFurnaceRegistry.getInstance().getMatchingRecipe(inventory, outputTank.getFluid());
             if (recipe != null) {
                 if (currentBurnTime <= 0) {
                     if (TileEntityFurnace.isItemFuel(fuelInventory)) {
@@ -152,14 +160,10 @@ public class TileAlloyFurnace extends TileBase implements IInventory {
                         currentProcessTime = 0;
                     }
                 }
-                
+
                 if (++currentProcessTime >= 200) {
                     currentProcessTime = 0;
-                    if (outputInventory != null) {
-                        outputInventory.stackSize += recipe.getCraftingResult(inventory).stackSize;
-                    } else {
-                        outputInventory = recipe.getCraftingResult(inventory).copy();
-                    }
+                    outputTank.fill(recipe.getResult(inventory).copy(), true);
                     recipe.useItems(inventory);
                 }
             } else {
@@ -167,79 +171,81 @@ public class TileAlloyFurnace extends TileBase implements IInventory {
             }
         }
     }
-    
+
     @Override
     protected void redstoneChanged(boolean newValue) {
-    
+
         // setIsActive(newValue);
     }
-    
+
     @SideOnly(Side.CLIENT)
     public void setBurnTicks(int _maxBurnTime, int _currentBurnTime) {
-    
+
         maxBurnTime = _maxBurnTime;
         currentBurnTime = _currentBurnTime;
     }
-    
+
     public float getBurningPercentage() {
-    
+
         if (maxBurnTime > 0) {
             return (float) currentBurnTime / (float) maxBurnTime;
         } else {
             return 0;
         }
     }
-    
+
     public float getProcessPercentage() {
-    
+
         return (float) currentProcessTime / 200;
     }
-    
+
     /**
      * ************* ADDED FUNCTIONS *************
      */
-    
+
     public boolean getIsActive() {
-    
+
         return isActive;
     }
-    
+
     public void setIsActive(boolean _isActive) {
-    
+
         if (_isActive != isActive) {
             isActive = _isActive;
             sendUpdatePacket();
         }
     }
-    
+
     /**
      * ************ IINVENTORY ****************
      */
-    
+
     @Override
     public int getSizeInventory() {
-    
+
         return 9 + 1 + 1; // 9 inventory, 1 fuel, 1 output
     }
-    
+
     @Override
     public ItemStack getStackInSlot(int var1) {
-    
+
         if (var1 == 0) {
             return fuelInventory;
-        } else if (var1 == 1) {
-            return outputInventory;
-        } else if (var1 < 11) { return inventory[var1 - 2]; }
+        } else if (var1 < 11) {
+            return inventory[var1 - 2];
+        }
         return null;
     }
-    
+
     @Override
     public ItemStack decrStackSize(int var1, int var2) {
-    
+
         ItemStack tInventory = getStackInSlot(var1);
-        
-        if (tInventory == null) { return null; }
-        
+
+        if (tInventory == null) {
+            return null;
+        }
+
         ItemStack ret = null;
         if (tInventory.stackSize < var2) {
             ret = tInventory;
@@ -249,74 +255,70 @@ public class TileAlloyFurnace extends TileBase implements IInventory {
             if (tInventory.stackSize <= 0) {
                 if (var1 == 0) {
                     fuelInventory = null;
-                } else if (var1 == 1) {
-                    outputInventory = null;
                 } else {
                     inventory[var1 - 2] = null;
                 }
             }
         }
-        
+
         return ret;
     }
-    
+
     @Override
     public ItemStack getStackInSlotOnClosing(int var1) {
-    
+
         return getStackInSlot(var1);
     }
-    
+
     @Override
     public void setInventorySlotContents(int var1, ItemStack itemStack) {
-    
+
         if (var1 == 0) {
             fuelInventory = itemStack;
-        } else if (var1 == 1) {
-            outputInventory = itemStack;
         } else {
             inventory[var1 - 2] = itemStack;
         }
     }
-    
+
     @Override
     public String getInventoryName() {
-    
+
         return BPBlocks.alloy_furnace.getUnlocalizedName();
     }
-    
+
     @Override
     public boolean hasCustomInventoryName() {
-    
+
         return false;
     }
-    
+
     @Override
     public int getInventoryStackLimit() {
-    
+
         return 64;
     }
-    
+
     @Override
     public boolean isUseableByPlayer(EntityPlayer var1) {
-    
+
         // Todo: Some fancy code here that detects whether the player is far
         // away
         return true;
     }
-    
+
     @Override
     public void openInventory() {
-    
+
     }
-    
+
     @Override
     public void closeInventory() {
-    
+
     }
-    
+
     @Override
     public boolean isItemValidForSlot(int var1, ItemStack itemStack) {
-    
+
         if (var1 == 0) {
             return TileEntityFurnace.isItemFuel(itemStack);
         } else if (var1 == 1) { // Output slot
@@ -325,15 +327,59 @@ public class TileAlloyFurnace extends TileBase implements IInventory {
             return true;
         }
     }
-    
+
     @Override
     public List<ItemStack> getDrops() {
-    
+
         List<ItemStack> drops = super.getDrops();
-        if (fuelInventory != null) drops.add(fuelInventory);
-        if (outputInventory != null) drops.add(outputInventory);
+        if (fuelInventory != null)
+            drops.add(fuelInventory);
         for (ItemStack stack : inventory)
-            if (stack != null) drops.add(stack);
+            if (stack != null)
+                drops.add(stack);
         return drops;
+    }
+
+    @Override
+    public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
+
+        return 0;
+    }
+
+    @Override
+    public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
+
+        if (resource == null)
+            return null;
+        if (outputTank.getFluid() == null)
+            return null;
+        if (outputTank.getFluid().getFluid() != resource.getFluid())
+            return null;
+
+        return outputTank.drain(resource.amount, doDrain);
+    }
+
+    @Override
+    public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
+
+        return outputTank.drain(maxDrain, doDrain);
+    }
+
+    @Override
+    public boolean canFill(ForgeDirection from, Fluid fluid) {
+
+        return false;
+    }
+
+    @Override
+    public boolean canDrain(ForgeDirection from, Fluid fluid) {
+
+        return fluid != null && outputTank.getFluid() != null && outputTank.getFluid().getFluid() == fluid;
+    }
+
+    @Override
+    public FluidTankInfo[] getTankInfo(ForgeDirection from) {
+
+        return new FluidTankInfo[] { new FluidTankInfo(outputTank) };
     }
 }

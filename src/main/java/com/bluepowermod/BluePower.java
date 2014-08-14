@@ -21,6 +21,7 @@ import com.bluepowermod.compat.fmp.PartRegister;
 import com.bluepowermod.events.BPEventHandler;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.init.BPEnchantments;
+import com.bluepowermod.init.BPFluids;
 import com.bluepowermod.init.BPItems;
 import com.bluepowermod.init.Config;
 import com.bluepowermod.init.CustomTabs;
@@ -69,6 +70,7 @@ public class BluePower {
         Config.syncConfig(config);
         BPBlocks.init();
         BPItems.init();
+        BPFluids.init();
 
         TileEntities.init();
         OreDictionarySetup.init();
