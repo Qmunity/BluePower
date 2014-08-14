@@ -441,6 +441,8 @@ gui.circuitDatabase.action.savePrivate=Save to Private Library
 gui.circuitDatabase.action.saveServer=Save to Server Library
 gui.circuitDatabase.action.copy=Copy
 
+gui.circuitDatabase.name=Name:
+
 gui.sneakForInfo=Sneak for info
 
 gui.widget.color.none=None

@@ -7,8 +7,8 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
 import com.bluepowermod.ClientProxy;
+import com.bluepowermod.api.item.IDatabaseSaveable;
 import com.bluepowermod.client.gui.GuiBase;
-import com.bluepowermod.containers.slots.SlotMachineOutput;
 import com.bluepowermod.containers.slots.SlotPhantom;
 import com.bluepowermod.tileentities.tier3.TileCircuitDatabase;
 
@@ -23,8 +23,22 @@ public class ContainerCircuitDatabaseMain extends ContainerGhosts {
     public ContainerCircuitDatabaseMain(InventoryPlayer invPlayer, TileCircuitDatabase circuitDatabase) {
     
         this.circuitDatabase = circuitDatabase;
-        addSlotToContainer(new SlotPhantom(circuitDatabase.copyInventory, 0, 57, 64));
-        addSlotToContainer(new SlotMachineOutput(circuitDatabase.copyInventory, 1, 108, 64));
+        addSlotToContainer(new SlotPhantom(circuitDatabase.copyInventory, 0, 57, 64) {
+            
+            @Override
+            public boolean isItemValid(ItemStack stack) {
+            
+                return stack.getItem() instanceof IDatabaseSaveable && ((IDatabaseSaveable) stack.getItem()).canGoInCopySlot(stack);
+            }
+        });
+        addSlotToContainer(new Slot(circuitDatabase.copyInventory, 1, 108, 64) {
+            
+            @Override
+            public boolean isItemValid(ItemStack stack) {
+            
+                return stack.getItem() instanceof IDatabaseSaveable && ((IDatabaseSaveable) stack.getItem()).canGoInCopySlot(stack);
+            }
+        });
         
         for (int i = 0; i < 2; ++i) {
             for (int j = 0; j < 9; ++j) {

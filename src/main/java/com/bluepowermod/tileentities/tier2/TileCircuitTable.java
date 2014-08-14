@@ -24,7 +24,7 @@ import com.bluepowermod.tileentities.TileBase;
  */
 public class TileCircuitTable extends TileBase implements IInventory, IGuiButtonSensitive, IGUITextFieldSensitive {
     
-    private ItemStack[]         inventory        = new ItemStack[18];
+    protected ItemStack[]       inventory        = new ItemStack[18];
     public final InventoryBasic circuitInventory = new InventoryBasic("circuitInventory", false, 24);
     private int                 slotsScrolled;
     private String              textboxString    = "";

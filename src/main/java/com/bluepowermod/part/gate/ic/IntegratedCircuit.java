@@ -16,7 +16,6 @@ import org.lwjgl.opengl.GL11;
 
 import com.bluepowermod.api.block.ISilkyRemovable;
 import com.bluepowermod.api.compat.IMultipartCompat;
-import com.bluepowermod.api.item.IDatabaseSaveable;
 import com.bluepowermod.api.part.BPPart;
 import com.bluepowermod.api.part.BPPartFace;
 import com.bluepowermod.api.part.FaceDirection;
@@ -31,7 +30,7 @@ import com.bluepowermod.part.gate.GateWire;
 import com.bluepowermod.raytrace.RayTracer;
 import com.bluepowermod.util.Dependencies;
 
-public abstract class IntegratedCircuit extends GateBase implements ISilkyRemovable, IDatabaseSaveable {
+public abstract class IntegratedCircuit extends GateBase implements ISilkyRemovable {
     
     private BPPartFace[][] gates;
     private static double  BORDER_WIDTH = 1 / 16D;
@@ -485,7 +484,7 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
                         gate = new WireBluestone();
                     }
                     ItemStack partStack = PartRegistry.getInstance().getItemForPart(gate.getType());
-                    getWorld().spawnEntityInWorld(new EntityItem(getWorld(), getX() + 0.5, getY() + 0.5, getZ() + 0.5, partStack));
+                    drops.add(partStack);
                 }
             }
         }
@@ -530,7 +529,7 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
      * @return false to disallow copying.
      */
     @Override
-    public boolean canCopyInto(ItemStack outputStack) {
+    public boolean canGoInCopySlot(ItemStack stack) {
     
         return true;
     }
