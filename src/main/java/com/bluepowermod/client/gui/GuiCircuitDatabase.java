@@ -3,17 +3,20 @@ package com.bluepowermod.client.gui;
 import java.util.List;
 
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.Slot;
 import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 
 import com.bluepowermod.client.gui.widget.BaseWidget;
 import com.bluepowermod.client.gui.widget.IGuiWidget;
+import com.bluepowermod.client.gui.widget.WidgetMode;
 import com.bluepowermod.client.gui.widget.WidgetSidewaysTab;
 import com.bluepowermod.client.gui.widget.WidgetTab;
 import com.bluepowermod.containers.ContainerCircuitDatabaseMain;
 import com.bluepowermod.containers.ContainerCircuitDatabaseSharing;
 import com.bluepowermod.network.NetworkHandler;
+import com.bluepowermod.network.messages.MessageCircuitDatabaseTemplate;
 import com.bluepowermod.network.messages.MessageGuiUpdate;
 import com.bluepowermod.references.GuiIDs;
 import com.bluepowermod.tileentities.tier3.TileCircuitDatabase;
@@ -68,18 +71,28 @@ public class GuiCircuitDatabase extends GuiCircuitTable {
                 
                     switch (curHoveredTab) {
                         case 0:
-                            curTip.add("gui.circuitDatabase.tab.cancel");
+                            curTip.add("gui.circuitDatabase.action.cancel");
                             break;
                         case 1:
-                            curTip.add("gui.circuitDatabase.tab.private");
+                            curTip.add("gui.circuitDatabase.action.savePrivate");
                             break;
                         case 2:
-                            curTip.add("gui.circuitDatabase.tab.server");
+                            curTip.add("gui.circuitDatabase.action.saveServer");
                             break;
                     }
                 }
             };
             widget.value = circuitDatabase.selectedShareOption;
+            addWidget(widget);
+            
+            widget = new WidgetMode(3, guiLeft + 80, guiTop + 48, 176, 37, 1, Refs.MODID + ":textures/gui/circuit_database.png") {
+                
+                @Override
+                public void addTooltip(int x, int y, List<String> curTip, boolean shiftPressed) {
+                
+                    curTip.add("gui.circuitDatabase.action.copy");
+                }
+            };
             addWidget(widget);
         }
     }
@@ -104,6 +117,17 @@ public class GuiCircuitDatabase extends GuiCircuitTable {
     protected boolean isTextfieldEnabled() {
     
         return circuitDatabase.clientCurrentTab == 1 || circuitDatabase.clientCurrentTab == 2;
+    }
+    
+    @Override
+    protected void handleMouseClick(Slot slot, int p_146984_2_, int p_146984_3_, int p_146984_4_) {
+    
+        if (circuitDatabase.clientCurrentTab == 1 && slot != null && slot.getHasStack() && slot.inventory == circuitDatabase.circuitInventory) {//when in the private database
+            circuitDatabase.clientCurrentTab = 0;//Navigate to the copy & share tab.
+            NetworkHandler.sendToServer(new MessageCircuitDatabaseTemplate(circuitDatabase, slot.getStack()));
+        } else {
+            super.handleMouseClick(slot, p_146984_2_, p_146984_3_, p_146984_4_);
+        }
     }
     
     @Override

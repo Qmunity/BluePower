@@ -16,6 +16,7 @@ import org.lwjgl.opengl.GL11;
 
 import com.bluepowermod.api.block.ISilkyRemovable;
 import com.bluepowermod.api.compat.IMultipartCompat;
+import com.bluepowermod.api.item.IDatabaseSaveable;
 import com.bluepowermod.api.part.BPPart;
 import com.bluepowermod.api.part.BPPartFace;
 import com.bluepowermod.api.part.FaceDirection;
@@ -30,7 +31,7 @@ import com.bluepowermod.part.gate.GateWire;
 import com.bluepowermod.raytrace.RayTracer;
 import com.bluepowermod.util.Dependencies;
 
-public abstract class IntegratedCircuit extends GateBase implements ISilkyRemovable {
+public abstract class IntegratedCircuit extends GateBase implements ISilkyRemovable, IDatabaseSaveable {
     
     private BPPartFace[][] gates;
     private static double  BORDER_WIDTH = 1 / 16D;
@@ -520,6 +521,34 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
     
         // TODO Auto-generated method stub
         
+    }
+    
+    /**
+     * Return true if the ItemStack that's being 'injected' with info is a stack that can be injected.
+     * This method is only called when itemStack.isItemEqual(otherStack) returned true.
+     * @param outputStack
+     * @return false to disallow copying.
+     */
+    @Override
+    public boolean canCopyInto(ItemStack outputStack) {
+    
+        return true;
+    }
+    
+    /**
+     * Items that contain items (an Integrated Circuit with gates on it) need to compare the input and output, and tell
+     * which items are required. With this method you can tell the Circuit Database what items the item carries, so it can
+     * calculate which items it needs.
+     * @param templateStack
+     * @param outputStack
+     * @return null is a valid return.
+     */
+    @Override
+    public List<ItemStack> getItemsOnStack(ItemStack stack) {
+    
+        List<ItemStack> items = getDrops();
+        items.remove(0); //remove the part itself
+        return items;
     }
     
     @Override

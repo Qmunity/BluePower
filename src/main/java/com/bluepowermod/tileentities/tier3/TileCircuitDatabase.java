@@ -1,24 +1,45 @@
 package com.bluepowermod.tileentities.tier3;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryBasic;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
 import com.bluepowermod.BluePower;
+import com.bluepowermod.helper.ItemStackDatabase;
 import com.bluepowermod.init.BPBlocks;
+import com.bluepowermod.network.NetworkHandler;
+import com.bluepowermod.network.messages.MessageCircuitDatabaseTemplate;
 import com.bluepowermod.references.GuiIDs;
 import com.bluepowermod.tileentities.tier2.TileCircuitTable;
 
 public class TileCircuitDatabase extends TileCircuitTable {
     
-    public IInventory       copyInventory        = new InventoryBasic("copy inventory", false, 2);
-    public int              clientCurrentTab;
-    public int              curUploadProgress;
-    public int              curCopyProgress;
-    public int              selectedShareOption;
-    public static final int UPLOAD_AND_COPY_TIME = 200;
+    public IInventory               copyInventory        = new InventoryBasic("copy inventory", false, 2);
+    public int                      clientCurrentTab;
+    public int                      curUploadProgress;
+    public int                      curCopyProgress;
+    public int                      selectedShareOption;
+    public static final int         UPLOAD_AND_COPY_TIME = 200;
+    private final ItemStackDatabase privateDatabase      = new ItemStackDatabase();
+    private EntityPlayer            triggeringPlayer;
+    
+    @Override
+    protected List<ItemStack> getApplicableItems() {
+    
+        List<ItemStack> items = new ArrayList<ItemStack>();
+        if (worldObj == null || !worldObj.isRemote) {
+            return items;
+        } else {
+            items.addAll(privateDatabase.loadItemStacks());
+            return items;
+        }
+    }
     
     @Override
     public void onButtonPress(EntityPlayer player, int messageId, int value) {
@@ -30,6 +51,7 @@ public class TileCircuitDatabase extends TileCircuitTable {
             case 2:
                 selectedShareOption = value;
                 if (selectedShareOption > 0) {
+                    triggeringPlayer = player;
                     curUploadProgress = 0;
                 } else {
                     curUploadProgress = -1;
@@ -58,6 +80,9 @@ public class TileCircuitDatabase extends TileCircuitTable {
                 if (curUploadProgress >= 0) {
                     if (++curUploadProgress > UPLOAD_AND_COPY_TIME) {
                         curUploadProgress = -1;
+                        if (selectedShareOption == 1 && triggeringPlayer != null) NetworkHandler.sendTo(new MessageCircuitDatabaseTemplate(this, copyInventory.getStackInSlot(0)), (EntityPlayerMP) triggeringPlayer);
+                        
+                        selectedShareOption = 0;
                     }
                 }
             } else {
@@ -66,6 +91,11 @@ public class TileCircuitDatabase extends TileCircuitTable {
                 selectedShareOption = 0;
             }
         }
+    }
+    
+    public void saveToPrivateLibrary(ItemStack stack) {
+    
+        privateDatabase.saveItemStack(stack);
     }
     
     @Override

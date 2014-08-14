@@ -34,6 +34,7 @@ import com.bluepowermod.tileentities.tier2.TileCircuitTable;
 import com.bluepowermod.tileentities.tier2.TileRegulator;
 import com.bluepowermod.tileentities.tier2.TileRetriever;
 import com.bluepowermod.tileentities.tier2.TileSortingMachine;
+import com.bluepowermod.tileentities.tier3.TileCircuitDatabase;
 import com.bluepowermod.tileentities.tier3.TileEngine;
 import com.bluepowermod.tileentities.tier3.TileManager;
 import com.bluepowermod.tileentities.tier3.TileSortron;
@@ -72,6 +73,7 @@ public class TileEntities {
         GameRegistry.registerTileEntity(TileManager.class, Refs.MODID + ".manager");
         GameRegistry.registerTileEntity(TileProjectTable.class, Refs.MODID + ".projectTable");
         GameRegistry.registerTileEntity(TileCircuitTable.class, Refs.MODID + ".circuitTable");
+        GameRegistry.registerTileEntity(TileCircuitDatabase.class, Refs.MODID + ".circuitDatabase");
         GameRegistry.registerTileEntity(TileLamp.class, Refs.MODID + ".lamp");
         GameRegistry.registerTileEntity(BPTileMultipart.class, Refs.MODID + ".multipart");
     }
