@@ -317,7 +317,7 @@ public class TileManager extends TileMachineBase implements ISidedInventory, IGu
     }
     
     @Override
-    public void onButtonPress(int messageId, int value) {
+    public void onButtonPress(EntityPlayer player, int messageId, int value) {
     
         if (messageId == 0) {
             filterColor = TubeColor.values()[value];

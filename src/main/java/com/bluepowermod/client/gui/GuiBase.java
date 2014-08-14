@@ -126,7 +126,7 @@ public class GuiBase extends GuiContainer implements IWidgetListener {
         List<String> tooltip = new ArrayList<String>();
         boolean shift = BluePower.proxy.isSneakingInGui();
         for (IGuiWidget widget : widgets) {
-            if (widget.getBounds().contains(x, y)) widget.addTooltip(tooltip, shift);
+            if (widget.getBounds().contains(x, y)) widget.addTooltip(x, y, tooltip, shift);
         }
         if (!tooltip.isEmpty()) {
             List<String> localizedTooltip = new ArrayList<String>();

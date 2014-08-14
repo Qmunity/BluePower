@@ -60,7 +60,7 @@ public class GuiRegulator extends GuiBase {
         WidgetMode modeWidget = new WidgetMode(1, guiLeft + 135, guiTop + 20, 216, 2, Refs.MODID + ":textures/gui/regulator.png") {
             
             @Override
-            public void addTooltip(List<String> curTip, boolean shiftPressed) {
+            public void addTooltip(int mouseX, int mouseY, List<String> curTip, boolean shiftPressed) {
             
                 curTip.add("gui.mode");
                 curTip.add("gui.regulator.mode." + (value == 0 ? "ratio" : "supply"));

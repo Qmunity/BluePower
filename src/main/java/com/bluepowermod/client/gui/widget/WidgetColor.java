@@ -57,7 +57,7 @@ public class WidgetColor extends BaseWidget {
     }
     
     @Override
-    public void addTooltip(List<String> curTooltip, boolean shiftPressed) {
+    public void addTooltip(int mouseX, int mouseY, List<String> curTooltip, boolean shiftPressed) {
     
         if (value < 16) {
             curTooltip.add("gui.widget.color." + ItemDye.field_150923_a[value]);

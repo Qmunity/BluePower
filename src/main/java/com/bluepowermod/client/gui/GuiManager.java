@@ -61,7 +61,7 @@ public class GuiManager extends GuiBase {
         WidgetMode modeWidget = new WidgetMode(1, guiLeft + 155, guiTop + 21, 176, 2, Refs.MODID + ":textures/gui/manager.png") {
             
             @Override
-            public void addTooltip(List<String> curTip, boolean shiftPressed) {
+            public void addTooltip(int mouseX, int mouseY, List<String> curTip, boolean shiftPressed) {
             
                 curTip.add("gui.mode");
                 String mode = null;
@@ -87,7 +87,7 @@ public class GuiManager extends GuiBase {
         WidgetNumber numberWidget = new WidgetNumber(2, guiLeft + 155, guiTop + 38, 9) {
             
             @Override
-            public void addTooltip(List<String> curTip, boolean shiftPressed) {
+            public void addTooltip(int mouseX, int mouseY, List<String> curTip, boolean shiftPressed) {
             
                 curTip.add("gui.priority");
                 curTip.add("gui.priority.info");

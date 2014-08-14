@@ -50,6 +50,7 @@ import com.bluepowermod.tileentities.tier2.TileCircuitTable;
 import com.bluepowermod.tileentities.tier2.TileRegulator;
 import com.bluepowermod.tileentities.tier2.TileRetriever;
 import com.bluepowermod.tileentities.tier2.TileSortingMachine;
+import com.bluepowermod.tileentities.tier3.TileCircuitDatabase;
 import com.bluepowermod.tileentities.tier3.TileManager;
 import com.bluepowermod.util.Dependencies;
 import com.bluepowermod.util.Refs;
@@ -109,6 +110,7 @@ public class BPBlocks {
     public static Block   sortron;
     public static Block   project_table;
     public static Block   circuit_table;
+    public static Block   circuit_database;
     public static Block   ejector;
     public static Block   relay;
     public static Block   filter;
@@ -177,6 +179,7 @@ public class BPBlocks {
         deployer = new BlockContainerFrontRender(Material.rock, TileDeployer.class).setGuiId(GuiIDs.DEPLOYER_ID).setBlockName(Refs.BLOCKDEPLOYER_NAME);
         project_table = new BlockProjectTable().setGuiId(GuiIDs.PROJECTTABLE_ID);
         circuit_table = new BlockProjectTable(TileCircuitTable.class).setGuiId(GuiIDs.CIRCUITTABLE_ID).setBlockName(Refs.CIRCUITTABLE_NAME);
+        circuit_database = new BlockProjectTable(TileCircuitDatabase.class).setGuiId(GuiIDs.CIRCUITDATABASE_MAIN_ID).setBlockName(Refs.CIRCUITDATABASE_NAME);
         
         transposer = new BlockContainerBase(Material.rock, TileTransposer.class).setBlockName(Refs.TRANSPOSER_NAME);
         ejector = new BlockContainerTwoSideRender(Material.rock, TileEjector.class).setGuiId(GuiIDs.EJECTOR_ID).setBlockName(Refs.EJECTOR_NAME);
@@ -262,6 +265,7 @@ public class BPBlocks {
         GameRegistry.registerBlock(deployer, Refs.BLOCKDEPLOYER_NAME);
         GameRegistry.registerBlock(project_table, Refs.PROJECTTABLE_NAME);
         GameRegistry.registerBlock(circuit_table, Refs.CIRCUITTABLE_NAME);
+        GameRegistry.registerBlock(circuit_database, Refs.CIRCUITDATABASE_NAME);
         GameRegistry.registerBlock(transposer, Refs.TRANSPOSER_NAME);
         GameRegistry.registerBlock(ejector, Refs.EJECTOR_NAME);
         GameRegistry.registerBlock(relay, Refs.RELAY_NAME);

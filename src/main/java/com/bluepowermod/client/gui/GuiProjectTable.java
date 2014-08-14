@@ -54,7 +54,7 @@ public class GuiProjectTable extends GuiBase {
         addWidget(new WidgetMode(0, guiLeft + 15, guiTop + 20, 176, 1, Refs.MODID + ":textures/gui/project_table.png") {
             
             @Override
-            public void addTooltip(List<String> curTip, boolean shift) {
+            public void addTooltip(int mouseX, int mouseY, List<String> curTip, boolean shift) {
             
                 curTip.add("gui.projectTable.clearGrid");
             }

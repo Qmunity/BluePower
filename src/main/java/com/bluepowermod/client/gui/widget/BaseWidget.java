@@ -30,16 +30,16 @@ import org.lwjgl.opengl.GL11;
  */
 public class BaseWidget implements IGuiWidget {
     
-    private final int                id;
-    public int                       value;           //just a generic value
-    protected final int              x, y;
-    private final int                width;
-    private final int                height;
-    private final int                textureU;
-    private final int                textureV;
-    private final ResourceLocation[] textures;
-    protected int                    textureIndex = 0;
-    protected IWidgetListener        gui;
+    private final int                  id;
+    public int                         value;           //just a generic value
+    protected final int                x, y;
+    protected final int                width;
+    protected final int                height;
+    private final int                  textureU;
+    private final int                  textureV;
+    protected final ResourceLocation[] textures;
+    protected int                      textureIndex = 0;
+    protected IWidgetListener          gui;
     
     public BaseWidget(int id, int x, int y, int width, int height, String... textureLocs) {
     
@@ -114,7 +114,7 @@ public class BaseWidget implements IGuiWidget {
     }
     
     @Override
-    public void addTooltip(List<String> curTip, boolean shiftPressed) {
+    public void addTooltip(int mouseX, int mouseY, List<String> curTip, boolean shiftPressed) {
     
     }
     

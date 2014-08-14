@@ -75,7 +75,7 @@ public class GuiSortingMachine extends GuiBase {
         WidgetMode pullModeWidget = new WidgetMode(9, guiLeft + 7, guiTop + 90, 196, PullMode.values().length, Refs.MODID + ":textures/gui/sorting_machine.png") {
             
             @Override
-            public void addTooltip(List<String> curTip, boolean shiftPressed) {
+            public void addTooltip(int mouseX, int mouseY, List<String> curTip, boolean shiftPressed) {
             
                 curTip.add("gui.pullMode");
                 curTip.add(PullMode.values()[value].toString());
@@ -92,7 +92,7 @@ public class GuiSortingMachine extends GuiBase {
         WidgetMode sortModeWidget = new WidgetMode(10, guiLeft + 7, guiTop + 106, 210, TileSortingMachine.SortMode.values().length, Refs.MODID + ":textures/gui/sorting_machine.png") {
             
             @Override
-            public void addTooltip(List<String> curTip, boolean shiftPressed) {
+            public void addTooltip(int mouseX, int mouseY, List<String> curTip, boolean shiftPressed) {
             
                 curTip.add("gui.sortMode");
                 curTip.add(TileSortingMachine.SortMode.values()[value].toString());

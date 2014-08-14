@@ -35,7 +35,7 @@ public class GuiItemDetector extends GuiBase {
         WidgetMode modeWidget = new WidgetMode(0, guiLeft + 152, guiTop + 10, 176, 3, Refs.MODID + ":textures/gui/item_detector.png") {
             
             @Override
-            public void addTooltip(List<String> curTip, boolean shiftPressed) {
+            public void addTooltip(int mouseX, int mouseY, List<String> curTip, boolean shiftPressed) {
             
                 curTip.add("gui.mode");
                 String mode;

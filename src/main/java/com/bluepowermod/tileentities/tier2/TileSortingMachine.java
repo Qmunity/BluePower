@@ -298,7 +298,7 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
     }
 
     @Override
-    public void onButtonPress(int messageId, int value) {
+    public void onButtonPress(EntityPlayer player, int messageId, int value) {
 
         if (messageId < 9) {
             colors[messageId] = TubeColor.values()[value];

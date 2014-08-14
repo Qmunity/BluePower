@@ -185,7 +185,7 @@ public class TileRegulator extends TileMachineBase implements ISidedInventory, I
     }
     
     @Override
-    public void onButtonPress(int messageId, int value) {
+    public void onButtonPress(EntityPlayer player, int messageId, int value) {
     
         if (messageId == 1) {
             mode = value;

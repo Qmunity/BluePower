@@ -98,15 +98,15 @@ public class MessageGuiUpdate extends LocationIntPacket<MessageGuiUpdate> {
         IMultipartCompat compat = (IMultipartCompat) CompatibilityUtils.getModule(Dependencies.FMP);
         TileEntity te = player.worldObj.getTileEntity(message.x, message.y, message.z);
         if (compat.isMultipart(te)) {
-            messagePart(te, message);
+            messagePart(player, te, message);
         } else {
             if (te instanceof IGuiButtonSensitive) {
-                ((IGuiButtonSensitive) te).onButtonPress(message.messageId, message.value);
+                ((IGuiButtonSensitive) te).onButtonPress(player, message.messageId, message.value);
             }
         }
     }
     
-    private void messagePart(TileEntity te, MessageGuiUpdate message) {
+    private void messagePart(EntityPlayer player, TileEntity te, MessageGuiUpdate message) {
     
         List<BPPart> parts = ((IMultipartCompat) CompatibilityUtils.getModule(Dependencies.FMP)).getBPParts(te, BPPart.class);
         if (message.partId < parts.size()) {
@@ -117,7 +117,7 @@ public class MessageGuiUpdate extends LocationIntPacket<MessageGuiUpdate> {
                 part = ((IntegratedCircuit) part).getPartForIndex(message.icId);
             }
             if (part instanceof IGuiButtonSensitive) {
-                ((IGuiButtonSensitive) part).onButtonPress(message.messageId, message.value);
+                ((IGuiButtonSensitive) part).onButtonPress(player, message.messageId, message.value);
                 if (circuit != null) circuit.sendUpdatePacket();
             } else {
                 BluePower.log.error("[BluePower][MessageGuiPacket] Part doesn't implement IGuiButtonSensitive");
