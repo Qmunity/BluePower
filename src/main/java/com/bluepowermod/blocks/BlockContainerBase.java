@@ -58,13 +58,13 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class BlockContainerBase extends BlockBase implements ITileEntityProvider, IAdvancedSilkyRemovable {
     
     @SideOnly(Side.CLIENT)
-    protected Map<String, IIcon>        textures;
-    private GuiIDs                      guiId = GuiIDs.INVALID;
-    private Class<? extends TileEntity> tileEntityClass;
-    private boolean                     isRedstoneEmitter;
-    private boolean                     isSilkyRemoving;
+    protected Map<String, IIcon>      textures;
+    private GuiIDs                    guiId = GuiIDs.INVALID;
+    private Class<? extends TileBase> tileEntityClass;
+    private boolean                   isRedstoneEmitter;
+    private boolean                   isSilkyRemoving;
     
-    public BlockContainerBase(Material material, Class<? extends TileEntity> tileEntityClass) {
+    public BlockContainerBase(Material material, Class<? extends TileBase> tileEntityClass) {
     
         super(material);
         isBlockContainer = true;
@@ -77,7 +77,7 @@ public class BlockContainerBase extends BlockBase implements ITileEntityProvider
         return this;
     }
     
-    public BlockContainerBase setTileEntityClass(Class<? extends TileEntity> tileEntityClass) {
+    public BlockContainerBase setTileEntityClass(Class<? extends TileBase> tileEntityClass) {
     
         this.tileEntityClass = tileEntityClass;
         return this;
@@ -101,7 +101,7 @@ public class BlockContainerBase extends BlockBase implements ITileEntityProvider
     
     /**
      * Fetches the TileEntity Class that goes with the block
-     *
+     * 
      * @return a .class
      */
     protected Class<? extends TileEntity> getTileEntity() {
@@ -198,13 +198,11 @@ public class BlockContainerBase extends BlockBase implements ITileEntityProvider
         if (te instanceof IRotatable) {
             IRotatable rotatable = (IRotatable) te;
             ForgeDirection dir = rotatable.getFacingDirection();
-            
-            do {
-                dir = ForgeDirection.getOrientation(dir.ordinal() + 1);
-                if (dir == ForgeDirection.UNKNOWN) dir = ForgeDirection.DOWN;
-            } while (!canRotateVertical() && (dir == ForgeDirection.UP || dir == ForgeDirection.DOWN));
-            rotatable.setFacingDirection(dir);
-            return true;
+            dir = dir.getRotation(axis);
+            if (dir != ForgeDirection.UP && dir != ForgeDirection.DOWN || canRotateVertical()) {
+                rotatable.setFacingDirection(dir);
+                return true;
+            }
         }
         return false;
     }
@@ -258,8 +256,8 @@ public class BlockContainerBase extends BlockBase implements ITileEntityProvider
         if (faceType == EnumFaceType.SIDE) {
             if (ejecting) iconName += "_active";
             
-            //TODO: When powersystem is implemented, uncomment this!
-            //if (powered) iconName += "_powered";
+            // TODO: When powersystem is implemented, uncomment this!
+            // if (powered) iconName += "_powered";
         }
         return iconName;
     }
@@ -321,5 +319,11 @@ public class BlockContainerBase extends BlockBase implements ITileEntityProvider
     public void postSilkyRemoval(World world, int x, int y, int z) {
     
         isSilkyRemoving = false;
+    }
+    
+    @Override
+    public boolean canConnectRedstone(IBlockAccess world, int x, int y, int z, int side) {
+    
+        return ((TileBase) world.getTileEntity(x, y, z)).canConnectRedstone();
     }
 }

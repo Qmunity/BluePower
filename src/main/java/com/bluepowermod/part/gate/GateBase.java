@@ -163,6 +163,11 @@ public abstract class GateBase extends BPPartFace {
         }
     }
     
+    protected void renderTopTexture(String name, boolean state) {
+    
+        renderTopTexture(Refs.MODID + ":textures/blocks/gates/" + getTextureName() + "/" + name + "_" + (state ? "on" : "off") + ".png");
+    }
+    
     protected void renderTopTexture(FaceDirection side, boolean state) {
     
         renderTopTexture(Refs.MODID + ":textures/blocks/gates/" + getTextureName() + "/" + side.getName() + "_" + (state ? "on" : "off") + ".png");

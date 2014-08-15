@@ -20,25 +20,25 @@ import com.bluepowermod.api.part.BPPart;
 import com.bluepowermod.part.PartRegistry;
 
 public class RenderItemBPPart implements IItemRenderer {
-    
+
     private final List<BPPart> parts = new ArrayList<BPPart>();
-    
+
     @Override
     public boolean handleRenderType(ItemStack item, ItemRenderType type) {
-    
+
         return true;
     }
-    
+
     @Override
     public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item, ItemRendererHelper helper) {
-    
+
         return true;
     }
-    
+
     @SuppressWarnings("incomplete-switch")
     @Override
     public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
-    
+
         BPPart part = null;
         try {
             for (BPPart p : parts)
@@ -48,35 +48,38 @@ public class RenderItemBPPart implements IItemRenderer {
                 }
             if (part == null) {
                 part = PartRegistry.getInstance().createPartFromItem(item);
-                if (part != null) parts.add(part);
+                if (part != null)
+                    parts.add(part);
             }
         } catch (Exception ex) {
         }
         if (part == null) {
             part = PartRegistry.getInstance().createPart(PartRegistry.getInstance().ICON_PART);
         }
-        
+
         GL11.glPushMatrix();
         {
             switch (type) {
-                case ENTITY:
-                    GL11.glScaled(0.5, 0.5, 0.5);
-                    GL11.glTranslated(-0.5, 0, -0.5);
-                    if (item.getItemFrame() != null) GL11.glTranslated(0, -0.25, 0);
-                    break;
-                case EQUIPPED:
-                    break;
-                case EQUIPPED_FIRST_PERSON:
-                    break;
-                case INVENTORY:
-                    GL11.glTranslated(0, -0.1, 0);
-                    break;
+            case ENTITY:
+                GL11.glScaled(0.5, 0.5, 0.5);
+                GL11.glTranslated(-0.5, 0, -0.5);
+                if (item.getItemFrame() != null)
+                    GL11.glTranslated(0, -0.25, 0);
+                break;
+            case EQUIPPED:
+                break;
+            case EQUIPPED_FIRST_PERSON:
+                break;
+            case INVENTORY:
+                GL11.glTranslated(0, -0.1, 0);
+                break;
             }
             GL11.glEnable(GL11.GL_BLEND);
+            GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
             part.renderItem(type, item, data);
             GL11.glDisable(GL11.GL_BLEND);
         }
         GL11.glPopMatrix();
     }
-    
+
 }

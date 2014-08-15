@@ -66,8 +66,7 @@ public class ItemSickle extends ItemTool {
 
     public float func_150893_a(ItemStack itemStack, Block block) {
 
-        if ((block.getMaterial() == Material.leaves) || (block.getMaterial() == Material.plants) || (block.getMaterial() == Material.grass)
-                || toolBlocks.contains(block)) {
+        if ((block.getMaterial() == Material.leaves) || (block.getMaterial() == Material.plants) || toolBlocks.contains(block)) {
 
             return this.efficiencyOnProperMaterial;
         }

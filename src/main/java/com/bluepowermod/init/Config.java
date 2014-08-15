@@ -76,6 +76,7 @@ public class Config {
     public static String[] alloyFurnaceBlacklist;
     public static boolean  enableTubeCaching;
     public static boolean  enableGateSounds;
+    public static String   tubeRenderMode;
     
     public static void syncConfig(Configuration config) {
     
@@ -130,6 +131,13 @@ public class Config {
         Property prop = config.get(Refs.CONFIG_TUBES, "Enable Tube Caching", true);
         prop.comment = "When enabled, the Tube routing is more friendly for the CPU. In return it uses a bit more RAM. Caching also may contain bugs still.";
         enableTubeCaching = prop.getBoolean();
+        
+        prop = config.get(Refs.CONFIG_TUBES, "Tube Render Mode", "auto");
+        prop.comment = "When encountering FPS issues with tubes with lots of items in it. Valid modes: \"normal\": Normal rendering, \"reduced\": All items going through tubes will display as 'one' item, \"none\": Only a small dot renders, \"auto\": will switch to \"normal\" on fancy graphics mode, and to \"reduced\" otherwise.";
+        tubeRenderMode = prop.getString();
+        if (!tubeRenderMode.equals("normal") && !tubeRenderMode.equals("reduced") && !tubeRenderMode.equals("none")) {
+            tubeRenderMode = "auto";
+        }
         
         config.addCustomCategoryComment(Refs.CONFIG_ENCHANTS, "Toggle enchantment ids");
         vorpalEnchantmentId = config.get(Refs.CONFIG_ENCHANTS, "vorpalEnchantmentId", 100).getInt();

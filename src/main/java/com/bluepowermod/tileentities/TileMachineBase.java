@@ -90,7 +90,7 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
     
         if (!worldObj.isRemote) {
             internalItemStackBuffer.add(new TubeStack(stack, getOutputDirection().getOpposite(), color));
-            if (internalItemStackBuffer.size() == 1) ejectItems();
+            if (internalItemStackBuffer.size() == 1) scheduleInjection();
             animationTicker = 0;
             sendUpdatePacket();
         }

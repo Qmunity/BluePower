@@ -12,6 +12,7 @@ import net.minecraft.item.crafting.CraftingManager;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 
+import net.minecraftforge.common.util.EnumHelper;
 import org.apache.logging.log4j.Logger;
 
 import com.bluepowermod.api.BPApi;
@@ -67,6 +68,7 @@ public class BluePower {
         CustomTabs.init();
         // Load configs
         Config.syncConfig(config);
+        EnumHelper.addToolMaterial("GEM", 2, 750, 6.0F, 2.0F, 18);
         BPBlocks.init();
         BPItems.init();
 

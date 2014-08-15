@@ -37,32 +37,19 @@ public class BlockStoneOre extends Block {
         super(Material.rock);
 
         this.name = name;
-
+        this.setResistance(5.0F);
+        this.setHardness(4.0F);
+        this.setHarvestLevel("pickaxe", 1);
         this.setBlockName(name);
-        this.setHardness(3.0F);
-        if (name == Refs.BASALT_NAME) {
-            this.setResistance(25.0F);
-            this.setHarvestLevel("pickaxe", 1);
-        } else if (name == Refs.MARBLE_NAME) {
-            this.setResistance(1.0F);
-            this.setHarvestLevel("pickaxe", 1);
-            this.setHardness(1.5F);
-        } else if (name == Refs.TUNGSTENORE_NAME) {
-        	this.setResistance(6.0F);
-            this.setHardness(20.0F);
-        	this.setHarvestLevel("pickaxe", 3);
-        }else if (name == Refs.TUNGSTENBLOCK_NAME) {
-        	this.setResistance(25.0F);
-        	this.setHarvestLevel("pickaxe", 3);
-        }else {
-            this.setResistance(5.0F);
-            this.setHarvestLevel("pickaxe", 2);
-        }
-        // this.textureName = Refs.MODID + ":" + name;
         this.setCreativeTab(CustomTabs.tabBluePowerBlocks);
         this.setStepSound(soundTypeStone);
     }
 
+
+    public Block setToolLevel(int level) {
+        super.setHarvestLevel("pickaxe", level);
+        return this;
+    }
 
     @Override
     public String getUnlocalizedName() {

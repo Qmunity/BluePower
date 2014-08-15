@@ -28,6 +28,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import com.bluepowermod.blocks.BlockContainerBase;
 import com.bluepowermod.client.renderers.RendererBlockBase.EnumFaceType;
 import com.bluepowermod.tileentities.IRotatable;
+import com.bluepowermod.tileentities.TileBase;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -36,39 +37,41 @@ import cpw.mods.fml.relauncher.SideOnly;
  * @author MineMaarten
  */
 public class BlockContainerTwoSideRender extends BlockContainerBase {
-    
-    public BlockContainerTwoSideRender(Material material, Class<? extends TileEntity> tileEntityClass) {
-    
+
+    public BlockContainerTwoSideRender(Material material, Class<? extends TileBase> tileEntityClass) {
+
         super(material, tileEntityClass);
     }
-    
+
     @Override
     @SideOnly(Side.CLIENT)
     public void registerBlockIcons(IIconRegister iconRegister) {
-    
+
         super.registerBlockIcons(iconRegister);
         blockIcon = iconRegister.registerIcon(getTextureName() + "_side_0");
     }
-    
+
     @Override
     @SideOnly(Side.CLIENT)
     public IIcon getIcon(int side, int meta) {
-    
+
         return side == 2 || side == 3 ? blockIcon : super.getIcon(side, meta);
     }
-    
+
     @Override
     protected IIcon getIcon(EnumFaceType faceType, boolean ejecting, boolean powered, int side, TileEntity te) {
-    
+
         if (faceType == EnumFaceType.SIDE) {
             ForgeDirection orientation = ((IRotatable) te).getFacingDirection();
             if (orientation.ordinal() < 2) {
-                if (side == ForgeDirection.WEST.ordinal() || side == ForgeDirection.EAST.ordinal()) return blockIcon;
+                if (side == ForgeDirection.WEST.ordinal() || side == ForgeDirection.EAST.ordinal())
+                    return blockIcon;
             } else {
-                if (side == ForgeDirection.UP.ordinal() || side == ForgeDirection.DOWN.ordinal()) return blockIcon;
+                if (side == ForgeDirection.UP.ordinal() || side == ForgeDirection.DOWN.ordinal())
+                    return blockIcon;
             }
         }
         return super.getIcon(faceType, ejecting, powered, side, te);
     }
-    
+
 }

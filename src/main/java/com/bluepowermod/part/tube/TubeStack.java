@@ -4,6 +4,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -17,6 +18,7 @@ import org.lwjgl.opengl.GL11;
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
 import com.bluepowermod.api.vec.Vector3Cube;
 import com.bluepowermod.client.renderers.RenderHelper;
+import com.bluepowermod.init.Config;
 import com.bluepowermod.util.Refs;
 
 import cpw.mods.fml.client.FMLClientHandler;
@@ -149,6 +151,12 @@ public class TubeStack {
     @SideOnly(Side.CLIENT)
     public void render(float partialTick) {
     
+        String renderMode = Config.tubeRenderMode;
+        if (renderMode.equals("auto")) {
+            renderMode = Minecraft.getMinecraft().gameSettings.fancyGraphics ? "normal" : "reduced";
+        }
+        final String finalRenderMode = renderMode;
+        
         if (customRenderItem == null) {
             customRenderItem = new RenderItem() {
                 
@@ -157,6 +165,12 @@ public class TubeStack {
                 
                     return false;
                 };
+                
+                @Override
+                public byte getMiniBlockCount(ItemStack stack, byte original) {
+                
+                    return finalRenderMode.equals("reduced") ? (byte) 1 : original;
+                }
             };
             customRenderItem.setRenderManager(RenderManager.instance);
             
@@ -170,14 +184,26 @@ public class TubeStack {
         
         GL11.glPushMatrix();
         GL11.glTranslated(heading.offsetX * renderProgress * 0.5, heading.offsetY * renderProgress * 0.5, heading.offsetZ * renderProgress * 0.5);
-        
-        GL11.glPushMatrix();
-        if (stack.stackSize > 5) {
-            GL11.glScaled(0.8, 0.8, 0.8);
+        if (!finalRenderMode.equals("none")) {
+            GL11.glPushMatrix();
+            if (stack.stackSize > 5) {
+                GL11.glScaled(0.8, 0.8, 0.8);
+            }
+            if (!(stack.getItem() instanceof ItemBlock)) {
+                GL11.glScaled(0.8, 0.8, 0.8);
+                GL11.glTranslated(0, -0.15, 0);
+            }
+            
+            customRenderItem.doRender(renderedItem, 0, 0, 0, 0, 0);
+            GL11.glPopMatrix();
+        } else {
+            float size = 0.02F;
+            GL11.glDisable(GL11.GL_TEXTURE_2D);
+            GL11.glBegin(GL11.GL_QUADS);
+            RenderHelper.drawColoredCube(new Vector3Cube(-size, -size, -size, size, size, size), 1, 1, 1, 1);
+            GL11.glEnd();
+            GL11.glEnable(GL11.GL_TEXTURE_2D);
         }
-        
-        customRenderItem.doRender(renderedItem, 0, 0, 0, 0, 0);
-        GL11.glPopMatrix();
         
         if (color != TubeColor.NONE) {
             
