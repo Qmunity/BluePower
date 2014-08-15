@@ -20,9 +20,8 @@ package com.bluepowermod.client.gui;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 
-import com.bluepowermod.client.renderers.RenderHelper;
+import com.bluepowermod.client.gui.widget.WidgetTank;
 import com.bluepowermod.containers.ContainerAlloyFurnace;
-import com.bluepowermod.init.BPFluids;
 import com.bluepowermod.tileentities.tier1.TileAlloyFurnace;
 import com.bluepowermod.util.Refs;
 
@@ -41,6 +40,14 @@ public class GuiAlloyFurnace extends GuiBase {
     }
 
     @Override
+    public void initGui() {
+
+        super.initGui();
+
+        addWidget(new WidgetTank(0, guiLeft + 134, guiTop + 19, 16, 48, null));
+    }
+
+    @Override
     protected void drawGuiContainerBackgroundLayer(float f, int i, int j) {
 
         super.drawGuiContainerBackgroundLayer(f, i, j);
@@ -54,13 +61,6 @@ public class GuiAlloyFurnace extends GuiBase {
 
         int processPercentage = (int) (furnace.getProcessPercentage() * 22);
         drawTexturedModalRect(x + 103, y + 35, 178, 14, processPercentage, 15);
-
-        RenderHelper.renderFluidInGui(BPFluids.molten_iron, 10, x + 134, y + 22, 16, 43, true);
-
-        mc.renderEngine.bindTexture(resLoc);
-
-        // Draw tank overlay
-        drawTexturedModalRect(x + 134, y + 22, 177, 34, 16, 43);
     }
 
 }
