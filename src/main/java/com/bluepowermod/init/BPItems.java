@@ -92,25 +92,24 @@ public class BPItems {
     public static Item iron_saw;
     public static Item diamond_saw;
     public static Item multipart;
-    private static ToolMaterial gemMaterial = EnumHelper.addToolMaterial("GEM", 2, 750, 6.0F, 2.0F, 18);
-    public static final Item ruby_axe = new ItemGemAxe(gemMaterial, Refs.RUBYAXE_NAME);
-    public static final Item ruby_sword = new ItemGemSword(gemMaterial, Refs.RUBYSWORD_NAME);
-    public static final Item ruby_pickaxe = new ItemGemPickaxe(gemMaterial, Refs.RUBYPICKAXE_NAME);
-    public static final Item ruby_spade = new ItemGemSpade(gemMaterial, Refs.RUBYSPADE_NAME);
-    public static final Item ruby_hoe = new ItemGemHoe(gemMaterial, Refs.RUBYHOE_NAME);
-    public static final Item ruby_sickle = new ItemSickle(gemMaterial, Refs.RUBYSICKLE_NAME);
-    public static final Item sapphire_axe = new ItemGemAxe(gemMaterial, Refs.SAPPHIREAXE_NAME);
-    public static final Item sapphire_sword = new ItemGemSword(gemMaterial, Refs.SAPPHIRESWORD_NAME);
-    public static final Item sapphire_pickaxe = new ItemGemPickaxe(gemMaterial, Refs.SAPPHIREPICKAXE_NAME);
-    public static final Item sapphire_spade = new ItemGemSpade(gemMaterial, Refs.SAPPHIRESPADE_NAME);
-    public static final Item sapphire_hoe = new ItemGemHoe(gemMaterial, Refs.SAPPHIREHOE_NAME);
-    public static final Item sapphire_sickle = new ItemSickle(gemMaterial, Refs.SAPPHIRESICKLE_NAME);
-    public static final Item amethyst_axe = new ItemGemAxe(gemMaterial, Refs.AMETHYSTAXE_NAME);
-    public static final Item amethyst_sword = new ItemGemSword(gemMaterial, Refs.AMETHYSTSWORD_NAME);
-    public static final Item amethyst_pickaxe = new ItemGemPickaxe(gemMaterial, Refs.AMETHYSTPICKAXE_NAME);
-    public static final Item amethyst_spade = new ItemGemSpade(gemMaterial, Refs.AMETHYSTSPADE_NAME);
-    public static final Item amethyst_hoe = new ItemGemHoe(gemMaterial, Refs.AMETHYSTHOE_NAME);
-    public static final Item amethyst_sickle = new ItemSickle(gemMaterial, Refs.AMETHYSTSICKLE_NAME);
+    public static final Item ruby_axe = new ItemGemAxe(ToolMaterial.valueOf("GEM"), Refs.RUBYAXE_NAME);
+    public static final Item ruby_sword = new ItemGemSword(ToolMaterial.valueOf("GEM"), Refs.RUBYSWORD_NAME);
+    public static final Item ruby_pickaxe = new ItemGemPickaxe(ToolMaterial.valueOf("GEM"), Refs.RUBYPICKAXE_NAME);
+    public static final Item ruby_spade = new ItemGemSpade(ToolMaterial.valueOf("GEM"), Refs.RUBYSPADE_NAME);
+    public static final Item ruby_hoe = new ItemGemHoe(ToolMaterial.valueOf("GEM"), Refs.RUBYHOE_NAME);
+    public static final Item ruby_sickle = new ItemSickle(ToolMaterial.valueOf("GEM"), Refs.RUBYSICKLE_NAME);
+    public static final Item sapphire_axe = new ItemGemAxe(ToolMaterial.valueOf("GEM"), Refs.SAPPHIREAXE_NAME);
+    public static final Item sapphire_sword = new ItemGemSword(ToolMaterial.valueOf("GEM"), Refs.SAPPHIRESWORD_NAME);
+    public static final Item sapphire_pickaxe = new ItemGemPickaxe(ToolMaterial.valueOf("GEM"), Refs.SAPPHIREPICKAXE_NAME);
+    public static final Item sapphire_spade = new ItemGemSpade(ToolMaterial.valueOf("GEM"), Refs.SAPPHIRESPADE_NAME);
+    public static final Item sapphire_hoe = new ItemGemHoe(ToolMaterial.valueOf("GEM"), Refs.SAPPHIREHOE_NAME);
+    public static final Item sapphire_sickle = new ItemSickle(ToolMaterial.valueOf("GEM"), Refs.SAPPHIRESICKLE_NAME);
+    public static final Item amethyst_axe = new ItemGemAxe(ToolMaterial.valueOf("GEM"), Refs.AMETHYSTAXE_NAME);
+    public static final Item amethyst_sword = new ItemGemSword(ToolMaterial.valueOf("GEM"), Refs.AMETHYSTSWORD_NAME);
+    public static final Item amethyst_pickaxe = new ItemGemPickaxe(ToolMaterial.valueOf("GEM"), Refs.AMETHYSTPICKAXE_NAME);
+    public static final Item amethyst_spade = new ItemGemSpade(ToolMaterial.valueOf("GEM"), Refs.AMETHYSTSPADE_NAME);
+    public static final Item amethyst_hoe = new ItemGemHoe(ToolMaterial.valueOf("GEM"), Refs.AMETHYSTHOE_NAME);
+    public static final Item amethyst_sickle = new ItemSickle(ToolMaterial.valueOf("GEM"), Refs.AMETHYSTSICKLE_NAME);
 
     public static void init() {
 
