@@ -12,7 +12,7 @@ import codechicken.nei.PositionedStack;
 import codechicken.nei.recipe.TemplateRecipeHandler;
 
 import com.bluepowermod.api.recipe.IAlloyFurnaceRecipe;
-import com.bluepowermod.client.gui.GuiAlloyFurnace;
+import com.bluepowermod.client.gui.GuiAlloyCrucible;
 import com.bluepowermod.recipe.AlloyFurnaceRegistry;
 import com.bluepowermod.recipe.AlloyFurnaceRegistry.StandardAlloyFurnaceRecipe;
 import com.bluepowermod.util.Refs;
@@ -42,7 +42,7 @@ public class AlloyFurnaceHandler extends TemplateRecipeHandler {
     @Override
     public Class<? extends GuiContainer> getGuiClass() {
 
-        return GuiAlloyFurnace.class;
+        return GuiAlloyCrucible.class;
     }
 
     /**

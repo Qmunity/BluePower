@@ -14,7 +14,7 @@ tile.bluepower:basalt_brick.name=Basalt Brick
 tile.bluepower:marble_brick.name=Marble Brick
 tile.bluepower:basalt_cobble.name=Basalt Cobble
 tile.bluepower:cracked_basalt_lava.name=Cracked Basalt
-tile.bluepower:alloy_furnace.name=Alloy Furnace
+tile.bluepower:alloy_crucible.name=Alloy Crucible
 tile.bluepower:amethyst_ore.name=Amethyst Ore
 tile.bluepower:basaltbrick_cracked.name=Cracked Basalt Brick
 tile.bluepower:basalt_brick_small.name=Small Basalt Bricks
@@ -43,7 +43,7 @@ tile.bluepower:indigo_flower.name=Indigo Flower
 tile.bluepower:tungsten_ore.name=Tungsten Ore
 tile.bluepower:tungsten_block.name=Tungsten Block
 
-tile.bluepower:alloyfurnace.name=Alloy Furnace
+tile.bluepower:alloycrucible.name=Alloy Crucible
 tile.bluepower:block_breaker.name=Block Breaker
 tile.bluepower:igniter.name=Igniter
 tile.bluepower:buffer.name=Buffer
@@ -477,3 +477,13 @@ bluepower.waila.rsLatch.noFeedback=No Feedback
 waila.pneumaticTube.color=Colors
 waila.machine.stuffed=Stuffed
 
+hud.empty=Empty
+
+fluid.iron.molten.name=Molten Iron
+fluid.gold.molten.name=Molten Gold
+fluid.brass.molten.name=Molten Brass
+fluid.zinc.reinforced.molten.name=Molten Brass
+fluid.bluealloy.molten.name=Molten Blue Alloy
+fluid.silicon.molten.name=Molten Silicon
+fluid.silicon.red.molten.name=Molten Red Silicon
+fluid.silicon.blue.molten.name=Molten Blue Silicon

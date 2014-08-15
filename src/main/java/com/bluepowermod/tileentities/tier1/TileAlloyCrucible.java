@@ -32,6 +32,7 @@ import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 
 import com.bluepowermod.api.recipe.IAlloyFurnaceRecipe;
+import com.bluepowermod.fluid.FluidPhysics;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.recipe.AlloyFurnaceRegistry;
 import com.bluepowermod.tileentities.TileBase;
@@ -44,7 +45,7 @@ import cpw.mods.fml.relauncher.SideOnly;
  * @author MineMaarten, Koen Beckers (K4Unl), Amadornes
  */
 
-public class TileAlloyFurnace extends TileBase implements IInventory, IFluidHandler {
+public class TileAlloyCrucible extends TileBase implements IInventory, IFluidHandler {
 
     private boolean isActive;
     public int currentBurnTime;
@@ -54,7 +55,7 @@ public class TileAlloyFurnace extends TileBase implements IInventory, IFluidHand
     private ItemStack fuelInventory;
     private FluidTank outputTank;
 
-    public TileAlloyFurnace() {
+    public TileAlloyCrucible() {
 
         inventory = new ItemStack[9];
         outputTank = new FluidTank(AlloyFurnaceRegistry.TANK_SIZE);
@@ -118,6 +119,10 @@ public class TileAlloyFurnace extends TileBase implements IInventory, IFluidHand
         currentBurnTime = tag.getInteger("currentBurnTime");
         currentProcessTime = tag.getInteger("currentProcessTime");
         maxBurnTime = tag.getInteger("maxBurnTime");
+
+        outputTank.drain(outputTank.getCapacity(), true);
+        outputTank.fill(FluidStack.loadFluidStackFromNBT(tag.getCompoundTag("outputTank")), true);
+
         markForRenderUpdate();
     }
 
@@ -129,6 +134,12 @@ public class TileAlloyFurnace extends TileBase implements IInventory, IFluidHand
         tag.setInteger("currentProcessTime", currentProcessTime);
         tag.setInteger("maxBurnTime", maxBurnTime);
         tag.setBoolean("isActive", isActive);
+
+        if (outputTank.getFluid() != null) {
+            NBTTagCompound outputCompound = new NBTTagCompound();
+            outputTank.getFluid().writeToNBT(outputCompound);
+            tag.setTag("outputTank", outputCompound);
+        }
     }
 
     /**
@@ -165,11 +176,14 @@ public class TileAlloyFurnace extends TileBase implements IInventory, IFluidHand
                     currentProcessTime = 0;
                     outputTank.fill(recipe.getResult(inventory).copy(), true);
                     recipe.useItems(inventory);
+                    sendUpdatePacket();
                 }
             } else {
                 currentProcessTime = 0;
             }
         }
+
+        FluidPhysics.applyPhyisics(this, 5);
     }
 
     @Override
@@ -283,7 +297,7 @@ public class TileAlloyFurnace extends TileBase implements IInventory, IFluidHand
     @Override
     public String getInventoryName() {
 
-        return BPBlocks.alloy_furnace.getUnlocalizedName();
+        return BPBlocks.alloy_crucible.getUnlocalizedName();
     }
 
     @Override
@@ -356,13 +370,17 @@ public class TileAlloyFurnace extends TileBase implements IInventory, IFluidHand
         if (outputTank.getFluid().getFluid() != resource.getFluid())
             return null;
 
-        return outputTank.drain(resource.amount, doDrain);
+        FluidStack fs = outputTank.drain(resource.amount, doDrain);
+        sendUpdatePacket();
+        return fs;
     }
 
     @Override
     public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
 
-        return outputTank.drain(maxDrain, doDrain);
+        FluidStack fs = outputTank.drain(maxDrain, doDrain);
+        sendUpdatePacket();
+        return fs;
     }
 
     @Override
@@ -382,4 +400,10 @@ public class TileAlloyFurnace extends TileBase implements IInventory, IFluidHand
 
         return new FluidTankInfo[] { new FluidTankInfo(outputTank) };
     }
+
+    public FluidTank getTank() {
+
+        return outputTank;
+    }
+
 }

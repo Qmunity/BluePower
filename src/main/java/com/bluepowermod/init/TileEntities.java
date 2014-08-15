@@ -18,7 +18,7 @@
 package com.bluepowermod.init;
 
 import com.bluepowermod.tileentities.BPTileMultipart;
-import com.bluepowermod.tileentities.tier1.TileAlloyFurnace;
+import com.bluepowermod.tileentities.tier1.TileAlloyCrucible;
 import com.bluepowermod.tileentities.tier1.TileBlockBreaker;
 import com.bluepowermod.tileentities.tier1.TileBuffer;
 import com.bluepowermod.tileentities.tier1.TileDeployer;
@@ -47,7 +47,7 @@ public class TileEntities {
      */
     public static void init() {
     
-        GameRegistry.registerTileEntity(TileAlloyFurnace.class, Refs.MODID + ".alloyFurnace");
+        GameRegistry.registerTileEntity(TileAlloyCrucible.class, Refs.MODID + ".alloyFurnace");
         GameRegistry.registerTileEntity(TileBlockBreaker.class, Refs.MODID + ".blockBreaker");
         GameRegistry.registerTileEntity(TileIgniter.class, Refs.MODID + ".igniter");
         GameRegistry.registerTileEntity(TileBuffer.class, Refs.MODID + ".buffer");

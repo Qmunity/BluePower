@@ -24,7 +24,7 @@ import net.minecraft.item.ItemDye;
 import com.bluepowermod.blocks.BPBlockMultipart;
 import com.bluepowermod.blocks.BlockContainerBase;
 import com.bluepowermod.blocks.BlockItemOre;
-import com.bluepowermod.blocks.machines.BlockAlloyFurnace;
+import com.bluepowermod.blocks.machines.BlockAlloyCrucible;
 import com.bluepowermod.blocks.machines.BlockContainerFrontRender;
 import com.bluepowermod.blocks.machines.BlockContainerTwoSideRender;
 import com.bluepowermod.blocks.machines.BlockIgniter;
@@ -97,7 +97,7 @@ public class BPBlocks {
     public static Block   flax_crop;
     public static Block   indigo_flower;
     
-    public static Block   alloy_furnace;
+    public static Block   alloy_crucible;
     public static Block   block_breaker;
     public static Block   igniter;
     public static Block   buffer;
@@ -166,7 +166,7 @@ public class BPBlocks {
         flax_crop = new BlockCrop().setBlockName(Refs.FLAXCROP_NAME);
         indigo_flower = new BlockCustomFlower(Refs.INDIGOFLOWER_NAME);
         
-        alloy_furnace = new BlockAlloyFurnace();
+        alloy_crucible = new BlockAlloyCrucible();
         sorting_machine = new BlockContainerBase(Material.rock, TileSortingMachine.class).setGuiId(GuiIDs.SORTING_MACHINE).setBlockName(Refs.SORTING_MACHINE_NAME);
         block_breaker = new BlockContainerFrontRender(Material.rock, TileBlockBreaker.class).setBlockName(Refs.BLOCKBREAKER_NAME);
         igniter = new BlockIgniter();
@@ -250,7 +250,7 @@ public class BPBlocks {
         GameRegistry.registerBlock(flax_crop, Refs.FLAXCROP_NAME);
         GameRegistry.registerBlock(indigo_flower, Refs.INDIGOFLOWER_NAME);
         
-        GameRegistry.registerBlock(alloy_furnace, Refs.ALLOYFURNACE_NAME);
+        GameRegistry.registerBlock(alloy_crucible, Refs.ALLOYCRUCIBLE_NAME);
         GameRegistry.registerBlock(sorting_machine, Refs.SORTING_MACHINE_NAME);
         GameRegistry.registerBlock(block_breaker, Refs.BLOCKBREAKER_NAME);
         GameRegistry.registerBlock(igniter, Refs.BLOCKIGNITER_NAME);

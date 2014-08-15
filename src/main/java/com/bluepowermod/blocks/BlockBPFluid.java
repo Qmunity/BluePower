@@ -25,8 +25,13 @@ public class BlockBPFluid extends BlockFluidClassic {
     @Override
     public void registerBlockIcons(IIconRegister reg) {
 
-        flowing = reg.registerIcon(Refs.MODID + ":fluids/" + name + "_flowing");
-        still = reg.registerIcon(Refs.MODID + ":fluids/" + name + "_still");
+        flowing = reg.registerIcon(Refs.MODID + ":fluids/" + name.replace(".", "_") + "_flowing");
+        blockIcon = still = reg.registerIcon(Refs.MODID + ":fluids/" + name.replace(".", "_") + "_still");
     }
 
+    @Override
+    public String getUnlocalizedName() {
+
+        return "fluid." + name;
+    }
 }

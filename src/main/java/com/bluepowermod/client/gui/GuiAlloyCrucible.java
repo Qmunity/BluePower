@@ -22,18 +22,18 @@ import net.minecraft.util.ResourceLocation;
 
 import com.bluepowermod.client.gui.widget.WidgetTank;
 import com.bluepowermod.containers.ContainerAlloyFurnace;
-import com.bluepowermod.tileentities.tier1.TileAlloyFurnace;
+import com.bluepowermod.tileentities.tier1.TileAlloyCrucible;
 import com.bluepowermod.util.Refs;
 
 /**
  * @author MineMaarten
  */
-public class GuiAlloyFurnace extends GuiBase {
+public class GuiAlloyCrucible extends GuiBase {
 
-    private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/alloy_furnace.png");
-    private final TileAlloyFurnace furnace;
+    private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/alloy_crucible.png");
+    private final TileAlloyCrucible furnace;
 
-    public GuiAlloyFurnace(InventoryPlayer invPlayer, TileAlloyFurnace furnace) {
+    public GuiAlloyCrucible(InventoryPlayer invPlayer, TileAlloyCrucible furnace) {
 
         super(furnace, new ContainerAlloyFurnace(invPlayer, furnace), resLoc);
         this.furnace = furnace;
@@ -44,7 +44,7 @@ public class GuiAlloyFurnace extends GuiBase {
 
         super.initGui();
 
-        addWidget(new WidgetTank(0, guiLeft + 134, guiTop + 19, 16, 48, null));
+        addWidget(new WidgetTank(0, guiLeft + 134, guiTop + 19, 16, 48, furnace.getTank()));
     }
 
     @Override

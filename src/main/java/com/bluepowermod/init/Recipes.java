@@ -235,7 +235,7 @@ public class Recipes {
                 Blocks.obsidian, 'I', BPItems.blue_alloy_ingot));
         GameRegistry.addRecipe(new ShapedOreRecipe(PartRegistry.getInstance().getItemForPart("accelerator", 1), "IOI", "O O", "IOI", 'O',
                 Blocks.obsidian, 'I', BPItems.blue_alloy_ingot));
-        craftManager.addRecipe(new ItemStack(BPBlocks.alloy_furnace, 1), "###", "# #", "###", '#', Blocks.brick_block);
+        craftManager.addRecipe(new ItemStack(BPBlocks.alloy_crucible, 1), "###", "# #", "###", '#', Blocks.brick_block);
 
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPBlocks.circuit_table), "WIW", "WCW", "WPW", 'W', "plankWood", 'I', PartRegistry
                 .getInstance().getItemForPart("integratedCircuit3x3"), 'C', Blocks.chest, 'P', BPBlocks.project_table));
@@ -349,7 +349,7 @@ public class Recipes {
         af.addRecipe(new FluidStack(BPFluids.molten_red_silicon, BPFluids.INGOT_AMOUNT * 1), new ItemStack(Items.redstone, 4), BPItems.silicon_wafer);
         af.addRecipe(new FluidStack(BPFluids.molten_blue_silicon, BPFluids.INGOT_AMOUNT * 1), new ItemStack(BPItems.teslatite, 4),
                 BPItems.silicon_wafer);
-        af.addRecipe(new FluidStack(BPFluids.molten_zinc, BPFluids.INGOT_AMOUNT * 4), new ItemStack(BPItems.zinc_ingot, 1), new ItemStack(
+        af.addRecipe(new FluidStack(BPFluids.molten_galvanized_iron, BPFluids.INGOT_AMOUNT * 4), new ItemStack(BPItems.zinc_ingot, 1), new ItemStack(
                 Items.iron_ingot, 2));
 
         // FIXME af.addRecyclingRecipe(new ItemStack(Blocks.iron_block));

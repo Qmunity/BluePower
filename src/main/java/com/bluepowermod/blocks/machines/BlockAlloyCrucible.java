@@ -30,13 +30,13 @@ import net.minecraftforge.common.util.ForgeDirection;
 import com.bluepowermod.blocks.BlockContainerBase;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.references.GuiIDs;
-import com.bluepowermod.tileentities.tier1.TileAlloyFurnace;
+import com.bluepowermod.tileentities.tier1.TileAlloyCrucible;
 import com.bluepowermod.util.Refs;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class BlockAlloyFurnace extends BlockContainerBase {
+public class BlockAlloyCrucible extends BlockContainerBase {
     
     public static IIcon textureTop;
     private IIcon       textureBottom;
@@ -44,10 +44,10 @@ public class BlockAlloyFurnace extends BlockContainerBase {
     private IIcon       textureFrontOn;
     private IIcon       textureFrontOff;
     
-    public BlockAlloyFurnace() {
+    public BlockAlloyCrucible() {
     
-        super(Material.rock, TileAlloyFurnace.class);
-        setBlockName(Refs.ALLOYFURNACE_NAME);
+        super(Material.rock, TileAlloyCrucible.class);
+        setBlockName(Refs.ALLOYCRUCIBLE_NAME);
         
     }
     
@@ -55,7 +55,7 @@ public class BlockAlloyFurnace extends BlockContainerBase {
     @SideOnly(Side.CLIENT)
     public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
     
-        TileAlloyFurnace te = (TileAlloyFurnace) world.getTileEntity(x, y, z);
+        TileAlloyCrucible te = (TileAlloyCrucible) world.getTileEntity(x, y, z);
         ForgeDirection forgeSide = ForgeDirection.getOrientation(side);
         if (forgeSide == ForgeDirection.UP) return textureTop;
         if (forgeSide == ForgeDirection.DOWN) return textureBottom;
@@ -99,7 +99,7 @@ public class BlockAlloyFurnace extends BlockContainerBase {
     @SideOnly(Side.CLIENT)
     public void randomDisplayTick(World world, int x, int y, int z, Random rnd) {
     
-        TileAlloyFurnace te = (TileAlloyFurnace) world.getTileEntity(x, y, z);
+        TileAlloyCrucible te = (TileAlloyCrucible) world.getTileEntity(x, y, z);
         if (te.getIsActive()) {
             int l = te.getFacingDirection().ordinal();
             float f = x + 0.5F;
@@ -128,24 +128,24 @@ public class BlockAlloyFurnace extends BlockContainerBase {
     @Override
     public Item getItemDropped(int p_149650_1_, Random random, int p_149650_3_) {
     
-        return Item.getItemFromBlock(BPBlocks.alloy_furnace);
+        return Item.getItemFromBlock(BPBlocks.alloy_crucible);
     }
     
     @Override
     @SideOnly(Side.CLIENT)
     public void registerBlockIcons(IIconRegister iconRegister) {
     
-        textureTop = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + Refs.ALLOYFURNACE_NAME + "_top");
-        textureBottom = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + Refs.ALLOYFURNACE_NAME + "_bottom");
-        textureSide = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + Refs.ALLOYFURNACE_NAME + "_side");
-        textureFrontOn = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + Refs.ALLOYFURNACE_NAME + "_front_on");
-        textureFrontOff = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + Refs.ALLOYFURNACE_NAME + "_front_off");
+        textureTop = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + Refs.ALLOYCRUCIBLE_NAME + "_top");
+        textureBottom = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + Refs.ALLOYCRUCIBLE_NAME + "_bottom");
+        textureSide = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + Refs.ALLOYCRUCIBLE_NAME + "_side");
+        textureFrontOn = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + Refs.ALLOYCRUCIBLE_NAME + "_front_on");
+        textureFrontOff = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + Refs.ALLOYCRUCIBLE_NAME + "_front_off");
     }
     
     @Override
     public int getLightValue(IBlockAccess world, int x, int y, int z) {
     
-        TileAlloyFurnace te = (TileAlloyFurnace) world.getTileEntity(x, y, z);
+        TileAlloyCrucible te = (TileAlloyCrucible) world.getTileEntity(x, y, z);
         return te.getIsActive() ? 13 : 0;
     }
     

@@ -70,7 +70,6 @@ public class BluePower {
         Config.syncConfig(config);
         BPBlocks.init();
         BPItems.init();
-        BPFluids.init();
 
         TileEntities.init();
         OreDictionarySetup.init();
@@ -92,6 +91,8 @@ public class BluePower {
 
     @EventHandler
     public void init(FMLInitializationEvent event) {
+
+        BPFluids.init();
 
         Recipes.init(CraftingManager.getInstance());
         proxy.init();

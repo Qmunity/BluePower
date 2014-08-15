@@ -37,4 +37,10 @@ public class BPFluid extends Fluid {
         return block.flowing;
     }
 
+    @Override
+    public String getUnlocalizedName() {
+
+        return block.getUnlocalizedName() + ".name";
+    }
+
 }

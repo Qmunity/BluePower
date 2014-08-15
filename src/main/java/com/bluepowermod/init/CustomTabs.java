@@ -57,7 +57,7 @@ public class CustomTabs {
             @Override
             public Item getTabIconItem() {
             
-                Block iconBlock = BPBlocks.alloy_furnace;
+                Block iconBlock = BPBlocks.alloy_crucible;
                 if (iconBlock != null) {
                     return Item.getItemFromBlock(iconBlock);
                 } else {
