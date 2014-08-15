@@ -35,17 +35,17 @@ import net.minecraftforge.common.util.EnumHelper;
 @GameRegistry.ObjectHolder(Refs.MODID)
 public class BPItems {
 
-    public static final Item amethyst = new ItemGem(Refs.AMETHYST_NAME);
-    public static final Item sapphire = new ItemGem(Refs.SAPPHIRE_NAME);
-    public static final Item ruby = new ItemGem(Refs.RUBY_NAME);
+    public static final Item amethyst = new ItemCrafting(Refs.AMETHYST_NAME);
+    public static final Item sapphire = new ItemCrafting(Refs.SAPPHIRE_NAME);
+    public static final Item ruby = new ItemCrafting(Refs.RUBY_NAME);
     public static final Item teslatite = new ItemCrafting(Refs.TESLATITE_NAME);
-    public static final Item copper_ingot = new ItemIngot(Refs.COPPERINGOT_NAME);
-    public static final Item silver_ingot = new ItemIngot(Refs.SILVERINGOT_NAME);
-    public static final Item zinc_ingot = new ItemIngot(Refs.ZINCINGOT_NAME);
-    public static final Item brass_ingot = new ItemIngot(Refs.BRASSINGOT_NAME);
-    public static final Item blue_alloy_ingot = new ItemIngot(Refs.BLUEALLOYINGOT_NAME);
-    //    public static final Item red_alloy_ingot = new ItemIngot(Refs.REDALLOYINGOT_NAME);
-    public static final Item tungsten_ingot = new ItemIngot(Refs.TUNGSTENINGOT_NAME);
+    public static final Item copper_ingot = new ItemCrafting(Refs.COPPERINGOT_NAME);
+    public static final Item silver_ingot = new ItemCrafting(Refs.SILVERINGOT_NAME);
+    public static final Item zinc_ingot = new ItemCrafting(Refs.ZINCINGOT_NAME);
+    public static final Item brass_ingot = new ItemCrafting(Refs.BRASSINGOT_NAME);
+    public static final Item blue_alloy_ingot = new ItemCrafting(Refs.BLUEALLOYINGOT_NAME);
+    //    public static final Item red_alloy_ingot = new ItemCrafting(Refs.REDALLOYINGOT_NAME);
+    public static final Item tungsten_ingot = new ItemCrafting(Refs.TUNGSTENINGOT_NAME);
     public static final Item zinc_ore_crushed = new ItemBase().setUnlocalizedName(Refs.ZINC_ORE_CRUSHED_NAME).setTextureName(Refs.MODID + ":" + Refs.ZINC_ORE_CRUSHED_NAME).setCreativeTab(CustomTabs.tabBluePowerItems);
     public static final Item zinc_ore_crushed_purified = new ItemBase().setUnlocalizedName(Refs.ZINC_ORE_CRUSHED_PURIFIED_NAME).setTextureName(Refs.MODID + ":" + Refs.ZINC_ORE_CRUSHED_PURIFIED_NAME).setCreativeTab(CustomTabs.tabBluePowerItems);
     public static final Item zinc_dust = new ItemBase().setUnlocalizedName(Refs.ZINCDUST_NAME).setTextureName(Refs.MODID + ":" + Refs.ZINCDUST_NAME).setCreativeTab(CustomTabs.tabBluePowerItems);
@@ -60,10 +60,10 @@ public class BPItems {
     public static final Item diamond_sickle = new ItemSickle(ToolMaterial.EMERALD, Refs.DIAMONDSICKLE_NAME);
     public static final Item flax_seed = new ItemCropSeed(BPBlocks.flax_crop, Blocks.farmland).setUnlocalizedName(Refs.FLAXSEED_NAME);
     public static final Item indigo_dye = new ItemIndigoDye(Refs.INDIGODYE_NAME);
-    public static final Item silicon_boule = new ItemSiliconBoule(Refs.SILICONBOULE_NAME).setCreativeTab(CustomTabs.tabBluePowerItems);
-    public static final Item silicon_wafer = new ItemSiliconWafer(Refs.SILICONWAFER_NAME).setCreativeTab(CustomTabs.tabBluePowerItems);
-    public static final Item red_doped_wafer = new ItemSiliconWafer(Refs.REDDOPEDWAFER_NAME).setCreativeTab(CustomTabs.tabBluePowerItems);
-    public static final Item blue_doped_wafer = new ItemSiliconWafer(Refs.BLUEDOPEDWAFER_NAME).setCreativeTab(CustomTabs.tabBluePowerItems);
+    public static final Item silicon_boule = new ItemCrafting(Refs.SILICONBOULE_NAME).setCreativeTab(CustomTabs.tabBluePowerItems);
+    public static final Item silicon_wafer = new ItemCrafting(Refs.SILICONWAFER_NAME).setCreativeTab(CustomTabs.tabBluePowerItems);
+    public static final Item red_doped_wafer = new ItemCrafting(Refs.REDDOPEDWAFER_NAME).setCreativeTab(CustomTabs.tabBluePowerItems);
+    public static final Item blue_doped_wafer = new ItemCrafting(Refs.BLUEDOPEDWAFER_NAME).setCreativeTab(CustomTabs.tabBluePowerItems);
     public static final Item screwdriver = new ItemScrewdriver();
     public static final Item silky_screwdriver = new ItemSilkyScrewdriver();
     public static final Item athame = new ItemAthame();
@@ -78,7 +78,7 @@ public class BPItems {
     public static final Item stone_redwire = new ItemCrafting(Refs.STONEREDWIRE_NAME);
     public static final Item plate_assembly = new ItemCrafting(Refs.PLATEASSEMBLY_NAME);
     public static final Item stone_bundle = new ItemCrafting(Refs.STONEBUNDLE_NAME);
-    public static final Item screwdriver_handle = new ItemHandle(Refs.SCREWDRIVERHANDLE_NAME);
+    public static final Item screwdriver_handle = new ItemCrafting(Refs.SCREWDRIVERHANDLE_NAME);
     public static final Item seedBag = new ItemSeedBag(Refs.SEEDBAG_NAME);
     public static final Item canvas_bag = new ItemCanvasBag(Refs.CANVASBAG_NAME);
     public static final Item canvas = new ItemCrafting(Refs.CANVAS_NAME);
