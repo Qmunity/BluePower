@@ -8,6 +8,7 @@
 
 package com.bluepowermod;
 
+import net.minecraft.item.Item;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
@@ -55,6 +56,7 @@ public class BluePower {
     public static CommonProxy proxy;
     public static Logger log;
     public static Configuration config;
+    public static Item.ToolMaterial gemMaterial = EnumHelper.addToolMaterial("GEM", 2, 750, 6.0F, 2.0F, 18);
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
@@ -68,7 +70,7 @@ public class BluePower {
         CustomTabs.init();
         // Load configs
         Config.syncConfig(config);
-        EnumHelper.addToolMaterial("GEM", 2, 750, 6.0F, 2.0F, 18);
+
         BPBlocks.init();
         BPItems.init();
 
