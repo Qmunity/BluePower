@@ -98,13 +98,13 @@ public class BPBlocks {
     //    public static final Block   engine = new BlockEngine();
 //    public static final Block   kinetic_generator = new BlockKineticGenerator();
 //    public static final Block   windmill = new BlockWindmill();
-    public static final Block[] blockLamp = new Block[ItemDye.field_150922_c.length];
+    public static Block[] blockLamp = new Block[ItemDye.field_150922_c.length];
 
     //    public static final Block   cpu = new BlockCPU();
 //    public static final Block   monitor = new BlockMonitor();
 //    public static final Block   disk_drive = new BlockDiskDrive();
 //    public static final Block   io_expander = new BlockIOExpander();
-    public static final Block[] blockLampInverted = new Block[ItemDye.field_150922_c.length];
+    public static Block[] blockLampInverted = new Block[ItemDye.field_150922_c.length];
     public static Block sortron;
     public static Block multipart;
 
