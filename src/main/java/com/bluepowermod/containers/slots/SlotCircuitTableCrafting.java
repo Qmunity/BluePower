@@ -58,7 +58,7 @@ public class SlotCircuitTableCrafting extends SlotCrafting {
     @Override
     public void onPickupFromSlot(EntityPlayer player, ItemStack craftedItem) {
     
-        FMLCommonHandler.instance().firePlayerCraftingEvent(player, craftedItem, null);
+        FMLCommonHandler.instance().firePlayerCraftingEvent(player, craftedItem, circuitTable);
         this.onCrafting(craftedItem);
         List<ItemStack> requiredItems = getCraftingComponents(craftedItem);
         for (ItemStack requiredItem : requiredItems) {
