@@ -19,6 +19,7 @@ import com.bluepowermod.part.gate.GateRandomizer;
 import com.bluepowermod.part.gate.GateRepeater;
 import com.bluepowermod.part.gate.GateSequencer;
 import com.bluepowermod.part.gate.GateStateCell;
+import com.bluepowermod.part.gate.GateSynchronizer;
 import com.bluepowermod.part.gate.GateTimer;
 import com.bluepowermod.part.gate.GateToggleLatch;
 import com.bluepowermod.part.gate.GateTransparentLatch;
@@ -60,6 +61,7 @@ public class PartRegister {
         PartRegistry.getInstance().registerPart(GateStateCell.class);
         PartRegistry.getInstance().registerPart(GateRepeater.class);
         PartRegistry.getInstance().registerPart(GateTransparentLatch.class);
+        PartRegistry.getInstance().registerPart(GateSynchronizer.class);
         PartRegistry.getInstance().registerPart(Circuit3x3.class);
         PartRegistry.getInstance().registerPart(Circuit5x5.class);
         PartRegistry.getInstance().registerPart(Circuit7x7.class);
