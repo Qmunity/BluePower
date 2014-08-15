@@ -37,6 +37,8 @@ public class GuiCircuitDatabase extends GuiCircuitTable {
     private final TileCircuitDatabase     circuitDatabase;
     
     private GuiTextField                  nameField;
+    private WidgetSidewaysTab             shareOptionTab;
+    private WidgetMode                    copyButton;
     
     public GuiCircuitDatabase(InventoryPlayer invPlayer, TileCircuitDatabase circuitDatabase, GuiIDs guiId) {
     
@@ -49,7 +51,7 @@ public class GuiCircuitDatabase extends GuiCircuitTable {
     
         super.initGui();
         
-        BaseWidget widget = new WidgetTab(1, guiLeft - 32, guiTop + 10, 33, 35, 198, 3, Refs.MODID + ":textures/gui/circuit_database.png") {
+        WidgetTab widget = new WidgetTab(1, guiLeft - 32, guiTop + 10, 33, 35, 198, 3, Refs.MODID + ":textures/gui/circuit_database.png") {
             
             @Override
             protected void addTooltip(int curHoveredTab, List<String> curTip, boolean shiftPressed) {
@@ -63,15 +65,17 @@ public class GuiCircuitDatabase extends GuiCircuitTable {
                         break;
                     case 2:
                         curTip.add("gui.circuitDatabase.tab.server");
+                        if (Minecraft.getMinecraft().isSingleplayer()) curTip.add("gui.circuitDatabase.info.serverOnly");
                         break;
                 }
             }
         };
         widget.value = circuitDatabase.clientCurrentTab;
+        widget.enabledTabs[2] = !Minecraft.getMinecraft().isSingleplayer();
         addWidget(widget);
         
         if (circuitDatabase.clientCurrentTab == 0) {
-            widget = new WidgetSidewaysTab(2, guiLeft + 44, guiTop + 18, 14, 14, 234, 3, Refs.MODID + ":textures/gui/circuit_database.png") {
+            shareOptionTab = new WidgetSidewaysTab(2, guiLeft + 44, guiTop + 18, 14, 14, 234, 3, Refs.MODID + ":textures/gui/circuit_database.png") {
                 
                 @Override
                 protected void addTooltip(int curHoveredTab, List<String> curTip, boolean shiftPressed) {
@@ -82,17 +86,22 @@ public class GuiCircuitDatabase extends GuiCircuitTable {
                             break;
                         case 1:
                             curTip.add("gui.circuitDatabase.action.savePrivate");
+                            if (!enabledTabs[curHoveredTab]) {
+                                curTip.add("gui.circuitDatabase.info.nameTaken");
+                            }
                             break;
                         case 2:
                             curTip.add("gui.circuitDatabase.action.saveServer");
+                            if (Minecraft.getMinecraft().isSingleplayer()) curTip.add("gui.circuitDatabase.info.serverOnly");
                             break;
                     }
                 }
             };
-            widget.value = circuitDatabase.selectedShareOption;
-            addWidget(widget);
+            shareOptionTab.value = circuitDatabase.selectedShareOption;
+            shareOptionTab.enabledTabs[2] = !Minecraft.getMinecraft().isSingleplayer();
+            addWidget(shareOptionTab);
             
-            widget = new WidgetMode(3, guiLeft + 80, guiTop + 48, 176, 37, 1, Refs.MODID + ":textures/gui/circuit_database.png") {
+            copyButton = new WidgetMode(3, guiLeft + 80, guiTop + 48, 176, 37, 1, Refs.MODID + ":textures/gui/circuit_database.png") {
                 
                 @Override
                 public void addTooltip(int x, int y, List<String> curTip, boolean shiftPressed) {
@@ -100,7 +109,7 @@ public class GuiCircuitDatabase extends GuiCircuitTable {
                     curTip.add("gui.circuitDatabase.action.copy");
                 }
             };
-            addWidget(widget);
+            addWidget(copyButton);
             
             nameField = new GuiTextField(fontRendererObj, guiLeft + 95, guiTop + 35, 70, fontRendererObj.FONT_HEIGHT);
             nameField.setEnableBackgroundDrawing(true);
@@ -145,10 +154,6 @@ public class GuiCircuitDatabase extends GuiCircuitTable {
         if (nameField != null) {
             this.drawString(guiLeft + 95, guiTop + 25, I18n.format("gui.circuitDatabase.name"), false);
             nameField.drawTextBox();
-            
-            if (circuitDatabase.copyInventory.getStackInSlot(0) != null) {
-                if (shouldDisplayRed(circuitDatabase.copyInventory.getStackInSlot(0))) drawRect(guiLeft + 57, guiTop + 64, guiLeft + 73, guiTop + 80, 0x55FF0000);
-            }
         }
         
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
@@ -192,7 +197,10 @@ public class GuiCircuitDatabase extends GuiCircuitTable {
     @Override
     public void actionPerformed(IGuiWidget widget) {
     
-        if (widget.getID() == 1) circuitDatabase.clientCurrentTab = ((BaseWidget) widget).value;
+        if (widget.getID() == 1) {
+            circuitDatabase.clientCurrentTab = ((BaseWidget) widget).value;
+            Minecraft.getMinecraft().displayGuiScreen(null);
+        }
         NetworkHandler.sendToServer(new MessageGuiUpdate(circuitDatabase, widget.getID(), ((BaseWidget) widget).value));
     }
     
@@ -205,13 +213,18 @@ public class GuiCircuitDatabase extends GuiCircuitTable {
                 nameField.setText(circuitDatabase.nameTextField);
             }
             boolean nameDuplicate = false;
-            for (ItemStack stack : circuitDatabase.privateDatabase.loadItemStacks()) {
-                if (stack.getDisplayName().equals(circuitDatabase.copyInventory.getStackInSlot(0).getDisplayName())) {
-                    nameDuplicate = true;
-                    break;
+            if (circuitDatabase.copyInventory.getStackInSlot(0) != null) {
+                for (ItemStack stack : circuitDatabase.stackDatabase.loadItemStacks()) {
+                    if (stack.getDisplayName().equals(circuitDatabase.copyInventory.getStackInSlot(0).getDisplayName())) {
+                        nameDuplicate = true;
+                        break;
+                    }
                 }
             }
-            nameField.setTextColor(nameDuplicate ? 0xFFFF0000 : 14737632);
+            shareOptionTab.enabledTabs[1] = !nameDuplicate;
+            
+            copyButton.enabled = circuitDatabase.copyInventory.getStackInSlot(0) != null && circuitDatabase.copyInventory.getStackInSlot(1) != null
+                    && circuitDatabase.copy(Minecraft.getMinecraft().thePlayer, circuitDatabase.copyInventory.getStackInSlot(0), circuitDatabase.copyInventory.getStackInSlot(1), true);
         }
     }
 }

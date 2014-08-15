@@ -30,6 +30,12 @@ public class ContainerCircuitDatabaseMain extends ContainerGhosts {
             
                 return stack.getItem() instanceof IDatabaseSaveable && ((IDatabaseSaveable) stack.getItem()).canGoInCopySlot(stack);
             }
+            
+            @Override
+            public int getSlotStackLimit() {
+            
+                return 1;
+            }
         });
         addSlotToContainer(new Slot(circuitDatabase.copyInventory, 1, 108, 64) {
             

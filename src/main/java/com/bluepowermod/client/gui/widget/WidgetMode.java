@@ -16,10 +16,6 @@
  */
 package com.bluepowermod.client.gui.widget;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.PositionedSoundRecord;
-import net.minecraft.util.ResourceLocation;
-
 /**
  * @author MineMaarten
  */
@@ -47,7 +43,6 @@ public class WidgetMode extends BaseWidget {
         } else if (button == 1) {
             if (--value < 0) value = maxMode - 1;
         }
-        Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.func_147674_a(new ResourceLocation("gui.button.press"), 1.0F));
         super.onMouseClicked(mouseX, mouseY, button);
     }
     

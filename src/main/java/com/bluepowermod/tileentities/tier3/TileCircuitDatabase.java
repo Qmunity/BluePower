@@ -4,21 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryBasic;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
 
-import com.bluepowermod.BluePower;
 import com.bluepowermod.api.item.IDatabaseSaveable;
 import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.helper.ItemStackDatabase;
 import com.bluepowermod.init.BPBlocks;
-import com.bluepowermod.network.NetworkHandler;
-import com.bluepowermod.network.messages.MessageCircuitDatabaseTemplate;
-import com.bluepowermod.references.GuiIDs;
 import com.bluepowermod.tileentities.tier2.TileCircuitTable;
 
 public class TileCircuitDatabase extends TileCircuitTable {
@@ -39,7 +34,8 @@ public class TileCircuitDatabase extends TileCircuitTable {
     public int                     curCopyProgress;
     public int                     selectedShareOption;
     public static final int        UPLOAD_AND_COPY_TIME = 20;
-    public final ItemStackDatabase privateDatabase      = new ItemStackDatabase();
+    public final ItemStackDatabase stackDatabase        = new ItemStackDatabase();
+    public static List<ItemStack>  serverDatabaseStacks = new ArrayList<ItemStack>(); //client side used only, sent from the server database.
     private EntityPlayer           triggeringPlayer;
     public String                  nameTextField        = "";
     
@@ -50,7 +46,7 @@ public class TileCircuitDatabase extends TileCircuitTable {
         if (worldObj == null || !worldObj.isRemote) {
             return items;
         } else {
-            items.addAll(privateDatabase.loadItemStacks());
+            items.addAll(clientCurrentTab == 1 ? stackDatabase.loadItemStacks() : serverDatabaseStacks);
             return items;
         }
     }
@@ -60,7 +56,7 @@ public class TileCircuitDatabase extends TileCircuitTable {
     
         switch (messageId) {
             case 1:
-                player.openGui(BluePower.instance, value == 0 ? GuiIDs.CIRCUITDATABASE_MAIN_ID.ordinal() : GuiIDs.CIRCUITDATABASE_SHARING_ID.ordinal(), worldObj, xCoord, yCoord, zCoord);
+                //  player.openGui(BluePower.instance, value == 0 ? GuiIDs.CIRCUITDATABASE_MAIN_ID.ordinal() : GuiIDs.CIRCUITDATABASE_SHARING_ID.ordinal(), worldObj, xCoord, yCoord, zCoord);
                 break;
             case 2:
                 selectedShareOption = value;
@@ -194,8 +190,8 @@ public class TileCircuitDatabase extends TileCircuitTable {
                 if (curUploadProgress >= 0) {
                     if (++curUploadProgress > UPLOAD_AND_COPY_TIME) {
                         curUploadProgress = -1;
-                        if (selectedShareOption == 1 && triggeringPlayer != null) NetworkHandler.sendTo(new MessageCircuitDatabaseTemplate(this, copyInventory.getStackInSlot(0)), (EntityPlayerMP) triggeringPlayer);
-                        
+                        //  if (selectedShareOption == 1 && triggeringPlayer != null) NetworkHandler.sendTo(new MessageCircuitDatabaseTemplate(this, copyInventory.getStackInSlot(0)), (EntityPlayerMP) triggeringPlayer);
+                        // if (selectedShareOption == 2) stackDatabase.saveItemStack(copyInventory.getStackInSlot(0));
                         selectedShareOption = 0;
                     }
                 }
@@ -209,7 +205,7 @@ public class TileCircuitDatabase extends TileCircuitTable {
     
     public void saveToPrivateLibrary(ItemStack stack) {
     
-        privateDatabase.saveItemStack(stack);
+        stackDatabase.saveItemStack(stack);
     }
     
     @Override

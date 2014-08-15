@@ -9,7 +9,6 @@ public class ContainerCircuitDatabaseSharing extends ContainerCircuitTable {
     public ContainerCircuitDatabaseSharing(InventoryPlayer invPlayer, TileCircuitDatabase circuitTable) {
     
         super(invPlayer, circuitTable);
-        
     }
     
 }

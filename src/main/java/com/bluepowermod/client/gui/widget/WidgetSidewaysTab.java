@@ -7,23 +7,31 @@ import net.minecraft.client.gui.Gui;
 
 import org.lwjgl.opengl.GL11;
 
+import scala.actors.threadpool.Arrays;
+
 public class WidgetSidewaysTab extends BaseWidget {
     
-    private final int singleTabWidth;
-    private final int tabAmount;
+    private final int      singleTabWidth;
+    private final int      tabAmount;
+    public final boolean[] enabledTabs;
     
     public WidgetSidewaysTab(int id, int x, int y, int width, int height, int textureU, int tabAmount, String textureLoc) {
     
         super(id, x, y, width * tabAmount, height, textureU, 0, textureLoc);
         singleTabWidth = width;
         this.tabAmount = tabAmount;
+        enabledTabs = new boolean[tabAmount];
+        Arrays.fill(enabledTabs, true);
     }
     
     @Override
     public void onMouseClicked(int mouseX, int mouseY, int button) {
     
-        value = (mouseX - x) / singleTabWidth;
-        super.onMouseClicked(mouseX, mouseY, button);
+        int clickedTab = (mouseX - x) / singleTabWidth;
+        if (enabledTabs[clickedTab]) {
+            value = clickedTab;
+            super.onMouseClicked(mouseX, mouseY, button);
+        }
     }
     
     @Override
@@ -35,7 +43,11 @@ public class WidgetSidewaysTab extends BaseWidget {
             if (i == value) {
                 GL11.glColor4d(1, 1, 1, 1);
             } else {
-                GL11.glColor4d(0.6, 0.6, 0.6, 1);
+                if (enabledTabs[i]) {
+                    GL11.glColor4d(0.6, 0.6, 0.6, 1);
+                } else {
+                    GL11.glColor4d(0.2, 0.2, 0.2, 1);
+                }
             }
             Gui.func_146110_a(x + singleTabWidth * i, y, getTextureU(), getTextureV() + singleTabWidth * i, singleTabWidth, height, 256, 256);
         }

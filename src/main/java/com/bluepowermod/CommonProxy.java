@@ -18,6 +18,7 @@
 package com.bluepowermod;
 
 import net.minecraft.entity.player.EntityPlayer;
+import cpw.mods.fml.server.FMLServerHandler;
 
 public class CommonProxy {
     
@@ -37,5 +38,11 @@ public class CommonProxy {
     public boolean isSneakingInGui() {
     
         return false;
+    }
+    
+    public String getSavePath() {
+    
+        String mcDataLocation = FMLServerHandler.instance().getSavesDirectory().getAbsolutePath();
+        return mcDataLocation.substring(0, mcDataLocation.length() - 2);
     }
 }

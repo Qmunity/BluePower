@@ -32,6 +32,7 @@ import org.apache.commons.lang3.text.WordUtils;
 import org.lwjgl.opengl.GL11;
 
 import com.bluepowermod.BluePower;
+import com.bluepowermod.client.gui.widget.BaseWidget;
 import com.bluepowermod.client.gui.widget.IGuiWidget;
 import com.bluepowermod.client.gui.widget.IWidgetListener;
 
@@ -147,7 +148,7 @@ public class GuiBase extends GuiContainer implements IWidgetListener {
     
         super.mouseClicked(x, y, button);
         for (IGuiWidget widget : widgets) {
-            if (widget.getBounds().contains(x, y)) widget.onMouseClicked(x, y, button);
+            if (widget.getBounds().contains(x, y) && (!(widget instanceof BaseWidget) || ((BaseWidget) widget).enabled)) widget.onMouseClicked(x, y, button);
         }
     }
     
