@@ -428,10 +428,10 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
     @Override
     public boolean onActivated(EntityPlayer player, MovingObjectPosition mop, ItemStack item) {
     
-        //int subPartHit = ((IMultipartCompat) CompatibilityUtils.getModule(Dependencies.FMP)).getMOPData(mop);
+        int subPartHit = ((IMultipartCompat) CompatibilityUtils.getModule(Dependencies.FMP)).getMOPData(mop);
         
         List<AxisAlignedBB> aabbs = getSelectionBoxes();
-        int subPartHit = aabbs.indexOf(RayTracer.getSelectedBox(mop, player, ForgeDirection.getOrientation(getFace()), aabbs));
+        if (subPartHit < 0) subPartHit = aabbs.indexOf(RayTracer.getSelectedBox(mop, player, ForgeDirection.getOrientation(getFace()), aabbs));
         
         if (subPartHit <= 0) return super.onActivated(player, mop, item);
         
