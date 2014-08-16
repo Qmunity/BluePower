@@ -167,7 +167,12 @@ public class TileDeployer extends TileBase implements ISidedInventory, IEjectAni
             for (int i = 0; i < useItems; i++) {
                 player.inventory.currentItem = i;
                 ItemStack stack = player.getCurrentEquippedItem();
-                boolean isGoingToShift = stack.getItem() instanceof ItemReed || stack.getItem() instanceof ItemRedstone;
+                boolean isGoingToShift = false;              
+                if(stack != null){
+                	if(stack.getItem() instanceof ItemReed || stack.getItem() instanceof ItemRedstone){
+                		isGoingToShift = true;
+                	}
+                }
                 int useX = isGoingToShift ? xCoord : x;
                 int useY = isGoingToShift ? yCoord : y;
                 int useZ = isGoingToShift ? zCoord : z;
@@ -362,5 +367,10 @@ public class TileDeployer extends TileBase implements ISidedInventory, IEjectAni
     
         return animationTimer >= 0;
     }
-    
+ 
+    @Override
+    public boolean canConnectRedstone() {
+    	
+    	return true;
+    }
 }
