@@ -1,5 +1,6 @@
 package com.bluepowermod.compat.fmp;
 
+import com.bluepowermod.part.cable.bluepower.WireBluePower;
 import com.bluepowermod.part.gate.*;
 import net.minecraft.item.ItemDye;
 
@@ -60,6 +61,8 @@ public class PartRegister {
         
         // Test cable
         PartRegistry.getInstance().registerPart(WireBluestone.class);
+
+        PartRegistry.getInstance().registerPart(WireBluePower.class);
         /*
          * // Red alloy registerPart(CableWall.class); // Uncovered for (int i = 0; i < ItemDye.field_150922_c.length; i++)
          * registerPart(CableWall.class, ItemDye.field_150921_b[i].toLowerCase(), ItemDye.field_150922_c[i]); // Covered

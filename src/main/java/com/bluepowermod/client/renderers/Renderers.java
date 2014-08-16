@@ -31,12 +31,14 @@ public class Renderers {
         RenderingRegistry.registerBlockHandler(new RendererBlockBase());
 
         RenderingRegistry.registerBlockHandler(new RenderLamp());
+        RenderingRegistry.registerBlockHandler(new RendererSolarPanel());
 
         ClientRegistry.bindTileEntitySpecialRenderer(TileEngine.class, new RenderEngine());
         // MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BPBlocks.engine), new RenderItemEngine());
         ClientRegistry.bindTileEntitySpecialRenderer(TileWindmill.class, new RenderWindmill());
 
         ClientRegistry.bindTileEntitySpecialRenderer(TileLamp.class, new RenderLamp());
+
 
         RenderMultipart.init();
 
