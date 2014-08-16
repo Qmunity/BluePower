@@ -380,51 +380,63 @@ public class RenderHelper {
      * @param vector
      * @param color
      */
-    public static void drawColoredCube(Vector3Cube vector, double r, double g, double b, double a) {
+    public static void drawColoredCube(Vector3Cube vector, double r, double g, double b, double a, boolean... renderFaces) {
 
         GL11.glColor4d(r, g, b, a);
 
         // Top side
-        GL11.glNormal3d(0, 1, 0);
-        addVertex(vector.getMinX(), vector.getMaxY(), vector.getMaxZ());
-        addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ());
-        addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMinZ());
-        addVertex(vector.getMinX(), vector.getMaxY(), vector.getMinZ());
+        if (renderFaces.length < 1 || renderFaces[0]) {
+            GL11.glNormal3d(0, 1, 0);
+            addVertex(vector.getMinX(), vector.getMaxY(), vector.getMaxZ());
+            addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ());
+            addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMinZ());
+            addVertex(vector.getMinX(), vector.getMaxY(), vector.getMinZ());
+        }
 
         // Bottom side
-        GL11.glNormal3d(0, -1, 0);
-        addVertex(vector.getMaxX(), vector.getMinY(), vector.getMaxZ());
-        addVertex(vector.getMinX(), vector.getMinY(), vector.getMaxZ());
-        addVertex(vector.getMinX(), vector.getMinY(), vector.getMinZ());
-        addVertex(vector.getMaxX(), vector.getMinY(), vector.getMinZ());
+        if (renderFaces.length < 2 || renderFaces[1]) {
+            GL11.glNormal3d(0, -1, 0);
+            addVertex(vector.getMaxX(), vector.getMinY(), vector.getMaxZ());
+            addVertex(vector.getMinX(), vector.getMinY(), vector.getMaxZ());
+            addVertex(vector.getMinX(), vector.getMinY(), vector.getMinZ());
+            addVertex(vector.getMaxX(), vector.getMinY(), vector.getMinZ());
+        }
 
         // Draw west side:
-        GL11.glNormal3d(-1, 0, 0);
-        addVertex(vector.getMinX(), vector.getMinY(), vector.getMaxZ());
-        addVertex(vector.getMinX(), vector.getMaxY(), vector.getMaxZ());
-        addVertex(vector.getMinX(), vector.getMaxY(), vector.getMinZ());
-        addVertex(vector.getMinX(), vector.getMinY(), vector.getMinZ());
+        if (renderFaces.length < 3 || renderFaces[2]) {
+            GL11.glNormal3d(-1, 0, 0);
+            addVertex(vector.getMinX(), vector.getMinY(), vector.getMaxZ());
+            addVertex(vector.getMinX(), vector.getMaxY(), vector.getMaxZ());
+            addVertex(vector.getMinX(), vector.getMaxY(), vector.getMinZ());
+            addVertex(vector.getMinX(), vector.getMinY(), vector.getMinZ());
+        }
 
         // Draw east side:
-        GL11.glNormal3d(1, 0, 0);
-        addVertex(vector.getMaxX(), vector.getMinY(), vector.getMinZ());
-        addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMinZ());
-        addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ());
-        addVertex(vector.getMaxX(), vector.getMinY(), vector.getMaxZ());
+        if (renderFaces.length < 4 || renderFaces[3]) {
+            GL11.glNormal3d(1, 0, 0);
+            addVertex(vector.getMaxX(), vector.getMinY(), vector.getMinZ());
+            addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMinZ());
+            addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ());
+            addVertex(vector.getMaxX(), vector.getMinY(), vector.getMaxZ());
+        }
 
         // Draw north side
-        GL11.glNormal3d(0, 0, -1);
-        addVertex(vector.getMinX(), vector.getMinY(), vector.getMinZ());
-        addVertex(vector.getMinX(), vector.getMaxY(), vector.getMinZ());
-        addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMinZ());
-        addVertex(vector.getMaxX(), vector.getMinY(), vector.getMinZ());
+        if (renderFaces.length < 5 || renderFaces[4]) {
+            GL11.glNormal3d(0, 0, -1);
+            addVertex(vector.getMinX(), vector.getMinY(), vector.getMinZ());
+            addVertex(vector.getMinX(), vector.getMaxY(), vector.getMinZ());
+            addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMinZ());
+            addVertex(vector.getMaxX(), vector.getMinY(), vector.getMinZ());
+        }
 
         // Draw south side
-        GL11.glNormal3d(0, 0, 1);
-        addVertex(vector.getMinX(), vector.getMinY(), vector.getMaxZ());
-        addVertex(vector.getMaxX(), vector.getMinY(), vector.getMaxZ());
-        addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ());
-        addVertex(vector.getMinX(), vector.getMaxY(), vector.getMaxZ());
+        if (renderFaces.length < 6 || renderFaces[5]) {
+            GL11.glNormal3d(0, 0, 1);
+            addVertex(vector.getMinX(), vector.getMinY(), vector.getMaxZ());
+            addVertex(vector.getMaxX(), vector.getMinY(), vector.getMaxZ());
+            addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ());
+            addVertex(vector.getMinX(), vector.getMaxY(), vector.getMaxZ());
+        }
 
         GL11.glColor4d(1, 1, 1, 1);
     }
