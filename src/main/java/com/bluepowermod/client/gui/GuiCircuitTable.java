@@ -93,7 +93,14 @@ public class GuiCircuitTable extends GuiBase {
     protected void mouseClicked(int x, int y, int button) {
     
         super.mouseClicked(x, y, button);
-        if (isTextfieldEnabled()) searchField.mouseClicked(x, y, button);
+        if (isTextfieldEnabled()) {
+            searchField.mouseClicked(x, y, button);
+            if (searchField.isFocused() && button == 1) {
+                searchField.setText("");
+                circuitTable.setText(0, searchField.getText());
+                NetworkHandler.sendToServer(new MessageUpdateTextfield(circuitTable, 0));
+            }
+        }
     }
     
     /**

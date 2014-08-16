@@ -120,6 +120,11 @@ public class GuiCircuitDatabaseMain extends GuiBase {
     
         super.mouseClicked(x, y, button);
         nameField.mouseClicked(x, y, button);
+        if (nameField.isFocused() && button == 1) {
+            nameField.setText("");
+            circuitDatabase.setText(1, nameField.getText());
+            NetworkHandler.sendToServer(new MessageUpdateTextfield(circuitDatabase, 0));
+        }
     }
     
     /**
