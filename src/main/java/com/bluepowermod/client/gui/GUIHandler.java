@@ -25,6 +25,9 @@ import com.bluepowermod.containers.ContainerAlloyFurnace;
 import com.bluepowermod.containers.ContainerBuffer;
 import com.bluepowermod.containers.ContainerCPU;
 import com.bluepowermod.containers.ContainerCanvasBag;
+import com.bluepowermod.containers.ContainerCircuitDatabaseMain;
+import com.bluepowermod.containers.ContainerCircuitDatabaseSharing;
+import com.bluepowermod.containers.ContainerCircuitTable;
 import com.bluepowermod.containers.ContainerDeployer;
 import com.bluepowermod.containers.ContainerDiskDrive;
 import com.bluepowermod.containers.ContainerEjector;
@@ -32,6 +35,7 @@ import com.bluepowermod.containers.ContainerFilter;
 import com.bluepowermod.containers.ContainerIOExpander;
 import com.bluepowermod.containers.ContainerItemDetector;
 import com.bluepowermod.containers.ContainerKinect;
+import com.bluepowermod.containers.ContainerManager;
 import com.bluepowermod.containers.ContainerMonitor;
 import com.bluepowermod.containers.ContainerProjectTable;
 import com.bluepowermod.containers.ContainerRedbusID;
@@ -55,14 +59,17 @@ import com.bluepowermod.tileentities.tier1.TileFilter;
 import com.bluepowermod.tileentities.tier1.TileItemDetector;
 import com.bluepowermod.tileentities.tier1.TileProjectTable;
 import com.bluepowermod.tileentities.tier1.TileRelay;
+import com.bluepowermod.tileentities.tier2.TileCircuitTable;
 import com.bluepowermod.tileentities.tier2.TileRegulator;
 import com.bluepowermod.tileentities.tier2.TileRetriever;
 import com.bluepowermod.tileentities.tier2.TileSortingMachine;
 import com.bluepowermod.tileentities.tier3.IRedBusWindow;
 import com.bluepowermod.tileentities.tier3.TileCPU;
+import com.bluepowermod.tileentities.tier3.TileCircuitDatabase;
 import com.bluepowermod.tileentities.tier3.TileDiskDrive;
 import com.bluepowermod.tileentities.tier3.TileIOExpander;
 import com.bluepowermod.tileentities.tier3.TileKinectGenerator;
+import com.bluepowermod.tileentities.tier3.TileManager;
 import com.bluepowermod.tileentities.tier3.TileMonitor;
 
 import cpw.mods.fml.common.network.IGuiHandler;
@@ -122,6 +129,14 @@ public class GUIHandler implements IGuiHandler {
                 return new ContainerItemDetector(player.inventory, (TileItemDetector) ent);
             case PROJECTTABLE_ID:
                 return new ContainerProjectTable(player.inventory, (TileProjectTable) ent);
+            case CIRCUITTABLE_ID:
+                return new ContainerCircuitTable(player.inventory, (TileCircuitTable) ent);
+            case MANAGER_ID:
+                return new ContainerManager(player.inventory, (TileManager) ent);
+            case CIRCUITDATABASE_SHARING_ID:
+                return new ContainerCircuitDatabaseSharing(player.inventory, (TileCircuitDatabase) ent);
+            case CIRCUITDATABASE_MAIN_ID:
+                return new ContainerCircuitDatabaseMain(player.inventory, (TileCircuitDatabase) ent);
             default:
                 break;
         }
@@ -178,6 +193,14 @@ public class GUIHandler implements IGuiHandler {
                 return new GuiItemDetector(player.inventory, (TileItemDetector) ent);
             case PROJECTTABLE_ID:
                 return new GuiProjectTable(player.inventory, (TileProjectTable) ent);
+            case CIRCUITTABLE_ID:
+                return new GuiCircuitTable(player.inventory, (TileCircuitTable) ent);
+            case MANAGER_ID:
+                return new GuiManager(player.inventory, (TileManager) ent);
+            case CIRCUITDATABASE_MAIN_ID:
+                return new GuiCircuitDatabaseMain(player.inventory, (TileCircuitDatabase) ent);
+            case CIRCUITDATABASE_SHARING_ID:
+                return new GuiCircuitDatabaseSharing(player.inventory, (TileCircuitDatabase) ent);
             default:
                 break;
         }

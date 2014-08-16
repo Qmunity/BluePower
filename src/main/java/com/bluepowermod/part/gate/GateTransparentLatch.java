@@ -12,6 +12,9 @@ import com.bluepowermod.api.part.RedstoneConnection;
 import com.bluepowermod.client.renderers.RenderHelper;
 import com.bluepowermod.util.Refs;
 
+/**
+ * @author MineMaarten
+ */
 public class GateTransparentLatch extends GateBase {
     
     private boolean mirrored;
@@ -66,7 +69,7 @@ public class GateTransparentLatch extends GateBase {
         renderTopTexture(FaceDirection.FRONT, front);
         renderTopTexture(FaceDirection.LEFT, mirrored ? right : left);
         renderTopTexture(FaceDirection.BACK, back);
-        renderTopTexture(Refs.MODID + ":textures/blocks/gates/" + getType() + "/leftCenter_" + (back.getPower() == 0 ? "on" : "off") + ".png");
+        renderTopTexture(Refs.MODID + ":textures/blocks/gates/transparent/leftcenter_" + (back.getPower() == 0 ? "on" : "off") + ".png");
         RenderHelper.renderRedstoneTorch(-4 / 16D, 1D / 8D, 4 / 16D, 8D / 16D, back.getPower() == 0);
         RenderHelper.renderRedstoneTorch(-4 / 16D, 1D / 8D, -1 / 16D, 8D / 16D, back.getPower() > 0 && front.getPower() == 0);
         RenderHelper.renderRedstoneTorch(-1 / 16D, 1D / 8D, -1 / 16D, 8D / 16D, back.getPower() == 0 && front.getPower() == 0);

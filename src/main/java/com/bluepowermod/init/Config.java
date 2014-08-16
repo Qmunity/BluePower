@@ -76,6 +76,9 @@ public class Config {
     public static String[] alloyFurnaceBlacklist;
     public static boolean  enableTubeCaching;
     public static boolean  enableGateSounds;
+    public static String   tubeRenderMode;
+    
+    public static boolean  serverCircuitSavingOpOnly;
     
     public static void syncConfig(Configuration config) {
     
@@ -88,12 +91,12 @@ public class Config {
         generateCopper = config.get(Refs.CONFIG_COPPER, "generateCopper", true).getBoolean(true);
         minCopperY = config.get(Refs.CONFIG_COPPER, "minCopperY", 0).getInt();
         maxCopperY = config.get(Refs.CONFIG_COPPER, "maxCopperY", 64).getInt();
-        veinCountCopper = config.get(Refs.CONFIG_COPPER, "veinCountCopper", 20).getInt();
-        veinSizeCopper = config.get(Refs.CONFIG_COPPER, "veinSizeCopper", 10).getInt();
+        veinCountCopper = config.get(Refs.CONFIG_COPPER, "veinCountCopper", 12).getInt();
+        veinSizeCopper = config.get(Refs.CONFIG_COPPER, "veinSizeCopper", 7).getInt();
         generateZinc = config.get(Refs.CONFIG_ZINC, "generateZinc", true).getBoolean(true);
         minZincY = config.get(Refs.CONFIG_ZINC, "minZincY", 0).getInt();
         maxZincY = config.get(Refs.CONFIG_ZINC, "maxZincY", 48).getInt();
-        veinCountZinc = config.get(Refs.CONFIG_ZINC, "veinCountZinc", 10).getInt();
+        veinCountZinc = config.get(Refs.CONFIG_ZINC, "veinCountZinc", 6).getInt();
         veinSizeZinc = config.get(Refs.CONFIG_ZINC, "veinSizeZinc", 8).getInt();
         generateSilver = config.get(Refs.CONFIG_SILVER, "generateSilver", true).getBoolean(true);
         minSilverY = config.get(Refs.CONFIG_SILVER, "minSilverY", 0).getInt();
@@ -130,6 +133,15 @@ public class Config {
         Property prop = config.get(Refs.CONFIG_TUBES, "Enable Tube Caching", true);
         prop.comment = "When enabled, the Tube routing is more friendly for the CPU. In return it uses a bit more RAM. Caching also may contain bugs still.";
         enableTubeCaching = prop.getBoolean();
+        
+        prop = config.get(Refs.CONFIG_TUBES, "Tube Render Mode", "auto");
+        prop.comment = "When encountering FPS issues with tubes with lots of items in it. Valid modes: \"normal\": Normal rendering, \"reduced\": All items going through tubes will display as 'one' item, \"none\": Only a small dot renders, \"auto\": will switch to \"normal\" on fancy graphics mode, and to \"reduced\" otherwise.";
+        tubeRenderMode = prop.getString();
+        if (!tubeRenderMode.equals("normal") && !tubeRenderMode.equals("reduced") && !tubeRenderMode.equals("none")) {
+            tubeRenderMode = "auto";
+        }
+        
+        serverCircuitSavingOpOnly = config.get(Refs.CONFIG_CIRCUIT_DATABASE, "Server Template Saving by Ops only", false).getBoolean(false);
         
         config.addCustomCategoryComment(Refs.CONFIG_ENCHANTS, "Toggle enchantment ids");
         vorpalEnchantmentId = config.get(Refs.CONFIG_ENCHANTS, "vorpalEnchantmentId", 100).getInt();

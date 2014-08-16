@@ -30,7 +30,7 @@ public class GuiRetriever extends GuiFilter {
         WidgetMode colorWidget = new WidgetMode(1, guiLeft + 117, guiTop + 20, 202, 2, Refs.MODID + ":textures/gui/retriever.png") {
             
             @Override
-            public void addTooltip(List<String> curTip, boolean shiftPressed) {
+            public void addTooltip(int mouseX, int mouseY, List<String> curTip, boolean shiftPressed) {
             
                 curTip.add("gui.mode");
                 curTip.add("gui.retriever.mode." + (value == 0 ? "sequential" : "any"));

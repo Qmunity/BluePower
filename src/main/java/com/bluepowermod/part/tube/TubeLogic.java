@@ -31,6 +31,7 @@ import com.bluepowermod.compat.CompatibilityUtils;
 import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.helper.TileEntityCache;
 import com.bluepowermod.init.Config;
+import com.bluepowermod.tileentities.tier3.TileManager;
 import com.bluepowermod.util.Dependencies;
 
 import cpw.mods.fml.relauncher.Side;
@@ -194,8 +195,11 @@ public class TubeLogic implements IPneumaticTube {
         if (result == null) return false;
         
         ItemStack extractedItem = null;
-        if (filter != null) {
-            extractedItem = IOHelper.extract(result.getValue(), result.getKey().getOpposite(), filter, true, false);
+        if (result.getValue() instanceof TileManager) {//Exception for managers, the result can only end up as a manager if the pulling inventory was a manager.
+            TileEntity managedInventory = ((TileManager) result.getValue()).getTileCache()[((TileManager) result.getValue()).getFacingDirection().ordinal()].getTileEntity();
+            extractedItem = IOHelper.extract(managedInventory, result.getKey().getOpposite(), filter, false, false);
+        } else if (filter != null) {
+            extractedItem = IOHelper.extract(result.getValue(), result.getKey().getOpposite(), filter, !(target instanceof TileManager), false);
         } else {
             extractedItem = IOHelper.extract(result.getValue(), result.getKey().getOpposite(), false);
         }
@@ -250,7 +254,7 @@ public class TubeLogic implements IPneumaticTube {
                         if (edge.target.target instanceof PneumaticTube) {
                             traversingNodes.add(edge.target);
                             trackingExportDirection.add(heading);
-                        } else if (stack.getTarget(tube.getWorld()) == null && edge.isValidForExportItem(stack.stack) || stack.heading == null && edge.isValidForImportItem(stack.stack) || stack.heading != null && stack.getTarget(tube.getWorld()) == edge.target.target
+                        } else if (stack.getTarget(tube.getWorld()) == null && edge.isValidForExportItem(stack.stack) || stack.heading == null && edge.isValidForImportItem(stack) || stack.heading != null && stack.getTarget(tube.getWorld()) == edge.target.target
                                 && edge.targetConnectionSide.getOpposite() == stack.getTargetEntryDir()) {
                             validDestinations.put(edge, stack.heading == null ? edge.targetConnectionSide : heading);
                         }
@@ -468,12 +472,24 @@ public class TubeLogic implements IPneumaticTube {
             return remainder == null || remainder.stackSize < stack.stackSize;
         }
         
-        public boolean isValidForImportItem(ItemStack stack) {
+        public boolean isValidForImportItem(TubeStack stack) {
         
             if (target.target instanceof PneumaticTube) return false;
+            TileEntity stackTarget = stack.getTarget(((TileEntity) target.target).getWorldObj());
+            if (stackTarget instanceof TileManager) {
+                TileManager retrievingManager = (TileManager) stackTarget;
+                if (target.target instanceof TileManager) {
+                    TileManager pulledManager = (TileManager) target.target;
+                    if (retrievingManager == pulledManager) return false;
+                    if (pulledManager.priority >= retrievingManager.priority) return false;//Only managers with a higher priority are allowed to pull.
+                    if (pulledManager.filterColor != TubeColor.NONE && retrievingManager.filterColor != TubeColor.NONE && retrievingManager.filterColor != pulledManager.filterColor) return false;
+                    TileEntity managedInventory = pulledManager.getTileCache()[pulledManager.getFacingDirection().ordinal()].getTileEntity();
+                    return IOHelper.extract(managedInventory, pulledManager.getFacingDirection().getOpposite(), stack.stack, false, true) != null;
+                }
+            }
             
-            if (stack != null) {
-                return IOHelper.extract((TileEntity) target.target, targetConnectionSide.getOpposite(), stack, true, true) != null;
+            if (stack.stack != null) {
+                return IOHelper.extract((TileEntity) target.target, targetConnectionSide.getOpposite(), stack.stack, !(stackTarget instanceof TileManager), true) != null;
             } else {
                 return IOHelper.extract((TileEntity) target.target, targetConnectionSide.getOpposite(), true) != null;
             }

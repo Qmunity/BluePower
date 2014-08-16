@@ -17,91 +17,119 @@
 
 package com.bluepowermod.blocks.machines;
 
-import com.bluepowermod.blocks.BlockContainerBase;
-import com.bluepowermod.init.BPBlocks;
-import com.bluepowermod.tileentities.tier1.TileProjectTable;
-import com.bluepowermod.util.Refs;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.item.Item;
 import net.minecraft.util.IIcon;
+import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.util.ForgeDirection;
 
-import java.util.Random;
+import com.bluepowermod.blocks.BlockContainerBase;
+import com.bluepowermod.tileentities.IRotatable;
+import com.bluepowermod.tileentities.TileBase;
+import com.bluepowermod.tileentities.tier1.TileProjectTable;
+import com.bluepowermod.util.Refs;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockProjectTable extends BlockContainerBase {
-    
-    public static IIcon textureTop;
-    private IIcon       textureBottom;
-    private IIcon       textureSide;
-    private IIcon       textureFront;
-    
+
+    private IIcon textureTop;
+    private IIcon textureBottom;
+    private IIcon textureSide;
+    private IIcon textureFront;
+
     public BlockProjectTable() {
-    
+
         super(Material.wood, TileProjectTable.class);
         setBlockName(Refs.PROJECTTABLE_NAME);
     }
-    
+
+    public BlockProjectTable(Class<? extends TileBase> tileClass) {
+
+        super(Material.wood, tileClass);
+    }
+
     @Override
     @SideOnly(Side.CLIENT)
-    public IIcon getIcon(int side, int meta) {
-    
+    public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
+
+        IRotatable rotatable = (IRotatable) world.getTileEntity(x, y, z);
         ForgeDirection s = ForgeDirection.getOrientation(side);
         // If is facing
-        
-        if (meta == side) { return textureFront; }
+
+        if (rotatable.getFacingDirection() == s) {
+            return textureFront;
+        }
         switch (s) {
-            case UP:
-                return textureTop;
-            case DOWN:
-                return textureBottom;
-            case EAST:
-            case NORTH:
-            case SOUTH:
-            case WEST:
-            case UNKNOWN:
-                return textureSide;
-            default:
-                break;
-        
+        case UP:
+            return textureTop;
+        case DOWN:
+            return textureBottom;
+        case EAST:
+        case NORTH:
+        case SOUTH:
+        case WEST:
+        case UNKNOWN:
+            return textureSide;
+        default:
+            break;
+
         }
         return null;
     }
-    
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public IIcon getIcon(int side, int meta) {
+
+        ForgeDirection s = ForgeDirection.getOrientation(side);
+        if (meta == side) {
+            return textureFront;
+        }
+        switch (s) {
+        case UP:
+            return textureTop;
+        case DOWN:
+            return textureBottom;
+        case EAST:
+        case NORTH:
+        case SOUTH:
+        case WEST:
+        case UNKNOWN:
+            return textureSide;
+        default:
+            break;
+
+        }
+        return null;
+    }
+
     @Override
     public boolean isOpaqueCube() {
-    
+
         return true;
     }
-    
-    // Not sure if you need this function.
-    @Override
-    public Item getItemDropped(int p_149650_1_, Random random, int p_149650_3_) {
-    
-        return Item.getItemFromBlock(BPBlocks.project_table);
-    }
-    
+
     @Override
     @SideOnly(Side.CLIENT)
     public void registerBlockIcons(IIconRegister iconRegister) {
-    
-        textureTop = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + Refs.PROJECTTABLE_NAME + "_top");
-        textureBottom = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + Refs.PROJECTTABLE_NAME + "_bottom");
-        textureSide = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + Refs.PROJECTTABLE_NAME + "_side");
-        textureFront = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + Refs.PROJECTTABLE_NAME + "_front");
+
+        textureTop = iconRegister.registerIcon(getTextureName() + "_top");
+        textureBottom = iconRegister.registerIcon(getTextureName() + "_bottom");
+        textureSide = iconRegister.registerIcon(getTextureName() + "_side");
+        textureFront = iconRegister.registerIcon(getTextureName() + "_front");
     }
-    
+
     @Override
     protected boolean canRotateVertical() {
-    
+
         return false;
     }
-    
+
     @Override
     public int getRenderType() {
-    
+
         return 0;
     }
 }

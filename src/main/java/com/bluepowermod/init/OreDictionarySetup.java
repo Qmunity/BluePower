@@ -27,6 +27,8 @@ public class OreDictionarySetup {
         OreDictionary.registerOre("oreZinc", BPBlocks.zinc_ore);
         OreDictionary.registerOre("oreSilver", BPBlocks.silver_ore);
         OreDictionary.registerOre("oreTungsten", BPBlocks.tungsten_ore);
+        OreDictionary.registerOre("marble", BPBlocks.marble);
+        OreDictionary.registerOre("basalt", BPBlocks.basalt);
         
         OreDictionary.registerOre("gemRuby", BPItems.ruby);
         OreDictionary.registerOre("gemAmethyst", BPItems.amethyst);

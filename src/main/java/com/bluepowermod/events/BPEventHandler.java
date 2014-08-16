@@ -1,5 +1,6 @@
 package com.bluepowermod.events;
 
+import net.minecraft.client.resources.I18n;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.monster.EntityCreeper;
@@ -17,8 +18,11 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
+import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 
+import com.bluepowermod.ClientProxy;
+import com.bluepowermod.client.gui.GuiCircuitDatabaseSharing;
 import com.bluepowermod.containers.ContainerSeedBag;
 import com.bluepowermod.containers.inventorys.InventoryItem;
 import com.bluepowermod.init.BPEnchantments;
@@ -30,6 +34,8 @@ import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.eventhandler.Event.Result;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class BPEventHandler {
     
@@ -170,6 +176,24 @@ public class BPEventHandler {
         if (event.entityLiving instanceof EntityZombie) {
             event.entityLiving.entityDropItem(new ItemStack(Items.skull, 1, 2), 0.0F);
             return;
+        }
+    }
+    
+    @SubscribeEvent
+    @SideOnly(Side.CLIENT)
+    public void onItemTooltip(ItemTooltipEvent event) {
+    
+        if (event.itemStack.hasTagCompound() && event.itemStack.getTagCompound().hasKey("tileData")) {
+            event.toolTip.add(I18n.format("gui.tooltip.hasSilkyData"));
+        }
+        
+        if (ClientProxy.getOpenedGui() instanceof GuiCircuitDatabaseSharing) {
+            ItemStack deletingStack = ((GuiCircuitDatabaseSharing) ClientProxy.getOpenedGui()).getCurrentDeletingTemplate();
+            if (deletingStack != null && deletingStack == event.itemStack) {
+                event.toolTip.add(I18n.format("gui.circuitDatabase.info.sneakClickToConfirmDeleting"));
+            } else {
+                event.toolTip.add(I18n.format("gui.circuitDatabase.info.sneakClickToDelete"));
+            }
         }
     }
 }

@@ -30,7 +30,7 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
     private TileEntityCache[]     tileCache;
     public static final int       BUFFER_EMPTY_INTERVAL   = 10;
     protected byte                animationTicker         = -1;
-    private static final int      ANIMATION_TIME          = 7;
+    protected static final int    ANIMATION_TIME          = 7;
     private boolean               isAnimating;
     
     @Override
@@ -39,16 +39,29 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
         super.updateEntity();
         
         if (!worldObj.isRemote) {
-            if (getTicker() % BUFFER_EMPTY_INTERVAL == 0 && !internalItemStackBuffer.isEmpty()) {
-                if (IOHelper.canInterfaceWith(getTileCache()[getOutputDirection().ordinal()].getTileEntity(), getFacingDirection())) {
-                    TubeStack tubeStack = internalItemStackBuffer.get(0);
-                    ItemStack returnedStack = IOHelper.insert(getTileCache()[getOutputDirection().ordinal()].getTileEntity(), tubeStack.stack, getFacingDirection(), tubeStack.color, false);
-                    if (returnedStack == null) {
-                        internalItemStackBuffer.remove(0);
-                        markDirty();
-                    } else if (returnedStack.stackSize != tubeStack.stack.stackSize) {
-                        markDirty();
-                    }
+            if (getTicker() % BUFFER_EMPTY_INTERVAL == 0) {
+                ejectItems();
+            }
+            if (animationTicker >= 0 && isBufferEmpty()) {
+                if (++animationTicker > ANIMATION_TIME) {
+                    animationTicker = -1;
+                    sendUpdatePacket();
+                }
+            }
+        }
+    }
+    
+    private void ejectItems() {
+    
+        if (!internalItemStackBuffer.isEmpty()) {
+            if (IOHelper.canInterfaceWith(getTileCache()[getOutputDirection().ordinal()].getTileEntity(), getFacingDirection())) {
+                TubeStack tubeStack = internalItemStackBuffer.get(0);
+                ItemStack returnedStack = IOHelper.insert(getTileCache()[getOutputDirection().ordinal()].getTileEntity(), tubeStack.stack, getFacingDirection(), tubeStack.color, false);
+                if (returnedStack == null) {
+                    internalItemStackBuffer.remove(0);
+                    markDirty();
+                } else if (returnedStack.stackSize != tubeStack.stack.stackSize) {
+                    markDirty();
                 }
             } else if (spawnItemsInWorld) {
                 ForgeDirection direction = getFacingDirection().getOpposite();
@@ -59,12 +72,6 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
                         iterator.remove();
                         markDirty();
                     }
-                }
-            }
-            if (animationTicker >= 0 && isBufferEmpty()) {
-                if (++animationTicker > ANIMATION_TIME) {
-                    animationTicker = -1;
-                    sendUpdatePacket();
                 }
             }
         }
@@ -83,6 +90,7 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
     
         if (!worldObj.isRemote) {
             internalItemStackBuffer.add(new TubeStack(stack, getOutputDirection().getOpposite(), color));
+            if (internalItemStackBuffer.size() == 1) scheduleInjection();
             animationTicker = 0;
             sendUpdatePacket();
         }

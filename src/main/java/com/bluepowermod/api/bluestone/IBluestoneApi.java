@@ -24,6 +24,9 @@ public interface IBluestoneApi {
     @SideOnly(Side.CLIENT)
     public void renderBox(int minx, int miny, int minz, int maxx, int maxy, int maxz);
 
+    @SideOnly(Side.CLIENT)
+    public void renderBox(int minx, int miny, int minz, int maxx, int maxy, int maxz, int textureSize);
+
     public void renderExtraCables(Vector3 block, IBluestoneWire wire, ForgeDirection side);
 
 }

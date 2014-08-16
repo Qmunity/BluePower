@@ -67,6 +67,7 @@ public class MultipartFaceBPPart extends MultipartBPPart implements TFacePart, I
 
         if (side == getFace())
             return getPart().getRedstonePower();
+
         return 0;
     }
 
@@ -75,6 +76,7 @@ public class MultipartFaceBPPart extends MultipartBPPart implements TFacePart, I
 
         if (side == getFace())
             return getPart().getRedstonePower();
+
         return 0;
     }
 

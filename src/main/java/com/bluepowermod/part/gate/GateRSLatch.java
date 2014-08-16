@@ -22,6 +22,9 @@ import com.bluepowermod.api.part.RedstoneConnection;
 import com.bluepowermod.client.renderers.RenderHelper;
 import com.bluepowermod.util.Refs;
 
+/**
+ * @author MineMaarten
+ */
 public class GateRSLatch extends GateBase {
     
     private int mode;

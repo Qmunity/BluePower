@@ -210,6 +210,11 @@ public class TileBase extends TileEntity implements IRotatable {
         return ticker;
     }
     
+    protected void scheduleInjection() {
+    
+        ticker = -1;//will make the ticker go to 0 next tick, which will trigger the machine to immediately try to empty its buffer.
+    }
+    
     /**
      * Gets called when the TileEntity ticks for the first time, the world is accessible and updateEntity() has not been ran yet
      */

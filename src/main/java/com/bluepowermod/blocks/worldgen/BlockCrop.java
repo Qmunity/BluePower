@@ -17,9 +17,11 @@
 
 package com.bluepowermod.blocks.worldgen;
 
-import java.util.ArrayList;
-import java.util.Random;
-
+import com.bluepowermod.init.BPBlocks;
+import com.bluepowermod.init.BPItems;
+import com.bluepowermod.util.Refs;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockAir;
 import net.minecraft.block.BlockCrops;
@@ -35,13 +37,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.EnumPlantType;
 
-import com.bluepowermod.init.BPBlocks;
-import com.bluepowermod.init.BPItems;
-import com.bluepowermod.util.Refs;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import java.util.ArrayList;
+import java.util.Random;
 
 public class BlockCrop extends BlockCrops implements IGrowable {
 
@@ -323,5 +322,11 @@ public class BlockCrop extends BlockCrops implements IGrowable {
 
         if (world.getBlock(x, y, z) != this) return super.canBlockStay(world, x, y, z);
         return (world.getBlock(x, y - 1, z) instanceof BlockFarmland) || (world.getBlock(x, y - 1, z) instanceof BlockCrop);
+    }
+
+    @Override
+    public EnumPlantType getPlantType(IBlockAccess world, int x, int y, int z)
+    {
+    	return EnumPlantType.Crop;
     }
 }

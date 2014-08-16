@@ -17,13 +17,16 @@ Contributions and bug fixes are welcome. If you plan to add any features check w
 When adding code. Please use proper javadoc and always include an @author tag. 
 
 ## Bug reports
-When issuing a bug report. Please make sure to include the following info:
+When issuing a bug report. Please take a look first here: https://github.com/Qmunity/BluePower/issues?q=is%3Aissue+is%3Aclosed. It might very well be that somebody already filed the bug you have, and we've already fixed it.
+
+If nobody else reported the same bug, you can go ahead and report it. Please make sure to include the following info:
 - **What where you doing when you had the issue?**
 - **What did you expect to happen?**
 - **What happened instead?**
 - **Crashlog**
 
 Please supply a crashlog using pastebin! do *not* paste a crashlog directly in the issue!
+Also please try to reproduce your crash. It's possible that a crash only happened because of a quirk in the universe.
 
 ##### Note
 The project is in active development and may not always be stable!

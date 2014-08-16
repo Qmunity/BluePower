@@ -80,44 +80,53 @@ public class BluestoneApi implements IBluestoneApi {
     @Override
     public void renderBox(int minx, int miny, int minz, int maxx, int maxy, int maxz) {
 
+        renderBox(minx, miny, minz, maxx, maxy, maxz, 16);
+    }
+
+    @SideOnly(Side.CLIENT)
+    @Override
+    public void renderBox(int minx, int miny, int minz, int maxx, int maxy, int maxz, int textureSize) {
+
+        double size = textureSize;
+
         GL11.glBegin(GL11.GL_QUADS);
         {
             // Top
             GL11.glNormal3d(0, 1, 0);
-            RenderHelper.addVertexWithTexture(minx / 16D, maxy / 16D, minz / 16D, minx / 16D, minz / 16D);
-            RenderHelper.addVertexWithTexture(minx / 16D, maxy / 16D, maxz / 16D, minx / 16D, maxz / 16D);
-            RenderHelper.addVertexWithTexture(maxx / 16D, maxy / 16D, maxz / 16D, maxx / 16D, maxz / 16D);
-            RenderHelper.addVertexWithTexture(maxx / 16D, maxy / 16D, minz / 16D, maxx / 16D, minz / 16D);
+            RenderHelper.addVertexWithTexture(minx / size, maxy / size, minz / size, minx / size, minz / size);
+            RenderHelper.addVertexWithTexture(minx / size, maxy / size, maxz / size, minx / size, maxz / size);
+            RenderHelper.addVertexWithTexture(maxx / size, maxy / size, maxz / size, maxx / size, maxz / size);
+            RenderHelper.addVertexWithTexture(maxx / size, maxy / size, minz / size, maxx / size, minz / size);
             // Bottom
             GL11.glNormal3d(0, -1, 0);
-            RenderHelper.addVertexWithTexture(minx / 16D, miny / 16D, minz / 16D, minx / 16D, minz / 16D);
-            RenderHelper.addVertexWithTexture(maxx / 16D, miny / 16D, minz / 16D, maxx / 16D, minz / 16D);
-            RenderHelper.addVertexWithTexture(maxx / 16D, miny / 16D, maxz / 16D, maxx / 16D, maxz / 16D);
-            RenderHelper.addVertexWithTexture(minx / 16D, miny / 16D, maxz / 16D, minx / 16D, maxz / 16D);
-            // South
-            GL11.glNormal3d(1, 0, 0);
-            RenderHelper.addVertexWithTexture(maxx / 16D, maxy / 16D, minz / 16D, minx / 16D, minz / 16D);
-            RenderHelper.addVertexWithTexture(maxx / 16D, maxy / 16D, maxz / 16D, minx / 16D, maxz / 16D);
-            RenderHelper.addVertexWithTexture(maxx / 16D, miny / 16D, maxz / 16D, minx / 16D, maxz / 16D);
-            RenderHelper.addVertexWithTexture(maxx / 16D, miny / 16D, minz / 16D, minx / 16D, minz / 16D);
-            // North
-            GL11.glNormal3d(-1, 0, 0);
-            RenderHelper.addVertexWithTexture(minx / 16D, maxy / 16D, minz / 16D, minx / 16D, minz / 16D);
-            RenderHelper.addVertexWithTexture(minx / 16D, miny / 16D, minz / 16D, minx / 16D, minz / 16D);
-            RenderHelper.addVertexWithTexture(minx / 16D, miny / 16D, maxz / 16D, minx / 16D, maxz / 16D);
-            RenderHelper.addVertexWithTexture(minx / 16D, maxy / 16D, maxz / 16D, minx / 16D, maxz / 16D);
-            // East
-            GL11.glNormal3d(0, 1, 0);
-            RenderHelper.addVertexWithTexture(minx / 16D, miny / 16D, minz / 16D, minx / 16D, minz / 16D);
-            RenderHelper.addVertexWithTexture(minx / 16D, maxy / 16D, minz / 16D, minx / 16D, minz / 16D);
-            RenderHelper.addVertexWithTexture(maxx / 16D, maxy / 16D, minz / 16D, maxx / 16D, minz / 16D);
-            RenderHelper.addVertexWithTexture(maxx / 16D, miny / 16D, minz / 16D, maxx / 16D, minz / 16D);
+            RenderHelper.addVertexWithTexture(minx / size, miny / size, minz / size, minx / size, minz / size);
+            RenderHelper.addVertexWithTexture(maxx / size, miny / size, minz / size, maxx / size, minz / size);
+            RenderHelper.addVertexWithTexture(maxx / size, miny / size, maxz / size, maxx / size, maxz / size);
+            RenderHelper.addVertexWithTexture(minx / size, miny / size, maxz / size, minx / size, maxz / size);
             // West
-            GL11.glNormal3d(0, -1, 0);
-            RenderHelper.addVertexWithTexture(minx / 16D, miny / 16D, maxz / 16D, minx / 16D, maxz / 16D);
-            RenderHelper.addVertexWithTexture(maxx / 16D, miny / 16D, maxz / 16D, maxx / 16D, maxz / 16D);
-            RenderHelper.addVertexWithTexture(maxx / 16D, maxy / 16D, maxz / 16D, maxx / 16D, maxz / 16D);
-            RenderHelper.addVertexWithTexture(minx / 16D, maxy / 16D, maxz / 16D, minx / 16D, maxz / 16D);
+            GL11.glNormal3d(-1, 0, 0);
+            RenderHelper.addVertexWithTexture(maxx / size, maxy / size, minz / size, maxx / size, minz / size);
+            RenderHelper.addVertexWithTexture(maxx / size, maxy / size, maxz / size, maxx / size, maxz / size);
+            RenderHelper.addVertexWithTexture(maxx / size, miny / size, maxz / size, maxx / size, maxz / size);
+            RenderHelper.addVertexWithTexture(maxx / size, miny / size, minz / size, maxx / size, minz / size);
+            // East
+            GL11.glNormal3d(1, 0, 0);
+            RenderHelper.addVertexWithTexture(minx / size, maxy / size, minz / size, (minx - maxy) / size, minz / size);
+            RenderHelper.addVertexWithTexture(minx / size, miny / size, minz / size, (minx - maxy) / size, minz / size);
+            RenderHelper.addVertexWithTexture(minx / size, miny / size, maxz / size, (minx - maxy) / size, maxz / size);
+            RenderHelper.addVertexWithTexture(minx / size, maxy / size, maxz / size, (minx - maxy) / size, maxz / size);
+            // South
+            GL11.glNormal3d(0, 0, 1);
+            RenderHelper.addVertexWithTexture(minx / size, miny / size, minz / size, minx / size, (minz - maxy) / size);
+            RenderHelper.addVertexWithTexture(minx / size, maxy / size, minz / size, minx / size, (minz - maxy) / size);
+            RenderHelper.addVertexWithTexture(maxx / size, maxy / size, minz / size, maxx / size, (minz - maxy) / size);
+            RenderHelper.addVertexWithTexture(maxx / size, miny / size, minz / size, maxx / size, (minz - maxy) / size);
+            // North
+            GL11.glNormal3d(0, 0, -1);
+            RenderHelper.addVertexWithTexture(minx / size, miny / size, maxz / size, minx / size, maxz / size);
+            RenderHelper.addVertexWithTexture(maxx / size, miny / size, maxz / size, maxx / size, maxz / size);
+            RenderHelper.addVertexWithTexture(maxx / size, maxy / size, maxz / size, maxx / size, maxz / size);
+            RenderHelper.addVertexWithTexture(minx / size, maxy / size, maxz / size, minx / size, maxz / size);
         }
         GL11.glEnd();
     }

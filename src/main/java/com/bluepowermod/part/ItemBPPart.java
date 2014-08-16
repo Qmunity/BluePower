@@ -23,13 +23,14 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import com.bluepowermod.api.item.IDatabaseSaveable;
 import com.bluepowermod.api.part.BPPart;
 import com.bluepowermod.api.vec.Vector3;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.tileentities.BPTileMultipart;
 import com.bluepowermod.util.Refs;
 
-public class ItemBPPart extends Item {
+public class ItemBPPart extends Item implements IDatabaseSaveable {
     
     private final List<BPPart> parts = new ArrayList<BPPart>();
     private boolean            secondAttempt;
@@ -151,6 +152,28 @@ public class ItemBPPart extends Item {
     public void getSubItems(Item unused, CreativeTabs tab, List l) {
     
         getSubItems(l);
+    }
+    
+    @Override
+    public boolean canGoInCopySlot(ItemStack stack) {
+    
+        return PartRegistry.getInstance().createPartFromItem(stack).canGoInCopySlot(stack);
+    }
+    
+    @Override
+    public boolean canCopy(ItemStack templateStack, ItemStack outputStack) {
+    
+        if (templateStack.getTagCompound().getString("id").equals(outputStack.getTagCompound().getString("id"))) {
+            return canGoInCopySlot(templateStack);
+        } else {
+            return false;
+        }
+    }
+    
+    @Override
+    public List<ItemStack> getItemsOnStack(ItemStack stack) {
+    
+        return PartRegistry.getInstance().createPartFromItem(stack).getItemsOnStack(stack);
     }
     
 }

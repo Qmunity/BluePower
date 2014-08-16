@@ -23,6 +23,12 @@ public class WidgetMode extends BaseWidget {
     
     public final int maxMode;
     
+    public WidgetMode(int id, int x, int y, int textureX, int textureY, int maxMode, String texture) {
+    
+        super(id, x, y, 14, 14, textureX, textureY, texture);
+        this.maxMode = maxMode;
+    }
+    
     public WidgetMode(int id, int x, int y, int textureX, int maxMode, String texture) {
     
         super(id, x, y, 14, 14, textureX, 0, texture);
@@ -43,7 +49,7 @@ public class WidgetMode extends BaseWidget {
     @Override
     protected int getTextureV() {
     
-        return value * 14;
+        return super.getTextureV() + value * 14;
     }
     
     @Override

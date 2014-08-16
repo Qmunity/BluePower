@@ -5,6 +5,7 @@ import java.util.List;
 import mcp.mobius.waila.api.SpecialChars;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 
@@ -20,6 +21,9 @@ import com.bluepowermod.util.Refs;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+/**
+ * @author MineMaarten
+ */
 public class GateStateCell extends GateBase implements IGuiButtonSensitive {
     
     private int     time      = 40;
@@ -83,7 +87,7 @@ public class GateStateCell extends GateBase implements IGuiButtonSensitive {
         RenderHelper.renderRandomizerButton(this, -2 / 16D, 0, 4 / 16D, left.getPower() > 0);
         RenderHelper.renderRedstoneTorch(4 / 16D, 1D / 8D, 0, 13D / 16D, ticks > 0);
         RenderHelper.renderRedstoneTorch(1 / 16D, 1D / 8D, -4 / 16D, 9D / 16D, mirrored ? back.getPower() > 0 : front.getPower() > 0);
-        RenderHelper.renderPointer(4 / 16D, 7D / 16D, 0, getWorld() != null ? ticks > 0 ? 1 - (ticks + frame) / (time * 7) + 0.25 : 0.25 : 0.25);
+        RenderHelper.renderPointer(4 / 16D, 7D / 16D, 0, ticks > 0 ? 1 - (ticks + frame) / (time * 7) + 0.25 : 0.25);
     }
     
     @Override
@@ -162,7 +166,7 @@ public class GateStateCell extends GateBase implements IGuiButtonSensitive {
     }
     
     @Override
-    public void onButtonPress(int messageId, int value) {
+    public void onButtonPress(EntityPlayer player, int messageId, int value) {
     
         time = value;
         sendUpdatePacket();

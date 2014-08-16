@@ -62,6 +62,7 @@ public class GateToggleLatch extends GateBase {
     
         if ((power != right.getPower() > 0 || left.getPower() > 0) && !power) {
             state = !state;
+            playTickSound();
         }
         power = right.getPower() > 0 || left.getPower() > 0;
         
@@ -74,6 +75,7 @@ public class GateToggleLatch extends GateBase {
     
         if (item == null || item.getItem() != BPItems.screwdriver) {
             state = !state;
+            playTickSound();
             return true;
         } else {
             return super.onActivated(player, mop, item);

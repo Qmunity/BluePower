@@ -23,6 +23,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.InventoryCraftResult;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
@@ -38,10 +39,11 @@ import com.bluepowermod.tileentities.tier1.TileProjectTable;
  */
 public class ContainerProjectTable extends Container {
     
+    public final IInventory         craftResult = new InventoryCraftResult();
     private final TileProjectTable  projectTable;
     private final InventoryCrafting craftingGrid;
     private int                     itemsCrafted;
-    private boolean                 isRetrying = false;
+    private boolean                 isRetrying  = false;
     
     public ContainerProjectTable(InventoryPlayer invPlayer, TileProjectTable projectTable) {
     
@@ -55,7 +57,7 @@ public class ContainerProjectTable extends Container {
             }
         }
         
-        addSlotToContainer(new SlotProjectTableCrafting(projectTable, invPlayer.player, craftingGrid, projectTable.craftResult, 0, 127, 34));
+        addSlotToContainer(new SlotProjectTableCrafting(projectTable, invPlayer.player, craftingGrid, craftResult, 0, 127, 34));
         
         for (int i = 0; i < 2; ++i) {
             for (int j = 0; j < 9; ++j) {
@@ -87,7 +89,7 @@ public class ContainerProjectTable extends Container {
     @Override
     public void onCraftMatrixChanged(IInventory p_75130_1_) {
     
-        if (craftingGrid != null) projectTable.craftResult.setInventorySlotContents(0, CraftingManager.getInstance().findMatchingRecipe(craftingGrid, projectTable.getWorldObj()));
+        if (craftingGrid != null) craftResult.setInventorySlotContents(0, CraftingManager.getInstance().findMatchingRecipe(craftingGrid, projectTable.getWorldObj()));
     }
     
     @Override

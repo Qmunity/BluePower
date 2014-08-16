@@ -12,6 +12,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import com.bluepowermod.api.compat.IMultipartCompat;
 import com.bluepowermod.api.part.BPPart;
+import com.bluepowermod.api.part.BPPartFace;
 import com.bluepowermod.api.vec.Vector3;
 import com.bluepowermod.compat.CompatModule;
 import com.bluepowermod.tileentities.BPTileMultipart;
@@ -57,6 +58,13 @@ public class CompatModuleFMPAlt extends CompatModule implements IMultipartCompat
     public BPPart getClickedPart(Vector3 loc, Vector3 subLoc, EntityPlayer player, TileEntity tile) {
     
         return null;
+    }
+    
+    @Override
+    public void removePart(TileEntity tile, BPPart part) {
+    
+        BPTileMultipart te = (BPTileMultipart) tile;
+        te.removePart(part);
     }
     
     @Override
@@ -115,6 +123,15 @@ public class CompatModuleFMPAlt extends CompatModule implements IMultipartCompat
             }
         }
         return l;
+    }
+    
+    @Override
+    public <T> T getBPPartOnFace(TileEntity te, Class<T> searchedClass, ForgeDirection face) {
+    
+        List<T> parts = getBPParts(te, searchedClass);
+        for (T p : parts)
+            if (p instanceof BPPartFace) if (ForgeDirection.getOrientation(((BPPartFace) p).getFace()) == face) return p;
+        return null;
     }
     
     @Override

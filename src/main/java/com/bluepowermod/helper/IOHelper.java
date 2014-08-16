@@ -10,10 +10,11 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.oredict.OreDictionary;
 
 import com.bluepowermod.api.compat.IMultipartCompat;
-import com.bluepowermod.api.tube.ITubeConnection;
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
+import com.bluepowermod.api.tube.ITubeConnection;
 import com.bluepowermod.compat.CompatibilityUtils;
 import com.bluepowermod.part.tube.PneumaticTube;
 import com.bluepowermod.part.tube.TubeLogic;
@@ -79,6 +80,44 @@ public class IOHelper {
         return null;
     }
     
+    public static ItemStack extract(TileEntity tile, ForgeDirection direction, ItemStack requestedStack, boolean useItemCount, boolean simulate) {
+    
+        return extract(tile, direction, requestedStack, useItemCount, simulate, false);
+    }
+    
+    public static int[] getAccessibleSlotsForInventory(IInventory inv, ForgeDirection side) {
+    
+        int[] accessibleSlots;
+        if (inv != null) {
+            if (inv instanceof ISidedInventory) {
+                accessibleSlots = ((ISidedInventory) inv).getAccessibleSlotsFromSide(side.ordinal());
+            } else {
+                accessibleSlots = new int[inv.getSizeInventory()];
+                for (int i = 0; i < accessibleSlots.length; i++)
+                    accessibleSlots[i] = i;
+            }
+            return accessibleSlots;
+        } else {
+            return new int[0];
+        }
+    }
+    
+    public static int getItemCount(ItemStack type, TileEntity inv, ForgeDirection side) {
+    
+        IInventory inventory = getInventoryForTE(inv);
+        int[] slots = getAccessibleSlotsForInventory(inventory, side);
+        int count = 0;
+        for (int slot : slots) {
+            ItemStack invStack = inventory.getStackInSlot(slot);
+            if (invStack != null) {
+                if (type.isItemEqual(invStack)) {
+                    count += invStack.stackSize;
+                }
+            }
+        }
+        return count;
+    }
+    
     /**
      * Retrieves an item from the specified inventory. This item can be specified.
      * 
@@ -91,7 +130,7 @@ public class IOHelper {
      * @param simulate
      * @return
      */
-    public static ItemStack extract(TileEntity tile, ForgeDirection direction, ItemStack requestedStack, boolean useItemCount, boolean simulate) {
+    public static ItemStack extract(TileEntity tile, ForgeDirection direction, ItemStack requestedStack, boolean useItemCount, boolean simulate, boolean useNBT) {
     
         if (requestedStack == null) return requestedStack;
         IInventory inv = getInventoryForTE(tile);
@@ -107,7 +146,7 @@ public class IOHelper {
             int itemsFound = 0;
             for (int slot : accessibleSlots) {
                 ItemStack stack = inv.getStackInSlot(slot);
-                if (stack != null && stack.isItemEqual(requestedStack) && IOHelper.canExtractItemFromInventory(inv, stack, slot, direction.ordinal())) {
+                if (stack != null && OreDictionary.itemMatches(requestedStack, stack, false) && (!useNBT || ItemStack.areItemStackTagsEqual(stack, requestedStack)) && IOHelper.canExtractItemFromInventory(inv, stack, slot, direction.ordinal())) {
                     if (!useItemCount) {
                         if (!simulate) {
                             inv.setInventorySlotContents(slot, null);
@@ -121,7 +160,7 @@ public class IOHelper {
                 int itemsNeeded = requestedStack.stackSize;
                 for (int slot : accessibleSlots) {
                     ItemStack stack = inv.getStackInSlot(slot);
-                    if (stack != null && stack.isItemEqual(requestedStack) && IOHelper.canExtractItemFromInventory(inv, stack, slot, direction.ordinal())) {
+                    if (stack != null && OreDictionary.itemMatches(requestedStack, stack, false) && (!useNBT || ItemStack.areItemStackTagsEqual(stack, requestedStack)) && IOHelper.canExtractItemFromInventory(inv, stack, slot, direction.ordinal())) {
                         int itemsSubstracted = Math.min(itemsNeeded, stack.stackSize);
                         itemsNeeded -= itemsSubstracted;
                         if (!simulate) {

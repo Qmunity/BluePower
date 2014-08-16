@@ -26,13 +26,15 @@ import codechicken.lib.vec.Vector3;
 import codechicken.multipart.JItemMultiPart;
 import codechicken.multipart.TMultiPart;
 
+import com.bluepowermod.api.BPApi;
+import com.bluepowermod.api.item.IDatabaseSaveable;
 import com.bluepowermod.api.part.BPPart;
 import com.bluepowermod.init.CustomTabs;
 import com.bluepowermod.part.ItemBPPart;
 import com.bluepowermod.part.PartRegistry;
 import com.bluepowermod.util.Refs;
 
-public class ItemBPMultipart extends JItemMultiPart {
+public class ItemBPMultipart extends JItemMultiPart implements IDatabaseSaveable {
     
     public ItemBPMultipart() {
     
@@ -125,6 +127,32 @@ public class ItemBPMultipart extends JItemMultiPart {
         }
         
         return super.createEntity(world, location, itemstack);
+    }
+    
+    @Override
+    public boolean canGoInCopySlot(ItemStack stack) {
+    
+        BPPart part = PartRegistry.getInstance().createPartFromItem(stack);
+        BPApi.getInstance().loadSilkySettings(part, stack);
+        return part.canGoInCopySlot(stack);
+    }
+    
+    @Override
+    public boolean canCopy(ItemStack templateStack, ItemStack outputStack) {
+    
+        if (templateStack.getTagCompound().getString("id").equals(outputStack.getTagCompound().getString("id"))) {
+            return canGoInCopySlot(templateStack);
+        } else {
+            return false;
+        }
+    }
+    
+    @Override
+    public List<ItemStack> getItemsOnStack(ItemStack stack) {
+    
+        BPPart part = PartRegistry.getInstance().createPartFromItem(stack);
+        BPApi.getInstance().loadSilkySettings(part, stack);
+        return part.getItemsOnStack(stack);
     }
     
 }

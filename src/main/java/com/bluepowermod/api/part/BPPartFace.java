@@ -8,11 +8,9 @@
 
 package com.bluepowermod.api.part;
 
-import com.bluepowermod.api.helper.RedstoneHelper;
-import com.bluepowermod.api.part.redstone.IBPRedstonePart;
-import com.bluepowermod.api.util.ForgeDirectionUtils;
-import com.bluepowermod.api.vec.Vector3;
-import com.bluepowermod.api.vec.Vector3Cube;
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -20,21 +18,31 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+
 import org.lwjgl.opengl.GL11;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.bluepowermod.api.BPApi;
+import com.bluepowermod.api.block.ISilkyRemovable;
+import com.bluepowermod.api.helper.RedstoneHelper;
+import com.bluepowermod.api.part.redstone.IBPRedstonePart;
+import com.bluepowermod.api.util.ForgeDirectionUtils;
+import com.bluepowermod.api.vec.Vector3;
+import com.bluepowermod.api.vec.Vector3Cube;
+import com.bluepowermod.part.gate.ic.IntegratedCircuit;
 
 public abstract class BPPartFace extends BPPart implements IBPFacePart, IBPRedstonePart {
 
     private int face = 0;
     private int rotation = 0;
+    public IntegratedCircuit parentCircuit; // != null when connected to a circuit
 
     protected RedstoneConnection[] connections = new RedstoneConnection[4];
 
     private final List<Vector3Cube> selectionBoxes = new ArrayList<Vector3Cube>();
     private final List<Vector3Cube> collisionBoxes = new ArrayList<Vector3Cube>();
     private final List<Vector3Cube> occlusionBoxes = new ArrayList<Vector3Cube>();
+
+    private boolean setFace = false;
 
     @Override
     public int getFace() {
@@ -47,6 +55,7 @@ public abstract class BPPartFace extends BPPart implements IBPFacePart, IBPRedst
 
         this.face = face;
         notifyUpdate();
+        setFace = true;
     }
 
     @Override
@@ -65,6 +74,8 @@ public abstract class BPPartFace extends BPPart implements IBPFacePart, IBPRedst
     @Override
     public boolean canPlacePart(ItemStack is, EntityPlayer player, Vector3 block, MovingObjectPosition mop) {
 
+        if (this instanceof ISilkyRemovable)
+            BPApi.getInstance().loadSilkySettings(this, is);
         World world = block.getWorld();
         int x = block.getBlockX();
         int y = block.getBlockY();
@@ -129,7 +140,7 @@ public abstract class BPPartFace extends BPPart implements IBPFacePart, IBPRedst
     @Override
     public boolean canStay() {
 
-        if (getWorld() == null)
+        if (getWorld() == null || !setFace)
             return true;
 
         ForgeDirection d = ForgeDirection.getOrientation(getFace());
@@ -141,7 +152,7 @@ public abstract class BPPartFace extends BPPart implements IBPFacePart, IBPRedst
     }
 
     @Override
-    public final boolean canConnect(ForgeDirection side) {
+    public boolean canConnect(ForgeDirection side) {
 
         RedstoneConnection con = getConnection(FaceDirection.getDirection(ForgeDirection.getOrientation(getFace()), side, rotation));
         if (con == null)
@@ -151,13 +162,13 @@ public abstract class BPPartFace extends BPPart implements IBPFacePart, IBPRedst
     }
 
     @Override
-    public final int getStrongOutput(ForgeDirection side) {
+    public int getStrongOutput(ForgeDirection side) {
 
-        return getWeakOutput(side);
+        return 0;
     }
 
     @Override
-    public final int getWeakOutput(ForgeDirection side) {
+    public int getWeakOutput(ForgeDirection side) {
 
         RedstoneConnection con = getConnection(side);
         if (con == null)
@@ -176,7 +187,6 @@ public abstract class BPPartFace extends BPPart implements IBPFacePart, IBPRedst
     }
 
     public void rotateAndTranslateDynamic(Vector3 loc, int pass, float frame) {
-
 
         GL11.glTranslated(loc.getX(), loc.getY(), loc.getZ());
 
@@ -256,12 +266,14 @@ public abstract class BPPartFace extends BPPart implements IBPFacePart, IBPRedst
 
         super.update();
 
-        ForgeDirection face = ForgeDirection.getOrientation(getFace()).getOpposite();
+        if (parentCircuit == null) {
+            ForgeDirection face = ForgeDirection.getOrientation(getFace()).getOpposite();
 
-        for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
-            RedstoneConnection rc = getConnection(d);
-            if (rc != null && rc.isInput()) {
-                rc.setPower(RedstoneHelper.getInput(getWorld(), getX(), getY(), getZ(), d, face));
+            for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
+                RedstoneConnection rc = getConnection(d);
+                if (rc != null && rc.isInput()) {
+                    rc.setPower(RedstoneHelper.getInput(getWorld(), getX(), getY(), getZ(), d, face));
+                }
             }
         }
     }
@@ -371,6 +383,11 @@ public abstract class BPPartFace extends BPPart implements IBPFacePart, IBPRedst
 
     public void addOcclusionBoxes(List<AxisAlignedBB> boxes) {
 
+    }
+
+    public boolean hasSetFace() {
+
+        return setFace;
     }
 
 }
