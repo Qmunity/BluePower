@@ -17,19 +17,21 @@
 
 package com.bluepowermod.blocks.machines;
 
+import com.bluepowermod.blocks.BlockContainerBase;
+import com.bluepowermod.client.renderers.RendererBlockBase.EnumFaceType;
+import com.bluepowermod.tileentities.IRotatable;
+import com.bluepowermod.tileentities.tier1.TileIgniter;
+import com.bluepowermod.util.Refs;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.init.Blocks;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
-
-import com.bluepowermod.blocks.BlockContainerBase;
-import com.bluepowermod.client.renderers.RendererBlockBase.EnumFaceType;
-import com.bluepowermod.tileentities.tier1.TileIgniter;
-import com.bluepowermod.util.Refs;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockIgniter extends BlockContainerBase {
     
@@ -69,5 +71,25 @@ public class BlockIgniter extends BlockContainerBase {
     public boolean canConnectRedstone(IBlockAccess world, int x, int y, int z, int side) {
     
         return true;
+    }
+
+    @Override
+    public boolean rotateBlock(World worldObj, int x, int y, int z, ForgeDirection axis) {
+
+        TileEntity te = worldObj.getTileEntity(x, y, z);
+        if (te instanceof IRotatable) {
+            IRotatable rotatable = (IRotatable) te;
+            ForgeDirection dir = rotatable.getFacingDirection();
+            Block target = worldObj.getBlock(x + dir.offsetX, y + dir.offsetY, z + dir.offsetZ);
+            if (target == Blocks.fire || target == Blocks.portal) {
+                worldObj.setBlock(x + dir.offsetX, y + dir.offsetY, z + dir.offsetZ, Blocks.air);
+            }
+            dir = dir.getRotation(axis);
+            if (dir != ForgeDirection.UP && dir != ForgeDirection.DOWN || canRotateVertical()) {
+                rotatable.setFacingDirection(dir);
+                return true;
+            }
+        }
+        return false;
     }
 }
