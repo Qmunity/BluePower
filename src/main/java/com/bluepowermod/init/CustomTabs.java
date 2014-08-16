@@ -36,8 +36,8 @@ public class CustomTabs {
     public static CreativeTabs tabBluePowerCircuits;
     public static CreativeTabs tabBluePowerLighting;
     
-    public static void init() {
-    
+    static {
+        
         tabBluePowerBlocks = new BPCreativeTab("tabBluePowerBlocks") {
             
             @Override
