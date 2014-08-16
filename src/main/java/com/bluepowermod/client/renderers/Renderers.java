@@ -30,6 +30,8 @@ public class Renderers {
         MinecraftForgeClient.registerItemRenderer(BPItems.multipart, new RenderItemBPPart());
         RenderingRegistry.registerBlockHandler(new RendererBlockBase());
 
+        RenderingRegistry.registerBlockHandler(new RendererAlloyCrucible());
+
         RenderingRegistry.registerBlockHandler(new RenderLamp());
 
         ClientRegistry.bindTileEntitySpecialRenderer(TileEngine.class, new RenderEngine());
