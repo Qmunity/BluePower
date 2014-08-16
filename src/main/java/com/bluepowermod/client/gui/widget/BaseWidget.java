@@ -20,6 +20,7 @@ import java.awt.Rectangle;
 import java.util.List;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.util.ResourceLocation;
 
@@ -30,16 +31,17 @@ import org.lwjgl.opengl.GL11;
  */
 public class BaseWidget implements IGuiWidget {
     
-    private final int                id;
-    public int                       value;           //just a generic value
-    protected final int              x, y;
-    private final int                width;
-    private final int                height;
-    private final int                textureU;
-    private final int                textureV;
-    private final ResourceLocation[] textures;
-    protected int                    textureIndex = 0;
-    protected IWidgetListener        gui;
+    private final int                  id;
+    public int                         value;              //just a generic value
+    protected final int                x, y;
+    protected final int                width;
+    protected final int                height;
+    private final int                  textureU;
+    private final int                  textureV;
+    protected final ResourceLocation[] textures;
+    protected int                      textureIndex = 0;
+    protected IWidgetListener          gui;
+    public boolean                     enabled      = true;
     
     public BaseWidget(int id, int x, int y, int width, int height, String... textureLocs) {
     
@@ -76,7 +78,11 @@ public class BaseWidget implements IGuiWidget {
     @Override
     public void render(int mouseX, int mouseY) {
     
-        GL11.glColor4d(1, 1, 1, 1);
+        if (enabled) {
+            GL11.glColor4d(1, 1, 1, 1);
+        } else {
+            GL11.glColor4d(0.2, 0.2, 0.2, 1);
+        }
         if (textures.length > 0) Minecraft.getMinecraft().getTextureManager().bindTexture(textures[textureIndex]);
         Gui.func_146110_a(x, y, getTextureU(), getTextureV(), width, height, getTextureWidth(), getTextureHeight());
     }
@@ -104,6 +110,7 @@ public class BaseWidget implements IGuiWidget {
     @Override
     public void onMouseClicked(int mouseX, int mouseY, int button) {
     
+        Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.func_147674_a(new ResourceLocation("gui.button.press"), 1.0F));
         gui.actionPerformed(this);
     }
     
@@ -114,7 +121,7 @@ public class BaseWidget implements IGuiWidget {
     }
     
     @Override
-    public void addTooltip(List<String> curTip, boolean shiftPressed) {
+    public void addTooltip(int mouseX, int mouseY, List<String> curTip, boolean shiftPressed) {
     
     }
     

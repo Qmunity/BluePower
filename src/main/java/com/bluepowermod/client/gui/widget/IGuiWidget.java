@@ -13,7 +13,7 @@ public interface IGuiWidget {
     
     public void onMouseClicked(int mouseX, int mouseY, int button);
     
-    public void addTooltip(List<String> curTip, boolean shiftPressed);
+    public void addTooltip(int mouseX, int mouseY, List<String> curTip, boolean shiftPressed);
     
     public Rectangle getBounds();
 }

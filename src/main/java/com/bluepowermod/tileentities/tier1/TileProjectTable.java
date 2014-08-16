@@ -199,7 +199,7 @@ public class TileProjectTable extends TileBase implements IInventory, IGuiButton
     }
     
     @Override
-    public void onButtonPress(int messageId, int value) {
+    public void onButtonPress(EntityPlayer player, int messageId, int value) {
     
         for (int i = 0; i < craftingGrid.length; i++) {
             if (craftingGrid[i] != null) {

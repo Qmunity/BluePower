@@ -2,6 +2,8 @@ package com.bluepowermod.client.gui;
 
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.input.Keyboard;
@@ -19,36 +21,41 @@ import cpw.mods.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class GuiCircuitTable extends GuiBase {
     
-    private static final ResourceLocation guiTexture    = new ResourceLocation(Refs.MODID, "textures/gui/circuit_table.png");
-    private static final ResourceLocation scrollTexture = new ResourceLocation("textures/gui/container/creative_inventory/tabs.png");
-    private final TileCircuitTable        circuitTable;
+    protected static final ResourceLocation guiTexture    = new ResourceLocation(Refs.MODID, "textures/gui/circuit_table.png");
+    private static final ResourceLocation   scrollTexture = new ResourceLocation("textures/gui/container/creative_inventory/tabs.png");
+    private final TileCircuitTable          circuitTable;
     
     /** Amount scrolled in Creative mode inventory (0 = top, 1 = bottom) */
-    private float                         currentScroll;
+    private float                           currentScroll;
     
     /** True if the scrollbar is being dragged */
-    private boolean                       isScrolling;
+    private boolean                         isScrolling;
     
     /**
      * True if the left mouse button was held down last time drawScreen was called.
      */
-    private boolean                       wasClicking;
-    private GuiTextField                  searchField;
-    private final boolean                 firstRun      = true;
-    private int                           ticksExisted;
+    private boolean                         wasClicking;
+    private GuiTextField                    searchField;
+    private final boolean                   firstRun      = true;
+    private int                             ticksExisted;
     
     /**
      * Used to back up the ContainerSearcher's inventory slots before filling it with the player's inventory slots for
      * the inventory tab.
      */
     //private List backupContainerSlots;
-    private boolean                       field_74234_w;
+    private boolean                         field_74234_w;
     
-    private final boolean[]               displayRed    = new boolean[24];
+    private final boolean[]                 displayRed    = new boolean[24];
     
     public GuiCircuitTable(InventoryPlayer invPlayer, TileCircuitTable circuitTable) {
     
-        super(circuitTable, new ContainerCircuitTable(invPlayer, circuitTable), guiTexture);
+        this(circuitTable, new ContainerCircuitTable(invPlayer, circuitTable), guiTexture);
+    }
+    
+    public GuiCircuitTable(TileCircuitTable circuitTable, Container container, ResourceLocation resLoc) {
+    
+        super(circuitTable, container, resLoc);
         allowUserInput = true;
         ySize = 224;
         this.circuitTable = circuitTable;
@@ -86,7 +93,14 @@ public class GuiCircuitTable extends GuiBase {
     protected void mouseClicked(int x, int y, int button) {
     
         super.mouseClicked(x, y, button);
-        searchField.mouseClicked(x, y, button);
+        if (isTextfieldEnabled()) {
+            searchField.mouseClicked(x, y, button);
+            if (searchField.isFocused() && button == 1) {
+                searchField.setText("");
+                circuitTable.setText(0, searchField.getText());
+                NetworkHandler.sendToServer(new MessageUpdateTextfield(circuitTable, 0));
+            }
+        }
     }
     
     /**
@@ -104,11 +118,13 @@ public class GuiCircuitTable extends GuiBase {
         {
             super.keyTyped(par1, par2);
         } else {
-            if (searchField.textboxKeyTyped(par1, par2)) {
-                circuitTable.setText(0, searchField.getText());
-                NetworkHandler.sendToServer(new MessageUpdateTextfield(circuitTable, 0));
-            } else {
-                super.keyTyped(par1, par2);
+            if (isTextfieldEnabled()) {
+                if (searchField.textboxKeyTyped(par1, par2)) {
+                    circuitTable.setText(0, searchField.getText());
+                    NetworkHandler.sendToServer(new MessageUpdateTextfield(circuitTable, 0));
+                } else {
+                    super.keyTyped(par1, par2);
+                }
             }
         }
     }
@@ -119,11 +135,8 @@ public class GuiCircuitTable extends GuiBase {
     @Override
     protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3) {
     
-        mc.getTextureManager().bindTexture(guiTexture);
-        int xStart = (width - xSize) / 2;
-        int yStart = (height - ySize) / 2;
-        drawTexturedModalRect(xStart, yStart, 0, 0, xSize, ySize);
-        searchField.drawTextBox();
+        super.drawGuiContainerBackgroundLayer(par1, par2, par3);
+        if (isTextfieldEnabled()) searchField.drawTextBox();
         
         int i1 = guiLeft + 156;
         int k = guiTop + 48;
@@ -145,8 +158,18 @@ public class GuiCircuitTable extends GuiBase {
     
         super.updateScreen();
         for (int i = 0; i < 24; i++) {
-            displayRed[i] = inventorySlots.getSlot(i).getHasStack() ? !SlotCircuitTableCrafting.canCraft(inventorySlots.getSlot(i).getStack(), circuitTable) : false;
+            displayRed[i] = inventorySlots.getSlot(i).getHasStack() ? shouldDisplayRed(inventorySlots.getSlot(i).getStack()) : false;
         }
+    }
+    
+    protected boolean shouldDisplayRed(ItemStack stack) {
+    
+        return !SlotCircuitTableCrafting.canCraft(stack, circuitTable);
+    }
+    
+    protected boolean isTextfieldEnabled() {
+    
+        return true;
     }
     
 }

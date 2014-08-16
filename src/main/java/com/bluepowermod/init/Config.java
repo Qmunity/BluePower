@@ -78,6 +78,8 @@ public class Config {
     public static boolean  enableGateSounds;
     public static String   tubeRenderMode;
     
+    public static boolean  serverCircuitSavingOpOnly;
+    
     public static void syncConfig(Configuration config) {
     
         config.addCustomCategoryComment(Refs.CONFIG_WORLDGEN, "Toggle blocks being generated into the world");
@@ -138,6 +140,8 @@ public class Config {
         if (!tubeRenderMode.equals("normal") && !tubeRenderMode.equals("reduced") && !tubeRenderMode.equals("none")) {
             tubeRenderMode = "auto";
         }
+        
+        serverCircuitSavingOpOnly = config.get(Refs.CONFIG_CIRCUIT_DATABASE, "Server Template Saving by Ops only", false).getBoolean(false);
         
         config.addCustomCategoryComment(Refs.CONFIG_ENCHANTS, "Toggle enchantment ids");
         vorpalEnchantmentId = config.get(Refs.CONFIG_ENCHANTS, "vorpalEnchantmentId", 100).getInt();

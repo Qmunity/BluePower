@@ -16,16 +16,18 @@
  */
 package com.bluepowermod.client.gui.widget;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.PositionedSoundRecord;
-import net.minecraft.util.ResourceLocation;
-
 /**
  * @author MineMaarten
  */
 public class WidgetMode extends BaseWidget {
     
     public final int maxMode;
+    
+    public WidgetMode(int id, int x, int y, int textureX, int textureY, int maxMode, String texture) {
+    
+        super(id, x, y, 14, 14, textureX, textureY, texture);
+        this.maxMode = maxMode;
+    }
     
     public WidgetMode(int id, int x, int y, int textureX, int maxMode, String texture) {
     
@@ -41,14 +43,13 @@ public class WidgetMode extends BaseWidget {
         } else if (button == 1) {
             if (--value < 0) value = maxMode - 1;
         }
-        Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.func_147674_a(new ResourceLocation("gui.button.press"), 1.0F));
         super.onMouseClicked(mouseX, mouseY, button);
     }
     
     @Override
     protected int getTextureV() {
     
-        return value * 14;
+        return super.getTextureV() + value * 14;
     }
     
     @Override

@@ -24,7 +24,7 @@ public class Refs {
     private static final String  MAJOR                          = "@MAJOR@";
     private static final String  MINOR                          = "@MINOR@";
     private static final String  BUILD                          = "@BUILD_NUMBER@";
-    private static final String  MCVERSION                      = "1.7.2";
+    private static final String  MCVERSION                      = "1.7.10";
     
     public static final String   MACHINE_TEXTURE_LOCATION       = "machines/";
     public static final String   MODEL_LOCATION                 = "models/";
@@ -177,6 +177,7 @@ public class Refs {
     
     public static final String   PROJECTTABLE_NAME              = "project_table";
     public static final String   CIRCUITTABLE_NAME              = "circuit_table";
+    public static final String   CIRCUITDATABASE_NAME           = "circuit_database";
     public static final String   BLUESTONETORCH_NAME            = "bluestone_torch";
     
     public static final String   BLOCKCPU_NAME                  = "cpu";
@@ -200,6 +201,7 @@ public class Refs {
     public static final String   CONFIG_RECIPES                 = "recipe enabling";
     public static final String   CONFIG_ENCHANTS                = "enchantment ids";
     public static final String   CONFIG_TUBES                   = "pneumatic tube options";
+    public static final String   CONFIG_CIRCUIT_DATABASE        = "circuit database options";
     
     public static String fullVersionString() {
     

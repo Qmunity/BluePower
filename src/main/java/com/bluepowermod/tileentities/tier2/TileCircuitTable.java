@@ -1,6 +1,7 @@
 package com.bluepowermod.tileentities.tier2;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -23,7 +24,7 @@ import com.bluepowermod.tileentities.TileBase;
  */
 public class TileCircuitTable extends TileBase implements IInventory, IGuiButtonSensitive, IGUITextFieldSensitive {
     
-    private ItemStack[]         inventory        = new ItemStack[18];
+    protected ItemStack[]       inventory        = new ItemStack[18];
     public final InventoryBasic circuitInventory = new InventoryBasic("circuitInventory", false, 24);
     private int                 slotsScrolled;
     private String              textboxString    = "";
@@ -35,7 +36,11 @@ public class TileCircuitTable extends TileBase implements IInventory, IGuiButton
     
     public void updateGateInventory() {
     
-        List<ItemStack> gates = getApplicableGates();
+        List<ItemStack> gates = getApplicableItems();
+        Iterator<ItemStack> iterator = gates.iterator();
+        while (iterator.hasNext()) {
+            if (!iterator.next().getDisplayName().toLowerCase().contains(textboxString.toLowerCase())) iterator.remove();
+        }
         slotsScrolled = Math.max(0, Math.min(slotsScrolled, (gates.size() - 17) / 8));
         for (int i = 0; i < circuitInventory.getSizeInventory(); i++) {
             ItemStack stack = gates.size() > slotsScrolled * 8 + i ? gates.get(slotsScrolled * 8 + i) : null;
@@ -43,7 +48,7 @@ public class TileCircuitTable extends TileBase implements IInventory, IGuiButton
         }
     }
     
-    private List<ItemStack> getApplicableGates() {
+    protected List<ItemStack> getApplicableItems() {
     
         List<ItemStack> gates = new ArrayList<ItemStack>();
         List<String> registeredParts = PartRegistry.getInstance().getRegisteredParts();
@@ -51,18 +56,16 @@ public class TileCircuitTable extends TileBase implements IInventory, IGuiButton
             BPPart part = PartRegistry.getInstance().createPart(partId);
             if (part instanceof GateBase && ((GateBase) part).isCraftableInCircuitTable()) {
                 ItemStack partStack = PartRegistry.getInstance().getItemForPart(partId);
-                if (partStack.getDisplayName().toLowerCase().contains(textboxString.toLowerCase())) {
-                    gates.add(partStack);
-                }
+                gates.add(partStack);
             }
         }
         return gates;
     }
     
     @Override
-    public void onButtonPress(int messageId, int value) {
+    public void onButtonPress(EntityPlayer player, int messageId, int value) {
     
-        slotsScrolled = value;
+        if (messageId == 0) slotsScrolled = value;
         updateGateInventory();
     }
     

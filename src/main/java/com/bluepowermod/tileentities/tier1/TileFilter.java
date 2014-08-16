@@ -235,7 +235,7 @@ public class TileFilter extends TileTransposer implements ISidedInventory, IGuiB
     }
 
     @Override
-    public void onButtonPress(int messageId, int value) {
+    public void onButtonPress(EntityPlayer player, int messageId, int value) {
 
         if (messageId == 0)
             filterColor = TubeColor.values()[value];

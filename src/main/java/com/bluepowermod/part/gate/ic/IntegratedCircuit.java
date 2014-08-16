@@ -484,7 +484,7 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
                         gate = new WireBluestone();
                     }
                     ItemStack partStack = PartRegistry.getInstance().getItemForPart(gate.getType());
-                    getWorld().spawnEntityInWorld(new EntityItem(getWorld(), getX() + 0.5, getY() + 0.5, getZ() + 0.5, partStack));
+                    drops.add(partStack);
                 }
             }
         }
@@ -520,6 +520,34 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
     
         // TODO Auto-generated method stub
         
+    }
+    
+    /**
+     * Return true if the ItemStack that's being 'injected' with info is a stack that can be injected.
+     * This method is only called when itemStack.isItemEqual(otherStack) returned true.
+     * @param outputStack
+     * @return false to disallow copying.
+     */
+    @Override
+    public boolean canGoInCopySlot(ItemStack stack) {
+    
+        return true;
+    }
+    
+    /**
+     * Items that contain items (an Integrated Circuit with gates on it) need to compare the input and output, and tell
+     * which items are required. With this method you can tell the Circuit Database what items the item carries, so it can
+     * calculate which items it needs.
+     * @param templateStack
+     * @param outputStack
+     * @return null is a valid return.
+     */
+    @Override
+    public List<ItemStack> getItemsOnStack(ItemStack stack) {
+    
+        List<ItemStack> items = getDrops();
+        items.remove(0); //remove the part itself
+        return items;
     }
     
     @Override

@@ -1,5 +1,6 @@
 package com.bluepowermod.tileentities.tier2;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -63,12 +64,12 @@ public class TileRetriever extends TileFilter {
     }
     
     @Override
-    public void onButtonPress(int messageId, int value) {
+    public void onButtonPress(EntityPlayer player, int messageId, int value) {
     
         if (messageId == 1) {
             mode = value;
         } else {
-            super.onButtonPress(messageId, value);
+            super.onButtonPress(player, messageId, value);
         }
     }
     
