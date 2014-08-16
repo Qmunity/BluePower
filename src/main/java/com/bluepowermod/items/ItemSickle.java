@@ -17,10 +17,12 @@
 
 package com.bluepowermod.items;
 
-import java.util.Set;
-
+import com.bluepowermod.init.CustomTabs;
+import com.bluepowermod.util.Refs;
+import com.google.common.collect.Sets;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
+import net.minecraft.block.BlockLilyPad;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -29,9 +31,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTool;
 import net.minecraft.world.World;
 
-import com.bluepowermod.init.CustomTabs;
-import com.bluepowermod.util.Refs;
-import com.google.common.collect.Sets;
+import java.util.Set;
 
 public class ItemSickle extends ItemTool {
 
@@ -108,12 +108,12 @@ public class ItemSickle extends ItemTool {
             return used;
         }
 
-        for (int i = -2; i <= 2; i++)
-            for (int j = -2; j <= 2; j++) {
-                Block blockToCheck = world.getBlock(x + i, y, z + j);
-                int meta = world.getBlockMetadata(x + i, y, z + j);
-                if (blockToCheck != null) {
-                    if (blockToCheck instanceof BlockBush) {
+        if ((block != null) && (block instanceof BlockLilyPad)) {
+            for (int i = -2; i <= 2; i++) {
+                for (int j = -2; j <= 2; j++) {
+                    Block blockToCheck = world.getBlock(x + i, y, z + j);
+                    int meta = world.getBlockMetadata(x + i, y, z + j);
+                    if (blockToCheck != null && blockToCheck instanceof BlockLilyPad) {
                         if (blockToCheck.canHarvestBlock(player, meta)) {
                             blockToCheck.harvestBlock(world, player, x + i, y, z + j, meta);
                         }
@@ -122,6 +122,24 @@ public class ItemSickle extends ItemTool {
                     }
                 }
             }
+        }
+        if ((block != null) && !(block instanceof BlockLilyPad)) {
+            for (int i = -2; i <= 2; i++) {
+                for (int j = -2; j <= 2; j++) {
+                    Block blockToCheck = world.getBlock(x + i, y, z + j);
+                    int meta = world.getBlockMetadata(x + i, y, z + j);
+                    if (blockToCheck != null) {
+                        if (blockToCheck instanceof BlockBush && !(blockToCheck instanceof BlockLilyPad)) {
+                            if (blockToCheck.canHarvestBlock(player, meta)) {
+                                blockToCheck.harvestBlock(world, player, x + i, y, z + j, meta);
+                            }
+                            world.setBlock(x + i, y, z + j, Blocks.air);
+                            used = true;
+                        }
+                    }
+                }
+            }
+        }
         if (used) {
             itemStack.damageItem(1, entityLiving);
         }
