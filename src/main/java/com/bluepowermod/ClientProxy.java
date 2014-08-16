@@ -27,14 +27,19 @@ import org.lwjgl.input.Keyboard;
 import com.bluepowermod.client.renderers.IconSupplier;
 import com.bluepowermod.client.renderers.Renderers;
 import com.bluepowermod.compat.CompatibilityUtils;
+import com.bluepowermod.events.BPEventHandlerClient;
 
 import cpw.mods.fml.client.FMLClientHandler;
 
 public class ClientProxy extends CommonProxy {
 
+    public static int mouseX = -1;
+    public static int mouseY = -1;
+
     @Override
     public void init() {
 
+        MinecraftForge.EVENT_BUS.register(new BPEventHandlerClient());
     }
 
     @Override
@@ -61,5 +66,17 @@ public class ClientProxy extends CommonProxy {
     public static GuiScreen getOpenedGui() {
 
         return FMLClientHandler.instance().getClient().currentScreen;
+    }
+
+    @Override
+    public int getMouseX() {
+
+        return mouseX;
+    }
+
+    @Override
+    public int getMouseY() {
+
+        return mouseY;
     }
 }

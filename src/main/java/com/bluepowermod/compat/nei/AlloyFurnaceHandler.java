@@ -4,15 +4,20 @@ import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.block.Block;
 import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import codechicken.nei.NEIClientUtils;
+import net.minecraftforge.fluids.Fluid;
 import codechicken.nei.NEIServerUtils;
 import codechicken.nei.PositionedStack;
-import codechicken.nei.recipe.TemplateRecipeHandler;
+import codechicken.nei.recipe.FurnaceRecipeHandler;
 
 import com.bluepowermod.api.recipe.IAlloyFurnaceRecipe;
+import com.bluepowermod.blocks.BlockBPFluid;
 import com.bluepowermod.client.gui.GuiAlloyCrucible;
+import com.bluepowermod.client.gui.widget.WidgetTank;
+import com.bluepowermod.helper.FluidHelper;
 import com.bluepowermod.recipe.AlloyFurnaceRegistry;
 import com.bluepowermod.recipe.AlloyFurnaceRegistry.StandardAlloyFurnaceRecipe;
 import com.bluepowermod.util.Refs;
@@ -22,18 +27,26 @@ import com.bluepowermod.util.Refs;
  * @author MineMaarten
  */
 
-public class AlloyFurnaceHandler extends TemplateRecipeHandler {
+public class AlloyFurnaceHandler extends FurnaceRecipeHandler {
+
+    private WidgetTank tank;
+
+    public AlloyFurnaceHandler() {
+
+        tank = new WidgetTank(0, 134, 8, 16, 48, null);
+        tank.setCapacity(AlloyFurnaceRegistry.TANK_SIZE);
+    }
 
     @Override
     public String getRecipeName() {
 
-        return "Alloy Furnace";
+        return "Alloy Crucible";
     }
 
     @Override
     public String getGuiTexture() {
 
-        return Refs.MODID + ":textures/GUI/alloy_furnace.png";
+        return Refs.MODID + ":textures/GUI/alloy_crucible.png";
     }
 
     /**
@@ -63,6 +76,23 @@ public class AlloyFurnaceHandler extends TemplateRecipeHandler {
     }
 
     @Override
+    public void drawForeground(int recipe) {
+
+        super.drawForeground(recipe);
+
+        ItemStack[] input = new ItemStack[9];
+
+        int i = 0;
+        for (PositionedStack ps : getIngredientStacks(recipe)) {
+            input[i] = ps.item;
+            i++;
+        }
+
+        tank.setFluid(AlloyFurnaceRegistry.getInstance().getMatchingRecipe(input, null).getResult(null));
+        tank.render(0, 0);
+    }
+
+    @Override
     public void loadCraftingRecipes(String outputId, Object... results) {
 
         if (outputId.equals(getRecipesID())) {
@@ -77,18 +107,26 @@ public class AlloyFurnaceHandler extends TemplateRecipeHandler {
 
     private String getRecipesID() {
 
-        return "alloyFurnace";
+        return "alloyCrucible";
     }
 
     @Override
     public void loadCraftingRecipes(ItemStack result) {
 
-        for (IAlloyFurnaceRecipe recipe : AlloyFurnaceRegistry.getInstance().getAllRecipes())
-            if (recipe instanceof AlloyFurnaceRegistry.StandardAlloyFurnaceRecipe) {
-                if (NEIClientUtils.areStacksSameTypeCrafting(recipe.getResult(null), result)) {
-                    arecipes.add(new AlloyRecipe((AlloyFurnaceRegistry.StandardAlloyFurnaceRecipe) recipe));
-                }
+        if (result.getItem() instanceof ItemBlock) {
+            Block b = Block.getBlockFromItem(result.getItem());
+            if (b instanceof BlockBPFluid) {
+
+                Fluid fluid = FluidHelper.getFluid(b.getUnlocalizedName());
+
+                for (IAlloyFurnaceRecipe recipe : AlloyFurnaceRegistry.getInstance().getAllRecipes())
+                    if (recipe instanceof AlloyFurnaceRegistry.StandardAlloyFurnaceRecipe) {
+                        if (recipe.getResult(null).getFluid() == fluid) {
+                            arecipes.add(new AlloyRecipe((AlloyFurnaceRegistry.StandardAlloyFurnaceRecipe) recipe));
+                        }
+                    }
             }
+        }
     }
 
     @Override
@@ -109,12 +147,10 @@ public class AlloyFurnaceHandler extends TemplateRecipeHandler {
 
     public class AlloyRecipe extends CachedRecipe {
 
-        private final PositionedStack craftingResult;
         private final List<PositionedStack> requiredItems;
 
         public AlloyRecipe(StandardAlloyFurnaceRecipe alloyRecipe) {
 
-            craftingResult = new PositionedStack(alloyRecipe.getResult(null), 129, 24);
             requiredItems = new ArrayList<PositionedStack>();
             int x = 0, y = 0;
             for (ItemStack requiredItem : alloyRecipe.getRequiredItems()) {
@@ -129,7 +165,7 @@ public class AlloyFurnaceHandler extends TemplateRecipeHandler {
         @Override
         public PositionedStack getResult() {
 
-            return craftingResult;
+            return null;
         }
 
         @Override

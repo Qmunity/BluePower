@@ -20,22 +20,32 @@ package com.bluepowermod;
 import net.minecraft.entity.player.EntityPlayer;
 
 public class CommonProxy {
-    
+
     public void init() {
-    
+
     }
-    
+
     public void initRenderers() {
-    
+
     }
-    
+
     public EntityPlayer getPlayer() {
-    
+
         return null;
     }
-    
+
     public boolean isSneakingInGui() {
-    
+
         return false;
+    }
+
+    public int getMouseX() {
+
+        return -1;
+    }
+
+    public int getMouseY() {
+
+        return -1;
     }
 }
