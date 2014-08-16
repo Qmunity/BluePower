@@ -142,7 +142,7 @@ public class BlockCrop extends BlockCrops implements IGrowable {
                     || (!world.isAirBlock(x, y + 1, z))) {
                 return;
             }
-            if (random.nextInt(30) == 0) {
+            if (random.nextInt(45) == 0) {
                 world.setBlockMetadataWithNotify(x, y, z, meta + 1, 2);
             }
             if ((meta > 6) && (world.getBlock(x, y - 1, z) == Blocks.farmland) && (world.getBlock(x, y + 1, z) == Blocks.air)) {
