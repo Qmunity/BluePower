@@ -18,14 +18,18 @@
 package com.bluepowermod.blocks.machines;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.World;
 
+import com.bluepowermod.helper.ItemStackDatabase;
+import com.bluepowermod.network.NetworkHandler;
+import com.bluepowermod.network.messages.MessageSendClientServerTemplates;
+import com.bluepowermod.tileentities.TileBase;
 import com.bluepowermod.tileentities.tier3.TileCircuitDatabase;
 
 public class BlockCircuitDatabase extends BlockProjectTable {
     
-    public BlockCircuitDatabase(Class<? extends TileEntity> tileClass) {
+    public BlockCircuitDatabase(Class<? extends TileBase> tileClass) {
     
         super(tileClass);
     }
@@ -36,7 +40,9 @@ public class BlockCircuitDatabase extends BlockProjectTable {
         if (super.onBlockActivated(world, x, y, z, player, par6, par7, par8, par9)) {
             TileCircuitDatabase database = (TileCircuitDatabase) world.getTileEntity(x, y, z);
             database.clientCurrentTab = 0;
-            //  if (!world.isRemote) NetworkHandler.sendTo(new MessageSendClientServerTemplates(database.stackDatabase.loadItemStacks()), (EntityPlayerMP) player);
+            if (!world.isRemote) {
+                NetworkHandler.sendTo(new MessageSendClientServerTemplates(new ItemStackDatabase().loadItemStacks()), (EntityPlayerMP) player);
+            }
             return true;
         } else {
             return false;

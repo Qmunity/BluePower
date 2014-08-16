@@ -198,8 +198,9 @@ public class GUIHandler implements IGuiHandler {
             case MANAGER_ID:
                 return new GuiManager(player.inventory, (TileManager) ent);
             case CIRCUITDATABASE_MAIN_ID:
+                return new GuiCircuitDatabaseMain(player.inventory, (TileCircuitDatabase) ent);
             case CIRCUITDATABASE_SHARING_ID:
-                return new GuiCircuitDatabase(player.inventory, (TileCircuitDatabase) ent, GuiIDs.values()[ID]);
+                return new GuiCircuitDatabaseSharing(player.inventory, (TileCircuitDatabase) ent);
             default:
                 break;
         }

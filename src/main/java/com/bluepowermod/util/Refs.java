@@ -201,6 +201,7 @@ public class Refs {
     public static final String   CONFIG_RECIPES                 = "recipe enabling";
     public static final String   CONFIG_ENCHANTS                = "enchantment ids";
     public static final String   CONFIG_TUBES                   = "pneumatic tube options";
+    public static final String   CONFIG_CIRCUIT_DATABASE        = "circuit database options";
     
     public static String fullVersionString() {
     

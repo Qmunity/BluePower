@@ -4,16 +4,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryBasic;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ChatComponentTranslation;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import com.bluepowermod.BluePower;
 import com.bluepowermod.api.item.IDatabaseSaveable;
 import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.helper.ItemStackDatabase;
 import com.bluepowermod.init.BPBlocks;
+import com.bluepowermod.init.Config;
+import com.bluepowermod.network.NetworkHandler;
+import com.bluepowermod.network.messages.MessageCircuitDatabaseTemplate;
+import com.bluepowermod.network.messages.MessageSendClientServerTemplates;
+import com.bluepowermod.references.GuiIDs;
 import com.bluepowermod.tileentities.tier2.TileCircuitTable;
 
 public class TileCircuitDatabase extends TileCircuitTable {
@@ -56,9 +64,10 @@ public class TileCircuitDatabase extends TileCircuitTable {
     
         switch (messageId) {
             case 1:
-                //  player.openGui(BluePower.instance, value == 0 ? GuiIDs.CIRCUITDATABASE_MAIN_ID.ordinal() : GuiIDs.CIRCUITDATABASE_SHARING_ID.ordinal(), worldObj, xCoord, yCoord, zCoord);
+                player.openGui(BluePower.instance, value == 0 ? GuiIDs.CIRCUITDATABASE_MAIN_ID.ordinal() : GuiIDs.CIRCUITDATABASE_SHARING_ID.ordinal(), worldObj, xCoord, yCoord, zCoord);
                 break;
             case 2:
+                if (value == 2 && !hasPermissions(player)) return;
                 selectedShareOption = value;
                 if (selectedShareOption > 0) {
                     triggeringPlayer = player;
@@ -74,6 +83,17 @@ public class TileCircuitDatabase extends TileCircuitTable {
         
         }
         super.onButtonPress(player, messageId, value);
+    }
+    
+    public static boolean hasPermissions(EntityPlayer player) {
+    
+        if (Config.serverCircuitSavingOpOnly) {
+            if (!player.canCommandSenderUseCommand(2, "saveTemplate")) {
+                player.addChatMessage(new ChatComponentTranslation("gui.circuitDatabase.info.opsOnly"));
+                return false;
+            }
+        }
+        return true;
     }
     
     @Override
@@ -190,8 +210,11 @@ public class TileCircuitDatabase extends TileCircuitTable {
                 if (curUploadProgress >= 0) {
                     if (++curUploadProgress > UPLOAD_AND_COPY_TIME) {
                         curUploadProgress = -1;
-                        //  if (selectedShareOption == 1 && triggeringPlayer != null) NetworkHandler.sendTo(new MessageCircuitDatabaseTemplate(this, copyInventory.getStackInSlot(0)), (EntityPlayerMP) triggeringPlayer);
-                        // if (selectedShareOption == 2) stackDatabase.saveItemStack(copyInventory.getStackInSlot(0));
+                        if (selectedShareOption == 1 && triggeringPlayer != null) NetworkHandler.sendTo(new MessageCircuitDatabaseTemplate(this, copyInventory.getStackInSlot(0)), (EntityPlayerMP) triggeringPlayer);
+                        if (selectedShareOption == 2) {
+                            stackDatabase.saveItemStack(copyInventory.getStackInSlot(0));
+                            NetworkHandler.sendToAll(new MessageSendClientServerTemplates(stackDatabase.loadItemStacks()));
+                        }
                         selectedShareOption = 0;
                     }
                 }

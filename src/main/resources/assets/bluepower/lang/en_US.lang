@@ -443,6 +443,9 @@ gui.circuitDatabase.action.copy=Copy
 
 gui.circuitDatabase.info.serverOnly=§cOnly available on a server.
 gui.circuitDatabase.info.nameTaken=§cName of the item already exists in the database.
+gui.circuitDatabase.info.opsOnly=§cServer is configurated to only allow ops to interact with the server library.
+gui.circuitDatabase.info.sneakClickToConfirmDeleting=§cAre you sure? Sneak-click to confirm.
+gui.circuitDatabase.info.sneakClickToDelete=Sneak-click to delete.
 
 gui.circuitDatabase.name=Name:
 
@@ -487,6 +490,7 @@ bluepower.config.settings.tooltip=General mod settings.
 bluepower.config.recipes.tooltip=Recipe settings.
 bluepower.config.enchantments.tooltip=Enchantment settings.
 bluepower.config.tubes.tooltip=Pneumatic Tube options.
+bluepower.config.circuitDatabase=Circuit Database options.
 bluepower.config.copper.tooltip=Adjust copper world generation.
 bluepower.config.zinc.tooltip=Adjust zinc world generation.
 bluepower.config.silver.tooltip=Adjust silver world generation.
