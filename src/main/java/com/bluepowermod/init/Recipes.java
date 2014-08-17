@@ -132,7 +132,7 @@ public class Recipes {
             GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.screwdriver, 1), "# ", " S", '#', "ingotIron", 'S', BPItems.screwdriver_handle));
         } else {
             GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.screwdriver, 1), "  #", " # ", "S  ", '#', "ingotIron", 'S', "stickWood"));
-            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.screwdriver, 1), "#  ", " # ", " S", '#', "ingotIron", 'S', "stickWood"));
+            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.screwdriver, 1), "#  ", " # ", "  S", '#', "ingotIron", 'S', "stickWood"));
         }
         
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.athame, 1), "# ", " S", '#', "ingotSilver", 'S', "stickWood"));
