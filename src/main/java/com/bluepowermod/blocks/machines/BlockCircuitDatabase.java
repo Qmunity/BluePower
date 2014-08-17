@@ -17,8 +17,11 @@
 
 package com.bluepowermod.blocks.machines;
 
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.util.IIcon;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import com.bluepowermod.helper.ItemStackDatabase;
@@ -27,11 +30,35 @@ import com.bluepowermod.network.messages.MessageSendClientServerTemplates;
 import com.bluepowermod.tileentities.TileBase;
 import com.bluepowermod.tileentities.tier3.TileCircuitDatabase;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 public class BlockCircuitDatabase extends BlockProjectTable {
     
     public BlockCircuitDatabase(Class<? extends TileBase> tileClass) {
     
         super(tileClass);
+    }
+    
+    @Override
+    @SideOnly(Side.CLIENT)
+    public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
+    
+        if (side < 2) {
+            return super.getIcon(world, x, y, z, side);
+        } else {
+            return textureSide;
+        }
+        
+    }
+    
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void registerBlockIcons(IIconRegister iconRegister) {
+    
+        textureTop = iconRegister.registerIcon(getTextureName() + "_top");
+        textureBottom = iconRegister.registerIcon(getTextureName() + "_bottom");
+        textureSide = iconRegister.registerIcon(getTextureName() + "_side");
     }
     
     @Override
