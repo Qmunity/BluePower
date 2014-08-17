@@ -40,6 +40,7 @@ public class ItemSeedBag extends ItemBase {
         this.setCreativeTab(CustomTabs.tabBluePowerItems);
         this.setUnlocalizedName(name);
         this.setTextureName(Refs.MODID + ":" + name);
+        this.maxStackSize = 1;
     }
     
     public static ItemStack getSeedType(ItemStack seedBag)
