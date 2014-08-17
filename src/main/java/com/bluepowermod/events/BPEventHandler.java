@@ -1,6 +1,7 @@
 package com.bluepowermod.events;
 
 import net.minecraft.client.resources.I18n;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.monster.EntityCreeper;
@@ -15,6 +16,7 @@ import net.minecraft.tileentity.TileEntityHopper;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraftforge.event.AnvilUpdateEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
@@ -26,6 +28,7 @@ import com.bluepowermod.client.gui.GuiCircuitDatabaseSharing;
 import com.bluepowermod.containers.ContainerSeedBag;
 import com.bluepowermod.containers.inventorys.InventoryItem;
 import com.bluepowermod.init.BPEnchantments;
+import com.bluepowermod.init.BPItems;
 import com.bluepowermod.items.ItemSeedBag;
 import com.bluepowermod.items.ItemSickle;
 import com.bluepowermod.util.Dependencies;
@@ -48,6 +51,19 @@ public class BPEventHandler {
             event.player.addChatComponentMessage(new ChatComponentText(EnumChatFormatting.RED + "WARNING: You're running BluePower without having " + EnumChatFormatting.RED + "ForgeMultipart installed. Even though it will work, " + EnumChatFormatting.RED + "ForgeMultipart is "
                     + EnumChatFormatting.BOLD + "highly" + EnumChatFormatting.RESET + EnumChatFormatting.RED + " recommended. Continue at own risk, " + EnumChatFormatting.RED + "expect bugs."));
             warned = true;
+        }
+    }
+    
+    @SubscribeEvent
+    public void onAnvilEvent(AnvilUpdateEvent event) {
+    
+        if (event.left != null && event.left.getItem() == BPItems.screwdriver) {
+            if (event.right != null && event.right.getItem() == Items.enchanted_book) {
+                if (EnchantmentHelper.getEnchantments(event.right).get(Enchantment.silkTouch.effectId) != null) {
+                    event.output = new ItemStack(BPItems.silky_screwdriver, 1, event.left.getItemDamage());
+                    event.cost = 20;
+                }
+            }
         }
     }
     
