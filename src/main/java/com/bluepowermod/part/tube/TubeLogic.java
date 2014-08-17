@@ -329,7 +329,7 @@ public class TubeLogic implements IPneumaticTube {
     
     public boolean injectStack(TubeStack stack, ForgeDirection from, boolean simulate) {
     
-        if (tube.getWorld().isRemote) throw new IllegalArgumentException("[Pneumatic Tube] You can't inject items from the client side!");
+        if (tube != null && tube.getWorld().isRemote) throw new IllegalArgumentException("[Pneumatic Tube] You can't inject items from the client side!");
         Pair<ForgeDirection, TileEntity> heading = getHeadingForItem(stack, simulate);
         if (heading != null && heading.getKey() != from.getOpposite()) {
             if (!simulate) {
