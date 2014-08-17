@@ -131,7 +131,8 @@ public class Recipes {
             GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.screwdriver_handle), "#", '#', "stickWood"));
             GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.screwdriver, 1), "# ", " S", '#', "ingotIron", 'S', BPItems.screwdriver_handle));
         } else {
-            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.screwdriver, 1), "# ", " S", '#', "ingotIron", 'S', "stickWood"));
+            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.screwdriver, 1), "  #", " # ", "S  ", '#', "ingotIron", 'S', "stickWood"));
+            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.screwdriver, 1), "#  ", " # ", " S", '#', "ingotIron", 'S', "stickWood"));
         }
         
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.athame, 1), "# ", " S", '#', "ingotSilver", 'S', "stickWood"));
@@ -179,6 +180,7 @@ public class Recipes {
         craftManager.addRecipe(PartRegistry.getInstance().getItemForPart("integratedCircuit3x3"), "TST", "SSS", "TST", 'T', BPItems.stone_tile, 'S', BPItems.silicon_chip);
         craftManager.addRecipe(PartRegistry.getInstance().getItemForPart("integratedCircuit5x5"), "II", "II", 'I', PartRegistry.getInstance().getItemForPart("integratedCircuit3x3"));
         craftManager.addRecipe(PartRegistry.getInstance().getItemForPart("integratedCircuit7x7"), "II", "II", 'I', PartRegistry.getInstance().getItemForPart("integratedCircuit5x5"));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPBlocks.circuit_database, 1), "#C#", "BTB", "###", '#', "ingotIron", 'C', PartRegistry.getInstance().getItemForPart("integratedCircuit7x7"), 'B', Blocks.bookshelf, 'T', BPBlocks.circuit_table));
         
         GameRegistry.addRecipe(new ShapedOreRecipe(PartRegistry.getInstance().getItemForPart("pneumaticTube", 8), "BGB", 'B', "ingotBrass", 'G', "blockGlass"));
         GameRegistry.addRecipe(new ShapelessOreRecipe(PartRegistry.getInstance().getItemForPart("restrictionTube", 1), "ingotIron", PartRegistry.getInstance().getItemForPart("pneumaticTube")));
