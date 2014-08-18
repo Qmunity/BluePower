@@ -398,6 +398,9 @@ public class TileAlloyCrucible extends TileBase implements IInventory, IFluidHan
     @Override
     public FluidTankInfo[] getTankInfo(ForgeDirection from) {
 
+        if (from == ForgeDirection.UP)
+            return new FluidTankInfo[0];
+
         return new FluidTankInfo[] { new FluidTankInfo(outputTank) };
     }
 

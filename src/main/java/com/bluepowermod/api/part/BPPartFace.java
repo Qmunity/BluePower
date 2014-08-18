@@ -376,6 +376,7 @@ public abstract class BPPartFace extends BPPart implements IBPFacePart, IBPRedst
 
     public void addOcclusionBoxes(List<AxisAlignedBB> boxes) {
 
+        addSelectionBoxes(boxes);
     }
 
 }

@@ -14,8 +14,6 @@ public class RendererAlloyCrucible implements ISimpleBlockRenderingHandler {
 
     public static final int RENDER_ID = RenderingRegistry.getNextAvailableRenderId();
 
-    public static int textureMode = 0;
-
     @Override
     public void renderInventoryBlock(Block block, int metadata, int modelId, RenderBlocks renderer) {
 
