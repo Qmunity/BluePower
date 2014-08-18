@@ -86,7 +86,7 @@ public class TileManager extends TileMachineBase implements ISidedInventory, IGu
     @Override
     public void updateEntity() {
     
-        if (getTicker() % BUFFER_EMPTY_INTERVAL == 0 && isBufferEmpty()) {
+        if (!worldObj.isRemote && getTicker() % BUFFER_EMPTY_INTERVAL == 0 && isBufferEmpty()) {
             dumpUnwantedItems();
             retrieveItemsFromManagers();
             setOutputtingRedstone(mode == 0 && shouldEmitRedstone());
