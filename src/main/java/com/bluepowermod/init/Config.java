@@ -121,8 +121,8 @@ public class Config {
         generateSapphire = config.get(Refs.CONFIG_SAPPHIRE, "generateSapphire", true).getBoolean(true);
         minSapphireY = config.get(Refs.CONFIG_SAPPHIRE, "minSapphireY", 0).getInt();
         maxSapphireY = config.get(Refs.CONFIG_SAPPHIRE, "maxSapphireY", 48).getInt();
-        veinCountSapphire = config.get(Refs.CONFIG_SAPPHIRE, "veinCountSapphire", 7).getInt();
-        veinSizeSapphire = config.get(Refs.CONFIG_SAPPHIRE, "veinSizeSapphire", 2).getInt();
+        veinCountSapphire = config.get(Refs.CONFIG_SAPPHIRE, "veinCountSapphire", 2).getInt();
+        veinSizeSapphire = config.get(Refs.CONFIG_SAPPHIRE, "veinSizeSapphire", 7).getInt();
         volcanoSpawnChance = config.get(Refs.CONFIG_WORLDGEN, "volcanoSpawnChance", 0.02).getDouble(0);
         volcanoActiveToInactiveRatio = config.get(Refs.CONFIG_WORLDGEN, "volcanoActiveToInactiveRatio", 0.5).getDouble(0);
         useAltScrewdriverRecipe = config.get(Refs.CONFIG_SETTINGS, "useAltScrewdriverRecipe", false).getBoolean(false);
