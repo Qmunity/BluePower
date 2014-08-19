@@ -97,7 +97,7 @@ public class Refs {
     public static final String BRASSINGOT_NAME = "brass_ingot";
     public static final String BLUEALLOYINGOT_NAME = "blue_alloy_ingot";
     public static final String REDALLOYINGOT_NAME = "red_alloy_ingot";
-    public static final String ZINCPLATE_NAME = "zincplate";
+    public static final String GALVANIZEDIRONPLATE_NAME = "zincplate";
 
     public static final String RUBYAXE_NAME = "ruby_axe";
     public static final String RUBYSWORD_NAME = "ruby_sword";
@@ -182,7 +182,10 @@ public class Refs {
     public static final String BLOCKMONITOR_NAME = "monitor";
     public static final String BLOCKDISKDRIVE_NAME = "disk_drive";
     public static final String BLOCKIOEXPANDER_NAME = "io_expander";
-    public static final String FLOPPY_DISK = "floppy_disk";
+    public static final String FLOPPY_DISK_NAME = "floppy_disk";
+
+    public static final String CASTPLATE_NAME = "cast_plate";
+    public static final String CAST_NAME = "cast";
 
     public static final String[] oreDictDyes = new String[] { "dyeBlack", "dyeRed", "dyeGreen", "dyeBrown", "dyeBlue", "dyePurple", "dyeCyan",
             "dyeLightGray", "dyeGray", "dyePink", "dyeLime", "dyeYellow", "dyeLightBlue", "dyeMagenta", "dyeOrange", "dyeWhite" };

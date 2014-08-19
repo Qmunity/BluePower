@@ -23,8 +23,8 @@ import com.bluepowermod.client.gui.GuiAlloyCrucible;
 import com.bluepowermod.client.gui.widget.WidgetTank;
 import com.bluepowermod.helper.FluidHelper;
 import com.bluepowermod.init.BPBlocks;
-import com.bluepowermod.recipe.AlloyFurnaceRegistry;
-import com.bluepowermod.recipe.AlloyFurnaceRegistry.StandardAlloyFurnaceRecipe;
+import com.bluepowermod.recipe.AlloyCrucibleRegistry;
+import com.bluepowermod.recipe.AlloyCrucibleRegistry.StandardAlloyFurnaceRecipe;
 import com.bluepowermod.util.Refs;
 
 import cpw.mods.fml.relauncher.ReflectionHelper;
@@ -44,9 +44,9 @@ public class AlloyFurnaceHandler extends FurnaceRecipeHandler implements IContai
     public AlloyFurnaceHandler() {
     
         tank[0] = new WidgetTank(0, 134, 8, 16, 48, null);
-        tank[0].setCapacity(AlloyFurnaceRegistry.TANK_SIZE);
+        tank[0].setCapacity(AlloyCrucibleRegistry.TANK_SIZE);
         tank[1] = new WidgetTank(0, 134, 8, 16, 48, null);
-        tank[1].setCapacity(AlloyFurnaceRegistry.TANK_SIZE);
+        tank[1].setCapacity(AlloyCrucibleRegistry.TANK_SIZE);
     }
     
     @Override
@@ -100,7 +100,7 @@ public class AlloyFurnaceHandler extends FurnaceRecipeHandler implements IContai
             i++;
         }
         
-        tank[firstRenderedRecipe ? 0 : 1].setFluid(AlloyFurnaceRegistry.getInstance().getMatchingRecipe(input, null).getResult(null));
+        tank[firstRenderedRecipe ? 0 : 1].setFluid(AlloyCrucibleRegistry.getInstance().getMatchingRecipe(input, null).getResult(null));
         tank[firstRenderedRecipe ? 0 : 1].render(0, 0);
         
         firstRenderedRecipe = false;
@@ -111,8 +111,8 @@ public class AlloyFurnaceHandler extends FurnaceRecipeHandler implements IContai
     public void loadCraftingRecipes(String outputId, Object... results) {
     
         if (outputId.equals(getRecipesID())) {
-            for (IAlloyFurnaceRecipe recipe : AlloyFurnaceRegistry.getInstance().getAllRecipes())
-                if (recipe instanceof AlloyFurnaceRegistry.StandardAlloyFurnaceRecipe) arecipes.add(new AlloyRecipe((AlloyFurnaceRegistry.StandardAlloyFurnaceRecipe) recipe));
+            for (IAlloyFurnaceRecipe recipe : AlloyCrucibleRegistry.getInstance().getAllRecipes())
+                if (recipe instanceof AlloyCrucibleRegistry.StandardAlloyFurnaceRecipe) arecipes.add(new AlloyRecipe((AlloyCrucibleRegistry.StandardAlloyFurnaceRecipe) recipe));
         } else if (outputId.equals("fuel")) {
             
         } else super.loadCraftingRecipes(outputId, results);
@@ -132,10 +132,10 @@ public class AlloyFurnaceHandler extends FurnaceRecipeHandler implements IContai
                 
                 Fluid fluid = FluidHelper.getFluid(b.getUnlocalizedName());
                 
-                for (IAlloyFurnaceRecipe recipe : AlloyFurnaceRegistry.getInstance().getAllRecipes())
-                    if (recipe instanceof AlloyFurnaceRegistry.StandardAlloyFurnaceRecipe) {
+                for (IAlloyFurnaceRecipe recipe : AlloyCrucibleRegistry.getInstance().getAllRecipes())
+                    if (recipe instanceof AlloyCrucibleRegistry.StandardAlloyFurnaceRecipe) {
                         if (recipe.getResult(null).getFluid() == fluid) {
-                            arecipes.add(new AlloyRecipe((AlloyFurnaceRegistry.StandardAlloyFurnaceRecipe) recipe));
+                            arecipes.add(new AlloyRecipe((AlloyCrucibleRegistry.StandardAlloyFurnaceRecipe) recipe));
                         }
                     }
             }
@@ -145,9 +145,9 @@ public class AlloyFurnaceHandler extends FurnaceRecipeHandler implements IContai
     @Override
     public void loadUsageRecipes(ItemStack ingredient) {
     
-        for (IAlloyFurnaceRecipe recipe : AlloyFurnaceRegistry.getInstance().getAllRecipes()) {
-            if (recipe instanceof AlloyFurnaceRegistry.StandardAlloyFurnaceRecipe) {
-                AlloyFurnaceRegistry.StandardAlloyFurnaceRecipe standardAlloyRecipe = (AlloyFurnaceRegistry.StandardAlloyFurnaceRecipe) recipe;
+        for (IAlloyFurnaceRecipe recipe : AlloyCrucibleRegistry.getInstance().getAllRecipes()) {
+            if (recipe instanceof AlloyCrucibleRegistry.StandardAlloyFurnaceRecipe) {
+                AlloyCrucibleRegistry.StandardAlloyFurnaceRecipe standardAlloyRecipe = (AlloyCrucibleRegistry.StandardAlloyFurnaceRecipe) recipe;
                 for (ItemStack input : standardAlloyRecipe.getRequiredItems()) {
                     if (NEIServerUtils.areStacksSameTypeCrafting(input, ingredient)) {
                         arecipes.add(new AlloyRecipe(standardAlloyRecipe));

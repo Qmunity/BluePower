@@ -23,6 +23,7 @@ import net.minecraftforge.fluids.IFluidHandler;
 
 import org.lwjgl.opengl.GL11;
 
+import com.bluepowermod.api.BPApi;
 import com.bluepowermod.api.part.BPPartFace;
 import com.bluepowermod.api.util.ForgeDirectionUtils;
 import com.bluepowermod.api.vec.Vector3;
@@ -48,8 +49,10 @@ public class PartFaucet extends BPPartFace {
     private double progressDownEnd = 0;
     private int totalDown = y + 2;
 
-    private PartCastingTable castingTable = null;
+    private boolean castingTable = false;
     private IFluidHandler attached = null;
+
+    private IFluidHandler destTank = null;
 
     private FluidTank inputTank;
     private FluidTank outputTank;
@@ -148,6 +151,8 @@ public class PartFaucet extends BPPartFace {
         if (!(te instanceof IFluidHandler))
             return;
         attached = (IFluidHandler) te;
+
+        refresh();
     }
 
     @Override
@@ -162,7 +167,7 @@ public class PartFaucet extends BPPartFace {
             return;
 
         totalDown = y;
-        if (castingTable != null) {
+        if (castingTable) {
             totalDown -= 7;
         } else {
             TileEntity below = getWorld().getTileEntity(getX(), getY() - 1, getZ());
@@ -185,8 +190,7 @@ public class PartFaucet extends BPPartFace {
 
         boolean sendUpdate = false;
 
-        TileEntity te = getWorld().getTileEntity(getX(), getY() - 1, getZ());
-        if (te != null && te instanceof IFluidHandler) {
+        if (destTank != null) {
 
             if (!getWorld().isRemote) {// Server
                 FluidTankInfo[] information = attached.getTankInfo(ForgeDirection.getOrientation(getFace()));
@@ -215,13 +219,13 @@ public class PartFaucet extends BPPartFace {
             }
             if (inputTank.getFluidAmount() <= 10) {
                 if (progressFaucetEnd > 0 || progressFaucetStart > 0) {
-                    progressFaucetStart += 0.3;
+                    progressFaucetStart += 0.55;
                     if (progressFaucetStart >= length) {
                         progressFaucetStart = 0;
                         progressFaucetEnd = 0;
                     }
                 } else if (progressDownEnd > 0 || progressDownStart > 0) {
-                    progressDownStart += 0.25;
+                    progressDownStart += 0.4;
                     if (progressDownStart >= totalDown) {
                         progressDownStart = 0;
                         progressDownEnd = 0;
@@ -241,8 +245,7 @@ public class PartFaucet extends BPPartFace {
                 }
 
                 if (outputTank.getFluidAmount() > 0) {
-                    IFluidHandler h = (IFluidHandler) te;
-                    outputTank.drain(h.fill(ForgeDirection.UP, outputTank.getFluid(), true), true);
+                    outputTank.drain(destTank.fill(ForgeDirection.UP, outputTank.getFluid(), true), true);
                     sendUpdate = true;
                 }
             }
@@ -293,11 +296,40 @@ public class PartFaucet extends BPPartFace {
 
         super.onPartChanged();
 
+        refresh();
+    }
+
+    @Override
+    public void onNeighborUpdate() {
+
+        super.onNeighborUpdate();
+
+        refresh();
+    }
+
+    @Override
+    public void onNeighborTileUpdate() {
+
+        super.onNeighborTileUpdate();
+
+        refresh();
+    }
+
+    private void refresh() {
+
         if (getWorld() == null)
             return;
 
-        // FIXME castingTable = BPApi.getInstance().getMultipartCompat().getBPPart(getWorld().getTileEntity(getX(), getY(), getZ()),
-        // PartCastingTable.class);
+        PartCastingTable table = BPApi.getInstance().getMultipartCompat()
+                .getBPPart(getWorld().getTileEntity(getX(), getY(), getZ()), PartCastingTable.class);
+        if (table != null) {
+            castingTable = true;
+            destTank = table;
+        } else {
+            TileEntity te = getWorld().getTileEntity(getX(), getY() - 1, getZ());
+            if (te != null && te instanceof IFluidHandler)
+                destTank = (IFluidHandler) te;
+        }
     }
 
     @Override

@@ -20,12 +20,12 @@ package com.bluepowermod.items;
 import com.bluepowermod.init.CustomTabs;
 import com.bluepowermod.util.Refs;
 
-public class ItemZincPlate extends ItemBase {
+public class ItemGalvanizedIronPlate extends ItemBase {
     
-    public ItemZincPlate() {
+    public ItemGalvanizedIronPlate() {
     
-        this.setUnlocalizedName(Refs.ZINCPLATE_NAME);
+        this.setUnlocalizedName(Refs.GALVANIZEDIRONPLATE_NAME);
         this.setCreativeTab(CustomTabs.tabBluePowerItems);
-        this.setTextureName(Refs.MODID + ":" + Refs.ZINCPLATE_NAME);
+        this.setTextureName(Refs.MODID + ":" + Refs.GALVANIZEDIRONPLATE_NAME);
     }
 }

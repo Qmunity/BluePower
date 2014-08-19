@@ -33,6 +33,7 @@ import com.bluepowermod.api.BPApi;
 import com.bluepowermod.api.recipe.IAlloyFurnaceRegistry;
 import com.bluepowermod.part.PartRegistry;
 import com.bluepowermod.recipe.CanvasBagRecipe;
+import com.bluepowermod.recipe.RecipeCastPlate;
 import com.bluepowermod.util.Refs;
 
 import cpw.mods.fml.common.Loader;
@@ -42,6 +43,8 @@ import cpw.mods.fml.common.registry.GameRegistry;
 public class Recipes {
 
     public static void init(CraftingManager craftManager) {
+
+        GameRegistry.addRecipe(new RecipeCastPlate());
 
         GameRegistry.addSmelting(BPBlocks.basalt_cobble, new ItemStack(BPBlocks.basalt), 0);
         GameRegistry.addSmelting(BPBlocks.copper_ore, new ItemStack(BPItems.copper_ingot), 0.5F);
@@ -235,7 +238,7 @@ public class Recipes {
                 Blocks.obsidian, 'I', BPItems.blue_alloy_ingot));
         GameRegistry.addRecipe(new ShapedOreRecipe(PartRegistry.getInstance().getItemForPart("accelerator", 1), "IOI", "O O", "IOI", 'O',
                 Blocks.obsidian, 'I', BPItems.blue_alloy_ingot));
-        craftManager.addRecipe(new ItemStack(BPBlocks.alloy_crucible, 1), "###", "# #", "###", '#', Blocks.brick_block);
+        craftManager.addRecipe(new ItemStack(BPBlocks.alloy_crucible, 1), "# #", "###", "###", '#', Blocks.brick_block);
 
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPBlocks.circuit_table), "WIW", "WCW", "WPW", 'W', "plankWood", 'I', PartRegistry
                 .getInstance().getItemForPart("integratedCircuit3x3"), 'C', Blocks.chest, 'P', BPBlocks.project_table));

@@ -34,7 +34,7 @@ import net.minecraftforge.fluids.IFluidHandler;
 import com.bluepowermod.api.recipe.IAlloyFurnaceRecipe;
 import com.bluepowermod.fluid.FluidPhysics;
 import com.bluepowermod.init.BPBlocks;
-import com.bluepowermod.recipe.AlloyFurnaceRegistry;
+import com.bluepowermod.recipe.AlloyCrucibleRegistry;
 import com.bluepowermod.tileentities.TileBase;
 
 import cpw.mods.fml.relauncher.Side;
@@ -58,7 +58,7 @@ public class TileAlloyCrucible extends TileBase implements IInventory, IFluidHan
     public TileAlloyCrucible() {
 
         inventory = new ItemStack[9];
-        outputTank = new FluidTank(AlloyFurnaceRegistry.TANK_SIZE);
+        outputTank = new FluidTank(AlloyCrucibleRegistry.TANK_SIZE);
     }
 
     /*************** BASIC TE FUNCTIONS **************/
@@ -155,7 +155,7 @@ public class TileAlloyCrucible extends TileBase implements IInventory, IFluidHan
             if (isActive) {
                 currentBurnTime--;
             }
-            IAlloyFurnaceRecipe recipe = AlloyFurnaceRegistry.getInstance().getMatchingRecipe(inventory, outputTank.getFluid());
+            IAlloyFurnaceRecipe recipe = AlloyCrucibleRegistry.getInstance().getMatchingRecipe(inventory, outputTank.getFluid());
             if (recipe != null) {
                 if (currentBurnTime <= 0) {
                     if (TileEntityFurnace.isItemFuel(fuelInventory)) {

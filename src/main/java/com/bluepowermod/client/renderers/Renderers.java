@@ -14,6 +14,7 @@ import net.minecraftforge.client.MinecraftForgeClient;
 
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.init.BPItems;
+import com.bluepowermod.tileentities.TileCastPlate;
 import com.bluepowermod.tileentities.tier1.TileLamp;
 import com.bluepowermod.tileentities.tier2.TileWindmill;
 import com.bluepowermod.tileentities.tier3.TileEngine;
@@ -28,9 +29,13 @@ public class Renderers {
     public static void init() {
 
         MinecraftForgeClient.registerItemRenderer(BPItems.multipart, new RenderItemBPPart());
-        RenderingRegistry.registerBlockHandler(new RendererBlockBase());
+        RenderingRegistry.registerBlockHandler(new RenderBlockBase());
 
-        RenderingRegistry.registerBlockHandler(new RendererAlloyCrucible());
+        RenderingRegistry.registerBlockHandler(new RenderAlloyCrucible());
+
+        RenderingRegistry.registerBlockHandler(new RenderCastPlate());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileCastPlate.class, new RenderCastPlate());
+        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BPBlocks.cast_plate), new RenderCastPlate());
 
         RenderingRegistry.registerBlockHandler(new RenderLamp());
 

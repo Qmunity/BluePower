@@ -4,7 +4,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.world.IBlockAccess;
 
 import com.bluepowermod.blocks.BlockContainerBase;
-import com.bluepowermod.client.renderers.RendererBlockBase.EnumFaceType;
+import com.bluepowermod.client.renderers.RenderBlockBase.EnumFaceType;
 import com.bluepowermod.tileentities.TileBase;
 
 /**

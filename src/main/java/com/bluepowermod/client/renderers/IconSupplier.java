@@ -3,6 +3,8 @@ package com.bluepowermod.client.renderers;
 import net.minecraft.util.IIcon;
 import net.minecraftforge.client.event.TextureStitchEvent;
 
+import com.bluepowermod.api.BPApi;
+import com.bluepowermod.api.cast.ICast;
 import com.bluepowermod.util.Refs;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -94,6 +96,9 @@ public class IconSupplier {
 
             bluestoneTorchOff = event.map.registerIcon(Refs.MODID + ":bluestone_torch_off");
             bluestoneTorchOn = event.map.registerIcon(Refs.MODID + ":bluestone_torch_on");
+        } else if (event.map.getTextureType() == 1) {
+            for (ICast c : BPApi.getInstance().getCastRegistry().getRegisteredCasts())
+                c.registerIcon(event.map);
         }
     }
 }

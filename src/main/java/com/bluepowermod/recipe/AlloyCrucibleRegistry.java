@@ -44,9 +44,9 @@ import cpw.mods.fml.common.registry.GameData;
  * @author MineMaarten
  */
 
-public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
+public class AlloyCrucibleRegistry implements IAlloyFurnaceRegistry {
 
-    private static AlloyFurnaceRegistry INSTANCE = new AlloyFurnaceRegistry();
+    private static AlloyCrucibleRegistry INSTANCE = new AlloyCrucibleRegistry();
 
     private final List<IAlloyFurnaceRecipe> alloyFurnaceRecipes = new ArrayList<IAlloyFurnaceRecipe>();
     private final List<FluidStack> bufferedRecyclingItems = new ArrayList<FluidStack>();
@@ -54,11 +54,11 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
 
     public static final int TANK_SIZE = 16000;
 
-    private AlloyFurnaceRegistry() {
+    private AlloyCrucibleRegistry() {
 
     }
 
-    public static AlloyFurnaceRegistry getInstance() {
+    public static AlloyCrucibleRegistry getInstance() {
 
         return INSTANCE;
     }

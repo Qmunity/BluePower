@@ -38,7 +38,7 @@ import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
 import com.bluepowermod.blocks.BlockContainerBase;
-import com.bluepowermod.client.renderers.RendererAlloyCrucible;
+import com.bluepowermod.client.renderers.RenderAlloyCrucible;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.references.GuiIDs;
 import com.bluepowermod.tileentities.tier1.TileAlloyCrucible;
@@ -261,7 +261,7 @@ public class BlockAlloyCrucible extends BlockContainerBase {
     @Override
     public GuiIDs getGuiID() {
 
-        return GuiIDs.ALLOY_FURNACE;
+        return GuiIDs.ALLOY_CRUCIBLE;
     }
 
     @Override
@@ -273,7 +273,7 @@ public class BlockAlloyCrucible extends BlockContainerBase {
     @Override
     public int getRenderType() {
 
-        return RendererAlloyCrucible.RENDER_ID;
+        return RenderAlloyCrucible.RENDER_ID;
     }
 
     @Override

@@ -78,7 +78,7 @@ public class GUIHandler implements IGuiHandler {
         TileEntity ent = world.getTileEntity(x, y, z);
         // ID is the GUI ID
         switch (GuiIDs.values()[ID]) {
-            case ALLOY_FURNACE:
+            case ALLOY_CRUCIBLE:
                 return new ContainerAlloyFurnace(player.inventory, (TileAlloyCrucible) ent);
             case BUFFER:
                 return new ContainerBuffer(player.inventory, (TileBuffer) ent);
@@ -138,7 +138,7 @@ public class GUIHandler implements IGuiHandler {
         TileEntity ent = world.getTileEntity(x, y, z);
         // ID is the GUI ID
         switch (GuiIDs.values()[ID]) {
-            case ALLOY_FURNACE:
+            case ALLOY_CRUCIBLE:
                 return new GuiAlloyCrucible(player.inventory, (TileAlloyCrucible) ent);
             case BUFFER:
                 return new GuiBuffer(player.inventory, (TileBuffer) ent);

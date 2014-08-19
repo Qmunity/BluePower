@@ -3,15 +3,16 @@ package com.bluepowermod.api;
 import net.minecraft.tileentity.TileEntity;
 
 import com.bluepowermod.api.bluestone.IBluestoneApi;
+import com.bluepowermod.api.cast.ICastRegistry;
 import com.bluepowermod.api.compat.IMultipartCompat;
 import com.bluepowermod.api.part.IPartRegistry;
 import com.bluepowermod.api.recipe.IAlloyFurnaceRegistry;
 import com.bluepowermod.api.tube.IPneumaticTube;
 
-@SuppressWarnings({ "rawtypes", "unchecked" })
 /**
- * This is then main hub where you can interface with BluePower as a modder. Note that the 'instance' in this class will be filled in BluePower's preInit.
- * This means this class is save to use from the init phase.
+ * This is then main hub where you can interface with BluePower as a modder. Note that the 'instance' in this class will be filled in BluePower's
+ * preInit. This means this class is save to use from the init phase.
+ * 
  * @author MineMaarten
  */
 public class BPApi {
@@ -34,6 +35,8 @@ public class BPApi {
         public IAlloyFurnaceRegistry getAlloyFurnaceRegistry();
 
         public IBluestoneApi getBluestoneApi();
+
+        public ICastRegistry getCastRegistry();
 
     }
 

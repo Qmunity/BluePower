@@ -35,8 +35,8 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import com.bluepowermod.BluePower;
 import com.bluepowermod.api.util.ForgeDirectionUtils;
-import com.bluepowermod.client.renderers.RendererBlockBase;
-import com.bluepowermod.client.renderers.RendererBlockBase.EnumFaceType;
+import com.bluepowermod.client.renderers.RenderBlockBase;
+import com.bluepowermod.client.renderers.RenderBlockBase.EnumFaceType;
 import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.init.BPItems;
 import com.bluepowermod.references.GuiIDs;
@@ -264,7 +264,7 @@ public class BlockContainerBase extends BlockBase implements ITileEntityProvider
     
         if (textures == null) return super.getIcon(world, x, y, z, side);
         TileEntity te = world.getTileEntity(x, y, z);
-        RendererBlockBase.EnumFaceType faceType = EnumFaceType.SIDE;
+        RenderBlockBase.EnumFaceType faceType = EnumFaceType.SIDE;
         boolean powered = false;
         boolean ejecting = false;
         if (te instanceof IRotatable) {
@@ -296,7 +296,7 @@ public class BlockContainerBase extends BlockBase implements ITileEntityProvider
     @SideOnly(Side.CLIENT)
     public int getRenderType() {
     
-        return RendererBlockBase.RENDER_ID;
+        return RenderBlockBase.RENDER_ID;
     }
     
     public GuiIDs getGuiID() {

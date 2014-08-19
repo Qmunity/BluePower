@@ -10,7 +10,7 @@ import com.bluepowermod.tileentities.tier1.TileAlloyCrucible;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 
-public class RendererAlloyCrucible implements ISimpleBlockRenderingHandler {
+public class RenderAlloyCrucible implements ISimpleBlockRenderingHandler {
 
     public static final int RENDER_ID = RenderingRegistry.getNextAvailableRenderId();
 

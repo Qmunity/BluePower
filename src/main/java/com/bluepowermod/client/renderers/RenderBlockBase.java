@@ -13,7 +13,7 @@ import com.bluepowermod.tileentities.IRotatable;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 
-public class RendererBlockBase implements ISimpleBlockRenderingHandler {
+public class RenderBlockBase implements ISimpleBlockRenderingHandler {
     
     public static enum EnumFaceType {
         SIDE, FRONT, BACK

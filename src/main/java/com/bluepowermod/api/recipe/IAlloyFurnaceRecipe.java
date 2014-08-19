@@ -22,7 +22,7 @@ import net.minecraftforge.fluids.FluidStack;
 
 /**
  * This class only should be used for special recipes, like recipes that depend on NBT. For normal recipes use
- * {@link com.bluepowermod.recipe.AlloyFurnaceRegistry#addRecipe(ItemStack, ItemStack...)}.
+ * {@link com.bluepowermod.recipe.AlloyCrucibleRegistry#addRecipe(ItemStack, ItemStack...)}.
  * 
  * @author MineMaarten
  */

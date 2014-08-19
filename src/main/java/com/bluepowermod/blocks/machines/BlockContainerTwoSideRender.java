@@ -26,7 +26,7 @@ import net.minecraft.util.IIcon;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import com.bluepowermod.blocks.BlockContainerBase;
-import com.bluepowermod.client.renderers.RendererBlockBase.EnumFaceType;
+import com.bluepowermod.client.renderers.RenderBlockBase.EnumFaceType;
 import com.bluepowermod.tileentities.IRotatable;
 
 import cpw.mods.fml.relauncher.Side;

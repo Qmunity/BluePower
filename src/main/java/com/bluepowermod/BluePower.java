@@ -15,6 +15,7 @@ import net.minecraftforge.common.config.Configuration;
 import org.apache.logging.log4j.Logger;
 
 import com.bluepowermod.api.BPApi;
+import com.bluepowermod.cast.CastRegistry;
 import com.bluepowermod.client.gui.GUIHandler;
 import com.bluepowermod.compat.CompatibilityUtils;
 import com.bluepowermod.events.BPEventHandler;
@@ -29,7 +30,7 @@ import com.bluepowermod.init.PartRegister;
 import com.bluepowermod.init.Recipes;
 import com.bluepowermod.init.TileEntities;
 import com.bluepowermod.network.NetworkHandler;
-import com.bluepowermod.recipe.AlloyFurnaceRegistry;
+import com.bluepowermod.recipe.AlloyCrucibleRegistry;
 import com.bluepowermod.util.Refs;
 import com.bluepowermod.world.WorldGenerationHandler;
 
@@ -105,8 +106,10 @@ public class BluePower {
     public void postInit(FMLPostInitializationEvent event) {
 
         CompatibilityUtils.postInit(event);
-        AlloyFurnaceRegistry.getInstance().generateRecyclingRecipes();
+        AlloyCrucibleRegistry.getInstance().generateRecyclingRecipes();
         proxy.initRenderers();
+
+        CastRegistry.init();
     }
 
     @EventHandler
