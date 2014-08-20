@@ -86,7 +86,6 @@ public class PartCastingTable extends BPPart implements IFluidHandler {
                 ex.printStackTrace();
             }
         } else {
-            System.out.println("WTF?");
         }
         if (cast != null)
             tag.setString("cast", cast.getCastType());
@@ -133,7 +132,6 @@ public class PartCastingTable extends BPPart implements IFluidHandler {
             if (result != null) {
                 if (!getWorld().isRemote) {
                     IOHelper.spawnItemInWorld(getWorld(), result, getX(), getY(), getZ());
-                    System.out.println(result + "!");
                     result = null;
                     sendUpdatePacket();
                 }
