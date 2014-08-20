@@ -6,6 +6,8 @@ import java.util.List;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
@@ -19,10 +21,14 @@ import net.minecraftforge.fluids.IFluidHandler;
 
 import org.lwjgl.opengl.GL11;
 
+import com.bluepowermod.api.BPApi;
+import com.bluepowermod.api.cast.ICast;
 import com.bluepowermod.api.part.BPPart;
 import com.bluepowermod.api.vec.Vector3;
 import com.bluepowermod.client.renderers.RenderHelper;
+import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.init.CustomTabs;
+import com.bluepowermod.items.ItemCast;
 import com.bluepowermod.util.Refs;
 
 public class PartCastingTable extends BPPart implements IFluidHandler {
@@ -34,6 +40,12 @@ public class PartCastingTable extends BPPart implements IFluidHandler {
     private ResourceLocation bottom;
 
     private FluidTank tank = new FluidTank(1000);
+
+    private ICast cast;
+    private ItemStack result;
+    private double progress = 0;
+
+    private boolean inUse = false;
 
     @Override
     public String getType() {
@@ -69,8 +81,19 @@ public class PartCastingTable extends BPPart implements IFluidHandler {
                 NBTTagCompound tank = new NBTTagCompound();
                 this.tank.writeToNBT(tank);
                 tag.setTag("tank", tank);
+                tag.setInteger("tankSize", this.tank.getCapacity());
             } catch (Exception ex) {
+                ex.printStackTrace();
             }
+        } else {
+            System.out.println("WTF?");
+        }
+        if (cast != null)
+            tag.setString("cast", cast.getCastType());
+        if (result != null) {
+            NBTTagCompound t = new NBTTagCompound();
+            result.writeToNBT(t);
+            tag.setTag("result", t);
         }
     }
 
@@ -80,9 +103,75 @@ public class PartCastingTable extends BPPart implements IFluidHandler {
         super.load(tag);
 
         try {
+            tank.drain(Integer.MAX_VALUE, true);
             tank.readFromNBT(tag.getCompoundTag("tank"));
+            tank.setCapacity(tag.getInteger("tankSize"));
         } catch (Exception ex) {
-            // There was no tank tag
+        }
+        cast = BPApi.getInstance().getCastRegistry().getCast(tag.getString("cast"));
+        result = ItemStack.loadItemStackFromNBT(tag.getCompoundTag("result"));
+    }
+
+    @Override
+    public boolean onActivated(EntityPlayer player, ItemStack item) {
+
+        if (cast == null) {
+            if (item != null) {
+                if (item.getItem() instanceof ItemCast) {
+                    cast = BPApi.getInstance().getCastRegistry().getCastFromStack(item);
+                    if (cast != null) {
+                        if (!getWorld().isRemote) {
+                            if (!player.capabilities.isCreativeMode)
+                                item.stackSize--;
+                            sendUpdatePacket();
+                        }
+                        return true;
+                    }
+                }
+            }
+        } else {
+            if (result != null) {
+                if (!getWorld().isRemote) {
+                    IOHelper.spawnItemInWorld(getWorld(), result, getX(), getY(), getZ());
+                    System.out.println(result + "!");
+                    result = null;
+                    sendUpdatePacket();
+                }
+            } else {
+                if (tank.getFluidAmount() > 0)
+                    return false;
+
+                if (!getWorld().isRemote) {
+                    IOHelper.spawnItemInWorld(getWorld(), ItemCast.createCast(cast), getX(), getY(), getZ());
+                    cast = null;
+                    sendUpdatePacket();
+                }
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    @Override
+    public void update() {
+
+        super.update();
+
+        if (!getWorld().isRemote) {
+            boolean sendUpdate = false;
+            if (tank.getFluidAmount() >= tank.getCapacity()) {
+                progress += (1 / 5D) / 20D;
+                sendUpdate = true;
+            }
+            if (progress >= 1) {
+                result = BPApi.getInstance().getCastRegistry().getResult(getCast(), getFluid()).copy();
+                tank.drain(Integer.MAX_VALUE, true);
+                progress = 0;
+                sendUpdate = true;
+            }
+            if (sendUpdate)
+                sendUpdatePacket();
         }
     }
 
@@ -197,6 +286,8 @@ public class PartCastingTable extends BPPart implements IFluidHandler {
 
                 double fluidHeight = 0.875 * (tank.getFluidAmount() / ((double) tank.getCapacity()));
 
+                net.minecraft.client.renderer.RenderHelper.enableStandardItemLighting();
+
                 GL11.glNormal3d(0, 1, 0);
                 GL11.glBegin(GL11.GL_QUADS);
                 {
@@ -210,7 +301,48 @@ public class PartCastingTable extends BPPart implements IFluidHandler {
                             icon.getInterpolatedU(16 - wallThickness), icon.getInterpolatedV(wallThickness));
                 }
                 GL11.glEnd();
+
+                net.minecraft.client.renderer.RenderHelper.disableStandardItemLighting();
             }
+
+            GL11.glPushMatrix();
+            {
+                ItemStack item = null;
+                if (cast != null)
+                    item = ItemCast.createCast(cast);
+                if (item != null) {
+
+                    net.minecraft.client.renderer.RenderHelper.enableStandardItemLighting();
+
+                    GL11.glTranslated(0.5, 0.3, 0.5);
+                    GL11.glScaled(1.5, 1.5, 1.5);
+                    GL11.glTranslated(0, 0.125, -0.225);
+                    GL11.glRotated(90, 1, 0, 0);
+
+                    com.bluepowermod.client.renderers.RenderHelper.renderItem(item);
+
+                    net.minecraft.client.renderer.RenderHelper.disableStandardItemLighting();
+                }
+            }
+            GL11.glPopMatrix();
+
+            GL11.glPushMatrix();
+            {
+                if (result != null) {
+
+                    net.minecraft.client.renderer.RenderHelper.enableStandardItemLighting();
+
+                    GL11.glTranslated(0.5, 0.3, 0.5);
+                    GL11.glScaled(1.5, 1.5, 1.5);
+                    GL11.glTranslated(0, 0.125, -0.225);
+                    GL11.glRotated(90, 1, 0, 0);
+
+                    com.bluepowermod.client.renderers.RenderHelper.renderItem(result);
+
+                    net.minecraft.client.renderer.RenderHelper.disableStandardItemLighting();
+                }
+            }
+            GL11.glPopMatrix();
         }
         GL11.glPopMatrix();
     }
@@ -224,7 +356,12 @@ public class PartCastingTable extends BPPart implements IFluidHandler {
     @Override
     public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
 
+        if (!canFill(from, resource.getFluid()))
+            return 0;
+
         int amt = tank.fill(resource, doFill);
+        if (amt > 0)
+            tank.setCapacity(BPApi.getInstance().getCastRegistry().getRecipe(cast, resource.getFluid()).getKey().amount);
         sendUpdatePacket();
         return amt;
     }
@@ -244,7 +381,8 @@ public class PartCastingTable extends BPPart implements IFluidHandler {
     @Override
     public boolean canFill(ForgeDirection from, Fluid fluid) {
 
-        return fluid != null && (tank.getFluid() == null || (tank.getFluid() != null && tank.getFluid().getFluid() == fluid));
+        return fluid != null && (tank.getFluid() == null || (tank.getFluid() != null && tank.getFluid().getFluid() == fluid)) && result == null
+                && BPApi.getInstance().getCastRegistry().getResult(cast, fluid) != null;
     }
 
     @Override
@@ -265,6 +403,40 @@ public class PartCastingTable extends BPPart implements IFluidHandler {
     public Fluid getFluid() {
 
         return tank.getFluid() != null ? tank.getFluid().getFluid() : null;
+    }
+
+    public ICast getCast() {
+
+        return cast;
+    }
+
+    public boolean isInUse() {
+
+        return inUse;
+    }
+
+    public void setInUse(boolean inUse) {
+
+        this.inUse = inUse;
+    }
+
+    @Override
+    public float getHardness() {
+
+        return 2.5F;
+    }
+
+    @Override
+    public List<ItemStack> getDrops() {
+
+        List<ItemStack> drops = super.getDrops();
+
+        if (cast != null)
+            drops.add(ItemCast.createCast(cast));
+        if (result != null)
+            drops.add(result);
+
+        return drops;
     }
 
 }

@@ -1,6 +1,7 @@
 package com.bluepowermod.part.fluid;
 
 import java.util.List;
+import java.util.Map.Entry;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -16,6 +17,7 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.FluidTankInfo;
@@ -24,6 +26,7 @@ import net.minecraftforge.fluids.IFluidHandler;
 import org.lwjgl.opengl.GL11;
 
 import com.bluepowermod.api.BPApi;
+import com.bluepowermod.api.helper.RedstoneHelper;
 import com.bluepowermod.api.part.BPPartFace;
 import com.bluepowermod.api.util.ForgeDirectionUtils;
 import com.bluepowermod.api.vec.Vector3;
@@ -49,13 +52,18 @@ public class PartFaucet extends BPPartFace {
     private double progressDownEnd = 0;
     private int totalDown = y + 2;
 
-    private boolean castingTable = false;
     private IFluidHandler attached = null;
 
     private IFluidHandler destTank = null;
 
     private FluidTank inputTank;
     private FluidTank outputTank;
+
+    private boolean isTransfering = false;
+    private int amountToTransfer = 0;
+    private Fluid fluidToTransfer = null;
+
+    private boolean redstone = false;
 
     public PartFaucet() {
 
@@ -73,6 +81,61 @@ public class PartFaucet extends BPPartFace {
     public String getUnlocalizedName() {
 
         return "faucet";
+    }
+
+    @Override
+    public boolean onActivated(EntityPlayer player, ItemStack item) {
+
+        return startTransfering();
+    }
+
+    private boolean startTransfering() {
+
+        if (destTank != null) {
+            if (!isTransfering) {
+                if (destTank instanceof PartCastingTable) {
+                    PartCastingTable table = (PartCastingTable) destTank;
+
+                    if (table.isInUse())
+                        return false;
+
+                    Entry<FluidStack, ItemStack> recipe = null;
+                    int availableAmount = 0;
+                    for (FluidTankInfo info : attached.getTankInfo(ForgeDirection.getOrientation(getFace()))) {
+                        if (info.fluid == null || info.fluid.amount == 0)
+                            continue;
+                        if (recipe == null)
+                            recipe = BPApi.getInstance().getCastRegistry().getRecipe(table.getCast(), info.fluid.getFluid());
+                        if (recipe != null)
+                            availableAmount += info.fluid.amount;
+                    }
+
+                    if (recipe == null)
+                        return false;
+
+                    amountToTransfer = recipe.getKey().amount
+                            - (table.getTankInfo(null)[0].fluid != null ? table.getTankInfo(null)[0].fluid.amount : 0);
+
+                    if (availableAmount < amountToTransfer) {
+                        amountToTransfer = 0;
+                        return false;
+                    }
+
+                    if (amountToTransfer > 0) {
+                        fluidToTransfer = recipe.getKey().getFluid();
+                        isTransfering = true;
+                        table.setInUse(true);
+
+                        table.sendUpdatePacket();
+                        sendUpdatePacket();
+                        return true;
+                    }
+                } else {
+
+                }
+            }
+        }
+        return false;
     }
 
     @Override
@@ -167,7 +230,7 @@ public class PartFaucet extends BPPartFace {
             return;
 
         totalDown = y;
-        if (castingTable) {
+        if (destTank != null && destTank instanceof PartCastingTable) {
             totalDown -= 7;
         } else {
             TileEntity below = getWorld().getTileEntity(getX(), getY() - 1, getZ());
@@ -183,29 +246,32 @@ public class PartFaucet extends BPPartFace {
             }
         }
 
+        boolean redstoneOld = redstone;
+        redstone = false;
+        for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
+            if (RedstoneHelper.getInput(getWorld(), getX(), getY(), getZ(), d) > 0) {
+                redstone = true;
+                break;
+            }
+        }
+        if (redstone && !redstoneOld) {
+            startTransfering();
+        }
+
         int maxExtracted = 20;
         int maxTransfered = 5;
 
-        Fluid contained = getFluid();
-
         boolean sendUpdate = false;
 
-        if (destTank != null) {
-
+        if (destTank != null && isTransfering) {
             if (!getWorld().isRemote) {// Server
-                FluidTankInfo[] information = attached.getTankInfo(ForgeDirection.getOrientation(getFace()));
-                if (information != null) {
-                    for (FluidTankInfo info : information) {
-                        if (info.fluid != null && info.fluid.amount > 0 && (contained == null || info.fluid.getFluid() == contained)) {
-                            int filled = inputTank.fill(attached.drain(ForgeDirection.getOrientation(getFace()),
-                                    new FluidStack(info.fluid, Math.min(maxExtracted, inputTank.getCapacity() - inputTank.getFluidAmount())), true),
-                                    true);
-                            if (filled > 0)
-                                sendUpdate = true;
-                            break;
-                        }
-                    }
-                }
+                int filled = inputTank.fill(attached.drain(
+                        ForgeDirection.getOrientation(getFace()),
+                        new FluidStack(fluidToTransfer, Math.min(Math.min(maxExtracted, inputTank.getCapacity() - inputTank.getFluidAmount()),
+                                amountToTransfer)), true), true);
+                amountToTransfer -= filled;
+                if (filled > 0)
+                    sendUpdate = true;
             }
 
             if (inputTank.getFluidAmount() > 10) {
@@ -249,6 +315,14 @@ public class PartFaucet extends BPPartFace {
                     sendUpdate = true;
                 }
             }
+            if (inputTank.getFluidAmount() == 0 && outputTank.getFluidAmount() == 0 && amountToTransfer == 0) {
+                isTransfering = false;
+                amountToTransfer = 0;
+                fluidToTransfer = null;
+                if (destTank instanceof PartCastingTable)
+                    ((PartCastingTable) destTank).setInUse(false);
+                sendUpdate = false;
+            }
         }
 
         if (sendUpdate)
@@ -271,6 +345,13 @@ public class PartFaucet extends BPPartFace {
             outputTank.writeToNBT(outTank);
             tag.setTag("outTank", outTank);
         }
+
+        tag.setBoolean("redstone", redstone);
+
+        tag.setBoolean("isTransfering", isTransfering);
+        tag.setInteger("amountToTransfer", amountToTransfer);
+        if (fluidToTransfer != null)
+            tag.setString("fluidToTransfer", fluidToTransfer.getName());
     }
 
     @Override
@@ -288,6 +369,16 @@ public class PartFaucet extends BPPartFace {
             outputTank.readFromNBT(tag.getCompoundTag("outTank"));
         } catch (Exception ex) {
             // There was no tank tag
+        }
+
+        redstone = tag.getBoolean("redstone");
+
+        isTransfering = tag.getBoolean("isTransfering");
+        amountToTransfer = tag.getInteger("amountToTransfer");
+        if (tag.hasKey("fluidToTransfer")) {
+            fluidToTransfer = FluidRegistry.getFluid(tag.getString("fluidToTransfer"));
+        } else {
+            fluidToTransfer = null;
         }
     }
 
@@ -323,7 +414,6 @@ public class PartFaucet extends BPPartFace {
         PartCastingTable table = BPApi.getInstance().getMultipartCompat()
                 .getBPPart(getWorld().getTileEntity(getX(), getY(), getZ()), PartCastingTable.class);
         if (table != null) {
-            castingTable = true;
             destTank = table;
         } else {
             TileEntity te = getWorld().getTileEntity(getX(), getY() - 1, getZ());
@@ -697,5 +787,11 @@ public class PartFaucet extends BPPartFace {
     private boolean isTransferingLiquid() {
 
         return getFluid() != null;
+    }
+
+    @Override
+    public float getHardness() {
+
+        return 2.5F;
     }
 }

@@ -5,15 +5,11 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.entity.RenderItem;
-import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.client.IItemRenderer;
 
@@ -30,21 +26,6 @@ public class RenderCastPlate extends TileEntitySpecialRenderer implements ISimpl
     private static RenderBlocks renderer = new RenderBlocks();
 
     public static final int RENDER_ID = RenderingRegistry.getNextAvailableRenderId();
-    private final RenderItem customRenderItem;
-
-    public RenderCastPlate() {
-
-        customRenderItem = new RenderItem() {
-
-            @Override
-            public boolean shouldSpreadItems() {
-
-                return false;
-            }
-        };
-
-        customRenderItem.setRenderManager(RenderManager.instance);
-    }
 
     @Override
     public void renderInventoryBlock(Block block, int metadata, int modelId, RenderBlocks renderer) {
@@ -107,77 +88,64 @@ public class RenderCastPlate extends TileEntitySpecialRenderer implements ISimpl
 
         GL11.glPushMatrix();
         {
-            ItemStack torender = null;
-            if (te.hasTemplate())
-                torender = te.getTemplate();
-            if (torender != null) {
+            GL11.glTranslated(x, y, z);
 
-                RenderHelper.enableStandardItemLighting();
+            // Template
+            GL11.glPushMatrix();
+            {
+                ItemStack item = null;
+                if (te.hasTemplate())
+                    item = te.getTemplate();
+                if (item != null) {
 
-                EntityItem ghostEntityItem = new EntityItem(te.getWorldObj());
-                ghostEntityItem.hoverStart = 0.0F;
-                ghostEntityItem.setEntityItemStack(torender);
+                    RenderHelper.enableStandardItemLighting();
 
-                GL11.glTranslatef((float) x, (float) y, (float) z);
+                    GL11.glTranslated(0.5, 0.3, 0.5);
+                    GL11.glScaled(1.5, 1.5, 1.5);
+                    GL11.glTranslated(0, -0.128, -0.225);
+                    GL11.glRotated(90, 1, 0, 0);
 
-                GL11.glTranslatef(0.5F, 0.3F, 0.5F);
-                GL11.glColor3f(1F, 1F, 1F);
+                    com.bluepowermod.client.renderers.RenderHelper.renderItem(item);
 
-                GL11.glScaled(1.5, 1.5, 1.5);
-
-                GL11.glTranslated(0, -0.128, -0.225);
-                GL11.glRotated(90, 1, 0, 0);
-
-                if (torender.getItem() instanceof ItemBlock) {
-                    ItemBlock testItem = (ItemBlock) torender.getItem();
-                    Block testBlock = testItem.field_150939_a;
-                    if (RenderBlocks.renderItemIn3d(testBlock.getRenderType())) {
-                        GL11.glScalef(1.2F, 1.2F, 1.2F);
-                    }
+                    RenderHelper.disableStandardItemLighting();
                 }
-
-                customRenderItem.doRender(ghostEntityItem, 0, 0, 0, 0, 0);
-
-                RenderHelper.disableStandardItemLighting();
             }
-        }
-        GL11.glPopMatrix();
+            GL11.glPopMatrix();
 
-        GL11.glPushMatrix();
-        {
-            ItemStack torender = null;
-            if (te.hasCast())
-                torender = te.getCast();
-            if (torender != null) {
+            // Cast
+            GL11.glPushMatrix();
+            {
+                ItemStack item = null;
+                if (te.hasCast())
+                    item = te.getCast();
+                if (item != null) {
 
-                RenderHelper.enableStandardItemLighting();
+                    RenderHelper.enableStandardItemLighting();
 
-                EntityItem ghostEntityItem = new EntityItem(te.getWorldObj());
-                ghostEntityItem.hoverStart = 0.0F;
-                ghostEntityItem.setEntityItemStack(torender);
+                    GL11.glTranslated(0.5, 0.3, 0.5);
+                    GL11.glScaled(1.5, 1.5, 1.5);
+                    GL11.glTranslated(0, -0.128, -0.225);
+                    GL11.glRotated(90, 1, 0, 0);
 
-                GL11.glTranslatef((float) x, (float) y, (float) z);
+                    com.bluepowermod.client.renderers.RenderHelper.renderItem(item);
 
-                GL11.glTranslatef(0.5F, 0.3F, 0.5F);
-                GL11.glColor3f(1F, 1F, 1F);
-
-                GL11.glScaled(1.5, 1.5, 1.5);
-
-                GL11.glTranslated(0, -0.128, -0.225);
-                GL11.glRotated(90, 1, 0, 0);
-
-                if (torender.getItem() instanceof ItemBlock) {
-                    ItemBlock testItem = (ItemBlock) torender.getItem();
-                    Block testBlock = testItem.field_150939_a;
-                    if (RenderBlocks.renderItemIn3d(testBlock.getRenderType())) {
-                        GL11.glScalef(1.2F, 1.2F, 1.2F);
-                    }
+                    RenderHelper.disableStandardItemLighting();
                 }
-
-                customRenderItem.doRender(ghostEntityItem, 0, 0, 0, 0, 0);
-
-                RenderHelper.disableStandardItemLighting();
             }
+            GL11.glPopMatrix();
+
+            // Progress
+            GL11.glPushMatrix();
+            {
+                MovingObjectPosition mop = Minecraft.getMinecraft().thePlayer.rayTrace(
+                        Minecraft.getMinecraft().thePlayer.capabilities.isCreativeMode ? 5 : 4.5, 0);
+
+                if (mop.blockX == te.xCoord && mop.blockY == te.yCoord && mop.blockZ == te.zCoord && te.hasTemplate()
+                        && (te.hasClay() || te.hasCast())) {
+                    com.bluepowermod.client.renderers.RenderHelper.renderEntityName(((int) (te.getCookProgress() * 100)) + "%", 0.5, 0.75, 0.5);
+                }
+            }
+            GL11.glPopMatrix();
         }
         GL11.glPopMatrix();
     }
@@ -197,11 +165,7 @@ public class RenderCastPlate extends TileEntitySpecialRenderer implements ISimpl
     @Override
     public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
 
-        RenderHelper.enableStandardItemLighting();
-
         Block block = BPBlocks.cast_plate;
-
-        NBTTagCompound tag = item.stackTagCompound;
 
         GL11.glPushMatrix();
         {
@@ -231,50 +195,8 @@ public class RenderCastPlate extends TileEntitySpecialRenderer implements ISimpl
             renderer.setRenderBounds(1 - (2 / 16D), 1 / 16D, 2 / 16D, 1, 2 / 16D, 1 - (2 / 16D));
             renderer.renderStandardBlock(block, 0, 0, 0);
 
-            // Clay
-            if (tag != null && tag.hasKey("hasClay") && tag.getBoolean("hasClay")) {
-                renderer.setRenderBounds(2 / 16D, 1 / 16D, 2 / 16D, 1 - (2 / 16D), 2 / 16D - (1 / 64D), 1 - (2 / 16D));
-                renderer.renderStandardBlock(Blocks.clay, 0, 0, 0);
-            }
             Tessellator.instance.draw();
-
-            GL11.glPushMatrix();
-            {
-                ItemStack torender = null;
-                if (tag != null && tag.hasKey("inventory0"))
-                    torender = ItemStack.loadItemStackFromNBT(tag.getCompoundTag("inventory0"));
-                if (torender != null) {
-
-                    EntityItem ghostEntityItem = new EntityItem(Minecraft.getMinecraft().theWorld);
-                    ghostEntityItem.hoverStart = 0.0F;
-                    ghostEntityItem.setEntityItemStack(torender);
-
-                    GL11.glTranslatef(0.5F, 0.3F, 0.5F);
-                    GL11.glColor3f(1F, 1F, 1F);
-
-                    GL11.glScaled(1.5, 1.5, 1.5);
-
-                    GL11.glTranslated(0, -0.128, -0.225);
-                    GL11.glRotated(90, 1, 0, 0);
-
-                    if (torender.getItem() instanceof ItemBlock) {
-                        ItemBlock testItem = (ItemBlock) torender.getItem();
-                        Block testBlock = testItem.field_150939_a;
-                        if (RenderBlocks.renderItemIn3d(testBlock.getRenderType())) {
-                            GL11.glScalef(1.2F, 1.2F, 1.2F);
-                        }
-                    }
-
-                    try {
-                        customRenderItem.doRender(ghostEntityItem, 0, 0, 0, 0, 0);
-                    } catch (Exception ex) {
-                    }
-                }
-            }
-            GL11.glPopMatrix();
         }
         GL11.glPopMatrix();
-
-        RenderHelper.enableStandardItemLighting();
     }
 }

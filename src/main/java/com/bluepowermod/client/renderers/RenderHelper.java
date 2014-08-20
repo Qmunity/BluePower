@@ -4,10 +4,17 @@ import java.nio.DoubleBuffer;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.entity.RenderItem;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -794,5 +801,79 @@ public class RenderHelper {
         default:
             break;
         }
+    }
+
+    private static RenderItem customRenderItem;
+
+    public static void renderItem(ItemStack item) {
+
+        if (customRenderItem == null) {
+            customRenderItem = new RenderItem() {
+
+                @Override
+                public boolean shouldSpreadItems() {
+
+                    return false;
+                }
+            };
+
+            customRenderItem.setRenderManager(RenderManager.instance);
+        }
+
+        EntityItem ghostEntityItem = new EntityItem(Minecraft.getMinecraft().theWorld);
+        ghostEntityItem.hoverStart = 0.0F;
+        ghostEntityItem.setEntityItemStack(item);
+
+        GL11.glColor3d(1, 1, 1);
+
+        if (item.getItem() instanceof ItemBlock) {
+            ItemBlock testItem = (ItemBlock) item.getItem();
+            Block testBlock = testItem.field_150939_a;
+            if (RenderBlocks.renderItemIn3d(testBlock.getRenderType())) {
+                GL11.glScaled(1.2, 1.2, 1.2);
+            }
+        }
+
+        customRenderItem.doRender(ghostEntityItem, 0, 0, 0, 0, 0);
+    }
+
+    public static void renderEntityName(String name, double x, double y, double z) {
+
+        GL11.glAlphaFunc(GL11.GL_GREATER, 0.1F);
+
+        RenderManager renderManager = RenderManager.instance;
+
+        float f = 1.6F;
+        float f1 = 0.016666668F * f;
+
+        FontRenderer fontrenderer = Minecraft.getMinecraft().fontRenderer;
+        GL11.glPushMatrix();
+        GL11.glTranslated(x, y, z);
+        GL11.glNormal3f(0.0F, 1.0F, 0.0F);
+        GL11.glRotatef(-renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
+        GL11.glRotatef(renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
+        GL11.glScalef(-f1, -f1, f1);
+        GL11.glDisable(GL11.GL_LIGHTING);
+        GL11.glTranslatef(0.0F, 0.25F / f1, 0.0F);
+        GL11.glDepthMask(false);
+        GL11.glEnable(GL11.GL_BLEND);
+        OpenGlHelper.glBlendFunc(770, 771, 1, 0);
+        Tessellator tessellator = Tessellator.instance;
+        GL11.glDisable(GL11.GL_TEXTURE_2D);
+        tessellator.startDrawingQuads();
+        int i = fontrenderer.getStringWidth(name) / 2;
+        tessellator.setColorRGBA_F(0.0F, 0.0F, 0.0F, 0.5F);
+        tessellator.addVertex(-i - 1, -1.0D, 0.0D);
+        tessellator.addVertex(-i - 1, 8.0D, 0.0D);
+        tessellator.addVertex(i + 1, 8.0D, 0.0D);
+        tessellator.addVertex(i + 1, -1.0D, 0.0D);
+        tessellator.draw();
+        GL11.glEnable(GL11.GL_TEXTURE_2D);
+        GL11.glDepthMask(true);
+        fontrenderer.drawString(name, -fontrenderer.getStringWidth(name) / 2, 0, 0xFFFFFFFF);
+        GL11.glEnable(GL11.GL_LIGHTING);
+        GL11.glDisable(GL11.GL_BLEND);
+        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        GL11.glPopMatrix();
     }
 }

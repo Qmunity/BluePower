@@ -35,103 +35,104 @@ import cpw.mods.fml.relauncher.ReflectionHelper;
  */
 
 public class AlloyFurnaceHandler extends FurnaceRecipeHandler implements IContainerTooltipHandler, IContainerDrawHandler {
-    
-    private static final WidgetTank[] tank                = new WidgetTank[2];
-    private boolean                   firstRenderedRecipe = true;
-    private static boolean            renderingAlloyFurnaceHandler;
-    private Field                     guiLeftField, guiTopField;
-    
+
+    private static final WidgetTank[] tank = new WidgetTank[2];
+    private static boolean renderingAlloyFurnaceHandler;
+    private Field guiLeftField, guiTopField;
+
     public AlloyFurnaceHandler() {
-    
+
         tank[0] = new WidgetTank(0, 134, 8, 16, 48, null);
         tank[0].setCapacity(AlloyCrucibleRegistry.TANK_SIZE);
         tank[1] = new WidgetTank(0, 134, 8, 16, 48, null);
         tank[1].setCapacity(AlloyCrucibleRegistry.TANK_SIZE);
     }
-    
+
     @Override
     public String getRecipeName() {
-    
+
         return BPBlocks.alloy_crucible.getLocalizedName();
     }
-    
+
     @Override
     public String getGuiTexture() {
-    
-        return Refs.MODID + ":textures/gui/alloy_crucible.png";//Doing this comment here so git transfers over the full line and doesn't ignore the 'GUI' vs 'gui' change.
+
+        return Refs.MODID + ":textures/gui/alloy_crucible.png";// Doing this comment here so git transfers over the full line and doesn't ignore the
+                                                               // 'GUI' vs 'gui' change.
     }
-    
+
     /**
      * @return The class of the GuiContainer that this recipe would be crafted in.
      */
     @Override
     public Class<? extends GuiContainer> getGuiClass() {
-    
+
         return GuiAlloyCrucible.class;
     }
-    
+
     /**
      * Loads a rectangle that can be clicked in the Alloy Furnace GUI that will load up every recipe of the Alloy Furnace
      */
     @Override
     public void loadTransferRects() {
-    
+
         transferRects.add(new RecipeTransferRect(new Rectangle(17, 43, 18, 18), "fuel"));
         transferRects.add(new RecipeTransferRect(new Rectangle(97, 24, 22, 14), getRecipesID()));
     }
-    
+
     @Override
     public void drawExtras(int recipe) {
-    
+
         drawProgressBar(17, 43, 177, 0, 14, 14, 48, 7);
         drawProgressBar(97, 24, 177, 14, 24, 16, 48, 0);
     }
-    
+
     @Override
     public void drawForeground(int recipe) {
-    
+
         super.drawForeground(recipe);
-        
+
         ItemStack[] input = new ItemStack[9];
-        
+
         int i = 0;
         for (PositionedStack ps : getIngredientStacks(recipe)) {
             input[i] = ps.item;
             i++;
         }
-        
-        tank[firstRenderedRecipe ? 0 : 1].setFluid(AlloyCrucibleRegistry.getInstance().getMatchingRecipe(input, null).getResult(null));
-        tank[firstRenderedRecipe ? 0 : 1].render(0, 0);
-        
-        firstRenderedRecipe = false;
+
+        tank[recipe % 2].setFluid(AlloyCrucibleRegistry.getInstance().getMatchingRecipe(input, null).getResult(null));
+        tank[recipe % 1].render(0, 0);
+
         renderingAlloyFurnaceHandler = true;
     }
-    
+
     @Override
     public void loadCraftingRecipes(String outputId, Object... results) {
-    
+
         if (outputId.equals(getRecipesID())) {
             for (IAlloyFurnaceRecipe recipe : AlloyCrucibleRegistry.getInstance().getAllRecipes())
-                if (recipe instanceof AlloyCrucibleRegistry.StandardAlloyFurnaceRecipe) arecipes.add(new AlloyRecipe((AlloyCrucibleRegistry.StandardAlloyFurnaceRecipe) recipe));
+                if (recipe instanceof AlloyCrucibleRegistry.StandardAlloyFurnaceRecipe)
+                    arecipes.add(new AlloyRecipe((AlloyCrucibleRegistry.StandardAlloyFurnaceRecipe) recipe));
         } else if (outputId.equals("fuel")) {
-            
-        } else super.loadCraftingRecipes(outputId, results);
+
+        } else
+            super.loadCraftingRecipes(outputId, results);
     }
-    
+
     private String getRecipesID() {
-    
+
         return "alloyCrucible";
     }
-    
+
     @Override
     public void loadCraftingRecipes(ItemStack result) {
-    
+
         if (result.getItem() instanceof ItemBlock) {
             Block b = Block.getBlockFromItem(result.getItem());
             if (b instanceof BlockBPFluid) {
-                
+
                 Fluid fluid = FluidHelper.getFluid(b.getUnlocalizedName());
-                
+
                 for (IAlloyFurnaceRecipe recipe : AlloyCrucibleRegistry.getInstance().getAllRecipes())
                     if (recipe instanceof AlloyCrucibleRegistry.StandardAlloyFurnaceRecipe) {
                         if (recipe.getResult(null).getFluid() == fluid) {
@@ -141,10 +142,10 @@ public class AlloyFurnaceHandler extends FurnaceRecipeHandler implements IContai
             }
         }
     }
-    
+
     @Override
     public void loadUsageRecipes(ItemStack ingredient) {
-    
+
         for (IAlloyFurnaceRecipe recipe : AlloyCrucibleRegistry.getInstance().getAllRecipes()) {
             if (recipe instanceof AlloyCrucibleRegistry.StandardAlloyFurnaceRecipe) {
                 AlloyCrucibleRegistry.StandardAlloyFurnaceRecipe standardAlloyRecipe = (AlloyCrucibleRegistry.StandardAlloyFurnaceRecipe) recipe;
@@ -157,13 +158,13 @@ public class AlloyFurnaceHandler extends FurnaceRecipeHandler implements IContai
             }
         }
     }
-    
+
     public class AlloyRecipe extends CachedRecipe {
-        
+
         private final List<PositionedStack> requiredItems;
-        
+
         public AlloyRecipe(StandardAlloyFurnaceRecipe alloyRecipe) {
-        
+
             requiredItems = new ArrayList<PositionedStack>();
             int x = 0, y = 0;
             for (ItemStack requiredItem : alloyRecipe.getRequiredItems()) {
@@ -174,22 +175,22 @@ public class AlloyFurnaceHandler extends FurnaceRecipeHandler implements IContai
                 }
             }
         }
-        
+
         @Override
         public PositionedStack getResult() {
-        
+
             return null;
         }
-        
+
         @Override
         public List<PositionedStack> getIngredients() {
-        
+
             return requiredItems;
         }
-        
+
         @Override
         public PositionedStack getOtherStack() {
-        
+
             PositionedStack stack = afuels.get(cycleticks / 48 % afuels.size()).stack;
             stack = stack.copy();
             stack.relx = 16;
@@ -197,15 +198,17 @@ public class AlloyFurnaceHandler extends FurnaceRecipeHandler implements IContai
             return stack;
         }
     }
-    
+
     @Override
     public List<String> handleTooltip(GuiContainer gui, int mousex, int mousey, List<String> currenttip) {
-    
+
         if (renderingAlloyFurnaceHandler) {
             int guiTop = 0;
             int guiLeft = 0;
-            if (guiTopField == null) guiTopField = ReflectionHelper.findField(GuiContainer.class, "field_74197_n", "guiTop");
-            if (guiLeftField == null) guiLeftField = ReflectionHelper.findField(GuiContainer.class, "field_74198_m", "guiLeft");
+            if (guiTopField == null)
+                guiTopField = ReflectionHelper.findField(GuiContainer.class, "field_74197_n", "guiTop");
+            if (guiLeftField == null)
+                guiLeftField = ReflectionHelper.findField(GuiContainer.class, "field_74198_m", "guiLeft");
             try {
                 guiTop = guiTopField.getInt(gui);
                 guiLeft = guiLeftField.getInt(gui);
@@ -220,42 +223,41 @@ public class AlloyFurnaceHandler extends FurnaceRecipeHandler implements IContai
         renderingAlloyFurnaceHandler = false;
         return currenttip;
     }
-    
+
     @Override
     public List<String> handleItemDisplayName(GuiContainer gui, ItemStack itemstack, List<String> currenttip) {
-    
+
         return currenttip;
     }
-    
+
     @Override
     public List<String> handleItemTooltip(GuiContainer gui, ItemStack itemstack, int mousex, int mousey, List<String> currenttip) {
-    
+
         return currenttip;
     }
-    
+
     @Override
     public void onPreDraw(GuiContainer gui) {
-    
-        firstRenderedRecipe = true;
+
     }
-    
+
     @Override
     public void renderObjects(GuiContainer gui, int mousex, int mousey) {
-    
+
     }
-    
+
     @Override
     public void postRenderObjects(GuiContainer gui, int mousex, int mousey) {
-    
+
     }
-    
+
     @Override
     public void renderSlotUnderlay(GuiContainer gui, Slot slot) {
-    
+
     }
-    
+
     @Override
     public void renderSlotOverlay(GuiContainer gui, Slot slot) {
-    
+
     }
 }

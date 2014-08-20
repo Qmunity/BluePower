@@ -13,32 +13,32 @@ import com.bluepowermod.util.Refs;
  */
 
 public class NEIPluginInitConfig implements IConfigureNEI {
-    
+
     @Override
     public void loadConfig() {
-    
+
         AlloyFurnaceHandler handler = new AlloyFurnaceHandler();
         API.registerUsageHandler(handler);
         API.registerRecipeHandler(handler);
         GuiContainerManager.drawHandlers.add(handler);
         GuiContainerManager.tooltipHandlers.add(handler);
-        
+
         API.registerGuiOverlayHandler(GuiProjectTable.class, new ProjectTableOverlayHandler(), "crafting");
-        
-        // GuiContainerManager.addTooltipHandler(new DebugTooltipHandler());//Remove comments to show the GameData name of an item when hovering over
-        // it.
+
+        // Remove comments to show the GameData name of an item when hovering over it.
+        // GuiContainerManager.addTooltipHandler(new DebugTooltipHandler());
     }
-    
+
     @Override
     public String getName() {
-    
+
         return "BPNEIHandler";
     }
-    
+
     @Override
     public String getVersion() {
-    
+
         return Refs.fullVersionString();
     }
-    
+
 }

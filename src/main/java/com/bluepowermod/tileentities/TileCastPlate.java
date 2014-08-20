@@ -31,9 +31,6 @@ public class TileCastPlate extends TileBase implements IInventory {
 
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player) {
 
-        if (world.isRemote)
-            return true;
-
         ItemStack held = player.getCurrentEquippedItem();
 
         if (cookProgress > 0 && cookProgress != 1) {
@@ -45,41 +42,51 @@ public class TileCastPlate extends TileBase implements IInventory {
         }
 
         if (cast != null) {
-            IOHelper.spawnItemInWorld(world, cast, x, y, z);
-            cast = null;
-            sendUpdatePacket();
-            cookProgress = 0;
+            if (!world.isRemote) {
+                IOHelper.spawnItemInWorld(world, cast, x, y, z);
+                cast = null;
+                sendUpdatePacket();
+                cookProgress = 0;
+            }
             return true;
         } else {
             if (template == null) {
                 if (held == null) {
                     if (hasClay) {
-                        IOHelper.spawnItemInWorld(world, template, x, y, z);
-                        template = null;
-                        sendUpdatePacket();
+                        if (!world.isRemote) {
+                            IOHelper.spawnItemInWorld(world, template, x, y, z);
+                            template = null;
+                            sendUpdatePacket();
+                        }
                         return true;
                     }
                 } else {
                     if (reg.getCreatedCast(held) != null) {
-                        template = new ItemStack(held.getItem(), 1, held.getItemDamage());
-                        template.stackTagCompound = held.stackTagCompound;
-                        if (!player.capabilities.isCreativeMode)
-                            held.stackSize--;
-                        sendUpdatePacket();
+                        if (!world.isRemote) {
+                            template = new ItemStack(held.getItem(), 1, held.getItemDamage());
+                            template.stackTagCompound = held.stackTagCompound;
+                            if (!player.capabilities.isCreativeMode)
+                                held.stackSize--;
+                            sendUpdatePacket();
+                        }
                         return true;
                     }
                 }
             } else if (!hasClay) {
                 if (held != null && held.getItem() instanceof ItemBlock && Block.getBlockFromItem(held.getItem()) == Blocks.clay) {
-                    hasClay = true;
-                    if (!player.capabilities.isCreativeMode)
-                        held.stackSize--;
-                    sendUpdatePacket();
+                    if (!world.isRemote) {
+                        hasClay = true;
+                        if (!player.capabilities.isCreativeMode)
+                            held.stackSize--;
+                        sendUpdatePacket();
+                    }
                     return true;
                 } else {
-                    IOHelper.spawnItemInWorld(world, template, x, y, z);
-                    template = null;
-                    sendUpdatePacket();
+                    if (!world.isRemote) {
+                        IOHelper.spawnItemInWorld(world, template, x, y, z);
+                        template = null;
+                        sendUpdatePacket();
+                    }
                     return true;
                 }
             }
@@ -102,7 +109,7 @@ public class TileCastPlate extends TileBase implements IInventory {
         if (hasClay() && hasTemplate() && cookProgress < 1) {
             Vector3 v = new Vector3(this).getRelative(ForgeDirection.DOWN);
             if (reg.isCookingHeatSource(v.getBlock(), v.getBlockMeta())) {
-                cookProgress += (1 / 3D) / 20D;
+                cookProgress += (1 / 10D) / 20D;
                 sendUpdatePacket();
             }
         }

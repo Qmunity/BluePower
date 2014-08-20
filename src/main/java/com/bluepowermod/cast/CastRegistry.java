@@ -18,7 +18,9 @@ import net.minecraftforge.oredict.OreDictionary;
 import com.bluepowermod.api.cast.ICast;
 import com.bluepowermod.api.cast.ICastRegistry;
 import com.bluepowermod.init.BPFluids;
-import com.bluepowermod.util.Refs;
+import com.bluepowermod.init.BPItems;
+
+import cpw.mods.fml.common.Loader;
 
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class CastRegistry implements ICastRegistry {
@@ -179,6 +181,26 @@ public class CastRegistry implements ICastRegistry {
     }
 
     @Override
+    public ItemStack getResult(ICast cast, Fluid fluid) {
+
+        Entry<FluidStack, ItemStack> recipe = getRecipe(cast, fluid);
+        if (recipe != null)
+            return recipe.getValue();
+
+        return null;
+    }
+
+    @Override
+    public Entry<FluidStack, ItemStack> getRecipe(ICast cast, Fluid fluid) {
+
+        for (Entry<ICast, Entry<FluidStack, ItemStack>> r : recipes)
+            if (r.getKey() == cast && r.getValue().getKey().getFluid() == fluid)
+                return r.getValue();
+
+        return null;
+    }
+
+    @Override
     public void registerCookingHeatSource(Block block) {
 
         heatSources.add(new AbstractMap.SimpleEntry(block, -1));
@@ -202,7 +224,7 @@ public class CastRegistry implements ICastRegistry {
                 return true;
         }
 
-        return block == Blocks.lava;
+        return false;
     }
 
     public static ICast ingotCast;
@@ -215,13 +237,14 @@ public class CastRegistry implements ICastRegistry {
         {
             // Ingot cast
             {
-                ingotCast = new DefaultCast("ingot", Refs.MODID + ":casts/ingot");
+                ingotCast = new DefaultCast("ingot");
                 r.registerCast(ingotCast);
                 for (String ore : OreDictionary.getOreNames())
                     if (ore.startsWith("ingot"))
                         for (ItemStack is : OreDictionary.getOres(ore))
                             r.registerCastTemplate(ingotCast, is);
                 r.registerCastTemplate(ingotCast, new ItemStack(Items.brick));
+                r.registerCastTemplate(ingotCast, new ItemStack(Items.netherbrick));
             }
         }
 
@@ -231,6 +254,19 @@ public class CastRegistry implements ICastRegistry {
             {
                 r.registerCastRecipe(ingotCast, new FluidStack(BPFluids.molten_gold, BPFluids.INGOT_AMOUNT), new ItemStack(Items.gold_ingot));
                 r.registerCastRecipe(ingotCast, new FluidStack(BPFluids.molten_iron, BPFluids.INGOT_AMOUNT), new ItemStack(Items.iron_ingot));
+                r.registerCastRecipe(ingotCast, new FluidStack(BPFluids.molten_brass, BPFluids.INGOT_AMOUNT), new ItemStack(BPItems.brass_ingot));
+                r.registerCastRecipe(ingotCast, new FluidStack(BPFluids.molten_blue_alloy, BPFluids.INGOT_AMOUNT), new ItemStack(
+                        BPItems.blue_alloy_ingot));
+            }
+        }
+
+        // Register heat sources
+        {
+            r.registerCookingHeatSource(Blocks.lava);
+            r.registerCookingHeatSource(Blocks.fire);
+            r.registerCookingHeatSource(Blocks.torch);
+            if (Loader.isModLoaded("Thaumcraft")) {
+                r.registerCookingHeatSource((Block) Block.blockRegistry.getObject("Thaumcraft:blockAiry"), 1);
             }
         }
     }

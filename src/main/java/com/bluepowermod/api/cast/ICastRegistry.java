@@ -5,6 +5,7 @@ import java.util.Map.Entry;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
 public interface ICastRegistry {
@@ -32,6 +33,10 @@ public interface ICastRegistry {
     public ICast getCastFromStack(ItemStack stack);
 
     public List<Entry<FluidStack, ItemStack>> getRecipes(ICast cast);
+
+    public ItemStack getResult(ICast cast, Fluid fluid);
+
+    public Entry<FluidStack, ItemStack> getRecipe(ICast cast, Fluid fluid);
 
     public void registerCookingHeatSource(Block block);
 

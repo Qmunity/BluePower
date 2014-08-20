@@ -4,6 +4,7 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.util.IIcon;
 
 import com.bluepowermod.api.cast.ICast;
+import com.bluepowermod.util.Refs;
 
 public class DefaultCast implements ICast {
 
@@ -15,6 +16,12 @@ public class DefaultCast implements ICast {
 
         this.type = type;
         this.texture = texture;
+    }
+
+    public DefaultCast(String type) {
+
+        this.type = type;
+        texture = Refs.MODID + ":casts/" + type;
     }
 
     @Override
