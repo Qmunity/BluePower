@@ -114,26 +114,27 @@ public class PartCastingTable extends BPPart implements IFluidHandler {
     @Override
     public boolean onActivated(EntityPlayer player, ItemStack item) {
 
-        if (cast == null) {
-            if (item != null) {
-                if (item.getItem() instanceof ItemCast) {
-                    cast = BPApi.getInstance().getCastRegistry().getCastFromStack(item);
-                    if (cast != null) {
-                        if (!getWorld().isRemote) {
-                            if (!player.capabilities.isCreativeMode)
-                                item.stackSize--;
-                            sendUpdatePacket();
-                        }
-                        return true;
-                    }
-                }
+        if (result != null) {
+            if (!getWorld().isRemote) {
+                IOHelper.spawnItemInWorld(getWorld(), result, getX(), getY(), getZ());
+                result = null;
+                sendUpdatePacket();
             }
+            return true;
         } else {
-            if (result != null) {
-                if (!getWorld().isRemote) {
-                    IOHelper.spawnItemInWorld(getWorld(), result, getX(), getY(), getZ());
-                    result = null;
-                    sendUpdatePacket();
+            if (cast == null) {
+                if (item != null) {
+                    if (item.getItem() instanceof ItemCast) {
+                        cast = BPApi.getInstance().getCastRegistry().getCastFromStack(item);
+                        if (cast != null) {
+                            if (!getWorld().isRemote) {
+                                if (!player.capabilities.isCreativeMode)
+                                    item.stackSize--;
+                                sendUpdatePacket();
+                            }
+                            return true;
+                        }
+                    }
                 }
             } else {
                 if (tank.getFluidAmount() > 0)

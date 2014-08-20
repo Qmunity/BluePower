@@ -96,9 +96,6 @@ public class CastRegistry implements ICastRegistry {
         if (output.stackSize <= 0)
             return;
 
-        if (cast == null)
-            return;
-
         Entry<FluidStack, ItemStack> recipe = new AbstractMap.SimpleEntry(input, output);
         recipes.add(new AbstractMap.SimpleEntry(cast, recipe));
 
@@ -257,6 +254,12 @@ public class CastRegistry implements ICastRegistry {
                 r.registerCastRecipe(ingotCast, new FluidStack(BPFluids.molten_brass, BPFluids.INGOT_AMOUNT), new ItemStack(BPItems.brass_ingot));
                 r.registerCastRecipe(ingotCast, new FluidStack(BPFluids.molten_blue_alloy, BPFluids.INGOT_AMOUNT), new ItemStack(
                         BPItems.blue_alloy_ingot));
+            }
+
+            // Plates (no cast)
+            {
+                r.registerCastRecipe((ICast) null, new FluidStack(BPFluids.molten_galvanized_iron, BPFluids.INGOT_AMOUNT * 3), new ItemStack(
+                        BPItems.galvanized_iron_plate));
             }
         }
 

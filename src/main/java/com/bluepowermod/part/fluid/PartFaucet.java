@@ -231,7 +231,7 @@ public class PartFaucet extends BPPartFace {
 
         totalDown = y;
         if (destTank != null && destTank instanceof PartCastingTable) {
-            totalDown -= 7;
+            totalDown -= 6;
         } else {
             TileEntity below = getWorld().getTileEntity(getX(), getY() - 1, getZ());
             if (below != null) {
@@ -274,31 +274,32 @@ public class PartFaucet extends BPPartFace {
                     sendUpdate = true;
             }
 
-            if (inputTank.getFluidAmount() > 10) {
-                if (progressFaucetEnd < length + 1) {
+        }
+        if (inputTank.getFluidAmount() > 10) {
+            if (progressFaucetEnd < length + 1) {
+                progressFaucetStart = 0;
+                progressFaucetEnd += 0.3;
+            } else if (progressDownEnd < totalDown) {
+                progressDownStart = 0;
+                progressDownEnd += 0.25;
+            }
+        }
+        if (inputTank.getFluidAmount() <= 10) {
+            if (progressFaucetEnd > 0 || progressFaucetStart > 0) {
+                progressFaucetStart += 0.55;
+                if (progressFaucetStart >= length) {
                     progressFaucetStart = 0;
-                    progressFaucetEnd += 0.3;
-                } else if (progressDownEnd < totalDown) {
+                    progressFaucetEnd = 0;
+                }
+            } else if (progressDownEnd > 0 || progressDownStart > 0) {
+                progressDownStart += 0.4;
+                if (progressDownStart >= totalDown) {
                     progressDownStart = 0;
-                    progressDownEnd += 0.25;
+                    progressDownEnd = 0;
                 }
             }
-            if (inputTank.getFluidAmount() <= 10) {
-                if (progressFaucetEnd > 0 || progressFaucetStart > 0) {
-                    progressFaucetStart += 0.55;
-                    if (progressFaucetStart >= length) {
-                        progressFaucetStart = 0;
-                        progressFaucetEnd = 0;
-                    }
-                } else if (progressDownEnd > 0 || progressDownStart > 0) {
-                    progressDownStart += 0.4;
-                    if (progressDownStart >= totalDown) {
-                        progressDownStart = 0;
-                        progressDownEnd = 0;
-                    }
-                }
-            }
-
+        }
+        if (destTank != null && isTransfering) {
             progressDownEnd = Math.max(0, Math.min(totalDown, progressDownEnd));
             progressDownStart = Math.max(0, Math.min(totalDown, progressDownStart));
             progressFaucetEnd = Math.max(0, Math.min(length + 1, progressFaucetEnd));
@@ -315,13 +316,13 @@ public class PartFaucet extends BPPartFace {
                     sendUpdate = true;
                 }
             }
-            if (inputTank.getFluidAmount() == 0 && outputTank.getFluidAmount() == 0 && amountToTransfer == 0) {
+            if (inputTank.getFluidAmount() == 0 && outputTank.getFluidAmount() == 0 && amountToTransfer == 0 && progressDownEnd == 0) {
                 isTransfering = false;
                 amountToTransfer = 0;
                 fluidToTransfer = null;
                 if (destTank instanceof PartCastingTable)
                     ((PartCastingTable) destTank).setInUse(false);
-                sendUpdate = false;
+                sendUpdate = true;
             }
         }
 

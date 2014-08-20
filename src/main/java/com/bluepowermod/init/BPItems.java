@@ -115,7 +115,7 @@ public class BPItems {
     public static Item blue_doped_wafer;
     public static ItemBase screwdriver;
     public static Item athame;
-    public static ItemBase zincplate;
+    public static ItemBase galvanized_iron_plate;
     public static ItemBase stone_tile;
     public static ItemBase stone_wire;
     public static ItemBase stone_anode;
@@ -209,7 +209,7 @@ public class BPItems {
         red_doped_wafer = new ItemSiliconWafer(Refs.REDDOPEDWAFER_NAME).setCreativeTab(CustomTabs.tabBluePowerItems);
         screwdriver = new ItemScrewdriver();
         athame = new ItemAthame();
-        zincplate = new ItemGalvanizedIronPlate();
+        galvanized_iron_plate = new ItemGalvanizedIronPlate();
         stone_tile = new ItemCrafting(Refs.STONETILE_NAME);
         stone_wire = new ItemCrafting(Refs.STONEWIRE_NAME);
         stone_anode = new ItemCrafting(Refs.STONEANODE_NAME);
@@ -312,7 +312,7 @@ public class BPItems {
         GameRegistry.registerItem(red_doped_wafer, Refs.REDDOPEDWAFER_NAME);
         GameRegistry.registerItem(screwdriver, Refs.SCREWDRIVER_NAME);
         GameRegistry.registerItem(athame, Refs.ATHAME_NAME);
-        GameRegistry.registerItem(zincplate, Refs.GALVANIZEDIRONPLATE_NAME);
+        GameRegistry.registerItem(galvanized_iron_plate, Refs.GALVANIZEDIRONPLATE_NAME);
 
         GameRegistry.registerItem(stone_tile, Refs.STONETILE_NAME);
         GameRegistry.registerItem(stone_wire, Refs.STONEWIRE_NAME);
