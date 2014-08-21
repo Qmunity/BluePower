@@ -48,6 +48,7 @@ public class SlotCircuitTableCrafting extends SlotCrafting {
     public static boolean canCraft(ItemStack stack, TileCircuitTable circuitTable) {
     
         List<ItemStack> requiredItems = getCraftingComponents(stack);
+        if (requiredItems.size() == 0) return false;
         for (ItemStack requiredItem : requiredItems) {
             ItemStack extractedStack = IOHelper.extract(circuitTable, ForgeDirection.UNKNOWN, requiredItem, true, true);
             if (extractedStack == null || extractedStack.stackSize < requiredItem.stackSize) return false;
