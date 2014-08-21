@@ -170,8 +170,7 @@ public class Recipes {
         craftManager.addRecipe(PartRegistry.getInstance().getItemForPart("rs"), "WWA", "C#C", "AWW", '#', BPItems.stone_tile, 'A', BPItems.stone_anode, 'C', BPItems.stone_cathode, 'W', BPItems.stone_wire);
         craftManager.addRecipe(PartRegistry.getInstance().getItemForPart("sequencer"), "#C#", "CPC", "#C#", '#', BPItems.stone_tile, 'C', BPItems.stone_cathode, 'P', BPItems.stone_pointer);
         craftManager.addRecipe(PartRegistry.getInstance().getItemForPart("state"), "#AC", "WXP", "#W#", '#', BPItems.stone_tile, 'A', BPItems.stone_anode, 'C', BPItems.stone_cathode, 'P', BPItems.stone_pointer, 'W', BPItems.stone_wire, 'X', BPItems.silicon_chip);
-        // craftManager.addRecipe(PartRegistry.getInstance().getItemForPart("synchronizer"), "WCW", "XAX", "WWW", '#', 'A', BPItems.stone_anode, 'C',
-        // BPItems.stone_cathode, 'W', BPItems.stone_wire, 'X', BPItems.silicon_chip);
+        craftManager.addRecipe(PartRegistry.getInstance().getItemForPart("synchronizer"), "WCW", "XAX", "WWW", '#', 'A', BPItems.stone_anode, 'C', BPItems.stone_cathode, 'W', BPItems.stone_wire, 'X', BPItems.silicon_chip);
         craftManager.addRecipe(PartRegistry.getInstance().getItemForPart("timer"), "#W#", "WPW", "ACA", '#', BPItems.stone_tile, 'A', BPItems.stone_anode, 'C', BPItems.stone_cathode, 'W', BPItems.stone_wire, 'P', BPItems.stone_pointer);
         craftManager.addRecipe(PartRegistry.getInstance().getItemForPart("toggle"), "#C#", "WLW", "#C#", '#', BPItems.stone_tile, 'C', BPItems.stone_cathode, 'W', BPItems.stone_wire, 'L', Blocks.lever);
         craftManager.addRecipe(PartRegistry.getInstance().getItemForPart("transparent"), "ACW", "CCC", "CW#", '#', BPItems.stone_tile, 'A', BPItems.stone_anode, 'C', BPItems.stone_cathode, 'W', BPItems.stone_wire);
