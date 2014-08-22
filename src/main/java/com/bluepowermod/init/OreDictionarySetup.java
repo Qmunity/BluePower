@@ -30,10 +30,10 @@ public class OreDictionarySetup {
         OreDictionary.registerOre("marble", BPBlocks.marble);
         OreDictionary.registerOre("basalt", BPBlocks.basalt);
         
-        OreDictionary.registerOre("gemRuby", BPItems.ruby);
-        OreDictionary.registerOre("gemAmethyst", BPItems.amethyst);
-        OreDictionary.registerOre("gemSapphire", BPItems.sapphire);
-        OreDictionary.registerOre("dustTeslatite", BPItems.teslatite);
+        OreDictionary.registerOre("gemRuby", BPItems.ruby_gem);
+        OreDictionary.registerOre("gemAmethyst", BPItems.amethyst_gem);
+        OreDictionary.registerOre("gemSapphire", BPItems.sapphire_gem);
+        OreDictionary.registerOre("dustTeslatite", BPItems.teslatite_dust);
         OreDictionary.registerOre("ingotCopper", BPItems.copper_ingot);
         OreDictionary.registerOre("ingotZinc", BPItems.zinc_ingot);
         OreDictionary.registerOre("ingotSilver", BPItems.silver_ingot);

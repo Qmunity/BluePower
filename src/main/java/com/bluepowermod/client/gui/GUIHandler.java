@@ -157,7 +157,7 @@ public class GUIHandler implements IGuiHandler {
                 return new GuiSortingMachine(player.inventory, (TileSortingMachine) ent);
             case SEEDBAG:
                 if (player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() instanceof ItemSeedBag) { return new GuiSeedBag(player.getCurrentEquippedItem(), player.inventory, InventoryItem.getItemInventory(player, player.getCurrentEquippedItem(),
-                        BPItems.seedBag.getUnlocalizedName(), 9)); }
+                        BPItems.seed_bag.getUnlocalizedName(), 9)); }
             case CANVAS_BAG:
                 if (player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() instanceof ItemCanvasBag) { return new GuiCanvasBag(player.getCurrentEquippedItem(), player.inventory, InventoryItem.getItemInventory(player, player.getCurrentEquippedItem(),
                         BPItems.canvas_bag.getUnlocalizedName(), 27)); }

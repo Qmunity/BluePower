@@ -67,7 +67,7 @@ public class BPBlocks {
     public static final Block basalt_cobble       = new BlockStoneOre(Refs.BASALTCOBBLE_NAME);
     public static final Block basalt_brick        = new BlockStoneOre(Refs.BASALTBRICK_NAME);
     public static final Block marble_brick        = new BlockStoneOre(Refs.MARBLEBRICK_NAME);
-    public static final Block cracked_basalt      = new BlockCrackedBasalt(Refs.CRACKED_BASALT);
+    public static final Block cracked_basalt_lava = new BlockCrackedBasalt(Refs.CRACKED_BASALT);
     
     public static final Block basaltbrick_cracked = new BlockStoneOre(Refs.CRACKEDBASALTBRICK_NAME);
     public static final Block basalt_brick_small  = new BlockStoneOre(Refs.SMALLBASALTBRICK_NAME);
@@ -101,7 +101,7 @@ public class BPBlocks {
     public static final Block flax_crop           = new BlockCrop().setBlockName(Refs.FLAXCROP_NAME);
     public static final Block indigo_flower       = new BlockCustomFlower(Refs.INDIGOFLOWER_NAME);
     
-    public static final Block alloy_furnace       = new BlockAlloyFurnace();
+    public static final Block alloyfurnace        = new BlockAlloyFurnace();
     public static final Block block_breaker       = new BlockContainerFrontRender(Material.rock, TileBlockBreaker.class).setBlockName(Refs.BLOCKBREAKER_NAME);
     public static final Block igniter             = new BlockIgniter();
     public static final Block buffer              = new BlockContainerBase(Material.rock, TileBuffer.class).setGuiId(GuiIDs.BUFFER).setBlockName(Refs.BLOCKBUFFER_NAME);
@@ -156,7 +156,7 @@ public class BPBlocks {
         GameRegistry.registerBlock(basaltbrick_cracked, Refs.CRACKEDBASALTBRICK_NAME);
         GameRegistry.registerBlock(fancy_basalt, Refs.CHISELEDBASALTBRICK_NAME);
         GameRegistry.registerBlock(basalt_brick_small, Refs.SMALLBASALTBRICK_NAME);
-        GameRegistry.registerBlock(cracked_basalt, Refs.CRACKED_BASALT);
+        GameRegistry.registerBlock(cracked_basalt_lava, Refs.CRACKED_BASALT);
         GameRegistry.registerBlock(basalt_tile, Refs.BASALTTILE_NAME);
         GameRegistry.registerBlock(basalt_paver, Refs.BASALTPAVER_NAME);
         
@@ -188,7 +188,7 @@ public class BPBlocks {
         GameRegistry.registerBlock(flax_crop, Refs.FLAXCROP_NAME);
         GameRegistry.registerBlock(indigo_flower, Refs.INDIGOFLOWER_NAME);
         
-        GameRegistry.registerBlock(alloy_furnace, Refs.ALLOYFURNACE_NAME);
+        GameRegistry.registerBlock(alloyfurnace, Refs.ALLOYFURNACE_NAME);
         GameRegistry.registerBlock(sorting_machine, Refs.SORTING_MACHINE_NAME);
         GameRegistry.registerBlock(block_breaker, Refs.BLOCKBREAKER_NAME);
         GameRegistry.registerBlock(igniter, Refs.BLOCKIGNITER_NAME);

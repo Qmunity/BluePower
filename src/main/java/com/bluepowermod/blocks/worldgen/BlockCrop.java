@@ -182,7 +182,7 @@ public class BlockCrop extends BlockCrops implements IGrowable {
     @Override
     protected Item func_149866_i() {
 
-        return BPItems.flax_seed;
+        return BPItems.flax_seeds;
     }
 
     @Override

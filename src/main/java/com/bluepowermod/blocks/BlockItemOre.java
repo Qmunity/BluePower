@@ -99,13 +99,13 @@ public class BlockItemOre extends BlockBase {
 
         blockName = blockName.substring(Refs.MODID.length() + 1);
         if (blockName.equalsIgnoreCase(Refs.TESLATITEORE_NAME)) {
-            return BPItems.teslatite;
+            return BPItems.teslatite_dust;
         } else if (blockName.equalsIgnoreCase(Refs.RUBYORE_NAME)) {
-            return BPItems.ruby;
+            return BPItems.ruby_gem;
         } else if (blockName.equalsIgnoreCase(Refs.SAPPHIREORE_NAME)) {
-            return BPItems.sapphire;
+            return BPItems.sapphire_gem;
         } else if (blockName.equalsIgnoreCase(Refs.AMETHYSTORE_NAME)) {
-            return BPItems.amethyst;
+            return BPItems.amethyst_gem;
         } else {
             return null;
         }

@@ -128,7 +128,7 @@ public class BlockAlloyFurnace extends BlockContainerBase {
     @Override
     public Item getItemDropped(int p_149650_1_, Random random, int p_149650_3_) {
     
-        return Item.getItemFromBlock(BPBlocks.alloy_furnace);
+        return Item.getItemFromBlock(BPBlocks.alloyfurnace);
     }
     
     @Override

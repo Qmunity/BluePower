@@ -281,7 +281,7 @@ public class TileAlloyFurnace extends TileBase implements IInventory {
     @Override
     public String getInventoryName() {
     
-        return BPBlocks.alloy_furnace.getUnlocalizedName();
+        return BPBlocks.alloyfurnace.getUnlocalizedName();
     }
     
     @Override

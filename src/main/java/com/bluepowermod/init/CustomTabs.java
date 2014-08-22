@@ -17,15 +17,14 @@
 
 package com.bluepowermod.init;
 
-import java.util.List;
-
+import com.bluepowermod.part.PartRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 
-import com.bluepowermod.part.PartRegistry;
+import java.util.List;
 
 public class CustomTabs {
     
@@ -57,7 +56,7 @@ public class CustomTabs {
             @Override
             public Item getTabIconItem() {
             
-                Block iconBlock = BPBlocks.alloy_furnace;
+                Block iconBlock = BPBlocks.alloyfurnace;
                 if (iconBlock != null) {
                     return Item.getItemFromBlock(iconBlock);
                 } else {
@@ -71,9 +70,9 @@ public class CustomTabs {
             @Override
             public Item getTabIconItem() {
             
-                Item iconItem = BPItems.ruby;
+                Item iconItem = BPItems.ruby_gem;
                 if (iconItem != null) {
-                    return BPItems.ruby;
+                    return BPItems.ruby_gem;
                 } else {
                     return Items.diamond;
                 }
