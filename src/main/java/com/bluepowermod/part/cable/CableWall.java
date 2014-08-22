@@ -1,14 +1,6 @@
 package com.bluepowermod.part.cable;
 
-import java.util.List;
-
-import net.minecraft.block.Block;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraftforge.common.util.ForgeDirection;
 import codechicken.multipart.TMultiPart;
-
 import com.bluepowermod.api.compat.IMultipartCompat;
 import com.bluepowermod.api.part.BPPartFace;
 import com.bluepowermod.api.util.ForgeDirectionUtils;
@@ -16,9 +8,15 @@ import com.bluepowermod.api.vec.Vector3;
 import com.bluepowermod.compat.CompatibilityUtils;
 import com.bluepowermod.part.cable.bluestone.ICableConnect;
 import com.bluepowermod.util.Dependencies;
-
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Optional;
+import net.minecraft.block.Block;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraftforge.common.util.ForgeDirection;
+
+import java.util.List;
 
 /**
  * @author amadornes

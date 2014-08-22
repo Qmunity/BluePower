@@ -7,8 +7,12 @@
  */
 package com.bluepowermod.api.vec;
 
-import java.util.StringTokenizer;
-
+import codechicken.lib.math.MathHelper;
+import codechicken.lib.vec.BlockCoord;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.Optional;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
@@ -18,12 +22,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
-import codechicken.lib.math.MathHelper;
-import codechicken.lib.vec.BlockCoord;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.Optional;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+
+import java.util.StringTokenizer;
 
 public class Vector3 {
 
@@ -41,6 +41,16 @@ public class Vector3 {
 
         this(x, y, z);
         this.w = w;
+    }
+
+    public Vector3(double x, double y, double z, ForgeDirection dir) {
+
+        this(x + dir.offsetX, y + dir.offsetY, z + dir.offsetZ);
+    }
+
+    public Vector3(Vector3 v, ForgeDirection dir) {
+
+        this(v.getX() + dir.offsetX, v.getY() + dir.offsetY, v.getZ() + dir.offsetZ, v.getWorld());
     }
 
     public Vector3(TileEntity te) {

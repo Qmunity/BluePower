@@ -101,7 +101,7 @@ public class BPBlocks {
     public static Block sortron;
     public static Block multipart;
 
-    public static Block solarPanel
+    public static Block solarPanel = new BlockSolarPanel();
 
     public static void init() {
 
@@ -177,6 +177,9 @@ GameRegistry.registerBlock(io_expander, Refs.BLOCKIOEXPANDER_NAME);
 GameRegistry.registerBlock(engine, Refs.ENGINE_NAME);
 GameRegistry.registerBlock(kinetic_generator, Refs.KINETICGENERATOR_NAME);
 GameRegistry.registerBlock(windmill, Refs.WINDMILL_NAME);*/
+
+        GameRegistry.registerBlock(solarPanel, Refs.SOLAR_PANEL_NAME);
+
         for (int i = 0; i < ItemDye.field_150922_c.length; i++) {
             GameRegistry.registerBlock(blockLamp[i], blockLamp[i].getUnlocalizedName().substring(blockLamp[i].getUnlocalizedName().indexOf(":") + 1));
         }

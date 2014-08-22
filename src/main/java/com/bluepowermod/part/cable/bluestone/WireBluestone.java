@@ -1,28 +1,9 @@
 package com.bluepowermod.part.cable.bluestone;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockRedstoneWire;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.IItemRenderer.ItemRenderType;
-import net.minecraftforge.common.util.ForgeDirection;
-
-import org.lwjgl.opengl.GL11;
-
 import codechicken.multipart.IFaceRedstonePart;
 import codechicken.multipart.IRedstonePart;
 import codechicken.multipart.TMultiPart;
 import codechicken.multipart.TileMultipart;
-
 import com.bluepowermod.api.BPApi;
 import com.bluepowermod.api.bluestone.IBluestoneWire;
 import com.bluepowermod.api.compat.IMultipartCompat;
@@ -40,9 +21,24 @@ import com.bluepowermod.init.CustomTabs;
 import com.bluepowermod.part.cable.CableWall;
 import com.bluepowermod.util.Dependencies;
 import com.bluepowermod.util.Refs;
-
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Optional;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockRedstoneWire;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.IItemRenderer.ItemRenderType;
+import net.minecraftforge.common.util.ForgeDirection;
+import org.lwjgl.opengl.GL11;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class WireBluestone extends CableWall implements IBluestoneWire, ICableSize {
 

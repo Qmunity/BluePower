@@ -21,7 +21,7 @@ public class BlockSolarPanel extends BlockContainerBase {
     public BlockSolarPanel() {
 
         super(Material.rock, TileSolarPanel.class);
-        setBlockName(Refs.SOLAR_PANEL);
+        setBlockName(Refs.SOLAR_PANEL_NAME);
     }
 
     @Override

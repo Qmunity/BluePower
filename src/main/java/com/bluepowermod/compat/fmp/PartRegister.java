@@ -86,12 +86,15 @@ public class PartRegister {
         PartRegistry.getInstance().registerPart(MagTube.class);
         PartRegistry.getInstance().registerPart(Accelerator.class);
 
+
+        PartRegistry.getInstance().registerPart(WireBluePower.class);
+
         // Bluestone
         PartRegistry.getInstance().registerPart(WireBluestone.class);// Normal
         for (int i = 0; i < ItemDye.field_150922_c.length; i++)
             PartRegistry.getInstance().registerPart(WireBluestone.class, ItemDye.field_150922_c[i], ItemDye.field_150921_b[i].toLowerCase());// Colored
 
-        PartRegistry.getInstance().registerPart(WireBluePower.class);
+
     }
 
 }
