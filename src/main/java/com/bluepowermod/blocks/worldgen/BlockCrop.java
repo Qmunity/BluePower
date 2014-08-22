@@ -35,6 +35,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.EnumPlantType;
@@ -102,16 +103,13 @@ public class BlockCrop extends BlockCrops implements IGrowable {
     public void fertilize(World world, int x, int y, int z) {
 
         int meta = world.getBlockMetadata(x, y, z);
-        if (world.getBlock(x, y + 1, z) instanceof BlockAir) {
-            if (meta < 5) {
+        if (world.getBlock(x, y + 1, z) instanceof BlockAir && (meta < 7)) {
+            meta = meta + MathHelper.getRandomIntegerInRange(world.rand, 2, 5);
+            if (meta > 6) {
                 world.setBlockMetadataWithNotify(x, y, z, 7, 2);
                 world.setBlock(x, y + 1, z, BPBlocks.flax_crop, 8, 2);
-                return;
-            }
-            return;
-        } else {
-            if (meta < 5) {
-                world.setBlockMetadataWithNotify(x, y, z, 5, 2);
+            } else {
+                world.setBlockMetadataWithNotify(x, y, z, meta, 2);
             }
         }
     }
@@ -138,18 +136,22 @@ public class BlockCrop extends BlockCrops implements IGrowable {
             if ((meta == 4) || (meta == 5)) {
                 return;
             }
-            if ((world.getBlock(x, y - 1, z) != Blocks.farmland) || (world.getBlock(x, y - 1, z) == BPBlocks.flax_crop)
+            if (!(world.getBlock(x, y - 1, z) instanceof BlockFarmland) || (world.getBlock(x, y - 1, z) == BPBlocks.flax_crop)
                     || (!world.isAirBlock(x, y + 1, z))) {
                 return;
             }
-            if (random.nextInt(30) == 0) {
+            if (random.nextInt(45) == 0) {
                 world.setBlockMetadataWithNotify(x, y, z, meta + 1, 2);
             }
-            if ((meta > 6) && (world.getBlock(x, y - 1, z) == Blocks.farmland) && (world.getBlock(x, y + 1, z) == Blocks.air)) {
+            if ((meta > 6) && (world.getBlock(x, y - 1, z) instanceof BlockFarmland) && (world.getBlock(x, y + 1, z) instanceof BlockAir)) {
                 if (meta == 7) {
                     world.setBlock(x, y + 1, z, BPBlocks.flax_crop, 8, 2);
                 }
                 world.setBlockMetadataWithNotify(x, y, z, 7, 2);
+            }
+            if ((meta > 7) && (world.getBlock(x, y - 1, z) instanceof BlockFarmland)) {
+                world.setBlockMetadataWithNotify(x, y, z, 7, 2);
+                world.setBlock(x, y + 1, z, BPBlocks.flax_crop, 8, 2);
             }
         }
     }
@@ -180,7 +182,7 @@ public class BlockCrop extends BlockCrops implements IGrowable {
     @Override
     protected Item func_149866_i() {
 
-        return BPItems.flax_seed;
+        return BPItems.flax_seeds;
     }
 
     @Override

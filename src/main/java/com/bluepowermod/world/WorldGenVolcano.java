@@ -87,7 +87,7 @@ public class WorldGenVolcano {
     
         // world.setBlock(x, topY, z, Blocks.lava);
         if (rand.nextDouble() < Config.volcanoActiveToInactiveRatio) {
-            world.setBlock(x, topY, z, BPBlocks.cracked_basalt);
+            world.setBlock(x, topY, z, BPBlocks.cracked_basalt_lava);
         } else {
             world.setBlock(x, topY + 1, z, Blocks.lava);
             world.setBlock(x, topY, z, Blocks.lava);// This block set, which does update neighbors, will make the lava above update.

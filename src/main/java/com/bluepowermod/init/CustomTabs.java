@@ -36,8 +36,8 @@ public class CustomTabs {
     public static CreativeTabs tabBluePowerLighting;
     public static CreativeTabs tabBluePowerPower;
     
-    public static void init() {
-    
+    static {
+        
         tabBluePowerBlocks = new BPCreativeTab("tabBluePowerBlocks") {
             
             @Override
@@ -57,7 +57,7 @@ public class CustomTabs {
             @Override
             public Item getTabIconItem() {
             
-                Block iconBlock = BPBlocks.alloy_furnace;
+                Block iconBlock = BPBlocks.alloyfurnace;
                 if (iconBlock != null) {
                     return Item.getItemFromBlock(iconBlock);
                 } else {
@@ -71,9 +71,9 @@ public class CustomTabs {
             @Override
             public Item getTabIconItem() {
             
-                Item iconItem = BPItems.ruby;
+                Item iconItem = BPItems.ruby_gem;
                 if (iconItem != null) {
-                    return BPItems.ruby;
+                    return BPItems.ruby_gem;
                 } else {
                     return Items.diamond;
                 }

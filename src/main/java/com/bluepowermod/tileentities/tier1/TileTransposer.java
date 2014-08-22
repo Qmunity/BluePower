@@ -90,7 +90,7 @@ public class TileTransposer extends TileMachineBase {
         for (EntityItem entity : (List<EntityItem>) worldObj.getEntitiesWithinAABB(EntityItem.class, ITEM_SUCK_AABBS[getFacingDirection().ordinal()]
                 .copy().offset(xCoord, yCoord, zCoord))) {
             ItemStack stack = entity.getEntityItem();
-            if (isItemAccepted(stack)) {
+            if (isItemAccepted(stack) && !entity.isDead) {
                 addItemToOutputBuffer(stack, getAcceptedItemColor(stack));
                 entity.setDead();
             }

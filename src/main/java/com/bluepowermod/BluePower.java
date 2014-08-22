@@ -12,8 +12,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
-
 import net.minecraftforge.common.util.EnumHelper;
+
 import org.apache.logging.log4j.Logger;
 
 import com.bluepowermod.api.BPApi;
@@ -25,7 +25,6 @@ import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.init.BPEnchantments;
 import com.bluepowermod.init.BPItems;
 import com.bluepowermod.init.Config;
-import com.bluepowermod.init.CustomTabs;
 import com.bluepowermod.init.OreDictionarySetup;
 import com.bluepowermod.init.Recipes;
 import com.bluepowermod.init.TileEntities;
@@ -48,71 +47,70 @@ import cpw.mods.fml.common.registry.GameRegistry;
 
 @Mod(modid = Refs.MODID, name = Refs.NAME, guiFactory = Refs.GUIFACTORY)
 public class BluePower {
-
+    
     @Instance(Refs.MODID)
-    public static BluePower instance;
-
+    public static BluePower         instance;
+    
     @SidedProxy(clientSide = Refs.PROXY_LOCATION + ".ClientProxy", serverSide = Refs.PROXY_LOCATION + ".CommonProxy")
-    public static CommonProxy proxy;
-    public static Logger log;
-    public static Configuration config;
+    public static CommonProxy       proxy;
+    public static Logger            log;
+    public static Configuration     config;
     public static Item.ToolMaterial gemMaterial = EnumHelper.addToolMaterial("GEM", 2, 750, 6.0F, 2.0F, 18);
-
+    
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
-
+    
         event.getModMetadata().version = Refs.fullVersionString();
-
+        
         log = event.getModLog();
         config = new Configuration(event.getSuggestedConfigurationFile());
-
+        
         BPApi.init(new BluePowerAPI());
-        CustomTabs.init();
         // Load configs
         Config.syncConfig(config);
-
+        
         BPBlocks.init();
         BPItems.init();
-
+        
         TileEntities.init();
         OreDictionarySetup.init();
         GameRegistry.registerWorldGenerator(new WorldGenerationHandler(), 0);
-
+        
         BPEnchantments.init();
-
+        
         CompatibilityUtils.preInit(event);
-
+        
         FMLCommonHandler.instance().bus().register(new Config());
         BPEventHandler eventHandler = new BPEventHandler();
         MinecraftForge.EVENT_BUS.register(eventHandler);
         FMLCommonHandler.instance().bus().register(eventHandler);
-
+        
         PartRegister.registerParts();
-
+        
         BPApi.getInstance().getBluestoneApi();
     }
-
+    
     @EventHandler
     public void init(FMLInitializationEvent event) {
-
+    
         Recipes.init(CraftingManager.getInstance());
         proxy.init();
         NetworkHandler.init();
         NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GUIHandler());
         CompatibilityUtils.init(event);
     }
-
+    
     @EventHandler
     public void postInit(FMLPostInitializationEvent event) {
-
+    
         CompatibilityUtils.postInit(event);
         AlloyFurnaceRegistry.getInstance().generateRecyclingRecipes();
         proxy.initRenderers();
     }
-
+    
     @EventHandler
     public void serverStarting(FMLServerStartingEvent event) {
-
+    
         // register commands
     }
 }

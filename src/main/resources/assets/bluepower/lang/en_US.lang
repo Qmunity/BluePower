@@ -261,6 +261,7 @@ item.bluepower:blue_doped_wafer.name=Blue Doped Wafer
 item.bluepower:red_doped_wafer.name=Red Doped Wafer
 item.bluepower:athame.name=Athame
 item.bluepower:screwdriver.name=Screwdriver
+item.bluepower:silky_screwdriver.name=Silky Screwdriver
 item.bluepower:zincplate.name=Zinc Plate
 item.bluepower:stone_tile.name=Stone Tile
 item.bluepower:stone_wire.name=Stone Wire Tile

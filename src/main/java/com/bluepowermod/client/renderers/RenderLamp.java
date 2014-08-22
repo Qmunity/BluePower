@@ -9,9 +9,11 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.client.IItemRenderer;
+import net.minecraftforge.common.util.ForgeDirection;
 
 import org.lwjgl.opengl.GL11;
 
+import com.bluepowermod.api.vec.Vector3;
 import com.bluepowermod.api.vec.Vector3Cube;
 import com.bluepowermod.blocks.machines.BlockLamp;
 import com.bluepowermod.tileentities.tier1.TileLamp;
@@ -205,19 +207,48 @@ public class RenderLamp extends TileEntitySpecialRenderer implements ISimpleBloc
                 power = 15 - power;
             }
             // power = 15;
-            Vector3Cube vector = new Vector3Cube(0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
+            Vector3 vector = new Vector3(te);
+            Vector3Cube box = new Vector3Cube(-0.5, -0.5, -0.5, 0.5, 0.5, 0.5).expand(0.8 / 16D);
+
+            boolean[] renderFaces = new boolean[] { true, true, true, true, true, true };
+
+            for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
+                if (vector.getRelative(d).getBlock() instanceof BlockLamp) {
+                    if (d.offsetX < 0) {
+                        box.getMin().setX(-0.5);
+                        renderFaces[2] = false;
+                    } else if (d.offsetY < 0) {
+                        box.getMin().setY(-0.5);
+                        renderFaces[1] = false;
+                    } else if (d.offsetZ < 0) {
+                        box.getMin().setZ(-0.5);
+                        renderFaces[4] = false;
+                    } else if (d.offsetX > 0) {
+                        box.getMax().setX(0.5);
+                        renderFaces[3] = false;
+                    } else if (d.offsetY > 0) {
+                        box.getMax().setY(0.5);
+                        renderFaces[0] = false;
+                    } else if (d.offsetZ > 0) {
+                        box.getMax().setZ(0.5);
+                        renderFaces[5] = false;
+                    }
+                }
+            }
+
+            box.getMin().add(0.5, 0.5, 0.5);
+            box.getMax().add(0.5, 0.5, 0.5);
+
             GL11.glTranslated(x, y, z);
             GL11.glEnable(GL11.GL_BLEND);
             GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
             GL11.glDisable(GL11.GL_TEXTURE_2D);
             GL11.glDisable(GL11.GL_LIGHTING);
             // GL11.glDisable(GL11.GL_CULL_FACE);
-            // GL11.glDepthMask(false);
             GL11.glBegin(GL11.GL_QUADS);
-            double powerDivision = (power / 15D);
-            RenderHelper.drawColoredCube(vector.clone().expand(0.8 / 16D), r / 256D, g / 256D, b / 256D, powerDivision * 0.625D);
+            double powerDivision = power / 18D;
+            RenderHelper.drawColoredCube(box, r / 256D, g / 256D, b / 256D, powerDivision * 0.625D, renderFaces);
             GL11.glEnd();
-            // GL11.glDepthMask(true);
             GL11.glEnable(GL11.GL_CULL_FACE);
             GL11.glEnable(GL11.GL_LIGHTING);
             GL11.glEnable(GL11.GL_TEXTURE_2D);

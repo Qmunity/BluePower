@@ -39,6 +39,7 @@ public class TubeStack {
     public ForgeDirection      heading;
     public boolean             enabled        = true;                  // will be disabled when the client sided stack is at an intersection, at which point it needs to wait for server
                                                                         // input. This just serves a visual purpose.
+    public int                 idleCounter;                            //increased when the stack is standing still. This will cause the client to remove the stack when a timeout occurs.
     private TileEntity         target;                                 // only should have a value when retrieving items. this is the target the item wants to go to.
     private int                targetX, targetY, targetZ;
     private ForgeDirection     targetEntryDir = ForgeDirection.UNKNOWN; // Which side should this item make its entry.
@@ -84,6 +85,7 @@ public class TubeStack {
             progress += speed;
             return progress >= 0.5 && isEntering;
         } else {
+            idleCounter++;
             return false;
         }
     }
