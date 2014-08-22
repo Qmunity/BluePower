@@ -145,7 +145,7 @@ public class TubeLogic implements IPneumaticTube {
                 if (tube != null) {// we don't need to check connections, that's catched earlier.
                     TubeLogic logic = tube.getLogic();
                     tubeStack.progress = 0;
-                    tubeStack.oldProgress = -TubeStack.ITEM_SPEED;
+                    tubeStack.oldProgress = -tubeStack.getSpeed();
                     logic.tubeStacks.add(tubeStack);// transfer to another tube.
                     iterator.remove();
                 } else if (!this.tube.getWorld().isRemote) {
@@ -176,6 +176,8 @@ public class TubeLogic implements IPneumaticTube {
                     iterator.remove();
                 }
                 
+            } else if (tubeStack.idleCounter > 100) {
+                iterator.remove();
             }
         }
     }
