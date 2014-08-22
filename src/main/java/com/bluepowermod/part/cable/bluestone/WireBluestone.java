@@ -59,20 +59,27 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
     private int power = 0;
     private int powerSelf = 0;
 
-    private boolean isSamplePart = false;
-    private boolean shouldUpdate;
+    private boolean isItemRenderer = false;
 
     private int color = -1;
     private String colorName = null;
+    private boolean isBundled = false;
 
     public WireBluestone(Integer color, String colorName) {
 
+        this(color, colorName, false);
+    }
+
+    public WireBluestone(Integer color, String colorName, Boolean bundled) {
+
         this.color = color.intValue();
         this.colorName = colorName;
+        isBundled = bundled.booleanValue();
     }
 
     public WireBluestone() {
 
+        this(-1, null);
     }
 
     @Override
@@ -96,8 +103,29 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
     @Override
     public boolean canConnectToCable(CableWall cable) {
 
-        return cable != null && cable instanceof WireBluestone
-                && (((WireBluestone) cable).color == color || ((WireBluestone) cable).color == -1 || color == -1);
+        if (cable != null && cable instanceof WireBluestone) {
+            WireBluestone w = (WireBluestone) cable;
+
+            if (isBundled) {
+                if (w.isBundled) {
+                    if (color == w.color || color == -1 || w.color == -1)
+                        return true;
+                } else {
+                    if (w.color != -1)
+                        return true;
+                }
+            } else {
+                if (w.isBundled) {
+                    if (color != -1)
+                        return true;
+                } else {
+                    if (color == w.color || color == -1 || w.color == -1)
+                        return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     @Override
@@ -273,11 +301,11 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
 
                     int len = 0;
 
-                    if (!isSamplePart)
+                    if (!isItemRenderer)
                         len = BPApi.getInstance().getBluestoneApi().getExtraLength(v, this, d);
                     int val = 1 + (v.distanceTo(this.loc) > 1 ? 1 : len);
 
-                    if (!isSamplePart) {
+                    if (!isItemRenderer) {
                         GL11.glPushMatrix();
                         {
                             int times = 0;
@@ -486,7 +514,7 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
     @Override
     public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
 
-        isSamplePart = true;
+        isItemRenderer = true;
 
         if (connections[ForgeDirectionUtils.getSide(ForgeDirection.EAST)] == null) {
             loc = new Vector3(0, -1, 0);
@@ -535,70 +563,14 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
         BPApi.getInstance().getBluestoneApi().renderBox(minx, miny, minz, maxx, maxy, maxz);
     }
 
-    public void propagate(List<WireBluestone> wires, int[] power) {
-
-        if (getWorld() == null)
-            return;
-
-        wires.add(this);
-
-        power[0] = Math.max(power[0], powerSelf);
-
-        for (Object o : connections) {
-            if (wires.contains(o))
-                continue;
-            if (o instanceof WireBluestone)
-                ((WireBluestone) o).propagate(wires, power);
-        }
-    }
-
-    public void propagate(WireBluestone... extras) {
-
-        if (getWorld() == null)
-            return;
-
-        if (!getWorld().isRemote) {
-            int oldPS = powerSelf;
-
-            recalculatePower();
-
-            if (powerSelf != oldPS || shouldUpdate) {
-                List<WireBluestone> l = new ArrayList<WireBluestone>();
-                int[] power = new int[1];
-                power[0] = 0;
-                propagate(l, power);
-                for (WireBluestone w : extras) {
-                    w.propagate(l, power);
-                    if (!l.contains(w))
-                        l.add(w);
-                }
-                for (WireBluestone w : l) {
-                    w.power = power[0];
-                    w.sendUpdatePacket();
-
-                    if (w.hasSetFace()) {
-                        for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
-                            int val = 0;
-                            if (w.isConnectedOnSide(d))
-                                val = w.power;
-                            RedstoneConnection c = w.getConnection(d);
-                            if (c != null)
-                                c.setPower(val, false);
-                        }
-                        if (w.loc != null) {
-                            for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
-                                Vector3 v = w.loc.getRelative(d);
-                                w.getWorld().notifyBlockChange(v.getBlockX(), v.getBlockY(), v.getBlockZ(), w.loc.getBlock());
-                                w.getWorld().markBlockForUpdate(v.getBlockX(), v.getBlockY(), v.getBlockZ());
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
     private void recalculatePower() {
+
+        if (loc == null)
+            loc = new Vector3(getX(), getY(), getZ(), getWorld());
+        loc.setX(getX());
+        loc.setY(getY());
+        loc.setZ(getZ());
+        loc.setWorld(getWorld());
 
         powerSelf = 0;
 
@@ -669,10 +641,74 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
     public void update() {
 
         super.update();
+    }
 
-        propagate();
+    @Override
+    public void onUpdate() {
 
-        shouldUpdate = false;
+        super.onUpdate();
+
+        try {
+            propagate();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void propagate() {
+
+        if (getWorld() == null)
+            return;
+        if (getWorld().isRemote)
+            return;
+
+        List<WireBluestone> wires = new ArrayList<WireBluestone>();
+        int[] power = new int[] { 0 };
+
+        propagate(wires, power);
+
+        for (WireBluestone wire : wires) {
+            wire.power = power[0];
+            wire.sendUpdatePacket();
+
+            if (wire.hasSetFace()) {
+                for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
+                    RedstoneConnection con = wire.getConnection(d);
+                    if (con != null)
+                        con.setPower(0, false);
+                }
+                for (int i = 0; i < 6; i++) {
+                    Object o = wire.connections[i];
+                    RedstoneConnection con = wire.getConnection(ForgeDirection.getOrientation(i));
+                    if (con != null) {
+                        if (o != null) {
+                            if (!(o instanceof WireBluestone)) {
+                                con.setPower(power[0], false);
+                            } else {
+                                con.setPower(0, false);
+                            }
+                        } else {
+                            con.setPower(0, false);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private void propagate(List<WireBluestone> wires, int[] power) {
+
+        recalculatePower();
+
+        wires.add(this);
+
+        power[0] = Math.max(power[0], powerSelf);
+
+        for (int i = 0; i < 6; i++)
+            if (connections[i] != null)
+                if (connections[i] instanceof WireBluestone)
+                    if (!wires.contains(connections[i]))
+                        ((WireBluestone) connections[i]).propagate(wires, power);
     }
 
     @Override
@@ -719,13 +755,13 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
     @Override
     public void onConnect(Object o) {
 
-        shouldUpdate = true;
+        propagate();
     }
 
     @Override
     public void onDisconnect(Object o) {
 
-        shouldUpdate = true;
+        propagate();
     }
 
     @Override
