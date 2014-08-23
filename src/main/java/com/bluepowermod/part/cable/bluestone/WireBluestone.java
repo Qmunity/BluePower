@@ -36,6 +36,7 @@ import com.bluepowermod.api.util.ForgeDirectionUtils;
 import com.bluepowermod.api.vec.Vector3;
 import com.bluepowermod.api.vec.Vector3Cube;
 import com.bluepowermod.compat.fmp.MultipartBPPart;
+import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.init.CustomTabs;
 import com.bluepowermod.part.cable.CableWall;
 import com.bluepowermod.util.Dependencies;
@@ -58,6 +59,8 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
 
     private int power = 0;
     private int powerSelf = 0;
+    
+    private static boolean updateState;
 
     private boolean isItemRenderer = false;
 
@@ -645,13 +648,16 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
 
     @Override
     public void onUpdate() {
-
-        super.onUpdate();
-
-        try {
-            propagate();
-        } catch (Exception ex) {
-            ex.printStackTrace();
+        if(!updateState){
+            updateState = true;
+            super.onUpdate();
+    
+            try {
+                propagate();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+            updateState = false;
         }
     }
 
@@ -693,6 +699,8 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
                     }
                 }
             }
+            getWorld().notifyBlocksOfNeighborChange(wire.getX(), wire.getY(), wire.getZ(), BPBlocks.multipart);
+            //This still needs to be expanded by notifying the blocks connected to the block this wire it attached to.
         }
     }
 
