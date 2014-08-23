@@ -62,11 +62,15 @@ public class MultipartFaceBPPart extends MultipartBPPart implements TFacePart, I
     @Override
     public int weakPowerLevel(int side) {
 
+        ForgeDirection face = ForgeDirection.getOrientation(getFace());
+        if (face != ForgeDirection.UP && face != ForgeDirection.DOWN)
+            face = face.getOpposite();
+
+        if (ForgeDirection.getOrientation(side) == face)
+            return getPart().getRedstonePower();
+
         if (getPart() instanceof IBPRedstonePart)
             return ((IBPRedstonePart) getPart()).getWeakOutput(ForgeDirection.getOrientation(side));
-
-        if (side == getFace())
-            return getPart().getRedstonePower();
 
         return 0;
     }
@@ -74,8 +78,15 @@ public class MultipartFaceBPPart extends MultipartBPPart implements TFacePart, I
     @Override
     public int strongPowerLevel(int side) {
 
-        if (side == getFace())
+        ForgeDirection face = ForgeDirection.getOrientation(getFace());
+        if (face != ForgeDirection.UP && face != ForgeDirection.DOWN)
+            face = face.getOpposite();
+
+        if (ForgeDirection.getOrientation(side) == face)
             return getPart().getRedstonePower();
+
+        if (getPart() instanceof IBPRedstonePart)
+            return ((IBPRedstonePart) getPart()).getStrongOutput(ForgeDirection.getOrientation(side));
 
         return 0;
     }

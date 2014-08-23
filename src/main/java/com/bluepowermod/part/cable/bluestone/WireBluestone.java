@@ -36,7 +36,6 @@ import com.bluepowermod.api.util.ForgeDirectionUtils;
 import com.bluepowermod.api.vec.Vector3;
 import com.bluepowermod.api.vec.Vector3Cube;
 import com.bluepowermod.compat.fmp.MultipartBPPart;
-import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.init.CustomTabs;
 import com.bluepowermod.part.cable.CableWall;
 import com.bluepowermod.util.Dependencies;
@@ -59,7 +58,7 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
 
     private int power = 0;
     private int powerSelf = 0;
-    
+
     private static boolean updateState;
 
     private boolean isItemRenderer = false;
@@ -648,10 +647,11 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
 
     @Override
     public void onUpdate() {
-        if(!updateState){
+
+        if (!updateState) {
             updateState = true;
             super.onUpdate();
-    
+
             try {
                 propagate();
             } catch (Exception ex) {
@@ -678,6 +678,9 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
             wire.sendUpdatePacket();
 
             if (wire.hasSetFace()) {
+                ForgeDirection face = ForgeDirection.getOrientation(wire.getFace());
+                if (face == ForgeDirection.UP || face == ForgeDirection.DOWN)
+                    face = face.getOpposite();
                 for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
                     RedstoneConnection con = wire.getConnection(d);
                     if (con != null)
@@ -698,9 +701,14 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
                         }
                     }
                 }
+                if (wire.loc != null) {
+                    for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
+                        Vector3 v = wire.loc.getRelative(d);
+                        wire.getWorld().notifyBlockChange(v.getBlockX(), v.getBlockY(), v.getBlockZ(), wire.loc.getBlock());
+                        wire.getWorld().markBlockForUpdate(v.getBlockX(), v.getBlockY(), v.getBlockZ());
+                    }
+                }
             }
-            getWorld().notifyBlocksOfNeighborChange(wire.getX(), wire.getY(), wire.getZ(), BPBlocks.multipart);
-            //This still needs to be expanded by notifying the blocks connected to the block this wire it attached to.
         }
     }
 
@@ -763,19 +771,33 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
     @Override
     public void onConnect(Object o) {
 
-        propagate();
+        if (o instanceof WireBluestone)
+            ((WireBluestone) o).onUpdate();
     }
 
     @Override
     public void onDisconnect(Object o) {
 
-        propagate();
+        if (o instanceof WireBluestone)
+            ((WireBluestone) o).onUpdate();
     }
 
     @Override
     public int getRedstonePower() {
 
         return power;
+    }
+
+    @Override
+    public int getStrongOutput(ForgeDirection side) {
+
+        return getWeakOutput(side);
+    }
+
+    @Override
+    public int getWeakOutput(ForgeDirection side) {
+
+        return super.getWeakOutput(side);
     }
 
     @Override

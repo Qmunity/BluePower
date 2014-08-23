@@ -1,6 +1,9 @@
 package com.bluepowermod.api.part;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.util.ForgeDirection;
+
+import com.bluepowermod.api.vec.Vector3;
 
 public class RedstoneConnection {
 
@@ -102,8 +105,15 @@ public class RedstoneConnection {
 
         this.power = power;
 
-        if (last != power && part != null && notifyUpdate)
+        if (last != power && part != null && notifyUpdate) {
             part.notifyUpdate();
+            Vector3 loc = new Vector3(part.getX(), part.getY(), part.getZ(), part.getWorld());
+            for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
+                Vector3 v = loc.getRelative(d);
+                part.getWorld().notifyBlockChange(v.getBlockX(), v.getBlockY(), v.getBlockZ(), loc.getBlock());
+                part.getWorld().markBlockForUpdate(v.getBlockX(), v.getBlockY(), v.getBlockZ());
+            }
+        }
     }
 
     public int getPower() {
