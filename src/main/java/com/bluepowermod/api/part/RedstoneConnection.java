@@ -107,11 +107,13 @@ public class RedstoneConnection {
 
         if (last != power && part != null && notifyUpdate) {
             part.notifyUpdate();
-            Vector3 loc = new Vector3(part.getX(), part.getY(), part.getZ(), part.getWorld());
-            for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
-                Vector3 v = loc.getRelative(d);
-                part.getWorld().notifyBlockChange(v.getBlockX(), v.getBlockY(), v.getBlockZ(), loc.getBlock());
-                part.getWorld().markBlockForUpdate(v.getBlockX(), v.getBlockY(), v.getBlockZ());
+            if (part.getWorld() != null) {
+                Vector3 loc = new Vector3(part.getX(), part.getY(), part.getZ(), part.getWorld());
+                for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
+                    Vector3 v = loc.getRelative(d);
+                    part.getWorld().notifyBlockChange(v.getBlockX(), v.getBlockY(), v.getBlockZ(), loc.getBlock());
+                    part.getWorld().markBlockForUpdate(v.getBlockX(), v.getBlockY(), v.getBlockZ());
+                }
             }
         }
     }

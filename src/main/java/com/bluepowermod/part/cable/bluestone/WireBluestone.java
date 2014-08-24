@@ -66,6 +66,7 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
     private int color = -1;
     private String colorName = null;
     private boolean isBundled = false;
+    private boolean hasTicked = false;
 
     public WireBluestone(Integer color, String colorName) {
 
@@ -643,6 +644,8 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
     public void update() {
 
         super.update();
+
+        hasTicked = true;
     }
 
     @Override
@@ -675,7 +678,6 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
 
         for (WireBluestone wire : wires) {
             wire.power = power[0];
-            wire.sendUpdatePacket();
 
             if (wire.hasSetFace()) {
                 ForgeDirection face = ForgeDirection.getOrientation(wire.getFace());
@@ -701,14 +703,10 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
                         }
                     }
                 }
-                if (wire.loc != null) {
-                    for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
-                        Vector3 v = wire.loc.getRelative(d);
-                        wire.getWorld().notifyBlockChange(v.getBlockX(), v.getBlockY(), v.getBlockZ(), wire.loc.getBlock());
-                        wire.getWorld().markBlockForUpdate(v.getBlockX(), v.getBlockY(), v.getBlockZ());
-                    }
-                }
+                wire.notifyRedstoneUpdate();
             }
+
+            wire.sendUpdatePacket();
         }
     }
 
@@ -727,6 +725,17 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
                         ((WireBluestone) connections[i]).propagate(wires, power);
     }
 
+    private void notifyRedstoneUpdate() {
+
+        if (loc != null) {
+            for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
+                Vector3 v = loc.getRelative(d);
+                getWorld().notifyBlockChange(v.getBlockX(), v.getBlockY(), v.getBlockZ(), loc.getBlock());
+                getWorld().markBlockForUpdate(v.getBlockX(), v.getBlockY(), v.getBlockZ());
+            }
+        }
+    }
+
     @Override
     public void writeUpdatePacket(NBTTagCompound tag) {
 
@@ -741,8 +750,6 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
         super.readUpdatePacket(tag);
 
         power = tag.getInteger("power");
-
-        onUpdate();
     }
 
     public int getPower() {
@@ -771,21 +778,43 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
     @Override
     public void onConnect(Object o) {
 
-        if (o instanceof WireBluestone)
-            ((WireBluestone) o).onUpdate();
+        if (updateState) {
+            if (o instanceof WireBluestone) {
+                WireBluestone w = (WireBluestone) o;
+                if (w.loc != null) {
+                    if (loc.getDirectionTo(w.loc) == null || !hasTicked) {
+                        updateState = false;
+                        w.onUpdate();
+                        updateState = true;
+                    }
+                }
+            }
+        }
     }
 
     @Override
     public void onDisconnect(Object o) {
 
-        if (o instanceof WireBluestone)
-            ((WireBluestone) o).onUpdate();
+        if (updateState) {
+            if (o instanceof WireBluestone) {
+                WireBluestone w = (WireBluestone) o;
+                if (w.loc != null) {
+                    if (loc.getDirectionTo(w.loc) == null || !hasTicked) {
+                        updateState = false;
+                        w.onUpdate();
+                        updateState = true;
+                    }
+                }
+            }
+        }
     }
+
+    private boolean emit = true;
 
     @Override
     public int getRedstonePower() {
 
-        return power;
+        return emit ? power : 0;
     }
 
     @Override
@@ -797,7 +826,7 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
     @Override
     public int getWeakOutput(ForgeDirection side) {
 
-        return super.getWeakOutput(side);
+        return emit ? super.getWeakOutput(side) : 0;
     }
 
     @Override
@@ -810,6 +839,16 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
     public boolean canStay() {
 
         return super.canStay();
+    }
+
+    @Override
+    public void onRemoved() {
+
+        emit = false;
+
+        super.onRemoved();
+
+        notifyRedstoneUpdate();
     }
 
 }
