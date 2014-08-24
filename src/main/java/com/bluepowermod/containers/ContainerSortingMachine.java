@@ -37,111 +37,128 @@ import cpw.mods.fml.relauncher.SideOnly;
  * @author MineMaarten
  */
 public class ContainerSortingMachine extends ContainerGhosts {
-    
+
     private final TileSortingMachine sortingMachine;
-    
-    private int                      pullMode, sortMode, curColumn = -1;
-    private final int[]              colors = new int[9];
-    
+
+    private int pullMode, sortMode, curColumn = -1;
+    private final int[] colors = new int[9];
+    private final int[] fuzzySettings = new int[8];
+
     public ContainerSortingMachine(InventoryPlayer invPlayer, TileSortingMachine sortingMachine) {
-    
+
         this.sortingMachine = sortingMachine;
-        
+
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 8; j++) {
                 addSlotToContainer(new SlotPhantom(sortingMachine, i * 8 + j, 26 + j * 18, 18 + i * 18));
             }
         }
         bindPlayerInventory(invPlayer);
-        
+
     }
-    
+
     protected void bindPlayerInventory(InventoryPlayer invPlayer) {
-    
-        int offset = 140;
+
+        int offset = 157;
         // Render inventory
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 9; j++) {
                 addSlotToContainer(new Slot(invPlayer, j + i * 9 + 9, 8 + j * 18, offset + i * 18));
             }
         }
-        
+
         // Render hotbar
         for (int j = 0; j < 9; j++) {
             addSlotToContainer(new Slot(invPlayer, j, 8 + j * 18, 58 + offset));
         }
     }
-    
+
     @Override
     public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int par2) {
-    
+
         return null;
     }
-    
+
     /**
      * Looks for changes made in the container, sends them to every listener.
      */
     @Override
     public void detectAndSendChanges() {
-    
+
         super.detectAndSendChanges();
-        
+
         for (Object crafter : crafters) {
             ICrafting icrafting = (ICrafting) crafter;
-            
+
             for (int i = 0; i < 9; i++) {
                 if (colors[i] != sortingMachine.colors[i].ordinal()) {
                     icrafting.sendProgressBarUpdate(this, i, sortingMachine.colors[i].ordinal());
                 }
             }
-            
+
             if (pullMode != sortingMachine.pullMode.ordinal()) {
                 icrafting.sendProgressBarUpdate(this, 9, sortingMachine.pullMode.ordinal());
             }
-            
+
             if (sortMode != sortingMachine.sortMode.ordinal()) {
                 icrafting.sendProgressBarUpdate(this, 10, sortingMachine.sortMode.ordinal());
             }
-            
+
             if (curColumn != sortingMachine.curColumn) {
                 icrafting.sendProgressBarUpdate(this, 11, sortingMachine.curColumn);
             }
+
+            for (int i = 0; i < 8; i++) {
+                if (fuzzySettings[i] != sortingMachine.fuzzySettings[i]) {
+                    icrafting.sendProgressBarUpdate(this, i + 12, sortingMachine.fuzzySettings[i]);
+                }
+            }
         }
-        
+
         pullMode = sortingMachine.pullMode.ordinal();
         sortMode = sortingMachine.sortMode.ordinal();
         curColumn = sortingMachine.curColumn;
         for (int i = 0; i < colors.length; i++) {
             colors[i] = sortingMachine.colors[i].ordinal();
         }
+        for (int i = 0; i < fuzzySettings.length; i++) {
+            fuzzySettings[i] = sortingMachine.fuzzySettings[i];
+        }
     }
-    
+
     @Override
     @SideOnly(Side.CLIENT)
     public void updateProgressBar(int id, int value) {
-    
+
         if (id < 9) {
             sortingMachine.colors[id] = TubeColor.values()[value];
+            ((GuiBase) ClientProxy.getOpenedGui()).redraw();
         }
-        
+
         if (id == 9) {
             sortingMachine.pullMode = TileSortingMachine.PullMode.values()[value];
+            ((GuiBase) ClientProxy.getOpenedGui()).redraw();
         }
-        
+
         if (id == 10) {
             sortingMachine.sortMode = TileSortingMachine.SortMode.values()[value];
             ((GuiBase) ClientProxy.getOpenedGui()).redraw();
         }
-        
+
         if (id == 11) {
             sortingMachine.curColumn = value;
         }
+
+        if (id >= 12 && id < 21) {
+            sortingMachine.fuzzySettings[id - 12] = value;
+            ((GuiBase) ClientProxy.getOpenedGui()).redraw();
+        }
     }
-    
+
     @Override
     public boolean canInteractWith(EntityPlayer entityplayer) {
-    
+
         return sortingMachine.isUseableByPlayer(entityplayer);
     }
-    
+
 }

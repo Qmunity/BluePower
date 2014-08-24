@@ -38,14 +38,15 @@ import cpw.mods.fml.relauncher.SideOnly;
  * @author MineMaarten
  */
 public class ContainerFilter extends Container {
-    
+
     private final TileFilter tileFilter;
-    private int              filterColor;
-    
+    private int filterColor;
+    private int fuzzySetting;
+
     public ContainerFilter(InventoryPlayer invPlayer, TileFilter ejector) {
-    
+
         tileFilter = ejector;
-        
+
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 3; ++j) {
                 addSlotToContainer(new Slot(ejector, j + i * 3, 62 + j * 18, 17 + i * 18));
@@ -53,68 +54,79 @@ public class ContainerFilter extends Container {
         }
         bindPlayerInventory(invPlayer);
     }
-    
+
     protected void bindPlayerInventory(InventoryPlayer invPlayer) {
-    
+
         // Render inventory
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 9; j++) {
                 addSlotToContainer(new Slot(invPlayer, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
             }
         }
-        
+
         // Render hotbar
         for (int j = 0; j < 9; j++) {
             addSlotToContainer(new Slot(invPlayer, j, 8 + j * 18, 142));
         }
     }
-    
+
     /**
      * Looks for changes made in the container, sends them to every listener.
      */
     @Override
     public void detectAndSendChanges() {
-    
+
         super.detectAndSendChanges();
-        
+
         for (Object crafter : crafters) {
             ICrafting icrafting = (ICrafting) crafter;
-            
+
             if (filterColor != tileFilter.filterColor.ordinal()) {
                 icrafting.sendProgressBarUpdate(this, 0, tileFilter.filterColor.ordinal());
             }
+
+            if (fuzzySetting != tileFilter.fuzzySetting) {
+                icrafting.sendProgressBarUpdate(this, 1, tileFilter.fuzzySetting);
+            }
         }
         filterColor = tileFilter.filterColor.ordinal();
+        fuzzySetting = tileFilter.fuzzySetting;
     }
-    
+
     @Override
     @SideOnly(Side.CLIENT)
     public void updateProgressBar(int id, int value) {
-    
+
         if (id == 0) {
             tileFilter.filterColor = TubeColor.values()[value];
             ((GuiBase) ClientProxy.getOpenedGui()).redraw();
         }
-        
+        if (id == 1) {
+            tileFilter.fuzzySetting = value;
+            ((GuiBase) ClientProxy.getOpenedGui()).redraw();
+        }
     }
-    
+
     @Override
     public boolean canInteractWith(EntityPlayer player) {
-    
+
         return tileFilter.isUseableByPlayer(player);
     }
-    
+
     @Override
     public ItemStack transferStackInSlot(EntityPlayer player, int par2) {
-    
+
         ItemStack itemstack = null;
         Slot slot = (Slot) inventorySlots.get(par2);
         if (slot != null && slot.getHasStack()) {
             ItemStack itemstack1 = slot.getStack();
             itemstack = itemstack1.copy();
             if (par2 < 9) {
-                if (!mergeItemStack(itemstack1, 9, 45, true)) return null;
-            } else if (!mergeItemStack(itemstack1, 0, 9, false)) { return null; }
+                if (!mergeItemStack(itemstack1, 9, 45, true))
+                    return null;
+            } else if (!mergeItemStack(itemstack1, 0, 9, false)) {
+                return null;
+            }
             if (itemstack1.stackSize == 0) {
                 slot.putStack(null);
             } else {

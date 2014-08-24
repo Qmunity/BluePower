@@ -8,6 +8,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import com.bluepowermod.client.gui.widget.WidgetFuzzySetting;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.part.IGuiButtonSensitive;
 import com.bluepowermod.part.tube.TubeStack;
@@ -21,6 +22,7 @@ public class TileItemDetector extends TileMachineBase implements ISidedInventory
     public int mode;
     private final ItemStack[] inventory = new ItemStack[9];
     private int savedPulses = 0;
+    public int fuzzySetting;
 
     @Override
     public void updateEntity() {
@@ -70,7 +72,7 @@ public class TileItemDetector extends TileMachineBase implements ISidedInventory
         boolean everythingNull = true;
         for (ItemStack invStack : inventory) {
             if (invStack != null) {
-                if (item.isItemEqual(invStack)) {
+                if (WidgetFuzzySetting.areStacksEqual(invStack, item, fuzzySetting)) {
                     return true;
                 }
                 everythingNull = false;
@@ -93,6 +95,7 @@ public class TileItemDetector extends TileMachineBase implements ISidedInventory
         }
 
         mode = tCompound.getByte("mode");
+        fuzzySetting = tCompound.getByte("fuzzySetting");
     }
 
     /**
@@ -112,6 +115,7 @@ public class TileItemDetector extends TileMachineBase implements ISidedInventory
         }
 
         tCompound.setByte("mode", (byte) mode);
+        tCompound.setByte("fuzzySetting", (byte) fuzzySetting);
     }
 
     @Override
@@ -238,6 +242,9 @@ public class TileItemDetector extends TileMachineBase implements ISidedInventory
 
         if (messageId == 0)
             mode = value;
+        if (messageId == 1) {
+            fuzzySetting = value;
+        }
     }
 
     @Override

@@ -470,6 +470,14 @@ gui.widget.color.magenta=Magenta
 gui.widget.color.orange=Orange
 gui.widget.color.white=White
 
+gui.widget.fuzzy=§bFilter Fuzzyness
+gui.widget.fuzzy.normal=§3Normal
+gui.widget.fuzzy.normal.info=Considers items to be the same when the item is equal and the damage is equal.
+gui.widget.fuzzy.fuzzy=§3Fuzzy
+gui.widget.fuzzy.fuzzy.info=Considers items to be the same when they are Ore Dictionary equivalents.
+gui.widget.fuzzy.exact=§3Exact
+gui.widget.fuzzy.exact.info=Considers items to be the same when they are exactly the same, including NBT. This means that a Diamond Sword is considered different from an enchanted Diamond Sword.
+
 gui.tooltip.hasSilkyData=§eHas Extra Silky Data
 
 direction.front=Front

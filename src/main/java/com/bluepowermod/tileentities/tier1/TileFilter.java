@@ -10,6 +10,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
+import com.bluepowermod.client.gui.widget.WidgetFuzzySetting;
 import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.part.IGuiButtonSensitive;
@@ -22,6 +23,7 @@ public class TileFilter extends TileTransposer implements ISidedInventory, IGuiB
 
     protected final ItemStack[] inventory = new ItemStack[9];
     public TubeColor filterColor = TubeColor.NONE;
+    public int fuzzySetting;
 
     @Override
     public TubeStack acceptItemFromTube(TubeStack stack, ForgeDirection from, boolean simulate) {
@@ -39,7 +41,7 @@ public class TileFilter extends TileTransposer implements ISidedInventory, IGuiB
         boolean everythingNull = true;
         for (ItemStack invStack : inventory) {
             if (invStack != null) {
-                if (item.isItemEqual(invStack)) {
+                if (WidgetFuzzySetting.areStacksEqual(invStack, item, fuzzySetting)) {
                     return true;
                 }
                 everythingNull = false;
@@ -65,7 +67,7 @@ public class TileFilter extends TileTransposer implements ISidedInventory, IGuiB
             for (ItemStack filterStack : inventory) {
                 if (filterStack != null) {
                     everythingNull = false;
-                    ItemStack extractedStack = IOHelper.extract(tile, direction, filterStack, true, false);
+                    ItemStack extractedStack = IOHelper.extract(tile, direction, filterStack, true, false, fuzzySetting);
                     if (extractedStack != null) {
                         this.addItemToOutputBuffer(extractedStack, filterColor);
                         break;
@@ -94,6 +96,7 @@ public class TileFilter extends TileTransposer implements ISidedInventory, IGuiB
             inventory[i] = ItemStack.loadItemStackFromNBT(tc);
         }
         filterColor = TubeColor.values()[tCompound.getByte("filterColor")];
+        fuzzySetting = tCompound.getByte("fuzzySetting");
     }
 
     /**
@@ -113,6 +116,7 @@ public class TileFilter extends TileTransposer implements ISidedInventory, IGuiB
         }
 
         tCompound.setByte("filterColor", (byte) filterColor.ordinal());
+        tCompound.setByte("fuzzySetting", (byte) fuzzySetting);
     }
 
     @Override
@@ -239,6 +243,8 @@ public class TileFilter extends TileTransposer implements ISidedInventory, IGuiB
 
         if (messageId == 0)
             filterColor = TubeColor.values()[value];
+        if (messageId == 1)
+            fuzzySetting = value;
     }
 
     @Override

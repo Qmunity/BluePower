@@ -9,20 +9,21 @@ import com.bluepowermod.api.compat.IMultipartCompat;
 import com.bluepowermod.compat.CompatibilityUtils;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.part.tube.PneumaticTube;
+import com.bluepowermod.tileentities.IFuzzyRetrieving;
 import com.bluepowermod.tileentities.tier1.TileFilter;
 import com.bluepowermod.util.Dependencies;
 
 /**
  * @author MineMaarten
  */
-public class TileRetriever extends TileFilter {
-    
+public class TileRetriever extends TileFilter implements IFuzzyRetrieving {
+
     public int slotIndex;
     public int mode;
-    
+
     @Override
     protected void pullItem() {
-    
+
         if (isBufferEmpty()) {
             TileEntity extractingInventory = getTileCache()[getFacingDirection().ordinal()].getTileEntity();
             IMultipartCompat compat = (IMultipartCompat) CompatibilityUtils.getModule(Dependencies.FMP);
@@ -37,8 +38,10 @@ public class TileRetriever extends TileFilter {
                                 if (mode == 0) {
                                     slotIndex++;
                                     while (slotIndex != i) {
-                                        if (inventory[slotIndex] != null) break;
-                                        if (++slotIndex >= inventory.length) slotIndex = 0;
+                                        if (inventory[slotIndex] != null)
+                                            break;
+                                        if (++slotIndex >= inventory.length)
+                                            slotIndex = 0;
                                     }
                                 }
                                 return;
@@ -56,36 +59,41 @@ public class TileRetriever extends TileFilter {
             }
         }
     }
-    
+
     @Override
     public String getInventoryName() {
-    
+
         return BPBlocks.retriever.getUnlocalizedName();
     }
-    
+
     @Override
     public void onButtonPress(EntityPlayer player, int messageId, int value) {
-    
-        if (messageId == 1) {
+
+        if (messageId == 2) {
             mode = value;
         } else {
             super.onButtonPress(player, messageId, value);
         }
     }
-    
+
     @Override
     public void writeToNBT(NBTTagCompound tag) {
-    
+
         super.writeToNBT(tag);
         tag.setByte("slotIndex", (byte) slotIndex);
         tag.setByte("mode", (byte) mode);
     }
-    
+
     @Override
     public void readFromNBT(NBTTagCompound tag) {
-    
+
         super.readFromNBT(tag);
         slotIndex = tag.getByte("slotIndex");
         mode = tag.getByte("mode");
+    }
+
+    @Override
+    public int getFuzzySetting() {
+        return fuzzySetting;
     }
 }
