@@ -10,8 +10,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
-import com.bluepowermod.client.gui.widget.WidgetFuzzySetting;
 import com.bluepowermod.helper.IOHelper;
+import com.bluepowermod.helper.ItemStackHelper;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.part.IGuiButtonSensitive;
 import com.bluepowermod.part.tube.TubeStack;
@@ -41,7 +41,7 @@ public class TileFilter extends TileTransposer implements ISidedInventory, IGuiB
         boolean everythingNull = true;
         for (ItemStack invStack : inventory) {
             if (invStack != null) {
-                if (WidgetFuzzySetting.areStacksEqual(invStack, item, fuzzySetting)) {
+                if (ItemStackHelper.areStacksEqual(invStack, item, fuzzySetting)) {
                     return true;
                 }
                 everythingNull = false;

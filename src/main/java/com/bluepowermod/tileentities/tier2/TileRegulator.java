@@ -11,8 +11,8 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
-import com.bluepowermod.client.gui.widget.WidgetFuzzySetting;
 import com.bluepowermod.helper.IOHelper;
+import com.bluepowermod.helper.ItemStackHelper;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.part.IGuiButtonSensitive;
 import com.bluepowermod.part.tube.TubeStack;
@@ -68,7 +68,7 @@ public class TileRegulator extends TileMachineBase implements ISidedInventory, I
                             int supplyingInvCount = 0;
                             for (int slot : accessibleSlots) {
                                 ItemStack stackInSlot = inv.getStackInSlot(slot);
-                                if (stackInSlot != null && WidgetFuzzySetting.areStacksEqual(stackInSlot, inventory[i], fuzzySetting)
+                                if (stackInSlot != null && ItemStackHelper.areStacksEqual(stackInSlot, inventory[i], fuzzySetting)
                                         && IOHelper.canInsertItemToInventory(inv, inventory[i], slot, getFacingDirection().ordinal())) {
                                     supplyingInvCount += stackInSlot.stackSize;
                                 }
@@ -136,7 +136,7 @@ public class TileRegulator extends TileMachineBase implements ISidedInventory, I
                     int supplyingInvCount = 0;
                     for (int slot : accessibleSlots) {
                         ItemStack stackInSlot = inv.getStackInSlot(slot);
-                        if (stackInSlot != null && WidgetFuzzySetting.areStacksEqual(stackInSlot, inventory[i], fuzzySetting)
+                        if (stackInSlot != null && ItemStackHelper.areStacksEqual(stackInSlot, inventory[i], fuzzySetting)
                                 && IOHelper.canInsertItemToInventory(inv, inventory[i], slot, getFacingDirection().ordinal())) {
                             supplyingInvCount += stackInSlot.stackSize;
                         }
@@ -197,7 +197,7 @@ public class TileRegulator extends TileMachineBase implements ISidedInventory, I
 
         int count = 0;
         for (int i = section.ordinal() * 9; i < section.ordinal() * 9 + 9; i++) {
-            if (inventory[i] != null && WidgetFuzzySetting.areStacksEqual(type, inventory[i], fuzzySetting))
+            if (inventory[i] != null && ItemStackHelper.areStacksEqual(type, inventory[i], fuzzySetting))
                 count += inventory[i].stackSize;
         }
         return count;

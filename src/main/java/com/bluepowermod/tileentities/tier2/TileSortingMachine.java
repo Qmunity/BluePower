@@ -14,8 +14,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
-import com.bluepowermod.client.gui.widget.WidgetFuzzySetting;
 import com.bluepowermod.helper.IOHelper;
+import com.bluepowermod.helper.ItemStackHelper;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.part.IGuiButtonSensitive;
 import com.bluepowermod.part.tube.TubeStack;
@@ -167,7 +167,7 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
             if (filterStack != null) {
                 boolean duplicate = false;
                 for (ItemStack requirement : requirements) {
-                    if (WidgetFuzzySetting.areStacksEqual(requirement, filterStack, fuzzySettings[column])) {
+                    if (ItemStackHelper.areStacksEqual(requirement, filterStack, fuzzySettings[column])) {
                         requirement.stackSize += filterStack.stackSize;
                         duplicate = true;
                         break;
@@ -188,7 +188,7 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
             ItemStack stack = iterator.next();
             for (int slot : accessibleSlots) {
                 ItemStack invStack = inputInventory.getStackInSlot(slot);
-                if (invStack != null && WidgetFuzzySetting.areStacksEqual(invStack, stack, fuzzySettings[column])) {
+                if (invStack != null && ItemStackHelper.areStacksEqual(invStack, stack, fuzzySettings[column])) {
                     stack.stackSize -= invStack.stackSize;
                     if (stack.stackSize <= 0) {
                         iterator.remove();
@@ -202,7 +202,7 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
                 for (int slot : accessibleSlots) {
                     if (stack.stackSize > 0) {
                         ItemStack invStack = inputInventory.getStackInSlot(slot);
-                        if (invStack != null && WidgetFuzzySetting.areStacksEqual(invStack, stack, fuzzySettings[column])) {
+                        if (invStack != null && ItemStackHelper.areStacksEqual(invStack, stack, fuzzySettings[column])) {
                             int substracted = Math.min(stack.stackSize, invStack.stackSize);
                             stack.stackSize -= substracted;
                             invStack.stackSize -= substracted;
@@ -238,7 +238,7 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
         case ANY_ITEM_DEFAULT:
             for (int i = 0; i < inventory.length; i++) {
                 ItemStack filter = inventory[i];
-                if (filter != null && WidgetFuzzySetting.areStacksEqual(filter, stack, fuzzySettings[i % 8]) && stack.stackSize >= filter.stackSize) {
+                if (filter != null && ItemStackHelper.areStacksEqual(filter, stack, fuzzySettings[i % 8]) && stack.stackSize >= filter.stackSize) {
                     if (!simulate) {
                         addItemToOutputBuffer(filter.copy(), colors[i % 8]);
                         stack.stackSize -= filter.stackSize;
@@ -258,7 +258,7 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
         case ANY_STACK_DEFAULT:
             for (int i = 0; i < inventory.length; i++) {
                 ItemStack filter = inventory[i];
-                if (filter != null && WidgetFuzzySetting.areStacksEqual(filter, stack, fuzzySettings[i % 8])) {
+                if (filter != null && ItemStackHelper.areStacksEqual(filter, stack, fuzzySettings[i % 8])) {
                     if (!simulate) {
                         addItemToOutputBuffer(stack.copy(), colors[i % 8]);
                         stack.stackSize = 0;

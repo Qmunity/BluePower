@@ -8,7 +8,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
 
-import com.bluepowermod.client.gui.widget.WidgetFuzzySetting;
+import com.bluepowermod.helper.ItemStackHelper;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.part.IGuiButtonSensitive;
 import com.bluepowermod.part.tube.TubeStack;
@@ -72,7 +72,7 @@ public class TileItemDetector extends TileMachineBase implements ISidedInventory
         boolean everythingNull = true;
         for (ItemStack invStack : inventory) {
             if (invStack != null) {
-                if (WidgetFuzzySetting.areStacksEqual(invStack, item, fuzzySetting)) {
+                if (ItemStackHelper.areStacksEqual(invStack, item, fuzzySetting)) {
                     return true;
                 }
                 everythingNull = false;

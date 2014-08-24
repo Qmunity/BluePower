@@ -2,10 +2,6 @@ package com.bluepowermod.client.gui.widget;
 
 import java.util.List;
 
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.oredict.OreDictionary;
-
-import com.bluepowermod.util.ItemStackUtils;
 import com.bluepowermod.util.Refs;
 
 public class WidgetFuzzySetting extends WidgetMode {
@@ -62,22 +58,5 @@ public class WidgetFuzzySetting extends WidgetMode {
     protected int getTextureHeight() {
 
         return 14;
-    }
-
-    public static boolean areStacksEqual(ItemStack stack1, ItemStack stack2, int mode) {
-        if (stack1 == null && stack2 != null)
-            return false;
-        if (stack1 != null && stack2 == null)
-            return false;
-        if (stack1 == null && stack2 == null)
-            return true;
-
-        if (mode == 0) {
-            return OreDictionary.itemMatches(stack1, stack2, false);
-        } else if (mode == 1) {
-            return ItemStackUtils.isItemFuzzyEqual(stack1, stack2);
-        } else {
-            return OreDictionary.itemMatches(stack1, stack2, false) && ItemStack.areItemStackTagsEqual(stack1, stack2);
-        }
     }
 }

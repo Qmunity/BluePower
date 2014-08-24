@@ -14,7 +14,6 @@ import net.minecraftforge.common.util.ForgeDirection;
 import com.bluepowermod.api.compat.IMultipartCompat;
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
 import com.bluepowermod.api.tube.ITubeConnection;
-import com.bluepowermod.client.gui.widget.WidgetFuzzySetting;
 import com.bluepowermod.compat.CompatibilityUtils;
 import com.bluepowermod.part.tube.PneumaticTube;
 import com.bluepowermod.part.tube.TubeLogic;
@@ -114,7 +113,7 @@ public class IOHelper {
         for (int slot : slots) {
             ItemStack invStack = inventory.getStackInSlot(slot);
             if (invStack != null) {
-                if (WidgetFuzzySetting.areStacksEqual(invStack, type, fuzzySetting)) {
+                if (ItemStackHelper.areStacksEqual(invStack, type, fuzzySetting)) {
                     count += invStack.stackSize;
                 }
             }
@@ -154,7 +153,7 @@ public class IOHelper {
             int itemsFound = 0;
             for (int slot : accessibleSlots) {
                 ItemStack stack = inv.getStackInSlot(slot);
-                if (stack != null && WidgetFuzzySetting.areStacksEqual(stack, requestedStack, fuzzySetting)
+                if (stack != null && ItemStackHelper.areStacksEqual(stack, requestedStack, fuzzySetting)
                         && IOHelper.canExtractItemFromInventory(inv, stack, slot, direction.ordinal())) {
                     if (!useItemCount) {
                         if (!simulate) {
@@ -170,7 +169,7 @@ public class IOHelper {
                 int itemsNeeded = requestedStack.stackSize;
                 for (int slot : accessibleSlots) {
                     ItemStack stack = inv.getStackInSlot(slot);
-                    if (stack != null && WidgetFuzzySetting.areStacksEqual(stack, requestedStack, fuzzySetting)
+                    if (stack != null && ItemStackHelper.areStacksEqual(stack, requestedStack, fuzzySetting)
                             && IOHelper.canExtractItemFromInventory(inv, stack, slot, direction.ordinal())) {
                         int itemsSubstracted = Math.min(itemsNeeded, stack.stackSize);
                         if (itemsSubstracted > 0)
