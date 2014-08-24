@@ -43,6 +43,8 @@ public class TileEjector extends TileMachineBase implements IInventory {
                     output.stackSize = 1;
                     addItemToOutputBuffer(output);
                     inventory[i].stackSize--;
+                    if (inventory[i].stackSize == 0)
+                        inventory[i] = null;
                     break;
                 }
             }
