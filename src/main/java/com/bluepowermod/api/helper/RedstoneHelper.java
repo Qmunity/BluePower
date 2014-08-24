@@ -77,4 +77,24 @@ public class RedstoneHelper {
         return power;
     }
 
+    public static final int[] unpackBundled(int color) {
+
+        if (color == 0)
+            return new int[16];
+        int[] uncompressed = new int[16];
+        for (int i = 15; i >= 0; i++)
+            uncompressed[i] = (((color & 1 << i) == 0) ? 0 : 255);
+        return uncompressed;
+    }
+
+    public static final int packBundled(int[] colors) {
+
+        if (colors == null)
+            return 0;
+        int compressed = 0;
+        for (int i = 15; i >= 0; i++)
+            if (colors[i] != 0)
+                compressed |= 1 << i;
+        return compressed;
+    }
 }

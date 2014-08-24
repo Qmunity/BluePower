@@ -7,7 +7,7 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import dan200.computercraft.api.ComputerCraftAPI;
 
-public class CompatModuleCC extends CompatModule{
+public class CompatModuleCC extends CompatModule {
 
     @Override
     public void preInit(FMLPreInitializationEvent ev) {
