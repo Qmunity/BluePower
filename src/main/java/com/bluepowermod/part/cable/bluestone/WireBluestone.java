@@ -765,7 +765,6 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
                 wire.power = power[0];
 
                 if (wire.hasSetFace()) {
-                    ForgeDirection face = ForgeDirection.getOrientation(wire.getFace());
                     for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
                         RedstoneConnection con = wire.getConnection(d);
                         if (con != null)
@@ -812,7 +811,8 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
         for (int i = 0; i < 6; i++)
             if (connections[i] != null)
                 if (connections[i] instanceof WireBluestone)
-                    if (((WireBluestone) connections[i]).colorId == colorId || colorId == -1 || ((WireBluestone) connections[i]).colorId == -1)
+                    if (((WireBluestone) connections[i]).colorId == this.colorId || this.colorId == -1
+                            || ((WireBluestone) connections[i]).colorId == -1)
                         if (!isInList(wires, (WireBluestone) connections[i]))
                             ((WireBluestone) connections[i]).propagate(wires, power, isBundled ? colorId : this.colorId);
     }
