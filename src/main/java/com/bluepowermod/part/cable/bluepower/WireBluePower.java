@@ -78,17 +78,25 @@ public class WireBluePower extends CableWall implements ICableSize {
     @Override
     public boolean renderStatic(Vector3 loc, int pass) {
         if(pass == 0){
+
+            Tessellator t = Tessellator.instance;
+            t.draw();
+
             rotateAndTranslateDynamic(loc, pass, 0);
+
             GL11.glTranslated(0.5, 0.5, 0.5);
             GL11.glRotated(-90 * (getRotation() == 0 || getRotation() == 2 ? (getRotation() + 2) % 4 : getRotation()), 0, 1, 0);
             GL11.glTranslated(-0.5, -0.5, -0.5);
 
-            Tessellator t = Tessellator.instance;
+            GL11.glPushMatrix();
+            GL11.glDisable(GL11.GL_TEXTURE_2D);
+
             double center = 0.5;
             double minX = center - ((getCableWidth() * pixel) / 2.0);
             double minZ = center - ((getCableWidth() * pixel) / 2.0);
             double maxX = center + ((getCableWidth() * pixel) / 2.0);
             double maxZ = center + ((getCableWidth() * pixel) / 2.0);
+            t.startDrawingQuads();
             RenderHelper.drawTesselatedColoredCube(new Vector3Cube(minX, 0.0, minZ, maxX, getCableHeight()*pixel, maxZ));
 
             List<ForgeDirection> validDirs = new ArrayList<ForgeDirection>();
@@ -98,18 +106,23 @@ public class WireBluePower extends CableWall implements ICableSize {
                 }
             }
 
-            if((getFace() == 0 && validDirs.contains(ForgeDirection.SOUTH)) || (getFace() == 1 && validDirs.contains(ForgeDirection.NORTH)) || (getFace() == 2 && validDirs.contains(ForgeDirection.UP)) || (getFace() == 3 && validDirs.contains(ForgeDirection.DOWN))){
+            if(((getFace() == 0) && validDirs.contains(ForgeDirection.SOUTH)) || ((getFace() == 1 || getFace() == 5 || getFace() == 4) && validDirs.contains(ForgeDirection.NORTH)) || (getFace() == 2 && validDirs.contains(ForgeDirection.UP)) || (getFace() == 3 && validDirs.contains(ForgeDirection.DOWN))){
                 RenderHelper.drawTesselatedColoredCube(new Vector3Cube(minX, 0.0, 0.0, maxX, getCableHeight()*pixel, minZ));
             }
-            if((getFace() == 0 && validDirs.contains(ForgeDirection.NORTH)) || (getFace() == 1 && validDirs.contains(ForgeDirection.SOUTH)) || (getFace() == 3 && validDirs.contains(ForgeDirection.UP)) || (getFace() == 2 && validDirs.contains(ForgeDirection.DOWN))){
+            if(((getFace() == 0) && validDirs.contains(ForgeDirection.NORTH)) || ((getFace() == 1 || getFace() == 5 || getFace() == 4) && validDirs.contains(ForgeDirection.SOUTH)) || (getFace() == 3 && validDirs.contains(ForgeDirection.UP)) || (getFace() == 2 && validDirs.contains(ForgeDirection.DOWN))){
                 RenderHelper.drawTesselatedColoredCube(new Vector3Cube(minX, 0.0, maxZ, maxX, getCableHeight()*pixel, 1.0));
             }
-            if(((getFace() == 1 || getFace() == 0) && validDirs.contains(ForgeDirection.EAST)) || (getFace() == 5 && validDirs.contains(ForgeDirection.UP)) || (getFace() == 4 && validDirs.contains(ForgeDirection.DOWN))){
+            if(((getFace() == 1 || getFace() == 0 || getFace() == 3 || getFace() == 2) && validDirs.contains(ForgeDirection.EAST)) || (getFace() == 5 && validDirs.contains(ForgeDirection.UP)) || (getFace() == 4 && validDirs.contains(ForgeDirection.DOWN))){
                 RenderHelper.drawTesselatedColoredCube(new Vector3Cube(maxX, 0.0, minZ, 1.0, getCableHeight()*pixel, maxZ));
             }
-            if(((getFace() == 1 || getFace() == 0) && validDirs.contains(ForgeDirection.WEST)) || (getFace() == 4 && validDirs.contains(ForgeDirection.UP)) || (getFace() == 5 && validDirs.contains(ForgeDirection.DOWN))){
+            if(((getFace() == 1 || getFace() == 0 || getFace() == 3 || getFace() == 2) && validDirs.contains(ForgeDirection.WEST)) || (getFace() == 4 && validDirs.contains(ForgeDirection.UP)) || (getFace() == 5 && validDirs.contains(ForgeDirection.DOWN))){
                 RenderHelper.drawTesselatedColoredCube(new Vector3Cube(0.0, 0.0, minZ, minX, getCableHeight()*pixel, maxZ));
             }
+
+            t.draw();
+            GL11.glEnable(GL11.GL_TEXTURE_2D);
+            t.startDrawingQuads();
+            GL11.glPopMatrix();
 
 
             return true;
