@@ -157,12 +157,9 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
     @Override
     public boolean canConnectToTileEntity(TileEntity tile) {
 
-        if (isBundled) {
-            if (Loader.isModLoaded(Dependencies.COMPUTER_CRAFT))
-                if (canConnectToComputer(tile))
-                    return true;
-        }
-
+        if (Loader.isModLoaded(Dependencies.COMPUTER_CRAFT))
+            if (canConnectToComputer(tile))
+                return true;
         return false;
     }
 
@@ -368,10 +365,10 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
                             sides[2] = val;
                             break;
                         case NORTH:
-                            sides[0] = val;
+                            sides[1] = val;
                             break;
                         case SOUTH:
-                            sides[1] = val;
+                            sides[0] = val;
                             break;
                         default:
                             break;
@@ -386,10 +383,10 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
                             sides[2] = val;
                             break;
                         case NORTH:
-                            sides[1] = val;
+                            sides[0] = val;
                             break;
                         case SOUTH:
-                            sides[0] = val;
+                            sides[1] = val;
                             break;
                         default:
                             break;
@@ -613,9 +610,7 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
         }
         GL11.glPushMatrix();
         {
-            GL11.glTranslated(0.5, 0.5, 0.5);
-            GL11.glRotated(180, 0, 0, -1);
-            GL11.glTranslated(-0.5, -0.5, -0.5);
+            GL11.glTranslated(0.1, 1, 0);
             switch (type) {
             case ENTITY:
                 if (item.getItemFrame() != null) {
@@ -640,6 +635,7 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
             Tessellator.instance.startDrawingQuads();
             renderStatic(new Vector3(0, 0, 0), 0);
             Tessellator.instance.draw();
+
         }
         GL11.glPopMatrix();
     }
@@ -663,8 +659,6 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
         for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
 
             ForgeDirection dir = d;
-            if (dir == ForgeDirection.UP || dir == ForgeDirection.DOWN)
-                dir = dir.getOpposite();
             if (dir == ForgeDirection.getOrientation(getFace()).getOpposite())// If it's in the opposite face, don't do anything
                 continue;
 
@@ -673,7 +667,7 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
             // If it's either disconnected on that side OR connected and it's not bluestone wire
             if (dir == ForgeDirection.getOrientation(getFace())
                     || (connections[ForgeDirectionUtils.getSide(d)] != null && !(connections[ForgeDirectionUtils.getSide(d)] instanceof WireBluestone))) {
-                if (isFMPPart(connections[ForgeDirectionUtils.getSide(d)])) {
+                if (Loader.isModLoaded(Dependencies.FMP) && isFMPPart(connections[ForgeDirectionUtils.getSide(d)])) {
                     powerSelf = Math.max(powerSelf, getFMPPower(connections[ForgeDirectionUtils.getSide(d)], d.getOpposite()));
                 } else {
                     if (connections[ForgeDirectionUtils.getSide(d)] instanceof Vector3) {
@@ -736,13 +730,16 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
 
         if (!updateState) {
             updateState = true;
+
             super.onUpdate();
 
-            if (!isBundled) {
-                try {
-                    propagate();
-                } catch (Exception ex) {
-                    ex.printStackTrace();
+            if (getWorld() != null && !getWorld().isRemote) {
+                if (!isBundled) {
+                    try {
+                        propagate();
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
                 }
             }
             updateState = false;
@@ -769,8 +766,6 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
 
                 if (wire.hasSetFace()) {
                     ForgeDirection face = ForgeDirection.getOrientation(wire.getFace());
-                    if (face == ForgeDirection.UP || face == ForgeDirection.DOWN)
-                        face = face.getOpposite();
                     for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
                         RedstoneConnection con = wire.getConnection(d);
                         if (con != null)
@@ -966,8 +961,7 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
 
         return isBundled;
     }
-    
-    
+
     public int[] getPowerArray() {
 
         return powerArray;

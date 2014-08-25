@@ -56,6 +56,9 @@ public class MultipartFaceBPPart extends MultipartBPPart implements TFacePart, I
     @Override
     public int getFace() {
 
+        if (facePart.getFace() == 0 || facePart.getFace() == 1)
+            return facePart.getFace();
+
         return facePart.getFace() ^ 1;
     }
 
@@ -63,10 +66,8 @@ public class MultipartFaceBPPart extends MultipartBPPart implements TFacePart, I
     public int weakPowerLevel(int side) {
 
         ForgeDirection face = ForgeDirection.getOrientation(getFace());
-        if (face != ForgeDirection.UP && face != ForgeDirection.DOWN)
-            face = face.getOpposite();
 
-        if (ForgeDirection.getOrientation(side) == face)
+        if (ForgeDirection.getOrientation(side).getOpposite() == face)
             return getPart().getRedstonePower();
 
         if (getPart() instanceof IBPRedstonePart)
@@ -79,10 +80,8 @@ public class MultipartFaceBPPart extends MultipartBPPart implements TFacePart, I
     public int strongPowerLevel(int side) {
 
         ForgeDirection face = ForgeDirection.getOrientation(getFace());
-        if (face != ForgeDirection.UP && face != ForgeDirection.DOWN)
-            face = face.getOpposite();
 
-        if (ForgeDirection.getOrientation(side) == face)
+        if (ForgeDirection.getOrientation(side).getOpposite() == face)
             return getPart().getRedstonePower();
 
         if (getPart() instanceof IBPRedstonePart)
@@ -153,36 +152,28 @@ public class MultipartFaceBPPart extends MultipartBPPart implements TFacePart, I
     public void save(NBTTagCompound tag) {
 
         super.save(tag);
-        tag.setInteger("face", facePart.getFace());
-        tag.setInteger("rotation", facePart.getRotation());
-        for (int i = 0; i < 4; i++) {
-            RedstoneConnection c = ((BPPartFace) getPart()).getConnection(FaceDirection.getDirection(i));
-            if (c != null) {
-                tag.setTag("con_" + i, c.getNBTTag());
-            } else {
-                NBTTagCompound t = new NBTTagCompound();
-                t.setBoolean("___error", true);
-                tag.setTag("con_" + i, t);
-            }
-        }
     }
 
     @Override
     public void load(NBTTagCompound tag) {
 
         super.load(tag);
-        facePart.setFace(tag.getInteger("face"));
-        facePart.setRotation(tag.getInteger("rotation"));
-        for (int i = 0; i < 4; i++) {
-            RedstoneConnection c = ((BPPartFace) getPart()).getConnection(FaceDirection.getDirection(i));
-            NBTTagCompound t = tag.getCompoundTag("con_" + i);
-            if (t.hasKey("___error") && t.getBoolean("___error")) {
-                continue;
-            } else {
-                if (c == null) {
-                    c = ((BPPartFace) getPart()).getConnectionOrCreate(FaceDirection.getDirection(i));
+        if (tag.hasKey("face"))
+            facePart.setFace(tag.getInteger("face"));
+        if (tag.hasKey("rotation"))
+            facePart.setRotation(tag.getInteger("rotation"));
+        if (tag.hasKey("con_0")) {
+            for (int i = 0; i < 4; i++) {
+                RedstoneConnection c = ((BPPartFace) getPart()).getConnection(FaceDirection.getDirection(i));
+                NBTTagCompound t = tag.getCompoundTag("con_" + i);
+                if (t.hasKey("___error") && t.getBoolean("___error")) {
+                    continue;
+                } else {
+                    if (c == null) {
+                        c = ((BPPartFace) getPart()).getConnectionOrCreate(FaceDirection.getDirection(i));
+                    }
+                    c.load(t);
                 }
-                c.load(t);
             }
         }
     }

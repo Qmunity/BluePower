@@ -195,8 +195,6 @@ public abstract class CableWall extends BPPartFace {
         // Check for cables in the same block
         l = compat.getBPParts(loc.getTileEntity(), CableWall.class);
         ForgeDirection dir2 = dir;
-        if (dir2 == ForgeDirection.UP || dir2 == ForgeDirection.DOWN)
-            dir2 = dir2.getOpposite();
         for (CableWall c : l) {
             if (c.getWorld() != null)
                 if (ForgeDirection.getOrientation(c.getFace()) == dir2)
@@ -208,15 +206,11 @@ public abstract class CableWall extends BPPartFace {
 
         // Check for cables around corners
         ForgeDirection f = ForgeDirection.getOrientation(getFace());
-        if (f == ForgeDirection.UP || f == ForgeDirection.DOWN)
-            f = f.getOpposite();
         Vector3 vec2 = vec.getRelative(f);
         l = compat.getBPParts(vec2.getTileEntity(), CableWall.class);
         for (CableWall c : l) {
             if (c.getWorld() != null) {
                 ForgeDirection d = dir;
-                if (d != ForgeDirection.UP && d != ForgeDirection.DOWN)
-                    d = d.getOpposite();
                 if (ForgeDirection.getOrientation(c.getFace()) == d) {
                     boolean isOccluded = compat.isOccupied(loc.getTileEntity(), getStripHitboxForSide(ForgeDirection.getOrientation(getFace()), dir))
                             || compat.isOccupied(vec.getTileEntity(),

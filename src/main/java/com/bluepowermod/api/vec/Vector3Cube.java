@@ -121,8 +121,7 @@ public class Vector3Cube {
         ForgeDirection o = dir;
         switch (o) {
         case DOWN:
-            mul = 2;
-            dir = ForgeDirection.NORTH;
+            mul = 0;
             break;
         case EAST:
             dir = ForgeDirection.SOUTH;
@@ -134,7 +133,8 @@ public class Vector3Cube {
             dir = ForgeDirection.WEST;
             break;
         case UP:
-            mul = 0;
+            mul = 2;
+            dir = ForgeDirection.NORTH;
             break;
         case WEST:
             dir = ForgeDirection.NORTH;
