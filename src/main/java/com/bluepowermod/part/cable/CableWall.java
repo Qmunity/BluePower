@@ -211,7 +211,7 @@ public abstract class CableWall extends BPPartFace {
         for (CableWall c : l) {
             if (c.getWorld() != null) {
                 ForgeDirection d = dir;
-                if (ForgeDirection.getOrientation(c.getFace()) == d) {
+                if (ForgeDirection.getOrientation(c.getFace()).getOpposite() == d) {
                     boolean isOccluded = compat.isOccupied(loc.getTileEntity(), getStripHitboxForSide(ForgeDirection.getOrientation(getFace()), dir))
                             || compat.isOccupied(vec.getTileEntity(),
                                     getStripHitboxForSide(ForgeDirection.getOrientation(getFace()), dir.getOpposite()));
