@@ -104,7 +104,7 @@ public class TileTransposer extends TileMachineBase {
                 + direction.offsetX + 1, yCoord + direction.offsetY + 1, zCoord + direction.offsetZ + 1);
         for (EntityItem entity : (List<EntityItem>) worldObj.getEntitiesWithinAABB(EntityItem.class, box)) {
             ItemStack stack = entity.getEntityItem();
-            if (isItemAccepted(stack)) {
+            if (isItemAccepted(stack) && !entity.isDead) {
                 addItemToOutputBuffer(stack, getAcceptedItemColor(stack));
                 entity.setDead();
             }
