@@ -36,7 +36,8 @@ public class TileRetriever extends TileFilter implements IFuzzyRetrieving {
                         if (stack != null) {
                             if (tube.getLogic().retrieveStack(this, getFacingDirection(), stack)) {
                                 if (mode == 0) {
-                                    slotIndex++;
+                                    if (++slotIndex >= inventory.length)
+                                        slotIndex = 0;
                                     while (slotIndex != i) {
                                         if (inventory[slotIndex] != null)
                                             break;
