@@ -17,8 +17,9 @@
 
 package com.bluepowermod.world;
 
-import java.util.Random;
-
+import com.bluepowermod.init.BPBlocks;
+import com.bluepowermod.init.Config;
+import cpw.mods.fml.common.IWorldGenerator;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
@@ -27,10 +28,7 @@ import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.feature.WorldGenFlowers;
 import net.minecraft.world.gen.feature.WorldGenMinable;
 
-import com.bluepowermod.init.BPBlocks;
-import com.bluepowermod.init.Config;
-
-import cpw.mods.fml.common.IWorldGenerator;
+import java.util.Random;
 
 public class WorldGenerationHandler implements IWorldGenerator {
 
@@ -91,7 +89,7 @@ public class WorldGenerationHandler implements IWorldGenerator {
             int x = chunkX * 16 + random.nextInt(16);
             int y = 32 + random.nextInt(32);
             int z = chunkZ * 16 + random.nextInt(16);
-            new WorldGenMarble(BPBlocks.marble, random.nextInt(4096)).generate(world, random, x, y, z);
+            new WorldGenMarble(BPBlocks.marble, random.nextInt(Config.veinSizeMarble)).generate(world, random, x, y, z);
         }
         if (random.nextDouble() < Config.volcanoSpawnChance) {
             int x = chunkX * 16 + random.nextInt(16);
