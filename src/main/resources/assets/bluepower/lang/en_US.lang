@@ -508,6 +508,8 @@ bluepower.config.ruby.tooltip=Adjust ruby world generation.
 bluepower.config.amethyst.tooltip=Adjust amethyst world generation.
 bluepower.config.sapphire.tooltip=Adjust sapphire world generation.
 bluepower.config.teslatite.tooltip=Adjust teslatite world generation.
+bluepower.config.worldgen.tooltip=Configure various world generation options.
+bluepower.config.circuitDatabase.tooltip=Circuit Database options.
 
 bluepower.waila.rsLatch.feedback=Feedback
 bluepower.waila.rsLatch.noFeedback=No Feedback
