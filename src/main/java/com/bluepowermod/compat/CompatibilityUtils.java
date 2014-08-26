@@ -19,6 +19,7 @@ import com.bluepowermod.compat.fmp.CompatModuleFMP;
 import com.bluepowermod.compat.fmp.CompatModuleFMPAlt;
 import com.bluepowermod.compat.hydcraft.CompatModuleHydCraft;
 import com.bluepowermod.compat.ic2.CompatModuleIC2;
+import com.bluepowermod.compat.thaumcraft.CompatModuleThaumcraft;
 import com.bluepowermod.compat.waila.CompatModuleWaila;
 import com.bluepowermod.util.Dependencies;
 
@@ -125,6 +126,7 @@ public class CompatibilityUtils {
         registerModule(Dependencies.WAILA, CompatModuleWaila.class, null);
         registerModule(Dependencies.IC2, CompatModuleIC2.class, null);
         registerModule(Dependencies.HC, CompatModuleHydCraft.class, null);
+        registerModule(Dependencies.THAUMCRAFT, CompatModuleThaumcraft.class, null);
     }
 
 }
