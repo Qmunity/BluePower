@@ -111,6 +111,9 @@ public abstract class CableWall extends BPPartFace {
     @SuppressWarnings({ "unchecked", "rawtypes" })
     public void onUpdate() {
 
+        if (updating)
+            return;
+
         updating = true;
 
         if (loc == null || loc.getBlockX() != getX() || loc.getBlockY() != getY() || loc.getBlockZ() != getZ() || loc.getWorld() != getWorld())
@@ -214,7 +217,9 @@ public abstract class CableWall extends BPPartFace {
                 if (ForgeDirection.getOrientation(c.getFace()).getOpposite() == d) {
                     boolean isOccluded = compat.isOccupied(loc.getTileEntity(), getStripHitboxForSide(ForgeDirection.getOrientation(getFace()), dir))
                             || compat.isOccupied(vec.getTileEntity(),
-                                    getStripHitboxForSide(ForgeDirection.getOrientation(getFace()), dir.getOpposite()));
+                                    getStripHitboxForSide(ForgeDirection.getOrientation(getFace()), dir.getOpposite()))
+                            || compat.isOccupied(vec2.getTileEntity(),
+                                    getStripHitboxForSide(dir.getOpposite(), ForgeDirection.getOrientation(getFace()).getOpposite()));
                     if (vec.getBlock() != null && vec.getBlock().isOpaqueCube())
                         isOccluded = true;
                     if (c.hasSetFace()) {
@@ -238,29 +243,11 @@ public abstract class CableWall extends BPPartFace {
 
         double one = 1;
         double zer = 0;
-        double min = 1 / 8D;
-        double max = 7 / 8D;
+        double min = 3 / 8D;
+        double max = 5 / 8D;
 
         switch (face) {
         case UP:
-            switch (dir) {
-            case EAST:
-                aabb = AxisAlignedBB.getBoundingBox(max, zer, zer, one, min, one);
-                break;
-            case WEST:
-                aabb = AxisAlignedBB.getBoundingBox(zer, zer, zer, min, min, one);
-                break;
-            case NORTH:
-                aabb = AxisAlignedBB.getBoundingBox(zer, zer, zer, one, min, min);
-                break;
-            case SOUTH:
-                aabb = AxisAlignedBB.getBoundingBox(zer, zer, max, one, min, one);
-                break;
-            default:
-                break;
-            }
-            break;
-        case DOWN:
             switch (dir) {
             case EAST:
                 aabb = AxisAlignedBB.getBoundingBox(max, max, zer, one, one, one);
@@ -273,6 +260,24 @@ public abstract class CableWall extends BPPartFace {
                 break;
             case SOUTH:
                 aabb = AxisAlignedBB.getBoundingBox(zer, max, max, one, one, one);
+                break;
+            default:
+                break;
+            }
+            break;
+        case DOWN:
+            switch (dir) {
+            case EAST:
+                aabb = AxisAlignedBB.getBoundingBox(max, zer, zer, one, min, one);
+                break;
+            case WEST:
+                aabb = AxisAlignedBB.getBoundingBox(zer, zer, zer, min, min, one);
+                break;
+            case NORTH:
+                aabb = AxisAlignedBB.getBoundingBox(zer, zer, zer, one, min, min);
+                break;
+            case SOUTH:
+                aabb = AxisAlignedBB.getBoundingBox(zer, zer, max, one, min, one);
                 break;
             default:
                 break;
@@ -562,7 +567,8 @@ public abstract class CableWall extends BPPartFace {
 
         Object o = connections[ForgeDirectionUtils.getSide(d)];
         if (o instanceof TMultiPart)
-            return new Vector3(((TMultiPart) o).tile());
+            if (((TMultiPart) o).tile() != null)
+                return new Vector3(((TMultiPart) o).tile());
         return null;
     }
 

@@ -67,7 +67,7 @@ public class MultipartFaceBPPart extends MultipartBPPart implements TFacePart, I
 
         ForgeDirection face = ForgeDirection.getOrientation(getFace());
 
-        if (ForgeDirection.getOrientation(side).getOpposite() == face)
+        if (ForgeDirection.getOrientation(side == 0 || side == 1 ? side ^ 1 : side).getOpposite() == face)
             return getPart().getRedstonePower();
 
         if (getPart() instanceof IBPRedstonePart)
@@ -81,7 +81,7 @@ public class MultipartFaceBPPart extends MultipartBPPart implements TFacePart, I
 
         ForgeDirection face = ForgeDirection.getOrientation(getFace());
 
-        if (ForgeDirection.getOrientation(side).getOpposite() == face)
+        if (ForgeDirection.getOrientation(side == 0 || side == 1 ? side ^ 1 : side).getOpposite() == face)
             return getPart().getRedstonePower();
 
         if (getPart() instanceof IBPRedstonePart)
