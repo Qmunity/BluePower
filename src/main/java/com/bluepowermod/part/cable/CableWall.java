@@ -256,8 +256,11 @@ public abstract class CableWall extends BPPartFace {
 
         double one = 1;
         double zer = 0;
-        double min = 3 / 8D;
-        double max = 5 / 8D;
+        double min = 1 / 8D;
+        double max = 7 / 8D;
+
+        double smi = 0.5 - (size / 8D);
+        double sma = 0.5 + (size / 8D);
 
         switch (face) {
         case UP:

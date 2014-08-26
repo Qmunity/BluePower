@@ -219,8 +219,6 @@ public class PneumaticTube extends BPPart {
             if (otherTubeColor != TubeColor.NONE && getColor(dir) != TubeColor.NONE && getColor(dir) != otherTubeColor)
                 return false;
         }
-        if (dir == ForgeDirection.UP || dir == ForgeDirection.DOWN)
-            dir = dir.getOpposite();
         return getWorld() == null || !checkOcclusion(sideBB.clone().rotate90Degrees(dir).toAABB());
     }
 
