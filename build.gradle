@@ -54,9 +54,8 @@ if (System.getenv().BUILD_NUMBER != null) {
     version += " - err"
 }
 
-def grabDep(name, url) {
+def grabDep(url) {
     ant.get(src: url, dest: 'dep')
-    file("dep/" + url.substring(url.lastIndexOf("/"))).renameTo(file("dep/" + name + ".jar"))
 	compile files("dep/" + url.substring(url.lastIndexOf("/")));
 }
 
