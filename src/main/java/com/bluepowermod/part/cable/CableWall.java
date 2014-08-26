@@ -9,11 +9,11 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.common.util.ForgeDirection;
 import codechicken.multipart.TMultiPart;
 
+import com.bluepowermod.api.BPApi;
 import com.bluepowermod.api.compat.IMultipartCompat;
 import com.bluepowermod.api.part.BPPartFace;
 import com.bluepowermod.api.util.ForgeDirectionUtils;
 import com.bluepowermod.api.vec.Vector3;
-import com.bluepowermod.compat.CompatibilityUtils;
 import com.bluepowermod.part.cable.bluestone.ICableConnect;
 import com.bluepowermod.util.Dependencies;
 
@@ -114,6 +114,8 @@ public abstract class CableWall extends BPPartFace {
         if (updating)
             return;
 
+        IMultipartCompat compat = BPApi.getInstance().getMultipartCompat();
+
         updating = true;
 
         if (loc == null || loc.getBlockX() != getX() || loc.getBlockY() != getY() || loc.getBlockZ() != getZ() || loc.getWorld() != getWorld())
@@ -139,10 +141,16 @@ public abstract class CableWall extends BPPartFace {
                     o = getPartOnSide(d);
                 }
                 if (o == null) {
+                    TileEntity te = loc.getTileEntity();
                     if (vec.getBlock(true) != null && canConnectToBlock(vec.getBlock(), vec)) {// Check connection to blocks
-                        o = vec;
-                    } else if (vec.getTileEntity() != null && canConnectToTileEntity(vec.getTileEntity())) {// Check connection to TEs
-                        o = vec;
+                        if (!compat.isOccupied(te, getStripHitboxForSide(ForgeDirection.getOrientation(getFace()), d)))
+                            o = vec;
+                    } else {
+                        TileEntity tile = vec.getTileEntity();
+                        if (tile != null && canConnectToTileEntity(tile)) {// Check connection to TEs
+                            if (!compat.isOccupied(te, getStripHitboxForSide(ForgeDirection.getOrientation(getFace()), d)))
+                                o = vec;
+                        }
                     }
                 }
             }
@@ -181,7 +189,7 @@ public abstract class CableWall extends BPPartFace {
     private CableWall getCableOnSide(ForgeDirection dir) {
 
         Vector3 vec = loc.getRelative(dir);
-        IMultipartCompat compat = ((IMultipartCompat) CompatibilityUtils.getModule(Dependencies.FMP));
+        IMultipartCompat compat = BPApi.getInstance().getMultipartCompat();
 
         // Check for cables next to this one
         List<CableWall> l = compat.getBPParts(vec.getTileEntity(), CableWall.class);
@@ -238,6 +246,11 @@ public abstract class CableWall extends BPPartFace {
     }
 
     protected static AxisAlignedBB getStripHitboxForSide(ForgeDirection face, ForgeDirection dir) {
+
+        return getStripHitboxForSide(face, dir, 3);
+    }
+
+    protected static AxisAlignedBB getStripHitboxForSide(ForgeDirection face, ForgeDirection dir, int size) {
 
         AxisAlignedBB aabb = AxisAlignedBB.getBoundingBox(0, 0, 0, 0, 0, 0);
 
