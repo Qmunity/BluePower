@@ -87,6 +87,24 @@ part.bluepower:bluestoneWire.green.name=Green Bluestone Wire
 part.bluepower:bluestoneWire.red.name=Red Bluestone Wire
 part.bluepower:bluestoneWire.black.name=Black Bluestone Wire
 
+part.bluepower:bluestoneWire.bundled.name=Bundled Wire
+part.bluepower:bluestoneWire.bundled.white.name=White Bundled Wire
+part.bluepower:bluestoneWire.bundled.orange.name=Orange Bundled Wire
+part.bluepower:bluestoneWire.bundled.magenta.name=Magenta Bundled Wire
+part.bluepower:bluestoneWire.bundled.light_blue.name=Light Blue Bundled Wire
+part.bluepower:bluestoneWire.bundled.yellow.name=Yellow Bundled Wire
+part.bluepower:bluestoneWire.bundled.lime.name=Lime Bundled Wire
+part.bluepower:bluestoneWire.bundled.pink.name=Pink Bundled Wire
+part.bluepower:bluestoneWire.bundled.gray.name=Gray Bundled Wire
+part.bluepower:bluestoneWire.bundled.silver.name=Light Gray Bundled Wire
+part.bluepower:bluestoneWire.bundled.cyan.name=Cyan Bundled Wire
+part.bluepower:bluestoneWire.bundled.purple.name=Purple Bundled Wire
+part.bluepower:bluestoneWire.bundled.blue.name=Blue Bundled Wire
+part.bluepower:bluestoneWire.bundled.brown.name=Brown Bundled Wire
+part.bluepower:bluestoneWire.bundled.green.name=Green Bundled Wire
+part.bluepower:bluestoneWire.bundled.red.name=Red Bundled Wire
+part.bluepower:bluestoneWire.bundled.black.name=Black Bundled Wire
+
 tile.bluepower:lampwhite.name=White Lamp
 tile.bluepower:lampinvertedwhite.name=Inverted White Lamp
 part.bluepower:cagelampwhite.name=White Cage Lamp

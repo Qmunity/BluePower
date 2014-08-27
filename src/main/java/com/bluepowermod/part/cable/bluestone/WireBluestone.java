@@ -708,12 +708,20 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
     @Override
     public void onFirstTick() {
 
-        super.onFirstTick();
-
         for (FaceDirection d : FaceDirection.values()) {
             RedstoneConnection c = getConnectionOrCreate(d);
             c.enable();
             c.setOutput();
+        }
+
+        super.onFirstTick();
+
+        if (isBundled) {
+            try {
+                propagate();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
         }
     }
 
@@ -756,7 +764,12 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
         List<Entry<WireBluestone, Integer>> wires = new ArrayList<Entry<WireBluestone, Integer>>();
         int[] power = new int[] { 0 };
 
-        propagate(wires, power, colorId);
+        if (isBundled) {
+            for (int i = 0; i < 16; i++)
+                propagate(wires, power, i);
+        } else {
+            propagate(wires, power, colorId);
+        }
 
         for (Entry<WireBluestone, Integer> entry : wires) {
             WireBluestone wire = entry.getKey();
@@ -811,7 +824,7 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
         for (int i = 0; i < 6; i++)
             if (connections[i] != null)
                 if (connections[i] instanceof WireBluestone)
-                    if (((WireBluestone) connections[i]).colorId == this.colorId || this.colorId == -1
+                    if (((WireBluestone) connections[i]).colorId == colorId || colorId == -1 || (!isBundled && this.colorId == -1)
                             || ((WireBluestone) connections[i]).colorId == -1)
                         if (!isInList(wires, (WireBluestone) connections[i]))
                             ((WireBluestone) connections[i]).propagate(wires, power, isBundled ? colorId : this.colorId);

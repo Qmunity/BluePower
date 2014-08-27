@@ -17,19 +17,22 @@
 
 package com.bluepowermod.init;
 
+import net.minecraft.item.ItemDye;
 import net.minecraftforge.oredict.OreDictionary;
 
+import com.bluepowermod.part.PartRegistry;
+
 public class OreDictionarySetup {
-    
+
     public static void init() {
-    
+
         OreDictionary.registerOre("oreCopper", BPBlocks.copper_ore);
         OreDictionary.registerOre("oreZinc", BPBlocks.zinc_ore);
         OreDictionary.registerOre("oreSilver", BPBlocks.silver_ore);
         OreDictionary.registerOre("oreTungsten", BPBlocks.tungsten_ore);
         OreDictionary.registerOre("marble", BPBlocks.marble);
         OreDictionary.registerOre("basalt", BPBlocks.basalt);
-        
+
         OreDictionary.registerOre("gemRuby", BPItems.ruby_gem);
         OreDictionary.registerOre("gemAmethyst", BPItems.amethyst_gem);
         OreDictionary.registerOre("gemSapphire", BPItems.sapphire_gem);
@@ -41,7 +44,10 @@ public class OreDictionarySetup {
         OreDictionary.registerOre("ingotTungsten", BPItems.tungsten_ingot);
         OreDictionary.registerOre("dyePurple", BPItems.indigo_dye);
         OreDictionary.registerOre("ingotBlueAlloy", BPItems.blue_alloy_ingot);
-        //   OreDictionary.registerOre("ingotRedAlloy", BPItems.red_alloy_ingot);
-        
+        // OreDictionary.registerOre("ingotRedAlloy", BPItems.red_alloy_ingot);
+        for (int i = 0; i < 16; i++) {
+            OreDictionary.registerOre("bluestoneInsulated", PartRegistry.getInstance().getItemForPart("bluestoneWire." + ItemDye.field_150921_b[i]));
+        }
     }
+
 }
