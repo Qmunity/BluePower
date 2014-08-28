@@ -29,6 +29,7 @@ import com.bluepowermod.init.OreDictionarySetup;
 import com.bluepowermod.init.Recipes;
 import com.bluepowermod.init.TileEntities;
 import com.bluepowermod.network.NetworkHandler;
+import com.bluepowermod.part.PartRegistry;
 import com.bluepowermod.recipe.AlloyFurnaceRegistry;
 import com.bluepowermod.util.Refs;
 import com.bluepowermod.world.WorldGenerationHandler;
@@ -106,6 +107,7 @@ public class BluePower {
         CompatibilityUtils.postInit(event);
         AlloyFurnaceRegistry.getInstance().generateRecyclingRecipes();
         proxy.initRenderers();
+        PartRegistry.getInstance().loadPartIdsFromFile();
     }
 
     @EventHandler

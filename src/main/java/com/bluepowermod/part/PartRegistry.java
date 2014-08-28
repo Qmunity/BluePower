@@ -35,6 +35,8 @@ public class PartRegistry implements IPartRegistry {
     private static PartRegistry INSTANCE = new PartRegistry();
     private final Map<String, Entry<Class<? extends BPPart>, Object[]>> parts = new LinkedHashMap<String, Entry<Class<? extends BPPart>, Object[]>>();
     private final Map<String, BPPart> samples = new LinkedHashMap<String, BPPart>();
+    public List<String> partIds = new ArrayList<String>();// Contains a list of all the parts, ordered in how the id's are assigned. Synced from a
+                                                          // file, synced to the client.
 
     public String ICON_PART;
 
@@ -262,11 +264,9 @@ public class PartRegistry implements IPartRegistry {
         if (id == null)
             return 0;
         int i = 0;
-        for (String s : parts.keySet()) {
-            if (s.equals(id))
-                break;
-            i++;
-        }
+        i = partIds.indexOf(id);
+        if (i == -1)
+            return 0;
         return i;
     }
 
@@ -295,5 +295,9 @@ public class PartRegistry implements IPartRegistry {
         if (part == null)
             return null;
         return part.createItemEntity(w, x, y, z, item);
+    }
+
+    public void loadPartIdsFromFile() {
+        partIds = new PartFileSyncer().getPartIds(samples.keySet());
     }
 }
