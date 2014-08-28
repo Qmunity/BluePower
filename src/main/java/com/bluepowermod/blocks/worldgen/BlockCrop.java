@@ -28,7 +28,6 @@ import net.minecraft.block.BlockCrops;
 import net.minecraft.block.BlockFarmland;
 import net.minecraft.block.IGrowable;
 import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -51,7 +50,7 @@ public class BlockCrop extends BlockCrops implements IGrowable {
     public BlockCrop() {
 
         this.setTickRandomly(true);
-        this.setCreativeTab((CreativeTabs) null);
+        this.setCreativeTab(null);
         this.setHardness(0.0F);
         this.setStepSound(soundTypeGrass);
         this.disableStats();
@@ -212,7 +211,7 @@ public class BlockCrop extends BlockCrops implements IGrowable {
     @Override
     public int quantityDropped(Random random) {
 
-        return random.nextInt(2);
+        return random.nextInt(10) > 3 ? 0 : 1;
     }
 
     @Override
