@@ -130,7 +130,7 @@ task deobfJar(type: Jar) {
 
 // add a source jar
 task sourceJar(type: Jar) {
-    from sourceSets.main.resources.srcDirs {
+    from (sourceSets.main.allSource) {
         appendix = "${project.ext.mcVersion}"
         classifier = "src"
     }
