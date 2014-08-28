@@ -127,7 +127,7 @@ public class Config {
         volcanoSpawnChance = config.get(Refs.CONFIG_WORLDGEN, "volcanoSpawnChance", 0.02).getDouble(0);
         volcanoActiveToInactiveRatio = config.get(Refs.CONFIG_WORLDGEN, "volcanoActiveToInactiveRatio", 0.5).getDouble(0);
         useAltScrewdriverRecipe = config.get(Refs.CONFIG_SETTINGS, "useAltScrewdriverRecipe", false).getBoolean(false);
-        veinSizeMarble = config.get(Refs.CONFIG_WORLDGEN, "veinSizeMarble", 4096).getInt();
+        veinSizeMarble = config.get(Refs.CONFIG_WORLDGEN, "veinSizeMarble", 2048).getInt();
         
         config.addCustomCategoryComment(Refs.CONFIG_RECIPES, "Toggle recipes to be enabled or not");
         alloyFurnaceBlacklist = config.get(Refs.CONFIG_RECIPES, "alloyFurnaceBlacklist", new String[0]).getStringList();
