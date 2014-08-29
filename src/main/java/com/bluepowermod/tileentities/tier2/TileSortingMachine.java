@@ -241,16 +241,16 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
                 if (filter != null && ItemStackHelper.areStacksEqual(filter, stack, fuzzySettings[i % 8]) && stack.stackSize >= filter.stackSize) {
                     if (!simulate) {
                         addItemToOutputBuffer(filter.copy(), colors[i % 8]);
-                        stack.stackSize -= filter.stackSize;
                     }
+                    stack.stackSize -= filter.stackSize;
                     return true;
                 }
             }
             if (sortMode == SortMode.ANY_ITEM_DEFAULT) {
                 if (!simulate) {
                     addItemToOutputBuffer(stack.copy(), colors[8]);
-                    stack.stackSize = 0;
                 }
+                stack.stackSize = 0;
                 return true;
             }
             break;
@@ -261,16 +261,16 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
                 if (filter != null && ItemStackHelper.areStacksEqual(filter, stack, fuzzySettings[i % 8])) {
                     if (!simulate) {
                         addItemToOutputBuffer(stack.copy(), colors[i % 8]);
-                        stack.stackSize = 0;
                     }
+                    stack.stackSize = 0;
                     return true;
                 }
             }
             if (sortMode == SortMode.ANY_STACK_DEFAULT) {
                 if (!simulate) {
                     addItemToOutputBuffer(stack.copy(), colors[8]);
-                    stack.stackSize = 0;
                 }
+                stack.stackSize = 0;
                 return true;
             }
             break;
