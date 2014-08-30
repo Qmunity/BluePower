@@ -45,6 +45,8 @@ public class Renderers {
 
         ClientRegistry.bindTileEntitySpecialRenderer(TileLamp.class, new RenderLamp());
 
+        RenderingRegistry.registerBlockHandler(new RenderExtruderTube());
+
         RenderMultipart.init();
 
         RenderLamp rl = new RenderLamp();

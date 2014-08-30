@@ -419,6 +419,11 @@ public class PartCastingTable extends BPPart implements IFluidHandler {
         this.inUse = inUse;
     }
 
+    public ItemStack getResult() {
+
+        return result;
+    }
+
     @Override
     public float getHardness() {
 

@@ -30,8 +30,11 @@ import com.bluepowermod.blocks.machines.BlockContainerFrontRender;
 import com.bluepowermod.blocks.machines.BlockContainerTwoSideRender;
 import com.bluepowermod.blocks.machines.BlockIgniter;
 import com.bluepowermod.blocks.machines.BlockLamp;
+import com.bluepowermod.blocks.machines.BlockMachineFrame;
 import com.bluepowermod.blocks.machines.BlockProjectTable;
 import com.bluepowermod.blocks.machines.BlockSortron;
+import com.bluepowermod.blocks.machines.extruder.BlockExtruderHopper;
+import com.bluepowermod.blocks.machines.extruder.BlockExtruderTube;
 import com.bluepowermod.blocks.worldgen.BlockCrackedBasalt;
 import com.bluepowermod.blocks.worldgen.BlockCrop;
 import com.bluepowermod.blocks.worldgen.BlockCustomFlower;
@@ -130,6 +133,11 @@ public class BPBlocks {
 
     public static Block cast_plate;
 
+    public static Block machine_frame;
+
+    public static Block extruder_tube;
+    public static Block extruder_hopper;
+
     public static void init() {
 
         basalt = new BlockStoneOre(Refs.BASALT_NAME);
@@ -191,6 +199,11 @@ public class BPBlocks {
                 .setBlockName(Refs.ITEMDETECTOR_NAME);
 
         cast_plate = new BlockCastPlate();
+
+        machine_frame = new BlockMachineFrame();
+
+        extruder_tube = new BlockExtruderTube();
+        extruder_hopper = new BlockExtruderHopper();
 
         // cpu = new BlockCPU();
         // monitor = new BlockMonitor();
@@ -276,6 +289,11 @@ public class BPBlocks {
         GameRegistry.registerBlock(item_detector, Refs.ITEMDETECTOR_NAME);
 
         GameRegistry.registerBlock(cast_plate, Refs.CASTPLATE_NAME);
+
+        GameRegistry.registerBlock(machine_frame, Refs.MACHINEFRAME_NAME);
+
+        GameRegistry.registerBlock(extruder_tube, Refs.EXTRUDERTUBE_NAME);
+        GameRegistry.registerBlock(extruder_hopper, Refs.EXTRUDERHOPPER_NAME);
 
         // GameRegistry.registerBlock(cpu, Refs.BLOCKCPU_NAME);
         // GameRegistry.registerBlock(monitor, Refs.BLOCKMONITOR_NAME);

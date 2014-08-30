@@ -98,6 +98,8 @@ public class PartFaucet extends BPPartFace {
 
                     if (table.isInUse())
                         return false;
+                    if (table.getResult() != null)
+                        return false;
 
                     Entry<FluidStack, ItemStack> recipe = null;
                     int availableAmount = 0;

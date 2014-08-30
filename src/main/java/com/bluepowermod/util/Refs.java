@@ -187,6 +187,11 @@ public class Refs {
     public static final String CASTPLATE_NAME = "cast_plate";
     public static final String CAST_NAME = "cast";
 
+    public static final String MACHINEFRAME_NAME = "machine_frame";
+
+    public static final String EXTRUDERTUBE_NAME = "extruder_tube";
+    public static final String EXTRUDERHOPPER_NAME = "extruder_hopper";
+
     public static final String[] oreDictDyes = new String[] { "dyeBlack", "dyeRed", "dyeGreen", "dyeBrown", "dyeBlue", "dyePurple", "dyeCyan",
             "dyeLightGray", "dyeGray", "dyePink", "dyeLime", "dyeYellow", "dyeLightBlue", "dyeMagenta", "dyeOrange", "dyeWhite" };
     public static final String LAMP_NAME = "lamp";

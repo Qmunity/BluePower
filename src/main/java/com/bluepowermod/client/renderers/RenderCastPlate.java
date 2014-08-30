@@ -140,7 +140,7 @@ public class RenderCastPlate extends TileEntitySpecialRenderer implements ISimpl
                 MovingObjectPosition mop = Minecraft.getMinecraft().thePlayer.rayTrace(
                         Minecraft.getMinecraft().thePlayer.capabilities.isCreativeMode ? 5 : 4.5, 0);
 
-                if (mop.blockX == te.xCoord && mop.blockY == te.yCoord && mop.blockZ == te.zCoord && te.hasTemplate()
+                if (mop != null && mop.blockX == te.xCoord && mop.blockY == te.yCoord && mop.blockZ == te.zCoord && te.hasTemplate()
                         && (te.hasClay() || te.hasCast())) {
                     com.bluepowermod.client.renderers.RenderHelper.renderEntityName(((int) (te.getCookProgress() * 100)) + "%", 0.5, 0.75, 0.5);
                 }
