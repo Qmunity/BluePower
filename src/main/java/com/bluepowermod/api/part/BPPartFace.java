@@ -140,7 +140,7 @@ public abstract class BPPartFace extends BPPart implements IBPFacePart, IBPRedst
 
         ForgeDirection d = ForgeDirection.getOrientation(getFace());
 
-        return getWorld().isSideSolid(getX() + d.offsetX, getY() + d.offsetY, getZ() + d.offsetZ, d);
+        return getWorld().isSideSolid(getX() + d.offsetX, getY() + d.offsetY, getZ() + d.offsetZ, d.getOpposite());
     }
 
     @Override
