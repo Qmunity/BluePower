@@ -85,11 +85,13 @@ public class WorldGenerationHandler implements IWorldGenerator {
             new WorldGenFlowers(BPBlocks.indigo_flower).generate(world, random, x, y, z);
         }
 
-        for (int i = 0; i < 4; i++) {
-            int x = chunkX * 16 + random.nextInt(16);
-            int y = 32 + random.nextInt(32);
-            int z = chunkZ * 16 + random.nextInt(16);
-            new WorldGenMarble(BPBlocks.marble, random.nextInt(Config.veinSizeMarble)).generate(world, random, x, y, z);
+        if (Config.veinSizeMarble > 0) {
+            for (int i = 0; i < 4; i++) {
+                int x = chunkX * 16 + random.nextInt(16);
+                int y = 32 + random.nextInt(32);
+                int z = chunkZ * 16 + random.nextInt(16);
+                new WorldGenMarble(BPBlocks.marble, random.nextInt(Config.veinSizeMarble)).generate(world, random, x, y, z);
+            }
         }
         if (random.nextDouble() < Config.volcanoSpawnChance) {
             int x = chunkX * 16 + random.nextInt(16);
