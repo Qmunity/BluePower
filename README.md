@@ -26,7 +26,7 @@ If nobody else reported the same bug, you can go ahead and report it. Please mak
 - **Crashlog**
 
 ## Known Issues
-Bluestone wire in all it's forms is currently extremely unreliable and is due to be re-written. Please don't report bugs relating to bluestone wire until it has received some attention ^^
+Various things work inconsistently when Forge Multipart is not installed.
 
 Please supply a crashlog using pastebin! do *not* paste a crashlog directly in the issue!
 Also please try to reproduce your crash. It's possible that a crash only happened because of a quirk in the universe.
