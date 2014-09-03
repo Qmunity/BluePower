@@ -17,13 +17,13 @@
 
 package com.bluepowermod.init;
 
+import com.bluepowermod.blocks.worldgen.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemDye;
 
 import com.bluepowermod.blocks.BPBlockMultipart;
 import com.bluepowermod.blocks.BlockContainerBase;
-import com.bluepowermod.blocks.BlockItemOre;
 import com.bluepowermod.blocks.machines.BlockAlloyFurnace;
 import com.bluepowermod.blocks.machines.BlockCircuitDatabase;
 import com.bluepowermod.blocks.machines.BlockContainerFrontRender;
@@ -33,11 +33,6 @@ import com.bluepowermod.blocks.machines.BlockLamp;
 import com.bluepowermod.blocks.machines.BlockProjectTable;
 import com.bluepowermod.blocks.machines.BlockRejecting;
 import com.bluepowermod.blocks.machines.BlockSortron;
-import com.bluepowermod.blocks.worldgen.BlockCrackedBasalt;
-import com.bluepowermod.blocks.worldgen.BlockCrop;
-import com.bluepowermod.blocks.worldgen.BlockCustomFlower;
-import com.bluepowermod.blocks.worldgen.BlockStoneOre;
-import com.bluepowermod.blocks.worldgen.BlockStoneOreConnected;
 import com.bluepowermod.references.GuiIDs;
 import com.bluepowermod.tileentities.tier1.TileBlockBreaker;
 import com.bluepowermod.tileentities.tier1.TileBuffer;
@@ -79,10 +74,10 @@ public class BPBlocks {
     public static final Block marble_paver        = new BlockStoneOre(Refs.MARBLEPAVER_NAME);
     public static final Block basalt_paver        = new BlockStoneOre(Refs.BASALTPAVER_NAME);
     
-    public static final Block teslatite_ore       = new BlockItemOre(Refs.TESLATITEORE_NAME);
-    public static final Block ruby_ore            = new BlockItemOre(Refs.RUBYORE_NAME);
-    public static final Block sapphire_ore        = new BlockItemOre(Refs.SAPPHIREORE_NAME);
-    public static final Block amethyst_ore        = new BlockItemOre(Refs.AMETHYSTORE_NAME);
+    public static final Block teslatite_ore       = new BlockTeslatiteOre(Refs.TESLATITEORE_NAME);
+    public static final Block ruby_ore            = new BlockRubyOre(Refs.RUBYORE_NAME);
+    public static final Block sapphire_ore        = new BlockSapphireOre(Refs.SAPPHIREORE_NAME);
+    public static final Block amethyst_ore        = new BlockAmethystOre(Refs.AMETHYSTORE_NAME);
     
     public static final Block copper_ore          = new BlockStoneOre(Refs.COPPERORE_NAME);
     public static final Block silver_ore          = new BlockStoneOre(Refs.SILVERORE_NAME).setToolLevel(2);
