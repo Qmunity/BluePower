@@ -170,12 +170,12 @@ public class ContainerProjectTable extends Container {
     @ContainerSectionCallback
     public Map<ContainerSection, List<Slot>> getSections() {
 
-        Map<ContainerSection, List<Slot>> sections = new HashMap<>();
-        List<Slot> slotsCraftingIn = new ArrayList<>();
-        List<Slot> slotsCraftingOut = new ArrayList<>();
-        List<Slot> slotsChest = new ArrayList<>();
-        List<Slot> slotsInventory = new ArrayList<>();
-        List<Slot> slotsInventoryHotbar = new ArrayList<>();
+        Map<ContainerSection, List<Slot>> sections = new HashMap<ContainerSection, List<Slot>>();
+        List<Slot> slotsCraftingIn = new ArrayList<Slot>();
+        List<Slot> slotsCraftingOut = new ArrayList<Slot>();
+        List<Slot> slotsChest = new ArrayList<Slot>();
+        List<Slot> slotsInventory = new ArrayList<Slot>();
+        List<Slot> slotsInventoryHotbar = new ArrayList<Slot>();
         for (int i = 0; i < 9; i++) {
             slotsCraftingIn.add(i, (Slot) inventorySlots.get(i));
         }
