@@ -33,6 +33,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -168,12 +170,12 @@ public class ContainerProjectTable extends Container {
     @ContainerSectionCallback
     public Map<ContainerSection, List<Slot>> getSections() {
 
-        Map<ContainerSection, List<Slot>> sections = null;
-        List<Slot> slotsCraftingIn = null;
-        List<Slot> slotsCraftingOut = null;
-        List<Slot> slotsChest = null;
-        List<Slot> slotsInventory = null;
-        List<Slot> slotsInventoryHotbar = null;
+        Map<ContainerSection, List<Slot>> sections = new HashMap<>();
+        List<Slot> slotsCraftingIn = new ArrayList<>();
+        List<Slot> slotsCraftingOut = new ArrayList<>();
+        List<Slot> slotsChest = new ArrayList<>();
+        List<Slot> slotsInventory = new ArrayList<>();
+        List<Slot> slotsInventoryHotbar = new ArrayList<>();
         for (int i = 0; i < 9; i++) {
             slotsCraftingIn.add(i, (Slot) inventorySlots.get(i));
         }
