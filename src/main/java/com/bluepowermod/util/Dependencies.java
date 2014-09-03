@@ -18,4 +18,5 @@ public class Dependencies {
     public static final String HC = "HydCraft";
     public static final String THAUMCRAFT = "Thaumcraft";
 
+    public static final String INVTWEAKS = "inventorytweaks";
 }

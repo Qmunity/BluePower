@@ -14,29 +14,32 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Blue Power.  If not, see <http://www.gnu.org/licenses/>
  *
- *     @author Quetzi
  */
 
 package com.bluepowermod.containers;
 
+import com.bluepowermod.containers.slots.SlotProjectTableCrafting;
+import com.bluepowermod.helper.IOHelper;
+import com.bluepowermod.tileentities.tier1.TileProjectTable;
+import com.bluepowermod.util.Dependencies;
+import cpw.mods.fml.common.Optional;
+import invtweaks.api.container.ChestContainer;
+import invtweaks.api.container.ContainerSection;
+import invtweaks.api.container.ContainerSectionCallback;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.InventoryCraftResult;
-import net.minecraft.inventory.InventoryCrafting;
-import net.minecraft.inventory.Slot;
+import net.minecraft.inventory.*;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraftforge.common.util.ForgeDirection;
 
-import com.bluepowermod.containers.slots.SlotProjectTableCrafting;
-import com.bluepowermod.helper.IOHelper;
-import com.bluepowermod.tileentities.tier1.TileProjectTable;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author MineMaarten
  */
+@ChestContainer
 public class ContainerProjectTable extends Container {
     
     public final IInventory         craftResult = new InventoryCraftResult();
@@ -44,7 +47,7 @@ public class ContainerProjectTable extends Container {
     private final InventoryCrafting craftingGrid;
     private int                     itemsCrafted;
     private boolean                 isRetrying  = false;
-    
+
     public ContainerProjectTable(InventoryPlayer invPlayer, TileProjectTable projectTable) {
     
         this.projectTable = projectTable;
@@ -159,5 +162,36 @@ public class ContainerProjectTable extends Container {
             }
         }
         return itemstack;
+    }
+
+    @Optional.Method(modid = Dependencies.INVTWEAKS)
+    @ContainerSectionCallback
+    public Map<ContainerSection, List<Slot>> getSections() {
+
+        Map<ContainerSection, List<Slot>> sections = null;
+        List<Slot> slotsCraftingIn = null;
+        List<Slot> slotsCraftingOut = null;
+        List<Slot> slotsChest = null;
+        List<Slot> slotsInventory = null;
+        List<Slot> slotsInventoryHotbar = null;
+        for (int i = 0; i < 9; i++) {
+            slotsCraftingIn.add(i, (Slot) inventorySlots.get(i));
+        }
+        slotsCraftingOut.add(0, (Slot) inventorySlots.get(9));
+        for (int i = 0; i < 18; i++) {
+            slotsChest.add(i, (Slot) inventorySlots.get(i + 10));
+        }
+        for (int i = 0; i < 27; i++) {
+            slotsInventory.add(0, (Slot) inventorySlots.get(i + 28));
+        }
+        for (int i = 0; i < 9; i++) {
+            slotsInventoryHotbar.add(0, (Slot) inventorySlots.get(i + 55));
+        }
+        sections.put(ContainerSection.CRAFTING_IN, slotsCraftingIn);
+        sections.put(ContainerSection.CRAFTING_OUT, slotsCraftingOut);
+        sections.put(ContainerSection.CHEST, slotsChest);
+        sections.put(ContainerSection.INVENTORY, slotsInventory);
+        sections.put(ContainerSection.INVENTORY_HOTBAR, slotsInventoryHotbar);
+        return sections;
     }
 }
