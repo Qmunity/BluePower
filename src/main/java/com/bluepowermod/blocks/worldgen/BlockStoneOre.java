@@ -54,20 +54,12 @@ public class BlockStoneOre extends Block {
     @Override
     public String getUnlocalizedName() {
 
-        return String.format("tile.%s:%s", Refs.MODID, getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
-    }
-
-    protected String getUnwrappedUnlocalizedName(String name) {
-
-        return name.substring(name.indexOf(".") + 1);
+        return String.format("tile." + Refs.MODID + ":" + this.name);
     }
 
     @Override
     public Item getItemDropped(int par1, Random par2, int par3) {
 
-        if (this.name.matches(Refs.BASALT_NAME)) {
-            return Item.getItemFromBlock(Block.getBlockFromName(Refs.MODID + ":" + Refs.BASALTCOBBLE_NAME));
-        }
         return Item.getItemFromBlock(Block.getBlockFromName(Refs.MODID + ":" + this.name));
     }
 

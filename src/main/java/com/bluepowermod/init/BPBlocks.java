@@ -57,7 +57,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 @GameRegistry.ObjectHolder(Refs.MODID)
 public class BPBlocks {
     
-    public static final Block basalt              = new BlockStoneOre(Refs.BASALT_NAME).setResistance(25.0F);
+    public static final Block basalt              = new BlockBasalt(Refs.BASALT_NAME).setResistance(25.0F);
     public static final Block marble              = new BlockStoneOre(Refs.MARBLE_NAME).setResistance(1.0F).setHardness(1.5F);
     public static final Block basalt_cobble       = new BlockStoneOre(Refs.BASALTCOBBLE_NAME);
     public static final Block basalt_brick        = new BlockStoneOre(Refs.BASALTBRICK_NAME);
