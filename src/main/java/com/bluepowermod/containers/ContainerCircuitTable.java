@@ -7,6 +7,7 @@
  */
 package com.bluepowermod.containers;
 
+import invtweaks.api.container.ChestContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -16,6 +17,7 @@ import net.minecraft.item.ItemStack;
 import com.bluepowermod.containers.slots.SlotCircuitTableCrafting;
 import com.bluepowermod.tileentities.tier2.TileCircuitTable;
 
+@ChestContainer
 public class ContainerCircuitTable extends Container {
     
     private final TileCircuitTable circuitTable;
