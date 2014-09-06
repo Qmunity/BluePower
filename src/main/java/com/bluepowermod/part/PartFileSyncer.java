@@ -20,15 +20,18 @@ import java.util.List;
 import com.bluepowermod.BluePower;
 
 public class PartFileSyncer {
-    private static final String PATH = BluePower.proxy.getSavePath() + "\\bluepower\\partIds\\";
+
+    private static final String PATH = BluePower.proxy.getSavePath() + File.separator + "bluepower" + File.separator + "partIds" + File.separator;
 
     private static PartFileSyncer INSTANCE = new PartFileSyncer();
 
     public static PartFileSyncer instance() {
+
         return INSTANCE;
     }
 
     public List<String> getPartIds(Iterable<String> toBeMapped) {
+
         List<String> partIds = new ArrayList<String>();
         File file = new File(PATH);
 
