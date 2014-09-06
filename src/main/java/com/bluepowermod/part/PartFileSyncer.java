@@ -20,7 +20,7 @@ import java.util.List;
 import com.bluepowermod.BluePower;
 
 public class PartFileSyncer {
-    private static final String PATH = BluePower.proxy.getSavePath() + "\\bluepower\\partIds\\";
+    private static final String PATH = BluePower.proxy.getSavePath() + "/bluepower/partIds/";
 
     private static PartFileSyncer INSTANCE = new PartFileSyncer();
 
