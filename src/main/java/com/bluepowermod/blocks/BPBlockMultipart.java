@@ -7,10 +7,23 @@
  */
 package com.bluepowermod.blocks;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
+import com.bluepowermod.api.part.BPPart;
+import com.bluepowermod.api.vec.Vector3;
+import com.bluepowermod.client.renderers.RenderMultipart;
+import com.bluepowermod.init.BPBlocks;
+import com.bluepowermod.network.NetworkHandler;
+import com.bluepowermod.network.messages.MessageMultipartRemove;
+import com.bluepowermod.part.PartRegistry;
+import com.bluepowermod.raytrace.BPMop;
+import com.bluepowermod.raytrace.RayTracer;
+import com.bluepowermod.tileentities.BPTileMultipart;
+import com.bluepowermod.util.AABBUtils;
+import com.bluepowermod.util.ComparatorMOP;
+import com.bluepowermod.util.Refs;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -32,22 +45,9 @@ import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action;
 
-import com.bluepowermod.api.part.BPPart;
-import com.bluepowermod.api.vec.Vector3;
-import com.bluepowermod.client.renderers.RenderMultipart;
-import com.bluepowermod.init.BPBlocks;
-import com.bluepowermod.network.NetworkHandler;
-import com.bluepowermod.network.messages.MessageMultipartRemove;
-import com.bluepowermod.raytrace.BPMop;
-import com.bluepowermod.raytrace.RayTracer;
-import com.bluepowermod.tileentities.BPTileMultipart;
-import com.bluepowermod.util.AABBUtils;
-import com.bluepowermod.util.ComparatorMOP;
-
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class BPBlockMultipart extends BlockContainer {
     
@@ -56,7 +56,12 @@ public class BPBlockMultipart extends BlockContainer {
         super(Material.rock);
         MinecraftForge.EVENT_BUS.register(this);
     }
-    
+
+    public static String getUnlocalizedName(ItemStack item) {
+
+        return "part." + Refs.MODID + ":" + PartRegistry.getInstance().getPartIdFromItem(item) + ".name";
+    }
+
     @Override
     public TileEntity createNewTileEntity(World world, int meta) {
     
