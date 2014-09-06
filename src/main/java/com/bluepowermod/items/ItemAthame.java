@@ -17,6 +17,9 @@
 
 package com.bluepowermod.items;
 
+import com.bluepowermod.init.BPItems;
+import com.bluepowermod.init.CustomTabs;
+import com.bluepowermod.util.Refs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.monster.EntityEnderman;
@@ -25,9 +28,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.util.DamageSource;
 import net.minecraftforge.common.util.EnumHelper;
-
-import com.bluepowermod.init.CustomTabs;
-import com.bluepowermod.util.Refs;
 
 public class ItemAthame extends ItemSword {
     
@@ -71,5 +71,17 @@ public class ItemAthame extends ItemSword {
     protected String getUnwrappedUnlocalizedName(String name) {
 
         return name.substring(name.indexOf(".") + 1);
+    }
+
+    @Override
+    public boolean isRepairable() {
+
+        return canRepair && isDamageable();
+    }
+
+    @Override
+    public boolean getIsRepairable(ItemStack is1, ItemStack is2) {
+
+        return ((is1.getItem() == this || is2.getItem() == this) && (is1.getItem() == BPItems.silver_ingot || is2.getItem() == BPItems.silver_ingot));
     }
 }
