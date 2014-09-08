@@ -35,7 +35,7 @@ import com.bluepowermod.part.cable.bluestone.WireBluestone;
 import com.bluepowermod.part.gate.GateBase;
 import com.bluepowermod.part.gate.GateWire;
 import com.bluepowermod.raytrace.RayTracer;
-import com.bluepowermod.util.Dependencies;
+import com.qmunity.lib.util.Dependencies;
 
 public abstract class IntegratedCircuit extends GateBase implements ISilkyRemovable {
     

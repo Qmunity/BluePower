@@ -19,9 +19,9 @@ public class WidgetNumber extends WidgetMode {
     }
     
     @Override
-    public void render(int mouseX, int mouseY) {
+    public void render(int mouseX, int mouseY, float partialTick) {
     
-        super.render(mouseX, mouseY);
+        super.render(mouseX, mouseY, partialTick);
         Minecraft.getMinecraft().fontRenderer.drawString("" + value, x + 4, y + 3, 4210752);
     }
     

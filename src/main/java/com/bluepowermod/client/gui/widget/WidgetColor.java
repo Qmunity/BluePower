@@ -24,6 +24,7 @@ import net.minecraft.item.ItemDye;
 import org.lwjgl.opengl.GL11;
 
 import com.bluepowermod.util.Refs;
+import com.qmunity.lib.client.gui.widget.BaseWidget;
 
 /**
  * @author MineMaarten
@@ -47,9 +48,9 @@ public class WidgetColor extends BaseWidget {
     }
     
     @Override
-    public void render(int mouseX, int mouseY) {
+    public void render(int mouseX, int mouseY, float partialTick) {
     
-        super.render(mouseX, mouseY);
+        super.render(mouseX, mouseY, partialTick);
         if (value < 16) {
             Gui.drawRect(x + 5, y + 5, x + 9, y + 9, 0xFF000000 + ItemDye.field_150922_c[value]);
             GL11.glColor4d(1, 1, 1, 1);

@@ -18,6 +18,7 @@
 package com.bluepowermod.init;
 
 import com.bluepowermod.blocks.worldgen.*;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemDye;
@@ -48,8 +49,8 @@ import com.bluepowermod.tileentities.tier2.TileRetriever;
 import com.bluepowermod.tileentities.tier2.TileSortingMachine;
 import com.bluepowermod.tileentities.tier3.TileCircuitDatabase;
 import com.bluepowermod.tileentities.tier3.TileManager;
-import com.bluepowermod.util.Dependencies;
 import com.bluepowermod.util.Refs;
+import com.qmunity.lib.util.Dependencies;
 
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.registry.GameRegistry;

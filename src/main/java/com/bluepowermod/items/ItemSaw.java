@@ -23,8 +23,8 @@ import net.minecraft.item.ItemStack;
 import codechicken.microblock.Saw;
 
 import com.bluepowermod.init.CustomTabs;
-import com.bluepowermod.util.Dependencies;
 import com.bluepowermod.util.Refs;
+import com.qmunity.lib.util.Dependencies;
 
 import cpw.mods.fml.common.Optional;
 

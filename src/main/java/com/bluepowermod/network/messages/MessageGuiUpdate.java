@@ -21,7 +21,7 @@ import com.bluepowermod.api.part.BPPartFace;
 import com.bluepowermod.compat.CompatibilityUtils;
 import com.bluepowermod.part.IGuiButtonSensitive;
 import com.bluepowermod.part.gate.ic.IntegratedCircuit;
-import com.bluepowermod.util.Dependencies;
+import com.qmunity.lib.util.Dependencies;
 
 /**
  * 

@@ -25,7 +25,7 @@ import com.bluepowermod.api.compat.IMultipartCompat;
 import com.bluepowermod.api.part.BPPart;
 import com.bluepowermod.api.vec.Vector3;
 import com.bluepowermod.compat.CompatibilityUtils;
-import com.bluepowermod.util.Dependencies;
+import com.qmunity.lib.util.Dependencies;
 
 import cpw.mods.fml.common.Optional;
 

@@ -18,7 +18,7 @@ import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.part.tube.PneumaticTube;
 import com.bluepowermod.tileentities.IFuzzyRetrieving;
 import com.bluepowermod.tileentities.tier1.TileFilter;
-import com.bluepowermod.util.Dependencies;
+import com.qmunity.lib.util.Dependencies;
 
 /**
  * @author MineMaarten

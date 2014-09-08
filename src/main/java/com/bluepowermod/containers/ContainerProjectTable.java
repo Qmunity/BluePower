@@ -21,7 +21,8 @@ package com.bluepowermod.containers;
 import com.bluepowermod.containers.slots.SlotProjectTableCrafting;
 import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.tileentities.tier1.TileProjectTable;
-import com.bluepowermod.util.Dependencies;
+import com.qmunity.lib.util.Dependencies;
+
 import cpw.mods.fml.common.Optional;
 import invtweaks.api.container.ChestContainer;
 import invtweaks.api.container.ContainerSection;

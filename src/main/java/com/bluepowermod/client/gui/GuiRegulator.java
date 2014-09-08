@@ -24,8 +24,6 @@ import java.util.List;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 
-import com.bluepowermod.client.gui.widget.BaseWidget;
-import com.bluepowermod.client.gui.widget.IGuiWidget;
 import com.bluepowermod.client.gui.widget.WidgetColor;
 import com.bluepowermod.client.gui.widget.WidgetFuzzySetting;
 import com.bluepowermod.client.gui.widget.WidgetMode;
@@ -34,6 +32,8 @@ import com.bluepowermod.network.NetworkHandler;
 import com.bluepowermod.network.messages.MessageGuiUpdate;
 import com.bluepowermod.tileentities.tier2.TileRegulator;
 import com.bluepowermod.util.Refs;
+import com.qmunity.lib.client.gui.widget.BaseWidget;
+import com.qmunity.lib.client.gui.widget.IGuiWidget;
 
 /**
  * @author MineMaarten
@@ -82,8 +82,10 @@ public class GuiRegulator extends GuiBase {
 
     @Override
     public void actionPerformed(IGuiWidget widget) {
-
-        BaseWidget baseWidget = (BaseWidget) widget;
-        NetworkHandler.sendToServer(new MessageGuiUpdate(regulator, widget.getID(), baseWidget.value));
+        super.actionPerformed(widget);
+        if (widget instanceof BaseWidget) {
+            BaseWidget baseWidget = (BaseWidget) widget;
+            NetworkHandler.sendToServer(new MessageGuiUpdate(regulator, widget.getID(), baseWidget.value));
+        }
     }
 }

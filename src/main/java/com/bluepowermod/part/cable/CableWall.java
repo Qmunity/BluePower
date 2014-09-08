@@ -22,7 +22,7 @@ import com.bluepowermod.api.part.BPPartFace;
 import com.bluepowermod.api.util.ForgeDirectionUtils;
 import com.bluepowermod.api.vec.Vector3;
 import com.bluepowermod.part.cable.bluestone.ICableConnect;
-import com.bluepowermod.util.Dependencies;
+import com.qmunity.lib.util.Dependencies;
 
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Optional;

@@ -10,7 +10,7 @@ package com.bluepowermod.compat.waila;
 import com.bluepowermod.api.compat.IMultipartCompat.MultipartCompat;
 import com.bluepowermod.compat.CompatModule;
 import com.bluepowermod.tileentities.TileMachineBase;
-import com.bluepowermod.util.Dependencies;
+import com.qmunity.lib.util.Dependencies;
 
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLInterModComms;

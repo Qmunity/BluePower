@@ -30,7 +30,7 @@ import com.bluepowermod.api.util.ForgeDirectionUtils;
 import com.bluepowermod.api.vec.Vector3;
 import com.bluepowermod.client.renderers.IconSupplier;
 import com.bluepowermod.compat.CompatibilityUtils;
-import com.bluepowermod.util.Dependencies;
+import com.qmunity.lib.util.Dependencies;
 
 /**
  * Accelerator extends PneumaticTube, as that's much easier routing wise.

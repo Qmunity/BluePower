@@ -20,8 +20,8 @@ import com.bluepowermod.api.bluestone.IBluestoneApi;
 import com.bluepowermod.api.bluestone.IBluestoneWire;
 import com.bluepowermod.api.vec.Vector3;
 import com.bluepowermod.client.renderers.RenderHelper;
-import com.bluepowermod.util.Dependencies;
 import com.jcraft.jorbis.Block;
+import com.qmunity.lib.util.Dependencies;
 
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.relauncher.Side;

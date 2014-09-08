@@ -25,7 +25,7 @@ import com.bluepowermod.compat.CompatibilityUtils;
 import com.bluepowermod.part.tube.PneumaticTube;
 import com.bluepowermod.part.tube.TubeLogic;
 import com.bluepowermod.part.tube.TubeStack;
-import com.bluepowermod.util.Dependencies;
+import com.qmunity.lib.util.Dependencies;
 
 /**
  * @author MineMaarten

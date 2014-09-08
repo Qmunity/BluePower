@@ -37,7 +37,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 /**
  * @author MineMaarten
  */
-public class ContainerRegulator extends ContainerGhosts {
+public class ContainerRegulator extends ContainerMachineBase {
 
     private final TileRegulator tileRegulator;
     private int filterColor;
@@ -45,7 +45,7 @@ public class ContainerRegulator extends ContainerGhosts {
     private int fuzzySetting;
 
     public ContainerRegulator(InventoryPlayer invPlayer, TileRegulator regulator) {
-
+        super(regulator);
         tileRegulator = regulator;
 
         for (int i = 0; i < 3; ++i) {

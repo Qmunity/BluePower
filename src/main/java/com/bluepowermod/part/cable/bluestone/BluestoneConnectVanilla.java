@@ -15,7 +15,7 @@ import org.lwjgl.opengl.GL11;
 import com.bluepowermod.api.bluestone.ABluestoneConnect;
 import com.bluepowermod.api.bluestone.IBluestoneWire;
 import com.bluepowermod.api.vec.Vector3;
-import com.bluepowermod.util.Dependencies;
+import com.qmunity.lib.util.Dependencies;
 
 import cpw.mods.fml.common.Loader;
 

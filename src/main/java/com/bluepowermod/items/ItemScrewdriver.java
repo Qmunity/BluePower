@@ -28,8 +28,8 @@ import com.bluepowermod.init.CustomTabs;
 import com.bluepowermod.references.GuiIDs;
 import com.bluepowermod.tileentities.tier3.IRedBusWindow;
 import com.bluepowermod.tileentities.tier3.TileCPU;
-import com.bluepowermod.util.Dependencies;
 import com.bluepowermod.util.Refs;
+import com.qmunity.lib.util.Dependencies;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

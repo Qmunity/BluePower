@@ -24,13 +24,13 @@ import java.util.List;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 
-import com.bluepowermod.client.gui.widget.IGuiWidget;
 import com.bluepowermod.client.gui.widget.WidgetMode;
 import com.bluepowermod.containers.ContainerProjectTable;
 import com.bluepowermod.network.NetworkHandler;
 import com.bluepowermod.network.messages.MessageGuiUpdate;
 import com.bluepowermod.tileentities.tier1.TileProjectTable;
 import com.bluepowermod.util.Refs;
+import com.qmunity.lib.client.gui.widget.IGuiWidget;
 
 /**
  * @author MineMaarten

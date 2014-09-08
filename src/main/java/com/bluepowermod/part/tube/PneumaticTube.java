@@ -42,7 +42,7 @@ import com.bluepowermod.init.Config;
 import com.bluepowermod.init.CustomTabs;
 import com.bluepowermod.items.ItemDamageableColorableOverlay;
 import com.bluepowermod.util.Color;
-import com.bluepowermod.util.Dependencies;
+import com.qmunity.lib.util.Dependencies;
 
 /**
  * 

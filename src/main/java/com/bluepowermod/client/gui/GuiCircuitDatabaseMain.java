@@ -19,8 +19,6 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
-import com.bluepowermod.client.gui.widget.BaseWidget;
-import com.bluepowermod.client.gui.widget.IGuiWidget;
 import com.bluepowermod.client.gui.widget.WidgetMode;
 import com.bluepowermod.client.gui.widget.WidgetSidewaysTab;
 import com.bluepowermod.client.gui.widget.WidgetTab;
@@ -30,6 +28,8 @@ import com.bluepowermod.network.messages.MessageGuiUpdate;
 import com.bluepowermod.network.messages.MessageUpdateTextfield;
 import com.bluepowermod.tileentities.tier3.TileCircuitDatabase;
 import com.bluepowermod.util.Refs;
+import com.qmunity.lib.client.gui.widget.BaseWidget;
+import com.qmunity.lib.client.gui.widget.IGuiWidget;
 
 public class GuiCircuitDatabaseMain extends GuiBase {
     

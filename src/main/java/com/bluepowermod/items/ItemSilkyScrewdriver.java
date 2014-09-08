@@ -35,8 +35,8 @@ import com.bluepowermod.api.part.BPPart;
 import com.bluepowermod.api.vec.Vector3;
 import com.bluepowermod.compat.CompatibilityUtils;
 import com.bluepowermod.init.CustomTabs;
-import com.bluepowermod.util.Dependencies;
 import com.bluepowermod.util.Refs;
+import com.qmunity.lib.util.Dependencies;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

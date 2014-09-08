@@ -15,8 +15,6 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
 import com.bluepowermod.BluePower;
-import com.bluepowermod.client.gui.widget.BaseWidget;
-import com.bluepowermod.client.gui.widget.IGuiWidget;
 import com.bluepowermod.client.gui.widget.WidgetTab;
 import com.bluepowermod.containers.ContainerCircuitDatabaseSharing;
 import com.bluepowermod.network.NetworkHandler;
@@ -24,6 +22,8 @@ import com.bluepowermod.network.messages.MessageCircuitDatabaseTemplate;
 import com.bluepowermod.network.messages.MessageGuiUpdate;
 import com.bluepowermod.tileentities.tier3.TileCircuitDatabase;
 import com.bluepowermod.util.Refs;
+import com.qmunity.lib.client.gui.widget.BaseWidget;
+import com.qmunity.lib.client.gui.widget.IGuiWidget;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

@@ -40,7 +40,7 @@ import com.bluepowermod.helper.TileEntityCache;
 import com.bluepowermod.init.Config;
 import com.bluepowermod.tileentities.IFuzzyRetrieving;
 import com.bluepowermod.tileentities.tier3.TileManager;
-import com.bluepowermod.util.Dependencies;
+import com.qmunity.lib.util.Dependencies;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

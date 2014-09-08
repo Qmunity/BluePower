@@ -498,6 +498,11 @@ gui.widget.fuzzy.exact.info=Considers items to be the same when they are exactly
 
 gui.tooltip.hasSilkyData=§eHas Extra Silky Data
 
+gui.tab.stuffed=Stuffed Items
+gui.tab.stuffed.noItems=No items stuffed
+gui.tab.info=Information
+tile.bluepower:filter.info=Test info, and this is to test the line wrapping. Bla bla, bladieblaa this is a filter
+
 direction.front=Front
 direction.left=Left
 direction.back=Back

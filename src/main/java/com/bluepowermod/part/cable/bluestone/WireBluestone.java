@@ -48,8 +48,8 @@ import com.bluepowermod.api.vec.Vector3Cube;
 import com.bluepowermod.compat.fmp.MultipartBPPart;
 import com.bluepowermod.init.CustomTabs;
 import com.bluepowermod.part.cable.CableWall;
-import com.bluepowermod.util.Dependencies;
 import com.bluepowermod.util.Refs;
+import com.qmunity.lib.util.Dependencies;
 
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Optional;

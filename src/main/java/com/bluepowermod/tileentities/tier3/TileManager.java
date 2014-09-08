@@ -28,7 +28,7 @@ import com.bluepowermod.part.tube.TubeStack;
 import com.bluepowermod.tileentities.IFuzzyRetrieving;
 import com.bluepowermod.tileentities.IRejectAnimator;
 import com.bluepowermod.tileentities.TileMachineBase;
-import com.bluepowermod.util.Dependencies;
+import com.qmunity.lib.util.Dependencies;
 
 /**
  * @author MineMaarten

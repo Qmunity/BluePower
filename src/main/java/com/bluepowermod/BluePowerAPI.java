@@ -24,7 +24,7 @@ import com.bluepowermod.part.PartRegistry;
 import com.bluepowermod.part.cable.bluestone.BluestoneApi;
 import com.bluepowermod.part.tube.PneumaticTube;
 import com.bluepowermod.recipe.AlloyFurnaceRegistry;
-import com.bluepowermod.util.Dependencies;
+import com.qmunity.lib.util.Dependencies;
 
 public class BluePowerAPI implements IBPApi {
     

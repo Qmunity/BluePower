@@ -15,6 +15,8 @@ import net.minecraft.client.gui.Gui;
 
 import org.lwjgl.opengl.GL11;
 
+import com.qmunity.lib.client.gui.widget.BaseWidget;
+
 public class WidgetSidewaysTab extends BaseWidget {
 
     private final int singleTabWidth;
@@ -41,7 +43,7 @@ public class WidgetSidewaysTab extends BaseWidget {
     }
 
     @Override
-    public void render(int mouseX, int mouseY) {
+    public void render(int mouseX, int mouseY, float partialTick) {
 
         if (textures.length > 0)
             Minecraft.getMinecraft().getTextureManager().bindTexture(textures[0]);

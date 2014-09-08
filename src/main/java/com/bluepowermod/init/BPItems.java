@@ -40,8 +40,9 @@ import com.bluepowermod.items.ItemSeedBag;
 import com.bluepowermod.items.ItemSickle;
 import com.bluepowermod.items.ItemSilkyScrewdriver;
 import com.bluepowermod.part.ItemBPPart;
-import com.bluepowermod.util.Dependencies;
 import com.bluepowermod.util.Refs;
+import com.qmunity.lib.util.Dependencies;
+
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Optional;
 import cpw.mods.fml.common.registry.GameRegistry;

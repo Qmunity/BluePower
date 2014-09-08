@@ -16,6 +16,8 @@
  */
 package com.bluepowermod.client.gui.widget;
 
+import com.qmunity.lib.client.gui.widget.BaseWidget;
+
 /**
  * @author MineMaarten
  */

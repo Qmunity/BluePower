@@ -43,7 +43,7 @@ import com.bluepowermod.items.ItemSickle;
 import com.bluepowermod.network.NetworkHandler;
 import com.bluepowermod.network.messages.MessageSyncPartIds;
 import com.bluepowermod.part.PartRegistry;
-import com.bluepowermod.util.Dependencies;
+import com.qmunity.lib.util.Dependencies;
 
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.eventhandler.Event.Result;

@@ -20,7 +20,7 @@ import com.bluepowermod.compat.fmp.CompatModuleFMPAlt;
 import com.bluepowermod.compat.hydcraft.CompatModuleHydCraft;
 import com.bluepowermod.compat.ic2.CompatModuleIC2;
 import com.bluepowermod.compat.waila.CompatModuleWaila;
-import com.bluepowermod.util.Dependencies;
+import com.qmunity.lib.util.Dependencies;
 
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
