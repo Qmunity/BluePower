@@ -44,6 +44,7 @@ public class OreDictionarySetup {
         OreDictionary.registerOre("ingotTungsten", BPItems.tungsten_ingot);
         OreDictionary.registerOre("dyePurple", BPItems.indigo_dye);
         OreDictionary.registerOre("ingotBlueAlloy", BPItems.blue_alloy_ingot);
+        OreDictionary.registerOre("waferStone", BPItems.stone_tile);
         // OreDictionary.registerOre("ingotRedAlloy", BPItems.red_alloy_ingot);
         for (int i = 0; i < 16; i++) {
             OreDictionary.registerOre("bluestoneInsulated", PartRegistry.getInstance().getItemForPart("bluestoneWire." + ItemDye.field_150921_b[i]));
