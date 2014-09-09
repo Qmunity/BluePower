@@ -196,7 +196,7 @@ public class BlockCrop extends BlockCrops implements IGrowable {
     @Override
     public int quantityDropped(Random random) {
 
-        return random.nextInt(10) > 3 ? 0 : 1;
+        return 1;
     }
 
     /**
@@ -295,8 +295,10 @@ public class BlockCrop extends BlockCrops implements IGrowable {
             if (world.rand.nextBoolean()) {
                 ret.add(new ItemStack(this.func_149866_i(), 1, 0));
             }
-        } else {
+        } else if (metadata == 7) {
             ret.add(new ItemStack(this.func_149866_i(), 1 + world.rand.nextInt(2), 0));
+        } else {
+            ret.add(new ItemStack(this.func_149866_i(), 1, 0));
         }
         return ret;
     }
