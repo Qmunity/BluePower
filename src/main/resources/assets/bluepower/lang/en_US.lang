@@ -536,3 +536,4 @@ bluepower.waila.rsLatch.noFeedback=No Feedback
 waila.pneumaticTube.color=Colors
 waila.machine.stuffed=Stuffed
 
+message.oldpart=This is an old part. Put in player inventory to restore.

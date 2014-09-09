@@ -17,9 +17,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 public interface IPartRegistry {
-    
+
     void registerPart(Class<? extends BPPart> part, Object... constructorArgs);
-    
+
     /**
      * Creates a part from its ID
      * 
@@ -30,7 +30,7 @@ public interface IPartRegistry {
      * @return A new instance of the part or null if it couldn't be found
      */
     public BPPart createPart(String id, boolean isMultipart);
-    
+
     /**
      * Creates a part from its ID
      * 
@@ -39,13 +39,13 @@ public interface IPartRegistry {
      * @return A new instance of the part or null if it couldn't be found
      */
     public BPPart createPart(String id);
-    
+
     public Map<String, Entry<Class<? extends BPPart>, Object[]>> getMappings();
-    
+
     public List<String> getRegisteredParts();
-    
+
     public List<String> getRegisteredPartsForTab(CreativeTabs tab);
-    
+
     /**
      * Gets the part's item from an ID
      * 
@@ -54,9 +54,9 @@ public interface IPartRegistry {
      * @return An item with the part ID
      */
     public ItemStack getItemForPart(String id);
-    
+
     public ItemStack getItemForPart(String id, int stackSize);
-    
+
     /**
      * Gets the part id stored in the item and creates a new part with that id
      * 
@@ -65,13 +65,13 @@ public interface IPartRegistry {
      * @return A new instance of the part or null if it couldn't be found
      */
     public BPPart createPartFromItem(ItemStack is);
-    
+
     public Entry<Class<? extends BPPart>, Object[]> getPartData(String id);
-    
+
     public Entry<Class<? extends BPPart>, Object[]> getPartData(String id, boolean isMultipart);
-    
+
     public Entry<Class<? extends BPPart>, Object[]> getPartDataFromItem(ItemStack is);
-    
+
     /**
      * Gets the part ID stored in the item
      * 
@@ -80,19 +80,10 @@ public interface IPartRegistry {
      * @return The part ID
      */
     public String getPartIdFromItem(ItemStack is);
-    
-    /**
-     * Gets the metadata for the multipart itemstack passed as an argument
-     * 
-     * @param is
-     *            ItemsStack to get the metadata from
-     * @return The metadata that stack should have
-     */
-    public int getStackMetadata(ItemStack is);
-    
+
     public boolean hasCustomItemEntity(ItemStack is);
-    
+
     public EntityItem createItemEntityForPart(String id, World w, double x, double y, double z, ItemStack item);
-    
+
     public EntityItem createItemEntityForStack(World w, double x, double y, double z, ItemStack item);
 }
