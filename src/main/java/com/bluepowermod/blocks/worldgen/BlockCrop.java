@@ -22,11 +22,7 @@ import com.bluepowermod.init.BPItems;
 import com.bluepowermod.util.Refs;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockAir;
-import net.minecraft.block.BlockCrops;
-import net.minecraft.block.BlockFarmland;
-import net.minecraft.block.IGrowable;
+import net.minecraft.block.*;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -56,11 +52,6 @@ public class BlockCrop extends BlockCrops implements IGrowable {
         this.disableStats();
         this.setBlockName(Refs.FLAXCROP_NAME);
         this.setBlockTextureName(Refs.MODID + ":" + Refs.FLAXCROP_NAME);
-    }
-
-    public static boolean func_149887_c(int meta) {
-
-        return (meta & 8) != 0;
     }
 
     @Override
@@ -95,20 +86,6 @@ public class BlockCrop extends BlockCrops implements IGrowable {
         if (world.getBlock(x, y, z) instanceof BlockCrop) {
             if (world.getBlockMetadata(x, y, z) == 8) {
                 world.setBlockMetadataWithNotify(x, y - 1, z, 5, 2);
-            }
-        }
-    }
-
-    public void fertilize(World world, int x, int y, int z) {
-
-        int meta = world.getBlockMetadata(x, y, z);
-        if (world.getBlock(x, y + 1, z) instanceof BlockAir && (meta < 7)) {
-            meta = meta + MathHelper.getRandomIntegerInRange(world.rand, 2, 5);
-            if (meta > 6) {
-                world.setBlockMetadataWithNotify(x, y, z, 7, 2);
-                world.setBlock(x, y + 1, z, BPBlocks.flax_crop, 8, 2);
-            } else {
-                world.setBlockMetadataWithNotify(x, y, z, meta, 2);
             }
         }
     }
@@ -178,12 +155,20 @@ public class BlockCrop extends BlockCrops implements IGrowable {
         return 6;
     }
 
+    /**
+     * getSeed
+     * @return
+     */
     @Override
     protected Item func_149866_i() {
 
         return BPItems.flax_seeds;
     }
 
+    /**
+     * getCrop
+     * @return
+     */
     @Override
     protected Item func_149865_P() {
 
@@ -214,12 +199,30 @@ public class BlockCrop extends BlockCrops implements IGrowable {
         return random.nextInt(10) > 3 ? 0 : 1;
     }
 
+    /**
+     * boolean canFertilise
+     * @param world
+     * @param x
+     * @param y
+     * @param z
+     * @param isClient
+     * @return
+     */
     @Override
-    public boolean func_149851_a(World world, int x, int y, int z, boolean p_149851_5_) {
+    public boolean func_149851_a(World world, int x, int y, int z, boolean isClient) {
 
-        return world.getBlockMetadata(x, y, z) != 7;
+        return world.getBlockMetadata(x, y, z) < 7;
     }
 
+    /**
+     * shouldFertilize
+     * @param world
+     * @param random
+     * @param x
+     * @param y
+     * @param z
+     * @return
+     */
     @Override
     public boolean func_149852_a(World world, Random random, int x, int y, int z) {
 
@@ -244,34 +247,44 @@ public class BlockCrop extends BlockCrops implements IGrowable {
 
         for (int i = 0; i < this.iconArray.length; ++i) {
             int tex = 0;
-            if (i == 0 || i == 1) {
-                tex = 0;
-            } else if (i == 2) {
-                tex = 1;
-            } else if (i == 3 || i == 4) {
-                tex = 2;
-            } else if ((i == 5) || (i == 6)) {
-                tex = 3;
-            } else if (i == 7) {
-                tex = 4;
-            } else if (i == 8) {
-                tex = 5;
-            }
+            if (i == 0 || i == 1) { tex = 0; }
+            else if (i == 2) { tex = 1; }
+            else if ((i == 3) || (i == 4)) { tex = 2; }
+            else if ((i == 5) || (i == 6)) { tex = 3; }
+            else if (i == 7) { tex = 4; }
+            else if (i == 8) { tex = 5; }
 
             this.iconArray[i] = iconRegister.registerIcon(this.getTextureName() + "_stage_" + tex);
         }
     }
 
+    /**
+     * fertilize
+     * @param world
+     * @param random
+     * @param x
+     * @param y
+     * @param z
+     */
     @Override
     public void func_149853_b(World world, Random random, int x, int y, int z) {
 
-        this.fertilize(world, x, y, z);
+        int meta = world.getBlockMetadata(x, y, z);
+        if (world.getBlock(x, y + 1, z) instanceof BlockAir && (meta < 7)) {
+            meta = meta + MathHelper.getRandomIntegerInRange(world.rand, 2, 5);
+            if (meta > 6) {
+                world.setBlockMetadataWithNotify(x, y, z, 7, 2);
+                world.setBlock(x, y + 1, z, BPBlocks.flax_crop, 8, 2);
+            } else {
+                world.setBlockMetadataWithNotify(x, y, z, meta, 2);
+            }
+        }
     }
 
     @Override
     public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
 
-        ArrayList<ItemStack> ret = super.getDrops(world, x, y, z, metadata, fortune);
+        ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
 
         if (metadata >= 8) {
             for (int i = 0; i < 3 + fortune; ++i) {
@@ -279,6 +292,11 @@ public class BlockCrop extends BlockCrops implements IGrowable {
                     ret.add(new ItemStack(this.func_149865_P(), 1, 0));
                 }
             }
+            if (world.rand.nextBoolean()) {
+                ret.add(new ItemStack(this.func_149866_i(), 1, 0));
+            }
+        } else {
+            ret.add(new ItemStack(this.func_149866_i(), 1 + world.rand.nextInt(2), 0));
         }
         return ret;
     }
@@ -326,8 +344,8 @@ public class BlockCrop extends BlockCrops implements IGrowable {
     }
 
     @Override
-    public EnumPlantType getPlantType(IBlockAccess world, int x, int y, int z)
-    {
+    public EnumPlantType getPlantType(IBlockAccess world, int x, int y, int z) {
+
     	return EnumPlantType.Crop;
     }
 }
