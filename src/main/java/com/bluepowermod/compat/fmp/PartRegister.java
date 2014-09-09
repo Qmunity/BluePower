@@ -40,7 +40,9 @@ import com.bluepowermod.part.lamp.PartFixture;
 import com.bluepowermod.part.tube.Accelerator;
 import com.bluepowermod.part.tube.MagTube;
 import com.bluepowermod.part.tube.PneumaticTube;
+import com.bluepowermod.part.tube.PneumaticTubeOpaque;
 import com.bluepowermod.part.tube.RestrictionTube;
+import com.bluepowermod.part.tube.RestrictionTubeOpaque;
 
 public class PartRegister {
 
@@ -88,7 +90,9 @@ public class PartRegister {
 
         // Pneumatic Tubes
         PartRegistry.getInstance().registerPart(PneumaticTube.class);
+        PartRegistry.getInstance().registerPart(PneumaticTubeOpaque.class);
         PartRegistry.getInstance().registerPart(RestrictionTube.class);
+        PartRegistry.getInstance().registerPart(RestrictionTubeOpaque.class);
         PartRegistry.getInstance().registerPart(MagTube.class);
         PartRegistry.getInstance().registerPart(Accelerator.class);
 
