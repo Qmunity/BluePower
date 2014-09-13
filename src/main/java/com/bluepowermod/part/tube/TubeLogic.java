@@ -265,8 +265,10 @@ public class TubeLogic implements IPneumaticTube {
         Map<TubeEdge, ForgeDirection> validDestinations = new LinkedHashMap<TubeEdge, ForgeDirection>();// using a LinkedHashMap so the order doesn't
                                                                                                         // change, used for round robin.
 
-        distances.put(getNode(), 0);// make this the origin.
-        traversingNodes.add(getNode());
+        if (getNode() != null) {
+            distances.put(getNode(), 0);// make this the origin.
+            traversingNodes.add(getNode());
+        }
 
         boolean firstRun = true;
         int closestDest = 0;
