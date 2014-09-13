@@ -15,6 +15,7 @@ import net.minecraftforge.client.MinecraftForgeClient;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.init.BPItems;
 import com.bluepowermod.tileentities.TileCastPlate;
+import com.bluepowermod.tileentities.TileMotor;
 import com.bluepowermod.tileentities.tier1.TileLamp;
 import com.bluepowermod.tileentities.tier2.TileWindmill;
 import com.bluepowermod.tileentities.tier3.TileEngine;
@@ -56,5 +57,7 @@ public class Renderers {
         for (Block l : BPBlocks.blockLampInverted) {
             MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(l), rl);
         }
+
+        ClientRegistry.bindTileEntitySpecialRenderer(TileMotor.class, new RenderMotor());
     }
 }

@@ -25,6 +25,7 @@ import com.bluepowermod.blocks.BPBlockMultipart;
 import com.bluepowermod.blocks.BlockCastPlate;
 import com.bluepowermod.blocks.BlockContainerBase;
 import com.bluepowermod.blocks.BlockItemOre;
+import com.bluepowermod.blocks.BlockMotor;
 import com.bluepowermod.blocks.machines.BlockAlloyCrucible;
 import com.bluepowermod.blocks.machines.BlockContainerFrontRender;
 import com.bluepowermod.blocks.machines.BlockContainerTwoSideRender;
@@ -138,6 +139,8 @@ public class BPBlocks {
     public static Block extruder_tube;
     public static Block extruder_hopper;
 
+    public static Block motor;
+
     public static void init() {
 
         basalt = new BlockStoneOre(Refs.BASALT_NAME);
@@ -204,6 +207,8 @@ public class BPBlocks {
 
         extruder_tube = new BlockExtruderTube();
         extruder_hopper = new BlockExtruderHopper();
+
+        motor = new BlockMotor();
 
         // cpu = new BlockCPU();
         // monitor = new BlockMonitor();
@@ -294,6 +299,8 @@ public class BPBlocks {
 
         GameRegistry.registerBlock(extruder_tube, Refs.EXTRUDERTUBE_NAME);
         GameRegistry.registerBlock(extruder_hopper, Refs.EXTRUDERHOPPER_NAME);
+
+        GameRegistry.registerBlock(motor, Refs.MOTOR_NAME);
 
         // GameRegistry.registerBlock(cpu, Refs.BLOCKCPU_NAME);
         // GameRegistry.registerBlock(monitor, Refs.BLOCKMONITOR_NAME);

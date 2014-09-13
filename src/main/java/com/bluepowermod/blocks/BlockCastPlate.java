@@ -45,8 +45,7 @@ public class BlockCastPlate extends BlockContainerBase {
     }
 
     @Override
-    public MovingObjectPosition collisionRayTrace(World w, int x, int y, int z, Vec3 start,
-            Vec3 end) {
+    public MovingObjectPosition collisionRayTrace(World w, int x, int y, int z, Vec3 start, Vec3 end) {
 
         setBlockBounds(0, 0, 0, 1, 2 / 16F, 1);
 
@@ -104,6 +103,7 @@ public class BlockCastPlate extends BlockContainerBase {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public int getRenderType() {
 
         return RenderCastPlate.RENDER_ID;

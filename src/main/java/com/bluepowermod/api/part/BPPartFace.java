@@ -294,11 +294,8 @@ public abstract class BPPartFace extends BPPart implements IBPFacePart, IBPRedst
 
             c = c.rotate90Degrees(d);
 
-            collisionBoxes.add(new Vector3Cube(c.getMin(), c.getMax()));
+            aabbs.add((new Vector3Cube(c.getMin(), c.getMax()).toAABB()));
         }
-
-        for (Vector3Cube c : collisionBoxes)
-            aabbs.add(c.toAABB());
 
         return aabbs;
     }
