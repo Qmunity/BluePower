@@ -13,6 +13,7 @@ import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,21 +21,25 @@ import java.util.Map.Entry;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
+import com.bluepowermod.api.BPApi;
 import com.bluepowermod.api.part.BPPart;
 import com.bluepowermod.api.part.ComparatorCreativeTabIndex;
 import com.bluepowermod.api.part.IPartRegistry;
-import com.bluepowermod.init.BPItems;
 import com.bluepowermod.util.Refs;
+
+import cpw.mods.fml.common.registry.GameRegistry;
 
 public class PartRegistry implements IPartRegistry {
 
     private static PartRegistry INSTANCE = new PartRegistry();
     private final Map<String, Entry<Class<? extends BPPart>, Object[]>> parts = new LinkedHashMap<String, Entry<Class<? extends BPPart>, Object[]>>();
     private final Map<String, BPPart> samples = new LinkedHashMap<String, BPPart>();
+    public static Map<String, Item> multipartItems = new HashMap<String, Item>();
 
     public String ICON_PART;
 
@@ -67,6 +72,10 @@ public class PartRegistry implements IPartRegistry {
         samples.put(p.getType(), p);
         parts.remove("tmp");
         parts.put(p.getType(), e);
+
+        Item item = BPApi.getInstance().getMultipartCompat().getNewMultipartItem(p.getType());
+        multipartItems.put(p.getType(), item);
+        GameRegistry.registerItem(item, "part." + p.getType());
     }
 
     /**
@@ -158,14 +167,13 @@ public class PartRegistry implements IPartRegistry {
     @Override
     public ItemStack getItemForPart(String id) {
 
-        if (parts.containsKey(id)) {
-            ItemStack is = new ItemStack(BPItems.multipart);
+        if (multipartItems.containsKey(id)) {
+            ItemStack is = new ItemStack(multipartItems.get(id));
 
             NBTTagCompound tag = new NBTTagCompound();
             tag.setString("id", id);
 
             is.setTagCompound(tag);
-            is.setItemDamage(getStackMetadata(is));
             return is;
         }
         return null;
@@ -248,28 +256,6 @@ public class PartRegistry implements IPartRegistry {
         return null;
     }
 
-    /**
-     * Gets the metadata for the multipart itemstack passed as an argument
-     * 
-     * @param is
-     *            ItemsStack to get the metadata from
-     * @return The metadata that stack should have
-     */
-    @Override
-    public int getStackMetadata(ItemStack is) {
-
-        String id = getPartIdFromItem(is);
-        if (id == null)
-            return 0;
-        int i = 0;
-        for (String s : parts.keySet()) {
-            if (s.equals(id))
-                break;
-            i++;
-        }
-        return i;
-    }
-
     @Override
     public boolean hasCustomItemEntity(ItemStack is) {
 
@@ -296,4 +282,5 @@ public class PartRegistry implements IPartRegistry {
             return null;
         return part.createItemEntity(w, x, y, z, item);
     }
+
 }

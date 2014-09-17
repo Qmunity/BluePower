@@ -17,6 +17,7 @@
 
 package com.bluepowermod.items;
 
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemStack;
 
@@ -25,12 +26,16 @@ import com.bluepowermod.util.Refs;
 
 public class ItemGemAxe extends ItemAxe {
 
-    public ItemGemAxe(ToolMaterial material, String name) {
+    public    Item    customCraftingMaterial = null;
+    protected boolean canRepair              = true;
+
+    public ItemGemAxe(ToolMaterial material, String name, Item repairItem) {
 
         super(material);
         this.setUnlocalizedName(name);
         this.setCreativeTab(CustomTabs.tabBluePowerTools);
         this.setTextureName(Refs.MODID + ":" + name);
+        this.customCraftingMaterial = repairItem;
     }
 
     @Override
@@ -42,5 +47,17 @@ public class ItemGemAxe extends ItemAxe {
     protected String getUnwrappedUnlocalizedName(String name) {
 
         return name.substring(name.indexOf(".") + 1);
+    }
+
+    @Override
+    public boolean isRepairable() {
+
+        return canRepair && isDamageable();
+    }
+
+    @Override
+    public boolean getIsRepairable(ItemStack is1, ItemStack is2) {
+
+        return ((is1.getItem() == this || is2.getItem() == this) && (is1.getItem() == this.customCraftingMaterial || is2.getItem() == this.customCraftingMaterial));
     }
 }

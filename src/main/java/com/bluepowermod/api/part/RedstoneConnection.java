@@ -1,6 +1,16 @@
+/*
+ * This file is part of Blue Power. Blue Power is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version. Blue Power is
+ * distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+ * PARTICULAR PURPOSE. See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along
+ * with Blue Power. If not, see <http://www.gnu.org/licenses/>
+ */
 package com.bluepowermod.api.part;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.util.ForgeDirection;
+
+import com.bluepowermod.api.vec.Vector3;
 
 public class RedstoneConnection {
 
@@ -102,8 +112,17 @@ public class RedstoneConnection {
 
         this.power = power;
 
-        if (last != power && part != null && notifyUpdate)
+        if (last != power && part != null && notifyUpdate) {
             part.notifyUpdate();
+            if (part.getWorld() != null) {
+                Vector3 loc = new Vector3(part.getX(), part.getY(), part.getZ(), part.getWorld());
+                for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
+                    Vector3 v = loc.getRelative(d);
+                    part.getWorld().notifyBlockChange(v.getBlockX(), v.getBlockY(), v.getBlockZ(), loc.getBlock());
+                    part.getWorld().markBlockForUpdate(v.getBlockX(), v.getBlockY(), v.getBlockZ());
+                }
+            }
+        }
     }
 
     public int getPower() {

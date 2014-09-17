@@ -1,9 +1,29 @@
+/*
+ * This file is part of Blue Power. Blue Power is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version. Blue Power is
+ * distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+ * PARTICULAR PURPOSE. See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along
+ * with Blue Power. If not, see <http://www.gnu.org/licenses/>
+ */
 package com.bluepowermod.blocks;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
+import com.bluepowermod.api.part.BPPart;
+import com.bluepowermod.api.vec.Vector3;
+import com.bluepowermod.client.renderers.RenderMultipart;
+import com.bluepowermod.init.BPBlocks;
+import com.bluepowermod.network.NetworkHandler;
+import com.bluepowermod.network.messages.MessageMultipartRemove;
+import com.bluepowermod.part.PartRegistry;
+import com.bluepowermod.raytrace.BPMop;
+import com.bluepowermod.raytrace.RayTracer;
+import com.bluepowermod.tileentities.BPTileMultipart;
+import com.bluepowermod.util.AABBUtils;
+import com.bluepowermod.util.ComparatorMOP;
+import com.bluepowermod.util.Refs;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -25,22 +45,9 @@ import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action;
 
-import com.bluepowermod.api.part.BPPart;
-import com.bluepowermod.api.vec.Vector3;
-import com.bluepowermod.client.renderers.RenderMultipart;
-import com.bluepowermod.init.BPBlocks;
-import com.bluepowermod.network.NetworkHandler;
-import com.bluepowermod.network.messages.MessageMultipartRemove;
-import com.bluepowermod.raytrace.BPMop;
-import com.bluepowermod.raytrace.RayTracer;
-import com.bluepowermod.tileentities.BPTileMultipart;
-import com.bluepowermod.util.AABBUtils;
-import com.bluepowermod.util.ComparatorMOP;
-
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class BPBlockMultipart extends BlockContainer {
     
@@ -49,7 +56,12 @@ public class BPBlockMultipart extends BlockContainer {
         super(Material.rock);
         MinecraftForge.EVENT_BUS.register(this);
     }
-    
+
+    public static String getUnlocalizedName(ItemStack item) {
+
+        return "part." + Refs.MODID + ":" + PartRegistry.getInstance().getPartIdFromItem(item) + ".name";
+    }
+
     @Override
     public TileEntity createNewTileEntity(World world, int meta) {
     

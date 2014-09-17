@@ -1,4 +1,33 @@
+/*
+ * This file is part of Blue Power. Blue Power is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version. Blue Power is
+ * distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+ * PARTICULAR PURPOSE. See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along
+ * with Blue Power. If not, see <http://www.gnu.org/licenses/>
+ */
 package com.bluepowermod.part.cable.bluestone;
+
+
+import java.util.AbstractMap;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map.Entry;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockRedstoneWire;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.ItemDye;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.IItemRenderer.ItemRenderType;
+import net.minecraftforge.common.util.ForgeDirection;
+
+import org.lwjgl.opengl.GL11;
 
 import codechicken.multipart.IFaceRedstonePart;
 import codechicken.multipart.IRedstonePart;
@@ -51,20 +80,30 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
     private static ResourceLocation textureOff;
     private static ResourceLocation textureInsulationFB;
     private static ResourceLocation textureInsulationLR;
+    private static ResourceLocation textureBundledFB;
+    private static ResourceLocation textureBundledLR;
 
     private int power = 0;
     private int powerSelf = 0;
+    private int[] powerArray = new int[16];
 
-    private boolean isSamplePart = false;
-    private boolean shouldUpdate;
+    private static boolean updateState;
 
-    private int color = -1;
-    private String colorName = null;
+    private boolean isItemRenderer = false;
 
-    public WireBluestone(Integer color, String colorName) {
+    private int colorId = -1;
+    private boolean isBundled = false;
+    private boolean hasTicked = false;
 
-        this.color = color.intValue();
-        this.colorName = colorName;
+    public WireBluestone(Integer colorId, Boolean bundled) {
+
+        this.colorId = colorId.intValue();
+        isBundled = bundled.booleanValue();
+    }
+
+    public WireBluestone(Boolean bundled) {
+
+        isBundled = bundled.booleanValue();
     }
 
     public WireBluestone() {
@@ -74,13 +113,13 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
     @Override
     public String getType() {
 
-        return "bluestoneWire" + (colorName != null ? "." + colorName : "");
+        return "bluestoneWire" + (isBundled ? ".bundled" : "") + (colorId >= 0 ? "." + ItemDye.field_150921_b[colorId] : "");
     }
 
     @Override
     public String getUnlocalizedName() {
 
-        return "bluestoneWire" + (colorName != null ? "." + colorName : "");
+        return "bluestoneWire" + (isBundled ? ".bundled" : "") + (colorId >= 0 ? "." + ItemDye.field_150921_b[colorId] : "");
     }
 
     @Override
@@ -92,12 +131,36 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
     @Override
     public boolean canConnectToCable(CableWall cable) {
 
-        return cable != null && cable instanceof WireBluestone
-                && (((WireBluestone) cable).color == color || ((WireBluestone) cable).color == -1 || color == -1);
+        if (cable != null && cable instanceof WireBluestone) {
+            WireBluestone w = (WireBluestone) cable;
+
+            if (isBundled) {
+                if (w.isBundled) {
+                    if (colorId == w.colorId || colorId == -1 || w.colorId == -1)
+                        return true;
+                } else {
+                    if (w.colorId != -1)
+                        return true;
+                }
+            } else {
+                if (w.isBundled) {
+                    if (colorId != -1)
+                        return true;
+                } else {
+                    if (colorId == w.colorId || colorId == -1 || w.colorId == -1)
+                        return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     @Override
     public boolean canConnectToBlock(Block block, Vector3 location) {
+
+        if (isBundled)
+            return false;
 
         if (Loader.isModLoaded(Dependencies.FMP))
             if (location.hasTileEntity() && isFMPTile(location.getTileEntity()))
@@ -116,7 +179,16 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
     @Override
     public boolean canConnectToTileEntity(TileEntity tile) {
 
+        if (Loader.isModLoaded(Dependencies.COMPUTER_CRAFT))
+            if (canConnectToComputer(tile))
+                return true;
         return false;
+    }
+
+    @Optional.Method(modid = Dependencies.COMPUTER_CRAFT)
+    private boolean canConnectToComputer(TileEntity tile) {
+
+        return tile.getClass().getName().equals("dan200.computercraft.shared.computer.blocks.TileComputer");
     }
 
     @Optional.Method(modid = Dependencies.FMP)
@@ -150,6 +222,9 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
 
     @Optional.Method(modid = Dependencies.FMP)
     public static TMultiPart getFMPPartOnSide(IBluestoneWire wire, ForgeDirection dir) {
+
+        if (((WireBluestone) wire).isBundled)
+            return null;
 
         IMultipartCompat compat = BPApi.getInstance().getMultipartCompat();
 
@@ -218,13 +293,13 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
     @Override
     public void addSelectionBoxes(List<AxisAlignedBB> boxes) {
 
-        boxes.add((color == -1 ? SELECTION_BOX : SELECTION_BOX_INSULATED).clone().toAABB());
+        boxes.add((colorId == -1 && !isBundled ? SELECTION_BOX : SELECTION_BOX_INSULATED).clone().toAABB());
     }
 
     @Override
     public void addOcclusionBoxes(List<AxisAlignedBB> boxes) {
 
-        boxes.add((color == -1 ? OCCLUSION_BOX : OCCLUSION_BOX_INSULATED).clone().toAABB());
+        boxes.add((colorId == -1 && !isBundled ? OCCLUSION_BOX : OCCLUSION_BOX_INSULATED).clone().toAABB());
     }
 
     @Override
@@ -248,6 +323,10 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
                 textureInsulationFB = new ResourceLocation(Refs.MODID + ":textures/blocks/bluestone/insulation_fb.png");
             if (textureInsulationLR == null)
                 textureInsulationLR = new ResourceLocation(Refs.MODID + ":textures/blocks/bluestone/insulation_lr.png");
+            if (textureBundledFB == null)
+                textureBundledFB = new ResourceLocation(Refs.MODID + ":textures/blocks/bluestone/bundled_nocolor_fb.png");
+            if (textureBundledLR == null)
+                textureBundledLR = new ResourceLocation(Refs.MODID + ":textures/blocks/bluestone/bundled_nocolor_lr.png");
 
             GL11.glPushMatrix();
             {
@@ -269,11 +348,11 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
 
                     int len = 0;
 
-                    if (!isSamplePart)
+                    if (!isItemRenderer)
                         len = BPApi.getInstance().getBluestoneApi().getExtraLength(v, this, d);
                     int val = 1 + (v.distanceTo(this.loc) > 1 ? 1 : len);
 
-                    if (!isSamplePart) {
+                    if (!isItemRenderer) {
                         GL11.glPushMatrix();
                         {
                             int times = 0;
@@ -308,10 +387,10 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
                             sides[2] = val;
                             break;
                         case NORTH:
-                            sides[0] = val;
+                            sides[1] = val;
                             break;
                         case SOUTH:
-                            sides[1] = val;
+                            sides[0] = val;
                             break;
                         default:
                             break;
@@ -326,10 +405,10 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
                             sides[2] = val;
                             break;
                         case NORTH:
-                            sides[1] = val;
+                            sides[0] = val;
                             break;
                         case SOUTH:
-                            sides[0] = val;
+                            sides[1] = val;
                             break;
                         default:
                             break;
@@ -418,55 +497,113 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
                 else
                     Minecraft.getMinecraft().renderEngine.bindTexture(textureOff);
 
-                if (color == -1) {
-                    // Render center
-                    renderBox(7, 0, 7, 9, 1, 9);
+                if (!isBundled) {
+                    if (colorId == -1) {
+                        // Render center
+                        renderBox(7, 0, 7, 9, 1, 9);
+                    }
+                    if (sides[3] > 0)// East
+                        renderBox(0 - (sides[3] - 1), 0, 7, 7, 1, 9);
+                    if (sides[2] > 0)// West
+                        renderBox(9, 0, 7, 16 + (sides[2] - 1), 1, 9);
+                    if (sides[1] > 0)// South
+                        renderBox(7, 0, 0 - (sides[1] - 1), 9, 1, 7);
+                    if (sides[0] > 0)// North
+                        renderBox(7, 0, 9, 9, 1, 16 + (sides[0] - 1));
                 }
-                if (sides[3] > 0)// East
-                    renderBox(0 - (sides[3] - 1), 0, 7, 7, 1, 9);
-                if (sides[2] > 0)// West
-                    renderBox(9, 0, 7, 16 + (sides[2] - 1), 1, 9);
-                if (sides[1] > 0)// South
-                    renderBox(7, 0, 0 - (sides[1] - 1), 9, 1, 7);
-                if (sides[0] > 0)// North
-                    renderBox(7, 0, 9, 9, 1, 16 + (sides[0] - 1));
 
-                if (color >= 0) {
-                    double r = ((color >> 16) & 0xFF) / 255D;
-                    double g = ((color >> 8) & 0xFF) / 255D;
-                    double b = (color & 0xFF) / 255D;
-                    GL11.glColor4d((r * 0.7) + 0.1, (g * 0.7) + 0.1, (b * 0.7) + 0.1, 1);
-                    Minecraft.getMinecraft().renderEngine.bindTexture(textureInsulationLR);
-                    renderBox(7, 0, 7, 9, 3, 9);
-                    if (sides[3] > 0) {// East
-                        Minecraft.getMinecraft().renderEngine.bindTexture(textureInsulationLR);
-                        renderBox(0, 0, 6, 7, 3, 10);
+                if (colorId >= 0 || isBundled) {
+                    if (isBundled) {
+                        int color = 0xFFFFFF;
+                        if (colorId >= 0)
+                            color = ItemDye.field_150922_c[colorId];
+                        double r = ((color >> 16) & 0xFF) / 255D;
+                        double g = ((color >> 8) & 0xFF) / 255D;
+                        double b = (color & 0xFF) / 255D;
+                        GL11.glColor4d((r * 0.7) + 0.1, (g * 0.7) + 0.1, (b * 0.7) + 0.1, 1);
+                        Minecraft.getMinecraft().renderEngine.bindTexture(textureBundledLR);
+                        renderBox(7, 0, 7, 9, 3, 9);
+                        if (sides[3] > 0) {// East
+                            Minecraft.getMinecraft().renderEngine.bindTexture(textureBundledLR);
+                            renderBox(0, 0, 5, 7, 3, 11);
+                        } else {
+                            if (sides[3] == 0 && sides[0] == 0 && sides[1] == 0 && sides[2] != 0)
+                                Minecraft.getMinecraft().renderEngine.bindTexture(textureBundledLR);
+                            else
+                                Minecraft.getMinecraft().renderEngine.bindTexture(textureBundledFB);
+                            renderBox(5, 0, 6 - (sides[1] == 0 ? 1 : 0), 7, 3, 10 + (sides[0] == 0 ? 1 : 0));
+                        }
+                        if (sides[2] > 0) {// West
+                            Minecraft.getMinecraft().renderEngine.bindTexture(textureBundledLR);
+                            renderBox(9, 0, 5, 16, 3, 11);
+                        } else {
+                            if (sides[2] == 0 && sides[0] == 0 && sides[1] == 0 && sides[3] != 0)
+                                Minecraft.getMinecraft().renderEngine.bindTexture(textureBundledLR);
+                            else
+                                Minecraft.getMinecraft().renderEngine.bindTexture(textureBundledFB);
+                            renderBox(9, 0, 6 - (sides[1] == 0 ? 1 : 0), 11, 3, 10 + (sides[0] == 0 ? 1 : 0));
+                        }
+                        if (sides[1] > 0) {// South
+                            Minecraft.getMinecraft().renderEngine.bindTexture(textureBundledFB);
+                            renderBox(5, 0, 0, 11, 3, 7);
+                        } else {
+                            if ((sides[1] == 0 && sides[2] == 0 && sides[3] == 0 && sides[0] != 0)
+                                    || (sides[0] == 0 && sides[1] == 0 && sides[2] == 0 && sides[3] == 0))
+                                Minecraft.getMinecraft().renderEngine.bindTexture(textureBundledFB);
+                            else
+                                Minecraft.getMinecraft().renderEngine.bindTexture(textureBundledLR);
+                            renderBox(7, 0, 5, 9, 3, 7);
+                        }
+                        if (sides[0] > 0) {// North
+                            Minecraft.getMinecraft().renderEngine.bindTexture(textureBundledFB);
+                            renderBox(5, 0, 9, 11, 3, 16);
+                        } else {
+                            if ((sides[0] == 0 && sides[2] == 0 && sides[3] == 0 && sides[1] != 0)
+                                    || (sides[0] == 0 && sides[1] == 0 && sides[2] == 0 && sides[3] == 0))
+                                Minecraft.getMinecraft().renderEngine.bindTexture(textureBundledFB);
+                            else
+                                Minecraft.getMinecraft().renderEngine.bindTexture(textureBundledLR);
+                            renderBox(7, 0, 9, 9, 3, 11);
+                        }
+                        GL11.glColor4d(1D, 1D, 1D, 1D);
                     } else {
-                        Minecraft.getMinecraft().renderEngine.bindTexture(textureInsulationFB);
-                        renderBox(6, 0, 7 - (sides[1] == 0 ? 1 : 0), 7, 3, 9 + (sides[0] == 0 ? 1 : 0));
-                    }
-                    if (sides[2] > 0) {// West
+                        int color = ItemDye.field_150922_c[colorId];
+                        double r = ((color >> 16) & 0xFF) / 255D;
+                        double g = ((color >> 8) & 0xFF) / 255D;
+                        double b = (color & 0xFF) / 255D;
+                        GL11.glColor4d((r * 0.7) + 0.1, (g * 0.7) + 0.1, (b * 0.7) + 0.1, 1);
                         Minecraft.getMinecraft().renderEngine.bindTexture(textureInsulationLR);
-                        renderBox(9, 0, 6, 16, 3, 10);
-                    } else {
-                        Minecraft.getMinecraft().renderEngine.bindTexture(textureInsulationFB);
-                        renderBox(9, 0, 7 - (sides[1] == 0 ? 1 : 0), 10, 3, 9 + (sides[0] == 0 ? 1 : 0));
+                        renderBox(7, 0, 7, 9, 3, 9);
+                        if (sides[3] > 0) {// East
+                            Minecraft.getMinecraft().renderEngine.bindTexture(textureInsulationLR);
+                            renderBox(0, 0, 6, 7, 3, 10);
+                        } else {
+                            Minecraft.getMinecraft().renderEngine.bindTexture(textureInsulationFB);
+                            renderBox(6, 0, 7 - (sides[1] == 0 ? 1 : 0), 7, 3, 9 + (sides[0] == 0 ? 1 : 0));
+                        }
+                        if (sides[2] > 0) {// West
+                            Minecraft.getMinecraft().renderEngine.bindTexture(textureInsulationLR);
+                            renderBox(9, 0, 6, 16, 3, 10);
+                        } else {
+                            Minecraft.getMinecraft().renderEngine.bindTexture(textureInsulationFB);
+                            renderBox(9, 0, 7 - (sides[1] == 0 ? 1 : 0), 10, 3, 9 + (sides[0] == 0 ? 1 : 0));
+                        }
+                        if (sides[1] > 0) {// South
+                            Minecraft.getMinecraft().renderEngine.bindTexture(textureInsulationFB);
+                            renderBox(6, 0, 0, 10, 3, 7);
+                        } else {
+                            Minecraft.getMinecraft().renderEngine.bindTexture(textureInsulationLR);
+                            renderBox(7, 0, 6, 9, 3, 7);
+                        }
+                        if (sides[0] > 0) {// North
+                            Minecraft.getMinecraft().renderEngine.bindTexture(textureInsulationFB);
+                            renderBox(6, 0, 9, 10, 3, 16);
+                        } else {
+                            Minecraft.getMinecraft().renderEngine.bindTexture(textureInsulationLR);
+                            renderBox(7, 0, 9, 9, 3, 10);
+                        }
+                        GL11.glColor4d(1D, 1D, 1D, 1D);
                     }
-                    if (sides[1] > 0) {// South
-                        Minecraft.getMinecraft().renderEngine.bindTexture(textureInsulationFB);
-                        renderBox(6, 0, 0, 10, 3, 7);
-                    } else {
-                        Minecraft.getMinecraft().renderEngine.bindTexture(textureInsulationLR);
-                        renderBox(7, 0, 6, 9, 3, 7);
-                    }
-                    if (sides[0] > 0) {// North
-                        Minecraft.getMinecraft().renderEngine.bindTexture(textureInsulationFB);
-                        renderBox(6, 0, 9, 10, 3, 16);
-                    } else {
-                        Minecraft.getMinecraft().renderEngine.bindTexture(textureInsulationLR);
-                        renderBox(7, 0, 9, 9, 3, 10);
-                    }
-                    GL11.glColor4d(1D, 1D, 1D, 1D);
                 }
             }
             GL11.glPopMatrix();
@@ -482,7 +619,7 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
     @Override
     public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
 
-        isSamplePart = true;
+        isItemRenderer = true;
 
         if (connections[ForgeDirectionUtils.getSide(ForgeDirection.EAST)] == null) {
             loc = new Vector3(0, -1, 0);
@@ -495,9 +632,7 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
         }
         GL11.glPushMatrix();
         {
-            GL11.glTranslated(0.5, 0.5, 0.5);
-            GL11.glRotated(180, 0, 0, -1);
-            GL11.glTranslated(-0.5, -0.5, -0.5);
+            GL11.glTranslated(0.1, 1, 0);
             switch (type) {
             case ENTITY:
                 if (item.getItemFrame() != null) {
@@ -522,6 +657,7 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
             Tessellator.instance.startDrawingQuads();
             renderStatic(new Vector3(0, 0, 0), 0);
             Tessellator.instance.draw();
+
         }
         GL11.glPopMatrix();
     }
@@ -531,78 +667,20 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
         BPApi.getInstance().getBluestoneApi().renderBox(minx, miny, minz, maxx, maxy, maxz);
     }
 
-    public void propagate(List<WireBluestone> wires, int[] power) {
-
-        if (getWorld() == null)
-            return;
-
-        wires.add(this);
-
-        power[0] = Math.max(power[0], powerSelf);
-
-        for (Object o : connections) {
-            if (wires.contains(o))
-                continue;
-            if (o instanceof WireBluestone)
-                ((WireBluestone) o).propagate(wires, power);
-        }
-    }
-
-    public void propagate(WireBluestone... extras) {
-
-        if (getWorld() == null)
-            return;
-
-        if (!getWorld().isRemote) {
-            int oldPS = powerSelf;
-
-            recalculatePower();
-
-            if (powerSelf != oldPS || shouldUpdate) {
-                List<WireBluestone> l = new ArrayList<WireBluestone>();
-                int[] power = new int[1];
-                power[0] = 0;
-                propagate(l, power);
-                for (WireBluestone w : extras) {
-                    w.propagate(l, power);
-                    if (!l.contains(w))
-                        l.add(w);
-                }
-                for (WireBluestone w : l) {
-                    w.power = power[0];
-                    w.sendUpdatePacket();
-
-                    if (w.hasSetFace()) {
-                        for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
-                            int val = 0;
-                            if (w.isConnectedOnSide(d))
-                                val = w.power;
-                            RedstoneConnection c = w.getConnection(d);
-                            if (c != null)
-                                c.setPower(val, false);
-                        }
-                        if (w.loc != null) {
-                            for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
-                                Vector3 v = w.loc.getRelative(d);
-                                w.getWorld().notifyBlockChange(v.getBlockX(), v.getBlockY(), v.getBlockZ(), w.loc.getBlock());
-                                w.getWorld().markBlockForUpdate(v.getBlockX(), v.getBlockY(), v.getBlockZ());
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
     private void recalculatePower() {
+
+        if (loc == null)
+            loc = new Vector3(getX(), getY(), getZ(), getWorld());
+        loc.setX(getX());
+        loc.setY(getY());
+        loc.setZ(getZ());
+        loc.setWorld(getWorld());
 
         powerSelf = 0;
 
         for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
 
             ForgeDirection dir = d;
-            if (dir == ForgeDirection.UP || dir == ForgeDirection.DOWN)
-                dir = dir.getOpposite();
             if (dir == ForgeDirection.getOrientation(getFace()).getOpposite())// If it's in the opposite face, don't do anything
                 continue;
 
@@ -611,7 +689,7 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
             // If it's either disconnected on that side OR connected and it's not bluestone wire
             if (dir == ForgeDirection.getOrientation(getFace())
                     || (connections[ForgeDirectionUtils.getSide(d)] != null && !(connections[ForgeDirectionUtils.getSide(d)] instanceof WireBluestone))) {
-                if (isFMPPart(connections[ForgeDirectionUtils.getSide(d)])) {
+                if (Loader.isModLoaded(Dependencies.FMP) && isFMPPart(connections[ForgeDirectionUtils.getSide(d)])) {
                     powerSelf = Math.max(powerSelf, getFMPPower(connections[ForgeDirectionUtils.getSide(d)], d.getOpposite()));
                 } else {
                     if (connections[ForgeDirectionUtils.getSide(d)] instanceof Vector3) {
@@ -652,12 +730,20 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
     @Override
     public void onFirstTick() {
 
-        super.onFirstTick();
-
         for (FaceDirection d : FaceDirection.values()) {
             RedstoneConnection c = getConnectionOrCreate(d);
             c.enable();
             c.setOutput();
+        }
+
+        super.onFirstTick();
+
+        if (isBundled) {
+            try {
+                propagate();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
         }
     }
 
@@ -666,9 +752,123 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
 
         super.update();
 
-        propagate();
+        hasTicked = true;
+    }
 
-        shouldUpdate = false;
+    @Override
+    public void onUpdate() {
+
+        if (!updateState) {
+            updateState = true;
+
+            super.onUpdate();
+
+            if (getWorld() != null && !getWorld().isRemote) {
+                if (!isBundled) {
+                    try {
+                        propagate();
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            }
+            updateState = false;
+        }
+    }
+
+    private void propagate() {
+
+        if (getWorld() == null)
+            return;
+        if (getWorld().isRemote)
+            return;
+
+        List<Entry<WireBluestone, Integer>> wires = new ArrayList<Entry<WireBluestone, Integer>>();
+        int[] power = new int[] { 0 };
+
+        if (isBundled) {
+            for (int i = 0; i < 16; i++)
+                propagate(wires, power, i);
+        } else {
+            propagate(wires, power, colorId);
+        }
+
+        for (Entry<WireBluestone, Integer> entry : wires) {
+            WireBluestone wire = entry.getKey();
+            int wireColorId = entry.getValue().intValue();
+            if (!wire.isBundled) {
+                wire.power = power[0];
+
+                if (wire.hasSetFace()) {
+                    for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
+                        RedstoneConnection con = wire.getConnection(d);
+                        if (con != null)
+                            con.setPower(0, false);
+                    }
+                    for (int i = 0; i < 6; i++) {
+                        Object o = wire.connections[i];
+                        RedstoneConnection con = wire.getConnection(ForgeDirection.getOrientation(i));
+                        if (con != null) {
+                            if (o != null) {
+                                if (!(o instanceof WireBluestone)) {
+                                    con.setPower(power[0], false);
+                                } else {
+                                    con.setPower(0, false);
+                                }
+                            } else {
+                                con.setPower(0, false);
+                            }
+                        }
+                    }
+                    wire.notifyRedstoneUpdate();
+                }
+            } else {
+                try {
+                    wire.powerArray[wireColorId] = power[0];
+                } catch (Exception ex) {
+                }
+            }
+
+            wire.sendUpdatePacket();
+        }
+    }
+
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    private void propagate(List<Entry<WireBluestone, Integer>> wires, int[] power, int colorId) {
+
+        if (!isBundled)
+            recalculatePower();
+
+        wires.add(new AbstractMap.SimpleEntry(this, isBundled ? colorId : this.colorId));
+
+        power[0] = Math.max(power[0], powerSelf);
+
+        for (int i = 0; i < 6; i++)
+            if (connections[i] != null)
+                if (connections[i] instanceof WireBluestone)
+                    if (((WireBluestone) connections[i]).colorId == colorId || colorId == -1 || (!isBundled && this.colorId == -1)
+                            || ((WireBluestone) connections[i]).colorId == -1)
+                        if (!isInList(wires, (WireBluestone) connections[i]))
+                            ((WireBluestone) connections[i]).propagate(wires, power, isBundled ? colorId : this.colorId);
+    }
+
+    private static boolean isInList(List<Entry<WireBluestone, Integer>> wires, WireBluestone wire) {
+
+        for (Entry<WireBluestone, Integer> w : wires)
+            if (w.getKey() == wire)
+                return true;
+        return false;
+    }
+
+    private void notifyRedstoneUpdate() {
+
+        if (loc != null) {
+            for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
+                Vector3 v = loc.getRelative(d);
+                getWorld().notifyBlockChange(v.getBlockX(), v.getBlockY(), v.getBlockZ(), loc.getBlock());
+                getWorld().markBlockForUpdate(v.getBlockX(), v.getBlockY(), v.getBlockZ());
+            }
+        }
     }
 
     @Override
@@ -685,13 +885,11 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
         super.readUpdatePacket(tag);
 
         power = tag.getInteger("power");
-
-        onUpdate();
     }
 
     public int getPower() {
 
-        return power;
+        return colorId == -1 && !isBundled ? power : 0;
     }
 
     @Override
@@ -703,31 +901,73 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
     @Override
     public int getCableWidth() {
 
-        return 2 + (color >= 0 ? 2 : 0);
+        return 2 + (colorId >= 0 ? 2 : 0);
     }
 
     @Override
     public int getCableHeight() {
 
-        return 1 + (color >= 0 ? 2 : 0);
+        return 1 + (colorId >= 0 ? 2 : 0);
     }
 
     @Override
     public void onConnect(Object o) {
 
-        shouldUpdate = true;
+        if (updateState) {
+            if (o instanceof WireBluestone) {
+                WireBluestone w = (WireBluestone) o;
+                if (w.loc != null) {
+                    if (loc.getDirectionTo(w.loc) == null || !hasTicked) {
+                        updateState = false;
+                        w.onUpdate();
+                        updateState = true;
+                    }
+                }
+            }
+        }
     }
 
     @Override
     public void onDisconnect(Object o) {
 
-        shouldUpdate = true;
+        if (updateState) {
+            if (o instanceof WireBluestone) {
+                WireBluestone w = (WireBluestone) o;
+                if (w.loc != null) {
+                    if (loc.getDirectionTo(w.loc) == null || !hasTicked) {
+                        updateState = false;
+                        w.onUpdate();
+                        updateState = true;
+                    }
+                }
+            }
+        }
     }
+
+    private boolean emit = true;
 
     @Override
     public int getRedstonePower() {
 
-        return power;
+        if (colorId != -1 || isBundled)
+            return 0;
+
+        return emit ? power : 0;
+    }
+
+    @Override
+    public int getStrongOutput(ForgeDirection side) {
+
+        return getWeakOutput(side);
+    }
+
+    @Override
+    public int getWeakOutput(ForgeDirection side) {
+
+        if (colorId != -1 || isBundled)
+            return 0;
+
+        return emit ? super.getWeakOutput(side) : 0;
     }
 
     @Override
@@ -740,6 +980,26 @@ public class WireBluestone extends CableWall implements IBluestoneWire, ICableSi
     public boolean canStay() {
 
         return super.canStay();
+    }
+
+    @Override
+    public void onRemoved() {
+
+        emit = false;
+
+        super.onRemoved();
+
+        notifyRedstoneUpdate();
+    }
+
+    public boolean isBundled() {
+
+        return isBundled;
+    }
+
+    public int[] getPowerArray() {
+
+        return powerArray;
     }
 
 }

@@ -1,11 +1,18 @@
+/*
+ * This file is part of Blue Power. Blue Power is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version. Blue Power is
+ * distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+ * PARTICULAR PURPOSE. See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along
+ * with Blue Power. If not, see <http://www.gnu.org/licenses/>
+ */
 package com.bluepowermod.part.cable;
 
 import codechicken.multipart.TMultiPart;
+import com.bluepowermod.api.BPApi;
 import com.bluepowermod.api.compat.IMultipartCompat;
 import com.bluepowermod.api.part.BPPartFace;
 import com.bluepowermod.api.util.ForgeDirectionUtils;
 import com.bluepowermod.api.vec.Vector3;
-import com.bluepowermod.compat.CompatibilityUtils;
 import com.bluepowermod.part.cable.bluestone.ICableConnect;
 import com.bluepowermod.util.Dependencies;
 import cpw.mods.fml.common.Loader;
@@ -109,6 +116,11 @@ public abstract class CableWall extends BPPartFace {
     @SuppressWarnings({ "unchecked", "rawtypes" })
     public void onUpdate() {
 
+        if (updating)
+            return;
+
+        IMultipartCompat compat = BPApi.getInstance().getMultipartCompat();
+
         updating = true;
 
         if (loc == null || loc.getBlockX() != getX() || loc.getBlockY() != getY() || loc.getBlockZ() != getZ() || loc.getWorld() != getWorld())
@@ -134,10 +146,16 @@ public abstract class CableWall extends BPPartFace {
                     o = getPartOnSide(d);
                 }
                 if (o == null) {
+                    TileEntity te = loc.getTileEntity();
                     if (vec.getBlock(true) != null && canConnectToBlock(vec.getBlock(), vec)) {// Check connection to blocks
-                        o = vec;
-                    } else if (vec.getTileEntity() != null && canConnectToTileEntity(vec.getTileEntity())) {// Check connection to TEs
-                        o = vec;
+                        if (!compat.isOccupied(te, getStripHitboxForSide(ForgeDirection.getOrientation(getFace()), d)))
+                            o = vec;
+                    } else {
+                        TileEntity tile = vec.getTileEntity();
+                        if (tile != null && canConnectToTileEntity(tile)) {// Check connection to TEs
+                            if (!compat.isOccupied(te, getStripHitboxForSide(ForgeDirection.getOrientation(getFace()), d)))
+                                o = vec;
+                        }
                     }
                 }
             }
@@ -176,7 +194,7 @@ public abstract class CableWall extends BPPartFace {
     private CableWall getCableOnSide(ForgeDirection dir) {
 
         Vector3 vec = loc.getRelative(dir);
-        IMultipartCompat compat = ((IMultipartCompat) CompatibilityUtils.getModule(Dependencies.FMP));
+        IMultipartCompat compat = BPApi.getInstance().getMultipartCompat();
 
         // Check for cables next to this one
         List<CableWall> l = compat.getBPParts(vec.getTileEntity(), CableWall.class);
@@ -193,8 +211,6 @@ public abstract class CableWall extends BPPartFace {
         // Check for cables in the same block
         l = compat.getBPParts(loc.getTileEntity(), CableWall.class);
         ForgeDirection dir2 = dir;
-        if (dir2 == ForgeDirection.UP || dir2 == ForgeDirection.DOWN)
-            dir2 = dir2.getOpposite();
         for (CableWall c : l) {
             if (c.getWorld() != null)
                 if (ForgeDirection.getOrientation(c.getFace()) == dir2)
@@ -206,19 +222,17 @@ public abstract class CableWall extends BPPartFace {
 
         // Check for cables around corners
         ForgeDirection f = ForgeDirection.getOrientation(getFace());
-        if (f == ForgeDirection.UP || f == ForgeDirection.DOWN)
-            f = f.getOpposite();
         Vector3 vec2 = vec.getRelative(f);
         l = compat.getBPParts(vec2.getTileEntity(), CableWall.class);
         for (CableWall c : l) {
             if (c.getWorld() != null) {
                 ForgeDirection d = dir;
-                if (d != ForgeDirection.UP && d != ForgeDirection.DOWN)
-                    d = d.getOpposite();
-                if (ForgeDirection.getOrientation(c.getFace()) == d) {
+                if (ForgeDirection.getOrientation(c.getFace()).getOpposite() == d) {
                     boolean isOccluded = compat.isOccupied(loc.getTileEntity(), getStripHitboxForSide(ForgeDirection.getOrientation(getFace()), dir))
                             || compat.isOccupied(vec.getTileEntity(),
-                                    getStripHitboxForSide(ForgeDirection.getOrientation(getFace()), dir.getOpposite()));
+                                    getStripHitboxForSide(ForgeDirection.getOrientation(getFace()), dir.getOpposite()))
+                            || compat.isOccupied(vec2.getTileEntity(),
+                                    getStripHitboxForSide(dir.getOpposite(), ForgeDirection.getOrientation(getFace()).getOpposite()));
                     if (vec.getBlock() != null && vec.getBlock().isOpaqueCube())
                         isOccluded = true;
                     if (c.hasSetFace()) {
@@ -238,6 +252,11 @@ public abstract class CableWall extends BPPartFace {
 
     protected static AxisAlignedBB getStripHitboxForSide(ForgeDirection face, ForgeDirection dir) {
 
+        return getStripHitboxForSide(face, dir, 3);
+    }
+
+    protected static AxisAlignedBB getStripHitboxForSide(ForgeDirection face, ForgeDirection dir, int size) {
+
         AxisAlignedBB aabb = AxisAlignedBB.getBoundingBox(0, 0, 0, 0, 0, 0);
 
         double one = 1;
@@ -245,26 +264,11 @@ public abstract class CableWall extends BPPartFace {
         double min = 1 / 8D;
         double max = 7 / 8D;
 
+        double smi = 0.5 - (size / 8D);
+        double sma = 0.5 + (size / 8D);
+
         switch (face) {
         case UP:
-            switch (dir) {
-            case EAST:
-                aabb = AxisAlignedBB.getBoundingBox(max, zer, zer, one, min, one);
-                break;
-            case WEST:
-                aabb = AxisAlignedBB.getBoundingBox(zer, zer, zer, min, min, one);
-                break;
-            case NORTH:
-                aabb = AxisAlignedBB.getBoundingBox(zer, zer, zer, one, min, min);
-                break;
-            case SOUTH:
-                aabb = AxisAlignedBB.getBoundingBox(zer, zer, max, one, min, one);
-                break;
-            default:
-                break;
-            }
-            break;
-        case DOWN:
             switch (dir) {
             case EAST:
                 aabb = AxisAlignedBB.getBoundingBox(max, max, zer, one, one, one);
@@ -277,6 +281,24 @@ public abstract class CableWall extends BPPartFace {
                 break;
             case SOUTH:
                 aabb = AxisAlignedBB.getBoundingBox(zer, max, max, one, one, one);
+                break;
+            default:
+                break;
+            }
+            break;
+        case DOWN:
+            switch (dir) {
+            case EAST:
+                aabb = AxisAlignedBB.getBoundingBox(max, zer, zer, one, min, one);
+                break;
+            case WEST:
+                aabb = AxisAlignedBB.getBoundingBox(zer, zer, zer, min, min, one);
+                break;
+            case NORTH:
+                aabb = AxisAlignedBB.getBoundingBox(zer, zer, zer, one, min, min);
+                break;
+            case SOUTH:
+                aabb = AxisAlignedBB.getBoundingBox(zer, zer, max, one, min, one);
                 break;
             default:
                 break;
@@ -566,7 +588,8 @@ public abstract class CableWall extends BPPartFace {
 
         Object o = connections[ForgeDirectionUtils.getSide(d)];
         if (o instanceof TMultiPart)
-            return new Vector3(((TMultiPart) o).tile());
+            if (((TMultiPart) o).tile() != null)
+                return new Vector3(((TMultiPart) o).tile());
         return null;
     }
 

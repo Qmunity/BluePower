@@ -14,6 +14,7 @@ import java.util.List;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
@@ -81,15 +82,9 @@ public abstract class BPPartFace extends BPPart implements IBPFacePart, IBPRedst
         int y = block.getBlockY();
         int z = block.getBlockZ();
 
-        ForgeDirection dir = ForgeDirection.getOrientation(mop.sideHit).getOpposite();
-        if (dir == ForgeDirection.DOWN) {
-            dir = ForgeDirection.UP;
-        } else {
-            if (dir == ForgeDirection.UP)
-                dir = ForgeDirection.DOWN;
-        }
+        ForgeDirection dir = ForgeDirection.getOrientation(mop.sideHit);
 
-        setFace(ForgeDirectionUtils.getSide(dir));
+        setFace(ForgeDirectionUtils.getSide(dir.getOpposite()));
 
         int rotation = 0;
 
@@ -145,9 +140,6 @@ public abstract class BPPartFace extends BPPart implements IBPFacePart, IBPRedst
 
         ForgeDirection d = ForgeDirection.getOrientation(getFace());
 
-        if (d == ForgeDirection.UP || d == ForgeDirection.DOWN)
-            d = d.getOpposite();
-
         return getWorld().isSideSolid(getX() + d.offsetX, getY() + d.offsetY, getZ() + d.offsetZ, d.getOpposite());
     }
 
@@ -174,7 +166,7 @@ public abstract class BPPartFace extends BPPart implements IBPFacePart, IBPRedst
         if (con == null)
             return 0;
 
-        ForgeDirection face = ForgeDirection.getOrientation(getFace()).getOpposite();
+        ForgeDirection face = ForgeDirection.getOrientation(getFace());
 
         int p = RedstoneHelper.setOutput(getWorld(), getX(), getY(), getZ(), side, face, con.getPower());
 
@@ -195,9 +187,9 @@ public abstract class BPPartFace extends BPPart implements IBPFacePart, IBPRedst
 
             switch (getFace()) {
             case 0:
-                GL11.glRotated(180, 1, 0, 0);
                 break;
             case 1:
+                GL11.glRotated(180, 1, 0, 0);
                 break;
             case 2:
                 GL11.glRotated(90, 1, 0, 0);
@@ -267,7 +259,7 @@ public abstract class BPPartFace extends BPPart implements IBPFacePart, IBPRedst
         super.update();
 
         if (parentCircuit == null) {
-            ForgeDirection face = ForgeDirection.getOrientation(getFace()).getOpposite();
+            ForgeDirection face = ForgeDirection.getOrientation(getFace());
 
             for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
                 RedstoneConnection rc = getConnection(d);
@@ -388,6 +380,49 @@ public abstract class BPPartFace extends BPPart implements IBPFacePart, IBPRedst
     public boolean hasSetFace() {
 
         return setFace;
+    }
+
+    @Override
+    public void save(NBTTagCompound tag) {
+
+        super.save(tag);
+        tag.setInteger("face", getFace());
+        tag.setInteger("rotation", getRotation());
+        for (int i = 0; i < 4; i++) {
+            RedstoneConnection c = getConnection(FaceDirection.getDirection(i));
+            if (c != null) {
+                tag.setTag("con_" + i, c.getNBTTag());
+            } else {
+                NBTTagCompound t = new NBTTagCompound();
+                t.setBoolean("___error", true);
+                tag.setTag("con_" + i, t);
+            }
+        }
+    }
+
+    @Override
+    public void load(NBTTagCompound tag) {
+
+        super.load(tag);
+
+        if (tag.hasKey("face"))
+            setFace(tag.getInteger("face"));
+        if (tag.hasKey("rotation"))
+            setRotation(tag.getInteger("rotation"));
+        if (tag.hasKey("con_0")) {
+            for (int i = 0; i < 4; i++) {
+                RedstoneConnection c = getConnection(FaceDirection.getDirection(i));
+                NBTTagCompound t = tag.getCompoundTag("con_" + i);
+                if (t.hasKey("___error") && t.getBoolean("___error")) {
+                    continue;
+                } else {
+                    if (c == null) {
+                        c = getConnectionOrCreate(FaceDirection.getDirection(i));
+                    }
+                    c.load(t);
+                }
+            }
+        }
     }
 
 }

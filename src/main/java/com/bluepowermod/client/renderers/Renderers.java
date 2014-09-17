@@ -8,12 +8,14 @@
 
 package com.bluepowermod.client.renderers;
 
+import java.util.Map;
+
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraftforge.client.MinecraftForgeClient;
 
 import com.bluepowermod.init.BPBlocks;
-import com.bluepowermod.init.BPItems;
+import com.bluepowermod.part.PartRegistry;
 import com.bluepowermod.tileentities.tier1.TileLamp;
 import com.bluepowermod.tileentities.tier2.TileWindmill;
 import com.bluepowermod.tileentities.tier3.TileEngine;
@@ -27,7 +29,9 @@ public class Renderers {
 
     public static void init() {
 
-        MinecraftForgeClient.registerItemRenderer(BPItems.multipart, new RenderItemBPPart());
+        for (Map.Entry<String, Item> entry : PartRegistry.multipartItems.entrySet()) {
+            MinecraftForgeClient.registerItemRenderer(entry.getValue(), new RenderItemBPPart(entry.getKey()));
+        }
         RenderingRegistry.registerBlockHandler(new RendererBlockBase());
 
         RenderingRegistry.registerBlockHandler(new RenderLamp());

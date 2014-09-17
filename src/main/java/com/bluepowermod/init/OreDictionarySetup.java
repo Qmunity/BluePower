@@ -17,19 +17,33 @@
 
 package com.bluepowermod.init;
 
+import net.minecraft.item.ItemDye;
 import net.minecraftforge.oredict.OreDictionary;
 
+import com.bluepowermod.part.PartRegistry;
+
 public class OreDictionarySetup {
-    
+
     public static void init() {
-    
+
         OreDictionary.registerOre("oreCopper", BPBlocks.copper_ore);
         OreDictionary.registerOre("oreZinc", BPBlocks.zinc_ore);
         OreDictionary.registerOre("oreSilver", BPBlocks.silver_ore);
         OreDictionary.registerOre("oreTungsten", BPBlocks.tungsten_ore);
+        OreDictionary.registerOre("oreTeslatite", BPBlocks.teslatite_ore);
+        OreDictionary.registerOre("oreAmethyst", BPBlocks.amethyst_ore);
+        OreDictionary.registerOre("oreRuby", BPBlocks.ruby_ore);
+        OreDictionary.registerOre("oreSapphire", BPBlocks.sapphire_ore);
         OreDictionary.registerOre("marble", BPBlocks.marble);
         OreDictionary.registerOre("basalt", BPBlocks.basalt);
-        
+        OreDictionary.registerOre("blockCopper", BPBlocks.copper_block);
+        OreDictionary.registerOre("blockZinc", BPBlocks.zinc_block);
+        OreDictionary.registerOre("blockSilver", BPBlocks.silver_block);
+        OreDictionary.registerOre("blockTeslatite", BPBlocks.teslatite_block);
+        OreDictionary.registerOre("blockAmethyst", BPBlocks.amethyst_block);
+        OreDictionary.registerOre("blockRuby", BPBlocks.ruby_block);
+        OreDictionary.registerOre("blockSapphire", BPBlocks.sapphire_block);
+
         OreDictionary.registerOre("gemRuby", BPItems.ruby_gem);
         OreDictionary.registerOre("gemAmethyst", BPItems.amethyst_gem);
         OreDictionary.registerOre("gemSapphire", BPItems.sapphire_gem);
@@ -41,7 +55,11 @@ public class OreDictionarySetup {
         OreDictionary.registerOre("ingotTungsten", BPItems.tungsten_ingot);
         OreDictionary.registerOre("dyePurple", BPItems.indigo_dye);
         OreDictionary.registerOre("ingotBlueAlloy", BPItems.blue_alloy_ingot);
-        //   OreDictionary.registerOre("ingotRedAlloy", BPItems.red_alloy_ingot);
-        
+        OreDictionary.registerOre("waferStone", BPItems.stone_tile);
+        // OreDictionary.registerOre("ingotRedAlloy", BPItems.red_alloy_ingot);
+        for (int i = 0; i < 16; i++) {
+            OreDictionary.registerOre("bluestoneInsulated", PartRegistry.getInstance().getItemForPart("bluestoneWire." + ItemDye.field_150921_b[i]));
+        }
     }
+
 }

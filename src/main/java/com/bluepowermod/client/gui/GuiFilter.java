@@ -25,6 +25,7 @@ import net.minecraft.util.ResourceLocation;
 import com.bluepowermod.client.gui.widget.BaseWidget;
 import com.bluepowermod.client.gui.widget.IGuiWidget;
 import com.bluepowermod.client.gui.widget.WidgetColor;
+import com.bluepowermod.client.gui.widget.WidgetFuzzySetting;
 import com.bluepowermod.containers.ContainerFilter;
 import com.bluepowermod.network.NetworkHandler;
 import com.bluepowermod.network.messages.MessageGuiUpdate;
@@ -35,34 +36,38 @@ import com.bluepowermod.util.Refs;
  * @author MineMaarten
  */
 public class GuiFilter extends GuiBase {
-    
+
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/seedBag.png");
-    protected TileFilter                  filter;
-    
+    protected TileFilter filter;
+
     public GuiFilter(ContainerFilter container, TileFilter filter, ResourceLocation resLoc) {
-    
+
         super(filter, container, resLoc);
         this.filter = filter;
     }
-    
+
     public GuiFilter(InventoryPlayer invPlayer, TileFilter filter) {
-    
+
         super(filter, new ContainerFilter(invPlayer, filter), resLoc);
         this.filter = filter;
     }
-    
+
     @Override
     public void initGui() {
-    
+
         super.initGui();
         WidgetColor colorWidget = new WidgetColor(0, guiLeft + 117, guiTop + 55);
         colorWidget.value = filter.filterColor.ordinal();
         addWidget(colorWidget);
+
+        WidgetFuzzySetting fuzzyWidget = new WidgetFuzzySetting(1, guiLeft + 134, guiTop + 55);
+        fuzzyWidget.value = filter.fuzzySetting;
+        addWidget(fuzzyWidget);
     }
-    
+
     @Override
     public void actionPerformed(IGuiWidget widget) {
-    
+
         BaseWidget baseWidget = (BaseWidget) widget;
         NetworkHandler.sendToServer(new MessageGuiUpdate(filter, widget.getID(), baseWidget.value));
     }

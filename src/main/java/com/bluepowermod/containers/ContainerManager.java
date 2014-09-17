@@ -38,16 +38,17 @@ import cpw.mods.fml.relauncher.SideOnly;
  * @author MineMaarten
  */
 public class ContainerManager extends Container {
-    
+
     private final TileManager tileManager;
-    private int               filterColor;
-    private int               priority;
-    private int               mode;
-    
+    private int filterColor;
+    private int priority;
+    private int mode;
+    private int fuzzySetting;
+
     public ContainerManager(InventoryPlayer invPlayer, TileManager manager) {
-    
+
         tileManager = manager;
-        
+
         for (int i = 0; i < 4; ++i) {
             for (int j = 0; j < 6; ++j) {
                 addSlotToContainer(new Slot(manager, j + i * 6, 44 + j * 18, 19 + i * 18));
@@ -55,33 +56,33 @@ public class ContainerManager extends Container {
         }
         bindPlayerInventory(invPlayer);
     }
-    
+
     protected void bindPlayerInventory(InventoryPlayer invPlayer) {
-    
+
         // Render inventory
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 9; j++) {
                 addSlotToContainer(new Slot(invPlayer, j + i * 9 + 9, 8 + j * 18, 104 + i * 18));
             }
         }
-        
+
         // Render hotbar
         for (int j = 0; j < 9; j++) {
             addSlotToContainer(new Slot(invPlayer, j, 8 + j * 18, 162));
         }
     }
-    
+
     /**
      * Looks for changes made in the container, sends them to every listener.
      */
     @Override
     public void detectAndSendChanges() {
-    
+
         super.detectAndSendChanges();
-        
+
         for (Object crafter : crafters) {
             ICrafting icrafting = (ICrafting) crafter;
-            
+
             if (filterColor != tileManager.filterColor.ordinal()) {
                 icrafting.sendProgressBarUpdate(this, 0, tileManager.filterColor.ordinal());
             }
@@ -91,16 +92,20 @@ public class ContainerManager extends Container {
             if (mode != tileManager.mode) {
                 icrafting.sendProgressBarUpdate(this, 2, tileManager.mode);
             }
+            if (fuzzySetting != tileManager.fuzzySetting) {
+                icrafting.sendProgressBarUpdate(this, 3, tileManager.fuzzySetting);
+            }
         }
         filterColor = tileManager.filterColor.ordinal();
         priority = tileManager.priority;
         mode = tileManager.mode;
+        fuzzySetting = tileManager.fuzzySetting;
     }
-    
+
     @Override
     @SideOnly(Side.CLIENT)
     public void updateProgressBar(int id, int value) {
-    
+
         if (id == 0) {
             tileManager.filterColor = TubeColor.values()[value];
             ((GuiBase) ClientProxy.getOpenedGui()).redraw();
@@ -113,25 +118,32 @@ public class ContainerManager extends Container {
             tileManager.mode = value;
             ((GuiBase) ClientProxy.getOpenedGui()).redraw();
         }
+        if (id == 3) {
+            tileManager.fuzzySetting = value;
+            ((GuiBase) ClientProxy.getOpenedGui()).redraw();
+        }
     }
-    
+
     @Override
     public boolean canInteractWith(EntityPlayer player) {
-    
+
         return tileManager.isUseableByPlayer(player);
     }
-    
+
     @Override
     public ItemStack transferStackInSlot(EntityPlayer player, int par2) {
-    
+
         ItemStack itemstack = null;
         Slot slot = (Slot) inventorySlots.get(par2);
         if (slot != null && slot.getHasStack()) {
             ItemStack itemstack1 = slot.getStack();
             itemstack = itemstack1.copy();
             if (par2 < 24) {
-                if (!mergeItemStack(itemstack1, 24, 60, false)) return null;
-            } else if (!mergeItemStack(itemstack1, 0, 24, false)) { return null; }
+                if (!mergeItemStack(itemstack1, 24, 60, false))
+                    return null;
+            } else if (!mergeItemStack(itemstack1, 0, 24, false)) {
+                return null;
+            }
             if (itemstack1.stackSize == 0) {
                 slot.putStack(null);
             } else {

@@ -54,9 +54,9 @@ if (System.getenv().BUILD_NUMBER != null) {
     version += " - err"
 }
 
-def grabDep(name, url) {
+def grabDep(url) {
     ant.get(src: url, dest: 'dep')
-    file("dep/" + url.substring(url.lastIndexOf("/"))).renameTo(file("dep/" + name + ".jar"))
+	compile files("dep/" + url.substring(url.lastIndexOf("/")));
 }
 
 dependencies {
@@ -73,15 +73,14 @@ dependencies {
     compile "codechicken:CodeChickenCore:1.7.10-1.0.2.11:dev"
     compile "codechicken:NotEnoughItems:1.7.10-1.0.2.26:dev"
     compile "codechicken:ForgeMultipart:1.7.10-1.1.0.297:dev"
-    compile "mcp.mobius.waila:Waila:1.5.3_1.7.10"
+    compile "mcp.mobius.waila:Waila:1.5.3a_1.7.10"
     compile "li.cil.oc:OpenComputers:MC1.7.10-1.3.0.20:api"
     compile 'net.industrial-craft:industrialcraft-2:2.2.558-experimental:api'
-
     println("  Finished adding dependencies!")
 }
 
 minecraft {
-    version = "${project.ext.mcVersion}-10.13.0.1208"
+    version = "${project.ext.mcVersion}-10.13.1.1217"
     runDir = "eclipse/assets"
 
     // replacing stuff in the source
@@ -131,7 +130,7 @@ task deobfJar(type: Jar) {
 
 // add a source jar
 task sourceJar(type: Jar) {
-    from sourceSets.main.resources.srcDirs {
+    from (sourceSets.main.allSource) {
         appendix = "${project.ext.mcVersion}"
         classifier = "src"
     }

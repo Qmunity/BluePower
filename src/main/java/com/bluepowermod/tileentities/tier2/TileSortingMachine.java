@@ -1,3 +1,10 @@
+/*
+ * This file is part of Blue Power. Blue Power is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version. Blue Power is
+ * distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+ * PARTICULAR PURPOSE. See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along
+ * with Blue Power. If not, see <http://www.gnu.org/licenses/>
+ */
 package com.bluepowermod.tileentities.tier2;
 
 import java.util.ArrayList;
@@ -15,6 +22,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
 import com.bluepowermod.helper.IOHelper;
+import com.bluepowermod.helper.ItemStackHelper;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.part.IGuiButtonSensitive;
 import com.bluepowermod.part.tube.TubeStack;
@@ -34,6 +42,7 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
     private boolean sweepTriggered;
     private int savedPulses;
     public final TubeColor[] colors = new TubeColor[9];
+    public int[] fuzzySettings = new int[8];
 
     public TileSortingMachine() {
 
@@ -165,7 +174,7 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
             if (filterStack != null) {
                 boolean duplicate = false;
                 for (ItemStack requirement : requirements) {
-                    if (requirement.isItemEqual(filterStack)) {
+                    if (ItemStackHelper.areStacksEqual(requirement, filterStack, fuzzySettings[column])) {
                         requirement.stackSize += filterStack.stackSize;
                         duplicate = true;
                         break;
@@ -186,7 +195,7 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
             ItemStack stack = iterator.next();
             for (int slot : accessibleSlots) {
                 ItemStack invStack = inputInventory.getStackInSlot(slot);
-                if (invStack != null && invStack.isItemEqual(stack)) {
+                if (invStack != null && ItemStackHelper.areStacksEqual(invStack, stack, fuzzySettings[column])) {
                     stack.stackSize -= invStack.stackSize;
                     if (stack.stackSize <= 0) {
                         iterator.remove();
@@ -200,7 +209,7 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
                 for (int slot : accessibleSlots) {
                     if (stack.stackSize > 0) {
                         ItemStack invStack = inputInventory.getStackInSlot(slot);
-                        if (invStack != null && invStack.isItemEqual(stack)) {
+                        if (invStack != null && ItemStackHelper.areStacksEqual(invStack, stack, fuzzySettings[column])) {
                             int substracted = Math.min(stack.stackSize, invStack.stackSize);
                             stack.stackSize -= substracted;
                             invStack.stackSize -= substracted;
@@ -236,19 +245,19 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
         case ANY_ITEM_DEFAULT:
             for (int i = 0; i < inventory.length; i++) {
                 ItemStack filter = inventory[i];
-                if (filter != null && stack.isItemEqual(filter) && stack.stackSize >= filter.stackSize) {
+                if (filter != null && ItemStackHelper.areStacksEqual(filter, stack, fuzzySettings[i % 8]) && stack.stackSize >= filter.stackSize) {
                     if (!simulate) {
                         addItemToOutputBuffer(filter.copy(), colors[i % 8]);
-                        stack.stackSize -= filter.stackSize;
                     }
+                    stack.stackSize -= filter.stackSize;
                     return true;
                 }
             }
             if (sortMode == SortMode.ANY_ITEM_DEFAULT) {
                 if (!simulate) {
                     addItemToOutputBuffer(stack.copy(), colors[8]);
-                    stack.stackSize = 0;
                 }
+                stack.stackSize = 0;
                 return true;
             }
             break;
@@ -256,19 +265,19 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
         case ANY_STACK_DEFAULT:
             for (int i = 0; i < inventory.length; i++) {
                 ItemStack filter = inventory[i];
-                if (filter != null && stack.isItemEqual(filter)) {
+                if (filter != null && ItemStackHelper.areStacksEqual(filter, stack, fuzzySettings[i % 8])) {
                     if (!simulate) {
                         addItemToOutputBuffer(stack.copy(), colors[i % 8]);
-                        stack.stackSize = 0;
                     }
+                    stack.stackSize = 0;
                     return true;
                 }
             }
             if (sortMode == SortMode.ANY_STACK_DEFAULT) {
                 if (!simulate) {
                     addItemToOutputBuffer(stack.copy(), colors[8]);
-                    stack.stackSize = 0;
                 }
+                stack.stackSize = 0;
                 return true;
             }
             break;
@@ -304,8 +313,10 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
             colors[messageId] = TubeColor.values()[value];
         } else if (messageId == 9) {
             pullMode = PullMode.values()[value];
-        } else {
+        } else if (messageId == 10) {
             sortMode = SortMode.values()[value];
+        } else {
+            fuzzySettings[messageId - 11] = value;
         }
     }
 
@@ -323,6 +334,8 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
             colorArray[i] = colors[i].ordinal();
         }
         tag.setIntArray("colors", colorArray);
+
+        tag.setIntArray("fuzzySettings", fuzzySettings);
 
         NBTTagList tagList = new NBTTagList();
         for (int currentIndex = 0; currentIndex < inventory.length; ++currentIndex) {
@@ -349,6 +362,9 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
         for (int i = 0; i < colorArray.length; i++) {
             colors[i] = TubeColor.values()[colorArray[i]];
         }
+
+        if (tag.hasKey("fuzzySettings"))
+            fuzzySettings = tag.getIntArray("fuzzySettings");
 
         NBTTagList tagList = tag.getTagList("Items", 10);
         inventory = new ItemStack[40];

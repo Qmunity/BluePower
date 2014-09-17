@@ -227,11 +227,15 @@ public class MultipartBPPart extends TMultiPart implements IRedstonePart, JNorma
     @Override
     public void onAdded() {
 
+        setPartData();
+
         getPart().onAdded();
     }
 
     @Override
     public void onRemoved() {
+
+        setPartData();
 
         getPart().onRemoved();
     }
@@ -239,11 +243,15 @@ public class MultipartBPPart extends TMultiPart implements IRedstonePart, JNorma
     @Override
     public void onPartChanged(TMultiPart part) {
 
+        setPartData();
+
         getPart().onPartChanged();
     }
 
     @Override
     public void onEntityCollision(Entity entity) {
+
+        setPartData();
 
         getPart().onEntityCollision(entity);
     }
@@ -251,11 +259,15 @@ public class MultipartBPPart extends TMultiPart implements IRedstonePart, JNorma
     @Override
     public void onNeighborChanged() {
 
+        setPartData();
+
         getPart().onNeighborUpdate();
     }
 
     @Override
     public void onNeighborTileChanged(int arg0, boolean arg1) {
+
+        setPartData();
 
         getPart().onNeighborTileUpdate();
     }
@@ -269,11 +281,15 @@ public class MultipartBPPart extends TMultiPart implements IRedstonePart, JNorma
     @Override
     public boolean activate(EntityPlayer player, MovingObjectPosition hit, ItemStack item) {
 
+        setPartData();
+
         return getPart().onActivated(player, hit, item);
     }
 
     @Override
     public void click(EntityPlayer player, MovingObjectPosition hit, ItemStack item) {
+
+        setPartData();
 
         getPart().click(player, hit, item);
     }
@@ -395,15 +411,21 @@ public class MultipartBPPart extends TMultiPart implements IRedstonePart, JNorma
         return true;
     }
 
-    @Override
-    public void update() {
+    private void setPartData() {
 
         getPart().setWorld(world());
         getPart().setX(x());
         getPart().setY(y());
         getPart().setZ(z());
+    }
 
-        getPart().update();
+    @Override
+    public void update() {
+
+        setPartData();
+
+        if (getPart().getWorld() != null)
+            getPart().update();
     }
 
     @Override

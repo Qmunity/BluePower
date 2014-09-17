@@ -27,6 +27,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTool;
 import net.minecraft.world.World;
@@ -35,16 +36,19 @@ import java.util.Set;
 
 public class ItemSickle extends ItemTool {
 
-    private static final Set toolBlocks = Sets.newHashSet(new Block[] { Blocks.leaves, Blocks.leaves2, Blocks.wheat, Blocks.potatoes, Blocks.carrots,
+    public    Item    customCraftingMaterial = null;
+    protected boolean canRepair              = true;
+
+    private static final Set toolBlocks = Sets.newHashSet(Blocks.leaves, Blocks.leaves2, Blocks.wheat, Blocks.potatoes, Blocks.carrots,
             Blocks.nether_wart, Blocks.red_mushroom, Blocks.brown_mushroom, Blocks.reeds, Blocks.tallgrass, Blocks.vine, Blocks.waterlily,
-            Blocks.red_flower, Blocks.yellow_flower });
+            Blocks.red_flower, Blocks.yellow_flower);
 
-    public ItemSickle(ToolMaterial material, String name) {
-
+    public ItemSickle(ToolMaterial material, String name, Item repairItem) {
         super(1.0F, material, toolBlocks);
         this.setUnlocalizedName(name);
         this.setCreativeTab(CustomTabs.tabBluePowerTools);
         this.setTextureName(Refs.MODID + ":" + name);
+        this.customCraftingMaterial = repairItem;
     }
 
     @Override
@@ -146,5 +150,15 @@ public class ItemSickle extends ItemTool {
         return used;
     }
 
+    @Override
+    public boolean isRepairable() {
 
+        return canRepair && isDamageable();
+    }
+
+    @Override
+    public boolean getIsRepairable(ItemStack is1, ItemStack is2) {
+
+        return ((is1.getItem() == this || is2.getItem() == this) && (is1.getItem() == this.customCraftingMaterial || is2.getItem() == this.customCraftingMaterial));
+    }
 }

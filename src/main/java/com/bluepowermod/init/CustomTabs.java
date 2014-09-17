@@ -27,7 +27,7 @@ import net.minecraft.item.Item;
 import java.util.List;
 
 public class CustomTabs {
-    
+
     public static CreativeTabs tabBluePowerBlocks;
     public static CreativeTabs tabBluePowerMachines;
     public static CreativeTabs tabBluePowerItems;
@@ -37,12 +37,12 @@ public class CustomTabs {
     public static CreativeTabs tabBluePowerPower;
     
     static {
-        
+
         tabBluePowerBlocks = new BPCreativeTab("tabBluePowerBlocks") {
-            
+
             @Override
             public Item getTabIconItem() {
-            
+
                 Block iconBlock = BPBlocks.marble;
                 if (iconBlock != null) {
                     return Item.getItemFromBlock(iconBlock);
@@ -51,12 +51,12 @@ public class CustomTabs {
                 }
             }
         };
-        
+
         tabBluePowerMachines = new BPCreativeTab("tabBluePowerMachines") {
-            
+
             @Override
             public Item getTabIconItem() {
-            
+
                 Block iconBlock = BPBlocks.alloyfurnace;
                 if (iconBlock != null) {
                     return Item.getItemFromBlock(iconBlock);
@@ -65,12 +65,12 @@ public class CustomTabs {
                 }
             }
         };
-        
+
         tabBluePowerItems = new BPCreativeTab("tabBluePowerItems") {
-            
+
             @Override
             public Item getTabIconItem() {
-            
+
                 Item iconItem = BPItems.ruby_gem;
                 if (iconItem != null) {
                     return BPItems.ruby_gem;
@@ -79,12 +79,12 @@ public class CustomTabs {
                 }
             }
         };
-        
+
         tabBluePowerTools = new BPCreativeTab("tabBluePowerTools") {
-            
+
             @Override
             public Item getTabIconItem() {
-            
+
                 Item iconItem = BPItems.screwdriver;
                 if (iconItem != null) {
                     return BPItems.screwdriver;
@@ -93,21 +93,21 @@ public class CustomTabs {
                 }
             }
         };
-        
+
         tabBluePowerCircuits = new BPCreativeTab("tabBluePowerCircuits") {
-            
+
             @Override
             public Item getTabIconItem() {
-            
-                return BPItems.multipart;
+
+                return PartRegistry.getInstance().getItemForPart("timer").getItem();
             }
         };
-        
+
         tabBluePowerLighting = new BPCreativeTab("tabBluePowerLighting") {
-            
+
             @Override
             public Item getTabIconItem() {
-            
+
                 return Item.getItemFromBlock(Blocks.redstone_lamp);
             }
         };
@@ -126,22 +126,22 @@ public class CustomTabs {
             }
         };
     }
-    
+
     private static abstract class BPCreativeTab extends CreativeTabs {
-        
+
         public BPCreativeTab(String label) {
-        
+
             super(label);
         }
-        
+
         @SuppressWarnings({ "rawtypes", "unchecked" })
         @Override
         public void displayAllReleventItems(List l) {
-        
+
             super.displayAllReleventItems(l);
             for (String s : PartRegistry.getInstance().getRegisteredPartsForTab(this))
                 l.add(PartRegistry.getInstance().getItemForPart(s));
         }
-        
+
     }
 }

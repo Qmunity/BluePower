@@ -1,3 +1,10 @@
+/*
+ * This file is part of Blue Power. Blue Power is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version. Blue Power is
+ * distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+ * PARTICULAR PURPOSE. See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along
+ * with Blue Power. If not, see <http://www.gnu.org/licenses/>
+ */
 package com.bluepowermod.part.tube;
 
 import net.minecraft.client.Minecraft;
@@ -18,7 +25,6 @@ import org.lwjgl.opengl.GL11;
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
 import com.bluepowermod.api.vec.Vector3Cube;
 import com.bluepowermod.client.renderers.RenderHelper;
-import com.bluepowermod.init.Config;
 import com.bluepowermod.util.Refs;
 
 import cpw.mods.fml.client.FMLClientHandler;
@@ -31,54 +37,60 @@ import cpw.mods.fml.relauncher.SideOnly;
  */
 
 public class TubeStack {
-    
-    public ItemStack           stack;
-    public final TubeColor     color;
-    public double              progress;                               // 0 at the start, 0.5 on an intersection, 1 at the end.
-    public double              oldProgress;
-    public ForgeDirection      heading;
-    public boolean             enabled        = true;                  // will be disabled when the client sided stack is at an intersection, at which point it needs to wait for server
-                                                                        // input. This just serves a visual purpose.
-    public int                 idleCounter;                            //increased when the stack is standing still. This will cause the client to remove the stack when a timeout occurs.
-    private TileEntity         target;                                 // only should have a value when retrieving items. this is the target the item wants to go to.
-    private int                targetX, targetY, targetZ;
-    private ForgeDirection     targetEntryDir = ForgeDirection.UNKNOWN; // Which side should this item make its entry.
-    public static final double ITEM_SPEED     = 0.04;
-    private double             speed          = ITEM_SPEED;
-    
+
+    public ItemStack stack;
+    public final TubeColor color;
+    public double progress; // 0 at the start, 0.5 on an intersection, 1 at the end.
+    public double oldProgress;
+    public ForgeDirection heading;
+    public boolean enabled = true; // will be disabled when the client sided stack is at an intersection, at which point it needs to wait for server
+                                   // input. This just serves a visual purpose.
+    public int idleCounter; // increased when the stack is standing still. This will cause the client to remove the stack when a timeout occurs.
+    private TileEntity target; // only should have a value when retrieving items. this is the target the item wants to go to.
+    private int targetX, targetY, targetZ;
+    private ForgeDirection targetEntryDir = ForgeDirection.UNKNOWN; // Which side should this item make its entry.
+    public static final double ITEM_SPEED = 0.04;
+    private double speed = ITEM_SPEED;
+
     @SideOnly(Side.CLIENT)
-    private static RenderItem  customRenderItem;
-    private static EntityItem  renderedItem;
-    
+    private static RenderItem customRenderItem;
+    private static EntityItem renderedItem;
+
+    public static RenderMode renderMode;
+
+    public static enum RenderMode {
+        AUTO, NORMAL, REDUCED, NONE
+    }
+
     public TubeStack(ItemStack stack, ForgeDirection from) {
-    
+
         this(stack, from, TubeColor.NONE);
     }
-    
+
     public TubeStack(ItemStack stack, ForgeDirection from, TubeColor color) {
-    
+
         heading = from;
         this.stack = stack;
         this.color = color;
     }
-    
+
     public void setSpeed(double speed) {
-    
+
         this.speed = speed;
     }
-    
+
     public double getSpeed() {
-    
+
         return speed;
     }
-    
+
     /**
      * Updates the movement by the given m/tick.
      * 
      * @return true if the stack has gone past the center, meaning logic needs to be triggered.
      */
     public boolean update() {
-    
+
         oldProgress = progress;
         if (enabled) {
             boolean isEntering = progress < 0.5;
@@ -89,22 +101,22 @@ public class TubeStack {
             return false;
         }
     }
-    
+
     public TileEntity getTarget(World world) {
-    
+
         if (target == null && (targetX != 0 || targetY != 0 || targetZ != 0)) {
             target = world.getTileEntity(targetX, targetY, targetZ);
         }
         return target;
     }
-    
+
     public ForgeDirection getTargetEntryDir() {
-    
+
         return targetEntryDir;
     }
-    
+
     public void setTarget(TileEntity tileEntity, ForgeDirection targetEntryDir) {
-    
+
         this.targetEntryDir = targetEntryDir;
         target = tileEntity;
         if (target != null) {
@@ -117,16 +129,16 @@ public class TubeStack {
             targetZ = 0;
         }
     }
-    
+
     public TubeStack copy() {
-    
+
         NBTTagCompound tag = new NBTTagCompound();
         writeToNBT(tag);
         return loadFromNBT(tag);
     }
-    
+
     public void writeToNBT(NBTTagCompound tag) {
-    
+
         stack.writeToNBT(tag);
         tag.setByte("color", (byte) color.ordinal());
         tag.setByte("heading", (byte) heading.ordinal());
@@ -137,10 +149,11 @@ public class TubeStack {
         tag.setInteger("targetZ", targetZ);
         tag.setByte("targetEntryDir", (byte) targetEntryDir.ordinal());
     }
-    
+
     public static TubeStack loadFromNBT(NBTTagCompound tag) {
-    
-        TubeStack stack = new TubeStack(ItemStack.loadItemStackFromNBT(tag), ForgeDirection.getOrientation(tag.getByte("heading")), TubeColor.values()[tag.getByte("color")]);
+
+        TubeStack stack = new TubeStack(ItemStack.loadItemStackFromNBT(tag), ForgeDirection.getOrientation(tag.getByte("heading")),
+                TubeColor.values()[tag.getByte("color")]);
         stack.progress = tag.getDouble("progress");
         stack.speed = tag.getDouble("speed");
         stack.targetX = tag.getInteger("targetX");
@@ -149,44 +162,42 @@ public class TubeStack {
         stack.targetEntryDir = ForgeDirection.getOrientation(tag.getByte("targetEntryDir"));
         return stack;
     }
-    
+
     @SideOnly(Side.CLIENT)
     public void render(float partialTick) {
-    
-        String renderMode = Config.tubeRenderMode;
-        if (renderMode.equals("auto")) {
-            renderMode = Minecraft.getMinecraft().gameSettings.fancyGraphics ? "normal" : "reduced";
+        if (renderMode == RenderMode.AUTO) {
+            renderMode = Minecraft.getMinecraft().gameSettings.fancyGraphics ? RenderMode.NORMAL : RenderMode.REDUCED;
         }
-        final String finalRenderMode = renderMode;
-        
+        final RenderMode finalRenderMode = renderMode;
+
         if (customRenderItem == null) {
             customRenderItem = new RenderItem() {
-                
+
                 @Override
                 public boolean shouldBob() {
-                
+
                     return false;
                 };
-                
+
                 @Override
                 public byte getMiniBlockCount(ItemStack stack, byte original) {
-                
-                    return finalRenderMode.equals("reduced") ? (byte) 1 : original;
+
+                    return finalRenderMode == RenderMode.REDUCED ? (byte) 1 : original;
                 }
             };
             customRenderItem.setRenderManager(RenderManager.instance);
-            
+
             renderedItem = new EntityItem(FMLClientHandler.instance().getWorldClient());
             renderedItem.hoverStart = 0.0F;
         }
-        
+
         renderedItem.setEntityItemStack(stack);
-        
+
         double renderProgress = (oldProgress + (progress - oldProgress) * partialTick) * 2 - 1;
-        
+
         GL11.glPushMatrix();
         GL11.glTranslated(heading.offsetX * renderProgress * 0.5, heading.offsetY * renderProgress * 0.5, heading.offsetZ * renderProgress * 0.5);
-        if (!finalRenderMode.equals("none")) {
+        if (finalRenderMode != RenderMode.NONE) {
             GL11.glPushMatrix();
             if (stack.stackSize > 5) {
                 GL11.glScaled(0.8, 0.8, 0.8);
@@ -195,7 +206,7 @@ public class TubeStack {
                 GL11.glScaled(0.8, 0.8, 0.8);
                 GL11.glTranslated(0, -0.15, 0);
             }
-            
+
             customRenderItem.doRender(renderedItem, 0, 0, 0, 0, 0);
             GL11.glPopMatrix();
         } else {
@@ -206,16 +217,16 @@ public class TubeStack {
             GL11.glEnd();
             GL11.glEnable(GL11.GL_TEXTURE_2D);
         }
-        
+
         if (color != TubeColor.NONE) {
-            
+
             float size = 0.2F;
-            
+
             int colorInt = ItemDye.field_150922_c[color.ordinal()];
             float red = (colorInt >> 16) / 256F;
             float green = (colorInt >> 8 & 255) / 256F;
             float blue = (colorInt & 255) / 256F;
-            
+
             GL11.glDisable(GL11.GL_CULL_FACE);
             GL11.glDisable(GL11.GL_LIGHTING);
             GL11.glColor3f(red, green, blue);
@@ -224,7 +235,7 @@ public class TubeStack {
             GL11.glEnable(GL11.GL_CULL_FACE);
             GL11.glEnable(GL11.GL_LIGHTING);
         }
-        
+
         GL11.glPopMatrix();
     }
 }

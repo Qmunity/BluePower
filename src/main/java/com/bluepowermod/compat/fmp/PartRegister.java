@@ -1,3 +1,10 @@
+/*
+ * This file is part of Blue Power. Blue Power is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version. Blue Power is
+ * distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+ * PARTICULAR PURPOSE. See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along
+ * with Blue Power. If not, see <http://www.gnu.org/licenses/>
+ */
 package com.bluepowermod.compat.fmp;
 
 import com.bluepowermod.part.cable.bluepower.WireBluePower;
@@ -34,7 +41,9 @@ import com.bluepowermod.part.lamp.PartFixture;
 import com.bluepowermod.part.tube.Accelerator;
 import com.bluepowermod.part.tube.MagTube;
 import com.bluepowermod.part.tube.PneumaticTube;
+import com.bluepowermod.part.tube.PneumaticTubeOpaque;
 import com.bluepowermod.part.tube.RestrictionTube;
+import com.bluepowermod.part.tube.RestrictionTubeOpaque;
 
 public class PartRegister {
 
@@ -82,19 +91,20 @@ public class PartRegister {
 
         // Pneumatic Tubes
         PartRegistry.getInstance().registerPart(PneumaticTube.class);
+        PartRegistry.getInstance().registerPart(PneumaticTubeOpaque.class);
         PartRegistry.getInstance().registerPart(RestrictionTube.class);
+        PartRegistry.getInstance().registerPart(RestrictionTubeOpaque.class);
         PartRegistry.getInstance().registerPart(MagTube.class);
         PartRegistry.getInstance().registerPart(Accelerator.class);
 
+        // Bluestone
+        for (int bundled = 0; bundled < 2; bundled++) {
+            PartRegistry.getInstance().registerPart(WireBluestone.class, bundled == 1);// Normal
+            for (int i = 0; i < 16; i++)
+                PartRegistry.getInstance().registerPart(WireBluestone.class, i, bundled == 1);// Colored
+        }
+
 
         PartRegistry.getInstance().registerPart(WireBluePower.class);
-
-        // Bluestone
-        PartRegistry.getInstance().registerPart(WireBluestone.class);// Normal
-        for (int i = 0; i < ItemDye.field_150922_c.length; i++)
-            PartRegistry.getInstance().registerPart(WireBluestone.class, ItemDye.field_150922_c[i], ItemDye.field_150921_b[i].toLowerCase());// Colored
-
-
     }
-
 }

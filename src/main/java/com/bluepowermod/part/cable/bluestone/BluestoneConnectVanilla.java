@@ -1,3 +1,10 @@
+/*
+ * This file is part of Blue Power. Blue Power is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version. Blue Power is
+ * distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+ * PARTICULAR PURPOSE. See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along
+ * with Blue Power. If not, see <http://www.gnu.org/licenses/>
+ */
 package com.bluepowermod.part.cable.bluestone;
 
 import net.minecraft.init.Blocks;
@@ -33,7 +40,7 @@ public class BluestoneConnectVanilla extends ABluestoneConnect {
         if (block.getBlock() == Blocks.wooden_pressure_plate || block.getBlock() == Blocks.stone_pressure_plate
                 || block.getBlock() == Blocks.heavy_weighted_pressure_plate || block.getBlock() == Blocks.light_weighted_pressure_plate)
             return 1;
-        if (block.getBlock() == Blocks.redstone_torch)
+        if (block.getBlock() == Blocks.redstone_torch || block.getBlock() == Blocks.unlit_redstone_torch)
             return 7;
         if (block.getBlock() == Blocks.fence_gate)
             if (block.getBlockMeta() == 0 || block.getBlockMeta() == 2 || block.getBlockMeta() == 4 || block.getBlockMeta() == 6)
@@ -65,7 +72,7 @@ public class BluestoneConnectVanilla extends ABluestoneConnect {
 
         BluestoneApi api = BluestoneApi.getInstance();
 
-        if (block.getBlock() == Blocks.redstone_torch && !Loader.isModLoaded(Dependencies.FMP))
+        if ((block.getBlock() == Blocks.redstone_torch || block.getBlock() == Blocks.unlit_redstone_torch) && !Loader.isModLoaded(Dependencies.FMP))
             renderExtraCablesTorch(api, block, wire, cableSide);
     }
 

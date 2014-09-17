@@ -1,3 +1,10 @@
+/*
+ * This file is part of Blue Power. Blue Power is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version. Blue Power is
+ * distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+ * PARTICULAR PURPOSE. See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along
+ * with Blue Power. If not, see <http://www.gnu.org/licenses/>
+ */
 package com.bluepowermod.part.cable.bluestone;
 
 import java.util.ArrayList;
@@ -104,29 +111,29 @@ public class BluestoneApi implements IBluestoneApi {
             RenderHelper.addVertexWithTexture(maxx / size, miny / size, maxz / size, maxx / size, maxz / size);
             RenderHelper.addVertexWithTexture(minx / size, miny / size, maxz / size, minx / size, maxz / size);
             // West
-            GL11.glNormal3d(-1, 0, 0);
-            RenderHelper.addVertexWithTexture(maxx / size, maxy / size, minz / size, maxx / size, minz / size);
-            RenderHelper.addVertexWithTexture(maxx / size, maxy / size, maxz / size, maxx / size, maxz / size);
-            RenderHelper.addVertexWithTexture(maxx / size, miny / size, maxz / size, maxx / size, maxz / size);
-            RenderHelper.addVertexWithTexture(maxx / size, miny / size, minz / size, maxx / size, minz / size);
-            // East
             GL11.glNormal3d(1, 0, 0);
-            RenderHelper.addVertexWithTexture(minx / size, maxy / size, minz / size, (minx - maxy) / size, minz / size);
+            RenderHelper.addVertexWithTexture(minx / size, maxy / size, minz / size, (minx - miny) / size, minz / size);
             RenderHelper.addVertexWithTexture(minx / size, miny / size, minz / size, (minx - maxy) / size, minz / size);
             RenderHelper.addVertexWithTexture(minx / size, miny / size, maxz / size, (minx - maxy) / size, maxz / size);
-            RenderHelper.addVertexWithTexture(minx / size, maxy / size, maxz / size, (minx - maxy) / size, maxz / size);
+            RenderHelper.addVertexWithTexture(minx / size, maxy / size, maxz / size, (minx - miny) / size, maxz / size);
+            // East
+            GL11.glNormal3d(-1, 0, 0);
+            RenderHelper.addVertexWithTexture(maxx / size, maxy / size, minz / size, (maxx + miny) / size, minz / size);
+            RenderHelper.addVertexWithTexture(maxx / size, maxy / size, maxz / size, (maxx + miny) / size, maxz / size);
+            RenderHelper.addVertexWithTexture(maxx / size, miny / size, maxz / size, (maxx + maxy) / size, maxz / size);
+            RenderHelper.addVertexWithTexture(maxx / size, miny / size, minz / size, (maxx + maxy) / size, minz / size);
             // South
             GL11.glNormal3d(0, 0, 1);
             RenderHelper.addVertexWithTexture(minx / size, miny / size, minz / size, minx / size, (minz - maxy) / size);
-            RenderHelper.addVertexWithTexture(minx / size, maxy / size, minz / size, minx / size, (minz - maxy) / size);
-            RenderHelper.addVertexWithTexture(maxx / size, maxy / size, minz / size, maxx / size, (minz - maxy) / size);
+            RenderHelper.addVertexWithTexture(minx / size, maxy / size, minz / size, minx / size, (minz - miny) / size);
+            RenderHelper.addVertexWithTexture(maxx / size, maxy / size, minz / size, maxx / size, (minz - miny) / size);
             RenderHelper.addVertexWithTexture(maxx / size, miny / size, minz / size, maxx / size, (minz - maxy) / size);
             // North
             GL11.glNormal3d(0, 0, -1);
-            RenderHelper.addVertexWithTexture(minx / size, miny / size, maxz / size, minx / size, maxz / size);
-            RenderHelper.addVertexWithTexture(maxx / size, miny / size, maxz / size, maxx / size, maxz / size);
-            RenderHelper.addVertexWithTexture(maxx / size, maxy / size, maxz / size, maxx / size, maxz / size);
-            RenderHelper.addVertexWithTexture(minx / size, maxy / size, maxz / size, minx / size, maxz / size);
+            RenderHelper.addVertexWithTexture(minx / size, miny / size, maxz / size, minx / size, (maxz + maxy) / size);
+            RenderHelper.addVertexWithTexture(maxx / size, miny / size, maxz / size, maxx / size, (maxz + maxy) / size);
+            RenderHelper.addVertexWithTexture(maxx / size, maxy / size, maxz / size, maxx / size, (maxz + miny) / size);
+            RenderHelper.addVertexWithTexture(minx / size, maxy / size, maxz / size, minx / size, (maxz + miny) / size);
         }
         GL11.glEnd();
     }
@@ -144,10 +151,11 @@ public class BluestoneApi implements IBluestoneApi {
         BluestoneApi api = getInstance();
 
         api.registerSpecialConnection(new BluestoneConnectVanilla());
-        api.registerSpecialConnection(new BluestoneConnectBPMultipart());
 
-        if (Loader.isModLoaded(Dependencies.FMP))
+        if (Loader.isModLoaded(Dependencies.FMP)) {
+            api.registerSpecialConnection(new BluestoneConnectBPMultipart());
             api.registerSpecialConnection(new BluestoneConnectFMP());
+        }
 
     }
 

@@ -27,6 +27,7 @@ import net.minecraft.util.ResourceLocation;
 import com.bluepowermod.client.gui.widget.BaseWidget;
 import com.bluepowermod.client.gui.widget.IGuiWidget;
 import com.bluepowermod.client.gui.widget.WidgetColor;
+import com.bluepowermod.client.gui.widget.WidgetFuzzySetting;
 import com.bluepowermod.client.gui.widget.WidgetMode;
 import com.bluepowermod.containers.ContainerRegulator;
 import com.bluepowermod.network.NetworkHandler;
@@ -38,30 +39,30 @@ import com.bluepowermod.util.Refs;
  * @author MineMaarten
  */
 public class GuiRegulator extends GuiBase {
-    
+
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/regulator.png");
-    protected TileRegulator               regulator;
-    
+    protected TileRegulator regulator;
+
     public GuiRegulator(InventoryPlayer invPlayer, TileRegulator regulator) {
-    
+
         super(regulator, new ContainerRegulator(invPlayer, regulator), resLoc);
         this.regulator = regulator;
         xSize = 212;
     }
-    
+
     @Override
     public void initGui() {
-    
+
         super.initGui();
         WidgetColor colorWidget = new WidgetColor(0, guiLeft + 135, guiTop + 55);
         colorWidget.value = regulator.color.ordinal();
         addWidget(colorWidget);
-        
+
         WidgetMode modeWidget = new WidgetMode(1, guiLeft + 135, guiTop + 20, 216, 2, Refs.MODID + ":textures/gui/regulator.png") {
-            
+
             @Override
             public void addTooltip(int mouseX, int mouseY, List<String> curTip, boolean shiftPressed) {
-            
+
                 curTip.add("gui.mode");
                 curTip.add("gui.regulator.mode." + (value == 0 ? "ratio" : "supply"));
                 if (shiftPressed) {
@@ -73,11 +74,15 @@ public class GuiRegulator extends GuiBase {
         };
         modeWidget.value = regulator.mode;
         addWidget(modeWidget);
+
+        WidgetFuzzySetting fuzzyWidget = new WidgetFuzzySetting(2, guiLeft + 135, guiTop + 70);
+        fuzzyWidget.value = regulator.fuzzySetting;
+        addWidget(fuzzyWidget);
     }
-    
+
     @Override
     public void actionPerformed(IGuiWidget widget) {
-    
+
         BaseWidget baseWidget = (BaseWidget) widget;
         NetworkHandler.sendToServer(new MessageGuiUpdate(regulator, widget.getID(), baseWidget.value));
     }

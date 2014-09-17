@@ -19,6 +19,7 @@
 
 package com.bluepowermod.containers;
 
+import invtweaks.api.container.ChestContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
@@ -30,11 +31,12 @@ import com.bluepowermod.containers.slots.SlotExclude;
 import com.bluepowermod.containers.slots.SlotLocked;
 import com.bluepowermod.init.BPItems;
 
+@ChestContainer
 public class ContainerCanvasBag extends Container {
     
     IInventory canvasBagInventory;
     ItemStack  bag;
-    
+
     public ContainerCanvasBag(ItemStack bag, IInventory playerInventory, IInventory canvasBagInventory) {
     
         this.bag = bag;

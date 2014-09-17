@@ -38,15 +38,16 @@ import cpw.mods.fml.relauncher.SideOnly;
  * @author MineMaarten
  */
 public class ContainerRegulator extends ContainerGhosts {
-    
+
     private final TileRegulator tileRegulator;
-    private int                 filterColor;
-    private int                 mode;
-    
+    private int filterColor;
+    private int mode;
+    private int fuzzySetting;
+
     public ContainerRegulator(InventoryPlayer invPlayer, TileRegulator regulator) {
-    
+
         tileRegulator = regulator;
-        
+
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 3; ++j) {
                 addSlotToContainer(new SlotPhantom(regulator, j + i * 3, 8 + j * 18, 18 + i * 18));
@@ -64,48 +65,52 @@ public class ContainerRegulator extends ContainerGhosts {
         }
         bindPlayerInventory(invPlayer);
     }
-    
+
     protected void bindPlayerInventory(InventoryPlayer invPlayer) {
-    
+
         // Render inventory
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 9; j++) {
                 addSlotToContainer(new Slot(invPlayer, j + i * 9 + 9, 26 + j * 18, 86 + i * 18));
             }
         }
-        
+
         // Render hotbar
         for (int j = 0; j < 9; j++) {
             addSlotToContainer(new Slot(invPlayer, j, 26 + j * 18, 144));
         }
     }
-    
+
     /**
      * Looks for changes made in the container, sends them to every listener.
      */
     @Override
     public void detectAndSendChanges() {
-    
+
         super.detectAndSendChanges();
-        
+
         for (Object crafter : crafters) {
             ICrafting icrafting = (ICrafting) crafter;
-            
+
             if (filterColor != tileRegulator.color.ordinal()) {
                 icrafting.sendProgressBarUpdate(this, 0, tileRegulator.color.ordinal());
             }
             if (mode != tileRegulator.mode) {
                 icrafting.sendProgressBarUpdate(this, 2, tileRegulator.mode);
             }
+            if (fuzzySetting != tileRegulator.fuzzySetting) {
+                icrafting.sendProgressBarUpdate(this, 3, tileRegulator.fuzzySetting);
+            }
         }
         filterColor = tileRegulator.color.ordinal();
         mode = tileRegulator.mode;
+        fuzzySetting = tileRegulator.fuzzySetting;
     }
-    
+
     @Override
     @SideOnly(Side.CLIENT)
     public void updateProgressBar(int id, int value) {
-    
+
         if (id == 0) {
             tileRegulator.color = TubeColor.values()[value];
             ((GuiBase) ClientProxy.getOpenedGui()).redraw();
@@ -114,25 +119,32 @@ public class ContainerRegulator extends ContainerGhosts {
             tileRegulator.mode = value;
             ((GuiBase) ClientProxy.getOpenedGui()).redraw();
         }
+        if (id == 3) {
+            tileRegulator.fuzzySetting = value;
+            ((GuiBase) ClientProxy.getOpenedGui()).redraw();
+        }
     }
-    
+
     @Override
     public boolean canInteractWith(EntityPlayer player) {
-    
+
         return tileRegulator.isUseableByPlayer(player);
     }
-    
+
     @Override
     public ItemStack transferStackInSlot(EntityPlayer player, int par2) {
-    
+
         ItemStack itemstack = null;
         Slot slot = (Slot) inventorySlots.get(par2);
         if (slot != null && slot.getHasStack()) {
             ItemStack itemstack1 = slot.getStack();
             itemstack = itemstack1.copy();
             if (par2 >= 9 && par2 < 18) {
-                if (!mergeItemStack(itemstack1, 27, 63, true)) return null;
-            } else if (par2 >= 27 && !mergeItemStack(itemstack1, 9, 18, false)) { return null; }
+                if (!mergeItemStack(itemstack1, 27, 63, true))
+                    return null;
+            } else if (par2 >= 27 && !mergeItemStack(itemstack1, 9, 18, false)) {
+                return null;
+            }
             if (itemstack1.stackSize == 0) {
                 slot.putStack(null);
             } else {

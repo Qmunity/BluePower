@@ -1,3 +1,10 @@
+/*
+ * This file is part of Blue Power. Blue Power is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version. Blue Power is
+ * distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+ * PARTICULAR PURPOSE. See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along
+ * with Blue Power. If not, see <http://www.gnu.org/licenses/>
+ */
 package com.bluepowermod.tileentities.tier1;
 
 import java.util.List;
@@ -8,6 +15,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import com.bluepowermod.helper.ItemStackHelper;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.part.IGuiButtonSensitive;
 import com.bluepowermod.part.tube.TubeStack;
@@ -21,6 +29,7 @@ public class TileItemDetector extends TileMachineBase implements ISidedInventory
     public int mode;
     private final ItemStack[] inventory = new ItemStack[9];
     private int savedPulses = 0;
+    public int fuzzySetting;
 
     @Override
     public void updateEntity() {
@@ -70,7 +79,7 @@ public class TileItemDetector extends TileMachineBase implements ISidedInventory
         boolean everythingNull = true;
         for (ItemStack invStack : inventory) {
             if (invStack != null) {
-                if (item.isItemEqual(invStack)) {
+                if (ItemStackHelper.areStacksEqual(invStack, item, fuzzySetting)) {
                     return true;
                 }
                 everythingNull = false;
@@ -93,6 +102,7 @@ public class TileItemDetector extends TileMachineBase implements ISidedInventory
         }
 
         mode = tCompound.getByte("mode");
+        fuzzySetting = tCompound.getByte("fuzzySetting");
     }
 
     /**
@@ -112,6 +122,7 @@ public class TileItemDetector extends TileMachineBase implements ISidedInventory
         }
 
         tCompound.setByte("mode", (byte) mode);
+        tCompound.setByte("fuzzySetting", (byte) fuzzySetting);
     }
 
     @Override
@@ -238,6 +249,9 @@ public class TileItemDetector extends TileMachineBase implements ISidedInventory
 
         if (messageId == 0)
             mode = value;
+        if (messageId == 1) {
+            fuzzySetting = value;
+        }
     }
 
     @Override
