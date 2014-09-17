@@ -115,7 +115,7 @@ public class BPItems {
     public static final Item paint_brush = new ItemPaintBrush(Refs.PAINTBRUSH_NAME);
     public static Item iron_saw;
     public static Item diamond_saw;
-    public static final Item item_multipart_legacy = new ItemPartLegacy();
+    public static final Item bluepower_multipart = new ItemPartLegacy();
     public static final Item ruby_axe = new ItemGemAxe(BluePower.gemMaterial, Refs.RUBYAXE_NAME, BPItems.ruby_gem);
     public static final Item ruby_sword = new ItemGemSword(BluePower.gemMaterial, Refs.RUBYSWORD_NAME, BPItems.ruby_gem);
     public static final Item ruby_pickaxe = new ItemGemPickaxe(BluePower.gemMaterial, Refs.RUBYPICKAXE_NAME, BPItems.ruby_gem);
@@ -234,7 +234,7 @@ public class BPItems {
         GameRegistry.registerItem(copper_wire, Refs.COPPERWIRE_NAME);
         GameRegistry.registerItem(iron_wire, Refs.IRONWIRE_NAME);
 
-        GameRegistry.registerItem(item_multipart_legacy, Refs.MULTIPART_NAME);
+        GameRegistry.registerItem(bluepower_multipart, Refs.MULTIPART_NAME);
 
         MinecraftForge.addGrassSeed(new ItemStack(flax_seeds), 5);
     }
