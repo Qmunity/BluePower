@@ -56,7 +56,7 @@ public class ItemPartLegacy extends Item {
     public static int convertLegacy(IInventory inv) {
         int count = 0;
         for (int i = 0; i < inv.getSizeInventory(); i++) {
-            if (inv.getStackInSlot(i) != null && inv.getStackInSlot(i).getItem() == BPItems.item_multipart_legacy) {
+            if (inv.getStackInSlot(i) != null && inv.getStackInSlot(i).getItem() == BPItems.bluepower_multipart) {
                 convertLegacy(inv, i);
                 count++;
             }
