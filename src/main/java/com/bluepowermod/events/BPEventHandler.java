@@ -67,7 +67,8 @@ public class BPEventHandler {
             warned = true;
         }
     }
-
+//TODO threadsafe - http://pastebin.com/aWxuTjEm
+/*
     @SubscribeEvent
     public void onChunkLoad(ChunkEvent.Load event) {
         Iterable<TileEntity> list = event.getChunk().chunkTileEntityMap.values();
@@ -81,7 +82,7 @@ public class BPEventHandler {
             BluePower.log.info("Converted " + count + " item stacks to the new parts.");
         }
     }
-
+*/
     @SubscribeEvent
     public void onAnvilEvent(AnvilUpdateEvent event) {
 
