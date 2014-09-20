@@ -40,6 +40,7 @@ import com.bluepowermod.containers.ContainerSeedBag;
 import com.bluepowermod.containers.inventorys.InventoryItem;
 import com.bluepowermod.init.BPEnchantments;
 import com.bluepowermod.init.BPItems;
+import com.bluepowermod.init.Config;
 import com.bluepowermod.items.ItemPartLegacy;
 import com.bluepowermod.items.ItemSeedBag;
 import com.bluepowermod.items.ItemSickle;
@@ -70,15 +71,17 @@ public class BPEventHandler {
 
     @SubscribeEvent
     public void onChunkLoad(ChunkEvent.Load event) {
-        Iterable<TileEntity> list = event.getChunk().chunkTileEntityMap.values();
-        int count = 0;
-        for (TileEntity te : list) {
-            if (te instanceof IInventory) {
-                count += ItemPartLegacy.convertLegacy((IInventory) te);
+        if (Config.convertLegacyPartsOnChunkLoad) {
+            Iterable<TileEntity> list = event.getChunk().chunkTileEntityMap.values();
+            int count = 0;
+            for (TileEntity te : list) {
+                if (te instanceof IInventory) {
+                    count += ItemPartLegacy.convertLegacy((IInventory) te);
+                }
             }
-        }
-        if (count > 0) {
-            BluePower.log.info("Converted " + count + " item stacks to the new parts.");
+            if (count > 0) {
+                BluePower.log.info("Converted " + count + " item stacks to the new parts.");
+            }
         }
     }
 
