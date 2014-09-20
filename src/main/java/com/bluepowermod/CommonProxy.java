@@ -21,28 +21,27 @@ import net.minecraft.entity.player.EntityPlayer;
 import cpw.mods.fml.server.FMLServerHandler;
 
 public class CommonProxy {
-    
+
     public void init() {
-    
+
     }
-    
+
     public void initRenderers() {
-    
+
     }
-    
+
     public EntityPlayer getPlayer() {
-    
+
         return null;
     }
-    
+
     public boolean isSneakingInGui() {
-    
+
         return false;
     }
-    
+
     public String getSavePath() {
-    
-        String mcDataLocation = FMLServerHandler.instance().getSavesDirectory().getAbsolutePath();
-        return mcDataLocation.substring(0, mcDataLocation.length() - 2);
+
+        return FMLServerHandler.instance().getSavesDirectory().getAbsolutePath();
     }
 }
