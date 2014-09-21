@@ -329,7 +329,9 @@ part.bluepower:integratedCircuit3x3.name=3x3 Integrated Circuit
 part.bluepower:integratedCircuit5x5.name=5x5 Integrated Circuit
 part.bluepower:integratedCircuit7x7.name=7x7 Integrated Circuit
 part.bluepower:pneumaticTube.name=Pneumatic Tube
+part.bluepower:pneumaticTubeOpaque.name=Opaque Pneumatic Tube
 part.bluepower:restrictionTube.name=Restriction Tube
+part.bluepower:restrictionTubeOpaque.name=Opaque Restriction Tube
 part.bluepower:magTube.name=Magtube
 part.bluepower:accelerator.name=Accelerator
 
@@ -553,3 +555,4 @@ bluepower.waila.rsLatch.noFeedback=No Feedback
 waila.pneumaticTube.color=Colors
 waila.machine.stuffed=Stuffed
 
+message.oldpart=This is an old part. Put in player inventory to restore.

@@ -38,6 +38,8 @@ import com.bluepowermod.compat.CompatibilityUtils;
 import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.helper.TileEntityCache;
 import com.bluepowermod.init.Config;
+import com.bluepowermod.network.NetworkHandler;
+import com.bluepowermod.network.messages.MessageRedirectTubeStack;
 import com.bluepowermod.tileentities.IFuzzyRetrieving;
 import com.bluepowermod.tileentities.tier3.TileManager;
 import com.qmunity.lib.util.Dependencies;
@@ -61,6 +63,16 @@ public class TubeLogic implements IPneumaticTube {
     public TubeLogic(PneumaticTube tube) {
 
         this.tube = tube;
+    }
+
+    public void onClientTubeRedirectPacket(TubeStack stack) {
+        for (TubeStack s : tubeStacks) {// Check if there's a stack that's awaiting server instructions that matches the sent stack.
+            if (/* !s.enabled && */ItemStack.areItemStacksEqual(s.stack, stack.stack) && stack.color == s.color) {
+                tubeStacks.remove(s);
+                break;
+            }
+        }
+        tubeStacks.add(stack);
     }
 
     public void clearNodeCaches() {
@@ -144,7 +156,7 @@ public class TubeLogic implements IPneumaticTube {
                         } else {
                             tubeStack.heading = heading.getKey();
                         }
-                        tube.sendUpdatePacket();
+                        NetworkHandler.sendToAllAround(new MessageRedirectTubeStack(tube, tubeStack), tube.getWorld());
                     } else {
                         tubeStack.enabled = false;
                     }
@@ -265,8 +277,10 @@ public class TubeLogic implements IPneumaticTube {
         Map<TubeEdge, ForgeDirection> validDestinations = new LinkedHashMap<TubeEdge, ForgeDirection>();// using a LinkedHashMap so the order doesn't
                                                                                                         // change, used for round robin.
 
-        distances.put(getNode(), 0);// make this the origin.
-        traversingNodes.add(getNode());
+        if (getNode() != null) {
+            distances.put(getNode(), 0);// make this the origin.
+            traversingNodes.add(getNode());
+        }
 
         boolean firstRun = true;
         int closestDest = 0;

@@ -50,7 +50,6 @@ import com.qmunity.lib.util.Dependencies;
  */
 
 public class PneumaticTube extends BPPart {
-
     public final boolean[] connections = new boolean[6];
     /**
      * true when != 2 connections, when this is true the logic doesn't have to 'think' which way an item should go.
@@ -356,7 +355,8 @@ public class PneumaticTube extends BPPart {
         renderMiddle(aabbs.get(0), getSideIcon());
         for (int i = 1; i < aabbs.size(); i++) {
             AxisAlignedBB aabb = aabbs.get(i);
-            IIcon icon = this instanceof MagTube ? getNodeIcon() : IconSupplier.pneumaticTubeNode;
+            IIcon icon = !(this instanceof RestrictionTube) ? getNodeIcon()
+                    : this instanceof RestrictionTubeOpaque ? IconSupplier.pneumaticTubeOpaqueNode : IconSupplier.pneumaticTubeNode;
             if (icon != null) {
                 if (aabb.minZ == 0) {
                     double minX = icon.getInterpolatedU(aabb.minX * 16);
@@ -427,10 +427,10 @@ public class PneumaticTube extends BPPart {
                 t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.maxZ, minX, maxZ);
                 t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.maxZ, maxX, maxZ);
 
-                t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.minZ, maxX, minZ);// top
-                t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.maxZ, maxX, maxZ);
-                t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.maxZ, minX, maxZ);
-                t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.minZ, minX, minZ);
+                t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.minZ, minX, minZ);// top
+                t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.maxZ, minX, maxZ);
+                t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.maxZ, maxX, maxZ);
+                t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.minZ, maxX, minZ);
             }
 
             if (!connections[4]) {
@@ -442,13 +442,13 @@ public class PneumaticTube extends BPPart {
 
                 t.addVertexWithUV(aabb.minX, aabb.minY, aabb.minZ, minY, minZ);// minX
                 t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.minZ, maxY, minZ);
-                t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.maxX, maxY, maxZ);
+                t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.maxZ, maxY, maxZ);
                 t.addVertexWithUV(aabb.minX, aabb.minY, aabb.maxZ, minY, maxZ);
 
-                t.addVertexWithUV(aabb.minX, aabb.minY, aabb.minZ, minY, minZ);// minX
-                t.addVertexWithUV(aabb.minX, aabb.minY, aabb.maxZ, minY, maxZ);
-                t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.maxX, maxY, maxZ);
-                t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.minZ, maxY, minZ);
+                t.addVertexWithUV(aabb.minX, aabb.minY, aabb.minZ, maxY, minZ);// minX
+                t.addVertexWithUV(aabb.minX, aabb.minY, aabb.maxZ, maxY, maxZ);
+                t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.maxZ, minY, maxZ);
+                t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.minZ, minY, minZ);
             }
 
             if (!connections[5]) {
@@ -491,10 +491,10 @@ public class PneumaticTube extends BPPart {
             }
             if (icon != IconSupplier.pneumaticTubeColorSide && icon != IconSupplier.pneumaticTubeColorNode || color[2] != TubeColor.NONE) {
                 if (connections[4]) {// or 5
-                    t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.minZ, minX, maxY);// minZ
-                    t.addVertexWithUV(aabb.minX, aabb.minY, aabb.minZ, minX, minY);
-                    t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.minZ, maxX, minY);
-                    t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.minZ, maxX, maxY);
+                    t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.minZ, maxX, maxY);// minZ
+                    t.addVertexWithUV(aabb.minX, aabb.minY, aabb.minZ, maxX, minY);
+                    t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.minZ, minX, minY);
+                    t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.minZ, minX, maxY);
 
                     t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.minZ, minX, maxY);// minZ
                     t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.minZ, maxX, maxY);
@@ -598,20 +598,20 @@ public class PneumaticTube extends BPPart {
                     t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.maxZ, minX, minZ);
                     t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.maxZ, minX, maxZ);
 
-                    t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.minZ, maxX, maxZ);// top
-                    t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.maxZ, minX, maxZ);
-                    t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.maxZ, minX, minZ);
-                    t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.minZ, maxX, minZ);
+                    t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.minZ, minX, maxZ);// top
+                    t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.maxZ, maxX, maxZ);
+                    t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.maxZ, maxX, minZ);
+                    t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.minZ, minX, minZ);
                 } else {
                     t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.minZ, maxX, minZ);// top
                     t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.minZ, minX, minZ);
                     t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.maxZ, minX, maxZ);
                     t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.maxZ, maxX, maxZ);
 
-                    t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.minZ, maxX, minZ);// top
-                    t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.maxZ, maxX, maxZ);
-                    t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.maxZ, minX, maxZ);
-                    t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.minZ, minX, minZ);
+                    t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.minZ, minX, minZ);// top
+                    t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.maxZ, minX, maxZ);
+                    t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.maxZ, maxX, maxZ);
+                    t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.minZ, maxX, minZ);
                 }
             }
         }
@@ -627,25 +627,25 @@ public class PneumaticTube extends BPPart {
             }
             if (icon != IconSupplier.pneumaticTubeColorSide && icon != IconSupplier.pneumaticTubeColorNode || color[4] != TubeColor.NONE) {
                 if (connections[0]) {
-                    t.addVertexWithUV(aabb.minX, aabb.minY, aabb.minZ, maxY, maxZ);// minX
-                    t.addVertexWithUV(aabb.minX, aabb.minY, aabb.maxZ, minY, maxZ);
-                    t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.maxX, minY, minZ);
-                    t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.minZ, maxY, minZ);
+                    t.addVertexWithUV(aabb.minX, aabb.minY, aabb.minZ, minY, maxZ);// minX
+                    t.addVertexWithUV(aabb.minX, aabb.minY, aabb.maxZ, maxY, maxZ);
+                    t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.maxX, maxY, minZ);
+                    t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.minZ, minY, minZ);
 
-                    t.addVertexWithUV(aabb.minX, aabb.minY, aabb.minZ, maxY, maxZ);// minX
-                    t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.minZ, maxY, minZ);
-                    t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.maxX, minY, minZ);
-                    t.addVertexWithUV(aabb.minX, aabb.minY, aabb.maxZ, minY, maxZ);
+                    t.addVertexWithUV(aabb.minX, aabb.minY, aabb.minZ, minY, maxZ);// minX
+                    t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.minZ, minY, minZ);
+                    t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.maxX, maxY, minZ);
+                    t.addVertexWithUV(aabb.minX, aabb.minY, aabb.maxZ, maxY, maxZ);
                 } else {
                     t.addVertexWithUV(aabb.minX, aabb.minY, aabb.minZ, minY, minZ);// minX
                     t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.minZ, maxY, minZ);
                     t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.maxX, maxY, maxZ);
                     t.addVertexWithUV(aabb.minX, aabb.minY, aabb.maxZ, minY, maxZ);
 
-                    t.addVertexWithUV(aabb.minX, aabb.minY, aabb.minZ, minY, minZ);// minX
-                    t.addVertexWithUV(aabb.minX, aabb.minY, aabb.maxZ, minY, maxZ);
-                    t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.maxX, maxY, maxZ);
-                    t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.minZ, maxY, minZ);
+                    t.addVertexWithUV(aabb.minX, aabb.minY, aabb.minZ, maxY, minZ);// minX
+                    t.addVertexWithUV(aabb.minX, aabb.minY, aabb.maxZ, maxY, maxZ);
+                    t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.maxX, minY, maxZ);
+                    t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.minZ, minY, minZ);
                 }
             }
         }
@@ -663,15 +663,15 @@ public class PneumaticTube extends BPPart {
             if (icon != IconSupplier.pneumaticTubeColorSide && icon != IconSupplier.pneumaticTubeColorNode
                     && icon != IconSupplier.pneumaticTubeColorNode || color[5] != TubeColor.NONE) {
                 if (connections[0]) {
-                    t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.minZ, minY, maxZ);// maxX
-                    t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.minZ, minY, minZ);
-                    t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.maxZ, maxY, minZ);
-                    t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.maxZ, maxY, maxZ);
+                    t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.minZ, maxY, maxZ);// maxX
+                    t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.minZ, maxY, minZ);
+                    t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.maxZ, minY, minZ);
+                    t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.maxZ, minY, maxZ);
 
-                    t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.minZ, minY, maxZ);// maxX
-                    t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.maxZ, maxY, maxZ);
-                    t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.maxZ, maxY, minZ);
-                    t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.minZ, minY, minZ);
+                    t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.minZ, maxY, maxZ);// maxX
+                    t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.maxZ, minY, maxZ);
+                    t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.maxZ, minY, minZ);
+                    t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.minZ, maxY, minZ);
                 } else {
                     t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.minZ, minY, maxZ);// maxX
                     t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.minZ, maxY, maxZ);
@@ -721,10 +721,10 @@ public class PneumaticTube extends BPPart {
                 t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.minZ, minX, minY);
                 t.addVertexWithUV(aabb.minX, aabb.minY, aabb.minZ, maxX, minY);
 
-                t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.minZ, maxX, maxY);// minZ
-                t.addVertexWithUV(aabb.minX, aabb.minY, aabb.minZ, maxX, minY);
-                t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.minZ, minX, minY);
-                t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.minZ, minX, maxY);
+                t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.minZ, maxX, minY);// minZ
+                t.addVertexWithUV(aabb.minX, aabb.minY, aabb.minZ, maxX, maxY);
+                t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.minZ, minX, maxY);
+                t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.minZ, minX, minY);
             }
         }
 
@@ -735,10 +735,10 @@ public class PneumaticTube extends BPPart {
                 double minY = icon.getInterpolatedV(aabb.minY * 16);
                 double maxY = icon.getInterpolatedV(aabb.maxY * 16);
                 t.setNormal(0, 0, 1);
-                t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.maxZ, minX, minY);
-                t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.maxZ, minX, maxY);// maxZ
-                t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.maxZ, maxX, maxY);
-                t.addVertexWithUV(aabb.minX, aabb.minY, aabb.maxZ, maxX, minY);
+                t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.maxZ, maxX, maxY);
+                t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.maxZ, maxX, minY);// maxZ
+                t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.maxZ, minX, minY);
+                t.addVertexWithUV(aabb.minX, aabb.minY, aabb.maxZ, minX, maxY);
 
                 t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.maxZ, minX, minY);
                 t.addVertexWithUV(aabb.minX, aabb.minY, aabb.maxZ, maxX, minY);
@@ -756,10 +756,10 @@ public class PneumaticTube extends BPPart {
                 t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.maxZ, maxX, maxY);
                 t.addVertexWithUV(aabb.minX, aabb.minY, aabb.maxZ, maxX, minY);
 
-                t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.maxZ, minX, minY);
-                t.addVertexWithUV(aabb.minX, aabb.minY, aabb.maxZ, maxX, minY);
-                t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.maxZ, maxX, maxY);
-                t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.maxZ, minX, maxY);// maxZ
+                t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.maxZ, maxX, maxY);
+                t.addVertexWithUV(aabb.minX, aabb.minY, aabb.maxZ, minX, maxY);
+                t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.maxZ, minX, minY);
+                t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.maxZ, maxX, minY);// maxZ
             }
         }
 
@@ -770,10 +770,10 @@ public class PneumaticTube extends BPPart {
                 double minZ = icon.getInterpolatedV(aabb.minX * 16);
                 double maxZ = icon.getInterpolatedV(aabb.maxX * 16);
                 t.setNormal(0, -1, 0);
-                t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.minZ, minX, maxZ);// bottom
-                t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.maxZ, maxX, maxZ);
-                t.addVertexWithUV(aabb.minX, aabb.minY, aabb.maxZ, maxX, minZ);
-                t.addVertexWithUV(aabb.minX, aabb.minY, aabb.minZ, minX, minZ);
+                t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.minZ, maxX, minZ);// bottom
+                t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.maxZ, minX, minZ);
+                t.addVertexWithUV(aabb.minX, aabb.minY, aabb.maxZ, minX, maxZ);
+                t.addVertexWithUV(aabb.minX, aabb.minY, aabb.minZ, maxX, maxZ);
 
                 t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.minZ, minX, maxZ);// bottom
                 t.addVertexWithUV(aabb.minX, aabb.minY, aabb.minZ, minX, minZ);
@@ -790,10 +790,10 @@ public class PneumaticTube extends BPPart {
                 t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.minZ, maxX, minZ);
                 t.addVertexWithUV(aabb.minX, aabb.minY, aabb.minZ, minX, minZ);
 
-                t.addVertexWithUV(aabb.minX, aabb.minY, aabb.maxZ, minX, maxZ);// bottom
-                t.addVertexWithUV(aabb.minX, aabb.minY, aabb.minZ, minX, minZ);
-                t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.minZ, maxX, minZ);
-                t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.maxZ, maxX, maxZ);
+                t.addVertexWithUV(aabb.minX, aabb.minY, aabb.maxZ, maxX, minZ);// bottom
+                t.addVertexWithUV(aabb.minX, aabb.minY, aabb.minZ, maxX, maxZ);
+                t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.minZ, minX, maxZ);
+                t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.maxZ, minX, minZ);
 
             }
         }
@@ -863,10 +863,10 @@ public class PneumaticTube extends BPPart {
                 t.addVertexWithUV(aabb.minX, aabb.minY, aabb.maxZ, maxY, maxZ);
                 t.addVertexWithUV(aabb.minX, aabb.minY, aabb.minZ, maxY, minZ);
 
-                t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.minZ, minY, minZ);// minX
-                t.addVertexWithUV(aabb.minX, aabb.minY, aabb.minZ, maxY, minZ);
-                t.addVertexWithUV(aabb.minX, aabb.minY, aabb.maxZ, maxY, maxZ);
-                t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.maxZ, minY, maxZ);
+                t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.minZ, minY, maxZ);// minX
+                t.addVertexWithUV(aabb.minX, aabb.minY, aabb.minZ, maxY, maxZ);
+                t.addVertexWithUV(aabb.minX, aabb.minY, aabb.maxZ, maxY, minZ);
+                t.addVertexWithUV(aabb.minX, aabb.maxY, aabb.maxZ, minY, minZ);
             }
         }
 
@@ -878,10 +878,10 @@ public class PneumaticTube extends BPPart {
                 double minZ = icon.getInterpolatedV(aabb.minY * 16);
                 double maxZ = icon.getInterpolatedV(aabb.maxY * 16);
                 t.setNormal(1, 0, 0);
-                t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.minZ, minY, maxZ);// maxX
-                t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.maxZ, maxY, maxZ);
-                t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.maxZ, maxY, minZ);
-                t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.minZ, minY, minZ);
+                t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.minZ, maxY, minZ);// maxX
+                t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.maxZ, minY, minZ);
+                t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.maxZ, minY, maxZ);
+                t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.minZ, maxY, maxZ);
 
                 t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.minZ, minY, maxZ);// maxX
                 t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.minZ, minY, minZ);
@@ -893,15 +893,15 @@ public class PneumaticTube extends BPPart {
                 double minZ = icon.getInterpolatedV(aabb.minZ * 16);
                 double maxZ = icon.getInterpolatedV(aabb.maxZ * 16);
                 t.setNormal(1, 0, 0);
-                t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.maxZ, minY, maxZ);// maxX
-                t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.maxZ, maxY, maxZ);
-                t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.minZ, maxY, minZ);
-                t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.minZ, minY, minZ);
+                t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.maxZ, maxY, maxZ);// maxX
+                t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.maxZ, minY, maxZ);
+                t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.minZ, minY, minZ);
+                t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.minZ, maxY, minZ);
 
-                t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.maxZ, minY, maxZ);// maxX
-                t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.minZ, minY, minZ);
-                t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.minZ, maxY, minZ);
-                t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.maxZ, maxY, maxZ);
+                t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.maxZ, minY, minZ);// maxX
+                t.addVertexWithUV(aabb.maxX, aabb.minY, aabb.minZ, minY, maxZ);
+                t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.minZ, maxY, maxZ);
+                t.addVertexWithUV(aabb.maxX, aabb.maxY, aabb.maxZ, maxY, minZ);
 
             }
         }

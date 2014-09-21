@@ -49,7 +49,7 @@ public class TileTransposer extends TileMachineBase {
 
         super.redstoneChanged(newValue);
 
-        if (isBufferEmpty() && newValue) {
+        if (!worldObj.isRemote && isBufferEmpty() && newValue) {
             suckItems();
             pullItem();
         }

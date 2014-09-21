@@ -42,6 +42,7 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
     protected byte animationTicker = -1;
     protected static final int ANIMATION_TIME = 7;
     private boolean isAnimating;
+    private boolean ejectionScheduled;
 
     @Override
     public void updateEntity() {
@@ -49,8 +50,9 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
         super.updateEntity();
 
         if (!worldObj.isRemote) {
-            if (getTicker() % BUFFER_EMPTY_INTERVAL == 0) {
+            if (ejectionScheduled || getTicker() % BUFFER_EMPTY_INTERVAL == 0) {
                 ejectItems();
+                ejectionScheduled = false;
             }
             if (animationTicker >= 0 && isBufferEmpty()) {
                 if (++animationTicker > ANIMATION_TIME) {
@@ -62,27 +64,27 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
     }
 
     private void ejectItems() {
-
-        if (!internalItemStackBuffer.isEmpty()) {
+        for (Iterator<TubeStack> iterator = internalItemStackBuffer.iterator(); iterator.hasNext();) {
+            TubeStack tubeStack = iterator.next();
             if (IOHelper.canInterfaceWith(getTileCache()[getOutputDirection().ordinal()].getTileEntity(), getFacingDirection())) {
-                TubeStack tubeStack = internalItemStackBuffer.get(0);
                 ItemStack returnedStack = IOHelper.insert(getTileCache()[getOutputDirection().ordinal()].getTileEntity(), tubeStack.stack,
                         getFacingDirection(), tubeStack.color, false);
                 if (returnedStack == null) {
-                    internalItemStackBuffer.remove(0);
+                    iterator.remove();
                     markDirty();
                 } else if (returnedStack.stackSize != tubeStack.stack.stackSize) {
                     markDirty();
+                } else {
+                    break;
                 }
             } else if (spawnItemsInWorld) {
                 ForgeDirection direction = getFacingDirection().getOpposite();
                 if (worldObj.isAirBlock(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ)) {
-                    for (Iterator<TubeStack> iterator = internalItemStackBuffer.iterator(); iterator.hasNext();) {
-                        ItemStack itemStack = iterator.next().stack;
-                        ejectItemInWorld(itemStack, direction);
-                        iterator.remove();
-                        markDirty();
-                    }
+                    ejectItemInWorld(tubeStack.stack, direction);
+                    iterator.remove();
+                    markDirty();
+                } else {
+                    break;
                 }
             }
         }
@@ -102,7 +104,7 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
         if (!worldObj.isRemote) {
             internalItemStackBuffer.add(new TubeStack(stack, getOutputDirection().getOpposite(), color));
             if (internalItemStackBuffer.size() == 1)
-                scheduleInjection();
+                ejectionScheduled = true;
             animationTicker = 0;
             sendUpdatePacket();
         }
@@ -138,7 +140,7 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
 
     protected boolean isBufferEmpty() {
 
-        return internalItemStackBuffer.isEmpty();
+        return internalItemStackBuffer.isEmpty();// also say the buffer is empty when a immediate injection is scheduled.
     }
 
     public TileEntityCache[] getTileCache() {
@@ -238,7 +240,7 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
     @Override
     public TubeStack acceptItemFromTube(TubeStack stack, ForgeDirection from, boolean simulate) {
 
-        if (from == getFacingDirection() && !isBufferEmpty())
+        if (from == getFacingDirection() && !isBufferEmpty() && !ejectionScheduled)
             return stack;
         if (!simulate)
             this.addItemToOutputBuffer(stack.stack, stack.color);

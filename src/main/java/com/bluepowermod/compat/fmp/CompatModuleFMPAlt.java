@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MovingObjectPosition;
@@ -22,6 +23,7 @@ import com.bluepowermod.api.part.BPPart;
 import com.bluepowermod.api.part.BPPartFace;
 import com.bluepowermod.api.vec.Vector3;
 import com.bluepowermod.compat.CompatModule;
+import com.bluepowermod.part.ItemBPPart;
 import com.bluepowermod.tileentities.BPTileMultipart;
 
 import cpw.mods.fml.common.event.FMLInitializationEvent;
@@ -149,6 +151,11 @@ public class CompatModuleFMPAlt extends CompatModule implements IMultipartCompat
     public int getMOPData(MovingObjectPosition mop) {
 
         return (Integer) mop.hitInfo;// TODO assign the subpart index hit to right clicking (for the Pneumatic Tube).
+    }
+
+    @Override
+    public Item getNewMultipartItem(String name) {
+        return new ItemBPPart(name);
     }
 
 }

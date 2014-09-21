@@ -31,42 +31,41 @@ import com.bluepowermod.compat.CompatibilityUtils;
 import cpw.mods.fml.client.FMLClientHandler;
 
 public class ClientProxy extends CommonProxy {
-    
+
     @Override
     public void init() {
-    
+
     }
-    
+
     @Override
     public void initRenderers() {
-    
+
         MinecraftForge.EVENT_BUS.register(new IconSupplier());
         Renderers.init();
-        
+
         CompatibilityUtils.registerRenders();
     }
-    
+
     @Override
     public EntityPlayer getPlayer() {
-    
+
         return FMLClientHandler.instance().getClientPlayerEntity();
     }
-    
+
     @Override
     public boolean isSneakingInGui() {
-    
+
         return Keyboard.isKeyDown(Minecraft.getMinecraft().gameSettings.keyBindSneak.getKeyCode());
     }
-    
+
     public static GuiScreen getOpenedGui() {
-    
+
         return FMLClientHandler.instance().getClient().currentScreen;
     }
-    
+
     @Override
     public String getSavePath() {
-    
-        String mcDataLocation = Minecraft.getMinecraft().mcDataDir.getAbsolutePath();
-        return mcDataLocation.substring(0, mcDataLocation.length() - 2);
+
+        return Minecraft.getMinecraft().mcDataDir.getAbsolutePath();
     }
 }

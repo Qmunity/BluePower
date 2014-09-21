@@ -14,6 +14,7 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MovingObjectPosition;
@@ -259,6 +260,11 @@ public class CompatModuleFMP extends CompatModule implements IMultipartCompat {
     public int getMOPData(MovingObjectPosition mop) {
 
         return mop instanceof ExtendedMOP ? (Integer) ((ExtendedMOP) mop).data : -1;
+    }
+
+    @Override
+    public Item getNewMultipartItem(String name) {
+        return new ItemBPMultipart(name);
     }
 
 }

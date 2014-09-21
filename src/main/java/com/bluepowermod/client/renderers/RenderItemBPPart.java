@@ -8,9 +8,6 @@
 
 package com.bluepowermod.client.renderers;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer;
 
@@ -21,7 +18,11 @@ import com.bluepowermod.part.PartRegistry;
 
 public class RenderItemBPPart implements IItemRenderer {
 
-    private final List<BPPart> parts = new ArrayList<BPPart>();
+    private final BPPart part;
+
+    public RenderItemBPPart(String partId) {
+        part = PartRegistry.getInstance().createPart(partId);
+    }
 
     @Override
     public boolean handleRenderType(ItemStack item, ItemRenderType type) {
@@ -38,24 +39,6 @@ public class RenderItemBPPart implements IItemRenderer {
     @SuppressWarnings("incomplete-switch")
     @Override
     public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
-
-        BPPart part = null;
-        try {
-            for (BPPart p : parts)
-                if (p.getType().equals(PartRegistry.getInstance().getPartIdFromItem(item))) {
-                    part = p;
-                    break;
-                }
-            if (part == null) {
-                part = PartRegistry.getInstance().createPartFromItem(item);
-                if (part != null)
-                    parts.add(part);
-            }
-        } catch (Exception ex) {
-        }
-        if (part == null) {
-            part = PartRegistry.getInstance().createPart(PartRegistry.getInstance().ICON_PART);
-        }
 
         GL11.glPushMatrix();
         {

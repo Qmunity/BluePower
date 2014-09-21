@@ -21,68 +21,72 @@ import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 
 import com.bluepowermod.BluePower;
+import com.bluepowermod.part.tube.TubeStack;
 import com.bluepowermod.util.Refs;
 
 import cpw.mods.fml.client.event.ConfigChangedEvent;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class Config {
-    
-    public static boolean  generateTungsten;
-    public static int      minTungstenY;
-    public static int      maxTungstenY;
-    public static int      veinCountTungsten;
-    public static int      veinSizeTungsten;
-    public static boolean  generateCopper;
-    public static int      minCopperY;
-    public static int      maxCopperY;
-    public static int      veinCountCopper;
-    public static int      veinSizeCopper;
-    public static boolean  generateSilver;
-    public static int      minSilverY;
-    public static int      maxSilverY;
-    public static int      veinCountSilver;
-    public static int      veinSizeSilver;
-    public static boolean  generateZinc;
-    public static int      minZincY;
-    public static int      maxZincY;
-    public static int      veinCountZinc;
-    public static int      veinSizeZinc;
-    public static boolean  generateTeslatite;
-    public static int      minTeslatiteY;
-    public static int      maxTeslatiteY;
-    public static int      veinCountTeslatite;
-    public static int      veinSizeTeslatite;
-    public static boolean  generateRuby;
-    public static int      minRubyY;
-    public static int      maxRubyY;
-    public static int      veinCountRuby;
-    public static int      veinSizeRuby;
-    public static boolean  generateAmethyst;
-    public static int      minAmethystY;
-    public static int      maxAmethystY;
-    public static int      veinCountAmethyst;
-    public static int      veinSizeAmethyst;
-    public static boolean  generateSapphire;
-    public static int      minSapphireY;
-    public static int      maxSapphireY;
-    public static int      veinCountSapphire;
-    public static int      veinSizeSapphire;
-    public static double   volcanoActiveToInactiveRatio;
-    public static double   volcanoSpawnChance;          // chance of a volcano spawning per chunk.
-    public static boolean  useAltScrewdriverRecipe;
-    public static int      vorpalEnchantmentId;
-    public static int      disjunctionEnchantmentId;
+
+    public static boolean generateTungsten;
+    public static int minTungstenY;
+    public static int maxTungstenY;
+    public static int veinCountTungsten;
+    public static int veinSizeTungsten;
+    public static boolean generateCopper;
+    public static int minCopperY;
+    public static int maxCopperY;
+    public static int veinCountCopper;
+    public static int veinSizeCopper;
+    public static boolean generateSilver;
+    public static int minSilverY;
+    public static int maxSilverY;
+    public static int veinCountSilver;
+    public static int veinSizeSilver;
+    public static boolean generateZinc;
+    public static int minZincY;
+    public static int maxZincY;
+    public static int veinCountZinc;
+    public static int veinSizeZinc;
+    public static boolean generateTeslatite;
+    public static int minTeslatiteY;
+    public static int maxTeslatiteY;
+    public static int veinCountTeslatite;
+    public static int veinSizeTeslatite;
+    public static boolean generateRuby;
+    public static int minRubyY;
+    public static int maxRubyY;
+    public static int veinCountRuby;
+    public static int veinSizeRuby;
+    public static boolean generateAmethyst;
+    public static int minAmethystY;
+    public static int maxAmethystY;
+    public static int veinCountAmethyst;
+    public static int veinSizeAmethyst;
+    public static boolean generateSapphire;
+    public static int minSapphireY;
+    public static int maxSapphireY;
+    public static int veinCountSapphire;
+    public static int veinSizeSapphire;
+    public static double volcanoActiveToInactiveRatio;
+    public static double volcanoSpawnChance; // chance of a volcano spawning per chunk.
+    public static boolean useAltScrewdriverRecipe;
+    public static int vorpalEnchantmentId;
+    public static int disjunctionEnchantmentId;
     public static String[] alloyFurnaceBlacklist;
-    public static boolean  enableTubeCaching;
-    public static boolean  enableGateSounds;
-    public static String   tubeRenderMode;
-    public static int      veinSizeMarble;
-    
-    public static boolean  serverCircuitSavingOpOnly;
-    
+
+    public static boolean enableTubeCaching;
+    public static boolean enableGateSounds;
+
+    public static int veinSizeMarble;
+
+    public static boolean serverCircuitSavingOpOnly;
+
+    public static boolean convertLegacyPartsOnChunkLoad;
+
     public static void syncConfig(Configuration config) {
-    
+
         config.addCustomCategoryComment(Refs.CONFIG_WORLDGEN, "Toggle blocks being generated into the world");
         generateTungsten = config.get(Refs.CONFIG_TUNGSTEN, "generateTungsten", true).getBoolean(true);
         minTungstenY = config.get(Refs.CONFIG_TUNGSTEN, "minTungstenY", 5).getInt();
@@ -128,37 +132,41 @@ public class Config {
         volcanoActiveToInactiveRatio = config.get(Refs.CONFIG_WORLDGEN, "volcanoActiveToInactiveRatio", 0.5).getDouble(0);
         useAltScrewdriverRecipe = config.get(Refs.CONFIG_SETTINGS, "useAltScrewdriverRecipe", false).getBoolean(false);
         veinSizeMarble = config.get(Refs.CONFIG_WORLDGEN, "veinSizeMarble", 2048).getInt();
-        
+
         config.addCustomCategoryComment(Refs.CONFIG_RECIPES, "Toggle recipes to be enabled or not");
         alloyFurnaceBlacklist = config.get(Refs.CONFIG_RECIPES, "alloyFurnaceBlacklist", new String[0]).getStringList();
-        
+
         Property prop = config.get(Refs.CONFIG_TUBES, "Enable Tube Caching", true);
         prop.comment = "When enabled, the Tube routing is more friendly for the CPU. In return it uses a bit more RAM. Caching also may contain bugs still.";
         enableTubeCaching = prop.getBoolean();
-        
+
         prop = config.get(Refs.CONFIG_TUBES, "Tube Render Mode", "auto");
         prop.comment = "When encountering FPS issues with tubes with lots of items in it. Valid modes: \"normal\": Normal rendering, \"reduced\": All items going through tubes will display as 'one' item, \"none\": Only a small dot renders, \"auto\": will switch to \"normal\" on fancy graphics mode, and to \"reduced\" otherwise.";
-        tubeRenderMode = prop.getString();
+        String tubeRenderMode = prop.getString();
         if (!tubeRenderMode.equals("normal") && !tubeRenderMode.equals("reduced") && !tubeRenderMode.equals("none")) {
             tubeRenderMode = "auto";
         }
-        
+        TubeStack.renderMode = TubeStack.RenderMode.valueOf(tubeRenderMode.toUpperCase());
+
         serverCircuitSavingOpOnly = config.get(Refs.CONFIG_CIRCUIT_DATABASE, "Server Template Saving by Ops only", false).getBoolean(false);
-        
+
         config.addCustomCategoryComment(Refs.CONFIG_ENCHANTS, "Toggle enchantment ids");
         vorpalEnchantmentId = config.get(Refs.CONFIG_ENCHANTS, "vorpalEnchantmentId", 100).getInt();
         disjunctionEnchantmentId = config.get(Refs.CONFIG_ENCHANTS, "disjunctionEnchantmentId", 101).getInt();
-        
+
         enableGateSounds = config.get(Refs.CONFIG_SETTINGS, "Enable Gate Ticking Sounds", true).getBoolean();
-        
+
+        convertLegacyPartsOnChunkLoad = config.getBoolean("Convert legacy parts on chunk load", Configuration.CATEGORY_GENERAL, true,
+                "Set to false when getting 'concurrentModificationExceptions'.");
+
         if (config.hasChanged()) {
             config.save();
         }
     }
-    
+
     @SubscribeEvent
     public void onConfigChanged(ConfigChangedEvent event) {
-    
+
         if (event.modID.equals(Refs.MODID)) {
             syncConfig(BluePower.config);
         }
