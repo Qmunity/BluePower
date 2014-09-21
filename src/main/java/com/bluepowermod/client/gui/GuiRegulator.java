@@ -48,6 +48,7 @@ public class GuiRegulator extends GuiBase {
         super(regulator, new ContainerRegulator(invPlayer, regulator), resLoc);
         this.regulator = regulator;
         xSize = 212;
+        ySize += 2;
     }
 
     @Override

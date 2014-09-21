@@ -91,9 +91,14 @@ public class GuiBase extends GuiContainer implements IWidgetListener, INEIGuiHan
         String unlocalizedInfo = inventory.getInventoryName() + ".info";
         String localizedInfo = I18n.format(unlocalizedInfo);
         if (!unlocalizedInfo.equals(localizedInfo)) {
-            addAnimatedStat("gui.tab.info", Refs.MODID + ":textures/gui/widgets/gui_info.png", 0xFF8888FF, true).setText(unlocalizedInfo);
+            addAnimatedStat("gui.tab.info", Refs.MODID + ":textures/gui/widgets/gui_info.png", 0xFF8888FF, isInfoStatLeftSided()).setText(
+                    unlocalizedInfo);
 
         }
+    }
+
+    protected boolean isInfoStatLeftSided() {
+        return true;
     }
 
     protected GuiAnimatedStat addAnimatedStat(String title, ItemStack icon, int color, boolean leftSided) {
