@@ -50,7 +50,6 @@ import com.bluepowermod.util.Dependencies;
  */
 
 public class PneumaticTube extends BPPart {
-
     public final boolean[] connections = new boolean[6];
     /**
      * true when != 2 connections, when this is true the logic doesn't have to 'think' which way an item should go.

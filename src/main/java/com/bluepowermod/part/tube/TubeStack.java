@@ -7,6 +7,7 @@
  */
 package com.bluepowermod.part.tube;
 
+import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.entity.RenderManager;
@@ -28,6 +29,7 @@ import com.bluepowermod.client.renderers.RenderHelper;
 import com.bluepowermod.util.Refs;
 
 import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.common.network.ByteBufUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -160,6 +162,22 @@ public class TubeStack {
         stack.targetY = tag.getInteger("targetY");
         stack.targetZ = tag.getInteger("targetZ");
         stack.targetEntryDir = ForgeDirection.getOrientation(tag.getByte("targetEntryDir"));
+        return stack;
+    }
+
+    public void writeToPacket(ByteBuf buf) {
+        ByteBufUtils.writeItemStack(buf, stack);
+        buf.writeByte(heading.ordinal());
+        buf.writeByte((byte) color.ordinal());
+        buf.writeDouble(speed);
+        buf.writeDouble(progress);
+    }
+
+    public static TubeStack loadFromPacket(ByteBuf buf) {
+        TubeStack stack = new TubeStack(ByteBufUtils.readItemStack(buf), ForgeDirection.getOrientation(buf.readByte()),
+                TubeColor.values()[buf.readByte()]);
+        stack.speed = buf.readDouble();
+        stack.progress = buf.readDouble();
         return stack;
     }
 
