@@ -77,8 +77,7 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
             } else if (spawnItemsInWorld) {
                 ForgeDirection direction = getFacingDirection().getOpposite();
                 if (worldObj.isAirBlock(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ)) {
-                    ItemStack itemStack = iterator.next().stack;
-                    ejectItemInWorld(itemStack, direction);
+                    ejectItemInWorld(tubeStack.stack, direction);
                     iterator.remove();
                     markDirty();
                 } else {
