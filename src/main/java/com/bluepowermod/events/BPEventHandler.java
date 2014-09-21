@@ -44,7 +44,6 @@ import com.bluepowermod.init.Config;
 import com.bluepowermod.items.ItemPartLegacy;
 import com.bluepowermod.items.ItemSeedBag;
 import com.bluepowermod.items.ItemSickle;
-import com.bluepowermod.util.Dependencies;
 
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.eventhandler.Event.Result;
@@ -60,7 +59,8 @@ public class BPEventHandler {
     @SubscribeEvent
     public void onTick(TickEvent.PlayerTickEvent event) {
 
-        if (event.phase == TickEvent.Phase.END && event.player.worldObj.isRemote && !warned && !Loader.isModLoaded(Dependencies.FMP)) {
+        if (event.phase == TickEvent.Phase.END && event.player.worldObj.isRemote && !warned
+                && !Loader.isModLoaded(com.qmunity.lib.util.Dependencies.FMP)) {
             event.player.addChatComponentMessage(new ChatComponentText(EnumChatFormatting.RED + "WARNING: You're running BluePower without having "
                     + EnumChatFormatting.RED + "ForgeMultipart installed. Even though it will work, " + EnumChatFormatting.RED + "ForgeMultipart is "
                     + EnumChatFormatting.BOLD + "highly" + EnumChatFormatting.RESET + EnumChatFormatting.RED + " recommended. Continue at own risk, "

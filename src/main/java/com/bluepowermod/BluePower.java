@@ -32,8 +32,10 @@ import com.bluepowermod.network.NetworkHandler;
 import com.bluepowermod.recipe.AlloyFurnaceRegistry;
 import com.bluepowermod.util.Refs;
 import com.bluepowermod.world.WorldGenerationHandler;
+import com.qmunity.lib.util.Dependencies;
 
 import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
@@ -63,6 +65,11 @@ public class BluePower {
         event.getModMetadata().version = Refs.fullVersionString();
 
         log = event.getModLog();
+
+        if (!Loader.isModLoaded(Dependencies.QLib)) {
+            throw new IllegalStateException("Blue Power requires QmunityLib to be installed!");
+        }
+
         config = new Configuration(event.getSuggestedConfigurationFile());
 
         BPApi.init(new BluePowerAPI());
