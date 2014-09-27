@@ -7,10 +7,17 @@
  */
 package com.bluepowermod.tileentities.tier2;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
+import com.bluepowermod.api.BPApi;
+import com.bluepowermod.api.bluepower.BluePowerTier;
+import com.bluepowermod.api.bluepower.IBluePowered;
+import com.bluepowermod.api.power.IPowerBase;
+import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
+import com.bluepowermod.helper.IOHelper;
+import com.bluepowermod.helper.ItemStackHelper;
+import com.bluepowermod.init.BPBlocks;
+import com.bluepowermod.part.IGuiButtonSensitive;
+import com.bluepowermod.part.tube.TubeStack;
+import com.bluepowermod.tileentities.TileMachineBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
@@ -20,20 +27,16 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 
-import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
-import com.bluepowermod.helper.IOHelper;
-import com.bluepowermod.helper.ItemStackHelper;
-import com.bluepowermod.init.BPBlocks;
-import com.bluepowermod.part.IGuiButtonSensitive;
-import com.bluepowermod.part.tube.TubeStack;
-import com.bluepowermod.tileentities.TileMachineBase;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * 
  * @author MineMaarten
  */
 
-public class TileSortingMachine extends TileMachineBase implements ISidedInventory, IGuiButtonSensitive {
+public class TileSortingMachine extends TileMachineBase implements ISidedInventory, IGuiButtonSensitive, IBluePowered {
 
     private ItemStack[] inventory = new ItemStack[40];
     public int curColumn = 0;
@@ -44,10 +47,33 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
     public final TubeColor[] colors = new TubeColor[9];
     public int[] fuzzySettings = new int[8];
 
+    private IPowerBase handler;
+
     public TileSortingMachine() {
 
         for (int i = 0; i < colors.length; i++)
             colors[i] = TubeColor.NONE;
+    }
+
+    @Override
+    public boolean isPowered() {
+
+        return false;
+    }
+
+    @Override
+    public BluePowerTier getTier() {
+
+        return null;
+    }
+
+    @Override
+    public IPowerBase getHandler() {
+        if(handler == null){
+            handler = BPApi.getInstance().getNewPowerHandler();
+            handler.init(this);
+        }
+        return handler;
     }
 
     public enum PullMode {
