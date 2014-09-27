@@ -172,6 +172,8 @@ public class Refs {
     public static final String WOOLCARD_NAME           = "wool_card";
     public static final String DIAMONDDRAWPLATE_NAME   = "diamond_drawplate";
 
+    public static final String   MULTIMETER_NAME         = "multimeter";
+
     public static final String SOLAR_PANEL_NAME = "solar_panel";
 
     public static final String PAINTCAN_NAME   = "paint_can";
@@ -204,6 +206,7 @@ public class Refs {
     public static final String   CONFIG_ENCHANTS         = "enchantment ids";
     public static final String   CONFIG_TUBES            = "pneumatic tube options";
     public static final String   CONFIG_CIRCUIT_DATABASE = "circuit database options";
+
 
 
     public static String fullVersionString() {

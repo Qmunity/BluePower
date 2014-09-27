@@ -8,6 +8,8 @@ package com.bluepowermod.api.bluepower;
  * with Blue Power. If not, see <http://www.gnu.org/licenses/>
  */
 
+import com.bluepowermod.api.power.IPowerBase;
+
 /**
  * Interface implemented by Blulectric machines.
  * @author MineMaarten & Koen Beckers (K4Unl)
@@ -29,5 +31,14 @@ public interface IBluePowered {
      * @return
      */
     public BluePowerTier getTier();
+
+
+    /**
+     * @author Koen Beckers (K4Unl)
+     * Gets the powerHandler
+     * @return
+     */
+    public IPowerBase getHandler();
+
 
 }

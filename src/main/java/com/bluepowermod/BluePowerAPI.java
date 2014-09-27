@@ -7,6 +7,7 @@
  */
 package com.bluepowermod;
 
+import com.bluepowermod.api.power.IPowerBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -57,6 +58,12 @@ public class BluePowerAPI implements IBPApi {
     public IBluestoneApi getBluestoneApi() {
     
         return BluestoneApi.getInstance();
+    }
+
+    @Override
+    public IPowerBase getNewPowerHandler(){
+
+        return new PowerHandler();
     }
     
     @Override
