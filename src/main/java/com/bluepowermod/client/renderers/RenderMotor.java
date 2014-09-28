@@ -28,9 +28,7 @@ public class RenderMotor extends TileEntitySpecialRenderer {
             GL11.glRotated(90 * te.getRotation(), 0, 1, 0);
             GL11.glTranslated(-0.5, 0, -0.5);
 
-            GL11.glDisable(GL11.GL_LIGHTING);
             model.render(te.isRotating());
-            GL11.glEnable(GL11.GL_LIGHTING);
         }
         GL11.glPopMatrix();
     }

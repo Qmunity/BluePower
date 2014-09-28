@@ -27,4 +27,22 @@ public class BlockMotor extends BlockContainer {
 
         return -1;
     }
+
+    @Override
+    public boolean isNormalCube() {
+
+        return false;
+    }
+
+    @Override
+    public boolean isOpaqueCube() {
+
+        return false;
+    }
+
+    @Override
+    public boolean renderAsNormalBlock() {
+
+        return false;
+    }
 }

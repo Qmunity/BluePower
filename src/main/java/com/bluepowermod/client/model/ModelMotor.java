@@ -167,7 +167,7 @@ public class ModelMotor extends ModelBase {
         body7.render(f5);
 
         if (rotate) {
-            rotatingThingy.rotateAngleZ = (float) ((System.currentTimeMillis() / 10D) % 360);
+            rotatingThingy.rotateAngleZ = (float) ((System.currentTimeMillis() / 500D) % 360);
             rotatingThingy.render(f5);
         } else {
             rotatingThingy.render(f5);

@@ -9,8 +9,10 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
+import com.bluepowermod.blocks.BlockMotor;
 import com.bluepowermod.client.renderers.RenderExtruderTube;
 import com.bluepowermod.util.Refs;
 
@@ -28,6 +30,20 @@ public class BlockExtruderTube extends Block {
         return RenderExtruderTube.RENDER_ID;
     }
 
+    public static boolean canConnect(IBlockAccess world, int x, int y, int z) {
+
+        Block block = world.getBlock(x, y, z);
+
+        return block instanceof BlockExtruderTube || block instanceof BlockMotor;
+    }
+
+    public static int getExtension(IBlockAccess world, int x, int y, int z) {
+
+        Block block = world.getBlock(x, y, z);
+
+        return block instanceof BlockMotor ? 0 : 0;
+    }
+
     @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
     public void addCollisionBoxesToList(World world, int x, int y, int z, AxisAlignedBB boundaries, List list, Entity entity) {
@@ -38,7 +54,7 @@ public class BlockExtruderTube extends Block {
             list.add(box);
 
         // West
-        if (world.getBlock(x - 1, y, z) != null && world.getBlock(x - 1, y, z) instanceof BlockExtruderTube) {
+        if (canConnect(world, x - 1, y, z)) {
             box = AxisAlignedBB.getBoundingBox(x + 0.25, y + 0.25, z + 0.25, x + 0.75, y + 0.75, z + 0.75);
             box.minX = x;
 
@@ -46,7 +62,7 @@ public class BlockExtruderTube extends Block {
                 list.add(box);
         }
         // East
-        if (world.getBlock(x + 1, y, z) != null && world.getBlock(x + 1, y, z) instanceof BlockExtruderTube) {
+        if (canConnect(world, x + 1, y, z)) {
             box = AxisAlignedBB.getBoundingBox(x + 0.25, y + 0.25, z + 0.25, x + 0.75, y + 0.75, z + 0.75);
             box.maxX = x + 1;
 
@@ -54,7 +70,7 @@ public class BlockExtruderTube extends Block {
                 list.add(box);
         }
         // North
-        if (world.getBlock(x, y, z - 1) != null && world.getBlock(x, y, z - 1) instanceof BlockExtruderTube) {
+        if (canConnect(world, x, y, z - 1)) {
             box = AxisAlignedBB.getBoundingBox(x + 0.25, y + 0.25, z + 0.25, x + 0.75, y + 0.75, z + 0.75);
             box.minZ = z;
 
@@ -62,7 +78,7 @@ public class BlockExtruderTube extends Block {
                 list.add(box);
         }
         // South
-        if (world.getBlock(x, y, z + 1) != null && world.getBlock(x, y, z + 1) instanceof BlockExtruderTube) {
+        if (canConnect(world, x, y, z + 1)) {
             box = AxisAlignedBB.getBoundingBox(x + 0.25, y + 0.25, z + 0.25, x + 0.75, y + 0.75, z + 0.75);
             box.maxZ = z + 1;
 
@@ -77,19 +93,19 @@ public class BlockExtruderTube extends Block {
         AxisAlignedBB box = AxisAlignedBB.getBoundingBox(x + 0.25, y + 0.25, z + 0.25, x + 0.75, y + 0.75, z + 0.75);
 
         // West
-        if (world.getBlock(x - 1, y, z) != null && world.getBlock(x - 1, y, z) instanceof BlockExtruderTube) {
+        if (canConnect(world, x - 1, y, z)) {
             box.minX = x;
         }
         // East
-        if (world.getBlock(x + 1, y, z) != null && world.getBlock(x + 1, y, z) instanceof BlockExtruderTube) {
+        if (canConnect(world, x + 1, y, z)) {
             box.maxX = x + 1;
         }
         // North
-        if (world.getBlock(x, y, z - 1) != null && world.getBlock(x, y, z - 1) instanceof BlockExtruderTube) {
+        if (canConnect(world, x, y, z - 1)) {
             box.minZ = z;
         }
         // South
-        if (world.getBlock(x, y, z + 1) != null && world.getBlock(x, y, z + 1) instanceof BlockExtruderTube) {
+        if (canConnect(world, x, y, z + 1)) {
             box.maxZ = z + 1;
         }
 
@@ -105,22 +121,22 @@ public class BlockExtruderTube extends Block {
         mop = super.collisionRayTrace(world, x, y, z, start, end);
 
         // West
-        if (mop == null && world.getBlock(x - 1, y, z) != null && world.getBlock(x - 1, y, z) instanceof BlockExtruderTube) {
+        if (mop == null && canConnect(world, x - 1, y, z)) {
             setBlockBounds(0F, 0.25F, 0.25F, 0.25F, 0.75F, 0.75F);
             mop = super.collisionRayTrace(world, x, y, z, start, end);
         }
         // East
-        if (mop == null && world.getBlock(x + 1, y, z) != null && world.getBlock(x + 1, y, z) instanceof BlockExtruderTube) {
+        if (mop == null && canConnect(world, x + 1, y, z)) {
             setBlockBounds(0.75F, 0.25F, 0.25F, 1F, 0.75F, 0.75F);
             mop = super.collisionRayTrace(world, x, y, z, start, end);
         }
         // North
-        if (mop == null && world.getBlock(x, y, z - 1) != null && world.getBlock(x, y, z - 1) instanceof BlockExtruderTube) {
+        if (mop == null && canConnect(world, x, y, z - 1)) {
             setBlockBounds(0.25F, 0.25F, 0F, 0.75F, 0.75F, 0.25F);
             mop = super.collisionRayTrace(world, x, y, z, start, end);
         }
         // South
-        if (mop == null && world.getBlock(x, y, z + 1) != null && world.getBlock(x, y, z + 1) instanceof BlockExtruderTube) {
+        if (mop == null && canConnect(world, x, y, z + 1)) {
             setBlockBounds(0.25F, 0.25F, 0.75F, 0.75F, 0.75F, 1F);
             mop = super.collisionRayTrace(world, x, y, z, start, end);
         }

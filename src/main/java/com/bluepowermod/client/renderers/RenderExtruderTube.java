@@ -53,23 +53,23 @@ public class RenderExtruderTube implements ISimpleBlockRenderingHandler, IItemRe
         // Render sides
         {
             // West
-            if (world.getBlock(x - 1, y, z) != null && world.getBlock(x - 1, y, z) instanceof BlockExtruderTube) {
-                renderer.setRenderBounds(0, 0.25, 0.25, 0.25, 0.75, 0.75);
+            if (BlockExtruderTube.canConnect(world, x - 1, y, z)) {
+                renderer.setRenderBounds(0 - (BlockExtruderTube.getExtension(world, x - 1, y, z) / 16D), 0.25, 0.25, 0.25, 0.75, 0.75);
                 renderer.renderStandardBlock(block, x, y, z);
             }
             // East
-            if (world.getBlock(x + 1, y, z) != null && world.getBlock(x + 1, y, z) instanceof BlockExtruderTube) {
-                renderer.setRenderBounds(0.75, 0.25, 0.25, 1, 0.75, 0.75);
+            if (BlockExtruderTube.canConnect(world, x + 1, y, z)) {
+                renderer.setRenderBounds(0.75, 0.25, 0.25, 1 + (BlockExtruderTube.getExtension(world, x + 1, y, z) / 16D), 0.75, 0.75);
                 renderer.renderStandardBlock(block, x, y, z);
             }
             // North
-            if (world.getBlock(x, y, z - 1) != null && world.getBlock(x, y, z - 1) instanceof BlockExtruderTube) {
-                renderer.setRenderBounds(0.25, 0.25, 0, 0.75, 0.75, 0.25);
+            if (BlockExtruderTube.canConnect(world, x, y, z - 1)) {
+                renderer.setRenderBounds(0.25, 0.25, 0 - (BlockExtruderTube.getExtension(world, x, y, z - 1) / 16D), 0.75, 0.75, 0.25);
                 renderer.renderStandardBlock(block, x, y, z);
             }
             // South
-            if (world.getBlock(x, y, z + 1) != null && world.getBlock(x, y, z + 1) instanceof BlockExtruderTube) {
-                renderer.setRenderBounds(0.25, 0.25, 0.75, 0.75, 0.75, 1);
+            if (BlockExtruderTube.canConnect(world, x, y, z + 1)) {
+                renderer.setRenderBounds(0.25, 0.25, 0.75, 0.75, 0.75, 1 + (BlockExtruderTube.getExtension(world, x, y, z + 1) / 16D));
                 renderer.renderStandardBlock(block, x, y, z);
             }
         }
@@ -81,9 +81,9 @@ public class RenderExtruderTube implements ISimpleBlockRenderingHandler, IItemRe
 
             tess.setNormal(0, 1, 0);
             tess.addVertexWithUV(0, 1, 0, texture.getInterpolatedU(0), texture.getInterpolatedV(0));
+            tess.addVertexWithUV(1, 1, 0, texture.getInterpolatedU(16), texture.getInterpolatedV(0));
             tess.addVertexWithUV(0, 1, 1, texture.getInterpolatedU(0), texture.getInterpolatedV(16));
             tess.addVertexWithUV(1, 1, 1, texture.getInterpolatedU(16), texture.getInterpolatedV(16));
-            tess.addVertexWithUV(1, 1, 0, texture.getInterpolatedU(16), texture.getInterpolatedV(0));
         }
 
         renderer.renderAllFaces = false;
