@@ -7,25 +7,25 @@
  */
 package com.bluepowermod;
 
-import com.bluepowermod.api.power.IPowerBase;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
-
 import com.bluepowermod.api.BPApi.IBPApi;
 import com.bluepowermod.api.bluestone.IBluestoneApi;
 import com.bluepowermod.api.compat.IMultipartCompat;
 import com.bluepowermod.api.part.BPPart;
 import com.bluepowermod.api.part.IPartRegistry;
+import com.bluepowermod.api.bluepower.IPowerBase;
 import com.bluepowermod.api.recipe.IAlloyFurnaceRegistry;
 import com.bluepowermod.api.tube.IPneumaticTube;
 import com.bluepowermod.compat.CompatibilityUtils;
 import com.bluepowermod.part.PartRegistry;
 import com.bluepowermod.part.cable.bluestone.BluestoneApi;
 import com.bluepowermod.part.tube.PneumaticTube;
+import com.bluepowermod.power.PowerHandler;
 import com.bluepowermod.recipe.AlloyFurnaceRegistry;
 import com.bluepowermod.util.Dependencies;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
 
 public class BluePowerAPI implements IBPApi {
     
@@ -61,9 +61,15 @@ public class BluePowerAPI implements IBPApi {
     }
 
     @Override
-    public IPowerBase getNewPowerHandler(){
+    public IPowerBase getNewPowerHandler(BPPart part, float maxAmp) {
 
-        return new PowerHandler();
+        return new PowerHandler(part, maxAmp);
+    }
+
+    @Override
+    public IPowerBase getNewPowerHandler(TileEntity tileEntity, float maxAmp) {
+
+        return new PowerHandler(tileEntity, maxAmp);
     }
     
     @Override

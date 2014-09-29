@@ -1,4 +1,4 @@
-package com.bluepowermod.api.power;
+package com.bluepowermod.api.bluepower;
 
 import com.bluepowermod.api.vec.Vector3;
 

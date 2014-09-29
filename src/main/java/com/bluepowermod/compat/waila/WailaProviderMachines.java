@@ -7,6 +7,7 @@
  */
 package com.bluepowermod.compat.waila;
 
+import com.bluepowermod.api.bluepower.IBluePowered;
 import com.bluepowermod.tileentities.TileMachineBase;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
@@ -32,6 +33,10 @@ public class WailaProviderMachines implements IWailaDataProvider {
         machine.addWailaInfo(info);
         tip.addAll(info);
         info.clear();
+
+        if(machine instanceof IBluePowered){
+            tip.add(((IBluePowered)machine).getHandler().getAmpStored() + "mA");
+        }
 
         return tip;
     }

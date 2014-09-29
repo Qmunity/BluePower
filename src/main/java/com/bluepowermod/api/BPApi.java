@@ -7,7 +7,7 @@
  */
 package com.bluepowermod.api;
 
-import com.bluepowermod.api.power.IPowerBase;
+import com.bluepowermod.api.bluepower.IPowerBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -46,7 +46,10 @@ public class BPApi {
         
         public IBluestoneApi getBluestoneApi();
 
-        public IPowerBase getNewPowerHandler();
+
+        public IPowerBase getNewPowerHandler(BPPart part, float maxAmp);
+
+        public IPowerBase getNewPowerHandler(TileEntity tileEntity, float maxAmp);
         
         /**
          * Should be called by an Block#onBlockAdded that implements ISilkyRemovable. It will get the TileEntity and load the tag "tileData" stored in

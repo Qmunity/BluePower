@@ -4,7 +4,7 @@ import com.bluepowermod.api.BPApi;
 import com.bluepowermod.api.bluepower.BluePowerTier;
 import com.bluepowermod.api.bluepower.IBluePowered;
 import com.bluepowermod.api.part.ICableSize;
-import com.bluepowermod.api.power.IPowerBase;
+import com.bluepowermod.api.bluepower.IPowerBase;
 import com.bluepowermod.api.util.ForgeDirectionUtils;
 import com.bluepowermod.api.vec.Vector3;
 import com.bluepowermod.api.vec.Vector3Cube;
@@ -211,8 +211,7 @@ public class WireBluePower extends CableWall implements ICableSize, IBluePowered
     @Override
     public IPowerBase getHandler() {
         if(handler == null){
-            handler = BPApi.getInstance().getNewPowerHandler();
-            handler.init(this);
+            handler = BPApi.getInstance().getNewPowerHandler(this, 20);
         }
         return handler;
     }

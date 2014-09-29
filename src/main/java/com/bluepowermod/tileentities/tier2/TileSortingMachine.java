@@ -10,7 +10,7 @@ package com.bluepowermod.tileentities.tier2;
 import com.bluepowermod.api.BPApi;
 import com.bluepowermod.api.bluepower.BluePowerTier;
 import com.bluepowermod.api.bluepower.IBluePowered;
-import com.bluepowermod.api.power.IPowerBase;
+import com.bluepowermod.api.bluepower.IPowerBase;
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
 import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.helper.ItemStackHelper;
@@ -70,8 +70,7 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
     @Override
     public IPowerBase getHandler() {
         if(handler == null){
-            handler = BPApi.getInstance().getNewPowerHandler();
-            handler.init(this);
+            handler = BPApi.getInstance().getNewPowerHandler(this, 2000);
         }
         return handler;
     }

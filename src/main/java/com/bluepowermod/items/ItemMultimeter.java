@@ -30,6 +30,7 @@ public class ItemMultimeter extends ItemBase {
 
         setUnlocalizedName(Refs.MULTIMETER_NAME);
         setCreativeTab(CustomTabs.tabBluePowerPower);
+        this.setTextureName(Refs.MODID + ":" + Refs.MULTIMETER_NAME);
         setMaxStackSize(1);
     }
 
@@ -54,7 +55,7 @@ public class ItemMultimeter extends ItemBase {
                     }
 
                     List<String> messages = new ArrayList<String>();
-                    messages.add("amp: " + machine.getHandler().getAmpStored());
+                    messages.add("Charge: " + machine.getHandler().getAmpStored() + "/" + machine.getHandler().getMaxAmp() + "mA");
 
 
 
