@@ -215,4 +215,10 @@ public class WireBluePower extends CableWall implements ICableSize, IBluePowered
         }
         return handler;
     }
+
+    @Override
+    public boolean canConnectTo(ForgeDirection dir) {
+
+        return true;
+    }
 }

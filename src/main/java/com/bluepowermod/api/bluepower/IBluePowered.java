@@ -8,6 +8,8 @@ package com.bluepowermod.api.bluepower;
  * with Blue Power. If not, see <http://www.gnu.org/licenses/>
  */
 
+import net.minecraftforge.common.util.ForgeDirection;
+
 /**
  * Interface implemented by Blulectric machines.
  * @author MineMaarten & Koen Beckers (K4Unl)
@@ -39,4 +41,11 @@ public interface IBluePowered {
     public IPowerBase getHandler();
 
 
+    /**
+     * @author Koen Beckers (K4Unl)
+     * Whether or not this machine can connect power to this direction
+     * @param dir
+     * @return
+     */
+    boolean canConnectTo(ForgeDirection dir);
 }

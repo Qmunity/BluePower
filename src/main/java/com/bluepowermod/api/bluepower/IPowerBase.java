@@ -29,8 +29,7 @@ public interface IPowerBase {
 
     public Vector3 getBlockLocation();
 
-    /**
-     * Call this function on every update
-     */
-    public void propagate();
+    void update();
+
+    void invalidate();
 }

@@ -8,6 +8,7 @@ import com.bluepowermod.tileentities.TileMachineBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.EnumSkyBlock;
+import net.minecraftforge.common.util.ForgeDirection;
 
 /**
  * @author Koen Beckers (K4Unl)
@@ -37,6 +38,12 @@ public class TileSolarPanel extends TileMachineBase implements IBluePowered {
     }
 
     @Override
+    public boolean canConnectTo(ForgeDirection dir) {
+
+        return !dir.equals(ForgeDirection.UP);
+    }
+
+    @Override
     public void updateEntity(){
 
         super.updateEntity();
@@ -45,7 +52,7 @@ public class TileSolarPanel extends TileMachineBase implements IBluePowered {
             //TODO: Add me as a config
             getHandler().addEnergy(getDaylightStrength() / 10);
 
-            getHandler().propagate();
+            getHandler().update();
         }
 
     }

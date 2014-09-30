@@ -75,6 +75,12 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
         return handler;
     }
 
+    @Override
+    public boolean canConnectTo(ForgeDirection dir) {
+
+        return true;
+    }
+
     public enum PullMode {
         SINGLE_STEP("single_step"), AUTOMATIC("automatic"), SINGLE_SWEEP("single_sweep");
 
@@ -122,6 +128,7 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
                 && (pullMode == PullMode.SINGLE_SWEEP && sweepTriggered || pullMode == PullMode.AUTOMATIC)) {
             triggerSorting();
         }
+        getHandler().update();
 
     }
 
