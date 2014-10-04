@@ -48,7 +48,7 @@ public class GateRSLatch extends GateBase {
     }
     
     @Override
-    public String getGateID() {
+    public String getId() {
     
         return "rs";
     }

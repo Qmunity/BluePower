@@ -17,73 +17,49 @@ import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityHopper;
-import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EntityDamageSource;
-import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.event.AnvilUpdateEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.event.world.ChunkEvent;
 
-import com.bluepowermod.BluePower;
 import com.bluepowermod.ClientProxy;
 import com.bluepowermod.client.gui.GuiCircuitDatabaseSharing;
 import com.bluepowermod.containers.ContainerSeedBag;
 import com.bluepowermod.containers.inventorys.InventoryItem;
 import com.bluepowermod.init.BPEnchantments;
 import com.bluepowermod.init.BPItems;
-import com.bluepowermod.init.Config;
-import com.bluepowermod.items.ItemPartLegacy;
 import com.bluepowermod.items.ItemSeedBag;
 import com.bluepowermod.items.ItemSickle;
-import com.bluepowermod.util.Dependencies;
 
-import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.eventhandler.Event.Result;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class BPEventHandler {
 
-    private boolean warned = false;
-
-    @SubscribeEvent
-    public void onTick(TickEvent.PlayerTickEvent event) {
-
-        if (event.phase == TickEvent.Phase.END && event.player.worldObj.isRemote && !warned && !Loader.isModLoaded(Dependencies.FMP)) {
-            event.player.addChatComponentMessage(new ChatComponentText(EnumChatFormatting.RED + "WARNING: You're running BluePower without having "
-                    + EnumChatFormatting.RED + "ForgeMultipart installed. Even though it will work, " + EnumChatFormatting.RED + "ForgeMultipart is "
-                    + EnumChatFormatting.BOLD + "highly" + EnumChatFormatting.RESET + EnumChatFormatting.RED + " recommended. Continue at own risk, "
-                    + EnumChatFormatting.RED + "expect bugs."));
-            warned = true;
-        }
-    }
-
-    @SubscribeEvent
-    public void onChunkLoad(ChunkEvent.Load event) {
-        if (Config.convertLegacyPartsOnChunkLoad) {
-            Iterable<TileEntity> list = event.getChunk().chunkTileEntityMap.values();
-            int count = 0;
-            for (TileEntity te : list) {
-                if (te instanceof IInventory) {
-                    count += ItemPartLegacy.convertLegacy((IInventory) te);
-                }
-            }
-            if (count > 0) {
-                BluePower.log.info("Converted " + count + " item stacks to the new parts.");
-            }
-        }
-    }
+    // @SubscribeEvent
+    // public void onChunkLoad(ChunkEvent.Load event) {
+    //
+    // if (Config.convertLegacyPartsOnChunkLoad) {
+    // Iterable<TileEntity> list = event.getChunk().chunkTileEntityMap.values();
+    // int count = 0;
+    // for (TileEntity te : list) {
+    // if (te instanceof IInventory) {
+    // count += ItemPartLegacy.convertLegacy((IInventory) te);
+    // }
+    // }
+    // if (count > 0) {
+    // BluePower.log.info("Converted " + count + " item stacks to the new parts.");
+    // }
+    // }
+    // }
 
     @SubscribeEvent
     public void onAnvilEvent(AnvilUpdateEvent event) {
@@ -144,7 +120,7 @@ public class BPEventHandler {
     public void onEntityAttack(LivingAttackEvent event) {
 
         if (!isAttacking && event.source instanceof EntityDamageSource) {// this event will be trigger recursively by EntityLiving#attackEntityFrom,
-                                                                         // so we need to stop the loop.
+            // so we need to stop the loop.
             EntityDamageSource entitySource = (EntityDamageSource) event.source;
 
             if (entitySource.getEntity() instanceof EntityPlayer) {

@@ -40,7 +40,7 @@ public class GateNot extends GateBase {
     }
     
     @Override
-    public String getGateID() {
+    public String getId() {
     
         return "not";
     }

@@ -25,8 +25,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 
-import com.bluepowermod.part.PartRegistry;
-
 public class CustomTabs {
 
     public static CreativeTabs tabBluePowerBlocks;
@@ -99,7 +97,7 @@ public class CustomTabs {
             @Override
             public Item getTabIconItem() {
 
-                return PartRegistry.getInstance().getItemForPart("timer").getItem();
+                return Item.getItemFromBlock(Blocks.stone);// PartRegistry.getInstance().getItemForPart("timer").getItem();
             }
         };
 
@@ -125,8 +123,8 @@ public class CustomTabs {
         public void displayAllReleventItems(List l) {
 
             super.displayAllReleventItems(l);
-            for (String s : PartRegistry.getInstance().getRegisteredPartsForTab(this))
-                l.add(PartRegistry.getInstance().getItemForPart(s));
+            // for (String s : PartRegistry.getInstance().getRegisteredPartsForTab(this))
+            // l.add(PartRegistry.getInstance().getItemForPart(s));
         }
 
     }

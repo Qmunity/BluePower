@@ -59,7 +59,7 @@ public class GateStateCell extends GateBase implements IGuiButtonSensitive {
     }
     
     @Override
-    public String getGateID() {
+    public String getId() {
     
         return "state";
     }

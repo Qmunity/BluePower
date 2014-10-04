@@ -8,62 +8,55 @@
 
 package com.bluepowermod.part.gate;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.client.renderer.RenderBlocks;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import org.lwjgl.opengl.GL11;
 
 import com.bluepowermod.api.block.ISilkyRemovable;
-import com.bluepowermod.api.part.BPPartFace;
-import com.bluepowermod.api.part.FaceDirection;
-import com.bluepowermod.api.part.RedstoneConnection;
-import com.bluepowermod.api.vec.Vector3;
-import com.bluepowermod.api.vec.Vector3Cube;
-import com.bluepowermod.client.renderers.RenderHelper;
 import com.bluepowermod.init.BPItems;
 import com.bluepowermod.init.Config;
-import com.bluepowermod.init.CustomTabs;
-import com.bluepowermod.util.Refs;
+import com.bluepowermod.part.BPPartFaceRotate;
+import com.bluepowermod.part.RedstoneConnection;
+import com.qmunity.lib.part.IPartRedstone;
+import com.qmunity.lib.util.Dir;
+import com.qmunity.lib.vec.Vec3d;
+import com.qmunity.lib.vec.Vec3dCube;
+import com.qmunity.lib.vec.Vec3i;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public abstract class GateBase extends BPPartFace {
+public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone {
 
-    protected static Vector3Cube BOX = new Vector3Cube(0, 0, 0, 1, 1D / 8D, 1);
+    protected static Vec3dCube BOX = new Vec3dCube(0, 0, 0, 1, 1D / 8D, 1);
+    protected static Vec3dCube OCCLUSION = new Vec3dCube(7D / 16D, 2D / 16D, 7D / 16D, 9D / 16D, 9D / 16D, 9D / 16D);
+
+    private RedstoneConnection[] connections = new RedstoneConnection[] { new RedstoneConnection(this, Dir.FRONT),
+            new RedstoneConnection(this, Dir.RIGHT), new RedstoneConnection(this, Dir.BACK), new RedstoneConnection(this, Dir.LEFT),
+            new RedstoneConnection(this, Dir.TOP), new RedstoneConnection(this, Dir.BOTTOM) };
 
     public GateBase() {
 
-        for (int i = 0; i < 4; i++)
-            connections[i] = new RedstoneConnection(this, i + "", true, false);
-
-        initializeConnections(getConnection(FaceDirection.FRONT), getConnection(FaceDirection.LEFT), getConnection(FaceDirection.BACK),
-                getConnection(FaceDirection.RIGHT));
+        initializeConnections();
     }
 
-    public abstract void initializeConnections(RedstoneConnection front, RedstoneConnection left, RedstoneConnection back, RedstoneConnection right);
-
-    @Override
-    public void setFace(int face) {
-
-        super.setFace(face);
-    }
+    public abstract void initializeConnections();
 
     @Override
     public String getType() {
 
-        return getGateID();
+        return getId();
     }
 
     protected String getTextureName() {
@@ -74,27 +67,63 @@ public abstract class GateBase extends BPPartFace {
     @Override
     public String getUnlocalizedName() {
 
-        return "gate." + getGateID();
+        return "gate." + getId();
     }
 
-    public abstract String getGateID();
+    public abstract String getId();
 
-    @Override
-    public void addCollisionBoxes(List<AxisAlignedBB> boxes) {
+    protected final void rotateBoxes(List<Vec3dCube> boxes) {
 
-        boxes.add(BOX.clone().toAABB());
-    }
-
-    @Override
-    public void addOcclusionBoxes(List<AxisAlignedBB> boxes) {
-
-        boxes.add(BOX.clone().toAABB());
+        for (Vec3dCube c : boxes)
+            c.rotate(getFace(), Vec3d.center);
     }
 
     @Override
-    public void addSelectionBoxes(List<AxisAlignedBB> boxes) {
+    public final void addCollisionBoxesToList(List<Vec3dCube> boxes, Entity entity) {
 
-        boxes.add(BOX.clone().toAABB());
+        List<Vec3dCube> boxes_ = new ArrayList<Vec3dCube>();
+        addCollisionBoxes(boxes_, entity);
+        rotateBoxes(boxes_);
+
+        for (Vec3dCube c : boxes_)
+            boxes.add(c);
+    }
+
+    public void addCollisionBoxes(List<Vec3dCube> boxes, Entity entity) {
+
+        boxes.add(BOX.clone());
+    }
+
+    @Override
+    public final List<Vec3dCube> getOcclusionBoxes() {
+
+        List<Vec3dCube> boxes = new ArrayList<Vec3dCube>();
+
+        addOcclusionBoxes(boxes);
+        rotateBoxes(boxes);
+
+        return boxes;
+    }
+
+    public void addOcclusionBoxes(List<Vec3dCube> boxes) {
+
+        boxes.add(BOX.clone());
+    }
+
+    @Override
+    public final List<Vec3dCube> getSelectionBoxes() {
+
+        List<Vec3dCube> boxes = new ArrayList<Vec3dCube>();
+
+        addSelectionBoxes(boxes);
+        rotateBoxes(boxes);
+
+        return boxes;
+    }
+
+    public void addSelectionBoxes(List<Vec3dCube> boxes) {
+
+        boxes.add(BOX.clone());
     }
 
     protected void playTickSound() {
@@ -105,100 +134,31 @@ public abstract class GateBase extends BPPartFace {
     }
 
     @Override
-    public final void renderDynamic(Vector3 loc, int pass, float frame) {
+    public void renderDynamic(Vec3d translation, double delta, int pass) {
 
-        if (pass != 0)
-            return;
-
-        GL11.glPushMatrix();
-        {
-            super.rotateAndTranslateDynamic(loc, pass, frame);
-
-            /* Top */
-            renderTop(frame);
-
-            Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/gates/bottom.png"));
-            GL11.glBegin(GL11.GL_QUADS);
-            /* Bottom */
-            GL11.glNormal3d(0, -1, 0);
-            RenderHelper.addVertexWithTexture(0, 0, 0, 0, 0);
-            RenderHelper.addVertexWithTexture(1, 0, 0, 1, 0);
-            RenderHelper.addVertexWithTexture(1, 0, 1, 1, 1);
-            RenderHelper.addVertexWithTexture(0, 0, 1, 0, 1);
-            GL11.glEnd();
-            Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/gates/side.png"));
-            GL11.glBegin(GL11.GL_QUADS);
-            /* East */
-            GL11.glNormal3d(1, 0, 0);
-            RenderHelper.addVertexWithTexture(1, 0, 0, 0, 0);
-            RenderHelper.addVertexWithTexture(1, 1D / 8D, 0, 1, 0);
-            RenderHelper.addVertexWithTexture(1, 1D / 8D, 1, 1, 1);
-            RenderHelper.addVertexWithTexture(1, 0, 1, 0, 1);
-            /* West */
-            GL11.glNormal3d(-1, 0, 0);
-            RenderHelper.addVertexWithTexture(0, 0, 0, 0, 0);
-            RenderHelper.addVertexWithTexture(0, 0, 1, 0, 1);
-            RenderHelper.addVertexWithTexture(0, 1D / 8D, 1, 1, 1);
-            RenderHelper.addVertexWithTexture(0, 1D / 8D, 0, 1, 0);
-            /* North */
-            GL11.glNormal3d(0, 0, -1);
-            RenderHelper.addVertexWithTexture(0, 0, 0, 0, 0);
-            RenderHelper.addVertexWithTexture(0, 1D / 8D, 0, 1, 0);
-            RenderHelper.addVertexWithTexture(1, 1D / 8D, 0, 1, 1);
-            RenderHelper.addVertexWithTexture(1, 0, 0, 0, 1);
-            /* South */
-            GL11.glNormal3d(0, 0, 1);
-            RenderHelper.addVertexWithTexture(0, 0, 1, 0, 0);
-            RenderHelper.addVertexWithTexture(1, 0, 1, 0, 1);
-            RenderHelper.addVertexWithTexture(1, 1D / 8D, 1, 1, 1);
-            RenderHelper.addVertexWithTexture(0, 1D / 8D, 1, 1, 0);
-            GL11.glEnd();
-        }
-        GL11.glPopMatrix();
-    }
-
-    protected void renderTopTexture(FaceDirection side, RedstoneConnection connection) {
-
-        if (connection.isEnabled()) {
-            renderTopTexture(side, connection.getPower() > 0);
-        } else {
-            renderTopTexture(Refs.MODID + ":textures/blocks/gates/" + getTextureName() + "/" + side.getName() + "_disabled.png");
-        }
-    }
-
-    protected void renderTopTexture(String name, boolean state) {
-
-        renderTopTexture(Refs.MODID + ":textures/blocks/gates/" + getTextureName() + "/" + name + "_" + (state ? "on" : "off") + ".png");
-    }
-
-    protected void renderTopTexture(FaceDirection side, boolean state) {
-
-        renderTopTexture(Refs.MODID + ":textures/blocks/gates/" + getTextureName() + "/" + side.getName() + "_" + (state ? "on" : "off") + ".png");
-    }
-
-    public void renderTopTexture(String texture) {
-
-        Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(texture));
-        GL11.glBegin(GL11.GL_QUADS);
-        GL11.glNormal3d(0, 1, 0);
-        RenderHelper.addVertexWithTexture(0, 1D / 8D, 0, 0, 0);
-        RenderHelper.addVertexWithTexture(0, 1D / 8D, 1, 0, 1);
-        RenderHelper.addVertexWithTexture(1, 1D / 8D, 1, 1, 1);
-        RenderHelper.addVertexWithTexture(1, 1D / 8D, 0, 1, 0);
-        GL11.glEnd();
     }
 
     @Override
-    public final boolean renderStatic(Vector3 loc, int pass) {
+    public final boolean renderStatic(Vec3i translation, RenderBlocks renderer, int pass) {
 
-        return super.renderStatic(loc, pass);
+        Vec3dCube c = BOX.clone().rotate(getFace(), Vec3d.center);
+
+        renderer.setRenderAllFaces(true);
+        renderer.setRenderBounds(c.getMinX(), c.getMinY(), c.getMinZ(), c.getMaxX(), c.getMaxY(), c.getMaxZ());
+        renderer.overrideBlockTexture = Blocks.stone_slab.getIcon(0, 0);
+        boolean rendered = renderer.renderStandardBlock(Blocks.stone_slab, getX(), getY(), getZ());
+        renderer.overrideBlockTexture = null;
+        renderer.setRenderBounds(0, 0, 0, 1, 1, 1);
+        renderer.setRenderAllFaces(false);
+
+        return rendered;
     }
 
     @Override
     public final void renderItem(ItemRenderType type, ItemStack item, Object... data) {
 
         if (this instanceof ISilkyRemovable && item.hasTagCompound()) {
-            load(item.getTagCompound().getCompoundTag("tileData"));
+            readFromNBT(item.getTagCompound().getCompoundTag("tileData"));
         }
         GL11.glPushMatrix();
         {
@@ -207,92 +167,19 @@ public abstract class GateBase extends BPPartFace {
                 GL11.glTranslated(0, 0.5, 0);
                 GL11.glRotated(-12, -1, 0, 1);
             }
-            /* Top */
-            renderTop();
-
-            Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/gates/bottom.png"));
-            GL11.glBegin(GL11.GL_QUADS);
-            /* Bottom */
-            GL11.glNormal3d(0, -1, 0);
-            RenderHelper.addVertexWithTexture(0, 0, 0, 0, 0);
-            RenderHelper.addVertexWithTexture(1, 0, 0, 1, 0);
-            RenderHelper.addVertexWithTexture(1, 0, 1, 1, 1);
-            RenderHelper.addVertexWithTexture(0, 0, 1, 0, 1);
-            GL11.glEnd();
-            Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/gates/side.png"));
-            GL11.glBegin(GL11.GL_QUADS);
-            /* East */
-            GL11.glNormal3d(1, 0, 0);
-            RenderHelper.addVertexWithTexture(1, 0, 0, 0, 0);
-            RenderHelper.addVertexWithTexture(1, 1D / 8D, 0, 1, 0);
-            RenderHelper.addVertexWithTexture(1, 1D / 8D, 1, 1, 1);
-            RenderHelper.addVertexWithTexture(1, 0, 1, 0, 1);
-            /* West */
-            GL11.glNormal3d(-1, 0, 0);
-            RenderHelper.addVertexWithTexture(0, 0, 0, 0, 0);
-            RenderHelper.addVertexWithTexture(0, 0, 1, 0, 1);
-            RenderHelper.addVertexWithTexture(0, 1D / 8D, 1, 1, 1);
-            RenderHelper.addVertexWithTexture(0, 1D / 8D, 0, 1, 0);
-            /* North */
-            GL11.glNormal3d(0, 0, -1);
-            RenderHelper.addVertexWithTexture(0, 0, 0, 0, 0);
-            RenderHelper.addVertexWithTexture(0, 1D / 8D, 0, 1, 0);
-            RenderHelper.addVertexWithTexture(1, 1D / 8D, 0, 1, 1);
-            RenderHelper.addVertexWithTexture(1, 0, 0, 0, 1);
-            /* South */
-            GL11.glNormal3d(0, 0, 1);
-            RenderHelper.addVertexWithTexture(0, 0, 1, 0, 0);
-            RenderHelper.addVertexWithTexture(1, 0, 1, 0, 1);
-            RenderHelper.addVertexWithTexture(1, 1D / 8D, 1, 1, 1);
-            RenderHelper.addVertexWithTexture(0, 1D / 8D, 1, 1, 0);
-            GL11.glEnd();
-
         }
         GL11.glPopMatrix();
     }
 
-    public void renderTop(float frame) {
-
-        renderTopTexture(Refs.MODID + ":textures/blocks/gates/" + getTextureName() + "/base.png");
-        renderTop(getConnection(FaceDirection.FRONT), getConnection(FaceDirection.LEFT), getConnection(FaceDirection.BACK),
-                getConnection(FaceDirection.RIGHT), frame);
-    }
-
-    public void renderTop() {
-
-        renderTopTexture(Refs.MODID + ":textures/blocks/gates/" + getTextureName() + "/base.png");
-        renderTopItem(getConnection(FaceDirection.FRONT), getConnection(FaceDirection.LEFT), getConnection(FaceDirection.BACK),
-                getConnection(FaceDirection.RIGHT));
-    }
-
-    protected void renderTopItem(RedstoneConnection front, RedstoneConnection left, RedstoneConnection back, RedstoneConnection right) {
-
-        renderTop(getConnection(FaceDirection.FRONT), getConnection(FaceDirection.LEFT), getConnection(FaceDirection.BACK),
-                getConnection(FaceDirection.RIGHT), 0);
-    }
-
-    protected abstract void renderTop(RedstoneConnection front, RedstoneConnection left, RedstoneConnection back, RedstoneConnection right,
-            float frame);
+    public abstract void doLogic();
 
     @Override
-    public void update() {
-
-        super.update();
-        doLogic(getConnection(FaceDirection.FRONT), getConnection(FaceDirection.LEFT), getConnection(FaceDirection.BACK),
-                getConnection(FaceDirection.RIGHT));
-    }
-
-    public abstract void doLogic(RedstoneConnection front, RedstoneConnection left, RedstoneConnection back, RedstoneConnection right);
-
-    @Override
-    public boolean onActivated(EntityPlayer player, MovingObjectPosition mop, ItemStack item) {
+    public boolean onActivated(EntityPlayer player, ItemStack item) {
 
         if (item != null && item.getItem() == BPItems.screwdriver) {
             if (player.isSneaking()) {
                 if (!getWorld().isRemote) {
-                    if (changeMode(getConnection(FaceDirection.FRONT), getConnection(FaceDirection.LEFT), getConnection(FaceDirection.BACK),
-                            getConnection(FaceDirection.RIGHT))) {
-                        notifyUpdate();
+                    if (changeMode()) {
                         sendUpdatePacket();
                         return true;
                     } else {
@@ -309,7 +196,7 @@ public abstract class GateBase extends BPPartFace {
             }
             return true;
         }
-        return super.onActivated(player, mop, item);
+        return false;
     }
 
     @SideOnly(Side.CLIENT)
@@ -323,24 +210,9 @@ public abstract class GateBase extends BPPartFace {
         return false;
     }
 
-    protected boolean changeMode(RedstoneConnection front, RedstoneConnection left, RedstoneConnection back, RedstoneConnection right) {
+    protected boolean changeMode() {
 
         return false;
-    }
-
-    @Override
-    public CreativeTabs getCreativeTab() {
-
-        return CustomTabs.tabBluePowerCircuits;
-    }
-
-    @Override
-    public abstract void addWailaInfo(List<String> info);
-
-    @Override
-    public float getHardness() {
-
-        return 1;
     }
 
     public boolean isCraftableInCircuitTable() {
@@ -349,9 +221,61 @@ public abstract class GateBase extends BPPartFace {
     }
 
     @Override
-    public int getStrongOutput(ForgeDirection side) {
+    public final int getStrongPower(ForgeDirection side) {
 
-        return super.getWeakOutput(side);
+        return getConnection(side).getOutput();
+    }
+
+    @Override
+    public final int getWeakPower(ForgeDirection side) {
+
+        return getConnection(side).getOutput();
+    }
+
+    @Override
+    public final boolean canConnectRedstone(ForgeDirection side) {
+
+        return getConnection(side).isEnabled();
+    }
+
+    public RedstoneConnection getConnection(Dir direction) {
+
+        return connections[direction.ordinal()];
+    }
+
+    public RedstoneConnection getConnection(ForgeDirection direction) {
+
+        return connections[Dir.getDirection(direction, getFace(), getRotation()).ordinal()];
+    }
+
+    protected final RedstoneConnection front() {
+
+        return getConnection(Dir.FRONT);
+    }
+
+    protected final RedstoneConnection right() {
+
+        return getConnection(Dir.RIGHT);
+    }
+
+    protected final RedstoneConnection back() {
+
+        return getConnection(Dir.BACK);
+    }
+
+    protected final RedstoneConnection left() {
+
+        return getConnection(Dir.LEFT);
+    }
+
+    protected final RedstoneConnection top() {
+
+        return getConnection(Dir.TOP);
+    }
+
+    protected final RedstoneConnection bottom() {
+
+        return getConnection(Dir.BOTTOM);
     }
 
 }

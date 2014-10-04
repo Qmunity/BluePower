@@ -19,7 +19,6 @@ import org.apache.logging.log4j.Logger;
 import com.bluepowermod.api.BPApi;
 import com.bluepowermod.client.gui.GUIHandler;
 import com.bluepowermod.compat.CompatibilityUtils;
-import com.bluepowermod.compat.fmp.PartRegister;
 import com.bluepowermod.events.BPEventHandler;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.init.BPEnchantments;
@@ -29,6 +28,7 @@ import com.bluepowermod.init.OreDictionarySetup;
 import com.bluepowermod.init.Recipes;
 import com.bluepowermod.init.TileEntities;
 import com.bluepowermod.network.NetworkHandler;
+import com.bluepowermod.part.PartManager;
 import com.bluepowermod.recipe.AlloyFurnaceRegistry;
 import com.bluepowermod.util.Refs;
 import com.bluepowermod.world.WorldGenerationHandler;
@@ -69,7 +69,7 @@ public class BluePower {
         // Load configs
         Config.syncConfig(config);
 
-        PartRegister.registerParts();
+        PartManager.registerParts();
 
         BPBlocks.init();
         BPItems.init();
@@ -86,8 +86,6 @@ public class BluePower {
         BPEventHandler eventHandler = new BPEventHandler();
         MinecraftForge.EVENT_BUS.register(eventHandler);
         FMLCommonHandler.instance().bus().register(eventHandler);
-
-        BPApi.getInstance().getBluestoneApi();
     }
 
     @EventHandler
@@ -98,6 +96,8 @@ public class BluePower {
         NetworkHandler.init();
         NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GUIHandler());
         CompatibilityUtils.init(event);
+
+        PartManager.registerParts();
     }
 
     @EventHandler

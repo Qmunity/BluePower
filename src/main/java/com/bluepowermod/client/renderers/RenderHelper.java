@@ -15,25 +15,19 @@ import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 
-import com.bluepowermod.api.vec.Vector3Cube;
-import com.bluepowermod.init.BPBlocks;
-import com.bluepowermod.part.gate.GateBase;
-import com.bluepowermod.util.Refs;
-
-import cpw.mods.fml.client.FMLClientHandler;
+import com.qmunity.lib.vec.Vec3dCube;
 
 public class RenderHelper {
 
     /**
      * Adds a vertex. Just a wrapper function for openGL
-     * 
+     *
      * @author Koen Beckers (K4Unl)
      * @param x
      * @param y
@@ -46,7 +40,7 @@ public class RenderHelper {
 
     /**
      * Adds a vertex with a texture.
-     * 
+     *
      * @author Koen Beckers (K4Unl)
      * @param x
      * @param y
@@ -105,93 +99,6 @@ public class RenderHelper {
     }
 
     /**
-     * @author MineMaarten
-     * @param gate
-     * @param x
-     * @param y
-     * @param z
-     * @param state
-     */
-    public static void renderLever(GateBase gate, double x, double y, double z, boolean state) {
-
-        GL11.glPushMatrix();
-        {
-            GL11.glTranslated(x, y, z);
-
-            RenderBlocks renderBlocks = RenderBlocks.getInstance();
-            Tessellator t = Tessellator.instance;
-
-            GL11.glPushMatrix();
-            {
-                GL11.glTranslated(-gate.getX(), -gate.getY(), -gate.getZ());
-
-                renderBlocks.blockAccess = FMLClientHandler.instance().getWorldClient();
-                renderBlocks.setOverrideBlockTexture(renderBlocks.getBlockIcon(Blocks.cobblestone));
-
-                renderBlocks.setRenderBounds(0, 0, 0, 4 / 16D, 2 / 16D, 8 / 16D);
-                t.startDrawingQuads();
-                renderBlocks.renderStandardBlock(BPBlocks.multipart, gate.getX(), gate.getY(), gate.getZ());
-                t.draw();
-            }
-            GL11.glPopMatrix();
-
-            GL11.glTranslated(-6 / 16F, 0, 3 / 16F);
-            if (state) {
-                GL11.glRotated(40, 1, 0, 0);
-            } else {
-                GL11.glRotated(-40, 1, 0, 0);
-            }
-
-            IIcon icon = renderBlocks.getBlockIconFromSide(Blocks.lever, 0);
-            double minU = icon.getMinU();
-            double minV = icon.getMinV();
-            double maxU = icon.getMaxU();
-            double maxV = icon.getMaxV();
-
-            t.startDrawingQuads();
-            t.addVertexWithUV(0, 0, 0, minU, maxV);
-            t.addVertexWithUV(0, 6F / 8F, 0, minU, minV);
-            t.addVertexWithUV(1, 6F / 8F, 0, maxU, minV);
-            t.addVertexWithUV(1, 0, 0, maxU, maxV);
-
-            t.addTranslation(0, 0, 2 / 16F);
-            t.addVertexWithUV(0, 0, 0, maxU, maxV);
-            t.addVertexWithUV(1, 0, 0, minU, maxV);
-            t.addVertexWithUV(1, 6F / 8F, 0, minU, minV);
-            t.addVertexWithUV(0, 6F / 8F, 0, maxU, minV);
-            t.addTranslation(0, 0, -2 / 16F);
-
-            t.addTranslation(7 / 16F, 0, -7 / 16F);
-            t.addVertexWithUV(0, 0, 0, maxU, maxV);
-            t.addVertexWithUV(0, 0, 1, minU, maxV);
-            t.addVertexWithUV(0, 6F / 8F, 1, minU, minV);
-            t.addVertexWithUV(0, 6F / 8F, 0, maxU, minV);
-            t.addTranslation(-7 / 16F, 0, 7 / 16F);
-
-            t.addTranslation(9 / 16F, 0, -7 / 16F);
-            t.addVertexWithUV(0, 0, 0, minU, maxV);
-            t.addVertexWithUV(0, 6F / 8F, 0, minU, minV);
-            t.addVertexWithUV(0, 6F / 8F, 1, maxU, minV);
-            t.addVertexWithUV(0, 0, 1, maxU, maxV);
-            t.addTranslation(-9 / 16F, 0, 7 / 16F);
-
-            t.addTranslation(7 / 16F, 0, 0);
-            minU = icon.getInterpolatedU(7);
-            maxU = icon.getInterpolatedU(9);
-            minV = icon.getInterpolatedV(6);
-            maxV = icon.getInterpolatedV(8);
-            t.addVertexWithUV(0, 15 / 32D, 0, minU, maxV);
-            t.addVertexWithUV(0, 15 / 32D, 1 / 8D, minU, minV);
-            t.addVertexWithUV(1 / 8D, 15 / 32D, 1 / 8D, maxU, minV);
-            t.addVertexWithUV(1 / 8D, 15 / 32D, 0, maxU, maxV);
-            t.addTranslation(-7 / 16F, 0, 0);
-            t.draw();
-        }
-        GL11.glPopMatrix();
-
-    }
-
-    /**
      * @author amadornes
      * @param gate
      * @param x
@@ -199,41 +106,41 @@ public class RenderHelper {
      * @param z
      * @param state
      */
-    public static void renderRandomizerButton(GateBase gate, double x, double y, double z, boolean state) {
-
-        String res = Refs.MODID + ":textures/blocks/gates/randomizer/button_" + (state ? "on" : "off") + ".png";
-        String resSide = Refs.MODID + ":textures/blocks/gates/randomizer/button_side.png";
-
-        GL11.glPushMatrix();
-        {
-            GL11.glTranslated(x, y, z);
-
-            GL11.glPushMatrix();
-            {
-                GL11.glTranslated(6 / 16D, 2 / 16D, 4 / 16D);
-                Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(resSide));
-                for (int i = 0; i < 4; i++) {
-                    GL11.glTranslated(2 / 16D, 0, 2 / 16D);
-                    GL11.glRotated(90, 0, 1, 0);
-                    GL11.glTranslated(-2 / 16D, 0, -2 / 16D);
-                    GL11.glBegin(GL11.GL_QUADS);
-                    {
-                        GL11.glNormal3d(1, 0, 0);
-                        addVertexWithTexture(0, 0, 0, 0, 0);
-                        addVertexWithTexture(0, 1 / 16D, 0, 0, 1);
-                        addVertexWithTexture(4 / 16D, 1 / 16D, 0, 1, 1);
-                        addVertexWithTexture(4 / 16D, 0, 0, 1, 0);
-                    }
-                    GL11.glEnd();
-                }
-            }
-            GL11.glPopMatrix();
-
-            GL11.glTranslated(0, 1 / 16D, 0);
-            gate.renderTopTexture(res);
-        }
-        GL11.glPopMatrix();
-    }
+    // public static void renderRandomizerButton(GateBase gate, double x, double y, double z, boolean state) {
+    //
+    // String res = Refs.MODID + ":textures/blocks/gates/randomizer/button_" + (state ? "on" : "off") + ".png";
+    // String resSide = Refs.MODID + ":textures/blocks/gates/randomizer/button_side.png";
+    //
+    // GL11.glPushMatrix();
+    // {
+    // GL11.glTranslated(x, y, z);
+    //
+    // GL11.glPushMatrix();
+    // {
+    // GL11.glTranslated(6 / 16D, 2 / 16D, 4 / 16D);
+    // Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(resSide));
+    // for (int i = 0; i < 4; i++) {
+    // GL11.glTranslated(2 / 16D, 0, 2 / 16D);
+    // GL11.glRotated(90, 0, 1, 0);
+    // GL11.glTranslated(-2 / 16D, 0, -2 / 16D);
+    // GL11.glBegin(GL11.GL_QUADS);
+    // {
+    // GL11.glNormal3d(1, 0, 0);
+    // addVertexWithTexture(0, 0, 0, 0, 0);
+    // addVertexWithTexture(0, 1 / 16D, 0, 0, 1);
+    // addVertexWithTexture(4 / 16D, 1 / 16D, 0, 1, 1);
+    // addVertexWithTexture(4 / 16D, 0, 0, 1, 0);
+    // }
+    // GL11.glEnd();
+    // }
+    // }
+    // GL11.glPopMatrix();
+    //
+    // GL11.glTranslated(0, 1 / 16D, 0);
+    // gate.renderTopTexture(res);
+    // }
+    // GL11.glPopMatrix();
+    // }
 
     /**
      * @author amadornes
@@ -325,11 +232,11 @@ public class RenderHelper {
 
     /**
      * Draws a colored cube with the size of vector. Every face has a different color This uses OpenGL
-     * 
+     *
      * @author Koen Beckers (K4Unl)
      * @param vector
      */
-    public static void drawColoredCube(Vector3Cube vector) {
+    public static void drawColoredCube(Vec3dCube vector) {
 
         // Top side
         GL11.glColor3f(1.0F, 0.0F, 0.0F);
@@ -382,12 +289,12 @@ public class RenderHelper {
 
     /**
      * Draws a colored cube with the size of vector. All faces have the specified color. This uses OpenGL
-     * 
+     *
      * @author Koen Beckers (K4Unl) and Amadornes
      * @param vector
      * @param color
      */
-    public static void drawColoredCube(Vector3Cube vector, double r, double g, double b, double a, boolean... renderFaces) {
+    public static void drawColoredCube(Vec3dCube vector, double r, double g, double b, double a, boolean... renderFaces) {
 
         GL11.glColor4d(r, g, b, a);
 
@@ -450,12 +357,12 @@ public class RenderHelper {
 
     /**
      * Draws a colored cube with the size of vector. All faces have the specified color. This uses Tesselator
-     * 
+     *
      * @author Koen Beckers (K4Unl) and Amadornes
      * @param vector
      * @param color
      */
-    public static void drawTesselatedColoredCube(Vector3Cube vector, int r, int g, int b, int a) {
+    public static void drawTesselatedColoredCube(Vec3dCube vector, int r, int g, int b, int a) {
 
         Tessellator t = Tessellator.instance;
         boolean wasTesselating = false;
@@ -520,11 +427,11 @@ public class RenderHelper {
 
     /**
      * Draws a colored cube with the size of vector. Every face has a different color This uses the Tessellator
-     * 
+     *
      * @author Koen Beckers (K4Unl)
      * @param vector
      */
-    public static void drawTesselatedColoredCube(Vector3Cube vector) {
+    public static void drawTesselatedColoredCube(Vec3dCube vector) {
 
         Tessellator t = Tessellator.instance;
         boolean wasTesselating = false;
@@ -591,11 +498,11 @@ public class RenderHelper {
 
     /**
      * Draws a cube with the size of vector. It uses the texture that is already bound and maps that completely This uses the Tessellator
-     * 
+     *
      * @author Koen Beckers (K4Unl)
      * @param vector
      */
-    public static void drawTesselatedTexturedCube(Vector3Cube vector) {
+    public static void drawTesselatedTexturedCube(Vec3dCube vector) {
 
         Tessellator t = Tessellator.instance;
         boolean wasTesselating = false;
@@ -661,11 +568,11 @@ public class RenderHelper {
 
     /**
      * Draws a cube with the size of vector. Every face has the same color This uses the Tessellator
-     * 
+     *
      * @author Koen Beckers (K4Unl)
      * @param vector
      */
-    public static void drawTesselatedCube(Vector3Cube vector) {
+    public static void drawTesselatedCube(Vec3dCube vector) {
 
         Tessellator t = Tessellator.instance;
         boolean wasTesselating = false;
@@ -726,11 +633,11 @@ public class RenderHelper {
 
     /**
      * ???
-     * 
+     *
      * @author ???
      * @param vector
      */
-    public static void drawTesselatedCubeWithoutNormals(Vector3Cube vector) {
+    public static void drawTesselatedCubeWithoutNormals(Vec3dCube vector) {
 
         Tessellator t = Tessellator.instance;
         boolean wasTesselating = false;
@@ -785,7 +692,7 @@ public class RenderHelper {
 
     /**
      * ???
-     * 
+     *
      * @author amadornes
      * @param d
      */

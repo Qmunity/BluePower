@@ -17,10 +17,7 @@
 
 package com.bluepowermod.init;
 
-import net.minecraft.item.ItemDye;
 import net.minecraftforge.oredict.OreDictionary;
-
-import com.bluepowermod.part.PartRegistry;
 
 public class OreDictionarySetup {
 
@@ -58,7 +55,8 @@ public class OreDictionarySetup {
         OreDictionary.registerOre("waferStone", BPItems.stone_tile);
         // OreDictionary.registerOre("ingotRedAlloy", BPItems.red_alloy_ingot);
         for (int i = 0; i < 16; i++) {
-            OreDictionary.registerOre("bluestoneInsulated", PartRegistry.getInstance().getItemForPart("bluestoneWire." + ItemDye.field_150921_b[i]));
+            // OreDictionary.registerOre("bluestoneInsulated", PartRegistry.getInstance().getItemForPart("bluestoneWire." +
+            // ItemDye.field_150921_b[i]));
         }
     }
 

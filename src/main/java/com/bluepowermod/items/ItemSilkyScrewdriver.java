@@ -30,40 +30,41 @@ import net.minecraft.world.World;
 import com.bluepowermod.api.BPApi;
 import com.bluepowermod.api.block.IAdvancedSilkyRemovable;
 import com.bluepowermod.api.block.ISilkyRemovable;
-import com.bluepowermod.api.compat.IMultipartCompat;
-import com.bluepowermod.api.part.BPPart;
-import com.bluepowermod.api.vec.Vector3;
 import com.bluepowermod.compat.CompatibilityUtils;
 import com.bluepowermod.init.CustomTabs;
+import com.bluepowermod.part.BPPart;
 import com.bluepowermod.util.Dependencies;
 import com.bluepowermod.util.Refs;
+import com.qmunity.lib.part.compat.IMultipartCompat;
+import com.qmunity.lib.vec.Vec3d;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemSilkyScrewdriver extends ItemBase {
-    
+
     public ItemSilkyScrewdriver() {
-    
+
         setUnlocalizedName(Refs.SILKYSCREWDRIVER_NAME);
         setCreativeTab(CustomTabs.tabBluePowerTools);
         setMaxDamage(250);
         setMaxStackSize(1);
         setTextureName(Refs.MODID + ":" + Refs.SILKYSCREWDRIVER_NAME);
     }
-    
+
     @Override
     public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
-    
+
         Block block = world.getBlock(x, y, z);
         TileEntity te = world.getTileEntity(x, y, z);
-        
+
         IMultipartCompat compat = (IMultipartCompat) CompatibilityUtils.getModule(Dependencies.FMP);
         if (compat.isMultipart(te)) {
-            
-            BPPart p = compat.getClickedPart(new Vector3(x, y, z, world), new Vector3(hitX, hitY, hitZ), player, te);
+
+            BPPart p = compat.getClickedPart(new Vec3d(x, y, z, world), new Vec3d(hitX, hitY, hitZ), player, te);
             if (p instanceof ISilkyRemovable && !world.isRemote) {
-                if (p instanceof IAdvancedSilkyRemovable && !((IAdvancedSilkyRemovable) p).preSilkyRemoval(world, x, y, z)) return false;
+                if (p instanceof IAdvancedSilkyRemovable && !((IAdvancedSilkyRemovable) p).preSilkyRemoval(world, x, y, z))
+                    return false;
                 NBTTagCompound tag = new NBTTagCompound();
                 p.save(tag);
                 ItemStack droppedStack = BPApi.getInstance().getPartRegistry().getItemForPart(p.getType());
@@ -71,22 +72,27 @@ public class ItemSilkyScrewdriver extends ItemBase {
                 stackTag.setTag("tileData", tag);
                 world.spawnEntityInWorld(new EntityItem(world, x + 0.5, y + 0.5, z + 0.5, droppedStack));
                 compat.removePart(te, p);
-                if (p instanceof IAdvancedSilkyRemovable) ((IAdvancedSilkyRemovable) p).postSilkyRemoval(world, x, y, z);
+                if (p instanceof IAdvancedSilkyRemovable)
+                    ((IAdvancedSilkyRemovable) p).postSilkyRemoval(world, x, y, z);
                 stack.damageItem(1, player);
                 return true;
             }
-            
+
             return false;
         }
-        
+
         if (block instanceof ISilkyRemovable && !world.isRemote) {
-            if (block instanceof IAdvancedSilkyRemovable && !((IAdvancedSilkyRemovable) block).preSilkyRemoval(world, x, y, z)) return false;
-            if (te == null) throw new IllegalStateException("Block doesn't have a TileEntity?! Implementers of ISilkyRemovable should have one. Offender: " + block.getUnlocalizedName());
+            if (block instanceof IAdvancedSilkyRemovable && !((IAdvancedSilkyRemovable) block).preSilkyRemoval(world, x, y, z))
+                return false;
+            if (te == null)
+                throw new IllegalStateException("Block doesn't have a TileEntity?! Implementers of ISilkyRemovable should have one. Offender: "
+                        + block.getUnlocalizedName());
             NBTTagCompound tag = new NBTTagCompound();
             te.writeToNBT(tag);
             int metadata = world.getBlockMetadata(x, y, z);
             Item item = block.getItemDropped(metadata, itemRand, 0);
-            if (item == null) throw new NullPointerException("Block returns null for getItemDropped(meta, rand, fortune)! Offender: " + block.getUnlocalizedName());
+            if (item == null)
+                throw new NullPointerException("Block returns null for getItemDropped(meta, rand, fortune)! Offender: " + block.getUnlocalizedName());
             ItemStack droppedStack = new ItemStack(item, 1, block.damageDropped(metadata));
             NBTTagCompound stackTag = droppedStack.getTagCompound();
             if (stackTag == null) {
@@ -96,24 +102,25 @@ public class ItemSilkyScrewdriver extends ItemBase {
             stackTag.setTag("tileData", tag);
             world.spawnEntityInWorld(new EntityItem(world, x + 0.5, y + 0.5, z + 0.5, droppedStack));
             world.setBlockToAir(x, y, z);
-            if (block instanceof IAdvancedSilkyRemovable) ((IAdvancedSilkyRemovable) block).postSilkyRemoval(world, x, y, z);
+            if (block instanceof IAdvancedSilkyRemovable)
+                ((IAdvancedSilkyRemovable) block).postSilkyRemoval(world, x, y, z);
             stack.damageItem(1, player);
             return true;
         }
-        
+
         return false;
     }
-    
+
     @SideOnly(Side.CLIENT)
     @Override
     public boolean isFull3D() {
-    
+
         return true;
     }
-    
+
     @Override
     public EnumAction getItemUseAction(ItemStack par1ItemStack) {
-    
+
         return EnumAction.block;
     }
 }

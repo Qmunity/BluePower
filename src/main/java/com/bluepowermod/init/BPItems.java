@@ -40,7 +40,7 @@ import com.bluepowermod.items.ItemLimitedCrafting;
 import com.bluepowermod.items.ItemLumar;
 import com.bluepowermod.items.ItemPaintBrush;
 import com.bluepowermod.items.ItemPaintCan;
-import com.bluepowermod.items.ItemPartLegacy;
+import com.bluepowermod.items.ItemPart;
 import com.bluepowermod.items.ItemSaw;
 import com.bluepowermod.items.ItemScrewdriver;
 import com.bluepowermod.items.ItemSeedBag;
@@ -115,7 +115,6 @@ public class BPItems {
     public static final Item paint_brush = new ItemPaintBrush(Refs.PAINTBRUSH_NAME);
     public static Item iron_saw;
     public static Item diamond_saw;
-    public static final Item bluepower_multipart = new ItemPartLegacy();
     public static final Item ruby_axe = new ItemGemAxe(BluePower.gemMaterial, Refs.RUBYAXE_NAME, BPItems.ruby_gem);
     public static final Item ruby_sword = new ItemGemSword(BluePower.gemMaterial, Refs.RUBYSWORD_NAME, BPItems.ruby_gem);
     public static final Item ruby_pickaxe = new ItemGemPickaxe(BluePower.gemMaterial, Refs.RUBYPICKAXE_NAME, BPItems.ruby_gem);
@@ -134,6 +133,8 @@ public class BPItems {
     public static final Item amethyst_shovel = new ItemGemSpade(BluePower.gemMaterial, Refs.AMETHYSTSPADE_NAME, BPItems.amethyst_gem);
     public static final Item amethyst_hoe = new ItemGemHoe(BluePower.gemMaterial, Refs.AMETHYSTHOE_NAME, BPItems.amethyst_gem);
     public static final Item amethyst_sickle = new ItemSickle(BluePower.gemMaterial, Refs.AMETHYSTSICKLE_NAME, BPItems.amethyst_gem);
+
+    public static final Item multipart = new ItemPart();
 
     public static void init() {
 
@@ -234,7 +235,7 @@ public class BPItems {
         GameRegistry.registerItem(copper_wire, Refs.COPPERWIRE_NAME);
         GameRegistry.registerItem(iron_wire, Refs.IRONWIRE_NAME);
 
-        GameRegistry.registerItem(bluepower_multipart, Refs.MULTIPART_NAME);
+        GameRegistry.registerItem(multipart, Refs.MULTIPART_NAME);
 
         MinecraftForge.addGrassSeed(new ItemStack(flax_seeds), 5);
     }

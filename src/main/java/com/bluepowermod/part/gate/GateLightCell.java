@@ -27,7 +27,7 @@ public class GateLightCell extends GateBase {
     }
     
     @Override
-    public String getGateID() {
+    public String getId() {
     
         return "lightCell";
     }

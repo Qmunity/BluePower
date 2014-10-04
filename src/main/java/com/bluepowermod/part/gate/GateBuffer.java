@@ -41,7 +41,7 @@ public class GateBuffer extends GateBase {
     }
     
     @Override
-    public String getGateID() {
+    public String getId() {
     
         return "buffer";
     }

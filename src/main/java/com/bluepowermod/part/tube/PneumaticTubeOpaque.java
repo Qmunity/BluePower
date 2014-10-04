@@ -2,10 +2,11 @@ package com.bluepowermod.part.tube;
 
 import net.minecraft.util.IIcon;
 
-import com.bluepowermod.api.vec.Vector3;
 import com.bluepowermod.client.renderers.IconSupplier;
+import com.qmunity.lib.vec.Vec3d;
 
 public class PneumaticTubeOpaque extends PneumaticTube {
+
     @Override
     public String getType() {
 
@@ -31,7 +32,7 @@ public class PneumaticTubeOpaque extends PneumaticTube {
     }
 
     @Override
-    public void renderDynamic(Vector3 loc, int pass, float frame) {
+    public void renderDynamic(Vec3d loc, int pass, float frame) {
 
     }
 }

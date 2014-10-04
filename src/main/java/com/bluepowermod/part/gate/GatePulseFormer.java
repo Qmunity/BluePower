@@ -39,7 +39,7 @@ public class GatePulseFormer extends GateBase {
     }
     
     @Override
-    public String getGateID() {
+    public String getId() {
     
         return "pulseformer";
     }

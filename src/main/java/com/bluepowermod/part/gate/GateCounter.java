@@ -55,7 +55,7 @@ public class GateCounter extends GateBase implements IGuiButtonSensitive {
     }
     
     @Override
-    public String getGateID() {
+    public String getId() {
     
         return "counter";
     }

@@ -17,7 +17,6 @@
 
 package com.bluepowermod.init;
 
-import com.bluepowermod.tileentities.BPTileMultipart;
 import com.bluepowermod.tileentities.tier1.TileAlloyFurnace;
 import com.bluepowermod.tileentities.tier1.TileBlockBreaker;
 import com.bluepowermod.tileentities.tier1.TileBuffer;
@@ -43,12 +42,12 @@ import com.bluepowermod.util.Refs;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public class TileEntities {
-    
+
     /**
      * Method to register the TE's to the game. If a TE is not registered, it _will_ cause issues!
      */
     public static void init() {
-    
+
         GameRegistry.registerTileEntity(TileAlloyFurnace.class, Refs.MODID + ".alloyFurnace");
         GameRegistry.registerTileEntity(TileBlockBreaker.class, Refs.MODID + ".blockBreaker");
         GameRegistry.registerTileEntity(TileIgniter.class, Refs.MODID + ".igniter");
@@ -75,6 +74,5 @@ public class TileEntities {
         GameRegistry.registerTileEntity(TileCircuitTable.class, Refs.MODID + ".circuitTable");
         GameRegistry.registerTileEntity(TileCircuitDatabase.class, Refs.MODID + ".circuitDatabase");
         GameRegistry.registerTileEntity(TileLamp.class, Refs.MODID + ".lamp");
-        GameRegistry.registerTileEntity(BPTileMultipart.class, Refs.MODID + ".multipart");
     }
 }

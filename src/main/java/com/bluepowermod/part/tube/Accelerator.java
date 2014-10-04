@@ -25,18 +25,18 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import org.lwjgl.opengl.GL11;
 
-import com.bluepowermod.api.compat.IMultipartCompat;
 import com.bluepowermod.api.util.ForgeDirectionUtils;
-import com.bluepowermod.api.vec.Vector3;
 import com.bluepowermod.client.renderers.IconSupplier;
 import com.bluepowermod.compat.CompatibilityUtils;
 import com.bluepowermod.util.Dependencies;
+import com.qmunity.lib.part.compat.IMultipartCompat;
+import com.qmunity.lib.vec.Vec3d;
 
 /**
  * Accelerator extends PneumaticTube, as that's much easier routing wise.
- * 
+ *
  * @author MineMaarten
- * 
+ *
  */
 public class Accelerator extends PneumaticTube {
 
@@ -55,7 +55,7 @@ public class Accelerator extends PneumaticTube {
     }
 
     @Override
-    public boolean canPlacePart(ItemStack is, EntityPlayer player, Vector3 block, MovingObjectPosition mop) {
+    public boolean canPlacePart(ItemStack is, EntityPlayer player, Vec3d block, MovingObjectPosition mop) {
 
         rotation = ForgeDirectionUtils.getDirectionFacing(player, true);
         return super.canPlacePart(is, player, block, mop);
@@ -63,7 +63,7 @@ public class Accelerator extends PneumaticTube {
 
     /**
      * Gets all the occlusion boxes for this block
-     * 
+     *
      * @return A list with the occlusion boxes
      */
     @Override
@@ -149,12 +149,12 @@ public class Accelerator extends PneumaticTube {
         Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
         t.startDrawingQuads();
         rotation = ForgeDirection.UP;
-        renderStatic(new Vector3(0, 0, 0), 0);
+        renderStatic(new Vec3d(0, 0, 0), 0);
         t.draw();
     }
 
     @Override
-    public boolean renderStatic(Vector3 loc, int pass) {
+    public boolean renderStatic(Vec3d loc, int pass) {
 
         if (pass == 0) {
             Tessellator t = Tessellator.instance;

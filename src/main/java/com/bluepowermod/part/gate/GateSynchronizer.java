@@ -44,7 +44,7 @@ public class GateSynchronizer extends GateBase {
     }
     
     @Override
-    public String getGateID() {
+    public String getId() {
     
         return "synchronizer";
     }

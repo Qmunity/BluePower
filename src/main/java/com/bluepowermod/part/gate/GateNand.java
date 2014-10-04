@@ -42,7 +42,7 @@ public class GateNand extends GateBase {
     }
     
     @Override
-    public String getGateID() {
+    public String getId() {
     
         return "nand";
     }

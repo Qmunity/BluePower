@@ -40,7 +40,7 @@ public class GateRepeater extends GateBase {
     }
 
     @Override
-    public String getGateID() {
+    public String getId() {
 
         return "repeater";
     }

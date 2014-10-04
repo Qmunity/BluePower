@@ -47,7 +47,7 @@ public class GateRandomizer extends GateBase {
     }
     
     @Override
-    public String getGateID() {
+    public String getId() {
     
         return "randomizer";
     }

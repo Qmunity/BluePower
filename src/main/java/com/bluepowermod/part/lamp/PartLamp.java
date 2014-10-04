@@ -22,20 +22,19 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import org.lwjgl.opengl.GL11;
 
-import com.bluepowermod.api.helper.RedstoneHelper;
-import com.bluepowermod.api.part.BPPartFace;
-import com.bluepowermod.api.part.RedstoneConnection;
-import com.bluepowermod.api.vec.Vector3;
-import com.bluepowermod.api.vec.Vector3Cube;
 import com.bluepowermod.client.renderers.IconSupplier;
 import com.bluepowermod.client.renderers.RenderHelper;
 import com.bluepowermod.init.CustomTabs;
+import com.bluepowermod.part.BPPartFace;
+import com.qmunity.lib.helper.RedstoneHelper;
+import com.qmunity.lib.vec.Vec3d;
+import com.qmunity.lib.vec.Vec3dCube;
 
 /**
  * Base class for the lamps that are multiparts.
- * 
+ *
  * @author Koen Beckers (K4Unl)
- * 
+ *
  */
 public class PartLamp extends BPPartFace {
 
@@ -126,12 +125,12 @@ public class PartLamp extends BPPartFace {
         Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
         GL11.glPushMatrix();
         t.startDrawingQuads();
-        renderStatic(new Vector3(0, 0, 0), 0);
+        renderStatic(new Vec3d(0, 0, 0), 0);
         t.draw();
         GL11.glPopMatrix();
         GL11.glPushMatrix();
         t.startDrawingQuads();
-        renderStatic(new Vector3(0, 0, 0), 1);
+        renderStatic(new Vec3d(0, 0, 0), 1);
         t.draw();
         GL11.glPopMatrix();
         Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationItemsTexture);
@@ -142,7 +141,7 @@ public class PartLamp extends BPPartFace {
      * @author Koen Beckers (K4Unl)
      */
     @Override
-    public boolean renderStatic(Vector3 loc, int pass) {
+    public boolean renderStatic(Vec3d loc, int pass) {
 
         rotateAndTranslateDynamic(loc, pass, 0);
         Tessellator t = Tessellator.instance;
@@ -172,7 +171,7 @@ public class PartLamp extends BPPartFace {
 
     /**
      * Code to render the base portion of the lamp. Will not be colored
-     * 
+     *
      * @author Koen Beckers (K4Unl)
      * @param pass
      *            The pass that is rendered now. Pass 1 for solids. Pass 2 for transparents
@@ -183,7 +182,7 @@ public class PartLamp extends BPPartFace {
 
     /**
      * Code to render the actual lamp portion of the lamp. Will be colored
-     * 
+     *
      * @author Koen Beckers (K4Unl)
      * @param pass
      *            The pass that is rendered now. Pass 1 for solids. Pass 2 for transparents
@@ -196,7 +195,7 @@ public class PartLamp extends BPPartFace {
      */
     public void renderLamp(int pass, int r, int g, int b) {
 
-        Vector3Cube vector = new Vector3Cube(0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
+        Vec3dCube vector = new Vec3dCube(0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
 
         if (pass == 0) {
             Tessellator t = Tessellator.instance;
@@ -207,8 +206,8 @@ public class PartLamp extends BPPartFace {
                 iconToUse = IconSupplier.lampOn;
 
                 /*
-                 * t.setColorRGBA(r, g, b, 20); RenderHelper.drawTesselatedCube(new Vector3Cube(pixel * 4.5, pixel * 2, pixel * 4.5, 1.0 -
-                 * (pixel*4.5), 1.0 - (pixel * 4.5), 1.0 - pixel * 4.5)); t.setColorRGBA(r, g, b, 255);
+                 * t.setColorRGBA(r, g, b, 20); RenderHelper.drawTesselatedCube(new Vec3dCube(pixel * 4.5, pixel * 2, pixel * 4.5, 1.0 - (pixel*4.5),
+                 * 1.0 - (pixel * 4.5), 1.0 - pixel * 4.5)); t.setColorRGBA(r, g, b, 255);
                  */
             }
 

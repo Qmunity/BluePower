@@ -22,20 +22,16 @@ import net.minecraftforge.common.util.ForgeDirection;
 import org.lwjgl.opengl.GL11;
 
 import com.bluepowermod.api.block.ISilkyRemovable;
-import com.bluepowermod.api.compat.IMultipartCompat;
-import com.bluepowermod.api.part.BPPart;
-import com.bluepowermod.api.part.BPPartFace;
-import com.bluepowermod.api.part.FaceDirection;
-import com.bluepowermod.api.part.RedstoneConnection;
-import com.bluepowermod.api.vec.Vector3;
 import com.bluepowermod.compat.CompatibilityUtils;
-import com.bluepowermod.part.ItemBPPart;
-import com.bluepowermod.part.PartRegistry;
-import com.bluepowermod.part.cable.bluestone.WireBluestone;
+import com.bluepowermod.part.BPPart;
+import com.bluepowermod.part.BPPartFace;
 import com.bluepowermod.part.gate.GateBase;
 import com.bluepowermod.part.gate.GateWire;
-import com.bluepowermod.raytrace.RayTracer;
 import com.bluepowermod.util.Dependencies;
+import com.qmunity.lib.part.PartRegistry;
+import com.qmunity.lib.part.compat.IMultipartCompat;
+import com.qmunity.lib.raytrace.RayTracer;
+import com.qmunity.lib.vec.Vec3d;
 
 public abstract class IntegratedCircuit extends GateBase implements ISilkyRemovable {
 
@@ -90,7 +86,7 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
     }
 
     @Override
-    public String getGateID() {
+    public String getId() {
 
         return "integratedCircuit" + getCircuitWidth() + "x" + getCircuitWidth();
     }
@@ -110,7 +106,7 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
         renderTopTexture(FaceDirection.LEFT, left);
         renderTopTexture(FaceDirection.BACK, back);
         renderTopTexture(FaceDirection.RIGHT, right);
-        Vector3 loc = new Vector3(0, 0, 0);
+        Vec3d loc = new Vec3d(0, 0, 0);
 
         GL11.glPushMatrix();
         {
@@ -546,7 +542,7 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
     /**
      * Return true if the ItemStack that's being 'injected' with info is a stack that can be injected. This method is only called when
      * itemStack.isItemEqual(otherStack) returned true.
-     * 
+     *
      * @param outputStack
      * @return false to disallow copying.
      */
@@ -559,7 +555,7 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
     /**
      * Items that contain items (an Integrated Circuit with gates on it) need to compare the input and output, and tell which items are required. With
      * this method you can tell the Circuit Database what items the item carries, so it can calculate which items it needs.
-     * 
+     *
      * @param templateStack
      * @param outputStack
      * @return null is a valid return.

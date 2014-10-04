@@ -16,7 +16,6 @@ import java.util.Map;
 
 import com.bluepowermod.compat.cc.CompatModuleCC;
 import com.bluepowermod.compat.fmp.CompatModuleFMP;
-import com.bluepowermod.compat.fmp.CompatModuleFMPAlt;
 import com.bluepowermod.compat.hydcraft.CompatModuleHydCraft;
 import com.bluepowermod.compat.ic2.CompatModuleIC2;
 import com.bluepowermod.compat.waila.CompatModuleWaila;
@@ -120,7 +119,7 @@ public class CompatibilityUtils {
      * Register your modules here
      */
     static {
-        registerModule(Dependencies.FMP, CompatModuleFMP.class, CompatModuleFMPAlt.class);
+        registerModule(Dependencies.FMP, CompatModuleFMP.class, null);
         registerModule(Dependencies.COMPUTER_CRAFT, CompatModuleCC.class, null);
         registerModule(Dependencies.WAILA, CompatModuleWaila.class, null);
         registerModule(Dependencies.IC2, CompatModuleIC2.class, null);

@@ -27,12 +27,8 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 import net.minecraftforge.common.util.ForgeDirection;
 
-import com.bluepowermod.api.compat.IMultipartCompat;
-import com.bluepowermod.api.part.BPPart;
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
 import com.bluepowermod.api.tube.ITubeConnection;
-import com.bluepowermod.api.vec.Vector3;
-import com.bluepowermod.api.vec.Vector3Cube;
 import com.bluepowermod.client.renderers.IconSupplier;
 import com.bluepowermod.compat.CompatibilityUtils;
 import com.bluepowermod.helper.IOHelper;
@@ -41,21 +37,26 @@ import com.bluepowermod.init.BPItems;
 import com.bluepowermod.init.Config;
 import com.bluepowermod.init.CustomTabs;
 import com.bluepowermod.items.ItemDamageableColorableOverlay;
+import com.bluepowermod.part.BPPart;
 import com.bluepowermod.util.Color;
 import com.bluepowermod.util.Dependencies;
+import com.qmunity.lib.part.compat.IMultipartCompat;
+import com.qmunity.lib.vec.Vec3d;
+import com.qmunity.lib.vec.Vec3dCube;
 
 /**
- * 
+ *
  * @author MineMaarten
  */
 
 public class PneumaticTube extends BPPart {
+
     public final boolean[] connections = new boolean[6];
     /**
      * true when != 2 connections, when this is true the logic doesn't have to 'think' which way an item should go.
      */
     public boolean isCrossOver;
-    protected final Vector3Cube sideBB = new Vector3Cube(AxisAlignedBB.getBoundingBox(0.25, 0, 0.25, 0.75, 0.25, 0.75));
+    protected final Vec3dCube sideBB = new Vec3dCube(AxisAlignedBB.getBoundingBox(0.25, 0, 0.25, 0.75, 0.25, 0.75));
     private TileEntityCache[] tileCache;
     private final TubeColor[] color = { TubeColor.NONE, TubeColor.NONE, TubeColor.NONE, TubeColor.NONE, TubeColor.NONE, TubeColor.NONE };
     private final TubeLogic logic = new TubeLogic(this);
@@ -78,7 +79,7 @@ public class PneumaticTube extends BPPart {
 
     /**
      * Gets all the collision boxes for this block
-     * 
+     *
      * @return A list with the collision boxes
      */
     @Override
@@ -89,7 +90,7 @@ public class PneumaticTube extends BPPart {
 
     /**
      * Gets all the selection boxes for this block
-     * 
+     *
      * @return A list with the selection boxes
      */
     @Override
@@ -104,7 +105,7 @@ public class PneumaticTube extends BPPart {
         for (int i = 0; i < 6; i++) {
             if (connections[i]) {
                 ForgeDirection d = ForgeDirection.getOrientation(i);
-                Vector3Cube c = sideBB.clone().rotate90Degrees(d);
+                Vec3dCube c = sideBB.clone().rotate90Degrees(d);
                 aabbs.add(c.toAABB());
             }
         }
@@ -113,7 +114,7 @@ public class PneumaticTube extends BPPart {
 
     /**
      * Gets all the occlusion boxes for this block
-     * 
+     *
      * @return A list with the occlusion boxes
      */
     @Override
@@ -265,7 +266,7 @@ public class PneumaticTube extends BPPart {
 
     /**
      * Event called when the part is activated (right clicked)
-     * 
+     *
      * @param player
      *            Player that right clicked the part
      * @param item
@@ -309,7 +310,7 @@ public class PneumaticTube extends BPPart {
 
     /**
      * How 'dense' the tube is to the pathfinding algorithm. Is altered in the RestrictionTube
-     * 
+     *
      * @return
      */
     public int getWeigth() {
@@ -324,7 +325,7 @@ public class PneumaticTube extends BPPart {
 
     /**
      * This render method gets called every tick. You should use this if you're doing animations
-     * 
+     *
      * @param loc
      *            Distance from the player's position
      * @param pass
@@ -333,7 +334,7 @@ public class PneumaticTube extends BPPart {
      *            Partial tick for smoother animations
      */
     @Override
-    public void renderDynamic(Vector3 loc, int pass, float frame) {
+    public void renderDynamic(Vec3d loc, int pass, float frame) {
 
         if (pass == 0) {
             logic.renderDynamic(loc, frame);
@@ -928,7 +929,7 @@ public class PneumaticTube extends BPPart {
      * This render method gets called whenever there's a block update in the chunk. You should use this to remove load from the renderer if a part of
      * the rendering code doesn't need to get called too often or just doesn't change at all. To call a render update to re-render this just call
      * {@link BPPart#markPartForRenderUpdate()}
-     * 
+     *
      * @param loc
      *            Distance from the player's position
      * @param pass
@@ -936,7 +937,7 @@ public class PneumaticTube extends BPPart {
      * @return Whether or not it rendered something
      */
     @Override
-    public boolean renderStatic(Vector3 loc, int pass) {
+    public boolean renderStatic(Vec3d loc, int pass) {
 
         Tessellator t = Tessellator.instance;
         t.setColorOpaque_F(1, 1, 1);
@@ -975,7 +976,7 @@ public class PneumaticTube extends BPPart {
 
     /**
      * Hacky method to get the right side
-     * 
+     *
      * @return
      */
     private int getSideFromAABBIndex(int index) {
@@ -1014,9 +1015,9 @@ public class PneumaticTube extends BPPart {
 
     /**
      * Adds information to the waila tooltip
-     * 
+     *
      * @author amadornes
-     * 
+     *
      * @param info
      */
     @Override

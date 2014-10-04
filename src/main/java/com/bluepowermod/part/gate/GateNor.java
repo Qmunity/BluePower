@@ -40,7 +40,7 @@ public class GateNor extends GateBase {
     }
     
     @Override
-    public String getGateID() {
+    public String getId() {
     
         return "nor";
     }

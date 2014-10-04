@@ -20,10 +20,10 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import org.lwjgl.opengl.GL11;
 
-import com.bluepowermod.api.vec.Vector3;
-import com.bluepowermod.api.vec.Vector3Cube;
 import com.bluepowermod.blocks.machines.BlockLamp;
 import com.bluepowermod.tileentities.tier1.TileLamp;
+import com.qmunity.lib.vec.Vec3d;
+import com.qmunity.lib.vec.Vec3dCube;
 
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import cpw.mods.fml.client.registry.RenderingRegistry;
@@ -42,7 +42,7 @@ public class RenderLamp extends TileEntitySpecialRenderer implements ISimpleBloc
         int r = (bLamp.getColor() & redMask) >> 16;
         int g = (bLamp.getColor() & greenMask) >> 8;
         int b = (bLamp.getColor() & blueMask);
-        Vector3Cube vector = new Vector3Cube(0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
+        Vec3dCube vector = new Vec3dCube(0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
 
         if (pass == 0) {
             Tessellator t = Tessellator.instance;
@@ -110,7 +110,7 @@ public class RenderLamp extends TileEntitySpecialRenderer implements ISimpleBloc
             int g = (bLamp.getColor() & greenMask) >> 8;
             int b = (bLamp.getColor() & blueMask);
 
-            Vector3Cube vector = new Vector3Cube(0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
+            Vec3dCube vector = new Vec3dCube(0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
 
             // if (pass == 0) {
             Tessellator t = Tessellator.instance;
@@ -214,8 +214,8 @@ public class RenderLamp extends TileEntitySpecialRenderer implements ISimpleBloc
                 power = 15 - power;
             }
             // power = 15;
-            Vector3 vector = new Vector3(te);
-            Vector3Cube box = new Vector3Cube(-0.5, -0.5, -0.5, 0.5, 0.5, 0.5).expand(0.8 / 16D);
+            Vec3d vector = new Vec3d(te);
+            Vec3dCube box = new Vec3dCube(-0.5, -0.5, -0.5, 0.5, 0.5, 0.5).expand(0.8 / 16D);
 
             boolean[] renderFaces = new boolean[] { true, true, true, true, true, true };
 
@@ -305,7 +305,7 @@ public class RenderLamp extends TileEntitySpecialRenderer implements ISimpleBloc
             int r = (bLamp.getColor() & redMask) >> 16;
             int g = (bLamp.getColor() & greenMask) >> 8;
             int b = (bLamp.getColor() & blueMask);
-            Vector3Cube vector = new Vector3Cube(0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
+            Vec3dCube vector = new Vec3dCube(0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
 
             Tessellator t = Tessellator.instance;
             t.startDrawingQuads();
