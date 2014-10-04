@@ -114,7 +114,8 @@ public class TileDeployer extends TileBase implements ISidedInventory, IEjectAni
      *          So to use the first slot only, pass 1, to use the full hotbar, 9.
      * @return
      */
-    protected boolean rightClick(FakePlayer player, int useItems) {
+    @SuppressWarnings("incomplete-switch")
+	protected boolean rightClick(FakePlayer player, int useItems) {
     
         if (useItems > 9) throw new IllegalArgumentException("Hotbar is 9 items in width! You're trying " + useItems + "!");
         

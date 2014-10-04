@@ -71,6 +71,11 @@ public class Refs {
     public static final String   ZINC_ORE_CRUSHED_PURIFIED_NAME = "zinc_ore_purified";
     public static final String   ZINCDUST_TINY_NAME             = "zinc_tiny_dust";
     
+    public static final String   TUNGSTENDUST_NAME				= "tungsten_dust";
+    public static final String	 TUNGSTEN_ORE_CRUSHED_NAME 		= "tungsten_ore_crushed";
+    public static final String	 TUNGSTEN_ORE_CRUSHED_PURIFIED_NAME = "tungsten_ore_purified"; //Sorry for ruining the perfect line! D:
+    public static final String 	 TUNGSTENDUST_TINY_NAME			= "tungsten_tiny_dust";
+    
     public static final String   AMETHYSTSAW_NAME               = "amethyst_saw";
     public static final String   SAPPHIRESAW_NAME               = "sapphire_saw";
     public static final String   RUBYSAW_NAME                   = "ruby_saw";

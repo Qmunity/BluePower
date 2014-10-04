@@ -53,7 +53,8 @@ public class GuiSortingMachine extends GuiBase {
         ySize = 239;
     }
 
-    @Override
+    @SuppressWarnings("incomplete-switch")
+	@Override
     public void initGui() {
 
         super.initGui();
