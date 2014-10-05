@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.client.renderer.RenderBlocks;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -39,7 +40,7 @@ IDatabaseSaveable {
         if (partInfo == null)
             partInfo = PartManager.getPartInfo(getType());
 
-        return partInfo.getItem();
+        return partInfo.getItem().copy();
     }
 
     @Override
@@ -159,6 +160,11 @@ IDatabaseSaveable {
     public List<ItemStack> getItemsOnStack(ItemStack stack) {
 
         return new ArrayList<ItemStack>();
+    }
+
+    @SideOnly(Side.CLIENT)
+    public void registerIcons(IIconRegister reg) {
+
     }
 
 }

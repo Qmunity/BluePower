@@ -1,5 +1,6 @@
 package com.bluepowermod.part;
 
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import com.qmunity.lib.helper.RedstoneHelper;
@@ -84,6 +85,9 @@ public class RedstoneConnection {
 
     public void update() {
 
+        if (part.getWorld().isRemote)
+            return;
+
         if (caching) {
             if (part instanceof IPartFace) {
                 in = RedstoneHelper.getInput(part.getWorld(), part.getX(), part.getY(), part.getZ(), getFD(), ((IPartFace) part).getFace());
@@ -103,6 +107,20 @@ public class RedstoneConnection {
             }
         }
         return getDirection().getFD();
+    }
+
+    public void writeToNBT(NBTTagCompound tag) {
+
+        tag.setBoolean("enabled", enabled);
+        tag.setInteger("in", in);
+        tag.setInteger("out", out);
+    }
+
+    public void readFromNBT(NBTTagCompound tag) {
+
+        enabled = tag.getBoolean("enabled");
+        in = tag.getInteger("in");
+        out = tag.getInteger("out");
     }
 
 }

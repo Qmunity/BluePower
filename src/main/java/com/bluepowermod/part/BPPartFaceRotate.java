@@ -13,7 +13,10 @@ public abstract class BPPartFaceRotate extends BPPartFace {
 
     public void setRotation(int rotation) {
 
+        int old = this.rotation;
         this.rotation = rotation;
+        if (rotation != old)
+            sendUpdatePacket();
     }
 
     @Override

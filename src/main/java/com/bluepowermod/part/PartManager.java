@@ -49,7 +49,7 @@ public class PartManager {
             return tag.getString("id");
         } catch (Exception ex) {
         }
-        return "gate.and";
+        return null;
     }
 
     public static BPPart createPart(ItemStack item) {

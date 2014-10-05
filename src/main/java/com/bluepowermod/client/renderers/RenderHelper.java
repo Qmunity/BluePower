@@ -9,7 +9,6 @@ package com.bluepowermod.client.renderers;
 
 import java.nio.DoubleBuffer;
 
-import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
@@ -66,36 +65,47 @@ public class RenderHelper {
      */
     public static void renderRedstoneTorch(double x, double y, double z, double height, boolean state) {
 
-        Block b = null;
-        if (state)
-            b = Blocks.redstone_torch;
-        else
-            b = Blocks.unlit_redstone_torch;
+        GL11.glPushMatrix();
+        {
+            GL11.glTranslated(x, y + height - 1, z);
 
-        GL11.glTranslated(x, y, z);
+            Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
 
-        Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
-        // Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/bluestone_torch_on"));
+            rb.overrideBlockTexture = state ? IconSupplier.bluestoneTorchOn : IconSupplier.bluestoneTorchOff;
 
-        if (state) {
-            rb.setOverrideBlockTexture(IconSupplier.bluestoneTorchOn);
-        } else {
-            rb.setOverrideBlockTexture(IconSupplier.bluestoneTorchOff);
+            GL11.glEnable(GL11.GL_CLIP_PLANE0);
+            GL11.glClipPlane(GL11.GL_CLIP_PLANE0, planeEquation(0, 0, 0, 0, 0, 1, 1, 0, 1));
+
+            Tessellator t = Tessellator.instance;
+
+            float n = 4 / 16F;
+
+            t.setColorOpaque_F(1.0F, 1.0F, 1.0F);
+            t.startDrawingQuads();
+            {
+                rb.setRenderBounds(7 / 16D, 0, 0, 9 / 16D, 1, 1);
+                t.setNormal(-1, n, 0);
+                rb.renderFaceXNeg(Blocks.stone, 0, 0, 0, null);
+                t.setNormal(1, n, 0);
+                rb.renderFaceXPos(Blocks.stone, 0, 0, 0, null);
+
+                rb.setRenderBounds(0, 0, 7 / 16D, 1, 1, 9 / 16D);
+                t.setNormal(0, n, -1);
+                rb.renderFaceZNeg(Blocks.stone, 0, 0, 0, null);
+                t.setNormal(0, n, 1);
+                rb.renderFaceZPos(Blocks.stone, 0, 0, 0, null);
+
+                rb.setRenderBounds(7 / 16D, 0, 6 / 16D, 9 / 16D, 10 / 16D, 8 / 16D);
+                t.setNormal(0, 1, 0);
+                rb.renderFaceYPos(Blocks.stone, 0, 0, 1 / 16D, null);
+            }
+            t.draw();
+
+            GL11.glDisable(GL11.GL_CLIP_PLANE0);
+
+            rb.overrideBlockTexture = null;
         }
-
-        GL11.glEnable(GL11.GL_CLIP_PLANE0);
-        GL11.glClipPlane(GL11.GL_CLIP_PLANE0, planeEquation(0, 0, 0, 0, 0, 1, 1, 0, 1));
-
-        Tessellator t = Tessellator.instance;
-
-        t.startDrawingQuads();
-        t.setColorOpaque_F(1.0F, 1.0F, 1.0F);
-        rb.renderTorchAtAngle(b, 0, y + height - 1, 0, 0, 0, 0);
-        t.draw();
-
-        GL11.glDisable(GL11.GL_CLIP_PLANE0);
-
-        GL11.glTranslated(-x, -y, -z);
+        GL11.glPopMatrix();
     }
 
     /**

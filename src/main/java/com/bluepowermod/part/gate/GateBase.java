@@ -10,13 +10,22 @@ package com.bluepowermod.part.gate;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.RenderBlocks;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.IIcon;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -27,7 +36,9 @@ import com.bluepowermod.init.BPItems;
 import com.bluepowermod.init.Config;
 import com.bluepowermod.part.BPPartFaceRotate;
 import com.bluepowermod.part.RedstoneConnection;
+import com.bluepowermod.util.Refs;
 import com.qmunity.lib.part.IPartRedstone;
+import com.qmunity.lib.part.IPartTicking;
 import com.qmunity.lib.util.Dir;
 import com.qmunity.lib.vec.Vec3d;
 import com.qmunity.lib.vec.Vec3dCube;
@@ -37,14 +48,36 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone {
+public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone, IPartTicking {
 
-    protected static Vec3dCube BOX = new Vec3dCube(0, 0, 0, 1, 1D / 8D, 1);
-    protected static Vec3dCube OCCLUSION = new Vec3dCube(7D / 16D, 2D / 16D, 7D / 16D, 9D / 16D, 9D / 16D, 9D / 16D);
+    private static Vec3dCube BOX = new Vec3dCube(0, 0, 0, 1, 2D / 16D, 1);
 
     private RedstoneConnection[] connections = new RedstoneConnection[] { new RedstoneConnection(this, Dir.FRONT),
             new RedstoneConnection(this, Dir.RIGHT), new RedstoneConnection(this, Dir.BACK), new RedstoneConnection(this, Dir.LEFT),
             new RedstoneConnection(this, Dir.TOP), new RedstoneConnection(this, Dir.BOTTOM) };
+
+    private static IIcon iconBottom;
+    private static IIcon iconSide;
+    private static IIcon iconTop;
+
+    private static GateBase rendering;
+    private static final Block blockFake = new Block(Material.rock) {
+
+        @Override
+        public IIcon getIcon(IBlockAccess w, int x, int y, int z, int face) {
+
+            ForgeDirection f = ForgeDirection.getOrientation(face);
+
+            if (f == rendering.getFace())
+                return iconBottom;
+            if (f == rendering.getFace().getOpposite())
+                return iconTop;
+
+            return iconSide;
+        };
+    };
+
+    private Random rnd = new Random();
 
     public GateBase() {
 
@@ -57,11 +90,6 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
     public String getType() {
 
         return getId();
-    }
-
-    protected String getTextureName() {
-
-        return getType();
     }
 
     @Override
@@ -133,25 +161,166 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
 
     }
 
+    protected final void transformDynamic(Vec3d translation) {
+
+        GL11.glTranslated(translation.getX(), translation.getY(), translation.getZ());
+
+        GL11.glTranslated(0.5, 0.5, 0.5);
+        {
+            switch (getFace()) {
+            case DOWN:
+                break;
+            case UP:
+                GL11.glRotated(180, 1, 0, 0);
+                break;
+            case NORTH:
+                GL11.glRotated(90, 1, 0, 0);
+                break;
+            case SOUTH:
+                GL11.glRotated(90, -1, 0, 0);
+                break;
+            case WEST:
+                GL11.glRotated(90, 0, 0, -1);
+                break;
+            case EAST:
+                GL11.glRotated(90, 0, 0, 1);
+                break;
+            default:
+                break;
+            }
+            int rotation = getRotation();
+            GL11.glRotated(90 * (rotation == 0 || rotation == 2 ? (rotation + 2) % 4 : rotation), 0, 1, 0);
+        }
+        GL11.glTranslated(-0.5, -0.5, -0.5);
+    }
+
     @Override
     public void renderDynamic(Vec3d translation, double delta, int pass) {
 
+        transformDynamic(translation);
+
+        GL11.glPushMatrix();
+        renderTop((float) delta);
+        GL11.glPopMatrix();
     }
 
     @Override
     public final boolean renderStatic(Vec3i translation, RenderBlocks renderer, int pass) {
 
+        rendering = this;
+
         Vec3dCube c = BOX.clone().rotate(getFace(), Vec3d.center);
+
+        if (getFace() == ForgeDirection.UP) {
+            renderer.uvRotateEast = 3;
+            renderer.uvRotateWest = 3;
+            renderer.uvRotateNorth = 3;
+            renderer.uvRotateSouth = 3;
+            renderer.uvRotateBottom = getTopRotation();
+        } else if (getFace() == ForgeDirection.EAST) {
+            renderer.uvRotateTop = 2;
+            renderer.uvRotateBottom = 1;
+            renderer.uvRotateEast = 1;
+            renderer.uvRotateWest = 2;
+            renderer.uvRotateNorth = getTopRotation();
+        } else if (getFace() == ForgeDirection.WEST) {
+            renderer.uvRotateTop = 1;
+            renderer.uvRotateBottom = 2;
+            renderer.uvRotateEast = 2;
+            renderer.uvRotateWest = 1;
+            renderer.uvRotateSouth = getTopRotation();
+        } else if (getFace() == ForgeDirection.SOUTH) {
+            renderer.uvRotateSouth = 1;
+            renderer.uvRotateNorth = 2;
+            renderer.uvRotateEast = getTopRotation();
+        } else if (getFace() == ForgeDirection.NORTH) {
+            renderer.uvRotateTop = 3;
+            renderer.uvRotateBottom = 3;
+            renderer.uvRotateSouth = 2;
+            renderer.uvRotateNorth = 1;
+            renderer.uvRotateWest = getTopRotation();
+        } else {
+            renderer.uvRotateTop = getTopRotation();
+        }
 
         renderer.setRenderAllFaces(true);
         renderer.setRenderBounds(c.getMinX(), c.getMinY(), c.getMinZ(), c.getMaxX(), c.getMaxY(), c.getMaxZ());
-        renderer.overrideBlockTexture = Blocks.stone_slab.getIcon(0, 0);
-        boolean rendered = renderer.renderStandardBlock(Blocks.stone_slab, getX(), getY(), getZ());
         renderer.overrideBlockTexture = null;
-        renderer.setRenderBounds(0, 0, 0, 1, 1, 1);
+        boolean rendered = renderer.renderStandardBlock(blockFake, getX(), getY(), getZ());
         renderer.setRenderAllFaces(false);
 
+        renderer.uvRotateEast = 0;
+        renderer.uvRotateWest = 0;
+        renderer.uvRotateNorth = 0;
+        renderer.uvRotateSouth = 0;
+        renderer.uvRotateTop = 0;
+        renderer.uvRotateBottom = 0;
+
         return rendered;
+    }
+
+    private int getTopRotation() {
+
+        switch (getRotation()) {
+        case 0:
+            return 0;
+        case 1:
+            return 1;
+        case 3:
+            return 2;
+        case 2:
+            return 3;
+        }
+        return -1;
+    }
+
+    protected abstract void renderTop(float frame);
+
+    private final void renderTop() {
+
+        Tessellator t = Tessellator.instance;
+
+        double y = 2 / 16D;
+
+        t.startDrawingQuads();
+        t.setNormal(0, 1, 0);
+        {
+            t.addVertexWithUV(0, y, 0, 1, 1);
+            t.addVertexWithUV(0, y, 1, 1, 0);
+            t.addVertexWithUV(1, y, 1, 0, 0);
+            t.addVertexWithUV(1, y, 0, 0, 1);
+        }
+        t.draw();
+    }
+
+    protected final void renderTop(String texture) {
+
+        Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/gates/" + getId() + "/" + texture
+                + ".png"));
+        renderTop();
+    }
+
+    protected final void renderTop(String texture, String status) {
+
+        Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/gates/" + getId() + "/" + texture + "_"
+                + status + ".png"));
+        renderTop();
+    }
+
+    protected final void renderTop(String name, RedstoneConnection con) {
+
+        Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/gates/" + getId() + "/" + name + "_"
+                + (con.isEnabled() ? (((con.getOutput() + con.getInput()) > 0) ? "on" : "off") : "disabled") + ".png"));
+        renderTop();
+    }
+
+    protected final void spawnBlueParticle(double x, double y, double z) {
+
+        if (!getWorld().isRemote)
+            return;
+
+        if (rnd.nextInt(rnd.nextInt(10) + 12) == 0)
+            getWorld().spawnParticle("reddust", getX() + x, getY() + y, getZ() + z, -1, 0, 1);
     }
 
     @Override
@@ -172,6 +341,53 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
     }
 
     public abstract void doLogic();
+
+    public void tick() {
+
+    }
+
+    @Override
+    public final void update() {
+
+        tick();
+    }
+
+    @Override
+    public void onNeighborBlockChange() {
+
+        super.onNeighborBlockChange();
+        if (!getWorld().isRemote)
+            onUpdate();
+    }
+
+    @Override
+    public void onNeighborTileChange() {
+
+        super.onNeighborTileChange();
+        if (!getWorld().isRemote)
+            onUpdate();
+    }
+
+    private void onUpdate() {
+
+        for (RedstoneConnection c : connections)
+            c.update();
+
+        doLogic();
+
+        sendUpdatePacket();
+    }
+
+    @Override
+    public void onAdded() {
+
+        super.onAdded();
+
+        for (RedstoneConnection c : connections)
+            c.update();
+
+        sendUpdatePacket();
+    }
 
     @Override
     public boolean onActivated(EntityPlayer player, ItemStack item) {
@@ -223,19 +439,31 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
     @Override
     public final int getStrongPower(ForgeDirection side) {
 
-        return getConnection(side).getOutput();
+        RedstoneConnection c = getConnection(side);
+        if (c == null)
+            return 0;
+
+        return c.getOutput();
     }
 
     @Override
     public final int getWeakPower(ForgeDirection side) {
 
-        return getConnection(side).getOutput();
+        RedstoneConnection c = getConnection(side);
+        if (c == null)
+            return 0;
+
+        return c.getOutput();
     }
 
     @Override
     public final boolean canConnectRedstone(ForgeDirection side) {
 
-        return getConnection(side).isEnabled();
+        RedstoneConnection c = getConnection(side);
+        if (c == null)
+            return false;
+
+        return c.isEnabled();
     }
 
     public RedstoneConnection getConnection(Dir direction) {
@@ -245,7 +473,11 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
 
     public RedstoneConnection getConnection(ForgeDirection direction) {
 
-        return connections[Dir.getDirection(direction, getFace(), getRotation()).ordinal()];
+        try {
+            return connections[Dir.getDirection(direction, getFace(), getRotation()).ordinal()];
+        } catch (Exception ex) {
+        }
+        return null;
     }
 
     protected final RedstoneConnection front() {
@@ -276,6 +508,62 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
     protected final RedstoneConnection bottom() {
 
         return getConnection(Dir.BOTTOM);
+    }
+
+    @Override
+    public void registerIcons(IIconRegister reg) {
+
+        iconBottom = reg.registerIcon(Refs.MODID + ":gates/bottom");
+        iconSide = reg.registerIcon(Refs.MODID + ":gates/side");
+        iconTop = reg.registerIcon(Refs.MODID + ":gates/" + getId() + "/base");
+    }
+
+    @Override
+    public void writeToNBT(NBTTagCompound tag) {
+
+        super.writeToNBT(tag);
+        writeConnections(tag);
+    }
+
+    @Override
+    public void readFromNBT(NBTTagCompound tag) {
+
+        super.readFromNBT(tag);
+        readConnections(tag);
+    }
+
+    @Override
+    public void writeUpdateToNBT(NBTTagCompound tag) {
+
+        super.writeUpdateToNBT(tag);
+        writeConnections(tag);
+    }
+
+    @Override
+    public void readUpdateFromNBT(NBTTagCompound tag) {
+
+        super.readUpdateFromNBT(tag);
+        readConnections(tag);
+    }
+
+    private void writeConnections(NBTTagCompound tag) {
+
+        NBTTagCompound t = new NBTTagCompound();
+
+        for (RedstoneConnection c : connections) {
+            NBTTagCompound data = new NBTTagCompound();
+            c.writeToNBT(data);
+            t.setTag(c.getDirection().name(), data);
+        }
+
+        tag.setTag("connections", t);
+    }
+
+    private void readConnections(NBTTagCompound tag) {
+
+        NBTTagCompound t = tag.getCompoundTag("connections");
+        for (RedstoneConnection c : connections)
+            c.readFromNBT(t.getCompoundTag(c.getDirection().name()));
     }
 
 }

@@ -10,6 +10,8 @@ package com.bluepowermod.client.renderers;
 import net.minecraft.util.IIcon;
 import net.minecraftforge.client.event.TextureStitchEvent;
 
+import com.bluepowermod.part.PartInfo;
+import com.bluepowermod.part.PartManager;
 import com.bluepowermod.util.Refs;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -109,6 +111,9 @@ public class IconSupplier {
 
             bluestoneTorchOff = event.map.registerIcon(Refs.MODID + ":bluestone_torch_off");
             bluestoneTorchOn = event.map.registerIcon(Refs.MODID + ":bluestone_torch_on");
+
+            for (PartInfo i : PartManager.getRegisteredParts())
+                i.getExample().registerIcons(event.map);
         }
     }
 }

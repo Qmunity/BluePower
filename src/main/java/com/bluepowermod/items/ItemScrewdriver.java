@@ -21,25 +21,20 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
-import com.bluepowermod.BluePower;
 import com.bluepowermod.blocks.BlockContainerBase;
-import com.bluepowermod.compat.CompatibilityUtils;
-import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.init.CustomTabs;
-import com.bluepowermod.part.BPPart;
+import com.bluepowermod.part.BPPartFaceRotate;
 import com.bluepowermod.references.GuiIDs;
-import com.bluepowermod.tileentities.tier3.IRedBusWindow;
-import com.bluepowermod.tileentities.tier3.TileCPU;
-import com.bluepowermod.util.Dependencies;
 import com.bluepowermod.util.Refs;
-import com.qmunity.lib.part.compat.IMultipartCompat;
-import com.qmunity.lib.vec.Vec3d;
+import com.qmunity.lib.part.IPart;
+import com.qmunity.lib.part.ITilePartHolder;
+import com.qmunity.lib.part.compat.MultipartCompatibility;
+import com.qmunity.lib.raytrace.QMovingObjectPosition;
+import com.qmunity.lib.raytrace.RayTracer;
+import com.qmunity.lib.vec.Vec3i;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -60,23 +55,19 @@ public class ItemScrewdriver extends ItemBase {
 
         Block block = world.getBlock(x, y, z);
 
-        if (block == BPBlocks.multipart) {
-            IMultipartCompat compat = (IMultipartCompat) CompatibilityUtils.getModule(Dependencies.FMP);
-            BPPart p = compat.getClickedPart(new Vec3d(x, y, z, world), new Vec3d(hitX, hitY, hitZ), player, null);
+        if (player.isSneaking()) {
+            ITilePartHolder itph = MultipartCompatibility.getPartHolder(world, new Vec3i(x, y, z));
 
-            if (p != null && player.isSneaking()) {
-                p.onActivated(player, new MovingObjectPosition(x, y, z, side, Vec3.createVectorHelper(x + hitX, y + hitY, z + hitZ)), stack);
+            if (itph != null) {
+                QMovingObjectPosition mop = itph.rayTrace(RayTracer.instance().getStartVector(player), RayTracer.instance().getEndVector(player));
+                if (mop == null)
+                    return false;
+                IPart p = mop.getPart();
+                if (p instanceof BPPartFaceRotate) {
+                    ((BPPartFaceRotate) p).setRotation((((BPPartFaceRotate) p).getRotation() + 1) % 4);
+                }
             }
-
-            return false;
         }
-
-        // TODO: Check this bit of code.. I don't understand why it's in here..
-        TileEntity te = world.getTileEntity(x, y, z);
-        if (te != null && te instanceof IRedBusWindow && player.isSneaking() && !(te instanceof TileCPU)) {
-            player.openGui(BluePower.instance, GuiIDs.REDBUS_ID.ordinal(), world, x, y, z);
-        }
-        // Check untill here.
 
         if (block instanceof BlockContainerBase) {
             if (((BlockContainerBase) block).getGuiID() != GuiIDs.INVALID) {
