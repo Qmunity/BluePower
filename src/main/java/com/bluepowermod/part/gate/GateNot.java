@@ -9,73 +9,104 @@ package com.bluepowermod.part.gate;
 
 import java.util.List;
 
-import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.client.resources.I18n;
 
-import com.bluepowermod.api.part.FaceDirection;
-import com.bluepowermod.api.part.RedstoneConnection;
 import com.bluepowermod.client.renderers.RenderHelper;
+import com.bluepowermod.util.Color;
+import com.qmunity.lib.util.Dir;
 
 public class GateNot extends GateBase {
-    
+
     private boolean power = false;
-    
+
     @Override
-    public void initializeConnections(RedstoneConnection front, RedstoneConnection left, RedstoneConnection back, RedstoneConnection right) {
-    
-        // Init front
-        front.enable();
-        front.setOutput();
-        
-        // Init left
-        left.enable();
-        left.setOutput();
-        
-        // Init back
-        back.enable();
-        back.setInput();
-        
-        // Init right
-        right.enable();
-        right.setOutput();
+    public void initializeConnections() {
+
+        front().enable();
+        right().enable();
+        back().enable();
+        left().enable();
     }
-    
+
     @Override
     public String getId() {
-    
+
         return "not";
     }
-    
+
     @Override
-    public void renderTop(RedstoneConnection front, RedstoneConnection left, RedstoneConnection back, RedstoneConnection right, float frame) {
-    
-        renderTopTexture(FaceDirection.FRONT, !power);
-        renderTopTexture(FaceDirection.LEFT, !power);
-        renderTopTexture(FaceDirection.RIGHT, !power);
-        renderTopTexture(FaceDirection.BACK, back.getPower() > 0);
-        RenderHelper.renderRedstoneTorch(0, 1D / 8D, 0, 9D / 16D, !power);
+    public void doLogic() {
+
+        power = false;
+
+        if (left().isEnabled()) {
+            power |= left().getInput() > 0;
+        }
+        if (back().isEnabled()) {
+            power |= back().getInput() > 0;
+        }
+        if (right().isEnabled()) {
+            power |= right().getInput() > 0;
+        }
+
+        front().setOutput(!power ? 15 : 0);
     }
-    
+
     @Override
-    public void addOcclusionBoxes(List<AxisAlignedBB> boxes) {
-    
-        super.addOcclusionBoxes(boxes);
-        
-        boxes.add(AxisAlignedBB.getBoundingBox(7D / 16D, 2D / 16D, 7D / 16D, 9D / 16D, 8D / 16D, 9D / 16D));
+    protected boolean changeMode() {
+
+        if (left().isEnabled() && back().isEnabled() && right().isEnabled()) {
+            right().disable();
+        } else if (left().isEnabled() && back().isEnabled()) {
+            back().disable();
+            right().enable();
+        } else if (left().isEnabled() && right().isEnabled()) {
+            left().disable();
+            back().enable();
+        } else if (back().isEnabled() && right().isEnabled()) {
+            left().enable();
+            back().disable();
+            right().disable();
+        } else if (left().isEnabled()) {
+            left().disable();
+            back().enable();
+        } else if (back().isEnabled()) {
+            back().disable();
+            right().enable();
+        } else {// right enabled
+            left().enable();
+            back().enable();
+        }
+        return true;
     }
-    
-    @Override
-    public void doLogic(RedstoneConnection front, RedstoneConnection left, RedstoneConnection back, RedstoneConnection right) {
-    
-        power = back.getPower() > 0;
-        
-        left.setPower(!power ? 15 : 0);
-        front.setPower(!power ? 15 : 0);
-        right.setPower(!power ? 15 : 0);
-    }
-    
+
     @Override
     public void addWailaInfo(List<String> info) {
-    
+
+        info.add(Color.YELLOW + I18n.format("gui.connections") + ":");
+        info.add("  " + Dir.LEFT.getLocalizedName() + ": "
+                + (getConnection(Dir.LEFT).isEnabled() ? Color.GREEN + I18n.format("random.enabled") : Color.RED + I18n.format("random.disabled")));
+        info.add("  " + Dir.BACK.getLocalizedName() + ": "
+                + (getConnection(Dir.BACK).isEnabled() ? Color.GREEN + I18n.format("random.enabled") : Color.RED + I18n.format("random.disabled")));
+        info.add("  " + Dir.RIGHT.getLocalizedName() + ": "
+                + (getConnection(Dir.RIGHT).isEnabled() ? Color.GREEN + I18n.format("random.enabled") : Color.RED + I18n.format("random.disabled")));
     }
-    
+
+    @Override
+    protected void renderTop(float frame) {
+
+        renderTop("front", front().getOutput() > 0 ? "on" : "off");
+        renderTop("right", right());
+        renderTop("back", back());
+        renderTop("left", left());
+
+        RenderHelper.renderRedstoneTorch(0, 0, 0, 14 / 16D, front().getOutput() > 0);
+    }
+
+    @Override
+    public void tick() {
+
+        if (front().getOutput() > 0)
+            spawnBlueParticle(8 / 16D, 8 / 16D, 8 / 16D);
+    }
 }

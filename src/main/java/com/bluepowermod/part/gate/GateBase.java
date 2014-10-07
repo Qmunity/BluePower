@@ -35,6 +35,7 @@ import com.bluepowermod.api.block.ISilkyRemovable;
 import com.bluepowermod.init.BPItems;
 import com.bluepowermod.init.Config;
 import com.bluepowermod.part.BPPartFaceRotate;
+import com.bluepowermod.part.PartManager;
 import com.bluepowermod.part.RedstoneConnection;
 import com.bluepowermod.util.Refs;
 import com.qmunity.lib.part.IPartRedstone;
@@ -58,7 +59,7 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
 
     private static IIcon iconBottom;
     private static IIcon iconSide;
-    private static IIcon iconTop;
+    private IIcon iconTop;
 
     private static GateBase rendering;
     private static final Block blockFake = new Block(Material.rock) {
@@ -71,7 +72,7 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
             if (f == rendering.getFace())
                 return iconBottom;
             if (f == rendering.getFace().getOpposite())
-                return iconTop;
+                return ((GateBase) PartManager.getExample(rendering.getType())).iconTop;
 
             return iconSide;
         };
@@ -513,8 +514,10 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
     @Override
     public void registerIcons(IIconRegister reg) {
 
-        iconBottom = reg.registerIcon(Refs.MODID + ":gates/bottom");
-        iconSide = reg.registerIcon(Refs.MODID + ":gates/side");
+        if (iconBottom == null)
+            iconBottom = reg.registerIcon(Refs.MODID + ":gates/bottom");
+        if (iconSide == null)
+            iconSide = reg.registerIcon(Refs.MODID + ":gates/side");
         iconTop = reg.registerIcon(Refs.MODID + ":gates/" + getId() + "/base");
     }
 

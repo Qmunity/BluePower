@@ -22,10 +22,10 @@ public class GateAnd extends GateBase {
     @Override
     public void initializeConnections() {
 
-        front().enable();// .setOutput();
-        right().enable();// .setInput();
-        back().enable();// .setInput();
-        left().enable();// .setInput();
+        front().enable();
+        right().enable();
+        back().enable();
+        left().enable();
     }
 
     @Override
