@@ -17,6 +17,7 @@ import net.minecraft.nbt.NBTTagCompound;
 
 import com.bluepowermod.part.gate.GateAnd;
 import com.bluepowermod.part.gate.GateNot;
+import com.bluepowermod.part.gate.GateOr;
 import com.qmunity.lib.part.PartRegistry;
 
 public class PartManager {
@@ -84,13 +85,13 @@ public class PartManager {
         PartRegistry.registerFactory(new PartFactory());
         registerPart(GateAnd.class);
         registerPart(GateNot.class);
+        registerPart(GateOr.class);
         // registerPart(GateTimer.class);
         // registerPart(GateSequencer.class);
         // registerPart(GateBuffer.class);
         // registerPart(GateCounter.class);
         // registerPart(GateMux.class);
         // registerPart(GateNand.class);
-        // registerPart(GateOr.class);
         // registerPart(GateNor.class);
         // registerPart(GatePulseFormer.class);
         // registerPart(GateRandomizer.class);
