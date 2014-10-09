@@ -134,7 +134,10 @@ public class Config {
         veinSizeMarble = config.get(Refs.CONFIG_WORLDGEN, "veinSizeMarble", 2048).getInt();
 
         config.addCustomCategoryComment(Refs.CONFIG_RECIPES, "Toggle recipes to be enabled or not");
-        alloyFurnaceBlacklist = config.get(Refs.CONFIG_RECIPES, "alloyFurnaceBlacklist", new String[0]).getStringList();
+        alloyFurnaceBlacklist = config
+                .get(Refs.CONFIG_RECIPES, "alloyFurnaceBlacklist", new String[0],
+                        "Any item name ('minecraft:bucket', 'minecraft:minecart') added here will be blacklisted from being able to melt down into its raw materials.")
+                .getStringList();
 
         Property prop = config.get(Refs.CONFIG_TUBES, "Enable Tube Caching", true);
         prop.comment = "When enabled, the Tube routing is more friendly for the CPU. In return it uses a bit more RAM. Caching also may contain bugs still.";
