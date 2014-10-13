@@ -163,7 +163,7 @@ public class Recipes {
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.stone_anode, 3), " # ", "###", "WWW", '#', "dustTeslatite", 'W',
                 BPItems.stone_tile));
         craftManager.addRecipe(new ItemStack(BPItems.stone_cathode, 1), "#", "W", '#', Blocks.redstone_torch, 'W', BPItems.stone_tile);
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.stone_pointer, 1), "S", "#", "W", 'S', Items.quartz, '#',
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.stone_pointer, 1), "S", "#", "W", 'S', "stone", '#',
                 Blocks.redstone_torch, 'W', BPItems.stone_tile));
         craftManager.addRecipe(new ItemStack(BPItems.silicon_chip, 1), " # ", "WWW", '#', BPItems.red_doped_wafer, 'W', BPItems.stone_tile);
         // GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.plate_assembly, 1), " # ", "SRS", "#C#", '#', BPItems.stone_tile, 'S',
@@ -251,7 +251,7 @@ public class Recipes {
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPBlocks.project_table), "SSS", "WCW", "WIW", 'S', "stone", 'W', "plankWood", 'C',
                 Blocks.crafting_table, 'I', Blocks.chest));
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPBlocks.block_breaker, 1), "#A#", "#P#", "#R#", '#', "cobblestone", 'A',
-                Items.iron_pickaxe, 'P', Blocks.piston, 'R', "dustRedstone"));
+                Items.iron_pickaxe, 'P', Blocks.piston, 'R', BPItems.red_doped_wafer));
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPBlocks.buffer, 1), "#P#", "P P", "#P#", '#', Blocks.iron_bars, 'P', "plankWood"));
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPBlocks.ejector, 1), "PBP", "PTP", "#R#", '#', "cobblestone", 'P', "plankWood",
                 'B', BPBlocks.buffer, 'T', BPBlocks.transposer, 'R', "dustRedstone"));
