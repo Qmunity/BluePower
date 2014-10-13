@@ -10,6 +10,7 @@ package com.bluepowermod.client.renderers;
 import java.nio.DoubleBuffer;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureMap;
@@ -73,6 +74,11 @@ public class RenderHelper {
 
             rb.overrideBlockTexture = state ? IconSupplier.bluestoneTorchOn : IconSupplier.bluestoneTorchOff;
 
+            float bX = OpenGlHelper.lastBrightnessX;
+            float bY = OpenGlHelper.lastBrightnessY;
+
+            OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, Math.max(150, bX), Math.max(150, bY));
+
             GL11.glEnable(GL11.GL_CLIP_PLANE0);
             GL11.glClipPlane(GL11.GL_CLIP_PLANE0, planeEquation(0, 0, 0, 0, 0, 1, 1, 0, 1));
 
@@ -102,6 +108,8 @@ public class RenderHelper {
             t.draw();
 
             GL11.glDisable(GL11.GL_CLIP_PLANE0);
+
+            OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, bX, bY);
 
             rb.overrideBlockTexture = null;
         }

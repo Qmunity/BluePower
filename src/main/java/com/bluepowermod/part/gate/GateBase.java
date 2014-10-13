@@ -16,6 +16,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -38,6 +39,7 @@ import com.bluepowermod.part.BPPartFaceRotate;
 import com.bluepowermod.part.PartManager;
 import com.bluepowermod.part.RedstoneConnection;
 import com.bluepowermod.util.Refs;
+import com.qmunity.lib.part.IPartLightEmitter;
 import com.qmunity.lib.part.IPartRedstone;
 import com.qmunity.lib.part.IPartTicking;
 import com.qmunity.lib.util.Dir;
@@ -49,7 +51,7 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone, IPartTicking {
+public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone, IPartTicking, IPartLightEmitter {
 
     private static Vec3dCube BOX = new Vec3dCube(0, 0, 0, 1, 2D / 16D, 1);
 
@@ -305,14 +307,38 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
 
         Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/gates/" + getId() + "/" + texture + "_"
                 + status + ".png"));
+
+        boolean isOn = status.equals("on");
+
+        float bX = OpenGlHelper.lastBrightnessX;
+        float bY = OpenGlHelper.lastBrightnessY;
+
+        if (isOn)
+            OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, Math.max(125, bX), Math.max(125, bY));
+
         renderTop();
+
+        if (isOn)
+            OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, bX, bY);
     }
 
     protected final void renderTop(String name, RedstoneConnection con) {
 
+        boolean isOn = ((con.getOutput() + (!con.isOutputOnly() ? con.getInput() : 0)) > 0);
+
         Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/gates/" + getId() + "/" + name + "_"
-                + (con.isEnabled() ? (((con.getOutput() + con.getInput()) > 0) ? "on" : "off") : "disabled") + ".png"));
+                + (con.isEnabled() ? (isOn ? "on" : "off") : "disabled") + ".png"));
+
+        float bX = OpenGlHelper.lastBrightnessX;
+        float bY = OpenGlHelper.lastBrightnessY;
+
+        if (isOn)
+            OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, Math.max(125, bX), Math.max(125, bY));
+
         renderTop();
+
+        if (isOn)
+            OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, bX, bY);
     }
 
     protected final void spawnBlueParticle(double x, double y, double z) {
@@ -320,7 +346,7 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
         if (!getWorld().isRemote)
             return;
 
-        if (rnd.nextInt(rnd.nextInt(10) + 12) == 0)
+        if (rnd.nextInt(5) == 0)
             getWorld().spawnParticle("reddust", getX() + x, getY() + y, getZ() + z, -1, 0, 1);
     }
 
@@ -514,10 +540,8 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
     @Override
     public void registerIcons(IIconRegister reg) {
 
-        if (iconBottom == null)
-            iconBottom = reg.registerIcon(Refs.MODID + ":gates/bottom");
-        if (iconSide == null)
-            iconSide = reg.registerIcon(Refs.MODID + ":gates/side");
+        iconBottom = reg.registerIcon(Refs.MODID + ":gates/bottom");
+        iconSide = reg.registerIcon(Refs.MODID + ":gates/side");
         iconTop = reg.registerIcon(Refs.MODID + ":gates/" + getId() + "/base");
     }
 
@@ -567,6 +591,23 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
         NBTTagCompound t = tag.getCompoundTag("connections");
         for (RedstoneConnection c : connections)
             c.readFromNBT(t.getCompoundTag(c.getDirection().name()));
+    }
+
+    @Override
+    public int getLightValue() {
+
+        int on = 0;
+
+        if (front().isEnabled())
+            on += front().getOutput() / 4;
+        if (right().isEnabled())
+            on += right().getOutput() / 4;
+        if (back().isEnabled())
+            on += back().getOutput() / 4;
+        if (left().isEnabled())
+            on += left().getOutput() / 4;
+
+        return on;
     }
 
 }

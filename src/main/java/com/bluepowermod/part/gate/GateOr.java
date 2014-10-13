@@ -22,7 +22,7 @@ public class GateOr extends GateBase {
     @Override
     public void initializeConnections() {
 
-        front().enable();
+        front().enable().setOutputOnly();
         right().enable();
         back().enable();
         left().enable();

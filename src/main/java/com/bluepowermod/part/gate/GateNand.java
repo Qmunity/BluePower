@@ -15,14 +15,14 @@ import com.bluepowermod.client.renderers.RenderHelper;
 import com.bluepowermod.util.Color;
 import com.qmunity.lib.util.Dir;
 
-public class GateNor extends GateBase {
+public class GateNand extends GateBase {
 
     private boolean power = false;
 
     @Override
     public void initializeConnections() {
 
-        front().enable();
+        front().enable().setOutputOnly();
         right().enable();
         back().enable();
         left().enable();
@@ -31,22 +31,22 @@ public class GateNor extends GateBase {
     @Override
     public String getId() {
 
-        return "nor";
+        return "nand";
     }
 
     @Override
     public void doLogic() {
 
-        power = false;
+        power = true;
 
         if (left().isEnabled()) {
-            power |= left().getInput() > 0;
+            power &= left().getInput() > 0;
         }
         if (back().isEnabled()) {
-            power |= back().getInput() > 0;
+            power &= back().getInput() > 0;
         }
         if (right().isEnabled()) {
-            power |= right().getInput() > 0;
+            power &= right().getInput() > 0;
         }
 
         front().setOutput(!power ? 15 : 0);
@@ -95,18 +95,24 @@ public class GateNor extends GateBase {
     @Override
     protected void renderTop(float frame) {
 
-        renderTop("front", front().getOutput() > 0 ? "on" : "off");
+        renderTop("front", front());
         renderTop("right", right());
         renderTop("back", back());
         renderTop("left", left());
 
-        RenderHelper.renderRedstoneTorch(0, 0, 0, 12 / 16D, front().getOutput() > 0);
+        RenderHelper.renderRedstoneTorch(3 / 16D, 0, 0, 12 / 16D, left().getInput() == 0 && left().isEnabled());
+        RenderHelper.renderRedstoneTorch(-3 / 16D, 0, 0, 12 / 16D, right().getInput() == 0 && right().isEnabled());
+        RenderHelper.renderRedstoneTorch(0, 0, 0, 12 / 16D, back().getInput() == 0 && back().isEnabled());
     }
 
     @Override
     public void tick() {
 
-        if (front().getOutput() > 0)
+        if (left().getInput() == 0 && left().isEnabled())
+            spawnBlueParticle(5 / 16D, 6 / 16D, 8 / 16D);
+        if (right().getInput() == 0 && right().isEnabled())
+            spawnBlueParticle(11 / 16D, 6 / 16D, 8 / 16D);
+        if (back().getInput() == 0 && back().isEnabled())
             spawnBlueParticle(8 / 16D, 6 / 16D, 8 / 16D);
     }
 }

@@ -22,7 +22,7 @@ public class GateNot extends GateBase {
     @Override
     public void initializeConnections() {
 
-        front().enable();
+        front().enable().setOutputOnly();
         right().enable();
         back().enable();
         left().enable();
@@ -95,18 +95,18 @@ public class GateNot extends GateBase {
     @Override
     protected void renderTop(float frame) {
 
-        renderTop("front", front().getOutput() > 0 ? "on" : "off");
+        renderTop("front", front());
         renderTop("right", right());
         renderTop("back", back());
         renderTop("left", left());
 
-        RenderHelper.renderRedstoneTorch(0, 0, 0, 14 / 16D, front().getOutput() > 0);
+        RenderHelper.renderRedstoneTorch(0, 0, 0, 12 / 16D, front().getOutput() > 0);
     }
 
     @Override
     public void tick() {
 
         if (front().getOutput() > 0)
-            spawnBlueParticle(8 / 16D, 8 / 16D, 8 / 16D);
+            spawnBlueParticle(8 / 16D, 6 / 16D, 8 / 16D);
     }
 }

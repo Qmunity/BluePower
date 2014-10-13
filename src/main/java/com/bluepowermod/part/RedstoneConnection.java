@@ -18,6 +18,7 @@ public class RedstoneConnection {
     private boolean caching = true;
 
     private boolean enabled = false;
+    private boolean outOnly = false;
 
     public RedstoneConnection(IPart part, Dir direction) {
 
@@ -81,6 +82,21 @@ public class RedstoneConnection {
         enabled = false;
 
         return this;
+    }
+
+    public void setOutputOnly() {
+
+        outOnly = true;
+    }
+
+    public void setBidirectional() {
+
+        outOnly = false;
+    }
+
+    public boolean isOutputOnly() {
+
+        return outOnly;
     }
 
     public void update() {
