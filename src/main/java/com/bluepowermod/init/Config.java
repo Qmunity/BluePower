@@ -83,8 +83,6 @@ public class Config {
 
     public static boolean serverCircuitSavingOpOnly;
 
-    public static boolean convertLegacyPartsOnChunkLoad;
-
     public static void syncConfig(Configuration config) {
 
         config.addCustomCategoryComment(Refs.CONFIG_WORLDGEN, "Toggle blocks being generated into the world");
@@ -158,9 +156,6 @@ public class Config {
         disjunctionEnchantmentId = config.get(Refs.CONFIG_ENCHANTS, "disjunctionEnchantmentId", 101).getInt();
 
         enableGateSounds = config.get(Refs.CONFIG_SETTINGS, "Enable Gate Ticking Sounds", true).getBoolean();
-
-        convertLegacyPartsOnChunkLoad = config.getBoolean("Convert legacy parts on chunk load", Configuration.CATEGORY_GENERAL, true,
-                "Set to false when getting 'concurrentModificationExceptions'.");
 
         if (config.hasChanged()) {
             config.save();
