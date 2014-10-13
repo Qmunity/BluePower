@@ -27,8 +27,8 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import com.bluepowermod.blocks.BlockContainerBase;
 import com.bluepowermod.client.renderers.RendererBlockBase.EnumFaceType;
-import com.bluepowermod.tileentities.IRotatable;
-import com.bluepowermod.tileentities.TileBase;
+import com.qmunity.lib.tileentity.IRotatable;
+import com.qmunity.lib.tileentity.TileBase;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

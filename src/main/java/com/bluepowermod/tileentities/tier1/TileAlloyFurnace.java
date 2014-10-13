@@ -28,7 +28,7 @@ import net.minecraft.tileentity.TileEntityFurnace;
 import com.bluepowermod.api.recipe.IAlloyFurnaceRecipe;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.recipe.AlloyFurnaceRegistry;
-import com.bluepowermod.tileentities.TileBase;
+import com.qmunity.lib.tileentity.TileBase;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

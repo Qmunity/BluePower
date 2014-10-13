@@ -26,10 +26,10 @@ import net.minecraftforge.common.util.ForgeDirection;
 import org.lwjgl.opengl.GL11;
 
 import com.bluepowermod.api.compat.IMultipartCompat;
-import com.bluepowermod.api.util.ForgeDirectionUtils;
 import com.bluepowermod.api.vec.Vector3;
 import com.bluepowermod.client.renderers.IconSupplier;
 import com.bluepowermod.compat.CompatibilityUtils;
+import com.qmunity.lib.misc.ForgeDirectionUtils;
 import com.qmunity.lib.util.Dependencies;
 
 /**

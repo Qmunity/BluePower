@@ -21,7 +21,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.EntityLivingBase;
@@ -36,17 +35,17 @@ import net.minecraftforge.common.util.ForgeDirection;
 import com.bluepowermod.BluePower;
 import com.bluepowermod.api.BPApi;
 import com.bluepowermod.api.block.IAdvancedSilkyRemovable;
-import com.bluepowermod.api.util.ForgeDirectionUtils;
 import com.bluepowermod.client.renderers.RendererBlockBase;
 import com.bluepowermod.client.renderers.RendererBlockBase.EnumFaceType;
-import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.init.BPItems;
+import com.bluepowermod.init.CustomTabs;
 import com.bluepowermod.references.GuiIDs;
 import com.bluepowermod.tileentities.IBluePowered;
 import com.bluepowermod.tileentities.IEjectAnimator;
-import com.bluepowermod.tileentities.IRotatable;
-import com.bluepowermod.tileentities.TileBase;
 import com.bluepowermod.util.Refs;
+import com.qmunity.lib.block.BlockTileBase;
+import com.qmunity.lib.tileentity.IRotatable;
+import com.qmunity.lib.tileentity.TileBase;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -55,88 +54,22 @@ import cpw.mods.fml.relauncher.SideOnly;
  * @author MineMaarten
  */
 
-public class BlockContainerBase extends BlockBase implements ITileEntityProvider, IAdvancedSilkyRemovable {
+public class BlockContainerBase extends BlockTileBase implements IAdvancedSilkyRemovable {
 
     @SideOnly(Side.CLIENT)
     protected Map<String, IIcon> textures;
-    private GuiIDs guiId = GuiIDs.INVALID;
-    private Class<? extends TileBase> tileEntityClass;
-    private boolean isRedstoneEmitter;
+
     private boolean isSilkyRemoving;
 
     public BlockContainerBase(Material material, Class<? extends TileBase> tileEntityClass) {
-
-        super(material);
-        isBlockContainer = true;
-        setTileEntityClass(tileEntityClass);
+        super(material, tileEntityClass);
+        setCreativeTab(CustomTabs.tabBluePowerMachines);
     }
 
     public BlockContainerBase setGuiId(GuiIDs guiId) {
 
-        this.guiId = guiId;
+        this.setGuiId(guiId.ordinal());
         return this;
-    }
-
-    public BlockContainerBase setTileEntityClass(Class<? extends TileBase> tileEntityClass) {
-
-        this.tileEntityClass = tileEntityClass;
-        return this;
-    }
-
-    public BlockContainerBase emitsRedstone() {
-
-        isRedstoneEmitter = true;
-        return this;
-    }
-
-    @Override
-    public TileEntity createNewTileEntity(World world, int metadata) {
-
-        try {
-            return getTileEntity().newInstance();
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
-    /**
-     * Fetches the TileEntity Class that goes with the block
-     * 
-     * @return a .class
-     */
-    protected Class<? extends TileEntity> getTileEntity() {
-
-        return tileEntityClass;
-    }
-
-    @Override
-    public void onNeighborBlockChange(World world, int x, int y, int z, Block block) {
-
-        super.onNeighborBlockChange(world, x, y, z, block);
-        // Only do this on the server side.
-        if (!world.isRemote) {
-            TileBase tileEntity = (TileBase) world.getTileEntity(x, y, z);
-            if (tileEntity != null) {
-                tileEntity.onBlockNeighbourChanged();
-            }
-        }
-    }
-
-    @Override
-    public boolean canProvidePower() {
-
-        return isRedstoneEmitter;
-    }
-
-    @Override
-    public int isProvidingWeakPower(IBlockAccess par1IBlockAccess, int par2, int par3, int par4, int par5) {
-
-        TileEntity te = par1IBlockAccess.getTileEntity(par2, par3, par4);
-        if (te instanceof TileBase) {
-            TileBase tileBase = (TileBase) te;
-            return tileBase.getOutputtingRedstone();
-        }
-        return 0;
     }
 
     @Override
@@ -150,70 +83,19 @@ public class BlockContainerBase extends BlockBase implements ITileEntityProvider
             }
         }
 
-        if (player.isSneaking()) {
-            return false;
-        }
-
-        TileEntity entity = world.getTileEntity(x, y, z);
-        if (entity == null || !(entity instanceof TileBase)) {
-            return false;
-        }
-
-        if (getGuiID() != GuiIDs.INVALID) {
-            if (!world.isRemote)
-                player.openGui(BluePower.instance, getGuiID().ordinal(), world, x, y, z);
-            return true;
-        }
-        return false;
+        return super.onBlockActivated(world, x, y, z, player, par6, par7, par8, par9);
     }
 
     @Override
-    public void breakBlock(World world, int x, int y, int z, Block block, int meta) {
-
-        if (!isSilkyRemoving) {
-            TileBase tile = (TileBase) world.getTileEntity(x, y, z);
-            if (tile != null) {
-                for (ItemStack stack : tile.getDrops()) {
-                    IOHelper.spawnItemInWorld(world, stack, x + 0.5, y + 0.5, z + 0.5);
-                }
-            }
-        }
-        super.breakBlock(world, x, y, z, block, meta);
-        world.removeTileEntity(x, y, z);
+    protected boolean shouldDropItems() {
+        return !isSilkyRemoving;
     }
 
-    /**
-     * Method to detect how the block was placed, and what way it's facing.
-     */
     @Override
     public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase player, ItemStack iStack) {
 
         BPApi.getInstance().loadSilkySettings(world, x, y, z, iStack);
-        TileEntity te = world.getTileEntity(x, y, z);
-        if (te instanceof IRotatable) {
-            ((IRotatable) te).setFacingDirection(ForgeDirectionUtils.getDirectionFacing(player, canRotateVertical()).getOpposite());
-        }
-    }
-
-    protected boolean canRotateVertical() {
-
-        return true;
-    }
-
-    @Override
-    public boolean rotateBlock(World worldObj, int x, int y, int z, ForgeDirection axis) {
-
-        TileEntity te = worldObj.getTileEntity(x, y, z);
-        if (te instanceof IRotatable) {
-            IRotatable rotatable = (IRotatable) te;
-            ForgeDirection dir = rotatable.getFacingDirection();
-            dir = dir.getRotation(axis);
-            if (dir != ForgeDirection.UP && dir != ForgeDirection.DOWN || canRotateVertical()) {
-                rotatable.setFacingDirection(dir);
-                return true;
-            }
-        }
-        return false;
+        super.onBlockPlacedBy(world, x, y, z, player, iStack);
     }
 
     @Override
@@ -317,11 +199,6 @@ public class BlockContainerBase extends BlockBase implements ITileEntityProvider
         return RendererBlockBase.RENDER_ID;
     }
 
-    public GuiIDs getGuiID() {
-
-        return guiId;
-    }
-
     @Override
     public boolean preSilkyRemoval(World world, int x, int y, int z) {
 
@@ -339,5 +216,15 @@ public class BlockContainerBase extends BlockBase implements ITileEntityProvider
     public boolean canConnectRedstone(IBlockAccess world, int x, int y, int z, int side) {
 
         return ((TileBase) world.getTileEntity(x, y, z)).canConnectRedstone();
+    }
+
+    @Override
+    protected Object getModInstance() {
+        return BluePower.instance;
+    }
+
+    @Override
+    protected String getModId() {
+        return Refs.MODID;
     }
 }

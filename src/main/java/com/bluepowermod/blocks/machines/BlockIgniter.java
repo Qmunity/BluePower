@@ -19,9 +19,10 @@ package com.bluepowermod.blocks.machines;
 
 import com.bluepowermod.blocks.BlockContainerBase;
 import com.bluepowermod.client.renderers.RendererBlockBase.EnumFaceType;
-import com.bluepowermod.tileentities.IRotatable;
 import com.bluepowermod.tileentities.tier1.TileIgniter;
 import com.bluepowermod.util.Refs;
+import com.qmunity.lib.tileentity.IRotatable;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;

@@ -17,6 +17,16 @@
 
 package com.bluepowermod.items;
 
+import net.minecraft.block.Block;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.EnumAction;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.Vec3;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
+
 import com.bluepowermod.BluePower;
 import com.bluepowermod.api.compat.IMultipartCompat;
 import com.bluepowermod.api.part.BPPart;
@@ -33,15 +43,6 @@ import com.qmunity.lib.util.Dependencies;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.EnumAction;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.Vec3;
-import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
 
 public class ItemScrewdriver extends ItemBase {
 
@@ -70,34 +71,33 @@ public class ItemScrewdriver extends ItemBase {
             return false;
         }
 
-        //TODO: Check this bit of code.. I don't understand why it's in here..
+        // TODO: Check this bit of code.. I don't understand why it's in here..
         TileEntity te = world.getTileEntity(x, y, z);
         if (te != null && te instanceof IRedBusWindow && player.isSneaking() && !(te instanceof TileCPU)) {
             player.openGui(BluePower.instance, GuiIDs.REDBUS_ID.ordinal(), world, x, y, z);
         }
-        //Check untill here.
+        // Check untill here.
 
-        if(block instanceof BlockContainerBase){
-            if(((BlockContainerBase)block).getGuiID() != GuiIDs.INVALID){
-                if(player.isSneaking()){
+        if (block instanceof BlockContainerBase) {
+            if (((BlockContainerBase) block).getGuiId() >= 0) {
+                if (player.isSneaking()) {
                     block.rotateBlock(world, x, y, z, ForgeDirection.getOrientation(side));
                     if (!player.capabilities.isCreativeMode) {
                         stack.setItemDamage(stack.getItemDamage() + 1);
                     }
                 }
-            }else{
+            } else {
                 block.rotateBlock(world, x, y, z, ForgeDirection.getOrientation(side));
                 if (!player.capabilities.isCreativeMode) {
                     stack.setItemDamage(stack.getItemDamage() + 1);
                 }
             }
-        }else{
+        } else {
             block.rotateBlock(world, x, y, z, ForgeDirection.getOrientation(side));
             if (!player.capabilities.isCreativeMode) {
                 stack.setItemDamage(stack.getItemDamage() + 1);
             }
         }
-
 
         return false;
     }

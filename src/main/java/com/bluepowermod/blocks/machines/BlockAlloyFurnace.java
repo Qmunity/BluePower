@@ -37,68 +37,73 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockAlloyFurnace extends BlockContainerBase {
-    
+
     public static IIcon textureTop;
-    private IIcon       textureBottom;
-    private IIcon       textureSide;
-    private IIcon       textureFrontOn;
-    private IIcon       textureFrontOff;
-    
+    private IIcon textureBottom;
+    private IIcon textureSide;
+    private IIcon textureFrontOn;
+    private IIcon textureFrontOff;
+
     public BlockAlloyFurnace() {
-    
+
         super(Material.rock, TileAlloyFurnace.class);
         setBlockName(Refs.ALLOYFURNACE_NAME);
-        
+        setGuiId(GuiIDs.ALLOY_FURNACE);
     }
-    
+
     @Override
     @SideOnly(Side.CLIENT)
     public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
-    
+
         TileAlloyFurnace te = (TileAlloyFurnace) world.getTileEntity(x, y, z);
         ForgeDirection forgeSide = ForgeDirection.getOrientation(side);
-        if (forgeSide == ForgeDirection.UP) return textureTop;
-        if (forgeSide == ForgeDirection.DOWN) return textureBottom;
-        if (forgeSide == te.getFacingDirection()) return te.getIsActive() ? textureFrontOn : textureFrontOff;
+        if (forgeSide == ForgeDirection.UP)
+            return textureTop;
+        if (forgeSide == ForgeDirection.DOWN)
+            return textureBottom;
+        if (forgeSide == te.getFacingDirection())
+            return te.getIsActive() ? textureFrontOn : textureFrontOff;
         return textureSide;
     }
-    
+
     @Override
     @SideOnly(Side.CLIENT)
     public IIcon getIcon(int side, int meta) {
-    
+
         ForgeDirection s = ForgeDirection.getOrientation(side);
         // If is facing
-        
-        if (3 == side) { return textureFrontOff; }
+
+        if (3 == side) {
+            return textureFrontOff;
+        }
         switch (s) {
-            case UP:
-                return textureTop;
-            case DOWN:
-                return textureBottom;
-            case EAST:
-            case NORTH:
-            case SOUTH:
-            case WEST:
-            case UNKNOWN:
-                return textureSide;
-            default:
-                break;
-        
+        case UP:
+            return textureTop;
+        case DOWN:
+            return textureBottom;
+        case EAST:
+        case NORTH:
+        case SOUTH:
+        case WEST:
+        case UNKNOWN:
+            return textureSide;
+        default:
+            break;
+
         }
         return null;
     }
-    
+
     @Override
     public boolean isOpaqueCube() {
-    
+
         return true;
     }
-    
+
     @Override
     @SideOnly(Side.CLIENT)
     public void randomDisplayTick(World world, int x, int y, int z, Random rnd) {
-    
+
         TileAlloyFurnace te = (TileAlloyFurnace) world.getTileEntity(x, y, z);
         if (te.getIsActive()) {
             int l = te.getFacingDirection().ordinal();
@@ -107,7 +112,7 @@ public class BlockAlloyFurnace extends BlockContainerBase {
             float f2 = z + 0.5F;
             float f3 = 0.52F;
             float f4 = rnd.nextFloat() * 0.6F - 0.3F;
-            
+
             if (l == 4) {
                 world.spawnParticle("smoke", f - f3, f1, f2 + f4, 0.0D, 0.0D, 0.0D);
                 world.spawnParticle("flame", f - f3, f1, f2 + f4, 0.0D, 0.0D, 0.0D);
@@ -123,47 +128,41 @@ public class BlockAlloyFurnace extends BlockContainerBase {
             }
         }
     }
-    
+
     // Not sure if you need this function.
     @Override
     public Item getItemDropped(int p_149650_1_, Random random, int p_149650_3_) {
-    
+
         return Item.getItemFromBlock(BPBlocks.alloyfurnace);
     }
-    
+
     @Override
     @SideOnly(Side.CLIENT)
     public void registerBlockIcons(IIconRegister iconRegister) {
-    
+
         textureTop = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + Refs.ALLOYFURNACE_NAME + "_top");
         textureBottom = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + Refs.ALLOYFURNACE_NAME + "_bottom");
         textureSide = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + Refs.ALLOYFURNACE_NAME + "_side");
         textureFrontOn = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + Refs.ALLOYFURNACE_NAME + "_front_on");
         textureFrontOff = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + Refs.ALLOYFURNACE_NAME + "_front_off");
     }
-    
+
     @Override
     public int getLightValue(IBlockAccess world, int x, int y, int z) {
-    
+
         TileAlloyFurnace te = (TileAlloyFurnace) world.getTileEntity(x, y, z);
         return te.getIsActive() ? 13 : 0;
     }
-    
-    @Override
-    public GuiIDs getGuiID() {
-    
-        return GuiIDs.ALLOY_FURNACE;
-    }
-    
+
     @Override
     protected boolean canRotateVertical() {
-    
+
         return false;
     }
-    
+
     @Override
     public int getRenderType() {
-    
+
         return 0;
     }
 }

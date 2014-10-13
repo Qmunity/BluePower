@@ -23,7 +23,7 @@ import com.bluepowermod.BluePower;
 import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.part.IGuiButtonSensitive;
-import com.bluepowermod.tileentities.TileBase;
+import com.qmunity.lib.tileentity.TileBase;
 
 import cpw.mods.fml.relauncher.ReflectionHelper;
 

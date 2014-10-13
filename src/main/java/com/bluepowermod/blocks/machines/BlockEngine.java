@@ -23,7 +23,6 @@ import net.minecraftforge.common.util.ForgeDirection;
 import com.bluepowermod.blocks.BlockContainerBase;
 import com.bluepowermod.init.BPItems;
 import com.bluepowermod.init.CustomTabs;
-import com.bluepowermod.references.GuiIDs;
 import com.bluepowermod.tileentities.tier3.TileEngine;
 import com.bluepowermod.util.Refs;
 
@@ -181,17 +180,6 @@ public class BlockEngine extends BlockContainerBase {
         }
 
         return false;
-    }
-
-    /**
-     * Method to be overwritten that returns a GUI ID
-     * 
-     * @return
-     */
-    @Override
-    public GuiIDs getGuiID() {
-
-        return GuiIDs.INVALID;
     }
 
     @Override

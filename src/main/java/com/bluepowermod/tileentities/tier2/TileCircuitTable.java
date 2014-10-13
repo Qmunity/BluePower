@@ -24,7 +24,7 @@ import com.bluepowermod.part.IGuiButtonSensitive;
 import com.bluepowermod.part.PartRegistry;
 import com.bluepowermod.part.gate.GateBase;
 import com.bluepowermod.tileentities.IGUITextFieldSensitive;
-import com.bluepowermod.tileentities.TileBase;
+import com.qmunity.lib.tileentity.TileBase;
 
 /**
  * @author MineMaarten

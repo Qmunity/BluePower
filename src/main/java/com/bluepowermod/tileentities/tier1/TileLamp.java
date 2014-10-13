@@ -10,7 +10,7 @@ package com.bluepowermod.tileentities.tier1;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import com.bluepowermod.api.helper.RedstoneHelper;
-import com.bluepowermod.tileentities.TileBase;
+import com.qmunity.lib.tileentity.TileBase;
 
 /**
  * @author Koen Beckers (K4Unl)

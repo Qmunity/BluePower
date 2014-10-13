@@ -13,7 +13,7 @@ import java.io.InputStream;
 import net.minecraft.init.Blocks;
 
 import com.bluepowermod.BluePower;
-import com.bluepowermod.tileentities.TileBase;
+import com.qmunity.lib.tileentity.TileBase;
 
 /**
  * @author fabricator77

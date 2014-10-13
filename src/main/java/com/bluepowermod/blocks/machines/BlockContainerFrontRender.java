@@ -12,7 +12,7 @@ import net.minecraft.world.IBlockAccess;
 
 import com.bluepowermod.blocks.BlockContainerBase;
 import com.bluepowermod.client.renderers.RendererBlockBase.EnumFaceType;
-import com.bluepowermod.tileentities.TileBase;
+import com.qmunity.lib.tileentity.TileBase;
 
 /**
  * @author MineMaarten

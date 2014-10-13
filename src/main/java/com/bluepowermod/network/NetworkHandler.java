@@ -28,6 +28,7 @@ import com.bluepowermod.network.messages.MessageGuiUpdate;
 import com.bluepowermod.network.messages.MessageMultipartRemove;
 import com.bluepowermod.network.messages.MessageRedirectTubeStack;
 import com.bluepowermod.network.messages.MessageSendClientServerTemplates;
+import com.bluepowermod.network.messages.MessageSyncMachineBacklog;
 import com.bluepowermod.network.messages.MessageUpdateTextfield;
 import com.bluepowermod.util.Refs;
 
@@ -59,6 +60,7 @@ public class NetworkHandler {
         INSTANCE.registerMessage(MessageDebugBlock.class, MessageDebugBlock.class, discriminant++, Side.CLIENT);
         INSTANCE.registerMessage(MessageSendClientServerTemplates.class, MessageSendClientServerTemplates.class, discriminant++, Side.CLIENT);
         INSTANCE.registerMessage(MessageRedirectTubeStack.class, MessageRedirectTubeStack.class, discriminant++, Side.CLIENT);
+        INSTANCE.registerMessage(MessageSyncMachineBacklog.class, MessageSyncMachineBacklog.class, discriminant++, Side.CLIENT);
     }
 
     /*

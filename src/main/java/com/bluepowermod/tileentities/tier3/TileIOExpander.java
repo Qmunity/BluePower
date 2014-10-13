@@ -7,7 +7,7 @@
  */
 package com.bluepowermod.tileentities.tier3;
 
-import com.bluepowermod.tileentities.TileBase;
+import com.qmunity.lib.tileentity.TileBase;
 
 /**
  * @author fabricator77

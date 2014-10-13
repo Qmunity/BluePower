@@ -25,6 +25,7 @@ import com.bluepowermod.api.tube.IWeightedTubeInventory;
 import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.helper.TileEntityCache;
 import com.bluepowermod.part.tube.TubeStack;
+import com.qmunity.lib.tileentity.TileBase;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

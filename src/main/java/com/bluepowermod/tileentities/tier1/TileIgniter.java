@@ -23,7 +23,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import com.bluepowermod.tileentities.IEjectAnimator;
-import com.bluepowermod.tileentities.TileBase;
+import com.qmunity.lib.tileentity.TileBase;
 
 public class TileIgniter extends TileBase implements IEjectAnimator {
 

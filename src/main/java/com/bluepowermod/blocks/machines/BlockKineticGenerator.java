@@ -21,19 +21,14 @@ import com.bluepowermod.util.Refs;
  * 
  */
 public class BlockKineticGenerator extends BlockContainerBase {
-    
+
     public BlockKineticGenerator() {
-    
+
         super(Material.iron, TileKinectGenerator.class);
         setCreativeTab(CustomTabs.tabBluePowerMachines);
         setBlockName(Refs.KINETICGENERATOR_NAME);
         setBlockTextureName(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + Refs.KINETICGENERATOR_NAME + "_front");
+        setGuiId(GuiIDs.KINETICGENERATOR_ID);
     }
-    
-    @Override
-    public GuiIDs getGuiID() {
-    
-        return GuiIDs.KINETICGENERATOR_ID;
-    }
-    
+
 }

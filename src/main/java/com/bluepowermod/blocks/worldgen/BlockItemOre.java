@@ -17,17 +17,14 @@
 
 package com.bluepowermod.blocks.worldgen;
 
-import com.bluepowermod.blocks.BlockBase;
-import com.bluepowermod.init.BPBlocks;
-import com.bluepowermod.init.BPItems;
-import com.bluepowermod.init.CustomTabs;
-import com.bluepowermod.util.Refs;
+import java.util.Random;
+
 import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
-import net.minecraft.util.MathHelper;
-import net.minecraft.world.IBlockAccess;
 
-import java.util.Random;
+import com.bluepowermod.init.CustomTabs;
+import com.bluepowermod.util.Refs;
+import com.qmunity.lib.block.BlockBase;
 
 public class BlockItemOre extends BlockBase {
 
@@ -36,13 +33,14 @@ public class BlockItemOre extends BlockBase {
     public BlockItemOre(String type) {
 
         super(Material.iron);
-        this.setCreativeTab(CustomTabs.tabBluePowerBlocks);
-        this.setStepSound(soundTypeStone);
-        this.setHardness(2.5F);
-        this.setResistance(10.0F);
-        this.textureName = Refs.MODID + ":" + type;
-        this.setBlockName(type);
+        setCreativeTab(CustomTabs.tabBluePowerBlocks);
+        setStepSound(soundTypeStone);
+        setHardness(2.5F);
+        setResistance(10.0F);
+        textureName = Refs.MODID + ":" + type;
+        setBlockName(type);
         this.setHarvestLevel("pickaxe", 2);
+
     }
 
     @Override
@@ -60,7 +58,7 @@ public class BlockItemOre extends BlockBase {
     @Override
     public int quantityDroppedWithBonus(int quantity, Random rand) {
 
-        if (quantity > 0 && Item.getItemFromBlock(this) != this.getItemDropped(0, rand, quantity)) {
+        if (quantity > 0 && Item.getItemFromBlock(this) != getItemDropped(0, rand, quantity)) {
             int j = rand.nextInt(quantity + 2) - 1;
             if (j < 0) {
                 j = 0;
@@ -69,5 +67,10 @@ public class BlockItemOre extends BlockBase {
         } else {
             return this.quantityDropped(rand);
         }
+    }
+
+    @Override
+    protected String getModId() {
+        return Refs.MODID;
     }
 }

@@ -22,6 +22,7 @@ public abstract class ContainerMachineBase extends ContainerGhosts {
     @Override
     public void detectAndSendChanges() {
         super.detectAndSendChanges();
+
         for (Object crafter : crafters) {
             ICrafting icrafting = (ICrafting) crafter;
 

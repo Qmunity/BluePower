@@ -15,7 +15,7 @@ import net.minecraft.util.IIcon;
 import com.bluepowermod.blocks.BlockContainerBase;
 import com.bluepowermod.client.renderers.RendererBlockBase.EnumFaceType;
 import com.bluepowermod.tileentities.IRejectAnimator;
-import com.bluepowermod.tileentities.TileBase;
+import com.qmunity.lib.tileentity.TileBase;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

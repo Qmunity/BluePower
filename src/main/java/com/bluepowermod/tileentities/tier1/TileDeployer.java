@@ -37,8 +37,8 @@ import com.bluepowermod.BluePower;
 import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.tileentities.IEjectAnimator;
-import com.bluepowermod.tileentities.TileBase;
 import com.mojang.authlib.GameProfile;
+import com.qmunity.lib.tileentity.TileBase;
 
 /**
  * @author MineMaarten

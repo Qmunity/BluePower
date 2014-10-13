@@ -24,10 +24,10 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import com.bluepowermod.blocks.BlockContainerBase;
-import com.bluepowermod.tileentities.IRotatable;
-import com.bluepowermod.tileentities.TileBase;
 import com.bluepowermod.tileentities.tier1.TileProjectTable;
 import com.bluepowermod.util.Refs;
+import com.qmunity.lib.tileentity.IRotatable;
+import com.qmunity.lib.tileentity.TileBase;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

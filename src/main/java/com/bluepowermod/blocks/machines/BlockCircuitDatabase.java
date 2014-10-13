@@ -27,8 +27,8 @@ import net.minecraft.world.World;
 import com.bluepowermod.helper.ItemStackDatabase;
 import com.bluepowermod.network.NetworkHandler;
 import com.bluepowermod.network.messages.MessageSendClientServerTemplates;
-import com.bluepowermod.tileentities.TileBase;
 import com.bluepowermod.tileentities.tier3.TileCircuitDatabase;
+import com.qmunity.lib.tileentity.TileBase;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
