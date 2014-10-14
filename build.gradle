@@ -104,6 +104,9 @@ processResources
             from(sourceSets.main.resources.srcDirs) {
                 exclude 'mcmod.info'
             }
+
+            //This makes sure that it gets run EVERY time
+            outputs.upToDateWhen {false}
         }
 
 
