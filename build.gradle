@@ -54,20 +54,7 @@ if (System.getenv().BUILD_NUMBER != null) {
     version += " - err"
 }
 
-def grabDep(url) {
-    ant.get(src: url, dest: 'dep')
-	compile files("dep/" + url.substring(url.lastIndexOf("/")));
-}
-
 dependencies {
-    def f = new File('dep/')
-    if (f.exists()) {
-        f.delete()
-    }
-    f.mkdirs()
-    if (!f.exists()) {
-        f.mkdir()
-    }
     println("  Adding dependencies!")
     compile "codechicken:CodeChickenLib:1.7.10-1.1.1.95:dev"
     compile "codechicken:CodeChickenCore:1.7.10-1.0.2.11:dev"
@@ -92,7 +79,6 @@ minecraft {
     } else {
         replace '@BUILD_NUMBER@', 0
     }
-
 }
 
 processResources
@@ -113,6 +99,8 @@ processResources
             from(sourceSets.main.resources.srcDirs) {
                 exclude 'mcmod.info'
             }
+            //This makes sure that it gets run EVERY time
+            outputs.upToDateWhen {false}
         }
 
 
