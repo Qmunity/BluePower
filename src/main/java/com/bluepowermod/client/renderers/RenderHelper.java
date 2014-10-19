@@ -236,7 +236,8 @@ public class RenderHelper {
      * @param z3
      * @return TODO: Maybe move this function?
      */
-    public static DoubleBuffer planeEquation(double x1, double y1, double z1, double x2, double y2, double z2, double x3, double y3, double z3) {
+    public static DoubleBuffer planeEquation(double x1, double y1, double z1, double x2, double y2, double z2, double x3, double y3,
+            double z3) {
 
         double[] eq = new double[4];
         eq[0] = y1 * (z2 - z3) + y2 * (z3 - z1) + y3 * (z1 - z2);

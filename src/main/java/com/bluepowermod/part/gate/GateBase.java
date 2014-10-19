@@ -298,15 +298,15 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
 
     protected final void renderTop(String texture) {
 
-        Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/gates/" + getId() + "/" + texture
-                + ".png"));
+        Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/gates/" + getId() + "/"
+                + texture + ".png"));
         renderTop();
     }
 
     protected final void renderTop(String texture, String status) {
 
-        Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/gates/" + getId() + "/" + texture + "_"
-                + status + ".png"));
+        Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/gates/" + getId() + "/"
+                + texture + "_" + status + ".png"));
 
         boolean isOn = status.equals("on");
 
@@ -326,8 +326,8 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
 
         boolean isOn = ((con.getOutput() + (!con.isOutputOnly() ? con.getInput() : 0)) > 0);
 
-        Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/gates/" + getId() + "/" + name + "_"
-                + (con.isEnabled() ? (isOn ? "on" : "off") : "disabled") + ".png"));
+        Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/gates/" + getId() + "/"
+                + name + "_" + (con.isEnabled() ? (isOn ? "on" : "off") : "disabled") + ".png"));
 
         float bX = OpenGlHelper.lastBrightnessX;
         float bY = OpenGlHelper.lastBrightnessY;
@@ -380,38 +380,12 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
     }
 
     @Override
-    public void onNeighborBlockChange() {
-
-        super.onNeighborBlockChange();
-        if (!getWorld().isRemote)
-            onUpdate();
-    }
-
-    @Override
-    public void onNeighborTileChange() {
-
-        super.onNeighborTileChange();
-        if (!getWorld().isRemote)
-            onUpdate();
-    }
-
-    private void onUpdate() {
+    public void onUpdate() {
 
         for (RedstoneConnection c : connections)
             c.update();
 
         doLogic();
-
-        sendUpdatePacket();
-    }
-
-    @Override
-    public void onAdded() {
-
-        super.onAdded();
-
-        for (RedstoneConnection c : connections)
-            c.update();
 
         sendUpdatePacket();
     }

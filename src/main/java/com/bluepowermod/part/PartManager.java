@@ -19,8 +19,11 @@ import com.bluepowermod.part.gate.GateAnd;
 import com.bluepowermod.part.gate.GateBuffer;
 import com.bluepowermod.part.gate.GateComparator;
 import com.bluepowermod.part.gate.GateNand;
+import com.bluepowermod.part.gate.GateNor;
 import com.bluepowermod.part.gate.GateNot;
 import com.bluepowermod.part.gate.GateOr;
+import com.bluepowermod.part.gate.GateTimer;
+import com.bluepowermod.part.gate.GateXnor;
 import com.bluepowermod.part.gate.GateXor;
 import com.qmunity.lib.part.PartRegistry;
 
@@ -93,8 +96,10 @@ public class PartManager {
         registerPart(GateNand.class);
         registerPart(GateBuffer.class);
         registerPart(GateXor.class);
+        registerPart(GateXnor.class);
         registerPart(GateComparator.class);
-        // registerPart(GateTimer.class);
+        registerPart(GateNor.class);
+        registerPart(GateTimer.class);
         // registerPart(GateSequencer.class);
         // registerPart(GateCounter.class);
         // registerPart(GateMux.class);
@@ -103,7 +108,6 @@ public class PartManager {
         // registerPart(GateLightCell.class);
         // registerPart(GateToggleLatch.class);
         // registerPart(GateRSLatch.class);
-        // registerPart(GateXnor.class);
         // registerPart(GateStateCell.class);
         // registerPart(GateRepeater.class);
         // registerPart(GateTransparentLatch.class);

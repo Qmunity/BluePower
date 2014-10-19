@@ -11,7 +11,7 @@ import java.util.List;
 
 import com.bluepowermod.client.renderers.RenderHelper;
 
-public class GateXor extends GateBase {
+public class GateXnor extends GateBase {
 
     @Override
     public void initializeConnections() {
@@ -24,7 +24,7 @@ public class GateXor extends GateBase {
     @Override
     public String getId() {
 
-        return "xor";
+        return "xnor";
     }
 
     @Override
@@ -33,7 +33,7 @@ public class GateXor extends GateBase {
         boolean l = left().getInput() > 0;
         boolean r = right().getInput() > 0;
 
-        front().setOutput(((l && !r) || (!l && r)) ? 15 : 0);
+        front().setOutput(((l && !r) || (!l && r)) ? 0 : 15);
     }
 
     @Override
@@ -54,7 +54,8 @@ public class GateXor extends GateBase {
         boolean r = right().getInput() > 0;
         boolean c = !l && !r;
 
-        renderTop("front", front());
+        renderTop("frontleft", (!l && !c) ? "on" : "off");
+        renderTop("frontright", (!r && !c) ? "on" : "off");
         renderTop("right", right());
         renderTop("left", left());
         renderTop("center", c ? "on" : "off");
@@ -63,6 +64,7 @@ public class GateXor extends GateBase {
         RenderHelper.renderRedstoneTorch(-4 / 16D, 0, 0, 12 / 16D, !r && !c);
 
         RenderHelper.renderRedstoneTorch(0 / 16D, 0, -4 / 16D, 13 / 16D, c);
+        RenderHelper.renderRedstoneTorch(0 / 16D, 0, 4 / 16D, 13 / 16D, !((!l && !c) || (!r && !c)));
     }
 
     @Override

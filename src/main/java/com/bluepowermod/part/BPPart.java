@@ -13,6 +13,7 @@ import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 import com.bluepowermod.api.item.IDatabaseSaveable;
 import com.qmunity.lib.part.IPart;
 import com.qmunity.lib.part.IPartCollidable;
+import com.qmunity.lib.part.IPartInteractable;
 import com.qmunity.lib.part.IPartOccluding;
 import com.qmunity.lib.part.IPartRenderable;
 import com.qmunity.lib.part.IPartSelectable;
@@ -27,8 +28,8 @@ import com.qmunity.lib.vec.Vec3i;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public abstract class BPPart extends PartBase implements IPartSelectable, IPartCollidable, IPartOccluding, IPartRenderable, IPartUpdateListener,
-        IDatabaseSaveable {
+public abstract class BPPart extends PartBase implements IPartSelectable, IPartCollidable, IPartOccluding, IPartRenderable,
+        IPartUpdateListener, IPartInteractable, IDatabaseSaveable {
 
     public abstract String getUnlocalizedName();
 
@@ -97,21 +98,29 @@ public abstract class BPPart extends PartBase implements IPartSelectable, IPartC
     @Override
     public void onPartChanged(IPart part) {
 
+        if (!getWorld().isRemote)
+            onUpdate();
     }
 
     @Override
     public void onNeighborBlockChange() {
 
+        if (!getWorld().isRemote)
+            onUpdate();
     }
 
     @Override
     public void onNeighborTileChange() {
 
+        if (!getWorld().isRemote)
+            onUpdate();
     }
 
     @Override
     public void onAdded() {
 
+        if (!getWorld().isRemote)
+            onUpdate();
     }
 
     @Override
@@ -122,6 +131,8 @@ public abstract class BPPart extends PartBase implements IPartSelectable, IPartC
     @Override
     public void onLoaded() {
 
+        if (!getWorld().isRemote)
+            onUpdate();
     }
 
     @Override
@@ -164,6 +175,21 @@ public abstract class BPPart extends PartBase implements IPartSelectable, IPartC
 
     @SideOnly(Side.CLIENT)
     public void registerIcons(IIconRegister reg) {
+
+    }
+
+    @Override
+    public boolean onActivated(EntityPlayer player, QMovingObjectPosition hit, ItemStack item) {
+
+        return false;
+    }
+
+    @Override
+    public void onClicked(EntityPlayer player, QMovingObjectPosition hit, ItemStack item) {
+
+    }
+
+    public void onUpdate() {
 
     }
 

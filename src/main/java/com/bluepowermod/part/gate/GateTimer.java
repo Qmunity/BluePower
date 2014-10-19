@@ -9,9 +9,12 @@ package com.bluepowermod.part.gate;
 
 import com.bluepowermod.client.renderers.RenderHelper;
 
-public class GateNot extends GateBase {
+public class GateTimer extends GateBase {
 
-    private boolean power = false;
+    private int time = 40;
+    private long start = -1;
+
+    private boolean output = false;
 
     @Override
     public void initializeConnections() {
@@ -25,34 +28,54 @@ public class GateNot extends GateBase {
     @Override
     public String getId() {
 
-        return "not";
+        return "timer";
     }
 
     @Override
     public void doLogic() {
 
-        power = back().getInput() > 0;
-
-        left().setOutput(!power ? 15 : 0);
-        front().setOutput(!power ? 15 : 0);
-        right().setOutput(!power ? 15 : 0);
     }
 
     @Override
     protected void renderTop(float frame) {
 
-        renderTop("front", front());
+        // renderTop("front", front());
         renderTop("right", right());
         renderTop("back", back());
         renderTop("left", left());
 
-        RenderHelper.renderRedstoneTorch(0, 0, 0, 12 / 16D, back().getInput() == 0);
+        RenderHelper.renderRedstoneTorch(0, 0, 0, 17 / 16D, back().getInput() == 0);
+
+        double t = 0;
+        if (back().getInput() == 0)
+            t = -(getWorld().getTotalWorldTime() - start + frame) / (double) time;
+        RenderHelper.renderPointer(0, 7 / 16D, 0, 0.5 + t);
     }
 
     @Override
     public void tick() {
 
-        if (front().getOutput() > 0)
-            spawnBlueParticle(8 / 16D, 6 / 16D, 8 / 16D);
+        if (output == true) {
+            front().setOutput(0);
+            output = false;
+        }
+
+        if (back().getInput() == 0) {
+            long now = getWorld().getTotalWorldTime();
+
+            if (start == -1)
+                start = now;
+
+            if (now - start == time - 2) {
+                front().setOutput(15);
+                output = true;
+                start += time;
+            }
+        } else {
+            start = -1;
+        }
+
+        // if (front().getOutput() > 0)
+        // spawnBlueParticle(8 / 16D, 6 / 16D, 8 / 16D);
     }
 }

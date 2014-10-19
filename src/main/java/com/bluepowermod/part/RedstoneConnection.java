@@ -49,10 +49,15 @@ public class RedstoneConnection {
 
     public RedstoneConnection setOutput(int out) {
 
+        return setOutput(out, true);
+    }
+
+    public RedstoneConnection setOutput(int out, boolean update) {
+
         int last = this.out;
         this.out = out;
 
-        if (last != out)
+        if (last != out && update)
             RedstoneHelper.notifyRedstoneUpdate(part.getWorld(), part.getX(), part.getY(), part.getZ(), getFD(), true);
 
         return this;
