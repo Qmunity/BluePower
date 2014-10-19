@@ -117,7 +117,7 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
 
         if (isBufferEmpty()) {
             ForgeDirection dir = getOutputDirection().getOpposite();
-            TileEntity inputTE = getTileCache()[dir.ordinal()].getTileEntity();// might need opposite
+            TileEntity inputTE = getTileCache(dir);// might need opposite
 
             if (inputTE instanceof IInventory) {
                 IInventory inputInv = (IInventory) inputTE;

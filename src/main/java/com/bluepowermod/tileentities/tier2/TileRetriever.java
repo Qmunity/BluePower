@@ -10,15 +10,12 @@ package com.bluepowermod.tileentities.tier2;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 
-import com.bluepowermod.api.compat.IMultipartCompat;
-import com.bluepowermod.compat.CompatibilityUtils;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.part.tube.PneumaticTube;
 import com.bluepowermod.tileentities.IFuzzyRetrieving;
 import com.bluepowermod.tileentities.tier1.TileFilter;
-import com.bluepowermod.util.Dependencies;
+import com.qmunity.lib.part.compat.MultipartCompatibility;
 
 /**
  * @author MineMaarten
@@ -32,9 +29,8 @@ public class TileRetriever extends TileFilter implements IFuzzyRetrieving {
     protected void pullItem() {
 
         if (isBufferEmpty()) {
-            TileEntity extractingInventory = getTileCache()[getFacingDirection().ordinal()].getTileEntity();
-            IMultipartCompat compat = (IMultipartCompat) CompatibilityUtils.getModule(Dependencies.FMP);
-            PneumaticTube tube = compat.getBPPart(extractingInventory, PneumaticTube.class);
+            PneumaticTube tube = MultipartCompatibility.getPart(worldObj, xCoord + getFacingDirection().offsetX, yCoord
+                    + getFacingDirection().offsetY, zCoord + getFacingDirection().offsetZ, PneumaticTube.class);
             if (tube != null) {
                 boolean everythingNull = true;
                 for (int i = 0; i < inventory.length; i++) {

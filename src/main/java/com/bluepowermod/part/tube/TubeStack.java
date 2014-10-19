@@ -185,7 +185,6 @@ public class TubeStack {
 
     @SideOnly(Side.CLIENT)
     public void render(float partialTick) {
-
         if (renderMode == RenderMode.AUTO) {
             renderMode = Minecraft.getMinecraft().gameSettings.fancyGraphics ? RenderMode.NORMAL : RenderMode.REDUCED;
         }

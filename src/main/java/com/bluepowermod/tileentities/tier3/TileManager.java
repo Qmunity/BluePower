@@ -17,9 +17,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 
-import com.bluepowermod.api.compat.IMultipartCompat;
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
-import com.bluepowermod.compat.CompatibilityUtils;
 import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.part.IGuiButtonSensitive;
@@ -28,7 +26,7 @@ import com.bluepowermod.part.tube.TubeStack;
 import com.bluepowermod.tileentities.IFuzzyRetrieving;
 import com.bluepowermod.tileentities.IRejectAnimator;
 import com.bluepowermod.tileentities.TileMachineBase;
-import com.bluepowermod.util.Dependencies;
+import com.qmunity.lib.part.compat.MultipartCompatibility;
 
 /**
  * @author MineMaarten
@@ -50,8 +48,7 @@ public class TileManager extends TileMachineBase implements ISidedInventory, IGu
             int itemsAccepted = acceptedItems(stack.stack);
             if (itemsAccepted > 0) {
                 if (itemsAccepted >= stack.stack.stackSize) {
-                    ItemStack rejectedStack = IOHelper.insert(getTileCache()[getFacingDirection().ordinal()].getTileEntity(), stack.stack, from,
-                            simulate);
+                    ItemStack rejectedStack = IOHelper.insert(getTileCache(getFacingDirection()), stack.stack, from, simulate);
                     if (rejectedStack == null || rejectedStack.stackSize != stack.stack.stackSize) {
                         if (!simulate) {
                             rejectTicker = 0;
@@ -69,8 +66,7 @@ public class TileManager extends TileMachineBase implements ISidedInventory, IGu
                 stack.stack.stackSize -= itemsAccepted;
 
                 injectedStack.stack.stackSize = itemsAccepted;
-                ItemStack rejectedStack = IOHelper.insert(getTileCache()[getFacingDirection().ordinal()].getTileEntity(), injectedStack.stack, from,
-                        simulate);
+                ItemStack rejectedStack = IOHelper.insert(getTileCache(getFacingDirection()), injectedStack.stack, from, simulate);
                 if (rejectedStack == null || rejectedStack.stackSize != injectedStack.stack.stackSize) {
                     if (!simulate) {
                         rejectTicker = 0;
@@ -93,9 +89,7 @@ public class TileManager extends TileMachineBase implements ISidedInventory, IGu
         int managerCount = IOHelper.getItemCount(item, this, ForgeDirection.UNKNOWN, fuzzySetting);
         if (mode == 1 && managerCount > 0)
             return item.stackSize;
-        return managerCount
-                - IOHelper.getItemCount(item, getTileCache()[getFacingDirection().ordinal()].getTileEntity(), getFacingDirection().getOpposite(),
-                        fuzzySetting);
+        return managerCount - IOHelper.getItemCount(item, getTileCache(getFacingDirection()), getFacingDirection().getOpposite(), fuzzySetting);
     }
 
     @Override
@@ -126,9 +120,8 @@ public class TileManager extends TileMachineBase implements ISidedInventory, IGu
 
     private void retrieveItemsFromManagers() {
 
-        TileEntity extractingInventory = getTileCache()[getOutputDirection().ordinal()].getTileEntity();
-        IMultipartCompat compat = (IMultipartCompat) CompatibilityUtils.getModule(Dependencies.FMP);
-        PneumaticTube tube = compat.getBPPart(extractingInventory, PneumaticTube.class);
+        PneumaticTube tube = MultipartCompatibility.getPart(worldObj, xCoord + getOutputDirection().offsetX, yCoord + getOutputDirection().offsetY,
+                zCoord + getOutputDirection().offsetZ, PneumaticTube.class);
         if (tube != null) {
             for (ItemStack stack : inventory) {
                 int acceptedItems = acceptedItems(stack);
@@ -144,7 +137,7 @@ public class TileManager extends TileMachineBase implements ISidedInventory, IGu
 
     private void dumpUnwantedItems() {
 
-        TileEntity te = getTileCache()[getFacingDirection().ordinal()].getTileEntity();
+        TileEntity te = getTileCache(getFacingDirection());
         IInventory inv = IOHelper.getInventoryForTE(te);
         int[] slots = IOHelper.getAccessibleSlotsForInventory(inv, getFacingDirection().getOpposite());
         for (int slot : slots) {

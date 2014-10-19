@@ -68,7 +68,7 @@ public class TileFilter extends TileTransposer implements ISidedInventory, IGuiB
 
         if (isBufferEmpty()) {
             ForgeDirection dir = getOutputDirection().getOpposite();
-            TileEntity tile = getTileCache()[dir.ordinal()].getTileEntity();
+            TileEntity tile = getTileCache(dir);
             ForgeDirection direction = dir.getOpposite();
             boolean everythingNull = true;
             for (ItemStack filterStack : inventory) {

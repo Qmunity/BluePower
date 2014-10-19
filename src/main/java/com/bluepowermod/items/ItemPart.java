@@ -17,6 +17,7 @@ import com.bluepowermod.part.BPPart;
 import com.bluepowermod.part.BPPartFace;
 import com.bluepowermod.part.PartInfo;
 import com.bluepowermod.part.PartManager;
+import com.bluepowermod.part.tube.Accelerator;
 import com.bluepowermod.util.Refs;
 import com.qmunity.lib.item.ItemMultipart;
 import com.qmunity.lib.part.IPart;
@@ -94,8 +95,9 @@ public class ItemPart extends ItemMultipart implements IDatabaseSaveable {
 
         if (part instanceof BPPartFace)
             ((BPPartFace) part).setFace(ForgeDirection.getOrientation(mop.sideHit).getOpposite());
-
+        if (part instanceof Accelerator) {
+            ((Accelerator) part).setRotation(player);
+        }
         return part;
     }
-
 }

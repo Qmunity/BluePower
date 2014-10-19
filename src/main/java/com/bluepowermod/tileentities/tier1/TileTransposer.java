@@ -68,7 +68,7 @@ public class TileTransposer extends TileMachineBase {
     protected void pullItem() {
 
         ForgeDirection dir = getOutputDirection().getOpposite();
-        TileEntity inputTE = getTileCache()[dir.ordinal()].getTileEntity();
+        TileEntity inputTE = getTileCache(dir);
         ItemStack extractedStack = IOHelper.extractOneItem(inputTE, dir.getOpposite());
         if (extractedStack != null)
             addItemToOutputBuffer(extractedStack);

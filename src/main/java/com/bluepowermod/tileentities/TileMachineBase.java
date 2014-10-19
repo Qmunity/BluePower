@@ -17,6 +17,7 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
@@ -34,7 +35,7 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
     protected boolean spawnItemsInWorld = true;
     protected boolean acceptsTubeItems = true;
     private final List<TubeStack> internalItemStackBuffer = new ArrayList<TubeStack>();
-    private TileEntityCache[] tileCache;
+    private TileEntityCache tileCache;
     public static final int BUFFER_EMPTY_INTERVAL = 10;
     protected byte animationTicker = -1;
     protected static final int ANIMATION_TIME = 7;
@@ -63,22 +64,25 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
     private void ejectItems() {
         for (Iterator<TubeStack> iterator = internalItemStackBuffer.iterator(); iterator.hasNext();) {
             TubeStack tubeStack = iterator.next();
-            if (IOHelper.canInterfaceWith(getTileCache()[getOutputDirection().ordinal()].getTileEntity(), getFacingDirection())) {
-                ItemStack returnedStack = IOHelper.insert(getTileCache()[getOutputDirection().ordinal()].getTileEntity(), tubeStack.stack,
-                        getFacingDirection(), tubeStack.color, false);
+            if (IOHelper.canInterfaceWith(getTileCache(getOutputDirection()), getFacingDirection())) {
+                ItemStack returnedStack = IOHelper.insert(getTileCache(getOutputDirection()), tubeStack.stack, getFacingDirection(), tubeStack.color,
+                        false);
                 if (returnedStack == null) {
                     iterator.remove();
                     markDirty();
+                    if (!ejectionScheduled)
+                        break;
                 } else if (returnedStack.stackSize != tubeStack.stack.stackSize) {
                     markDirty();
+                    if (!ejectionScheduled)
+                        break;
                 } else {
                     break;
                 }
             } else if (spawnItemsInWorld) {
                 ForgeDirection direction = getFacingDirection().getOpposite();
                 if (worldObj.isAirBlock(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ)) {
-                    ItemStack itemStack = iterator.next().stack;
-                    ejectItemInWorld(itemStack, direction);
+                    ejectItemInWorld(tubeStack.stack, direction);
                     iterator.remove();
                     markDirty();
                 } else {
@@ -92,9 +96,7 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
     public void onBlockNeighbourChanged() {
 
         super.onBlockNeighbourChanged();
-        for (TileEntityCache cache : getTileCache()) {
-            cache.update();
-        }
+        tileCache = null;
     }
 
     protected void addItemToOutputBuffer(ItemStack stack, TubeColor color) {
@@ -131,12 +133,12 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
         return internalItemStackBuffer.isEmpty();// also say the buffer is empty when a immediate injection is scheduled.
     }
 
-    public TileEntityCache[] getTileCache() {
+    public TileEntity getTileCache(ForgeDirection d) {
 
         if (tileCache == null) {
-            tileCache = TileEntityCache.getDefaultCache(worldObj, xCoord, yCoord, zCoord);
+            tileCache = new TileEntityCache(worldObj, xCoord, yCoord, zCoord);
         }
-        return tileCache;
+        return tileCache.getValue(d);
     }
 
     public ForgeDirection getOutputDirection() {

@@ -59,7 +59,7 @@ public class TileRegulator extends TileMachineBase implements ISidedInventory, I
                 checkIndividualOutputFilterAndEject();
 
             if (mode == 1 && !isEjecting()) {// supply mode
-                IInventory inv = IOHelper.getInventoryForTE(getTileCache()[getOutputDirection().ordinal()].getTileEntity());
+                IInventory inv = IOHelper.getInventoryForTE(getTileCache(getOutputDirection()));
                 if (inv != null) {
                     int[] accessibleSlots;
                     if (inv instanceof ISidedInventory) {
@@ -125,7 +125,7 @@ public class TileRegulator extends TileMachineBase implements ISidedInventory, I
      */
     private boolean isSatisfied() {
 
-        IInventory inv = IOHelper.getInventoryForTE(getTileCache()[getOutputDirection().ordinal()].getTileEntity());
+        IInventory inv = IOHelper.getInventoryForTE(getTileCache(getOutputDirection()));
         if (inv != null) {
             int[] accessibleSlots;
             if (inv instanceof ISidedInventory) {
