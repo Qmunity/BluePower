@@ -3,10 +3,10 @@ package com.bluepowermod.network.messages;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 
-import com.bluepowermod.api.BPApi;
 import com.bluepowermod.part.tube.PneumaticTube;
 import com.bluepowermod.part.tube.TubeLogic;
 import com.bluepowermod.part.tube.TubeStack;
+import com.qmunity.lib.part.compat.MultipartCompatibility;
 
 public class MessageRedirectTubeStack extends LocationIntPacket<MessageRedirectTubeStack> {
     private TubeStack stack;
@@ -33,7 +33,7 @@ public class MessageRedirectTubeStack extends LocationIntPacket<MessageRedirectT
 
     @Override
     public void handleClientSide(MessageRedirectTubeStack message, EntityPlayer player) {
-        TubeLogic logic = (TubeLogic) BPApi.getInstance().getPneumaticTube(message.getTileEntity(player.worldObj));
+        TubeLogic logic = MultipartCompatibility.getPart(player.worldObj, message.x, message.y, message.z, PneumaticTube.class).getLogic();
         logic.onClientTubeRedirectPacket(message.stack);
     }
 

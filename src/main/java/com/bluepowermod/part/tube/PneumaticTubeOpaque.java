@@ -32,7 +32,7 @@ public class PneumaticTubeOpaque extends PneumaticTube {
     }
 
     @Override
-    public void renderDynamic(Vec3d loc, int pass, float frame) {
+    public void renderDynamic(Vec3d loc, double delta, int pass) {
 
     }
 }

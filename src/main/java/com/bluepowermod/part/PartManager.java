@@ -28,6 +28,12 @@ import com.bluepowermod.part.gate.GateXnor;
 import com.bluepowermod.part.gate.GateXor;
 import com.bluepowermod.part.lamp.PartCageLamp;
 import com.bluepowermod.part.lamp.PartFixture;
+import com.bluepowermod.part.tube.Accelerator;
+import com.bluepowermod.part.tube.MagTube;
+import com.bluepowermod.part.tube.PneumaticTube;
+import com.bluepowermod.part.tube.PneumaticTubeOpaque;
+import com.bluepowermod.part.tube.RestrictionTube;
+import com.bluepowermod.part.tube.RestrictionTubeOpaque;
 import com.qmunity.lib.part.PartRegistry;
 
 public class PartManager {
@@ -133,12 +139,12 @@ public class PartManager {
             registerPart(PartFixture.class, ItemDye.field_150921_b[i].toLowerCase(), ItemDye.field_150922_c[i], true);
 
         // // Pneumatic Tubes
-        // registerPart(PneumaticTube.class);
-        // registerPart(PneumaticTubeOpaque.class);
-        // registerPart(RestrictionTube.class);
-        // registerPart(RestrictionTubeOpaque.class);
-        // registerPart(MagTube.class);
-        // registerPart(Accelerator.class);
+        registerPart(PneumaticTube.class);
+        registerPart(PneumaticTubeOpaque.class);
+        registerPart(RestrictionTube.class);
+        registerPart(RestrictionTubeOpaque.class);
+        registerPart(MagTube.class);
+        registerPart(Accelerator.class);
 
         // Bluestone
         // for (int bundled = 0; bundled < 2; bundled++) {
