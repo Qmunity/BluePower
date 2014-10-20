@@ -7,10 +7,10 @@
  */
 package com.bluepowermod.part.lamp;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
 
 import org.lwjgl.opengl.GL11;
@@ -21,7 +21,7 @@ import com.qmunity.lib.vec.Vec3dCube;
 
 /**
  *
- * @author Koen Beckers (K4Unl)
+ * @author Koen Beckers (K4Unl), Amadornes
  *
  */
 public class PartFixture extends PartLamp {
@@ -32,14 +32,17 @@ public class PartFixture extends PartLamp {
     }
 
     /**
-     * @author Koen Beckers (K4Unl)
+     * @author Koen Beckers (K4Unl), Amadornes
      */
-
     @Override
-    public void addSelectionBoxes(List<AxisAlignedBB> boxes) {
+    public List<Vec3dCube> getSelectionBoxes() {
 
-        boxes.add(AxisAlignedBB.getBoundingBox(pixel * 2, 0.0, pixel * 2, 1.0 - (pixel * 2), pixel * 2, 1.0 - pixel * 2));
-        boxes.add(AxisAlignedBB.getBoundingBox(pixel * 3, pixel * 2, pixel * 3, 1.0 - (pixel * 3), pixel * 8, 1.0 - pixel * 3));
+        List<Vec3dCube> boxes = new ArrayList<Vec3dCube>();
+
+        boxes.add(new Vec3dCube(2 / 16D, 0.0, 2 / 16D, 14 / 16D, 2 / 16D, 14 / 16D));
+        boxes.add(new Vec3dCube(3 / 16D, 2 / 16D, 3 / 16D, 13 / 16D, 8 / 16D, 13 / 16D));
+
+        return boxes;
     }
 
     @Override
@@ -54,13 +57,16 @@ public class PartFixture extends PartLamp {
         return (inverted ? "inverted" : "") + "fixture." + colorName;
     }
 
+    /**
+     * @author Koen Beckers (K4Unl), Amadornes
+     */
     @Override
     public void renderBase(int pass) {
 
         if (pass != 0)
             return;
         Tessellator t = Tessellator.instance;
-        Vec3dCube vector = new Vec3dCube(pixel * 2, 0.0, pixel * 2, 1.0 - (pixel * 2), pixel * 2, 1.0 - pixel * 2);
+        Vec3dCube vector = new Vec3dCube(2 / 16D, 0.0, 2 / 16D, 1.0 - (2 / 16D), 2 / 16D, 1.0 - 2 / 16D);
         IIcon topIcon = IconSupplier.fixtureFootTop;
         // IIcon sideIcon = IconSupplier.fixtureFootSide;
 
@@ -114,7 +120,7 @@ public class PartFixture extends PartLamp {
     @Override
     public void renderLamp(int pass, int r, int g, int b) {
 
-        Vec3dCube vector = new Vec3dCube(pixel * 3, pixel * 2, pixel * 3, 1.0 - (pixel * 3), pixel * 8, 1.0 - pixel * 3);
+        Vec3dCube vector = new Vec3dCube(3 / 16D, 2 / 16D, 3 / 16D, 1.0 - (3 / 16D), 8 / 16D, 13 / 16D);
 
         if (pass == 0) {
             Tessellator t = Tessellator.instance;
@@ -128,8 +134,7 @@ public class PartFixture extends PartLamp {
                 iconToUseTop = IconSupplier.fixtureLampTopOn;
 
                 t.setColorRGBA(r, g, b, 20);
-                RenderHelper.drawTesselatedCube(new Vec3dCube(pixel * 4.5, pixel * 2, pixel * 4.5, 1.0 - (pixel * 4.5), 1.0 - (pixel * 4.5),
-                        1.0 - pixel * 4.5));
+                RenderHelper.drawTesselatedCube(new Vec3dCube(4.5 / 16D, 2 / 16D, 4.5 / 16D, 11.5 / 16D, 11.5 / 16D, 11.5 / 16D));
                 t.setColorRGBA(r, g, b, 255);
             }
 
@@ -148,8 +153,8 @@ public class PartFixture extends PartLamp {
             // I think there might be something wrong with the textures here..
             minU = iconToUseSide.getInterpolatedU(vector.getMinZ() * 16);
             maxU = iconToUseSide.getInterpolatedU(vector.getMaxZ() * 16);
-            minV = iconToUseSide.getInterpolatedV((vector.getMinY() + (3 * pixel)) * 16);
-            maxV = iconToUseSide.getInterpolatedV((vector.getMaxY() + (3 * pixel)) * 16);
+            minV = iconToUseSide.getInterpolatedV((vector.getMinY() + (3 / 16D)) * 16);
+            maxV = iconToUseSide.getInterpolatedV((vector.getMaxY() + (3 / 16D)) * 16);
 
             // Draw west side:
             t.setNormal(-1, 0, 0);

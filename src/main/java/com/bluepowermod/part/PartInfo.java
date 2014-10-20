@@ -18,6 +18,8 @@ public class PartInfo {
 
     public PartInfo(Class<? extends BPPart> clazz, Object... arguments) {
 
+        this.arguments = arguments;
+
         generateConstructor(clazz, arguments);
 
         example = create();
@@ -36,7 +38,6 @@ public class PartInfo {
                 argsClasses[i] = arguments[i].getClass();
 
             constructor = clazz.getConstructor(argsClasses);
-            constructor.setAccessible(true);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -47,6 +48,7 @@ public class PartInfo {
         try {
             return constructor.newInstance(arguments);
         } catch (Exception ex) {
+            ex.printStackTrace();
         }
 
         return null;

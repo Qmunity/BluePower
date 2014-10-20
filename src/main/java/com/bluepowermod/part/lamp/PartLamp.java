@@ -7,14 +7,14 @@
  */
 package com.bluepowermod.part.lamp;
 
+import java.util.Arrays;
 import java.util.List;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
@@ -24,19 +24,19 @@ import org.lwjgl.opengl.GL11;
 
 import com.bluepowermod.client.renderers.IconSupplier;
 import com.bluepowermod.client.renderers.RenderHelper;
-import com.bluepowermod.init.CustomTabs;
 import com.bluepowermod.part.BPPartFace;
 import com.qmunity.lib.helper.RedstoneHelper;
+import com.qmunity.lib.part.IPartLightEmitter;
 import com.qmunity.lib.vec.Vec3d;
 import com.qmunity.lib.vec.Vec3dCube;
 
 /**
  * Base class for the lamps that are multiparts.
  *
- * @author Koen Beckers (K4Unl)
+ * @author Koen Beckers (K4Unl), Amadornes
  *
  */
-public class PartLamp extends BPPartFace {
+public class PartLamp extends BPPartFace implements IPartLightEmitter {
 
     protected String colorName;
     private int colorVal;
@@ -56,14 +56,6 @@ public class PartLamp extends BPPartFace {
         this.colorName = colorName;
         this.colorVal = colorVal;
         this.inverted = inverted;
-
-        for (int i = 0; i < 4; i++)
-            connections[i] = new RedstoneConnection(this, i + "", true, false);
-
-        for (RedstoneConnection c : connections) {
-            c.enable();
-            c.setInput();
-        }
     }
 
     @Override
@@ -85,28 +77,28 @@ public class PartLamp extends BPPartFace {
      * @author amadornes
      */
     @Override
-    public void addCollisionBoxes(List<AxisAlignedBB> boxes) {
+    public void addCollisionBoxesToList(List<Vec3dCube> boxes, Entity entity) {
 
-        addSelectionBoxes(boxes);
-    }
-
-    /**
-     * @author Koen Beckers (K4Unl)
-     */
-
-    @Override
-    public void addSelectionBoxes(List<AxisAlignedBB> boxes) {
-
-        boxes.add(AxisAlignedBB.getBoundingBox(0.0, 0.0, 0.0, 1.0, 1.0, 1.0));
+        boxes.addAll(getSelectionBoxes());
     }
 
     /**
      * @author amadornes
      */
     @Override
-    public void addOcclusionBoxes(List<AxisAlignedBB> boxes) {
+    public List<Vec3dCube> getOcclusionBoxes() {
 
-        addSelectionBoxes(boxes);
+        return getSelectionBoxes();
+    }
+
+    /**
+     * @author amadornes
+     */
+
+    @Override
+    public List<Vec3dCube> getSelectionBoxes() {
+
+        return Arrays.asList(new Vec3dCube(0.0, 0.0, 0.0, 1.0, 1.0, 1.0));
     }
 
     /**
@@ -118,55 +110,82 @@ public class PartLamp extends BPPartFace {
         power = inverted ? 15 : 0;
 
         GL11.glPushMatrix();
-        GL11.glTranslated(0.5, 0.5, 0.5);
-        GL11.glRotated(180, 1, 0, 0);
-        GL11.glTranslated(-0.5, -0.5, -0.5);
-        Tessellator t = Tessellator.instance;
-        Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
-        GL11.glPushMatrix();
-        t.startDrawingQuads();
-        renderStatic(new Vec3d(0, 0, 0), 0);
-        t.draw();
+        {
+            Tessellator t = Tessellator.instance;
+            Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
+
+            GL11.glPushMatrix();
+            {
+                t.startDrawingQuads();
+                renderDynamic(new Vec3d(0, 0, 0), 0, 0);
+                t.draw();
+            }
+            GL11.glPopMatrix();
+        }
         GL11.glPopMatrix();
-        GL11.glPushMatrix();
-        t.startDrawingQuads();
-        renderStatic(new Vec3d(0, 0, 0), 1);
-        t.draw();
-        GL11.glPopMatrix();
+
         Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationItemsTexture);
-        GL11.glPopMatrix();
     }
 
     /**
-     * @author Koen Beckers (K4Unl)
+     * @author Koen Beckers (K4Unl), Amadornes
      */
     @Override
-    public boolean renderStatic(Vec3d loc, int pass) {
+    public void renderDynamic(Vec3d translation, double delta, int pass) {
 
-        rotateAndTranslateDynamic(loc, pass, 0);
-        Tessellator t = Tessellator.instance;
-        t.setColorOpaque_F(1, 1, 1);
+        GL11.glPushMatrix();
+        {
+            // Rotate and translate
+            GL11.glTranslated(translation.getX(), translation.getY(), translation.getZ());
+            GL11.glTranslated(0.5, 0.5, 0.5);
+            {
 
-        // Render base
-        renderBase(pass);
+                switch (getFace().ordinal()) {
+                case 0:
+                    break;
+                case 1:
+                    GL11.glRotated(180, 1, 0, 0);
+                    break;
+                case 2:
+                    GL11.glRotated(90, 1, 0, 0);
+                    break;
+                case 3:
+                    GL11.glRotated(90, -1, 0, 0);
+                    break;
+                case 4:
+                    GL11.glRotated(90, 0, 0, -1);
+                    break;
+                case 5:
+                    GL11.glRotated(90, 0, 0, 1);
+                    break;
+                }
+            }
+            GL11.glTranslated(-0.5, -0.5, -0.5);
 
-        // Color multiplier
-        int redMask = 0xFF0000, greenMask = 0xFF00, blueMask = 0xFF;
-        int r = (colorVal & redMask) >> 16;
-        int g = (colorVal & greenMask) >> 8;
-        int b = (colorVal & blueMask);
+            // Render
 
-        t.setColorOpaque(r, g, b);
-        // Render lamp itself here
-        renderLamp(pass, r, g, b);
+            Tessellator t = Tessellator.instance;
+            t.startDrawingQuads();
 
-        return true;
-    }
+            t.setColorOpaque_F(1, 1, 1);
+            // Render base
+            renderBase(pass);
 
-    @Override
-    public boolean shouldRenderStaticOnPass(int pass) {
+            // Color multiplier
+            int redMask = 0xFF0000, greenMask = 0xFF00, blueMask = 0xFF;
+            int r = (colorVal & redMask) >> 16;
+            int g = (colorVal & greenMask) >> 8;
+            int b = (colorVal & blueMask);
 
-        return true;
+            t.setColorOpaque(r, g, b);
+            // Render lamp itself here
+            renderLamp(pass, r, g, b);
+
+            t.setColorOpaque_F(1, 1, 1);
+
+            t.draw();
+        }
+        GL11.glPopMatrix();
     }
 
     /**
@@ -257,13 +276,11 @@ public class PartLamp extends BPPartFace {
             GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
             GL11.glDisable(GL11.GL_TEXTURE_2D);
             GL11.glDisable(GL11.GL_LIGHTING);
-            // GL11.glDisable(GL11.GL_CULL_FACE);
             GL11.glDepthMask(false);
             GL11.glBegin(GL11.GL_QUADS);
             RenderHelper.drawColoredCube(vector.clone().expand(0.8 / 16D), r / 256D, g / 256D, b / 256D, (power / 15D) * 0.625);
             GL11.glEnd();
             GL11.glDepthMask(true);
-            GL11.glEnable(GL11.GL_CULL_FACE);
             GL11.glEnable(GL11.GL_LIGHTING);
             GL11.glEnable(GL11.GL_TEXTURE_2D);
             GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
@@ -281,9 +298,7 @@ public class PartLamp extends BPPartFace {
      * @author amadornes
      */
     @Override
-    public void update() {
-
-        super.update();
+    public void onUpdate() {
 
         int old = power;
 
@@ -304,16 +319,16 @@ public class PartLamp extends BPPartFace {
     /**
      * @author amadornes
      */
-    @Override
-    public CreativeTabs getCreativeTab() {
-
-        return CustomTabs.tabBluePowerLighting;
-    }
-
-    @Override
-    public float getHardness() {
-
-        return 1.5F;
-    }
+    // @Override
+    // public CreativeTabs getCreativeTab() {
+    //
+    // return CustomTabs.tabBluePowerLighting;
+    // }
+    //
+    // @Override
+    // public float getHardness() {
+    //
+    // return 1.5F;
+    // }
 
 }

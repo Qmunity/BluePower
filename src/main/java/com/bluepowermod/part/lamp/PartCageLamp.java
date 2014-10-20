@@ -7,10 +7,10 @@
  */
 package com.bluepowermod.part.lamp;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
 
 import org.lwjgl.opengl.GL11;
@@ -21,7 +21,7 @@ import com.qmunity.lib.vec.Vec3dCube;
 
 /**
  *
- * @author Koen Beckers (K4Unl)
+ * @author Koen Beckers (K4Unl), Amadornes
  *
  */
 public class PartCageLamp extends PartLamp {
@@ -32,14 +32,17 @@ public class PartCageLamp extends PartLamp {
     }
 
     /**
-     * @author Koen Beckers (K4Unl)
+     * @author Koen Beckers (K4Unl), Amadornes
      */
-
     @Override
-    public void addSelectionBoxes(List<AxisAlignedBB> boxes) {
+    public List<Vec3dCube> getSelectionBoxes() {
 
-        boxes.add(AxisAlignedBB.getBoundingBox(pixel * 3, 0.0, pixel * 3, 1.0 - (pixel * 3), pixel * 2, 1.0 - pixel * 3));
-        boxes.add(AxisAlignedBB.getBoundingBox(pixel * 4, pixel * 2, pixel * 4, 1.0 - (pixel * 4), 1.0 - (pixel * 4), 1.0 - pixel * 4));
+        List<Vec3dCube> boxes = new ArrayList<Vec3dCube>();
+
+        boxes.add(new Vec3dCube(3 / 16D, 0.0, 3 / 16D, 13 / 16D, 2 / 16D, 1.0 - 3 / 16D));
+        boxes.add(new Vec3dCube(4 / 16D, 2 / 16D, 4 / 16D, 12 / 16D, 12 / 16D, 12 / 16D));
+
+        return boxes;
     }
 
     @Override
@@ -48,7 +51,7 @@ public class PartCageLamp extends PartLamp {
         if (pass != 0)
             return;
         Tessellator t = Tessellator.instance;
-        Vec3dCube vector = new Vec3dCube(pixel * 3, 0.0, pixel * 3, 1.0 - (pixel * 3), pixel * 2, 1.0 - pixel * 3);
+        Vec3dCube vector = new Vec3dCube(3 / 16D, 0.0, 3 / 16D, 13 / 16D, 2 / 16D, 1.0 - 3 / 16D);
         IIcon topIcon = IconSupplier.cagedLampFootTop;
         IIcon sideIcon = IconSupplier.cagedLampFootSide;
 
@@ -98,7 +101,7 @@ public class PartCageLamp extends PartLamp {
 
         // And now, the cage itself!
         // No. Not Nicholas Cage. The lamp-cage!
-        vector = new Vec3dCube(pixel * 4, pixel * 2, pixel * 4, 1.0 - (pixel * 4), 1.0 - (pixel * 4), 1.0 - pixel * 4);
+        vector = new Vec3dCube(4 / 16D, 2 / 16D, 4 / 16D, 12 / 16D, 12 / 16D, 12 / 16D);
         topIcon = IconSupplier.cagedLampCageTop;
         sideIcon = IconSupplier.cagedLampCageSide;
 
@@ -174,7 +177,7 @@ public class PartCageLamp extends PartLamp {
     @Override
     public void renderLamp(int pass, int r, int g, int b) {
 
-        Vec3dCube vector = new Vec3dCube(pixel * 5, pixel * 2, pixel * 5, 1.0 - (pixel * 5), 1.0 - (pixel * 5), 1.0 - pixel * 5);
+        Vec3dCube vector = new Vec3dCube(5 / 16D, 2 / 16D, 5 / 16D, 11 / 16D, 11 / 16D, 11 / 16D);
 
         Tessellator t = Tessellator.instance;
         IIcon iconToUseTop;
@@ -187,8 +190,7 @@ public class PartCageLamp extends PartLamp {
             iconToUseTop = IconSupplier.cagedLampLampActiveTop;
 
             t.setColorRGBA(r, g, b, 20);
-            RenderHelper.drawTesselatedCube(new Vec3dCube(pixel * 4.5, pixel * 2, pixel * 4.5, 1.0 - (pixel * 4.5), 1.0 - (pixel * 4.5),
-                    1.0 - pixel * 4.5));
+            RenderHelper.drawTesselatedCube(new Vec3dCube(4.5 / 16D, 2 / 16D, 4.5 / 16D, 11.5 / 16D, 11.5 / 16D, 1.0 - 4.5 / 16D));
             t.setColorRGBA(r, g, b, 255);
         }
 

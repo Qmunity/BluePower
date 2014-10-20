@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -25,6 +26,8 @@ import com.bluepowermod.part.gate.GateOr;
 import com.bluepowermod.part.gate.GateTimer;
 import com.bluepowermod.part.gate.GateXnor;
 import com.bluepowermod.part.gate.GateXor;
+import com.bluepowermod.part.lamp.PartCageLamp;
+import com.bluepowermod.part.lamp.PartFixture;
 import com.qmunity.lib.part.PartRegistry;
 
 public class PartManager {
@@ -117,18 +120,18 @@ public class PartManager {
         // registerPart(Circuit7x7.class);
         //
         // Lamps
-        // for (int i = 0; i < ItemDye.field_150922_c.length; i++)
-        // registerPart(PartCageLamp.class, ItemDye.field_150921_b[i].toLowerCase(), ItemDye.field_150922_c[i], false);
-        //
-        // for (int i = 0; i < ItemDye.field_150922_c.length; i++)
-        // registerPart(PartFixture.class, ItemDye.field_150921_b[i].toLowerCase(), ItemDye.field_150922_c[i], false);
-        //
-        // for (int i = 0; i < ItemDye.field_150922_c.length; i++)
-        // registerPart(PartCageLamp.class, ItemDye.field_150921_b[i].toLowerCase(), ItemDye.field_150922_c[i], true);
-        //
-        // for (int i = 0; i < ItemDye.field_150922_c.length; i++)
-        // registerPart(PartFixture.class, ItemDye.field_150921_b[i].toLowerCase(), ItemDye.field_150922_c[i], true);
-        //
+        for (int i = 0; i < ItemDye.field_150922_c.length; i++)
+            registerPart(PartCageLamp.class, ItemDye.field_150921_b[i].toLowerCase(), ItemDye.field_150922_c[i], false);
+
+        for (int i = 0; i < ItemDye.field_150922_c.length; i++)
+            registerPart(PartFixture.class, ItemDye.field_150921_b[i].toLowerCase(), ItemDye.field_150922_c[i], false);
+
+        for (int i = 0; i < ItemDye.field_150922_c.length; i++)
+            registerPart(PartCageLamp.class, ItemDye.field_150921_b[i].toLowerCase(), ItemDye.field_150922_c[i], true);
+
+        for (int i = 0; i < ItemDye.field_150922_c.length; i++)
+            registerPart(PartFixture.class, ItemDye.field_150921_b[i].toLowerCase(), ItemDye.field_150922_c[i], true);
+
         // // Pneumatic Tubes
         // registerPart(PneumaticTube.class);
         // registerPart(PneumaticTubeOpaque.class);

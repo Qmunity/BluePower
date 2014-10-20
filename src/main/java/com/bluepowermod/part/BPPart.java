@@ -7,6 +7,7 @@ import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 
@@ -29,7 +30,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public abstract class BPPart extends PartBase implements IPartSelectable, IPartCollidable, IPartOccluding, IPartRenderable,
-        IPartUpdateListener, IPartInteractable, IDatabaseSaveable {
+IPartUpdateListener, IPartInteractable, IDatabaseSaveable {
 
     public abstract String getUnlocalizedName();
 
@@ -191,6 +192,11 @@ public abstract class BPPart extends PartBase implements IPartSelectable, IPartC
 
     public void onUpdate() {
 
+    }
+
+    public void notifyUpdate() {
+
+        getWorld().notifyBlockChange(getX(), getY(), getZ(), Blocks.air);
     }
 
 }
