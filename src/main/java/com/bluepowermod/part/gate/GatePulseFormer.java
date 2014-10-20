@@ -28,8 +28,8 @@ public class GatePulseFormer extends GateBase {
     @Override
     public void renderTop(float frame) {
 
-        RenderHelper.renderRedstoneTorch(-3 / 16D, 1D / 8D, -1 / 16D, 9D / 16D, !power[0]);
-        RenderHelper.renderRedstoneTorch(3 / 16D, 1D / 8D, -1 / 16D, 9D / 16D, power[2]);
+        RenderHelper.renderRedstoneTorch(3 / 16D, 1D / 8D, -1 / 16D, 9D / 16D, !power[0]);
+        RenderHelper.renderRedstoneTorch(-3 / 16D, 1D / 8D, -1 / 16D, 9D / 16D, power[2]);
         RenderHelper.renderRedstoneTorch(0, 1D / 8D, 5 / 16D, 9D / 16D, !power[2] && power[1]);
 
         renderTop("center", !power[1]);

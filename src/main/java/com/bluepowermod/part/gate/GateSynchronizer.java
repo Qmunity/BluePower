@@ -45,8 +45,8 @@ public class GateSynchronizer extends GateBase {
         renderTop("left", left());
         renderTop("frontleft", !leftTriggered);
         renderTop("frontright", !rightTriggered);
-        RenderHelper.renderRandomizerButton(this, -3 / 16D, 0, 4 / 16D, leftTriggered);
-        RenderHelper.renderRandomizerButton(this, 3 / 16D, 0, 4 / 16D, rightTriggered);
+        RenderHelper.renderRandomizerButton(this, 3 / 16D, 0, -4 / 16D, leftTriggered);
+        RenderHelper.renderRandomizerButton(this, -3 / 16D, 0, -4 / 16D, rightTriggered);
     }
 
     @Override

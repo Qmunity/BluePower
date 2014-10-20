@@ -42,6 +42,7 @@ import com.bluepowermod.util.Refs;
 import com.qmunity.lib.part.IPartLightEmitter;
 import com.qmunity.lib.part.IPartRedstone;
 import com.qmunity.lib.part.IPartTicking;
+import com.qmunity.lib.raytrace.QMovingObjectPosition;
 import com.qmunity.lib.util.Dir;
 import com.qmunity.lib.vec.Vec3d;
 import com.qmunity.lib.vec.Vec3dCube;
@@ -74,7 +75,7 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
             if (f == rendering.getFace())
                 return iconBottom;
             if (f == rendering.getFace().getOpposite())
-                return ((GateBase) PartManager.getExample(rendering.getType())).iconTop;
+                return ((GateBase) PartManager.getExample(rendering.getType())).getTopIcon();
 
             return iconSide;
         };
@@ -279,7 +280,7 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
 
     protected abstract void renderTop(float frame);
 
-    private final void renderTop() {
+    protected final void renderTop() {
 
         Tessellator t = Tessellator.instance;
 
@@ -395,10 +396,15 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
     }
 
     @Override
+    public boolean onActivated(EntityPlayer player, QMovingObjectPosition hit, ItemStack item) {
+        return onActivated(player, item);
+    }
+
+    @Override
     public boolean onActivated(EntityPlayer player, ItemStack item) {
 
         if (item != null && item.getItem() == BPItems.screwdriver) {
-            if (player.isSneaking()) {
+            if (!player.isSneaking()) {
                 if (!getWorld().isRemote) {
                     if (changeMode()) {
                         sendUpdatePacket();
@@ -521,6 +527,10 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
         iconBottom = reg.registerIcon(Refs.MODID + ":gates/bottom");
         iconSide = reg.registerIcon(Refs.MODID + ":gates/side");
         iconTop = reg.registerIcon(Refs.MODID + ":gates/" + getId() + "/base");
+    }
+
+    public IIcon getTopIcon() {
+        return iconTop;
     }
 
     @Override

@@ -137,7 +137,7 @@ public class RenderHelper {
 
             GL11.glPushMatrix();
             {
-                GL11.glTranslated(6 / 16D, 2 / 16D, 0 / 16D);
+                GL11.glTranslated(6 / 16D, 2 / 16D, 8 / 16D);
                 Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(resSide));
                 for (int i = 0; i < 4; i++) {
                     GL11.glTranslated(2 / 16D, 0, 2 / 16D);
@@ -156,7 +156,7 @@ public class RenderHelper {
             }
             GL11.glPopMatrix();
 
-            GL11.glTranslated(0, 1 / 16D, -8 / 16D);
+            GL11.glTranslated(0, 1 / 16D, 0 / 16D);
 
             Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(res));
             Tessellator t = Tessellator.instance;

@@ -9,9 +9,9 @@ import com.bluepowermod.init.BPItems;
 
 public class PartInfo {
 
-    private String type;
-    private BPPart example;
-    private ItemStack item;
+    private final String type;
+    private final BPPart example;
+    private final ItemStack item;
 
     private Constructor<? extends BPPart> constructor;
     private Object[] arguments;
