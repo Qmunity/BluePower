@@ -21,6 +21,8 @@ import net.minecraftforge.common.util.ForgeDirection;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 
+import com.bluepowermod.part.gate.GateBase;
+import com.bluepowermod.util.Refs;
 import com.qmunity.lib.vec.Vec3dCube;
 
 public class RenderHelper {
@@ -124,41 +126,55 @@ public class RenderHelper {
      * @param z
      * @param state
      */
-    // public static void renderRandomizerButton(GateBase gate, double x, double y, double z, boolean state) {
-    //
-    // String res = Refs.MODID + ":textures/blocks/gates/randomizer/button_" + (state ? "on" : "off") + ".png";
-    // String resSide = Refs.MODID + ":textures/blocks/gates/randomizer/button_side.png";
-    //
-    // GL11.glPushMatrix();
-    // {
-    // GL11.glTranslated(x, y, z);
-    //
-    // GL11.glPushMatrix();
-    // {
-    // GL11.glTranslated(6 / 16D, 2 / 16D, 4 / 16D);
-    // Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(resSide));
-    // for (int i = 0; i < 4; i++) {
-    // GL11.glTranslated(2 / 16D, 0, 2 / 16D);
-    // GL11.glRotated(90, 0, 1, 0);
-    // GL11.glTranslated(-2 / 16D, 0, -2 / 16D);
-    // GL11.glBegin(GL11.GL_QUADS);
-    // {
-    // GL11.glNormal3d(1, 0, 0);
-    // addVertexWithTexture(0, 0, 0, 0, 0);
-    // addVertexWithTexture(0, 1 / 16D, 0, 0, 1);
-    // addVertexWithTexture(4 / 16D, 1 / 16D, 0, 1, 1);
-    // addVertexWithTexture(4 / 16D, 0, 0, 1, 0);
-    // }
-    // GL11.glEnd();
-    // }
-    // }
-    // GL11.glPopMatrix();
-    //
-    // GL11.glTranslated(0, 1 / 16D, 0);
-    // gate.renderTopTexture(res);
-    // }
-    // GL11.glPopMatrix();
-    // }
+    public static void renderRandomizerButton(GateBase gate, double x, double y, double z, boolean state) {
+
+        String res = Refs.MODID + ":textures/blocks/gates/randomizer/button_" + (state ? "on" : "off") + ".png";
+        String resSide = Refs.MODID + ":textures/blocks/gates/randomizer/button_side.png";
+
+        GL11.glPushMatrix();
+        {
+            GL11.glTranslated(x, y, z);
+
+            GL11.glPushMatrix();
+            {
+                GL11.glTranslated(6 / 16D, 2 / 16D, 0 / 16D);
+                Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(resSide));
+                for (int i = 0; i < 4; i++) {
+                    GL11.glTranslated(2 / 16D, 0, 2 / 16D);
+                    GL11.glRotated(90, 0, 1, 0);
+                    GL11.glTranslated(-2 / 16D, 0, -2 / 16D);
+                    GL11.glBegin(GL11.GL_QUADS);
+                    {
+                        GL11.glNormal3d(1, 0, 0);
+                        addVertexWithTexture(0, 0, 0, 0, 0);
+                        addVertexWithTexture(0, 1 / 16D, 0, 0, 1);
+                        addVertexWithTexture(4 / 16D, 1 / 16D, 0, 1, 1);
+                        addVertexWithTexture(4 / 16D, 0, 0, 1, 0);
+                    }
+                    GL11.glEnd();
+                }
+            }
+            GL11.glPopMatrix();
+
+            GL11.glTranslated(0, 1 / 16D, -8 / 16D);
+
+            Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(res));
+            Tessellator t = Tessellator.instance;
+
+            y = 2 / 16D;
+
+            t.startDrawingQuads();
+            t.setNormal(0, 1, 0);
+            {
+                t.addVertexWithUV(0, y, 0, 1, 1);
+                t.addVertexWithUV(0, y, 1, 1, 0);
+                t.addVertexWithUV(1, y, 1, 0, 0);
+                t.addVertexWithUV(1, y, 0, 0, 1);
+            }
+            t.draw();
+        }
+        GL11.glPopMatrix();
+    }
 
     /**
      * @author amadornes
@@ -236,8 +252,7 @@ public class RenderHelper {
      * @param z3
      * @return TODO: Maybe move this function?
      */
-    public static DoubleBuffer planeEquation(double x1, double y1, double z1, double x2, double y2, double z2, double x3, double y3,
-            double z3) {
+    public static DoubleBuffer planeEquation(double x1, double y1, double z1, double x2, double y2, double z2, double x3, double y3, double z3) {
 
         double[] eq = new double[4];
         eq[0] = y1 * (z2 - z3) + y2 * (z3 - z1) + y3 * (z1 - z2);

@@ -23,6 +23,7 @@ import com.bluepowermod.part.gate.GateNand;
 import com.bluepowermod.part.gate.GateNor;
 import com.bluepowermod.part.gate.GateNot;
 import com.bluepowermod.part.gate.GateOr;
+import com.bluepowermod.part.gate.GateSynchronizer;
 import com.bluepowermod.part.gate.GateTimer;
 import com.bluepowermod.part.gate.GateXnor;
 import com.bluepowermod.part.gate.GateXor;
@@ -120,7 +121,7 @@ public class PartManager {
         // registerPart(GateStateCell.class);
         // registerPart(GateRepeater.class);
         // registerPart(GateTransparentLatch.class);
-        // registerPart(GateSynchronizer.class);
+        registerPart(GateSynchronizer.class);
         // registerPart(Circuit3x3.class);
         // registerPart(Circuit5x5.class);
         // registerPart(Circuit7x7.class);
