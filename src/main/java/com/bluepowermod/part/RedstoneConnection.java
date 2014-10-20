@@ -10,8 +10,8 @@ import com.qmunity.lib.util.Dir;
 
 public class RedstoneConnection {
 
-    private IPart part;
-    private Dir dir;
+    private final IPart part;
+    private final Dir dir;
 
     private int out = 0;
     private int in = 0;
@@ -45,6 +45,10 @@ public class RedstoneConnection {
         update();
         caching = false;
         return in;
+    }
+
+    public RedstoneConnection setOutput(boolean out) {
+        return setOutput(out ? 15 : 0);
     }
 
     public RedstoneConnection setOutput(int out) {
