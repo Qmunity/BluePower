@@ -19,7 +19,11 @@
 
 package com.bluepowermod.containers;
 
+import com.bluepowermod.util.Dependencies;
+import cpw.mods.fml.common.Optional;
 import invtweaks.api.container.ChestContainer;
+import invtweaks.api.container.ContainerSection;
+import invtweaks.api.container.ContainerSectionCallback;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
@@ -30,6 +34,11 @@ import com.bluepowermod.containers.inventorys.InventoryItem;
 import com.bluepowermod.containers.slots.SlotExclude;
 import com.bluepowermod.containers.slots.SlotLocked;
 import com.bluepowermod.init.BPItems;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @ChestContainer
 public class ContainerCanvasBag extends Container {
@@ -189,5 +198,28 @@ public class ContainerCanvasBag extends Container {
             }
         }
         return flag1;
+    }
+
+    @Optional.Method(modid = Dependencies.INVTWEAKS)
+    @ContainerSectionCallback
+    public Map<ContainerSection, List<Slot>> getSections() {
+
+        Map<ContainerSection, List<Slot>> sections = new HashMap<ContainerSection, List<Slot>>();
+        List<Slot> slotsChest = new ArrayList<Slot>();
+        List<Slot> slotsInventory = new ArrayList<Slot>();
+        List<Slot> slotsInventoryHotbar = new ArrayList<Slot>();
+        for (int i = 0; i < 27; i++) {
+            slotsChest.add(i, (Slot) inventorySlots.get(i));
+        }
+        for (int i = 0; i < 27; i++) {
+            slotsInventory.add(0, (Slot) inventorySlots.get(i + 27));
+        }
+        for (int i = 0; i < 9; i++) {
+            slotsInventoryHotbar.add(0, (Slot) inventorySlots.get(i + 55));
+        }
+        sections.put(ContainerSection.CHEST, slotsChest);
+        sections.put(ContainerSection.INVENTORY, slotsInventory);
+        sections.put(ContainerSection.INVENTORY_HOTBAR, slotsInventoryHotbar);
+        return sections;
     }
 }
