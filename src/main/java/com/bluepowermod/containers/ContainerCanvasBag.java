@@ -207,19 +207,14 @@ public class ContainerCanvasBag extends Container {
         Map<ContainerSection, List<Slot>> sections = new HashMap<ContainerSection, List<Slot>>();
         List<Slot> slotsChest = new ArrayList<Slot>();
         List<Slot> slotsInventory = new ArrayList<Slot>();
-        List<Slot> slotsInventoryHotbar = new ArrayList<Slot>();
         for (int i = 0; i < 27; i++) {
             slotsChest.add(i, (Slot) inventorySlots.get(i));
         }
-        for (int i = 0; i < 27; i++) {
+        for (int i = 0; i < 36; i++) {
             slotsInventory.add(0, (Slot) inventorySlots.get(i + 27));
-        }
-        for (int i = 0; i < 9; i++) {
-            slotsInventoryHotbar.add(0, (Slot) inventorySlots.get(i + 55));
         }
         sections.put(ContainerSection.CHEST, slotsChest);
         sections.put(ContainerSection.INVENTORY, slotsInventory);
-        sections.put(ContainerSection.INVENTORY_HOTBAR, slotsInventoryHotbar);
         return sections;
     }
 }
