@@ -118,16 +118,6 @@ public class Recipes {
         GameRegistry
                 .addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.diamond_sickle, 1), " G ", "  G", "SG ", 'G', "gemDiamond", 'S', "stickWood"));
 
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.iron_saw, 1), "SSS", " II", " II", 'S', "stickWood", 'I', "ingotIron"));
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.ruby_saw, 1), "SSS", " II", " ##", 'S', "stickWood", 'I', "ingotIron", '#',
-                "gemRuby"));
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.amethyst_saw, 1), "SSS", " II", " ##", 'S', "stickWood", 'I', "ingotIron",
-                '#', "gemAmethyst"));
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.sapphire_saw, 1), "SSS", " II", " ##", 'S', "stickWood", 'I', "ingotIron",
-                '#', "gemSapphire"));
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.diamond_saw, 1), "SSS", " II", " ##", 'S', "stickWood", 'I', "ingotIron",
-                '#', "gemDiamond"));
-
         craftManager.addRecipe(new ItemStack(BPItems.indigo_dye, 1), "#", '#', BPBlocks.indigo_flower);
 
         craftManager.addRecipe(new ItemStack(BPBlocks.basalt_brick_small, 4), "##", "##", '#', BPBlocks.basalt_brick);
@@ -364,6 +354,15 @@ public class Recipes {
                     "gemDiamond"));
             GameRegistry.addShapelessRecipe(new ItemStack(BPItems.silicon_wafer, 16), new ItemStack(BPItems.diamond_saw, 1,
                     OreDictionary.WILDCARD_VALUE), new ItemStack(BPItems.silicon_boule));
+            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.iron_saw, 1), "SSS", " II", " II", 'S', "stickWood", 'I', "ingotIron"));
+            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.ruby_saw, 1), "SSS", " II", " ##", 'S', "stickWood", 'I', "ingotIron", '#',
+                    "gemRuby"));
+            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.amethyst_saw, 1), "SSS", " II", " ##", 'S', "stickWood", 'I', "ingotIron",
+                    '#', "gemAmethyst"));
+            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.sapphire_saw, 1), "SSS", " II", " ##", 'S', "stickWood", 'I', "ingotIron",
+                    '#', "gemSapphire"));
+            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.diamond_saw, 1), "SSS", " II", " ##", 'S', "stickWood", 'I', "ingotIron",
+                    '#', "gemDiamond"));
         }
 
         // Alloy furnace
