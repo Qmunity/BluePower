@@ -141,17 +141,6 @@ IPartUpdateListener, IPartInteractable, IDatabaseSaveable {
 
     }
 
-    @Override
-    public boolean onActivated(EntityPlayer player, ItemStack item) {
-
-        return false;
-    }
-
-    @Override
-    public void onClicked(EntityPlayer player, ItemStack item) {
-
-    }
-
     public void addWailaInfo(List<String> info) {
 
     }

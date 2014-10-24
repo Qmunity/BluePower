@@ -16,6 +16,7 @@ import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
+import com.bluepowermod.part.bluestone.PartBluestone;
 import com.bluepowermod.part.gate.GateAnd;
 import com.bluepowermod.part.gate.GateBuffer;
 import com.bluepowermod.part.gate.GateComparator;
@@ -24,6 +25,7 @@ import com.bluepowermod.part.gate.GateMux;
 import com.bluepowermod.part.gate.GateNand;
 import com.bluepowermod.part.gate.GateNor;
 import com.bluepowermod.part.gate.GateNot;
+import com.bluepowermod.part.gate.GateNullCell;
 import com.bluepowermod.part.gate.GateOr;
 import com.bluepowermod.part.gate.GatePulseFormer;
 import com.bluepowermod.part.gate.GateRSLatch;
@@ -132,6 +134,8 @@ public class PartManager {
         // registerPart(Circuit3x3.class);
         // registerPart(Circuit5x5.class);
         // registerPart(Circuit7x7.class);
+        registerPart(GateNullCell.class);
+
         //
         // Lamps
         for (int i = 0; i < ItemDye.field_150922_c.length; i++)
@@ -155,6 +159,8 @@ public class PartManager {
         registerPart(Accelerator.class);
 
         // Bluestone
+        registerPart(PartBluestone.class);
+
         // for (int bundled = 0; bundled < 2; bundled++) {
         // registerPart(WireBluestone.class, bundled == 1);// Normal
         // for (int i = 0; i < 16; i++)

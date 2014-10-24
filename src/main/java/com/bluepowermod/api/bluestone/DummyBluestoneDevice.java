@@ -49,20 +49,30 @@ public class DummyBluestoneDevice implements IBluestoneDevice {
         this(world, new Vec3i(x, y, z));
     }
 
+    public DummyBluestoneDevice() {
+
+    }
+
     @Override
-    public IBluestoneDevice getConnectedDevice(ForgeDirection side, BluestoneConnectionType type) {
+    public IBluestoneDevice getConnectedDevice(ForgeDirection side) {
 
         return null;
     }
 
     @Override
-    public void onPowerUpdate(BluestoneConnectionType changed, int oldValue, int newValue) {
+    public void onPowerUpdate(int network, int oldValue, int newValue) {
 
     }
 
     @Override
-    public void propagate(List<IBluestoneDevice> visited, BluestoneConnectionType type, ForgeDirection from, int oldValue, int newValue) {
+    public void listConnected(List<IBluestoneDevice> visited, BluestoneColor insulationColor, ForgeDirection from) {
 
+    }
+
+    @Override
+    public boolean canConnect(BluestoneColor insulationColor, BluestoneColor bundleColor) {
+
+        return insulationColor == BluestoneColor.NONE && bundleColor == BluestoneColor.INVALID;
     }
 
 }

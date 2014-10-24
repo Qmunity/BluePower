@@ -33,6 +33,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import org.lwjgl.opengl.GL11;
 
 import com.bluepowermod.api.block.ISilkyRemovable;
+import com.bluepowermod.helper.VectorHelper;
 import com.bluepowermod.init.BPItems;
 import com.bluepowermod.init.Config;
 import com.bluepowermod.part.BPPartFaceRotate;
@@ -104,18 +105,12 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
 
     public abstract String getId();
 
-    protected final void rotateBoxes(List<Vec3dCube> boxes) {
-
-        for (Vec3dCube c : boxes)
-            c.rotate(getFace(), Vec3d.center);
-    }
-
     @Override
     public final void addCollisionBoxesToList(List<Vec3dCube> boxes, Entity entity) {
 
         List<Vec3dCube> boxes_ = new ArrayList<Vec3dCube>();
         addCollisionBoxes(boxes_, entity);
-        rotateBoxes(boxes_);
+        VectorHelper.rotateBoxes(boxes_, getFace(), getRotation());
 
         for (Vec3dCube c : boxes_)
             boxes.add(c);
@@ -132,7 +127,7 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
         List<Vec3dCube> boxes = new ArrayList<Vec3dCube>();
 
         addOcclusionBoxes(boxes);
-        rotateBoxes(boxes);
+        VectorHelper.rotateBoxes(boxes, getFace(), getRotation());
 
         return boxes;
     }
@@ -148,7 +143,7 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
         List<Vec3dCube> boxes = new ArrayList<Vec3dCube>();
 
         addSelectionBoxes(boxes);
-        rotateBoxes(boxes);
+        VectorHelper.rotateBoxes(boxes, getFace(), getRotation());
 
         return boxes;
     }
@@ -209,7 +204,7 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
     }
 
     @Override
-    public final boolean renderStatic(Vec3i translation, RenderBlocks renderer, int pass) {
+    public boolean renderStatic(Vec3i translation, RenderBlocks renderer, int pass) {
 
         rendering = this;
 
@@ -299,19 +294,20 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
 
     protected final void renderTop(String texture) {
 
-        Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/gates/" + getId() + "/" + texture
-                + ".png"));
+        Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/gates/" + getId() + "/"
+                + texture + ".png"));
         renderTop();
     }
 
     protected final void renderTop(String texture, boolean status) {
+
         renderTop(texture, status ? "on" : "off");
     }
 
     protected final void renderTop(String texture, String status) {
 
-        Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/gates/" + getId() + "/" + texture + "_"
-                + status + ".png"));
+        Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/gates/" + getId() + "/"
+                + texture + "_" + status + ".png"));
 
         boolean isOn = status.equals("on");
 
@@ -331,8 +327,8 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
 
         boolean isOn = con.getOutput() + (!con.isOutputOnly() ? con.getInput() : 0) > 0;
 
-        Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/gates/" + getId() + "/" + name + "_"
-                + (con.isEnabled() ? isOn ? "on" : "off" : "disabled") + ".png"));
+        Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/gates/" + getId() + "/"
+                + name + "_" + (con.isEnabled() ? isOn ? "on" : "off" : "disabled") + ".png"));
 
         float bX = OpenGlHelper.lastBrightnessX;
         float bY = OpenGlHelper.lastBrightnessY;
@@ -397,11 +393,6 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
 
     @Override
     public boolean onActivated(EntityPlayer player, QMovingObjectPosition hit, ItemStack item) {
-        return onActivated(player, item);
-    }
-
-    @Override
-    public boolean onActivated(EntityPlayer player, ItemStack item) {
 
         if (item != null && item.getItem() == BPItems.screwdriver) {
             if (!player.isSneaking()) {
@@ -530,6 +521,7 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
     }
 
     public IIcon getTopIcon() {
+
         return iconTop;
     }
 

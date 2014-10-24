@@ -7,6 +7,7 @@ import net.minecraft.item.ItemStack;
 
 import com.bluepowermod.client.renderers.RenderHelper;
 import com.bluepowermod.init.BPItems;
+import com.qmunity.lib.raytrace.QMovingObjectPosition;
 
 public class GateToggleLatch extends GateBase {
 
@@ -37,7 +38,7 @@ public class GateToggleLatch extends GateBase {
         renderTop("right", power);
         RenderHelper.renderRedstoneTorch(-2.5D / 8D, 1D / 8D, 2.5D / 8D, 9D / 16D, !state);
         RenderHelper.renderRedstoneTorch(-2.5D / 8D, 1D / 8D, -2.5D / 8D, 9D / 16D, state);
-        //RenderHelper.renderLever(this, 9 / 16D, 1 / 8D, 4 / 16D, !state);
+        // RenderHelper.renderLever(this, 9 / 16D, 1 / 8D, 4 / 16D, !state);
     }
 
     @Override
@@ -54,14 +55,14 @@ public class GateToggleLatch extends GateBase {
     }
 
     @Override
-    public boolean onActivated(EntityPlayer player, ItemStack item) {
+    public boolean onActivated(EntityPlayer player, QMovingObjectPosition hit, ItemStack item) {
 
         if (item == null || item.getItem() != BPItems.screwdriver) {
             state = !state;
             playTickSound();
             return true;
         } else {
-            return super.onActivated(player, item);
+            return super.onActivated(player, hit, item);
         }
     }
 

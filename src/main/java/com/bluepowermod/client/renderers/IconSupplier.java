@@ -63,6 +63,9 @@ public class IconSupplier {
     public static IIcon bluestoneTorchOn;
     public static IIcon bluestoneTorchOff;
 
+    public static IIcon bluestoneOn;
+    public static IIcon bluestoneOff;
+
     @SubscribeEvent
     public void onTextureStitch(TextureStitchEvent.Pre event) {
 
@@ -111,6 +114,9 @@ public class IconSupplier {
 
             bluestoneTorchOff = event.map.registerIcon(Refs.MODID + ":bluestone_torch_off");
             bluestoneTorchOn = event.map.registerIcon(Refs.MODID + ":bluestone_torch_on");
+
+            bluestoneOff = event.map.registerIcon(Refs.MODID + ":bluestone_off");
+            bluestoneOn = event.map.registerIcon(Refs.MODID + ":bluestone_on");
 
             for (PartInfo i : PartManager.getRegisteredParts())
                 i.getExample().registerIcons(event.map);
