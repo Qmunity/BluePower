@@ -105,19 +105,11 @@ public class BlockCrop extends BlockCrops implements IGrowable {
     @Override
     public void updateTick(World world, int x, int y, int z, Random random) {
 
-        super.updateTick(world, x, y, z, random);
-
         if (world.getBlockLightValue(x, y + 1, z) >= 9) {
             int meta = world.getBlockMetadata(x, y, z);
-            if ((meta == 4) || (meta == 5)) {
-                return;
-            }
             if (!(world.getBlock(x, y - 1, z) instanceof BlockFarmland) || (world.getBlock(x, y - 1, z) == BPBlocks.flax_crop)
                     || (!world.isAirBlock(x, y + 1, z))) {
                 return;
-            }
-            if (random.nextInt(45) == 0) {
-                world.setBlockMetadataWithNotify(x, y, z, meta + 1, 2);
             }
             if ((meta > 6) && (world.getBlock(x, y - 1, z) instanceof BlockFarmland) && (world.getBlock(x, y + 1, z) instanceof BlockAir)) {
                 if (meta == 7) {
@@ -129,8 +121,8 @@ public class BlockCrop extends BlockCrops implements IGrowable {
                 world.setBlockMetadataWithNotify(x, y, z, 7, 2);
                 world.setBlock(x, y + 1, z, BPBlocks.flax_crop, 8, 2);
             }
-            if ((meta < 8) && ((world.getBlock(x, y - 1, z) instanceof BlockCrop))) {
-                world.setBlockToAir(x, y, z);
+            if (random.nextInt(30) == 0) {
+                world.setBlockMetadataWithNotify(x, y, z, meta + 1, 2);
             }
         }
     }
@@ -345,7 +337,7 @@ public class BlockCrop extends BlockCrops implements IGrowable {
     public boolean canBlockStay(World world, int x, int y, int z) {
 
         if (world.getBlock(x, y, z) != this) return super.canBlockStay(world, x, y, z);
-        return (world.getBlock(x, y - 1, z) instanceof BlockFarmland) || (world.getBlock(x, y - 1, z) instanceof BlockCrop);
+        return (world.getBlock(x, y - 1, z) instanceof BlockFarmland) || ((world.getBlock(x, y - 1, z) instanceof BlockCrop) && (world.getBlockMetadata(x, y - 1, z) != 7));
     }
 
     @Override
