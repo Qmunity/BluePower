@@ -10,13 +10,16 @@ package com.bluepowermod.api;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
+import com.bluepowermod.api.bluestone.IBluestoneApi;
 import com.bluepowermod.api.recipe.IAlloyFurnaceRegistry;
 import com.qmunity.lib.part.IPart;
 
-@SuppressWarnings({ "rawtypes", "unchecked" })
+import cpw.mods.fml.common.Loader;
+
 /**
- * This is then main hub where you can interface with BluePower as a modder. Note that the 'instance' in this class will be filled in BluePower's preInit.
- * This means this class is save to use from the init phase.
+ * This is then main hub where you can interface with BluePower as a modder. Note that the 'instance' in this class will be filled in BluePower's
+ * preInit. This means this class is save to use from the init phase.
+ *
  * @author MineMaarten
  */
 public class BPApi {
@@ -53,6 +56,8 @@ public class BPApi {
          * @param stack
          */
         public void loadSilkySettings(IPart part, ItemStack stack);
+
+        public IBluestoneApi getBluestoneApi();
     }
 
     /**
@@ -62,7 +67,7 @@ public class BPApi {
      */
     public static void init(IBPApi inst) {
 
-        if (instance == null) {
+        if (instance == null && Loader.instance().activeModContainer().getModId().equals("bluepower")) {
             instance = inst;
         } else {
             throw new IllegalStateException("This method should be called from BluePower only!");

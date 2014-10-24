@@ -13,7 +13,9 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
 import com.bluepowermod.api.BPApi.IBPApi;
+import com.bluepowermod.api.bluestone.IBluestoneApi;
 import com.bluepowermod.api.recipe.IAlloyFurnaceRegistry;
+import com.bluepowermod.part.bluestone.BluestoneApi;
 import com.bluepowermod.recipe.AlloyFurnaceRegistry;
 import com.qmunity.lib.part.IPart;
 
@@ -64,6 +66,12 @@ public class BluePowerAPI implements IBPApi {
                 part.readFromNBT(tileTag);
             }
         }
+    }
+
+    @Override
+    public IBluestoneApi getBluestoneApi() {
+
+        return BluestoneApi.getInstance();
     }
 
 }
