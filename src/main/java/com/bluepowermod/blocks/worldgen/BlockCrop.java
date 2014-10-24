@@ -129,6 +129,9 @@ public class BlockCrop extends BlockCrops implements IGrowable {
                 world.setBlockMetadataWithNotify(x, y, z, 7, 2);
                 world.setBlock(x, y + 1, z, BPBlocks.flax_crop, 8, 2);
             }
+            if ((meta < 8) && ((world.getBlock(x, y - 1, z) instanceof BlockCrop))) {
+                world.setBlockToAir(x, y, z);
+            }
         }
     }
 
