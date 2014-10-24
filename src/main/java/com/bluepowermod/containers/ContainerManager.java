@@ -40,10 +40,10 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class ContainerManager extends Container {
 
     private final TileManager tileManager;
-    private int filterColor;
-    private int priority;
-    private int mode;
-    private int fuzzySetting;
+    private int filterColor = -1;
+    private int priority = -1;
+    private int mode = -1;
+    private int fuzzySetting = -0;
 
     public ContainerManager(InventoryPlayer invPlayer, TileManager manager) {
 

@@ -22,7 +22,7 @@ import cpw.mods.fml.relauncher.SideOnly;
  */
 public class ContainerRetriever extends ContainerFilter {
 
-    private int slotIndex, mode;
+    private int slotIndex = -1, mode = -1;
     private final TileRetriever retriever;
 
     public ContainerRetriever(InventoryPlayer invPlayer, TileRetriever retriever) {

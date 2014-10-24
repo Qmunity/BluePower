@@ -26,8 +26,8 @@ import cpw.mods.fml.relauncher.SideOnly;
  */
 public class ContainerItemDetector extends Container {
 
-    private int mode;
-    private int fuzzySetting;
+    private int mode = -1;
+    private int fuzzySetting = -1;
     private final TileItemDetector itemDetector;
 
     public ContainerItemDetector(InventoryPlayer invPlayer, TileItemDetector itemDetector) {
