@@ -62,9 +62,13 @@ public class RedstoneConnection {
         this.out = out;
 
         if (last != out && update)
-            RedstoneHelper.notifyRedstoneUpdate(part.getWorld(), part.getX(), part.getY(), part.getZ(), getFD(), true);
+            forceUpdateNeighbor();
 
         return this;
+    }
+
+    public void forceUpdateNeighbor() {
+        RedstoneHelper.notifyRedstoneUpdate(part.getWorld(), part.getX(), part.getY(), part.getZ(), getFD(), true);
     }
 
     public boolean isEnabled() {

@@ -17,14 +17,17 @@
 
 package com.bluepowermod.part.gate;
 
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.entity.player.EntityPlayer;
+
+import org.lwjgl.opengl.GL11;
+
 import com.bluepowermod.client.gui.gate.GuiGateCounter;
 import com.bluepowermod.client.renderers.RenderHelper;
 import com.bluepowermod.part.IGuiButtonSensitive;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.entity.player.EntityPlayer;
-import org.lwjgl.opengl.GL11;
 
 /**
  * Created by Quetzi on 04/11/14.
@@ -74,25 +77,21 @@ public class GateCounter extends GateBase implements IGuiButtonSensitive {
 
     @Override
     public void doLogic() {
-
-    }
-
-    @Override
-    public void tick() {
-
-        if (left().getOutput() > 0 && !wasOnLeft) {
+        if (left().getInput() > 0 && !wasOnLeft) {
             wasOnLeft = true;
             count -= decrement;
             playTickSound();
         }
-        if (left().getOutput() == 0) wasOnLeft = false;
+        if (left().getInput() == 0)
+            wasOnLeft = false;
 
-        if (right().getOutput() > 0 && !wasOnRight) {
+        if (right().getInput() > 0 && !wasOnRight) {
             wasOnRight = true;
             count += increment;
             playTickSound();
         }
-        if (right().getOutput() == 0) wasOnRight = false;
+        if (right().getInput() == 0)
+            wasOnRight = false;
 
         count = Math.max(Math.min(count, max), 0);
         increment = Math.max(Math.min(increment, max), 0);
@@ -103,18 +102,23 @@ public class GateCounter extends GateBase implements IGuiButtonSensitive {
     }
 
     @Override
+    public void tick() {
+
+    }
+
+    @Override
     public void onButtonPress(EntityPlayer player, int messageId, int value) {
 
         switch (messageId) {
-            case 0:
-                max = value;
-                break;
-            case 1:
-                increment = value;
-                break;
-            case 2:
-                decrement = value;
-                break;
+        case 0:
+            max = value;
+            break;
+        case 1:
+            increment = value;
+            break;
+        case 2:
+            decrement = value;
+            break;
         }
         sendUpdatePacket();
     }

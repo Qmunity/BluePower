@@ -11,6 +11,7 @@ import org.lwjgl.opengl.GL11;
 
 import com.bluepowermod.client.renderers.RenderHelper;
 import com.bluepowermod.util.Refs;
+import com.qmunity.lib.util.QLog;
 
 public class GateRSLatch extends GateBase {
 
@@ -22,7 +23,7 @@ public class GateRSLatch extends GateBase {
         front().enable().setOutputOnly();
         left().enable();
         right().enable();
-        back().enable();
+        back().enable().setOutputOnly();
 
     }
 
@@ -63,8 +64,8 @@ public class GateRSLatch extends GateBase {
             renderTop();
         }
 
-        RenderHelper.renderRedstoneTorch(-1D / 8D, 1D / 8D, 2D / 8D, 9D / 16D, front().getInput() == 0);
-        RenderHelper.renderRedstoneTorch(1D / 8D, 1D / 8D, -2D / 8D, 9D / 16D, back().getInput() == 0);
+        RenderHelper.renderRedstoneTorch(1D / 8D, 1D / 8D, -2D / 8D, 9D / 16D, front().getInput() == 0);
+        RenderHelper.renderRedstoneTorch(-1D / 8D, 1D / 8D, 2D / 8D, 9D / 16D, back().getInput() == 0);
 
         if (mode % 2 == 1) {
             GL11.glEnable(GL11.GL_CULL_FACE);
@@ -74,41 +75,42 @@ public class GateRSLatch extends GateBase {
 
     @Override
     public void doLogic() {
-
-        if (left().getInput() > 0 && right().getInput() > 0) {
-            left().setBidirectional();
-            right().setBidirectional();
+        if ((left().getOutput() > 0 || left().getInput() > 0) && (right().getOutput() > 0 || right().getInput() > 0)) {
+            //  left().setBidirectional();
+            left().setOutput(0);
+            //   right().setBidirectional();
+            right().setOutput(0);
             front().setOutput(0);
             back().setOutput(0);
         } else {
             boolean mirrored = mode % 2 == 0;
-            if (mirrored ? left().getInput() > 0 : right().getInput() > 0) {
+            if (mirrored ? left().getInput() > 0 || left().getOutput() > 0 : right().getInput() > 0 || right().getOutput() > 0) {
                 front().setOutput(15);
                 back().setOutput(0);
                 if (mode < 2) {
                     if (mirrored) {
-                        left().setOutputOnly();
+                        // left().setOutputOnly();
                         left().setOutput(15);
-                        right().getInput();
+                        right().setOutput(0);
                     } else {
-                        right().setOutputOnly();
+                        // right().setOutputOnly();
                         right().setOutput(15);
-                        left().getInput();
+                        left().setOutput(0);
                     }
                 }
             }
-            if (mirrored ? right().getInput() > 0 : left().getInput() > 0) {
+            if (mirrored ? right().getInput() > 0 || right().getOutput() > 0 : left().getInput() > 0 || left().getOutput() > 0) {
                 front().setOutput(0);
                 back().setOutput(15);
                 if (mode < 2) {
                     if (mirrored) {
-                        right().setOutputOnly();
+                        //   right().setOutputOnly();
                         right().setOutput(15);
-                        left().getInput();
+                        left().setOutput(0);
                     } else {
-                        left().setOutputOnly();
+                        //  left().setOutputOnly();
                         left().setOutput(15);
-                        right().getInput();
+                        right().setOutput(0);
                     }
                 }
             }
@@ -118,9 +120,9 @@ public class GateRSLatch extends GateBase {
 
     @Override
     protected boolean changeMode() {
-
         if (++mode > 3)
             mode = 0;
+        QLog.info("mode:" + mode);
         return true;
     }
 

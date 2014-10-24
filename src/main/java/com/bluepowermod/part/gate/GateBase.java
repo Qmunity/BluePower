@@ -61,6 +61,8 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
             new RedstoneConnection(this, Dir.RIGHT), new RedstoneConnection(this, Dir.BACK), new RedstoneConnection(this, Dir.LEFT),
             new RedstoneConnection(this, Dir.TOP), new RedstoneConnection(this, Dir.BOTTOM) };
 
+    private boolean needsUpdate;//flag that is set when a neighbor block update occurs.
+
     private static IIcon iconBottom;
     private static IIcon iconSide;
     private IIcon iconTop;
@@ -394,6 +396,14 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
 
     @Override
     public final void update() {
+        if (needsUpdate) {
+            needsUpdate = false;
+            for (RedstoneConnection c : connections)
+                c.update();
+            doLogic();
+
+            sendUpdatePacket();
+        }
 
         tick();
     }
@@ -401,12 +411,7 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
     @Override
     public void onUpdate() {
 
-        for (RedstoneConnection c : connections)
-            c.update();
-
-        doLogic();
-
-        sendUpdatePacket();
+        needsUpdate = true;
     }
 
     @Override
