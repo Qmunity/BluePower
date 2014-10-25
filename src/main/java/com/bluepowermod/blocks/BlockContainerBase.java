@@ -36,7 +36,6 @@ import net.minecraftforge.common.util.ForgeDirection;
 import com.bluepowermod.BluePower;
 import com.bluepowermod.api.BPApi;
 import com.bluepowermod.api.block.IAdvancedSilkyRemovable;
-import com.bluepowermod.api.util.ForgeDirectionUtils;
 import com.bluepowermod.client.renderers.RendererBlockBase;
 import com.bluepowermod.client.renderers.RendererBlockBase.EnumFaceType;
 import com.bluepowermod.helper.IOHelper;
@@ -47,6 +46,7 @@ import com.bluepowermod.tileentities.IEjectAnimator;
 import com.bluepowermod.tileentities.IRotatable;
 import com.bluepowermod.tileentities.TileBase;
 import com.bluepowermod.util.Refs;
+import com.qmunity.lib.misc.ForgeDirectionUtils;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -101,7 +101,7 @@ public class BlockContainerBase extends BlockBase implements ITileEntityProvider
 
     /**
      * Fetches the TileEntity Class that goes with the block
-     * 
+     *
      * @return a .class
      */
     protected Class<? extends TileEntity> getTileEntity() {

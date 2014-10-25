@@ -4,14 +4,14 @@ import java.util.List;
 
 import net.minecraftforge.common.util.ForgeDirection;
 
-public interface IBluestoneDevice {
+import com.qmunity.lib.vec.IWorldLocation;
 
-    IBluestoneDevice getConnectedDevice(ForgeDirection side);
+public interface IBluestoneDevice extends IWorldLocation {
 
-    void onPowerUpdate(int network, int oldValue, int newValue);
+    public BluestoneColor getBundleColor();
 
-    void listConnected(List<IBluestoneDevice> visited, BluestoneColor insulationColor, ForgeDirection from);
+    public List<IBluestoneHandler> getHandlers();
 
-    boolean canConnect(BluestoneColor insulationColor, BluestoneColor bundleColor);
+    public IBluestoneDevice getNeighbor(ForgeDirection side);
 
 }

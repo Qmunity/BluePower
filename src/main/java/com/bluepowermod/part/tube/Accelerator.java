@@ -22,8 +22,8 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import org.lwjgl.opengl.GL11;
 
-import com.bluepowermod.api.util.ForgeDirectionUtils;
 import com.bluepowermod.client.renderers.IconSupplier;
+import com.qmunity.lib.misc.ForgeDirectionUtils;
 import com.qmunity.lib.part.compat.MultipartCompatibility;
 import com.qmunity.lib.vec.Vec3d;
 import com.qmunity.lib.vec.Vec3dCube;
@@ -51,6 +51,7 @@ public class Accelerator extends PneumaticTube {
     }
 
     public void setRotation(EntityPlayer player) {
+
         rotation = ForgeDirectionUtils.getDirectionFacing(player, true);
     }
 
@@ -128,6 +129,7 @@ public class Accelerator extends PneumaticTube {
 
     @Override
     protected IIcon getSideIcon(ForgeDirection side) {
+
         return getPartCache(side) instanceof MagTube ? IconSupplier.magTubeSide : IconSupplier.pneumaticTubeSide;
     }
 
@@ -144,6 +146,7 @@ public class Accelerator extends PneumaticTube {
 
     @Override
     public void renderDynamic(Vec3d loc, double delta, int pass) {
+
         super.renderDynamic(loc, delta, pass);
         if (pass == 1) {
             Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.locationBlocksTexture);

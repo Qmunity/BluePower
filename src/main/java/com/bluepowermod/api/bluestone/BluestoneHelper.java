@@ -7,9 +7,14 @@
  */
 package com.bluepowermod.api.bluestone;
 
+import java.util.AbstractMap;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map.Entry;
+
 import net.minecraftforge.common.util.ForgeDirection;
 
-public class ConductionMapHelper {
+public class BluestoneHelper {
 
     public static int rotateConductionMap(int map, int times) {
 
@@ -68,13 +73,15 @@ public class ConductionMapHelper {
             a = west;
             west = down;
             down = east;
-            east = a;
+            east = up;
+            up = a;
             break;
         case EAST:
             a = east;
             east = down;
             down = west;
-            west = a;
+            west = up;
+            up = a;
             break;
         default:
             break;
@@ -90,24 +97,62 @@ public class ConductionMapHelper {
 
     public static int getNetwork(int map, ForgeDirection side) {
 
-        switch (side) {
-        case DOWN:
-            return (map & 0xF00000) >> 20;
-        case UP:
-            return (map & 0x0F0000) >> 16;
-        case NORTH:
-            return (map & 0x00F000) >> 12;
-        case SOUTH:
-            return (map & 0x000F00) >> 8;
-        case WEST:
-            return (map & 0x0000F0) >> 4;
-        case EAST:
-            return (map & 0x00000F);
-        default:
-            break;
+        return (map & (0xF << (4 * (5 - side.ordinal())))) >> (4 * (5 - side.ordinal()));
+    }
+
+    public static List<IBluestoneHandler> getConnectedHandlers(IBluestoneHandler handler, int network) {
+
+        List<IBluestoneHandler> handlers = new ArrayList<IBluestoneHandler>();
+
+        int map = handler.getConductionMap();
+        for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
+            if (getNetwork(map, d) == network) {
+                IBluestoneHandler h = handler.getConnectedHandler(d);
+                if (h != null && !handlers.contains(h))
+                    handlers.add(h);
+            }
         }
 
-        return -1;
+        return handlers;
+    }
+
+    public static List<Entry<IBluestoneHandler, Integer>> listHandlersInNetwork(IBluestoneHandler handler, int network) {
+
+        List<Entry<IBluestoneHandler, Integer>> handlers = new ArrayList<Entry<IBluestoneHandler, Integer>>();
+        listHandlersInNetwork(handlers, handler, network);
+        return handlers;
+    }
+
+    @SuppressWarnings("rawtypes")
+    private static void listHandlersInNetwork(List<Entry<IBluestoneHandler, Integer>> visited, IBluestoneHandler handler, int network) {
+
+        Entry<IBluestoneHandler, Integer> data = new AbstractMap.SimpleEntry(handler, network);
+
+        if (visited.contains(data))
+            return;
+        visited.add(data);
+
+        int map = handler.getConductionMap();
+        for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
+            if (getNetwork(map, d) == network) {
+                IBluestoneHandler h = handler.getConnectedHandler(d);
+                if (h != null)
+                    listHandlersInNetwork(visited, h, getNetwork(h.getConductionMap(), d.getOpposite()));
+            }
+        }
+    }
+
+    public static List<IBluestoneDevice> listDevicesInNetwork(IBluestoneHandler handler, int network) {
+
+        List<IBluestoneDevice> devices = new ArrayList<IBluestoneDevice>();
+
+        for (Entry<IBluestoneHandler, Integer> e : listHandlersInNetwork(handler, network)) {
+            IBluestoneDevice dev = e.getKey().getDevice();
+            if (!devices.contains(dev))
+                devices.add(dev);
+        }
+
+        return devices;
     }
 
 }

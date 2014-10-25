@@ -1,5 +1,6 @@
 package com.bluepowermod.part.gate;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.client.renderer.RenderBlocks;
@@ -8,23 +9,29 @@ import net.minecraft.init.Blocks;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import com.bluepowermod.api.bluestone.BluestoneColor;
-import com.bluepowermod.api.bluestone.ConductionMapHelper;
-import com.bluepowermod.api.bluestone.IBluestoneConductor;
 import com.bluepowermod.api.bluestone.IBluestoneDevice;
+import com.bluepowermod.api.bluestone.IBluestoneHandler;
 import com.bluepowermod.client.renderers.IconSupplier;
 import com.bluepowermod.helper.VectorHelper;
 import com.bluepowermod.part.bluestone.BluestoneApi;
+import com.qmunity.lib.misc.ForgeDirectionUtils;
 import com.qmunity.lib.raytrace.QMovingObjectPosition;
 import com.qmunity.lib.vec.Vec3d;
 import com.qmunity.lib.vec.Vec3dCube;
 import com.qmunity.lib.vec.Vec3i;
 
-public class GateNullCell extends GateBase implements IBluestoneConductor {
-
-    private IBluestoneDevice[] devices = new IBluestoneDevice[6];
+public class GateNullCell extends GateBase implements IBluestoneDevice {
 
     private boolean on2 = false;
     private boolean on3 = false;
+
+    private IBluestoneHandler handler;
+    private List<IBluestoneHandler> handlers = new ArrayList<IBluestoneHandler>();
+
+    public GateNullCell() {
+
+        handlers.add(handler = BluestoneApi.getInstance().createDefaultBluestoneHandler(this, BluestoneColor.NONE, 0x012233));
+    }
 
     @Override
     public void initializeConnections() {
@@ -40,6 +47,14 @@ public class GateNullCell extends GateBase implements IBluestoneConductor {
     @Override
     protected void renderTop(float frame) {
 
+        boolean old2 = on2;
+        boolean old3 = on3;
+
+        on2 = handler.getPower(2) > 0;
+        on3 = handler.getPower(3) > 0;
+
+        if (old2 != on2 || old3 != on3)
+            getWorld().markBlockRangeForRenderUpdate(getX(), getY(), getZ(), getX(), getY(), getZ());
     }
 
     @Override
@@ -90,71 +105,10 @@ public class GateNullCell extends GateBase implements IBluestoneConductor {
     }
 
     @Override
-    public IBluestoneDevice getConnectedDevice(ForgeDirection side) {
+    public void onUpdate() {
 
-        return devices[side.ordinal()];
-    }
-
-    @Override
-    public void onPowerUpdate(int network, int oldValue, int newValue) {
-
-        if (network == 2) {
-            on2 = newValue > 0;
-        }
-        if (network == 3) {
-            on3 = newValue > 0;
-        }
-    }
-
-    @Override
-    public void listConnected(List<IBluestoneDevice> visited, BluestoneColor insulationColor, ForgeDirection from) {
-
-        visited.add(this);
-        refreshConnections();
-
-        int map = getConductionMap(null);
-        int net = ConductionMapHelper.getNetwork(map, from);
-
-        for (ForgeDirection side : ForgeDirection.VALID_DIRECTIONS) {
-            if (side == getFace() || side == getFace().getOpposite())
-                continue;
-            if (net != ConductionMapHelper.getNetwork(map, side))
-                continue;
-
-            IBluestoneDevice dev = getConnectedDevice(side);
-            if (dev != null && !visited.contains(dev))
-                dev.listConnected(visited, BluestoneColor.NONE, side.getOpposite());
-        }
-    }
-
-    @Override
-    public boolean canConnect(BluestoneColor insulationColor, BluestoneColor bundleColor) {
-
-        return bundleColor == BluestoneColor.INVALID;
-    }
-
-    @Override
-    public int getConductionMap(BluestoneColor insulationColor) {
-
-        return 0x012233;
-    }
-
-    private void refreshConnections() {
-
-        devices = new IBluestoneDevice[6];
-
-        for (ForgeDirection side : ForgeDirection.VALID_DIRECTIONS) {
-            if (side == getFace() || side == getFace().getOpposite())
-                continue;
-
-            IBluestoneDevice dev = BluestoneApi.getInstance().getDevice(getWorld(), getX() + side.offsetX, getY() + side.offsetY,
-                    getZ() + side.offsetZ, getFace());
-            if (dev != null && dev.canConnect(BluestoneColor.NONE, BluestoneColor.INVALID)) {
-                devices[side.ordinal()] = dev;
-            }
-        }
-
-        sendUpdatePacket();
+        super.onUpdate();
+        handler.refreshConnections(true);
     }
 
     @Override
@@ -196,10 +150,30 @@ public class GateNullCell extends GateBase implements IBluestoneConductor {
     public QMovingObjectPosition rayTrace(Vec3d start, Vec3d end) {
 
         QMovingObjectPosition mop = super.rayTrace(start, end);
+
         if (mop != null)
-            mop = new QMovingObjectPosition(mop, mop.getPart(), new Vec3dCube(0, 0, 0, 1, 12 / 16D, 1));
+            mop = new QMovingObjectPosition(mop, mop.getPart(), Vec3dCube.merge(getSelectionBoxes()));
 
         return mop;
+    }
+
+    @Override
+    public BluestoneColor getBundleColor() {
+
+        return BluestoneColor.INVALID;
+    }
+
+    @Override
+    public List<IBluestoneHandler> getHandlers() {
+
+        return handlers;
+    }
+
+    @Override
+    public IBluestoneDevice getNeighbor(ForgeDirection side) {
+
+        Vec3i loc = new Vec3i(this).add(ForgeDirectionUtils.getOnFace(getFace(), side));
+        return BluestoneApi.getInstance().getDevice(getWorld(), loc.getX(), loc.getY(), loc.getZ(), getFace(), true);
     }
 
 }

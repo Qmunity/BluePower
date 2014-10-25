@@ -2,7 +2,17 @@ package com.bluepowermod.api.bluestone;
 
 public enum BluestoneColor {
 
+    /**
+     * Matches any color + none + invalid
+     */
+    ANY(-3, "any", false), //
+    /**
+     * Not bundled
+     */
     INVALID(-2, "invalid", false), //
+    /**
+     * No insulation / Default bundle color
+     */
     NONE(-1, "none", false), //
     WHITE(0, "white", true), //
     ORANGE(1, "orange", true), //
@@ -27,13 +37,13 @@ public enum BluestoneColor {
 
     private int color;
     private String name;
-    private boolean valid;
+    private boolean isColor;
 
-    private BluestoneColor(int color, String name, boolean valid) {
+    private BluestoneColor(int color, String name, boolean isColor) {
 
         this.color = color;
         this.name = name;
-        this.valid = valid;
+        this.isColor = isColor;
     }
 
     public int getColor() {
@@ -46,9 +56,20 @@ public enum BluestoneColor {
         return name;
     }
 
-    public boolean isValid() {
+    public boolean isColor() {
 
-        return valid;
+        return isColor;
+    }
+
+    public boolean canConnect(BluestoneColor color) {
+
+        if (this == ANY || color == ANY)
+            return true;
+
+        if (this == NONE || color == NONE)
+            return true;
+
+        return this == color;
     }
 
 }

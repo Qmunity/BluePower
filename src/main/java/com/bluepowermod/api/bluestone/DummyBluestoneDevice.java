@@ -6,6 +6,7 @@ import java.util.List;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import com.bluepowermod.api.BPApi;
 import com.qmunity.lib.vec.Vec3i;
 
 public class DummyBluestoneDevice implements IBluestoneDevice {
@@ -38,10 +39,13 @@ public class DummyBluestoneDevice implements IBluestoneDevice {
     }
 
     private Vec3i location;
+    private List<IBluestoneHandler> handlers = new ArrayList<IBluestoneHandler>();
 
     public DummyBluestoneDevice(World world, Vec3i location) {
 
         this.location = location.setWorld(world).getImmutableCopy();
+
+        handlers.add(BPApi.getInstance().getBluestoneApi().createDefaultBluestoneHandler(this, BluestoneColor.NONE));
     }
 
     public DummyBluestoneDevice(World world, int x, int y, int z) {
@@ -54,25 +58,49 @@ public class DummyBluestoneDevice implements IBluestoneDevice {
     }
 
     @Override
-    public IBluestoneDevice getConnectedDevice(ForgeDirection side) {
+    public World getWorld() {
 
         return null;
     }
 
     @Override
-    public void onPowerUpdate(int network, int oldValue, int newValue) {
+    public int getX() {
 
+        return 0;
     }
 
     @Override
-    public void listConnected(List<IBluestoneDevice> visited, BluestoneColor insulationColor, ForgeDirection from) {
+    public int getY() {
 
+        return 0;
     }
 
     @Override
-    public boolean canConnect(BluestoneColor insulationColor, BluestoneColor bundleColor) {
+    public int getZ() {
 
-        return insulationColor == BluestoneColor.NONE && bundleColor == BluestoneColor.INVALID;
+        return 0;
+    }
+
+    @Override
+    public BluestoneColor getBundleColor() {
+
+        return BluestoneColor.INVALID;
+    }
+
+    @Override
+    public List<IBluestoneHandler> getHandlers() {
+
+        return handlers;
+    }
+
+    @Override
+    public IBluestoneDevice getNeighbor(ForgeDirection side) {
+
+        if (getWorld() == null)
+            return null;
+
+        return BPApi.getInstance().getBluestoneApi()
+                .getDevice(getWorld(), getX() + side.offsetX, getY() + side.offsetY, getZ() + side.offsetZ, true);
     }
 
 }
