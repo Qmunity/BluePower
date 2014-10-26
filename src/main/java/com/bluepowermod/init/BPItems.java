@@ -68,12 +68,20 @@ public class BPItems {
     public static final Item tungsten_ingot = new ItemCrafting(Refs.TUNGSTENINGOT_NAME);
     public static final Item zinc_ore_crushed = new ItemBase().setUnlocalizedName(Refs.ZINC_ORE_CRUSHED_NAME)
             .setTextureName(Refs.MODID + ":" + Refs.ZINC_ORE_CRUSHED_NAME).setCreativeTab(CustomTabs.tabBluePowerItems);
+    public static final Item tungsten_ore_crushed = new ItemBase().setUnlocalizedName(Refs.TUNGSTEN_ORE_CRUSHED_NAME)
+    		.setTextureName(Refs.MODID + ":" + Refs.TUNGSTEN_ORE_CRUSHED_NAME).setCreativeTab(CustomTabs.tabBluePowerItems);
     public static final Item zinc_ore_purified = new ItemBase().setUnlocalizedName(Refs.ZINC_ORE_CRUSHED_PURIFIED_NAME)
             .setTextureName(Refs.MODID + ":" + Refs.ZINC_ORE_CRUSHED_PURIFIED_NAME).setCreativeTab(CustomTabs.tabBluePowerItems);
+    public static final Item tungsten_ore_purified = new ItemBase().setUnlocalizedName(Refs.TUNGSTEN_ORE_CRUSHED_PURIFIED_NAME)
+    		.setTextureName(Refs.MODID + ":" + Refs.TUNGSTEN_ORE_CRUSHED_PURIFIED_NAME).setCreativeTab(CustomTabs.tabBluePowerItems);
     public static final Item zinc_dust = new ItemBase().setUnlocalizedName(Refs.ZINCDUST_NAME).setTextureName(Refs.MODID + ":" + Refs.ZINCDUST_NAME)
             .setCreativeTab(CustomTabs.tabBluePowerItems);
+    public static final Item tungsten_dust = new ItemBase().setUnlocalizedName(Refs.TUNGSTENDUST_NAME).setTextureName(Refs.MODID + ":" + Refs.TUNGSTENDUST_NAME)
+    		.setCreativeTab(CustomTabs.tabBluePowerItems);
     public static final Item zinc_tiny_dust = new ItemBase().setUnlocalizedName(Refs.ZINCDUST_TINY_NAME)
             .setTextureName(Refs.MODID + ":" + Refs.ZINCDUST_TINY_NAME).setCreativeTab(CustomTabs.tabBluePowerItems);
+    public static final Item tungsten_tiny_dust = new ItemBase().setUnlocalizedName(Refs.TUNGSTENDUST_TINY_NAME)
+    		.setTextureName(Refs.MODID + ":" + Refs.TUNGSTENDUST_TINY_NAME).setCreativeTab(CustomTabs.tabBluePowerItems);
     public static final Item ruby_saw = new ItemSaw(2, Refs.RUBYSAW_NAME);
     public static final Item sapphire_saw = new ItemSaw(2, Refs.SAPPHIRESAW_NAME);
     public static final Item amethyst_saw = new ItemSaw(2, Refs.AMETHYSTSAW_NAME);
@@ -164,6 +172,11 @@ public class BPItems {
         GameRegistry.registerItem(zinc_ore_purified, Refs.ZINC_ORE_CRUSHED_PURIFIED_NAME);
         GameRegistry.registerItem(zinc_tiny_dust, Refs.ZINCDUST_TINY_NAME);
 
+        GameRegistry.registerItem(tungsten_dust, Refs.TUNGSTENDUST_NAME);
+        GameRegistry.registerItem(tungsten_ore_crushed, Refs.TUNGSTEN_ORE_CRUSHED_NAME);
+        GameRegistry.registerItem(tungsten_ore_purified, Refs.TUNGSTEN_ORE_CRUSHED_PURIFIED_NAME);
+        GameRegistry.registerItem(tungsten_tiny_dust, Refs.TUNGSTENDUST_TINY_NAME);
+        
         GameRegistry.registerItem(ruby_axe, Refs.RUBYAXE_NAME);
         GameRegistry.registerItem(ruby_sword, Refs.RUBYSWORD_NAME);
         GameRegistry.registerItem(ruby_pickaxe, Refs.RUBYPICKAXE_NAME);

@@ -23,6 +23,10 @@ plate_assembly
 
 floppy_disk (no existing texture)
 
+Crushed Tungsten Ore (Ic2 compact)
+Tungsten Dust (Ic2 compact)
+Purified Crushed Tungsten Ore (Ic2 compact)
+Tungsten tiny dust (Ic2 compact)
 
 Sorting Machine:
 Sorting Machine has some missing mode icons. All pull modes are missing, and the last 2 sort modes. This is based on http://integratedredstone.wikispaces.com/Redpower+Machine#Blutricity-Sorting Machine

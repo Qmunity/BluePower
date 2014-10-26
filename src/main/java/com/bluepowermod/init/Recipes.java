@@ -54,6 +54,9 @@ public class Recipes {
         GameRegistry.addSmelting(BPItems.zinc_ore_crushed, new ItemStack(BPItems.zinc_ingot), 0.5F);
         GameRegistry.addSmelting(BPItems.zinc_dust, new ItemStack(BPItems.zinc_ingot), 0.5F);
         GameRegistry.addSmelting(BPItems.zinc_ore_purified, new ItemStack(BPItems.zinc_ingot), 0.5F);
+        GameRegistry.addSmelting(BPItems.tungsten_ore_crushed, new ItemStack(BPItems.tungsten_ingot), 0.5F);
+        GameRegistry.addSmelting(BPItems.tungsten_dust, new ItemStack(BPItems.tungsten_ingot), 0.5F);
+        GameRegistry.addSmelting(BPItems.tungsten_ore_purified, new ItemStack(BPItems.tungsten_ingot), 0.5F);
 
         GameRegistry.addShapelessRecipe(new ItemStack(BPBlocks.basalt_paver), BPBlocks.basalt_tile);
         GameRegistry.addShapelessRecipe(new ItemStack(BPBlocks.basalt_tile), BPBlocks.basalt_paver);
@@ -69,7 +72,8 @@ public class Recipes {
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPBlocks.ruby_block, 1), "###", "###", "###", '#', "gemRuby"));
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPBlocks.sapphire_block, 1), "###", "###", "###", '#', "gemSapphire"));
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPBlocks.teslatite_block, 1), "###", "###", "###", '#', "dustTeslatite"));
-        GameRegistry.addRecipe(new ItemStack(BPItems.zinc_dust, 1), "###", "###", "###", '#', BPItems.zinc_tiny_dust);
+        GameRegistry.addRecipe(new ItemStack(BPItems.zinc_dust), "###", "###", "###", '#', BPItems.zinc_tiny_dust);
+        GameRegistry.addRecipe(new ItemStack(BPItems.tungsten_dust), "###", "###", "###", '#', BPItems.tungsten_tiny_dust);
 
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.ruby_axe, 1), "GG ", "GS ", " S ", 'G', "gemRuby", 'S', "stickWood"));
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.ruby_axe, 1), " GG", " SG", " S ", 'G', "gemRuby", 'S', "stickWood"));
