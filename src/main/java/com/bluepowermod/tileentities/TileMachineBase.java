@@ -88,6 +88,12 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
     }
 
     @Override
+    public void validate() {
+        super.validate();
+        tileCache = null;
+    }
+
+    @Override
     public void onBlockNeighbourChanged() {
 
         super.onBlockNeighbourChanged();

@@ -273,6 +273,20 @@ public class MultipartBPPart extends TMultiPart implements IRedstonePart, JNorma
     }
 
     @Override
+    public void onChunkLoad() {
+        setPartData();
+
+        getPart().onChunkLoad();
+    }
+
+    @Override
+    public void onChunkUnload() {
+        setPartData();
+
+        getPart().onChunkUnload();
+    }
+
+    @Override
     public boolean weakTileChanges() {
 
         return false;

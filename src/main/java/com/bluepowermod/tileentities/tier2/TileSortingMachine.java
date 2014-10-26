@@ -27,6 +27,7 @@ import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.part.IGuiButtonSensitive;
 import com.bluepowermod.part.tube.TubeStack;
 import com.bluepowermod.tileentities.TileMachineBase;
+import com.qmunity.lib.util.QLog;
 
 /**
  * 
@@ -133,6 +134,7 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
                 for (int slot : accessibleSlots) {
                     ItemStack stack = inputInv.getStackInSlot(slot);
                     if (stack != null && IOHelper.canExtractItemFromInventory(inputInv, stack, slot, dir.getOpposite().ordinal())) {
+                        QLog.info("stacksize: " + stack.stackSize);
                         if (tryProcessItem(stack, false)) {
                             if (stack.stackSize == 0)
                                 inputInv.setInventorySlotContents(slot, null);
