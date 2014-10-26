@@ -107,23 +107,21 @@ public class BlockCrop extends BlockCrops implements IGrowable {
 
         if (world.getBlockLightValue(x, y + 1, z) >= 9) {
             int meta = world.getBlockMetadata(x, y, z);
-            if (!(world.getBlock(x, y - 1, z) instanceof BlockFarmland) || (world.getBlock(x, y - 1, z) == BPBlocks.flax_crop)
-                    || (!world.isAirBlock(x, y + 1, z))) {
-                return;
-            }
-            if ((meta > 6) && (world.getBlock(x, y - 1, z) instanceof BlockFarmland) && (world.getBlock(x, y + 1, z) instanceof BlockAir)) {
-                if (meta == 7) {
-                    world.setBlock(x, y + 1, z, BPBlocks.flax_crop, 8, 2);
+
+            if ((meta < 7) && (world.getBlock(x, y -1, z) instanceof BlockFarmland)) {
+                if (random.nextInt(30) == 0) {
+                    world.setBlockMetadataWithNotify(x, y, z, meta + 1, 2);
                 }
-                world.setBlockMetadataWithNotify(x, y, z, 7, 2);
             }
+            if ((meta == 7) && (world.getBlock(x, y - 1, z) instanceof BlockFarmland) && (world.getBlock(x, y + 1, z) instanceof BlockAir)) {
+                world.setBlock(x, y + 1, z, BPBlocks.flax_crop, 8, 2);
+            }
+            // If the bottom somehow becomes fully grown, correct it
             if ((meta > 7) && (world.getBlock(x, y - 1, z) instanceof BlockFarmland)) {
                 world.setBlockMetadataWithNotify(x, y, z, 7, 2);
                 world.setBlock(x, y + 1, z, BPBlocks.flax_crop, 8, 2);
             }
-            if (random.nextInt(30) == 0) {
-                world.setBlockMetadataWithNotify(x, y, z, meta + 1, 2);
-            }
+
         }
     }
 
