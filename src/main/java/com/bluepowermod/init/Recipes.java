@@ -136,16 +136,8 @@ public class Recipes {
         craftManager.addRecipe(new ItemStack(BPItems.tungsten_ingot, 9), "#", '#', BPBlocks.tungsten_block);
         craftManager.addRecipe(new ItemStack(BPItems.teslatite_dust, 9), "#", '#', BPBlocks.teslatite_block);
 
-        if (Config.useAltScrewdriverRecipe) {
-            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.screwdriver_handle), "#", '#', "stickWood"));
-            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.screwdriver, 1), "# ", " S", '#', "ingotIron", 'S',
-                    BPItems.screwdriver_handle));
-        } else {
-            GameRegistry
-                    .addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.screwdriver, 1), "  #", " # ", "S  ", '#', "ingotIron", 'S', "stickWood"));
-            GameRegistry
-                    .addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.screwdriver, 1), "#  ", " # ", "  S", '#', "ingotIron", 'S', "stickWood"));
-        }
+        GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(BPItems.screwdriver_handle,1), "stickWood", BPItems.indigo_dye));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.screwdriver, 1), "# ", " S", '#', "ingotIron", 'S', BPItems.screwdriver_handle));
 
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.athame, 1), "# ", " S", '#', "ingotSilver", 'S', "stickWood"));
 
