@@ -335,7 +335,13 @@ public class BlockCrop extends BlockCrops implements IGrowable {
     public boolean canBlockStay(World world, int x, int y, int z) {
 
         if (world.getBlock(x, y, z) != this) return super.canBlockStay(world, x, y, z);
-        return (world.getBlock(x, y - 1, z) instanceof BlockFarmland) || ((world.getBlock(x, y - 1, z) instanceof BlockCrop) && (world.getBlockMetadata(x, y - 1, z) != 7));
+        if ((world.getBlock(x, y -1, z) instanceof BlockFarmland) && (world.getBlock(x, y -1, z).isFertile(world, x, y - 1, z))) {
+            return true;
+        }
+        if ((world.getBlock(x, y - 1, z) instanceof BlockCrop) && (world.getBlockMetadata(x, y - 1, z) == 7)) {
+            return true;
+        }
+        return false;
     }
 
     @Override
