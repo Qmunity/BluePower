@@ -292,7 +292,7 @@ public class TubeLogic implements IPneumaticTube {
             for (int i = 0; i < 6; i++) {
                 if (firstRun)
                     heading = ForgeDirection.getOrientation(i);
-                if (node.edges[i] != null) {
+                if (node.edges != null) {
                     TubeEdge edge = node.edges[i];
                     if (edge != null && canPassThroughMask(stack.color, edge.colorMask)) {// if this item can travel through this color mask proceed.
                         Integer distance = distances.get(edge.target);
