@@ -147,6 +147,18 @@ public class PneumaticTube extends BPPart {
         onNeighborTileUpdate();
     }
 
+    @Override
+    public void onChunkLoad() {
+        tileCache = null;
+        if (Config.enableTubeCaching)
+            getLogic().clearNodeCaches();
+    }
+
+    @Override
+    public void onChunkUnload() {
+
+    }
+
     /**
      * Event called whenever a nearby block updates
      */

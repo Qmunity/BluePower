@@ -40,9 +40,9 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class ContainerRegulator extends ContainerGhosts {
 
     private final TileRegulator tileRegulator;
-    private int filterColor;
-    private int mode;
-    private int fuzzySetting;
+    private int filterColor = -1;
+    private int mode = -1;
+    private int fuzzySetting = -1;
 
     public ContainerRegulator(InventoryPlayer invPlayer, TileRegulator regulator) {
 

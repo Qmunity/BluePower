@@ -20,7 +20,9 @@ package com.bluepowermod.recipe;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -54,6 +56,7 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
 
     private final List<IAlloyFurnaceRecipe> alloyFurnaceRecipes = new ArrayList<IAlloyFurnaceRecipe>();
     private final List<ItemStack> bufferedRecyclingItems = new ArrayList<ItemStack>();
+    private final Map<ItemStack, ItemStack> moltenDownMap = new HashMap<ItemStack, ItemStack>();
     private final List<String> blacklist = new ArrayList<String>();
 
     private AlloyFurnaceRegistry() {
@@ -73,7 +76,7 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
 
     /**
      * getter for NEI plugin
-     * 
+     *
      * @return
      */
     public List<IAlloyFurnaceRecipe> getAllRecipes() {
@@ -103,7 +106,8 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
 
     @Override
     public void addRecyclingRecipe(ItemStack recycledItem, String... blacklist) {
-
+        if (recycledItem == null)
+            throw new NullPointerException("Recycled item can't be null!");
         bufferedRecyclingItems.add(recycledItem);
         if (blacklist.length > 0) {
             ModContainer mc = Loader.instance().activeModContainer();
@@ -111,6 +115,14 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
                     + Arrays.toString(blacklist));
             Collections.addAll(this.blacklist, blacklist);
         }
+    }
+
+    @Override
+    public void addRecyclingRecipe(ItemStack recycledItem, ItemStack moltenDownItem, String... blacklist) {
+        if (moltenDownItem == null)
+            throw new NullPointerException("Molten down item can't be null!");
+        addRecyclingRecipe(recycledItem, blacklist);
+        moltenDownMap.put(recycledItem, moltenDownItem);
     }
 
     @SuppressWarnings("unchecked")
@@ -127,18 +139,25 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
             }
         }
 
-        List<IRecipe> registeredRecipes = new ArrayList<IRecipe>();
-        for (ItemStack recyclingItem : bufferedRecyclingItems) {
-            List<IRecipe> recipes = CraftingManager.getInstance().getRecipeList();
-            for (IRecipe recipe : recipes) {
+        List<ItemStack> registeredRecycledItems = new ArrayList<ItemStack>();
+        List<ItemStack> registeredResultItems = new ArrayList<ItemStack>();
+
+        List<IRecipe> recipes = CraftingManager.getInstance().getRecipeList();
+        for (IRecipe recipe : recipes) {
+            int recyclingAmount = 0;
+            ItemStack currentlyRecycledInto = null;
+            for (ItemStack recyclingItem : bufferedRecyclingItems) {
                 try {
-                    int recyclingAmount = 0;
                     if (recipe instanceof ShapedRecipes) {
                         ShapedRecipes shaped = (ShapedRecipes) recipe;
                         if (shaped.recipeItems != null) {
                             for (ItemStack input : shaped.recipeItems) {
                                 if (input != null && ItemStackUtils.isItemFuzzyEqual(input, recyclingItem)) {
-                                    recyclingAmount++;
+                                    ItemStack moltenDownItem = getRecyclingStack(recyclingItem);
+                                    if (currentlyRecycledInto == null || ItemStackUtils.isItemFuzzyEqual(currentlyRecycledInto, moltenDownItem)) {
+                                        currentlyRecycledInto = moltenDownItem;
+                                        recyclingAmount += moltenDownItem.stackSize;
+                                    }
                                 }
                             }
                         }
@@ -147,7 +166,11 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
                         if (shapeless.recipeItems != null) {
                             for (ItemStack input : (List<ItemStack>) shapeless.recipeItems) {
                                 if (input != null && ItemStackUtils.isItemFuzzyEqual(input, recyclingItem)) {
-                                    recyclingAmount++;
+                                    ItemStack moltenDownItem = getRecyclingStack(recyclingItem);
+                                    if (currentlyRecycledInto == null || ItemStackUtils.isItemFuzzyEqual(currentlyRecycledInto, moltenDownItem)) {
+                                        currentlyRecycledInto = moltenDownItem;
+                                        recyclingAmount += moltenDownItem.stackSize;
+                                    }
                                 }
                             }
                         }
@@ -165,7 +188,12 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
                                     }
                                     for (ItemStack item : itemList) {
                                         if (item != null && ItemStackUtils.isItemFuzzyEqual(item, recyclingItem)) {
-                                            recyclingAmount++;
+                                            ItemStack moltenDownItem = getRecyclingStack(recyclingItem);
+                                            if (currentlyRecycledInto == null
+                                                    || ItemStackUtils.isItemFuzzyEqual(currentlyRecycledInto, moltenDownItem)) {
+                                                currentlyRecycledInto = moltenDownItem;
+                                                recyclingAmount += moltenDownItem.stackSize;
+                                            }
                                             break;
                                         }
                                     }
@@ -185,21 +213,16 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
                                 }
                                 for (ItemStack item : itemList) {
                                     if (item != null && ItemStackUtils.isItemFuzzyEqual(item, recyclingItem)) {
-                                        recyclingAmount++;
+                                        ItemStack moltenDownItem = getRecyclingStack(recyclingItem);
+                                        if (currentlyRecycledInto == null || ItemStackUtils.isItemFuzzyEqual(currentlyRecycledInto, moltenDownItem)) {
+                                            currentlyRecycledInto = moltenDownItem;
+                                            recyclingAmount += moltenDownItem.stackSize;
+                                        }
                                         break;
                                     }
                                 }
                             }
                         }
-                    }
-                    if (recyclingAmount > 0 && !registeredRecipes.contains(recipe) && recipe.getRecipeOutput().stackSize > 0) {
-                        if (blacklist.contains(recipe.getRecipeOutput().getItem())) {
-                            BluePower.log.info("Skipped adding item/block " + recipe.getRecipeOutput().getDisplayName()
-                                    + " to the Alloy Furnace recipes.");
-                            continue;
-                        }
-                        registeredRecipes.add(recipe);
-                        addRecipe(new ItemStack(recyclingItem.getItem(), recyclingAmount, recyclingItem.getItemDamage()), recipe.getRecipeOutput());
                     }
                 } catch (Throwable e) {
                     BluePower.log.error("Error when generating an Alloy Furnace recipe for item " + recyclingItem.getDisplayName()
@@ -207,7 +230,44 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
                     e.printStackTrace();
                 }
             }
+            if (recyclingAmount > 0 && recipe.getRecipeOutput().stackSize > 0) {
+                boolean shouldAdd = true;
+                for (int i = 0; i < registeredRecycledItems.size(); i++) {
+                    if (ItemStackUtils.isItemFuzzyEqual(registeredRecycledItems.get(i), recipe.getRecipeOutput())) {
+                        if (registeredResultItems.get(i).stackSize < recyclingAmount) {
+                            shouldAdd = false;
+                            break;
+                        } else {
+                            registeredResultItems.remove(i);
+                            registeredRecycledItems.remove(i);
+                            i--;
+                        }
+                    }
+                }
+
+                if (shouldAdd) {
+                    if (blacklist.contains(recipe.getRecipeOutput().getItem())) {
+                        BluePower.log.info("Skipped adding item/block " + recipe.getRecipeOutput().getDisplayName()
+                                + " to the Alloy Furnace recipes.");
+                        continue;
+                    }
+                    ItemStack resultItem = new ItemStack(currentlyRecycledInto.getItem(), Math.min(64, recyclingAmount),
+                            currentlyRecycledInto.getItemDamage());
+                    registeredResultItems.add(resultItem);
+                    registeredRecycledItems.add(recipe.getRecipeOutput());
+
+                }
+            }
         }
+        for (int i = 0; i < registeredResultItems.size(); i++) {
+            addRecipe(registeredResultItems.get(i), registeredRecycledItems.get(i));
+        }
+
+    }
+
+    private ItemStack getRecyclingStack(ItemStack original) {
+        ItemStack moltenDownStack = moltenDownMap.get(original);
+        return moltenDownStack != null ? moltenDownStack : original;
     }
 
     public IAlloyFurnaceRecipe getMatchingRecipe(ItemStack[] input, ItemStack outputSlot) {
@@ -305,7 +365,7 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
 
         /**
          * getter for NEI plugin
-         * 
+         *
          * @return
          */
         public ItemStack[] getRequiredItems() {

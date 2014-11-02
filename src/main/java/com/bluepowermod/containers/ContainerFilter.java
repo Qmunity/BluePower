@@ -40,8 +40,8 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class ContainerFilter extends Container {
 
     private final TileFilter tileFilter;
-    private int filterColor;
-    private int fuzzySetting;
+    private int filterColor = -1;
+    private int fuzzySetting = -1;
 
     public ContainerFilter(InventoryPlayer invPlayer, TileFilter ejector) {
 

@@ -292,19 +292,21 @@ public class TubeLogic implements IPneumaticTube {
             for (int i = 0; i < 6; i++) {
                 if (firstRun)
                     heading = ForgeDirection.getOrientation(i);
-                TubeEdge edge = node.edges[i];
-                if (edge != null && canPassThroughMask(stack.color, edge.colorMask)) {// if this item can travel through this color mask proceed.
-                    Integer distance = distances.get(edge.target);
-                    if (distance == null || distances.get(node) + edge.distance < distance) {
-                        distances.put(edge.target, distances.get(node) + edge.distance);
-                        if (edge.target.target instanceof PneumaticTube) {
-                            traversingNodes.add(edge.target);
-                            trackingExportDirection.add(heading);
-                        } else if (stack.getTarget(tube.getWorld()) == null && edge.isValidForExportItem(stack.stack) || stack.heading == null
-                                && edge.isValidForImportItem(stack) || stack.heading != null
-                                && stack.getTarget(tube.getWorld()) == edge.target.target
-                                && edge.targetConnectionSide.getOpposite() == stack.getTargetEntryDir()) {
-                            validDestinations.put(edge, stack.heading == null ? edge.targetConnectionSide : heading);
+                if (node.edges != null) {
+                    TubeEdge edge = node.edges[i];
+                    if (edge != null && canPassThroughMask(stack.color, edge.colorMask)) {// if this item can travel through this color mask proceed.
+                        Integer distance = distances.get(edge.target);
+                        if (distance == null || distances.get(node) + edge.distance < distance) {
+                            distances.put(edge.target, distances.get(node) + edge.distance);
+                            if (edge.target.target instanceof PneumaticTube) {
+                                traversingNodes.add(edge.target);
+                                trackingExportDirection.add(heading);
+                            } else if (stack.getTarget(tube.getWorld()) == null && edge.isValidForExportItem(stack.stack) || stack.heading == null
+                                    && edge.isValidForImportItem(stack) || stack.heading != null
+                                    && stack.getTarget(tube.getWorld()) == edge.target.target
+                                    && edge.targetConnectionSide.getOpposite() == stack.getTargetEntryDir()) {
+                                validDestinations.put(edge, stack.heading == null ? edge.targetConnectionSide : heading);
+                            }
                         }
                     }
                 }

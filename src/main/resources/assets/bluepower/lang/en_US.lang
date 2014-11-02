@@ -1,4 +1,4 @@
-/*
+﻿/*
  * This file is part of Blue Power. Blue Power is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
  * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version. Blue Power is
  * distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
@@ -218,11 +218,6 @@ item.bluepower:zinc_ore_crushed.name=Crushed Zinc Ore
 item.bluepower:zinc_dust.name=Zinc Dust
 item.bluepower:zinc_tiny_dust.name=Tiny Pile of Zinc Dust
 item.bluepower:zinc_ore_purified.name=Purified Crushed Zinc Ore
-
-item.bluepower:tungsten_ore_crushed.name=Crushed Tungsten Ore
-item.bluepower:tungsten_dust.name=Tungsten Dust
-item.bluepower:tungsten_tiny_dust.name=Tiny Pile of Tungsten Dust
-item.bluepower:tungsten_ore_purified.name=Purified Crushed Tungsten Ore
 
 item.bluepower:flax_seeds.name=Flax Seeds
 item.bluepower:indigo_flower.name=Indigo Flower
