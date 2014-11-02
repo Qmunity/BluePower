@@ -18,18 +18,16 @@ import com.bluepowermod.client.renderers.IconSupplier;
 import com.bluepowermod.helper.VectorHelper;
 import com.bluepowermod.part.BPPartFace;
 import com.qmunity.lib.helper.RedstoneHelper;
-import com.qmunity.lib.misc.ForgeDirectionUtils;
+import com.qmunity.lib.part.IPartRedstone;
 import com.qmunity.lib.vec.Vec3dCube;
 import com.qmunity.lib.vec.Vec3i;
 
-public class WireBluestone extends BPPartFace implements IBluestoneDevice {
+public class WireBluestone extends BPPartFace implements IBluestoneDevice, IPartRedstone {
 
     private BluestoneColor insulationColor = BluestoneColor.NONE;
     private BluestoneColor bundleColor = BluestoneColor.INVALID;
 
     private List<IBluestoneHandler> handlers = new ArrayList<IBluestoneHandler>();
-
-    private boolean powered = false;
 
     public WireBluestone() {
 
@@ -86,9 +84,7 @@ public class WireBluestone extends BPPartFace implements IBluestoneDevice {
         double height = 2 / 16D;
 
         ForgeDirection d1 = ForgeDirection.NORTH;
-        // (getFace() == ForgeDirection.SOUTH || getFace() == ForgeDirection.NORTH) ? ForgeDirection.DOWN : ForgeDirection.NORTH
         ForgeDirection d2 = ForgeDirection.SOUTH;
-        // (getFace() == ForgeDirection.SOUTH || getFace() == ForgeDirection.NORTH) ? ForgeDirection.UP : ForgeDirection.SOUTH
         ForgeDirection d3 = ForgeDirection.WEST;
         ForgeDirection d4 = ForgeDirection.EAST;
 
@@ -104,6 +100,9 @@ public class WireBluestone extends BPPartFace implements IBluestoneDevice {
         } else if (getFace() == ForgeDirection.EAST) {
             d3 = ForgeDirection.DOWN;
             d4 = ForgeDirection.UP;
+        } else if (getFace() == ForgeDirection.UP) {
+            d3 = ForgeDirection.EAST;
+            d4 = ForgeDirection.WEST;
         }
 
         boolean north = getConnectedDevice(d1) != null;
@@ -146,43 +145,71 @@ public class WireBluestone extends BPPartFace implements IBluestoneDevice {
         renderer.renderStandardBlock(Blocks.stone, translation.getX(), translation.getY(), translation.getZ());
     }
 
+    private static boolean updating = false;
+
     @Override
     public void onUpdate() {
 
+        if (updating)
+            return;
+
         super.onUpdate();
+
+        updating = true;
 
         for (IBluestoneHandler h : handlers)
             h.refreshConnections(true);
 
         if (bundleColor == BluestoneColor.INVALID) {
-            boolean powered = false;
-            for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
-                if (!powered && getConnectedDevice(d) == null)
-                    powered = RedstoneHelper.getInput(getWorld(), getX(), getY(), getZ(), d, getFace()) > 0;
+            IBluestoneHandler handler = handlers.get(0);
+            List<Entry<IBluestoneHandler, Integer>> netHandlers = BluestoneHelper.listHandlersInNetwork(handler, 2);
+
+            boolean p = false;
+            for (Entry<IBluestoneHandler, Integer> e : netHandlers) {
+                if (p)
+                    break;
+                for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS)
+                    if (!p)
+                        p = e.getKey().getInput(d) > 0;
             }
-            if (this.powered != powered) {
-                this.powered = powered;
 
-                IBluestoneHandler handler = handlers.get(0);
-                List<Entry<IBluestoneHandler, Integer>> netHandlers = BluestoneHelper.listHandlersInNetwork(handler, 2);
-
-                boolean p = false;
-                for (Entry<IBluestoneHandler, Integer> e : netHandlers) {
-                    if (p)
-                        break;
-                    for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS)
-                        if (!p)
-                            p = e.getKey().getInput(d) > 0;
+            for (Entry<IBluestoneHandler, Integer> e : netHandlers) {
+                e.getKey().onUpdate(e.getValue(), p ? 15 : 0);
+                IBluestoneDevice d = e.getKey().getDevice();
+                if (d instanceof WireBluestone) {
+                    ((WireBluestone) d).notifyNeighbors();
                 }
-
-                System.out.println("Server!");
-
-                for (Entry<IBluestoneHandler, Integer> e : netHandlers)
-                    e.getKey().onUpdate(e.getValue(), p ? 15 : 0);
             }
         }
 
         sendUpdatePacket();
+
+        updating = false;
+    }
+
+    private boolean isRedstoneDeviceOnSide(ForgeDirection side) {
+
+        IBluestoneHandler handler = getUncoveredCableHandler();
+        if (handler == null)
+            return false;
+
+        IBluestoneHandler h = handler.getConnectedHandler(side);
+        if (h == null)
+            return false;
+        if (h.getDevice() instanceof WireBluestone)
+            return false;
+
+        return true;
+    }
+
+    private void notifyNeighbors() {
+
+        if (getUncoveredCableHandler() == null)
+            return;
+
+        for (ForgeDirection side : ForgeDirection.VALID_DIRECTIONS)
+            if (isRedstoneDeviceOnSide(side))
+                RedstoneHelper.notifyRedstoneUpdate(getWorld(), getX(), getY(), getZ(), side, true);
     }
 
     @Override
@@ -206,8 +233,6 @@ public class WireBluestone extends BPPartFace implements IBluestoneDevice {
 
         boolean p = tag.getBoolean("isOn");
 
-        System.out.println("Client!");
-
         for (Entry<IBluestoneHandler, Integer> e : netHandlers)
             e.getKey().onUpdate(e.getValue(), p ? 15 : 0);
 
@@ -229,8 +254,54 @@ public class WireBluestone extends BPPartFace implements IBluestoneDevice {
     @Override
     public IBluestoneDevice getNeighbor(ForgeDirection side) {
 
-        Vec3i loc = new Vec3i(this).add(ForgeDirectionUtils.getOnFace(getFace(), side));
-        return BluestoneApi.getInstance().getDevice(getWorld(), loc.getX(), loc.getY(), loc.getZ(), getFace(), true);
+        // Same block check
+        {
+            Vec3i loc = new Vec3i(this);
+            IBluestoneDevice neighbor = BluestoneApi.getInstance().getDevice(getWorld(), loc.getX(), loc.getY(), loc.getZ(), side, true);
+            if (neighbor instanceof WireBluestone) {
+                return neighbor;
+            }
+        }
+
+        // Diagonal check
+        {
+            Vec3i loc = new Vec3i(this).add(side).add(getFace());
+            IBluestoneDevice neighbor = BluestoneApi.getInstance().getDevice(getWorld(), loc.getX(), loc.getY(), loc.getZ(),
+                    side.getOpposite(), true);
+            if (neighbor instanceof WireBluestone) {
+                return neighbor;
+            }
+        }
+
+        // Side check
+        {
+            Vec3i loc = new Vec3i(this).add(side);
+            IBluestoneDevice neighbor = BluestoneApi.getInstance().getDevice(getWorld(), loc.getX(), loc.getY(), loc.getZ(), getFace(),
+                    true);
+            return neighbor;
+        }
+    }
+
+    @Override
+    public void onRemoved() {
+
+        super.onRemoved();
+
+        List<IBluestoneHandler> updatedHandlers = new ArrayList<IBluestoneHandler>();
+
+        for (IBluestoneHandler h : handlers) {
+            for (ForgeDirection side : ForgeDirection.VALID_DIRECTIONS) {
+                IBluestoneHandler handler = h.getConnectedHandler(side);
+                if (handler != null && !updatedHandlers.contains(handler))
+                    updatedHandlers.add(handler);
+            }
+        }
+
+        updatedHandlers.removeAll(handlers);
+
+        for (IBluestoneHandler h : updatedHandlers)
+            h.refreshConnections(false);
+        updatedHandlers.clear();
     }
 
     private IBluestoneDevice getConnectedDevice(ForgeDirection side) {
@@ -251,5 +322,51 @@ public class WireBluestone extends BPPartFace implements IBluestoneDevice {
                 return true;
 
         return false;
+    }
+
+    private IBluestoneHandler getUncoveredCableHandler() {
+
+        if (handlers.size() == 1)
+            return handlers.get(0);
+
+        return null;
+    }
+
+    @Override
+    public int getStrongPower(ForgeDirection side) {
+
+        IBluestoneHandler handler = getUncoveredCableHandler();
+        if (handler == null)
+            return 0;
+        if (!canConnectRedstone(side) || !isRedstoneDeviceOnSide(side))
+            return 0;
+
+        int power = handler.getPower(2);
+
+        if (side == getFace())
+            return power;
+
+        return 0;
+    }
+
+    @Override
+    public int getWeakPower(ForgeDirection side) {
+
+        IBluestoneHandler handler = getUncoveredCableHandler();
+        if (handler == null)
+            return 0;
+        if (!canConnectRedstone(side) || !isRedstoneDeviceOnSide(side))
+            return 0;
+
+        return handler.getPower(2);
+    }
+
+    @Override
+    public boolean canConnectRedstone(ForgeDirection side) {
+
+        if (getUncoveredCableHandler() == null)
+            return false;
+
+        return side != getFace() && side != getFace().getOpposite();
     }
 }

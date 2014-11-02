@@ -1,10 +1,6 @@
-package com.bluepowermod.part.bluestone;
+package com.bluepowermod.api.bluestone;
 
 import net.minecraftforge.common.util.ForgeDirection;
-
-import com.bluepowermod.api.bluestone.BluestoneColor;
-import com.bluepowermod.api.bluestone.IBluestoneDevice;
-import com.bluepowermod.api.bluestone.IBluestoneHandler;
 
 public class DefaultBluestoneHandler implements IBluestoneHandler {
 
@@ -43,29 +39,30 @@ public class DefaultBluestoneHandler implements IBluestoneHandler {
     @Override
     public boolean canConnect(IBluestoneDevice device) {
 
-        // If both are bundled and share the same color (or are compatible)
-        if (getDevice().getBundleColor() != BluestoneColor.INVALID && device.getBundleColor() != BluestoneColor.INVALID
-                && getDevice().getBundleColor().canConnect(device.getBundleColor()))
-            return true;
-        // If this one is bundled and the other isn't
-        if (getDevice().getBundleColor() != BluestoneColor.INVALID && device.getBundleColor() == BluestoneColor.INVALID) {
-            boolean isColored = false;
-            for (IBluestoneHandler h : device.getHandlers())
-                if (h.getInsulationColor().isColor())
-                    isColored = true;
-            if (device.getHandlers().size() > 0) {
-                if (!isColored)
-                    return false;
-            } else {
-                return true;
-            }
-        }
-
-        for (IBluestoneHandler h : device.getHandlers())
-            if (h.getInsulationColor().canConnect(getInsulationColor()))
-                return true;
-
-        return false;
+        // // If both are bundled and share the same color (or are compatible)
+        // if (getDevice().getBundleColor() != BluestoneColor.INVALID && device.getBundleColor() != BluestoneColor.INVALID
+        // && getDevice().getBundleColor().canConnect(device.getBundleColor()))
+        // return true;
+        // // If this one is bundled and the other isn't
+        // if (getDevice().getBundleColor() != BluestoneColor.INVALID && device.getBundleColor() == BluestoneColor.INVALID) {
+        // boolean isColored = false;
+        // for (IBluestoneHandler h : device.getHandlers())
+        // if (h.getInsulationColor().isColor())
+        // isColored = true;
+        // if (device.getHandlers().size() > 0) {
+        // if (!isColored)
+        // return false;
+        // } else {
+        // return true;
+        // }
+        // }
+        //
+        // for (IBluestoneHandler h : device.getHandlers())
+        // if (h.getInsulationColor().canConnect(getInsulationColor()))
+        // return true;
+        //
+        // return false;
+        return true;
     }
 
     @Override
@@ -109,9 +106,6 @@ public class DefaultBluestoneHandler implements IBluestoneHandler {
 
     @Override
     public void onUpdate(int network, int newValue) {
-
-        System.out.println(network + " updated to " + newValue + " from " + power[network] + " [" + getDevice().getX() + ", "
-                + getDevice().getY() + ", " + getDevice().getZ() + "] - " + getDevice());
 
         power[network] = newValue;
 

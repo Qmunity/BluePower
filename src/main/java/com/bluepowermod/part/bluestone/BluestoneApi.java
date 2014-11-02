@@ -1,11 +1,11 @@
 package com.bluepowermod.part.bluestone;
 
-import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import com.bluepowermod.api.bluestone.BluestoneColor;
+import com.bluepowermod.api.bluestone.DefaultBluestoneHandler;
 import com.bluepowermod.api.bluestone.DummyBluestoneDevice;
 import com.bluepowermod.api.bluestone.IBluestoneApi;
 import com.bluepowermod.api.bluestone.IBluestoneDevice;
@@ -61,8 +61,6 @@ public class BluestoneApi implements IBluestoneApi {
                     }
                 }
             }
-
-            return null;
         }
 
         TileEntity te = location.getTileEntity();
@@ -70,16 +68,7 @@ public class BluestoneApi implements IBluestoneApi {
             return (IBluestoneDevice) te;
 
         if (includeRedstoneDevices) {
-            Block b = location.getBlock();
-            boolean can = false;
-            for (int i = -1; i < 4; i++) {
-                if (b.canConnectRedstone(world, location.getX(), location.getY(), location.getZ(), i)) {
-                    can = true;
-                    break;
-                }
-            }
-            if (can)
-                return DummyBluestoneDevice.getDeviceAt(world, location.getX(), location.getY(), location.getZ());
+            return DummyBluestoneDevice.getDeviceAt(world, location.getX(), location.getY(), location.getZ());
         }
 
         return null;

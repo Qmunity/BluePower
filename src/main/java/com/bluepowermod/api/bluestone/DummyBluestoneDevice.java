@@ -7,6 +7,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import com.bluepowermod.api.BPApi;
+import com.qmunity.lib.helper.RedstoneHelper;
+import com.qmunity.lib.part.IPartFace;
 import com.qmunity.lib.vec.Vec3i;
 
 public class DummyBluestoneDevice implements IBluestoneDevice {
@@ -45,7 +47,7 @@ public class DummyBluestoneDevice implements IBluestoneDevice {
 
         this.location = location.setWorld(world).getImmutableCopy();
 
-        handlers.add(BPApi.getInstance().getBluestoneApi().createDefaultBluestoneHandler(this, BluestoneColor.NONE));
+        handlers.add(new DummyBluestonehandler(this, BluestoneColor.NONE, 0x012345));
     }
 
     public DummyBluestoneDevice(World world, int x, int y, int z) {
@@ -60,25 +62,25 @@ public class DummyBluestoneDevice implements IBluestoneDevice {
     @Override
     public World getWorld() {
 
-        return null;
+        return location.getWorld();
     }
 
     @Override
     public int getX() {
 
-        return 0;
+        return location.getX();
     }
 
     @Override
     public int getY() {
 
-        return 0;
+        return location.getY();
     }
 
     @Override
     public int getZ() {
 
-        return 0;
+        return location.getZ();
     }
 
     @Override
@@ -101,6 +103,33 @@ public class DummyBluestoneDevice implements IBluestoneDevice {
 
         return BPApi.getInstance().getBluestoneApi()
                 .getDevice(getWorld(), getX() + side.offsetX, getY() + side.offsetY, getZ() + side.offsetZ, true);
+    }
+
+    private static class DummyBluestonehandler extends DefaultBluestoneHandler {
+
+        public DummyBluestonehandler(IBluestoneDevice parent, BluestoneColor color, int conductionMap) {
+
+            super(parent, color, conductionMap);
+        }
+
+        @Override
+        public boolean canConnect(IBluestoneDevice device) {
+
+            if (!super.canConnect(device))
+                return false;
+
+            ForgeDirection side = new Vec3i(device).getDirectionTo(new Vec3i(getDevice()));
+
+            if (side == ForgeDirection.UNKNOWN)
+                return true;
+
+            if (device instanceof IPartFace)
+                return RedstoneHelper.canConnect(getDevice().getWorld(), getDevice().getX(), getDevice().getY(), getDevice().getZ(),
+                        side.getOpposite(), ((IPartFace) device).getFace());
+            return RedstoneHelper.canConnect(getDevice().getWorld(), getDevice().getX(), getDevice().getY(), getDevice().getZ(),
+                    side.getOpposite());
+        }
+
     }
 
 }

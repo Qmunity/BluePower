@@ -123,7 +123,7 @@ public class BluestoneHelper {
         return handlers;
     }
 
-    @SuppressWarnings("rawtypes")
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     private static void listHandlersInNetwork(List<Entry<IBluestoneHandler, Integer>> visited, IBluestoneHandler handler, int network) {
 
         Entry<IBluestoneHandler, Integer> data = new AbstractMap.SimpleEntry(handler, network);

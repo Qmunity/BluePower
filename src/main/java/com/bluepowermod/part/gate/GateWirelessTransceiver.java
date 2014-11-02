@@ -6,10 +6,10 @@ import java.util.List;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import com.bluepowermod.api.bluestone.BluestoneColor;
+import com.bluepowermod.api.bluestone.DefaultBluestoneHandler;
 import com.bluepowermod.api.bluestone.IBluestoneDevice;
 import com.bluepowermod.api.bluestone.IBluestoneHandler;
 import com.bluepowermod.part.bluestone.BluestoneApi;
-import com.bluepowermod.part.bluestone.DefaultBluestoneHandler;
 import com.qmunity.lib.misc.ForgeDirectionUtils;
 import com.qmunity.lib.vec.Vec3i;
 

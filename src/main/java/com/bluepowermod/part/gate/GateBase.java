@@ -221,17 +221,35 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
             renderer.uvRotateBottom = 1;
             renderer.uvRotateEast = 1;
             renderer.uvRotateWest = 2;
-            renderer.uvRotateNorth = getTopRotation();
+
+            int amt = (getRotation() - 1) % 4;
+            while (amt < 0)
+                amt += 4;
+            if (amt == 2 || amt == 3)
+                amt = amt ^ 1;
+            renderer.uvRotateNorth = amt;
         } else if (getFace() == ForgeDirection.WEST) {
             renderer.uvRotateTop = 1;
             renderer.uvRotateBottom = 2;
             renderer.uvRotateEast = 2;
             renderer.uvRotateWest = 1;
-            renderer.uvRotateSouth = getTopRotation();
+
+            int amt = (getRotation() + 1) % 4;
+            while (amt < 0)
+                amt += 4;
+            if (amt == 2 || amt == 3)
+                amt = amt ^ 1;
+            renderer.uvRotateSouth = amt;
         } else if (getFace() == ForgeDirection.SOUTH) {
             renderer.uvRotateSouth = 1;
             renderer.uvRotateNorth = 2;
-            renderer.uvRotateEast = getTopRotation();
+
+            int amt = (getRotation() - 2) % 4;
+            while (amt < 0)
+                amt += 4;
+            if (amt == 2 || amt == 3)
+                amt = amt ^ 1;
+            renderer.uvRotateEast = amt;
         } else if (getFace() == ForgeDirection.NORTH) {
             renderer.uvRotateTop = 3;
             renderer.uvRotateBottom = 3;
@@ -395,18 +413,21 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
     public boolean onActivated(EntityPlayer player, QMovingObjectPosition hit, ItemStack item) {
 
         if (item != null && item.getItem() == BPItems.screwdriver) {
-            if (!player.isSneaking()) {
+            if (player.isSneaking()) {
                 if (!getWorld().isRemote) {
                     if (changeMode()) {
                         sendUpdatePacket();
+                        getWorld().markBlockRangeForRenderUpdate(getX(), getY(), getZ(), getX(), getY(), getZ());
                         return true;
                     } else {
                         return false;
                     }
                 }
             } else {
-                setRotation(getRotation() + 1);
+                setRotation((getRotation() + 1) % 4);
+                getWorld().markBlockRangeForRenderUpdate(getX(), getY(), getZ(), getX(), getY(), getZ());
             }
+
             return true;
         } else if (hasGUI()) {
             if (getWorld().isRemote) {
