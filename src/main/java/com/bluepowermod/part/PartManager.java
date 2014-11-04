@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.bluepowermod.part.gate.*;
+import com.bluepowermod.part.gate.analogue.GateInverter;
 import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -117,6 +118,9 @@ public class PartManager {
         // registerPart(Circuit5x5.class);
         // registerPart(Circuit7x7.class);
         registerPart(GateNullCell.class);
+
+        // Analogue gates
+        registerPart(GateInverter.class);
 
         //
         // Lamps
