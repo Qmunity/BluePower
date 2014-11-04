@@ -15,12 +15,12 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 
 import com.bluepowermod.BluePower;
-import com.bluepowermod.compat.CompatibilityUtils;
 import com.bluepowermod.part.IGuiButtonSensitive;
+import com.bluepowermod.part.gate.GateBase;
 import com.bluepowermod.part.gate.ic.IntegratedCircuit;
-import com.bluepowermod.util.Dependencies;
 import com.qmunity.lib.part.IPart;
-import com.qmunity.lib.part.compat.IMultipartCompat;
+import com.qmunity.lib.part.ITilePartHolder;
+import com.qmunity.lib.part.compat.MultipartCompatibility;
 
 /**
  *
@@ -48,15 +48,15 @@ public class MessageGuiUpdate extends LocationIntPacket<MessageGuiUpdate> {
     public MessageGuiUpdate(IPart part, int messageId, int value) {
 
         super(part.getX(), part.getY(), part.getZ());
-        if (part.isFMPMultipart()) {
-            if (part instanceof BPPartFace && ((BPPartFace) part).parentCircuit != null) {
-                icId = ((BPPartFace) part).parentCircuit.getGateIndex((BPPartFace) part);
-                part = ((BPPartFace) part).parentCircuit;
-            }
-            partId = getPartId(part);
-            if (partId == -1)
-                BluePower.log.warn("[MessageGuiUpdate] BPPart couldn't be found");
+
+        if (part instanceof GateBase && ((GateBase) part).parentCircuit != null) {
+            icId = ((GateBase) part).parentCircuit.getGateIndex((GateBase) part);
+            part = ((GateBase) part).parentCircuit;
         }
+        partId = getPartId(part);
+        if (partId == -1)
+            BluePower.log.warn("[MessageGuiUpdate] BPPart couldn't be found");
+
         this.messageId = messageId;
         this.value = value;
     }
@@ -69,10 +69,9 @@ public class MessageGuiUpdate extends LocationIntPacket<MessageGuiUpdate> {
         this.value = value;
     }
 
-    private int getPartId(BPPart part) {
+    private int getPartId(IPart part) {
 
-        List<BPPart> parts = ((IMultipartCompat) CompatibilityUtils.getModule(Dependencies.FMP)).getBPParts(
-                part.getWorld().getTileEntity(part.getX(), part.getY(), part.getZ()), BPPart.class);
+        List<IPart> parts = MultipartCompatibility.getPartHolder(part.getWorld(), part.getX(), part.getY(), part.getZ()).getParts();
         return parts.indexOf(part);
     }
 
@@ -103,23 +102,22 @@ public class MessageGuiUpdate extends LocationIntPacket<MessageGuiUpdate> {
 
     @Override
     public void handleServerSide(MessageGuiUpdate message, EntityPlayer player) {
-
-        IMultipartCompat compat = (IMultipartCompat) CompatibilityUtils.getModule(Dependencies.FMP);
-        TileEntity te = player.worldObj.getTileEntity(message.x, message.y, message.z);
-        if (compat.isMultipart(te)) {
-            messagePart(player, te, message);
+        ITilePartHolder partHolder = MultipartCompatibility.getPartHolder(player.worldObj, message.x, message.y, message.z);
+        if (partHolder != null) {
+            messagePart(player, partHolder, message);
         } else {
+            TileEntity te = player.worldObj.getTileEntity(message.x, message.y, message.z);
             if (te instanceof IGuiButtonSensitive) {
                 ((IGuiButtonSensitive) te).onButtonPress(player, message.messageId, message.value);
             }
         }
     }
 
-    private void messagePart(EntityPlayer player, TileEntity te, MessageGuiUpdate message) {
+    private void messagePart(EntityPlayer player, ITilePartHolder partHolder, MessageGuiUpdate message) {
 
-        List<BPPart> parts = ((IMultipartCompat) CompatibilityUtils.getModule(Dependencies.FMP)).getBPParts(te, BPPart.class);
+        List<IPart> parts = partHolder.getParts();
         if (message.partId < parts.size()) {
-            BPPart part = parts.get(message.partId);
+            IPart part = parts.get(message.partId);
             IntegratedCircuit circuit = null;
             if (part instanceof IntegratedCircuit) {
                 circuit = (IntegratedCircuit) part;

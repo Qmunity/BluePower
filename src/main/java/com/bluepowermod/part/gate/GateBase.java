@@ -39,6 +39,7 @@ import com.bluepowermod.init.Config;
 import com.bluepowermod.part.BPPartFaceRotate;
 import com.bluepowermod.part.PartManager;
 import com.bluepowermod.part.RedstoneConnection;
+import com.bluepowermod.part.gate.ic.IntegratedCircuit;
 import com.bluepowermod.util.Refs;
 import com.qmunity.lib.part.IPartLightEmitter;
 import com.qmunity.lib.part.IPartRedstone;
@@ -62,6 +63,7 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
             new RedstoneConnection(this, Dir.TOP), new RedstoneConnection(this, Dir.BOTTOM) };
 
     private boolean needsUpdate;//flag that is set when a neighbor block update occurs.
+    public IntegratedCircuit parentCircuit;
 
     private static IIcon iconBottom;
     private static IIcon iconSide;
