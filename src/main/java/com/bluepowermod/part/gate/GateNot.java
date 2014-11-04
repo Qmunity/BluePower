@@ -55,4 +55,32 @@ public class GateNot extends GateBase {
         if (front().getOutput() > 0)
             spawnBlueParticle(8 / 16D, 6 / 16D, 8 / 16D);
     }
+
+    @Override
+    protected boolean changeMode() {
+
+        if (left().isEnabled() && front().isEnabled() && right().isEnabled()) {
+            right().disable();
+        } else if (left().isEnabled() && front().isEnabled()) {
+            front().disable();
+            right().enable();
+        } else if (left().isEnabled() && right().isEnabled()) {
+            left().disable();
+            front().enable();
+        } else if (front().isEnabled() && right().isEnabled()) {
+            left().enable();
+            front().disable();
+            right().disable();
+        } else if (left().isEnabled()) {
+            left().disable();
+            front().enable();
+        } else if (front().isEnabled()) {
+            front().disable();
+            right().enable();
+        } else {
+            left().enable();
+            front().enable();
+        }
+        return true;
+    }
 }
