@@ -22,10 +22,13 @@ import com.bluepowermod.client.renderers.RenderHelper;
 import com.bluepowermod.part.IGuiButtonSensitive;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import mcp.mobius.waila.api.SpecialChars;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by Quetzi on 04/11/14.
@@ -132,5 +135,20 @@ public class GateSequencer extends GateBase implements IGuiButtonSensitive {
     protected boolean hasGUI() {
 
         return true;
+    }
+
+    @Override
+    public void addWailaInfo(List<String> info) {
+
+        String t = "";
+
+        int time = this.time / 4 * 50;
+        if (time >= 1000) {
+            t = time / 1000 + "." + time % 1000 + "s";
+        } else {
+            t = time + "ms";
+        }
+
+        info.add(I18n.format("gui.timerInterval") + ": " + SpecialChars.WHITE + t);
     }
 }

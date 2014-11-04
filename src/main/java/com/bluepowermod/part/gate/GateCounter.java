@@ -17,7 +17,9 @@
 
 package com.bluepowermod.part.gate;
 
+import com.bluepowermod.util.Color;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 
 import org.lwjgl.opengl.GL11;
@@ -28,6 +30,8 @@ import com.bluepowermod.part.IGuiButtonSensitive;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+
+import java.util.List;
 
 /**
  * Created by Quetzi on 04/11/14.
@@ -153,5 +157,14 @@ public class GateCounter extends GateBase implements IGuiButtonSensitive {
     protected boolean hasGUI() {
 
         return true;
+    }
+
+    @Override
+    public void addWailaInfo(List<String> info) {
+
+        info.add(I18n.format("gui.counterMax") + ": " + Color.YELLOW + max);
+        info.add(I18n.format("gui.counterCount") + ": " + Color.YELLOW + count);
+        info.add(I18n.format("gui.counterIncrement") + ": " + Color.WHITE + increment);
+        info.add(I18n.format("gui.counterDecrement") + ": " + Color.WHITE + decrement);
     }
 }
