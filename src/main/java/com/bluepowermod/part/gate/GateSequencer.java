@@ -17,18 +17,18 @@
 
 package com.bluepowermod.part.gate;
 
+import java.util.Arrays;
+
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
+
 import com.bluepowermod.client.gui.gate.GuiGateSingleTime;
 import com.bluepowermod.client.renderers.RenderHelper;
 import com.bluepowermod.part.IGuiButtonSensitive;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import mcp.mobius.waila.api.SpecialChars;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.player.EntityPlayer;
-
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * Created by Quetzi on 04/11/14.
@@ -36,9 +36,9 @@ import java.util.List;
 public class GateSequencer extends GateBase implements IGuiButtonSensitive {
 
     private final boolean[] power = new boolean[4];
-    private int             start = -1;
-    private int             time  = 160;
-    private int             ticks = 0;
+    private int start = -1;
+    private int time = 160;
+    private int ticks = 0;
 
     @Override
     public void initializeConnections() {
@@ -58,13 +58,14 @@ public class GateSequencer extends GateBase implements IGuiButtonSensitive {
     @Override
     public void renderTop(float frame) {
 
-        RenderHelper.renderRedstoneTorch(0, 1D / 8D, -5D / 16D, 8D / 16D, power[1]);
-        RenderHelper.renderRedstoneTorch(5D / 16D, 1D / 8D, 0, 8D / 16D, power[2]);
-        RenderHelper.renderRedstoneTorch(0, 1D / 8D, 5D / 16D, 8D / 16D, power[3]);
-        RenderHelper.renderRedstoneTorch(-5D / 16D, 1D / 8D, 0, 8D / 16D, power[0]);
+        RenderHelper.renderRedstoneTorch(0, 1D / 8D, 5D / 16D, 9D / 16D, power[1]);
+        RenderHelper.renderRedstoneTorch(-5D / 16D, 1D / 8D, 0, 9D / 16D, power[2]);
+        RenderHelper.renderRedstoneTorch(0, 1D / 8D, -5D / 16D, 9D / 16D, power[3]);
+        RenderHelper.renderRedstoneTorch(5D / 16D, 1D / 8D, 0, 9D / 16D, power[0]);
 
-        RenderHelper.renderRedstoneTorch(0, 1D / 8D, 0, 13D / 16D, true);
-        RenderHelper.renderPointer(0, 7D / 16D, 0, getWorld() != null ? start >= 0 ? 1 - (double) (ticks - start + frame) / (double) time : 0 : 0);
+        RenderHelper.renderRedstoneTorch(0, 1D / 8D, 0, 15D / 16D, true);
+        RenderHelper.renderPointer(0, 7D / 16D, 0 / 16D, getWorld() != null ? start >= 0 ? 0.5 - (double) (ticks - start + frame) / (double) time : 0
+                : 0);
     }
 
     @Override
@@ -75,7 +76,8 @@ public class GateSequencer extends GateBase implements IGuiButtonSensitive {
     @Override
     public void tick() {
 
-        if (!getWorld().isRemote && getWorld().getWorldTime() % 400 == 0) sendUpdatePacket();//Prevent slow desyncing of the timer.
+        if (!getWorld().isRemote && getWorld().getWorldTime() % 400 == 0)
+            sendUpdatePacket();//Prevent slow desyncing of the timer.
         Arrays.fill(power, false);
 
         if (start >= 0) {
@@ -90,16 +92,20 @@ public class GateSequencer extends GateBase implements IGuiButtonSensitive {
 
         if (t >= 1D / 8D && t < 3D / 8D) {
             power[2] = true;
-            if (right().getOutput() == 0) playTickSound();
+            if (right().getOutput() == 0)
+                playTickSound();
         } else if (t >= 3D / 8D && t < 5D / 8D) {
             power[3] = true;
-            if (back().getOutput() == 0) playTickSound();
+            if (back().getOutput() == 0)
+                playTickSound();
         } else if (t >= 5D / 8D && t < 7D / 8D) {
             power[0] = true;
-            if (left().getOutput() == 0) playTickSound();
+            if (left().getOutput() == 0)
+                playTickSound();
         } else if (t >= 7D / 8D && t < 1 || t >= 0 && t < 1D / 8D) {
             power[1] = true;
-            if (front().getOutput() == 0) playTickSound();
+            if (front().getOutput() == 0)
+                playTickSound();
         }
 
         left().setOutput(power[0] ? 15 : 0);
@@ -115,6 +121,33 @@ public class GateSequencer extends GateBase implements IGuiButtonSensitive {
 
         time = value * 4;
         sendUpdatePacket();
+    }
+
+    @Override
+    public void writeToNBT(NBTTagCompound tag) {
+        writeUpdateToNBT(tag);
+    }
+
+    @Override
+    public void writeUpdateToNBT(NBTTagCompound tag) {
+        super.writeUpdateToNBT(tag);
+        tag.setInteger("start", start);
+        tag.setInteger("ticks", ticks);
+        tag.setInteger("time", time);
+    }
+
+    @Override
+    public void readFromNBT(NBTTagCompound tag) {
+        readUpdateFromNBT(tag);
+    }
+
+    @Override
+    public void readUpdateFromNBT(NBTTagCompound tag) {
+
+        super.readUpdateFromNBT(tag);
+        start = tag.getInteger("start");
+        ticks = tag.getInteger("ticks");
+        time = tag.getInteger("time");
     }
 
     @Override
