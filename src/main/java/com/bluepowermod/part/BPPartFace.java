@@ -7,7 +7,7 @@ import com.qmunity.lib.part.IPartFace;
 
 public abstract class BPPartFace extends BPPart implements IPartFace {
 
-    private ForgeDirection face = null;
+    private ForgeDirection face = ForgeDirection.DOWN;//The default face is used in the item render.
 
     @Override
     public ForgeDirection getFace() {

@@ -39,7 +39,7 @@ import com.qmunity.lib.vec.Vec3dCube;
 public class PartLamp extends BPPartFace implements IPartLightEmitter {
 
     protected String colorName;
-    private int colorVal;
+    private final int colorVal;
     protected boolean inverted;
 
     protected int power = 0;
@@ -116,9 +116,7 @@ public class PartLamp extends BPPartFace implements IPartLightEmitter {
 
             GL11.glPushMatrix();
             {
-                t.startDrawingQuads();
                 renderDynamic(new Vec3d(0, 0, 0), 0, 0);
-                t.draw();
             }
             GL11.glPopMatrix();
         }
@@ -175,7 +173,7 @@ public class PartLamp extends BPPartFace implements IPartLightEmitter {
             int redMask = 0xFF0000, greenMask = 0xFF00, blueMask = 0xFF;
             int r = (colorVal & redMask) >> 16;
             int g = (colorVal & greenMask) >> 8;
-            int b = (colorVal & blueMask);
+            int b = colorVal & blueMask;
 
             t.setColorOpaque(r, g, b);
             // Render lamp itself here
@@ -278,7 +276,7 @@ public class PartLamp extends BPPartFace implements IPartLightEmitter {
             GL11.glDisable(GL11.GL_LIGHTING);
             GL11.glDepthMask(false);
             GL11.glBegin(GL11.GL_QUADS);
-            RenderHelper.drawColoredCube(vector.clone().expand(0.8 / 16D), r / 256D, g / 256D, b / 256D, (power / 15D) * 0.625);
+            RenderHelper.drawColoredCube(vector.clone().expand(0.8 / 16D), r / 256D, g / 256D, b / 256D, power / 15D * 0.625);
             GL11.glEnd();
             GL11.glDepthMask(true);
             GL11.glEnable(GL11.GL_LIGHTING);

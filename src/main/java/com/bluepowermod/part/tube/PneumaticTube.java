@@ -470,9 +470,8 @@ public class PneumaticTube extends BPPart implements IPartTicking {
                 t.addVertexWithUV(aabb.getMaxX(), aabb.getMaxY(), aabb.getMinZ(), maxY, maxZ);
             }
         }
-
-        renderSide();
         t.draw();
+        renderSide();
         Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationItemsTexture);
     }
 
