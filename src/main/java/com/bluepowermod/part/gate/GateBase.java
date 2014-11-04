@@ -107,6 +107,10 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
 
     public abstract String getId();
 
+    protected String getTextureName() {
+        return getId();
+    }
+
     @Override
     public final void addCollisionBoxesToList(List<Vec3dCube> boxes, Entity entity) {
 
@@ -314,7 +318,7 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
 
     protected final void renderTop(String texture) {
 
-        Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/gates/" + getId() + "/"
+        Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/gates/" + getTextureName() + "/"
                 + texture + ".png"));
         renderTop();
     }
@@ -326,7 +330,7 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
 
     protected final void renderTop(String texture, String status) {
 
-        Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/gates/" + getId() + "/"
+        Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/gates/" + getTextureName() + "/"
                 + texture + "_" + status + ".png"));
 
         boolean isOn = status.equals("on");
@@ -347,8 +351,8 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
 
         boolean isOn = con.getOutput() + (!con.isOutputOnly() ? con.getInput() : 0) > 0;
 
-        Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/gates/" + getId() + "/"
-                + name + "_" + (con.isEnabled() ? isOn ? "on" : "off" : "disabled") + ".png"));
+        Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/gates/" + getTextureName() + "/" + name
+                + "_" + (con.isEnabled() ? isOn ? "on" : "off" : "disabled") + ".png"));
 
         float bX = OpenGlHelper.lastBrightnessX;
         float bY = OpenGlHelper.lastBrightnessY;
@@ -543,7 +547,7 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
 
         iconBottom = reg.registerIcon(Refs.MODID + ":gates/bottom");
         iconSide = reg.registerIcon(Refs.MODID + ":gates/side");
-        iconTop = reg.registerIcon(Refs.MODID + ":gates/" + getId() + "/base");
+        iconTop = reg.registerIcon(Refs.MODID + ":gates/" + getTextureName() + "/base");
     }
 
     public IIcon getTopIcon() {

@@ -45,22 +45,22 @@ public class GateRSLatch extends GateBase {
             GL11.glDisable(GL11.GL_CULL_FACE);
         }
 
-        Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/gates/" + getId()
+        Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/gates/" + getTextureName()
                 + (mode > 1 ? "2" : "") + "/base.png"));
         this.renderTop();
 
-        Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/gates/" + getType()
+        Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/gates/" + getTextureName()
                 + (mode > 1 ? "2" : "") + "/left_" + ((mode % 2 == 0 ? left().getInput() > 0 : right().getInput() > 0) ? "on" : "off") + ".png"));
         renderTop();
-        Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/gates/" + getType()
+        Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/gates/" + getTextureName()
                 + (mode > 1 ? "2" : "") + "/right_" + ((mode % 2 == 0 ? right().getInput() > 0 : left().getInput() > 0) ? "on" : "off") + ".png"));
         renderTop();
         if (mode > 1) {
-            Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/gates/" + getType() + "2/front"
-                    + "_" + (front().getInput() > 0 ? "on" : "off") + ".png"));
+            Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/gates/" + getTextureName()
+                    + "2/front" + "_" + (front().getInput() > 0 ? "on" : "off") + ".png"));
             renderTop();
-            Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/gates/" + getType() + "2/back"
-                    + "_" + (back().getInput() > 0 ? "on" : "off") + ".png"));
+            Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/gates/" + getTextureName()
+                    + "2/back" + "_" + (back().getInput() > 0 ? "on" : "off") + ".png"));
             renderTop();
         }
 

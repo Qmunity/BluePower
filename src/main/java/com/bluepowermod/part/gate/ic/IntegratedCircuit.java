@@ -24,7 +24,7 @@ import org.lwjgl.opengl.GL11;
 import com.bluepowermod.api.block.ISilkyRemovable;
 import com.bluepowermod.compat.CompatibilityUtils;
 import com.bluepowermod.part.BPPart;
-import com.bluepowermod.part.BPPartFace;
+import com.bluepowermod.part.RedstoneConnection;
 import com.bluepowermod.part.gate.GateBase;
 import com.bluepowermod.part.gate.GateWire;
 import com.bluepowermod.util.Dependencies;
@@ -32,28 +32,29 @@ import com.qmunity.lib.part.PartRegistry;
 import com.qmunity.lib.part.compat.IMultipartCompat;
 import com.qmunity.lib.raytrace.RayTracer;
 import com.qmunity.lib.vec.Vec3d;
+import com.qmunity.lib.vec.Vec3dCube;
 
 public abstract class IntegratedCircuit extends GateBase implements ISilkyRemovable {
 
-    private BPPartFace[][] gates;
+    private GateBase[][] gates;
     private static double BORDER_WIDTH = 1 / 16D;
 
     @Override
-    public void initializeConnections(RedstoneConnection front, RedstoneConnection left, RedstoneConnection back, RedstoneConnection right) {
+    public void initializeConnections() {
 
         clearGateArray();
     }
 
     private void clearGateArray() {
 
-        gates = new BPPartFace[getCircuitWidth()][];
+        gates = new GateBase[getCircuitWidth()][];
         for (int i = 0; i < gates.length; i++) {
-            gates[i] = new BPPartFace[gates.length];
+            gates[i] = new GateBase[gates.length];
         }
     }
 
     @Override
-    public void addSelectionBoxes(List<AxisAlignedBB> boxes) {
+    public void addSelectionBoxes(List<Vec3dCube> boxes) {
 
         super.addSelectionBoxes(boxes);
         double minY = 1 / 16D;
@@ -62,13 +63,13 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
         double gateWidth = (1.0 - 2 * BORDER_WIDTH) / getCircuitWidth();
         for (int x = 0; x < getCircuitWidth(); x++) {
             for (int y = 0; y < getCircuitWidth(); y++) {
-                boxes.add(AxisAlignedBB.getBoundingBox(BORDER_WIDTH + x * gateWidth, minY, BORDER_WIDTH + y * gateWidth, BORDER_WIDTH + (x + 1)
-                        * gateWidth, maxY, BORDER_WIDTH + (y + 1) * gateWidth));
+                boxes.add(new Vec3dCube(BORDER_WIDTH + x * gateWidth, minY, BORDER_WIDTH + y * gateWidth, BORDER_WIDTH + (x + 1) * gateWidth, maxY,
+                        BORDER_WIDTH + (y + 1) * gateWidth));
             }
         }
     }
 
-    public int getGateIndex(BPPartFace part) {
+    public int getGateIndex(GateBase part) {
 
         for (int i = 0; i < getCircuitWidth(); i++) {
             for (int j = 0; j < getCircuitWidth(); j++) {
@@ -80,7 +81,7 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
         throw new IllegalArgumentException("Part not found in Integrated Circuit");
     }
 
-    public BPPartFace getPartForIndex(int index) {
+    public GateBase getPartForIndex(int index) {
 
         return gates[index / getCircuitWidth()][index % getCircuitWidth()];
     }
@@ -100,12 +101,12 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
     protected abstract int getCircuitWidth();
 
     @Override
-    protected void renderTop(RedstoneConnection front, RedstoneConnection left, RedstoneConnection back, RedstoneConnection right, float frame) {
+    protected void renderTop(float frame) {
 
-        renderTopTexture(FaceDirection.FRONT, front);
-        renderTopTexture(FaceDirection.LEFT, left);
-        renderTopTexture(FaceDirection.BACK, back);
-        renderTopTexture(FaceDirection.RIGHT, right);
+        renderTop("front", front());
+        renderTop("left", left());
+        renderTop("back", back());
+        renderTop("right", right());
         Vec3d loc = new Vec3d(0, 0, 0);
 
         GL11.glPushMatrix();
@@ -115,17 +116,17 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
 
             GL11.glScaled(1.0 / getCircuitWidth(), 1.0 / getCircuitWidth(), 1.0 / getCircuitWidth());
             GL11.glTranslated(0, -2 / 16D, 0);
-            for (BPPartFace[] gateArray : gates) {
+            for (GateBase[] gateArray : gates) {
                 GL11.glPushMatrix();
-                for (BPPartFace gate : gateArray) {
+                for (GateBase gate : gateArray) {
                     if (gate != null) {
                         GL11.glPushMatrix();
-                        if (gate instanceof GateBase) {
-                            ((GateBase) gate).rotateAndTranslateDynamic(loc, 0, frame);
-                            ((GateBase) gate).renderTop(frame);
-                        } else {
-                            gate.renderDynamic(loc, 0, frame);
-                        }
+                        /* if (gate instanceof GateBase) {
+                             gate.transformDynamic(loc);
+                             gate.renderTop(frame);
+                         } else {*/
+                        gate.renderDynamic(loc, frame, 0);
+                        //}
                         GL11.glPopMatrix();
                     }
                     GL11.glTranslated(0, 0, 1);
@@ -138,7 +139,7 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
     }
 
     @Override
-    public void doLogic(RedstoneConnection front, RedstoneConnection left, RedstoneConnection back, RedstoneConnection right) {
+    public void doLogic() {
 
         if (getWorld() != null && !getWorld().isRemote && getWorld().getWorldTime() % 400 == 0)
             sendUpdatePacket();// Prevent slow desyncing of the timer.
@@ -146,10 +147,10 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
         updateWires();
         for (int i = 0; i < gates.length; i++) {
             for (int j = 0; j < gates[i].length; j++) {
-                BPPartFace gate = gates[i][j];
+                GateBase gate = gates[i][j];
                 if (gate != null) {
                     for (FaceDirection dir : FaceDirection.values()) {
-                        BPPartFace neighbor = getNeighbor(i, j, dir);
+                        GateBase neighbor = getNeighbor(i, j, dir);
 
                         ForgeDirection forgeDir = null;
                         switch (dir) {
@@ -185,7 +186,7 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
         reflectGates(front, left, back, right);
     }
 
-    private BPPartFace getNeighbor(int x, int y, FaceDirection faceDir) {
+    private GateBase getNeighbor(int x, int y, FaceDirection faceDir) {
 
         if (faceDir == FaceDirection.RIGHT && x > 0)
             return gates[x - 1][y];
@@ -241,7 +242,7 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
         traversedWires.add(curWire);
         for (FaceDirection dir : FaceDirection.values()) {
 
-            BPPartFace neighbor = getNeighbor(x, y, dir);
+            GateBase neighbor = getNeighbor(x, y, dir);
             if (neighbor != null) {
                 ForgeDirection forgeDir = null;
                 switch (dir) {
@@ -356,7 +357,7 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
         for (int k = 0; k < gates.length; k++) {
             for (int j = 0; j < gates[k].length; j++) {
                 if (gates[k][j] != null) {
-                    BPPartFace gate = gates[k][j];
+                    GateBase gate = gates[k][j];
                     NBTTagCompound gateTag = new NBTTagCompound();
 
                     gateTag.setString("part_id", gate.getType());
@@ -394,14 +395,14 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
                     NBTTagCompound gateTag = tag.getCompoundTag("gate" + k + "" + j);
 
                     String type = gateTag.getString("part_id");
-                    BPPartFace gate;
+                    GateBase gate;
                     if (gates[k][j] != null && gates[k][j].getType().equals(type)) {
                         gate = gates[k][j];
                     } else {
                         if (type.equals(GateWire.ID)) {
                             gate = new GateWire();
                         } else {
-                            gate = (BPPartFace) PartRegistry.getInstance().createPart(type);
+                            gate = (GateBase) PartRegistry.getInstance().createPart(type);
                         }
                         gates[k][j] = gate;
                         gates[k][j].parentCircuit = this;
@@ -492,8 +493,8 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
     public List<ItemStack> getDrops() {
 
         List<ItemStack> drops = super.getDrops();
-        for (BPPartFace[] gateArray : gates) {
-            for (BPPartFace gate : gateArray) {
+        for (GateBase[] gateArray : gates) {
+            for (GateBase gate : gateArray) {
                 if (gate != null) {
                     if (gate instanceof GateWire) {
                         gate = new WireBluestone();
@@ -515,9 +516,9 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
                 part = new GateWire();
             }
             if (part instanceof GateBase && !(part instanceof IntegratedCircuit)) {
-                gates[x][y] = (BPPartFace) part;
-                ((BPPartFace) part).setFace(1);
-                ((BPPartFace) part).parentCircuit = this;
+                gates[x][y] = (GateBase) part;
+                ((GateBase) part).setFace(1);
+                ((GateBase) part).parentCircuit = this;
                 part.setWorld(getWorld());
                 part.setX(getX());
                 part.setY(getY());
@@ -572,8 +573,8 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
     public void setWorld(World world) {
 
         super.setWorld(world);
-        for (BPPartFace[] gateArray : gates) {
-            for (BPPartFace gate : gateArray) {
+        for (GateBase[] gateArray : gates) {
+            for (GateBase gate : gateArray) {
                 if (gate != null)
                     gate.setWorld(world);
             }
@@ -584,8 +585,8 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
     public void setX(int x) {
 
         super.setX(x);
-        for (BPPartFace[] gateArray : gates) {
-            for (BPPartFace gate : gateArray) {
+        for (GateBase[] gateArray : gates) {
+            for (GateBase gate : gateArray) {
                 if (gate != null)
                     gate.setX(x);
             }
@@ -596,8 +597,8 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
     public void setY(int y) {
 
         super.setY(y);
-        for (BPPartFace[] gateArray : gates) {
-            for (BPPartFace gate : gateArray) {
+        for (GateBase[] gateArray : gates) {
+            for (GateBase gate : gateArray) {
                 if (gate != null)
                     gate.setY(y);
             }
@@ -608,8 +609,8 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
     public void setZ(int z) {
 
         super.setZ(z);
-        for (BPPartFace[] gateArray : gates) {
-            for (BPPartFace gate : gateArray) {
+        for (GateBase[] gateArray : gates) {
+            for (GateBase gate : gateArray) {
                 if (gate != null)
                     gate.setZ(z);
             }
