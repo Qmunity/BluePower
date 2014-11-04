@@ -111,7 +111,7 @@ public class PartManager {
         registerPart(GateToggleLatch.class);
         registerPart(GateRSLatch.class);
         registerPart(GateStateCell.class);
-        // registerPart(GateRepeater.class);
+        registerPart(GateRepeater.class);
         registerPart(GateTransparentLatch.class);
         registerPart(GateSynchronizer.class);
         // registerPart(Circuit3x3.class);
