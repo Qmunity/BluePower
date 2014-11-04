@@ -27,15 +27,14 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
-import com.bluepowermod.api.BPApi;
 import com.bluepowermod.api.block.IAdvancedSilkyRemovable;
 import com.bluepowermod.api.block.ISilkyRemovable;
-import com.bluepowermod.compat.CompatibilityUtils;
 import com.bluepowermod.init.CustomTabs;
-import com.bluepowermod.part.BPPart;
-import com.bluepowermod.util.Dependencies;
 import com.bluepowermod.util.Refs;
-import com.qmunity.lib.part.compat.IMultipartCompat;
+import com.qmunity.lib.part.IPart;
+import com.qmunity.lib.part.ITilePartHolder;
+import com.qmunity.lib.part.compat.MultipartCompatibility;
+import com.qmunity.lib.raytrace.QMovingObjectPosition;
 import com.qmunity.lib.vec.Vec3d;
 
 import cpw.mods.fml.relauncher.Side;
@@ -58,24 +57,26 @@ public class ItemSilkyScrewdriver extends ItemBase {
         Block block = world.getBlock(x, y, z);
         TileEntity te = world.getTileEntity(x, y, z);
 
-        IMultipartCompat compat = (IMultipartCompat) CompatibilityUtils.getModule(Dependencies.FMP);
-        if (compat.isMultipart(te)) {
-
-            BPPart p = compat.getClickedPart(new Vec3d(x, y, z, world), new Vec3d(hitX, hitY, hitZ), player, te);
-            if (p instanceof ISilkyRemovable && !world.isRemote) {
-                if (p instanceof IAdvancedSilkyRemovable && !((IAdvancedSilkyRemovable) p).preSilkyRemoval(world, x, y, z))
-                    return false;
-                NBTTagCompound tag = new NBTTagCompound();
-                p.save(tag);
-                ItemStack droppedStack = BPApi.getInstance().getPartRegistry().getItemForPart(p.getType());
-                NBTTagCompound stackTag = droppedStack.getTagCompound();
-                stackTag.setTag("tileData", tag);
-                world.spawnEntityInWorld(new EntityItem(world, x + 0.5, y + 0.5, z + 0.5, droppedStack));
-                compat.removePart(te, p);
-                if (p instanceof IAdvancedSilkyRemovable)
-                    ((IAdvancedSilkyRemovable) p).postSilkyRemoval(world, x, y, z);
-                stack.damageItem(1, player);
-                return true;
+        ITilePartHolder h = MultipartCompatibility.getPartHolder(world, x, y, z);
+        if (h != null) {
+            QMovingObjectPosition mop = h.rayTrace(new Vec3d(x, y, z, world), new Vec3d(hitX, hitY, hitZ));
+            if (mop != null) {
+                IPart p = mop.getPart();
+                if (p instanceof ISilkyRemovable && !world.isRemote) {
+                    if (p instanceof IAdvancedSilkyRemovable && !((IAdvancedSilkyRemovable) p).preSilkyRemoval(world, x, y, z))
+                        return false;
+                    NBTTagCompound tag = new NBTTagCompound();
+                    p.writeToNBT(tag);
+                    ItemStack droppedStack = p.getItem();
+                    NBTTagCompound stackTag = droppedStack.getTagCompound();
+                    stackTag.setTag("tileData", tag);
+                    world.spawnEntityInWorld(new EntityItem(world, x + 0.5, y + 0.5, z + 0.5, droppedStack));
+                    h.removePart(p);
+                    if (p instanceof IAdvancedSilkyRemovable)
+                        ((IAdvancedSilkyRemovable) p).postSilkyRemoval(world, x, y, z);
+                    stack.damageItem(1, player);
+                    return true;
+                }
             }
 
             return false;
