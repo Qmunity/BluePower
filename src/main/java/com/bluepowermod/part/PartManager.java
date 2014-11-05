@@ -12,13 +12,39 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.bluepowermod.part.gate.*;
-import com.bluepowermod.part.gate.analogue.GateInverter;
 import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
 import com.bluepowermod.part.bluestone.WireBluestone;
+import com.bluepowermod.part.gate.GateAnd;
+import com.bluepowermod.part.gate.GateBuffer;
+import com.bluepowermod.part.gate.GateComparator;
+import com.bluepowermod.part.gate.GateCounter;
+import com.bluepowermod.part.gate.GateLightCell;
+import com.bluepowermod.part.gate.GateMux;
+import com.bluepowermod.part.gate.GateNand;
+import com.bluepowermod.part.gate.GateNor;
+import com.bluepowermod.part.gate.GateNot;
+import com.bluepowermod.part.gate.GateNullCell;
+import com.bluepowermod.part.gate.GateOr;
+import com.bluepowermod.part.gate.GatePulseFormer;
+import com.bluepowermod.part.gate.GateRSLatch;
+import com.bluepowermod.part.gate.GateRandomizer;
+import com.bluepowermod.part.gate.GateRepeater;
+import com.bluepowermod.part.gate.GateSequencer;
+import com.bluepowermod.part.gate.GateStateCell;
+import com.bluepowermod.part.gate.GateSynchronizer;
+import com.bluepowermod.part.gate.GateTimer;
+import com.bluepowermod.part.gate.GateToggleLatch;
+import com.bluepowermod.part.gate.GateTransparentLatch;
+import com.bluepowermod.part.gate.GateWirelessTransceiver;
+import com.bluepowermod.part.gate.GateXnor;
+import com.bluepowermod.part.gate.GateXor;
+import com.bluepowermod.part.gate.analogue.GateInverter;
+import com.bluepowermod.part.gate.ic.Circuit3x3;
+import com.bluepowermod.part.gate.ic.Circuit5x5;
+import com.bluepowermod.part.gate.ic.Circuit7x7;
 import com.bluepowermod.part.lamp.PartCageLamp;
 import com.bluepowermod.part.lamp.PartFixture;
 import com.bluepowermod.part.tube.Accelerator;
@@ -114,9 +140,9 @@ public class PartManager {
         registerPart(GateRepeater.class);
         registerPart(GateTransparentLatch.class);
         registerPart(GateSynchronizer.class);
-        // registerPart(Circuit3x3.class);
-        // registerPart(Circuit5x5.class);
-        // registerPart(Circuit7x7.class);
+        registerPart(Circuit3x3.class);
+        registerPart(Circuit5x5.class);
+        registerPart(Circuit7x7.class);
         registerPart(GateNullCell.class);
 
         // Analogue gates

@@ -404,8 +404,9 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
     public final void update() {
         if (needsUpdate) {
             needsUpdate = false;
-            for (RedstoneConnection c : connections)
-                c.update();
+            if (parentCircuit == null)
+                for (RedstoneConnection c : connections)
+                    c.update();
             doLogic();
 
             sendUpdatePacket();

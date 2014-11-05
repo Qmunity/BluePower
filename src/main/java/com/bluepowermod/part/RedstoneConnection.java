@@ -47,6 +47,15 @@ public class RedstoneConnection {
         return in;
     }
 
+    /**
+     * Used in Integrated Circuits
+     * @param input
+     */
+    public void setInput(int input) {
+        in = input;
+        caching = true;
+    }
+
     public RedstoneConnection setOutput(boolean out) {
         return setOutput(out ? 15 : 0);
     }
