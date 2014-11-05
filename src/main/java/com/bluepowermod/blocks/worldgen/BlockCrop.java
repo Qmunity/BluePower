@@ -312,6 +312,12 @@ public class BlockCrop extends BlockCrops implements IGrowable {
         if ((world.getBlockMetadata(x, y, z) == 7) && (world.getBlock(x, y + 1, z) == Blocks.air)) {
             world.setBlockMetadataWithNotify(x, y, z, 5, 2);
         }
+        if ((world.getBlockMetadata(x, y , z) == 8) && (world.getBlockMetadata(x, y - 1, z) != 7)) {
+            world.setBlockToAir(x, y, z);
+        }
+        if ((world.getBlockMetadata(x, y, z) < 8) && (world.getBlock(x,y - 1, z) instanceof BlockCrop)) {
+            world.setBlockToAir(x, y, z);
+        }
         this.checkAndDropBlock(world, x, y, z);
     }
 

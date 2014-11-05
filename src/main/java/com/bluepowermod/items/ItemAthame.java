@@ -56,7 +56,7 @@ public class ItemAthame extends ItemSword {
     
         this.damageDealt = athameMaterial.getDamageVsEntity();
         if ((entity instanceof EntityEnderman) || (entity instanceof EntityDragon)) {
-            this.damageDealt += 25.0F;
+            this.damageDealt += 18.0F;
         }
         entity.attackEntityFrom(DamageSource.causePlayerDamage((EntityPlayer) player), this.damageDealt);
         return super.hitEntity(stack, entity, player);
