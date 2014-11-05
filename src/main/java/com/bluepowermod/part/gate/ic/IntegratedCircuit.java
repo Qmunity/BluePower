@@ -427,6 +427,7 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
             if (!getWorld().isRemote) {
                 ItemStack partStack = PartManager
                         .getPartInfo(gates[x][y] instanceof GateWire ? new WireBluestone().getType() : gates[x][y].getType()).getItem();
+                partStack.stackSize = 1;
                 getWorld().spawnEntityInWorld(new EntityItem(getWorld(), getX() + 0.5, getY() + 0.5, getZ() + 0.5, partStack));
                 gates[x][y] = null;
                 sendUpdatePacket();
@@ -446,8 +447,7 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
                     if (gate instanceof GateWire) {
                         //  gate = new WireBluestone(); TODO
                     }
-                    ItemStack partStack = PartManager.getPartInfo(gate.getType()).getItem();
-                    drops.add(partStack);
+                    drops.addAll(gate.getDrops());
                 }
             }
         }
