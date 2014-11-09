@@ -34,7 +34,9 @@ public class MessageRedirectTubeStack extends LocationIntPacket<MessageRedirectT
     @Override
     public void handleClientSide(MessageRedirectTubeStack message, EntityPlayer player) {
         TubeLogic logic = (TubeLogic) BPApi.getInstance().getPneumaticTube(message.getTileEntity(player.worldObj));
-        logic.onClientTubeRedirectPacket(message.stack);
+        if (!(logic == null || message.stack == null)) {
+            logic.onClientTubeRedirectPacket(message.stack);
+        }
     }
 
     @Override
