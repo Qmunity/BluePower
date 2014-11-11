@@ -64,7 +64,7 @@ public class BPItems {
     public static final Item zinc_ingot = new ItemCrafting(Refs.ZINCINGOT_NAME);
     public static final Item brass_ingot = new ItemCrafting(Refs.BRASSINGOT_NAME);
     public static final Item blue_alloy_ingot = new ItemCrafting(Refs.BLUEALLOYINGOT_NAME);
-    // public static final Item red_alloy_ingot = new ItemCrafting(Refs.REDALLOYINGOT_NAME);
+    public static final Item red_alloy_ingot = new ItemCrafting(Refs.REDALLOYINGOT_NAME);
     public static final Item tungsten_ingot = new ItemCrafting(Refs.TUNGSTENINGOT_NAME);
     public static final Item tungsten_nugget = new ItemCrafting(Refs.TUNGSTENNUGGET_NAME);
     public static final Item zinc_ore_crushed = new ItemBase().setUnlocalizedName(Refs.ZINC_ORE_CRUSHED_NAME)
@@ -159,7 +159,7 @@ public class BPItems {
         GameRegistry.registerItem(tungsten_ingot, Refs.TUNGSTENINGOT_NAME);
         GameRegistry.registerItem(brass_ingot, Refs.BRASSINGOT_NAME);
         GameRegistry.registerItem(blue_alloy_ingot, Refs.BLUEALLOYINGOT_NAME);
-        // GameRegistry.registerItem(red_alloy_ingot, Refs.REDALLOYINGOT_NAME);
+        GameRegistry.registerItem(red_alloy_ingot, Refs.REDALLOYINGOT_NAME);
 
         GameRegistry.registerItem(zinc_dust, Refs.ZINCDUST_NAME);
         GameRegistry.registerItem(zinc_ore_crushed, Refs.ZINC_ORE_CRUSHED_NAME);

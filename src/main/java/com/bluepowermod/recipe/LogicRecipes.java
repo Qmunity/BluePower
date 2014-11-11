@@ -49,16 +49,16 @@ public class LogicRecipes {
         // TODO: stone_redwire recipe and stone_bundle recipe
 
         // Wires
-        GameRegistry.addRecipe(new ShapedOreRecipe(PartRegistry.getInstance().getItemForPart("bluestoneWire", 12), "iii", 'i', "ingotBlueAlloy"));
-        GameRegistry.addRecipe(new ShapedOreRecipe(PartRegistry.getInstance().getItemForPart("bluestoneWire", 12), "i", "i", "i", 'i', "ingotBlueAlloy"));
+        GameRegistry.addRecipe(new ShapedOreRecipe(PartRegistry.getInstance().getItemForPart("bluestoneWire", 12), "iii", 'i', "ingotRedAlloy"));
+        GameRegistry.addRecipe(new ShapedOreRecipe(PartRegistry.getInstance().getItemForPart("bluestoneWire", 12), "i", "i", "i", 'i', "ingotRedAlloy"));
         // Insulated wire
         {
             int i = 15;
             for (String s : ItemDye.field_150921_b) {
                 GameRegistry.addRecipe(new ShapedOreRecipe(PartRegistry.getInstance().getItemForPart("bluestoneWire." + s, 12), "www", "iii", "www",
-                        'i', "ingotBlueAlloy", 'w', new ItemStack(Blocks.wool, 1, i)));
+                        'i', "ingotRedAlloy", 'w', new ItemStack(Blocks.wool, 1, i)));
                 GameRegistry.addRecipe(new ShapedOreRecipe(PartRegistry.getInstance().getItemForPart("bluestoneWire." + s, 12), "wiw", "wiw", "wiw",
-                        'i', "ingotBlueAlloy", 'w', new ItemStack(Blocks.wool, 1, i)));
+                        'i', "ingotRedAlloy", 'w', new ItemStack(Blocks.wool, 1, i)));
                 i--;
             }
         }
