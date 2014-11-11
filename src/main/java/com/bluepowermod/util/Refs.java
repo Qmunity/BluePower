@@ -65,6 +65,7 @@ public class Refs {
     public static final String   SILVERINGOT_NAME               = "silver_ingot";
     public static final String   ZINCINGOT_NAME                 = "zinc_ingot";
     public static final String   TUNGSTENINGOT_NAME             = "tungsten_ingot";
+    public static final String   TUNGSTENNUGGET_NAME            = "tungsten_nugget";
     
     public static final String   ZINCDUST_NAME                  = "zinc_dust";
     public static final String   ZINC_ORE_CRUSHED_NAME          = "zinc_ore_crushed";
@@ -202,7 +203,8 @@ public class Refs {
     public static final String   CONFIG_ENCHANTS                = "enchantment ids";
     public static final String   CONFIG_TUBES                   = "pneumatic tube options";
     public static final String   CONFIG_CIRCUIT_DATABASE        = "circuit database options";
-    
+
+
     public static String fullVersionString() {
     
         return String.format("%s-%s.%s.%s", MCVERSION, MAJOR, MINOR, BUILD);

@@ -53,6 +53,7 @@ public class OreDictionarySetup {
         OreDictionary.registerOre("ingotSilver", BPItems.silver_ingot);
         OreDictionary.registerOre("ingotBrass", BPItems.brass_ingot);
         OreDictionary.registerOre("ingotTungsten", BPItems.tungsten_ingot);
+        OreDictionary.registerOre("nuggetTungsten", BPItems.tungsten_nugget);
         OreDictionary.registerOre("dyePurple", BPItems.indigo_dye);
         OreDictionary.registerOre("ingotBlueAlloy", BPItems.blue_alloy_ingot);
         OreDictionary.registerOre("waferStone", BPItems.stone_tile);

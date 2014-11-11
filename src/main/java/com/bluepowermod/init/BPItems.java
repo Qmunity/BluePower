@@ -66,6 +66,7 @@ public class BPItems {
     public static final Item blue_alloy_ingot = new ItemCrafting(Refs.BLUEALLOYINGOT_NAME);
     // public static final Item red_alloy_ingot = new ItemCrafting(Refs.REDALLOYINGOT_NAME);
     public static final Item tungsten_ingot = new ItemCrafting(Refs.TUNGSTENINGOT_NAME);
+    public static final Item tungsten_nugget = new ItemCrafting(Refs.TUNGSTENNUGGET_NAME);
     public static final Item zinc_ore_crushed = new ItemBase().setUnlocalizedName(Refs.ZINC_ORE_CRUSHED_NAME)
             .setTextureName(Refs.MODID + ":" + Refs.ZINC_ORE_CRUSHED_NAME).setCreativeTab(CustomTabs.tabBluePowerItems);
     public static final Item zinc_ore_purified = new ItemBase().setUnlocalizedName(Refs.ZINC_ORE_CRUSHED_PURIFIED_NAME)
@@ -163,6 +164,7 @@ public class BPItems {
         GameRegistry.registerItem(zinc_ore_crushed, Refs.ZINC_ORE_CRUSHED_NAME);
         GameRegistry.registerItem(zinc_ore_purified, Refs.ZINC_ORE_CRUSHED_PURIFIED_NAME);
         GameRegistry.registerItem(zinc_tiny_dust, Refs.ZINCDUST_TINY_NAME);
+        GameRegistry.registerItem(tungsten_nugget, Refs.TUNGSTENNUGGET_NAME);
 
         GameRegistry.registerItem(ruby_axe, Refs.RUBYAXE_NAME);
         GameRegistry.registerItem(ruby_sword, Refs.RUBYSWORD_NAME);

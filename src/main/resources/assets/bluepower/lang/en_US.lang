@@ -42,6 +42,7 @@ tile.bluepower:flax_crop.name=Flax
 tile.bluepower:indigo_flower.name=Indigo Flower
 tile.bluepower:tungsten_ore.name=Tungsten Ore
 tile.bluepower:tungsten_block.name=Tungsten Block
+tile.bluepower:tungsten_nugget.name=Tungsten Nugget
 
 tile.bluepower:alloyfurnace.name=Alloy Furnace
 tile.bluepower:block_breaker.name=Block Breaker
