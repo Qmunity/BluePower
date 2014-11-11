@@ -89,6 +89,7 @@ public class BPItems {
     public static final Item silicon_wafer = new ItemCrafting(Refs.SILICONWAFER_NAME).setCreativeTab(CustomTabs.tabBluePowerItems);
     public static final Item red_doped_wafer = new ItemCrafting(Refs.REDDOPEDWAFER_NAME).setCreativeTab(CustomTabs.tabBluePowerItems);
     public static final Item blue_doped_wafer = new ItemCrafting(Refs.BLUEDOPEDWAFER_NAME).setCreativeTab(CustomTabs.tabBluePowerItems);
+    public static final Item infused_teslatite_dust = new ItemCrafting(Refs.INFUSEDTESLATITEDUST_NAME);
     public static final Item screwdriver = new ItemScrewdriver();
     public static final Item silky_screwdriver = new ItemSilkyScrewdriver();
     public static final Item athame = new ItemAthame();
@@ -211,6 +212,7 @@ public class BPItems {
         GameRegistry.registerItem(silky_screwdriver, Refs.SILKYSCREWDRIVER_NAME);
         GameRegistry.registerItem(athame, Refs.ATHAME_NAME);
         GameRegistry.registerItem(zincplate, Refs.ZINCPLATE_NAME);
+        GameRegistry.registerItem(infused_teslatite_dust, Refs.INFUSEDTESLATITEDUST_NAME);
 
         GameRegistry.registerItem(stone_tile, Refs.STONETILE_NAME);
         GameRegistry.registerItem(stone_wire, Refs.STONEWIRE_NAME);

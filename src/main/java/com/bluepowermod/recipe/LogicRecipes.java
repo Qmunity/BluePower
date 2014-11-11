@@ -35,8 +35,8 @@ public class LogicRecipes {
     public static void init() {
 
         // Components
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.stone_wire, 1), "#", "W", '#', "dustTeslatite", 'W', BPItems.stone_tile));
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.stone_anode, 3), " # ", "###", "WWW", '#', "dustTeslatite", 'W',
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.stone_wire, 1), "#", "W", '#', "dustInfusedteslatite", 'W', BPItems.stone_tile));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.stone_anode, 3), " # ", "###", "WWW", '#', "dustInfusedteslatite", 'W',
                 BPItems.stone_tile));
         GameRegistry.addRecipe(new ItemStack(BPItems.stone_cathode, 1), "#", "W", '#', Blocks.redstone_torch, 'W', BPItems.stone_tile);
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.stone_pointer, 1), "S", "#", "W", 'S', "stone", '#', Blocks.redstone_torch,
@@ -45,6 +45,7 @@ public class LogicRecipes {
         // GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.plate_assembly, 1), " # ", "SRS", "#C#", '#', BPItems.stone_tile, 'S',
         // "stickWood", 'R', BPItems.red_alloy_ingot, 'C', BPItems.stone_cathode));
         GameRegistry.addShapelessRecipe(new ItemStack(BPItems.taintedsilicon_chip, 1), BPItems.silicon_chip, Items.glowstone_dust);
+        GameRegistry.addShapelessRecipe(new ItemStack(BPItems.infused_teslatite_dust, 2), BPItems.teslatite_dust, Items.redstone);
         // TODO: stone_redwire recipe and stone_bundle recipe
 
         // Wires

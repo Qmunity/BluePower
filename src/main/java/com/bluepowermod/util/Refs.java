@@ -100,6 +100,7 @@ public class Refs {
     public static final String   BLUEALLOYINGOT_NAME            = "blue_alloy_ingot";
     public static final String   REDALLOYINGOT_NAME             = "red_alloy_ingot";
     public static final String   ZINCPLATE_NAME                 = "zincplate";
+    public static final String   INFUSEDTESLATITEDUST_NAME      = "infused_teslatite_dust";
     
     public static final String   RUBYAXE_NAME                   = "ruby_axe";
     public static final String   RUBYSWORD_NAME                 = "ruby_sword";
@@ -203,6 +204,7 @@ public class Refs {
     public static final String   CONFIG_ENCHANTS                = "enchantment ids";
     public static final String   CONFIG_TUBES                   = "pneumatic tube options";
     public static final String   CONFIG_CIRCUIT_DATABASE        = "circuit database options";
+
 
 
     public static String fullVersionString() {
