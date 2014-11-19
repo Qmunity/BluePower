@@ -105,6 +105,7 @@ public class CoreRecipes {
                 OreDictionary.WILDCARD_VALUE), new ItemStack(Blocks.wool, 1, OreDictionary.WILDCARD_VALUE)));
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.wool_card, 1, 0), "f", "p", "s", 'f', BPItems.iron_wire, 'p', "plankWood",
                 's', "stickWood"));
+        GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(BPItems.iron_wire, 1), new ItemStack(BPItems.diamond_drawplate, 1, OreDictionary.WILDCARD_VALUE), "ingotIron"));
 
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.ruby_axe, 1), "GG ", "GS ", " S ", 'G', "gemRuby", 'S', "stickWood"));
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.ruby_axe, 1), " GG", " SG", " S ", 'G', "gemRuby", 'S', "stickWood"));

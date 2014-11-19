@@ -37,8 +37,7 @@ public class MachineRecipes {
     public static void init() {
 
         // Components
-        GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(BPItems.copper_wire, 1), BPItems.diamond_drawplate, "ingotCopper"));
-        GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(BPItems.iron_wire, 1), BPItems.diamond_drawplate, "ingotIron"));
+        GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(BPItems.copper_wire, 1), new ItemStack(BPItems.diamond_drawplate, 1, OreDictionary.WILDCARD_VALUE), "ingotCopper"));
 
         // Tubes and Transport
         GameRegistry.addRecipe(new ShapedOreRecipe(PartRegistry.getInstance().getItemForPart("pneumaticTube", 8), "BGB", 'B', "ingotBrass", 'G',
