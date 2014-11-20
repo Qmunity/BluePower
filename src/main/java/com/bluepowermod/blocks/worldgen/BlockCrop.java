@@ -34,6 +34,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.EnumPlantType;
+import net.minecraftforge.common.util.ForgeDirection;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -341,7 +342,7 @@ public class BlockCrop extends BlockCrops implements IGrowable {
     public boolean canBlockStay(World world, int x, int y, int z) {
 
         if (world.getBlock(x, y, z) != this) return super.canBlockStay(world, x, y, z);
-        if ((world.getBlock(x, y -1, z) instanceof BlockFarmland) && (world.getBlockMetadata(x, y - 1, z) > 0)) {
+        if (world.getBlock(x, y - 1, z).canSustainPlant(world, x, y, z, ForgeDirection.UP, this) && world.getBlock(x, y - 1, z).isFertile(world, x, y, z)) {
             return true;
         }
         if ((world.getBlock(x, y - 1, z) instanceof BlockCrop) && (world.getBlockMetadata(x, y - 1, z) == 7)) {
