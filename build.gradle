@@ -69,7 +69,7 @@ dependencies {
 }
 
 minecraft {
-    version = "${project.ext.mcVersion}-10.13.1.1236"
+    version = "${project.ext.mcVersion}-10.13.2.1236"
     runDir = "eclipse/assets"
 
     // replacing stuff in the source
