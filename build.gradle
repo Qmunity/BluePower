@@ -44,20 +44,18 @@ apply plugin: 'maven'
 project.ext {
     major = "0"
     minor = "1"
+    if (System.getenv().BUILD_NUMBER != null) {
+        build = System.getenv().BUILD_NUMBER
+    } else {
+        build = "-custom"
+    }
     mcVersion = "1.7.10"
 }
 
 
-version = "${project.ext.major}.${project.minor}"
+version = "${project.ext.major}.${project.minor}.${project.build}"
 group = "com.bluepowermod"
 archivesBaseName = "BluePower"
-
-
-if (System.getenv().BUILD_NUMBER != null) {
-    version += ".${System.getenv().BUILD_NUMBER}"
-} else {
-    version += " - err"
-}
 
 dependencies {
     compile "codechicken:CodeChickenLib:1.7.10-1.1.1.95:dev"
@@ -71,18 +69,14 @@ dependencies {
 }
 
 minecraft {
-    version = "${project.ext.mcVersion}-10.13.1.1217"
+    version = "${project.ext.mcVersion}-10.13.1.1236"
     runDir = "eclipse/assets"
 
     // replacing stuff in the source
     replace '@MAJOR@', project.major
     replace '@MINOR@', project.minor
     replace '@MC_VERSION@', version
-    if (System.getenv("BUILD_NUMBER") != null) {
-        replace '@BUILD_NUMBER@', System.getenv("BUILD_NUMBER")
-    } else {
-        replace '@BUILD_NUMBER@', 0
-    }
+    replace '@BUILD_NUMBER@', project.build
 
 }
 
