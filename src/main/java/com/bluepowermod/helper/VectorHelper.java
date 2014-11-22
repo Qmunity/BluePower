@@ -11,9 +11,8 @@ public class VectorHelper {
 
     public static final void rotateBoxes(List<Vec3dCube> boxes, ForgeDirection face, int rotation) {
 
-        for (Vec3dCube box : boxes) {
+        for (Vec3dCube box : boxes)
             rotateBox(box, face, rotation);
-        }
     }
 
     public static final void rotateBox(Vec3dCube box, ForgeDirection face, int rotation) {

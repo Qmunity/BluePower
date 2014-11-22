@@ -173,7 +173,7 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
                             if (neighbor.getConnection(neighborDir).isEnabled()
                                     && (neighbor.getConnection(neighborDir).isOutput() || neighbor instanceof GateWire)) {
                                 if (gate.getConnection(gateDir).isEnabled() && gate.getConnection(gateDir).isInput()) {
-                                    gate.getConnection(gateDir).setPower(neighbor.getConnection(neighborDir).getPower());
+                                    gate.getConnection(gateDir).setBluestonePowerLevel(neighbor.getConnection(neighborDir).getPower());
                                 }
                             }
                         }
@@ -224,7 +224,7 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
                     for (int k = startSize; k < traversedWires.size(); k++) {
                         GateWire wire = traversedWires.get(k);
                         for (FaceDirection dir : FaceDirection.values()) {
-                            wire.getConnection(dir).setPower(wirePowaah);
+                            wire.getConnection(dir).setBluestonePowerLevel(wirePowaah);
                         }
                     }
                 }
@@ -288,10 +288,10 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
             }
             if (connection.isInput()) {
                 left.setInput();
-                connection.setPower(left.getPower());
+                connection.setBluestonePowerLevel(left.getPower());
             } else {
                 left.setOutput();
-                left.setPower(connection.getPower());
+                left.setBluestonePowerLevel(connection.getPower());
             }
         } else {
             left.disable();
@@ -305,10 +305,10 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
             }
             if (connection.isInput()) {
                 right.setInput();
-                connection.setPower(right.getPower());
+                connection.setBluestonePowerLevel(right.getPower());
             } else {
                 right.setOutput();
-                right.setPower(connection.getPower());
+                right.setBluestonePowerLevel(connection.getPower());
             }
         } else {
             right.disable();
@@ -322,10 +322,10 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
             }
             if (connection.isInput()) {
                 front.setInput();
-                connection.setPower(front.getPower());
+                connection.setBluestonePowerLevel(front.getPower());
             } else {
                 front.setOutput();
-                front.setPower(connection.getPower());
+                front.setBluestonePowerLevel(connection.getPower());
             }
         } else {
             front.disable();
@@ -339,10 +339,10 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
             }
             if (connection.isInput()) {
                 back.setInput();
-                connection.setPower(back.getPower());
+                connection.setBluestonePowerLevel(back.getPower());
             } else {
                 back.setOutput();
-                back.setPower(connection.getPower());
+                back.setBluestonePowerLevel(connection.getPower());
             }
         } else {
             back.disable();

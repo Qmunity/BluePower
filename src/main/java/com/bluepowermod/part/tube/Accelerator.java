@@ -17,16 +17,21 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.world.World;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import org.lwjgl.opengl.GL11;
 
 import com.bluepowermod.client.renderers.IconSupplier;
-import com.qmunity.lib.misc.ForgeDirectionUtils;
+import com.qmunity.lib.part.IPart;
+import com.qmunity.lib.part.IPartCustomPlacement;
+import com.qmunity.lib.part.IPartPlacement;
 import com.qmunity.lib.part.compat.MultipartCompatibility;
 import com.qmunity.lib.vec.Vec3d;
 import com.qmunity.lib.vec.Vec3dCube;
+import com.qmunity.lib.vec.Vec3i;
 
 /**
  * Accelerator extends PneumaticTube, as that's much easier routing wise.
@@ -34,7 +39,7 @@ import com.qmunity.lib.vec.Vec3dCube;
  * @author MineMaarten
  *
  */
-public class Accelerator extends PneumaticTube {
+public class Accelerator extends PneumaticTube implements IPartCustomPlacement {
 
     private ForgeDirection rotation = ForgeDirection.UP;
 
@@ -50,9 +55,9 @@ public class Accelerator extends PneumaticTube {
         return getType();
     }
 
-    public void setRotation(EntityPlayer player) {
+    public void setRotation(ForgeDirection rotation) {
 
-        rotation = ForgeDirectionUtils.getDirectionFacing(player, true);
+        this.rotation = rotation;
     }
 
     /**
@@ -248,6 +253,13 @@ public class Accelerator extends PneumaticTube {
             GL11.glPopMatrix();
         }
 
+    }
+
+    @Override
+    public IPartPlacement getPlacement(IPart part, World world, Vec3i location, ForgeDirection face, MovingObjectPosition mop,
+            EntityPlayer player) {
+
+        return new PartPlacementAccelerator(player);
     }
 
 }

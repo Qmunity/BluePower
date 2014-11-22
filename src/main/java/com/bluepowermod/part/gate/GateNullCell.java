@@ -1,37 +1,29 @@
 package com.bluepowermod.part.gate;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
 
-import com.bluepowermod.api.bluestone.BluestoneColor;
 import com.bluepowermod.api.bluestone.IBluestoneDevice;
-import com.bluepowermod.api.bluestone.IBluestoneHandler;
-import com.bluepowermod.client.renderers.IconSupplier;
+import com.bluepowermod.api.bluestone.IMultiNetworkBluestoneConductor;
 import com.bluepowermod.helper.VectorHelper;
-import com.bluepowermod.part.bluestone.BluestoneApi;
-import com.qmunity.lib.misc.ForgeDirectionUtils;
+import com.bluepowermod.part.bluestone.BluestoneManager;
+import com.qmunity.lib.client.render.RenderHelper;
 import com.qmunity.lib.raytrace.QMovingObjectPosition;
 import com.qmunity.lib.vec.Vec3d;
 import com.qmunity.lib.vec.Vec3dCube;
 import com.qmunity.lib.vec.Vec3i;
 
-public class GateNullCell extends GateBase implements IBluestoneDevice {
+public class GateNullCell extends GateBase implements IMultiNetworkBluestoneConductor {
 
     private boolean on2 = false;
     private boolean on3 = false;
 
-    private IBluestoneHandler handler;
-    private List<IBluestoneHandler> handlers = new ArrayList<IBluestoneHandler>();
-
-    public GateNullCell() {
-
-        handlers.add(handler = BluestoneApi.getInstance().createDefaultBluestoneHandler(this, BluestoneColor.NONE, 0x012233));
-    }
+    private IBluestoneDevice[] connections = new IBluestoneDevice[6];
 
     @Override
     public void initializeConnections() {
@@ -45,48 +37,35 @@ public class GateNullCell extends GateBase implements IBluestoneDevice {
     }
 
     @Override
-    protected void renderTop(float frame) {
+    public boolean renderStatic(Vec3i translation, RenderHelper renderer, RenderBlocks renderBlocks, int pass) {
 
-        boolean old2 = on2;
-        boolean old3 = on3;
-
-        on2 = handler.getPower(2) > 0;
-        on3 = handler.getPower(3) > 0;
-
-        if (old2 != on2 || old3 != on3)
-            getWorld().markBlockRangeForRenderUpdate(getX(), getY(), getZ(), getX(), getY(), getZ());
-    }
-
-    @Override
-    public boolean renderStatic(Vec3i translation, RenderBlocks renderer, int pass) {
-
-        super.renderStatic(translation, renderer, pass);
-        double height = 2 / 16D;
-
-        renderer.renderAllFaces = true;
-
-        renderer.setOverrideBlockTexture(Blocks.planks.getIcon(0, 0));
-        renderBox(translation, renderer, new Vec3dCube(2 / 16D, 2 / 16D, 2 / 16D, 3 / 16D, 10 / 16D, 3 / 16D));
-        renderBox(translation, renderer, new Vec3dCube(2 / 16D, 2 / 16D, 13 / 16D, 3 / 16D, 10 / 16D, 14 / 16D));
-        renderBox(translation, renderer, new Vec3dCube(2 / 16D, 9 / 16D, 3 / 16D, 3 / 16D, 10 / 16D, 13 / 16D));
-
-        renderBox(translation, renderer, new Vec3dCube(13 / 16D, 2 / 16D, 2 / 16D, 14 / 16D, 10 / 16D, 3 / 16D));
-        renderBox(translation, renderer, new Vec3dCube(13 / 16D, 2 / 16D, 13 / 16D, 14 / 16D, 10 / 16D, 14 / 16D));
-        renderBox(translation, renderer, new Vec3dCube(13 / 16D, 9 / 16D, 3 / 16D, 14 / 16D, 10 / 16D, 13 / 16D));
-
-        renderer.setOverrideBlockTexture(on2 ? IconSupplier.bluestoneOn : IconSupplier.bluestoneOff);
-        renderBox(translation, renderer, new Vec3dCube(7 / 16D, 2 / 16D, 1 / 16D, 9 / 16D, 2 / 16D + height, 15 / 16D));
-        renderBox(translation, renderer, new Vec3dCube(7 / 16D, 2 / 16D, 0 / 16D, 9 / 16D, 2 / 16D + (height / 2), 1 / 16D));
-        renderBox(translation, renderer, new Vec3dCube(7 / 16D, 2 / 16D, 15 / 16D, 9 / 16D, 2 / 16D + (height / 2), 16 / 16D));
-
-        renderer.setOverrideBlockTexture(on3 ? IconSupplier.bluestoneOn : IconSupplier.bluestoneOff);
-        renderBox(translation, renderer, new Vec3dCube(0 / 16D, 2 / 16D, 7 / 16D, 2 / 16D, 12 / 16D, 9 / 16D));
-        renderBox(translation, renderer, new Vec3dCube(14 / 16D, 2 / 16D, 7 / 16D, 16 / 16D, 12 / 16D, 9 / 16D));
-        renderBox(translation, renderer, new Vec3dCube(2 / 16D, 10 / 16D, 7 / 16D, 14 / 16D, 12 / 16D, 9 / 16D));
-
-        renderer.setRenderBounds(0, 0, 0, 1, 1, 1);
-        renderer.setOverrideBlockTexture(null);
-        renderer.renderAllFaces = false;
+        // super.renderStatic(translation, renderer, pass);
+        // double height = 2 / 16D;
+        //
+        // renderer.renderAllFaces = true;
+        //
+        // renderer.setOverrideBlockTexture(Blocks.planks.getIcon(0, 0));
+        // renderBox(translation, renderer, new Vec3dCube(2 / 16D, 2 / 16D, 2 / 16D, 3 / 16D, 10 / 16D, 3 / 16D));
+        // renderBox(translation, renderer, new Vec3dCube(2 / 16D, 2 / 16D, 13 / 16D, 3 / 16D, 10 / 16D, 14 / 16D));
+        // renderBox(translation, renderer, new Vec3dCube(2 / 16D, 9 / 16D, 3 / 16D, 3 / 16D, 10 / 16D, 13 / 16D));
+        //
+        // renderBox(translation, renderer, new Vec3dCube(13 / 16D, 2 / 16D, 2 / 16D, 14 / 16D, 10 / 16D, 3 / 16D));
+        // renderBox(translation, renderer, new Vec3dCube(13 / 16D, 2 / 16D, 13 / 16D, 14 / 16D, 10 / 16D, 14 / 16D));
+        // renderBox(translation, renderer, new Vec3dCube(13 / 16D, 9 / 16D, 3 / 16D, 14 / 16D, 10 / 16D, 13 / 16D));
+        //
+        // renderer.setOverrideBlockTexture(on2 ? IconSupplier.bluestoneOn : IconSupplier.bluestoneOff);
+        // renderBox(translation, renderer, new Vec3dCube(7 / 16D, 2 / 16D, 1 / 16D, 9 / 16D, 2 / 16D + height, 15 / 16D));
+        // renderBox(translation, renderer, new Vec3dCube(7 / 16D, 2 / 16D, 0 / 16D, 9 / 16D, 2 / 16D + (height / 2), 1 / 16D));
+        // renderBox(translation, renderer, new Vec3dCube(7 / 16D, 2 / 16D, 15 / 16D, 9 / 16D, 2 / 16D + (height / 2), 16 / 16D));
+        //
+        // renderer.setOverrideBlockTexture(on3 ? IconSupplier.bluestoneOn : IconSupplier.bluestoneOff);
+        // renderBox(translation, renderer, new Vec3dCube(0 / 16D, 2 / 16D, 7 / 16D, 2 / 16D, 12 / 16D, 9 / 16D));
+        // renderBox(translation, renderer, new Vec3dCube(14 / 16D, 2 / 16D, 7 / 16D, 16 / 16D, 12 / 16D, 9 / 16D));
+        // renderBox(translation, renderer, new Vec3dCube(2 / 16D, 10 / 16D, 7 / 16D, 14 / 16D, 12 / 16D, 9 / 16D));
+        //
+        // renderer.setRenderBounds(0, 0, 0, 1, 1, 1);
+        // renderer.setOverrideBlockTexture(null);
+        // renderer.renderAllFaces = false;
         return true;
     }
 
@@ -108,7 +87,8 @@ public class GateNullCell extends GateBase implements IBluestoneDevice {
     public void onUpdate() {
 
         super.onUpdate();
-        handler.refreshConnections(true);
+
+        BluestoneManager.INSTANCE.recalculateConnections(this);
     }
 
     @Override
@@ -158,22 +138,79 @@ public class GateNullCell extends GateBase implements IBluestoneDevice {
     }
 
     @Override
-    public BluestoneColor getBundleColor() {
+    public void onBluestoneUpdate() {
 
-        return BluestoneColor.INVALID;
+        sendUpdatePacket();
     }
 
     @Override
-    public List<IBluestoneHandler> getHandlers() {
+    public void onConnect(ForgeDirection side, IBluestoneDevice device) {
 
-        return handlers;
+        connections[side.ordinal()] = device;
     }
 
     @Override
-    public IBluestoneDevice getNeighbor(ForgeDirection side) {
+    public void onDisconnect(ForgeDirection side) {
 
-        Vec3i loc = new Vec3i(this).add(ForgeDirectionUtils.getOnFace(getFace(), side));
-        return BluestoneApi.getInstance().getDevice(getWorld(), loc.getX(), loc.getY(), loc.getZ(), getFace(), true);
+        connections[side.ordinal()] = null;
+    }
+
+    @Override
+    public IBluestoneDevice getDeviceOnSide(ForgeDirection side) {
+
+        return connections[side.ordinal()];
+    }
+
+    @Override
+    public boolean canConnectOnSide(ForgeDirection side) {
+
+        return side != getFace() && side != getFace().getOpposite();
+    }
+
+    @Override
+    public double getInput(ForgeDirection side) {
+
+        return 0;
+    }
+
+    @Override
+    public int getConductionMap() {
+
+        return 0x012233;
+    }
+
+    @Override
+    public void setBluestonePowerLevel(int network, double power) {
+
+        if (network == 2) {
+            on2 = power > 0;
+        }
+        if (network == 3) {
+            on3 = power > 0;
+        }
+    }
+
+    @Override
+    protected void renderTop(float frame) {
+
+    }
+
+    @Override
+    public void writeUpdateToNBT(NBTTagCompound tag) {
+
+        super.writeUpdateToNBT(tag);
+
+        tag.setBoolean("on2", on2);
+        tag.setBoolean("on3", on3);
+    }
+
+    @Override
+    public void readUpdateFromNBT(NBTTagCompound tag) {
+
+        super.readUpdateFromNBT(tag);
+
+        on2 = tag.getBoolean("on2");
+        on3 = tag.getBoolean("on3");
     }
 
 }

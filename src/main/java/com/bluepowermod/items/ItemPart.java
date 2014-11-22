@@ -8,19 +8,15 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
 
 import com.bluepowermod.api.BPApi;
 import com.bluepowermod.api.item.IDatabaseSaveable;
 import com.bluepowermod.init.CustomTabs;
 import com.bluepowermod.part.BPPart;
-import com.bluepowermod.part.BPPartFace;
 import com.bluepowermod.part.PartInfo;
 import com.bluepowermod.part.PartManager;
-import com.bluepowermod.part.tube.Accelerator;
 import com.bluepowermod.util.Refs;
 import com.qmunity.lib.item.ItemMultipart;
-import com.qmunity.lib.part.IPart;
 
 public class ItemPart extends ItemMultipart implements IDatabaseSaveable {
 
@@ -86,18 +82,5 @@ public class ItemPart extends ItemMultipart implements IDatabaseSaveable {
     public String getCreatedPartType(ItemStack item, EntityPlayer player, World world, MovingObjectPosition mop) {
 
         return PartManager.getPartType(item);
-    }
-
-    @Override
-    public IPart createPart(ItemStack item, EntityPlayer player, World world, MovingObjectPosition mop) {
-
-        IPart part = super.createPart(item, player, world, mop);
-
-        if (part instanceof BPPartFace)
-            ((BPPartFace) part).setFace(ForgeDirection.getOrientation(mop.sideHit).getOpposite());
-        if (part instanceof Accelerator) {
-            ((Accelerator) part).setRotation(player);
-        }
-        return part;
     }
 }

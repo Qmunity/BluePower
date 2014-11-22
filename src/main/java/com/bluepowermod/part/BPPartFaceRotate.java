@@ -1,6 +1,14 @@
 package com.bluepowermod.part;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
+
+import com.qmunity.lib.part.IPart;
+import com.qmunity.lib.part.IPartPlacement;
+import com.qmunity.lib.vec.Vec3i;
 
 public abstract class BPPartFaceRotate extends BPPartFace {
 
@@ -45,6 +53,24 @@ public abstract class BPPartFaceRotate extends BPPartFace {
 
         super.readUpdateFromNBT(tag);
         rotation = tag.getInteger("rotation");
+    }
+
+    @Override
+    public IPartPlacement getPlacement(IPart part, World world, Vec3i location, ForgeDirection face, MovingObjectPosition mop,
+            EntityPlayer player) {
+
+        int rot = PartRotationHelper.getPlacementRotation(mop);
+
+        if (face == ForgeDirection.UP || face == ForgeDirection.NORTH || face == ForgeDirection.WEST)
+            rot += 2;
+        if (face == ForgeDirection.DOWN || face == ForgeDirection.EAST)
+            if (rot == 0 || rot == 2)
+                rot += 2;
+        if (face == ForgeDirection.SOUTH)
+            if (rot == 1 || rot == 3)
+                rot += 2;
+
+        return new PartPlacementFaceRotate(face.getOpposite(), rot % 4);
     }
 
 }

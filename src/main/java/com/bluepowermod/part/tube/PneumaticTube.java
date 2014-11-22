@@ -38,6 +38,7 @@ import com.bluepowermod.init.Config;
 import com.bluepowermod.items.ItemDamageableColorableOverlay;
 import com.bluepowermod.part.BPPart;
 import com.bluepowermod.util.Color;
+import com.qmunity.lib.client.render.RenderHelper;
 import com.qmunity.lib.part.IPartTicking;
 import com.qmunity.lib.part.compat.MultipartCompatibility;
 import com.qmunity.lib.raytrace.QMovingObjectPosition;
@@ -46,7 +47,7 @@ import com.qmunity.lib.vec.Vec3dCube;
 import com.qmunity.lib.vec.Vec3i;
 
 /**
- * 
+ *
  * @author MineMaarten
  */
 
@@ -82,12 +83,13 @@ public class PneumaticTube extends BPPart implements IPartTicking {
 
     @Override
     public void addCollisionBoxesToList(List<Vec3dCube> boxes, Entity entity) {
+
         boxes.addAll(getSelectionBoxes());
     }
 
     /**
      * Gets all the selection boxes for this block
-     * 
+     *
      * @return A list with the selection boxes
      */
     @Override
@@ -111,7 +113,7 @@ public class PneumaticTube extends BPPart implements IPartTicking {
 
     /**
      * Gets all the occlusion boxes for this block
-     * 
+     *
      * @return A list with the occlusion boxes
      */
     @Override
@@ -167,6 +169,7 @@ public class PneumaticTube extends BPPart implements IPartTicking {
     }
 
     public void clearCache() {
+
         tileCache = null;
         partCache = null;
     }
@@ -215,7 +218,8 @@ public class PneumaticTube extends BPPart implements IPartTicking {
     public boolean isConnected(ForgeDirection dir, PneumaticTube otherTube) {
 
         if (otherTube != null) {
-            if (!(this instanceof Accelerator) && this instanceof MagTube != otherTube instanceof MagTube && !(otherTube instanceof Accelerator))
+            if (!(this instanceof Accelerator) && this instanceof MagTube != otherTube instanceof MagTube
+                    && !(otherTube instanceof Accelerator))
                 return false;
             TubeColor otherTubeColor = otherTube.getColor(dir.getOpposite());
             if (otherTubeColor != TubeColor.NONE && getColor(dir) != TubeColor.NONE && getColor(dir) != otherTubeColor)
@@ -227,11 +231,13 @@ public class PneumaticTube extends BPPart implements IPartTicking {
 
     @Override
     public void writeToNBT(NBTTagCompound tag) {
+
         writeUpdateToNBT(tag);
     }
 
     @Override
     public void readFromNBT(NBTTagCompound tag) {
+
         readUpdateFromNBT(tag);
     }
 
@@ -272,7 +278,7 @@ public class PneumaticTube extends BPPart implements IPartTicking {
 
     /**
      * Event called when the part is activated (right clicked)
-     * 
+     *
      * @param player
      *            Player that right clicked the part
      * @param item
@@ -287,18 +293,23 @@ public class PneumaticTube extends BPPart implements IPartTicking {
 
         if (!getWorld().isRemote) {
 
-            if (item != null && item.getItem() == BPItems.paint_brush && ((ItemDamageableColorableOverlay) BPItems.paint_brush).tryUseItem(item)) {
-                /* int subPartHit = ((IMultipartCompat) CompatibilityUtils.getModule(Dependencies.FMP)).getMOPData(mop);
-                 if (subPartHit == 0) {
-                     subPartHit = mop.sideHit;
-                 } else { 
-                     subPartHit = getSideFromAABBIndex(subPartHit);
-                 }
-                 color[subPartHit] = TubeColor.values()[item.getItemDamage()];
-                 updateConnections();
-                 getLogic().clearNodeCaches();
-                 notifyUpdate();
-                 return true;*/
+            if (item != null && item.getItem() == BPItems.paint_brush
+                    && ((ItemDamageableColorableOverlay) BPItems.paint_brush).tryUseItem(item)) {
+
+                List<Vec3dCube> boxes = getTubeBoxes();
+                Vec3dCube box = mop.getCube();
+                int face = -1;
+                if (box.equals(boxes.get(0))) {
+                    face = mop.sideHit;
+                } else {
+                    face = getSideFromAABBIndex(boxes.indexOf(box));
+                }
+                color[face] = TubeColor.values()[item.getItemDamage()];
+                updateConnections();
+                getLogic().clearNodeCaches();
+                notifyUpdate();
+                return true;
+
             }
         }
         return false;
@@ -316,7 +327,7 @@ public class PneumaticTube extends BPPart implements IPartTicking {
 
     /**
      * How 'dense' the tube is to the pathfinding algorithm. Is altered in the RestrictionTube
-     * 
+     *
      * @return
      */
     public int getWeigth() {
@@ -353,7 +364,7 @@ public class PneumaticTube extends BPPart implements IPartTicking {
 
         List<Vec3dCube> aabbs = getTubeBoxes();
 
-        renderMiddle(aabbs.get(0), getSideIcon());
+        // renderMiddle(aabbs.get(0), getSideIcon());
         for (int i = 1; i < aabbs.size(); i++) {
             Vec3dCube aabb = aabbs.get(i);
             IIcon icon = !(this instanceof RestrictionTube) ? getNodeIcon()
@@ -476,436 +487,71 @@ public class PneumaticTube extends BPPart implements IPartTicking {
         Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationItemsTexture);
     }
 
-    protected void renderMiddle(Vec3dCube aabb, IIcon icon) {
+    protected void renderMiddle(Vec3dCube aabb, RenderHelper renderer) {
 
-        Tessellator t = Tessellator.instance;
+        IIcon colorIcon = null;
+        ForgeDirection d = ForgeDirection.UNKNOWN;
 
-        if (!connections[2]) {
-            double minX = icon.getInterpolatedU(aabb.getMinX() * 16);
-            double maxX = icon.getInterpolatedU(aabb.getMaxX() * 16);
-            double minY = icon.getInterpolatedV(aabb.getMinY() * 16);
-            double maxY = icon.getInterpolatedV(aabb.getMaxY() * 16);
-
-            t.setNormal(0, 0, -1);
-            if ((icon == IconSupplier.pneumaticTubeColorSide || icon == IconSupplier.pneumaticTubeColorNode) && color[2] != TubeColor.NONE) {
-                t.setColorOpaque_I(ItemDye.field_150922_c[color[2].ordinal()]);
-            }
-            if (icon != IconSupplier.pneumaticTubeColorSide && icon != IconSupplier.pneumaticTubeColorNode || color[2] != TubeColor.NONE) {
-                if (connections[4]) {// or 5
-                    t.addVertexWithUV(aabb.getMaxX(), aabb.getMinY(), aabb.getMinZ(), maxX, maxY);// minZ
-                    t.addVertexWithUV(aabb.getMinX(), aabb.getMinY(), aabb.getMinZ(), maxX, minY);
-                    t.addVertexWithUV(aabb.getMinX(), aabb.getMaxY(), aabb.getMinZ(), minX, minY);
-                    t.addVertexWithUV(aabb.getMaxX(), aabb.getMaxY(), aabb.getMinZ(), minX, maxY);
-
-                    t.addVertexWithUV(aabb.getMaxX(), aabb.getMinY(), aabb.getMinZ(), minX, maxY);// minZ
-                    t.addVertexWithUV(aabb.getMaxX(), aabb.getMaxY(), aabb.getMinZ(), maxX, maxY);
-                    t.addVertexWithUV(aabb.getMinX(), aabb.getMaxY(), aabb.getMinZ(), maxX, minY);
-                    t.addVertexWithUV(aabb.getMinX(), aabb.getMinY(), aabb.getMinZ(), minX, minY);
-                } else {
-                    t.addVertexWithUV(aabb.getMaxX(), aabb.getMinY(), aabb.getMinZ(), minX, maxY);// minZ
-                    t.addVertexWithUV(aabb.getMinX(), aabb.getMinY(), aabb.getMinZ(), maxX, maxY);
-                    t.addVertexWithUV(aabb.getMinX(), aabb.getMaxY(), aabb.getMinZ(), maxX, minY);
-                    t.addVertexWithUV(aabb.getMaxX(), aabb.getMaxY(), aabb.getMinZ(), minX, minY);
-
-                    t.addVertexWithUV(aabb.getMaxX(), aabb.getMinY(), aabb.getMinZ(), minX, maxY);// minZ
-                    t.addVertexWithUV(aabb.getMaxX(), aabb.getMaxY(), aabb.getMinZ(), minX, minY);
-                    t.addVertexWithUV(aabb.getMinX(), aabb.getMaxY(), aabb.getMinZ(), maxX, minY);
-                    t.addVertexWithUV(aabb.getMinX(), aabb.getMinY(), aabb.getMinZ(), maxX, maxY);
-                }
-            }
+        if (shouldRenderNode()) {
+            if (getNodeIcon() != null)
+                renderTexturedCuboid(aabb, getNodeIcon(), ForgeDirection.UNKNOWN, renderer);
+            colorIcon = IconSupplier.pneumaticTubeColorNode;
+        } else {
+            ForgeDirection dir = ForgeDirection.UNKNOWN;
+            if (connections[ForgeDirection.EAST.ordinal()] && connections[ForgeDirection.WEST.ordinal()])
+                dir = d = ForgeDirection.EAST;
+            if (getNodeIcon() != null)
+                renderTexturedCuboid(aabb, getSideIcon(), dir, renderer);
+            colorIcon = IconSupplier.pneumaticTubeColorSide;
         }
 
-        if (!connections[3]) {
-            double minX = icon.getInterpolatedU(aabb.getMinX() * 16);
-            double maxX = icon.getInterpolatedU(aabb.getMaxX() * 16);
-            double minY = icon.getInterpolatedV(aabb.getMinY() * 16);
-            double maxY = icon.getInterpolatedV(aabb.getMaxY() * 16);
-            t.setNormal(0, 0, 1);
-            if ((icon == IconSupplier.pneumaticTubeColorSide || icon == IconSupplier.pneumaticTubeColorNode) && color[3] != TubeColor.NONE) {
-                t.setColorOpaque_I(ItemDye.field_150922_c[color[3].ordinal()]);
-            }
-            if (icon != IconSupplier.pneumaticTubeColorSide && icon != IconSupplier.pneumaticTubeColorNode || color[3] != TubeColor.NONE) {
-                if (connections[4]) {// or 5
-                    t.addVertexWithUV(aabb.getMinX(), aabb.getMaxY(), aabb.getMaxZ(), maxX, maxY);
-                    t.addVertexWithUV(aabb.getMinX(), aabb.getMinY(), aabb.getMaxZ(), minX, maxY);// maxZ
-                    t.addVertexWithUV(aabb.getMaxX(), aabb.getMinY(), aabb.getMaxZ(), minX, minY);
-                    t.addVertexWithUV(aabb.getMaxX(), aabb.getMaxY(), aabb.getMaxZ(), maxX, minY);
-
-                    t.addVertexWithUV(aabb.getMinX(), aabb.getMaxY(), aabb.getMaxZ(), maxX, maxY);
-                    t.addVertexWithUV(aabb.getMaxX(), aabb.getMaxY(), aabb.getMaxZ(), maxX, minY);
-                    t.addVertexWithUV(aabb.getMaxX(), aabb.getMinY(), aabb.getMaxZ(), minX, minY);
-                    t.addVertexWithUV(aabb.getMinX(), aabb.getMinY(), aabb.getMaxZ(), minX, maxY);// maxZ
-                } else {
-                    t.addVertexWithUV(aabb.getMinX(), aabb.getMaxY(), aabb.getMaxZ(), minX, minY);
-                    t.addVertexWithUV(aabb.getMinX(), aabb.getMinY(), aabb.getMaxZ(), minX, maxY);// maxZ
-                    t.addVertexWithUV(aabb.getMaxX(), aabb.getMinY(), aabb.getMaxZ(), maxX, maxY);
-                    t.addVertexWithUV(aabb.getMaxX(), aabb.getMaxY(), aabb.getMaxZ(), maxX, minY);
-
-                    t.addVertexWithUV(aabb.getMinX(), aabb.getMaxY(), aabb.getMaxZ(), minX, minY);
-                    t.addVertexWithUV(aabb.getMaxX(), aabb.getMaxY(), aabb.getMaxZ(), maxX, minY);
-                    t.addVertexWithUV(aabb.getMaxX(), aabb.getMinY(), aabb.getMaxZ(), maxX, maxY);
-                    t.addVertexWithUV(aabb.getMinX(), aabb.getMinY(), aabb.getMaxZ(), minX, maxY);// maxZ
-                }
-            }
-        }
-
-        if (!connections[0]) {
-            double minX = icon.getInterpolatedU(aabb.getMinX() * 16);
-            double maxX = icon.getInterpolatedU(aabb.getMaxX() * 16);
-            double minZ = icon.getInterpolatedV(aabb.getMinZ() * 16);
-            double maxZ = icon.getInterpolatedV(aabb.getMaxZ() * 16);
-            t.setNormal(0, -1, 0);
-            if ((icon == IconSupplier.pneumaticTubeColorSide || icon == IconSupplier.pneumaticTubeColorNode) && color[0] != TubeColor.NONE) {
-                t.setColorOpaque_I(ItemDye.field_150922_c[color[0].ordinal()]);
-            }
-            if (icon != IconSupplier.pneumaticTubeColorSide && icon != IconSupplier.pneumaticTubeColorNode || color[0] != TubeColor.NONE) {
-                if (connections[4]) {// or 5
-                    t.addVertexWithUV(aabb.getMinX(), aabb.getMinY(), aabb.getMinZ(), maxX, maxZ);// bottom
-                    t.addVertexWithUV(aabb.getMinX(), aabb.getMinY(), aabb.getMaxZ(), minX, maxZ);
-                    t.addVertexWithUV(aabb.getMaxX(), aabb.getMinY(), aabb.getMaxZ(), minX, minZ);
-                    t.addVertexWithUV(aabb.getMaxX(), aabb.getMinY(), aabb.getMinZ(), maxX, minZ);
-
-                    t.addVertexWithUV(aabb.getMinX(), aabb.getMinY(), aabb.getMinZ(), maxX, maxZ);// bottom
-                    t.addVertexWithUV(aabb.getMaxX(), aabb.getMinY(), aabb.getMinZ(), maxX, minZ);
-                    t.addVertexWithUV(aabb.getMaxX(), aabb.getMinY(), aabb.getMaxZ(), minX, minZ);
-                    t.addVertexWithUV(aabb.getMinX(), aabb.getMinY(), aabb.getMaxZ(), minX, maxZ);
-                } else {
-                    t.addVertexWithUV(aabb.getMinX(), aabb.getMinY(), aabb.getMinZ(), maxX, maxZ);// bottom
-                    t.addVertexWithUV(aabb.getMaxX(), aabb.getMinY(), aabb.getMinZ(), minX, maxZ);
-                    t.addVertexWithUV(aabb.getMaxX(), aabb.getMinY(), aabb.getMaxZ(), minX, minZ);
-                    t.addVertexWithUV(aabb.getMinX(), aabb.getMinY(), aabb.getMaxZ(), maxX, minZ);
-
-                    t.addVertexWithUV(aabb.getMinX(), aabb.getMinY(), aabb.getMinZ(), maxX, maxZ);// bottom
-                    t.addVertexWithUV(aabb.getMinX(), aabb.getMinY(), aabb.getMaxZ(), maxX, minZ);
-                    t.addVertexWithUV(aabb.getMaxX(), aabb.getMinY(), aabb.getMaxZ(), minX, minZ);
-                    t.addVertexWithUV(aabb.getMaxX(), aabb.getMinY(), aabb.getMinZ(), minX, maxZ);
-                }
-            }
-        }
-
-        if (!connections[1]) {
-            double minX = icon.getInterpolatedU(aabb.getMinX() * 16);
-            double maxX = icon.getInterpolatedU(aabb.getMaxX() * 16);
-            double minZ = icon.getInterpolatedV(aabb.getMinZ() * 16);
-            double maxZ = icon.getInterpolatedV(aabb.getMaxZ() * 16);
-            t.setNormal(0, 1, 0);
-            if ((icon == IconSupplier.pneumaticTubeColorSide || icon == IconSupplier.pneumaticTubeColorNode) && color[1] != TubeColor.NONE) {
-                t.setColorOpaque_I(ItemDye.field_150922_c[color[1].ordinal()]);
-            }
-            if (icon != IconSupplier.pneumaticTubeColorSide && icon != IconSupplier.pneumaticTubeColorNode || color[1] != TubeColor.NONE) {
-                if (connections[4]) {// or 5
-                    t.addVertexWithUV(aabb.getMinX(), aabb.getMaxY(), aabb.getMinZ(), maxX, maxZ);// top
-                    t.addVertexWithUV(aabb.getMaxX(), aabb.getMaxY(), aabb.getMinZ(), maxX, minZ);
-                    t.addVertexWithUV(aabb.getMaxX(), aabb.getMaxY(), aabb.getMaxZ(), minX, minZ);
-                    t.addVertexWithUV(aabb.getMinX(), aabb.getMaxY(), aabb.getMaxZ(), minX, maxZ);
-
-                    t.addVertexWithUV(aabb.getMinX(), aabb.getMaxY(), aabb.getMinZ(), minX, maxZ);// top
-                    t.addVertexWithUV(aabb.getMinX(), aabb.getMaxY(), aabb.getMaxZ(), maxX, maxZ);
-                    t.addVertexWithUV(aabb.getMaxX(), aabb.getMaxY(), aabb.getMaxZ(), maxX, minZ);
-                    t.addVertexWithUV(aabb.getMaxX(), aabb.getMaxY(), aabb.getMinZ(), minX, minZ);
-                } else {
-                    t.addVertexWithUV(aabb.getMinX(), aabb.getMaxY(), aabb.getMinZ(), maxX, minZ);// top
-                    t.addVertexWithUV(aabb.getMaxX(), aabb.getMaxY(), aabb.getMinZ(), minX, minZ);
-                    t.addVertexWithUV(aabb.getMaxX(), aabb.getMaxY(), aabb.getMaxZ(), minX, maxZ);
-                    t.addVertexWithUV(aabb.getMinX(), aabb.getMaxY(), aabb.getMaxZ(), maxX, maxZ);
-
-                    t.addVertexWithUV(aabb.getMinX(), aabb.getMaxY(), aabb.getMinZ(), minX, minZ);// top
-                    t.addVertexWithUV(aabb.getMinX(), aabb.getMaxY(), aabb.getMaxZ(), minX, maxZ);
-                    t.addVertexWithUV(aabb.getMaxX(), aabb.getMaxY(), aabb.getMaxZ(), maxX, maxZ);
-                    t.addVertexWithUV(aabb.getMaxX(), aabb.getMaxY(), aabb.getMinZ(), maxX, minZ);
-                }
-            }
-        }
-
-        if (!connections[4]) {
-            double minY = icon.getInterpolatedU(aabb.getMinY() * 16);
-            double maxY = icon.getInterpolatedU(aabb.getMaxY() * 16);
-            double minZ = icon.getInterpolatedV(aabb.getMinZ() * 16);
-            double maxZ = icon.getInterpolatedV(aabb.getMaxZ() * 16);
-            t.setNormal(-1, 0, 0);
-            if ((icon == IconSupplier.pneumaticTubeColorSide || icon == IconSupplier.pneumaticTubeColorNode) && color[4] != TubeColor.NONE) {
-                t.setColorOpaque_I(ItemDye.field_150922_c[color[4].ordinal()]);
-            }
-            if (icon != IconSupplier.pneumaticTubeColorSide && icon != IconSupplier.pneumaticTubeColorNode || color[4] != TubeColor.NONE) {
-                if (connections[0]) {
-                    t.addVertexWithUV(aabb.getMinX(), aabb.getMinY(), aabb.getMinZ(), minY, maxZ);// minX
-                    t.addVertexWithUV(aabb.getMinX(), aabb.getMinY(), aabb.getMaxZ(), maxY, maxZ);
-                    t.addVertexWithUV(aabb.getMinX(), aabb.getMaxY(), aabb.getMaxX(), maxY, minZ);
-                    t.addVertexWithUV(aabb.getMinX(), aabb.getMaxY(), aabb.getMinZ(), minY, minZ);
-
-                    t.addVertexWithUV(aabb.getMinX(), aabb.getMinY(), aabb.getMinZ(), minY, maxZ);// minX
-                    t.addVertexWithUV(aabb.getMinX(), aabb.getMaxY(), aabb.getMinZ(), minY, minZ);
-                    t.addVertexWithUV(aabb.getMinX(), aabb.getMaxY(), aabb.getMaxX(), maxY, minZ);
-                    t.addVertexWithUV(aabb.getMinX(), aabb.getMinY(), aabb.getMaxZ(), maxY, maxZ);
-                } else {
-                    t.addVertexWithUV(aabb.getMinX(), aabb.getMinY(), aabb.getMinZ(), minY, minZ);// minX
-                    t.addVertexWithUV(aabb.getMinX(), aabb.getMaxY(), aabb.getMinZ(), maxY, minZ);
-                    t.addVertexWithUV(aabb.getMinX(), aabb.getMaxY(), aabb.getMaxX(), maxY, maxZ);
-                    t.addVertexWithUV(aabb.getMinX(), aabb.getMinY(), aabb.getMaxZ(), minY, maxZ);
-
-                    t.addVertexWithUV(aabb.getMinX(), aabb.getMinY(), aabb.getMinZ(), maxY, minZ);// minX
-                    t.addVertexWithUV(aabb.getMinX(), aabb.getMinY(), aabb.getMaxZ(), maxY, maxZ);
-                    t.addVertexWithUV(aabb.getMinX(), aabb.getMaxY(), aabb.getMaxX(), minY, maxZ);
-                    t.addVertexWithUV(aabb.getMinX(), aabb.getMaxY(), aabb.getMinZ(), minY, minZ);
-                }
-            }
-        }
-
-        if (!connections[5]) {
-            double minY = icon.getInterpolatedU(aabb.getMinY() * 16);
-            double maxY = icon.getInterpolatedU(aabb.getMaxY() * 16);
-            double minZ = icon.getInterpolatedV(aabb.getMinZ() * 16);
-            double maxZ = icon.getInterpolatedV(aabb.getMaxZ() * 16);
-            t.setNormal(1, 0, 0);
-            if ((icon == IconSupplier.pneumaticTubeColorSide || icon == IconSupplier.pneumaticTubeColorNode || icon == IconSupplier.pneumaticTubeColorNode)
-                    && color[5] != TubeColor.NONE) {
-                t.setColorOpaque_I(ItemDye.field_150922_c[color[5].ordinal()]);
-            }
-            if (icon != IconSupplier.pneumaticTubeColorSide && icon != IconSupplier.pneumaticTubeColorNode
-                    && icon != IconSupplier.pneumaticTubeColorNode || color[5] != TubeColor.NONE) {
-                if (connections[0]) {
-                    t.addVertexWithUV(aabb.getMaxX(), aabb.getMinY(), aabb.getMinZ(), maxY, maxZ);// maxX
-                    t.addVertexWithUV(aabb.getMaxX(), aabb.getMaxY(), aabb.getMinZ(), maxY, minZ);
-                    t.addVertexWithUV(aabb.getMaxX(), aabb.getMaxY(), aabb.getMaxZ(), minY, minZ);
-                    t.addVertexWithUV(aabb.getMaxX(), aabb.getMinY(), aabb.getMaxZ(), minY, maxZ);
-
-                    t.addVertexWithUV(aabb.getMaxX(), aabb.getMinY(), aabb.getMinZ(), maxY, maxZ);// maxX
-                    t.addVertexWithUV(aabb.getMaxX(), aabb.getMinY(), aabb.getMaxZ(), minY, maxZ);
-                    t.addVertexWithUV(aabb.getMaxX(), aabb.getMaxY(), aabb.getMaxZ(), minY, minZ);
-                    t.addVertexWithUV(aabb.getMaxX(), aabb.getMaxY(), aabb.getMinZ(), maxY, minZ);
-                } else {
-                    t.addVertexWithUV(aabb.getMaxX(), aabb.getMinY(), aabb.getMinZ(), minY, maxZ);// maxX
-                    t.addVertexWithUV(aabb.getMaxX(), aabb.getMaxY(), aabb.getMinZ(), maxY, maxZ);
-                    t.addVertexWithUV(aabb.getMaxX(), aabb.getMaxY(), aabb.getMaxZ(), maxY, minZ);
-                    t.addVertexWithUV(aabb.getMaxX(), aabb.getMinY(), aabb.getMaxZ(), minY, minZ);
-
-                    t.addVertexWithUV(aabb.getMaxX(), aabb.getMinY(), aabb.getMinZ(), minY, maxZ);// maxX
-                    t.addVertexWithUV(aabb.getMaxX(), aabb.getMinY(), aabb.getMaxZ(), minY, minZ);
-                    t.addVertexWithUV(aabb.getMaxX(), aabb.getMaxY(), aabb.getMaxZ(), maxY, minZ);
-                    t.addVertexWithUV(aabb.getMaxX(), aabb.getMaxY(), aabb.getMinZ(), maxY, maxZ);
-                }
+        for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
+            if (connections[dir.ordinal()])
+                continue;
+            TubeColor sideColor = color[dir.ordinal()];
+            if (sideColor != TubeColor.NONE) {
+                renderer.setColor(ItemDye.field_150922_c[sideColor.ordinal()]);
+                renderTexturedCuboid(aabb, colorIcon, d, renderer, new boolean[] { dir == ForgeDirection.DOWN, dir == ForgeDirection.UP,
+                        dir == ForgeDirection.WEST, dir == ForgeDirection.EAST, dir == ForgeDirection.NORTH, dir == ForgeDirection.SOUTH });
+                renderer.setColor(0xFFFFFF);
             }
         }
     }
 
-    public void renderTexturedCuboid(Vec3dCube aabb, IIcon icon) {
+    public void renderTexturedCuboid(Vec3dCube box, IIcon icon, ForgeDirection dir, RenderHelper helper) {
 
-        Tessellator t = Tessellator.instance;
-
-        if (aabb.getMinZ() != 0 && (!connections[3] || aabb.getMinZ() != 0.75)) {
-            if (aabb.getMaxY() == 1 || aabb.getMinY() == 0) {
-                double minX = icon.getInterpolatedU(aabb.getMinX() * 16);
-                double maxX = icon.getInterpolatedU(aabb.getMaxX() * 16);
-                double minY = icon.getInterpolatedV(aabb.getMinY() * 16);
-                double maxY = icon.getInterpolatedV(aabb.getMaxY() * 16);
-                t.setNormal(0, 0, -1);
-
-                t.addVertexWithUV(aabb.getMinX(), aabb.getMinY(), aabb.getMinZ(), maxX, maxY);// minZ
-                t.addVertexWithUV(aabb.getMaxX(), aabb.getMinY(), aabb.getMinZ(), minX, maxY);
-                t.addVertexWithUV(aabb.getMaxX(), aabb.getMaxY(), aabb.getMinZ(), minX, minY);
-                t.addVertexWithUV(aabb.getMinX(), aabb.getMaxY(), aabb.getMinZ(), maxX, minY);
-
-                t.addVertexWithUV(aabb.getMinX(), aabb.getMinY(), aabb.getMinZ(), maxX, maxY);// minZ
-                t.addVertexWithUV(aabb.getMinX(), aabb.getMaxY(), aabb.getMinZ(), maxX, minY);
-                t.addVertexWithUV(aabb.getMaxX(), aabb.getMaxY(), aabb.getMinZ(), minX, minY);
-                t.addVertexWithUV(aabb.getMaxX(), aabb.getMinY(), aabb.getMinZ(), minX, maxY);
-
-            } else {
-                double minX = icon.getInterpolatedU(aabb.getMinY() * 16);
-                double maxX = icon.getInterpolatedU(aabb.getMaxY() * 16);
-                double minY = icon.getInterpolatedV(aabb.getMinX() * 16);
-                double maxY = icon.getInterpolatedV(aabb.getMaxX() * 16);
-                t.setNormal(0, 0, -1);
-
-                t.addVertexWithUV(aabb.getMaxX(), aabb.getMinY(), aabb.getMinZ(), maxX, maxY);// minZ
-                t.addVertexWithUV(aabb.getMaxX(), aabb.getMaxY(), aabb.getMinZ(), minX, maxY);
-                t.addVertexWithUV(aabb.getMinX(), aabb.getMaxY(), aabb.getMinZ(), minX, minY);
-                t.addVertexWithUV(aabb.getMinX(), aabb.getMinY(), aabb.getMinZ(), maxX, minY);
-
-                t.addVertexWithUV(aabb.getMaxX(), aabb.getMinY(), aabb.getMinZ(), maxX, minY);// minZ
-                t.addVertexWithUV(aabb.getMinX(), aabb.getMinY(), aabb.getMinZ(), maxX, maxY);
-                t.addVertexWithUV(aabb.getMinX(), aabb.getMaxY(), aabb.getMinZ(), minX, maxY);
-                t.addVertexWithUV(aabb.getMaxX(), aabb.getMaxY(), aabb.getMinZ(), minX, minY);
-            }
+        if (dir == ForgeDirection.UNKNOWN) {
+            helper.setRenderSides(!connections[ForgeDirection.DOWN.ordinal()], !connections[ForgeDirection.UP.ordinal()],
+                    !connections[ForgeDirection.WEST.ordinal()], !connections[ForgeDirection.EAST.ordinal()],
+                    !connections[ForgeDirection.NORTH.ordinal()], !connections[ForgeDirection.SOUTH.ordinal()]);
+        } else {
+            helper.setRenderSide(dir, false);
+            helper.setRenderSide(dir.getOpposite(), false);
         }
 
-        if (aabb.getMaxZ() != 1 && (!connections[2] || aabb.getMaxZ() != 0.25)) {
-            if (aabb.getMinY() == 0 || aabb.getMaxY() == 1) {
-                double minX = icon.getInterpolatedU(aabb.getMinX() * 16);
-                double maxX = icon.getInterpolatedU(aabb.getMaxX() * 16);
-                double minY = icon.getInterpolatedV(aabb.getMinY() * 16);
-                double maxY = icon.getInterpolatedV(aabb.getMaxY() * 16);
-                t.setNormal(0, 0, 1);
-                t.addVertexWithUV(aabb.getMaxX(), aabb.getMinY(), aabb.getMaxZ(), maxX, maxY);
-                t.addVertexWithUV(aabb.getMaxX(), aabb.getMaxY(), aabb.getMaxZ(), maxX, minY);// maxZ
-                t.addVertexWithUV(aabb.getMinX(), aabb.getMaxY(), aabb.getMaxZ(), minX, minY);
-                t.addVertexWithUV(aabb.getMinX(), aabb.getMinY(), aabb.getMaxZ(), minX, maxY);
+        renderTexturedCuboid(box, icon, dir, helper, null);
+    }
 
-                t.addVertexWithUV(aabb.getMaxX(), aabb.getMinY(), aabb.getMaxZ(), minX, minY);
-                t.addVertexWithUV(aabb.getMinX(), aabb.getMinY(), aabb.getMaxZ(), maxX, minY);
-                t.addVertexWithUV(aabb.getMinX(), aabb.getMaxY(), aabb.getMaxZ(), maxX, maxY);
-                t.addVertexWithUV(aabb.getMaxX(), aabb.getMaxY(), aabb.getMaxZ(), minX, maxY);// maxZ
+    public void renderTexturedCuboid(Vec3dCube box, IIcon icon, ForgeDirection dir, RenderHelper helper, boolean[] sides) {
 
-            } else {
-                double minX = icon.getInterpolatedU(aabb.getMinY() * 16);
-                double maxX = icon.getInterpolatedU(aabb.getMaxY() * 16);
-                double minY = icon.getInterpolatedV(aabb.getMinX() * 16);
-                double maxY = icon.getInterpolatedV(aabb.getMaxX() * 16);
-                t.setNormal(0, 0, 1);
-                t.addVertexWithUV(aabb.getMinX(), aabb.getMaxY(), aabb.getMaxZ(), minX, minY);
-                t.addVertexWithUV(aabb.getMaxX(), aabb.getMaxY(), aabb.getMaxZ(), minX, maxY);// maxZ
-                t.addVertexWithUV(aabb.getMaxX(), aabb.getMinY(), aabb.getMaxZ(), maxX, maxY);
-                t.addVertexWithUV(aabb.getMinX(), aabb.getMinY(), aabb.getMaxZ(), maxX, minY);
+        if (dir == ForgeDirection.EAST || dir == ForgeDirection.WEST)
+            helper.setTextureRotations(1, 1, 1, 1, 0, 0);
+        else if (dir == ForgeDirection.NORTH
+                || dir == ForgeDirection.SOUTH
+                || (dir == ForgeDirection.UNKNOWN && (connections[ForgeDirection.NORTH.ordinal()] || connections[ForgeDirection.SOUTH
+                                                                                                                 .ordinal()])))
+            helper.setTextureRotations(0, 0, 0, 0, 1, 1);
 
-                t.addVertexWithUV(aabb.getMinX(), aabb.getMaxY(), aabb.getMaxZ(), maxX, maxY);
-                t.addVertexWithUV(aabb.getMinX(), aabb.getMinY(), aabb.getMaxZ(), minX, maxY);
-                t.addVertexWithUV(aabb.getMaxX(), aabb.getMinY(), aabb.getMaxZ(), minX, minY);
-                t.addVertexWithUV(aabb.getMaxX(), aabb.getMaxY(), aabb.getMaxZ(), maxX, minY);// maxZ
-            }
-        }
+        if (sides != null)
+            helper.setRenderSides(sides[0], sides[1], sides[2], sides[3], sides[4], sides[5]);
 
-        if (aabb.getMinY() != 0 && (!connections[1] || aabb.getMinY() != 0.75)) {
-            if (aabb.getMinX() == 0 || aabb.getMaxX() == 1) {
-                double minX = icon.getInterpolatedU(aabb.getMinZ() * 16);
-                double maxX = icon.getInterpolatedU(aabb.getMaxZ() * 16);
-                double minZ = icon.getInterpolatedV(aabb.getMinX() * 16);
-                double maxZ = icon.getInterpolatedV(aabb.getMaxX() * 16);
-                t.setNormal(0, -1, 0);
-                t.addVertexWithUV(aabb.getMaxX(), aabb.getMinY(), aabb.getMinZ(), maxX, minZ);// bottom
-                t.addVertexWithUV(aabb.getMaxX(), aabb.getMinY(), aabb.getMaxZ(), minX, minZ);
-                t.addVertexWithUV(aabb.getMinX(), aabb.getMinY(), aabb.getMaxZ(), minX, maxZ);
-                t.addVertexWithUV(aabb.getMinX(), aabb.getMinY(), aabb.getMinZ(), maxX, maxZ);
+        helper.renderBox(box, icon);
+        helper.setRenderFromInside(true);
+        helper.renderBox(box, icon);
+        helper.setRenderFromInside(false);
 
-                t.addVertexWithUV(aabb.getMaxX(), aabb.getMinY(), aabb.getMinZ(), minX, maxZ);// bottom
-                t.addVertexWithUV(aabb.getMinX(), aabb.getMinY(), aabb.getMinZ(), minX, minZ);
-                t.addVertexWithUV(aabb.getMinX(), aabb.getMinY(), aabb.getMaxZ(), maxX, minZ);
-                t.addVertexWithUV(aabb.getMaxX(), aabb.getMinY(), aabb.getMaxZ(), maxX, maxZ);
-            } else {
-                double minX = icon.getInterpolatedU(aabb.getMinX() * 16);
-                double maxX = icon.getInterpolatedU(aabb.getMaxX() * 16);
-                double minZ = icon.getInterpolatedV(aabb.getMinZ() * 16);
-                double maxZ = icon.getInterpolatedV(aabb.getMaxZ() * 16);
-                t.setNormal(0, -1, 0);
-                t.addVertexWithUV(aabb.getMinX(), aabb.getMinY(), aabb.getMaxZ(), minX, maxZ);// bottom
-                t.addVertexWithUV(aabb.getMaxX(), aabb.getMinY(), aabb.getMaxZ(), maxX, maxZ);
-                t.addVertexWithUV(aabb.getMaxX(), aabb.getMinY(), aabb.getMinZ(), maxX, minZ);
-                t.addVertexWithUV(aabb.getMinX(), aabb.getMinY(), aabb.getMinZ(), minX, minZ);
-
-                t.addVertexWithUV(aabb.getMinX(), aabb.getMinY(), aabb.getMaxZ(), maxX, minZ);// bottom
-                t.addVertexWithUV(aabb.getMinX(), aabb.getMinY(), aabb.getMinZ(), maxX, maxZ);
-                t.addVertexWithUV(aabb.getMaxX(), aabb.getMinY(), aabb.getMinZ(), minX, maxZ);
-                t.addVertexWithUV(aabb.getMaxX(), aabb.getMinY(), aabb.getMaxZ(), minX, minZ);
-
-            }
-        }
-
-        if (aabb.getMaxY() != 1 && (!connections[0] || aabb.getMaxY() != 0.25)) {
-            if (aabb.getMinX() == 0 || aabb.getMaxX() == 1) {
-                double minX = icon.getInterpolatedU(aabb.getMinZ() * 16);
-                double maxX = icon.getInterpolatedU(aabb.getMaxZ() * 16);
-                double minZ = icon.getInterpolatedV(aabb.getMinX() * 16);
-                double maxZ = icon.getInterpolatedV(aabb.getMaxX() * 16);
-                t.setNormal(0, 1, 0);
-                t.addVertexWithUV(aabb.getMaxX(), aabb.getMaxY(), aabb.getMinZ(), minX, minZ);// top
-                t.addVertexWithUV(aabb.getMaxX(), aabb.getMaxY(), aabb.getMaxZ(), maxX, minZ);
-                t.addVertexWithUV(aabb.getMinX(), aabb.getMaxY(), aabb.getMaxZ(), maxX, maxZ);
-                t.addVertexWithUV(aabb.getMinX(), aabb.getMaxY(), aabb.getMinZ(), minX, maxZ);
-
-                t.addVertexWithUV(aabb.getMaxX(), aabb.getMaxY(), aabb.getMinZ(), minX, minZ);// top
-                t.addVertexWithUV(aabb.getMinX(), aabb.getMaxY(), aabb.getMinZ(), minX, maxZ);
-                t.addVertexWithUV(aabb.getMinX(), aabb.getMaxY(), aabb.getMaxZ(), maxX, maxZ);
-                t.addVertexWithUV(aabb.getMaxX(), aabb.getMaxY(), aabb.getMaxZ(), maxX, minZ);
-            } else {
-                double minX = icon.getInterpolatedU(aabb.getMinX() * 16);
-                double maxX = icon.getInterpolatedU(aabb.getMaxX() * 16);
-                double minZ = icon.getInterpolatedV(aabb.getMinZ() * 16);
-                double maxZ = icon.getInterpolatedV(aabb.getMaxZ() * 16);
-                t.setNormal(0, 1, 0);
-                t.addVertexWithUV(aabb.getMinX(), aabb.getMaxY(), aabb.getMaxZ(), minX, minZ);// top
-                t.addVertexWithUV(aabb.getMaxX(), aabb.getMaxY(), aabb.getMaxZ(), maxX, minZ);
-                t.addVertexWithUV(aabb.getMaxX(), aabb.getMaxY(), aabb.getMinZ(), maxX, maxZ);
-                t.addVertexWithUV(aabb.getMinX(), aabb.getMaxY(), aabb.getMinZ(), minX, maxZ);
-
-                t.addVertexWithUV(aabb.getMinX(), aabb.getMaxY(), aabb.getMaxZ(), minX, minZ);// top
-                t.addVertexWithUV(aabb.getMinX(), aabb.getMaxY(), aabb.getMinZ(), minX, maxZ);
-                t.addVertexWithUV(aabb.getMaxX(), aabb.getMaxY(), aabb.getMinZ(), maxX, maxZ);
-                t.addVertexWithUV(aabb.getMaxX(), aabb.getMaxY(), aabb.getMaxZ(), maxX, minZ);
-
-            }
-
-        }
-
-        if (aabb.getMinX() != 0 && (!connections[5] || aabb.getMinX() != 0.75)) {
-            if (aabb.getMinY() == 0 || aabb.getMaxY() == 1) {
-                double minY = icon.getInterpolatedU(aabb.getMinZ() * 16);
-                double maxY = icon.getInterpolatedU(aabb.getMaxZ() * 16);
-                double minZ = icon.getInterpolatedV(aabb.getMinY() * 16);
-                double maxZ = icon.getInterpolatedV(aabb.getMaxY() * 16);
-
-                t.setNormal(-1, 0, 0);
-                t.addVertexWithUV(aabb.getMinX(), aabb.getMaxY(), aabb.getMinZ(), minY, minZ);// minX
-                t.addVertexWithUV(aabb.getMinX(), aabb.getMinY(), aabb.getMinZ(), minY, maxZ);
-                t.addVertexWithUV(aabb.getMinX(), aabb.getMinY(), aabb.getMaxZ(), maxY, maxZ);
-                t.addVertexWithUV(aabb.getMinX(), aabb.getMaxY(), aabb.getMaxZ(), maxY, minZ);
-
-                t.addVertexWithUV(aabb.getMinX(), aabb.getMaxY(), aabb.getMinZ(), minY, minZ);// minX
-                t.addVertexWithUV(aabb.getMinX(), aabb.getMaxY(), aabb.getMaxZ(), maxY, minZ);
-                t.addVertexWithUV(aabb.getMinX(), aabb.getMinY(), aabb.getMaxZ(), maxY, maxZ);
-                t.addVertexWithUV(aabb.getMinX(), aabb.getMinY(), aabb.getMinZ(), minY, maxZ);
-            } else {
-                double minY = icon.getInterpolatedU(aabb.getMinY() * 16);
-                double maxY = icon.getInterpolatedU(aabb.getMaxY() * 16);
-                double minZ = icon.getInterpolatedV(aabb.getMinZ() * 16);
-                double maxZ = icon.getInterpolatedV(aabb.getMaxZ() * 16);
-
-                t.setNormal(-1, 0, 0);
-                t.addVertexWithUV(aabb.getMinX(), aabb.getMaxY(), aabb.getMinZ(), minY, minZ);// minX
-                t.addVertexWithUV(aabb.getMinX(), aabb.getMaxY(), aabb.getMaxZ(), minY, maxZ);
-                t.addVertexWithUV(aabb.getMinX(), aabb.getMinY(), aabb.getMaxZ(), maxY, maxZ);
-                t.addVertexWithUV(aabb.getMinX(), aabb.getMinY(), aabb.getMinZ(), maxY, minZ);
-
-                t.addVertexWithUV(aabb.getMinX(), aabb.getMaxY(), aabb.getMinZ(), minY, maxZ);// minX
-                t.addVertexWithUV(aabb.getMinX(), aabb.getMinY(), aabb.getMinZ(), maxY, maxZ);
-                t.addVertexWithUV(aabb.getMinX(), aabb.getMinY(), aabb.getMaxZ(), maxY, minZ);
-                t.addVertexWithUV(aabb.getMinX(), aabb.getMaxY(), aabb.getMaxZ(), minY, minZ);
-            }
-        }
-
-        if (aabb.getMaxX() != 1 && (!connections[4] || aabb.getMaxX() != 0.25)) {
-            if (aabb.getMinY() == 0 || aabb.getMaxY() == 1) {
-
-                double minY = icon.getInterpolatedU(aabb.getMinZ() * 16);
-                double maxY = icon.getInterpolatedU(aabb.getMaxZ() * 16);
-                double minZ = icon.getInterpolatedV(aabb.getMinY() * 16);
-                double maxZ = icon.getInterpolatedV(aabb.getMaxY() * 16);
-                t.setNormal(1, 0, 0);
-                t.addVertexWithUV(aabb.getMaxX(), aabb.getMaxY(), aabb.getMinZ(), maxY, minZ);// maxX
-                t.addVertexWithUV(aabb.getMaxX(), aabb.getMaxY(), aabb.getMaxZ(), minY, minZ);
-                t.addVertexWithUV(aabb.getMaxX(), aabb.getMinY(), aabb.getMaxZ(), minY, maxZ);
-                t.addVertexWithUV(aabb.getMaxX(), aabb.getMinY(), aabb.getMinZ(), maxY, maxZ);
-
-                t.addVertexWithUV(aabb.getMaxX(), aabb.getMaxY(), aabb.getMinZ(), minY, maxZ);// maxX
-                t.addVertexWithUV(aabb.getMaxX(), aabb.getMinY(), aabb.getMinZ(), minY, minZ);
-                t.addVertexWithUV(aabb.getMaxX(), aabb.getMinY(), aabb.getMaxZ(), maxY, minZ);
-                t.addVertexWithUV(aabb.getMaxX(), aabb.getMaxY(), aabb.getMaxZ(), maxY, maxZ);
-            } else {
-                double minY = icon.getInterpolatedU(aabb.getMinY() * 16);
-                double maxY = icon.getInterpolatedU(aabb.getMaxY() * 16);
-                double minZ = icon.getInterpolatedV(aabb.getMinZ() * 16);
-                double maxZ = icon.getInterpolatedV(aabb.getMaxZ() * 16);
-                t.setNormal(1, 0, 0);
-                t.addVertexWithUV(aabb.getMaxX(), aabb.getMinY(), aabb.getMaxZ(), maxY, maxZ);// maxX
-                t.addVertexWithUV(aabb.getMaxX(), aabb.getMaxY(), aabb.getMaxZ(), minY, maxZ);
-                t.addVertexWithUV(aabb.getMaxX(), aabb.getMaxY(), aabb.getMinZ(), minY, minZ);
-                t.addVertexWithUV(aabb.getMaxX(), aabb.getMinY(), aabb.getMinZ(), maxY, minZ);
-
-                t.addVertexWithUV(aabb.getMaxX(), aabb.getMinY(), aabb.getMaxZ(), minY, minZ);// maxX
-                t.addVertexWithUV(aabb.getMaxX(), aabb.getMinY(), aabb.getMinZ(), minY, maxZ);
-                t.addVertexWithUV(aabb.getMaxX(), aabb.getMaxY(), aabb.getMinZ(), maxY, maxZ);
-                t.addVertexWithUV(aabb.getMaxX(), aabb.getMaxY(), aabb.getMaxZ(), maxY, minZ);
-
-            }
-        }
+        helper.resetTextureRotations();
+        helper.resetRenderedSides();
     }
 
     protected boolean shouldRenderNode() {
@@ -929,7 +575,7 @@ public class PneumaticTube extends BPPart implements IPartTicking {
      * This render method gets called whenever there's a block update in the chunk. You should use this to remove load from the renderer if a part of
      * the rendering code doesn't need to get called too often or just doesn't change at all. To call a render update to re-render this just call
      * {@link BPPart#markPartForRenderUpdate()}
-     * 
+     *
      * @param loc
      *            Distance from the player's position
      * @param pass
@@ -937,35 +583,26 @@ public class PneumaticTube extends BPPart implements IPartTicking {
      * @return Whether or not it rendered something
      */
     @Override
-    public boolean renderStatic(Vec3i loc, RenderBlocks renderer, int pass) {
+    public boolean renderStatic(Vec3i loc, RenderHelper renderer, RenderBlocks renderBlocks, int pass) {
 
         Tessellator t = Tessellator.instance;
         t.setColorOpaque_F(1, 1, 1);
-        t.addTranslation(loc.getX(), loc.getY(), loc.getZ());
 
         List<Vec3dCube> aabbs = getTubeBoxes();
 
-        if (shouldRenderNode()) {
-            if (getNodeIcon() != null)
-                renderMiddle(aabbs.get(0), getNodeIcon());
-            renderMiddle(aabbs.get(0), IconSupplier.pneumaticTubeColorNode);
-            t.setColorOpaque_F(1, 1, 1);
-        } else {
-            if (getNodeIcon() != null)
-                renderMiddle(aabbs.get(0), getSideIcon());
-            renderMiddle(aabbs.get(0), IconSupplier.pneumaticTubeColorSide);
-            t.setColorOpaque_F(1, 1, 1);
-        }
+        renderMiddle(aabbs.get(0), renderer);
+
         for (int i = 1; i < aabbs.size(); i++) {
-            renderTexturedCuboid(aabbs.get(i), getSideIcon(ForgeDirection.getOrientation(getSideFromAABBIndex(i))));
-            TubeColor sideColor = color[getSideFromAABBIndex(i)];
+            ForgeDirection dir = ForgeDirection.getOrientation(getSideFromAABBIndex(i));
+            renderTexturedCuboid(aabbs.get(i), getSideIcon(dir), dir, renderer);
+            TubeColor sideColor = color[dir.ordinal()];
             if (sideColor != TubeColor.NONE) {
-                t.setColorOpaque_I(ItemDye.field_150922_c[sideColor.ordinal()]);
-                renderTexturedCuboid(aabbs.get(i), IconSupplier.pneumaticTubeColorSide);
-                t.setColorOpaque_F(1, 1, 1);
+                renderer.setColor(ItemDye.field_150922_c[sideColor.ordinal()]);
+                renderTexturedCuboid(aabbs.get(i), IconSupplier.pneumaticTubeColorSide, dir, renderer);
+                renderer.setColor(0xFFFFFF);
             }
         }
-        t.addTranslation(-loc.getX(), -loc.getY(), -loc.getZ());
+
         return true;
     }
 
@@ -975,7 +612,7 @@ public class PneumaticTube extends BPPart implements IPartTicking {
 
     /**
      * Hacky method to get the right side
-     * 
+     *
      * @return
      */
     private int getSideFromAABBIndex(int index) {
@@ -1008,9 +645,9 @@ public class PneumaticTube extends BPPart implements IPartTicking {
 
     /**
      * Adds information to the waila tooltip
-     * 
+     *
      * @author amadornes
-     * 
+     *
      * @param info
      */
     @Override
@@ -1028,8 +665,9 @@ public class PneumaticTube extends BPPart implements IPartTicking {
             for (int i = 0; i < 6; i++) {
                 if (color[i] != TubeColor.NONE) {
                     if (color[i] != TubeColor.NONE)
-                        info.add(EnumChatFormatting.DARK_AQUA + I18n.format("rotation." + ForgeDirection.getOrientation(i).toString().toLowerCase())
-                                + ": " + EnumChatFormatting.WHITE + I18n.format("gui.widget.color." + ItemDye.field_150923_a[color[i].ordinal()]));
+                        info.add(EnumChatFormatting.DARK_AQUA
+                                + I18n.format("rotation." + ForgeDirection.getOrientation(i).toString().toLowerCase()) + ": "
+                                + EnumChatFormatting.WHITE + I18n.format("gui.widget.color." + ItemDye.field_150923_a[color[i].ordinal()]));
                 }
             }
         }

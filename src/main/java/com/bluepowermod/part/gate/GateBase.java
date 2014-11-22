@@ -40,8 +40,10 @@ import com.bluepowermod.part.BPPartFaceRotate;
 import com.bluepowermod.part.PartManager;
 import com.bluepowermod.part.RedstoneConnection;
 import com.bluepowermod.util.Refs;
+import com.qmunity.lib.client.render.RenderHelper;
 import com.qmunity.lib.part.IPartLightEmitter;
 import com.qmunity.lib.part.IPartRedstone;
+import com.qmunity.lib.part.IPartRenderPlacement;
 import com.qmunity.lib.part.IPartTicking;
 import com.qmunity.lib.raytrace.QMovingObjectPosition;
 import com.qmunity.lib.util.Dir;
@@ -53,7 +55,7 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone, IPartTicking, IPartLightEmitter {
+public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone, IPartTicking, IPartLightEmitter, IPartRenderPlacement {
 
     private static Vec3dCube BOX = new Vec3dCube(0, 0, 0, 1, 2D / 16D, 1);
 
@@ -204,74 +206,74 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
     }
 
     @Override
-    public boolean renderStatic(Vec3i translation, RenderBlocks renderer, int pass) {
+    public boolean renderStatic(Vec3i translation, RenderHelper renderer, RenderBlocks renderBlocks, int pass) {
 
         rendering = this;
 
         Vec3dCube c = BOX.clone().rotate(getFace(), Vec3d.center);
 
         if (getFace() == ForgeDirection.UP) {
-            renderer.uvRotateEast = 3;
-            renderer.uvRotateWest = 3;
-            renderer.uvRotateNorth = 3;
-            renderer.uvRotateSouth = 3;
-            renderer.uvRotateBottom = getTopRotation();
+            renderBlocks.uvRotateEast = 3;
+            renderBlocks.uvRotateWest = 3;
+            renderBlocks.uvRotateNorth = 3;
+            renderBlocks.uvRotateSouth = 3;
+            renderBlocks.uvRotateBottom = getTopRotation();
         } else if (getFace() == ForgeDirection.EAST) {
-            renderer.uvRotateTop = 2;
-            renderer.uvRotateBottom = 1;
-            renderer.uvRotateEast = 1;
-            renderer.uvRotateWest = 2;
+            renderBlocks.uvRotateTop = 2;
+            renderBlocks.uvRotateBottom = 1;
+            renderBlocks.uvRotateEast = 1;
+            renderBlocks.uvRotateWest = 2;
 
             int amt = (getRotation() - 1) % 4;
             while (amt < 0)
                 amt += 4;
             if (amt == 2 || amt == 3)
                 amt = amt ^ 1;
-            renderer.uvRotateNorth = amt;
+            renderBlocks.uvRotateNorth = amt;
         } else if (getFace() == ForgeDirection.WEST) {
-            renderer.uvRotateTop = 1;
-            renderer.uvRotateBottom = 2;
-            renderer.uvRotateEast = 2;
-            renderer.uvRotateWest = 1;
+            renderBlocks.uvRotateTop = 1;
+            renderBlocks.uvRotateBottom = 2;
+            renderBlocks.uvRotateEast = 2;
+            renderBlocks.uvRotateWest = 1;
 
             int amt = (getRotation() + 1) % 4;
             while (amt < 0)
                 amt += 4;
             if (amt == 2 || amt == 3)
                 amt = amt ^ 1;
-            renderer.uvRotateSouth = amt;
+            renderBlocks.uvRotateSouth = amt;
         } else if (getFace() == ForgeDirection.SOUTH) {
-            renderer.uvRotateSouth = 1;
-            renderer.uvRotateNorth = 2;
+            renderBlocks.uvRotateSouth = 1;
+            renderBlocks.uvRotateNorth = 2;
 
             int amt = (getRotation() - 2) % 4;
             while (amt < 0)
                 amt += 4;
             if (amt == 2 || amt == 3)
                 amt = amt ^ 1;
-            renderer.uvRotateEast = amt;
+            renderBlocks.uvRotateEast = amt;
         } else if (getFace() == ForgeDirection.NORTH) {
-            renderer.uvRotateTop = 3;
-            renderer.uvRotateBottom = 3;
-            renderer.uvRotateSouth = 2;
-            renderer.uvRotateNorth = 1;
-            renderer.uvRotateWest = getTopRotation();
+            renderBlocks.uvRotateTop = 3;
+            renderBlocks.uvRotateBottom = 3;
+            renderBlocks.uvRotateSouth = 2;
+            renderBlocks.uvRotateNorth = 1;
+            renderBlocks.uvRotateWest = getTopRotation();
         } else {
-            renderer.uvRotateTop = getTopRotation();
+            renderBlocks.uvRotateTop = getTopRotation();
         }
 
-        renderer.setRenderAllFaces(true);
-        renderer.setRenderBounds(c.getMinX(), c.getMinY(), c.getMinZ(), c.getMaxX(), c.getMaxY(), c.getMaxZ());
-        renderer.overrideBlockTexture = null;
-        boolean rendered = renderer.renderStandardBlock(blockFake, getX(), getY(), getZ());
-        renderer.setRenderAllFaces(false);
+        renderBlocks.setRenderAllFaces(true);
+        renderBlocks.setRenderBounds(c.getMinX(), c.getMinY(), c.getMinZ(), c.getMaxX(), c.getMaxY(), c.getMaxZ());
+        renderBlocks.overrideBlockTexture = null;
+        boolean rendered = renderBlocks.renderStandardBlock(blockFake, getX(), getY(), getZ());
+        renderBlocks.setRenderAllFaces(false);
 
-        renderer.uvRotateEast = 0;
-        renderer.uvRotateWest = 0;
-        renderer.uvRotateNorth = 0;
-        renderer.uvRotateSouth = 0;
-        renderer.uvRotateTop = 0;
-        renderer.uvRotateBottom = 0;
+        renderBlocks.uvRotateEast = 0;
+        renderBlocks.uvRotateWest = 0;
+        renderBlocks.uvRotateNorth = 0;
+        renderBlocks.uvRotateSouth = 0;
+        renderBlocks.uvRotateTop = 0;
+        renderBlocks.uvRotateBottom = 0;
 
         return rendered;
     }
@@ -365,8 +367,10 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
         if (!getWorld().isRemote)
             return;
 
+        Vec3d v = new Vec3d(x, y, z).sub(Vec3d.center).rotate(0, 90 * getRotation(), 0).add(Vec3d.center).rotate(getFace(), Vec3d.center);
+
         if (rnd.nextInt(5) == 0)
-            getWorld().spawnParticle("reddust", getX() + x, getY() + y, getZ() + z, -1, 0, 1);
+            getWorld().spawnParticle("reddust", getX() + v.getX(), getY() + v.getY(), getZ() + v.getZ(), -1, 0, 1);
     }
 
     @Override

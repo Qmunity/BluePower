@@ -12,6 +12,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 
 import com.bluepowermod.api.item.IDatabaseSaveable;
+import com.qmunity.lib.client.render.RenderHelper;
 import com.qmunity.lib.part.IPart;
 import com.qmunity.lib.part.IPartCollidable;
 import com.qmunity.lib.part.IPartInteractable;
@@ -46,7 +47,7 @@ IPartUpdateListener, IPartInteractable, IDatabaseSaveable {
     }
 
     @Override
-    public boolean renderStatic(Vec3i translation, RenderBlocks renderer, int pass) {
+    public boolean renderStatic(Vec3i translation, RenderHelper renderer, RenderBlocks renderBlocks, int pass) {
 
         return false;
     }
@@ -60,6 +61,12 @@ IPartUpdateListener, IPartInteractable, IDatabaseSaveable {
     public boolean shouldRenderOnPass(int pass) {
 
         return pass == 0;
+    }
+
+    @Override
+    public Vec3dCube getRenderBounds() {
+
+        return new Vec3dCube(0, 0, 0, 1, 1, 1);
     }
 
     @Override
