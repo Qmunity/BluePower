@@ -26,7 +26,6 @@ import com.bluepowermod.part.gate.GateMux;
 import com.bluepowermod.part.gate.GateNand;
 import com.bluepowermod.part.gate.GateNor;
 import com.bluepowermod.part.gate.GateNot;
-import com.bluepowermod.part.gate.GateNullCell;
 import com.bluepowermod.part.gate.GateOr;
 import com.bluepowermod.part.gate.GatePulseFormer;
 import com.bluepowermod.part.gate.GateRSLatch;
@@ -142,7 +141,6 @@ public class PartManager {
         registerPart(Circuit3x3.class);
         registerPart(Circuit5x5.class);
         registerPart(Circuit7x7.class);
-        registerPart(GateNullCell.class);
 
         // Analogue gates
         registerPart(GateInverter.class);
