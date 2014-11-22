@@ -47,6 +47,15 @@ public class RedstoneConnection {
         return in;
     }
 
+    /**
+     * Used in Integrated Circuits
+     * @param input
+     */
+    public void setInput(int input) {
+        in = input;
+        caching = true;
+    }
+
     public RedstoneConnection setOutput(boolean out) {
         return setOutput(out ? 15 : 0);
     }
@@ -62,9 +71,13 @@ public class RedstoneConnection {
         this.out = out;
 
         if (last != out && update)
-            RedstoneHelper.notifyRedstoneUpdate(part.getWorld(), part.getX(), part.getY(), part.getZ(), getFD(), true);
+            forceUpdateNeighbor();
 
         return this;
+    }
+
+    public void forceUpdateNeighbor() {
+        RedstoneHelper.notifyRedstoneUpdate(part.getWorld(), part.getX(), part.getY(), part.getZ(), getFD(), true);
     }
 
     public boolean isEnabled() {

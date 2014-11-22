@@ -1,17 +1,32 @@
 /*
- * This file is part of Blue Power. Blue Power is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
- * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version. Blue Power is
- * distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
- * PARTICULAR PURPOSE. See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along
- * with Blue Power. If not, see <http://www.gnu.org/licenses/>
+ * This file is part of Blue Power.
+ *
+ *      Blue Power is free software: you can redistribute it and/or modify
+ *      it under the terms of the GNU General Public License as published by
+ *      the Free Software Foundation, either version 3 of the License, or
+ *      (at your option) any later version.
+ *
+ *      Blue Power is distributed in the hope that it will be useful,
+ *      but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *      GNU General Public License for more details.
+ *
+ *      You should have received a copy of the GNU General Public License
+ *      along with Blue Power.  If not, see <http://www.gnu.org/licenses/>
  */
-package com.bluepowermod.part.gate;
+
+package com.bluepowermod.part.gate.analogue;
 
 import com.bluepowermod.client.renderers.RenderHelper;
+import com.bluepowermod.part.gate.GateBase;
 
-public class GateNot extends GateBase {
+/* Takes a signal and inverts it
+    e.g. input str 2 output str 13
+         input str 5 output str 10
+         input str 0 output str 15
+ */
 
-    private boolean power = false;
+public class GateInverter extends GateBase {
 
     @Override
     public void initializeConnections() {
@@ -25,17 +40,17 @@ public class GateNot extends GateBase {
     @Override
     public String getId() {
 
-        return "not";
+        return "inverter";
     }
 
     @Override
     public void doLogic() {
 
-        power = back().getInput() > 0;
+        int power = back().getInput();
 
-        left().setOutput(!power ? 15 : 0);
-        front().setOutput(!power ? 15 : 0);
-        right().setOutput(!power ? 15 : 0);
+        left().setOutput(15 - power);
+        front().setOutput(15 - power);
+        right().setOutput(15 - power);
     }
 
     @Override
@@ -84,3 +99,4 @@ public class GateNot extends GateBase {
         return true;
     }
 }
+

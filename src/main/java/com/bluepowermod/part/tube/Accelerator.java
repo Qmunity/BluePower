@@ -140,13 +140,9 @@ public class Accelerator extends PneumaticTube implements IPartCustomPlacement {
 
     @Override
     public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
-
-        Tessellator t = Tessellator.instance;
         Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
-        t.startDrawingQuads();
         rotation = ForgeDirection.UP;
         renderDynamic(new Vec3d(0, 0, 0), 0, 1);
-        t.draw();
     }
 
     @Override

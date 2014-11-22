@@ -37,7 +37,7 @@ public class GateTransparentLatch extends GateBase {
     @Override
     public void registerIcons(IIconRegister reg) {
         super.registerIcons(reg);
-        mirroredTopIcon = reg.registerIcon(Refs.MODID + ":gates/" + getId() + "/base_mirrored");
+        mirroredTopIcon = reg.registerIcon(Refs.MODID + ":gates/" + getTextureName() + "/base_mirrored");
     }
 
     @Override

@@ -17,6 +17,7 @@ import com.bluepowermod.api.bluestone.IBluestoneHandler;
 import com.bluepowermod.client.renderers.IconSupplier;
 import com.bluepowermod.helper.VectorHelper;
 import com.bluepowermod.part.BPPartFace;
+import com.qmunity.lib.client.render.RenderHelper;
 import com.qmunity.lib.helper.RedstoneHelper;
 import com.qmunity.lib.part.IPartRedstone;
 import com.qmunity.lib.vec.Vec3dCube;
@@ -79,7 +80,7 @@ public class WireBluestone extends BPPartFace implements IBluestoneDevice, IPart
     }
 
     @Override
-    public boolean renderStatic(Vec3i translation, RenderBlocks renderer, int pass) {
+    public boolean renderStatic(Vec3i translation, RenderHelper renderer, RenderBlocks renderBlocks, int pass) {
 
         double height = 2 / 16D;
 
@@ -110,29 +111,29 @@ public class WireBluestone extends BPPartFace implements IBluestoneDevice, IPart
         boolean west = getConnectedDevice(d3) != null;
         boolean east = getConnectedDevice(d4) != null;
 
-        renderer.setOverrideBlockTexture(isOn() ? IconSupplier.bluestoneOn : IconSupplier.bluestoneOff);
-        renderer.renderAllFaces = true;
+        renderBlocks.setOverrideBlockTexture(isOn() ? IconSupplier.bluestoneOn : IconSupplier.bluestoneOff);
+        renderBlocks.renderAllFaces = true;
 
         // Center
-        renderBox(translation, renderer, new Vec3dCube(7 / 16D, 0, 7 / 16D, 9 / 16D, height, 9 / 16D));
+        renderBox(translation, renderBlocks, new Vec3dCube(7 / 16D, 0, 7 / 16D, 9 / 16D, height, 9 / 16D));
         // Sides
         if (east || west) {
             if (west || (!west && east && !north && !south))
-                renderBox(translation, renderer, new Vec3dCube(west ? 0 : 5 / 16D, 0, 7 / 16D, 7 / 16D, height, 9 / 16D));
+                renderBox(translation, renderBlocks, new Vec3dCube(west ? 0 : 5 / 16D, 0, 7 / 16D, 7 / 16D, height, 9 / 16D));
             if (east || (west && !east && !north && !south))
-                renderBox(translation, renderer, new Vec3dCube(9 / 16D, 0, 7 / 16D, east ? 1 : 11 / 16D, height, 9 / 16D));
+                renderBox(translation, renderBlocks, new Vec3dCube(9 / 16D, 0, 7 / 16D, east ? 1 : 11 / 16D, height, 9 / 16D));
             if (north)
-                renderBox(translation, renderer, new Vec3dCube(7 / 16D, 0, north ? 0 : 5 / 16D, 9 / 16D, height, 7 / 16D));
+                renderBox(translation, renderBlocks, new Vec3dCube(7 / 16D, 0, north ? 0 : 5 / 16D, 9 / 16D, height, 7 / 16D));
             if (south)
-                renderBox(translation, renderer, new Vec3dCube(7 / 16D, 0, 9 / 16D, 9 / 16D, height, south ? 1 : 11 / 16D));
+                renderBox(translation, renderBlocks, new Vec3dCube(7 / 16D, 0, 9 / 16D, 9 / 16D, height, south ? 1 : 11 / 16D));
         } else {
-            renderBox(translation, renderer, new Vec3dCube(7 / 16D, 0, north ? 0 : 5 / 16D, 9 / 16D, height, 7 / 16D));
-            renderBox(translation, renderer, new Vec3dCube(7 / 16D, 0, 9 / 16D, 9 / 16D, height, south ? 1 : 11 / 16D));
+            renderBox(translation, renderBlocks, new Vec3dCube(7 / 16D, 0, north ? 0 : 5 / 16D, 9 / 16D, height, 7 / 16D));
+            renderBox(translation, renderBlocks, new Vec3dCube(7 / 16D, 0, 9 / 16D, 9 / 16D, height, south ? 1 : 11 / 16D));
         }
 
-        renderer.setRenderBounds(0, 0, 0, 1, 1, 1);
-        renderer.setOverrideBlockTexture(null);
-        renderer.renderAllFaces = false;
+        renderBlocks.setRenderBounds(0, 0, 0, 1, 1, 1);
+        renderBlocks.setOverrideBlockTexture(null);
+        renderBlocks.renderAllFaces = false;
         return true;
     }
 

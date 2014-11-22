@@ -16,11 +16,11 @@ import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
-import com.bluepowermod.part.bluestone.FreestandingWireBluestone;
 import com.bluepowermod.part.bluestone.WireBluestone;
 import com.bluepowermod.part.gate.GateAnd;
 import com.bluepowermod.part.gate.GateBuffer;
 import com.bluepowermod.part.gate.GateComparator;
+import com.bluepowermod.part.gate.GateCounter;
 import com.bluepowermod.part.gate.GateLightCell;
 import com.bluepowermod.part.gate.GateMux;
 import com.bluepowermod.part.gate.GateNand;
@@ -31,12 +31,19 @@ import com.bluepowermod.part.gate.GateOr;
 import com.bluepowermod.part.gate.GatePulseFormer;
 import com.bluepowermod.part.gate.GateRSLatch;
 import com.bluepowermod.part.gate.GateRandomizer;
+import com.bluepowermod.part.gate.GateRepeater;
+import com.bluepowermod.part.gate.GateSequencer;
+import com.bluepowermod.part.gate.GateStateCell;
 import com.bluepowermod.part.gate.GateSynchronizer;
 import com.bluepowermod.part.gate.GateTimer;
 import com.bluepowermod.part.gate.GateToggleLatch;
 import com.bluepowermod.part.gate.GateTransparentLatch;
 import com.bluepowermod.part.gate.GateXnor;
 import com.bluepowermod.part.gate.GateXor;
+import com.bluepowermod.part.gate.analogue.GateInverter;
+import com.bluepowermod.part.gate.ic.Circuit3x3;
+import com.bluepowermod.part.gate.ic.Circuit5x5;
+import com.bluepowermod.part.gate.ic.Circuit7x7;
 import com.bluepowermod.part.lamp.PartCageLamp;
 import com.bluepowermod.part.lamp.PartFixture;
 import com.bluepowermod.part.tube.Accelerator;
@@ -120,22 +127,25 @@ public class PartManager {
         registerPart(GateComparator.class);
         registerPart(GateNor.class);
         registerPart(GateTimer.class);
-        // registerPart(GateSequencer.class);
-        // registerPart(GateCounter.class);
+        registerPart(GateSequencer.class);
+        registerPart(GateCounter.class);
         registerPart(GateMux.class);
         registerPart(GatePulseFormer.class);
         registerPart(GateRandomizer.class);
         registerPart(GateLightCell.class);
         registerPart(GateToggleLatch.class);
         registerPart(GateRSLatch.class);
-        // registerPart(GateStateCell.class);
-        // registerPart(GateRepeater.class);
+        registerPart(GateStateCell.class);
+        registerPart(GateRepeater.class);
         registerPart(GateTransparentLatch.class);
         registerPart(GateSynchronizer.class);
-        // registerPart(Circuit3x3.class);
-        // registerPart(Circuit5x5.class);
-        // registerPart(Circuit7x7.class);
+        registerPart(Circuit3x3.class);
+        registerPart(Circuit5x5.class);
+        registerPart(Circuit7x7.class);
         registerPart(GateNullCell.class);
+
+        // Analogue gates
+        registerPart(GateInverter.class);
 
         //
         // Lamps
@@ -161,7 +171,6 @@ public class PartManager {
 
         // Bluestone
         registerPart(WireBluestone.class);
-        registerPart(FreestandingWireBluestone.class);
         // registerPart(GateWirelessTransceiver.class);
 
         // for (int bundled = 0; bundled < 2; bundled++) {

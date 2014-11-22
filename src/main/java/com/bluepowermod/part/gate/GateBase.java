@@ -39,6 +39,7 @@ import com.bluepowermod.init.Config;
 import com.bluepowermod.part.BPPartFaceRotate;
 import com.bluepowermod.part.PartManager;
 import com.bluepowermod.part.RedstoneConnection;
+import com.bluepowermod.part.gate.ic.IntegratedCircuit;
 import com.bluepowermod.util.Refs;
 import com.qmunity.lib.client.render.RenderHelper;
 import com.qmunity.lib.part.IPartLightEmitter;
@@ -62,6 +63,9 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
     private final RedstoneConnection[] connections = new RedstoneConnection[] { new RedstoneConnection(this, Dir.FRONT),
             new RedstoneConnection(this, Dir.RIGHT), new RedstoneConnection(this, Dir.BACK), new RedstoneConnection(this, Dir.LEFT),
             new RedstoneConnection(this, Dir.TOP), new RedstoneConnection(this, Dir.BOTTOM) };
+
+    private boolean needsUpdate;//flag that is set when a neighbor block update occurs.
+    public IntegratedCircuit parentCircuit;
 
     private static IIcon iconBottom;
     private static IIcon iconSide;
@@ -106,6 +110,10 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
     }
 
     public abstract String getId();
+
+    protected String getTextureName() {
+        return getId();
+    }
 
     @Override
     public final void addCollisionBoxesToList(List<Vec3dCube> boxes, Entity entity) {
@@ -314,7 +322,7 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
 
     protected final void renderTop(String texture) {
 
-        Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/gates/" + getId() + "/"
+        Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/gates/" + getTextureName() + "/"
                 + texture + ".png"));
         renderTop();
     }
@@ -326,7 +334,7 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
 
     protected final void renderTop(String texture, String status) {
 
-        Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/gates/" + getId() + "/"
+        Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/gates/" + getTextureName() + "/"
                 + texture + "_" + status + ".png"));
 
         boolean isOn = status.equals("on");
@@ -347,8 +355,8 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
 
         boolean isOn = con.getOutput() + (!con.isOutputOnly() ? con.getInput() : 0) > 0;
 
-        Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/gates/" + getId() + "/"
-                + name + "_" + (con.isEnabled() ? isOn ? "on" : "off" : "disabled") + ".png"));
+        Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/gates/" + getTextureName() + "/" + name
+                + "_" + (con.isEnabled() ? isOn ? "on" : "off" : "disabled") + ".png"));
 
         float bX = OpenGlHelper.lastBrightnessX;
         float bY = OpenGlHelper.lastBrightnessY;
@@ -398,6 +406,15 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
 
     @Override
     public final void update() {
+        if (needsUpdate) {
+            needsUpdate = false;
+            if (parentCircuit == null)
+                for (RedstoneConnection c : connections)
+                    c.update();
+            doLogic();
+
+            sendUpdatePacket();
+        }
 
         tick();
     }
@@ -405,12 +422,7 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
     @Override
     public void onUpdate() {
 
-        for (RedstoneConnection c : connections)
-            c.update();
-
-        doLogic();
-
-        sendUpdatePacket();
+        needsUpdate = true;
     }
 
     @Override
@@ -542,7 +554,7 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
 
         iconBottom = reg.registerIcon(Refs.MODID + ":gates/bottom");
         iconSide = reg.registerIcon(Refs.MODID + ":gates/side");
-        iconTop = reg.registerIcon(Refs.MODID + ":gates/" + getId() + "/base");
+        iconTop = reg.registerIcon(Refs.MODID + ":gates/" + getTextureName() + "/base");
     }
 
     public IIcon getTopIcon() {

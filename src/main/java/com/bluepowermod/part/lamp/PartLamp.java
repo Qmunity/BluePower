@@ -7,10 +7,16 @@
  */
 package com.bluepowermod.part.lamp;
 
-import java.util.Arrays;
-import java.util.List;
-
+import com.bluepowermod.client.renderers.IconSupplier;
+import com.bluepowermod.client.renderers.RenderHelper;
+import com.bluepowermod.part.BPPartFace;
+import com.qmunity.lib.helper.RedstoneHelper;
+import com.qmunity.lib.part.IPartLightEmitter;
+import com.qmunity.lib.vec.Vec3d;
+import com.qmunity.lib.vec.Vec3dCube;
+import com.qmunity.lib.vec.Vec3i;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.Entity;
@@ -19,16 +25,10 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 import net.minecraftforge.common.util.ForgeDirection;
-
 import org.lwjgl.opengl.GL11;
 
-import com.bluepowermod.client.renderers.IconSupplier;
-import com.bluepowermod.client.renderers.RenderHelper;
-import com.bluepowermod.part.BPPartFace;
-import com.qmunity.lib.helper.RedstoneHelper;
-import com.qmunity.lib.part.IPartLightEmitter;
-import com.qmunity.lib.vec.Vec3d;
-import com.qmunity.lib.vec.Vec3dCube;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Base class for the lamps that are multiparts.
@@ -39,7 +39,7 @@ import com.qmunity.lib.vec.Vec3dCube;
 public class PartLamp extends BPPartFace implements IPartLightEmitter {
 
     protected String colorName;
-    private int colorVal;
+    private final int colorVal;
     protected boolean inverted;
 
     protected int power = 0;
@@ -116,9 +116,7 @@ public class PartLamp extends BPPartFace implements IPartLightEmitter {
 
             GL11.glPushMatrix();
             {
-                t.startDrawingQuads();
                 renderDynamic(new Vec3d(0, 0, 0), 0, 0);
-                t.draw();
             }
             GL11.glPopMatrix();
         }
@@ -175,7 +173,7 @@ public class PartLamp extends BPPartFace implements IPartLightEmitter {
             int redMask = 0xFF0000, greenMask = 0xFF00, blueMask = 0xFF;
             int r = (colorVal & redMask) >> 16;
             int g = (colorVal & greenMask) >> 8;
-            int b = (colorVal & blueMask);
+            int b = colorVal & blueMask;
 
             t.setColorOpaque(r, g, b);
             // Render lamp itself here
@@ -186,6 +184,83 @@ public class PartLamp extends BPPartFace implements IPartLightEmitter {
             t.draw();
         }
         GL11.glPopMatrix();
+
+    }
+
+    /**
+     * This render method gets called whenever there's a block update in the chunk. You should use this to remove load from the renderer if a part of
+     * the rendering code doesn't need to get called too often or just doesn't change at all. To call a render update to re-render this just call
+     * {@link com.bluepowermod.part.BPPart#markPartForRenderUpdate()}
+     *
+     * @param loc
+     *            Distance from the player's position
+     * @param pass
+     *            Render pass (0 or 1)
+     * @return Whether or not it rendered something
+     */
+    @Override
+    public boolean renderStatic(Vec3i loc, RenderBlocks renderer, int pass) {
+        GL11.glPushMatrix();
+        {
+            // Rotate and translate
+            /*GL11.glTranslated(loc.getX(), loc.getY(), loc.getZ());
+            GL11.glTranslated(0.5, 0.5, 0.5);*/
+            Tessellator t = Tessellator.instance;
+            t.addTranslation(loc.getX(), loc.getY(), loc.getZ());
+            {
+
+                switch (getFace().ordinal()) {
+                    case 0:
+                        break;
+                    case 1:
+                        GL11.glRotated(180, 1, 0, 0);
+                        break;
+                    case 2:
+                        GL11.glRotated(90, 1, 0, 0);
+                        break;
+                    case 3:
+                        GL11.glRotated(90, -1, 0, 0);
+                        break;
+                    case 4:
+                        GL11.glRotated(90, 0, 0, -1);
+                        break;
+                    case 5:
+                        GL11.glRotated(90, 0, 0, 1);
+                        break;
+                }
+            }
+            //GL11.glTranslated(-0.5, -0.5, -0.5);
+
+            // Render
+            //t.startDrawingQuads();
+
+            t.setColorOpaque_F(1, 1, 1);
+            // Render base
+            renderBase(pass);
+
+            // Color multiplier
+            int redMask = 0xFF0000, greenMask = 0xFF00, blueMask = 0xFF;
+            int r = (colorVal & redMask) >> 16;
+            int g = (colorVal & greenMask) >> 8;
+            int b = colorVal & blueMask;
+
+            t.setColorOpaque(r, g, b);
+            // Render lamp itself here
+            renderLamp(pass, r, g, b);
+
+            t.setColorOpaque_F(1, 1, 1);
+
+            t.addTranslation(-loc.getX(), -loc.getY(), -loc.getZ());
+            //t.draw();
+        }
+        GL11.glPopMatrix();
+        return true;
+        //return false;
+    }
+
+    @Override
+    public boolean shouldRenderOnPass(int pass){
+        return true;
     }
 
     /**
@@ -278,7 +353,7 @@ public class PartLamp extends BPPartFace implements IPartLightEmitter {
             GL11.glDisable(GL11.GL_LIGHTING);
             GL11.glDepthMask(false);
             GL11.glBegin(GL11.GL_QUADS);
-            RenderHelper.drawColoredCube(vector.clone().expand(0.8 / 16D), r / 256D, g / 256D, b / 256D, (power / 15D) * 0.625);
+            RenderHelper.drawColoredCube(vector.clone().expand(0.8 / 16D), r / 256D, g / 256D, b / 256D, power / 15D * 0.625);
             GL11.glEnd();
             GL11.glDepthMask(true);
             GL11.glEnable(GL11.GL_LIGHTING);
