@@ -7,6 +7,10 @@
  */
 package com.bluepowermod.part.gate.ic;
 
+import com.qmunity.lib.part.IPart;
+
+import java.util.Map;
+
 public class Circuit7x7 extends IntegratedCircuit {
     
     @Override
@@ -14,5 +18,9 @@ public class Circuit7x7 extends IntegratedCircuit {
     
         return 7;
     }
-    
+
+    @Override public Map<String, IPart> getPartMap() {
+
+        return null;
+    }
 }

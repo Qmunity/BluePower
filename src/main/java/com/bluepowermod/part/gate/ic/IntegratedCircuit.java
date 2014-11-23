@@ -159,16 +159,9 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
                             Dir neighborDir = Dir.getDirection(ForgeDirection.UP, forgeDir, neighbor.getRotation()).getOpposite();
                             Dir gateDir = Dir.getDirection(ForgeDirection.UP, forgeDir, gate.getRotation());
 
-<<<<<<< HEAD
-                            if (neighbor.getConnection(neighborDir).isEnabled()
-                                    && (neighbor.getConnection(neighborDir).isOutput() || neighbor instanceof GateWire)) {
-                                if (gate.getConnection(gateDir).isEnabled() && gate.getConnection(gateDir).isInput()) {
-                                    gate.getConnection(gateDir).setBluestonePowerLevel(neighbor.getConnection(neighborDir).getPower());
-=======
                             if (neighbor.getConnection(neighborDir).isEnabled() && neighbor instanceof GateWire) {
                                 if (gate.getConnection(gateDir).isEnabled() && !gate.getConnection(gateDir).isOutputOnly()) {
                                     gate.getConnection(gateDir).setInput(neighbor.getConnection(neighborDir).getOutput());
->>>>>>> origin/NewMultipart
                                 }
                             }
                         }
@@ -230,13 +223,8 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
                      */
                     for (int k = startSize; k < traversedWires.size(); k++) {
                         GateWire wire = traversedWires.get(k);
-<<<<<<< HEAD
-                        for (FaceDirection dir : FaceDirection.values()) {
-                            wire.getConnection(dir).setBluestonePowerLevel(wirePowaah);
-=======
                         for (Dir dir : Dir.values()) {
                             wire.getConnection(dir).setOutput(wirePowaah);
->>>>>>> origin/NewMultipart
                         }
                     }
                 }
@@ -294,22 +282,9 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
         if (gates[0][mid] != null) {
             RedstoneConnection connection = gates[0][mid].getConnection(ForgeDirection.WEST);
             if (connection.isEnabled()) {
-<<<<<<< HEAD
-                left.enable();
-            } else {
-                left.disable();
-            }
-            if (connection.isInput()) {
-                left.setInput();
-                connection.setBluestonePowerLevel(left.getPower());
-            } else {
-                left.setOutput();
-                left.setBluestonePowerLevel(connection.getPower());
-=======
                 left().enable();
             } else {
                 left().disable();
->>>>>>> origin/NewMultipart
             }
             connection.setInput(left().getInput());
             left().setOutput(connection.getOutput());
@@ -321,18 +296,7 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
             if (connection.isEnabled()) {
                 right().enable();
             } else {
-<<<<<<< HEAD
-                right.disable();
-            }
-            if (connection.isInput()) {
-                right.setInput();
-                connection.setBluestonePowerLevel(right.getPower());
-            } else {
-                right.setOutput();
-                right.setBluestonePowerLevel(connection.getPower());
-=======
                 right().disable();
->>>>>>> origin/NewMultipart
             }
             connection.setInput(right().getOutput());
             right().setInput(connection.getOutput());
@@ -342,22 +306,9 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
         if (gates[mid][0] != null) {
             RedstoneConnection connection = gates[mid][0].getConnection(ForgeDirection.NORTH);
             if (connection.isEnabled()) {
-<<<<<<< HEAD
-                front.enable();
-            } else {
-                front.disable();
-            }
-            if (connection.isInput()) {
-                front.setInput();
-                connection.setBluestonePowerLevel(front.getPower());
-            } else {
-                front.setOutput();
-                front.setBluestonePowerLevel(connection.getPower());
-=======
                 front().enable();
             } else {
                 front().disable();
->>>>>>> origin/NewMultipart
             }
             connection.setInput(front().getOutput());
             front().setInput(connection.getOutput());
@@ -369,18 +320,7 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
             if (connection.isEnabled()) {
                 back().enable();
             } else {
-<<<<<<< HEAD
-                back.disable();
-            }
-            if (connection.isInput()) {
-                back.setInput();
-                connection.setBluestonePowerLevel(back.getPower());
-            } else {
-                back.setOutput();
-                back.setBluestonePowerLevel(connection.getPower());
-=======
                 back().disable();
->>>>>>> origin/NewMultipart
             }
             connection.setInput(back().getOutput());
             back().setInput(connection.getOutput());
@@ -593,7 +533,8 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
         return false;
     }
 
-    @Override
+    //@Override
+    //TODO: Check me
     public void sendPartUpdate(IPart part) {
         sendUpdatePacket();
     }
