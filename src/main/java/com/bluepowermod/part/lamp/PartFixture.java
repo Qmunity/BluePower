@@ -7,17 +7,14 @@
  */
 package com.bluepowermod.part.lamp;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.bluepowermod.client.renderers.IconSupplier;
+import com.qmunity.lib.vec.Vec3dCube;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.IIcon;
-
 import org.lwjgl.opengl.GL11;
 
-import com.bluepowermod.client.renderers.IconSupplier;
-import com.bluepowermod.client.renderers.RenderHelper;
-import com.qmunity.lib.vec.Vec3dCube;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -61,64 +58,23 @@ public class PartFixture extends PartLamp {
      * @author Koen Beckers (K4Unl), Amadornes
      */
     @Override
-    public void renderBase(int pass) {
+    public void renderBase(com.qmunity.lib.client.render.RenderHelper renderer, int pass) {
 
         if (pass != 0)
             return;
         Tessellator t = Tessellator.instance;
         Vec3dCube vector = new Vec3dCube(2 / 16D, 0.0, 2 / 16D, 1.0 - (2 / 16D), 2 / 16D, 1.0 - 2 / 16D);
         IIcon topIcon = IconSupplier.fixtureFootTop;
-        // IIcon sideIcon = IconSupplier.fixtureFootSide;
+        IIcon sideIcon = IconSupplier.fixtureFootSide;
 
-        double minU = topIcon.getInterpolatedU(vector.getMinX() * 16);
-        double maxU = topIcon.getInterpolatedU(vector.getMaxX() * 16);
-        double minV = topIcon.getInterpolatedV(vector.getMinZ() * 16);
-        double maxV = topIcon.getInterpolatedV(vector.getMaxZ() * 16);
-
-        // Top side
-        t.setNormal(0, 1, 0);
-        t.addVertexWithUV(vector.getMinX(), vector.getMaxY(), vector.getMaxZ(), minU, maxV);
-        t.addVertexWithUV(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ(), minU, minV);
-        t.addVertexWithUV(vector.getMaxX(), vector.getMaxY(), vector.getMinZ(), maxU, minV);
-        t.addVertexWithUV(vector.getMinX(), vector.getMaxY(), vector.getMinZ(), maxU, maxV);
-
-        // FIXME: Icons for the side aren't rendered..
-
-        /*
-         * minU = sideIcon.getInterpolatedU(vector.getMinX() * 16); maxU = sideIcon.getInterpolatedU(vector.getMaxX() * 16); minV =
-         * sideIcon.getInterpolatedV((vector.getMinY() + (3*pixel) )* 16); maxV = sideIcon.getInterpolatedV((vector.getMaxY() + (3*pixel) )* 16);
-         */
-        // Draw west side:
-        t.setNormal(-1, 0, 0);
-        t.addVertexWithUV(vector.getMinX(), vector.getMinY(), vector.getMaxZ(), minU, maxV);
-        t.addVertexWithUV(vector.getMinX(), vector.getMaxY(), vector.getMaxZ(), minU, minV);
-        t.addVertexWithUV(vector.getMinX(), vector.getMaxY(), vector.getMinZ(), maxU, minV);
-        t.addVertexWithUV(vector.getMinX(), vector.getMinY(), vector.getMinZ(), maxU, maxV);
-
-        // Draw east side:
-        t.setNormal(1, 0, 0);
-        t.addVertexWithUV(vector.getMaxX(), vector.getMinY(), vector.getMinZ(), minU, maxV);
-        t.addVertexWithUV(vector.getMaxX(), vector.getMaxY(), vector.getMinZ(), minU, minV);
-        t.addVertexWithUV(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ(), maxU, minV);
-        t.addVertexWithUV(vector.getMaxX(), vector.getMinY(), vector.getMaxZ(), maxU, maxV);
-
-        // Draw north side
-        t.setNormal(0, 0, -1);
-        t.addVertexWithUV(vector.getMinX(), vector.getMinY(), vector.getMinZ(), minU, maxV);
-        t.addVertexWithUV(vector.getMinX(), vector.getMaxY(), vector.getMinZ(), minU, minV);
-        t.addVertexWithUV(vector.getMaxX(), vector.getMaxY(), vector.getMinZ(), maxU, minV);
-        t.addVertexWithUV(vector.getMaxX(), vector.getMinY(), vector.getMinZ(), maxU, maxV);
-
-        // Draw south side
-        t.setNormal(0, 0, 1);
-        t.addVertexWithUV(vector.getMinX(), vector.getMinY(), vector.getMaxZ(), minU, maxV);
-        t.addVertexWithUV(vector.getMaxX(), vector.getMinY(), vector.getMaxZ(), minU, minV);
-        t.addVertexWithUV(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ(), maxU, minV);
-        t.addVertexWithUV(vector.getMinX(), vector.getMaxY(), vector.getMaxZ(), maxU, maxV);
+        renderer.setRenderSides(false, true, false, false, false, false);
+        renderer.renderBox(vector, topIcon);
+        renderer.setRenderSides(false, false, true, true, true, true);
+        renderer.renderBox(vector, sideIcon);
     }
 
     @Override
-    public void renderLamp(int pass, int r, int g, int b) {
+    public void renderLamp(com.qmunity.lib.client.render.RenderHelper renderer, int pass, int r, int g, int b) {
 
         Vec3dCube vector = new Vec3dCube(3 / 16D, 2 / 16D, 3 / 16D, 1.0 - (3 / 16D), 8 / 16D, 13 / 16D);
 
@@ -134,55 +90,16 @@ public class PartFixture extends PartLamp {
                 iconToUseTop = IconSupplier.fixtureLampTopOn;
 
                 t.setColorRGBA(r, g, b, 20);
-                RenderHelper.drawTesselatedCube(new Vec3dCube(4.5 / 16D, 2 / 16D, 4.5 / 16D, 11.5 / 16D, 11.5 / 16D, 11.5 / 16D));
+                //RenderHelper.drawTesselatedCube(new Vec3dCube(4.5 / 16D, 2 / 16D, 4.5 / 16D, 11.5 / 16D, 11.5 / 16D, 11.5 / 16D));
                 t.setColorRGBA(r, g, b, 255);
             }
 
-            double minU = iconToUseTop.getInterpolatedU(vector.getMinX() * 16);
-            double maxU = iconToUseTop.getInterpolatedU(vector.getMaxX() * 16);
-            double minV = iconToUseTop.getInterpolatedV(vector.getMinZ() * 16);
-            double maxV = iconToUseTop.getInterpolatedV(vector.getMaxZ() * 16);
-
-            // Top side
-            t.setNormal(0, 1, 0);
-            t.addVertexWithUV(vector.getMinX(), vector.getMaxY(), vector.getMaxZ(), minU, maxV);
-            t.addVertexWithUV(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ(), minU, minV);
-            t.addVertexWithUV(vector.getMaxX(), vector.getMaxY(), vector.getMinZ(), maxU, minV);
-            t.addVertexWithUV(vector.getMinX(), vector.getMaxY(), vector.getMinZ(), maxU, maxV);
-
-            // I think there might be something wrong with the textures here..
-            minU = iconToUseSide.getInterpolatedU(vector.getMinZ() * 16);
-            maxU = iconToUseSide.getInterpolatedU(vector.getMaxZ() * 16);
-            minV = iconToUseSide.getInterpolatedV((vector.getMinY() + (3 / 16D)) * 16);
-            maxV = iconToUseSide.getInterpolatedV((vector.getMaxY() + (3 / 16D)) * 16);
-
-            // Draw west side:
-            t.setNormal(-1, 0, 0);
-            t.addVertexWithUV(vector.getMinX(), vector.getMinY(), vector.getMaxZ(), minU, maxV);
-            t.addVertexWithUV(vector.getMinX(), vector.getMaxY(), vector.getMaxZ(), minU, minV);
-            t.addVertexWithUV(vector.getMinX(), vector.getMaxY(), vector.getMinZ(), maxU, minV);
-            t.addVertexWithUV(vector.getMinX(), vector.getMinY(), vector.getMinZ(), maxU, maxV);
-
-            // Draw east side:
-            t.setNormal(1, 0, 0);
-            t.addVertexWithUV(vector.getMaxX(), vector.getMinY(), vector.getMinZ(), minU, maxV);
-            t.addVertexWithUV(vector.getMaxX(), vector.getMaxY(), vector.getMinZ(), minU, minV);
-            t.addVertexWithUV(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ(), maxU, minV);
-            t.addVertexWithUV(vector.getMaxX(), vector.getMinY(), vector.getMaxZ(), maxU, maxV);
-
-            // Draw north side
-            t.setNormal(0, 0, -1);
-            t.addVertexWithUV(vector.getMinX(), vector.getMinY(), vector.getMinZ(), minU, maxV);
-            t.addVertexWithUV(vector.getMinX(), vector.getMaxY(), vector.getMinZ(), minU, minV);
-            t.addVertexWithUV(vector.getMaxX(), vector.getMaxY(), vector.getMinZ(), maxU, minV);
-            t.addVertexWithUV(vector.getMaxX(), vector.getMinY(), vector.getMinZ(), maxU, maxV);
-
-            // Draw south side
-            t.setNormal(0, 0, 1);
-            t.addVertexWithUV(vector.getMinX(), vector.getMinY(), vector.getMaxZ(), minU, maxV);
-            t.addVertexWithUV(vector.getMaxX(), vector.getMinY(), vector.getMaxZ(), maxU, maxV);
-            t.addVertexWithUV(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ(), maxU, minV);
-            t.addVertexWithUV(vector.getMinX(), vector.getMaxY(), vector.getMaxZ(), minU, minV);
+            renderer.setTextureRotations(0, 0, 3, 3, 3, 3);
+            renderer.setRenderSides(true, true, false, false, false, false);
+            renderer.renderBox(vector, iconToUseTop);
+            renderer.setRenderSides(false, false, true, true, true, true);
+            renderer.renderBox(vector, iconToUseSide);
+            renderer.resetTextureRotations();
         }
 
         if (power > 0 && pass == 1) {
@@ -193,7 +110,9 @@ public class PartFixture extends PartLamp {
             // GL11.glDisable(GL11.GL_CULL_FACE);
             GL11.glDepthMask(false);
             GL11.glBegin(GL11.GL_QUADS);
-            RenderHelper.drawColoredCube(vector.clone().expand(0.8 / 16D), r / 256D, g / 256D, b / 256D, (power / 15D) * 0.625);
+            //renderer.setColor(renderer.);
+            //, r / 256D, g / 256D, b / 256D, (power / 15D) * 0.625);
+            renderer.renderBox(vector.clone().expand(0.8 / 16D));
             GL11.glEnd();
             GL11.glDepthMask(true);
             GL11.glEnable(GL11.GL_CULL_FACE);

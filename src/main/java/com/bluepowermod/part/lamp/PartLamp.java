@@ -7,9 +7,14 @@
  */
 package com.bluepowermod.part.lamp;
 
-import java.util.Arrays;
-import java.util.List;
-
+import com.bluepowermod.client.renderers.IconSupplier;
+import com.bluepowermod.part.BPPartFace;
+import com.qmunity.lib.client.render.RenderHelper;
+import com.qmunity.lib.helper.RedstoneHelper;
+import com.qmunity.lib.part.IPartLightEmitter;
+import com.qmunity.lib.vec.Vec3d;
+import com.qmunity.lib.vec.Vec3dCube;
+import com.qmunity.lib.vec.Vec3i;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
@@ -20,17 +25,10 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 import net.minecraftforge.common.util.ForgeDirection;
-
 import org.lwjgl.opengl.GL11;
 
-import com.bluepowermod.client.renderers.IconSupplier;
-import com.bluepowermod.part.BPPartFace;
-import com.qmunity.lib.client.render.RenderHelper;
-import com.qmunity.lib.helper.RedstoneHelper;
-import com.qmunity.lib.part.IPartLightEmitter;
-import com.qmunity.lib.vec.Vec3d;
-import com.qmunity.lib.vec.Vec3dCube;
-import com.qmunity.lib.vec.Vec3i;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Base class for the lamps that are multiparts.
@@ -118,7 +116,8 @@ public class PartLamp extends BPPartFace implements IPartLightEmitter {
 
             GL11.glPushMatrix();
             {
-                renderDynamic(new Vec3d(0, 0, 0), 0, 0);
+                //RenderHelper renderer = new RenderHelper();
+                //renderStatic(new Vec3i(0, 0, 0), renderer, null, 0);
             }
             GL11.glPopMatrix();
         }
@@ -133,60 +132,6 @@ public class PartLamp extends BPPartFace implements IPartLightEmitter {
     @Override
     public void renderDynamic(Vec3d translation, double delta, int pass) {
 
-        GL11.glPushMatrix();
-        {
-            // Rotate and translate
-            GL11.glTranslated(translation.getX(), translation.getY(), translation.getZ());
-            GL11.glTranslated(0.5, 0.5, 0.5);
-            {
-
-                switch (getFace().ordinal()) {
-                case 0:
-                    break;
-                case 1:
-                    GL11.glRotated(180, 1, 0, 0);
-                    break;
-                case 2:
-                    GL11.glRotated(90, 1, 0, 0);
-                    break;
-                case 3:
-                    GL11.glRotated(90, -1, 0, 0);
-                    break;
-                case 4:
-                    GL11.glRotated(90, 0, 0, -1);
-                    break;
-                case 5:
-                    GL11.glRotated(90, 0, 0, 1);
-                    break;
-                }
-            }
-            GL11.glTranslated(-0.5, -0.5, -0.5);
-
-            // Render
-
-            Tessellator t = Tessellator.instance;
-            t.startDrawingQuads();
-
-            t.setColorOpaque_F(1, 1, 1);
-            // Render base
-            renderBase(pass);
-
-            // Color multiplier
-            int redMask = 0xFF0000, greenMask = 0xFF00, blueMask = 0xFF;
-            int r = (colorVal & redMask) >> 16;
-            int g = (colorVal & greenMask) >> 8;
-            int b = colorVal & blueMask;
-
-            t.setColorOpaque(r, g, b);
-            // Render lamp itself here
-            renderLamp(pass, r, g, b);
-
-            t.setColorOpaque_F(1, 1, 1);
-
-            t.draw();
-        }
-        GL11.glPopMatrix();
-
     }
 
     /**
@@ -194,73 +139,47 @@ public class PartLamp extends BPPartFace implements IPartLightEmitter {
      * the rendering code doesn't need to get called too often or just doesn't change at all. To call a render update to re-render this just call
      * {@link com.bluepowermod.part.BPPart#markPartForRenderUpdate()}
      *
-     * @param loc
-     *            Distance from the player's position
-     * @param pass
-     *            Render pass (0 or 1)
+     * @param loc Distance from the player's position
+     * @param pass Render pass (0 or 1)
      * @return Whether or not it rendered something
      */
 
     @Override
     public boolean renderStatic(Vec3i loc, RenderHelper renderer, RenderBlocks renderBlocks, int pass) {
 
-        GL11.glPushMatrix();
-        {
-            // Rotate and translate
-            /*
-             * GL11.glTranslated(loc.getX(), loc.getY(), loc.getZ()); GL11.glTranslated(0.5, 0.5, 0.5);
-             */
-            Tessellator t = Tessellator.instance;
-            t.addTranslation(loc.getX(), loc.getY(), loc.getZ());
-            {
-
-                switch (getFace().ordinal()) {
-                case 0:
-                    break;
-                case 1:
-                    GL11.glRotated(180, 1, 0, 0);
-                    break;
-                case 2:
-                    GL11.glRotated(90, 1, 0, 0);
-                    break;
-                case 3:
-                    GL11.glRotated(90, -1, 0, 0);
-                    break;
-                case 4:
-                    GL11.glRotated(90, 0, 0, -1);
-                    break;
-                case 5:
-                    GL11.glRotated(90, 0, 0, 1);
-                    break;
-                }
-            }
-            // GL11.glTranslated(-0.5, -0.5, -0.5);
-
-            // Render
-            // t.startDrawingQuads();
-
-            t.setColorOpaque_F(1, 1, 1);
-            // Render base
-            renderBase(pass);
-
-            // Color multiplier
-            int redMask = 0xFF0000, greenMask = 0xFF00, blueMask = 0xFF;
-            int r = (colorVal & redMask) >> 16;
-            int g = (colorVal & greenMask) >> 8;
-            int b = colorVal & blueMask;
-
-            t.setColorOpaque(r, g, b);
-            // Render lamp itself here
-            renderLamp(pass, r, g, b);
-
-            t.setColorOpaque_F(1, 1, 1);
-
-            t.addTranslation(-loc.getX(), -loc.getY(), -loc.getZ());
-            // t.draw();
+        //renderer.setTextureRotations(0, 0, 3, 3, 3, 3);
+        switch (getFace().ordinal()) {
+        case 0:
+            break;
+        case 1:
+            renderer.setRotation(180, 0, 0, Vec3d.center);
+            break;
+        case 2:
+            renderer.setRotation(90, 0, 0, Vec3d.center);
+            break;
+        case 3:
+            renderer.setRotation(-90, 0, 0, Vec3d.center);
+            break;
+        case 4:
+            renderer.setRotation(0, 0, -90, Vec3d.center);
+            break;
+        case 5:
+            renderer.setRotation(0, 0, 90, Vec3d.center);
+            break;
         }
-        GL11.glPopMatrix();
+
+        // Render base
+        renderBase(renderer, pass);
+
+        // Color multiplier
+        int redMask = 0xFF0000, greenMask = 0xFF00, blueMask = 0xFF;
+        int r = (colorVal & redMask) >> 16;
+        int g = (colorVal & greenMask) >> 8;
+        int b = colorVal & blueMask;
+
+        renderLamp(renderer, pass, r, g, b);
+
         return true;
-        // return false;
     }
 
     @Override
@@ -273,10 +192,10 @@ public class PartLamp extends BPPartFace implements IPartLightEmitter {
      * Code to render the base portion of the lamp. Will not be colored
      *
      * @author Koen Beckers (K4Unl)
+     * @param renderer
      * @param pass
-     *            The pass that is rendered now. Pass 1 for solids. Pass 2 for transparents
      */
-    public void renderBase(int pass) {
+    public void renderBase(RenderHelper renderer, int pass) {
 
     }
 
@@ -284,6 +203,7 @@ public class PartLamp extends BPPartFace implements IPartLightEmitter {
      * Code to render the actual lamp portion of the lamp. Will be colored
      *
      * @author Koen Beckers (K4Unl)
+     * @param renderer The RenderHelper
      * @param pass
      *            The pass that is rendered now. Pass 1 for solids. Pass 2 for transparents
      * @param r
@@ -293,80 +213,8 @@ public class PartLamp extends BPPartFace implements IPartLightEmitter {
      * @param b
      *            The ammount of blue in the lamp
      */
-    public void renderLamp(int pass, int r, int g, int b) {
+    public void renderLamp(RenderHelper renderer, int pass, int r, int g, int b) {
 
-        Vec3dCube vector = new Vec3dCube(0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
-
-        if (pass == 0) {
-            Tessellator t = Tessellator.instance;
-            IIcon iconToUse;
-            if (power == 0) {
-                iconToUse = IconSupplier.lampOff;
-            } else {
-                iconToUse = IconSupplier.lampOn;
-
-                /*
-                 * t.setColorRGBA(r, g, b, 20); RenderHelper.drawTesselatedCube(new Vec3dCube(pixel * 4.5, pixel * 2, pixel * 4.5, 1.0 - (pixel*4.5),
-                 * 1.0 - (pixel * 4.5), 1.0 - pixel * 4.5)); t.setColorRGBA(r, g, b, 255);
-                 */
-            }
-
-            double minU = iconToUse.getMinU();
-            double maxU = iconToUse.getMaxU();
-            double minV = iconToUse.getMinV();
-            double maxV = iconToUse.getMaxV();
-
-            // Top side
-            t.setNormal(0, 1, 0);
-            t.addVertexWithUV(vector.getMinX(), vector.getMaxY(), vector.getMaxZ(), minU, maxV);
-            t.addVertexWithUV(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ(), minU, minV);
-            t.addVertexWithUV(vector.getMaxX(), vector.getMaxY(), vector.getMinZ(), maxU, minV);
-            t.addVertexWithUV(vector.getMinX(), vector.getMaxY(), vector.getMinZ(), maxU, maxV);
-
-            // Draw west side:
-            t.setNormal(-1, 0, 0);
-            t.addVertexWithUV(vector.getMinX(), vector.getMinY(), vector.getMaxZ(), minU, maxV);
-            t.addVertexWithUV(vector.getMinX(), vector.getMaxY(), vector.getMaxZ(), minU, minV);
-            t.addVertexWithUV(vector.getMinX(), vector.getMaxY(), vector.getMinZ(), maxU, minV);
-            t.addVertexWithUV(vector.getMinX(), vector.getMinY(), vector.getMinZ(), maxU, maxV);
-
-            // Draw east side:
-            t.setNormal(1, 0, 0);
-            t.addVertexWithUV(vector.getMaxX(), vector.getMinY(), vector.getMinZ(), minU, maxV);
-            t.addVertexWithUV(vector.getMaxX(), vector.getMaxY(), vector.getMinZ(), minU, minV);
-            t.addVertexWithUV(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ(), maxU, minV);
-            t.addVertexWithUV(vector.getMaxX(), vector.getMinY(), vector.getMaxZ(), maxU, maxV);
-
-            // Draw north side
-            t.setNormal(0, 0, -1);
-            t.addVertexWithUV(vector.getMinX(), vector.getMinY(), vector.getMinZ(), minU, maxV);
-            t.addVertexWithUV(vector.getMinX(), vector.getMaxY(), vector.getMinZ(), minU, minV);
-            t.addVertexWithUV(vector.getMaxX(), vector.getMaxY(), vector.getMinZ(), maxU, minV);
-            t.addVertexWithUV(vector.getMaxX(), vector.getMinY(), vector.getMinZ(), maxU, maxV);
-
-            // Draw south side
-            t.setNormal(0, 0, 1);
-            t.addVertexWithUV(vector.getMinX(), vector.getMinY(), vector.getMaxZ(), minU, maxV);
-            t.addVertexWithUV(vector.getMaxX(), vector.getMinY(), vector.getMaxZ(), maxU, maxV);
-            t.addVertexWithUV(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ(), maxU, minV);
-            t.addVertexWithUV(vector.getMinX(), vector.getMaxY(), vector.getMaxZ(), minU, minV);
-        }
-
-        if (power > 0 && pass == 1) {
-            GL11.glEnable(GL11.GL_BLEND);
-            GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
-            GL11.glDisable(GL11.GL_TEXTURE_2D);
-            GL11.glDisable(GL11.GL_LIGHTING);
-            GL11.glDepthMask(false);
-            GL11.glBegin(GL11.GL_QUADS);
-            // RenderHelper.drawColoredCube(vector.clone().expand(0.8 / 16D), r / 256D, g / 256D, b / 256D, power / 15D * 0.625);
-            GL11.glEnd();
-            GL11.glDepthMask(true);
-            GL11.glEnable(GL11.GL_LIGHTING);
-            GL11.glEnable(GL11.GL_TEXTURE_2D);
-            GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-            GL11.glDisable(GL11.GL_BLEND);
-        }
     }
 
     @Override
