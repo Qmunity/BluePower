@@ -32,6 +32,17 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import org.lwjgl.opengl.GL11;
 
+import uk.co.qmunity.lib.client.render.RenderHelper;
+import uk.co.qmunity.lib.part.IPartLightEmitter;
+import uk.co.qmunity.lib.part.IPartRedstone;
+import uk.co.qmunity.lib.part.IPartRenderPlacement;
+import uk.co.qmunity.lib.part.IPartTicking;
+import uk.co.qmunity.lib.raytrace.QMovingObjectPosition;
+import uk.co.qmunity.lib.util.Dir;
+import uk.co.qmunity.lib.vec.Vec3d;
+import uk.co.qmunity.lib.vec.Vec3dCube;
+import uk.co.qmunity.lib.vec.Vec3i;
+
 import com.bluepowermod.api.block.ISilkyRemovable;
 import com.bluepowermod.helper.VectorHelper;
 import com.bluepowermod.init.BPItems;
@@ -41,16 +52,6 @@ import com.bluepowermod.part.PartManager;
 import com.bluepowermod.part.RedstoneConnection;
 import com.bluepowermod.part.gate.ic.IntegratedCircuit;
 import com.bluepowermod.util.Refs;
-import com.qmunity.lib.client.render.RenderHelper;
-import com.qmunity.lib.part.IPartLightEmitter;
-import com.qmunity.lib.part.IPartRedstone;
-import com.qmunity.lib.part.IPartRenderPlacement;
-import com.qmunity.lib.part.IPartTicking;
-import com.qmunity.lib.raytrace.QMovingObjectPosition;
-import com.qmunity.lib.util.Dir;
-import com.qmunity.lib.vec.Vec3d;
-import com.qmunity.lib.vec.Vec3dCube;
-import com.qmunity.lib.vec.Vec3i;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;

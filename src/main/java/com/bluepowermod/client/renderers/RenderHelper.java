@@ -21,9 +21,10 @@ import net.minecraftforge.common.util.ForgeDirection;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 
+import uk.co.qmunity.lib.vec.Vec3dCube;
+
 import com.bluepowermod.part.gate.GateBase;
 import com.bluepowermod.util.Refs;
-import com.qmunity.lib.vec.Vec3dCube;
 
 public class RenderHelper {
 

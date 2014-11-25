@@ -11,6 +11,9 @@ import io.netty.buffer.ByteBuf;
 
 import java.util.List;
 
+import uk.co.qmunity.lib.part.IPart;
+import uk.co.qmunity.lib.part.ITilePartHolder;
+import uk.co.qmunity.lib.part.compat.MultipartCompatibility;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 
@@ -18,9 +21,6 @@ import com.bluepowermod.BluePower;
 import com.bluepowermod.part.IGuiButtonSensitive;
 import com.bluepowermod.part.gate.GateBase;
 import com.bluepowermod.part.gate.ic.IntegratedCircuit;
-import com.qmunity.lib.part.IPart;
-import com.qmunity.lib.part.ITilePartHolder;
-import com.qmunity.lib.part.compat.MultipartCompatibility;
 
 /**
  *

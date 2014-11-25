@@ -7,10 +7,10 @@
  */
 package com.bluepowermod.tileentities.tier1;
 
+import uk.co.qmunity.lib.helper.RedstoneHelper;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import com.bluepowermod.tileentities.TileBase;
-import com.qmunity.lib.helper.RedstoneHelper;
 
 /**
  * @author Koen Beckers (K4Unl) Yes. I only need this class to do the getPower() function.. damn :(

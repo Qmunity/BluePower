@@ -20,10 +20,11 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import org.lwjgl.opengl.GL11;
 
+import uk.co.qmunity.lib.vec.Vec3d;
+import uk.co.qmunity.lib.vec.Vec3dCube;
+
 import com.bluepowermod.blocks.machines.BlockLamp;
 import com.bluepowermod.tileentities.tier1.TileLamp;
-import com.qmunity.lib.vec.Vec3d;
-import com.qmunity.lib.vec.Vec3dCube;
 
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import cpw.mods.fml.client.registry.RenderingRegistry;

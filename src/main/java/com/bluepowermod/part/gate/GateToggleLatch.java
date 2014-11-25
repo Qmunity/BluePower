@@ -2,12 +2,12 @@ package com.bluepowermod.part.gate;
 
 import java.util.List;
 
+import uk.co.qmunity.lib.raytrace.QMovingObjectPosition;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
 import com.bluepowermod.client.renderers.RenderHelper;
 import com.bluepowermod.init.BPItems;
-import com.qmunity.lib.raytrace.QMovingObjectPosition;
 
 public class GateToggleLatch extends GateBase {
 

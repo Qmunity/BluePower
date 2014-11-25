@@ -21,6 +21,14 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import org.lwjgl.opengl.GL11;
 
+import uk.co.qmunity.lib.part.IPart;
+import uk.co.qmunity.lib.part.ITilePartHolder;
+import uk.co.qmunity.lib.part.PartRegistry;
+import uk.co.qmunity.lib.raytrace.QMovingObjectPosition;
+import uk.co.qmunity.lib.util.Dir;
+import uk.co.qmunity.lib.vec.Vec3d;
+import uk.co.qmunity.lib.vec.Vec3dCube;
+
 import com.bluepowermod.api.block.ISilkyRemovable;
 import com.bluepowermod.init.BPItems;
 import com.bluepowermod.part.BPPart;
@@ -29,13 +37,6 @@ import com.bluepowermod.part.RedstoneConnection;
 import com.bluepowermod.part.bluestone.WireBluestone;
 import com.bluepowermod.part.gate.GateBase;
 import com.bluepowermod.part.gate.GateWire;
-import com.qmunity.lib.part.IPart;
-import com.qmunity.lib.part.ITilePartHolder;
-import com.qmunity.lib.part.PartRegistry;
-import com.qmunity.lib.raytrace.QMovingObjectPosition;
-import com.qmunity.lib.util.Dir;
-import com.qmunity.lib.vec.Vec3d;
-import com.qmunity.lib.vec.Vec3dCube;
 
 public abstract class IntegratedCircuit extends GateBase implements ISilkyRemovable, ITilePartHolder {
 

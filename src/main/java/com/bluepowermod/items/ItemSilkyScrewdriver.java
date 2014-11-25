@@ -17,6 +17,11 @@
 
 package com.bluepowermod.items;
 
+import uk.co.qmunity.lib.part.IPart;
+import uk.co.qmunity.lib.part.ITilePartHolder;
+import uk.co.qmunity.lib.part.compat.MultipartCompatibility;
+import uk.co.qmunity.lib.raytrace.QMovingObjectPosition;
+import uk.co.qmunity.lib.vec.Vec3d;
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -31,11 +36,6 @@ import com.bluepowermod.api.block.IAdvancedSilkyRemovable;
 import com.bluepowermod.api.block.ISilkyRemovable;
 import com.bluepowermod.init.CustomTabs;
 import com.bluepowermod.util.Refs;
-import com.qmunity.lib.part.IPart;
-import com.qmunity.lib.part.ITilePartHolder;
-import com.qmunity.lib.part.compat.MultipartCompatibility;
-import com.qmunity.lib.raytrace.QMovingObjectPosition;
-import com.qmunity.lib.vec.Vec3d;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

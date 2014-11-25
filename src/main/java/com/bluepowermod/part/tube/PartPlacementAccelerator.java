@@ -1,14 +1,13 @@
 package com.bluepowermod.part.tube;
 
+import uk.co.qmunity.lib.misc.ForgeDirectionUtils;
+import uk.co.qmunity.lib.part.IPart;
+import uk.co.qmunity.lib.part.PartPlacementDefault;
+import uk.co.qmunity.lib.part.compat.IMultipartCompat;
+import uk.co.qmunity.lib.vec.Vec3i;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
-
-import com.qmunity.lib.misc.ForgeDirectionUtils;
-import com.qmunity.lib.part.IPart;
-import com.qmunity.lib.part.PartPlacementDefault;
-import com.qmunity.lib.part.compat.IMultipartCompat;
-import com.qmunity.lib.vec.Vec3i;
 
 public class PartPlacementAccelerator extends PartPlacementDefault {
 

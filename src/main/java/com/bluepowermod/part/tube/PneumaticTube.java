@@ -10,6 +10,13 @@ package com.bluepowermod.part.tube;
 import java.util.ArrayList;
 import java.util.List;
 
+import uk.co.qmunity.lib.client.render.RenderHelper;
+import uk.co.qmunity.lib.part.IPartTicking;
+import uk.co.qmunity.lib.part.compat.MultipartCompatibility;
+import uk.co.qmunity.lib.raytrace.QMovingObjectPosition;
+import uk.co.qmunity.lib.vec.Vec3d;
+import uk.co.qmunity.lib.vec.Vec3dCube;
+import uk.co.qmunity.lib.vec.Vec3i;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
@@ -38,13 +45,6 @@ import com.bluepowermod.init.Config;
 import com.bluepowermod.items.ItemDamageableColorableOverlay;
 import com.bluepowermod.part.BPPart;
 import com.bluepowermod.util.Color;
-import com.qmunity.lib.client.render.RenderHelper;
-import com.qmunity.lib.part.IPartTicking;
-import com.qmunity.lib.part.compat.MultipartCompatibility;
-import com.qmunity.lib.raytrace.QMovingObjectPosition;
-import com.qmunity.lib.vec.Vec3d;
-import com.qmunity.lib.vec.Vec3dCube;
-import com.qmunity.lib.vec.Vec3i;
 
 /**
  *

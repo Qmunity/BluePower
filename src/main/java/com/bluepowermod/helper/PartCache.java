@@ -1,9 +1,8 @@
 package com.bluepowermod.helper;
 
+import uk.co.qmunity.lib.part.IPart;
+import uk.co.qmunity.lib.part.compat.MultipartCompatibility;
 import net.minecraft.world.World;
-
-import com.qmunity.lib.part.IPart;
-import com.qmunity.lib.part.compat.MultipartCompatibility;
 
 public class PartCache<CachedPart extends IPart> extends LocationCache<CachedPart> {
     public <T> PartCache(World world, int x, int y, int z, Class<? extends IPart> searchedParts) {

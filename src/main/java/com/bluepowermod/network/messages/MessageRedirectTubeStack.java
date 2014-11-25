@@ -1,12 +1,12 @@
 package com.bluepowermod.network.messages;
 
+import uk.co.qmunity.lib.part.compat.MultipartCompatibility;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 
 import com.bluepowermod.part.tube.PneumaticTube;
 import com.bluepowermod.part.tube.TubeLogic;
 import com.bluepowermod.part.tube.TubeStack;
-import com.qmunity.lib.part.compat.MultipartCompatibility;
 
 public class MessageRedirectTubeStack extends LocationIntPacket<MessageRedirectTubeStack> {
     private TubeStack stack;

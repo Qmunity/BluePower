@@ -24,14 +24,15 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import org.lwjgl.opengl.GL11;
 
+import uk.co.qmunity.lib.part.IPart;
+import uk.co.qmunity.lib.part.IPartCustomPlacement;
+import uk.co.qmunity.lib.part.IPartPlacement;
+import uk.co.qmunity.lib.part.compat.MultipartCompatibility;
+import uk.co.qmunity.lib.vec.Vec3d;
+import uk.co.qmunity.lib.vec.Vec3dCube;
+import uk.co.qmunity.lib.vec.Vec3i;
+
 import com.bluepowermod.client.renderers.IconSupplier;
-import com.qmunity.lib.part.IPart;
-import com.qmunity.lib.part.IPartCustomPlacement;
-import com.qmunity.lib.part.IPartPlacement;
-import com.qmunity.lib.part.compat.MultipartCompatibility;
-import com.qmunity.lib.vec.Vec3d;
-import com.qmunity.lib.vec.Vec3dCube;
-import com.qmunity.lib.vec.Vec3i;
 
 /**
  * Accelerator extends PneumaticTube, as that's much easier routing wise.

@@ -1,12 +1,11 @@
 package com.bluepowermod.part;
 
+import uk.co.qmunity.lib.helper.RedstoneHelper;
+import uk.co.qmunity.lib.part.IPart;
+import uk.co.qmunity.lib.part.IPartFace;
+import uk.co.qmunity.lib.util.Dir;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
-
-import com.qmunity.lib.helper.RedstoneHelper;
-import com.qmunity.lib.part.IPart;
-import com.qmunity.lib.part.IPartFace;
-import com.qmunity.lib.util.Dir;
 
 public class RedstoneConnection {
 

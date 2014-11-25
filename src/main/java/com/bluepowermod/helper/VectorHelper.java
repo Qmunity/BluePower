@@ -2,10 +2,9 @@ package com.bluepowermod.helper;
 
 import java.util.List;
 
+import uk.co.qmunity.lib.vec.Vec3d;
+import uk.co.qmunity.lib.vec.Vec3dCube;
 import net.minecraftforge.common.util.ForgeDirection;
-
-import com.qmunity.lib.vec.Vec3d;
-import com.qmunity.lib.vec.Vec3dCube;
 
 public class VectorHelper {
 

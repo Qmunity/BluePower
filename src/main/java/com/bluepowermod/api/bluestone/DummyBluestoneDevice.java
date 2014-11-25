@@ -3,13 +3,13 @@ package com.bluepowermod.api.bluestone;
 import java.util.ArrayList;
 import java.util.List;
 
+import uk.co.qmunity.lib.helper.RedstoneHelper;
+import uk.co.qmunity.lib.part.IPartFace;
+import uk.co.qmunity.lib.vec.Vec3i;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import com.bluepowermod.api.BPApi;
-import com.qmunity.lib.helper.RedstoneHelper;
-import com.qmunity.lib.part.IPartFace;
-import com.qmunity.lib.vec.Vec3i;
 
 public class DummyBluestoneDevice implements IBluestoneDevice {
 

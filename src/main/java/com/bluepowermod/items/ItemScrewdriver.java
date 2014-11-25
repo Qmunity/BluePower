@@ -17,6 +17,12 @@
 
 package com.bluepowermod.items;
 
+import uk.co.qmunity.lib.part.IPart;
+import uk.co.qmunity.lib.part.ITilePartHolder;
+import uk.co.qmunity.lib.part.compat.MultipartCompatibility;
+import uk.co.qmunity.lib.raytrace.QMovingObjectPosition;
+import uk.co.qmunity.lib.raytrace.RayTracer;
+import uk.co.qmunity.lib.vec.Vec3i;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumAction;
@@ -29,12 +35,6 @@ import com.bluepowermod.init.CustomTabs;
 import com.bluepowermod.part.BPPartFaceRotate;
 import com.bluepowermod.references.GuiIDs;
 import com.bluepowermod.util.Refs;
-import com.qmunity.lib.part.IPart;
-import com.qmunity.lib.part.ITilePartHolder;
-import com.qmunity.lib.part.compat.MultipartCompatibility;
-import com.qmunity.lib.raytrace.QMovingObjectPosition;
-import com.qmunity.lib.raytrace.RayTracer;
-import com.qmunity.lib.vec.Vec3i;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

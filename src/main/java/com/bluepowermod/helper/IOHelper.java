@@ -7,6 +7,7 @@
  */
 package com.bluepowermod.helper;
 
+import uk.co.qmunity.lib.part.compat.MultipartCompatibility;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockChest;
 import net.minecraft.entity.item.EntityItem;
@@ -23,7 +24,6 @@ import com.bluepowermod.api.tube.ITubeConnection;
 import com.bluepowermod.part.tube.PneumaticTube;
 import com.bluepowermod.part.tube.TubeLogic;
 import com.bluepowermod.part.tube.TubeStack;
-import com.qmunity.lib.part.compat.MultipartCompatibility;
 
 /**
  * @author MineMaarten

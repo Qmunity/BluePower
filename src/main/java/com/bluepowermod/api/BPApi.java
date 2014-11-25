@@ -7,12 +7,12 @@
  */
 package com.bluepowermod.api;
 
+import uk.co.qmunity.lib.part.IPart;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 import com.bluepowermod.api.bluestone.IBluestoneApi;
 import com.bluepowermod.api.recipe.IAlloyFurnaceRegistry;
-import com.qmunity.lib.part.IPart;
 
 import cpw.mods.fml.common.Loader;
 

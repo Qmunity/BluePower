@@ -16,8 +16,9 @@ import net.minecraft.util.IIcon;
 
 import org.lwjgl.opengl.GL11;
 
+import uk.co.qmunity.lib.vec.Vec3dCube;
+
 import com.bluepowermod.client.renderers.IconSupplier;
-import com.qmunity.lib.vec.Vec3dCube;
 
 /**
  * @author MineMaarten

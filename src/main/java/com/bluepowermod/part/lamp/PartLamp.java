@@ -9,12 +9,7 @@ package com.bluepowermod.part.lamp;
 
 import com.bluepowermod.client.renderers.IconSupplier;
 import com.bluepowermod.part.BPPartFace;
-import com.qmunity.lib.client.render.RenderHelper;
-import com.qmunity.lib.helper.RedstoneHelper;
-import com.qmunity.lib.part.IPartLightEmitter;
-import com.qmunity.lib.vec.Vec3d;
-import com.qmunity.lib.vec.Vec3dCube;
-import com.qmunity.lib.vec.Vec3i;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
@@ -25,7 +20,15 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 import net.minecraftforge.common.util.ForgeDirection;
+
 import org.lwjgl.opengl.GL11;
+
+import uk.co.qmunity.lib.client.render.RenderHelper;
+import uk.co.qmunity.lib.helper.RedstoneHelper;
+import uk.co.qmunity.lib.part.IPartLightEmitter;
+import uk.co.qmunity.lib.vec.Vec3d;
+import uk.co.qmunity.lib.vec.Vec3dCube;
+import uk.co.qmunity.lib.vec.Vec3i;
 
 import java.util.Arrays;
 import java.util.List;

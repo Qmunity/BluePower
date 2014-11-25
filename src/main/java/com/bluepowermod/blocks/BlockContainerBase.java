@@ -20,6 +20,7 @@ package com.bluepowermod.blocks;
 import java.util.HashMap;
 import java.util.Map;
 
+import uk.co.qmunity.lib.misc.ForgeDirectionUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
@@ -46,7 +47,6 @@ import com.bluepowermod.tileentities.IEjectAnimator;
 import com.bluepowermod.tileentities.IRotatable;
 import com.bluepowermod.tileentities.TileBase;
 import com.bluepowermod.util.Refs;
-import com.qmunity.lib.misc.ForgeDirectionUtils;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

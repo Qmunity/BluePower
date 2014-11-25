@@ -1,5 +1,11 @@
 package com.bluepowermod.part;
 
+import uk.co.qmunity.lib.part.IPart;
+import uk.co.qmunity.lib.part.IPartCustomPlacement;
+import uk.co.qmunity.lib.part.IPartFace;
+import uk.co.qmunity.lib.part.IPartPlacement;
+import uk.co.qmunity.lib.part.PartPlacementFace;
+import uk.co.qmunity.lib.vec.Vec3i;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MovingObjectPosition;
@@ -7,12 +13,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import com.bluepowermod.api.misc.IFace;
-import com.qmunity.lib.part.IPart;
-import com.qmunity.lib.part.IPartCustomPlacement;
-import com.qmunity.lib.part.IPartFace;
-import com.qmunity.lib.part.IPartPlacement;
-import com.qmunity.lib.part.PartPlacementFace;
-import com.qmunity.lib.vec.Vec3i;
 
 public abstract class BPPartFace extends BPPart implements IPartFace, IFace, IPartCustomPlacement {
 

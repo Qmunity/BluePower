@@ -9,10 +9,9 @@ package com.bluepowermod.util;
 
 import java.util.Comparator;
 
+import uk.co.qmunity.lib.vec.Vec3d;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
-
-import com.qmunity.lib.vec.Vec3d;
 
 public class ComparatorMOP implements Comparator<MovingObjectPosition> {
 

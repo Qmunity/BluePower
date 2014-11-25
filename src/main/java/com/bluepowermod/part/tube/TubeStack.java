@@ -23,10 +23,11 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import org.lwjgl.opengl.GL11;
 
+import uk.co.qmunity.lib.vec.Vec3dCube;
+
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
 import com.bluepowermod.client.renderers.RenderHelper;
 import com.bluepowermod.util.Refs;
-import com.qmunity.lib.vec.Vec3dCube;
 
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.network.ByteBufUtils;

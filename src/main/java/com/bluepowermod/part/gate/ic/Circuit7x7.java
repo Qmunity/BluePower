@@ -7,9 +7,9 @@
  */
 package com.bluepowermod.part.gate.ic;
 
-import com.qmunity.lib.part.IPart;
-
 import java.util.Map;
+
+import uk.co.qmunity.lib.part.IPart;
 
 public class Circuit7x7 extends IntegratedCircuit {
     

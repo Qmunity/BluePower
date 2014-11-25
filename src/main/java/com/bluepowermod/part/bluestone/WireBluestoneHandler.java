@@ -1,15 +1,15 @@
 package com.bluepowermod.part.bluestone;
 
+import uk.co.qmunity.lib.helper.RedstoneHelper;
+import uk.co.qmunity.lib.part.compat.IMultipartCompat;
+import uk.co.qmunity.lib.part.compat.MultipartSystem;
+import uk.co.qmunity.lib.vec.Vec3i;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import com.bluepowermod.api.bluestone.BluestoneColor;
 import com.bluepowermod.api.bluestone.DefaultBluestoneHandler;
 import com.bluepowermod.api.bluestone.DummyBluestoneDevice;
 import com.bluepowermod.api.bluestone.IBluestoneHandler;
-import com.qmunity.lib.helper.RedstoneHelper;
-import com.qmunity.lib.part.compat.IMultipartCompat;
-import com.qmunity.lib.part.compat.MultipartSystem;
-import com.qmunity.lib.vec.Vec3i;
 
 public class WireBluestoneHandler extends DefaultBluestoneHandler {
 

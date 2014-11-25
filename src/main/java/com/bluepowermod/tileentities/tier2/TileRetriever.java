@@ -7,6 +7,7 @@
  */
 package com.bluepowermod.tileentities.tier2;
 
+import uk.co.qmunity.lib.part.compat.MultipartCompatibility;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -15,7 +16,6 @@ import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.part.tube.PneumaticTube;
 import com.bluepowermod.tileentities.IFuzzyRetrieving;
 import com.bluepowermod.tileentities.tier1.TileFilter;
-import com.qmunity.lib.part.compat.MultipartCompatibility;
 
 /**
  * @author MineMaarten

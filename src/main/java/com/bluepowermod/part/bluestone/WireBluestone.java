@@ -4,6 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
 
+import uk.co.qmunity.lib.client.render.RenderHelper;
+import uk.co.qmunity.lib.helper.RedstoneHelper;
+import uk.co.qmunity.lib.part.IPartRedstone;
+import uk.co.qmunity.lib.vec.Vec3dCube;
+import uk.co.qmunity.lib.vec.Vec3i;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
@@ -17,11 +22,6 @@ import com.bluepowermod.api.bluestone.IBluestoneHandler;
 import com.bluepowermod.client.renderers.IconSupplier;
 import com.bluepowermod.helper.VectorHelper;
 import com.bluepowermod.part.BPPartFace;
-import com.qmunity.lib.client.render.RenderHelper;
-import com.qmunity.lib.helper.RedstoneHelper;
-import com.qmunity.lib.part.IPartRedstone;
-import com.qmunity.lib.vec.Vec3dCube;
-import com.qmunity.lib.vec.Vec3i;
 
 public class WireBluestone extends BPPartFace implements IBluestoneDevice, IPartRedstone {
 

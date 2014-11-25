@@ -2,6 +2,7 @@ package com.bluepowermod.items;
 
 import java.util.List;
 
+import uk.co.qmunity.lib.item.ItemMultipart;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -16,7 +17,6 @@ import com.bluepowermod.part.BPPart;
 import com.bluepowermod.part.PartInfo;
 import com.bluepowermod.part.PartManager;
 import com.bluepowermod.util.Refs;
-import com.qmunity.lib.item.ItemMultipart;
 
 public class ItemPart extends ItemMultipart implements IDatabaseSaveable {
 

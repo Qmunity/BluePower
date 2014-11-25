@@ -2,7 +2,7 @@ package com.bluepowermod.part.gate;
 
 import java.util.List;
 
-import com.qmunity.lib.util.Dir;
+import uk.co.qmunity.lib.util.Dir;
 
 public class GateWire extends GateBase {
 

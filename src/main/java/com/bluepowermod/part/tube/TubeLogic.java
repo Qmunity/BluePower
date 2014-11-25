@@ -29,6 +29,9 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.lwjgl.opengl.GL11;
 
+import uk.co.qmunity.lib.part.compat.MultipartCompatibility;
+import uk.co.qmunity.lib.vec.Vec3d;
+
 import com.bluepowermod.api.tube.IPneumaticTube;
 import com.bluepowermod.api.tube.ITubeConnection;
 import com.bluepowermod.api.tube.IWeightedTubeInventory;
@@ -38,8 +41,6 @@ import com.bluepowermod.network.NetworkHandler;
 import com.bluepowermod.network.messages.MessageRedirectTubeStack;
 import com.bluepowermod.tileentities.IFuzzyRetrieving;
 import com.bluepowermod.tileentities.tier3.TileManager;
-import com.qmunity.lib.part.compat.MultipartCompatibility;
-import com.qmunity.lib.vec.Vec3d;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

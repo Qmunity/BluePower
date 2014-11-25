@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import uk.co.qmunity.lib.part.PartRegistry;
 import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -51,7 +52,6 @@ import com.bluepowermod.part.tube.PneumaticTube;
 import com.bluepowermod.part.tube.PneumaticTubeOpaque;
 import com.bluepowermod.part.tube.RestrictionTube;
 import com.bluepowermod.part.tube.RestrictionTubeOpaque;
-import com.qmunity.lib.part.PartRegistry;
 
 public class PartManager {
 

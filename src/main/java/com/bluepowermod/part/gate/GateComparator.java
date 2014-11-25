@@ -9,10 +9,9 @@ package com.bluepowermod.part.gate;
 
 import java.util.List;
 
+import uk.co.qmunity.lib.vec.Vec3i;
 import net.minecraft.block.Block;
 import net.minecraftforge.common.util.ForgeDirection;
-
-import com.qmunity.lib.vec.Vec3i;
 
 public class GateComparator extends GateBase {
 

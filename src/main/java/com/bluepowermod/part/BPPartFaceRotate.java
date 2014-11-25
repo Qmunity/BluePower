@@ -1,14 +1,13 @@
 package com.bluepowermod.part;
 
+import uk.co.qmunity.lib.part.IPart;
+import uk.co.qmunity.lib.part.IPartPlacement;
+import uk.co.qmunity.lib.vec.Vec3i;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
-
-import com.qmunity.lib.part.IPart;
-import com.qmunity.lib.part.IPartPlacement;
-import com.qmunity.lib.vec.Vec3i;
 
 public abstract class BPPartFaceRotate extends BPPartFace {
 

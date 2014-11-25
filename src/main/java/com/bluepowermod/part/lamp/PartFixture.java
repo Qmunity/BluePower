@@ -8,10 +8,13 @@
 package com.bluepowermod.part.lamp;
 
 import com.bluepowermod.client.renderers.IconSupplier;
-import com.qmunity.lib.vec.Vec3dCube;
+
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.IIcon;
+
 import org.lwjgl.opengl.GL11;
+
+import uk.co.qmunity.lib.vec.Vec3dCube;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,7 +61,7 @@ public class PartFixture extends PartLamp {
      * @author Koen Beckers (K4Unl), Amadornes
      */
     @Override
-    public void renderBase(com.qmunity.lib.client.render.RenderHelper renderer, int pass) {
+    public void renderBase(uk.co.qmunity.lib.client.render.RenderHelper renderer, int pass) {
 
         if (pass != 0)
             return;
@@ -74,7 +77,7 @@ public class PartFixture extends PartLamp {
     }
 
     @Override
-    public void renderLamp(com.qmunity.lib.client.render.RenderHelper renderer, int pass, int r, int g, int b) {
+    public void renderLamp(uk.co.qmunity.lib.client.render.RenderHelper renderer, int pass, int r, int g, int b) {
 
         Vec3dCube vector = new Vec3dCube(3 / 16D, 2 / 16D, 3 / 16D, 1.0 - (3 / 16D), 8 / 16D, 13 / 16D);
 

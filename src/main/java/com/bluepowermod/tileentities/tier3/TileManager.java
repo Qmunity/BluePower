@@ -9,6 +9,7 @@ package com.bluepowermod.tileentities.tier3;
 
 import java.util.List;
 
+import uk.co.qmunity.lib.part.compat.MultipartCompatibility;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
@@ -26,7 +27,6 @@ import com.bluepowermod.part.tube.TubeStack;
 import com.bluepowermod.tileentities.IFuzzyRetrieving;
 import com.bluepowermod.tileentities.IRejectAnimator;
 import com.bluepowermod.tileentities.TileMachineBase;
-import com.qmunity.lib.part.compat.MultipartCompatibility;
 
 /**
  * @author MineMaarten

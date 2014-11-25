@@ -1,5 +1,10 @@
 package com.bluepowermod.part.bluestone;
 
+import uk.co.qmunity.lib.part.IPart;
+import uk.co.qmunity.lib.part.IPartFace;
+import uk.co.qmunity.lib.part.ITilePartHolder;
+import uk.co.qmunity.lib.part.compat.MultipartCompatibility;
+import uk.co.qmunity.lib.vec.Vec3i;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -10,11 +15,6 @@ import com.bluepowermod.api.bluestone.DummyBluestoneDevice;
 import com.bluepowermod.api.bluestone.IBluestoneApi;
 import com.bluepowermod.api.bluestone.IBluestoneDevice;
 import com.bluepowermod.api.bluestone.IBluestoneHandler;
-import com.qmunity.lib.part.IPart;
-import com.qmunity.lib.part.IPartFace;
-import com.qmunity.lib.part.ITilePartHolder;
-import com.qmunity.lib.part.compat.MultipartCompatibility;
-import com.qmunity.lib.vec.Vec3i;
 
 public class BluestoneApi implements IBluestoneApi {
 

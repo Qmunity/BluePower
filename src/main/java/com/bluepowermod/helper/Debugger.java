@@ -9,12 +9,12 @@ package com.bluepowermod.helper;
 
 import java.util.Random;
 
+import uk.co.qmunity.lib.part.IPart;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
 import com.bluepowermod.network.NetworkHandler;
 import com.bluepowermod.network.messages.MessageDebugBlock;
-import com.qmunity.lib.part.IPart;
 
 /**
  * Class aimed for debugging purposes only

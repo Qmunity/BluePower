@@ -8,11 +8,14 @@
 package com.bluepowermod.part.lamp;
 
 import com.bluepowermod.client.renderers.IconSupplier;
-import com.qmunity.lib.client.render.RenderHelper;
-import com.qmunity.lib.vec.Vec3dCube;
+
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.IIcon;
+
 import org.lwjgl.opengl.GL11;
+
+import uk.co.qmunity.lib.client.render.RenderHelper;
+import uk.co.qmunity.lib.vec.Vec3dCube;
 
 import java.util.ArrayList;
 import java.util.List;
