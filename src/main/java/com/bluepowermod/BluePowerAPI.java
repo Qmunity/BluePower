@@ -7,16 +7,16 @@
  */
 package com.bluepowermod;
 
-import uk.co.qmunity.lib.part.IPart;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import uk.co.qmunity.lib.part.IPart;
 
 import com.bluepowermod.api.BPApi.IBPApi;
-import com.bluepowermod.api.bluestone.IBluestoneApi;
 import com.bluepowermod.api.recipe.IAlloyFurnaceRegistry;
-import com.bluepowermod.part.bluestone.BluestoneApi;
+import com.bluepowermod.api.redstone.IRedstoneApi;
+import com.bluepowermod.part.wire.RedstoneApi;
 import com.bluepowermod.recipe.AlloyFurnaceRegistry;
 
 public class BluePowerAPI implements IBPApi {
@@ -69,9 +69,9 @@ public class BluePowerAPI implements IBPApi {
     }
 
     @Override
-    public IBluestoneApi getBluestoneApi() {
+    public IRedstoneApi getRedstoneApi() {
 
-        return BluestoneApi.getInstance();
+        return RedstoneApi.getInstance();
     }
 
 }

@@ -12,12 +12,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import uk.co.qmunity.lib.part.PartRegistry;
 import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import uk.co.qmunity.lib.part.PartRegistry;
 
-import com.bluepowermod.part.bluestone.WireBluestone;
 import com.bluepowermod.part.gate.GateAnd;
 import com.bluepowermod.part.gate.GateBuffer;
 import com.bluepowermod.part.gate.GateComparator;
@@ -168,7 +167,7 @@ public class PartManager {
         registerPart(Accelerator.class);
 
         // Bluestone
-        registerPart(WireBluestone.class);
+        // registerPart(WireBluestone.class);
         // registerPart(GateWirelessTransceiver.class);
 
         // for (int bundled = 0; bundled < 2; bundled++) {
