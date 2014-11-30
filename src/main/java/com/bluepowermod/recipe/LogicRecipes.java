@@ -17,13 +17,10 @@
 
 package com.bluepowermod.recipe;
 
-import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.init.BPItems;
-import com.bluepowermod.part.PartRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 
@@ -35,8 +32,8 @@ public class LogicRecipes {
     public static void init() {
 
         // Components
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.stone_wire, 1), "#", "W", '#', "dustTeslatite", 'W', BPItems.stone_tile));
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.stone_anode, 3), " # ", "###", "WWW", '#', "dustTeslatite", 'W',
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.stone_wire, 1), "#", "W", '#', "dustInfusedteslatite", 'W', BPItems.stone_tile));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.stone_anode, 3), " # ", "###", "WWW", '#', "dustInfusedteslatite", 'W',
                 BPItems.stone_tile));
         GameRegistry.addRecipe(new ItemStack(BPItems.stone_cathode, 1), "#", "W", '#', Blocks.redstone_torch, 'W', BPItems.stone_tile);
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.stone_pointer, 1), "S", "#", "W", 'S', "stone", '#', Blocks.redstone_torch,
@@ -45,25 +42,31 @@ public class LogicRecipes {
         // GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.plate_assembly, 1), " # ", "SRS", "#C#", '#', BPItems.stone_tile, 'S',
         // "stickWood", 'R', BPItems.red_alloy_ingot, 'C', BPItems.stone_cathode));
         GameRegistry.addShapelessRecipe(new ItemStack(BPItems.taintedsilicon_chip, 1), BPItems.silicon_chip, Items.glowstone_dust);
+        GameRegistry.addShapelessRecipe(new ItemStack(BPItems.infused_teslatite_dust, 2), BPItems.teslatite_dust, Items.redstone);
         // TODO: stone_redwire recipe and stone_bundle recipe
 
         // Wires
-        GameRegistry.addRecipe(new ShapedOreRecipe(PartRegistry.getInstance().getItemForPart("bluestoneWire", 12), "iii", 'i', "ingotBlueAlloy"));
-        GameRegistry.addRecipe(new ShapedOreRecipe(PartRegistry.getInstance().getItemForPart("bluestoneWire", 12), "i", "i", "i", 'i', "ingotBlueAlloy"));
+        //TODO: Add Part recipes
+        /*
+        GameRegistry.addRecipe(new ShapedOreRecipe(PartRegistry.getInstance().getItemForPart("bluestoneWire", 12), "iii", 'i', "ingotRedAlloy"));
+        GameRegistry.addRecipe(new ShapedOreRecipe(PartRegistry.getInstance().getItemForPart("bluestoneWire", 12), "i", "i", "i", 'i', "ingotRedAlloy"));
+        */
         // Insulated wire
+        /*
         {
             int i = 15;
             for (String s : ItemDye.field_150921_b) {
                 GameRegistry.addRecipe(new ShapedOreRecipe(PartRegistry.getInstance().getItemForPart("bluestoneWire." + s, 12), "www", "iii", "www",
-                        'i', "ingotBlueAlloy", 'w', new ItemStack(Blocks.wool, 1, i)));
+                        'i', "ingotRedAlloy", 'w', new ItemStack(Blocks.wool, 1, i)));
                 GameRegistry.addRecipe(new ShapedOreRecipe(PartRegistry.getInstance().getItemForPart("bluestoneWire." + s, 12), "wiw", "wiw", "wiw",
-                        'i', "ingotBlueAlloy", 'w', new ItemStack(Blocks.wool, 1, i)));
+                        'i', "ingotRedAlloy", 'w', new ItemStack(Blocks.wool, 1, i)));
                 i--;
             }
         }
         // Bundled wire
         GameRegistry.addRecipe(new ShapedOreRecipe(PartRegistry.getInstance().getItemForPart("bluestoneWire.bundled", 2), "sws", "www", "sws",
                     'w', "bluestoneInsulated", 's', new ItemStack(Items.string, 1)));
+
 
         // Blocks
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPBlocks.circuit_table), "WIW", "WCW", "WPW", 'W', "plankWood", 'I', PartRegistry
@@ -128,5 +131,7 @@ public class LogicRecipes {
                 .getItemForPart("integratedCircuit5x5"));
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPBlocks.circuit_database, 1), "#C#", "BTB", "###", '#', "ingotIron", 'C',
                 PartRegistry.getInstance().getItemForPart("integratedCircuit7x7"), 'B', Blocks.bookshelf, 'T', BPBlocks.circuit_table));
+
+                */
     }
 }

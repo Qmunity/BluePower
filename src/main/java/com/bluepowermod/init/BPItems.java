@@ -64,8 +64,9 @@ public class BPItems {
     public static final Item zinc_ingot = new ItemCrafting(Refs.ZINCINGOT_NAME);
     public static final Item brass_ingot = new ItemCrafting(Refs.BRASSINGOT_NAME);
     public static final Item blue_alloy_ingot = new ItemCrafting(Refs.BLUEALLOYINGOT_NAME);
-    // public static final Item red_alloy_ingot = new ItemCrafting(Refs.REDALLOYINGOT_NAME);
+    public static final Item red_alloy_ingot = new ItemCrafting(Refs.REDALLOYINGOT_NAME);
     public static final Item tungsten_ingot = new ItemCrafting(Refs.TUNGSTENINGOT_NAME);
+    public static final Item tungsten_nugget = new ItemCrafting(Refs.TUNGSTENNUGGET_NAME);
     public static final Item zinc_ore_crushed = new ItemBase().setUnlocalizedName(Refs.ZINC_ORE_CRUSHED_NAME)
             .setTextureName(Refs.MODID + ":" + Refs.ZINC_ORE_CRUSHED_NAME).setCreativeTab(CustomTabs.tabBluePowerItems);
     public static final Item zinc_ore_purified = new ItemBase().setUnlocalizedName(Refs.ZINC_ORE_CRUSHED_PURIFIED_NAME)
@@ -88,6 +89,7 @@ public class BPItems {
     public static final Item silicon_wafer = new ItemCrafting(Refs.SILICONWAFER_NAME).setCreativeTab(CustomTabs.tabBluePowerItems);
     public static final Item red_doped_wafer = new ItemCrafting(Refs.REDDOPEDWAFER_NAME).setCreativeTab(CustomTabs.tabBluePowerItems);
     public static final Item blue_doped_wafer = new ItemCrafting(Refs.BLUEDOPEDWAFER_NAME).setCreativeTab(CustomTabs.tabBluePowerItems);
+    public static final Item infused_teslatite_dust = new ItemCrafting(Refs.INFUSEDTESLATITEDUST_NAME);
     public static final Item screwdriver = new ItemScrewdriver();
     public static final Item silky_screwdriver = new ItemSilkyScrewdriver();
     public static final Item athame = new ItemAthame();
@@ -158,12 +160,13 @@ public class BPItems {
         GameRegistry.registerItem(tungsten_ingot, Refs.TUNGSTENINGOT_NAME);
         GameRegistry.registerItem(brass_ingot, Refs.BRASSINGOT_NAME);
         GameRegistry.registerItem(blue_alloy_ingot, Refs.BLUEALLOYINGOT_NAME);
-        // GameRegistry.registerItem(red_alloy_ingot, Refs.REDALLOYINGOT_NAME);
+        GameRegistry.registerItem(red_alloy_ingot, Refs.REDALLOYINGOT_NAME);
 
         GameRegistry.registerItem(zinc_dust, Refs.ZINCDUST_NAME);
         GameRegistry.registerItem(zinc_ore_crushed, Refs.ZINC_ORE_CRUSHED_NAME);
         GameRegistry.registerItem(zinc_ore_purified, Refs.ZINC_ORE_CRUSHED_PURIFIED_NAME);
         GameRegistry.registerItem(zinc_tiny_dust, Refs.ZINCDUST_TINY_NAME);
+        GameRegistry.registerItem(tungsten_nugget, Refs.TUNGSTENNUGGET_NAME);
 
         GameRegistry.registerItem(ruby_axe, Refs.RUBYAXE_NAME);
         GameRegistry.registerItem(ruby_sword, Refs.RUBYSWORD_NAME);
@@ -210,6 +213,7 @@ public class BPItems {
         GameRegistry.registerItem(silky_screwdriver, Refs.SILKYSCREWDRIVER_NAME);
         GameRegistry.registerItem(athame, Refs.ATHAME_NAME);
         GameRegistry.registerItem(zincplate, Refs.ZINCPLATE_NAME);
+        GameRegistry.registerItem(infused_teslatite_dust, Refs.INFUSEDTESLATITEDUST_NAME);
 
         GameRegistry.registerItem(stone_tile, Refs.STONETILE_NAME);
         GameRegistry.registerItem(stone_wire, Refs.STONEWIRE_NAME);

@@ -39,8 +39,8 @@ public class Recipes {
 
         // Alloy furnace
         IAlloyFurnaceRegistry af = BPApi.getInstance().getAlloyFurnaceRegistry();
-        // af.addRecipe(new ItemStack(BPItems.red_alloy_ingot, 1), new ItemStack(Items.redstone, 4), Items.iron_ingot);
-        // af.addRecipe(new ItemStack(BPItems.red_alloy_ingot, 1), new ItemStack(Items.redstone, 4), BPItems.copper_ingot);
+        af.addRecipe(new ItemStack(BPItems.red_alloy_ingot, 1), new ItemStack(BPItems.infused_teslatite_dust, 4), Items.iron_ingot);
+        af.addRecipe(new ItemStack(BPItems.red_alloy_ingot, 1), new ItemStack(BPItems.infused_teslatite_dust, 4), BPItems.copper_ingot);
         af.addRecipe(new ItemStack(BPItems.brass_ingot, 4), new ItemStack(BPItems.copper_ingot, 3), BPItems.zinc_ingot);
         af.addRecipe(new ItemStack(BPItems.blue_alloy_ingot, 1), new ItemStack(BPItems.teslatite_dust, 4), BPItems.silver_ingot);
         af.addRecipe(new ItemStack(BPItems.silicon_boule, 1), new ItemStack(Items.coal, 8), new ItemStack(Blocks.sand, 8));

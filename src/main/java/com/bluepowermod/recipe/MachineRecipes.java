@@ -19,7 +19,6 @@ package com.bluepowermod.recipe;
 
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.init.BPItems;
-import com.bluepowermod.part.PartRegistry;
 import com.bluepowermod.util.Refs;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.init.Blocks;
@@ -37,10 +36,11 @@ public class MachineRecipes {
     public static void init() {
 
         // Components
-        GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(BPItems.copper_wire, 1), BPItems.diamond_drawplate, "ingotCopper"));
-        GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(BPItems.iron_wire, 1), BPItems.diamond_drawplate, "ingotIron"));
+        GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(BPItems.copper_wire, 1), new ItemStack(BPItems.diamond_drawplate, 1, OreDictionary.WILDCARD_VALUE), "ingotCopper"));
 
         // Tubes and Transport
+        //TODO: Add Part recipes
+        /*
         GameRegistry.addRecipe(new ShapedOreRecipe(PartRegistry.getInstance().getItemForPart("pneumaticTube", 8), "BGB", 'B', "ingotBrass", 'G',
                 "blockGlass"));
         GameRegistry.addRecipe(new ShapedOreRecipe(PartRegistry.getInstance().getItemForPart("pneumaticTubeOpaque", 8), "BGB", 'B', "ingotBrass",
@@ -55,7 +55,7 @@ public class MachineRecipes {
                 Blocks.obsidian, 'I', "ingotBlueAlloy"));
         GameRegistry.addRecipe(new ShapedOreRecipe(PartRegistry.getInstance().getItemForPart("accelerator", 1), "IOI", "O O", "IOI", 'O',
                 Blocks.obsidian, 'I', "ingotBlueAlloy"));
-
+*/
         // Paint
         GameRegistry.addRecipe(new ItemStack(BPItems.paint_can, 1, 16), "t t", "t t", "ttt", 't', BPItems.zincplate);
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.paint_brush, 1, 16), " w", "s ", 'w', Blocks.wool, 's', "stickWood"));
@@ -76,9 +76,9 @@ public class MachineRecipes {
                 BPBlocks.buffer, 'T', BPBlocks.transposer, 'W', BPItems.red_doped_wafer));
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPBlocks.transposer, 1), "###", "WPW", "#R#", '#', "cobblestone", 'P',
                 Blocks.piston, 'R', "dustRedstone", 'W', "plankWood"));
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPBlocks.item_detector, 1), "ITI", "WUW", "PTP", 'I', "ingotBrass", 'T',
+        /*GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPBlocks.item_detector, 1), "ITI", "WUW", "PTP", 'I', "ingotBrass", 'T',
                 PartRegistry.getInstance().getItemForPart("pneumaticTube"), 'W', BPItems.red_doped_wafer, 'U', Blocks.wooden_pressure_plate, 'P',
-                "plankWood"));
+                "plankWood"));*/
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPBlocks.regulator, 1), "IBI", "WDW", "PBP", 'I', "ingotBrass", 'B',
                 BPBlocks.buffer, 'W', BPItems.red_doped_wafer, 'D', BPBlocks.item_detector, 'P', "plankWood"));
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPBlocks.retriever, 1), "BLB", "EFE", "IAI", 'B', "ingotBrass", 'L', Items.leather,

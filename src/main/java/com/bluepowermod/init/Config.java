@@ -151,8 +151,8 @@ public class Config {
         serverCircuitSavingOpOnly = config.get(Refs.CONFIG_CIRCUIT_DATABASE, "Server Template Saving by Ops only", false).getBoolean(false);
 
         config.addCustomCategoryComment(Refs.CONFIG_ENCHANTS, "Toggle enchantment ids");
-        vorpalEnchantmentId = config.get(Refs.CONFIG_ENCHANTS, "vorpalEnchantmentId", 100).getInt();
-        disjunctionEnchantmentId = config.get(Refs.CONFIG_ENCHANTS, "disjunctionEnchantmentId", 101).getInt();
+        vorpalEnchantmentId = config.get(Refs.CONFIG_ENCHANTS, "vorpalEnchantmentId", 110).getInt();
+        disjunctionEnchantmentId = config.get(Refs.CONFIG_ENCHANTS, "disjunctionEnchantmentId", 111).getInt();
 
         enableGateSounds = config.get(Refs.CONFIG_SETTINGS, "Enable Gate Ticking Sounds", true).getBoolean();
 

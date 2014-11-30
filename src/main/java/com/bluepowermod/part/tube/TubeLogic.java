@@ -488,7 +488,7 @@ public class TubeLogic implements IPneumaticTube {
                                 }
                             }
                         }
-                        if (tube != null && tube != nodeTube && tube.getLogic().getNode() != null)
+                        if (tube != null && tube != nodeTube && tube.getLogic() != null && tube.getLogic().getNode() != null)
                             edges[i] = new TubeEdge(tube.getLogic().getNode(), curDir, colorMask, dist);// only add an edge that isn't just connected
                         // to itself.
 

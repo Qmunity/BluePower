@@ -35,6 +35,7 @@ public class MessageRedirectTubeStack extends LocationIntPacket<MessageRedirectT
     public void handleClientSide(MessageRedirectTubeStack message, EntityPlayer player) {
         TubeLogic logic = MultipartCompatibility.getPart(player.worldObj, message.x, message.y, message.z, PneumaticTube.class).getLogic();
         logic.onClientTubeRedirectPacket(message.stack);
+
     }
 
     @Override

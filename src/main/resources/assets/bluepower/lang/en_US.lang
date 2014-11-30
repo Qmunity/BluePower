@@ -213,6 +213,7 @@ item.bluepower:red_alloy_ingot.name=Red Alloy Ingot
 item.bluepower:blue_alloy_ingot.name=Blue Alloy Ingot
 item.bluepower:brass_ingot.name=Brass Ingot
 item.bluepower:tungsten_ingot.name=Tungsten Ingot
+item.bluepower:tungsten_nugget.name=Tungsten Nugget
 
 item.bluepower:zinc_ore_crushed.name=Crushed Zinc Ore
 item.bluepower:zinc_dust.name=Zinc Dust
@@ -299,6 +300,7 @@ item.bluepower:wool_card.name=Wool Card
 item.bluepower:diamond_drawplate.name=Diamond Drawplate
 item.bluepower:iron_wire.name=Fine Iron Wire
 item.bluepower:copper_wire.name=Fine Copper Wire
+item.bluepower:infused_teslatite_dust.name=Infused Teslatite Dust
 
 part.bluepower:and.name=AND Gate
 part.bluepower:buffer.name=Buffer Gate
