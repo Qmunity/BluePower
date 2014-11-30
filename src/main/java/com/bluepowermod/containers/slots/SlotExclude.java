@@ -36,7 +36,7 @@ public class SlotExclude extends Slot {
     }
     
     public boolean isItemValid(ItemStack par1ItemStack) {
-    
-        return !(par1ItemStack.getItem() == filter);
+
+        return par1ItemStack == null || !(par1ItemStack.getItem() == filter);
     }
 }

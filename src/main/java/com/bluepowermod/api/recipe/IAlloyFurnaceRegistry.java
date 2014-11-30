@@ -25,7 +25,7 @@ import net.minecraft.item.ItemStack;
  */
 
 public interface IAlloyFurnaceRegistry {
-    
+
     /**
      * With this you can add recipes that require special handling (like NBT dependent recipes). It's similar to Vanilla's IRecipe
      * For the normal recipes, use addRecipe(ItemStack output, Object... input).
@@ -33,7 +33,7 @@ public interface IAlloyFurnaceRegistry {
      * @param recipe
      */
     void addRecipe(IAlloyFurnaceRecipe recipe);
-    
+
     /**
      * Adds a recipe to the Alloy Furnace.
      *
@@ -42,7 +42,7 @@ public interface IAlloyFurnaceRegistry {
      *               You can only specify one type of item once. Items will automatically be matched against the ore dictionary.
      */
     void addRecipe(ItemStack output, Object... input);
-    
+
     /**
      * Any item added here will cause dynamically generated recipes that allows items to be broken down to this item.
      * In BluePower, this is called with an iron ingot.S
@@ -52,4 +52,6 @@ public interface IAlloyFurnaceRegistry {
      * As modder you could pass a config entry to this.
      */
     void addRecyclingRecipe(ItemStack recycledItem, String... blacklist);
+
+    void addRecyclingRecipe(ItemStack recycledItem, ItemStack moltenDownItem, String... blacklist);
 }

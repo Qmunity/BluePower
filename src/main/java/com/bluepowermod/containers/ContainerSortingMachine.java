@@ -17,6 +17,8 @@
 
 package com.bluepowermod.containers;
 
+import java.util.Arrays;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ICrafting;
@@ -40,7 +42,7 @@ public class ContainerSortingMachine extends ContainerGhosts {
 
     private final TileSortingMachine sortingMachine;
 
-    private int pullMode, sortMode, curColumn = -1;
+    private int pullMode = -1, sortMode = -1, curColumn = -1;
     private final int[] colors = new int[9];
     private final int[] fuzzySettings = new int[8];
 
@@ -54,6 +56,8 @@ public class ContainerSortingMachine extends ContainerGhosts {
             }
         }
         bindPlayerInventory(invPlayer);
+        Arrays.fill(colors, -1);
+        Arrays.fill(fuzzySettings, -1);
 
     }
 

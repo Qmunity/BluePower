@@ -68,7 +68,7 @@ public class TileItemDetector extends TileMachineBase implements ISidedInventory
         if (from == getFacingDirection() && !isItemAccepted(stack.stack))
             return stack;
         TubeStack remainder = super.acceptItemFromTube(stack, from, simulate);
-        if (remainder == null && !simulate) {
+        if (remainder == null && !simulate && mode < 2) {
             savedPulses += mode == 0 ? stack.stack.stackSize : 1;
         }
         return remainder;
@@ -103,6 +103,7 @@ public class TileItemDetector extends TileMachineBase implements ISidedInventory
 
         mode = tCompound.getByte("mode");
         fuzzySetting = tCompound.getByte("fuzzySetting");
+        savedPulses = tCompound.getInteger("savedPulses");
     }
 
     /**
@@ -123,6 +124,7 @@ public class TileItemDetector extends TileMachineBase implements ISidedInventory
 
         tCompound.setByte("mode", (byte) mode);
         tCompound.setByte("fuzzySetting", (byte) fuzzySetting);
+        tCompound.setInteger("savedPulses", savedPulses);
     }
 
     @Override

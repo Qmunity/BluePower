@@ -43,6 +43,7 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
     private int savedPulses;
     public final TubeColor[] colors = new TubeColor[9];
     public int[] fuzzySettings = new int[8];
+    private ItemStack nonAcceptedStack;//will be set to the latest accepted stack via tubes.. It will reject any following items from that stack that tick.
 
     public TileSortingMachine() {
 
@@ -87,7 +88,7 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
 
     @Override
     public void updateEntity() {
-
+        nonAcceptedStack = null;
         super.updateEntity();
         if (!sweepTriggered && savedPulses > 0) {
             savedPulses--;
@@ -437,12 +438,12 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
 
     @Override
     public TubeStack acceptItemFromTube(TubeStack stack, ForgeDirection from, boolean simulate) {
-
         if (from == getOutputDirection()) {
             return super.acceptItemFromTube(stack, from, simulate);
         } else {
-            boolean success = tryProcessItem(stack.stack, simulate);
+            boolean success = !ItemStack.areItemStacksEqual(stack.stack, nonAcceptedStack) && tryProcessItem(stack.stack, simulate);
             if (success) {
+                nonAcceptedStack = stack.stack;
                 if (stack.stack.stackSize <= 0) {
                     return null;
                 } else {

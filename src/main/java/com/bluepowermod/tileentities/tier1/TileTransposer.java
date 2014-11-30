@@ -19,18 +19,17 @@
 
 package com.bluepowermod.tileentities.tier1;
 
-import java.util.List;
-
+import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
+import com.bluepowermod.helper.IOHelper;
+import com.bluepowermod.part.tube.TubeStack;
+import com.bluepowermod.tileentities.TileMachineBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.common.util.ForgeDirection;
 
-import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
-import com.bluepowermod.helper.IOHelper;
-import com.bluepowermod.part.tube.TubeStack;
-import com.bluepowermod.tileentities.TileMachineBase;
+import java.util.List;
 
 public class TileTransposer extends TileMachineBase {
 
@@ -48,10 +47,14 @@ public class TileTransposer extends TileMachineBase {
     protected void redstoneChanged(boolean newValue) {
 
         super.redstoneChanged(newValue);
+        ForgeDirection direction = getFacingDirection();
 
         if (!worldObj.isRemote && isBufferEmpty() && newValue) {
-            suckItems();
-            pullItem();
+            if (worldObj.isAirBlock(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ)) {
+                suckItems();
+            } else {
+                pullItem();
+            }
         }
 
     }
