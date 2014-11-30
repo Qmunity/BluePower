@@ -34,7 +34,6 @@ import com.bluepowermod.init.BPItems;
 import com.bluepowermod.part.BPPart;
 import com.bluepowermod.part.PartManager;
 import com.bluepowermod.part.RedstoneConnection;
-import com.bluepowermod.part.bluestone.WireBluestone;
 import com.bluepowermod.part.gate.GateBase;
 import com.bluepowermod.part.gate.GateWire;
 
@@ -426,8 +425,8 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
         int y = getCircuitWidth() - 1 - subPartHit % getCircuitWidth();
         if (gates[x][y] != null) {
             if (!getWorld().isRemote) {
-                ItemStack partStack = PartManager
-                        .getPartInfo(gates[x][y] instanceof GateWire ? new WireBluestone().getType() : gates[x][y].getType()).getItem();
+                ItemStack partStack = PartManager.getPartInfo(
+                        /*gates[x][y] instanceof GateWire ? new WireBluestone().getType() : */gates[x][y].getType()).getItem();
                 partStack.stackSize = 1;
                 getWorld().spawnEntityInWorld(new EntityItem(getWorld(), getX() + 0.5, getY() + 0.5, getZ() + 0.5, partStack));
                 gates[x][y] = null;
@@ -460,9 +459,9 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
 
         if (stack != null && stack.getItem() == BPItems.multipart) {
             BPPart part = PartManager.createPart(stack);
-            if (part instanceof WireBluestone) {
-                part = new GateWire();
-            }
+            /* if (part instanceof WireBluestone) {
+                 part = new GateWire();
+             }*/
             if (part instanceof GateBase && !(part instanceof IntegratedCircuit)) {
                 gates[x][y] = (GateBase) part;
                 ((GateBase) part).setFace(ForgeDirection.DOWN);

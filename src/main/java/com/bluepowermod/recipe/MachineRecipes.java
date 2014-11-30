@@ -17,17 +17,19 @@
 
 package com.bluepowermod.recipe;
 
-import com.bluepowermod.init.BPBlocks;
-import com.bluepowermod.init.BPItems;
-import com.bluepowermod.part.PartManager;
-import com.bluepowermod.util.Refs;
-import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
+
+import com.bluepowermod.init.BPBlocks;
+import com.bluepowermod.init.BPItems;
+import com.bluepowermod.part.PartManager;
+import com.bluepowermod.util.Refs;
+
+import cpw.mods.fml.common.registry.GameRegistry;
 
 /**
  * Created by Quetzi on 27/10/14.
@@ -37,23 +39,23 @@ public class MachineRecipes {
     public static void init() {
 
         // Components
-        GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(BPItems.copper_wire, 1), new ItemStack(BPItems.diamond_drawplate, 1, OreDictionary.WILDCARD_VALUE), "ingotCopper"));
+        GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(BPItems.copper_wire, 1), new ItemStack(BPItems.diamond_drawplate, 1,
+                OreDictionary.WILDCARD_VALUE), "ingotCopper"));
 
         // Tubes and Transport
-        GameRegistry.addRecipe(new ShapedOreRecipe(PartManager.getPartInfo("pneumaticTube").getItem(8), "BGB", 'B', "ingotBrass", 'G',
-                "blockGlass"));
-        GameRegistry.addRecipe(new ShapedOreRecipe(PartManager.getPartInfo("pneumaticTubeOpaque").getItem(8), "BGB", 'B', "ingotBrass",
-                'G', "ingotSilver"));
-        GameRegistry.addRecipe(new ShapelessOreRecipe(PartManager.getPartInfo("restrictionTube").getItem(), "ingotIron", PartManager
-                .getPartInfo("pneumaticTube").getItem()));
-        GameRegistry.addRecipe(new ShapelessOreRecipe(PartManager.getPartInfo("restrictionTubeOpaque").getItem(), "ingotIron",
-                PartManager.getPartInfo("pneumaticTubeOpaque")));
-        GameRegistry.addRecipe(new ShapedOreRecipe(PartManager.getPartInfo("magTube").getItem(8), "CCC", "BGB", "CCC", 'B',
-                Blocks.obsidian, 'G', "blockGlass", 'C', BPItems.copper_wire));
-        GameRegistry.addRecipe(new ShapedOreRecipe(PartManager.getPartInfo("accelerator").getItem(), "OIO", "I I", "OIO", 'O',
-                Blocks.obsidian, 'I', "ingotBlueAlloy"));
-        GameRegistry.addRecipe(new ShapedOreRecipe(PartManager.getPartInfo("accelerator").getItem(), "IOI", "O O", "IOI", 'O',
-                Blocks.obsidian, 'I', "ingotBlueAlloy"));
+        GameRegistry.addRecipe(new ShapedOreRecipe(PartManager.getPartInfo("pneumaticTube").getItem(8), "BGB", 'B', "ingotBrass", 'G', "blockGlass"));
+        GameRegistry.addRecipe(new ShapedOreRecipe(PartManager.getPartInfo("pneumaticTubeOpaque").getItem(8), "BGB", 'B', "ingotBrass", 'G',
+                "ingotSilver"));
+        GameRegistry.addRecipe(new ShapelessOreRecipe(PartManager.getPartInfo("restrictionTube").getItem(), "ingotIron", PartManager.getPartInfo(
+                "pneumaticTube").getItem()));
+        GameRegistry.addRecipe(new ShapelessOreRecipe(PartManager.getPartInfo("restrictionTubeOpaque").getItem(), "ingotIron", PartManager
+                .getPartInfo("pneumaticTubeOpaque").getItem()));
+        GameRegistry.addRecipe(new ShapedOreRecipe(PartManager.getPartInfo("magTube").getItem(8), "CCC", "BGB", "CCC", 'B', Blocks.obsidian, 'G',
+                "blockGlass", 'C', BPItems.copper_wire));
+        GameRegistry.addRecipe(new ShapedOreRecipe(PartManager.getPartInfo("accelerator").getItem(), "OIO", "I I", "OIO", 'O', Blocks.obsidian, 'I',
+                "ingotBlueAlloy"));
+        GameRegistry.addRecipe(new ShapedOreRecipe(PartManager.getPartInfo("accelerator").getItem(), "IOI", "O O", "IOI", 'O', Blocks.obsidian, 'I',
+                "ingotBlueAlloy"));
 
         // Paint
         GameRegistry.addRecipe(new ItemStack(BPItems.paint_can, 1, 16), "t t", "t t", "ttt", 't', BPItems.zincplate);
