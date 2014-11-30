@@ -17,13 +17,14 @@
 
 package com.bluepowermod.recipe;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import com.bluepowermod.BluePower;
+import com.bluepowermod.api.recipe.IAlloyFurnaceRecipe;
+import com.bluepowermod.api.recipe.IAlloyFurnaceRegistry;
+import com.bluepowermod.init.Config;
+import com.bluepowermod.util.ItemStackUtils;
+import cpw.mods.fml.common.Loader;
+import cpw.mods.fml.common.ModContainer;
+import cpw.mods.fml.common.registry.GameData;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -35,15 +36,7 @@ import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 
-import com.bluepowermod.BluePower;
-import com.bluepowermod.api.recipe.IAlloyFurnaceRecipe;
-import com.bluepowermod.api.recipe.IAlloyFurnaceRegistry;
-import com.bluepowermod.init.Config;
-import com.bluepowermod.util.ItemStackUtils;
-
-import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.common.ModContainer;
-import cpw.mods.fml.common.registry.GameData;
+import java.util.*;
 
 /**
  * 

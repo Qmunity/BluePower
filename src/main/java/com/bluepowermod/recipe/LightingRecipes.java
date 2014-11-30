@@ -19,10 +19,12 @@ package com.bluepowermod.recipe;
 
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.init.BPItems;
+import com.bluepowermod.part.PartManager;
 import com.bluepowermod.util.Refs;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
@@ -42,24 +44,24 @@ public class LightingRecipes {
             GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPBlocks.blockLampInverted[i], 1), "gLg", "gLg", "gRg", 'g',
                     "paneGlassColorless", 'L', new ItemStack(BPItems.lumar, 1, 15 - i), 'R', Blocks.redstone_torch));
             // other multipart lamps
-            //TODO: Add Part recipes
-            /*
+            
+            
             GameRegistry.addRecipe(new ShapedOreRecipe(
-                    PartRegistry.getInstance().getItemForPart("fixture" + ItemDye.field_150921_b[i].toLowerCase()), "gLg", "gLg", "sRs", 'g',
+                    PartManager.getPartInfo("fixture" + ItemDye.field_150921_b[i].toLowerCase()).getItem(), "gLg", "gLg", "sRs", 'g',
                     "paneGlassColorless", 's', new ItemStack(Blocks.stone_slab, 1, 0), 'L', new ItemStack(BPItems.lumar, 1, 15 - i), 'R',
                     "dustRedstone"));
-            GameRegistry.addRecipe(new ShapedOreRecipe(PartRegistry.getInstance().getItemForPart(
-                    "invertedfixture" + ItemDye.field_150921_b[i].toLowerCase()), "gLg", "gLg", "sRs", 'g', "paneGlassColorless", 's', new ItemStack(
+            GameRegistry.addRecipe(new ShapedOreRecipe(PartManager.getPartInfo(
+                    "invertedfixture" + ItemDye.field_150921_b[i].toLowerCase()).getItem(), "gLg", "gLg", "sRs", 'g', "paneGlassColorless", 's', new ItemStack(
                     Blocks.stone_slab, 1, 0), 'L', new ItemStack(BPItems.lumar, 1, 15 - i), 'R', Blocks.redstone_torch));
             GameRegistry
-                    .addRecipe(new ShapedOreRecipe(PartRegistry.getInstance().getItemForPart("cagelamp" + ItemDye.field_150921_b[i].toLowerCase()),
+                    .addRecipe(new ShapedOreRecipe(PartManager.getPartInfo("cagelamp" + ItemDye.field_150921_b[i].toLowerCase()).getItem(),
                             "cLc", "gLg", "sRs", 'g', "paneGlassColorless", 'c', Blocks.iron_bars, 's', new ItemStack(Blocks.stone_slab, 1, 0), 'L',
                             new ItemStack(BPItems.lumar, 1, 15 - i), 'R', "dustRedstone"));
-            GameRegistry.addRecipe(new ShapedOreRecipe(PartRegistry.getInstance().getItemForPart(
-                    "invertedcagelamp" + ItemDye.field_150921_b[i].toLowerCase()), "cLc", "gLg", "sRs", 'g', "paneGlassColorless", 'c',
+            GameRegistry.addRecipe(new ShapedOreRecipe(PartManager.getPartInfo(
+                    "invertedcagelamp" + ItemDye.field_150921_b[i].toLowerCase()).getItem(), "cLc", "gLg", "sRs", 'g', "paneGlassColorless", 'c',
                     Blocks.iron_bars, 's', new ItemStack(Blocks.stone_slab, 1, 0), 'L', new ItemStack(BPItems.lumar, 1, 15 - i), 'R',
                     Blocks.redstone_torch));
-                    */
+
         }
     }
 }

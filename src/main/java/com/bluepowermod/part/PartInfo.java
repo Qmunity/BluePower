@@ -1,11 +1,10 @@
 package com.bluepowermod.part;
 
-import java.lang.reflect.Constructor;
-
+import com.bluepowermod.init.BPItems;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
-import com.bluepowermod.init.BPItems;
+import java.lang.reflect.Constructor;
 
 public class PartInfo {
 
@@ -67,6 +66,13 @@ public class PartInfo {
     public ItemStack getItem() {
 
         return item;
+    }
+
+    public ItemStack getItem(int stackSize) {
+
+        ItemStack ret = item.copy();
+        ret.stackSize = stackSize;
+        return ret;
     }
 
 }

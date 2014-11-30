@@ -19,6 +19,7 @@ package com.bluepowermod.recipe;
 
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.init.BPItems;
+import com.bluepowermod.part.PartManager;
 import com.bluepowermod.util.Refs;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.init.Blocks;
@@ -39,23 +40,21 @@ public class MachineRecipes {
         GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(BPItems.copper_wire, 1), new ItemStack(BPItems.diamond_drawplate, 1, OreDictionary.WILDCARD_VALUE), "ingotCopper"));
 
         // Tubes and Transport
-        //TODO: Add Part recipes
-        /*
-        GameRegistry.addRecipe(new ShapedOreRecipe(PartRegistry.getInstance().getItemForPart("pneumaticTube", 8), "BGB", 'B', "ingotBrass", 'G',
+        GameRegistry.addRecipe(new ShapedOreRecipe(PartManager.getPartInfo("pneumaticTube").getItem(8), "BGB", 'B', "ingotBrass", 'G',
                 "blockGlass"));
-        GameRegistry.addRecipe(new ShapedOreRecipe(PartRegistry.getInstance().getItemForPart("pneumaticTubeOpaque", 8), "BGB", 'B', "ingotBrass",
+        GameRegistry.addRecipe(new ShapedOreRecipe(PartManager.getPartInfo("pneumaticTubeOpaque").getItem(8), "BGB", 'B', "ingotBrass",
                 'G', "ingotSilver"));
-        GameRegistry.addRecipe(new ShapelessOreRecipe(PartRegistry.getInstance().getItemForPart("restrictionTube", 1), "ingotIron", PartRegistry
-                .getInstance().getItemForPart("pneumaticTube")));
-        GameRegistry.addRecipe(new ShapelessOreRecipe(PartRegistry.getInstance().getItemForPart("restrictionTubeOpaque", 1), "ingotIron",
-                PartRegistry.getInstance().getItemForPart("pneumaticTubeOpaque")));
-        GameRegistry.addRecipe(new ShapedOreRecipe(PartRegistry.getInstance().getItemForPart("magTube", 8), "CCC", "BGB", "CCC", 'B',
+        GameRegistry.addRecipe(new ShapelessOreRecipe(PartManager.getPartInfo("restrictionTube").getItem(), "ingotIron", PartManager
+                .getPartInfo("pneumaticTube").getItem()));
+        GameRegistry.addRecipe(new ShapelessOreRecipe(PartManager.getPartInfo("restrictionTubeOpaque").getItem(), "ingotIron",
+                PartManager.getPartInfo("pneumaticTubeOpaque")));
+        GameRegistry.addRecipe(new ShapedOreRecipe(PartManager.getPartInfo("magTube").getItem(8), "CCC", "BGB", "CCC", 'B',
                 Blocks.obsidian, 'G', "blockGlass", 'C', BPItems.copper_wire));
-        GameRegistry.addRecipe(new ShapedOreRecipe(PartRegistry.getInstance().getItemForPart("accelerator", 1), "OIO", "I I", "OIO", 'O',
+        GameRegistry.addRecipe(new ShapedOreRecipe(PartManager.getPartInfo("accelerator").getItem(), "OIO", "I I", "OIO", 'O',
                 Blocks.obsidian, 'I', "ingotBlueAlloy"));
-        GameRegistry.addRecipe(new ShapedOreRecipe(PartRegistry.getInstance().getItemForPart("accelerator", 1), "IOI", "O O", "IOI", 'O',
+        GameRegistry.addRecipe(new ShapedOreRecipe(PartManager.getPartInfo("accelerator").getItem(), "IOI", "O O", "IOI", 'O',
                 Blocks.obsidian, 'I', "ingotBlueAlloy"));
-*/
+
         // Paint
         GameRegistry.addRecipe(new ItemStack(BPItems.paint_can, 1, 16), "t t", "t t", "ttt", 't', BPItems.zincplate);
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.paint_brush, 1, 16), " w", "s ", 'w', Blocks.wool, 's', "stickWood"));
@@ -77,7 +76,7 @@ public class MachineRecipes {
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPBlocks.transposer, 1), "###", "WPW", "#R#", '#', "cobblestone", 'P',
                 Blocks.piston, 'R', "dustRedstone", 'W', "plankWood"));
         /*GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPBlocks.item_detector, 1), "ITI", "WUW", "PTP", 'I', "ingotBrass", 'T',
-                PartRegistry.getInstance().getItemForPart("pneumaticTube"), 'W', BPItems.red_doped_wafer, 'U', Blocks.wooden_pressure_plate, 'P',
+                PartManager.getPartInfo("pneumaticTube"), 'W', BPItems.red_doped_wafer, 'U', Blocks.wooden_pressure_plate, 'P',
                 "plankWood"));*/
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPBlocks.regulator, 1), "IBI", "WDW", "PBP", 'I', "ingotBrass", 'B',
                 BPBlocks.buffer, 'W', BPItems.red_doped_wafer, 'D', BPBlocks.item_detector, 'P', "plankWood"));
