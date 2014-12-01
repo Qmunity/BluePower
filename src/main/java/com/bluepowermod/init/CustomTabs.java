@@ -17,13 +17,14 @@
 
 package com.bluepowermod.init;
 
-import java.util.List;
-
+import com.bluepowermod.part.PartManager;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
+
+import java.util.List;
 
 public class CustomTabs {
 
@@ -96,8 +97,12 @@ public class CustomTabs {
 
             @Override
             public Item getTabIconItem() {
-
-                return Item.getItemFromBlock(Blocks.stone);// PartRegistry.getInstance().getItemForPart("timer").getItemStack();
+                Item iconItem = PartManager.getPartInfo("timer").getItem().getItem();
+                if (iconItem != null) {
+                    return iconItem;
+                } else {
+                    return Item.getItemFromBlock(Blocks.stone);
+                }
             }
         };
 
