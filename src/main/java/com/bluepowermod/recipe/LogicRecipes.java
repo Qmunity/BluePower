@@ -52,8 +52,8 @@ public class LogicRecipes {
 
         // Wires
 
-        //GameRegistry.addRecipe(new ShapedOreRecipe(PartManager.getPartInfo("bluestoneWire").getItem(12), "iii", 'i', "ingotRedAlloy"));
-        //  GameRegistry.addRecipe(new ShapedOreRecipe(PartManager.getPartInfo("bluestoneWire").getItem(12), "i", "i", "i", 'i', "ingotRedAlloy"));
+        //GameRegistry.addRecipe(new ShapedOreRecipe(PartManager.getPartInfo("bluestoneWire").getItemStack(12), "iii", 'i', "ingotRedAlloy"));
+        //  GameRegistry.addRecipe(new ShapedOreRecipe(PartManager.getPartInfo("bluestoneWire").getItemStack(12), "i", "i", "i", 'i', "ingotRedAlloy"));
 
         // Insulated wire
         /*

@@ -43,14 +43,14 @@ public class MachineRecipes {
                 OreDictionary.WILDCARD_VALUE), "ingotCopper"));
 
         // Tubes and Transport
-        GameRegistry.addRecipe(new ShapedOreRecipe(PartManager.getPartInfo("pneumaticTube").getItem(8), "BGB", 'B', "ingotBrass", 'G', "blockGlass"));
-        GameRegistry.addRecipe(new ShapedOreRecipe(PartManager.getPartInfo("pneumaticTubeOpaque").getItem(8), "BGB", 'B', "ingotBrass", 'G',
+        GameRegistry.addRecipe(new ShapedOreRecipe(PartManager.getPartInfo("pneumaticTube").getItemStack(8), "BGB", 'B', "ingotBrass", 'G', "blockGlass"));
+        GameRegistry.addRecipe(new ShapedOreRecipe(PartManager.getPartInfo("pneumaticTubeOpaque").getItemStack(8), "BGB", 'B', "ingotBrass", 'G',
                 "ingotSilver"));
         GameRegistry.addRecipe(new ShapelessOreRecipe(PartManager.getPartInfo("restrictionTube").getItem(), "ingotIron", PartManager.getPartInfo(
                 "pneumaticTube").getItem()));
         GameRegistry.addRecipe(new ShapelessOreRecipe(PartManager.getPartInfo("restrictionTubeOpaque").getItem(), "ingotIron", PartManager
                 .getPartInfo("pneumaticTubeOpaque").getItem()));
-        GameRegistry.addRecipe(new ShapedOreRecipe(PartManager.getPartInfo("magTube").getItem(8), "CCC", "BGB", "CCC", 'B', Blocks.obsidian, 'G',
+        GameRegistry.addRecipe(new ShapedOreRecipe(PartManager.getPartInfo("magTube").getItemStack(8), "CCC", "BGB", "CCC", 'B', Blocks.obsidian, 'G',
                 "blockGlass", 'C', BPItems.copper_wire));
         GameRegistry.addRecipe(new ShapedOreRecipe(PartManager.getPartInfo("accelerator").getItem(), "OIO", "I I", "OIO", 'O', Blocks.obsidian, 'I',
                 "ingotBlueAlloy"));

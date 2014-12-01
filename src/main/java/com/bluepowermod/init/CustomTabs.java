@@ -97,7 +97,7 @@ public class CustomTabs {
             @Override
             public Item getTabIconItem() {
 
-                return Item.getItemFromBlock(Blocks.stone);// PartRegistry.getInstance().getItemForPart("timer").getItem();
+                return Item.getItemFromBlock(Blocks.stone);// PartRegistry.getInstance().getItemForPart("timer").getItemStack();
             }
         };
 
