@@ -21,6 +21,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import org.lwjgl.opengl.GL11;
 
+import uk.co.qmunity.lib.part.IMicroblock;
 import uk.co.qmunity.lib.part.IPart;
 import uk.co.qmunity.lib.part.ITilePartHolder;
 import uk.co.qmunity.lib.part.PartRegistry;
@@ -66,8 +67,8 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
         double gateWidth = (1.0 - 2 * BORDER_WIDTH) / getCircuitWidth();
         for (int x = 0; x < getCircuitWidth(); x++) {
             for (int y = 0; y < getCircuitWidth(); y++) {
-                boxes.add(new Vec3dCube(BORDER_WIDTH + x * gateWidth, minY, BORDER_WIDTH + y * gateWidth, BORDER_WIDTH + (x + 1) * gateWidth, maxY,
-                        BORDER_WIDTH + (y + 1) * gateWidth));
+                boxes.add(new Vec3dCube(BORDER_WIDTH + x * gateWidth, minY, BORDER_WIDTH + y * gateWidth, BORDER_WIDTH + (x + 1)
+                        * gateWidth, maxY, BORDER_WIDTH + (y + 1) * gateWidth));
             }
         }
     }
@@ -124,12 +125,11 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
                 for (GateBase gate : gateArray) {
                     if (gate != null) {
                         GL11.glPushMatrix();
-                        /* if (gate instanceof GateBase) {
-                             gate.transformDynamic(loc);
-                             gate.renderTop(frame);
-                         } else {*/
+                        /*
+                         * if (gate instanceof GateBase) { gate.transformDynamic(loc); gate.renderTop(frame); } else {
+                         */
                         gate.renderDynamic(loc, frame, 0);
-                        //}
+                        // }
                         GL11.glPopMatrix();
                     }
                     GL11.glTranslated(0, 0, 1);
@@ -143,6 +143,7 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
 
     @Override
     public void doLogic() {
+
         updateWires();
         for (int i = 0; i < gates.length; i++) {
             for (int j = 0; j < gates[i].length; j++) {
@@ -175,6 +176,7 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
 
     @Override
     public void tick() {
+
         super.tick();
         for (GateBase[] gateArray : gates) {
             for (GateBase gate : gateArray) {
@@ -331,11 +333,13 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
 
     @Override
     public void writeToNBT(NBTTagCompound tag) {
+
         writeUpdateToNBT(tag);
     }
 
     @Override
     public void readFromNBT(NBTTagCompound tag) {
+
         readUpdateFromNBT(tag);
     }
 
@@ -426,7 +430,7 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
         if (gates[x][y] != null) {
             if (!getWorld().isRemote) {
                 ItemStack partStack = PartManager.getPartInfo(
-                        /*gates[x][y] instanceof GateWire ? new WireBluestone().getType() : */gates[x][y].getType()).getItem();
+                /* gates[x][y] instanceof GateWire ? new WireBluestone().getType() : */gates[x][y].getType()).getItem();
                 partStack.stackSize = 1;
                 getWorld().spawnEntityInWorld(new EntityItem(getWorld(), getX() + 0.5, getY() + 0.5, getZ() + 0.5, partStack));
                 gates[x][y] = null;
@@ -445,7 +449,7 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
             for (GateBase gate : gateArray) {
                 if (gate != null) {
                     if (gate instanceof GateWire) {
-                        //  gate = new WireBluestone(); TODO
+                        // gate = new WireBluestone(); TODO
                     }
                     drops.addAll(gate.getDrops());
                 }
@@ -459,9 +463,9 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
 
         if (stack != null && stack.getItem() == BPItems.multipart) {
             BPPart part = PartManager.createPart(stack);
-            /* if (part instanceof WireBluestone) {
-                 part = new GateWire();
-             }*/
+            /*
+             * if (part instanceof WireBluestone) { part = new GateWire(); }
+             */
             if (part instanceof GateBase && !(part instanceof IntegratedCircuit)) {
                 gates[x][y] = (GateBase) part;
                 ((GateBase) part).setFace(ForgeDirection.DOWN);
@@ -516,32 +520,44 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
 
     @Override
     public List<IPart> getParts() {
+
         return null;
     }
 
     @Override
     public boolean canAddPart(IPart part) {
+
         return false;
     }
 
     @Override
     public void addPart(IPart part) {
+
     }
 
     @Override
     public boolean removePart(IPart part) {
+
         return false;
     }
 
-    //@Override
-    //TODO: Check me
+    // @Override
+    // TODO: Check me
     public void sendPartUpdate(IPart part) {
+
         sendUpdatePacket();
     }
 
     @Override
     public void addCollisionBoxesToList(List<Vec3dCube> boxes, AxisAlignedBB bounds, Entity entity) {
 
+    }
+
+    @Override
+    public List<IMicroblock> getMicroblocks() {
+
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }

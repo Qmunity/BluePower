@@ -57,7 +57,7 @@ public class WirePropagator implements IPropagator {
         @Override
         public void beginPropagation(IRedstoneConductor device, ForgeDirection fromSide, byte from, byte to) {
 
-            byte original = device.getRedstoneOutput(fromSide);
+            byte original = device.getRedstonePower(fromSide);
 
             if (to == original)
                 return;
