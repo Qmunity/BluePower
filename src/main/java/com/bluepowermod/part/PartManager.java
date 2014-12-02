@@ -42,6 +42,9 @@ import com.bluepowermod.part.gate.GateTransparentLatch;
 import com.bluepowermod.part.gate.GateXnor;
 import com.bluepowermod.part.gate.GateXor;
 import com.bluepowermod.part.gate.analog.GateInverter;
+import com.bluepowermod.part.gate.ic.Circuit3x3;
+import com.bluepowermod.part.gate.ic.Circuit5x5;
+import com.bluepowermod.part.gate.ic.Circuit7x7;
 import com.bluepowermod.part.lamp.PartCageLamp;
 import com.bluepowermod.part.lamp.PartFixture;
 import com.bluepowermod.part.tube.Accelerator;
@@ -139,14 +142,16 @@ public class PartManager {
         registerPart(GateRepeater.class);
         registerPart(GateTransparentLatch.class);
         registerPart(GateSynchronizer.class);
-        // registerPart(Circuit3x3.class);
-        // registerPart(Circuit5x5.class);
-        // registerPart(Circuit7x7.class);
         registerPart(GateNullCell.class, false);
 
         // Analog gates
         registerPart(GateInverter.class);
         registerPart(GateNullCell.class, true);
+
+        // IC's
+        registerPart(Circuit3x3.class);
+        registerPart(Circuit5x5.class);
+        registerPart(Circuit7x7.class);
 
         // Lamps
         for (int i = 0; i < ItemDye.field_150922_c.length; i++)

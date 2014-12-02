@@ -65,7 +65,7 @@ public class PartInfo {
 
     public ItemStack getItem() {
 
-        return item;
+        return item.copy();
     }
 
     public ItemStack getItemStack(int stackSize) {

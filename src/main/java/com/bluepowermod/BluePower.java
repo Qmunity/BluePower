@@ -91,7 +91,6 @@ public class BluePower {
     @EventHandler
     public void init(FMLInitializationEvent event) {
 
-        Recipes.init(CraftingManager.getInstance());
         proxy.init();
         NetworkHandler.init();
         NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GUIHandler());
@@ -106,6 +105,8 @@ public class BluePower {
         CompatibilityUtils.postInit(event);
         AlloyFurnaceRegistry.getInstance().generateRecyclingRecipes();
         proxy.initRenderers();
+
+        Recipes.init(CraftingManager.getInstance());
     }
 
     @EventHandler
