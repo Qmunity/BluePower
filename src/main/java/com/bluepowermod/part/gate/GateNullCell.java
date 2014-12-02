@@ -10,6 +10,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.IIcon;
 import net.minecraftforge.common.util.ForgeDirection;
 import uk.co.qmunity.lib.client.render.RenderHelper;
+import uk.co.qmunity.lib.misc.Pair;
 import uk.co.qmunity.lib.raytrace.QMovingObjectPosition;
 import uk.co.qmunity.lib.vec.Vec3d;
 import uk.co.qmunity.lib.vec.Vec3dCube;
@@ -230,13 +231,13 @@ public class GateNullCell extends GateBase implements IRedstoneConductor {
     }
 
     @Override
-    public Collection<IRedstoneDevice> propagate(ForgeDirection fromSide) {
+    public Collection<Pair<IRedstoneDevice, ForgeDirection>> propagate(ForgeDirection fromSide) {
 
         IRedstoneDevice dev = getDeviceOnSide(fromSide.getOpposite());
         if (dev == null)
             return Arrays.asList();
 
-        return Arrays.asList(dev);
+        return Arrays.asList(new Pair<IRedstoneDevice, ForgeDirection>(dev, fromSide.getOpposite()));
     }
 
 }

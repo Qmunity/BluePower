@@ -11,6 +11,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
 import net.minecraftforge.common.util.ForgeDirection;
 import uk.co.qmunity.lib.client.render.RenderHelper;
+import uk.co.qmunity.lib.misc.Pair;
 import uk.co.qmunity.lib.part.IPartRedstone;
 import uk.co.qmunity.lib.part.IPartWAILAProvider;
 import uk.co.qmunity.lib.vec.Vec3d;
@@ -196,7 +197,8 @@ IBundledConductor, IPartRedstone, IPartWAILAProvider {
 
     protected boolean canConnect(IRedstoneDevice device) {
 
-        if (device instanceof IRedstoneConductor && ((IRedstoneConductor) device).isAnalog() != isAnalog())
+        if (device instanceof IRedstoneConductor
+                && (((IRedstoneConductor) device).isAnalog() != isAnalog() || ((IRedstoneConductor) device).hasLoss() != hasLoss()))
             return false;
 
         return true;
@@ -279,12 +281,14 @@ IBundledConductor, IPartRedstone, IPartWAILAProvider {
     }
 
     @Override
-    public List<IRedstoneDevice> propagate(ForgeDirection fromSide) {
+    public List<Pair<IRedstoneDevice, ForgeDirection>> propagate(ForgeDirection fromSide) {
 
-        List<IRedstoneDevice> devices = new ArrayList<IRedstoneDevice>();
-        for (IRedstoneDevice d : this.devices)
+        List<Pair<IRedstoneDevice, ForgeDirection>> devices = new ArrayList<Pair<IRedstoneDevice, ForgeDirection>>();
+        for (int i = 0; i < 6; i++) {
+            IRedstoneDevice d = this.devices[i];
             if (d != null)
-                devices.add(d);
+                devices.add(new Pair<IRedstoneDevice, ForgeDirection>(d, ForgeDirection.getOrientation(i)));
+        }
 
         return devices;
     }
@@ -376,9 +380,12 @@ IBundledConductor, IPartRedstone, IPartWAILAProvider {
             }
         }
 
-        for (ForgeDirection s : ForgeDirection.VALID_DIRECTIONS)
-            if (s != getFace())
-                WirePropagator.INSTANCE.onPowerLevelChange(this, s, power, (byte) Math.max(power & 0xFF, input));
+        for (ForgeDirection s : ForgeDirection.VALID_DIRECTIONS) {
+            if (s != getFace()) {
+                WirePropagator.INSTANCE.onPowerLevelChange(this, s, power, (byte) input);
+                break;
+            }
+        }
     }
 
     @Override

@@ -1,17 +1,15 @@
 package com.bluepowermod.part.wire.propagation;
 
-import java.util.AbstractMap;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map.Entry;
 
 import net.minecraftforge.common.util.ForgeDirection;
+import uk.co.qmunity.lib.misc.Pair;
 
 import com.bluepowermod.api.redstone.IPropagator;
 import com.bluepowermod.api.redstone.IRedstoneConductor;
 import com.bluepowermod.api.redstone.IRedstoneDevice;
-import com.bluepowermod.part.wire.WireHelper;
 
 public class WirePropagator implements IPropagator {
 
@@ -82,26 +80,25 @@ public class WirePropagator implements IPropagator {
             devices.clear();
         }
 
-        @SuppressWarnings({ "rawtypes", "unchecked" })
         private void propagateRising(IRedstoneConductor device, ForgeDirection fromSide, byte power) {
 
-            if (!hasVisited(device, fromSide))
-                visited.add(new AbstractMap.SimpleEntry(device, fromSide));
-            else
-                return;
-
-            Collection<IRedstoneDevice> neighbors = device.propagate(fromSide);
-            for (IRedstoneDevice dev : neighbors) {
-                ForgeDirection d = WireHelper.getConnectionSide(device, dev);
-                if (!hasVisited(device, d))
-                    visited.add(new AbstractMap.SimpleEntry(device, d));
-
-                ForgeDirection s = WireHelper.getConnectionSide(dev, device);
-                dev.setRedstonePower(s, power);
-                if (dev instanceof IRedstoneConductor && ((power & 0xFF) - 1) > 0) {
-                    propagateRising((IRedstoneConductor) dev, s, (byte) ((power & 0xFF) - 1));
-                }
-            }
+            // if (!hasVisited(device, fromSide))
+            // visited.add(new AbstractMap.SimpleEntry(device, fromSide));
+            // else
+            // return;
+            //
+            // Collection<Pair<IRedstoneDevice, ForgeDirection>> neighbors = device.propagate(fromSide);
+            // for (Pair<IRedstoneDevice, ForgeDirection> pair : neighbors) {
+            // ForgeDirection d = WireHelper.getConnectionSide(device, dev);
+            // if (!hasVisited(device, d))
+            // visited.add(new AbstractMap.SimpleEntry(device, d));
+            //
+            // ForgeDirection s = WireHelper.getConnectionSide(dev, device);
+            // dev.setRedstonePower(s, power);
+            // if (dev instanceof IRedstoneConductor && ((power & 0xFF) - 1) > 0) {
+            // propagateRising((IRedstoneConductor) dev, s, (byte) ((power & 0xFF) - 1));
+            // }
+            // }
         }
 
         private void propagateFalling(IRedstoneConductor device, ForgeDirection fromSide) {
@@ -119,10 +116,28 @@ public class WirePropagator implements IPropagator {
 
     private static final class PropagatorLogic implements IPropagatorLogic {
 
-        List<Entry<IRedstoneDevice, ForgeDirection>> visited = new ArrayList<Entry<IRedstoneDevice, ForgeDirection>>();
+        List<Pair<IRedstoneDevice, ForgeDirection>> visited = new ArrayList<Pair<IRedstoneDevice, ForgeDirection>>();
 
         @Override
         public void beginPropagation(IRedstoneConductor device, ForgeDirection fromSide, byte from, byte to) {
+
+            visited.addAll(WirePathfinder.pathfind(device, fromSide));
+
+            int power = 0;
+            for (Pair<IRedstoneDevice, ForgeDirection> pair : visited)
+                pair.getKey().setRedstonePower(pair.getValue(), (byte) 0);
+            for (Pair<IRedstoneDevice, ForgeDirection> pair : visited)
+                power = Math.max(power, pair.getKey().getRedstonePower(pair.getValue()) & 0xFF);
+
+            List<IRedstoneDevice> devices = new ArrayList<IRedstoneDevice>();
+            for (Pair<IRedstoneDevice, ForgeDirection> pair : visited) {
+                pair.getKey().setRedstonePower(pair.getValue(), (byte) power);
+                if (!devices.contains(pair.getKey()))
+                    devices.add(pair.getKey());
+            }
+
+            for (IRedstoneDevice d : devices)
+                d.onRedstoneUpdate();
 
             visited.clear();
         }
