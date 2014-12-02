@@ -15,12 +15,16 @@ public interface IBundledDevice extends IWorldLocation {
 
     public IBundledDevice getBundledDeviceOnSide(ForgeDirection side);
 
-    public byte[] getBundledOutput(ForgeDirection side);
+    public byte[] getBundledPower(ForgeDirection side);
 
-    public void onBundledUpdate(ForgeDirection side, byte[] power);
+    public void setBundledPower(ForgeDirection side, byte[] power);
+
+    public void onBundledUpdate();
 
     public RedstoneColor getBundleColor(ForgeDirection side);
 
     public boolean isNormalBlock();
+
+    public boolean isBundled();
 
 }

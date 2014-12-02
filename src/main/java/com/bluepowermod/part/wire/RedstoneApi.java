@@ -5,11 +5,18 @@ import java.util.List;
 
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import uk.co.qmunity.lib.part.IPart;
+import uk.co.qmunity.lib.part.ITilePartHolder;
+import uk.co.qmunity.lib.part.compat.MultipartCompatibility;
+import uk.co.qmunity.lib.vec.Vec3i;
 
 import com.bluepowermod.api.redstone.IBundledDevice;
+import com.bluepowermod.api.redstone.IFaceRedstoneDevice;
+import com.bluepowermod.api.redstone.IPropagator;
 import com.bluepowermod.api.redstone.IRedstoneApi;
 import com.bluepowermod.api.redstone.IRedstoneDevice;
 import com.bluepowermod.api.redstone.IRedstoneProvider;
+import com.bluepowermod.part.wire.propagation.WirePropagator;
 
 public class RedstoneApi implements IRedstoneApi {
 
@@ -51,7 +58,13 @@ public class RedstoneApi implements IRedstoneApi {
                 return device;
         }
 
-        return null;
+        ITilePartHolder holder = MultipartCompatibility.getPartHolder(world, x, y, z);
+        if (holder != null)
+            for (IPart p : holder.getParts())
+                if (p instanceof IFaceRedstoneDevice && ((IFaceRedstoneDevice) p).getFace() == face)
+                    return (IRedstoneDevice) p;
+
+        return new DummyRedstoneDevice(new Vec3i(x, y, z, world));
     }
 
     @Override
@@ -75,6 +88,12 @@ public class RedstoneApi implements IRedstoneApi {
             return;
 
         providers.add(provider);
+    }
+
+    @Override
+    public IPropagator getPropagator() {
+
+        return WirePropagator.INSTANCE;
     }
 
 }

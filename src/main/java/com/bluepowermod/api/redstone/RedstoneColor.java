@@ -21,6 +21,9 @@ public enum RedstoneColor {
     NONE, //
     ANY;
 
+    public static RedstoneColor[] VALID_COLORS = { WHITE, ORANGE, MAGENTA, LIGHT_BLUE, YELLOW, LIME, PINK, GRAY, LIGHT_GRAY, CYAN, PURPLE,
+        BLUE, BROWN, GREEN, RED, BLACK, NONE };
+
     public boolean matches(RedstoneColor color) {
 
         if (this == ANY || color == ANY)

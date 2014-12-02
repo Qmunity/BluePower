@@ -13,4 +13,6 @@ public interface IRedstoneApi {
 
     public void registerRedstoneProvider(IRedstoneProvider provider);
 
+    public IPropagator getPropagator();
+
 }

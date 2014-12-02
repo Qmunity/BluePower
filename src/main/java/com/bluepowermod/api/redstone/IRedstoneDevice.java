@@ -15,9 +15,11 @@ public interface IRedstoneDevice extends IWorldLocation {
 
     public IRedstoneDevice getDeviceOnSide(ForgeDirection side);
 
-    public byte getRedstoneOutput(ForgeDirection side);
+    public byte getRedstonePower(ForgeDirection side);
 
-    public void onRedstoneUpdate(ForgeDirection side, byte power);
+    public void setRedstonePower(ForgeDirection side, byte power);
+
+    public void onRedstoneUpdate();
 
     public RedstoneColor getInsulationColor(ForgeDirection side);
 

@@ -17,6 +17,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import uk.co.qmunity.lib.part.PartRegistry;
 
+import com.bluepowermod.api.redstone.RedstoneColor;
 import com.bluepowermod.part.gate.GateAnd;
 import com.bluepowermod.part.gate.GateBuffer;
 import com.bluepowermod.part.gate.GateComparator;
@@ -26,6 +27,7 @@ import com.bluepowermod.part.gate.GateMux;
 import com.bluepowermod.part.gate.GateNand;
 import com.bluepowermod.part.gate.GateNor;
 import com.bluepowermod.part.gate.GateNot;
+import com.bluepowermod.part.gate.GateNullCell;
 import com.bluepowermod.part.gate.GateOr;
 import com.bluepowermod.part.gate.GatePulseFormer;
 import com.bluepowermod.part.gate.GateRSLatch;
@@ -39,10 +41,7 @@ import com.bluepowermod.part.gate.GateToggleLatch;
 import com.bluepowermod.part.gate.GateTransparentLatch;
 import com.bluepowermod.part.gate.GateXnor;
 import com.bluepowermod.part.gate.GateXor;
-import com.bluepowermod.part.gate.analogue.GateInverter;
-import com.bluepowermod.part.gate.ic.Circuit3x3;
-import com.bluepowermod.part.gate.ic.Circuit5x5;
-import com.bluepowermod.part.gate.ic.Circuit7x7;
+import com.bluepowermod.part.gate.analog.GateInverter;
 import com.bluepowermod.part.lamp.PartCageLamp;
 import com.bluepowermod.part.lamp.PartFixture;
 import com.bluepowermod.part.tube.Accelerator;
@@ -51,6 +50,9 @@ import com.bluepowermod.part.tube.PneumaticTube;
 import com.bluepowermod.part.tube.PneumaticTubeOpaque;
 import com.bluepowermod.part.tube.RestrictionTube;
 import com.bluepowermod.part.tube.RestrictionTubeOpaque;
+import com.bluepowermod.part.wire.PartWireBluestone;
+import com.bluepowermod.part.wire.PartWireInfusedTeslatite;
+import com.bluepowermod.part.wire.PartWireRedAlloy;
 
 public class PartManager {
 
@@ -113,7 +115,7 @@ public class PartManager {
 
     public static void registerParts() {
 
-        // Gates
+        // Digital gates
         PartRegistry.registerFactory(new PartFactory());
         registerPart(GateAnd.class);
         registerPart(GateNot.class);
@@ -137,14 +139,15 @@ public class PartManager {
         registerPart(GateRepeater.class);
         registerPart(GateTransparentLatch.class);
         registerPart(GateSynchronizer.class);
-        registerPart(Circuit3x3.class);
-        registerPart(Circuit5x5.class);
-        registerPart(Circuit7x7.class);
+        // registerPart(Circuit3x3.class);
+        // registerPart(Circuit5x5.class);
+        // registerPart(Circuit7x7.class);
+        registerPart(GateNullCell.class, false);
 
-        // Analogue gates
+        // Analog gates
         registerPart(GateInverter.class);
+        registerPart(GateNullCell.class, true);
 
-        //
         // Lamps
         for (int i = 0; i < ItemDye.field_150922_c.length; i++)
             registerPart(PartCageLamp.class, ItemDye.field_150921_b[i].toLowerCase(), ItemDye.field_150922_c[i], false);
@@ -166,14 +169,20 @@ public class PartManager {
         registerPart(MagTube.class);
         registerPart(Accelerator.class);
 
-        // Bluestone
-        // registerPart(WireBluestone.class);
-        // registerPart(GateWirelessTransceiver.class);
+        // Wires
+        for (RedstoneColor c : RedstoneColor.VALID_COLORS)
+            registerPart(PartWireRedAlloy.class, c);
+        for (RedstoneColor c : RedstoneColor.VALID_COLORS)
+            registerPart(PartWireRedAlloy.class, c, false);
 
-        // for (int bundled = 0; bundled < 2; bundled++) {
-        // registerPart(WireBluestone.class, bundled == 1);// Normal
-        // for (int i = 0; i < 16; i++)
-        // registerPart(WireBluestone.class, i, bundled == 1);// Colored
-        // }
+        for (RedstoneColor c : RedstoneColor.VALID_COLORS)
+            registerPart(PartWireInfusedTeslatite.class, c);
+        for (RedstoneColor c : RedstoneColor.VALID_COLORS)
+            registerPart(PartWireInfusedTeslatite.class, c, false);
+
+        for (RedstoneColor c : RedstoneColor.VALID_COLORS)
+            registerPart(PartWireBluestone.class, c);
+        for (RedstoneColor c : RedstoneColor.VALID_COLORS)
+            registerPart(PartWireBluestone.class, c, false);
     }
 }

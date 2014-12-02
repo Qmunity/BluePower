@@ -4,4 +4,6 @@ public interface IConductor {
 
     public boolean hasLoss();
 
+    public boolean isAnalog();
+
 }

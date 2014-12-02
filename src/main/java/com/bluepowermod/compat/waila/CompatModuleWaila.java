@@ -8,6 +8,7 @@
 package com.bluepowermod.compat.waila;
 
 import mcp.mobius.waila.api.IWailaRegistrar;
+import net.minecraft.tileentity.TileEntity;
 
 import com.bluepowermod.compat.CompatModule;
 import com.bluepowermod.tileentities.TileMachineBase;
@@ -59,5 +60,6 @@ public class CompatModuleWaila extends CompatModule {
     public static void callbackRegister(IWailaRegistrar registrar) {
 
         registrar.registerBodyProvider(new WailaProviderMachines(), TileMachineBase.class);
+        registrar.registerBodyProvider(new WailaProviderParts(), TileEntity.class);
     }
 }

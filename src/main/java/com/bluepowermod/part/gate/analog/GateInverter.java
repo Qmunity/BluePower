@@ -15,7 +15,7 @@
  *      along with Blue Power.  If not, see <http://www.gnu.org/licenses/>
  */
 
-package com.bluepowermod.part.gate.analogue;
+package com.bluepowermod.part.gate.analog;
 
 import com.bluepowermod.client.renderers.RenderHelper;
 import com.bluepowermod.part.gate.GateBase;
