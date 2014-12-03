@@ -21,7 +21,7 @@ public interface IRedstoneDevice extends IWorldLocation {
 
     public void onRedstoneUpdate();
 
-    public RedstoneColor getInsulationColor(ForgeDirection side);
+    public RedstoneColor getInsulationColor();
 
     public boolean isNormalBlock();
 

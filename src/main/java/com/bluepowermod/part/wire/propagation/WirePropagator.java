@@ -21,9 +21,6 @@ public class WirePropagator implements IPropagator {
 
     public void onPowerLevelChange(IRedstoneDevice device, ForgeDirection side, byte from, byte to) {
 
-        if (from == to)
-            return;
-
         IRedstoneDevice dev = device;// device.getDeviceOnSide(side);
         // System.out.println(dev);
         // if (dev == null)

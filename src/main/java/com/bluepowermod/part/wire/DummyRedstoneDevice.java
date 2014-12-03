@@ -93,9 +93,9 @@ public class DummyRedstoneDevice implements IRedstoneDevice {
     }
 
     @Override
-    public RedstoneColor getInsulationColor(ForgeDirection side) {
+    public RedstoneColor getInsulationColor() {
 
-        return null;
+        return RedstoneColor.NONE;
     }
 
     @Override

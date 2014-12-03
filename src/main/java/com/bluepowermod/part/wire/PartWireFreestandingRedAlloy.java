@@ -2,14 +2,14 @@ package com.bluepowermod.part.wire;
 
 import com.bluepowermod.api.redstone.RedstoneColor;
 
-public class PartWireBluestone extends PartWire {
+public class PartWireFreestandingRedAlloy extends PartWireFreestanding {
 
-    public PartWireBluestone(RedstoneColor bundleColor, Boolean unused) {
+    public PartWireFreestandingRedAlloy(RedstoneColor bundleColor, Boolean unused) {
 
         super(bundleColor, unused);
     }
 
-    public PartWireBluestone(RedstoneColor insulationColor) {
+    public PartWireFreestandingRedAlloy(RedstoneColor insulationColor) {
 
         super(insulationColor);
     }
@@ -17,7 +17,7 @@ public class PartWireBluestone extends PartWire {
     @Override
     public String getType() {
 
-        String type = "wire.bluestone";
+        String type = "wire.freestanding.redalloy";
 
         if (isBundled()) {
             type += ".bundled";
@@ -34,19 +34,19 @@ public class PartWireBluestone extends PartWire {
     @Override
     public boolean isAnalog() {
 
-        return false;
+        return true;
     }
 
     @Override
     public boolean hasLoss() {
 
-        return false;
+        return true;
     }
 
     @Override
     public int getColor() {
 
-        return 0x4444DD;
+        return 0xDD0000;
     }
 
 }

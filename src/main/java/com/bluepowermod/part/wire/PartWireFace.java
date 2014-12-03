@@ -3,7 +3,6 @@ package com.bluepowermod.part.wire;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map.Entry;
 
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.entity.Entity;
@@ -30,7 +29,7 @@ import com.bluepowermod.helper.VectorHelper;
 import com.bluepowermod.part.BPPartFace;
 import com.bluepowermod.part.wire.propagation.WirePropagator;
 
-public abstract class PartWire extends BPPartFace implements IFaceRedstoneDevice, IRedstoneConductor, IFaceBundledDevice,
+public abstract class PartWireFace extends BPPartFace implements IFaceRedstoneDevice, IRedstoneConductor, IFaceBundledDevice,
 IBundledConductor, IPartRedstone, IPartWAILAProvider {
 
     protected IRedstoneDevice[] devices = new IRedstoneDevice[6];
@@ -44,14 +43,14 @@ IBundledConductor, IPartRedstone, IPartWAILAProvider {
 
     protected boolean bundled = false;
 
-    public PartWire(RedstoneColor insulationColor) {
+    public PartWireFace(RedstoneColor insulationColor) {
 
         this.insulationColor = insulationColor;
 
         Arrays.fill(bundledPower, (byte) -128);
     }
 
-    public PartWire(RedstoneColor bundleColor, boolean unused) {
+    public PartWireFace(RedstoneColor bundleColor, boolean unused) {
 
         this.bundleColor = bundleColor;
         bundled = true;
@@ -127,11 +126,7 @@ IBundledConductor, IPartRedstone, IPartWAILAProvider {
 
         IIcon icon = IconSupplier.wire;
 
-        int color = getColor();
-        double mul = (0.3 + (0.7 * ((power & 0xFF) / 255D)));
-        color = ((int) ((color & 0xFF0000) * mul) & 0xFF0000) + ((int) ((color & 0x00FF00) * mul) & 0x00FF00)
-                + ((int) ((color & 0x0000FF) * mul) & 0x0000FF);
-        renderer.setColor(color);
+        renderer.setColor(WireCommons.getColorForPowerLevel(getColor(), power));
 
         // Center
         renderer.renderBox(new Vec3dCube(8 / 16D - width, 0, 8 / 16D - width, 8 / 16D + width, height, 8 / 16D + width), icon);
@@ -195,36 +190,22 @@ IBundledConductor, IPartRedstone, IPartWAILAProvider {
         }
     }
 
-    protected boolean canConnect(IRedstoneDevice device) {
-
-        if (device instanceof IRedstoneConductor
-                && (((IRedstoneConductor) device).isAnalog() != isAnalog() || ((IRedstoneConductor) device).hasLoss() != hasLoss()))
-            return false;
-
-        return true;
-    }
-
-    protected boolean canConnect(IBundledDevice device) {
-
-        return true;
-    }
-
     @Override
     public boolean canConnectStraight(IRedstoneDevice device) {
 
-        return canConnect(device);
+        return WireCommons.canConnect(this, device);
     }
 
     @Override
     public boolean canConnectOpenCorner(IRedstoneDevice device) {
 
-        return canConnect(device);
+        return WireCommons.canConnect(this, device);
     }
 
     @Override
     public boolean canConnectClosedCorner(IRedstoneDevice device) {
 
-        return canConnect(device);
+        return WireCommons.canConnect(this, device);
     }
 
     @Override
@@ -275,7 +256,7 @@ IBundledConductor, IPartRedstone, IPartWAILAProvider {
     }
 
     @Override
-    public RedstoneColor getInsulationColor(ForgeDirection side) {
+    public RedstoneColor getInsulationColor() {
 
         return insulationColor;
     }
@@ -291,28 +272,6 @@ IBundledConductor, IPartRedstone, IPartWAILAProvider {
         }
 
         return devices;
-    }
-
-    private void refreshConnections() {
-
-        // Add neighbors and connect to them
-        for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
-            Entry<IBundledDevice, ForgeDirection> bundledDevice = WireHelper.getBundledNeighbor(this, d);
-            boolean wasConnected = getDeviceOnSide(d) != null || getBundledDeviceOnSide(d) != null;
-            if (bundledDevice != null && bundledDevice.getKey() != getBundledDeviceOnSide(d)) {
-                onConnect(d, bundledDevice.getKey());
-                bundledDevice.getKey().onConnect(bundledDevice.getValue(), this);
-
-            }
-            Entry<IRedstoneDevice, ForgeDirection> redstoneDevice = WireHelper.getNeighbor(this, d);
-            if (redstoneDevice != null && redstoneDevice.getKey() != getDeviceOnSide(d)) {
-                onConnect(d, redstoneDevice.getKey());
-                redstoneDevice.getKey().onConnect(redstoneDevice.getValue(), this);
-            }
-            if (wasConnected && bundledDevice == null && redstoneDevice == null) {
-                onDisconnect(d);
-            }
-        }
     }
 
     @Override
@@ -333,33 +292,7 @@ IBundledConductor, IPartRedstone, IPartWAILAProvider {
         if (getWorld().isRemote)
             return;
 
-        // Tell neighbors to disconnect
-        for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
-            IBundledDevice bundledDevice = getBundledDeviceOnSide(d);
-            if (bundledDevice != null) {
-                onDisconnect(d);
-                for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
-                    IBundledDevice t = bundledDevice.getBundledDeviceOnSide(dir);
-                    if (t == this) {
-                        bundledDevice.onDisconnect(dir);
-                        break;
-                    }
-                }
-                continue;
-            }
-            IRedstoneDevice redstoneDevice = getDeviceOnSide(d);
-            if (redstoneDevice != null) {
-                onDisconnect(d);
-                for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
-                    IRedstoneDevice t = redstoneDevice.getDeviceOnSide(dir);
-                    if (t == this) {
-                        redstoneDevice.onDisconnect(dir);
-                        break;
-                    }
-                }
-                continue;
-            }
-        }
+        WireCommons.disconnect(this, this);
     }
 
     @Override
@@ -370,7 +303,7 @@ IBundledConductor, IPartRedstone, IPartWAILAProvider {
         if (getWorld().isRemote)
             return;
 
-        refreshConnections();
+        WireCommons.refreshConnections(this, this);
 
         int input = 0;
         for (int i = 0; i < 6; i++) {
@@ -434,19 +367,19 @@ IBundledConductor, IPartRedstone, IPartWAILAProvider {
     @Override
     public boolean canConnectBundledStraight(IBundledDevice device) {
 
-        return canConnect(device);
+        return WireCommons.canConnect(this, device);
     }
 
     @Override
     public boolean canConnectBundledOpenCorner(IBundledDevice device) {
 
-        return canConnect(device);
+        return WireCommons.canConnect(this, device);
     }
 
     @Override
     public boolean canConnectBundledClosedCorner(IBundledDevice device) {
 
-        return canConnect(device);
+        return WireCommons.canConnect(this, device);
     }
 
     @Override
@@ -481,7 +414,7 @@ IBundledConductor, IPartRedstone, IPartWAILAProvider {
     }
 
     @Override
-    public RedstoneColor getBundleColor(ForgeDirection side) {
+    public RedstoneColor getBundleColor() {
 
         return bundleColor;
     }

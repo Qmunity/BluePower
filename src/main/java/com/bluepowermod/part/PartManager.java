@@ -53,9 +53,12 @@ import com.bluepowermod.part.tube.PneumaticTube;
 import com.bluepowermod.part.tube.PneumaticTubeOpaque;
 import com.bluepowermod.part.tube.RestrictionTube;
 import com.bluepowermod.part.tube.RestrictionTubeOpaque;
-import com.bluepowermod.part.wire.PartWireBluestone;
-import com.bluepowermod.part.wire.PartWireInfusedTeslatite;
-import com.bluepowermod.part.wire.PartWireRedAlloy;
+import com.bluepowermod.part.wire.PartWireFaceBluestone;
+import com.bluepowermod.part.wire.PartWireFaceInfusedTeslatite;
+import com.bluepowermod.part.wire.PartWireFaceRedAlloy;
+import com.bluepowermod.part.wire.PartWireFreestandingBluestone;
+import com.bluepowermod.part.wire.PartWireFreestandingInfusedTeslatite;
+import com.bluepowermod.part.wire.PartWireFreestandingRedAlloy;
 
 public class PartManager {
 
@@ -174,20 +177,36 @@ public class PartManager {
         registerPart(MagTube.class);
         registerPart(Accelerator.class);
 
-        // Wires
+        // Face wires
         for (RedstoneColor c : RedstoneColor.VALID_COLORS)
-            registerPart(PartWireRedAlloy.class, c);
+            registerPart(PartWireFaceRedAlloy.class, c);
         for (RedstoneColor c : RedstoneColor.VALID_COLORS)
-            registerPart(PartWireRedAlloy.class, c, false);
+            registerPart(PartWireFaceRedAlloy.class, c, false);
 
         for (RedstoneColor c : RedstoneColor.VALID_COLORS)
-            registerPart(PartWireInfusedTeslatite.class, c);
+            registerPart(PartWireFaceInfusedTeslatite.class, c);
         for (RedstoneColor c : RedstoneColor.VALID_COLORS)
-            registerPart(PartWireInfusedTeslatite.class, c, false);
+            registerPart(PartWireFaceInfusedTeslatite.class, c, false);
 
         for (RedstoneColor c : RedstoneColor.VALID_COLORS)
-            registerPart(PartWireBluestone.class, c);
+            registerPart(PartWireFaceBluestone.class, c);
         for (RedstoneColor c : RedstoneColor.VALID_COLORS)
-            registerPart(PartWireBluestone.class, c, false);
+            registerPart(PartWireFaceBluestone.class, c, false);
+
+        // Freestanding wires
+        for (RedstoneColor c : RedstoneColor.VALID_COLORS)
+            registerPart(PartWireFreestandingRedAlloy.class, c);
+        for (RedstoneColor c : RedstoneColor.VALID_COLORS)
+            registerPart(PartWireFreestandingRedAlloy.class, c, false);
+
+        for (RedstoneColor c : RedstoneColor.VALID_COLORS)
+            registerPart(PartWireFreestandingInfusedTeslatite.class, c);
+        for (RedstoneColor c : RedstoneColor.VALID_COLORS)
+            registerPart(PartWireFreestandingInfusedTeslatite.class, c, false);
+
+        for (RedstoneColor c : RedstoneColor.VALID_COLORS)
+            registerPart(PartWireFreestandingBluestone.class, c);
+        for (RedstoneColor c : RedstoneColor.VALID_COLORS)
+            registerPart(PartWireFreestandingBluestone.class, c, false);
     }
 }

@@ -21,7 +21,7 @@ public interface IBundledDevice extends IWorldLocation {
 
     public void onBundledUpdate();
 
-    public RedstoneColor getBundleColor(ForgeDirection side);
+    public RedstoneColor getBundleColor();
 
     public boolean isNormalBlock();
 
