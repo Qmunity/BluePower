@@ -61,10 +61,11 @@ public class RedstoneApi implements IRedstoneApi {
         ITilePartHolder holder = MultipartCompatibility.getPartHolder(world, x, y, z);
         if (holder != null)
             for (IPart p : holder.getParts()) {
-                if (p instanceof IFaceRedstoneDevice) {
-                    if (((IFaceRedstoneDevice) p).getFace() == face)
-                        return (IRedstoneDevice) p;
-                } else {
+                if (p instanceof IRedstoneDevice) {
+                    if (p instanceof IFaceRedstoneDevice) {
+                        if (((IFaceRedstoneDevice) p).getFace() == face)
+                            return (IRedstoneDevice) p;
+                    }
                     return (IRedstoneDevice) p;
                 }
             }

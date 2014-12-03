@@ -7,8 +7,8 @@
  */
 package com.bluepowermod.part.lamp;
 
-import com.bluepowermod.client.renderers.IconSupplier;
-import com.bluepowermod.part.BPPartFace;
+import java.util.Arrays;
+import java.util.List;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
@@ -16,7 +16,6 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -26,12 +25,12 @@ import org.lwjgl.opengl.GL11;
 import uk.co.qmunity.lib.client.render.RenderHelper;
 import uk.co.qmunity.lib.helper.RedstoneHelper;
 import uk.co.qmunity.lib.part.IPartLightEmitter;
+import uk.co.qmunity.lib.part.IPartRedstone;
 import uk.co.qmunity.lib.vec.Vec3d;
 import uk.co.qmunity.lib.vec.Vec3dCube;
 import uk.co.qmunity.lib.vec.Vec3i;
 
-import java.util.Arrays;
-import java.util.List;
+import com.bluepowermod.part.BPPartFace;
 
 /**
  * Base class for the lamps that are multiparts.
@@ -39,7 +38,7 @@ import java.util.List;
  * @author Koen Beckers (K4Unl), Amadornes
  *
  */
-public class PartLamp extends BPPartFace implements IPartLightEmitter {
+public class PartLamp extends BPPartFace implements IPartLightEmitter, IPartRedstone {
 
     protected String colorName;
     private final int colorVal;
@@ -119,8 +118,8 @@ public class PartLamp extends BPPartFace implements IPartLightEmitter {
 
             GL11.glPushMatrix();
             {
-                //RenderHelper renderer = new RenderHelper();
-                //renderStatic(new Vec3i(0, 0, 0), renderer, null, 0);
+                // RenderHelper renderer = new RenderHelper();
+                // renderStatic(new Vec3i(0, 0, 0), renderer, null, 0);
             }
             GL11.glPopMatrix();
         }
@@ -142,15 +141,17 @@ public class PartLamp extends BPPartFace implements IPartLightEmitter {
      * the rendering code doesn't need to get called too often or just doesn't change at all. To call a render update to re-render this just call
      * {@link com.bluepowermod.part.BPPart#markPartForRenderUpdate()}
      *
-     * @param loc Distance from the player's position
-     * @param pass Render pass (0 or 1)
+     * @param loc
+     *            Distance from the player's position
+     * @param pass
+     *            Render pass (0 or 1)
      * @return Whether or not it rendered something
      */
 
     @Override
     public boolean renderStatic(Vec3i loc, RenderHelper renderer, RenderBlocks renderBlocks, int pass) {
 
-        //renderer.setTextureRotations(0, 0, 3, 3, 3, 3);
+        // renderer.setTextureRotations(0, 0, 3, 3, 3, 3);
         switch (getFace().ordinal()) {
         case 0:
             break;
@@ -206,7 +207,8 @@ public class PartLamp extends BPPartFace implements IPartLightEmitter {
      * Code to render the actual lamp portion of the lamp. Will be colored
      *
      * @author Koen Beckers (K4Unl)
-     * @param renderer The RenderHelper
+     * @param renderer
+     *            The RenderHelper
      * @param pass
      *            The pass that is rendered now. Pass 1 for solids. Pass 2 for transparents
      * @param r
@@ -246,6 +248,24 @@ public class PartLamp extends BPPartFace implements IPartLightEmitter {
             notifyUpdate();
             getWorld().updateLightByType(EnumSkyBlock.Block, getX(), getY(), getZ());
         }
+    }
+
+    @Override
+    public int getStrongPower(ForgeDirection side) {
+
+        return 0;
+    }
+
+    @Override
+    public int getWeakPower(ForgeDirection side) {
+
+        return 0;
+    }
+
+    @Override
+    public boolean canConnectRedstone(ForgeDirection side) {
+
+        return true;
     }
 
     /**

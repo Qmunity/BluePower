@@ -13,6 +13,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import uk.co.qmunity.lib.client.render.RenderHelper;
 import uk.co.qmunity.lib.misc.Pair;
 import uk.co.qmunity.lib.part.IPartRedstone;
+import uk.co.qmunity.lib.part.IPartSolid;
 import uk.co.qmunity.lib.part.IPartWAILAProvider;
 import uk.co.qmunity.lib.vec.Vec3d;
 import uk.co.qmunity.lib.vec.Vec3dCube;
@@ -25,9 +26,10 @@ import com.bluepowermod.api.redstone.IRedstoneDevice;
 import com.bluepowermod.api.redstone.RedstoneColor;
 import com.bluepowermod.client.renderers.IconSupplier;
 import com.bluepowermod.part.BPPart;
+import com.bluepowermod.part.wire.propagation.WirePropagator;
 
 public abstract class PartWireFreestanding extends BPPart implements IRedstoneConductor, IBundledConductor, IPartRedstone,
-IPartWAILAProvider {
+IPartWAILAProvider, IPartSolid {
 
     protected IRedstoneDevice[] devices = new IRedstoneDevice[6];
     protected IBundledDevice[] bundledDevices = new IBundledDevice[6];
@@ -70,6 +72,23 @@ IPartWAILAProvider {
 
         boxes.add(new Vec3dCube(0.5 - (size / 2), 0.5 - (size / 2), 0.5 - (size / 2), 0.5 + (size / 2), 0.5 + (size / 2), 0.5 + (size / 2)));
 
+        if (getParent() == null || getWorld() == null)
+            return boxes;
+
+        Vec3dCube box = new Vec3dCube(0.5 - (size / 2), 0, 0.5 - (size / 2), 0.5 + (size / 2), 0.5 - (size / 2), 0.5 + (size / 2));
+
+        if (getWorld().isRemote) {
+            for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
+                if (connections[d.ordinal()])
+                    boxes.add(box.clone().rotate(d, Vec3d.center));
+            }
+        } else {
+            for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
+                if (devices[d.ordinal()] != null || bundledDevices[d.ordinal()] != null)
+                    boxes.add(box.clone().rotate(d, Vec3d.center));
+            }
+        }
+
         return boxes;
     }
 
@@ -88,9 +107,7 @@ IPartWAILAProvider {
     @Override
     public void addCollisionBoxesToList(List<Vec3dCube> boxes, Entity entity) {
 
-        double size = 8 / 16D;
-
-        boxes.add(new Vec3dCube(0.5 - (size / 2), 0.5 - (size / 2), 0.5 - (size / 2), 0.5 + (size / 2), 0.5 + (size / 2), 0.5 + (size / 2)));
+        boxes.addAll(getSelectionBoxes());
     }
 
     @Override
@@ -137,52 +154,99 @@ IPartWAILAProvider {
         renderer.setColor(0xFFFFFF);
 
         // Frame
-        IIcon planks = Blocks.planks.getIcon(0, 0);
-        // renderer.renderBox(new Vec3dCube(0.5 - ((size + separation) / 2), 0.5 - ((size + separation) / 2), 0.5 - ((size + separation) / 2),
-        // 0.5 + ((size + separation) / 2), 0.5 + ((size + separation) / 2), 0.5 + ((size + separation) / 2)), planks);
+        {
+            IIcon planks = Blocks.planks.getIcon(0, 0);
 
-        // Top
-        renderer.renderBox(new Vec3dCube(0.5 - ((size + separation) / 2) - thickness, 0.5 + ((size + separation) / 2), 0.5
-                - ((size + separation) / 2) - thickness, 0.5 - ((size + separation) / 2), 0.5 + ((size + separation) / 2) + thickness, 0.5
-                + ((size + separation) / 2) + thickness), planks);
-        renderer.renderBox(new Vec3dCube(0.5 + ((size + separation) / 2), 0.5 + ((size + separation) / 2), 0.5 - ((size + separation) / 2)
-                - thickness, 0.5 + ((size + separation) / 2) + thickness, 0.5 + ((size + separation) / 2) + thickness, 0.5
-                + ((size + separation) / 2) + thickness), planks);
-        renderer.renderBox(new Vec3dCube(0.5 + ((size + separation) / 2), 0.5 + ((size + separation) / 2), 0.5 + ((size + separation) / 2),
-                0.5 - ((size + separation) / 2), 0.5 + ((size + separation) / 2) + thickness, 0.5 + ((size + separation) / 2) + thickness),
-                planks);
-        renderer.renderBox(
-                new Vec3dCube(0.5 + ((size + separation) / 2), 0.5 + ((size + separation) / 2),
-                        0.5 - ((size + separation) / 2) - thickness, 0.5 - ((size + separation) / 2), 0.5 + ((size + separation) / 2)
+            // Top
+            if (west == up)
+                renderer.renderBox(new Vec3dCube(0.5 - ((size + separation) / 2) - thickness, 0.5 + ((size + separation) / 2),
+                        0.5 - ((size + separation) / 2), 0.5 - ((size + separation) / 2), 0.5 + ((size + separation) / 2) + thickness,
+                        0.5 + ((size + separation) / 2)), planks);
+            if (east == up)
+                renderer.renderBox(new Vec3dCube(0.5 + ((size + separation) / 2), 0.5 + ((size + separation) / 2),
+                        0.5 - ((size + separation) / 2), 0.5 + ((size + separation) / 2) + thickness, 0.5 + ((size + separation) / 2)
+                        + thickness, 0.5 + ((size + separation) / 2)), planks);
+            if (south == up)
+                renderer.renderBox(new Vec3dCube(0.5 + ((size + separation) / 2), 0.5 + ((size + separation) / 2),
+                        0.5 + ((size + separation) / 2), 0.5 - ((size + separation) / 2), 0.5 + ((size + separation) / 2) + thickness, 0.5
+                        + ((size + separation) / 2) + thickness), planks);
+            if (north == up)
+                renderer.renderBox(new Vec3dCube(0.5 + ((size + separation) / 2), 0.5 + ((size + separation) / 2), 0.5
+                        - ((size + separation) / 2) - thickness, 0.5 - ((size + separation) / 2), 0.5 + ((size + separation) / 2)
                         + thickness, 0.5 - ((size + separation) / 2)), planks);
-        // Bottom
-        renderer.renderBox(new Vec3dCube(0.5 - ((size + separation) / 2) - thickness, 0.5 - ((size + separation) / 2) - thickness, 0.5
-                - ((size + separation) / 2) - thickness, 0.5 - ((size + separation) / 2), 0.5 - ((size + separation) / 2), 0.5
-                + ((size + separation) / 2) + thickness), planks);
-        renderer.renderBox(new Vec3dCube(0.5 + ((size + separation) / 2), 0.5 - ((size + separation) / 2) - thickness, 0.5
-                - ((size + separation) / 2) - thickness, 0.5 + ((size + separation) / 2) + thickness, 0.5 - ((size + separation) / 2), 0.5
-                + ((size + separation) / 2) + thickness), planks);
-        renderer.renderBox(new Vec3dCube(0.5 + ((size + separation) / 2), 0.5 - ((size + separation) / 2) - thickness,
-                0.5 + ((size + separation) / 2), 0.5 - ((size + separation) / 2), 0.5 - ((size + separation) / 2), 0.5
-                + ((size + separation) / 2) + thickness), planks);
-        renderer.renderBox(new Vec3dCube(0.5 + ((size + separation) / 2), 0.5 - ((size + separation) / 2) - thickness, 0.5
-                - ((size + separation) / 2) - thickness, 0.5 - ((size + separation) / 2), 0.5 - ((size + separation) / 2),
-                0.5 - ((size + separation) / 2)), planks);
+            // Bottom
+            if (west == down)
+                renderer.renderBox(new Vec3dCube(0.5 - ((size + separation) / 2) - thickness, 0.5 - ((size + separation) / 2) - thickness,
+                        0.5 - ((size + separation) / 2), 0.5 - ((size + separation) / 2), 0.5 - ((size + separation) / 2),
+                        0.5 + ((size + separation) / 2)), planks);
+            if (east == down)
+                renderer.renderBox(new Vec3dCube(0.5 + ((size + separation) / 2), 0.5 - ((size + separation) / 2) - thickness,
+                        0.5 - ((size + separation) / 2), 0.5 + ((size + separation) / 2) + thickness, 0.5 - ((size + separation) / 2),
+                        0.5 + ((size + separation) / 2)), planks);
+            if (south == down)
+                renderer.renderBox(new Vec3dCube(0.5 + ((size + separation) / 2), 0.5 - ((size + separation) / 2) - thickness,
+                        0.5 + ((size + separation) / 2), 0.5 - ((size + separation) / 2), 0.5 - ((size + separation) / 2), 0.5
+                        + ((size + separation) / 2) + thickness), planks);
+            if (north == down)
+                renderer.renderBox(new Vec3dCube(0.5 + ((size + separation) / 2), 0.5 - ((size + separation) / 2) - thickness, 0.5
+                        - ((size + separation) / 2) - thickness, 0.5 - ((size + separation) / 2), 0.5 - ((size + separation) / 2),
+                        0.5 - ((size + separation) / 2)), planks);
 
-        // Sides
-        renderer.renderBox(new Vec3dCube(0.5 - ((size + separation) / 2) - thickness, 0.5 - ((size + separation) / 2), 0.5
-                - ((size + separation) / 2) - thickness, 0.5 - ((size + separation) / 2), 0.5 + ((size + separation) / 2),
-                0.5 - ((size + separation) / 2)), planks);
-        renderer.renderBox(new Vec3dCube(0.5 - ((size + separation) / 2) - thickness, 0.5 - ((size + separation) / 2),
-                0.5 + ((size + separation) / 2), 0.5 - ((size + separation) / 2), 0.5 + ((size + separation) / 2), 0.5
-                + ((size + separation) / 2) + thickness), planks);
-        renderer.renderBox(
-                new Vec3dCube(0.5 + ((size + separation) / 2), 0.5 - ((size + separation) / 2),
-                        0.5 - ((size + separation) / 2) - thickness, 0.5 + ((size + separation) / 2) + thickness,
+            // Sides
+            if (north == west)
+                renderer.renderBox(new Vec3dCube(0.5 - ((size + separation) / 2) - thickness, 0.5 - ((size + separation) / 2), 0.5
+                        - ((size + separation) / 2) - thickness, 0.5 - ((size + separation) / 2), 0.5 + ((size + separation) / 2),
+                        0.5 - ((size + separation) / 2)), planks);
+            if (south == west)
+                renderer.renderBox(new Vec3dCube(0.5 - ((size + separation) / 2) - thickness, 0.5 - ((size + separation) / 2),
+                        0.5 + ((size + separation) / 2), 0.5 - ((size + separation) / 2), 0.5 + ((size + separation) / 2), 0.5
+                        + ((size + separation) / 2) + thickness), planks);
+            if (north == east)
+                renderer.renderBox(new Vec3dCube(0.5 + ((size + separation) / 2), 0.5 - ((size + separation) / 2), 0.5
+                        - ((size + separation) / 2) - thickness, 0.5 + ((size + separation) / 2) + thickness,
                         0.5 + ((size + separation) / 2), 0.5 - ((size + separation) / 2)), planks);
-        renderer.renderBox(new Vec3dCube(0.5 + ((size + separation) / 2), 0.5 - ((size + separation) / 2), 0.5 + ((size + separation) / 2),
-                0.5 + ((size + separation) / 2) + thickness, 0.5 + ((size + separation) / 2), 0.5 + ((size + separation) / 2) + thickness),
-                planks);
+            if (south == east)
+                renderer.renderBox(new Vec3dCube(0.5 + ((size + separation) / 2), 0.5 - ((size + separation) / 2),
+                        0.5 + ((size + separation) / 2), 0.5 + ((size + separation) / 2) + thickness, 0.5 + ((size + separation) / 2), 0.5
+                        + ((size + separation) / 2) + thickness), planks);
+
+            // Corners
+            renderer.renderBox(new Vec3dCube(0.5 - ((size + separation) / 2) - thickness, 0.5 + ((size + separation) / 2), 0.5
+                    - ((size + separation) / 2) - thickness, 0.5 - ((size + separation) / 2), 0.5 + ((size + separation) / 2) + thickness,
+                    0.5 - ((size + separation) / 2)), planks);
+            renderer.renderBox(new Vec3dCube(0.5 - ((size + separation) / 2) - thickness, 0.5 + ((size + separation) / 2),
+                    0.5 + ((size + separation) / 2), 0.5 - ((size + separation) / 2), 0.5 + ((size + separation) / 2) + thickness, 0.5
+                    + ((size + separation) / 2) + thickness), planks);
+            renderer.renderBox(new Vec3dCube(0.5 + ((size + separation) / 2), 0.5 + ((size + separation) / 2), 0.5
+                    - ((size + separation) / 2) - thickness, 0.5 + ((size + separation) / 2) + thickness, 0.5 + ((size + separation) / 2)
+                    + thickness, 0.5 - ((size + separation) / 2)), planks);
+            renderer.renderBox(new Vec3dCube(0.5 + ((size + separation) / 2), 0.5 + ((size + separation) / 2),
+                    0.5 + ((size + separation) / 2), 0.5 + ((size + separation) / 2) + thickness, 0.5 + ((size + separation) / 2)
+                    + thickness, 0.5 + ((size + separation) / 2) + thickness), planks);
+
+            renderer.renderBox(new Vec3dCube(0.5 - ((size + separation) / 2) - thickness, 0.5 - ((size + separation) / 2) - thickness, 0.5
+                    - ((size + separation) / 2) - thickness, 0.5 - ((size + separation) / 2), 0.5 - ((size + separation) / 2),
+                    0.5 - ((size + separation) / 2)), planks);
+            renderer.renderBox(new Vec3dCube(0.5 - ((size + separation) / 2) - thickness, 0.5 - ((size + separation) / 2) - thickness,
+                    0.5 + ((size + separation) / 2), 0.5 - ((size + separation) / 2), 0.5 - ((size + separation) / 2), 0.5
+                    + ((size + separation) / 2) + thickness), planks);
+            renderer.renderBox(new Vec3dCube(0.5 + ((size + separation) / 2), 0.5 - ((size + separation) / 2) - thickness, 0.5
+                    - ((size + separation) / 2) - thickness, 0.5 + ((size + separation) / 2) + thickness, 0.5 - ((size + separation) / 2),
+                    0.5 - ((size + separation) / 2)), planks);
+            renderer.renderBox(new Vec3dCube(0.5 + ((size + separation) / 2), 0.5 - ((size + separation) / 2) - thickness,
+                    0.5 + ((size + separation) / 2), 0.5 + ((size + separation) / 2) + thickness, 0.5 - ((size + separation) / 2), 0.5
+                    + ((size + separation) / 2) + thickness), planks);
+
+            // Connections
+            Vec3dCube box = new Vec3dCube(0.5 - ((size + separation) / 2) - thickness, 0, 0.5 - ((size + separation) / 2) - thickness,
+                    0.5 - ((size + separation) / 2), 0.5 - ((size + separation) / 2) - thickness, 0.5 - ((size + separation) / 2));
+            for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
+                if (!connections[d.ordinal()])
+                    continue;
+                for (int i = 0; i < 4; i++)
+                    renderer.renderBox(box.clone().rotate(0, 90 * i, 0, Vec3d.center).rotate(d, Vec3d.center), planks);
+            }
+        }
 
         renderer.setRotation(0, 0, 0, Vec3d.center);
 
@@ -346,12 +410,7 @@ IPartWAILAProvider {
         }
         power = (byte) input;
 
-        // for (ForgeDirection s : ForgeDirection.VALID_DIRECTIONS) {
-        // if (s != getFace()) {
-        // WirePropagator.INSTANCE.onPowerLevelChange(this, s, power, (byte) input);
-        // break;
-        // }
-        // }
+        WirePropagator.INSTANCE.onPowerLevelChange(this, ForgeDirection.UP, power, (byte) input);
     }
 
     @Override
@@ -467,6 +526,12 @@ IPartWAILAProvider {
     public void addWAILABody(List<String> text) {
 
         text.add("Power: " + (power & 0xFF) + "/255");
+    }
+
+    @Override
+    public boolean isSideSolid(ForgeDirection face) {
+
+        return true;
     }
 
 }
