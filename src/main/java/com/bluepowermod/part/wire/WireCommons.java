@@ -38,8 +38,8 @@ public class WireCommons {
             Entry<IBundledDevice, ForgeDirection> bundledDevice = WireHelper.getBundledNeighbor(conductor1, d);
             boolean wasConnected = conductor.getDeviceOnSide(d) != null || conductor1.getBundledDeviceOnSide(d) != null;
             if (bundledDevice != null && bundledDevice.getKey() != conductor1.getBundledDeviceOnSide(d)) {
-                conductor1.onConnect(d, bundledDevice.getKey());
-                bundledDevice.getKey().onConnect(bundledDevice.getValue(), conductor1);
+                // conductor1.onConnect(d, bundledDevice.getKey());
+                // bundledDevice.getKey().onConnect(bundledDevice.getValue(), conductor1);
 
             }
             Entry<IRedstoneDevice, ForgeDirection> redstoneDevice = WireHelper.getNeighbor(conductor, d);

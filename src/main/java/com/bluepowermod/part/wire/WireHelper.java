@@ -48,6 +48,16 @@ public class WireHelper {
             }
         }
 
+        // Same block
+        {
+            Vec3i loc = new Vec3i(device);
+            IRedstoneDevice dev = RedstoneApi.getInstance().getRedstoneDevice(device.getWorld(), loc.getX(), loc.getY(), loc.getZ(),
+                    side == face.getOpposite() ? ForgeDirection.UNKNOWN : side, side.getOpposite());
+            if (dev != null && dev != device)
+                if (device.canConnectStraight(dev) && dev.canConnectStraight(device))
+                    return new AbstractMap.SimpleEntry(dev, side.getOpposite());
+        }
+
         return null;
     }
 

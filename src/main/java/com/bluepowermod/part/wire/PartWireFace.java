@@ -30,7 +30,7 @@ import com.bluepowermod.part.BPPartFace;
 import com.bluepowermod.part.wire.propagation.WirePropagator;
 
 public abstract class PartWireFace extends BPPartFace implements IFaceRedstoneDevice, IRedstoneConductor, IFaceBundledDevice,
-IBundledConductor, IPartRedstone, IPartWAILAProvider {
+        IBundledConductor, IPartRedstone, IPartWAILAProvider {
 
     protected IRedstoneDevice[] devices = new IRedstoneDevice[6];
     protected IBundledDevice[] bundledDevices = new IBundledDevice[6];
@@ -240,7 +240,7 @@ IBundledConductor, IPartRedstone, IPartWAILAProvider {
     @Override
     public void setRedstonePower(ForgeDirection side, byte power) {
 
-        this.power = power;
+        this.power = isAnalog() ? power : (((power & 0xFF) > 0) ? (byte) 255 : (byte) 0);
     }
 
     @Override
@@ -420,12 +420,12 @@ IBundledConductor, IPartRedstone, IPartWAILAProvider {
     }
 
     @Override
-    public List<IBundledDevice> propagateBundled(ForgeDirection fromSide) {
+    public List<Pair<IBundledDevice, ForgeDirection>> propagateBundled(ForgeDirection fromSide) {
 
-        List<IBundledDevice> devices = new ArrayList<IBundledDevice>();
-        for (IBundledDevice d : bundledDevices)
-            if (d != null)
-                devices.add(d);
+        List<Pair<IBundledDevice, ForgeDirection>> devices = new ArrayList<Pair<IBundledDevice, ForgeDirection>>();
+        // for (IBundledDevice d : bundledDevices)
+        // if (d != null)
+        // devices.add(d);
 
         return devices;
     }

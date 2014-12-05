@@ -1,5 +1,6 @@
 package com.bluepowermod.part.wire;
 
+import net.minecraft.block.Block;
 import net.minecraft.util.Direction;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -45,7 +46,10 @@ public class DummyRedstoneDevice implements IRedstoneDevice {
     @Override
     public boolean canConnectStraight(IRedstoneDevice device) {
 
-        return loc.getBlock().canConnectRedstone(getWorld(), getX(), getY(), getZ(), 0);
+        return getWorld().getBlock(getX(), getY(), getZ()).canConnectRedstone(getWorld(), getX(), getY(), getZ(),
+                Direction.getMovementDirection(ForgeDirection.SOUTH.offsetX, ForgeDirection.SOUTH.offsetZ));// RedstoneHelper.canConnect(getWorld(),
+        // getX(), getY(), getZ(),
+        // ForgeDirection.NORTH);
     }
 
     @Override
@@ -73,12 +77,13 @@ public class DummyRedstoneDevice implements IRedstoneDevice {
     @Override
     public byte getRedstonePower(ForgeDirection side) {
 
+        // int original = RedstoneHelper.getOutput(getWorld(), getX(), getY(), getZ(), side);
+        Block b = getWorld().getBlock(getX(), getY(), getZ());
         int original = Math.max(
-                loc.getBlock().isProvidingWeakPower(getWorld(), getX(), getY(), getZ(),
-                        Direction.getMovementDirection(side.offsetX, side.offsetZ)),
-                loc.getBlock().isProvidingStrongPower(getWorld(), getX(), getY(), getZ(),
-                        Direction.getMovementDirection(side.offsetX, side.offsetZ)));
-
+                b.isProvidingWeakPower(getWorld(), getX(), getY(), getZ(),
+                        Direction.getMovementDirection(ForgeDirection.SOUTH.offsetX, ForgeDirection.SOUTH.offsetZ)),
+                        b.isProvidingStrongPower(getWorld(), getX(), getY(), getZ(),
+                                Direction.getMovementDirection(ForgeDirection.SOUTH.offsetX, ForgeDirection.SOUTH.offsetZ)));
         return (byte) MathHelper.map(original, 0, 15, 0, 255);
     }
 

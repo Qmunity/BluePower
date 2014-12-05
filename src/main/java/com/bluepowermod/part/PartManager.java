@@ -45,6 +45,7 @@ import com.bluepowermod.part.gate.analog.GateInverter;
 import com.bluepowermod.part.gate.ic.Circuit3x3;
 import com.bluepowermod.part.gate.ic.Circuit5x5;
 import com.bluepowermod.part.gate.ic.Circuit7x7;
+import com.bluepowermod.part.gate.wireless.GateTransceiver;
 import com.bluepowermod.part.lamp.PartCageLamp;
 import com.bluepowermod.part.lamp.PartFixture;
 import com.bluepowermod.part.tube.Accelerator;
@@ -151,6 +152,12 @@ public class PartManager {
         registerPart(GateInverter.class);
         registerPart(GateNullCell.class, true);
 
+        // Wireless gates
+        registerPart(GateTransceiver.class, false, false);
+        registerPart(GateTransceiver.class, true, false);
+        registerPart(GateTransceiver.class, false, true);
+        registerPart(GateTransceiver.class, true, true);
+
         // IC's
         registerPart(Circuit3x3.class);
         registerPart(Circuit5x5.class);
@@ -169,7 +176,7 @@ public class PartManager {
         for (int i = 0; i < ItemDye.field_150922_c.length; i++)
             registerPart(PartFixture.class, ItemDye.field_150921_b[i].toLowerCase(), ItemDye.field_150922_c[i], true);
 
-        // // Pneumatic Tubes
+        // Pneumatic Tubes
         registerPart(PneumaticTube.class);
         registerPart(PneumaticTubeOpaque.class);
         registerPart(RestrictionTube.class);

@@ -5,13 +5,8 @@ import java.util.List;
 
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
-import uk.co.qmunity.lib.part.IPart;
-import uk.co.qmunity.lib.part.ITilePartHolder;
-import uk.co.qmunity.lib.part.compat.MultipartCompatibility;
-import uk.co.qmunity.lib.vec.Vec3i;
 
 import com.bluepowermod.api.redstone.IBundledDevice;
-import com.bluepowermod.api.redstone.IFaceRedstoneDevice;
 import com.bluepowermod.api.redstone.IPropagator;
 import com.bluepowermod.api.redstone.IRedstoneApi;
 import com.bluepowermod.api.redstone.IRedstoneDevice;
@@ -21,6 +16,8 @@ import com.bluepowermod.part.wire.propagation.WirePropagator;
 public class RedstoneApi implements IRedstoneApi {
 
     private static RedstoneApi INSTANCE = new RedstoneApi();
+
+    private static Object returnDevice = new ReturnDevice();
 
     private RedstoneApi() {
 
@@ -54,23 +51,14 @@ public class RedstoneApi implements IRedstoneApi {
 
         for (IRedstoneProvider provider : providers) {
             IRedstoneDevice device = provider.getRedstoneDevice(world, x, y, z, face, side);
-            if (device != null)
+            if (device != null) {
+                if (device == returnDevice)
+                    return null;
                 return device;
+            }
         }
 
-        ITilePartHolder holder = MultipartCompatibility.getPartHolder(world, x, y, z);
-        if (holder != null)
-            for (IPart p : holder.getParts()) {
-                if (p instanceof IRedstoneDevice) {
-                    if (p instanceof IFaceRedstoneDevice) {
-                        if (((IFaceRedstoneDevice) p).getFace() == face)
-                            return (IRedstoneDevice) p;
-                    }
-                    return (IRedstoneDevice) p;
-                }
-            }
-
-        return new DummyRedstoneDevice(new Vec3i(x, y, z, world));
+        return null;
     }
 
     @Override
@@ -78,8 +66,11 @@ public class RedstoneApi implements IRedstoneApi {
 
         for (IRedstoneProvider provider : providers) {
             IBundledDevice device = provider.getBundledDevice(world, x, y, z, face, side);
-            if (device != null)
+            if (device != null) {
+                if (device == returnDevice)
+                    return null;
                 return device;
+            }
         }
 
         return null;
@@ -100,6 +91,12 @@ public class RedstoneApi implements IRedstoneApi {
     public IPropagator getPropagator() {
 
         return WirePropagator.INSTANCE;
+    }
+
+    @Override
+    public Object getReturnDevice() {
+
+        return returnDevice;
     }
 
 }

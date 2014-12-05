@@ -11,6 +11,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
 import net.minecraftforge.common.util.ForgeDirection;
 import uk.co.qmunity.lib.client.render.RenderHelper;
+import uk.co.qmunity.lib.helper.MathHelper;
 import uk.co.qmunity.lib.misc.Pair;
 import uk.co.qmunity.lib.part.IPartRedstone;
 import uk.co.qmunity.lib.part.IPartSolid;
@@ -29,7 +30,7 @@ import com.bluepowermod.part.BPPart;
 import com.bluepowermod.part.wire.propagation.WirePropagator;
 
 public abstract class PartWireFreestanding extends BPPart implements IRedstoneConductor, IBundledConductor, IPartRedstone,
-IPartWAILAProvider, IPartSolid {
+        IPartWAILAProvider, IPartSolid {
 
     protected IRedstoneDevice[] devices = new IRedstoneDevice[6];
     protected IBundledDevice[] bundledDevices = new IBundledDevice[6];
@@ -165,11 +166,11 @@ IPartWAILAProvider, IPartSolid {
             if (east == up)
                 renderer.renderBox(new Vec3dCube(0.5 + ((size + separation) / 2), 0.5 + ((size + separation) / 2),
                         0.5 - ((size + separation) / 2), 0.5 + ((size + separation) / 2) + thickness, 0.5 + ((size + separation) / 2)
-                        + thickness, 0.5 + ((size + separation) / 2)), planks);
+                                + thickness, 0.5 + ((size + separation) / 2)), planks);
             if (south == up)
                 renderer.renderBox(new Vec3dCube(0.5 + ((size + separation) / 2), 0.5 + ((size + separation) / 2),
                         0.5 + ((size + separation) / 2), 0.5 - ((size + separation) / 2), 0.5 + ((size + separation) / 2) + thickness, 0.5
-                        + ((size + separation) / 2) + thickness), planks);
+                                + ((size + separation) / 2) + thickness), planks);
             if (north == up)
                 renderer.renderBox(new Vec3dCube(0.5 + ((size + separation) / 2), 0.5 + ((size + separation) / 2), 0.5
                         - ((size + separation) / 2) - thickness, 0.5 - ((size + separation) / 2), 0.5 + ((size + separation) / 2)
@@ -186,7 +187,7 @@ IPartWAILAProvider, IPartSolid {
             if (south == down)
                 renderer.renderBox(new Vec3dCube(0.5 + ((size + separation) / 2), 0.5 - ((size + separation) / 2) - thickness,
                         0.5 + ((size + separation) / 2), 0.5 - ((size + separation) / 2), 0.5 - ((size + separation) / 2), 0.5
-                        + ((size + separation) / 2) + thickness), planks);
+                                + ((size + separation) / 2) + thickness), planks);
             if (north == down)
                 renderer.renderBox(new Vec3dCube(0.5 + ((size + separation) / 2), 0.5 - ((size + separation) / 2) - thickness, 0.5
                         - ((size + separation) / 2) - thickness, 0.5 - ((size + separation) / 2), 0.5 - ((size + separation) / 2),
@@ -200,7 +201,7 @@ IPartWAILAProvider, IPartSolid {
             if (south == west)
                 renderer.renderBox(new Vec3dCube(0.5 - ((size + separation) / 2) - thickness, 0.5 - ((size + separation) / 2),
                         0.5 + ((size + separation) / 2), 0.5 - ((size + separation) / 2), 0.5 + ((size + separation) / 2), 0.5
-                        + ((size + separation) / 2) + thickness), planks);
+                                + ((size + separation) / 2) + thickness), planks);
             if (north == east)
                 renderer.renderBox(new Vec3dCube(0.5 + ((size + separation) / 2), 0.5 - ((size + separation) / 2), 0.5
                         - ((size + separation) / 2) - thickness, 0.5 + ((size + separation) / 2) + thickness,
@@ -208,7 +209,7 @@ IPartWAILAProvider, IPartSolid {
             if (south == east)
                 renderer.renderBox(new Vec3dCube(0.5 + ((size + separation) / 2), 0.5 - ((size + separation) / 2),
                         0.5 + ((size + separation) / 2), 0.5 + ((size + separation) / 2) + thickness, 0.5 + ((size + separation) / 2), 0.5
-                        + ((size + separation) / 2) + thickness), planks);
+                                + ((size + separation) / 2) + thickness), planks);
 
             // Corners
             renderer.renderBox(new Vec3dCube(0.5 - ((size + separation) / 2) - thickness, 0.5 + ((size + separation) / 2), 0.5
@@ -216,26 +217,26 @@ IPartWAILAProvider, IPartSolid {
                     0.5 - ((size + separation) / 2)), planks);
             renderer.renderBox(new Vec3dCube(0.5 - ((size + separation) / 2) - thickness, 0.5 + ((size + separation) / 2),
                     0.5 + ((size + separation) / 2), 0.5 - ((size + separation) / 2), 0.5 + ((size + separation) / 2) + thickness, 0.5
-                    + ((size + separation) / 2) + thickness), planks);
+                            + ((size + separation) / 2) + thickness), planks);
             renderer.renderBox(new Vec3dCube(0.5 + ((size + separation) / 2), 0.5 + ((size + separation) / 2), 0.5
                     - ((size + separation) / 2) - thickness, 0.5 + ((size + separation) / 2) + thickness, 0.5 + ((size + separation) / 2)
                     + thickness, 0.5 - ((size + separation) / 2)), planks);
             renderer.renderBox(new Vec3dCube(0.5 + ((size + separation) / 2), 0.5 + ((size + separation) / 2),
                     0.5 + ((size + separation) / 2), 0.5 + ((size + separation) / 2) + thickness, 0.5 + ((size + separation) / 2)
-                    + thickness, 0.5 + ((size + separation) / 2) + thickness), planks);
+                            + thickness, 0.5 + ((size + separation) / 2) + thickness), planks);
 
             renderer.renderBox(new Vec3dCube(0.5 - ((size + separation) / 2) - thickness, 0.5 - ((size + separation) / 2) - thickness, 0.5
                     - ((size + separation) / 2) - thickness, 0.5 - ((size + separation) / 2), 0.5 - ((size + separation) / 2),
                     0.5 - ((size + separation) / 2)), planks);
             renderer.renderBox(new Vec3dCube(0.5 - ((size + separation) / 2) - thickness, 0.5 - ((size + separation) / 2) - thickness,
                     0.5 + ((size + separation) / 2), 0.5 - ((size + separation) / 2), 0.5 - ((size + separation) / 2), 0.5
-                    + ((size + separation) / 2) + thickness), planks);
+                            + ((size + separation) / 2) + thickness), planks);
             renderer.renderBox(new Vec3dCube(0.5 + ((size + separation) / 2), 0.5 - ((size + separation) / 2) - thickness, 0.5
                     - ((size + separation) / 2) - thickness, 0.5 + ((size + separation) / 2) + thickness, 0.5 - ((size + separation) / 2),
                     0.5 - ((size + separation) / 2)), planks);
             renderer.renderBox(new Vec3dCube(0.5 + ((size + separation) / 2), 0.5 - ((size + separation) / 2) - thickness,
                     0.5 + ((size + separation) / 2), 0.5 + ((size + separation) / 2) + thickness, 0.5 - ((size + separation) / 2), 0.5
-                    + ((size + separation) / 2) + thickness), planks);
+                            + ((size + separation) / 2) + thickness), planks);
 
             // Connections
             Vec3dCube box = new Vec3dCube(0.5 - ((size + separation) / 2) - thickness, 0, 0.5 - ((size + separation) / 2) - thickness,
@@ -336,7 +337,7 @@ IPartWAILAProvider, IPartSolid {
     @Override
     public void setRedstonePower(ForgeDirection side, byte power) {
 
-        this.power = power;
+        this.power = isAnalog() ? power : (((power & 0xFF) > 0) ? (byte) 255 : (byte) 0);
     }
 
     @Override
@@ -424,15 +425,11 @@ IPartWAILAProvider, IPartSolid {
 
         // if (!shouldOutput)
         // return 0;
-        //
-        // if (isBundled())
-        // return 0;
-        //
-        // if (side != getFace())
-        // return 0;
-        //
-        // return MathHelper.map(power, 0, 255, 0, 15);
-        return 0;
+
+        if (isBundled())
+            return 0;
+
+        return MathHelper.map(power & 0xFF, 0, 255, 0, 15);
     }
 
     @Override
@@ -451,7 +448,12 @@ IPartWAILAProvider, IPartSolid {
         // return 0;
         //
         // return MathHelper.map(power, 0, 255, 0, 15);
-        return 0;
+
+        if (isBundled())
+            return 0;
+
+        return MathHelper.map(power & 0xFF, 0, 255, 0, 15);
+        // return 0;
     }
 
     public abstract int getColor();
@@ -506,12 +508,12 @@ IPartWAILAProvider, IPartSolid {
     }
 
     @Override
-    public List<IBundledDevice> propagateBundled(ForgeDirection fromSide) {
+    public List<Pair<IBundledDevice, ForgeDirection>> propagateBundled(ForgeDirection fromSide) {
 
-        List<IBundledDevice> devices = new ArrayList<IBundledDevice>();
-        for (IBundledDevice d : bundledDevices)
-            if (d != null)
-                devices.add(d);
+        List<Pair<IBundledDevice, ForgeDirection>> devices = new ArrayList<Pair<IBundledDevice, ForgeDirection>>();
+        // for (IBundledDevice d : bundledDevices)
+        // if (d != null)
+        // devices.add(d);
 
         return devices;
     }

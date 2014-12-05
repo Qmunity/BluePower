@@ -65,7 +65,7 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
             new RedstoneConnection(this, Dir.RIGHT), new RedstoneConnection(this, Dir.BACK), new RedstoneConnection(this, Dir.LEFT),
             new RedstoneConnection(this, Dir.TOP), new RedstoneConnection(this, Dir.BOTTOM) };
 
-    private boolean needsUpdate;//flag that is set when a neighbor block update occurs.
+    private boolean needsUpdate;// flag that is set when a neighbor block update occurs.
     public IntegratedCircuit parentCircuit;
 
     private static IIcon iconBottom;
@@ -113,6 +113,7 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
     public abstract String getId();
 
     protected String getTextureName() {
+
         return getId();
     }
 
@@ -145,7 +146,7 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
 
     public void addOcclusionBoxes(List<Vec3dCube> boxes) {
 
-        boxes.add(BOX.clone());
+        boxes.add(new Vec3dCube(2 / 16D, 0, 2 / 16D, 14 / 16D, 2D / 16D, 14 / 16D));
     }
 
     @Override
@@ -323,8 +324,8 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
 
     protected final void renderTop(String texture) {
 
-        Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/gates/" + getTextureName() + "/"
-                + texture + ".png"));
+        Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/gates/" + getTextureName()
+                + "/" + texture + ".png"));
         renderTop();
     }
 
@@ -335,8 +336,8 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
 
     protected final void renderTop(String texture, String status) {
 
-        Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/gates/" + getTextureName() + "/"
-                + texture + "_" + status + ".png"));
+        Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/gates/" + getTextureName()
+                + "/" + texture + "_" + status + ".png"));
 
         boolean isOn = status.equals("on");
 
@@ -356,8 +357,8 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
 
         boolean isOn = con.getOutput() + (!con.isOutputOnly() ? con.getInput() : 0) > 0;
 
-        Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/gates/" + getTextureName() + "/" + name
-                + "_" + (con.isEnabled() ? isOn ? "on" : "off" : "disabled") + ".png"));
+        Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/gates/" + getTextureName()
+                + "/" + name + "_" + (con.isEnabled() ? isOn ? "on" : "off" : "disabled") + ".png"));
 
         float bX = OpenGlHelper.lastBrightnessX;
         float bY = OpenGlHelper.lastBrightnessY;
@@ -407,6 +408,7 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
 
     @Override
     public final void update() {
+
         if (needsUpdate) {
             needsUpdate = false;
             if (parentCircuit == null)
