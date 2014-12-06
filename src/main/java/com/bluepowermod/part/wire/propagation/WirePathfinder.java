@@ -15,6 +15,7 @@ public class WirePathfinder {
     public static List<Pair<IRedstoneDevice, ForgeDirection>> pathfind(IRedstoneConductor from, ForgeDirection side) {
 
         List<Pair<IRedstoneDevice, ForgeDirection>> result = new ArrayList<Pair<IRedstoneDevice, ForgeDirection>>();
+        result.add(new Pair<IRedstoneDevice, ForgeDirection>(from, side));
 
         List<Pair<IRedstoneDevice, ForgeDirection>> current = new ArrayList<Pair<IRedstoneDevice, ForgeDirection>>();
         current.addAll(from.propagate(side));
