@@ -17,7 +17,6 @@
 
 package com.bluepowermod.init;
 
-import com.bluepowermod.part.PartManager;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
@@ -97,7 +96,7 @@ public class CustomTabs {
 
             @Override
             public Item getTabIconItem() {
-                Item iconItem = PartManager.getPartInfo("timer").getItem().getItem();
+                Item iconItem = BPItems.blue_doped_wafer; //PartManager.getPartInfo("timer").getItem().getItem();
                 if (iconItem != null) {
                     return iconItem;
                 } else {
