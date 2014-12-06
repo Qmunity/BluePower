@@ -46,7 +46,7 @@ public class PartWireFaceInfusedTeslatite extends PartWireFace {
     @Override
     public int getColor() {
 
-        return 0xDD00BB;
+        return 0xAA00BB;
     }
 
 }

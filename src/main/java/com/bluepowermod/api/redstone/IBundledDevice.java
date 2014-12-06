@@ -5,9 +5,9 @@ import uk.co.qmunity.lib.vec.IWorldLocation;
 
 public interface IBundledDevice extends IWorldLocation {
 
-    public boolean canConnectBundledStraight(IBundledDevice device);
+    public boolean canConnectBundledStraight(ForgeDirection side, IBundledDevice device);
 
-    public boolean canConnectBundledOpenCorner(IBundledDevice device);
+    public boolean canConnectBundledOpenCorner(ForgeDirection side, IBundledDevice device);
 
     public void onConnect(ForgeDirection side, IBundledDevice device);
 

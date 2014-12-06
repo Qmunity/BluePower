@@ -10,6 +10,7 @@ import net.minecraft.util.IIcon;
 import net.minecraftforge.common.util.ForgeDirection;
 import uk.co.qmunity.lib.client.render.RenderHelper;
 import uk.co.qmunity.lib.misc.Pair;
+import uk.co.qmunity.lib.transform.Rotation;
 import uk.co.qmunity.lib.vec.Vec3d;
 import uk.co.qmunity.lib.vec.Vec3dCube;
 import uk.co.qmunity.lib.vec.Vec3i;
@@ -68,6 +69,9 @@ public class GateTransceiver extends GateBase implements IFaceRedstoneDevice, IR
 
         super.renderStatic(translation, renderer, renderBlocks, pass);
 
+        if (getParent() != null)
+            renderer.addTransformation(new Rotation(0, 180, 0));
+
         IIcon obsidian = Blocks.obsidian.getIcon(0, 0);
         IIcon quartz = Blocks.quartz_block.getIcon(0, 0);
         IIcon iron = Blocks.iron_block.getIcon(0, 0);
@@ -75,6 +79,8 @@ public class GateTransceiver extends GateBase implements IFaceRedstoneDevice, IR
 
         // Base
         renderer.renderBox(new Vec3dCube(7 / 16D, 2 / 16D, 7 / 16D, 9 / 16D, 8 / 16D, 9 / 16D), obsidian);
+
+        renderer.addTransformation(new Rotation(45, 0, 0));
 
         // Post
         renderer.renderBox(new Vec3dCube(15 / 32D, 9 / 16D, 15 / 32D, 17 / 32D, 10 / 16D, 17 / 32D), iron);
@@ -109,19 +115,19 @@ public class GateTransceiver extends GateBase implements IFaceRedstoneDevice, IR
     }
 
     @Override
-    public boolean canConnectStraight(IRedstoneDevice device) {
+    public boolean canConnectStraight(ForgeDirection side, IRedstoneDevice device) {
 
         return !isBundled;
     }
 
     @Override
-    public boolean canConnectOpenCorner(IRedstoneDevice device) {
+    public boolean canConnectOpenCorner(ForgeDirection side, IRedstoneDevice device) {
 
         return !isBundled;
     }
 
     @Override
-    public boolean canConnectClosedCorner(IRedstoneDevice device) {
+    public boolean canConnectClosedCorner(ForgeDirection side, IRedstoneDevice device) {
 
         return !isBundled;
     }
@@ -221,19 +227,19 @@ public class GateTransceiver extends GateBase implements IFaceRedstoneDevice, IR
     }
 
     @Override
-    public boolean canConnectBundledStraight(IBundledDevice device) {
+    public boolean canConnectBundledStraight(ForgeDirection side, IBundledDevice device) {
 
         return true;
     }
 
     @Override
-    public boolean canConnectBundledOpenCorner(IBundledDevice device) {
+    public boolean canConnectBundledOpenCorner(ForgeDirection side, IBundledDevice device) {
 
         return true;
     }
 
     @Override
-    public boolean canConnectBundledClosedCorner(IBundledDevice device) {
+    public boolean canConnectBundledClosedCorner(ForgeDirection side, IBundledDevice device) {
 
         return true;
     }

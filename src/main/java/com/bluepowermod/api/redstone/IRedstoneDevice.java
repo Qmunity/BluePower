@@ -5,9 +5,9 @@ import uk.co.qmunity.lib.vec.IWorldLocation;
 
 public interface IRedstoneDevice extends IWorldLocation {
 
-    public boolean canConnectStraight(IRedstoneDevice device);
+    public boolean canConnectStraight(ForgeDirection side, IRedstoneDevice device);
 
-    public boolean canConnectOpenCorner(IRedstoneDevice device);
+    public boolean canConnectOpenCorner(ForgeDirection side, IRedstoneDevice device);
 
     public void onConnect(ForgeDirection side, IRedstoneDevice device);
 

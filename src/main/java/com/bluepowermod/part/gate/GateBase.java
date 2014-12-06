@@ -12,21 +12,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -38,6 +36,7 @@ import uk.co.qmunity.lib.part.IPartRedstone;
 import uk.co.qmunity.lib.part.IPartRenderPlacement;
 import uk.co.qmunity.lib.part.IPartTicking;
 import uk.co.qmunity.lib.raytrace.QMovingObjectPosition;
+import uk.co.qmunity.lib.transform.Rotation;
 import uk.co.qmunity.lib.util.Dir;
 import uk.co.qmunity.lib.vec.Vec3d;
 import uk.co.qmunity.lib.vec.Vec3dCube;
@@ -73,21 +72,6 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
     private IIcon iconTop;
 
     private static GateBase rendering;
-    private static final Block blockFake = new Block(Material.rock) {
-
-        @Override
-        public IIcon getIcon(IBlockAccess w, int x, int y, int z, int face) {
-
-            ForgeDirection f = ForgeDirection.getOrientation(face);
-
-            if (f == rendering.getFace())
-                return iconBottom;
-            if (f == rendering.getFace().getOpposite())
-                return ((GateBase) PartManager.getExample(rendering.getType())).getTopIcon();
-
-            return iconSide;
-        };
-    };
 
     private final Random rnd = new Random();
 
@@ -218,89 +202,84 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
     @Override
     public boolean renderStatic(Vec3i translation, RenderHelper renderer, RenderBlocks renderBlocks, int pass) {
 
-        rendering = this;
-
-        Vec3dCube c = BOX.clone().rotate(getFace(), Vec3d.center);
-
-        if (getFace() == ForgeDirection.UP) {
-            renderBlocks.uvRotateEast = 3;
-            renderBlocks.uvRotateWest = 3;
-            renderBlocks.uvRotateNorth = 3;
-            renderBlocks.uvRotateSouth = 3;
-            renderBlocks.uvRotateBottom = getTopRotation();
-        } else if (getFace() == ForgeDirection.EAST) {
-            renderBlocks.uvRotateTop = 2;
-            renderBlocks.uvRotateBottom = 1;
-            renderBlocks.uvRotateEast = 1;
-            renderBlocks.uvRotateWest = 2;
-
-            int amt = (getRotation() - 1) % 4;
-            while (amt < 0)
-                amt += 4;
-            if (amt == 2 || amt == 3)
-                amt = amt ^ 1;
-            renderBlocks.uvRotateNorth = amt;
-        } else if (getFace() == ForgeDirection.WEST) {
-            renderBlocks.uvRotateTop = 1;
-            renderBlocks.uvRotateBottom = 2;
-            renderBlocks.uvRotateEast = 2;
-            renderBlocks.uvRotateWest = 1;
-
-            int amt = (getRotation() + 1) % 4;
-            while (amt < 0)
-                amt += 4;
-            if (amt == 2 || amt == 3)
-                amt = amt ^ 1;
-            renderBlocks.uvRotateSouth = amt;
-        } else if (getFace() == ForgeDirection.SOUTH) {
-            renderBlocks.uvRotateSouth = 1;
-            renderBlocks.uvRotateNorth = 2;
-
-            int amt = (getRotation() - 2) % 4;
-            while (amt < 0)
-                amt += 4;
-            if (amt == 2 || amt == 3)
-                amt = amt ^ 1;
-            renderBlocks.uvRotateEast = amt;
-        } else if (getFace() == ForgeDirection.NORTH) {
-            renderBlocks.uvRotateTop = 3;
-            renderBlocks.uvRotateBottom = 3;
-            renderBlocks.uvRotateSouth = 2;
-            renderBlocks.uvRotateNorth = 1;
-            renderBlocks.uvRotateWest = getTopRotation();
-        } else {
-            renderBlocks.uvRotateTop = getTopRotation();
+        switch (getFace()) {
+        case DOWN:
+            break;
+        case UP:
+            renderer.addTransformation(new Rotation(180, 0, 0, Vec3d.center));
+            break;
+        case NORTH:
+            renderer.addTransformation(new Rotation(90, 0, 0, Vec3d.center));
+            break;
+        case SOUTH:
+            renderer.addTransformation(new Rotation(-90, 0, 0, Vec3d.center));
+            break;
+        case WEST:
+            renderer.addTransformation(new Rotation(0, 0, -90, Vec3d.center));
+            break;
+        case EAST:
+            renderer.addTransformation(new Rotation(0, 0, 90, Vec3d.center));
+            break;
+        default:
+            break;
         }
 
-        renderBlocks.setRenderAllFaces(true);
-        renderBlocks.setRenderBounds(c.getMinX(), c.getMinY(), c.getMinZ(), c.getMaxX(), c.getMaxY(), c.getMaxZ());
-        renderBlocks.overrideBlockTexture = null;
-        boolean rendered = renderBlocks.renderStandardBlock(blockFake, getX(), getY(), getZ());
-        renderBlocks.setRenderAllFaces(false);
+        int rotation = getRotation();
+        renderer.addTransformation(new Rotation(0, 90 * -rotation, 0));
 
-        renderBlocks.uvRotateEast = 0;
-        renderBlocks.uvRotateWest = 0;
-        renderBlocks.uvRotateNorth = 0;
-        renderBlocks.uvRotateSouth = 0;
-        renderBlocks.uvRotateTop = 0;
-        renderBlocks.uvRotateBottom = 0;
+        if (rendering == null)
+            rendering = this;
+        renderer.renderBox(new Vec3dCube(0, 0, 0, 1, 2 / 16D, 1), getIcon(ForgeDirection.DOWN), getIcon(ForgeDirection.UP),
+                getIcon(ForgeDirection.WEST), getIcon(ForgeDirection.EAST), getIcon(ForgeDirection.NORTH), getIcon(ForgeDirection.SOUTH));
 
-        return rendered;
+        rendering = null;
+
+        return true;
     }
 
-    private int getTopRotation() {
+    @Override
+    public final void renderItem(ItemRenderType type, ItemStack item, Object... data) {
 
-        switch (getRotation()) {
-        case 0:
-            return 0;
-        case 1:
-            return 1;
-        case 3:
-            return 2;
-        case 2:
-            return 3;
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+
+        rendering = this;
+
+        if (this instanceof ISilkyRemovable && item.hasTagCompound()) {
+            readFromNBT(item.getTagCompound().getCompoundTag("tileData"));
         }
-        return -1;
+        GL11.glPushMatrix();
+        {
+            RenderHelper rh = RenderHelper.instance;
+            rh.reset();
+            Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
+
+            if (type == ItemRenderType.EQUIPPED_FIRST_PERSON) {
+                GL11.glTranslated(0.5, 0, 0.5);
+                GL11.glRotated(-90, 0, 1, 0);
+                GL11.glTranslated(-0.5, 0, -0.5);
+                GL11.glTranslated(0, 0.75, 0);
+            }
+            if (type == ItemRenderType.ENTITY && item.getItemFrame() != null) {
+                GL11.glTranslated(19 / 32D, 8 / 16D, 1);
+                GL11.glRotated(-90, 0, 0, 1);
+                GL11.glRotated(90, 0, 1, 0);
+            }
+
+            Tessellator.instance.startDrawingQuads();
+            if (shouldRenderOnPass(0))
+                renderStatic(new Vec3i(0, 0, 0), rh, RenderBlocks.getInstance(), 0);
+            rh.reset();
+            if (shouldRenderOnPass(1))
+                renderStatic(new Vec3i(0, 0, 0), rh, RenderBlocks.getInstance(), 1);
+            rh.reset();
+            Tessellator.instance.draw();
+            renderDynamic(new Vec3d(0, 0, 0), 0, 0);
+
+        }
+        GL11.glPopMatrix();
+
+        GL11.glDisable(GL11.GL_BLEND);
     }
 
     protected abstract void renderTop(float frame);
@@ -379,25 +358,8 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
 
         Vec3d v = new Vec3d(x, y, z).sub(Vec3d.center).rotate(0, 90 * getRotation(), 0).add(Vec3d.center).rotate(getFace(), Vec3d.center);
 
-        if (rnd.nextInt(5) == 0)
+        if (rnd.nextInt(20) == 0)
             getWorld().spawnParticle("reddust", getX() + v.getX(), getY() + v.getY(), getZ() + v.getZ(), -1, 0, 1);
-    }
-
-    @Override
-    public final void renderItem(ItemRenderType type, ItemStack item, Object... data) {
-
-        if (this instanceof ISilkyRemovable && item.hasTagCompound()) {
-            readFromNBT(item.getTagCompound().getCompoundTag("tileData"));
-        }
-        GL11.glPushMatrix();
-        {
-
-            if (type == ItemRenderType.INVENTORY) {
-                GL11.glTranslated(0, 0.5, 0);
-                GL11.glRotated(-12, -1, 0, 1);
-            }
-        }
-        GL11.glPopMatrix();
     }
 
     public abstract void doLogic();
@@ -563,6 +525,16 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
     public IIcon getTopIcon() {
 
         return iconTop;
+    }
+
+    public IIcon getIcon(ForgeDirection face) {
+
+        if (face == ForgeDirection.DOWN)
+            return iconBottom;
+        if (face == ForgeDirection.UP)
+            return ((GateBase) PartManager.getExample(rendering.getType())).getTopIcon();
+
+        return iconSide;
     }
 
     @Override

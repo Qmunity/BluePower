@@ -71,8 +71,6 @@ public class RenderHelper {
 
         GL11.glPushMatrix();
         {
-            GL11.glTranslated(x, y + height - 1, z);
-
             Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
 
             rb.overrideBlockTexture = state ? IconSupplier.bluestoneTorchOn : IconSupplier.bluestoneTorchOff;
@@ -83,7 +81,9 @@ public class RenderHelper {
             OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, Math.max(150, bX), Math.max(150, bY));
 
             GL11.glEnable(GL11.GL_CLIP_PLANE0);
-            GL11.glClipPlane(GL11.GL_CLIP_PLANE0, planeEquation(0, 0, 0, 0, 0, 1, 1, 0, 1));
+            GL11.glClipPlane(GL11.GL_CLIP_PLANE0, uk.co.qmunity.lib.client.render.RenderUtils.planeEquation(0, 1, 0));
+
+            GL11.glTranslated(x, y + height - 1, z);
 
             Tessellator t = Tessellator.instance;
 
@@ -253,7 +253,8 @@ public class RenderHelper {
      * @param z3
      * @return TODO: Maybe move this function?
      */
-    public static DoubleBuffer planeEquation(double x1, double y1, double z1, double x2, double y2, double z2, double x3, double y3, double z3) {
+    public static DoubleBuffer planeEquation(double x1, double y1, double z1, double x2, double y2, double z2, double x3, double y3,
+            double z3) {
 
         double[] eq = new double[4];
         eq[0] = y1 * (z2 - z3) + y2 * (z3 - z1) + y3 * (z1 - z2);

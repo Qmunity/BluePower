@@ -4,15 +4,24 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.Entity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
+import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 import net.minecraftforge.common.util.ForgeDirection;
+
+import org.lwjgl.opengl.GL11;
+
 import uk.co.qmunity.lib.client.render.RenderHelper;
 import uk.co.qmunity.lib.misc.Pair;
 import uk.co.qmunity.lib.part.IPartRedstone;
 import uk.co.qmunity.lib.part.IPartWAILAProvider;
+import uk.co.qmunity.lib.transform.Rotation;
 import uk.co.qmunity.lib.vec.Vec3d;
 import uk.co.qmunity.lib.vec.Vec3dCube;
 import uk.co.qmunity.lib.vec.Vec3i;
@@ -119,10 +128,44 @@ public abstract class PartWireFace extends BPPartFace implements IFaceRedstoneDe
             d4 = ForgeDirection.WEST;
         }
 
+        switch (getFace()) {
+        case DOWN:
+            break;
+        case UP:
+            renderer.addTransformation(new Rotation(180, 0, 0, Vec3d.center));
+            break;
+        case NORTH:
+            renderer.addTransformation(new Rotation(90, 90, 0, Vec3d.center));
+            d1 = d1.getRotation(getFace());
+            d2 = d2.getRotation(getFace());
+            d3 = d3.getRotation(getFace());
+            d4 = d4.getRotation(getFace());
+            break;
+        case SOUTH:
+            renderer.addTransformation(new Rotation(-90, 90, 0, Vec3d.center));
+            d1 = d1.getRotation(getFace());
+            d2 = d2.getRotation(getFace());
+            d3 = d3.getRotation(getFace());
+            d4 = d4.getRotation(getFace());
+            break;
+        case WEST:
+            renderer.addTransformation(new Rotation(0, 0, -90, Vec3d.center));
+            break;
+        case EAST:
+            renderer.addTransformation(new Rotation(0, 0, 90, Vec3d.center));
+            break;
+        default:
+            break;
+        }
+
         boolean north = connections[d1.ordinal()];
+        boolean northOpen = false;// connections[d1.ordinal()];
         boolean south = connections[d2.ordinal()];
+        boolean southOpen = false;// connections[d2.ordinal()];
         boolean west = connections[d3.ordinal()];
+        boolean westOpen = false;// connections[d3.ordinal()];
         boolean east = connections[d4.ordinal()];
+        boolean eastOpen = false;// connections[d4.ordinal()];
 
         IIcon icon = IconSupplier.wire;
 
@@ -133,22 +176,45 @@ public abstract class PartWireFace extends BPPartFace implements IFaceRedstoneDe
         // Sides
         if (east || west) {
             if (west || (!west && east && !north && !south))
-                renderer.renderBox(new Vec3dCube(west ? 0 : 5 / 16D, 0, 8 / 16D - width, 8 / 16D - width, height, 8 / 16D + width), icon);
+                renderer.renderBox(new Vec3dCube(west ? (westOpen ? -2 / 16D : 0) : 5 / 16D, 0, 8 / 16D - width, 8 / 16D - width, height,
+                        8 / 16D + width), icon);
             if (east || (west && !east && !north && !south))
-                renderer.renderBox(new Vec3dCube(8 / 16D + width, 0, 8 / 16D - width, east ? 1 : 11 / 16D, height, 8 / 16D + width), icon);
+                renderer.renderBox(new Vec3dCube(8 / 16D + width, 0, 8 / 16D - width, east ? (eastOpen ? 18 / 16D : 1) : 11 / 16D, height,
+                        8 / 16D + width), icon);
             if (north)
-                renderer.renderBox(new Vec3dCube(8 / 16D - width, 0, north ? 0 : 5 / 16D, 8 / 16D + width, height, 8 / 16D - width), icon);
+                renderer.renderBox(new Vec3dCube(8 / 16D - width, 0, north ? (northOpen ? -2 / 16D : 0) : 5 / 16D, 8 / 16D + width, height,
+                        8 / 16D - width), icon);
             if (south)
-                renderer.renderBox(new Vec3dCube(8 / 16D - width, 0, 8 / 16D + width, 8 / 16D + width, height, south ? 1 : 11 / 16D), icon);
+                renderer.renderBox(new Vec3dCube(8 / 16D - width, 0, 8 / 16D + width, 8 / 16D + width, height,
+                        south ? (southOpen ? 18 / 16D : 1) : 11 / 16D), icon);
         } else {
             renderer.renderBox(new Vec3dCube(8 / 16D - width, 0, north ? 0 : 5 / 16D, 8 / 16D + width, height, 8 / 16D - width), icon);
             renderer.renderBox(new Vec3dCube(8 / 16D - width, 0, 8 / 16D + width, 8 / 16D + width, height, south ? 1 : 11 / 16D), icon);
         }
 
         renderer.setColor(0xFFFFFF);
-        renderer.setRotation(0, 0, 0, Vec3d.center);
+        renderer.resetTransformations();
 
         return true;
+    }
+
+    @Override
+    public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
+
+        power = (byte) 255;
+
+        RenderHelper rh = RenderHelper.instance;
+        rh.setRenderCoords(null, 0, 0, 0);
+        Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
+
+        GL11.glTranslated(0, 0.5, 0);
+        GL11.glScaled(2, 2, 2);
+        Tessellator.instance.startDrawingQuads();
+        renderStatic(new Vec3i(0, 0, 0), rh, RenderBlocks.getInstance(), 0);
+        Tessellator.instance.draw();
+        GL11.glScaled(0.5, 0.5, 0.5);
+
+        rh.reset();
     }
 
     @Override
@@ -191,19 +257,19 @@ public abstract class PartWireFace extends BPPartFace implements IFaceRedstoneDe
     }
 
     @Override
-    public boolean canConnectStraight(IRedstoneDevice device) {
+    public boolean canConnectStraight(ForgeDirection side, IRedstoneDevice device) {
+
+        return side != getFace().getOpposite() && WireCommons.canConnect(this, device);
+    }
+
+    @Override
+    public boolean canConnectOpenCorner(ForgeDirection side, IRedstoneDevice device) {
 
         return WireCommons.canConnect(this, device);
     }
 
     @Override
-    public boolean canConnectOpenCorner(IRedstoneDevice device) {
-
-        return WireCommons.canConnect(this, device);
-    }
-
-    @Override
-    public boolean canConnectClosedCorner(IRedstoneDevice device) {
+    public boolean canConnectClosedCorner(ForgeDirection side, IRedstoneDevice device) {
 
         return WireCommons.canConnect(this, device);
     }
@@ -365,19 +431,19 @@ public abstract class PartWireFace extends BPPartFace implements IFaceRedstoneDe
     public abstract int getColor();
 
     @Override
-    public boolean canConnectBundledStraight(IBundledDevice device) {
+    public boolean canConnectBundledStraight(ForgeDirection side, IBundledDevice device) {
 
         return WireCommons.canConnect(this, device);
     }
 
     @Override
-    public boolean canConnectBundledOpenCorner(IBundledDevice device) {
+    public boolean canConnectBundledOpenCorner(ForgeDirection side, IBundledDevice device) {
 
         return WireCommons.canConnect(this, device);
     }
 
     @Override
-    public boolean canConnectBundledClosedCorner(IBundledDevice device) {
+    public boolean canConnectBundledClosedCorner(ForgeDirection side, IBundledDevice device) {
 
         return WireCommons.canConnect(this, device);
     }

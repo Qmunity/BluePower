@@ -34,13 +34,13 @@ public class ReturnDevice implements IRedstoneDevice, IBundledDevice {
     }
 
     @Override
-    public boolean canConnectStraight(IRedstoneDevice device) {
+    public boolean canConnectStraight(ForgeDirection side, IRedstoneDevice device) {
 
         return false;
     }
 
     @Override
-    public boolean canConnectOpenCorner(IRedstoneDevice device) {
+    public boolean canConnectOpenCorner(ForgeDirection side, IRedstoneDevice device) {
 
         return false;
     }
@@ -90,13 +90,13 @@ public class ReturnDevice implements IRedstoneDevice, IBundledDevice {
     }
 
     @Override
-    public boolean canConnectBundledStraight(IBundledDevice device) {
+    public boolean canConnectBundledStraight(ForgeDirection side, IBundledDevice device) {
 
         return false;
     }
 
     @Override
-    public boolean canConnectBundledOpenCorner(IBundledDevice device) {
+    public boolean canConnectBundledOpenCorner(ForgeDirection side, IBundledDevice device) {
 
         return false;
     }

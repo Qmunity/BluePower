@@ -16,7 +16,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.world.EnumSkyBlock;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -26,6 +26,7 @@ import uk.co.qmunity.lib.client.render.RenderHelper;
 import uk.co.qmunity.lib.helper.RedstoneHelper;
 import uk.co.qmunity.lib.part.IPartLightEmitter;
 import uk.co.qmunity.lib.part.IPartRedstone;
+import uk.co.qmunity.lib.transform.Rotation;
 import uk.co.qmunity.lib.vec.Vec3d;
 import uk.co.qmunity.lib.vec.Vec3dCube;
 import uk.co.qmunity.lib.vec.Vec3i;
@@ -41,8 +42,8 @@ import com.bluepowermod.part.BPPartFace;
 public class PartLamp extends BPPartFace implements IPartLightEmitter, IPartRedstone {
 
     protected String colorName;
-    private final int colorVal;
-    protected boolean inverted;
+    protected final int colorVal;
+    protected final boolean inverted;
 
     protected int power = 0;
 
@@ -111,18 +112,20 @@ public class PartLamp extends BPPartFace implements IPartLightEmitter, IPartReds
 
         power = inverted ? 15 : 0;
 
-        GL11.glPushMatrix();
-        {
-            Tessellator t = Tessellator.instance;
-            Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
+        power = (byte) 255;
 
-            GL11.glPushMatrix();
-            {
-                // RenderHelper renderer = new RenderHelper();
-                // renderStatic(new Vec3i(0, 0, 0), renderer, null, 0);
-            }
-            GL11.glPopMatrix();
-        }
+        RenderHelper rh = RenderHelper.instance;
+        rh.setRenderCoords(null, 0, 0, 0);
+        Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
+
+        Tessellator.instance.startDrawingQuads();
+        renderStatic(new Vec3i(0, 0, 0), rh, RenderBlocks.getInstance(), 0);
+        Tessellator.instance.draw();
+
+        rh.reset();
+
+        GL11.glPushMatrix();
+        renderGlow(1);
         GL11.glPopMatrix();
 
         Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationItemsTexture);
@@ -134,6 +137,32 @@ public class PartLamp extends BPPartFace implements IPartLightEmitter, IPartReds
     @Override
     public void renderDynamic(Vec3d translation, double delta, int pass) {
 
+        RenderHelper renderer = RenderHelper.instance;
+        renderer.reset();
+
+        switch (getFace().ordinal()) {
+        case 0:
+            break;
+        case 1:
+            renderer.addTransformation(new Rotation(180, 0, 0, Vec3d.center));
+            break;
+        case 2:
+            renderer.addTransformation(new Rotation(90, 0, 0, Vec3d.center));
+            break;
+        case 3:
+            renderer.addTransformation(new Rotation(-90, 0, 0, Vec3d.center));
+            break;
+        case 4:
+            renderer.addTransformation(new Rotation(0, 0, -90, Vec3d.center));
+            break;
+        case 5:
+            renderer.addTransformation(new Rotation(0, 0, 90, Vec3d.center));
+            break;
+        }
+
+        renderGlow(pass);
+
+        renderer.resetTransformations();
     }
 
     /**
@@ -151,37 +180,30 @@ public class PartLamp extends BPPartFace implements IPartLightEmitter, IPartReds
     @Override
     public boolean renderStatic(Vec3i loc, RenderHelper renderer, RenderBlocks renderBlocks, int pass) {
 
-        // renderer.setTextureRotations(0, 0, 3, 3, 3, 3);
         switch (getFace().ordinal()) {
         case 0:
             break;
         case 1:
-            renderer.setRotation(180, 0, 0, Vec3d.center);
+            renderer.addTransformation(new Rotation(180, 0, 0, Vec3d.center));
             break;
         case 2:
-            renderer.setRotation(90, 0, 0, Vec3d.center);
+            renderer.addTransformation(new Rotation(90, 0, 0, Vec3d.center));
             break;
         case 3:
-            renderer.setRotation(-90, 0, 0, Vec3d.center);
+            renderer.addTransformation(new Rotation(-90, 0, 0, Vec3d.center));
             break;
         case 4:
-            renderer.setRotation(0, 0, -90, Vec3d.center);
+            renderer.addTransformation(new Rotation(0, 0, -90, Vec3d.center));
             break;
         case 5:
-            renderer.setRotation(0, 0, 90, Vec3d.center);
+            renderer.addTransformation(new Rotation(0, 0, 90, Vec3d.center));
             break;
         }
 
         // Render base
-        renderBase(renderer, pass);
+        renderLamp(renderer);
 
-        // Color multiplier
-        int redMask = 0xFF0000, greenMask = 0xFF00, blueMask = 0xFF;
-        int r = (colorVal & redMask) >> 16;
-        int g = (colorVal & greenMask) >> 8;
-        int b = colorVal & blueMask;
-
-        renderLamp(renderer, pass, r, g, b);
+        renderer.resetTransformations();
 
         return true;
     }
@@ -199,7 +221,7 @@ public class PartLamp extends BPPartFace implements IPartLightEmitter, IPartReds
      * @param renderer
      * @param pass
      */
-    public void renderBase(RenderHelper renderer, int pass) {
+    public void renderLamp(RenderHelper renderer) {
 
     }
 
@@ -207,18 +229,10 @@ public class PartLamp extends BPPartFace implements IPartLightEmitter, IPartReds
      * Code to render the actual lamp portion of the lamp. Will be colored
      *
      * @author Koen Beckers (K4Unl)
-     * @param renderer
-     *            The RenderHelper
      * @param pass
      *            The pass that is rendered now. Pass 1 for solids. Pass 2 for transparents
-     * @param r
-     *            The ammount of red in the lamp
-     * @param g
-     *            The ammount of green in the lamp
-     * @param b
-     *            The ammount of blue in the lamp
      */
-    public void renderLamp(RenderHelper renderer, int pass, int r, int g, int b) {
+    public void renderGlow(int pass) {
 
     }
 
@@ -234,20 +248,18 @@ public class PartLamp extends BPPartFace implements IPartLightEmitter, IPartReds
     @Override
     public void onUpdate() {
 
+        if (getWorld().isRemote)
+            return;
+
         int old = power;
 
-        power = 0;
-        for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS)
-            power = Math.max(power, RedstoneHelper.getInput(getWorld(), getX(), getY(), getZ(), d));
+        power = Math.max(power, RedstoneHelper.getInput(getWorld(), getX(), getY(), getZ()));
 
-        if (inverted) {
+        if (inverted)
             power = 15 - power;
-        }
 
-        if (old != power) {
-            notifyUpdate();
-            getWorld().updateLightByType(EnumSkyBlock.Block, getX(), getY(), getZ());
-        }
+        if (old != power)
+            sendUpdatePacket();
     }
 
     @Override
@@ -266,6 +278,34 @@ public class PartLamp extends BPPartFace implements IPartLightEmitter, IPartReds
     public boolean canConnectRedstone(ForgeDirection side) {
 
         return true;
+    }
+
+    @Override
+    public void writeToNBT(NBTTagCompound tag) {
+
+        super.writeToNBT(tag);
+        tag.setInteger("power", power);
+    }
+
+    @Override
+    public void readFromNBT(NBTTagCompound tag) {
+
+        super.readFromNBT(tag);
+        power = tag.getInteger("power");
+    }
+
+    @Override
+    public void writeUpdateToNBT(NBTTagCompound tag) {
+
+        super.writeUpdateToNBT(tag);
+        tag.setInteger("power", power);
+    }
+
+    @Override
+    public void readUpdateFromNBT(NBTTagCompound tag) {
+
+        super.readUpdateFromNBT(tag);
+        power = tag.getInteger("power");
     }
 
     /**

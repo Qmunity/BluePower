@@ -43,13 +43,13 @@ public class BundledWrapper implements IRedstoneDevice {
     }
 
     @Override
-    public boolean canConnectStraight(IRedstoneDevice device) {
+    public boolean canConnectStraight(ForgeDirection side, IRedstoneDevice device) {
 
         return false;
     }
 
     @Override
-    public boolean canConnectOpenCorner(IRedstoneDevice device) {
+    public boolean canConnectOpenCorner(ForgeDirection side, IRedstoneDevice device) {
 
         return false;
     }

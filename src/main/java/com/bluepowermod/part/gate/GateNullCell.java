@@ -60,8 +60,6 @@ public class GateNullCell extends GateBase implements IFaceRedstoneDevice, IReds
 
         super.renderStatic(translation, renderer, renderBlocks, pass);
 
-        renderer.setRotation(0, 90 * (getRotation() % 2), 0, Vec3d.center);
-
         double height = 2 / 16D;
 
         IIcon planks = Blocks.planks.getIcon(0, 0);
@@ -111,7 +109,7 @@ public class GateNullCell extends GateBase implements IFaceRedstoneDevice, IReds
 
         renderer.setColor(0xFFFFFF);
 
-        renderer.setRotation(0, 0, 0, Vec3d.center);
+        renderer.resetTransformations();
 
         return true;
     }
@@ -201,19 +199,19 @@ public class GateNullCell extends GateBase implements IFaceRedstoneDevice, IReds
     }
 
     @Override
-    public boolean canConnectStraight(IRedstoneDevice device) {
+    public boolean canConnectStraight(ForgeDirection side, IRedstoneDevice device) {
 
         return true;
     }
 
     @Override
-    public boolean canConnectOpenCorner(IRedstoneDevice device) {
+    public boolean canConnectOpenCorner(ForgeDirection side, IRedstoneDevice device) {
 
         return true;
     }
 
     @Override
-    public boolean canConnectClosedCorner(IRedstoneDevice device) {
+    public boolean canConnectClosedCorner(ForgeDirection side, IRedstoneDevice device) {
 
         return true;
     }

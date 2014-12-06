@@ -7,17 +7,14 @@
  */
 package com.bluepowermod.part.lamp;
 
-import com.bluepowermod.client.renderers.IconSupplier;
-
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.util.IIcon;
-
-import org.lwjgl.opengl.GL11;
-
-import uk.co.qmunity.lib.vec.Vec3dCube;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import net.minecraft.util.IIcon;
+import uk.co.qmunity.lib.client.render.RenderHelper;
+import uk.co.qmunity.lib.vec.Vec3dCube;
+
+import com.bluepowermod.client.renderers.IconSupplier;
 
 /**
  *
@@ -61,11 +58,8 @@ public class PartFixture extends PartLamp {
      * @author Koen Beckers (K4Unl), Amadornes
      */
     @Override
-    public void renderBase(uk.co.qmunity.lib.client.render.RenderHelper renderer, int pass) {
+    public void renderLamp(RenderHelper renderer) {
 
-        if (pass != 0)
-            return;
-        Tessellator t = Tessellator.instance;
         Vec3dCube vector = new Vec3dCube(2 / 16D, 0.0, 2 / 16D, 1.0 - (2 / 16D), 2 / 16D, 1.0 - 2 / 16D);
         IIcon topIcon = IconSupplier.fixtureFootTop;
         IIcon sideIcon = IconSupplier.fixtureFootSide;
@@ -77,52 +71,52 @@ public class PartFixture extends PartLamp {
     }
 
     @Override
-    public void renderLamp(uk.co.qmunity.lib.client.render.RenderHelper renderer, int pass, int r, int g, int b) {
+    public void renderGlow(int pass) {
 
-        Vec3dCube vector = new Vec3dCube(3 / 16D, 2 / 16D, 3 / 16D, 1.0 - (3 / 16D), 8 / 16D, 13 / 16D);
-
-        if (pass == 0) {
-            Tessellator t = Tessellator.instance;
-            IIcon iconToUseTop;
-            IIcon iconToUseSide;
-            if (power == 0) {
-                iconToUseSide = IconSupplier.fixtureLampSideOff;
-                iconToUseTop = IconSupplier.fixtureLampTopOff;
-            } else {
-                iconToUseSide = IconSupplier.fixtureLampSideOn;
-                iconToUseTop = IconSupplier.fixtureLampTopOn;
-
-                t.setColorRGBA(r, g, b, 20);
-                //RenderHelper.drawTesselatedCube(new Vec3dCube(4.5 / 16D, 2 / 16D, 4.5 / 16D, 11.5 / 16D, 11.5 / 16D, 11.5 / 16D));
-                t.setColorRGBA(r, g, b, 255);
-            }
-
-            renderer.setTextureRotations(0, 0, 3, 3, 3, 3);
-            renderer.setRenderSides(true, true, false, false, false, false);
-            renderer.renderBox(vector, iconToUseTop);
-            renderer.setRenderSides(false, false, true, true, true, true);
-            renderer.renderBox(vector, iconToUseSide);
-            renderer.resetTextureRotations();
-        }
-
-        if (power > 0 && pass == 1) {
-            GL11.glEnable(GL11.GL_BLEND);
-            GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
-            GL11.glDisable(GL11.GL_TEXTURE_2D);
-            GL11.glDisable(GL11.GL_LIGHTING);
-            // GL11.glDisable(GL11.GL_CULL_FACE);
-            GL11.glDepthMask(false);
-            GL11.glBegin(GL11.GL_QUADS);
-            //renderer.setColor(renderer.);
-            //, r / 256D, g / 256D, b / 256D, (power / 15D) * 0.625);
-            renderer.renderBox(vector.clone().expand(0.8 / 16D));
-            GL11.glEnd();
-            GL11.glDepthMask(true);
-            GL11.glEnable(GL11.GL_CULL_FACE);
-            GL11.glEnable(GL11.GL_LIGHTING);
-            GL11.glEnable(GL11.GL_TEXTURE_2D);
-            GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-            GL11.glDisable(GL11.GL_BLEND);
-        }
+        // Vec3dCube vector = new Vec3dCube(3 / 16D, 2 / 16D, 3 / 16D, 1.0 - (3 / 16D), 8 / 16D, 13 / 16D);
+        //
+        // if (pass == 0) {
+        // Tessellator t = Tessellator.instance;
+        // IIcon iconToUseTop;
+        // IIcon iconToUseSide;
+        // if (power == 0) {
+        // iconToUseSide = IconSupplier.fixtureLampSideOff;
+        // iconToUseTop = IconSupplier.fixtureLampTopOff;
+        // } else {
+        // iconToUseSide = IconSupplier.fixtureLampSideOn;
+        // iconToUseTop = IconSupplier.fixtureLampTopOn;
+        //
+        // t.setColorRGBA(r, g, b, 20);
+        // // RenderHelper.drawTesselatedCube(new Vec3dCube(4.5 / 16D, 2 / 16D, 4.5 / 16D, 11.5 / 16D, 11.5 / 16D, 11.5 / 16D));
+        // t.setColorRGBA(r, g, b, 255);
+        // }
+        //
+        // renderer.setTextureRotations(0, 0, 3, 3, 3, 3);
+        // renderer.setRenderSides(true, true, false, false, false, false);
+        // renderer.renderBox(vector, iconToUseTop);
+        // renderer.setRenderSides(false, false, true, true, true, true);
+        // renderer.renderBox(vector, iconToUseSide);
+        // renderer.resetTextureRotations();
+        // }
+        //
+        // if (power > 0 && pass == 1) {
+        // GL11.glEnable(GL11.GL_BLEND);
+        // GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
+        // GL11.glDisable(GL11.GL_TEXTURE_2D);
+        // GL11.glDisable(GL11.GL_LIGHTING);
+        // // GL11.glDisable(GL11.GL_CULL_FACE);
+        // GL11.glDepthMask(false);
+        // GL11.glBegin(GL11.GL_QUADS);
+        // // renderer.setColor(renderer.);
+        // // , r / 256D, g / 256D, b / 256D, (power / 15D) * 0.625);
+        // renderer.renderBox(vector.clone().expand(0.8 / 16D));
+        // GL11.glEnd();
+        // GL11.glDepthMask(true);
+        // GL11.glEnable(GL11.GL_CULL_FACE);
+        // GL11.glEnable(GL11.GL_LIGHTING);
+        // GL11.glEnable(GL11.GL_TEXTURE_2D);
+        // GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        // GL11.glDisable(GL11.GL_BLEND);
+        // }
     }
 }

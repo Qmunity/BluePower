@@ -5,6 +5,7 @@ import net.minecraft.util.Direction;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import uk.co.qmunity.lib.helper.MathHelper;
+import uk.co.qmunity.lib.helper.RedstoneHelper;
 import uk.co.qmunity.lib.vec.Vec3i;
 
 import com.bluepowermod.api.redstone.IRedstoneDevice;
@@ -44,18 +45,17 @@ public class DummyRedstoneDevice implements IRedstoneDevice {
     }
 
     @Override
-    public boolean canConnectStraight(IRedstoneDevice device) {
+    public boolean canConnectStraight(ForgeDirection side, IRedstoneDevice device) {
 
-        return getWorld().getBlock(getX(), getY(), getZ()).canConnectRedstone(getWorld(), getX(), getY(), getZ(),
-                Direction.getMovementDirection(ForgeDirection.SOUTH.offsetX, ForgeDirection.SOUTH.offsetZ));// RedstoneHelper.canConnect(getWorld(),
+        return RedstoneHelper.canConnect(getWorld(), getX(), getY(), getZ(), side);// RedstoneHelper.canConnect(getWorld(),
         // getX(), getY(), getZ(),
         // ForgeDirection.NORTH);
     }
 
     @Override
-    public boolean canConnectOpenCorner(IRedstoneDevice device) {
+    public boolean canConnectOpenCorner(ForgeDirection side, IRedstoneDevice device) {
 
-        return canConnectStraight(device);
+        return canConnectStraight(side, device);
     }
 
     @Override
@@ -82,8 +82,8 @@ public class DummyRedstoneDevice implements IRedstoneDevice {
         int original = Math.max(
                 b.isProvidingWeakPower(getWorld(), getX(), getY(), getZ(),
                         Direction.getMovementDirection(ForgeDirection.SOUTH.offsetX, ForgeDirection.SOUTH.offsetZ)),
-                        b.isProvidingStrongPower(getWorld(), getX(), getY(), getZ(),
-                                Direction.getMovementDirection(ForgeDirection.SOUTH.offsetX, ForgeDirection.SOUTH.offsetZ)));
+                b.isProvidingStrongPower(getWorld(), getX(), getY(), getZ(),
+                        Direction.getMovementDirection(ForgeDirection.SOUTH.offsetX, ForgeDirection.SOUTH.offsetZ)));
         return (byte) MathHelper.map(original, 0, 15, 0, 255);
     }
 
