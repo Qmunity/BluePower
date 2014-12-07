@@ -17,26 +17,30 @@
 
 package com.bluepowermod.init;
 
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 
-import java.util.List;
+import com.bluepowermod.part.PartManager;
 
-public class CustomTabs {
+public class BPCreativeTabs {
 
-    public static CreativeTabs tabBluePowerBlocks;
-    public static CreativeTabs tabBluePowerMachines;
-    public static CreativeTabs tabBluePowerItems;
-    public static CreativeTabs tabBluePowerTools;
-    public static CreativeTabs tabBluePowerCircuits;
-    public static CreativeTabs tabBluePowerLighting;
+    public static CreativeTabs blocks;
+    public static CreativeTabs machines;
+    public static CreativeTabs items;
+    public static CreativeTabs tools;
+    public static CreativeTabs circuits;
+    public static CreativeTabs wiring;
+    public static CreativeTabs lighting;
 
     static {
 
-        tabBluePowerBlocks = new BPCreativeTab("tabBluePowerBlocks") {
+        blocks = new BPCreativeTab("tabBluePowerBlocks") {
 
             @Override
             public Item getTabIconItem() {
@@ -50,7 +54,7 @@ public class CustomTabs {
             }
         };
 
-        tabBluePowerMachines = new BPCreativeTab("tabBluePowerMachines") {
+        machines = new BPCreativeTab("tabBluePowerMachines") {
 
             @Override
             public Item getTabIconItem() {
@@ -64,7 +68,7 @@ public class CustomTabs {
             }
         };
 
-        tabBluePowerItems = new BPCreativeTab("tabBluePowerItems") {
+        items = new BPCreativeTab("tabBluePowerItems") {
 
             @Override
             public Item getTabIconItem() {
@@ -78,7 +82,7 @@ public class CustomTabs {
             }
         };
 
-        tabBluePowerTools = new BPCreativeTab("tabBluePowerTools") {
+        tools = new BPCreativeTab("tabBluePowerTools") {
 
             @Override
             public Item getTabIconItem() {
@@ -92,20 +96,47 @@ public class CustomTabs {
             }
         };
 
-        tabBluePowerCircuits = new BPCreativeTab("tabBluePowerCircuits") {
+        circuits = new BPCreativeTab("tabBluePowerCircuits") {
 
             @Override
             public Item getTabIconItem() {
-                Item iconItem = BPItems.blue_doped_wafer; //PartManager.getPartInfo("timer").getItem().getItem();
+
+                return null;
+            }
+
+            @Override
+            public ItemStack getIconItemStack() {
+
+                ItemStack iconItem = PartManager.getPartInfo("timer").getItem();
                 if (iconItem != null) {
                     return iconItem;
                 } else {
-                    return Item.getItemFromBlock(Blocks.stone);
+                    return new ItemStack(Blocks.stone);
                 }
             }
         };
 
-        tabBluePowerLighting = new BPCreativeTab("tabBluePowerLighting") {
+        wiring = new BPCreativeTab("tabBluePowerWiring") {
+
+            @Override
+            public Item getTabIconItem() {
+
+                return null;
+            }
+
+            @Override
+            public ItemStack getIconItemStack() {
+
+                ItemStack iconItem = PartManager.getPartInfo("wire.freestanding.bluestone").getItem();
+                if (iconItem != null) {
+                    return iconItem;
+                } else {
+                    return new ItemStack(Blocks.stone);
+                }
+            }
+        };
+
+        lighting = new BPCreativeTab("tabBluePowerLighting") {
 
             @Override
             public Item getTabIconItem() {

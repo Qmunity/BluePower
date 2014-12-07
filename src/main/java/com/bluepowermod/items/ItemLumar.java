@@ -26,7 +26,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
 
-import com.bluepowermod.init.CustomTabs;
+import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.util.Refs;
 
 import cpw.mods.fml.relauncher.Side;
@@ -37,7 +37,7 @@ public class ItemLumar extends ItemBase {
     public ItemLumar() {
 
         super();
-        this.setCreativeTab(CustomTabs.tabBluePowerItems);
+        this.setCreativeTab(BPCreativeTabs.items);
         this.setHasSubtypes(true);
         this.setUnlocalizedName(Refs.LUMAR_NAME);
         this.setTextureName(Refs.MODID + ":" + Refs.LUMAR_NAME);

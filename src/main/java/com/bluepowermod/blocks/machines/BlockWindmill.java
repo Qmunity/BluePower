@@ -13,7 +13,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
-import com.bluepowermod.init.CustomTabs;
+import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.tileentities.tier2.TileWindmill;
 import com.bluepowermod.util.Refs;
 
@@ -27,7 +27,7 @@ public class BlockWindmill extends Block implements ITileEntityProvider {
     public BlockWindmill() {
     
         super(Material.iron);
-        setCreativeTab(CustomTabs.tabBluePowerItems);
+        setCreativeTab(BPCreativeTabs.items);
         setBlockName(Refs.WINDMILL_NAME);
         setBlockBounds(0, 0, 0, 1, 1, 1);
     }

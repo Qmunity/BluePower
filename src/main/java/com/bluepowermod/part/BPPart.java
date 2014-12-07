@@ -3,6 +3,14 @@ package com.bluepowermod.part;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.client.renderer.RenderBlocks;
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 import uk.co.qmunity.lib.client.render.RenderHelper;
 import uk.co.qmunity.lib.part.IPart;
 import uk.co.qmunity.lib.part.IPartCollidable;
@@ -17,13 +25,6 @@ import uk.co.qmunity.lib.raytrace.RayTracer;
 import uk.co.qmunity.lib.vec.Vec3d;
 import uk.co.qmunity.lib.vec.Vec3dCube;
 import uk.co.qmunity.lib.vec.Vec3i;
-import net.minecraft.client.renderer.RenderBlocks;
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 
 import com.bluepowermod.api.item.IDatabaseSaveable;
 
@@ -31,7 +32,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public abstract class BPPart extends PartBase implements IPartSelectable, IPartCollidable, IPartOccluding, IPartRenderable,
-IPartUpdateListener, IPartInteractable, IDatabaseSaveable {
+        IPartUpdateListener, IPartInteractable, IDatabaseSaveable {
 
     public abstract String getUnlocalizedName();
 
@@ -44,6 +45,12 @@ IPartUpdateListener, IPartInteractable, IDatabaseSaveable {
             partInfo = PartManager.getPartInfo(getType());
 
         return partInfo.getItem().copy();
+    }
+
+    @Override
+    public boolean renderBreaking(Vec3i translation, RenderHelper renderer, RenderBlocks renderBlocks, int pass, QMovingObjectPosition mop) {
+
+        return renderStatic(translation, renderer, renderBlocks, pass);
     }
 
     @Override
@@ -193,6 +200,16 @@ IPartUpdateListener, IPartInteractable, IDatabaseSaveable {
     public void notifyUpdate() {
 
         getWorld().notifyBlockChange(getX(), getY(), getZ(), Blocks.air);
+    }
+
+    public CreativeTabs[] getCreativeTabs() {
+
+        return new CreativeTabs[] { getCreativeTab() };
+    }
+
+    public CreativeTabs getCreativeTab() {
+
+        return null;
     }
 
 }

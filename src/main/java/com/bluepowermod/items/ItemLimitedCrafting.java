@@ -23,14 +23,14 @@ import java.util.Random;
 
 import net.minecraft.item.ItemStack;
 
-import com.bluepowermod.init.CustomTabs;
+import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.util.Refs;
 
 public class ItemLimitedCrafting extends ItemBase {
     
     public ItemLimitedCrafting(String name, int uses) {
     
-        this.setCreativeTab(CustomTabs.tabBluePowerItems);
+        this.setCreativeTab(BPCreativeTabs.items);
         this.setUnlocalizedName(name);
         this.setTextureName(Refs.MODID + ":" + name);
         this.setMaxDamage(uses - 1);

@@ -10,18 +10,12 @@ package com.bluepowermod.part.tube;
 import java.util.ArrayList;
 import java.util.List;
 
-import uk.co.qmunity.lib.client.render.RenderHelper;
-import uk.co.qmunity.lib.part.IPartTicking;
-import uk.co.qmunity.lib.part.compat.MultipartCompatibility;
-import uk.co.qmunity.lib.raytrace.QMovingObjectPosition;
-import uk.co.qmunity.lib.vec.Vec3d;
-import uk.co.qmunity.lib.vec.Vec3dCube;
-import uk.co.qmunity.lib.vec.Vec3i;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemDye;
@@ -34,12 +28,23 @@ import net.minecraft.util.IIcon;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import org.lwjgl.opengl.GL11;
+
+import uk.co.qmunity.lib.client.render.RenderHelper;
+import uk.co.qmunity.lib.part.IPartTicking;
+import uk.co.qmunity.lib.part.compat.MultipartCompatibility;
+import uk.co.qmunity.lib.raytrace.QMovingObjectPosition;
+import uk.co.qmunity.lib.vec.Vec3d;
+import uk.co.qmunity.lib.vec.Vec3dCube;
+import uk.co.qmunity.lib.vec.Vec3i;
+
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
 import com.bluepowermod.api.tube.ITubeConnection;
 import com.bluepowermod.client.renderers.IconSupplier;
 import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.helper.PartCache;
 import com.bluepowermod.helper.TileEntityCache;
+import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.init.BPItems;
 import com.bluepowermod.init.Config;
 import com.bluepowermod.items.ItemDamageableColorableOverlay;
@@ -355,6 +360,10 @@ public class PneumaticTube extends BPPart implements IPartTicking {
     @Override
     public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
 
+        GL11.glPushMatrix();
+
+        GL11.glTranslated(0, -0.125, 0);
+
         Tessellator t = Tessellator.instance;
         Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
         t.startDrawingQuads();
@@ -364,7 +373,7 @@ public class PneumaticTube extends BPPart implements IPartTicking {
 
         List<Vec3dCube> aabbs = getTubeBoxes();
 
-        // renderMiddle(aabbs.get(0), getSideIcon());
+        renderMiddle(aabbs.get(0), RenderHelper.instance);
         for (int i = 1; i < aabbs.size(); i++) {
             Vec3dCube aabb = aabbs.get(i);
             IIcon icon = !(this instanceof RestrictionTube) ? getNodeIcon()
@@ -484,23 +493,24 @@ public class PneumaticTube extends BPPart implements IPartTicking {
         t.draw();
         renderSide();
         Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationItemsTexture);
+
+        GL11.glPopMatrix();
     }
 
     protected void renderMiddle(Vec3dCube aabb, RenderHelper renderer) {
 
-        IIcon colorIcon = null;
-        ForgeDirection d = ForgeDirection.UNKNOWN;
+        boolean[] oConnections = new boolean[] { !connections[0], !connections[1], !connections[2], !connections[3], !connections[4],
+                !connections[5] };
 
+        IIcon colorIcon = null;
         if (shouldRenderNode()) {
             if (getNodeIcon() != null)
-                renderTexturedCuboid(aabb, getNodeIcon(), ForgeDirection.UNKNOWN, renderer);
+                renderTexturedCuboid(aabb, getNodeIcon(), renderer, oConnections);
             colorIcon = IconSupplier.pneumaticTubeColorNode;
         } else {
-            ForgeDirection dir = ForgeDirection.UNKNOWN;
-            if (connections[ForgeDirection.EAST.ordinal()] && connections[ForgeDirection.WEST.ordinal()])
-                dir = d = ForgeDirection.EAST;
-            if (getNodeIcon() != null)
-                renderTexturedCuboid(aabb, getSideIcon(), dir, renderer);
+            renderer.setTextureRotations(1, 1, 1, 1, 1, 1);
+            if (getSideIcon() != null)
+                renderTexturedCuboid(aabb, getSideIcon(), renderer, oConnections);
             colorIcon = IconSupplier.pneumaticTubeColorSide;
         }
 
@@ -510,46 +520,24 @@ public class PneumaticTube extends BPPart implements IPartTicking {
             TubeColor sideColor = color[dir.ordinal()];
             if (sideColor != TubeColor.NONE) {
                 renderer.setColor(ItemDye.field_150922_c[sideColor.ordinal()]);
-                renderTexturedCuboid(aabb, colorIcon, d, renderer, new boolean[] { dir == ForgeDirection.DOWN, dir == ForgeDirection.UP,
-                        dir == ForgeDirection.WEST, dir == ForgeDirection.EAST, dir == ForgeDirection.NORTH, dir == ForgeDirection.SOUTH });
+                renderTexturedCuboid(aabb, colorIcon, renderer, new boolean[] { dir == ForgeDirection.DOWN, dir == ForgeDirection.UP,
+                        dir == ForgeDirection.NORTH, dir == ForgeDirection.SOUTH, dir == ForgeDirection.WEST, dir == ForgeDirection.EAST });
                 renderer.setColor(0xFFFFFF);
             }
         }
+        renderer.resetTextureRotations();
     }
 
-    public void renderTexturedCuboid(Vec3dCube box, IIcon icon, ForgeDirection dir, RenderHelper helper) {
-
-        if (dir == ForgeDirection.UNKNOWN) {
-            helper.setRenderSides(!connections[ForgeDirection.DOWN.ordinal()], !connections[ForgeDirection.UP.ordinal()],
-                    !connections[ForgeDirection.WEST.ordinal()], !connections[ForgeDirection.EAST.ordinal()],
-                    !connections[ForgeDirection.NORTH.ordinal()], !connections[ForgeDirection.SOUTH.ordinal()]);
-        } else {
-            helper.setRenderSide(dir, false);
-            helper.setRenderSide(dir.getOpposite(), false);
-        }
-
-        renderTexturedCuboid(box, icon, dir, helper, null);
-    }
-
-    public void renderTexturedCuboid(Vec3dCube box, IIcon icon, ForgeDirection dir, RenderHelper helper, boolean[] sides) {
-
-        if (dir == ForgeDirection.EAST || dir == ForgeDirection.WEST)
-            helper.setTextureRotations(1, 1, 1, 1, 0, 0);
-        else if (dir == ForgeDirection.NORTH
-                || dir == ForgeDirection.SOUTH
-                || (dir == ForgeDirection.UNKNOWN && (connections[ForgeDirection.NORTH.ordinal()] || connections[ForgeDirection.SOUTH
-                                                                                                                 .ordinal()])))
-            helper.setTextureRotations(0, 0, 0, 0, 1, 1);
+    public void renderTexturedCuboid(Vec3dCube box, IIcon icon, RenderHelper helper, boolean[] sides) {
 
         if (sides != null)
-            helper.setRenderSides(sides[0], sides[1], sides[2], sides[3], sides[4], sides[5]);
+            helper.setRenderSides(sides[0], sides[1], sides[4], sides[5], sides[2], sides[3]);
 
         helper.renderBox(box, icon);
         helper.setRenderFromInside(true);
         helper.renderBox(box, icon);
         helper.setRenderFromInside(false);
 
-        helper.resetTextureRotations();
         helper.resetRenderedSides();
     }
 
@@ -587,20 +575,31 @@ public class PneumaticTube extends BPPart implements IPartTicking {
         Tessellator t = Tessellator.instance;
         t.setColorOpaque_F(1, 1, 1);
 
+        Vec3dCube box = new Vec3dCube(0.25, 0, 0.25, 0.75, 0.25, 0.75);
+
         List<Vec3dCube> aabbs = getTubeBoxes();
 
+        renderer.setTextureRotations(0, 1, 0, 0, 0, 0);
         renderMiddle(aabbs.get(0), renderer);
 
-        for (int i = 1; i < aabbs.size(); i++) {
-            ForgeDirection dir = ForgeDirection.getOrientation(getSideFromAABBIndex(i));
-            renderTexturedCuboid(aabbs.get(i), getSideIcon(dir), dir, renderer);
-            TubeColor sideColor = color[dir.ordinal()];
-            if (sideColor != TubeColor.NONE) {
-                renderer.setColor(ItemDye.field_150922_c[sideColor.ordinal()]);
-                renderTexturedCuboid(aabbs.get(i), IconSupplier.pneumaticTubeColorSide, dir, renderer);
-                renderer.setColor(0xFFFFFF);
-            }
-        }
+        // for (int i = 0; i < 6; i++) {
+        // if (!connections[i])
+        // continue;
+        // ForgeDirection d = ForgeDirection.getOrientation(i);
+        //
+        // renderer.resetTransformations();
+        // renderer.addTransformation(new Rotation(d));
+        //
+        // renderTexturedCuboid(box, getSideIcon(d), renderer, new boolean[] { false, false, true, true, true, true });
+        // TubeColor sideColor = color[d.ordinal()];
+        // if (sideColor != TubeColor.NONE) {
+        // renderer.setColor(ItemDye.field_150922_c[sideColor.ordinal()]);
+        // renderTexturedCuboid(box, IconSupplier.pneumaticTubeColorSide, renderer, new boolean[] { false, false, true, true, true,
+        // true });
+        // renderer.setColor(0xFFFFFF);
+        // }
+        // }
+        renderer.resetTransformations();
 
         return true;
     }
@@ -670,5 +669,11 @@ public class PneumaticTube extends BPPart implements IPartTicking {
                 }
             }
         }
+    }
+
+    @Override
+    public CreativeTabs getCreativeTab() {
+
+        return BPCreativeTabs.machines;
     }
 }

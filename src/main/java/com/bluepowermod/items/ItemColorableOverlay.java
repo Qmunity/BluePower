@@ -16,7 +16,7 @@ import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 
-import com.bluepowermod.init.CustomTabs;
+import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.util.Refs;
 
 import cpw.mods.fml.relauncher.Side;
@@ -32,7 +32,7 @@ public class ItemColorableOverlay extends ItemBase {
     public ItemColorableOverlay(String name) {
     
         setUnlocalizedName(name);
-        setCreativeTab(CustomTabs.tabBluePowerItems);
+        setCreativeTab(BPCreativeTabs.items);
         setTextureName(Refs.MODID + ":" + name);
         setHasSubtypes(true);
         setMaxStackSize(1);

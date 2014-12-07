@@ -31,7 +31,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import com.bluepowermod.blocks.BlockContainerBase;
-import com.bluepowermod.init.CustomTabs;
+import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.part.BPPartFaceRotate;
 import com.bluepowermod.references.GuiIDs;
 import com.bluepowermod.util.Refs;
@@ -44,7 +44,7 @@ public class ItemScrewdriver extends ItemBase {
     public ItemScrewdriver() {
 
         setUnlocalizedName(Refs.SCREWDRIVER_NAME);
-        setCreativeTab(CustomTabs.tabBluePowerTools);
+        setCreativeTab(BPCreativeTabs.tools);
         setMaxDamage(250);
         setMaxStackSize(1);
         setTextureName(Refs.MODID + ":" + Refs.SCREWDRIVER_NAME);

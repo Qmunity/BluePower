@@ -10,7 +10,7 @@ package com.bluepowermod.blocks.machines;
 import net.minecraft.block.material.Material;
 
 import com.bluepowermod.blocks.BlockContainerBase;
-import com.bluepowermod.init.CustomTabs;
+import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.references.GuiIDs;
 import com.bluepowermod.tileentities.tier3.TileKinectGenerator;
 import com.bluepowermod.util.Refs;
@@ -25,7 +25,7 @@ public class BlockKineticGenerator extends BlockContainerBase {
     public BlockKineticGenerator() {
     
         super(Material.iron, TileKinectGenerator.class);
-        setCreativeTab(CustomTabs.tabBluePowerMachines);
+        setCreativeTab(BPCreativeTabs.machines);
         setBlockName(Refs.KINETICGENERATOR_NAME);
         setBlockTextureName(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + Refs.KINETICGENERATOR_NAME + "_front");
     }

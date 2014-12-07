@@ -25,7 +25,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.EnumPlantType;
 
 import com.bluepowermod.init.BPBlocks;
-import com.bluepowermod.init.CustomTabs;
+import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.util.Refs;
 
 import cpw.mods.fml.relauncher.Side;
@@ -42,7 +42,7 @@ public class BlockCustomFlower extends BlockBush {
     public BlockCustomFlower(String name) {
 
         super();
-        this.setCreativeTab(CustomTabs.tabBluePowerBlocks);
+        this.setCreativeTab(BPCreativeTabs.blocks);
         this.setHardness(0.0F);
         this.setStepSound(soundTypeGrass);
         this.setBlockName(name);

@@ -17,7 +17,7 @@
 
 package com.bluepowermod.items;
 
-import com.bluepowermod.init.CustomTabs;
+import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.util.Refs;
 import com.google.common.collect.Sets;
 import net.minecraft.block.Block;
@@ -46,7 +46,7 @@ public class ItemSickle extends ItemTool {
     public ItemSickle(ToolMaterial material, String name, Item repairItem) {
         super(1.0F, material, toolBlocks);
         this.setUnlocalizedName(name);
-        this.setCreativeTab(CustomTabs.tabBluePowerTools);
+        this.setCreativeTab(BPCreativeTabs.tools);
         this.setTextureName(Refs.MODID + ":" + name);
         this.customCraftingMaterial = repairItem;
     }

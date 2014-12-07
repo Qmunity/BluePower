@@ -15,6 +15,7 @@ import net.minecraft.util.IIcon;
 import org.lwjgl.opengl.GL11;
 
 import uk.co.qmunity.lib.client.render.RenderHelper;
+import uk.co.qmunity.lib.vec.Vec3d;
 import uk.co.qmunity.lib.vec.Vec3dCube;
 
 import com.bluepowermod.client.renderers.IconSupplier;
@@ -39,8 +40,8 @@ public class PartCageLamp extends PartLamp {
 
         List<Vec3dCube> boxes = new ArrayList<Vec3dCube>();
 
-        boxes.add(new Vec3dCube(3 / 16D, 0.0, 3 / 16D, 13 / 16D, 2 / 16D, 1.0 - 3 / 16D));
-        boxes.add(new Vec3dCube(4 / 16D, 2 / 16D, 4 / 16D, 12 / 16D, 12 / 16D, 12 / 16D));
+        boxes.add(new Vec3dCube(3 / 16D, 0.0, 3 / 16D, 13 / 16D, 2 / 16D, 1.0 - 3 / 16D).rotate(getFace(), Vec3d.center));
+        boxes.add(new Vec3dCube(4 / 16D, 2 / 16D, 4 / 16D, 12 / 16D, 12 / 16D, 12 / 16D).rotate(getFace(), Vec3d.center));
 
         return boxes;
     }
@@ -60,13 +61,12 @@ public class PartCageLamp extends PartLamp {
 
         for (int i = 0; i < 2; i++) {
             renderer.setRenderFromInside(i == 1);
-            renderer.setRenderSides(false, true, true, true, true, true);
             renderer.renderBox(vector, topIcon, topIcon, sideIcon, sideIcon, sideIcon, sideIcon);
         }
         renderer.setRenderFromInside(false);
 
         vector = new Vec3dCube(5 / 16D, 2 / 16D, 5 / 16D, 11 / 16D, 11 / 16D, 11 / 16D);
-        if (power == 0) {
+        if (inverted ? power == 15 : power == 0) {
             sideIcon = IconSupplier.cagedLampLampInactive;
             topIcon = IconSupplier.cagedLampLampInactiveTop;
         } else {
@@ -82,9 +82,7 @@ public class PartCageLamp extends PartLamp {
     @Override
     public void renderGlow(int pass) {
 
-        power = 0;
-
-        Vec3dCube vector = new Vec3dCube(5 / 16D, 2 / 16D, 5 / 16D, 11 / 16D, 11 / 16D, 11 / 16D);
+        Vec3dCube vector = new Vec3dCube(5 / 16D, 2 / 16D, 5 / 16D, 11 / 16D, 11 / 16D, 11 / 16D).rotate(getFace(), Vec3d.center);
 
         double r = ((colorVal & 0xFF0000) >> 16) / 256D;
         double g = ((colorVal & 0x00FF00) >> 8) / 256D;
@@ -95,13 +93,10 @@ public class PartCageLamp extends PartLamp {
             GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
             GL11.glDisable(GL11.GL_TEXTURE_2D);
             GL11.glDisable(GL11.GL_LIGHTING);
-            // GL11.glDisable(GL11.GL_CULL_FACE);
-            GL11.glDepthMask(false);
             GL11.glBegin(GL11.GL_QUADS);
             com.bluepowermod.client.renderers.RenderHelper.drawColoredCube(vector.clone().expand(0.5 / 16D), r, g, b,
                     ((inverted ? 15 - power : power) / 15D) * 0.625);
             GL11.glEnd();
-            GL11.glDepthMask(true);
             GL11.glEnable(GL11.GL_CULL_FACE);
             GL11.glEnable(GL11.GL_LIGHTING);
             GL11.glEnable(GL11.GL_TEXTURE_2D);

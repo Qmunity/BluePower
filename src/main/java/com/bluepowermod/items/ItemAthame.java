@@ -18,7 +18,7 @@
 package com.bluepowermod.items;
 
 import com.bluepowermod.init.BPItems;
-import com.bluepowermod.init.CustomTabs;
+import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.util.Refs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.boss.EntityDragon;
@@ -37,7 +37,7 @@ public class ItemAthame extends ItemSword {
     public ItemAthame() {
     
         super(athameMaterial);
-        this.setCreativeTab(CustomTabs.tabBluePowerTools);
+        this.setCreativeTab(BPCreativeTabs.tools);
         this.setMaxDamage(100);
         this.setUnlocalizedName(Refs.ATHAME_NAME);
         this.setTextureName(Refs.MODID + ":" + Refs.ATHAME_NAME);

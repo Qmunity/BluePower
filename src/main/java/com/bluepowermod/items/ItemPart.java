@@ -2,17 +2,17 @@ package com.bluepowermod.items;
 
 import java.util.List;
 
-import uk.co.qmunity.lib.item.ItemMultipart;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
+import uk.co.qmunity.lib.item.ItemMultipart;
 
 import com.bluepowermod.api.BPApi;
 import com.bluepowermod.api.item.IDatabaseSaveable;
-import com.bluepowermod.init.CustomTabs;
+import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.part.BPPart;
 import com.bluepowermod.part.PartInfo;
 import com.bluepowermod.part.PartManager;
@@ -23,7 +23,14 @@ public class ItemPart extends ItemMultipart implements IDatabaseSaveable {
     public ItemPart() {
 
         setUnlocalizedName("part." + Refs.MODID + ":");
-        setCreativeTab(CustomTabs.tabBluePowerCircuits);
+
+        setCreativeTab(BPCreativeTabs.items);
+    }
+
+    @Override
+    public CreativeTabs[] getCreativeTabs() {
+
+        return CreativeTabs.creativeTabArray;
     }
 
     @Override
@@ -42,8 +49,11 @@ public class ItemPart extends ItemMultipart implements IDatabaseSaveable {
     @Override
     public void getSubItems(Item unused, CreativeTabs tab, List l) {
 
-        for (PartInfo i : PartManager.getRegisteredParts())
-            l.add(i.getItem());
+        for (PartInfo i : PartManager.getRegisteredParts()) {
+            for (CreativeTabs t : i.getExample().getCreativeTabs())
+                if ((t != null && t.equals(tab)) || tab == null)
+                    l.add(i.getItem());
+        }
     }
 
     @Override

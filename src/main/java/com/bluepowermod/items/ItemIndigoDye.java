@@ -22,7 +22,7 @@ import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
-import com.bluepowermod.init.CustomTabs;
+import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.util.Refs;
 
 public class ItemIndigoDye extends ItemBase {
@@ -30,7 +30,7 @@ public class ItemIndigoDye extends ItemBase {
     public ItemIndigoDye(String name) {
 
         this.setUnlocalizedName(name);
-        this.setCreativeTab(CustomTabs.tabBluePowerItems);
+        this.setCreativeTab(BPCreativeTabs.items);
         this.setTextureName(Refs.MODID + ":" + name);
     }
 

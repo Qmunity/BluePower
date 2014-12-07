@@ -30,7 +30,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import com.bluepowermod.BluePower;
 import com.bluepowermod.containers.inventorys.InventoryItem;
-import com.bluepowermod.init.CustomTabs;
+import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.references.GuiIDs;
 import com.bluepowermod.util.Refs;
 
@@ -38,7 +38,7 @@ public class ItemSeedBag extends ItemBase {
 
     public ItemSeedBag(String name) {
 
-        this.setCreativeTab(CustomTabs.tabBluePowerItems);
+        this.setCreativeTab(BPCreativeTabs.items);
         this.setUnlocalizedName(name);
         this.setTextureName(Refs.MODID + ":" + name);
         this.maxStackSize = 1;

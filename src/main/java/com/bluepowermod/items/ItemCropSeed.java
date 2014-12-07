@@ -27,7 +27,7 @@ import net.minecraftforge.common.EnumPlantType;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.util.ForgeDirection;
 
-import com.bluepowermod.init.CustomTabs;
+import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.util.Refs;
 
 public class ItemCropSeed extends ItemSeeds implements IPlantable {
@@ -38,7 +38,7 @@ public class ItemCropSeed extends ItemSeeds implements IPlantable {
 
         super(blockCrop, blockSoil);
         field_150925_a = blockCrop;
-        this.setCreativeTab(CustomTabs.tabBluePowerItems);
+        this.setCreativeTab(BPCreativeTabs.items);
         this.setTextureName(Refs.MODID + ":" + Refs.FLAXSEED_NAME);
     }
 

@@ -14,16 +14,19 @@ public class RenderPartItem implements IItemRenderer {
 
     @Override
     public boolean handleRenderType(ItemStack item, ItemRenderType type) {
+
         return true;
     }
 
     @Override
     public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item, ItemRendererHelper helper) {
+
         return true;
     }
 
     @Override
     public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
+
         switch (type) {
         case ENTITY: {
             render(-0.5F, 0.0F, -0.5F, 0.6F, type, item, data);
@@ -47,6 +50,7 @@ public class RenderPartItem implements IItemRenderer {
     }
 
     private void render(float x, float y, float z, float scale, ItemRenderType type, ItemStack item, Object... data) {
+
         GL11.glPushMatrix();
         GL11.glScalef(scale, scale, scale);
         GL11.glTranslatef(x, y, z);

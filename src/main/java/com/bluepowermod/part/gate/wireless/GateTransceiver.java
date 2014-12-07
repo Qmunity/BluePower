@@ -106,6 +106,8 @@ public class GateTransceiver extends GateBase implements IFaceRedstoneDevice, IR
                     quartz);
         }
 
+        renderer.resetTransformations();
+
         return true;
     }
 

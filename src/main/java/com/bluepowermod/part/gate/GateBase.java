@@ -19,6 +19,7 @@ import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -44,6 +45,7 @@ import uk.co.qmunity.lib.vec.Vec3i;
 
 import com.bluepowermod.api.block.ISilkyRemovable;
 import com.bluepowermod.helper.VectorHelper;
+import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.init.BPItems;
 import com.bluepowermod.init.Config;
 import com.bluepowermod.part.BPPartFaceRotate;
@@ -600,6 +602,12 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
             on += left().getOutput() / 4;
 
         return on;
+    }
+
+    @Override
+    public CreativeTabs getCreativeTab() {
+
+        return BPCreativeTabs.circuits;
     }
 
 }

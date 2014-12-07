@@ -67,8 +67,8 @@ public class GateSequencer extends GateBase implements IGuiButtonSensitive {
         RenderHelper.renderRedstoneTorch(5D / 16D, 1D / 8D, 0, 9D / 16D, power[0]);
 
         RenderHelper.renderRedstoneTorch(0, 1D / 8D, 0, 15D / 16D, true);
-        RenderHelper.renderPointer(0, 7D / 16D, 0 / 16D, getWorld() != null ? start >= 0 ? 0.5 - (double) (ticks - start + frame) / (double) time : 0
-                : 0);
+        RenderHelper.renderPointer(0, 7D / 16D, 0 / 16D, getParent() != null && getWorld() != null ? (getWorld() != null ? start >= 0 ? 0.5
+                - (double) (ticks - start + frame) / (double) time : 0 : 0) : 0);
     }
 
     @Override
@@ -80,7 +80,7 @@ public class GateSequencer extends GateBase implements IGuiButtonSensitive {
     public void tick() {
 
         if (!getWorld().isRemote && getWorld().getWorldTime() % 400 == 0)
-            sendUpdatePacket();//Prevent slow desyncing of the timer.
+            sendUpdatePacket();// Prevent slow desyncing of the timer.
         Arrays.fill(power, false);
 
         if (start >= 0) {
@@ -128,11 +128,13 @@ public class GateSequencer extends GateBase implements IGuiButtonSensitive {
 
     @Override
     public void writeToNBT(NBTTagCompound tag) {
+
         writeUpdateToNBT(tag);
     }
 
     @Override
     public void writeUpdateToNBT(NBTTagCompound tag) {
+
         super.writeUpdateToNBT(tag);
         tag.setInteger("start", start);
         tag.setInteger("ticks", ticks);
@@ -141,6 +143,7 @@ public class GateSequencer extends GateBase implements IGuiButtonSensitive {
 
     @Override
     public void readFromNBT(NBTTagCompound tag) {
+
         readUpdateFromNBT(tag);
     }
 

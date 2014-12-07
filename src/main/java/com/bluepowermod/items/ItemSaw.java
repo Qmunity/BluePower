@@ -22,7 +22,7 @@ import java.util.Random;
 import net.minecraft.item.ItemStack;
 import codechicken.microblock.Saw;
 
-import com.bluepowermod.init.CustomTabs;
+import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.util.Dependencies;
 import com.bluepowermod.util.Refs;
 
@@ -35,7 +35,7 @@ public class ItemSaw extends ItemBase implements Saw {
     
     public ItemSaw(int sawLevel, String name) {
     
-        setCreativeTab(CustomTabs.tabBluePowerTools);
+        setCreativeTab(BPCreativeTabs.tools);
         this.sawLevel = sawLevel;
         setTextureName(Refs.MODID + ":" + name);
         setUnlocalizedName(name);

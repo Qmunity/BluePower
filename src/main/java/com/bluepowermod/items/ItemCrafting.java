@@ -17,13 +17,13 @@
 
 package com.bluepowermod.items;
 
-import com.bluepowermod.init.CustomTabs;
+import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.util.Refs;
 
 public class ItemCrafting extends ItemBase {
 
     public ItemCrafting(String name) {
-        this.setCreativeTab(CustomTabs.tabBluePowerItems);
+        this.setCreativeTab(BPCreativeTabs.items);
         this.setUnlocalizedName(name);
         this.setTextureName(Refs.MODID + ":" + name);
     }

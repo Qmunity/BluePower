@@ -21,7 +21,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemStack;
 
-import com.bluepowermod.init.CustomTabs;
+import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.util.Refs;
 
 public class ItemGemAxe extends ItemAxe {
@@ -33,7 +33,7 @@ public class ItemGemAxe extends ItemAxe {
 
         super(material);
         this.setUnlocalizedName(name);
-        this.setCreativeTab(CustomTabs.tabBluePowerTools);
+        this.setCreativeTab(BPCreativeTabs.tools);
         this.setTextureName(Refs.MODID + ":" + name);
         this.customCraftingMaterial = repairItem;
     }

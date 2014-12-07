@@ -17,28 +17,29 @@
 
 package com.bluepowermod.part.gate;
 
-import com.bluepowermod.client.gui.gate.GuiGateSingleTime;
-import com.bluepowermod.client.renderers.RenderHelper;
-import com.bluepowermod.part.IGuiButtonSensitive;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import java.util.List;
+
 import mcp.mobius.waila.api.SpecialChars;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 
-import java.util.List;
+import com.bluepowermod.client.gui.gate.GuiGateSingleTime;
+import com.bluepowermod.client.renderers.RenderHelper;
+import com.bluepowermod.part.IGuiButtonSensitive;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * Created by Quetzi on 04/11/14.
  */
 public class GateStateCell extends GateBase implements IGuiButtonSensitive {
 
-    private int     time      = 40;
-    private int     ticks     = 0;
+    private int time = 40;
+    private int ticks = 0;
     private boolean triggered = false;
-    private boolean mirrored  = false;
-    private long    start     = -1;
+    private boolean mirrored = false;
 
     @Override
     public void initializeConnections() {
@@ -62,10 +63,6 @@ public class GateStateCell extends GateBase implements IGuiButtonSensitive {
         renderTop("right", right());
         renderTop("back", back());
         renderTop("left", left());
-
-        double t = 0;
-        if (back().getInput() == 0)
-            t = -(getWorld().getTotalWorldTime() - start + frame) / (double) time;
 
         RenderHelper.renderRandomizerButton(this, -2 / 16D, 0, 4 / 16D, left().getOutput() > 0);
         RenderHelper.renderRedstoneTorch(4 / 16D, 1D / 8D, 0, 13D / 16D, ticks > 0);
@@ -94,7 +91,8 @@ public class GateStateCell extends GateBase implements IGuiButtonSensitive {
         }
         if (locked || right().getOutput() > 0) {
             ticks = 0;
-            if (triggered) left().setOutput(15);
+            if (triggered)
+                left().setOutput(15);
         } else if (triggered) {
             left().setOutput(15);
             if (ticks++ >= time) {

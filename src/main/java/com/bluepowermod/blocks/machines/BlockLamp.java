@@ -13,7 +13,7 @@ import net.minecraft.world.IBlockAccess;
 
 import com.bluepowermod.blocks.BlockContainerBase;
 import com.bluepowermod.client.renderers.RenderLamp;
-import com.bluepowermod.init.CustomTabs;
+import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.tileentities.tier1.TileLamp;
 import com.bluepowermod.util.Refs;
 
@@ -37,7 +37,7 @@ public class BlockLamp extends BlockContainerBase {
         colorName = _colorName;
         setColor(_color);
         setBlockName(Refs.LAMP_NAME + (isInverted ? "inverted" : "") + colorName);
-        setCreativeTab(CustomTabs.tabBluePowerLighting);
+        setCreativeTab(BPCreativeTabs.lighting);
 
     }
 

@@ -20,7 +20,7 @@ package com.bluepowermod.blocks.worldgen;
 import com.bluepowermod.blocks.BlockBase;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.init.BPItems;
-import com.bluepowermod.init.CustomTabs;
+import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.util.Refs;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
@@ -36,7 +36,7 @@ public class BlockItemOre extends BlockBase {
     public BlockItemOre(String type) {
 
         super(Material.iron);
-        this.setCreativeTab(CustomTabs.tabBluePowerBlocks);
+        this.setCreativeTab(BPCreativeTabs.blocks);
         this.setStepSound(soundTypeStone);
         this.setHardness(2.5F);
         this.setResistance(10.0F);

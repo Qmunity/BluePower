@@ -8,6 +8,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -35,11 +36,12 @@ import com.bluepowermod.api.redstone.IRedstoneDevice;
 import com.bluepowermod.api.redstone.RedstoneColor;
 import com.bluepowermod.client.renderers.IconSupplier;
 import com.bluepowermod.helper.VectorHelper;
+import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.part.BPPartFace;
 import com.bluepowermod.part.wire.propagation.WirePropagator;
 
 public abstract class PartWireFace extends BPPartFace implements IFaceRedstoneDevice, IRedstoneConductor, IFaceBundledDevice,
-        IBundledConductor, IPartRedstone, IPartWAILAProvider {
+IBundledConductor, IPartRedstone, IPartWAILAProvider {
 
     protected IRedstoneDevice[] devices = new IRedstoneDevice[6];
     protected IBundledDevice[] bundledDevices = new IBundledDevice[6];
@@ -506,6 +508,12 @@ public abstract class PartWireFace extends BPPartFace implements IFaceRedstoneDe
     public void addWAILABody(List<String> text) {
 
         text.add("Power: " + (power & 0xFF) + "/255");
+    }
+
+    @Override
+    public CreativeTabs getCreativeTab() {
+
+        return BPCreativeTabs.wiring;
     }
 
 }

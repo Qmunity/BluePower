@@ -34,7 +34,7 @@ import net.minecraft.world.World;
 
 import com.bluepowermod.api.block.IAdvancedSilkyRemovable;
 import com.bluepowermod.api.block.ISilkyRemovable;
-import com.bluepowermod.init.CustomTabs;
+import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.util.Refs;
 
 import cpw.mods.fml.relauncher.Side;
@@ -45,7 +45,7 @@ public class ItemSilkyScrewdriver extends ItemBase {
     public ItemSilkyScrewdriver() {
 
         setUnlocalizedName(Refs.SILKYSCREWDRIVER_NAME);
-        setCreativeTab(CustomTabs.tabBluePowerTools);
+        setCreativeTab(BPCreativeTabs.tools);
         setMaxDamage(250);
         setMaxStackSize(1);
         setTextureName(Refs.MODID + ":" + Refs.SILKYSCREWDRIVER_NAME);

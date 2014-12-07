@@ -22,7 +22,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import com.bluepowermod.blocks.BlockContainerBase;
 import com.bluepowermod.init.BPItems;
-import com.bluepowermod.init.CustomTabs;
+import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.references.GuiIDs;
 import com.bluepowermod.tileentities.tier3.TileEngine;
 import com.bluepowermod.util.Refs;
@@ -37,7 +37,7 @@ public class BlockEngine extends BlockContainerBase {
     public BlockEngine() {
 
         super(Material.iron, TileEngine.class);
-        setCreativeTab(CustomTabs.tabBluePowerMachines);
+        setCreativeTab(BPCreativeTabs.machines);
         setBlockName(Refs.ENGINE_NAME);
         setBlockTextureName("models/engineoff");
 

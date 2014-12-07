@@ -17,7 +17,7 @@
 
 package com.bluepowermod.items;
 
-import com.bluepowermod.init.CustomTabs;
+import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.util.Refs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -32,7 +32,7 @@ public class ItemGemSword extends ItemSword {
 
         super(material);
         this.setUnlocalizedName(name);
-        this.setCreativeTab(CustomTabs.tabBluePowerTools);
+        this.setCreativeTab(BPCreativeTabs.tools);
         this.setTextureName(Refs.MODID + ":" + name);
         this.customCraftingMaterial = repairItem;
     }

@@ -14,6 +14,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -31,6 +32,7 @@ import uk.co.qmunity.lib.vec.Vec3d;
 import uk.co.qmunity.lib.vec.Vec3dCube;
 import uk.co.qmunity.lib.vec.Vec3i;
 
+import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.part.BPPartFace;
 
 /**
@@ -253,10 +255,7 @@ public class PartLamp extends BPPartFace implements IPartLightEmitter, IPartReds
 
         int old = power;
 
-        power = Math.max(power, RedstoneHelper.getInput(getWorld(), getX(), getY(), getZ()));
-
-        if (inverted)
-            power = 15 - power;
+        power = RedstoneHelper.getInput(getWorld(), getX(), getY(), getZ());
 
         if (old != power)
             sendUpdatePacket();
@@ -311,16 +310,10 @@ public class PartLamp extends BPPartFace implements IPartLightEmitter, IPartReds
     /**
      * @author amadornes
      */
-    // @Override
-    // public CreativeTabs getCreativeTab() {
-    //
-    // return CustomTabs.tabBluePowerLighting;
-    // }
-    //
-    // @Override
-    // public float getHardness() {
-    //
-    // return 1.5F;
-    // }
+    @Override
+    public CreativeTabs getCreativeTab() {
+
+        return BPCreativeTabs.lighting;
+    }
 
 }

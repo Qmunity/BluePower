@@ -18,7 +18,7 @@
 package com.bluepowermod.blocks.worldgen;
 
 import com.bluepowermod.init.BPBlocks;
-import com.bluepowermod.init.CustomTabs;
+import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.util.Refs;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -41,7 +41,7 @@ public class BlockStoneOre extends Block {
         this.setHardness(4.0F);
         this.setHarvestLevel("pickaxe", 1);
         this.setBlockName(name);
-        this.setCreativeTab(CustomTabs.tabBluePowerBlocks);
+        this.setCreativeTab(BPCreativeTabs.blocks);
         this.setStepSound(soundTypeStone);
     }
 

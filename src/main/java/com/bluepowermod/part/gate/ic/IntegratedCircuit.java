@@ -10,6 +10,8 @@ package com.bluepowermod.part.gate.ic;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.client.renderer.RenderBlocks;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -21,6 +23,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import org.lwjgl.opengl.GL11;
 
+import uk.co.qmunity.lib.client.render.RenderHelper;
 import uk.co.qmunity.lib.part.IMicroblock;
 import uk.co.qmunity.lib.part.IPart;
 import uk.co.qmunity.lib.part.ITilePartHolder;
@@ -29,6 +32,7 @@ import uk.co.qmunity.lib.raytrace.QMovingObjectPosition;
 import uk.co.qmunity.lib.util.Dir;
 import uk.co.qmunity.lib.vec.Vec3d;
 import uk.co.qmunity.lib.vec.Vec3dCube;
+import uk.co.qmunity.lib.vec.Vec3i;
 
 import com.bluepowermod.api.block.ISilkyRemovable;
 import com.bluepowermod.init.BPItems;
@@ -113,6 +117,10 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
         renderTop("right", right());
         Vec3d loc = new Vec3d(0, 0, 0);
 
+        RenderHelper rh = RenderHelper.instance;
+        rh.reset();
+        RenderBlocks rb = RenderBlocks.getInstance();
+
         GL11.glPushMatrix();
         {
             GL11.glTranslated(BORDER_WIDTH, 2 / 16D + 0.001D, BORDER_WIDTH);
@@ -125,12 +133,13 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
                 for (GateBase gate : gateArray) {
                     if (gate != null) {
                         GL11.glPushMatrix();
-                        /*
-                         * if (gate instanceof GateBase) { gate.transformDynamic(loc); gate.renderTop(frame); } else {
-                         */
+                        Tessellator.instance.startDrawingQuads();
+                        gate.renderStatic(new Vec3i(0, 0, 0), rh, rb, 0);
+                        Tessellator.instance.draw();
                         gate.renderDynamic(loc, frame, 0);
-                        // }
                         GL11.glPopMatrix();
+
+                        rh.reset();
                     }
                     GL11.glTranslated(0, 0, 1);
                 }
@@ -430,7 +439,7 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
         if (gates[x][y] != null) {
             if (!getWorld().isRemote) {
                 ItemStack partStack = PartManager.getPartInfo(
-                /* gates[x][y] instanceof GateWire ? new WireBluestone().getType() : */gates[x][y].getType()).getItem();
+                        /* gates[x][y] instanceof GateWire ? new WireBluestone().getType() : */gates[x][y].getType()).getItem();
                 partStack.stackSize = 1;
                 getWorld().spawnEntityInWorld(new EntityItem(getWorld(), getX() + 0.5, getY() + 0.5, getZ() + 0.5, partStack));
                 gates[x][y] = null;
@@ -469,7 +478,6 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
             if (part instanceof GateBase && !(part instanceof IntegratedCircuit)) {
                 gates[x][y] = (GateBase) part;
                 ((GateBase) part).setFace(ForgeDirection.DOWN);
-                ;
                 ((GateBase) part).parentCircuit = this;
                 part.setParent(this);
                 if (!player.capabilities.isCreativeMode)
