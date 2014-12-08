@@ -32,7 +32,6 @@ import net.minecraftforge.common.util.ForgeDirection;
 import org.lwjgl.opengl.GL11;
 
 import uk.co.qmunity.lib.client.render.RenderHelper;
-import uk.co.qmunity.lib.part.IPartLightEmitter;
 import uk.co.qmunity.lib.part.IPartRedstone;
 import uk.co.qmunity.lib.part.IPartRenderPlacement;
 import uk.co.qmunity.lib.part.IPartTicking;
@@ -58,7 +57,7 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone, IPartTicking, IPartLightEmitter, IPartRenderPlacement {
+public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone, IPartTicking, IPartRenderPlacement {
 
     private static Vec3dCube BOX = new Vec3dCube(0, 0, 0, 1, 2D / 16D, 1);
 

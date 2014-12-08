@@ -25,7 +25,6 @@ import org.lwjgl.opengl.GL11;
 
 import uk.co.qmunity.lib.client.render.RenderHelper;
 import uk.co.qmunity.lib.helper.RedstoneHelper;
-import uk.co.qmunity.lib.part.IPartLightEmitter;
 import uk.co.qmunity.lib.part.IPartRedstone;
 import uk.co.qmunity.lib.transform.Rotation;
 import uk.co.qmunity.lib.vec.Vec3d;
@@ -41,7 +40,7 @@ import com.bluepowermod.part.BPPartFace;
  * @author Koen Beckers (K4Unl), Amadornes
  *
  */
-public class PartLamp extends BPPartFace implements IPartLightEmitter, IPartRedstone {
+public class PartLamp extends BPPartFace implements IPartRedstone {
 
     protected String colorName;
     protected final int colorVal;

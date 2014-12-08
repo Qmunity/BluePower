@@ -10,6 +10,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
@@ -23,6 +24,7 @@ import uk.co.qmunity.lib.helper.MathHelper;
 import uk.co.qmunity.lib.misc.Pair;
 import uk.co.qmunity.lib.part.IPartRedstone;
 import uk.co.qmunity.lib.part.IPartSolid;
+import uk.co.qmunity.lib.part.IPartThruHole;
 import uk.co.qmunity.lib.part.IPartWAILAProvider;
 import uk.co.qmunity.lib.vec.Vec3d;
 import uk.co.qmunity.lib.vec.Vec3dCube;
@@ -38,7 +40,7 @@ import com.bluepowermod.part.BPPart;
 import com.bluepowermod.part.wire.propagation.WirePropagator;
 
 public abstract class PartWireFreestanding extends BPPart implements IRedstoneConductor, IBundledConductor, IPartRedstone,
-IPartWAILAProvider, IPartSolid {
+IPartWAILAProvider, IPartSolid, IPartThruHole {
 
     protected IRedstoneDevice[] devices = new IRedstoneDevice[6];
     protected IBundledDevice[] bundledDevices = new IBundledDevice[6];
@@ -122,10 +124,29 @@ IPartWAILAProvider, IPartSolid {
     @Override
     public boolean renderStatic(Vec3i translation, RenderHelper renderer, RenderBlocks renderBlocks, int pass) {
 
-        double size = 2 / 16D;
+        IIcon normalIcon = IconSupplier.wire;
+        IIcon insulationIcon = IconSupplier.wireInsulation;
+        IIcon bundleIcon = IconSupplier.wireBundled;
 
+        double size = 2 / 16D;
         double separation = 4 / 16D;
         double thickness = 1 / 16D;
+
+        IIcon icon = normalIcon;
+        int color = WireCommons.getColorForPowerLevel(getColor(), power);
+
+        if (insulationColor != RedstoneColor.NONE) {
+            size += 1 / 16D;
+            separation -= 1 / 16D;
+            icon = insulationIcon;
+            color = ItemDye.field_150922_c[15 - insulationColor.ordinal()];
+        }
+        if (isBundled()) {
+            size += 4 / 16D;
+            separation -= 4 / 16D;
+            icon = bundleIcon;
+            color = 0xFFFFFF;
+        }
 
         boolean isInWorld = getParent() != null;
 
@@ -136,9 +157,7 @@ IPartWAILAProvider, IPartSolid {
         boolean west = connections[ForgeDirection.WEST.ordinal()];
         boolean east = connections[ForgeDirection.EAST.ordinal()];
 
-        IIcon icon = IconSupplier.wire;
-
-        renderer.setColor(WireCommons.getColorForPowerLevel(getColor(), power));
+        renderer.setColor(color);
 
         // Wire
         renderer.renderBox(new Vec3dCube(0.5 - (size / 2), 0.5 - (size / 2), 0.5 - (size / 2), 0.5 + (size / 2), 0.5 + (size / 2),
@@ -543,9 +562,11 @@ IPartWAILAProvider, IPartSolid {
     public List<Pair<IBundledDevice, ForgeDirection>> propagateBundled(ForgeDirection fromSide) {
 
         List<Pair<IBundledDevice, ForgeDirection>> devices = new ArrayList<Pair<IBundledDevice, ForgeDirection>>();
-        // for (IBundledDevice d : bundledDevices)
-        // if (d != null)
-        // devices.add(d);
+        for (int i = 0; i < 6; i++) {
+            IBundledDevice d = bundledDevices[i];
+            if (d != null)
+                devices.add(new Pair<IBundledDevice, ForgeDirection>(d, ForgeDirection.getOrientation(i)));
+        }
 
         return devices;
     }
@@ -566,6 +587,12 @@ IPartWAILAProvider, IPartSolid {
     public boolean isSideSolid(ForgeDirection face) {
 
         return true;
+    }
+
+    @Override
+    public int getHollowSize(ForgeDirection side) {
+
+        return 1;
     }
 
 }

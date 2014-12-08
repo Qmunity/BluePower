@@ -2,6 +2,7 @@ package com.bluepowermod.items;
 
 import java.util.List;
 
+import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -92,5 +93,17 @@ public class ItemPart extends ItemMultipart implements IDatabaseSaveable {
     public String getCreatedPartType(ItemStack item, EntityPlayer player, World world, MovingObjectPosition mop) {
 
         return PartManager.getPartType(item);
+    }
+
+    @Override
+    public boolean onItemUse(ItemStack item, EntityPlayer player, World world, int x, int y, int z, int face, float x_, float y_, float z_) {
+
+        if (!super.onItemUse(item, player, world, x, y, z, face, x_, y_, z_))
+            return false;
+
+        Block.SoundType sound = PartManager.getExample(item).getPlacementSound();
+        world.playSoundEffect(x + 0.5, y + 0.5, z + 0.5, sound.func_150496_b(), sound.getVolume() + 3, sound.getPitch() * 0.85F);
+
+        return true;
     }
 }

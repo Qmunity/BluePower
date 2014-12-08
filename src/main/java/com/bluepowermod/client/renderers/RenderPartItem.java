@@ -1,5 +1,6 @@
 package com.bluepowermod.client.renderers;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer;
@@ -7,8 +8,6 @@ import net.minecraftforge.client.IItemRenderer;
 import org.lwjgl.opengl.GL11;
 
 import com.bluepowermod.part.PartManager;
-
-import cpw.mods.fml.client.FMLClientHandler;
 
 public class RenderPartItem implements IItemRenderer {
 
@@ -54,8 +53,14 @@ public class RenderPartItem implements IItemRenderer {
         GL11.glPushMatrix();
         GL11.glScalef(scale, scale, scale);
         GL11.glTranslatef(x, y, z);
-        FMLClientHandler.instance().getClient().getTextureManager().bindTexture(TextureMap.locationBlocksTexture);
-        PartManager.getExample(item).renderItem(type, item, data);
+        Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
+        try {
+            PartManager.getExample(item).renderItem(type, item, data);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            System.out.println(item + " -> " + PartManager.getPartType(item));
+            System.exit(-1);
+        }
         GL11.glPopMatrix();
     }
 

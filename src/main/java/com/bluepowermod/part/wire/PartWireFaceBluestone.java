@@ -19,7 +19,7 @@ public class PartWireFaceBluestone extends PartWireFace {
 
         String type = "wire.bluestone";
 
-        if (isBundled()) {
+        if (bundled) {
             type += ".bundled";
             if (bundleColor != RedstoneColor.NONE)
                 type += "." + bundleColor.name().toLowerCase();

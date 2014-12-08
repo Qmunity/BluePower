@@ -34,6 +34,7 @@ import uk.co.qmunity.lib.client.render.RenderHelper;
 import uk.co.qmunity.lib.part.IPartTicking;
 import uk.co.qmunity.lib.part.compat.MultipartCompatibility;
 import uk.co.qmunity.lib.raytrace.QMovingObjectPosition;
+import uk.co.qmunity.lib.transform.Rotation;
 import uk.co.qmunity.lib.vec.Vec3d;
 import uk.co.qmunity.lib.vec.Vec3dCube;
 import uk.co.qmunity.lib.vec.Vec3i;
@@ -582,23 +583,23 @@ public class PneumaticTube extends BPPart implements IPartTicking {
         renderer.setTextureRotations(0, 1, 0, 0, 0, 0);
         renderMiddle(aabbs.get(0), renderer);
 
-        // for (int i = 0; i < 6; i++) {
-        // if (!connections[i])
-        // continue;
-        // ForgeDirection d = ForgeDirection.getOrientation(i);
-        //
-        // renderer.resetTransformations();
-        // renderer.addTransformation(new Rotation(d));
-        //
-        // renderTexturedCuboid(box, getSideIcon(d), renderer, new boolean[] { false, false, true, true, true, true });
-        // TubeColor sideColor = color[d.ordinal()];
-        // if (sideColor != TubeColor.NONE) {
-        // renderer.setColor(ItemDye.field_150922_c[sideColor.ordinal()]);
-        // renderTexturedCuboid(box, IconSupplier.pneumaticTubeColorSide, renderer, new boolean[] { false, false, true, true, true,
-        // true });
-        // renderer.setColor(0xFFFFFF);
-        // }
-        // }
+        for (int i = 0; i < 6; i++) {
+            if (!connections[i])
+                continue;
+            ForgeDirection d = ForgeDirection.getOrientation(i);
+
+            renderer.resetTransformations();
+            renderer.addTransformation(new Rotation(d));
+
+            renderTexturedCuboid(box, getSideIcon(d), renderer, new boolean[] { false, false, true, true, true, true });
+            TubeColor sideColor = color[d.ordinal()];
+            if (sideColor != TubeColor.NONE) {
+                renderer.setColor(ItemDye.field_150922_c[sideColor.ordinal()]);
+                renderTexturedCuboid(box, IconSupplier.pneumaticTubeColorSide, renderer, new boolean[] { false, false, true, true, true,
+                        true });
+                renderer.setColor(0xFFFFFF);
+            }
+        }
         renderer.resetTransformations();
 
         return true;

@@ -3,6 +3,7 @@ package com.bluepowermod.part;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
@@ -16,7 +17,6 @@ import uk.co.qmunity.lib.part.IPart;
 import uk.co.qmunity.lib.part.IPartCollidable;
 import uk.co.qmunity.lib.part.IPartInteractable;
 import uk.co.qmunity.lib.part.IPartOccluding;
-import uk.co.qmunity.lib.part.IPartRenderable;
 import uk.co.qmunity.lib.part.IPartSelectable;
 import uk.co.qmunity.lib.part.IPartUpdateListener;
 import uk.co.qmunity.lib.part.PartBase;
@@ -31,8 +31,8 @@ import com.bluepowermod.api.item.IDatabaseSaveable;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public abstract class BPPart extends PartBase implements IPartSelectable, IPartCollidable, IPartOccluding, IPartRenderable,
-        IPartUpdateListener, IPartInteractable, IDatabaseSaveable {
+public abstract class BPPart extends PartBase implements IPartSelectable, IPartCollidable, IPartOccluding, IPartUpdateListener,
+IPartInteractable, IDatabaseSaveable {
 
     public abstract String getUnlocalizedName();
 
@@ -51,29 +51,6 @@ public abstract class BPPart extends PartBase implements IPartSelectable, IPartC
     public boolean renderBreaking(Vec3i translation, RenderHelper renderer, RenderBlocks renderBlocks, int pass, QMovingObjectPosition mop) {
 
         return renderStatic(translation, renderer, renderBlocks, pass);
-    }
-
-    @Override
-    public boolean renderStatic(Vec3i translation, RenderHelper renderer, RenderBlocks renderBlocks, int pass) {
-
-        return false;
-    }
-
-    @Override
-    public void renderDynamic(Vec3d translation, double delta, int pass) {
-
-    }
-
-    @Override
-    public boolean shouldRenderOnPass(int pass) {
-
-        return pass == 0;
-    }
-
-    @Override
-    public Vec3dCube getRenderBounds() {
-
-        return new Vec3dCube(0, 0, 0, 1, 1, 1);
     }
 
     @Override
@@ -202,14 +179,22 @@ public abstract class BPPart extends PartBase implements IPartSelectable, IPartC
         getWorld().notifyBlockChange(getX(), getY(), getZ(), Blocks.air);
     }
 
+    @SideOnly(Side.CLIENT)
     public CreativeTabs[] getCreativeTabs() {
 
         return new CreativeTabs[] { getCreativeTab() };
     }
 
+    @SideOnly(Side.CLIENT)
     public CreativeTabs getCreativeTab() {
 
         return null;
+    }
+
+    @SideOnly(Side.CLIENT)
+    public Block.SoundType getPlacementSound() {
+
+        return Block.soundTypeGlass;
     }
 
 }

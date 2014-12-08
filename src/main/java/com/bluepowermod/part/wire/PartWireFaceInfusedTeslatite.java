@@ -19,7 +19,7 @@ public class PartWireFaceInfusedTeslatite extends PartWireFace {
 
         String type = "wire.infusedteslatite";
 
-        if (isBundled()) {
+        if (bundled) {
             type += ".bundled";
             if (bundleColor != RedstoneColor.NONE)
                 type += "." + bundleColor.name().toLowerCase();

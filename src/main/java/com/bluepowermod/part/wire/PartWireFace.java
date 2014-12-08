@@ -10,6 +10,8 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
@@ -41,7 +43,7 @@ import com.bluepowermod.part.BPPartFace;
 import com.bluepowermod.part.wire.propagation.WirePropagator;
 
 public abstract class PartWireFace extends BPPartFace implements IFaceRedstoneDevice, IRedstoneConductor, IFaceBundledDevice,
-IBundledConductor, IPartRedstone, IPartWAILAProvider {
+        IBundledConductor, IPartRedstone, IPartWAILAProvider {
 
     protected IRedstoneDevice[] devices = new IRedstoneDevice[6];
     protected IBundledDevice[] bundledDevices = new IBundledDevice[6];
@@ -80,7 +82,7 @@ IBundledConductor, IPartRedstone, IPartWAILAProvider {
 
         List<Vec3dCube> boxes = new ArrayList<Vec3dCube>();
 
-        boxes.add(new Vec3dCube(0, 0, 0, 1, 2 / 16D, 1));
+        boxes.add(new Vec3dCube(0, 0, 0, 1, 2 / 16D + (bundled ? 2 / 16D : (insulationColor != RedstoneColor.NONE ? 1 / 16D : 0)), 1));
 
         VectorHelper.rotateBoxes(boxes, getFace(), 0);
         return boxes;
@@ -91,7 +93,8 @@ IBundledConductor, IPartRedstone, IPartWAILAProvider {
 
         List<Vec3dCube> boxes = new ArrayList<Vec3dCube>();
 
-        boxes.add(new Vec3dCube(2 / 16D, 0, 2 / 16D, 14 / 16D, 2 / 16D, 14 / 16D));
+        boxes.add(new Vec3dCube(2 / 16D, 0, 2 / 16D, 14 / 16D, 2 / 16D + (bundled ? 2 / 16D
+                : (insulationColor != RedstoneColor.NONE ? 1 / 16D : 0)), 14 / 16D));
 
         VectorHelper.rotateBoxes(boxes, getFace(), 0);
         return boxes;
@@ -105,8 +108,27 @@ IBundledConductor, IPartRedstone, IPartWAILAProvider {
     @Override
     public boolean renderStatic(Vec3i translation, RenderHelper renderer, RenderBlocks renderBlocks, int pass) {
 
+        IIcon normalIcon = IconSupplier.wire;
+        IIcon insulationIcon = IconSupplier.wireInsulation;
+        IIcon bundleIcon = IconSupplier.wireBundled;
+
         double height = 2 / 16D;
         double width = 1 / 16D;
+        IIcon icon = normalIcon;
+        int color = WireCommons.getColorForPowerLevel(getColor(), power);
+
+        if (insulationColor != RedstoneColor.NONE) {
+            height += 1 / 16D;
+            width += 1 / 16D;
+            icon = Blocks.wool.getIcon(0, 0);
+            color = ItemDye.field_150922_c[15 - insulationColor.ordinal()];
+        }
+        if (bundled) {
+            height += 2 / 16D;
+            width += 2 / 16D;
+            icon = bundleIcon;
+            color = 0xFFFFFF;
+        }
 
         ForgeDirection d1 = ForgeDirection.NORTH;
         ForgeDirection d2 = ForgeDirection.SOUTH;
@@ -169,9 +191,7 @@ IBundledConductor, IPartRedstone, IPartWAILAProvider {
         boolean east = connections[d4.ordinal()];
         boolean eastOpen = false;// connections[d4.ordinal()];
 
-        IIcon icon = IconSupplier.wire;
-
-        renderer.setColor(WireCommons.getColorForPowerLevel(getColor(), power));
+        renderer.setColor(color);
 
         // Center
         renderer.renderBox(new Vec3dCube(8 / 16D - width, 0, 8 / 16D - width, 8 / 16D + width, height, 8 / 16D + width), icon);
@@ -194,6 +214,21 @@ IBundledConductor, IPartRedstone, IPartWAILAProvider {
             renderer.renderBox(new Vec3dCube(8 / 16D - width, 0, 8 / 16D + width, 8 / 16D + width, height, south ? 1 : 11 / 16D), icon);
         }
 
+        if (bundled) {
+            if (bundleColor != RedstoneColor.NONE) {
+                renderer.setColor(ItemDye.field_150922_c[15 - bundleColor.ordinal()]);
+                renderer.renderBox(new Vec3dCube(9 / 16D - width, height, 9 / 16D - width, 7 / 16D + width, height + 1 / 16D,
+                        7 / 16D + width), Blocks.wool.getIcon(0, 0));
+                renderer.setColor(WireCommons.getColorForPowerLevel(getColor(), (byte) 127));
+                renderer.renderBox(new Vec3dCube(10 / 16D - width, height + 1 / 16D, 10 / 16D - width, 6 / 16D + width, height + 2 / 16D,
+                        6 / 16D + width), normalIcon);
+            } else {
+                renderer.setColor(WireCommons.getColorForPowerLevel(getColor(), (byte) 127));
+                renderer.renderBox(new Vec3dCube(10 / 16D - width, height, 10 / 16D - width, 6 / 16D + width, height + 1 / 16D,
+                        6 / 16D + width), normalIcon);
+            }
+        }
+
         renderer.setColor(0xFFFFFF);
         renderer.resetTransformations();
 
@@ -204,17 +239,30 @@ IBundledConductor, IPartRedstone, IPartWAILAProvider {
     public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
 
         power = (byte) 255;
+        double scale = 2;
+        double translation = 0.5;
+
+        if (bundled || getInsulationColor() != RedstoneColor.NONE) {
+            connections = new boolean[] { false, false, true, true, true, true };
+            scale = 1.25;
+            translation = 0.125;
+        }
 
         RenderHelper rh = RenderHelper.instance;
         rh.setRenderCoords(null, 0, 0, 0);
         Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
 
-        GL11.glTranslated(0, 0.5, 0);
-        GL11.glScaled(2, 2, 2);
-        Tessellator.instance.startDrawingQuads();
-        renderStatic(new Vec3i(0, 0, 0), rh, RenderBlocks.getInstance(), 0);
-        Tessellator.instance.draw();
-        GL11.glScaled(0.5, 0.5, 0.5);
+        GL11.glPushMatrix();
+        {
+            if (type == ItemRenderType.ENTITY)
+                GL11.glTranslated(-0.5, 0, -0.5);
+            GL11.glTranslated(0, translation, 0);
+            GL11.glScaled(scale, scale, scale);
+            Tessellator.instance.startDrawingQuads();
+            renderStatic(new Vec3i(0, 0, 0), rh, RenderBlocks.getInstance(), 0);
+            Tessellator.instance.draw();
+        }
+        GL11.glPopMatrix();
 
         rh.reset();
     }
@@ -261,19 +309,19 @@ IBundledConductor, IPartRedstone, IPartWAILAProvider {
     @Override
     public boolean canConnectStraight(ForgeDirection side, IRedstoneDevice device) {
 
-        return side != getFace().getOpposite() && WireCommons.canConnect(this, device);
+        return !bundled && side != getFace().getOpposite() && WireCommons.canConnect(this, device);
     }
 
     @Override
     public boolean canConnectOpenCorner(ForgeDirection side, IRedstoneDevice device) {
 
-        return WireCommons.canConnect(this, device);
+        return !bundled && WireCommons.canConnect(this, device);
     }
 
     @Override
     public boolean canConnectClosedCorner(ForgeDirection side, IRedstoneDevice device) {
 
-        return WireCommons.canConnect(this, device);
+        return !bundled && WireCommons.canConnect(this, device);
     }
 
     @Override
@@ -287,6 +335,7 @@ IBundledConductor, IPartRedstone, IPartWAILAProvider {
     public void onDisconnect(ForgeDirection side) {
 
         devices[side.ordinal()] = null;
+        bundledDevices[side.ordinal()] = null;
         sendUpdatePacket();
     }
 
@@ -435,7 +484,8 @@ IBundledConductor, IPartRedstone, IPartWAILAProvider {
     @Override
     public boolean canConnectBundledStraight(ForgeDirection side, IBundledDevice device) {
 
-        return WireCommons.canConnect(this, device);
+        return WireCommons.canConnect(this, device)
+                && (device instanceof IRedstoneDevice ? (((IRedstoneDevice) device).getInsulationColor() == RedstoneColor.NONE) : true);
     }
 
     @Override
@@ -455,6 +505,8 @@ IBundledConductor, IPartRedstone, IPartWAILAProvider {
 
         bundledDevices[side.ordinal()] = device;
         sendUpdatePacket();
+
+        System.out.println("Connected!");
     }
 
     @Override
@@ -491,9 +543,14 @@ IBundledConductor, IPartRedstone, IPartWAILAProvider {
     public List<Pair<IBundledDevice, ForgeDirection>> propagateBundled(ForgeDirection fromSide) {
 
         List<Pair<IBundledDevice, ForgeDirection>> devices = new ArrayList<Pair<IBundledDevice, ForgeDirection>>();
-        // for (IBundledDevice d : bundledDevices)
-        // if (d != null)
-        // devices.add(d);
+
+        if (bundled) {
+            for (int i = 0; i < 6; i++) {
+                IBundledDevice d = bundledDevices[i];
+                if (d != null)
+                    devices.add(new Pair<IBundledDevice, ForgeDirection>(d, ForgeDirection.getOrientation(i)));
+            }
+        }
 
         return devices;
     }
@@ -501,7 +558,7 @@ IBundledConductor, IPartRedstone, IPartWAILAProvider {
     @Override
     public boolean isBundled() {
 
-        return bundled;
+        return bundled || getInsulationColor() != RedstoneColor.NONE;
     }
 
     @Override

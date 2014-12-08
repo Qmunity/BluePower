@@ -29,7 +29,7 @@ public class WireCommons {
         RedstoneColor c1 = a.getBundleColor();
         RedstoneColor c2 = b.getBundleColor();
 
-        return c1.matches(c2) || c1 == RedstoneColor.NONE || c2 == RedstoneColor.NONE;
+        return (c1.matches(c2) || c1 == RedstoneColor.NONE || c2 == RedstoneColor.NONE);
     }
 
     public static void refreshConnections(IRedstoneConductor conductor, IBundledConductor conductor1) {
@@ -38,8 +38,8 @@ public class WireCommons {
             Entry<IBundledDevice, ForgeDirection> bundledDevice = WireHelper.getBundledNeighbor(conductor1, d);
             boolean wasConnected = conductor.getDeviceOnSide(d) != null || conductor1.getBundledDeviceOnSide(d) != null;
             if (bundledDevice != null && bundledDevice.getKey() != conductor1.getBundledDeviceOnSide(d)) {
-                // conductor1.onConnect(d, bundledDevice.getKey());
-                // bundledDevice.getKey().onConnect(bundledDevice.getValue(), conductor1);
+                conductor1.onConnect(d, bundledDevice.getKey());
+                bundledDevice.getKey().onConnect(bundledDevice.getValue(), conductor1);
 
             }
             Entry<IRedstoneDevice, ForgeDirection> redstoneDevice = WireHelper.getNeighbor(conductor, d);

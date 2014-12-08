@@ -39,7 +39,7 @@ public class RedstoneProviderBluePower implements IRedstoneProvider {
     public IBundledDevice getBundledDevice(World world, int x, int y, int z, ForgeDirection face, ForgeDirection side) {
 
         ITilePartHolder holder = MultipartCompatibility.getPartHolder(world, x, y, z);
-        if (holder != null)
+        if (holder != null) {
             for (IPart p : holder.getParts()) {
                 if (p instanceof IBundledDevice) {
                     if (p instanceof IFaceBundledDevice) {
@@ -51,6 +51,7 @@ public class RedstoneProviderBluePower implements IRedstoneProvider {
                     }
                 }
             }
+        }
 
         return null;
     }
