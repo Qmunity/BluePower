@@ -112,8 +112,6 @@ public class WorldConverter {
         if (chunk == null)
             return;
 
-        System.out.println("Processing chunk!");
-
         NBTTagList tileEntities = chunk.getTagList("TileEntities", new NBTTagCompound().getId());
 
         for (int i = 0; i < tileEntities.tagCount(); i++) {
@@ -122,8 +120,6 @@ public class WorldConverter {
                 convertTile(te);
             }
         }
-
-        System.out.println(tileEntities);
 
         saveChunk(file, 0, 0, chunk);
     }
@@ -153,7 +149,6 @@ public class WorldConverter {
             NBTTagCompound part = new NBTTagCompound();
             fmppart.save(part);
             parts.appendTag(part);
-            System.out.println("New part data: " + part);
         }
     }
 }

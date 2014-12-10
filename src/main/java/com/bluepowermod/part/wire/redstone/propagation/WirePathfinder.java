@@ -1,4 +1,4 @@
-package com.bluepowermod.part.wire.propagation;
+package com.bluepowermod.part.wire.redstone.propagation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +10,7 @@ import com.bluepowermod.api.redstone.IBundledConductor;
 import com.bluepowermod.api.redstone.IBundledDevice;
 import com.bluepowermod.api.redstone.IRedstoneConductor;
 import com.bluepowermod.api.redstone.IRedstoneDevice;
-import com.bluepowermod.part.wire.WireHelper;
+import com.bluepowermod.part.wire.redstone.WireHelper;
 
 public class WirePathfinder {
 

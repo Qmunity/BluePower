@@ -1,4 +1,4 @@
-package com.bluepowermod.part.wire;
+package com.bluepowermod.part.wire.redstone;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +11,7 @@ import com.bluepowermod.api.redstone.IPropagator;
 import com.bluepowermod.api.redstone.IRedstoneApi;
 import com.bluepowermod.api.redstone.IRedstoneDevice;
 import com.bluepowermod.api.redstone.IRedstoneProvider;
-import com.bluepowermod.part.wire.propagation.WirePropagator;
+import com.bluepowermod.part.wire.redstone.propagation.WirePropagator;
 
 public class RedstoneApi implements IRedstoneApi {
 

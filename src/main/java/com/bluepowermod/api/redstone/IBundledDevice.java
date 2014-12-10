@@ -3,6 +3,8 @@ package com.bluepowermod.api.redstone;
 import net.minecraftforge.common.util.ForgeDirection;
 import uk.co.qmunity.lib.vec.IWorldLocation;
 
+import com.bluepowermod.api.misc.MinecraftColor;
+
 public interface IBundledDevice extends IWorldLocation {
 
     public boolean canConnectBundledStraight(ForgeDirection side, IBundledDevice device);
@@ -21,10 +23,10 @@ public interface IBundledDevice extends IWorldLocation {
 
     public void onBundledUpdate();
 
-    public RedstoneColor getBundleColor();
-
-    public boolean isNormalBlock();
+    public MinecraftColor getBundledColor();
 
     public boolean isBundled();
+
+    public boolean isNormalBlock();
 
 }

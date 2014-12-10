@@ -1,4 +1,4 @@
-package com.bluepowermod.part.wire;
+package com.bluepowermod.part.wire.redstone;
 
 import net.minecraft.block.Block;
 import net.minecraft.util.Direction;
@@ -8,8 +8,9 @@ import uk.co.qmunity.lib.helper.MathHelper;
 import uk.co.qmunity.lib.helper.RedstoneHelper;
 import uk.co.qmunity.lib.vec.Vec3i;
 
+import com.bluepowermod.api.misc.IFace;
+import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.api.redstone.IRedstoneDevice;
-import com.bluepowermod.api.redstone.RedstoneColor;
 
 public class DummyRedstoneDevice implements IRedstoneDevice {
 
@@ -47,15 +48,14 @@ public class DummyRedstoneDevice implements IRedstoneDevice {
     @Override
     public boolean canConnectStraight(ForgeDirection side, IRedstoneDevice device) {
 
-        return RedstoneHelper.canConnect(getWorld(), getX(), getY(), getZ(), side);// RedstoneHelper.canConnect(getWorld(),
-        // getX(), getY(), getZ(),
-        // ForgeDirection.NORTH);
+        return RedstoneHelper.canConnect(getWorld(), getX(), getY(), getZ(), side, device instanceof IFace ? ((IFace) device).getFace()
+                : ForgeDirection.UNKNOWN);
     }
 
     @Override
     public boolean canConnectOpenCorner(ForgeDirection side, IRedstoneDevice device) {
 
-        return canConnectStraight(side, device);
+        return RedstoneHelper.canConnect(getWorld(), getX(), getY(), getZ(), side);
     }
 
     @Override
@@ -82,8 +82,8 @@ public class DummyRedstoneDevice implements IRedstoneDevice {
         int original = Math.max(
                 b.isProvidingWeakPower(getWorld(), getX(), getY(), getZ(),
                         Direction.getMovementDirection(ForgeDirection.SOUTH.offsetX, ForgeDirection.SOUTH.offsetZ)),
-                b.isProvidingStrongPower(getWorld(), getX(), getY(), getZ(),
-                        Direction.getMovementDirection(ForgeDirection.SOUTH.offsetX, ForgeDirection.SOUTH.offsetZ)));
+                        b.isProvidingStrongPower(getWorld(), getX(), getY(), getZ(),
+                                Direction.getMovementDirection(ForgeDirection.SOUTH.offsetX, ForgeDirection.SOUTH.offsetZ)));
         return (byte) MathHelper.map(original, 0, 15, 0, 255);
     }
 
@@ -98,9 +98,9 @@ public class DummyRedstoneDevice implements IRedstoneDevice {
     }
 
     @Override
-    public RedstoneColor getInsulationColor() {
+    public MinecraftColor getInsulationColor() {
 
-        return RedstoneColor.NONE;
+        return MinecraftColor.NONE;
     }
 
     @Override

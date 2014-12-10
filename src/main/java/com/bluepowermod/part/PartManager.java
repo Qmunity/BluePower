@@ -17,7 +17,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import uk.co.qmunity.lib.part.PartRegistry;
 
-import com.bluepowermod.api.redstone.RedstoneColor;
+import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.part.gate.GateAnd;
 import com.bluepowermod.part.gate.GateBuffer;
 import com.bluepowermod.part.gate.GateComparator;
@@ -54,12 +54,9 @@ import com.bluepowermod.part.tube.PneumaticTube;
 import com.bluepowermod.part.tube.PneumaticTubeOpaque;
 import com.bluepowermod.part.tube.RestrictionTube;
 import com.bluepowermod.part.tube.RestrictionTubeOpaque;
-import com.bluepowermod.part.wire.PartWireFaceBluestone;
-import com.bluepowermod.part.wire.PartWireFaceInfusedTeslatite;
-import com.bluepowermod.part.wire.PartWireFaceRedAlloy;
-import com.bluepowermod.part.wire.PartWireFreestandingBluestone;
-import com.bluepowermod.part.wire.PartWireFreestandingInfusedTeslatite;
-import com.bluepowermod.part.wire.PartWireFreestandingRedAlloy;
+import com.bluepowermod.part.wire.redstone.PartRedwireFace;
+import com.bluepowermod.part.wire.redstone.PartRedwireFreestanding;
+import com.bluepowermod.part.wire.redstone.RedwireType;
 
 public class PartManager {
 
@@ -184,36 +181,15 @@ public class PartManager {
         registerPart(MagTube.class);
         registerPart(Accelerator.class);
 
-        // Face wires
-        for (RedstoneColor c : RedstoneColor.VALID_COLORS)
-            registerPart(PartWireFaceRedAlloy.class, c);
-        for (RedstoneColor c : RedstoneColor.VALID_COLORS)
-            registerPart(PartWireFaceRedAlloy.class, c, false);
-
-        for (RedstoneColor c : RedstoneColor.VALID_COLORS)
-            registerPart(PartWireFaceInfusedTeslatite.class, c);
-        for (RedstoneColor c : RedstoneColor.VALID_COLORS)
-            registerPart(PartWireFaceInfusedTeslatite.class, c, false);
-
-        for (RedstoneColor c : RedstoneColor.VALID_COLORS)
-            registerPart(PartWireFaceBluestone.class, c);
-        for (RedstoneColor c : RedstoneColor.VALID_COLORS)
-            registerPart(PartWireFaceBluestone.class, c, false);
-
-        // Freestanding wires
-        for (RedstoneColor c : RedstoneColor.VALID_COLORS)
-            registerPart(PartWireFreestandingRedAlloy.class, c);
-        for (RedstoneColor c : RedstoneColor.VALID_COLORS)
-            registerPart(PartWireFreestandingRedAlloy.class, c, false);
-
-        for (RedstoneColor c : RedstoneColor.VALID_COLORS)
-            registerPart(PartWireFreestandingInfusedTeslatite.class, c);
-        for (RedstoneColor c : RedstoneColor.VALID_COLORS)
-            registerPart(PartWireFreestandingInfusedTeslatite.class, c, false);
-
-        for (RedstoneColor c : RedstoneColor.VALID_COLORS)
-            registerPart(PartWireFreestandingBluestone.class, c);
-        for (RedstoneColor c : RedstoneColor.VALID_COLORS)
-            registerPart(PartWireFreestandingBluestone.class, c, false);
+        // Wires
+        for (RedwireType type : RedwireType.values()) {
+            for (MinecraftColor color : MinecraftColor.WIRE_COLORS) {
+                registerPart(PartRedwireFace.class, type, color, false);
+                registerPart(PartRedwireFace.class, type, color, true);
+                registerPart(PartRedwireFreestanding.class, type, color, false);
+                if (color == MinecraftColor.NONE)
+                    registerPart(PartRedwireFreestanding.class, type, color, true);
+            }
+        }
     }
 }

@@ -57,9 +57,6 @@ public class RenderPartItem implements IItemRenderer {
         try {
             PartManager.getExample(item).renderItem(type, item, data);
         } catch (Exception ex) {
-            ex.printStackTrace();
-            System.out.println(item + " -> " + PartManager.getPartType(item));
-            System.exit(-1);
         }
         GL11.glPopMatrix();
     }

@@ -10,24 +10,27 @@ import net.minecraft.util.IIcon;
 import net.minecraftforge.common.util.ForgeDirection;
 import uk.co.qmunity.lib.client.render.RenderHelper;
 import uk.co.qmunity.lib.misc.Pair;
+import uk.co.qmunity.lib.part.MicroblockShape;
+import uk.co.qmunity.lib.part.PartNormallyOccluded;
+import uk.co.qmunity.lib.part.compat.OcclusionHelper;
 import uk.co.qmunity.lib.transform.Rotation;
 import uk.co.qmunity.lib.vec.Vec3d;
 import uk.co.qmunity.lib.vec.Vec3dCube;
 import uk.co.qmunity.lib.vec.Vec3i;
 
 import com.bluepowermod.api.misc.Accessability;
+import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.api.redstone.IBundledConductor;
 import com.bluepowermod.api.redstone.IBundledDevice;
 import com.bluepowermod.api.redstone.IFaceBundledDevice;
 import com.bluepowermod.api.redstone.IFaceRedstoneDevice;
 import com.bluepowermod.api.redstone.IRedstoneConductor;
 import com.bluepowermod.api.redstone.IRedstoneDevice;
-import com.bluepowermod.api.redstone.RedstoneColor;
 import com.bluepowermod.api.wireless.IBundledFrequency;
 import com.bluepowermod.api.wireless.IFrequency;
 import com.bluepowermod.api.wireless.IRedstoneFrequency;
 import com.bluepowermod.part.gate.GateBase;
-import com.bluepowermod.part.wire.WireCommons;
+import com.bluepowermod.part.wire.redstone.WireCommons;
 
 public class GateTransceiver extends GateBase implements IFaceRedstoneDevice, IRedstoneConductor, IFaceBundledDevice, IBundledConductor {
 
@@ -119,19 +122,40 @@ public class GateTransceiver extends GateBase implements IFaceRedstoneDevice, IR
     @Override
     public boolean canConnectStraight(ForgeDirection side, IRedstoneDevice device) {
 
-        return !isBundled;
+        if (isBundled)
+            return false;
+
+        int microblockLocation = getFace().ordinal() + (side.ordinal() << 4);
+        if (!getParent().canAddPart(new PartNormallyOccluded(OcclusionHelper.getBox(MicroblockShape.EDGE, 1, microblockLocation))))
+            return false;
+
+        return true;
     }
 
     @Override
     public boolean canConnectOpenCorner(ForgeDirection side, IRedstoneDevice device) {
 
-        return !isBundled;
+        if (isBundled)
+            return false;
+
+        int microblockLocation = getFace().ordinal() + (side.ordinal() << 4);
+        if (!getParent().canAddPart(new PartNormallyOccluded(OcclusionHelper.getBox(MicroblockShape.EDGE, 1, microblockLocation))))
+            return false;
+
+        return true;
     }
 
     @Override
     public boolean canConnectClosedCorner(ForgeDirection side, IRedstoneDevice device) {
 
-        return !isBundled;
+        if (isBundled)
+            return false;
+
+        int microblockLocation = getFace().ordinal() + (side.ordinal() << 4);
+        if (!getParent().canAddPart(new PartNormallyOccluded(OcclusionHelper.getBox(MicroblockShape.EDGE, 1, microblockLocation))))
+            return false;
+
+        return true;
     }
 
     @Override
@@ -182,9 +206,9 @@ public class GateTransceiver extends GateBase implements IFaceRedstoneDevice, IR
     }
 
     @Override
-    public RedstoneColor getInsulationColor() {
+    public MinecraftColor getInsulationColor() {
 
-        return RedstoneColor.NONE;
+        return MinecraftColor.NONE;
     }
 
     @Override
@@ -231,17 +255,38 @@ public class GateTransceiver extends GateBase implements IFaceRedstoneDevice, IR
     @Override
     public boolean canConnectBundledStraight(ForgeDirection side, IBundledDevice device) {
 
+        if (!isBundled)
+            return false;
+
+        int microblockLocation = getFace().ordinal() + (side.ordinal() << 4);
+        if (!getParent().canAddPart(new PartNormallyOccluded(OcclusionHelper.getBox(MicroblockShape.EDGE, 1, microblockLocation))))
+            return false;
+
         return true;
     }
 
     @Override
     public boolean canConnectBundledOpenCorner(ForgeDirection side, IBundledDevice device) {
 
+        if (!isBundled)
+            return false;
+
+        int microblockLocation = getFace().ordinal() + (side.ordinal() << 4);
+        if (!getParent().canAddPart(new PartNormallyOccluded(OcclusionHelper.getBox(MicroblockShape.EDGE, 1, microblockLocation))))
+            return false;
+
         return true;
     }
 
     @Override
     public boolean canConnectBundledClosedCorner(ForgeDirection side, IBundledDevice device) {
+
+        if (!isBundled)
+            return false;
+
+        int microblockLocation = getFace().ordinal() + (side.ordinal() << 4);
+        if (!getParent().canAddPart(new PartNormallyOccluded(OcclusionHelper.getBox(MicroblockShape.EDGE, 1, microblockLocation))))
+            return false;
 
         return true;
     }
@@ -287,9 +332,9 @@ public class GateTransceiver extends GateBase implements IFaceRedstoneDevice, IR
     }
 
     @Override
-    public RedstoneColor getBundleColor() {
+    public MinecraftColor getBundledColor() {
 
-        return RedstoneColor.NONE;
+        return MinecraftColor.NONE;
     }
 
     @Override

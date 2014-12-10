@@ -1,14 +1,14 @@
-package com.bluepowermod.part.wire;
+package com.bluepowermod.part.wire.redstone;
 
 import java.util.Map.Entry;
 
 import net.minecraftforge.common.util.ForgeDirection;
 
+import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.api.redstone.IBundledConductor;
 import com.bluepowermod.api.redstone.IBundledDevice;
 import com.bluepowermod.api.redstone.IRedstoneConductor;
 import com.bluepowermod.api.redstone.IRedstoneDevice;
-import com.bluepowermod.api.redstone.RedstoneColor;
 
 public class WireCommons {
 
@@ -18,18 +18,24 @@ public class WireCommons {
                 && (((IRedstoneConductor) b).isAnalog() != a.isAnalog() || ((IRedstoneConductor) b).hasLoss() != a.hasLoss()))
             return false;
 
-        RedstoneColor c1 = a.getInsulationColor();
-        RedstoneColor c2 = b.getInsulationColor();
+        MinecraftColor c1 = a.getInsulationColor();
+        MinecraftColor c2 = b.getInsulationColor();
 
-        return c1.matches(c2) || c1 == RedstoneColor.NONE || c2 == RedstoneColor.NONE;
+        if (c1 == null || c2 == null)
+            return false;
+
+        return c1.matches(c2) || c1 == MinecraftColor.NONE || c2 == MinecraftColor.NONE;
     }
 
     public static boolean canConnect(IBundledConductor a, IBundledDevice b) {
 
-        RedstoneColor c1 = a.getBundleColor();
-        RedstoneColor c2 = b.getBundleColor();
+        MinecraftColor c1 = a.getBundledColor();
+        MinecraftColor c2 = b.getBundledColor();
 
-        return (c1.matches(c2) || c1 == RedstoneColor.NONE || c2 == RedstoneColor.NONE);
+        if (c1 == null || c2 == null)
+            return false;
+
+        return (c1.matches(c2) || c1 == MinecraftColor.NONE || c2 == MinecraftColor.NONE);
     }
 
     public static void refreshConnections(IRedstoneConductor conductor, IBundledConductor conductor1) {
@@ -40,7 +46,6 @@ public class WireCommons {
             if (bundledDevice != null && bundledDevice.getKey() != conductor1.getBundledDeviceOnSide(d)) {
                 conductor1.onConnect(d, bundledDevice.getKey());
                 bundledDevice.getKey().onConnect(bundledDevice.getValue(), conductor1);
-
             }
             Entry<IRedstoneDevice, ForgeDirection> redstoneDevice = WireHelper.getNeighbor(conductor, d);
             if (redstoneDevice != null && redstoneDevice.getKey() != conductor.getDeviceOnSide(d)) {

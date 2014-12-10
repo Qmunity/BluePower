@@ -1,4 +1,4 @@
-package com.bluepowermod.part.wire;
+package com.bluepowermod.part.wire.redstone;
 
 import java.util.AbstractMap;
 import java.util.Map.Entry;

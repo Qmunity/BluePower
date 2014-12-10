@@ -18,13 +18,13 @@ import uk.co.qmunity.lib.vec.Vec3d;
 import uk.co.qmunity.lib.vec.Vec3dCube;
 import uk.co.qmunity.lib.vec.Vec3i;
 
+import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.api.redstone.IFaceRedstoneDevice;
 import com.bluepowermod.api.redstone.IRedstoneConductor;
 import com.bluepowermod.api.redstone.IRedstoneDevice;
-import com.bluepowermod.api.redstone.RedstoneColor;
 import com.bluepowermod.client.renderers.IconSupplier;
-import com.bluepowermod.part.wire.WireHelper;
-import com.bluepowermod.part.wire.propagation.WirePropagator;
+import com.bluepowermod.part.wire.redstone.WireHelper;
+import com.bluepowermod.part.wire.redstone.propagation.WirePropagator;
 
 public class GateNullCell extends GateBase implements IFaceRedstoneDevice, IRedstoneConductor {
 
@@ -270,9 +270,9 @@ public class GateNullCell extends GateBase implements IFaceRedstoneDevice, IReds
     }
 
     @Override
-    public RedstoneColor getInsulationColor() {
+    public MinecraftColor getInsulationColor() {
 
-        return RedstoneColor.NONE;
+        return MinecraftColor.NONE;
     }
 
     @Override

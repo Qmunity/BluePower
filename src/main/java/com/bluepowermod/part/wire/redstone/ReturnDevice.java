@@ -1,11 +1,11 @@
-package com.bluepowermod.part.wire;
+package com.bluepowermod.part.wire.redstone;
 
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.api.redstone.IBundledDevice;
 import com.bluepowermod.api.redstone.IRedstoneDevice;
-import com.bluepowermod.api.redstone.RedstoneColor;
 
 public class ReturnDevice implements IRedstoneDevice, IBundledDevice {
 
@@ -78,9 +78,9 @@ public class ReturnDevice implements IRedstoneDevice, IBundledDevice {
     }
 
     @Override
-    public RedstoneColor getInsulationColor() {
+    public MinecraftColor getInsulationColor() {
 
-        return RedstoneColor.NONE;
+        return MinecraftColor.NONE;
     }
 
     @Override
@@ -129,7 +129,7 @@ public class ReturnDevice implements IRedstoneDevice, IBundledDevice {
     }
 
     @Override
-    public RedstoneColor getBundleColor() {
+    public MinecraftColor getBundledColor() {
 
         return null;
     }

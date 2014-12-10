@@ -3,6 +3,8 @@ package com.bluepowermod.api.redstone;
 import net.minecraftforge.common.util.ForgeDirection;
 import uk.co.qmunity.lib.vec.IWorldLocation;
 
+import com.bluepowermod.api.misc.MinecraftColor;
+
 public interface IRedstoneDevice extends IWorldLocation {
 
     public boolean canConnectStraight(ForgeDirection side, IRedstoneDevice device);
@@ -21,7 +23,7 @@ public interface IRedstoneDevice extends IWorldLocation {
 
     public void onRedstoneUpdate();
 
-    public RedstoneColor getInsulationColor();
+    public MinecraftColor getInsulationColor();
 
     public boolean isNormalBlock();
 

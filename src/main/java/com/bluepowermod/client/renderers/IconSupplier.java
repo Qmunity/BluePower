@@ -64,8 +64,8 @@ public class IconSupplier {
     public static IIcon bluestoneTorchOff;
 
     public static IIcon wire;
-    public static IIcon wireInsulation;
-    public static IIcon wireInsulationSide;
+    public static IIcon wireInsulation1;
+    public static IIcon wireInsulation2;
     public static IIcon wireBundled;
 
     @SubscribeEvent
@@ -118,8 +118,8 @@ public class IconSupplier {
             bluestoneTorchOn = event.map.registerIcon(Refs.MODID + ":bluestone_torch_on");
 
             wire = event.map.registerIcon(Refs.MODID + ":wire/wire");
-            wireInsulation = event.map.registerIcon(Refs.MODID + ":wire/insulation");
-            wireInsulation = event.map.registerIcon(Refs.MODID + ":wire/insulation_side");
+            wireInsulation1 = event.map.registerIcon(Refs.MODID + ":wire/insulation1");
+            wireInsulation2 = event.map.registerIcon(Refs.MODID + ":wire/insulation2");
             wireBundled = event.map.registerIcon(Refs.MODID + ":wire/bundled");
 
             for (PartInfo i : PartManager.getRegisteredParts())

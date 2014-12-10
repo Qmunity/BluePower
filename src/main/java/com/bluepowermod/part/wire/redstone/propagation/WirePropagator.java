@@ -1,4 +1,4 @@
-package com.bluepowermod.part.wire.propagation;
+package com.bluepowermod.part.wire.redstone.propagation;
 
 import java.util.ArrayList;
 import java.util.List;

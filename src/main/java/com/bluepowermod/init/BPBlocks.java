@@ -81,6 +81,7 @@ public class BPBlocks {
     public static final Block basalt_tile = new BlockStoneOreConnected(Refs.BASALTTILE_NAME);
     public static final Block marble_paver = new BlockStoneOre(Refs.MARBLEPAVER_NAME);
     public static final Block basalt_paver = new BlockStoneOre(Refs.BASALTPAVER_NAME);
+    public static final Block tiles = new BlockStoneOre(Refs.TILES);
 
     public static final Block teslatite_ore = new BlockTeslatiteOre(Refs.TESLATITEORE_NAME);
     public static final Block ruby_ore = new BlockRubyOre(Refs.RUBYORE_NAME);
@@ -90,7 +91,8 @@ public class BPBlocks {
     public static final Block copper_ore = new BlockStoneOre(Refs.COPPERORE_NAME);
     public static final Block silver_ore = new BlockStoneOre(Refs.SILVERORE_NAME).setToolLevel(2);
     public static final Block zinc_ore = new BlockStoneOre(Refs.ZINCORE_NAME);
-    public static final Block tungsten_ore = new BlockStoneOre(Refs.TUNGSTENORE_NAME).setToolLevel(3).setResistance(6.0F).setHardness(15.0F);
+    public static final Block tungsten_ore = new BlockStoneOre(Refs.TUNGSTENORE_NAME).setToolLevel(3).setResistance(6.0F)
+            .setHardness(15.0F);
 
     public static final Block ruby_block = new BlockStoneOre(Refs.RUBYBLOCK_NAME).setToolLevel(2);
     public static final Block sapphire_block = new BlockStoneOre(Refs.SAPPHIREBLOCK_NAME).setToolLevel(2);
@@ -99,7 +101,8 @@ public class BPBlocks {
     public static final Block copper_block = new BlockStoneOre(Refs.COPPERBLOCK_NAME);
     public static final Block silver_block = new BlockStoneOre(Refs.SILVERBLOCK_NAME).setToolLevel(2);
     public static final Block zinc_block = new BlockStoneOre(Refs.ZINCBLOCK_NAME);
-    public static final Block tungsten_block = new BlockStoneOre(Refs.TUNGSTENBLOCK_NAME).setToolLevel(3).setResistance(25.0F).setHardness(5.0F);
+    public static final Block tungsten_block = new BlockStoneOre(Refs.TUNGSTENBLOCK_NAME).setToolLevel(3).setResistance(25.0F)
+            .setHardness(5.0F);
 
     public static final Block flax_crop = new BlockCrop().setBlockName(Refs.FLAXCROP_NAME);
     public static final Block indigo_flower = new BlockCustomFlower(Refs.INDIGOFLOWER_NAME);
@@ -110,28 +113,28 @@ public class BPBlocks {
     public static final Block igniter = new BlockIgniter();
     public static final Block buffer = new BlockContainerBase(Material.rock, TileBuffer.class).setGuiId(GuiIDs.BUFFER).setBlockName(
             Refs.BLOCKBUFFER_NAME);
-    public static final Block deployer = new BlockContainerFrontRender(Material.rock, TileDeployer.class).setGuiId(GuiIDs.DEPLOYER_ID).setBlockName(
-            Refs.BLOCKDEPLOYER_NAME);
+    public static final Block deployer = new BlockContainerFrontRender(Material.rock, TileDeployer.class).setGuiId(GuiIDs.DEPLOYER_ID)
+            .setBlockName(Refs.BLOCKDEPLOYER_NAME);
     public static final Block transposer = new BlockContainerBase(Material.rock, TileTransposer.class).setBlockName(Refs.TRANSPOSER_NAME);
-    public static final Block sorting_machine = new BlockContainerBase(Material.rock, TileSortingMachine.class).setGuiId(GuiIDs.SORTING_MACHINE)
-            .setBlockName(Refs.SORTING_MACHINE_NAME);
+    public static final Block sorting_machine = new BlockContainerBase(Material.rock, TileSortingMachine.class).setGuiId(
+            GuiIDs.SORTING_MACHINE).setBlockName(Refs.SORTING_MACHINE_NAME);
     public static final Block project_table = new BlockProjectTable().setGuiId(GuiIDs.PROJECTTABLE_ID);
     public static final Block circuit_table = new BlockProjectTable(TileCircuitTable.class).setGuiId(GuiIDs.CIRCUITTABLE_ID).setBlockName(
             Refs.CIRCUITTABLE_NAME);
-    public static final Block circuit_database = new BlockCircuitDatabase(TileCircuitDatabase.class).setGuiId(GuiIDs.CIRCUITDATABASE_MAIN_ID)
-            .setBlockName(Refs.CIRCUITDATABASE_NAME);
-    public static final Block ejector = new BlockContainerTwoSideRender(Material.rock, TileEjector.class).setGuiId(GuiIDs.EJECTOR_ID).setBlockName(
-            Refs.EJECTOR_NAME);
-    public static final Block relay = new BlockContainerTwoSideRender(Material.rock, TileRelay.class).setGuiId(GuiIDs.RELAY_ID).setBlockName(
-            Refs.RELAY_NAME);
+    public static final Block circuit_database = new BlockCircuitDatabase(TileCircuitDatabase.class).setGuiId(
+            GuiIDs.CIRCUITDATABASE_MAIN_ID).setBlockName(Refs.CIRCUITDATABASE_NAME);
+    public static final Block ejector = new BlockContainerTwoSideRender(Material.rock, TileEjector.class).setGuiId(GuiIDs.EJECTOR_ID)
+            .setBlockName(Refs.EJECTOR_NAME);
+    public static final Block relay = new BlockContainerTwoSideRender(Material.rock, TileRelay.class).setGuiId(GuiIDs.RELAY_ID)
+            .setBlockName(Refs.RELAY_NAME);
     public static final Block filter = new BlockContainerBase(Material.rock, TileFilter.class).setGuiId(GuiIDs.FILTER_ID).setBlockName(
             Refs.FILTER_NAME);
-    public static final Block retriever = new BlockContainerBase(Material.rock, TileRetriever.class).setGuiId(GuiIDs.RETRIEVER_ID).setBlockName(
-            Refs.RETRIEVER_NAME);
+    public static final Block retriever = new BlockContainerBase(Material.rock, TileRetriever.class).setGuiId(GuiIDs.RETRIEVER_ID)
+            .setBlockName(Refs.RETRIEVER_NAME);
     public static final Block regulator = new BlockContainerTwoSideRender(Material.rock, TileRegulator.class).setGuiId(GuiIDs.REGULATOR_ID)
             .emitsRedstone().setBlockName(Refs.REGULATOR_NAME);
-    public static final Block item_detector = new BlockContainerTwoSideRender(Material.rock, TileItemDetector.class).setGuiId(GuiIDs.ITEMDETECTOR_ID)
-            .emitsRedstone().setBlockName(Refs.ITEMDETECTOR_NAME);
+    public static final Block item_detector = new BlockContainerTwoSideRender(Material.rock, TileItemDetector.class)
+    .setGuiId(GuiIDs.ITEMDETECTOR_ID).emitsRedstone().setBlockName(Refs.ITEMDETECTOR_NAME);
     public static final Block manager = new BlockRejecting(Material.rock, TileManager.class).setGuiId(GuiIDs.MANAGER_ID).emitsRedstone()
             .setBlockName(Refs.MANAGER_NAME);
     // public static final Block engine = new BlockEngine();
@@ -177,6 +180,7 @@ public class BPBlocks {
         GameRegistry.registerBlock(marble_brick_small, Refs.SMALLMARBLEBRICK_NAME);
         GameRegistry.registerBlock(marble_tile, Refs.MARBLETILE_NAME);
         GameRegistry.registerBlock(marble_paver, Refs.MARBLEPAVER_NAME);
+        GameRegistry.registerBlock(tiles, Refs.TILES_NAME);
 
         GameRegistry.registerBlock(teslatite_ore, Refs.TESLATITEORE_NAME);
         GameRegistry.registerBlock(copper_ore, Refs.COPPERORE_NAME);
@@ -226,7 +230,8 @@ public class BPBlocks {
          */
 
         for (int i = 0; i < ItemDye.field_150922_c.length; i++) {
-            GameRegistry.registerBlock(blockLamp[i], blockLamp[i].getUnlocalizedName().substring(blockLamp[i].getUnlocalizedName().indexOf(":") + 1));
+            GameRegistry.registerBlock(blockLamp[i],
+                    blockLamp[i].getUnlocalizedName().substring(blockLamp[i].getUnlocalizedName().indexOf(":") + 1));
         }
         for (int i = 0; i < ItemDye.field_150922_c.length; i++) {
             GameRegistry.registerBlock(blockLampInverted[i],
