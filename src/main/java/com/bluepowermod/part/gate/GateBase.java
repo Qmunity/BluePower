@@ -256,10 +256,7 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
             Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
 
             if (type == ItemRenderType.EQUIPPED_FIRST_PERSON) {
-                GL11.glTranslated(0.5, 0, 0.5);
-                GL11.glRotated(-90, 0, 1, 0);
-                GL11.glTranslated(-0.5, 0, -0.5);
-                GL11.glTranslated(0, 0.75, 0);
+                GL11.glTranslated(-0.25, 0.75, 0.25);
             }
             if (type == ItemRenderType.ENTITY && item.getItemFrame() != null) {
                 GL11.glTranslated(19 / 32D, 8 / 16D, 1);

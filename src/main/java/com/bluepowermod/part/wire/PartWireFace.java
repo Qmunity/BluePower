@@ -103,16 +103,16 @@ public abstract class PartWireFace extends BPPartFace {
         // Sides
         if (s4 || s3) {
             if (s3 || (!s3 && s4 && !s1 && !s2))
-                renderer.renderBox(new Vec3dCube(s3 ? 0 : 5 / 16D, 0, 8 / 16D - width, 8 / 16D - width, height, 8 / 16D + width), icons);
+                renderer.renderBox(new Vec3dCube(s3 ? 0 : 4 / 16D, 0, 8 / 16D - width, 8 / 16D - width, height, 8 / 16D + width), icons);
             if (s4 || (s3 && !s4 && !s1 && !s2))
-                renderer.renderBox(new Vec3dCube(8 / 16D + width, 0, 8 / 16D - width, s4 ? 1 : 11 / 16D, height, 8 / 16D + width), icons);
+                renderer.renderBox(new Vec3dCube(8 / 16D + width, 0, 8 / 16D - width, s4 ? 1 : 12 / 16D, height, 8 / 16D + width), icons);
             if (s1)
-                renderer.renderBox(new Vec3dCube(8 / 16D - width, 0, s1 ? 0 : 5 / 16D, 8 / 16D + width, height, 8 / 16D - width), icons);
+                renderer.renderBox(new Vec3dCube(8 / 16D - width, 0, s1 ? 0 : 4 / 16D, 8 / 16D + width, height, 8 / 16D - width), icons);
             if (s2)
-                renderer.renderBox(new Vec3dCube(8 / 16D - width, 0, 8 / 16D + width, 8 / 16D + width, height, s2 ? 1 : 11 / 16D), icons);
+                renderer.renderBox(new Vec3dCube(8 / 16D - width, 0, 8 / 16D + width, 8 / 16D + width, height, s2 ? 1 : 12 / 16D), icons);
         } else {
-            renderer.renderBox(new Vec3dCube(8 / 16D - width, 0, s1 ? 0 : 5 / 16D, 8 / 16D + width, height, 8 / 16D - width), icons);
-            renderer.renderBox(new Vec3dCube(8 / 16D - width, 0, 8 / 16D + width, 8 / 16D + width, height, s2 ? 1 : 11 / 16D), icons);
+            renderer.renderBox(new Vec3dCube(8 / 16D - width, 0, s1 ? 0 : 4 / 16D, 8 / 16D + width, height, 8 / 16D - width), icons);
+            renderer.renderBox(new Vec3dCube(8 / 16D - width, 0, 8 / 16D + width, 8 / 16D + width, height, s2 ? 1 : 12 / 16D), icons);
         }
 
         renderer.resetTransformations();

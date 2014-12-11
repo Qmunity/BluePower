@@ -87,21 +87,19 @@ public class RenderHelper {
 
             Tessellator t = Tessellator.instance;
 
-            float n = 4 / 16F;
-
             t.setColorOpaque_F(1.0F, 1.0F, 1.0F);
             t.startDrawingQuads();
             {
                 rb.setRenderBounds(7 / 16D, 0, 0, 9 / 16D, 1, 1);
-                t.setNormal(-1, n, 0);
+                t.setNormal(-1, 1, 0);
                 rb.renderFaceXNeg(Blocks.stone, 0, 0, 0, null);
-                t.setNormal(1, n, 0);
+                t.setNormal(1, 1, 0);
                 rb.renderFaceXPos(Blocks.stone, 0, 0, 0, null);
 
                 rb.setRenderBounds(0, 0, 7 / 16D, 1, 1, 9 / 16D);
-                t.setNormal(0, n, -1);
+                t.setNormal(0, 1, -1);
                 rb.renderFaceZNeg(Blocks.stone, 0, 0, 0, null);
-                t.setNormal(0, n, 1);
+                t.setNormal(0, 1, 1);
                 rb.renderFaceZPos(Blocks.stone, 0, 0, 0, null);
 
                 rb.setRenderBounds(7 / 16D, 0, 6 / 16D, 9 / 16D, 10 / 16D, 8 / 16D);

@@ -24,6 +24,8 @@ import uk.co.qmunity.lib.part.IPartRedstone;
 import uk.co.qmunity.lib.part.IPartSolid;
 import uk.co.qmunity.lib.part.IPartThruHole;
 import uk.co.qmunity.lib.part.IPartWAILAProvider;
+import uk.co.qmunity.lib.part.PartNormallyOccluded;
+import uk.co.qmunity.lib.part.compat.OcclusionHelper;
 import uk.co.qmunity.lib.vec.Vec3d;
 import uk.co.qmunity.lib.vec.Vec3dCube;
 import uk.co.qmunity.lib.vec.Vec3i;
@@ -31,6 +33,8 @@ import uk.co.qmunity.lib.vec.Vec3i;
 import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.api.redstone.IBundledConductor;
 import com.bluepowermod.api.redstone.IBundledDevice;
+import com.bluepowermod.api.redstone.IFaceBundledDevice;
+import com.bluepowermod.api.redstone.IFaceRedstoneDevice;
 import com.bluepowermod.api.redstone.IRedstoneConductor;
 import com.bluepowermod.api.redstone.IRedstoneDevice;
 import com.bluepowermod.client.renderers.IconSupplier;
@@ -87,6 +91,12 @@ IPartWAILAProvider, IPartSolid, IPartThruHole {
 
         return bundled ? 0xFFFFFF : (color == MinecraftColor.NONE ? WireCommons.getColorForPowerLevel(type.getColor(), power) : color
                 .getHex());
+    }
+
+    @Override
+    public int getHollowSize(ForgeDirection side) {
+
+        return 4;
     }
 
     @Override
@@ -361,11 +371,21 @@ IPartWAILAProvider, IPartSolid, IPartThruHole {
     @Override
     public boolean canConnectStraight(ForgeDirection side, IRedstoneDevice device) {
 
+        if (!(device instanceof IFaceRedstoneDevice))
+            if (!getParent().canAddPart(
+                    new PartNormallyOccluded(OcclusionHelper.getFaceHollowMicroblockBox(1, side.ordinal(), getHollowSize(side)))))
+                return false;
+
         return WireCommons.canConnect(this, device);
     }
 
     @Override
     public boolean canConnectOpenCorner(ForgeDirection side, IRedstoneDevice device) {
+
+        if (!(device instanceof IFaceRedstoneDevice))
+            if (!getParent().canAddPart(
+                    new PartNormallyOccluded(OcclusionHelper.getFaceHollowMicroblockBox(1, side.ordinal(), getHollowSize(side)))))
+                return false;
 
         return WireCommons.canConnect(this, device);
     }
@@ -524,11 +544,21 @@ IPartWAILAProvider, IPartSolid, IPartThruHole {
     @Override
     public boolean canConnectBundledStraight(ForgeDirection side, IBundledDevice device) {
 
+        if (!(device instanceof IFaceBundledDevice))
+            if (!getParent().canAddPart(
+                    new PartNormallyOccluded(OcclusionHelper.getFaceHollowMicroblockBox(1, side.ordinal(), getHollowSize(side)))))
+                return false;
+
         return WireCommons.canConnect(this, device);
     }
 
     @Override
     public boolean canConnectBundledOpenCorner(ForgeDirection side, IBundledDevice device) {
+
+        if (!(device instanceof IFaceBundledDevice))
+            if (!getParent().canAddPart(
+                    new PartNormallyOccluded(OcclusionHelper.getFaceHollowMicroblockBox(1, side.ordinal(), getHollowSize(side)))))
+                return false;
 
         return WireCommons.canConnect(this, device);
     }
@@ -599,12 +629,6 @@ IPartWAILAProvider, IPartSolid, IPartThruHole {
     public boolean isSideSolid(ForgeDirection face) {
 
         return true;
-    }
-
-    @Override
-    public int getHollowSize(ForgeDirection side) {
-
-        return 1;
     }
 
     @Override
