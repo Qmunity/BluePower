@@ -41,8 +41,12 @@ public class WireCommons {
     public static void refreshConnections(IRedstoneConductor conductor, IBundledConductor conductor1) {
 
         for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
+            IRedstoneDevice oldDevice = conductor.getDeviceOnSide(d);
+            IBundledDevice oldBundledDevice = conductor1.getBundledDeviceOnSide(d);
+
             Entry<IBundledDevice, ForgeDirection> bundledDevice = WireHelper.getBundledNeighbor(conductor1, d);
-            boolean wasConnected = conductor.getDeviceOnSide(d) != null || conductor1.getBundledDeviceOnSide(d) != null;
+            boolean wasConnected = oldDevice != null || oldBundledDevice != null;
+
             if (bundledDevice != null && bundledDevice.getKey() != conductor1.getBundledDeviceOnSide(d)) {
                 conductor1.onConnect(d, bundledDevice.getKey());
                 bundledDevice.getKey().onConnect(bundledDevice.getValue(), conductor1);
@@ -52,8 +56,17 @@ public class WireCommons {
                 conductor.onConnect(d, redstoneDevice.getKey());
                 redstoneDevice.getKey().onConnect(redstoneDevice.getValue(), conductor);
             }
-            if (wasConnected && bundledDevice == null && redstoneDevice == null)
+            if (wasConnected && bundledDevice == null && redstoneDevice == null) {
                 conductor.onDisconnect(d);
+                if (oldDevice != null)
+                    for (ForgeDirection s : ForgeDirection.VALID_DIRECTIONS)
+                        if (oldDevice.getDeviceOnSide(s) == conductor)
+                            oldDevice.onDisconnect(s);
+                if (oldBundledDevice != null)
+                    for (ForgeDirection s : ForgeDirection.VALID_DIRECTIONS)
+                        if (oldBundledDevice.getBundledDeviceOnSide(s) == conductor1)
+                            oldBundledDevice.onDisconnect(s);
+            }
         }
     }
 

@@ -40,7 +40,7 @@ import com.bluepowermod.part.wire.PartWireFace;
 import com.bluepowermod.part.wire.redstone.propagation.WirePropagator;
 
 public class PartRedwireFace extends PartWireFace implements IFaceRedstoneDevice, IRedstoneConductor, IFaceBundledDevice,
-        IBundledConductor, IPartRedstone, IPartWAILAProvider {
+IBundledConductor, IPartRedstone, IPartWAILAProvider {
 
     protected IRedstoneDevice[] devices = new IRedstoneDevice[6];
     protected IBundledDevice[] bundledDevices = new IBundledDevice[6];
@@ -319,9 +319,11 @@ public class PartRedwireFace extends PartWireFace implements IFaceRedstoneDevice
     @Override
     public boolean canConnectStraight(ForgeDirection side, IRedstoneDevice device) {
 
-        int microblockLocation = getFace().ordinal() + (side.ordinal() << 4);
-        if (!getParent().canAddPart(new PartNormallyOccluded(OcclusionHelper.getBox(MicroblockShape.EDGE, 1, microblockLocation))))
-            return false;
+        if (side != getFace().getOpposite() && side != ForgeDirection.UNKNOWN) {
+            int microblockLocation = getFace().ordinal() + (side.ordinal() << 4);
+            if (!getParent().canAddPart(new PartNormallyOccluded(OcclusionHelper.getBox(MicroblockShape.EDGE, 1, microblockLocation))))
+                return false;
+        }
 
         return !bundled && side != getFace().getOpposite() && WireCommons.canConnect(this, device);
     }
@@ -329,9 +331,11 @@ public class PartRedwireFace extends PartWireFace implements IFaceRedstoneDevice
     @Override
     public boolean canConnectOpenCorner(ForgeDirection side, IRedstoneDevice device) {
 
-        int microblockLocation = getFace().ordinal() + (side.ordinal() << 4);
-        if (!getParent().canAddPart(new PartNormallyOccluded(OcclusionHelper.getBox(MicroblockShape.EDGE, 1, microblockLocation))))
-            return false;
+        if (side != getFace().getOpposite() && side != ForgeDirection.UNKNOWN) {
+            int microblockLocation = getFace().ordinal() + (side.ordinal() << 4);
+            if (!getParent().canAddPart(new PartNormallyOccluded(OcclusionHelper.getBox(MicroblockShape.EDGE, 1, microblockLocation))))
+                return false;
+        }
 
         return !bundled && WireCommons.canConnect(this, device);
     }
@@ -339,9 +343,11 @@ public class PartRedwireFace extends PartWireFace implements IFaceRedstoneDevice
     @Override
     public boolean canConnectClosedCorner(ForgeDirection side, IRedstoneDevice device) {
 
-        int microblockLocation = getFace().ordinal() + (side.ordinal() << 4);
-        if (!getParent().canAddPart(new PartNormallyOccluded(OcclusionHelper.getBox(MicroblockShape.EDGE, 1, microblockLocation))))
-            return false;
+        if (side != getFace().getOpposite() && side != ForgeDirection.UNKNOWN) {
+            int microblockLocation = getFace().ordinal() + (side.ordinal() << 4);
+            if (!getParent().canAddPart(new PartNormallyOccluded(OcclusionHelper.getBox(MicroblockShape.EDGE, 1, microblockLocation))))
+                return false;
+        }
 
         return !bundled && WireCommons.canConnect(this, device);
     }
@@ -500,9 +506,11 @@ public class PartRedwireFace extends PartWireFace implements IFaceRedstoneDevice
             if (!bundled && !((PartRedwireFace) device).bundled && !color.matches(((PartRedwireFace) device).color))
                 return false;
 
-        int microblockLocation = getFace().ordinal() + (side.ordinal() << 4);
-        if (!getParent().canAddPart(new PartNormallyOccluded(OcclusionHelper.getBox(MicroblockShape.EDGE, 1, microblockLocation))))
-            return false;
+        if (side != getFace().getOpposite() && side != ForgeDirection.UNKNOWN) {
+            int microblockLocation = getFace().ordinal() + (side.ordinal() << 4);
+            if (!getParent().canAddPart(new PartNormallyOccluded(OcclusionHelper.getBox(MicroblockShape.EDGE, 1, microblockLocation))))
+                return false;
+        }
 
         return WireCommons.canConnect(this, device);
     }
@@ -514,9 +522,11 @@ public class PartRedwireFace extends PartWireFace implements IFaceRedstoneDevice
             if (!bundled && !((PartRedwireFace) device).bundled && !color.matches(((PartRedwireFace) device).color))
                 return false;
 
-        int microblockLocation = getFace().ordinal() + (side.ordinal() << 4);
-        if (!getParent().canAddPart(new PartNormallyOccluded(OcclusionHelper.getBox(MicroblockShape.EDGE, 1, microblockLocation))))
-            return false;
+        if (side != getFace().getOpposite() && side != ForgeDirection.UNKNOWN) {
+            int microblockLocation = getFace().ordinal() + (side.ordinal() << 4);
+            if (!getParent().canAddPart(new PartNormallyOccluded(OcclusionHelper.getBox(MicroblockShape.EDGE, 1, microblockLocation))))
+                return false;
+        }
 
         return WireCommons.canConnect(this, device);
     }
@@ -528,9 +538,11 @@ public class PartRedwireFace extends PartWireFace implements IFaceRedstoneDevice
             if (!bundled && !((PartRedwireFace) device).bundled && !color.matches(((PartRedwireFace) device).color))
                 return false;
 
-        int microblockLocation = getFace().ordinal() + (side.ordinal() << 4);
-        if (!getParent().canAddPart(new PartNormallyOccluded(OcclusionHelper.getBox(MicroblockShape.EDGE, 1, microblockLocation))))
-            return false;
+        if (side != getFace().getOpposite() && side != ForgeDirection.UNKNOWN) {
+            int microblockLocation = getFace().ordinal() + (side.ordinal() << 4);
+            if (!getParent().canAddPart(new PartNormallyOccluded(OcclusionHelper.getBox(MicroblockShape.EDGE, 1, microblockLocation))))
+                return false;
+        }
 
         return WireCommons.canConnect(this, device);
     }

@@ -147,7 +147,7 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
 
     public void addSelectionBoxes(List<Vec3dCube> boxes) {
 
-        boxes.add(BOX.clone());
+        boxes.add(BOX.clone().expand(-0.001));
     }
 
     protected void playTickSound() {
@@ -230,7 +230,7 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
 
         if (rendering == null)
             rendering = this;
-        renderer.renderBox(new Vec3dCube(0, 0, 0, 1, 2 / 16D, 1), getIcon(ForgeDirection.DOWN), getIcon(ForgeDirection.UP),
+        renderer.renderBox(BOX.clone().expand(-0.001), getIcon(ForgeDirection.DOWN), getIcon(ForgeDirection.UP),
                 getIcon(ForgeDirection.WEST), getIcon(ForgeDirection.EAST), getIcon(ForgeDirection.NORTH), getIcon(ForgeDirection.SOUTH));
 
         rendering = null;
