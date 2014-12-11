@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.UUID;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.world.World;
+import net.minecraftforge.event.world.WorldEvent;
 import uk.co.qmunity.lib.friend.FriendManager;
 import uk.co.qmunity.lib.friend.IPlayer;
 
@@ -15,6 +17,9 @@ import com.bluepowermod.api.wireless.IRedstoneFrequency;
 import com.bluepowermod.api.wireless.IWirelessManager;
 import com.bluepowermod.part.gate.wireless.Frequency.BundledFrequency;
 import com.bluepowermod.part.gate.wireless.Frequency.RedstoneFrequency;
+
+import cpw.mods.fml.common.event.FMLServerStoppingEvent;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public final class WirelessManager implements IWirelessManager {
 
@@ -40,7 +45,7 @@ public final class WirelessManager implements IWirelessManager {
     }
 
     @Override
-    public List<IRedstoneFrequency> getUseableRedstoneFrequencies(EntityPlayer player) {
+    public List<IRedstoneFrequency> getAvailableRedstoneFrequencies(EntityPlayer player) {
 
         UUID uuid = player.getGameProfile().getId();
         List<IPlayer> friends = FriendManager.getFriends(uuid);
@@ -54,7 +59,7 @@ public final class WirelessManager implements IWirelessManager {
     }
 
     @Override
-    public List<IBundledFrequency> getUseableBundledFrequencies(EntityPlayer player) {
+    public List<IBundledFrequency> getAvailableBundledFrequencies(EntityPlayer player) {
 
         UUID uuid = player.getGameProfile().getId();
         List<IPlayer> friends = FriendManager.getFriends(uuid);
@@ -113,6 +118,24 @@ public final class WirelessManager implements IWirelessManager {
 
         redstoneFrequencies.remove(frequency);
         bundledFrequencies.remove(frequency);
+    }
+
+    @SubscribeEvent
+    public void onWorldLoad(WorldEvent.Load event) {
+
+    }
+
+    @SubscribeEvent
+    public void onServerStop(FMLServerStoppingEvent event) {
+
+    }
+
+    public void loadFrequencies(World world) {
+
+    }
+
+    public void unloadFrequencies() {
+
     }
 
 }

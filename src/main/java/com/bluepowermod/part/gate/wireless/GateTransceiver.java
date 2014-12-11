@@ -6,6 +6,7 @@ import java.util.List;
 
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.init.Blocks;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
 import net.minecraftforge.common.util.ForgeDirection;
 import uk.co.qmunity.lib.client.render.RenderHelper;
@@ -18,7 +19,6 @@ import uk.co.qmunity.lib.vec.Vec3d;
 import uk.co.qmunity.lib.vec.Vec3dCube;
 import uk.co.qmunity.lib.vec.Vec3i;
 
-import com.bluepowermod.api.misc.Accessability;
 import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.api.redstone.IBundledConductor;
 import com.bluepowermod.api.redstone.IBundledDevice;
@@ -29,18 +29,19 @@ import com.bluepowermod.api.redstone.IRedstoneDevice;
 import com.bluepowermod.api.wireless.IBundledFrequency;
 import com.bluepowermod.api.wireless.IFrequency;
 import com.bluepowermod.api.wireless.IRedstoneFrequency;
+import com.bluepowermod.api.wireless.IWirelessDevice;
 import com.bluepowermod.part.gate.GateBase;
 import com.bluepowermod.part.wire.redstone.WireCommons;
 
-public class GateTransceiver extends GateBase implements IFaceRedstoneDevice, IRedstoneConductor, IFaceBundledDevice, IBundledConductor {
+public class GateTransceiver extends GateBase implements IWirelessDevice, IFaceRedstoneDevice, IRedstoneConductor, IFaceBundledDevice,
+IBundledConductor {
 
-    private static IFrequency mainFreq = WirelessManager.INSTANCE.registerRedstoneFrequency(null, "test", Accessability.PUBLIC);
-    private static List<GateTransceiver> transceivers = new ArrayList<GateTransceiver>();
+    private static final List<GateTransceiver> transceivers = new ArrayList<GateTransceiver>();
 
     private boolean isBundled;
     private boolean isAnalog;
 
-    private IFrequency frequency = mainFreq;
+    private IFrequency frequency = null;
 
     private IRedstoneDevice[] devices = new IRedstoneDevice[6];
     private IBundledDevice[] bundledDevices = new IBundledDevice[6];
@@ -234,6 +235,9 @@ public class GateTransceiver extends GateBase implements IFaceRedstoneDevice, IR
 
         List<Pair<IRedstoneDevice, ForgeDirection>> devices = new ArrayList<Pair<IRedstoneDevice, ForgeDirection>>();
 
+        if (frequency == null)
+            return devices;
+
         for (GateTransceiver t : transceivers) {
             if (t == this)
                 continue;
@@ -348,6 +352,9 @@ public class GateTransceiver extends GateBase implements IFaceRedstoneDevice, IR
 
         List<Pair<IBundledDevice, ForgeDirection>> devices = new ArrayList<Pair<IBundledDevice, ForgeDirection>>();
 
+        if (frequency == null)
+            return devices;
+
         for (GateTransceiver t : transceivers) {
             if (t == this)
                 continue;
@@ -402,6 +409,45 @@ public class GateTransceiver extends GateBase implements IFaceRedstoneDevice, IR
 
         super.onUnloaded();
         transceivers.remove(this);
+    }
+
+    @Override
+    public void setFrequency(IFrequency freq) {
+
+        transceivers.remove(this);
+        WireCommons.refreshConnections(this, this);
+        frequency = freq;
+        transceivers.add(this);
+    }
+
+    @Override
+    public IFrequency getFrequency() {
+
+        return frequency;
+    }
+
+    @Override
+    public void writeToNBT(NBTTagCompound tag) {
+
+        super.writeToNBT(tag);
+    }
+
+    @Override
+    public void readFromNBT(NBTTagCompound tag) {
+
+        super.readFromNBT(tag);
+    }
+
+    @Override
+    public void writeUpdateToNBT(NBTTagCompound tag) {
+
+        super.writeUpdateToNBT(tag);
+    }
+
+    @Override
+    public void readUpdateFromNBT(NBTTagCompound tag) {
+
+        super.readUpdateFromNBT(tag);
     }
 
 }

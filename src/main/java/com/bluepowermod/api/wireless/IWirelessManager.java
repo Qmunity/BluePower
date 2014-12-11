@@ -12,9 +12,9 @@ public interface IWirelessManager {
 
     public List<IBundledFrequency> getBundledFrequencies();
 
-    public List<IRedstoneFrequency> getUseableRedstoneFrequencies(EntityPlayer player);
+    public List<IRedstoneFrequency> getAvailableRedstoneFrequencies(EntityPlayer player);
 
-    public List<IBundledFrequency> getUseableBundledFrequencies(EntityPlayer player);
+    public List<IBundledFrequency> getAvailableBundledFrequencies(EntityPlayer player);
 
     public IRedstoneFrequency registerRedstoneFrequency(EntityPlayer owner, String frequency, Accessability accessability);
 
