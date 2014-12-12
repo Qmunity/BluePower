@@ -29,51 +29,51 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class Config {
 
-    public static boolean generateTungsten;
-    public static int minTungstenY;
-    public static int maxTungstenY;
-    public static int veinCountTungsten;
-    public static int veinSizeTungsten;
-    public static boolean generateCopper;
-    public static int minCopperY;
-    public static int maxCopperY;
-    public static int veinCountCopper;
-    public static int veinSizeCopper;
-    public static boolean generateSilver;
-    public static int minSilverY;
-    public static int maxSilverY;
-    public static int veinCountSilver;
-    public static int veinSizeSilver;
-    public static boolean generateZinc;
-    public static int minZincY;
-    public static int maxZincY;
-    public static int veinCountZinc;
-    public static int veinSizeZinc;
-    public static boolean generateTeslatite;
-    public static int minTeslatiteY;
-    public static int maxTeslatiteY;
-    public static int veinCountTeslatite;
-    public static int veinSizeTeslatite;
-    public static boolean generateRuby;
-    public static int minRubyY;
-    public static int maxRubyY;
-    public static int veinCountRuby;
-    public static int veinSizeRuby;
-    public static boolean generateAmethyst;
-    public static int minAmethystY;
-    public static int maxAmethystY;
-    public static int veinCountAmethyst;
-    public static int veinSizeAmethyst;
-    public static boolean generateSapphire;
-    public static int minSapphireY;
-    public static int maxSapphireY;
-    public static int veinCountSapphire;
-    public static int veinSizeSapphire;
-    public static double volcanoActiveToInactiveRatio;
-    public static double volcanoSpawnChance; // chance of a volcano spawning per chunk.
-    public static boolean useAltScrewdriverRecipe;
-    public static int vorpalEnchantmentId;
-    public static int disjunctionEnchantmentId;
+    public static boolean  generateTungsten;
+    public static int      minTungstenY;
+    public static int      maxTungstenY;
+    public static int      veinCountTungsten;
+    public static int      veinSizeTungsten;
+    public static boolean  generateCopper;
+    public static int      minCopperY;
+    public static int      maxCopperY;
+    public static int      veinCountCopper;
+    public static int      veinSizeCopper;
+    public static boolean  generateSilver;
+    public static int      minSilverY;
+    public static int      maxSilverY;
+    public static int      veinCountSilver;
+    public static int      veinSizeSilver;
+    public static boolean  generateZinc;
+    public static int      minZincY;
+    public static int      maxZincY;
+    public static int      veinCountZinc;
+    public static int      veinSizeZinc;
+    public static boolean  generateTeslatite;
+    public static int      minTeslatiteY;
+    public static int      maxTeslatiteY;
+    public static int      veinCountTeslatite;
+    public static int      veinSizeTeslatite;
+    public static boolean  generateRuby;
+    public static int      minRubyY;
+    public static int      maxRubyY;
+    public static int      veinCountRuby;
+    public static int      veinSizeRuby;
+    public static boolean  generateAmethyst;
+    public static int      minAmethystY;
+    public static int      maxAmethystY;
+    public static int      veinCountAmethyst;
+    public static int      veinSizeAmethyst;
+    public static boolean  generateSapphire;
+    public static int      minSapphireY;
+    public static int      maxSapphireY;
+    public static int      veinCountSapphire;
+    public static int      veinSizeSapphire;
+    public static double   volcanoActiveToInactiveRatio;
+    public static double   volcanoSpawnChance; // chance of a volcano spawning per chunk.
+    public static boolean  useAltScrewdriverRecipe;
+    public static int      vorpalEnchantmentId;
+    public static int      disjunctionEnchantmentId;
     public static String[] alloyFurnaceBlacklist;
 
     public static boolean enableTubeCaching;
@@ -133,7 +133,7 @@ public class Config {
         config.addCustomCategoryComment(Refs.CONFIG_RECIPES, "Toggle recipes to be enabled or not");
         alloyFurnaceBlacklist = config
                 .get(Refs.CONFIG_RECIPES, "alloyFurnaceBlacklist", new String[0],
-                        "Any item name ('minecraft:bucket', 'minecraft:minecart') added here will be blacklisted from being able to melt down into its raw materials.")
+                     "Any item name ('minecraft:bucket', 'minecraft:minecart') added here will be blacklisted from being able to melt down into its raw materials.")
                 .getStringList();
 
         Property prop = config.get(Refs.CONFIG_TUBES, "Enable Tube Caching", true);

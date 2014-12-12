@@ -47,22 +47,6 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 
 public class BPEventHandler {
 
-    // @SubscribeEvent
-    // public void onChunkLoad(ChunkEvent.Load event) {
-    //
-    // if (Config.convertLegacyPartsOnChunkLoad) {
-    // Iterable<TileEntity> list = event.getChunk().chunkTileEntityMap.values();
-    // int count = 0;
-    // for (TileEntity te : list) {
-    // if (te instanceof IInventory) {
-    // count += ItemPartLegacy.convertLegacy((IInventory) te);
-    // }
-    // }
-    // if (count > 0) {
-    // BluePower.log.info("Converted " + count + " item stacks to the new parts.");
-    // }
-    // }
-    // }
     private boolean warned = false;
 
     @SubscribeEvent
