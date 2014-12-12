@@ -17,6 +17,7 @@
 
 package com.bluepowermod.items;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.block.Block;
@@ -122,5 +123,17 @@ public class ItemPart extends ItemMultipart implements IDatabaseSaveable {
         world.playSoundEffect(x + 0.5, y + 0.5, z + 0.5, sound.func_150496_b(), sound.getVolume() + 3, sound.getPitch() * 0.85F);
 
         return true;
+    }
+
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @Override
+    public void addInformation(ItemStack item, EntityPlayer player, List list, boolean unused) {
+
+        BPPart part = PartManager.getExample(item);
+        if (part == null)
+            return;
+        List<String> l = new ArrayList<String>();
+        part.addTooltip(l);
+        list.addAll(l);
     }
 }

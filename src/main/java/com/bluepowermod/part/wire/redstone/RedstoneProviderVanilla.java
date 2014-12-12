@@ -30,7 +30,7 @@ public class RedstoneProviderVanilla implements IRedstoneProvider {
     @Override
     public IRedstoneDevice getRedstoneDevice(World world, int x, int y, int z, ForgeDirection face, ForgeDirection side) {
 
-        return new DummyRedstoneDevice(new Vec3i(x, y, z, world));
+        return DummyRedstoneDevice.getDeviceAt(new Vec3i(x, y, z, world));
     }
 
     @Override

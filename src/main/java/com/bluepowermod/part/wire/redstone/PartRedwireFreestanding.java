@@ -24,11 +24,15 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.world.World;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -37,6 +41,9 @@ import org.lwjgl.opengl.GL11;
 import uk.co.qmunity.lib.client.render.RenderHelper;
 import uk.co.qmunity.lib.helper.MathHelper;
 import uk.co.qmunity.lib.misc.Pair;
+import uk.co.qmunity.lib.part.IPart;
+import uk.co.qmunity.lib.part.IPartCustomPlacement;
+import uk.co.qmunity.lib.part.IPartPlacement;
 import uk.co.qmunity.lib.part.IPartRedstone;
 import uk.co.qmunity.lib.part.IPartSolid;
 import uk.co.qmunity.lib.part.IPartThruHole;
@@ -55,11 +62,12 @@ import com.bluepowermod.api.redstone.IFaceRedstoneDevice;
 import com.bluepowermod.api.redstone.IRedstoneConductor;
 import com.bluepowermod.api.redstone.IRedstoneDevice;
 import com.bluepowermod.client.renderers.IconSupplier;
+import com.bluepowermod.part.PartPlacementNone;
 import com.bluepowermod.part.wire.PartWireFreestanding;
 import com.bluepowermod.part.wire.redstone.propagation.WirePropagator;
 
 public class PartRedwireFreestanding extends PartWireFreestanding implements IRedstoneConductor, IBundledConductor, IPartRedstone,
-IPartWAILAProvider, IPartSolid, IPartThruHole {
+IPartWAILAProvider, IPartSolid, IPartThruHole, IPartCustomPlacement {
 
     protected IRedstoneDevice[] devices = new IRedstoneDevice[6];
     protected IBundledDevice[] bundledDevices = new IBundledDevice[6];
@@ -665,6 +673,23 @@ IPartWAILAProvider, IPartSolid, IPartThruHole {
 
         return "wire.freestanding." + type.getName() + (bundled ? ".bundled" : "")
                 + (color != MinecraftColor.NONE ? "." + color.name().toLowerCase() : "");
+    }
+
+    @Override
+    public IPartPlacement getPlacement(IPart part, World world, Vec3i location, ForgeDirection face, MovingObjectPosition mop,
+            EntityPlayer player) {
+
+        if (((PartRedwireFreestanding) part).bundled || type == RedwireType.RED_ALLOY)
+            return new PartPlacementNone();
+
+        return null;
+    }
+
+    @Override
+    public void addTooltip(List<String> tip) {
+
+        if (bundled || type == RedwireType.RED_ALLOY)
+            tip.add(MinecraftColor.RED + I18n.format("Disabled temporarily. Still not fully working."));
     }
 
 }

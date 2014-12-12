@@ -24,17 +24,25 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.world.World;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import org.lwjgl.opengl.GL11;
 
 import uk.co.qmunity.lib.client.render.RenderHelper;
+import uk.co.qmunity.lib.helper.MathHelper;
+import uk.co.qmunity.lib.helper.RedstoneHelper;
 import uk.co.qmunity.lib.misc.Pair;
+import uk.co.qmunity.lib.part.IPart;
+import uk.co.qmunity.lib.part.IPartPlacement;
 import uk.co.qmunity.lib.part.IPartRedstone;
 import uk.co.qmunity.lib.part.IPartWAILAProvider;
 import uk.co.qmunity.lib.part.MicroblockShape;
@@ -53,6 +61,7 @@ import com.bluepowermod.api.redstone.IRedstoneDevice;
 import com.bluepowermod.client.renderers.IconSupplier;
 import com.bluepowermod.helper.VectorHelper;
 import com.bluepowermod.init.BPCreativeTabs;
+import com.bluepowermod.part.PartPlacementNone;
 import com.bluepowermod.part.wire.PartWireFace;
 import com.bluepowermod.part.wire.redstone.propagation.WirePropagator;
 
@@ -411,8 +420,13 @@ IBundledConductor, IPartRedstone, IPartWAILAProvider {
     @Override
     public void onRedstoneUpdate() {
 
-        if (!isBundled())
+        if (!isBundled()) {
             sendUpdatePacket();
+            for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS)
+                if (devices[dir.ordinal()] != null && (devices[dir.ordinal()] instanceof DummyRedstoneDevice))
+                    RedstoneHelper.notifyRedstoneUpdate(getWorld(), getX(), getY(), getZ(), dir, new Vec3i(this).add(dir).getBlock()
+                            .isNormalCube());
+        }
     }
 
     @Override
@@ -478,42 +492,25 @@ IBundledConductor, IPartRedstone, IPartWAILAProvider {
     @Override
     public boolean canConnectRedstone(ForgeDirection side) {
 
-        return false;// side != getFace();
+        return false;// side != getFace().getOpposite() && !bundled;
     }
 
     @Override
     public int getStrongPower(ForgeDirection side) {
 
-        // if (!shouldOutput)
-        // return 0;
-        //
-        // if (isBundled())
-        // return 0;
-        //
-        // if (side != getFace())
-        // return 0;
-        //
-        // return MathHelper.map(power, 0, 255, 0, 15);
-        return 0;
+        if (devices[side.ordinal()] == null || !(devices[side.ordinal()] instanceof DummyRedstoneDevice))
+            return 0;
+
+        return MathHelper.map(power & 0xFF, 0, 255, 0, 15);
     }
 
     @Override
     public int getWeakPower(ForgeDirection side) {
 
-        // if (!shouldOutput)
-        // return 0;
-        //
-        // if (isBundled())
-        // return 0;
-        //
-        // IRedstoneDevice device = getDeviceOnSide(side);
-        // if (device == null)
-        // return 0;
-        // if (!(device instanceof DummyRedstoneDevice))
-        // return 0;
-        //
-        // return MathHelper.map(power, 0, 255, 0, 15);
-        return 0;
+        if (devices[side.ordinal()] == null || !(devices[side.ordinal()] instanceof DummyRedstoneDevice))
+            return 0;
+
+        return MathHelper.map(power & 0xFF, 0, 255, 0, 15);
     }
 
     @Override
@@ -652,6 +649,34 @@ IBundledConductor, IPartRedstone, IPartWAILAProvider {
 
         return "wire." + type.getName() + (bundled ? ".bundled" : "")
                 + (color != MinecraftColor.NONE ? "." + color.name().toLowerCase() : "");
+    }
+
+    @Override
+    public IPartPlacement getPlacement(IPart part, World world, Vec3i location, ForgeDirection face, MovingObjectPosition mop,
+            EntityPlayer player) {
+
+        if (bundled || type == RedwireType.RED_ALLOY)
+            return new PartPlacementNone();
+
+        return super.getPlacement(part, world, location, face, mop, player);
+    }
+
+    @Override
+    public void addTooltip(List<String> tip) {
+
+        if (bundled || type == RedwireType.RED_ALLOY)
+            tip.add(MinecraftColor.RED + I18n.format("Disabled temporarily. Still not fully working."));
+    }
+
+    @Override
+    public void setFace(ForgeDirection face) {
+
+        WireCommons.disconnect(this, this);
+
+        super.setFace(face);
+
+        if (getParent() != null)
+            WireCommons.refreshConnections(this, this);
     }
 
 }

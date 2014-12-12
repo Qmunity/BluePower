@@ -214,4 +214,8 @@ IPartInteractable, IDatabaseSaveable {
         return Block.soundTypeGlass;
     }
 
+    public void addTooltip(List<String> tip) {
+
+    }
+
 }

@@ -38,9 +38,9 @@ public enum MinecraftColor {
     ANY(-1, -1, -1, (char) 0);
 
     public static MinecraftColor[] VALID_COLORS = { WHITE, ORANGE, MAGENTA, LIGHT_BLUE, YELLOW, LIME, PINK, GRAY, LIGHT_GRAY, CYAN, PURPLE,
-            BLUE, BROWN, GREEN, RED, BLACK };
+        BLUE, BROWN, GREEN, RED, BLACK };
     public static MinecraftColor[] WIRE_COLORS = { WHITE, ORANGE, MAGENTA, LIGHT_BLUE, YELLOW, LIME, PINK, GRAY, LIGHT_GRAY, CYAN, PURPLE,
-            BLUE, BROWN, GREEN, RED, BLACK, NONE };
+        BLUE, BROWN, GREEN, RED, BLACK, NONE };
 
     private int hexDark, hex, hexLight;
     private char chatColorChar;
@@ -92,6 +92,12 @@ public enum MinecraftColor {
             return true;
 
         return this == color;
+    }
+
+    @Override
+    public String toString() {
+
+        return getChatColor();
     }
 
 }

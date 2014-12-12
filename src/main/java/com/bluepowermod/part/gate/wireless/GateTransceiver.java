@@ -20,9 +20,12 @@ package com.bluepowermod.part.gate.wireless;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 
 import net.minecraft.client.renderer.RenderBlocks;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -31,11 +34,13 @@ import uk.co.qmunity.lib.misc.Pair;
 import uk.co.qmunity.lib.part.MicroblockShape;
 import uk.co.qmunity.lib.part.PartNormallyOccluded;
 import uk.co.qmunity.lib.part.compat.OcclusionHelper;
+import uk.co.qmunity.lib.raytrace.QMovingObjectPosition;
 import uk.co.qmunity.lib.transform.Rotation;
 import uk.co.qmunity.lib.vec.Vec3d;
 import uk.co.qmunity.lib.vec.Vec3dCube;
 import uk.co.qmunity.lib.vec.Vec3i;
 
+import com.bluepowermod.api.misc.Accessability;
 import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.api.redstone.IBundledConductor;
 import com.bluepowermod.api.redstone.IBundledDevice;
@@ -48,10 +53,15 @@ import com.bluepowermod.api.wireless.IFrequency;
 import com.bluepowermod.api.wireless.IRedstoneFrequency;
 import com.bluepowermod.api.wireless.IWirelessDevice;
 import com.bluepowermod.part.gate.GateBase;
+import com.bluepowermod.part.gate.wireless.Frequency.RedstoneFrequency;
 import com.bluepowermod.part.wire.redstone.WireCommons;
+import com.bluepowermod.part.wire.redstone.propagation.WirePropagator;
 
 public class GateTransceiver extends GateBase implements IWirelessDevice, IFaceRedstoneDevice, IRedstoneConductor, IFaceBundledDevice,
-IBundledConductor {
+        IBundledConductor {
+
+    private static final RedstoneFrequency freq1 = new RedstoneFrequency(Accessability.PUBLIC, UUID.randomUUID(), "freq1");
+    private static final RedstoneFrequency freq2 = new RedstoneFrequency(Accessability.PUBLIC, UUID.randomUUID(), "freq2");
 
     private static final List<GateTransceiver> transceivers = new ArrayList<GateTransceiver>();
 
@@ -431,10 +441,15 @@ IBundledConductor {
     @Override
     public void setFrequency(IFrequency freq) {
 
+        if (getWorld().isRemote)
+            return;
+
         transceivers.remove(this);
         WireCommons.refreshConnections(this, this);
+        WirePropagator.INSTANCE.onPowerLevelChange(this, ForgeDirection.UNKNOWN, (byte) 0, (byte) 0);
         frequency = freq;
         transceivers.add(this);
+        WirePropagator.INSTANCE.onPowerLevelChange(this, ForgeDirection.UNKNOWN, (byte) 0, (byte) 0);
     }
 
     @Override
@@ -465,6 +480,17 @@ IBundledConductor {
     public void readUpdateFromNBT(NBTTagCompound tag) {
 
         super.readUpdateFromNBT(tag);
+    }
+
+    @Override
+    public boolean onActivated(EntityPlayer player, QMovingObjectPosition hit, ItemStack item) {
+
+        if (frequency == freq1)
+            setFrequency(freq2);
+        else
+            setFrequency(freq1);
+
+        return true;
     }
 
 }

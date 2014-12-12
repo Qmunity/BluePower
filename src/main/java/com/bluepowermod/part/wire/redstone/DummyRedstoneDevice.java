@@ -17,8 +17,9 @@
 
 package com.bluepowermod.part.wire.redstone;
 
-import net.minecraft.block.Block;
-import net.minecraft.util.Direction;
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import uk.co.qmunity.lib.helper.MathHelper;
@@ -31,9 +32,22 @@ import com.bluepowermod.api.redstone.IRedstoneDevice;
 
 public class DummyRedstoneDevice implements IRedstoneDevice {
 
+    private static final List<DummyRedstoneDevice> dummyDevices = new ArrayList<DummyRedstoneDevice>();
+
+    public static DummyRedstoneDevice getDeviceAt(Vec3i loc) {
+
+        if (dummyDevices.contains(loc))
+            return dummyDevices.get(dummyDevices.indexOf(loc));
+
+        DummyRedstoneDevice dev = new DummyRedstoneDevice(loc);
+        dummyDevices.add(dev);
+        return dev;
+    }
+
+    private IRedstoneDevice[] devices = new IRedstoneDevice[6];
     private Vec3i loc;
 
-    public DummyRedstoneDevice(Vec3i loc) {
+    private DummyRedstoneDevice(Vec3i loc) {
 
         this.loc = loc;
     }
@@ -78,30 +92,28 @@ public class DummyRedstoneDevice implements IRedstoneDevice {
     @Override
     public void onConnect(ForgeDirection side, IRedstoneDevice device) {
 
+        devices[side.ordinal()] = device;
     }
 
     @Override
     public void onDisconnect(ForgeDirection side) {
 
+        devices[side.ordinal()] = null;
     }
 
     @Override
     public IRedstoneDevice getDeviceOnSide(ForgeDirection side) {
 
-        return null;
+        return devices[side.ordinal()];
     }
 
     @Override
     public byte getRedstonePower(ForgeDirection side) {
 
-        // int original = RedstoneHelper.getOutput(getWorld(), getX(), getY(), getZ(), side);
-        Block b = getWorld().getBlock(getX(), getY(), getZ());
-        int original = Math.max(
-                b.isProvidingWeakPower(getWorld(), getX(), getY(), getZ(),
-                        Direction.getMovementDirection(ForgeDirection.SOUTH.offsetX, ForgeDirection.SOUTH.offsetZ)),
-                        b.isProvidingStrongPower(getWorld(), getX(), getY(), getZ(),
-                                Direction.getMovementDirection(ForgeDirection.SOUTH.offsetX, ForgeDirection.SOUTH.offsetZ)));
-        return (byte) MathHelper.map(original, 0, 15, 0, 255);
+        if (side == ForgeDirection.UNKNOWN)
+            return (byte) 0;
+
+        return (byte) MathHelper.map(RedstoneHelper.getOutput(getWorld(), getX(), getY(), getZ(), side), 0, 15, 0, 255);
     }
 
     @Override
@@ -124,6 +136,15 @@ public class DummyRedstoneDevice implements IRedstoneDevice {
     public boolean isNormalBlock() {
 
         return true;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+
+        if (obj == loc || obj == this)
+            return true;
+
+        return false;
     }
 
 }
