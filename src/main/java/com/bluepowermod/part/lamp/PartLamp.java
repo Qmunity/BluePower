@@ -18,6 +18,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.EnumSkyBlock;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -304,6 +305,11 @@ public class PartLamp extends BPPartFace implements IPartRedstone {
 
         super.readUpdateFromNBT(tag);
         power = tag.getInteger("power");
+
+        try {
+            getWorld().updateLightByType(EnumSkyBlock.Block, getX(), getY(), getZ());
+        } catch (Exception ex) {
+        }
     }
 
     /**
