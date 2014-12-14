@@ -7,9 +7,13 @@
  */
 package com.bluepowermod.blocks.machines;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 
 import com.bluepowermod.blocks.BlockContainerBase;
 import com.bluepowermod.client.renderers.RenderLamp;
@@ -22,54 +26,67 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * @author Koen Beckers (K4Unl)
- * 
+ *
  */
 public class BlockLamp extends BlockContainerBase {
 
-    private boolean isInverted;
-    private final String colorName;
-    private int color;
+    private final boolean isInverted;
+    private final int color;
 
-    public BlockLamp(boolean _isInverted, String _colorName, int _color) {
+    @SideOnly(Side.CLIENT)
+    public static IIcon off, on;
+
+    public BlockLamp(boolean isInverted, String colorName, int color) {
 
         super(Material.iron, TileLamp.class);
-        setInverted(_isInverted);
-        colorName = _colorName;
-        setColor(_color);
+        this.isInverted = isInverted;
+        this.color = color;
         setBlockName(Refs.LAMP_NAME + (isInverted ? "inverted" : "") + colorName);
         setCreativeTab(BPCreativeTabs.lighting);
 
+    }
+
+    private TileLamp get(IBlockAccess w, int x, int y, int z) {
+
+        TileEntity te = w.getTileEntity(x, y, z);
+
+        if (te == null || !(te instanceof TileLamp))
+            return null;
+
+        return (TileLamp) te;
+    }
+
+    private int getPower(IBlockAccess w, int x, int y, int z) {
+
+        TileLamp te = get(w, x, y, z);
+        if (te == null)
+            return 0;
+
+        int power = te.getPower();
+        if (isInverted())
+            power = 15 - power;
+        return power;
     }
 
     @Override
     @SideOnly(Side.CLIENT)
     public void registerBlockIcons(IIconRegister iconRegister) {
 
-        blockIcon = iconRegister.registerIcon(Refs.MODID + ":lamps/lamp_on");
-        blockIcon = iconRegister.registerIcon(Refs.MODID + ":lamps/lamp_off");
+        on = iconRegister.registerIcon(Refs.MODID + ":lamps/lamp_on");
+        off = iconRegister.registerIcon(Refs.MODID + ":lamps/lamp_off");
     }
 
     @Override
     public int getLightValue(IBlockAccess w, int x, int y, int z) {
 
-        TileLamp tileEntity = (TileLamp) w.getTileEntity(x, y, z);
-        if (tileEntity != null) {
-            int power = tileEntity.getPower();
-
-            if (isInverted()) {
-                power = 15 - power;
-            }
-            return power;
-        } else {
-            return 0;
-        }
+        return getPower(w, x, y, z);
     }
 
     @Override
     @SideOnly(Side.CLIENT)
     public int getRenderType() {
 
-        return RenderLamp.RENDER_ID;
+        return 0;
     }
 
     public int getColor() {
@@ -77,19 +94,9 @@ public class BlockLamp extends BlockContainerBase {
         return color;
     }
 
-    public void setColor(int color) {
-
-        this.color = color;
-    }
-
     public boolean isInverted() {
 
         return isInverted;
-    }
-
-    public void setInverted(boolean isInverted) {
-
-        this.isInverted = isInverted;
     }
 
     @Override
@@ -102,7 +109,6 @@ public class BlockLamp extends BlockContainerBase {
     public boolean canRenderInPass(int pass) {
 
         RenderLamp.pass = pass;
-
         return true;
     }
 
@@ -110,5 +116,36 @@ public class BlockLamp extends BlockContainerBase {
     public int getRenderBlockPass() {
 
         return 1;
+    }
+
+    @Override
+    public int colorMultiplier(IBlockAccess world, int x, int y, int z) {
+
+        return color;
+    }
+
+    @Override
+    public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
+
+        int power = getPower(world, x, y, z);
+
+        return power > 0 ? on : off;
+    }
+
+    @Override
+    public IIcon getIcon(int side, int meta) {
+
+        return isInverted ? on : off;
+    }
+
+    @Override
+    public void onNeighborBlockChange(World world, int x, int y, int z, Block block) {
+
+        super.onNeighborBlockChange(world, x, y, z, block);
+
+        TileLamp te = get(world, x, y, z);
+        if (te == null)
+            return;
+        te.onUpdate();
     }
 }

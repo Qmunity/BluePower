@@ -7,8 +7,9 @@
  */
 package com.bluepowermod.tileentities.tier1;
 
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.EnumSkyBlock;
 import uk.co.qmunity.lib.helper.RedstoneHelper;
-import net.minecraftforge.common.util.ForgeDirection;
 
 import com.bluepowermod.tileentities.TileBase;
 
@@ -17,12 +18,38 @@ import com.bluepowermod.tileentities.TileBase;
  */
 public class TileLamp extends TileBase {
 
+    private int power;
+
     public int getPower() {
 
-        int power = 0;
-        for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
-            power = Math.max(power, RedstoneHelper.getInput(getWorldObj(), xCoord, yCoord, zCoord, d));
-        }
         return power;
+    }
+
+    public void onUpdate() {
+
+        int pow = RedstoneHelper.getInput(getWorldObj(), xCoord, yCoord, zCoord);
+        if (pow != power) {
+            power = pow;
+            sendUpdatePacket();
+            getWorldObj().markBlockRangeForRenderUpdate(xCoord, yCoord, zCoord, xCoord, yCoord, zCoord);
+            getWorldObj().updateLightByType(EnumSkyBlock.Block, xCoord, yCoord, zCoord);
+            getWorldObj().notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, getBlockType());
+        }
+    }
+
+    @Override
+    protected void writeToPacketNBT(NBTTagCompound tCompound) {
+
+        tCompound.setInteger("power", power);
+    }
+
+    @Override
+    protected void readFromPacketNBT(NBTTagCompound tCompound) {
+
+        power = tCompound.getInteger("power");
+        if (getWorldObj() != null) {
+            getWorldObj().markBlockRangeForRenderUpdate(xCoord, yCoord, zCoord, xCoord, yCoord, zCoord);
+            getWorldObj().updateLightByType(EnumSkyBlock.Block, xCoord, yCoord, zCoord);
+        }
     }
 }

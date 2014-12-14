@@ -13,13 +13,13 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.client.IItemRenderer;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import org.lwjgl.opengl.GL11;
 
+import uk.co.qmunity.lib.client.render.RenderHelper;
 import uk.co.qmunity.lib.vec.Vec3d;
 import uk.co.qmunity.lib.vec.Vec3dCube;
 
@@ -38,151 +38,11 @@ public class RenderLamp extends TileEntitySpecialRenderer implements ISimpleBloc
     @Override
     public void renderInventoryBlock(Block block, int metadata, int modelId, RenderBlocks renderer) {
 
-        BlockLamp bLamp = (BlockLamp) block;
-        int redMask = 0xFF0000, greenMask = 0xFF00, blueMask = 0xFF;
-        int r = (bLamp.getColor() & redMask) >> 16;
-        int g = (bLamp.getColor() & greenMask) >> 8;
-        int b = (bLamp.getColor() & blueMask);
-        Vec3dCube vector = new Vec3dCube(0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
-
-        if (pass == 0) {
-            Tessellator t = Tessellator.instance;
-            t.startDrawingQuads();
-            t.setColorOpaque(r, g, b);
-            IIcon iconToUse;
-            int power = 0;
-            if (power == 0) {
-                iconToUse = IconSupplier.lampOff;
-            } else {
-                iconToUse = IconSupplier.lampOn;
-            }
-
-            double minU = iconToUse.getMinU();
-            double maxU = iconToUse.getMaxU();
-            double minV = iconToUse.getMinV();
-            double maxV = iconToUse.getMaxV();
-
-            // Top side
-            t.setNormal(0, 1, 0);
-            t.addVertexWithUV(vector.getMinX(), vector.getMaxY(), vector.getMaxZ(), minU, maxV);
-            t.addVertexWithUV(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ(), minU, minV);
-            t.addVertexWithUV(vector.getMaxX(), vector.getMaxY(), vector.getMinZ(), maxU, minV);
-            t.addVertexWithUV(vector.getMinX(), vector.getMaxY(), vector.getMinZ(), maxU, maxV);
-
-            // Draw west side:
-            t.setNormal(-1, 0, 0);
-            t.addVertexWithUV(vector.getMinX(), vector.getMinY(), vector.getMaxZ(), minU, maxV);
-            t.addVertexWithUV(vector.getMinX(), vector.getMaxY(), vector.getMaxZ(), minU, minV);
-            t.addVertexWithUV(vector.getMinX(), vector.getMaxY(), vector.getMinZ(), maxU, minV);
-            t.addVertexWithUV(vector.getMinX(), vector.getMinY(), vector.getMinZ(), maxU, maxV);
-
-            // Draw east side:
-            t.setNormal(1, 0, 0);
-            t.addVertexWithUV(vector.getMaxX(), vector.getMinY(), vector.getMinZ(), minU, maxV);
-            t.addVertexWithUV(vector.getMaxX(), vector.getMaxY(), vector.getMinZ(), minU, minV);
-            t.addVertexWithUV(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ(), maxU, minV);
-            t.addVertexWithUV(vector.getMaxX(), vector.getMinY(), vector.getMaxZ(), maxU, maxV);
-
-            // Draw north side
-            t.setNormal(0, 0, -1);
-            t.addVertexWithUV(vector.getMinX(), vector.getMinY(), vector.getMinZ(), minU, maxV);
-            t.addVertexWithUV(vector.getMinX(), vector.getMaxY(), vector.getMinZ(), minU, minV);
-            t.addVertexWithUV(vector.getMaxX(), vector.getMaxY(), vector.getMinZ(), maxU, minV);
-            t.addVertexWithUV(vector.getMaxX(), vector.getMinY(), vector.getMinZ(), maxU, maxV);
-
-            // Draw south side
-            t.setNormal(0, 0, 1);
-            t.addVertexWithUV(vector.getMinX(), vector.getMinY(), vector.getMaxZ(), minU, maxV);
-            t.addVertexWithUV(vector.getMaxX(), vector.getMinY(), vector.getMaxZ(), maxU, maxV);
-            t.addVertexWithUV(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ(), maxU, minV);
-            t.addVertexWithUV(vector.getMinX(), vector.getMaxY(), vector.getMaxZ(), minU, minV);
-
-            t.draw();
-        }
     }
 
     @Override
     public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer) {
 
-        if (pass == 0) {
-            BlockLamp bLamp = (BlockLamp) block;
-            int redMask = 0xFF0000, greenMask = 0xFF00, blueMask = 0xFF;
-            int r = (bLamp.getColor() & redMask) >> 16;
-            int g = (bLamp.getColor() & greenMask) >> 8;
-            int b = (bLamp.getColor() & blueMask);
-
-            Vec3dCube vector = new Vec3dCube(0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
-
-            // if (pass == 0) {
-            Tessellator t = Tessellator.instance;
-            t.addTranslation(x, y, z);
-            t.setColorOpaque(r, g, b);
-            IIcon iconToUse;
-            int power = ((TileLamp) world.getTileEntity(x, y, z)).getPower();
-            if (bLamp.isInverted()) {
-                power = 15 - power;
-            }
-
-            if (power == 0) {
-                iconToUse = IconSupplier.lampOn;
-            } else {
-                iconToUse = IconSupplier.lampOff;
-            }
-
-            double minU = iconToUse.getMinU();
-            double maxU = iconToUse.getMaxU();
-            double minV = iconToUse.getMinV();
-            double maxV = iconToUse.getMaxV();
-
-            // Bottom side
-            t.setNormal(0, -1, 0);
-            t.addVertexWithUV(vector.getMaxX(), vector.getMinY(), vector.getMaxZ(), minU, maxV);
-            t.addVertexWithUV(vector.getMinX(), vector.getMinY(), vector.getMaxZ(), minU, minV);
-            t.addVertexWithUV(vector.getMinX(), vector.getMinY(), vector.getMinZ(), maxU, minV);
-            t.addVertexWithUV(vector.getMaxX(), vector.getMinY(), vector.getMinZ(), maxU, maxV);
-
-            // Top side
-            t.setNormal(0, 1, 0);
-            t.addVertexWithUV(vector.getMinX(), vector.getMaxY(), vector.getMaxZ(), minU, maxV);
-            t.addVertexWithUV(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ(), minU, minV);
-            t.addVertexWithUV(vector.getMaxX(), vector.getMaxY(), vector.getMinZ(), maxU, minV);
-            t.addVertexWithUV(vector.getMinX(), vector.getMaxY(), vector.getMinZ(), maxU, maxV);
-
-            // Draw west side:
-            t.setNormal(-1, 0, 0);
-            t.addVertexWithUV(vector.getMinX(), vector.getMinY(), vector.getMaxZ(), minU, maxV);
-            t.addVertexWithUV(vector.getMinX(), vector.getMaxY(), vector.getMaxZ(), minU, minV);
-            t.addVertexWithUV(vector.getMinX(), vector.getMaxY(), vector.getMinZ(), maxU, minV);
-            t.addVertexWithUV(vector.getMinX(), vector.getMinY(), vector.getMinZ(), maxU, maxV);
-
-            // Draw east side:
-            t.setNormal(1, 0, 0);
-            t.addVertexWithUV(vector.getMaxX(), vector.getMinY(), vector.getMinZ(), minU, maxV);
-            t.addVertexWithUV(vector.getMaxX(), vector.getMaxY(), vector.getMinZ(), minU, minV);
-            t.addVertexWithUV(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ(), maxU, minV);
-            t.addVertexWithUV(vector.getMaxX(), vector.getMinY(), vector.getMaxZ(), maxU, maxV);
-
-            // Draw north side
-            t.setNormal(0, 0, -1);
-            t.addVertexWithUV(vector.getMinX(), vector.getMinY(), vector.getMinZ(), minU, maxV);
-            t.addVertexWithUV(vector.getMinX(), vector.getMaxY(), vector.getMinZ(), minU, minV);
-            t.addVertexWithUV(vector.getMaxX(), vector.getMaxY(), vector.getMinZ(), maxU, minV);
-            t.addVertexWithUV(vector.getMaxX(), vector.getMinY(), vector.getMinZ(), maxU, maxV);
-
-            // Draw south side
-            t.setNormal(0, 0, 1);
-            t.addVertexWithUV(vector.getMinX(), vector.getMinY(), vector.getMaxZ(), minU, maxV);
-            t.addVertexWithUV(vector.getMaxX(), vector.getMinY(), vector.getMaxZ(), maxU, maxV);
-            t.addVertexWithUV(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ(), maxU, minV);
-            t.addVertexWithUV(vector.getMinX(), vector.getMaxY(), vector.getMaxZ(), minU, minV);
-            // }
-
-            // if (power > 0) {
-
-            // }
-            t.addTranslation(-x, -y, -z);
-            return true;
-        }
         return false;
     }
 
@@ -255,7 +115,8 @@ public class RenderLamp extends TileEntitySpecialRenderer implements ISimpleBloc
             // GL11.glDisable(GL11.GL_CULL_FACE);
             GL11.glBegin(GL11.GL_QUADS);
             double powerDivision = power / 18D;
-            RenderHelper.drawColoredCube(box, r / 256D, g / 256D, b / 256D, powerDivision * 0.625D, renderFaces);
+            com.bluepowermod.client.renderers.RenderHelper.drawColoredCube(box, r / 256D, g / 256D, b / 256D, powerDivision * 0.625D,
+                    renderFaces);
             GL11.glEnd();
             GL11.glEnable(GL11.GL_CULL_FACE);
             GL11.glEnable(GL11.GL_LIGHTING);
@@ -301,66 +162,26 @@ public class RenderLamp extends TileEntitySpecialRenderer implements ISimpleBloc
                 break;
             }
 
-            BlockLamp bLamp = (BlockLamp) Block.getBlockFromItem(item.getItem());
+            BlockLamp block = (BlockLamp) Block.getBlockFromItem(item.getItem());
             int redMask = 0xFF0000, greenMask = 0xFF00, blueMask = 0xFF;
-            int r = (bLamp.getColor() & redMask) >> 16;
-            int g = (bLamp.getColor() & greenMask) >> 8;
-            int b = (bLamp.getColor() & blueMask);
-            Vec3dCube vector = new Vec3dCube(0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
+            int r = (block.getColor() & redMask) >> 16;
+            int g = (block.getColor() & greenMask) >> 8;
+            int b = (block.getColor() & blueMask);
+
+            Vec3dCube cube = new Vec3dCube(0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
 
             Tessellator t = Tessellator.instance;
             t.startDrawingQuads();
             t.setColorOpaque(r, g, b);
-            IIcon iconToUse;
-            int power = 0;
-            if (power == 0) {
-                iconToUse = IconSupplier.lampOff;
-            } else {
-                iconToUse = IconSupplier.lampOn;
-            }
 
-            double minU = iconToUse.getMinU();
-            double maxU = iconToUse.getMaxU();
-            double minV = iconToUse.getMinV();
-            double maxV = iconToUse.getMaxV();
-
-            // Top side
-            t.setNormal(0, 1, 0);
-            t.addVertexWithUV(vector.getMinX(), vector.getMaxY(), vector.getMaxZ(), minU, maxV);
-            t.addVertexWithUV(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ(), minU, minV);
-            t.addVertexWithUV(vector.getMaxX(), vector.getMaxY(), vector.getMinZ(), maxU, minV);
-            t.addVertexWithUV(vector.getMinX(), vector.getMaxY(), vector.getMinZ(), maxU, maxV);
-
-            // Draw west side:
-            t.setNormal(-1, 0, 0);
-            t.addVertexWithUV(vector.getMinX(), vector.getMinY(), vector.getMaxZ(), minU, maxV);
-            t.addVertexWithUV(vector.getMinX(), vector.getMaxY(), vector.getMaxZ(), minU, minV);
-            t.addVertexWithUV(vector.getMinX(), vector.getMaxY(), vector.getMinZ(), maxU, minV);
-            t.addVertexWithUV(vector.getMinX(), vector.getMinY(), vector.getMinZ(), maxU, maxV);
-
-            // Draw east side:
-            t.setNormal(1, 0, 0);
-            t.addVertexWithUV(vector.getMaxX(), vector.getMinY(), vector.getMinZ(), minU, maxV);
-            t.addVertexWithUV(vector.getMaxX(), vector.getMaxY(), vector.getMinZ(), minU, minV);
-            t.addVertexWithUV(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ(), maxU, minV);
-            t.addVertexWithUV(vector.getMaxX(), vector.getMinY(), vector.getMaxZ(), maxU, maxV);
-
-            // Draw north side
-            t.setNormal(0, 0, -1);
-            t.addVertexWithUV(vector.getMinX(), vector.getMinY(), vector.getMinZ(), minU, maxV);
-            t.addVertexWithUV(vector.getMinX(), vector.getMaxY(), vector.getMinZ(), minU, minV);
-            t.addVertexWithUV(vector.getMaxX(), vector.getMaxY(), vector.getMinZ(), maxU, minV);
-            t.addVertexWithUV(vector.getMaxX(), vector.getMinY(), vector.getMinZ(), maxU, maxV);
-
-            // Draw south side
-            t.setNormal(0, 0, 1);
-            t.addVertexWithUV(vector.getMinX(), vector.getMinY(), vector.getMaxZ(), minU, maxV);
-            t.addVertexWithUV(vector.getMaxX(), vector.getMinY(), vector.getMaxZ(), maxU, maxV);
-            t.addVertexWithUV(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ(), maxU, minV);
-            t.addVertexWithUV(vector.getMinX(), vector.getMaxY(), vector.getMaxZ(), minU, minV);
+            RenderHelper h = RenderHelper.instance;
+            h.reset();
+            h.setColor(block.getColor());
+            h.renderBox(cube, block.isInverted() ? BlockLamp.on : BlockLamp.off);
+            h.reset();
 
             t.draw();
-            if (bLamp.isInverted()) {
+            if (block.isInverted()) {
                 GL11.glEnable(GL11.GL_BLEND);
                 GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
                 // GL11.glAlphaFunc(GL11.GL_EQUAL, (power / 15F) * 1F);
@@ -369,8 +190,8 @@ public class RenderLamp extends TileEntitySpecialRenderer implements ISimpleBloc
                 // GL11.glDisable(GL11.GL_CULL_FACE);
                 GL11.glDepthMask(false);
                 GL11.glBegin(GL11.GL_QUADS);
-                double powerDivision = (15 / 15D);
-                RenderHelper.drawColoredCube(vector.clone().expand(0.8 / 16D), r / 256D, g / 256D, b / 256D, powerDivision * 0.625D);
+                com.bluepowermod.client.renderers.RenderHelper.drawColoredCube(cube.clone().expand(0.8 / 16D), r / 256D, g / 256D,
+                        b / 256D, 0.625D);
                 GL11.glEnd();
                 GL11.glDepthMask(true);
                 GL11.glEnable(GL11.GL_CULL_FACE);
