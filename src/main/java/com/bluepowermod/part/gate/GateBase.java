@@ -153,7 +153,7 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
     protected void playTickSound() {
 
         if (getWorld().isRemote && Config.enableGateSounds)
-            getWorld().playSound(getX(), getY(), getZ(), "gui.button.press", 0.3F, 0.5F, false);
+            getWorld().playSound(getX(), getY(), getZ(), "gui.button.press", 0.2F, 0.5F, false);
 
     }
 
