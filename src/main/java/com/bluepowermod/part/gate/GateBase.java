@@ -236,6 +236,8 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
 
         rendering = null;
 
+        renderer.resetTransformations();
+
         return true;
     }
 
@@ -476,10 +478,9 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
 
     public RedstoneConnection getConnection(ForgeDirection direction) {
 
-        try {
-            return connections[Dir.getDirection(direction, getFace(), getRotation()).ordinal()];
-        } catch (Exception ex) {
-        }
+        for (RedstoneConnection c : connections)
+            if (c.getDirection().toForgeDirection(getFace(), getRotation()) == direction)
+                return c;
         return null;
     }
 
