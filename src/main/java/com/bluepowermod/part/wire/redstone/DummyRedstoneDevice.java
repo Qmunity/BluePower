@@ -86,7 +86,7 @@ public class DummyRedstoneDevice implements IRedstoneDevice {
     @Override
     public boolean canConnectOpenCorner(ForgeDirection side, IRedstoneDevice device) {
 
-        return RedstoneHelper.canConnect(getWorld(), getX(), getY(), getZ(), side);
+        return false;// RedstoneHelper.canConnect(getWorld(), getX(), getY(), getZ(), side);
     }
 
     @Override
