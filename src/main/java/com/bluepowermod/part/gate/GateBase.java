@@ -167,6 +167,7 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
             case DOWN:
                 break;
             case UP:
+                GL11.glRotated(180, 0, 1, 0);
                 GL11.glRotated(180, 1, 0, 0);
                 break;
             case NORTH:
@@ -207,7 +208,7 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
         case DOWN:
             break;
         case UP:
-            renderer.addTransformation(new Rotation(180, 0, 0, Vec3d.center));
+            renderer.addTransformation(new Rotation(180, 180, 0, Vec3d.center));
             break;
         case NORTH:
             renderer.addTransformation(new Rotation(90, 0, 0, Vec3d.center));
