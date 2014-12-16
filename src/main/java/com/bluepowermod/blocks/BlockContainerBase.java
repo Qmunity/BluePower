@@ -233,9 +233,9 @@ public class BlockContainerBase extends BlockBase implements ITileEntityProvider
                     }
 
                     powered = !powered;
-                } while (powered == true && IBluePowered.class.isAssignableFrom(getTileEntity()));
+                } while (powered && IBluePowered.class.isAssignableFrom(getTileEntity()));
                 ejecting = !ejecting;
-            } while (ejecting == true && IEjectAnimator.class.isAssignableFrom(getTileEntity()));
+            } while (ejecting && IEjectAnimator.class.isAssignableFrom(getTileEntity()));
         }
     }
 

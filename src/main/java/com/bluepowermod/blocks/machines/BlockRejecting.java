@@ -47,9 +47,9 @@ public class BlockRejecting extends BlockContainerBase {
                 }
 
                 powered = !powered;
-            } while (powered == true);
+            } while (powered);
             ejecting = !ejecting;
-        } while (ejecting == true);
+        } while (ejecting);
     }
 
     @Override

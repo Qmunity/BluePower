@@ -120,6 +120,7 @@ public class TileCPU extends TileBase implements IRedBusWindow {
     
     //TODO: NBT read/write
     
+    @Override
     public void updateEntity() {
         // 20 ticks per second = 20khz
         if (halt) return;

@@ -18,14 +18,10 @@
 package com.bluepowermod.blocks.worldgen;
 
 import com.bluepowermod.blocks.BlockBase;
-import com.bluepowermod.init.BPBlocks;
-import com.bluepowermod.init.BPItems;
 import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.util.Refs;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
-import net.minecraft.util.MathHelper;
-import net.minecraft.world.IBlockAccess;
 
 import java.util.Random;
 

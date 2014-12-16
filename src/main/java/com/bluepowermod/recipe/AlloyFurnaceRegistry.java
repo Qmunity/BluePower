@@ -267,14 +267,12 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
 
         for (IAlloyFurnaceRecipe recipe : alloyFurnaceRecipes) {
             if (recipe.matches(input)) {
-                if (outputSlot != null) {
-                    if (outputSlot != null) {// check if we can add the crafting result to the output slot
-                        ItemStack craftingResult = recipe.getCraftingResult(input);
-                        if (!ItemStack.areItemStackTagsEqual(outputSlot, craftingResult) || !outputSlot.isItemEqual(craftingResult)) {
-                            continue;
-                        } else if (craftingResult.stackSize + outputSlot.stackSize > outputSlot.getMaxStackSize()) {
-                            continue;
-                        }
+                if (outputSlot != null) {// check if we can add the crafting result to the output slot
+                    ItemStack craftingResult = recipe.getCraftingResult(input);
+                    if (!ItemStack.areItemStackTagsEqual(outputSlot, craftingResult) || !outputSlot.isItemEqual(craftingResult)) {
+                        continue;
+                    } else if (craftingResult.stackSize + outputSlot.stackSize > outputSlot.getMaxStackSize()) {
+                        continue;
                     }
                 }
                 return recipe;

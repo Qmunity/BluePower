@@ -61,7 +61,7 @@ public class BlockCrop extends BlockCrops implements IGrowable {
         return String.format("tile.%s:%s", Refs.MODID, getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
     }
 
-    protected String getUnwrappedUnlocalizedName(String name) {
+    String getUnwrappedUnlocalizedName(String name) {
 
         return name.substring(name.indexOf(".") + 1);
     }
@@ -345,10 +345,7 @@ public class BlockCrop extends BlockCrops implements IGrowable {
         if (world.getBlock(x, y - 1, z).canSustainPlant(world, x, y, z, ForgeDirection.UP, this) && world.getBlock(x, y - 1, z).isFertile(world, x, y, z)) {
             return true;
         }
-        if ((world.getBlock(x, y - 1, z) instanceof BlockCrop) && (world.getBlockMetadata(x, y - 1, z) == 7)) {
-            return true;
-        }
-        return false;
+        return (world.getBlock(x, y - 1, z) instanceof com.bluepowermod.blocks.worldgen.BlockCrop) && (world.getBlockMetadata(x, y - 1, z) == 7);
     }
 
     @Override

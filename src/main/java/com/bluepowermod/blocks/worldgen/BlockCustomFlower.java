@@ -54,7 +54,7 @@ public class BlockCustomFlower extends BlockBush {
         return String.format("tile.%s:%s", Refs.MODID, getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
     }
 
-    protected String getUnwrappedUnlocalizedName(String name) {
+    String getUnwrappedUnlocalizedName(String name) {
 
         return name.substring(name.indexOf(".") + 1);
     }

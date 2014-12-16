@@ -18,8 +18,6 @@
 package com.bluepowermod.blocks.worldgen;
 
 import com.bluepowermod.init.BPBlocks;
-import com.bluepowermod.util.Refs;
-import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 
 import java.util.Random;

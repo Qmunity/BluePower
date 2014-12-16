@@ -20,28 +20,27 @@ package com.bluepowermod.part.gate.wireless;
 import java.util.Arrays;
 import java.util.UUID;
 
-import com.bluepowermod.api.misc.Accessability;
 import com.bluepowermod.api.wireless.IBundledFrequency;
 import com.bluepowermod.api.wireless.IFrequency;
 import com.bluepowermod.api.wireless.IRedstoneFrequency;
 
 public class Frequency implements IFrequency {
 
-    private Accessability accessability;
-    private UUID owner;
-    private String frequency;
+    private com.bluepowermod.api.misc.Accessibility accessibility;
+    private UUID                                    owner;
+    private String                                  frequency;
 
-    public Frequency(Accessability accessability, UUID owner, String frequency) {
+    public Frequency(com.bluepowermod.api.misc.Accessibility accessibility, UUID owner, String frequency) {
 
-        this.accessability = accessability;
+        this.accessibility = accessibility;
         this.owner = owner;
         this.frequency = frequency;
     }
 
     @Override
-    public Accessability getAccessability() {
+    public com.bluepowermod.api.misc.Accessibility getAccessibility() {
 
-        return accessability;
+        return accessibility;
     }
 
     @Override
@@ -60,9 +59,9 @@ public class Frequency implements IFrequency {
 
         private byte signal = (byte) 0;
 
-        public RedstoneFrequency(Accessability accessability, UUID owner, String frequency) {
+        public RedstoneFrequency(com.bluepowermod.api.misc.Accessibility accessibility, UUID owner, String frequency) {
 
-            super(accessability, owner, frequency);
+            super(accessibility, owner, frequency);
         }
 
         @Override
@@ -83,9 +82,9 @@ public class Frequency implements IFrequency {
 
         private byte[] signal = new byte[1];
 
-        public BundledFrequency(Accessability accessability, UUID owner, String frequency) {
+        public BundledFrequency(com.bluepowermod.api.misc.Accessibility accessibility, UUID owner, String frequency) {
 
-            super(accessability, owner, frequency);
+            super(accessibility, owner, frequency);
         }
 
         @Override

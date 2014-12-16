@@ -27,7 +27,6 @@ import net.minecraftforge.event.world.WorldEvent;
 import uk.co.qmunity.lib.friend.FriendManager;
 import uk.co.qmunity.lib.friend.IPlayer;
 
-import com.bluepowermod.api.misc.Accessability;
 import com.bluepowermod.api.wireless.IBundledFrequency;
 import com.bluepowermod.api.wireless.IFrequency;
 import com.bluepowermod.api.wireless.IRedstoneFrequency;
@@ -91,10 +90,10 @@ public final class WirelessManager implements IWirelessManager {
 
     private boolean canAccess(IFrequency freq, UUID uuid, List<IPlayer> friends) {
 
-        if (freq.getOwner().equals(uuid) || freq.getAccessability() == Accessability.PUBLIC) {
+        if (freq.getOwner().equals(uuid) || freq.getAccessibility() == com.bluepowermod.api.misc.Accessibility.PUBLIC) {
             return true;
         }
-        if (freq.getAccessability() == Accessability.SHARED) {
+        if (freq.getAccessibility() == com.bluepowermod.api.misc.Accessibility.SHARED) {
             for (IPlayer friend : friends) {
                 if (freq.getOwner().equals(friend.getUUID())) {
                     return true;
@@ -106,28 +105,28 @@ public final class WirelessManager implements IWirelessManager {
     }
 
     @Override
-    public IRedstoneFrequency registerRedstoneFrequency(EntityPlayer owner, String frequency, Accessability accessability) {
+    public IRedstoneFrequency registerRedstoneFrequency(EntityPlayer owner, String frequency, com.bluepowermod.api.misc.Accessibility accessibility) {
 
-        RedstoneFrequency freq = new RedstoneFrequency(accessability, owner == null ? UUID.randomUUID() : owner.getGameProfile().getId(),
+        RedstoneFrequency freq = new RedstoneFrequency(accessibility, owner == null ? UUID.randomUUID() : owner.getGameProfile().getId(),
                 frequency);
         redstoneFrequencies.add(freq);
         return freq;
     }
 
     @Override
-    public IBundledFrequency registerBundledFrequency(EntityPlayer owner, String frequency, Accessability accessability) {
+    public IBundledFrequency registerBundledFrequency(EntityPlayer owner, String frequency, com.bluepowermod.api.misc.Accessibility accessibility) {
 
-        BundledFrequency freq = new BundledFrequency(accessability, owner == null ? UUID.randomUUID() : owner.getGameProfile().getId(),
+        BundledFrequency freq = new BundledFrequency(accessibility, owner == null ? UUID.randomUUID() : owner.getGameProfile().getId(),
                 frequency);
         bundledFrequencies.add(freq);
         return freq;
     }
 
     @Override
-    public IFrequency registerFrequency(EntityPlayer owner, String frequency, Accessability accessability, boolean isBundled) {
+    public IFrequency registerFrequency(EntityPlayer owner, String frequency, com.bluepowermod.api.misc.Accessibility accessibility, boolean isBundled) {
 
-        return isBundled ? registerBundledFrequency(owner, frequency, accessability) : registerRedstoneFrequency(owner, frequency,
-                accessability);
+        return isBundled ? registerBundledFrequency(owner, frequency, accessibility) : registerRedstoneFrequency(owner, frequency,
+                                                                                                                 accessibility);
     }
 
     @Override

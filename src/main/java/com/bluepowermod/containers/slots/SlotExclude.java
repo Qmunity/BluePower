@@ -35,6 +35,7 @@ public class SlotExclude extends Slot {
         this.filter = filter;
     }
     
+    @Override
     public boolean isItemValid(ItemStack par1ItemStack) {
 
         return par1ItemStack == null || !(par1ItemStack.getItem() == filter);

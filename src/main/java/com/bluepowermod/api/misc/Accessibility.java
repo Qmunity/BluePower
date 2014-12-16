@@ -16,7 +16,7 @@
  */
 package com.bluepowermod.api.misc;
 
-public enum Accessability {
+public enum Accessibility {
 
     PUBLIC, PRIVATE, SHARED;
 

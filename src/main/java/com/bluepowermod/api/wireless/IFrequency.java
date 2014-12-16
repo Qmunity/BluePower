@@ -19,11 +19,9 @@ package com.bluepowermod.api.wireless;
 
 import java.util.UUID;
 
-import com.bluepowermod.api.misc.Accessability;
-
 public interface IFrequency {
 
-    public Accessability getAccessability();
+    public com.bluepowermod.api.misc.Accessibility getAccessibility();
 
     public UUID getOwner();
 

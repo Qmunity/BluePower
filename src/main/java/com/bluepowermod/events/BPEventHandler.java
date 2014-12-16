@@ -174,7 +174,6 @@ public class BPEventHandler {
 
         if (event.entityLiving instanceof EntityCreeper) {
             event.entityLiving.entityDropItem(new ItemStack(Items.skull, 1, 4), 0.0F);
-            return;
         }
 
         if (event.entityLiving instanceof EntityPlayer) {
@@ -182,7 +181,6 @@ public class BPEventHandler {
             drop.stackTagCompound = new NBTTagCompound();
             drop.stackTagCompound.setString("SkullOwner", ((EntityPlayer) event.entityLiving).getDisplayName());
             event.entityLiving.entityDropItem(drop, 0.0F);
-            return;
         }
 
         if (event.entityLiving instanceof EntitySkeleton) {
@@ -190,16 +188,13 @@ public class BPEventHandler {
 
             if (sk.getSkeletonType() == 0) {
                 event.entityLiving.entityDropItem(new ItemStack(Items.skull, 1, 0), 0.0F);
-                return;
             } else {
                 event.entityLiving.entityDropItem(new ItemStack(Items.skull, 1, 1), 0.0F);
-                return;
             }
         }
 
         if (event.entityLiving instanceof EntityZombie) {
             event.entityLiving.entityDropItem(new ItemStack(Items.skull, 1, 2), 0.0F);
-            return;
         }
     }
 

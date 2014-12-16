@@ -38,11 +38,13 @@ public class ItemLimitedCrafting extends ItemBase {
         this.setContainerItem(this);
     }
     
+    @Override
     public boolean doesContainerItemLeaveCraftingGrid(ItemStack par1ItemStack) {
     
         return false;
     }
     
+    @Override
     public ItemStack getContainerItem(ItemStack itemStack) {
     
         ItemStack container = itemStack.copy();

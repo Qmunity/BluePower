@@ -68,6 +68,7 @@ public class ItemSickle extends ItemTool {
         return name.substring(name.indexOf(".") + 1);
     }
 
+    @Override
     public float func_150893_a(ItemStack itemStack, Block block) {
 
         if ((block.getMaterial() == Material.leaves) || (block.getMaterial() == Material.plants) || toolBlocks.contains(block)) {
@@ -77,12 +78,14 @@ public class ItemSickle extends ItemTool {
         return 1.0F;
     }
 
+    @Override
     public boolean hitEntity(ItemStack itemStack, EntityLivingBase par2EntityLivingBase, EntityLivingBase par3EntityLivingBase) {
 
         itemStack.damageItem(2, par3EntityLivingBase);
         return true;
     }
 
+    @Override
     public boolean onBlockDestroyed(ItemStack itemStack, World world, Block block, int x, int y, int z, EntityLivingBase entityLiving) {
 
         boolean used = false;

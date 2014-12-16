@@ -59,11 +59,13 @@ public class ItemSeedBag extends ItemBase {
         return seed;
     }
 
+    @Override
     public double getDurabilityForDisplay(ItemStack stack) {
 
         return 1D - (double) getItemDamageForDisplay(stack) / (double) 576;
     }
 
+    @Override
     public boolean showDurabilityBar(ItemStack stack) {
 
         return stack.stackTagCompound != null;
@@ -83,6 +85,7 @@ public class ItemSeedBag extends ItemBase {
         return items;
     }
 
+    @Override
     public int getMaxDamage(ItemStack stack) {
 
         return 576;

@@ -40,7 +40,6 @@ import uk.co.qmunity.lib.vec.Vec3d;
 import uk.co.qmunity.lib.vec.Vec3dCube;
 import uk.co.qmunity.lib.vec.Vec3i;
 
-import com.bluepowermod.api.misc.Accessability;
 import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.api.redstone.IBundledConductor;
 import com.bluepowermod.api.redstone.IBundledDevice;
@@ -60,8 +59,8 @@ import com.bluepowermod.part.wire.redstone.propagation.WirePropagator;
 public class GateTransceiver extends GateBase implements IWirelessDevice, IFaceRedstoneDevice, IRedstoneConductor, IFaceBundledDevice,
         IBundledConductor {
 
-    private static final RedstoneFrequency freq1 = new RedstoneFrequency(Accessability.PUBLIC, UUID.randomUUID(), "freq1");
-    private static final RedstoneFrequency freq2 = new RedstoneFrequency(Accessability.PUBLIC, UUID.randomUUID(), "freq2");
+    private static final RedstoneFrequency freq1 = new RedstoneFrequency(com.bluepowermod.api.misc.Accessibility.PUBLIC, UUID.randomUUID(), "freq1");
+    private static final RedstoneFrequency freq2 = new RedstoneFrequency(com.bluepowermod.api.misc.Accessibility.PUBLIC, UUID.randomUUID(), "freq2");
 
     private static final List<GateTransceiver> transceivers = new ArrayList<GateTransceiver>();
 
@@ -70,8 +69,8 @@ public class GateTransceiver extends GateBase implements IWirelessDevice, IFaceR
 
     private IFrequency frequency = null;
 
-    private IRedstoneDevice[] devices = new IRedstoneDevice[6];
-    private IBundledDevice[] bundledDevices = new IBundledDevice[6];
+    private IRedstoneDevice[] devices        = new IRedstoneDevice[6];
+    private IBundledDevice[]  bundledDevices = new IBundledDevice[6];
 
     public GateTransceiver(Boolean isBundled, Boolean isAnalog) {
 
@@ -123,18 +122,18 @@ public class GateTransceiver extends GateBase implements IWirelessDevice, IFaceR
 
         for (int i = 0; i < 4; i++) {
             renderer.renderBox(new Vec3dCube(5 / 16D, 9 / 16D, 10 / 16D, 6 / 16D, 10 / 16D, 11 / 16D).rotate(0, i * 90, 0, Vec3d.center),
-                    quartz);
+                               quartz);
 
             renderer.renderBox(new Vec3dCube(4 / 16D, 9 / 16D, 6 / 16D, 5 / 16D, 10 / 16D, 10 / 16D).rotate(0, i * 90, 0, Vec3d.center),
-                    quartz);
+                               quartz);
             renderer.renderBox(new Vec3dCube(4 / 16D, 10 / 16D, 5 / 16D, 5 / 16D, 11 / 16D, 11 / 16D).rotate(0, i * 90, 0, Vec3d.center),
-                    quartz);
+                               quartz);
 
             renderer.renderBox(new Vec3dCube(4 / 16D, 11 / 16D, 11 / 16D, 5 / 16D, 12 / 16D, 12 / 16D).rotate(0, i * 90, 0, Vec3d.center),
-                    quartz);
+                               quartz);
 
             renderer.renderBox(new Vec3dCube(3 / 16D, 11 / 16D, 4 / 16D, 4 / 16D, 12 / 16D, 12 / 16D).rotate(0, i * 90, 0, Vec3d.center),
-                    quartz);
+                               quartz);
         }
 
         renderer.resetTransformations();

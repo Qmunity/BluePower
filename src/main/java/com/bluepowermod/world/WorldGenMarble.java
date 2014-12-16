@@ -65,6 +65,7 @@ public class WorldGenMarble extends WorldGenMinable {
         addBlock(x, y, z + 1, num);
     }
 
+    @Override
     public boolean generate(World world, Random random, int x, int y, int z) {
 
         if (!world.blockExists(x, y, z)) {

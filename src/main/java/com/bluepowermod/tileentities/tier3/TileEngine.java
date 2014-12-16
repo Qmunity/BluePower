@@ -64,13 +64,15 @@ public class TileEngine extends TileMachineBase{
 	}
 	
 	
+	@Override
 	public Packet getDescriptionPacket() {
         NBTTagCompound nbtTag = new NBTTagCompound();
         this.writeToNBT(nbtTag);
         return new S35PacketUpdateTileEntity(this.xCoord, this.yCoord, this.zCoord, 1, nbtTag);
     }
 
-    public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity packet) {
+    @Override
+	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity packet) {
         readFromNBT(packet.func_148857_g());
     }
     

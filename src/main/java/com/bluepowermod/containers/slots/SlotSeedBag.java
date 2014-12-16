@@ -31,6 +31,7 @@ public class SlotSeedBag extends Slot {
         super(par1iInventory, par2, par3, par4);
     }
     
+    @Override
     public boolean isItemValid(ItemStack itemstack) {
     
         itemstack = itemstack.copy();
