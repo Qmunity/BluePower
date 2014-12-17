@@ -19,7 +19,7 @@ package com.bluepowermod.part.wire.redstone;
 
 public enum RedwireType {
 
-    BLUESTONE(false, false, 0x0000FF), RED_ALLOY(true, true, 0xFF0000), INFUSED_TESLATITE(true, false, 0xFF00FF);
+    BLUESTONE(false, false, 0x4444CC), RED_ALLOY(true, true, 0xDD0000), INFUSED_TESLATITE(true, false, 0xAA00BB);
 
     private boolean analog, loss;
     private int color;
