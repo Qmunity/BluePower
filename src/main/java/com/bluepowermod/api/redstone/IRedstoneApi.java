@@ -32,6 +32,6 @@ public interface IRedstoneApi {
 
     public IPropagator getPropagator();
 
-    public Object getReturnDevice();
+    public boolean shouldWiresOutputPower();
 
 }

@@ -27,6 +27,7 @@ import uk.co.qmunity.lib.misc.Pair;
 import com.bluepowermod.api.redstone.IPropagator;
 import com.bluepowermod.api.redstone.IRedstoneConductor;
 import com.bluepowermod.api.redstone.IRedstoneDevice;
+import com.bluepowermod.part.wire.redstone.RedstoneApi;
 
 public class WirePropagator implements IPropagator {
 
@@ -137,11 +138,11 @@ public class WirePropagator implements IPropagator {
 
             visited.addAll(WirePathfinder.pathfind(device, fromSide));
 
+            RedstoneApi.getInstance().setWiresOutputPower(false);
             int power = 0;
             for (Pair<IRedstoneDevice, ForgeDirection> pair : visited)
-                pair.getKey().setRedstonePower(pair.getValue(), (byte) 0);
-            for (Pair<IRedstoneDevice, ForgeDirection> pair : visited)
                 power = Math.max(power, pair.getKey().getRedstonePower(pair.getValue()) & 0xFF);
+            RedstoneApi.getInstance().setWiresOutputPower(true);
 
             List<IRedstoneDevice> devices = new ArrayList<IRedstoneDevice>();
             for (Pair<IRedstoneDevice, ForgeDirection> pair : visited) {

@@ -5,13 +5,15 @@
  * PARTICULAR PURPOSE. See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along
  * with Blue Power. If not, see <http://www.gnu.org/licenses/>
  */
-package com.bluepowermod.part.gate;
+package com.bluepowermod.part.gate.analog;
 
 import java.util.List;
 
-import uk.co.qmunity.lib.vec.Vec3i;
 import net.minecraft.block.Block;
 import net.minecraftforge.common.util.ForgeDirection;
+import uk.co.qmunity.lib.vec.Vec3i;
+
+import com.bluepowermod.part.gate.GateBase;
 
 public class GateComparator extends GateBase {
 
@@ -21,9 +23,7 @@ public class GateComparator extends GateBase {
     public void initializeConnections() {
 
         front().enable().setOutputOnly();
-        right().enable();
         back().enable();
-        left().enable();
     }
 
     @Override
@@ -41,12 +41,12 @@ public class GateComparator extends GateBase {
         Vec3i a = new Vec3i(getX(), getY(), getZ(), getWorld()).add(d);
         Block ba = a.getBlock(false);
         if (ba.hasComparatorInputOverride())
-            power = Math.max(power, ba.getComparatorInputOverride(getWorld(), a.getX(), a.getY(), a.getZ(), d.getOpposite().ordinal()));
+            power = ba.getComparatorInputOverride(getWorld(), a.getX(), a.getY(), a.getZ(), d.getOpposite().ordinal());
         if (ba.isOpaqueCube()) {
             Vec3i b = a.getRelative(d);
             Block bb = b.getBlock(false);
             if (bb.hasComparatorInputOverride())
-                power = Math.max(power, bb.getComparatorInputOverride(getWorld(), b.getX(), b.getY(), b.getZ(), d.getOpposite().ordinal()));
+                power = bb.getComparatorInputOverride(getWorld(), b.getX(), b.getY(), b.getZ(), d.getOpposite().ordinal());
         }
 
         front().setOutput(power);

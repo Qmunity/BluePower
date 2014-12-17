@@ -18,6 +18,7 @@
 package com.bluepowermod.part.wire.redstone;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import net.minecraft.client.Minecraft;
@@ -61,23 +62,24 @@ import com.bluepowermod.api.redstone.IRedstoneDevice;
 import com.bluepowermod.client.renderers.IconSupplier;
 import com.bluepowermod.helper.VectorHelper;
 import com.bluepowermod.init.BPCreativeTabs;
-import com.bluepowermod.part.PartPlacementNone;
 import com.bluepowermod.part.wire.PartWireFace;
 import com.bluepowermod.part.wire.redstone.propagation.WirePropagator;
 
 public class PartRedwireFace extends PartWireFace implements IFaceRedstoneDevice, IRedstoneConductor, IFaceBundledDevice,
 IBundledConductor, IPartRedstone, IPartWAILAProvider {
 
-    protected IRedstoneDevice[] devices = new IRedstoneDevice[6];
-    protected IBundledDevice[] bundledDevices = new IBundledDevice[6];
-    protected boolean[] connections = new boolean[6];
+    protected final IRedstoneDevice[] devices = new IRedstoneDevice[6];
+    protected final IBundledDevice[] bundledDevices = new IBundledDevice[6];
+    protected final boolean[] connections = new boolean[6];
+
+    protected final RedwireType type;
+    protected final boolean bundled;
+    protected final MinecraftColor color;
 
     protected byte power = 0;
     protected byte[] bundledPower = new byte[16];
 
-    protected RedwireType type;
-    protected boolean bundled;
-    protected MinecraftColor color;
+    private boolean hasUpdated = false;
 
     public PartRedwireFace(RedwireType type, MinecraftColor color, Boolean bundled) {
 
@@ -287,7 +289,9 @@ IBundledConductor, IPartRedstone, IPartWAILAProvider {
         double translation = 0.5;
 
         if (bundled || getInsulationColor() != MinecraftColor.NONE) {
-            connections = new boolean[] { false, false, true, true, true, true };
+            Arrays.fill(connections, true);
+            connections[0] = false;
+            connections[1] = false;
             scale = 1.25;
             translation = 0.125;
         }
@@ -405,6 +409,9 @@ IBundledConductor, IPartRedstone, IPartWAILAProvider {
     @Override
     public byte getRedstonePower(ForgeDirection side) {
 
+        if (!RedstoneApi.getInstance().shouldWiresOutputPower())
+            return 0;
+
         if (!isAnalog())
             return (byte) ((power & 0xFF) > 0 ? 255 : 0);
 
@@ -414,18 +421,24 @@ IBundledConductor, IPartRedstone, IPartWAILAProvider {
     @Override
     public void setRedstonePower(ForgeDirection side, byte power) {
 
-        this.power = isAnalog() ? power : (((power & 0xFF) > 0) ? (byte) 255 : (byte) 0);
+        byte pow = isAnalog() ? power : (((power & 0xFF) > 0) ? (byte) 255 : (byte) 0);
+        hasUpdated = hasUpdated | (pow != this.power);
+        this.power = pow;
     }
 
     @Override
     public void onRedstoneUpdate() {
 
-        if (!isBundled()) {
+        RedstoneApi.getInstance().setWiresOutputPower(true);
+
+        if (!isBundled() && hasUpdated) {
             sendUpdatePacket();
             for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS)
                 if (devices[dir.ordinal()] != null && (devices[dir.ordinal()] instanceof DummyRedstoneDevice))
                     RedstoneHelper.notifyRedstoneUpdate(getWorld(), getX(), getY(), getZ(), dir, new Vec3i(this).add(dir).getBlock()
                             .isNormalCube());
+
+            hasUpdated = false;
         }
     }
 
@@ -498,7 +511,10 @@ IBundledConductor, IPartRedstone, IPartWAILAProvider {
     @Override
     public int getStrongPower(ForgeDirection side) {
 
-        if (devices[side.ordinal()] == null || !(devices[side.ordinal()] instanceof DummyRedstoneDevice))
+        // if (!RedstoneApi.getInstance().shouldWiresOutputPower())
+        // return 0;
+
+        if (devices[side.ordinal()] == null || !(devices[side.ordinal()] instanceof DummyRedstoneDevice) || side == getFace())
             return 0;
 
         return MathHelper.map(power & 0xFF, 0, 255, 0, 15);
@@ -507,7 +523,10 @@ IBundledConductor, IPartRedstone, IPartWAILAProvider {
     @Override
     public int getWeakPower(ForgeDirection side) {
 
-        if (devices[side.ordinal()] == null || !(devices[side.ordinal()] instanceof DummyRedstoneDevice))
+        // if (!RedstoneApi.getInstance().shouldWiresOutputPower())
+        // return 0;
+
+        if (devices[side.ordinal()] == null || !(devices[side.ordinal()] instanceof DummyRedstoneDevice) || side == getFace())
             return 0;
 
         return MathHelper.map(power & 0xFF, 0, 255, 0, 15);
@@ -656,7 +675,7 @@ IBundledConductor, IPartRedstone, IPartWAILAProvider {
             EntityPlayer player) {
 
         if (bundled || type == RedwireType.RED_ALLOY)
-            return new PartPlacementNone();
+            return null;
 
         return super.getPlacement(part, world, location, face, mop, player);
     }

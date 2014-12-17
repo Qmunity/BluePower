@@ -49,6 +49,7 @@ import uk.co.qmunity.lib.part.IPartSolid;
 import uk.co.qmunity.lib.part.IPartThruHole;
 import uk.co.qmunity.lib.part.IPartWAILAProvider;
 import uk.co.qmunity.lib.part.PartNormallyOccluded;
+import uk.co.qmunity.lib.part.PartPlacementDefault;
 import uk.co.qmunity.lib.part.compat.OcclusionHelper;
 import uk.co.qmunity.lib.vec.Vec3d;
 import uk.co.qmunity.lib.vec.Vec3dCube;
@@ -62,7 +63,6 @@ import com.bluepowermod.api.redstone.IFaceRedstoneDevice;
 import com.bluepowermod.api.redstone.IRedstoneConductor;
 import com.bluepowermod.api.redstone.IRedstoneDevice;
 import com.bluepowermod.client.renderers.IconSupplier;
-import com.bluepowermod.part.PartPlacementNone;
 import com.bluepowermod.part.wire.PartWireFreestanding;
 import com.bluepowermod.part.wire.redstone.propagation.WirePropagator;
 
@@ -679,10 +679,10 @@ IPartWAILAProvider, IPartSolid, IPartThruHole, IPartCustomPlacement {
     public IPartPlacement getPlacement(IPart part, World world, Vec3i location, ForgeDirection face, MovingObjectPosition mop,
             EntityPlayer player) {
 
-        if (((PartRedwireFreestanding) part).bundled || type == RedwireType.RED_ALLOY)
-            return new PartPlacementNone();
+        if (bundled || type == RedwireType.RED_ALLOY)
+            return null;
 
-        return null;
+        return new PartPlacementDefault();
     }
 
     @Override

@@ -34,8 +34,6 @@ public class RedstoneApi implements IRedstoneApi {
 
     private static RedstoneApi INSTANCE = new RedstoneApi();
 
-    private static Object returnDevice = new ReturnDevice();
-
     private RedstoneApi() {
 
     }
@@ -46,6 +44,7 @@ public class RedstoneApi implements IRedstoneApi {
     }
 
     private List<IRedstoneProvider> providers = new ArrayList<IRedstoneProvider>();
+    private boolean shouldWiresOutputPower = true;
 
     @Override
     public byte[] getBundledOutput(World world, int x, int y, int z, ForgeDirection face, ForgeDirection side) {
@@ -68,11 +67,8 @@ public class RedstoneApi implements IRedstoneApi {
 
         for (IRedstoneProvider provider : providers) {
             IRedstoneDevice device = provider.getRedstoneDevice(world, x, y, z, face, side);
-            if (device != null) {
-                if (device == returnDevice)
-                    return null;
+            if (device != null)
                 return device;
-            }
         }
 
         return null;
@@ -83,11 +79,8 @@ public class RedstoneApi implements IRedstoneApi {
 
         for (IRedstoneProvider provider : providers) {
             IBundledDevice device = provider.getBundledDevice(world, x, y, z, face, side);
-            if (device != null) {
-                if (device == returnDevice)
-                    return null;
+            if (device != null)
                 return device;
-            }
         }
 
         return null;
@@ -111,9 +104,14 @@ public class RedstoneApi implements IRedstoneApi {
     }
 
     @Override
-    public Object getReturnDevice() {
+    public boolean shouldWiresOutputPower() {
 
-        return returnDevice;
+        return shouldWiresOutputPower;
+    }
+
+    public void setWiresOutputPower(boolean shouldWiresOutputPower) {
+
+        this.shouldWiresOutputPower = shouldWiresOutputPower;
     }
 
 }
