@@ -17,12 +17,13 @@
 
 package com.bluepowermod.part;
 
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 import uk.co.qmunity.lib.helper.RedstoneHelper;
 import uk.co.qmunity.lib.part.IPart;
 import uk.co.qmunity.lib.part.IPartFace;
 import uk.co.qmunity.lib.util.Dir;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.util.ForgeDirection;
 
 public class RedstoneConnection {
 
@@ -65,14 +66,17 @@ public class RedstoneConnection {
 
     /**
      * Used in Integrated Circuits
+     *
      * @param input
      */
     public void setInput(int input) {
+
         in = input;
         caching = true;
     }
 
     public RedstoneConnection setOutput(boolean out) {
+
         return setOutput(out ? 15 : 0);
     }
 
@@ -93,7 +97,12 @@ public class RedstoneConnection {
     }
 
     public void forceUpdateNeighbor() {
-        RedstoneHelper.notifyRedstoneUpdate(part.getWorld(), part.getX(), part.getY(), part.getZ(), getFD(), true);
+
+        ForgeDirection d = getFD();
+        World world = part.getWorld();
+        int x = part.getX(), y = part.getY(), z = part.getZ();
+
+        RedstoneHelper.notifyRedstoneUpdate(world, x, y, z, d, world.getBlock(x, y, z).isNormalCube(world, x, y, z));
     }
 
     public boolean isEnabled() {
