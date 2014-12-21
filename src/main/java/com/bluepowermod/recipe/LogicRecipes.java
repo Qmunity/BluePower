@@ -75,67 +75,67 @@ public class LogicRecipes {
         */
         // Blocks
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPBlocks.circuit_table), "WIW", "WCW", "WPW", 'W', "plankWood", 'I', PartManager
-                .getPartInfo("integratedCircuit3x3").getItem(), 'C', Blocks.chest, 'P', BPBlocks.project_table));
+                .getPartInfo("integratedCircuit3x3").getStack(), 'C', Blocks.chest, 'P', BPBlocks.project_table));
 
         // Gates and Circuits
-        GameRegistry.addRecipe(PartManager.getPartInfo("and").getItem(), "ACA", "CCC", "#W#", '#', BPItems.stone_tile, 'A', BPItems.stone_anode, 'C',
+        GameRegistry.addRecipe(PartManager.getPartInfo("and").getStack(), "ACA", "CCC", "#W#", '#', BPItems.stone_tile, 'A', BPItems.stone_anode, 'C',
                 BPItems.stone_cathode, 'W', BPItems.stone_wire);
-        GameRegistry.addRecipe(PartManager.getPartInfo("buffer").getItem(), "ACA", "WCW", "#W#", '#', BPItems.stone_tile, 'A', BPItems.stone_anode,
+        GameRegistry.addRecipe(PartManager.getPartInfo("buffer").getStack(), "ACA", "WCW", "#W#", '#', BPItems.stone_tile, 'A', BPItems.stone_anode,
                 'C', BPItems.stone_cathode, 'W', BPItems.stone_wire);
         // craftManager.addRecipe(PartManager.getPartInfo("bustransceiver"), "BBB", "N#N", "BBB", '#', BPItems.stone_tile, 'B',
         // BPItems.stone_bundle, 'N', BPItems.red_doped_wafer);
-        GameRegistry.addRecipe(PartManager.getPartInfo("counter").getItem(), "#W#", "CPC", "#W#", '#', BPItems.stone_tile, 'C',
+        GameRegistry.addRecipe(PartManager.getPartInfo("counter").getStack(), "#W#", "CPC", "#W#", '#', BPItems.stone_tile, 'C',
                 BPItems.stone_cathode, 'W', BPItems.stone_wire, 'P', BPItems.stone_pointer);
         // craftManager.addRecipe(PartManager.getPartInfo("invert"), "#R#", "ROR", "#R#", '#', BPItems.stone_tile, 'O',
         // BPItems.plate_assembly, 'R', BPItems.stone_redwire);
-        GameRegistry.addRecipe(PartManager.getPartInfo("lightCell").getItem(), "#W#", "#B#", "###", '#', BPItems.stone_tile, 'B',
+        GameRegistry.addRecipe(PartManager.getPartInfo("lightCell").getStack(), "#W#", "#B#", "###", '#', BPItems.stone_tile, 'B',
                 BPItems.blue_doped_wafer, 'W', BPItems.stone_wire);
-        GameRegistry.addRecipe(PartManager.getPartInfo("multiplexer").getItem(), "ACA", "C#C", "ACW", '#', BPItems.stone_tile, 'A',
+        GameRegistry.addRecipe(PartManager.getPartInfo("multiplexer").getStack(), "ACA", "C#C", "ACW", '#', BPItems.stone_tile, 'A',
                 BPItems.stone_anode, 'C', BPItems.stone_cathode, 'W', BPItems.stone_wire);
-        GameRegistry.addRecipe(PartManager.getPartInfo("nand").getItem(), "AAA", "CCC", "#W#", '#', BPItems.stone_tile, 'A', BPItems.stone_anode,
+        GameRegistry.addRecipe(PartManager.getPartInfo("nand").getStack(), "AAA", "CCC", "#W#", '#', BPItems.stone_tile, 'A', BPItems.stone_anode,
                 'C', BPItems.stone_cathode, 'W', BPItems.stone_wire);
         // craftManager.addRecipe(PartManager.getPartInfo("noninvert"), "#R#", "ROR", "#RC", '#', BPItems.stone_tile, 'C',
         // BPItems.stone_cathode, 'O', BPItems.plate_assembly, 'R', BPItems.stone_redwire);
-        GameRegistry.addRecipe(PartManager.getPartInfo("nor").getItem(), "#A#", "WCW", "#W#", '#', BPItems.stone_tile, 'A', BPItems.stone_anode, 'C',
+        GameRegistry.addRecipe(PartManager.getPartInfo("nor").getStack(), "#A#", "WCW", "#W#", '#', BPItems.stone_tile, 'A', BPItems.stone_anode, 'C',
                 BPItems.stone_cathode, 'W', BPItems.stone_wire);
-        GameRegistry.addRecipe(PartManager.getPartInfo("not").getItem(), "#A#", "ACA", "#W#", '#', BPItems.stone_tile, 'A', BPItems.stone_anode, 'C',
+        GameRegistry.addRecipe(PartManager.getPartInfo("not").getStack(), "#A#", "ACA", "#W#", '#', BPItems.stone_tile, 'A', BPItems.stone_anode, 'C',
                 BPItems.stone_cathode, 'W', BPItems.stone_wire);
         // craftManager.addRecipe(PartManager.getPartInfo("null"), "#R#", "RRR", "#R#", '#', BPItems.stone_tile, 'R',
         // BPItems.stone_redwire);
-        GameRegistry.addRecipe(PartManager.getPartInfo("or").getItem(), "#C#", "WCW", "#W#", '#', BPItems.stone_tile, 'C', BPItems.stone_cathode,
+        GameRegistry.addRecipe(PartManager.getPartInfo("or").getStack(), "#C#", "WCW", "#W#", '#', BPItems.stone_tile, 'C', BPItems.stone_cathode,
                 'W', BPItems.stone_wire);
-        GameRegistry.addRecipe(PartManager.getPartInfo("randomizer").getItem(), "#T#", "WWW", "TWT", '#', BPItems.stone_tile, 'T',
+        GameRegistry.addRecipe(PartManager.getPartInfo("randomizer").getStack(), "#T#", "WWW", "TWT", '#', BPItems.stone_tile, 'T',
                 BPItems.taintedsilicon_chip, 'W', BPItems.stone_wire);
-        GameRegistry.addRecipe(PartManager.getPartInfo("pulseformer").getItem(), "ACA", "CAC", "WW#", '#', BPItems.stone_tile, 'A',
+        GameRegistry.addRecipe(PartManager.getPartInfo("pulseformer").getStack(), "ACA", "CAC", "WW#", '#', BPItems.stone_tile, 'A',
                 BPItems.stone_anode, 'C', BPItems.stone_cathode, 'W', BPItems.stone_wire);
-        GameRegistry.addRecipe(PartManager.getPartInfo("repeater").getItem(), "#CW", "#AW", "#WC", '#', BPItems.stone_tile, 'A', BPItems.stone_anode,
+        GameRegistry.addRecipe(PartManager.getPartInfo("repeater").getStack(), "#CW", "#AW", "#WC", '#', BPItems.stone_tile, 'A', BPItems.stone_anode,
                 'C', BPItems.stone_cathode, 'W', BPItems.stone_wire);
-        GameRegistry.addRecipe(PartManager.getPartInfo("rs").getItem(), "WWA", "C#C", "AWW", '#', BPItems.stone_tile, 'A', BPItems.stone_anode, 'C',
+        GameRegistry.addRecipe(PartManager.getPartInfo("rs").getStack(), "WWA", "C#C", "AWW", '#', BPItems.stone_tile, 'A', BPItems.stone_anode, 'C',
                 BPItems.stone_cathode, 'W', BPItems.stone_wire);
-        GameRegistry.addRecipe(PartManager.getPartInfo("sequencer").getItem(), "#C#", "CPC", "#C#", '#', BPItems.stone_tile, 'C',
+        GameRegistry.addRecipe(PartManager.getPartInfo("sequencer").getStack(), "#C#", "CPC", "#C#", '#', BPItems.stone_tile, 'C',
                 BPItems.stone_cathode, 'P', BPItems.stone_pointer);
-        GameRegistry.addRecipe(PartManager.getPartInfo("state").getItem(), "#AC", "WXP", "#W#", '#', BPItems.stone_tile, 'A', BPItems.stone_anode,
+        GameRegistry.addRecipe(PartManager.getPartInfo("state").getStack(), "#AC", "WXP", "#W#", '#', BPItems.stone_tile, 'A', BPItems.stone_anode,
                 'C', BPItems.stone_cathode, 'P', BPItems.stone_pointer, 'W', BPItems.stone_wire, 'X', BPItems.silicon_chip);
-        GameRegistry.addRecipe(PartManager.getPartInfo("synchronizer").getItem(), "WCW", "XAX", "WWW", 'A', BPItems.stone_anode, 'C',
+        GameRegistry.addRecipe(PartManager.getPartInfo("synchronizer").getStack(), "WCW", "XAX", "WWW", 'A', BPItems.stone_anode, 'C',
                 BPItems.stone_cathode, 'W', BPItems.stone_wire, 'X', BPItems.silicon_chip);
-        GameRegistry.addRecipe(PartManager.getPartInfo("timer").getItem(), "#W#", "WPW", "ACA", '#', BPItems.stone_tile, 'A', BPItems.stone_anode,
+        GameRegistry.addRecipe(PartManager.getPartInfo("timer").getStack(), "#W#", "WPW", "ACA", '#', BPItems.stone_tile, 'A', BPItems.stone_anode,
                 'C', BPItems.stone_cathode, 'W', BPItems.stone_wire, 'P', BPItems.stone_pointer);
-        GameRegistry.addRecipe(PartManager.getPartInfo("toggle").getItem(), "#C#", "WLW", "#C#", '#', BPItems.stone_tile, 'C', BPItems.stone_cathode,
+        GameRegistry.addRecipe(PartManager.getPartInfo("toggle").getStack(), "#C#", "WLW", "#C#", '#', BPItems.stone_tile, 'C', BPItems.stone_cathode,
                 'W', BPItems.stone_wire, 'L', Blocks.lever);
-        GameRegistry.addRecipe(PartManager.getPartInfo("transparent").getItem(), "ACW", "CCC", "CW#", '#', BPItems.stone_tile, 'A',
+        GameRegistry.addRecipe(PartManager.getPartInfo("transparent").getStack(), "ACW", "CCC", "CW#", '#', BPItems.stone_tile, 'A',
                 BPItems.stone_anode, 'C', BPItems.stone_cathode, 'W', BPItems.stone_wire);
-        GameRegistry.addRecipe(PartManager.getPartInfo("xnor").getItem(), "ACA", "CAC", "WCW", 'A', BPItems.stone_anode, 'C', BPItems.stone_cathode,
+        GameRegistry.addRecipe(PartManager.getPartInfo("xnor").getStack(), "ACA", "CAC", "WCW", 'A', BPItems.stone_anode, 'C', BPItems.stone_cathode,
                 'W', BPItems.stone_wire);
-        GameRegistry.addRecipe(PartManager.getPartInfo("xor").getItem(), "AWA", "CAC", "WCW", 'A', BPItems.stone_anode, 'C', BPItems.stone_cathode,
+        GameRegistry.addRecipe(PartManager.getPartInfo("xor").getStack(), "AWA", "CAC", "WCW", 'A', BPItems.stone_anode, 'C', BPItems.stone_cathode,
                 'W', BPItems.stone_wire);
-        GameRegistry.addRecipe(PartManager.getPartInfo("integratedCircuit3x3").getItem(), "TST", "SSS", "TST", 'T', BPItems.stone_tile, 'S',
+        GameRegistry.addRecipe(PartManager.getPartInfo("integratedCircuit3x3").getStack(), "TST", "SSS", "TST", 'T', BPItems.stone_tile, 'S',
                 BPItems.silicon_chip);
-        GameRegistry.addRecipe(PartManager.getPartInfo("integratedCircuit5x5").getItem(), "II", "II", 'I',
-                PartManager.getPartInfo("integratedCircuit3x3").getItem());
-        GameRegistry.addRecipe(PartManager.getPartInfo("integratedCircuit7x7").getItem(), "II", "II", 'I',
-                PartManager.getPartInfo("integratedCircuit5x5").getItem());
+        GameRegistry.addRecipe(PartManager.getPartInfo("integratedCircuit5x5").getStack(), "II", "II", 'I',
+                PartManager.getPartInfo("integratedCircuit3x3").getStack());
+        GameRegistry.addRecipe(PartManager.getPartInfo("integratedCircuit7x7").getStack(), "II", "II", 'I',
+                PartManager.getPartInfo("integratedCircuit5x5").getStack());
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPBlocks.circuit_database, 1), "#C#", "BTB", "###", '#', "ingotIron", 'C',
-                PartManager.getPartInfo("integratedCircuit7x7").getItem(), 'B', Blocks.bookshelf, 'T', BPBlocks.circuit_table));
+                PartManager.getPartInfo("integratedCircuit7x7").getStack(), 'B', Blocks.bookshelf, 'T', BPBlocks.circuit_table));
 
     }
 }

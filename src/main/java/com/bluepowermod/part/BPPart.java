@@ -61,7 +61,7 @@ IPartInteractable, IDatabaseSaveable {
         if (partInfo == null)
             partInfo = PartManager.getPartInfo(getType());
 
-        return partInfo.getItem().copy();
+        return partInfo.getStack().copy();
     }
 
     @Override

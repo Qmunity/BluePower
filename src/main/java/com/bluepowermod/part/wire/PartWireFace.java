@@ -131,9 +131,6 @@ public abstract class PartWireFace extends BPPartFace {
             renderer.renderBox(new Vec3dCube(8 / 16D - width, 0, 8 / 16D + width, 8 / 16D + width, height, s2 ? 1 : 12 / 16D), icons);
         }
 
-        renderer.setColor(0xFFFFFF);
-        renderer.resetTransformations();
-
         return true;
     }
 

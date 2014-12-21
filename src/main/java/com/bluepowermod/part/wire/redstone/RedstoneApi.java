@@ -45,6 +45,7 @@ public class RedstoneApi implements IRedstoneApi {
 
     private List<IRedstoneProvider> providers = new ArrayList<IRedstoneProvider>();
     private boolean shouldWiresOutputPower = true;
+    private boolean shouldWiresHandleUpdates = true;
 
     @Override
     public byte[] getBundledOutput(World world, int x, int y, int z, ForgeDirection face, ForgeDirection side) {
@@ -65,8 +66,20 @@ public class RedstoneApi implements IRedstoneApi {
     @Override
     public IRedstoneDevice getRedstoneDevice(World world, int x, int y, int z, ForgeDirection face, ForgeDirection side) {
 
+        IRedstoneProvider vanilla = null;
+
         for (IRedstoneProvider provider : providers) {
+            if (provider instanceof RedstoneProviderVanilla) {
+                vanilla = provider;
+                continue;
+            }
             IRedstoneDevice device = provider.getRedstoneDevice(world, x, y, z, face, side);
+            if (device != null)
+                return device;
+        }
+
+        if (vanilla != null) {
+            IRedstoneDevice device = vanilla.getRedstoneDevice(world, x, y, z, face, side);
             if (device != null)
                 return device;
         }
@@ -109,9 +122,22 @@ public class RedstoneApi implements IRedstoneApi {
         return shouldWiresOutputPower;
     }
 
+    @Override
     public void setWiresOutputPower(boolean shouldWiresOutputPower) {
 
         this.shouldWiresOutputPower = shouldWiresOutputPower;
+    }
+
+    @Override
+    public boolean shouldWiresHandleUpdates() {
+
+        return shouldWiresHandleUpdates;
+    }
+
+    @Override
+    public void setWiresHandleUpdates(boolean shouldWiresHandleUpdates) {
+
+        this.shouldWiresHandleUpdates = shouldWiresHandleUpdates;
     }
 
 }

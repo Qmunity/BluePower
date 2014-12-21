@@ -65,6 +65,8 @@ import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.part.wire.PartWireFace;
 import com.bluepowermod.part.wire.redstone.propagation.WirePropagator;
 
+import cpw.mods.fml.common.FMLCommonHandler;
+
 public class PartRedwireFace extends PartWireFace implements IFaceRedstoneDevice, IRedstoneConductor, IFaceBundledDevice,
 IBundledConductor, IPartRedstone, IPartWAILAProvider {
 
@@ -153,132 +155,101 @@ IBundledConductor, IPartRedstone, IPartWAILAProvider {
     @Override
     public boolean renderStatic(Vec3i translation, RenderHelper renderer, RenderBlocks renderBlocks, int pass) {
 
-        // IIcon normalIcon = IconSupplier.wire;
-        // IIcon insulationIcon = IconSupplier.wireInsulation;
-        // IIcon bundleIcon = IconSupplier.wireBundled;
-        //
-        // double height = 2 / 16D;
-        // double width = 1 / 16D;
-        // IIcon icon = normalIcon;
-        // int color = WireCommons.getColorForPowerLevel(getColor(), power);
-        //
-        // if (insulationColor != MinecraftColor.NONE) {
-        // height += 1 / 16D;
-        // width += 1 / 16D;
-        // icon = insulationIcon;
-        // color = insulationColor.getHex();
-        // }
-        // if (bundled) {
-        // height += 2 / 16D;
-        // width += 2 / 16D;
-        // icon = bundleIcon;
-        // color = 0xFFFFFF;
-        // }
-        //
-        // ForgeDirection d1 = ForgeDirection.NORTH;
-        // ForgeDirection d2 = ForgeDirection.SOUTH;
-        // ForgeDirection d3 = ForgeDirection.WEST;
-        // ForgeDirection d4 = ForgeDirection.EAST;
-        //
-        // if (getFace() == ForgeDirection.NORTH) {
-        // d1 = ForgeDirection.UP;
-        // d2 = ForgeDirection.DOWN;
-        // } else if (getFace() == ForgeDirection.SOUTH) {
-        // d1 = ForgeDirection.DOWN;
-        // d2 = ForgeDirection.UP;
-        // } else if (getFace() == ForgeDirection.WEST) {
-        // d3 = ForgeDirection.UP;
-        // d4 = ForgeDirection.DOWN;
-        // } else if (getFace() == ForgeDirection.EAST) {
-        // d3 = ForgeDirection.DOWN;
-        // d4 = ForgeDirection.UP;
-        // } else if (getFace() == ForgeDirection.UP) {
-        // d3 = ForgeDirection.EAST;
-        // d4 = ForgeDirection.WEST;
-        // }
-        //
-        // switch (getFace()) {
-        // case DOWN:
-        // break;
-        // case UP:
-        // renderer.addTransformation(new Rotation(180, 0, 0, Vec3d.center));
-        // break;
-        // case NORTH:
-        // renderer.addTransformation(new Rotation(90, 90, 0, Vec3d.center));
-        // d1 = d1.getRotation(getFace());
-        // d2 = d2.getRotation(getFace());
-        // d3 = d3.getRotation(getFace());
-        // d4 = d4.getRotation(getFace());
-        // break;
-        // case SOUTH:
-        // renderer.addTransformation(new Rotation(-90, 90, 0, Vec3d.center));
-        // d1 = d1.getRotation(getFace());
-        // d2 = d2.getRotation(getFace());
-        // d3 = d3.getRotation(getFace());
-        // d4 = d4.getRotation(getFace());
-        // break;
-        // case WEST:
-        // renderer.addTransformation(new Rotation(0, 0, -90, Vec3d.center));
-        // break;
-        // case EAST:
-        // renderer.addTransformation(new Rotation(0, 0, 90, Vec3d.center));
-        // break;
-        // default:
-        // break;
-        // }
-        //
-        // boolean north = connections[d1.ordinal()];
-        // boolean northOpen = false;// connections[d1.ordinal()];
-        // boolean south = connections[d2.ordinal()];
-        // boolean southOpen = false;// connections[d2.ordinal()];
-        // boolean west = connections[d3.ordinal()];
-        // boolean westOpen = false;// connections[d3.ordinal()];
-        // boolean east = connections[d4.ordinal()];
-        // boolean eastOpen = false;// connections[d4.ordinal()];
-        //
-        // renderer.setColor(color);
-        //
-        // // Center
-        // renderer.renderBox(new Vec3dCube(8 / 16D - width, 0, 8 / 16D - width, 8 / 16D + width, height, 8 / 16D + width), icon);
-        // // Sides
-        // if (east || west) {
-        // if (west || (!west && east && !north && !south))
-        // renderer.renderBox(new Vec3dCube(west ? (westOpen ? -2 / 16D : 0) : 5 / 16D, 0, 8 / 16D - width, 8 / 16D - width, height,
-        // 8 / 16D + width), icon);
-        // if (east || (west && !east && !north && !south))
-        // renderer.renderBox(new Vec3dCube(8 / 16D + width, 0, 8 / 16D - width, east ? (eastOpen ? 18 / 16D : 1) : 11 / 16D, height,
-        // 8 / 16D + width), icon);
-        // if (north)
-        // renderer.renderBox(new Vec3dCube(8 / 16D - width, 0, north ? (northOpen ? -2 / 16D : 0) : 5 / 16D, 8 / 16D + width, height,
-        // 8 / 16D - width), icon);
-        // if (south)
-        // renderer.renderBox(new Vec3dCube(8 / 16D - width, 0, 8 / 16D + width, 8 / 16D + width, height,
-        // south ? (southOpen ? 18 / 16D : 1) : 11 / 16D), icon);
-        // } else {
-        // renderer.renderBox(new Vec3dCube(8 / 16D - width, 0, north ? 0 : 5 / 16D, 8 / 16D + width, height, 8 / 16D - width), icon);
-        // renderer.renderBox(new Vec3dCube(8 / 16D - width, 0, 8 / 16D + width, 8 / 16D + width, height, south ? 1 : 11 / 16D), icon);
-        // }
-        //
-        // if (bundled) {
-        // if (bundleColor != MinecraftColor.NONE) {
-        // renderer.setColor(ItemDye.field_150922_c[15 - bundleColor.ordinal()]);
-        // renderer.renderBox(new Vec3dCube(9 / 16D - width, height, 9 / 16D - width, 7 / 16D + width, height + 1 / 16D,
-        // 7 / 16D + width), Blocks.wool.getIcon(0, 0));
-        // renderer.setColor(WireCommons.getColorForPowerLevel(getColor(), (byte) 127));
-        // renderer.renderBox(new Vec3dCube(10 / 16D - width, height + 1 / 16D, 10 / 16D - width, 6 / 16D + width, height + 2 / 16D,
-        // 6 / 16D + width), normalIcon);
-        // } else {
-        // renderer.setColor(WireCommons.getColorForPowerLevel(getColor(), (byte) 127));
-        // renderer.renderBox(new Vec3dCube(10 / 16D - width, height, 10 / 16D - width, 6 / 16D + width, height + 1 / 16D,
-        // 6 / 16D + width), normalIcon);
-        // }
-        // }
-        //
-        // renderer.setColor(0xFFFFFF);
-        // renderer.resetTransformations();
-        //
-        // return true;
-        return super.renderStatic(translation, renderer, renderBlocks, pass);
+        super.renderStatic(translation, renderer, renderBlocks, pass);
+
+        ForgeDirection d1 = ForgeDirection.NORTH;
+        ForgeDirection d2 = ForgeDirection.SOUTH;
+        ForgeDirection d3 = ForgeDirection.WEST;
+        ForgeDirection d4 = ForgeDirection.EAST;
+
+        if (getFace() == ForgeDirection.NORTH) {
+            d1 = ForgeDirection.UP;
+            d2 = ForgeDirection.DOWN;
+        } else if (getFace() == ForgeDirection.SOUTH) {
+            d1 = ForgeDirection.DOWN;
+            d2 = ForgeDirection.UP;
+        } else if (getFace() == ForgeDirection.WEST) {
+            d3 = ForgeDirection.UP;
+            d4 = ForgeDirection.DOWN;
+        } else if (getFace() == ForgeDirection.EAST) {
+            d3 = ForgeDirection.DOWN;
+            d4 = ForgeDirection.UP;
+        } else if (getFace() == ForgeDirection.UP) {
+            d3 = ForgeDirection.EAST;
+            d4 = ForgeDirection.WEST;
+        }
+        boolean s1 = shouldRenderConnection(d1);
+        boolean s2 = shouldRenderConnection(d2);
+        boolean s3 = shouldRenderConnection(d3);
+        boolean s4 = shouldRenderConnection(d4);
+
+        if (isBundled()) {
+            double size = 1 / 64D;
+
+            double width = 1 / 32D;
+            double height = getHeight() / 16D;
+
+            byte power = bundled ? (byte) 128 : this.power;
+
+            renderer.setColor(WireCommons.getColorForPowerLevel(type.getColor(), power));
+
+            // Center
+            if ((s1 && s3) != (s2 && s4) || (s1 && s2 && s3 && s4)) {
+                renderer.renderBox(new Vec3dCube(8 / 16D - width - size, height, 8 / 16D - width - size, 8 / 16D + width + size, height
+                        + size, 8 / 16D + width + size), IconSupplier.wire);
+            } else {
+                renderer.renderBox(
+                        new Vec3dCube(8 / 16D - width, height, 8 / 16D - width, 8 / 16D + width, height + size, 8 / 16D + width),
+                        IconSupplier.wire);
+            }
+            // Sides
+            if (s4 || s3) {
+                if (s3 || (!s1 && !s2))
+                    renderer.renderBox(new Vec3dCube(s3 ? 0 : 5 / 16D, height, 8 / 16D - width, 8 / 16D - width, height + size,
+                            8 / 16D + width), IconSupplier.wire);
+                if (s4 || (!s1 && !s2))
+                    renderer.renderBox(new Vec3dCube(8 / 16D + width, height, 8 / 16D - width, s4 ? 1 : 11 / 16D, height + size,
+                            8 / 16D + width), IconSupplier.wire);
+                if (s1)
+                    renderer.renderBox(new Vec3dCube(8 / 16D - width, height, s1 ? 0 : 4 / 16D, 8 / 16D + width, height + size,
+                            8 / 16D - width), IconSupplier.wire);
+                if (s2)
+                    renderer.renderBox(new Vec3dCube(8 / 16D - width, height, 8 / 16D + width, 8 / 16D + width, height + size, s2 ? 1
+                            : 12 / 16D), IconSupplier.wire);
+            } else {
+                renderer.renderBox(
+                        new Vec3dCube(8 / 16D - width, height, s1 ? 0 : 5 / 16D, 8 / 16D + width, height + size, 8 / 16D - width),
+                        IconSupplier.wire);
+                renderer.renderBox(new Vec3dCube(8 / 16D - width, height, 8 / 16D + width, 8 / 16D + width, height + size, s2 ? 1
+                        : 11 / 16D), IconSupplier.wire);
+            }
+
+            if (!bundled) {
+                double len = 1 / 16D;
+                width = 1 / 16D;
+
+                if (s4 || s3) {
+                    if (s3 || (!s1 && !s2)) {
+                        renderer.renderBox(new Vec3dCube(4 / 16D - len, 0, 8 / 16D - width, 4 / 16D, 2 / 16D, 8 / 16D + width),
+                                IconSupplier.wire);
+                    }
+
+                    if (s4 || (!s1 && !s2)) {
+                        renderer.renderBox(new Vec3dCube(12 / 16D, 0, 8 / 16D - width, 12 / 16D + len, 2 / 16D, 8 / 16D + width),
+                                IconSupplier.wire);
+                    }
+                } else {
+                    if (!s1)
+                        renderer.renderBox(new Vec3dCube(8 / 16D - width, 0, 4 / 16D - len, 8 / 16D + width, 2 / 16D, 4 / 16D),
+                                IconSupplier.wire);
+                    if (!s2)
+                        renderer.renderBox(new Vec3dCube(8 / 16D - width, 0, 12 / 16D, 8 / 16D + width, 2 / 16D, 12 / 16D + len),
+                                IconSupplier.wire);
+                }
+            }
+        }
+
+        return true;
     }
 
     @Override
@@ -287,13 +258,15 @@ IBundledConductor, IPartRedstone, IPartWAILAProvider {
         power = (byte) 255;
         double scale = 2;
         double translation = 0.5;
+        double droppedTranslation = -0.5;
 
         if (bundled || getInsulationColor() != MinecraftColor.NONE) {
             Arrays.fill(connections, true);
             connections[0] = false;
             connections[1] = false;
             scale = 1.25;
-            translation = 0.125;
+            translation = 0.25;
+            droppedTranslation = 0;
         }
 
         RenderHelper rh = RenderHelper.instance;
@@ -303,7 +276,7 @@ IBundledConductor, IPartRedstone, IPartWAILAProvider {
         GL11.glPushMatrix();
         {
             if (type == ItemRenderType.ENTITY)
-                GL11.glTranslated(-0.5, 0, -0.5);
+                GL11.glTranslated(droppedTranslation, 0, droppedTranslation);
             GL11.glTranslated(0, translation, 0);
             GL11.glScaled(scale, scale, scale);
             Tessellator.instance.startDrawingQuads();
@@ -431,12 +404,17 @@ IBundledConductor, IPartRedstone, IPartWAILAProvider {
 
         RedstoneApi.getInstance().setWiresOutputPower(true);
 
-        if (!isBundled() && hasUpdated) {
+        if (!bundled && hasUpdated) {
             sendUpdatePacket();
-            for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS)
-                if (devices[dir.ordinal()] != null && (devices[dir.ordinal()] instanceof DummyRedstoneDevice))
-                    RedstoneHelper.notifyRedstoneUpdate(getWorld(), getX(), getY(), getZ(), dir, new Vec3i(this).add(dir).getBlock()
-                            .isNormalCube());
+            for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
+                try {
+                    getWorld();
+                } catch (Exception ex) {
+                    System.out.println(FMLCommonHandler.instance().getEffectiveSide());
+                }
+                if ((devices[dir.ordinal()] != null && (devices[dir.ordinal()] instanceof DummyRedstoneDevice)) || dir == getFace())
+                    RedstoneHelper.notifyRedstoneUpdate(getWorld(), getX(), getY(), getZ(), dir, true);
+            }
 
             hasUpdated = false;
         }
@@ -468,16 +446,20 @@ IBundledConductor, IPartRedstone, IPartWAILAProvider {
     }
 
     @Override
-    public void onRemoved() {
-
-        if (getWorld().isRemote)
-            return;
+    public void breakAndDrop(boolean creative) {
 
         WireCommons.disconnect(this, this);
+
+        super.breakAndDrop(creative);
     }
+
+    private byte lastInput = 1;
 
     @Override
     public void onUpdate() {
+
+        if (!RedstoneApi.getInstance().shouldWiresHandleUpdates())
+            return;
 
         super.onUpdate();
 
@@ -486,24 +468,28 @@ IBundledConductor, IPartRedstone, IPartWAILAProvider {
 
         WireCommons.refreshConnections(this, this);
 
+        RedstoneApi.getInstance().setWiresOutputPower(false);
         int input = 0;
         for (int i = 0; i < 6; i++) {
             IRedstoneDevice d = devices[i];
-            if (d != null && !(d instanceof IRedstoneConductor)) {
-                input = Math.max(input, d.getRedstonePower(ForgeDirection.getOrientation(i)) & 0xFF);
-            }
+            if (d != null && d instanceof DummyRedstoneDevice)
+                input = Math.max(input, d.getRedstonePower(ForgeDirection.getOrientation(i).getOpposite()) & 0xFF);
         }
+        RedstoneApi.getInstance().setWiresOutputPower(true);
 
-        for (ForgeDirection s : ForgeDirection.VALID_DIRECTIONS) {
-            if (s != getFace()) {
-                WirePropagator.INSTANCE.onPowerLevelChange(this, s, power, (byte) input);
-                break;
-            }
-        }
+        RedstoneApi.getInstance().setWiresHandleUpdates(false);
+        WirePropagator.INSTANCE.onPowerLevelChange(this, getFace(), lastInput, (byte) input);
+        RedstoneApi.getInstance().setWiresHandleUpdates(true);
+
+        lastInput = (byte) input;
     }
 
     @Override
     public boolean canConnectRedstone(ForgeDirection side) {
+
+        if (getWorld().isRemote) {
+            System.out.println(Arrays.asList(devices));
+        }
 
         return false;// side != getFace().getOpposite() && !bundled;
     }
@@ -511,10 +497,10 @@ IBundledConductor, IPartRedstone, IPartWAILAProvider {
     @Override
     public int getStrongPower(ForgeDirection side) {
 
-        // if (!RedstoneApi.getInstance().shouldWiresOutputPower())
-        // return 0;
+        if (!RedstoneApi.getInstance().shouldWiresOutputPower())
+            return 0;
 
-        if (devices[side.ordinal()] == null || !(devices[side.ordinal()] instanceof DummyRedstoneDevice) || side == getFace())
+        if ((devices[side.ordinal()] == null || !(devices[side.ordinal()] instanceof DummyRedstoneDevice)) && side != getFace())
             return 0;
 
         return MathHelper.map(power & 0xFF, 0, 255, 0, 15);
@@ -523,10 +509,10 @@ IBundledConductor, IPartRedstone, IPartWAILAProvider {
     @Override
     public int getWeakPower(ForgeDirection side) {
 
-        // if (!RedstoneApi.getInstance().shouldWiresOutputPower())
-        // return 0;
+        if (!RedstoneApi.getInstance().shouldWiresOutputPower())
+            return 0;
 
-        if (devices[side.ordinal()] == null || !(devices[side.ordinal()] instanceof DummyRedstoneDevice) || side == getFace())
+        if ((devices[side.ordinal()] == null || !(devices[side.ordinal()] instanceof DummyRedstoneDevice)) && side != getFace())
             return 0;
 
         return MathHelper.map(power & 0xFF, 0, 255, 0, 15);

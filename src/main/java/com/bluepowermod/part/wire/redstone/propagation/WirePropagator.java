@@ -39,21 +39,17 @@ public class WirePropagator implements IPropagator {
 
     public void onPowerLevelChange(IRedstoneDevice device, ForgeDirection side, byte from, byte to) {
 
-        IRedstoneDevice dev = device;// device.getDeviceOnSide(side);
-        // System.out.println(dev);
-        // if (dev == null)
+        // if (from == to)
         // return;
 
-        // ForgeDirection s = WireHelper.getConnectionSide(dev, device);
-
-        if (dev instanceof IRedstoneConductor) {
-            if (((IRedstoneConductor) dev).hasLoss()) {
-                new LossyPropagatorLogic().beginPropagation((IRedstoneConductor) dev, side, from, to);// s, from, to);
+        if (device instanceof IRedstoneConductor) {
+            if (((IRedstoneConductor) device).hasLoss()) {
+                new LossyPropagatorLogic().beginPropagation((IRedstoneConductor) device, side, from, to);// s, from, to);
             } else {
-                new PropagatorLogic().beginPropagation((IRedstoneConductor) dev, side, from, to);// s, from, to);
+                new PropagatorLogic().beginPropagation((IRedstoneConductor) device, side, from, to);// s, from, to);
             }
         } else {
-            dev.setRedstonePower(side, to);// s, to);
+            device.setRedstonePower(side, to);// s, to);
         }
     }
 

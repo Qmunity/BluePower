@@ -46,6 +46,10 @@ public class WireCommons {
 
     public static boolean canConnect(IBundledConductor a, IBundledDevice b) {
 
+        if (b instanceof IBundledConductor
+                && (((IBundledConductor) b).isAnalog() != a.isAnalog() || ((IBundledConductor) b).hasLoss() != a.hasLoss()))
+            return false;
+
         MinecraftColor c1 = a.getBundledColor();
         MinecraftColor c2 = b.getBundledColor();
 

@@ -25,6 +25,7 @@ import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -63,6 +64,7 @@ import com.bluepowermod.api.redstone.IFaceRedstoneDevice;
 import com.bluepowermod.api.redstone.IRedstoneConductor;
 import com.bluepowermod.api.redstone.IRedstoneDevice;
 import com.bluepowermod.client.renderers.IconSupplier;
+import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.part.wire.PartWireFreestanding;
 import com.bluepowermod.part.wire.redstone.propagation.WirePropagator;
 
@@ -438,6 +440,9 @@ IPartWAILAProvider, IPartSolid, IPartThruHole, IPartCustomPlacement {
     @Override
     public byte getRedstonePower(ForgeDirection side) {
 
+        if (!RedstoneApi.getInstance().shouldWiresOutputPower())
+            return 0;
+
         if (!isAnalog())
             return (byte) ((power & 0xFF) > 0 ? 255 : 0);
 
@@ -502,8 +507,13 @@ IPartWAILAProvider, IPartSolid, IPartThruHole, IPartCustomPlacement {
         WireCommons.disconnect(this, this);
     }
 
+    private byte lastInput = 1;
+
     @Override
     public void onUpdate() {
+
+        if (!RedstoneApi.getInstance().shouldWiresHandleUpdates())
+            return;
 
         super.onUpdate();
 
@@ -516,12 +526,15 @@ IPartWAILAProvider, IPartSolid, IPartThruHole, IPartCustomPlacement {
         for (int i = 0; i < 6; i++) {
             IRedstoneDevice d = devices[i];
             if (d != null && !(d instanceof IRedstoneConductor)) {
-                input = Math.max(input, d.getRedstonePower(ForgeDirection.getOrientation(i)) & 0xFF);
+                input = Math.max(input, d.getRedstonePower(ForgeDirection.getOrientation(i).getOpposite()) & 0xFF);
             }
         }
-        power = (byte) input;
 
-        WirePropagator.INSTANCE.onPowerLevelChange(this, ForgeDirection.UP, power, (byte) input);
+        RedstoneApi.getInstance().setWiresHandleUpdates(false);
+        WirePropagator.INSTANCE.onPowerLevelChange(this, ForgeDirection.DOWN, lastInput, (byte) input);
+        RedstoneApi.getInstance().setWiresHandleUpdates(true);
+
+        lastInput = (byte) input;
     }
 
     @Override
@@ -533,10 +546,10 @@ IPartWAILAProvider, IPartSolid, IPartThruHole, IPartCustomPlacement {
     @Override
     public int getStrongPower(ForgeDirection side) {
 
-        // if (!shouldOutput)
-        // return 0;
+        if (!RedstoneApi.getInstance().shouldWiresOutputPower())
+            return 0;
 
-        if (isBundled())
+        if (devices[side.ordinal()] == null || !(devices[side.ordinal()] instanceof DummyRedstoneDevice))
             return 0;
 
         return MathHelper.map(power & 0xFF, 0, 255, 0, 15);
@@ -545,25 +558,13 @@ IPartWAILAProvider, IPartSolid, IPartThruHole, IPartCustomPlacement {
     @Override
     public int getWeakPower(ForgeDirection side) {
 
-        // if (!shouldOutput)
-        // return 0;
-        //
-        // if (isBundled())
-        // return 0;
-        //
-        // IRedstoneDevice device = getDeviceOnSide(side);
-        // if (device == null)
-        // return 0;
-        // if (!(device instanceof DummyRedstoneDevice))
-        // return 0;
-        //
-        // return MathHelper.map(power, 0, 255, 0, 15);
+        if (!RedstoneApi.getInstance().shouldWiresOutputPower())
+            return 0;
 
-        if (isBundled())
+        if (devices[side.ordinal()] == null || !(devices[side.ordinal()] instanceof DummyRedstoneDevice))
             return 0;
 
         return MathHelper.map(power & 0xFF, 0, 255, 0, 15);
-        // return 0;
     }
 
     @Override
@@ -651,9 +652,15 @@ IPartWAILAProvider, IPartSolid, IPartThruHole, IPartCustomPlacement {
     }
 
     @Override
+    public CreativeTabs getCreativeTab() {
+
+        return BPCreativeTabs.wiring;
+    }
+
+    @Override
     public boolean isSideSolid(ForgeDirection face) {
 
-        return true;
+        return false;// true;
     }
 
     @Override

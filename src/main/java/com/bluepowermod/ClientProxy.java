@@ -20,16 +20,14 @@ package com.bluepowermod;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.MinecraftForge;
 
 import org.lwjgl.input.Keyboard;
 
 import com.bluepowermod.client.renderers.IconSupplier;
-import com.bluepowermod.client.renderers.RenderPartItem;
 import com.bluepowermod.client.renderers.Renderers;
 import com.bluepowermod.compat.CompatibilityUtils;
-import com.bluepowermod.init.BPItems;
+import com.bluepowermod.part.PartManager;
 
 import cpw.mods.fml.client.FMLClientHandler;
 
@@ -44,7 +42,7 @@ public class ClientProxy extends CommonProxy {
     public void initRenderers() {
 
         MinecraftForge.EVENT_BUS.register(new IconSupplier());
-        MinecraftForgeClient.registerItemRenderer(BPItems.multipart, new RenderPartItem());
+        PartManager.registerRenderers();
         Renderers.init();
 
         CompatibilityUtils.registerRenders();

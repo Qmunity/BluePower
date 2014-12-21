@@ -17,17 +17,26 @@
 
 package com.bluepowermod.part;
 
-import com.bluepowermod.init.BPItems;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-
 import java.lang.reflect.Constructor;
+
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.client.MinecraftForgeClient;
+
+import com.bluepowermod.client.renderers.RenderPartItem;
+import com.bluepowermod.items.ItemPart;
+import com.bluepowermod.util.Refs;
+
+import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class PartInfo {
 
     private final String type;
     private final BPPart example;
-    private final ItemStack item;
+    private final Item item;
+    private final ItemStack stack;
 
     private Constructor<? extends BPPart> constructor;
     private Object[] arguments;
@@ -41,9 +50,8 @@ public class PartInfo {
         example = create();
         type = example.getType();
 
-        item = new ItemStack(BPItems.multipart);
-        item.stackTagCompound = new NBTTagCompound();
-        item.stackTagCompound.setString("id", type);
+        item = new ItemPart(this);
+        stack = new ItemStack(item);
     }
 
     private void generateConstructor(Class<? extends BPPart> clazz, Object... arguments) {
@@ -80,16 +88,32 @@ public class PartInfo {
         return example;
     }
 
-    public ItemStack getItem() {
+    public ItemStack getStack() {
 
-        return item.copy();
+        return stack.copy();
     }
 
-    public ItemStack getItemStack(int stackSize) {
+    public ItemStack getStack(int stackSize) {
 
-        ItemStack ret = item.copy();
+        ItemStack ret = stack.copy();
         ret.stackSize = stackSize;
         return ret;
+    }
+
+    public Item getItem() {
+
+        return item;
+    }
+
+    public void registerItem() {
+
+        GameRegistry.registerItem(item, Refs.MULTIPART_NAME + "." + type);
+    }
+
+    @SideOnly(Side.CLIENT)
+    public void registerRenderer() {
+
+        MinecraftForgeClient.registerItemRenderer(item, RenderPartItem.instance);
     }
 
 }

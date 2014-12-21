@@ -8,16 +8,16 @@
 package com.bluepowermod.part;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import uk.co.qmunity.lib.part.PartRegistry;
 
 import com.bluepowermod.api.misc.MinecraftColor;
+import com.bluepowermod.items.ItemPart;
 import com.bluepowermod.part.gate.GateAnd;
 import com.bluepowermod.part.gate.GateBuffer;
 import com.bluepowermod.part.gate.GateCounter;
@@ -58,9 +58,12 @@ import com.bluepowermod.part.wire.redstone.PartRedwireFace;
 import com.bluepowermod.part.wire.redstone.PartRedwireFreestanding;
 import com.bluepowermod.part.wire.redstone.RedwireType;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 public class PartManager {
 
-    private static Map<String, PartInfo> parts = new HashMap<String, PartInfo>();
+    private static Map<String, PartInfo> parts = new LinkedHashMap<String, PartInfo>();
 
     public static void registerPart(Class<? extends BPPart> clazz, Object... arguments) {
 
@@ -85,8 +88,7 @@ public class PartManager {
     public static String getPartType(ItemStack item) {
 
         try {
-            NBTTagCompound tag = item.getTagCompound();
-            return tag.getString("id");
+            return ((ItemPart) item.getItem()).getPartType();
         } catch (Exception ex) {
         }
         return null;
@@ -183,13 +185,33 @@ public class PartManager {
 
         // Wires
         for (RedwireType type : RedwireType.values()) {
-            for (MinecraftColor color : MinecraftColor.WIRE_COLORS) {
+            registerPart(PartRedwireFace.class, type, MinecraftColor.NONE, false);
+            for (MinecraftColor color : MinecraftColor.VALID_COLORS)
                 registerPart(PartRedwireFace.class, type, color, false);
+            registerPart(PartRedwireFace.class, type, MinecraftColor.NONE, true);
+            for (MinecraftColor color : MinecraftColor.VALID_COLORS)
                 registerPart(PartRedwireFace.class, type, color, true);
-                registerPart(PartRedwireFreestanding.class, type, color, false);
-                if (color == MinecraftColor.NONE)
-                    registerPart(PartRedwireFreestanding.class, type, color, true);
-            }
         }
+        for (RedwireType type : RedwireType.values()) {
+            registerPart(PartRedwireFreestanding.class, type, MinecraftColor.NONE, false);
+            for (MinecraftColor color : MinecraftColor.VALID_COLORS)
+                registerPart(PartRedwireFreestanding.class, type, color, false);
+            registerPart(PartRedwireFreestanding.class, type, MinecraftColor.NONE, true);
+        }
+    }
+
+    public static void registerItems() {
+
+        for (String s : parts.keySet()) {
+            System.out.println(" - " + parts.get(s).getType());
+            parts.get(s).registerItem();
+        }
+    }
+
+    @SideOnly(Side.CLIENT)
+    public static void registerRenderers() {
+
+        for (String s : parts.keySet())
+            parts.get(s).registerRenderer();
     }
 }

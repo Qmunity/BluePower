@@ -98,12 +98,12 @@ public class BluePower {
         NetworkHandler.init();
         NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GUIHandler());
         CompatibilityUtils.init(event);
-
-        PartManager.registerParts();
     }
 
     @EventHandler
     public void postInit(FMLPostInitializationEvent event) {
+
+        PartManager.registerItems();
 
         CompatibilityUtils.postInit(event);
         AlloyFurnaceRegistry.getInstance().generateRecyclingRecipes();

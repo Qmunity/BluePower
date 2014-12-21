@@ -72,7 +72,7 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
     private static IIcon iconSide;
     private IIcon iconTop;
 
-    private static GateBase rendering;
+    protected static GateBase rendering;
 
     private final Random rnd = new Random();
 
@@ -229,14 +229,13 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
         int rotation = getRotation();
         renderer.addTransformation(new Rotation(0, 90 * -rotation, 0));
 
+        boolean wasNull = rendering == null;
         if (rendering == null)
             rendering = this;
         renderer.renderBox(BOX.clone().expand(-0.001), getIcon(ForgeDirection.DOWN), getIcon(ForgeDirection.UP),
                 getIcon(ForgeDirection.WEST), getIcon(ForgeDirection.EAST), getIcon(ForgeDirection.NORTH), getIcon(ForgeDirection.SOUTH));
-
-        rendering = null;
-
-        renderer.resetTransformations();
+        if (wasNull)
+            rendering = null;
 
         return true;
     }
@@ -280,7 +279,7 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
         }
         GL11.glPopMatrix();
 
-        GL11.glDisable(GL11.GL_BLEND);
+        rendering = null;
     }
 
     protected abstract void renderTop(float frame);

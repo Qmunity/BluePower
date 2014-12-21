@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -28,6 +29,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import uk.co.qmunity.lib.item.ItemMultipart;
+import uk.co.qmunity.lib.part.IPart;
 
 import com.bluepowermod.api.BPApi;
 import com.bluepowermod.api.item.IDatabaseSaveable;
@@ -39,11 +41,21 @@ import com.bluepowermod.util.Refs;
 
 public class ItemPart extends ItemMultipart implements IDatabaseSaveable {
 
-    public ItemPart() {
+    private PartInfo info;
+
+    public ItemPart(PartInfo info) {
 
         setUnlocalizedName("part." + Refs.MODID + ":");
 
         setCreativeTab(BPCreativeTabs.items);
+
+        this.info = info;
+    }
+
+    @Override
+    public String getUnlocalizedName(ItemStack item) {
+
+        return super.getUnlocalizedName() + info.getExample().getUnlocalizedName();
     }
 
     @Override
@@ -52,33 +64,19 @@ public class ItemPart extends ItemMultipart implements IDatabaseSaveable {
         return CreativeTabs.creativeTabArray;
     }
 
-    @Override
-    public String getUnlocalizedName(ItemStack item) {
-
-        return super.getUnlocalizedName() + PartManager.getPartType(item);
-    }
-
-    @Override
-    public boolean getHasSubtypes() {
-
-        return true;
-    }
-
     @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
     public void getSubItems(Item unused, CreativeTabs tab, List l) {
 
-        for (PartInfo i : PartManager.getRegisteredParts()) {
-            for (CreativeTabs t : i.getExample().getCreativeTabs())
-                if ((t != null && t.equals(tab)) || tab == null)
-                    l.add(i.getItem());
-        }
+        for (CreativeTabs t : info.getExample().getCreativeTabs())
+            if ((t != null && t.equals(tab)) || tab == null)
+                l.add(info.getStack());
     }
 
     @Override
     public boolean canGoInCopySlot(ItemStack stack) {
 
-        BPPart part = PartManager.getExample(stack);
+        BPPart part = info.create();
         BPApi.getInstance().loadSilkySettings(part, stack);
         return part.canGoInCopySlot(stack);
     }
@@ -102,7 +100,7 @@ public class ItemPart extends ItemMultipart implements IDatabaseSaveable {
     @Override
     public List<ItemStack> getItemsOnStack(ItemStack stack) {
 
-        BPPart part = PartManager.getExample(stack);
+        BPPart part = info.create();
         BPApi.getInstance().loadSilkySettings(part, stack);
         return part.getItemsOnStack(stack);
     }
@@ -110,7 +108,13 @@ public class ItemPart extends ItemMultipart implements IDatabaseSaveable {
     @Override
     public String getCreatedPartType(ItemStack item, EntityPlayer player, World world, MovingObjectPosition mop) {
 
-        return PartManager.getPartType(item);
+        return null;
+    }
+
+    @Override
+    public IPart createPart(ItemStack item, EntityPlayer player, World world, MovingObjectPosition mop) {
+
+        return info.create();
     }
 
     @Override
@@ -135,5 +139,15 @@ public class ItemPart extends ItemMultipart implements IDatabaseSaveable {
         List<String> l = new ArrayList<String>();
         part.addTooltip(l);
         list.addAll(l);
+    }
+
+    @Override
+    public void registerIcons(IIconRegister p_94581_1_) {
+
+    }
+
+    public String getPartType() {
+
+        return info.getType();
     }
 }

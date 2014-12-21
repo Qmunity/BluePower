@@ -57,7 +57,7 @@ import com.bluepowermod.part.wire.redstone.WireCommons;
 import com.bluepowermod.part.wire.redstone.propagation.WirePropagator;
 
 public class GateTransceiver extends GateBase implements IWirelessDevice, IFaceRedstoneDevice, IRedstoneConductor, IFaceBundledDevice,
-        IBundledConductor {
+IBundledConductor {
 
     private static final RedstoneFrequency freq1 = new RedstoneFrequency(com.bluepowermod.api.misc.Accessibility.PUBLIC, UUID.randomUUID(), "freq1");
     private static final RedstoneFrequency freq2 = new RedstoneFrequency(com.bluepowermod.api.misc.Accessibility.PUBLIC, UUID.randomUUID(), "freq2");
@@ -110,6 +110,9 @@ public class GateTransceiver extends GateBase implements IWirelessDevice, IFaceR
         // Base
         renderer.renderBox(new Vec3dCube(7 / 16D, 2 / 16D, 7 / 16D, 9 / 16D, 8 / 16D, 9 / 16D), obsidian);
 
+        if (rendering != null) {
+            renderer.addTransformation(new Rotation(0, (System.currentTimeMillis() / 100D) % 360, 0));
+        }
         renderer.addTransformation(new Rotation(45, 0, 0));
 
         // Post

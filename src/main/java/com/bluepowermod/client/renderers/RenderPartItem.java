@@ -28,6 +28,12 @@ import com.bluepowermod.part.PartManager;
 
 public class RenderPartItem implements IItemRenderer {
 
+    public static final RenderPartItem instance = new RenderPartItem();
+
+    private RenderPartItem() {
+
+    }
+
     @Override
     public boolean handleRenderType(ItemStack item, ItemRenderType type) {
 
@@ -67,6 +73,13 @@ public class RenderPartItem implements IItemRenderer {
 
     private void render(float x, float y, float z, float scale, ItemRenderType type, ItemStack item, Object... data) {
 
+        boolean blend = GL11.glGetBoolean(GL11.GL_BLEND);
+        boolean alpha = GL11.glGetBoolean(GL11.GL_ALPHA_TEST);
+
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        GL11.glEnable(GL11.GL_ALPHA_TEST);
+
         GL11.glPushMatrix();
         GL11.glScalef(scale, scale, scale);
         GL11.glTranslatef(x, y, z);
@@ -76,6 +89,11 @@ public class RenderPartItem implements IItemRenderer {
         } catch (Exception ex) {
         }
         GL11.glPopMatrix();
+
+        if (!blend)
+            GL11.glDisable(GL11.GL_BLEND);
+        if (!alpha)
+            GL11.glDisable(GL11.GL_ALPHA_TEST);
     }
 
 }

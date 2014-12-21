@@ -34,4 +34,10 @@ public interface IRedstoneApi {
 
     public boolean shouldWiresOutputPower();
 
+    public void setWiresOutputPower(boolean shouldWiresOutputPower);
+
+    public boolean shouldWiresHandleUpdates();
+
+    public void setWiresHandleUpdates(boolean shouldWiresHandleUpdates);
+
 }

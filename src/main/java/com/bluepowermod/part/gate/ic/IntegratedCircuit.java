@@ -10,15 +10,19 @@ package com.bluepowermod.part.gate.ic;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import org.lwjgl.opengl.GL11;
@@ -29,18 +33,20 @@ import uk.co.qmunity.lib.part.IPart;
 import uk.co.qmunity.lib.part.ITilePartHolder;
 import uk.co.qmunity.lib.part.PartRegistry;
 import uk.co.qmunity.lib.raytrace.QMovingObjectPosition;
+import uk.co.qmunity.lib.transform.Rotation;
 import uk.co.qmunity.lib.util.Dir;
 import uk.co.qmunity.lib.vec.Vec3d;
 import uk.co.qmunity.lib.vec.Vec3dCube;
 import uk.co.qmunity.lib.vec.Vec3i;
 
 import com.bluepowermod.api.block.ISilkyRemovable;
-import com.bluepowermod.init.BPItems;
+import com.bluepowermod.items.ItemPart;
 import com.bluepowermod.part.BPPart;
 import com.bluepowermod.part.PartManager;
 import com.bluepowermod.part.RedstoneConnection;
 import com.bluepowermod.part.gate.GateBase;
 import com.bluepowermod.part.gate.GateWire;
+import com.bluepowermod.util.Refs;
 
 public abstract class IntegratedCircuit extends GateBase implements ISilkyRemovable, ITilePartHolder {
 
@@ -109,6 +115,56 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
     protected abstract int getCircuitWidth();
 
     @Override
+    public boolean renderStatic(Vec3i translation, RenderHelper renderer, RenderBlocks renderBlocks, int pass) {
+
+        switch (getFace()) {
+        case DOWN:
+            break;
+        case UP:
+            renderer.addTransformation(new Rotation(180, 180, 0, Vec3d.center));
+            break;
+        case NORTH:
+            renderer.addTransformation(new Rotation(90, 0, 0, Vec3d.center));
+            break;
+        case SOUTH:
+            renderer.addTransformation(new Rotation(-90, 0, 0, Vec3d.center));
+            break;
+        case WEST:
+            renderer.addTransformation(new Rotation(0, 0, -90, Vec3d.center));
+            break;
+        case EAST:
+            renderer.addTransformation(new Rotation(0, 0, 90, Vec3d.center));
+            break;
+        default:
+            break;
+        }
+
+        int rotation = getRotation();
+        renderer.addTransformation(new Rotation(0, 90 * -rotation, 0));
+
+        if (rendering == null)
+            rendering = this;
+
+        IIcon[] icons = new IIcon[] { getIcon(ForgeDirection.DOWN), getIcon(ForgeDirection.UP), getIcon(ForgeDirection.WEST),
+                getIcon(ForgeDirection.EAST), getIcon(ForgeDirection.NORTH), getIcon(ForgeDirection.SOUTH) };
+
+        renderer.setRenderSide(ForgeDirection.UP, false);
+        renderer.renderBox(new Vec3dCube(0, 0, 0, 1, 1 / 16D, 1), icons);
+        renderer.setRenderSide(ForgeDirection.UP, true);
+
+        renderer.renderBox(new Vec3dCube(0, 1 / 16D, 0, 1, 2 / 16D, 1 / 16D), icons);
+        renderer.renderBox(new Vec3dCube(0, 1 / 16D, 15 / 16D, 1, 2 / 16D, 1), icons);
+        renderer.renderBox(new Vec3dCube(0, 1 / 16D, 0, 1 / 16D, 2 / 16D, 1), icons);
+        renderer.renderBox(new Vec3dCube(15 / 16D, 1 / 16D, 0, 1, 2 / 16D, 1), icons);
+
+        rendering = null;
+
+        renderer.resetTransformations();
+
+        return true;
+    }
+
+    @Override
     protected void renderTop(float frame) {
 
         renderTop("front", front());
@@ -123,6 +179,27 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
 
         GL11.glPushMatrix();
         {
+            GL11.glTranslated(0, 2 / 16D - ((1 / 16D) * (1.0 / getCircuitWidth())), 0);
+            GL11.glNormal3d(0, 1, 0);
+            int size = getCircuitWidth();
+            double textureMaxUV = 0.5 * size;
+
+            Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/gates/"
+                    + getTextureName() + "/checkerboard.png"));
+            GL11.glBegin(GL11.GL_QUADS);
+            {
+                com.bluepowermod.client.renderers.RenderHelper.addVertexWithTexture(BORDER_WIDTH, 0, BORDER_WIDTH, 0, 0);
+                com.bluepowermod.client.renderers.RenderHelper.addVertexWithTexture(BORDER_WIDTH, 0, 1 - BORDER_WIDTH, 0, textureMaxUV);
+                com.bluepowermod.client.renderers.RenderHelper.addVertexWithTexture(1 - BORDER_WIDTH, 0, 1 - BORDER_WIDTH, textureMaxUV,
+                        textureMaxUV);
+                com.bluepowermod.client.renderers.RenderHelper.addVertexWithTexture(1 - BORDER_WIDTH, 0, BORDER_WIDTH, textureMaxUV, 0);
+            }
+            GL11.glEnd();
+        }
+        GL11.glPopMatrix();
+
+        GL11.glPushMatrix();
+        {
             GL11.glTranslated(BORDER_WIDTH, 2 / 16D + 0.001D, BORDER_WIDTH);
             GL11.glScaled((1 - 2 * BORDER_WIDTH) / 1, 1, (1 - 2 * BORDER_WIDTH) / 1);
 
@@ -133,10 +210,17 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
                 for (GateBase gate : gateArray) {
                     if (gate != null) {
                         GL11.glPushMatrix();
-                        Tessellator.instance.startDrawingQuads();
-                        gate.renderStatic(new Vec3i(0, 0, 0), rh, rb, 0);
-                        Tessellator.instance.draw();
                         gate.renderDynamic(loc, frame, 0);
+                        GL11.glPopMatrix();
+
+                        // Static renderer
+                        GL11.glPushMatrix();
+                        {
+                            Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
+                            Tessellator.instance.startDrawingQuads();
+                            gate.renderStatic(new Vec3i(gate), rh, rb, 0);
+                            Tessellator.instance.draw();
+                        }
                         GL11.glPopMatrix();
 
                         rh.reset();
@@ -153,34 +237,34 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
     @Override
     public void doLogic() {
 
-        updateWires();
-        for (int i = 0; i < gates.length; i++) {
-            for (int j = 0; j < gates[i].length; j++) {
-                GateBase gate = gates[i][j];
-                if (gate != null) {
-                    for (Dir dir : Dir.values()) {
-                        if (dir == Dir.TOP || dir == Dir.BOTTOM)
-                            continue;
-                        GateBase neighbor = getNeighbor(i, j, dir);
-
-                        ForgeDirection forgeDir = dir.getFD().getOpposite();
-
-                        if (neighbor != null) {
-                            Dir neighborDir = Dir.getDirection(ForgeDirection.UP, forgeDir, neighbor.getRotation()).getOpposite();
-                            Dir gateDir = Dir.getDirection(ForgeDirection.UP, forgeDir, gate.getRotation());
-
-                            if (neighbor.getConnection(neighborDir).isEnabled() && neighbor instanceof GateWire) {
-                                if (gate.getConnection(gateDir).isEnabled() && !gate.getConnection(gateDir).isOutputOnly()) {
-                                    gate.getConnection(gateDir).setInput(neighbor.getConnection(neighborDir).getOutput());
-                                }
-                            }
-                        }
-                    }
-                    gate.update();
-                }
-            }
-        }
-        reflectGates();
+        // updateWires();
+        // for (int i = 0; i < gates.length; i++) {
+        // for (int j = 0; j < gates[i].length; j++) {
+        // GateBase gate = gates[i][j];
+        // if (gate != null) {
+        // for (Dir dir : Dir.values()) {
+        // if (dir == Dir.TOP || dir == Dir.BOTTOM)
+        // continue;
+        // GateBase neighbor = getNeighbor(i, j, dir);
+        //
+        // ForgeDirection forgeDir = dir.getFD().getOpposite();
+        //
+        // if (neighbor != null) {
+        // Dir neighborDir = Dir.getDirection(ForgeDirection.UP, forgeDir, neighbor.getRotation()).getOpposite();
+        // Dir gateDir = Dir.getDirection(ForgeDirection.UP, forgeDir, gate.getRotation());
+        //
+        // if (neighbor.getConnection(neighborDir).isEnabled() && neighbor instanceof GateWire) {
+        // if (gate.getConnection(gateDir).isEnabled() && !gate.getConnection(gateDir).isOutputOnly()) {
+        // gate.getConnection(gateDir).setInput(neighbor.getConnection(neighborDir).getOutput());
+        // }
+        // }
+        // }
+        // }
+        // gate.update();
+        // }
+        // }
+        // }
+        // reflectGates();
     }
 
     @Override
@@ -439,7 +523,7 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
         if (gates[x][y] != null) {
             if (!getWorld().isRemote) {
                 ItemStack partStack = PartManager.getPartInfo(
-                        /* gates[x][y] instanceof GateWire ? new WireBluestone().getType() : */gates[x][y].getType()).getItem();
+                        /* gates[x][y] instanceof GateWire ? new WireBluestone().getType() : */gates[x][y].getType()).getStack();
                 partStack.stackSize = 1;
                 getWorld().spawnEntityInWorld(new EntityItem(getWorld(), getX() + 0.5, getY() + 0.5, getZ() + 0.5, partStack));
                 gates[x][y] = null;
@@ -470,7 +554,7 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
 
     private boolean tryPlaceGate(EntityPlayer player, int x, int y, ItemStack stack, MovingObjectPosition mop) {
 
-        if (stack != null && stack.getItem() == BPItems.multipart) {
+        if (stack != null && stack.getItem() instanceof ItemPart) {
             BPPart part = PartManager.createPart(stack);
             /*
              * if (part instanceof WireBluestone) { part = new GateWire(); }

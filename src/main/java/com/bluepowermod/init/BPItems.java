@@ -40,7 +40,6 @@ import com.bluepowermod.items.ItemLimitedCrafting;
 import com.bluepowermod.items.ItemLumar;
 import com.bluepowermod.items.ItemPaintBrush;
 import com.bluepowermod.items.ItemPaintCan;
-import com.bluepowermod.items.ItemPart;
 import com.bluepowermod.items.ItemSaw;
 import com.bluepowermod.items.ItemScrewdriver;
 import com.bluepowermod.items.ItemSeedBag;
@@ -71,15 +70,16 @@ public class BPItems {
             .setTextureName(Refs.MODID + ":" + Refs.ZINC_ORE_CRUSHED_NAME).setCreativeTab(BPCreativeTabs.items);
     public static final Item zinc_ore_purified = new ItemBase().setUnlocalizedName(Refs.ZINC_ORE_CRUSHED_PURIFIED_NAME)
             .setTextureName(Refs.MODID + ":" + Refs.ZINC_ORE_CRUSHED_PURIFIED_NAME).setCreativeTab(BPCreativeTabs.items);
-    public static final Item zinc_dust = new ItemBase().setUnlocalizedName(Refs.ZINCDUST_NAME).setTextureName(Refs.MODID + ":" + Refs.ZINCDUST_NAME)
-            .setCreativeTab(BPCreativeTabs.items);
+    public static final Item zinc_dust = new ItemBase().setUnlocalizedName(Refs.ZINCDUST_NAME)
+            .setTextureName(Refs.MODID + ":" + Refs.ZINCDUST_NAME).setCreativeTab(BPCreativeTabs.items);
     public static final Item zinc_tiny_dust = new ItemBase().setUnlocalizedName(Refs.ZINCDUST_TINY_NAME)
             .setTextureName(Refs.MODID + ":" + Refs.ZINCDUST_TINY_NAME).setCreativeTab(BPCreativeTabs.items);
     public static final Item ruby_saw = new ItemSaw(2, Refs.RUBYSAW_NAME);
     public static final Item sapphire_saw = new ItemSaw(2, Refs.SAPPHIRESAW_NAME);
     public static final Item amethyst_saw = new ItemSaw(2, Refs.AMETHYSTSAW_NAME);
     public static final Item wood_sickle = new ItemSickle(ToolMaterial.WOOD, Refs.WOODSICKLE_NAME, Item.getItemFromBlock(Blocks.planks));
-    public static final Item stone_sickle = new ItemSickle(ToolMaterial.STONE, Refs.STONESICKLE_NAME, Item.getItemFromBlock(Blocks.cobblestone));
+    public static final Item stone_sickle = new ItemSickle(ToolMaterial.STONE, Refs.STONESICKLE_NAME,
+            Item.getItemFromBlock(Blocks.cobblestone));
     public static final Item iron_sickle = new ItemSickle(ToolMaterial.IRON, Refs.IRONSICKLE_NAME, Items.iron_ingot);
     public static final Item gold_sickle = new ItemSickle(ToolMaterial.GOLD, Refs.GOLDSICKLE_NAME, Items.gold_ingot);
     public static final Item diamond_sickle = new ItemSickle(ToolMaterial.EMERALD, Refs.DIAMONDSICKLE_NAME, Items.diamond);
@@ -135,8 +135,6 @@ public class BPItems {
     public static final Item amethyst_shovel = new ItemGemSpade(BluePower.gemMaterial, Refs.AMETHYSTSPADE_NAME, BPItems.amethyst_gem);
     public static final Item amethyst_hoe = new ItemGemHoe(BluePower.gemMaterial, Refs.AMETHYSTHOE_NAME, BPItems.amethyst_gem);
     public static final Item amethyst_sickle = new ItemSickle(BluePower.gemMaterial, Refs.AMETHYSTSICKLE_NAME, BPItems.amethyst_gem);
-
-    public static final Item multipart = new ItemPart();
 
     public static void init() {
 
@@ -238,8 +236,6 @@ public class BPItems {
 
         GameRegistry.registerItem(copper_wire, Refs.COPPERWIRE_NAME);
         GameRegistry.registerItem(iron_wire, Refs.IRONWIRE_NAME);
-
-        GameRegistry.registerItem(multipart, Refs.MULTIPART_NAME);
 
         MinecraftForge.addGrassSeed(new ItemStack(flax_seeds), 5);
     }

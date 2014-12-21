@@ -47,18 +47,18 @@ public class LightingRecipes {
             
             
             GameRegistry.addRecipe(new ShapedOreRecipe(
-                    PartManager.getPartInfo("fixture" + ItemDye.field_150921_b[i].toLowerCase()).getItem(), "gLg", "gLg", "sRs", 'g',
+                    PartManager.getPartInfo("fixture" + ItemDye.field_150921_b[i].toLowerCase()).getStack(), "gLg", "gLg", "sRs", 'g',
                     "paneGlassColorless", 's', new ItemStack(Blocks.stone_slab, 1, 0), 'L', new ItemStack(BPItems.lumar, 1, 15 - i), 'R',
                     "dustRedstone"));
             GameRegistry.addRecipe(new ShapedOreRecipe(PartManager.getPartInfo(
-                    "invertedfixture" + ItemDye.field_150921_b[i].toLowerCase()).getItem(), "gLg", "gLg", "sRs", 'g', "paneGlassColorless", 's', new ItemStack(
+                    "invertedfixture" + ItemDye.field_150921_b[i].toLowerCase()).getStack(), "gLg", "gLg", "sRs", 'g', "paneGlassColorless", 's', new ItemStack(
                     Blocks.stone_slab, 1, 0), 'L', new ItemStack(BPItems.lumar, 1, 15 - i), 'R', Blocks.redstone_torch));
             GameRegistry
-                    .addRecipe(new ShapedOreRecipe(PartManager.getPartInfo("cagelamp" + ItemDye.field_150921_b[i].toLowerCase()).getItem(),
+                    .addRecipe(new ShapedOreRecipe(PartManager.getPartInfo("cagelamp" + ItemDye.field_150921_b[i].toLowerCase()).getStack(),
                             "cLc", "gLg", "sRs", 'g', "paneGlassColorless", 'c', Blocks.iron_bars, 's', new ItemStack(Blocks.stone_slab, 1, 0), 'L',
                             new ItemStack(BPItems.lumar, 1, 15 - i), 'R', "dustRedstone"));
             GameRegistry.addRecipe(new ShapedOreRecipe(PartManager.getPartInfo(
-                    "invertedcagelamp" + ItemDye.field_150921_b[i].toLowerCase()).getItem(), "cLc", "gLg", "sRs", 'g', "paneGlassColorless", 'c',
+                    "invertedcagelamp" + ItemDye.field_150921_b[i].toLowerCase()).getStack(), "cLc", "gLg", "sRs", 'g', "paneGlassColorless", 'c',
                     Blocks.iron_bars, 's', new ItemStack(Blocks.stone_slab, 1, 0), 'L', new ItemStack(BPItems.lumar, 1, 15 - i), 'R',
                     Blocks.redstone_torch));
 
