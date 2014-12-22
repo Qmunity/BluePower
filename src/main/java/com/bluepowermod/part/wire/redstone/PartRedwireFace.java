@@ -20,6 +20,7 @@ package com.bluepowermod.part.wire.redstone;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
@@ -64,6 +65,7 @@ import com.bluepowermod.helper.VectorHelper;
 import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.part.wire.PartWireFace;
 import com.bluepowermod.part.wire.redstone.propagation.WirePropagator;
+import com.google.common.base.Stopwatch;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 
@@ -82,6 +84,7 @@ IBundledConductor, IPartRedstone, IPartWAILAProvider {
     protected byte[] bundledPower = new byte[16];
 
     private boolean hasUpdated = false;
+    private boolean disconnected = false;
 
     public PartRedwireFace(RedwireType type, MinecraftColor color, Boolean bundled) {
 
@@ -377,6 +380,7 @@ IBundledConductor, IPartRedstone, IPartWAILAProvider {
 
         devices[side.ordinal()] = null;
         bundledDevices[side.ordinal()] = null;
+        disconnected = true;
         sendUpdatePacket();
     }
 
@@ -412,7 +416,7 @@ IBundledConductor, IPartRedstone, IPartWAILAProvider {
         RedstoneApi.getInstance().setWiresOutputPower(true);
 
         if (!bundled && hasUpdated) {
-            sendUpdatePacket();
+            // sendUpdatePacket();
             for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
                 try {
                     getWorld();
@@ -465,6 +469,8 @@ IBundledConductor, IPartRedstone, IPartWAILAProvider {
     @Override
     public void onUpdate() {
 
+        Stopwatch timer = Stopwatch.createStarted();
+
         // System.out.println("Updating " + Integer.toHexString(hashCode()));
         // StackTraceElement[] e = Thread.getAllStackTraces().get(Thread.currentThread());
         // for (int i = 2; i < 11; i++) {
@@ -479,22 +485,28 @@ IBundledConductor, IPartRedstone, IPartWAILAProvider {
         if (getWorld().isRemote)
             return;
 
-        WireCommons.refreshConnections(this, this);
+        // WireCommons.refreshConnections(this, this);
 
-        RedstoneApi.getInstance().setWiresOutputPower(false);
-        int input = 0;
-        for (int i = 0; i < 6; i++) {
-            IRedstoneDevice d = devices[i];
-            if (d != null && d instanceof DummyRedstoneDevice)
-                input = Math.max(input, d.getRedstonePower(ForgeDirection.getOrientation(i).getOpposite()) & 0xFF);
-        }
-        RedstoneApi.getInstance().setWiresOutputPower(true);
+        // RedstoneApi.getInstance().setWiresOutputPower(false);
+        // int input = 0;
+        // for (int i = 0; i < 6; i++) {
+        // IRedstoneDevice d = devices[i];
+        // if (d != null && d instanceof DummyRedstoneDevice)
+        // input = Math.max(input, d.getRedstonePower(ForgeDirection.getOrientation(i).getOpposite()) & 0xFF);
+        // }
+        // input = Math.max(input,
+        // DummyRedstoneDevice.getDeviceAt(new Vec3i(this).getRelative(getFace())).getRedstonePower(getFace().getOpposite()));
+        // RedstoneApi.getInstance().setWiresOutputPower(true);
 
         RedstoneApi.getInstance().setWiresHandleUpdates(false);
-        WirePropagator.INSTANCE.onPowerLevelChange(this, getFace(), lastInput, (byte) input);
+        WirePropagator.INSTANCE.onPowerLevelChange(this, getFace(), disconnected ? -1 : lastInput, (byte) 0);
         RedstoneApi.getInstance().setWiresHandleUpdates(true);
 
-        lastInput = (byte) input;
+        lastInput = (byte) 0;
+
+        timer.stop();
+
+        System.out.println(timer.elapsed(TimeUnit.MICROSECONDS) / 1000D + " ms");
     }
 
     @Override

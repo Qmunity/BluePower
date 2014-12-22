@@ -149,6 +149,13 @@ IPartInteractable, IDatabaseSaveable {
 
     }
 
+    @Override
+    public void onConverted() {
+
+        if (!getWorld().isRemote)
+            onUpdate();
+    }
+
     public void addWailaInfo(List<String> info) {
 
     }
