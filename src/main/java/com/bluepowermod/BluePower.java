@@ -42,11 +42,15 @@ import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLMissingMappingsEvent;
+import cpw.mods.fml.common.event.FMLMissingMappingsEvent.MissingMapping;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
+import cpw.mods.fml.common.registry.GameData;
 import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.common.registry.GameRegistry.Type;
 
 @Mod(modid = Refs.MODID, name = Refs.NAME, guiFactory = Refs.GUIFACTORY)
 public class BluePower {
@@ -119,5 +123,23 @@ public class BluePower {
     public void serverStarting(FMLServerStartingEvent event) {
 
         // register commands
+    }
+
+    @EventHandler
+    public void event(FMLMissingMappingsEvent event) {
+
+        for (MissingMapping mapping : event.get()) {
+            if (mapping.name.equals("bluepower:bluepower_multipart"))
+                mapping.ignore();
+            if (mapping.type != Type.ITEM)
+                continue;
+            if (mapping.name.startsWith("bluepower:part.bluestoneWire")) {
+                String name = mapping.name;
+                name = name.replace("bluestoneWire", "wire.bluestone");
+                name = name.replace("silver", "light_gray");
+                mapping.remap(GameData.getItemRegistry().getObject(name));
+                continue;
+            }
+        }
     }
 }

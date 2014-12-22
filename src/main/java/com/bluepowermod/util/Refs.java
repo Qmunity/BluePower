@@ -137,7 +137,7 @@ public class Refs {
 
     public static final String SCREWDRIVER_NAME = "screwdriver";
     public static final String SILKYSCREWDRIVER_NAME = "silky_screwdriver";
-    public static final String MULTIPART_NAME = "multipart"; // When changing this name, also change the name in the call to GameData in PartRegistry.
+    public static final String MULTIPART_NAME = "part";
 
     public static final String CRACKEDBASALTBRICK_NAME = "basaltbrick_cracked";
     public static final String SMALLBASALTBRICK_NAME = "basalt_brick_small";
