@@ -68,7 +68,7 @@ import com.bluepowermod.part.wire.redstone.propagation.WirePropagator;
 import cpw.mods.fml.common.FMLCommonHandler;
 
 public class PartRedwireFace extends PartWireFace implements IFaceRedstoneDevice, IRedstoneConductor, IFaceBundledDevice,
-        IBundledConductor, IPartRedstone, IPartWAILAProvider {
+IBundledConductor, IPartRedstone, IPartWAILAProvider {
 
     protected final IRedstoneDevice[] devices = new IRedstoneDevice[6];
     protected final IBundledDevice[] bundledDevices = new IBundledDevice[6];
@@ -465,6 +465,12 @@ public class PartRedwireFace extends PartWireFace implements IFaceRedstoneDevice
     @Override
     public void onUpdate() {
 
+        // System.out.println("Updating " + Integer.toHexString(hashCode()));
+        // StackTraceElement[] e = Thread.getAllStackTraces().get(Thread.currentThread());
+        // for (int i = 2; i < 11; i++) {
+        // System.out.println(" - " + e[i].toString());
+        // }
+
         if (!RedstoneApi.getInstance().shouldWiresHandleUpdates())
             return;
 
@@ -637,7 +643,10 @@ public class PartRedwireFace extends PartWireFace implements IFaceRedstoneDevice
     @Override
     public void addWAILABody(List<String> text) {
 
-        text.add("Power: " + (power & 0xFF) + "/255");
+        if (isAnalog())
+            text.add("Power: " + (power & 0xFF) + "/255");
+        else
+            text.add("Power: " + ((power & 0xFF) > 0 ? 1 : 0) + "/1");
     }
 
     @Override
@@ -680,17 +689,6 @@ public class PartRedwireFace extends PartWireFace implements IFaceRedstoneDevice
 
         if (bundled || type == RedwireType.RED_ALLOY)
             tip.add(MinecraftColor.RED + I18n.format("Disabled temporarily. Still not fully working."));
-    }
-
-    @Override
-    public void setFace(ForgeDirection face) {
-
-        WireCommons.disconnect(this, this);
-
-        super.setFace(face);
-
-        if (getParent() != null)
-            WireCommons.refreshConnections(this, this);
     }
 
 }
