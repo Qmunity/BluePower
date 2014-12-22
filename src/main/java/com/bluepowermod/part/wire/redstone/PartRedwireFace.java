@@ -68,7 +68,7 @@ import com.bluepowermod.part.wire.redstone.propagation.WirePropagator;
 import cpw.mods.fml.common.FMLCommonHandler;
 
 public class PartRedwireFace extends PartWireFace implements IFaceRedstoneDevice, IRedstoneConductor, IFaceBundledDevice,
-IBundledConductor, IPartRedstone, IPartWAILAProvider {
+        IBundledConductor, IPartRedstone, IPartWAILAProvider {
 
     protected final IRedstoneDevice[] devices = new IRedstoneDevice[6];
     protected final IBundledDevice[] bundledDevices = new IBundledDevice[6];
@@ -178,6 +178,14 @@ IBundledConductor, IPartRedstone, IPartWAILAProvider {
             d3 = ForgeDirection.EAST;
             d4 = ForgeDirection.WEST;
         }
+
+        if (getFace() == ForgeDirection.NORTH || getFace() == ForgeDirection.SOUTH) {
+            d1 = d1.getRotation(getFace());
+            d2 = d2.getRotation(getFace());
+            d3 = d3.getRotation(getFace());
+            d4 = d4.getRotation(getFace());
+        }
+
         boolean s1 = shouldRenderConnection(d1);
         boolean s2 = shouldRenderConnection(d2);
         boolean s3 = shouldRenderConnection(d3);
@@ -194,7 +202,7 @@ IBundledConductor, IPartRedstone, IPartWAILAProvider {
             renderer.setColor(WireCommons.getColorForPowerLevel(type.getColor(), power));
 
             // Center
-            if ((s1 && s3) != (s2 && s4) || (s1 && s2 && s3 && s4)) {
+            if ((s1 && s3) || (s3 && s2) || (s2 && s4) || (s4 && s1)) {
                 renderer.renderBox(new Vec3dCube(8 / 16D - width - size, height, 8 / 16D - width - size, 8 / 16D + width + size, height
                         + size, 8 / 16D + width + size), IconSupplier.wire);
             } else {
@@ -229,10 +237,9 @@ IBundledConductor, IPartRedstone, IPartWAILAProvider {
                 width = 1 / 16D;
 
                 if (s4 || s3) {
-                    if (s3 || (!s1 && !s2)) {
+                    if (s3 || (!s1 && !s2))
                         renderer.renderBox(new Vec3dCube(4 / 16D - len, 0, 8 / 16D - width, 4 / 16D, 2 / 16D, 8 / 16D + width),
                                 IconSupplier.wire);
-                    }
 
                     if (s4 || (!s1 && !s2)) {
                         renderer.renderBox(new Vec3dCube(12 / 16D, 0, 8 / 16D - width, 12 / 16D + len, 2 / 16D, 8 / 16D + width),
@@ -500,7 +507,8 @@ IBundledConductor, IPartRedstone, IPartWAILAProvider {
         if (!RedstoneApi.getInstance().shouldWiresOutputPower())
             return 0;
 
-        if ((devices[side.ordinal()] == null || !(devices[side.ordinal()] instanceof DummyRedstoneDevice)) && side != getFace())
+        if ((side == getFace().getOpposite() || devices[side.ordinal()] == null || !(devices[side.ordinal()] instanceof DummyRedstoneDevice))
+                && side != getFace())
             return 0;
 
         return MathHelper.map(power & 0xFF, 0, 255, 0, 15);
@@ -512,7 +520,8 @@ IBundledConductor, IPartRedstone, IPartWAILAProvider {
         if (!RedstoneApi.getInstance().shouldWiresOutputPower())
             return 0;
 
-        if ((devices[side.ordinal()] == null || !(devices[side.ordinal()] instanceof DummyRedstoneDevice)) && side != getFace())
+        if ((side == getFace().getOpposite() || devices[side.ordinal()] == null || !(devices[side.ordinal()] instanceof DummyRedstoneDevice))
+                && side != getFace())
             return 0;
 
         return MathHelper.map(power & 0xFF, 0, 255, 0, 15);
