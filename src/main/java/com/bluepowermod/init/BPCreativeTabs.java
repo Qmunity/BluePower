@@ -17,8 +17,6 @@
 
 package com.bluepowermod.init;
 
-import java.util.List;
-
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
@@ -96,7 +94,7 @@ public class BPCreativeTabs {
             }
         };
 
-        circuits = new BPCreativeTab("tabBluePowerCircuits") {
+        circuits = new BPCreativeTab("tabBluePowerCircuits", true) {
 
             @Override
             public Item getTabIconItem() {
@@ -116,7 +114,7 @@ public class BPCreativeTabs {
             }
         };
 
-        wiring = new BPCreativeTab("tabBluePowerWiring") {
+        wiring = new BPCreativeTab("tabBluePowerWiring", true) {
 
             @Override
             public Item getTabIconItem() {
@@ -136,7 +134,7 @@ public class BPCreativeTabs {
             }
         };
 
-        lighting = new BPCreativeTab("tabBluePowerLighting") {
+        lighting = new BPCreativeTab("tabBluePowerLighting", true) {
 
             @Override
             public Item getTabIconItem() {
@@ -148,18 +146,35 @@ public class BPCreativeTabs {
 
     private static abstract class BPCreativeTab extends CreativeTabs {
 
+        private boolean searchbar = false;
+
         public BPCreativeTab(String label) {
 
             super(label);
         }
 
-        @SuppressWarnings({ "rawtypes", "unchecked" })
-        @Override
-        public void displayAllReleventItems(List l) {
+        public BPCreativeTab(String label, boolean searchbar) {
 
-            super.displayAllReleventItems(l);
-            // for (String s : PartRegistry.getInstance().getRegisteredPartsForTab(this))
-            // l.add(PartRegistry.getInstance().getItemForPart(s));
+            this(label);
+            this.searchbar = searchbar;
+        }
+
+        @Override
+        public boolean hasSearchBar() {
+
+            return searchbar;
+        }
+
+        @Override
+        public String getBackgroundImageName() {
+
+            return searchbar ? "bp_search.png" : super.getBackgroundImageName();
+        }
+
+        @Override
+        public int getSearchbarWidth() {
+
+            return 62;
         }
 
     }
