@@ -77,19 +77,18 @@ public class ItemScrewdriver extends ItemBase {
                         stack.setItemDamage(stack.getItemDamage() + 1);
                     }
                 }
-            } else {
+            } else  if (block.getValidRotations(world, x, y, z).length > 1) {
                 block.rotateBlock(world, x, y, z, ForgeDirection.getOrientation(side));
                 if (!player.capabilities.isCreativeMode) {
                     stack.setItemDamage(stack.getItemDamage() + 1);
                 }
             }
-        } else {
+        } else if (block.getValidRotations(world, x, y, z).length > 1) {
             block.rotateBlock(world, x, y, z, ForgeDirection.getOrientation(side));
             if (!player.capabilities.isCreativeMode) {
                 stack.setItemDamage(stack.getItemDamage() + 1);
             }
         }
-
         return false;
     }
 
