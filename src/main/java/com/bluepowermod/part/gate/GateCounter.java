@@ -17,21 +17,22 @@
 
 package com.bluepowermod.part.gate;
 
-import com.bluepowermod.util.Color;
+import java.util.List;
+
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
 
 import org.lwjgl.opengl.GL11;
 
 import com.bluepowermod.client.gui.gate.GuiGateCounter;
 import com.bluepowermod.client.renderers.RenderHelper;
 import com.bluepowermod.part.IGuiButtonSensitive;
+import com.bluepowermod.util.Color;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-
-import java.util.List;
 
 /**
  * Created by Quetzi on 04/11/14.
@@ -60,12 +61,13 @@ public class GateCounter extends GateBase implements IGuiButtonSensitive {
     @Override
     public void renderTop(float frame) {
 
-        renderTop("left", left().getOutput() > 0);
-        renderTop("right", right().getOutput() > 0);
+        renderTop("left", left().getInput() > 0);
+        renderTop("right", right().getInput() > 0);
+        renderTop("centerleft", left().getInput() > 0);
 
-        RenderHelper.renderRedstoneTorch(2 / 16D, 1D / 8D, 0, 13D / 16D, true);
-        RenderHelper.renderRedstoneTorch(0, 1D / 8D, 5D / 16D, 8D / 16D, count == 0);
-        RenderHelper.renderRedstoneTorch(0, 1D / 8D, -5D / 16D, 8D / 16D, count == max);
+        RenderHelper.renderRedstoneTorch(-2 / 16D, 1D / 8D, 0, 13D / 16D, true);
+        RenderHelper.renderRedstoneTorch(0, 1D / 8D, -5D / 16D, 8D / 16D, count == 0);
+        RenderHelper.renderRedstoneTorch(0, 1D / 8D, 5D / 16D, 8D / 16D, count == max);
         GL11.glPushMatrix();
         {
             GL11.glTranslated(2 / 16D, 0, 0);
@@ -74,7 +76,7 @@ public class GateCounter extends GateBase implements IGuiButtonSensitive {
 
             double angle = min + max * (count / (double) this.max);
 
-            RenderHelper.renderPointer(0, 7 / 16D, 0, -angle);
+            RenderHelper.renderPointer(-4 / 16D, 6 / 16D, 0, -angle + 0.5);
         }
         GL11.glPopMatrix();
     }
@@ -111,6 +113,39 @@ public class GateCounter extends GateBase implements IGuiButtonSensitive {
     }
 
     @Override
+    public void writeToNBT(NBTTagCompound tag) {
+        writeUpdateToNBT(tag);
+    }
+
+    @Override
+    public void writeUpdateToNBT(NBTTagCompound tag) {
+        super.writeUpdateToNBT(tag);
+        tag.setInteger("count", count);
+        tag.setInteger("decrement", decrement);
+        tag.setInteger("increment", increment);
+        tag.setInteger("max", max);
+        tag.setBoolean("wasOnLeft", wasOnLeft);
+        tag.setBoolean("wasOnRight", wasOnRight);
+    }
+
+    @Override
+    public void readFromNBT(NBTTagCompound tag) {
+        readUpdateFromNBT(tag);
+    }
+
+    @Override
+    public void readUpdateFromNBT(NBTTagCompound tag) {
+
+        super.readUpdateFromNBT(tag);
+        count = tag.getInteger("count");
+        decrement = tag.getInteger("decrement");
+        increment = tag.getInteger("increment");
+        max = tag.getInteger("max");
+        wasOnLeft = tag.getBoolean("wasOnLeft");
+        wasOnRight = tag.getBoolean("wasOnRight");
+    }
+
+    @Override
     public void onButtonPress(EntityPlayer player, int messageId, int value) {
 
         switch (messageId) {
@@ -124,6 +159,9 @@ public class GateCounter extends GateBase implements IGuiButtonSensitive {
             decrement = value;
             break;
         }
+        count = Math.max(Math.min(count, max), 0);
+        increment = Math.max(Math.min(increment, max), 0);
+        decrement = Math.max(Math.min(decrement, max), 0);
         sendUpdatePacket();
     }
 

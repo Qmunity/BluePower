@@ -19,9 +19,10 @@ package com.bluepowermod.part.gate;
 
 import java.util.List;
 
-import uk.co.qmunity.lib.raytrace.QMovingObjectPosition;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import uk.co.qmunity.lib.raytrace.QMovingObjectPosition;
 
 import com.bluepowermod.client.renderers.RenderHelper;
 import com.bluepowermod.init.BPItems;
@@ -53,8 +54,8 @@ public class GateToggleLatch extends GateBase {
         renderTop("left", power);
         renderTop("centerright", power);
         renderTop("right", power);
-        RenderHelper.renderRedstoneTorch(-2.5D / 8D, 1D / 8D, 2.5D / 8D, 9D / 16D, !state);
-        RenderHelper.renderRedstoneTorch(-2.5D / 8D, 1D / 8D, -2.5D / 8D, 9D / 16D, state);
+        RenderHelper.renderRedstoneTorch(2.5D / 8D, 1D / 8D, -2.5D / 8D, 9D / 16D, !state);
+        RenderHelper.renderRedstoneTorch(2.5D / 8D, 1D / 8D, 2.5D / 8D, 9D / 16D, state);
         // RenderHelper.renderLever(this, 9 / 16D, 1 / 8D, 4 / 16D, !state);
     }
 
@@ -72,11 +73,35 @@ public class GateToggleLatch extends GateBase {
     }
 
     @Override
+    public void writeToNBT(NBTTagCompound tag) {
+        writeUpdateToNBT(tag);
+    }
+
+    @Override
+    public void writeUpdateToNBT(NBTTagCompound tag) {
+        super.writeUpdateToNBT(tag);
+        tag.setBoolean("state", state);
+    }
+
+    @Override
+    public void readFromNBT(NBTTagCompound tag) {
+        readUpdateFromNBT(tag);
+    }
+
+    @Override
+    public void readUpdateFromNBT(NBTTagCompound tag) {
+
+        super.readUpdateFromNBT(tag);
+        state = tag.getBoolean("state");
+    }
+
+    @Override
     public boolean onActivated(EntityPlayer player, QMovingObjectPosition hit, ItemStack item) {
 
         if (item == null || item.getItem() != BPItems.screwdriver) {
             state = !state;
             playTickSound();
+            doLogic();
             return true;
         } else {
             return super.onActivated(player, hit, item);

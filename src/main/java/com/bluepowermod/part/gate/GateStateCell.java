@@ -23,6 +23,7 @@ import mcp.mobius.waila.api.SpecialChars;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
 
 import com.bluepowermod.client.gui.gate.GuiGateSingleTime;
 import com.bluepowermod.client.renderers.RenderHelper;
@@ -47,7 +48,8 @@ public class GateStateCell extends GateBase implements IGuiButtonSensitive {
         front().enable().setOutputOnly();
         left().enable().setOutputOnly();
         back().enable();
-        right().enable().setOutputOnly();
+        right().enable();
+        mirrored = true;
     }
 
     @Override
@@ -63,11 +65,12 @@ public class GateStateCell extends GateBase implements IGuiButtonSensitive {
         renderTop("right", right());
         renderTop("back", back());
         renderTop("left", left());
+        renderTop("center", left());
 
-        RenderHelper.renderRandomizerButton(this, -2 / 16D, 0, 4 / 16D, left().getOutput() > 0);
-        RenderHelper.renderRedstoneTorch(4 / 16D, 1D / 8D, 0, 13D / 16D, ticks > 0);
-        RenderHelper.renderRedstoneTorch(1 / 16D, 1D / 8D, -4 / 16D, 9D / 16D, mirrored ? back().getOutput() > 0 : front().getOutput() > 0);
-        RenderHelper.renderPointer(4 / 16D, 7D / 16D, 0, ticks > 0 ? 1 - (ticks + frame) / (time * 7) + 0.25 : 0.25);
+        RenderHelper.renderRandomizerButton(this, 2 / 16D, 0, -4 / 16D, left().getOutput() > 0);
+        RenderHelper.renderRedstoneTorch(-4 / 16D, 1D / 8D, 0, 13D / 16D, ticks > 0);
+        RenderHelper.renderRedstoneTorch(-1 / 16D, 1D / 8D, 4 / 16D, 9D / 16D, mirrored ? back().getOutput() > 0 : front().getOutput() > 0);
+        RenderHelper.renderPointer(-4 / 16D, 6D / 16D, 0, ticks > 0 ? 1 - (ticks + frame) / (time * 7) + 0.75 : 0.75);
 
     }
 
@@ -89,7 +92,7 @@ public class GateStateCell extends GateBase implements IGuiButtonSensitive {
             triggered = true;
             locked = true;
         }
-        if (locked || right().getOutput() > 0) {
+        if (locked || right().getInput() > 0) {
             ticks = 0;
             if (triggered)
                 left().setOutput(15);
@@ -108,6 +111,35 @@ public class GateStateCell extends GateBase implements IGuiButtonSensitive {
         } else {
             left().setOutput(0);
         }
+    }
+
+    @Override
+    public void writeToNBT(NBTTagCompound tag) {
+        writeUpdateToNBT(tag);
+    }
+
+    @Override
+    public void writeUpdateToNBT(NBTTagCompound tag) {
+        super.writeUpdateToNBT(tag);
+        tag.setInteger("ticks", ticks);
+        tag.setInteger("time", time);
+        tag.setBoolean("mirrored", mirrored);
+        tag.setBoolean("triggered", triggered);
+    }
+
+    @Override
+    public void readFromNBT(NBTTagCompound tag) {
+        readUpdateFromNBT(tag);
+    }
+
+    @Override
+    public void readUpdateFromNBT(NBTTagCompound tag) {
+
+        super.readUpdateFromNBT(tag);
+        ticks = tag.getInteger("ticks");
+        time = tag.getInteger("time");
+        mirrored = tag.getBoolean("mirrored");
+        triggered = tag.getBoolean("triggered");
     }
 
     @Override
