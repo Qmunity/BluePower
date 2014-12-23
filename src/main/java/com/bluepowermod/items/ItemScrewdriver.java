@@ -17,18 +17,18 @@
 
 package com.bluepowermod.items;
 
-import uk.co.qmunity.lib.part.IPart;
-import uk.co.qmunity.lib.part.ITilePartHolder;
-import uk.co.qmunity.lib.part.compat.MultipartCompatibility;
-import uk.co.qmunity.lib.raytrace.QMovingObjectPosition;
-import uk.co.qmunity.lib.raytrace.RayTracer;
-import uk.co.qmunity.lib.vec.Vec3i;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import uk.co.qmunity.lib.part.IPart;
+import uk.co.qmunity.lib.part.ITilePartHolder;
+import uk.co.qmunity.lib.part.compat.MultipartCompatibility;
+import uk.co.qmunity.lib.raytrace.QMovingObjectPosition;
+import uk.co.qmunity.lib.raytrace.RayTracer;
+import uk.co.qmunity.lib.vec.Vec3i;
 
 import com.bluepowermod.blocks.BlockContainerBase;
 import com.bluepowermod.init.BPCreativeTabs;
@@ -51,7 +51,8 @@ public class ItemScrewdriver extends ItemBase {
     }
 
     @Override
-    public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
+    public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY,
+            float hitZ) {
 
         Block block = world.getBlock(x, y, z);
 
@@ -59,7 +60,8 @@ public class ItemScrewdriver extends ItemBase {
             ITilePartHolder itph = MultipartCompatibility.getPartHolder(world, new Vec3i(x, y, z));
 
             if (itph != null) {
-                QMovingObjectPosition mop = itph.rayTrace(RayTracer.instance().getStartVector(player), RayTracer.instance().getEndVector(player));
+                QMovingObjectPosition mop = itph.rayTrace(RayTracer.instance().getStartVector(player),
+                        RayTracer.instance().getEndVector(player));
                 if (mop == null)
                     return false;
                 IPart p = mop.getPart();
@@ -73,21 +75,16 @@ public class ItemScrewdriver extends ItemBase {
             if (((BlockContainerBase) block).getGuiID() != GuiIDs.INVALID) {
                 if (player.isSneaking()) {
                     block.rotateBlock(world, x, y, z, ForgeDirection.getOrientation(side));
-                    if (!player.capabilities.isCreativeMode) {
-                        stack.setItemDamage(stack.getItemDamage() + 1);
-                    }
+                    if (!player.capabilities.isCreativeMode)
+                        stack.damageItem(1, player);
                 }
-            } else  if (block.getValidRotations(world, x, y, z).length > 1) {
-                block.rotateBlock(world, x, y, z, ForgeDirection.getOrientation(side));
-                if (!player.capabilities.isCreativeMode) {
-                    stack.setItemDamage(stack.getItemDamage() + 1);
-                }
+            } else {
+                if (block.rotateBlock(world, x, y, z, ForgeDirection.getOrientation(side)) && !player.capabilities.isCreativeMode)
+                    stack.damageItem(1, player);
             }
-        } else if (block.getValidRotations(world, x, y, z).length > 1) {
-            block.rotateBlock(world, x, y, z, ForgeDirection.getOrientation(side));
-            if (!player.capabilities.isCreativeMode) {
-                stack.setItemDamage(stack.getItemDamage() + 1);
-            }
+        } else {
+            if (block.rotateBlock(world, x, y, z, ForgeDirection.getOrientation(side)) && !player.capabilities.isCreativeMode)
+                stack.damageItem(1, player);
         }
         return false;
     }
