@@ -15,6 +15,7 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
+import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.blocks.BlockContainerBase;
 import com.bluepowermod.client.renderers.RenderLamp;
 import com.bluepowermod.init.BPCreativeTabs;
@@ -31,17 +32,17 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class BlockLamp extends BlockContainerBase {
 
     private final boolean isInverted;
-    private final int color;
+    private final MinecraftColor color;
 
     @SideOnly(Side.CLIENT)
     public static IIcon off, on;
 
-    public BlockLamp(boolean isInverted, String colorName, int color) {
+    public BlockLamp(boolean isInverted, MinecraftColor color) {
 
         super(Material.iron, TileLamp.class);
         this.isInverted = isInverted;
         this.color = color;
-        setBlockName(Refs.LAMP_NAME + (isInverted ? "inverted" : "") + colorName);
+        setBlockName(Refs.LAMP_NAME + "." + color.name().toLowerCase() + (isInverted ? ".inverted" : ""));
         setCreativeTab(BPCreativeTabs.lighting);
 
     }
@@ -91,7 +92,7 @@ public class BlockLamp extends BlockContainerBase {
 
     public int getColor() {
 
-        return color;
+        return color.getHex();
     }
 
     public boolean isInverted() {
@@ -121,7 +122,7 @@ public class BlockLamp extends BlockContainerBase {
     @Override
     public int colorMultiplier(IBlockAccess world, int x, int y, int z) {
 
-        return color;
+        return getColor();
     }
 
     @Override

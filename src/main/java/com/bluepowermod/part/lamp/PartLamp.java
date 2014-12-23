@@ -32,6 +32,7 @@ import uk.co.qmunity.lib.vec.Vec3d;
 import uk.co.qmunity.lib.vec.Vec3dCube;
 import uk.co.qmunity.lib.vec.Vec3i;
 
+import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.part.BPPartFace;
 
@@ -41,10 +42,9 @@ import com.bluepowermod.part.BPPartFace;
  * @author Koen Beckers (K4Unl), Amadornes
  *
  */
-public class PartLamp extends BPPartFace implements IPartRedstone {
+public abstract class PartLamp extends BPPartFace implements IPartRedstone {
 
-    protected String colorName;
-    protected final int colorVal;
+    protected final MinecraftColor color;
     protected final boolean inverted;
 
     protected int power = 0;
@@ -56,18 +56,19 @@ public class PartLamp extends BPPartFace implements IPartRedstone {
      * @param inverted
      *            TODO
      */
-    public PartLamp(String colorName, Integer colorVal, Boolean inverted) {
+    public PartLamp(MinecraftColor color, Boolean inverted) {
 
-        this.colorName = colorName;
-        this.colorVal = colorVal;
+        this.color = color;
         this.inverted = inverted;
     }
 
     @Override
     public String getType() {
 
-        return (inverted ? "inverted" : "") + "lamp" + colorName;
+        return getLampType() + "." + color.name().toLowerCase() + (inverted ? ".inverted" : "");
     }
+
+    protected abstract String getLampType();
 
     /**
      * @author amadornes
@@ -75,7 +76,7 @@ public class PartLamp extends BPPartFace implements IPartRedstone {
     @Override
     public String getUnlocalizedName() {
 
-        return (inverted ? "inverted" : "") + "lamp." + colorName;
+        return getType();
     }
 
     /**
@@ -241,7 +242,7 @@ public class PartLamp extends BPPartFace implements IPartRedstone {
     @Override
     public int getLightValue() {
 
-        return power;
+        return (inverted ? 15 - power : power);
     }
 
     /**

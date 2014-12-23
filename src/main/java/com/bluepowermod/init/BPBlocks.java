@@ -19,8 +19,8 @@ package com.bluepowermod.init;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.item.ItemDye;
 
+import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.blocks.BlockContainerBase;
 import com.bluepowermod.blocks.machines.BlockAlloyFurnace;
 import com.bluepowermod.blocks.machines.BlockCircuitDatabase;
@@ -109,7 +109,7 @@ public class BPBlocks {
 
     public static final Block alloyfurnace = new BlockAlloyFurnace();
     public static final Block block_breaker = new BlockContainerFrontRender(Material.rock, TileBlockBreaker.class)
-    .setBlockName(Refs.BLOCKBREAKER_NAME);
+            .setBlockName(Refs.BLOCKBREAKER_NAME);
     public static final Block igniter = new BlockIgniter();
     public static final Block buffer = new BlockContainerBase(Material.rock, TileBuffer.class).setGuiId(GuiIDs.BUFFER).setBlockName(
             Refs.BLOCKBUFFER_NAME);
@@ -134,29 +134,27 @@ public class BPBlocks {
     public static final Block regulator = new BlockContainerTwoSideRender(Material.rock, TileRegulator.class).setGuiId(GuiIDs.REGULATOR_ID)
             .emitsRedstone().setBlockName(Refs.REGULATOR_NAME);
     public static final Block item_detector = new BlockContainerTwoSideRender(Material.rock, TileItemDetector.class)
-    .setGuiId(GuiIDs.ITEMDETECTOR_ID).emitsRedstone().setBlockName(Refs.ITEMDETECTOR_NAME);
+            .setGuiId(GuiIDs.ITEMDETECTOR_ID).emitsRedstone().setBlockName(Refs.ITEMDETECTOR_NAME);
     public static final Block manager = new BlockRejecting(Material.rock, TileManager.class).setGuiId(GuiIDs.MANAGER_ID).emitsRedstone()
             .setBlockName(Refs.MANAGER_NAME);
     // public static final Block engine = new BlockEngine();
     // public static final Block kinetic_generator = new BlockKineticGenerator();
     // public static final Block windmill = new BlockWindmill();
-    public static Block[] blockLamp = new Block[ItemDye.field_150922_c.length];
+    public static Block[] blockLamp = new Block[MinecraftColor.VALID_COLORS.length];
 
     // public static final Block cpu = new BlockCPU();
     // public static final Block monitor = new BlockMonitor();
     // public static final Block disk_drive = new BlockDiskDrive();
     // public static final Block io_expander = new BlockIOExpander();
-    public static Block[] blockLampInverted = new Block[ItemDye.field_150922_c.length];
+    public static Block[] blockLampInverted = new Block[MinecraftColor.VALID_COLORS.length];
     public static Block sortron;
 
     public static void init() {
 
-        for (int i = 0; i < ItemDye.field_150922_c.length; i++) {
-            blockLamp[i] = new BlockLamp(false, ItemDye.field_150921_b[i].toLowerCase(), ItemDye.field_150922_c[i]);
-        }
-        for (int i = 0; i < ItemDye.field_150922_c.length; i++) {
-            blockLampInverted[i] = new BlockLamp(true, ItemDye.field_150921_b[i].toLowerCase(), ItemDye.field_150922_c[i]);
-        }
+        for (int i = 0; i < MinecraftColor.VALID_COLORS.length; i++)
+            blockLamp[i] = new BlockLamp(false, MinecraftColor.VALID_COLORS[i]);
+        for (int i = 0; i < MinecraftColor.VALID_COLORS.length; i++)
+            blockLampInverted[i] = new BlockLamp(true, MinecraftColor.VALID_COLORS[i]);
 
         registerBlocks();
         initModDependantBlocks();
@@ -224,18 +222,18 @@ public class BPBlocks {
         /*
          * GameRegistry.registerBlock(cpu, Refs.BLOCKCPU_NAME); GameRegistry.registerBlock(monitor, Refs.BLOCKMONITOR_NAME);
          * GameRegistry.registerBlock(disk_drive, Refs.BLOCKDISKDRIVE_NAME); GameRegistry.registerBlock(io_expander, Refs.BLOCKIOEXPANDER_NAME);
-         *
+         * 
          * GameRegistry.registerBlock(engine, Refs.ENGINE_NAME); GameRegistry.registerBlock(kinetic_generator, Refs.KINETICGENERATOR_NAME);
          * GameRegistry.registerBlock(windmill, Refs.WINDMILL_NAME);
          */
 
-        for (int i = 0; i < ItemDye.field_150922_c.length; i++) {
-            GameRegistry.registerBlock(blockLamp[i],
-                    blockLamp[i].getUnlocalizedName().substring(blockLamp[i].getUnlocalizedName().indexOf(":") + 1));
+        for (int i = 0; i < MinecraftColor.VALID_COLORS.length; i++) {
+            MinecraftColor color = MinecraftColor.VALID_COLORS[i];
+            GameRegistry.registerBlock(blockLamp[i], Refs.LAMP_NAME + color.name().toLowerCase());
         }
-        for (int i = 0; i < ItemDye.field_150922_c.length; i++) {
-            GameRegistry.registerBlock(blockLampInverted[i],
-                    blockLampInverted[i].getUnlocalizedName().substring(blockLampInverted[i].getUnlocalizedName().indexOf(":") + 1));
+        for (int i = 0; i < MinecraftColor.VALID_COLORS.length; i++) {
+            MinecraftColor color = MinecraftColor.VALID_COLORS[i];
+            GameRegistry.registerBlock(blockLampInverted[i], Refs.LAMP_NAME + "inverted" + color.name().toLowerCase());
         }
 
     }

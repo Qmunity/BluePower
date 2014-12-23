@@ -129,17 +129,33 @@ public class BluePower {
     public void event(FMLMissingMappingsEvent event) {
 
         for (MissingMapping mapping : event.get()) {
-            if (mapping.name.equals("bluepower:bluepower_multipart"))
-                mapping.ignore();
-            if (mapping.type != Type.ITEM)
-                continue;
-            if (mapping.name.startsWith("bluepower:part.bluestoneWire")) {
-                String name = mapping.name;
-                name = name.replace("bluestoneWire", "wire.bluestone");
+            String name = mapping.name;
+            if (mapping.name.startsWith("bluepower:lamp")) {
                 name = name.replace("silver", "light_gray");
-                mapping.remap(GameData.getItemRegistry().getObject(name));
+                if (mapping.type == Type.BLOCK) {
+                    mapping.remap(GameData.getBlockRegistry().getObject(name));
+                } else {
+                    mapping.remap(GameData.getItemRegistry().getObject(name));
+                }
                 continue;
             }
+            if (mapping.name.equals("bluepower:bluepower_multipart")) {
+                mapping.ignore();
+                continue;
+            }
+
+            name = name.replace("silver", "light_gray");
+
+            name = name.replace("bluestoneWire", "wire.bluestone");
+
+            name = name.replace("cagelamp", "cagelamp.").replace("fixture", "fixture.");
+            if (name.contains("inverted"))
+                name = "bluepower:part." + name.substring("bluepower:part.inverted".length()) + ".inverted";
+
+            Item item = GameData.getItemRegistry().getObject(name);
+            if (item == null)
+                continue;
+            mapping.remap(item);
         }
     }
 }

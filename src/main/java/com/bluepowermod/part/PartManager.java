@@ -12,7 +12,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
 import uk.co.qmunity.lib.part.PartRegistry;
 
@@ -163,17 +162,12 @@ public class PartManager {
         registerPart(Circuit7x7.class);
 
         // Lamps
-        for (int i = 0; i < ItemDye.field_150922_c.length; i++)
-            registerPart(PartCageLamp.class, ItemDye.field_150921_b[i].toLowerCase(), ItemDye.field_150922_c[i], false);
-
-        for (int i = 0; i < ItemDye.field_150922_c.length; i++)
-            registerPart(PartFixture.class, ItemDye.field_150921_b[i].toLowerCase(), ItemDye.field_150922_c[i], false);
-
-        for (int i = 0; i < ItemDye.field_150922_c.length; i++)
-            registerPart(PartCageLamp.class, ItemDye.field_150921_b[i].toLowerCase(), ItemDye.field_150922_c[i], true);
-
-        for (int i = 0; i < ItemDye.field_150922_c.length; i++)
-            registerPart(PartFixture.class, ItemDye.field_150921_b[i].toLowerCase(), ItemDye.field_150922_c[i], true);
+        for (int i = 0; i < 2; i++)
+            for (MinecraftColor c : MinecraftColor.VALID_COLORS)
+                registerPart(PartCageLamp.class, c, i == 1);
+        for (int i = 0; i < 2; i++)
+            for (MinecraftColor c : MinecraftColor.VALID_COLORS)
+                registerPart(PartFixture.class, c, i == 1);
 
         // Pneumatic Tubes
         registerPart(PneumaticTube.class);

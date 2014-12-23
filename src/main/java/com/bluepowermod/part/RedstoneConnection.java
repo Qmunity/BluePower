@@ -181,9 +181,12 @@ public class RedstoneConnection {
 
     public void readFromNBT(NBTTagCompound tag) {
 
-        enabled = tag.getBoolean("enabled");
-        in = tag.getInteger("in");
-        out = tag.getInteger("out");
+        if (tag.hasKey("enabled"))
+            enabled = tag.getBoolean("enabled");
+        if (tag.hasKey("in"))
+            in = tag.getInteger("in");
+        if (tag.hasKey("out"))
+            out = tag.getInteger("out");
     }
 
 }

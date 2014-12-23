@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.util.IIcon;
+import net.minecraftforge.common.util.ForgeDirection;
 
 import org.lwjgl.opengl.GL11;
 
@@ -18,6 +19,7 @@ import uk.co.qmunity.lib.client.render.RenderHelper;
 import uk.co.qmunity.lib.vec.Vec3d;
 import uk.co.qmunity.lib.vec.Vec3dCube;
 
+import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.client.renderers.IconSupplier;
 
 /**
@@ -27,9 +29,15 @@ import com.bluepowermod.client.renderers.IconSupplier;
  */
 public class PartCageLamp extends PartLamp {
 
-    public PartCageLamp(String colorName, Integer colorVal, Boolean inverted) {
+    public PartCageLamp(MinecraftColor color, Boolean inverted) {
 
-        super(colorName, colorVal, inverted);
+        super(color, inverted);
+    }
+
+    @Override
+    protected String getLampType() {
+
+        return "cagelamp";
     }
 
     /**
@@ -59,6 +67,8 @@ public class PartCageLamp extends PartLamp {
         topIcon = IconSupplier.cagedLampCageTop;
         sideIcon = IconSupplier.cagedLampCageSide;
 
+        renderer.setRenderSide(ForgeDirection.DOWN, false);
+
         for (int i = 0; i < 2; i++) {
             renderer.setRenderFromInside(i == 1);
             renderer.renderBox(vector, topIcon, topIcon, sideIcon, sideIcon, sideIcon, sideIcon);
@@ -74,7 +84,7 @@ public class PartCageLamp extends PartLamp {
             topIcon = IconSupplier.cagedLampLampActiveTop;
         }
 
-        renderer.setColor(colorVal);
+        renderer.setColor(color.getHex());
         renderer.renderBox(vector, topIcon, topIcon, sideIcon, sideIcon, sideIcon, sideIcon);
         renderer.setColor(0xFFFFFF);
     }
@@ -84,9 +94,9 @@ public class PartCageLamp extends PartLamp {
 
         Vec3dCube vector = new Vec3dCube(5 / 16D, 2 / 16D, 5 / 16D, 11 / 16D, 11 / 16D, 11 / 16D).rotate(getFace(), Vec3d.center);
 
-        double r = ((colorVal & 0xFF0000) >> 16) / 256D;
-        double g = ((colorVal & 0x00FF00) >> 8) / 256D;
-        double b = (colorVal & 0x0000FF) / 256D;
+        double r = ((color.getHex() & 0xFF0000) >> 16) / 256D;
+        double g = ((color.getHex() & 0x00FF00) >> 8) / 256D;
+        double b = (color.getHex() & 0x0000FF) / 256D;
 
         if (pass == 1) {
             GL11.glEnable(GL11.GL_BLEND);
@@ -104,18 +114,6 @@ public class PartCageLamp extends PartLamp {
             GL11.glDisable(GL11.GL_BLEND);
         }
 
-    }
-
-    @Override
-    public String getType() {
-
-        return (inverted ? "inverted" : "") + "cagelamp" + colorName;
-    }
-
-    @Override
-    public String getUnlocalizedName() {
-
-        return (inverted ? "inverted" : "") + "cagelamp." + colorName;
     }
 
 }

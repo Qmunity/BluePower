@@ -416,7 +416,7 @@ IBundledConductor, IPartRedstone, IPartWAILAProvider {
         RedstoneApi.getInstance().setWiresOutputPower(true);
 
         if (!bundled && hasUpdated) {
-            // sendUpdatePacket();
+            sendUpdatePacket();
             for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
                 try {
                     getWorld();
@@ -485,7 +485,7 @@ IBundledConductor, IPartRedstone, IPartWAILAProvider {
         if (getWorld().isRemote)
             return;
 
-        // WireCommons.refreshConnections(this, this);
+        WireCommons.refreshConnections(this, this);
 
         // RedstoneApi.getInstance().setWiresOutputPower(false);
         // int input = 0;

@@ -18,6 +18,7 @@ import uk.co.qmunity.lib.client.render.RenderHelper;
 import uk.co.qmunity.lib.vec.Vec3d;
 import uk.co.qmunity.lib.vec.Vec3dCube;
 
+import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.client.renderers.IconSupplier;
 
 /**
@@ -27,9 +28,15 @@ import com.bluepowermod.client.renderers.IconSupplier;
  */
 public class PartFixture extends PartLamp {
 
-    public PartFixture(String colorName, Integer colorVal, Boolean inverted) {
+    public PartFixture(MinecraftColor color, Boolean inverted) {
 
-        super(colorName, colorVal, inverted);
+        super(color, inverted);
+    }
+
+    @Override
+    protected String getLampType() {
+
+        return "fixture";
     }
 
     /**
@@ -44,18 +51,6 @@ public class PartFixture extends PartLamp {
         boxes.add(new Vec3dCube(3 / 16D, 2 / 16D, 3 / 16D, 13 / 16D, 8 / 16D, 13 / 16D).expand(0.5 / 16D).rotate(getFace(), Vec3d.center));
 
         return boxes;
-    }
-
-    @Override
-    public String getType() {
-
-        return (inverted ? "inverted" : "") + "fixture" + colorName;
-    }
-
-    @Override
-    public String getUnlocalizedName() {
-
-        return (inverted ? "inverted" : "") + "fixture." + colorName;
     }
 
     /**
@@ -79,7 +74,7 @@ public class PartFixture extends PartLamp {
             topIcon = IconSupplier.fixtureLampTopOn;
         }
 
-        renderer.setColor(colorVal);
+        renderer.setColor(color.getHex());
         renderer.renderBox(vector, topIcon, topIcon, sideIcon, sideIcon, sideIcon, sideIcon);
         renderer.setColor(0xFFFFFF);
     }
@@ -89,9 +84,9 @@ public class PartFixture extends PartLamp {
 
         Vec3dCube vector = new Vec3dCube(3 / 16D, 2 / 16D, 3 / 16D, 1.0 - (3 / 16D), 8 / 16D, 13 / 16D).rotate(getFace(), Vec3d.center);
 
-        double r = ((colorVal & 0xFF0000) >> 16) / 256D;
-        double g = ((colorVal & 0x00FF00) >> 8) / 256D;
-        double b = (colorVal & 0x0000FF) / 256D;
+        double r = ((color.getHex() & 0xFF0000) >> 16) / 256D;
+        double g = ((color.getHex() & 0x00FF00) >> 8) / 256D;
+        double b = (color.getHex() & 0x0000FF) / 256D;
         if (pass == 1) {
             GL11.glEnable(GL11.GL_BLEND);
             GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);

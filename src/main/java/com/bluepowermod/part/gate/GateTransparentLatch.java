@@ -53,12 +53,14 @@ public class GateTransparentLatch extends GateBase {
 
     @Override
     public void registerIcons(IIconRegister reg) {
+
         super.registerIcons(reg);
         mirroredTopIcon = reg.registerIcon(Refs.MODID + ":gates/" + getTextureName() + "/base_mirrored");
     }
 
     @Override
     public IIcon getTopIcon() {
+
         return mirrored ? mirroredTopIcon : super.getTopIcon();
     }
 
@@ -106,6 +108,7 @@ public class GateTransparentLatch extends GateBase {
 
     @Override
     protected boolean changeMode() {
+
         mirrored = !mirrored;
         if (mirrored) {
             left().setOutputOnly();
@@ -149,7 +152,7 @@ public class GateTransparentLatch extends GateBase {
             left().setBidirectional();
             right().setOutputOnly();
         }
-        if (getWorld() != null && getWorld().isRemote)
+        if (getParent() != null && getWorld() != null && getWorld().isRemote)
             getWorld().markBlockRangeForRenderUpdate(getX(), getY(), getZ(), getX(), getY(), getZ());
     }
 
