@@ -25,6 +25,8 @@ import uk.co.qmunity.lib.part.IPart;
 import uk.co.qmunity.lib.part.IPartFace;
 import uk.co.qmunity.lib.util.Dir;
 
+import com.bluepowermod.part.gate.GateBase;
+
 public class RedstoneConnection {
 
     private final IPart part;
@@ -99,10 +101,14 @@ public class RedstoneConnection {
     public void forceUpdateNeighbor() {
 
         ForgeDirection d = getFD();
-        World world = part.getWorld();
-        int x = part.getX(), y = part.getY(), z = part.getZ();
+        if (part instanceof GateBase && ((GateBase) part).parentCircuit != null) {
+            ((GateBase) part).parentCircuit.updateNeighborGates((GateBase) part);
+        } else {
+            World world = part.getWorld();
+            int x = part.getX(), y = part.getY(), z = part.getZ();
 
-        RedstoneHelper.notifyRedstoneUpdate(world, x, y, z, d, world.getBlock(x, y, z).isNormalCube(world, x, y, z));
+            RedstoneHelper.notifyRedstoneUpdate(world, x, y, z, d, world.getBlock(x, y, z).isNormalCube(world, x, y, z));
+        }
     }
 
     public boolean isEnabled() {
