@@ -41,7 +41,7 @@ import com.bluepowermod.util.Refs;
 
 public class ItemPart extends ItemMultipart implements IDatabaseSaveable {
 
-    private PartInfo info;
+    private final PartInfo info;
 
     public ItemPart(PartInfo info) {
 
@@ -69,7 +69,7 @@ public class ItemPart extends ItemMultipart implements IDatabaseSaveable {
     public void getSubItems(Item unused, CreativeTabs tab, List l) {
 
         for (CreativeTabs t : info.getExample().getCreativeTabs())
-            if ((t != null && t.equals(tab)) || tab == null)
+            if (t != null && t.equals(tab) || tab == null)
                 l.add(info.getStack());
     }
 
@@ -114,7 +114,9 @@ public class ItemPart extends ItemMultipart implements IDatabaseSaveable {
     @Override
     public IPart createPart(ItemStack item, EntityPlayer player, World world, MovingObjectPosition mop) {
 
-        return info.create();
+        IPart part = info.create();
+        BPApi.getInstance().loadSilkySettings(part, item);
+        return part;
     }
 
     @Override

@@ -26,6 +26,7 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import org.lwjgl.opengl.GL11;
@@ -58,6 +59,7 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
 
     private GateBase[][] gates;
     private static double BORDER_WIDTH = 1 / 16D;
+    private boolean isRenderingItem;
 
     @Override
     public void initializeConnections() {
@@ -119,6 +121,13 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
     }
 
     protected abstract int getCircuitWidth();
+
+    @Override
+    public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
+        isRenderingItem = true;
+        super.renderItem(type, item, data);
+        isRenderingItem = false;
+    }
 
     @Override
     public boolean renderStatic(Vec3i translation, RenderHelper renderer, RenderBlocks renderBlocks, int pass) {
@@ -219,15 +228,17 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
                         gate.renderDynamic(loc, frame, 0);
                         GL11.glPopMatrix();
 
-                        // Static renderer
-                        GL11.glPushMatrix();
-                        {
-                            Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
-                            Tessellator.instance.startDrawingQuads();
-                            gate.renderStatic(new Vec3i(gate), rh, rb, 0);
-                            Tessellator.instance.draw();
+                        if (!isRenderingItem) {
+                            // Static renderer
+                            GL11.glPushMatrix();
+                            {
+                                Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
+                                Tessellator.instance.startDrawingQuads();
+                                gate.renderStatic(new Vec3i(gate), rh, rb, 0);
+                                Tessellator.instance.draw();
+                            }
+                            GL11.glPopMatrix();
                         }
-                        GL11.glPopMatrix();
 
                         rh.reset();
                     }
@@ -596,7 +607,7 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
         if (gates[x][y] != null) {
             if (!getWorld().isRemote) {
                 ItemStack partStack = PartManager.getPartInfo(
-                        gates[x][y] instanceof GateWire ? new PartRedwireFace(RedwireType.RED_ALLOY, MinecraftColor.NONE, false).getType()
+                        gates[x][y] instanceof GateWire ? new PartRedwireFace(RedwireType.BLUESTONE, MinecraftColor.NONE, false).getType()
                                 : gates[x][y].getType()).getStack();
                 partStack.stackSize = 1;
                 getWorld().spawnEntityInWorld(new EntityItem(getWorld(), getX() + 0.5, getY() + 0.5, getZ() + 0.5, partStack));
@@ -617,7 +628,7 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
             for (GateBase gate : gateArray) {
                 if (gate != null) {
                     if (gate instanceof GateWire) {
-                        drops.addAll(new PartRedwireFace(RedwireType.RED_ALLOY, MinecraftColor.NONE, false).getDrops());
+                        drops.addAll(new PartRedwireFace(RedwireType.BLUESTONE, MinecraftColor.NONE, false).getDrops());
                     } else {
                         drops.addAll(gate.getDrops());
                     }
@@ -632,7 +643,8 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
 
         if (stack != null && stack.getItem() instanceof ItemPart) {
             BPPart part = PartManager.createPart(stack);
-            if (part instanceof PartRedwireFace) {
+            if (part instanceof PartRedwireFace
+                    && part.getType().equals(new PartRedwireFace(RedwireType.BLUESTONE, MinecraftColor.NONE, false).getType())) {
                 part = new GateWire();
             }
             if (part instanceof GateBase && !(part instanceof IntegratedCircuit)) {

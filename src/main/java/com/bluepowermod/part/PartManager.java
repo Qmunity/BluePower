@@ -37,7 +37,6 @@ import com.bluepowermod.part.gate.GateSynchronizer;
 import com.bluepowermod.part.gate.GateTimer;
 import com.bluepowermod.part.gate.GateToggleLatch;
 import com.bluepowermod.part.gate.GateTransparentLatch;
-import com.bluepowermod.part.gate.GateWire;
 import com.bluepowermod.part.gate.GateXnor;
 import com.bluepowermod.part.gate.GateXor;
 import com.bluepowermod.part.gate.analog.GateComparator;
@@ -146,7 +145,6 @@ public class PartManager {
         registerPart(GateTransparentLatch.class);
         registerPart(GateSynchronizer.class);
         registerPart(GateNullCell.class, false);
-        registerPart(GateWire.class);
 
         // Analog gates
         registerPart(GateInverter.class);
