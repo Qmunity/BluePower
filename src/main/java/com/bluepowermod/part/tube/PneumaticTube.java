@@ -169,7 +169,7 @@ public class PneumaticTube extends BPPart implements IPartTicking {
     public PneumaticTube getPartCache(ForgeDirection d) {
 
         if (partCache == null) {
-            partCache = new PartCache(getWorld(), getX(), getY(), getZ(), PneumaticTube.class);
+            partCache = new PartCache<PneumaticTube>(getWorld(), getX(), getY(), getZ(), PneumaticTube.class);
         }
         return partCache.getValue(d);
     }
@@ -509,11 +509,16 @@ public class PneumaticTube extends BPPart implements IPartTicking {
                 renderTexturedCuboid(aabb, getNodeIcon(), renderer, oConnections);
             colorIcon = IconSupplier.pneumaticTubeColorNode;
         } else {
-            renderer.setTextureRotations(1, 1, 1, 1, 1, 1);
+            if (connections[ForgeDirection.EAST.ordinal()] || connections[ForgeDirection.WEST.ordinal()])
+                renderer.setTextureRotations(1, 1, 0, 0, 1, 1);
+            if (connections[ForgeDirection.NORTH.ordinal()] || connections[ForgeDirection.SOUTH.ordinal()])
+                renderer.setTextureRotations(0, 0, 1, 1, 0, 0);
             if (getSideIcon() != null)
                 renderTexturedCuboid(aabb, getSideIcon(), renderer, oConnections);
             colorIcon = IconSupplier.pneumaticTubeColorSide;
         }
+
+        renderer.resetTextureRotations();
 
         for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
             if (connections[dir.ordinal()])
@@ -580,8 +585,8 @@ public class PneumaticTube extends BPPart implements IPartTicking {
 
         List<Vec3dCube> aabbs = getTubeBoxes();
 
-        renderer.setTextureRotations(0, 1, 0, 0, 0, 0);
         renderMiddle(aabbs.get(0), renderer);
+        renderer.resetTextureRotations();
 
         for (int i = 0; i < 6; i++) {
             if (!connections[i])
@@ -592,13 +597,14 @@ public class PneumaticTube extends BPPart implements IPartTicking {
             renderer.addTransformation(new Rotation(d));
 
             renderTexturedCuboid(box, getSideIcon(d), renderer, new boolean[] { false, false, true, true, true, true });
-            TubeColor sideColor = color[d.ordinal()];
-            if (sideColor != TubeColor.NONE) {
-                renderer.setColor(ItemDye.field_150922_c[sideColor.ordinal()]);
-                renderTexturedCuboid(box, IconSupplier.pneumaticTubeColorSide, renderer, new boolean[] { false, false, true, true, true,
-                        true });
-                renderer.setColor(0xFFFFFF);
-            }
+
+            // TubeColor sideColor = color[d.ordinal()];
+            // if (sideColor != TubeColor.NONE) {
+            // renderer.setColor(ItemDye.field_150922_c[sideColor.ordinal()]);
+            // renderTexturedCuboid(box, IconSupplier.pneumaticTubeColorSide, renderer, new boolean[] { false, false, true, true, true,
+            // true });
+            // renderer.setColor(0xFFFFFF);
+            // }
         }
         renderer.resetTransformations();
 
