@@ -58,8 +58,8 @@ public class GateInverter extends GateBase {
 
         renderTop("front", front());
         renderTop("right", right());
-        renderTop("back", back());
         renderTop("left", left());
+        renderTop("back", back());
 
         RenderHelper.renderAnalogRedstoneTorch(0, 0, 0, 12 / 16D, back().getInput() == 0);
     }

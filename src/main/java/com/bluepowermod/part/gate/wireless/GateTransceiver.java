@@ -57,6 +57,7 @@ import com.bluepowermod.api.wireless.IRedstoneFrequency;
 import com.bluepowermod.api.wireless.IWirelessDevice;
 import com.bluepowermod.part.gate.GateBase;
 import com.bluepowermod.part.gate.wireless.Frequency.RedstoneFrequency;
+import com.bluepowermod.part.wire.redstone.RedstoneApi;
 import com.bluepowermod.part.wire.redstone.WireCommons;
 import com.bluepowermod.part.wire.redstone.propagation.WirePropagator;
 
@@ -87,6 +88,7 @@ IBundledConductor {
     @Override
     public void initializeConnections() {
 
+        front().setEnabled(true);
     }
 
     @Override
@@ -164,37 +166,28 @@ IBundledConductor {
     @Override
     public boolean canConnectStraight(ForgeDirection side, IRedstoneDevice device) {
 
-        if (isBundled)
+        if (!super.canConnectStraight(side, device))
             return false;
 
-        if (OcclusionHelper.microblockOcclusionTest(getParent(), MicroblockShape.EDGE, 1, getFace(), side))
-            return false;
-
-        return true;
+        return side == front().getDirection().toForgeDirection(getFace(), getRotation());
     }
 
     @Override
     public boolean canConnectOpenCorner(ForgeDirection side, IRedstoneDevice device) {
 
-        if (isBundled)
+        if (!super.canConnectOpenCorner(side, device))
             return false;
 
-        if (OcclusionHelper.microblockOcclusionTest(getParent(), MicroblockShape.EDGE, 1, getFace(), side))
-            return false;
-
-        return true;
+        return side == front().getDirection().toForgeDirection(getFace(), getRotation());
     }
 
     @Override
     public boolean canConnectClosedCorner(ForgeDirection side, IRedstoneDevice device) {
 
-        if (isBundled)
+        if (!super.canConnectClosedCorner(side, device))
             return false;
 
-        if (OcclusionHelper.microblockOcclusionTest(getParent(), MicroblockShape.EDGE, 1, getFace(), side))
-            return false;
-
-        return true;
+        return side == front().getDirection().toForgeDirection(getFace(), getRotation());
     }
 
     @Override
@@ -220,6 +213,8 @@ IBundledConductor {
     @Override
     public byte getRedstonePower(ForgeDirection side) {
 
+        if (!RedstoneApi.getInstance().shouldWiresOutputPower())
+            return 0;
         if (isBundled)
             return 0;
         if (frequency == null)
