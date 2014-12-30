@@ -45,7 +45,7 @@ import uk.co.qmunity.lib.vec.Vec3i;
 
 import com.bluepowermod.api.block.ISilkyRemovable;
 import com.bluepowermod.api.misc.MinecraftColor;
-import com.bluepowermod.items.ItemPart;
+import com.bluepowermod.item.ItemPart;
 import com.bluepowermod.part.BPPart;
 import com.bluepowermod.part.PartManager;
 import com.bluepowermod.part.RedstoneConnection;
@@ -204,11 +204,11 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
                     + getTextureName() + "/checkerboard.png"));
             GL11.glBegin(GL11.GL_QUADS);
             {
-                com.bluepowermod.client.renderers.RenderHelper.addVertexWithTexture(BORDER_WIDTH, 0, BORDER_WIDTH, 0, 0);
-                com.bluepowermod.client.renderers.RenderHelper.addVertexWithTexture(BORDER_WIDTH, 0, 1 - BORDER_WIDTH, 0, textureMaxUV);
-                com.bluepowermod.client.renderers.RenderHelper.addVertexWithTexture(1 - BORDER_WIDTH, 0, 1 - BORDER_WIDTH, textureMaxUV,
+                com.bluepowermod.client.render.RenderHelper.addVertexWithTexture(BORDER_WIDTH, 0, BORDER_WIDTH, 0, 0);
+                com.bluepowermod.client.render.RenderHelper.addVertexWithTexture(BORDER_WIDTH, 0, 1 - BORDER_WIDTH, 0, textureMaxUV);
+                com.bluepowermod.client.render.RenderHelper.addVertexWithTexture(1 - BORDER_WIDTH, 0, 1 - BORDER_WIDTH, textureMaxUV,
                         textureMaxUV);
-                com.bluepowermod.client.renderers.RenderHelper.addVertexWithTexture(1 - BORDER_WIDTH, 0, BORDER_WIDTH, textureMaxUV, 0);
+                com.bluepowermod.client.render.RenderHelper.addVertexWithTexture(1 - BORDER_WIDTH, 0, BORDER_WIDTH, textureMaxUV, 0);
             }
             GL11.glEnd();
         }

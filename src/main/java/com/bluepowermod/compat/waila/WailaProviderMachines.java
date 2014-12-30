@@ -7,7 +7,8 @@
  */
 package com.bluepowermod.compat.waila;
 
-import com.bluepowermod.tileentities.TileMachineBase;
+import com.bluepowermod.tile.TileMachineBase;
+
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 import mcp.mobius.waila.api.IWailaDataProvider;

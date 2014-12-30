@@ -21,7 +21,7 @@ import java.util.List;
 
 import net.minecraft.client.resources.I18n;
 
-import com.bluepowermod.client.renderers.RenderHelper;
+import com.bluepowermod.client.render.RenderHelper;
 import com.bluepowermod.util.Color;
 
 public class GateMux extends GateBase {

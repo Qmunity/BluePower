@@ -9,7 +9,7 @@ package com.bluepowermod.part.gate;
 
 import java.util.List;
 
-import com.bluepowermod.client.renderers.RenderHelper;
+import com.bluepowermod.client.render.RenderHelper;
 
 public class GateXor extends GateBase {
 

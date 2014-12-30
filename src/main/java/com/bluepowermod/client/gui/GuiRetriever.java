@@ -14,8 +14,8 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 
 import com.bluepowermod.client.gui.widget.WidgetMode;
-import com.bluepowermod.containers.ContainerRetriever;
-import com.bluepowermod.tileentities.tier2.TileRetriever;
+import com.bluepowermod.container.ContainerRetriever;
+import com.bluepowermod.tile.tier2.TileRetriever;
 import com.bluepowermod.util.Refs;
 
 /**

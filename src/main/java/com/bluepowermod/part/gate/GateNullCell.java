@@ -38,7 +38,7 @@ import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.api.redstone.IFaceRedstoneDevice;
 import com.bluepowermod.api.redstone.IRedstoneConductor;
 import com.bluepowermod.api.redstone.IRedstoneDevice;
-import com.bluepowermod.client.renderers.IconSupplier;
+import com.bluepowermod.client.render.IconSupplier;
 import com.bluepowermod.part.wire.redstone.RedstoneApi;
 import com.bluepowermod.part.wire.redstone.WireCommons;
 import com.bluepowermod.part.wire.redstone.propagation.WirePropagator;

@@ -17,7 +17,7 @@
 
 package com.bluepowermod.part.gate.analog;
 
-import com.bluepowermod.client.renderers.RenderHelper;
+import com.bluepowermod.client.render.RenderHelper;
 import com.bluepowermod.part.gate.GateBase;
 
 /* Takes a signal and inverts it

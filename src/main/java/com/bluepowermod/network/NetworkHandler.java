@@ -20,14 +20,14 @@ package com.bluepowermod.network;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.World;
 
-import com.bluepowermod.network.messages.LocationDoublePacket;
-import com.bluepowermod.network.messages.LocationIntPacket;
-import com.bluepowermod.network.messages.MessageCircuitDatabaseTemplate;
-import com.bluepowermod.network.messages.MessageDebugBlock;
-import com.bluepowermod.network.messages.MessageGuiUpdate;
-import com.bluepowermod.network.messages.MessageRedirectTubeStack;
-import com.bluepowermod.network.messages.MessageSendClientServerTemplates;
-import com.bluepowermod.network.messages.MessageUpdateTextfield;
+import com.bluepowermod.network.message.LocationDoublePacket;
+import com.bluepowermod.network.message.LocationIntPacket;
+import com.bluepowermod.network.message.MessageCircuitDatabaseTemplate;
+import com.bluepowermod.network.message.MessageDebugBlock;
+import com.bluepowermod.network.message.MessageGuiUpdate;
+import com.bluepowermod.network.message.MessageRedirectTubeStack;
+import com.bluepowermod.network.message.MessageSendClientServerTemplates;
+import com.bluepowermod.network.message.MessageUpdateTextfield;
 import com.bluepowermod.util.Refs;
 
 import cpw.mods.fml.common.network.NetworkRegistry;

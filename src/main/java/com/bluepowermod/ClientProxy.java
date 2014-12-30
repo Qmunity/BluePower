@@ -24,8 +24,8 @@ import net.minecraftforge.common.MinecraftForge;
 
 import org.lwjgl.input.Keyboard;
 
-import com.bluepowermod.client.renderers.IconSupplier;
-import com.bluepowermod.client.renderers.Renderers;
+import com.bluepowermod.client.render.IconSupplier;
+import com.bluepowermod.client.render.Renderers;
 import com.bluepowermod.compat.CompatibilityUtils;
 import com.bluepowermod.part.PartManager;
 

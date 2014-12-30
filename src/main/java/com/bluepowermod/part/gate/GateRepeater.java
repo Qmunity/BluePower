@@ -17,7 +17,7 @@
 
 package com.bluepowermod.part.gate;
 
-import com.bluepowermod.client.renderers.RenderHelper;
+import com.bluepowermod.client.render.RenderHelper;
 
 import java.util.List;
 

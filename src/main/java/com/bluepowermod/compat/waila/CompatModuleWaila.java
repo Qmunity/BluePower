@@ -11,7 +11,7 @@ import mcp.mobius.waila.api.IWailaRegistrar;
 import net.minecraft.tileentity.TileEntity;
 
 import com.bluepowermod.compat.CompatModule;
-import com.bluepowermod.tileentities.TileMachineBase;
+import com.bluepowermod.tile.TileMachineBase;
 import com.bluepowermod.util.Dependencies;
 
 import cpw.mods.fml.common.event.FMLInitializationEvent;

@@ -9,7 +9,7 @@ package com.bluepowermod.client.gui.gate;
 
 import com.bluepowermod.client.gui.GuiScreenBase;
 import com.bluepowermod.network.NetworkHandler;
-import com.bluepowermod.network.messages.MessageGuiUpdate;
+import com.bluepowermod.network.message.MessageGuiUpdate;
 import com.bluepowermod.part.gate.GateBase;
 
 /**

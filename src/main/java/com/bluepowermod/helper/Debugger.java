@@ -14,7 +14,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
 import com.bluepowermod.network.NetworkHandler;
-import com.bluepowermod.network.messages.MessageDebugBlock;
+import com.bluepowermod.network.message.MessageDebugBlock;
 
 /**
  * Class aimed for debugging purposes only

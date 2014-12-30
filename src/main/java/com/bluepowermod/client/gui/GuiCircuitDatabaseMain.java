@@ -24,11 +24,11 @@ import com.bluepowermod.client.gui.widget.IGuiWidget;
 import com.bluepowermod.client.gui.widget.WidgetMode;
 import com.bluepowermod.client.gui.widget.WidgetSidewaysTab;
 import com.bluepowermod.client.gui.widget.WidgetTab;
-import com.bluepowermod.containers.ContainerCircuitDatabaseMain;
+import com.bluepowermod.container.ContainerCircuitDatabaseMain;
 import com.bluepowermod.network.NetworkHandler;
-import com.bluepowermod.network.messages.MessageGuiUpdate;
-import com.bluepowermod.network.messages.MessageUpdateTextfield;
-import com.bluepowermod.tileentities.tier3.TileCircuitDatabase;
+import com.bluepowermod.network.message.MessageGuiUpdate;
+import com.bluepowermod.network.message.MessageUpdateTextfield;
+import com.bluepowermod.tile.tier3.TileCircuitDatabase;
 import com.bluepowermod.util.Refs;
 
 public class GuiCircuitDatabaseMain extends GuiBase {

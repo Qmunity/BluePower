@@ -32,7 +32,7 @@ import uk.co.qmunity.lib.vec.Vec3d;
 import uk.co.qmunity.lib.vec.Vec3dCube;
 import uk.co.qmunity.lib.vec.Vec3i;
 
-import com.bluepowermod.client.renderers.IconSupplier;
+import com.bluepowermod.client.render.IconSupplier;
 
 /**
  * Accelerator extends PneumaticTube, as that's much easier routing wise.

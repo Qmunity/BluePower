@@ -16,7 +16,7 @@ import net.minecraft.item.ItemStack;
 import uk.co.qmunity.lib.part.PartRegistry;
 
 import com.bluepowermod.api.misc.MinecraftColor;
-import com.bluepowermod.items.ItemPart;
+import com.bluepowermod.item.ItemPart;
 import com.bluepowermod.part.gate.GateAnd;
 import com.bluepowermod.part.gate.GateBuffer;
 import com.bluepowermod.part.gate.GateCounter;

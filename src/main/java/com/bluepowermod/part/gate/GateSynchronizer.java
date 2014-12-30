@@ -11,7 +11,7 @@ import java.util.List;
 
 import net.minecraft.nbt.NBTTagCompound;
 
-import com.bluepowermod.client.renderers.RenderHelper;
+import com.bluepowermod.client.render.RenderHelper;
 
 /**
  * @author MineMaarten

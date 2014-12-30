@@ -41,14 +41,14 @@ import uk.co.qmunity.lib.vec.Vec3i;
 
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
 import com.bluepowermod.api.tube.ITubeConnection;
-import com.bluepowermod.client.renderers.IconSupplier;
+import com.bluepowermod.client.render.IconSupplier;
 import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.helper.PartCache;
 import com.bluepowermod.helper.TileEntityCache;
 import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.init.BPItems;
 import com.bluepowermod.init.Config;
-import com.bluepowermod.items.ItemDamageableColorableOverlay;
+import com.bluepowermod.item.ItemDamageableColorableOverlay;
 import com.bluepowermod.part.BPPart;
 import com.bluepowermod.util.Color;
 

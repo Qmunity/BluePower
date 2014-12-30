@@ -9,7 +9,7 @@ package com.bluepowermod.part.tube;
 
 import net.minecraft.util.IIcon;
 
-import com.bluepowermod.client.renderers.IconSupplier;
+import com.bluepowermod.client.render.IconSupplier;
 
 /**
  * @author MineMaarten

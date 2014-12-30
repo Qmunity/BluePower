@@ -20,7 +20,7 @@ package com.bluepowermod.part.tube;
 import uk.co.qmunity.lib.vec.Vec3d;
 import net.minecraft.util.IIcon;
 
-import com.bluepowermod.client.renderers.IconSupplier;
+import com.bluepowermod.client.render.IconSupplier;
 
 public class PneumaticTubeOpaque extends PneumaticTube {
 

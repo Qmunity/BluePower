@@ -27,7 +27,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import org.lwjgl.opengl.GL11;
 
 import com.bluepowermod.client.gui.gate.GuiGateCounter;
-import com.bluepowermod.client.renderers.RenderHelper;
+import com.bluepowermod.client.render.RenderHelper;
 import com.bluepowermod.part.IGuiButtonSensitive;
 import com.bluepowermod.util.Color;
 

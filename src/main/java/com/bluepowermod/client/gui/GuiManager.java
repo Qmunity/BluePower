@@ -30,10 +30,10 @@ import com.bluepowermod.client.gui.widget.WidgetColor;
 import com.bluepowermod.client.gui.widget.WidgetFuzzySetting;
 import com.bluepowermod.client.gui.widget.WidgetMode;
 import com.bluepowermod.client.gui.widget.WidgetNumber;
-import com.bluepowermod.containers.ContainerManager;
+import com.bluepowermod.container.ContainerManager;
 import com.bluepowermod.network.NetworkHandler;
-import com.bluepowermod.network.messages.MessageGuiUpdate;
-import com.bluepowermod.tileentities.tier3.TileManager;
+import com.bluepowermod.network.message.MessageGuiUpdate;
+import com.bluepowermod.tile.tier3.TileManager;
 import com.bluepowermod.util.Refs;
 
 /**

@@ -22,7 +22,7 @@ import java.util.Random;
 
 import net.minecraft.nbt.NBTTagCompound;
 
-import com.bluepowermod.client.renderers.RenderHelper;
+import com.bluepowermod.client.render.RenderHelper;
 
 public class GateRandomizer extends GateBase {
 

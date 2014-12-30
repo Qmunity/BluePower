@@ -18,7 +18,7 @@ import org.lwjgl.opengl.GL11;
 
 import uk.co.qmunity.lib.vec.Vec3dCube;
 
-import com.bluepowermod.client.renderers.IconSupplier;
+import com.bluepowermod.client.render.IconSupplier;
 
 /**
  * @author MineMaarten

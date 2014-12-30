@@ -26,10 +26,10 @@ import com.bluepowermod.client.gui.widget.BaseWidget;
 import com.bluepowermod.client.gui.widget.IGuiWidget;
 import com.bluepowermod.client.gui.widget.WidgetColor;
 import com.bluepowermod.client.gui.widget.WidgetFuzzySetting;
-import com.bluepowermod.containers.ContainerFilter;
+import com.bluepowermod.container.ContainerFilter;
 import com.bluepowermod.network.NetworkHandler;
-import com.bluepowermod.network.messages.MessageGuiUpdate;
-import com.bluepowermod.tileentities.tier1.TileFilter;
+import com.bluepowermod.network.message.MessageGuiUpdate;
+import com.bluepowermod.tile.tier1.TileFilter;
 import com.bluepowermod.util.Refs;
 
 /**

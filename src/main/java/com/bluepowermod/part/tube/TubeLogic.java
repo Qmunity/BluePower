@@ -38,9 +38,9 @@ import com.bluepowermod.api.tube.IWeightedTubeInventory;
 import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.init.Config;
 import com.bluepowermod.network.NetworkHandler;
-import com.bluepowermod.network.messages.MessageRedirectTubeStack;
-import com.bluepowermod.tileentities.IFuzzyRetrieving;
-import com.bluepowermod.tileentities.tier3.TileManager;
+import com.bluepowermod.network.message.MessageRedirectTubeStack;
+import com.bluepowermod.tile.IFuzzyRetrieving;
+import com.bluepowermod.tile.tier3.TileManager;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

@@ -19,7 +19,7 @@ import org.apache.logging.log4j.Logger;
 import com.bluepowermod.api.BPApi;
 import com.bluepowermod.client.gui.GUIHandler;
 import com.bluepowermod.compat.CompatibilityUtils;
-import com.bluepowermod.events.BPEventHandler;
+import com.bluepowermod.event.BPEventHandler;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.init.BPEnchantments;
 import com.bluepowermod.init.BPItems;

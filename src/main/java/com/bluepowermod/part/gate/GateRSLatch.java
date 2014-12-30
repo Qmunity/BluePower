@@ -28,7 +28,7 @@ import org.lwjgl.opengl.GL11;
 
 import uk.co.qmunity.lib.util.QLog;
 
-import com.bluepowermod.client.renderers.RenderHelper;
+import com.bluepowermod.client.render.RenderHelper;
 import com.bluepowermod.util.Refs;
 
 public class GateRSLatch extends GateBase {

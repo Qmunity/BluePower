@@ -7,7 +7,7 @@
  */
 package com.bluepowermod.part.gate;
 
-import com.bluepowermod.client.renderers.RenderHelper;
+import com.bluepowermod.client.render.RenderHelper;
 
 public class GateNot extends GateBase {
 

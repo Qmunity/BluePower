@@ -23,8 +23,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.MinecraftForgeClient;
 
-import com.bluepowermod.client.renderers.RenderPartItem;
-import com.bluepowermod.items.ItemPart;
+import com.bluepowermod.client.render.RenderPartItem;
+import com.bluepowermod.item.ItemPart;
 import com.bluepowermod.util.Refs;
 
 import cpw.mods.fml.common.registry.GameRegistry;

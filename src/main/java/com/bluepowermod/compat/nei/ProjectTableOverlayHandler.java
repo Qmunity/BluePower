@@ -27,7 +27,7 @@ import codechicken.nei.recipe.DefaultOverlayHandler.DistributedIngred;
 import codechicken.nei.recipe.DefaultOverlayHandler.IngredientDistribution;
 import codechicken.nei.recipe.IRecipeHandler;
 
-import com.bluepowermod.tileentities.tier1.TileProjectTable;
+import com.bluepowermod.tile.tier1.TileProjectTable;
 
 /**
  * @author MineMaarten This class is very closely derived from ChickenBones' NEI DefaultOverlayHandler class.
