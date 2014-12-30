@@ -40,4 +40,6 @@ public interface IRedstoneApi {
 
     public void setWiresHandleUpdates(boolean shouldWiresHandleUpdates);
 
+    public IRedstoneDevice getReturnDevice();
+
 }

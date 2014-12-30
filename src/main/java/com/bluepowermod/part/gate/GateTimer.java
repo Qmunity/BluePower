@@ -54,7 +54,7 @@ public class GateTimer extends GateBase implements IGuiButtonSensitive {
         RenderHelper.renderRedstoneTorch(0, 0, 0, 17 / 16D, back().getInput() == 0);
 
         double t = 0;
-        if (back().getInput() == 0)
+        if (back().getInput() == 0 && (getParent() == null || (getParent() != null && !getParent().isSimulated())))
             t = -(curTime + frame) / (double) time;
         RenderHelper.renderPointer(0, 7 / 16D, 0, 0.5 + t);
     }
@@ -78,17 +78,19 @@ public class GateTimer extends GateBase implements IGuiButtonSensitive {
             curTime = 0;
         }
 
-        // if (front().getOutput() > 0)
-        // spawnBlueParticle(8 / 16D, 6 / 16D, 8 / 16D);
+        if (front().getOutput() > 0)
+            spawnBlueParticle(8 / 16D, 6 / 16D, 8 / 16D);
     }
 
     @Override
     public void writeToNBT(NBTTagCompound tag) {
+
         writeUpdateToNBT(tag);
     }
 
     @Override
     public void writeUpdateToNBT(NBTTagCompound tag) {
+
         super.writeUpdateToNBT(tag);
         tag.setInteger("curTime", curTime);
         tag.setInteger("time", time);
@@ -96,6 +98,7 @@ public class GateTimer extends GateBase implements IGuiButtonSensitive {
 
     @Override
     public void readFromNBT(NBTTagCompound tag) {
+
         readUpdateFromNBT(tag);
     }
 

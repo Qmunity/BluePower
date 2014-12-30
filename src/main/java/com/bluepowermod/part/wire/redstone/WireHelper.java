@@ -17,10 +17,12 @@
 
 package com.bluepowermod.part.wire.redstone;
 
-import java.util.AbstractMap;
 import java.util.Map.Entry;
 
 import net.minecraftforge.common.util.ForgeDirection;
+import uk.co.qmunity.lib.misc.Pair;
+import uk.co.qmunity.lib.part.MicroblockShape;
+import uk.co.qmunity.lib.part.compat.OcclusionHelper;
 import uk.co.qmunity.lib.vec.Vec3i;
 
 import com.bluepowermod.api.misc.IFace;
@@ -29,7 +31,6 @@ import com.bluepowermod.api.redstone.IFaceBundledDevice;
 import com.bluepowermod.api.redstone.IFaceRedstoneDevice;
 import com.bluepowermod.api.redstone.IRedstoneDevice;
 
-@SuppressWarnings({ "rawtypes", "unchecked" })
 public class WireHelper {
 
     public static Entry<IRedstoneDevice, ForgeDirection> getNeighbor(IRedstoneDevice device, ForgeDirection side) {
@@ -39,67 +40,71 @@ public class WireHelper {
             face = ((IFace) device).getFace();
 
         // In same block
-        {
+        do {
             Vec3i loc = new Vec3i(device);
+            ForgeDirection devFace = side == face.getOpposite() ? ForgeDirection.UNKNOWN : side;
             IRedstoneDevice dev = RedstoneApi.getInstance().getRedstoneDevice(device.getWorld(), loc.getX(), loc.getY(), loc.getZ(),
-                    side == face.getOpposite() ? ForgeDirection.UNKNOWN : side, side.getOpposite());
-            if (dev != null && dev != device && (side == face.getOpposite() || dev instanceof IFaceRedstoneDevice)) {
-                if (device instanceof IFaceRedstoneDevice && dev instanceof IFaceRedstoneDevice
-                        && ((IFaceRedstoneDevice) device).canConnectClosedCorner(side, dev)
-                        && ((IFaceRedstoneDevice) dev).canConnectClosedCorner(side.getOpposite(), device))
-                    return new AbstractMap.SimpleEntry(dev, side.getOpposite());
-                if (device instanceof IFaceRedstoneDevice && !(dev instanceof IFaceRedstoneDevice)
-                        && device.canConnectStraight(ForgeDirection.UNKNOWN, dev) && dev.canConnectStraight(face, device))
-                    return new AbstractMap.SimpleEntry(dev, side.getOpposite());
-                if (dev instanceof IFaceRedstoneDevice && !(device instanceof IFaceRedstoneDevice)
-                        && dev.canConnectStraight(ForgeDirection.UNKNOWN, device) && device.canConnectStraight(face, dev))
-                    return new AbstractMap.SimpleEntry(dev, side.getOpposite());
+                    devFace, face);
+            if (dev != null && dev != device) {
+                if (face != ForgeDirection.UNKNOWN) {
+                    if (dev instanceof IFaceRedstoneDevice) {
+                        IFaceRedstoneDevice d1 = (IFaceRedstoneDevice) device;
+                        IFaceRedstoneDevice d2 = (IFaceRedstoneDevice) dev;
+                        if (d1.canConnectClosedCorner(side, d2) && d2.canConnectClosedCorner(face, d1))
+                            return new Pair<IRedstoneDevice, ForgeDirection>(dev, face);
+                    } else {
+                        if (device.canConnectStraight(side, dev) && dev.canConnectStraight(face, device))
+                            return new Pair<IRedstoneDevice, ForgeDirection>(dev, face);
+                    }
+                } else {
+                    if (dev instanceof IFaceRedstoneDevice) {
+                        if (device.canConnectStraight(side, dev) && dev.canConnectStraight(face, device))
+                            return new Pair<IRedstoneDevice, ForgeDirection>(dev, face);
+                    } else {
+                        if (device.canConnectStraight(side, dev) && dev.canConnectStraight(side.getOpposite(), device))
+                            return new Pair<IRedstoneDevice, ForgeDirection>(dev, side.getOpposite());
+                    }
+                }
             }
-        }
+        } while (false);
 
         // On same block
-        {
+        do {
             Vec3i loc = new Vec3i(device).add(face).add(side);
-            IRedstoneDevice faceDev = RedstoneApi.getInstance().getRedstoneDevice(device.getWorld(), loc.getX(), loc.getY(), loc.getZ(),
+            IRedstoneDevice dev = RedstoneApi.getInstance().getRedstoneDevice(device.getWorld(), loc.getX(), loc.getY(), loc.getZ(),
                     side.getOpposite(), face.getOpposite());
-            if (faceDev != null) {
-                if (device.canConnectOpenCorner(side, faceDev) && faceDev.canConnectOpenCorner(face.getOpposite(), device))
-                    return new AbstractMap.SimpleEntry(faceDev, face.getOpposite());
-            } else {
-                IRedstoneDevice dev = RedstoneApi.getInstance().getRedstoneDevice(device.getWorld(), loc.getX(), loc.getY(), loc.getZ(),
-                        ForgeDirection.UNKNOWN, face.getOpposite());
-                if (dev != null && dev.isNormalBlock())
-                    if (device.canConnectOpenCorner(side, faceDev) && dev.canConnectOpenCorner(face.getOpposite(), device))
-                        return new AbstractMap.SimpleEntry(faceDev, face.getOpposite());
+            if (dev != null && dev != device) {
+                if (device.canConnectOpenCorner(side, dev) && dev.canConnectOpenCorner(face.getOpposite(), device)) {
+                    // Check occlusion on the corner block
+                    Vec3i block = new Vec3i(device).add(side);
+                    // Full block check
+                    if (block.getBlock().isNormalCube(block.getWorld(), block.getX(), block.getY(), block.getZ()))
+                        break;
+                    // Microblock check
+                    if (OcclusionHelper.microblockOcclusionTest(block, MicroblockShape.EDGE, 1, face, side.getOpposite()))
+                        break;
+                    return new Pair<IRedstoneDevice, ForgeDirection>(dev, face.getOpposite());
+                }
             }
-        }
+        } while (false);
 
         // Straight connection
-        {
+        do {
             Vec3i loc = new Vec3i(device).add(side);
-            for (int i = -1; i < 6; i++) {
-                ForgeDirection d = ForgeDirection.getOrientation(i);
-                IRedstoneDevice dev = RedstoneApi.getInstance().getRedstoneDevice(device.getWorld(), loc.getX(), loc.getY(), loc.getZ(), d,
-                        side.getOpposite());
-                if (dev == null)
-                    continue;
-
-                // If our device isn't placed on a face and the other one is, if this isn't a normal block, continue.
-                if (face == ForgeDirection.UNKNOWN && d != ForgeDirection.UNKNOWN && !device.isNormalBlock())
-                    continue;
-                // And vice versa.
-                if (d == ForgeDirection.UNKNOWN && face != ForgeDirection.UNKNOWN && !dev.isNormalBlock())
-                    continue;
-                // If they're both on the face of a block and that face doesn't match, continue.
-                if (face != ForgeDirection.UNKNOWN && d != ForgeDirection.UNKNOWN && face != d)
-                    continue;
-                // If one of them can't connect to the other, continue.
-                if (!device.canConnectStraight(side, dev) || !dev.canConnectStraight(side.getOpposite(), device))
-                    continue;
-
-                return new AbstractMap.SimpleEntry(dev, side.getOpposite());
+            IRedstoneDevice dev = RedstoneApi.getInstance().getRedstoneDevice(device.getWorld(), loc.getX(), loc.getY(), loc.getZ(), face,
+                    side.getOpposite());
+            if (dev != null && dev != device) {
+                if (device.canConnectStraight(side, dev) && dev.canConnectStraight(side.getOpposite(), device))
+                    return new Pair<IRedstoneDevice, ForgeDirection>(dev, side.getOpposite());
+            } else {
+                dev = RedstoneApi.getInstance().getRedstoneDevice(device.getWorld(), loc.getX(), loc.getY(), loc.getZ(),
+                        ForgeDirection.UNKNOWN, side.getOpposite());
+                if (dev != null && dev != device && (device.isNormalBlock() || dev.isNormalBlock())) {
+                    if (device.canConnectStraight(side, dev) && dev.canConnectStraight(side.getOpposite(), device))
+                        return new Pair<IRedstoneDevice, ForgeDirection>(dev, side.getOpposite());
+                }
             }
-        }
+        } while (false);
 
         return null;
     }
@@ -110,74 +115,72 @@ public class WireHelper {
         if (device instanceof IFaceBundledDevice)
             face = ((IFace) device).getFace();
 
-        if (!device.isBundled())
-            return null;
-
         // In same block
-        {
+        do {
             Vec3i loc = new Vec3i(device);
-            IBundledDevice dev = RedstoneApi.getInstance().getBundledDevice(device.getWorld(), loc.getX(), loc.getY(), loc.getZ(),
-                    side == face.getOpposite() ? ForgeDirection.UNKNOWN : side, side.getOpposite());
-            if (dev != null && dev != device && dev.isBundled() && (side == face.getOpposite() || dev instanceof IFaceBundledDevice)) {
-                if (device instanceof IFaceBundledDevice && dev instanceof IFaceBundledDevice
-                        && ((IFaceBundledDevice) device).canConnectBundledClosedCorner(side, dev)
-                        && ((IFaceBundledDevice) dev).canConnectBundledClosedCorner(side.getOpposite(), device))
-                    return new AbstractMap.SimpleEntry(dev, side.getOpposite());
-                if (device instanceof IFaceBundledDevice && !(dev instanceof IFaceBundledDevice)
-                        && device.canConnectBundledStraight(ForgeDirection.UNKNOWN, dev) && dev.canConnectBundledStraight(face, device))
-                    return new AbstractMap.SimpleEntry(dev, side.getOpposite());
-                if (dev instanceof IFaceBundledDevice && !(device instanceof IFaceBundledDevice)
-                        && dev.canConnectBundledStraight(ForgeDirection.UNKNOWN, device) && device.canConnectBundledStraight(face, dev))
-                    return new AbstractMap.SimpleEntry(dev, side.getOpposite());
+            ForgeDirection devFace = side == face.getOpposite() ? ForgeDirection.UNKNOWN : side;
+            IBundledDevice dev = RedstoneApi.getInstance().getBundledDevice(device.getWorld(), loc.getX(), loc.getY(), loc.getZ(), devFace,
+                    face);
+            if (dev != null && dev != device) {
+                if (face != ForgeDirection.UNKNOWN) {
+                    if (dev instanceof IFaceRedstoneDevice) {
+                        IFaceBundledDevice d1 = (IFaceBundledDevice) device;
+                        IFaceBundledDevice d2 = (IFaceBundledDevice) dev;
+                        if (d1.canConnectBundledClosedCorner(side, d2) && d2.canConnectBundledClosedCorner(face, d1))
+                            return new Pair<IBundledDevice, ForgeDirection>(dev, face);
+                    } else {
+                        if (device.canConnectBundledStraight(side, dev) && dev.canConnectBundledStraight(face, device))
+                            return new Pair<IBundledDevice, ForgeDirection>(dev, face);
+                    }
+                } else {
+                    if (dev instanceof IFaceBundledDevice) {
+                        if (device.canConnectBundledStraight(side, dev) && dev.canConnectBundledStraight(face, device))
+                            return new Pair<IBundledDevice, ForgeDirection>(dev, face);
+                    } else {
+                        if (device.canConnectBundledStraight(side, dev) && dev.canConnectBundledStraight(side.getOpposite(), device))
+                            return new Pair<IBundledDevice, ForgeDirection>(dev, side.getOpposite());
+                    }
+                }
             }
-        }
+        } while (false);
 
         // On same block
-        {
+        do {
             Vec3i loc = new Vec3i(device).add(face).add(side);
-            IBundledDevice faceDev = RedstoneApi.getInstance().getBundledDevice(device.getWorld(), loc.getX(), loc.getY(), loc.getZ(),
+            IBundledDevice dev = RedstoneApi.getInstance().getBundledDevice(device.getWorld(), loc.getX(), loc.getY(), loc.getZ(),
                     side.getOpposite(), face.getOpposite());
-            if (faceDev != null) {
-                if (device.canConnectBundledOpenCorner(side, faceDev) && faceDev.canConnectBundledOpenCorner(face.getOpposite(), device)
-                        && faceDev.isBundled())
-                    return new AbstractMap.SimpleEntry(faceDev, face.getOpposite());
-            } else {
-                IBundledDevice dev = RedstoneApi.getInstance().getBundledDevice(device.getWorld(), loc.getX(), loc.getY(), loc.getZ(),
-                        ForgeDirection.UNKNOWN, face.getOpposite());
-                if (dev != null && dev.isNormalBlock() && dev.isBundled())
-                    if (device.canConnectBundledOpenCorner(side, faceDev) && dev.canConnectBundledOpenCorner(face.getOpposite(), device))
-                        return new AbstractMap.SimpleEntry(faceDev, face.getOpposite());
+            if (dev != null && dev != device) {
+                if (device.canConnectBundledOpenCorner(side, dev) && dev.canConnectBundledOpenCorner(face.getOpposite(), device)) {
+                    // Check occlusion on the corner block
+                    Vec3i block = new Vec3i(device).add(side);
+                    // Full block check
+                    if (block.getBlock().isNormalCube(block.getWorld(), block.getX(), block.getY(), block.getZ()))
+                        break;
+                    // Microblock check
+                    if (OcclusionHelper.microblockOcclusionTest(block, MicroblockShape.EDGE, 1, face, side.getOpposite()))
+                        break;
+                    return new Pair<IBundledDevice, ForgeDirection>(dev, face.getOpposite());
+                }
             }
-        }
+        } while (false);
 
         // Straight connection
-        {
+        do {
             Vec3i loc = new Vec3i(device).add(side);
-            for (int i = -1; i < 6; i++) {
-                ForgeDirection d = ForgeDirection.getOrientation(i);
-                IBundledDevice dev = RedstoneApi.getInstance().getBundledDevice(device.getWorld(), loc.getX(), loc.getY(), loc.getZ(), d,
-                        side.getOpposite());
-                if (dev == null)
-                    continue;
-                if (!dev.isBundled())
-                    continue;
-
-                // If our device isn't placed on a face and the other one is, if this isn't a normal block, continue.
-                if (face == ForgeDirection.UNKNOWN && d != ForgeDirection.UNKNOWN && !device.isNormalBlock())
-                    continue;
-                // And vice versa.
-                if (d == ForgeDirection.UNKNOWN && face != ForgeDirection.UNKNOWN && !dev.isNormalBlock())
-                    continue;
-                // If they're both on the face of a block and that face doesn't match, continue.
-                if (face != ForgeDirection.UNKNOWN && d != ForgeDirection.UNKNOWN && face != d)
-                    continue;
-                // If one of them can't connect to the other, continue.
-                if (!device.canConnectBundledStraight(side, dev) || !dev.canConnectBundledStraight(side.getOpposite(), device))
-                    continue;
-
-                return new AbstractMap.SimpleEntry(dev, side.getOpposite());
+            IBundledDevice dev = RedstoneApi.getInstance().getBundledDevice(device.getWorld(), loc.getX(), loc.getY(), loc.getZ(), face,
+                    side.getOpposite());
+            if (dev != null && dev != device) {
+                if (device.canConnectBundledStraight(side, dev) && dev.canConnectBundledStraight(side.getOpposite(), device))
+                    return new Pair<IBundledDevice, ForgeDirection>(dev, side.getOpposite());
+            } else {
+                dev = RedstoneApi.getInstance().getBundledDevice(device.getWorld(), loc.getX(), loc.getY(), loc.getZ(),
+                        ForgeDirection.UNKNOWN, side.getOpposite());
+                if (dev != null && dev != device && (device.isNormalBlock() || dev.isNormalBlock())) {
+                    if (device.canConnectBundledStraight(side, dev) && dev.canConnectBundledStraight(side.getOpposite(), device))
+                        return new Pair<IBundledDevice, ForgeDirection>(dev, side.getOpposite());
+                }
             }
-        }
+        } while (false);
 
         return null;
     }

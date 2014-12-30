@@ -67,8 +67,11 @@ public class GateSequencer extends GateBase implements IGuiButtonSensitive {
         RenderHelper.renderRedstoneTorch(5D / 16D, 1D / 8D, 0, 9D / 16D, power[0]);
 
         RenderHelper.renderRedstoneTorch(0, 1D / 8D, 0, 15D / 16D, true);
-        RenderHelper.renderPointer(0, 7D / 16D, 0 / 16D, getParent() != null && getWorld() != null ? (getWorld() != null ? start >= 0 ? 0.5
-                - (double) (ticks - start + frame) / (double) time : 0 : 0) : 0);
+
+        double t = 0;
+        if (back().getInput() == 0 && (getParent() == null || (getParent() != null && !getParent().isSimulated())))
+            t = -(double) (ticks - start + frame) / time;
+        RenderHelper.renderPointer(0, 7D / 16D, 0 / 16D, 0.5 + t);
     }
 
     @Override
@@ -93,19 +96,19 @@ public class GateSequencer extends GateBase implements IGuiButtonSensitive {
 
         double t = (double) (ticks - start) / (double) time;
 
-        if (t >= 1D / 8D && t < 3D / 8D) {
+        if (t >= 2D / 8D && t < 4D / 8D) {
             power[2] = true;
             if (right().getOutput() == 0)
                 playTickSound();
-        } else if (t >= 3D / 8D && t < 5D / 8D) {
+        } else if (t >= 4D / 8D && t < 6D / 8D) {
             power[3] = true;
             if (back().getOutput() == 0)
                 playTickSound();
-        } else if (t >= 5D / 8D && t < 7D / 8D) {
+        } else if (t >= 6D / 8D && t < 8D / 8D) {
             power[0] = true;
             if (left().getOutput() == 0)
                 playTickSound();
-        } else if (t >= 7D / 8D && t < 1 || t >= 0 && t < 1D / 8D) {
+        } else if (t >= 0D / 8D && t < 2D / 8D) {
             power[1] = true;
             if (front().getOutput() == 0)
                 playTickSound();

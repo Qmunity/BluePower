@@ -25,6 +25,9 @@ import uk.co.qmunity.lib.part.IPart;
 import uk.co.qmunity.lib.part.IPartFace;
 import uk.co.qmunity.lib.util.Dir;
 
+import com.bluepowermod.api.redstone.IRedstoneDevice;
+import com.bluepowermod.part.gate.GateBase;
+
 public class RedstoneConnection {
 
     private final IPart part;
@@ -102,7 +105,13 @@ public class RedstoneConnection {
         World world = part.getWorld();
         int x = part.getX(), y = part.getY(), z = part.getZ();
 
-        RedstoneHelper.notifyRedstoneUpdate(world, x, y, z, d, world.getBlock(x, y, z).isNormalCube(world, x, y, z));
+        RedstoneHelper.notifyRedstoneUpdate(world, x, y, z, d, true);
+
+        if (part instanceof GateBase) {
+            IRedstoneDevice dev = ((GateBase) part).getDeviceOnSide(d);
+            if (dev != null && dev instanceof BPPart)
+                ((BPPart) dev).onUpdate();
+        }
     }
 
     public boolean isEnabled() {
@@ -148,14 +157,20 @@ public class RedstoneConnection {
 
     public void update() {
 
+        ForgeDirection dir = getFD();
+
+        if (part instanceof IRedstoneDevice)
+            if (((IRedstoneDevice) part).getDeviceOnSide(dir) != null)
+                return;
+
         if (part.getWorld().isRemote)
             return;
 
         if (caching) {
             if (part instanceof IPartFace) {
-                in = RedstoneHelper.getInput(part.getWorld(), part.getX(), part.getY(), part.getZ(), getFD(), ((IPartFace) part).getFace());
+                in = RedstoneHelper.getInput(part.getWorld(), part.getX(), part.getY(), part.getZ(), dir, ((IPartFace) part).getFace());
             } else {
-                in = RedstoneHelper.getInput(part.getWorld(), part.getX(), part.getY(), part.getZ(), getFD());
+                in = RedstoneHelper.getInput(part.getWorld(), part.getX(), part.getY(), part.getZ(), dir);
             }
         }
     }

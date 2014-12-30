@@ -20,6 +20,7 @@ package com.bluepowermod.part.wire.redstone;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.block.BlockRedstoneWire;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import uk.co.qmunity.lib.helper.MathHelper;
@@ -36,8 +37,9 @@ public class DummyRedstoneDevice implements IRedstoneDevice {
 
     public static DummyRedstoneDevice getDeviceAt(Vec3i loc) {
 
-        if (dummyDevices.contains(loc))
-            return dummyDevices.get(dummyDevices.indexOf(loc));
+        for (DummyRedstoneDevice dev : dummyDevices)
+            if (dev.loc != null && dev.loc.equals(loc))
+                return dev;
 
         DummyRedstoneDevice dev = new DummyRedstoneDevice(loc);
         dummyDevices.add(dev);
@@ -110,8 +112,18 @@ public class DummyRedstoneDevice implements IRedstoneDevice {
     @Override
     public byte getRedstonePower(ForgeDirection side) {
 
+        if (loc.getBlock() instanceof BlockRedstoneWire) {
+            boolean wiresHandledUpdates = RedstoneApi.getInstance().shouldWiresHandleUpdates();
+            boolean wiresOutputtedPower = RedstoneApi.getInstance().shouldWiresOutputPower();
+            RedstoneApi.getInstance().setWiresOutputPower(false);
+            RedstoneApi.getInstance().setWiresHandleUpdates(false);
+            loc.getBlock().onNeighborBlockChange(loc.getWorld(), loc.getX(), loc.getY(), loc.getZ(), new Vec3i(this).getBlock());
+            RedstoneApi.getInstance().setWiresHandleUpdates(wiresHandledUpdates);
+            RedstoneApi.getInstance().setWiresOutputPower(wiresOutputtedPower);
+        }
+
         if (side == ForgeDirection.UNKNOWN)
-            return (byte) 0;
+            return 0;
 
         return (byte) MathHelper.map(RedstoneHelper.getOutput(getWorld(), getX(), getY(), getZ(), side), 0, 15, 0, 255);
     }
@@ -119,6 +131,36 @@ public class DummyRedstoneDevice implements IRedstoneDevice {
     @Override
     public void setRedstonePower(ForgeDirection side, byte power) {
 
+        // if (loc.getBlock() instanceof BlockRedstoneWire) {
+        // boolean wiresHandledUpdates = RedstoneApi.getInstance().shouldWiresHandleUpdates();
+        // boolean wiresOutputtedPower = RedstoneApi.getInstance().shouldWiresOutputPower();
+        // RedstoneApi.getInstance().setWiresOutputPower(false);
+        // RedstoneApi.getInstance().setWiresHandleUpdates(false);
+        // loc.getBlock().onNeighborBlockChange(loc.getWorld(), loc.getX(), loc.getY(), loc.getZ(), new Vec3i(this).getBlock());
+        // RedstoneApi.getInstance().setWiresHandleUpdates(wiresHandledUpdates);
+        // RedstoneApi.getInstance().setWiresOutputPower(wiresOutputtedPower);
+        // }
+    }
+
+    public int getRedstoneOutput(int def) {
+
+        if (loc.getBlock() instanceof BlockRedstoneWire) {
+            // boolean wiresHandledUpdates = RedstoneApi.getInstance().shouldWiresHandleUpdates();
+            // boolean wiresOutputtedPower = RedstoneApi.getInstance().shouldWiresOutputPower();
+            // RedstoneApi.getInstance().setWiresOutputPower(false);
+            // RedstoneApi.getInstance().setWiresHandleUpdates(false);
+            // // loc.getBlock().onNeighborBlockChange(loc.getWorld(), loc.getX(), loc.getY(), loc.getZ(), new Vec3i(this).getBlock());
+            // RedstoneApi.getInstance().setWiresHandleUpdates(wiresHandledUpdates);
+            // RedstoneApi.getInstance().setWiresOutputPower(wiresOutputtedPower);
+            // int powNow = loc.getBlockMeta();
+            // System.out.println(powNow + " vs " + def);
+
+            // if (def >= powNow)
+            // return def;
+            return 0;
+        }
+
+        return def;
     }
 
     @Override
@@ -135,16 +177,13 @@ public class DummyRedstoneDevice implements IRedstoneDevice {
     @Override
     public boolean isNormalBlock() {
 
-        return true;
+        return loc.getBlock().isNormalCube(loc.getWorld(), loc.getX(), loc.getY(), loc.getZ());
     }
 
     @Override
     public boolean equals(Object obj) {
 
-        if (obj == loc || obj == this)
-            return true;
-
-        return false;
+        return super.equals(obj);
     }
 
 }

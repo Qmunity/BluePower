@@ -15,13 +15,14 @@
  *     along with Blue Power.  If not, see <http://www.gnu.org/licenses/>
  */
 
-package com.bluepowermod.part.wire.redstone;
+package com.bluepowermod.compat.fmp;
 
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
-import uk.co.qmunity.lib.part.IPart;
-import uk.co.qmunity.lib.part.ITilePartHolder;
-import uk.co.qmunity.lib.part.compat.MultipartCompatibility;
+import codechicken.lib.vec.BlockCoord;
+import codechicken.multipart.IFaceRedstonePart;
+import codechicken.multipart.TMultiPart;
+import codechicken.multipart.TileMultipart;
 
 import com.bluepowermod.api.redstone.IBundledDevice;
 import com.bluepowermod.api.redstone.IFaceBundledDevice;
@@ -29,25 +30,31 @@ import com.bluepowermod.api.redstone.IFaceRedstoneDevice;
 import com.bluepowermod.api.redstone.IRedstoneDevice;
 import com.bluepowermod.api.redstone.IRedstoneProvider;
 
-public class RedstoneProviderBluePower implements IRedstoneProvider {
+public class RedstoneProviderFMP implements IRedstoneProvider {
 
     @Override
     public IRedstoneDevice getRedstoneDevice(World world, int x, int y, int z, ForgeDirection face, ForgeDirection side) {
 
-        ITilePartHolder holder = MultipartCompatibility.getPartHolder(world, x, y, z);
-        if (holder != null) {
-            for (IPart p : holder.getParts()) {
-                if (p instanceof IRedstoneDevice) {
-                    if (p instanceof IFaceRedstoneDevice) {
-                        if (((IFaceRedstoneDevice) p).getFace() == face)
-                            return (IRedstoneDevice) p;
-                    } else {
-                        if (face == ForgeDirection.UNKNOWN)
-                            return (IRedstoneDevice) p;
-                    }
+        TileMultipart tmp = TileMultipart.getTile(world, new BlockCoord(x, y, z));
+        if (tmp == null)
+            return null;
+
+        for (TMultiPart p : tmp.jPartList()) {
+            if (p instanceof IRedstoneDevice) {
+                if (p instanceof IFaceRedstoneDevice) {
+                    if (((IFaceRedstoneDevice) p).getFace() == face)
+                        return (IRedstoneDevice) p;
+                } else {
+                    if (face == ForgeDirection.UNKNOWN)
+                        return (IRedstoneDevice) p;
                 }
             }
         }
+
+        if (face != null && face != ForgeDirection.UNKNOWN)
+            for (TMultiPart p : tmp.jPartList())
+                if (p instanceof IFaceRedstonePart && ((IFaceRedstonePart) p).getFace() == face.ordinal())
+                    return new FMPRedstoneDevice(p);
 
         return null;
     }
@@ -55,17 +62,18 @@ public class RedstoneProviderBluePower implements IRedstoneProvider {
     @Override
     public IBundledDevice getBundledDevice(World world, int x, int y, int z, ForgeDirection face, ForgeDirection side) {
 
-        ITilePartHolder holder = MultipartCompatibility.getPartHolder(world, x, y, z);
-        if (holder != null) {
-            for (IPart p : holder.getParts()) {
-                if (p instanceof IBundledDevice) {
-                    if (p instanceof IFaceBundledDevice) {
-                        if (((IFaceBundledDevice) p).getFace() == face)
-                            return (IBundledDevice) p;
-                    } else {
-                        if (face == ForgeDirection.UNKNOWN)
-                            return (IBundledDevice) p;
-                    }
+        TileMultipart tmp = TileMultipart.getTile(world, new BlockCoord(x, y, z));
+        if (tmp == null)
+            return null;
+
+        for (TMultiPart p : tmp.jPartList()) {
+            if (p instanceof IRedstoneDevice) {
+                if (p instanceof IFaceBundledDevice) {
+                    if (((IFaceBundledDevice) p).getFace() == face)
+                        return (IBundledDevice) p;
+                } else {
+                    if (face == ForgeDirection.UNKNOWN)
+                        return (IBundledDevice) p;
                 }
             }
         }

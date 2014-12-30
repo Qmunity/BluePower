@@ -77,8 +77,8 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
         double gateWidth = (1.0 - 2 * BORDER_WIDTH) / getCircuitWidth();
         for (int x = 0; x < getCircuitWidth(); x++) {
             for (int y = 0; y < getCircuitWidth(); y++) {
-                boxes.add(new Vec3dCube(BORDER_WIDTH + x * gateWidth, minY, BORDER_WIDTH + y * gateWidth, BORDER_WIDTH + (x + 1)
-                        * gateWidth, maxY, BORDER_WIDTH + (y + 1) * gateWidth));
+                boxes.add(new Vec3dCube(BORDER_WIDTH + x * gateWidth, minY, BORDER_WIDTH + y * gateWidth, BORDER_WIDTH + (x + 1) * gateWidth, maxY,
+                        BORDER_WIDTH + (y + 1) * gateWidth));
             }
         }
     }
@@ -184,14 +184,14 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
             int size = getCircuitWidth();
             double textureMaxUV = 0.5 * size;
 
-            Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/gates/"
-                    + getTextureName() + "/checkerboard.png"));
+            Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/gates/" + getTextureName()
+                    + "/checkerboard.png"));
             GL11.glBegin(GL11.GL_QUADS);
             {
                 com.bluepowermod.client.renderers.RenderHelper.addVertexWithTexture(BORDER_WIDTH, 0, BORDER_WIDTH, 0, 0);
                 com.bluepowermod.client.renderers.RenderHelper.addVertexWithTexture(BORDER_WIDTH, 0, 1 - BORDER_WIDTH, 0, textureMaxUV);
-                com.bluepowermod.client.renderers.RenderHelper.addVertexWithTexture(1 - BORDER_WIDTH, 0, 1 - BORDER_WIDTH, textureMaxUV,
-                        textureMaxUV);
+                com.bluepowermod.client.renderers.RenderHelper
+                        .addVertexWithTexture(1 - BORDER_WIDTH, 0, 1 - BORDER_WIDTH, textureMaxUV, textureMaxUV);
                 com.bluepowermod.client.renderers.RenderHelper.addVertexWithTexture(1 - BORDER_WIDTH, 0, BORDER_WIDTH, textureMaxUV, 0);
             }
             GL11.glEnd();
@@ -523,7 +523,7 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
         if (gates[x][y] != null) {
             if (!getWorld().isRemote) {
                 ItemStack partStack = PartManager.getPartInfo(
-                        /* gates[x][y] instanceof GateWire ? new WireBluestone().getType() : */gates[x][y].getType()).getStack();
+                /* gates[x][y] instanceof GateWire ? new WireBluestone().getType() : */gates[x][y].getType()).getStack();
                 partStack.stackSize = 1;
                 getWorld().spawnEntityInWorld(new EntityItem(getWorld(), getX() + 0.5, getY() + 0.5, getZ() + 0.5, partStack));
                 gates[x][y] = null;
@@ -584,7 +584,7 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
     /**
      * Return true if the ItemStack that's being 'injected' with info is a stack that can be injected. This method is only called when
      * itemStack.isItemEqual(otherStack) returned true.
-     *
+     * 
      * @param outputStack
      * @return false to disallow copying.
      */
@@ -597,7 +597,7 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
     /**
      * Items that contain items (an Integrated Circuit with gates on it) need to compare the input and output, and tell which items are required. With
      * this method you can tell the Circuit Database what items the item carries, so it can calculate which items it needs.
-     *
+     * 
      * @param templateStack
      * @param outputStack
      * @return null is a valid return.
@@ -648,8 +648,13 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
     @Override
     public List<IMicroblock> getMicroblocks() {
 
-        // TODO Auto-generated method stub
-        return null;
+        return new ArrayList<IMicroblock>();
+    }
+
+    @Override
+    public boolean isSimulated() {
+
+        return false;
     }
 
 }

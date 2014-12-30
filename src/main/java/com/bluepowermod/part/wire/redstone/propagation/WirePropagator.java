@@ -24,6 +24,8 @@ import java.util.Map.Entry;
 import net.minecraftforge.common.util.ForgeDirection;
 import uk.co.qmunity.lib.misc.Pair;
 
+import com.bluepowermod.api.redstone.IBundledConductor;
+import com.bluepowermod.api.redstone.IBundledDevice;
 import com.bluepowermod.api.redstone.IPropagator;
 import com.bluepowermod.api.redstone.IRedstoneConductor;
 import com.bluepowermod.api.redstone.IRedstoneDevice;
@@ -149,6 +151,41 @@ public class WirePropagator implements IPropagator {
 
             for (IRedstoneDevice d : devices)
                 d.onRedstoneUpdate();
+
+            visited.clear();
+        }
+    }
+
+    public static final class BundledPropagatorLogic {
+
+        List<Pair<IBundledDevice, ForgeDirection>> visited = new ArrayList<Pair<IBundledDevice, ForgeDirection>>();
+
+        public void beginPropagation(IBundledConductor device, ForgeDirection fromSide) {
+
+            visited.addAll(WirePathfinder.pathfind(device, fromSide));
+
+            RedstoneApi.getInstance().setWiresOutputPower(false);
+            int[] power = new int[16];
+            for (Pair<IBundledDevice, ForgeDirection> pair : visited) {
+                byte[] pow = pair.getKey().getBundledPower(pair.getValue());
+                for (int i = 0; i < 16; i++)
+                    power[i] = Math.max(power[i], pow[i] & 0xFF);
+            }
+            RedstoneApi.getInstance().setWiresOutputPower(true);
+
+            byte[] result = new byte[16];
+            for (int i = 0; i < 16; i++)
+                result[i] = (byte) power[i];
+
+            List<IBundledDevice> devices = new ArrayList<IBundledDevice>();
+            for (Pair<IBundledDevice, ForgeDirection> pair : visited) {
+                pair.getKey().setBundledPower(pair.getValue(), result);
+                if (!devices.contains(pair.getKey()))
+                    devices.add(pair.getKey());
+            }
+
+            for (IBundledDevice d : devices)
+                d.onBundledUpdate();
 
             visited.clear();
         }

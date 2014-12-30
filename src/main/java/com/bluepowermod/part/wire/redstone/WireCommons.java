@@ -63,30 +63,31 @@ public class WireCommons {
 
         for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
             IRedstoneDevice oldDevice = conductor.getDeviceOnSide(d);
-            // IBundledDevice oldBundledDevice = conductor1.getBundledDeviceOnSide(d);
+            IBundledDevice oldBundledDevice = conductor1.getBundledDeviceOnSide(d);
+            boolean wasConnected = oldDevice != null || oldBundledDevice != null;
 
-            // Entry<IBundledDevice, ForgeDirection> bundledDevice = WireHelper.getBundledNeighbor(conductor1, d);
-            boolean wasConnected = oldDevice != null;// || oldBundledDevice != null;
+            Entry<IBundledDevice, ForgeDirection> bundledDevice = WireHelper.getBundledNeighbor(conductor1, d);
+            if (bundledDevice != null && bundledDevice.getKey() != conductor1.getBundledDeviceOnSide(d)) {
+                conductor1.onConnect(d, bundledDevice.getKey());
+                bundledDevice.getKey().onConnect(bundledDevice.getValue(), conductor1);
+            }
 
-            // if (bundledDevice != null && bundledDevice.getKey() != conductor1.getBundledDeviceOnSide(d)) {
-            // conductor1.onConnect(d, bundledDevice.getKey());
-            // bundledDevice.getKey().onConnect(bundledDevice.getValue(), conductor1);
-            // }
             Entry<IRedstoneDevice, ForgeDirection> redstoneDevice = WireHelper.getNeighbor(conductor, d);
             if (redstoneDevice != null && redstoneDevice.getKey() != conductor.getDeviceOnSide(d)) {
                 conductor.onConnect(d, redstoneDevice.getKey());
                 redstoneDevice.getKey().onConnect(redstoneDevice.getValue(), conductor);
             }
-            if (wasConnected /* && bundledDevice == null */&& redstoneDevice == null) {
+
+            if (wasConnected && bundledDevice == null && redstoneDevice == null) {
                 conductor.onDisconnect(d);
                 if (oldDevice != null)
                     for (ForgeDirection s : ForgeDirection.VALID_DIRECTIONS)
                         if (oldDevice.getDeviceOnSide(s) == conductor)
                             oldDevice.onDisconnect(s);
-                // if (oldBundledDevice != null)
-                // for (ForgeDirection s : ForgeDirection.VALID_DIRECTIONS)
-                // if (oldBundledDevice.getBundledDeviceOnSide(s) == conductor1)
-                // oldBundledDevice.onDisconnect(s);
+                if (oldBundledDevice != null)
+                    for (ForgeDirection s : ForgeDirection.VALID_DIRECTIONS)
+                        if (oldBundledDevice.getBundledDeviceOnSide(s) == conductor1)
+                            oldBundledDevice.onDisconnect(s);
             }
         }
     }

@@ -46,6 +46,7 @@ public class RedstoneApi implements IRedstoneApi {
     private List<IRedstoneProvider> providers = new ArrayList<IRedstoneProvider>();
     private boolean shouldWiresOutputPower = true;
     private boolean shouldWiresHandleUpdates = true;
+    private DummyRedstoneDevice returnDevice = DummyRedstoneDevice.getDeviceAt(null);
 
     @Override
     public byte[] getBundledOutput(World world, int x, int y, int z, ForgeDirection face, ForgeDirection side) {
@@ -66,20 +67,15 @@ public class RedstoneApi implements IRedstoneApi {
     @Override
     public IRedstoneDevice getRedstoneDevice(World world, int x, int y, int z, ForgeDirection face, ForgeDirection side) {
 
-        IRedstoneProvider vanilla = null;
-
+        boolean returned = false;
         for (IRedstoneProvider provider : providers) {
-            if (provider instanceof RedstoneProviderVanilla) {
-                vanilla = provider;
+            if (returned && provider instanceof RedstoneProviderVanilla)
+                continue;
+            IRedstoneDevice device = provider.getRedstoneDevice(world, x, y, z, face, side);
+            if (device == returnDevice) {
+                returned = true;
                 continue;
             }
-            IRedstoneDevice device = provider.getRedstoneDevice(world, x, y, z, face, side);
-            if (device != null)
-                return device;
-        }
-
-        if (vanilla != null) {
-            IRedstoneDevice device = vanilla.getRedstoneDevice(world, x, y, z, face, side);
             if (device != null)
                 return device;
         }
@@ -92,6 +88,8 @@ public class RedstoneApi implements IRedstoneApi {
 
         for (IRedstoneProvider provider : providers) {
             IBundledDevice device = provider.getBundledDevice(world, x, y, z, face, side);
+            if (device == returnDevice)
+                return null;
             if (device != null)
                 return device;
         }
@@ -138,6 +136,12 @@ public class RedstoneApi implements IRedstoneApi {
     public void setWiresHandleUpdates(boolean shouldWiresHandleUpdates) {
 
         this.shouldWiresHandleUpdates = shouldWiresHandleUpdates;
+    }
+
+    @Override
+    public IRedstoneDevice getReturnDevice() {
+
+        return returnDevice;
     }
 
 }

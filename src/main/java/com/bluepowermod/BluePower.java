@@ -30,7 +30,7 @@ import com.bluepowermod.init.TileEntities;
 import com.bluepowermod.network.NetworkHandler;
 import com.bluepowermod.part.PartManager;
 import com.bluepowermod.part.wire.redstone.RedstoneApi;
-import com.bluepowermod.part.wire.redstone.RedstoneProviderBluePower;
+import com.bluepowermod.part.wire.redstone.RedstoneProviderQmunityLib;
 import com.bluepowermod.part.wire.redstone.RedstoneProviderVanilla;
 import com.bluepowermod.recipe.AlloyFurnaceRegistry;
 import com.bluepowermod.util.Refs;
@@ -93,6 +93,8 @@ public class BluePower {
         BPEventHandler eventHandler = new BPEventHandler();
         MinecraftForge.EVENT_BUS.register(eventHandler);
         FMLCommonHandler.instance().bus().register(eventHandler);
+
+        RedstoneApi.getInstance().registerRedstoneProvider(new RedstoneProviderQmunityLib());
     }
 
     @EventHandler
@@ -114,8 +116,6 @@ public class BluePower {
         proxy.initRenderers();
 
         Recipes.init(CraftingManager.getInstance());
-
-        RedstoneApi.getInstance().registerRedstoneProvider(new RedstoneProviderBluePower());
         RedstoneApi.getInstance().registerRedstoneProvider(new RedstoneProviderVanilla());
     }
 

@@ -32,7 +32,6 @@ import net.minecraftforge.common.util.ForgeDirection;
 import uk.co.qmunity.lib.client.render.RenderHelper;
 import uk.co.qmunity.lib.misc.Pair;
 import uk.co.qmunity.lib.part.MicroblockShape;
-import uk.co.qmunity.lib.part.PartNormallyOccluded;
 import uk.co.qmunity.lib.part.compat.OcclusionHelper;
 import uk.co.qmunity.lib.raytrace.QMovingObjectPosition;
 import uk.co.qmunity.lib.transform.Rotation;
@@ -57,10 +56,12 @@ import com.bluepowermod.part.wire.redstone.WireCommons;
 import com.bluepowermod.part.wire.redstone.propagation.WirePropagator;
 
 public class GateTransceiver extends GateBase implements IWirelessDevice, IFaceRedstoneDevice, IRedstoneConductor, IFaceBundledDevice,
-IBundledConductor {
+        IBundledConductor {
 
-    private static final RedstoneFrequency freq1 = new RedstoneFrequency(com.bluepowermod.api.misc.Accessibility.PUBLIC, UUID.randomUUID(), "freq1");
-    private static final RedstoneFrequency freq2 = new RedstoneFrequency(com.bluepowermod.api.misc.Accessibility.PUBLIC, UUID.randomUUID(), "freq2");
+    private static final RedstoneFrequency freq1 = new RedstoneFrequency(com.bluepowermod.api.misc.Accessibility.PUBLIC, UUID.randomUUID(),
+            "freq1");
+    private static final RedstoneFrequency freq2 = new RedstoneFrequency(com.bluepowermod.api.misc.Accessibility.PUBLIC, UUID.randomUUID(),
+            "freq2");
 
     private static final List<GateTransceiver> transceivers = new ArrayList<GateTransceiver>();
 
@@ -69,8 +70,8 @@ IBundledConductor {
 
     private IFrequency frequency = null;
 
-    private IRedstoneDevice[] devices        = new IRedstoneDevice[6];
-    private IBundledDevice[]  bundledDevices = new IBundledDevice[6];
+    private IRedstoneDevice[] devices = new IRedstoneDevice[6];
+    private IBundledDevice[] bundledDevices = new IBundledDevice[6];
 
     public GateTransceiver(Boolean isBundled, Boolean isAnalog) {
 
@@ -125,18 +126,18 @@ IBundledConductor {
 
         for (int i = 0; i < 4; i++) {
             renderer.renderBox(new Vec3dCube(5 / 16D, 9 / 16D, 10 / 16D, 6 / 16D, 10 / 16D, 11 / 16D).rotate(0, i * 90, 0, Vec3d.center),
-                               quartz);
+                    quartz);
 
             renderer.renderBox(new Vec3dCube(4 / 16D, 9 / 16D, 6 / 16D, 5 / 16D, 10 / 16D, 10 / 16D).rotate(0, i * 90, 0, Vec3d.center),
-                               quartz);
+                    quartz);
             renderer.renderBox(new Vec3dCube(4 / 16D, 10 / 16D, 5 / 16D, 5 / 16D, 11 / 16D, 11 / 16D).rotate(0, i * 90, 0, Vec3d.center),
-                               quartz);
+                    quartz);
 
             renderer.renderBox(new Vec3dCube(4 / 16D, 11 / 16D, 11 / 16D, 5 / 16D, 12 / 16D, 12 / 16D).rotate(0, i * 90, 0, Vec3d.center),
-                               quartz);
+                    quartz);
 
             renderer.renderBox(new Vec3dCube(3 / 16D, 11 / 16D, 4 / 16D, 4 / 16D, 12 / 16D, 12 / 16D).rotate(0, i * 90, 0, Vec3d.center),
-                               quartz);
+                    quartz);
         }
 
         renderer.resetTransformations();
@@ -155,8 +156,7 @@ IBundledConductor {
         if (isBundled)
             return false;
 
-        int microblockLocation = getFace().ordinal() + (side.ordinal() << 4);
-        if (!getParent().canAddPart(new PartNormallyOccluded(OcclusionHelper.getBox(MicroblockShape.EDGE, 1, microblockLocation))))
+        if (OcclusionHelper.microblockOcclusionTest(getParent(), MicroblockShape.EDGE, 1, getFace(), side))
             return false;
 
         return true;
@@ -168,8 +168,7 @@ IBundledConductor {
         if (isBundled)
             return false;
 
-        int microblockLocation = getFace().ordinal() + (side.ordinal() << 4);
-        if (!getParent().canAddPart(new PartNormallyOccluded(OcclusionHelper.getBox(MicroblockShape.EDGE, 1, microblockLocation))))
+        if (OcclusionHelper.microblockOcclusionTest(getParent(), MicroblockShape.EDGE, 1, getFace(), side))
             return false;
 
         return true;
@@ -181,8 +180,7 @@ IBundledConductor {
         if (isBundled)
             return false;
 
-        int microblockLocation = getFace().ordinal() + (side.ordinal() << 4);
-        if (!getParent().canAddPart(new PartNormallyOccluded(OcclusionHelper.getBox(MicroblockShape.EDGE, 1, microblockLocation))))
+        if (OcclusionHelper.microblockOcclusionTest(getParent(), MicroblockShape.EDGE, 1, getFace(), side))
             return false;
 
         return true;
@@ -291,8 +289,7 @@ IBundledConductor {
         if (!isBundled)
             return false;
 
-        int microblockLocation = getFace().ordinal() + (side.ordinal() << 4);
-        if (!getParent().canAddPart(new PartNormallyOccluded(OcclusionHelper.getBox(MicroblockShape.EDGE, 1, microblockLocation))))
+        if (OcclusionHelper.microblockOcclusionTest(getParent(), MicroblockShape.EDGE, 1, getFace(), side))
             return false;
 
         return true;
@@ -304,8 +301,7 @@ IBundledConductor {
         if (!isBundled)
             return false;
 
-        int microblockLocation = getFace().ordinal() + (side.ordinal() << 4);
-        if (!getParent().canAddPart(new PartNormallyOccluded(OcclusionHelper.getBox(MicroblockShape.EDGE, 1, microblockLocation))))
+        if (OcclusionHelper.microblockOcclusionTest(getParent(), MicroblockShape.EDGE, 1, getFace(), side))
             return false;
 
         return true;
@@ -317,8 +313,7 @@ IBundledConductor {
         if (!isBundled)
             return false;
 
-        int microblockLocation = getFace().ordinal() + (side.ordinal() << 4);
-        if (!getParent().canAddPart(new PartNormallyOccluded(OcclusionHelper.getBox(MicroblockShape.EDGE, 1, microblockLocation))))
+        if (OcclusionHelper.microblockOcclusionTest(getParent(), MicroblockShape.EDGE, 1, getFace(), side))
             return false;
 
         return true;

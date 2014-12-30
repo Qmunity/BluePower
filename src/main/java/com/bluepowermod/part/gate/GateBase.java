@@ -32,9 +32,12 @@ import net.minecraftforge.common.util.ForgeDirection;
 import org.lwjgl.opengl.GL11;
 
 import uk.co.qmunity.lib.client.render.RenderHelper;
+import uk.co.qmunity.lib.helper.MathHelper;
 import uk.co.qmunity.lib.part.IPartRedstone;
 import uk.co.qmunity.lib.part.IPartRenderPlacement;
 import uk.co.qmunity.lib.part.IPartTicking;
+import uk.co.qmunity.lib.part.MicroblockShape;
+import uk.co.qmunity.lib.part.compat.OcclusionHelper;
 import uk.co.qmunity.lib.raytrace.QMovingObjectPosition;
 import uk.co.qmunity.lib.transform.Rotation;
 import uk.co.qmunity.lib.util.Dir;
@@ -43,6 +46,9 @@ import uk.co.qmunity.lib.vec.Vec3dCube;
 import uk.co.qmunity.lib.vec.Vec3i;
 
 import com.bluepowermod.api.block.ISilkyRemovable;
+import com.bluepowermod.api.misc.MinecraftColor;
+import com.bluepowermod.api.redstone.IFaceRedstoneDevice;
+import com.bluepowermod.api.redstone.IRedstoneDevice;
 import com.bluepowermod.helper.VectorHelper;
 import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.init.BPItems;
@@ -57,7 +63,7 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone, IPartTicking, IPartRenderPlacement {
+public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone, IPartTicking, IPartRenderPlacement, IFaceRedstoneDevice {
 
     private static Vec3dCube BOX = new Vec3dCube(0, 0, 0, 1, 2D / 16D, 1);
 
@@ -377,6 +383,10 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
                 for (RedstoneConnection c : connections)
                     c.update();
             doLogic();
+            // for (IRedstoneDevice d : devices) {
+            // if (d != null && d instanceof PartRedwireFace)
+            // ((BPPart) d).onUpdate();
+            // }
 
             sendUpdatePacket();
         }
@@ -605,6 +615,106 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
     public CreativeTabs getCreativeTab() {
 
         return BPCreativeTabs.circuits;
+    }
+
+    protected IRedstoneDevice[] devices = new IRedstoneDevice[6];
+
+    @Override
+    public boolean canConnectStraight(ForgeDirection side, IRedstoneDevice device) {
+
+        if (side == ForgeDirection.UNKNOWN)
+            return false;
+
+        if (OcclusionHelper.microblockOcclusionTest(getParent(), MicroblockShape.EDGE, 1, getFace(), side))
+            return false;
+
+        return getConnection(side).isEnabled();
+    }
+
+    @Override
+    public boolean canConnectOpenCorner(ForgeDirection side, IRedstoneDevice device) {
+
+        if (side == ForgeDirection.UNKNOWN)
+            return false;
+
+        if (OcclusionHelper.microblockOcclusionTest(getParent(), MicroblockShape.EDGE, 1, getFace(), side))
+            return false;
+
+        return canConnectStraight(side, device);
+    }
+
+    @Override
+    public boolean canConnectClosedCorner(ForgeDirection side, IRedstoneDevice device) {
+
+        if (side == getFace())
+            return false;
+        if (side == getFace().getOpposite())
+            return false;
+        if (side == ForgeDirection.UNKNOWN)
+            return false;
+
+        if (OcclusionHelper.microblockOcclusionTest(getParent(), MicroblockShape.EDGE, 1, getFace(), side))
+            return false;
+
+        return canConnectStraight(side, device);
+    }
+
+    @Override
+    public void onConnect(ForgeDirection side, IRedstoneDevice device) {
+
+        devices[side.ordinal()] = device;
+        onUpdate();
+    }
+
+    @Override
+    public void onDisconnect(ForgeDirection side) {
+
+        devices[side.ordinal()] = null;
+        onUpdate();
+    }
+
+    @Override
+    public IRedstoneDevice getDeviceOnSide(ForgeDirection side) {
+
+        return devices[side.ordinal()];
+    }
+
+    @Override
+    public byte getRedstonePower(ForgeDirection side) {
+
+        RedstoneConnection con = getConnection(side);
+
+        if (con.isEnabled())
+            return (byte) MathHelper.map(con.getOutput(), 0, 15, 0, 255);
+
+        return 0;
+    }
+
+    @Override
+    public void setRedstonePower(ForgeDirection side, byte power) {
+
+        RedstoneConnection con = getConnection(side);
+
+        if (con.isEnabled())
+            con.setInput(MathHelper.map(power & 0xFF, 0, 255, 0, 15));
+    }
+
+    @Override
+    public void onRedstoneUpdate() {
+
+        onUpdate();
+    }
+
+    @Override
+    public MinecraftColor getInsulationColor() {
+
+        return MinecraftColor.NONE;
+    }
+
+    @Override
+    public boolean isNormalBlock() {
+
+        return false;
     }
 
 }

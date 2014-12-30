@@ -20,7 +20,6 @@ package com.bluepowermod.part.gate;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map.Entry;
 
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.entity.Entity;
@@ -40,7 +39,8 @@ import com.bluepowermod.api.redstone.IFaceRedstoneDevice;
 import com.bluepowermod.api.redstone.IRedstoneConductor;
 import com.bluepowermod.api.redstone.IRedstoneDevice;
 import com.bluepowermod.client.renderers.IconSupplier;
-import com.bluepowermod.part.wire.redstone.WireHelper;
+import com.bluepowermod.part.wire.redstone.RedstoneApi;
+import com.bluepowermod.part.wire.redstone.WireCommons;
 import com.bluepowermod.part.wire.redstone.propagation.WirePropagator;
 
 public class GateNullCell extends GateBase implements IFaceRedstoneDevice, IRedstoneConductor {
@@ -139,31 +139,16 @@ public class GateNullCell extends GateBase implements IFaceRedstoneDevice, IReds
     @Override
     public void onUpdate() {
 
+        if (RedstoneApi.getInstance().shouldWiresHandleUpdates())
+            return;
+
         super.onUpdate();
 
-        for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
-            boolean wasConnected = getDeviceOnSide(d) != null;
-            Entry<IRedstoneDevice, ForgeDirection> redstoneDevice = WireHelper.getNeighbor(this, d);
-            if (redstoneDevice != null && redstoneDevice.getKey() != getDeviceOnSide(d)) {
-                onConnect(d, redstoneDevice.getKey());
-                redstoneDevice.getKey().onConnect(redstoneDevice.getValue(), this);
-            }
-            if (wasConnected && redstoneDevice == null) {
-                onDisconnect(d);
-            }
-        }
-
-        int input = 0;
-        for (int i = 0; i < 6; i++) {
-            IRedstoneDevice d = devices[i];
-            if (d != null && !(d instanceof IRedstoneConductor)) {
-                input = Math.max(input, d.getRedstonePower(ForgeDirection.getOrientation(i)) & 0xFF);
-            }
-        }
+        WireCommons.refreshConnectionsRedstone(this);
 
         for (ForgeDirection s : ForgeDirection.VALID_DIRECTIONS) {
             if (s != getFace()) {
-                WirePropagator.INSTANCE.onPowerLevelChange(this, s, (byte) 0, (byte) input);
+                WirePropagator.INSTANCE.onPowerLevelChange(this, s, (byte) 0, (byte) -1);
                 break;
             }
         }
@@ -254,6 +239,9 @@ public class GateNullCell extends GateBase implements IFaceRedstoneDevice, IReds
     @Override
     public byte getRedstonePower(ForgeDirection side) {
 
+        if (RedstoneApi.getInstance().shouldWiresOutputPower())
+            return 0;
+
         for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
             if (d == getFace() || d == getFace().getOpposite())
                 continue;
@@ -312,6 +300,9 @@ public class GateNullCell extends GateBase implements IFaceRedstoneDevice, IReds
 
     @Override
     public Collection<Pair<IRedstoneDevice, ForgeDirection>> propagate(ForgeDirection fromSide) {
+
+        if (fromSide == ForgeDirection.UNKNOWN)
+            return Arrays.asList();
 
         IRedstoneDevice dev = getDeviceOnSide(fromSide.getOpposite());
         if (dev == null)

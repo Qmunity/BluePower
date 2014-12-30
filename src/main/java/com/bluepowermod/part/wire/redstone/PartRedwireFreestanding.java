@@ -41,6 +41,7 @@ import org.lwjgl.opengl.GL11;
 
 import uk.co.qmunity.lib.client.render.RenderHelper;
 import uk.co.qmunity.lib.helper.MathHelper;
+import uk.co.qmunity.lib.helper.RedstoneHelper;
 import uk.co.qmunity.lib.misc.Pair;
 import uk.co.qmunity.lib.part.IPart;
 import uk.co.qmunity.lib.part.IPartCustomPlacement;
@@ -49,7 +50,7 @@ import uk.co.qmunity.lib.part.IPartRedstone;
 import uk.co.qmunity.lib.part.IPartSolid;
 import uk.co.qmunity.lib.part.IPartThruHole;
 import uk.co.qmunity.lib.part.IPartWAILAProvider;
-import uk.co.qmunity.lib.part.PartNormallyOccluded;
+import uk.co.qmunity.lib.part.MicroblockShape;
 import uk.co.qmunity.lib.part.PartPlacementDefault;
 import uk.co.qmunity.lib.part.compat.OcclusionHelper;
 import uk.co.qmunity.lib.vec.Vec3d;
@@ -67,6 +68,8 @@ import com.bluepowermod.client.renderers.IconSupplier;
 import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.part.wire.PartWireFreestanding;
 import com.bluepowermod.part.wire.redstone.propagation.WirePropagator;
+
+import cpw.mods.fml.common.FMLCommonHandler;
 
 public class PartRedwireFreestanding extends PartWireFreestanding implements IRedstoneConductor, IBundledConductor, IPartRedstone,
 IPartWAILAProvider, IPartSolid, IPartThruHole, IPartCustomPlacement {
@@ -399,8 +402,7 @@ IPartWAILAProvider, IPartSolid, IPartThruHole, IPartCustomPlacement {
     public boolean canConnectStraight(ForgeDirection side, IRedstoneDevice device) {
 
         if (!(device instanceof IFaceRedstoneDevice))
-            if (!getParent().canAddPart(
-                    new PartNormallyOccluded(OcclusionHelper.getFaceHollowMicroblockBox(1, side.ordinal(), getHollowSize(side)))))
+            if (OcclusionHelper.microblockOcclusionTest(new Vec3i(this), MicroblockShape.FACE, 1, side))
                 return false;
 
         return WireCommons.canConnect(this, device);
@@ -410,8 +412,7 @@ IPartWAILAProvider, IPartSolid, IPartThruHole, IPartCustomPlacement {
     public boolean canConnectOpenCorner(ForgeDirection side, IRedstoneDevice device) {
 
         if (!(device instanceof IFaceRedstoneDevice))
-            if (!getParent().canAddPart(
-                    new PartNormallyOccluded(OcclusionHelper.getFaceHollowMicroblockBox(1, side.ordinal(), getHollowSize(side)))))
+            if (OcclusionHelper.microblockOcclusionTest(new Vec3i(this), MicroblockShape.FACE, 1, side))
                 return false;
 
         return WireCommons.canConnect(this, device);
@@ -458,7 +459,27 @@ IPartWAILAProvider, IPartSolid, IPartThruHole, IPartCustomPlacement {
     @Override
     public void onRedstoneUpdate() {
 
-        sendUpdatePacket();
+        if (!bundled) {// && hasUpdated) {
+            sendUpdatePacket();
+
+            for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
+                try {
+                    getWorld();
+                } catch (Exception ex) {
+                    System.out.println(FMLCommonHandler.instance().getEffectiveSide());
+                }
+                IRedstoneDevice dev = devices[dir.ordinal()];
+                if ((dev != null && (dev instanceof DummyRedstoneDevice)))
+                    RedstoneHelper.notifyRedstoneUpdate(getWorld(), getX(), getY(), getZ(), dir, true);
+            }
+
+            // if (!isPropagatingBundled) {
+            // if (isBundled() && propagateBundled(getFace()).size() > 0)
+            // new BundledPropagatorLogic().beginPropagation(this, getFace());
+            // }
+
+            // hasUpdated = false;
+        }
     }
 
     @Override
@@ -571,8 +592,7 @@ IPartWAILAProvider, IPartSolid, IPartThruHole, IPartCustomPlacement {
     public boolean canConnectBundledStraight(ForgeDirection side, IBundledDevice device) {
 
         if (!(device instanceof IFaceBundledDevice))
-            if (!getParent().canAddPart(
-                    new PartNormallyOccluded(OcclusionHelper.getFaceHollowMicroblockBox(1, side.ordinal(), getHollowSize(side)))))
+            if (OcclusionHelper.microblockOcclusionTest(new Vec3i(this), MicroblockShape.FACE, 1, side))
                 return false;
 
         return WireCommons.canConnect(this, device);
@@ -582,8 +602,7 @@ IPartWAILAProvider, IPartSolid, IPartThruHole, IPartCustomPlacement {
     public boolean canConnectBundledOpenCorner(ForgeDirection side, IBundledDevice device) {
 
         if (!(device instanceof IFaceBundledDevice))
-            if (!getParent().canAddPart(
-                    new PartNormallyOccluded(OcclusionHelper.getFaceHollowMicroblockBox(1, side.ordinal(), getHollowSize(side)))))
+            if (OcclusionHelper.microblockOcclusionTest(new Vec3i(this), MicroblockShape.FACE, 1, side))
                 return false;
 
         return WireCommons.canConnect(this, device);

@@ -16,6 +16,7 @@ import codechicken.microblock.MicroMaterialRegistry;
 import com.bluepowermod.compat.CompatModule;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.init.BPItems;
+import com.bluepowermod.part.wire.redstone.RedstoneApi;
 
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
@@ -39,6 +40,7 @@ public class CompatModuleFMP extends CompatModule {
     @Override
     public void postInit(FMLPostInitializationEvent ev) {
 
+        RedstoneApi.getInstance().registerRedstoneProvider(new RedstoneProviderFMP());
     }
 
     private void registerBlocksAsMicroblock() {
@@ -59,6 +61,10 @@ public class CompatModuleFMP extends CompatModule {
         registerBlockAsMicroblock(BPBlocks.marble_tile);
         registerBlockAsMicroblock(BPBlocks.marble_paver);
 
+        registerBlockAsMicroblock(BPBlocks.tiles);
+
+        registerBlockAsMicroblock(BPBlocks.tungsten_block);
+        registerBlockAsMicroblock(BPBlocks.teslatite_block);
         registerBlockAsMicroblock(BPBlocks.amethyst_block);
         registerBlockAsMicroblock(BPBlocks.ruby_block);
         registerBlockAsMicroblock(BPBlocks.sapphire_block);

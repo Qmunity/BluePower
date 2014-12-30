@@ -27,6 +27,7 @@ import org.lwjgl.opengl.GL11;
 import uk.co.qmunity.lib.client.render.RenderHelper;
 import uk.co.qmunity.lib.helper.RedstoneHelper;
 import uk.co.qmunity.lib.part.IPartRedstone;
+import uk.co.qmunity.lib.part.compat.MultipartCompatibility;
 import uk.co.qmunity.lib.transform.Rotation;
 import uk.co.qmunity.lib.vec.Vec3d;
 import uk.co.qmunity.lib.vec.Vec3dCube;
@@ -35,6 +36,7 @@ import uk.co.qmunity.lib.vec.Vec3i;
 import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.part.BPPartFace;
+import com.bluepowermod.part.wire.redstone.PartRedwireFreestanding;
 
 /**
  * Base class for the lamps that are multiparts.
@@ -311,6 +313,17 @@ public abstract class PartLamp extends BPPartFace implements IPartRedstone {
             getWorld().updateLightByType(EnumSkyBlock.Block, getX(), getY(), getZ());
         } catch (Exception ex) {
         }
+    }
+
+    @Override
+    public boolean canStay() {
+
+        Vec3i loc = new Vec3i(this).add(getFace());
+
+        if (MultipartCompatibility.getPartHolder(getWorld(), loc) != null)
+            return MultipartCompatibility.getPart(getWorld(), loc, PartRedwireFreestanding.class) != null;
+
+        return super.canStay();
     }
 
     /**
