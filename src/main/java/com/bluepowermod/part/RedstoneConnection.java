@@ -169,7 +169,7 @@ public class RedstoneConnection {
 
         if (part instanceof IRedstoneDevice) {
             IRedstoneDevice dev = ((IRedstoneDevice) part).getDeviceOnSide(dir);
-            if (dev != null && !(dev instanceof DummyRedstoneDevice))
+            if (dev != null && !(dev instanceof DummyRedstoneDevice || dev instanceof GateBase))
                 return;
         }
 
