@@ -17,11 +17,6 @@
 
 package com.bluepowermod.items;
 
-import uk.co.qmunity.lib.part.IPart;
-import uk.co.qmunity.lib.part.ITilePartHolder;
-import uk.co.qmunity.lib.part.compat.MultipartCompatibility;
-import uk.co.qmunity.lib.raytrace.QMovingObjectPosition;
-import uk.co.qmunity.lib.vec.Vec3d;
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -31,6 +26,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import uk.co.qmunity.lib.part.IPart;
+import uk.co.qmunity.lib.part.ITilePartHolder;
+import uk.co.qmunity.lib.part.compat.MultipartCompatibility;
+import uk.co.qmunity.lib.raytrace.QMovingObjectPosition;
+import uk.co.qmunity.lib.vec.Vec3d;
 
 import com.bluepowermod.api.block.IAdvancedSilkyRemovable;
 import com.bluepowermod.api.block.ISilkyRemovable;
@@ -69,6 +69,10 @@ public class ItemSilkyScrewdriver extends ItemBase {
                     p.writeToNBT(tag);
                     ItemStack droppedStack = p.getItem();
                     NBTTagCompound stackTag = droppedStack.getTagCompound();
+                    if (stackTag == null) {
+                        stackTag = new NBTTagCompound();
+                        droppedStack.setTagCompound(stackTag);
+                    }
                     stackTag.setTag("tileData", tag);
                     world.spawnEntityInWorld(new EntityItem(world, x + 0.5, y + 0.5, z + 0.5, droppedStack));
                     h.removePart(p);

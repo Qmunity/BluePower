@@ -12,6 +12,7 @@ import net.minecraftforge.client.event.TextureStitchEvent;
 
 import com.bluepowermod.part.PartInfo;
 import com.bluepowermod.part.PartManager;
+import com.bluepowermod.part.gate.GateWire;
 import com.bluepowermod.util.Refs;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -124,6 +125,7 @@ public class IconSupplier {
 
             for (PartInfo i : PartManager.getRegisteredParts())
                 i.getExample().registerIcons(event.map);
+            GateWire.registerTopIcon(event.map);
         }
     }
 }

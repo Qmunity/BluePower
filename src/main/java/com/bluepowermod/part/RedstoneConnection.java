@@ -102,15 +102,19 @@ public class RedstoneConnection {
     public void forceUpdateNeighbor() {
 
         ForgeDirection d = getFD();
-        World world = part.getWorld();
-        int x = part.getX(), y = part.getY(), z = part.getZ();
+        if (part instanceof GateBase && ((GateBase) part).parentCircuit != null) {
+            ((GateBase) part).parentCircuit.updateNeighborGates((GateBase) part);
+        } else {
+            World world = part.getWorld();
+            int x = part.getX(), y = part.getY(), z = part.getZ();
 
-        RedstoneHelper.notifyRedstoneUpdate(world, x, y, z, d, true);
+            RedstoneHelper.notifyRedstoneUpdate(world, x, y, z, d, true);
 
-        if (part instanceof GateBase) {
-            IRedstoneDevice dev = ((GateBase) part).getDeviceOnSide(d);
-            if (dev != null && dev instanceof BPPart)
-                ((BPPart) dev).onUpdate();
+            if (part instanceof GateBase) {
+                IRedstoneDevice dev = ((GateBase) part).getDeviceOnSide(d);
+                if (dev != null && dev instanceof BPPart)
+                    ((BPPart) dev).onUpdate();
+            }
         }
     }
 

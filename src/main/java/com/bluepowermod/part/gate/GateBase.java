@@ -238,8 +238,8 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
         boolean wasNull = rendering == null;
         if (rendering == null)
             rendering = this;
-        renderer.renderBox(BOX.clone().expand(-0.001), getIcon(ForgeDirection.DOWN), getIcon(ForgeDirection.UP),
-                getIcon(ForgeDirection.WEST), getIcon(ForgeDirection.EAST), getIcon(ForgeDirection.NORTH), getIcon(ForgeDirection.SOUTH));
+        renderer.renderBox(BOX.clone().expand(-0.001), getIcon(ForgeDirection.DOWN), getIcon(ForgeDirection.UP), getIcon(ForgeDirection.WEST),
+                getIcon(ForgeDirection.EAST), getIcon(ForgeDirection.NORTH), getIcon(ForgeDirection.SOUTH));
         if (wasNull)
             rendering = null;
 
@@ -247,15 +247,15 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
     }
 
     @Override
-    public final void renderItem(ItemRenderType type, ItemStack item, Object... data) {
+    public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
 
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
         rendering = this;
 
-        if (this instanceof ISilkyRemovable && item.hasTagCompound()) {
-            readFromNBT(item.getTagCompound().getCompoundTag("tileData"));
+        if (this instanceof ISilkyRemovable) {
+            readFromNBT(item.hasTagCompound() ? item.getTagCompound().getCompoundTag("tileData") : new NBTTagCompound());
         }
         GL11.glPushMatrix();
         {
@@ -309,8 +309,8 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
 
     protected final void renderTop(String texture) {
 
-        Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/gates/" + getTextureName()
-                + "/" + texture + ".png"));
+        Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/gates/" + getTextureName() + "/"
+                + texture + ".png"));
         renderTop();
     }
 
@@ -321,8 +321,8 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
 
     protected final void renderTop(String texture, String status) {
 
-        Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/gates/" + getTextureName()
-                + "/" + texture + "_" + status + ".png"));
+        Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/gates/" + getTextureName() + "/"
+                + texture + "_" + status + ".png"));
 
         boolean isOn = status.equals("on");
 
@@ -342,8 +342,8 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
 
         boolean isOn = con.getOutput() + (!con.isOutputOnly() ? con.getInput() : 0) > 0;
 
-        Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/gates/" + getTextureName()
-                + "/" + name + "_" + (con.isEnabled() ? isOn ? "on" : "off" : "disabled") + ".png"));
+        Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/gates/" + getTextureName() + "/" + name
+                + "_" + (con.isEnabled() ? isOn ? "on" : "off" : "disabled") + ".png"));
 
         float bX = OpenGlHelper.lastBrightnessX;
         float bY = OpenGlHelper.lastBrightnessY;

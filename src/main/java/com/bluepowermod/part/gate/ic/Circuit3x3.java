@@ -7,20 +7,12 @@
  */
 package com.bluepowermod.part.gate.ic;
 
-import java.util.Map;
-
-import uk.co.qmunity.lib.part.IPart;
 
 public class Circuit3x3 extends IntegratedCircuit {
-    
+
     @Override
     protected int getCircuitWidth() {
-    
+
         return 3;
-    }
-
-    @Override public Map<String, IPart> getPartMap() {
-
-        return null;
     }
 }
