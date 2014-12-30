@@ -40,6 +40,7 @@ import com.bluepowermod.api.redstone.IRedstoneConductor;
 import com.bluepowermod.api.redstone.IRedstoneDevice;
 import com.bluepowermod.client.render.IconSupplier;
 import com.bluepowermod.part.wire.redstone.RedstoneApi;
+import com.bluepowermod.part.wire.redstone.RedwireType;
 import com.bluepowermod.part.wire.redstone.WireCommons;
 import com.bluepowermod.part.wire.redstone.propagation.WirePropagator;
 
@@ -68,6 +69,12 @@ public class GateNullCell extends GateBase implements IFaceRedstoneDevice, IReds
     }
 
     @Override
+    protected String getTextureName() {
+
+        return "nullcell";
+    }
+
+    @Override
     protected void renderTop(float frame) {
 
     }
@@ -82,7 +89,7 @@ public class GateNullCell extends GateBase implements IFaceRedstoneDevice, IReds
         IIcon planks = Blocks.planks.getIcon(0, 0);
         IIcon wire = IconSupplier.wire;
 
-        int col = isAnalog() ? 0xDD0000 : 0x4444DD;
+        int col = isAnalog() ? RedwireType.INFUSED_TESLATITE.getColor() : RedwireType.BLUESTONE.getColor();
 
         renderer.renderBox(new Vec3dCube(2 / 16D, 2 / 16D, 2 / 16D, 3 / 16D, 10 / 16D, 3 / 16D), planks);
         renderer.renderBox(new Vec3dCube(2 / 16D, 2 / 16D, 13 / 16D, 3 / 16D, 10 / 16D, 14 / 16D), planks);
@@ -92,36 +99,28 @@ public class GateNullCell extends GateBase implements IFaceRedstoneDevice, IReds
         renderer.renderBox(new Vec3dCube(13 / 16D, 2 / 16D, 13 / 16D, 14 / 16D, 10 / 16D, 14 / 16D), planks);
         renderer.renderBox(new Vec3dCube(13 / 16D, 9 / 16D, 3 / 16D, 14 / 16D, 10 / 16D, 13 / 16D), planks);
 
-        int color = col;
-        double mul = (0.3 + (0.7 * ((powerA & 0xFF) / 255D)));
-        color = ((int) ((color & 0xFF0000) * mul) & 0xFF0000) + ((int) ((color & 0x00FF00) * mul) & 0x00FF00)
-                + ((int) ((color & 0x0000FF) * mul) & 0x0000FF);
-        renderer.setColor(color);
+        renderer.setColor(WireCommons.getColorForPowerLevel(col, getRotation() % 2 == 0 ? powerA : powerB));
 
         ForgeDirection dir = ForgeDirection.NORTH;
         if (getRotation() % 2 == 1)
             dir = dir.getRotation(getFace());
 
         renderer.renderBox(new Vec3dCube(7 / 16D, 2 / 16D, 1 / 16D, 9 / 16D, 2 / 16D + height, 15 / 16D), wire);
-        renderer.renderBox(new Vec3dCube(7 / 16D, 2 / 16D, 0 / 16D, 9 / 16D, 2 / 16D + (height / (nullcells[dir.ordinal()] ? 1 : 2)),
-                1 / 16D), wire);
+        renderer.renderBox(new Vec3dCube(7 / 16D, 2 / 16D, 0 / 16D, 9 / 16D,
+                2 / 16D + (height / /* (nullcells[dir.ordinal()] ? 1 : */2/* ) */), 1 / 16D), wire);
         renderer.renderBox(new Vec3dCube(7 / 16D, 2 / 16D, 15 / 16D, 9 / 16D,
                 2 / 16D + (height / (nullcells[dir.getOpposite().ordinal()] ? 1 : 2)), 16 / 16D), wire);
 
-        color = col;
-        mul = (0.3 + (0.7 * ((powerB & 0xFF) / 255D)));
-        color = ((int) ((color & 0xFF0000) * mul) & 0xFF0000) + ((int) ((color & 0x00FF00) * mul) & 0x00FF00)
-                + ((int) ((color & 0x0000FF) * mul) & 0x0000FF);
-        renderer.setColor(color);
+        renderer.setColor(WireCommons.getColorForPowerLevel(col, getRotation() % 2 == 0 ? powerB : powerA));
 
         ForgeDirection dir2 = ForgeDirection.WEST;
         if (getRotation() % 2 == 1)
             dir2 = dir2.getRotation(getFace());
 
-        if (!nullcells[dir2.ordinal()])
-            renderer.renderBox(new Vec3dCube(0 / 16D, 2 / 16D, 7 / 16D, 2 / 16D, 10 / 16D, 9 / 16D), wire);
-        if (!nullcells[dir2.getOpposite().ordinal()])
-            renderer.renderBox(new Vec3dCube(14 / 16D, 2 / 16D, 7 / 16D, 16 / 16D, 10 / 16D, 9 / 16D), wire);
+        // if (!nullcells[dir2.ordinal()])
+        renderer.renderBox(new Vec3dCube(0 / 16D, 2 / 16D, 7 / 16D, 2 / 16D, 10 / 16D, 9 / 16D), wire);
+        // if (!nullcells[dir2.getOpposite().ordinal()])
+        renderer.renderBox(new Vec3dCube(14 / 16D, 2 / 16D, 7 / 16D, 16 / 16D, 10 / 16D, 9 / 16D), wire);
         renderer.renderBox(new Vec3dCube(0 / 16D, 10 / 16D, 7 / 16D, 16 / 16D, 12 / 16D, 9 / 16D), wire);
 
         renderer.setColor(0xFFFFFF);
@@ -239,7 +238,7 @@ public class GateNullCell extends GateBase implements IFaceRedstoneDevice, IReds
     @Override
     public byte getRedstonePower(ForgeDirection side) {
 
-        if (RedstoneApi.getInstance().shouldWiresOutputPower())
+        if (!RedstoneApi.getInstance().shouldWiresOutputPower())
             return 0;
 
         for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
@@ -289,7 +288,7 @@ public class GateNullCell extends GateBase implements IFaceRedstoneDevice, IReds
     @Override
     public boolean hasLoss() {
 
-        return analog;
+        return false;
     }
 
     @Override

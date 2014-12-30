@@ -23,14 +23,19 @@ import java.util.List;
 import java.util.UUID;
 
 import net.minecraft.client.renderer.RenderBlocks;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import uk.co.qmunity.lib.client.render.RenderHelper;
 import uk.co.qmunity.lib.misc.Pair;
+import uk.co.qmunity.lib.part.IPart;
+import uk.co.qmunity.lib.part.IPartPlacement;
 import uk.co.qmunity.lib.part.MicroblockShape;
 import uk.co.qmunity.lib.part.compat.OcclusionHelper;
 import uk.co.qmunity.lib.raytrace.QMovingObjectPosition;
@@ -56,7 +61,7 @@ import com.bluepowermod.part.wire.redstone.WireCommons;
 import com.bluepowermod.part.wire.redstone.propagation.WirePropagator;
 
 public class GateTransceiver extends GateBase implements IWirelessDevice, IFaceRedstoneDevice, IRedstoneConductor, IFaceBundledDevice,
-        IBundledConductor {
+IBundledConductor {
 
     private static final RedstoneFrequency freq1 = new RedstoneFrequency(com.bluepowermod.api.misc.Accessibility.PUBLIC, UUID.randomUUID(),
             "freq1");
@@ -88,6 +93,12 @@ public class GateTransceiver extends GateBase implements IWirelessDevice, IFaceR
     public String getId() {
 
         return "wirelesstransceiver" + (isAnalog ? ".analog" : "") + (isBundled ? ".bundled" : "");
+    }
+
+    @Override
+    protected String getTextureName() {
+
+        return "wirelesstransceiver";
     }
 
     @Override
@@ -488,6 +499,19 @@ public class GateTransceiver extends GateBase implements IWirelessDevice, IFaceR
             setFrequency(freq1);
 
         return true;
+    }
+
+    @Override
+    public IPartPlacement getPlacement(IPart part, World world, Vec3i location, ForgeDirection face, MovingObjectPosition mop,
+            EntityPlayer player) {
+
+        return null;
+    }
+
+    @Override
+    public void addTooltip(List<String> tip) {
+
+        tip.add(MinecraftColor.RED + I18n.format("Disabled temporarily. Still not fully working."));
     }
 
 }

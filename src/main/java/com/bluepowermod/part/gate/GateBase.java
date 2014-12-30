@@ -370,6 +370,17 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
             getWorld().spawnParticle("reddust", getX() + v.getX(), getY() + v.getY(), getZ() + v.getZ(), -1, 0, 1);
     }
 
+    protected final void spawnRedParticle(double x, double y, double z) {
+
+        if (!getWorld().isRemote)
+            return;
+
+        Vec3d v = new Vec3d(x, y, z).sub(Vec3d.center).rotate(0, 90 * getRotation(), 0).add(Vec3d.center).rotate(getFace(), Vec3d.center);
+
+        if (rnd.nextInt(20) == 0)
+            getWorld().spawnParticle("reddust", getX() + v.getX(), getY() + v.getY(), getZ() + v.getZ(), 0, 0, 0);
+    }
+
     public abstract void doLogic();
 
     public void tick() {
