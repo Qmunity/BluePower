@@ -32,7 +32,8 @@ import org.lwjgl.opengl.GL11;
 
 import uk.co.qmunity.lib.client.render.RenderHelper;
 import uk.co.qmunity.lib.part.IPartTicking;
-import uk.co.qmunity.lib.part.compat.MultipartCompatibility;
+import uk.co.qmunity.lib.part.MicroblockShape;
+import uk.co.qmunity.lib.part.compat.OcclusionHelper;
 import uk.co.qmunity.lib.raytrace.QMovingObjectPosition;
 import uk.co.qmunity.lib.transform.Rotation;
 import uk.co.qmunity.lib.vec.Vec3d;
@@ -231,8 +232,7 @@ public class PneumaticTube extends BPPart implements IPartTicking {
             if (otherTubeColor != TubeColor.NONE && getColor(dir) != TubeColor.NONE && getColor(dir) != otherTubeColor)
                 return false;
         }
-        return getWorld() == null
-                || !MultipartCompatibility.checkOcclusion(getWorld(), getX(), getY(), getZ(), sideBB.clone().rotate(dir, Vec3d.center));
+        return getWorld() == null || !OcclusionHelper.microblockOcclusionTest(getParent(), MicroblockShape.FACE_HOLLOW, 8, dir);
     }
 
     @Override
@@ -656,7 +656,7 @@ public class PneumaticTube extends BPPart implements IPartTicking {
      * @param info
      */
     @Override
-    public void addWailaInfo(List<String> info) {
+    public void addWAILABody(List<String> info) {
 
         boolean addTooltip = false;
         for (TubeColor col : color) {

@@ -153,7 +153,6 @@ public class DummyRedstoneDevice implements IRedstoneDevice {
             // RedstoneApi.getInstance().setWiresHandleUpdates(wiresHandledUpdates);
             // RedstoneApi.getInstance().setWiresOutputPower(wiresOutputtedPower);
             // int powNow = loc.getBlockMeta();
-            // System.out.println(powNow + " vs " + def);
 
             // if (def >= powNow)
             // return def;

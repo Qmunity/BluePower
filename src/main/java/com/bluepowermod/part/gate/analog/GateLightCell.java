@@ -15,14 +15,16 @@
  *     along with Blue Power.  If not, see <http://www.gnu.org/licenses/>
  */
 
-package com.bluepowermod.part.gate;
+package com.bluepowermod.part.gate.analog;
 
-import java.util.List;
+import com.bluepowermod.part.gate.GateBase;
+
 
 public class GateLightCell extends GateBase {
 
     @Override
     public void initializeConnections() {
+
         front().enable().setOutputOnly();
     }
 
@@ -34,20 +36,16 @@ public class GateLightCell extends GateBase {
 
     @Override
     public void renderTop(float frame) {
+
         renderTop("front", front());
     }
 
     @Override
     public void tick() {
-        if (getWorld().getWorldTime() % 60 == 0) {
-            int light = getWorld().getBlockLightValue(getX(), getY(), getZ());
-            front().setOutput(light);
+
+        if (getWorld().getWorldTime() % 5 == 0) {
+            front().setOutput(getWorld().getBlockLightValue(getX(), getY(), getZ()));
         }
-    }
-
-    @Override
-    public void addWailaInfo(List<String> info) {
-
     }
 
     @Override

@@ -27,6 +27,7 @@ import uk.co.qmunity.lib.util.Dir;
 
 import com.bluepowermod.api.redstone.IRedstoneDevice;
 import com.bluepowermod.part.gate.GateBase;
+import com.bluepowermod.part.wire.redstone.DummyRedstoneDevice;
 
 public class RedstoneConnection {
 
@@ -161,14 +162,16 @@ public class RedstoneConnection {
 
     public void update() {
 
-        ForgeDirection dir = getFD();
-
-        if (part instanceof IRedstoneDevice)
-            if (((IRedstoneDevice) part).getDeviceOnSide(dir) != null)
-                return;
-
         if (part.getWorld().isRemote)
             return;
+
+        ForgeDirection dir = getFD();
+
+        if (part instanceof IRedstoneDevice) {
+            IRedstoneDevice dev = ((IRedstoneDevice) part).getDeviceOnSide(dir);
+            if (dev != null && !(dev instanceof DummyRedstoneDevice))
+                return;
+        }
 
         if (caching) {
             if (part instanceof IPartFace) {

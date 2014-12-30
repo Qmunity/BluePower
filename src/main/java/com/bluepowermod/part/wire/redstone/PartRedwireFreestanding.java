@@ -69,8 +69,6 @@ import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.part.wire.PartWireFreestanding;
 import com.bluepowermod.part.wire.redstone.propagation.WirePropagator;
 
-import cpw.mods.fml.common.FMLCommonHandler;
-
 public class PartRedwireFreestanding extends PartWireFreestanding implements IRedstoneConductor, IBundledConductor, IPartRedstone,
 IPartWAILAProvider, IPartSolid, IPartThruHole, IPartCustomPlacement {
 
@@ -185,164 +183,6 @@ IPartWAILAProvider, IPartSolid, IPartThruHole, IPartCustomPlacement {
     @Override
     public boolean renderStatic(Vec3i translation, RenderHelper renderer, RenderBlocks renderBlocks, int pass) {
 
-        // IIcon normalIcon = IconSupplier.wire;
-        // IIcon insulationIcon = IconSupplier.wireInsulation;
-        // IIcon bundleIcon = IconSupplier.wireBundled;
-        //
-        // double size = 2 / 16D;
-        // double separation = 4 / 16D;
-        // double thickness = 1 / 16D;
-        //
-        // IIcon icon = normalIcon;
-        // int color = WireCommons.getColorForPowerLevel(getColor(), power);
-        //
-        // if (insulationColor != MinecraftColor.NONE) {
-        // size += 2 / 16D;
-        // separation -= 2 / 16D;
-        // icon = insulationIcon;
-        // color = insulationColor.getHex();
-        // }
-        // if (isBundled()) {
-        // size += 4 / 16D;
-        // separation -= 4 / 16D;
-        // icon = bundleIcon;
-        // color = 0xFFFFFF;
-        // }
-        //
-        // boolean isInWorld = getParent() != null;
-        //
-        // boolean down = connections[ForgeDirection.DOWN.ordinal()];
-        // boolean up = connections[ForgeDirection.UP.ordinal()];
-        // boolean north = connections[ForgeDirection.NORTH.ordinal()];
-        // boolean south = connections[ForgeDirection.SOUTH.ordinal()];
-        // boolean west = connections[ForgeDirection.WEST.ordinal()];
-        // boolean east = connections[ForgeDirection.EAST.ordinal()];
-        //
-        // renderer.setColor(color);
-        //
-        // // Wire
-        // renderer.renderBox(new Vec3dCube(0.5 - (size / 2), 0.5 - (size / 2), 0.5 - (size / 2), 0.5 + (size / 2), 0.5 + (size / 2),
-        // 0.5 + (size / 2)), icon);
-        // if (up || !isInWorld)
-        // renderer.renderBox(new Vec3dCube(0.5 - (size / 2), 0.5 + (size / 2), 0.5 - (size / 2), 0.5 + (size / 2), 1, 0.5 + (size / 2)),
-        // icon);
-        // if (down || !isInWorld)
-        // renderer.renderBox(new Vec3dCube(0.5 - (size / 2), 0, 0.5 - (size / 2), 0.5 + (size / 2), 0.5 - (size / 2), 0.5 + (size / 2)),
-        // icon);
-        // if (north || !isInWorld)
-        // renderer.renderBox(new Vec3dCube(0.5 - (size / 2), 0.5 - (size / 2), 0, 0.5 + (size / 2), 0.5 + (size / 2), 0.5 - (size / 2)),
-        // icon);
-        // if (south || !isInWorld)
-        // renderer.renderBox(new Vec3dCube(0.5 - (size / 2), 0.5 - (size / 2), 0.5 + (size / 2), 0.5 + (size / 2), 0.5 + (size / 2), 1),
-        // icon);
-        // if (west || !isInWorld)
-        // renderer.renderBox(new Vec3dCube(0, 0.5 - (size / 2), 0.5 - (size / 2), 0.5 - (size / 2), 0.5 + (size / 2), 0.5 + (size / 2)),
-        // icon);
-        // if (east || !isInWorld)
-        // renderer.renderBox(new Vec3dCube(0.5 + (size / 2), 0.5 - (size / 2), 0.5 - (size / 2), 1, 0.5 + (size / 2), 0.5 + (size / 2)),
-        // icon);
-        //
-        // renderer.setColor(0xFFFFFF);
-        //
-        // // Frame
-        // {
-        // IIcon planks = Blocks.planks.getIcon(0, 0);
-        //
-        // // Top
-        // if (west == up || !isInWorld)
-        // renderer.renderBox(new Vec3dCube(0.5 - ((size + separation) / 2) - thickness, 0.5 + ((size + separation) / 2),
-        // 0.5 - ((size + separation) / 2), 0.5 - ((size + separation) / 2), 0.5 + ((size + separation) / 2) + thickness,
-        // 0.5 + ((size + separation) / 2)), planks);
-        // if (east == up || !isInWorld)
-        // renderer.renderBox(new Vec3dCube(0.5 + ((size + separation) / 2), 0.5 + ((size + separation) / 2),
-        // 0.5 - ((size + separation) / 2), 0.5 + ((size + separation) / 2) + thickness, 0.5 + ((size + separation) / 2)
-        // + thickness, 0.5 + ((size + separation) / 2)), planks);
-        // if (south == up || !isInWorld)
-        // renderer.renderBox(new Vec3dCube(0.5 + ((size + separation) / 2), 0.5 + ((size + separation) / 2),
-        // 0.5 + ((size + separation) / 2), 0.5 - ((size + separation) / 2), 0.5 + ((size + separation) / 2) + thickness, 0.5
-        // + ((size + separation) / 2) + thickness), planks);
-        // if (north == up || !isInWorld)
-        // renderer.renderBox(new Vec3dCube(0.5 + ((size + separation) / 2), 0.5 + ((size + separation) / 2), 0.5
-        // - ((size + separation) / 2) - thickness, 0.5 - ((size + separation) / 2), 0.5 + ((size + separation) / 2)
-        // + thickness, 0.5 - ((size + separation) / 2)), planks);
-        // // Bottom
-        // if (west == down || !isInWorld)
-        // renderer.renderBox(new Vec3dCube(0.5 - ((size + separation) / 2) - thickness, 0.5 - ((size + separation) / 2) - thickness,
-        // 0.5 - ((size + separation) / 2), 0.5 - ((size + separation) / 2), 0.5 - ((size + separation) / 2),
-        // 0.5 + ((size + separation) / 2)), planks);
-        // if (east == down || !isInWorld)
-        // renderer.renderBox(new Vec3dCube(0.5 + ((size + separation) / 2), 0.5 - ((size + separation) / 2) - thickness,
-        // 0.5 - ((size + separation) / 2), 0.5 + ((size + separation) / 2) + thickness, 0.5 - ((size + separation) / 2),
-        // 0.5 + ((size + separation) / 2)), planks);
-        // if (south == down || !isInWorld)
-        // renderer.renderBox(new Vec3dCube(0.5 + ((size + separation) / 2), 0.5 - ((size + separation) / 2) - thickness,
-        // 0.5 + ((size + separation) / 2), 0.5 - ((size + separation) / 2), 0.5 - ((size + separation) / 2), 0.5
-        // + ((size + separation) / 2) + thickness), planks);
-        // if (north == down || !isInWorld)
-        // renderer.renderBox(new Vec3dCube(0.5 + ((size + separation) / 2), 0.5 - ((size + separation) / 2) - thickness, 0.5
-        // - ((size + separation) / 2) - thickness, 0.5 - ((size + separation) / 2), 0.5 - ((size + separation) / 2),
-        // 0.5 - ((size + separation) / 2)), planks);
-        //
-        // // Sides
-        // if (north == west || !isInWorld)
-        // renderer.renderBox(new Vec3dCube(0.5 - ((size + separation) / 2) - thickness, 0.5 - ((size + separation) / 2), 0.5
-        // - ((size + separation) / 2) - thickness, 0.5 - ((size + separation) / 2), 0.5 + ((size + separation) / 2),
-        // 0.5 - ((size + separation) / 2)), planks);
-        // if (south == west || !isInWorld)
-        // renderer.renderBox(new Vec3dCube(0.5 - ((size + separation) / 2) - thickness, 0.5 - ((size + separation) / 2),
-        // 0.5 + ((size + separation) / 2), 0.5 - ((size + separation) / 2), 0.5 + ((size + separation) / 2), 0.5
-        // + ((size + separation) / 2) + thickness), planks);
-        // if (north == east || !isInWorld)
-        // renderer.renderBox(new Vec3dCube(0.5 + ((size + separation) / 2), 0.5 - ((size + separation) / 2), 0.5
-        // - ((size + separation) / 2) - thickness, 0.5 + ((size + separation) / 2) + thickness,
-        // 0.5 + ((size + separation) / 2), 0.5 - ((size + separation) / 2)), planks);
-        // if (south == east || !isInWorld)
-        // renderer.renderBox(new Vec3dCube(0.5 + ((size + separation) / 2), 0.5 - ((size + separation) / 2),
-        // 0.5 + ((size + separation) / 2), 0.5 + ((size + separation) / 2) + thickness, 0.5 + ((size + separation) / 2), 0.5
-        // + ((size + separation) / 2) + thickness), planks);
-        //
-        // // Corners
-        // renderer.renderBox(new Vec3dCube(0.5 - ((size + separation) / 2) - thickness, 0.5 + ((size + separation) / 2), 0.5
-        // - ((size + separation) / 2) - thickness, 0.5 - ((size + separation) / 2), 0.5 + ((size + separation) / 2) + thickness,
-        // 0.5 - ((size + separation) / 2)), planks);
-        // renderer.renderBox(new Vec3dCube(0.5 - ((size + separation) / 2) - thickness, 0.5 + ((size + separation) / 2),
-        // 0.5 + ((size + separation) / 2), 0.5 - ((size + separation) / 2), 0.5 + ((size + separation) / 2) + thickness, 0.5
-        // + ((size + separation) / 2) + thickness), planks);
-        // renderer.renderBox(new Vec3dCube(0.5 + ((size + separation) / 2), 0.5 + ((size + separation) / 2), 0.5
-        // - ((size + separation) / 2) - thickness, 0.5 + ((size + separation) / 2) + thickness, 0.5 + ((size + separation) / 2)
-        // + thickness, 0.5 - ((size + separation) / 2)), planks);
-        // renderer.renderBox(new Vec3dCube(0.5 + ((size + separation) / 2), 0.5 + ((size + separation) / 2),
-        // 0.5 + ((size + separation) / 2), 0.5 + ((size + separation) / 2) + thickness, 0.5 + ((size + separation) / 2)
-        // + thickness, 0.5 + ((size + separation) / 2) + thickness), planks);
-        //
-        // renderer.renderBox(new Vec3dCube(0.5 - ((size + separation) / 2) - thickness, 0.5 - ((size + separation) / 2) - thickness, 0.5
-        // - ((size + separation) / 2) - thickness, 0.5 - ((size + separation) / 2), 0.5 - ((size + separation) / 2),
-        // 0.5 - ((size + separation) / 2)), planks);
-        // renderer.renderBox(new Vec3dCube(0.5 - ((size + separation) / 2) - thickness, 0.5 - ((size + separation) / 2) - thickness,
-        // 0.5 + ((size + separation) / 2), 0.5 - ((size + separation) / 2), 0.5 - ((size + separation) / 2), 0.5
-        // + ((size + separation) / 2) + thickness), planks);
-        // renderer.renderBox(new Vec3dCube(0.5 + ((size + separation) / 2), 0.5 - ((size + separation) / 2) - thickness, 0.5
-        // - ((size + separation) / 2) - thickness, 0.5 + ((size + separation) / 2) + thickness, 0.5 - ((size + separation) / 2),
-        // 0.5 - ((size + separation) / 2)), planks);
-        // renderer.renderBox(new Vec3dCube(0.5 + ((size + separation) / 2), 0.5 - ((size + separation) / 2) - thickness,
-        // 0.5 + ((size + separation) / 2), 0.5 + ((size + separation) / 2) + thickness, 0.5 - ((size + separation) / 2), 0.5
-        // + ((size + separation) / 2) + thickness), planks);
-        //
-        // if (isInWorld) {
-        // // Connections
-        // Vec3dCube box = new Vec3dCube(0.5 - ((size + separation) / 2) - thickness, 0, 0.5 - ((size + separation) / 2) - thickness,
-        // 0.5 - ((size + separation) / 2), 0.5 - ((size + separation) / 2) - thickness, 0.5 - ((size + separation) / 2));
-        // for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
-        // if (!connections[d.ordinal()])
-        // continue;
-        // for (int i = 0; i < 4; i++)
-        // renderer.renderBox(box.clone().rotate(0, 90 * i, 0, Vec3d.center).rotate(d, Vec3d.center), planks);
-        // }
-        // }
-        // }
-        // renderer.resetTransformations();
-        //
-        // return true;
         return super.renderStatic(translation, renderer, renderBlocks, pass);
     }
 
@@ -402,7 +242,7 @@ IPartWAILAProvider, IPartSolid, IPartThruHole, IPartCustomPlacement {
     public boolean canConnectStraight(ForgeDirection side, IRedstoneDevice device) {
 
         if (!(device instanceof IFaceRedstoneDevice))
-            if (OcclusionHelper.microblockOcclusionTest(new Vec3i(this), MicroblockShape.FACE, 1, side))
+            if (OcclusionHelper.microblockOcclusionTest(new Vec3i(this), MicroblockShape.FACE_HOLLOW, 8, side))
                 return false;
 
         return WireCommons.canConnect(this, device);
@@ -412,7 +252,7 @@ IPartWAILAProvider, IPartSolid, IPartThruHole, IPartCustomPlacement {
     public boolean canConnectOpenCorner(ForgeDirection side, IRedstoneDevice device) {
 
         if (!(device instanceof IFaceRedstoneDevice))
-            if (OcclusionHelper.microblockOcclusionTest(new Vec3i(this), MicroblockShape.FACE, 1, side))
+            if (OcclusionHelper.microblockOcclusionTest(new Vec3i(this), MicroblockShape.FACE_HOLLOW, 8, side))
                 return false;
 
         return WireCommons.canConnect(this, device);
@@ -466,7 +306,6 @@ IPartWAILAProvider, IPartSolid, IPartThruHole, IPartCustomPlacement {
                 try {
                     getWorld();
                 } catch (Exception ex) {
-                    System.out.println(FMLCommonHandler.instance().getEffectiveSide());
                 }
                 IRedstoneDevice dev = devices[dir.ordinal()];
                 if ((dev != null && (dev instanceof DummyRedstoneDevice)))
@@ -573,7 +412,8 @@ IPartWAILAProvider, IPartSolid, IPartThruHole, IPartCustomPlacement {
         if (devices[side.ordinal()] == null || !(devices[side.ordinal()] instanceof DummyRedstoneDevice))
             return 0;
 
-        return MathHelper.map(power & 0xFF, 0, 255, 0, 15);
+        return (devices[side.ordinal()] != null && devices[side.ordinal()] instanceof DummyRedstoneDevice) ? ((DummyRedstoneDevice) devices[side
+                                                                                                                                            .ordinal()]).getRedstoneOutput(MathHelper.map(power & 0xFF, 0, 255, 0, 15)) : 0;
     }
 
     @Override
@@ -585,14 +425,15 @@ IPartWAILAProvider, IPartSolid, IPartThruHole, IPartCustomPlacement {
         if (devices[side.ordinal()] == null || !(devices[side.ordinal()] instanceof DummyRedstoneDevice))
             return 0;
 
-        return MathHelper.map(power & 0xFF, 0, 255, 0, 15);
+        return (devices[side.ordinal()] != null && devices[side.ordinal()] instanceof DummyRedstoneDevice) ? ((DummyRedstoneDevice) devices[side
+                                                                                                                                            .ordinal()]).getRedstoneOutput(MathHelper.map(power & 0xFF, 0, 255, 0, 15)) : 0;
     }
 
     @Override
     public boolean canConnectBundledStraight(ForgeDirection side, IBundledDevice device) {
 
         if (!(device instanceof IFaceBundledDevice))
-            if (OcclusionHelper.microblockOcclusionTest(new Vec3i(this), MicroblockShape.FACE, 1, side))
+            if (OcclusionHelper.microblockOcclusionTest(new Vec3i(this), MicroblockShape.FACE_HOLLOW, 8, side))
                 return false;
 
         return WireCommons.canConnect(this, device);
@@ -602,7 +443,7 @@ IPartWAILAProvider, IPartSolid, IPartThruHole, IPartCustomPlacement {
     public boolean canConnectBundledOpenCorner(ForgeDirection side, IBundledDevice device) {
 
         if (!(device instanceof IFaceBundledDevice))
-            if (OcclusionHelper.microblockOcclusionTest(new Vec3i(this), MicroblockShape.FACE, 1, side))
+            if (OcclusionHelper.microblockOcclusionTest(new Vec3i(this), MicroblockShape.FACE_HOLLOW, 8, side))
                 return false;
 
         return WireCommons.canConnect(this, device);

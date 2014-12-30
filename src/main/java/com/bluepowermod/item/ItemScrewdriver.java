@@ -24,6 +24,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import uk.co.qmunity.lib.part.IPart;
+import uk.co.qmunity.lib.part.IPartInteractable;
 import uk.co.qmunity.lib.part.ITilePartHolder;
 import uk.co.qmunity.lib.part.compat.MultipartCompatibility;
 import uk.co.qmunity.lib.raytrace.QMovingObjectPosition;
@@ -32,7 +33,6 @@ import uk.co.qmunity.lib.vec.Vec3i;
 
 import com.bluepowermod.block.BlockContainerBase;
 import com.bluepowermod.init.BPCreativeTabs;
-import com.bluepowermod.part.BPPartFaceRotate;
 import com.bluepowermod.reference.GuiIDs;
 import com.bluepowermod.util.Refs;
 
@@ -65,9 +65,8 @@ public class ItemScrewdriver extends ItemBase {
                 if (mop == null)
                     return false;
                 IPart p = mop.getPart();
-                if (p instanceof BPPartFaceRotate) {
-                    ((BPPartFaceRotate) p).setRotation((((BPPartFaceRotate) p).getRotation() + 1) % 4);
-                }
+                if (p instanceof IPartInteractable)
+                    ((IPartInteractable) p).onActivated(player, mop, stack);
             }
         }
 

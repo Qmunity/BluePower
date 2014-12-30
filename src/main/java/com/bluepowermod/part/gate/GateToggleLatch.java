@@ -17,8 +17,6 @@
 
 package com.bluepowermod.part.gate;
 
-import java.util.List;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -54,8 +52,9 @@ public class GateToggleLatch extends GateBase {
         renderTop("left", power);
         renderTop("centerright", power);
         renderTop("right", power);
-        RenderHelper.renderRedstoneTorch(2.5D / 8D, 1D / 8D, -2.5D / 8D, 9D / 16D, !state);
-        RenderHelper.renderRedstoneTorch(2.5D / 8D, 1D / 8D, 2.5D / 8D, 9D / 16D, state);
+        RenderHelper.renderDigitalRedstoneTorch(2.5D / 8D, 1D / 8D, -2.5D / 8D, 9D / 16D, !state);
+        RenderHelper.renderDigitalRedstoneTorch(2.5D / 8D, 1D / 8D, 2.5D / 8D, 9D / 16D, state);
+
         // RenderHelper.renderLever(this, 9 / 16D, 1 / 8D, 4 / 16D, !state);
     }
 
@@ -74,17 +73,20 @@ public class GateToggleLatch extends GateBase {
 
     @Override
     public void writeToNBT(NBTTagCompound tag) {
+
         writeUpdateToNBT(tag);
     }
 
     @Override
     public void writeUpdateToNBT(NBTTagCompound tag) {
+
         super.writeUpdateToNBT(tag);
         tag.setBoolean("state", state);
     }
 
     @Override
     public void readFromNBT(NBTTagCompound tag) {
+
         readUpdateFromNBT(tag);
     }
 
@@ -108,8 +110,4 @@ public class GateToggleLatch extends GateBase {
         }
     }
 
-    @Override
-    public void addWailaInfo(List<String> info) {
-
-    }
 }

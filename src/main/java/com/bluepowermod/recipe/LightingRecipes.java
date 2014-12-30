@@ -51,8 +51,6 @@ public class LightingRecipes {
 
             // Microblock lamps
             String colorname = MinecraftColor.values()[MinecraftColor.VALID_COLORS.length - 1 - i].name().toLowerCase();
-            System.out.println("Color: " + colorname);
-            System.out.println("  Part: " + PartManager.getPartInfo("fixture." + colorname));
             GameRegistry.addRecipe(new ShapedOreRecipe(PartManager.getPartInfo("fixture." + colorname).getStack(), "gLg", "gLg", "sRs",
                     'g', "paneGlassColorless", 's', new ItemStack(Blocks.stone_slab, 1, 0), 'L', new ItemStack(BPItems.lumar, 1, 15 - i),
                     'R', "dustRedstone"));

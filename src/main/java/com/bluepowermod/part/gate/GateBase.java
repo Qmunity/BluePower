@@ -33,6 +33,7 @@ import org.lwjgl.opengl.GL11;
 
 import uk.co.qmunity.lib.client.render.RenderHelper;
 import uk.co.qmunity.lib.helper.MathHelper;
+import uk.co.qmunity.lib.part.IPart;
 import uk.co.qmunity.lib.part.IPartRedstone;
 import uk.co.qmunity.lib.part.IPartRenderPlacement;
 import uk.co.qmunity.lib.part.IPartTicking;
@@ -57,6 +58,7 @@ import com.bluepowermod.part.BPPartFaceRotate;
 import com.bluepowermod.part.PartManager;
 import com.bluepowermod.part.RedstoneConnection;
 import com.bluepowermod.part.gate.ic.IntegratedCircuit;
+import com.bluepowermod.part.wire.redstone.WireCommons;
 import com.bluepowermod.util.Refs;
 
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -238,8 +240,8 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
         boolean wasNull = rendering == null;
         if (rendering == null)
             rendering = this;
-        renderer.renderBox(BOX.clone().expand(-0.001), getIcon(ForgeDirection.DOWN), getIcon(ForgeDirection.UP), getIcon(ForgeDirection.WEST),
-                getIcon(ForgeDirection.EAST), getIcon(ForgeDirection.NORTH), getIcon(ForgeDirection.SOUTH));
+        renderer.renderBox(BOX.clone().expand(-0.001), getIcon(ForgeDirection.DOWN), getIcon(ForgeDirection.UP),
+                getIcon(ForgeDirection.WEST), getIcon(ForgeDirection.EAST), getIcon(ForgeDirection.NORTH), getIcon(ForgeDirection.SOUTH));
         if (wasNull)
             rendering = null;
 
@@ -309,8 +311,8 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
 
     protected final void renderTop(String texture) {
 
-        Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/gates/" + getTextureName() + "/"
-                + texture + ".png"));
+        Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/gates/" + getTextureName()
+                + "/" + texture + ".png"));
         renderTop();
     }
 
@@ -321,8 +323,8 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
 
     protected final void renderTop(String texture, String status) {
 
-        Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/gates/" + getTextureName() + "/"
-                + texture + "_" + status + ".png"));
+        Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/gates/" + getTextureName()
+                + "/" + texture + "_" + status + ".png"));
 
         boolean isOn = status.equals("on");
 
@@ -342,8 +344,8 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
 
         boolean isOn = con.getOutput() + (!con.isOutputOnly() ? con.getInput() : 0) > 0;
 
-        Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/gates/" + getTextureName() + "/" + name
-                + "_" + (con.isEnabled() ? isOn ? "on" : "off" : "disabled") + ".png"));
+        Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/gates/" + getTextureName()
+                + "/" + name + "_" + (con.isEnabled() ? isOn ? "on" : "off" : "disabled") + ".png"));
 
         float bX = OpenGlHelper.lastBrightnessX;
         float bY = OpenGlHelper.lastBrightnessY;
@@ -379,9 +381,11 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
 
         if (needsUpdate) {
             needsUpdate = false;
-            if (parentCircuit == null)
+            if (parentCircuit == null) {
+                WireCommons.refreshConnectionsRedstone(this);
                 for (RedstoneConnection c : connections)
                     c.update();
+            }
             doLogic();
             // for (IRedstoneDevice d : devices) {
             // if (d != null && d instanceof PartRedwireFace)
@@ -401,22 +405,37 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
     }
 
     @Override
+    public void onRemoved() {
+
+        super.onRemoved();
+        WireCommons.disconnectRedstone(this);
+    }
+
+    @Override
     public boolean onActivated(EntityPlayer player, QMovingObjectPosition hit, ItemStack item) {
 
         if (item != null && item.getItem() == BPItems.screwdriver) {
             if (player.isSneaking()) {
-                if (!getWorld().isRemote) {
-                    if (changeMode()) {
+                if (changeMode()) {
+                    if (!getWorld().isRemote) {
+                        for (RedstoneConnection c : connections)
+                            if (c != null)
+                                c.forceUpdateNeighbor();
+                        if (parentCircuit == null)
+                            WireCommons.refreshConnectionsRedstone(this);
                         sendUpdatePacket();
-                        getWorld().markBlockRangeForRenderUpdate(getX(), getY(), getZ(), getX(), getY(), getZ());
-                        return true;
-                    } else {
-                        return false;
                     }
+                    return true;
                 }
+                return false;
             } else {
                 setRotation((getRotation() + 1) % 4);
-                getWorld().markBlockRangeForRenderUpdate(getX(), getY(), getZ(), getX(), getY(), getZ());
+                for (RedstoneConnection c : connections)
+                    if (c != null)
+                        c.forceUpdateNeighbor();
+                if (parentCircuit == null)
+                    WireCommons.refreshConnectionsRedstone(this);
+                sendUpdatePacket();
             }
 
             return true;
@@ -597,18 +616,7 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
     @Override
     public int getLightValue() {
 
-        int on = 0;
-
-        if (front().isEnabled())
-            on += front().getOutput() / 4;
-        if (right().isEnabled())
-            on += right().getOutput() / 4;
-        if (back().isEnabled())
-            on += back().getOutput() / 4;
-        if (left().isEnabled())
-            on += left().getOutput() / 4;
-
-        return on;
+        return 0;
     }
 
     @Override
@@ -684,7 +692,7 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
 
         RedstoneConnection con = getConnection(side);
 
-        if (con.isEnabled())
+        if (con != null && con.isEnabled())
             return (byte) MathHelper.map(con.getOutput(), 0, 15, 0, 255);
 
         return 0;
@@ -695,7 +703,7 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
 
         RedstoneConnection con = getConnection(side);
 
-        if (con.isEnabled())
+        if (con != null && con.isEnabled())
             con.setInput(MathHelper.map(power & 0xFF, 0, 255, 0, 15));
     }
 
@@ -713,6 +721,15 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
 
     @Override
     public boolean isNormalBlock() {
+
+        return false;
+    }
+
+    @Override
+    public boolean occlusionTest(IPart part) {
+
+        if (part instanceof GateBase)
+            return ((GateBase) part).getFace() != getFace().getOpposite();
 
         return false;
     }

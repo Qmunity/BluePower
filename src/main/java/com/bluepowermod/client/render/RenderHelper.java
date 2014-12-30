@@ -23,7 +23,6 @@ import org.lwjgl.opengl.GL11;
 
 import uk.co.qmunity.lib.vec.Vec3dCube;
 
-import com.bluepowermod.part.gate.GateBase;
 import com.bluepowermod.util.Refs;
 
 public class RenderHelper {
@@ -59,21 +58,27 @@ public class RenderHelper {
 
     private static RenderBlocks rb = new RenderBlocks();
 
-    /**
-     * @author amadornes
-     * @param x
-     * @param y
-     * @param z
-     * @param height
-     * @param state
-     */
-    public static void renderRedstoneTorch(double x, double y, double z, double height, boolean state) {
+    public static void renderDigitalRedstoneTorch(double x, double y, double z, double height, boolean state) {
+
+        renderRedstoneTorch(x, y, z, height, state, true);
+    }
+
+    public static void renderAnalogRedstoneTorch(double x, double y, double z, double height, boolean state) {
+
+        renderRedstoneTorch(x, y, z, height, state, false);
+    }
+
+    public static void renderRedstoneTorch(double x, double y, double z, double height, boolean state, boolean digital) {
 
         GL11.glPushMatrix();
         {
             Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
 
-            rb.overrideBlockTexture = state ? IconSupplier.bluestoneTorchOn : IconSupplier.bluestoneTorchOff;
+            if (digital) {
+                rb.overrideBlockTexture = state ? IconSupplier.bluestoneTorchOn : IconSupplier.bluestoneTorchOff;
+            } else {
+                rb.overrideBlockTexture = state ? Blocks.redstone_torch.getIcon(0, 0) : Blocks.unlit_redstone_torch.getIcon(0, 0);
+            }
 
             float bX = OpenGlHelper.lastBrightnessX;
             float bY = OpenGlHelper.lastBrightnessY;
@@ -117,18 +122,21 @@ public class RenderHelper {
         GL11.glPopMatrix();
     }
 
-    /**
-     * @author amadornes
-     * @param gate
-     * @param x
-     * @param y
-     * @param z
-     * @param state
-     */
-    public static void renderRandomizerButton(GateBase gate, double x, double y, double z, boolean state) {
+    public static void renderRandomizerButton(double x, double y, double z, boolean state) {
 
         String res = Refs.MODID + ":textures/blocks/gates/randomizer/button_" + (state ? "on" : "off") + ".png";
         String resSide = Refs.MODID + ":textures/blocks/gates/randomizer/button_side.png";
+        renderButton(x, y, z, res, resSide);
+    }
+
+    public static void renderQuartzResonator(double x, double y, double z) {
+
+        String res = Refs.MODID + ":textures/blocks/gates/comparator/resonator.png";
+        String resSide = Refs.MODID + ":textures/blocks/gates/randomizer/button_side.png";
+        renderButton(x, y, z, res, resSide);
+    }
+
+    public static void renderButton(double x, double y, double z, String res, String resSide) {
 
         GL11.glPushMatrix();
         {

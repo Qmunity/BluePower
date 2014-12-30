@@ -65,9 +65,9 @@ public class GateCounter extends GateBase implements IGuiButtonSensitive {
         renderTop("right", right().getInput() > 0);
         renderTop("centerleft", left().getInput() > 0);
 
-        RenderHelper.renderRedstoneTorch(-2 / 16D, 1D / 8D, 0, 13D / 16D, true);
-        RenderHelper.renderRedstoneTorch(0, 1D / 8D, -5D / 16D, 8D / 16D, count == 0);
-        RenderHelper.renderRedstoneTorch(0, 1D / 8D, 5D / 16D, 8D / 16D, count == max);
+        RenderHelper.renderDigitalRedstoneTorch(-2 / 16D, 2D / 8D, 0, 13D / 16D, true);
+        RenderHelper.renderDigitalRedstoneTorch(0, 2D / 8D, -5D / 16D, 8D / 16D, count == 0);
+        RenderHelper.renderDigitalRedstoneTorch(0, 2D / 8D, 5D / 16D, 8D / 16D, count == max);
         GL11.glPushMatrix();
         {
             GL11.glTranslated(2 / 16D, 0, 0);
@@ -76,13 +76,14 @@ public class GateCounter extends GateBase implements IGuiButtonSensitive {
 
             double angle = min + max * (count / (double) this.max);
 
-            RenderHelper.renderPointer(-4 / 16D, 6 / 16D, 0, -angle + 0.5);
+            RenderHelper.renderPointer(-4 / 16D, 7 / 16D, 0, -angle + 0.5);
         }
         GL11.glPopMatrix();
     }
 
     @Override
     public void doLogic() {
+
         if (left().getInput() > 0 && !wasOnLeft) {
             wasOnLeft = true;
             count -= decrement;
@@ -114,11 +115,13 @@ public class GateCounter extends GateBase implements IGuiButtonSensitive {
 
     @Override
     public void writeToNBT(NBTTagCompound tag) {
+
         writeUpdateToNBT(tag);
     }
 
     @Override
     public void writeUpdateToNBT(NBTTagCompound tag) {
+
         super.writeUpdateToNBT(tag);
         tag.setInteger("count", count);
         tag.setInteger("decrement", decrement);
@@ -130,6 +133,7 @@ public class GateCounter extends GateBase implements IGuiButtonSensitive {
 
     @Override
     public void readFromNBT(NBTTagCompound tag) {
+
         readUpdateFromNBT(tag);
     }
 
@@ -198,7 +202,7 @@ public class GateCounter extends GateBase implements IGuiButtonSensitive {
     }
 
     @Override
-    public void addWailaInfo(List<String> info) {
+    public void addWAILABody(List<String> info) {
 
         info.add(I18n.format("gui.counterMax") + ": " + Color.YELLOW + max);
         info.add(I18n.format("gui.counterCount") + ": " + Color.YELLOW + count);

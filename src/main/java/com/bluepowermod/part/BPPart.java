@@ -36,6 +36,7 @@ import uk.co.qmunity.lib.part.IPartInteractable;
 import uk.co.qmunity.lib.part.IPartOccluding;
 import uk.co.qmunity.lib.part.IPartSelectable;
 import uk.co.qmunity.lib.part.IPartUpdateListener;
+import uk.co.qmunity.lib.part.IPartWAILAProvider;
 import uk.co.qmunity.lib.part.PartBase;
 import uk.co.qmunity.lib.raytrace.QMovingObjectPosition;
 import uk.co.qmunity.lib.raytrace.RayTracer;
@@ -49,7 +50,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public abstract class BPPart extends PartBase implements IPartSelectable, IPartCollidable, IPartOccluding, IPartUpdateListener,
-IPartInteractable, IDatabaseSaveable {
+IPartInteractable, IDatabaseSaveable, IPartWAILAProvider {
 
     public abstract String getUnlocalizedName();
 
@@ -156,7 +157,8 @@ IPartInteractable, IDatabaseSaveable {
             onUpdate();
     }
 
-    public void addWailaInfo(List<String> info) {
+    @Override
+    public void addWAILABody(List<String> text) {
 
     }
 

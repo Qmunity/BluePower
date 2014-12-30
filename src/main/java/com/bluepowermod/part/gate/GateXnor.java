@@ -7,8 +7,6 @@
  */
 package com.bluepowermod.part.gate;
 
-import java.util.List;
-
 import com.bluepowermod.client.render.RenderHelper;
 
 public class GateXnor extends GateBase {
@@ -43,11 +41,6 @@ public class GateXnor extends GateBase {
     }
 
     @Override
-    public void addWailaInfo(List<String> info) {
-
-    }
-
-    @Override
     protected void renderTop(float frame) {
 
         boolean l = left().getInput() > 0;
@@ -60,11 +53,11 @@ public class GateXnor extends GateBase {
         renderTop("left", left());
         renderTop("center", c ? "on" : "off");
 
-        RenderHelper.renderRedstoneTorch(4 / 16D, 0, 0, 12 / 16D, !l && !c);
-        RenderHelper.renderRedstoneTorch(-4 / 16D, 0, 0, 12 / 16D, !r && !c);
+        RenderHelper.renderDigitalRedstoneTorch(4 / 16D, 0, 0, 12 / 16D, !l && !c);
+        RenderHelper.renderDigitalRedstoneTorch(-4 / 16D, 0, 0, 12 / 16D, !r && !c);
 
-        RenderHelper.renderRedstoneTorch(0 / 16D, 0, -4 / 16D, 13 / 16D, c);
-        RenderHelper.renderRedstoneTorch(0 / 16D, 0, 4 / 16D, 13 / 16D, !((!l && !c) || (!r && !c)));
+        RenderHelper.renderDigitalRedstoneTorch(0 / 16D, 0, -4 / 16D, 13 / 16D, c);
+        RenderHelper.renderDigitalRedstoneTorch(0 / 16D, 0, 4 / 16D, 13 / 16D, !((!l && !c) || (!r && !c)));
     }
 
     @Override

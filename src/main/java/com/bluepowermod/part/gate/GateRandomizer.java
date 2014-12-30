@@ -17,7 +17,6 @@
 
 package com.bluepowermod.part.gate;
 
-import java.util.List;
 import java.util.Random;
 
 import net.minecraft.nbt.NBTTagCompound;
@@ -55,9 +54,9 @@ public class GateRandomizer extends GateBase {
         renderTop("right", out[2]);
         renderTop("center", back().getInput() > 0);
 
-        RenderHelper.renderRandomizerButton(this, 4 / 16D, 0, -6 / 16D, out[0]);
-        RenderHelper.renderRandomizerButton(this, 0, 0, 0, out[1]);
-        RenderHelper.renderRandomizerButton(this, -4 / 16D, 0, -6 / 16D, out[2]);
+        RenderHelper.renderRandomizerButton(4 / 16D, 0, -6 / 16D, out[0]);
+        RenderHelper.renderRandomizerButton(0, 0, 0, out[1]);
+        RenderHelper.renderRandomizerButton(-4 / 16D, 0, -6 / 16D, out[2]);
     }
 
     @Override
@@ -109,11 +108,6 @@ public class GateRandomizer extends GateBase {
         out[0] = tag.getBoolean("out_0");
         out[1] = tag.getBoolean("out_1");
         out[2] = tag.getBoolean("out_2");
-    }
-
-    @Override
-    public void addWailaInfo(List<String> info) {
-
     }
 
     @Override

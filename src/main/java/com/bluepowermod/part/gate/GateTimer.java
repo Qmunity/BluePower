@@ -51,7 +51,7 @@ public class GateTimer extends GateBase implements IGuiButtonSensitive {
         renderTop("back", back());
         renderTop("left", left());
 
-        RenderHelper.renderRedstoneTorch(0, 0, 0, 17 / 16D, back().getInput() == 0);
+        RenderHelper.renderDigitalRedstoneTorch(0, 0, 0, 17 / 16D, back().getInput() == 0);
 
         double t = 0;
         if (back().getInput() == 0 && (getParent() == null || (getParent() != null && !getParent().isSimulated())))

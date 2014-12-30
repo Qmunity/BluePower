@@ -19,6 +19,7 @@ import org.apache.logging.log4j.Logger;
 import com.bluepowermod.api.BPApi;
 import com.bluepowermod.client.gui.GUIHandler;
 import com.bluepowermod.compat.CompatibilityUtils;
+import com.bluepowermod.convert.WorldConversionEventHandler;
 import com.bluepowermod.event.BPEventHandler;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.init.BPEnchantments;
@@ -93,6 +94,8 @@ public class BluePower {
         BPEventHandler eventHandler = new BPEventHandler();
         MinecraftForge.EVENT_BUS.register(eventHandler);
         FMLCommonHandler.instance().bus().register(eventHandler);
+
+        MinecraftForge.EVENT_BUS.register(new WorldConversionEventHandler());
 
         RedstoneApi.getInstance().registerRedstoneProvider(new RedstoneProviderQmunityLib());
     }

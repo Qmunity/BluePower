@@ -21,16 +21,16 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import com.bluepowermod.block.BlockContainerBase;
-import com.bluepowermod.init.BPItems;
 import com.bluepowermod.init.BPCreativeTabs;
+import com.bluepowermod.init.BPItems;
 import com.bluepowermod.reference.GuiIDs;
 import com.bluepowermod.tile.tier3.TileEngine;
 import com.bluepowermod.util.Refs;
 
 /**
- * 
+ *
  * @author TheFjong
- * 
+ *
  */
 public class BlockEngine extends BlockContainerBase {
 
@@ -126,8 +126,8 @@ public class BlockEngine extends BlockContainerBase {
 
     @SuppressWarnings("cast")
     @Override
-    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int p_149727_6_, float p_149727_7_, float p_149727_8_,
-            float p_149727_9_) {
+    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int p_149727_6_, float p_149727_7_,
+            float p_149727_8_, float p_149727_9_) {
 
         if (player.inventory.getCurrentItem() != null) {
             Item item = player.inventory.getCurrentItem().getItem();
@@ -174,8 +174,6 @@ public class BlockEngine extends BlockContainerBase {
 
                     engine.setOrientation(direction);
                     world.markBlockForUpdate(x, y, z);
-                    System.out.println(direction + " Direction:Facing " + facing);
-
                 }
             }
         }
@@ -185,7 +183,7 @@ public class BlockEngine extends BlockContainerBase {
 
     /**
      * Method to be overwritten that returns a GUI ID
-     * 
+     *
      * @return
      */
     @Override

@@ -21,10 +21,9 @@ public class PartConverterGate implements IPartConverter {
 
         String id = old.getString("part_id");
         PartInfo info = PartManager.getPartInfo(id);
-        if (info == null) {
-            System.out.println("ERR - " + id);
+        if (info == null)
             return null;
-        }
+
         IPart p = info.create();
 
         if (!(p instanceof GateBase))

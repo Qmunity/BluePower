@@ -65,8 +65,6 @@ import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.part.wire.PartWireFace;
 import com.bluepowermod.part.wire.redstone.propagation.WirePropagator;
 
-import cpw.mods.fml.common.FMLCommonHandler;
-
 public class PartRedwireFace extends PartWireFace implements IFaceRedstoneDevice, IRedstoneConductor, IFaceBundledDevice,
         IBundledConductor, IPartRedstone, IPartWAILAProvider {
 
@@ -461,7 +459,6 @@ public class PartRedwireFace extends PartWireFace implements IFaceRedstoneDevice
                 try {
                     getWorld();
                 } catch (Exception ex) {
-                    System.out.println(FMLCommonHandler.instance().getEffectiveSide());
                 }
                 IRedstoneDevice dev = devices[dir.ordinal()];
                 if ((dev != null && (dev instanceof DummyRedstoneDevice)) || dir == getFace())
@@ -515,10 +512,8 @@ public class PartRedwireFace extends PartWireFace implements IFaceRedstoneDevice
     @Override
     public void onUpdate() {
 
-        // System.out.println("Updating " + Integer.toHexString(hashCode()));
         // StackTraceElement[] e = Thread.getAllStackTraces().get(Thread.currentThread());
         // for (int i = 2; i < 11; i++) {
-        // System.out.println(" - " + e[i].toString());
         // }
 
         if (!RedstoneApi.getInstance().shouldWiresHandleUpdates())
@@ -532,7 +527,6 @@ public class PartRedwireFace extends PartWireFace implements IFaceRedstoneDevice
         // Stopwatch timer = Stopwatch.createStarted();
         WireCommons.refreshConnections(this, this);
         // timer.stop();
-        // System.out.println(timer.elapsed(TimeUnit.MICROSECONDS) / 1000D + " ms");
 
         if (!bundled) {
             devices[getFace().ordinal()] = DummyRedstoneDevice.getDeviceAt(new Vec3i(this).add(getFace()));
@@ -572,7 +566,6 @@ public class PartRedwireFace extends PartWireFace implements IFaceRedstoneDevice
     public boolean canConnectRedstone(ForgeDirection side) {
 
         // if (getWorld().isRemote) {
-        // System.out.println(Arrays.asList(devices));
         // }
 
         return false;// side != getFace().getOpposite() && !bundled;
@@ -589,7 +582,7 @@ public class PartRedwireFace extends PartWireFace implements IFaceRedstoneDevice
             return 0;
 
         return (devices[side.ordinal()] != null && devices[side.ordinal()] instanceof DummyRedstoneDevice) ? ((DummyRedstoneDevice) devices[side
-                                                                                                                                            .ordinal()]).getRedstoneOutput(MathHelper.map(power & 0xFF, 0, 255, 0, 15)) : 0;
+                .ordinal()]).getRedstoneOutput(MathHelper.map(power & 0xFF, 0, 255, 0, 15)) : 0;
     }
 
     @Override
@@ -603,7 +596,7 @@ public class PartRedwireFace extends PartWireFace implements IFaceRedstoneDevice
             return 0;
 
         return (devices[side.ordinal()] != null && devices[side.ordinal()] instanceof DummyRedstoneDevice) ? ((DummyRedstoneDevice) devices[side
-                                                                                                                                            .ordinal()]).getRedstoneOutput(MathHelper.map(power & 0xFF, 0, 255, 0, 15)) : 0;
+                .ordinal()]).getRedstoneOutput(MathHelper.map(power & 0xFF, 0, 255, 0, 15)) : 0;
     }
 
     @Override
@@ -783,7 +776,7 @@ public class PartRedwireFace extends PartWireFace implements IFaceRedstoneDevice
     public IPartPlacement getPlacement(IPart part, World world, Vec3i location, ForgeDirection face, MovingObjectPosition mop,
             EntityPlayer player) {
 
-        if (type == RedwireType.RED_ALLOY)
+        if (bundled || type == RedwireType.RED_ALLOY)
             return null;
 
         return super.getPlacement(part, world, location, face, mop, player);
@@ -792,7 +785,7 @@ public class PartRedwireFace extends PartWireFace implements IFaceRedstoneDevice
     @Override
     public void addTooltip(List<String> tip) {
 
-        if (type == RedwireType.RED_ALLOY)
+        if (bundled || type == RedwireType.RED_ALLOY)
             tip.add(MinecraftColor.RED + I18n.format("Disabled temporarily. Still not fully working."));
     }
 

@@ -46,8 +46,8 @@ public class GateBuffer extends GateBase {
         renderTop("back", back());
         renderTop("left", left());
 
-        RenderHelper.renderRedstoneTorch(0, 0, 0, 13 / 16D, back().getInput() == 0);
-        RenderHelper.renderRedstoneTorch(0, 0, 4 / 16D, 14 / 16D, back().getInput() > 0);
+        RenderHelper.renderDigitalRedstoneTorch(0, 0, 0, 13 / 16D, back().getInput() == 0);
+        RenderHelper.renderDigitalRedstoneTorch(0, 0, 4 / 16D, 14 / 16D, back().getInput() > 0);
     }
 
     @Override

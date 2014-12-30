@@ -670,9 +670,7 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
     }
 
     @Override
-    public void addWailaInfo(List<String> info) {
-
-        // TODO Auto-generated method stub
+    public void addWAILABody(List<String> info) {
 
     }
 

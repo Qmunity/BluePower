@@ -48,15 +48,15 @@ public class GateMux extends GateBase {
         renderTop("left", left().getInput() > 0 || back().getInput() == 0);
         renderTop("right", right().getInput() > 0 || back().getInput() > 0);
         renderTop("back", back().getInput() > 0);
-        RenderHelper.renderRedstoneTorch(0, 1D / 8D, -2 / 16D, 9D / 16D, back().getInput() == 0);
+        RenderHelper.renderDigitalRedstoneTorch(0, 1D / 8D, -2 / 16D, 9D / 16D, back().getInput() == 0);
         boolean frontLeft = !(left().getInput() > 0 || back().getInput() == 0);
         boolean frontRight = !(right().getInput() > 0 || back().getInput() > 0);
-        RenderHelper.renderRedstoneTorch(-4 / 16D, 1D / 8D, 1 / 16D, 9D / 16D, frontRight);
-        RenderHelper.renderRedstoneTorch(4 / 16D, 1D / 8D, 1 / 16D, 9D / 16D, frontLeft);
+        RenderHelper.renderDigitalRedstoneTorch(-4 / 16D, 1D / 8D, 1 / 16D, 9D / 16D, frontRight);
+        RenderHelper.renderDigitalRedstoneTorch(4 / 16D, 1D / 8D, 1 / 16D, 9D / 16D, frontLeft);
 
         renderTop("frontleft", frontLeft);
         renderTop("frontRight", frontRight);
-        RenderHelper.renderRedstoneTorch(0, 1D / 8D, 4 / 16D, 9D / 16D, !frontLeft && !frontRight);
+        RenderHelper.renderDigitalRedstoneTorch(0, 1D / 8D, 4 / 16D, 9D / 16D, !frontLeft && !frontRight);
     }
 
     @Override
@@ -75,7 +75,7 @@ public class GateMux extends GateBase {
     }
 
     @Override
-    public void addWailaInfo(List<String> info) {
+    public void addWAILABody(List<String> info) {
 
         info.add(I18n.format("gui.passThrough") + ": " + Color.YELLOW
                 + (back().getInput() > 0 ? I18n.format("direction.left") : I18n.format("direction.right")));

@@ -61,15 +61,15 @@ public class GateSequencer extends GateBase implements IGuiButtonSensitive {
     @Override
     public void renderTop(float frame) {
 
-        RenderHelper.renderRedstoneTorch(0, 1D / 8D, 5D / 16D, 9D / 16D, power[1]);
-        RenderHelper.renderRedstoneTorch(-5D / 16D, 1D / 8D, 0, 9D / 16D, power[2]);
-        RenderHelper.renderRedstoneTorch(0, 1D / 8D, -5D / 16D, 9D / 16D, power[3]);
-        RenderHelper.renderRedstoneTorch(5D / 16D, 1D / 8D, 0, 9D / 16D, power[0]);
+        RenderHelper.renderDigitalRedstoneTorch(0, 1D / 8D, 5D / 16D, 9D / 16D, power[1]);
+        RenderHelper.renderDigitalRedstoneTorch(-5D / 16D, 1D / 8D, 0, 9D / 16D, power[2]);
+        RenderHelper.renderDigitalRedstoneTorch(0, 1D / 8D, -5D / 16D, 9D / 16D, power[3]);
+        RenderHelper.renderDigitalRedstoneTorch(5D / 16D, 1D / 8D, 0, 9D / 16D, power[0]);
 
-        RenderHelper.renderRedstoneTorch(0, 1D / 8D, 0, 15D / 16D, true);
+        RenderHelper.renderDigitalRedstoneTorch(0, 1D / 8D, 0, 15D / 16D, true);
 
         double t = 0;
-        if (back().getInput() == 0 && (getParent() == null || (getParent() != null && !getParent().isSimulated())))
+        if ((getParent() == null || (getParent() != null && !getParent().isSimulated())))
             t = -(double) (ticks - start + frame) / time;
         RenderHelper.renderPointer(0, 7D / 16D, 0 / 16D, 0.5 + t);
     }
@@ -180,7 +180,7 @@ public class GateSequencer extends GateBase implements IGuiButtonSensitive {
     }
 
     @Override
-    public void addWailaInfo(List<String> info) {
+    public void addWAILABody(List<String> info) {
 
         String t = "";
 

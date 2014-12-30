@@ -17,8 +17,6 @@
 
 package com.bluepowermod.part.gate;
 
-import java.util.List;
-
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
@@ -80,11 +78,11 @@ public class GateTransparentLatch extends GateBase {
         renderTop("left", mirrored ? right() : left());
         renderTop("back", back());
         renderTop("leftcenter", back().getInput() == 0);
-        RenderHelper.renderRedstoneTorch(4 / 16D, 3D / 16D, -4 / 16D, 8D / 16D, back().getInput() == 0);
-        RenderHelper.renderRedstoneTorch(4 / 16D, 3D / 16D, 1 / 16D, 8D / 16D, back().getInput() > 0 && front().getInput() == 0);
-        RenderHelper.renderRedstoneTorch(1 / 16D, 3D / 16D, 1 / 16D, 8D / 16D, back().getInput() == 0 && front().getInput() == 0);
-        RenderHelper.renderRedstoneTorch(-4 / 16D, 2D / 16D, 1 / 16D, 10D / 16D, front().getInput() > 0);
-        RenderHelper.renderRedstoneTorch(2 / 16D, 2D / 16D, 6 / 16D, 10D / 16D, front().getInput() > 0);
+        RenderHelper.renderDigitalRedstoneTorch(4 / 16D, 3D / 16D, -4 / 16D, 8D / 16D, back().getInput() == 0);
+        RenderHelper.renderDigitalRedstoneTorch(4 / 16D, 3D / 16D, 1 / 16D, 8D / 16D, back().getInput() > 0 && front().getInput() == 0);
+        RenderHelper.renderDigitalRedstoneTorch(1 / 16D, 3D / 16D, 1 / 16D, 8D / 16D, back().getInput() == 0 && front().getInput() == 0);
+        RenderHelper.renderDigitalRedstoneTorch(-4 / 16D, 2D / 16D, 1 / 16D, 10D / 16D, front().getInput() > 0);
+        RenderHelper.renderDigitalRedstoneTorch(2 / 16D, 2D / 16D, 6 / 16D, 10D / 16D, front().getInput() > 0);
         renderTop("right", mirrored ? left() : right());
 
         if (mirrored) {
@@ -154,11 +152,6 @@ public class GateTransparentLatch extends GateBase {
         }
         if (getParent() != null && getWorld() != null && getWorld().isRemote)
             getWorld().markBlockRangeForRenderUpdate(getX(), getY(), getZ(), getX(), getY(), getZ());
-    }
-
-    @Override
-    public void addWailaInfo(List<String> info) {
-
     }
 
 }

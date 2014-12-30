@@ -67,9 +67,10 @@ public class GateStateCell extends GateBase implements IGuiButtonSensitive {
         renderTop("left", left());
         renderTop("center", left());
 
-        RenderHelper.renderRandomizerButton(this, 2 / 16D, 0, -4 / 16D, left().getOutput() > 0);
-        RenderHelper.renderRedstoneTorch(-4 / 16D, 1D / 8D, 0, 13D / 16D, ticks > 0);
-        RenderHelper.renderRedstoneTorch(-1 / 16D, 1D / 8D, 4 / 16D, 9D / 16D, mirrored ? back().getOutput() > 0 : front().getOutput() > 0);
+        RenderHelper.renderRandomizerButton(2 / 16D, 0, -4 / 16D, left().getOutput() > 0);
+        RenderHelper.renderDigitalRedstoneTorch(-4 / 16D, 1D / 8D, 0, 13D / 16D, ticks > 0);
+        RenderHelper.renderDigitalRedstoneTorch(-1 / 16D, 1D / 8D, 4 / 16D, 9D / 16D, mirrored ? back().getOutput() > 0 : front()
+                .getOutput() > 0);
         RenderHelper.renderPointer(-4 / 16D, 6D / 16D, 0, ticks > 0 ? 1 - (ticks + frame) / (time * 7) + 0.75 : 0.75);
 
     }
@@ -115,11 +116,13 @@ public class GateStateCell extends GateBase implements IGuiButtonSensitive {
 
     @Override
     public void writeToNBT(NBTTagCompound tag) {
+
         writeUpdateToNBT(tag);
     }
 
     @Override
     public void writeUpdateToNBT(NBTTagCompound tag) {
+
         super.writeUpdateToNBT(tag);
         tag.setInteger("ticks", ticks);
         tag.setInteger("time", time);
@@ -129,6 +132,7 @@ public class GateStateCell extends GateBase implements IGuiButtonSensitive {
 
     @Override
     public void readFromNBT(NBTTagCompound tag) {
+
         readUpdateFromNBT(tag);
     }
 
@@ -171,7 +175,7 @@ public class GateStateCell extends GateBase implements IGuiButtonSensitive {
     }
 
     @Override
-    public void addWailaInfo(List<String> info) {
+    public void addWAILABody(List<String> info) {
 
         String t = "";
 

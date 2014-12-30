@@ -7,12 +7,11 @@
  */
 package com.bluepowermod.part.gate.analog;
 
-import java.util.List;
-
 import net.minecraft.block.Block;
 import net.minecraftforge.common.util.ForgeDirection;
 import uk.co.qmunity.lib.vec.Vec3i;
 
+import com.bluepowermod.client.render.RenderHelper;
 import com.bluepowermod.part.gate.GateBase;
 
 public class GateComparator extends GateBase {
@@ -23,7 +22,9 @@ public class GateComparator extends GateBase {
     public void initializeConnections() {
 
         front().enable().setOutputOnly();
+        right().enable();
         back().enable();
+        left().enable();
     }
 
     @Override
@@ -49,46 +50,27 @@ public class GateComparator extends GateBase {
                 power = bb.getComparatorInputOverride(getWorld(), b.getX(), b.getY(), b.getZ(), d.getOpposite().ordinal());
         }
 
-        front().setOutput(power);
-    }
-
-    @Override
-    protected boolean changeMode() {
-
-        return false;
-    }
-
-    @Override
-    public void addWailaInfo(List<String> info) {
-
+        front().setOutput(Math.max(power - Math.max(left().getInput(), right().getInput()), 0));
     }
 
     @Override
     protected void renderTop(float frame) {
 
-        // renderTop("front", front().getOutput() == 0 ? "on" : "off");
-        // renderTop("right", right());
-        // renderTop("back", back());
-        // renderTop("left", left());
-        //
-        // RenderHelper.renderRedstoneTorch(3 / 16D, 0, 0, 12 / 16D, left().getInput() == 0 && left().isEnabled());
-        // RenderHelper.renderRedstoneTorch(-3 / 16D, 0, 0, 12 / 16D, right().getInput() == 0 && right().isEnabled());
-        // RenderHelper.renderRedstoneTorch(0, 0, 0, 12 / 16D, back().getInput() == 0 && back().isEnabled());
-        //
-        // RenderHelper.renderRedstoneTorch(0, 0, 4 / 16D, 14 / 16D, front().getOutput() > 0);
+        renderTop("front", front().getOutput() == 0);
+        renderTop("right", right());
+        renderTop("back", back());
+        renderTop("left", left());
+
+        RenderHelper.renderAnalogRedstoneTorch(0, 0, 5 / 16D, 11 / 16D, front().getOutput() > 0);
+
+        RenderHelper.renderAnalogRedstoneTorch(-4 / 16D, 0, -3 / 16D, 13 / 16D, right().getInput() == 0);
+        RenderHelper.renderAnalogRedstoneTorch(4 / 16D, 0, -3 / 16D, 13 / 16D, left().getInput() == 0);
+
+        RenderHelper.renderQuartzResonator(0, 0, -4 / 16D);
     }
 
     @Override
     public void tick() {
 
-        // if (left().getInput() == 0 && left().isEnabled())
-        // spawnBlueParticle(5 / 16D, 6 / 16D, 8 / 16D);
-        // if (right().getInput() == 0 && right().isEnabled())
-        // spawnBlueParticle(11 / 16D, 6 / 16D, 8 / 16D);
-        // if (back().getInput() == 0 && back().isEnabled())
-        // spawnBlueParticle(8 / 16D, 6 / 16D, 8 / 16D);
-        //
-        // if (front().getOutput() > 0)
-        // spawnBlueParticle(8 / 16D, 8 / 16D, 4 / 16D);
     }
 }

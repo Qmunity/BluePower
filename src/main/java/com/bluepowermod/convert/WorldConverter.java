@@ -30,12 +30,10 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.chunk.storage.RegionFile;
 import uk.co.qmunity.lib.part.IPart;
 import uk.co.qmunity.lib.part.compat.fmp.FMPPart;
-import uk.co.qmunity.lib.vec.Vec2d;
 
 import com.bluepowermod.convert.part.PartConverterGate;
 import com.bluepowermod.convert.part.PartConverterLamp;
 import com.bluepowermod.convert.part.PartConverterWire;
-import com.bluepowermod.part.PartManager;
 
 public class WorldConverter {
 
@@ -45,16 +43,6 @@ public class WorldConverter {
         converters.add(new PartConverterWire());
         converters.add(new PartConverterLamp());
         converters.add(new PartConverterGate());
-    }
-
-    public static void main(String[] args) {
-
-        PartManager.registerParts();
-
-        // Temporary, just for testing :P
-        new WorldConverter(new File("C:/modding/1.7.10/rundir/client/saves/Multipart Conversion Test/")).convert();
-        // .convertRegion(new File(
-        // "C:/modding/1.7.10/rundir/client/saves/Multipart Conversion Test/region/r.4.-1.mca"));
     }
 
     private final File worldFolder;
@@ -72,34 +60,22 @@ public class WorldConverter {
 
     public boolean needsConversion() {
 
-        return false;
+        return !new File(worldFolder, "bluepower/worldconversion").exists();
     }
 
     public void convert() {
 
-        for (File regionFolder : getRegionFolders())
-            for (File region : getRegionFiles(regionFolder))
-                convertRegion(region);
-    }
-
-    private List<File> getRegionFolders() {
-
-        List<File> folders = new ArrayList<File>();
-
         File regFolder = new File(worldFolder, "region/");
 
-        if (regFolder.exists() && regFolder.isDirectory())
-            folders.add(regFolder);
-
-        for (File f : worldFolder.listFiles()) {
-            if (!f.isDirectory())
-                continue;
-            regFolder = new File(f, "region/");
-            if (regFolder.exists() && regFolder.isDirectory())
-                folders.add(regFolder);
+        if (regFolder.exists())
+            for (File region : getRegionFiles(regFolder))
+                convertRegion(region);
+        try {
+            File f = new File(worldFolder, "bluepower/worldconversion");
+            f.getParentFile().mkdirs();
+            f.createNewFile();
+        } catch (Exception e) {
         }
-
-        return folders;
     }
 
     private List<File> getRegionFiles(File regionFolder) {
@@ -149,25 +125,16 @@ public class WorldConverter {
 
         RegionFile reg = new RegionFile(file);
 
-        System.out.println("Region! " + file.getName());
-
         String filename = file.getName();
         int dot = filename.indexOf(".", 3);
         int regX = Integer.parseInt(filename.substring(2, dot));
         int regZ = Integer.parseInt(filename.substring(dot + 1, filename.lastIndexOf(".")));
-        System.out.println(" This region goes from (" + (regX * 32) + ", " + (regZ * 32) + ") to (" + ((regX * 32) + 32) + ", "
-                + ((regZ * 32) + 32) + ")");
 
         for (int x = 0; x < 32; x++) {
             for (int z = 0; z < 32; z++) {
                 NBTTagCompound chunk = getChunk(reg, x, z);
                 if (chunk == null)
                     continue;
-
-                Vec2d c = new Vec2d(x + 32 * regX, z + 32 * regZ);
-
-                if (c.getX() == 129 && c.distance(new Vec2d(129, -25)) < 2)
-                    System.out.println("    Chunk: (" + (x + 32 * regX) + ", " + (z + 32 * regZ) + ") " + chunk);
 
                 NBTTagList tileEntities = chunk.getTagList("TileEntities", new NBTTagCompound().getId());
 
@@ -179,10 +146,8 @@ public class WorldConverter {
                         changed |= convertTile(te);
                 }
 
-                if (changed) {
+                if (changed)
                     saveChunk(reg, x, z, chunk);
-                    System.out.println("Changed!");
-                }
             }
         }
 

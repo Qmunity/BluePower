@@ -20,7 +20,6 @@ import com.bluepowermod.item.ItemPart;
 import com.bluepowermod.part.gate.GateAnd;
 import com.bluepowermod.part.gate.GateBuffer;
 import com.bluepowermod.part.gate.GateCounter;
-import com.bluepowermod.part.gate.GateLightCell;
 import com.bluepowermod.part.gate.GateMux;
 import com.bluepowermod.part.gate.GateNand;
 import com.bluepowermod.part.gate.GateNor;
@@ -41,6 +40,7 @@ import com.bluepowermod.part.gate.GateXnor;
 import com.bluepowermod.part.gate.GateXor;
 import com.bluepowermod.part.gate.analog.GateComparator;
 import com.bluepowermod.part.gate.analog.GateInverter;
+import com.bluepowermod.part.gate.analog.GateLightCell;
 import com.bluepowermod.part.gate.ic.Circuit3x3;
 import com.bluepowermod.part.gate.ic.Circuit5x5;
 import com.bluepowermod.part.gate.ic.Circuit7x7;
@@ -196,10 +196,8 @@ public class PartManager {
 
     public static void registerItems() {
 
-        for (String s : parts.keySet()) {
-            System.out.println(" - " + parts.get(s).getType());
+        for (String s : parts.keySet())
             parts.get(s).registerItem();
-        }
     }
 
     @SideOnly(Side.CLIENT)

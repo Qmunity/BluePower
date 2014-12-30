@@ -26,8 +26,6 @@ import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 
-import uk.co.qmunity.lib.util.QLog;
-
 import com.bluepowermod.client.render.RenderHelper;
 import com.bluepowermod.util.Refs;
 
@@ -38,10 +36,18 @@ public class GateRSLatch extends GateBase {
     @Override
     public void initializeConnections() {
 
-        front().enable().setOutputOnly();
-        left().enable();
-        right().enable();
+        front().enable().setOutput(15, false).setOutputOnly();
+        front().setInput(0);
+
+        left().enable().setInput(0);
+        left().setOutput(0, false);
+        if (mode == 0 || mode == 1)
+            left().setOutput(15, false);
+
+        right().enable().setInput(0);
+
         back().enable().setOutputOnly();
+        back().setInput(0);
 
     }
 
@@ -68,22 +74,24 @@ public class GateRSLatch extends GateBase {
         this.renderTop();
 
         Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/gates/" + getTextureName()
-                + (mode > 1 ? "2" : "") + "/left_" + ((mode % 2 == 0 ? left().getInput() > 0 : right().getInput() > 0) ? "on" : "off") + ".png"));
+                + (mode > 1 ? "2" : "") + "/left_" + ((mode % 2 == 0 ? left().getInput() > 0 : right().getInput() > 0) ? "on" : "off")
+                + ".png"));
         renderTop();
         Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/gates/" + getTextureName()
-                + (mode > 1 ? "2" : "") + "/right_" + ((mode % 2 == 0 ? right().getInput() > 0 : left().getInput() > 0) ? "on" : "off") + ".png"));
+                + (mode > 1 ? "2" : "") + "/right_" + ((mode % 2 == 0 ? right().getInput() > 0 : left().getInput() > 0) ? "on" : "off")
+                + ".png"));
         renderTop();
         if (mode > 1) {
-            Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/gates/" + getTextureName()
-                    + "2/front" + "_" + (front().getInput() > 0 ? "on" : "off") + ".png"));
+            Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/gates/"
+                    + getTextureName() + "2/front" + "_" + (front().getInput() > 0 ? "on" : "off") + ".png"));
             renderTop();
-            Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/gates/" + getTextureName()
-                    + "2/back" + "_" + (back().getInput() > 0 ? "on" : "off") + ".png"));
+            Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/gates/"
+                    + getTextureName() + "2/back" + "_" + (back().getInput() > 0 ? "on" : "off") + ".png"));
             renderTop();
         }
 
-        RenderHelper.renderRedstoneTorch(1D / 8D, 1D / 8D, -2D / 8D, 9D / 16D, front().getInput() == 0);
-        RenderHelper.renderRedstoneTorch(-1D / 8D, 1D / 8D, 2D / 8D, 9D / 16D, back().getInput() == 0);
+        RenderHelper.renderDigitalRedstoneTorch(1D / 8D, 3D / 16D, -2D / 8D, 9D / 16D, front().getInput() == 0);
+        RenderHelper.renderDigitalRedstoneTorch(-1D / 8D, 3D / 16D, 2D / 8D, 9D / 16D, back().getInput() == 0);
 
         if (mode % 2 == 1) {
             GL11.glEnable(GL11.GL_CULL_FACE);
@@ -93,10 +101,11 @@ public class GateRSLatch extends GateBase {
 
     @Override
     public void doLogic() {
+
         if ((left().getOutput() > 0 || left().getInput() > 0) && (right().getOutput() > 0 || right().getInput() > 0)) {
-            //  left().setBidirectional();
+            // left().setBidirectional();
             left().setOutput(0);
-            //   right().setBidirectional();
+            // right().setBidirectional();
             right().setOutput(0);
             front().setOutput(0);
             back().setOutput(0);
@@ -122,11 +131,11 @@ public class GateRSLatch extends GateBase {
                 back().setOutput(15);
                 if (mode < 2) {
                     if (mirrored) {
-                        //   right().setOutputOnly();
+                        // right().setOutputOnly();
                         right().setOutput(15);
                         left().setOutput(0);
                     } else {
-                        //  left().setOutputOnly();
+                        // left().setOutputOnly();
                         left().setOutput(15);
                         right().setOutput(0);
                     }
@@ -138,9 +147,13 @@ public class GateRSLatch extends GateBase {
 
     @Override
     protected boolean changeMode() {
+
         if (++mode > 3)
             mode = 0;
-        QLog.info("mode:" + mode);
+
+        initializeConnections();
+        doLogic();
+
         return true;
     }
 
@@ -171,7 +184,7 @@ public class GateRSLatch extends GateBase {
     }
 
     @Override
-    public void addWailaInfo(List<String> info) {
+    public void addWAILABody(List<String> info) {
 
         info.add(I18n.format("gui.mode") + ": " + I18n.format("bluepower.waila.rsLatch." + (mode < 2 ? "feedback" : "noFeedback")));
     }

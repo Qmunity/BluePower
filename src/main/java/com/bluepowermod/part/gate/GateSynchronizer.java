@@ -7,8 +7,6 @@
  */
 package com.bluepowermod.part.gate;
 
-import java.util.List;
-
 import net.minecraft.nbt.NBTTagCompound;
 
 import com.bluepowermod.client.render.RenderHelper;
@@ -38,15 +36,15 @@ public class GateSynchronizer extends GateBase {
     @Override
     public void renderTop(float frame) {
 
-        RenderHelper.renderRedstoneTorch(0, 1D / 8D, 5 / 16D, 10D / 16D, front().getInput() > 0);
+        RenderHelper.renderDigitalRedstoneTorch(0, 1D / 8D, 5 / 16D, 10D / 16D, front().getInput() > 0);
         renderTop("front", front());
         renderTop("right", right());
         renderTop("back", back());
         renderTop("left", left());
         renderTop("frontleft", !leftTriggered);
         renderTop("frontright", !rightTriggered);
-        RenderHelper.renderRandomizerButton(this, 3 / 16D, 0, -4 / 16D, leftTriggered);
-        RenderHelper.renderRandomizerButton(this, -3 / 16D, 0, -4 / 16D, rightTriggered);
+        RenderHelper.renderRandomizerButton(3 / 16D, 0, -4 / 16D, leftTriggered);
+        RenderHelper.renderRandomizerButton(-3 / 16D, 0, -4 / 16D, rightTriggered);
     }
 
     @Override
@@ -76,16 +74,19 @@ public class GateSynchronizer extends GateBase {
 
     @Override
     public void tick() {
+
         front().setOutput(0);
     }
 
     @Override
     public void writeToNBT(NBTTagCompound tag) {
+
         writeUpdateToNBT(tag);
     }
 
     @Override
     public void readFromNBT(NBTTagCompound tag) {
+
         readUpdateFromNBT(tag);
     }
 
@@ -107,11 +108,6 @@ public class GateSynchronizer extends GateBase {
         rightTriggered = tag.getBoolean("rightTriggered");
         oldLeftState = tag.getBoolean("oldLeftState");
         oldRightState = tag.getBoolean("oldRightState");
-    }
-
-    @Override
-    public void addWailaInfo(List<String> info) {
-
     }
 
 }

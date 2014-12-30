@@ -9,8 +9,8 @@ package com.bluepowermod.part.gate;
 
 import java.util.List;
 
-import uk.co.qmunity.lib.util.Dir;
 import net.minecraft.client.resources.I18n;
+import uk.co.qmunity.lib.util.Dir;
 
 import com.bluepowermod.client.render.RenderHelper;
 import com.bluepowermod.util.Color;
@@ -81,15 +81,24 @@ public class GateOr extends GateBase {
     }
 
     @Override
-    public void addWailaInfo(List<String> info) {
+    public void addWAILABody(List<String> info) {
 
         info.add(Color.YELLOW + I18n.format("gui.connections") + ":");
-        info.add("  " + Dir.LEFT.getLocalizedName() + ": "
-                + (getConnection(Dir.LEFT).isEnabled() ? Color.GREEN + I18n.format("random.enabled") : Color.RED + I18n.format("random.disabled")));
-        info.add("  " + Dir.BACK.getLocalizedName() + ": "
-                + (getConnection(Dir.BACK).isEnabled() ? Color.GREEN + I18n.format("random.enabled") : Color.RED + I18n.format("random.disabled")));
-        info.add("  " + Dir.RIGHT.getLocalizedName() + ": "
-                + (getConnection(Dir.RIGHT).isEnabled() ? Color.GREEN + I18n.format("random.enabled") : Color.RED + I18n.format("random.disabled")));
+        info.add("  "
+                + Dir.LEFT.getLocalizedName()
+                + ": "
+                + (getConnection(Dir.LEFT).isEnabled() ? Color.GREEN + I18n.format("random.enabled") : Color.RED
+                        + I18n.format("random.disabled")));
+        info.add("  "
+                + Dir.BACK.getLocalizedName()
+                + ": "
+                + (getConnection(Dir.BACK).isEnabled() ? Color.GREEN + I18n.format("random.enabled") : Color.RED
+                        + I18n.format("random.disabled")));
+        info.add("  "
+                + Dir.RIGHT.getLocalizedName()
+                + ": "
+                + (getConnection(Dir.RIGHT).isEnabled() ? Color.GREEN + I18n.format("random.enabled") : Color.RED
+                        + I18n.format("random.disabled")));
     }
 
     @Override
@@ -100,8 +109,8 @@ public class GateOr extends GateBase {
         renderTop("back", back());
         renderTop("left", left());
 
-        RenderHelper.renderRedstoneTorch(0, 0, 0, 12 / 16D, front().getOutput() == 0);
-        RenderHelper.renderRedstoneTorch(0, 0, 6 / 16D, 14 / 16D, front().getOutput() > 0);
+        RenderHelper.renderDigitalRedstoneTorch(0, 0, 0, 12 / 16D, front().getOutput() == 0);
+        RenderHelper.renderDigitalRedstoneTorch(0, 0, 6 / 16D, 14 / 16D, front().getOutput() > 0);
     }
 
     @Override

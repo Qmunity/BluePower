@@ -17,8 +17,6 @@
 
 package com.bluepowermod.part.gate;
 
-import java.util.List;
-
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.util.IIcon;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -39,10 +37,9 @@ public class GateWire extends GateBase {
         back().enable();
         right().enable();
 
-        /*  front.setOutput();
-          left.setOutput();
-          back.setOutput();
-          right.setOutput();*/
+        /*
+         * front.setOutput(); left.setOutput(); back.setOutput(); right.setOutput();
+         */
     }
 
     @Override
@@ -90,17 +87,14 @@ public class GateWire extends GateBase {
 
     }
 
-    @Override
-    public void addWailaInfo(List<String> info) {
-
-    }
-
     public static void registerTopIcon(IIconRegister reg) {
+
         topIcon = reg.registerIcon(Refs.MODID + ":gates/" + ID + "/base");
     }
 
     @Override
     public IIcon getIcon(ForgeDirection face) {
+
         if (face == ForgeDirection.UP)
             return topIcon;
 
