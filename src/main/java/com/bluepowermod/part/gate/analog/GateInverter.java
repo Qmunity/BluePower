@@ -21,9 +21,9 @@ import com.bluepowermod.client.render.RenderHelper;
 import com.bluepowermod.part.gate.GateBase;
 
 /* Takes a signal and inverts it
-    e.g. input str 2 output str 13
-         input str 5 output str 10
-         input str 0 output str 15
+ e.g. input str 2 output str 13
+ input str 5 output str 10
+ input str 0 output str 15
  */
 
 public class GateInverter extends GateBase {
@@ -61,7 +61,7 @@ public class GateInverter extends GateBase {
         renderTop("back", back());
         renderTop("left", left());
 
-        RenderHelper.renderDigitalRedstoneTorch(0, 0, 0, 12 / 16D, back().getInput() == 0);
+        RenderHelper.renderAnalogRedstoneTorch(0, 0, 0, 12 / 16D, back().getInput() == 0);
     }
 
     @Override
@@ -99,4 +99,3 @@ public class GateInverter extends GateBase {
         return true;
     }
 }
-

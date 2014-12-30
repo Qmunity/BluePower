@@ -19,16 +19,19 @@ package com.bluepowermod.part.wire.redstone;
 
 public enum RedwireType {
 
-    BLUESTONE(false, false, 0x4444CC), RED_ALLOY(true, true, 0xDD0000), INFUSED_TESLATITE(true, false, 0xAA00BB);
+    BLUESTONE(false, false, 0x4444CC, "ingotBlueAlloy"), RED_ALLOY(true, true, 0xDD0000, "ingotRedAlloy"), INFUSED_TESLATITE(true, false,
+            0xAA00BB, "ingotPurpleAlloy");
 
     private boolean analog, loss;
     private int color;
+    private String ingotOredictName;
 
-    private RedwireType(boolean analog, boolean loss, int color) {
+    private RedwireType(boolean analog, boolean loss, int color, String ingotOredictName) {
 
         this.analog = analog;
         this.loss = loss;
         this.color = color;
+        this.ingotOredictName = ingotOredictName;
     }
 
     public boolean isAnalog() {
@@ -49,6 +52,11 @@ public enum RedwireType {
     public int getColor() {
 
         return color;
+    }
+
+    public String getIngotOredictName() {
+
+        return ingotOredictName;
     }
 
 }

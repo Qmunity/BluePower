@@ -45,7 +45,7 @@ public class OreDictionarySetup {
         OreDictionary.registerOre("gemAmethyst", BPItems.amethyst_gem);
         OreDictionary.registerOre("gemSapphire", BPItems.sapphire_gem);
         OreDictionary.registerOre("dustTeslatite", BPItems.teslatite_dust);
-        OreDictionary.registerOre("dustInfusedteslatite", BPItems.infused_teslatite_dust);
+        OreDictionary.registerOre("dustInfusedTeslatite", BPItems.infused_teslatite_dust);
         OreDictionary.registerOre("ingotCopper", BPItems.copper_ingot);
         OreDictionary.registerOre("ingotZinc", BPItems.zinc_ingot);
         OreDictionary.registerOre("ingotSilver", BPItems.silver_ingot);
@@ -54,8 +54,9 @@ public class OreDictionarySetup {
         OreDictionary.registerOre("nuggetTungsten", BPItems.tungsten_nugget);
         OreDictionary.registerOre("dyePurple", BPItems.indigo_dye);
         OreDictionary.registerOre("ingotBlueAlloy", BPItems.blue_alloy_ingot);
-        OreDictionary.registerOre("waferStone", BPItems.stone_tile);
         OreDictionary.registerOre("ingotRedAlloy", BPItems.red_alloy_ingot);
+        OreDictionary.registerOre("ingotPurpleAlloy", BPItems.purple_alloy_ingot);
+        OreDictionary.registerOre("waferStone", BPItems.stone_tile);
 
         for (int i = 0; i < 16; i++) {
             // OreDictionary.registerOre("bluestoneInsulated", PartRegistry.getInstance().getItemForPart("bluestoneWire." +

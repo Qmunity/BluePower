@@ -101,6 +101,7 @@ public class Refs {
     public static final String BRASSINGOT_NAME = "brass_ingot";
     public static final String BLUEALLOYINGOT_NAME = "blue_alloy_ingot";
     public static final String REDALLOYINGOT_NAME = "red_alloy_ingot";
+    public static final String PURPLEALLOYINGOT_NAME = "purple_alloy_ingot";
     public static final String ZINCPLATE_NAME = "zincplate";
 
     public static final String RUBYAXE_NAME = "ruby_axe";
