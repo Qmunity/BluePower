@@ -18,6 +18,7 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -300,26 +301,31 @@ public class PneumaticTube extends BPPart implements IPartTicking {
         if (getWorld() == null)
             return false;
 
-        if (!getWorld().isRemote) {
-
-            if (item != null && item.getItem() == BPItems.paint_brush
-                    && ((ItemDamageableColorableOverlay) BPItems.paint_brush).tryUseItem(item)) {
-
-                List<Vec3dCube> boxes = getTubeBoxes();
-                Vec3dCube box = mop.getCube();
-                int face = -1;
-                if (box.equals(boxes.get(0))) {
-                    face = mop.sideHit;
-                } else {
-                    face = getSideFromAABBIndex(boxes.indexOf(box));
-                }
-                color[face] = TubeColor.values()[item.getItemDamage()];
-                updateConnections();
-                getLogic().clearNodeCaches();
-                notifyUpdate();
-                return true;
-
+        if (item != null) {
+            TubeColor newColor = null;
+            if (item.getItem() == BPItems.paint_brush && ((ItemDamageableColorableOverlay) BPItems.paint_brush).tryUseItem(item)) {
+                newColor = TubeColor.values()[item.getItemDamage()];
+            } else if (item.getItem() == Items.water_bucket || (item.getItem() == BPItems.paint_brush && item.getItemDamage() == 16)) {
+                newColor = TubeColor.NONE;
             }
+            if (newColor != null) {
+                if (!getWorld().isRemote) {
+                    List<Vec3dCube> boxes = getTubeBoxes();
+                    Vec3dCube box = mop.getCube();
+                    int face = -1;
+                    if (box.equals(boxes.get(0))) {
+                        face = mop.sideHit;
+                    } else {
+                        face = getSideFromAABBIndex(boxes.indexOf(box));
+                    }
+                    color[face] = newColor;
+                    updateConnections();
+                    getLogic().clearNodeCaches();
+                    notifyUpdate();
+                }
+                return true;
+            }
+
         }
         return false;
     }
@@ -531,6 +537,10 @@ public class PneumaticTube extends BPPart implements IPartTicking {
                 continue;
             TubeColor sideColor = color[dir.ordinal()];
             if (sideColor != TubeColor.NONE) {
+                if (connections[ForgeDirection.EAST.ordinal()] || connections[ForgeDirection.WEST.ordinal()])
+                    renderer.setTextureRotations(1, 1, 0, 0, 1, 1);
+                if (connections[ForgeDirection.NORTH.ordinal()] || connections[ForgeDirection.SOUTH.ordinal()])
+                    renderer.setTextureRotations(0, 0, 1, 1, 0, 0);
                 renderer.setColor(ItemDye.field_150922_c[sideColor.ordinal()]);
                 renderTexturedCuboid(aabb, colorIcon, renderer, new boolean[] { dir == ForgeDirection.DOWN, dir == ForgeDirection.UP,
                         dir == ForgeDirection.NORTH, dir == ForgeDirection.SOUTH, dir == ForgeDirection.WEST, dir == ForgeDirection.EAST });
@@ -606,13 +616,13 @@ public class PneumaticTube extends BPPart implements IPartTicking {
 
             renderTexturedCuboid(box, getSideIcon(d), renderer, new boolean[] { false, false, true, true, true, true });
 
-            // TubeColor sideColor = color[d.ordinal()];
-            // if (sideColor != TubeColor.NONE) {
-            // renderer.setColor(ItemDye.field_150922_c[sideColor.ordinal()]);
-            // renderTexturedCuboid(box, IconSupplier.pneumaticTubeColorSide, renderer, new boolean[] { false, false, true, true, true,
-            // true });
-            // renderer.setColor(0xFFFFFF);
-            // }
+            TubeColor sideColor = color[d.ordinal()];
+            if (sideColor != TubeColor.NONE) {
+                renderer.setColor(ItemDye.field_150922_c[sideColor.ordinal()]);
+                renderTexturedCuboid(box, IconSupplier.pneumaticTubeColorSide, renderer, new boolean[] { false, false, true, true, true,
+                        true });
+                renderer.setColor(0xFFFFFF);
+            }
         }
         renderer.resetTransformations();
 
