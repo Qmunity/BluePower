@@ -155,6 +155,22 @@ public class BluePower {
             if (name.contains("inverted"))
                 name = "bluepower:part." + name.substring("bluepower:part.inverted".length()) + ".inverted";
 
+            if (name.equals("bluepower:stone_wire"))
+                name = "bluepower:bluestone_wire_tile";
+            if (name.equals("bluepower:stone_cathode"))
+                name = "bluepower:bluestone_cathode_tile";
+            if (name.equals("bluepower:stone_anode"))
+                name = "bluepower:bluestone_anode_tile";
+            if (name.equals("bluepower:stone_pointer"))
+                name = "bluepower:bluestone_pointer_tile";
+
+            if (name.equals("bluepower:silicon_chip"))
+                name = "bluepower:silicon_chip_tile";
+            if (name.equals("bluepower:taintedsilicon_chip"))
+                name = "bluepower:tainted_silicon_chip_tile";
+            if (name.equals("bluepower:quartz_resonator"))
+                name = "bluepower:quartz_resonator_tile";
+
             Item item = GameData.getItemRegistry().getObject(name);
             if (item == null)
                 continue;

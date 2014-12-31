@@ -38,20 +38,32 @@ public class LogicRecipes {
     public static void init() {
 
         // Components
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.stone_wire, 1), "#", "W", '#', "dustTeslatite", 'W',
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.bluestone_wire_tile, 1), "#", "W", '#', "dustTeslatite", 'W',
                 BPItems.stone_tile));
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.stone_anode, 3), " # ", "###", "WWW", '#', "dustTeslatite", 'W',
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.bluestone_anode_tile, 3), " # ", "###", "WWW", '#',
+                "dustTeslatite", 'W', BPItems.stone_tile));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.bluestone_cathode_tile, 1), "T#T", " W ", 'T', "dustTeslatite",
+                '#', Blocks.redstone_torch, 'W', BPItems.stone_tile));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.bluestone_pointer_tile, 1), " S ", "T#T", " W ", 'S', "stone",
+                '#', Blocks.redstone_torch, 'W', BPItems.stone_tile, 'T', "dustTeslatite"));
+
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.redstone_wire_tile, 1), "#", "W", '#', "dustRedstone", 'W',
                 BPItems.stone_tile));
-        GameRegistry.addRecipe(new ItemStack(BPItems.stone_cathode, 1), "#", "W", '#', Blocks.redstone_torch, 'W', BPItems.stone_tile);
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.stone_pointer, 1), "S", "#", "W", 'S', "stone", '#',
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.redstone_anode_tile, 3), " # ", "###", "WWW", '#', "dustRedstone",
+                'W', BPItems.stone_tile));
+        GameRegistry.addRecipe(new ItemStack(BPItems.redstone_cathode_tile, 1), "#", "W", '#', Blocks.redstone_torch, 'W',
+                BPItems.stone_tile);
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.redstone_pointer_tile, 1), "S", "#", "W", 'S', "stone", '#',
                 Blocks.redstone_torch, 'W', BPItems.stone_tile));
-        GameRegistry
-                .addRecipe(new ItemStack(BPItems.silicon_chip, 1), " # ", "WWW", '#', BPItems.blue_doped_wafer, 'W', BPItems.stone_tile);
+
+        GameRegistry.addRecipe(new ItemStack(BPItems.silicon_chip_tile, 1), " # ", "WWW", '#', BPItems.blue_doped_wafer, 'W',
+                BPItems.stone_tile);
         // GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.plate_assembly, 1), " # ", "SRS", "#C#", '#', BPItems.stone_tile, 'S',
         // "stickWood", 'R', BPItems.red_alloy_ingot, 'C', BPItems.stone_cathode));
-        GameRegistry.addShapelessRecipe(new ItemStack(BPItems.taintedsilicon_chip, 1), BPItems.silicon_chip, Items.glowstone_dust);
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.quartz_resonator, 3), " # ", "###", "WWW", '#', "gemQuartz", 'W',
-                BPItems.stone_tile));
+        GameRegistry
+        .addShapelessRecipe(new ItemStack(BPItems.taintedsilicon_chip_tile, 1), BPItems.silicon_chip_tile, Items.glowstone_dust);
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.quartz_resonator_tile, 3), " # ", "###", "WWW", '#', "gemQuartz",
+                'W', BPItems.stone_tile));
 
         GameRegistry.addShapelessRecipe(new ItemStack(BPItems.infused_teslatite_dust, 1), BPItems.teslatite_dust, Items.redstone);
         // TODO: stone_redwire recipe and stone_bundle recipe
@@ -87,60 +99,66 @@ public class LogicRecipes {
 
         // Gates and Circuits
         GameRegistry.addRecipe(PartManager.getPartInfo("and").getStack(), "ACA", "CCC", "#W#", '#', BPItems.stone_tile, 'A',
-                BPItems.stone_anode, 'C', BPItems.stone_cathode, 'W', BPItems.stone_wire);
+                BPItems.bluestone_anode_tile, 'C', BPItems.bluestone_cathode_tile, 'W', BPItems.bluestone_wire_tile);
         GameRegistry.addRecipe(PartManager.getPartInfo("buffer").getStack(), "ACA", "WCW", "#W#", '#', BPItems.stone_tile, 'A',
-                BPItems.stone_anode, 'C', BPItems.stone_cathode, 'W', BPItems.stone_wire);
+                BPItems.bluestone_anode_tile, 'C', BPItems.bluestone_cathode_tile, 'W', BPItems.bluestone_wire_tile);
         // craftManager.addRecipe(PartManager.getPartInfo("bustransceiver"), "BBB", "N#N", "BBB", '#', BPItems.stone_tile, 'B',
         // BPItems.stone_bundle, 'N', BPItems.red_doped_wafer);
         GameRegistry.addRecipe(PartManager.getPartInfo("counter").getStack(), "#W#", "CPC", "#W#", '#', BPItems.stone_tile, 'C',
-                BPItems.stone_cathode, 'W', BPItems.stone_wire, 'P', BPItems.stone_pointer);
+                BPItems.bluestone_cathode_tile, 'W', BPItems.bluestone_wire_tile, 'P', BPItems.bluestone_pointer_tile);
         // craftManager.addRecipe(PartManager.getPartInfo("invert"), "#R#", "ROR", "#R#", '#', BPItems.stone_tile, 'O',
         // BPItems.plate_assembly, 'R', BPItems.stone_redwire);
         GameRegistry.addRecipe(PartManager.getPartInfo("lightCell").getStack(), "#W#", "#B#", "###", '#', BPItems.stone_tile, 'B',
-                BPItems.blue_doped_wafer, 'W', BPItems.stone_wire);
+                BPItems.blue_doped_wafer, 'W', BPItems.bluestone_wire_tile);
         GameRegistry.addRecipe(PartManager.getPartInfo("multiplexer").getStack(), "ACA", "C#C", "ACW", '#', BPItems.stone_tile, 'A',
-                BPItems.stone_anode, 'C', BPItems.stone_cathode, 'W', BPItems.stone_wire);
+                BPItems.bluestone_anode_tile, 'C', BPItems.bluestone_cathode_tile, 'W', BPItems.bluestone_wire_tile);
         GameRegistry.addRecipe(PartManager.getPartInfo("nand").getStack(), "AAA", "CCC", "#W#", '#', BPItems.stone_tile, 'A',
-                BPItems.stone_anode, 'C', BPItems.stone_cathode, 'W', BPItems.stone_wire);
+                BPItems.bluestone_anode_tile, 'C', BPItems.bluestone_cathode_tile, 'W', BPItems.bluestone_wire_tile);
         // craftManager.addRecipe(PartManager.getPartInfo("noninvert"), "#R#", "ROR", "#RC", '#', BPItems.stone_tile, 'C',
         // BPItems.stone_cathode, 'O', BPItems.plate_assembly, 'R', BPItems.stone_redwire);
         GameRegistry.addRecipe(PartManager.getPartInfo("nor").getStack(), "#A#", "WCW", "#W#", '#', BPItems.stone_tile, 'A',
-                BPItems.stone_anode, 'C', BPItems.stone_cathode, 'W', BPItems.stone_wire);
+                BPItems.bluestone_anode_tile, 'C', BPItems.bluestone_cathode_tile, 'W', BPItems.bluestone_wire_tile);
         GameRegistry.addRecipe(PartManager.getPartInfo("not").getStack(), "#A#", "ACA", "#W#", '#', BPItems.stone_tile, 'A',
-                BPItems.stone_anode, 'C', BPItems.stone_cathode, 'W', BPItems.stone_wire);
+                BPItems.bluestone_anode_tile, 'C', BPItems.bluestone_cathode_tile, 'W', BPItems.bluestone_wire_tile);
         // craftManager.addRecipe(PartManager.getPartInfo("null"), "#R#", "RRR", "#R#", '#', BPItems.stone_tile, 'R',
         // BPItems.stone_redwire);
         GameRegistry.addRecipe(PartManager.getPartInfo("or").getStack(), "#C#", "WCW", "#W#", '#', BPItems.stone_tile, 'C',
-                BPItems.stone_cathode, 'W', BPItems.stone_wire);
+                BPItems.bluestone_cathode_tile, 'W', BPItems.bluestone_wire_tile);
         GameRegistry.addRecipe(PartManager.getPartInfo("randomizer").getStack(), "#T#", "WWW", "TWT", '#', BPItems.stone_tile, 'T',
-                BPItems.taintedsilicon_chip, 'W', BPItems.stone_wire);
+                BPItems.taintedsilicon_chip_tile, 'W', BPItems.bluestone_wire_tile);
         GameRegistry.addRecipe(PartManager.getPartInfo("pulseformer").getStack(), "ACA", "CAC", "WW#", '#', BPItems.stone_tile, 'A',
-                BPItems.stone_anode, 'C', BPItems.stone_cathode, 'W', BPItems.stone_wire);
+                BPItems.bluestone_anode_tile, 'C', BPItems.bluestone_cathode_tile, 'W', BPItems.bluestone_wire_tile);
         GameRegistry.addRecipe(PartManager.getPartInfo("repeater").getStack(), "#CW", "#AW", "#WC", '#', BPItems.stone_tile, 'A',
-                BPItems.stone_anode, 'C', BPItems.stone_cathode, 'W', BPItems.stone_wire);
+                BPItems.bluestone_anode_tile, 'C', BPItems.bluestone_cathode_tile, 'W', BPItems.bluestone_wire_tile);
         GameRegistry.addRecipe(PartManager.getPartInfo("rs").getStack(), "WWA", "C#C", "AWW", '#', BPItems.stone_tile, 'A',
-                BPItems.stone_anode, 'C', BPItems.stone_cathode, 'W', BPItems.stone_wire);
+                BPItems.bluestone_anode_tile, 'C', BPItems.bluestone_cathode_tile, 'W', BPItems.bluestone_wire_tile);
         GameRegistry.addRecipe(PartManager.getPartInfo("sequencer").getStack(), "#C#", "CPC", "#C#", '#', BPItems.stone_tile, 'C',
-                BPItems.stone_cathode, 'P', BPItems.stone_pointer);
+                BPItems.bluestone_cathode_tile, 'P', BPItems.bluestone_pointer_tile);
         GameRegistry.addRecipe(PartManager.getPartInfo("state").getStack(), "#AC", "WXP", "#W#", '#', BPItems.stone_tile, 'A',
-                BPItems.stone_anode, 'C', BPItems.stone_cathode, 'P', BPItems.stone_pointer, 'W', BPItems.stone_wire, 'X',
-                BPItems.silicon_chip);
-        GameRegistry.addRecipe(PartManager.getPartInfo("synchronizer").getStack(), "WCW", "XAX", "WWW", 'A', BPItems.stone_anode, 'C',
-                BPItems.stone_cathode, 'W', BPItems.stone_wire, 'X', BPItems.silicon_chip);
+                BPItems.bluestone_anode_tile, 'C', BPItems.bluestone_cathode_tile, 'P', BPItems.bluestone_pointer_tile, 'W',
+                BPItems.bluestone_wire_tile, 'X', BPItems.silicon_chip_tile);
+        GameRegistry.addRecipe(PartManager.getPartInfo("synchronizer").getStack(), "WCW", "XAX", "WWW", 'A', BPItems.bluestone_anode_tile,
+                'C', BPItems.bluestone_cathode_tile, 'W', BPItems.bluestone_wire_tile, 'X', BPItems.silicon_chip_tile);
         GameRegistry.addRecipe(PartManager.getPartInfo("timer").getStack(), "#W#", "WPW", "ACA", '#', BPItems.stone_tile, 'A',
-                BPItems.stone_anode, 'C', BPItems.stone_cathode, 'W', BPItems.stone_wire, 'P', BPItems.stone_pointer);
+                BPItems.bluestone_anode_tile, 'C', BPItems.bluestone_cathode_tile, 'W', BPItems.bluestone_wire_tile, 'P',
+                BPItems.bluestone_pointer_tile);
         GameRegistry.addRecipe(PartManager.getPartInfo("toggle").getStack(), "C##", "WLW", "C##", '#', BPItems.stone_tile, 'C',
-                BPItems.stone_cathode, 'W', BPItems.stone_wire, 'L', Blocks.lever);
+                BPItems.bluestone_cathode_tile, 'W', BPItems.bluestone_wire_tile, 'L', Blocks.lever);
         GameRegistry.addRecipe(PartManager.getPartInfo("transparent").getStack(), "ACW", "CCC", "CW#", '#', BPItems.stone_tile, 'A',
-                BPItems.stone_anode, 'C', BPItems.stone_cathode, 'W', BPItems.stone_wire);
-        GameRegistry.addRecipe(PartManager.getPartInfo("xnor").getStack(), "ACA", "CAC", "WCW", 'A', BPItems.stone_anode, 'C',
-                BPItems.stone_cathode, 'W', BPItems.stone_wire);
-        GameRegistry.addRecipe(PartManager.getPartInfo("xor").getStack(), "AWA", "CAC", "WCW", 'A', BPItems.stone_anode, 'C',
-                BPItems.stone_cathode, 'W', BPItems.stone_wire);
-        GameRegistry.addRecipe(PartManager.getPartInfo("comparator").getStack(), "TCT", "WRW", "CAC", 'A', BPItems.stone_anode, 'C',
-                BPItems.stone_cathode, 'W', BPItems.stone_wire, 'T', BPItems.stone_tile, 'R', BPItems.quartz_resonator);
+                BPItems.bluestone_anode_tile, 'C', BPItems.bluestone_cathode_tile, 'W', BPItems.bluestone_wire_tile);
+        GameRegistry.addRecipe(PartManager.getPartInfo("xnor").getStack(), "ACA", "CAC", "WCW", 'A', BPItems.bluestone_anode_tile, 'C',
+                BPItems.bluestone_cathode_tile, 'W', BPItems.bluestone_wire_tile);
+        GameRegistry.addRecipe(PartManager.getPartInfo("xor").getStack(), "AWA", "CAC", "WCW", 'A', BPItems.bluestone_anode_tile, 'C',
+                BPItems.bluestone_cathode_tile, 'W', BPItems.bluestone_wire_tile);
+
+        GameRegistry.addRecipe(PartManager.getPartInfo("comparator").getStack(), "TCT", "WRW", "CAC", 'A', BPItems.redstone_anode_tile,
+                'C', BPItems.redstone_cathode_tile, 'W', BPItems.redstone_wire_tile, 'T', BPItems.stone_tile, 'R',
+                BPItems.quartz_resonator_tile);
+        GameRegistry.addRecipe(PartManager.getPartInfo("inverter").getStack(), "#A#", "ACA", "#W#", '#', BPItems.stone_tile, 'A',
+                BPItems.redstone_anode_tile, 'C', BPItems.redstone_cathode_tile, 'W', BPItems.redstone_wire_tile);
+
         GameRegistry.addRecipe(PartManager.getPartInfo("integratedCircuit3x3").getStack(), "TST", "SSS", "TST", 'T', BPItems.stone_tile,
-                'S', BPItems.silicon_chip);
+                'S', BPItems.silicon_chip_tile);
         GameRegistry.addRecipe(PartManager.getPartInfo("integratedCircuit5x5").getStack(), "II", "II", 'I',
                 PartManager.getPartInfo("integratedCircuit3x3").getStack());
         GameRegistry.addRecipe(PartManager.getPartInfo("integratedCircuit7x7").getStack(), "II", "II", 'I',
