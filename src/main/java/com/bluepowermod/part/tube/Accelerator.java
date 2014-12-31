@@ -155,9 +155,15 @@ public class Accelerator extends PneumaticTube implements IPartCustomPlacement {
     @SideOnly(Side.CLIENT)
     public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
 
-        Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
-        rotation = ForgeDirection.UP;
-        renderDynamic(new Vec3d(0, 0, 0), 0, 1);
+        GL11.glPushMatrix();
+        {
+            GL11.glTranslated(0, -0.125, 0);
+
+            Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
+            rotation = ForgeDirection.UP;
+            renderDynamic(new Vec3d(0, 0, 0), 0, 1);
+        }
+        GL11.glPopMatrix();
     }
 
     @Override
