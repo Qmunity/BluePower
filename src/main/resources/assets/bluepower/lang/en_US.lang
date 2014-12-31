@@ -294,6 +294,7 @@ item.bluepower:stone_cathode.name=Stone Cathode Tile
 item.bluepower:stone_pointer.name=Stone Pointer Tile
 item.bluepower:silicon_chip.name=Silicon Chip Tile
 item.bluepower:taintedsilicon_chip.name=Tainted Silicon Chip Tile
+item.bluepower:quartz_resonator.name=Quartz Resonator Tile
 item.bluepower:plate_assembly.name=Plate Assembly Tile
 item.bluepower:stone_redwire.name=Stone Redwire Tile
 item.bluepower:stone_bundle.name=Stone Bundle Tile

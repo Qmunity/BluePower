@@ -46,10 +46,13 @@ public class LogicRecipes {
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.stone_pointer, 1), "S", "#", "W", 'S', "stone", '#',
                 Blocks.redstone_torch, 'W', BPItems.stone_tile));
         GameRegistry
-        .addRecipe(new ItemStack(BPItems.silicon_chip, 1), " # ", "WWW", '#', BPItems.blue_doped_wafer, 'W', BPItems.stone_tile);
+                .addRecipe(new ItemStack(BPItems.silicon_chip, 1), " # ", "WWW", '#', BPItems.blue_doped_wafer, 'W', BPItems.stone_tile);
         // GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.plate_assembly, 1), " # ", "SRS", "#C#", '#', BPItems.stone_tile, 'S',
         // "stickWood", 'R', BPItems.red_alloy_ingot, 'C', BPItems.stone_cathode));
         GameRegistry.addShapelessRecipe(new ItemStack(BPItems.taintedsilicon_chip, 1), BPItems.silicon_chip, Items.glowstone_dust);
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.quartz_resonator, 3), " # ", "###", "WWW", '#', "gemQuartz", 'W',
+                BPItems.stone_tile));
+
         GameRegistry.addShapelessRecipe(new ItemStack(BPItems.infused_teslatite_dust, 1), BPItems.teslatite_dust, Items.redstone);
         // TODO: stone_redwire recipe and stone_bundle recipe
 
@@ -126,7 +129,7 @@ public class LogicRecipes {
                 BPItems.stone_cathode, 'W', BPItems.stone_wire, 'X', BPItems.silicon_chip);
         GameRegistry.addRecipe(PartManager.getPartInfo("timer").getStack(), "#W#", "WPW", "ACA", '#', BPItems.stone_tile, 'A',
                 BPItems.stone_anode, 'C', BPItems.stone_cathode, 'W', BPItems.stone_wire, 'P', BPItems.stone_pointer);
-        GameRegistry.addRecipe(PartManager.getPartInfo("toggle").getStack(), "#C#", "WLW", "#C#", '#', BPItems.stone_tile, 'C',
+        GameRegistry.addRecipe(PartManager.getPartInfo("toggle").getStack(), "C##", "WLW", "C##", '#', BPItems.stone_tile, 'C',
                 BPItems.stone_cathode, 'W', BPItems.stone_wire, 'L', Blocks.lever);
         GameRegistry.addRecipe(PartManager.getPartInfo("transparent").getStack(), "ACW", "CCC", "CW#", '#', BPItems.stone_tile, 'A',
                 BPItems.stone_anode, 'C', BPItems.stone_cathode, 'W', BPItems.stone_wire);
@@ -134,6 +137,8 @@ public class LogicRecipes {
                 BPItems.stone_cathode, 'W', BPItems.stone_wire);
         GameRegistry.addRecipe(PartManager.getPartInfo("xor").getStack(), "AWA", "CAC", "WCW", 'A', BPItems.stone_anode, 'C',
                 BPItems.stone_cathode, 'W', BPItems.stone_wire);
+        GameRegistry.addRecipe(PartManager.getPartInfo("comparator").getStack(), "TCT", "WRW", "CAC", 'A', BPItems.stone_anode, 'C',
+                BPItems.stone_cathode, 'W', BPItems.stone_wire, 'T', BPItems.stone_tile, 'R', BPItems.quartz_resonator);
         GameRegistry.addRecipe(PartManager.getPartInfo("integratedCircuit3x3").getStack(), "TST", "SSS", "TST", 'T', BPItems.stone_tile,
                 'S', BPItems.silicon_chip);
         GameRegistry.addRecipe(PartManager.getPartInfo("integratedCircuit5x5").getStack(), "II", "II", 'I',

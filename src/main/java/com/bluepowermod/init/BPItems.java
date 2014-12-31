@@ -102,6 +102,7 @@ public class BPItems {
     public static final Item stone_pointer = new ItemCrafting(Refs.STONEPOINTER_NAME);
     public static final Item silicon_chip = new ItemCrafting(Refs.SILICONCHIP_NAME);
     public static final Item taintedsilicon_chip = new ItemCrafting(Refs.TAINTEDSILICONCHIP_NAME);
+    public static final Item quartz_resonator = new ItemCrafting(Refs.QUARTZRESONATOR_NAME);
     // public static final Item stone_redwire = new ItemCrafting(Refs.STONEREDWIRE_NAME);
     // public static final Item plate_assembly = new ItemCrafting(Refs.PLATEASSEMBLY_NAME);
     public static final Item stone_bundle = new ItemCrafting(Refs.STONEBUNDLE_NAME);
@@ -222,6 +223,7 @@ public class BPItems {
         GameRegistry.registerItem(stone_pointer, Refs.STONEPOINTER_NAME);
         GameRegistry.registerItem(silicon_chip, Refs.SILICONCHIP_NAME);
         GameRegistry.registerItem(taintedsilicon_chip, Refs.TAINTEDSILICONCHIP_NAME);
+        GameRegistry.registerItem(quartz_resonator, Refs.QUARTZRESONATOR_NAME);
         // GameRegistry.registerItem(stone_redwire, Refs.STONEREDWIRE_NAME);
         // GameRegistry.registerItem(plate_assembly, Refs.PLATEASSEMBLY_NAME);
         GameRegistry.registerItem(stone_bundle, Refs.STONEBUNDLE_NAME);

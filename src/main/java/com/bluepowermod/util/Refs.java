@@ -163,6 +163,7 @@ public class Refs {
     public static final String STONEPOINTER_NAME = "stone_pointer";
     public static final String SILICONCHIP_NAME = "silicon_chip";
     public static final String TAINTEDSILICONCHIP_NAME = "taintedsilicon_chip";
+    public static final String QUARTZRESONATOR_NAME = "quartz_resonator";
     public static final String STONEREDWIRE_NAME = "stone_redwire";
     public static final String PLATEASSEMBLY_NAME = "plate_assembly";
     public static final String STONEBUNDLE_NAME = "stone_bundle";
@@ -194,7 +195,7 @@ public class Refs {
     public static final String FLOPPY_DISK = "floppy_disk";
 
     public static final String[] oreDictDyes = new String[] { "dyeBlack", "dyeRed", "dyeGreen", "dyeBrown", "dyeBlue", "dyePurple",
-            "dyeCyan", "dyeLightGray", "dyeGray", "dyePink", "dyeLime", "dyeYellow", "dyeLightBlue", "dyeMagenta", "dyeOrange", "dyeWhite" };
+        "dyeCyan", "dyeLightGray", "dyeGray", "dyePink", "dyeLime", "dyeYellow", "dyeLightBlue", "dyeMagenta", "dyeOrange", "dyeWhite" };
     public static final String LAMP_NAME = "lamp";
     public static final String CONFIG_WORLDGEN = "world gen";
     public static final String CONFIG_TUNGSTEN = "tungsten";
