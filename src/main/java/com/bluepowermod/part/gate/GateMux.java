@@ -59,7 +59,7 @@ public class GateMux extends GateBase {
         RenderHelper.renderDigitalRedstoneTorch(4 / 16D, 1D / 8D, 1 / 16D, 9D / 16D, frontLeft);
 
         renderTop("frontleft", frontLeft);
-        renderTop("frontRight", frontRight);
+        renderTop("frontright", frontRight);
         RenderHelper.renderDigitalRedstoneTorch(0, 1D / 8D, 4 / 16D, 9D / 16D, !frontLeft && !frontRight);
     }
 
