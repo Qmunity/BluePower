@@ -146,6 +146,13 @@ public class Accelerator extends PneumaticTube implements IPartCustomPlacement {
 
     @Override
     @SideOnly(Side.CLIENT)
+    protected IIcon getSideIcon() {
+
+        return null;
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
     public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
 
         Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
