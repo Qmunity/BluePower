@@ -37,7 +37,7 @@ public class DummyRedstoneDevice implements IRedstoneDevice {
 
     public static DummyRedstoneDevice getDeviceAt(Vec3i loc) {
 
-        for (DummyRedstoneDevice dev : dummyDevices)
+        for (DummyRedstoneDevice dev : new ArrayList<DummyRedstoneDevice>(dummyDevices))
             if (dev.loc != null && dev.loc.equals(loc))
                 return dev;
 
