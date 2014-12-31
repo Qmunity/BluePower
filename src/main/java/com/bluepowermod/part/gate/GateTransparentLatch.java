@@ -26,6 +26,9 @@ import org.lwjgl.opengl.GL11;
 import com.bluepowermod.client.render.RenderHelper;
 import com.bluepowermod.util.Refs;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 /**
  * @author MineMaarten
  */
@@ -50,6 +53,7 @@ public class GateTransparentLatch extends GateBase {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void registerIcons(IIconRegister reg) {
 
         super.registerIcons(reg);
@@ -57,12 +61,14 @@ public class GateTransparentLatch extends GateBase {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public IIcon getTopIcon() {
 
         return mirrored ? mirroredTopIcon : super.getTopIcon();
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void renderTop(float frame) {
 
         if (mirrored) {

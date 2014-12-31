@@ -59,6 +59,7 @@ public class BlockContainerTwoSideRender extends BlockContainerBase {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     protected IIcon getIcon(EnumFaceType faceType, boolean ejecting, boolean powered, int side, TileEntity te) {
 
         if (faceType == EnumFaceType.SIDE) {

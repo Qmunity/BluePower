@@ -39,6 +39,9 @@ import com.bluepowermod.part.PartInfo;
 import com.bluepowermod.part.PartManager;
 import com.bluepowermod.util.Refs;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 public class ItemPart extends ItemMultipart implements IDatabaseSaveable {
 
     private final PartInfo info;
@@ -133,6 +136,7 @@ public class ItemPart extends ItemMultipart implements IDatabaseSaveable {
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
+    @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack item, EntityPlayer player, List list, boolean unused) {
 
         BPPart part = PartManager.getExample(item);
@@ -144,6 +148,7 @@ public class ItemPart extends ItemMultipart implements IDatabaseSaveable {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void registerIcons(IIconRegister p_94581_1_) {
 
     }

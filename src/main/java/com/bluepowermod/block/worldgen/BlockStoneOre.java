@@ -17,16 +17,20 @@
 
 package com.bluepowermod.block.worldgen;
 
-import com.bluepowermod.init.BPBlocks;
-import com.bluepowermod.init.BPCreativeTabs;
-import com.bluepowermod.util.Refs;
+import java.util.Random;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.Item;
 import net.minecraft.world.IBlockAccess;
 
-import java.util.Random;
+import com.bluepowermod.init.BPBlocks;
+import com.bluepowermod.init.BPCreativeTabs;
+import com.bluepowermod.util.Refs;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockStoneOre extends Block {
 
@@ -37,16 +41,16 @@ public class BlockStoneOre extends Block {
         super(Material.rock);
 
         this.name = name;
-        this.setResistance(5.0F);
-        this.setHardness(4.0F);
+        setResistance(5.0F);
+        setHardness(4.0F);
         this.setHarvestLevel("pickaxe", 1);
-        this.setBlockName(name);
-        this.setCreativeTab(BPCreativeTabs.blocks);
-        this.setStepSound(soundTypeStone);
+        setBlockName(name);
+        setCreativeTab(BPCreativeTabs.blocks);
+        setStepSound(soundTypeStone);
     }
 
-
     public Block setToolLevel(int level) {
+
         super.setHarvestLevel("pickaxe", level);
         return this;
     }
@@ -54,26 +58,28 @@ public class BlockStoneOre extends Block {
     @Override
     public String getUnlocalizedName() {
 
-        return String.format("tile." + Refs.MODID + ":" + this.name);
+        return String.format("tile." + Refs.MODID + ":" + name);
     }
 
     @Override
     public Item getItemDropped(int par1, Random par2, int par3) {
 
-        return Item.getItemFromBlock(Block.getBlockFromName(Refs.MODID + ":" + this.name));
+        return Item.getItemFromBlock(Block.getBlockFromName(Refs.MODID + ":" + name));
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void registerBlockIcons(IIconRegister iconRegister) {
 
-        blockIcon = iconRegister.registerIcon(Refs.MODID + ":" + this.name);
+        blockIcon = iconRegister.registerIcon(Refs.MODID + ":" + name);
     }
 
     // Allow storage blocks to be used as a beacon base
     @Override
     public boolean isBeaconBase(IBlockAccess worldObj, int x, int y, int z, int beaconX, int beaconY, int beaconZ) {
 
-        return this == BPBlocks.amethyst_block || this == BPBlocks.ruby_block || this == BPBlocks.sapphire_block || this == BPBlocks.copper_block
-                || this == BPBlocks.zinc_block || this == BPBlocks.silver_block || this == BPBlocks.tungsten_block;
+        return this == BPBlocks.amethyst_block || this == BPBlocks.ruby_block || this == BPBlocks.sapphire_block
+                || this == BPBlocks.copper_block || this == BPBlocks.zinc_block || this == BPBlocks.silver_block
+                || this == BPBlocks.tungsten_block;
     }
 }

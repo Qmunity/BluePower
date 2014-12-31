@@ -55,6 +55,9 @@ import com.bluepowermod.part.wire.redstone.PartRedwireFace;
 import com.bluepowermod.part.wire.redstone.RedwireType;
 import com.bluepowermod.util.Refs;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 public abstract class IntegratedCircuit extends GateBase implements ISilkyRemovable, ITilePartHolder {
 
     private GateBase[][] gates;
@@ -123,6 +126,7 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
     protected abstract int getCircuitWidth();
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
 
         isRenderingItem = true;
@@ -131,6 +135,7 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public boolean renderStatic(Vec3i translation, RenderHelper renderer, RenderBlocks renderBlocks, int pass) {
 
         switch (getFace()) {
@@ -181,6 +186,7 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     protected void renderTop(float frame) {
 
         renderTop("front", front());
@@ -670,6 +676,7 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void addWAILABody(List<String> info) {
 
     }

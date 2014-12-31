@@ -107,6 +107,7 @@ public class BlockLamp extends BlockContainerBase {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public boolean canRenderInPass(int pass) {
 
         RenderLamp.pass = pass;
@@ -114,18 +115,21 @@ public class BlockLamp extends BlockContainerBase {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public int getRenderBlockPass() {
 
         return 1;
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public int colorMultiplier(IBlockAccess world, int x, int y, int z) {
 
         return getColor();
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
 
         int power = getPower(world, x, y, z);
@@ -134,6 +138,7 @@ public class BlockLamp extends BlockContainerBase {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public IIcon getIcon(int side, int meta) {
 
         return isInverted ? on : off;

@@ -38,6 +38,9 @@ import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.part.BPPartFace;
 import com.bluepowermod.part.wire.redstone.PartRedwireFreestanding;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 /**
  * Base class for the lamps that are multiparts.
  *
@@ -113,6 +116,7 @@ public abstract class PartLamp extends BPPartFace implements IPartRedstone {
      * @author Koen Beckers (K4Unl)
      */
     @Override
+    @SideOnly(Side.CLIENT)
     public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
 
         power = inverted ? 15 : 0;
@@ -140,6 +144,7 @@ public abstract class PartLamp extends BPPartFace implements IPartRedstone {
      * @author Koen Beckers (K4Unl), Amadornes
      */
     @Override
+    @SideOnly(Side.CLIENT)
     public void renderDynamic(Vec3d translation, double delta, int pass) {
 
         RenderHelper renderer = RenderHelper.instance;
@@ -183,6 +188,7 @@ public abstract class PartLamp extends BPPartFace implements IPartRedstone {
      */
 
     @Override
+    @SideOnly(Side.CLIENT)
     public boolean renderStatic(Vec3i loc, RenderHelper renderer, RenderBlocks renderBlocks, int pass) {
 
         switch (getFace().ordinal()) {
@@ -214,6 +220,7 @@ public abstract class PartLamp extends BPPartFace implements IPartRedstone {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public boolean shouldRenderOnPass(int pass) {
 
         return true;
@@ -226,6 +233,7 @@ public abstract class PartLamp extends BPPartFace implements IPartRedstone {
      * @param renderer
      * @param pass
      */
+    @SideOnly(Side.CLIENT)
     public void renderLamp(RenderHelper renderer) {
 
     }
@@ -237,6 +245,7 @@ public abstract class PartLamp extends BPPartFace implements IPartRedstone {
      * @param pass
      *            The pass that is rendered now. Pass 1 for solids. Pass 2 for transparents
      */
+    @SideOnly(Side.CLIENT)
     public void renderGlow(int pass) {
 
     }

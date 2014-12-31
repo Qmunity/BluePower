@@ -44,6 +44,9 @@ import com.bluepowermod.part.wire.redstone.RedwireType;
 import com.bluepowermod.part.wire.redstone.WireCommons;
 import com.bluepowermod.part.wire.redstone.propagation.WirePropagator;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 public class GateNullCell extends GateBase implements IFaceRedstoneDevice, IRedstoneConductor {
 
     private boolean analog = false;
@@ -75,11 +78,13 @@ public class GateNullCell extends GateBase implements IFaceRedstoneDevice, IReds
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     protected void renderTop(float frame) {
 
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public boolean renderStatic(Vec3i translation, RenderHelper renderer, RenderBlocks renderBlocks, int pass) {
 
         super.renderStatic(translation, renderer, renderBlocks, pass);

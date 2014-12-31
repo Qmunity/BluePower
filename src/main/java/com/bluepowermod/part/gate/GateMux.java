@@ -24,6 +24,9 @@ import net.minecraft.client.resources.I18n;
 import com.bluepowermod.client.render.RenderHelper;
 import com.bluepowermod.util.Color;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 public class GateMux extends GateBase {
 
     @Override
@@ -42,6 +45,7 @@ public class GateMux extends GateBase {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void renderTop(float frame) {
 
         // renderTopTexture(FaceDirection.FRONT, false);
@@ -75,6 +79,7 @@ public class GateMux extends GateBase {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void addWAILABody(List<String> info) {
 
         info.add(I18n.format("gui.passThrough") + ": " + Color.YELLOW

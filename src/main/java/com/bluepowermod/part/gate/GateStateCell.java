@@ -59,6 +59,7 @@ public class GateStateCell extends GateBase implements IGuiButtonSensitive {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     protected void renderTop(float frame) {
 
         renderTop("front", front());
@@ -175,6 +176,7 @@ public class GateStateCell extends GateBase implements IGuiButtonSensitive {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void addWAILABody(List<String> info) {
 
         String t = "";

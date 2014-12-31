@@ -50,7 +50,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public abstract class BPPart extends PartBase implements IPartSelectable, IPartCollidable, IPartOccluding, IPartUpdateListener,
-IPartInteractable, IDatabaseSaveable, IPartWAILAProvider {
+        IPartInteractable, IDatabaseSaveable, IPartWAILAProvider {
 
     public abstract String getUnlocalizedName();
 
@@ -66,6 +66,7 @@ IPartInteractable, IDatabaseSaveable, IPartWAILAProvider {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public boolean renderBreaking(Vec3i translation, RenderHelper renderer, RenderBlocks renderBlocks, int pass, QMovingObjectPosition mop) {
 
         return renderStatic(translation, renderer, renderBlocks, pass);
@@ -158,6 +159,7 @@ IPartInteractable, IDatabaseSaveable, IPartWAILAProvider {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void addWAILABody(List<String> text) {
 
     }
@@ -205,24 +207,22 @@ IPartInteractable, IDatabaseSaveable, IPartWAILAProvider {
         getWorld().notifyBlockChange(getX(), getY(), getZ(), Blocks.air);
     }
 
-    @SideOnly(Side.CLIENT)
     public CreativeTabs[] getCreativeTabs() {
 
         return new CreativeTabs[] { getCreativeTab() };
     }
 
-    @SideOnly(Side.CLIENT)
     public CreativeTabs getCreativeTab() {
 
         return null;
     }
 
-    @SideOnly(Side.CLIENT)
     public Block.SoundType getPlacementSound() {
 
         return Block.soundTypeGlass;
     }
 
+    @SideOnly(Side.CLIENT)
     public void addTooltip(List<String> tip) {
 
     }

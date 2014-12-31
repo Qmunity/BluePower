@@ -11,6 +11,9 @@ import net.minecraft.nbt.NBTTagCompound;
 
 import com.bluepowermod.client.render.RenderHelper;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 /**
  * @author MineMaarten
  */
@@ -34,6 +37,7 @@ public class GateSynchronizer extends GateBase {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void renderTop(float frame) {
 
         RenderHelper.renderDigitalRedstoneTorch(0, 1D / 8D, 5 / 16D, 10D / 16D, front().getInput() > 0);

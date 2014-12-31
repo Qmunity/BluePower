@@ -28,6 +28,9 @@ import uk.co.qmunity.lib.util.Dir;
 import com.bluepowermod.client.render.RenderHelper;
 import com.bluepowermod.util.Color;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 /**
  * Created by Quetzi on 04/11/14.
  */
@@ -55,6 +58,7 @@ public class GateRepeater extends GateBase {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void renderTop(float frame) {
 
         renderTop("front", !power);
@@ -101,6 +105,7 @@ public class GateRepeater extends GateBase {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void addWAILABody(List<String> info) {
 
         info.add(Color.YELLOW + I18n.format("gui.connections") + ":");

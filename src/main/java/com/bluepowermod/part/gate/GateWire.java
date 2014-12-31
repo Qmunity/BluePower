@@ -24,6 +24,9 @@ import uk.co.qmunity.lib.util.Dir;
 
 import com.bluepowermod.util.Refs;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 public class GateWire extends GateBase {
 
     public static final String ID = "icWire";
@@ -49,6 +52,7 @@ public class GateWire extends GateBase {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     protected void renderTop(float frame) {
 
         boolean isOn = false;
@@ -87,12 +91,14 @@ public class GateWire extends GateBase {
 
     }
 
+    @SideOnly(Side.CLIENT)
     public static void registerTopIcon(IIconRegister reg) {
 
         topIcon = reg.registerIcon(Refs.MODID + ":gates/" + ID + "/base");
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public IIcon getIcon(ForgeDirection face) {
 
         if (face == ForgeDirection.UP)

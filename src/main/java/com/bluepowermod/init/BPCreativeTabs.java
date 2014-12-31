@@ -26,6 +26,9 @@ import net.minecraft.item.ItemStack;
 
 import com.bluepowermod.part.PartManager;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 public class BPCreativeTabs {
 
     public static CreativeTabs blocks;
@@ -41,6 +44,7 @@ public class BPCreativeTabs {
         blocks = new BPCreativeTab("tabBluePowerBlocks") {
 
             @Override
+            @SideOnly(Side.CLIENT)
             public Item getTabIconItem() {
 
                 Block iconBlock = BPBlocks.marble;
@@ -55,6 +59,7 @@ public class BPCreativeTabs {
         machines = new BPCreativeTab("tabBluePowerMachines") {
 
             @Override
+            @SideOnly(Side.CLIENT)
             public Item getTabIconItem() {
 
                 Block iconBlock = BPBlocks.alloyfurnace;
@@ -69,6 +74,7 @@ public class BPCreativeTabs {
         items = new BPCreativeTab("tabBluePowerItems") {
 
             @Override
+            @SideOnly(Side.CLIENT)
             public Item getTabIconItem() {
 
                 Item iconItem = BPItems.ruby_gem;
@@ -83,6 +89,7 @@ public class BPCreativeTabs {
         tools = new BPCreativeTab("tabBluePowerTools") {
 
             @Override
+            @SideOnly(Side.CLIENT)
             public Item getTabIconItem() {
 
                 Item iconItem = BPItems.screwdriver;
@@ -97,12 +104,14 @@ public class BPCreativeTabs {
         circuits = new BPCreativeTab("tabBluePowerCircuits", true) {
 
             @Override
+            @SideOnly(Side.CLIENT)
             public Item getTabIconItem() {
 
                 return null;
             }
 
             @Override
+            @SideOnly(Side.CLIENT)
             public ItemStack getIconItemStack() {
 
                 ItemStack iconItem = PartManager.getPartInfo("timer").getStack();
@@ -117,12 +126,14 @@ public class BPCreativeTabs {
         wiring = new BPCreativeTab("tabBluePowerWiring", true) {
 
             @Override
+            @SideOnly(Side.CLIENT)
             public Item getTabIconItem() {
 
                 return null;
             }
 
             @Override
+            @SideOnly(Side.CLIENT)
             public ItemStack getIconItemStack() {
 
                 ItemStack iconItem = PartManager.getPartInfo("wire.freestanding.bluestone").getStack();
@@ -137,6 +148,7 @@ public class BPCreativeTabs {
         lighting = new BPCreativeTab("tabBluePowerLighting", true) {
 
             @Override
+            @SideOnly(Side.CLIENT)
             public Item getTabIconItem() {
 
                 return Item.getItemFromBlock(Blocks.redstone_lamp);
@@ -166,6 +178,7 @@ public class BPCreativeTabs {
         }
 
         @Override
+        @SideOnly(Side.CLIENT)
         public String getBackgroundImageName() {
 
             return searchbar ? "bp_search.png" : super.getBackgroundImageName();

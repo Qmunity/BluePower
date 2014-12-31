@@ -48,6 +48,7 @@ public abstract class PartWireFreestanding extends BPPart implements IPartThruHo
     protected abstract IIcon getFrameIcon();
 
     @Override
+    @SideOnly(Side.CLIENT)
     public boolean renderStatic(Vec3i translation, RenderHelper renderer, RenderBlocks renderBlocks, int pass) {
 
         double frameSize = getSize() / 16D;
@@ -106,12 +107,12 @@ public abstract class PartWireFreestanding extends BPPart implements IPartThruHo
             if (east == up || !isInWorld)
                 renderer.renderBox(new Vec3dCube(0.5 + ((frameSize + frameSeparation) / 2), 0.5 + ((frameSize + frameSeparation) / 2),
                         0.5 - ((frameSize + frameSeparation) / 2), 0.5 + ((frameSize + frameSeparation) / 2) + frameThickness, 0.5
-                                + ((frameSize + frameSeparation) / 2) + frameThickness, 0.5 + ((frameSize + frameSeparation) / 2)), frame);
+                        + ((frameSize + frameSeparation) / 2) + frameThickness, 0.5 + ((frameSize + frameSeparation) / 2)), frame);
             if (south == up || !isInWorld)
                 renderer.renderBox(new Vec3dCube(0.5 + ((frameSize + frameSeparation) / 2), 0.5 + ((frameSize + frameSeparation) / 2),
                         0.5 + ((frameSize + frameSeparation) / 2), 0.5 - ((frameSize + frameSeparation) / 2), 0.5
-                                + ((frameSize + frameSeparation) / 2) + frameThickness, 0.5 + ((frameSize + frameSeparation) / 2)
-                                + frameThickness), frame);
+                        + ((frameSize + frameSeparation) / 2) + frameThickness, 0.5 + ((frameSize + frameSeparation) / 2)
+                        + frameThickness), frame);
             if (north == up || !isInWorld)
                 renderer.renderBox(new Vec3dCube(0.5 + ((frameSize + frameSeparation) / 2), 0.5 + ((frameSize + frameSeparation) / 2), 0.5
                         - ((frameSize + frameSeparation) / 2) - frameThickness, 0.5 - ((frameSize + frameSeparation) / 2), 0.5
@@ -146,7 +147,7 @@ public abstract class PartWireFreestanding extends BPPart implements IPartThruHo
                 renderer.renderBox(new Vec3dCube(0.5 - ((frameSize + frameSeparation) / 2) - frameThickness,
                         0.5 - ((frameSize + frameSeparation) / 2), 0.5 + ((frameSize + frameSeparation) / 2),
                         0.5 - ((frameSize + frameSeparation) / 2), 0.5 + ((frameSize + frameSeparation) / 2), 0.5
-                                + ((frameSize + frameSeparation) / 2) + frameThickness), frame);
+                        + ((frameSize + frameSeparation) / 2) + frameThickness), frame);
             if (north == east || !isInWorld)
                 renderer.renderBox(new Vec3dCube(0.5 + ((frameSize + frameSeparation) / 2), 0.5 - ((frameSize + frameSeparation) / 2), 0.5
                         - ((frameSize + frameSeparation) / 2) - frameThickness, 0.5 + ((frameSize + frameSeparation) / 2) + frameThickness,
@@ -164,14 +165,14 @@ public abstract class PartWireFreestanding extends BPPart implements IPartThruHo
             renderer.renderBox(new Vec3dCube(0.5 - ((frameSize + frameSeparation) / 2) - frameThickness,
                     0.5 + ((frameSize + frameSeparation) / 2), 0.5 + ((frameSize + frameSeparation) / 2),
                     0.5 - ((frameSize + frameSeparation) / 2), 0.5 + ((frameSize + frameSeparation) / 2) + frameThickness, 0.5
-                            + ((frameSize + frameSeparation) / 2) + frameThickness), frame);
+                    + ((frameSize + frameSeparation) / 2) + frameThickness), frame);
             renderer.renderBox(new Vec3dCube(0.5 + ((frameSize + frameSeparation) / 2), 0.5 + ((frameSize + frameSeparation) / 2), 0.5
                     - ((frameSize + frameSeparation) / 2) - frameThickness, 0.5 + ((frameSize + frameSeparation) / 2) + frameThickness, 0.5
                     + ((frameSize + frameSeparation) / 2) + frameThickness, 0.5 - ((frameSize + frameSeparation) / 2)), frame);
             renderer.renderBox(new Vec3dCube(0.5 + ((frameSize + frameSeparation) / 2), 0.5 + ((frameSize + frameSeparation) / 2),
                     0.5 + ((frameSize + frameSeparation) / 2), 0.5 + ((frameSize + frameSeparation) / 2) + frameThickness, 0.5
-                            + ((frameSize + frameSeparation) / 2) + frameThickness, 0.5 + ((frameSize + frameSeparation) / 2)
-                            + frameThickness), frame);
+                    + ((frameSize + frameSeparation) / 2) + frameThickness, 0.5 + ((frameSize + frameSeparation) / 2)
+                    + frameThickness), frame);
 
             renderer.renderBox(new Vec3dCube(0.5 - ((frameSize + frameSeparation) / 2) - frameThickness, 0.5
                     - ((frameSize + frameSeparation) / 2) - frameThickness, 0.5 - ((frameSize + frameSeparation) / 2) - frameThickness,
@@ -180,14 +181,14 @@ public abstract class PartWireFreestanding extends BPPart implements IPartThruHo
             renderer.renderBox(new Vec3dCube(0.5 - ((frameSize + frameSeparation) / 2) - frameThickness, 0.5
                     - ((frameSize + frameSeparation) / 2) - frameThickness, 0.5 + ((frameSize + frameSeparation) / 2),
                     0.5 - ((frameSize + frameSeparation) / 2), 0.5 - ((frameSize + frameSeparation) / 2), 0.5
-                            + ((frameSize + frameSeparation) / 2) + frameThickness), frame);
+                    + ((frameSize + frameSeparation) / 2) + frameThickness), frame);
             renderer.renderBox(new Vec3dCube(0.5 + ((frameSize + frameSeparation) / 2), 0.5 - ((frameSize + frameSeparation) / 2)
                     - frameThickness, 0.5 - ((frameSize + frameSeparation) / 2) - frameThickness, 0.5 + ((frameSize + frameSeparation) / 2)
                     + frameThickness, 0.5 - ((frameSize + frameSeparation) / 2), 0.5 - ((frameSize + frameSeparation) / 2)), frame);
             renderer.renderBox(new Vec3dCube(0.5 + ((frameSize + frameSeparation) / 2), 0.5 - ((frameSize + frameSeparation) / 2)
                     - frameThickness, 0.5 + ((frameSize + frameSeparation) / 2),
                     0.5 + ((frameSize + frameSeparation) / 2) + frameThickness, 0.5 - ((frameSize + frameSeparation) / 2), 0.5
-                            + ((frameSize + frameSeparation) / 2) + frameThickness), frame);
+                    + ((frameSize + frameSeparation) / 2) + frameThickness), frame);
 
             if (isInWorld) {
                 // Connections

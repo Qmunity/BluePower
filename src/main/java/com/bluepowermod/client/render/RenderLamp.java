@@ -28,7 +28,10 @@ import com.bluepowermod.tile.tier1.TileLamp;
 
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import cpw.mods.fml.client.registry.RenderingRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public class RenderLamp extends TileEntitySpecialRenderer implements ISimpleBlockRenderingHandler, IItemRenderer {
 
     public static final int RENDER_ID = RenderingRegistry.getNextAvailableRenderId();
@@ -190,8 +193,8 @@ public class RenderLamp extends TileEntitySpecialRenderer implements ISimpleBloc
                 // GL11.glDisable(GL11.GL_CULL_FACE);
                 GL11.glDepthMask(false);
                 GL11.glBegin(GL11.GL_QUADS);
-                com.bluepowermod.client.render.RenderHelper.drawColoredCube(cube.clone().expand(0.8 / 16D), r / 256D, g / 256D,
-                        b / 256D, 0.625D);
+                com.bluepowermod.client.render.RenderHelper.drawColoredCube(cube.clone().expand(0.8 / 16D), r / 256D, g / 256D, b / 256D,
+                        0.625D);
                 GL11.glEnd();
                 GL11.glDepthMask(true);
                 GL11.glEnable(GL11.GL_CULL_FACE);

@@ -19,6 +19,8 @@ package com.bluepowermod.part.gate.analog;
 
 import com.bluepowermod.part.gate.GateBase;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class GateLightCell extends GateBase {
 
@@ -35,6 +37,7 @@ public class GateLightCell extends GateBase {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void renderTop(float frame) {
 
         renderTop("front", front());

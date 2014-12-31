@@ -15,6 +15,9 @@ import uk.co.qmunity.lib.util.Dir;
 import com.bluepowermod.client.render.RenderHelper;
 import com.bluepowermod.util.Color;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 public class GateNand extends GateBase {
 
     private boolean power = false;
@@ -81,6 +84,7 @@ public class GateNand extends GateBase {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void addWAILABody(List<String> info) {
 
         info.add(Color.YELLOW + I18n.format("gui.connections") + ":");
@@ -102,6 +106,7 @@ public class GateNand extends GateBase {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     protected void renderTop(float frame) {
 
         renderTop("front", front());

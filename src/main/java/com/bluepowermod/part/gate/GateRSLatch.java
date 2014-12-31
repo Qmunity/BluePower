@@ -29,6 +29,9 @@ import org.lwjgl.opengl.GL11;
 import com.bluepowermod.client.render.RenderHelper;
 import com.bluepowermod.util.Refs;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 public class GateRSLatch extends GateBase {
 
     private int mode;
@@ -58,6 +61,7 @@ public class GateRSLatch extends GateBase {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void renderTop(float frame) {
 
         if (mode % 2 == 1) {
@@ -184,6 +188,7 @@ public class GateRSLatch extends GateBase {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void addWAILABody(List<String> info) {
 
         info.add(I18n.format("gui.mode") + ": " + I18n.format("bluepower.waila.rsLatch." + (mode < 2 ? "feedback" : "noFeedback")));

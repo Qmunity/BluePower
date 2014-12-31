@@ -44,6 +44,7 @@ public class GateTimer extends GateBase implements IGuiButtonSensitive {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     protected void renderTop(float frame) {
 
         // renderTop("front", front());

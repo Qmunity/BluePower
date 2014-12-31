@@ -59,6 +59,7 @@ public class GateSequencer extends GateBase implements IGuiButtonSensitive {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void renderTop(float frame) {
 
         RenderHelper.renderDigitalRedstoneTorch(0, 1D / 8D, 5D / 16D, 9D / 16D, power[1]);
@@ -180,6 +181,7 @@ public class GateSequencer extends GateBase implements IGuiButtonSensitive {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void addWAILABody(List<String> info) {
 
         String t = "";

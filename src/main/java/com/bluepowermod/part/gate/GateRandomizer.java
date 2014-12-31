@@ -23,6 +23,9 @@ import net.minecraft.nbt.NBTTagCompound;
 
 import com.bluepowermod.client.render.RenderHelper;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 public class GateRandomizer extends GateBase {
 
     private static final Random random = new Random();
@@ -47,6 +50,7 @@ public class GateRandomizer extends GateBase {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void renderTop(float frame) {
 
         renderTop("left", out[0]);

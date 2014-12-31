@@ -23,6 +23,9 @@ import net.minecraft.nbt.NBTTagCompound;
 
 import com.bluepowermod.client.render.RenderHelper;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 public class GatePulseFormer extends GateBase {
 
     private final boolean power[] = new boolean[4];
@@ -43,6 +46,7 @@ public class GatePulseFormer extends GateBase {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void renderTop(float frame) {
 
         RenderHelper.renderDigitalRedstoneTorch(3 / 16D, 1D / 8D, -1 / 16D, 9D / 16D, !power[0]);
@@ -85,6 +89,7 @@ public class GatePulseFormer extends GateBase {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void addWAILABody(List<String> info) {
 
     }

@@ -53,6 +53,9 @@ import com.bluepowermod.item.ItemDamageableColorableOverlay;
 import com.bluepowermod.part.BPPart;
 import com.bluepowermod.util.Color;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 /**
  *
  * @author MineMaarten
@@ -347,6 +350,7 @@ public class PneumaticTube extends BPPart implements IPartTicking {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void renderDynamic(Vec3d translation, double delta, int pass) {
 
         if (pass == 1) {
@@ -359,6 +363,7 @@ public class PneumaticTube extends BPPart implements IPartTicking {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
 
         GL11.glPushMatrix();
@@ -498,6 +503,7 @@ public class PneumaticTube extends BPPart implements IPartTicking {
         GL11.glPopMatrix();
     }
 
+    @SideOnly(Side.CLIENT)
     protected void renderMiddle(Vec3dCube aabb, RenderHelper renderer) {
 
         boolean[] oConnections = new boolean[] { !connections[0], !connections[1], !connections[2], !connections[3], !connections[4],
@@ -534,6 +540,7 @@ public class PneumaticTube extends BPPart implements IPartTicking {
         renderer.resetTextureRotations();
     }
 
+    @SideOnly(Side.CLIENT)
     public void renderTexturedCuboid(Vec3dCube box, IIcon icon, RenderHelper helper, boolean[] sides) {
 
         if (sides != null)
@@ -576,6 +583,7 @@ public class PneumaticTube extends BPPart implements IPartTicking {
      * @return Whether or not it rendered something
      */
     @Override
+    @SideOnly(Side.CLIENT)
     public boolean renderStatic(Vec3i loc, RenderHelper renderer, RenderBlocks renderBlocks, int pass) {
 
         Tessellator t = Tessellator.instance;
@@ -633,16 +641,19 @@ public class PneumaticTube extends BPPart implements IPartTicking {
         return 0;
     }
 
+    @SideOnly(Side.CLIENT)
     protected IIcon getSideIcon(ForgeDirection side) {
 
         return getSideIcon();
     }
 
+    @SideOnly(Side.CLIENT)
     protected IIcon getSideIcon() {
 
         return IconSupplier.pneumaticTubeSide;
     }
 
+    @SideOnly(Side.CLIENT)
     protected IIcon getNodeIcon() {
 
         return IconSupplier.pneumaticTubeNode;
@@ -656,6 +667,7 @@ public class PneumaticTube extends BPPart implements IPartTicking {
      * @param info
      */
     @Override
+    @SideOnly(Side.CLIENT)
     public void addWAILABody(List<String> info) {
 
         boolean addTooltip = false;

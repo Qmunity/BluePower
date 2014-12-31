@@ -14,6 +14,9 @@ import uk.co.qmunity.lib.vec.Vec3i;
 import com.bluepowermod.client.render.RenderHelper;
 import com.bluepowermod.part.gate.GateBase;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 public class GateComparator extends GateBase {
 
     private int power = 0;
@@ -54,6 +57,7 @@ public class GateComparator extends GateBase {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     protected void renderTop(float frame) {
 
         renderTop("front", front().getOutput() == 0);

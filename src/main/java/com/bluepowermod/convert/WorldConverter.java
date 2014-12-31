@@ -125,11 +125,6 @@ public class WorldConverter {
 
         RegionFile reg = new RegionFile(file);
 
-        String filename = file.getName();
-        int dot = filename.indexOf(".", 3);
-        int regX = Integer.parseInt(filename.substring(2, dot));
-        int regZ = Integer.parseInt(filename.substring(dot + 1, filename.lastIndexOf(".")));
-
         for (int x = 0; x < 32; x++) {
             for (int z = 0; z < 32; z++) {
                 NBTTagCompound chunk = getChunk(reg, x, z);

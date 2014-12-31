@@ -20,6 +20,9 @@ package com.bluepowermod.part.gate.analog;
 import com.bluepowermod.client.render.RenderHelper;
 import com.bluepowermod.part.gate.GateBase;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 /* Takes a signal and inverts it
  e.g. input str 2 output str 13
  input str 5 output str 10
@@ -54,6 +57,7 @@ public class GateInverter extends GateBase {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     protected void renderTop(float frame) {
 
         renderTop("front", front());

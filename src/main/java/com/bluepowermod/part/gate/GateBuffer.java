@@ -9,6 +9,9 @@ package com.bluepowermod.part.gate;
 
 import com.bluepowermod.client.render.RenderHelper;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 public class GateBuffer extends GateBase {
 
     private boolean power = false;
@@ -39,6 +42,7 @@ public class GateBuffer extends GateBase {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     protected void renderTop(float frame) {
 
         renderTop("center", back().getInput() == 0 ? "on" : "off");

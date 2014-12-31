@@ -26,6 +26,10 @@ import org.lwjgl.opengl.GL11;
 
 import com.bluepowermod.part.PartManager;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
+@SideOnly(Side.CLIENT)
 public class RenderPartItem implements IItemRenderer {
 
     public static final RenderPartItem instance = new RenderPartItem();
