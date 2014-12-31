@@ -41,6 +41,13 @@ public class OreDictionarySetup {
         OreDictionary.registerOre("blockRuby", BPBlocks.ruby_block);
         OreDictionary.registerOre("blockSapphire", BPBlocks.sapphire_block);
 
+        OreDictionary.registerOre("glass", BPBlocks.sapphire_glass);
+        OreDictionary.registerOre("blockGlass", BPBlocks.sapphire_glass);
+        OreDictionary.registerOre("blockGlassColorless", BPBlocks.sapphire_glass);
+        OreDictionary.registerOre("glass", BPBlocks.reinforced_sapphire_glass);
+        OreDictionary.registerOre("blockGlass", BPBlocks.reinforced_sapphire_glass);
+        OreDictionary.registerOre("blockGlassColorless", BPBlocks.reinforced_sapphire_glass);
+
         OreDictionary.registerOre("gemRuby", BPItems.ruby_gem);
         OreDictionary.registerOre("gemAmethyst", BPItems.amethyst_gem);
         OreDictionary.registerOre("gemSapphire", BPItems.sapphire_gem);

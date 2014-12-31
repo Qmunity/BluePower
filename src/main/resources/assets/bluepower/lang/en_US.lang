@@ -44,6 +44,9 @@ tile.bluepower:indigo_flower.name=Indigo Flower
 tile.bluepower:tungsten_ore.name=Tungsten Ore
 tile.bluepower:tungsten_block.name=Tungsten Block
 
+tile.bluepower:sapphire_glass.name=Sapphire Glass
+tile.bluepower:reinforced_sapphire_glass.name=Reinforced Sapphire Glass
+
 tile.bluepower:alloyfurnace.name=Alloy Furnace
 tile.bluepower:block_breaker.name=Block Breaker
 tile.bluepower:igniter.name=Igniter

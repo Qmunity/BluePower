@@ -22,6 +22,8 @@ import java.util.Random;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.boss.EntityWither;
 import net.minecraft.item.Item;
 import net.minecraft.world.IBlockAccess;
 
@@ -35,6 +37,10 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class BlockStoneOre extends Block {
 
     private String name;
+
+    private boolean transparent = false;
+    private boolean witherproof = false;
+    private String[] tooltip = new String[] {};
 
     public BlockStoneOre(String name) {
 
@@ -82,4 +88,93 @@ public class BlockStoneOre extends Block {
                 || this == BPBlocks.copper_block || this == BPBlocks.zinc_block || this == BPBlocks.silver_block
                 || this == BPBlocks.tungsten_block;
     }
+
+    public BlockStoneOre setTransparent(boolean transparent) {
+
+        this.transparent = transparent;
+
+        return this;
+    }
+
+    @Override
+    public boolean isNormalCube() {
+
+        return !transparent;
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public boolean isBlockNormalCube() {
+
+        return !transparent;
+    }
+
+    @Override
+    public boolean isOpaqueCube() {
+
+        return !transparent;
+    }
+
+    @Override
+    public boolean renderAsNormalBlock() {
+
+        return !transparent;
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public boolean canRenderInPass(int pass) {
+
+        return transparent ? true : super.canRenderInPass(pass);
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public int getRenderBlockPass() {
+
+        return transparent ? 1 : super.getRenderBlockPass();
+    }
+
+    @Override
+    public boolean shouldSideBeRendered(IBlockAccess w, int x, int y, int z, int p_149646_5_) {
+
+        if (transparent)
+            return w.getBlock(x, y, z) != this;
+        return super.shouldSideBeRendered(w, x, y, z, p_149646_5_);
+    }
+
+    @Override
+    public int getLightOpacity() {
+
+        return transparent ? 0 : super.getLightOpacity();
+    }
+
+    public BlockStoneOre setWitherproof(boolean witherproof) {
+
+        this.witherproof = witherproof;
+
+        return this;
+    }
+
+    @Override
+    public boolean canEntityDestroy(IBlockAccess world, int x, int y, int z, Entity entity) {
+
+        if (witherproof)
+            return !(entity instanceof EntityWither) && super.canEntityDestroy(world, x, y, z, entity);
+
+        return super.canEntityDestroy(world, x, y, z, entity);
+    }
+
+    public BlockStoneOre setTooltip(String... tooltip) {
+
+        this.tooltip = tooltip;
+
+        return this;
+    }
+
+    public String[] getTooltip() {
+
+        return tooltip;
+    }
+
 }

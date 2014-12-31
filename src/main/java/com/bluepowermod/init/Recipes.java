@@ -61,5 +61,8 @@ public class Recipes {
         af.addRecyclingRecipe(new ItemStack(Items.iron_ingot));
         af.addRecyclingRecipe(new ItemStack(Items.gold_ingot));
         af.addRecyclingRecipe(new ItemStack(Items.gold_nugget));
+
+        af.addRecipe(new ItemStack(BPBlocks.sapphire_glass, 4), new ItemStack(Blocks.glass, 4), BPItems.sapphire_gem);
+        af.addRecipe(new ItemStack(BPBlocks.reinforced_sapphire_glass, 2), new ItemStack(BPBlocks.sapphire_glass, 2), Blocks.obsidian);
     }
 }

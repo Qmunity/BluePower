@@ -41,6 +41,7 @@ import com.bluepowermod.block.worldgen.BlockSapphireOre;
 import com.bluepowermod.block.worldgen.BlockStoneOre;
 import com.bluepowermod.block.worldgen.BlockStoneOreConnected;
 import com.bluepowermod.block.worldgen.BlockTeslatiteOre;
+import com.bluepowermod.item.ItemBlockTooltip;
 import com.bluepowermod.reference.GuiIDs;
 import com.bluepowermod.tile.tier1.TileBlockBreaker;
 import com.bluepowermod.tile.tier1.TileBuffer;
@@ -104,12 +105,18 @@ public class BPBlocks {
     public static final Block tungsten_block = new BlockStoneOre(Refs.TUNGSTENBLOCK_NAME).setToolLevel(3).setResistance(25.0F)
             .setHardness(5.0F);
 
+    public static final Block sapphire_glass = new BlockStoneOreConnected(Refs.SAPPHIREGLASS_NAME).setTransparent(true).setHardness(10)
+            .setResistance(10000);
+    public static final Block reinforced_sapphire_glass = new BlockStoneOreConnected(Refs.REINFORCEDSAPPHIREGLASS_NAME)
+    .setTransparent(true).setWitherproof(true).setTooltip(MinecraftColor.RED.getChatColor() + "Witherproof").setHardness(30)
+    .setResistance(Integer.MAX_VALUE);
+
     public static final Block flax_crop = new BlockCrop().setBlockName(Refs.FLAXCROP_NAME);
     public static final Block indigo_flower = new BlockCustomFlower(Refs.INDIGOFLOWER_NAME);
 
     public static final Block alloyfurnace = new BlockAlloyFurnace();
     public static final Block block_breaker = new BlockContainerFrontRender(Material.rock, TileBlockBreaker.class)
-            .setBlockName(Refs.BLOCKBREAKER_NAME);
+    .setBlockName(Refs.BLOCKBREAKER_NAME);
     public static final Block igniter = new BlockIgniter();
     public static final Block buffer = new BlockContainerBase(Material.rock, TileBuffer.class).setGuiId(GuiIDs.BUFFER).setBlockName(
             Refs.BLOCKBUFFER_NAME);
@@ -134,7 +141,7 @@ public class BPBlocks {
     public static final Block regulator = new BlockContainerTwoSideRender(Material.rock, TileRegulator.class).setGuiId(GuiIDs.REGULATOR_ID)
             .emitsRedstone().setBlockName(Refs.REGULATOR_NAME);
     public static final Block item_detector = new BlockContainerTwoSideRender(Material.rock, TileItemDetector.class)
-            .setGuiId(GuiIDs.ITEMDETECTOR_ID).emitsRedstone().setBlockName(Refs.ITEMDETECTOR_NAME);
+    .setGuiId(GuiIDs.ITEMDETECTOR_ID).emitsRedstone().setBlockName(Refs.ITEMDETECTOR_NAME);
     public static final Block manager = new BlockRejecting(Material.rock, TileManager.class).setGuiId(GuiIDs.MANAGER_ID).emitsRedstone()
             .setBlockName(Refs.MANAGER_NAME);
     // public static final Block engine = new BlockEngine();
@@ -198,6 +205,9 @@ public class BPBlocks {
         GameRegistry.registerBlock(zinc_block, Refs.ZINCBLOCK_NAME);
         GameRegistry.registerBlock(tungsten_block, Refs.TUNGSTENBLOCK_NAME);
 
+        GameRegistry.registerBlock(sapphire_glass, Refs.SAPPHIREGLASS_NAME);
+        GameRegistry.registerBlock(reinforced_sapphire_glass, ItemBlockTooltip.class, Refs.REINFORCEDSAPPHIREGLASS_NAME);
+
         GameRegistry.registerBlock(flax_crop, Refs.FLAXCROP_NAME);
         GameRegistry.registerBlock(indigo_flower, Refs.INDIGOFLOWER_NAME);
 
@@ -222,7 +232,7 @@ public class BPBlocks {
         /*
          * GameRegistry.registerBlock(cpu, Refs.BLOCKCPU_NAME); GameRegistry.registerBlock(monitor, Refs.BLOCKMONITOR_NAME);
          * GameRegistry.registerBlock(disk_drive, Refs.BLOCKDISKDRIVE_NAME); GameRegistry.registerBlock(io_expander, Refs.BLOCKIOEXPANDER_NAME);
-         * 
+         *
          * GameRegistry.registerBlock(engine, Refs.ENGINE_NAME); GameRegistry.registerBlock(kinetic_generator, Refs.KINETICGENERATOR_NAME);
          * GameRegistry.registerBlock(windmill, Refs.WINDMILL_NAME);
          */

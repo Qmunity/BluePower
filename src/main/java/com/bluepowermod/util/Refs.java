@@ -68,6 +68,9 @@ public class Refs {
     public static final String TUNGSTENINGOT_NAME = "tungsten_ingot";
     public static final String TUNGSTENNUGGET_NAME = "tungsten_nugget";
 
+    public static final String SAPPHIREGLASS_NAME = "sapphire_glass";
+    public static final String REINFORCEDSAPPHIREGLASS_NAME = "reinforced_sapphire_glass";
+
     public static final String ZINCDUST_NAME = "zinc_dust";
     public static final String ZINC_ORE_CRUSHED_NAME = "zinc_ore_crushed";
     public static final String ZINC_ORE_CRUSHED_PURIFIED_NAME = "zinc_ore_purified";

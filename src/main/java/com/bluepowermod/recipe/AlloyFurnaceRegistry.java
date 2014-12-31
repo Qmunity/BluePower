@@ -17,14 +17,13 @@
 
 package com.bluepowermod.recipe;
 
-import com.bluepowermod.BluePower;
-import com.bluepowermod.api.recipe.IAlloyFurnaceRecipe;
-import com.bluepowermod.api.recipe.IAlloyFurnaceRegistry;
-import com.bluepowermod.init.Config;
-import com.bluepowermod.util.ItemStackUtils;
-import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.common.ModContainer;
-import cpw.mods.fml.common.registry.GameData;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -36,10 +35,18 @@ import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 
-import java.util.*;
+import com.bluepowermod.BluePower;
+import com.bluepowermod.api.recipe.IAlloyFurnaceRecipe;
+import com.bluepowermod.api.recipe.IAlloyFurnaceRegistry;
+import com.bluepowermod.init.Config;
+import com.bluepowermod.util.ItemStackUtils;
+
+import cpw.mods.fml.common.Loader;
+import cpw.mods.fml.common.ModContainer;
+import cpw.mods.fml.common.registry.GameData;
 
 /**
- * 
+ *
  * @author MineMaarten
  */
 
@@ -89,7 +96,7 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
             } else if (requiredItems[i] instanceof Item) {
                 requiredStacks[i] = new ItemStack((Item) requiredItems[i], 1, OreDictionary.WILDCARD_VALUE);
             } else if (requiredItems[i] instanceof Block) {
-                requiredStacks[i] = new ItemStack((Item) requiredItems[i], 1, OreDictionary.WILDCARD_VALUE);
+                requiredStacks[i] = new ItemStack(Item.getItemFromBlock((Block) requiredItems[i]), 1, OreDictionary.WILDCARD_VALUE);
             } else {
                 throw new IllegalArgumentException("Alloy Furnace crafting ingredients can only be ItemStack, Item or Block!");
             }
@@ -99,6 +106,7 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
 
     @Override
     public void addRecyclingRecipe(ItemStack recycledItem, String... blacklist) {
+
         if (recycledItem == null)
             throw new NullPointerException("Recycled item can't be null!");
         bufferedRecyclingItems.add(recycledItem);
@@ -112,6 +120,7 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
 
     @Override
     public void addRecyclingRecipe(ItemStack recycledItem, ItemStack moltenDownItem, String... blacklist) {
+
         if (moltenDownItem == null)
             throw new NullPointerException("Molten down item can't be null!");
         addRecyclingRecipe(recycledItem, blacklist);
@@ -128,7 +137,8 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
             if (item != null) {
                 blacklist.add(item);
             } else {
-                BluePower.log.info("Config entry \"" + configString + "\" not an existing item/block name! Will not be added to the blacklist");
+                BluePower.log.info("Config entry \"" + configString
+                        + "\" not an existing item/block name! Will not be added to the blacklist");
             }
         }
 
@@ -147,7 +157,8 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
                             for (ItemStack input : shaped.recipeItems) {
                                 if (input != null && ItemStackUtils.isItemFuzzyEqual(input, recyclingItem)) {
                                     ItemStack moltenDownItem = getRecyclingStack(recyclingItem);
-                                    if (currentlyRecycledInto == null || ItemStackUtils.isItemFuzzyEqual(currentlyRecycledInto, moltenDownItem)) {
+                                    if (currentlyRecycledInto == null
+                                            || ItemStackUtils.isItemFuzzyEqual(currentlyRecycledInto, moltenDownItem)) {
                                         currentlyRecycledInto = moltenDownItem;
                                         recyclingAmount += moltenDownItem.stackSize;
                                     }
@@ -160,7 +171,8 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
                             for (ItemStack input : (List<ItemStack>) shapeless.recipeItems) {
                                 if (input != null && ItemStackUtils.isItemFuzzyEqual(input, recyclingItem)) {
                                     ItemStack moltenDownItem = getRecyclingStack(recyclingItem);
-                                    if (currentlyRecycledInto == null || ItemStackUtils.isItemFuzzyEqual(currentlyRecycledInto, moltenDownItem)) {
+                                    if (currentlyRecycledInto == null
+                                            || ItemStackUtils.isItemFuzzyEqual(currentlyRecycledInto, moltenDownItem)) {
                                         currentlyRecycledInto = moltenDownItem;
                                         recyclingAmount += moltenDownItem.stackSize;
                                     }
@@ -207,7 +219,8 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
                                 for (ItemStack item : itemList) {
                                     if (item != null && ItemStackUtils.isItemFuzzyEqual(item, recyclingItem)) {
                                         ItemStack moltenDownItem = getRecyclingStack(recyclingItem);
-                                        if (currentlyRecycledInto == null || ItemStackUtils.isItemFuzzyEqual(currentlyRecycledInto, moltenDownItem)) {
+                                        if (currentlyRecycledInto == null
+                                                || ItemStackUtils.isItemFuzzyEqual(currentlyRecycledInto, moltenDownItem)) {
                                             currentlyRecycledInto = moltenDownItem;
                                             recyclingAmount += moltenDownItem.stackSize;
                                         }
@@ -259,6 +272,7 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
     }
 
     private ItemStack getRecyclingStack(ItemStack original) {
+
         ItemStack moltenDownStack = moltenDownMap.get(original);
         return moltenDownStack != null ? moltenDownStack : original;
     }
@@ -344,7 +358,8 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
                     }
                 }
                 if (itemsNeeded > 0)
-                    throw new IllegalArgumentException("Alloy Furnace recipe using items, after using still items required?? This is a bug!");
+                    throw new IllegalArgumentException(
+                            "Alloy Furnace recipe using items, after using still items required?? This is a bug!");
             }
         }
 
