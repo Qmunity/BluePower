@@ -72,7 +72,7 @@ public class GateInverter extends GateBase {
     public void tick() {
 
         if (front().getOutput() > 0)
-            spawnBlueParticle(8 / 16D, 6 / 16D, 8 / 16D);
+            spawnRedParticle(8 / 16D, 6 / 16D, 8 / 16D);
     }
 
     @Override
