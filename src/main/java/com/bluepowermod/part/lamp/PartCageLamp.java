@@ -80,7 +80,7 @@ public class PartCageLamp extends PartLamp {
         renderer.setRenderFromInside(false);
 
         vector = new Vec3dCube(5 / 16D, 2 / 16D, 5 / 16D, 11 / 16D, 11 / 16D, 11 / 16D);
-        if (inverted ? power == 15 : power == 0) {
+        if (inverted ? (power & 0xFF) == 255 : power == 0) {
             sideIcon = IconSupplier.cagedLampLampInactive;
             topIcon = IconSupplier.cagedLampLampInactiveTop;
         } else {
@@ -109,8 +109,8 @@ public class PartCageLamp extends PartLamp {
             GL11.glDisable(GL11.GL_TEXTURE_2D);
             GL11.glDisable(GL11.GL_LIGHTING);
             GL11.glBegin(GL11.GL_QUADS);
-            com.bluepowermod.client.render.RenderHelper.drawColoredCube(vector.clone().expand(0.5 / 16D), r, g, b, ((inverted ? 15 - power
-                    : power) / 15D) * 0.625);
+            com.bluepowermod.client.render.RenderHelper.drawColoredCube(vector.clone().expand(0.5 / 16D), r, g, b,
+                    ((inverted ? 255 - (power & 0xFF) : (power & 0xFF)) / 255D) * 0.625);
             GL11.glEnd();
             GL11.glEnable(GL11.GL_CULL_FACE);
             GL11.glEnable(GL11.GL_LIGHTING);

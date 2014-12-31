@@ -25,18 +25,24 @@ import net.minecraftforge.common.util.ForgeDirection;
 import org.lwjgl.opengl.GL11;
 
 import uk.co.qmunity.lib.client.render.RenderHelper;
+import uk.co.qmunity.lib.helper.MathHelper;
 import uk.co.qmunity.lib.helper.RedstoneHelper;
 import uk.co.qmunity.lib.part.IPartRedstone;
+import uk.co.qmunity.lib.part.MicroblockShape;
 import uk.co.qmunity.lib.part.compat.MultipartCompatibility;
+import uk.co.qmunity.lib.part.compat.OcclusionHelper;
 import uk.co.qmunity.lib.transform.Rotation;
 import uk.co.qmunity.lib.vec.Vec3d;
 import uk.co.qmunity.lib.vec.Vec3dCube;
 import uk.co.qmunity.lib.vec.Vec3i;
 
 import com.bluepowermod.api.misc.MinecraftColor;
+import com.bluepowermod.api.redstone.IFaceRedstoneDevice;
+import com.bluepowermod.api.redstone.IRedstoneDevice;
 import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.part.BPPartFace;
 import com.bluepowermod.part.wire.redstone.PartRedwireFreestanding;
+import com.bluepowermod.part.wire.redstone.WireCommons;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -47,12 +53,15 @@ import cpw.mods.fml.relauncher.SideOnly;
  * @author Koen Beckers (K4Unl), Amadornes
  *
  */
-public abstract class PartLamp extends BPPartFace implements IPartRedstone {
+public abstract class PartLamp extends BPPartFace implements IPartRedstone, IFaceRedstoneDevice {
 
     protected final MinecraftColor color;
     protected final boolean inverted;
 
-    protected int power = 0;
+    protected byte power = 0;
+    private byte[] input = new byte[6];
+
+    private IRedstoneDevice[] devices = new IRedstoneDevice[6];
 
     /**
      * @author amadornes
@@ -118,8 +127,6 @@ public abstract class PartLamp extends BPPartFace implements IPartRedstone {
     @Override
     @SideOnly(Side.CLIENT)
     public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
-
-        power = inverted ? 15 : 0;
 
         power = (byte) 255;
 
@@ -256,18 +263,42 @@ public abstract class PartLamp extends BPPartFace implements IPartRedstone {
         return (inverted ? 15 - power : power);
     }
 
+    @Override
+    public void onAdded() {
+
+        super.onAdded();
+
+        WireCommons.refreshConnectionsRedstone(this);
+
+        onUpdate();
+    }
+
     /**
      * @author amadornes
      */
     @Override
     public void onUpdate() {
 
+        recalculatePower();
+    }
+
+    private void recalculatePower() {
+
         if (getWorld().isRemote)
             return;
 
         int old = power;
 
-        power = RedstoneHelper.getInput(getWorld(), getX(), getY(), getZ());
+        int pow = 0;
+        for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
+            IRedstoneDevice dev = getDeviceOnSide(d);
+            if (dev != null) {
+                pow = Math.max(pow, input[d.ordinal()] & 0xFF);
+            } else {
+                pow = Math.max(pow, MathHelper.map(RedstoneHelper.getInput(getWorld(), getX(), getY(), getZ(), d), 0, 15, 0, 255));
+            }
+        }
+        power = (byte) pow;
 
         if (old != power)
             sendUpdatePacket();
@@ -295,28 +326,28 @@ public abstract class PartLamp extends BPPartFace implements IPartRedstone {
     public void writeToNBT(NBTTagCompound tag) {
 
         super.writeToNBT(tag);
-        tag.setInteger("power", power);
+        tag.setByte("power", power);
     }
 
     @Override
     public void readFromNBT(NBTTagCompound tag) {
 
         super.readFromNBT(tag);
-        power = tag.getInteger("power");
+        power = tag.getByte("power");
     }
 
     @Override
     public void writeUpdateToNBT(NBTTagCompound tag) {
 
         super.writeUpdateToNBT(tag);
-        tag.setInteger("power", power);
+        tag.setByte("power", power);
     }
 
     @Override
     public void readUpdateFromNBT(NBTTagCompound tag) {
 
         super.readUpdateFromNBT(tag);
-        power = tag.getInteger("power");
+        power = tag.getByte("power");
 
         try {
             getWorld().updateLightByType(EnumSkyBlock.Block, getX(), getY(), getZ());
@@ -342,6 +373,94 @@ public abstract class PartLamp extends BPPartFace implements IPartRedstone {
     public CreativeTabs getCreativeTab() {
 
         return BPCreativeTabs.lighting;
+    }
+
+    @Override
+    public boolean canConnectStraight(ForgeDirection side, IRedstoneDevice device) {
+
+        if (side == ForgeDirection.UNKNOWN)
+            return false;
+
+        if (OcclusionHelper.microblockOcclusionTest(getParent(), MicroblockShape.EDGE, 1, getFace(), side))
+            return false;
+
+        return true;
+    }
+
+    @Override
+    public boolean canConnectOpenCorner(ForgeDirection side, IRedstoneDevice device) {
+
+        if (side == ForgeDirection.UNKNOWN)
+            return false;
+
+        if (OcclusionHelper.microblockOcclusionTest(getParent(), MicroblockShape.EDGE, 1, getFace(), side))
+            return false;
+
+        return true;
+    }
+
+    @Override
+    public boolean canConnectClosedCorner(ForgeDirection side, IRedstoneDevice device) {
+
+        if (side == getFace())
+            return false;
+        if (side == getFace().getOpposite())
+            return false;
+        if (side == ForgeDirection.UNKNOWN)
+            return false;
+
+        if (OcclusionHelper.microblockOcclusionTest(getParent(), MicroblockShape.EDGE, 1, getFace(), side))
+            return false;
+
+        return true;
+    }
+
+    @Override
+    public MinecraftColor getInsulationColor() {
+
+        return MinecraftColor.NONE;
+    }
+
+    @Override
+    public byte getRedstonePower(ForgeDirection side) {
+
+        return 0;
+    }
+
+    @Override
+    public void setRedstonePower(ForgeDirection side, byte power) {
+
+        input[side.ordinal()] = power;
+    }
+
+    @Override
+    public void onRedstoneUpdate() {
+
+        recalculatePower();
+    }
+
+    @Override
+    public boolean isNormalBlock() {
+
+        return false;
+    }
+
+    @Override
+    public void onConnect(ForgeDirection side, IRedstoneDevice device) {
+
+        devices[side.ordinal()] = device;
+    }
+
+    @Override
+    public void onDisconnect(ForgeDirection side) {
+
+        devices[side.ordinal()] = null;
+    }
+
+    @Override
+    public IRedstoneDevice getDeviceOnSide(ForgeDirection side) {
+
+        return devices[side.ordinal()];
     }
 
 }

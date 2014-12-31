@@ -70,7 +70,7 @@ public class PartFixture extends PartLamp {
         renderer.renderBox(vector, topIcon, topIcon, sideIcon, sideIcon, sideIcon, sideIcon);
 
         vector = new Vec3dCube(3 / 16D, 2 / 16D, 3 / 16D, 1.0 - (3 / 16D), 8 / 16D, 13 / 16D);
-        if (inverted ? power == 15 : power == 0) {
+        if (inverted ? (power & 0xFF) == 255 : power == 0) {
             sideIcon = IconSupplier.fixtureLampSideOff;
             topIcon = IconSupplier.fixtureLampTopOff;
         } else {
@@ -98,8 +98,8 @@ public class PartFixture extends PartLamp {
             GL11.glDisable(GL11.GL_TEXTURE_2D);
             GL11.glDisable(GL11.GL_LIGHTING);
             GL11.glBegin(GL11.GL_QUADS);
-            com.bluepowermod.client.render.RenderHelper.drawColoredCube(vector.clone().expand(0.5 / 16D), r, g, b, ((inverted ? 15 - power
-                    : power) / 15D) * 0.625);
+            com.bluepowermod.client.render.RenderHelper.drawColoredCube(vector.clone().expand(0.5 / 16D), r, g, b,
+                    ((inverted ? 255 - (power & 0xFF) : (power & 0xFF)) / 255D) * 0.625);
             GL11.glEnd();
             GL11.glEnable(GL11.GL_CULL_FACE);
             GL11.glEnable(GL11.GL_LIGHTING);
