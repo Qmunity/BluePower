@@ -25,6 +25,9 @@ import uk.co.qmunity.lib.raytrace.QMovingObjectPosition;
 import com.bluepowermod.client.render.RenderHelper;
 import com.bluepowermod.init.BPItems;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 public class GateToggleLatch extends GateBase {
 
     private boolean power = false;
@@ -46,6 +49,7 @@ public class GateToggleLatch extends GateBase {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     protected void renderTop(float frame) {
 
         renderTop("centerleft", power);

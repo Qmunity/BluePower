@@ -12,29 +12,33 @@ import com.bluepowermod.network.NetworkHandler;
 import com.bluepowermod.network.message.MessageGuiUpdate;
 import com.bluepowermod.part.gate.GateBase;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 /**
- * 
+ *
  * @author MineMaarten
  */
 
+@SideOnly(Side.CLIENT)
 public abstract class GuiGate extends GuiScreenBase {
-    
+
     private final GateBase gate;
-    
+
     public GuiGate(GateBase gate, int xSize, int ySize) {
-    
+
         super(xSize, ySize);
         this.gate = gate;
     }
-    
+
     protected void sendToServer(int id, int value) {
-    
+
         NetworkHandler.sendToServer(new MessageGuiUpdate(gate, id, value));
     }
-    
+
     @Override
     public boolean doesGuiPauseGame() {
-    
+
         return false;
     }
 }

@@ -17,10 +17,13 @@
 
 package com.bluepowermod.part.tube;
 
-import uk.co.qmunity.lib.vec.Vec3d;
 import net.minecraft.util.IIcon;
+import uk.co.qmunity.lib.vec.Vec3d;
 
 import com.bluepowermod.client.render.IconSupplier;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class PneumaticTubeOpaque extends PneumaticTube {
 
@@ -37,18 +40,21 @@ public class PneumaticTubeOpaque extends PneumaticTube {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     protected IIcon getSideIcon() {
 
         return IconSupplier.pneumaticTubeOpaqueSide;
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     protected IIcon getNodeIcon() {
 
         return IconSupplier.pneumaticTubeOpaqueNode;
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void renderDynamic(Vec3d loc, double delta, int pass) {
 
     }

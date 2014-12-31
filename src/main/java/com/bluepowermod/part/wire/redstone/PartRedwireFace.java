@@ -65,8 +65,11 @@ import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.part.wire.PartWireFace;
 import com.bluepowermod.part.wire.redstone.propagation.WirePropagator;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 public class PartRedwireFace extends PartWireFace implements IFaceRedstoneDevice, IRedstoneConductor, IFaceBundledDevice,
-        IBundledConductor, IPartRedstone, IPartWAILAProvider {
+IBundledConductor, IPartRedstone, IPartWAILAProvider {
 
     protected final IRedstoneDevice[] devices = new IRedstoneDevice[6];
     protected final IBundledDevice[] bundledDevices = new IBundledDevice[6];
@@ -108,6 +111,7 @@ public class PartRedwireFace extends PartWireFace implements IFaceRedstoneDevice
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     protected IIcon getWireIcon(ForgeDirection side) {
 
         return bundled ? IconSupplier.wireBundled : (color == MinecraftColor.NONE ? IconSupplier.wire : (side == ForgeDirection.UP
@@ -164,6 +168,7 @@ public class PartRedwireFace extends PartWireFace implements IFaceRedstoneDevice
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public boolean renderStatic(Vec3i translation, RenderHelper renderer, RenderBlocks renderBlocks, int pass) {
 
         super.renderStatic(translation, renderer, renderBlocks, pass);
@@ -270,6 +275,7 @@ public class PartRedwireFace extends PartWireFace implements IFaceRedstoneDevice
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
 
         power = (byte) 255;
@@ -582,7 +588,7 @@ public class PartRedwireFace extends PartWireFace implements IFaceRedstoneDevice
             return 0;
 
         return (devices[side.ordinal()] != null && devices[side.ordinal()] instanceof DummyRedstoneDevice) ? ((DummyRedstoneDevice) devices[side
-                .ordinal()]).getRedstoneOutput(MathHelper.map(power & 0xFF, 0, 255, 0, 15)) : 0;
+                                                                                                                                            .ordinal()]).getRedstoneOutput(MathHelper.map(power & 0xFF, 0, 255, 0, 15)) : 0;
     }
 
     @Override
@@ -596,7 +602,7 @@ public class PartRedwireFace extends PartWireFace implements IFaceRedstoneDevice
             return 0;
 
         return (devices[side.ordinal()] != null && devices[side.ordinal()] instanceof DummyRedstoneDevice) ? ((DummyRedstoneDevice) devices[side
-                .ordinal()]).getRedstoneOutput(MathHelper.map(power & 0xFF, 0, 255, 0, 15)) : 0;
+                                                                                                                                            .ordinal()]).getRedstoneOutput(MathHelper.map(power & 0xFF, 0, 255, 0, 15)) : 0;
     }
 
     @Override
@@ -735,6 +741,7 @@ public class PartRedwireFace extends PartWireFace implements IFaceRedstoneDevice
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void addWAILABody(List<String> text) {
 
         if (!bundled) {
@@ -783,6 +790,7 @@ public class PartRedwireFace extends PartWireFace implements IFaceRedstoneDevice
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void addTooltip(List<String> tip) {
 
         if (bundled || type == RedwireType.RED_ALLOY)

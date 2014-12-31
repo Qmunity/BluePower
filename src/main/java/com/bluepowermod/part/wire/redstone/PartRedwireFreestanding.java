@@ -69,6 +69,9 @@ import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.part.wire.PartWireFreestanding;
 import com.bluepowermod.part.wire.redstone.propagation.WirePropagator;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 public class PartRedwireFreestanding extends PartWireFreestanding implements IRedstoneConductor, IBundledConductor, IPartRedstone,
 IPartWAILAProvider, IPartSolid, IPartThruHole, IPartCustomPlacement {
 
@@ -97,6 +100,7 @@ IPartWAILAProvider, IPartSolid, IPartThruHole, IPartCustomPlacement {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     protected IIcon getWireIcon(ForgeDirection side) {
 
         return bundled ? IconSupplier.wireBundled : (color == MinecraftColor.NONE ? IconSupplier.wire : IconSupplier.wireInsulation1);
@@ -109,6 +113,7 @@ IPartWAILAProvider, IPartSolid, IPartThruHole, IPartCustomPlacement {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     protected IIcon getFrameIcon() {
 
         return Blocks.planks.getIcon(0, 0);
@@ -181,12 +186,7 @@ IPartWAILAProvider, IPartSolid, IPartThruHole, IPartCustomPlacement {
     }
 
     @Override
-    public boolean renderStatic(Vec3i translation, RenderHelper renderer, RenderBlocks renderBlocks, int pass) {
-
-        return super.renderStatic(translation, renderer, renderBlocks, pass);
-    }
-
-    @Override
+    @SideOnly(Side.CLIENT)
     public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
 
         power = (byte) 255;
@@ -506,6 +506,7 @@ IPartWAILAProvider, IPartSolid, IPartThruHole, IPartCustomPlacement {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void addWAILABody(List<String> text) {
 
         text.add("Power: " + (power & 0xFF) + "/255");
@@ -553,6 +554,7 @@ IPartWAILAProvider, IPartSolid, IPartThruHole, IPartCustomPlacement {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void addTooltip(List<String> tip) {
 
         if (bundled || type == RedwireType.RED_ALLOY)

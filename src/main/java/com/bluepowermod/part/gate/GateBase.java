@@ -165,6 +165,7 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
 
     }
 
+    @SideOnly(Side.CLIENT)
     protected final void transformDynamic(Vec3d translation) {
 
         GL11.glTranslated(translation.getX(), translation.getY(), translation.getZ());
@@ -200,6 +201,7 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void renderDynamic(Vec3d translation, double delta, int pass) {
 
         transformDynamic(translation);
@@ -210,6 +212,7 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public boolean renderStatic(Vec3i translation, RenderHelper renderer, RenderBlocks renderBlocks, int pass) {
 
         switch (getFace()) {
@@ -249,6 +252,7 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
 
         GL11.glEnable(GL11.GL_BLEND);
@@ -290,8 +294,10 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
         rendering = null;
     }
 
+    @SideOnly(Side.CLIENT)
     protected abstract void renderTop(float frame);
 
+    @SideOnly(Side.CLIENT)
     protected final void renderTop() {
 
         Tessellator t = Tessellator.instance;
@@ -309,6 +315,7 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
         t.draw();
     }
 
+    @SideOnly(Side.CLIENT)
     protected final void renderTop(String texture) {
 
         Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/gates/" + getTextureName()
@@ -316,11 +323,13 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
         renderTop();
     }
 
+    @SideOnly(Side.CLIENT)
     protected final void renderTop(String texture, boolean status) {
 
         renderTop(texture, status ? "on" : "off");
     }
 
+    @SideOnly(Side.CLIENT)
     protected final void renderTop(String texture, String status) {
 
         Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/gates/" + getTextureName()
@@ -340,6 +349,7 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
             OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, bX, bY);
     }
 
+    @SideOnly(Side.CLIENT)
     protected final void renderTop(String name, RedstoneConnection con) {
 
         boolean isOn = con.getOutput() + (!con.isOutputOnly() ? con.getInput() : 0) > 0;
@@ -554,6 +564,7 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void registerIcons(IIconRegister reg) {
 
         iconBottom = reg.registerIcon(Refs.MODID + ":gates/bottom");
@@ -561,11 +572,13 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
         iconTop = reg.registerIcon(Refs.MODID + ":gates/" + getTextureName() + "/base");
     }
 
+    @SideOnly(Side.CLIENT)
     public IIcon getTopIcon() {
 
         return iconTop;
     }
 
+    @SideOnly(Side.CLIENT)
     public IIcon getIcon(ForgeDirection face) {
 
         if (face == ForgeDirection.DOWN)

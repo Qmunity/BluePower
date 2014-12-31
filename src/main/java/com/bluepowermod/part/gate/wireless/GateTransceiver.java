@@ -61,6 +61,9 @@ import com.bluepowermod.part.wire.redstone.RedstoneApi;
 import com.bluepowermod.part.wire.redstone.WireCommons;
 import com.bluepowermod.part.wire.redstone.propagation.WirePropagator;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 public class GateTransceiver extends GateBase implements IWirelessDevice, IFaceRedstoneDevice, IRedstoneConductor, IFaceBundledDevice,
 IBundledConductor {
 
@@ -104,11 +107,13 @@ IBundledConductor {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     protected void renderTop(float frame) {
 
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public boolean renderStatic(Vec3i translation, RenderHelper renderer, RenderBlocks renderBlocks, int pass) {
 
         super.renderStatic(translation, renderer, renderBlocks, pass);
@@ -504,6 +509,7 @@ IBundledConductor {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void addTooltip(List<String> tip) {
 
         tip.add(MinecraftColor.RED + I18n.format("Disabled temporarily. Still not fully working."));

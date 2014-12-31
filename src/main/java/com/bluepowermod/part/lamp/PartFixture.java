@@ -21,6 +21,9 @@ import uk.co.qmunity.lib.vec.Vec3dCube;
 import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.client.render.IconSupplier;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 /**
  *
  * @author Koen Beckers (K4Unl), Amadornes
@@ -57,6 +60,7 @@ public class PartFixture extends PartLamp {
      * @author Koen Beckers (K4Unl), Amadornes
      */
     @Override
+    @SideOnly(Side.CLIENT)
     public void renderLamp(RenderHelper renderer) {
 
         Vec3dCube vector = new Vec3dCube(2 / 16D, 0.0, 2 / 16D, 1.0 - (2 / 16D), 2 / 16D, 1.0 - 2 / 16D);
@@ -80,6 +84,7 @@ public class PartFixture extends PartLamp {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void renderGlow(int pass) {
 
         Vec3dCube vector = new Vec3dCube(3 / 16D, 2 / 16D, 3 / 16D, 1.0 - (3 / 16D), 8 / 16D, 13 / 16D).rotate(getFace(), Vec3d.center);
@@ -93,8 +98,8 @@ public class PartFixture extends PartLamp {
             GL11.glDisable(GL11.GL_TEXTURE_2D);
             GL11.glDisable(GL11.GL_LIGHTING);
             GL11.glBegin(GL11.GL_QUADS);
-            com.bluepowermod.client.render.RenderHelper.drawColoredCube(vector.clone().expand(0.5 / 16D), r, g, b,
-                    ((inverted ? 15 - power : power) / 15D) * 0.625);
+            com.bluepowermod.client.render.RenderHelper.drawColoredCube(vector.clone().expand(0.5 / 16D), r, g, b, ((inverted ? 15 - power
+                    : power) / 15D) * 0.625);
             GL11.glEnd();
             GL11.glEnable(GL11.GL_CULL_FACE);
             GL11.glEnable(GL11.GL_LIGHTING);

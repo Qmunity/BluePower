@@ -17,7 +17,10 @@ import com.bluepowermod.tile.tier1.TileLamp;
 
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public class Renderers {
 
     public static int RenderIdLamps;

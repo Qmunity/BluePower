@@ -16,10 +16,13 @@ import com.bluepowermod.part.gate.GateWire;
 import com.bluepowermod.util.Refs;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * @author MineMaarten
  */
+@SideOnly(Side.CLIENT)
 public class IconSupplier {
 
     public static IIcon pneumaticTubeSide;

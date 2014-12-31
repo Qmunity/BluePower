@@ -14,6 +14,10 @@ import net.minecraft.util.ResourceLocation;
 import com.bluepowermod.part.gate.GateBase;
 import com.bluepowermod.util.Refs;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
+@SideOnly(Side.CLIENT)
 public abstract class GuiGateCounter extends GuiGate {
 
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/gateBig.png");
@@ -33,8 +37,8 @@ public abstract class GuiGateCounter extends GuiGate {
         int buttonWidth = 35;
         for (int y = 0; y < 3; y++) {
             for (int i = 0; i < buttonTexts.length; i++) {
-                buttonList.add(new GuiButton(y * buttonTexts.length + i, guiLeft + 4 + i * (buttonWidth + 2), guiTop + 25 + (y * 35), buttonWidth,
-                        20, buttonTexts[i]));
+                buttonList.add(new GuiButton(y * buttonTexts.length + i, guiLeft + 4 + i * (buttonWidth + 2), guiTop + 25 + (y * 35),
+                        buttonWidth, 20, buttonTexts[i]));
             }
         }
     }
@@ -86,7 +90,8 @@ public abstract class GuiGateCounter extends GuiGate {
     public void drawScreen(int x, int y, float partialTicks) {
 
         super.drawScreen(x, y, partialTicks);
-        drawCenteredString(fontRendererObj, I18n.format("gui.counterMax") + ": " + getCurrentMax(), guiLeft + xSize / 2, guiTop + 10, 0xFFFFFF);
+        drawCenteredString(fontRendererObj, I18n.format("gui.counterMax") + ": " + getCurrentMax(), guiLeft + xSize / 2, guiTop + 10,
+                0xFFFFFF);
         drawCenteredString(fontRendererObj, I18n.format("gui.counterIncrement") + ": " + getCurrentIncrement(), guiLeft + xSize / 2,
                 guiTop + 10 + 38, 0xFFFFFF);
         drawCenteredString(fontRendererObj, I18n.format("gui.counterDecrement") + ": " + getCurrentDecrement(), guiLeft + xSize / 2,

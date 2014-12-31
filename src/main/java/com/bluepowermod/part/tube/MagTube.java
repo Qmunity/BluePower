@@ -20,6 +20,9 @@ import uk.co.qmunity.lib.vec.Vec3dCube;
 
 import com.bluepowermod.client.render.IconSupplier;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 /**
  * @author MineMaarten
  */
@@ -38,12 +41,14 @@ public class MagTube extends PneumaticTube {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     protected IIcon getSideIcon() {
 
         return IconSupplier.magTubeSide;
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     protected IIcon getNodeIcon() {
 
         return IconSupplier.magTubeNode;
@@ -78,6 +83,7 @@ public class MagTube extends PneumaticTube {
      * Render method that works, and now should be buried under the ground so no-one looks at it
      */
     @Override
+    @SideOnly(Side.CLIENT)
     protected void renderSide() {
 
         Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.locationBlocksTexture);

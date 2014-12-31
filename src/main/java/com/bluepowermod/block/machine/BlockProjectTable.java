@@ -33,99 +33,104 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockProjectTable extends BlockContainerBase {
-    
+
     protected IIcon textureTop;
     protected IIcon textureBottom;
     protected IIcon textureSide;
     protected IIcon textureFront;
-    
+
     public BlockProjectTable() {
-    
+
         super(Material.wood, TileProjectTable.class);
         setBlockName(Refs.PROJECTTABLE_NAME);
     }
-    
+
     public BlockProjectTable(Class<? extends TileBase> tileClass) {
-    
+
         super(Material.wood, tileClass);
     }
-    
+
     @Override
     @SideOnly(Side.CLIENT)
     public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
-    
+
         IRotatable rotatable = (IRotatable) world.getTileEntity(x, y, z);
         ForgeDirection s = ForgeDirection.getOrientation(side);
         // If is facing
-        
-        if (rotatable.getFacingDirection() == s) { return textureFront; }
+
+        if (rotatable.getFacingDirection() == s) {
+            return textureFront;
+        }
         switch (s) {
-            case UP:
-                return textureTop;
-            case DOWN:
-                return textureBottom;
-            case EAST:
-            case NORTH:
-            case SOUTH:
-            case WEST:
-            case UNKNOWN:
-                return textureSide;
-            default:
-                break;
-        
+        case UP:
+            return textureTop;
+        case DOWN:
+            return textureBottom;
+        case EAST:
+        case NORTH:
+        case SOUTH:
+        case WEST:
+        case UNKNOWN:
+            return textureSide;
+        default:
+            break;
+
         }
         return null;
     }
-    
+
     @Override
     @SideOnly(Side.CLIENT)
     public IIcon getIcon(int side, int meta) {
-    
+
         ForgeDirection s = ForgeDirection.getOrientation(side);
-        if (meta == side) { return textureFront; }
+        if (meta == side) {
+            return textureFront;
+        }
         switch (s) {
-            case UP:
-                return textureTop;
-            case DOWN:
-                return textureBottom;
-            case EAST:
-            case NORTH:
-            case SOUTH:
-            case WEST:
-            case UNKNOWN:
-                return textureSide;
-            default:
-                break;
-        
+        case UP:
+            return textureTop;
+        case DOWN:
+            return textureBottom;
+        case EAST:
+        case NORTH:
+        case SOUTH:
+        case WEST:
+        case UNKNOWN:
+            return textureSide;
+        default:
+            break;
+
         }
         return null;
     }
-    
+
     @Override
     public boolean isOpaqueCube() {
-    
+
         return true;
     }
-    
+
     @Override
     @SideOnly(Side.CLIENT)
     public void registerBlockIcons(IIconRegister iconRegister) {
-    
+
         textureTop = iconRegister.registerIcon(getTextureName() + "_top");
         textureBottom = iconRegister.registerIcon(getTextureName() + "_bottom");
         textureSide = iconRegister.registerIcon(getTextureName() + "_side");
         textureFront = iconRegister.registerIcon(getTextureName() + "_front");
     }
-    
+
     @Override
     protected boolean canRotateVertical() {
-    
+
         return false;
     }
-    
+
     @Override
+    @SideOnly(Side.CLIENT)
     public int getRenderType() {
-    
+
         return 0;
     }
 }

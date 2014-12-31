@@ -7,19 +7,22 @@
  */
 package com.bluepowermod.compat.hydcraft;
 
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+
 import com.bluepowermod.compat.CompatModule;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.init.BPItems;
+
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLInterModComms;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class CompatModuleHydCraft extends CompatModule {
-    
+
     @Override
     public void preInit(FMLPreInitializationEvent ev) {
 
@@ -65,42 +68,32 @@ public class CompatModuleHydCraft extends CompatModule {
         toRegister.setFloat("pressureRatio", 1.0F);
         FMLInterModComms.sendMessage("HydCraft", "registerWashingRecipe", toRegister);
 
-
     }
-    
+
     @Override
     public void init(FMLInitializationEvent ev) {
-    
-        // TODO Auto-generated method stub
-        
+
     }
-    
+
     @Override
     public void postInit(FMLPostInitializationEvent ev) {
-    
-        // TODO Auto-generated method stub
-        
+
     }
-    
+
     @Override
     public void registerBlocks() {
-    
-        // TODO Auto-generated method stub
-        
+
     }
-    
+
     @Override
     public void registerItems() {
-    
-        // TODO Auto-generated method stub
-        
+
     }
-    
+
     @Override
+    @SideOnly(Side.CLIENT)
     public void registerRenders() {
-    
-        // TODO Auto-generated method stub
-        
+
     }
-    
+
 }

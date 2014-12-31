@@ -34,6 +34,9 @@ import uk.co.qmunity.lib.vec.Vec3i;
 
 import com.bluepowermod.client.render.IconSupplier;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 /**
  * Accelerator extends PneumaticTube, as that's much easier routing wise.
  *
@@ -128,25 +131,30 @@ public class Accelerator extends PneumaticTube implements IPartCustomPlacement {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     protected IIcon getNodeIcon() {
 
         return null;
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     protected IIcon getSideIcon(ForgeDirection side) {
 
         return getPartCache(side) instanceof MagTube ? IconSupplier.magTubeSide : IconSupplier.pneumaticTubeSide;
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
+
         Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
         rotation = ForgeDirection.UP;
         renderDynamic(new Vec3d(0, 0, 0), 0, 1);
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void renderDynamic(Vec3d loc, double delta, int pass) {
 
         super.renderDynamic(loc, delta, pass);

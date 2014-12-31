@@ -27,6 +27,9 @@ import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.helper.TileEntityCache;
 import com.bluepowermod.part.tube.TubeStack;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 /**
  * @author MineMaarten
  */
@@ -62,11 +65,12 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
     }
 
     private void ejectItems() {
+
         for (Iterator<TubeStack> iterator = internalItemStackBuffer.iterator(); iterator.hasNext();) {
             TubeStack tubeStack = iterator.next();
             if (IOHelper.canInterfaceWith(getTileCache(getOutputDirection()), getFacingDirection())) {
-                ItemStack returnedStack = IOHelper.insert(getTileCache(getOutputDirection()), tubeStack.stack, getFacingDirection(), tubeStack.color,
-                        false);
+                ItemStack returnedStack = IOHelper.insert(getTileCache(getOutputDirection()), tubeStack.stack, getFacingDirection(),
+                        tubeStack.color, false);
                 if (returnedStack == null) {
                     iterator.remove();
                     markDirty();
@@ -94,6 +98,7 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
 
     @Override
     public void validate() {
+
         super.validate();
         tileCache = null;
     }
@@ -257,12 +262,12 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
 
     /**
      * Adds information to the waila tooltip
-     * 
+     *
      * @author Koen Beckers (K4Unl)
-     * 
+     *
      * @param info
      */
-
+    @SideOnly(Side.CLIENT)
     public void addWailaInfo(List<String> info) {
 
         if (isEjecting()) {

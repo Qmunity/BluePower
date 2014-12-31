@@ -59,6 +59,7 @@ public class GateCounter extends GateBase implements IGuiButtonSensitive {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void renderTop(float frame) {
 
         renderTop("left", left().getInput() > 0);
@@ -202,6 +203,7 @@ public class GateCounter extends GateBase implements IGuiButtonSensitive {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void addWAILABody(List<String> info) {
 
         info.add(I18n.format("gui.counterMax") + ": " + Color.YELLOW + max);

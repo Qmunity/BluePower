@@ -9,6 +9,9 @@ package com.bluepowermod.part.gate;
 
 import com.bluepowermod.client.render.RenderHelper;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 public class GateXnor extends GateBase {
 
     @Override
@@ -41,6 +44,7 @@ public class GateXnor extends GateBase {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     protected void renderTop(float frame) {
 
         boolean l = left().getInput() > 0;
