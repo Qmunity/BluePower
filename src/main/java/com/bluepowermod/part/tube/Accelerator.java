@@ -161,7 +161,7 @@ public class Accelerator extends PneumaticTube implements IPartCustomPlacement {
 
             Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
             rotation = ForgeDirection.UP;
-            renderDynamic(new Vec3d(0, 0, 0), 0, 1);
+            renderDynamic(new Vec3d(0, 0, 0), 0, 0);
         }
         GL11.glPopMatrix();
     }
