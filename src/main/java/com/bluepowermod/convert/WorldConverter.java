@@ -158,7 +158,7 @@ public class WorldConverter {
         NBTTagList parts = tag.getTagList("parts", new NBTTagCompound().getId());
         int count = parts.tagCount();
 
-        FMPPart fmppart = new FMPPart();
+        FMPPart fmppart = new FMPPart(true);
 
         for (int i = 0; i < count; i++) {
             NBTTagCompound part = parts.getCompoundTagAt(i);
