@@ -359,12 +359,10 @@ public class PneumaticTube extends BPPart implements IPartTicking {
     @SideOnly(Side.CLIENT)
     public void renderDynamic(Vec3d translation, double delta, int pass) {
 
-        if (pass == 1) {
+        if (pass == 0) {
             logic.renderDynamic(translation, (float) delta);
-        }
-
-        if (pass == 1 && !shouldRenderNode()) {
-            renderSide();
+            if (!shouldRenderNode())
+                renderSide();
         }
     }
 

@@ -18,7 +18,6 @@
 package com.bluepowermod.part.tube;
 
 import net.minecraft.util.IIcon;
-import uk.co.qmunity.lib.vec.Vec3d;
 
 import com.bluepowermod.client.render.IconSupplier;
 
@@ -51,11 +50,5 @@ public class PneumaticTubeOpaque extends PneumaticTube {
     protected IIcon getNodeIcon() {
 
         return IconSupplier.pneumaticTubeOpaqueNode;
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void renderDynamic(Vec3d loc, double delta, int pass) {
-
     }
 }

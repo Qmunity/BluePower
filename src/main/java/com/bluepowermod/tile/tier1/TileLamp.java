@@ -11,6 +11,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.EnumSkyBlock;
 import uk.co.qmunity.lib.helper.RedstoneHelper;
 
+import com.bluepowermod.client.render.RenderLamp;
 import com.bluepowermod.tile.TileBase;
 
 /**
@@ -51,5 +52,12 @@ public class TileLamp extends TileBase {
             getWorldObj().markBlockRangeForRenderUpdate(xCoord, yCoord, zCoord, xCoord, yCoord, zCoord);
             getWorldObj().updateLightByType(EnumSkyBlock.Block, xCoord, yCoord, zCoord);
         }
+    }
+
+    @Override
+    public boolean shouldRenderInPass(int pass) {
+
+        RenderLamp.pass = pass;
+        return true;
     }
 }

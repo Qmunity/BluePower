@@ -171,7 +171,7 @@ public class Accelerator extends PneumaticTube implements IPartCustomPlacement {
     public void renderDynamic(Vec3d loc, double delta, int pass) {
 
         super.renderDynamic(loc, delta, pass);
-        if (pass == 1) {
+        if (pass == 0) {
             Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.locationBlocksTexture);
             Tessellator t = Tessellator.instance;
 

@@ -121,6 +121,7 @@ public class TubeLogic implements IPneumaticTube {
     }
 
     public void update() {
+
         if (!Config.enableTubeCaching)
             clearNodeCache();
         Iterator<TubeStack> iterator = tubeStacks.iterator();
@@ -186,8 +187,8 @@ public class TubeLogic implements IPneumaticTube {
                             this.tube.sendUpdatePacket();
                         } else {
                             EntityItem entity = new EntityItem(this.tube.getWorld(), this.tube.getX() + 0.5 + tubeStack.heading.offsetX
-                                    * tubeStack.progress * 0.5, this.tube.getY() + 0.5 + tubeStack.heading.offsetY * tubeStack.progress * 0.5,
-                                    this.tube.getZ() + 0.5 + tubeStack.heading.offsetX * tubeStack.progress * 0.5, remainder);
+                                    * tubeStack.progress * 0.5, this.tube.getY() + 0.5 + tubeStack.heading.offsetY * tubeStack.progress
+                                    * 0.5, this.tube.getZ() + 0.5 + tubeStack.heading.offsetX * tubeStack.progress * 0.5, remainder);
                             this.tube.getWorld().spawnEntityInWorld(entity);
                             iterator.remove();
                         }
@@ -228,11 +229,12 @@ public class TubeLogic implements IPneumaticTube {
         ItemStack extractedItem = null;
         if (result.getValue() instanceof TileManager) {// Exception for managers, the result can only end up as a manager if the pulling inventory was
             // a manager.
-            TileEntity managedInventory = ((TileManager) result.getValue()).getTileCache(((TileManager) result.getValue()).getFacingDirection());
+            TileEntity managedInventory = ((TileManager) result.getValue()).getTileCache(((TileManager) result.getValue())
+                    .getFacingDirection());
             extractedItem = IOHelper.extract(managedInventory, result.getKey().getOpposite(), filter, false, false, fuzzySetting);
         } else if (filter != null) {
-            extractedItem = IOHelper.extract(result.getValue(), result.getKey().getOpposite(), filter, !(target instanceof TileManager), false,
-                    fuzzySetting);
+            extractedItem = IOHelper.extract(result.getValue(), result.getKey().getOpposite(), filter, !(target instanceof TileManager),
+                    false, fuzzySetting);
         } else {
             extractedItem = IOHelper.extract(result.getValue(), result.getKey().getOpposite(), false);
         }
@@ -242,8 +244,10 @@ public class TubeLogic implements IPneumaticTube {
         stack = new TubeStack(extractedItem, result.getKey().getOpposite(), color);
         stack.setTarget(target, dirToRetrieveInto);
 
-        PneumaticTube tube = MultipartCompatibility.getPart(this.tube.getWorld(), result.getValue().xCoord - result.getKey().offsetX,
-                result.getValue().yCoord - result.getKey().offsetY, result.getValue().zCoord - result.getKey().offsetZ, PneumaticTube.class);
+        PneumaticTube tube = MultipartCompatibility
+                .getPart(this.tube.getWorld(), result.getValue().xCoord - result.getKey().offsetX,
+                        result.getValue().yCoord - result.getKey().offsetY, result.getValue().zCoord - result.getKey().offsetZ,
+                        PneumaticTube.class);
         if (tube == null)
             throw new IllegalArgumentException("wieeeeerd!");
         return tube.getLogic().injectStack(stack, result.getKey().getOpposite(), false);
@@ -293,8 +297,8 @@ public class TubeLogic implements IPneumaticTube {
                             if (edge.target.target instanceof PneumaticTube) {
                                 traversingNodes.add(edge.target);
                                 trackingExportDirection.add(heading);
-                            } else if (stack.getTarget(tube.getWorld()) == null && edge.isValidForExportItem(stack.stack) || stack.heading == null
-                                    && edge.isValidForImportItem(stack) || stack.heading != null
+                            } else if (stack.getTarget(tube.getWorld()) == null && edge.isValidForExportItem(stack.stack)
+                                    || stack.heading == null && edge.isValidForImportItem(stack) || stack.heading != null
                                     && stack.getTarget(tube.getWorld()) == edge.target.target
                                     && edge.targetConnectionSide.getOpposite() == stack.getTargetEntryDir()) {
                                 validDestinations.put(edge, stack.heading == null ? edge.targetConnectionSide : heading);
@@ -523,7 +527,8 @@ public class TubeLogic implements IPneumaticTube {
 
             if (target.target instanceof PneumaticTube)
                 return false;
-            if (target.target instanceof IWeightedTubeInventory && ((IWeightedTubeInventory) target.target).getWeight(targetConnectionSide) > 10000)
+            if (target.target instanceof IWeightedTubeInventory
+                    && ((IWeightedTubeInventory) target.target).getWeight(targetConnectionSide) > 10000)
                 return true;
             ItemStack remainder = IOHelper.insert((TileEntity) target.target, stack.copy(), targetConnectionSide.getOpposite(), true);
             return remainder == null || remainder.stackSize < stack.stackSize;
