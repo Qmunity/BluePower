@@ -34,9 +34,11 @@ public interface IBundledDevice extends IWorldLocation {
 
     public IBundledDevice getBundledDeviceOnSide(ForgeDirection side);
 
-    public byte[] getBundledPower(ForgeDirection side);
+    public byte[] getBundledOutput(ForgeDirection side);
 
     public void setBundledPower(ForgeDirection side, byte[] power);
+
+    public byte[] getBundledPower(ForgeDirection side);
 
     public void onBundledUpdate();
 

@@ -67,6 +67,7 @@ import com.bluepowermod.api.redstone.IRedstoneDevice;
 import com.bluepowermod.client.render.IconSupplier;
 import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.part.wire.PartWireFreestanding;
+import com.bluepowermod.part.wire.redstone.propagation.BundledDeviceWrapper;
 import com.bluepowermod.part.wire.redstone.propagation.WirePropagator;
 
 import cpw.mods.fml.relauncher.Side;
@@ -269,6 +270,7 @@ IPartWAILAProvider, IPartSolid, IPartThruHole, IPartCustomPlacement {
     public void onDisconnect(ForgeDirection side) {
 
         devices[side.ordinal()] = null;
+        bundledDevices[side.ordinal()] = null;
         sendUpdatePacket();
     }
 
@@ -311,13 +313,6 @@ IPartWAILAProvider, IPartSolid, IPartThruHole, IPartCustomPlacement {
                 if ((dev != null && (dev instanceof DummyRedstoneDevice)))
                     RedstoneHelper.notifyRedstoneUpdate(getWorld(), getX(), getY(), getZ(), dir, true);
             }
-
-            // if (!isPropagatingBundled) {
-            // if (isBundled() && propagateBundled(getFace()).size() > 0)
-            // new BundledPropagatorLogic().beginPropagation(this, getFace());
-            // }
-
-            // hasUpdated = false;
         }
     }
 
@@ -337,34 +332,42 @@ IPartWAILAProvider, IPartSolid, IPartThruHole, IPartCustomPlacement {
     public List<Pair<IRedstoneDevice, ForgeDirection>> propagate(ForgeDirection fromSide) {
 
         List<Pair<IRedstoneDevice, ForgeDirection>> devices = new ArrayList<Pair<IRedstoneDevice, ForgeDirection>>();
+
+        if (bundled)
+            return devices;
+
         for (int i = 0; i < 6; i++) {
             IRedstoneDevice d = this.devices[i];
-            if (d != null)
+            if (d != null) {
                 devices.add(new Pair<IRedstoneDevice, ForgeDirection>(d, ForgeDirection.getOrientation(i)));
+            } else {
+                IBundledDevice dev = bundledDevices[i];
+                if (dev != null) {
+                    devices.add(new Pair<IRedstoneDevice, ForgeDirection>(BundledDeviceWrapper.getWrapper(dev, getInsulationColor()),
+                            ForgeDirection.getOrientation(i)));
+                }
+            }
         }
 
         return devices;
     }
 
     @Override
-    public void onAdded() {
+    public void breakAndDrop(boolean creative) {
 
-        super.onAdded();
-    }
+        WireCommons.disconnect(this, this);
 
-    @Override
-    public void onLoaded() {
-
-        super.onLoaded();
+        super.breakAndDrop(creative);
     }
 
     @Override
     public void onRemoved() {
 
-        if (getWorld().isRemote)
-            return;
-
-        WireCommons.disconnect(this, this);
+        // if (getWorld().isRemote)
+        // return;
+        //
+        // WireCommons.disconnect(this, this);
+        super.onRemoved();
     }
 
     private byte lastInput = 1;
@@ -463,37 +466,53 @@ IPartWAILAProvider, IPartSolid, IPartThruHole, IPartCustomPlacement {
     }
 
     @Override
-    public byte[] getBundledPower(ForgeDirection side) {
+    public byte[] getBundledOutput(ForgeDirection side) {
 
-        return bundledPower;
+        if (!RedstoneApi.getInstance().shouldWiresOutputPower())
+            return new byte[16];
+
+        return getBundledPower(side);
     }
 
     @Override
     public void setBundledPower(ForgeDirection side, byte[] power) {
 
         bundledPower = power;
+        if (!bundled)
+            this.power = power[getInsulationColor().ordinal()];
+    }
+
+    @Override
+    public byte[] getBundledPower(ForgeDirection side) {
+
+        return bundledPower;
     }
 
     @Override
     public void onBundledUpdate() {
 
-        sendUpdatePacket();
+        if (!bundled)
+            onRedstoneUpdate();
     }
 
     @Override
     public MinecraftColor getBundledColor() {
 
-        return bundled ? color : null;
+        return bundled ? color : (color == MinecraftColor.NONE ? null : MinecraftColor.NONE);
     }
 
     @Override
     public List<Pair<IBundledDevice, ForgeDirection>> propagateBundled(ForgeDirection fromSide) {
 
         List<Pair<IBundledDevice, ForgeDirection>> devices = new ArrayList<Pair<IBundledDevice, ForgeDirection>>();
+
         for (int i = 0; i < 6; i++) {
             IBundledDevice d = bundledDevices[i];
-            if (d != null)
+            if (d != null) {
+                if (d instanceof IRedstoneDevice && ((IRedstoneDevice) d).getInsulationColor() != null && getInsulationColor() != null)
+                    continue;
                 devices.add(new Pair<IBundledDevice, ForgeDirection>(d, ForgeDirection.getOrientation(i)));
+            }
         }
 
         return devices;
@@ -547,7 +566,7 @@ IPartWAILAProvider, IPartSolid, IPartThruHole, IPartCustomPlacement {
     public IPartPlacement getPlacement(IPart part, World world, Vec3i location, ForgeDirection face, MovingObjectPosition mop,
             EntityPlayer player) {
 
-        if (bundled || type == RedwireType.RED_ALLOY)
+        if (type == RedwireType.RED_ALLOY)
             return null;
 
         return new PartPlacementDefault();
@@ -557,7 +576,7 @@ IPartWAILAProvider, IPartSolid, IPartThruHole, IPartCustomPlacement {
     @SideOnly(Side.CLIENT)
     public void addTooltip(List<String> tip) {
 
-        if (bundled || type == RedwireType.RED_ALLOY)
+        if (type == RedwireType.RED_ALLOY)
             tip.add(MinecraftColor.RED + I18n.format("Disabled temporarily. Still not fully working."));
     }
 

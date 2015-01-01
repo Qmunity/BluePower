@@ -71,6 +71,8 @@ public class IconSupplier {
     public static IIcon wireInsulation1;
     public static IIcon wireInsulation2;
     public static IIcon wireBundled;
+    public static IIcon wireBundled2;
+    public static IIcon wireBundled3;
 
     @SubscribeEvent
     public void onTextureStitch(TextureStitchEvent.Pre event) {
@@ -125,6 +127,8 @@ public class IconSupplier {
             wireInsulation1 = event.map.registerIcon(Refs.MODID + ":wire/insulation1");
             wireInsulation2 = event.map.registerIcon(Refs.MODID + ":wire/insulation2");
             wireBundled = event.map.registerIcon(Refs.MODID + ":wire/bundled");
+            wireBundled2 = event.map.registerIcon(Refs.MODID + ":wire/bundled2");
+            wireBundled3 = event.map.registerIcon(Refs.MODID + ":wire/bundled3");
 
             for (PartInfo i : PartManager.getRegisteredParts())
                 i.getExample().registerIcons(event.map);

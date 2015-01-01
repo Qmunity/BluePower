@@ -344,7 +344,7 @@ IBundledConductor {
     }
 
     @Override
-    public byte[] getBundledPower(ForgeDirection side) {
+    public byte[] getBundledOutput(ForgeDirection side) {
 
         if (!isBundled)
             return new byte[16];
@@ -363,6 +363,12 @@ IBundledConductor {
             return;
 
         ((IBundledFrequency) frequency).setSignal(power);
+    }
+
+    @Override
+    public byte[] getBundledPower(ForgeDirection side) {
+
+        return getBundledOutput(side);
     }
 
     @Override

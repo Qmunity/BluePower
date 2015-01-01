@@ -130,7 +130,7 @@ public class ReturnDevice implements IRedstoneDevice, IBundledDevice {
     }
 
     @Override
-    public byte[] getBundledPower(ForgeDirection side) {
+    public byte[] getBundledOutput(ForgeDirection side) {
 
         return null;
     }
@@ -138,6 +138,12 @@ public class ReturnDevice implements IRedstoneDevice, IBundledDevice {
     @Override
     public void setBundledPower(ForgeDirection side, byte[] power) {
 
+    }
+
+    @Override
+    public byte[] getBundledPower(ForgeDirection side) {
+
+        return null;
     }
 
     @Override
