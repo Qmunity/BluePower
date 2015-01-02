@@ -264,7 +264,7 @@ public class BlockCrop extends BlockCrops implements IGrowable {
     public void func_149853_b(World world, Random random, int x, int y, int z) {
 
         int meta = world.getBlockMetadata(x, y, z);
-        if (world.getBlock(x, y + 1, z) instanceof BlockAir && (meta < 7)) {
+        if (world.getBlock(x, y + 1, z) instanceof BlockAir && (meta < 7) && !(world.getBlock(x, y - 1, z) instanceof BlockCrop)) {
             meta = meta + MathHelper.getRandomIntegerInRange(world.rand, 2, 5);
             if (meta > 6) {
                 world.setBlockMetadataWithNotify(x, y, z, 7, 2);
