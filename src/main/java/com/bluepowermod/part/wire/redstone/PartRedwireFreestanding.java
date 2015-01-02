@@ -74,7 +74,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class PartRedwireFreestanding extends PartWireFreestanding implements IRedstoneConductor, IBundledConductor, IPartRedstone,
-IPartWAILAProvider, IPartSolid, IPartThruHole, IPartCustomPlacement {
+        IPartWAILAProvider, IPartSolid, IPartThruHole, IPartCustomPlacement {
 
     protected IRedstoneDevice[] devices = new IRedstoneDevice[6];
     protected IBundledDevice[] bundledDevices = new IBundledDevice[6];
@@ -128,9 +128,15 @@ IPartWAILAProvider, IPartSolid, IPartThruHole, IPartCustomPlacement {
     }
 
     @Override
+    protected int getFrameColorMultiplier() {
+
+        return 0xFFFFFF;
+    }
+
+    @Override
     public int getHollowSize(ForgeDirection side) {
 
-        return 4;
+        return 8;
     }
 
     @Override
@@ -416,7 +422,7 @@ IPartWAILAProvider, IPartSolid, IPartThruHole, IPartCustomPlacement {
             return 0;
 
         return (devices[side.ordinal()] != null && devices[side.ordinal()] instanceof DummyRedstoneDevice) ? ((DummyRedstoneDevice) devices[side
-                                                                                                                                            .ordinal()]).getRedstoneOutput(MathHelper.map(power & 0xFF, 0, 255, 0, 15)) : 0;
+                .ordinal()]).getRedstoneOutput(MathHelper.map(power & 0xFF, 0, 255, 0, 15)) : 0;
     }
 
     @Override
@@ -429,7 +435,7 @@ IPartWAILAProvider, IPartSolid, IPartThruHole, IPartCustomPlacement {
             return 0;
 
         return (devices[side.ordinal()] != null && devices[side.ordinal()] instanceof DummyRedstoneDevice) ? ((DummyRedstoneDevice) devices[side
-                                                                                                                                            .ordinal()]).getRedstoneOutput(MathHelper.map(power & 0xFF, 0, 255, 0, 15)) : 0;
+                .ordinal()]).getRedstoneOutput(MathHelper.map(power & 0xFF, 0, 255, 0, 15)) : 0;
     }
 
     @Override

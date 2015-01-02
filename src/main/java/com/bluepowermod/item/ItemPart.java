@@ -48,6 +48,8 @@ public class ItemPart extends ItemMultipart implements IDatabaseSaveable {
 
     public ItemPart(PartInfo info) {
 
+        super();
+
         setUnlocalizedName("part." + Refs.MODID + ":");
 
         setCreativeTab(BPCreativeTabs.items);
@@ -56,9 +58,15 @@ public class ItemPart extends ItemMultipart implements IDatabaseSaveable {
     }
 
     @Override
-    public String getUnlocalizedName(ItemStack item) {
+    public String getUnlocalizedName() {
 
         return super.getUnlocalizedName() + info.getExample().getUnlocalizedName();
+    }
+
+    @Override
+    public String getUnlocalizedName(ItemStack p_77667_1_) {
+
+        return getUnlocalizedName();
     }
 
     @Override

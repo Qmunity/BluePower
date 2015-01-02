@@ -41,6 +41,11 @@ public abstract class PartWireFreestanding extends BPPart implements IPartThruHo
         return 0xFFFFFF;
     }
 
+    protected int getFrameColorMultiplier() {
+
+        return 0xFFFFFF;
+    }
+
     @SideOnly(Side.CLIENT)
     protected abstract IIcon getWireIcon(ForgeDirection side);
 
@@ -92,7 +97,7 @@ public abstract class PartWireFreestanding extends BPPart implements IPartThruHo
             renderer.renderBox(new Vec3dCube(0.5 + (frameSize / 2), 0.5 - (frameSize / 2), 0.5 - (frameSize / 2), 1, 0.5 + (frameSize / 2),
                     0.5 + (frameSize / 2)), icons);
 
-        renderer.setColor(0xFFFFFF);
+        renderer.setColor(getFrameColorMultiplier());
 
         // Frame
         {
@@ -211,7 +216,7 @@ public abstract class PartWireFreestanding extends BPPart implements IPartThruHo
     @Override
     public int getHollowSize(ForgeDirection side) {
 
-        return 1;
+        return 8;
     }
 
 }

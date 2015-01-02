@@ -17,7 +17,12 @@
 
 package com.bluepowermod.init;
 
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
+
+import com.bluepowermod.api.misc.MinecraftColor;
+import com.bluepowermod.part.PartManager;
+import com.bluepowermod.part.wire.redstone.RedwireType;
 
 public class OreDictionarySetup {
 
@@ -65,9 +70,11 @@ public class OreDictionarySetup {
         OreDictionary.registerOre("ingotPurpleAlloy", BPItems.purple_alloy_ingot);
         OreDictionary.registerOre("waferStone", BPItems.stone_tile);
 
-        for (int i = 0; i < 16; i++) {
-            // OreDictionary.registerOre("bluestoneInsulated", PartRegistry.getInstance().getItemForPart("bluestoneWire." +
-            // ItemDye.field_150921_b[i]));
+        for (RedwireType t : RedwireType.values()) {
+            for (MinecraftColor c : MinecraftColor.VALID_COLORS) {
+                ItemStack wire = PartManager.getPartInfo("wire." + t.getName() + "." + c.name().toLowerCase()).getStack(1);
+                OreDictionary.registerOre(t.getName() + "Insulated", wire.getItem());
+            }
         }
     }
 

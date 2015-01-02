@@ -77,15 +77,6 @@ public class BluePower {
         // Load configs
         Config.syncConfig(config);
 
-        PartManager.registerParts();
-
-        BPBlocks.init();
-        BPItems.init();
-
-        TileEntities.init();
-        OreDictionarySetup.init();
-        GameRegistry.registerWorldGenerator(new WorldGenerationHandler(), 0);
-
         BPEnchantments.init();
 
         CompatibilityUtils.preInit(event);
@@ -102,6 +93,16 @@ public class BluePower {
 
     @EventHandler
     public void init(FMLInitializationEvent event) {
+
+        PartManager.registerParts();
+
+        BPBlocks.init();
+        BPItems.init();
+        PartManager.registerItems();
+
+        TileEntities.init();
+        OreDictionarySetup.init();
+        GameRegistry.registerWorldGenerator(new WorldGenerationHandler(), 0);
 
         proxy.init();
         NetworkHandler.init();

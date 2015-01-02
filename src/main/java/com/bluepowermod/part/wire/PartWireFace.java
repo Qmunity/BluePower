@@ -34,9 +34,9 @@ public abstract class PartWireFace extends BPPartFace {
 
     protected abstract boolean shouldRenderConnection(ForgeDirection side);
 
-    protected abstract int getWidth();
+    protected abstract double getWidth();
 
-    protected abstract int getHeight();
+    protected abstract double getHeight();
 
     protected int getColorMultiplier() {
 
@@ -55,7 +55,7 @@ public abstract class PartWireFace extends BPPartFace {
     @SideOnly(Side.CLIENT)
     public boolean renderStatic(Vec3i translation, RenderHelper renderer, RenderBlocks renderBlocks, int pass) {
 
-        double height = getHeight() / 16D;
+        double height = (getHeight() / 16D) - 0.001;
         double width = getWidth() / 32D;
         IIcon[] icons = new IIcon[] { getWireIcon(ForgeDirection.DOWN), getWireIcon(ForgeDirection.UP), getWireIcon(ForgeDirection.WEST),
                 getWireIcon(ForgeDirection.EAST), getWireIcon(ForgeDirection.NORTH), getWireIcon(ForgeDirection.SOUTH) };

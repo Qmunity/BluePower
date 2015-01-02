@@ -96,13 +96,13 @@ IBundledConductor, IPartRedstone, IPartWAILAProvider {
     }
 
     @Override
-    protected int getWidth() {
+    protected double getWidth() {
 
         return bundled ? 6 : (color == MinecraftColor.NONE ? 2 : 4);
     }
 
     @Override
-    protected int getHeight() {
+    protected double getHeight() {
 
         return bundled ? 4 : (color == MinecraftColor.NONE ? 2 : 3);
     }

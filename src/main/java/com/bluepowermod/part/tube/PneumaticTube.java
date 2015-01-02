@@ -32,6 +32,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import org.lwjgl.opengl.GL11;
 
 import uk.co.qmunity.lib.client.render.RenderHelper;
+import uk.co.qmunity.lib.part.IPartThruHole;
 import uk.co.qmunity.lib.part.IPartTicking;
 import uk.co.qmunity.lib.part.MicroblockShape;
 import uk.co.qmunity.lib.part.compat.OcclusionHelper;
@@ -62,7 +63,7 @@ import cpw.mods.fml.relauncher.SideOnly;
  * @author MineMaarten
  */
 
-public class PneumaticTube extends BPPart implements IPartTicking {
+public class PneumaticTube extends BPPart implements IPartTicking, IPartThruHole {
 
     public final boolean[] connections = new boolean[6];
     /**
@@ -702,5 +703,11 @@ public class PneumaticTube extends BPPart implements IPartTicking {
     public CreativeTabs getCreativeTab() {
 
         return BPCreativeTabs.machines;
+    }
+
+    @Override
+    public int getHollowSize(ForgeDirection side) {
+
+        return 8;
     }
 }

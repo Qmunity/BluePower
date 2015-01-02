@@ -19,8 +19,11 @@ package com.bluepowermod.recipe;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.ShapedOreRecipe;
+
+import org.apache.commons.lang3.StringUtils;
 
 import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.init.BPBlocks;
@@ -68,13 +71,15 @@ public class LogicRecipes {
         GameRegistry.addShapelessRecipe(new ItemStack(BPItems.infused_teslatite_dust, 1), BPItems.teslatite_dust, Items.redstone);
         // TODO: stone_redwire recipe and stone_bundle recipe
 
-        // TODO: Wire recipes
         {
-            int i = -1;
+            int i = 0;
             for (RedwireType t : RedwireType.values()) {
                 for (MinecraftColor c : MinecraftColor.WIRE_COLORS) {
                     ItemStack stack = PartManager.getPartInfo(
                             "wire." + t.getName() + (c == MinecraftColor.NONE ? "" : "." + c.name().toLowerCase())).getStack(12);
+                    ItemStack freestanding = PartManager.getPartInfo(
+                            "wire.freestanding." + t.getName() + (c == MinecraftColor.NONE ? "" : "." + c.name().toLowerCase()))
+                            .getStack(1);
 
                     if (c == MinecraftColor.NONE) {
                         GameRegistry.addRecipe(new ShapedOreRecipe(stack.copy(), "iii", 'i', t.getIngotOredictName()));
@@ -85,13 +90,27 @@ public class LogicRecipes {
                         GameRegistry.addRecipe(new ShapedOreRecipe(stack.copy(), "wiw", "wiw", "wiw", 'i', t.getIngotOredictName(), 'w',
                                 new ItemStack(Blocks.wool, 1, i)));
                     }
+                    GameRegistry.addRecipe(new ShapedOreRecipe(freestanding, " s ", "sws", " s ", 's', "stickWood", 'w', stack.copy()));
                     i++;
                 }
             }
         }
         // Bundled wire
-        // GameRegistry.addRecipe(new ShapedOreRecipe(PartManager.getPartInfo("bluestoneWire.bundled", 2), "sws", "www", "sws", 'w',
-        // "bluestoneInsulated", 's', new ItemStack(Items.string, 1)));
+
+        for (RedwireType t : RedwireType.values()) {
+            ItemStack bundled = PartManager.getPartInfo("wire." + t.getName() + ".bundled").getStack(1);
+            ItemStack freestanding = PartManager.getPartInfo("wire.freestanding." + t.getName() + ".bundled").getStack(1);
+
+            GameRegistry.addRecipe(new ShapedOreRecipe(bundled, "sws", "www", "sws", 'w', t.getName() + "Insulated", 's', Items.string));
+            GameRegistry.addRecipe(new ShapedOreRecipe(freestanding, " s ", "sws", " s ", 's', "stickWood", 'w', bundled.copy()));
+
+            for (MinecraftColor c : MinecraftColor.VALID_COLORS) {
+                ItemStack stack = PartManager.getPartInfo(
+                        "wire." + t.getName() + ".bundled" + (c == MinecraftColor.NONE ? "" : "." + c.name().toLowerCase())).getStack(8);
+                GameRegistry.addRecipe(new ShapedOreRecipe(stack, "www", "wdw", "www", 'w', bundled, 'd', "dye"
+                        + StringUtils.capitalize(ItemDye.field_150923_a[15 - c.ordinal()])));
+            }
+        }
 
         // Blocks
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPBlocks.circuit_table), "WIW", "WCW", "WPW", 'W', "plankWood", 'I',

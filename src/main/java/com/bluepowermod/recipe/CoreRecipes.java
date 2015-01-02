@@ -70,6 +70,7 @@ public class CoreRecipes {
         GameRegistry.addShapelessRecipe(new ItemStack(BPBlocks.basalt_tile), BPBlocks.basalt_paver);
         GameRegistry.addShapelessRecipe(new ItemStack(BPBlocks.marble_paver), BPBlocks.marble_tile);
         GameRegistry.addShapelessRecipe(new ItemStack(BPBlocks.marble_tile), BPBlocks.marble_paver);
+        GameRegistry.addRecipe(new ItemStack(BPBlocks.tiles, 4), "BM", "MB", 'M', BPBlocks.marble_tile, 'B', BPBlocks.basalt_tile);
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPBlocks.basalt_brick, 4), "##", "##", '#', BPBlocks.basalt));
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPBlocks.marble_brick, 4), "##", "##", '#', BPBlocks.marble));
         GameRegistry.addRecipe(new ItemStack(BPBlocks.fancy_basalt, 1), "#", '#', BPBlocks.basalt_brick);
@@ -191,6 +192,13 @@ public class CoreRecipes {
             ItemStack diamondSawFMP = new ItemStack(GameData.getItemRegistry().getObject("ForgeMicroblock:sawDiamond"), 1,
                     OreDictionary.WILDCARD_VALUE);
             GameRegistry.addShapelessRecipe(new ItemStack(BPItems.silicon_wafer, 16), diamondSawFMP, new ItemStack(BPItems.silicon_boule));
+
+            GameRegistry.addRecipe(new ShapedOreRecipe(BPItems.amethyst_saw, "WSS", "WGS", 'W', "stickWood", 'S', "rodStone", 'G',
+                    BPItems.amethyst_gem));
+            GameRegistry.addRecipe(new ShapedOreRecipe(BPItems.ruby_saw, "WSS", "WGS", 'W', "stickWood", 'S', "rodStone", 'G',
+                    BPItems.ruby_gem));
+            GameRegistry.addRecipe(new ShapedOreRecipe(BPItems.sapphire_saw, "WSS", "WGS", 'W', "stickWood", 'S', "rodStone", 'G',
+                    BPItems.sapphire_gem));
         } else {
             GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.diamond_drawplate), "IDI", "IDI", "IDI", 'I', "ingotIron",
                     'D', "gemDiamond"));
