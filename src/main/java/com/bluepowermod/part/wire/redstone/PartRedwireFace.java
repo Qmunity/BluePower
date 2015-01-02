@@ -25,7 +25,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -799,9 +798,6 @@ IBundledConductor, IPartRedstone, IPartWAILAProvider {
     public IPartPlacement getPlacement(IPart part, World world, Vec3i location, ForgeDirection face, MovingObjectPosition mop,
             EntityPlayer player) {
 
-        if (type == RedwireType.RED_ALLOY)
-            return null;
-
         return super.getPlacement(part, world, location, face, mop, player);
     }
 
@@ -809,8 +805,6 @@ IBundledConductor, IPartRedstone, IPartWAILAProvider {
     @SideOnly(Side.CLIENT)
     public void addTooltip(List<String> tip) {
 
-        if (type == RedwireType.RED_ALLOY)
-            tip.add(MinecraftColor.RED + I18n.format("Disabled temporarily. Still not fully working."));
     }
 
 }

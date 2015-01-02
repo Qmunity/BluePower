@@ -19,7 +19,6 @@ package com.bluepowermod.part.wire.redstone.propagation;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map.Entry;
 
 import net.minecraftforge.common.util.ForgeDirection;
 import uk.co.qmunity.lib.misc.Pair;
@@ -28,6 +27,7 @@ import com.bluepowermod.api.redstone.IPropagator;
 import com.bluepowermod.api.redstone.IRedstoneConductor;
 import com.bluepowermod.api.redstone.IRedstoneDevice;
 import com.bluepowermod.part.wire.redstone.RedstoneApi;
+import com.bluepowermod.part.wire.redstone.WireHelper;
 
 public class WirePropagator implements IPropagator {
 
@@ -39,9 +39,6 @@ public class WirePropagator implements IPropagator {
 
     public void onPowerLevelChange(IRedstoneDevice device, ForgeDirection side, byte from, byte to) {
 
-        // if (from == to)
-        // return;
-
         if (device instanceof IRedstoneConductor) {
             if (((IRedstoneConductor) device).hasLoss()) {
                 new LossyPropagatorLogic().beginPropagation((IRedstoneConductor) device, side, from, to);// s, from, to);
@@ -50,6 +47,7 @@ public class WirePropagator implements IPropagator {
             }
         } else {
             device.setRedstonePower(side, to);// s, to);
+            device.onRedstoneUpdate();
         }
 
         BundledDeviceWrapper.clearCache();
@@ -63,77 +61,62 @@ public class WirePropagator implements IPropagator {
 
     private static final class LossyPropagatorLogic implements IPropagatorLogic {
 
-        List<Entry<IRedstoneDevice, ForgeDirection>> visited = new ArrayList<Entry<IRedstoneDevice, ForgeDirection>>();
-
         @Override
         public void beginPropagation(IRedstoneConductor device, ForgeDirection fromSide, byte from, byte to) {
 
-            byte original = device.getRedstonePower(fromSide);
-
-            if (to == original)
-                return;
-
-            if ((to & 0xFF) > (original & 0xFF)) {
-                propagateRising(device, fromSide, to);
-            } else {
-
-            }
-
-            propagateFalling(device, fromSide);
+            List<Pair<IRedstoneDevice, ForgeDirection>> visited = new ArrayList<Pair<IRedstoneDevice, ForgeDirection>>();
+            visited.addAll(WirePathfinder.pathfind(device, fromSide));
 
             List<IRedstoneDevice> devices = new ArrayList<IRedstoneDevice>();
-            for (Entry<IRedstoneDevice, ForgeDirection> e : visited) {
-                if (devices.contains(e.getKey()))
-                    continue;
-                devices.add(e.getKey());
-                e.getKey().onRedstoneUpdate();
+
+            new PropagatorLogic().propagate((byte) 0, devices, visited);
+
+            for (Pair<IRedstoneDevice, ForgeDirection> pair : visited) {
+                RedstoneApi.getInstance().setWiresOutputPower(false);
+                byte power = pair.getKey().getRedstonePower(pair.getValue());
+                RedstoneApi.getInstance().setWiresOutputPower(true);
+                if ((power & 0xFF) > 0) {
+                    if (pair.getKey() instanceof IRedstoneConductor) {
+                        propagate((IRedstoneConductor) pair.getKey(), pair.getValue(), power);
+                    } else {
+                        IRedstoneDevice d = pair.getKey().getDeviceOnSide(pair.getValue());
+                        if (d != null) {
+                            if (d instanceof IRedstoneConductor) {
+                                propagate((IRedstoneConductor) d, WireHelper.getConnectionSide(d, pair.getKey()), power);
+                            }
+                        }
+                    }
+                }
             }
 
-            visited.clear();
-            devices.clear();
+            for (IRedstoneDevice d : devices)
+                d.onRedstoneUpdate();
         }
 
-        private void propagateRising(IRedstoneConductor device, ForgeDirection fromSide, byte power) {
+        private void propagate(IRedstoneConductor cond, ForgeDirection from, byte power) {
 
-            // if (!hasVisited(device, fromSide))
-            // visited.add(new AbstractMap.SimpleEntry(device, fromSide));
-            // else
-            // return;
-            //
-            // Collection<Pair<IRedstoneDevice, ForgeDirection>> neighbors = device.propagate(fromSide);
-            // for (Pair<IRedstoneDevice, ForgeDirection> pair : neighbors) {
-            // ForgeDirection d = WireHelper.getConnectionSide(device, dev);
-            // if (!hasVisited(device, d))
-            // visited.add(new AbstractMap.SimpleEntry(device, d));
-            //
-            // ForgeDirection s = WireHelper.getConnectionSide(dev, device);
-            // dev.setRedstonePower(s, power);
-            // if (dev instanceof IRedstoneConductor && ((power & 0xFF) - 1) > 0) {
-            // propagateRising((IRedstoneConductor) dev, s, (byte) ((power & 0xFF) - 1));
-            // }
-            // }
-        }
+            if ((power & 0xFF) < 0)
+                return;
+            if ((cond.getRedstonePower(from) & 0xFF) >= (power & 0xFF))
+                return;
 
-        private void propagateFalling(IRedstoneConductor device, ForgeDirection fromSide) {
-
-        }
-
-        private boolean hasVisited(IRedstoneDevice conductor, ForgeDirection side) {
-
-            for (Entry<IRedstoneDevice, ForgeDirection> e : visited)
-                if (e.getKey() == conductor && e.getValue() == side)
-                    return true;
-            return false;
+            for (Pair<IRedstoneDevice, ForgeDirection> p : cond.propagate(from)) {
+                // cond.setRedstonePower(p.getValue(), power);
+                ForgeDirection d = WireHelper.getConnectionSide(p.getKey(), cond);
+                cond.setRedstonePower(p.getValue(), power);
+                if (p.getKey() instanceof IRedstoneConductor) {
+                    propagate((IRedstoneConductor) p.getKey(), d, (byte) ((power & 0xFF) - 1));
+                }
+            }
         }
     }
 
     private static final class PropagatorLogic implements IPropagatorLogic {
 
-        List<Pair<IRedstoneDevice, ForgeDirection>> visited = new ArrayList<Pair<IRedstoneDevice, ForgeDirection>>();
-
         @Override
         public void beginPropagation(IRedstoneConductor device, ForgeDirection fromSide, byte from, byte to) {
 
+            List<Pair<IRedstoneDevice, ForgeDirection>> visited = new ArrayList<Pair<IRedstoneDevice, ForgeDirection>>();
             visited.addAll(WirePathfinder.pathfind(device, fromSide));
 
             RedstoneApi.getInstance().setWiresOutputPower(false);
@@ -143,16 +126,22 @@ public class WirePropagator implements IPropagator {
             RedstoneApi.getInstance().setWiresOutputPower(true);
 
             List<IRedstoneDevice> devices = new ArrayList<IRedstoneDevice>();
-            for (Pair<IRedstoneDevice, ForgeDirection> pair : visited) {
-                pair.getKey().setRedstonePower(pair.getValue(), (byte) power);
-                if (!devices.contains(pair.getKey()))
-                    devices.add(pair.getKey());
-            }
+
+            propagate((byte) power, devices, visited);
 
             for (IRedstoneDevice d : devices)
                 d.onRedstoneUpdate();
 
             visited.clear();
+        }
+
+        private void propagate(byte power, List<IRedstoneDevice> devices, List<Pair<IRedstoneDevice, ForgeDirection>> visited) {
+
+            for (Pair<IRedstoneDevice, ForgeDirection> pair : visited) {
+                pair.getKey().setRedstonePower(pair.getValue(), power);
+                if (!devices.contains(pair.getKey()))
+                    devices.add(pair.getKey());
+            }
         }
     }
 
