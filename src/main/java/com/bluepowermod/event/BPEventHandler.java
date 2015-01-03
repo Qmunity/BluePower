@@ -15,12 +15,8 @@ import com.bluepowermod.init.BPEnchantments;
 import com.bluepowermod.init.BPItems;
 import com.bluepowermod.item.ItemSeedBag;
 import com.bluepowermod.item.ItemSickle;
-import com.bluepowermod.util.Dependencies;
-
-import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.eventhandler.Event.Result;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.resources.I18n;
@@ -36,9 +32,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntityHopper;
-import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EntityDamageSource;
-import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.event.AnvilUpdateEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
@@ -49,18 +43,6 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 public class BPEventHandler {
 
     private boolean warned = false;
-
-    @SubscribeEvent
-    public void onTick(TickEvent.PlayerTickEvent event) {
-
-        if (event.phase == TickEvent.Phase.END && event.player.worldObj.isRemote && !warned && !Loader.isModLoaded(Dependencies.FMP)) {
-            event.player.addChatComponentMessage(new ChatComponentText(EnumChatFormatting.RED + "WARNING: You're running BluePower without having "
-                    + EnumChatFormatting.RED + "ForgeMultipart installed. Even though it will work, " + EnumChatFormatting.RED + "ForgeMultipart is "
-                    + EnumChatFormatting.BOLD + "highly" + EnumChatFormatting.RESET + EnumChatFormatting.RED + " recommended. Continue at own risk, "
-                    + EnumChatFormatting.RED + "expect bugs."));
-            warned = true;
-        }
-    }
 
     @SubscribeEvent
     public void onAnvilEvent(AnvilUpdateEvent event) {
