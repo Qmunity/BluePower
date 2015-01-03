@@ -8,6 +8,7 @@
 
 package com.bluepowermod;
 
+import com.bluepowermod.util.Achievements;
 import net.minecraft.item.Item;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraftforge.common.MinecraftForge;
@@ -89,6 +90,8 @@ public class BluePower {
         MinecraftForge.EVENT_BUS.register(new WorldConversionEventHandler());
 
         RedstoneApi.getInstance().registerRedstoneProvider(new RedstoneProviderQmunityLib());
+
+        Achievements.init();
     }
 
     @EventHandler

@@ -11,12 +11,16 @@ import com.bluepowermod.ClientProxy;
 import com.bluepowermod.client.gui.GuiCircuitDatabaseSharing;
 import com.bluepowermod.container.ContainerSeedBag;
 import com.bluepowermod.container.inventory.InventoryItem;
+import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.init.BPEnchantments;
 import com.bluepowermod.init.BPItems;
 import com.bluepowermod.item.ItemSeedBag;
 import com.bluepowermod.item.ItemSickle;
+import com.bluepowermod.part.PartManager;
+import com.bluepowermod.util.Achievements;
 import cpw.mods.fml.common.eventhandler.Event.Result;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.PlayerEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.resources.I18n;
@@ -29,6 +33,7 @@ import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntityHopper;
@@ -94,6 +99,10 @@ public class BPEventHandler {
                     }
                 }
             }
+        }
+
+        if(pickUp.getItem().equals(Item.getItemFromBlock(BPBlocks.tungsten_ore))){
+            player.addStat(Achievements.tungstenAchievement, 1);
         }
     }
 
@@ -196,6 +205,19 @@ public class BPEventHandler {
             } else {
                 event.toolTip.add(I18n.format("gui.circuitDatabase.info.sneakClickToDelete"));
             }
+        }
+    }
+
+
+    @SubscribeEvent
+    public void onCrafting(PlayerEvent.ItemCraftedEvent event) {
+        Item item = event.crafting.getItem();
+        if(item == null) return;
+
+        if(item.equals(BPItems.blue_doped_wafer) || item.equals(BPItems.red_doped_wafer)){
+            event.player.addStat(Achievements.dopeAchievement, 1);
+        }else if(item.equals(PartManager.getPartInfo("pneumaticTube"))){
+
         }
     }
 }
