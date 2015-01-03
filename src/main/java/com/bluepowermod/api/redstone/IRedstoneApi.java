@@ -17,18 +17,24 @@
 
 package com.bluepowermod.api.redstone;
 
+import java.util.EnumSet;
+
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
-public interface IRedstoneApi {
+import com.bluepowermod.api.misc.MinecraftColor;
 
-    public byte[] getBundledOutput(World world, int x, int y, int z, ForgeDirection face, ForgeDirection side);
+public interface IRedstoneApi {
 
     public IRedstoneDevice getRedstoneDevice(World world, int x, int y, int z, ForgeDirection face, ForgeDirection side);
 
     public IBundledDevice getBundledDevice(World world, int x, int y, int z, ForgeDirection face, ForgeDirection side);
 
     public void registerRedstoneProvider(IRedstoneProvider provider);
+
+    public void registerBundledUpdateHandler(IBundledUpdateHandler handler);
+
+    public EnumSet<MinecraftColor> getColorsToPropagateOnBlockUpdate(IBundledDevice device);
 
     public IPropagator getPropagator();
 

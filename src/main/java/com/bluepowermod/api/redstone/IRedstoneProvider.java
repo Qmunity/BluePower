@@ -31,6 +31,4 @@ public interface IRedstoneProvider {
 
     public IBundledDevice getBundledDevice(World world, int x, int y, int z, ForgeDirection face, ForgeDirection side);
 
-    public byte[] getBundledOutput(World world, int x, int y, int z, ForgeDirection side, ForgeDirection face);
-
 }

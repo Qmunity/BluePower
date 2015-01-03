@@ -69,7 +69,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class PartRedwireFace extends PartWireFace implements IFaceRedstoneDevice, IRedstoneConductor, IFaceBundledDevice,
-IBundledConductor, IPartRedstone, IPartWAILAProvider {
+        IBundledConductor, IPartRedstone, IPartWAILAProvider {
 
     protected final IRedstoneDevice[] devices = new IRedstoneDevice[6];
     protected final IBundledDevice[] bundledDevices = new IBundledDevice[6];
@@ -604,6 +604,21 @@ IBundledConductor, IPartRedstone, IPartWAILAProvider {
     }
 
     @Override
+    public void onNeighborBlockChange() {
+
+        super.onNeighborBlockChange();
+
+        if (bundled) {
+            for (MinecraftColor c : RedstoneApi.getInstance().getColorsToPropagateOnBlockUpdate(this)) {
+                RedstoneApi.getInstance().setWiresHandleUpdates(false);
+                WirePropagator.INSTANCE.onPowerLevelChange(BundledDeviceWrapper.getWrapper(this, c), getFace(), disconnected ? -1
+                        : lastInput, (byte) -1);
+                RedstoneApi.getInstance().setWiresHandleUpdates(true);
+            }
+        }
+    }
+
+    @Override
     public boolean canConnectRedstone(ForgeDirection side) {
 
         // if (getWorld().isRemote) {
@@ -623,7 +638,7 @@ IBundledConductor, IPartRedstone, IPartWAILAProvider {
             return 0;
 
         return (devices[side.ordinal()] != null && devices[side.ordinal()] instanceof DummyRedstoneDevice) ? ((DummyRedstoneDevice) devices[side
-                                                                                                                                            .ordinal()]).getRedstoneOutput(MathHelper.map(power & 0xFF, 0, 255, 0, 15)) : 0;
+                .ordinal()]).getRedstoneOutput(MathHelper.map(power & 0xFF, 0, 255, 0, 15)) : 0;
     }
 
     @Override
@@ -637,7 +652,7 @@ IBundledConductor, IPartRedstone, IPartWAILAProvider {
             return 0;
 
         return (devices[side.ordinal()] != null && devices[side.ordinal()] instanceof DummyRedstoneDevice) ? ((DummyRedstoneDevice) devices[side
-                                                                                                                                            .ordinal()]).getRedstoneOutput(MathHelper.map(power & 0xFF, 0, 255, 0, 15)) : 0;
+                .ordinal()]).getRedstoneOutput(MathHelper.map(power & 0xFF, 0, 255, 0, 15)) : 0;
     }
 
     @Override

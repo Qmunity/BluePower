@@ -24,6 +24,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.api.redstone.IBundledConductor;
 import com.bluepowermod.api.redstone.IBundledDevice;
+import com.bluepowermod.api.redstone.IConductor;
 import com.bluepowermod.api.redstone.IRedstoneConductor;
 import com.bluepowermod.api.redstone.IRedstoneDevice;
 
@@ -31,8 +32,7 @@ public class WireCommons {
 
     public static boolean canConnect(IRedstoneConductor a, IRedstoneDevice b) {
 
-        if (b instanceof IRedstoneConductor
-                && (((IRedstoneConductor) b).isAnalog() != a.isAnalog() || ((IRedstoneConductor) b).hasLoss() != a.hasLoss()))
+        if (b instanceof IConductor && (((IConductor) b).isAnalog() != a.isAnalog() || ((IConductor) b).hasLoss() != a.hasLoss()))
             return false;
 
         MinecraftColor c1 = a.getInsulationColor();
@@ -46,8 +46,7 @@ public class WireCommons {
 
     public static boolean canConnect(IBundledConductor a, IBundledDevice b) {
 
-        if (b instanceof IBundledConductor
-                && (((IBundledConductor) b).isAnalog() != a.isAnalog() || ((IBundledConductor) b).hasLoss() != a.hasLoss()))
+        if (b instanceof IConductor && (((IConductor) b).isAnalog() != a.isAnalog() || ((IConductor) b).hasLoss() != a.hasLoss()))
             return false;
 
         MinecraftColor c1 = a.getBundledColor();
