@@ -105,6 +105,10 @@ processResources
 
 
 jar {
+		manifest {
+			attributes 'FMLCorePlugin': 'com.bluepowermod.asm.LoadingPlugin'
+            attributes 'FMLCorePluginContainsFMLMod': 'true'
+		}
     appendix = "${project.ext.mcVersion}"
     classifier = "universal"
 }
