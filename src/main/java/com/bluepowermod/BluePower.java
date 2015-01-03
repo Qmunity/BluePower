@@ -119,10 +119,11 @@ public class BluePower {
         PartManager.registerItems();
 
         CompatibilityUtils.postInit(event);
-        AlloyFurnaceRegistry.getInstance().generateRecyclingRecipes();
         proxy.initRenderers();
 
         Recipes.init(CraftingManager.getInstance());
+        AlloyFurnaceRegistry.getInstance().generateRecyclingRecipes();
+
         RedstoneApi.getInstance().registerRedstoneProvider(new RedstoneProviderVanilla());
     }
 

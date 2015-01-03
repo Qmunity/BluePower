@@ -8,6 +8,7 @@
 package com.bluepowermod.compat.cc;
 
 import com.bluepowermod.compat.CompatModule;
+import com.bluepowermod.part.wire.redstone.RedstoneApi;
 
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
@@ -22,11 +23,14 @@ public class CompatModuleCC extends CompatModule {
     public void preInit(FMLPreInitializationEvent ev) {
 
         ComputerCraftAPI.registerPeripheralProvider(PeripheralProvider.INSTANCE);
+        ComputerCraftAPI.registerBundledRedstoneProvider(new BundledRedstoneProviderCC());
     }
 
     @Override
     public void init(FMLInitializationEvent ev) {
 
+        RedstoneApi.getInstance().registerRedstoneProvider(new RedstoneProviderCC());
+        RedstoneApi.getInstance().registerBundledUpdateHandler(new BundledUpdateHandlerCC());
     }
 
     @Override

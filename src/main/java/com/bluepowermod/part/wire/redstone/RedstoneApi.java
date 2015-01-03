@@ -18,12 +18,15 @@
 package com.bluepowermod.part.wire.redstone;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
 
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.api.redstone.IBundledDevice;
+import com.bluepowermod.api.redstone.IBundledUpdateHandler;
 import com.bluepowermod.api.redstone.IPropagator;
 import com.bluepowermod.api.redstone.IRedstoneApi;
 import com.bluepowermod.api.redstone.IRedstoneDevice;
@@ -44,25 +47,10 @@ public class RedstoneApi implements IRedstoneApi {
     }
 
     private List<IRedstoneProvider> providers = new ArrayList<IRedstoneProvider>();
+    private List<IBundledUpdateHandler> updateHandlers = new ArrayList<IBundledUpdateHandler>();
     private boolean shouldWiresOutputPower = true;
     private boolean shouldWiresHandleUpdates = true;
     private DummyRedstoneDevice returnDevice = DummyRedstoneDevice.getDeviceAt(null);
-
-    @Override
-    public byte[] getBundledOutput(World world, int x, int y, int z, ForgeDirection face, ForgeDirection side) {
-
-        byte[] output = new byte[16];
-
-        for (IRedstoneProvider provider : providers) {
-            byte[] out = provider.getBundledOutput(world, x, y, z, side, face);
-            if (out == null)
-                continue;
-            for (int i = 0; i < output.length; i++)
-                output[i] = (byte) Math.max(output[i], out[i]);
-        }
-
-        return output;
-    }
 
     @Override
     public IRedstoneDevice getRedstoneDevice(World world, int x, int y, int z, ForgeDirection face, ForgeDirection side) {
@@ -106,6 +94,29 @@ public class RedstoneApi implements IRedstoneApi {
             return;
 
         providers.add(provider);
+    }
+
+    @Override
+    public void registerBundledUpdateHandler(IBundledUpdateHandler handler) {
+
+        if (handler == null)
+            return;
+        if (updateHandlers.contains(handler))
+            return;
+
+        updateHandlers.add(handler);
+    }
+
+    @Override
+    public EnumSet<MinecraftColor> getColorsToPropagateOnBlockUpdate(IBundledDevice device) {
+
+        EnumSet<MinecraftColor> colors = EnumSet.noneOf(MinecraftColor.class);
+
+        for (IBundledUpdateHandler h : updateHandlers)
+            if (h.shouldPropagateOnBlockUpdate(device))
+                colors.addAll(h.getColorsToUpdate(device));
+
+        return colors;
     }
 
     @Override

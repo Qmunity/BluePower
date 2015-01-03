@@ -104,6 +104,9 @@ public class BundledDeviceWrapper implements IRedstoneDevice, IRedstoneConductor
     @Override
     public IRedstoneDevice getDeviceOnSide(ForgeDirection side) {
 
+        IBundledDevice d = dev.getBundledDeviceOnSide(side);
+        if (d != null)
+            return getWrapper(d, color);
         return null;
     }
 
@@ -162,8 +165,11 @@ public class BundledDeviceWrapper implements IRedstoneDevice, IRedstoneConductor
                 return list;
         }
 
-        if (dev instanceof IRedstoneConductor)
-            list.addAll(((IRedstoneConductor) dev).propagate(fromSide));
+        if (dev instanceof IRedstoneDevice) {
+            list.add(new Pair<IRedstoneDevice, ForgeDirection>((IRedstoneDevice) dev, fromSide));
+            if (dev instanceof IRedstoneConductor)
+                list.addAll(((IRedstoneConductor) dev).propagate(fromSide));
+        }
 
         return list;
     }

@@ -440,11 +440,11 @@ IPartWAILAProvider, IPartSolid, IPartThruHole, IPartCustomPlacement {
     @Override
     public boolean canConnectBundledStraight(ForgeDirection side, IBundledDevice device) {
 
-        if (!(device instanceof IFaceBundledDevice))
-            if (OcclusionHelper.microblockOcclusionTest(new Vec3i(this), MicroblockShape.FACE_HOLLOW, 8, side))
-                return false;
+        // if (!(device instanceof IFaceBundledDevice))
+        // if (OcclusionHelper.microblockOcclusionTest(new Vec3i(this), MicroblockShape.FACE_HOLLOW, 8, side))
+        // return false;
 
-        return WireCommons.canConnect(this, device);
+        return isBundled();// WireCommons.canConnect(this, device);
     }
 
     @Override
@@ -545,7 +545,7 @@ IPartWAILAProvider, IPartSolid, IPartThruHole, IPartCustomPlacement {
     @Override
     public boolean isSideSolid(ForgeDirection face) {
 
-        return false;// true;
+        return false;
     }
 
     @Override
