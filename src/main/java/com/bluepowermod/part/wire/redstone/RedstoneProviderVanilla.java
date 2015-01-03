@@ -24,6 +24,7 @@ import uk.co.qmunity.lib.vec.Vec3i;
 import com.bluepowermod.api.redstone.IBundledDevice;
 import com.bluepowermod.api.redstone.IRedstoneDevice;
 import com.bluepowermod.api.redstone.IRedstoneProvider;
+import com.bluepowermod.block.machine.BlockLampRGB;
 
 public class RedstoneProviderVanilla implements IRedstoneProvider {
 
@@ -35,6 +36,9 @@ public class RedstoneProviderVanilla implements IRedstoneProvider {
 
     @Override
     public IBundledDevice getBundledDevice(World world, int x, int y, int z, ForgeDirection face, ForgeDirection side) {
+
+        if (world.getBlock(x, y, z) instanceof BlockLampRGB)
+            return BlockLampRGB.RGBLampBundledDevice.getDeviceAt(world, x, y, z);
 
         return null;
     }

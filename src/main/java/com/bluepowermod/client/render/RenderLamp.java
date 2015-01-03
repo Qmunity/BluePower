@@ -66,13 +66,15 @@ public class RenderLamp extends TileEntitySpecialRenderer implements ISimpleBloc
     public void renderTileEntityAt(TileEntity te, double x, double y, double z, float f) {
 
         if (pass != 0) {
+            BlockLamp bLamp = (BlockLamp) te.getBlockType();
             int power = ((TileLamp) te).getPower();
 
-            BlockLamp bLamp = (BlockLamp) te.getBlockType();
+            int color = bLamp.getColor(te.getWorldObj(), te.xCoord, te.yCoord, te.zCoord);
+
             int redMask = 0xFF0000, greenMask = 0xFF00, blueMask = 0xFF;
-            int r = (bLamp.getColor() & redMask) >> 16;
-            int g = (bLamp.getColor() & greenMask) >> 8;
-            int b = (bLamp.getColor() & blueMask);
+            int r = (color & redMask) >> 16;
+            int g = (color & greenMask) >> 8;
+            int b = (color & blueMask);
 
             if (bLamp.isInverted()) {
                 power = 15 - power;

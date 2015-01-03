@@ -11,6 +11,10 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.EnumSkyBlock;
 import uk.co.qmunity.lib.helper.RedstoneHelper;
 
+import com.bluepowermod.api.misc.MinecraftColor;
+import com.bluepowermod.block.machine.BlockLamp;
+import com.bluepowermod.block.machine.BlockLampRGB;
+import com.bluepowermod.block.machine.BlockLampRGB.RGBLampBundledDevice;
 import com.bluepowermod.client.render.RenderLamp;
 import com.bluepowermod.tile.TileBase;
 
@@ -28,13 +32,29 @@ public class TileLamp extends TileBase {
 
     public void onUpdate() {
 
-        int pow = RedstoneHelper.getInput(getWorldObj(), xCoord, yCoord, zCoord);
-        if (pow != power) {
-            power = pow;
+        if (blockType instanceof BlockLampRGB) {
+            RGBLampBundledDevice lamp = BlockLampRGB.RGBLampBundledDevice.getDeviceAt(worldObj, xCoord, yCoord, zCoord);
+            int pow = 0;
+            if (((BlockLamp) blockType).isInverted()) {
+                pow = 255 - Math.min(Math.min(lamp.getBundledPower(null)[MinecraftColor.RED.ordinal()] & 0xFF,
+                        lamp.getBundledPower(null)[MinecraftColor.GREEN.ordinal()] & 0xFF), lamp.getBundledPower(null)[MinecraftColor.BLUE
+                                                                                                                       .ordinal()] & 0xFF);
+            } else {
+                pow = Math.max(Math.max(lamp.getBundledPower(null)[MinecraftColor.RED.ordinal()] & 0xFF,
+                        lamp.getBundledPower(null)[MinecraftColor.GREEN.ordinal()] & 0xFF), lamp.getBundledPower(null)[MinecraftColor.BLUE
+                                                                                                                       .ordinal()] & 0xFF);
+            }
+            power = (int) ((pow / 256D) * 15);
             sendUpdatePacket();
-            getWorldObj().markBlockRangeForRenderUpdate(xCoord, yCoord, zCoord, xCoord, yCoord, zCoord);
-            getWorldObj().updateLightByType(EnumSkyBlock.Block, xCoord, yCoord, zCoord);
-            getWorldObj().notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, getBlockType());
+        } else {
+            int pow = RedstoneHelper.getInput(getWorldObj(), xCoord, yCoord, zCoord);
+            if (pow != power) {
+                power = pow;
+                sendUpdatePacket();
+                getWorldObj().markBlockRangeForRenderUpdate(xCoord, yCoord, zCoord, xCoord, yCoord, zCoord);
+                getWorldObj().updateLightByType(EnumSkyBlock.Block, xCoord, yCoord, zCoord);
+                getWorldObj().notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, getBlockType());
+            }
         }
     }
 
@@ -42,12 +62,26 @@ public class TileLamp extends TileBase {
     protected void writeToPacketNBT(NBTTagCompound tCompound) {
 
         tCompound.setInteger("power", power);
+        if (blockType instanceof BlockLampRGB) {
+            RGBLampBundledDevice lamp = BlockLampRGB.RGBLampBundledDevice.getDeviceAt(worldObj, xCoord, yCoord, zCoord);
+            tCompound.setByte("red", lamp.getBundledPower(null)[MinecraftColor.RED.ordinal()]);
+            tCompound.setByte("green", lamp.getBundledPower(null)[MinecraftColor.GREEN.ordinal()]);
+            tCompound.setByte("blue", lamp.getBundledPower(null)[MinecraftColor.BLUE.ordinal()]);
+        }
     }
 
     @Override
     protected void readFromPacketNBT(NBTTagCompound tCompound) {
 
         power = tCompound.getInteger("power");
+        if (tCompound.hasKey("red")) {
+            RGBLampBundledDevice lamp = BlockLampRGB.RGBLampBundledDevice.getDeviceAt(worldObj, xCoord, yCoord, zCoord);
+            byte[] pow = lamp.getBundledPower(null);
+            pow[MinecraftColor.RED.ordinal()] = tCompound.getByte("red");
+            pow[MinecraftColor.GREEN.ordinal()] = tCompound.getByte("green");
+            pow[MinecraftColor.BLUE.ordinal()] = tCompound.getByte("blue");
+            lamp.setBundledPower(null, pow);
+        }
         if (getWorldObj() != null) {
             getWorldObj().markBlockRangeForRenderUpdate(xCoord, yCoord, zCoord, xCoord, yCoord, zCoord);
             getWorldObj().updateLightByType(EnumSkyBlock.Block, xCoord, yCoord, zCoord);

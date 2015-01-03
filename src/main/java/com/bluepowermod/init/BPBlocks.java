@@ -28,6 +28,7 @@ import com.bluepowermod.block.machine.BlockContainerFrontRender;
 import com.bluepowermod.block.machine.BlockContainerTwoSideRender;
 import com.bluepowermod.block.machine.BlockIgniter;
 import com.bluepowermod.block.machine.BlockLamp;
+import com.bluepowermod.block.machine.BlockLampRGB;
 import com.bluepowermod.block.machine.BlockProjectTable;
 import com.bluepowermod.block.machine.BlockRejecting;
 import com.bluepowermod.block.machine.BlockSortron;
@@ -144,16 +145,22 @@ public class BPBlocks {
     .setGuiId(GuiIDs.ITEMDETECTOR_ID).emitsRedstone().setBlockName(Refs.ITEMDETECTOR_NAME);
     public static final Block manager = new BlockRejecting(Material.rock, TileManager.class).setGuiId(GuiIDs.MANAGER_ID).emitsRedstone()
             .setBlockName(Refs.MANAGER_NAME);
+
     // public static final Block engine = new BlockEngine();
     // public static final Block kinetic_generator = new BlockKineticGenerator();
     // public static final Block windmill = new BlockWindmill();
-    public static Block[] blockLamp = new Block[MinecraftColor.VALID_COLORS.length];
 
     // public static final Block cpu = new BlockCPU();
     // public static final Block monitor = new BlockMonitor();
     // public static final Block disk_drive = new BlockDiskDrive();
     // public static final Block io_expander = new BlockIOExpander();
+
+    public static Block[] blockLamp = new Block[MinecraftColor.VALID_COLORS.length];
+    public static Block blockLampRGB = new BlockLampRGB(false);
+
     public static Block[] blockLampInverted = new Block[MinecraftColor.VALID_COLORS.length];
+    public static Block blockLampRGBInverted = new BlockLampRGB(true);
+
     public static Block sortron;
 
     public static void init() {
@@ -241,10 +248,12 @@ public class BPBlocks {
             MinecraftColor color = MinecraftColor.VALID_COLORS[i];
             GameRegistry.registerBlock(blockLamp[i], Refs.LAMP_NAME + color.name().toLowerCase());
         }
+        GameRegistry.registerBlock(blockLampRGB, Refs.LAMP_NAME + "RGB");
         for (int i = 0; i < MinecraftColor.VALID_COLORS.length; i++) {
             MinecraftColor color = MinecraftColor.VALID_COLORS[i];
             GameRegistry.registerBlock(blockLampInverted[i], Refs.LAMP_NAME + "inverted" + color.name().toLowerCase());
         }
+        GameRegistry.registerBlock(blockLampRGBInverted, Refs.LAMP_NAME + "invertedRGB");
 
     }
 

@@ -42,5 +42,8 @@ public class Renderers {
             MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(l), rl);
         for (Block l : BPBlocks.blockLampInverted)
             MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(l), rl);
+
+        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BPBlocks.blockLampRGB), rl);
+        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BPBlocks.blockLampRGBInverted), rl);
     }
 }

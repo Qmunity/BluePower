@@ -90,6 +90,11 @@ public class BlockLamp extends BlockContainerBase {
         return 0;
     }
 
+    public int getColor(IBlockAccess w, int x, int y, int z) {
+
+        return color.getHex();
+    }
+
     public int getColor() {
 
         return color.getHex();
@@ -125,7 +130,7 @@ public class BlockLamp extends BlockContainerBase {
     @SideOnly(Side.CLIENT)
     public int colorMultiplier(IBlockAccess world, int x, int y, int z) {
 
-        return getColor();
+        return getColor(world, x, y, z);
     }
 
     @Override
