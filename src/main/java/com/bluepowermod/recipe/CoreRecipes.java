@@ -101,6 +101,8 @@ public class CoreRecipes {
         GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(BPItems.screwdriver_handle, 1), "stickWood", BPItems.indigo_dye));
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.screwdriver, 1), "# ", " S", '#', "ingotIron", 'S',
                 BPItems.screwdriver_handle));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.silky_screwdriver, 1), "tt", "St", 't', "nuggetTungsten", 'S',
+                BPItems.screwdriver));
 
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.canvas, 1), "SSS", "SiS", "SSS", 'S', Items.string, 'i',
                 "stickWood"));
