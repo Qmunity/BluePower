@@ -20,25 +20,18 @@ package com.bluepowermod.part.gate.wireless;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.UUID;
 
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.RenderBlocks;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import uk.co.qmunity.lib.client.render.RenderHelper;
 import uk.co.qmunity.lib.misc.Pair;
-import uk.co.qmunity.lib.part.IPart;
-import uk.co.qmunity.lib.part.IPartPlacement;
 import uk.co.qmunity.lib.part.MicroblockShape;
 import uk.co.qmunity.lib.part.compat.OcclusionHelper;
-import uk.co.qmunity.lib.raytrace.QMovingObjectPosition;
 import uk.co.qmunity.lib.transform.Rotation;
 import uk.co.qmunity.lib.vec.Vec3d;
 import uk.co.qmunity.lib.vec.Vec3dCube;
@@ -55,8 +48,9 @@ import com.bluepowermod.api.wireless.IBundledFrequency;
 import com.bluepowermod.api.wireless.IFrequency;
 import com.bluepowermod.api.wireless.IRedstoneFrequency;
 import com.bluepowermod.api.wireless.IWirelessDevice;
+import com.bluepowermod.client.gui.gate.GuiGateWireless;
+import com.bluepowermod.part.IGuiButtonSensitive;
 import com.bluepowermod.part.gate.GateBase;
-import com.bluepowermod.part.gate.wireless.Frequency.RedstoneFrequency;
 import com.bluepowermod.part.wire.redstone.RedstoneApi;
 import com.bluepowermod.part.wire.redstone.WireCommons;
 import com.bluepowermod.part.wire.redstone.propagation.WirePropagator;
@@ -65,22 +59,19 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class GateTransceiver extends GateBase implements IWirelessDevice, IFaceRedstoneDevice, IRedstoneConductor, IFaceBundledDevice,
-IBundledConductor {
-
-    private static final RedstoneFrequency freq1 = new RedstoneFrequency(com.bluepowermod.api.misc.Accessibility.PUBLIC, UUID.randomUUID(),
-            "freq1");
-    private static final RedstoneFrequency freq2 = new RedstoneFrequency(com.bluepowermod.api.misc.Accessibility.PUBLIC, UUID.randomUUID(),
-            "freq2");
+IBundledConductor, IGuiButtonSensitive, IWirelessGate {
 
     private static final List<GateTransceiver> transceivers = new ArrayList<GateTransceiver>();
 
     private boolean isBundled;
     private boolean isAnalog;
 
-    private IFrequency frequency = null;
+    private Frequency frequency = null;
 
     private IRedstoneDevice[] devices = new IRedstoneDevice[6];
     private IBundledDevice[] bundledDevices = new IBundledDevice[6];
+
+    private WirelessMode mode = WirelessMode.BOTH;
 
     public GateTransceiver(Boolean isBundled, Boolean isAnalog) {
 
@@ -218,6 +209,8 @@ IBundledConductor {
     @Override
     public byte getRedstonePower(ForgeDirection side) {
 
+        if (mode == WirelessMode.SEND)
+            return 0;
         if (!RedstoneApi.getInstance().shouldWiresOutputPower())
             return 0;
         if (isBundled)
@@ -231,6 +224,8 @@ IBundledConductor {
     @Override
     public void setRedstonePower(ForgeDirection side, byte power) {
 
+        if (mode == WirelessMode.RECEIVE)
+            return;
         if (isBundled)
             return;
         if (frequency == null)
@@ -276,20 +271,25 @@ IBundledConductor {
         if (frequency == null)
             return devices;
 
-        for (GateTransceiver t : transceivers) {
-            if (t == this)
-                continue;
-            if (t.frequency != frequency)
-                continue;
-            devices.add(new Pair<IRedstoneDevice, ForgeDirection>(t, ForgeDirection.UNKNOWN));
+        if (mode != WirelessMode.RECEIVE) {
+            for (GateTransceiver t : transceivers) {
+                if (t == this)
+                    continue;
+                if (t.frequency != frequency)
+                    continue;
+                devices.add(new Pair<IRedstoneDevice, ForgeDirection>(t, ForgeDirection.UNKNOWN));
+            }
         }
 
-        if (fromSide == ForgeDirection.UNKNOWN)
-            for (int i = 0; i < 6; i++) {
-                IRedstoneDevice d = this.devices[i];
-                if (d != null)
-                    devices.add(new Pair<IRedstoneDevice, ForgeDirection>(d, ForgeDirection.getOrientation(i)));
+        if (mode != WirelessMode.SEND) {
+            if (fromSide == ForgeDirection.UNKNOWN) {
+                for (int i = 0; i < 6; i++) {
+                    IRedstoneDevice d = this.devices[i];
+                    if (d != null)
+                        devices.add(new Pair<IRedstoneDevice, ForgeDirection>(d, ForgeDirection.getOrientation(i)));
+                }
             }
+        }
 
         return devices;
     }
@@ -346,6 +346,8 @@ IBundledConductor {
     @Override
     public byte[] getBundledOutput(ForgeDirection side) {
 
+        if (mode == WirelessMode.SEND)
+            return new byte[16];
         if (!isBundled)
             return new byte[16];
         if (frequency == null)
@@ -357,6 +359,8 @@ IBundledConductor {
     @Override
     public void setBundledPower(ForgeDirection side, byte[] power) {
 
+        if (mode == WirelessMode.RECEIVE)
+            return;
         if (!isBundled)
             return;
         if (frequency == null)
@@ -457,17 +461,21 @@ IBundledConductor {
 
         if (getWorld().isRemote)
             return;
+        if (!(freq instanceof Frequency))
+            return;
 
         transceivers.remove(this);
         WireCommons.refreshConnections(this, this);
         WirePropagator.INSTANCE.onPowerLevelChange(this, ForgeDirection.UNKNOWN, (byte) 0, (byte) 0);
-        frequency = freq;
+        frequency = (Frequency) freq;
         transceivers.add(this);
         WirePropagator.INSTANCE.onPowerLevelChange(this, ForgeDirection.UNKNOWN, (byte) 0, (byte) 0);
+
+        sendUpdatePacket();
     }
 
     @Override
-    public IFrequency getFrequency() {
+    public Frequency getFrequency() {
 
         return frequency;
     }
@@ -476,49 +484,84 @@ IBundledConductor {
     public void writeToNBT(NBTTagCompound tag) {
 
         super.writeToNBT(tag);
+        tag.setInteger("mode", mode.ordinal());
+
+        if (frequency != null)
+            frequency.writeToNBT(tag);
     }
 
     @Override
     public void readFromNBT(NBTTagCompound tag) {
 
         super.readFromNBT(tag);
+        mode = WirelessMode.values()[tag.getInteger("mode")];
+
+        if (tag.hasKey("freq_name")) {
+            Frequency f = new Frequency();
+            f.readFromNBT(tag);
+            frequency = (Frequency) WirelessManager.INSTANCE.getFrequency(f.getAccessibility(), f.getFrequencyName(), f.getOwner());
+        } else {
+            frequency = null;
+        }
     }
 
     @Override
     public void writeUpdateToNBT(NBTTagCompound tag) {
 
         super.writeUpdateToNBT(tag);
+        tag.setInteger("mode", mode.ordinal());
+
+        if (frequency != null)
+            frequency.writeToNBT(tag);
     }
 
     @Override
     public void readUpdateFromNBT(NBTTagCompound tag) {
 
         super.readUpdateFromNBT(tag);
+        mode = WirelessMode.values()[tag.getInteger("mode")];
+
+        if (tag.hasKey("freq_name")) {
+            if (frequency == null)
+                frequency = new Frequency();
+            frequency.readFromNBT(tag);
+        } else {
+            frequency = null;
+        }
     }
 
     @Override
-    public boolean onActivated(EntityPlayer player, QMovingObjectPosition hit, ItemStack item) {
+    @SideOnly(Side.CLIENT)
+    protected GuiScreen getGui() {
 
-        if (frequency == freq1)
-            setFrequency(freq2);
-        else
-            setFrequency(freq1);
+        return new GuiGateWireless(this, isBundled, mode);
+    }
+
+    @Override
+    protected boolean hasGUI() {
 
         return true;
     }
 
     @Override
-    public IPartPlacement getPlacement(IPart part, World world, Vec3i location, ForgeDirection face, MovingObjectPosition mop,
-            EntityPlayer player) {
+    public WirelessMode getMode() {
 
-        return null;
+        return mode;
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
-    public void addTooltip(List<String> tip) {
+    public void setMode(WirelessMode mode) {
 
-        tip.add(MinecraftColor.RED + I18n.format("Disabled temporarily. Still not fully working."));
+        this.mode = mode;
+    }
+
+    @Override
+    public void onButtonPress(EntityPlayer player, int messageId, int value) {
+
+        if (messageId == 0)
+            mode = WirelessMode.values()[value];
+
+        sendUpdatePacket();
     }
 
 }

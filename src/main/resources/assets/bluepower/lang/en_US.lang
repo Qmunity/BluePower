@@ -779,3 +779,12 @@ waila.pneumaticTube.color=Colors
 waila.machine.stuffed=Stuffed
 
 message.oldpart=This is an old part. Put in player inventory to restore.
+
+bluepower.accessability.public=Public
+bluepower.accessability.shared=Shared
+bluepower.accessability.private=Private
+
+bluepower.gui.none=None
+bluepower.gui.admin=Admin
+
+bluepower.gui.wireless=Wireless Redstone

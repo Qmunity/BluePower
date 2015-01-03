@@ -18,6 +18,6 @@ package com.bluepowermod.api.misc;
 
 public enum Accessibility {
 
-    PUBLIC, PRIVATE, SHARED;
+    PUBLIC, SHARED, PRIVATE;
 
 }

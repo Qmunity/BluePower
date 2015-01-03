@@ -27,6 +27,7 @@ import net.minecraftforge.event.world.WorldEvent;
 import uk.co.qmunity.lib.friend.FriendManager;
 import uk.co.qmunity.lib.friend.IPlayer;
 
+import com.bluepowermod.api.misc.Accessibility;
 import com.bluepowermod.api.wireless.IBundledFrequency;
 import com.bluepowermod.api.wireless.IFrequency;
 import com.bluepowermod.api.wireless.IRedstoneFrequency;
@@ -90,10 +91,10 @@ public final class WirelessManager implements IWirelessManager {
 
     private boolean canAccess(IFrequency freq, UUID uuid, List<IPlayer> friends) {
 
-        if (freq.getOwner().equals(uuid) || freq.getAccessibility() == com.bluepowermod.api.misc.Accessibility.PUBLIC) {
+        if (freq.getOwner().equals(uuid) || freq.getAccessibility() == Accessibility.PUBLIC) {
             return true;
         }
-        if (freq.getAccessibility() == com.bluepowermod.api.misc.Accessibility.SHARED) {
+        if (freq.getAccessibility() == Accessibility.SHARED) {
             for (IPlayer friend : friends) {
                 if (freq.getOwner().equals(friend.getUUID())) {
                     return true;
@@ -105,7 +106,30 @@ public final class WirelessManager implements IWirelessManager {
     }
 
     @Override
-    public IRedstoneFrequency registerRedstoneFrequency(EntityPlayer owner, String frequency, com.bluepowermod.api.misc.Accessibility accessibility) {
+    public IRedstoneFrequency registerRedstoneFrequency(EntityPlayer owner, String frequency, Accessibility accessibility) {
+
+        for (IRedstoneFrequency f : redstoneFrequencies) {
+            if (accessibility == Accessibility.PUBLIC) {
+                if (f.getFrequencyName().equals(frequency) && f.getAccessibility() == Accessibility.PUBLIC)
+                    return f;
+            } else {
+                if (f.getOwner().equals(owner) && f.getFrequencyName().equals(frequency)
+                        && (f.getAccessibility() == Accessibility.PRIVATE || f.getAccessibility() == Accessibility.SHARED))
+                    return f;
+            }
+        }
+        for (IBundledFrequency f : bundledFrequencies) {
+            if (accessibility == Accessibility.PUBLIC) {
+                if (f.getFrequencyName().equals(frequency) && f.getAccessibility() == Accessibility.PUBLIC)
+                    return null;
+            } else {
+                if (f.getOwner().equals(owner) && f.getFrequencyName().equals(frequency)
+                        && (f.getAccessibility() == Accessibility.PRIVATE || f.getAccessibility() == Accessibility.SHARED))
+                    return null;
+            }
+        }
+
+        System.out.println(":/ " + owner.getGameProfile().getId() + " - " + frequency + " " + accessibility);
 
         RedstoneFrequency freq = new RedstoneFrequency(accessibility, owner == null ? UUID.randomUUID() : owner.getGameProfile().getId(),
                 frequency);
@@ -114,7 +138,28 @@ public final class WirelessManager implements IWirelessManager {
     }
 
     @Override
-    public IBundledFrequency registerBundledFrequency(EntityPlayer owner, String frequency, com.bluepowermod.api.misc.Accessibility accessibility) {
+    public IBundledFrequency registerBundledFrequency(EntityPlayer owner, String frequency, Accessibility accessibility) {
+
+        for (IRedstoneFrequency f : redstoneFrequencies) {
+            if (accessibility == Accessibility.PUBLIC) {
+                if (f.getFrequencyName().equals(frequency) && f.getAccessibility() == Accessibility.PUBLIC)
+                    return null;
+            } else {
+                if (f.getOwner().equals(owner) && f.getFrequencyName().equals(frequency)
+                        && (f.getAccessibility() == Accessibility.PRIVATE || f.getAccessibility() == Accessibility.SHARED))
+                    return null;
+            }
+        }
+        for (IBundledFrequency f : bundledFrequencies) {
+            if (accessibility == Accessibility.PUBLIC) {
+                if (f.getFrequencyName().equals(frequency) && f.getAccessibility() == Accessibility.PUBLIC)
+                    return f;
+            } else {
+                if (f.getOwner().equals(owner) && f.getFrequencyName().equals(frequency)
+                        && (f.getAccessibility() == Accessibility.PRIVATE || f.getAccessibility() == Accessibility.SHARED))
+                    return f;
+            }
+        }
 
         BundledFrequency freq = new BundledFrequency(accessibility, owner == null ? UUID.randomUUID() : owner.getGameProfile().getId(),
                 frequency);
@@ -123,10 +168,10 @@ public final class WirelessManager implements IWirelessManager {
     }
 
     @Override
-    public IFrequency registerFrequency(EntityPlayer owner, String frequency, com.bluepowermod.api.misc.Accessibility accessibility, boolean isBundled) {
+    public IFrequency registerFrequency(EntityPlayer owner, String frequency, Accessibility accessibility, boolean isBundled) {
 
         return isBundled ? registerBundledFrequency(owner, frequency, accessibility) : registerRedstoneFrequency(owner, frequency,
-                                                                                                                 accessibility);
+                accessibility);
     }
 
     @Override
@@ -152,6 +197,20 @@ public final class WirelessManager implements IWirelessManager {
 
     public void unloadFrequencies() {
 
+    }
+
+    @Override
+    public IFrequency getFrequency(Accessibility accessibility, String frequency, UUID owner) {
+
+        for (IRedstoneFrequency f : redstoneFrequencies)
+            if (f.getAccessibility().equals(accessibility) && f.getFrequencyName().equals(frequency) && f.getOwner().equals(owner))
+                return f;
+
+        for (IBundledFrequency f : bundledFrequencies)
+            if (f.getAccessibility().equals(accessibility) && f.getFrequencyName().equals(frequency) && f.getOwner().equals(owner))
+                return f;
+
+        return null;
     }
 
 }

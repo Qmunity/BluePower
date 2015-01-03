@@ -61,9 +61,8 @@ public abstract class GuiGateSingleTime extends GuiGate {
     }
 
     @Override
-    public void drawScreen(int x, int y, float partialTicks) {
+    public void renderGUI(int x, int y, float partialTicks) {
 
-        super.drawScreen(x, y, partialTicks);
         drawCenteredString(fontRendererObj, I18n.format("gui.timerInterval") + ": " + getTimerValue(getCurrentIntervalTicks()), guiLeft
                 + xSize / 2, guiTop + 10, 0xFFFFFF);
     }

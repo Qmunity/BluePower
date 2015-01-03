@@ -20,25 +20,32 @@ package com.bluepowermod.part.gate.wireless;
 import java.util.Arrays;
 import java.util.UUID;
 
+import net.minecraft.nbt.NBTTagCompound;
+
+import com.bluepowermod.api.misc.Accessibility;
 import com.bluepowermod.api.wireless.IBundledFrequency;
 import com.bluepowermod.api.wireless.IFrequency;
 import com.bluepowermod.api.wireless.IRedstoneFrequency;
 
 public class Frequency implements IFrequency {
 
-    private com.bluepowermod.api.misc.Accessibility accessibility;
-    private UUID                                    owner;
-    private String                                  frequency;
+    private Accessibility accessibility;
+    private UUID owner;
+    private String frequency;
 
-    public Frequency(com.bluepowermod.api.misc.Accessibility accessibility, UUID owner, String frequency) {
+    public Frequency(Accessibility accessibility, UUID owner, String frequency) {
 
         this.accessibility = accessibility;
         this.owner = owner;
         this.frequency = frequency;
     }
 
+    public Frequency() {
+
+    }
+
     @Override
-    public com.bluepowermod.api.misc.Accessibility getAccessibility() {
+    public Accessibility getAccessibility() {
 
         return accessibility;
     }
@@ -55,11 +62,41 @@ public class Frequency implements IFrequency {
         return frequency;
     }
 
+    public void setAccessibility(Accessibility accessibility) {
+
+        this.accessibility = accessibility;
+    }
+
+    public void setFrequency(String frequency) {
+
+        this.frequency = frequency;
+    }
+
+    public void writeToNBT(NBTTagCompound tag) {
+
+        tag.setInteger("freq_accessibility", accessibility.ordinal());
+        tag.setString("freq_owner", owner.toString());
+        tag.setString("freq_name", frequency);
+    }
+
+    public void readFromNBT(NBTTagCompound tag) {
+
+        accessibility = Accessibility.values()[tag.getInteger("freq_accessibility")];
+        owner = UUID.fromString(tag.getString("freq_owner"));
+        frequency = tag.getString("freq_name");
+    }
+
+    @Override
+    public void notifyClients() {
+
+        // TODO: Notify clients!
+    }
+
     public static final class RedstoneFrequency extends Frequency implements IRedstoneFrequency {
 
         private byte signal = (byte) 0;
 
-        public RedstoneFrequency(com.bluepowermod.api.misc.Accessibility accessibility, UUID owner, String frequency) {
+        public RedstoneFrequency(Accessibility accessibility, UUID owner, String frequency) {
 
             super(accessibility, owner, frequency);
         }
@@ -82,7 +119,7 @@ public class Frequency implements IFrequency {
 
         private byte[] signal = new byte[1];
 
-        public BundledFrequency(com.bluepowermod.api.misc.Accessibility accessibility, UUID owner, String frequency) {
+        public BundledFrequency(Accessibility accessibility, UUID owner, String frequency) {
 
             super(accessibility, owner, frequency);
         }

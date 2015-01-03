@@ -7,7 +7,20 @@
  */
 package com.bluepowermod.client.gui.gate;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.util.ResourceLocation;
+
+import org.apache.commons.lang3.text.WordUtils;
+
+import com.bluepowermod.BluePower;
 import com.bluepowermod.client.gui.GuiScreenBase;
+import com.bluepowermod.client.gui.widget.BaseWidget;
+import com.bluepowermod.client.gui.widget.IGuiWidget;
+import com.bluepowermod.client.gui.widget.IWidgetListener;
 import com.bluepowermod.network.NetworkHandler;
 import com.bluepowermod.network.message.MessageGuiUpdate;
 import com.bluepowermod.part.gate.GateBase;
@@ -21,14 +34,20 @@ import cpw.mods.fml.relauncher.SideOnly;
  */
 
 @SideOnly(Side.CLIENT)
-public abstract class GuiGate extends GuiScreenBase {
+public class GuiGate extends GuiScreenBase implements IWidgetListener {
 
     private final GateBase gate;
+    private final List<IGuiWidget> widgets = new ArrayList<IGuiWidget>();
 
     public GuiGate(GateBase gate, int xSize, int ySize) {
 
         super(xSize, ySize);
         this.gate = gate;
+    }
+
+    public GateBase getGate() {
+
+        return gate;
     }
 
     protected void sendToServer(int id, int value) {
@@ -40,5 +59,80 @@ public abstract class GuiGate extends GuiScreenBase {
     public boolean doesGuiPauseGame() {
 
         return false;
+    }
+
+    @Override
+    public void actionPerformed(IGuiWidget widget) {
+
+    }
+
+    protected void addWidget(IGuiWidget widget) {
+
+        widgets.add(widget);
+        widget.setListener(this);
+    }
+
+    @Override
+    public void setWorldAndResolution(Minecraft par1Minecraft, int par2, int par3) {
+
+        widgets.clear();
+        super.setWorldAndResolution(par1Minecraft, par2, par3);
+    }
+
+    public void redraw() {
+
+        buttonList.clear();
+        widgets.clear();
+        initGui();
+    }
+
+    @Override
+    public final void drawScreen(int x, int y, float partialTick) {
+
+        super.drawScreen(x, y, partialTick);
+
+        for (IGuiWidget widget : widgets)
+            widget.render(x, y);
+
+        renderGUI(x, y, partialTick);
+
+        List<String> tooltip = new ArrayList<String>();
+        boolean shift = BluePower.proxy.isSneakingInGui();
+        for (IGuiWidget widget : widgets) {
+            if (widget.getBounds().contains(x, y))
+                widget.addTooltip(x, y, tooltip, shift);
+        }
+        if (!tooltip.isEmpty()) {
+            List<String> localizedTooltip = new ArrayList<String>();
+            for (String line : tooltip) {
+                String localizedLine = I18n.format(line);
+                String[] lines = WordUtils.wrap(localizedLine, 50).split(System.getProperty("line.separator"));
+                for (String locLine : lines) {
+                    localizedTooltip.add(locLine);
+                }
+            }
+            drawHoveringText(localizedTooltip, x, y, fontRendererObj);
+        }
+    }
+
+    protected void renderGUI(int x, int y, float partialTick) {
+
+    }
+
+    @Override
+    protected void mouseClicked(int x, int y, int button) {
+
+        super.mouseClicked(x, y, button);
+        for (IGuiWidget widget : widgets) {
+            if (widget.getBounds().contains(x, y) && (!(widget instanceof BaseWidget) || ((BaseWidget) widget).enabled))
+                widget.onMouseClicked(x, y, button);
+        }
+    }
+
+    @Override
+    protected ResourceLocation getTexture() {
+
+        // TODO Auto-generated method stub
+        return null;
     }
 }

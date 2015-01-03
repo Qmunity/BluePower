@@ -19,12 +19,16 @@ package com.bluepowermod.api.wireless;
 
 import java.util.UUID;
 
+import com.bluepowermod.api.misc.Accessibility;
+
 public interface IFrequency {
 
-    public com.bluepowermod.api.misc.Accessibility getAccessibility();
+    public Accessibility getAccessibility();
 
     public UUID getOwner();
 
     public String getFrequencyName();
+
+    public void notifyClients();
 
 }
