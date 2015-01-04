@@ -13,7 +13,7 @@ public class LoadingPlugin implements IFMLLoadingPlugin
     @Override
     public String[] getASMTransformerClass()
     {
-        return new String[]{getAccessTransformerClass()};
+        return new String[]{"com.bluepowermod.asm.BluePowerTransformer"};
     }
 
     @Override
@@ -36,6 +36,6 @@ public class LoadingPlugin implements IFMLLoadingPlugin
     @Override
     public String getAccessTransformerClass()
     {
-        return "com.bluepowermod.asm.BluePowerTransformer";
+        return null;
     }
 }

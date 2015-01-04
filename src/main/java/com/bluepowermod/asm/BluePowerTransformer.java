@@ -107,8 +107,13 @@ public class BluePowerTransformer implements IClassTransformer
         ClassName clazz = classMap.get(className);
         if (clazz!=null)
         {
-            bytes = insertAchievementCheck(Method.ENCHANT_ITEM,bytes);
-            classMap.clear();
+            switch (clazz)
+            {
+                case ENCHANTMENT_CONTAINER:
+                    bytes = insertAchievementCheck(Method.ENCHANT_ITEM,bytes);
+                    break;
+            }
+            classMap.remove(className);
         }
         return bytes;
     }
