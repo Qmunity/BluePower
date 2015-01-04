@@ -24,6 +24,7 @@ import java.util.List;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
@@ -49,6 +50,8 @@ import com.bluepowermod.api.wireless.IFrequency;
 import com.bluepowermod.api.wireless.IRedstoneFrequency;
 import com.bluepowermod.api.wireless.IWirelessDevice;
 import com.bluepowermod.client.gui.gate.GuiGateWireless;
+import com.bluepowermod.network.NetworkHandler;
+import com.bluepowermod.network.message.MessageWirelessFrequencySync;
 import com.bluepowermod.part.IGuiButtonSensitive;
 import com.bluepowermod.part.gate.GateBase;
 import com.bluepowermod.part.wire.redstone.RedstoneApi;
@@ -432,6 +435,7 @@ IBundledConductor, IGuiButtonSensitive, IWirelessGate {
         super.onAdded();
         if (!transceivers.contains(this))
             transceivers.add(this);
+        WirelessManager.COMMON_INSTANCE.registerWirelessDevice(this);
     }
 
     @Override
@@ -440,6 +444,7 @@ IBundledConductor, IGuiButtonSensitive, IWirelessGate {
         super.onLoaded();
         if (!transceivers.contains(this))
             transceivers.add(this);
+        WirelessManager.COMMON_INSTANCE.registerWirelessDevice(this);
     }
 
     @Override
@@ -447,6 +452,7 @@ IBundledConductor, IGuiButtonSensitive, IWirelessGate {
 
         super.onRemoved();
         transceivers.remove(this);
+        WirelessManager.COMMON_INSTANCE.unregisterWirelessDevice(this);
     }
 
     @Override
@@ -454,6 +460,7 @@ IBundledConductor, IGuiButtonSensitive, IWirelessGate {
 
         super.onUnloaded();
         transceivers.remove(this);
+        WirelessManager.COMMON_INSTANCE.unregisterWirelessDevice(this);
     }
 
     @Override
@@ -461,7 +468,7 @@ IBundledConductor, IGuiButtonSensitive, IWirelessGate {
 
         if (getWorld().isRemote)
             return;
-        if (!(freq instanceof Frequency))
+        if (!(freq instanceof Frequency) && freq != null)
             return;
 
         transceivers.remove(this);
@@ -499,7 +506,7 @@ IBundledConductor, IGuiButtonSensitive, IWirelessGate {
         if (tag.hasKey("freq_name")) {
             Frequency f = new Frequency();
             f.readFromNBT(tag);
-            frequency = (Frequency) WirelessManager.INSTANCE.getFrequency(f.getAccessibility(), f.getFrequencyName(), f.getOwner());
+            frequency = (Frequency) WirelessManager.COMMON_INSTANCE.getFrequency(f.getAccessibility(), f.getFrequencyName(), f.getOwner());
         } else {
             frequency = null;
         }
@@ -531,8 +538,15 @@ IBundledConductor, IGuiButtonSensitive, IWirelessGate {
     }
 
     @Override
+    protected void handleGUIServer(EntityPlayer player) {
+
+        sendUpdatePacket();
+        NetworkHandler.sendTo(new MessageWirelessFrequencySync(player), (EntityPlayerMP) player);
+    }
+
+    @Override
     @SideOnly(Side.CLIENT)
-    protected GuiScreen getGui() {
+    protected GuiScreen getGui(EntityPlayer player) {
 
         return new GuiGateWireless(this, isBundled, mode);
     }
@@ -560,6 +574,10 @@ IBundledConductor, IGuiButtonSensitive, IWirelessGate {
 
         if (messageId == 0)
             mode = WirelessMode.values()[value];
+        if (messageId == 1) {
+            setFrequency(null);
+            NetworkHandler.sendTo(new MessageWirelessFrequencySync(player), (EntityPlayerMP) player);
+        }
 
         sendUpdatePacket();
     }

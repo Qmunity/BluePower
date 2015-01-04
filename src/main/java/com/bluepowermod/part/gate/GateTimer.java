@@ -121,7 +121,7 @@ public class GateTimer extends GateBase implements IGuiButtonSensitive {
 
     @Override
     @SideOnly(Side.CLIENT)
-    protected GuiScreen getGui() {
+    protected GuiScreen getGui(EntityPlayer player) {
 
         return new GuiGateSingleTime(this) {
 

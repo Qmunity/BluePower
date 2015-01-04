@@ -462,15 +462,21 @@ public abstract class GateBase extends BPPartFaceRotate implements IPartRedstone
             return true;
         } else if (hasGUI()) {
             if (getWorld().isRemote) {
-                FMLCommonHandler.instance().showGuiScreen(getGui());
+                FMLCommonHandler.instance().showGuiScreen(getGui(player));
+            } else {
+                handleGUIServer(player);
             }
             return true;
         }
         return false;
     }
 
+    protected void handleGUIServer(EntityPlayer player) {
+
+    }
+
     @SideOnly(Side.CLIENT)
-    protected GuiScreen getGui() {
+    protected GuiScreen getGui(EntityPlayer player) {
 
         return null;
     }

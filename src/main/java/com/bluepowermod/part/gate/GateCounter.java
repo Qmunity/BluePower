@@ -172,7 +172,7 @@ public class GateCounter extends GateBase implements IGuiButtonSensitive {
 
     @Override
     @SideOnly(Side.CLIENT)
-    protected GuiScreen getGui() {
+    protected GuiScreen getGui(EntityPlayer player) {
 
         return new GuiGateCounter(this) {
 

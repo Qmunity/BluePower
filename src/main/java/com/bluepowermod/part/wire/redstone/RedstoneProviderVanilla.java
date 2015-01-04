@@ -17,6 +17,7 @@
 
 package com.bluepowermod.part.wire.redstone;
 
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import uk.co.qmunity.lib.vec.Vec3i;
@@ -24,12 +25,15 @@ import uk.co.qmunity.lib.vec.Vec3i;
 import com.bluepowermod.api.redstone.IBundledDevice;
 import com.bluepowermod.api.redstone.IRedstoneDevice;
 import com.bluepowermod.api.redstone.IRedstoneProvider;
-import com.bluepowermod.block.machine.BlockLampRGB;
 
 public class RedstoneProviderVanilla implements IRedstoneProvider {
 
     @Override
     public IRedstoneDevice getRedstoneDevice(World world, int x, int y, int z, ForgeDirection face, ForgeDirection side) {
+
+        TileEntity te = world.getTileEntity(x, y, z);
+        if (te != null && te instanceof IRedstoneDevice)
+            return (IRedstoneDevice) te;
 
         return DummyRedstoneDevice.getDeviceAt(new Vec3i(x, y, z, world));
     }
@@ -37,8 +41,9 @@ public class RedstoneProviderVanilla implements IRedstoneProvider {
     @Override
     public IBundledDevice getBundledDevice(World world, int x, int y, int z, ForgeDirection face, ForgeDirection side) {
 
-        if (world.getBlock(x, y, z) instanceof BlockLampRGB)
-            return BlockLampRGB.RGBLampBundledDevice.getDeviceAt(world, x, y, z);
+        TileEntity te = world.getTileEntity(x, y, z);
+        if (te != null && te instanceof IBundledDevice && ((IBundledDevice) te).isBundled())
+            return (IBundledDevice) te;
 
         return null;
     }

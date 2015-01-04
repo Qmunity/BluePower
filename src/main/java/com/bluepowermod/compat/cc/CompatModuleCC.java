@@ -30,7 +30,6 @@ public class CompatModuleCC extends CompatModule {
     public void init(FMLInitializationEvent ev) {
 
         RedstoneApi.getInstance().registerRedstoneProvider(new RedstoneProviderCC());
-        RedstoneApi.getInstance().registerBundledUpdateHandler(new BundledUpdateHandlerCC());
     }
 
     @Override
