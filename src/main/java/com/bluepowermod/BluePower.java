@@ -90,8 +90,6 @@ public class BluePower {
         MinecraftForge.EVENT_BUS.register(new WorldConversionEventHandler());
 
         RedstoneApi.getInstance().registerRedstoneProvider(new RedstoneProviderQmunityLib());
-
-        Achievements.init();
     }
 
     @EventHandler
@@ -111,6 +109,8 @@ public class BluePower {
         NetworkHandler.init();
         NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GUIHandler());
         CompatibilityUtils.init(event);
+
+        Achievements.init();
     }
 
     @EventHandler

@@ -216,8 +216,16 @@ public class BPEventHandler {
 
         if(item.equals(BPItems.blue_doped_wafer) || item.equals(BPItems.red_doped_wafer)){
             event.player.addStat(Achievements.dopeAchievement, 1);
-        }else if(item.equals(PartManager.getPartInfo("pneumaticTube"))){
-
+        }else if(item.equals(PartManager.getPartInfo("pneumaticTube").getItem())){
+            event.player.addStat(Achievements.tubeAchievement, 1);
+        }else if(item.equals(Item.getItemFromBlock(BPBlocks.sorting_machine))){
+            event.player.addStat(Achievements.sortAchievement, 1);
+        }else if(item.equals(PartManager.getPartInfo("magTube").getItem())){
+            event.player.addStat(Achievements.magTubeAchievement, 1);
+        }else if(item.equals(PartManager.getPartInfo("integratedCircuit3x3").getItem())
+                ||item.equals(PartManager.getPartInfo("integratedCircuit5x5").getItem())
+                ||item.equals(PartManager.getPartInfo("integratedCircuit7x7").getItem())){
+            event.player.addStat(Achievements.circuitCeptionAchievement, 1);
         }
     }
 }

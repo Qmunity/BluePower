@@ -788,3 +788,29 @@ bluepower.gui.none=None
 bluepower.gui.admin=Admin
 
 bluepower.gui.wireless=Wireless Redstone
+
+
+/******** ACHIEVEMENTS ********/
+
+bluepower.gui.achievements=Bluepower
+
+achievement.vorpal=Well endowed
+achievement.vorpal.desc=Get Vorpal enchant on an item
+
+achievement.sort=Sorting your life out
+achievement.sort.desc=Craft a sorting machine
+
+achievement.tungsten=No longer useless!
+achievement.tungsten.desc=Mine tungsten ore
+
+achievement.dope=That's dope bro!
+achievement.dope.desc=Make a doped wafer
+
+achievement.tube=Tu-be or not tu-be
+achievement.tube.desc=Craft a tube
+
+achievement.magtube=Need for Speed
+achievement.magtube.desc=Craft a magtube
+
+achievement.circuitception=Circuitception
+achievement.circuitception.desc=Craft an integrated circuit
