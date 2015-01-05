@@ -62,7 +62,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class GateTransceiver extends GateBase implements IWirelessDevice, IFaceRedstoneDevice, IRedstoneConductor, IFaceBundledDevice,
-IBundledConductor, IGuiButtonSensitive, IWirelessGate {
+        IBundledConductor, IGuiButtonSensitive, IWirelessGate {
 
     private static final List<GateTransceiver> transceivers = new ArrayList<GateTransceiver>();
 

@@ -267,4 +267,9 @@ public final class WirelessManager implements IWirelessManager {
         bundledFrequencies.clear();
     }
 
+    public List<IWirelessDevice> getDevices() {
+
+        return devices;
+    }
+
 }

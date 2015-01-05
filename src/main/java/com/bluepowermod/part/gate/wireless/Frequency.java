@@ -29,6 +29,7 @@ import com.bluepowermod.api.misc.Accessibility;
 import com.bluepowermod.api.wireless.IBundledFrequency;
 import com.bluepowermod.api.wireless.IFrequency;
 import com.bluepowermod.api.wireless.IRedstoneFrequency;
+import com.bluepowermod.api.wireless.IWirelessDevice;
 import com.mojang.authlib.GameProfile;
 
 import cpw.mods.fml.common.network.ByteBufUtils;
@@ -40,6 +41,7 @@ public class Frequency implements IFrequency {
     private String ownerName;
     private String frequency;
     private boolean bundled;
+    private int devices = 0;
 
     public Frequency(Accessibility accessibility, UUID owner, String frequency) {
 
@@ -77,6 +79,11 @@ public class Frequency implements IFrequency {
         return frequency;
     }
 
+    public String getOwnerName() {
+
+        return ownerName;
+    }
+
     public void setAccessibility(Accessibility accessibility) {
 
         this.accessibility = accessibility;
@@ -110,6 +117,12 @@ public class Frequency implements IFrequency {
         ByteBufUtils.writeUTF8String(buf, ownerName);
         ByteBufUtils.writeUTF8String(buf, frequency);
         buf.writeBoolean(isBundled());
+
+        int amt = 0;
+        for (IWirelessDevice d : WirelessManager.COMMON_INSTANCE.getDevices())
+            if (d.getFrequency() != null && d.getFrequency().equals(this))
+                amt++;
+        buf.writeInt(amt);
     }
 
     public void readFromBuffer(ByteBuf buf) {
@@ -119,6 +132,7 @@ public class Frequency implements IFrequency {
         ownerName = ByteBufUtils.readUTF8String(buf);
         frequency = ByteBufUtils.readUTF8String(buf);
         bundled = buf.readBoolean();
+        devices = buf.readInt();
     }
 
     @Override
@@ -133,6 +147,11 @@ public class Frequency implements IFrequency {
             return true;
 
         return bundled;
+    }
+
+    public int getDevices() {
+
+        return devices;
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.bluepowermod.client.gui.gate;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -17,7 +18,10 @@ import net.minecraftforge.client.ForgeHooksClient;
 
 import org.apache.commons.lang3.StringUtils;
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
+
+import uk.co.qmunity.lib.util.AlphanumComparator;
 
 import com.bluepowermod.api.misc.Accessibility;
 import com.bluepowermod.api.wireless.IFrequency;
@@ -62,6 +66,8 @@ public class GuiGateWireless extends GuiGate {
 
     private String filter = "";
 
+    private int scrolled = 0;
+
     public GuiGateWireless(GateBase gate, boolean bundled, WirelessMode mode) {
 
         super(gate, 228, 184);
@@ -78,7 +84,9 @@ public class GuiGateWireless extends GuiGate {
     public void initGui() {
 
         super.initGui();
+
         Keyboard.enableRepeatEvents(true);
+        Mouse.getDWheel();
 
         addWidget(accessLevel = new WidgetMode(0, guiLeft + 10, guiTop + ySize - 24, 228, 0, Accessibility.values().length, Refs.MODID
                 + ":textures/gui/wirelessRedstone.png") {
@@ -156,8 +164,10 @@ public class GuiGateWireless extends GuiGate {
         }
 
         frequencyName.textboxKeyTyped(c, key);
-        if (selected == null)
+        if (selected == null) {
             filter = frequencyName.getText().trim();
+            fixScrollWheel();
+        }
     }
 
     @Override
@@ -173,16 +183,10 @@ public class GuiGateWireless extends GuiGate {
                 filter = "";
         }
 
-        List<Frequency> frequencies = new ArrayList<Frequency>();
-        for (IFrequency f : WirelessManager.CLIENT_INSTANCE.getFrequencies()) {
-            if (f.getAccessibility().ordinal() == filterAccessLevel.value || filterAccessLevel.value == 3 || filterAccessLevel.value == 4)
-                if (f.getFrequencyName().toLowerCase().contains(filter.toLowerCase()))
-                    frequencies.add((Frequency) f);
-        }
-        Collections.sort(frequencies, new FrequencySorter(this));
+        List<Frequency> frequencies = getFrequencies();
         if (x > guiLeft + 88 && x <= guiLeft + 88 + 133 - (frequencies.size() > 12 ? 11 : 0)) {
             for (int i = 0; i < Math.min(frequencies.size(), 12); i++) {
-                Frequency f = frequencies.get(i);
+                Frequency f = frequencies.get(i + scrolled);
                 if (f.isBundled() == gate.isBundled()) {
                     int yPos = guiTop + 22 + 10 + 2 + (i * 12);
                     if (y > yPos && y < yPos + 11) {
@@ -204,6 +208,27 @@ public class GuiGateWireless extends GuiGate {
                 }
             }
         }
+    }
+
+    @Override
+    public void handleMouseInput() {
+
+        super.handleMouseInput();
+
+        int scrolled = Mouse.getEventDWheel();
+        if (scrolled != 0) {
+            if (scrolled < 0) {
+                this.scrolled++;
+            } else {
+                this.scrolled--;
+            }
+            fixScrollWheel();
+        }
+    }
+
+    private void fixScrollWheel() {
+
+        scrolled = Math.max(Math.min(scrolled, getFrequencies().size() - 12), 0);
     }
 
     @Override
@@ -290,21 +315,20 @@ public class GuiGateWireless extends GuiGate {
         drawString(fontRendererObj, I18n.format(accessLevelLabel), guiLeft + 10 + 14 + 3, guiTop + ySize - 24 + 3,
                 accessLevel.enabled ? 0xEFEFEF : 0x565656);
 
+        // Label for the mode
+        String modeLabel = modeSelector.value == 0 ? "bluepower.mode.sendreceive" : (modeSelector.value == 1 ? "bluepower.mode.send"
+                : "bluepower.mode.receive");
+        drawString(fontRendererObj, I18n.format(modeLabel), guiLeft + 10 + 14 + 3, guiTop + 57 + 3, 0xEFEFEF);
+
         // Render the textbox
         frequencyName.drawTextBox();
 
         // Get all frequencies and sort them
-        List<Frequency> frequencies = new ArrayList<Frequency>();
-        for (IFrequency f : WirelessManager.CLIENT_INSTANCE.getFrequencies()) {
-            if (f.getAccessibility().ordinal() == filterAccessLevel.value || filterAccessLevel.value == 3 || filterAccessLevel.value == 4)
-                if (f.getFrequencyName().toLowerCase().contains(filter.toLowerCase()))
-                    frequencies.add((Frequency) f);
-        }
-        Collections.sort(frequencies, new FrequencySorter(this));
+        List<Frequency> frequencies = getFrequencies();
 
         // Render the list
         for (int i = 0; i < Math.min(frequencies.size(), 12); i++) {
-            Frequency f = frequencies.get(i);
+            Frequency f = frequencies.get(i + scrolled);
             int yPos = guiTop + 22 + 10 + 2 + (i * 12);
             int color = f.equals(gate.getFrequency()) ? 0x00CCCC : (f.equals(selected) ? 0x888888 : ((x > guiLeft + 88
                     && x <= guiLeft + 88 + 133 - (frequencies.size() > 12 ? 11 : 0) && y > yPos && y <= yPos + 11 && f.isBundled() == gate
@@ -336,6 +360,20 @@ public class GuiGateWireless extends GuiGate {
         if (frequencies.size() > 12) {
             drawRect(guiLeft + 88 + 133 - 10, guiTop + 22 + 10 + 2, guiLeft + 88 + 133, guiTop + 22 + 10 + 1 + (12 * 12), 0xFF565656);
         }
+
+        for (int i = 0; i < Math.min(frequencies.size(), 12); i++) {
+            Frequency f = frequencies.get(i + scrolled);
+            int yPos = guiTop + 22 + 10 + 2 + (i * 12);
+            if (x > guiLeft + 88 && x <= guiLeft + 88 + 133 - (frequencies.size() > 12 ? 11 : 0) && y > yPos && y <= yPos + 11
+                    && f.isBundled() == gate.isBundled()) {
+                func_146283_a(
+                        Arrays.asList(
+                                "Frequency: " + f.getFrequencyName(),
+                                EnumChatFormatting.GRAY + "Accessibility: "
+                                        + StringUtils.capitalize(f.getAccessibility().name().toLowerCase()), EnumChatFormatting.GRAY
+                                        + "Owner: " + f.getOwnerName(), "Devices: " + f.getDevices()), x, y);
+            }
+        }
     }
 
     private boolean checkNoMatches() {
@@ -345,6 +383,19 @@ public class GuiGateWireless extends GuiGate {
                 return false;
 
         return true;
+    }
+
+    private List<Frequency> getFrequencies() {
+
+        List<Frequency> frequencies = new ArrayList<Frequency>();
+        for (IFrequency f : WirelessManager.CLIENT_INSTANCE.getFrequencies()) {
+            if (f.getAccessibility().ordinal() == filterAccessLevel.value || filterAccessLevel.value == 3 || filterAccessLevel.value == 4)
+                if (f.getFrequencyName().toLowerCase().contains(filter.toLowerCase()))
+                    frequencies.add((Frequency) f);
+        }
+        Collections.sort(frequencies, new FrequencySorter(this));
+
+        return frequencies;
     }
 
     private static class FrequencySorter implements Comparator<Frequency> {
@@ -373,7 +424,7 @@ public class GuiGateWireless extends GuiGate {
             if (o1.getAccessibility() != o2.getAccessibility())
                 return o1.getAccessibility().compareTo(o2.getAccessibility());
 
-            return o1.getFrequencyName().compareTo(o2.getFrequencyName());
+            return new AlphanumComparator().compare(o1.getFrequencyName(), o2.getFrequencyName());
         }
 
     }
