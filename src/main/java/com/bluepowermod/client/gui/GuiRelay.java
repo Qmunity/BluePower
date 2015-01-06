@@ -22,8 +22,8 @@ package com.bluepowermod.client.gui;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 
-import com.bluepowermod.containers.ContainerRelay;
-import com.bluepowermod.tileentities.tier1.TileRelay;
+import com.bluepowermod.container.ContainerRelay;
+import com.bluepowermod.tile.tier1.TileRelay;
 import com.bluepowermod.util.Refs;
 
 public class GuiRelay extends GuiBase {

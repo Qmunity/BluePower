@@ -29,26 +29,24 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.lwjgl.opengl.GL11;
 
-import com.bluepowermod.api.compat.IMultipartCompat;
+import uk.co.qmunity.lib.part.compat.MultipartCompatibility;
+import uk.co.qmunity.lib.vec.Vec3d;
+
 import com.bluepowermod.api.tube.IPneumaticTube;
 import com.bluepowermod.api.tube.ITubeConnection;
 import com.bluepowermod.api.tube.IWeightedTubeInventory;
-import com.bluepowermod.api.vec.Vector3;
-import com.bluepowermod.compat.CompatibilityUtils;
 import com.bluepowermod.helper.IOHelper;
-import com.bluepowermod.helper.TileEntityCache;
 import com.bluepowermod.init.Config;
 import com.bluepowermod.network.NetworkHandler;
-import com.bluepowermod.network.messages.MessageRedirectTubeStack;
-import com.bluepowermod.tileentities.IFuzzyRetrieving;
-import com.bluepowermod.tileentities.tier3.TileManager;
-import com.bluepowermod.util.Dependencies;
+import com.bluepowermod.network.message.MessageRedirectTubeStack;
+import com.bluepowermod.tile.IFuzzyRetrieving;
+import com.bluepowermod.tile.tier3.TileManager;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 /**
- * 
+ *
  * @author MineMaarten
  */
 
@@ -56,7 +54,7 @@ public class TubeLogic implements IPneumaticTube {
 
     private final PneumaticTube tube;
     private TubeNode connectionNode; // contains a cache of connected TileEntities (not necessarily directly adjacent, but nodes, intersections, or
-                                     // inventories). Also contains a colormask and distance.
+    // inventories). Also contains a colormask and distance.
     public List<TubeStack> tubeStacks = new ArrayList<TubeStack>();
     private int roundRobinCounter;
 
@@ -66,6 +64,7 @@ public class TubeLogic implements IPneumaticTube {
     }
 
     public void onClientTubeRedirectPacket(TubeStack stack) {
+
         for (TubeStack s : tubeStacks) {// Check if there's a stack that's awaiting server instructions that matches the sent stack.
             if (/* !s.enabled && */ItemStack.areItemStacksEqual(s.stack, stack.stack) && stack.color == s.color) {
                 tubeStacks.remove(s);
@@ -80,17 +79,15 @@ public class TubeLogic implements IPneumaticTube {
         List<PneumaticTube> clearedTubes = new ArrayList<PneumaticTube>();
         Stack<PneumaticTube> todoTubes = new Stack<PneumaticTube>();
 
-        IMultipartCompat compat = (IMultipartCompat) CompatibilityUtils.getModule(Dependencies.FMP);
-
         clearNodeCache();
         boolean firstRun = true;
         todoTubes.push(tube);
 
         while (!todoTubes.isEmpty()) {
             PneumaticTube tube = todoTubes.pop();
-            if (tube.getWorld() != null) {
-                for (TileEntityCache cache : tube.getTileCache()) {
-                    PneumaticTube neighbor = compat.getBPPart(cache.getTileEntity(), PneumaticTube.class);
+            if (tube.getParent() != null && tube.getWorld() != null) {
+                for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
+                    PneumaticTube neighbor = tube.getPartCache(d);
                     if (neighbor != null) {
                         if (!clearedTubes.contains(neighbor)) {
                             neighbor.getLogic().clearNodeCache();
@@ -146,7 +143,7 @@ public class TubeLogic implements IPneumaticTube {
                                 TubeEdge edge = getNode().edges[i];
                                 if (edge != null) {
                                     tubeStack.heading = ForgeDirection.getOrientation(i);// this will allow the item to ignore the color mask when
-                                                                                         // there's really no option left.
+                                    // there's really no option left.
                                     if (canPassThroughMask(tubeStack.color, edge.colorMask)) {
                                         tubeStack.heading = ForgeDirection.getOrientation(i);// just a specific direction for now.
                                         break;
@@ -162,9 +159,8 @@ public class TubeLogic implements IPneumaticTube {
                     }
                 }
             } else if (tubeStack.progress >= 1) {// when the item reached the end of the tube.
-                TileEntity output = tube.getTileCache()[tubeStack.heading.ordinal()].getTileEntity();
-                IMultipartCompat compat = (IMultipartCompat) CompatibilityUtils.getModule(Dependencies.FMP);
-                PneumaticTube tube = compat.getBPPart(output, PneumaticTube.class);
+                TileEntity output = tube.getTileCache(tubeStack.heading);
+                PneumaticTube tube = this.tube.getPartCache(tubeStack.heading);
                 if (tube != null) {// we don't need to check connections, that's catched earlier.
                     TubeLogic logic = tube.getLogic();
                     tubeStack.progress = 0;
@@ -191,8 +187,8 @@ public class TubeLogic implements IPneumaticTube {
                             this.tube.sendUpdatePacket();
                         } else {
                             EntityItem entity = new EntityItem(this.tube.getWorld(), this.tube.getX() + 0.5 + tubeStack.heading.offsetX
-                                    * tubeStack.progress * 0.5, this.tube.getY() + 0.5 + tubeStack.heading.offsetY * tubeStack.progress * 0.5,
-                                    this.tube.getZ() + 0.5 + tubeStack.heading.offsetX * tubeStack.progress * 0.5, remainder);
+                                    * tubeStack.progress * 0.5, this.tube.getY() + 0.5 + tubeStack.heading.offsetY * tubeStack.progress
+                                    * 0.5, this.tube.getZ() + 0.5 + tubeStack.heading.offsetX * tubeStack.progress * 0.5, remainder);
                             this.tube.getWorld().spawnEntityInWorld(entity);
                             iterator.remove();
                         }
@@ -232,13 +228,13 @@ public class TubeLogic implements IPneumaticTube {
 
         ItemStack extractedItem = null;
         if (result.getValue() instanceof TileManager) {// Exception for managers, the result can only end up as a manager if the pulling inventory was
-                                                       // a manager.
-            TileEntity managedInventory = ((TileManager) result.getValue()).getTileCache()[((TileManager) result.getValue()).getFacingDirection()
-                    .ordinal()].getTileEntity();
+            // a manager.
+            TileEntity managedInventory = ((TileManager) result.getValue()).getTileCache(((TileManager) result.getValue())
+                    .getFacingDirection());
             extractedItem = IOHelper.extract(managedInventory, result.getKey().getOpposite(), filter, false, false, fuzzySetting);
         } else if (filter != null) {
-            extractedItem = IOHelper.extract(result.getValue(), result.getKey().getOpposite(), filter, !(target instanceof TileManager), false,
-                    fuzzySetting);
+            extractedItem = IOHelper.extract(result.getValue(), result.getKey().getOpposite(), filter, !(target instanceof TileManager),
+                    false, fuzzySetting);
         } else {
             extractedItem = IOHelper.extract(result.getValue(), result.getKey().getOpposite(), false);
         }
@@ -248,10 +244,10 @@ public class TubeLogic implements IPneumaticTube {
         stack = new TubeStack(extractedItem, result.getKey().getOpposite(), color);
         stack.setTarget(target, dirToRetrieveInto);
 
-        IMultipartCompat compat = (IMultipartCompat) CompatibilityUtils.getModule(Dependencies.FMP);
-        TileEntity te = tube.getWorld().getTileEntity(result.getValue().xCoord - result.getKey().offsetX,
-                result.getValue().yCoord - result.getKey().offsetY, result.getValue().zCoord - result.getKey().offsetZ);
-        PneumaticTube tube = compat.getBPPart(te, PneumaticTube.class);
+        PneumaticTube tube = MultipartCompatibility
+                .getPart(this.tube.getWorld(), result.getValue().xCoord - result.getKey().offsetX,
+                        result.getValue().yCoord - result.getKey().offsetY, result.getValue().zCoord - result.getKey().offsetZ,
+                        PneumaticTube.class);
         if (tube == null)
             throw new IllegalArgumentException("wieeeeerd!");
         return tube.getLogic().injectStack(stack, result.getKey().getOpposite(), false);
@@ -261,7 +257,7 @@ public class TubeLogic implements IPneumaticTube {
      * This method gets the end target and heading for a TubeStack. When the tubestack's target variable is null, this is an exporting item, meaning
      * the returned target will be the TileEntity the item is going to transport to. When the tubestack's target variable is not not, the item is
      * being retrieved to this inventory. The returned target is the inventory the item came/should come from.
-     * 
+     *
      * @param simulate
      *            The only difference between simulate and not simulate is the fact that the round robin handling will be updated in non-simulate.
      * @param from
@@ -275,7 +271,7 @@ public class TubeLogic implements IPneumaticTube {
         Queue<TubeNode> traversingNodes = new LinkedBlockingQueue<TubeNode>();
         Queue<ForgeDirection> trackingExportDirection = new LinkedBlockingQueue<ForgeDirection>();
         Map<TubeEdge, ForgeDirection> validDestinations = new LinkedHashMap<TubeEdge, ForgeDirection>();// using a LinkedHashMap so the order doesn't
-                                                                                                        // change, used for round robin.
+        // change, used for round robin.
 
         if (getNode() != null) {
             distances.put(getNode(), 0);// make this the origin.
@@ -301,8 +297,8 @@ public class TubeLogic implements IPneumaticTube {
                             if (edge.target.target instanceof PneumaticTube) {
                                 traversingNodes.add(edge.target);
                                 trackingExportDirection.add(heading);
-                            } else if (stack.getTarget(tube.getWorld()) == null && edge.isValidForExportItem(stack.stack) || stack.heading == null
-                                    && edge.isValidForImportItem(stack) || stack.heading != null
+                            } else if (stack.getTarget(tube.getWorld()) == null && edge.isValidForExportItem(stack.stack)
+                                    || stack.heading == null && edge.isValidForImportItem(stack) || stack.heading != null
                                     && stack.getTarget(tube.getWorld()) == edge.target.target
                                     && edge.targetConnectionSide.getOpposite() == stack.getTargetEntryDir()) {
                                 validDestinations.put(edge, stack.heading == null ? edge.targetConnectionSide : heading);
@@ -359,7 +355,7 @@ public class TubeLogic implements IPneumaticTube {
 
     /**
      * Used to get an indication for when the search is done.
-     * 
+     *
      * @param validDestinations
      * @param distances
      * @return
@@ -423,7 +419,7 @@ public class TubeLogic implements IPneumaticTube {
     }
 
     @SideOnly(Side.CLIENT)
-    public void renderDynamic(Vector3 pos, float partialTick) {
+    public void renderDynamic(Vec3d pos, float partialTick) {
 
         GL11.glPushMatrix();
         GL11.glTranslated(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
@@ -457,10 +453,8 @@ public class TubeLogic implements IPneumaticTube {
             edges = new TubeEdge[6];
             for (int i = 0; i < 6; i++) {
                 if (tube.connections[i]) {
-                    TileEntity neighbor = nodeTube.getTileCache()[i].getTileEntity();
-
-                    IMultipartCompat compat = (IMultipartCompat) CompatibilityUtils.getModule(Dependencies.FMP);
-                    PneumaticTube tube = compat.getBPPart(neighbor, PneumaticTube.class);
+                    TileEntity neighbor = nodeTube.getTileCache(ForgeDirection.getOrientation(i));
+                    PneumaticTube tube = nodeTube.getPartCache(ForgeDirection.getOrientation(i));
 
                     int colorMask = nodeTube.getColor(ForgeDirection.getOrientation(i)) != TubeColor.NONE ? 1 << nodeTube.getColor(
                             ForgeDirection.getOrientation(i)).ordinal() : 0;
@@ -476,12 +470,12 @@ public class TubeLogic implements IPneumaticTube {
                                     break;
                                 }
                             }
-                            neighbor = tube.getTileCache()[curDir.ordinal()].getTileEntity();
+                            neighbor = tube.getTileCache(curDir);
                             if (neighbor != null) {
                                 if (tube.getColor(curDir) != TubeColor.NONE) {
                                     colorMask = colorMask | 1 << tube.getColor(curDir).ordinal();
                                 }
-                                tube = compat.getBPPart(neighbor, PneumaticTube.class);
+                                tube = tube.getPartCache(curDir);
                                 if (tube == null) {
                                     edges[i] = new TubeEdge(new TubeNode(neighbor), curDir, colorMask,
                                             dist
@@ -518,7 +512,8 @@ public class TubeLogic implements IPneumaticTube {
         private final ForgeDirection targetConnectionSide;
         public final int distance;
         public int colorMask; // bitmask of disallowed colored items through the tube. Least significant bit is TubeColor.values()[0]. only least
-                              // significant 16 bits are used
+
+        // significant 16 bits are used
 
         public TubeEdge(TubeNode target, ForgeDirection targetConnectionSide, int colorMask, int distance) {
 
@@ -532,7 +527,8 @@ public class TubeLogic implements IPneumaticTube {
 
             if (target.target instanceof PneumaticTube)
                 return false;
-            if (target.target instanceof IWeightedTubeInventory && ((IWeightedTubeInventory) target.target).getWeight(targetConnectionSide) > 10000)
+            if (target.target instanceof IWeightedTubeInventory
+                    && ((IWeightedTubeInventory) target.target).getWeight(targetConnectionSide) > 10000)
                 return true;
             ItemStack remainder = IOHelper.insert((TileEntity) target.target, stack.copy(), targetConnectionSide.getOpposite(), true);
             return remainder == null || remainder.stackSize < stack.stackSize;
@@ -554,7 +550,7 @@ public class TubeLogic implements IPneumaticTube {
                     if (pulledManager.filterColor != TubeColor.NONE && retrievingManager.filterColor != TubeColor.NONE
                             && retrievingManager.filterColor != pulledManager.filterColor)
                         return false;
-                    TileEntity managedInventory = pulledManager.getTileCache()[pulledManager.getFacingDirection().ordinal()].getTileEntity();
+                    TileEntity managedInventory = pulledManager.getTileCache(pulledManager.getFacingDirection());
                     return IOHelper.extract(managedInventory, pulledManager.getFacingDirection().getOpposite(), stack.stack, false, true) != null;
                 }
             }

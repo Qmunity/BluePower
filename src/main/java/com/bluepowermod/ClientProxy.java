@@ -24,12 +24,16 @@ import net.minecraftforge.common.MinecraftForge;
 
 import org.lwjgl.input.Keyboard;
 
-import com.bluepowermod.client.renderers.IconSupplier;
-import com.bluepowermod.client.renderers.Renderers;
+import com.bluepowermod.client.render.IconSupplier;
+import com.bluepowermod.client.render.Renderers;
 import com.bluepowermod.compat.CompatibilityUtils;
+import com.bluepowermod.part.PartManager;
 
 import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public class ClientProxy extends CommonProxy {
 
     @Override
@@ -41,6 +45,7 @@ public class ClientProxy extends CommonProxy {
     public void initRenderers() {
 
         MinecraftForge.EVENT_BUS.register(new IconSupplier());
+        PartManager.registerRenderers();
         Renderers.init();
 
         CompatibilityUtils.registerRenders();

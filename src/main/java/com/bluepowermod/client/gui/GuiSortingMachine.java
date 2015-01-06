@@ -28,12 +28,12 @@ import com.bluepowermod.client.gui.widget.IGuiWidget;
 import com.bluepowermod.client.gui.widget.WidgetColor;
 import com.bluepowermod.client.gui.widget.WidgetFuzzySetting;
 import com.bluepowermod.client.gui.widget.WidgetMode;
-import com.bluepowermod.containers.ContainerSortingMachine;
+import com.bluepowermod.container.ContainerSortingMachine;
 import com.bluepowermod.network.NetworkHandler;
-import com.bluepowermod.network.messages.MessageGuiUpdate;
-import com.bluepowermod.tileentities.tier2.TileSortingMachine;
-import com.bluepowermod.tileentities.tier2.TileSortingMachine.PullMode;
-import com.bluepowermod.tileentities.tier2.TileSortingMachine.SortMode;
+import com.bluepowermod.network.message.MessageGuiUpdate;
+import com.bluepowermod.tile.tier2.TileSortingMachine;
+import com.bluepowermod.tile.tier2.TileSortingMachine.PullMode;
+import com.bluepowermod.tile.tier2.TileSortingMachine.SortMode;
 import com.bluepowermod.util.Refs;
 
 /**

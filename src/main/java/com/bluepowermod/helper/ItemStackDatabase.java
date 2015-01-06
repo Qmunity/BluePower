@@ -29,49 +29,49 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.GameRegistry.UniqueIdentifier;
 
 public class ItemStackDatabase {
-    
-    private static final String FILE_EXTENSION       = ".cdf";
+
+    private static final String FILE_EXTENSION = ".cdf";
     private static final String DATABASE_FOLDER_NAME = "bluepower\\circuitDatabase\\";
-    private final String        saveLocation;
-    private List<ItemStack>     cache;
-    
+    private final String saveLocation;
+    private List<ItemStack> cache;
+
     public ItemStackDatabase() {
-    
+
         saveLocation = BluePower.proxy.getSavePath() + "\\" + DATABASE_FOLDER_NAME;
     }
-    
+
     public void saveItemStack(ItemStack stack) {
-    
+
         new File(saveLocation).mkdirs();
         File targetLocation = new File(saveLocation + stack.getDisplayName() + FILE_EXTENSION);
-        
+
         NBTTagCompound tag = new NBTTagCompound();
         stack.writeToNBT(tag);
-        
+
         UniqueIdentifier ui = GameRegistry.findUniqueIdentifierFor(stack.getItem());
         tag.setString("owner", ui.modId);
         tag.setString("name", ui.name);
-        
+
         try {
             FileOutputStream fos = new FileOutputStream(targetLocation);
             DataOutputStream dos = new DataOutputStream(fos);
-            
+
             byte[] abyte = CompressedStreamTools.compress(tag);
             dos.writeShort((short) abyte.length);
             dos.write(abyte);
-            
+
             dos.close();
-            
+
         } catch (IOException e) {
             BluePower.log.error("IOException when trying to save an ItemStack in the database: " + e);
         }
         cache = null;
     }
-    
+
     public void deleteStack(ItemStack deletingStack) {
-    
+
         File targetLocation = new File(saveLocation);
-        
+
         if (targetLocation.exists()) {
             File[] files = targetLocation.listFiles();
             for (File file : files) {
@@ -83,12 +83,12 @@ public class ItemStackDatabase {
             }
         }
     }
-    
+
     public List<ItemStack> loadItemStacks() {
-    
+
         if (cache == null) {
             File targetLocation = new File(saveLocation);
-            
+
             List<ItemStack> stacks = new ArrayList<ItemStack>();
             if (targetLocation.exists()) {
                 File[] files = targetLocation.listFiles();
@@ -96,7 +96,7 @@ public class ItemStackDatabase {
                     try {
                         FileInputStream fos = new FileInputStream(file);
                         DataInputStream dos = new DataInputStream(fos);
-                        
+
                         short short1 = dos.readShort();
                         byte[] abyte = new byte[short1];
                         dos.read(abyte);
@@ -114,14 +114,16 @@ public class ItemStackDatabase {
                                     backupStack.setTagCompound(stack.getTagCompound());
                                 }
                                 stacks.add(backupStack);
-                                BluePower.log.info("Successfully retrieved stack via its name: " + tag.getString("owner") + ":" + tag.getString("name"));
+                                BluePower.log.info("Successfully retrieved stack via its name: " + tag.getString("owner") + ":"
+                                        + tag.getString("name"));
                             } else {
-                                BluePower.log.error("Couldn't retrieve the item via its name: " + tag.getString("owner") + ":" + tag.getString("name"));
+                                BluePower.log.error("Couldn't retrieve the item via its name: " + tag.getString("owner") + ":"
+                                        + tag.getString("name"));
                             }
                         }
                         dos.close();
                     } catch (IOException e) {
-                        System.out.println("Exception : " + e);
+                        BluePower.log.error("Exception : " + e);
                     }
                 }
             }
@@ -129,5 +131,5 @@ public class ItemStackDatabase {
         }
         return cache;
     }
-    
+
 }

@@ -9,33 +9,34 @@ package com.bluepowermod.helper;
 
 import java.util.Random;
 
+import uk.co.qmunity.lib.part.IPart;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
-import com.bluepowermod.api.part.BPPart;
 import com.bluepowermod.network.NetworkHandler;
-import com.bluepowermod.network.messages.MessageDebugBlock;
+import com.bluepowermod.network.message.MessageDebugBlock;
 
 /**
  * Class aimed for debugging purposes only
+ * 
  * @author MineMaarten
  */
 public class Debugger {
-    
+
     private static Random rand = new Random();
-    
+
     public static void indicateBlock(TileEntity te) {
-    
+
         indicateBlock(te.getWorldObj(), te.xCoord, te.yCoord, te.zCoord);
     }
-    
-    public static void indicateBlock(BPPart part) {
-    
+
+    public static void indicateBlock(IPart part) {
+
         indicateBlock(part.getWorld(), part.getX(), part.getY(), part.getZ());
     }
-    
+
     public static void indicateBlock(World world, int x, int y, int z) {
-    
+
         if (world != null) {
             if (world.isRemote) {
                 for (int i = 0; i < 5; i++) {

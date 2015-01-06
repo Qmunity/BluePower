@@ -1,149 +1,163 @@
 /*
- * This file is part of Blue Power. Blue Power is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
- * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version. Blue Power is
- * distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
- * PARTICULAR PURPOSE. See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along
- * with Blue Power. If not, see <http://www.gnu.org/licenses/>
+ * This file is part of Blue Power.
+ *
+ *     Blue Power is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     Blue Power is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with Blue Power.  If not, see <http://www.gnu.org/licenses/>
  */
+
 package com.bluepowermod.part.gate;
 
-import java.util.List;
-
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.IIcon;
 
 import org.lwjgl.opengl.GL11;
 
-import com.bluepowermod.api.part.FaceDirection;
-import com.bluepowermod.api.part.RedstoneConnection;
-import com.bluepowermod.client.renderers.RenderHelper;
+import com.bluepowermod.client.render.RenderHelper;
 import com.bluepowermod.util.Refs;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * @author MineMaarten
  */
 public class GateTransparentLatch extends GateBase {
-    
+
     private boolean mirrored;
-    
+    private IIcon mirroredTopIcon;
+
     @Override
-    public void initializeConnections(RedstoneConnection front, RedstoneConnection left, RedstoneConnection back, RedstoneConnection right) {
-    
-        // Init front
-        front.enable();
-        front.setOutput();
-        
-        // Init left
-        left.enable();
-        left.setInput();
-        
-        // Init back
-        back.enable();
-        back.setInput();
-        
-        // Init right
-        right.enable();
-        right.setOutput();
+    public void initializeConnections() {
+
+        front().enable().setOutputOnly();
+        left().enable();
+        back().enable();
+        right().enable().setOutputOnly();
     }
-    
+
     @Override
-    public String getGateID() {
-    
+    public String getId() {
+
         return "transparent";
     }
-    
+
     @Override
+    @SideOnly(Side.CLIENT)
+    public void registerIcons(IIconRegister reg) {
+
+        super.registerIcons(reg);
+        mirroredTopIcon = reg.registerIcon(Refs.MODID + ":gates/" + getTextureName() + "/base_mirrored");
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public IIcon getTopIcon() {
+
+        return mirrored ? mirroredTopIcon : super.getTopIcon();
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
     public void renderTop(float frame) {
-    
+
         if (mirrored) {
             GL11.glPushMatrix();
             GL11.glTranslated(0.5, 0, 0.5);
             GL11.glScaled(-1, 1, 1);
             GL11.glTranslated(-0.5, 0, -0.5);
-            
+
             GL11.glDisable(GL11.GL_CULL_FACE);
         }
-        super.renderTop(frame);
+
+        renderTop("front", front());
+        renderTop("left", mirrored ? right() : left());
+        renderTop("back", back());
+        renderTop("leftcenter", back().getInput() == 0);
+        RenderHelper.renderDigitalRedstoneTorch(4 / 16D, 3D / 16D, -4 / 16D, 8D / 16D, back().getInput() == 0);
+        RenderHelper.renderDigitalRedstoneTorch(4 / 16D, 3D / 16D, 1 / 16D, 8D / 16D, back().getInput() > 0 && front().getInput() == 0);
+        RenderHelper.renderDigitalRedstoneTorch(1 / 16D, 3D / 16D, 1 / 16D, 8D / 16D, back().getInput() == 0 && front().getInput() == 0);
+        RenderHelper.renderDigitalRedstoneTorch(-4 / 16D, 2D / 16D, 1 / 16D, 10D / 16D, front().getInput() > 0);
+        RenderHelper.renderDigitalRedstoneTorch(2 / 16D, 2D / 16D, 6 / 16D, 10D / 16D, front().getInput() > 0);
+        renderTop("right", mirrored ? left() : right());
+
         if (mirrored) {
             GL11.glEnable(GL11.GL_CULL_FACE);
             GL11.glPopMatrix();
         }
     }
-    
+
     @Override
-    public void renderTop(RedstoneConnection front, RedstoneConnection left, RedstoneConnection back, RedstoneConnection right, float frame) {
-    
-        renderTopTexture(FaceDirection.FRONT, front);
-        renderTopTexture(FaceDirection.LEFT, mirrored ? right : left);
-        renderTopTexture(FaceDirection.BACK, back);
-        renderTopTexture(Refs.MODID + ":textures/blocks/gates/transparent/leftcenter_" + (back.getPower() == 0 ? "on" : "off") + ".png");
-        RenderHelper.renderRedstoneTorch(-4 / 16D, 1D / 8D, 4 / 16D, 8D / 16D, back.getPower() == 0);
-        RenderHelper.renderRedstoneTorch(-4 / 16D, 1D / 8D, -1 / 16D, 8D / 16D, back.getPower() > 0 && front.getPower() == 0);
-        RenderHelper.renderRedstoneTorch(-1 / 16D, 1D / 8D, -1 / 16D, 8D / 16D, back.getPower() == 0 && front.getPower() == 0);
-        RenderHelper.renderRedstoneTorch(4 / 16D, 2D / 16D, -1 / 16D, 10D / 16D, front.getPower() > 0);
-        RenderHelper.renderRedstoneTorch(-2 / 16D, 2D / 16D, -6 / 16D, 10D / 16D, front.getPower() > 0);
-        renderTopTexture(FaceDirection.RIGHT, mirrored ? left : right);
-    }
-    
-    @Override
-    public void addOcclusionBoxes(List<AxisAlignedBB> boxes) {
-    
-        super.addOcclusionBoxes(boxes);
-        
-        boxes.add(AxisAlignedBB.getBoundingBox(7D / 16D, 2D / 16D, 7D / 16D, 9D / 16D, 9D / 16D, 9D / 16D));
-    }
-    
-    @Override
-    public void doLogic(RedstoneConnection front, RedstoneConnection left, RedstoneConnection back, RedstoneConnection right) {
-    
-        if (back.getPower() > 0) {
-            front.setPower(mirrored ? right.getPower() : left.getPower());
+    public void doLogic() {
+
+        if (back().getInput() > 0) {
+            front().setOutput(mirrored ? right().getInput() : left().getInput());
             if (mirrored) {
-                left.setPower(right.getPower());
+                left().setOutput(right().getInput());
             } else {
-                right.setPower(left.getPower());
+                right().setOutput(left().getInput());
             }
         }
     }
-    
+
     @Override
-    protected boolean changeMode(RedstoneConnection front, RedstoneConnection left, RedstoneConnection back, RedstoneConnection right) {
-    
+    protected boolean changeMode() {
+
         mirrored = !mirrored;
         if (mirrored) {
-            left.setOutput();
-            right.setInput();
+            left().setOutputOnly();
+            right().setBidirectional();
         } else {
-            left.setInput();
-            right.setOutput();
+            left().setBidirectional();
+            right().setOutputOnly();
         }
+        sendUpdatePacket();
         return true;
     }
-    
+
     @Override
-    public void save(NBTTagCompound tag) {
-    
-        super.save(tag);
+    public void writeToNBT(NBTTagCompound tag) {
+
+        writeUpdateToNBT(tag);
+    }
+
+    @Override
+    public void writeUpdateToNBT(NBTTagCompound tag) {
+
+        super.writeUpdateToNBT(tag);
         tag.setBoolean("mirrored", mirrored);
     }
-    
+
     @Override
-    public void load(NBTTagCompound tag) {
-    
-        super.load(tag);
+    public void readFromNBT(NBTTagCompound tag) {
+
+        readUpdateFromNBT(tag);
+    }
+
+    @Override
+    public void readUpdateFromNBT(NBTTagCompound tag) {
+
+        super.readUpdateFromNBT(tag);
         mirrored = tag.getBoolean("mirrored");
         if (mirrored) {
-            getConnection(FaceDirection.LEFT).setOutput();
-            getConnection(FaceDirection.RIGHT).setInput();
+            left().setOutputOnly();
+            right().setBidirectional();
         } else {
-            getConnection(FaceDirection.LEFT).setInput();
-            getConnection(FaceDirection.RIGHT).setOutput();
+            left().setBidirectional();
+            right().setOutputOnly();
         }
+        if (getParent() != null && getWorld() != null && getWorld().isRemote)
+            getWorld().markBlockRangeForRenderUpdate(getX(), getY(), getZ(), getX(), getY(), getZ());
     }
-    
-    @Override
-    public void addWailaInfo(List<String> info) {
-    
-    }
-    
+
 }

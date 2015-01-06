@@ -23,7 +23,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
-import com.bluepowermod.containers.ContainerSeedBag;
+import com.bluepowermod.container.ContainerSeedBag;
 import com.bluepowermod.util.Refs;
 
 public class GuiSeedBag extends GuiBase {

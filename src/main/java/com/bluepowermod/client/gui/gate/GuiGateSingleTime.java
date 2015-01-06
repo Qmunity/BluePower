@@ -14,16 +14,20 @@ import net.minecraft.util.ResourceLocation;
 import com.bluepowermod.part.gate.GateBase;
 import com.bluepowermod.util.Refs;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 /**
- * 
+ *
  * @author MineMaarten
  */
 
+@SideOnly(Side.CLIENT)
 public abstract class GuiGateSingleTime extends GuiGate {
 
-    private static final ResourceLocation resLoc        = new ResourceLocation(Refs.MODID, "textures/gui/gate.png");
-    private static final String[]         buttonTexts   = { "-10s", "-1s", "-50ms", "+50ms", "+1s", "+10s" };
-    private static final int[]            buttonActions = { -200, -20, -1, 1, 20, 200 };
+    private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/gate.png");
+    private static final String[] buttonTexts = { "-10s", "-1s", "-50ms", "+50ms", "+1s", "+10s" };
+    private static final int[] buttonActions = { -200, -20, -1, 1, 20, 200 };
 
     public GuiGateSingleTime(GateBase gate) {
 
@@ -45,7 +49,8 @@ public abstract class GuiGateSingleTime extends GuiGate {
     public void actionPerformed(GuiButton button) {
 
         int newTimerValue = getCurrentIntervalTicks() + buttonActions[button.id];
-        if (newTimerValue <= 1) newTimerValue = 2;
+        if (newTimerValue <= 1)
+            newTimerValue = 2;
         sendToServer(0, newTimerValue);
     }
 
@@ -56,10 +61,10 @@ public abstract class GuiGateSingleTime extends GuiGate {
     }
 
     @Override
-    public void drawScreen(int x, int y, float partialTicks) {
+    public void renderGUI(int x, int y, float partialTicks) {
 
-        super.drawScreen(x, y, partialTicks);
-        drawCenteredString(fontRendererObj, I18n.format("gui.timerInterval") + ": " + getTimerValue(getCurrentIntervalTicks()), guiLeft + xSize / 2, guiTop + 10, 0xFFFFFF);
+        drawCenteredString(fontRendererObj, I18n.format("gui.timerInterval") + ": " + getTimerValue(getCurrentIntervalTicks()), guiLeft
+                + xSize / 2, guiTop + 10, 0xFFFFFF);
     }
 
     private String getTimerValue(int ticks) {

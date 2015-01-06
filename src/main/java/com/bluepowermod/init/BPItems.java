@@ -25,27 +25,26 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 
 import com.bluepowermod.BluePower;
-import com.bluepowermod.items.ItemAthame;
-import com.bluepowermod.items.ItemBase;
-import com.bluepowermod.items.ItemCanvasBag;
-import com.bluepowermod.items.ItemCrafting;
-import com.bluepowermod.items.ItemCropSeed;
-import com.bluepowermod.items.ItemGemAxe;
-import com.bluepowermod.items.ItemGemHoe;
-import com.bluepowermod.items.ItemGemPickaxe;
-import com.bluepowermod.items.ItemGemSpade;
-import com.bluepowermod.items.ItemGemSword;
-import com.bluepowermod.items.ItemIndigoDye;
-import com.bluepowermod.items.ItemLimitedCrafting;
-import com.bluepowermod.items.ItemLumar;
-import com.bluepowermod.items.ItemPaintBrush;
-import com.bluepowermod.items.ItemPaintCan;
-import com.bluepowermod.items.ItemPartLegacy;
-import com.bluepowermod.items.ItemSaw;
-import com.bluepowermod.items.ItemScrewdriver;
-import com.bluepowermod.items.ItemSeedBag;
-import com.bluepowermod.items.ItemSickle;
-import com.bluepowermod.items.ItemSilkyScrewdriver;
+import com.bluepowermod.item.ItemAthame;
+import com.bluepowermod.item.ItemBase;
+import com.bluepowermod.item.ItemCanvasBag;
+import com.bluepowermod.item.ItemCrafting;
+import com.bluepowermod.item.ItemCropSeed;
+import com.bluepowermod.item.ItemGemAxe;
+import com.bluepowermod.item.ItemGemHoe;
+import com.bluepowermod.item.ItemGemPickaxe;
+import com.bluepowermod.item.ItemGemSpade;
+import com.bluepowermod.item.ItemGemSword;
+import com.bluepowermod.item.ItemIndigoDye;
+import com.bluepowermod.item.ItemLimitedCrafting;
+import com.bluepowermod.item.ItemLumar;
+import com.bluepowermod.item.ItemPaintBrush;
+import com.bluepowermod.item.ItemPaintCan;
+import com.bluepowermod.item.ItemSaw;
+import com.bluepowermod.item.ItemScrewdriver;
+import com.bluepowermod.item.ItemSeedBag;
+import com.bluepowermod.item.ItemSickle;
+import com.bluepowermod.item.ItemSilkyScrewdriver;
 import com.bluepowermod.util.Dependencies;
 import com.bluepowermod.util.Refs;
 
@@ -65,45 +64,52 @@ public class BPItems {
     public static final Item brass_ingot = new ItemCrafting(Refs.BRASSINGOT_NAME);
     public static final Item blue_alloy_ingot = new ItemCrafting(Refs.BLUEALLOYINGOT_NAME);
     public static final Item red_alloy_ingot = new ItemCrafting(Refs.REDALLOYINGOT_NAME);
+    public static final Item purple_alloy_ingot = new ItemCrafting(Refs.PURPLEALLOYINGOT_NAME);
     public static final Item tungsten_ingot = new ItemCrafting(Refs.TUNGSTENINGOT_NAME);
     public static final Item tungsten_nugget = new ItemCrafting(Refs.TUNGSTENNUGGET_NAME);
     public static final Item zinc_ore_crushed = new ItemBase().setUnlocalizedName(Refs.ZINC_ORE_CRUSHED_NAME)
-            .setTextureName(Refs.MODID + ":" + Refs.ZINC_ORE_CRUSHED_NAME).setCreativeTab(CustomTabs.tabBluePowerItems);
+            .setTextureName(Refs.MODID + ":" + Refs.ZINC_ORE_CRUSHED_NAME).setCreativeTab(BPCreativeTabs.items);
     public static final Item zinc_ore_purified = new ItemBase().setUnlocalizedName(Refs.ZINC_ORE_CRUSHED_PURIFIED_NAME)
-            .setTextureName(Refs.MODID + ":" + Refs.ZINC_ORE_CRUSHED_PURIFIED_NAME).setCreativeTab(CustomTabs.tabBluePowerItems);
-    public static final Item zinc_dust = new ItemBase().setUnlocalizedName(Refs.ZINCDUST_NAME).setTextureName(Refs.MODID + ":" + Refs.ZINCDUST_NAME)
-            .setCreativeTab(CustomTabs.tabBluePowerItems);
+            .setTextureName(Refs.MODID + ":" + Refs.ZINC_ORE_CRUSHED_PURIFIED_NAME).setCreativeTab(BPCreativeTabs.items);
+    public static final Item zinc_dust = new ItemBase().setUnlocalizedName(Refs.ZINCDUST_NAME)
+            .setTextureName(Refs.MODID + ":" + Refs.ZINCDUST_NAME).setCreativeTab(BPCreativeTabs.items);
     public static final Item zinc_tiny_dust = new ItemBase().setUnlocalizedName(Refs.ZINCDUST_TINY_NAME)
-            .setTextureName(Refs.MODID + ":" + Refs.ZINCDUST_TINY_NAME).setCreativeTab(CustomTabs.tabBluePowerItems);
+            .setTextureName(Refs.MODID + ":" + Refs.ZINCDUST_TINY_NAME).setCreativeTab(BPCreativeTabs.items);
     public static final Item ruby_saw = new ItemSaw(2, Refs.RUBYSAW_NAME);
     public static final Item sapphire_saw = new ItemSaw(2, Refs.SAPPHIRESAW_NAME);
     public static final Item amethyst_saw = new ItemSaw(2, Refs.AMETHYSTSAW_NAME);
     public static final Item wood_sickle = new ItemSickle(ToolMaterial.WOOD, Refs.WOODSICKLE_NAME, Item.getItemFromBlock(Blocks.planks));
-    public static final Item stone_sickle = new ItemSickle(ToolMaterial.STONE, Refs.STONESICKLE_NAME, Item.getItemFromBlock(Blocks.cobblestone));
+    public static final Item stone_sickle = new ItemSickle(ToolMaterial.STONE, Refs.STONESICKLE_NAME,
+            Item.getItemFromBlock(Blocks.cobblestone));
     public static final Item iron_sickle = new ItemSickle(ToolMaterial.IRON, Refs.IRONSICKLE_NAME, Items.iron_ingot);
     public static final Item gold_sickle = new ItemSickle(ToolMaterial.GOLD, Refs.GOLDSICKLE_NAME, Items.gold_ingot);
     public static final Item diamond_sickle = new ItemSickle(ToolMaterial.EMERALD, Refs.DIAMONDSICKLE_NAME, Items.diamond);
     public static final Item flax_seeds = new ItemCropSeed(BPBlocks.flax_crop, Blocks.farmland).setUnlocalizedName(Refs.FLAXSEED_NAME);
     public static final Item indigo_dye = new ItemIndigoDye(Refs.INDIGODYE_NAME);
-    public static final Item silicon_boule = new ItemCrafting(Refs.SILICONBOULE_NAME).setCreativeTab(CustomTabs.tabBluePowerItems);
-    public static final Item silicon_wafer = new ItemCrafting(Refs.SILICONWAFER_NAME).setCreativeTab(CustomTabs.tabBluePowerItems);
-    public static final Item red_doped_wafer = new ItemCrafting(Refs.REDDOPEDWAFER_NAME).setCreativeTab(CustomTabs.tabBluePowerItems);
-    public static final Item blue_doped_wafer = new ItemCrafting(Refs.BLUEDOPEDWAFER_NAME).setCreativeTab(CustomTabs.tabBluePowerItems);
+    public static final Item silicon_boule = new ItemCrafting(Refs.SILICONBOULE_NAME).setCreativeTab(BPCreativeTabs.items);
+    public static final Item silicon_wafer = new ItemCrafting(Refs.SILICONWAFER_NAME).setCreativeTab(BPCreativeTabs.items);
+    public static final Item red_doped_wafer = new ItemCrafting(Refs.REDDOPEDWAFER_NAME).setCreativeTab(BPCreativeTabs.items);
+    public static final Item blue_doped_wafer = new ItemCrafting(Refs.BLUEDOPEDWAFER_NAME).setCreativeTab(BPCreativeTabs.items);
     public static final Item infused_teslatite_dust = new ItemCrafting(Refs.INFUSEDTESLATITEDUST_NAME);
     public static final Item screwdriver = new ItemScrewdriver();
     public static final Item silky_screwdriver = new ItemSilkyScrewdriver();
     public static final Item athame = new ItemAthame();
     public static final Item zincplate = new ItemCrafting(Refs.ZINCPLATE_NAME);
     public static final Item stone_tile = new ItemCrafting(Refs.STONETILE_NAME);
-    public static final Item stone_wire = new ItemCrafting(Refs.STONEWIRE_NAME);
-    public static final Item stone_anode = new ItemCrafting(Refs.STONEANODE_NAME);
-    public static final Item stone_cathode = new ItemCrafting(Refs.STONECATHODE_NAME);
-    public static final Item stone_pointer = new ItemCrafting(Refs.STONEPOINTER_NAME);
-    public static final Item silicon_chip = new ItemCrafting(Refs.SILICONCHIP_NAME);
-    public static final Item taintedsilicon_chip = new ItemCrafting(Refs.TAINTEDSILICONCHIP_NAME);
+    public static final Item bluestone_wire_tile = new ItemCrafting(Refs.BLUESTONEWIRETILE_NAME);
+    public static final Item bluestone_anode_tile = new ItemCrafting(Refs.BLUESTONEANODETILE_NAME);
+    public static final Item bluestone_cathode_tile = new ItemCrafting(Refs.BLUESTONECATHODE_NAME);
+    public static final Item bluestone_pointer_tile = new ItemCrafting(Refs.BLUESTONEPOINTER_NAME);
+    public static final Item silicon_chip_tile = new ItemCrafting(Refs.SILICONCHIP_NAME);
+    public static final Item taintedsilicon_chip_tile = new ItemCrafting(Refs.TAINTEDSILICONCHIP_NAME);
+    public static final Item quartz_resonator_tile = new ItemCrafting(Refs.QUARTZRESONATOR_NAME);
+    public static final Item redstone_wire_tile = new ItemCrafting(Refs.REDSTONEWIRETILE_NAME);
+    public static final Item redstone_anode_tile = new ItemCrafting(Refs.REDSTONEANODETILE_NAME);
+    public static final Item redstone_cathode_tile = new ItemCrafting(Refs.REDSTONECATHODE_NAME);
+    public static final Item redstone_pointer_tile = new ItemCrafting(Refs.REDSTONEPOINTER_NAME);
     // public static final Item stone_redwire = new ItemCrafting(Refs.STONEREDWIRE_NAME);
     // public static final Item plate_assembly = new ItemCrafting(Refs.PLATEASSEMBLY_NAME);
-    public static final Item stone_bundle = new ItemCrafting(Refs.STONEBUNDLE_NAME);
+    public static final Item stone_bundle_tile = new ItemCrafting(Refs.STONEBUNDLE_NAME);
     public static final Item screwdriver_handle = new ItemCrafting(Refs.SCREWDRIVERHANDLE_NAME);
     public static final Item seed_bag = new ItemSeedBag(Refs.SEEDBAG_NAME);
     public static final Item canvas_bag = new ItemCanvasBag(Refs.CANVASBAG_NAME);
@@ -117,7 +123,6 @@ public class BPItems {
     public static final Item paint_brush = new ItemPaintBrush(Refs.PAINTBRUSH_NAME);
     public static Item iron_saw;
     public static Item diamond_saw;
-    public static final Item bluepower_multipart = new ItemPartLegacy();
     public static final Item ruby_axe = new ItemGemAxe(BluePower.gemMaterial, Refs.RUBYAXE_NAME, BPItems.ruby_gem);
     public static final Item ruby_sword = new ItemGemSword(BluePower.gemMaterial, Refs.RUBYSWORD_NAME, BPItems.ruby_gem);
     public static final Item ruby_pickaxe = new ItemGemPickaxe(BluePower.gemMaterial, Refs.RUBYPICKAXE_NAME, BPItems.ruby_gem);
@@ -160,6 +165,7 @@ public class BPItems {
         GameRegistry.registerItem(brass_ingot, Refs.BRASSINGOT_NAME);
         GameRegistry.registerItem(blue_alloy_ingot, Refs.BLUEALLOYINGOT_NAME);
         GameRegistry.registerItem(red_alloy_ingot, Refs.REDALLOYINGOT_NAME);
+        GameRegistry.registerItem(purple_alloy_ingot, Refs.PURPLEALLOYINGOT_NAME);
 
         GameRegistry.registerItem(zinc_dust, Refs.ZINCDUST_NAME);
         GameRegistry.registerItem(zinc_ore_crushed, Refs.ZINC_ORE_CRUSHED_NAME);
@@ -215,15 +221,20 @@ public class BPItems {
         GameRegistry.registerItem(infused_teslatite_dust, Refs.INFUSEDTESLATITEDUST_NAME);
 
         GameRegistry.registerItem(stone_tile, Refs.STONETILE_NAME);
-        GameRegistry.registerItem(stone_wire, Refs.STONEWIRE_NAME);
-        GameRegistry.registerItem(stone_anode, Refs.STONEANODE_NAME);
-        GameRegistry.registerItem(stone_cathode, Refs.STONECATHODE_NAME);
-        GameRegistry.registerItem(stone_pointer, Refs.STONEPOINTER_NAME);
-        GameRegistry.registerItem(silicon_chip, Refs.SILICONCHIP_NAME);
-        GameRegistry.registerItem(taintedsilicon_chip, Refs.TAINTEDSILICONCHIP_NAME);
+        GameRegistry.registerItem(bluestone_wire_tile, Refs.BLUESTONEWIRETILE_NAME);
+        GameRegistry.registerItem(bluestone_anode_tile, Refs.BLUESTONEANODETILE_NAME);
+        GameRegistry.registerItem(bluestone_cathode_tile, Refs.BLUESTONECATHODE_NAME);
+        GameRegistry.registerItem(bluestone_pointer_tile, Refs.BLUESTONEPOINTER_NAME);
+        GameRegistry.registerItem(silicon_chip_tile, Refs.SILICONCHIP_NAME);
+        GameRegistry.registerItem(taintedsilicon_chip_tile, Refs.TAINTEDSILICONCHIP_NAME);
+        GameRegistry.registerItem(quartz_resonator_tile, Refs.QUARTZRESONATOR_NAME);
+        GameRegistry.registerItem(redstone_wire_tile, Refs.REDSTONEWIRETILE_NAME);
+        GameRegistry.registerItem(redstone_anode_tile, Refs.REDSTONEANODETILE_NAME);
+        GameRegistry.registerItem(redstone_cathode_tile, Refs.REDSTONECATHODE_NAME);
+        GameRegistry.registerItem(redstone_pointer_tile, Refs.REDSTONEPOINTER_NAME);
         // GameRegistry.registerItem(stone_redwire, Refs.STONEREDWIRE_NAME);
         // GameRegistry.registerItem(plate_assembly, Refs.PLATEASSEMBLY_NAME);
-        GameRegistry.registerItem(stone_bundle, Refs.STONEBUNDLE_NAME);
+        GameRegistry.registerItem(stone_bundle_tile, Refs.STONEBUNDLE_NAME);
         GameRegistry.registerItem(screwdriver_handle, Refs.SCREWDRIVERHANDLE_NAME);
         GameRegistry.registerItem(seed_bag, Refs.SEEDBAG_NAME);
         GameRegistry.registerItem(canvas_bag, Refs.CANVASBAG_NAME);
@@ -237,8 +248,6 @@ public class BPItems {
 
         GameRegistry.registerItem(copper_wire, Refs.COPPERWIRE_NAME);
         GameRegistry.registerItem(iron_wire, Refs.IRONWIRE_NAME);
-
-        GameRegistry.registerItem(bluepower_multipart, Refs.MULTIPART_NAME);
 
         MinecraftForge.addGrassSeed(new ItemStack(flax_seeds), 5);
     }

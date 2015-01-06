@@ -9,56 +9,23 @@ package com.bluepowermod.helper;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
 
 /**
  * 
  * @author MineMaarten
  */
 
-public class TileEntityCache {
-
-    private TileEntity te;
-    private final World world;
-    private final int x, y, z;
+public class TileEntityCache extends LocationCache<TileEntity> {
 
     public TileEntityCache(World world, int x, int y, int z) {
 
-        if (world == null)
-            throw new NullPointerException("World can't be null!");
-        this.world = world;
-        this.x = x;
-        this.y = y;
-        this.z = z;
-        update();
+        super(world, x, y, z);
     }
 
-    public void update() {
+    @Override
+    protected TileEntity getNewValue(World world, int x, int y, int z, Object... extraArgs) {
 
-        te = world.getTileEntity(x, y, z);
-    }
-
-    public TileEntity getTileEntity() {
-        if (isOnChunkBoundary(x, z)) {//hack to prevent item loss through dummy TE's.
-            update();
-        }
-        return te;
-    }
-
-    private static boolean isOnChunkBoundary(int x, int z) {
-        x = x & 15;
-        z = z & 15;
-        return x == 0 || x == 15 || z == 0 || z == 15;
-    }
-
-    public static TileEntityCache[] getDefaultCache(World world, int x, int y, int z) {
-
-        TileEntityCache[] cache = new TileEntityCache[6];
-        for (int i = 0; i < 6; i++) {
-            ForgeDirection d = ForgeDirection.getOrientation(i);
-            cache[i] = new TileEntityCache(world, x + d.offsetX, y + d.offsetY, z + d.offsetZ);
-        }
-        return cache;
+        return world.getTileEntity(x, y, z);
     }
 
 }

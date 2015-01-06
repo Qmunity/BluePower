@@ -7,75 +7,84 @@
  */
 package com.bluepowermod.part.gate;
 
-import java.util.List;
+import com.bluepowermod.client.render.RenderHelper;
 
-import net.minecraft.util.AxisAlignedBB;
-
-import com.bluepowermod.api.part.FaceDirection;
-import com.bluepowermod.api.part.RedstoneConnection;
-import com.bluepowermod.client.renderers.RenderHelper;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class GateNot extends GateBase {
-    
+
     private boolean power = false;
-    
+
     @Override
-    public void initializeConnections(RedstoneConnection front, RedstoneConnection left, RedstoneConnection back, RedstoneConnection right) {
-    
-        // Init front
-        front.enable();
-        front.setOutput();
-        
-        // Init left
-        left.enable();
-        left.setOutput();
-        
-        // Init back
-        back.enable();
-        back.setInput();
-        
-        // Init right
-        right.enable();
-        right.setOutput();
+    public void initializeConnections() {
+
+        front().enable().setOutputOnly();
+        right().enable().setOutputOnly();
+        back().enable();
+        left().enable().setOutputOnly();
     }
-    
+
     @Override
-    public String getGateID() {
-    
+    public String getId() {
+
         return "not";
     }
-    
+
     @Override
-    public void renderTop(RedstoneConnection front, RedstoneConnection left, RedstoneConnection back, RedstoneConnection right, float frame) {
-    
-        renderTopTexture(FaceDirection.FRONT, !power);
-        renderTopTexture(FaceDirection.LEFT, !power);
-        renderTopTexture(FaceDirection.RIGHT, !power);
-        renderTopTexture(FaceDirection.BACK, back.getPower() > 0);
-        RenderHelper.renderRedstoneTorch(0, 1D / 8D, 0, 9D / 16D, !power);
+    public void doLogic() {
+
+        power = back().getInput() > 0;
+
+        left().setOutput(!power ? 15 : 0);
+        front().setOutput(!power ? 15 : 0);
+        right().setOutput(!power ? 15 : 0);
     }
-    
+
     @Override
-    public void addOcclusionBoxes(List<AxisAlignedBB> boxes) {
-    
-        super.addOcclusionBoxes(boxes);
-        
-        boxes.add(AxisAlignedBB.getBoundingBox(7D / 16D, 2D / 16D, 7D / 16D, 9D / 16D, 8D / 16D, 9D / 16D));
+    @SideOnly(Side.CLIENT)
+    protected void renderTop(float frame) {
+
+        renderTop("front", front());
+        renderTop("right", right());
+        renderTop("back", back());
+        renderTop("left", left());
+
+        RenderHelper.renderDigitalRedstoneTorch(0, 0, 0, 12 / 16D, back().getInput() == 0);
     }
-    
+
     @Override
-    public void doLogic(RedstoneConnection front, RedstoneConnection left, RedstoneConnection back, RedstoneConnection right) {
-    
-        power = back.getPower() > 0;
-        
-        left.setPower(!power ? 15 : 0);
-        front.setPower(!power ? 15 : 0);
-        right.setPower(!power ? 15 : 0);
+    public void tick() {
+
+        if (front().getOutput() > 0)
+            spawnBlueParticle(8 / 16D, 6 / 16D, 8 / 16D);
     }
-    
+
     @Override
-    public void addWailaInfo(List<String> info) {
-    
+    protected boolean changeMode() {
+
+        if (left().isEnabled() && front().isEnabled() && right().isEnabled()) {
+            right().disable();
+        } else if (left().isEnabled() && front().isEnabled()) {
+            front().disable();
+            right().enable();
+        } else if (left().isEnabled() && right().isEnabled()) {
+            left().disable();
+            front().enable();
+        } else if (front().isEnabled() && right().isEnabled()) {
+            left().enable();
+            front().disable();
+            right().disable();
+        } else if (left().isEnabled()) {
+            left().disable();
+            front().enable();
+        } else if (front().isEnabled()) {
+            front().disable();
+            right().enable();
+        } else {
+            left().enable();
+            front().enable();
+        }
+        return true;
     }
-    
 }

@@ -22,8 +22,8 @@ package com.bluepowermod.client.gui;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 
-import com.bluepowermod.containers.ContainerEjector;
-import com.bluepowermod.tileentities.tier1.TileEjector;
+import com.bluepowermod.container.ContainerEjector;
+import com.bluepowermod.tile.tier1.TileEjector;
 import com.bluepowermod.util.Refs;
 
 public class GuiEjector extends GuiBase {

@@ -7,153 +7,136 @@
  */
 package com.bluepowermod.part.gate;
 
-import java.util.List;
-
-import mcp.mobius.waila.api.SpecialChars;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.AxisAlignedBB;
 
-import com.bluepowermod.api.part.FaceDirection;
-import com.bluepowermod.api.part.RedstoneConnection;
 import com.bluepowermod.client.gui.gate.GuiGateSingleTime;
-import com.bluepowermod.client.renderers.RenderHelper;
+import com.bluepowermod.client.render.RenderHelper;
 import com.bluepowermod.part.IGuiButtonSensitive;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class GateTimer extends GateBase implements IGuiButtonSensitive {
-    
-    private boolean power = false;
-    private int     time  = 40;
-    private int     ticks = 0;
-    
+
+    private int time = 40;
+    private int curTime = 0;
+
     @Override
-    public void initializeConnections(RedstoneConnection front, RedstoneConnection left, RedstoneConnection back, RedstoneConnection right) {
-    
-        // Init front
-        front.enable();
-        front.setOutput();
-        
-        // Init left
-        left.enable();
-        left.setOutput();
-        
-        // Init back
-        back.enable();
-        back.setInput();
-        
-        // Init right
-        right.enable();
-        right.setOutput();
+    public void initializeConnections() {
+
+        front().enable().setOutputOnly();
+        right().enable().setOutputOnly();
+        back().enable();
+        left().enable().setOutputOnly();
     }
-    
+
     @Override
-    public String getGateID() {
-    
+    public String getId() {
+
         return "timer";
     }
-    
+
     @Override
-    public void renderTop(RedstoneConnection front, RedstoneConnection left, RedstoneConnection back, RedstoneConnection right, float frame) {
-    
-        // renderTopTexture(FaceDirection.FRONT, power);
-        renderTopTexture(FaceDirection.LEFT, power);
-        renderTopTexture(FaceDirection.RIGHT, power);
-        renderTopTexture(FaceDirection.BACK, back.getPower() > 0);
-        RenderHelper.renderRedstoneTorch(0, 1D / 8D, 0, 13D / 16D, true);
-        RenderHelper.renderRedstoneTorch(0, 1D / 8D, -5D / 16D, 1D / 2D, power);
-        RenderHelper.renderPointer(0, 7D / 16D, 0, getWorld() != null ? back.getPower() == 0 ? 1 - (double) (ticks + frame) / (double) time : 0 : 0);
+    public void doLogic() {
+
     }
-    
-    @Override
-    public void addOcclusionBoxes(List<AxisAlignedBB> boxes) {
-    
-        super.addOcclusionBoxes(boxes);
-        
-        boxes.add(AxisAlignedBB.getBoundingBox(7D / 16D, 2D / 16D, 7D / 16D, 9D / 16D, 12D / 16D, 9D / 16D));
-    }
-    
-    @Override
-    public void doLogic(RedstoneConnection front, RedstoneConnection left, RedstoneConnection back, RedstoneConnection right) {
-    
-        if (getWorld() != null && !getWorld().isRemote && getWorld().getWorldTime() % 400 == 0) sendUpdatePacket();//Prevent slow desyncing of the timer.
-        power = false;
-        
-        if (back.getPower() == 0) {
-            if (ticks++ >= time) {
-                ticks = 0;
-                power = true;
-                playTickSound();
-            }
-        } else {
-            ticks = 0;
-        }
-        
-        left.setPower(power ? 15 : 0);
-        front.setPower(power ? 15 : 0);
-        right.setPower(power ? 15 : 0);
-    }
-    
-    @Override
-    public void save(NBTTagCompound tag) {
-    
-        super.save(tag);
-        tag.setInteger("ticks", ticks);
-        tag.setInteger("time", time);
-    }
-    
-    @Override
-    public void load(NBTTagCompound tag) {
-    
-        super.load(tag);
-        ticks = tag.getInteger("ticks");
-        time = tag.getInteger("time");
-    }
-    
-    @Override
-    public void onButtonPress(EntityPlayer player, int messageId, int value) {
-    
-        time = value;
-        sendUpdatePacket();
-    }
-    
+
     @Override
     @SideOnly(Side.CLIENT)
-    protected GuiScreen getGui() {
-    
+    protected void renderTop(float frame) {
+
+        // renderTop("front", front());
+        renderTop("right", right());
+        renderTop("back", back());
+        renderTop("left", left());
+
+        RenderHelper.renderDigitalRedstoneTorch(0, 0, 0, 17 / 16D, back().getInput() == 0);
+
+        double t = 0;
+        if (back().getInput() == 0 && (getParent() == null || (getParent() != null && !getParent().isSimulated())))
+            t = -(curTime + frame) / (double) time;
+        RenderHelper.renderPointer(0, 7 / 16D, 0, 0.5 + t);
+    }
+
+    @Override
+    public void tick() {
+
+        if (front().getOutput() > 0) {
+            front().setOutput(0);
+            left().setOutput(0);
+            right().setOutput(0);
+        } else if (back().getInput() == 0) {
+            if (++curTime >= time) {
+                front().setOutput(15);
+                left().setOutput(15);
+                right().setOutput(15);
+                playTickSound();
+                curTime = 0;
+            }
+        } else {
+            curTime = 0;
+        }
+
+        if (front().getOutput() > 0)
+            spawnBlueParticle(8 / 16D, 6 / 16D, 8 / 16D);
+    }
+
+    @Override
+    public void writeToNBT(NBTTagCompound tag) {
+
+        writeUpdateToNBT(tag);
+    }
+
+    @Override
+    public void writeUpdateToNBT(NBTTagCompound tag) {
+
+        super.writeUpdateToNBT(tag);
+        tag.setInteger("curTime", curTime);
+        tag.setInteger("time", time);
+    }
+
+    @Override
+    public void readFromNBT(NBTTagCompound tag) {
+
+        readUpdateFromNBT(tag);
+    }
+
+    @Override
+    public void readUpdateFromNBT(NBTTagCompound tag) {
+
+        super.readUpdateFromNBT(tag);
+        curTime = tag.getInteger("curTime");
+        time = tag.getInteger("time");
+    }
+
+    @Override
+    public void onButtonPress(EntityPlayer player, int messageId, int value) {
+
+        time = value;
+        curTime = 0;
+        sendUpdatePacket();
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    protected GuiScreen getGui(EntityPlayer player) {
+
         return new GuiGateSingleTime(this) {
-            
+
             @Override
             protected int getCurrentIntervalTicks() {
-            
+
                 return time;
             }
-            
+
         };
     }
-    
+
     @Override
     protected boolean hasGUI() {
-    
+
         return true;
-    }
-    
-    @Override
-    public void addWailaInfo(List<String> info) {
-    
-        String t = "";
-        
-        int time = this.time * 50;
-        if (time >= 1000) {
-            t = time / 1000 + "." + time % 1000 + "s";
-        } else {
-            t = time + "ms";
-        }
-        
-        info.add(I18n.format("gui.timerInterval") + ": " + SpecialChars.WHITE + t);
     }
 }

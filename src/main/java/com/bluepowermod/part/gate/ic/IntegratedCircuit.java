@@ -8,56 +8,78 @@
 package com.bluepowermod.part.gate.ic;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.RenderBlocks;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.world.World;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import org.lwjgl.opengl.GL11;
 
+import uk.co.qmunity.lib.client.render.RenderHelper;
+import uk.co.qmunity.lib.part.IMicroblock;
+import uk.co.qmunity.lib.part.IPart;
+import uk.co.qmunity.lib.part.ITilePartHolder;
+import uk.co.qmunity.lib.part.PartRegistry;
+import uk.co.qmunity.lib.raytrace.QMovingObjectPosition;
+import uk.co.qmunity.lib.transform.Rotation;
+import uk.co.qmunity.lib.util.Dir;
+import uk.co.qmunity.lib.vec.Vec3d;
+import uk.co.qmunity.lib.vec.Vec3dCube;
+import uk.co.qmunity.lib.vec.Vec3i;
+
 import com.bluepowermod.api.block.ISilkyRemovable;
-import com.bluepowermod.api.compat.IMultipartCompat;
-import com.bluepowermod.api.part.BPPart;
-import com.bluepowermod.api.part.BPPartFace;
-import com.bluepowermod.api.part.FaceDirection;
-import com.bluepowermod.api.part.RedstoneConnection;
-import com.bluepowermod.api.vec.Vector3;
-import com.bluepowermod.compat.CompatibilityUtils;
-import com.bluepowermod.part.ItemBPPart;
-import com.bluepowermod.part.PartRegistry;
-import com.bluepowermod.part.cable.bluestone.WireBluestone;
+import com.bluepowermod.api.misc.MinecraftColor;
+import com.bluepowermod.item.ItemPart;
+import com.bluepowermod.part.BPPart;
+import com.bluepowermod.part.PartManager;
+import com.bluepowermod.part.RedstoneConnection;
 import com.bluepowermod.part.gate.GateBase;
 import com.bluepowermod.part.gate.GateWire;
-import com.bluepowermod.raytrace.RayTracer;
-import com.bluepowermod.util.Dependencies;
+import com.bluepowermod.part.wire.redstone.PartRedwireFace;
+import com.bluepowermod.part.wire.redstone.RedwireType;
+import com.bluepowermod.util.Refs;
 
-public abstract class IntegratedCircuit extends GateBase implements ISilkyRemovable {
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
-    private BPPartFace[][] gates;
+public abstract class IntegratedCircuit extends GateBase implements ISilkyRemovable, ITilePartHolder {
+
+    private GateBase[][] gates;
     private static double BORDER_WIDTH = 1 / 16D;
+    private boolean isRenderingItem;
 
     @Override
-    public void initializeConnections(RedstoneConnection front, RedstoneConnection left, RedstoneConnection back, RedstoneConnection right) {
+    public void initializeConnections() {
 
         clearGateArray();
     }
 
     private void clearGateArray() {
 
-        gates = new BPPartFace[getCircuitWidth()][];
+        gates = new GateBase[getCircuitWidth()][];
         for (int i = 0; i < gates.length; i++) {
-            gates[i] = new BPPartFace[gates.length];
+            gates[i] = new GateBase[gates.length];
         }
     }
 
     @Override
-    public void addSelectionBoxes(List<AxisAlignedBB> boxes) {
+    public void addSelectionBoxes(List<Vec3dCube> boxes) {
 
         super.addSelectionBoxes(boxes);
         double minY = 1 / 16D;
@@ -66,13 +88,13 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
         double gateWidth = (1.0 - 2 * BORDER_WIDTH) / getCircuitWidth();
         for (int x = 0; x < getCircuitWidth(); x++) {
             for (int y = 0; y < getCircuitWidth(); y++) {
-                boxes.add(AxisAlignedBB.getBoundingBox(BORDER_WIDTH + x * gateWidth, minY, BORDER_WIDTH + y * gateWidth, BORDER_WIDTH + (x + 1)
+                boxes.add(new Vec3dCube(BORDER_WIDTH + x * gateWidth, minY, BORDER_WIDTH + y * gateWidth, BORDER_WIDTH + (x + 1)
                         * gateWidth, maxY, BORDER_WIDTH + (y + 1) * gateWidth));
             }
         }
     }
 
-    public int getGateIndex(BPPartFace part) {
+    public int getGateIndex(GateBase part) {
 
         for (int i = 0; i < getCircuitWidth(); i++) {
             for (int j = 0; j < getCircuitWidth(); j++) {
@@ -84,13 +106,13 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
         throw new IllegalArgumentException("Part not found in Integrated Circuit");
     }
 
-    public BPPartFace getPartForIndex(int index) {
+    public GateBase getPartForIndex(int index) {
 
         return gates[index / getCircuitWidth()][index % getCircuitWidth()];
     }
 
     @Override
-    public String getGateID() {
+    public String getId() {
 
         return "integratedCircuit" + getCircuitWidth() + "x" + getCircuitWidth();
     }
@@ -104,13 +126,99 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
     protected abstract int getCircuitWidth();
 
     @Override
-    protected void renderTop(RedstoneConnection front, RedstoneConnection left, RedstoneConnection back, RedstoneConnection right, float frame) {
+    @SideOnly(Side.CLIENT)
+    public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
 
-        renderTopTexture(FaceDirection.FRONT, front);
-        renderTopTexture(FaceDirection.LEFT, left);
-        renderTopTexture(FaceDirection.BACK, back);
-        renderTopTexture(FaceDirection.RIGHT, right);
-        Vector3 loc = new Vector3(0, 0, 0);
+        isRenderingItem = true;
+        super.renderItem(type, item, data);
+        isRenderingItem = false;
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public boolean renderStatic(Vec3i translation, RenderHelper renderer, RenderBlocks renderBlocks, int pass) {
+
+        switch (getFace()) {
+        case DOWN:
+            break;
+        case UP:
+            renderer.addTransformation(new Rotation(180, 180, 0, Vec3d.center));
+            break;
+        case NORTH:
+            renderer.addTransformation(new Rotation(90, 0, 0, Vec3d.center));
+            break;
+        case SOUTH:
+            renderer.addTransformation(new Rotation(-90, 0, 0, Vec3d.center));
+            break;
+        case WEST:
+            renderer.addTransformation(new Rotation(0, 0, -90, Vec3d.center));
+            break;
+        case EAST:
+            renderer.addTransformation(new Rotation(0, 0, 90, Vec3d.center));
+            break;
+        default:
+            break;
+        }
+
+        int rotation = getRotation();
+        renderer.addTransformation(new Rotation(0, 90 * -rotation, 0));
+
+        if (rendering == null)
+            rendering = this;
+
+        IIcon[] icons = new IIcon[] { getIcon(ForgeDirection.DOWN), getIcon(ForgeDirection.UP), getIcon(ForgeDirection.WEST),
+                getIcon(ForgeDirection.EAST), getIcon(ForgeDirection.NORTH), getIcon(ForgeDirection.SOUTH) };
+
+        renderer.setRenderSide(ForgeDirection.UP, false);
+        renderer.renderBox(new Vec3dCube(0, 0, 0, 1, 1 / 16D, 1), icons);
+        renderer.setRenderSide(ForgeDirection.UP, true);
+
+        renderer.renderBox(new Vec3dCube(0, 1 / 16D, 0, 1, 2 / 16D, 1 / 16D), icons);
+        renderer.renderBox(new Vec3dCube(0, 1 / 16D, 15 / 16D, 1, 2 / 16D, 1), icons);
+        renderer.renderBox(new Vec3dCube(0, 1 / 16D, 0, 1 / 16D, 2 / 16D, 1), icons);
+        renderer.renderBox(new Vec3dCube(15 / 16D, 1 / 16D, 0, 1, 2 / 16D, 1), icons);
+
+        rendering = null;
+
+        renderer.resetTransformations();
+
+        return true;
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    protected void renderTop(float frame) {
+
+        renderTop("front", front());
+        renderTop("left", left());
+        renderTop("back", back());
+        renderTop("right", right());
+        Vec3d loc = new Vec3d(0, 0, 0);
+
+        RenderHelper rh = RenderHelper.instance;
+        rh.reset();
+        RenderBlocks rb = RenderBlocks.getInstance();
+
+        GL11.glPushMatrix();
+        {
+            GL11.glTranslated(0, 2 / 16D - 1 / 16D * (1.0 / getCircuitWidth()), 0);
+            GL11.glNormal3d(0, 1, 0);
+            int size = getCircuitWidth();
+            double textureMaxUV = 0.5 * size;
+
+            Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/gates/"
+                    + getTextureName() + "/checkerboard.png"));
+            GL11.glBegin(GL11.GL_QUADS);
+            {
+                com.bluepowermod.client.render.RenderHelper.addVertexWithTexture(BORDER_WIDTH, 0, BORDER_WIDTH, 0, 0);
+                com.bluepowermod.client.render.RenderHelper.addVertexWithTexture(BORDER_WIDTH, 0, 1 - BORDER_WIDTH, 0, textureMaxUV);
+                com.bluepowermod.client.render.RenderHelper.addVertexWithTexture(1 - BORDER_WIDTH, 0, 1 - BORDER_WIDTH, textureMaxUV,
+                        textureMaxUV);
+                com.bluepowermod.client.render.RenderHelper.addVertexWithTexture(1 - BORDER_WIDTH, 0, BORDER_WIDTH, textureMaxUV, 0);
+            }
+            GL11.glEnd();
+        }
+        GL11.glPopMatrix();
 
         GL11.glPushMatrix();
         {
@@ -119,18 +227,27 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
 
             GL11.glScaled(1.0 / getCircuitWidth(), 1.0 / getCircuitWidth(), 1.0 / getCircuitWidth());
             GL11.glTranslated(0, -2 / 16D, 0);
-            for (BPPartFace[] gateArray : gates) {
+            for (GateBase[] gateArray : gates) {
                 GL11.glPushMatrix();
-                for (BPPartFace gate : gateArray) {
+                for (GateBase gate : gateArray) {
                     if (gate != null) {
                         GL11.glPushMatrix();
-                        if (gate instanceof GateBase) {
-                            ((GateBase) gate).rotateAndTranslateDynamic(loc, 0, frame);
-                            ((GateBase) gate).renderTop(frame);
-                        } else {
-                            gate.renderDynamic(loc, 0, frame);
-                        }
+                        gate.renderDynamic(loc, frame, 0);
                         GL11.glPopMatrix();
+
+                        if (!isRenderingItem) {
+                            // Static renderer
+                            GL11.glPushMatrix();
+                            {
+                                Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
+                                Tessellator.instance.startDrawingQuads();
+                                gate.renderStatic(new Vec3i(gate), rh, rb, 0);
+                                Tessellator.instance.draw();
+                            }
+                            GL11.glPopMatrix();
+                        }
+
+                        rh.reset();
                     }
                     GL11.glTranslated(0, 0, 1);
                 }
@@ -142,74 +259,100 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
     }
 
     @Override
-    public void doLogic(RedstoneConnection front, RedstoneConnection left, RedstoneConnection back, RedstoneConnection right) {
+    public void doLogic() {
 
-        if (getWorld() != null && !getWorld().isRemote && getWorld().getWorldTime() % 400 == 0)
-            sendUpdatePacket();// Prevent slow desyncing of the timer.
+        try {
+            reflectGates();
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+    }
 
-        updateWires();
-        for (int i = 0; i < gates.length; i++) {
-            for (int j = 0; j < gates[i].length; j++) {
-                BPPartFace gate = gates[i][j];
+    @Override
+    public void tick() {
+
+        super.tick();
+        for (GateBase[] gateArray : gates) {
+            for (GateBase gate : gateArray) {
                 if (gate != null) {
-                    for (FaceDirection dir : FaceDirection.values()) {
-                        BPPartFace neighbor = getNeighbor(i, j, dir);
-
-                        ForgeDirection forgeDir = null;
-                        switch (dir) {
-                        case FRONT:
-                            forgeDir = ForgeDirection.SOUTH;
-                            break;
-                        case BACK:
-                            forgeDir = ForgeDirection.NORTH;
-                            break;
-                        case LEFT:
-                            forgeDir = ForgeDirection.EAST;
-                            break;
-                        case RIGHT:
-                            forgeDir = ForgeDirection.WEST;
-                            break;
-                        }
-                        if (neighbor != null) {
-                            FaceDirection neighborDir = FaceDirection.getDirection(ForgeDirection.UP, forgeDir, neighbor.getRotation()).getOpposite();
-                            FaceDirection gateDir = FaceDirection.getDirection(ForgeDirection.UP, forgeDir, gate.getRotation());
-
-                            if (neighbor.getConnection(neighborDir).isEnabled()
-                                    && (neighbor.getConnection(neighborDir).isOutput() || neighbor instanceof GateWire)) {
-                                if (gate.getConnection(gateDir).isEnabled() && gate.getConnection(gateDir).isInput()) {
-                                    gate.getConnection(gateDir).setPower(neighbor.getConnection(neighborDir).getPower());
-                                }
-                            }
-                        }
-                    }
                     gate.update();
                 }
             }
         }
-        reflectGates(front, left, back, right);
     }
 
-    private BPPartFace getNeighbor(int x, int y, FaceDirection faceDir) {
+    private void updateNeighborGates(int i, int j) {
 
-        if (faceDir == FaceDirection.RIGHT && x > 0)
+        GateBase gate = gates[i][j];
+        for (Dir dir : Dir.values()) {
+            if (dir == Dir.TOP || dir == Dir.BOTTOM)
+                continue;
+            GateBase neighbor = getNeighbor(i, j, dir);
+            ForgeDirection forgeDir = dir.getFD().getOpposite();
+
+            if (neighbor != null) {
+
+                Dir neighborDir = Dir.getDirection(ForgeDirection.UP, forgeDir, neighbor.getRotation()).getOpposite();
+                RedstoneConnection neighborConnection = neighbor.getConnection(neighborDir);
+
+                if (gate != null) {
+                    Dir gateDir = Dir.getDirection(ForgeDirection.UP, forgeDir, gate.getRotation());
+                    RedstoneConnection gateConnection = gate.getConnection(gateDir);
+                    if (neighborConnection.isEnabled() /* && !(neighbor instanceof GateWire) */) {
+                        if (gateConnection.isEnabled() /* && !neighborConnection.isOutputOnly() */) {
+                            // gateConnection.setInput(neighborConnection.getOutput());
+                            neighborConnection.setInput(gateConnection.getOutput());
+                            if (neighbor instanceof GateWire) {
+                                updateWires();
+                            }
+                            neighbor.onUpdate();
+                            reflectGates();
+                            sendUpdatePacket();
+                        }
+                    }
+                } else {
+                    neighborConnection.setInput(0);
+                    neighbor.onUpdate();
+                    reflectGates();
+                    sendUpdatePacket();
+                }
+
+            }
+        }
+    }
+
+    public void updateNeighborGates(GateBase gate) {
+
+        for (int i = 0; i < gates.length; i++) {
+            for (int j = 0; j < gates[i].length; j++) {
+                if (gate == gates[i][j]) {
+                    updateNeighborGates(i, j);
+                }
+            }
+        }
+    }
+
+    private GateBase getNeighbor(int x, int y, Dir faceDir) {
+
+        if (faceDir == Dir.RIGHT && x > 0)
             return gates[x - 1][y];
-        if (faceDir == FaceDirection.LEFT && x < getCircuitWidth() - 1)
+        if (faceDir == Dir.LEFT && x < getCircuitWidth() - 1)
             return gates[x + 1][y];
-        if (faceDir == FaceDirection.BACK && y > 0)
+        if (faceDir == Dir.BACK && y > 0)
             return gates[x][y - 1];
-        if (faceDir == FaceDirection.FRONT && y < getCircuitWidth() - 1)
+        if (faceDir == Dir.FRONT && y < getCircuitWidth() - 1)
             return gates[x][y + 1];
         return null;
     }
 
-    private int getOffsetX(FaceDirection faceDir) {
+    private int getOffsetX(Dir faceDir) {
 
-        return faceDir == FaceDirection.RIGHT ? -1 : faceDir == FaceDirection.LEFT ? 1 : 0;
+        return faceDir == Dir.RIGHT ? -1 : faceDir == Dir.LEFT ? 1 : 0;
     }
 
-    private int getOffsetY(FaceDirection faceDir) {
+    private int getOffsetY(Dir faceDir) {
 
-        return faceDir == FaceDirection.BACK ? -1 : faceDir == FaceDirection.FRONT ? 1 : 0;
+        return faceDir == Dir.BACK ? -1 : faceDir == Dir.FRONT ? 1 : 0;
     }
 
     private void updateWires() {
@@ -220,15 +363,11 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
                 if (gates[i][j] instanceof GateWire && !traversedWires.contains(gates[i][j])) {
                     int startSize = traversedWires.size();
                     int wirePowaah = traverseWire(traversedWires, i, j);// POWAHH!
-                    /*
-                     * for (int k = startSize; k < traversedWires.size(); k++) {//check for interfaces with the outside world GateWire wire =
-                     * traversedWires.get(k); int index = getGateIndex(wire); int x = index / getCircuitWidth(); int y = index % getCircuitWidth();
-                     * if(x == 0 ) }
-                     */
+
                     for (int k = startSize; k < traversedWires.size(); k++) {
                         GateWire wire = traversedWires.get(k);
-                        for (FaceDirection dir : FaceDirection.values()) {
-                            wire.getConnection(dir).setPower(wirePowaah);
+                        for (Dir dir : Dir.values()) {
+                            wire.getConnection(dir).setOutput(wirePowaah);
                         }
                     }
                 }
@@ -236,16 +375,47 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
         }
     }
 
+    private int getStrengthFromOutside(GateWire checkingWire, int x, int y) {
+
+        int mid = getCircuitWidth() / 2;
+        if (x == 0 && y == mid) {
+            RedstoneConnection connection = checkingWire.getConnection(ForgeDirection.WEST);
+            if (connection.isEnabled()) {
+                return right().getInput();
+            }
+        }
+        if (x == getCircuitWidth() - 1 && y == mid) {
+            RedstoneConnection connection = checkingWire.getConnection(ForgeDirection.EAST);
+            if (connection.isEnabled()) {
+                return left().getInput();
+            }
+        }
+        if (x == mid && y == 0) {
+            RedstoneConnection connection = checkingWire.getConnection(ForgeDirection.NORTH);
+            if (connection.isEnabled()) {
+                return back().getInput();
+            }
+        }
+        if (x == mid && y == getCircuitWidth() - 1) {
+            RedstoneConnection connection = checkingWire.getConnection(ForgeDirection.SOUTH);
+            if (connection.isEnabled()) {
+                return front().getInput();
+            }
+        }
+        return 0;
+    }
+
     private int traverseWire(List<GateWire> traversedWires, int x, int y) {
 
-        if (x < 0 || y < 0 || x >= getCircuitWidth() || y >= getCircuitWidth())
+        if (x < 0 || y < 0 || x >= getCircuitWidth() || y >= getCircuitWidth()) {
             return 0;
+        }
         int maxPowaah = 0;
         GateWire curWire = (GateWire) gates[x][y];
         traversedWires.add(curWire);
-        for (FaceDirection dir : FaceDirection.values()) {
+        for (Dir dir : Dir.values()) {
 
-            BPPartFace neighbor = getNeighbor(x, y, dir);
+            GateBase neighbor = getNeighbor(x, y, dir);
             if (neighbor != null) {
                 ForgeDirection forgeDir = null;
                 switch (dir) {
@@ -262,8 +432,8 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
                     forgeDir = ForgeDirection.WEST;
                     break;
                 }
-                FaceDirection neighborDir = FaceDirection.getDirection(ForgeDirection.UP, forgeDir, neighbor.getRotation()).getOpposite();
-                FaceDirection gateDir = FaceDirection.getDirection(ForgeDirection.UP, forgeDir, curWire.getRotation());
+                Dir neighborDir = Dir.getDirection(ForgeDirection.UP, forgeDir, neighbor.getRotation()).getOpposite();
+                Dir gateDir = Dir.getDirection(ForgeDirection.UP, forgeDir, curWire.getRotation());
                 if (curWire.getConnection(gateDir).isEnabled()) {
                     if (neighbor instanceof GateWire) {
                         if (!traversedWires.contains(neighbor) && neighbor.getConnection(neighborDir).isEnabled()) {
@@ -271,117 +441,105 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
                         }
                     } else {
                         RedstoneConnection connection = neighbor.getConnection(neighborDir);
-                        if (connection.isEnabled() && connection.isOutput())
-                            maxPowaah = Math.max(maxPowaah, connection.getPower());
+                        if (connection.isEnabled())
+                            maxPowaah = Math.max(maxPowaah, connection.getOutput());
                     }
                 }
+            } else {
+                // maxPowaah = Math.max(maxPowaah, getStrengthFromOutside(curWire, x, y)); //accept power from outside world. creates a loop.
             }
         }
         return maxPowaah;
     }
 
-    private void reflectGates(RedstoneConnection front, RedstoneConnection left, RedstoneConnection back, RedstoneConnection right) {
+    private void reflectGates() {
 
         int mid = getCircuitWidth() / 2;
         if (gates[0][mid] != null) {
             RedstoneConnection connection = gates[0][mid].getConnection(ForgeDirection.WEST);
             if (connection.isEnabled()) {
-                left.enable();
+                right().enable();
             } else {
-                left.disable();
+                right().disable();
             }
-            if (connection.isInput()) {
-                left.setInput();
-                connection.setPower(left.getPower());
-            } else {
-                left.setOutput();
-                left.setPower(connection.getPower());
-            }
+            connection.setInput(right().getInput());
+            right().setOutput(connection.getOutput());
+
+            gates[0][mid].onUpdate();
         } else {
-            left.disable();
+            right().setOutput(false);
+            right().disable();
         }
         if (gates[getCircuitWidth() - 1][mid] != null) {
             RedstoneConnection connection = gates[getCircuitWidth() - 1][mid].getConnection(ForgeDirection.EAST);
             if (connection.isEnabled()) {
-                right.enable();
+                left().enable();
             } else {
-                right.disable();
+                left().disable();
             }
-            if (connection.isInput()) {
-                right.setInput();
-                connection.setPower(right.getPower());
-            } else {
-                right.setOutput();
-                right.setPower(connection.getPower());
-            }
+            connection.setInput(left().getInput());
+            left().setOutput(connection.getOutput());
+
+            gates[getCircuitWidth() - 1][mid].onUpdate();
         } else {
-            right.disable();
+            left().setOutput(false);
+            left().disable();
         }
         if (gates[mid][0] != null) {
             RedstoneConnection connection = gates[mid][0].getConnection(ForgeDirection.NORTH);
             if (connection.isEnabled()) {
-                front.enable();
+                back().enable();
             } else {
-                front.disable();
+                back().disable();
             }
-            if (connection.isInput()) {
-                front.setInput();
-                connection.setPower(front.getPower());
-            } else {
-                front.setOutput();
-                front.setPower(connection.getPower());
-            }
+            connection.setInput(back().getInput());
+            back().setOutput(connection.getOutput());
+
+            gates[mid][0].onUpdate();
         } else {
-            front.disable();
+            back().setOutput(false);
+            back().disable();
         }
         if (gates[mid][getCircuitWidth() - 1] != null) {
             RedstoneConnection connection = gates[mid][getCircuitWidth() - 1].getConnection(ForgeDirection.SOUTH);
             if (connection.isEnabled()) {
-                back.enable();
+                front().enable();
             } else {
-                back.disable();
+                front().disable();
             }
-            if (connection.isInput()) {
-                back.setInput();
-                connection.setPower(back.getPower());
-            } else {
-                back.setOutput();
-                back.setPower(connection.getPower());
-            }
+            connection.setInput(front().getInput());
+            front().setOutput(connection.getOutput());
+
+            gates[mid][getCircuitWidth() - 1].onUpdate();
         } else {
-            back.disable();
+            front().setOutput(false);
+            front().disable();
         }
     }
 
     @Override
-    public void save(NBTTagCompound tag) {
+    public void writeToNBT(NBTTagCompound tag) {
 
-        super.save(tag);
+        writeUpdateToNBT(tag);
+    }
+
+    @Override
+    public void readFromNBT(NBTTagCompound tag) {
+
+        readUpdateFromNBT(tag);
+    }
+
+    @Override
+    public void writeUpdateToNBT(NBTTagCompound tag) {
+
+        super.writeUpdateToNBT(tag);
         for (int k = 0; k < gates.length; k++) {
             for (int j = 0; j < gates[k].length; j++) {
                 if (gates[k][j] != null) {
-                    BPPartFace gate = gates[k][j];
+                    GateBase gate = gates[k][j];
                     NBTTagCompound gateTag = new NBTTagCompound();
-
-                    gateTag.setString("part_id", gate.getType());
-
-                    NBTTagCompound t = new NBTTagCompound();
-                    gate.save(t);
-                    gateTag.setTag("partData", t);
-
-                    gateTag.setInteger("face", gate.getFace());
-                    gateTag.setInteger("rotation", gate.getRotation());
-                    for (int i = 0; i < 4; i++) {
-                        RedstoneConnection c = gate.getConnection(FaceDirection.getDirection(i));
-                        if (c != null) {
-                            gateTag.setTag("con_" + i, c.getNBTTag());
-                        } else {
-                            NBTTagCompound ta = new NBTTagCompound();
-                            ta.setBoolean("___error", true);
-                            gateTag.setTag("con_" + i, ta);
-                        }
-                    }
-
+                    gateTag.setString("type", gate.getType());
+                    gate.writeToNBT(gateTag);
                     tag.setTag("gate" + k + "" + j, gateTag);
                 }
             }
@@ -389,102 +547,83 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
     }
 
     @Override
-    public void load(NBTTagCompound tag) {
+    public void readUpdateFromNBT(NBTTagCompound tag) {
 
-        super.load(tag);
+        super.readUpdateFromNBT(tag);
         for (int k = 0; k < gates.length; k++) {
             for (int j = 0; j < gates[k].length; j++) {
                 if (tag.hasKey("gate" + k + "" + j)) {
                     NBTTagCompound gateTag = tag.getCompoundTag("gate" + k + "" + j);
 
-                    String type = gateTag.getString("part_id");
-                    BPPartFace gate;
+                    String type = gateTag.getString("type");
+                    GateBase gate;
                     if (gates[k][j] != null && gates[k][j].getType().equals(type)) {
                         gate = gates[k][j];
                     } else {
                         if (type.equals(GateWire.ID)) {
                             gate = new GateWire();
                         } else {
-                            gate = (BPPartFace) PartRegistry.getInstance().createPart(type);
+                            gate = (GateBase) PartRegistry.createPart(type, false);
                         }
                         gates[k][j] = gate;
                         gates[k][j].parentCircuit = this;
+                        gate.setParent(this);
                     }
-
-                    NBTTagCompound t = gateTag.getCompoundTag("partData");
-                    gate.load(t);
-
-                    gate.setFace(gateTag.getInteger("face"));
-                    gate.setRotation(gateTag.getInteger("rotation"));
-                    for (int i = 0; i < 4; i++) {
-                        RedstoneConnection c = gate.getConnection(FaceDirection.getDirection(i));
-                        NBTTagCompound ta = gateTag.getCompoundTag("con_" + i);
-                        if (ta.hasKey("___error") && ta.getBoolean("___error")) {
-                            continue;
-                        } else {
-                            if (c == null) {
-                                c = gate.getConnectionOrCreate(FaceDirection.getDirection(i));
-                            }
-                            c.load(ta);
-                        }
-                    }
+                    gate.readFromNBT(gateTag);
                 } else {
                     gates[k][j] = null;
                 }
             }
         }
-        if (getWorld() != null) {
-            setWorld(getWorld());// Make sure the attached gates get all the info.
-            setX(getX());
-            setY(getY());
-            setZ(getZ());
-        }
     }
 
     @Override
-    public boolean onActivated(EntityPlayer player, MovingObjectPosition mop, ItemStack item) {
+    public boolean onActivated(EntityPlayer player, QMovingObjectPosition hit, ItemStack item) {
 
-        int subPartHit = ((IMultipartCompat) CompatibilityUtils.getModule(Dependencies.FMP)).getMOPData(mop);
-
-        List<AxisAlignedBB> aabbs = getSelectionBoxes();
-        if (subPartHit < 0)
-            subPartHit = aabbs.indexOf(RayTracer.getSelectedBox(mop, player, ForgeDirection.getOrientation(getFace()), aabbs));
+        List<Vec3dCube> aabbs = getSelectionBoxes();
+        int subPartHit = aabbs.indexOf(hit.getCube());
 
         if (subPartHit <= 0)
-            return super.onActivated(player, mop, item);
+            return super.onActivated(player, hit, item);
 
         subPartHit--;
         int x = getCircuitWidth() - 1 - subPartHit / getCircuitWidth();
         int y = getCircuitWidth() - 1 - subPartHit % getCircuitWidth();
         if (gates[x][y] != null) {
-            if (gates[x][y].onActivated(player, mop, item)) {
+            if (gates[x][y].onActivated(player, hit, item)) {
+                updateNeighborGates(x, y);
+                gates[x][y].onUpdate();
                 sendUpdatePacket();
                 return true;
             } else {
                 return false;
             }
         } else {
-            return tryPlaceGate(player, x, y, item, mop);
+            return tryPlaceGate(player, x, y, item, hit);
         }
     }
 
     @Override
-    public void click(EntityPlayer player, MovingObjectPosition mop, ItemStack item) {
+    public void onClicked(EntityPlayer player, QMovingObjectPosition hit, ItemStack item) {
 
-        int subPartHit = ((IMultipartCompat) CompatibilityUtils.getModule(Dependencies.FMP)).getMOPData(mop);
-        if (subPartHit == 0)
+        List<Vec3dCube> aabbs = getSelectionBoxes();
+        int subPartHit = aabbs.indexOf(hit.getCube());
+
+        if (subPartHit <= 0)
             return;
+
         subPartHit--;
         int x = getCircuitWidth() - 1 - subPartHit / getCircuitWidth();
         int y = getCircuitWidth() - 1 - subPartHit % getCircuitWidth();
         if (gates[x][y] != null) {
             if (!getWorld().isRemote) {
-                if (gates[x][y] instanceof GateWire) {
-                    gates[x][y] = new WireBluestone();
-                }
-                ItemStack partStack = PartRegistry.getInstance().getItemForPart(gates[x][y].getType());
+                ItemStack partStack = PartManager.getPartInfo(
+                        gates[x][y] instanceof GateWire ? new PartRedwireFace(RedwireType.BLUESTONE, MinecraftColor.NONE, false).getType()
+                                : gates[x][y].getType()).getStack();
+                partStack.stackSize = 1;
                 getWorld().spawnEntityInWorld(new EntityItem(getWorld(), getX() + 0.5, getY() + 0.5, getZ() + 0.5, partStack));
                 gates[x][y] = null;
+                updateNeighborGates(x, y);
                 sendUpdatePacket();
             }
             gates[x][y] = null;
@@ -496,14 +635,14 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
     public List<ItemStack> getDrops() {
 
         List<ItemStack> drops = super.getDrops();
-        for (BPPartFace[] gateArray : gates) {
-            for (BPPartFace gate : gateArray) {
+        for (GateBase[] gateArray : gates) {
+            for (GateBase gate : gateArray) {
                 if (gate != null) {
                     if (gate instanceof GateWire) {
-                        gate = new WireBluestone();
+                        drops.addAll(new PartRedwireFace(RedwireType.BLUESTONE, MinecraftColor.NONE, false).getDrops());
+                    } else {
+                        drops.addAll(gate.getDrops());
                     }
-                    ItemStack partStack = PartRegistry.getInstance().getItemForPart(gate.getType());
-                    drops.add(partStack);
                 }
             }
         }
@@ -513,23 +652,23 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
 
     private boolean tryPlaceGate(EntityPlayer player, int x, int y, ItemStack stack, MovingObjectPosition mop) {
 
-        if (stack != null && stack.getItem() instanceof ItemBPPart) {
-            BPPart part = PartRegistry.getInstance().createPartFromItem(stack);
-            if (part instanceof WireBluestone) {
+        if (stack != null && stack.getItem() instanceof ItemPart) {
+            BPPart part = PartManager.createPart(stack);
+            if (part instanceof PartRedwireFace
+                    && part.getType().equals(new PartRedwireFace(RedwireType.BLUESTONE, MinecraftColor.NONE, false).getType())) {
                 part = new GateWire();
             }
             if (part instanceof GateBase && !(part instanceof IntegratedCircuit)) {
-                gates[x][y] = (BPPartFace) part;
-                ((BPPartFace) part).setFace(1);
-                ((BPPartFace) part).parentCircuit = this;
-                part.setWorld(getWorld());
-                part.setX(getX());
-                part.setY(getY());
-                part.setZ(getZ());
+                gates[x][y] = (GateBase) part;
+                ((GateBase) part).setFace(ForgeDirection.DOWN);
+                ((GateBase) part).parentCircuit = this;
+                part.setParent(this);
                 if (!player.capabilities.isCreativeMode)
                     stack.stackSize--;
                 if (!getWorld().isRemote)
                     notifyUpdate();
+                updateNeighborGates(x, y);
+                gates[x][y].onUpdate();
                 return true;
             }
         }
@@ -537,16 +676,15 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
     }
 
     @Override
-    public void addWailaInfo(List<String> info) {
-
-        // TODO Auto-generated method stub
+    @SideOnly(Side.CLIENT)
+    public void addWAILABody(List<String> info) {
 
     }
 
     /**
      * Return true if the ItemStack that's being 'injected' with info is a stack that can be injected. This method is only called when
      * itemStack.isItemEqual(otherStack) returned true.
-     * 
+     *
      * @param outputStack
      * @return false to disallow copying.
      */
@@ -559,7 +697,7 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
     /**
      * Items that contain items (an Integrated Circuit with gates on it) need to compare the input and output, and tell which items are required. With
      * this method you can tell the Circuit Database what items the item carries, so it can calculate which items it needs.
-     * 
+     *
      * @param templateStack
      * @param outputStack
      * @return null is a valid return.
@@ -573,50 +711,74 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
     }
 
     @Override
-    public void setWorld(World world) {
+    public List<IPart> getParts() {
 
-        super.setWorld(world);
-        for (BPPartFace[] gateArray : gates) {
-            for (BPPartFace gate : gateArray) {
-                if (gate != null)
-                    gate.setWorld(world);
-            }
-        }
+        return null;
     }
 
     @Override
-    public void setX(int x) {
+    public boolean canAddPart(IPart part) {
 
-        super.setX(x);
-        for (BPPartFace[] gateArray : gates) {
-            for (BPPartFace gate : gateArray) {
-                if (gate != null)
-                    gate.setX(x);
-            }
-        }
+        return false;
     }
 
     @Override
-    public void setY(int y) {
+    public void addPart(IPart part) {
 
-        super.setY(y);
-        for (BPPartFace[] gateArray : gates) {
-            for (BPPartFace gate : gateArray) {
-                if (gate != null)
-                    gate.setY(y);
-            }
-        }
     }
 
     @Override
-    public void setZ(int z) {
+    public boolean removePart(IPart part) {
 
-        super.setZ(z);
-        for (BPPartFace[] gateArray : gates) {
-            for (BPPartFace gate : gateArray) {
+        return false;
+    }
+
+    // @Override
+    // TODO: Check me
+    public void sendPartUpdate(IPart part) {
+
+        sendUpdatePacket();
+    }
+
+    @Override
+    public void addCollisionBoxesToList(List<Vec3dCube> boxes, AxisAlignedBB bounds, Entity entity) {
+
+    }
+
+    @Override
+    public List<IMicroblock> getMicroblocks() {
+
+        return new ArrayList<IMicroblock>();
+    }
+
+    @Override
+    public boolean isSimulated() {
+
+        return false;
+    }
+
+    @Override
+    public Map<String, IPart> getPartMap() {
+
+        Map<String, IPart> parts = new HashMap<String, IPart>();
+        for (GateBase[] gateArray : gates) {
+            for (GateBase gate : gateArray) {
                 if (gate != null)
-                    gate.setZ(z);
+                    parts.put(genIdentifier(parts), gate);
             }
         }
+
+        return parts;
     }
+
+    private String genIdentifier(Map<String, IPart> curParts) {
+
+        String s = null;
+        do {
+            s = UUID.randomUUID().toString();
+        } while (curParts.containsKey(s));
+
+        return s;
+    }
+
 }
