@@ -23,14 +23,19 @@ import java.util.List;
 
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.RenderBlocks;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import uk.co.qmunity.lib.client.render.RenderHelper;
 import uk.co.qmunity.lib.misc.Pair;
+import uk.co.qmunity.lib.part.IPart;
+import uk.co.qmunity.lib.part.IPartPlacement;
 import uk.co.qmunity.lib.part.MicroblockShape;
 import uk.co.qmunity.lib.part.compat.OcclusionHelper;
 import uk.co.qmunity.lib.transform.Rotation;
@@ -62,7 +67,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class GateTransceiver extends GateBase implements IWirelessDevice, IFaceRedstoneDevice, IRedstoneConductor, IFaceBundledDevice,
-        IBundledConductor, IGuiButtonSensitive, IWirelessGate {
+IBundledConductor, IGuiButtonSensitive, IWirelessGate {
 
     private static final List<GateTransceiver> transceivers = new ArrayList<GateTransceiver>();
 
@@ -580,6 +585,19 @@ public class GateTransceiver extends GateBase implements IWirelessDevice, IFaceR
         }
 
         sendUpdatePacket();
+    }
+
+    @Override
+    public IPartPlacement getPlacement(IPart part, World world, Vec3i location, ForgeDirection face, MovingObjectPosition mop,
+            EntityPlayer player) {
+
+        return null;
+    }
+
+    @Override
+    public void addTooltip(List<String> tip) {
+
+        tip.add(MinecraftColor.RED + I18n.format("Disabled temporarily. Still not fully working."));
     }
 
 }

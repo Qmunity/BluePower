@@ -24,6 +24,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -592,13 +593,17 @@ IPartWAILAProvider, IPartSolid, IPartThruHole, IPartCustomPlacement {
     public IPartPlacement getPlacement(IPart part, World world, Vec3i location, ForgeDirection face, MovingObjectPosition mop,
             EntityPlayer player) {
 
+        if (bundled || type == RedwireType.RED_ALLOY)
+            return null;
+
         return new PartPlacementDefault();
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
     public void addTooltip(List<String> tip) {
 
+        if (bundled || type == RedwireType.RED_ALLOY)
+            tip.add(MinecraftColor.RED + I18n.format("Disabled temporarily. Still not fully working."));
     }
 
 }
