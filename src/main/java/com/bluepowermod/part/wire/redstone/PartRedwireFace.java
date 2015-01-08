@@ -25,6 +25,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -69,7 +70,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class PartRedwireFace extends PartWireFace implements IFaceRedstoneDevice, IRedstoneConductor, IFaceBundledDevice,
-        IBundledConductor, IPartRedstone, IPartWAILAProvider {
+IBundledConductor, IPartRedstone, IPartWAILAProvider {
 
     protected final IRedstoneDevice[] devices = new IRedstoneDevice[6];
     protected final IBundledDevice[] bundledDevices = new IBundledDevice[6];
@@ -491,10 +492,6 @@ public class PartRedwireFace extends PartWireFace implements IFaceRedstoneDevice
             sendUpdatePacket();
 
             for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
-                try {
-                    getWorld();
-                } catch (Exception ex) {
-                }
                 IRedstoneDevice dev = devices[dir.ordinal()];
                 if ((dev != null && (dev instanceof DummyRedstoneDevice)) || dir == getFace())
                     RedstoneHelper.notifyRedstoneUpdate(getWorld(), getX(), getY(), getZ(), dir, true);
@@ -573,43 +570,13 @@ public class PartRedwireFace extends PartWireFace implements IFaceRedstoneDevice
             devices[getFace().ordinal()] = DummyRedstoneDevice.getDeviceAt(new Vec3i(this).add(getFace()));
             devices[getFace().ordinal()].onConnect(getFace().getOpposite(), this);
 
-            // RedstoneApi.getInstance().setWiresOutputPower(false);
-            // int input = 0;
-            // for (int i = 0; i < 6; i++) {
-            // IRedstoneDevice d = devices[i];
-            // if (d != null && d instanceof DummyRedstoneDevice)
-            // input = Math.max(input, d.getRedstonePower(ForgeDirection.getOrientation(i).getOpposite()) & 0xFF);
-            // }
-            // input = Math.max(input,
-            // DummyRedstoneDevice.getDeviceAt(new Vec3i(this).getRelative(getFace())).getRedstonePower(getFace().getOpposite()));
-            // RedstoneApi.getInstance().setWiresOutputPower(true);
-
             RedstoneApi.getInstance().setWiresHandleUpdates(false);
-            // RedstoneApi.getInstance().setWiresOutputPower(false);
-            // for (IRedstoneDevice d : devices) {
-            // if (d == null || !(d instanceof DummyRedstoneDevice))
-            // continue;
-            // Vec3i v = new Vec3i(d);
-            // if (v.getBlock() instanceof BlockRedstoneWire) {
-            // v.getBlock().onNeighborBlockChange(v.getWorld(), v.getX(), v.getY(), v.getZ(), new Vec3i(this).getBlock());
-            // }
-            // }
-            // RedstoneApi.getInstance().setWiresOutputPower(true);
-
             WirePropagator.INSTANCE.onPowerLevelChange(this, getFace(), disconnected ? -1 : lastInput, (byte) -1);
             RedstoneApi.getInstance().setWiresHandleUpdates(true);
 
             lastInput = (byte) 0;
-        }
-    }
-
-    @Override
-    public void onNeighborBlockChange() {
-
-        super.onNeighborBlockChange();
-
-        if (bundled) {
-            for (MinecraftColor c : RedstoneApi.getInstance().getColorsToPropagateOnBlockUpdate(this)) {
+        } else {
+            for (MinecraftColor c : MinecraftColor.VALID_COLORS) {
                 RedstoneApi.getInstance().setWiresHandleUpdates(false);
                 WirePropagator.INSTANCE.onPowerLevelChange(BundledDeviceWrapper.getWrapper(this, c), getFace(), disconnected ? -1
                         : lastInput, (byte) -1);
@@ -638,7 +605,7 @@ public class PartRedwireFace extends PartWireFace implements IFaceRedstoneDevice
             return 0;
 
         return (devices[side.ordinal()] != null && devices[side.ordinal()] instanceof DummyRedstoneDevice) ? ((DummyRedstoneDevice) devices[side
-                .ordinal()]).getRedstoneOutput(MathHelper.map(power & 0xFF, 0, 255, 0, 15)) : 0;
+                                                                                                                                            .ordinal()]).getRedstoneOutput(MathHelper.map(power & 0xFF, 0, 255, 0, 15)) : 0;
     }
 
     @Override
@@ -652,7 +619,7 @@ public class PartRedwireFace extends PartWireFace implements IFaceRedstoneDevice
             return 0;
 
         return (devices[side.ordinal()] != null && devices[side.ordinal()] instanceof DummyRedstoneDevice) ? ((DummyRedstoneDevice) devices[side
-                .ordinal()]).getRedstoneOutput(MathHelper.map(power & 0xFF, 0, 255, 0, 15)) : 0;
+                                                                                                                                            .ordinal()]).getRedstoneOutput(MathHelper.map(power & 0xFF, 0, 255, 0, 15)) : 0;
     }
 
     @Override
@@ -813,13 +780,17 @@ public class PartRedwireFace extends PartWireFace implements IFaceRedstoneDevice
     public IPartPlacement getPlacement(IPart part, World world, Vec3i location, ForgeDirection face, MovingObjectPosition mop,
             EntityPlayer player) {
 
+        if (bundled || type == RedwireType.RED_ALLOY)
+            return null;
+
         return super.getPlacement(part, world, location, face, mop, player);
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
     public void addTooltip(List<String> tip) {
 
+        if (bundled || type == RedwireType.RED_ALLOY)
+            tip.add(MinecraftColor.RED + I18n.format("Disabled temporarily. Still not fully working."));
     }
 
 }

@@ -24,6 +24,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -85,6 +86,9 @@ IPartWAILAProvider, IPartSolid, IPartThruHole, IPartCustomPlacement {
     protected RedwireType type;
     protected boolean bundled;
     protected MinecraftColor color;
+
+    private boolean hasUpdated = false;
+    private boolean disconnected = false;
 
     public PartRedwireFreestanding(RedwireType type, MinecraftColor color, Boolean bundled) {
 
@@ -276,6 +280,7 @@ IPartWAILAProvider, IPartSolid, IPartThruHole, IPartCustomPlacement {
 
         devices[side.ordinal()] = null;
         bundledDevices[side.ordinal()] = null;
+        disconnected = true;
         sendUpdatePacket();
     }
 
@@ -300,24 +305,24 @@ IPartWAILAProvider, IPartSolid, IPartThruHole, IPartCustomPlacement {
     @Override
     public void setRedstonePower(ForgeDirection side, byte power) {
 
-        this.power = isAnalog() ? power : (((power & 0xFF) > 0) ? (byte) 255 : (byte) 0);
+        byte pow = isAnalog() ? power : (((power & 0xFF) > 0) ? (byte) 255 : (byte) 0);
+        hasUpdated = hasUpdated | (pow != this.power);
+        this.power = pow;
     }
 
     @Override
     public void onRedstoneUpdate() {
 
-        if (!bundled) {// && hasUpdated) {
+        if (!bundled && hasUpdated) {
             sendUpdatePacket();
 
             for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
-                try {
-                    getWorld();
-                } catch (Exception ex) {
-                }
                 IRedstoneDevice dev = devices[dir.ordinal()];
-                if ((dev != null && (dev instanceof DummyRedstoneDevice)))
+                if (dev != null && (dev instanceof DummyRedstoneDevice))
                     RedstoneHelper.notifyRedstoneUpdate(getWorld(), getX(), getY(), getZ(), dir, true);
             }
+
+            hasUpdated = false;
         }
     }
 
@@ -390,19 +395,36 @@ IPartWAILAProvider, IPartSolid, IPartThruHole, IPartCustomPlacement {
 
         WireCommons.refreshConnections(this, this);
 
-        int input = 0;
-        for (int i = 0; i < 6; i++) {
-            IRedstoneDevice d = devices[i];
-            if (d != null && !(d instanceof IRedstoneConductor)) {
-                input = Math.max(input, d.getRedstonePower(ForgeDirection.getOrientation(i).getOpposite()) & 0xFF);
+        if (!bundled) {
+            int input = 0;
+            for (int i = 0; i < 6; i++) {
+                IRedstoneDevice d = devices[i];
+                if (d != null && !(d instanceof IRedstoneConductor)) {
+                    input = Math.max(input, d.getRedstonePower(ForgeDirection.getOrientation(i).getOpposite()) & 0xFF);
+                }
+            }
+
+            RedstoneApi.getInstance().setWiresHandleUpdates(false);
+            WirePropagator.INSTANCE.onPowerLevelChange(this, ForgeDirection.DOWN, disconnected ? -1 : lastInput, (byte) -1);
+            RedstoneApi.getInstance().setWiresHandleUpdates(true);
+
+            lastInput = (byte) input;
+
+        } else {
+            for (MinecraftColor c : MinecraftColor.VALID_COLORS) {
+                RedstoneApi.getInstance().setWiresHandleUpdates(false);
+                WirePropagator.INSTANCE.onPowerLevelChange(BundledDeviceWrapper.getWrapper(this, c), ForgeDirection.DOWN, disconnected ? -1
+                        : lastInput, (byte) -1);
+                RedstoneApi.getInstance().setWiresHandleUpdates(true);
             }
         }
+    }
 
-        RedstoneApi.getInstance().setWiresHandleUpdates(false);
-        WirePropagator.INSTANCE.onPowerLevelChange(this, ForgeDirection.DOWN, lastInput, (byte) input);
-        RedstoneApi.getInstance().setWiresHandleUpdates(true);
+    @Override
+    public void onNeighborBlockChange() {
 
-        lastInput = (byte) input;
+        super.onNeighborBlockChange();
+
     }
 
     @Override
@@ -571,13 +593,17 @@ IPartWAILAProvider, IPartSolid, IPartThruHole, IPartCustomPlacement {
     public IPartPlacement getPlacement(IPart part, World world, Vec3i location, ForgeDirection face, MovingObjectPosition mop,
             EntityPlayer player) {
 
+        if (bundled || type == RedwireType.RED_ALLOY)
+            return null;
+
         return new PartPlacementDefault();
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
     public void addTooltip(List<String> tip) {
 
+        if (bundled || type == RedwireType.RED_ALLOY)
+            tip.add(MinecraftColor.RED + I18n.format("Disabled temporarily. Still not fully working."));
     }
 
 }

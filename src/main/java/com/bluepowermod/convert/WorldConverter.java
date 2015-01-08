@@ -33,6 +33,7 @@ import uk.co.qmunity.lib.part.compat.fmp.FMPPart;
 
 import com.bluepowermod.convert.part.PartConverterGate;
 import com.bluepowermod.convert.part.PartConverterLamp;
+import com.bluepowermod.convert.part.PartConverterTube;
 import com.bluepowermod.convert.part.PartConverterWire;
 
 public class WorldConverter {
@@ -43,6 +44,7 @@ public class WorldConverter {
         converters.add(new PartConverterWire());
         converters.add(new PartConverterLamp());
         converters.add(new PartConverterGate());
+        converters.add(new PartConverterTube());
     }
 
     private final File worldFolder;

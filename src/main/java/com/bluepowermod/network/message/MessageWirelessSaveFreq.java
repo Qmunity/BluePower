@@ -1,10 +1,12 @@
 package com.bluepowermod.network.message;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import uk.co.qmunity.lib.network.Packet;
 
 import com.bluepowermod.api.misc.Accessibility;
+import com.bluepowermod.network.NetworkHandler;
 import com.bluepowermod.part.gate.wireless.Frequency;
 import com.bluepowermod.part.gate.wireless.WirelessManager;
 
@@ -33,6 +35,7 @@ public class MessageWirelessSaveFreq extends Packet<MessageWirelessSaveFreq> {
     @Override
     public void handleServerSide(MessageWirelessSaveFreq message, EntityPlayer player) {
 
+        NetworkHandler.sendTo(new MessageWirelessFrequencySync(player), (EntityPlayerMP) player);
     }
 
     @Override
@@ -49,7 +52,7 @@ public class MessageWirelessSaveFreq extends Packet<MessageWirelessSaveFreq> {
 
         freq = new Frequency();
         freq.readFromNBT(tag);
-        freq = (Frequency) WirelessManager.INSTANCE.getFrequency(freq.getAccessibility(), freq.getFrequencyName(), freq.getOwner());
+        freq = (Frequency) WirelessManager.COMMON_INSTANCE.getFrequency(freq.getAccessibility(), freq.getFrequencyName(), freq.getOwner());
 
         freq.setAccessibility(Accessibility.values()[tag.getInteger("acc")]);
         freq.setFrequency(tag.getString("name"));

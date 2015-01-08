@@ -47,7 +47,7 @@ public class BlockLamp extends BlockContainerBase {
 
     }
 
-    private TileLamp get(IBlockAccess w, int x, int y, int z) {
+    protected TileLamp get(IBlockAccess w, int x, int y, int z) {
 
         TileEntity te = w.getTileEntity(x, y, z);
 
@@ -57,7 +57,7 @@ public class BlockLamp extends BlockContainerBase {
         return (TileLamp) te;
     }
 
-    private int getPower(IBlockAccess w, int x, int y, int z) {
+    protected int getPower(IBlockAccess w, int x, int y, int z) {
 
         TileLamp te = get(w, x, y, z);
         if (te == null)

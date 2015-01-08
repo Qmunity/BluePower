@@ -162,7 +162,7 @@ public class GateSequencer extends GateBase implements IGuiButtonSensitive {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public GuiScreen getGui() {
+    public GuiScreen getGui(EntityPlayer player) {
 
         return new GuiGateSingleTime(this) {
 

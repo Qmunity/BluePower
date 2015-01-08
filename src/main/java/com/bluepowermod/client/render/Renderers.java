@@ -13,6 +13,7 @@ import net.minecraft.item.Item;
 import net.minecraftforge.client.MinecraftForgeClient;
 
 import com.bluepowermod.init.BPBlocks;
+import com.bluepowermod.init.BPItems;
 import com.bluepowermod.tile.tier1.TileLamp;
 
 import cpw.mods.fml.client.registry.ClientRegistry;
@@ -45,5 +46,20 @@ public class Renderers {
 
         MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BPBlocks.blockLampRGB), rl);
         MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BPBlocks.blockLampRGBInverted), rl);
+
+        RenderCircuitTile rct = new RenderCircuitTile();
+        MinecraftForgeClient.registerItemRenderer(BPItems.stone_tile, rct);
+        MinecraftForgeClient.registerItemRenderer(BPItems.bluestone_anode_tile, rct);
+        MinecraftForgeClient.registerItemRenderer(BPItems.bluestone_cathode_tile, rct);
+        MinecraftForgeClient.registerItemRenderer(BPItems.bluestone_pointer_tile, rct);
+        MinecraftForgeClient.registerItemRenderer(BPItems.bluestone_wire_tile, rct);
+        MinecraftForgeClient.registerItemRenderer(BPItems.redstone_anode_tile, rct);
+        MinecraftForgeClient.registerItemRenderer(BPItems.redstone_cathode_tile, rct);
+        MinecraftForgeClient.registerItemRenderer(BPItems.redstone_pointer_tile, rct);
+        MinecraftForgeClient.registerItemRenderer(BPItems.redstone_wire_tile, rct);
+        MinecraftForgeClient.registerItemRenderer(BPItems.silicon_chip_tile, rct);
+        MinecraftForgeClient.registerItemRenderer(BPItems.taintedsilicon_chip_tile, rct);
+        MinecraftForgeClient.registerItemRenderer(BPItems.quartz_resonator_tile, rct);
+        MinecraftForgeClient.registerItemRenderer(BPItems.stone_bundle_tile, rct);
     }
 }

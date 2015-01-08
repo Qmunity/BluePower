@@ -17,27 +17,44 @@
 
 package com.bluepowermod.part.gate.wireless;
 
+import io.netty.buffer.ByteBuf;
+
 import java.util.Arrays;
 import java.util.UUID;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.server.MinecraftServer;
 
 import com.bluepowermod.api.misc.Accessibility;
 import com.bluepowermod.api.wireless.IBundledFrequency;
 import com.bluepowermod.api.wireless.IFrequency;
 import com.bluepowermod.api.wireless.IRedstoneFrequency;
+import com.bluepowermod.api.wireless.IWirelessDevice;
+import com.mojang.authlib.GameProfile;
+
+import cpw.mods.fml.common.network.ByteBufUtils;
 
 public class Frequency implements IFrequency {
 
     private Accessibility accessibility;
     private UUID owner;
+    private String ownerName;
     private String frequency;
+    private boolean bundled;
+    private int devices = 0;
 
     public Frequency(Accessibility accessibility, UUID owner, String frequency) {
 
         this.accessibility = accessibility;
         this.owner = owner;
         this.frequency = frequency;
+
+        for (GameProfile p : MinecraftServer.getServer().func_152357_F()) {
+            if (p.getId().equals(owner)) {
+                ownerName = p.getName();
+                break;
+            }
+        }
     }
 
     public Frequency() {
@@ -62,6 +79,11 @@ public class Frequency implements IFrequency {
         return frequency;
     }
 
+    public String getOwnerName() {
+
+        return ownerName;
+    }
+
     public void setAccessibility(Accessibility accessibility) {
 
         this.accessibility = accessibility;
@@ -77,6 +99,7 @@ public class Frequency implements IFrequency {
         tag.setInteger("freq_accessibility", accessibility.ordinal());
         tag.setString("freq_owner", owner.toString());
         tag.setString("freq_name", frequency);
+        tag.setBoolean("freq_bundled", isBundled());
     }
 
     public void readFromNBT(NBTTagCompound tag) {
@@ -84,12 +107,63 @@ public class Frequency implements IFrequency {
         accessibility = Accessibility.values()[tag.getInteger("freq_accessibility")];
         owner = UUID.fromString(tag.getString("freq_owner"));
         frequency = tag.getString("freq_name");
+        bundled = tag.getBoolean("freq_bundled");
+    }
+
+    public void writeToBuffer(ByteBuf buf) {
+
+        buf.writeInt(accessibility.ordinal());
+        ByteBufUtils.writeUTF8String(buf, owner.toString());
+        ByteBufUtils.writeUTF8String(buf, ownerName);
+        ByteBufUtils.writeUTF8String(buf, frequency);
+        buf.writeBoolean(isBundled());
+
+        int amt = 0;
+        for (IWirelessDevice d : WirelessManager.COMMON_INSTANCE.getDevices())
+            if (d.getFrequency() != null && d.getFrequency().equals(this))
+                amt++;
+        buf.writeInt(amt);
+    }
+
+    public void readFromBuffer(ByteBuf buf) {
+
+        accessibility = Accessibility.values()[buf.readInt()];
+        owner = UUID.fromString(ByteBufUtils.readUTF8String(buf));
+        ownerName = ByteBufUtils.readUTF8String(buf);
+        frequency = ByteBufUtils.readUTF8String(buf);
+        bundled = buf.readBoolean();
+        devices = buf.readInt();
     }
 
     @Override
     public void notifyClients() {
 
         // TODO: Notify clients!
+    }
+
+    public boolean isBundled() {
+
+        if (this instanceof IBundledFrequency)
+            return true;
+
+        return bundled;
+    }
+
+    public int getDevices() {
+
+        return devices;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+
+        if (obj != null && obj instanceof Frequency) {
+            Frequency f = (Frequency) obj;
+            return f.accessibility == accessibility && f.owner.equals(owner) && f.frequency.equals(frequency)
+                    && f.isBundled() == isBundled();
+        }
+
+        return false;
     }
 
     public static final class RedstoneFrequency extends Frequency implements IRedstoneFrequency {

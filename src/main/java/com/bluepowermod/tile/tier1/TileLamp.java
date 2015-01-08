@@ -9,21 +9,28 @@ package com.bluepowermod.tile.tier1;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.EnumSkyBlock;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
+import uk.co.qmunity.lib.helper.MathHelper;
 import uk.co.qmunity.lib.helper.RedstoneHelper;
 
 import com.bluepowermod.api.misc.MinecraftColor;
+import com.bluepowermod.api.redstone.IBundledDevice;
 import com.bluepowermod.block.machine.BlockLamp;
 import com.bluepowermod.block.machine.BlockLampRGB;
-import com.bluepowermod.block.machine.BlockLampRGB.RGBLampBundledDevice;
 import com.bluepowermod.client.render.RenderLamp;
 import com.bluepowermod.tile.TileBase;
 
 /**
  * @author Koen Beckers (K4Unl) Yes. I only need this class to do the getPower() function.. damn :(
  */
-public class TileLamp extends TileBase {
+public class TileLamp extends TileBase implements IBundledDevice {
 
     private int power;
+
+    private byte[] bundledPower = new byte[16];
+
+    private IBundledDevice[] devices = new IBundledDevice[6];
 
     public int getPower() {
 
@@ -33,16 +40,15 @@ public class TileLamp extends TileBase {
     public void onUpdate() {
 
         if (blockType instanceof BlockLampRGB) {
-            RGBLampBundledDevice lamp = BlockLampRGB.RGBLampBundledDevice.getDeviceAt(worldObj, xCoord, yCoord, zCoord);
             int pow = 0;
             if (((BlockLamp) blockType).isInverted()) {
-                pow = 255 - Math.min(Math.min(lamp.getBundledPower(null)[MinecraftColor.RED.ordinal()] & 0xFF,
-                        lamp.getBundledPower(null)[MinecraftColor.GREEN.ordinal()] & 0xFF), lamp.getBundledPower(null)[MinecraftColor.BLUE
-                                                                                                                       .ordinal()] & 0xFF);
+                pow = 255 - Math.min(
+                        Math.min(bundledPower[MinecraftColor.RED.ordinal()] & 0xFF, bundledPower[MinecraftColor.GREEN.ordinal()] & 0xFF),
+                        bundledPower[MinecraftColor.BLUE.ordinal()] & 0xFF);
             } else {
-                pow = Math.max(Math.max(lamp.getBundledPower(null)[MinecraftColor.RED.ordinal()] & 0xFF,
-                        lamp.getBundledPower(null)[MinecraftColor.GREEN.ordinal()] & 0xFF), lamp.getBundledPower(null)[MinecraftColor.BLUE
-                                                                                                                       .ordinal()] & 0xFF);
+                pow = Math.max(
+                        Math.max(bundledPower[MinecraftColor.RED.ordinal()] & 0xFF, bundledPower[MinecraftColor.GREEN.ordinal()] & 0xFF),
+                        bundledPower[MinecraftColor.BLUE.ordinal()] & 0xFF);
             }
             power = (int) ((pow / 256D) * 15);
             sendUpdatePacket();
@@ -63,10 +69,9 @@ public class TileLamp extends TileBase {
 
         tCompound.setInteger("power", power);
         if (blockType instanceof BlockLampRGB) {
-            RGBLampBundledDevice lamp = BlockLampRGB.RGBLampBundledDevice.getDeviceAt(worldObj, xCoord, yCoord, zCoord);
-            tCompound.setByte("red", lamp.getBundledPower(null)[MinecraftColor.RED.ordinal()]);
-            tCompound.setByte("green", lamp.getBundledPower(null)[MinecraftColor.GREEN.ordinal()]);
-            tCompound.setByte("blue", lamp.getBundledPower(null)[MinecraftColor.BLUE.ordinal()]);
+            tCompound.setByte("red", bundledPower[MinecraftColor.RED.ordinal()]);
+            tCompound.setByte("green", bundledPower[MinecraftColor.GREEN.ordinal()]);
+            tCompound.setByte("blue", bundledPower[MinecraftColor.BLUE.ordinal()]);
         }
     }
 
@@ -75,12 +80,11 @@ public class TileLamp extends TileBase {
 
         power = tCompound.getInteger("power");
         if (tCompound.hasKey("red")) {
-            RGBLampBundledDevice lamp = BlockLampRGB.RGBLampBundledDevice.getDeviceAt(worldObj, xCoord, yCoord, zCoord);
-            byte[] pow = lamp.getBundledPower(null);
+            byte[] pow = bundledPower;
             pow[MinecraftColor.RED.ordinal()] = tCompound.getByte("red");
             pow[MinecraftColor.GREEN.ordinal()] = tCompound.getByte("green");
             pow[MinecraftColor.BLUE.ordinal()] = tCompound.getByte("blue");
-            lamp.setBundledPower(null, pow);
+            bundledPower = pow;
         }
         if (getWorldObj() != null) {
             getWorldObj().markBlockRangeForRenderUpdate(xCoord, yCoord, zCoord, xCoord, yCoord, zCoord);
@@ -93,5 +97,110 @@ public class TileLamp extends TileBase {
 
         RenderLamp.pass = pass;
         return true;
+    }
+
+    @Override
+    public World getWorld() {
+
+        return getWorldObj();
+    }
+
+    @Override
+    public int getX() {
+
+        return xCoord;
+    }
+
+    @Override
+    public int getY() {
+
+        return yCoord;
+    }
+
+    @Override
+    public int getZ() {
+
+        return zCoord;
+    }
+
+    @Override
+    public boolean canConnectBundledStraight(ForgeDirection side, IBundledDevice device) {
+
+        return side != ForgeDirection.UNKNOWN;
+    }
+
+    @Override
+    public boolean canConnectBundledOpenCorner(ForgeDirection side, IBundledDevice device) {
+
+        return false;
+    }
+
+    @Override
+    public void onConnect(ForgeDirection side, IBundledDevice device) {
+
+        devices[side.ordinal()] = device;
+    }
+
+    @Override
+    public void onDisconnect(ForgeDirection side) {
+
+        devices[side.ordinal()] = null;
+    }
+
+    @Override
+    public IBundledDevice getBundledDeviceOnSide(ForgeDirection side) {
+
+        return devices[side.ordinal()];
+    }
+
+    @Override
+    public byte[] getBundledOutput(ForgeDirection side) {
+
+        return new byte[16];
+    }
+
+    @Override
+    public void setBundledPower(ForgeDirection side, byte[] power) {
+
+        bundledPower = power;
+    }
+
+    @Override
+    public byte[] getBundledPower(ForgeDirection side) {
+
+        return bundledPower;
+    }
+
+    @Override
+    public void onBundledUpdate() {
+
+        onUpdate();
+    }
+
+    @Override
+    public MinecraftColor getBundledColor() {
+
+        return MinecraftColor.NONE;
+    }
+
+    @Override
+    public boolean isBundled() {
+
+        return blockType instanceof BlockLampRGB;
+    }
+
+    @Override
+    public boolean isNormalBlock() {
+
+        return true;
+    }
+
+    public int getColor() {
+
+        int r = MathHelper.map(bundledPower[MinecraftColor.RED.ordinal()] & 0xFF, 0, 255, 20, 235);
+        int g = MathHelper.map(bundledPower[MinecraftColor.GREEN.ordinal()] & 0xFF, 0, 255, 20, 235);
+        int b = MathHelper.map(bundledPower[MinecraftColor.BLUE.ordinal()] & 0xFF, 0, 255, 20, 235);
+
+        return (r << 16) + (g << 8) + b;
     }
 }
