@@ -20,8 +20,8 @@ package com.bluepowermod.client.gui;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 
-import com.bluepowermod.containers.ContainerAlloyFurnace;
-import com.bluepowermod.tileentities.tier1.TileAlloyFurnace;
+import com.bluepowermod.container.ContainerAlloyFurnace;
+import com.bluepowermod.tile.tier1.TileAlloyFurnace;
 import com.bluepowermod.util.Refs;
 
 /**

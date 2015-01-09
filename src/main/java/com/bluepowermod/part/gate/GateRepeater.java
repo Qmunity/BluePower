@@ -1,86 +1,101 @@
 /*
- * This file is part of Blue Power. Blue Power is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
- * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version. Blue Power is
- * distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
- * PARTICULAR PURPOSE. See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along
- * with Blue Power. If not, see <http://www.gnu.org/licenses/>
+ * This file is part of Blue Power.
+ *
+ *      Blue Power is free software: you can redistribute it and/or modify
+ *      it under the terms of the GNU General Public License as published by
+ *      the Free Software Foundation, either version 3 of the License, or
+ *      (at your option) any later version.
+ *
+ *      Blue Power is distributed in the hope that it will be useful,
+ *      but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *      GNU General Public License for more details.
+ *
+ *      You should have received a copy of the GNU General Public License
+ *      along with Blue Power.  If not, see <http://www.gnu.org/licenses/>
  */
+
 package com.bluepowermod.part.gate;
 
 import java.util.List;
 
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import uk.co.qmunity.lib.raytrace.QMovingObjectPosition;
+import uk.co.qmunity.lib.util.Dir;
 
-import com.bluepowermod.api.part.FaceDirection;
-import com.bluepowermod.api.part.RedstoneConnection;
-import com.bluepowermod.client.renderers.RenderHelper;
+import com.bluepowermod.client.render.RenderHelper;
+import com.bluepowermod.util.Color;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 /**
- * @Author Koen Beckers (K4Unl)
+ * Created by Quetzi on 04/11/14.
  */
 public class GateRepeater extends GateBase {
 
     private boolean power = false;
-    private boolean powerBack = false;
+    private boolean lastInput = false;
+    private boolean currentUpdate = false;
+
     private int ticksRemaining = 0;
     private int location = 0;
     private int[] ticks = { 1, 2, 3, 4, 8, 16, 32, 64, 128, 256, 1024 };
 
     @Override
-    public void initializeConnections(RedstoneConnection front, RedstoneConnection left, RedstoneConnection back, RedstoneConnection right) {
+    public void initializeConnections() {
 
-        // Init front
-        front.enable();
-        front.setOutput();
-
-        // Init back
-        back.enable();
-        back.setInput();
+        front().enable().setOutputOnly();
+        back().enable();
     }
 
     @Override
-    public String getGateID() {
+    public String getId() {
 
         return "repeater";
     }
 
     @Override
-    public void renderTop(RedstoneConnection front, RedstoneConnection left, RedstoneConnection back, RedstoneConnection right, float frame) {
+    @SideOnly(Side.CLIENT)
+    public void renderTop(float frame) {
 
-        renderTopTexture(FaceDirection.FRONT, power);
-        RenderHelper.renderRedstoneTorch(pixel * -3, pixel * 2, pixel * -6, pixel * 8, !power);
+        renderTop("front", !power);
+        RenderHelper.renderDigitalRedstoneTorch(3D / 16D, 5D / 16D, 6D / 16D, 1D / 2D, power);
 
-        renderTopTexture(FaceDirection.BACK, powerBack);
-        RenderHelper.renderRedstoneTorch(pixel * 4, pixel * 2, pixel * (4 - location), pixel * 8, (back.getPower() > 0));
+        renderTop("back", currentUpdate);
+        RenderHelper.renderDigitalRedstoneTorch(-1D / 4D, 4D / 16D, -(1D / 16D * (5 - location)), 1D / 2D, !power);
     }
 
     @Override
-    public void addOcclusionBoxes(List<AxisAlignedBB> boxes) {
+    public void doLogic() {
 
-        super.addOcclusionBoxes(boxes);
-
-        boxes.add(AxisAlignedBB.getBoundingBox(7D / 16D, 2D / 16D, 7D / 16D, 9D / 16D, 9D / 16D, 9D / 16D));
     }
 
     @Override
-    public void doLogic(RedstoneConnection front, RedstoneConnection left, RedstoneConnection back, RedstoneConnection right) {
+    public void tick() {
 
-        if (powerBack != back.getPower() > 0 && ticksRemaining == 0) {
-            ticksRemaining = ticks[location];
+        boolean in = back().getInput() > 0;
+
+        if (in != currentUpdate) {
+            if (in || (!in && ticksRemaining == 0)) {
+                ticksRemaining = ticks[location];
+                currentUpdate = in;
+            }
         }
-        powerBack = back.getPower() > 0;
-        if (ticksRemaining == 0) {
-            power = powerBack;
-        } else {
+
+        if (ticksRemaining > 0)
             ticksRemaining--;
-        }
 
-        front.setPower(power ? 15 : 0);
+        if (ticksRemaining == 0)
+            power = currentUpdate;
+
+        front().setOutput(power ? 15 : 0);
     }
 
     @Override
-    protected boolean changeMode(RedstoneConnection front, RedstoneConnection left, RedstoneConnection back, RedstoneConnection right) {
+    protected boolean changeMode() {
 
         location++;
         if (location == 9) {
@@ -90,31 +105,35 @@ public class GateRepeater extends GateBase {
     }
 
     @Override
-    public void addWailaInfo(List<String> info) {
+    @SideOnly(Side.CLIENT)
+    public void addWAILABody(List<String> info) {
 
-        /*
-         * info.add(Color.YELLOW + I18n.format("gui.connections") + ":"); info.add("  " + FaceDirection.LEFT.getLocalizedName() + ": " +
-         * (getConnection(FaceDirection.LEFT).isEnabled() ? Color.GREEN + I18n.format("random.enabled") : Color.RED +
-         * I18n.format("random.disabled"))); info.add("  " + FaceDirection.BACK.getLocalizedName() + ": " +
-         * (getConnection(FaceDirection.BACK).isEnabled() ? Color.GREEN + I18n.format("random.enabled") : Color.RED +
-         * I18n.format("random.disabled"))); info.add("  " + FaceDirection.RIGHT.getLocalizedName() + ": " +
-         * (getConnection(FaceDirection.RIGHT).isEnabled() ? Color.GREEN + I18n.format("random.enabled") : Color.RED +
-         * I18n.format("random.disabled")));
-         */
+        info.add(Color.YELLOW + I18n.format("gui.connections") + ":");
+        info.add("  "
+                + Dir.LEFT.getLocalizedName()
+                + ": "
+                + (getConnection(Dir.LEFT).isEnabled() ? Color.GREEN + I18n.format("random.enabled") : Color.RED
+                        + I18n.format("random.disabled")));
+        info.add("  "
+                + Dir.BACK.getLocalizedName()
+                + ": "
+                + (getConnection(Dir.BACK).isEnabled() ? Color.GREEN + I18n.format("random.enabled") : Color.RED
+                        + I18n.format("random.disabled")));
+        info.add("  "
+                + Dir.RIGHT.getLocalizedName()
+                + ": "
+                + (getConnection(Dir.RIGHT).isEnabled() ? Color.GREEN + I18n.format("random.enabled") : Color.RED
+                        + I18n.format("random.disabled")));
     }
 
     @Override
-    public void save(NBTTagCompound tag) {
+    public boolean onActivated(EntityPlayer player, QMovingObjectPosition hit, ItemStack item) {
 
-        super.save(tag);
-        tag.setInteger("location", location);
+        if (item == null) {
+            location = (location + 1) % ticks.length;
+            return true;
+        }
+
+        return super.onActivated(player, hit, item);
     }
-
-    @Override
-    public void load(NBTTagCompound tag) {
-
-        super.load(tag);
-        location = tag.getInteger("location");
-    }
-
 }

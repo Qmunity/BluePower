@@ -7,43 +7,61 @@
  */
 package com.bluepowermod.part.lamp;
 
+import java.util.Arrays;
 import java.util.List;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.IIcon;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import org.lwjgl.opengl.GL11;
 
-import com.bluepowermod.api.helper.RedstoneHelper;
-import com.bluepowermod.api.part.BPPartFace;
-import com.bluepowermod.api.part.RedstoneConnection;
-import com.bluepowermod.api.vec.Vector3;
-import com.bluepowermod.api.vec.Vector3Cube;
-import com.bluepowermod.client.renderers.IconSupplier;
-import com.bluepowermod.client.renderers.RenderHelper;
-import com.bluepowermod.init.CustomTabs;
+import uk.co.qmunity.lib.client.render.RenderHelper;
+import uk.co.qmunity.lib.helper.MathHelper;
+import uk.co.qmunity.lib.helper.RedstoneHelper;
+import uk.co.qmunity.lib.part.IPartRedstone;
+import uk.co.qmunity.lib.part.MicroblockShape;
+import uk.co.qmunity.lib.part.compat.MultipartCompatibility;
+import uk.co.qmunity.lib.part.compat.OcclusionHelper;
+import uk.co.qmunity.lib.transform.Rotation;
+import uk.co.qmunity.lib.vec.Vec3d;
+import uk.co.qmunity.lib.vec.Vec3dCube;
+import uk.co.qmunity.lib.vec.Vec3i;
+
+import com.bluepowermod.api.misc.MinecraftColor;
+import com.bluepowermod.api.redstone.IFaceRedstoneDevice;
+import com.bluepowermod.api.redstone.IRedstoneDevice;
+import com.bluepowermod.init.BPCreativeTabs;
+import com.bluepowermod.part.BPPartFace;
+import com.bluepowermod.part.wire.redstone.PartRedwireFreestanding;
+import com.bluepowermod.part.wire.redstone.WireCommons;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * Base class for the lamps that are multiparts.
- * 
- * @author Koen Beckers (K4Unl)
- * 
+ *
+ * @author Koen Beckers (K4Unl), Amadornes
+ *
  */
-public class PartLamp extends BPPartFace {
+public abstract class PartLamp extends BPPartFace implements IPartRedstone, IFaceRedstoneDevice {
 
-    protected String colorName;
-    private int colorVal;
-    protected boolean inverted;
+    protected final MinecraftColor color;
+    protected final boolean inverted;
 
-    protected int power = 0;
+    protected byte power = 0;
+    private byte[] input = new byte[6];
+
+    private IRedstoneDevice[] devices = new IRedstoneDevice[6];
 
     /**
      * @author amadornes
@@ -52,26 +70,19 @@ public class PartLamp extends BPPartFace {
      * @param inverted
      *            TODO
      */
-    public PartLamp(String colorName, Integer colorVal, Boolean inverted) {
+    public PartLamp(MinecraftColor color, Boolean inverted) {
 
-        this.colorName = colorName;
-        this.colorVal = colorVal;
+        this.color = color;
         this.inverted = inverted;
-
-        for (int i = 0; i < 4; i++)
-            connections[i] = new RedstoneConnection(this, i + "", true, false);
-
-        for (RedstoneConnection c : connections) {
-            c.enable();
-            c.setInput();
-        }
     }
 
     @Override
     public String getType() {
 
-        return (inverted ? "inverted" : "") + "lamp" + colorName;
+        return getLampType() + "." + color.name().toLowerCase() + (inverted ? ".inverted" : "");
     }
+
+    protected abstract String getLampType();
 
     /**
      * @author amadornes
@@ -79,227 +90,280 @@ public class PartLamp extends BPPartFace {
     @Override
     public String getUnlocalizedName() {
 
-        return (inverted ? "inverted" : "") + "lamp." + colorName;
+        return getType();
     }
 
     /**
      * @author amadornes
      */
     @Override
-    public void addCollisionBoxes(List<AxisAlignedBB> boxes) {
+    public void addCollisionBoxesToList(List<Vec3dCube> boxes, Entity entity) {
 
-        addSelectionBoxes(boxes);
-    }
-
-    /**
-     * @author Koen Beckers (K4Unl)
-     */
-
-    @Override
-    public void addSelectionBoxes(List<AxisAlignedBB> boxes) {
-
-        boxes.add(AxisAlignedBB.getBoundingBox(0.0, 0.0, 0.0, 1.0, 1.0, 1.0));
+        boxes.addAll(getSelectionBoxes());
     }
 
     /**
      * @author amadornes
      */
     @Override
-    public void addOcclusionBoxes(List<AxisAlignedBB> boxes) {
+    public List<Vec3dCube> getOcclusionBoxes() {
 
-        addSelectionBoxes(boxes);
+        return getSelectionBoxes();
+    }
+
+    /**
+     * @author amadornes
+     */
+
+    @Override
+    public List<Vec3dCube> getSelectionBoxes() {
+
+        return Arrays.asList(new Vec3dCube(0.0, 0.0, 0.0, 1.0, 1.0, 1.0));
     }
 
     /**
      * @author Koen Beckers (K4Unl)
      */
     @Override
+    @SideOnly(Side.CLIENT)
     public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
 
-        power = inverted ? 15 : 0;
+        power = (byte) 255;
+
+        RenderHelper rh = RenderHelper.instance;
+        rh.setRenderCoords(null, 0, 0, 0);
+        Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
+
+        Tessellator.instance.startDrawingQuads();
+        renderStatic(new Vec3i(0, 0, 0), rh, RenderBlocks.getInstance(), 0);
+        Tessellator.instance.draw();
+
+        rh.reset();
 
         GL11.glPushMatrix();
-        GL11.glTranslated(0.5, 0.5, 0.5);
-        GL11.glRotated(180, 1, 0, 0);
-        GL11.glTranslated(-0.5, -0.5, -0.5);
-        Tessellator t = Tessellator.instance;
-        Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
-        GL11.glPushMatrix();
-        t.startDrawingQuads();
-        renderStatic(new Vector3(0, 0, 0), 0);
-        t.draw();
+        renderGlow(1);
         GL11.glPopMatrix();
-        GL11.glPushMatrix();
-        t.startDrawingQuads();
-        renderStatic(new Vector3(0, 0, 0), 1);
-        t.draw();
-        GL11.glPopMatrix();
+
         Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationItemsTexture);
-        GL11.glPopMatrix();
     }
 
     /**
-     * @author Koen Beckers (K4Unl)
+     * @author Koen Beckers (K4Unl), Amadornes
      */
     @Override
-    public boolean renderStatic(Vector3 loc, int pass) {
+    @SideOnly(Side.CLIENT)
+    public void renderDynamic(Vec3d translation, double delta, int pass) {
 
-        rotateAndTranslateDynamic(loc, pass, 0);
-        Tessellator t = Tessellator.instance;
-        t.setColorOpaque_F(1, 1, 1);
+        RenderHelper renderer = RenderHelper.instance;
+        renderer.reset();
+
+        switch (getFace().ordinal()) {
+        case 0:
+            break;
+        case 1:
+            renderer.addTransformation(new Rotation(180, 0, 0, Vec3d.center));
+            break;
+        case 2:
+            renderer.addTransformation(new Rotation(90, 0, 0, Vec3d.center));
+            break;
+        case 3:
+            renderer.addTransformation(new Rotation(-90, 0, 0, Vec3d.center));
+            break;
+        case 4:
+            renderer.addTransformation(new Rotation(0, 0, -90, Vec3d.center));
+            break;
+        case 5:
+            renderer.addTransformation(new Rotation(0, 0, 90, Vec3d.center));
+            break;
+        }
+
+        renderGlow(pass);
+
+        renderer.resetTransformations();
+    }
+
+    /**
+     * This render method gets called whenever there's a block update in the chunk. You should use this to remove load from the renderer if a part of
+     * the rendering code doesn't need to get called too often or just doesn't change at all. To call a render update to re-render this just call
+     * {@link com.bluepowermod.part.BPPart#markPartForRenderUpdate()}
+     *
+     * @param loc
+     *            Distance from the player's position
+     * @param pass
+     *            Render pass (0 or 1)
+     * @return Whether or not it rendered something
+     */
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public boolean renderStatic(Vec3i loc, RenderHelper renderer, RenderBlocks renderBlocks, int pass) {
+
+        switch (getFace().ordinal()) {
+        case 0:
+            break;
+        case 1:
+            renderer.addTransformation(new Rotation(180, 0, 0, Vec3d.center));
+            break;
+        case 2:
+            renderer.addTransformation(new Rotation(90, 0, 0, Vec3d.center));
+            break;
+        case 3:
+            renderer.addTransformation(new Rotation(-90, 0, 0, Vec3d.center));
+            break;
+        case 4:
+            renderer.addTransformation(new Rotation(0, 0, -90, Vec3d.center));
+            break;
+        case 5:
+            renderer.addTransformation(new Rotation(0, 0, 90, Vec3d.center));
+            break;
+        }
 
         // Render base
-        renderBase(pass);
+        renderLamp(renderer);
 
-        // Color multiplier
-        int redMask = 0xFF0000, greenMask = 0xFF00, blueMask = 0xFF;
-        int r = (colorVal & redMask) >> 16;
-        int g = (colorVal & greenMask) >> 8;
-        int b = (colorVal & blueMask);
-
-        t.setColorOpaque(r, g, b);
-        // Render lamp itself here
-        renderLamp(pass, r, g, b);
+        renderer.resetTransformations();
 
         return true;
     }
 
     @Override
-    public boolean shouldRenderStaticOnPass(int pass) {
+    @SideOnly(Side.CLIENT)
+    public boolean shouldRenderOnPass(int pass) {
 
         return true;
     }
 
     /**
      * Code to render the base portion of the lamp. Will not be colored
-     * 
+     *
      * @author Koen Beckers (K4Unl)
+     * @param renderer
      * @param pass
-     *            The pass that is rendered now. Pass 1 for solids. Pass 2 for transparents
      */
-    public void renderBase(int pass) {
+    @SideOnly(Side.CLIENT)
+    public void renderLamp(RenderHelper renderer) {
 
     }
 
     /**
      * Code to render the actual lamp portion of the lamp. Will be colored
-     * 
+     *
      * @author Koen Beckers (K4Unl)
      * @param pass
      *            The pass that is rendered now. Pass 1 for solids. Pass 2 for transparents
-     * @param r
-     *            The ammount of red in the lamp
-     * @param g
-     *            The ammount of green in the lamp
-     * @param b
-     *            The ammount of blue in the lamp
      */
-    public void renderLamp(int pass, int r, int g, int b) {
+    @SideOnly(Side.CLIENT)
+    public void renderGlow(int pass) {
 
-        Vector3Cube vector = new Vector3Cube(0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
-
-        if (pass == 0) {
-            Tessellator t = Tessellator.instance;
-            IIcon iconToUse;
-            if (power == 0) {
-                iconToUse = IconSupplier.lampOff;
-            } else {
-                iconToUse = IconSupplier.lampOn;
-
-                /*
-                 * t.setColorRGBA(r, g, b, 20); RenderHelper.drawTesselatedCube(new Vector3Cube(pixel * 4.5, pixel * 2, pixel * 4.5, 1.0 -
-                 * (pixel*4.5), 1.0 - (pixel * 4.5), 1.0 - pixel * 4.5)); t.setColorRGBA(r, g, b, 255);
-                 */
-            }
-
-            double minU = iconToUse.getMinU();
-            double maxU = iconToUse.getMaxU();
-            double minV = iconToUse.getMinV();
-            double maxV = iconToUse.getMaxV();
-
-            // Top side
-            t.setNormal(0, 1, 0);
-            t.addVertexWithUV(vector.getMinX(), vector.getMaxY(), vector.getMaxZ(), minU, maxV);
-            t.addVertexWithUV(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ(), minU, minV);
-            t.addVertexWithUV(vector.getMaxX(), vector.getMaxY(), vector.getMinZ(), maxU, minV);
-            t.addVertexWithUV(vector.getMinX(), vector.getMaxY(), vector.getMinZ(), maxU, maxV);
-
-            // Draw west side:
-            t.setNormal(-1, 0, 0);
-            t.addVertexWithUV(vector.getMinX(), vector.getMinY(), vector.getMaxZ(), minU, maxV);
-            t.addVertexWithUV(vector.getMinX(), vector.getMaxY(), vector.getMaxZ(), minU, minV);
-            t.addVertexWithUV(vector.getMinX(), vector.getMaxY(), vector.getMinZ(), maxU, minV);
-            t.addVertexWithUV(vector.getMinX(), vector.getMinY(), vector.getMinZ(), maxU, maxV);
-
-            // Draw east side:
-            t.setNormal(1, 0, 0);
-            t.addVertexWithUV(vector.getMaxX(), vector.getMinY(), vector.getMinZ(), minU, maxV);
-            t.addVertexWithUV(vector.getMaxX(), vector.getMaxY(), vector.getMinZ(), minU, minV);
-            t.addVertexWithUV(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ(), maxU, minV);
-            t.addVertexWithUV(vector.getMaxX(), vector.getMinY(), vector.getMaxZ(), maxU, maxV);
-
-            // Draw north side
-            t.setNormal(0, 0, -1);
-            t.addVertexWithUV(vector.getMinX(), vector.getMinY(), vector.getMinZ(), minU, maxV);
-            t.addVertexWithUV(vector.getMinX(), vector.getMaxY(), vector.getMinZ(), minU, minV);
-            t.addVertexWithUV(vector.getMaxX(), vector.getMaxY(), vector.getMinZ(), maxU, minV);
-            t.addVertexWithUV(vector.getMaxX(), vector.getMinY(), vector.getMinZ(), maxU, maxV);
-
-            // Draw south side
-            t.setNormal(0, 0, 1);
-            t.addVertexWithUV(vector.getMinX(), vector.getMinY(), vector.getMaxZ(), minU, maxV);
-            t.addVertexWithUV(vector.getMaxX(), vector.getMinY(), vector.getMaxZ(), maxU, maxV);
-            t.addVertexWithUV(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ(), maxU, minV);
-            t.addVertexWithUV(vector.getMinX(), vector.getMaxY(), vector.getMaxZ(), minU, minV);
-        }
-
-        if (power > 0 && pass == 1) {
-            GL11.glEnable(GL11.GL_BLEND);
-            GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
-            GL11.glDisable(GL11.GL_TEXTURE_2D);
-            GL11.glDisable(GL11.GL_LIGHTING);
-            // GL11.glDisable(GL11.GL_CULL_FACE);
-            GL11.glDepthMask(false);
-            GL11.glBegin(GL11.GL_QUADS);
-            RenderHelper.drawColoredCube(vector.clone().expand(0.8 / 16D), r / 256D, g / 256D, b / 256D, (power / 15D) * 0.625);
-            GL11.glEnd();
-            GL11.glDepthMask(true);
-            GL11.glEnable(GL11.GL_CULL_FACE);
-            GL11.glEnable(GL11.GL_LIGHTING);
-            GL11.glEnable(GL11.GL_TEXTURE_2D);
-            GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-            GL11.glDisable(GL11.GL_BLEND);
-        }
     }
 
     @Override
     public int getLightValue() {
 
-        return power;
+        return (inverted ? 15 - power : power);
+    }
+
+    @Override
+    public void onAdded() {
+
+        super.onAdded();
+
+        WireCommons.refreshConnectionsRedstone(this);
+
+        onUpdate();
     }
 
     /**
      * @author amadornes
      */
     @Override
-    public void update() {
+    public void onUpdate() {
 
-        super.update();
+        recalculatePower();
+    }
+
+    private void recalculatePower() {
+
+        if (getWorld().isRemote)
+            return;
 
         int old = power;
 
-        power = 0;
-        for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS)
-            power = Math.max(power, RedstoneHelper.getInput(getWorld(), getX(), getY(), getZ(), d));
-
-        if (inverted) {
-            power = 15 - power;
+        int pow = 0;
+        for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
+            IRedstoneDevice dev = getDeviceOnSide(d);
+            if (dev != null) {
+                pow = Math.max(pow, input[d.ordinal()] & 0xFF);
+            } else {
+                pow = Math.max(pow, MathHelper.map(RedstoneHelper.getInput(getWorld(), getX(), getY(), getZ(), d), 0, 15, 0, 255));
+            }
         }
+        power = (byte) pow;
 
-        if (old != power) {
-            notifyUpdate();
+        if (old != power)
+            sendUpdatePacket();
+    }
+
+    @Override
+    public int getStrongPower(ForgeDirection side) {
+
+        return 0;
+    }
+
+    @Override
+    public int getWeakPower(ForgeDirection side) {
+
+        return 0;
+    }
+
+    @Override
+    public boolean canConnectRedstone(ForgeDirection side) {
+
+        return true;
+    }
+
+    @Override
+    public void writeToNBT(NBTTagCompound tag) {
+
+        super.writeToNBT(tag);
+        tag.setByte("power", power);
+    }
+
+    @Override
+    public void readFromNBT(NBTTagCompound tag) {
+
+        super.readFromNBT(tag);
+        power = tag.getByte("power");
+    }
+
+    @Override
+    public void writeUpdateToNBT(NBTTagCompound tag) {
+
+        super.writeUpdateToNBT(tag);
+        tag.setByte("power", power);
+    }
+
+    @Override
+    public void readUpdateFromNBT(NBTTagCompound tag) {
+
+        super.readUpdateFromNBT(tag);
+        power = tag.getByte("power");
+
+        try {
             getWorld().updateLightByType(EnumSkyBlock.Block, getX(), getY(), getZ());
+        } catch (Exception ex) {
         }
+    }
+
+    @Override
+    public boolean canStay() {
+
+        Vec3i loc = new Vec3i(this).add(getFace());
+
+        if (MultipartCompatibility.getPartHolder(getWorld(), loc) != null)
+            return MultipartCompatibility.getPart(getWorld(), loc, PartRedwireFreestanding.class) != null;
+
+        return super.canStay();
     }
 
     /**
@@ -308,13 +372,95 @@ public class PartLamp extends BPPartFace {
     @Override
     public CreativeTabs getCreativeTab() {
 
-        return CustomTabs.tabBluePowerLighting;
+        return BPCreativeTabs.lighting;
     }
 
     @Override
-    public float getHardness() {
+    public boolean canConnectStraight(ForgeDirection side, IRedstoneDevice device) {
 
-        return 1.5F;
+        if (side == ForgeDirection.UNKNOWN)
+            return false;
+
+        if (OcclusionHelper.microblockOcclusionTest(getParent(), MicroblockShape.EDGE, 1, getFace(), side))
+            return false;
+
+        return true;
+    }
+
+    @Override
+    public boolean canConnectOpenCorner(ForgeDirection side, IRedstoneDevice device) {
+
+        if (side == ForgeDirection.UNKNOWN)
+            return false;
+
+        if (OcclusionHelper.microblockOcclusionTest(getParent(), MicroblockShape.EDGE, 1, getFace(), side))
+            return false;
+
+        return true;
+    }
+
+    @Override
+    public boolean canConnectClosedCorner(ForgeDirection side, IRedstoneDevice device) {
+
+        if (side == getFace())
+            return false;
+        if (side == getFace().getOpposite())
+            return false;
+        if (side == ForgeDirection.UNKNOWN)
+            return false;
+
+        if (OcclusionHelper.microblockOcclusionTest(getParent(), MicroblockShape.EDGE, 1, getFace(), side))
+            return false;
+
+        return true;
+    }
+
+    @Override
+    public MinecraftColor getInsulationColor() {
+
+        return MinecraftColor.NONE;
+    }
+
+    @Override
+    public byte getRedstonePower(ForgeDirection side) {
+
+        return 0;
+    }
+
+    @Override
+    public void setRedstonePower(ForgeDirection side, byte power) {
+
+        input[side.ordinal()] = power;
+    }
+
+    @Override
+    public void onRedstoneUpdate() {
+
+        recalculatePower();
+    }
+
+    @Override
+    public boolean isNormalBlock() {
+
+        return false;
+    }
+
+    @Override
+    public void onConnect(ForgeDirection side, IRedstoneDevice device) {
+
+        devices[side.ordinal()] = device;
+    }
+
+    @Override
+    public void onDisconnect(ForgeDirection side) {
+
+        devices[side.ordinal()] = null;
+    }
+
+    @Override
+    public IRedstoneDevice getDeviceOnSide(ForgeDirection side) {
+
+        return devices[side.ordinal()];
     }
 
 }

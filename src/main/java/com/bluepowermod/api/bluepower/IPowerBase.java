@@ -1,7 +1,7 @@
 package com.bluepowermod.api.bluepower;
 
-import com.bluepowermod.api.vec.Vector3;
 import net.minecraft.nbt.NBTTagCompound;
+import uk.co.qmunity.lib.vec.Vec3i;
 
 /**
  * @author Koen Beckers (K4Unl)
@@ -27,7 +27,7 @@ public interface IPowerBase {
 
     public void addEnergy(float amp);
 
-    public Vector3 getBlockLocation();
+    public Vec3i getBlockLocation();
 
     void update();
 

@@ -8,10 +8,13 @@
 package com.bluepowermod.compat.cc;
 
 import com.bluepowermod.compat.CompatModule;
+import com.bluepowermod.part.wire.redstone.RedstoneApi;
 
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import dan200.computercraft.api.ComputerCraftAPI;
 
 public class CompatModuleCC extends CompatModule {
@@ -20,11 +23,13 @@ public class CompatModuleCC extends CompatModule {
     public void preInit(FMLPreInitializationEvent ev) {
 
         ComputerCraftAPI.registerPeripheralProvider(PeripheralProvider.INSTANCE);
+        ComputerCraftAPI.registerBundledRedstoneProvider(new BundledRedstoneProviderCC());
     }
 
     @Override
     public void init(FMLInitializationEvent ev) {
 
+        RedstoneApi.getInstance().registerRedstoneProvider(new RedstoneProviderCC());
     }
 
     @Override
@@ -43,6 +48,7 @@ public class CompatModuleCC extends CompatModule {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void registerRenders() {
 
     }

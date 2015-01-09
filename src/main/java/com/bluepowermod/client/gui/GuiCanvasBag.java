@@ -23,7 +23,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
-import com.bluepowermod.containers.ContainerCanvasBag;
+import com.bluepowermod.container.ContainerCanvasBag;
 import com.bluepowermod.util.Refs;
 
 public class GuiCanvasBag extends GuiBase {

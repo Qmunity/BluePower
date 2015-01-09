@@ -16,10 +16,10 @@ import com.bluepowermod.client.gui.widget.BaseWidget;
 import com.bluepowermod.client.gui.widget.IGuiWidget;
 import com.bluepowermod.client.gui.widget.WidgetFuzzySetting;
 import com.bluepowermod.client.gui.widget.WidgetMode;
-import com.bluepowermod.containers.ContainerItemDetector;
+import com.bluepowermod.container.ContainerItemDetector;
 import com.bluepowermod.network.NetworkHandler;
-import com.bluepowermod.network.messages.MessageGuiUpdate;
-import com.bluepowermod.tileentities.tier1.TileItemDetector;
+import com.bluepowermod.network.message.MessageGuiUpdate;
+import com.bluepowermod.tile.tier1.TileItemDetector;
 import com.bluepowermod.util.Refs;
 
 /**

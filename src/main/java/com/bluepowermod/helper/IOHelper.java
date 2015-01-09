@@ -7,6 +7,7 @@
  */
 package com.bluepowermod.helper;
 
+import uk.co.qmunity.lib.part.compat.MultipartCompatibility;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockChest;
 import net.minecraft.entity.item.EntityItem;
@@ -18,14 +19,11 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
-import com.bluepowermod.api.compat.IMultipartCompat;
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
 import com.bluepowermod.api.tube.ITubeConnection;
-import com.bluepowermod.compat.CompatibilityUtils;
 import com.bluepowermod.part.tube.PneumaticTube;
 import com.bluepowermod.part.tube.TubeLogic;
 import com.bluepowermod.part.tube.TubeStack;
-import com.bluepowermod.util.Dependencies;
 
 /**
  * @author MineMaarten
@@ -242,8 +240,7 @@ public class IOHelper {
         IInventory inv = getInventoryForTE(tile);
         if (inv != null)
             return insert(inv, itemStack, direction.ordinal(), simulate);
-        IMultipartCompat compat = (IMultipartCompat) CompatibilityUtils.getModule(Dependencies.FMP);
-        PneumaticTube tube = compat.getBPPart(tile, PneumaticTube.class);
+        PneumaticTube tube = MultipartCompatibility.getPart(tile.getWorldObj(), tile.xCoord, tile.yCoord, tile.zCoord, PneumaticTube.class);
         if (tube != null) {// we don't need to check connections, that's catched earlier.
             TubeLogic logic = tube.getLogic();
             return logic.injectStack(itemStack, direction.getOpposite(), color, simulate) ? null : itemStack;
@@ -377,8 +374,8 @@ public class IOHelper {
 
     public static boolean canInterfaceWith(TileEntity tile, ForgeDirection direction, PneumaticTube requester, boolean canInterfaceWithIInventory) {
 
-        IMultipartCompat compat = (IMultipartCompat) CompatibilityUtils.getModule(Dependencies.FMP);
-        PneumaticTube tube = compat.getBPPart(tile, PneumaticTube.class);
+        PneumaticTube tube = tile != null ? MultipartCompatibility.getPart(tile.getWorldObj(), tile.xCoord, tile.yCoord, tile.zCoord,
+                PneumaticTube.class) : null;
         if (tube != null && tube.isConnected(direction, requester))
             return true;
         if (!canInterfaceWithIInventory)

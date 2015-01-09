@@ -7,103 +7,67 @@
  */
 package com.bluepowermod.part.gate;
 
-import com.bluepowermod.api.part.FaceDirection;
-import com.bluepowermod.api.part.RedstoneConnection;
-import com.bluepowermod.client.renderers.RenderHelper;
-import com.bluepowermod.util.Refs;
-import net.minecraft.util.AxisAlignedBB;
+import com.bluepowermod.client.render.RenderHelper;
 
-import java.util.List;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
-/**
- * @Author Koen Beckers (K4Unl)
- */
 public class GateXnor extends GateBase {
-    
-    private boolean q = false;
-    
+
     @Override
-    public void initializeConnections(RedstoneConnection front, RedstoneConnection left, RedstoneConnection back, RedstoneConnection right) {
-    
-        // Init front
-        front.enable();
-        front.setOutput();
-        
-        // Init left
-        left.enable();
-        left.setInput();
-        
-        // Init right
-        right.enable();
-        right.setInput();
+    public void initializeConnections() {
+
+        front().enable().setOutputOnly();
+        right().enable();
+        left().enable();
     }
-    
+
     @Override
-    public String getGateID() {
-    
+    public String getId() {
+
         return "xnor";
     }
-    
+
     @Override
-    public void renderTop(RedstoneConnection front, RedstoneConnection left, RedstoneConnection back, RedstoneConnection right, float frame) {
+    public void doLogic() {
 
+        boolean l = left().getInput() > 0;
+        boolean r = right().getInput() > 0;
 
-        renderTopTexture(FaceDirection.LEFT, left.getPower() > 0);
-        renderTopTexture(FaceDirection.RIGHT, right.getPower() > 0);
-        boolean lp = left.getPower() > 0;
-        boolean rp = right.getPower() > 0;
-
-        //Right
-        if(!rp && lp){
-            RenderHelper.renderRedstoneTorch(pixel * 4, pixel*2, 0, 9D/16D, true);
-            renderTopTexture(Refs.MODID + ":textures/blocks/gates/" + getType() + "/frontright_on.png");
-        }else{
-            RenderHelper.renderRedstoneTorch(pixel * 4, pixel*2, 0, 9D/16D, false);
-            renderTopTexture(Refs.MODID + ":textures/blocks/gates/" + getType() + "/frontright_off.png");
-        }
-
-        //Left
-        if(!lp && rp){
-            RenderHelper.renderRedstoneTorch(pixel * -4, pixel*2, 0, 9D/16D, true);
-            renderTopTexture(Refs.MODID + ":textures/blocks/gates/" + getType() + "/frontleft_on.png");
-        }else{
-            RenderHelper.renderRedstoneTorch(pixel * -4, pixel*2, 0, 9D/16D, false);
-            renderTopTexture(Refs.MODID + ":textures/blocks/gates/" + getType() + "/frontleft_off.png");
-        }
-
-
-
-        if(!lp && !rp){
-            renderTopTexture(Refs.MODID + ":textures/blocks/gates/" + getType() + "/center_on.png");
-            RenderHelper.renderRedstoneTorch(0, pixel*2, pixel * 4, 9D/16D, true);
-        }else{
-            renderTopTexture(Refs.MODID + ":textures/blocks/gates/" + getType() + "/center_off.png");
-            RenderHelper.renderRedstoneTorch(0, pixel*2, pixel * 4, 9D/16D, false);
-        }
-        RenderHelper.renderRedstoneTorch(0, pixel*2, pixel * -4, pixel*10, q);
+        front().setOutput(((l && !r) || (!l && r)) ? 0 : 15);
     }
-    
+
     @Override
-    public void addOcclusionBoxes(List<AxisAlignedBB> boxes) {
-    
-        super.addOcclusionBoxes(boxes);
-        
-        boxes.add(AxisAlignedBB.getBoundingBox(7D / 16D, 2D / 16D, 7D / 16D, 9D / 16D, 8D / 16D, 9D / 16D));
-    }
-    
-    @Override
-    public void doLogic(RedstoneConnection front, RedstoneConnection left, RedstoneConnection back, RedstoneConnection right) {
+    protected boolean changeMode() {
 
-        boolean p1 = right.getPower() > 0;
-        boolean p2 = left.getPower() > 0;
-        q = (p1 && p2) || (!p1 && !p2);
-        
-        front.setPower(q ? 15 : 0);
+        return true;
     }
-    
+
     @Override
-    public void addWailaInfo(List<String> info) {
-    
+    @SideOnly(Side.CLIENT)
+    protected void renderTop(float frame) {
+
+        boolean l = left().getInput() > 0;
+        boolean r = right().getInput() > 0;
+        boolean c = !l && !r;
+
+        renderTop("frontleft", (!l && !c) ? "on" : "off");
+        renderTop("frontright", (!r && !c) ? "on" : "off");
+        renderTop("right", right());
+        renderTop("left", left());
+        renderTop("center", c ? "on" : "off");
+
+        RenderHelper.renderDigitalRedstoneTorch(4 / 16D, 0, 0, 12 / 16D, !l && !c);
+        RenderHelper.renderDigitalRedstoneTorch(-4 / 16D, 0, 0, 12 / 16D, !r && !c);
+
+        RenderHelper.renderDigitalRedstoneTorch(0 / 16D, 0, -4 / 16D, 13 / 16D, c);
+        RenderHelper.renderDigitalRedstoneTorch(0 / 16D, 0, 4 / 16D, 13 / 16D, !((!l && !c) || (!r && !c)));
     }
-    
+
+    @Override
+    public void tick() {
+
+        // if (front().getOutput() > 0)
+        // spawnBlueParticle(8 / 16D, 8 / 16D, 8 / 16D);
+    }
 }

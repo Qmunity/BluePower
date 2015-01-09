@@ -17,23 +17,26 @@
 
 package com.bluepowermod.init;
 
-import com.bluepowermod.tileentities.BPTileMultipart;
-import com.bluepowermod.tileentities.tier1.*;
-import com.bluepowermod.tileentities.tier2.*;
-import com.bluepowermod.tileentities.tier3.TileCircuitDatabase;
-import com.bluepowermod.tileentities.tier3.TileEngine;
-import com.bluepowermod.tileentities.tier3.TileManager;
-import com.bluepowermod.tileentities.tier3.TileSortron;
+import com.bluepowermod.tile.tier1.*;
+import com.bluepowermod.tile.tier2.TileCircuitTable;
+import com.bluepowermod.tile.tier2.TileRegulator;
+import com.bluepowermod.tile.tier2.TileRetriever;
+import com.bluepowermod.tile.tier2.TileSortingMachine;
+import com.bluepowermod.tile.tier3.TileCircuitDatabase;
+import com.bluepowermod.tile.tier3.TileEngine;
+import com.bluepowermod.tile.tier3.TileManager;
+import com.bluepowermod.tile.tier3.TileSortron;
+import com.bluepowermod.tile.tier2.TileSolarPanel;
 import com.bluepowermod.util.Refs;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public class TileEntities {
-    
+
     /**
      * Method to register the TE's to the game. If a TE is not registered, it _will_ cause issues!
      */
     public static void init() {
-    
+
         GameRegistry.registerTileEntity(TileAlloyFurnace.class, Refs.MODID + ".alloyFurnace");
         GameRegistry.registerTileEntity(TileBlockBreaker.class, Refs.MODID + ".blockBreaker");
         GameRegistry.registerTileEntity(TileIgniter.class, Refs.MODID + ".igniter");
@@ -60,7 +63,6 @@ public class TileEntities {
         GameRegistry.registerTileEntity(TileCircuitTable.class, Refs.MODID + ".circuitTable");
         GameRegistry.registerTileEntity(TileCircuitDatabase.class, Refs.MODID + ".circuitDatabase");
         GameRegistry.registerTileEntity(TileLamp.class, Refs.MODID + ".lamp");
-        GameRegistry.registerTileEntity(BPTileMultipart.class, Refs.MODID + ".multipart");
 
         GameRegistry.registerTileEntity(TileSolarPanel.class, Refs.MODID + ".solarPanel");
     }

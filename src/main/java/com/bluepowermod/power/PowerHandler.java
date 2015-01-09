@@ -4,14 +4,14 @@ import com.bluepowermod.BluePower;
 import com.bluepowermod.api.bluepower.BluePowerTier;
 import com.bluepowermod.api.bluepower.IBluePowered;
 import com.bluepowermod.api.bluepower.IPowerBase;
-import com.bluepowermod.api.part.BPPart;
-import com.bluepowermod.api.vec.Vector3;
+import com.bluepowermod.part.BPPart;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import uk.co.qmunity.lib.vec.Vec3i;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +33,7 @@ public class PowerHandler implements IPowerBase {
     private BluePowerTier tier;
     private boolean shouldUpdateNetworkOnNextTick = true;
     protected List<ForgeDirection> connectedSides;
-    private float oldCurrent;
+    private   float                oldCurrent;
 
     public PowerHandler(TileEntity _target, float _maxAmp) {
 
@@ -54,13 +54,11 @@ public class PowerHandler implements IPowerBase {
         connectedSides = new ArrayList<ForgeDirection>();
     }
 
-    @Override
-    public void readFromNBT(NBTTagCompound tagCompound) {
+    @Override public void readFromNBT(NBTTagCompound tagCompound) {
 
     }
 
-    @Override
-    public void writeToNBT(NBTTagCompound tagCompound) {
+    @Override public void writeToNBT(NBTTagCompound tagCompound) {
 
     }
 
@@ -122,12 +120,12 @@ public class PowerHandler implements IPowerBase {
     }
 
     @Override
-    public Vector3 getBlockLocation() {
+    public Vec3i getBlockLocation() {
 
         if(isMultipart) {
-            return new Vector3(pTarget.getX(), pTarget.getY(), pTarget.getZ(), getWorld());
+            return new Vec3i(pTarget.getX(), pTarget.getY(), pTarget.getZ(), getWorld());
         }else{
-            return new Vector3(tTarget.xCoord, tTarget.yCoord, tTarget.zCoord, getWorld());
+            return new Vec3i(tTarget.xCoord, tTarget.yCoord, tTarget.zCoord, getWorld());
         }
     }
 

@@ -7,120 +7,111 @@
  */
 package com.bluepowermod.part.gate;
 
-import java.util.List;
-
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.AxisAlignedBB;
 
-import com.bluepowermod.api.part.FaceDirection;
-import com.bluepowermod.api.part.RedstoneConnection;
-import com.bluepowermod.client.renderers.RenderHelper;
+import com.bluepowermod.client.render.RenderHelper;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * @author MineMaarten
  */
 public class GateSynchronizer extends GateBase {
-    
+
     private boolean rightTriggered, leftTriggered, oldLeftState, oldRightState;
-    
+
     @Override
-    public void initializeConnections(RedstoneConnection front, RedstoneConnection left, RedstoneConnection back, RedstoneConnection right) {
-    
-        // Init front
-        front.enable();
-        front.setOutput();
-        
-        // Init left
-        left.enable();
-        left.setInput();
-        
-        // Init back
-        back.enable();
-        back.setInput();
-        
-        // Init right
-        right.enable();
-        right.setInput();
+    public void initializeConnections() {
+
+        front().enable().setOutputOnly();
+        left().enable();
+        back().enable();
+        right().enable();
     }
-    
+
     @Override
-    public String getGateID() {
-    
+    public String getId() {
+
         return "synchronizer";
     }
-    
+
     @Override
-    public void renderTop(RedstoneConnection front, RedstoneConnection left, RedstoneConnection back, RedstoneConnection right, float frame) {
-    
-        RenderHelper.renderRedstoneTorch(0, 1D / 8D, -4D / 16D, 10D / 16D, front.getPower() > 0);
-        renderTopTexture(FaceDirection.FRONT, front);
-        renderTopTexture(FaceDirection.LEFT, left);
-        renderTopTexture(FaceDirection.BACK, back);
-        renderTopTexture(FaceDirection.RIGHT, right);
-        renderTopTexture("frontleft", !leftTriggered);
-        renderTopTexture("frontright", !rightTriggered);
-        RenderHelper.renderRandomizerButton(this, -3 * pixel, 0, 4 * pixel, leftTriggered);
-        RenderHelper.renderRandomizerButton(this, 3 * pixel, 0, 4 * pixel, rightTriggered);
+    @SideOnly(Side.CLIENT)
+    public void renderTop(float frame) {
+
+        RenderHelper.renderDigitalRedstoneTorch(0, 1D / 8D, 5 / 16D, 10D / 16D, front().getInput() > 0);
+        renderTop("front", front());
+        renderTop("right", right());
+        renderTop("back", back());
+        renderTop("left", left());
+        renderTop("frontleft", !leftTriggered);
+        renderTop("frontright", !rightTriggered);
+        RenderHelper.renderRandomizerButton(3 / 16D, 0, -4 / 16D, leftTriggered);
+        RenderHelper.renderRandomizerButton(-3 / 16D, 0, -4 / 16D, rightTriggered);
     }
-    
+
     @Override
-    public void addOcclusionBoxes(List<AxisAlignedBB> boxes) {
-    
-        super.addOcclusionBoxes(boxes);
-        
-        boxes.add(AxisAlignedBB.getBoundingBox(7D / 16D, 2D / 16D, 7D / 16D, 9D / 16D, 9D / 16D, 9D / 16D));
-    }
-    
-    @Override
-    public void doLogic(RedstoneConnection front, RedstoneConnection left, RedstoneConnection back, RedstoneConnection right) {
-    
-        if (!oldLeftState && left.getPower() > 0) {
+    public void doLogic() {
+
+        if (!oldLeftState && left().getInput() > 0) {
             leftTriggered = true;
         }
-        if (!oldRightState && right.getPower() > 0) {
+        if (!oldRightState && right().getInput() > 0) {
             rightTriggered = true;
         }
-        
-        if (back.getPower() > 0) {
+        if (back().getInput() > 0) {
             leftTriggered = false;
             rightTriggered = false;
         }
-        
+
         if (leftTriggered && rightTriggered) {
-            front.setPower(15);
+            front().setOutput(15);
             leftTriggered = false;
             rightTriggered = false;
-        } else {
-            front.setPower(0);
         }
-        
-        oldLeftState = left.getPower() > 0;
-        oldRightState = right.getPower() > 0;
+
+        oldLeftState = left().getInput() > 0;
+        oldRightState = right().getInput() > 0;
+
     }
-    
+
     @Override
-    public void save(NBTTagCompound tag) {
-    
-        super.save(tag);
+    public void tick() {
+
+        front().setOutput(0);
+    }
+
+    @Override
+    public void writeToNBT(NBTTagCompound tag) {
+
+        writeUpdateToNBT(tag);
+    }
+
+    @Override
+    public void readFromNBT(NBTTagCompound tag) {
+
+        readUpdateFromNBT(tag);
+    }
+
+    @Override
+    public void writeUpdateToNBT(NBTTagCompound tag) {
+
+        super.writeUpdateToNBT(tag);
         tag.setBoolean("leftTriggered", leftTriggered);
         tag.setBoolean("rightTriggered", rightTriggered);
         tag.setBoolean("oldLeftState", oldLeftState);
         tag.setBoolean("oldRightState", oldRightState);
     }
-    
+
     @Override
-    public void load(NBTTagCompound tag) {
-    
-        super.load(tag);
+    public void readUpdateFromNBT(NBTTagCompound tag) {
+
+        super.readUpdateFromNBT(tag);
         leftTriggered = tag.getBoolean("leftTriggered");
         rightTriggered = tag.getBoolean("rightTriggered");
         oldLeftState = tag.getBoolean("oldLeftState");
         oldRightState = tag.getBoolean("oldRightState");
     }
-    
-    @Override
-    public void addWailaInfo(List<String> info) {
-    
-    }
-    
+
 }

@@ -8,18 +8,23 @@
 package com.bluepowermod.compat.waila;
 
 import com.bluepowermod.api.bluepower.IBluePowered;
-import com.bluepowermod.tileentities.TileMachineBase;
-import mcp.mobius.waila.api.IWailaConfigHandler;
-import mcp.mobius.waila.api.IWailaDataAccessor;
-import mcp.mobius.waila.api.IWailaDataProvider;
-import net.minecraft.item.ItemStack;
-
 import java.util.ArrayList;
 import java.util.List;
 
+import mcp.mobius.waila.api.IWailaConfigHandler;
+import mcp.mobius.waila.api.IWailaDataAccessor;
+import mcp.mobius.waila.api.IWailaDataProvider;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
+
+import com.bluepowermod.tile.TileMachineBase;
+
 /**
  * @author amadornes
- * 
+ *
  */
 public class WailaProviderMachines implements IWailaDataProvider {
 
@@ -57,5 +62,11 @@ public class WailaProviderMachines implements IWailaDataProvider {
     public ItemStack getWailaStack(IWailaDataAccessor accessor, IWailaConfigHandler config) {
 
         return null;
+    }
+
+    @Override
+    public NBTTagCompound getNBTData(EntityPlayerMP player, TileEntity te, NBTTagCompound tag, World w, int x, int y, int z) {
+
+        return tag;
     }
 }

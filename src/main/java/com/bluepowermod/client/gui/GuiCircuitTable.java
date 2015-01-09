@@ -15,11 +15,11 @@ import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.input.Keyboard;
 
-import com.bluepowermod.containers.ContainerCircuitTable;
-import com.bluepowermod.containers.slots.SlotCircuitTableCrafting;
+import com.bluepowermod.container.ContainerCircuitTable;
+import com.bluepowermod.container.slot.SlotCircuitTableCrafting;
 import com.bluepowermod.network.NetworkHandler;
-import com.bluepowermod.network.messages.MessageUpdateTextfield;
-import com.bluepowermod.tileentities.tier2.TileCircuitTable;
+import com.bluepowermod.network.message.MessageUpdateTextfield;
+import com.bluepowermod.tile.tier2.TileCircuitTable;
 import com.bluepowermod.util.Refs;
 
 import cpw.mods.fml.relauncher.Side;

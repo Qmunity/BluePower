@@ -16,29 +16,34 @@ import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.world.World;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import org.lwjgl.opengl.GL11;
 
-import com.bluepowermod.api.compat.IMultipartCompat;
-import com.bluepowermod.api.util.ForgeDirectionUtils;
-import com.bluepowermod.api.vec.Vector3;
-import com.bluepowermod.client.renderers.IconSupplier;
-import com.bluepowermod.compat.CompatibilityUtils;
-import com.bluepowermod.util.Dependencies;
+import uk.co.qmunity.lib.part.IPart;
+import uk.co.qmunity.lib.part.IPartCustomPlacement;
+import uk.co.qmunity.lib.part.IPartPlacement;
+import uk.co.qmunity.lib.part.compat.MultipartCompatibility;
+import uk.co.qmunity.lib.vec.Vec3d;
+import uk.co.qmunity.lib.vec.Vec3dCube;
+import uk.co.qmunity.lib.vec.Vec3i;
+
+import com.bluepowermod.client.render.IconSupplier;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * Accelerator extends PneumaticTube, as that's much easier routing wise.
- * 
+ *
  * @author MineMaarten
- * 
+ *
  */
-public class Accelerator extends PneumaticTube {
+public class Accelerator extends PneumaticTube implements IPartCustomPlacement {
 
     private ForgeDirection rotation = ForgeDirection.UP;
 
@@ -54,29 +59,27 @@ public class Accelerator extends PneumaticTube {
         return getType();
     }
 
-    @Override
-    public boolean canPlacePart(ItemStack is, EntityPlayer player, Vector3 block, MovingObjectPosition mop) {
+    public void setRotation(ForgeDirection rotation) {
 
-        rotation = ForgeDirectionUtils.getDirectionFacing(player, true);
-        return super.canPlacePart(is, player, block, mop);
+        this.rotation = rotation;
     }
 
     /**
      * Gets all the occlusion boxes for this block
-     * 
+     *
      * @return A list with the occlusion boxes
      */
     @Override
-    public List<AxisAlignedBB> getOcclusionBoxes() {
+    public List<Vec3dCube> getOcclusionBoxes() {
 
-        List<AxisAlignedBB> aabbs = new ArrayList<AxisAlignedBB>();
+        List<Vec3dCube> aabbs = new ArrayList<Vec3dCube>();
 
         if (rotation == ForgeDirection.DOWN || rotation == ForgeDirection.UP) {
-            aabbs.add(AxisAlignedBB.getBoundingBox(0, 4 / 16D, 0, 1, 12 / 16D, 1));
+            aabbs.add(new Vec3dCube(0, 4 / 16D, 0, 1, 12 / 16D, 1));
         } else if (rotation == ForgeDirection.NORTH || rotation == ForgeDirection.SOUTH) {
-            aabbs.add(AxisAlignedBB.getBoundingBox(0, 0, 4 / 16D, 1, 1, 12 / 16D));
+            aabbs.add(new Vec3dCube(0, 0, 4 / 16D, 1, 1, 12 / 16D));
         } else {
-            aabbs.add(AxisAlignedBB.getBoundingBox(4 / 16D, 0, 0, 12 / 16D, 1, 1));
+            aabbs.add(new Vec3dCube(4 / 16D, 0, 0, 12 / 16D, 1, 1));
         }
         return aabbs;
     }
@@ -87,9 +90,7 @@ public class Accelerator extends PneumaticTube {
         super.update();
         TubeLogic logic = getLogic();
         for (TubeStack stack : logic.tubeStacks) {
-            TileEntity te = getTileCache()[stack.heading.ordinal()].getTileEntity();
-            IMultipartCompat compat = (IMultipartCompat) CompatibilityUtils.getModule(Dependencies.FMP);
-            PneumaticTube tube = compat.getBPPart(te, PneumaticTube.class);
+            PneumaticTube tube = getPartCache(stack.heading);
             if (tube instanceof MagTube && isPowered()) {
                 stack.setSpeed(1);
             } else {
@@ -100,16 +101,16 @@ public class Accelerator extends PneumaticTube {
     }
 
     @Override
-    public void save(NBTTagCompound tag) {
+    public void writeUpdateToNBT(NBTTagCompound tag) {
 
-        super.save(tag);
+        super.writeUpdateToNBT(tag);
         tag.setByte("rotation", (byte) rotation.ordinal());
     }
 
     @Override
-    public void load(NBTTagCompound tag) {
+    public void readUpdateFromNBT(NBTTagCompound tag) {
 
-        super.load(tag);
+        super.readUpdateFromNBT(tag);
         rotation = ForgeDirection.getOrientation(tag.getByte("rotation"));
     }
 
@@ -117,7 +118,8 @@ public class Accelerator extends PneumaticTube {
     public boolean isConnected(ForgeDirection dir, PneumaticTube otherTube) {
 
         if (dir == rotation || dir.getOpposite() == rotation) {
-            return getWorld() == null || !checkOcclusion(sideBB.clone().rotate90Degrees(dir).toAABB());
+            return getWorld() == null
+                    || !MultipartCompatibility.checkOcclusion(getWorld(), getX(), getY(), getZ(), sideBB.clone().rotate(dir, Vec3d.center));
         } else {
             return false;
         }
@@ -129,36 +131,49 @@ public class Accelerator extends PneumaticTube {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     protected IIcon getNodeIcon() {
 
         return null;
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     protected IIcon getSideIcon(ForgeDirection side) {
 
-        IMultipartCompat compat = (IMultipartCompat) CompatibilityUtils.getModule(Dependencies.FMP);
-        PneumaticTube tube = compat.getBPPart(getTileCache()[side.ordinal()].getTileEntity(), PneumaticTube.class);
-        return tube instanceof MagTube ? IconSupplier.magTubeSide : IconSupplier.pneumaticTubeSide;
+        return getPartCache(side) instanceof MagTube ? IconSupplier.magTubeSide : IconSupplier.pneumaticTubeSide;
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
+    protected IIcon getSideIcon() {
+
+        return null;
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
     public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
 
-        Tessellator t = Tessellator.instance;
-        Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
-        t.startDrawingQuads();
-        rotation = ForgeDirection.UP;
-        renderStatic(new Vector3(0, 0, 0), 0);
-        t.draw();
+        GL11.glPushMatrix();
+        {
+            GL11.glTranslated(0, -0.125, 0);
+
+            Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
+            rotation = ForgeDirection.UP;
+            renderDynamic(new Vec3d(0, 0, 0), 0, 0);
+        }
+        GL11.glPopMatrix();
     }
 
     @Override
-    public boolean renderStatic(Vector3 loc, int pass) {
+    @SideOnly(Side.CLIENT)
+    public void renderDynamic(Vec3d loc, double delta, int pass) {
 
+        super.renderDynamic(loc, delta, pass);
         if (pass == 0) {
+            Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.locationBlocksTexture);
             Tessellator t = Tessellator.instance;
-            t.draw();
 
             GL11.glPushMatrix();
             GL11.glTranslatef((float) loc.getX() + 0.5F, (float) loc.getY() + 0.5F, (float) loc.getZ() + 0.5F);
@@ -254,16 +269,15 @@ public class Accelerator extends PneumaticTube {
             t.addTranslation((float) -loc.getX(), (float) -loc.getY(), (float) -loc.getZ());
             t.draw();
             GL11.glPopMatrix();
-            t.startDrawingQuads();
         }
-        return super.renderStatic(loc, pass);
 
     }
 
     @Override
-    public float getHardness() {
+    public IPartPlacement getPlacement(IPart part, World world, Vec3i location, ForgeDirection face, MovingObjectPosition mop,
+            EntityPlayer player) {
 
-        return 2.5F;
+        return new PartPlacementAccelerator(player);
     }
 
 }

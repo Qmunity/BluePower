@@ -7,58 +7,62 @@
  */
 package com.bluepowermod.compat.waila;
 
-import com.bluepowermod.api.compat.IMultipartCompat.MultipartCompat;
+import mcp.mobius.waila.api.IWailaRegistrar;
+import net.minecraft.tileentity.TileEntity;
+
 import com.bluepowermod.compat.CompatModule;
-import com.bluepowermod.tileentities.TileMachineBase;
+import com.bluepowermod.tile.TileMachineBase;
 import com.bluepowermod.util.Dependencies;
 
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLInterModComms;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import mcp.mobius.waila.api.IWailaRegistrar;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * @author amadornes
- * 
+ *
  */
 public class CompatModuleWaila extends CompatModule {
-    
+
     @Override
     public void preInit(FMLPreInitializationEvent ev) {
-    
+
     }
-    
+
     @Override
     public void init(FMLInitializationEvent ev) {
-    
+
         FMLInterModComms.sendMessage(Dependencies.WAILA, "register", getClass().getName() + ".callbackRegister");
-        
+
     }
-    
+
     @Override
     public void postInit(FMLPostInitializationEvent ev) {
-    
+
     }
-    
+
     @Override
     public void registerBlocks() {
-    
+
     }
-    
+
     @Override
     public void registerItems() {
-    
+
     }
-    
+
     @Override
+    @SideOnly(Side.CLIENT)
     public void registerRenders() {
-    
+
     }
-    
+
     public static void callbackRegister(IWailaRegistrar registrar) {
 
         registrar.registerBodyProvider(new WailaProviderMachines(), TileMachineBase.class);
-        registrar.registerBodyProvider(new WailaProviderPart(), MultipartCompat.tile);
+        registrar.registerBodyProvider(new WailaProviderParts(), TileEntity.class);
     }
 }

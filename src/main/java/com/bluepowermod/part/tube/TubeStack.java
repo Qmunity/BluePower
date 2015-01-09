@@ -7,6 +7,7 @@
  */
 package com.bluepowermod.part.tube;
 
+import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.entity.RenderManager;
@@ -22,17 +23,19 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import org.lwjgl.opengl.GL11;
 
+import uk.co.qmunity.lib.vec.Vec3dCube;
+
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
-import com.bluepowermod.api.vec.Vector3Cube;
-import com.bluepowermod.client.renderers.RenderHelper;
+import com.bluepowermod.client.render.RenderHelper;
 import com.bluepowermod.util.Refs;
 
 import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.common.network.ByteBufUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 /**
- * 
+ *
  * @author MineMaarten
  */
 
@@ -44,7 +47,7 @@ public class TubeStack {
     public double oldProgress;
     public ForgeDirection heading;
     public boolean enabled = true; // will be disabled when the client sided stack is at an intersection, at which point it needs to wait for server
-                                   // input. This just serves a visual purpose.
+    // input. This just serves a visual purpose.
     public int idleCounter; // increased when the stack is standing still. This will cause the client to remove the stack when a timeout occurs.
     private TileEntity target; // only should have a value when retrieving items. this is the target the item wants to go to.
     private int targetX, targetY, targetZ;
@@ -86,7 +89,7 @@ public class TubeStack {
 
     /**
      * Updates the movement by the given m/tick.
-     * 
+     *
      * @return true if the stack has gone past the center, meaning logic needs to be triggered.
      */
     public boolean update() {
@@ -163,6 +166,24 @@ public class TubeStack {
         return stack;
     }
 
+    public void writeToPacket(ByteBuf buf) {
+
+        ByteBufUtils.writeItemStack(buf, stack);
+        buf.writeByte(heading.ordinal());
+        buf.writeByte((byte) color.ordinal());
+        buf.writeDouble(speed);
+        buf.writeDouble(progress);
+    }
+
+    public static TubeStack loadFromPacket(ByteBuf buf) {
+
+        TubeStack stack = new TubeStack(ByteBufUtils.readItemStack(buf), ForgeDirection.getOrientation(buf.readByte()),
+                TubeColor.values()[buf.readByte()]);
+        stack.speed = buf.readDouble();
+        stack.progress = buf.readDouble();
+        return stack;
+    }
+
     @SideOnly(Side.CLIENT)
     public void render(float partialTick) {
         if (renderMode == RenderMode.AUTO) {
@@ -213,7 +234,7 @@ public class TubeStack {
             float size = 0.02F;
             GL11.glDisable(GL11.GL_TEXTURE_2D);
             GL11.glBegin(GL11.GL_QUADS);
-            RenderHelper.drawColoredCube(new Vector3Cube(-size, -size, -size, size, size, size), 1, 1, 1, 1);
+            RenderHelper.drawColoredCube(new Vec3dCube(-size, -size, -size, size, size, size), 1, 1, 1, 1);
             GL11.glEnd();
             GL11.glEnable(GL11.GL_TEXTURE_2D);
         }
@@ -231,7 +252,7 @@ public class TubeStack {
             GL11.glDisable(GL11.GL_LIGHTING);
             GL11.glColor3f(red, green, blue);
             Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID, "textures/blocks/tubes/inside_color_border.png"));
-            RenderHelper.drawTesselatedTexturedCube(new Vector3Cube(-size, -size, -size, size, size, size));
+            RenderHelper.drawTesselatedTexturedCube(new Vec3dCube(-size, -size, -size, size, size, size));
             GL11.glEnable(GL11.GL_CULL_FACE);
             GL11.glEnable(GL11.GL_LIGHTING);
         }

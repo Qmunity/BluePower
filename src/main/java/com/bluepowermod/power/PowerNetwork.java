@@ -2,11 +2,11 @@ package com.bluepowermod.power;
 
 import com.bluepowermod.BluePower;
 import com.bluepowermod.api.bluepower.IBluePowered;
-import com.bluepowermod.api.vec.Vector3;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.util.ForgeDirection;
+import uk.co.qmunity.lib.vec.Vec3i;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,14 +18,14 @@ import java.util.Random;
 public class PowerNetwork {
 
     public static class networkEntry {
-        private Vector3 blockLocation;
+        private Vec3i blockLocation;
 
-        public networkEntry(Vector3 _location){
+        public networkEntry(Vec3i _location){
 
             blockLocation = _location;
         }
 
-        public Vector3 getLocation(){
+        public Vec3i getLocation(){
 
             return blockLocation;
         }
@@ -87,7 +87,7 @@ public class PowerNetwork {
 
         //TODO: Redo me for multiparts
         for(networkEntry entry : machines){
-            Vector3 loc = entry.getLocation();
+            Vec3i loc = entry.getLocation();
             TileEntity ent = loc.getTileEntity();
             if(ent instanceof IBluePowered){
                 IBluePowered target = ((IBluePowered) ent);
@@ -107,7 +107,7 @@ public class PowerNetwork {
         List<networkEntry> otherList = toMerge.getMachines();
 
         for(networkEntry entry : otherList){
-            Vector3 loc = entry.getLocation();
+            Vec3i loc = entry.getLocation();
             TileEntity ent = loc.getTileEntity();
             if(ent instanceof IBluePowered){
                 IBluePowered machine = (IBluePowered) ent;
@@ -139,7 +139,7 @@ public class PowerNetwork {
         currentStored = tagCompound.getFloat("currentStored");
     }
 
-    public static PowerNetwork getNetworkInDir(Vector3 loc, ForgeDirection dir){
+    public static PowerNetwork getNetworkInDir(Vec3i loc, ForgeDirection dir){
 
         TileEntity t = loc.getTileEntity();
         if(t instanceof IBluePowered){ //Just to be safe
@@ -147,7 +147,7 @@ public class PowerNetwork {
 
 
             PowerNetwork foundNetwork = null;
-            Vector3 locationInDir = loc.getRelative(dir);
+            Vec3i locationInDir = loc.getRelative(dir);
             if(locationInDir.getTileEntity() instanceof IBluePowered){
                 foundNetwork = ((PowerHandler)((IBluePowered)locationInDir.getTileEntity()).getHandler()).getNetwork();
                 return foundNetwork;

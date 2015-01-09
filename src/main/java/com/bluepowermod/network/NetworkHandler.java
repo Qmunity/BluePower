@@ -20,14 +20,18 @@ package com.bluepowermod.network;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.World;
 
-import com.bluepowermod.network.messages.LocationDoublePacket;
-import com.bluepowermod.network.messages.LocationIntPacket;
-import com.bluepowermod.network.messages.MessageCircuitDatabaseTemplate;
-import com.bluepowermod.network.messages.MessageDebugBlock;
-import com.bluepowermod.network.messages.MessageGuiUpdate;
-import com.bluepowermod.network.messages.MessageMultipartRemove;
-import com.bluepowermod.network.messages.MessageSendClientServerTemplates;
-import com.bluepowermod.network.messages.MessageUpdateTextfield;
+import com.bluepowermod.network.message.LocationDoublePacket;
+import com.bluepowermod.network.message.LocationIntPacket;
+import com.bluepowermod.network.message.MessageCircuitDatabaseTemplate;
+import com.bluepowermod.network.message.MessageDebugBlock;
+import com.bluepowermod.network.message.MessageGuiUpdate;
+import com.bluepowermod.network.message.MessageRedirectTubeStack;
+import com.bluepowermod.network.message.MessageSendClientServerTemplates;
+import com.bluepowermod.network.message.MessageUpdateTextfield;
+import com.bluepowermod.network.message.MessageWirelessFrequencySync;
+import com.bluepowermod.network.message.MessageWirelessNewFreq;
+import com.bluepowermod.network.message.MessageWirelessRemoveFreq;
+import com.bluepowermod.network.message.MessageWirelessSaveFreq;
 import com.bluepowermod.util.Refs;
 
 import cpw.mods.fml.common.network.NetworkRegistry;
@@ -36,7 +40,7 @@ import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import cpw.mods.fml.relauncher.Side;
 
 /**
- * 
+ *
  * @author MineMaarten
  */
 
@@ -52,11 +56,17 @@ public class NetworkHandler {
 
         INSTANCE.registerMessage(MessageGuiUpdate.class, MessageGuiUpdate.class, discriminant++, Side.SERVER);
         INSTANCE.registerMessage(MessageUpdateTextfield.class, MessageUpdateTextfield.class, discriminant++, Side.SERVER);
-        INSTANCE.registerMessage(MessageMultipartRemove.class, MessageMultipartRemove.class, discriminant++, Side.SERVER);
         INSTANCE.registerMessage(MessageCircuitDatabaseTemplate.class, MessageCircuitDatabaseTemplate.class, discriminant++, Side.SERVER);
         INSTANCE.registerMessage(MessageCircuitDatabaseTemplate.class, MessageCircuitDatabaseTemplate.class, discriminant++, Side.CLIENT);
         INSTANCE.registerMessage(MessageDebugBlock.class, MessageDebugBlock.class, discriminant++, Side.CLIENT);
-        INSTANCE.registerMessage(MessageSendClientServerTemplates.class, MessageSendClientServerTemplates.class, discriminant++, Side.CLIENT);
+        INSTANCE.registerMessage(MessageSendClientServerTemplates.class, MessageSendClientServerTemplates.class, discriminant++,
+                Side.CLIENT);
+        INSTANCE.registerMessage(MessageRedirectTubeStack.class, MessageRedirectTubeStack.class, discriminant++, Side.CLIENT);
+
+        INSTANCE.registerMessage(MessageWirelessNewFreq.class, MessageWirelessNewFreq.class, discriminant++, Side.SERVER);
+        INSTANCE.registerMessage(MessageWirelessSaveFreq.class, MessageWirelessSaveFreq.class, discriminant++, Side.SERVER);
+        INSTANCE.registerMessage(MessageWirelessFrequencySync.class, MessageWirelessFrequencySync.class, discriminant++, Side.CLIENT);
+        INSTANCE.registerMessage(MessageWirelessRemoveFreq.class, MessageWirelessRemoveFreq.class, discriminant++, Side.SERVER);
     }
 
     /*

@@ -9,8 +9,8 @@ package com.bluepowermod.init;
 
 import net.minecraft.enchantment.Enchantment;
 
-import com.bluepowermod.enchantments.EnchantmentDisjunction;
-import com.bluepowermod.enchantments.EnchantmentVorpal;
+import com.bluepowermod.enchant.EnchantmentDisjunction;
+import com.bluepowermod.enchant.EnchantmentVorpal;
 
 public class BPEnchantments {
 

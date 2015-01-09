@@ -35,14 +35,16 @@ import cpw.mods.fml.client.config.GuiConfig;
 import cpw.mods.fml.client.config.IConfigElement;
 
 public class BPGuiConfig extends GuiConfig {
-    
+
     public BPGuiConfig(GuiScreen parent) {
-    
-        super(parent, BPGuiConfig.getConfigElements(), Refs.MODID, false, false, GuiConfig.getAbridgedConfigPath(BluePower.config.toString()));
+
+        super(parent, BPGuiConfig.getConfigElements(), Refs.MODID, false, false, GuiConfig.getAbridgedConfigPath(BluePower.config
+                .toString()));
     }
-    
+
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     private static List<IConfigElement> getConfigElements() {
-    
+
         List<IConfigElement> list = new ArrayList<IConfigElement>();
         List<IConfigElement> listZinc = new ConfigElement(BluePower.config.getCategory(Refs.CONFIG_ZINC)).getChildElements();
         List<IConfigElement> listCopper = new ConfigElement(BluePower.config.getCategory(Refs.CONFIG_COPPER)).getChildElements();
@@ -57,8 +59,9 @@ public class BPGuiConfig extends GuiConfig {
         List<IConfigElement> listRecipes = new ConfigElement(BluePower.config.getCategory(Refs.CONFIG_RECIPES)).getChildElements();
         List<IConfigElement> listEnchants = new ConfigElement(BluePower.config.getCategory(Refs.CONFIG_ENCHANTS)).getChildElements();
         List<IConfigElement> listPneumaticTube = new ConfigElement(BluePower.config.getCategory(Refs.CONFIG_TUBES)).getChildElements();
-        List<IConfigElement> listCircuitDatabase = new ConfigElement(BluePower.config.getCategory(Refs.CONFIG_CIRCUIT_DATABASE)).getChildElements();
-        
+        List<IConfigElement> listCircuitDatabase = new ConfigElement(BluePower.config.getCategory(Refs.CONFIG_CIRCUIT_DATABASE))
+                .getChildElements();
+
         list.add(new DummyConfigElement.DummyCategoryElement("World Gen", "bluepower.config.worldgen", listWorldGen));
         list.add(new DummyConfigElement.DummyCategoryElement("Settings", "bluepower.config.settings", listSettings));
         list.add(new DummyConfigElement.DummyCategoryElement("Recipes", "bluepower.config.recipes", listRecipes));

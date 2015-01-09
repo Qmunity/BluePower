@@ -1,11 +1,11 @@
 package com.bluepowermod.api.bluepower;
 
-import com.bluepowermod.api.vec.Vector3;
+import uk.co.qmunity.lib.vec.Vec3i;
 
 public interface IBluepowerWire {
 
     public int getFace();
 
-    public Vector3 getLocation();
+    public Vec3i getLocation();
 
 }

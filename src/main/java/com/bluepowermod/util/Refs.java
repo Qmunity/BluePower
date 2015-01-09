@@ -40,6 +40,7 @@ public class Refs {
     public static final String BASALTBRICK_NAME    = "basalt_brick";
     public static final String MARBLEBRICK_NAME    = "marble_brick";
     public static final String CRACKED_BASALT      = "cracked_basalt_lava";
+    public static final String TILES               = "tiles";
     public static final String ALLOYFURNACE_NAME   = "alloyfurnace";
     public static final String AMETHYSTORE_NAME    = "amethyst_ore";
     public static final String RUBYORE_NAME        = "ruby_ore";
@@ -65,11 +66,16 @@ public class Refs {
     public static final String SILVERINGOT_NAME    = "silver_ingot";
     public static final String ZINCINGOT_NAME      = "zinc_ingot";
     public static final String TUNGSTENINGOT_NAME  = "tungsten_ingot";
+    public static final String TUNGSTENNUGGET_NAME = "tungsten_nugget";
+
+    public static final String SAPPHIREGLASS_NAME           = "sapphire_glass";
+    public static final String REINFORCEDSAPPHIREGLASS_NAME = "reinforced_sapphire_glass";
 
     public static final String ZINCDUST_NAME                  = "zinc_dust";
     public static final String ZINC_ORE_CRUSHED_NAME          = "zinc_ore_crushed";
     public static final String ZINC_ORE_CRUSHED_PURIFIED_NAME = "zinc_ore_purified";
     public static final String ZINCDUST_TINY_NAME             = "zinc_tiny_dust";
+    public static final String INFUSEDTESLATITEDUST_NAME      = "infused_teslatite_dust";
 
     public static final String AMETHYSTSAW_NAME     = "amethyst_saw";
     public static final String SAPPHIRESAW_NAME     = "sapphire_saw";
@@ -95,10 +101,11 @@ public class Refs {
     public static final String KINETICGENERATOR_NAME = "kinetic_generator";
     public static final String WINDMILL_NAME         = "windmill";
 
-    public static final String BRASSINGOT_NAME     = "brass_ingot";
-    public static final String BLUEALLOYINGOT_NAME = "blue_alloy_ingot";
-    public static final String REDALLOYINGOT_NAME  = "red_alloy_ingot";
-    public static final String ZINCPLATE_NAME      = "zincplate";
+    public static final String BRASSINGOT_NAME       = "brass_ingot";
+    public static final String BLUEALLOYINGOT_NAME   = "blue_alloy_ingot";
+    public static final String REDALLOYINGOT_NAME    = "red_alloy_ingot";
+    public static final String PURPLEALLOYINGOT_NAME = "purple_alloy_ingot";
+    public static final String ZINCPLATE_NAME        = "zincplate";
 
     public static final String RUBYAXE_NAME     = "ruby_axe";
     public static final String RUBYSWORD_NAME   = "ruby_sword";
@@ -134,8 +141,7 @@ public class Refs {
 
     public static final String SCREWDRIVER_NAME      = "screwdriver";
     public static final String SILKYSCREWDRIVER_NAME = "silky_screwdriver";
-    public static final String MULTIPART_NAME        = "bluepower_multipart";                                                                                                                                                                                                //When changing this name, also change the name in the call to GameData in PartRegistry.
-    public static final String MULTIPART_BLOCK_NAME  = "bluepower_multipart_block";
+    public static final String MULTIPART_NAME        = "part";
 
     public static final String CRACKEDBASALTBRICK_NAME  = "basaltbrick_cracked";
     public static final String SMALLBASALTBRICK_NAME    = "basalt_brick_small";
@@ -146,16 +152,22 @@ public class Refs {
     public static final String BASALTTILE_NAME          = "basalt_tile";
     public static final String MARBLEPAVER_NAME         = "marble_paver";
     public static final String BASALTPAVER_NAME         = "basalt_paver";
+    public static final String TILES_NAME               = "tiles";
 
     public static final String ATHAME_NAME             = "athame";
     public static final String BLOCKIGNITER_NAME       = "igniter";
     public static final String STONETILE_NAME          = "stone_tile";
-    public static final String STONEWIRE_NAME          = "stone_wire";
-    public static final String STONEANODE_NAME         = "stone_anode";
-    public static final String STONECATHODE_NAME       = "stone_cathode";
-    public static final String STONEPOINTER_NAME       = "stone_pointer";
-    public static final String SILICONCHIP_NAME        = "silicon_chip";
-    public static final String TAINTEDSILICONCHIP_NAME = "taintedsilicon_chip";
+    public static final String BLUESTONEWIRETILE_NAME  = "bluestone_wire_tile";
+    public static final String BLUESTONEANODETILE_NAME = "bluestone_anode_tile";
+    public static final String BLUESTONECATHODE_NAME   = "bluestone_cathode_tile";
+    public static final String BLUESTONEPOINTER_NAME   = "bluestone_pointer_tile";
+    public static final String SILICONCHIP_NAME        = "silicon_chip_tile";
+    public static final String TAINTEDSILICONCHIP_NAME = "tainted_silicon_chip_tile";
+    public static final String QUARTZRESONATOR_NAME    = "quartz_resonator_tile";
+    public static final String REDSTONEWIRETILE_NAME   = "redstone_wire_tile";
+    public static final String REDSTONEANODETILE_NAME  = "redstone_anode_tile";
+    public static final String REDSTONECATHODE_NAME    = "redstone_cathode_tile";
+    public static final String REDSTONEPOINTER_NAME    = "redstone_pointer_tile";
     public static final String STONEREDWIRE_NAME       = "stone_redwire";
     public static final String PLATEASSEMBLY_NAME      = "plate_assembly";
     public static final String STONEBUNDLE_NAME        = "stone_bundle";
@@ -172,10 +184,6 @@ public class Refs {
     public static final String WOOLCARD_NAME           = "wool_card";
     public static final String DIAMONDDRAWPLATE_NAME   = "diamond_drawplate";
 
-    public static final String   MULTIMETER_NAME         = "multimeter";
-
-    public static final String SOLAR_PANEL_NAME = "solar_panel";
-
     public static final String PAINTCAN_NAME   = "paint_can";
     public static final String PAINTBRUSH_NAME = "paint_brush";
 
@@ -190,7 +198,8 @@ public class Refs {
     public static final String BLOCKIOEXPANDER_NAME = "io_expander";
     public static final String FLOPPY_DISK          = "floppy_disk";
 
-    public static final String[] oreDictDyes             = new String[] { "dyeBlack", "dyeRed", "dyeGreen", "dyeBrown", "dyeBlue", "dyePurple", "dyeCyan", "dyeLightGray", "dyeGray", "dyePink", "dyeLime", "dyeYellow", "dyeLightBlue", "dyeMagenta", "dyeOrange", "dyeWhite" };
+    public static final String[] oreDictDyes             = new String[] { "dyeBlack", "dyeRed", "dyeGreen", "dyeBrown", "dyeBlue", "dyePurple",
+            "dyeCyan", "dyeLightGray", "dyeGray", "dyePink", "dyeLime", "dyeYellow", "dyeLightBlue", "dyeMagenta", "dyeOrange", "dyeWhite" };
     public static final String   LAMP_NAME               = "lamp";
     public static final String   CONFIG_WORLDGEN         = "world gen";
     public static final String   CONFIG_TUNGSTEN         = "tungsten";
@@ -207,7 +216,9 @@ public class Refs {
     public static final String   CONFIG_TUBES            = "pneumatic tube options";
     public static final String   CONFIG_CIRCUIT_DATABASE = "circuit database options";
 
+    public static final String MULTIMETER_NAME = "multimeter";
 
+    public static final String SOLAR_PANEL_NAME = "solar_panel";
 
     public static String fullVersionString() {
 
