@@ -8,7 +8,6 @@
 
 package com.bluepowermod;
 
-import com.bluepowermod.util.Achievements;
 import net.minecraft.item.Item;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraftforge.common.MinecraftForge;
@@ -35,6 +34,7 @@ import com.bluepowermod.part.wire.redstone.RedstoneApi;
 import com.bluepowermod.part.wire.redstone.RedstoneProviderQmunityLib;
 import com.bluepowermod.part.wire.redstone.RedstoneProviderVanilla;
 import com.bluepowermod.recipe.AlloyFurnaceRegistry;
+import com.bluepowermod.util.Achievements;
 import com.bluepowermod.util.Refs;
 import com.bluepowermod.world.WorldGenerationHandler;
 
@@ -54,7 +54,7 @@ import cpw.mods.fml.common.registry.GameData;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.GameRegistry.Type;
 
-@Mod(modid = Refs.MODID, name = Refs.NAME, guiFactory = Refs.GUIFACTORY)
+@Mod(modid = Refs.MODID, name = Refs.NAME, dependencies = "required-after:qmunitylib", guiFactory = Refs.GUIFACTORY)
 public class BluePower {
 
     @Instance(Refs.MODID)
