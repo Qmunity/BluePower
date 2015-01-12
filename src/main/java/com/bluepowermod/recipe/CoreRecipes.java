@@ -71,6 +71,7 @@ public class CoreRecipes {
         GameRegistry.addShapelessRecipe(new ItemStack(BPBlocks.marble_paver), BPBlocks.marble_tile);
         GameRegistry.addShapelessRecipe(new ItemStack(BPBlocks.marble_tile), BPBlocks.marble_paver);
         GameRegistry.addRecipe(new ItemStack(BPBlocks.tiles, 4), "BM", "MB", 'M', BPBlocks.marble_tile, 'B', BPBlocks.basalt_tile);
+        GameRegistry.addRecipe(new ItemStack(BPBlocks.tiles, 4), "MB", "BM", 'M', BPBlocks.marble_tile, 'B', BPBlocks.basalt_tile);
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPBlocks.basalt_brick, 4), "##", "##", '#', BPBlocks.basalt));
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPBlocks.marble_brick, 4), "##", "##", '#', BPBlocks.marble));
         GameRegistry.addRecipe(new ItemStack(BPBlocks.fancy_basalt, 1), "#", '#', BPBlocks.basalt_brick);
