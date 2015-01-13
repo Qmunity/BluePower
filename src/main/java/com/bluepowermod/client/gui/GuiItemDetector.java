@@ -76,8 +76,10 @@ public class GuiItemDetector extends GuiBase {
 
     @Override
     public void actionPerformed(IGuiWidget widget) {
-
-        BaseWidget baseWidget = (BaseWidget) widget;
-        NetworkHandler.sendToServer(new MessageGuiUpdate(itemDetector, widget.getID(), baseWidget.value));
+        super.actionPerformed(widget);
+        if (widget instanceof BaseWidget) {
+            BaseWidget baseWidget = (BaseWidget) widget;
+            NetworkHandler.sendToServer(new MessageGuiUpdate(itemDetector, widget.getID(), baseWidget.value));
+        }
     }
 }

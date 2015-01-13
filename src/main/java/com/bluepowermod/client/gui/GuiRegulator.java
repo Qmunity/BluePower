@@ -48,6 +48,7 @@ public class GuiRegulator extends GuiBase {
         super(regulator, new ContainerRegulator(invPlayer, regulator), resLoc);
         this.regulator = regulator;
         xSize = 212;
+        ySize += 2;
     }
 
     @Override
@@ -82,8 +83,10 @@ public class GuiRegulator extends GuiBase {
 
     @Override
     public void actionPerformed(IGuiWidget widget) {
-
-        BaseWidget baseWidget = (BaseWidget) widget;
-        NetworkHandler.sendToServer(new MessageGuiUpdate(regulator, widget.getID(), baseWidget.value));
+        super.actionPerformed(widget);
+        if (widget instanceof BaseWidget) {
+            BaseWidget baseWidget = (BaseWidget) widget;
+            NetworkHandler.sendToServer(new MessageGuiUpdate(regulator, widget.getID(), baseWidget.value));
+        }
     }
 }

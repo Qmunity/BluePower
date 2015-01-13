@@ -104,8 +104,10 @@ public class GuiManager extends GuiBase {
 
     @Override
     public void actionPerformed(IGuiWidget widget) {
-
-        BaseWidget baseWidget = (BaseWidget) widget;
-        NetworkHandler.sendToServer(new MessageGuiUpdate(manager, widget.getID(), baseWidget.value));
+        super.actionPerformed(widget);
+        if (widget instanceof BaseWidget) {
+            BaseWidget baseWidget = (BaseWidget) widget;
+            NetworkHandler.sendToServer(new MessageGuiUpdate(manager, widget.getID(), baseWidget.value));
+        }
     }
 }

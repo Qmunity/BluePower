@@ -125,6 +125,11 @@ public class GuiCircuitDatabaseMain extends GuiBase {
     }
 
     @Override
+    protected boolean isInfoStatLeftSided() {
+        return false;
+    }
+
+    @Override
     protected void mouseClicked(int x, int y, int button) {
 
         super.mouseClicked(x, y, button);
@@ -142,7 +147,7 @@ public class GuiCircuitDatabaseMain extends GuiBase {
     @Override
     protected void keyTyped(char par1, int par2) {
 
-        if (par2 == 1)//esc
+        if (par2 == 1)// esc
         {
             super.keyTyped(par1, par2);
         } else {
@@ -182,7 +187,8 @@ public class GuiCircuitDatabaseMain extends GuiBase {
         if (widget.getID() == 1) {
             circuitDatabase.clientCurrentTab = ((BaseWidget) widget).value;
         }
-        NetworkHandler.sendToServer(new MessageGuiUpdate(circuitDatabase, widget.getID(), ((BaseWidget) widget).value));
+        if (widget instanceof BaseWidget)
+            NetworkHandler.sendToServer(new MessageGuiUpdate(circuitDatabase, widget.getID(), ((BaseWidget) widget).value));
     }
 
     @Override

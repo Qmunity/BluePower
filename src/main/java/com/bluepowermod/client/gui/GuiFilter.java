@@ -67,8 +67,10 @@ public class GuiFilter extends GuiBase {
 
     @Override
     public void actionPerformed(IGuiWidget widget) {
-
-        BaseWidget baseWidget = (BaseWidget) widget;
-        NetworkHandler.sendToServer(new MessageGuiUpdate(filter, widget.getID(), baseWidget.value));
+        super.actionPerformed(widget);
+        if (widget instanceof BaseWidget) {
+            BaseWidget baseWidget = (BaseWidget) widget;
+            NetworkHandler.sendToServer(new MessageGuiUpdate(filter, widget.getID(), baseWidget.value));
+        }
     }
 }

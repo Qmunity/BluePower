@@ -122,6 +122,16 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
         }
     }
 
+    public List<TubeStack> getBacklog() {
+        return internalItemStackBuffer;
+    }
+
+    @SideOnly(Side.CLIENT)
+    public void setBacklog(List<TubeStack> backlog) {
+        internalItemStackBuffer.clear();
+        internalItemStackBuffer.addAll(backlog);
+    }
+
     protected void addItemToOutputBuffer(ItemStack stack) {
 
         addItemToOutputBuffer(stack, TubeColor.NONE);

@@ -73,6 +73,11 @@ public class GuiCircuitDatabaseSharing extends GuiCircuitTable {
     }
 
     @Override
+    protected boolean isInfoStatLeftSided() {
+        return false;
+    }
+
+    @Override
     protected void handleMouseClick(Slot slot, int p_146984_2_, int p_146984_3_, int p_146984_4_) {
 
         if (slot != null && slot.getHasStack() && slot.inventory == circuitDatabase.circuitInventory) {
@@ -89,7 +94,7 @@ public class GuiCircuitDatabaseSharing extends GuiCircuitTable {
                     return;
                 }
             } else {
-                circuitDatabase.clientCurrentTab = 0;//Navigate to the copy & share tab.
+                circuitDatabase.clientCurrentTab = 0;// Navigate to the copy & share tab.
                 NetworkHandler.sendToServer(new MessageCircuitDatabaseTemplate(circuitDatabase, slot.getStack()));
             }
         } else {
@@ -120,7 +125,8 @@ public class GuiCircuitDatabaseSharing extends GuiCircuitTable {
         if (widget.getID() == 1) {
             circuitDatabase.clientCurrentTab = ((BaseWidget) widget).value;
         }
-        NetworkHandler.sendToServer(new MessageGuiUpdate(circuitDatabase, widget.getID(), ((BaseWidget) widget).value));
+        if (widget instanceof BaseWidget)
+            NetworkHandler.sendToServer(new MessageGuiUpdate(circuitDatabase, widget.getID(), ((BaseWidget) widget).value));
     }
 
     @Override
