@@ -43,7 +43,7 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
     protected byte animationTicker = -1;
     protected static final int ANIMATION_TIME = 7;
     private boolean isAnimating;
-    private boolean ejectionScheduled;
+    protected boolean ejectionScheduled;
 
     @Override
     public void updateEntity() {
