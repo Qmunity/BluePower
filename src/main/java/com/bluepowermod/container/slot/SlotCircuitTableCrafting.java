@@ -109,16 +109,18 @@ public class SlotCircuitTableCrafting extends SlotCrafting {
                 } else if (r instanceof ShapedRecipes) {
                     ShapedRecipes recipe = (ShapedRecipes) r;
                     for (ItemStack stack : recipe.recipeItems) {
-                        boolean needsAdding = true;
-                        for (ItemStack listStack : requiredItems) {
-                            if (listStack.isItemEqual(stack)) {
-                                listStack.stackSize++;
-                                needsAdding = false;
-                                break;
+                        if (stack != null) {
+                            boolean needsAdding = true;
+                            for (ItemStack listStack : requiredItems) {
+                                if (listStack.isItemEqual(stack)) {
+                                    listStack.stackSize++;
+                                    needsAdding = false;
+                                    break;
+                                }
                             }
+                            if (needsAdding)
+                                requiredItems.add(stack.copy());
                         }
-                        if (needsAdding)
-                            requiredItems.add(stack.copy());
                     }
                     return requiredItems;
                 }
