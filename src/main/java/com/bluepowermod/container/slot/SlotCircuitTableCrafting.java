@@ -26,18 +26,18 @@ import com.bluepowermod.tile.tier2.TileCircuitTable;
 import cpw.mods.fml.common.FMLCommonHandler;
 
 public class SlotCircuitTableCrafting extends SlotCrafting {
-    
+
     private final TileCircuitTable circuitTable;
-    
-    public SlotCircuitTableCrafting(EntityPlayer p_i1823_1_, IInventory circuitTable, IInventory craftSlot, int p_i1823_4_, int p_i1823_5_, int p_i1823_6_) {
-    
+
+    public SlotCircuitTableCrafting(EntityPlayer p_i1823_1_, IInventory circuitTable, IInventory craftSlot, int p_i1823_4_, int p_i1823_5_,
+            int p_i1823_6_) {
+
         super(p_i1823_1_, circuitTable, craftSlot, p_i1823_4_, p_i1823_5_, p_i1823_6_);
         this.circuitTable = (TileCircuitTable) circuitTable;
     }
-    
+
     @Override
-    public boolean canTakeStack(EntityPlayer p_82869_1_) {
-    
+    public boolean canTakeStack(EntityPlayer player) {
         ItemStack stack = getStack();
         if (stack != null) {
             return canCraft(stack, circuitTable);
@@ -45,56 +45,64 @@ public class SlotCircuitTableCrafting extends SlotCrafting {
             return false;
         }
     }
-    
-    @Override
-    public void onSlotChanged() {
-    
-        circuitTable.updateGateInventory();
-    }
-    
+
     public static boolean canCraft(ItemStack stack, TileCircuitTable circuitTable) {
-    
+
         List<ItemStack> requiredItems = getCraftingComponents(stack);
-        if (requiredItems.size() == 0) return false;
+        if (requiredItems.size() == 0)
+            return false;
         for (ItemStack requiredItem : requiredItems) {
             ItemStack extractedStack = IOHelper.extract(circuitTable, ForgeDirection.UNKNOWN, requiredItem, true, true);
-            if (extractedStack == null || extractedStack.stackSize < requiredItem.stackSize) return false;
+            if (extractedStack == null || extractedStack.stackSize < requiredItem.stackSize)
+                return false;
         }
         return true;
     }
-    
+
     @Override
     public void onPickupFromSlot(EntityPlayer player, ItemStack craftedItem) {
-    
+
         FMLCommonHandler.instance().firePlayerCraftingEvent(player, craftedItem, circuitTable);
         this.onCrafting(craftedItem);
         List<ItemStack> requiredItems = getCraftingComponents(craftedItem);
         for (ItemStack requiredItem : requiredItems) {
-            IOHelper.extract(circuitTable, ForgeDirection.UNKNOWN, requiredItem, true, false);
+            IOHelper.extract(circuitTable, ForgeDirection.UNKNOWN, requiredItem, true, false, 1);
         }
+        ItemStack item = craftedItem.copy();
+        item.stackSize = 1;
+        putStack(item);
     }
-    
+
     private static List<ItemStack> getCraftingComponents(ItemStack gate) {
-    
+
         List<ItemStack> requiredItems = new ArrayList<ItemStack>();
         List recipeList = CraftingManager.getInstance().getRecipeList();
         for (IRecipe r : (List<IRecipe>) recipeList) {
             ItemStack result = r.getRecipeOutput();
-            if (ItemStack.areItemStackTagsEqual(result, gate)) {
+            if (result != null && result.isItemEqual(gate)) {
                 if (r instanceof ShapedOreRecipe) {
                     ShapedOreRecipe recipe = (ShapedOreRecipe) r;
                     for (Object o : recipe.getInput()) {
                         if (o != null) {
-                            ItemStack stack = (ItemStack) o;
-                            boolean needsAdding = true;
-                            for (ItemStack listStack : requiredItems) {
-                                if (listStack.isItemEqual(stack)) {
-                                    listStack.stackSize++;
-                                    needsAdding = false;
-                                    break;
-                                }
+                            ItemStack stack;
+                            if (o instanceof ItemStack) {
+                                stack = (ItemStack) o;
+                            } else {
+                                List<ItemStack> list = (List<ItemStack>) o;
+                                stack = list.size() > 0 ? list.get(0) : null;
                             }
-                            if (needsAdding) requiredItems.add(stack.copy());
+                            if (stack != null) {
+                                boolean needsAdding = true;
+                                for (ItemStack listStack : requiredItems) {
+                                    if (listStack.isItemEqual(stack)) {
+                                        listStack.stackSize++;
+                                        needsAdding = false;
+                                        break;
+                                    }
+                                }
+                                if (needsAdding)
+                                    requiredItems.add(stack.copy());
+                            }
                         }
                     }
                     return requiredItems;
@@ -109,7 +117,8 @@ public class SlotCircuitTableCrafting extends SlotCrafting {
                                 break;
                             }
                         }
-                        if (needsAdding) requiredItems.add(stack.copy());
+                        if (needsAdding)
+                            requiredItems.add(stack.copy());
                     }
                     return requiredItems;
                 }

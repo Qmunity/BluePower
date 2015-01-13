@@ -23,8 +23,8 @@ import java.util.List;
 
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
+import uk.co.qmunity.lib.client.gui.widget.IGuiWidget;
 
-import com.bluepowermod.client.gui.widget.IGuiWidget;
 import com.bluepowermod.client.gui.widget.WidgetMode;
 import com.bluepowermod.container.ContainerProjectTable;
 import com.bluepowermod.network.NetworkHandler;
@@ -36,34 +36,34 @@ import com.bluepowermod.util.Refs;
  * @author MineMaarten
  */
 public class GuiProjectTable extends GuiBase {
-    
+
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/project_table.png");
-    private final TileProjectTable        projectTable;
-    
+    private final TileProjectTable projectTable;
+
     public GuiProjectTable(InventoryPlayer invPlayer, TileProjectTable projectTable) {
-    
+
         super(projectTable, new ContainerProjectTable(invPlayer, projectTable), resLoc);
         this.projectTable = projectTable;
         ySize = 208;
     }
-    
+
     @Override
     public void initGui() {
-    
+
         super.initGui();
         addWidget(new WidgetMode(0, guiLeft + 15, guiTop + 20, 176, 1, Refs.MODID + ":textures/gui/project_table.png") {
-            
+
             @Override
             public void addTooltip(int mouseX, int mouseY, List<String> curTip, boolean shift) {
-            
+
                 curTip.add("gui.projectTable.clearGrid");
             }
         });
     }
-    
+
     @Override
     public void actionPerformed(IGuiWidget button) {
-    
+
         NetworkHandler.sendToServer(new MessageGuiUpdate(projectTable, 0, 0));
     }
 }

@@ -16,11 +16,12 @@ import net.minecraft.util.ResourceLocation;
 
 import org.apache.commons.lang3.text.WordUtils;
 
+import uk.co.qmunity.lib.client.gui.widget.BaseWidget;
+import uk.co.qmunity.lib.client.gui.widget.IGuiWidget;
+import uk.co.qmunity.lib.client.gui.widget.IWidgetListener;
+
 import com.bluepowermod.BluePower;
 import com.bluepowermod.client.gui.GuiScreenBase;
-import com.bluepowermod.client.gui.widget.BaseWidget;
-import com.bluepowermod.client.gui.widget.IGuiWidget;
-import com.bluepowermod.client.gui.widget.IWidgetListener;
 import com.bluepowermod.network.NetworkHandler;
 import com.bluepowermod.network.message.MessageGuiUpdate;
 import com.bluepowermod.part.gate.GateBase;
@@ -92,7 +93,7 @@ public class GuiGate extends GuiScreenBase implements IWidgetListener {
         super.drawScreen(x, y, partialTick);
 
         for (IGuiWidget widget : widgets)
-            widget.render(x, y);
+            widget.render(x, y, partialTick);
 
         renderGUI(x, y, partialTick);
 
