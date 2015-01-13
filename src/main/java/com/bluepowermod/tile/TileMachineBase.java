@@ -69,8 +69,8 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
         for (Iterator<TubeStack> iterator = internalItemStackBuffer.iterator(); iterator.hasNext();) {
             TubeStack tubeStack = iterator.next();
             if (IOHelper.canInterfaceWith(getTileCache(getOutputDirection()), getFacingDirection())) {
-                ItemStack returnedStack = IOHelper.insert(getTileCache(getOutputDirection()), tubeStack.stack, getFacingDirection(),
-                        tubeStack.color, false);
+                ItemStack returnedStack = IOHelper.insert(getTileCache(getOutputDirection()), tubeStack.stack, getFacingDirection(), tubeStack.color,
+                        false);
                 if (returnedStack == null) {
                     iterator.remove();
                     markDirty();
@@ -85,7 +85,8 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
                 }
             } else if (spawnItemsInWorld) {
                 ForgeDirection direction = getFacingDirection().getOpposite();
-                if (worldObj.isAirBlock(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ)) {
+                if (worldObj.getBlock(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ).getBlocksMovement(worldObj,
+                        xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ)) {
                     ejectItemInWorld(tubeStack.stack, direction);
                     iterator.remove();
                     markDirty();
