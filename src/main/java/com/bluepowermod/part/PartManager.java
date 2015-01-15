@@ -7,37 +7,9 @@
  */
 package com.bluepowermod.part;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-
-import net.minecraft.item.ItemStack;
-import uk.co.qmunity.lib.part.PartRegistry;
-
 import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.item.ItemPart;
-import com.bluepowermod.part.gate.GateAnd;
-import com.bluepowermod.part.gate.GateBuffer;
-import com.bluepowermod.part.gate.GateCounter;
-import com.bluepowermod.part.gate.GateMux;
-import com.bluepowermod.part.gate.GateNand;
-import com.bluepowermod.part.gate.GateNor;
-import com.bluepowermod.part.gate.GateNot;
-import com.bluepowermod.part.gate.GateNullCell;
-import com.bluepowermod.part.gate.GateOr;
-import com.bluepowermod.part.gate.GatePulseFormer;
-import com.bluepowermod.part.gate.GateRSLatch;
-import com.bluepowermod.part.gate.GateRandomizer;
-import com.bluepowermod.part.gate.GateRepeater;
-import com.bluepowermod.part.gate.GateSequencer;
-import com.bluepowermod.part.gate.GateStateCell;
-import com.bluepowermod.part.gate.GateSynchronizer;
-import com.bluepowermod.part.gate.GateTimer;
-import com.bluepowermod.part.gate.GateToggleLatch;
-import com.bluepowermod.part.gate.GateTransparentLatch;
-import com.bluepowermod.part.gate.GateXnor;
-import com.bluepowermod.part.gate.GateXor;
+import com.bluepowermod.part.gate.*;
 import com.bluepowermod.part.gate.analog.GateComparator;
 import com.bluepowermod.part.gate.analog.GateInverter;
 import com.bluepowermod.part.gate.analog.GateLightCell;
@@ -47,18 +19,20 @@ import com.bluepowermod.part.gate.ic.Circuit7x7;
 import com.bluepowermod.part.gate.wireless.GateTransceiver;
 import com.bluepowermod.part.lamp.PartCageLamp;
 import com.bluepowermod.part.lamp.PartFixture;
-import com.bluepowermod.part.tube.Accelerator;
-import com.bluepowermod.part.tube.MagTube;
-import com.bluepowermod.part.tube.PneumaticTube;
-import com.bluepowermod.part.tube.PneumaticTubeOpaque;
-import com.bluepowermod.part.tube.RestrictionTube;
-import com.bluepowermod.part.tube.RestrictionTubeOpaque;
+import com.bluepowermod.part.tube.*;
+import com.bluepowermod.part.wire.bluepower.WireBluePower;
 import com.bluepowermod.part.wire.redstone.PartRedwireFace;
 import com.bluepowermod.part.wire.redstone.PartRedwireFreestanding;
 import com.bluepowermod.part.wire.redstone.RedwireType;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.item.ItemStack;
+import uk.co.qmunity.lib.part.PartRegistry;
+
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 public class PartManager {
 
@@ -192,6 +166,8 @@ public class PartManager {
                 registerPart(PartRedwireFreestanding.class, type, color, false);
             registerPart(PartRedwireFreestanding.class, type, MinecraftColor.NONE, true);
         }
+
+        registerPart(WireBluePower.class);
     }
 
     public static void registerItems() {

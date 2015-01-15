@@ -121,6 +121,8 @@ public class BPItems {
     public static final Item amethyst_hoe     = new ItemGemHoe(BluePower.gemMaterial, Refs.AMETHYSTHOE_NAME, BPItems.amethyst_gem);
     public static final Item amethyst_sickle  = new ItemSickle(BluePower.gemMaterial, Refs.AMETHYSTSICKLE_NAME, BPItems.amethyst_gem);
 
+    public static final Item multimeter = new ItemMultimeter();
+
     public static void init() {
 
         if (!Loader.isModLoaded("ForgeMicroblock")) {// FMP already has an iron and diamond saw
@@ -227,6 +229,8 @@ public class BPItems {
 
         GameRegistry.registerItem(copper_wire, Refs.COPPERWIRE_NAME);
         GameRegistry.registerItem(iron_wire, Refs.IRONWIRE_NAME);
+
+        GameRegistry.registerItem(multimeter, Refs.MULTIMETER_NAME);
 
         MinecraftForge.addGrassSeed(new ItemStack(flax_seeds), 5);
     }

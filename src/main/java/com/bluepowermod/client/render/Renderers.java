@@ -8,18 +8,16 @@
 
 package com.bluepowermod.client.render;
 
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
-import net.minecraftforge.client.MinecraftForgeClient;
-
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.init.BPItems;
 import com.bluepowermod.tile.tier1.TileLamp;
-
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
+import net.minecraftforge.client.MinecraftForgeClient;
 
 @SideOnly(Side.CLIENT)
 public class Renderers {
@@ -31,6 +29,8 @@ public class Renderers {
         RenderingRegistry.registerBlockHandler(new RendererBlockBase());
 
         RenderingRegistry.registerBlockHandler(new RenderLamp());
+
+        RenderingRegistry.registerBlockHandler(new RendererSolarPanel());
 
         // ClientRegistry.bindTileEntitySpecialRenderer(TileEngine.class, new RenderEngine());
         // MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BPBlocks.engine), new RenderItemEngine());

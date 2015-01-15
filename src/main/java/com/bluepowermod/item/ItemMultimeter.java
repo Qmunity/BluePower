@@ -9,6 +9,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.world.World;
+import uk.co.qmunity.lib.part.compat.MultipartCompatibility;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,21 +34,16 @@ public class ItemMultimeter extends ItemBase {
         if(!world.isRemote){
             TileEntity ent = world.getTileEntity(x, y, z);
             Block block = world.getBlock(x, y, z);
+            IBluePowered part = MultipartCompatibility.getPart(world, x, y, z, IBluePowered.class);
             if(ent != null){
-                if(ent instanceof IBluePowered){ //TODO: Add multipart checking
+                if(ent instanceof IBluePowered || part != null){ //TODO: Add multipart checking
                     IBluePowered machine = null;
-                    /*
-                    if(block == BPBlocks.multipart){
-                        IMultipartCompat compat = (IMultipartCompat) CompatibilityUtils.getModule(Dependencies.FMP);
-                        BPPart part = compat.getClickedPart(new Vector3(x, y, z, world), new Vector3(xC, yC, zC), player, null);
-                        if(part instanceof IBluePowered){
-                            machine = (IBluePowered) part;
-                        }else{
-                            return false;
-                        }
-                    }else{*/
+
+                    if(part == null) {
                         machine = (IBluePowered) ent;
-                    //}
+                    }else{
+                        machine = part;
+                    }
 
                     List<String> messages = new ArrayList<String>();
                     messages.add("Charge: " + machine.getHandler().getAmpStored() + "/" + machine.getHandler().getMaxAmp() + "mA");
