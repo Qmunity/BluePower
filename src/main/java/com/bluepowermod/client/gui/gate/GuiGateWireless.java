@@ -21,11 +21,11 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
+import uk.co.qmunity.lib.client.gui.widget.IGuiWidget;
 import uk.co.qmunity.lib.util.AlphanumComparator;
 
 import com.bluepowermod.api.misc.Accessibility;
 import com.bluepowermod.api.wireless.IFrequency;
-import com.bluepowermod.client.gui.widget.IGuiWidget;
 import com.bluepowermod.client.gui.widget.WidgetMode;
 import com.bluepowermod.network.NetworkHandler;
 import com.bluepowermod.network.message.MessageWirelessNewFreq;
@@ -60,7 +60,7 @@ public class GuiGateWireless extends GuiGate {
     private GuiTextField frequencyName;
     private Accessibility acc = Accessibility.PUBLIC;
 
-    private IWirelessGate gate;
+    private final IWirelessGate gate;
 
     private Frequency selected = null;
 
@@ -136,8 +136,7 @@ public class GuiGateWireless extends GuiGate {
             }
         });
 
-        addWidget(modeSelector = new WidgetMode(6, guiLeft + 10, guiTop + 57, 228, (14 * 5), 3, Refs.MODID
-                + ":textures/gui/wirelessRedstone.png"));
+        addWidget(modeSelector = new WidgetMode(6, guiLeft + 10, guiTop + 57, 228, 14 * 5, 3, Refs.MODID + ":textures/gui/wirelessRedstone.png"));
         modeSelector.value = gate.getMode().ordinal();
 
         frequencyName = new GuiTextField(fontRendererObj, guiLeft + 88, guiTop + 22, 133, 10);
@@ -188,7 +187,7 @@ public class GuiGateWireless extends GuiGate {
             for (int i = 0; i < Math.min(frequencies.size(), 12); i++) {
                 Frequency f = frequencies.get(i + scrolled);
                 if (f.isBundled() == gate.isBundled()) {
-                    int yPos = guiTop + 22 + 10 + 2 + (i * 12);
+                    int yPos = guiTop + 22 + 10 + 2 + i * 12;
                     if (y > yPos && y < yPos + 11) {
                         if (button == 0) {
                             if (f.equals(selected)) {
@@ -283,41 +282,41 @@ public class GuiGateWireless extends GuiGate {
         {
             String txt = frequencyName.getText();
 
-            removeFrequency.enabled = (gate.getFrequency() != null && (gate.getFrequency().getOwner()
-                    .equals(player.getGameProfile().getId()) || player.capabilities.isCreativeMode))
-                    || (selected != null && (selected.getOwner().equals(player.getGameProfile().getId()) || player.capabilities.isCreativeMode));
+            removeFrequency.enabled = gate.getFrequency() != null
+                    && (gate.getFrequency().getOwner().equals(player.getGameProfile().getId()) || player.capabilities.isCreativeMode)
+                    || selected != null && (selected.getOwner().equals(player.getGameProfile().getId()) || player.capabilities.isCreativeMode);
 
-            accessLevel.enabled = selected != null || (txt.trim().length() > 0 && checkNoMatches());
+            accessLevel.enabled = selected != null || txt.trim().length() > 0 && checkNoMatches();
 
             saveFrequency.enabled = selected != null
-                    && (acc != selected.getAccessibility() || (txt.trim().length() > 0 && !txt.trim().equals(selected.getFrequencyName())));
+                    && (acc != selected.getAccessibility() || txt.trim().length() > 0 && !txt.trim().equals(selected.getFrequencyName()));
 
             addFrequency.enabled = selected == null && txt.trim().length() > 0 && checkNoMatches();
         }
 
         // Render title
-        drawCenteredString(fontRendererObj, I18n.format("bluepower.gui.wireless"), guiLeft + (xSize / 2), guiTop + 8, 0xEFEFEF);
+        drawCenteredString(fontRendererObj, I18n.format("bluepower.gui.wireless"), guiLeft + xSize / 2, guiTop + 8, 0xEFEFEF);
 
         // Filter
         {
             drawCenteredString(fontRendererObj, "Filter", guiLeft + 45, guiTop + 22 + 3, 0xEFEFEF);
             String accessLevelLabel = filterAccessLevel.value == 0 ? "bluepower.accessability.public"
-                    : (filterAccessLevel.value == 1 ? "bluepower.accessability.shared"
-                            : (filterAccessLevel.value == 2 ? "bluepower.accessability.private"
-                                    : (filterAccessLevel.value == 3 ? "bluepower.gui.admin" : "bluepower.gui.none")));
-            drawString(fontRendererObj, I18n.format(accessLevelLabel), guiLeft + 12 + 14 + 3, guiTop + 35 + 3,
-                    filterAccessLevel.enabled ? 0xEFEFEF : 0x565656);
+                    : filterAccessLevel.value == 1 ? "bluepower.accessability.shared"
+                            : filterAccessLevel.value == 2 ? "bluepower.accessability.private" : filterAccessLevel.value == 3 ? "bluepower.gui.admin"
+                                    : "bluepower.gui.none";
+            drawString(fontRendererObj, I18n.format(accessLevelLabel), guiLeft + 12 + 14 + 3, guiTop + 35 + 3, filterAccessLevel.enabled ? 0xEFEFEF
+                    : 0x565656);
         }
 
         // Label for the access level
         String accessLevelLabel = accessLevel.value == 0 ? "bluepower.accessability.public"
-                : (accessLevel.value == 1 ? "bluepower.accessability.shared" : "bluepower.accessability.private");
-        drawString(fontRendererObj, I18n.format(accessLevelLabel), guiLeft + 10 + 14 + 3, guiTop + ySize - 24 + 3,
-                accessLevel.enabled ? 0xEFEFEF : 0x565656);
+                : accessLevel.value == 1 ? "bluepower.accessability.shared" : "bluepower.accessability.private";
+        drawString(fontRendererObj, I18n.format(accessLevelLabel), guiLeft + 10 + 14 + 3, guiTop + ySize - 24 + 3, accessLevel.enabled ? 0xEFEFEF
+                : 0x565656);
 
         // Label for the mode
-        String modeLabel = modeSelector.value == 0 ? "bluepower.mode.sendreceive" : (modeSelector.value == 1 ? "bluepower.mode.send"
-                : "bluepower.mode.receive");
+        String modeLabel = modeSelector.value == 0 ? "bluepower.mode.sendreceive" : modeSelector.value == 1 ? "bluepower.mode.send"
+                : "bluepower.mode.receive";
         drawString(fontRendererObj, I18n.format(modeLabel), guiLeft + 10 + 14 + 3, guiTop + 57 + 3, 0xEFEFEF);
 
         // Render the textbox
@@ -329,17 +328,17 @@ public class GuiGateWireless extends GuiGate {
         // Render the list
         for (int i = 0; i < Math.min(frequencies.size(), 12); i++) {
             Frequency f = frequencies.get(i + scrolled);
-            int yPos = guiTop + 22 + 10 + 2 + (i * 12);
-            int color = f.equals(gate.getFrequency()) ? 0x00CCCC : (f.equals(selected) ? 0x888888 : ((x > guiLeft + 88
-                    && x <= guiLeft + 88 + 133 - (frequencies.size() > 12 ? 11 : 0) && y > yPos && y <= yPos + 11 && f.isBundled() == gate
-                    .isBundled()) ? 0xAAAAAA : 0x333333));
-            int textColor = f.equals(gate.getFrequency()) ? 0x333333 : (f.isBundled() != gate.isBundled() ? 0x999999 : 0xFFFFFF);
+            int yPos = guiTop + 22 + 10 + 2 + i * 12;
+            int color = f.equals(gate.getFrequency()) ? 0x00CCCC : f.equals(selected) ? 0x888888 : x > guiLeft + 88
+                    && x <= guiLeft + 88 + 133 - (frequencies.size() > 12 ? 11 : 0) && y > yPos && y <= yPos + 11
+                    && f.isBundled() == gate.isBundled() ? 0xAAAAAA : 0x333333;
+            int textColor = f.equals(gate.getFrequency()) ? 0x333333 : f.isBundled() != gate.isBundled() ? 0x999999 : 0xFFFFFF;
             drawRect(guiLeft + 88, yPos, guiLeft + 88 + 133 - (frequencies.size() > 12 ? 11 : 0), yPos + 11, (0xFF << 24) + color);
 
             String format = f.isBundled() != gate.isBundled() ? EnumChatFormatting.STRIKETHROUGH.toString() : "";
             String txt = format
                     + f.getFrequencyName()
-                    + ((filterAccessLevel.value == 3 || filterAccessLevel.value == 4) ? " ["
+                    + (filterAccessLevel.value == 3 || filterAccessLevel.value == 4 ? " ["
                             + StringUtils.capitalize(f.getAccessibility().name().toLowerCase()) + "]" : "");
             fontRendererObj.drawString(txt, guiLeft + 88 + 2 + 12 + 2, yPos + 2, textColor, !f.equals(gate.getFrequency()));
 
@@ -350,28 +349,24 @@ public class GuiGateWireless extends GuiGate {
                     GL11.glEnable(GL11.GL_LIGHTING);
                 GL11.glTranslated(guiLeft + 88 + 1, yPos - 2, 0);
                 GL11.glScaled(0.75, 0.75, 0.75);
-                ForgeHooksClient
-                .renderInventoryItem(RenderBlocks.getInstance(), Minecraft.getMinecraft().renderEngine, item, true, 1, 1, 1);
+                ForgeHooksClient.renderInventoryItem(RenderBlocks.getInstance(), Minecraft.getMinecraft().renderEngine, item, true, 1, 1, 1);
                 if (f.isBundled() != gate.isBundled())
                     GL11.glDisable(GL11.GL_LIGHTING);
             }
             GL11.glPopMatrix();
         }
         if (frequencies.size() > 12) {
-            drawRect(guiLeft + 88 + 133 - 10, guiTop + 22 + 10 + 2, guiLeft + 88 + 133, guiTop + 22 + 10 + 1 + (12 * 12), 0xFF565656);
+            drawRect(guiLeft + 88 + 133 - 10, guiTop + 22 + 10 + 2, guiLeft + 88 + 133, guiTop + 22 + 10 + 1 + 12 * 12, 0xFF565656);
         }
 
         for (int i = 0; i < Math.min(frequencies.size(), 12); i++) {
             Frequency f = frequencies.get(i + scrolled);
-            int yPos = guiTop + 22 + 10 + 2 + (i * 12);
+            int yPos = guiTop + 22 + 10 + 2 + i * 12;
             if (x > guiLeft + 88 && x <= guiLeft + 88 + 133 - (frequencies.size() > 12 ? 11 : 0) && y > yPos && y <= yPos + 11
                     && f.isBundled() == gate.isBundled()) {
-                func_146283_a(
-                        Arrays.asList(
-                                "Frequency: " + f.getFrequencyName(),
-                                EnumChatFormatting.GRAY + "Accessibility: "
-                                        + StringUtils.capitalize(f.getAccessibility().name().toLowerCase()), EnumChatFormatting.GRAY
-                                        + "Owner: " + f.getOwnerName(), "Devices: " + f.getDevices()), x, y);
+                func_146283_a(Arrays.asList("Frequency: " + f.getFrequencyName(),
+                        EnumChatFormatting.GRAY + "Accessibility: " + StringUtils.capitalize(f.getAccessibility().name().toLowerCase()),
+                        EnumChatFormatting.GRAY + "Owner: " + f.getOwnerName(), "Devices: " + f.getDevices()), x, y);
             }
         }
     }
@@ -400,7 +395,7 @@ public class GuiGateWireless extends GuiGate {
 
     private static class FrequencySorter implements Comparator<Frequency> {
 
-        private GuiGateWireless gui;
+        private final GuiGateWireless gui;
 
         public FrequencySorter(GuiGateWireless gui) {
 

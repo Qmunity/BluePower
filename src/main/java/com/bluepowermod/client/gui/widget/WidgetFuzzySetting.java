@@ -20,9 +20,9 @@ public class WidgetFuzzySetting extends WidgetMode {
     }
 
     @Override
-    public void render(int mouseX, int mouseY) {
+    public void render(int mouseX, int mouseY, float partialTicks) {
         textureIndex = value;
-        super.render(mouseX, mouseY);
+        super.render(mouseX, mouseY, partialTicks);
     }
 
     @Override

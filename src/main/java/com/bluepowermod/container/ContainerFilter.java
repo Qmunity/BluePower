@@ -21,7 +21,6 @@ package com.bluepowermod.container;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
@@ -29,6 +28,7 @@ import net.minecraft.item.ItemStack;
 import com.bluepowermod.ClientProxy;
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
 import com.bluepowermod.client.gui.GuiBase;
+import com.bluepowermod.containers.ContainerMachineBase;
 import com.bluepowermod.tile.tier1.TileFilter;
 
 import cpw.mods.fml.relauncher.Side;
@@ -37,19 +37,19 @@ import cpw.mods.fml.relauncher.SideOnly;
 /**
  * @author MineMaarten
  */
-public class ContainerFilter extends Container {
+public class ContainerFilter extends ContainerMachineBase {
 
     private final TileFilter tileFilter;
     private int filterColor = -1;
     private int fuzzySetting = -1;
 
-    public ContainerFilter(InventoryPlayer invPlayer, TileFilter ejector) {
-
-        tileFilter = ejector;
+    public ContainerFilter(InventoryPlayer invPlayer, TileFilter filter) {
+        super(filter);
+        tileFilter = filter;
 
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 3; ++j) {
-                addSlotToContainer(new Slot(ejector, j + i * 3, 62 + j * 18, 17 + i * 18));
+                addSlotToContainer(new Slot(filter, j + i * 3, 62 + j * 18, 17 + i * 18));
             }
         }
         bindPlayerInventory(invPlayer);
@@ -96,7 +96,6 @@ public class ContainerFilter extends Container {
     @Override
     @SideOnly(Side.CLIENT)
     public void updateProgressBar(int id, int value) {
-
         if (id == 0) {
             tileFilter.filterColor = TubeColor.values()[value];
             ((GuiBase) ClientProxy.getOpenedGui()).redraw();

@@ -58,6 +58,7 @@ public class GuiRetriever extends GuiFilter {
         super.drawGuiContainerBackgroundLayer(f, i, j);
 
         if (((TileRetriever) filter).mode == 0) {
+            mc.renderEngine.bindTexture(resLoc);
             int curSlot = ((TileRetriever) filter).slotIndex;
             Gui.func_146110_a(guiLeft + 60 + curSlot % 3 * 18, guiTop + 15 + 18 * (curSlot / 3), 182, 0, 20, 20, 256, 256);
         }

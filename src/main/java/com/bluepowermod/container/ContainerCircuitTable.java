@@ -8,65 +8,98 @@
 package com.bluepowermod.container;
 
 import invtweaks.api.container.ChestContainer;
+
+import java.util.List;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
+import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
+import com.bluepowermod.client.gui.GuiCircuitTable;
 import com.bluepowermod.container.slot.SlotCircuitTableCrafting;
 import com.bluepowermod.tile.tier2.TileCircuitTable;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 @ChestContainer
 public class ContainerCircuitTable extends Container {
-    
+
     private final TileCircuitTable circuitTable;
-    private int                    itemsCrafted;
-    private boolean                isRetrying = false;
-    
+    private int itemsCrafted;
+    private boolean isRetrying = false;
+    private int scrollState = -1;
+
     public ContainerCircuitTable(InventoryPlayer invPlayer, TileCircuitTable circuitTable) {
-    
+
         this.circuitTable = circuitTable;
-        
+
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 8; ++j) {
-                addSlotToContainer(new SlotCircuitTableCrafting(invPlayer.player, circuitTable, circuitTable.circuitInventory, j + i * 8, 8 + j * 18, 33 + i * 18));
+                addSlotToContainer(new SlotCircuitTableCrafting(invPlayer.player, circuitTable, circuitTable.circuitInventory, j + i * 8, 8 + j * 18,
+                        33 + i * 18));
             }
         }
-        
+
         for (int i = 0; i < 2; ++i) {
             for (int j = 0; j < 9; ++j) {
                 addSlotToContainer(new Slot(circuitTable, j + i * 9, 8 + j * 18, 95 + i * 18));
             }
         }
-        
+
         bindPlayerInventory(invPlayer);
     }
-    
+
     protected void bindPlayerInventory(InventoryPlayer invPlayer) {
-    
+
         // Render inventory
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 9; j++) {
                 addSlotToContainer(new Slot(invPlayer, j + i * 9 + 9, 8 + j * 18, 142 + i * 18));
             }
         }
-        
+
         // Render hotbar
         for (int j = 0; j < 9; j++) {
             addSlotToContainer(new Slot(invPlayer, j, 8 + j * 18, 200));
         }
     }
-    
+
     @Override
     public boolean canInteractWith(EntityPlayer player) {
-    
+
         return true;
     }
-    
+
+    @Override
+    public void detectAndSendChanges() {
+        super.detectAndSendChanges();
+        if (scrollState != circuitTable.slotsScrolled) {
+            scrollState = circuitTable.slotsScrolled;
+            for (ICrafting crafter : (List<ICrafting>) crafters) {
+                crafter.sendProgressBarUpdate(this, 0, circuitTable.slotsScrolled);
+            }
+        }
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void updateProgressBar(int p_75137_1_, int p_75137_2_) {
+        circuitTable.slotsScrolled = p_75137_2_;
+        GuiScreen gui = Minecraft.getMinecraft().currentScreen;
+        if (gui instanceof GuiCircuitTable) {
+            ((GuiCircuitTable) gui).updateScrollbar(circuitTable.slotsScrolled);
+        }
+    }
+
     @Override
     protected void retrySlotClick(int slot, int p_75133_2_, boolean p_75133_3_, EntityPlayer p_75133_4_) {
-    
+
         ItemStack stackInSlot = ((Slot) inventorySlots.get(slot)).getStack();
         itemsCrafted += stackInSlot.stackSize;
         isRetrying = true;
@@ -75,21 +108,24 @@ public class ContainerCircuitTable extends Container {
         }
         isRetrying = false;
     }
-    
+
     @Override
     public ItemStack transferStackInSlot(EntityPlayer player, int par2) {
-    
-        if (!isRetrying) itemsCrafted = 0;
-        
+
+        if (!isRetrying)
+            itemsCrafted = 0;
+
         ItemStack itemstack = null;
         Slot slot = (Slot) inventorySlots.get(par2);
         if (slot != null && slot.getHasStack()) {
             ItemStack itemstack1 = slot.getStack();
             itemstack = itemstack1.copy();
             if (par2 < 42) {
-                if (!mergeItemStack(itemstack1, 42, 77, false)) return null;
+                if (!mergeItemStack(itemstack1, 42, 77, false))
+                    return null;
             } else {
-                if (!mergeItemStack(itemstack1, 24, 42, false)) return null;
+                if (!mergeItemStack(itemstack1, 24, 42, false))
+                    return null;
             }
             if (itemstack1.stackSize == 0) {
                 slot.putStack(null);
@@ -104,5 +140,5 @@ public class ContainerCircuitTable extends Container {
         }
         return itemstack;
     }
-    
+
 }

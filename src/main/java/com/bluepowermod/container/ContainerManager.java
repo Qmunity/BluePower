@@ -21,7 +21,6 @@ package com.bluepowermod.container;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
@@ -29,6 +28,7 @@ import net.minecraft.item.ItemStack;
 import com.bluepowermod.ClientProxy;
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
 import com.bluepowermod.client.gui.GuiBase;
+import com.bluepowermod.containers.ContainerMachineBase;
 import com.bluepowermod.tile.tier3.TileManager;
 
 import cpw.mods.fml.relauncher.Side;
@@ -37,7 +37,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 /**
  * @author MineMaarten
  */
-public class ContainerManager extends Container {
+public class ContainerManager extends ContainerMachineBase {
 
     private final TileManager tileManager;
     private int filterColor = -1;
@@ -46,7 +46,7 @@ public class ContainerManager extends Container {
     private int fuzzySetting = -0;
 
     public ContainerManager(InventoryPlayer invPlayer, TileManager manager) {
-
+        super(manager);
         tileManager = manager;
 
         for (int i = 0; i < 4; ++i) {
