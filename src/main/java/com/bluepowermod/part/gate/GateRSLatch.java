@@ -19,15 +19,14 @@ package com.bluepowermod.part.gate;
 
 import java.util.List;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ResourceLocation;
 
-import org.lwjgl.opengl.GL11;
-
-import com.bluepowermod.client.render.RenderHelper;
-import com.bluepowermod.util.Refs;
+import com.bluepowermod.part.gate.component.GateComponentBorder;
+import com.bluepowermod.part.gate.component.GateComponentTorch;
+import com.bluepowermod.part.gate.component.GateComponentWire;
+import com.bluepowermod.part.wire.redstone.RedwireType;
+import com.bluepowermod.util.Layout;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -51,56 +50,30 @@ public class GateRSLatch extends GateBase {
 
         back().enable().setOutputOnly();
         back().setInput(0);
+    }
 
+    @Override
+    public void initializeComponents() {
+
+        GateComponentTorch t1 = new GateComponentTorch(this, 0x0000FF, 4 / 16D, true);
+        t1.setState(true);
+        addComponent(t1);
+        GateComponentTorch t2 = new GateComponentTorch(this, 0x3E94DC, 4 / 16D, true);
+        t2.setState(false);
+        addComponent(t2);
+
+        addComponent(new GateComponentWire(this, 0x00FF00, RedwireType.BLUESTONE).bind(front()));
+        addComponent(new GateComponentWire(this, 0xFFF600, RedwireType.BLUESTONE).bind(right()));
+        addComponent(new GateComponentWire(this, 0xC600FF, RedwireType.BLUESTONE).bind(back()));
+        addComponent(new GateComponentWire(this, 0xFF0000, RedwireType.BLUESTONE).bind(left()));
+
+        addComponent(new GateComponentBorder(this, 0x7D7D7D));
     }
 
     @Override
     public String getId() {
 
         return "rs";
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void renderTop(float frame) {
-
-        if (mode % 2 == 1) {
-            GL11.glPushMatrix();
-            GL11.glTranslated(0.5, 0, 0.5);
-            GL11.glScaled(-1, 1, 1);
-            GL11.glTranslated(-0.5, 0, -0.5);
-
-            GL11.glDisable(GL11.GL_CULL_FACE);
-        }
-
-        Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/gates/" + getTextureName()
-                + (mode > 1 ? "2" : "") + "/base.png"));
-        this.renderTop();
-
-        Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/gates/" + getTextureName()
-                + (mode > 1 ? "2" : "") + "/left_" + ((mode % 2 == 0 ? left().getInput() > 0 : right().getInput() > 0) ? "on" : "off")
-                + ".png"));
-        renderTop();
-        Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/gates/" + getTextureName()
-                + (mode > 1 ? "2" : "") + "/right_" + ((mode % 2 == 0 ? right().getInput() > 0 : left().getInput() > 0) ? "on" : "off")
-                + ".png"));
-        renderTop();
-        if (mode > 1) {
-            Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/gates/"
-                    + getTextureName() + "2/front" + "_" + (front().getInput() > 0 ? "on" : "off") + ".png"));
-            renderTop();
-            Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/gates/"
-                    + getTextureName() + "2/back" + "_" + (back().getInput() > 0 ? "on" : "off") + ".png"));
-            renderTop();
-        }
-
-        RenderHelper.renderDigitalRedstoneTorch(1D / 8D, 3D / 16D, -2D / 8D, 9D / 16D, front().getInput() == 0);
-        RenderHelper.renderDigitalRedstoneTorch(-1D / 8D, 3D / 16D, 2D / 8D, 9D / 16D, back().getInput() == 0);
-
-        if (mode % 2 == 1) {
-            GL11.glEnable(GL11.GL_CULL_FACE);
-            GL11.glPopMatrix();
-        }
     }
 
     @Override
@@ -155,6 +128,9 @@ public class GateRSLatch extends GateBase {
         if (++mode > 3)
             mode = 0;
 
+        getComponents().clear();
+        initializeComponents();
+
         initializeConnections();
         doLogic();
 
@@ -192,5 +168,14 @@ public class GateRSLatch extends GateBase {
     public void addWAILABody(List<String> info) {
 
         info.add(I18n.format("gui.mode") + ": " + I18n.format("bluepower.waila.rsLatch." + (mode < 2 ? "feedback" : "noFeedback")));
+    }
+
+    @Override
+    public Layout getLayout() {
+
+        Layout layout = super.getLayout();
+        if (layout == null)
+            return null;
+        return layout.getSubLayout(mode);
     }
 }

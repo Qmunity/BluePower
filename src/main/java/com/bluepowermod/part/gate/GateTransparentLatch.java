@@ -17,17 +17,13 @@
 
 package com.bluepowermod.part.gate;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.IIcon;
 
-import org.lwjgl.opengl.GL11;
-
-import com.bluepowermod.client.render.RenderHelper;
-import com.bluepowermod.util.Refs;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import com.bluepowermod.part.gate.component.GateComponentBorder;
+import com.bluepowermod.part.gate.component.GateComponentTorch;
+import com.bluepowermod.part.gate.component.GateComponentWire;
+import com.bluepowermod.part.wire.redstone.RedwireType;
+import com.bluepowermod.util.Layout;
 
 /**
  * @author MineMaarten
@@ -35,7 +31,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class GateTransparentLatch extends GateBase {
 
     private boolean mirrored;
-    private IIcon mirroredTopIcon;
 
     @Override
     public void initializeConnections() {
@@ -47,54 +42,37 @@ public class GateTransparentLatch extends GateBase {
     }
 
     @Override
+    public void initializeComponents() {
+
+        GateComponentTorch t1 = new GateComponentTorch(this, 0x215b8d, 4 / 16D, true);
+        t1.setState(true);
+        addComponent(t1);
+        GateComponentTorch t2 = new GateComponentTorch(this, 0x0000FF, 4 / 16D, true);
+        t2.setState(false);
+        addComponent(t2);
+        GateComponentTorch t3 = new GateComponentTorch(this, 0x3e94dc, 4 / 16D, true);
+        t3.setState(true);
+        addComponent(t3);
+        GateComponentTorch t4 = new GateComponentTorch(this, 0x6F00B5, 5 / 16D, true);
+        t4.setState(false);
+        addComponent(t4);
+        GateComponentTorch t5 = new GateComponentTorch(this, 0x7635c6, 4 / 16D, true);
+        t5.setState(false);
+        addComponent(t5);
+
+        addComponent(new GateComponentWire(this, 0x18FF00, RedwireType.BLUESTONE));
+        addComponent(new GateComponentWire(this, 0xFFF600, RedwireType.BLUESTONE).bind(right()));
+        addComponent(new GateComponentWire(this, 0xC600FF, RedwireType.BLUESTONE).bind(back()));
+        addComponent(new GateComponentWire(this, 0xFF0000, RedwireType.BLUESTONE).bind(left()));
+        addComponent(new GateComponentWire(this, 0xd2ae31, RedwireType.BLUESTONE));
+
+        addComponent(new GateComponentBorder(this, 0x7D7D7D));
+    }
+
+    @Override
     public String getId() {
 
         return "transparent";
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerIcons(IIconRegister reg) {
-
-        super.registerIcons(reg);
-        mirroredTopIcon = reg.registerIcon(Refs.MODID + ":gates/" + getTextureName() + "/base_mirrored");
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public IIcon getTopIcon() {
-
-        return mirrored ? mirroredTopIcon : super.getTopIcon();
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void renderTop(float frame) {
-
-        if (mirrored) {
-            GL11.glPushMatrix();
-            GL11.glTranslated(0.5, 0, 0.5);
-            GL11.glScaled(-1, 1, 1);
-            GL11.glTranslated(-0.5, 0, -0.5);
-
-            GL11.glDisable(GL11.GL_CULL_FACE);
-        }
-
-        renderTop("front", front());
-        renderTop("left", mirrored ? right() : left());
-        renderTop("back", back());
-        renderTop("leftcenter", back().getInput() == 0);
-        RenderHelper.renderDigitalRedstoneTorch(4 / 16D, 3D / 16D, -4 / 16D, 8D / 16D, back().getInput() == 0);
-        RenderHelper.renderDigitalRedstoneTorch(4 / 16D, 3D / 16D, 1 / 16D, 8D / 16D, back().getInput() > 0 && front().getInput() == 0);
-        RenderHelper.renderDigitalRedstoneTorch(1 / 16D, 3D / 16D, 1 / 16D, 8D / 16D, back().getInput() == 0 && front().getInput() == 0);
-        RenderHelper.renderDigitalRedstoneTorch(-4 / 16D, 2D / 16D, 1 / 16D, 10D / 16D, front().getInput() > 0);
-        RenderHelper.renderDigitalRedstoneTorch(2 / 16D, 2D / 16D, 6 / 16D, 10D / 16D, front().getInput() > 0);
-        renderTop("right", mirrored ? left() : right());
-
-        if (mirrored) {
-            GL11.glEnable(GL11.GL_CULL_FACE);
-            GL11.glPopMatrix();
-        }
     }
 
     @Override
@@ -121,6 +99,10 @@ public class GateTransparentLatch extends GateBase {
             left().setBidirectional();
             right().setOutputOnly();
         }
+
+        getComponents().clear();
+        initializeComponents();
+
         sendUpdatePacket();
         return true;
     }
@@ -158,6 +140,15 @@ public class GateTransparentLatch extends GateBase {
         }
         if (getParent() != null && getWorld() != null && getWorld().isRemote)
             getWorld().markBlockRangeForRenderUpdate(getX(), getY(), getZ(), getX(), getY(), getZ());
+    }
+
+    @Override
+    public Layout getLayout() {
+
+        Layout layout = super.getLayout();
+        if (layout == null)
+            return null;
+        return layout.getSubLayout(mirrored ? 1 : 0);
     }
 
 }

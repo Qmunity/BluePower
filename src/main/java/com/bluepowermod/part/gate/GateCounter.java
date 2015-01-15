@@ -24,11 +24,14 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 
-import org.lwjgl.opengl.GL11;
-
 import com.bluepowermod.client.gui.gate.GuiGateCounter;
-import com.bluepowermod.client.render.RenderHelper;
 import com.bluepowermod.part.IGuiButtonSensitive;
+import com.bluepowermod.part.gate.component.GateComponentBorder;
+import com.bluepowermod.part.gate.component.GateComponentBorderDark;
+import com.bluepowermod.part.gate.component.GateComponentPointer;
+import com.bluepowermod.part.gate.component.GateComponentTorch;
+import com.bluepowermod.part.gate.component.GateComponentWire;
+import com.bluepowermod.part.wire.redstone.RedwireType;
 import com.bluepowermod.util.Color;
 
 import cpw.mods.fml.relauncher.Side;
@@ -53,34 +56,54 @@ public class GateCounter extends GateBase implements IGuiButtonSensitive {
     }
 
     @Override
+    public void initializeComponents() {
+
+        GateComponentTorch t1 = new GateComponentTorch(this, 0x0000FF, 4 / 16D, true);
+        t1.setState(true);
+        addComponent(t1);
+        GateComponentTorch t2 = new GateComponentTorch(this, 0x00c0ff, 4 / 16D, true);
+        t2.setState(true);
+        addComponent(t2);
+        GateComponentPointer t3 = new GateComponentPointer(this, 0xb220d1, 7 / 16D, true);
+        t3.setState(true);
+        addComponent(t3);
+
+        addComponent(new GateComponentWire(this, 0xFFF600, RedwireType.BLUESTONE).bind(right()));
+        addComponent(new GateComponentWire(this, 0xFF0000, RedwireType.BLUESTONE).bind(left()));
+
+        addComponent(new GateComponentBorder(this, 0x7D7D7D));
+        addComponent(new GateComponentBorderDark(this, 0x4d4d4d));
+    }
+
+    @Override
     public String getId() {
 
         return "counter";
     }
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void renderTop(float frame) {
-
-        renderTop("left", left().getInput() > 0);
-        renderTop("right", right().getInput() > 0);
-        renderTop("centerleft", left().getInput() > 0);
-
-        RenderHelper.renderDigitalRedstoneTorch(-2 / 16D, 2D / 8D, 0, 13D / 16D, true);
-        RenderHelper.renderDigitalRedstoneTorch(0, 2D / 8D, -5D / 16D, 8D / 16D, count == 0);
-        RenderHelper.renderDigitalRedstoneTorch(0, 2D / 8D, 5D / 16D, 8D / 16D, count == max);
-        GL11.glPushMatrix();
-        {
-            GL11.glTranslated(2 / 16D, 0, 0);
-            double min = 0.555;
-            double max = 0.385;
-
-            double angle = min + max * (count / (double) this.max);
-
-            RenderHelper.renderPointer(-4 / 16D, 7 / 16D, 0, -angle + 0.5);
-        }
-        GL11.glPopMatrix();
-    }
+    // @Override
+    // @SideOnly(Side.CLIENT)
+    // public void renderTop(float frame) {
+    //
+    // renderTop("left", left().getInput() > 0);
+    // renderTop("right", right().getInput() > 0);
+    // renderTop("centerleft", left().getInput() > 0);
+    //
+    // RenderHelper.renderDigitalRedstoneTorch(-2 / 16D, 2D / 8D, 0, 13D / 16D, true);
+    // RenderHelper.renderDigitalRedstoneTorch(0, 2D / 8D, -5D / 16D, 8D / 16D, count == 0);
+    // RenderHelper.renderDigitalRedstoneTorch(0, 2D / 8D, 5D / 16D, 8D / 16D, count == max);
+    // GL11.glPushMatrix();
+    // {
+    // GL11.glTranslated(2 / 16D, 0, 0);
+    // double min = 0.555;
+    // double max = 0.385;
+    //
+    // double angle = min + max * (count / (double) this.max);
+    //
+    // RenderHelper.renderPointer(-4 / 16D, 7 / 16D, 0, -angle + 0.5);
+    // }
+    // GL11.glPopMatrix();
+    // }
 
     @Override
     public void doLogic() {

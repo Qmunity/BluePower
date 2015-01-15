@@ -22,11 +22,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import uk.co.qmunity.lib.raytrace.QMovingObjectPosition;
 
-import com.bluepowermod.client.render.RenderHelper;
 import com.bluepowermod.init.BPItems;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import com.bluepowermod.part.gate.component.GateComponentBorder;
+import com.bluepowermod.part.gate.component.GateComponentLever;
+import com.bluepowermod.part.gate.component.GateComponentTorch;
+import com.bluepowermod.part.gate.component.GateComponentWire;
+import com.bluepowermod.part.wire.redstone.RedwireType;
 
 public class GateToggleLatch extends GateBase {
 
@@ -43,24 +44,42 @@ public class GateToggleLatch extends GateBase {
     }
 
     @Override
+    public void initializeComponents() {
+
+        GateComponentTorch t1 = new GateComponentTorch(this, 0x0000FF, 4 / 16D, true);
+        t1.setState(true);
+        addComponent(t1);
+        GateComponentTorch t2 = new GateComponentTorch(this, 0x6F00B5, 4 / 16D, true);
+        t2.setState(false);
+        addComponent(t2);
+
+        addComponent(new GateComponentLever(this, 0x00FF00));
+
+        addComponent(new GateComponentWire(this, 0xFFF600, RedwireType.BLUESTONE).bind(right()));
+        addComponent(new GateComponentWire(this, 0xFF0000, RedwireType.BLUESTONE).bind(left()));
+
+        addComponent(new GateComponentBorder(this, 0x7D7D7D));
+    }
+
+    @Override
     public String getId() {
 
         return "toggle";
     }
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    protected void renderTop(float frame) {
-
-        renderTop("centerleft", power);
-        renderTop("left", power);
-        renderTop("centerright", power);
-        renderTop("right", power);
-        RenderHelper.renderDigitalRedstoneTorch(2.5D / 8D, 1D / 8D, -2.5D / 8D, 9D / 16D, !state);
-        RenderHelper.renderDigitalRedstoneTorch(2.5D / 8D, 1D / 8D, 2.5D / 8D, 9D / 16D, state);
-
-        // RenderHelper.renderLever(this, 9 / 16D, 1 / 8D, 4 / 16D, !state);
-    }
+    // @Override
+    // @SideOnly(Side.CLIENT)
+    // protected void renderTop(float frame) {
+    //
+    // renderTop("centerleft", power);
+    // renderTop("left", power);
+    // renderTop("centerright", power);
+    // renderTop("right", power);
+    // RenderHelper.renderDigitalRedstoneTorch(2.5D / 8D, 1D / 8D, -2.5D / 8D, 9D / 16D, !state);
+    // RenderHelper.renderDigitalRedstoneTorch(2.5D / 8D, 1D / 8D, 2.5D / 8D, 9D / 16D, state);
+    //
+    // // RenderHelper.renderLever(this, 9 / 16D, 1 / 8D, 4 / 16D, !state);
+    // }
 
     @Override
     public void doLogic() {

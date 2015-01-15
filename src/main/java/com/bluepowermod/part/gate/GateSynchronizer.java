@@ -9,10 +9,11 @@ package com.bluepowermod.part.gate;
 
 import net.minecraft.nbt.NBTTagCompound;
 
-import com.bluepowermod.client.render.RenderHelper;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import com.bluepowermod.part.gate.component.GateComponentBorder;
+import com.bluepowermod.part.gate.component.GateComponentSiliconChip;
+import com.bluepowermod.part.gate.component.GateComponentTorch;
+import com.bluepowermod.part.gate.component.GateComponentWire;
+import com.bluepowermod.part.wire.redstone.RedwireType;
 
 /**
  * @author MineMaarten
@@ -31,25 +32,43 @@ public class GateSynchronizer extends GateBase {
     }
 
     @Override
+    public void initializeComponents() {
+
+        addComponent(new GateComponentTorch(this, 0xffb400, 5 / 16D, true));
+
+        addComponent(new GateComponentWire(this, 0x208800, RedwireType.BLUESTONE));
+        addComponent(new GateComponentWire(this, 0x3faa62, RedwireType.BLUESTONE));
+        addComponent(new GateComponentWire(this, 0xa50d7f, RedwireType.BLUESTONE));
+        addComponent(new GateComponentWire(this, 0xFFF600, RedwireType.BLUESTONE).bind(right()));
+        addComponent(new GateComponentWire(this, 0xC600FF, RedwireType.BLUESTONE).bind(back()));
+        addComponent(new GateComponentWire(this, 0xFF0000, RedwireType.BLUESTONE).bind(left()));
+
+        addComponent(new GateComponentSiliconChip(this, 0x0000FF));
+        addComponent(new GateComponentSiliconChip(this, 0x00ccff));
+
+        addComponent(new GateComponentBorder(this, 0x7D7D7D));
+    }
+
+    @Override
     public String getId() {
 
         return "synchronizer";
     }
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void renderTop(float frame) {
-
-        RenderHelper.renderDigitalRedstoneTorch(0, 1D / 8D, 5 / 16D, 10D / 16D, front().getInput() > 0);
-        renderTop("front", front());
-        renderTop("right", right());
-        renderTop("back", back());
-        renderTop("left", left());
-        renderTop("frontleft", !leftTriggered);
-        renderTop("frontright", !rightTriggered);
-        RenderHelper.renderRandomizerButton(3 / 16D, 0, -4 / 16D, leftTriggered);
-        RenderHelper.renderRandomizerButton(-3 / 16D, 0, -4 / 16D, rightTriggered);
-    }
+    // @Override
+    // @SideOnly(Side.CLIENT)
+    // public void renderTop(float frame) {
+    //
+    // RenderHelper.renderDigitalRedstoneTorch(0, 1D / 8D, 5 / 16D, 10D / 16D, front().getInput() > 0);
+    // renderTop("front", front());
+    // renderTop("right", right());
+    // renderTop("back", back());
+    // renderTop("left", left());
+    // renderTop("frontleft", !leftTriggered);
+    // renderTop("frontright", !rightTriggered);
+    // RenderHelper.renderRandomizerButton(3 / 16D, 0, -4 / 16D, leftTriggered);
+    // RenderHelper.renderRandomizerButton(-3 / 16D, 0, -4 / 16D, rightTriggered);
+    // }
 
     @Override
     public void doLogic() {

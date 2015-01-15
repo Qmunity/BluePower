@@ -20,7 +20,6 @@ package com.bluepowermod.part.gate;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.util.IIcon;
 import net.minecraftforge.common.util.ForgeDirection;
-import uk.co.qmunity.lib.util.Dir;
 
 import com.bluepowermod.util.Refs;
 
@@ -46,28 +45,33 @@ public class GateWire extends GateBase {
     }
 
     @Override
+    public void initializeComponents() {
+
+    }
+
+    @Override
     public String getId() {
 
         return ID;
     }
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    protected void renderTop(float frame) {
-
-        boolean isOn = false;
-        for (Dir dir : Dir.values()) {
-            if (getConnection(dir).isEnabled()) {
-                isOn = getConnection(dir).getInput() > 0 || getConnection(dir).getOutput() > 0;
-                break;
-            }
-        }
-        this.renderTop("front", front());
-        renderTop("back", back());
-        renderTop("left", left());
-        renderTop("right", right());
-        renderTop("center_" + (isOn ? "on" : "off"));
-    }
+    // @Override
+    // @SideOnly(Side.CLIENT)
+    // protected void renderTop(float frame) {
+    //
+    // boolean isOn = false;
+    // for (Dir dir : Dir.values()) {
+    // if (getConnection(dir).isEnabled()) {
+    // isOn = getConnection(dir).getInput() > 0 || getConnection(dir).getOutput() > 0;
+    // break;
+    // }
+    // }
+    // renderTop("front", front());
+    // renderTop("back", back());
+    // renderTop("left", left());
+    // renderTop("right", right());
+    // renderTop("center_" + (isOn ? "on" : "off"));
+    // }
 
     @Override
     public boolean changeMode() {

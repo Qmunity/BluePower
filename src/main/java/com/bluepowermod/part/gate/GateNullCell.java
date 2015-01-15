@@ -39,6 +39,7 @@ import com.bluepowermod.api.redstone.IFaceRedstoneDevice;
 import com.bluepowermod.api.redstone.IRedstoneConductor;
 import com.bluepowermod.api.redstone.IRedstoneDevice;
 import com.bluepowermod.client.render.IconSupplier;
+import com.bluepowermod.part.gate.component.GateComponentBorder;
 import com.bluepowermod.part.wire.redstone.RedstoneApi;
 import com.bluepowermod.part.wire.redstone.RedwireType;
 import com.bluepowermod.part.wire.redstone.WireCommons;
@@ -66,6 +67,12 @@ public class GateNullCell extends GateBase implements IFaceRedstoneDevice, IReds
     }
 
     @Override
+    public void initializeComponents() {
+
+        addComponent(new GateComponentBorder(this, 0x7D7D7D));
+    }
+
+    @Override
     public String getId() {
 
         return "nullcell" + (analog ? ".analog" : "");
@@ -77,11 +84,11 @@ public class GateNullCell extends GateBase implements IFaceRedstoneDevice, IReds
         return "nullcell";
     }
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    protected void renderTop(float frame) {
-
-    }
+    // @Override
+    // @SideOnly(Side.CLIENT)
+    // protected void renderTop(float frame) {
+    //
+    // }
 
     @Override
     @SideOnly(Side.CLIENT)
@@ -94,7 +101,7 @@ public class GateNullCell extends GateBase implements IFaceRedstoneDevice, IReds
         IIcon planks = Blocks.planks.getIcon(0, 0);
         IIcon wire = IconSupplier.wire;
 
-        int col = isAnalog() ? RedwireType.INFUSED_TESLATITE.getColor() : RedwireType.BLUESTONE.getColor();
+        int col = isAnalog() ? RedwireType.RED_ALLOY.getColor() : RedwireType.BLUESTONE.getColor();
 
         renderer.renderBox(new Vec3dCube(2 / 16D, 2 / 16D, 2 / 16D, 3 / 16D, 10 / 16D, 3 / 16D), planks);
         renderer.renderBox(new Vec3dCube(2 / 16D, 2 / 16D, 13 / 16D, 3 / 16D, 10 / 16D, 14 / 16D), planks);
@@ -104,7 +111,10 @@ public class GateNullCell extends GateBase implements IFaceRedstoneDevice, IReds
         renderer.renderBox(new Vec3dCube(13 / 16D, 2 / 16D, 13 / 16D, 14 / 16D, 10 / 16D, 14 / 16D), planks);
         renderer.renderBox(new Vec3dCube(13 / 16D, 9 / 16D, 3 / 16D, 14 / 16D, 10 / 16D, 13 / 16D), planks);
 
-        renderer.setColor(WireCommons.getColorForPowerLevel(col, getRotation() % 2 == 0 ? powerA : powerB));
+        byte pow = getRotation() % 2 == 0 ? powerA : powerB;
+        if (rendering != null)
+            pow = (byte) 50;
+        renderer.setColor(WireCommons.getColorForPowerLevel(col, pow));
 
         ForgeDirection dir = ForgeDirection.NORTH;
         if (getRotation() % 2 == 1)
@@ -116,7 +126,10 @@ public class GateNullCell extends GateBase implements IFaceRedstoneDevice, IReds
         renderer.renderBox(new Vec3dCube(7 / 16D, 2 / 16D, 15 / 16D, 9 / 16D,
                 2 / 16D + (height / (nullcells[dir.getOpposite().ordinal()] ? 1 : 2)), 16 / 16D), wire);
 
-        renderer.setColor(WireCommons.getColorForPowerLevel(col, getRotation() % 2 == 0 ? powerB : powerA));
+        pow = getRotation() % 2 == 0 ? powerB : powerA;
+        if (rendering != null)
+            pow = (byte) 50;
+        renderer.setColor(WireCommons.getColorForPowerLevel(col, pow));
 
         ForgeDirection dir2 = ForgeDirection.WEST;
         if (getRotation() % 2 == 1)
@@ -143,12 +156,7 @@ public class GateNullCell extends GateBase implements IFaceRedstoneDevice, IReds
     @Override
     public void onUpdate() {
 
-        if (RedstoneApi.getInstance().shouldWiresHandleUpdates())
-            return;
-
         super.onUpdate();
-
-        WireCommons.refreshConnectionsRedstone(this);
 
         for (ForgeDirection s : ForgeDirection.VALID_DIRECTIONS) {
             if (s != getFace()) {
@@ -207,19 +215,19 @@ public class GateNullCell extends GateBase implements IFaceRedstoneDevice, IReds
     @Override
     public boolean canConnectStraight(ForgeDirection side, IRedstoneDevice device) {
 
-        return true;
+        return side != ForgeDirection.UNKNOWN;
     }
 
     @Override
     public boolean canConnectOpenCorner(ForgeDirection side, IRedstoneDevice device) {
 
-        return true;
+        return false;
     }
 
     @Override
     public boolean canConnectClosedCorner(ForgeDirection side, IRedstoneDevice device) {
 
-        return true;
+        return false;
     }
 
     @Override

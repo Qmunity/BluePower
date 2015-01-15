@@ -21,7 +21,10 @@ import java.util.List;
 
 import net.minecraft.nbt.NBTTagCompound;
 
-import com.bluepowermod.client.render.RenderHelper;
+import com.bluepowermod.part.gate.component.GateComponentBorder;
+import com.bluepowermod.part.gate.component.GateComponentTorch;
+import com.bluepowermod.part.gate.component.GateComponentWire;
+import com.bluepowermod.part.wire.redstone.RedwireType;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -40,24 +43,44 @@ public class GatePulseFormer extends GateBase {
     }
 
     @Override
+    public void initializeComponents() {
+
+        GateComponentTorch t1 = new GateComponentTorch(this, 0x0000FF, 4 / 16D, true);
+        t1.setState(true);
+        addComponent(t1);
+        GateComponentTorch t2 = new GateComponentTorch(this, 0x6F00B5, 4 / 16D, true);
+        t2.setState(false);
+        addComponent(t2);
+        GateComponentTorch t3 = new GateComponentTorch(this, 0x3e94dc, 5 / 16D, true);
+        t3.setState(false);
+        addComponent(t3);
+
+        addComponent(new GateComponentWire(this, 0x18FF00, RedwireType.BLUESTONE));
+        addComponent(new GateComponentWire(this, 0xC600FF, RedwireType.BLUESTONE));
+        addComponent(new GateComponentWire(this, 0x18DFA5, RedwireType.BLUESTONE));
+
+        addComponent(new GateComponentBorder(this, 0x7D7D7D));
+    }
+
+    @Override
     public String getId() {
 
         return "pulseformer";
     }
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void renderTop(float frame) {
-
-        RenderHelper.renderDigitalRedstoneTorch(3 / 16D, 1D / 8D, -1 / 16D, 9D / 16D, !power[0]);
-        RenderHelper.renderDigitalRedstoneTorch(-3 / 16D, 1D / 8D, -1 / 16D, 9D / 16D, power[2]);
-        RenderHelper.renderDigitalRedstoneTorch(0, 1D / 8D, 5 / 16D, 9D / 16D, !power[2] && power[1]);
-
-        renderTop("center", !power[1]);
-        renderTop("back", power[0]);
-        renderTop("left", !power[1]);
-        renderTop("right", power[2]);
-    }
+    // @Override
+    // @SideOnly(Side.CLIENT)
+    // public void renderTop(float frame) {
+    //
+    // RenderHelper.renderDigitalRedstoneTorch(3 / 16D, 1D / 8D, -1 / 16D, 9D / 16D, !power[0]);
+    // RenderHelper.renderDigitalRedstoneTorch(-3 / 16D, 1D / 8D, -1 / 16D, 9D / 16D, power[2]);
+    // RenderHelper.renderDigitalRedstoneTorch(0, 1D / 8D, 5 / 16D, 9D / 16D, !power[2] && power[1]);
+    //
+    // renderTop("center", !power[1]);
+    // renderTop("back", power[0]);
+    // renderTop("left", !power[1]);
+    // renderTop("right", power[2]);
+    // }
 
     @Override
     public void doLogic() {

@@ -7,10 +7,10 @@
  */
 package com.bluepowermod.part.gate;
 
-import com.bluepowermod.client.render.RenderHelper;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import com.bluepowermod.part.gate.component.GateComponentBorder;
+import com.bluepowermod.part.gate.component.GateComponentTorch;
+import com.bluepowermod.part.gate.component.GateComponentWire;
+import com.bluepowermod.part.wire.redstone.RedwireType;
 
 public class GateBuffer extends GateBase {
 
@@ -23,6 +23,24 @@ public class GateBuffer extends GateBase {
         right().enable();
         back().enable();
         left().enable();
+    }
+
+    @Override
+    public void initializeComponents() {
+
+        GateComponentTorch t1 = new GateComponentTorch(this, 0x0000FF, 5 / 16D, true);
+        t1.setState(true);
+        addComponent(t1);
+        GateComponentTorch t2 = new GateComponentTorch(this, 0x6F00B5, 4 / 16D, true);
+        t2.setState(false);
+        addComponent(t2);
+
+        addComponent(new GateComponentWire(this, 0x18FF00, RedwireType.BLUESTONE));
+        addComponent(new GateComponentWire(this, 0xFFF600, RedwireType.BLUESTONE).bind(right()));
+        addComponent(new GateComponentWire(this, 0xC600FF, RedwireType.BLUESTONE).bind(back()));
+        addComponent(new GateComponentWire(this, 0xFF0000, RedwireType.BLUESTONE).bind(left()));
+
+        addComponent(new GateComponentBorder(this, 0x7D7D7D));
     }
 
     @Override
@@ -41,23 +59,23 @@ public class GateBuffer extends GateBase {
         right().setOutput(power ? 15 : 0);
     }
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    protected void renderTop(float frame) {
-
-        renderTop("center", back().getInput() == 0 ? "on" : "off");
-        renderTop("right", right());
-        renderTop("back", back());
-        renderTop("left", left());
-
-        RenderHelper.renderDigitalRedstoneTorch(0, 0, 0, 13 / 16D, back().getInput() == 0);
-        RenderHelper.renderDigitalRedstoneTorch(0, 0, 4 / 16D, 14 / 16D, back().getInput() > 0);
-    }
-
-    @Override
-    public void tick() {
-
-        if (front().getOutput() > 0)
-            spawnBlueParticle(8 / 16D, 8 / 16D, 8 / 16D);
-    }
+    // @Override
+    // @SideOnly(Side.CLIENT)
+    // protected void renderTop(float frame) {
+    //
+    // renderTop("center", back().getInput() == 0 ? "on" : "off");
+    // renderTop("right", right());
+    // renderTop("back", back());
+    // renderTop("left", left());
+    //
+    // RenderHelper.renderDigitalRedstoneTorch(0, 0, 0, 13 / 16D, back().getInput() == 0);
+    // RenderHelper.renderDigitalRedstoneTorch(0, 0, 4 / 16D, 14 / 16D, back().getInput() > 0);
+    // }
+    //
+    // @Override
+    // public void tick() {
+    //
+    // if (front().getOutput() > 0)
+    // spawnBlueParticle(8 / 16D, 8 / 16D, 8 / 16D);
+    // }
 }

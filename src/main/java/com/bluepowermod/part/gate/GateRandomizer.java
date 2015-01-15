@@ -21,10 +21,10 @@ import java.util.Random;
 
 import net.minecraft.nbt.NBTTagCompound;
 
-import com.bluepowermod.client.render.RenderHelper;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import com.bluepowermod.part.gate.component.GateComponentBorder;
+import com.bluepowermod.part.gate.component.GateComponentTaintedSiliconChip;
+import com.bluepowermod.part.gate.component.GateComponentWire;
+import com.bluepowermod.part.wire.redstone.RedwireType;
 
 public class GateRandomizer extends GateBase {
 
@@ -44,24 +44,41 @@ public class GateRandomizer extends GateBase {
     }
 
     @Override
+    public void initializeComponents() {
+
+        addComponent(new GateComponentWire(this, 0x18FF00, RedwireType.BLUESTONE).bind(front()));
+        addComponent(new GateComponentWire(this, 0xFFF600, RedwireType.BLUESTONE).bind(right()));
+        addComponent(new GateComponentWire(this, 0xC600FF, RedwireType.BLUESTONE).bind(back()));
+        addComponent(new GateComponentWire(this, 0xFF0000, RedwireType.BLUESTONE).bind(left()));
+
+        GateComponentTaintedSiliconChip tsc = new GateComponentTaintedSiliconChip(this, 0xd6ab17);
+        tsc.setState(true);
+        addComponent(tsc);
+        addComponent(new GateComponentTaintedSiliconChip(this, 0x0000FF));
+        addComponent(new GateComponentTaintedSiliconChip(this, 0x00ccff));
+
+        addComponent(new GateComponentBorder(this, 0x7D7D7D));
+    }
+
+    @Override
     public String getId() {
 
         return "randomizer";
     }
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void renderTop(float frame) {
-
-        renderTop("left", out[0]);
-        renderTop("front", out[1]);
-        renderTop("right", out[2]);
-        renderTop("center", back().getInput() > 0);
-
-        RenderHelper.renderRandomizerButton(4 / 16D, 0, -6 / 16D, out[0]);
-        RenderHelper.renderRandomizerButton(0, 0, 0, out[1]);
-        RenderHelper.renderRandomizerButton(-4 / 16D, 0, -6 / 16D, out[2]);
-    }
+    // @Override
+    // @SideOnly(Side.CLIENT)
+    // public void renderTop(float frame) {
+    //
+    // renderTop("left", out[0]);
+    // renderTop("front", out[1]);
+    // renderTop("right", out[2]);
+    // renderTop("center", back().getInput() > 0);
+    //
+    // RenderHelper.renderRandomizerButton(4 / 16D, 0, -6 / 16D, out[0]);
+    // RenderHelper.renderRandomizerButton(0, 0, 0, out[1]);
+    // RenderHelper.renderRandomizerButton(-4 / 16D, 0, -6 / 16D, out[2]);
+    // }
 
     @Override
     public void tick() {

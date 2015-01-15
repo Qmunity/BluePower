@@ -26,8 +26,13 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 
 import com.bluepowermod.client.gui.gate.GuiGateSingleTime;
-import com.bluepowermod.client.render.RenderHelper;
 import com.bluepowermod.part.IGuiButtonSensitive;
+import com.bluepowermod.part.gate.component.GateComponentBorder;
+import com.bluepowermod.part.gate.component.GateComponentPointer;
+import com.bluepowermod.part.gate.component.GateComponentSiliconChip;
+import com.bluepowermod.part.gate.component.GateComponentTorch;
+import com.bluepowermod.part.gate.component.GateComponentWire;
+import com.bluepowermod.part.wire.redstone.RedwireType;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -53,28 +58,52 @@ public class GateStateCell extends GateBase implements IGuiButtonSensitive {
     }
 
     @Override
+    public void initializeComponents() {
+
+        GateComponentPointer t1 = new GateComponentPointer(this, 0x0000FF, 7 / 16D, true);
+        t1.setState(true);
+        addComponent(t1);
+        GateComponentTorch t2 = new GateComponentTorch(this, 0x6F00B5, 4 / 16D, true);
+        t2.setState(false);
+        addComponent(t2);
+        // GateComponentTorch t3 = new GateComponentTorch(this, 0x3e94dc, 5 / 16D, false);
+        // t3.setState(true);
+        // addComponent(t3);
+
+        addComponent(new GateComponentWire(this, 0x18FF00, RedwireType.BLUESTONE));
+        addComponent(new GateComponentWire(this, 0x61a11d, RedwireType.BLUESTONE));
+        addComponent(new GateComponentWire(this, 0xFFF600, RedwireType.BLUESTONE).bind(right()));
+        addComponent(new GateComponentWire(this, 0xC600FF, RedwireType.BLUESTONE).bind(back()));
+        addComponent(new GateComponentWire(this, 0xFF0000, RedwireType.BLUESTONE).bind(left()));
+
+        addComponent(new GateComponentSiliconChip(this, 0xd6ab17));
+
+        addComponent(new GateComponentBorder(this, 0x7D7D7D));
+    }
+
+    @Override
     public String getId() {
 
         return "state";
     }
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    protected void renderTop(float frame) {
-
-        renderTop("front", front());
-        renderTop("right", right());
-        renderTop("back", back());
-        renderTop("left", left());
-        renderTop("center", left());
-
-        RenderHelper.renderRandomizerButton(2 / 16D, 0, -4 / 16D, left().getOutput() > 0);
-        RenderHelper.renderDigitalRedstoneTorch(-4 / 16D, 1D / 8D, 0, 13D / 16D, ticks > 0);
-        RenderHelper.renderDigitalRedstoneTorch(-1 / 16D, 1D / 8D, 4 / 16D, 9D / 16D, mirrored ? back().getOutput() > 0 : front()
-                .getOutput() > 0);
-        RenderHelper.renderPointer(-4 / 16D, 6D / 16D, 0, ticks > 0 ? 1 - (ticks + frame) / (time * 7) + 0.75 : 0.75);
-
-    }
+    // @Override
+    // @SideOnly(Side.CLIENT)
+    // protected void renderTop(float frame) {
+    //
+    // renderTop("front", front());
+    // renderTop("right", right());
+    // renderTop("back", back());
+    // renderTop("left", left());
+    // renderTop("center", left());
+    //
+    // RenderHelper.renderRandomizerButton(2 / 16D, 0, -4 / 16D, left().getOutput() > 0);
+    // RenderHelper.renderDigitalRedstoneTorch(-4 / 16D, 1D / 8D, 0, 13D / 16D, ticks > 0);
+    // RenderHelper.renderDigitalRedstoneTorch(-1 / 16D, 1D / 8D, 4 / 16D, 9D / 16D, mirrored ? back().getOutput() > 0 : front()
+    // .getOutput() > 0);
+    // RenderHelper.renderPointer(-4 / 16D, 6D / 16D, 0, ticks > 0 ? 1 - (ticks + frame) / (time * 7) + 0.75 : 0.75);
+    //
+    // }
 
     @Override
     public void doLogic() {

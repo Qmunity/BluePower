@@ -11,11 +11,12 @@ import net.minecraft.block.Block;
 import net.minecraftforge.common.util.ForgeDirection;
 import uk.co.qmunity.lib.vec.Vec3i;
 
-import com.bluepowermod.client.render.RenderHelper;
 import com.bluepowermod.part.gate.GateBase;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import com.bluepowermod.part.gate.component.GateComponentBorder;
+import com.bluepowermod.part.gate.component.GateComponentQuartzResonator;
+import com.bluepowermod.part.gate.component.GateComponentTorch;
+import com.bluepowermod.part.gate.component.GateComponentWire;
+import com.bluepowermod.part.wire.redstone.RedwireType;
 
 public class GateComparator extends GateBase {
 
@@ -28,6 +29,29 @@ public class GateComparator extends GateBase {
         right().enable();
         back().enable();
         left().enable();
+    }
+
+    @Override
+    public void initializeComponents() {
+
+        GateComponentTorch t1 = new GateComponentTorch(this, 0x0000FF, 4 / 16D, false);
+        t1.setState(true);
+        addComponent(t1);
+        GateComponentTorch t2 = new GateComponentTorch(this, 0x6F00B5, 4 / 16D, false);
+        t2.setState(false);
+        addComponent(t2);
+        GateComponentTorch t3 = new GateComponentTorch(this, 0x3e94dc, 5 / 16D, false);
+        t3.setState(true);
+        addComponent(t3);
+
+        addComponent(new GateComponentWire(this, 0x18FF00, RedwireType.RED_ALLOY));
+        addComponent(new GateComponentWire(this, 0xFFF600, RedwireType.RED_ALLOY).bind(right()));
+        addComponent(new GateComponentWire(this, 0xC600FF, RedwireType.RED_ALLOY).bind(back()));
+        addComponent(new GateComponentWire(this, 0xFF0000, RedwireType.RED_ALLOY).bind(left()));
+
+        addComponent(new GateComponentQuartzResonator(this, 0xd6ab17));
+
+        addComponent(new GateComponentBorder(this, 0x7D7D7D));
     }
 
     @Override
@@ -56,22 +80,22 @@ public class GateComparator extends GateBase {
         front().setOutput(Math.max(power - Math.max(left().getInput(), right().getInput()), 0));
     }
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    protected void renderTop(float frame) {
-
-        renderTop("front", front().getOutput() == 0);
-        renderTop("right", right());
-        renderTop("back", back());
-        renderTop("left", left());
-
-        RenderHelper.renderAnalogRedstoneTorch(0, 0, 5 / 16D, 11 / 16D, front().getOutput() > 0);
-
-        RenderHelper.renderAnalogRedstoneTorch(-4 / 16D, 0, -3 / 16D, 13 / 16D, right().getInput() == 0);
-        RenderHelper.renderAnalogRedstoneTorch(4 / 16D, 0, -3 / 16D, 13 / 16D, left().getInput() == 0);
-
-        RenderHelper.renderQuartzResonator(0, 0, -4 / 16D);
-    }
+    // @Override
+    // @SideOnly(Side.CLIENT)
+    // protected void renderTop(float frame) {
+    //
+    // renderTop("front", front().getOutput() == 0);
+    // renderTop("right", right());
+    // renderTop("back", back());
+    // renderTop("left", left());
+    //
+    // RenderHelper.renderAnalogRedstoneTorch(0, 0, 5 / 16D, 11 / 16D, front().getOutput() > 0);
+    //
+    // RenderHelper.renderAnalogRedstoneTorch(-4 / 16D, 0, -3 / 16D, 13 / 16D, right().getInput() == 0);
+    // RenderHelper.renderAnalogRedstoneTorch(4 / 16D, 0, -3 / 16D, 13 / 16D, left().getInput() == 0);
+    //
+    // RenderHelper.renderQuartzResonator(0, 0, -4 / 16D);
+    // }
 
     @Override
     public void tick() {

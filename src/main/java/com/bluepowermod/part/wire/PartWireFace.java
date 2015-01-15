@@ -51,9 +51,22 @@ public abstract class PartWireFace extends BPPartFace {
     @SideOnly(Side.CLIENT)
     protected abstract IIcon getWireIcon(ForgeDirection side);
 
+    protected boolean shouldIgnoreLighting() {
+
+        return false;
+    }
+
+    protected int getBrightness() {
+
+        return 0xF000F0;
+    }
+
     @Override
     @SideOnly(Side.CLIENT)
     public boolean renderStatic(Vec3i translation, RenderHelper renderer, RenderBlocks renderBlocks, int pass) {
+
+        renderer.setIgnoreLighting(shouldIgnoreLighting());
+        renderer.setLightingOverride(getBrightness());
 
         double height = (getHeight() / 16D) - 0.001;
         double width = getWidth() / 32D;
@@ -142,6 +155,8 @@ public abstract class PartWireFace extends BPPartFace {
             renderer.renderBox(new Vec3dCube(8 / 16D - width, 0, 8 / 16D + width, 8 / 16D + width, height,
                     s2 ? 1 + (extendsToCorner(d2) ? height : 0) : 12 / 16D), icons);
         }
+
+        renderer.setIgnoreLighting(false);
 
         return true;
     }

@@ -35,6 +35,7 @@ import uk.co.qmunity.lib.transform.Rotation;
 import uk.co.qmunity.lib.vec.Vec3d;
 import uk.co.qmunity.lib.vec.Vec3dCube;
 import uk.co.qmunity.lib.vec.Vec3i;
+import coloredlightscore.src.api.CLApi;
 
 import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.api.redstone.IFaceRedstoneDevice;
@@ -44,6 +45,7 @@ import com.bluepowermod.part.BPPartFace;
 import com.bluepowermod.part.wire.redstone.PartRedwireFreestanding;
 import com.bluepowermod.part.wire.redstone.WireCommons;
 
+import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -260,7 +262,24 @@ public abstract class PartLamp extends BPPartFace implements IPartRedstone, IFac
     @Override
     public int getLightValue() {
 
-        return (inverted ? 15 - power : power);
+        int pow = (inverted ? 15 - power : power);
+
+        if (Loader.isModLoaded("coloredlightscore")) {
+            float brightness = pow / 15F;
+            int color = this.color.getHex();
+
+            int r = (color >> 16) & 0xFF;
+            int g = (color >> 8) & 0xFF;
+            int b = (color >> 0) & 0xFF;
+
+            float rf = r / 256F;
+            float gf = g / 256F;
+            float bf = b / 256F;
+
+            return CLApi.makeRGBLightValue(Math.min(rf, brightness), Math.min(gf, brightness), Math.min(bf, brightness), brightness);
+        }
+
+        return pow;
     }
 
     @Override

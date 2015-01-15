@@ -25,7 +25,10 @@ import net.minecraft.item.ItemStack;
 import uk.co.qmunity.lib.raytrace.QMovingObjectPosition;
 import uk.co.qmunity.lib.util.Dir;
 
-import com.bluepowermod.client.render.RenderHelper;
+import com.bluepowermod.part.gate.component.GateComponentBorder;
+import com.bluepowermod.part.gate.component.GateComponentTorch;
+import com.bluepowermod.part.gate.component.GateComponentWire;
+import com.bluepowermod.part.wire.redstone.RedwireType;
 import com.bluepowermod.util.Color;
 
 import cpw.mods.fml.relauncher.Side;
@@ -37,7 +40,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class GateRepeater extends GateBase {
 
     private boolean power = false;
-    private boolean lastInput = false;
     private boolean currentUpdate = false;
 
     private int ticksRemaining = 0;
@@ -52,21 +54,37 @@ public class GateRepeater extends GateBase {
     }
 
     @Override
+    public void initializeComponents() {
+
+        GateComponentTorch t1 = new GateComponentTorch(this, 0x0000FF, 5 / 16D, true);
+        t1.setState(false);
+        addComponent(t1);
+        GateComponentTorch t2 = new GateComponentTorch(this, 21 / 32D, 24 / 32D, 4 / 16D, true);
+        t2.setState(true);
+        addComponent(t2);
+
+        addComponent(new GateComponentWire(this, 0xC600FF, RedwireType.BLUESTONE).bind(back()));
+        addComponent(new GateComponentWire(this, 0xFF0000, RedwireType.BLUESTONE));
+
+        addComponent(new GateComponentBorder(this, 0x7D7D7D));
+    }
+
+    @Override
     public String getId() {
 
         return "repeater";
     }
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void renderTop(float frame) {
-
-        renderTop("front", !power);
-        RenderHelper.renderDigitalRedstoneTorch(3D / 16D, 5D / 16D, 6D / 16D, 1D / 2D, power);
-
-        renderTop("back", currentUpdate);
-        RenderHelper.renderDigitalRedstoneTorch(-1D / 4D, 4D / 16D, -(1D / 16D * (5 - location)), 1D / 2D, !power);
-    }
+    // @Override
+    // @SideOnly(Side.CLIENT)
+    // public void renderTop(float frame) {
+    //
+    // renderTop("front", !power);
+    // RenderHelper.renderDigitalRedstoneTorch(3D / 16D, 5D / 16D, 6D / 16D, 1D / 2D, power);
+    //
+    // renderTop("back", currentUpdate);
+    // RenderHelper.renderDigitalRedstoneTorch(-1D / 4D, 4D / 16D, -(1D / 16D * (5 - location)), 1D / 2D, !power);
+    // }
 
     @Override
     public void doLogic() {

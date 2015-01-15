@@ -61,7 +61,7 @@ import com.bluepowermod.part.IGuiButtonSensitive;
 import com.bluepowermod.part.gate.GateBase;
 import com.bluepowermod.part.wire.redstone.RedstoneApi;
 import com.bluepowermod.part.wire.redstone.WireCommons;
-import com.bluepowermod.part.wire.redstone.propagation.WirePropagator;
+import com.bluepowermod.util.DebugHelper;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -94,6 +94,11 @@ IBundledConductor, IGuiButtonSensitive, IWirelessGate {
     }
 
     @Override
+    public void initializeComponents() {
+
+    }
+
+    @Override
     public String getId() {
 
         return "wirelesstransceiver" + (isAnalog ? ".analog" : "") + (isBundled ? ".bundled" : "");
@@ -105,11 +110,11 @@ IBundledConductor, IGuiButtonSensitive, IWirelessGate {
         return "wirelesstransceiver";
     }
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    protected void renderTop(float frame) {
-
-    }
+    // @Override
+    // @SideOnly(Side.CLIENT)
+    // protected void renderTop(float frame) {
+    //
+    // }
 
     @Override
     @SideOnly(Side.CLIENT)
@@ -128,9 +133,8 @@ IBundledConductor, IGuiButtonSensitive, IWirelessGate {
         // Base
         renderer.renderBox(new Vec3dCube(7 / 16D, 2 / 16D, 7 / 16D, 9 / 16D, 8 / 16D, 9 / 16D), obsidian);
 
-        if (rendering != null) {
-            renderer.addTransformation(new Rotation(0, (System.currentTimeMillis() / 100D) % 360, 0));
-        }
+        if (rendering != null)
+            renderer.addTransformation(new Rotation(0, -(System.currentTimeMillis() / 100D) % 360, 0));
         renderer.addTransformation(new Rotation(45, 0, 0));
 
         // Post
@@ -477,11 +481,10 @@ IBundledConductor, IGuiButtonSensitive, IWirelessGate {
             return;
 
         transceivers.remove(this);
-        WireCommons.refreshConnections(this, this);
-        WirePropagator.INSTANCE.onPowerLevelChange(this, ForgeDirection.UNKNOWN, (byte) 0, (byte) 0);
+        // WirePropagator.INSTANCE.onPowerLevelChange(this, ForgeDirection.UNKNOWN, (byte) 0, (byte) 0);
         frequency = (Frequency) freq;
         transceivers.add(this);
-        WirePropagator.INSTANCE.onPowerLevelChange(this, ForgeDirection.UNKNOWN, (byte) 0, (byte) 0);
+        // WirePropagator.INSTANCE.onPowerLevelChange(this, ForgeDirection.UNKNOWN, (byte) 0, (byte) 0);
 
         sendUpdatePacket();
     }
@@ -591,13 +594,17 @@ IBundledConductor, IGuiButtonSensitive, IWirelessGate {
     public IPartPlacement getPlacement(IPart part, World world, Vec3i location, ForgeDirection face, MovingObjectPosition mop,
             EntityPlayer player) {
 
-        return null;
+        if (!DebugHelper.isDebugModeEnabled())
+            return null;
+
+        return super.getPlacement(part, world, location, face, mop, player);
     }
 
     @Override
     public void addTooltip(List<String> tip) {
 
-        tip.add(MinecraftColor.RED + I18n.format("Disabled temporarily. Still not fully working."));
+        if (!DebugHelper.isDebugModeEnabled())
+            tip.add(MinecraftColor.RED + I18n.format("Disabled temporarily. Still not fully working."));
     }
 
 }

@@ -18,9 +18,10 @@
 package com.bluepowermod.part.gate.analog;
 
 import com.bluepowermod.part.gate.GateBase;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import com.bluepowermod.part.gate.component.GateComponentBorder;
+import com.bluepowermod.part.gate.component.GateComponentSolarPanel;
+import com.bluepowermod.part.gate.component.GateComponentWire;
+import com.bluepowermod.part.wire.redstone.RedwireType;
 
 public class GateLightCell extends GateBase {
 
@@ -31,17 +32,27 @@ public class GateLightCell extends GateBase {
     }
 
     @Override
+    public void initializeComponents() {
+
+        addComponent(new GateComponentSolarPanel(this, 0xd6ab17));
+
+        addComponent(new GateComponentWire(this, 0xC600FF, RedwireType.RED_ALLOY).bind(front()));
+
+        addComponent(new GateComponentBorder(this, 0x7D7D7D));
+    }
+
+    @Override
     public String getId() {
 
         return "lightCell";
     }
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void renderTop(float frame) {
-
-        renderTop("front", front());
-    }
+    // @Override
+    // @SideOnly(Side.CLIENT)
+    // public void renderTop(float frame) {
+    //
+    // renderTop("front", front());
+    // }
 
     @Override
     public void tick() {

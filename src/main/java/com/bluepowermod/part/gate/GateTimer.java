@@ -12,8 +12,12 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 
 import com.bluepowermod.client.gui.gate.GuiGateSingleTime;
-import com.bluepowermod.client.render.RenderHelper;
 import com.bluepowermod.part.IGuiButtonSensitive;
+import com.bluepowermod.part.gate.component.GateComponentBorder;
+import com.bluepowermod.part.gate.component.GateComponentPointer;
+import com.bluepowermod.part.gate.component.GateComponentTorch;
+import com.bluepowermod.part.gate.component.GateComponentWire;
+import com.bluepowermod.part.wire.redstone.RedwireType;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -33,6 +37,24 @@ public class GateTimer extends GateBase implements IGuiButtonSensitive {
     }
 
     @Override
+    public void initializeComponents() {
+
+        GateComponentPointer t1 = new GateComponentPointer(this, 0x0000FF, 7 / 16D, true);
+        t1.setState(true);
+        addComponent(t1);
+        GateComponentTorch t2 = new GateComponentTorch(this, 0x6F00B5, 3 / 16D, true);
+        t2.setState(false);
+        addComponent(t2);
+
+        addComponent(new GateComponentWire(this, 0x18FF00, RedwireType.BLUESTONE));
+        addComponent(new GateComponentWire(this, 0xFFF600, RedwireType.BLUESTONE).bind(right()));
+        addComponent(new GateComponentWire(this, 0xC600FF, RedwireType.BLUESTONE).bind(back()));
+        addComponent(new GateComponentWire(this, 0xFF0000, RedwireType.BLUESTONE).bind(left()));
+
+        addComponent(new GateComponentBorder(this, 0x7D7D7D));
+    }
+
+    @Override
     public String getId() {
 
         return "timer";
@@ -43,22 +65,22 @@ public class GateTimer extends GateBase implements IGuiButtonSensitive {
 
     }
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    protected void renderTop(float frame) {
-
-        // renderTop("front", front());
-        renderTop("right", right());
-        renderTop("back", back());
-        renderTop("left", left());
-
-        RenderHelper.renderDigitalRedstoneTorch(0, 0, 0, 17 / 16D, back().getInput() == 0);
-
-        double t = 0;
-        if (back().getInput() == 0 && (getParent() == null || (getParent() != null && !getParent().isSimulated())))
-            t = -(curTime + frame) / (double) time;
-        RenderHelper.renderPointer(0, 7 / 16D, 0, 0.5 + t);
-    }
+    // @Override
+    // @SideOnly(Side.CLIENT)
+    // protected void renderTop(float frame) {
+    //
+    // // renderTop("front", front());
+    // renderTop("right", right());
+    // renderTop("back", back());
+    // renderTop("left", left());
+    //
+    // RenderHelper.renderDigitalRedstoneTorch(0, 0, 0, 17 / 16D, back().getInput() == 0);
+    //
+    // double t = 0;
+    // if (back().getInput() == 0 && (getParent() == null || (getParent() != null && !getParent().isSimulated())))
+    // t = -(curTime + frame) / (double) time;
+    // RenderHelper.renderPointer(0, 7 / 16D, 0, 0.5 + t);
+    // }
 
     @Override
     public void tick() {
@@ -79,8 +101,8 @@ public class GateTimer extends GateBase implements IGuiButtonSensitive {
             curTime = 0;
         }
 
-        if (front().getOutput() > 0)
-            spawnBlueParticle(8 / 16D, 6 / 16D, 8 / 16D);
+        // if (front().getOutput() > 0)
+        // spawnBlueParticle(8 / 16D, 6 / 16D, 8 / 16D);
     }
 
     @Override

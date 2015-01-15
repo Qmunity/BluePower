@@ -12,7 +12,10 @@ import java.util.List;
 import net.minecraft.client.resources.I18n;
 import uk.co.qmunity.lib.util.Dir;
 
-import com.bluepowermod.client.render.RenderHelper;
+import com.bluepowermod.part.gate.component.GateComponentBorder;
+import com.bluepowermod.part.gate.component.GateComponentTorch;
+import com.bluepowermod.part.gate.component.GateComponentWire;
+import com.bluepowermod.part.wire.redstone.RedwireType;
 import com.bluepowermod.util.Color;
 
 import cpw.mods.fml.relauncher.Side;
@@ -29,6 +32,27 @@ public class GateNand extends GateBase {
         right().enable();
         back().enable();
         left().enable();
+    }
+
+    @Override
+    public void initializeComponents() {
+
+        GateComponentTorch t1 = new GateComponentTorch(this, 0x215b8d, 4 / 16D, true);
+        t1.setState(true);
+        addComponent(t1);
+        GateComponentTorch t2 = new GateComponentTorch(this, 0x0000FF, 4 / 16D, true);
+        t2.setState(false);
+        addComponent(t2);
+        GateComponentTorch t3 = new GateComponentTorch(this, 0x3e94dc, 4 / 16D, true);
+        t3.setState(true);
+        addComponent(t3);
+
+        addComponent(new GateComponentWire(this, 0x18FF00, RedwireType.BLUESTONE).bind(front()));
+        addComponent(new GateComponentWire(this, 0xFFF600, RedwireType.BLUESTONE).bind(right()));
+        addComponent(new GateComponentWire(this, 0xC600FF, RedwireType.BLUESTONE).bind(back()));
+        addComponent(new GateComponentWire(this, 0xFF0000, RedwireType.BLUESTONE).bind(left()));
+
+        addComponent(new GateComponentBorder(this, 0x7D7D7D));
     }
 
     @Override
@@ -105,28 +129,28 @@ public class GateNand extends GateBase {
                         + I18n.format("random.disabled")));
     }
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    protected void renderTop(float frame) {
-
-        renderTop("front", front());
-        renderTop("right", right());
-        renderTop("back", back());
-        renderTop("left", left());
-
-        RenderHelper.renderDigitalRedstoneTorch(3 / 16D, 0, 0, 12 / 16D, left().getInput() == 0 && left().isEnabled());
-        RenderHelper.renderDigitalRedstoneTorch(-3 / 16D, 0, 0, 12 / 16D, right().getInput() == 0 && right().isEnabled());
-        RenderHelper.renderDigitalRedstoneTorch(0, 0, 0, 12 / 16D, back().getInput() == 0 && back().isEnabled());
-    }
-
-    @Override
-    public void tick() {
-
-        if (left().getInput() == 0 && left().isEnabled())
-            spawnBlueParticle(5 / 16D, 6 / 16D, 8 / 16D);
-        if (right().getInput() == 0 && right().isEnabled())
-            spawnBlueParticle(11 / 16D, 6 / 16D, 8 / 16D);
-        if (back().getInput() == 0 && back().isEnabled())
-            spawnBlueParticle(8 / 16D, 6 / 16D, 8 / 16D);
-    }
+    // @Override
+    // @SideOnly(Side.CLIENT)
+    // protected void renderTop(float frame) {
+    //
+    // renderTop("front", front());
+    // renderTop("right", right());
+    // renderTop("back", back());
+    // renderTop("left", left());
+    //
+    // RenderHelper.renderDigitalRedstoneTorch(3 / 16D, 0, 0, 12 / 16D, left().getInput() == 0 && left().isEnabled());
+    // RenderHelper.renderDigitalRedstoneTorch(-3 / 16D, 0, 0, 12 / 16D, right().getInput() == 0 && right().isEnabled());
+    // RenderHelper.renderDigitalRedstoneTorch(0, 0, 0, 12 / 16D, back().getInput() == 0 && back().isEnabled());
+    // }
+    //
+    // @Override
+    // public void tick() {
+    //
+    // if (left().getInput() == 0 && left().isEnabled())
+    // spawnBlueParticle(5 / 16D, 6 / 16D, 8 / 16D);
+    // if (right().getInput() == 0 && right().isEnabled())
+    // spawnBlueParticle(11 / 16D, 6 / 16D, 8 / 16D);
+    // if (back().getInput() == 0 && back().isEnabled())
+    // spawnBlueParticle(8 / 16D, 6 / 16D, 8 / 16D);
+    // }
 }

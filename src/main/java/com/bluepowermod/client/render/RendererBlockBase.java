@@ -86,6 +86,8 @@ public class RendererBlockBase implements ISimpleBlockRenderingHandler {
                 renderer.uvRotateTop = 1;
                 renderer.uvRotateBottom = 2;
                 break;
+            default:
+                break;
             }
         }
         boolean ret = renderer.renderStandardBlock(block, x, y, z);

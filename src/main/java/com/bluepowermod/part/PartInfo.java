@@ -47,6 +47,8 @@ public class PartInfo {
 
         generateConstructor(clazz, arguments);
 
+        System.out.println("Creating " + clazz.getName());
+
         example = create();
         type = example.getType();
 

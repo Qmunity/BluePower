@@ -27,8 +27,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 
 import com.bluepowermod.client.gui.gate.GuiGateSingleTime;
-import com.bluepowermod.client.render.RenderHelper;
 import com.bluepowermod.part.IGuiButtonSensitive;
+import com.bluepowermod.part.gate.component.GateComponentBorder;
+import com.bluepowermod.part.gate.component.GateComponentPointer;
+import com.bluepowermod.part.gate.component.GateComponentTorch;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -53,27 +55,47 @@ public class GateSequencer extends GateBase implements IGuiButtonSensitive {
     }
 
     @Override
+    public void initializeComponents() {
+
+        GateComponentTorch t1 = new GateComponentTorch(this, 0x23cecc, 3 / 16D, true);
+        addComponent(t1);
+        GateComponentTorch t2 = new GateComponentTorch(this, 0x0000FF, 3 / 16D, true);
+        addComponent(t2);
+        GateComponentTorch t3 = new GateComponentTorch(this, 0x3e94dc, 3 / 16D, true);
+        t3.setState(true);
+        addComponent(t3);
+        GateComponentTorch t4 = new GateComponentTorch(this, 0x6F00B5, 3 / 16D, true);
+        addComponent(t4);
+
+        GateComponentPointer p = new GateComponentPointer(this, 0xFFFF00, 7 / 16D, true);
+        p.setState(false);
+        addComponent(p);
+
+        addComponent(new GateComponentBorder(this, 0x7D7D7D));
+    }
+
+    @Override
     public String getId() {
 
         return "sequencer";
     }
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void renderTop(float frame) {
-
-        RenderHelper.renderDigitalRedstoneTorch(0, 1D / 8D, 5D / 16D, 9D / 16D, power[1]);
-        RenderHelper.renderDigitalRedstoneTorch(-5D / 16D, 1D / 8D, 0, 9D / 16D, power[2]);
-        RenderHelper.renderDigitalRedstoneTorch(0, 1D / 8D, -5D / 16D, 9D / 16D, power[3]);
-        RenderHelper.renderDigitalRedstoneTorch(5D / 16D, 1D / 8D, 0, 9D / 16D, power[0]);
-
-        RenderHelper.renderDigitalRedstoneTorch(0, 1D / 8D, 0, 15D / 16D, true);
-
-        double t = 0;
-        if ((getParent() == null || (getParent() != null && !getParent().isSimulated())))
-            t = -(double) (ticks - start + frame) / time;
-        RenderHelper.renderPointer(0, 7D / 16D, 0 / 16D, 0.5 + t);
-    }
+    // @Override
+    // @SideOnly(Side.CLIENT)
+    // public void renderTop(float frame) {
+    //
+    // RenderHelper.renderDigitalRedstoneTorch(0, 1D / 8D, 5D / 16D, 9D / 16D, power[1]);
+    // RenderHelper.renderDigitalRedstoneTorch(-5D / 16D, 1D / 8D, 0, 9D / 16D, power[2]);
+    // RenderHelper.renderDigitalRedstoneTorch(0, 1D / 8D, -5D / 16D, 9D / 16D, power[3]);
+    // RenderHelper.renderDigitalRedstoneTorch(5D / 16D, 1D / 8D, 0, 9D / 16D, power[0]);
+    //
+    // RenderHelper.renderDigitalRedstoneTorch(0, 1D / 8D, 0, 15D / 16D, true);
+    //
+    // double t = 0;
+    // if ((getParent() == null || (getParent() != null && !getParent().isSimulated())))
+    // t = -(double) (ticks - start + frame) / time;
+    // RenderHelper.renderPointer(0, 7D / 16D, 0 / 16D, 0.5 + t);
+    // }
 
     @Override
     public void doLogic() {
@@ -83,19 +105,20 @@ public class GateSequencer extends GateBase implements IGuiButtonSensitive {
     @Override
     public void tick() {
 
-        if (!getWorld().isRemote && getWorld().getWorldTime() % 400 == 0)
+        if (!getWorld().isRemote && ticks % 400 == 0)
             sendUpdatePacket();// Prevent slow desyncing of the timer.
+
         Arrays.fill(power, false);
 
         if (start >= 0) {
-            if (ticks >= start + time) {
+            if (ticks >= start + (time / 4D)) {
                 start = ticks;
             }
         } else {
             start = ticks;
         }
 
-        double t = (double) (ticks - start) / (double) time;
+        double t = (ticks - start) / (time / 4D);
 
         if (t >= 2D / 8D && t < 4D / 8D) {
             power[2] = true;

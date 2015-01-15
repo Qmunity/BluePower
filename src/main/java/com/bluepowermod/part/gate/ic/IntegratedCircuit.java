@@ -13,10 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -25,12 +22,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 import net.minecraftforge.common.util.ForgeDirection;
-
-import org.lwjgl.opengl.GL11;
-
 import uk.co.qmunity.lib.client.render.RenderHelper;
 import uk.co.qmunity.lib.part.IMicroblock;
 import uk.co.qmunity.lib.part.IPart;
@@ -38,6 +31,8 @@ import uk.co.qmunity.lib.part.ITilePartHolder;
 import uk.co.qmunity.lib.part.PartRegistry;
 import uk.co.qmunity.lib.raytrace.QMovingObjectPosition;
 import uk.co.qmunity.lib.transform.Rotation;
+import uk.co.qmunity.lib.transform.Scale;
+import uk.co.qmunity.lib.transform.Translation;
 import uk.co.qmunity.lib.util.Dir;
 import uk.co.qmunity.lib.vec.Vec3d;
 import uk.co.qmunity.lib.vec.Vec3dCube;
@@ -53,7 +48,6 @@ import com.bluepowermod.part.gate.GateBase;
 import com.bluepowermod.part.gate.GateWire;
 import com.bluepowermod.part.wire.redstone.PartRedwireFace;
 import com.bluepowermod.part.wire.redstone.RedwireType;
-import com.bluepowermod.util.Refs;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -68,6 +62,11 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
     public void initializeConnections() {
 
         clearGateArray();
+    }
+
+    @Override
+    public void initializeComponents() {
+
     }
 
     private void clearGateArray() {
@@ -161,102 +160,121 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
         }
 
         int rotation = getRotation();
-        renderer.addTransformation(new Rotation(0, 90 * -rotation, 0));
+        if (rotation != -1)
+            renderer.addTransformation(new Rotation(0, 90 * -rotation, 0));
 
+        boolean wasNull = rendering == null;
         if (rendering == null)
             rendering = this;
 
         IIcon[] icons = new IIcon[] { getIcon(ForgeDirection.DOWN), getIcon(ForgeDirection.UP), getIcon(ForgeDirection.WEST),
                 getIcon(ForgeDirection.EAST), getIcon(ForgeDirection.NORTH), getIcon(ForgeDirection.SOUTH) };
 
-        renderer.setRenderSide(ForgeDirection.UP, false);
         renderer.renderBox(new Vec3dCube(0, 0, 0, 1, 1 / 16D, 1), icons);
-        renderer.setRenderSide(ForgeDirection.UP, true);
 
         renderer.renderBox(new Vec3dCube(0, 1 / 16D, 0, 1, 2 / 16D, 1 / 16D), icons);
         renderer.renderBox(new Vec3dCube(0, 1 / 16D, 15 / 16D, 1, 2 / 16D, 1), icons);
         renderer.renderBox(new Vec3dCube(0, 1 / 16D, 0, 1 / 16D, 2 / 16D, 1), icons);
         renderer.renderBox(new Vec3dCube(15 / 16D, 1 / 16D, 0, 1, 2 / 16D, 1), icons);
 
-        rendering = null;
+        double scale = (1 - BORDER_WIDTH * 2D) / getCircuitWidth();
 
-        renderer.resetTransformations();
+        renderer.addTransformation(new Scale(scale, scale, scale));
+
+        for (int x = 0; x < getCircuitWidth(); x++) {
+            for (int y = 0; y < getCircuitWidth(); y++) {
+                GateBase g = gates[x][y];
+                if (g == null)
+                    continue;
+
+                int s = getCircuitWidth();
+                if (s % 2 == 1)
+                    s -= 1;
+
+                renderer.addTransformation(new Translation(-(s - x - 1), -1, -(s - y - 1)));
+                g.renderStatic(translation, renderer, renderBlocks, pass);
+                renderer.addTransformation(new Translation(s - x - 1, 1, s - y - 1));
+            }
+        }
+
+        if (wasNull)
+            rendering = null;
 
         return true;
     }
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    protected void renderTop(float frame) {
-
-        renderTop("front", front());
-        renderTop("left", left());
-        renderTop("back", back());
-        renderTop("right", right());
-        Vec3d loc = new Vec3d(0, 0, 0);
-
-        RenderHelper rh = RenderHelper.instance;
-        rh.reset();
-        RenderBlocks rb = RenderBlocks.getInstance();
-
-        GL11.glPushMatrix();
-        {
-            GL11.glTranslated(0, 2 / 16D - 1 / 16D * (1.0 / getCircuitWidth()), 0);
-            GL11.glNormal3d(0, 1, 0);
-            int size = getCircuitWidth();
-            double textureMaxUV = 0.5 * size;
-
-            Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/gates/"
-                    + getTextureName() + "/checkerboard.png"));
-            GL11.glBegin(GL11.GL_QUADS);
-            {
-                com.bluepowermod.client.render.RenderHelper.addVertexWithTexture(BORDER_WIDTH, 0, BORDER_WIDTH, 0, 0);
-                com.bluepowermod.client.render.RenderHelper.addVertexWithTexture(BORDER_WIDTH, 0, 1 - BORDER_WIDTH, 0, textureMaxUV);
-                com.bluepowermod.client.render.RenderHelper.addVertexWithTexture(1 - BORDER_WIDTH, 0, 1 - BORDER_WIDTH, textureMaxUV,
-                        textureMaxUV);
-                com.bluepowermod.client.render.RenderHelper.addVertexWithTexture(1 - BORDER_WIDTH, 0, BORDER_WIDTH, textureMaxUV, 0);
-            }
-            GL11.glEnd();
-        }
-        GL11.glPopMatrix();
-
-        GL11.glPushMatrix();
-        {
-            GL11.glTranslated(BORDER_WIDTH, 2 / 16D + 0.001D, BORDER_WIDTH);
-            GL11.glScaled((1 - 2 * BORDER_WIDTH) / 1, 1, (1 - 2 * BORDER_WIDTH) / 1);
-
-            GL11.glScaled(1.0 / getCircuitWidth(), 1.0 / getCircuitWidth(), 1.0 / getCircuitWidth());
-            GL11.glTranslated(0, -2 / 16D, 0);
-            for (GateBase[] gateArray : gates) {
-                GL11.glPushMatrix();
-                for (GateBase gate : gateArray) {
-                    if (gate != null) {
-                        GL11.glPushMatrix();
-                        gate.renderDynamic(loc, frame, 0);
-                        GL11.glPopMatrix();
-
-                        if (!isRenderingItem) {
-                            // Static renderer
-                            GL11.glPushMatrix();
-                            {
-                                Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
-                                Tessellator.instance.startDrawingQuads();
-                                gate.renderStatic(new Vec3i(gate), rh, rb, 0);
-                                Tessellator.instance.draw();
-                            }
-                            GL11.glPopMatrix();
-                        }
-
-                        rh.reset();
-                    }
-                    GL11.glTranslated(0, 0, 1);
-                }
-                GL11.glPopMatrix();
-                GL11.glTranslated(1, 0, 0);
-            }
-        }
-        GL11.glPopMatrix();
-    }
+    // @Override
+    // @SideOnly(Side.CLIENT)
+    // protected void renderTop(float frame) {
+    //
+    // renderTop("front", front());
+    // renderTop("left", left());
+    // renderTop("back", back());
+    // renderTop("right", right());
+    // Vec3d loc = new Vec3d(0, 0, 0);
+    //
+    // RenderHelper rh = RenderHelper.instance;
+    // rh.reset();
+    // RenderBlocks rb = RenderBlocks.getInstance();
+    //
+    // GL11.glPushMatrix();
+    // {
+    // GL11.glTranslated(0, 2 / 16D - 1 / 16D * (1.0 / getCircuitWidth()), 0);
+    // GL11.glNormal3d(0, 1, 0);
+    // int size = getCircuitWidth();
+    // double textureMaxUV = 0.5 * size;
+    //
+    // Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID + ":textures/blocks/gates/"
+    // + getTextureName() + "/checkerboard.png"));
+    // GL11.glBegin(GL11.GL_QUADS);
+    // {
+    // com.bluepowermod.client.render.RenderHelper.addVertexWithTexture(BORDER_WIDTH, 0, BORDER_WIDTH, 0, 0);
+    // com.bluepowermod.client.render.RenderHelper.addVertexWithTexture(BORDER_WIDTH, 0, 1 - BORDER_WIDTH, 0, textureMaxUV);
+    // com.bluepowermod.client.render.RenderHelper.addVertexWithTexture(1 - BORDER_WIDTH, 0, 1 - BORDER_WIDTH, textureMaxUV,
+    // textureMaxUV);
+    // com.bluepowermod.client.render.RenderHelper.addVertexWithTexture(1 - BORDER_WIDTH, 0, BORDER_WIDTH, textureMaxUV, 0);
+    // }
+    // GL11.glEnd();
+    // }
+    // GL11.glPopMatrix();
+    //
+    // GL11.glPushMatrix();
+    // {
+    // GL11.glTranslated(BORDER_WIDTH, 2 / 16D + 0.001D, BORDER_WIDTH);
+    // GL11.glScaled((1 - 2 * BORDER_WIDTH) / 1, 1, (1 - 2 * BORDER_WIDTH) / 1);
+    //
+    // GL11.glScaled(1.0 / getCircuitWidth(), 1.0 / getCircuitWidth(), 1.0 / getCircuitWidth());
+    // GL11.glTranslated(0, -2 / 16D, 0);
+    // for (GateBase[] gateArray : gates) {
+    // GL11.glPushMatrix();
+    // for (GateBase gate : gateArray) {
+    // if (gate != null) {
+    // GL11.glPushMatrix();
+    // gate.renderDynamic(loc, frame, 0);
+    // GL11.glPopMatrix();
+    //
+    // if (!isRenderingItem) {
+    // // Static renderer
+    // GL11.glPushMatrix();
+    // {
+    // Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
+    // Tessellator.instance.startDrawingQuads();
+    // gate.renderStatic(new Vec3i(gate), rh, rb, 0);
+    // Tessellator.instance.draw();
+    // }
+    // GL11.glPopMatrix();
+    // }
+    //
+    // rh.reset();
+    // }
+    // GL11.glTranslated(0, 0, 1);
+    // }
+    // GL11.glPopMatrix();
+    // GL11.glTranslated(1, 0, 0);
+    // }
+    // }
+    // GL11.glPopMatrix();
+    // }
 
     @Override
     public void doLogic() {
@@ -669,6 +687,7 @@ public abstract class IntegratedCircuit extends GateBase implements ISilkyRemova
                     notifyUpdate();
                 updateNeighborGates(x, y);
                 gates[x][y].onUpdate();
+                sendUpdatePacket();
                 return true;
             }
         }

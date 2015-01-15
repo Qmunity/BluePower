@@ -7,7 +7,6 @@
  */
 package com.bluepowermod.helper;
 
-import uk.co.qmunity.lib.part.compat.MultipartCompatibility;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockChest;
 import net.minecraft.entity.item.EntityItem;
@@ -18,6 +17,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import uk.co.qmunity.lib.part.compat.MultipartCompatibility;
 
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
 import com.bluepowermod.api.tube.ITubeConnection;
@@ -88,7 +88,8 @@ public class IOHelper {
         return null;
     }
 
-    public static ItemStack extract(TileEntity tile, ForgeDirection direction, ItemStack requestedStack, boolean useItemCount, boolean simulate) {
+    public static ItemStack extract(TileEntity tile, ForgeDirection direction, ItemStack requestedStack, boolean useItemCount,
+            boolean simulate) {
 
         return extract(tile, direction, requestedStack, useItemCount, simulate, 0);
     }
@@ -128,7 +129,7 @@ public class IOHelper {
 
     /**
      * Retrieves an item from the specified inventory. This item can be specified.
-     * 
+     *
      * @param tile
      * @param direction
      * @param requestedStack
@@ -140,8 +141,8 @@ public class IOHelper {
      *            ,
      * @return
      */
-    public static ItemStack extract(TileEntity tile, ForgeDirection direction, ItemStack requestedStack, boolean useItemCount, boolean simulate,
-            int fuzzySetting) {
+    public static ItemStack extract(TileEntity tile, ForgeDirection direction, ItemStack requestedStack, boolean useItemCount,
+            boolean simulate, int fuzzySetting) {
 
         if (requestedStack == null)
             return requestedStack;
@@ -230,9 +231,12 @@ public class IOHelper {
 
     public static ItemStack insert(TileEntity tile, ItemStack itemStack, ForgeDirection direction, TubeColor color, boolean simulate) {
 
+        if (tile == null || itemStack == null)
+            return itemStack;
+
         if (tile instanceof ITubeConnection) {
-            TubeStack tubeStack = ((ITubeConnection) tile).acceptItemFromTube(new TubeStack(itemStack, direction.getOpposite(), color), direction,
-                    simulate);
+            TubeStack tubeStack = ((ITubeConnection) tile).acceptItemFromTube(new TubeStack(itemStack, direction.getOpposite(), color),
+                    direction, simulate);
             if (tubeStack == null)
                 return null;
             return tubeStack.stack;
@@ -372,7 +376,8 @@ public class IOHelper {
         return canInterfaceWith(tile, direction, null, true);
     }
 
-    public static boolean canInterfaceWith(TileEntity tile, ForgeDirection direction, PneumaticTube requester, boolean canInterfaceWithIInventory) {
+    public static boolean canInterfaceWith(TileEntity tile, ForgeDirection direction, PneumaticTube requester,
+            boolean canInterfaceWithIInventory) {
 
         PneumaticTube tube = tile != null ? MultipartCompatibility.getPart(tile.getWorldObj(), tile.xCoord, tile.yCoord, tile.zCoord,
                 PneumaticTube.class) : null;
@@ -381,7 +386,8 @@ public class IOHelper {
         if (!canInterfaceWithIInventory)
             return false;
         if (tile instanceof IInventory) {
-            return !(tile instanceof ISidedInventory) || ((ISidedInventory) tile).getAccessibleSlotsFromSide(direction.ordinal()).length > 0;
+            return !(tile instanceof ISidedInventory)
+                    || ((ISidedInventory) tile).getAccessibleSlotsFromSide(direction.ordinal()).length > 0;
         }
         return false;
     }

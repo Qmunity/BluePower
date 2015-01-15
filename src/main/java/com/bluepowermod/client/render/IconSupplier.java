@@ -7,6 +7,7 @@
  */
 package com.bluepowermod.client.render;
 
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.util.IIcon;
 import net.minecraftforge.client.event.TextureStitchEvent;
 
@@ -74,65 +75,83 @@ public class IconSupplier {
     public static IIcon wireBundled2;
     public static IIcon wireBundled3;
 
+    public static IIcon gateButton = null;
+    public static IIcon siliconChipOff = null;
+    public static IIcon siliconChipOn = null;
+    public static IIcon taintedSiliconChipOff = null;
+    public static IIcon taintedSiliconChipOn = null;
+    public static IIcon quartzResonator = null;
+    public static IIcon gateSolarPanel = null;
+
     @SubscribeEvent
     public void onTextureStitch(TextureStitchEvent.Pre event) {
 
-        if (event.map.getTextureType() == 0) {
-            pneumaticTubeSide = event.map.registerIcon(Refs.MODID + ":tubes/pneumatic_tube_side");
-            pneumaticTubeNode = event.map.registerIcon(Refs.MODID + ":tubes/tube_end");
-            pneumaticTubeOpaqueSide = event.map.registerIcon(Refs.MODID + ":tubes/pneumatic_tube_side_opaque");
-            pneumaticTubeOpaqueNode = event.map.registerIcon(Refs.MODID + ":tubes/tube_end_opaque");
-            pneumaticTubeColorSide = event.map.registerIcon(Refs.MODID + ":tubes/tube_color_side");
-            pneumaticTubeColorNode = event.map.registerIcon(Refs.MODID + ":tubes/tube_color_end");
-            restrictionTubeNode = event.map.registerIcon(Refs.MODID + ":tubes/restriction_tube_end");
-            restrictionTubeSide = event.map.registerIcon(Refs.MODID + ":tubes/restriction_tube_side");
-            restrictionTubeNodeOpaque = event.map.registerIcon(Refs.MODID + ":tubes/restriction_tube_end_opaque");
-            restrictionTubeSideOpaque = event.map.registerIcon(Refs.MODID + ":tubes/restriction_tube_side_opaque");
-            magTubeNode = event.map.registerIcon(Refs.MODID + ":tubes/mag_end");
-            magTubeSide = event.map.registerIcon(Refs.MODID + ":tubes/mag_side");
-            magCoilSide = event.map.registerIcon(Refs.MODID + ":tubes/mag_casing");
-            magCoilFront = event.map.registerIcon(Refs.MODID + ":tubes/mag_casing_end");
-            acceleratorFront = event.map.registerIcon(Refs.MODID + ":machines/accelerator_front");
-            acceleratorFrontPowered = event.map.registerIcon(Refs.MODID + ":machines/accelerator_front_powered");
-            acceleratorSide = event.map.registerIcon(Refs.MODID + ":machines/accelerator_side");
-            acceleratorSidePowered = event.map.registerIcon(Refs.MODID + ":machines/accelerator_side_powered");
-            acceleratorInside = event.map.registerIcon(Refs.MODID + ":machines/accelerator_inside");
+        TextureMap reg = event.map;
 
-            cagedLampFootSide = event.map.registerIcon(Refs.MODID + ":lamps/cage_foot_side");
-            cagedLampFootTop = event.map.registerIcon(Refs.MODID + ":lamps/cage_foot_top");
-            cagedLampCageSide = event.map.registerIcon(Refs.MODID + ":lamps/cage");
-            cagedLampCageTop = event.map.registerIcon(Refs.MODID + ":lamps/cage_top");
+        if (reg.getTextureType() == 0) {
+            pneumaticTubeSide = reg.registerIcon(Refs.MODID + ":tubes/pneumatic_tube_side");
+            pneumaticTubeNode = reg.registerIcon(Refs.MODID + ":tubes/tube_end");
+            pneumaticTubeOpaqueSide = reg.registerIcon(Refs.MODID + ":tubes/pneumatic_tube_side_opaque");
+            pneumaticTubeOpaqueNode = reg.registerIcon(Refs.MODID + ":tubes/tube_end_opaque");
+            pneumaticTubeColorSide = reg.registerIcon(Refs.MODID + ":tubes/tube_color_side");
+            pneumaticTubeColorNode = reg.registerIcon(Refs.MODID + ":tubes/tube_color_end");
+            restrictionTubeNode = reg.registerIcon(Refs.MODID + ":tubes/restriction_tube_end");
+            restrictionTubeSide = reg.registerIcon(Refs.MODID + ":tubes/restriction_tube_side");
+            restrictionTubeNodeOpaque = reg.registerIcon(Refs.MODID + ":tubes/restriction_tube_end_opaque");
+            restrictionTubeSideOpaque = reg.registerIcon(Refs.MODID + ":tubes/restriction_tube_side_opaque");
+            magTubeNode = reg.registerIcon(Refs.MODID + ":tubes/mag_end");
+            magTubeSide = reg.registerIcon(Refs.MODID + ":tubes/mag_side");
+            magCoilSide = reg.registerIcon(Refs.MODID + ":tubes/mag_casing");
+            magCoilFront = reg.registerIcon(Refs.MODID + ":tubes/mag_casing_end");
+            acceleratorFront = reg.registerIcon(Refs.MODID + ":machines/accelerator_front");
+            acceleratorFrontPowered = reg.registerIcon(Refs.MODID + ":machines/accelerator_front_powered");
+            acceleratorSide = reg.registerIcon(Refs.MODID + ":machines/accelerator_side");
+            acceleratorSidePowered = reg.registerIcon(Refs.MODID + ":machines/accelerator_side_powered");
+            acceleratorInside = reg.registerIcon(Refs.MODID + ":machines/accelerator_inside");
 
-            cagedLampLampActive = event.map.registerIcon(Refs.MODID + ":lamps/cage_lamp_on");
-            cagedLampLampInactive = event.map.registerIcon(Refs.MODID + ":lamps/cage_lamp_off");
+            cagedLampFootSide = reg.registerIcon(Refs.MODID + ":lamps/cage_foot_side");
+            cagedLampFootTop = reg.registerIcon(Refs.MODID + ":lamps/cage_foot_top");
+            cagedLampCageSide = reg.registerIcon(Refs.MODID + ":lamps/cage");
+            cagedLampCageTop = reg.registerIcon(Refs.MODID + ":lamps/cage_top");
 
-            cagedLampLampActiveTop = event.map.registerIcon(Refs.MODID + ":lamps/cage_lamp_on_top");
-            cagedLampLampInactiveTop = event.map.registerIcon(Refs.MODID + ":lamps/cage_lamp_off_top");
+            cagedLampLampActive = reg.registerIcon(Refs.MODID + ":lamps/cage_lamp_on");
+            cagedLampLampInactive = reg.registerIcon(Refs.MODID + ":lamps/cage_lamp_off");
 
-            fixtureFootSide = event.map.registerIcon(Refs.MODID + ":lamps/fixture_foot_side");
-            fixtureFootTop = event.map.registerIcon(Refs.MODID + ":lamps/fixture_foot_top");
-            fixtureLampSideOn = event.map.registerIcon(Refs.MODID + ":lamps/fixture_lamp_on");
-            fixtureLampTopOn = event.map.registerIcon(Refs.MODID + ":lamps/fixture_lamp_on_top");
+            cagedLampLampActiveTop = reg.registerIcon(Refs.MODID + ":lamps/cage_lamp_on_top");
+            cagedLampLampInactiveTop = reg.registerIcon(Refs.MODID + ":lamps/cage_lamp_off_top");
 
-            fixtureLampSideOff = event.map.registerIcon(Refs.MODID + ":lamps/fixture_lamp_off");
-            fixtureLampTopOff = event.map.registerIcon(Refs.MODID + ":lamps/fixture_lamp_off_top");
+            fixtureFootSide = reg.registerIcon(Refs.MODID + ":lamps/fixture_foot_side");
+            fixtureFootTop = reg.registerIcon(Refs.MODID + ":lamps/fixture_foot_top");
+            fixtureLampSideOn = reg.registerIcon(Refs.MODID + ":lamps/fixture_lamp_on");
+            fixtureLampTopOn = reg.registerIcon(Refs.MODID + ":lamps/fixture_lamp_on_top");
 
-            lampOn = event.map.registerIcon(Refs.MODID + ":lamps/lamp_off");
-            lampOff = event.map.registerIcon(Refs.MODID + ":lamps/lamp_on");
+            fixtureLampSideOff = reg.registerIcon(Refs.MODID + ":lamps/fixture_lamp_off");
+            fixtureLampTopOff = reg.registerIcon(Refs.MODID + ":lamps/fixture_lamp_off_top");
 
-            bluestoneTorchOff = event.map.registerIcon(Refs.MODID + ":bluestone_torch_off");
-            bluestoneTorchOn = event.map.registerIcon(Refs.MODID + ":bluestone_torch_on");
+            lampOn = reg.registerIcon(Refs.MODID + ":lamps/lamp_off");
+            lampOff = reg.registerIcon(Refs.MODID + ":lamps/lamp_on");
 
-            wire = event.map.registerIcon(Refs.MODID + ":wire/wire");
-            wireInsulation1 = event.map.registerIcon(Refs.MODID + ":wire/insulation1");
-            wireInsulation2 = event.map.registerIcon(Refs.MODID + ":wire/insulation2");
-            wireBundled = event.map.registerIcon(Refs.MODID + ":wire/bundled");
-            wireBundled2 = event.map.registerIcon(Refs.MODID + ":wire/bundled2");
-            wireBundled3 = event.map.registerIcon(Refs.MODID + ":wire/bundled3");
+            bluestoneTorchOff = reg.registerIcon(Refs.MODID + ":bluestone_torch_off");
+            bluestoneTorchOn = reg.registerIcon(Refs.MODID + ":bluestone_torch_on");
+
+            wire = reg.registerIcon(Refs.MODID + ":wire/wire");
+            wireInsulation1 = reg.registerIcon(Refs.MODID + ":wire/insulation1");
+            wireInsulation2 = reg.registerIcon(Refs.MODID + ":wire/insulation2");
+            wireBundled = reg.registerIcon(Refs.MODID + ":wire/bundled");
+            wireBundled2 = reg.registerIcon(Refs.MODID + ":wire/bundled2");
+            wireBundled3 = reg.registerIcon(Refs.MODID + ":wire/bundled3");
+
+            gateButton = reg.registerIcon(Refs.MODID + ":gates/components/button");
+            siliconChipOff = reg.registerIcon(Refs.MODID + ":gates/components/silicon_chip_off");
+            siliconChipOn = reg.registerIcon(Refs.MODID + ":gates/componenst/silicon_chip_on");
+            taintedSiliconChipOff = reg.registerIcon(Refs.MODID + ":gates/components/tainted_silicon_chip_off");
+            taintedSiliconChipOn = reg.registerIcon(Refs.MODID + ":gates/components/tainted_silicon_chip_on");
+            quartzResonator = reg.registerIcon(Refs.MODID + ":gates/components/resonator");
+            gateSolarPanel = reg.registerIcon(Refs.MODID + ":gates/components/solarpanel");
 
             for (PartInfo i : PartManager.getRegisteredParts())
-                i.getExample().registerIcons(event.map);
-            GateWire.registerTopIcon(event.map);
+                i.getExample().registerIcons(reg);
+            GateWire.registerTopIcon(reg);
         }
     }
 }

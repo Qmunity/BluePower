@@ -14,6 +14,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import coloredlightscore.src.api.CLApi;
 
 import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.block.BlockContainerBase;
@@ -22,6 +23,7 @@ import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.tile.tier1.TileLamp;
 import com.bluepowermod.util.Refs;
 
+import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -80,7 +82,24 @@ public class BlockLamp extends BlockContainerBase {
     @Override
     public int getLightValue(IBlockAccess w, int x, int y, int z) {
 
-        return getPower(w, x, y, z);
+        int pow = getPower(w, x, y, z);
+
+        if (Loader.isModLoaded("coloredlightscore")) {
+            float brightness = pow / 15F;
+            int color = getColor(w, x, y, z);
+
+            int r = (color >> 16) & 0xFF;
+            int g = (color >> 8) & 0xFF;
+            int b = (color >> 0) & 0xFF;
+
+            float rf = r / 256F;
+            float gf = g / 256F;
+            float bf = b / 256F;
+
+            return CLApi.makeRGBLightValue(Math.min(rf, brightness), Math.min(gf, brightness), Math.min(bf, brightness), brightness);
+        }
+
+        return pow;
     }
 
     @Override

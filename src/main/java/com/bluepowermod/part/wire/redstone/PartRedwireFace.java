@@ -65,12 +65,13 @@ import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.part.wire.PartWireFace;
 import com.bluepowermod.part.wire.redstone.propagation.BundledDeviceWrapper;
 import com.bluepowermod.part.wire.redstone.propagation.WirePropagator;
+import com.bluepowermod.util.DebugHelper;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class PartRedwireFace extends PartWireFace implements IFaceRedstoneDevice, IRedstoneConductor, IFaceBundledDevice,
-IBundledConductor, IPartRedstone, IPartWAILAProvider {
+        IBundledConductor, IPartRedstone, IPartWAILAProvider {
 
     protected final IRedstoneDevice[] devices = new IRedstoneDevice[6];
     protected final IBundledDevice[] bundledDevices = new IBundledDevice[6];
@@ -605,7 +606,7 @@ IBundledConductor, IPartRedstone, IPartWAILAProvider {
             return 0;
 
         return (devices[side.ordinal()] != null && devices[side.ordinal()] instanceof DummyRedstoneDevice) ? ((DummyRedstoneDevice) devices[side
-                                                                                                                                            .ordinal()]).getRedstoneOutput(MathHelper.map(power & 0xFF, 0, 255, 0, 15)) : 0;
+                .ordinal()]).getRedstoneOutput(MathHelper.map(power & 0xFF, 0, 255, 0, 15)) : 0;
     }
 
     @Override
@@ -619,7 +620,7 @@ IBundledConductor, IPartRedstone, IPartWAILAProvider {
             return 0;
 
         return (devices[side.ordinal()] != null && devices[side.ordinal()] instanceof DummyRedstoneDevice) ? ((DummyRedstoneDevice) devices[side
-                                                                                                                                            .ordinal()]).getRedstoneOutput(MathHelper.map(power & 0xFF, 0, 255, 0, 15)) : 0;
+                .ordinal()]).getRedstoneOutput(MathHelper.map(power & 0xFF, 0, 255, 0, 15)) : 0;
     }
 
     @Override
@@ -780,7 +781,7 @@ IBundledConductor, IPartRedstone, IPartWAILAProvider {
     public IPartPlacement getPlacement(IPart part, World world, Vec3i location, ForgeDirection face, MovingObjectPosition mop,
             EntityPlayer player) {
 
-        if (bundled || type == RedwireType.RED_ALLOY)
+        if ((bundled || type == RedwireType.RED_ALLOY) && !DebugHelper.isDebugModeEnabled())
             return null;
 
         return super.getPlacement(part, world, location, face, mop, player);
@@ -789,7 +790,7 @@ IBundledConductor, IPartRedstone, IPartWAILAProvider {
     @Override
     public void addTooltip(List<String> tip) {
 
-        if (bundled || type == RedwireType.RED_ALLOY)
+        if ((bundled || type == RedwireType.RED_ALLOY) && !DebugHelper.isDebugModeEnabled())
             tip.add(MinecraftColor.RED + I18n.format("Disabled temporarily. Still not fully working."));
     }
 
