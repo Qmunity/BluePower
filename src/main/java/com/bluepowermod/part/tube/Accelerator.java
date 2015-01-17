@@ -148,7 +148,7 @@ public class Accelerator extends PneumaticTube implements IPartCustomPlacement {
     @SideOnly(Side.CLIENT)
     protected IIcon getSideIcon() {
 
-        return null;
+        return IconSupplier.pneumaticTubeSide;
     }
 
     @Override

@@ -71,7 +71,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class PartRedwireFace extends PartWireFace implements IFaceRedstoneDevice, IRedstoneConductor, IFaceBundledDevice,
-        IBundledConductor, IPartRedstone, IPartWAILAProvider {
+IBundledConductor, IPartRedstone, IPartWAILAProvider {
 
     protected final IRedstoneDevice[] devices = new IRedstoneDevice[6];
     protected final IBundledDevice[] bundledDevices = new IBundledDevice[6];
@@ -336,14 +336,14 @@ public class PartRedwireFace extends PartWireFace implements IFaceRedstoneDevice
                         if (dev instanceof PartRedwireFace) {
                             if (dev.getInsulationColor() != MinecraftColor.NONE)
                                 connected = true;
+                            if (getInsulationColor() == MinecraftColor.NONE)
+                                render = true;
                             if (getFace().ordinal() > ((PartRedwireFace) dev).getFace().ordinal()) {
                                 if (dev.getInsulationColor() == getInsulationColor())
                                     render = true;
                                 if (getInsulationColor() == MinecraftColor.NONE)
                                     render = true;
                             }
-                            render = true;
-                            connected = true;
                         } else {
                             connected = true;
                             render = true;
@@ -606,7 +606,7 @@ public class PartRedwireFace extends PartWireFace implements IFaceRedstoneDevice
             return 0;
 
         return (devices[side.ordinal()] != null && devices[side.ordinal()] instanceof DummyRedstoneDevice) ? ((DummyRedstoneDevice) devices[side
-                .ordinal()]).getRedstoneOutput(MathHelper.map(power & 0xFF, 0, 255, 0, 15)) : 0;
+                                                                                                                                            .ordinal()]).getRedstoneOutput(MathHelper.map(power & 0xFF, 0, 255, 0, 15)) : 0;
     }
 
     @Override
@@ -620,7 +620,7 @@ public class PartRedwireFace extends PartWireFace implements IFaceRedstoneDevice
             return 0;
 
         return (devices[side.ordinal()] != null && devices[side.ordinal()] instanceof DummyRedstoneDevice) ? ((DummyRedstoneDevice) devices[side
-                .ordinal()]).getRedstoneOutput(MathHelper.map(power & 0xFF, 0, 255, 0, 15)) : 0;
+                                                                                                                                            .ordinal()]).getRedstoneOutput(MathHelper.map(power & 0xFF, 0, 255, 0, 15)) : 0;
     }
 
     @Override
@@ -792,6 +792,11 @@ public class PartRedwireFace extends PartWireFace implements IFaceRedstoneDevice
 
         if ((bundled || type == RedwireType.RED_ALLOY) && !DebugHelper.isDebugModeEnabled())
             tip.add(MinecraftColor.RED + I18n.format("Disabled temporarily. Still not fully working."));
+    }
+
+    public RedwireType getWireType() {
+
+        return type;
     }
 
 }

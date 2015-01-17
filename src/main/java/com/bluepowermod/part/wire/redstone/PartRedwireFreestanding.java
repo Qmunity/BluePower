@@ -69,12 +69,13 @@ import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.part.wire.PartWireFreestanding;
 import com.bluepowermod.part.wire.redstone.propagation.BundledDeviceWrapper;
 import com.bluepowermod.part.wire.redstone.propagation.WirePropagator;
+import com.bluepowermod.util.DebugHelper;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class PartRedwireFreestanding extends PartWireFreestanding implements IRedstoneConductor, IBundledConductor, IPartRedstone,
-IPartWAILAProvider, IPartSolid, IPartThruHole, IPartCustomPlacement {
+        IPartWAILAProvider, IPartSolid, IPartThruHole, IPartCustomPlacement {
 
     protected IRedstoneDevice[] devices = new IRedstoneDevice[6];
     protected IBundledDevice[] bundledDevices = new IBundledDevice[6];
@@ -443,7 +444,7 @@ IPartWAILAProvider, IPartSolid, IPartThruHole, IPartCustomPlacement {
             return 0;
 
         return (devices[side.ordinal()] != null && devices[side.ordinal()] instanceof DummyRedstoneDevice) ? ((DummyRedstoneDevice) devices[side
-                                                                                                                                            .ordinal()]).getRedstoneOutput(MathHelper.map(power & 0xFF, 0, 255, 0, 15)) : 0;
+                .ordinal()]).getRedstoneOutput(MathHelper.map(power & 0xFF, 0, 255, 0, 15)) : 0;
     }
 
     @Override
@@ -456,7 +457,7 @@ IPartWAILAProvider, IPartSolid, IPartThruHole, IPartCustomPlacement {
             return 0;
 
         return (devices[side.ordinal()] != null && devices[side.ordinal()] instanceof DummyRedstoneDevice) ? ((DummyRedstoneDevice) devices[side
-                                                                                                                                            .ordinal()]).getRedstoneOutput(MathHelper.map(power & 0xFF, 0, 255, 0, 15)) : 0;
+                .ordinal()]).getRedstoneOutput(MathHelper.map(power & 0xFF, 0, 255, 0, 15)) : 0;
     }
 
     @Override
@@ -593,7 +594,7 @@ IPartWAILAProvider, IPartSolid, IPartThruHole, IPartCustomPlacement {
     public IPartPlacement getPlacement(IPart part, World world, Vec3i location, ForgeDirection face, MovingObjectPosition mop,
             EntityPlayer player) {
 
-        if (bundled || type == RedwireType.RED_ALLOY)
+        if (!DebugHelper.isDebugModeEnabled() && (bundled || type == RedwireType.RED_ALLOY))
             return null;
 
         return new PartPlacementDefault();
@@ -602,7 +603,7 @@ IPartWAILAProvider, IPartSolid, IPartThruHole, IPartCustomPlacement {
     @Override
     public void addTooltip(List<String> tip) {
 
-        if (bundled || type == RedwireType.RED_ALLOY)
+        if (!DebugHelper.isDebugModeEnabled() && (bundled || type == RedwireType.RED_ALLOY))
             tip.add(MinecraftColor.RED + I18n.format("Disabled temporarily. Still not fully working."));
     }
 
