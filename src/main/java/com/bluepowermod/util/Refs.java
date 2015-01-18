@@ -162,7 +162,7 @@ public class Refs {
     public static final String BLUESTONECATHODE_NAME = "bluestone_cathode_tile";
     public static final String BLUESTONEPOINTER_NAME = "bluestone_pointer_tile";
     public static final String SILICONCHIP_NAME = "silicon_chip_tile";
-    public static final String TAINTEDSILICONCHIP_NAME = "taintedsilicon_chip_tile";
+    public static final String TAINTEDSILICONCHIP_NAME = "tainted_silicon_chip_tile";
     public static final String QUARTZRESONATOR_NAME = "quartz_resonator_tile";
     public static final String REDSTONEWIRETILE_NAME = "redstone_wire_tile";
     public static final String REDSTONEANODETILE_NAME = "redstone_anode_tile";
@@ -170,7 +170,7 @@ public class Refs {
     public static final String REDSTONEPOINTER_NAME = "redstone_pointer_tile";
     public static final String STONEREDWIRE_NAME = "stone_redwire";
     public static final String PLATEASSEMBLY_NAME = "plate_assembly";
-    public static final String STONEBUNDLE_NAME = "stone_bundle_tile";
+    public static final String STONEBUNDLE_NAME = "stone_bundle";
     public static final String SCREWDRIVERHANDLE_NAME = "screwdriver_handle";
     public static final String BLOCKBUFFER_NAME = "buffer";
     public static final String BLOCKDEPLOYER_NAME = "deployer";

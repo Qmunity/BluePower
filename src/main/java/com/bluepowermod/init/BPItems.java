@@ -101,7 +101,7 @@ public class BPItems {
     public static final Item bluestone_cathode_tile = new ItemCrafting(Refs.BLUESTONECATHODE_NAME);
     public static final Item bluestone_pointer_tile = new ItemCrafting(Refs.BLUESTONEPOINTER_NAME);
     public static final Item silicon_chip_tile = new ItemCrafting(Refs.SILICONCHIP_NAME);
-    public static final Item taintedsilicon_chip_tile = new ItemCrafting(Refs.TAINTEDSILICONCHIP_NAME);
+    public static final Item tainted_silicon_chip_tile = new ItemCrafting(Refs.TAINTEDSILICONCHIP_NAME);
     public static final Item quartz_resonator_tile = new ItemCrafting(Refs.QUARTZRESONATOR_NAME);
     public static final Item redstone_wire_tile = new ItemCrafting(Refs.REDSTONEWIRETILE_NAME);
     public static final Item redstone_anode_tile = new ItemCrafting(Refs.REDSTONEANODETILE_NAME);
@@ -109,7 +109,7 @@ public class BPItems {
     public static final Item redstone_pointer_tile = new ItemCrafting(Refs.REDSTONEPOINTER_NAME);
     // public static final Item stone_redwire = new ItemCrafting(Refs.STONEREDWIRE_NAME);
     // public static final Item plate_assembly = new ItemCrafting(Refs.PLATEASSEMBLY_NAME);
-    public static final Item stone_bundle_tile = new ItemCrafting(Refs.STONEBUNDLE_NAME);
+    public static final Item stone_bundle = new ItemCrafting(Refs.STONEBUNDLE_NAME);
     public static final Item screwdriver_handle = new ItemCrafting(Refs.SCREWDRIVERHANDLE_NAME);
     public static final Item seed_bag = new ItemSeedBag(Refs.SEEDBAG_NAME);
     public static final Item canvas_bag = new ItemCanvasBag(Refs.CANVASBAG_NAME);
@@ -226,7 +226,7 @@ public class BPItems {
         GameRegistry.registerItem(bluestone_cathode_tile, Refs.BLUESTONECATHODE_NAME);
         GameRegistry.registerItem(bluestone_pointer_tile, Refs.BLUESTONEPOINTER_NAME);
         GameRegistry.registerItem(silicon_chip_tile, Refs.SILICONCHIP_NAME);
-        GameRegistry.registerItem(taintedsilicon_chip_tile, Refs.TAINTEDSILICONCHIP_NAME);
+        GameRegistry.registerItem(tainted_silicon_chip_tile, Refs.TAINTEDSILICONCHIP_NAME);
         GameRegistry.registerItem(quartz_resonator_tile, Refs.QUARTZRESONATOR_NAME);
         GameRegistry.registerItem(redstone_wire_tile, Refs.REDSTONEWIRETILE_NAME);
         GameRegistry.registerItem(redstone_anode_tile, Refs.REDSTONEANODETILE_NAME);
@@ -234,7 +234,7 @@ public class BPItems {
         GameRegistry.registerItem(redstone_pointer_tile, Refs.REDSTONEPOINTER_NAME);
         // GameRegistry.registerItem(stone_redwire, Refs.STONEREDWIRE_NAME);
         // GameRegistry.registerItem(plate_assembly, Refs.PLATEASSEMBLY_NAME);
-        GameRegistry.registerItem(stone_bundle_tile, Refs.STONEBUNDLE_NAME);
+        GameRegistry.registerItem(stone_bundle, Refs.STONEBUNDLE_NAME);
         GameRegistry.registerItem(screwdriver_handle, Refs.SCREWDRIVERHANDLE_NAME);
         GameRegistry.registerItem(seed_bag, Refs.SEEDBAG_NAME);
         GameRegistry.registerItem(canvas_bag, Refs.CANVASBAG_NAME);
