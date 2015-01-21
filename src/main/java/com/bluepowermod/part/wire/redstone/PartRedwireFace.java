@@ -74,7 +74,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class PartRedwireFace extends PartWireFace implements IFaceRedstoneDevice, IRedstoneConductor, IFaceBundledDevice,
-        IBundledConductor, IPartRedstone, IPartWAILAProvider, IRedwire {
+IBundledConductor, IPartRedstone, IPartWAILAProvider, IRedwire {
 
     protected final IRedstoneDevice[] devices = new IRedstoneDevice[6];
     protected final IBundledDevice[] bundledDevices = new IBundledDevice[6];
@@ -586,10 +586,7 @@ public class PartRedwireFace extends PartWireFace implements IFaceRedstoneDevice
     @Override
     public boolean canConnectRedstone(ForgeDirection side) {
 
-        // if (getWorld().isRemote) {
-        // }
-
-        return false;// side != getFace().getOpposite() && !bundled;
+        return side != getFace().getOpposite() && !bundled;
     }
 
     @Override
@@ -602,7 +599,7 @@ public class PartRedwireFace extends PartWireFace implements IFaceRedstoneDevice
             return 0;
 
         return (devices[side.ordinal()] != null && devices[side.ordinal()] instanceof DummyRedstoneDevice) ? ((DummyRedstoneDevice) devices[side
-                .ordinal()]).getRedstoneOutput(MathHelper.map(power & 0xFF, 0, 255, 0, 15)) : 0;
+                                                                                                                                            .ordinal()]).getRedstoneOutput(MathHelper.map(power & 0xFF, 0, 255, 0, 15)) : 0;
     }
 
     @Override
@@ -643,12 +640,16 @@ public class PartRedwireFace extends PartWireFace implements IFaceRedstoneDevice
     @Override
     public boolean canConnectBundledOpenCorner(ForgeDirection side, IBundledDevice device) {
 
-        if (device instanceof PartRedwireFace)
-            if (!bundled && !((PartRedwireFace) device).bundled && !color.matches(((PartRedwireFace) device).color))
-                return false;
-
         if (OcclusionHelper.microblockOcclusionTest(getParent(), MicroblockShape.EDGE, 1, getFace(), side))
             return false;
+
+        if (device instanceof IRedstoneDevice) {
+            MinecraftColor insulation = ((IRedstoneDevice) device).getInsulationColor(side.getOpposite());
+            MinecraftColor myInsulation = getInsulationColor(side);
+            if (insulation != null && getInsulationColor(side) != null)
+                if (!insulation.matches(myInsulation))
+                    return false;
+        }
 
         return WireCommons.canConnect(this, device, side, getFace().getOpposite());
     }
@@ -656,12 +657,16 @@ public class PartRedwireFace extends PartWireFace implements IFaceRedstoneDevice
     @Override
     public boolean canConnectBundledClosedCorner(ForgeDirection side, IBundledDevice device) {
 
-        if (device instanceof PartRedwireFace)
-            if (!bundled && !((PartRedwireFace) device).bundled && !color.matches(((PartRedwireFace) device).color))
-                return false;
-
         if (OcclusionHelper.microblockOcclusionTest(getParent(), MicroblockShape.EDGE, 1, getFace(), side))
             return false;
+
+        if (device instanceof IRedstoneDevice) {
+            MinecraftColor insulation = ((IRedstoneDevice) device).getInsulationColor(side.getOpposite());
+            MinecraftColor myInsulation = getInsulationColor(side);
+            if (insulation != null && getInsulationColor(side) != null)
+                if (!insulation.matches(myInsulation))
+                    return false;
+        }
 
         return WireCommons.canConnect(this, device, side, getFace().getOpposite());
     }

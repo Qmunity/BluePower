@@ -427,7 +427,7 @@ IPartWAILAProvider, IPartSolid, IPartThruHole, IPartCustomPlacement {
     @Override
     public boolean canConnectRedstone(ForgeDirection side) {
 
-        return false;// side != getFace();
+        return !bundled;
     }
 
     @Override
@@ -456,6 +456,14 @@ IPartWAILAProvider, IPartSolid, IPartThruHole, IPartCustomPlacement {
             if (OcclusionHelper.microblockOcclusionTest(new Vec3i(this), MicroblockShape.FACE_HOLLOW, 8, side))
                 return false;
 
+        if (device instanceof IRedstoneDevice) {
+            MinecraftColor insulation = ((IRedstoneDevice) device).getInsulationColor(side.getOpposite());
+            MinecraftColor myInsulation = getInsulationColor(side);
+            if (insulation != null && getInsulationColor(side) != null)
+                if (!insulation.matches(myInsulation))
+                    return false;
+        }
+
         return WireCommons.canConnect(this, device, side, side.getOpposite());
     }
 
@@ -465,6 +473,14 @@ IPartWAILAProvider, IPartSolid, IPartThruHole, IPartCustomPlacement {
         if (!(device instanceof IFaceBundledDevice))
             if (OcclusionHelper.microblockOcclusionTest(new Vec3i(this), MicroblockShape.FACE_HOLLOW, 8, side))
                 return false;
+
+        if (device instanceof IRedstoneDevice) {
+            MinecraftColor insulation = ((IRedstoneDevice) device).getInsulationColor(side.getOpposite());
+            MinecraftColor myInsulation = getInsulationColor(side);
+            if (insulation != null && getInsulationColor(side) != null)
+                if (!insulation.matches(myInsulation))
+                    return false;
+        }
 
         return WireCommons.canConnect(this, device);
     }
