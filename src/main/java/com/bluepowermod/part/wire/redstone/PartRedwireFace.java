@@ -617,6 +617,7 @@ public class PartRedwireFace extends PartWireFace implements IFaceRedstoneDevice
             return MathHelper.map(power & 0xFF, 0, 255, 0, 15);
 
         return (devices[side.ordinal()] != null && devices[side.ordinal()] instanceof DummyRedstoneDevice) ? ((DummyRedstoneDevice) devices[side
+                                                                                                                                            .ordinal()]).getRedstoneOutput(MathHelper.map(power & 0xFF, 0, 255, 0, 15)) : 0;
     }
 
     @Override
