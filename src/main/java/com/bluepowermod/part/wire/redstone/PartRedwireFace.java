@@ -74,7 +74,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class PartRedwireFace extends PartWireFace implements IFaceRedstoneDevice, IRedstoneConductor, IFaceBundledDevice,
-IBundledConductor, IPartRedstone, IPartWAILAProvider, IRedwire {
+        IBundledConductor, IPartRedstone, IPartWAILAProvider, IRedwire {
 
     protected final IRedstoneDevice[] devices = new IRedstoneDevice[6];
     protected final IBundledDevice[] bundledDevices = new IBundledDevice[6];
@@ -602,7 +602,7 @@ IBundledConductor, IPartRedstone, IPartWAILAProvider, IRedwire {
             return 0;
 
         return (devices[side.ordinal()] != null && devices[side.ordinal()] instanceof DummyRedstoneDevice) ? ((DummyRedstoneDevice) devices[side
-                                                                                                                                            .ordinal()]).getRedstoneOutput(MathHelper.map(power & 0xFF, 0, 255, 0, 15)) : 0;
+                .ordinal()]).getRedstoneOutput(MathHelper.map(power & 0xFF, 0, 255, 0, 15)) : 0;
     }
 
     @Override
@@ -611,12 +611,12 @@ IBundledConductor, IPartRedstone, IPartWAILAProvider, IRedwire {
         if (!RedstoneApi.getInstance().shouldWiresOutputPower())
             return 0;
 
-        if ((side == getFace().getOpposite() || devices[side.ordinal()] == null || !(devices[side.ordinal()] instanceof DummyRedstoneDevice))
-                && side != getFace())
+        if (side == getFace().getOpposite())
             return 0;
+        if (devices[side.ordinal()] == null && !(devices[side.ordinal()] instanceof DummyRedstoneDevice))
+            return MathHelper.map(power & 0xFF, 0, 255, 0, 15);
 
         return (devices[side.ordinal()] != null && devices[side.ordinal()] instanceof DummyRedstoneDevice) ? ((DummyRedstoneDevice) devices[side
-                                                                                                                                            .ordinal()]).getRedstoneOutput(MathHelper.map(power & 0xFF, 0, 255, 0, 15)) : 0;
     }
 
     @Override

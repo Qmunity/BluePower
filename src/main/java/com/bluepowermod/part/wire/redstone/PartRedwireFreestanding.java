@@ -443,7 +443,7 @@ IPartWAILAProvider, IPartSolid, IPartThruHole, IPartCustomPlacement {
             return 0;
 
         if (devices[side.ordinal()] == null || !(devices[side.ordinal()] instanceof DummyRedstoneDevice))
-            return 0;
+            return MathHelper.map(power & 0xFF, 0, 255, 0, 15);
 
         return (devices[side.ordinal()] != null && devices[side.ordinal()] instanceof DummyRedstoneDevice) ? ((DummyRedstoneDevice) devices[side
                                                                                                                                             .ordinal()]).getRedstoneOutput(MathHelper.map(power & 0xFF, 0, 255, 0, 15)) : 0;
