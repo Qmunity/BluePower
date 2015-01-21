@@ -77,7 +77,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class PartRedwireFreestanding extends PartWireFreestanding implements IRedstoneConductor, IBundledConductor, IPartRedstone,
-        IPartWAILAProvider, IPartSolid, IPartThruHole, IPartCustomPlacement {
+IPartWAILAProvider, IPartSolid, IPartThruHole, IPartCustomPlacement {
 
     protected IRedstoneDevice[] devices = new IRedstoneDevice[6];
     protected IBundledDevice[] bundledDevices = new IBundledDevice[6];
@@ -433,14 +433,7 @@ public class PartRedwireFreestanding extends PartWireFreestanding implements IRe
     @Override
     public int getStrongPower(ForgeDirection side) {
 
-        if (!RedstoneApi.getInstance().shouldWiresOutputPower())
-            return 0;
-
-        if (devices[side.ordinal()] == null || !(devices[side.ordinal()] instanceof DummyRedstoneDevice))
-            return 0;
-
-        return (devices[side.ordinal()] != null && devices[side.ordinal()] instanceof DummyRedstoneDevice) ? ((DummyRedstoneDevice) devices[side
-                .ordinal()]).getRedstoneOutput(MathHelper.map(power & 0xFF, 0, 255, 0, 15)) : 0;
+        return 0;
     }
 
     @Override
@@ -453,7 +446,7 @@ public class PartRedwireFreestanding extends PartWireFreestanding implements IRe
             return 0;
 
         return (devices[side.ordinal()] != null && devices[side.ordinal()] instanceof DummyRedstoneDevice) ? ((DummyRedstoneDevice) devices[side
-                .ordinal()]).getRedstoneOutput(MathHelper.map(power & 0xFF, 0, 255, 0, 15)) : 0;
+                                                                                                                                            .ordinal()]).getRedstoneOutput(MathHelper.map(power & 0xFF, 0, 255, 0, 15)) : 0;
     }
 
     @Override

@@ -598,8 +598,7 @@ IBundledConductor, IPartRedstone, IPartWAILAProvider, IRedwire {
         if (!RedstoneApi.getInstance().shouldWiresOutputPower())
             return 0;
 
-        if ((side == getFace().getOpposite() || devices[side.ordinal()] == null || !(devices[side.ordinal()] instanceof DummyRedstoneDevice))
-                && (isBundled(side) ? true : side != getFace()))
+        if (side != getFace())
             return 0;
 
         return (devices[side.ordinal()] != null && devices[side.ordinal()] instanceof DummyRedstoneDevice) ? ((DummyRedstoneDevice) devices[side
