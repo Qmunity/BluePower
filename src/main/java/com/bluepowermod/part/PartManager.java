@@ -17,34 +17,9 @@ import uk.co.qmunity.lib.part.PartRegistry;
 
 import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.item.ItemPart;
-import com.bluepowermod.part.gate.GateAnd;
-import com.bluepowermod.part.gate.GateBuffer;
-import com.bluepowermod.part.gate.GateCounter;
-import com.bluepowermod.part.gate.GateMux;
-import com.bluepowermod.part.gate.GateNand;
-import com.bluepowermod.part.gate.GateNor;
-import com.bluepowermod.part.gate.GateNot;
-import com.bluepowermod.part.gate.GateNullCell;
-import com.bluepowermod.part.gate.GateOr;
-import com.bluepowermod.part.gate.GatePulseFormer;
-import com.bluepowermod.part.gate.GateRSLatch;
-import com.bluepowermod.part.gate.GateRandomizer;
-import com.bluepowermod.part.gate.GateRepeater;
-import com.bluepowermod.part.gate.GateSequencer;
-import com.bluepowermod.part.gate.GateStateCell;
-import com.bluepowermod.part.gate.GateSynchronizer;
-import com.bluepowermod.part.gate.GateTimer;
-import com.bluepowermod.part.gate.GateToggleLatch;
-import com.bluepowermod.part.gate.GateTransparentLatch;
-import com.bluepowermod.part.gate.GateXnor;
-import com.bluepowermod.part.gate.GateXor;
-import com.bluepowermod.part.gate.analog.GateComparator;
-import com.bluepowermod.part.gate.analog.GateInverter;
-import com.bluepowermod.part.gate.analog.GateLightCell;
-import com.bluepowermod.part.gate.ic.Circuit3x3;
-import com.bluepowermod.part.gate.ic.Circuit5x5;
-import com.bluepowermod.part.gate.ic.Circuit7x7;
-import com.bluepowermod.part.gate.wireless.GateTransceiver;
+import com.bluepowermod.part.gate.analogue.GateInverter;
+import com.bluepowermod.part.gate.digital.GateAnd;
+import com.bluepowermod.part.gate.digital.GateNot;
 import com.bluepowermod.part.lamp.PartCageLamp;
 import com.bluepowermod.part.lamp.PartFixture;
 import com.bluepowermod.part.tube.Accelerator;
@@ -120,46 +95,47 @@ public class PartManager {
 
     public static void registerParts() {
 
-        // Digital gates
         PartRegistry.registerFactory(new PartFactory());
+
+        // Digital gates
         registerPart(GateAnd.class);
         registerPart(GateNot.class);
-        registerPart(GateOr.class);
-        registerPart(GateNand.class);
-        registerPart(GateBuffer.class);
-        registerPart(GateXor.class);
-        registerPart(GateXnor.class);
-        registerPart(GateComparator.class);
-        registerPart(GateNor.class);
-        registerPart(GateTimer.class);
-        registerPart(GateSequencer.class);
-        registerPart(GateCounter.class);
-        registerPart(GateMux.class);
-        registerPart(GatePulseFormer.class);
-        registerPart(GateRandomizer.class);
-        registerPart(GateLightCell.class);
-        registerPart(GateToggleLatch.class);
-        registerPart(GateRSLatch.class);
-        registerPart(GateStateCell.class);
-        registerPart(GateRepeater.class);
-        registerPart(GateTransparentLatch.class);
-        registerPart(GateSynchronizer.class);
-        registerPart(GateNullCell.class, false);
+        // registerPart(GateOr.class);
+        // registerPart(GateNand.class);
+        // registerPart(GateBuffer.class);
+        // registerPart(GateXor.class);
+        // registerPart(GateXnor.class);
+        // registerPart(GateComparator.class);
+        // registerPart(GateNor.class);
+        // registerPart(GateTimer.class);
+        // registerPart(GateSequencer.class);
+        // registerPart(GateCounter.class);
+        // registerPart(GateMux.class);
+        // registerPart(GatePulseFormer.class);
+        // registerPart(GateRandomizer.class);
+        // registerPart(GateLightCell.class);
+        // registerPart(GateToggleLatch.class);
+        // registerPart(GateRSLatch.class);
+        // registerPart(GateStateCell.class);
+        // registerPart(GateRepeater.class);
+        // registerPart(GateTransparentLatch.class);
+        // registerPart(GateSynchronizer.class);
+        // registerPart(GateNullCell.class, false);
 
         // Analog gates
         registerPart(GateInverter.class);
-        registerPart(GateNullCell.class, true);
+        // registerPart(GateNullCell.class, true);
 
         // Wireless gates
-        registerPart(GateTransceiver.class, false, false);
-        registerPart(GateTransceiver.class, true, false);
-        registerPart(GateTransceiver.class, false, true);
-        registerPart(GateTransceiver.class, true, true);
+        // registerPart(GateTransceiver.class, false, false);
+        // registerPart(GateTransceiver.class, true, false);
+        // registerPart(GateTransceiver.class, false, true);
+        // registerPart(GateTransceiver.class, true, true);
 
         // IC's
-        registerPart(Circuit3x3.class);
-        registerPart(Circuit5x5.class);
-        registerPart(Circuit7x7.class);
+        // registerPart(Circuit3x3.class);
+        // registerPart(Circuit5x5.class);
+        // registerPart(Circuit7x7.class);
 
         // Lamps
         for (int i = 0; i < 2; i++)

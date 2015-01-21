@@ -39,14 +39,14 @@ public class BundledConductorWrapper extends BundledDeviceWrapper implements IRe
         List<Pair<IRedstoneDevice, ForgeDirection>> list = super.propagate(fromSide);
 
         if (cond instanceof IRedstoneDevice) {
-            MinecraftColor color = ((IRedstoneDevice) cond).getInsulationColor();
-            if (color != null && !color.matches(getInsulationColor()))
+            MinecraftColor color = ((IRedstoneDevice) cond).getInsulationColor(fromSide);
+            if (color != null && !color.matches(getInsulationColor(fromSide)))
                 return list;
         }
 
         for (Pair<IBundledDevice, ForgeDirection> pair : cond.propagateBundled(fromSide))
-            list.add(new Pair<IRedstoneDevice, ForgeDirection>(BundledDeviceWrapper.getWrapper(pair.getKey(), getInsulationColor()), pair
-                    .getValue()));
+            list.add(new Pair<IRedstoneDevice, ForgeDirection>(BundledDeviceWrapper.getWrapper(pair.getKey(),
+                    getInsulationColor(pair.getValue())), pair.getValue()));
 
         return list;
     }

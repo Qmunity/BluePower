@@ -17,6 +17,10 @@
 
 package com.bluepowermod.part;
 
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MovingObjectPosition;
@@ -26,7 +30,6 @@ import uk.co.qmunity.lib.part.IPart;
 import uk.co.qmunity.lib.part.IPartCustomPlacement;
 import uk.co.qmunity.lib.part.IPartFace;
 import uk.co.qmunity.lib.part.IPartPlacement;
-import uk.co.qmunity.lib.part.PartPlacementFace;
 import uk.co.qmunity.lib.vec.Vec3i;
 
 import com.bluepowermod.api.misc.IFace;
@@ -41,7 +44,6 @@ public abstract class BPPartFace extends BPPart implements IPartFace, IFace, IPa
         return face;
     }
 
-    @Override
     public boolean canStay() {
 
         return getWorld().isSideSolid(getX() + getFace().offsetX, getY() + getFace().offsetY, getZ() + getFace().offsetZ,
@@ -67,15 +69,19 @@ public abstract class BPPartFace extends BPPart implements IPartFace, IFace, IPa
     }
 
     @Override
-    public void writeUpdateToNBT(NBTTagCompound tag) {
+    public void writeUpdateData(DataOutput buffer) throws IOException {
 
-        tag.setInteger("face", face.ordinal());
+        super.writeUpdateData(buffer);
+
+        buffer.writeInt(face.ordinal());
     }
 
     @Override
-    public void readUpdateFromNBT(NBTTagCompound tag) {
+    public void readUpdateData(DataInput buffer) throws IOException {
 
-        face = ForgeDirection.getOrientation(tag.getInteger("face"));
+        super.readUpdateData(buffer);
+
+        face = ForgeDirection.getOrientation(buffer.readInt());
     }
 
     @Override
@@ -83,6 +89,15 @@ public abstract class BPPartFace extends BPPart implements IPartFace, IFace, IPa
             EntityPlayer player) {
 
         return new PartPlacementFace(face.getOpposite());
+    }
+
+    @Override
+    public void onNeighborBlockChange() {
+
+        super.onNeighborBlockChange();
+
+        if (getParent() != null && getWorld() != null && !getWorld().isRemote && !canStay())
+            breakAndDrop(false);
     }
 
 }

@@ -40,7 +40,7 @@ public interface IRedstoneDevice extends IWorldLocation {
 
     public void onRedstoneUpdate();
 
-    public MinecraftColor getInsulationColor();
+    public MinecraftColor getInsulationColor(ForgeDirection side);
 
     public boolean isNormalBlock();
 

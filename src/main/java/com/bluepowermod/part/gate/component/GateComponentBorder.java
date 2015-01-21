@@ -9,7 +9,7 @@ import com.bluepowermod.part.gate.GateBase;
 
 public class GateComponentBorder extends GateComponentLocationArray {
 
-    public GateComponentBorder(GateBase gate, int color) {
+    public GateComponentBorder(GateBase<?, ?, ?, ?, ?, ?> gate, int color) {
 
         super(gate, color);
     }

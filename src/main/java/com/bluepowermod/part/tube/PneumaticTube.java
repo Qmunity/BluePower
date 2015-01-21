@@ -7,6 +7,9 @@
  */
 package com.bluepowermod.part.tube;
 
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -258,17 +261,7 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
     @Override
     public void writeToNBT(NBTTagCompound tag) {
 
-        writeUpdateToNBT(tag);
-    }
-
-    @Override
-    public void readFromNBT(NBTTagCompound tag) {
-
-        readUpdateFromNBT(tag);
-    }
-
-    @Override
-    public void writeUpdateToNBT(NBTTagCompound tag) {
+        super.writeToNBT(tag);
 
         for (int i = 0; i < 6; i++) {
             tag.setBoolean("connections" + i, connections[i]);
@@ -288,7 +281,9 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
     }
 
     @Override
-    public void readUpdateFromNBT(NBTTagCompound tag) {
+    public void readFromNBT(NBTTagCompound tag) {
+
+        super.readFromNBT(tag);
 
         int connectionCount = 0;
         for (int i = 0; i < 6; i++) {
@@ -312,6 +307,71 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
 
         NBTTagCompound logicTag = tag.getCompoundTag("logic");
         logic.readFromNBT(logicTag);
+    }
+
+    @Override
+    public void writeUpdateData(DataOutput buffer) throws IOException {
+
+        super.writeUpdateData(buffer);
+
+        // Connections
+        for (int i = 0; i < 6; i++)
+            buffer.writeBoolean(connections[i]);
+        for (int i = 0; i < 6; i++)
+            buffer.writeBoolean(RedstoneConductorTube.getDevice(this).getDeviceOnSide(ForgeDirection.getOrientation(i)) != null);
+
+        // Colors
+        for (int i = 0; i < color.length; i++)
+            buffer.writeInt(color[i].ordinal());
+
+        // Redwire
+        if (redwireType != null) {
+            buffer.writeBoolean(true);
+            buffer.writeInt(redwireType.ordinal());
+            buffer.writeByte(RedstoneConductorTube.getDevice(this).getPower());
+        } else {
+            buffer.writeBoolean(false);
+        }
+
+        // Logic
+        logic.writeData(buffer);
+    }
+
+    @Override
+    public void readUpdateData(DataInput buffer) throws IOException {
+
+        super.readUpdateData(buffer);
+
+        // Connections
+        for (int i = 0; i < 6; i++)
+            connections[i] = buffer.readBoolean();
+        for (int i = 0; i < 6; i++)
+            redstoneConnections[i] = buffer.readBoolean();
+
+        int connectionCount = 0;
+        for (int i = 0; i < 6; i++)
+            if (connections[i] || redstoneConnections[i])
+                connectionCount++;
+        isCrossOver = connectionCount != 2;
+
+        // Colors
+        for (int i = 0; i < color.length; i++)
+            color[i] = TubeColor.values()[buffer.readInt()];
+
+        // Redwire
+        if (buffer.readBoolean()) {
+            redwireType = RedwireType.values()[buffer.readInt()];
+            RedstoneConductorTube.getDevice(this).setRedstonePower(null, buffer.readByte());
+        } else {
+            redwireType = null;
+        }
+
+        // Logic
+        logic.readData(buffer);
+
+        // Render update
+        if (getParent() != null && getWorld() != null)
+            getWorld().markBlockRangeForRenderUpdate(getX(), getY(), getZ(), getX(), getY(), getZ());
     }
 
     /**
@@ -357,7 +417,7 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
             // Applying redwire
             if (item.getItem() instanceof ItemPart) {
                 BPPart part = PartManager.getExample(item);
-                if (redwireType == null && part instanceof PartRedwireFace && !((PartRedwireFace) part).isBundled()) {
+                if (redwireType == null && part instanceof PartRedwireFace && !((PartRedwireFace) part).isBundled(ForgeDirection.DOWN)) {
                     if (!getWorld().isRemote) {
                         redwireType = ((PartRedwireFace) part).getWireType();
                         if (!player.capabilities.isCreativeMode)
@@ -463,13 +523,13 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
         boolean shouldRenderNode = false;
         int connectionCount = 0;
         for (int i = 0; i < 6; i += 2) {
-            if (connections[i] != connections[i + 1]) {
+            if (connections[i] != connections[i + 1] || redstoneConnections[i] != redstoneConnections[i + 1]) {
                 shouldRenderNode = true;
                 break;
             }
-            if (connections[i])
+            if (connections[i] || redstoneConnections[i])
                 connectionCount++;
-            if (connections[i + 1])
+            if (connections[i + 1] || redstoneConnections[i + 1])
                 connectionCount++;
         }
         return shouldRenderNode || connectionCount == 0 || connectionCount > 2;

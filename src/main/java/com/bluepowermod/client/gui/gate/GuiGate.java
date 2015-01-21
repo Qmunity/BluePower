@@ -23,7 +23,7 @@ import com.bluepowermod.client.gui.widget.IGuiWidget;
 import com.bluepowermod.client.gui.widget.IWidgetListener;
 import com.bluepowermod.network.NetworkHandler;
 import com.bluepowermod.network.message.MessageGuiUpdate;
-import com.bluepowermod.part.gate.GateBase;
+import com.bluepowermod.part.gate.old.digital.GateBase;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

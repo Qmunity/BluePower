@@ -114,7 +114,7 @@ public class BPCreativeTabs {
             @SideOnly(Side.CLIENT)
             public ItemStack getIconItemStack() {
 
-                ItemStack iconItem = PartManager.getPartInfo("timer").getStack();
+                ItemStack iconItem = null;// PartManager.getPartInfo("timer").getStack();
                 if (iconItem != null) {
                     return iconItem;
                 } else {

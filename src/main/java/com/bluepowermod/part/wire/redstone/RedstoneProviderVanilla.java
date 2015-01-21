@@ -42,7 +42,7 @@ public class RedstoneProviderVanilla implements IRedstoneProvider {
     public IBundledDevice getBundledDevice(World world, int x, int y, int z, ForgeDirection face, ForgeDirection side) {
 
         TileEntity te = world.getTileEntity(x, y, z);
-        if (te != null && te instanceof IBundledDevice && ((IBundledDevice) te).isBundled())
+        if (te != null && te instanceof IBundledDevice && ((IBundledDevice) te).isBundled(side))
             return (IBundledDevice) te;
 
         return null;

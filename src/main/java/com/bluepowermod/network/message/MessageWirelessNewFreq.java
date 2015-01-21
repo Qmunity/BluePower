@@ -11,9 +11,9 @@ import uk.co.qmunity.lib.part.compat.MultipartCompatibility;
 
 import com.bluepowermod.api.misc.Accessibility;
 import com.bluepowermod.network.NetworkHandler;
-import com.bluepowermod.part.gate.wireless.Frequency;
-import com.bluepowermod.part.gate.wireless.IWirelessGate;
-import com.bluepowermod.part.gate.wireless.WirelessManager;
+import com.bluepowermod.part.gate.old.wireless.Frequency;
+import com.bluepowermod.part.gate.old.wireless.IWirelessGate;
+import com.bluepowermod.part.gate.old.wireless.WirelessManager;
 
 public class MessageWirelessNewFreq extends LocatedPacket<MessageWirelessNewFreq> {
 

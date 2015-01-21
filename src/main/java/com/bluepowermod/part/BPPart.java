@@ -50,7 +50,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public abstract class BPPart extends PartBase implements IPartSelectable, IPartCollidable, IPartOccluding, IPartUpdateListener,
-        IPartInteractable, IDatabaseSaveable, IPartWAILAProvider {
+IPartInteractable, IDatabaseSaveable, IPartWAILAProvider {
 
     public abstract String getUnlocalizedName();
 

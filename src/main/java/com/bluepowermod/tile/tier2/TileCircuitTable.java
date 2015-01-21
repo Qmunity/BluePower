@@ -61,7 +61,8 @@ public class TileCircuitTable extends TileBase implements IInventory, IGuiButton
         List<ItemStack> gates = new ArrayList<ItemStack>();
         List<PartInfo> registeredParts = PartManager.getRegisteredParts();
         for (PartInfo part : registeredParts) {
-            if (part.getExample() instanceof GateBase && ((GateBase) part.getExample()).isCraftableInCircuitTable()) {
+            if (part.getExample() instanceof GateBase<?, ?, ?, ?, ?, ?>
+            && ((GateBase<?, ?, ?, ?, ?, ?>) part.getExample()).isCraftableInCircuitTable()) {
                 ItemStack partStack = part.getStack().copy();
                 gates.add(partStack);
             }

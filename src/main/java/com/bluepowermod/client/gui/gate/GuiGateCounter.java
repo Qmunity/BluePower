@@ -11,7 +11,7 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 
-import com.bluepowermod.part.gate.GateBase;
+import com.bluepowermod.part.gate.old.digital.GateBase;
 import com.bluepowermod.util.Refs;
 
 import cpw.mods.fml.relauncher.Side;

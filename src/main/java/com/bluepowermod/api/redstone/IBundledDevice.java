@@ -42,9 +42,9 @@ public interface IBundledDevice extends IWorldLocation {
 
     public void onBundledUpdate();
 
-    public MinecraftColor getBundledColor();
+    public MinecraftColor getBundledColor(ForgeDirection side);
 
-    public boolean isBundled();
+    public boolean isBundled(ForgeDirection side);
 
     public boolean isNormalBlock();
 

@@ -7,6 +7,9 @@
  */
 package com.bluepowermod.part.lamp;
 
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -70,7 +73,6 @@ public abstract class PartLamp extends BPPartFace implements IPartRedstone, IFac
      * @param colorName
      * @param colorVal
      * @param inverted
-     *            TODO
      */
     public PartLamp(MinecraftColor color, Boolean inverted) {
 
@@ -356,17 +358,17 @@ public abstract class PartLamp extends BPPartFace implements IPartRedstone, IFac
     }
 
     @Override
-    public void writeUpdateToNBT(NBTTagCompound tag) {
+    public void writeUpdateData(DataOutput buffer) throws IOException {
 
-        super.writeUpdateToNBT(tag);
-        tag.setByte("power", power);
+        super.writeUpdateData(buffer);
+        buffer.writeByte(power);
     }
 
     @Override
-    public void readUpdateFromNBT(NBTTagCompound tag) {
+    public void readUpdateData(DataInput buffer) throws IOException {
 
-        super.readUpdateFromNBT(tag);
-        power = tag.getByte("power");
+        super.readUpdateData(buffer);
+        power = buffer.readByte();
 
         try {
             getWorld().updateLightByType(EnumSkyBlock.Block, getX(), getY(), getZ());
@@ -435,7 +437,7 @@ public abstract class PartLamp extends BPPartFace implements IPartRedstone, IFac
     }
 
     @Override
-    public MinecraftColor getInsulationColor() {
+    public MinecraftColor getInsulationColor(ForgeDirection side) {
 
         return MinecraftColor.NONE;
     }

@@ -13,7 +13,6 @@ import net.minecraftforge.client.event.TextureStitchEvent;
 
 import com.bluepowermod.part.PartInfo;
 import com.bluepowermod.part.PartManager;
-import com.bluepowermod.part.gate.GateWire;
 import com.bluepowermod.util.Refs;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -32,6 +31,7 @@ public class IconSupplier {
     public static IIcon pneumaticTubeOpaqueNode;
     public static IIcon pneumaticTubeColorNode;
     public static IIcon pneumaticTubeColorSide;
+    public static IIcon pneumaticTubeGlass;
 
     public static IIcon restrictionTubeNode;
     public static IIcon restrictionTubeSide;
@@ -108,6 +108,7 @@ public class IconSupplier {
             acceleratorSide = reg.registerIcon(Refs.MODID + ":machines/accelerator_side");
             acceleratorSidePowered = reg.registerIcon(Refs.MODID + ":machines/accelerator_side_powered");
             acceleratorInside = reg.registerIcon(Refs.MODID + ":machines/accelerator_inside");
+            pneumaticTubeGlass = reg.registerIcon(Refs.MODID + ":tubes/tube_glass");
 
             cagedLampFootSide = reg.registerIcon(Refs.MODID + ":lamps/cage_foot_side");
             cagedLampFootTop = reg.registerIcon(Refs.MODID + ":lamps/cage_foot_top");
@@ -151,7 +152,6 @@ public class IconSupplier {
 
             for (PartInfo i : PartManager.getRegisteredParts())
                 i.getExample().registerIcons(reg);
-            GateWire.registerTopIcon(reg);
         }
     }
 }

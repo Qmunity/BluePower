@@ -7,6 +7,8 @@
  */
 package com.bluepowermod.part.tube;
 
+import java.io.DataInput;
+import java.io.DataOutput;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -418,6 +420,14 @@ public class TubeLogic implements IPneumaticTube {
         roundRobinCounter = tag.getInteger("roundRobinCounter");
     }
 
+    public void writeData(DataOutput buffer) {
+
+    }
+
+    public void readData(DataInput buffer) {
+
+    }
+
     @SideOnly(Side.CLIENT)
     public void renderDynamic(Vec3d pos, float partialTick) {
 
@@ -458,49 +468,49 @@ public class TubeLogic implements IPneumaticTube {
 
                     int colorMask = nodeTube.getColor(ForgeDirection.getOrientation(i)) != TubeColor.NONE ? 1 << nodeTube.getColor(
                             ForgeDirection.getOrientation(i)).ordinal() : 0;
-                    if (tube != null) {
-                        int dist = tube.getWeigth();
-                        if (tube.getColor(ForgeDirection.getOrientation(i).getOpposite()) != TubeColor.NONE)
-                            colorMask = colorMask | 1 << tube.getColor(ForgeDirection.getOrientation(i).getOpposite()).ordinal();
-                        ForgeDirection curDir = ForgeDirection.getOrientation(i);
-                        while (!tube.isCrossOver && tube.initialized) {// traverse the tubes
-                            for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
-                                if (dir != curDir.getOpposite() && tube.connections[dir.ordinal()]) {
-                                    curDir = dir;
-                                    break;
-                                }
-                            }
-                            neighbor = tube.getTileCache(curDir);
-                            if (neighbor != null) {
-                                if (tube.getColor(curDir) != TubeColor.NONE) {
-                                    colorMask = colorMask | 1 << tube.getColor(curDir).ordinal();
-                                }
-                                tube = tube.getPartCache(curDir);
-                                if (tube == null) {
-                                    edges[i] = new TubeEdge(new TubeNode(neighbor), curDir, colorMask,
-                                            dist
+                            if (tube != null) {
+                                int dist = tube.getWeigth();
+                                if (tube.getColor(ForgeDirection.getOrientation(i).getOpposite()) != TubeColor.NONE)
+                                    colorMask = colorMask | 1 << tube.getColor(ForgeDirection.getOrientation(i).getOpposite()).ordinal();
+                                ForgeDirection curDir = ForgeDirection.getOrientation(i);
+                                while (!tube.isCrossOver && tube.initialized) {// traverse the tubes
+                                    for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
+                                        if (dir != curDir.getOpposite() && tube.connections[dir.ordinal()]) {
+                                            curDir = dir;
+                                            break;
+                                        }
+                                    }
+                                    neighbor = tube.getTileCache(curDir);
+                                    if (neighbor != null) {
+                                        if (tube.getColor(curDir) != TubeColor.NONE) {
+                                            colorMask = colorMask | 1 << tube.getColor(curDir).ordinal();
+                                        }
+                                        tube = tube.getPartCache(curDir);
+                                        if (tube == null) {
+                                            edges[i] = new TubeEdge(new TubeNode(neighbor), curDir, colorMask,
+                                                    dist
                                                     + (neighbor instanceof IWeightedTubeInventory ? ((IWeightedTubeInventory) neighbor)
                                                             .getWeight(curDir) : 0));
-                                    break;
-                                } else {
-                                    if (!tube.initialized)
-                                        break;
-                                    dist += tube.getWeigth();
-                                    if (tube.getColor(curDir.getOpposite()) != TubeColor.NONE) {
-                                        colorMask = colorMask | 1 << tube.getColor(curDir.getOpposite()).ordinal();
+                                            break;
+                                        } else {
+                                            if (!tube.initialized)
+                                                break;
+                                            dist += tube.getWeigth();
+                                            if (tube.getColor(curDir.getOpposite()) != TubeColor.NONE) {
+                                                colorMask = colorMask | 1 << tube.getColor(curDir.getOpposite()).ordinal();
+                                            }
+                                        }
                                     }
                                 }
-                            }
-                        }
-                        if (tube != null && tube != nodeTube && tube.getLogic() != null && tube.getLogic().getNode() != null)
-                            edges[i] = new TubeEdge(tube.getLogic().getNode(), curDir, colorMask, dist);// only add an edge that isn't just connected
-                        // to itself.
+                                if (tube != null && tube != nodeTube && tube.getLogic() != null && tube.getLogic().getNode() != null)
+                                    edges[i] = new TubeEdge(tube.getLogic().getNode(), curDir, colorMask, dist);// only add an edge that isn't just connected
+                                // to itself.
 
-                    } else if (neighbor != null) {
-                        edges[i] = new TubeEdge(new TubeNode(neighbor), ForgeDirection.getOrientation(i), colorMask,
-                                neighbor instanceof IWeightedTubeInventory ? ((IWeightedTubeInventory) neighbor).getWeight(ForgeDirection
-                                        .getOrientation(i)) : 0);
-                    }
+                            } else if (neighbor != null) {
+                                edges[i] = new TubeEdge(new TubeNode(neighbor), ForgeDirection.getOrientation(i), colorMask,
+                                        neighbor instanceof IWeightedTubeInventory ? ((IWeightedTubeInventory) neighbor).getWeight(ForgeDirection
+                                                .getOrientation(i)) : 0);
+                            }
                 }
             }
         }

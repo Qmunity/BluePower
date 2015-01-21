@@ -7,6 +7,9 @@
  */
 package com.bluepowermod.part.tube;
 
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -101,17 +104,31 @@ public class Accelerator extends PneumaticTube implements IPartCustomPlacement {
     }
 
     @Override
-    public void writeUpdateToNBT(NBTTagCompound tag) {
+    public void writeToNBT(NBTTagCompound tag) {
 
-        super.writeUpdateToNBT(tag);
+        super.writeToNBT(tag);
         tag.setByte("rotation", (byte) rotation.ordinal());
     }
 
     @Override
-    public void readUpdateFromNBT(NBTTagCompound tag) {
+    public void readFromNBT(NBTTagCompound tag) {
 
-        super.readUpdateFromNBT(tag);
+        super.readFromNBT(tag);
         rotation = ForgeDirection.getOrientation(tag.getByte("rotation"));
+    }
+
+    @Override
+    public void writeUpdateData(DataOutput buffer) throws IOException {
+
+        super.writeUpdateData(buffer);
+        buffer.writeInt(rotation.ordinal());
+    }
+
+    @Override
+    public void readUpdateData(DataInput buffer) throws IOException {
+
+        super.readUpdateData(buffer);
+        rotation = ForgeDirection.getOrientation(buffer.readInt());
     }
 
     @Override

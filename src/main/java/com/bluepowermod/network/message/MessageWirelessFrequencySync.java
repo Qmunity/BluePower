@@ -8,8 +8,8 @@ import java.util.List;
 import net.minecraft.entity.player.EntityPlayer;
 
 import com.bluepowermod.api.wireless.IFrequency;
-import com.bluepowermod.part.gate.wireless.Frequency;
-import com.bluepowermod.part.gate.wireless.WirelessManager;
+import com.bluepowermod.part.gate.old.wireless.Frequency;
+import com.bluepowermod.part.gate.old.wireless.WirelessManager;
 
 public class MessageWirelessFrequencySync extends AbstractPacket<MessageWirelessFrequencySync> {
 

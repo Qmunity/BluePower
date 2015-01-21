@@ -95,7 +95,7 @@ public class ReturnDevice implements IRedstoneDevice, IBundledDevice {
     }
 
     @Override
-    public MinecraftColor getInsulationColor() {
+    public MinecraftColor getInsulationColor(ForgeDirection side) {
 
         return MinecraftColor.NONE;
     }
@@ -152,13 +152,13 @@ public class ReturnDevice implements IRedstoneDevice, IBundledDevice {
     }
 
     @Override
-    public MinecraftColor getBundledColor() {
+    public MinecraftColor getBundledColor(ForgeDirection side) {
 
         return null;
     }
 
     @Override
-    public boolean isBundled() {
+    public boolean isBundled(ForgeDirection side) {
 
         return false;
     }

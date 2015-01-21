@@ -17,6 +17,9 @@
 
 package com.bluepowermod.part.wire.redstone;
 
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,7 +33,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
@@ -219,34 +221,28 @@ public class PartRedwireFreestanding extends PartWireFreestanding implements IRe
     }
 
     @Override
-    public void writeUpdateToNBT(NBTTagCompound tag) {
+    public void writeUpdateData(DataOutput buffer) throws IOException {
 
-        super.writeUpdateToNBT(tag);
+        super.writeUpdateData(buffer);
 
         for (int i = 0; i < 6; i++)
-            tag.setBoolean("connected_" + i, devices[i] != null || bundledDevices[i] != null);
+            buffer.writeBoolean(devices[i] != null || bundledDevices[i] != null);
 
         for (int i = 0; i < 16; i++)
-            tag.setByte("power_" + i, bundledPower[i]);
-        tag.setByte("power", power);
+            buffer.writeByte(bundledPower[i]);
+        buffer.writeByte(power);
     }
 
     @Override
-    public void readUpdateFromNBT(NBTTagCompound tag) {
+    public void readUpdateData(DataInput buffer) throws IOException {
 
-        super.readUpdateFromNBT(tag);
-
+        super.readUpdateData(buffer);
         for (int i = 0; i < 6; i++)
-            connections[i] = tag.getBoolean("connected_" + i);
+            connections[i] = buffer.readBoolean();
 
         for (int i = 0; i < 16; i++)
-            bundledPower[i] = tag.getByte("power_" + i);
-        power = tag.getByte("power");
-
-        try {
-            getWorld().markBlockRangeForRenderUpdate(getX(), getY(), getZ(), getX(), getY(), getZ());
-        } catch (Exception ex) {
-        }
+            bundledPower[i] = buffer.readByte();
+        power = buffer.readByte();
     }
 
     @Override
@@ -256,7 +252,7 @@ public class PartRedwireFreestanding extends PartWireFreestanding implements IRe
             if (OcclusionHelper.microblockOcclusionTest(new Vec3i(this), MicroblockShape.FACE_HOLLOW, 8, side))
                 return false;
 
-        return WireCommons.canConnect(this, device);
+        return WireCommons.canConnect(this, device, side, side.getOpposite());
     }
 
     @Override
@@ -334,7 +330,7 @@ public class PartRedwireFreestanding extends PartWireFreestanding implements IRe
     }
 
     @Override
-    public MinecraftColor getInsulationColor() {
+    public MinecraftColor getInsulationColor(ForgeDirection side) {
 
         return bundled ? null : color;
     }
@@ -354,8 +350,8 @@ public class PartRedwireFreestanding extends PartWireFreestanding implements IRe
             } else {
                 IBundledDevice dev = bundledDevices[i];
                 if (dev != null) {
-                    devices.add(new Pair<IRedstoneDevice, ForgeDirection>(BundledDeviceWrapper.getWrapper(dev, getInsulationColor()),
-                            ForgeDirection.getOrientation(i)));
+                    devices.add(new Pair<IRedstoneDevice, ForgeDirection>(BundledDeviceWrapper.getWrapper(dev,
+                            getInsulationColor(ForgeDirection.getOrientation(i))), ForgeDirection.getOrientation(i)));
                 }
             }
         }
@@ -463,11 +459,11 @@ public class PartRedwireFreestanding extends PartWireFreestanding implements IRe
     @Override
     public boolean canConnectBundledStraight(ForgeDirection side, IBundledDevice device) {
 
-        // if (!(device instanceof IFaceBundledDevice))
-        // if (OcclusionHelper.microblockOcclusionTest(new Vec3i(this), MicroblockShape.FACE_HOLLOW, 8, side))
-        // return false;
+        if (!(device instanceof IFaceBundledDevice))
+            if (OcclusionHelper.microblockOcclusionTest(new Vec3i(this), MicroblockShape.FACE_HOLLOW, 8, side))
+                return false;
 
-        return isBundled();// WireCommons.canConnect(this, device);
+        return WireCommons.canConnect(this, device, side, side.getOpposite());
     }
 
     @Override
@@ -507,7 +503,7 @@ public class PartRedwireFreestanding extends PartWireFreestanding implements IRe
 
         bundledPower = power;
         if (!bundled)
-            this.power = power[getInsulationColor().ordinal()];
+            this.power = power[getInsulationColor(side).ordinal()];
     }
 
     @Override
@@ -524,7 +520,7 @@ public class PartRedwireFreestanding extends PartWireFreestanding implements IRe
     }
 
     @Override
-    public MinecraftColor getBundledColor() {
+    public MinecraftColor getBundledColor(ForgeDirection side) {
 
         return bundled ? color : (color == MinecraftColor.NONE ? null : MinecraftColor.NONE);
     }
@@ -537,7 +533,8 @@ public class PartRedwireFreestanding extends PartWireFreestanding implements IRe
         for (int i = 0; i < 6; i++) {
             IBundledDevice d = bundledDevices[i];
             if (d != null) {
-                if (d instanceof IRedstoneDevice && ((IRedstoneDevice) d).getInsulationColor() != null && getInsulationColor() != null)
+                if (d instanceof IRedstoneDevice && ((IRedstoneDevice) d).getInsulationColor(WireHelper.getConnectionSide(d, this)) != null
+                        && getInsulationColor(ForgeDirection.getOrientation(i)) != null)
                     continue;
                 devices.add(new Pair<IBundledDevice, ForgeDirection>(d, ForgeDirection.getOrientation(i)));
             }
@@ -547,9 +544,9 @@ public class PartRedwireFreestanding extends PartWireFreestanding implements IRe
     }
 
     @Override
-    public boolean isBundled() {
+    public boolean isBundled(ForgeDirection side) {
 
-        return bundled || getInsulationColor() != MinecraftColor.NONE;
+        return bundled || getInsulationColor(side) != MinecraftColor.NONE;
     }
 
     @Override

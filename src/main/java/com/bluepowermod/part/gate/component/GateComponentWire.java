@@ -1,12 +1,17 @@
 package com.bluepowermod.part.gate.component;
 
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
+
+import net.minecraft.nbt.NBTTagCompound;
 import uk.co.qmunity.lib.client.render.RenderHelper;
 import uk.co.qmunity.lib.vec.Vec3dCube;
 import uk.co.qmunity.lib.vec.Vec3i;
 
 import com.bluepowermod.client.render.IconSupplier;
-import com.bluepowermod.part.RedstoneConnection;
 import com.bluepowermod.part.gate.GateBase;
+import com.bluepowermod.part.gate.connection.GateConnectionBase;
 import com.bluepowermod.part.wire.redstone.RedwireType;
 import com.bluepowermod.part.wire.redstone.WireCommons;
 
@@ -14,9 +19,12 @@ public class GateComponentWire extends GateComponentLocationArray {
 
     private RedwireType type;
 
-    private RedstoneConnection connection;
+    private GateConnectionBase connection;
 
-    public GateComponentWire(GateBase gate, int color, RedwireType type) {
+    private byte power;
+    private boolean enabled = true;
+
+    public GateComponentWire(GateBase<?, ?, ?, ?, ?, ?> gate, int color, RedwireType type) {
 
         super(gate, color);
 
@@ -26,19 +34,8 @@ public class GateComponentWire extends GateComponentLocationArray {
     @Override
     public void renderStatic(Vec3i translation, RenderHelper renderer, int pass) {
 
-        byte power = 0;
-        int color = type.getColor();
-        if (connection != null) {
-            if (connection.isEnabled()) {
-                int src = connection.getOutput();
-                if (!connection.isOutputOnly())
-                    src = Math.max(src, connection.getInput());
-                power = (byte) ((src / 15D) * 255);
-            } else {
-                power = (byte) (255 / 2);
-                color = 0x999999;
-            }
-        }
+        byte power = getPower();
+        int color = isEnabled() ? type.getColor() : 0x999999;
 
         renderer.setColor(WireCommons.getColorForPowerLevel(color, power));
         double height = 1 / 48D;
@@ -66,11 +63,87 @@ public class GateComponentWire extends GateComponentLocationArray {
         renderer.setColor(0xFFFFFF);
     }
 
-    public GateComponentWire bind(RedstoneConnection connection) {
+    public GateComponentWire bind(GateConnectionBase connection) {
 
         this.connection = connection;
 
         return this;
+    }
+
+    public void setPower(byte power) {
+
+        if (power != this.power)
+            setNeedsSyncing(true);
+        this.power = power;
+    }
+
+    public byte getPower() {
+
+        if (connection != null && getGate().getParent() != null && (getGate().getParent().isSimulated() || !getGate().getWorld().isRemote)) {
+            if (connection.isEnabled()) {
+                return (byte) (connection.getSignal() * 255);
+            } else {
+                return (byte) (255 / 2);
+            }
+        }
+
+        return power;
+    }
+
+    public boolean isEnabled() {
+
+        if (connection != null && getGate().getParent() != null && (getGate().getParent().isSimulated() || !getGate().getWorld().isRemote))
+            return connection.isEnabled();
+
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+
+        if (enabled != this.enabled)
+            setNeedsSyncing(true);
+        this.enabled = enabled;
+    }
+
+    @Override
+    public void writeToNBT(NBTTagCompound tag) {
+
+        super.writeToNBT(tag);
+        tag.setByte("power", getPower());
+        tag.setBoolean("enabled", isEnabled());
+    }
+
+    @Override
+    public void readFromNBT(NBTTagCompound tag) {
+
+        super.readFromNBT(tag);
+        power = tag.getByte("power");
+        enabled = tag.getBoolean("enabled");
+    }
+
+    @Override
+    public void writeData(DataOutput buffer) throws IOException {
+
+        super.writeData(buffer);
+        buffer.writeByte(getPower());
+        buffer.writeBoolean(isEnabled());
+    }
+
+    @Override
+    public void readData(DataInput buffer) throws IOException {
+
+        super.readData(buffer);
+        power = buffer.readByte();
+        enabled = buffer.readBoolean();
+    }
+
+    @Override
+    public boolean needsSyncing() {
+
+        if (connection != null && connection.needsSyncing())
+            return true;
+
+        return super.needsSyncing();
     }
 
 }

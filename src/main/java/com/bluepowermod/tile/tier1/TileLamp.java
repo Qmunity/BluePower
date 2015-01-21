@@ -178,13 +178,13 @@ public class TileLamp extends TileBase implements IBundledDevice {
     }
 
     @Override
-    public MinecraftColor getBundledColor() {
+    public MinecraftColor getBundledColor(ForgeDirection side) {
 
         return MinecraftColor.NONE;
     }
 
     @Override
-    public boolean isBundled() {
+    public boolean isBundled(ForgeDirection side) {
 
         return blockType instanceof BlockLampRGB;
     }

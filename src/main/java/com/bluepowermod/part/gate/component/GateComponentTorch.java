@@ -1,9 +1,13 @@
 package com.bluepowermod.part.gate.component;
 
 import java.awt.image.BufferedImage;
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
 import java.util.Random;
 
 import net.minecraft.init.Blocks;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
 import uk.co.qmunity.lib.client.render.RenderHelper;
 import uk.co.qmunity.lib.transform.Translation;
@@ -26,7 +30,7 @@ public class GateComponentTorch extends GateComponent {
 
     private boolean digital;
 
-    public GateComponentTorch(GateBase gate, int color, double height, boolean digital) {
+    public GateComponentTorch(GateBase<?, ?, ?, ?, ?, ?> gate, int color, double height, boolean digital) {
 
         super(gate);
 
@@ -38,7 +42,7 @@ public class GateComponentTorch extends GateComponent {
         this.digital = digital;
     }
 
-    public GateComponentTorch(GateBase gate, double x, double z, double height, boolean digital) {
+    public GateComponentTorch(GateBase<?, ?, ?, ?, ?, ?> gate, double x, double z, double height, boolean digital) {
 
         super(gate);
 
@@ -111,7 +115,7 @@ public class GateComponentTorch extends GateComponent {
         if (!state)
             return;
 
-        GateBase gate = getGate();
+        GateBase<?, ?, ?, ?, ?, ?> gate = getGate();
 
         if (!gate.getWorld().isRemote)
             return;
@@ -123,14 +127,46 @@ public class GateComponentTorch extends GateComponent {
                     digital ? -1 : 0, 0, digital ? 1 : 0);
     }
 
-    public void setState(boolean state) {
+    public GateComponentTorch setState(boolean state) {
 
+        if (state != this.state)
+            setNeedsSyncing(true);
         this.state = state;
+
+        return this;
     }
 
     public boolean getState() {
 
         return state;
+    }
+
+    @Override
+    public void writeToNBT(NBTTagCompound tag) {
+
+        super.writeToNBT(tag);
+        tag.setBoolean("state", state);
+    }
+
+    @Override
+    public void readFromNBT(NBTTagCompound tag) {
+
+        super.readFromNBT(tag);
+        state = tag.getBoolean("state");
+    }
+
+    @Override
+    public void writeData(DataOutput buffer) throws IOException {
+
+        super.writeData(buffer);
+        buffer.writeBoolean(state);
+    }
+
+    @Override
+    public void readData(DataInput buffer) throws IOException {
+
+        super.readData(buffer);
+        state = buffer.readBoolean();
     }
 
 }

@@ -133,13 +133,13 @@ public class BundledDeviceCCComputer implements IBundledDevice {
     }
 
     @Override
-    public MinecraftColor getBundledColor() {
+    public MinecraftColor getBundledColor(ForgeDirection side) {
 
         return MinecraftColor.NONE;
     }
 
     @Override
-    public boolean isBundled() {
+    public boolean isBundled(ForgeDirection side) {
 
         return true;
     }

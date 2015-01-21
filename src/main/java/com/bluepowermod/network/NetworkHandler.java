@@ -28,10 +28,6 @@ import com.bluepowermod.network.message.MessageGuiUpdate;
 import com.bluepowermod.network.message.MessageRedirectTubeStack;
 import com.bluepowermod.network.message.MessageSendClientServerTemplates;
 import com.bluepowermod.network.message.MessageUpdateTextfield;
-import com.bluepowermod.network.message.MessageWirelessFrequencySync;
-import com.bluepowermod.network.message.MessageWirelessNewFreq;
-import com.bluepowermod.network.message.MessageWirelessRemoveFreq;
-import com.bluepowermod.network.message.MessageWirelessSaveFreq;
 import com.bluepowermod.util.Refs;
 
 import cpw.mods.fml.common.network.NetworkRegistry;
@@ -63,10 +59,10 @@ public class NetworkHandler {
                 Side.CLIENT);
         INSTANCE.registerMessage(MessageRedirectTubeStack.class, MessageRedirectTubeStack.class, discriminant++, Side.CLIENT);
 
-        INSTANCE.registerMessage(MessageWirelessNewFreq.class, MessageWirelessNewFreq.class, discriminant++, Side.SERVER);
-        INSTANCE.registerMessage(MessageWirelessSaveFreq.class, MessageWirelessSaveFreq.class, discriminant++, Side.SERVER);
-        INSTANCE.registerMessage(MessageWirelessFrequencySync.class, MessageWirelessFrequencySync.class, discriminant++, Side.CLIENT);
-        INSTANCE.registerMessage(MessageWirelessRemoveFreq.class, MessageWirelessRemoveFreq.class, discriminant++, Side.SERVER);
+        // INSTANCE.registerMessage(MessageWirelessNewFreq.class, MessageWirelessNewFreq.class, discriminant++, Side.SERVER);
+        // INSTANCE.registerMessage(MessageWirelessSaveFreq.class, MessageWirelessSaveFreq.class, discriminant++, Side.SERVER);
+        // INSTANCE.registerMessage(MessageWirelessFrequencySync.class, MessageWirelessFrequencySync.class, discriminant++, Side.CLIENT);
+        // INSTANCE.registerMessage(MessageWirelessRemoveFreq.class, MessageWirelessRemoveFreq.class, discriminant++, Side.SERVER);
     }
 
     /*

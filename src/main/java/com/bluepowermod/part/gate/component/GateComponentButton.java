@@ -2,6 +2,7 @@ package com.bluepowermod.part.gate.component;
 
 import java.awt.image.BufferedImage;
 
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
 import uk.co.qmunity.lib.client.render.RenderHelper;
 import uk.co.qmunity.lib.vec.Vec3d;
@@ -18,7 +19,7 @@ public abstract class GateComponentButton extends GateComponent {
     private int layoutColor = -1;
     private double x = 0, z = 0;
 
-    public GateComponentButton(GateBase gate, int color) {
+    public GateComponentButton(GateBase<?, ?, ?, ?, ?, ?> gate, int color) {
 
         super(gate);
 
@@ -26,7 +27,7 @@ public abstract class GateComponentButton extends GateComponent {
         onLayoutRefresh();
     }
 
-    public GateComponentButton(GateBase gate, double x, double z) {
+    public GateComponentButton(GateBase<?, ?, ?, ?, ?, ?> gate, double x, double z) {
 
         super(gate);
 
@@ -70,14 +71,30 @@ public abstract class GateComponentButton extends GateComponent {
         z = z / (img.getHeight());
     }
 
-    public void setState(boolean state) {
+    public GateComponentButton setState(boolean state) {
 
         this.state = state;
+
+        return this;
     }
 
     public boolean getState() {
 
         return state;
+    }
+
+    @Override
+    public void writeToNBT(NBTTagCompound tag) {
+
+        super.writeToNBT(tag);
+        tag.setBoolean("state", state);
+    }
+
+    @Override
+    public void readFromNBT(NBTTagCompound tag) {
+
+        super.readFromNBT(tag);
+        state = tag.getBoolean("state");
     }
 
 }

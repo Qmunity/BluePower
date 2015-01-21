@@ -11,16 +11,14 @@ import io.netty.buffer.ByteBuf;
 
 import java.util.List;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.tileentity.TileEntity;
 import uk.co.qmunity.lib.part.IPart;
 import uk.co.qmunity.lib.part.ITilePartHolder;
 import uk.co.qmunity.lib.part.compat.MultipartCompatibility;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.tileentity.TileEntity;
 
 import com.bluepowermod.BluePower;
 import com.bluepowermod.part.IGuiButtonSensitive;
-import com.bluepowermod.part.gate.GateBase;
-import com.bluepowermod.part.gate.ic.IntegratedCircuit;
 
 /**
  *
@@ -49,10 +47,10 @@ public class MessageGuiUpdate extends LocationIntPacket<MessageGuiUpdate> {
 
         super(part.getX(), part.getY(), part.getZ());
 
-        if (part instanceof GateBase && ((GateBase) part).parentCircuit != null) {
-            icId = ((GateBase) part).parentCircuit.getGateIndex((GateBase) part);
-            part = ((GateBase) part).parentCircuit;
-        }
+        // if (part instanceof GateBase && ((GateBase) part).parentCircuit != null) {
+        // icId = ((GateBase) part).parentCircuit.getGateIndex((GateBase) part);
+        // part = ((GateBase) part).parentCircuit;
+        // }
         partId = getPartId(part);
         if (partId == -1)
             BluePower.log.warn("[MessageGuiUpdate] BPPart couldn't be found");
@@ -102,6 +100,7 @@ public class MessageGuiUpdate extends LocationIntPacket<MessageGuiUpdate> {
 
     @Override
     public void handleServerSide(MessageGuiUpdate message, EntityPlayer player) {
+
         ITilePartHolder partHolder = MultipartCompatibility.getPartHolder(player.worldObj, message.x, message.y, message.z);
         if (partHolder != null) {
             messagePart(player, partHolder, message);
@@ -115,22 +114,22 @@ public class MessageGuiUpdate extends LocationIntPacket<MessageGuiUpdate> {
 
     private void messagePart(EntityPlayer player, ITilePartHolder partHolder, MessageGuiUpdate message) {
 
-        List<IPart> parts = partHolder.getParts();
-        if (message.partId < parts.size()) {
-            IPart part = parts.get(message.partId);
-            IntegratedCircuit circuit = null;
-            if (part instanceof IntegratedCircuit) {
-                circuit = (IntegratedCircuit) part;
-                part = ((IntegratedCircuit) part).getPartForIndex(message.icId);
-            }
-            if (part instanceof IGuiButtonSensitive) {
-                ((IGuiButtonSensitive) part).onButtonPress(player, message.messageId, message.value);
-                if (circuit != null)
-                    circuit.sendUpdatePacket();
-            } else {
-                BluePower.log.error("[BluePower][MessageGuiPacket] Part doesn't implement IGuiButtonSensitive");
-            }
-        }
+        // List<IPart> parts = partHolder.getParts();
+        // if (message.partId < parts.size()) {
+        // IPart part = parts.get(message.partId);
+        // IntegratedCircuit circuit = null;
+        // if (part instanceof IntegratedCircuit) {
+        // circuit = (IntegratedCircuit) part;
+        // part = ((IntegratedCircuit) part).getPartForIndex(message.icId);
+        // }
+        // if (part instanceof IGuiButtonSensitive) {
+        // ((IGuiButtonSensitive) part).onButtonPress(player, message.messageId, message.value);
+        // if (circuit != null)
+        // circuit.sendUpdatePacket();
+        // } else {
+        // BluePower.log.error("[BluePower][MessageGuiPacket] Part doesn't implement IGuiButtonSensitive");
+        // }
+        // }
     }
 
 }

@@ -32,11 +32,11 @@ import com.bluepowermod.network.message.MessageWirelessNewFreq;
 import com.bluepowermod.network.message.MessageWirelessRemoveFreq;
 import com.bluepowermod.network.message.MessageWirelessSaveFreq;
 import com.bluepowermod.part.PartManager;
-import com.bluepowermod.part.gate.GateBase;
-import com.bluepowermod.part.gate.wireless.Frequency;
-import com.bluepowermod.part.gate.wireless.IWirelessGate;
-import com.bluepowermod.part.gate.wireless.WirelessManager;
-import com.bluepowermod.part.gate.wireless.WirelessMode;
+import com.bluepowermod.part.gate.old.digital.GateBase;
+import com.bluepowermod.part.gate.old.wireless.Frequency;
+import com.bluepowermod.part.gate.old.wireless.IWirelessGate;
+import com.bluepowermod.part.gate.old.wireless.WirelessManager;
+import com.bluepowermod.part.gate.old.wireless.WirelessMode;
 import com.bluepowermod.util.Refs;
 
 import cpw.mods.fml.relauncher.Side;

@@ -6,6 +6,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.init.Blocks;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
 
 import org.lwjgl.opengl.GL11;
@@ -25,7 +26,7 @@ public class GateComponentLever extends GateComponent {
     private int layoutColor = -1;
     protected double x = 0, z = 0;
 
-    public GateComponentLever(GateBase gate, int color) {
+    public GateComponentLever(GateBase<?, ?, ?, ?, ?, ?> gate, int color) {
 
         super(gate);
 
@@ -33,7 +34,7 @@ public class GateComponentLever extends GateComponent {
         onLayoutRefresh();
     }
 
-    public GateComponentLever(GateBase gate, double x, double z) {
+    public GateComponentLever(GateBase<?, ?, ?, ?, ?, ?> gate, double x, double z) {
 
         super(gate);
 
@@ -141,14 +142,30 @@ public class GateComponentLever extends GateComponent {
         z = z / (img.getHeight());
     }
 
-    public void setState(boolean state) {
+    public GateComponentLever setState(boolean state) {
 
         this.state = state;
+
+        return this;
     }
 
     public boolean getState() {
 
         return state;
+    }
+
+    @Override
+    public void writeToNBT(NBTTagCompound tag) {
+
+        super.writeToNBT(tag);
+        tag.setBoolean("state", state);
+    }
+
+    @Override
+    public void readFromNBT(NBTTagCompound tag) {
+
+        super.readFromNBT(tag);
+        state = tag.getBoolean("state");
     }
 
 }

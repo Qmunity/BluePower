@@ -18,18 +18,14 @@
 package com.bluepowermod.client.render;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer;
 
 import org.lwjgl.opengl.GL11;
 
-import com.bluepowermod.BluePower;
 import com.bluepowermod.part.BPPart;
 import com.bluepowermod.part.PartManager;
-import com.bluepowermod.part.gate.GateBase;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -95,20 +91,6 @@ public class RenderPartItem implements IItemRenderer {
         Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
         try {
             BPPart part = PartManager.getExample(item);
-            if (type == ItemRenderType.INVENTORY && BluePower.proxy.isSneakingInGui() && part instanceof GateBase) {
-                GuiScreen gui = Minecraft.getMinecraft().currentScreen;
-                if (gui != null && gui instanceof GuiContainer) {
-                    GL11.glRotatef(90F, 0.0F, 1.0F, 0.0F);
-                    GL11.glRotatef(-45F, 0.0F, 1.0F, 0.0F);
-                    GL11.glRotatef(-210F, 1.0F, 0.0F, 0.0F);
-                    GL11.glScaled(1.5, 1.5, 1.5);
-                    GL11.glTranslated(-0.5, 0, 0);
-
-                    GL11.glTranslated(0, -0.5, 0);
-                    GL11.glRotated(-90, 1, 0, 0);
-                    GL11.glTranslated(0, 0.5, 0);
-                }
-            }
             part.renderItem(type, item, data);
         } catch (Exception ex) {
         }

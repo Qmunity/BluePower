@@ -9,7 +9,6 @@
 package com.bluepowermod;
 
 import net.minecraft.item.Item;
-import net.minecraft.item.crafting.CraftingManager;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.util.EnumHelper;
@@ -26,7 +25,6 @@ import com.bluepowermod.init.BPEnchantments;
 import com.bluepowermod.init.BPItems;
 import com.bluepowermod.init.Config;
 import com.bluepowermod.init.OreDictionarySetup;
-import com.bluepowermod.init.Recipes;
 import com.bluepowermod.init.TileEntities;
 import com.bluepowermod.network.NetworkHandler;
 import com.bluepowermod.part.PartManager;
@@ -34,8 +32,6 @@ import com.bluepowermod.part.tube.RedstoneProviderTube;
 import com.bluepowermod.part.wire.redstone.RedstoneApi;
 import com.bluepowermod.part.wire.redstone.RedstoneProviderQmunityLib;
 import com.bluepowermod.part.wire.redstone.RedstoneProviderVanilla;
-import com.bluepowermod.recipe.AlloyFurnaceRegistry;
-import com.bluepowermod.util.Achievements;
 import com.bluepowermod.util.Refs;
 import com.bluepowermod.world.WorldGenerationHandler;
 
@@ -112,7 +108,7 @@ public class BluePower {
         NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GUIHandler());
         CompatibilityUtils.init(event);
 
-        Achievements.init();
+        // Achievements.init();
     }
 
     @EventHandler
@@ -123,8 +119,8 @@ public class BluePower {
         CompatibilityUtils.postInit(event);
         proxy.initRenderers();
 
-        Recipes.init(CraftingManager.getInstance());
-        AlloyFurnaceRegistry.getInstance().generateRecyclingRecipes();
+        // Recipes.init(CraftingManager.getInstance());
+        // AlloyFurnaceRegistry.getInstance().generateRecyclingRecipes();
 
         RedstoneApi.getInstance().registerRedstoneProvider(new RedstoneProviderVanilla());
     }

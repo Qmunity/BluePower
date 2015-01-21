@@ -7,12 +7,12 @@ import com.bluepowermod.part.gate.GateBase;
 
 public class GateComponentPointer extends GateComponentTorch {
 
-    public GateComponentPointer(GateBase gate, int color, double height, boolean digital) {
+    public GateComponentPointer(GateBase<?, ?, ?, ?, ?, ?> gate, int color, double height, boolean digital) {
 
         super(gate, color, height, digital);
     }
 
-    public GateComponentPointer(GateBase gate, double x, double z, double height, boolean digital) {
+    public GateComponentPointer(GateBase<?, ?, ?, ?, ?, ?> gate, double x, double z, double height, boolean digital) {
 
         super(gate, x, z, height, digital);
     }

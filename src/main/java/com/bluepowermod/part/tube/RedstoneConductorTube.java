@@ -135,7 +135,7 @@ public class RedstoneConductorTube implements IRedstoneConductor {
     }
 
     @Override
-    public MinecraftColor getInsulationColor() {
+    public MinecraftColor getInsulationColor(ForgeDirection side) {
 
         return MinecraftColor.NONE;
     }

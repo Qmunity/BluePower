@@ -10,7 +10,7 @@ public abstract class GateComponentLocationArray extends GateComponent {
 
     protected boolean[][] pixels;
 
-    public GateComponentLocationArray(GateBase gate, int color) {
+    public GateComponentLocationArray(GateBase<?, ?, ?, ?, ?, ?> gate, int color) {
 
         super(gate);
 

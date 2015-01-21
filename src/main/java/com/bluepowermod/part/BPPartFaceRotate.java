@@ -17,14 +17,18 @@
 
 package com.bluepowermod.part;
 
-import uk.co.qmunity.lib.part.IPart;
-import uk.co.qmunity.lib.part.IPartPlacement;
-import uk.co.qmunity.lib.vec.Vec3i;
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import uk.co.qmunity.lib.part.IPart;
+import uk.co.qmunity.lib.part.IPartPlacement;
+import uk.co.qmunity.lib.vec.Vec3i;
 
 public abstract class BPPartFaceRotate extends BPPartFace {
 
@@ -58,17 +62,17 @@ public abstract class BPPartFaceRotate extends BPPartFace {
     }
 
     @Override
-    public void writeUpdateToNBT(NBTTagCompound tag) {
+    public void writeUpdateData(DataOutput buffer) throws IOException {
 
-        super.writeUpdateToNBT(tag);
-        tag.setInteger("rotation", rotation);
+        super.writeUpdateData(buffer);
+        buffer.writeInt(rotation);
     }
 
     @Override
-    public void readUpdateFromNBT(NBTTagCompound tag) {
+    public void readUpdateData(DataInput buffer) throws IOException {
 
-        super.readUpdateFromNBT(tag);
-        rotation = tag.getInteger("rotation");
+        super.readUpdateData(buffer);
+        rotation = buffer.readInt();
     }
 
     @Override

@@ -131,7 +131,7 @@ public class BundledDeviceWrapper implements IRedstoneDevice, IRedstoneConductor
     }
 
     @Override
-    public MinecraftColor getInsulationColor() {
+    public MinecraftColor getInsulationColor(ForgeDirection side) {
 
         return color;
     }
@@ -160,8 +160,8 @@ public class BundledDeviceWrapper implements IRedstoneDevice, IRedstoneConductor
         List<Pair<IRedstoneDevice, ForgeDirection>> list = new ArrayList<Pair<IRedstoneDevice, ForgeDirection>>();
 
         if (dev instanceof IRedstoneDevice) {
-            MinecraftColor color = ((IRedstoneDevice) dev).getInsulationColor();
-            if (color != null && !color.matches(getInsulationColor()))
+            MinecraftColor color = ((IRedstoneDevice) dev).getInsulationColor(fromSide);
+            if (color != null && !color.matches(getInsulationColor(fromSide)))
                 return list;
         }
 

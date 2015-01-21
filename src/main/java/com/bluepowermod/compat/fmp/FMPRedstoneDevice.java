@@ -124,7 +124,7 @@ public class FMPRedstoneDevice implements IFaceRedstoneDevice {
     }
 
     @Override
-    public MinecraftColor getInsulationColor() {
+    public MinecraftColor getInsulationColor(ForgeDirection side) {
 
         return MinecraftColor.NONE;
     }
