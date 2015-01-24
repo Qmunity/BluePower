@@ -29,6 +29,7 @@ import com.bluepowermod.ClientProxy;
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
 import com.bluepowermod.client.gui.GuiBase;
 import com.bluepowermod.container.slot.SlotPhantom;
+import com.bluepowermod.containers.ContainerMachineBase;
 import com.bluepowermod.tile.tier2.TileRegulator;
 
 import cpw.mods.fml.relauncher.Side;
@@ -37,7 +38,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 /**
  * @author MineMaarten
  */
-public class ContainerRegulator extends ContainerGhosts {
+public class ContainerRegulator extends ContainerMachineBase {
 
     private final TileRegulator tileRegulator;
     private int filterColor = -1;
@@ -45,7 +46,7 @@ public class ContainerRegulator extends ContainerGhosts {
     private int fuzzySetting = -1;
 
     public ContainerRegulator(InventoryPlayer invPlayer, TileRegulator regulator) {
-
+        super(regulator);
         tileRegulator = regulator;
 
         for (int i = 0; i < 3; ++i) {

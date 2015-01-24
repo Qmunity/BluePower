@@ -17,10 +17,9 @@ import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraftforge.common.util.ForgeDirection;
 
 import com.bluepowermod.BluePower;
-import com.bluepowermod.helper.IOHelper;
+import com.bluepowermod.container.ContainerProjectTable;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.part.IGuiButtonSensitive;
 import com.bluepowermod.tile.TileBase;
@@ -44,7 +43,7 @@ public class TileProjectTable extends TileBase implements IInventory, IGuiButton
         }
         try {
             stackListFieldInventoryCrafting.set(inventoryCrafting, craftingGrid);// Inject the array, so when stacks are being set to null by the
-            // container it'll make it's way over to the actual stacks.
+                                                                                 // container it'll make it's way over to the actual stacks.
             return inventoryCrafting;
         } catch (Exception e) {
             BluePower.log.error("This is about to go wrong, Project Table getCraftingGrid:");
@@ -209,79 +208,10 @@ public class TileProjectTable extends TileBase implements IInventory, IGuiButton
 
     @Override
     public void onButtonPress(EntityPlayer player, int messageId, int value) {
-
-        for (int i = 0; i < craftingGrid.length; i++) {
-            if (craftingGrid[i] != null) {
-                // craftingGrid[i] = IOHelper.insert(this, craftingGrid[i], ForgeDirection.UNKNOWN, false);
-                craftingGrid[i] = mergeItems(craftingGrid[i]);
-            }
+        Container container = player.openContainer;
+        if (container instanceof ContainerProjectTable) {
+            ((ContainerProjectTable) container).clearCraftingGrid();
         }
     }
 
-    public ItemStack mergeItems(ItemStack item) {
-
-        ItemStack gridResult = item.copy();
-        if (getNextFreeSlot() != -1 && !hasFreeStack(item)) { // No free stack to merge & Free slots -> go into first free slot
-            inventory[getNextFreeSlot()] = item;
-            gridResult = null;
-        } else if (getNextFreeSlot() != -1 && hasFreeStack(item)) {
-            if (item.stackSize + inventory[getFreeStack(item)].stackSize <= item.getMaxStackSize()) { // Free stack to merge on without opening up a
-                // new stack
-                int stacksize = item.stackSize + inventory[getFreeStack(item)].stackSize;
-                inventory[getFreeStack(item)] = item;
-                inventory[getFreeStack(item)].stackSize = stacksize;
-                gridResult = null;
-            } else { // Has a free stack to merge on but has to either open up a new stack or merge onto a second stack
-                int nextEqualSlot = getFreeStack(item);
-                int leftitems = (inventory[nextEqualSlot].stackSize + item.stackSize) - item.getMaxStackSize(); // Calculates how many items are left
-                // 33 in the grid and 32 in the stack
-                // = 1 Item left
-                inventory[getFreeStack(item)].stackSize = item.getMaxStackSize();
-                if (hasFreeStack(item)) { // Free stack to merge and and has another free stack to merge left items on
-                    ItemStack leftItemStack = item.copy(); // Gets the item that is cleared
-                    leftItemStack.stackSize = leftitems;
-                    mergeItems(leftItemStack);
-                    gridResult = null;
-                } else { // Free stack to merge on but has to open up a new stack for leftover items
-                    int nextFreeSlot = getNextFreeSlot();
-                    inventory[nextFreeSlot] = item.copy();
-                    inventory[nextFreeSlot].stackSize = leftitems;
-                    gridResult = null;
-                }
-
-            }
-        } else if (getNextFreeSlot() == -1 && hasFreeStack(item)) { // Has at least one free stack to merge on but the table is full -> Old code works
-            // fine
-            gridResult = IOHelper.insert(this, item, ForgeDirection.UNKNOWN, false);
-        }
-        return gridResult;
-    }
-
-    public int getNextFreeSlot() {
-
-        for (int i = 0; i < inventory.length; i++) {
-            if (inventory[i] == null) {
-                return i;
-            }
-        }
-        return -1;
-    }
-
-    public boolean hasFreeStack(ItemStack item) {
-
-        for (int i = 0; i < inventory.length; i++) {
-            if (inventory[i] != null && inventory[i].getItem() == item.getItem() && inventory[i].stackSize < inventory[i].getMaxStackSize())
-                return true;
-        }
-        return false;
-    }
-
-    public int getFreeStack(ItemStack item) {
-
-        for (int i = 0; i < inventory.length; i++) {
-            if (inventory[i] != null && inventory[i].getItem() == item.getItem() && inventory[i].stackSize < inventory[i].getMaxStackSize())
-                return i;
-        }
-        return -1;
-    }
 }

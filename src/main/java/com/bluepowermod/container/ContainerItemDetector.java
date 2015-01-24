@@ -9,13 +9,13 @@ package com.bluepowermod.container;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
 import com.bluepowermod.ClientProxy;
 import com.bluepowermod.client.gui.GuiBase;
+import com.bluepowermod.containers.ContainerMachineBase;
 import com.bluepowermod.tile.tier1.TileItemDetector;
 
 import cpw.mods.fml.relauncher.Side;
@@ -24,14 +24,14 @@ import cpw.mods.fml.relauncher.SideOnly;
 /**
  * @author MineMaarten
  */
-public class ContainerItemDetector extends Container {
+public class ContainerItemDetector extends ContainerMachineBase {
 
     private int mode = -1;
     private int fuzzySetting = -1;
     private final TileItemDetector itemDetector;
 
     public ContainerItemDetector(InventoryPlayer invPlayer, TileItemDetector itemDetector) {
-
+        super(itemDetector);
         this.itemDetector = itemDetector;
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 3; ++j) {

@@ -161,10 +161,10 @@ public class RenderCircuitTile implements IItemRenderer {
             if (item.getItem() == BPItems.silicon_chip_tile) {
                 com.bluepowermod.client.render.RenderHelper.renderRandomizerButton(0, 0, -0.125, false);
             }
-            if (item.getItem() == BPItems.taintedsilicon_chip_tile) {
+            if (item.getItem() == BPItems.tainted_silicon_chip_tile) {
                 com.bluepowermod.client.render.RenderHelper.renderRandomizerButton(0, 0, -0.125, true);
             }
-            if (item.getItem() == BPItems.stone_bundle_tile) {
+            if (item.getItem() == BPItems.stone_bundle) {
                 GL11.glPushMatrix();
                 {
                     GL11.glTranslated(0.5, 0, 0.5);

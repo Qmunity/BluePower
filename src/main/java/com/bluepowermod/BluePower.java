@@ -116,8 +116,6 @@ public class BluePower {
     @EventHandler
     public void postInit(FMLPostInitializationEvent event) {
 
-        PartManager.registerItems();
-
         CompatibilityUtils.postInit(event);
         proxy.initRenderers();
 
