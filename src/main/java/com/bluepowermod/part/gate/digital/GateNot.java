@@ -1,17 +1,17 @@
 package com.bluepowermod.part.gate.digital;
 
+import uk.co.qmunity.lib.misc.ShiftingBuffer;
 import uk.co.qmunity.lib.util.Dir;
 
-import com.bluepowermod.part.gate.GateSimple;
 import com.bluepowermod.part.gate.component.GateComponentBorder;
 import com.bluepowermod.part.gate.component.GateComponentTorch;
 import com.bluepowermod.part.gate.component.GateComponentWire;
 import com.bluepowermod.part.gate.connection.GateConnectionDigital;
 import com.bluepowermod.part.wire.redstone.RedwireType;
 
-public class GateNot extends GateSimple<GateConnectionDigital> {
+public class GateNot extends GateSimpleDigital {
 
-    private boolean[] power = new boolean[3 * 1];// 3 * numTorches
+    private ShiftingBuffer<Boolean> buf = new ShiftingBuffer<Boolean>(1, 3, false);
 
     private GateComponentTorch t;
 
@@ -22,11 +22,11 @@ public class GateNot extends GateSimple<GateConnectionDigital> {
     }
 
     @Override
-    protected void initConnections() {
+    protected void initializeConnections() {
 
-        front(new GateConnectionDigital(this, Dir.FRONT)).enable().setOutputOnly().setOutput(true);
-        left(new GateConnectionDigital(this, Dir.LEFT)).enable().setOutputOnly().setOutput(true);
-        right(new GateConnectionDigital(this, Dir.RIGHT)).enable().setOutputOnly().setOutput(true);
+        front().enable().setOutputOnly().setOutput(true);
+        left().enable().setOutputOnly().setOutput(true);
+        right().enable().setOutputOnly().setOutput(true);
 
         back(new GateConnectionDigital(this, Dir.BACK)).enable();
     }
@@ -49,20 +49,21 @@ public class GateNot extends GateSimple<GateConnectionDigital> {
     @Override
     public void doLogic() {
 
-        power[0] = back().getInput();
+        buf.set(0, back().getInput());
     }
 
     @Override
     public void tick() {
 
-        power[2] = power[1];
-        power[1] = power[0];
+        buf.shift();
 
-        t.setState(!power[2]);
+        boolean pow = buf.get(0);
 
-        left().setOutput(!power[2]);
-        front().setOutput(!power[2]);
-        right().setOutput(!power[2]);
+        t.setState(!pow);
+
+        left().setOutput(!pow);
+        front().setOutput(!pow);
+        right().setOutput(!pow);
     }
 
     @Override

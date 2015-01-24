@@ -1,11 +1,19 @@
 package com.bluepowermod.part.gate.component;
 
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
+
+import net.minecraft.nbt.NBTTagCompound;
 import uk.co.qmunity.lib.vec.Vec3d;
 
 import com.bluepowermod.client.render.RenderHelper;
 import com.bluepowermod.part.gate.GateBase;
 
 public class GateComponentPointer extends GateComponentTorch {
+
+    private double angle = 0;
+    private double increment = 0;
 
     public GateComponentPointer(GateBase<?, ?, ?, ?, ?, ?> gate, int color, double height, boolean digital) {
 
@@ -20,7 +28,78 @@ public class GateComponentPointer extends GateComponentTorch {
     @Override
     public void renderDynamic(Vec3d translation, double delta, int pass) {
 
-        RenderHelper.renderPointer((1 - x) - 9 / 16D, height - 4 / 32D, z - 7 / 16D, 0);
+        RenderHelper.renderPointer((1 - x) - 9 / 16D, height - 4 / 32D, (1 - (z + 1 / 16D)) - 8 / 16D, angle
+                + (getState() ? (delta * increment) : 0));
+
+    }
+
+    public GateComponentPointer setAngle(double angle) {
+
+        if (this.angle != angle)
+            setNeedsSyncing(true);
+        this.angle = angle;
+
+        return this;
+    }
+
+    public GateComponentPointer setIncrement(double increment) {
+
+        if (this.increment != increment)
+            setNeedsSyncing(true);
+        this.increment = increment;
+
+        return this;
+    }
+
+    public double getAngle() {
+
+        return angle;
+    }
+
+    public double getIncrement() {
+
+        return increment;
+    }
+
+    @Override
+    public void tick() {
+
+        super.tick();
+
+        if (getState())
+            angle = angle + increment;
+    }
+
+    @Override
+    public void writeToNBT(NBTTagCompound tag) {
+
+        super.writeToNBT(tag);
+        tag.setDouble("angle", angle);
+        tag.setDouble("increment", increment);
+    }
+
+    @Override
+    public void readFromNBT(NBTTagCompound tag) {
+
+        super.readFromNBT(tag);
+        angle = tag.getDouble("angle");
+        increment = tag.getDouble("increment");
+    }
+
+    @Override
+    public void writeData(DataOutput buffer) throws IOException {
+
+        super.writeData(buffer);
+        buffer.writeDouble(angle);
+        buffer.writeDouble(increment);
+    }
+
+    @Override
+    public void readData(DataInput buffer) throws IOException {
+
+        super.readData(buffer);
+        angle = buffer.readDouble();
+        increment = buffer.readDouble();
     }
 
 }

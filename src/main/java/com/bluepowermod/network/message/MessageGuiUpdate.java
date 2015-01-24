@@ -114,22 +114,22 @@ public class MessageGuiUpdate extends LocationIntPacket<MessageGuiUpdate> {
 
     private void messagePart(EntityPlayer player, ITilePartHolder partHolder, MessageGuiUpdate message) {
 
-        // List<IPart> parts = partHolder.getParts();
-        // if (message.partId < parts.size()) {
-        // IPart part = parts.get(message.partId);
-        // IntegratedCircuit circuit = null;
-        // if (part instanceof IntegratedCircuit) {
-        // circuit = (IntegratedCircuit) part;
-        // part = ((IntegratedCircuit) part).getPartForIndex(message.icId);
-        // }
-        // if (part instanceof IGuiButtonSensitive) {
-        // ((IGuiButtonSensitive) part).onButtonPress(player, message.messageId, message.value);
-        // if (circuit != null)
-        // circuit.sendUpdatePacket();
-        // } else {
-        // BluePower.log.error("[BluePower][MessageGuiPacket] Part doesn't implement IGuiButtonSensitive");
-        // }
-        // }
+        List<IPart> parts = partHolder.getParts();
+        if (message.partId < parts.size()) {
+            IPart part = parts.get(message.partId);
+            // IntegratedCircuit circuit = null;
+            // if (part instanceof IntegratedCircuit) {
+            // circuit = (IntegratedCircuit) part;
+            // part = ((IntegratedCircuit) part).getPartForIndex(message.icId);
+            // }
+            if (part instanceof IGuiButtonSensitive) {
+                ((IGuiButtonSensitive) part).onButtonPress(player, message.messageId, message.value);
+                // if (circuit != null)
+                // circuit.sendUpdatePacket();
+            } else {
+                BluePower.log.error("[BluePower][MessageGuiPacket] Part doesn't implement IGuiButtonSensitive");
+            }
+        }
     }
 
 }

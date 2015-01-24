@@ -64,10 +64,10 @@ public class GateComponentTorch extends GateComponent {
         renderer.addTransformation(new Translation(x - 7 / 16D, 2 / 16D - height, z - 7 / 16D));
 
         renderer.setRenderSides(false, false, false, false, true, true);
-        renderer.renderBox(new Vec3dCube(6 / 16D, height, 7 / 16D, 10 / 16D, 11 / 16D, 9 / 16D), icon);
+        renderer.renderBox(new Vec3dCube(0, height, 7 / 16D, 1, 1, 9 / 16D), icon);
 
         renderer.setRenderSides(false, false, true, true, false, false);
-        renderer.renderBox(new Vec3dCube(7 / 16D, height, 6 / 16D, 9 / 16D, 11 / 16D, 10 / 16D), icon);
+        renderer.renderBox(new Vec3dCube(7 / 16D, height, 0, 9 / 16D, 1, 1), icon);
 
         renderer.addTransformation(new Translation(0, 0, 1 / 16D));
 
@@ -120,7 +120,7 @@ public class GateComponentTorch extends GateComponent {
         if (!gate.getWorld().isRemote)
             return;
 
-        Vec3d v = new Vec3d(x + 1 / 16D, height + 2 / 16D, z + 1 / 16D).sub(Vec3d.center).rotate(0, 90 * gate.getRotation(), 0)
+        Vec3d v = new Vec3d(x + 1 / 16D, height + 2 / 16D, z + 1 / 16D).sub(Vec3d.center).rotate(0, 90 * -gate.getRotation(), 0)
                 .add(Vec3d.center).rotate(gate.getFace(), Vec3d.center);
         if (rnd.nextInt(10) == 0)
             gate.getWorld().spawnParticle("reddust", gate.getX() + v.getX(), gate.getY() + v.getY(), gate.getZ() + v.getZ(),
@@ -167,6 +167,26 @@ public class GateComponentTorch extends GateComponent {
 
         super.readData(buffer);
         state = buffer.readBoolean();
+    }
+
+    public void setX(double x) {
+
+        this.x = x;
+    }
+
+    public void setZ(double z) {
+
+        this.z = z;
+    }
+
+    public double getX() {
+
+        return x;
+    }
+
+    public double getZ() {
+
+        return z;
     }
 
 }

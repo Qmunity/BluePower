@@ -79,18 +79,18 @@ public class GateConnectionAnalogue extends GateConnectionBase {
 
     public GateConnectionAnalogue setInput(byte input) {
 
+        if (this.input != input)
+            setNeedsSyncing(true);
         this.input = input;
-
-        setNeedsSyncing(true);
 
         return this;
     }
 
     public GateConnectionAnalogue setOutput(byte output) {
 
+        if (this.output != output)
+            setNeedsSyncing(true);
         this.output = output;
-
-        setNeedsSyncing(true);
 
         return this;
     }

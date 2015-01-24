@@ -58,7 +58,10 @@ public class TileLamp extends TileBase implements IBundledDevice {
                 power = pow;
                 sendUpdatePacket();
                 getWorldObj().markBlockRangeForRenderUpdate(xCoord, yCoord, zCoord, xCoord, yCoord, zCoord);
-                getWorldObj().updateLightByType(EnumSkyBlock.Block, xCoord, yCoord, zCoord);
+                try {
+                    getWorldObj().updateLightByType(EnumSkyBlock.Block, xCoord, yCoord, zCoord);
+                } catch (Exception ex) {
+                }
                 getWorldObj().notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, getBlockType());
             }
         }

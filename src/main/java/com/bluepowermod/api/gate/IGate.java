@@ -2,7 +2,12 @@ package com.bluepowermod.api.gate;
 
 import java.util.Collection;
 
-public interface IGate<C_BOTTOM extends IGateConnection, C_TOP extends IGateConnection, C_LEFT extends IGateConnection, C_RIGHT extends IGateConnection, C_FRONT extends IGateConnection, C_BACK extends IGateConnection> {
+import uk.co.qmunity.lib.vec.IWorldLocation;
+
+import com.bluepowermod.api.misc.IFace;
+
+public interface IGate<C_BOTTOM extends IGateConnection, C_TOP extends IGateConnection, C_LEFT extends IGateConnection, C_RIGHT extends IGateConnection, C_FRONT extends IGateConnection, C_BACK extends IGateConnection>
+extends IWorldLocation, IFace {
 
     public Collection<IGateComponent> getComponents();
 

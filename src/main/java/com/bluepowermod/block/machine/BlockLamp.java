@@ -59,7 +59,7 @@ public class BlockLamp extends BlockContainerBase {
         return (TileLamp) te;
     }
 
-    protected int getPower(IBlockAccess w, int x, int y, int z) {
+    public int getPower(IBlockAccess w, int x, int y, int z) {
 
         TileLamp te = get(w, x, y, z);
         if (te == null)

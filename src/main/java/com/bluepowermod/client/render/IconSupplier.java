@@ -144,7 +144,7 @@ public class IconSupplier {
 
             gateButton = reg.registerIcon(Refs.MODID + ":gates/components/button");
             siliconChipOff = reg.registerIcon(Refs.MODID + ":gates/components/silicon_chip_off");
-            siliconChipOn = reg.registerIcon(Refs.MODID + ":gates/componenst/silicon_chip_on");
+            siliconChipOn = reg.registerIcon(Refs.MODID + ":gates/components/silicon_chip_on");
             taintedSiliconChipOff = reg.registerIcon(Refs.MODID + ":gates/components/tainted_silicon_chip_off");
             taintedSiliconChipOn = reg.registerIcon(Refs.MODID + ":gates/components/tainted_silicon_chip_on");
             quartzResonator = reg.registerIcon(Refs.MODID + ":gates/components/resonator");

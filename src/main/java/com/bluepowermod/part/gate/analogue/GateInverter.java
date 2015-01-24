@@ -2,14 +2,13 @@ package com.bluepowermod.part.gate.analogue;
 
 import uk.co.qmunity.lib.util.Dir;
 
-import com.bluepowermod.part.gate.GateSimple;
 import com.bluepowermod.part.gate.component.GateComponentBorder;
 import com.bluepowermod.part.gate.component.GateComponentTorch;
 import com.bluepowermod.part.gate.component.GateComponentWire;
 import com.bluepowermod.part.gate.connection.GateConnectionAnalogue;
 import com.bluepowermod.part.wire.redstone.RedwireType;
 
-public class GateInverter extends GateSimple<GateConnectionAnalogue> {
+public class GateInverter extends GateSimpleAnalogue {
 
     private byte[] power = new byte[3];
 
@@ -22,11 +21,11 @@ public class GateInverter extends GateSimple<GateConnectionAnalogue> {
     }
 
     @Override
-    protected void initConnections() {
+    protected void initializeConnections() {
 
-        front(new GateConnectionAnalogue(this, Dir.FRONT)).enable().setOutputOnly().setOutput((byte) 255);
-        left(new GateConnectionAnalogue(this, Dir.LEFT)).enable().setOutputOnly().setOutput((byte) 255);
-        right(new GateConnectionAnalogue(this, Dir.RIGHT)).enable().setOutputOnly().setOutput((byte) 255);
+        front().enable().setOutputOnly().setOutput((byte) 255);
+        left().enable().setOutputOnly().setOutput((byte) 255);
+        right().enable().setOutputOnly().setOutput((byte) 255);
 
         back(new GateConnectionAnalogue(this, Dir.BACK)).enable();
     }
@@ -34,14 +33,12 @@ public class GateInverter extends GateSimple<GateConnectionAnalogue> {
     @Override
     protected void initComponents() {
 
-        t = new GateComponentTorch(this, 0x0000FF, 4 / 16D, true);
-        t.setState(true);
-        addComponent(t);
+        addComponent(t = new GateComponentTorch(this, 0x0000FF, 4 / 16D, false).setState(true));
 
-        addComponent(new GateComponentWire(this, 0x18FF00, RedwireType.BLUESTONE).bind(front()));
-        addComponent(new GateComponentWire(this, 0xFFF600, RedwireType.BLUESTONE).bind(right()));
-        addComponent(new GateComponentWire(this, 0xC600FF, RedwireType.BLUESTONE).bind(back()));
-        addComponent(new GateComponentWire(this, 0xFF0000, RedwireType.BLUESTONE).bind(left()));
+        addComponent(new GateComponentWire(this, 0x18FF00, RedwireType.RED_ALLOY).bind(front()));
+        addComponent(new GateComponentWire(this, 0xFFF600, RedwireType.RED_ALLOY).bind(right()));
+        addComponent(new GateComponentWire(this, 0xC600FF, RedwireType.RED_ALLOY).bind(back()));
+        addComponent(new GateComponentWire(this, 0xFF0000, RedwireType.RED_ALLOY).bind(left()));
 
         addComponent(new GateComponentBorder(this, 0x7D7D7D));
     }

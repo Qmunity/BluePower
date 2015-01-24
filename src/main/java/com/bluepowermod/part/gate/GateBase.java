@@ -48,6 +48,7 @@ import com.bluepowermod.api.redstone.IRedstoneDevice;
 import com.bluepowermod.helper.VectorHelper;
 import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.init.BPItems;
+import com.bluepowermod.init.Config;
 import com.bluepowermod.part.BPPart;
 import com.bluepowermod.part.BPPartFaceRotate;
 import com.bluepowermod.part.PartManager;
@@ -56,12 +57,13 @@ import com.bluepowermod.part.wire.redstone.WireCommons;
 import com.bluepowermod.util.Layout;
 import com.bluepowermod.util.Refs;
 
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public abstract class GateBase<C_BOTTOM extends GateConnectionBase, C_TOP extends GateConnectionBase, C_LEFT extends GateConnectionBase, C_RIGHT extends GateConnectionBase, C_FRONT extends GateConnectionBase, C_BACK extends GateConnectionBase>
-        extends BPPartFaceRotate implements IGate<C_BOTTOM, C_TOP, C_LEFT, C_RIGHT, C_FRONT, C_BACK>, IPartRedstone, IFaceRedstoneDevice,
-        IFaceBundledDevice, IPartTicking, IPartRenderPlacement {
+extends BPPartFaceRotate implements IGate<C_BOTTOM, C_TOP, C_LEFT, C_RIGHT, C_FRONT, C_BACK>, IPartRedstone, IFaceRedstoneDevice,
+IFaceBundledDevice, IPartTicking, IPartRenderPlacement {
 
     // Static var declarations
     private static Vec3dCube BOX = new Vec3dCube(0, 0, 0, 1, 2D / 16D, 1);
@@ -320,15 +322,14 @@ public abstract class GateBase<C_BOTTOM extends GateConnectionBase, C_TOP extend
             }
 
             return true;
+        } else if (hasGUI()) {
+            if (getWorld().isRemote) {
+                FMLCommonHandler.instance().showGuiScreen(getGui(player));
+            } else {
+                handleGUIServer(player);
+            }
+            return true;
         }
-        // else if (hasGUI()) {
-        // if (getWorld().isRemote) {
-        // FMLCommonHandler.instance().showGuiScreen(getGui(player));
-        // } else {
-        // handleGUIServer(player);
-        // }
-        // return true;
-        // }
         return false;
     }
 
@@ -859,6 +860,32 @@ public abstract class GateBase<C_BOTTOM extends GateConnectionBase, C_TOP extend
                 c.readData(buffer);
 
         getWorld().markBlockRangeForRenderUpdate(getX(), getY(), getZ(), getX(), getY(), getZ());
+    }
+
+    // GUIs
+
+    protected void handleGUIServer(EntityPlayer player) {
+
+    }
+
+    @SideOnly(Side.CLIENT)
+    protected GuiScreen getGui(EntityPlayer player) {
+
+        return null;
+    }
+
+    protected boolean hasGUI() {
+
+        return false;
+    }
+
+    // Misc
+
+    protected void playTickSound() {
+
+        if (getWorld().isRemote && Config.enableGateSounds)
+            getWorld().playSound(getX(), getY(), getZ(), "gui.button.press", 0.5F, 0.5F, false);
+
     }
 
 }

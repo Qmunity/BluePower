@@ -11,7 +11,7 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 
-import com.bluepowermod.part.gate.old.digital.GateBase;
+import com.bluepowermod.part.gate.digital.GateCounter;
 import com.bluepowermod.util.Refs;
 
 import cpw.mods.fml.relauncher.Side;
@@ -24,7 +24,7 @@ public abstract class GuiGateCounter extends GuiGate {
     private static final String[] buttonTexts = { "-25", "-5", "-1", "+1", "+5", "+25" };
     private static final int[] buttonActions = { -25, -5, -1, +1, +5, +25 };
 
-    public GuiGateCounter(GateBase gate) {
+    public GuiGateCounter(GateCounter gate) {
 
         super(gate, 228, 120);
     }

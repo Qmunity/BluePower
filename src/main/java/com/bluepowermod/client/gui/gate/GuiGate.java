@@ -23,7 +23,7 @@ import com.bluepowermod.client.gui.widget.IGuiWidget;
 import com.bluepowermod.client.gui.widget.IWidgetListener;
 import com.bluepowermod.network.NetworkHandler;
 import com.bluepowermod.network.message.MessageGuiUpdate;
-import com.bluepowermod.part.gate.old.digital.GateBase;
+import com.bluepowermod.part.gate.GateBase;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -36,16 +36,16 @@ import cpw.mods.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class GuiGate extends GuiScreenBase implements IWidgetListener {
 
-    private final GateBase gate;
+    private final GateBase<?, ?, ?, ?, ?, ?> gate;
     private final List<IGuiWidget> widgets = new ArrayList<IGuiWidget>();
 
-    public GuiGate(GateBase gate, int xSize, int ySize) {
+    public GuiGate(GateBase<?, ?, ?, ?, ?, ?> gate, int xSize, int ySize) {
 
         super(xSize, ySize);
         this.gate = gate;
     }
 
-    public GateBase getGate() {
+    public GateBase<?, ?, ?, ?, ?, ?> getGate() {
 
         return gate;
     }

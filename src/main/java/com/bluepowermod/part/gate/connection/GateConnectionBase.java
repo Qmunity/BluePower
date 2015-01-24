@@ -19,7 +19,7 @@ public abstract class GateConnectionBase implements IGateConnection {
 
     protected GateBase<?, ?, ?, ?, ?, ?> gate;
     protected Dir direction;
-    protected boolean enabled;
+    protected boolean enabled = false;
     protected boolean outputOnly;
 
     private boolean needsSyncing = false;

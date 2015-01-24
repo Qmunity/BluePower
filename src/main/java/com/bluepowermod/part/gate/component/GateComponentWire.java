@@ -70,11 +70,13 @@ public class GateComponentWire extends GateComponentLocationArray {
         return this;
     }
 
-    public void setPower(byte power) {
+    public GateComponentWire setPower(byte power) {
 
         if (power != this.power)
             setNeedsSyncing(true);
         this.power = power;
+
+        return this;
     }
 
     public byte getPower() {

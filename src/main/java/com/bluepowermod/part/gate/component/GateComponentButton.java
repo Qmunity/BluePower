@@ -1,6 +1,9 @@
 package com.bluepowermod.part.gate.component;
 
 import java.awt.image.BufferedImage;
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
@@ -73,6 +76,8 @@ public abstract class GateComponentButton extends GateComponent {
 
     public GateComponentButton setState(boolean state) {
 
+        if (state != this.state)
+            setNeedsSyncing(true);
         this.state = state;
 
         return this;
@@ -95,6 +100,20 @@ public abstract class GateComponentButton extends GateComponent {
 
         super.readFromNBT(tag);
         state = tag.getBoolean("state");
+    }
+
+    @Override
+    public void writeData(DataOutput buffer) throws IOException {
+
+        super.writeData(buffer);
+        buffer.writeBoolean(state);
+    }
+
+    @Override
+    public void readData(DataInput buffer) throws IOException {
+
+        super.readData(buffer);
+        state = buffer.readBoolean();
     }
 
 }

@@ -59,7 +59,7 @@ public class GateConnectionDigital extends GateConnectionBase {
     @Override
     public void setRedstonePower(byte power) {
 
-        input = (power & 0xFF) > 0;
+        setInput((power & 0xFF) > 0);
     }
 
     @Override
@@ -79,18 +79,18 @@ public class GateConnectionDigital extends GateConnectionBase {
 
     public GateConnectionDigital setInput(boolean input) {
 
+        if (this.input != input)
+            setNeedsSyncing(true);
         this.input = input;
-
-        setNeedsSyncing(true);
 
         return this;
     }
 
     public GateConnectionDigital setOutput(boolean output) {
 
+        if (this.output != output)
+            setNeedsSyncing(true);
         this.output = output;
-
-        setNeedsSyncing(true);
 
         return this;
     }
@@ -189,13 +189,6 @@ public class GateConnectionDigital extends GateConnectionBase {
 
         if (lastOutput != output)
             notifyUpdate();
-    }
-
-    @Override
-    public boolean needsSyncing() {
-
-        // TODO Auto-generated method stub
-        return false;
     }
 
 }

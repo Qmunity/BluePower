@@ -22,18 +22,12 @@ import com.bluepowermod.util.Color;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class GateAnd extends GateSimpleDigital {
+public class GateOr extends GateSimpleDigital {
 
-    private ShiftingBuffer<Boolean> buf = new ShiftingBuffer<Boolean>(5, 2, false);
+    private ShiftingBuffer<Boolean> buf = new ShiftingBuffer<Boolean>(1, 3, false);
 
-    private GateComponentTorch t1, t2, t3, t4;
-    private GateComponentWire wire;
-
-    @Override
-    protected String getGateType() {
-
-        return "and";
-    }
+    private GateComponentTorch t1, t2;
+    private GateComponentWire w;
 
     @Override
     public void initializeConnections() {
@@ -47,25 +41,34 @@ public class GateAnd extends GateSimpleDigital {
     @Override
     public void initComponents() {
 
-        addComponent(t1 = new GateComponentTorch(this, 0x215b8d, 4 / 16D, true).setState(true));
-        addComponent(t2 = new GateComponentTorch(this, 0x0000FF, 4 / 16D, true).setState(true));
-        addComponent(t3 = new GateComponentTorch(this, 0x3e94dc, 4 / 16D, true).setState(true));
-        addComponent(t4 = new GateComponentTorch(this, 0x6F00B5, 5 / 16D, true).setState(false));
+        t1 = new GateComponentTorch(this, 0x0000FF, 4 / 16D, true);
+        t1.setState(true);
+        addComponent(t1);
+        t2 = new GateComponentTorch(this, 0x6F00B5, 5 / 16D, true);
+        t2.setState(false);
+        addComponent(t2);
 
-        addComponent(wire = new GateComponentWire(this, 0x18FF00, RedwireType.BLUESTONE).setPower((byte) 255));
+        addComponent(w = new GateComponentWire(this, 0x18FF00, RedwireType.BLUESTONE));
         addComponent(new GateComponentWire(this, 0xFFF600, RedwireType.BLUESTONE).bind(right()));
         addComponent(new GateComponentWire(this, 0xC600FF, RedwireType.BLUESTONE).bind(back()));
         addComponent(new GateComponentWire(this, 0xFF0000, RedwireType.BLUESTONE).bind(left()));
 
         addComponent(new GateComponentBorder(this, 0x7D7D7D));
+
+        w.setPower((byte) 255);
+    }
+
+    @Override
+    public String getGateType() {
+
+        return "or";
     }
 
     @Override
     public void doLogic() {
 
-        buf.set(0, !left().isEnabled() || left().getInput());
-        buf.set(1, !back().isEnabled() || back().getInput());
-        buf.set(2, !right().isEnabled() || right().getInput());
+        buf.set(0, (left().isEnabled() && left().getInput()) || (back().isEnabled() && back().getInput())
+                || (right().isEnabled() && right().getInput()));
     }
 
     @Override
@@ -76,26 +79,17 @@ public class GateAnd extends GateSimpleDigital {
 
         buf.shift();
 
-        boolean pow = buf.get(0) && buf.get(1) && buf.get(2);
+        boolean mid = !buf.get(0, 1);
+        t1.setState(mid);
+        w.setPower((byte) (mid ? 255 : 0));
 
-        t1.setState(!buf.get(0));
-        t2.setState(!buf.get(1));
-        t3.setState(!buf.get(2));
-
-        wire.setPower((byte) (!pow ? 255 : 0));
-
-        buf.set(3, pow);
-        t4.setState(buf.get(3));
-
-        buf.set(4, buf.get(3));
-        front().setOutput(buf.get(4));
+        boolean out = buf.get(0);
+        t2.setState(out);
+        front().setOutput(out);
     }
 
     @Override
     public boolean changeMode() {
-
-        if (getWorld().isRemote)
-            return true;
 
         if (left().isEnabled() && back().isEnabled() && right().isEnabled()) {
             right().disable();
@@ -134,5 +128,4 @@ public class GateAnd extends GateSimpleDigital {
         info.add("  " + Dir.RIGHT.getLocalizedName() + ": "
                 + (right().isEnabled() ? Color.GREEN + I18n.format("random.enabled") : Color.RED + I18n.format("random.disabled")));
     }
-
 }
