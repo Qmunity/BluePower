@@ -37,15 +37,15 @@ public class BluePowerAPI implements IBPApi {
     }
 
     @Override
-    public IPowerBase getNewPowerHandler(BPPart part, float maxAmp) {
+    public IPowerBase getNewPowerHandler(BPPart part) {
 
-        return new PowerHandler(part, maxAmp);
+        return new PowerHandler(part);
     }
 
     @Override
-    public IPowerBase getNewPowerHandler(TileEntity tileEntity, float maxAmp) {
+    public IPowerBase getNewPowerHandler(TileEntity tileEntity) {
 
-        return new PowerHandler(tileEntity, maxAmp);
+        return new PowerHandler(tileEntity);
     }
     
     @Override

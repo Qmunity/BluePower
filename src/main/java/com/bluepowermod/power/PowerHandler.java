@@ -29,36 +29,35 @@ public class PowerHandler implements IPowerBase {
 
     private PowerNetwork pNetwork;
 
-    private float maxAmp = 0;
     private BluePowerTier tier;
     private boolean shouldUpdateNetworkOnNextTick = true;
     protected List<ForgeDirection> connectedSides;
     private   float                oldCurrent;
 
-    public PowerHandler(TileEntity _target, float _maxAmp) {
+    public PowerHandler(TileEntity _target) {
 
         tTarget = _target;
         iTarget = (IBluePowered) _target;
         tWorld = _target.getWorldObj();
-        maxAmp = _maxAmp;
         connectedSides = new ArrayList<ForgeDirection>();
     }
 
-    public PowerHandler(BPPart _target, float _maxAmp) {
+    public PowerHandler(BPPart _target) {
 
         pTarget = _target;
         iTarget = (IBluePowered) _target;
         isMultipart = true;
         tWorld = _target.getWorld();
-        maxAmp = _maxAmp;
         connectedSides = new ArrayList<ForgeDirection>();
     }
 
-    @Override public void readFromNBT(NBTTagCompound tagCompound) {
+    @Override
+    public void readFromNBT(NBTTagCompound tagCompound) {
 
     }
 
-    @Override public void writeToNBT(NBTTagCompound tagCompound) {
+    @Override
+    public void writeToNBT(NBTTagCompound tagCompound) {
 
     }
 
@@ -78,13 +77,22 @@ public class PowerHandler implements IPowerBase {
 
 
     public float getAmpStored(){
+        if(getNetwork() == null){
+            //Fuck, we need to fix this..
+            updateNetworkOnNextTick(0);
+            return 0;
+        }
         return getNetwork().getCurrentStored();
     }
 
     @Override
     public float getMaxAmp() {
-
-        return maxAmp;
+        if(getNetwork() == null){
+            //Fuck, we need to fix this..
+            updateNetworkOnNextTick(0);
+            return 0;
+        }
+        return getNetwork().getMaxStored();
     }
 
     @Override
@@ -104,7 +112,7 @@ public class PowerHandler implements IPowerBase {
     public void addEnergy(float amp){
 
         if(getNetwork() == null) return;
-        int compare = Float.compare(getNetwork().getCurrentStored() + amp, maxAmp);
+        int compare = Float.compare(getNetwork().getCurrentStored() + amp, getMaxAmp());
         if(compare == -1) {
             getNetwork().setCurrentStored(getNetwork().getCurrentStored() + amp);
         }else{

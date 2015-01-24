@@ -17,6 +17,7 @@ import com.bluepowermod.helper.ItemStackHelper;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.part.IGuiButtonSensitive;
 import com.bluepowermod.part.tube.TubeStack;
+import com.bluepowermod.tile.TileMachineBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
@@ -78,7 +79,7 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
     @Override
     public IPowerBase getHandler() {
         if(handler == null){
-            handler = BPApi.getInstance().getNewPowerHandler(this, 2000);
+            handler = BPApi.getInstance().getNewPowerHandler(this);
         }
         return handler;
     }
@@ -87,6 +88,12 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
     public boolean canConnectTo(ForgeDirection dir) {
 
         return true;
+    }
+
+    @Override
+    public float getMaxStorage() {
+
+        return 700;
     }
 
     public enum PullMode {

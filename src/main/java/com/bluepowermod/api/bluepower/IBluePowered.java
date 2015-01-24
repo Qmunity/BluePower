@@ -48,4 +48,11 @@ public interface IBluePowered {
      * @return
      */
     boolean canConnectTo(ForgeDirection dir);
+
+    /**
+     * @author Koen Beckers (K4Unl)
+     * Returns the storage of milliAmps this block has,
+     * @return int
+     */
+    float getMaxStorage();
 }

@@ -6,6 +6,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.util.ForgeDirection;
+import uk.co.qmunity.lib.part.compat.MultipartCompatibility;
 import uk.co.qmunity.lib.vec.Vec3i;
 
 import java.util.ArrayList;
@@ -16,6 +17,8 @@ import java.util.Random;
  * @author Koen Beckers (K4Unl)
  */
 public class PowerNetwork {
+
+
 
     public static class networkEntry {
         private Vec3i blockLocation;
@@ -34,6 +37,7 @@ public class PowerNetwork {
     private int randomNumber = 0;
 
     private float currentStored = 0.0F;
+    private float maxStored = 0.0F;
     private List<networkEntry> machines;
     private IBlockAccess world;
 
@@ -43,6 +47,8 @@ public class PowerNetwork {
 
         machines = new ArrayList<networkEntry>();
         machines.add(new networkEntry(machine.getHandler().getBlockLocation()));
+
+        maxStored = machine.getMaxStorage();
 
         currentStored = beginCurrent;
         world = ((PowerHandler)machine.getHandler()).getWorld();
@@ -67,14 +73,21 @@ public class PowerNetwork {
 
         if(contains(machine) == -1){
             float oAmp = currentStored * machines.size();
+
             oAmp += currentToAdd;
             machines.add(new networkEntry(machine.getHandler().getBlockLocation()));
             currentStored = oAmp / machines.size();
+            maxStored+= machine.getMaxStorage();
 
             if(world == null){
                 world = ((PowerHandler)machine.getHandler()).getWorld();
             }
         }
+    }
+
+    public float getMaxStored() {
+
+        return maxStored;
     }
 
     public void removeMachine(IBluePowered machine){
@@ -83,9 +96,9 @@ public class PowerNetwork {
         if(machineIndex != -1){
             ((PowerHandler)machine.getHandler()).setNetwork(null);
             machines.remove(machineIndex);
+            maxStored = 0.0F;
         }
 
-        //TODO: Redo me for multiparts
         for(networkEntry entry : machines){
             Vec3i loc = entry.getLocation();
             TileEntity ent = loc.getTileEntity();
@@ -93,6 +106,12 @@ public class PowerNetwork {
                 IBluePowered target = ((IBluePowered) ent);
                 ((PowerHandler)target.getHandler()).setNetwork(null);
                 ((PowerHandler)machine.getHandler()).updateNetworkOnNextTick(getCurrentStored());
+            }
+
+            IBluePowered p = MultipartCompatibility.getPart(loc.getWorld(), loc.getX(), loc.getY(), loc.getZ(), IBluePowered.class);
+            if(p != null){
+                ((PowerHandler)p.getHandler()).setNetwork(null);
+                ((PowerHandler)p.getHandler()).updateNetworkOnNextTick(getCurrentStored());
             }
         }
     }
@@ -113,6 +132,11 @@ public class PowerNetwork {
                 IBluePowered machine = (IBluePowered) ent;
                 ((PowerHandler)machine.getHandler()).setNetwork(this);
                 this.addMachine(machine, newCurrent);
+            }
+            IBluePowered p = MultipartCompatibility.getPart(loc.getWorld(), loc.getX(), loc.getY(), loc.getZ(), IBluePowered.class);
+            if(p != null){
+                ((PowerHandler)p.getHandler()).setNetwork(this);
+                this.addMachine(p, newCurrent);
             }
         }
 
@@ -143,7 +167,7 @@ public class PowerNetwork {
 
         TileEntity t = loc.getTileEntity();
         if(t instanceof IBluePowered){ //Just to be safe
-            IBluePowered mEnt = (IBluePowered) t;
+            //IBluePowered mEnt = (IBluePowered) t;
 
 
             PowerNetwork foundNetwork = null;
@@ -152,6 +176,11 @@ public class PowerNetwork {
                 foundNetwork = ((PowerHandler)((IBluePowered)locationInDir.getTileEntity()).getHandler()).getNetwork();
                 return foundNetwork;
             }
+            IBluePowered p = MultipartCompatibility.getPart(locationInDir.getWorld(), locationInDir.getX(), locationInDir.getY(), locationInDir.getZ(), IBluePowered.class);
+            if(p != null){
+                return ((PowerHandler)p.getHandler()).getNetwork();
+            }
+
         }
 
         return null;

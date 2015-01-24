@@ -101,7 +101,7 @@ public class WireBluePower extends PartWireFace implements IBluePowered, IPartTi
     @Override
     public IPowerBase getHandler() {
         if(handler == null){
-            handler = BPApi.getInstance().getNewPowerHandler(this, 20);
+            handler = BPApi.getInstance().getNewPowerHandler(this);
         }
         return handler;
     }
@@ -119,22 +119,32 @@ public class WireBluePower extends PartWireFace implements IBluePowered, IPartTi
         return p != null;
     }
 
-    @Override protected boolean shouldRenderConnection(ForgeDirection side) {
+    @Override
+    public float getMaxStorage() {
+
+        return 10;
+    }
+
+    @Override
+    protected boolean shouldRenderConnection(ForgeDirection side) {
 
         return canConnectTo(side);
     }
 
-    @Override protected double getWidth() {
+    @Override
+    protected double getWidth() {
 
         return 4;
     }
 
-    @Override protected double getHeight() {
+    @Override
+    protected double getHeight() {
 
         return 3;
     }
 
-    @Override protected IIcon getWireIcon(ForgeDirection side) {
+    @Override
+    protected IIcon getWireIcon(ForgeDirection side) {
 
         return Blocks.planks.getIcon(0, 0);
     }

@@ -38,7 +38,7 @@ public class TileBattery extends TileMachineBase implements IBluePowered, IInven
 
         if(handler == null){
 
-            handler = BPApi.getInstance().getNewPowerHandler(this, 2000);
+            handler = BPApi.getInstance().getNewPowerHandler(this);
         }
         return handler;
     }
@@ -47,6 +47,11 @@ public class TileBattery extends TileMachineBase implements IBluePowered, IInven
     public boolean canConnectTo(ForgeDirection dir) {
 
         return true;
+    }
+
+    @Override public float getMaxStorage() {
+
+        return 3000;
     }
 
     @Override

@@ -32,7 +32,7 @@ public class TileSolarPanel extends TileMachineBase implements IBluePowered {
     @Override
     public IPowerBase getHandler() {
         if(handler == null){
-            handler = BPApi.getInstance().getNewPowerHandler(this, 2000);
+            handler = BPApi.getInstance().getNewPowerHandler(this);
         }
         return handler;
     }
@@ -41,6 +41,12 @@ public class TileSolarPanel extends TileMachineBase implements IBluePowered {
     public boolean canConnectTo(ForgeDirection dir) {
 
         return !dir.equals(ForgeDirection.UP);
+    }
+
+    @Override
+    public float getMaxStorage() {
+
+        return 500;
     }
 
     @Override

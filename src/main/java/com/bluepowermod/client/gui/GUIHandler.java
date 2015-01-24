@@ -22,6 +22,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
 import com.bluepowermod.container.ContainerAlloyFurnace;
+import com.bluepowermod.container.ContainerBattery;
 import com.bluepowermod.container.ContainerBuffer;
 import com.bluepowermod.container.ContainerCPU;
 import com.bluepowermod.container.ContainerCanvasBag;

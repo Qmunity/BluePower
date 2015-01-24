@@ -46,7 +46,11 @@ public class ItemMultimeter extends ItemBase {
                     }
 
                     List<String> messages = new ArrayList<String>();
-                    messages.add("Charge: " + machine.getHandler().getAmpStored() + "/" + machine.getHandler().getMaxAmp() + "mA");
+                    if(machine.getHandler() != null) {
+                        messages.add("Charge: " + machine.getHandler().getAmpStored() + "/" + machine.getHandler().getMaxAmp() + "mA");
+                    }else{
+                        messages.add("No handler found!");
+                    }
 
 
 

@@ -38,9 +38,9 @@ public class BPApi {
 
         public IAlloyFurnaceRegistry getAlloyFurnaceRegistry();
 
-        public IPowerBase getNewPowerHandler(BPPart part, float maxAmp);
+        public IPowerBase getNewPowerHandler(BPPart part);
 
-        public IPowerBase getNewPowerHandler(TileEntity tileEntity, float maxAmp);
+        public IPowerBase getNewPowerHandler(TileEntity tileEntity);
         
         /**
          * Should be called by an Block#onBlockAdded that implements ISilkyRemovable. It will get the TileEntity and load the tag "tileData" stored in
