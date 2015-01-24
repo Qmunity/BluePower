@@ -122,6 +122,7 @@ public class BPItems {
     public static final Item amethyst_sickle  = new ItemSickle(BluePower.gemMaterial, Refs.AMETHYSTSICKLE_NAME, BPItems.amethyst_gem);
 
     public static final Item multimeter = new ItemMultimeter();
+    public static final Item battery    = new ItemBattery();
 
     public static void init() {
 
@@ -231,6 +232,7 @@ public class BPItems {
         GameRegistry.registerItem(iron_wire, Refs.IRONWIRE_NAME);
 
         GameRegistry.registerItem(multimeter, Refs.MULTIMETER_NAME);
+        GameRegistry.registerItem(battery, Refs.BATTERY_ITEM_NAME);
 
         MinecraftForge.addGrassSeed(new ItemStack(flax_seeds), 5);
     }

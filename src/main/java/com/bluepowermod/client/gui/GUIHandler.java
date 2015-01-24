@@ -59,6 +59,7 @@ import com.bluepowermod.tile.tier1.TileFilter;
 import com.bluepowermod.tile.tier1.TileItemDetector;
 import com.bluepowermod.tile.tier1.TileProjectTable;
 import com.bluepowermod.tile.tier1.TileRelay;
+import com.bluepowermod.tile.tier2.TileBattery;
 import com.bluepowermod.tile.tier2.TileCircuitTable;
 import com.bluepowermod.tile.tier2.TileRegulator;
 import com.bluepowermod.tile.tier2.TileRetriever;
@@ -151,6 +152,8 @@ public class GUIHandler implements IGuiHandler {
             return new ContainerCircuitDatabaseSharing(player.inventory, (TileCircuitDatabase) ent);
         case CIRCUITDATABASE_MAIN_ID:
             return new ContainerCircuitDatabaseMain(player.inventory, (TileCircuitDatabase) ent);
+        case BATTERY_ID:
+            return new ContainerBattery(player.inventory, (TileBattery) ent);
         default:
             break;
         }
@@ -227,6 +230,8 @@ public class GUIHandler implements IGuiHandler {
             return new GuiCircuitDatabaseMain(player.inventory, (TileCircuitDatabase) ent);
         case CIRCUITDATABASE_SHARING_ID:
             return new GuiCircuitDatabaseSharing(player.inventory, (TileCircuitDatabase) ent);
+        case BATTERY_ID:
+            return new GuiBattery(player.inventory, (TileBattery) ent);
         default:
             break;
         }

@@ -152,6 +152,7 @@ public class BPBlocks {
     public static Block sortron;
 
     public static final Block solar_panel = new BlockSolarPanel();
+    public static final Block battery     = new BlockBattery();
 
     public static void init() {
 
@@ -227,6 +228,7 @@ public class BPBlocks {
         GameRegistry.registerBlock(manager, Refs.MANAGER_NAME);
 
         GameRegistry.registerBlock(solar_panel, Refs.SOLAR_PANEL_NAME);
+        GameRegistry.registerBlock(battery, Refs.BATTERY_NAME);
 
         /*
          * GameRegistry.registerBlock(cpu, Refs.BLOCKCPU_NAME); GameRegistry.registerBlock(monitor, Refs.BLOCKMONITOR_NAME);

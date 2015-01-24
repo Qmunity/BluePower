@@ -219,6 +219,8 @@ public class Refs {
     public static final String MULTIMETER_NAME = "multimeter";
 
     public static final String SOLAR_PANEL_NAME = "solar_panel";
+    public static final String BATTERY_NAME     = "batteryBlock";
+    public static final String BATTERY_ITEM_NAME     = "battery";
 
     public static String fullVersionString() {
 
