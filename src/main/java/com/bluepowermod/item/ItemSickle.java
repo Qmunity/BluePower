@@ -17,9 +17,8 @@
 
 package com.bluepowermod.item;
 
-import com.bluepowermod.init.BPCreativeTabs;
-import com.bluepowermod.util.Refs;
-import com.google.common.collect.Sets;
+import java.util.Set;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.BlockLilyPad;
@@ -32,7 +31,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTool;
 import net.minecraft.world.World;
 
-import java.util.Set;
+import com.bluepowermod.init.BPCreativeTabs;
+import com.bluepowermod.util.Refs;
+import com.google.common.collect.Sets;
 
 public class ItemSickle extends ItemTool {
 

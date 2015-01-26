@@ -13,10 +13,10 @@ import net.minecraft.client.resources.I18n;
 import uk.co.qmunity.lib.misc.ShiftingBuffer;
 import uk.co.qmunity.lib.util.Dir;
 
+import com.bluepowermod.api.wire.redstone.RedwireType;
 import com.bluepowermod.part.gate.component.GateComponentBorder;
 import com.bluepowermod.part.gate.component.GateComponentTorch;
 import com.bluepowermod.part.gate.component.GateComponentWire;
-import com.bluepowermod.part.wire.redstone.RedwireType;
 import com.bluepowermod.util.Color;
 
 import cpw.mods.fml.relauncher.Side;

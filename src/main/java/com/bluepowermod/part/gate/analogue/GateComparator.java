@@ -12,11 +12,11 @@ import net.minecraftforge.common.util.ForgeDirection;
 import uk.co.qmunity.lib.helper.MathHelper;
 import uk.co.qmunity.lib.vec.Vec3i;
 
+import com.bluepowermod.api.wire.redstone.RedwireType;
 import com.bluepowermod.part.gate.component.GateComponentBorder;
 import com.bluepowermod.part.gate.component.GateComponentQuartzResonator;
 import com.bluepowermod.part.gate.component.GateComponentTorch;
 import com.bluepowermod.part.gate.component.GateComponentWire;
-import com.bluepowermod.part.wire.redstone.RedwireType;
 
 public class GateComparator extends GateSimpleAnalogue {
 

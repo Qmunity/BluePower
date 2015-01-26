@@ -15,7 +15,7 @@
  *     along with Blue Power.  If not, see <http://www.gnu.org/licenses/>
  */
 
-package com.bluepowermod.part.wire.redstone;
+package com.bluepowermod.redstone;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,8 +28,9 @@ import uk.co.qmunity.lib.helper.RedstoneHelper;
 import uk.co.qmunity.lib.vec.Vec3i;
 
 import com.bluepowermod.api.misc.IFace;
-import com.bluepowermod.api.misc.MinecraftColor;
-import com.bluepowermod.api.redstone.IRedstoneDevice;
+import com.bluepowermod.api.wire.ConnectionType;
+import com.bluepowermod.api.wire.IConnectionCache;
+import com.bluepowermod.api.wire.redstone.IRedstoneDevice;
 
 public class DummyRedstoneDevice implements IRedstoneDevice {
 
@@ -46,12 +47,14 @@ public class DummyRedstoneDevice implements IRedstoneDevice {
         return dev;
     }
 
-    private IRedstoneDevice[] devices = new IRedstoneDevice[6];
     private Vec3i loc;
+    private RedstoneConnectionCache connections;
 
     private DummyRedstoneDevice(Vec3i loc) {
 
         this.loc = loc;
+        if (loc != null)
+            connections = RedstoneApi.getInstance().createRedstoneConnectionCache(this);
     }
 
     @Override
@@ -79,34 +82,19 @@ public class DummyRedstoneDevice implements IRedstoneDevice {
     }
 
     @Override
-    public boolean canConnectStraight(ForgeDirection side, IRedstoneDevice device) {
+    public IConnectionCache<? extends IRedstoneDevice> getRedstoneConnectionCache() {
 
-        return RedstoneHelper.canConnect(getWorld(), getX(), getY(), getZ(), side, device instanceof IFace ? ((IFace) device).getFace()
-                : ForgeDirection.UNKNOWN);
+        return connections;
     }
 
     @Override
-    public boolean canConnectOpenCorner(ForgeDirection side, IRedstoneDevice device) {
+    public boolean canConnect(ForgeDirection side, IRedstoneDevice dev, ConnectionType type) {
 
-        return false;// RedstoneHelper.canConnect(getWorld(), getX(), getY(), getZ(), side);
-    }
+        if (type == ConnectionType.STRAIGHT)
+            return RedstoneHelper.canConnect(getWorld(), getX(), getY(), getZ(), side, dev instanceof IFace ? ((IFace) dev).getFace()
+                    : ForgeDirection.UNKNOWN);
 
-    @Override
-    public void onConnect(ForgeDirection side, IRedstoneDevice device) {
-
-        devices[side.ordinal()] = device;
-    }
-
-    @Override
-    public void onDisconnect(ForgeDirection side) {
-
-        devices[side.ordinal()] = null;
-    }
-
-    @Override
-    public IRedstoneDevice getDeviceOnSide(ForgeDirection side) {
-
-        return devices[side.ordinal()];
+        return false;
     }
 
     @Override
@@ -165,18 +153,6 @@ public class DummyRedstoneDevice implements IRedstoneDevice {
     @Override
     public void onRedstoneUpdate() {
 
-    }
-
-    @Override
-    public MinecraftColor getInsulationColor(ForgeDirection side) {
-
-        return MinecraftColor.NONE;
-    }
-
-    @Override
-    public boolean isNormalBlock() {
-
-        return loc.getBlock().isNormalCube(loc.getWorld(), loc.getX(), loc.getY(), loc.getZ());
     }
 
     @Override

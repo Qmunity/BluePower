@@ -15,7 +15,7 @@
  *     along with Blue Power.  If not, see <http://www.gnu.org/licenses/>
  */
 
-package com.bluepowermod.part.wire.redstone;
+package com.bluepowermod.api.wire.redstone;
 
 public enum RedwireType {
 
@@ -57,6 +57,11 @@ public enum RedwireType {
     public String getIngotOredictName() {
 
         return ingotOredictName;
+    }
+
+    public boolean canConnectTo(RedwireType type) {
+
+        return type == this;
     }
 
 }

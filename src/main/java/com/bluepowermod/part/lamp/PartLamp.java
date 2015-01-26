@@ -41,12 +41,14 @@ import uk.co.qmunity.lib.vec.Vec3i;
 import coloredlightscore.src.api.CLApi;
 
 import com.bluepowermod.api.misc.MinecraftColor;
-import com.bluepowermod.api.redstone.IFaceRedstoneDevice;
-import com.bluepowermod.api.redstone.IRedstoneDevice;
+import com.bluepowermod.api.wire.ConnectionType;
+import com.bluepowermod.api.wire.IConnectionCache;
+import com.bluepowermod.api.wire.redstone.IRedstoneDevice;
 import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.part.BPPartFace;
 import com.bluepowermod.part.wire.redstone.PartRedwireFreestanding;
-import com.bluepowermod.part.wire.redstone.WireCommons;
+import com.bluepowermod.redstone.RedstoneApi;
+import com.bluepowermod.redstone.RedstoneConnectionCache;
 
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.relauncher.Side;
@@ -58,7 +60,7 @@ import cpw.mods.fml.relauncher.SideOnly;
  * @author Koen Beckers (K4Unl), Amadornes
  *
  */
-public abstract class PartLamp extends BPPartFace implements IPartRedstone, IFaceRedstoneDevice {
+public abstract class PartLamp extends BPPartFace implements IPartRedstone, IRedstoneDevice {
 
     protected final MinecraftColor color;
     protected final boolean inverted;
@@ -66,7 +68,7 @@ public abstract class PartLamp extends BPPartFace implements IPartRedstone, IFac
     protected byte power = 0;
     private byte[] input = new byte[6];
 
-    private IRedstoneDevice[] devices = new IRedstoneDevice[6];
+    private RedstoneConnectionCache connections = RedstoneApi.getInstance().createRedstoneConnectionCache(this);
 
     /**
      * @author amadornes
@@ -289,7 +291,7 @@ public abstract class PartLamp extends BPPartFace implements IPartRedstone, IFac
 
         super.onAdded();
 
-        WireCommons.refreshConnectionsRedstone(this);
+        connections.recalculateConnections();
 
         onUpdate();
     }
@@ -312,7 +314,7 @@ public abstract class PartLamp extends BPPartFace implements IPartRedstone, IFac
 
         int pow = 0;
         for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
-            IRedstoneDevice dev = getDeviceOnSide(d);
+            IRedstoneDevice dev = connections.getConnectionOnSide(d).getB();
             if (dev != null) {
                 pow = Math.max(pow, input[d.ordinal()] & 0xFF);
             } else {
@@ -397,7 +399,7 @@ public abstract class PartLamp extends BPPartFace implements IPartRedstone, IFac
     }
 
     @Override
-    public boolean canConnectStraight(ForgeDirection side, IRedstoneDevice device) {
+    public boolean canConnect(ForgeDirection side, IRedstoneDevice dev, ConnectionType type) {
 
         if (side == ForgeDirection.UNKNOWN)
             return false;
@@ -409,37 +411,9 @@ public abstract class PartLamp extends BPPartFace implements IPartRedstone, IFac
     }
 
     @Override
-    public boolean canConnectOpenCorner(ForgeDirection side, IRedstoneDevice device) {
+    public IConnectionCache<? extends IRedstoneDevice> getRedstoneConnectionCache() {
 
-        if (side == ForgeDirection.UNKNOWN)
-            return false;
-
-        if (OcclusionHelper.microblockOcclusionTest(getParent(), MicroblockShape.EDGE, 1, getFace(), side))
-            return false;
-
-        return true;
-    }
-
-    @Override
-    public boolean canConnectClosedCorner(ForgeDirection side, IRedstoneDevice device) {
-
-        if (side == getFace())
-            return false;
-        if (side == getFace().getOpposite())
-            return false;
-        if (side == ForgeDirection.UNKNOWN)
-            return false;
-
-        if (OcclusionHelper.microblockOcclusionTest(getParent(), MicroblockShape.EDGE, 1, getFace(), side))
-            return false;
-
-        return true;
-    }
-
-    @Override
-    public MinecraftColor getInsulationColor(ForgeDirection side) {
-
-        return MinecraftColor.NONE;
+        return connections;
     }
 
     @Override
@@ -458,30 +432,6 @@ public abstract class PartLamp extends BPPartFace implements IPartRedstone, IFac
     public void onRedstoneUpdate() {
 
         recalculatePower();
-    }
-
-    @Override
-    public boolean isNormalBlock() {
-
-        return false;
-    }
-
-    @Override
-    public void onConnect(ForgeDirection side, IRedstoneDevice device) {
-
-        devices[side.ordinal()] = device;
-    }
-
-    @Override
-    public void onDisconnect(ForgeDirection side) {
-
-        devices[side.ordinal()] = null;
-    }
-
-    @Override
-    public IRedstoneDevice getDeviceOnSide(ForgeDirection side) {
-
-        return devices[side.ordinal()];
     }
 
 }

@@ -7,22 +7,6 @@
  */
 package com.bluepowermod.event;
 
-import com.bluepowermod.ClientProxy;
-import com.bluepowermod.client.gui.GuiCircuitDatabaseSharing;
-import com.bluepowermod.container.ContainerSeedBag;
-import com.bluepowermod.container.inventory.InventoryItem;
-import com.bluepowermod.init.BPBlocks;
-import com.bluepowermod.init.BPEnchantments;
-import com.bluepowermod.init.BPItems;
-import com.bluepowermod.item.ItemSeedBag;
-import com.bluepowermod.item.ItemSickle;
-import com.bluepowermod.part.PartManager;
-import com.bluepowermod.util.Achievements;
-import cpw.mods.fml.common.eventhandler.Event.Result;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.PlayerEvent;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -44,6 +28,24 @@ import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+
+import com.bluepowermod.ClientProxy;
+import com.bluepowermod.client.gui.GuiCircuitDatabaseSharing;
+import com.bluepowermod.container.ContainerSeedBag;
+import com.bluepowermod.container.inventory.InventoryItem;
+import com.bluepowermod.init.BPBlocks;
+import com.bluepowermod.init.BPEnchantments;
+import com.bluepowermod.init.BPItems;
+import com.bluepowermod.item.ItemSeedBag;
+import com.bluepowermod.item.ItemSickle;
+import com.bluepowermod.part.PartManager;
+import com.bluepowermod.util.Achievements;
+
+import cpw.mods.fml.common.eventhandler.Event.Result;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.PlayerEvent;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class BPEventHandler {
 

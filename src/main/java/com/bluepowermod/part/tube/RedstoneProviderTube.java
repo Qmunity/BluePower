@@ -21,14 +21,14 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import uk.co.qmunity.lib.part.compat.MultipartCompatibility;
 
-import com.bluepowermod.api.redstone.IBundledDevice;
-import com.bluepowermod.api.redstone.IRedstoneDevice;
-import com.bluepowermod.api.redstone.IRedstoneProvider;
+import com.bluepowermod.api.wire.redstone.IBundledDevice;
+import com.bluepowermod.api.wire.redstone.IRedstoneDevice;
+import com.bluepowermod.api.wire.redstone.IRedstoneProvider;
 
 public class RedstoneProviderTube implements IRedstoneProvider {
 
     @Override
-    public IRedstoneDevice getRedstoneDevice(World world, int x, int y, int z, ForgeDirection face, ForgeDirection side) {
+    public IRedstoneDevice getRedstoneDeviceAt(World world, int x, int y, int z, ForgeDirection face, ForgeDirection side) {
 
         PneumaticTube tube = MultipartCompatibility.getPart(world, x, y, z, PneumaticTube.class);
         if (tube != null)
@@ -38,7 +38,7 @@ public class RedstoneProviderTube implements IRedstoneProvider {
     }
 
     @Override
-    public IBundledDevice getBundledDevice(World world, int x, int y, int z, ForgeDirection face, ForgeDirection side) {
+    public IBundledDevice getBundledDeviceAt(World world, int x, int y, int z, ForgeDirection face, ForgeDirection side) {
 
         return null;
     }

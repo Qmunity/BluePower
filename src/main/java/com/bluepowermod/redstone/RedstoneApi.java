@@ -15,7 +15,7 @@
  *     along with Blue Power.  If not, see <http://www.gnu.org/licenses/>
  */
 
-package com.bluepowermod.part.wire.redstone;
+package com.bluepowermod.redstone;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,12 +23,13 @@ import java.util.List;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
-import com.bluepowermod.api.redstone.IBundledDevice;
-import com.bluepowermod.api.redstone.IPropagator;
-import com.bluepowermod.api.redstone.IRedstoneApi;
-import com.bluepowermod.api.redstone.IRedstoneDevice;
-import com.bluepowermod.api.redstone.IRedstoneProvider;
-import com.bluepowermod.part.wire.redstone.propagation.WirePropagator;
+import com.bluepowermod.api.wire.ConnectionType;
+import com.bluepowermod.api.wire.redstone.IBundledDevice;
+import com.bluepowermod.api.wire.redstone.IPropagator;
+import com.bluepowermod.api.wire.redstone.IRedstoneApi;
+import com.bluepowermod.api.wire.redstone.IRedstoneDevice;
+import com.bluepowermod.api.wire.redstone.IRedstoneProvider;
+import com.bluepowermod.redstone.propagation.RedstonePropagator;
 
 public class RedstoneApi implements IRedstoneApi {
 
@@ -55,7 +56,7 @@ public class RedstoneApi implements IRedstoneApi {
         for (IRedstoneProvider provider : providers) {
             if (returned && provider instanceof RedstoneProviderVanilla)
                 continue;
-            IRedstoneDevice device = provider.getRedstoneDevice(world, x, y, z, face, side);
+            IRedstoneDevice device = provider.getRedstoneDeviceAt(world, x, y, z, face, side);
             if (device == returnDevice) {
                 returned = true;
                 continue;
@@ -71,7 +72,7 @@ public class RedstoneApi implements IRedstoneApi {
     public IBundledDevice getBundledDevice(World world, int x, int y, int z, ForgeDirection face, ForgeDirection side) {
 
         for (IRedstoneProvider provider : providers) {
-            IBundledDevice device = provider.getBundledDevice(world, x, y, z, face, side);
+            IBundledDevice device = provider.getBundledDeviceAt(world, x, y, z, face, side);
             if (device == returnDevice)
                 return null;
             if (device != null)
@@ -90,12 +91,6 @@ public class RedstoneApi implements IRedstoneApi {
             return;
 
         providers.add(provider);
-    }
-
-    @Override
-    public IPropagator getPropagator() {
-
-        return WirePropagator.INSTANCE;
     }
 
     @Override
@@ -122,10 +117,54 @@ public class RedstoneApi implements IRedstoneApi {
         this.shouldWiresHandleUpdates = shouldWiresHandleUpdates;
     }
 
-    @Override
     public IRedstoneDevice getReturnDevice() {
 
         return returnDevice;
+    }
+
+    @Override
+    public RedstoneConnection createConnection(IRedstoneDevice a, IRedstoneDevice b, ForgeDirection sideA, ForgeDirection sideB,
+            ConnectionType type) {
+
+        if (a == null || b == null || sideA == null || sideB == null || type == null || a == b)
+            return null;
+
+        return new RedstoneConnection(a, b, sideA, sideB, type);
+    }
+
+    @Override
+    public BundledConnection createConnection(IBundledDevice a, IBundledDevice b, ForgeDirection sideA, ForgeDirection sideB,
+            ConnectionType type) {
+
+        if (a == null || b == null || sideA == null || sideB == null || type == null || a == b)
+            return null;
+
+        return new BundledConnection(a, b, sideA, sideB, type);
+    }
+
+    @Override
+    public RedstoneConnectionCache createRedstoneConnectionCache(IRedstoneDevice dev) {
+
+        return new RedstoneConnectionCache(dev);
+    }
+
+    @Override
+    public BundledConnectionCache createBundledConnectionCache(IBundledDevice dev) {
+
+        return new BundledConnectionCache(dev);
+    }
+
+    @Override
+    public IPropagator<IRedstoneDevice> getRedstonePropagator(IRedstoneDevice device, ForgeDirection side) {
+
+        return new RedstonePropagator.RedPropagator(device, side);
+    }
+
+    @Override
+    public IPropagator<IBundledDevice> getBundledPropagator(IBundledDevice device, ForgeDirection side) {
+
+        // TODO Return bundled propagator
+        return null;
     }
 
 }

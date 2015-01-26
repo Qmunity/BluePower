@@ -15,21 +15,21 @@
  *     along with Blue Power.  If not, see <http://www.gnu.org/licenses/>
  */
 
-package com.bluepowermod.part.wire.redstone;
+package com.bluepowermod.redstone;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import uk.co.qmunity.lib.vec.Vec3i;
 
-import com.bluepowermod.api.redstone.IBundledDevice;
-import com.bluepowermod.api.redstone.IRedstoneDevice;
-import com.bluepowermod.api.redstone.IRedstoneProvider;
+import com.bluepowermod.api.wire.redstone.IBundledDevice;
+import com.bluepowermod.api.wire.redstone.IRedstoneDevice;
+import com.bluepowermod.api.wire.redstone.IRedstoneProvider;
 
 public class RedstoneProviderVanilla implements IRedstoneProvider {
 
     @Override
-    public IRedstoneDevice getRedstoneDevice(World world, int x, int y, int z, ForgeDirection face, ForgeDirection side) {
+    public IRedstoneDevice getRedstoneDeviceAt(World world, int x, int y, int z, ForgeDirection face, ForgeDirection side) {
 
         TileEntity te = world.getTileEntity(x, y, z);
         if (te != null && te instanceof IRedstoneDevice)
@@ -39,10 +39,10 @@ public class RedstoneProviderVanilla implements IRedstoneProvider {
     }
 
     @Override
-    public IBundledDevice getBundledDevice(World world, int x, int y, int z, ForgeDirection face, ForgeDirection side) {
+    public IBundledDevice getBundledDeviceAt(World world, int x, int y, int z, ForgeDirection face, ForgeDirection side) {
 
         TileEntity te = world.getTileEntity(x, y, z);
-        if (te != null && te instanceof IBundledDevice && ((IBundledDevice) te).isBundled(side))
+        if (te != null && te instanceof IBundledDevice)
             return (IBundledDevice) te;
 
         return null;

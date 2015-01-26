@@ -48,6 +48,7 @@ import uk.co.qmunity.lib.vec.Vec3i;
 import com.bluepowermod.BluePower;
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
 import com.bluepowermod.api.tube.ITubeConnection;
+import com.bluepowermod.api.wire.redstone.RedwireType;
 import com.bluepowermod.client.render.IconSupplier;
 import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.helper.PartCache;
@@ -56,15 +57,10 @@ import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.init.BPItems;
 import com.bluepowermod.init.Config;
 import com.bluepowermod.item.ItemDamageableColorableOverlay;
-import com.bluepowermod.item.ItemPart;
-import com.bluepowermod.item.ItemScrewdriver;
 import com.bluepowermod.part.BPPart;
 import com.bluepowermod.part.PartManager;
 import com.bluepowermod.part.wire.PartWireFreestanding;
-import com.bluepowermod.part.wire.redstone.PartRedwireFace;
-import com.bluepowermod.part.wire.redstone.RedwireType;
 import com.bluepowermod.part.wire.redstone.WireCommons;
-import com.bluepowermod.part.wire.redstone.propagation.WirePropagator;
 import com.bluepowermod.util.Color;
 
 import cpw.mods.fml.relauncher.Side;
@@ -173,8 +169,8 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
     @Override
     public void onUpdate() {
 
-        WireCommons.refreshConnectionsRedstone(RedstoneConductorTube.getDevice(this));
-        WirePropagator.INSTANCE.onPowerLevelChange(RedstoneConductorTube.getDevice(this), ForgeDirection.DOWN, (byte) 0, (byte) 0);
+        // FIXME WireCommons.refreshConnectionsRedstone(RedstoneConductorTube.getDevice(this));
+        // FIXME WirePropagator.INSTANCE.onPowerLevelChange(RedstoneConductorTube.getDevice(this), ForgeDirection.DOWN, (byte) 0, (byte) 0);
 
         if (getWorld() != null) {
             clearCache();
@@ -414,43 +410,43 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
                 return true;
             }
 
-            // Applying redwire
-            if (item.getItem() instanceof ItemPart) {
-                BPPart part = PartManager.getExample(item);
-                if (redwireType == null && part instanceof PartRedwireFace && !((PartRedwireFace) part).isBundled(ForgeDirection.DOWN)) {
-                    if (!getWorld().isRemote) {
-                        redwireType = ((PartRedwireFace) part).getWireType();
-                        if (!player.capabilities.isCreativeMode)
-                            item.stackSize--;
-
-                        // Redstone update
-                        WireCommons.refreshConnectionsRedstone(RedstoneConductorTube.getDevice(this));
-
-                        updateConnections();
-                        getLogic().clearNodeCaches();
-                        notifyUpdate();
-                        sendUpdatePacket();
-                    }
-                    return true;
-                }
-            }
-            // Removing redwire
-            if (redwireType != null && item.getItem() instanceof ItemScrewdriver && player.isSneaking()) {
-                if (!getWorld().isRemote) {
-                    IOHelper.spawnItemInWorld(getWorld(), PartManager.getPartInfo("wire." + redwireType.getName()).getStack(),
-                            getX() + 0.5, getY() + 0.5, getZ() + 0.5);
-                    redwireType = null;
-
-                    // Redstone update
-                    WireCommons.disconnectRedstone(RedstoneConductorTube.getDevice(this));
-
-                    updateConnections();
-                    getLogic().clearNodeCaches();
-                    notifyUpdate();
-                    sendUpdatePacket();
-                }
-                return true;
-            }
+            // FIXME Applying redwire
+            // if (item.getItem() instanceof ItemPart) {
+            // BPPart part = PartManager.getExample(item);
+            // if (redwireType == null && part instanceof PartRedwireFace && !((PartRedwireFace) part).isBundled(ForgeDirection.DOWN)) {
+            // if (!getWorld().isRemote) {
+            // redwireType = ((PartRedwireFace) part).getWireType();
+            // if (!player.capabilities.isCreativeMode)
+            // item.stackSize--;
+            //
+            // // Redstone update
+            // WireCommons.refreshConnectionsRedstone(RedstoneConductorTube.getDevice(this));
+            //
+            // updateConnections();
+            // getLogic().clearNodeCaches();
+            // notifyUpdate();
+            // sendUpdatePacket();
+            // }
+            // return true;
+            // }
+            // }
+            // // Removing redwire
+            // if (redwireType != null && item.getItem() instanceof ItemScrewdriver && player.isSneaking()) {
+            // if (!getWorld().isRemote) {
+            // IOHelper.spawnItemInWorld(getWorld(), PartManager.getPartInfo("wire." + redwireType.getName()).getStack(),
+            // getX() + 0.5, getY() + 0.5, getZ() + 0.5);
+            // redwireType = null;
+            //
+            // // Redstone update
+            // WireCommons.disconnectRedstone(RedstoneConductorTube.getDevice(this));
+            //
+            // updateConnections();
+            // getLogic().clearNodeCaches();
+            // notifyUpdate();
+            // sendUpdatePacket();
+            // }
+            // return true;
+            // }
         }
         return false;
     }

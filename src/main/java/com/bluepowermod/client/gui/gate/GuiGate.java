@@ -132,7 +132,6 @@ public class GuiGate extends GuiScreenBase implements IWidgetListener {
     @Override
     protected ResourceLocation getTexture() {
 
-        // TODO Auto-generated method stub
         return null;
     }
 }

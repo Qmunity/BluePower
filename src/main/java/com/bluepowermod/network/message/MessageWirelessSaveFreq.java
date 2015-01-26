@@ -7,8 +7,6 @@ import uk.co.qmunity.lib.network.Packet;
 
 import com.bluepowermod.api.misc.Accessibility;
 import com.bluepowermod.network.NetworkHandler;
-import com.bluepowermod.part.gate.old.wireless.Frequency;
-import com.bluepowermod.part.gate.old.wireless.WirelessManager;
 
 public class MessageWirelessSaveFreq extends Packet<MessageWirelessSaveFreq> {
 

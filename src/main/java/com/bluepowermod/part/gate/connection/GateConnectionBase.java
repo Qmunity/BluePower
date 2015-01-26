@@ -11,9 +11,10 @@ import uk.co.qmunity.lib.helper.RedstoneHelper;
 import uk.co.qmunity.lib.util.Dir;
 
 import com.bluepowermod.api.gate.IGateConnection;
-import com.bluepowermod.api.redstone.IRedstoneDevice;
-import com.bluepowermod.part.BPPart;
+import com.bluepowermod.api.wire.IConnection;
+import com.bluepowermod.api.wire.redstone.IRedstoneDevice;
 import com.bluepowermod.part.gate.GateBase;
+import com.bluepowermod.redstone.RedstoneApi;
 
 public abstract class GateConnectionBase implements IGateConnection {
 
@@ -54,14 +55,16 @@ public abstract class GateConnectionBase implements IGateConnection {
             return;
 
         ForgeDirection d = getForgeDirection();
-        World world = gate.getWorld();
-        int x = gate.getX(), y = gate.getY(), z = gate.getZ();
+        IConnection<? extends IRedstoneDevice> c = gate.getRedstoneConnectionCache().getConnectionOnSide(d);
 
-        RedstoneHelper.notifyRedstoneUpdate(world, x, y, z, d, true);
+        if (c == null) {
+            World world = gate.getWorld();
+            int x = gate.getX(), y = gate.getY(), z = gate.getZ();
 
-        IRedstoneDevice dev = gate.getDeviceOnSide(d);
-        if (dev != null && dev instanceof BPPart)
-            ((BPPart) dev).onUpdate();
+            RedstoneHelper.notifyRedstoneUpdate(world, x, y, z, d, true);
+        } else {
+            RedstoneApi.getInstance().getRedstonePropagator(getGate(), d).propagate();
+        }
     }
 
     public abstract void notifyUpdateIfNeeded();

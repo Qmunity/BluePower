@@ -15,7 +15,7 @@
  *     along with Blue Power.  If not, see <http://www.gnu.org/licenses/>
  */
 
-package com.bluepowermod.part.wire.redstone;
+package com.bluepowermod.redstone;
 
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -23,24 +23,23 @@ import uk.co.qmunity.lib.part.IPart;
 import uk.co.qmunity.lib.part.ITilePartHolder;
 import uk.co.qmunity.lib.part.compat.MultipartCompatibility;
 
-import com.bluepowermod.api.redstone.IBundledDevice;
-import com.bluepowermod.api.redstone.IFaceBundledDevice;
-import com.bluepowermod.api.redstone.IFaceRedstoneDevice;
-import com.bluepowermod.api.redstone.IRedstoneDevice;
-import com.bluepowermod.api.redstone.IRedstoneProvider;
+import com.bluepowermod.api.misc.IFace;
+import com.bluepowermod.api.wire.redstone.IBundledDevice;
+import com.bluepowermod.api.wire.redstone.IRedstoneDevice;
+import com.bluepowermod.api.wire.redstone.IRedstoneProvider;
 
 public class RedstoneProviderQmunityLib implements IRedstoneProvider {
 
     @Override
-    public IRedstoneDevice getRedstoneDevice(World world, int x, int y, int z, ForgeDirection face, ForgeDirection side) {
+    public IRedstoneDevice getRedstoneDeviceAt(World world, int x, int y, int z, ForgeDirection face, ForgeDirection side) {
 
         ITilePartHolder holder = MultipartCompatibility.getPartHolder(world, x, y, z);
         if (holder != null) {
             boolean found = false;
             for (IPart p : holder.getParts()) {
                 if (p instanceof IRedstoneDevice) {
-                    if (p instanceof IFaceRedstoneDevice) {
-                        if (((IFaceRedstoneDevice) p).getFace() == face)
+                    if (p instanceof IFace) {
+                        if (((IFace) p).getFace() == face)
                             return (IRedstoneDevice) p;
                     } else {
                         if (face == ForgeDirection.UNKNOWN)
@@ -57,14 +56,14 @@ public class RedstoneProviderQmunityLib implements IRedstoneProvider {
     }
 
     @Override
-    public IBundledDevice getBundledDevice(World world, int x, int y, int z, ForgeDirection face, ForgeDirection side) {
+    public IBundledDevice getBundledDeviceAt(World world, int x, int y, int z, ForgeDirection face, ForgeDirection side) {
 
         ITilePartHolder holder = MultipartCompatibility.getPartHolder(world, x, y, z);
         if (holder != null) {
             for (IPart p : holder.getParts()) {
                 if (p instanceof IBundledDevice) {
-                    if (p instanceof IFaceBundledDevice) {
-                        if (((IFaceBundledDevice) p).getFace() == face)
+                    if (p instanceof IFace) {
+                        if (((IFace) p).getFace() == face)
                             return (IBundledDevice) p;
                     } else {
                         if (face == ForgeDirection.UNKNOWN)

@@ -27,6 +27,7 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 
+import com.bluepowermod.api.wire.redstone.RedwireType;
 import com.bluepowermod.client.gui.gate.GuiGateCounter;
 import com.bluepowermod.part.IGuiButtonSensitive;
 import com.bluepowermod.part.gate.component.GateComponentBorder;
@@ -34,7 +35,6 @@ import com.bluepowermod.part.gate.component.GateComponentBorderDark;
 import com.bluepowermod.part.gate.component.GateComponentPointer;
 import com.bluepowermod.part.gate.component.GateComponentTorch;
 import com.bluepowermod.part.gate.component.GateComponentWire;
-import com.bluepowermod.part.wire.redstone.RedwireType;
 import com.bluepowermod.util.Color;
 
 import cpw.mods.fml.relauncher.Side;

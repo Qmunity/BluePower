@@ -13,8 +13,8 @@ import org.lwjgl.opengl.GL11;
 import uk.co.qmunity.lib.client.render.RenderHelper;
 import uk.co.qmunity.lib.vec.Vec3dCube;
 
+import com.bluepowermod.api.wire.redstone.RedwireType;
 import com.bluepowermod.init.BPItems;
-import com.bluepowermod.part.wire.redstone.RedwireType;
 import com.bluepowermod.part.wire.redstone.WireCommons;
 
 public class RenderCircuitTile implements IItemRenderer {

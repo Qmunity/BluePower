@@ -114,7 +114,7 @@ public class BPCreativeTabs {
             @SideOnly(Side.CLIENT)
             public ItemStack getIconItemStack() {
 
-                ItemStack iconItem = null;// PartManager.getPartInfo("timer").getStack();
+                ItemStack iconItem = PartManager.getPartInfo("timer").getStack();
                 if (iconItem != null) {
                     return iconItem;
                 } else {
@@ -136,7 +136,7 @@ public class BPCreativeTabs {
             @SideOnly(Side.CLIENT)
             public ItemStack getIconItemStack() {
 
-                ItemStack iconItem = PartManager.getPartInfo("wire.freestanding.bluestone").getStack();
+                ItemStack iconItem = PartManager.getPartInfo("wire.bluestone").getStack();
                 if (iconItem != null) {
                     return iconItem;
                 } else {

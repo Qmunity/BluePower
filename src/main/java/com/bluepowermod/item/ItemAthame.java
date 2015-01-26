@@ -17,9 +17,6 @@
 
 package com.bluepowermod.item;
 
-import com.bluepowermod.init.BPItems;
-import com.bluepowermod.init.BPCreativeTabs;
-import com.bluepowermod.util.Refs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.monster.EntityEnderman;
@@ -28,6 +25,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.util.DamageSource;
 import net.minecraftforge.common.util.EnumHelper;
+
+import com.bluepowermod.init.BPCreativeTabs;
+import com.bluepowermod.init.BPItems;
+import com.bluepowermod.util.Refs;
 
 public class ItemAthame extends ItemSword {
     

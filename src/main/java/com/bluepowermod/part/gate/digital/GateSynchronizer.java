@@ -9,12 +9,12 @@ package com.bluepowermod.part.gate.digital;
 
 import net.minecraft.nbt.NBTTagCompound;
 
+import com.bluepowermod.api.wire.redstone.RedwireType;
 import com.bluepowermod.part.gate.component.GateComponentBorder;
 import com.bluepowermod.part.gate.component.GateComponentButton;
 import com.bluepowermod.part.gate.component.GateComponentSiliconChip;
 import com.bluepowermod.part.gate.component.GateComponentTorch;
 import com.bluepowermod.part.gate.component.GateComponentWire;
-import com.bluepowermod.part.wire.redstone.RedwireType;
 
 /**
  * @author MineMaarten
@@ -42,8 +42,8 @@ public class GateSynchronizer extends GateSimpleDigital {
 
         addComponent(t = new GateComponentTorch(this, 0xffb400, 5 / 16D, true));
 
-        addComponent(w1 = new GateComponentWire(this, 0x208800, RedwireType.BLUESTONE));
-        addComponent(w2 = new GateComponentWire(this, 0x3faa62, RedwireType.BLUESTONE));
+        addComponent(w1 = new GateComponentWire(this, 0x208800, RedwireType.BLUESTONE).setPower((byte) 255));
+        addComponent(w2 = new GateComponentWire(this, 0x3faa62, RedwireType.BLUESTONE).setPower((byte) 255));
         addComponent(w3 = new GateComponentWire(this, 0xa50d7f, RedwireType.BLUESTONE));
         addComponent(new GateComponentWire(this, 0xFFF600, RedwireType.BLUESTONE).bind(right()));
         addComponent(new GateComponentWire(this, 0xC600FF, RedwireType.BLUESTONE).bind(back()));
@@ -66,18 +66,18 @@ public class GateSynchronizer extends GateSimpleDigital {
 
         if (!oldLeftState && left().getInput()) {
             b1.setState(leftTriggered = true);
-            w1.setPower((byte) 255);
+            w1.setPower((byte) 0);
         }
         if (!oldRightState && right().getInput()) {
             b2.setState(rightTriggered = true);
-            w2.setPower((byte) 255);
+            w2.setPower((byte) 0);
         }
 
         if (back().getInput()) {
             b1.setState(leftTriggered = false);
             b2.setState(rightTriggered = false);
-            w1.setPower((byte) 0);
-            w2.setPower((byte) 0);
+            w1.setPower((byte) 255);
+            w2.setPower((byte) 255);
         }
 
         if (leftTriggered && rightTriggered) {
@@ -85,6 +85,7 @@ public class GateSynchronizer extends GateSimpleDigital {
             w3.setPower((byte) 255);
             b1.setState(leftTriggered = false);
             b2.setState(rightTriggered = false);
+            t.setState(true);
         }
 
         oldLeftState = left().getInput();
@@ -95,12 +96,16 @@ public class GateSynchronizer extends GateSimpleDigital {
     @Override
     public void tick() {
 
+        if (getWorld().isRemote)
+            return;
+
         if (front().getOutput()) {
             if (turnOff) {
                 front().setOutput(false);
                 w3.setPower((byte) 0);
-                w1.setPower((byte) 0);
-                w2.setPower((byte) 0);
+                w1.setPower((byte) 255);
+                w2.setPower((byte) 255);
+                t.setState(false);
             }
             turnOff = !turnOff;
         }

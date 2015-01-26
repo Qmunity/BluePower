@@ -41,10 +41,11 @@ import com.bluepowermod.api.gate.IGateComponent;
 import com.bluepowermod.api.gate.IGateConnection;
 import com.bluepowermod.api.gate.IGateLogic;
 import com.bluepowermod.api.misc.MinecraftColor;
-import com.bluepowermod.api.redstone.IBundledDevice;
-import com.bluepowermod.api.redstone.IFaceBundledDevice;
-import com.bluepowermod.api.redstone.IFaceRedstoneDevice;
-import com.bluepowermod.api.redstone.IRedstoneDevice;
+import com.bluepowermod.api.wire.ConnectionType;
+import com.bluepowermod.api.wire.IConnection;
+import com.bluepowermod.api.wire.IConnectionListener;
+import com.bluepowermod.api.wire.redstone.IBundledDevice;
+import com.bluepowermod.api.wire.redstone.IRedstoneDevice;
 import com.bluepowermod.helper.VectorHelper;
 import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.init.BPItems;
@@ -53,7 +54,9 @@ import com.bluepowermod.part.BPPart;
 import com.bluepowermod.part.BPPartFaceRotate;
 import com.bluepowermod.part.PartManager;
 import com.bluepowermod.part.gate.connection.GateConnectionBase;
-import com.bluepowermod.part.wire.redstone.WireCommons;
+import com.bluepowermod.redstone.BundledConnectionCache;
+import com.bluepowermod.redstone.RedstoneApi;
+import com.bluepowermod.redstone.RedstoneConnectionCache;
 import com.bluepowermod.util.Layout;
 import com.bluepowermod.util.Refs;
 
@@ -62,8 +65,8 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public abstract class GateBase<C_BOTTOM extends GateConnectionBase, C_TOP extends GateConnectionBase, C_LEFT extends GateConnectionBase, C_RIGHT extends GateConnectionBase, C_FRONT extends GateConnectionBase, C_BACK extends GateConnectionBase>
-extends BPPartFaceRotate implements IGate<C_BOTTOM, C_TOP, C_LEFT, C_RIGHT, C_FRONT, C_BACK>, IPartRedstone, IFaceRedstoneDevice,
-IFaceBundledDevice, IPartTicking, IPartRenderPlacement {
+        extends BPPartFaceRotate implements IGate<C_BOTTOM, C_TOP, C_LEFT, C_RIGHT, C_FRONT, C_BACK>, IPartRedstone, IConnectionListener,
+        IRedstoneDevice, IBundledDevice, IPartTicking, IPartRenderPlacement {
 
     // Static var declarations
     private static Vec3dCube BOX = new Vec3dCube(0, 0, 0, 1, 2D / 16D, 1);
@@ -94,6 +97,9 @@ IFaceBundledDevice, IPartTicking, IPartRenderPlacement {
         initConnections();
         if (getLayout() != null)
             initComponents();
+
+        getRedstoneConnectionCache().listen();
+        getBundledConnectionCache().listen();
     }
 
     @Override
@@ -259,9 +265,21 @@ IFaceBundledDevice, IPartTicking, IPartRenderPlacement {
     @Override
     public void onUpdate() {
 
+        getRedstoneConnectionCache().recalculateConnections();
+        getBundledConnectionCache().recalculateConnections();
+
+        for (GateConnectionBase c : getConnections())
+            if (c != null)
+                RedstoneApi.getInstance().getRedstonePropagator(this, c.getForgeDirection()).propagate();
+
+        doLogicStuff();
+    }
+
+    private void doLogicStuff() {
+
         logic().doLogic();
 
-        sendUpdateIfNeeded();
+        // sendUpdateIfNeeded();
     }
 
     @Override
@@ -269,7 +287,7 @@ IFaceBundledDevice, IPartTicking, IPartRenderPlacement {
 
         super.onRemoved();
 
-        WireCommons.disconnect(this, this);
+        // FIXME WireCommons.disconnect(this, this);
     }
 
     private void sendUpdateIfNeeded() {
@@ -306,7 +324,7 @@ IFaceBundledDevice, IPartTicking, IPartRenderPlacement {
                         for (IGateConnection c : getConnections())
                             if (c != null)
                                 c.notifyUpdate();
-                        WireCommons.refreshConnectionsRedstone(this);
+                        // FIXME WireCommons.refreshConnectionsRedstone(this);
                         sendUpdateIfNeeded();
                     }
                     return true;
@@ -317,7 +335,7 @@ IFaceBundledDevice, IPartTicking, IPartRenderPlacement {
                 for (GateConnectionBase c : getConnections())
                     if (c != null)
                         c.notifyUpdate();
-                WireCommons.refreshConnectionsRedstone(this);
+                // FIXME WireCommons.refreshConnectionsRedstone(this);
                 sendUpdateIfNeeded();
             }
 
@@ -389,7 +407,7 @@ IFaceBundledDevice, IPartTicking, IPartRenderPlacement {
     }
 
     @Override
-    public boolean canConnectStraight(ForgeDirection side, IRedstoneDevice device) {
+    public boolean canConnect(ForgeDirection side, IRedstoneDevice device, ConnectionType type) {
 
         GateConnectionBase con = getConnection(side);
         if (con == null)
@@ -399,15 +417,17 @@ IFaceBundledDevice, IPartTicking, IPartRenderPlacement {
     }
 
     @Override
-    public boolean canConnectClosedCorner(ForgeDirection side, IRedstoneDevice device) {
+    public void onConnect(IConnection<?> connection) {
 
-        return canConnectStraight(side, device);
     }
 
     @Override
-    public boolean canConnectOpenCorner(ForgeDirection side, IRedstoneDevice device) {
+    public void onDisconnect(IConnection<?> connection) {
 
-        return canConnectStraight(side, device);
+        GateConnectionBase c = getConnection(connection.getSideA());
+        if (c == null)
+            return;
+        c.setRedstonePower((byte) 0);
     }
 
     @Override
@@ -433,37 +453,17 @@ IFaceBundledDevice, IPartTicking, IPartRenderPlacement {
     @Override
     public void onRedstoneUpdate() {
 
-        // TODO
-
-        onUpdate();
+        doLogicStuff();
     }
 
     @Override
-    public MinecraftColor getInsulationColor(ForgeDirection side) {
-
-        return MinecraftColor.NONE;
-    }
-
-    @Override
-    public boolean canConnectBundledStraight(ForgeDirection side, IBundledDevice device) {
+    public boolean canConnect(ForgeDirection side, IBundledDevice device, ConnectionType type) {
 
         GateConnectionBase con = getConnection(side);
         if (con == null)
             return false;
 
         return con.isEnabled() && con.canConnect(device);
-    }
-
-    @Override
-    public boolean canConnectBundledClosedCorner(ForgeDirection side, IBundledDevice device) {
-
-        return canConnectBundledStraight(side, device);
-    }
-
-    @Override
-    public boolean canConnectBundledOpenCorner(ForgeDirection side, IBundledDevice device) {
-
-        return canConnectBundledStraight(side, device);
     }
 
     @Override
@@ -495,9 +495,7 @@ IFaceBundledDevice, IPartTicking, IPartRenderPlacement {
     @Override
     public void onBundledUpdate() {
 
-        // TODO
-
-        onUpdate();
+        doLogicStuff();
     }
 
     @Override
@@ -508,56 +506,19 @@ IFaceBundledDevice, IPartTicking, IPartRenderPlacement {
 
     // RS connection handling
 
-    private IRedstoneDevice[] devices = new IRedstoneDevice[6];
-    private IBundledDevice[] bundledDevices = new IBundledDevice[6];
+    private RedstoneConnectionCache redstoneConnections = RedstoneApi.getInstance().createRedstoneConnectionCache(this);
+    private BundledConnectionCache bundledConnections = RedstoneApi.getInstance().createBundledConnectionCache(this);
 
     @Override
-    public void onConnect(ForgeDirection side, IRedstoneDevice device) {
+    public RedstoneConnectionCache getRedstoneConnectionCache() {
 
-        devices[side.ordinal()] = device;
+        return redstoneConnections;
     }
 
     @Override
-    public void onDisconnect(ForgeDirection side) {
+    public BundledConnectionCache getBundledConnectionCache() {
 
-        devices[side.ordinal()] = null;
-        bundledDevices[side.ordinal()] = null;
-    }
-
-    @Override
-    public IRedstoneDevice getDeviceOnSide(ForgeDirection side) {
-
-        return devices[side.ordinal()];
-    }
-
-    @Override
-    public void onConnect(ForgeDirection side, IBundledDevice device) {
-
-        bundledDevices[side.ordinal()] = device;
-    }
-
-    @Override
-    public IBundledDevice getBundledDeviceOnSide(ForgeDirection side) {
-
-        return bundledDevices[side.ordinal()];
-    }
-
-    // Misc RS methods
-
-    @Override
-    public boolean isBundled(ForgeDirection side) {
-
-        GateConnectionBase con = getConnection(side);
-        if (con == null)
-            return false;
-
-        return con.isEnabled() && con.isBundled();
-    }
-
-    @Override
-    public boolean isNormalBlock() {
-
-        return false;
+        return bundledConnections;
     }
 
     // Occlusion, selection and collision boxes
@@ -591,7 +552,8 @@ IFaceBundledDevice, IPartTicking, IPartRenderPlacement {
 
     public void addOcclusionBoxes(List<Vec3dCube> boxes) {
 
-        boxes.add(BOX.clone());
+        boxes.add(new Vec3dCube(2 / 16D, 0, 0, 1 - 2 / 16D, 2D / 16D, 1));
+        boxes.add(new Vec3dCube(0, 0, 2 / 16D, 1, 2D / 16D, 1 - 2 / 16D));
     }
 
     @Override

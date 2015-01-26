@@ -20,7 +20,6 @@ package com.bluepowermod.block;
 import java.util.HashMap;
 import java.util.Map;
 
-import uk.co.qmunity.lib.misc.ForgeDirectionUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
@@ -33,6 +32,7 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import uk.co.qmunity.lib.misc.ForgeDirectionUtils;
 
 import com.bluepowermod.BluePower;
 import com.bluepowermod.api.BPApi;

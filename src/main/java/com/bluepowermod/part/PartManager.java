@@ -16,6 +16,7 @@ import net.minecraft.item.ItemStack;
 import uk.co.qmunity.lib.part.PartRegistry;
 
 import com.bluepowermod.api.misc.MinecraftColor;
+import com.bluepowermod.api.wire.redstone.RedwireType;
 import com.bluepowermod.item.ItemPart;
 import com.bluepowermod.part.gate.analogue.GateComparator;
 import com.bluepowermod.part.gate.analogue.GateInverter;
@@ -27,12 +28,14 @@ import com.bluepowermod.part.gate.digital.GateNand;
 import com.bluepowermod.part.gate.digital.GateNor;
 import com.bluepowermod.part.gate.digital.GateNot;
 import com.bluepowermod.part.gate.digital.GateOr;
+import com.bluepowermod.part.gate.digital.GatePulseFormer;
 import com.bluepowermod.part.gate.digital.GateRandomizer;
 import com.bluepowermod.part.gate.digital.GateRepeater;
 import com.bluepowermod.part.gate.digital.GateSequencer;
 import com.bluepowermod.part.gate.digital.GateStateCell;
 import com.bluepowermod.part.gate.digital.GateSynchronizer;
 import com.bluepowermod.part.gate.digital.GateTimer;
+import com.bluepowermod.part.gate.digital.GateToggleLatch;
 import com.bluepowermod.part.lamp.PartCageLamp;
 import com.bluepowermod.part.lamp.PartFixture;
 import com.bluepowermod.part.tube.Accelerator;
@@ -41,9 +44,7 @@ import com.bluepowermod.part.tube.PneumaticTube;
 import com.bluepowermod.part.tube.PneumaticTubeOpaque;
 import com.bluepowermod.part.tube.RestrictionTube;
 import com.bluepowermod.part.tube.RestrictionTubeOpaque;
-import com.bluepowermod.part.wire.redstone.PartRedwireFace;
-import com.bluepowermod.part.wire.redstone.PartRedwireFreestanding;
-import com.bluepowermod.part.wire.redstone.RedwireType;
+import com.bluepowermod.part.wire.redstone.PartRedwireFace.PartRedwireFaceUninsulated;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -123,15 +124,15 @@ public class PartManager {
         registerPart(GateSequencer.class);
         registerPart(GateCounter.class);
         // registerPart(GateMux.class);
-        // registerPart(GatePulseFormer.class);
+        registerPart(GatePulseFormer.class);
         registerPart(GateRandomizer.class);
-        // registerPart(GateToggleLatch.class);
+        registerPart(GateToggleLatch.class);
         // registerPart(GateRSLatch.class);
         registerPart(GateStateCell.class);
         registerPart(GateRepeater.class);
         // registerPart(GateTransparentLatch.class);
         registerPart(GateSynchronizer.class);
-        // registerPart(GateNullCell.class, false);
+        // registerPart(GateNullCell.class);
 
         // Analog gates
         registerPart(GateInverter.class);
@@ -168,19 +169,19 @@ public class PartManager {
 
         // Wires
         for (RedwireType type : RedwireType.values()) {
-            registerPart(PartRedwireFace.class, type, MinecraftColor.NONE, false);
-            for (MinecraftColor color : MinecraftColor.VALID_COLORS)
-                registerPart(PartRedwireFace.class, type, color, false);
-            registerPart(PartRedwireFace.class, type, MinecraftColor.NONE, true);
-            for (MinecraftColor color : MinecraftColor.VALID_COLORS)
-                registerPart(PartRedwireFace.class, type, color, true);
+            registerPart(PartRedwireFaceUninsulated.class, type);
+            // for (MinecraftColor color : MinecraftColor.VALID_COLORS)
+            // registerPart(PartRedwireFace.class, type, color, false);
+            // registerPart(PartRedwireFace.class, type, MinecraftColor.NONE, true);
+            // for (MinecraftColor color : MinecraftColor.VALID_COLORS)
+            // registerPart(PartRedwireFace.class, type, color, true);
         }
-        for (RedwireType type : RedwireType.values()) {
-            registerPart(PartRedwireFreestanding.class, type, MinecraftColor.NONE, false);
-            for (MinecraftColor color : MinecraftColor.VALID_COLORS)
-                registerPart(PartRedwireFreestanding.class, type, color, false);
-            registerPart(PartRedwireFreestanding.class, type, MinecraftColor.NONE, true);
-        }
+        // for (RedwireType type : RedwireType.values()) {
+        // registerPart(PartRedwireFreestanding.class, type, MinecraftColor.NONE, false);
+        // for (MinecraftColor color : MinecraftColor.VALID_COLORS)
+        // registerPart(PartRedwireFreestanding.class, type, color, false);
+        // registerPart(PartRedwireFreestanding.class, type, MinecraftColor.NONE, true);
+        // }
     }
 
     public static void registerItems() {

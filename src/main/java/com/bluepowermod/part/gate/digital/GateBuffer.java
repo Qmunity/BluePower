@@ -9,10 +9,10 @@ package com.bluepowermod.part.gate.digital;
 
 import uk.co.qmunity.lib.misc.ShiftingBuffer;
 
+import com.bluepowermod.api.wire.redstone.RedwireType;
 import com.bluepowermod.part.gate.component.GateComponentBorder;
 import com.bluepowermod.part.gate.component.GateComponentTorch;
 import com.bluepowermod.part.gate.component.GateComponentWire;
-import com.bluepowermod.part.wire.redstone.RedwireType;
 
 public class GateBuffer extends GateSimpleDigital {
 

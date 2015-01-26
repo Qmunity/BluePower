@@ -21,10 +21,10 @@ import java.util.Random;
 
 import net.minecraft.nbt.NBTTagCompound;
 
+import com.bluepowermod.api.wire.redstone.RedwireType;
 import com.bluepowermod.part.gate.component.GateComponentBorder;
 import com.bluepowermod.part.gate.component.GateComponentTaintedSiliconChip;
 import com.bluepowermod.part.gate.component.GateComponentWire;
-import com.bluepowermod.part.wire.redstone.RedwireType;
 
 public class GateRandomizer extends GateSimpleDigital {
 

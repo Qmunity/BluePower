@@ -7,8 +7,8 @@ import java.io.IOException;
 import net.minecraft.nbt.NBTTagCompound;
 import uk.co.qmunity.lib.util.Dir;
 
-import com.bluepowermod.api.redstone.IBundledDevice;
-import com.bluepowermod.api.redstone.IRedstoneDevice;
+import com.bluepowermod.api.wire.redstone.IBundledDevice;
+import com.bluepowermod.api.wire.redstone.IRedstoneDevice;
 import com.bluepowermod.part.gate.GateBase;
 
 public class GateConnectionDigital extends GateConnectionBase {

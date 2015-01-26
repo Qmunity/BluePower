@@ -19,10 +19,10 @@ package com.bluepowermod.part.gate.analogue;
 
 import uk.co.qmunity.lib.helper.MathHelper;
 
+import com.bluepowermod.api.wire.redstone.RedwireType;
 import com.bluepowermod.part.gate.component.GateComponentBorder;
 import com.bluepowermod.part.gate.component.GateComponentSolarPanel;
 import com.bluepowermod.part.gate.component.GateComponentWire;
-import com.bluepowermod.part.wire.redstone.RedwireType;
 
 public class GateLightCell extends GateSimpleAnalogue {
 

@@ -8,7 +8,7 @@
 package com.bluepowermod.compat.cc;
 
 import com.bluepowermod.compat.CompatModule;
-import com.bluepowermod.part.wire.redstone.RedstoneApi;
+import com.bluepowermod.redstone.RedstoneApi;
 
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;

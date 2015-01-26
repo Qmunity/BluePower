@@ -24,16 +24,15 @@ import codechicken.multipart.IFaceRedstonePart;
 import codechicken.multipart.TMultiPart;
 import codechicken.multipart.TileMultipart;
 
-import com.bluepowermod.api.redstone.IBundledDevice;
-import com.bluepowermod.api.redstone.IFaceBundledDevice;
-import com.bluepowermod.api.redstone.IFaceRedstoneDevice;
-import com.bluepowermod.api.redstone.IRedstoneDevice;
-import com.bluepowermod.api.redstone.IRedstoneProvider;
+import com.bluepowermod.api.misc.IFace;
+import com.bluepowermod.api.wire.redstone.IBundledDevice;
+import com.bluepowermod.api.wire.redstone.IRedstoneDevice;
+import com.bluepowermod.api.wire.redstone.IRedstoneProvider;
 
 public class RedstoneProviderFMP implements IRedstoneProvider {
 
     @Override
-    public IRedstoneDevice getRedstoneDevice(World world, int x, int y, int z, ForgeDirection face, ForgeDirection side) {
+    public IRedstoneDevice getRedstoneDeviceAt(World world, int x, int y, int z, ForgeDirection face, ForgeDirection side) {
 
         TileMultipart tmp = TileMultipart.getTile(world, new BlockCoord(x, y, z));
         if (tmp == null)
@@ -41,8 +40,8 @@ public class RedstoneProviderFMP implements IRedstoneProvider {
 
         for (TMultiPart p : tmp.jPartList()) {
             if (p instanceof IRedstoneDevice) {
-                if (p instanceof IFaceRedstoneDevice) {
-                    if (((IFaceRedstoneDevice) p).getFace() == face)
+                if (p instanceof IFace) {
+                    if (((IFace) p).getFace() == face)
                         return (IRedstoneDevice) p;
                 } else {
                     if (face == ForgeDirection.UNKNOWN)
@@ -60,16 +59,16 @@ public class RedstoneProviderFMP implements IRedstoneProvider {
     }
 
     @Override
-    public IBundledDevice getBundledDevice(World world, int x, int y, int z, ForgeDirection face, ForgeDirection side) {
+    public IBundledDevice getBundledDeviceAt(World world, int x, int y, int z, ForgeDirection face, ForgeDirection side) {
 
         TileMultipart tmp = TileMultipart.getTile(world, new BlockCoord(x, y, z));
         if (tmp == null)
             return null;
 
         for (TMultiPart p : tmp.jPartList()) {
-            if (p instanceof IRedstoneDevice) {
-                if (p instanceof IFaceBundledDevice) {
-                    if (((IFaceBundledDevice) p).getFace() == face)
+            if (p instanceof IBundledDevice) {
+                if (p instanceof IFace) {
+                    if (((IFace) p).getFace() == face)
                         return (IBundledDevice) p;
                 } else {
                     if (face == ForgeDirection.UNKNOWN)

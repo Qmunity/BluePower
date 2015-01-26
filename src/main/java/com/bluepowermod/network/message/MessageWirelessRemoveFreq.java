@@ -5,8 +5,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 
 import com.bluepowermod.network.NetworkHandler;
-import com.bluepowermod.part.gate.old.wireless.Frequency;
-import com.bluepowermod.part.gate.old.wireless.WirelessManager;
 
 public class MessageWirelessRemoveFreq extends AbstractPacket<MessageWirelessRemoveFreq> {
 

@@ -17,11 +17,12 @@
 
 package com.bluepowermod.item;
 
-import com.bluepowermod.init.BPCreativeTabs;
-import com.bluepowermod.util.Refs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
+
+import com.bluepowermod.init.BPCreativeTabs;
+import com.bluepowermod.util.Refs;
 
 public class ItemGemSword extends ItemSword {
 

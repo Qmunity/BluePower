@@ -15,16 +15,21 @@
  *     along with Blue Power.  If not, see <http://www.gnu.org/licenses/>
  */
 
-package com.bluepowermod.part.wire.redstone;
+package com.bluepowermod.redstone;
 
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import com.bluepowermod.api.misc.MinecraftColor;
-import com.bluepowermod.api.redstone.IBundledDevice;
-import com.bluepowermod.api.redstone.IRedstoneDevice;
+import com.bluepowermod.api.wire.ConnectionType;
+import com.bluepowermod.api.wire.IConnectionCache;
+import com.bluepowermod.api.wire.redstone.IBundledDevice;
+import com.bluepowermod.api.wire.redstone.IRedstoneDevice;
 
 public class ReturnDevice implements IRedstoneDevice, IBundledDevice {
+
+    private RedstoneConnectionCache redstoneConnections = RedstoneApi.getInstance().createRedstoneConnectionCache(this);
+    private BundledConnectionCache bundledConnections = RedstoneApi.getInstance().createBundledConnectionCache(this);
 
     @Override
     public World getWorld() {
@@ -51,31 +56,27 @@ public class ReturnDevice implements IRedstoneDevice, IBundledDevice {
     }
 
     @Override
-    public boolean canConnectStraight(ForgeDirection side, IRedstoneDevice device) {
+    public IConnectionCache<? extends IRedstoneDevice> getRedstoneConnectionCache() {
+
+        return redstoneConnections;
+    }
+
+    @Override
+    public IConnectionCache<? extends IBundledDevice> getBundledConnectionCache() {
+
+        return bundledConnections;
+    }
+
+    @Override
+    public boolean canConnect(ForgeDirection side, IRedstoneDevice dev, ConnectionType type) {
 
         return false;
     }
 
     @Override
-    public boolean canConnectOpenCorner(ForgeDirection side, IRedstoneDevice device) {
+    public boolean canConnect(ForgeDirection side, IBundledDevice dev, ConnectionType type) {
 
         return false;
-    }
-
-    @Override
-    public void onConnect(ForgeDirection side, IRedstoneDevice device) {
-
-    }
-
-    @Override
-    public void onDisconnect(ForgeDirection side) {
-
-    }
-
-    @Override
-    public IRedstoneDevice getDeviceOnSide(ForgeDirection side) {
-
-        return null;
     }
 
     @Override
@@ -92,41 +93,6 @@ public class ReturnDevice implements IRedstoneDevice, IBundledDevice {
     @Override
     public void onRedstoneUpdate() {
 
-    }
-
-    @Override
-    public MinecraftColor getInsulationColor(ForgeDirection side) {
-
-        return MinecraftColor.NONE;
-    }
-
-    @Override
-    public boolean isNormalBlock() {
-
-        return false;
-    }
-
-    @Override
-    public boolean canConnectBundledStraight(ForgeDirection side, IBundledDevice device) {
-
-        return false;
-    }
-
-    @Override
-    public boolean canConnectBundledOpenCorner(ForgeDirection side, IBundledDevice device) {
-
-        return false;
-    }
-
-    @Override
-    public void onConnect(ForgeDirection side, IBundledDevice device) {
-
-    }
-
-    @Override
-    public IBundledDevice getBundledDeviceOnSide(ForgeDirection side) {
-
-        return null;
     }
 
     @Override
@@ -155,12 +121,6 @@ public class ReturnDevice implements IRedstoneDevice, IBundledDevice {
     public MinecraftColor getBundledColor(ForgeDirection side) {
 
         return null;
-    }
-
-    @Override
-    public boolean isBundled(ForgeDirection side) {
-
-        return false;
     }
 
 }

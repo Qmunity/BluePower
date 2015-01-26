@@ -60,17 +60,16 @@ import uk.co.qmunity.lib.vec.Vec3dCube;
 import uk.co.qmunity.lib.vec.Vec3i;
 
 import com.bluepowermod.api.misc.MinecraftColor;
-import com.bluepowermod.api.redstone.IBundledConductor;
-import com.bluepowermod.api.redstone.IBundledDevice;
-import com.bluepowermod.api.redstone.IFaceBundledDevice;
-import com.bluepowermod.api.redstone.IFaceRedstoneDevice;
-import com.bluepowermod.api.redstone.IRedstoneConductor;
-import com.bluepowermod.api.redstone.IRedstoneDevice;
+import com.bluepowermod.api.wire.redstone.IBundledDevice;
+import com.bluepowermod.api.wire.redstone.IRedstoneDevice;
+import com.bluepowermod.api.wire.redstone.RedwireType;
 import com.bluepowermod.client.render.IconSupplier;
 import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.part.wire.PartWireFreestanding;
 import com.bluepowermod.part.wire.redstone.propagation.BundledDeviceWrapper;
 import com.bluepowermod.part.wire.redstone.propagation.WirePropagator;
+import com.bluepowermod.redstone.DummyRedstoneDevice;
+import com.bluepowermod.redstone.RedstoneApi;
 import com.bluepowermod.util.DebugHelper;
 
 import cpw.mods.fml.relauncher.Side;

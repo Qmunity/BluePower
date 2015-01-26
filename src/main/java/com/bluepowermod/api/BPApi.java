@@ -12,7 +12,7 @@ import net.minecraft.world.World;
 import uk.co.qmunity.lib.part.IPart;
 
 import com.bluepowermod.api.recipe.IAlloyFurnaceRegistry;
-import com.bluepowermod.api.redstone.IRedstoneApi;
+import com.bluepowermod.api.wire.redstone.IRedstoneApi;
 
 import cpw.mods.fml.common.Loader;
 

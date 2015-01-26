@@ -1,24 +1,25 @@
 package com.bluepowermod.part.tube;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
-import uk.co.qmunity.lib.misc.Pair;
 import uk.co.qmunity.lib.part.MicroblockShape;
 import uk.co.qmunity.lib.part.compat.OcclusionHelper;
 import uk.co.qmunity.lib.vec.Vec3i;
 
-import com.bluepowermod.api.misc.MinecraftColor;
-import com.bluepowermod.api.redstone.IFaceRedstoneDevice;
-import com.bluepowermod.api.redstone.IRedstoneConductor;
-import com.bluepowermod.api.redstone.IRedstoneDevice;
-import com.bluepowermod.part.wire.redstone.RedstoneApi;
-import com.bluepowermod.part.wire.redstone.WireCommons;
+import com.bluepowermod.api.misc.IFace;
+import com.bluepowermod.api.wire.ConnectionType;
+import com.bluepowermod.api.wire.IConnection;
+import com.bluepowermod.api.wire.IConnectionCache;
+import com.bluepowermod.api.wire.IConnectionListener;
+import com.bluepowermod.api.wire.redstone.IRedstoneConductor;
+import com.bluepowermod.api.wire.redstone.IRedstoneDevice;
+import com.bluepowermod.redstone.RedstoneApi;
+import com.bluepowermod.redstone.RedstoneConnectionCache;
 
-public class RedstoneConductorTube implements IRedstoneConductor {
+public class RedstoneConductorTube implements IRedstoneConductor, IConnectionListener {
 
     private static final List<RedstoneConductorTube> tubes = new ArrayList<RedstoneConductorTube>();
 
@@ -33,7 +34,7 @@ public class RedstoneConductorTube implements IRedstoneConductor {
         return dev;
     }
 
-    private IRedstoneDevice[] devices = new IRedstoneDevice[6];
+    private RedstoneConnectionCache connections = RedstoneApi.getInstance().createRedstoneConnectionCache(this);
     private PneumaticTube tube;
 
     private byte power = 0;
@@ -68,46 +69,42 @@ public class RedstoneConductorTube implements IRedstoneConductor {
     }
 
     @Override
-    public boolean canConnectStraight(ForgeDirection side, IRedstoneDevice device) {
+    public boolean canConnect(ForgeDirection side, IRedstoneDevice device, ConnectionType type) {
 
-        if (tube.getRedwireType() == null)
-            return false;
-
-        if (device instanceof IFaceRedstoneDevice)
-            return false;
-        if (OcclusionHelper.microblockOcclusionTest(new Vec3i(this), MicroblockShape.FACE_HOLLOW, 8, side))
-            return false;
-        if (device instanceof RedstoneConductorTube)
-            if (((RedstoneConductorTube) device).tube instanceof MagTube != tube instanceof MagTube)
+        if (type == ConnectionType.STRAIGHT) {
+            if (tube.getRedwireType() == null)
                 return false;
 
-        return WireCommons.canConnect(this, device);
-    }
+            if (device instanceof IFace)
+                return false;
+            if (OcclusionHelper.microblockOcclusionTest(new Vec3i(this), MicroblockShape.FACE_HOLLOW, 8, side))
+                return false;
+            if (device instanceof RedstoneConductorTube)
+                if (((RedstoneConductorTube) device).tube instanceof MagTube != tube instanceof MagTube)
+                    return false;
 
-    @Override
-    public boolean canConnectOpenCorner(ForgeDirection side, IRedstoneDevice device) {
+            return true;// FIXME WireCommons.canConnect(this, device);
+        }
 
         return false;
     }
 
     @Override
-    public void onConnect(ForgeDirection side, IRedstoneDevice device) {
+    public IConnectionCache<? extends IRedstoneDevice> getRedstoneConnectionCache() {
 
-        devices[side.ordinal()] = device;
+        return connections;
+    }
+
+    @Override
+    public void onConnect(IConnection<?> connection) {
+
         tube.sendUpdatePacket();
     }
 
     @Override
-    public void onDisconnect(ForgeDirection side) {
+    public void onDisconnect(IConnection<?> connection) {
 
-        devices[side.ordinal()] = null;
         tube.sendUpdatePacket();
-    }
-
-    @Override
-    public IRedstoneDevice getDeviceOnSide(ForgeDirection side) {
-
-        return devices[side.ordinal()];
     }
 
     @Override
@@ -116,7 +113,7 @@ public class RedstoneConductorTube implements IRedstoneConductor {
         if (!RedstoneApi.getInstance().shouldWiresOutputPower())
             return 0;
 
-        if (!isAnalog())
+        if (!isAnalog(side))
             return (byte) ((power & 0xFF) > 0 ? 255 : 0);
 
         return power;
@@ -135,19 +132,7 @@ public class RedstoneConductorTube implements IRedstoneConductor {
     }
 
     @Override
-    public MinecraftColor getInsulationColor(ForgeDirection side) {
-
-        return MinecraftColor.NONE;
-    }
-
-    @Override
-    public boolean isNormalBlock() {
-
-        return false;
-    }
-
-    @Override
-    public boolean hasLoss() {
+    public boolean hasLoss(ForgeDirection side) {
 
         if (tube.getRedwireType() == null)
             return false;
@@ -156,7 +141,7 @@ public class RedstoneConductorTube implements IRedstoneConductor {
     }
 
     @Override
-    public boolean isAnalog() {
+    public boolean isAnalog(ForgeDirection side) {
 
         if (tube.getRedwireType() == null)
             return false;
@@ -165,22 +150,19 @@ public class RedstoneConductorTube implements IRedstoneConductor {
     }
 
     @Override
-    public Collection<Pair<IRedstoneDevice, ForgeDirection>> propagate(ForgeDirection fromSide) {
+    public boolean canPropagateFrom(ForgeDirection fromSide) {
 
-        List<Pair<IRedstoneDevice, ForgeDirection>> devices = new ArrayList<Pair<IRedstoneDevice, ForgeDirection>>();
-
-        for (int i = 0; i < 6; i++) {
-            IRedstoneDevice d = this.devices[i];
-            if (d != null)
-                devices.add(new Pair<IRedstoneDevice, ForgeDirection>(d, ForgeDirection.getOrientation(i)));
-        }
-
-        return devices;
+        return true;
     }
 
     public byte getPower() {
 
         return power;
+    }
+
+    public IRedstoneDevice getDeviceOnSide(ForgeDirection d) {
+
+        return connections.getConnectionOnSide(d).getB();
     }
 
 }

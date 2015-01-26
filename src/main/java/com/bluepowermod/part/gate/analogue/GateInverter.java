@@ -2,11 +2,11 @@ package com.bluepowermod.part.gate.analogue;
 
 import uk.co.qmunity.lib.util.Dir;
 
+import com.bluepowermod.api.wire.redstone.RedwireType;
 import com.bluepowermod.part.gate.component.GateComponentBorder;
 import com.bluepowermod.part.gate.component.GateComponentTorch;
 import com.bluepowermod.part.gate.component.GateComponentWire;
 import com.bluepowermod.part.gate.connection.GateConnectionAnalogue;
-import com.bluepowermod.part.wire.redstone.RedwireType;
 
 public class GateInverter extends GateSimpleAnalogue {
 

@@ -7,14 +7,17 @@ import codechicken.multipart.IFaceRedstonePart;
 import codechicken.multipart.IRedstonePart;
 import codechicken.multipart.TMultiPart;
 
-import com.bluepowermod.api.misc.MinecraftColor;
-import com.bluepowermod.api.redstone.IFaceRedstoneDevice;
-import com.bluepowermod.api.redstone.IRedstoneDevice;
+import com.bluepowermod.api.misc.IFace;
+import com.bluepowermod.api.wire.ConnectionType;
+import com.bluepowermod.api.wire.IConnectionCache;
+import com.bluepowermod.api.wire.redstone.IRedstoneDevice;
+import com.bluepowermod.redstone.RedstoneApi;
+import com.bluepowermod.redstone.RedstoneConnectionCache;
 
-public class FMPRedstoneDevice implements IFaceRedstoneDevice {
+public class FMPRedstoneDevice implements IRedstoneDevice, IFace {
 
     private TMultiPart part;
-    private IRedstoneDevice[] devices = new IRedstoneDevice[6];
+    private RedstoneConnectionCache connections = RedstoneApi.getInstance().createRedstoneConnectionCache(this);
 
     public FMPRedstoneDevice(TMultiPart part) {
 
@@ -46,56 +49,26 @@ public class FMPRedstoneDevice implements IFaceRedstoneDevice {
     }
 
     @Override
-    public boolean canConnectStraight(ForgeDirection side, IRedstoneDevice device) {
+    public boolean canConnect(ForgeDirection side, IRedstoneDevice device, ConnectionType type) {
 
-        if (side == ForgeDirection.UNKNOWN)
-            return false;
-        if (!(device instanceof IFaceRedstoneDevice))
-            return false;
-        if (((IFaceRedstoneDevice) device).getFace() != getFace())
-            return false;
+        if (type == ConnectionType.STRAIGHT || type == ConnectionType.CLOSED_CORNER) {
+            if (side == ForgeDirection.UNKNOWN)
+                return false;
+            if (!(device instanceof IFace))
+                return false;
+            if (((IFace) device).getFace() != getFace())
+                return false;
 
-        return ((IRedstonePart) part).canConnectRedstone(side.ordinal());
-    }
-
-    @Override
-    public boolean canConnectOpenCorner(ForgeDirection side, IRedstoneDevice device) {
+            return ((IRedstonePart) part).canConnectRedstone(side.ordinal());
+        }
 
         return false;
     }
 
     @Override
-    public boolean canConnectClosedCorner(ForgeDirection side, IRedstoneDevice device) {
+    public IConnectionCache<? extends IRedstoneDevice> getRedstoneConnectionCache() {
 
-        if (side == ForgeDirection.UNKNOWN)
-            return false;
-        if (!(device instanceof IFaceRedstoneDevice))
-            return false;
-        if (((IFaceRedstoneDevice) device).getFace() != side)
-            return false;
-
-        return ((IRedstonePart) part).canConnectRedstone(getFace().ordinal());
-    }
-
-    @Override
-    public void onConnect(ForgeDirection side, IRedstoneDevice device) {
-
-        if (side == ForgeDirection.UNKNOWN)
-            return;
-
-        devices[side.ordinal()] = device;
-    }
-
-    @Override
-    public void onDisconnect(ForgeDirection side) {
-
-        devices[side.ordinal()] = null;
-    }
-
-    @Override
-    public IRedstoneDevice getDeviceOnSide(ForgeDirection side) {
-
-        return devices[side.ordinal()];
+        return connections;
     }
 
     @Override
@@ -121,18 +94,6 @@ public class FMPRedstoneDevice implements IFaceRedstoneDevice {
 
         if (part.tile() != null && part.world() != null)
             part.onNeighborChanged();
-    }
-
-    @Override
-    public MinecraftColor getInsulationColor(ForgeDirection side) {
-
-        return MinecraftColor.NONE;
-    }
-
-    @Override
-    public boolean isNormalBlock() {
-
-        return false;
     }
 
     @Override

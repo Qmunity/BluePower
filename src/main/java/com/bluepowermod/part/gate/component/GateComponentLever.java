@@ -1,6 +1,9 @@
 package com.bluepowermod.part.gate.component;
 
 import java.awt.image.BufferedImage;
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
@@ -46,7 +49,7 @@ public class GateComponentLever extends GateComponent {
     public void renderStatic(Vec3i translation, RenderHelper renderer, int pass) {
 
         renderer.addTransformation(new Translation(x, 0, z));
-        renderer.renderBox(new Vec3dCube(0, 2 / 16D, 0, 4 / 16D, 5 / 16D, 7 / 16D), Blocks.cobblestone.getIcon(0, 0));
+        renderer.renderBox(new Vec3dCube(0, 2 / 16D, 0, 4 / 16D, 4 / 16D, 7 / 16D), Blocks.cobblestone.getIcon(0, 0));
         renderer.removeTransformation();
     }
 
@@ -69,10 +72,10 @@ public class GateComponentLever extends GateComponent {
             double maxU = icon.getMaxU();
             double maxV = icon.getMaxV();
 
-            GL11.glTranslated(-x + 6 / 16D, 3 / 16D, -z + 11.5 / 16D);
+            GL11.glTranslated(-x + 6 / 16D, 2 / 16D, -z + 11.5 / 16D);
 
             GL11.glTranslated(0, 0, 1 / 16D);
-            GL11.glRotated((System.currentTimeMillis() % 2000 < 1000) ? 40 : -40, 1, 0, 0);
+            GL11.glRotated(state ? 40 : -40, 1, 0, 0);
             GL11.glTranslated(0, 0, -1 / 16D);
 
             t.startDrawingQuads();
@@ -166,6 +169,20 @@ public class GateComponentLever extends GateComponent {
 
         super.readFromNBT(tag);
         state = tag.getBoolean("state");
+    }
+
+    @Override
+    public void writeData(DataOutput buffer) throws IOException {
+
+        super.writeData(buffer);
+        buffer.writeBoolean(state);
+    }
+
+    @Override
+    public void readData(DataInput buffer) throws IOException {
+
+        super.readData(buffer);
+        state = buffer.readBoolean();
     }
 
 }

@@ -17,14 +17,14 @@
 
 package com.bluepowermod.block.worldgen;
 
-import com.bluepowermod.block.BlockBase;
-import com.bluepowermod.init.BPCreativeTabs;
-import com.bluepowermod.util.Refs;
+import java.util.Random;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
 
-import java.util.Random;
+import com.bluepowermod.block.BlockBase;
+import com.bluepowermod.init.BPCreativeTabs;
+import com.bluepowermod.util.Refs;
 
 public class BlockItemOre extends BlockBase {
 

@@ -21,8 +21,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
 import com.bluepowermod.api.misc.MinecraftColor;
+import com.bluepowermod.api.wire.redstone.RedwireType;
 import com.bluepowermod.part.PartManager;
-import com.bluepowermod.part.wire.redstone.RedwireType;
 
 public class OreDictionarySetup {
 
