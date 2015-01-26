@@ -160,7 +160,7 @@ public abstract class RedstonePropagator implements IPropagator<IRedstoneDevice>
 
     protected boolean shouldPreventStackOverflows() {
 
-        return Thread.getAllStackTraces().size() > 500;
+        return Thread.getAllStackTraces().size() > 200;
     }
 
     // Propagator implementation
@@ -221,13 +221,11 @@ public abstract class RedstonePropagator implements IPropagator<IRedstoneDevice>
         @Override
         protected void doPropagate() {
 
-            System.out.println("Hey!");
-
             List<IConnection<IRedstoneDevice>> connections = performPropagation();
             List<Pair<IRedstoneDevice, ForgeDirection>> l = simplifyDeviceList(connections);
 
-            for (Pair<IRedstoneDevice, ForgeDirection> p : l)
-                p.getKey().setRedstonePower(p.getValue(), (byte) 0);
+            for (IConnection<IRedstoneDevice> c : connections)
+                c.getA().setRedstonePower(c.getSideA(), (byte) 0);
 
             for (Pair<IRedstoneDevice, ForgeDirection> pair : l) {
                 RedstoneApi.getInstance().setWiresOutputPower(false, true);

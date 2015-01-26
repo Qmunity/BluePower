@@ -64,7 +64,7 @@ public enum RedwireType {
         if (type == null)
             return false;
 
-        return (this == BLUESTONE) == (type == BLUESTONE);
+        return type == this;// (this == BLUESTONE) == (type == BLUESTONE);
     }
 
 }
