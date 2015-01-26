@@ -207,7 +207,7 @@ public abstract class RedstonePropagator implements IPropagator<IRedstoneDevice>
         protected void doPropagate() {
 
             if (getDevice() instanceof IRedConductor)
-                if (((IRedConductor) getDevice()).isAnalog(getSide()))
+                if (((IRedConductor) getDevice()).hasLoss(getSide()))
                     return;
 
             try {
