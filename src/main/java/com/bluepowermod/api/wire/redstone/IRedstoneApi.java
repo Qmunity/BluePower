@@ -57,12 +57,12 @@ public interface IRedstoneApi {
     /**
      * Returns whether or not wires should output power.
      */
-    public boolean shouldWiresOutputPower();
+    public boolean shouldWiresOutputPower(boolean lossy);
 
     /**
      * Determines whether or not wires should output power.
      */
-    public void setWiresOutputPower(boolean shouldWiresOutputPower);
+    public void setWiresOutputPower(boolean shouldWiresOutputPower, boolean lossy);
 
     /**
      * Returns whether or not wires should handle block/tile/part updates.

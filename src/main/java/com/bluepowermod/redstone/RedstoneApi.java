@@ -46,6 +46,7 @@ public class RedstoneApi implements IRedstoneApi {
 
     private List<IRedstoneProvider> providers = new ArrayList<IRedstoneProvider>();
     private boolean shouldWiresOutputPower = true;
+    private boolean shouldLossyWiresOutputPower = true;
     private boolean shouldWiresHandleUpdates = true;
     private DummyRedstoneDevice returnDevice = DummyRedstoneDevice.getDeviceAt(null);
 
@@ -94,15 +95,18 @@ public class RedstoneApi implements IRedstoneApi {
     }
 
     @Override
-    public boolean shouldWiresOutputPower() {
+    public boolean shouldWiresOutputPower(boolean lossy) {
 
-        return shouldWiresOutputPower;
+        return lossy ? shouldLossyWiresOutputPower : shouldWiresOutputPower;
     }
 
     @Override
-    public void setWiresOutputPower(boolean shouldWiresOutputPower) {
+    public void setWiresOutputPower(boolean shouldWiresOutputPower, boolean lossy) {
 
-        this.shouldWiresOutputPower = shouldWiresOutputPower;
+        if (lossy)
+            shouldLossyWiresOutputPower = shouldWiresOutputPower;
+        else
+            this.shouldWiresOutputPower = shouldWiresOutputPower;
     }
 
     @Override

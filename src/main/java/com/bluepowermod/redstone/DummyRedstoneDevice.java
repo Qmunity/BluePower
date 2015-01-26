@@ -100,15 +100,15 @@ public class DummyRedstoneDevice implements IRedstoneDevice {
     @Override
     public byte getRedstonePower(ForgeDirection side) {
 
-        if (loc.getBlock() instanceof BlockRedstoneWire) {
-            boolean wiresHandledUpdates = RedstoneApi.getInstance().shouldWiresHandleUpdates();
-            boolean wiresOutputtedPower = RedstoneApi.getInstance().shouldWiresOutputPower();
-            RedstoneApi.getInstance().setWiresOutputPower(false);
-            RedstoneApi.getInstance().setWiresHandleUpdates(false);
-            loc.getBlock().onNeighborBlockChange(loc.getWorld(), loc.getX(), loc.getY(), loc.getZ(), new Vec3i(this).getBlock());
-            RedstoneApi.getInstance().setWiresHandleUpdates(wiresHandledUpdates);
-            RedstoneApi.getInstance().setWiresOutputPower(wiresOutputtedPower);
-        }
+        // if (loc.getBlock() instanceof BlockRedstoneWire) {
+        // boolean wiresHandledUpdates = RedstoneApi.getInstance().shouldWiresHandleUpdates();
+        // boolean wiresOutputtedPower = RedstoneApi.getInstance().shouldWiresOutputPower();
+        // RedstoneApi.getInstance().setWiresOutputPower(false);
+        // RedstoneApi.getInstance().setWiresHandleUpdates(false);
+        // loc.getBlock().onNeighborBlockChange(loc.getWorld(), loc.getX(), loc.getY(), loc.getZ(), new Vec3i(this).getBlock());
+        // RedstoneApi.getInstance().setWiresHandleUpdates(wiresHandledUpdates);
+        // RedstoneApi.getInstance().setWiresOutputPower(wiresOutputtedPower);
+        // }
 
         if (side == ForgeDirection.UNKNOWN)
             return 0;

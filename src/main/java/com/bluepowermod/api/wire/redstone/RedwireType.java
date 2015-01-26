@@ -61,6 +61,9 @@ public enum RedwireType {
 
     public boolean canConnectTo(RedwireType type) {
 
+        if (type == null)
+            return false;
+
         return (this == BLUESTONE) == (type == BLUESTONE);
     }
 

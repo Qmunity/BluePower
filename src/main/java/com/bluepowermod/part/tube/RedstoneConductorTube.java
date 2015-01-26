@@ -116,10 +116,10 @@ public class RedstoneConductorTube implements IRedstoneConductor, IConnectionLis
     @Override
     public byte getRedstonePower(ForgeDirection side) {
 
-        if (!RedstoneApi.getInstance().shouldWiresOutputPower())
+        if (!RedstoneApi.getInstance().shouldWiresOutputPower(hasLoss(side)))
             return 0;
 
-        if (!isAnalog(side))
+        if (!isAnalogue(side))
             return (byte) ((power & 0xFF) > 0 ? 255 : 0);
 
         return power;
@@ -147,7 +147,7 @@ public class RedstoneConductorTube implements IRedstoneConductor, IConnectionLis
     }
 
     @Override
-    public boolean isAnalog(ForgeDirection side) {
+    public boolean isAnalogue(ForgeDirection side) {
 
         if (tube.getRedwireType() == null)
             return false;

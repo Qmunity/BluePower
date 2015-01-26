@@ -58,10 +58,7 @@ import com.bluepowermod.redstone.DummyRedstoneDevice;
 import com.bluepowermod.redstone.RedstoneApi;
 import com.bluepowermod.redstone.RedstoneConnectionCache;
 
-public abstract class PartRedwireFace extends PartWireFace implements IRedwire, IRedConductor // , IRedstoneConductor , IBundledConductor,
-// IPartRedstone,
-// IPartWAILAProvider
-{
+public abstract class PartRedwireFace extends PartWireFace implements IRedwire, IRedConductor {
 
     private RedwireType type;
 
@@ -147,7 +144,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
     }
 
     @Override
-    public boolean isAnalog(ForgeDirection side) {
+    public boolean isAnalogue(ForgeDirection side) {
 
         return getRedwireType().isAnalog();
     }
@@ -222,7 +219,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
                     return false;
             }
 
-            if (device instanceof IRedwire && !((IRedwire) device).getRedwireType().canConnectTo(getRedwireType()))
+            if (device instanceof IRedwire && !getRedwireType().canConnectTo(((IRedwire) device).getRedwireType()))
                 return false;
 
             if (OcclusionHelper.microblockOcclusionTest(getParent(), MicroblockShape.EDGE, 1, getFace(), side))
@@ -252,10 +249,10 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
         @Override
         public byte getRedstonePower(ForgeDirection side) {
 
-            if (!RedstoneApi.getInstance().shouldWiresOutputPower())
+            if (!RedstoneApi.getInstance().shouldWiresOutputPower(hasLoss(side)))
                 return 0;
 
-            if (!isAnalog(side))
+            if (!isAnalogue(side))
                 return (byte) ((power & 0xFF) > 0 ? 255 : 0);
 
             return power;
@@ -264,7 +261,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
         @Override
         public void setRedstonePower(ForgeDirection side, byte power) {
 
-            byte pow = isAnalog(side) ? power : (((power & 0xFF) > 0) ? (byte) 255 : (byte) 0);
+            byte pow = isAnalogue(side) ? power : (((power & 0xFF) > 0) ? (byte) 255 : (byte) 0);
             hasUpdated = hasUpdated | (pow != this.power);
             this.power = pow;
         }
@@ -369,6 +366,14 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
             power = buffer.readByte();
 
             getWorld().markBlockRangeForRenderUpdate(getX(), getY(), getZ(), getX(), getY(), getZ());
+        }
+
+        @Override
+        public void addWAILABody(List<String> text) {
+
+            super.addWAILABody(text);
+
+            text.add("Power: " + (power & 0xFF));
         }
 
     }

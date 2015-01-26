@@ -6,6 +6,6 @@ public interface IRedConductor {
 
     public boolean hasLoss(ForgeDirection side);
 
-    public boolean isAnalog(ForgeDirection side);
+    public boolean isAnalogue(ForgeDirection side);
 
 }
