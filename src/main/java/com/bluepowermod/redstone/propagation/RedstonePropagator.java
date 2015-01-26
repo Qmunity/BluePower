@@ -33,10 +33,10 @@ public abstract class RedstonePropagator implements IPropagator<IRedstoneDevice>
     @Override
     public void propagate() {
 
-        doPropagate();
-
         if (shouldPreventStackOverflows())
             return;
+
+        doPropagate();
 
         for (RedstonePropagator p : scheduledPropagations)
             p.propagate();
