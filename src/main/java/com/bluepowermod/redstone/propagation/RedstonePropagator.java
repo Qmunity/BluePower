@@ -11,6 +11,7 @@ import uk.co.qmunity.lib.misc.Pair;
 
 import com.bluepowermod.api.wire.IConnection;
 import com.bluepowermod.api.wire.redstone.IPropagator;
+import com.bluepowermod.api.wire.redstone.IRedConductor;
 import com.bluepowermod.api.wire.redstone.IRedstoneConductor;
 import com.bluepowermod.api.wire.redstone.IRedstoneConductor.IAdvancedRedstoneConductor;
 import com.bluepowermod.api.wire.redstone.IRedstoneDevice;
@@ -34,7 +35,7 @@ public abstract class RedstonePropagator implements IPropagator<IRedstoneDevice>
 
         doPropagate();
 
-        if (Thread.getAllStackTraces().size() > 500)
+        if (Thread.getAllStackTraces().size() > 100)
             return;
 
         for (RedstonePropagator p : scheduledPropagations)
@@ -204,6 +205,10 @@ public abstract class RedstonePropagator implements IPropagator<IRedstoneDevice>
 
         @Override
         protected void doPropagate() {
+
+            if (getDevice() instanceof IRedConductor)
+                if (((IRedConductor) getDevice()).isAnalog(getSide()))
+                    return;
 
             try {
                 new LosslessPropagator(getDevice(), getSide()).propagate();

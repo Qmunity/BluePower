@@ -16,10 +16,12 @@ import com.bluepowermod.api.wire.IConnectionCache;
 import com.bluepowermod.api.wire.IConnectionListener;
 import com.bluepowermod.api.wire.redstone.IRedstoneConductor;
 import com.bluepowermod.api.wire.redstone.IRedstoneDevice;
+import com.bluepowermod.api.wire.redstone.IRedwire;
+import com.bluepowermod.api.wire.redstone.RedwireType;
 import com.bluepowermod.redstone.RedstoneApi;
 import com.bluepowermod.redstone.RedstoneConnectionCache;
 
-public class RedstoneConductorTube implements IRedstoneConductor, IConnectionListener {
+public class RedstoneConductorTube implements IRedstoneConductor, IConnectionListener, IRedwire {
 
     private static final List<RedstoneConductorTube> tubes = new ArrayList<RedstoneConductorTube>();
 
@@ -72,7 +74,11 @@ public class RedstoneConductorTube implements IRedstoneConductor, IConnectionLis
     public boolean canConnect(ForgeDirection side, IRedstoneDevice device, ConnectionType type) {
 
         if (type == ConnectionType.STRAIGHT) {
-            if (tube.getRedwireType() == null)
+            if (getRedwireType() == null)
+                return false;
+
+            if (device instanceof IRedwire && ((IRedwire) device).getRedwireType() != null
+                    && !((IRedwire) device).getRedwireType().canConnectTo(getRedwireType()))
                 return false;
 
             if (device instanceof IFace)
@@ -83,7 +89,7 @@ public class RedstoneConductorTube implements IRedstoneConductor, IConnectionLis
                 if (((RedstoneConductorTube) device).tube instanceof MagTube != tube instanceof MagTube)
                     return false;
 
-            return true;// FIXME WireCommons.canConnect(this, device);
+            return true;
         }
 
         return false;
@@ -162,7 +168,18 @@ public class RedstoneConductorTube implements IRedstoneConductor, IConnectionLis
 
     public IRedstoneDevice getDeviceOnSide(ForgeDirection d) {
 
-        return connections.getConnectionOnSide(d).getB();
+        IConnection<IRedstoneDevice> c = connections.getConnectionOnSide(d);
+
+        if (c == null)
+            return null;
+
+        return c.getB();
+    }
+
+    @Override
+    public RedwireType getRedwireType() {
+
+        return tube.getRedwireType();
     }
 
 }

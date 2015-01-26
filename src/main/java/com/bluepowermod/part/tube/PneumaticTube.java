@@ -48,6 +48,7 @@ import uk.co.qmunity.lib.vec.Vec3i;
 import com.bluepowermod.BluePower;
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
 import com.bluepowermod.api.tube.ITubeConnection;
+import com.bluepowermod.api.wire.redstone.IRedwire;
 import com.bluepowermod.api.wire.redstone.RedwireType;
 import com.bluepowermod.client.render.IconSupplier;
 import com.bluepowermod.helper.IOHelper;
@@ -57,10 +58,13 @@ import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.init.BPItems;
 import com.bluepowermod.init.Config;
 import com.bluepowermod.item.ItemDamageableColorableOverlay;
+import com.bluepowermod.item.ItemPart;
 import com.bluepowermod.part.BPPart;
 import com.bluepowermod.part.PartManager;
 import com.bluepowermod.part.wire.PartWireFreestanding;
+import com.bluepowermod.part.wire.redstone.PartRedwireFace.PartRedwireFaceUninsulated;
 import com.bluepowermod.part.wire.redstone.WireCommons;
+import com.bluepowermod.redstone.RedstoneApi;
 import com.bluepowermod.util.Color;
 
 import cpw.mods.fml.relauncher.Side;
@@ -88,9 +92,6 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
     private int tick;
 
     private RedwireType redwireType = null;
-
-    // private final ResourceLocation tubeSideTexture = new ResourceLocation(Refs.MODID + ":textures/blocks/Tubes/pneumatic_tube_side.png");
-    // private final ResourceLocation tubeNodeTexture = new ResourceLocation(Refs.MODID + ":textures/blocks/Tubes/tube_end.png");
 
     @Override
     public String getType() {
@@ -169,8 +170,10 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
     @Override
     public void onUpdate() {
 
-        // FIXME WireCommons.refreshConnectionsRedstone(RedstoneConductorTube.getDevice(this));
-        // FIXME WirePropagator.INSTANCE.onPowerLevelChange(RedstoneConductorTube.getDevice(this), ForgeDirection.DOWN, (byte) 0, (byte) 0);
+        // Redstone update
+        RedstoneConductorTube device = RedstoneConductorTube.getDevice(this);
+        device.getRedstoneConnectionCache().recalculateConnections();
+        RedstoneApi.getInstance().getRedstonePropagator(device, ForgeDirection.DOWN);
 
         if (getWorld() != null) {
             clearCache();
@@ -410,27 +413,28 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
                 return true;
             }
 
-            // FIXME Applying redwire
-            // if (item.getItem() instanceof ItemPart) {
-            // BPPart part = PartManager.getExample(item);
-            // if (redwireType == null && part instanceof PartRedwireFace && !((PartRedwireFace) part).isBundled(ForgeDirection.DOWN)) {
-            // if (!getWorld().isRemote) {
-            // redwireType = ((PartRedwireFace) part).getWireType();
-            // if (!player.capabilities.isCreativeMode)
-            // item.stackSize--;
-            //
-            // // Redstone update
-            // WireCommons.refreshConnectionsRedstone(RedstoneConductorTube.getDevice(this));
-            //
-            // updateConnections();
-            // getLogic().clearNodeCaches();
-            // notifyUpdate();
-            // sendUpdatePacket();
-            // }
-            // return true;
-            // }
-            // }
-            // // Removing redwire
+            if (item.getItem() instanceof ItemPart) {
+                BPPart part = PartManager.getExample(item);
+                if (redwireType == null && part instanceof PartRedwireFaceUninsulated) {
+                    if (!getWorld().isRemote) {
+                        redwireType = ((IRedwire) part).getRedwireType();
+                        if (!player.capabilities.isCreativeMode)
+                            item.stackSize--;
+
+                        // Redstone update
+                        RedstoneConductorTube device = RedstoneConductorTube.getDevice(this);
+                        device.getRedstoneConnectionCache().recalculateConnections();
+                        RedstoneApi.getInstance().getRedstonePropagator(device, ForgeDirection.DOWN);
+
+                        updateConnections();
+                        getLogic().clearNodeCaches();
+                        notifyUpdate();
+                        sendUpdatePacket();
+                    }
+                    return true;
+                }
+            }
+            // TODO // Removing redwire
             // if (redwireType != null && item.getItem() instanceof ItemScrewdriver && player.isSneaking()) {
             // if (!getWorld().isRemote) {
             // IOHelper.spawnItemInWorld(getWorld(), PartManager.getPartInfo("wire." + redwireType.getName()).getStack(),
@@ -547,7 +551,33 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
     public boolean renderStatic(Vec3i loc, RenderHelper renderer, RenderBlocks renderBlocks, int pass) {
 
         if (pass == 0) {
-            super.renderStatic(loc, renderer, renderBlocks, 0);
+            boolean renderFully = false;
+
+            for (int i = 0; i < 6; i += 2)
+                if (connections[i] != connections[i + 1])
+                    renderFully = true;
+
+            if (renderFully) {
+                double wireSize = getSize() / 16D;
+                double frameSeparation = 4 / 16D - (wireSize - 2 / 16D);
+                double frameThickness = 1 / 16D;
+
+                boolean down = shouldRenderConnection(ForgeDirection.DOWN);
+                boolean up = shouldRenderConnection(ForgeDirection.UP);
+                boolean north = shouldRenderConnection(ForgeDirection.NORTH);
+                boolean south = shouldRenderConnection(ForgeDirection.SOUTH);
+                boolean west = shouldRenderConnection(ForgeDirection.WEST);
+                boolean east = shouldRenderConnection(ForgeDirection.EAST);
+
+                renderer.setColor(getColorMultiplier());
+
+                renderFrame(renderer, wireSize, frameSeparation, frameThickness, true, true, true, true, true, true, down, up, west, east,
+                        north, south, getParent() != null && getWorld() != null, getFrameIcon(), getFrameColorMultiplier());
+
+                renderer.setColor(0xFFFFFF);
+            } else {
+                super.renderStatic(loc, renderer, renderBlocks, 0);
+            }
 
             if (redwireType != null) {
                 double wireSize = getSize() / 16D;
@@ -556,10 +586,12 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
                 frameThickness /= 1.5;
                 frameSeparation -= 1 / 32D;
 
-                renderFrame(renderer, wireSize, frameSeparation, frameThickness, shouldRenderConnection(ForgeDirection.DOWN),
-                        shouldRenderConnection(ForgeDirection.UP), shouldRenderConnection(ForgeDirection.WEST),
-                        shouldRenderConnection(ForgeDirection.EAST), shouldRenderConnection(ForgeDirection.NORTH),
-                        shouldRenderConnection(ForgeDirection.SOUTH), redstoneConnections[ForgeDirection.DOWN.ordinal()],
+                renderFrame(renderer, wireSize, frameSeparation, frameThickness,
+                        renderFully || shouldRenderConnection(ForgeDirection.DOWN), renderFully
+                        || shouldRenderConnection(ForgeDirection.UP), renderFully || shouldRenderConnection(ForgeDirection.WEST),
+                        renderFully || shouldRenderConnection(ForgeDirection.EAST), renderFully
+                        || shouldRenderConnection(ForgeDirection.NORTH), renderFully
+                        || shouldRenderConnection(ForgeDirection.SOUTH), redstoneConnections[ForgeDirection.DOWN.ordinal()],
                         redstoneConnections[ForgeDirection.UP.ordinal()], redstoneConnections[ForgeDirection.WEST.ordinal()],
                         redstoneConnections[ForgeDirection.EAST.ordinal()], redstoneConnections[ForgeDirection.NORTH.ordinal()],
                         redstoneConnections[ForgeDirection.SOUTH.ordinal()], getParent() != null && getWorld() != null, IconSupplier.wire,
