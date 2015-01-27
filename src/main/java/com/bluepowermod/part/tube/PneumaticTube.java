@@ -62,7 +62,7 @@ import com.bluepowermod.item.ItemPart;
 import com.bluepowermod.part.BPPart;
 import com.bluepowermod.part.PartManager;
 import com.bluepowermod.part.wire.PartWireFreestanding;
-import com.bluepowermod.part.wire.redstone.PartRedwireFace.PartRedwireFaceUninsulated;
+import com.bluepowermod.part.wire.redstone.PartRedwireFace.PartRedwireFaceInsulated;
 import com.bluepowermod.part.wire.redstone.WireCommons;
 import com.bluepowermod.redstone.RedstoneApi;
 import com.bluepowermod.util.Color;
@@ -415,7 +415,7 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
 
             if (item.getItem() instanceof ItemPart) {
                 BPPart part = PartManager.getExample(item);
-                if (redwireType == null && part instanceof PartRedwireFaceUninsulated) {
+                if (redwireType == null && part instanceof PartRedwireFaceInsulated) {
                     if (!getWorld().isRemote) {
                         redwireType = ((IRedwire) part).getRedwireType();
                         if (!player.capabilities.isCreativeMode)

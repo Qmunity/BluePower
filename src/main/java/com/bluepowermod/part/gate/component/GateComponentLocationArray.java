@@ -6,7 +6,7 @@ import com.bluepowermod.part.gate.GateBase;
 
 public abstract class GateComponentLocationArray extends GateComponent {
 
-    private int layoutColor = -1;
+    protected int layoutColor = -1;
 
     protected boolean[][] pixels;
 

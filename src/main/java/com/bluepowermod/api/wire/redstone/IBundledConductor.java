@@ -12,7 +12,7 @@ public interface IBundledConductor extends IBundledDevice, IRedConductor {
     /**
      * Whether or not this device can continue (or start) a propagation on the specified side.
      */
-    public boolean canPropagateFrom(ForgeDirection fromSide);
+    public boolean canPropagateBundledFrom(ForgeDirection fromSide);
 
     public static interface IAdvancedBundledConductor extends IBundledConductor {
 

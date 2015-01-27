@@ -16,6 +16,7 @@ public class Layout {
 
     private BufferedImage layout;
     private Map<Integer, BufferedImage> colorMaps = new HashMap<Integer, BufferedImage>();
+    private Map<Integer, SimplifiedLayout> simplificationMaps = new HashMap<Integer, SimplifiedLayout>();
 
     private LayoutConfiguration config = null;
 
@@ -70,6 +71,7 @@ public class Layout {
         }
 
         colorMaps.clear();
+        simplificationMaps.clear();
     }
 
     public BufferedImage getLayout(int color) {
@@ -99,7 +101,24 @@ public class Layout {
         // Dispose the graphics instance, we don't need it anymore
         g.dispose();
 
+        // Store the image to the map so it can be used later
+        colorMaps.put(color, img);
+
         return img;
+    }
+
+    public SimplifiedLayout getSimplifiedLayout(int color) {
+
+        if (parent == null)
+            return getSubLayout(0).getSimplifiedLayout(color);
+
+        for (Entry<Integer, SimplifiedLayout> e : simplificationMaps.entrySet())
+            if (e.getKey().intValue() == color)
+                return e.getValue();
+
+        SimplifiedLayout l = new SimplifiedLayout(this, color);
+        simplificationMaps.put(color, l);
+        return l;
     }
 
     public LayoutConfiguration getConfig() {

@@ -127,7 +127,7 @@ public class BlockLamp extends BlockContainerBase {
     @Override
     public boolean canConnectRedstone(IBlockAccess world, int x, int y, int z, int side) {
 
-        return true;
+        return !(world.getBlock(x, y, z) instanceof BlockLampRGB);
     }
 
     @Override

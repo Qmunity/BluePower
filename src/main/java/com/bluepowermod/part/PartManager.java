@@ -36,6 +36,7 @@ import com.bluepowermod.part.gate.digital.GateStateCell;
 import com.bluepowermod.part.gate.digital.GateSynchronizer;
 import com.bluepowermod.part.gate.digital.GateTimer;
 import com.bluepowermod.part.gate.digital.GateToggleLatch;
+import com.bluepowermod.part.gate.ic.GateIntegratedCircuit;
 import com.bluepowermod.part.lamp.PartCageLamp;
 import com.bluepowermod.part.lamp.PartFixture;
 import com.bluepowermod.part.tube.Accelerator;
@@ -44,6 +45,7 @@ import com.bluepowermod.part.tube.PneumaticTube;
 import com.bluepowermod.part.tube.PneumaticTubeOpaque;
 import com.bluepowermod.part.tube.RestrictionTube;
 import com.bluepowermod.part.tube.RestrictionTubeOpaque;
+import com.bluepowermod.part.wire.redstone.PartRedwireFace.PartRedwireFaceInsulated;
 import com.bluepowermod.part.wire.redstone.PartRedwireFace.PartRedwireFaceUninsulated;
 
 import cpw.mods.fml.relauncher.Side;
@@ -147,9 +149,9 @@ public class PartManager {
         // registerPart(GateTransceiver.class, true, true);
 
         // IC's
-        // registerPart(Circuit3x3.class);
-        // registerPart(Circuit5x5.class);
-        // registerPart(Circuit7x7.class);
+        registerPart(GateIntegratedCircuit.class, 3);
+        registerPart(GateIntegratedCircuit.class, 5);
+        registerPart(GateIntegratedCircuit.class, 7);
 
         // Lamps
         for (int i = 0; i < 2; i++)
@@ -170,8 +172,8 @@ public class PartManager {
         // Wires
         for (RedwireType type : RedwireType.values()) {
             registerPart(PartRedwireFaceUninsulated.class, type);
-            // for (MinecraftColor color : MinecraftColor.VALID_COLORS)
-            // registerPart(PartRedwireFace.class, type, color, false);
+            for (MinecraftColor color : MinecraftColor.VALID_COLORS)
+                registerPart(PartRedwireFaceInsulated.class, type, color);
             // registerPart(PartRedwireFace.class, type, MinecraftColor.NONE, true);
             // for (MinecraftColor color : MinecraftColor.VALID_COLORS)
             // registerPart(PartRedwireFace.class, type, color, true);
