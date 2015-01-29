@@ -19,6 +19,7 @@ import net.minecraft.world.storage.WorldInfo;
 import net.minecraftforge.common.util.ForgeDirection;
 import uk.co.qmunity.lib.init.QLBlocks;
 import uk.co.qmunity.lib.tile.TileMultipart;
+import uk.co.qmunity.lib.vec.Vec3d;
 
 public class FakeWorldIC extends World {
 
@@ -53,20 +54,14 @@ public class FakeWorldIC extends World {
         return ic;
     }
 
-    // private GateBase<?, ?, ?, ?, ?, ?> get(int x, int z) {
-    //
-    // if (getIC() == null)
-    // return null;
-    //
-    // return getIC().getGate(x, z);
-    // }
-
     private TileMultipart getTile(int x, int z) {
 
-        if (getIC() == null)
+        GateIntegratedCircuit ic = getIC();
+
+        if (ic == null)
             return null;
 
-        return getIC().getTile(x, z);
+        return ic.getTile(x, z);
     }
 
     @Override
@@ -95,13 +90,49 @@ public class FakeWorldIC extends World {
         if (y == 63)
             return Blocks.stone;
         if (y != 64)
-            return null;
+            return Blocks.air;
+
+        if (ic == null)
+            return Blocks.air;
+
+        ForgeDirection d = null;
+        if (x == -1 && z == ((ic.getSize() - 1) / 2))
+            d = ForgeDirection.WEST;
+        if (x == ic.getSize() && z == ((ic.getSize() - 1) / 2))
+            d = ForgeDirection.EAST;
+        if (x == ((ic.getSize() - 1) / 2) && z == -1)
+            d = ForgeDirection.NORTH;
+        if (x == ((ic.getSize() - 1) / 2) && z == ic.getSize())
+            d = ForgeDirection.SOUTH;
+        if (d != null) {
+            return new Vec3d(0, 0, 0, ic.getWorld()).add(d).rotate(0, 90 * -ic.getRotation(), 0).add(ic.getX(), ic.getY(), ic.getZ())
+                    .getBlock();
+        }
+
+        if (x < 0 || x >= ic.getSize() || z < 0 || z >= ic.getSize())
+            return Blocks.air;
 
         return QLBlocks.multipart;
     }
 
     @Override
-    public int getBlockMetadata(int p_72805_1_, int p_72805_2_, int p_72805_3_) {
+    public int getBlockMetadata(int x, int y, int z) {
+
+        if (ic == null)
+            return 0;
+
+        ForgeDirection d = null;
+        if (x == -1 && z == ((ic.getSize() - 1) / 2))
+            d = ForgeDirection.WEST;
+        if (x == ic.getSize() && z == ((ic.getSize() - 1) / 2))
+            d = ForgeDirection.EAST;
+        if (x == ((ic.getSize() - 1) / 2) && z == -1)
+            d = ForgeDirection.NORTH;
+        if (x == ((ic.getSize() - 1) / 2) && z == ic.getSize())
+            d = ForgeDirection.SOUTH;
+        if (d != null)
+            return new Vec3d(0, 0, 0, ic.getWorld()).add(d).rotate(0, 90 * -ic.getRotation(), 0).add(ic.getX(), ic.getY(), ic.getZ())
+                    .getBlockMeta();
 
         return 0;
     }
@@ -111,6 +142,22 @@ public class FakeWorldIC extends World {
 
         if (y != 64)
             return null;
+
+        if (ic == null)
+            return null;
+
+        ForgeDirection d = null;
+        if (x == -1 && z == ((ic.getSize() - 1) / 2))
+            d = ForgeDirection.WEST;
+        if (x == ic.getSize() && z == ((ic.getSize() - 1) / 2))
+            d = ForgeDirection.EAST;
+        if (x == ((ic.getSize() - 1) / 2) && z == -1)
+            d = ForgeDirection.NORTH;
+        if (x == ((ic.getSize() - 1) / 2) && z == ic.getSize())
+            d = ForgeDirection.SOUTH;
+        if (d != null)
+            return new Vec3d(0, 0, 0, ic.getWorld()).add(d).rotate(0, 90 * -ic.getRotation(), 0).add(ic.getX(), ic.getY(), ic.getZ())
+                    .getTileEntity();
 
         return getTile(x, z);
     }

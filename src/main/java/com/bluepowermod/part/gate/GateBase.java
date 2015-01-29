@@ -40,9 +40,11 @@ import com.bluepowermod.api.gate.IGate;
 import com.bluepowermod.api.gate.IGateComponent;
 import com.bluepowermod.api.gate.IGateConnection;
 import com.bluepowermod.api.gate.IGateLogic;
+import com.bluepowermod.api.gate.IIntegratedCircuitPart;
 import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.api.wire.ConnectionType;
 import com.bluepowermod.api.wire.IConnection;
+import com.bluepowermod.api.wire.IConnectionCache;
 import com.bluepowermod.api.wire.IConnectionListener;
 import com.bluepowermod.api.wire.redstone.IBundledDevice;
 import com.bluepowermod.api.wire.redstone.IRedstoneDevice;
@@ -65,8 +67,8 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public abstract class GateBase<C_BOTTOM extends GateConnectionBase, C_TOP extends GateConnectionBase, C_LEFT extends GateConnectionBase, C_RIGHT extends GateConnectionBase, C_FRONT extends GateConnectionBase, C_BACK extends GateConnectionBase>
-        extends BPPartFaceRotate implements IGate<C_BOTTOM, C_TOP, C_LEFT, C_RIGHT, C_FRONT, C_BACK>, IPartRedstone, IConnectionListener,
-        IRedstoneDevice, IBundledDevice, IPartTicking, IPartRenderPlacement {
+extends BPPartFaceRotate implements IGate<C_BOTTOM, C_TOP, C_LEFT, C_RIGHT, C_FRONT, C_BACK>, IPartRedstone, IConnectionListener,
+IRedstoneDevice, IBundledDevice, IPartTicking, IPartRenderPlacement, IIntegratedCircuitPart {
 
     // Static var declarations
     private static Vec3dCube BOX = new Vec3dCube(0, 0, 0, 1, 2D / 16D, 1);
@@ -98,8 +100,12 @@ public abstract class GateBase<C_BOTTOM extends GateConnectionBase, C_TOP extend
         if (getLayout() != null)
             initComponents();
 
-        getRedstoneConnectionCache().listen();
-        getBundledConnectionCache().listen();
+        IConnectionCache<IRedstoneDevice> c1 = getRedstoneConnectionCache();
+        if (c1 != null)
+            c1.listen();
+        IConnectionCache<IBundledDevice> c2 = getBundledConnectionCache();
+        if (c2 != null)
+            c2.listen();
     }
 
     @Override
@@ -848,6 +854,12 @@ public abstract class GateBase<C_BOTTOM extends GateConnectionBase, C_TOP extend
         if (getWorld().isRemote && Config.enableGateSounds)
             getWorld().playSound(getX(), getY(), getZ(), "gui.button.press", 0.5F, 0.5F, false);
 
+    }
+
+    @Override
+    public boolean canPlaceOnIntegratedCircuit() {
+
+        return true;
     }
 
 }

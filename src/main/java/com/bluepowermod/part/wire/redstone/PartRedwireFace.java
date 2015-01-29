@@ -45,6 +45,7 @@ import uk.co.qmunity.lib.part.compat.OcclusionHelper;
 import uk.co.qmunity.lib.vec.Vec3dCube;
 import uk.co.qmunity.lib.vec.Vec3i;
 
+import com.bluepowermod.api.gate.IIntegratedCircuitPart;
 import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.api.wire.ConnectionType;
 import com.bluepowermod.api.wire.IConnection;
@@ -66,7 +67,7 @@ import com.bluepowermod.redstone.DummyRedstoneDevice;
 import com.bluepowermod.redstone.RedstoneApi;
 import com.bluepowermod.redstone.RedstoneConnectionCache;
 
-public abstract class PartRedwireFace extends PartWireFace implements IRedwire, IRedConductor {
+public abstract class PartRedwireFace extends PartWireFace implements IRedwire, IRedConductor, IIntegratedCircuitPart {
 
     private RedwireType type;
 
@@ -177,6 +178,12 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
         super.readUpdateData(buffer);
         for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS)
             connections[d.ordinal()] = buffer.readBoolean();
+    }
+
+    @Override
+    public boolean canPlaceOnIntegratedCircuit() {
+
+        return true;
     }
 
     public static class PartRedwireFaceUninsulated extends PartRedwireFace implements IAdvancedRedstoneConductor, IConnectionListener {
@@ -324,6 +331,10 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
 
             super.onUpdate();
 
+            // Do not do anything if we're on the client
+            if (getWorld().isRemote)
+                return;
+
             // Refresh connections
             connections.recalculateConnections();
             // Add bottom device (forced)
@@ -390,7 +401,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
     }
 
     public static class PartRedwireFaceInsulated extends PartRedwireFace implements IAdvancedRedstoneConductor, IInsulatedRedstoneDevice,
-            IAdvancedBundledConductor, IConnectionListener {
+    IAdvancedBundledConductor, IConnectionListener {
 
         private RedstoneConnectionCache connections = RedstoneApi.getInstance().createRedstoneConnectionCache(this);
         private BundledConnectionCache bundledConnections = RedstoneApi.getInstance().createBundledConnectionCache(this);
@@ -615,6 +626,10 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
 
             super.onUpdate();
 
+            // Do not do anything if we're on the client
+            if (getWorld().isRemote)
+                return;
+
             // Refresh connections
             connections.recalculateConnections();
             // Add bottom device (forced)
@@ -622,7 +637,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
             connections.onConnect(getFace(), drd, getFace().getOpposite(), ConnectionType.STRAIGHT);
             drd.getRedstoneConnectionCache().onConnect(getFace().getOpposite(), null, getFace(), ConnectionType.STRAIGHT);
 
-            RedstoneApi.getInstance().getRedstonePropagator(this, getFace()).propagate();
+            // RedstoneApi.getInstance().getRedstonePropagator(this, getFace()).propagate();
         }
 
         // Rendering methods

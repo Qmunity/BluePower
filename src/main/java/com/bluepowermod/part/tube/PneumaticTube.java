@@ -62,7 +62,7 @@ import com.bluepowermod.item.ItemPart;
 import com.bluepowermod.part.BPPart;
 import com.bluepowermod.part.PartManager;
 import com.bluepowermod.part.wire.PartWireFreestanding;
-import com.bluepowermod.part.wire.redstone.PartRedwireFace.PartRedwireFaceInsulated;
+import com.bluepowermod.part.wire.redstone.PartRedwireFace.PartRedwireFaceUninsulated;
 import com.bluepowermod.part.wire.redstone.WireCommons;
 import com.bluepowermod.redstone.RedstoneApi;
 import com.bluepowermod.util.Color;
@@ -415,7 +415,7 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
 
             if (item.getItem() instanceof ItemPart) {
                 BPPart part = PartManager.getExample(item);
-                if (redwireType == null && part instanceof PartRedwireFaceInsulated) {
+                if (redwireType == null && part instanceof PartRedwireFaceUninsulated) {
                     if (!getWorld().isRemote) {
                         redwireType = ((IRedwire) part).getRedwireType();
                         if (!player.capabilities.isCreativeMode)
@@ -552,10 +552,16 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
 
         if (pass == 0) {
             boolean renderFully = false;
+            int count = 0;
 
-            for (int i = 0; i < 6; i += 2)
-                if (connections[i] != connections[i + 1])
+            for (int i = 0; i < 6; i++) {
+                if (connections[i])
+                    count++;
+                if (i % 2 == 0 && connections[i] != connections[i + 1])
                     renderFully = true;
+            }
+
+            renderFully |= count > 2;
 
             if (renderFully) {
                 double wireSize = getSize() / 16D;

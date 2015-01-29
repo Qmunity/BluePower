@@ -27,7 +27,7 @@ public class RedstoneConnectionCache implements IConnectionCache<IRedstoneDevice
     }
 
     @Override
-    public RedstoneConnection getConnectionOnSide(ForgeDirection side) {
+    public IConnection<IRedstoneDevice> getConnectionOnSide(ForgeDirection side) {
 
         return connections[side.ordinal()];
     }
@@ -56,7 +56,7 @@ public class RedstoneConnectionCache implements IConnectionCache<IRedstoneDevice
 
         IRedstoneDevice self = getSelf();
         for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
-            boolean wasConnected = getConnectionOnSide(d) != null;
+            boolean wasConnected = connections[d.ordinal()] != null;
             RedstoneConnection con = WireHelper.getNeighbor(self, d);
             if (con != null) {
                 onConnect(con.getSideA(), con.getB(), con.getSideB(), con.getType());
@@ -67,13 +67,18 @@ public class RedstoneConnectionCache implements IConnectionCache<IRedstoneDevice
                         .getConnectionOnSide(con.getSideB());
                 con = connections[d.ordinal()];
 
+                if (con == null)
+                    return;
+
                 con.setComplementaryConnection(con2);
                 con2.setComplementaryConnection(con);
             } else if (wasConnected) {
                 con = connections[d.ordinal()];
 
-                onDisconnect(con.getSideA());
-                con.getB().getRedstoneConnectionCache().onDisconnect(con.getSideB());
+                if (con != null) {
+                    onDisconnect(con.getSideA());
+                    con.getB().getRedstoneConnectionCache().onDisconnect(con.getSideB());
+                }
             }
         }
     }

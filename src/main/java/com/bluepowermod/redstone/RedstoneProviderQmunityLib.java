@@ -25,7 +25,9 @@ import uk.co.qmunity.lib.part.compat.MultipartCompatibility;
 
 import com.bluepowermod.api.misc.IFace;
 import com.bluepowermod.api.wire.redstone.IBundledDevice;
+import com.bluepowermod.api.wire.redstone.IBundledDeviceWrapper;
 import com.bluepowermod.api.wire.redstone.IRedstoneDevice;
+import com.bluepowermod.api.wire.redstone.IRedstoneDeviceWrapper;
 import com.bluepowermod.api.wire.redstone.IRedstoneProvider;
 
 public class RedstoneProviderQmunityLib implements IRedstoneProvider {
@@ -37,7 +39,16 @@ public class RedstoneProviderQmunityLib implements IRedstoneProvider {
         if (holder != null) {
             boolean found = false;
             for (IPart p : holder.getParts()) {
-                if (p instanceof IRedstoneDevice) {
+                if (p instanceof IRedstoneDeviceWrapper) {
+                    if (p instanceof IFace) {
+                        if (((IFace) p).getFace() == face)
+                            return ((IRedstoneDeviceWrapper) p).getDeviceOnSide(side);
+                    } else {
+                        if (face == ForgeDirection.UNKNOWN)
+                            return ((IRedstoneDeviceWrapper) p).getDeviceOnSide(side);
+                    }
+                    found = true;
+                } else if (p instanceof IRedstoneDevice) {
                     if (p instanceof IFace) {
                         if (((IFace) p).getFace() == face)
                             return (IRedstoneDevice) p;
@@ -61,7 +72,15 @@ public class RedstoneProviderQmunityLib implements IRedstoneProvider {
         ITilePartHolder holder = MultipartCompatibility.getPartHolder(world, x, y, z);
         if (holder != null) {
             for (IPart p : holder.getParts()) {
-                if (p instanceof IBundledDevice) {
+                if (p instanceof IBundledDeviceWrapper) {
+                    if (p instanceof IFace) {
+                        if (((IFace) p).getFace() == face)
+                            return ((IBundledDeviceWrapper) p).getBundledDeviceOnSide(side);
+                    } else {
+                        if (face == ForgeDirection.UNKNOWN)
+                            return ((IBundledDeviceWrapper) p).getBundledDeviceOnSide(side);
+                    }
+                } else if (p instanceof IBundledDevice) {
                     if (p instanceof IFace) {
                         if (((IFace) p).getFace() == face)
                             return (IBundledDevice) p;

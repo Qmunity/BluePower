@@ -157,6 +157,7 @@ public abstract class PartWireFace extends BPPartFace {
         }
 
         renderer.setIgnoreLighting(false);
+        renderer.setColor(0xFFFFFF);
 
         return true;
     }
