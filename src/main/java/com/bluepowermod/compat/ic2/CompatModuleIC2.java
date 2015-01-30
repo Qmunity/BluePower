@@ -69,5 +69,4 @@ public class CompatModuleIC2 extends CompatModule {
     public void registerRenders() {
 
     }
-
 }
