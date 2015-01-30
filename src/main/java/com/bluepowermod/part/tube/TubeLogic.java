@@ -469,7 +469,7 @@ public class TubeLogic implements IPneumaticTube {
                     int colorMask = nodeTube.getColor(ForgeDirection.getOrientation(i)) != TubeColor.NONE ? 1 << nodeTube.getColor(
                             ForgeDirection.getOrientation(i)).ordinal() : 0;
                             if (tube != null) {
-                                int dist = tube.getWeigth();
+                                int dist = tube.getWeight();
                                 if (tube.getColor(ForgeDirection.getOrientation(i).getOpposite()) != TubeColor.NONE)
                                     colorMask = colorMask | 1 << tube.getColor(ForgeDirection.getOrientation(i).getOpposite()).ordinal();
                                 ForgeDirection curDir = ForgeDirection.getOrientation(i);
@@ -495,7 +495,7 @@ public class TubeLogic implements IPneumaticTube {
                                         } else {
                                             if (!tube.initialized)
                                                 break;
-                                            dist += tube.getWeigth();
+                                            dist += tube.getWeight();
                                             if (tube.getColor(curDir.getOpposite()) != TubeColor.NONE) {
                                                 colorMask = colorMask | 1 << tube.getColor(curDir.getOpposite()).ordinal();
                                             }

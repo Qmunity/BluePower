@@ -470,7 +470,7 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
      *
      * @return
      */
-    public int getWeigth() {
+    public int getWeight() {
 
         return 1;
     }
@@ -563,26 +563,39 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
 
             renderFully |= count > 2;
 
-            if (renderFully) {
+            if (getParent() == null || getWorld() == null) {
                 double wireSize = getSize() / 16D;
                 double frameSeparation = 4 / 16D - (wireSize - 2 / 16D);
                 double frameThickness = 1 / 16D;
 
-                boolean down = shouldRenderConnection(ForgeDirection.DOWN);
-                boolean up = shouldRenderConnection(ForgeDirection.UP);
-                boolean north = shouldRenderConnection(ForgeDirection.NORTH);
-                boolean south = shouldRenderConnection(ForgeDirection.SOUTH);
-                boolean west = shouldRenderConnection(ForgeDirection.WEST);
-                boolean east = shouldRenderConnection(ForgeDirection.EAST);
-
                 renderer.setColor(getColorMultiplier());
 
-                renderFrame(renderer, wireSize, frameSeparation, frameThickness, true, true, true, true, true, true, down, up, west, east,
-                        north, south, getParent() != null && getWorld() != null, getFrameIcon(), getFrameColorMultiplier());
+                renderFrame(renderer, wireSize, frameSeparation, frameThickness, true, true, true, true, true, true, true, true, false,
+                        false, false, false, true, getFrameIcon(), getFrameColorMultiplier());
 
                 renderer.setColor(0xFFFFFF);
             } else {
-                super.renderStatic(loc, renderer, renderBlocks, 0);
+                if (renderFully) {
+                    double wireSize = getSize() / 16D;
+                    double frameSeparation = 4 / 16D - (wireSize - 2 / 16D);
+                    double frameThickness = 1 / 16D;
+
+                    boolean down = shouldRenderConnection(ForgeDirection.DOWN);
+                    boolean up = shouldRenderConnection(ForgeDirection.UP);
+                    boolean north = shouldRenderConnection(ForgeDirection.NORTH);
+                    boolean south = shouldRenderConnection(ForgeDirection.SOUTH);
+                    boolean west = shouldRenderConnection(ForgeDirection.WEST);
+                    boolean east = shouldRenderConnection(ForgeDirection.EAST);
+
+                    renderer.setColor(getColorMultiplier());
+
+                    renderFrame(renderer, wireSize, frameSeparation, frameThickness, true, true, true, true, true, true, down, up, west,
+                            east, north, south, getParent() != null && getWorld() != null, getFrameIcon(), getFrameColorMultiplier());
+
+                    renderer.setColor(0xFFFFFF);
+                } else {
+                    super.renderStatic(loc, renderer, renderBlocks, 0);
+                }
             }
 
             if (redwireType != null) {

@@ -17,14 +17,8 @@
 
 package com.bluepowermod.part.tube;
 
-import net.minecraft.util.IIcon;
 
-import com.bluepowermod.client.render.IconSupplier;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
-public class RestrictionTubeOpaque extends RestrictionTube {
+public class RestrictionTubeOpaque extends PneumaticTubeOpaque {
 
     @Override
     public String getType() {
@@ -39,16 +33,8 @@ public class RestrictionTubeOpaque extends RestrictionTube {
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
-    protected IIcon getSideIcon() {
+    public int getWeight() {
 
-        return IconSupplier.restrictionTubeSideOpaque;
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    protected IIcon getNodeIcon() {
-
-        return IconSupplier.restrictionTubeNodeOpaque;
+        return 5000;
     }
 }
