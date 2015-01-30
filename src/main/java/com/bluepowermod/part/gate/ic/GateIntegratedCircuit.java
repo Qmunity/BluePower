@@ -45,8 +45,8 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class GateIntegratedCircuit extends
-GateBase<GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase>
-implements IGateLogic<GateIntegratedCircuit>, IRedstoneDeviceWrapper, IBundledDeviceWrapper {
+        GateBase<GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase>
+        implements IGateLogic<GateIntegratedCircuit>, IRedstoneDeviceWrapper, IBundledDeviceWrapper {
 
     private int size;
     private IIntegratedCircuitPart[][] parts = null;

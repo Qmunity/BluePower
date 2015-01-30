@@ -37,6 +37,7 @@ import com.bluepowermod.part.gate.digital.GateSynchronizer;
 import com.bluepowermod.part.gate.digital.GateTimer;
 import com.bluepowermod.part.gate.digital.GateToggleLatch;
 import com.bluepowermod.part.gate.ic.GateIntegratedCircuit;
+import com.bluepowermod.part.gate.supported.GateNullCell;
 import com.bluepowermod.part.lamp.PartCageLamp;
 import com.bluepowermod.part.lamp.PartFixture;
 import com.bluepowermod.part.tube.Accelerator;
@@ -134,13 +135,11 @@ public class PartManager {
         registerPart(GateRepeater.class);
         // registerPart(GateTransparentLatch.class);
         registerPart(GateSynchronizer.class);
-        // registerPart(GateNullCell.class);
 
         // Analog gates
         registerPart(GateInverter.class);
         registerPart(GateComparator.class);
         registerPart(GateLightCell.class);
-        // registerPart(GateNullCell.class, true);
 
         // Wireless gates
         // registerPart(GateTransceiver.class, false, false);
@@ -152,6 +151,11 @@ public class PartManager {
         registerPart(GateIntegratedCircuit.class, 3);
         registerPart(GateIntegratedCircuit.class, 5);
         registerPart(GateIntegratedCircuit.class, 7);
+
+        // Supported gates
+        for (RedwireType t1 : RedwireType.values())
+            for (RedwireType t2 : RedwireType.values())
+                registerPart(GateNullCell.class, t1, t2);
 
         // Lamps
         for (int i = 0; i < 2; i++)
