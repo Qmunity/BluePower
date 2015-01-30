@@ -12,6 +12,11 @@ public class FakeMultipartTileIC extends TileMultipart {
         this.ic = ic;
     }
 
+    public GateIntegratedCircuit getIC() {
+
+        return ic;
+    }
+
     @Override
     public void sendUpdatePacket(IPart part, int channel) {
 

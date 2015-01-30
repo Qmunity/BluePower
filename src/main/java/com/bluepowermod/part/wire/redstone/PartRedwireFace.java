@@ -61,6 +61,7 @@ import com.bluepowermod.api.wire.redstone.IRedwire;
 import com.bluepowermod.api.wire.redstone.RedwireType;
 import com.bluepowermod.client.render.IconSupplier;
 import com.bluepowermod.helper.VectorHelper;
+import com.bluepowermod.part.gate.ic.FakeMultipartTileIC;
 import com.bluepowermod.part.wire.PartWireFace;
 import com.bluepowermod.redstone.BundledConnectionCache;
 import com.bluepowermod.redstone.DummyRedstoneDevice;
@@ -287,6 +288,9 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
         @Override
         public void onRedstoneUpdate() {
 
+            if (getParent() instanceof FakeMultipartTileIC)
+                ((FakeMultipartTileIC) getParent()).getIC().loadWorld();
+
             if (hasUpdated) {
                 sendUpdatePacket();
 
@@ -313,6 +317,9 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
 
         @Override
         public List<Entry<IConnection<IRedstoneDevice>, Boolean>> propagate(ForgeDirection fromSide) {
+
+            if (getParent() instanceof FakeMultipartTileIC)
+                ((FakeMultipartTileIC) getParent()).getIC().loadWorld();
 
             List<Entry<IConnection<IRedstoneDevice>, Boolean>> l = new ArrayList<Entry<IConnection<IRedstoneDevice>, Boolean>>();
 

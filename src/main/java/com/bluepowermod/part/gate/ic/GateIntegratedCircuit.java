@@ -45,8 +45,8 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class GateIntegratedCircuit extends
-        GateBase<GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase>
-        implements IGateLogic<GateIntegratedCircuit>, IRedstoneDeviceWrapper, IBundledDeviceWrapper {
+GateBase<GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase>
+implements IGateLogic<GateIntegratedCircuit>, IRedstoneDeviceWrapper, IBundledDeviceWrapper {
 
     private int size;
     private IIntegratedCircuitPart[][] parts = null;
@@ -139,12 +139,12 @@ public class GateIntegratedCircuit extends
         return null;
     }
 
-    private void loadWorld() {
+    public void loadWorld() {
 
         FakeWorldIC.getInstance().setIC(this);
     }
 
-    private void unloadWorld() {
+    public void unloadWorld() {
 
         FakeWorldIC.getInstance().setIC(null);
     }
@@ -198,6 +198,13 @@ public class GateIntegratedCircuit extends
         }
 
         unloadWorld();
+    }
+
+    @Override
+    public int getRotation() {
+
+        // TODO Make this work as it actually should
+        return 0;
     }
 
     // Logic and interaction
