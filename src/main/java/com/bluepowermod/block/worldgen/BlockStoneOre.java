@@ -25,7 +25,9 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.boss.EntityWither;
 import net.minecraft.item.Item;
+import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.init.BPCreativeTabs;
@@ -163,6 +165,19 @@ public class BlockStoneOre extends Block {
             return !(entity instanceof EntityWither) && super.canEntityDestroy(world, x, y, z, entity);
 
         return super.canEntityDestroy(world, x, y, z, entity);
+    }
+
+    @Override
+    public void onBlockExploded(World world, int x, int y, int z, Explosion explosion) {
+
+        if (!witherproof)
+            super.onBlockExploded(world, x, y, z, explosion);
+    }
+
+    @Override
+    public boolean canDropFromExplosion(Explosion explosion) {
+
+        return witherproof ? false : super.canDropFromExplosion(explosion);
     }
 
     public BlockStoneOre setTooltip(String... tooltip) {
