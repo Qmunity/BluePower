@@ -153,9 +153,7 @@ public class PartManager {
         registerPart(GateIntegratedCircuit.class, 7);
 
         // Supported gates
-        for (RedwireType t1 : RedwireType.values())
-            for (RedwireType t2 : RedwireType.values())
-                registerPart(GateNullCell.class, t1, t2);
+        registerPart(GateNullCell.class);
 
         // Lamps
         for (int i = 0; i < 2; i++)

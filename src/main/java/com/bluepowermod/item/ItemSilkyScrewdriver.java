@@ -30,7 +30,7 @@ import uk.co.qmunity.lib.part.IPart;
 import uk.co.qmunity.lib.part.ITilePartHolder;
 import uk.co.qmunity.lib.part.compat.MultipartCompatibility;
 import uk.co.qmunity.lib.raytrace.QMovingObjectPosition;
-import uk.co.qmunity.lib.vec.Vec3d;
+import uk.co.qmunity.lib.raytrace.RayTracer;
 
 import com.bluepowermod.api.block.IAdvancedSilkyRemovable;
 import com.bluepowermod.api.block.ISilkyRemovable;
@@ -52,21 +52,27 @@ public class ItemSilkyScrewdriver extends ItemBase {
     }
 
     @Override
-    public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
+    public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY,
+            float hitZ) {
 
         Block block = world.getBlock(x, y, z);
         TileEntity te = world.getTileEntity(x, y, z);
 
         ITilePartHolder h = MultipartCompatibility.getPartHolder(world, x, y, z);
         if (h != null) {
-            QMovingObjectPosition mop = h.rayTrace(new Vec3d(x, y, z, world), new Vec3d(hitX, hitY, hitZ));
+            QMovingObjectPosition mop = h.rayTrace(RayTracer.instance().getStartVector(player), RayTracer.instance().getEndVector(player));
             if (mop != null) {
                 IPart p = mop.getPart();
                 if (p instanceof ISilkyRemovable && !world.isRemote) {
                     if (p instanceof IAdvancedSilkyRemovable && !((IAdvancedSilkyRemovable) p).preSilkyRemoval(world, x, y, z))
                         return false;
                     NBTTagCompound tag = new NBTTagCompound();
-                    p.writeToNBT(tag);
+                    boolean hideTooltip = false;
+                    if (p instanceof IAdvancedSilkyRemovable) {
+                        hideTooltip = ((IAdvancedSilkyRemovable) p).writeSilkyData(world, x, y, z, tag);
+                    } else {
+                        p.writeToNBT(tag);
+                    }
                     ItemStack droppedStack = p.getItem();
                     NBTTagCompound stackTag = droppedStack.getTagCompound();
                     if (stackTag == null) {
@@ -74,6 +80,7 @@ public class ItemSilkyScrewdriver extends ItemBase {
                         droppedStack.setTagCompound(stackTag);
                     }
                     stackTag.setTag("tileData", tag);
+                    stackTag.setBoolean("hideSilkyTooltip", hideTooltip);
                     world.spawnEntityInWorld(new EntityItem(world, x + 0.5, y + 0.5, z + 0.5, droppedStack));
                     h.removePart(p);
                     if (p instanceof IAdvancedSilkyRemovable)
@@ -90,14 +97,16 @@ public class ItemSilkyScrewdriver extends ItemBase {
             if (block instanceof IAdvancedSilkyRemovable && !((IAdvancedSilkyRemovable) block).preSilkyRemoval(world, x, y, z))
                 return false;
             if (te == null)
-                throw new IllegalStateException("Block doesn't have a TileEntity?! Implementers of ISilkyRemovable should have one. Offender: "
-                        + block.getUnlocalizedName());
+                throw new IllegalStateException(
+                        "Block doesn't have a TileEntity?! Implementers of ISilkyRemovable should have one. Offender: "
+                                + block.getUnlocalizedName());
             NBTTagCompound tag = new NBTTagCompound();
             te.writeToNBT(tag);
             int metadata = world.getBlockMetadata(x, y, z);
             Item item = block.getItemDropped(metadata, itemRand, 0);
             if (item == null)
-                throw new NullPointerException("Block returns null for getItemDropped(meta, rand, fortune)! Offender: " + block.getUnlocalizedName());
+                throw new NullPointerException("Block returns null for getItemDropped(meta, rand, fortune)! Offender: "
+                        + block.getUnlocalizedName());
             ItemStack droppedStack = new ItemStack(item, 1, block.damageDropped(metadata));
             NBTTagCompound stackTag = droppedStack.getTagCompound();
             if (stackTag == null) {

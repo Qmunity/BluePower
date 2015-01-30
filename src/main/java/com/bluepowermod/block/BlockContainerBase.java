@@ -27,6 +27,7 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
@@ -333,6 +334,19 @@ public class BlockContainerBase extends BlockBase implements ITileEntityProvider
     public void postSilkyRemoval(World world, int x, int y, int z) {
 
         isSilkyRemoving = false;
+    }
+
+    @Override
+    public boolean writeSilkyData(World world, int x, int y, int z, NBTTagCompound tag) {
+
+        world.getTileEntity(x, y, z).writeToNBT(tag);
+        return false;
+    }
+
+    @Override
+    public void readSilkyData(World world, int x, int y, int z, NBTTagCompound tag) {
+
+        world.getTileEntity(x, y, z).readFromNBT(tag);
     }
 
     @Override

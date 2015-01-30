@@ -48,8 +48,6 @@ public class ItemPart extends ItemMultipart implements IDatabaseSaveable {
 
     public ItemPart(PartInfo info) {
 
-        super();
-
         setUnlocalizedName("part." + Refs.MODID + ":");
 
         setCreativeTab(BPCreativeTabs.items);
@@ -81,7 +79,7 @@ public class ItemPart extends ItemMultipart implements IDatabaseSaveable {
 
         for (CreativeTabs t : info.getExample().getCreativeTabs())
             if (t != null && t.equals(tab) || tab == null)
-                l.add(info.getStack());
+                l.addAll(info.getExample().getSubItems());
     }
 
     @Override
@@ -151,7 +149,7 @@ public class ItemPart extends ItemMultipart implements IDatabaseSaveable {
         if (part == null)
             return;
         List<String> l = new ArrayList<String>();
-        part.addTooltip(l);
+        part.addTooltip(item, l);
         list.addAll(l);
     }
 

@@ -18,6 +18,7 @@
 package com.bluepowermod.part;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import net.minecraft.block.Block;
@@ -62,7 +63,7 @@ IPartInteractable, IDatabaseSaveable, IPartWAILAProvider {
         if (partInfo == null)
             partInfo = PartManager.getPartInfo(getType());
 
-        return partInfo.getStack().copy();
+        return partInfo.getStack();
     }
 
     @Override
@@ -223,8 +224,13 @@ IPartInteractable, IDatabaseSaveable, IPartWAILAProvider {
     }
 
     @SideOnly(Side.CLIENT)
-    public void addTooltip(List<String> tip) {
+    public void addTooltip(ItemStack item, List<String> tip) {
 
+    }
+
+    public List<ItemStack> getSubItems() {
+
+        return Arrays.asList(getItem());
     }
 
 }
