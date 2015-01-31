@@ -46,6 +46,7 @@ import uk.co.qmunity.lib.vec.Vec3dCube;
 import uk.co.qmunity.lib.vec.Vec3i;
 
 import com.bluepowermod.BluePower;
+import com.bluepowermod.api.misc.IScrewdriver;
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
 import com.bluepowermod.api.tube.ITubeConnection;
 import com.bluepowermod.api.wire.redstone.IRedwire;
@@ -170,12 +171,21 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
     @Override
     public void onUpdate() {
 
-        // Redstone update
-        RedstoneConductorTube device = RedstoneConductorTube.getDevice(this);
-        device.getRedstoneConnectionCache().recalculateConnections();
-        RedstoneApi.getInstance().getRedstonePropagator(device, ForgeDirection.DOWN);
+        if (getParent() != null && getWorld() != null) {
+            // Redstone update
+            RedstoneConductorTube device = RedstoneConductorTube.getDevice(this);
+            device.getRedstoneConnectionCache().recalculateConnections();
 
-        if (getWorld() != null) {
+            ForgeDirection d = ForgeDirection.UNKNOWN;
+            for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS)
+                if (device.getDeviceOnSide(dir) != null)
+                    d = dir;
+
+            RedstoneApi.getInstance().getRedstonePropagator(device, d).propagate();
+
+            sendUpdatePacket();
+
+            // Cache and connection refresh
             clearCache();
             updateConnections();
         }
@@ -424,7 +434,7 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
                         // Redstone update
                         RedstoneConductorTube device = RedstoneConductorTube.getDevice(this);
                         device.getRedstoneConnectionCache().recalculateConnections();
-                        RedstoneApi.getInstance().getRedstonePropagator(device, ForgeDirection.DOWN);
+                        RedstoneApi.getInstance().getRedstonePropagator(device, ForgeDirection.DOWN).propagate();
 
                         updateConnections();
                         getLogic().clearNodeCaches();
@@ -434,23 +444,27 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
                     return true;
                 }
             }
-            // TODO // Removing redwire
-            // if (redwireType != null && item.getItem() instanceof ItemScrewdriver && player.isSneaking()) {
-            // if (!getWorld().isRemote) {
-            // IOHelper.spawnItemInWorld(getWorld(), PartManager.getPartInfo("wire." + redwireType.getName()).getStack(),
-            // getX() + 0.5, getY() + 0.5, getZ() + 0.5);
-            // redwireType = null;
-            //
-            // // Redstone update
-            // WireCommons.disconnectRedstone(RedstoneConductorTube.getDevice(this));
-            //
-            // updateConnections();
-            // getLogic().clearNodeCaches();
-            // notifyUpdate();
-            // sendUpdatePacket();
-            // }
-            // return true;
-            // }
+            // Removing redwire
+            if (redwireType != null && item.getItem() instanceof IScrewdriver && player.isSneaking()) {
+                if (!getWorld().isRemote) {
+                    IOHelper.spawnItemInWorld(getWorld(), PartManager.getPartInfo("wire." + redwireType.getName()).getStack(),
+                            getX() + 0.5, getY() + 0.5, getZ() + 0.5);
+                    redwireType = null;
+
+                    // Redstone update
+                    RedstoneConductorTube device = RedstoneConductorTube.getDevice(this);
+                    device.getRedstoneConnectionCache().recalculateConnections();
+                    RedstoneApi.getInstance().getRedstonePropagator(device, ForgeDirection.DOWN).propagate();
+
+                    ((IScrewdriver) item.getItem()).damage(item, 1, player, false);
+
+                    updateConnections();
+                    getLogic().clearNodeCaches();
+                    notifyUpdate();
+                    sendUpdatePacket();
+                }
+                return true;
+            }
         }
         return false;
     }

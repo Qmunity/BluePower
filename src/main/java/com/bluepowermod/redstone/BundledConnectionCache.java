@@ -52,6 +52,9 @@ public class BundledConnectionCache implements IConnectionCache<IBundledDevice> 
     @Override
     public void recalculateConnections() {
 
+        if (dev.getWorld().isRemote)
+            return;
+
         // FIXME Recalculate connections
     }
 

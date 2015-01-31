@@ -54,6 +54,9 @@ public class RedstoneConnectionCache implements IConnectionCache<IRedstoneDevice
     @Override
     public void recalculateConnections() {
 
+        if (dev.getWorld().isRemote)
+            return;
+
         IRedstoneDevice self = getSelf();
         for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
             boolean wasConnected = connections[d.ordinal()] != null;

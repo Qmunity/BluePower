@@ -545,7 +545,7 @@ implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor {
 
         QMovingObjectPosition mop = super.rayTrace(start, end);
 
-        EntityPlayer player = BluePower.proxy.getPlayer();
+        // EntityPlayer player = BluePower.proxy.getPlayer();
 
         // if (mop != null
         // && (player == null || (player != null && player.getCurrentEquippedItem() != null && !(player.getCurrentEquippedItem()
@@ -751,7 +751,7 @@ implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor {
                         }
                     }
                 }
-            } else if (item.getItem() instanceof IScrewdriver) {
+            } else if (item.getItem() instanceof IScrewdriver && player.isSneaking()) {
                 if (hit.getY() > 2 / 16D
                         && ((hit.getY() <= 4 / 16D && hit.getX() > 0.5 - 1 / 16D && hit.getX() > 0.5 + 1 / 16D) || hit.getY() > 4 / 16D)) {
                     if (typeB != null) {

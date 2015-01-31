@@ -158,7 +158,7 @@ public class RedstoneConductorTube implements IRedstoneConductor, IConnectionLis
     @Override
     public boolean canPropagateFrom(ForgeDirection fromSide) {
 
-        return true;
+        return true;// getRedwireType() != null;
     }
 
     public byte getPower() {
@@ -168,7 +168,8 @@ public class RedstoneConductorTube implements IRedstoneConductor, IConnectionLis
 
     public IRedstoneDevice getDeviceOnSide(ForgeDirection d) {
 
-        IConnection<IRedstoneDevice> c = connections.getConnectionOnSide(d);
+        @SuppressWarnings("unchecked")
+        IConnection<IRedstoneDevice> c = (IConnection<IRedstoneDevice>) getRedstoneConnectionCache().getConnectionOnSide(d);
 
         if (c == null)
             return null;
