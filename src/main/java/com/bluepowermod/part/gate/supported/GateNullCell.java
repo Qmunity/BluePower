@@ -8,25 +8,34 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map.Entry;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+
+import org.lwjgl.opengl.GL11;
+
 import uk.co.qmunity.lib.client.render.RenderHelper;
 import uk.co.qmunity.lib.misc.Pair;
 import uk.co.qmunity.lib.part.IPart;
 import uk.co.qmunity.lib.part.IPartPlacement;
 import uk.co.qmunity.lib.raytrace.QMovingObjectPosition;
+import uk.co.qmunity.lib.transform.Rotation;
 import uk.co.qmunity.lib.vec.Vec3d;
 import uk.co.qmunity.lib.vec.Vec3dCube;
 import uk.co.qmunity.lib.vec.Vec3i;
 
 import com.bluepowermod.BluePower;
 import com.bluepowermod.api.block.IAdvancedSilkyRemovable;
+import com.bluepowermod.api.misc.IScrewdriver;
 import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.api.wire.ConnectionType;
 import com.bluepowermod.api.wire.IConnection;
@@ -35,9 +44,12 @@ import com.bluepowermod.api.wire.redstone.IRedstoneDevice;
 import com.bluepowermod.api.wire.redstone.IRedwire;
 import com.bluepowermod.api.wire.redstone.RedwireType;
 import com.bluepowermod.client.render.IconSupplier;
+import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.item.ItemPart;
 import com.bluepowermod.part.PartManager;
 import com.bluepowermod.part.gate.connection.GateConnectionBase;
+import com.bluepowermod.part.wire.redstone.PartRedwireFace;
+import com.bluepowermod.part.wire.redstone.PartRedwireFace.PartRedwireFaceUninsulated;
 import com.bluepowermod.part.wire.redstone.WireCommons;
 import com.bluepowermod.redstone.DummyRedstoneDevice;
 import com.bluepowermod.redstone.RedstoneApi;
@@ -504,6 +516,286 @@ implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor {
             return null;
 
         return super.getPlacement(part, world, location, face, mop, player);
+    }
+
+    // Collision/selection boxes
+
+    @Override
+    protected void addBoxes(List<Vec3dCube> boxes) {
+
+        super.addBoxes(boxes);
+
+        double height = 2 / 16D;
+
+        if (typeA != null) {
+            boxes.add(new Vec3dCube(7 / 16D, 2 / 16D, 1 / 16D, 9 / 16D, 2 / 16D + height, 15 / 16D));
+            boxes.add(new Vec3dCube(7 / 16D, 2 / 16D, 0 / 16D, 9 / 16D, 2 / 16D + (height / 2), 1 / 16D));
+            boxes.add(new Vec3dCube(7 / 16D, 2 / 16D, 15 / 16D, 9 / 16D, 2 / 16D + (height / 2), 16 / 16D));
+        }
+
+        if (typeB != null) {
+            boxes.add(new Vec3dCube(0 / 16D, 2 / 16D, 7 / 16D, 2 / 16D, 12 / 16D, 9 / 16D));
+            boxes.add(new Vec3dCube(14 / 16D, 2 / 16D, 7 / 16D, 16 / 16D, 12 / 16D, 9 / 16D));
+            boxes.add(new Vec3dCube(2 / 16D, 10 / 16D, 7 / 16D, 14 / 16D, 12 / 16D, 9 / 16D));
+        }
+    }
+
+    @Override
+    public QMovingObjectPosition rayTrace(Vec3d start, Vec3d end) {
+
+        QMovingObjectPosition mop = super.rayTrace(start, end);
+
+        EntityPlayer player = BluePower.proxy.getPlayer();
+
+        // if (mop != null
+        // && (player == null || (player != null && player.getCurrentEquippedItem() != null && !(player.getCurrentEquippedItem()
+        // .getItem() instanceof IScrewdriver))))
+        if (mop != null)
+            mop = new QMovingObjectPosition(mop, mop.getPart(), Vec3dCube.merge(getSelectionBoxes()));
+
+        return mop;
+    }
+
+    @Override
+    public boolean drawHighlight(QMovingObjectPosition mop, EntityPlayer player, float frame) {
+
+        Vec3d hit = new Vec3d(mop.hitVec).sub(mop.blockX, mop.blockY, mop.blockZ).rotateUndo(getFace(), Vec3d.center);
+        Vec3 pos = player.getPosition(frame);
+
+        ItemStack held = player.getCurrentEquippedItem();
+        if (held == null)
+            return false;
+        if (held.getItem() instanceof ItemPart) {
+            IPart part = ((ItemPart) held.getItem()).createPart(held, player, null, null);
+            if (part == null)
+                return false;
+            if (!(part instanceof PartRedwireFaceUninsulated))
+                return false;
+            PartRedwireFace wire = (PartRedwireFace) part;
+
+            RenderHelper renderer = RenderHelper.instance;
+            renderer.fullReset();
+            renderer.setRenderCoords(getWorld(), getX(), getY(), getZ());
+
+            double height = 2 / 16D;
+
+            IIcon wireIcon = IconSupplier.wire;
+
+            GL11.glEnable(GL11.GL_BLEND);
+            GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+
+            Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
+
+            Tessellator.instance.startDrawingQuads();
+            Tessellator.instance.addTranslation((float) -pos.xCoord, (float) -pos.yCoord, (float) -pos.zCoord);
+            {
+                switch (getFace()) {
+                case DOWN:
+                    break;
+                case UP:
+                    renderer.addTransformation(new Rotation(180, 180, 0, Vec3d.center));
+                    break;
+                case NORTH:
+                    renderer.addTransformation(new Rotation(90, 0, 0, Vec3d.center));
+                    break;
+                case SOUTH:
+                    renderer.addTransformation(new Rotation(-90, 0, 0, Vec3d.center));
+                    break;
+                case WEST:
+                    renderer.addTransformation(new Rotation(0, 0, -90, Vec3d.center));
+                    break;
+                case EAST:
+                    renderer.addTransformation(new Rotation(0, 0, 90, Vec3d.center));
+                    break;
+                default:
+                    break;
+                }
+
+                int rotation = getRotation();
+                if (rotation != -1)
+                    renderer.addTransformation(new Rotation(0, 90 * -rotation, 0));
+
+                renderer.setOpacity(0.5);
+                renderer.setColor(WireCommons.getColorForPowerLevel(wire.getRedwireType().getColor(), (byte) (255 / 2)));
+
+                ForgeDirection dir = ForgeDirection.NORTH;
+                if (getRotation() % 2 == 1)
+                    dir = dir.getRotation(getFace());
+
+                if (hit.getY() > 2 / 16D) {
+                    if (typeB == null) {
+                        renderer.renderBox(new Vec3dCube(0 / 16D, 2 / 16D, 7 / 16D, 2 / 16D, 10 / 16D, 9 / 16D), wireIcon);
+                        renderer.renderBox(new Vec3dCube(14 / 16D, 2 / 16D, 7 / 16D, 16 / 16D, 10 / 16D, 9 / 16D), wireIcon);
+                        renderer.renderBox(new Vec3dCube(0 / 16D, 10 / 16D, 7 / 16D, 16 / 16D, 12 / 16D, 9 / 16D), wireIcon);
+                    }
+                } else {
+                    if (typeA == null)
+                        renderer.renderBox(new Vec3dCube(7 / 16D, 2 / 16D, 0 / 16D, 9 / 16D, 2 / 16D + height, 16 / 16D), wireIcon);
+                }
+
+                renderer.fullReset();
+            }
+            Tessellator.instance.addTranslation((float) pos.xCoord, (float) pos.yCoord, (float) pos.zCoord);
+            Tessellator.instance.draw();
+
+            GL11.glDisable(GL11.GL_BLEND);
+
+            return true;
+        } else if (held.getItem() instanceof IScrewdriver) {
+            // List<Vec3dCube> l = new ArrayList<Vec3dCube>();
+            // super.addBoxes(l);
+            // boolean def = false;
+            // for (Vec3dCube c : l)
+            // if (mop.getCube().equals(c.clone().rotate(getFace(), Vec3d.center).rotate(0, 90 * -getRotation(), 0, Vec3d.center)))
+            // def = true;
+            // if (def || hit.getY() <= 2 / 16D) {
+            // Vec3dCube c = Vec3dCube.merge(getSelectionBoxes()).expand(0.001);
+            //
+            // GL11.glEnable(GL11.GL_BLEND);
+            // GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+            // GL11.glDisable(GL11.GL_TEXTURE_2D);
+            // GL11.glColor4f(0, 0, 0, 0.4F);
+            // GL11.glLineWidth(2);
+            // GL11.glDepthMask(true);
+            // GL11.glPushMatrix();
+            //
+            // Tessellator var2 = Tessellator.instance;
+            // var2.startDrawing(3);
+            // Tessellator.instance.addTranslation((float) -pos.xCoord + getX(), (float) -pos.yCoord + getY(), (float) -pos.zCoord
+            // + getZ());
+            // var2.addVertex(c.getMinX(), c.getMinY(), c.getMinZ());
+            // var2.addVertex(c.getMaxX(), c.getMinY(), c.getMinZ());
+            // var2.addVertex(c.getMaxX(), c.getMinY(), c.getMaxZ());
+            // var2.addVertex(c.getMinX(), c.getMinY(), c.getMaxZ());
+            // var2.addVertex(c.getMinX(), c.getMinY(), c.getMinZ());
+            // var2.draw();
+            // var2.startDrawing(3);
+            // var2.addVertex(c.getMinX(), c.getMaxY(), c.getMinZ());
+            // var2.addVertex(c.getMaxX(), c.getMaxY(), c.getMinZ());
+            // var2.addVertex(c.getMaxX(), c.getMaxY(), c.getMaxZ());
+            // var2.addVertex(c.getMinX(), c.getMaxY(), c.getMaxZ());
+            // var2.addVertex(c.getMinX(), c.getMaxY(), c.getMinZ());
+            // var2.draw();
+            // var2.startDrawing(1);
+            // var2.addVertex(c.getMinX(), c.getMinY(), c.getMinZ());
+            // var2.addVertex(c.getMinX(), c.getMaxY(), c.getMinZ());
+            // var2.addVertex(c.getMaxX(), c.getMinY(), c.getMinZ());
+            // var2.addVertex(c.getMaxX(), c.getMaxY(), c.getMinZ());
+            // var2.addVertex(c.getMaxX(), c.getMinY(), c.getMaxZ());
+            // var2.addVertex(c.getMaxX(), c.getMaxY(), c.getMaxZ());
+            // var2.addVertex(c.getMinX(), c.getMinY(), c.getMaxZ());
+            // var2.addVertex(c.getMinX(), c.getMaxY(), c.getMaxZ());
+            // Tessellator.instance.addTranslation((float) pos.xCoord - getX(), (float) pos.yCoord - getY(), (float) pos.zCoord - getZ());
+            // var2.draw();
+            //
+            // GL11.glPopMatrix();
+            // GL11.glDepthMask(false);
+            // GL11.glEnable(GL11.GL_TEXTURE_2D);
+            // GL11.glDisable(GL11.GL_BLEND);
+            //
+            // return true;
+            // }
+            //
+            // return true;
+        }
+
+        return false;
+    }
+
+    // In-world customization
+
+    @Override
+    public boolean onActivated(EntityPlayer player, QMovingObjectPosition mop, ItemStack item) {
+
+        Vec3d hit = new Vec3d(mop.hitVec).sub(mop.blockX, mop.blockY, mop.blockZ).rotateUndo(getFace(), Vec3d.center);
+
+        if (item != null) {
+            if (item.getItem() instanceof ItemPart) {
+                IPart part = ((ItemPart) item.getItem()).createPart(item, player, null, null);
+                if (part != null && part instanceof PartRedwireFaceUninsulated) {
+                    PartRedwireFace wire = (PartRedwireFace) part;
+
+                    if (hit.getY() > 2 / 16D) {
+                        if (typeB == null) {
+                            if (getWorld().isRemote)
+                                return true;
+
+                            typeB = wire.getRedwireType();
+                            bundledB = false;
+                            inWorldB = true;
+
+                            getRedstoneConnectionCache().recalculateConnections();
+
+                            sendUpdatePacket();
+
+                            if (!player.capabilities.isCreativeMode)
+                                item.stackSize--;
+                            return true;
+                        }
+                    } else {
+                        if (typeA == null) {
+                            if (getWorld().isRemote)
+                                return true;
+
+                            typeA = wire.getRedwireType();
+                            bundledA = false;
+                            inWorldA = true;
+
+                            getRedstoneConnectionCache().recalculateConnections();
+
+                            sendUpdatePacket();
+
+                            if (!player.capabilities.isCreativeMode)
+                                item.stackSize--;
+                            return true;
+                        }
+                    }
+                }
+            } else if (item.getItem() instanceof IScrewdriver) {
+                if (hit.getY() > 2 / 16D
+                        && ((hit.getY() <= 4 / 16D && hit.getX() > 0.5 - 1 / 16D && hit.getX() > 0.5 + 1 / 16D) || hit.getY() > 4 / 16D)) {
+                    if (typeB != null) {
+                        if (getWorld().isRemote)
+                            return true;
+
+                        IOHelper.spawnItemInWorld(getWorld(), typeB.getPartInfo(MinecraftColor.NONE, bundledB).getStack(), getX() + 0.5,
+                                getY() + 0.5, getZ() + 0.5);
+
+                        typeB = null;
+                        bundledB = false;
+                        inWorldB = false;
+
+                        ((IScrewdriver) item.getItem()).damage(item, 1, player, false);
+
+                        getRedstoneConnectionCache().recalculateConnections();
+
+                        sendUpdatePacket();
+                        return true;
+                    }
+                } else if (hit.getY() > 2 / 16D) {
+                    if (typeA != null) {
+                        if (getWorld().isRemote)
+                            return true;
+
+                        IOHelper.spawnItemInWorld(getWorld(), typeA.getPartInfo(MinecraftColor.NONE, bundledA).getStack(), getX() + 0.5,
+                                getY() + 0.5, getZ() + 0.5);
+
+                        typeA = null;
+                        bundledA = false;
+                        inWorldA = false;
+
+                        ((IScrewdriver) item.getItem()).damage(item, 1, player, false);
+
+                        getRedstoneConnectionCache().recalculateConnections();
+
+                        sendUpdatePacket();
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return super.onActivated(player, mop, item);
     }
 
 }

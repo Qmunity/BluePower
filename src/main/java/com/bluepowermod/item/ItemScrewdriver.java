@@ -17,10 +17,14 @@
 
 package com.bluepowermod.item;
 
+import java.util.Random;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumAction;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.stats.StatList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import uk.co.qmunity.lib.part.IPart;
@@ -75,16 +79,15 @@ public class ItemScrewdriver extends ItemBase implements IScrewdriver {
             if (((BlockContainerBase) block).getGuiID() != GuiIDs.INVALID) {
                 if (player.isSneaking()) {
                     block.rotateBlock(world, x, y, z, ForgeDirection.getOrientation(side));
-                    if (!player.capabilities.isCreativeMode)
-                        stack.damageItem(1, player);
+                    damage(stack, 1, player, false);
                 }
             } else {
-                if (block.rotateBlock(world, x, y, z, ForgeDirection.getOrientation(side)) && !player.capabilities.isCreativeMode)
-                    stack.damageItem(1, player);
+                if (block.rotateBlock(world, x, y, z, ForgeDirection.getOrientation(side)))
+                    damage(stack, 1, player, false);
             }
         } else {
-            if (block.rotateBlock(world, x, y, z, ForgeDirection.getOrientation(side)) && !player.capabilities.isCreativeMode)
-                stack.damageItem(1, player);
+            if (block.rotateBlock(world, x, y, z, ForgeDirection.getOrientation(side)))
+                damage(stack, 1, player, false);
         }
         return false;
     }
@@ -100,5 +103,32 @@ public class ItemScrewdriver extends ItemBase implements IScrewdriver {
     public EnumAction getItemUseAction(ItemStack par1ItemStack) {
 
         return EnumAction.block;
+    }
+
+    @Override
+    public boolean damage(ItemStack stack, int damage, EntityPlayer player, boolean simulated) {
+
+        if (player != null && player.capabilities.isCreativeMode)
+            return true;
+        if ((stack.getItemDamage() % stack.getMaxDamage()) + damage > stack.getMaxDamage())
+            return false;
+
+        if (!simulated) {
+            if (stack.attemptDamageItem(damage, new Random())) {
+                if (player != null)
+                    player.renderBrokenItemStack(stack);
+                --stack.stackSize;
+
+                if (player != null && player instanceof EntityPlayer)
+                    player.addStat(StatList.objectBreakStats[Item.getIdFromItem(stack.getItem())], 1);
+
+                if (stack.stackSize < 0)
+                    stack.stackSize = 0;
+
+                stack.setItemDamage(0);
+            }
+        }
+
+        return true;
     }
 }

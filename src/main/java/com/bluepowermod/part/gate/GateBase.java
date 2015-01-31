@@ -42,6 +42,7 @@ import com.bluepowermod.api.gate.IGateComponent;
 import com.bluepowermod.api.gate.IGateConnection;
 import com.bluepowermod.api.gate.IGateLogic;
 import com.bluepowermod.api.gate.IIntegratedCircuitPart;
+import com.bluepowermod.api.misc.IScrewdriver;
 import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.api.wire.ConnectionType;
 import com.bluepowermod.api.wire.IConnection;
@@ -51,7 +52,6 @@ import com.bluepowermod.api.wire.redstone.IBundledDevice;
 import com.bluepowermod.api.wire.redstone.IRedstoneDevice;
 import com.bluepowermod.helper.VectorHelper;
 import com.bluepowermod.init.BPCreativeTabs;
-import com.bluepowermod.init.BPItems;
 import com.bluepowermod.init.Config;
 import com.bluepowermod.part.BPPart;
 import com.bluepowermod.part.BPPartFaceRotate;
@@ -68,8 +68,8 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public abstract class GateBase<C_BOTTOM extends GateConnectionBase, C_TOP extends GateConnectionBase, C_LEFT extends GateConnectionBase, C_RIGHT extends GateConnectionBase, C_FRONT extends GateConnectionBase, C_BACK extends GateConnectionBase>
-extends BPPartFaceRotate implements IGate<C_BOTTOM, C_TOP, C_LEFT, C_RIGHT, C_FRONT, C_BACK>, IPartRedstone, IConnectionListener,
-IRedstoneDevice, IBundledDevice, IPartTicking, IPartRenderPlacement, IIntegratedCircuitPart {
+        extends BPPartFaceRotate implements IGate<C_BOTTOM, C_TOP, C_LEFT, C_RIGHT, C_FRONT, C_BACK>, IPartRedstone, IConnectionListener,
+        IRedstoneDevice, IBundledDevice, IPartTicking, IPartRenderPlacement, IIntegratedCircuitPart {
 
     // Static var declarations
     private static Vec3dCube BOX = new Vec3dCube(0, 0, 0, 1, 2D / 16D, 1);
@@ -322,16 +322,18 @@ IRedstoneDevice, IBundledDevice, IPartTicking, IPartRenderPlacement, IIntegrated
     // Interaction
 
     @Override
-    public boolean onActivated(EntityPlayer player, QMovingObjectPosition hit, ItemStack item) {
+    public boolean onActivated(EntityPlayer player, QMovingObjectPosition mop, ItemStack item) {
 
-        if (item != null && item.getItem() == BPItems.screwdriver) {
+        if (item != null && item.getItem() instanceof IScrewdriver) {
             if (player.isSneaking()) {
                 if (logic().changeMode()) {
                     if (!getWorld().isRemote) {
+                        ((IScrewdriver) item.getItem()).damage(item, 1, player, false);
+                        getRedstoneConnectionCache().recalculateConnections();
+                        getBundledConnectionCache().recalculateConnections();
                         for (IGateConnection c : getConnections())
                             if (c != null)
                                 c.notifyUpdate();
-                        // FIXME WireCommons.refreshConnectionsRedstone(this);
                         sendUpdateIfNeeded();
                     }
                     return true;
@@ -339,10 +341,12 @@ IRedstoneDevice, IBundledDevice, IPartTicking, IPartRenderPlacement, IIntegrated
                 return false;
             } else {
                 setRotation((getRotation() + 1) % 4);
+                ((IScrewdriver) item.getItem()).damage(item, 1, player, false);
+                getRedstoneConnectionCache().recalculateConnections();
+                getBundledConnectionCache().recalculateConnections();
                 for (GateConnectionBase c : getConnections())
                     if (c != null)
                         c.notifyUpdate();
-                // FIXME WireCommons.refreshConnectionsRedstone(this);
                 sendUpdateIfNeeded();
             }
 

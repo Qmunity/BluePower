@@ -1,5 +1,6 @@
 package com.bluepowermod.recipe;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
@@ -8,6 +9,7 @@ import net.minecraft.world.World;
 import uk.co.qmunity.lib.part.IPart;
 
 import com.bluepowermod.BluePower;
+import com.bluepowermod.api.misc.IScrewdriver;
 import com.bluepowermod.api.wire.redstone.RedwireType;
 import com.bluepowermod.item.ItemPart;
 import com.bluepowermod.item.ItemScrewdriver;
@@ -36,7 +38,7 @@ public class RecipeNullCell implements IRecipe {
     @Override
     public ItemStack getCraftingResult(InventoryCrafting inv) {
 
-        return getCraftingResult(inv, false);
+        return getCraftingResult(inv, null, false);
     }
 
     @Override
@@ -54,7 +56,7 @@ public class RecipeNullCell implements IRecipe {
     @SubscribeEvent
     public void onCraft(ItemCraftedEvent event) {
 
-        getCraftingResult(event.craftMatrix, true);
+        getCraftingResult(event.craftMatrix, event.player, true);
     }
 
     private ItemStack getItemAt(IInventory inv, int x, int y) {
@@ -68,7 +70,7 @@ public class RecipeNullCell implements IRecipe {
         return item;
     }
 
-    private ItemStack getCraftingResult(IInventory inv, boolean isCrafting) {
+    private ItemStack getCraftingResult(IInventory inv, EntityPlayer player, boolean isCrafting) {
 
         int centerX = 0;
         int centerY = 0;
@@ -140,6 +142,8 @@ public class RecipeNullCell implements IRecipe {
                             if (centerX > 0)
                                 if (getItemAt(inv, centerX - 1, centerY) != null)
                                     can = false;
+                            if (!((IScrewdriver) sd.getItem()).damage(sd, getItemAt(inv, centerX, centerY).stackSize, null, true))
+                                can = false;
 
                             if (can) {
                                 ItemStack wire = PartManager.getPartInfo("wire." + t.getName() + (bundled ? ".bundled" : "")).getStack(
@@ -150,6 +154,7 @@ public class RecipeNullCell implements IRecipe {
                                     nullCellStack.stackSize = getItemAt(inv, centerX, centerY).stackSize + 1;
                                     setItemAt(inv, centerX, centerY, nullCellStack);
                                     sd.stackSize++;
+                                    ((IScrewdriver) sd.getItem()).damage(sd, nullCellStack.stackSize - 1, null, false);
                                 }
                                 return wire;
                             }
@@ -171,6 +176,8 @@ public class RecipeNullCell implements IRecipe {
                             if (centerX > 0)
                                 if (getItemAt(inv, centerX - 1, centerY) != null)
                                     can = false;
+                            if (!((IScrewdriver) sd.getItem()).damage(sd, getItemAt(inv, centerX, centerY).stackSize, null, true))
+                                can = false;
 
                             if (can) {
                                 ItemStack wire = PartManager.getPartInfo("wire." + t.getName() + (bundled ? ".bundled" : "")).getStack(
@@ -181,6 +188,7 @@ public class RecipeNullCell implements IRecipe {
                                     nullCellStack.stackSize = getItemAt(inv, centerX, centerY).stackSize + 1;
                                     setItemAt(inv, centerX, centerY, nullCellStack);
                                     sd.stackSize++;
+                                    ((IScrewdriver) sd.getItem()).damage(sd, nullCellStack.stackSize - 1, null, false);
                                 }
                                 return wire;
                             }
@@ -211,6 +219,8 @@ public class RecipeNullCell implements IRecipe {
                                 amt += getItemAt(inv, centerX, centerY).stackSize;
                             if (amt > 64)
                                 can = false;
+                            if (!((IScrewdriver) sd.getItem()).damage(sd, amt, null, true))
+                                can = false;
 
                             if (can) {
                                 ItemStack wire = null;
@@ -231,6 +241,7 @@ public class RecipeNullCell implements IRecipe {
                                     nullCellStack.stackSize = getItemAt(inv, centerX, centerY).stackSize + 1;
                                     setItemAt(inv, centerX, centerY, nullCellStack);
                                     sd.stackSize++;
+                                    System.out.println(((IScrewdriver) sd.getItem()).damage(sd, amt, null, false) + " " + player);
                                 }
                                 return wire;
                             }
