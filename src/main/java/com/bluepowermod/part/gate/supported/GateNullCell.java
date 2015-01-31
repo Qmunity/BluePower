@@ -325,9 +325,11 @@ implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor {
                 buffer.writeInt(typeB.ordinal());
                 buffer.writeBoolean(bundledB);
             }
-        } else if (channel == 1) {
+        }
+        if (channel == 1 || channel == -1) {
             buffer.writeByte(powerA);
-        } else if (channel == 2) {
+        }
+        if (channel == 2 || channel == -1) {
             buffer.writeByte(powerB);
         }
     }
@@ -352,9 +354,11 @@ implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor {
                 typeB = null;
                 bundledB = false;
             }
-        } else if (channel == 1) {
+        }
+        if (channel == 1 || channel == -1) {
             powerA = buffer.readByte();
-        } else if (channel == 2) {
+        }
+        if (channel == 2 || channel == -1) {
             powerB = buffer.readByte();
         }
 
