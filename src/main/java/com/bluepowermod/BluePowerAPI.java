@@ -74,7 +74,6 @@ public class BluePowerAPI implements IBPApi {
                 NBTTagCompound tileTag = tag.getCompoundTag("tileData");
                 boolean err = false;
                 if (part instanceof IAdvancedSilkyRemovable) {
-                    System.out.println("Heyo!");
                     try {
                         part.getWorld();
                         part.getX();

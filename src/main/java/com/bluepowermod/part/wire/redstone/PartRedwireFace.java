@@ -159,7 +159,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
     @Override
     public boolean isAnalogue(ForgeDirection side) {
 
-        return getRedwireType().isAnalog();
+        return getRedwireType().isAnalogue();
     }
 
     // NBT

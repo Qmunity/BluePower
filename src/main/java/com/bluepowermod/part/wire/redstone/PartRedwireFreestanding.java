@@ -292,7 +292,7 @@ IPartWAILAProvider, IPartSolid, IPartThruHole, IPartCustomPlacement {
         if (!RedstoneApi.getInstance().shouldWiresOutputPower())
             return 0;
 
-        if (!isAnalog())
+        if (!isAnalogue())
             return (byte) ((power & 0xFF) > 0 ? 255 : 0);
 
         return power;
@@ -301,7 +301,7 @@ IPartWAILAProvider, IPartSolid, IPartThruHole, IPartCustomPlacement {
     @Override
     public void setRedstonePower(ForgeDirection side, byte power) {
 
-        byte pow = isAnalog() ? power : (((power & 0xFF) > 0) ? (byte) 255 : (byte) 0);
+        byte pow = isAnalogue() ? power : (((power & 0xFF) > 0) ? (byte) 255 : (byte) 0);
         hasUpdated = hasUpdated | (pow != this.power);
         this.power = pow;
     }
@@ -585,7 +585,7 @@ IPartWAILAProvider, IPartSolid, IPartThruHole, IPartCustomPlacement {
     @Override
     public boolean isAnalog() {
 
-        return type.isAnalog();
+        return type.isAnalogue();
     }
 
     @Override

@@ -28,6 +28,7 @@ import com.bluepowermod.init.TileEntities;
 import com.bluepowermod.network.NetworkHandler;
 import com.bluepowermod.part.PartManager;
 import com.bluepowermod.part.tube.RedstoneProviderTube;
+import com.bluepowermod.recipe.RecipeNullCell;
 import com.bluepowermod.redstone.RedstoneApi;
 import com.bluepowermod.redstone.RedstoneProviderQmunityLib;
 import com.bluepowermod.redstone.RedstoneProviderVanilla;
@@ -119,6 +120,7 @@ public class BluePower {
         proxy.initRenderers();
 
         // Recipes.init(CraftingManager.getInstance());
+        GameRegistry.addRecipe(new RecipeNullCell());
         // AlloyFurnaceRegistry.getInstance().generateRecyclingRecipes();
 
         RedstoneApi.getInstance().registerRedstoneProvider(new RedstoneProviderVanilla());

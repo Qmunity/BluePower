@@ -64,7 +64,7 @@ public class LogicRecipes {
         // GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.plate_assembly, 1), " # ", "SRS", "#C#", '#', BPItems.stone_tile, 'S',
         // "stickWood", 'R', BPItems.red_alloy_ingot, 'C', BPItems.stone_cathode));
         GameRegistry
-        .addShapelessRecipe(new ItemStack(BPItems.taintedsilicon_chip_tile, 1), BPItems.silicon_chip_tile, Items.glowstone_dust);
+                .addShapelessRecipe(new ItemStack(BPItems.taintedsilicon_chip_tile, 1), BPItems.silicon_chip_tile, Items.glowstone_dust);
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.quartz_resonator_tile, 3), " # ", "###", "WWW", '#', "gemQuartz",
                 'W', BPItems.stone_tile));
 
@@ -185,5 +185,7 @@ public class LogicRecipes {
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPBlocks.circuit_database, 1), "#C#", "BTB", "###", '#', "ingotIron", 'C',
                 PartManager.getPartInfo("integratedCircuit7x7").getStack(), 'B', Blocks.bookshelf, 'T', BPBlocks.circuit_table));
 
+        // Custom crafting for nullcells
+        GameRegistry.addRecipe(new RecipeNullCell());
     }
 }

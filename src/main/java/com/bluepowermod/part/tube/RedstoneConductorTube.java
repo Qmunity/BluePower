@@ -152,7 +152,7 @@ public class RedstoneConductorTube implements IRedstoneConductor, IConnectionLis
         if (tube.getRedwireType() == null)
             return false;
 
-        return tube.getRedwireType().isAnalog();
+        return tube.getRedwireType().isAnalogue();
     }
 
     @Override

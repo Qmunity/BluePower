@@ -35,6 +35,7 @@ import uk.co.qmunity.lib.vec.Vec3dCube;
 import uk.co.qmunity.lib.vec.Vec3i;
 
 import com.bluepowermod.BluePower;
+import com.bluepowermod.api.block.IAdvancedSilkyRemovable;
 import com.bluepowermod.api.block.ISilkyRemovable;
 import com.bluepowermod.api.gate.IGate;
 import com.bluepowermod.api.gate.IGateComponent;
@@ -677,7 +678,12 @@ IRedstoneDevice, IBundledDevice, IPartTicking, IPartRenderPlacement, IIntegrated
     public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
 
         if (this instanceof ISilkyRemovable) {
-            readFromNBT(item.hasTagCompound() ? item.getTagCompound().getCompoundTag("tileData") : new NBTTagCompound());
+            if (this instanceof IAdvancedSilkyRemovable) {
+                ((IAdvancedSilkyRemovable) this).readSilkyData(null, 0, 0, 0,
+                        item.hasTagCompound() ? item.getTagCompound().getCompoundTag("tileData") : new NBTTagCompound());
+            } else {
+                readFromNBT(item.hasTagCompound() ? item.getTagCompound().getCompoundTag("tileData") : new NBTTagCompound());
+            }
         }
         GL11.glPushMatrix();
         {
