@@ -569,7 +569,7 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
             int count = 0;
 
             for (int i = 0; i < 6; i++) {
-                if (connections[i])
+                if (connections[i] || redstoneConnections[i])
                     count++;
                 if (i % 2 == 0 && connections[i] != connections[i + 1])
                     renderFully = true;
