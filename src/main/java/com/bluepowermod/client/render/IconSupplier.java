@@ -26,19 +26,14 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class IconSupplier {
 
     public static IIcon pneumaticTubeSide;
-    public static IIcon pneumaticTubeNode;
     public static IIcon pneumaticTubeOpaqueSide;
     public static IIcon pneumaticTubeOpaqueNode;
-    public static IIcon pneumaticTubeColorNode;
-    public static IIcon pneumaticTubeColorSide;
     public static IIcon pneumaticTubeGlass;
 
-    public static IIcon restrictionTubeNode;
     public static IIcon restrictionTubeSide;
     public static IIcon restrictionTubeNodeOpaque;
     public static IIcon restrictionTubeSideOpaque;
 
-    public static IIcon magTubeNode;
     public static IIcon magTubeSide;
     public static IIcon magCoilSide;
     public static IIcon magCoilFront;
@@ -90,16 +85,11 @@ public class IconSupplier {
 
         if (reg.getTextureType() == 0) {
             pneumaticTubeSide = reg.registerIcon(Refs.MODID + ":tubes/pneumatic_tube_side");
-            pneumaticTubeNode = reg.registerIcon(Refs.MODID + ":tubes/tube_end");
             pneumaticTubeOpaqueSide = reg.registerIcon(Refs.MODID + ":tubes/pneumatic_tube_side_opaque");
-            pneumaticTubeOpaqueNode = reg.registerIcon(Refs.MODID + ":tubes/tube_end_opaque");
-            pneumaticTubeColorSide = reg.registerIcon(Refs.MODID + ":tubes/tube_color_side");
-            pneumaticTubeColorNode = reg.registerIcon(Refs.MODID + ":tubes/tube_color_end");
-            restrictionTubeNode = reg.registerIcon(Refs.MODID + ":tubes/restriction_tube_end");
+            pneumaticTubeOpaqueNode = reg.registerIcon(Refs.MODID + ":tubes/pneumatic_tube_end_opaque");
             restrictionTubeSide = reg.registerIcon(Refs.MODID + ":tubes/restriction_tube_side");
             restrictionTubeNodeOpaque = reg.registerIcon(Refs.MODID + ":tubes/restriction_tube_end_opaque");
             restrictionTubeSideOpaque = reg.registerIcon(Refs.MODID + ":tubes/restriction_tube_side_opaque");
-            magTubeNode = reg.registerIcon(Refs.MODID + ":tubes/mag_end");
             magTubeSide = reg.registerIcon(Refs.MODID + ":tubes/mag_side");
             magCoilSide = reg.registerIcon(Refs.MODID + ":tubes/mag_casing");
             magCoilFront = reg.registerIcon(Refs.MODID + ":tubes/mag_casing_end");

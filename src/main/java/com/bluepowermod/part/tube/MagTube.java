@@ -48,13 +48,6 @@ public class MagTube extends PneumaticTube {
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
-    protected IIcon getNodeIcon() {
-
-        return IconSupplier.magTubeNode;
-    }
-
-    @Override
     protected boolean canConnectToInventories() {
 
         return false;

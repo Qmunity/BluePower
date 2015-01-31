@@ -123,7 +123,7 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
         return getTubeBoxes();
     }
 
-    private List<Vec3dCube> getTubeBoxes() {
+    protected List<Vec3dCube> getTubeBoxes() {
 
         List<Vec3dCube> aabbs = getOcclusionBoxes();
         for (int i = 0; i < 6; i++) {
@@ -498,7 +498,7 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
     @SideOnly(Side.CLIENT)
     public void renderDynamic(Vec3d translation, double delta, int pass) {
 
-        if (pass == 0) {
+        if (pass == 0 && !(this instanceof PneumaticTubeOpaque)) {
             logic.renderDynamic(translation, (float) delta);
             if (!shouldRenderNode())
                 renderSide();
@@ -516,8 +516,8 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
         Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
         t.startDrawingQuads();
 
-        connections[2] = true;
-        connections[3] = true;
+        connections[ForgeDirection.DOWN.ordinal()] = true;
+        connections[ForgeDirection.UP.ordinal()] = true;
 
         RenderHelper renderer = RenderHelper.instance;
         renderer.fullReset();
@@ -569,47 +569,41 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
             int count = 0;
 
             for (int i = 0; i < 6; i++) {
-                if (connections[i] || redstoneConnections[i])
+                if (shouldRenderConnection(ForgeDirection.getOrientation(i)))
                     count++;
                 if (i % 2 == 0 && connections[i] != connections[i + 1])
                     renderFully = true;
             }
 
-            renderFully |= count > 2;
+            renderFully |= count > 2 || count == 0;
+            renderFully |= this instanceof RestrictionTube;
+            renderFully |= getParent() == null || getWorld() == null;
 
-            if (getParent() == null || getWorld() == null) {
+            if (this instanceof RestrictionTube) {
+                IIcon icon = IconSupplier.restrictionTubeSide;
+                renderer.renderBox(new Vec3dCube(0.25, 0.25, 0.25, 0.75, 0.75, 0.75), icon);
+            }
+
+            if (renderFully) {
                 double wireSize = getSize() / 16D;
                 double frameSeparation = 4 / 16D - (wireSize - 2 / 16D);
                 double frameThickness = 1 / 16D;
 
+                boolean down = shouldRenderConnection(ForgeDirection.DOWN);
+                boolean up = shouldRenderConnection(ForgeDirection.UP);
+                boolean north = shouldRenderConnection(ForgeDirection.NORTH);
+                boolean south = shouldRenderConnection(ForgeDirection.SOUTH);
+                boolean west = shouldRenderConnection(ForgeDirection.WEST);
+                boolean east = shouldRenderConnection(ForgeDirection.EAST);
+
                 renderer.setColor(getColorMultiplier());
 
-                renderFrame(renderer, wireSize, frameSeparation, frameThickness, true, true, true, true, true, true, true, true, false,
-                        false, false, false, true, getFrameIcon(), getFrameColorMultiplier());
+                renderFrame(renderer, wireSize, frameSeparation, frameThickness, true, true, true, true, true, true, down, up, west, east,
+                        north, south, true, getFrameIcon(), getFrameColorMultiplier());
 
                 renderer.setColor(0xFFFFFF);
             } else {
-                if (renderFully) {
-                    double wireSize = getSize() / 16D;
-                    double frameSeparation = 4 / 16D - (wireSize - 2 / 16D);
-                    double frameThickness = 1 / 16D;
-
-                    boolean down = shouldRenderConnection(ForgeDirection.DOWN);
-                    boolean up = shouldRenderConnection(ForgeDirection.UP);
-                    boolean north = shouldRenderConnection(ForgeDirection.NORTH);
-                    boolean south = shouldRenderConnection(ForgeDirection.SOUTH);
-                    boolean west = shouldRenderConnection(ForgeDirection.WEST);
-                    boolean east = shouldRenderConnection(ForgeDirection.EAST);
-
-                    renderer.setColor(getColorMultiplier());
-
-                    renderFrame(renderer, wireSize, frameSeparation, frameThickness, true, true, true, true, true, true, down, up, west,
-                            east, north, south, getParent() != null && getWorld() != null, getFrameIcon(), getFrameColorMultiplier());
-
-                    renderer.setColor(0xFFFFFF);
-                } else {
-                    super.renderStatic(loc, renderer, renderBlocks, 0);
-                }
+                super.renderStatic(loc, renderer, renderBlocks, 0);
             }
 
             if (redwireType != null) {
@@ -686,21 +680,9 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
     }
 
     @SideOnly(Side.CLIENT)
-    protected IIcon getSideIcon(ForgeDirection side) {
-
-        return getSideIcon();
-    }
-
-    @SideOnly(Side.CLIENT)
     protected IIcon getSideIcon() {
 
         return IconSupplier.pneumaticTubeSide;
-    }
-
-    @SideOnly(Side.CLIENT)
-    protected IIcon getNodeIcon() {
-
-        return IconSupplier.pneumaticTubeNode;
     }
 
     /**

@@ -147,19 +147,12 @@ public class Accelerator extends PneumaticTube implements IPartCustomPlacement {
         return true;// TODO implement powah!
     }
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    protected IIcon getNodeIcon() {
-
-        return null;
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    protected IIcon getSideIcon(ForgeDirection side) {
-
-        return getPartCache(side) instanceof MagTube ? IconSupplier.magTubeSide : IconSupplier.pneumaticTubeSide;
-    }
+    // @Override
+    // @SideOnly(Side.CLIENT)
+    // protected IIcon getSideIcon(ForgeDirection side) {
+    //
+    // return getPartCache(side) instanceof MagTube ? IconSupplier.magTubeSide : IconSupplier.pneumaticTubeSide;
+    // }
 
     @Override
     @SideOnly(Side.CLIENT)

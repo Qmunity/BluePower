@@ -28,7 +28,7 @@ public class RedstoneConductorTube implements IRedstoneConductor, IConnectionLis
     public static RedstoneConductorTube getDevice(PneumaticTube tube) {
 
         for (RedstoneConductorTube dev : new ArrayList<RedstoneConductorTube>(tubes))
-            if (dev.tube != null && dev.tube.equals(tube))
+            if (dev != null && dev.tube != null && dev.tube.equals(tube))
                 return dev;
 
         RedstoneConductorTube dev = new RedstoneConductorTube(tube);
