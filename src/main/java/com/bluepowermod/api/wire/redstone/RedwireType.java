@@ -17,26 +17,30 @@
 
 package com.bluepowermod.api.wire.redstone;
 
+import com.bluepowermod.api.misc.MinecraftColor;
+import com.bluepowermod.part.PartInfo;
+import com.bluepowermod.part.PartManager;
+
 public enum RedwireType {
 
     BLUESTONE(false, false, 0x4444CC, "ingotBlueAlloy"), RED_ALLOY(true, true, 0xDD0000, "ingotRedAlloy"), INFUSED_TESLATITE(true, false,
             0xAA00BB, "ingotPurpleAlloy");
 
-    private boolean analog, loss;
+    private boolean analogue, loss;
     private int color;
     private String ingotOredictName;
 
-    private RedwireType(boolean analog, boolean loss, int color, String ingotOredictName) {
+    private RedwireType(boolean analogue, boolean loss, int color, String ingotOredictName) {
 
-        this.analog = analog;
+        this.analogue = analogue;
         this.loss = loss;
         this.color = color;
         this.ingotOredictName = ingotOredictName;
     }
 
-    public boolean isAnalog() {
+    public boolean isAnalogue() {
 
-        return analog;
+        return analogue;
     }
 
     public boolean hasLoss() {
@@ -65,6 +69,12 @@ public enum RedwireType {
             return false;
 
         return type == this;// (this == BLUESTONE) == (type == BLUESTONE);
+    }
+
+    public PartInfo getPartInfo(MinecraftColor color, boolean bundled) {
+
+        return PartManager.getPartInfo("wire." + getName()
+                + (color != MinecraftColor.NONE && color != null ? "." + color.name().toLowerCase() : "") + (bundled ? ".bundled" : ""));
     }
 
 }
