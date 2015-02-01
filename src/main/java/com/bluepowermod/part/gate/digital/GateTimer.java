@@ -90,6 +90,7 @@ public class GateTimer extends GateSimpleDigital implements IGuiButtonSensitive 
                     left().setOutput(true);
                     right().setOutput(true);
                     t.setState(true);
+                    p.setAngle(0);
                 }
                 playTickSound();
                 curTime = 0;
