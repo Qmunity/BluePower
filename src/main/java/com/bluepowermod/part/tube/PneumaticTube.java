@@ -47,6 +47,7 @@ import uk.co.qmunity.lib.vec.Vec3i;
 
 import com.bluepowermod.BluePower;
 import com.bluepowermod.api.misc.IScrewdriver;
+import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
 import com.bluepowermod.api.tube.ITubeConnection;
 import com.bluepowermod.api.wire.redstone.IRedwire;
@@ -583,11 +584,11 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
                 IIcon icon = IconSupplier.restrictionTubeSide;
                 renderer.renderBox(new Vec3dCube(0.25, 0.25, 0.25, 0.75, 0.75, 0.75), icon);
             }
+            double wireSize = getSize() / 16D;
+            double frameSeparation = 4 / 16D - (wireSize - 2 / 16D);
+            double frameThickness = 1 / 16D;
 
             if (renderFully) {
-                double wireSize = getSize() / 16D;
-                double frameSeparation = 4 / 16D - (wireSize - 2 / 16D);
-                double frameThickness = 1 / 16D;
 
                 boolean down = shouldRenderConnection(ForgeDirection.DOWN);
                 boolean up = shouldRenderConnection(ForgeDirection.UP);
@@ -606,10 +607,53 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
                 super.renderStatic(loc, renderer, renderBlocks, 0);
             }
 
+            // Tube coloring
+            {
+                Vec3dCube side = new Vec3dCube(0.25 + 5 / 128D, 0, 0.25 - 1 / 128D, 0.25 + 9 / 128D, 0.25, 0.25 + 2 / 128D);
+                Vec3dCube side2 = new Vec3dCube(0.25 - 1 / 128D, 0, 0.25 + 5 / 128D, 0.25 + 2 / 128D, 0.25, 0.25 + 9 / 128D);
+                Vec3dCube side3 = new Vec3dCube(0.25 - 1 / 128D, 0.25 - 1 / 128D, 0.25 + 5 / 128D, 0.25 + 2 / 128D, 0.25 + 2 / 128D,
+                        0.25 + 59 / 128D);
+                Vec3dCube side4 = new Vec3dCube(0.25 + 5 / 128D, 0.25 - 1 / 128D, 0.25 + 5 / 128D, 0.25 + 9 / 128D, 0.25 + 2 / 128D,
+                        0.25 + 56 / 128D);
+                Vec3dCube side5 = new Vec3dCube(0.25 + 5 / 128D, 0.25 - 1 / 128D, 0.25 - 1 / 128D, 0.25 + 9 / 128D, 0.25 + 2 / 128D,
+                        0.25 + 65 / 128D);
+                for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
+                    TubeColor c = color[d.ordinal()];
+                    if (c != TubeColor.NONE) {
+                        try {
+                            renderer.setColor(MinecraftColor.values()[15 - c.ordinal()].getHex());
+                            if (connections[d.ordinal()]) {
+                                for (int i = 0; i < 4; i++) {
+                                    renderer.renderBox(side.clone().rotate(0, i * 90, 0, Vec3d.center).rotate(d, Vec3d.center),
+                                            IconSupplier.pneumaticTubeColoring);
+                                    renderer.renderBox(side2.clone().rotate(0, i * 90, 0, Vec3d.center).rotate(d, Vec3d.center),
+                                            IconSupplier.pneumaticTubeColoring);
+                                    if (renderFully)
+                                        renderer.renderBox(side3.clone().rotate(0, i * 90, 0, Vec3d.center).rotate(d, Vec3d.center),
+                                                IconSupplier.pneumaticTubeColoring);
+                                }
+                            } else if (renderFully) {
+                                for (int i = 0; i < 4; i++)
+                                    renderer.renderBox(side4.clone().rotate(0, i * 90, 0, Vec3d.center).rotate(d, Vec3d.center),
+                                            IconSupplier.pneumaticTubeColoring);
+                            } else {
+                                for (int i = 1; i < 4; i += 2)
+                                    renderer.renderBox(
+                                            side5.clone()
+                                            .rotate(0,
+                                                    (i + ((shouldRenderConnection(ForgeDirection.NORTH) || (shouldRenderConnection(ForgeDirection.UP) && (d == ForgeDirection.NORTH || d == ForgeDirection.SOUTH))) ? 1
+                                                            : 0)) * 90, 0, Vec3d.center).rotate(d, Vec3d.center),
+                                                            IconSupplier.pneumaticTubeColoring);
+                            }
+                            renderer.setColor(0xFFFFFF);
+                        } catch (Exception ex) {
+                            System.out.println("Err on side " + d + ". Color: " + c);
+                        }
+                    }
+                }
+            }
+
             if (redwireType != null) {
-                double wireSize = getSize() / 16D;
-                double frameSeparation = 4 / 16D - (wireSize - 2 / 16D);
-                double frameThickness = 1 / 16D;
                 frameThickness /= 1.5;
                 frameSeparation -= 1 / 32D;
 
@@ -623,11 +667,6 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
                         redstoneConnections[ForgeDirection.EAST.ordinal()], redstoneConnections[ForgeDirection.NORTH.ordinal()],
                         redstoneConnections[ForgeDirection.SOUTH.ordinal()], getParent() != null && getWorld() != null, IconSupplier.wire,
                         WireCommons.getColorForPowerLevel(redwireType.getColor(), RedstoneConductorTube.getDevice(this).getPower()));
-            }
-
-            // Colored borders
-            {
-
             }
         } else if (pass == 1) {
             // IIcon glass = IconSupplier.pneumaticTubeGlass;

@@ -28,7 +28,7 @@ public class IconSupplier {
     public static IIcon pneumaticTubeSide;
     public static IIcon pneumaticTubeOpaqueSide;
     public static IIcon pneumaticTubeOpaqueNode;
-    public static IIcon pneumaticTubeGlass;
+    public static IIcon pneumaticTubeColoring;
 
     public static IIcon restrictionTubeSide;
     public static IIcon restrictionTubeNodeOpaque;
@@ -98,7 +98,7 @@ public class IconSupplier {
             acceleratorSide = reg.registerIcon(Refs.MODID + ":machines/accelerator_side");
             acceleratorSidePowered = reg.registerIcon(Refs.MODID + ":machines/accelerator_side_powered");
             acceleratorInside = reg.registerIcon(Refs.MODID + ":machines/accelerator_inside");
-            pneumaticTubeGlass = reg.registerIcon(Refs.MODID + ":tubes/tube_glass");
+            pneumaticTubeColoring = reg.registerIcon(Refs.MODID + ":tubes/coloring");
 
             cagedLampFootSide = reg.registerIcon(Refs.MODID + ":lamps/cage_foot_side");
             cagedLampFootTop = reg.registerIcon(Refs.MODID + ":lamps/cage_foot_top");
