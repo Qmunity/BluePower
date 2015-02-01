@@ -88,7 +88,7 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
     protected final Vec3dCube sideBB = new Vec3dCube(AxisAlignedBB.getBoundingBox(0.25, 0, 0.25, 0.75, 0.25, 0.75));
     private TileEntityCache tileCache;
     private PartCache<PneumaticTube> partCache;
-    private final TubeColor[] color = { TubeColor.NONE, TubeColor.NONE, TubeColor.NONE, TubeColor.NONE, TubeColor.NONE, TubeColor.NONE };
+    protected final TubeColor[] color = { TubeColor.NONE, TubeColor.NONE, TubeColor.NONE, TubeColor.NONE, TubeColor.NONE, TubeColor.NONE };
     private final TubeLogic logic = new TubeLogic(this);
     public boolean initialized; // workaround to the connections not properly initialized, but being tried to be used.
     private int tick;

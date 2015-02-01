@@ -23,9 +23,12 @@ import net.minecraft.util.IIcon;
 import net.minecraftforge.common.util.ForgeDirection;
 import uk.co.qmunity.lib.client.render.RenderHelper;
 import uk.co.qmunity.lib.transform.Rotation;
+import uk.co.qmunity.lib.vec.Vec3d;
 import uk.co.qmunity.lib.vec.Vec3dCube;
 import uk.co.qmunity.lib.vec.Vec3i;
 
+import com.bluepowermod.api.misc.MinecraftColor;
+import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
 import com.bluepowermod.client.render.IconSupplier;
 import com.bluepowermod.part.wire.redstone.WireCommons;
 
@@ -72,7 +75,7 @@ public class PneumaticTubeOpaque extends PneumaticTube {
 
             IIcon icon = this instanceof RestrictionTubeOpaque ? (renderFully ? IconSupplier.restrictionTubeNodeOpaque
                     : IconSupplier.restrictionTubeSideOpaque) : renderFully ? IconSupplier.pneumaticTubeOpaqueNode
-                            : IconSupplier.pneumaticTubeOpaqueSide;
+                    : IconSupplier.pneumaticTubeOpaqueSide;
 
             if (shouldRenderConnection(ForgeDirection.EAST) || shouldRenderConnection(ForgeDirection.WEST))
                 renderer.setTextureRotations(1, 1, 0, 0, 1, 1);
@@ -101,14 +104,60 @@ public class PneumaticTubeOpaque extends PneumaticTube {
 
                 renderFrame(renderer, wireSize, frameSeparation, frameThickness,
                         renderFully || shouldRenderConnection(ForgeDirection.DOWN), renderFully
-                        || shouldRenderConnection(ForgeDirection.UP), renderFully || shouldRenderConnection(ForgeDirection.WEST),
+                                || shouldRenderConnection(ForgeDirection.UP), renderFully || shouldRenderConnection(ForgeDirection.WEST),
                         renderFully || shouldRenderConnection(ForgeDirection.EAST), renderFully
-                        || shouldRenderConnection(ForgeDirection.NORTH), renderFully
-                        || shouldRenderConnection(ForgeDirection.SOUTH), redstoneConnections[ForgeDirection.DOWN.ordinal()],
+                                || shouldRenderConnection(ForgeDirection.NORTH), renderFully
+                                || shouldRenderConnection(ForgeDirection.SOUTH), redstoneConnections[ForgeDirection.DOWN.ordinal()],
                         redstoneConnections[ForgeDirection.UP.ordinal()], redstoneConnections[ForgeDirection.WEST.ordinal()],
                         redstoneConnections[ForgeDirection.EAST.ordinal()], redstoneConnections[ForgeDirection.NORTH.ordinal()],
                         redstoneConnections[ForgeDirection.SOUTH.ordinal()], getParent() != null && getWorld() != null, IconSupplier.wire,
                         WireCommons.getColorForPowerLevel(getRedwireType().getColor(), RedstoneConductorTube.getDevice(this).getPower()));
+            }
+
+            // Tube coloring
+            {
+                Vec3dCube side = new Vec3dCube(0.25 + 5 / 128D, 0, 0.25 - 1 / 128D, 0.25 + 9 / 128D, 0.25, 0.25 + 2 / 128D);
+                Vec3dCube side2 = new Vec3dCube(0.25 - 1 / 128D, 0, 0.25 + 5 / 128D, 0.25 + 2 / 128D, 0.25, 0.25 + 9 / 128D);
+                Vec3dCube side3 = new Vec3dCube(0.25 - 1 / 128D, 0.25 - 1 / 128D, 0.25 + 5 / 128D, 0.25 + 2 / 128D, 0.25 + 2 / 128D,
+                        0.25 + 59 / 128D);
+                Vec3dCube side4 = new Vec3dCube(0.25 + 5 / 128D, 0.25 - 1 / 128D, 0.25 + 5 / 128D, 0.25 + 9 / 128D, 0.25 + 2 / 128D,
+                        0.25 + 56 / 128D);
+                Vec3dCube side5 = new Vec3dCube(0.25 + 5 / 128D, 0.25 - 1 / 128D, 0.25 - 1 / 128D, 0.25 + 9 / 128D, 0.25 + 2 / 128D,
+                        0.25 + 65 / 128D);
+                for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
+                    TubeColor c = color[d.ordinal()];
+                    if (c != TubeColor.NONE) {
+                        try {
+                            renderer.setColor(MinecraftColor.values()[15 - c.ordinal()].getHex());
+                            if (connections[d.ordinal()]) {
+                                for (int i = 0; i < 4; i++) {
+                                    renderer.renderBox(side.clone().rotate(0, i * 90, 0, Vec3d.center).rotate(d, Vec3d.center),
+                                            IconSupplier.pneumaticTubeColoring);
+                                    renderer.renderBox(side2.clone().rotate(0, i * 90, 0, Vec3d.center).rotate(d, Vec3d.center),
+                                            IconSupplier.pneumaticTubeColoring);
+                                    if (renderFully)
+                                        renderer.renderBox(side3.clone().rotate(0, i * 90, 0, Vec3d.center).rotate(d, Vec3d.center),
+                                                IconSupplier.pneumaticTubeColoring);
+                                }
+                            } else if (renderFully) {
+                                for (int i = 0; i < 4; i++)
+                                    renderer.renderBox(side4.clone().rotate(0, i * 90, 0, Vec3d.center).rotate(d, Vec3d.center),
+                                            IconSupplier.pneumaticTubeColoring);
+                            } else {
+                                for (int i = 1; i < 4; i += 2)
+                                    renderer.renderBox(
+                                            side5.clone()
+                                                    .rotate(0,
+                                                            (i + ((shouldRenderConnection(ForgeDirection.NORTH) || (shouldRenderConnection(ForgeDirection.UP) && (d == ForgeDirection.NORTH || d == ForgeDirection.SOUTH))) ? 1
+                                                                    : 0)) * 90, 0, Vec3d.center).rotate(d, Vec3d.center),
+                                            IconSupplier.pneumaticTubeColoring);
+                            }
+                            renderer.setColor(0xFFFFFF);
+                        } catch (Exception ex) {
+                            System.out.println("Err on side " + d + ". Color: " + c);
+                        }
+                    }
+                }
             }
         }
 
