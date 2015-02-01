@@ -21,12 +21,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.PositionedSoundRecord;
+import net.minecraft.client.audio.SoundCategory;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import uk.co.qmunity.lib.item.ItemMultipart;
 import uk.co.qmunity.lib.part.IPart;
@@ -135,7 +139,14 @@ public class ItemPart extends ItemMultipart implements IDatabaseSaveable {
             return false;
 
         Block.SoundType sound = PartManager.getExample(item).getPlacementSound();
-        world.playSoundEffect(x + 0.5, y + 0.5, z + 0.5, sound.func_150496_b(), sound.getVolume() + 3, sound.getPitch() * 0.85F);
+        if (world.isRemote)
+            Minecraft
+            .getMinecraft()
+            .getSoundHandler()
+            .playSound(
+                    new PositionedSoundRecord(new ResourceLocation(sound.func_150496_b()), (sound.getVolume() + 3)
+                            * Minecraft.getMinecraft().gameSettings.getSoundLevel(SoundCategory.BLOCKS), sound.getPitch() * 0.85F,
+                            x + 0.5F, y + 0.5F, z + 0.5F));
 
         return true;
     }
