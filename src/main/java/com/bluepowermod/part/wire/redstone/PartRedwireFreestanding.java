@@ -140,12 +140,12 @@ public abstract class PartRedwireFreestanding extends PartWireFreestanding imple
 
         if (getWorld().isRemote) {
             for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
-                if (connections[d.ordinal()])
+                if (shouldRenderConnection(d))
                     boxes.add(box.clone().rotate(d, Vec3d.center));
             }
         } else {
             for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
-                if (shouldRenderConnection(d))
+                if (isConnected(d))
                     boxes.add(box.clone().rotate(d, Vec3d.center));
             }
         }
@@ -211,7 +211,7 @@ public abstract class PartRedwireFreestanding extends PartWireFreestanding imple
     }
 
     public static class PartRedwireFreestandingUninsulated extends PartRedwireFreestanding implements IAdvancedRedstoneConductor,
-            IConnectionListener {
+    IConnectionListener {
 
         private RedstoneConnectionCache connections = RedstoneApi.getInstance().createRedstoneConnectionCache(this);
         private boolean hasUpdated = false;
@@ -417,7 +417,7 @@ public abstract class PartRedwireFreestanding extends PartWireFreestanding imple
     }
 
     public static class PartRedwireFreestandingInsulated extends PartRedwireFreestanding implements IAdvancedRedstoneConductor,
-            IInsulatedRedstoneDevice, IAdvancedBundledConductor, IConnectionListener {
+    IInsulatedRedstoneDevice, IAdvancedBundledConductor, IConnectionListener {
 
         private RedstoneConnectionCache connections = RedstoneApi.getInstance().createRedstoneConnectionCache(this);
         private BundledConnectionCache bundledConnections = RedstoneApi.getInstance().createBundledConnectionCache(this);

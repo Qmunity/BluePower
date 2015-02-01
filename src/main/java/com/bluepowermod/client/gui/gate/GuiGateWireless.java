@@ -27,12 +27,16 @@ import com.bluepowermod.api.misc.Accessibility;
 import com.bluepowermod.api.wireless.IFrequency;
 import com.bluepowermod.client.gui.widget.IGuiWidget;
 import com.bluepowermod.client.gui.widget.WidgetMode;
-import com.bluepowermod.network.NetworkHandler;
+import com.bluepowermod.network.BPNetworkHandler;
 import com.bluepowermod.network.message.MessageWirelessNewFreq;
 import com.bluepowermod.network.message.MessageWirelessRemoveFreq;
 import com.bluepowermod.network.message.MessageWirelessSaveFreq;
 import com.bluepowermod.part.PartManager;
 import com.bluepowermod.part.gate.GateBase;
+import com.bluepowermod.part.gate.wireless.Frequency;
+import com.bluepowermod.part.gate.wireless.IWirelessGate;
+import com.bluepowermod.part.gate.wireless.WirelessManager;
+import com.bluepowermod.part.gate.wireless.WirelessMode;
 import com.bluepowermod.util.Refs;
 
 import cpw.mods.fml.relauncher.Side;
@@ -64,7 +68,7 @@ public class GuiGateWireless extends GuiGate {
 
     private int scrolled = 0;
 
-    public GuiGateWireless(GateBase gate, boolean bundled, WirelessMode mode) {
+    public GuiGateWireless(GateBase<?, ?, ?, ?, ?, ?> gate, boolean bundled, WirelessMode mode) {
 
         super(gate, 228, 184);
         this.gate = (IWirelessGate) gate;
@@ -188,8 +192,8 @@ public class GuiGateWireless extends GuiGate {
                     if (y > yPos && y < yPos + 11) {
                         if (button == 0) {
                             if (f.equals(selected)) {
-                                NetworkHandler.sendToServer(new MessageWirelessNewFreq(gate, f.getAccessibility(), f.getFrequencyName(), f
-                                        .isBundled()));
+                                BPNetworkHandler.INSTANCE.sendToServer(new MessageWirelessNewFreq(gate, f.getAccessibility(), f
+                                        .getFrequencyName(), f.isBundled()));
                             } else {
                                 selected = f;
                                 frequencyName.setText(f.getFrequencyName());
@@ -247,10 +251,10 @@ public class GuiGateWireless extends GuiGate {
             sendToServer(0, modeSelector.value);
 
         if (widget == addFrequency)
-            NetworkHandler.sendToServer(new MessageWirelessNewFreq(gate, acc, frequencyName.getText().trim(), gate.isBundled()));
+            BPNetworkHandler.INSTANCE.sendToServer(new MessageWirelessNewFreq(gate, acc, frequencyName.getText().trim(), gate.isBundled()));
 
         if (widget == saveFrequency) {
-            NetworkHandler.sendToServer(new MessageWirelessSaveFreq(selected, acc, frequencyName.getText().trim()));
+            BPNetworkHandler.INSTANCE.sendToServer(new MessageWirelessSaveFreq(selected, acc, frequencyName.getText().trim()));
             filter = "";
         }
 
@@ -258,7 +262,7 @@ public class GuiGateWireless extends GuiGate {
             if (gate.getFrequency() != null && (selected == null || selected.equals(gate.getFrequency()))) {
                 sendToServer(1, 0);
             } else if (selected != null) {
-                NetworkHandler.sendToServer(new MessageWirelessRemoveFreq(selected));
+                BPNetworkHandler.INSTANCE.sendToServer(new MessageWirelessRemoveFreq(selected));
                 selected = null;
             }
         }

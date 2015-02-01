@@ -25,7 +25,7 @@ import com.bluepowermod.init.BPEnchantments;
 import com.bluepowermod.init.BPItems;
 import com.bluepowermod.init.Config;
 import com.bluepowermod.init.TileEntities;
-import com.bluepowermod.network.NetworkHandler;
+import com.bluepowermod.network.BPNetworkHandler;
 import com.bluepowermod.part.PartManager;
 import com.bluepowermod.part.tube.RedstoneProviderTube;
 import com.bluepowermod.recipe.RecipeNullCell;
@@ -104,7 +104,7 @@ public class BluePower {
         GameRegistry.registerWorldGenerator(new WorldGenerationHandler(), 0);
 
         proxy.init();
-        NetworkHandler.init();
+        BPNetworkHandler.initBP();
         NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GUIHandler());
         CompatibilityUtils.init(event);
 

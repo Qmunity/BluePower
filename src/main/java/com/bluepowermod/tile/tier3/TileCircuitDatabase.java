@@ -25,7 +25,7 @@ import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.helper.ItemStackDatabase;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.init.Config;
-import com.bluepowermod.network.NetworkHandler;
+import com.bluepowermod.network.BPNetworkHandler;
 import com.bluepowermod.network.message.MessageCircuitDatabaseTemplate;
 import com.bluepowermod.network.message.MessageSendClientServerTemplates;
 import com.bluepowermod.reference.GuiIDs;
@@ -71,8 +71,9 @@ public class TileCircuitDatabase extends TileCircuitTable {
 
         switch (messageId) {
         case 1:
-            player.openGui(BluePower.instance, value == 0 ? GuiIDs.CIRCUITDATABASE_MAIN_ID.ordinal() : GuiIDs.CIRCUITDATABASE_SHARING_ID.ordinal(),
-                    worldObj, xCoord, yCoord, zCoord);
+            player.openGui(BluePower.instance,
+                    value == 0 ? GuiIDs.CIRCUITDATABASE_MAIN_ID.ordinal() : GuiIDs.CIRCUITDATABASE_SHARING_ID.ordinal(), worldObj, xCoord,
+                    yCoord, zCoord);
             break;
         case 2:
             if (value == 2 && !hasPermissions(player))
@@ -87,7 +88,8 @@ public class TileCircuitDatabase extends TileCircuitTable {
             break;
         case 3:
             triggeringPlayer = player;
-            curCopyProgress = curCopyProgress >= 0 || !copy(player, copyInventory.getStackInSlot(0), copyInventory.getStackInSlot(1), true) ? -1 : 0;
+            curCopyProgress = curCopyProgress >= 0 || !copy(player, copyInventory.getStackInSlot(0), copyInventory.getStackInSlot(1), true) ? -1
+                    : 0;
             break;
 
         }
@@ -126,7 +128,7 @@ public class TileCircuitDatabase extends TileCircuitTable {
 
     /**
      * Returns true of copy succeeded.
-     * 
+     *
      * @param player
      * @param simulate
      * @return
@@ -154,7 +156,8 @@ public class TileCircuitDatabase extends TileCircuitTable {
                         for (ItemStack templateStack : allApplicableItems) {
                             boolean alreadyTraversed = false;
                             for (ItemStack traversedItem : traversedItems) {
-                                if (traversedItem.isItemEqual(templateStack) && ItemStack.areItemStackTagsEqual(traversedItem, templateStack)) {
+                                if (traversedItem.isItemEqual(templateStack)
+                                        && ItemStack.areItemStackTagsEqual(traversedItem, templateStack)) {
                                     alreadyTraversed = true;
                                     break;
                                 }
@@ -225,11 +228,11 @@ public class TileCircuitDatabase extends TileCircuitTable {
                     if (++curUploadProgress > UPLOAD_AND_COPY_TIME) {
                         curUploadProgress = -1;
                         if (selectedShareOption == 1 && triggeringPlayer != null)
-                            NetworkHandler.sendTo(new MessageCircuitDatabaseTemplate(this, copyInventory.getStackInSlot(0)),
+                            BPNetworkHandler.INSTANCE.sendTo(new MessageCircuitDatabaseTemplate(this, copyInventory.getStackInSlot(0)),
                                     (EntityPlayerMP) triggeringPlayer);
                         if (selectedShareOption == 2) {
                             stackDatabase.saveItemStack(copyInventory.getStackInSlot(0));
-                            NetworkHandler.sendToAll(new MessageSendClientServerTemplates(stackDatabase.loadItemStacks()));
+                            BPNetworkHandler.INSTANCE.sendToAll(new MessageSendClientServerTemplates(stackDatabase.loadItemStacks()));
                         }
                         selectedShareOption = 0;
                     }

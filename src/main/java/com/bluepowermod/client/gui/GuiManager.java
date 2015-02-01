@@ -31,7 +31,7 @@ import com.bluepowermod.client.gui.widget.WidgetFuzzySetting;
 import com.bluepowermod.client.gui.widget.WidgetMode;
 import com.bluepowermod.client.gui.widget.WidgetNumber;
 import com.bluepowermod.container.ContainerManager;
-import com.bluepowermod.network.NetworkHandler;
+import com.bluepowermod.network.BPNetworkHandler;
 import com.bluepowermod.network.message.MessageGuiUpdate;
 import com.bluepowermod.tile.tier3.TileManager;
 import com.bluepowermod.util.Refs;
@@ -106,6 +106,6 @@ public class GuiManager extends GuiBase {
     public void actionPerformed(IGuiWidget widget) {
 
         BaseWidget baseWidget = (BaseWidget) widget;
-        NetworkHandler.sendToServer(new MessageGuiUpdate(manager, widget.getID(), baseWidget.value));
+        BPNetworkHandler.INSTANCE.sendToServer(new MessageGuiUpdate(manager, widget.getID(), baseWidget.value));
     }
 }

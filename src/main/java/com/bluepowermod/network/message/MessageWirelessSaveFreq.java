@@ -1,12 +1,17 @@
 package com.bluepowermod.network.message;
 
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.nbt.NBTTagCompound;
 import uk.co.qmunity.lib.network.Packet;
 
 import com.bluepowermod.api.misc.Accessibility;
-import com.bluepowermod.network.NetworkHandler;
+import com.bluepowermod.network.BPNetworkHandler;
+import com.bluepowermod.part.gate.wireless.Frequency;
+import com.bluepowermod.part.gate.wireless.WirelessManager;
 
 public class MessageWirelessSaveFreq extends Packet<MessageWirelessSaveFreq> {
 
@@ -26,34 +31,34 @@ public class MessageWirelessSaveFreq extends Packet<MessageWirelessSaveFreq> {
     }
 
     @Override
-    public void handleClientSide(MessageWirelessSaveFreq message, EntityPlayer player) {
+    public void handleClientSide(EntityPlayer player) {
 
     }
 
     @Override
-    public void handleServerSide(MessageWirelessSaveFreq message, EntityPlayer player) {
+    public void handleServerSide(EntityPlayer player) {
 
-        NetworkHandler.sendTo(new MessageWirelessFrequencySync(player), (EntityPlayerMP) player);
+        BPNetworkHandler.INSTANCE.sendTo(new MessageWirelessFrequencySync(player), (EntityPlayerMP) player);
     }
 
     @Override
-    public void write(NBTTagCompound tag) {
+    public void write(DataOutput buffer) throws IOException {
 
-        freq.writeToNBT(tag);
+        freq.writeToBuffer(buffer);
 
-        tag.setInteger("acc", acc.ordinal());
-        tag.setString("name", name);
+        buffer.writeInt(acc.ordinal());
+        buffer.writeUTF(name);
     }
 
     @Override
-    public void read(NBTTagCompound tag) {
+    public void read(DataInput buffer) throws IOException {
 
         freq = new Frequency();
-        freq.readFromNBT(tag);
+        freq.readFromBuffer(buffer);
         freq = (Frequency) WirelessManager.COMMON_INSTANCE.getFrequency(freq.getAccessibility(), freq.getFrequencyName(), freq.getOwner());
 
-        freq.setAccessibility(Accessibility.values()[tag.getInteger("acc")]);
-        freq.setFrequency(tag.getString("name"));
+        freq.setAccessibility(Accessibility.values()[buffer.readInt()]);
+        freq.setFrequency(buffer.readUTF());
     }
 
 }

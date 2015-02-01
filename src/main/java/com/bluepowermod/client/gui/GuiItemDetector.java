@@ -17,7 +17,7 @@ import com.bluepowermod.client.gui.widget.IGuiWidget;
 import com.bluepowermod.client.gui.widget.WidgetFuzzySetting;
 import com.bluepowermod.client.gui.widget.WidgetMode;
 import com.bluepowermod.container.ContainerItemDetector;
-import com.bluepowermod.network.NetworkHandler;
+import com.bluepowermod.network.BPNetworkHandler;
 import com.bluepowermod.network.message.MessageGuiUpdate;
 import com.bluepowermod.tile.tier1.TileItemDetector;
 import com.bluepowermod.util.Refs;
@@ -78,6 +78,6 @@ public class GuiItemDetector extends GuiBase {
     public void actionPerformed(IGuiWidget widget) {
 
         BaseWidget baseWidget = (BaseWidget) widget;
-        NetworkHandler.sendToServer(new MessageGuiUpdate(itemDetector, widget.getID(), baseWidget.value));
+        BPNetworkHandler.INSTANCE.sendToServer(new MessageGuiUpdate(itemDetector, widget.getID(), baseWidget.value));
     }
 }

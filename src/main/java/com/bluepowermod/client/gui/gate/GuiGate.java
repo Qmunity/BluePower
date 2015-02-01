@@ -21,7 +21,7 @@ import com.bluepowermod.client.gui.GuiScreenBase;
 import com.bluepowermod.client.gui.widget.BaseWidget;
 import com.bluepowermod.client.gui.widget.IGuiWidget;
 import com.bluepowermod.client.gui.widget.IWidgetListener;
-import com.bluepowermod.network.NetworkHandler;
+import com.bluepowermod.network.BPNetworkHandler;
 import com.bluepowermod.network.message.MessageGuiUpdate;
 import com.bluepowermod.part.gate.GateBase;
 
@@ -52,7 +52,7 @@ public class GuiGate extends GuiScreenBase implements IWidgetListener {
 
     protected void sendToServer(int id, int value) {
 
-        NetworkHandler.sendToServer(new MessageGuiUpdate(gate, id, value));
+        BPNetworkHandler.INSTANCE.sendToServer(new MessageGuiUpdate(gate, id, value));
     }
 
     @Override

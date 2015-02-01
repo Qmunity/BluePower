@@ -38,6 +38,7 @@ import com.bluepowermod.part.gate.digital.GateTimer;
 import com.bluepowermod.part.gate.digital.GateToggleLatch;
 import com.bluepowermod.part.gate.ic.GateIntegratedCircuit;
 import com.bluepowermod.part.gate.supported.GateNullCell;
+import com.bluepowermod.part.gate.wireless.GateTransceiver;
 import com.bluepowermod.part.lamp.PartCageLamp;
 import com.bluepowermod.part.lamp.PartFixture;
 import com.bluepowermod.part.tube.Accelerator;
@@ -144,10 +145,10 @@ public class PartManager {
         registerPart(GateLightCell.class);
 
         // Wireless gates
-        // registerPart(GateTransceiver.class, false, false);
-        // registerPart(GateTransceiver.class, true, false);
-        // registerPart(GateTransceiver.class, false, true);
-        // registerPart(GateTransceiver.class, true, true);
+        registerPart(GateTransceiver.class, false, false);
+        registerPart(GateTransceiver.class, true, false);
+        registerPart(GateTransceiver.class, false, true);
+        registerPart(GateTransceiver.class, true, true);
 
         // IC's
         registerPart(GateIntegratedCircuit.class, 3);

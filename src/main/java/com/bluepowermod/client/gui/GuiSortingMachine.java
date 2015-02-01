@@ -29,7 +29,7 @@ import com.bluepowermod.client.gui.widget.WidgetColor;
 import com.bluepowermod.client.gui.widget.WidgetFuzzySetting;
 import com.bluepowermod.client.gui.widget.WidgetMode;
 import com.bluepowermod.container.ContainerSortingMachine;
-import com.bluepowermod.network.NetworkHandler;
+import com.bluepowermod.network.BPNetworkHandler;
 import com.bluepowermod.network.message.MessageGuiUpdate;
 import com.bluepowermod.tile.tier2.TileSortingMachine;
 import com.bluepowermod.tile.tier2.TileSortingMachine.PullMode;
@@ -37,7 +37,7 @@ import com.bluepowermod.tile.tier2.TileSortingMachine.SortMode;
 import com.bluepowermod.util.Refs;
 
 /**
- * 
+ *
  * @author MineMaarten
  */
 
@@ -89,8 +89,8 @@ public class GuiSortingMachine extends GuiBase {
         pullModeWidget.value = sortingMachine.pullMode.ordinal();
         addWidget(pullModeWidget);
 
-        WidgetMode sortModeWidget = new WidgetMode(10, guiLeft + 7, guiTop + 106, 210, TileSortingMachine.SortMode.values().length, Refs.MODID
-                + ":textures/gui/sorting_machine.png") {
+        WidgetMode sortModeWidget = new WidgetMode(10, guiLeft + 7, guiTop + 106, 210, TileSortingMachine.SortMode.values().length,
+                Refs.MODID + ":textures/gui/sorting_machine.png") {
 
             @Override
             public void addTooltip(int mouseX, int mouseY, List<String> curTip, boolean shiftPressed) {
@@ -118,7 +118,7 @@ public class GuiSortingMachine extends GuiBase {
     public void actionPerformed(IGuiWidget widget) {
 
         BaseWidget baseWidget = (BaseWidget) widget;
-        NetworkHandler.sendToServer(new MessageGuiUpdate(sortingMachine, widget.getID(), baseWidget.value));
+        BPNetworkHandler.INSTANCE.sendToServer(new MessageGuiUpdate(sortingMachine, widget.getID(), baseWidget.value));
     }
 
     @Override
