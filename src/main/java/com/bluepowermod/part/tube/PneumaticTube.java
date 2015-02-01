@@ -41,6 +41,7 @@ import uk.co.qmunity.lib.part.MicroblockShape;
 import uk.co.qmunity.lib.part.compat.OcclusionHelper;
 import uk.co.qmunity.lib.raytrace.QMovingObjectPosition;
 import uk.co.qmunity.lib.raytrace.RayTracer;
+import uk.co.qmunity.lib.transform.Rotation;
 import uk.co.qmunity.lib.vec.Vec3d;
 import uk.co.qmunity.lib.vec.Vec3dCube;
 import uk.co.qmunity.lib.vec.Vec3i;
@@ -640,10 +641,10 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
                                 for (int i = 1; i < 4; i += 2)
                                     renderer.renderBox(
                                             side5.clone()
-                                            .rotate(0,
-                                                    (i + ((shouldRenderConnection(ForgeDirection.NORTH) || (shouldRenderConnection(ForgeDirection.UP) && (d == ForgeDirection.NORTH || d == ForgeDirection.SOUTH))) ? 1
-                                                            : 0)) * 90, 0, Vec3d.center).rotate(d, Vec3d.center),
-                                                            IconSupplier.pneumaticTubeColoring);
+                                                    .rotate(0,
+                                                            (i + ((shouldRenderConnection(ForgeDirection.NORTH) || (shouldRenderConnection(ForgeDirection.UP) && (d == ForgeDirection.NORTH || d == ForgeDirection.SOUTH))) ? 1
+                                                                    : 0)) * 90, 0, Vec3d.center).rotate(d, Vec3d.center),
+                                            IconSupplier.pneumaticTubeColoring);
                             }
                             renderer.setColor(0xFFFFFF);
                         } catch (Exception ex) {
@@ -659,32 +660,32 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
 
                 renderFrame(renderer, wireSize, frameSeparation, frameThickness,
                         renderFully || shouldRenderConnection(ForgeDirection.DOWN), renderFully
-                        || shouldRenderConnection(ForgeDirection.UP), renderFully || shouldRenderConnection(ForgeDirection.WEST),
+                                || shouldRenderConnection(ForgeDirection.UP), renderFully || shouldRenderConnection(ForgeDirection.WEST),
                         renderFully || shouldRenderConnection(ForgeDirection.EAST), renderFully
-                        || shouldRenderConnection(ForgeDirection.NORTH), renderFully
-                        || shouldRenderConnection(ForgeDirection.SOUTH), redstoneConnections[ForgeDirection.DOWN.ordinal()],
+                                || shouldRenderConnection(ForgeDirection.NORTH), renderFully
+                                || shouldRenderConnection(ForgeDirection.SOUTH), redstoneConnections[ForgeDirection.DOWN.ordinal()],
                         redstoneConnections[ForgeDirection.UP.ordinal()], redstoneConnections[ForgeDirection.WEST.ordinal()],
                         redstoneConnections[ForgeDirection.EAST.ordinal()], redstoneConnections[ForgeDirection.NORTH.ordinal()],
                         redstoneConnections[ForgeDirection.SOUTH.ordinal()], getParent() != null && getWorld() != null, IconSupplier.wire,
                         WireCommons.getColorForPowerLevel(redwireType.getColor(), RedstoneConductorTube.getDevice(this).getPower()));
+
+                Vec3dCube c = new Vec3dCube(0.5 - 1 / 56D, 0, 0.2, 0.5 + 1 / 56D, 1 / 32D, 0.8);
+
+                renderer.setColor(WireCommons.getColorForPowerLevel(redwireType.getColor(), RedstoneConductorTube.getDevice(this)
+                        .getPower()));
+                for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
+                    if (redstoneConnections[d.ordinal()] && !connections[d.ordinal()]) {
+                        renderer.addTransformation(new Rotation(d));
+                        for (int i = 0; i < 2; i++) {
+                            renderer.addTransformation(new Rotation(0, 45 + 90 * i, 0));
+                            renderer.renderBox(c.clone(), IconSupplier.wire);
+                            renderer.removeTransformation();
+                        }
+                        renderer.removeTransformation();
+                    }
+                }
+                renderer.setColor(0xFFFFFF);
             }
-        } else if (pass == 1) {
-            // IIcon glass = IconSupplier.pneumaticTubeGlass;
-            // Vec3dCube sideBox = new Vec3dCube(0.25 + 1 / 32D, 0, 0.25 + 1 / 32D, 0.75 - 1 / 32D, 0.25 + 1 / 32D, 0.75 - 1 / 32D);
-            // for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
-            // if (shouldRenderConnection(d)) {
-            // renderer.setRenderSide(d, false);
-            // renderer.setRenderSide(d.getOpposite(), false);
-            // renderer.renderBox(sideBox.clone().rotate(d, Vec3d.center), glass, glass, glass, glass, glass, glass);
-            // renderer.setRenderSides(true, true, true, true, true, true);
-            // }
-            // }
-            //
-            // for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS)
-            // if (shouldRenderConnection(d))
-            // renderer.setRenderSide(d, false);
-            // renderer.renderBox(new Vec3dCube(0.25, 0.25, 0.25, 0.75, 0.75, 0.75).expand(-1 / 32D), glass);
-            // renderer.resetRenderedSides();
         }
 
         return true;
@@ -819,7 +820,7 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
                             redstoneConnections[ForgeDirection.UP.ordinal()], redstoneConnections[ForgeDirection.WEST.ordinal()],
                             redstoneConnections[ForgeDirection.EAST.ordinal()], redstoneConnections[ForgeDirection.NORTH.ordinal()],
                             redstoneConnections[ForgeDirection.SOUTH.ordinal()], getParent() != null && getWorld() != null), start, end,
-                            new Vec3i(this));
+                    new Vec3i(this));
             QMovingObjectPosition frame = RayTracer.instance().rayTraceCubes(getFrameBoxes(), start, end, new Vec3i(this));
 
             if (wire != null) {

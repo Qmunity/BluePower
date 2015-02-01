@@ -9,12 +9,16 @@ import java.util.Map.Entry;
 import net.minecraftforge.common.util.ForgeDirection;
 import uk.co.qmunity.lib.misc.Pair;
 
+import com.bluepowermod.api.gate.IGateConnection;
 import com.bluepowermod.api.wire.IConnection;
 import com.bluepowermod.api.wire.redstone.IPropagator;
 import com.bluepowermod.api.wire.redstone.IRedConductor;
 import com.bluepowermod.api.wire.redstone.IRedstoneConductor;
 import com.bluepowermod.api.wire.redstone.IRedstoneConductor.IAdvancedRedstoneConductor;
 import com.bluepowermod.api.wire.redstone.IRedstoneDevice;
+import com.bluepowermod.part.gate.GateBase;
+import com.bluepowermod.part.gate.connection.GateConnectionAnalogue;
+import com.bluepowermod.part.gate.connection.GateConnectionDigital;
 import com.bluepowermod.redstone.RedstoneApi;
 
 @SuppressWarnings("unchecked")
@@ -303,15 +307,33 @@ public abstract class RedstonePropagator implements IPropagator<IRedstoneDevice>
                         ex.printStackTrace();
                     }
                 }
-            } else {
-                try {
-                    new LosslessPropagator(getDevice(), getSide()).propagate();
-                } catch (Exception ex) {
-                    ex.printStackTrace();
+                return;
+            } else if (getDevice() instanceof GateBase<?, ?, ?, ?, ?, ?>) {
+                IGateConnection c = ((GateBase<?, ?, ?, ?, ?, ?>) getDevice()).getConnection(getSide());
+                if (c != null) {
+                    if (c instanceof GateConnectionAnalogue) {
+                        try {
+                            new LossyPropagator(getDevice(), getSide()).propagate();
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                        }
+                    } else if (c instanceof GateConnectionDigital) {
+                        try {
+                            new LosslessPropagator(getDevice(), getSide()).propagate();
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                        }
+                    }
+
+                    return;
                 }
             }
+            try {
+                new LosslessPropagator(getDevice(), getSide()).propagate();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
         }
-
     }
 
 }

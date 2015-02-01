@@ -48,6 +48,8 @@ import com.bluepowermod.part.tube.RestrictionTube;
 import com.bluepowermod.part.tube.RestrictionTubeOpaque;
 import com.bluepowermod.part.wire.redstone.PartRedwireFace.PartRedwireFaceInsulated;
 import com.bluepowermod.part.wire.redstone.PartRedwireFace.PartRedwireFaceUninsulated;
+import com.bluepowermod.part.wire.redstone.PartRedwireFreestanding.PartRedwireFreestandingInsulated;
+import com.bluepowermod.part.wire.redstone.PartRedwireFreestanding.PartRedwireFreestandingUninsulated;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -180,12 +182,14 @@ public class PartManager {
             // for (MinecraftColor color : MinecraftColor.VALID_COLORS)
             // registerPart(PartRedwireFace.class, type, color, true);
         }
-        // for (RedwireType type : RedwireType.values()) {
-        // registerPart(PartRedwireFreestanding.class, type, MinecraftColor.NONE, false);
-        // for (MinecraftColor color : MinecraftColor.VALID_COLORS)
-        // registerPart(PartRedwireFreestanding.class, type, color, false);
-        // registerPart(PartRedwireFreestanding.class, type, MinecraftColor.NONE, true);
-        // }
+        for (RedwireType type : RedwireType.values()) {
+            registerPart(PartRedwireFreestandingUninsulated.class, type);
+            for (MinecraftColor color : MinecraftColor.VALID_COLORS)
+                registerPart(PartRedwireFreestandingInsulated.class, type, color);
+            // registerPart(PartRedwireFace.class, type, MinecraftColor.NONE, true);
+            // for (MinecraftColor color : MinecraftColor.VALID_COLORS)
+            // registerPart(PartRedwireFace.class, type, color, true);
+        }
     }
 
     public static void registerItems() {

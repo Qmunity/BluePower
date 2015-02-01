@@ -21,134 +21,108 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
+import java.util.Map.Entry;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.world.World;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import org.lwjgl.opengl.GL11;
 
 import uk.co.qmunity.lib.client.render.RenderHelper;
-import uk.co.qmunity.lib.helper.MathHelper;
 import uk.co.qmunity.lib.helper.RedstoneHelper;
 import uk.co.qmunity.lib.misc.Pair;
-import uk.co.qmunity.lib.part.IPart;
-import uk.co.qmunity.lib.part.IPartCustomPlacement;
-import uk.co.qmunity.lib.part.IPartPlacement;
-import uk.co.qmunity.lib.part.IPartRedstone;
-import uk.co.qmunity.lib.part.IPartSolid;
-import uk.co.qmunity.lib.part.IPartThruHole;
-import uk.co.qmunity.lib.part.IPartWAILAProvider;
 import uk.co.qmunity.lib.part.MicroblockShape;
-import uk.co.qmunity.lib.part.PartPlacementDefault;
 import uk.co.qmunity.lib.part.compat.OcclusionHelper;
 import uk.co.qmunity.lib.vec.Vec3d;
 import uk.co.qmunity.lib.vec.Vec3dCube;
 import uk.co.qmunity.lib.vec.Vec3i;
 
+import com.bluepowermod.api.gate.IIntegratedCircuitPart;
 import com.bluepowermod.api.misc.MinecraftColor;
+import com.bluepowermod.api.wire.ConnectionType;
+import com.bluepowermod.api.wire.IConnection;
+import com.bluepowermod.api.wire.IConnectionCache;
+import com.bluepowermod.api.wire.IConnectionListener;
+import com.bluepowermod.api.wire.redstone.IBundledConductor.IAdvancedBundledConductor;
 import com.bluepowermod.api.wire.redstone.IBundledDevice;
+import com.bluepowermod.api.wire.redstone.IInsulatedRedstoneDevice;
+import com.bluepowermod.api.wire.redstone.IRedConductor;
+import com.bluepowermod.api.wire.redstone.IRedstoneConductor.IAdvancedRedstoneConductor;
 import com.bluepowermod.api.wire.redstone.IRedstoneDevice;
+import com.bluepowermod.api.wire.redstone.IRedwire;
 import com.bluepowermod.api.wire.redstone.RedwireType;
 import com.bluepowermod.client.render.IconSupplier;
-import com.bluepowermod.init.BPCreativeTabs;
+import com.bluepowermod.part.gate.ic.FakeMultipartTileIC;
 import com.bluepowermod.part.wire.PartWireFreestanding;
-import com.bluepowermod.part.wire.redstone.propagation.BundledDeviceWrapper;
-import com.bluepowermod.part.wire.redstone.propagation.WirePropagator;
+import com.bluepowermod.redstone.BundledConnectionCache;
 import com.bluepowermod.redstone.DummyRedstoneDevice;
 import com.bluepowermod.redstone.RedstoneApi;
-import com.bluepowermod.util.DebugHelper;
+import com.bluepowermod.redstone.RedstoneConnectionCache;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+public abstract class PartRedwireFreestanding extends PartWireFreestanding implements IRedwire, IRedConductor, IIntegratedCircuitPart {
 
-public class PartRedwireFreestanding extends PartWireFreestanding implements IRedstoneConductor, IBundledConductor, IPartRedstone,
-IPartWAILAProvider, IPartSolid, IPartThruHole, IPartCustomPlacement {
+    private RedwireType type;
 
-    protected IRedstoneDevice[] devices = new IRedstoneDevice[6];
-    protected IBundledDevice[] bundledDevices = new IBundledDevice[6];
-    protected boolean[] connections = new boolean[6];
+    public PartRedwireFreestanding(int size, RedwireType type) {
 
-    protected byte power = 0;
-    protected byte[] bundledPower = new byte[16];
-
-    protected RedwireType type;
-    protected boolean bundled;
-    protected MinecraftColor color;
-
-    private boolean hasUpdated = false;
-    private boolean disconnected = false;
-
-    public PartRedwireFreestanding(RedwireType type, MinecraftColor color, Boolean bundled) {
-
+        this.size = size;
         this.type = type;
-        this.color = color;
-        this.bundled = bundled;
     }
 
     @Override
-    protected int getSize() {
+    public RedwireType getRedwireType() {
 
-        return bundled ? 6 : (color == MinecraftColor.NONE ? 2 : 4);
+        return type;
     }
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    protected IIcon getWireIcon(ForgeDirection side) {
-
-        return bundled ? IconSupplier.wireBundled : (color == MinecraftColor.NONE ? IconSupplier.wire : IconSupplier.wireInsulation1);
-    }
-
-    @Override
-    protected boolean shouldRenderConnection(ForgeDirection side) {
-
-        return connections[side.ordinal()];
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    protected IIcon getFrameIcon() {
-
-        return Blocks.planks.getIcon(0, 0);
-    }
-
-    @Override
-    protected int getColorMultiplier() {
-
-        return bundled ? 0xFFFFFF : (color == MinecraftColor.NONE ? WireCommons.getColorForPowerLevel(type.getColor(), power) : color
-                .getHex());
-    }
-
-    @Override
-    protected int getFrameColorMultiplier() {
-
-        return 0xFFFFFF;
-    }
-
-    @Override
-    public int getHollowSize(ForgeDirection side) {
-
-        return 8;
-    }
+    // Part methods
 
     @Override
     public String getUnlocalizedName() {
 
         return getType();
     }
+
+    // Wire methods
+
+    private int size;
+    private boolean connections[] = new boolean[6];
+
+    @Override
+    protected boolean shouldRenderConnection(ForgeDirection side) {
+
+        if (getParent() == null || getWorld() == null)
+            return isConnected(side);
+
+        return connections[side.ordinal()];
+    }
+
+    protected abstract boolean isConnected(ForgeDirection side);
+
+    @Override
+    protected int getSize() {
+
+        return size;
+    }
+
+    @Override
+    protected IIcon getFrameIcon() {
+
+        return Blocks.planks.getIcon(0, 0);
+    }
+
+    // Selection and occlusion boxes
 
     @Override
     public List<Vec3dCube> getSelectionBoxes() {
@@ -171,7 +145,7 @@ IPartWAILAProvider, IPartSolid, IPartThruHole, IPartCustomPlacement {
             }
         } else {
             for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
-                if (devices[d.ordinal()] != null || bundledDevices[d.ordinal()] != null)
+                if (shouldRenderConnection(d))
                     boxes.add(box.clone().rotate(d, Vec3d.center));
             }
         }
@@ -197,419 +171,535 @@ IPartWAILAProvider, IPartSolid, IPartThruHole, IPartCustomPlacement {
         boxes.addAll(getSelectionBoxes());
     }
 
+    // Conductor
+
     @Override
-    @SideOnly(Side.CLIENT)
-    public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
+    public boolean hasLoss(ForgeDirection side) {
 
-        power = (byte) 255;
-        connections[ForgeDirection.EAST.ordinal()] = true;
-        connections[ForgeDirection.WEST.ordinal()] = true;
-
-        RenderHelper rh = RenderHelper.instance;
-        rh.setRenderCoords(null, 0, 0, 0);
-        Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
-
-        GL11.glTranslated(0, -0.125, 0);
-        GL11.glScaled(1.25, 1.25, 1.25);
-        Tessellator.instance.startDrawingQuads();
-        renderStatic(new Vec3i(0, 0, 0), rh, RenderBlocks.getInstance(), 0);
-        Tessellator.instance.draw();
-        GL11.glScaled(1 / 1.25, 1 / 1.25, 1 / 1.25);
-
-        rh.reset();
+        return getRedwireType().hasLoss();
     }
+
+    @Override
+    public boolean isAnalogue(ForgeDirection side) {
+
+        return getRedwireType().isAnalogue();
+    }
+
+    // NBT
 
     @Override
     public void writeUpdateData(DataOutput buffer) throws IOException {
 
         super.writeUpdateData(buffer);
 
-        for (int i = 0; i < 6; i++)
-            buffer.writeBoolean(devices[i] != null || bundledDevices[i] != null);
-
-        for (int i = 0; i < 16; i++)
-            buffer.writeByte(bundledPower[i]);
-        buffer.writeByte(power);
+        for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS)
+            buffer.writeBoolean(isConnected(d));
     }
 
     @Override
     public void readUpdateData(DataInput buffer) throws IOException {
 
         super.readUpdateData(buffer);
-        for (int i = 0; i < 6; i++)
-            connections[i] = buffer.readBoolean();
-
-        for (int i = 0; i < 16; i++)
-            bundledPower[i] = buffer.readByte();
-        power = buffer.readByte();
+        for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS)
+            connections[d.ordinal()] = buffer.readBoolean();
     }
 
     @Override
-    public boolean canConnectStraight(ForgeDirection side, IRedstoneDevice device) {
+    public boolean canPlaceOnIntegratedCircuit() {
 
-        if (!(device instanceof IFaceRedstoneDevice))
-            if (OcclusionHelper.microblockOcclusionTest(new Vec3i(this), MicroblockShape.FACE_HOLLOW, 8, side))
+        return true;
+    }
+
+    public static class PartRedwireFreestandingUninsulated extends PartRedwireFreestanding implements IAdvancedRedstoneConductor,
+            IConnectionListener {
+
+        private RedstoneConnectionCache connections = RedstoneApi.getInstance().createRedstoneConnectionCache(this);
+        private boolean hasUpdated = false;
+        private byte power = 0;
+
+        public PartRedwireFreestandingUninsulated(RedwireType type) {
+
+            super(2, type);
+            connections.listen();
+        }
+
+        @Override
+        public String getType() {
+
+            return "wire.freestanding." + getRedwireType().getName();
+        }
+
+        @Override
+        protected boolean isConnected(ForgeDirection side) {
+
+            return connections.getConnectionOnSide(side) != null;
+        }
+
+        @Override
+        protected IIcon getWireIcon(ForgeDirection side) {
+
+            return IconSupplier.wire;
+        }
+
+        @Override
+        protected int getColorMultiplier() {
+
+            return WireCommons.getColorForPowerLevel(getRedwireType().getColor(), power);
+        }
+
+        @Override
+        public boolean canConnect(ForgeDirection side, IRedstoneDevice device, ConnectionType type) {
+
+            if (type == ConnectionType.STRAIGHT)
+                if (side == ForgeDirection.UNKNOWN && device instanceof DummyRedstoneDevice)
+                    return false;
+            if (type == ConnectionType.CLOSED_CORNER) {
+                if (side == ForgeDirection.UNKNOWN)
+                    return false;
+            }
+
+            if (device instanceof IRedwire && !getRedwireType().canConnectTo(((IRedwire) device).getRedwireType()))
                 return false;
 
-        return WireCommons.canConnect(this, device, side, side.getOpposite());
-    }
-
-    @Override
-    public boolean canConnectOpenCorner(ForgeDirection side, IRedstoneDevice device) {
-
-        if (!(device instanceof IFaceRedstoneDevice))
-            if (OcclusionHelper.microblockOcclusionTest(new Vec3i(this), MicroblockShape.FACE_HOLLOW, 8, side))
+            if (OcclusionHelper.microblockOcclusionTest(getParent(), MicroblockShape.FACE_HOLLOW, 1, side))
                 return false;
 
-        return WireCommons.canConnect(this, device);
-    }
+            return true;
+        }
 
-    @Override
-    public void onConnect(ForgeDirection side, IRedstoneDevice device) {
+        @Override
+        public RedstoneConnectionCache getRedstoneConnectionCache() {
 
-        devices[side.ordinal()] = device;
-        sendUpdatePacket();
-    }
+            return connections;
+        }
 
-    @Override
-    public void onDisconnect(ForgeDirection side) {
+        @Override
+        public void onConnect(IConnection<?> connection) {
 
-        devices[side.ordinal()] = null;
-        bundledDevices[side.ordinal()] = null;
-        disconnected = true;
-        sendUpdatePacket();
-    }
-
-    @Override
-    public IRedstoneDevice getDeviceOnSide(ForgeDirection side) {
-
-        return devices[side.ordinal()];
-    }
-
-    @Override
-    public byte getRedstonePower(ForgeDirection side) {
-
-        if (!RedstoneApi.getInstance().shouldWiresOutputPower())
-            return 0;
-
-        if (!isAnalogue())
-            return (byte) ((power & 0xFF) > 0 ? 255 : 0);
-
-        return power;
-    }
-
-    @Override
-    public void setRedstonePower(ForgeDirection side, byte power) {
-
-        byte pow = isAnalogue() ? power : (((power & 0xFF) > 0) ? (byte) 255 : (byte) 0);
-        hasUpdated = hasUpdated | (pow != this.power);
-        this.power = pow;
-    }
-
-    @Override
-    public void onRedstoneUpdate() {
-
-        if (!bundled && hasUpdated) {
             sendUpdatePacket();
-
-            for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
-                IRedstoneDevice dev = devices[dir.ordinal()];
-                if (dev != null && (dev instanceof DummyRedstoneDevice))
-                    RedstoneHelper.notifyRedstoneUpdate(getWorld(), getX(), getY(), getZ(), dir, true);
-            }
-
-            hasUpdated = false;
         }
-    }
 
-    @Override
-    public boolean isNormalBlock() {
+        @Override
+        public void onDisconnect(IConnection<?> connection) {
 
-        return false;
-    }
+            sendUpdatePacket();
+        }
 
-    @Override
-    public MinecraftColor getInsulationColor(ForgeDirection side) {
+        @Override
+        public byte getRedstonePower(ForgeDirection side) {
 
-        return bundled ? null : color;
-    }
+            if (!RedstoneApi.getInstance().shouldWiresOutputPower(hasLoss(side)))
+                return 0;
 
-    @Override
-    public List<Pair<IRedstoneDevice, ForgeDirection>> propagate(ForgeDirection fromSide) {
+            if (!isAnalogue(side))
+                return (byte) ((power & 0xFF) > 0 ? 255 : 0);
 
-        List<Pair<IRedstoneDevice, ForgeDirection>> devices = new ArrayList<Pair<IRedstoneDevice, ForgeDirection>>();
+            return power;
+        }
 
-        if (bundled)
-            return devices;
+        @Override
+        public void setRedstonePower(ForgeDirection side, byte power) {
 
-        for (int i = 0; i < 6; i++) {
-            IRedstoneDevice d = this.devices[i];
-            if (d != null) {
-                devices.add(new Pair<IRedstoneDevice, ForgeDirection>(d, ForgeDirection.getOrientation(i)));
-            } else {
-                IBundledDevice dev = bundledDevices[i];
-                if (dev != null) {
-                    devices.add(new Pair<IRedstoneDevice, ForgeDirection>(BundledDeviceWrapper.getWrapper(dev,
-                            getInsulationColor(ForgeDirection.getOrientation(i))), ForgeDirection.getOrientation(i)));
+            byte pow = isAnalogue(side) ? power : (((power & 0xFF) > 0) ? (byte) 255 : (byte) 0);
+            hasUpdated = hasUpdated | (pow != this.power);
+            this.power = pow;
+        }
+
+        @Override
+        public void onRedstoneUpdate() {
+
+            if (getParent() instanceof FakeMultipartTileIC)
+                ((FakeMultipartTileIC) getParent()).getIC().loadWorld();
+
+            if (hasUpdated) {
+                sendUpdatePacket();
+
+                for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
+                    IConnection<IRedstoneDevice> c = connections.getConnectionOnSide(dir);
+                    if (c == null)
+                        continue;
+                    IRedstoneDevice dev = c.getB();
+                    if (dev == null || dev instanceof DummyRedstoneDevice)
+                        RedstoneHelper.notifyRedstoneUpdate(getWorld(), getX(), getY(), getZ(), dir, false);
                 }
+
+                hasUpdated = false;
             }
         }
 
-        return devices;
-    }
+        @Override
+        public boolean canPropagateFrom(ForgeDirection fromSide) {
 
-    @Override
-    public void breakAndDrop(boolean creative) {
-
-        WireCommons.disconnect(this, this);
-
-        super.breakAndDrop(creative);
-    }
-
-    @Override
-    public void onRemoved() {
-
-        // if (getWorld().isRemote)
-        // return;
-        //
-        // WireCommons.disconnect(this, this);
-        super.onRemoved();
-    }
-
-    private byte lastInput = 1;
-
-    @Override
-    public void onUpdate() {
-
-        if (!RedstoneApi.getInstance().shouldWiresHandleUpdates())
-            return;
-
-        super.onUpdate();
-
-        if (getWorld().isRemote)
-            return;
-
-        WireCommons.refreshConnections(this, this);
-
-        if (!bundled) {
-            int input = 0;
-            for (int i = 0; i < 6; i++) {
-                IRedstoneDevice d = devices[i];
-                if (d != null && !(d instanceof IRedstoneConductor)) {
-                    input = Math.max(input, d.getRedstonePower(ForgeDirection.getOrientation(i).getOpposite()) & 0xFF);
-                }
-            }
-
-            RedstoneApi.getInstance().setWiresHandleUpdates(false);
-            WirePropagator.INSTANCE.onPowerLevelChange(this, ForgeDirection.DOWN, disconnected ? -1 : lastInput, (byte) -1);
-            RedstoneApi.getInstance().setWiresHandleUpdates(true);
-
-            lastInput = (byte) input;
-
-        } else {
-            for (MinecraftColor c : MinecraftColor.VALID_COLORS) {
-                RedstoneApi.getInstance().setWiresHandleUpdates(false);
-                WirePropagator.INSTANCE.onPowerLevelChange(BundledDeviceWrapper.getWrapper(this, c), ForgeDirection.DOWN, disconnected ? -1
-                        : lastInput, (byte) -1);
-                RedstoneApi.getInstance().setWiresHandleUpdates(true);
-            }
+            return true;
         }
+
+        @Override
+        public List<Entry<IConnection<IRedstoneDevice>, Boolean>> propagate(ForgeDirection fromSide) {
+
+            if (getParent() instanceof FakeMultipartTileIC)
+                ((FakeMultipartTileIC) getParent()).getIC().loadWorld();
+
+            List<Entry<IConnection<IRedstoneDevice>, Boolean>> l = new ArrayList<Entry<IConnection<IRedstoneDevice>, Boolean>>();
+
+            for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
+                IConnection<IRedstoneDevice> c = connections.getConnectionOnSide(d);
+                if (c != null)
+                    l.add(new Pair<IConnection<IRedstoneDevice>, Boolean>(c, c.getB() instanceof IRedwire
+                            && ((IRedwire) c.getB()).getRedwireType() != getRedwireType()));
+            }
+
+            return l;
+        }
+
+        @Override
+        public void onUpdate() {
+
+            super.onUpdate();
+
+            // Do not do anything if we're on the client
+            if (getWorld().isRemote)
+                return;
+
+            // Refresh connections
+            connections.recalculateConnections();
+            ForgeDirection d = ForgeDirection.UNKNOWN;
+            for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS)
+                if (getRedstoneConnectionCache().getConnectionOnSide(dir) != null)
+                    d = dir;
+            RedstoneApi.getInstance().getRedstonePropagator(this, d).propagate();
+        }
+
+        // Rendering methods
+
+        @Override
+        public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
+
+            power = (byte) 255;
+
+            RenderHelper rh = RenderHelper.instance;
+            rh.setRenderCoords(null, 0, 0, 0);
+            Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
+
+            GL11.glTranslated(0, -0.125, 0);
+            GL11.glScaled(1.25, 1.25, 1.25);
+            Tessellator.instance.startDrawingQuads();
+            renderStatic(new Vec3i(0, 0, 0), rh, RenderBlocks.getInstance(), 0);
+            Tessellator.instance.draw();
+            GL11.glScaled(1 / 1.25, 1 / 1.25, 1 / 1.25);
+
+            rh.reset();
+        }
+
+        @Override
+        public void writeUpdateData(DataOutput buffer) throws IOException {
+
+            super.writeUpdateData(buffer);
+            buffer.writeByte(power);
+        }
+
+        @Override
+        public void readUpdateData(DataInput buffer) throws IOException {
+
+            super.readUpdateData(buffer);
+            power = buffer.readByte();
+
+            getWorld().markBlockRangeForRenderUpdate(getX(), getY(), getZ(), getX(), getY(), getZ());
+        }
+
+        @Override
+        public void addWAILABody(List<String> text) {
+
+            super.addWAILABody(text);
+
+            text.add("Power: " + (power & 0xFF));
+        }
+
     }
 
-    @Override
-    public void onNeighborBlockChange() {
+    public static class PartRedwireFreestandingInsulated extends PartRedwireFreestanding implements IAdvancedRedstoneConductor,
+            IInsulatedRedstoneDevice, IAdvancedBundledConductor, IConnectionListener {
 
-        super.onNeighborBlockChange();
+        private RedstoneConnectionCache connections = RedstoneApi.getInstance().createRedstoneConnectionCache(this);
+        private BundledConnectionCache bundledConnections = RedstoneApi.getInstance().createBundledConnectionCache(this);
+        private boolean hasUpdated = false;
+        private byte power = 0;
+        private MinecraftColor color;
 
-    }
+        public PartRedwireFreestandingInsulated(RedwireType type, MinecraftColor color) {
 
-    @Override
-    public boolean canConnectRedstone(ForgeDirection side) {
+            super(4, type);
+            this.color = color;
 
-        return !bundled;
-    }
+            connections.listen();
+        }
 
-    @Override
-    public int getStrongPower(ForgeDirection side) {
+        @Override
+        public String getType() {
 
-        return 0;
-    }
+            return "wire.freestanding." + getRedwireType().getName() + "." + color.name().toLowerCase();
+        }
 
-    @Override
-    public int getWeakPower(ForgeDirection side) {
+        @Override
+        protected boolean isConnected(ForgeDirection side) {
 
-        if (!RedstoneApi.getInstance().shouldWiresOutputPower())
-            return 0;
+            if (getParent() == null || getWorld() == null)
+                return true;
 
-        if (devices[side.ordinal()] == null || !(devices[side.ordinal()] instanceof DummyRedstoneDevice))
-            return MathHelper.map(power & 0xFF, 0, 255, 0, 15);
+            return connections.getConnectionOnSide(side) != null;
+        }
 
-        return (devices[side.ordinal()] != null && devices[side.ordinal()] instanceof DummyRedstoneDevice) ? ((DummyRedstoneDevice) devices[side
-                                                                                                                                            .ordinal()]).getRedstoneOutput(MathHelper.map(power & 0xFF, 0, 255, 0, 15)) : 0;
-    }
+        @Override
+        protected IIcon getWireIcon(ForgeDirection side) {
 
-    @Override
-    public boolean canConnectBundledStraight(ForgeDirection side, IBundledDevice device) {
+            return IconSupplier.wireInsulation1;
+        }
 
-        if (!(device instanceof IFaceBundledDevice))
-            if (OcclusionHelper.microblockOcclusionTest(new Vec3i(this), MicroblockShape.FACE_HOLLOW, 8, side))
+        @Override
+        protected int getColorMultiplier() {
+
+            return color.getHex();
+        }
+
+        @Override
+        public boolean canConnect(ForgeDirection side, IRedstoneDevice device, ConnectionType type) {
+
+            if (type == ConnectionType.STRAIGHT)
+                if (side == ForgeDirection.UNKNOWN && device instanceof DummyRedstoneDevice)
+                    return false;
+            if (type == ConnectionType.CLOSED_CORNER) {
+                if (side == ForgeDirection.UNKNOWN)
+                    return false;
+            }
+
+            if (device instanceof IInsulatedRedstoneDevice) {
+                MinecraftColor c = ((IInsulatedRedstoneDevice) device).getInsulationColor(type == ConnectionType.STRAIGHT ? side
+                        .getOpposite() : null);
+                if (c != null && c != getInsulationColor(side))
+                    return false;
+            }
+
+            if (device instanceof IRedwire && !getRedwireType().canConnectTo(((IRedwire) device).getRedwireType()))
                 return false;
 
-        if (device instanceof IRedstoneDevice) {
-            MinecraftColor insulation = ((IRedstoneDevice) device).getInsulationColor(side.getOpposite());
-            MinecraftColor myInsulation = getInsulationColor(side);
-            if (insulation != null && getInsulationColor(side) != null)
-                if (!insulation.matches(myInsulation))
-                    return false;
-        }
-
-        return WireCommons.canConnect(this, device, side, side.getOpposite());
-    }
-
-    @Override
-    public boolean canConnectBundledOpenCorner(ForgeDirection side, IBundledDevice device) {
-
-        if (!(device instanceof IFaceBundledDevice))
-            if (OcclusionHelper.microblockOcclusionTest(new Vec3i(this), MicroblockShape.FACE_HOLLOW, 8, side))
+            if (OcclusionHelper.microblockOcclusionTest(getParent(), MicroblockShape.FACE_HOLLOW, 1, side))
                 return false;
 
-        if (device instanceof IRedstoneDevice) {
-            MinecraftColor insulation = ((IRedstoneDevice) device).getInsulationColor(side.getOpposite());
-            MinecraftColor myInsulation = getInsulationColor(side);
-            if (insulation != null && getInsulationColor(side) != null)
-                if (!insulation.matches(myInsulation))
-                    return false;
+            return true;
         }
 
-        return WireCommons.canConnect(this, device);
-    }
+        @Override
+        public boolean canConnect(ForgeDirection side, IBundledDevice device, ConnectionType type) {
 
-    @Override
-    public void onConnect(ForgeDirection side, IBundledDevice device) {
+            if (device instanceof IInsulatedRedstoneDevice)
+                return false;
 
-        bundledDevices[side.ordinal()] = device;
-        sendUpdatePacket();
-    }
+            if (device instanceof IRedwire)
+                return true;
 
-    @Override
-    public IBundledDevice getBundledDeviceOnSide(ForgeDirection side) {
+            return false;
+        }
 
-        return bundledDevices[side.ordinal()];
-    }
+        @Override
+        public RedstoneConnectionCache getRedstoneConnectionCache() {
 
-    @Override
-    public byte[] getBundledOutput(ForgeDirection side) {
+            return connections;
+        }
 
-        if (!RedstoneApi.getInstance().shouldWiresOutputPower())
-            return new byte[16];
+        @Override
+        public IConnectionCache<? extends IBundledDevice> getBundledConnectionCache() {
 
-        return getBundledPower(side);
-    }
+            return bundledConnections;
+        }
 
-    @Override
-    public void setBundledPower(ForgeDirection side, byte[] power) {
+        @Override
+        public void onConnect(IConnection<?> connection) {
 
-        bundledPower = power;
-        if (!bundled)
+            sendUpdatePacket();
+        }
+
+        @Override
+        public void onDisconnect(IConnection<?> connection) {
+
+            sendUpdatePacket();
+        }
+
+        @Override
+        public byte getRedstonePower(ForgeDirection side) {
+
+            if (!RedstoneApi.getInstance().shouldWiresOutputPower(hasLoss(side)))
+                return 0;
+
+            if (!isAnalogue(side))
+                return (byte) ((power & 0xFF) > 0 ? 255 : 0);
+
+            return power;
+        }
+
+        @Override
+        public void setRedstonePower(ForgeDirection side, byte power) {
+
+            byte pow = isAnalogue(side) ? power : (((power & 0xFF) > 0) ? (byte) 255 : (byte) 0);
+            hasUpdated = hasUpdated | (pow != this.power);
+            this.power = pow;
+        }
+
+        @Override
+        public byte[] getBundledOutput(ForgeDirection side) {
+
+            if (!RedstoneApi.getInstance().shouldWiresOutputPower(hasLoss(side)))
+                return new byte[16];
+
+            return getBundledPower(side);
+        }
+
+        @Override
+        public void setBundledPower(ForgeDirection side, byte[] power) {
+
             this.power = power[getInsulationColor(side).ordinal()];
-    }
+            hasUpdated = true;
+        }
 
-    @Override
-    public byte[] getBundledPower(ForgeDirection side) {
+        @Override
+        public byte[] getBundledPower(ForgeDirection side) {
 
-        return bundledPower;
-    }
+            byte[] val = new byte[16];
+            val[color.ordinal()] = power;
+            return val;
+        }
 
-    @Override
-    public void onBundledUpdate() {
+        @Override
+        public void onRedstoneUpdate() {
 
-        if (!bundled)
-            onRedstoneUpdate();
-    }
+            if (hasUpdated) {
+                sendUpdatePacket();
 
-    @Override
-    public MinecraftColor getBundledColor(ForgeDirection side) {
+                for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
+                    IConnection<IRedstoneDevice> c = connections.getConnectionOnSide(dir);
+                    if (c == null)
+                        continue;
+                    IRedstoneDevice dev = c.getB();
+                    if (dev == null || dev instanceof DummyRedstoneDevice)
+                        RedstoneHelper.notifyRedstoneUpdate(getWorld(), getX(), getY(), getZ(), dir, false);
+                }
 
-        return bundled ? color : (color == MinecraftColor.NONE ? null : MinecraftColor.NONE);
-    }
-
-    @Override
-    public List<Pair<IBundledDevice, ForgeDirection>> propagateBundled(ForgeDirection fromSide) {
-
-        List<Pair<IBundledDevice, ForgeDirection>> devices = new ArrayList<Pair<IBundledDevice, ForgeDirection>>();
-
-        for (int i = 0; i < 6; i++) {
-            IBundledDevice d = bundledDevices[i];
-            if (d != null) {
-                if (d instanceof IRedstoneDevice && ((IRedstoneDevice) d).getInsulationColor(WireHelper.getConnectionSide(d, this)) != null
-                        && getInsulationColor(ForgeDirection.getOrientation(i)) != null)
-                    continue;
-                devices.add(new Pair<IBundledDevice, ForgeDirection>(d, ForgeDirection.getOrientation(i)));
+                hasUpdated = false;
             }
         }
 
-        return devices;
-    }
+        @Override
+        public void onBundledUpdate() {
 
-    @Override
-    public boolean isBundled(ForgeDirection side) {
+            onRedstoneUpdate();
+        }
 
-        return bundled || getInsulationColor(side) != MinecraftColor.NONE;
-    }
+        @Override
+        public boolean canPropagateFrom(ForgeDirection fromSide) {
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void addWAILABody(List<String> text) {
+            return true;
+        }
 
-        text.add("Power: " + (power & 0xFF) + "/255");
-    }
+        @Override
+        public boolean canPropagateBundledFrom(ForgeDirection fromSide) {
 
-    @Override
-    public CreativeTabs getCreativeTab() {
+            return true;
+        }
 
-        return BPCreativeTabs.wiring;
-    }
+        @Override
+        public List<Entry<IConnection<IRedstoneDevice>, Boolean>> propagate(ForgeDirection fromSide) {
 
-    @Override
-    public boolean isSideSolid(ForgeDirection face) {
+            List<Entry<IConnection<IRedstoneDevice>, Boolean>> l = new ArrayList<Entry<IConnection<IRedstoneDevice>, Boolean>>();
 
-        return false;
-    }
+            for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
+                IConnection<IRedstoneDevice> c = connections.getConnectionOnSide(d);
+                if (c != null)
+                    l.add(new Pair<IConnection<IRedstoneDevice>, Boolean>(c, c.getB() instanceof IRedwire
+                            && ((IRedwire) c.getB()).getRedwireType() != getRedwireType()));
+            }
 
-    @Override
-    public boolean hasLoss() {
+            return l;
+        }
 
-        return type.hasLoss();
-    }
+        @Override
+        public Collection<Entry<IConnection<IBundledDevice>, Boolean>> propagateBundled(ForgeDirection fromSide) {
 
-    @Override
-    public boolean isAnalog() {
+            return Arrays.asList();// TODO
+        }
 
-        return type.isAnalogue();
-    }
+        @Override
+        public MinecraftColor getBundledColor(ForgeDirection side) {
 
-    @Override
-    public String getType() {
-
-        return "wire.freestanding." + type.getName() + (bundled ? ".bundled" : "")
-                + (color != MinecraftColor.NONE ? "." + color.name().toLowerCase() : "");
-    }
-
-    @Override
-    public IPartPlacement getPlacement(IPart part, World world, Vec3i location, ForgeDirection face, MovingObjectPosition mop,
-            EntityPlayer player) {
-
-        if (!DebugHelper.isDebugModeEnabled() && (bundled || type == RedwireType.RED_ALLOY))
             return null;
+        }
 
-        return new PartPlacementDefault();
-    }
+        @Override
+        public void onUpdate() {
 
-    @Override
-    public void addTooltip(List<String> tip) {
+            super.onUpdate();
 
-        if (!DebugHelper.isDebugModeEnabled() && (bundled || type == RedwireType.RED_ALLOY))
-            tip.add(MinecraftColor.RED + I18n.format("Disabled temporarily. Still not fully working."));
+            // Do not do anything if we're on the client
+            if (getWorld().isRemote)
+                return;
+
+            // Refresh connections
+            connections.recalculateConnections();
+            ForgeDirection d = ForgeDirection.UNKNOWN;
+            for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS)
+                if (getRedstoneConnectionCache().getConnectionOnSide(dir) != null)
+                    d = dir;
+            RedstoneApi.getInstance().getRedstonePropagator(this, d).propagate();
+        }
+
+        // Rendering methods
+
+        @Override
+        public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
+
+            power = (byte) 255;
+
+            RenderHelper rh = RenderHelper.instance;
+            rh.setRenderCoords(null, 0, 0, 0);
+            Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
+
+            GL11.glTranslated(0, -0.125, 0);
+            GL11.glScaled(1.25, 1.25, 1.25);
+            Tessellator.instance.startDrawingQuads();
+            renderStatic(new Vec3i(0, 0, 0), rh, RenderBlocks.getInstance(), 0);
+            Tessellator.instance.draw();
+            GL11.glScaled(1 / 1.25, 1 / 1.25, 1 / 1.25);
+
+            rh.reset();
+        }
+
+        @Override
+        public void writeUpdateData(DataOutput buffer) throws IOException {
+
+            super.writeUpdateData(buffer);
+            buffer.writeByte(power);
+        }
+
+        @Override
+        public void readUpdateData(DataInput buffer) throws IOException {
+
+            super.readUpdateData(buffer);
+            power = buffer.readByte();
+
+            getWorld().markBlockRangeForRenderUpdate(getX(), getY(), getZ(), getX(), getY(), getZ());
+        }
+
+        @Override
+        public void addWAILABody(List<String> text) {
+
+            super.addWAILABody(text);
+
+            text.add("Power: " + (power & 0xFF));
+        }
+
+        @Override
+        public MinecraftColor getInsulationColor(ForgeDirection side) {
+
+            return color;
+        }
+
     }
 
 }
