@@ -18,14 +18,14 @@
 package com.bluepowermod.world;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.LongHashMap;
+import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.World;
 
 import com.bluepowermod.init.BPBlocks;
@@ -39,10 +39,9 @@ public class WorldGenVolcano {
 
     private static final int MAX_VOLCANO_RADIUS = 200; // absolute max radius a volcano can have, this should be a
     // magnitude bigger than an average volcano radius.
-    private final Map<Pos, Integer> volcanoMap = new HashMap<Pos, Integer>();
+    private final LongHashMap volcanoMap = new LongHashMap();
 
     public void generate(World world, Random rand, int middleX, int volcanoHeight, int middleZ) {
-
         List<Pos>[] distMap = calculateDistMap();
         boolean first = true;
         for (int dist = 0; dist < distMap.length; dist++) {// Loop through every XZ position of the volcano, in order of how close the positions are
@@ -57,7 +56,7 @@ public class WorldGenVolcano {
                     // height is higher
                     // than the world
                     // height, generate.
-                    volcanoMap.put(p, posHeight);
+                    volcanoMap.add(ChunkCoordIntPair.chunkXZ2Int(p.x, p.z), posHeight);
                     if (!first) {
                         for (int i = posHeight; i > 0 && (i > worldHeight || canReplace(world, p.x + middleX, i, p.z + middleZ)); i--) {
                             world.setBlock(p.x + middleX, i, p.z + middleZ, BPBlocks.basalt, 0, 2);
@@ -149,8 +148,8 @@ public class WorldGenVolcano {
         int totalHeight = 0;
         for (int x = requestedPos.x - 1; x <= requestedPos.x + 1; x++) {
             for (int z = requestedPos.z - 1; z <= requestedPos.z + 1; z++) {
-                int neighborHeight = getNeighborHeight(x, z);
-                if (neighborHeight != -1) {
+                Integer neighborHeight = (Integer) volcanoMap.getValueByKey(ChunkCoordIntPair.chunkXZ2Int(x, z));
+                if (neighborHeight != null) {
                     neighborCount++;
                     totalHeight += neighborHeight;
                 }
@@ -167,7 +166,7 @@ public class WorldGenVolcano {
             } else if (distFromCenter == 2) {
                 blocksDown = rand.nextInt(2);
             } else {
-                blocksDown = (int) (Math.pow(avgHeight - worldHeight + 1, 1.2) * 0.02D + (rand.nextDouble() - 0.5) * 3 + 0.4D);
+                blocksDown = (int) (Math.pow(avgHeight - worldHeight + 1, 1.2) * 0.005D + (rand.nextDouble() - 0.5) * 3 + 0.4D);
             }
             if (blocksDown < 0)
                 blocksDown = 0;
@@ -178,23 +177,7 @@ public class WorldGenVolcano {
         }
     }
 
-    /**
-     * This helper method is created so we don't have to create an object just to do a volcanoMap.get(new Pos(x,z)).
-     * 
-     * @param x
-     * @param z
-     * @return
-     */
-    private int getNeighborHeight(int x, int z) {
-
-        for (Map.Entry<Pos, Integer> entry : volcanoMap.entrySet()) {
-            if (entry.getKey().x == x && entry.getKey().z == z)
-                return entry.getValue();
-        }
-        return -1;
-    }
-
-    public class Pos {
+    private static class Pos {
 
         public final int x, z;
 
@@ -202,6 +185,21 @@ public class WorldGenVolcano {
 
             this.x = x;
             this.z = z;
+        }
+
+        @Override
+        public boolean equals(Object object) {
+            if (object instanceof Pos) {
+                Pos pos = (Pos) object;
+                return pos.x == x && pos.z == z;
+            } else {
+                return false;
+            }
+        }
+
+        @Override
+        public int hashCode() {
+            return (x << 13) + z;
         }
     }
 }
