@@ -124,13 +124,6 @@ task sourceJar(type: Jar) {
     }
 }
 
-// add a javadoc jar
-task javadocZip(type: Zip, dependsOn: javadoc) {
-    appendix = "${project.ext.mcVersion}"
-    classifier = "javadoc"
-    from 'build/docs/javadoc'
-}
-
 // Create API library zip
 task apiZip(type: Zip) {
     from(sourceSets.main.java) {
@@ -145,7 +138,6 @@ apiZip.mustRunAfter deobfJar
 artifacts {
     archives sourceJar
     archives deobfJar
-    archives javadocZip
     archives apiZip
 }
 
