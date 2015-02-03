@@ -87,52 +87,60 @@ public class FakeWorldIC extends World {
     @Override
     public Block getBlock(int x, int y, int z) {
 
-        if (y == 63)
-            return Blocks.stone;
-        if (y != 64)
-            return Blocks.air;
+        try {
+            if (y == 63)
+                return Blocks.stone;
+            if (y != 64)
+                return Blocks.air;
 
-        if (ic == null)
-            return Blocks.air;
+            if (ic == null || ic.getParent() == null || ic.getWorld() == null)
+                return Blocks.air;
 
-        ForgeDirection d = null;
-        if (x == -1 && z == ((ic.getSize() - 1) / 2))
-            d = ForgeDirection.WEST;
-        if (x == ic.getSize() && z == ((ic.getSize() - 1) / 2))
-            d = ForgeDirection.EAST;
-        if (x == ((ic.getSize() - 1) / 2) && z == -1)
-            d = ForgeDirection.NORTH;
-        if (x == ((ic.getSize() - 1) / 2) && z == ic.getSize())
-            d = ForgeDirection.SOUTH;
-        if (d != null) {
-            return new Vec3d(0, 0, 0, ic.getWorld()).add(d).rotate(0, 90 * -ic.getRotation(), 0).add(ic.getX(), ic.getY(), ic.getZ())
-                    .getBlock();
+            ForgeDirection d = null;
+            if (x == -1 && z == ((ic.getSize() - 1) / 2))
+                d = ForgeDirection.WEST;
+            if (x == ic.getSize() && z == ((ic.getSize() - 1) / 2))
+                d = ForgeDirection.EAST;
+            if (x == ((ic.getSize() - 1) / 2) && z == -1)
+                d = ForgeDirection.NORTH;
+            if (x == ((ic.getSize() - 1) / 2) && z == ic.getSize())
+                d = ForgeDirection.SOUTH;
+            if (d != null) {
+                return new Vec3d(0, 0, 0, ic.getWorld()).add(d).rotate(0, 90 * -ic.getRotation(), 0).add(ic.getX(), ic.getY(), ic.getZ())
+                        .getBlock();
+            }
+
+            if (x < 0 || x >= ic.getSize() || z < 0 || z >= ic.getSize())
+                return Blocks.air;
+
+            return QLBlocks.multipart;
+        } catch (Exception ex) {
         }
 
-        if (x < 0 || x >= ic.getSize() || z < 0 || z >= ic.getSize())
-            return Blocks.air;
-
-        return QLBlocks.multipart;
+        return Blocks.air;
     }
 
     @Override
     public int getBlockMetadata(int x, int y, int z) {
 
-        if (ic == null)
-            return 0;
+        try {
+            if (ic == null || ic.getParent() == null || ic.getWorld() == null)
+                return 0;
 
-        ForgeDirection d = null;
-        if (x == -1 && z == ((ic.getSize() - 1) / 2))
-            d = ForgeDirection.WEST;
-        if (x == ic.getSize() && z == ((ic.getSize() - 1) / 2))
-            d = ForgeDirection.EAST;
-        if (x == ((ic.getSize() - 1) / 2) && z == -1)
-            d = ForgeDirection.NORTH;
-        if (x == ((ic.getSize() - 1) / 2) && z == ic.getSize())
-            d = ForgeDirection.SOUTH;
-        if (d != null)
-            return new Vec3d(0, 0, 0, ic.getWorld()).add(d).rotate(0, 90 * -ic.getRotation(), 0).add(ic.getX(), ic.getY(), ic.getZ())
-                    .getBlockMeta();
+            ForgeDirection d = null;
+            if (x == -1 && z == ((ic.getSize() - 1) / 2))
+                d = ForgeDirection.WEST;
+            if (x == ic.getSize() && z == ((ic.getSize() - 1) / 2))
+                d = ForgeDirection.EAST;
+            if (x == ((ic.getSize() - 1) / 2) && z == -1)
+                d = ForgeDirection.NORTH;
+            if (x == ((ic.getSize() - 1) / 2) && z == ic.getSize())
+                d = ForgeDirection.SOUTH;
+            if (d != null)
+                return new Vec3d(0, 0, 0, ic.getWorld()).add(d).rotate(0, 90 * -ic.getRotation(), 0).add(ic.getX(), ic.getY(), ic.getZ())
+                        .getBlockMeta();
+        } catch (Exception ex) {
+        }
 
         return 0;
     }
@@ -140,26 +148,31 @@ public class FakeWorldIC extends World {
     @Override
     public TileEntity getTileEntity(int x, int y, int z) {
 
-        if (y != 64)
-            return null;
+        try {
+            if (y != 64)
+                return null;
 
-        if (ic == null)
-            return null;
+            if (ic == null || ic.getParent() == null || ic.getWorld() == null)
+                return null;
 
-        ForgeDirection d = null;
-        if (x == -1 && z == ((ic.getSize() - 1) / 2))
-            d = ForgeDirection.WEST;
-        if (x == ic.getSize() && z == ((ic.getSize() - 1) / 2))
-            d = ForgeDirection.EAST;
-        if (x == ((ic.getSize() - 1) / 2) && z == -1)
-            d = ForgeDirection.NORTH;
-        if (x == ((ic.getSize() - 1) / 2) && z == ic.getSize())
-            d = ForgeDirection.SOUTH;
-        if (d != null)
-            return new Vec3d(0, 0, 0, ic.getWorld()).add(d).rotate(0, 90 * -ic.getRotation(), 0).add(ic.getX(), ic.getY(), ic.getZ())
-                    .getTileEntity();
+            ForgeDirection d = null;
+            if (x == -1 && z == ((ic.getSize() - 1) / 2))
+                d = ForgeDirection.WEST;
+            if (x == ic.getSize() && z == ((ic.getSize() - 1) / 2))
+                d = ForgeDirection.EAST;
+            if (x == ((ic.getSize() - 1) / 2) && z == -1)
+                d = ForgeDirection.NORTH;
+            if (x == ((ic.getSize() - 1) / 2) && z == ic.getSize())
+                d = ForgeDirection.SOUTH;
+            if (d != null)
+                return new Vec3d(0, 0, 0, ic.getWorld()).add(d).rotate(0, 90 * -ic.getRotation(), 0).add(ic.getX(), ic.getY(), ic.getZ())
+                        .getTileEntity();
 
-        return getTile(x, z);
+            return getTile(x, z);
+        } catch (Exception ex) {
+        }
+
+        return null;
     }
 
     @Override

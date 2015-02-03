@@ -569,6 +569,9 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
         @Override
         public void onRedstoneUpdate() {
 
+            if (getParent() == null || getWorld() == null)
+                return;
+
             if (hasUpdated) {
                 sendUpdatePacket();
 
@@ -661,6 +664,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
             bundledConnections.recalculateConnections();
 
             RedstoneApi.getInstance().getRedstonePropagator(this, getFace()).propagate();
+            RedstoneApi.getInstance().getBundledPropagator(this, getFace()).propagate();
         }
 
         // Rendering methods
@@ -858,13 +862,13 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
         @Override
         protected IIcon getWireIcon(ForgeDirection side) {
 
-            return side == ForgeDirection.UP || side == ForgeDirection.DOWN ? IconSupplier.wireInsulation1 : IconSupplier.wireInsulation2;
+            return side == ForgeDirection.UP || side == ForgeDirection.DOWN ? IconSupplier.wireBundled : IconSupplier.wireBundled2;
         }
 
         @Override
         protected int getColorMultiplier() {
 
-            return color.getHex();
+            return 0xFFFFFF;
         }
 
         @Override
@@ -976,7 +980,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
 
             // Refresh connections
             bundledConnections.recalculateConnections();
-            // RedstoneApi.getInstance().getRedstonePropagator(this, getFace()).propagate();
+            RedstoneApi.getInstance().getBundledPropagator(this, getFace()).propagate();
         }
 
         // Rendering methods

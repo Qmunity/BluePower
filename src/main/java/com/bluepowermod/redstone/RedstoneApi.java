@@ -166,8 +166,7 @@ public class RedstoneApi implements IRedstoneApi {
     @Override
     public IPropagator<IBundledDevice> getBundledPropagator(IBundledDevice device, ForgeDirection side) {
 
-        // TODO Return bundled propagator
-        return null;
+        return new BundledPropagator(device, side);
     }
 
 }

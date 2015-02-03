@@ -10,7 +10,8 @@ public interface IRedwire {
 
     public RedwireType getRedwireType();
 
-    public static interface IInsulatedRedwire extends IRedwire, IAdvancedRedstoneConductor, IAdvancedBundledConductor {
+    public static interface IInsulatedRedwire extends IInsulatedRedstoneDevice, IRedwire, IAdvancedRedstoneConductor,
+    IAdvancedBundledConductor {
 
     }
 

@@ -45,8 +45,8 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class GateIntegratedCircuit extends
-        GateBase<GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase>
-        implements IGateLogic<GateIntegratedCircuit>, IRedstoneDeviceWrapper, IBundledDeviceWrapper {
+GateBase<GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase>
+implements IGateLogic<GateIntegratedCircuit>, IRedstoneDeviceWrapper, IBundledDeviceWrapper {
 
     private int size;
     private IIntegratedCircuitPart[][] parts = null;
@@ -214,9 +214,21 @@ public class GateIntegratedCircuit extends
 
         loadWorld();
 
-        for (IIntegratedCircuitPart part : allParts())
-            if (part instanceof IPartUpdateListener)
-                ((IPartUpdateListener) part).onNeighborBlockChange();
+        IPart part = getPart(0, (getSize() - 1) / 2);
+        if (part instanceof IPartUpdateListener)
+            ((IPartUpdateListener) part).onNeighborBlockChange();
+
+        part = getPart(getSize() - 1, (getSize() - 1) / 2);
+        if (part instanceof IPartUpdateListener)
+            ((IPartUpdateListener) part).onNeighborBlockChange();
+
+        part = getPart((getSize() - 1) / 2, 0);
+        if (part instanceof IPartUpdateListener)
+            ((IPartUpdateListener) part).onNeighborBlockChange();
+
+        part = getPart((getSize() - 1) / 2, getSize() - 1);
+        if (part instanceof IPartUpdateListener)
+            ((IPartUpdateListener) part).onNeighborBlockChange();
 
         unloadWorld();
     }
