@@ -17,8 +17,6 @@
 
 package com.bluepowermod.part.wire.redstone;
 
-import java.util.Map.Entry;
-
 import net.minecraftforge.common.util.ForgeDirection;
 import uk.co.qmunity.lib.vec.Vec3i;
 
@@ -26,6 +24,7 @@ import com.bluepowermod.api.misc.IFace;
 import com.bluepowermod.api.wire.ConnectionType;
 import com.bluepowermod.api.wire.redstone.IBundledDevice;
 import com.bluepowermod.api.wire.redstone.IRedstoneDevice;
+import com.bluepowermod.redstone.BundledConnection;
 import com.bluepowermod.redstone.RedstoneApi;
 import com.bluepowermod.redstone.RedstoneConnection;
 
@@ -123,13 +122,27 @@ public class WireHelper {
         return null;
     }
 
-    public static Entry<IBundledDevice, ForgeDirection> getBundledNeighbor(IBundledDevice device, ForgeDirection side) {
+    public static BundledConnection getBundledNeighbor(IBundledDevice device, ForgeDirection side) {
 
-        // ForgeDirection face = ForgeDirection.UNKNOWN;
-        // if (device instanceof IFace)
-        // face = ((IFace) device).getFace();
+        ForgeDirection face = ForgeDirection.UNKNOWN;
+        if (device instanceof IFace)
+            face = ((IFace) device).getFace();
 
         // FIXME Neighbor calculation
+
+        // Straight connection
+        do {
+            Vec3i loc = new Vec3i(device).add(side);
+            IBundledDevice dev = RedstoneApi.getInstance().getBundledDevice(loc.getWorld(), loc.getX(), loc.getY(), loc.getZ(), face,
+                    side.getOpposite());
+
+            if (dev == null)
+                break;
+
+            if (device.canConnect(side, dev, ConnectionType.STRAIGHT)
+                    && dev.canConnect(side.getOpposite(), device, ConnectionType.STRAIGHT))
+                return RedstoneApi.getInstance().createConnection(device, dev, side, side.getOpposite(), ConnectionType.STRAIGHT);
+        } while (false);
 
         // // In same block
         // do {

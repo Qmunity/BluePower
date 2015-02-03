@@ -7,6 +7,7 @@ import com.bluepowermod.api.wire.IConnection;
 import com.bluepowermod.api.wire.IConnectionCache;
 import com.bluepowermod.api.wire.IConnectionListener;
 import com.bluepowermod.api.wire.redstone.IBundledDevice;
+import com.bluepowermod.part.wire.redstone.WireHelper;
 
 public class BundledConnectionCache implements IConnectionCache<IBundledDevice> {
 
@@ -49,13 +50,40 @@ public class BundledConnectionCache implements IConnectionCache<IBundledDevice> 
             ((IConnectionListener) dev).onDisconnect(con);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void recalculateConnections() {
 
         if (dev.getWorld().isRemote)
             return;
 
-        // FIXME Recalculate connections
+        IBundledDevice self = getSelf();
+        for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
+            boolean wasConnected = connections[d.ordinal()] != null;
+            BundledConnection con = WireHelper.getBundledNeighbor(self, d);
+            if (con != null) {
+                onConnect(con.getSideA(), con.getB(), con.getSideB(), con.getType());
+                ((IConnectionCache<IBundledDevice>) con.getB().getBundledConnectionCache()).onConnect(con.getSideB(), con.getA(),
+                        con.getSideA(), con.getType());
+
+                IConnection<IBundledDevice> con2 = (IConnection<IBundledDevice>) con.getB().getBundledConnectionCache()
+                        .getConnectionOnSide(con.getSideB());
+                con = connections[d.ordinal()];
+
+                if (con == null)
+                    return;
+
+                con.setComplementaryConnection(con2);
+                con2.setComplementaryConnection(con);
+            } else if (wasConnected) {
+                con = connections[d.ordinal()];
+
+                if (con != null) {
+                    onDisconnect(con.getSideA());
+                    con.getB().getBundledConnectionCache().onDisconnect(con.getSideB());
+                }
+            }
+        }
     }
 
     @Override

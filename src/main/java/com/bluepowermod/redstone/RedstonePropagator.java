@@ -1,4 +1,4 @@
-package com.bluepowermod.redstone.propagation;
+package com.bluepowermod.redstone;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,7 +19,6 @@ import com.bluepowermod.api.wire.redstone.IRedstoneDevice;
 import com.bluepowermod.part.gate.GateBase;
 import com.bluepowermod.part.gate.connection.GateConnectionAnalogue;
 import com.bluepowermod.part.gate.connection.GateConnectionDigital;
-import com.bluepowermod.redstone.RedstoneApi;
 
 @SuppressWarnings("unchecked")
 public abstract class RedstonePropagator implements IPropagator<IRedstoneDevice> {
@@ -101,10 +100,9 @@ public abstract class RedstonePropagator implements IPropagator<IRedstoneDevice>
 
         IConnection<IRedstoneDevice> firstCon = (IConnection<IRedstoneDevice>) getDevice().getRedstoneConnectionCache()
                 .getConnectionOnSide(getSide());
-        if (firstCon == null)
-            return connections;
 
-        connections.add(firstCon);
+        if (firstCon != null)
+            connections.add(firstCon);
 
         List<IConnection<IRedstoneDevice>> current = new ArrayList<IConnection<IRedstoneDevice>>();
         for (Entry<IConnection<IRedstoneDevice>, Boolean> p : getPropagation(getDevice(), getSide())) {
@@ -114,6 +112,9 @@ public abstract class RedstonePropagator implements IPropagator<IRedstoneDevice>
                 current.add(p.getKey());
             }
         }
+
+        if (current.size() == 0 && connections.size() == 0)
+            return connections;
 
         List<IConnection<IRedstoneDevice>> newDevices = new ArrayList<IConnection<IRedstoneDevice>>();
 

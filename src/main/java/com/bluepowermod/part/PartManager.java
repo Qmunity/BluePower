@@ -47,6 +47,7 @@ import com.bluepowermod.part.tube.PneumaticTube;
 import com.bluepowermod.part.tube.PneumaticTubeOpaque;
 import com.bluepowermod.part.tube.RestrictionTube;
 import com.bluepowermod.part.tube.RestrictionTubeOpaque;
+import com.bluepowermod.part.wire.redstone.PartRedwireFace.PartRedwireFaceBundled;
 import com.bluepowermod.part.wire.redstone.PartRedwireFace.PartRedwireFaceInsulated;
 import com.bluepowermod.part.wire.redstone.PartRedwireFace.PartRedwireFaceUninsulated;
 import com.bluepowermod.part.wire.redstone.PartRedwireFreestanding.PartRedwireFreestandingInsulated;
@@ -179,9 +180,9 @@ public class PartManager {
             registerPart(PartRedwireFaceUninsulated.class, type);
             for (MinecraftColor color : MinecraftColor.VALID_COLORS)
                 registerPart(PartRedwireFaceInsulated.class, type, color);
-            // registerPart(PartRedwireFace.class, type, MinecraftColor.NONE, true);
-            // for (MinecraftColor color : MinecraftColor.VALID_COLORS)
-            // registerPart(PartRedwireFace.class, type, color, true);
+            registerPart(PartRedwireFaceBundled.class, type, MinecraftColor.NONE);
+            for (MinecraftColor color : MinecraftColor.VALID_COLORS)
+                registerPart(PartRedwireFaceBundled.class, type, color);
         }
         for (RedwireType type : RedwireType.values()) {
             registerPart(PartRedwireFreestandingUninsulated.class, type);

@@ -29,7 +29,6 @@ import com.bluepowermod.api.wire.redstone.IPropagator;
 import com.bluepowermod.api.wire.redstone.IRedstoneApi;
 import com.bluepowermod.api.wire.redstone.IRedstoneDevice;
 import com.bluepowermod.api.wire.redstone.IRedstoneProvider;
-import com.bluepowermod.redstone.propagation.RedstonePropagator;
 
 public class RedstoneApi implements IRedstoneApi {
 
