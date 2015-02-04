@@ -172,8 +172,7 @@ public class RenderCircuitTile implements IItemRenderer {
                     GL11.glTranslated(-0.5, 0.125, -0.5);
                     Tessellator.instance.startDrawingQuads();
                     rh.renderBox(new Vec3dCube(0.5 - (bundledWidth / 2), 2 / 16D, 0, 0.5 + (bundledWidth / 2), 2 / 16D + bundledHeight, 1),
-                            IconSupplier.wireBundled, IconSupplier.wireBundled, IconSupplier.wireBundled2, IconSupplier.wireBundled3,
-                            IconSupplier.wireBundled, IconSupplier.wireBundled);
+                            IconSupplier.wireBundledStraight1);
                     Tessellator.instance.draw();
                 }
                 GL11.glPopMatrix();

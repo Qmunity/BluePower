@@ -409,7 +409,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
     }
 
     public static class PartRedwireFaceInsulated extends PartRedwireFace implements IAdvancedRedstoneConductor, IInsulatedRedstoneDevice,
-            IAdvancedBundledConductor, IConnectionListener, IInsulatedRedwire {
+    IAdvancedBundledConductor, IConnectionListener, IInsulatedRedwire {
 
         private RedstoneConnectionCache connections = RedstoneApi.getInstance().createRedstoneConnectionCache(this);
         private BundledConnectionCache bundledConnections = RedstoneApi.getInstance().createBundledConnectionCache(this);
@@ -862,7 +862,63 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
         @Override
         protected IIcon getWireIcon(ForgeDirection side) {
 
-            return side == ForgeDirection.UP || side == ForgeDirection.DOWN ? IconSupplier.wireBundled : IconSupplier.wireBundled2;
+            return null;
+        }
+
+        @Override
+        protected IIcon getWireIcon(ForgeDirection side, ForgeDirection face) {
+
+            if (face == ForgeDirection.UP || face == ForgeDirection.DOWN) {
+                if (side == ForgeDirection.UNKNOWN) {
+                    ForgeDirection d1 = ForgeDirection.NORTH;
+                    ForgeDirection d2 = ForgeDirection.SOUTH;
+                    ForgeDirection d3 = ForgeDirection.WEST;
+                    ForgeDirection d4 = ForgeDirection.EAST;
+
+                    if (getFace() == ForgeDirection.NORTH) {
+                        d1 = ForgeDirection.UP;
+                        d2 = ForgeDirection.DOWN;
+                    } else if (getFace() == ForgeDirection.SOUTH) {
+                        d1 = ForgeDirection.DOWN;
+                        d2 = ForgeDirection.UP;
+                    } else if (getFace() == ForgeDirection.WEST) {
+                        d3 = ForgeDirection.UP;
+                        d4 = ForgeDirection.DOWN;
+                    } else if (getFace() == ForgeDirection.EAST) {
+                        d3 = ForgeDirection.DOWN;
+                        d4 = ForgeDirection.UP;
+                    } else if (getFace() == ForgeDirection.UP) {
+                        d3 = ForgeDirection.EAST;
+                        d4 = ForgeDirection.WEST;
+                    }
+
+                    if (getFace() == ForgeDirection.NORTH || getFace() == ForgeDirection.SOUTH) {
+                        d1 = d1.getRotation(getFace());
+                        d2 = d2.getRotation(getFace());
+                        d3 = d3.getRotation(getFace());
+                        d4 = d4.getRotation(getFace());
+                    }
+
+                    boolean s1 = shouldRenderConnection(d1);
+                    boolean s2 = shouldRenderConnection(d2);
+                    boolean s3 = shouldRenderConnection(d3);
+                    boolean s4 = shouldRenderConnection(d4);
+
+                    if ((s1 || s2) && !(s3 || s4))
+                        return IconSupplier.wireBundledStraight1;
+                    if (!(s1 || s2) && (s3 || s4))
+                        return IconSupplier.wireBundledStraight2;
+                }
+                return IconSupplier.wireBundledCross;
+            }
+
+            if (side == face)
+                return IconSupplier.wireBundledConnection;
+
+            if (face == ForgeDirection.UP || face == ForgeDirection.WEST || face == ForgeDirection.NORTH)
+                return IconSupplier.wireBundledSide1;
+
+            return IconSupplier.wireBundledSide2;
         }
 
         @Override
@@ -1054,7 +1110,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
 
             double size = 1 / 64D;
 
-            double width = 1 / 32D;
+            double width = 1 / 48D;
             double height = getHeight() / 16D;
 
             renderer.setColor(WireCommons.getColorForPowerLevel(getRedwireType().getColor(), (byte) (255 / 2)/* power */));
@@ -1088,27 +1144,27 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
                 renderer.renderBox(new Vec3dCube(8 / 16D - width, height, 8 / 16D + width, 8 / 16D + width, height + size,
                         s2 ? (openConnections[d2.ordinal()] ? 1 + height + size : 1) : 11 / 16D), IconSupplier.wire);
             }
-
-            double len = 1 / 16D;
-            width = 1 / 16D;
-
-            if (s4 || s3) {
-                if (s3 || (!s1 && !s2))
-                    renderer.renderBox(new Vec3dCube(4 / 16D - len, 0, 8 / 16D - width, 4 / 16D, 2 / 16D, 8 / 16D + width),
-                            IconSupplier.wire);
-
-                if (s4 || (!s1 && !s2)) {
-                    renderer.renderBox(new Vec3dCube(12 / 16D, 0, 8 / 16D - width, 12 / 16D + len, 2 / 16D, 8 / 16D + width),
-                            IconSupplier.wire);
-                }
-            } else {
-                if (!s1)
-                    renderer.renderBox(new Vec3dCube(8 / 16D - width, 0, 4 / 16D - len, 8 / 16D + width, 2 / 16D, 4 / 16D),
-                            IconSupplier.wire);
-                if (!s2)
-                    renderer.renderBox(new Vec3dCube(8 / 16D - width, 0, 12 / 16D, 8 / 16D + width, 2 / 16D, 12 / 16D + len),
-                            IconSupplier.wire);
-            }
+            //
+            // double len = 1 / 16D;
+            // width = 1 / 16D;
+            //
+            // if (s4 || s3) {
+            // if (s3 || (!s1 && !s2))
+            // renderer.renderBox(new Vec3dCube(4 / 16D - len, 0, 8 / 16D - width, 4 / 16D, 2 / 16D, 8 / 16D + width),
+            // IconSupplier.wire);
+            //
+            // if (s4 || (!s1 && !s2)) {
+            // renderer.renderBox(new Vec3dCube(12 / 16D, 0, 8 / 16D - width, 12 / 16D + len, 2 / 16D, 8 / 16D + width),
+            // IconSupplier.wire);
+            // }
+            // } else {
+            // if (!s1)
+            // renderer.renderBox(new Vec3dCube(8 / 16D - width, 0, 4 / 16D - len, 8 / 16D + width, 2 / 16D, 4 / 16D),
+            // IconSupplier.wire);
+            // if (!s2)
+            // renderer.renderBox(new Vec3dCube(8 / 16D - width, 0, 12 / 16D, 8 / 16D + width, 2 / 16D, 12 / 16D + len),
+            // IconSupplier.wire);
+            // }
 
             return true;
         }

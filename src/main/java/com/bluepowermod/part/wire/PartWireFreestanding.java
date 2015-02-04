@@ -53,6 +53,20 @@ public abstract class PartWireFreestanding extends BPPart implements IPartThruHo
     protected abstract IIcon getWireIcon(ForgeDirection side);
 
     @SideOnly(Side.CLIENT)
+    protected IIcon getWireIcon(ForgeDirection side, ForgeDirection face) {
+
+        return getWireIcon(face);
+    }
+
+    @SideOnly(Side.CLIENT)
+    protected IIcon[] getIcons(ForgeDirection side) {
+
+        return new IIcon[] { getWireIcon(side, ForgeDirection.DOWN), getWireIcon(side, ForgeDirection.UP),
+                getWireIcon(side, ForgeDirection.WEST), getWireIcon(side, ForgeDirection.EAST), getWireIcon(side, ForgeDirection.NORTH),
+                getWireIcon(side, ForgeDirection.SOUTH) };
+    }
+
+    @SideOnly(Side.CLIENT)
     protected abstract IIcon getFrameIcon();
 
     protected List<Vec3dCube> getFrameBoxes() {
@@ -224,8 +238,6 @@ public abstract class PartWireFreestanding extends BPPart implements IPartThruHo
         double frameSeparation = 4 / 16D - (wireSize - 2 / 16D);
         double frameThickness = 1 / 16D;
 
-        IIcon[] icons = new IIcon[] { getWireIcon(ForgeDirection.DOWN), getWireIcon(ForgeDirection.UP), getWireIcon(ForgeDirection.WEST),
-                getWireIcon(ForgeDirection.EAST), getWireIcon(ForgeDirection.NORTH), getWireIcon(ForgeDirection.SOUTH) };
         int color = getColorMultiplier();
 
         boolean isInWorld = getParent() != null;
@@ -241,25 +253,25 @@ public abstract class PartWireFreestanding extends BPPart implements IPartThruHo
 
         // Wire
         renderer.renderBox(new Vec3dCube(0.5 - (wireSize / 2), 0.5 - (wireSize / 2), 0.5 - (wireSize / 2), 0.5 + (wireSize / 2),
-                0.5 + (wireSize / 2), 0.5 + (wireSize / 2)), icons);
+                0.5 + (wireSize / 2), 0.5 + (wireSize / 2)), getWireIcon(ForgeDirection.UNKNOWN));
         if (up || !isInWorld)
             renderer.renderBox(new Vec3dCube(0.5 - (wireSize / 2), 0.5 + (wireSize / 2), 0.5 - (wireSize / 2), 0.5 + (wireSize / 2), 1,
-                    0.5 + (wireSize / 2)), icons);
+                    0.5 + (wireSize / 2)), getWireIcon(ForgeDirection.UP));
         if (down || !isInWorld)
             renderer.renderBox(new Vec3dCube(0.5 - (wireSize / 2), 0, 0.5 - (wireSize / 2), 0.5 + (wireSize / 2), 0.5 - (wireSize / 2),
-                    0.5 + (wireSize / 2)), icons);
+                    0.5 + (wireSize / 2)), getWireIcon(ForgeDirection.DOWN));
         if (north || !isInWorld)
             renderer.renderBox(new Vec3dCube(0.5 - (wireSize / 2), 0.5 - (wireSize / 2), 0, 0.5 + (wireSize / 2), 0.5 + (wireSize / 2),
-                    0.5 - (wireSize / 2)), icons);
+                    0.5 - (wireSize / 2)), getWireIcon(ForgeDirection.NORTH));
         if (south || !isInWorld)
             renderer.renderBox(new Vec3dCube(0.5 - (wireSize / 2), 0.5 - (wireSize / 2), 0.5 + (wireSize / 2), 0.5 + (wireSize / 2),
-                    0.5 + (wireSize / 2), 1), icons);
+                    0.5 + (wireSize / 2), 1), getWireIcon(ForgeDirection.SOUTH));
         if (west || !isInWorld)
             renderer.renderBox(new Vec3dCube(0, 0.5 - (wireSize / 2), 0.5 - (wireSize / 2), 0.5 - (wireSize / 2), 0.5 + (wireSize / 2),
-                    0.5 + (wireSize / 2)), icons);
+                    0.5 + (wireSize / 2)), getWireIcon(ForgeDirection.WEST));
         if (east || !isInWorld)
             renderer.renderBox(new Vec3dCube(0.5 + (wireSize / 2), 0.5 - (wireSize / 2), 0.5 - (wireSize / 2), 1, 0.5 + (wireSize / 2),
-                    0.5 + (wireSize / 2)), icons);
+                    0.5 + (wireSize / 2)), getWireIcon(ForgeDirection.EAST));
 
         renderer.setColor(getFrameColorMultiplier());
 

@@ -66,9 +66,13 @@ public class IconSupplier {
     public static IIcon wire;
     public static IIcon wireInsulation1;
     public static IIcon wireInsulation2;
-    public static IIcon wireBundled;
-    public static IIcon wireBundled2;
-    public static IIcon wireBundled3;
+
+    public static IIcon wireBundledCross;
+    public static IIcon wireBundledStraight1;
+    public static IIcon wireBundledStraight2;
+    public static IIcon wireBundledSide1;
+    public static IIcon wireBundledSide2;
+    public static IIcon wireBundledConnection;
 
     public static IIcon gateButton = null;
     public static IIcon siliconChipOff = null;
@@ -128,9 +132,13 @@ public class IconSupplier {
             wire = reg.registerIcon(Refs.MODID + ":wire/wire");
             wireInsulation1 = reg.registerIcon(Refs.MODID + ":wire/insulation1");
             wireInsulation2 = reg.registerIcon(Refs.MODID + ":wire/insulation2");
-            wireBundled = reg.registerIcon(Refs.MODID + ":wire/bundled");
-            wireBundled2 = reg.registerIcon(Refs.MODID + ":wire/bundled2");
-            wireBundled3 = reg.registerIcon(Refs.MODID + ":wire/bundled3");
+
+            wireBundledConnection = reg.registerIcon(Refs.MODID + ":wire/bundled_connection");
+            wireBundledCross = reg.registerIcon(Refs.MODID + ":wire/bundled_cross");
+            wireBundledStraight1 = reg.registerIcon(Refs.MODID + ":wire/bundled_straight_1");
+            wireBundledStraight2 = reg.registerIcon(Refs.MODID + ":wire/bundled_straight_2");
+            wireBundledSide1 = reg.registerIcon(Refs.MODID + ":wire/bundled_side_1");
+            wireBundledSide2 = reg.registerIcon(Refs.MODID + ":wire/bundled_side_2");
 
             gateButton = reg.registerIcon(Refs.MODID + ":gates/components/button");
             siliconChipOff = reg.registerIcon(Refs.MODID + ":gates/components/silicon_chip_off");
