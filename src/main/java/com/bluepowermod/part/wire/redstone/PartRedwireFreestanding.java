@@ -211,7 +211,7 @@ public abstract class PartRedwireFreestanding extends PartWireFreestanding imple
     }
 
     public static class PartRedwireFreestandingUninsulated extends PartRedwireFreestanding implements IAdvancedRedstoneConductor,
-    IConnectionListener {
+            IConnectionListener {
 
         private RedstoneConnectionCache connections = RedstoneApi.getInstance().createRedstoneConnectionCache(this);
         private boolean hasUpdated = false;
@@ -244,7 +244,7 @@ public abstract class PartRedwireFreestanding extends PartWireFreestanding imple
         @Override
         protected int getColorMultiplier() {
 
-            return WireCommons.getColorForPowerLevel(getRedwireType().getColor(), power);
+            return WireCommons.getColorForPowerLevel(getRedwireType(), power);
         }
 
         @Override
@@ -417,7 +417,7 @@ public abstract class PartRedwireFreestanding extends PartWireFreestanding imple
     }
 
     public static class PartRedwireFreestandingInsulated extends PartRedwireFreestanding implements IAdvancedRedstoneConductor,
-    IInsulatedRedstoneDevice, IAdvancedBundledConductor, IConnectionListener {
+            IInsulatedRedstoneDevice, IAdvancedBundledConductor, IConnectionListener {
 
         private RedstoneConnectionCache connections = RedstoneApi.getInstance().createRedstoneConnectionCache(this);
         private BundledConnectionCache bundledConnections = RedstoneApi.getInstance().createBundledConnectionCache(this);

@@ -23,18 +23,19 @@ import com.bluepowermod.part.PartManager;
 
 public enum RedwireType {
 
-    BLUESTONE(false, false, 0x4444CC, "ingotBlueAlloy"), RED_ALLOY(true, true, 0xDD0000, "ingotRedAlloy"), INFUSED_TESLATITE(true, false,
-            0xAA00BB, "ingotPurpleAlloy");
+    BLUESTONE(false, false, 0x1B1B51, 0x4444CC, "ingotBlueAlloy"), RED_ALLOY(true, true, 0x470000, 0xBB0000, "ingotRedAlloy"), INFUSED_TESLATITE(
+            true, false, 0x3A003E, 0xAA00BB, "ingotPurpleAlloy");
 
     private boolean analogue, loss;
-    private int color;
+    private int minColor, maxColor;
     private String ingotOredictName;
 
-    private RedwireType(boolean analogue, boolean loss, int color, String ingotOredictName) {
+    private RedwireType(boolean analogue, boolean loss, int minColor, int maxColor, String ingotOredictName) {
 
         this.analogue = analogue;
         this.loss = loss;
-        this.color = color;
+        this.minColor = minColor;
+        this.maxColor = maxColor;
         this.ingotOredictName = ingotOredictName;
     }
 
@@ -53,9 +54,14 @@ public enum RedwireType {
         return name().toLowerCase().replace("_", "");
     }
 
-    public int getColor() {
+    public int getMinColor() {
 
-        return color;
+        return minColor;
+    }
+
+    public int getMaxColor() {
+
+        return maxColor;
     }
 
     public String getIngotOredictName() {

@@ -78,7 +78,7 @@ public class RenderCircuitTile implements IItemRenderer {
             IIcon wireTexture = IconSupplier.wire;
 
             // Bluestone tiles
-            rh.setColor(WireCommons.getColorForPowerLevel(RedwireType.BLUESTONE.getColor(), (byte) (255 / 2)));
+            rh.setColor(WireCommons.getColorForPowerLevel(RedwireType.BLUESTONE, (byte) (255 / 2)));
             if (item.getItem() == BPItems.bluestone_cathode_tile) {
                 com.bluepowermod.client.render.RenderHelper.renderDigitalRedstoneTorch(0, 0, 0, 13 / 16D, true);
                 Tessellator.instance.startDrawingQuads();
@@ -116,7 +116,7 @@ public class RenderCircuitTile implements IItemRenderer {
             }
 
             // Redstone tiles
-            rh.setColor(WireCommons.getColorForPowerLevel(RedwireType.RED_ALLOY.getColor(), (byte) (255 / 2)));
+            rh.setColor(WireCommons.getColorForPowerLevel(RedwireType.RED_ALLOY, (byte) (255 / 2)));
             if (item.getItem() == BPItems.redstone_cathode_tile) {
                 com.bluepowermod.client.render.RenderHelper.renderAnalogRedstoneTorch(0, 0, 0, 13 / 16D, true);
                 Tessellator.instance.startDrawingQuads();

@@ -37,9 +37,10 @@ public class GateComponentWire extends GateComponentLocationArray {
     public void renderStatic(Vec3i translation, RenderHelper renderer, int pass) {
 
         byte power = getPower();
-        int color = isEnabled() ? type.getColor() : 0x999999;
+        int colorMin = isEnabled() ? type.getMinColor() : 0x999999;
+        int colorMax = isEnabled() ? type.getMaxColor() : 0x999999;
 
-        renderer.setColor(WireCommons.getColorForPowerLevel(color, power));
+        renderer.setColor(WireCommons.getColorForPowerLevel(colorMin, colorMax, power));
         double height = 1 / 48D;
         // double size = 1 / ((double) pixels.length);
         double scale = 1D / getGate().getLayout().getLayout(layoutColor).getWidth();

@@ -59,9 +59,9 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class GateNullCell
-extends
-GateSupported<GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase>
-implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor {
+        extends
+        GateSupported<GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase>
+        implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor {
 
     private RedwireType typeA = null, typeB = null;
     private boolean bundledA = false, bundledB = false;
@@ -121,7 +121,7 @@ implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor {
         IIcon wire = IconSupplier.wire;
 
         if (typeA != null) { // Flat
-            renderer.setColor(WireCommons.getColorForPowerLevel(typeA.getColor(), powerA));
+            renderer.setColor(WireCommons.getColorForPowerLevel(typeA, powerA));
 
             ForgeDirection dir = ForgeDirection.NORTH;
             if (getRotation() % 2 == 1)
@@ -131,11 +131,11 @@ implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor {
             renderer.renderBox(new Vec3dCube(7 / 16D, 2 / 16D, 0 / 16D, 9 / 16D,
                     2 / 16D + (height / /* (nullcells[dir.ordinal()] ? 1 : */2/* ) */), 1 / 16D), wire);
             renderer.renderBox(new Vec3dCube(7 / 16D, 2 / 16D, 15 / 16D, 9 / 16D, 2 / 16D + (height / (nullcells[dir.getOpposite()
-                                                                                                                 .ordinal()] ? 1 : 2)), 16 / 16D), wire);
+                    .ordinal()] ? 1 : 2)), 16 / 16D), wire);
         }
 
         if (typeB != null) { // Supported
-            renderer.setColor(WireCommons.getColorForPowerLevel(typeB.getColor(), powerB));
+            renderer.setColor(WireCommons.getColorForPowerLevel(typeB, powerB));
 
             ForgeDirection dir2 = ForgeDirection.WEST;
             if (getRotation() % 2 == 1)
@@ -620,7 +620,7 @@ implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor {
                     renderer.addTransformation(new Rotation(0, 90 * -rotation, 0));
 
                 renderer.setOpacity(0.5);
-                renderer.setColor(WireCommons.getColorForPowerLevel(wire.getRedwireType().getColor(), (byte) (255 / 2)));
+                renderer.setColor(WireCommons.getColorForPowerLevel(wire.getRedwireType(), (byte) (255 / 2)));
 
                 ForgeDirection dir = ForgeDirection.NORTH;
                 if (getRotation() % 2 == 1)
