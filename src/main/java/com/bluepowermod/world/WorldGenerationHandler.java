@@ -17,9 +17,8 @@
 
 package com.bluepowermod.world;
 
-import com.bluepowermod.init.BPBlocks;
-import com.bluepowermod.init.Config;
-import cpw.mods.fml.common.IWorldGenerator;
+import java.util.Random;
+
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
@@ -28,7 +27,10 @@ import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.feature.WorldGenFlowers;
 import net.minecraft.world.gen.feature.WorldGenMinable;
 
-import java.util.Random;
+import com.bluepowermod.init.BPBlocks;
+import com.bluepowermod.init.Config;
+
+import cpw.mods.fml.common.IWorldGenerator;
 
 public class WorldGenerationHandler implements IWorldGenerator {
 
@@ -39,44 +41,51 @@ public class WorldGenerationHandler implements IWorldGenerator {
             return;
         }
         if (Config.generateAmethyst) {
-            this.addOreToGenerate(random, Config.veinCountAmethyst, Config.veinSizeAmethyst, Config.minAmethystY, Config.maxAmethystY, BPBlocks.amethyst_ore,
-                    world, chunkX, chunkZ);
+            addOreToGenerate(random, Config.veinCountAmethyst, Config.veinSizeAmethyst, Config.minAmethystY, Config.maxAmethystY,
+                    BPBlocks.amethyst_ore, world, chunkX, chunkZ);
         }
         if (Config.generateRuby) {
-            this.addOreToGenerate(random, Config.veinCountRuby, Config.veinSizeRuby, Config.minRubyY, Config.maxRubyY, BPBlocks.ruby_ore, world, chunkX,
+            addOreToGenerate(random, Config.veinCountRuby, Config.veinSizeRuby, Config.minRubyY, Config.maxRubyY, BPBlocks.ruby_ore, world, chunkX,
                     chunkZ);
         }
         if (Config.generateSapphire) {
-            this.addOreToGenerate(random, Config.veinCountSapphire, Config.veinSizeSapphire, Config.minSapphireY, Config.maxSapphireY, BPBlocks.sapphire_ore,
-                    world, chunkX, chunkZ);
+            addOreToGenerate(random, Config.veinCountSapphire, Config.veinSizeSapphire, Config.minSapphireY, Config.maxSapphireY,
+                    BPBlocks.sapphire_ore, world, chunkX, chunkZ);
         }
         if (Config.generateSilver) {
-            this.addOreToGenerate(random, Config.veinCountSilver, Config.veinSizeSilver, Config.minSilverY, Config.maxSilverY, BPBlocks.silver_ore, world,
+            addOreToGenerate(random, Config.veinCountSilver, Config.veinSizeSilver, Config.minSilverY, Config.maxSilverY, BPBlocks.silver_ore, world,
                     chunkX, chunkZ);
         }
         if (Config.generateTeslatite) {
-            this.addOreToGenerate(random, Config.veinCountTeslatite, Config.veinSizeTeslatite, Config.minTeslatiteY, Config.maxTeslatiteY, BPBlocks.teslatite_ore,
-                    world, chunkX, chunkZ);
+            addOreToGenerate(random, Config.veinCountTeslatite, Config.veinSizeTeslatite, Config.minTeslatiteY, Config.maxTeslatiteY,
+                    BPBlocks.teslatite_ore, world, chunkX, chunkZ);
         }
         if (Config.generateZinc) {
-            this.addOreToGenerate(random, Config.veinCountZinc, Config.veinSizeZinc, Config.minZincY, Config.maxZincY, BPBlocks.zinc_ore, world, chunkX, chunkZ);
+            addOreToGenerate(random, Config.veinCountZinc, Config.veinSizeZinc, Config.minZincY, Config.maxZincY, BPBlocks.zinc_ore, world, chunkX,
+                    chunkZ);
         }
         if (Config.generateCopper) {
-            this.addOreToGenerate(random, Config.veinCountCopper, Config.veinSizeCopper, Config.minCopperY, Config.maxCopperY, BPBlocks.copper_ore, world,
+            addOreToGenerate(random, Config.veinCountCopper, Config.veinSizeCopper, Config.minCopperY, Config.maxCopperY, BPBlocks.copper_ore, world,
                     chunkX, chunkZ);
         }
         if (Config.generateTungsten) {
-        	this.addOreToGenerate(random, Config.veinCountTungsten, Config.veinSizeTungsten, Config.minTungstenY, Config.maxTungstenY, BPBlocks.tungsten_ore, world, chunkX, chunkZ);
+            addOreToGenerate(random, Config.veinCountTungsten, Config.veinSizeTungsten, Config.minTungstenY, Config.maxTungstenY,
+                    BPBlocks.tungsten_ore, world, chunkX, chunkZ);
         }
 
         BiomeGenBase bgb = world.getWorldChunkManager().getBiomeGenAt(chunkX * 16 + 16, chunkZ * 16 + 16);
 
         int n = 0;
-        if (bgb == BiomeGenBase.birchForest) n = 1;
-        else if (bgb == BiomeGenBase.birchForestHills) n = 1;
-        else if (bgb == BiomeGenBase.plains) n = 1;
-        else if (bgb == BiomeGenBase.forest) n = 4;
-        else if (bgb == BiomeGenBase.roofedForest) n = 4;
+        if (bgb == BiomeGenBase.birchForest)
+            n = 1;
+        else if (bgb == BiomeGenBase.birchForestHills)
+            n = 1;
+        else if (bgb == BiomeGenBase.plains)
+            n = 1;
+        else if (bgb == BiomeGenBase.forest)
+            n = 4;
+        else if (bgb == BiomeGenBase.roofedForest)
+            n = 4;
 
         for (int i = 0; i < n; i++) {
             int x = chunkX * 16 + random.nextInt(16) + 8;
@@ -95,10 +104,12 @@ public class WorldGenerationHandler implements IWorldGenerator {
         }
         if (random.nextDouble() < Config.volcanoSpawnChance) {
             int x = chunkX * 16 + random.nextInt(16);
-            int z = chunkZ * 16 + random.nextInt(16);
-            int y = world.getHeightValue(x, z) + 20 + random.nextInt(10);// This number determines the topmost block of the volcano, it increases
-            // generation time exponentially when increased!
-            if (world.getBlock(x, 10, z) == Blocks.lava) new WorldGenVolcano().generate(world, random, x, y, z);
+            int z = chunkZ * 16 + random.nextInt(16);//20
+            int y = world.getHeightValue(x, z) + 80 + random.nextInt(10);
+
+            if (world.getBlock(x, 10, z) == Blocks.lava) {
+                new WorldGenVolcano().generate(world, random, x, y, z);
+            }
         }
     }
 
@@ -108,7 +119,7 @@ public class WorldGenerationHandler implements IWorldGenerator {
             int x = chunkX * 16 + random.nextInt(16);
             int y = random.nextInt(maxY - minY) + minY;
             int z = chunkZ * 16 + random.nextInt(16);
-            (new WorldGenMinable(block, veinSize)).generate(world, random, x, y, z);
+            new WorldGenMinable(block, veinSize).generate(world, random, x, y, z);
         }
     }
 }
