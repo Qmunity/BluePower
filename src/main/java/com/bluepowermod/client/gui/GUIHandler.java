@@ -17,10 +17,6 @@
 
 package com.bluepowermod.client.gui;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
-
 import com.bluepowermod.container.ContainerAlloyFurnace;
 import com.bluepowermod.container.ContainerBattery;
 import com.bluepowermod.container.ContainerBuffer;
@@ -73,10 +69,12 @@ import com.bluepowermod.tile.tier3.TileIOExpander;
 import com.bluepowermod.tile.tier3.TileKinectGenerator;
 import com.bluepowermod.tile.tier3.TileManager;
 import com.bluepowermod.tile.tier3.TileMonitor;
-
 import cpw.mods.fml.common.network.IGuiHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
 
 public class GUIHandler implements IGuiHandler {
 

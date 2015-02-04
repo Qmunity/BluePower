@@ -31,14 +31,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
-import com.bluepowermod.helper.IOHelper;
-import com.bluepowermod.helper.ItemStackHelper;
-import com.bluepowermod.init.BPBlocks;
-import com.bluepowermod.part.IGuiButtonSensitive;
-import com.bluepowermod.part.tube.TubeStack;
-import com.bluepowermod.tile.TileMachineBase;
-
 /**
  * 
  * @author MineMaarten

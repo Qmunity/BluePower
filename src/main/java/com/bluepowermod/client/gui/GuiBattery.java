@@ -1,5 +1,6 @@
 package com.bluepowermod.client.gui;
 
+import com.bluepowermod.client.gui.widget.WidgetPowerBar;
 import com.bluepowermod.container.ContainerBattery;
 import com.bluepowermod.tile.tier2.TileBattery;
 import com.bluepowermod.util.Refs;
@@ -18,5 +19,14 @@ public class GuiBattery extends GuiBase {
 
         super(battery, new ContainerBattery(invPlayer, battery), resLoc);
         ySize = 170;
+    }
+
+
+    @Override
+    public void initGui() {
+
+        super.initGui();
+        WidgetPowerBar mainPowerWidget = new WidgetPowerBar(0, guiLeft + 59, guiTop + 25);
+        addWidget(mainPowerWidget);
     }
 }
