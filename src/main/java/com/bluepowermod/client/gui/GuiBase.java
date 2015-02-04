@@ -55,6 +55,7 @@ import cpw.mods.fml.common.Optional;
  * @author MineMaarten
  * @author K-4U
  */
+@Optional.Interface(iface = "codechicken.nei.api.INEIGuiHandler", modid = Dependencies.NEI)
 public class GuiBase extends GuiContainer implements IWidgetListener, INEIGuiHandler {
 
     protected static final int COLOR_TEXT = 4210752;
