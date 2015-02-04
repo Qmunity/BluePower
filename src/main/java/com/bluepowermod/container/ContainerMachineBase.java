@@ -1,4 +1,4 @@
-package com.bluepowermod.containers;
+package com.bluepowermod.container;
 
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.ICrafting;

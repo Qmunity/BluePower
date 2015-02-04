@@ -15,7 +15,6 @@ import net.minecraft.item.ItemStack;
 
 import com.bluepowermod.ClientProxy;
 import com.bluepowermod.client.gui.GuiBase;
-import com.bluepowermod.containers.ContainerMachineBase;
 import com.bluepowermod.tile.tier1.TileItemDetector;
 
 import cpw.mods.fml.relauncher.Side;

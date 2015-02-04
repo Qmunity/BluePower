@@ -29,7 +29,6 @@ import com.bluepowermod.ClientProxy;
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
 import com.bluepowermod.client.gui.GuiBase;
 import com.bluepowermod.container.slot.SlotPhantom;
-import com.bluepowermod.containers.ContainerMachineBase;
 import com.bluepowermod.tile.tier2.TileRegulator;
 
 import cpw.mods.fml.relauncher.Side;
