@@ -28,29 +28,30 @@ import com.bluepowermod.util.Refs;
  * @author MineMaarten
  */
 public class GuiAlloyFurnace extends GuiBase {
-    
+
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/alloy_furnace.png");
-    private final TileAlloyFurnace        furnace;
-    
+    private final TileAlloyFurnace furnace;
+
     public GuiAlloyFurnace(InventoryPlayer invPlayer, TileAlloyFurnace furnace) {
-    
+
         super(furnace, new ContainerAlloyFurnace(invPlayer, furnace), resLoc);
         this.furnace = furnace;
     }
-    
+
     @Override
     protected void drawGuiContainerBackgroundLayer(float f, int i, int j) {
-    
+
         super.drawGuiContainerBackgroundLayer(f, i, j);
-        
+
         int x = (width - xSize) / 2;
         int y = (height - ySize) / 2;
-        
+        mc.renderEngine.bindTexture(resLoc);
+
         int burningPercentage = (int) (furnace.getBurningPercentage() * 14);
         drawTexturedModalRect(x + 22, y + 54 + 14 - burningPercentage, 177, 14 - burningPercentage, 14, burningPercentage + 0);
-        
+
         int processPercentage = (int) (furnace.getProcessPercentage() * 22);
         drawTexturedModalRect(x + 103, y + 35, 178, 14, processPercentage, 15);
     }
-    
+
 }
