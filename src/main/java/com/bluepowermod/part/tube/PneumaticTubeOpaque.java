@@ -30,7 +30,7 @@ import uk.co.qmunity.lib.vec.Vec3i;
 import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
 import com.bluepowermod.client.render.IconSupplier;
-import com.bluepowermod.part.wire.redstone.WireCommons;
+import com.bluepowermod.part.wire.redstone.WireHelper;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -111,7 +111,7 @@ public class PneumaticTubeOpaque extends PneumaticTube {
                         redstoneConnections[ForgeDirection.UP.ordinal()], redstoneConnections[ForgeDirection.WEST.ordinal()],
                         redstoneConnections[ForgeDirection.EAST.ordinal()], redstoneConnections[ForgeDirection.NORTH.ordinal()],
                         redstoneConnections[ForgeDirection.SOUTH.ordinal()], getParent() != null && getWorld() != null, IconSupplier.wire,
-                        WireCommons.getColorForPowerLevel(getRedwireType(), RedstoneConductorTube.getDevice(this).getPower()));
+                        WireHelper.getColorForPowerLevel(getRedwireType(), RedstoneConductorTube.getDevice(this).getPower()));
             }
 
             // Tube coloring

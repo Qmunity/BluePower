@@ -221,7 +221,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
         @Override
         protected int getColorMultiplier() {
 
-            return WireCommons.getColorForPowerLevel(getRedwireType(), power);
+            return WireHelper.getColorForPowerLevel(getRedwireType(), power);
         }
 
         @Override
@@ -742,7 +742,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
             double width = 1 / 32D;
             double height = getHeight() / 16D;
 
-            renderer.setColor(WireCommons.getColorForPowerLevel(getRedwireType(), power));
+            renderer.setColor(WireHelper.getColorForPowerLevel(getRedwireType(), power));
 
             // Center
             if ((s1 && s3) || (s3 && s2) || (s2 && s4) || (s4 && s1)) {
@@ -1113,7 +1113,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
             double width = 1 / 48D;
             double height = getHeight() / 16D;
 
-            renderer.setColor(WireCommons.getColorForPowerLevel(getRedwireType(), (byte) (255 / 2)/* power */));
+            renderer.setColor(WireHelper.getColorForPowerLevel(getRedwireType(), (byte) (255 / 2)/* power */));
 
             // Center
             if ((s1 && s3) || (s3 && s2) || (s2 && s4) || (s4 && s1)) {

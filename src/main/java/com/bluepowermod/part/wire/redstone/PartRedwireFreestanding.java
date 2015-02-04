@@ -244,7 +244,7 @@ public abstract class PartRedwireFreestanding extends PartWireFreestanding imple
         @Override
         protected int getColorMultiplier() {
 
-            return WireCommons.getColorForPowerLevel(getRedwireType(), power);
+            return WireHelper.getColorForPowerLevel(getRedwireType(), power);
         }
 
         @Override

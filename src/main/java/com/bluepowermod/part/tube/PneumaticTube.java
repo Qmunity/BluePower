@@ -66,7 +66,7 @@ import com.bluepowermod.part.BPPart;
 import com.bluepowermod.part.PartManager;
 import com.bluepowermod.part.wire.PartWireFreestanding;
 import com.bluepowermod.part.wire.redstone.PartRedwireFace.PartRedwireFaceUninsulated;
-import com.bluepowermod.part.wire.redstone.WireCommons;
+import com.bluepowermod.part.wire.redstone.WireHelper;
 import com.bluepowermod.redstone.RedstoneApi;
 import com.bluepowermod.util.Color;
 
@@ -667,11 +667,11 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
                         redstoneConnections[ForgeDirection.UP.ordinal()], redstoneConnections[ForgeDirection.WEST.ordinal()],
                         redstoneConnections[ForgeDirection.EAST.ordinal()], redstoneConnections[ForgeDirection.NORTH.ordinal()],
                         redstoneConnections[ForgeDirection.SOUTH.ordinal()], getParent() != null && getWorld() != null, IconSupplier.wire,
-                        WireCommons.getColorForPowerLevel(redwireType, RedstoneConductorTube.getDevice(this).getPower()));
+                        WireHelper.getColorForPowerLevel(redwireType, RedstoneConductorTube.getDevice(this).getPower()));
 
                 Vec3dCube c = new Vec3dCube(0.5 - 1 / 56D, 0, 0.2, 0.5 + 1 / 56D, 1 / 32D, 0.8);
 
-                renderer.setColor(WireCommons.getColorForPowerLevel(redwireType, RedstoneConductorTube.getDevice(this).getPower()));
+                renderer.setColor(WireHelper.getColorForPowerLevel(redwireType, RedstoneConductorTube.getDevice(this).getPower()));
                 for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
                     if (redstoneConnections[d.ordinal()] && !connections[d.ordinal()]) {
                         renderer.addTransformation(new Rotation(d));

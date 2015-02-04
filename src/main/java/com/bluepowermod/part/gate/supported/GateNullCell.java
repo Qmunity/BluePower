@@ -50,7 +50,7 @@ import com.bluepowermod.part.PartManager;
 import com.bluepowermod.part.gate.connection.GateConnectionBase;
 import com.bluepowermod.part.wire.redstone.PartRedwireFace;
 import com.bluepowermod.part.wire.redstone.PartRedwireFace.PartRedwireFaceUninsulated;
-import com.bluepowermod.part.wire.redstone.WireCommons;
+import com.bluepowermod.part.wire.redstone.WireHelper;
 import com.bluepowermod.redstone.DummyRedstoneDevice;
 import com.bluepowermod.redstone.RedstoneApi;
 import com.bluepowermod.redstone.RedstoneConnectionCache;
@@ -121,7 +121,7 @@ public class GateNullCell
         IIcon wire = IconSupplier.wire;
 
         if (typeA != null) { // Flat
-            renderer.setColor(WireCommons.getColorForPowerLevel(typeA, powerA));
+            renderer.setColor(WireHelper.getColorForPowerLevel(typeA, powerA));
 
             ForgeDirection dir = ForgeDirection.NORTH;
             if (getRotation() % 2 == 1)
@@ -135,7 +135,7 @@ public class GateNullCell
         }
 
         if (typeB != null) { // Supported
-            renderer.setColor(WireCommons.getColorForPowerLevel(typeB, powerB));
+            renderer.setColor(WireHelper.getColorForPowerLevel(typeB, powerB));
 
             ForgeDirection dir2 = ForgeDirection.WEST;
             if (getRotation() % 2 == 1)
@@ -620,7 +620,7 @@ public class GateNullCell
                     renderer.addTransformation(new Rotation(0, 90 * -rotation, 0));
 
                 renderer.setOpacity(0.5);
-                renderer.setColor(WireCommons.getColorForPowerLevel(wire.getRedwireType(), (byte) (255 / 2)));
+                renderer.setColor(WireHelper.getColorForPowerLevel(wire.getRedwireType(), (byte) (255 / 2)));
 
                 ForgeDirection dir = ForgeDirection.NORTH;
                 if (getRotation() % 2 == 1)

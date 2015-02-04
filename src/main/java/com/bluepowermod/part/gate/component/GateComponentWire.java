@@ -15,7 +15,7 @@ import com.bluepowermod.api.wire.redstone.RedwireType;
 import com.bluepowermod.client.render.IconSupplier;
 import com.bluepowermod.part.gate.GateBase;
 import com.bluepowermod.part.gate.connection.GateConnectionBase;
-import com.bluepowermod.part.wire.redstone.WireCommons;
+import com.bluepowermod.part.wire.redstone.WireHelper;
 
 public class GateComponentWire extends GateComponentLocationArray {
 
@@ -40,7 +40,7 @@ public class GateComponentWire extends GateComponentLocationArray {
         int colorMin = isEnabled() ? type.getMinColor() : 0x999999;
         int colorMax = isEnabled() ? type.getMaxColor() : 0x999999;
 
-        renderer.setColor(WireCommons.getColorForPowerLevel(colorMin, colorMax, power));
+        renderer.setColor(WireHelper.getColorForPowerLevel(colorMin, colorMax, power));
         double height = 1 / 48D;
         // double size = 1 / ((double) pixels.length);
         double scale = 1D / getGate().getLayout().getLayout(layoutColor).getWidth();
