@@ -17,6 +17,7 @@ import uk.co.qmunity.lib.helper.RedstoneHelper;
 import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.api.wire.ConnectionType;
 import com.bluepowermod.api.wire.redstone.IBundledDevice;
+import com.bluepowermod.api.wire.redstone.IInsulatedRedstoneDevice;
 import com.bluepowermod.block.machine.BlockLamp;
 import com.bluepowermod.block.machine.BlockLampRGB;
 import com.bluepowermod.client.render.RenderLamp;
@@ -131,6 +132,9 @@ public class TileLamp extends TileBase implements IBundledDevice {
 
     @Override
     public boolean canConnect(ForgeDirection side, IBundledDevice dev, ConnectionType type) {
+
+        if (dev instanceof IInsulatedRedstoneDevice)
+            return false;
 
         return type == ConnectionType.STRAIGHT && side != ForgeDirection.UNKNOWN;
     }
