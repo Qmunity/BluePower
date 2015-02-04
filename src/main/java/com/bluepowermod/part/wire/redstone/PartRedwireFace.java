@@ -301,7 +301,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
                         continue;
                     IRedstoneDevice dev = c.getB();
                     if (dir == getFace())
-                        RedstoneHelper.notifyRedstoneUpdate(getWorld(), getX(), getY(), getZ(), dir, true);
+                        ;// RedstoneHelper.notifyRedstoneUpdate(getWorld(), getX(), getY(), getZ(), dir, true);
                     else if (dev == null || dev instanceof DummyRedstoneDevice)
                         RedstoneHelper.notifyRedstoneUpdate(getWorld(), getX(), getY(), getZ(), dir, false);
                 }
@@ -336,6 +336,10 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
 
         @Override
         public void onUpdate() {
+
+            // Don't to anything if propagation-related stuff is going on
+            if (!RedstoneApi.getInstance().shouldWiresHandleUpdates())
+                return;
 
             super.onUpdate();
 
@@ -652,6 +656,10 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
 
         @Override
         public void onUpdate() {
+
+            // Don't to anything if propagation-related stuff is going on
+            if (!RedstoneApi.getInstance().shouldWiresHandleUpdates())
+                return;
 
             super.onUpdate();
 
@@ -1027,6 +1035,10 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
 
         @Override
         public void onUpdate() {
+
+            // Don't to anything if propagation-related stuff is going on
+            if (!RedstoneApi.getInstance().shouldWiresHandleUpdates())
+                return;
 
             super.onUpdate();
 

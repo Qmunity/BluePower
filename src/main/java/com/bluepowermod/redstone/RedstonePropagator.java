@@ -165,7 +165,7 @@ public abstract class RedstonePropagator implements IPropagator<IRedstoneDevice>
 
     protected boolean shouldPreventStackOverflows() {
 
-        return Thread.getAllStackTraces().size() > 200;
+        return false;// Thread.getAllStackTraces().size() > 200;
     }
 
     // Propagator implementation
@@ -193,8 +193,11 @@ public abstract class RedstonePropagator implements IPropagator<IRedstoneDevice>
             for (Pair<IRedstoneDevice, ForgeDirection> p : l)
                 p.getKey().setRedstonePower(p.getValue(), (byte) pow);
 
+            boolean did = RedstoneApi.getInstance().shouldWiresHandleUpdates();
+            RedstoneApi.getInstance().setWiresHandleUpdates(false);
             for (Pair<IRedstoneDevice, ForgeDirection> p : l)
                 p.getKey().onRedstoneUpdate();
+            RedstoneApi.getInstance().setWiresHandleUpdates(did);
 
             // Clear the arrays to free up memory
             l.clear();
@@ -240,8 +243,11 @@ public abstract class RedstonePropagator implements IPropagator<IRedstoneDevice>
                     propagate(pair.getKey(), pair.getValue(), power);
             }
 
+            boolean did = RedstoneApi.getInstance().shouldWiresHandleUpdates();
+            RedstoneApi.getInstance().setWiresHandleUpdates(false);
             for (Pair<IRedstoneDevice, ForgeDirection> p : l)
                 p.getKey().onRedstoneUpdate();
+            RedstoneApi.getInstance().setWiresHandleUpdates(did);
 
             List<RedstonePropagator> scheduled = new ArrayList<RedstonePropagator>();
             scheduled.addAll(getScheduledPropagations());

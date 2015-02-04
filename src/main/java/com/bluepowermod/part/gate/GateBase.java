@@ -70,8 +70,8 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public abstract class GateBase<C_BOTTOM extends GateConnectionBase, C_TOP extends GateConnectionBase, C_LEFT extends GateConnectionBase, C_RIGHT extends GateConnectionBase, C_FRONT extends GateConnectionBase, C_BACK extends GateConnectionBase>
-        extends BPPartFaceRotate implements IGate<C_BOTTOM, C_TOP, C_LEFT, C_RIGHT, C_FRONT, C_BACK>, IPartRedstone, IConnectionListener,
-        IRedstoneDevice, IBundledDevice, IPartTicking, IPartRenderPlacement, IIntegratedCircuitPart {
+extends BPPartFaceRotate implements IGate<C_BOTTOM, C_TOP, C_LEFT, C_RIGHT, C_FRONT, C_BACK>, IPartRedstone, IConnectionListener,
+IRedstoneDevice, IBundledDevice, IPartTicking, IPartRenderPlacement, IIntegratedCircuitPart {
 
     // Static var declarations
     private static Vec3dCube BOX = new Vec3dCube(0, 0, 0, 1, 2D / 16D, 1);
@@ -273,6 +273,10 @@ public abstract class GateBase<C_BOTTOM extends GateConnectionBase, C_TOP extend
 
     @Override
     public void onUpdate() {
+
+        // Don't to anything if propagation-related stuff is going on
+        if (!RedstoneApi.getInstance().shouldWiresHandleUpdates())
+            return;
 
         getRedstoneConnectionCache().recalculateConnections();
         getBundledConnectionCache().recalculateConnections();
@@ -868,11 +872,11 @@ public abstract class GateBase<C_BOTTOM extends GateConnectionBase, C_TOP extend
 
         if (getWorld().isRemote && Config.enableGateSounds)
             Minecraft
-                    .getMinecraft()
-                    .getSoundHandler()
-                    .playSound(
-                            new PositionedSoundRecord(new ResourceLocation("random.click"), 0.3F, 0.5F, getX() + 0.5F, getY() + 0.5F,
-                                    getZ() + 0.5F));
+            .getMinecraft()
+            .getSoundHandler()
+            .playSound(
+                    new PositionedSoundRecord(new ResourceLocation("random.click"), 0.3F, 0.5F, getX() + 0.5F, getY() + 0.5F,
+                            getZ() + 0.5F));
 
     }
 

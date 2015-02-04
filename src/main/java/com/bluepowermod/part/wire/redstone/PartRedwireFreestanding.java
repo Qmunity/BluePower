@@ -354,6 +354,10 @@ public abstract class PartRedwireFreestanding extends PartWireFreestanding imple
         @Override
         public void onUpdate() {
 
+            // Don't to anything if propagation-related stuff is going on
+            if (!RedstoneApi.getInstance().shouldWiresHandleUpdates())
+                return;
+
             super.onUpdate();
 
             // Do not do anything if we're on the client
@@ -633,6 +637,10 @@ public abstract class PartRedwireFreestanding extends PartWireFreestanding imple
 
         @Override
         public void onUpdate() {
+
+            // Don't to anything if propagation-related stuff is going on
+            if (!RedstoneApi.getInstance().shouldWiresHandleUpdates())
+                return;
 
             super.onUpdate();
 
