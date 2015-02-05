@@ -283,7 +283,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
         @Override
         public void setRedstonePower(ForgeDirection side, byte power) {
 
-            byte pow = isAnalogue(side) ? power : (((power & 0xFF) > 0) ? (byte) 255 : (byte) 0);
+            byte pow = hasLoss(side) ? power : (((power & 0xFF) > 0) ? (byte) 255 : (byte) 0);
             hasUpdated = hasUpdated | (pow != this.power);
             this.power = pow;
         }
@@ -306,6 +306,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
                         RedstoneHelper.notifyRedstoneUpdate(getWorld(), getX(), getY(), getZ(), dir, true);
                     } else if (dev == null || dev instanceof DummyRedstoneDevice) {
                         RedstoneHelper.notifyRedstoneUpdate(getWorld(), getX(), getY(), getZ(), dir, false);
+                        System.out.println("Hello?");
                     }
                 }
 

@@ -17,7 +17,6 @@ import com.bluepowermod.api.wire.redstone.IRedstoneConductor;
 import com.bluepowermod.api.wire.redstone.IRedstoneConductor.IAdvancedRedstoneConductor;
 import com.bluepowermod.api.wire.redstone.IRedstoneDevice;
 import com.bluepowermod.part.gate.GateBase;
-import com.bluepowermod.part.gate.connection.GateConnectionAnalogue;
 import com.bluepowermod.part.gate.connection.GateConnectionDigital;
 
 @SuppressWarnings("unchecked")
@@ -109,7 +108,12 @@ public abstract class RedstonePropagator implements IPropagator<IRedstoneDevice>
             if (p.getValue()) {
                 schedule(new RedPropagator(p.getKey().getB(), p.getKey().getSideB()));
             } else {
-                current.add(p.getKey());
+                if (p.getKey().getB() instanceof IRedstoneConductor
+                        && ((IRedstoneConductor) p.getKey().getB()).hasLoss(p.getKey().getSideB()) != (this instanceof LossyPropagator)) {
+                    schedule(new RedPropagator(p.getKey().getB(), p.getKey().getSideB()));
+                } else {
+                    current.add(p.getKey());
+                }
             }
         }
 
@@ -309,7 +313,8 @@ public abstract class RedstonePropagator implements IPropagator<IRedstoneDevice>
                     }
                 }
                 if (!found)
-                    propagate(e.getKey().getB(), e.getKey().getSideB(), (byte) ((power & 0xFF) - 1));
+                    propagate(e.getKey().getB(), e.getKey().getSideB(),
+                            (byte) ((power & 0xFF) - (dev instanceof IRedstoneConductor ? 1 : 0)));
             }
         }
 
@@ -345,8 +350,10 @@ public abstract class RedstonePropagator implements IPropagator<IRedstoneDevice>
                 return;
             } else if (getDevice() instanceof GateBase<?, ?, ?, ?, ?, ?>) {
                 IGateConnection c = ((GateBase<?, ?, ?, ?, ?, ?>) getDevice()).getConnection(getSide());
+                IConnection<IRedstoneDevice> con = (IConnection<IRedstoneDevice>) getDevice().getRedstoneConnectionCache()
+                        .getConnectionOnSide(getSide());
                 if (c != null) {
-                    if (c instanceof GateConnectionAnalogue) {
+                    if (con != null && con.getB() instanceof IRedConductor && ((IRedConductor) con.getB()).hasLoss(con.getSideB())) {
                         try {
                             new LossyPropagator(getDevice(), getSide()).propagate();
                         } catch (Exception ex) {
