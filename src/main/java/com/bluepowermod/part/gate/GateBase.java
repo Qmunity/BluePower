@@ -259,27 +259,42 @@ IRedstoneDevice, IBundledDevice, IPartTicking, IPartRenderPlacement, IIntegrated
     @Override
     public final void update() {
 
-        logic().tick();
+        if (!getWorld().isRemote) {
+            getRedstoneConnectionCache().recalculateConnections();
+            getBundledConnectionCache().recalculateConnections();
 
-        for (GateConnectionBase c : getConnections())
-            if (c != null)
-                c.notifyUpdateIfNeeded();
+            for (GateConnectionBase c : getConnections())
+                if (c != null)
+                    c.refesh();
+        }
+
+        logic().tick();
 
         for (IGateComponent c : getComponents())
             c.tick();
 
-        sendUpdateIfNeeded();
+        if (!getWorld().isRemote) {
+            for (GateConnectionBase c : getConnections())
+                if (c != null)
+                    c.notifyUpdateIfNeeded();
+
+            sendUpdateIfNeeded();
+        }
     }
 
     @Override
     public void onUpdate() {
 
+        getRedstoneConnectionCache().recalculateConnections();
+        getBundledConnectionCache().recalculateConnections();
+
+        for (GateConnectionBase c : getConnections())
+            if (c != null)
+                c.refesh();
+
         // Don't to anything if propagation-related stuff is going on
         if (!RedstoneApi.getInstance().shouldWiresHandleUpdates())
             return;
-
-        getRedstoneConnectionCache().recalculateConnections();
-        getBundledConnectionCache().recalculateConnections();
 
         for (GateConnectionBase c : getConnections())
             if (c != null)
@@ -292,7 +307,7 @@ IRedstoneDevice, IBundledDevice, IPartTicking, IPartRenderPlacement, IIntegrated
 
         logic().doLogic();
 
-        // sendUpdateIfNeeded();
+        sendUpdateIfNeeded();
     }
 
     @Override

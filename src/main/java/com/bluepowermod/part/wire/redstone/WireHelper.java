@@ -168,6 +168,21 @@ public class WireHelper {
             Vec3i loc = new Vec3i(device).add(side);
             IBundledDevice dev = RedstoneApi.getInstance().getBundledDevice(loc.getWorld(), loc.getX(), loc.getY(), loc.getZ(), face,
                     side.getOpposite());
+            if (dev == null) {
+                dev = RedstoneApi.getInstance().getBundledDevice(loc.getWorld(), loc.getX(), loc.getY(), loc.getZ(), side.getOpposite(),
+                        side.getOpposite());
+                if (dev == null && face == ForgeDirection.UNKNOWN) {
+                    for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
+                        if (d != side && d != side.getOpposite()) {
+                            dev = RedstoneApi.getInstance().getBundledDevice(loc.getWorld(), loc.getX(), loc.getY(), loc.getZ(), d,
+                                    side.getOpposite());
+                            if (dev != null)
+                                break;
+                        }
+                    }
+                }
+            }
+
             if (dev == null)
                 break;
 

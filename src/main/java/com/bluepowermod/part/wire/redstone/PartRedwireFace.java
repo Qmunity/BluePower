@@ -37,8 +37,10 @@ import net.minecraftforge.common.util.ForgeDirection;
 import org.lwjgl.opengl.GL11;
 
 import uk.co.qmunity.lib.client.render.RenderHelper;
+import uk.co.qmunity.lib.helper.MathHelper;
 import uk.co.qmunity.lib.helper.RedstoneHelper;
 import uk.co.qmunity.lib.misc.Pair;
+import uk.co.qmunity.lib.part.IPartRedstone;
 import uk.co.qmunity.lib.part.MicroblockShape;
 import uk.co.qmunity.lib.part.compat.OcclusionHelper;
 import uk.co.qmunity.lib.vec.Vec3dCube;
@@ -69,7 +71,7 @@ import com.bluepowermod.redstone.RedstoneApi;
 import com.bluepowermod.redstone.RedstoneConnection;
 import com.bluepowermod.redstone.RedstoneConnectionCache;
 
-public abstract class PartRedwireFace extends PartWireFace implements IRedwire, IRedConductor, IIntegratedCircuitPart {
+public abstract class PartRedwireFace extends PartWireFace implements IRedwire, IRedConductor, IIntegratedCircuitPart, IPartRedstone {
 
     private RedwireType type;
 
@@ -300,10 +302,11 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
                     if (c == null)
                         continue;
                     IRedstoneDevice dev = c.getB();
-                    if (dir == getFace())
-                        ;// RedstoneHelper.notifyRedstoneUpdate(getWorld(), getX(), getY(), getZ(), dir, true);
-                    else if (dev == null || dev instanceof DummyRedstoneDevice)
+                    if (dir == getFace()) {
+                        RedstoneHelper.notifyRedstoneUpdate(getWorld(), getX(), getY(), getZ(), dir, true);
+                    } else if (dev == null || dev instanceof DummyRedstoneDevice) {
                         RedstoneHelper.notifyRedstoneUpdate(getWorld(), getX(), getY(), getZ(), dir, false);
+                    }
                 }
 
                 hasUpdated = false;
@@ -350,9 +353,11 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
             // Refresh connections
             connections.recalculateConnections();
             // Add bottom device (forced)
-            IRedstoneDevice drd = DummyRedstoneDevice.getDeviceAt(new Vec3i(this).add(getFace()));
-            connections.onConnect(getFace(), drd, getFace().getOpposite(), ConnectionType.STRAIGHT);
-            drd.getRedstoneConnectionCache().onConnect(getFace().getOpposite(), null, getFace(), ConnectionType.STRAIGHT);
+            if (connections.getConnectionOnSide(getFace()) == null) {
+                IRedstoneDevice drd = DummyRedstoneDevice.getDeviceAt(new Vec3i(this).add(getFace()));
+                connections.onConnect(getFace(), drd, getFace().getOpposite(), ConnectionType.STRAIGHT);
+                drd.getRedstoneConnectionCache().onConnect(getFace().getOpposite(), null, getFace(), ConnectionType.STRAIGHT);
+            }
 
             RedstoneApi.getInstance().getRedstonePropagator(this, getFace()).propagate();
         }
@@ -408,6 +413,36 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
             super.addWAILABody(text);
 
             text.add("Power: " + (power & 0xFF));
+        }
+
+        @Override
+        public boolean canConnectRedstone(ForgeDirection side) {
+
+            return side != getFace().getOpposite();
+        }
+
+        @Override
+        public int getWeakPower(ForgeDirection side) {
+
+            if (!RedstoneApi.getInstance().shouldWiresOutputPower(hasLoss(side)))
+                return 0;
+
+            if (side == getFace().getOpposite())
+                return 0;
+
+            return MathHelper.map(power & 0xFF, 0, 255, 0, 15);
+        }
+
+        @Override
+        public int getStrongPower(ForgeDirection side) {
+
+            if (!RedstoneApi.getInstance().shouldWiresOutputPower(hasLoss(side)))
+                return 0;
+
+            if (side != getFace())
+                return 0;
+
+            return MathHelper.map(power & 0xFF, 0, 255, 0, 15);
         }
 
     }
@@ -836,6 +871,30 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
             return color;
         }
 
+        @Override
+        public boolean canConnectRedstone(ForgeDirection side) {
+
+            return side != getFace().getOpposite();
+        }
+
+        @Override
+        public int getWeakPower(ForgeDirection side) {
+
+            if (!RedstoneApi.getInstance().shouldWiresOutputPower(hasLoss(side)))
+                return 0;
+
+            if (side == getFace() || side == getFace().getOpposite())
+                return 0;
+
+            return MathHelper.map(power & 0xFF, 0, 255, 0, 15);
+        }
+
+        @Override
+        public int getStrongPower(ForgeDirection side) {
+
+            return 0;
+        }
+
     }
 
     public static class PartRedwireFaceBundled extends PartRedwireFace implements IAdvancedBundledConductor, IConnectionListener {
@@ -1196,9 +1255,21 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
         }
 
         @Override
-        public void addWAILABody(List<String> text) {
+        public boolean canConnectRedstone(ForgeDirection side) {
 
-            super.addWAILABody(text);
+            return false;
+        }
+
+        @Override
+        public int getWeakPower(ForgeDirection side) {
+
+            return 0;
+        }
+
+        @Override
+        public int getStrongPower(ForgeDirection side) {
+
+            return 0;
         }
 
     }

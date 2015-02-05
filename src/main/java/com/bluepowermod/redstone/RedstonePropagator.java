@@ -183,6 +183,20 @@ public abstract class RedstonePropagator implements IPropagator<IRedstoneDevice>
             RedstoneApi.getInstance().setWiresOutputPower(false, false);
 
             List<IConnection<IRedstoneDevice>> connections = performPropagation();
+
+            if (connections.size() == 0) {
+                getDevice().setRedstonePower(getSide(), (byte) 0);
+
+                boolean did = RedstoneApi.getInstance().shouldWiresHandleUpdates();
+                RedstoneApi.getInstance().setWiresHandleUpdates(false);
+                getDevice().onRedstoneUpdate();
+                RedstoneApi.getInstance().setWiresHandleUpdates(did);
+
+                RedstoneApi.getInstance().setWiresOutputPower(true, false);
+
+                return;
+            }
+
             List<Pair<IRedstoneDevice, ForgeDirection>> l = simplifyDeviceList(connections);
 
             int pow = 0;
@@ -230,6 +244,20 @@ public abstract class RedstonePropagator implements IPropagator<IRedstoneDevice>
         protected void doPropagate() {
 
             List<IConnection<IRedstoneDevice>> connections = performPropagation();
+
+            if (connections.size() == 0) {
+                getDevice().setRedstonePower(getSide(), (byte) 0);
+
+                boolean did = RedstoneApi.getInstance().shouldWiresHandleUpdates();
+                RedstoneApi.getInstance().setWiresHandleUpdates(false);
+                getDevice().onRedstoneUpdate();
+                RedstoneApi.getInstance().setWiresHandleUpdates(did);
+
+                RedstoneApi.getInstance().setWiresOutputPower(true, false);
+
+                return;
+            }
+
             List<Pair<IRedstoneDevice, ForgeDirection>> l = simplifyDeviceList(connections);
 
             for (IConnection<IRedstoneDevice> c : connections)

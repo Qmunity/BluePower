@@ -44,6 +44,14 @@ public class TileLamp extends TileBase implements IBundledDevice {
     public void onUpdate() {
 
         if (blockType instanceof BlockLampRGB) {
+            connections.recalculateConnections();
+            int connected = 0;
+            for (ForgeDirection s : ForgeDirection.VALID_DIRECTIONS)
+                connected += (connections.getConnectionOnSide(s) != null) ? 1 : 0;
+
+            if (connected == 0)
+                bundledPower = new byte[16];
+
             int pow = 0;
             if (((BlockLamp) blockType).isInverted()) {
                 pow = 255 - Math.min(
@@ -134,6 +142,8 @@ public class TileLamp extends TileBase implements IBundledDevice {
     public boolean canConnect(ForgeDirection side, IBundledDevice dev, ConnectionType type) {
 
         if (dev instanceof IInsulatedRedstoneDevice)
+            return false;
+        if (dev instanceof TileLamp)
             return false;
 
         return type == ConnectionType.STRAIGHT && side != ForgeDirection.UNKNOWN;

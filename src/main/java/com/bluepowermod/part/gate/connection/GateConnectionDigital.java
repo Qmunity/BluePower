@@ -5,6 +5,7 @@ import java.io.DataOutput;
 import java.io.IOException;
 
 import net.minecraft.nbt.NBTTagCompound;
+import uk.co.qmunity.lib.helper.RedstoneHelper;
 import uk.co.qmunity.lib.util.Dir;
 
 import com.bluepowermod.api.wire.redstone.IBundledDevice;
@@ -24,6 +25,9 @@ public class GateConnectionDigital extends GateConnectionBase {
     @Override
     public void refesh() {
 
+        if (getGate().getRedstoneConnectionCache().getConnectionOnSide(getForgeDirection()) == null)
+            input = RedstoneHelper.getInput(getGate().getWorld(), getGate().getX(), getGate().getY(), getGate().getZ(),
+                    getForgeDirection(), getGate().getFace()) > 0;
     }
 
     @Override
