@@ -123,4 +123,10 @@ public class ReturnDevice implements IRedstoneDevice, IBundledDevice {
         return null;
     }
 
+    @Override
+    public boolean isNormalFace(ForgeDirection side) {
+
+        return false;
+    }
+
 }

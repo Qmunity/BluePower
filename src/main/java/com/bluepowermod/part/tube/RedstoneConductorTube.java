@@ -183,4 +183,10 @@ public class RedstoneConductorTube implements IRedstoneConductor, IConnectionLis
         return tube.getRedwireType();
     }
 
+    @Override
+    public boolean isNormalFace(ForgeDirection side) {
+
+        return false;
+    }
+
 }

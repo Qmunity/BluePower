@@ -154,6 +154,12 @@ public class BundledDeviceWrapper implements IAdvancedRedstoneConductor {
         return l;
     }
 
+    @Override
+    public boolean isNormalFace(ForgeDirection side) {
+
+        return device.isNormalFace(side);
+    }
+
     @SuppressWarnings("rawtypes")
     private class RedstoneConnectionCacheWrapper extends RedstoneConnectionCache {
 

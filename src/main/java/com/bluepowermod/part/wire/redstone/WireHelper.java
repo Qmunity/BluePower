@@ -74,8 +74,8 @@ public class WireHelper {
             if (dev == null)
                 break;
 
-            ConnectionType type = (!(device instanceof IFace) || !(dev instanceof IFace))
-                    && !(device instanceof IFace == dev instanceof IFace) ? ConnectionType.STRAIGHT : ConnectionType.CLOSED_CORNER;
+            ConnectionType type = (device instanceof IFace || dev instanceof IFace) && !(device instanceof IFace == dev instanceof IFace) ? ConnectionType.STRAIGHT
+                    : ConnectionType.CLOSED_CORNER;
             if (device.canConnect(side, dev, type) && dev.canConnect(face, device, type))
                 return RedstoneApi.getInstance().createConnection(device, dev, side, face, type);
         } while (false);
@@ -108,6 +108,20 @@ public class WireHelper {
             Vec3i loc = new Vec3i(device).add(side);
             IRedstoneDevice dev = RedstoneApi.getInstance().getRedstoneDevice(loc.getWorld(), loc.getX(), loc.getY(), loc.getZ(), face,
                     side.getOpposite());
+            if (dev == null) {
+                dev = RedstoneApi.getInstance().getRedstoneDevice(loc.getWorld(), loc.getX(), loc.getY(), loc.getZ(), side.getOpposite(),
+                        side.getOpposite());
+                if (dev == null && face == ForgeDirection.UNKNOWN && device.isNormalFace(side)) {
+                    for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
+                        if (d != side && d != side.getOpposite()) {
+                            dev = RedstoneApi.getInstance().getRedstoneDevice(loc.getWorld(), loc.getX(), loc.getY(), loc.getZ(), d,
+                                    side.getOpposite());
+                            if (dev != null)
+                                break;
+                        }
+                    }
+                }
+            }
 
             if (dev == null)
                 break;
@@ -134,8 +148,8 @@ public class WireHelper {
             if (dev == null)
                 break;
 
-            ConnectionType type = (!(device instanceof IFace) || !(dev instanceof IFace))
-                    && !(device instanceof IFace == dev instanceof IFace) ? ConnectionType.STRAIGHT : ConnectionType.CLOSED_CORNER;
+            ConnectionType type = (device instanceof IFace || dev instanceof IFace) && !(device instanceof IFace == dev instanceof IFace) ? ConnectionType.STRAIGHT
+                    : ConnectionType.CLOSED_CORNER;
             if (device.canConnect(side, dev, type) && dev.canConnect(face, device, type))
                 return RedstoneApi.getInstance().createConnection(device, dev, side, face, type);
         } while (false);
@@ -171,7 +185,7 @@ public class WireHelper {
             if (dev == null) {
                 dev = RedstoneApi.getInstance().getBundledDevice(loc.getWorld(), loc.getX(), loc.getY(), loc.getZ(), side.getOpposite(),
                         side.getOpposite());
-                if (dev == null && face == ForgeDirection.UNKNOWN) {
+                if (dev == null && face == ForgeDirection.UNKNOWN && device.isNormalFace(side)) {
                     for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
                         if (d != side && d != side.getOpposite()) {
                             dev = RedstoneApi.getInstance().getBundledDevice(loc.getWorld(), loc.getX(), loc.getY(), loc.getZ(), d,

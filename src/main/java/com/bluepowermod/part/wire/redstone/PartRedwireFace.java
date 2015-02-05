@@ -25,6 +25,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map.Entry;
 
+import net.minecraft.block.BlockRedstoneWire;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
@@ -444,6 +445,9 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
             if (!RedstoneApi.getInstance().shouldWiresOutputPower(hasLoss(side)))
                 return 0;
 
+            if (new Vec3i(this).add(side).getBlock() instanceof BlockRedstoneWire)
+                return 0;
+
             if (side == getFace().getOpposite())
                 return 0;
 
@@ -456,10 +460,19 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
             if (!RedstoneApi.getInstance().shouldWiresOutputPower(hasLoss(side)))
                 return 0;
 
+            if (new Vec3i(this).add(side).getBlock() instanceof BlockRedstoneWire)
+                return 0;
+
             if (side != getFace())
                 return 0;
 
             return MathHelper.map(power & 0xFF, 0, 255, 0, 15);
+        }
+
+        @Override
+        public boolean isNormalFace(ForgeDirection side) {
+
+            return false;
         }
 
     }
@@ -917,6 +930,9 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
             if (!RedstoneApi.getInstance().shouldWiresOutputPower(hasLoss(side)))
                 return 0;
 
+            if (new Vec3i(this).add(side).getBlock() instanceof BlockRedstoneWire)
+                return 0;
+
             if (side == getFace() || side == getFace().getOpposite())
                 return 0;
 
@@ -927,6 +943,12 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
         public int getStrongPower(ForgeDirection side) {
 
             return 0;
+        }
+
+        @Override
+        public boolean isNormalFace(ForgeDirection side) {
+
+            return false;
         }
 
     }
@@ -1032,8 +1054,6 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
         @Override
         public boolean canConnect(ForgeDirection side, IBundledDevice device, ConnectionType type) {
 
-            if (type == ConnectionType.STRAIGHT && side == getFace().getOpposite() || side == ForgeDirection.UNKNOWN)
-                return false;
             if (type == ConnectionType.CLOSED_CORNER) {
                 if (side == getFace())
                     return false;
@@ -1320,6 +1340,12 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
         public int getStrongPower(ForgeDirection side) {
 
             return 0;
+        }
+
+        @Override
+        public boolean isNormalFace(ForgeDirection side) {
+
+            return false;
         }
 
     }

@@ -102,4 +102,10 @@ public class FMPRedstoneDevice implements IRedstoneDevice, IFace {
         return ForgeDirection.getOrientation(((IFaceRedstonePart) part).getFace());
     }
 
+    @Override
+    public boolean isNormalFace(ForgeDirection side) {
+
+        return false;
+    }
+
 }

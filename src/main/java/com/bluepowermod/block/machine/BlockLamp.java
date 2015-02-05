@@ -173,6 +173,9 @@ public class BlockLamp extends BlockContainerBase {
 
         super.onNeighborBlockChange(world, x, y, z, block);
 
+        if (this instanceof BlockLampRGB && block instanceof BlockLampRGB)
+            return;
+
         TileLamp te = get(world, x, y, z);
         if (te == null)
             return;

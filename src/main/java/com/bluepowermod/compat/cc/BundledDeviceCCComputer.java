@@ -122,4 +122,10 @@ public class BundledDeviceCCComputer implements IBundledDevice {
         return MinecraftColor.NONE;
     }
 
+    @Override
+    public boolean isNormalFace(ForgeDirection side) {
+
+        return true;
+    }
+
 }

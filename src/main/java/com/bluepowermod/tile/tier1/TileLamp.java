@@ -193,4 +193,10 @@ public class TileLamp extends TileBase implements IBundledDevice {
 
         return (r << 16) + (g << 8) + b;
     }
+
+    @Override
+    public boolean isNormalFace(ForgeDirection side) {
+
+        return true;
+    }
 }

@@ -434,4 +434,10 @@ public abstract class PartLamp extends BPPartFace implements IPartRedstone, IRed
         recalculatePower();
     }
 
+    @Override
+    public boolean isNormalFace(ForgeDirection side) {
+
+        return false;
+    }
+
 }

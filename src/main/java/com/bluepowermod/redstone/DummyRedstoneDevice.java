@@ -161,4 +161,10 @@ public class DummyRedstoneDevice implements IRedstoneDevice {
         return super.equals(obj);
     }
 
+    @Override
+    public boolean isNormalFace(ForgeDirection side) {
+
+        return loc.getBlock().isSideSolid(loc.getWorld(), loc.getX(), loc.getY(), loc.getZ(), side);
+    }
+
 }

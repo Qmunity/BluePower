@@ -104,16 +104,16 @@ public abstract class PartWireFreestanding extends BPPart implements IPartThruHo
         if (west == up || !isInWorld)
             boxes.add(new Vec3dCube(0.5 - ((wireSize + frameSeparation) / 2) - frameThickness, 0.5 + ((wireSize + frameSeparation) / 2),
                     0.5 - ((wireSize + frameSeparation) / 2), 0.5 - ((wireSize + frameSeparation) / 2), 0.5
-                    + ((wireSize + frameSeparation) / 2) + frameThickness, 0.5 + ((wireSize + frameSeparation) / 2)));
+                            + ((wireSize + frameSeparation) / 2) + frameThickness, 0.5 + ((wireSize + frameSeparation) / 2)));
         if (east == up || !isInWorld)
             boxes.add(new Vec3dCube(0.5 + ((wireSize + frameSeparation) / 2), 0.5 + ((wireSize + frameSeparation) / 2),
                     0.5 - ((wireSize + frameSeparation) / 2), 0.5 + ((wireSize + frameSeparation) / 2) + frameThickness, 0.5
-                    + ((wireSize + frameSeparation) / 2) + frameThickness, 0.5 + ((wireSize + frameSeparation) / 2)));
+                            + ((wireSize + frameSeparation) / 2) + frameThickness, 0.5 + ((wireSize + frameSeparation) / 2)));
         if (south == up || !isInWorld)
             boxes.add(new Vec3dCube(0.5 + ((wireSize + frameSeparation) / 2), 0.5 + ((wireSize + frameSeparation) / 2),
                     0.5 + ((wireSize + frameSeparation) / 2), 0.5 - ((wireSize + frameSeparation) / 2), 0.5
-                    + ((wireSize + frameSeparation) / 2) + frameThickness, 0.5 + ((wireSize + frameSeparation) / 2)
-                    + frameThickness));
+                            + ((wireSize + frameSeparation) / 2) + frameThickness, 0.5 + ((wireSize + frameSeparation) / 2)
+                            + frameThickness));
         if (north == up || !isInWorld)
             boxes.add(new Vec3dCube(0.5 + ((wireSize + frameSeparation) / 2), 0.5 + ((wireSize + frameSeparation) / 2), 0.5
                     - ((wireSize + frameSeparation) / 2) - frameThickness, 0.5 - ((wireSize + frameSeparation) / 2), 0.5
@@ -160,13 +160,13 @@ public abstract class PartWireFreestanding extends BPPart implements IPartThruHo
                 + ((wireSize + frameSeparation) / 2) + frameThickness, 0.5 - ((wireSize + frameSeparation) / 2)));
         boxes.add(new Vec3dCube(0.5 - ((wireSize + frameSeparation) / 2) - frameThickness, 0.5 + ((wireSize + frameSeparation) / 2),
                 0.5 + ((wireSize + frameSeparation) / 2), 0.5 - ((wireSize + frameSeparation) / 2), 0.5
-                + ((wireSize + frameSeparation) / 2) + frameThickness, 0.5 + ((wireSize + frameSeparation) / 2) + frameThickness));
+                        + ((wireSize + frameSeparation) / 2) + frameThickness, 0.5 + ((wireSize + frameSeparation) / 2) + frameThickness));
         boxes.add(new Vec3dCube(0.5 + ((wireSize + frameSeparation) / 2), 0.5 + ((wireSize + frameSeparation) / 2), 0.5
                 - ((wireSize + frameSeparation) / 2) - frameThickness, 0.5 + ((wireSize + frameSeparation) / 2) + frameThickness, 0.5
                 + ((wireSize + frameSeparation) / 2) + frameThickness, 0.5 - ((wireSize + frameSeparation) / 2)));
         boxes.add(new Vec3dCube(0.5 + ((wireSize + frameSeparation) / 2), 0.5 + ((wireSize + frameSeparation) / 2),
                 0.5 + ((wireSize + frameSeparation) / 2), 0.5 + ((wireSize + frameSeparation) / 2) + frameThickness, 0.5
-                + ((wireSize + frameSeparation) / 2) + frameThickness, 0.5 + ((wireSize + frameSeparation) / 2) + frameThickness));
+                        + ((wireSize + frameSeparation) / 2) + frameThickness, 0.5 + ((wireSize + frameSeparation) / 2) + frameThickness));
 
         boxes.add(new Vec3dCube(0.5 - ((wireSize + frameSeparation) / 2) - frameThickness, 0.5 - ((wireSize + frameSeparation) / 2)
                 - frameThickness, 0.5 - ((wireSize + frameSeparation) / 2) - frameThickness, 0.5 - ((wireSize + frameSeparation) / 2),
@@ -253,25 +253,25 @@ public abstract class PartWireFreestanding extends BPPart implements IPartThruHo
 
         // Wire
         renderer.renderBox(new Vec3dCube(0.5 - (wireSize / 2), 0.5 - (wireSize / 2), 0.5 - (wireSize / 2), 0.5 + (wireSize / 2),
-                0.5 + (wireSize / 2), 0.5 + (wireSize / 2)), getWireIcon(ForgeDirection.UNKNOWN));
+                0.5 + (wireSize / 2), 0.5 + (wireSize / 2)), getIcons(ForgeDirection.UNKNOWN));
         if (up || !isInWorld)
             renderer.renderBox(new Vec3dCube(0.5 - (wireSize / 2), 0.5 + (wireSize / 2), 0.5 - (wireSize / 2), 0.5 + (wireSize / 2), 1,
-                    0.5 + (wireSize / 2)), getWireIcon(ForgeDirection.UP));
+                    0.5 + (wireSize / 2)), getIcons(ForgeDirection.UP));
         if (down || !isInWorld)
             renderer.renderBox(new Vec3dCube(0.5 - (wireSize / 2), 0, 0.5 - (wireSize / 2), 0.5 + (wireSize / 2), 0.5 - (wireSize / 2),
-                    0.5 + (wireSize / 2)), getWireIcon(ForgeDirection.DOWN));
+                    0.5 + (wireSize / 2)), getIcons(ForgeDirection.DOWN));
         if (north || !isInWorld)
             renderer.renderBox(new Vec3dCube(0.5 - (wireSize / 2), 0.5 - (wireSize / 2), 0, 0.5 + (wireSize / 2), 0.5 + (wireSize / 2),
-                    0.5 - (wireSize / 2)), getWireIcon(ForgeDirection.NORTH));
+                    0.5 - (wireSize / 2)), getIcons(ForgeDirection.NORTH));
         if (south || !isInWorld)
             renderer.renderBox(new Vec3dCube(0.5 - (wireSize / 2), 0.5 - (wireSize / 2), 0.5 + (wireSize / 2), 0.5 + (wireSize / 2),
-                    0.5 + (wireSize / 2), 1), getWireIcon(ForgeDirection.SOUTH));
+                    0.5 + (wireSize / 2), 1), getIcons(ForgeDirection.SOUTH));
         if (west || !isInWorld)
             renderer.renderBox(new Vec3dCube(0, 0.5 - (wireSize / 2), 0.5 - (wireSize / 2), 0.5 - (wireSize / 2), 0.5 + (wireSize / 2),
-                    0.5 + (wireSize / 2)), getWireIcon(ForgeDirection.WEST));
+                    0.5 + (wireSize / 2)), getIcons(ForgeDirection.WEST));
         if (east || !isInWorld)
             renderer.renderBox(new Vec3dCube(0.5 + (wireSize / 2), 0.5 - (wireSize / 2), 0.5 - (wireSize / 2), 1, 0.5 + (wireSize / 2),
-                    0.5 + (wireSize / 2)), getWireIcon(ForgeDirection.EAST));
+                    0.5 + (wireSize / 2)), getIcons(ForgeDirection.EAST));
 
         renderer.setColor(getFrameColorMultiplier());
 

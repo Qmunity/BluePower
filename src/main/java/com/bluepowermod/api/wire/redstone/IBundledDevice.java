@@ -46,4 +46,9 @@ public interface IBundledDevice extends IWorldLocation {
      */
     public MinecraftColor getBundledColor(ForgeDirection side);
 
+    /**
+     * Returns whether or not this is a normal face (if face devices should be able to connect to it)
+     */
+    public boolean isNormalFace(ForgeDirection side);
+
 }
