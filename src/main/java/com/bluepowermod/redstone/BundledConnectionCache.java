@@ -87,6 +87,17 @@ public class BundledConnectionCache implements IConnectionCache<IBundledDevice> 
     }
 
     @Override
+    public void disconnectAll() {
+
+        for (BundledConnection con : connections) {
+            if (con == null)
+                continue;
+            onDisconnect(con.getSideA());
+            con.getB().getBundledConnectionCache().onDisconnect(con.getSideB());
+        }
+    }
+
+    @Override
     public void listen() {
 
         listening = dev instanceof IConnectionListener;

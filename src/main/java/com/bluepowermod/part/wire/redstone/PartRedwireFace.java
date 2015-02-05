@@ -362,6 +362,22 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
             RedstoneApi.getInstance().getRedstonePropagator(this, getFace()).propagate();
         }
 
+        @Override
+        public void onRemoved() {
+
+            // Don't to anything if propagation-related stuff is going on
+            if (!RedstoneApi.getInstance().shouldWiresHandleUpdates())
+                return;
+
+            super.onRemoved();
+
+            // Do not do anything if we're on the client
+            if (getWorld().isRemote)
+                return;
+
+            connections.disconnectAll();
+        }
+
         // Rendering methods
 
         @Override
@@ -708,6 +724,23 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
 
             RedstoneApi.getInstance().getRedstonePropagator(this, getFace()).propagate();
             RedstoneApi.getInstance().getBundledPropagator(this, getFace()).propagate();
+        }
+
+        @Override
+        public void onRemoved() {
+
+            // Don't to anything if propagation-related stuff is going on
+            if (!RedstoneApi.getInstance().shouldWiresHandleUpdates())
+                return;
+
+            super.onRemoved();
+
+            // Do not do anything if we're on the client
+            if (getWorld().isRemote)
+                return;
+
+            connections.disconnectAll();
+            bundledConnections.disconnectAll();
         }
 
         // Rendering methods
@@ -1075,7 +1108,6 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
         public Collection<Entry<IConnection<IBundledDevice>, Boolean>> propagateBundled(ForgeDirection fromSide) {
 
             List<Entry<IConnection<IBundledDevice>, Boolean>> l = new ArrayList<Entry<IConnection<IBundledDevice>, Boolean>>();
-            System.out.println("Hello?");
             for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
                 IConnection<IBundledDevice> c = bundledConnections.getConnectionOnSide(d);
                 if (c != null)
@@ -1108,6 +1140,22 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
             // Refresh connections
             bundledConnections.recalculateConnections();
             RedstoneApi.getInstance().getBundledPropagator(this, getFace()).propagate();
+        }
+
+        @Override
+        public void onRemoved() {
+
+            // Don't to anything if propagation-related stuff is going on
+            if (!RedstoneApi.getInstance().shouldWiresHandleUpdates())
+                return;
+
+            super.onRemoved();
+
+            // Do not do anything if we're on the client
+            if (getWorld().isRemote)
+                return;
+
+            bundledConnections.disconnectAll();
         }
 
         // Rendering methods

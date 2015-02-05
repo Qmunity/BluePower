@@ -315,7 +315,18 @@ IRedstoneDevice, IBundledDevice, IPartTicking, IPartRenderPlacement, IIntegrated
 
         super.onRemoved();
 
-        // FIXME WireCommons.disconnect(this, this);
+        // Don't to anything if propagation-related stuff is going on
+        if (!RedstoneApi.getInstance().shouldWiresHandleUpdates())
+            return;
+
+        super.onRemoved();
+
+        // Do not do anything if we're on the client
+        if (getWorld().isRemote)
+            return;
+
+        redstoneConnections.disconnectAll();
+        bundledConnections.disconnectAll();
     }
 
     private void sendUpdateIfNeeded() {

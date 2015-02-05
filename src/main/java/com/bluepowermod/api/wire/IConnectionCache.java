@@ -30,6 +30,11 @@ public interface IConnectionCache<T> {
     public void recalculateConnections();
 
     /**
+     * Disconnects all the devices from this one.
+     */
+    public void disconnectAll();
+
+    /**
      * Makes the object the cache is bound to, if instance of {@link IConnectionListener}, listen to connect/disconnect events.
      */
     public void listen();

@@ -87,6 +87,17 @@ public class RedstoneConnectionCache implements IConnectionCache<IRedstoneDevice
     }
 
     @Override
+    public void disconnectAll() {
+
+        for (RedstoneConnection con : connections) {
+            if (con == null)
+                continue;
+            onDisconnect(con.getSideA());
+            con.getB().getRedstoneConnectionCache().onDisconnect(con.getSideB());
+        }
+    }
+
+    @Override
     public void listen() {
 
         listening = dev instanceof IConnectionListener;

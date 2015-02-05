@@ -211,7 +211,7 @@ public abstract class PartRedwireFreestanding extends PartWireFreestanding imple
     }
 
     public static class PartRedwireFreestandingUninsulated extends PartRedwireFreestanding implements IAdvancedRedstoneConductor,
-            IConnectionListener {
+    IConnectionListener {
 
         private RedstoneConnectionCache connections = RedstoneApi.getInstance().createRedstoneConnectionCache(this);
         private boolean hasUpdated = false;
@@ -373,6 +373,22 @@ public abstract class PartRedwireFreestanding extends PartWireFreestanding imple
             RedstoneApi.getInstance().getRedstonePropagator(this, d).propagate();
         }
 
+        @Override
+        public void onRemoved() {
+
+            // Don't to anything if propagation-related stuff is going on
+            if (!RedstoneApi.getInstance().shouldWiresHandleUpdates())
+                return;
+
+            super.onRemoved();
+
+            // Do not do anything if we're on the client
+            if (getWorld().isRemote)
+                return;
+
+            connections.disconnectAll();
+        }
+
         // Rendering methods
 
         @Override
@@ -421,7 +437,7 @@ public abstract class PartRedwireFreestanding extends PartWireFreestanding imple
     }
 
     public static class PartRedwireFreestandingInsulated extends PartRedwireFreestanding implements IAdvancedRedstoneConductor,
-            IInsulatedRedstoneDevice, IAdvancedBundledConductor, IConnectionListener {
+    IInsulatedRedstoneDevice, IAdvancedBundledConductor, IConnectionListener {
 
         private RedstoneConnectionCache connections = RedstoneApi.getInstance().createRedstoneConnectionCache(this);
         private BundledConnectionCache bundledConnections = RedstoneApi.getInstance().createBundledConnectionCache(this);
@@ -588,6 +604,23 @@ public abstract class PartRedwireFreestanding extends PartWireFreestanding imple
 
                 hasUpdated = false;
             }
+        }
+
+        @Override
+        public void onRemoved() {
+
+            // Don't to anything if propagation-related stuff is going on
+            if (!RedstoneApi.getInstance().shouldWiresHandleUpdates())
+                return;
+
+            super.onRemoved();
+
+            // Do not do anything if we're on the client
+            if (getWorld().isRemote)
+                return;
+
+            connections.disconnectAll();
+            bundledConnections.disconnectAll();
         }
 
         @Override
