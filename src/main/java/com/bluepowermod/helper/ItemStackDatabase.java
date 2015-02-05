@@ -31,13 +31,13 @@ import cpw.mods.fml.common.registry.GameRegistry.UniqueIdentifier;
 public class ItemStackDatabase {
 
     private static final String FILE_EXTENSION = ".cdf";
-    private static final String DATABASE_FOLDER_NAME = "bluepower\\circuitDatabase\\";
+    private static final String DATABASE_FOLDER_NAME = "bluepower" + File.separator + "circuitDatabase" + File.separator;
     private final String saveLocation;
     private List<ItemStack> cache;
 
     public ItemStackDatabase() {
 
-        saveLocation = BluePower.proxy.getSavePath() + "\\" + DATABASE_FOLDER_NAME;
+        saveLocation = BluePower.proxy.getSavePath() + File.separator + DATABASE_FOLDER_NAME;
     }
 
     public void saveItemStack(ItemStack stack) {

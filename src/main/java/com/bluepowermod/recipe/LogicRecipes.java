@@ -63,8 +63,8 @@ public class LogicRecipes {
                 BPItems.stone_tile);
         // GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.plate_assembly, 1), " # ", "SRS", "#C#", '#', BPItems.stone_tile, 'S',
         // "stickWood", 'R', BPItems.red_alloy_ingot, 'C', BPItems.stone_cathode));
-        GameRegistry
-                .addShapelessRecipe(new ItemStack(BPItems.taintedsilicon_chip_tile, 1), BPItems.silicon_chip_tile, Items.glowstone_dust);
+        GameRegistry.addShapelessRecipe(new ItemStack(BPItems.tainted_silicon_chip_tile, 1), BPItems.silicon_chip_tile,
+                Items.glowstone_dust);
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.quartz_resonator_tile, 3), " # ", "###", "WWW", '#', "gemQuartz",
                 'W', BPItems.stone_tile));
 
@@ -144,7 +144,7 @@ public class LogicRecipes {
         GameRegistry.addRecipe(PartManager.getPartInfo("or").getStack(), "#C#", "WCW", "#W#", '#', BPItems.stone_tile, 'C',
                 BPItems.bluestone_cathode_tile, 'W', BPItems.bluestone_wire_tile);
         GameRegistry.addRecipe(PartManager.getPartInfo("randomizer").getStack(), "#T#", "WWW", "TWT", '#', BPItems.stone_tile, 'T',
-                BPItems.taintedsilicon_chip_tile, 'W', BPItems.bluestone_wire_tile);
+                BPItems.tainted_silicon_chip_tile, 'W', BPItems.bluestone_wire_tile);
         GameRegistry.addRecipe(PartManager.getPartInfo("pulseformer").getStack(), "ACA", "CAC", "WW#", '#', BPItems.stone_tile, 'A',
                 BPItems.bluestone_anode_tile, 'C', BPItems.bluestone_cathode_tile, 'W', BPItems.bluestone_wire_tile);
         GameRegistry.addRecipe(PartManager.getPartInfo("repeater").getStack(), "#CW", "#AW", "#WC", '#', BPItems.stone_tile, 'A',

@@ -38,7 +38,7 @@ import cpw.mods.fml.relauncher.SideOnly;
  * 
  * @author MineMaarten
  */
-public class ContainerSortingMachine extends ContainerGhosts {
+public class ContainerSortingMachine extends ContainerMachineBase {
 
     private final TileSortingMachine sortingMachine;
 
@@ -47,7 +47,7 @@ public class ContainerSortingMachine extends ContainerGhosts {
     private final int[] fuzzySettings = new int[8];
 
     public ContainerSortingMachine(InventoryPlayer invPlayer, TileSortingMachine sortingMachine) {
-
+        super(sortingMachine);
         this.sortingMachine = sortingMachine;
 
         for (int i = 0; i < 5; i++) {

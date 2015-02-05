@@ -740,6 +740,25 @@ gui.widget.fuzzy.exact.info=Considers items to be the same when they are exactly
 
 gui.tooltip.hasSilkyData=§eHas Extra Silky Data
 
+gui.tab.stuffed=Stuffed Items
+gui.tab.stuffed.noItems=No items stuffed
+gui.tab.info=Information
+
+tile.bluepower:alloyfurnace.info=This machine can melt down metals. It can be used to create Brass, using 3x Copper and 1x Zinc. It can also be used to recycle any item that is made up of a metal into that metal.
+tile.bluepower:buffer.info=Every side of this machine apart from one has it's own compartment of storage accessible. Apart from one side, which has access to all slots.
+tile.bluepower:deployer.info=This machine right clicks any block/entity in front of it using the items stored in the Deployer. This for instance can be used to milk a cow by putting in a Bucket and by putting the Deployer in front of a Cow.
+tile.bluepower:ejector.info=When pulsed by redstone, the Ejector will try to eject one item out of its inventory.
+tile.bluepower:filter.info=When pulsed by redstone, the Filter will try to take a stack out of a connected inventory and eject it on the other side. The allowed items can be specified using the filter slots, and the ejected stack also can be colored.
+tile.bluepower:item_detector.info=Used to detect items going through tubes. It can be set to emit a redstone pulse once per stack, or once for every single item in a stack. It can also be used to detect a system getting stuffed.
+tile.bluepower:project_table.info=A Project Table is an enhanced Crafting Table. It can be used for mass crafting. Put in a 'template' into the crafting grid. Any items used by crafting will be pulled from the Table's inventory.
+tile.bluepower:relay.info=Automatically tries to eject any item in its inventory. It can be used as an interface between different mods, or simply as a faster Hopper.
+tile.bluepower:circuit_table.info=Crafting Gates can be painful. The Circuit Table allows you to craft a gate by simply clicking on the gate you want, provided the items needed to craft the gate are in the Table's inventory.
+tile.bluepower:regulator.info=Very versatile machine. It can be used to keep an inventory supplied with a certain amount of items, detect whether inventories have certain items, and much more.
+tile.bluepower:retriever.info=When pulsed by redstone, the Retriever will try to retrieve a stack of items out of an inventory somehow connected to the Retriever using Pneumatic Tubes. It can be filtered just like the Filter.
+tile.bluepower:sorting_machine.info=The primary use of the Sorting Machine is to sort items, by coloring different items differently. It can be used for other purposes though, to for example make sure that a Furnace always smelts 8 items at a time.
+tile.bluepower:circuit_database.info=With this machine you can copy and share Integrated Circuit designs. To copy, put the template in the left slot, and an empty IC into the right slot. Make sure to have all the gates required and hit the copy button.\n\nTo share, put in a template and hit one of the two buttons. When saving privately, a folder is created where your Minecraft instance is. You can transfer this with you to other worlds. Server saved templates can be accessed by everyone on a server.
+tile.bluepower:manager.info=High tier machine used to manage an inventory. It can be set to keep an inventory supplied with exactly the specified items/amounts, or it can be set to retrieve all the items it is able to get of a specified type. Priorities can be set, meaning Managers with a lower priority can't pull from a Manager with a higher priority.
+
 direction.front=Front
 direction.left=Left
 direction.back=Back

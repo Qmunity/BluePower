@@ -21,6 +21,7 @@ package com.bluepowermod.tile.tier1;
 
 import java.util.List;
 
+import com.bluepowermod.part.tube.TubeStack;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -28,6 +29,7 @@ import net.minecraft.nbt.NBTTagCompound;
 
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.tile.TileMachineBase;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public class TileRelay extends TileMachineBase implements IInventory {
 
@@ -222,5 +224,11 @@ public class TileRelay extends TileMachineBase implements IInventory {
     public boolean canConnectRedstone() {
 
         return true;
+    }
+
+    @Override
+    public TubeStack acceptItemFromTube(TubeStack stack, ForgeDirection from, boolean simulate) {
+
+        return from == getFacingDirection() ? stack : super.acceptItemFromTube(stack, from, simulate);
     }
 }
