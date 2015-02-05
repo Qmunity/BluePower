@@ -22,7 +22,7 @@ public class GateConnectionBundledDigital extends GateConnectionBase {
     }
 
     @Override
-    public void refesh() {
+    public void refresh() {
 
     }
 

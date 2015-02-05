@@ -32,7 +32,7 @@ public interface IGateConnection {
 
     public boolean isOutputOnly();
 
-    public void refesh();
+    public void refresh();
 
     public void writeToNBT(NBTTagCompound tag);
 

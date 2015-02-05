@@ -8,6 +8,7 @@ import java.io.IOException;
 import net.minecraft.nbt.NBTTagCompound;
 import uk.co.qmunity.lib.client.render.RenderHelper;
 import uk.co.qmunity.lib.transform.Scale;
+import uk.co.qmunity.lib.transform.Transformation;
 import uk.co.qmunity.lib.vec.Vec2dRect;
 import uk.co.qmunity.lib.vec.Vec3i;
 
@@ -37,8 +38,8 @@ public class GateComponentWire extends GateComponentLocationArray {
     public void renderStatic(Vec3i translation, RenderHelper renderer, int pass) {
 
         byte power = getPower();
-        int colorMin = isEnabled() ? type.getMinColor() : 0x999999;
-        int colorMax = isEnabled() ? type.getMaxColor() : 0x999999;
+        int colorMin = isEnabled() ? type.getMinColor() : 0x6A6A6A;
+        int colorMax = isEnabled() ? type.getMaxColor() : 0x6A6A6A;
 
         renderer.setColor(WireHelper.getColorForPowerLevel(colorMin, colorMax, power));
         double height = 1 / 48D;
@@ -46,9 +47,9 @@ public class GateComponentWire extends GateComponentLocationArray {
         double scale = 1D / getGate().getLayout().getLayout(layoutColor).getWidth();
 
         renderer.setRenderSides(false, true, true, true, true, true);
+        Transformation transformation = new Scale(scale, 1, scale);
         for (Rectangle r : getGate().getLayout().getSimplifiedLayout(layoutColor).getRectangles())
-            renderer.renderBox(
-                    new Vec2dRect(r).extrude(height).transform(new Scale(scale, 1, scale)).add(-0.5 + 1 / 64D, 2 / 16D, -0.5 + 1 / 64D),
+            renderer.renderBox(new Vec2dRect(r).extrude(height).transform(transformation).add(-0.5 + 1 / 64D, 2 / 16D, -0.5 + 1 / 64D),
                     IconSupplier.wire);
 
         // for (int x = 0; x < pixels.length; x++) {

@@ -948,7 +948,8 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
         @Override
         public String getType() {
 
-            return "wire." + getRedwireType().getName() + (color != null ? ("." + color.name().toLowerCase()) : "") + ".bundled";
+            return "wire." + getRedwireType().getName() + ".bundled"
+                    + (color != MinecraftColor.NONE ? ("." + color.name().toLowerCase()) : "");
         }
 
         @Override

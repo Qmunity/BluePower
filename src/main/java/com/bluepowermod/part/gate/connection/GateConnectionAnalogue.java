@@ -24,7 +24,7 @@ public class GateConnectionAnalogue extends GateConnectionBase {
     }
 
     @Override
-    public void refesh() {
+    public void refresh() {
 
         if (getGate().getRedstoneConnectionCache().getConnectionOnSide(getForgeDirection()) == null)
             input = (byte) MathHelper.map(RedstoneHelper.getInput(getGate().getWorld(), getGate().getX(), getGate().getY(), getGate()

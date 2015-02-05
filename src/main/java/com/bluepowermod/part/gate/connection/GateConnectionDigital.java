@@ -23,7 +23,7 @@ public class GateConnectionDigital extends GateConnectionBase {
     }
 
     @Override
-    public void refesh() {
+    public void refresh() {
 
         if (getGate().getRedstoneConnectionCache().getConnectionOnSide(getForgeDirection()) == null)
             input = RedstoneHelper.getInput(getGate().getWorld(), getGate().getX(), getGate().getY(), getGate().getZ(),

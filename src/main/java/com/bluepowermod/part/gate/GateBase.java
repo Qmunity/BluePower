@@ -265,7 +265,7 @@ public abstract class GateBase<C_BOTTOM extends GateConnectionBase, C_TOP extend
 
             for (GateConnectionBase c : getConnections())
                 if (c != null)
-                    c.refesh();
+                    c.refresh();
         }
 
         logic().tick();
@@ -290,7 +290,7 @@ public abstract class GateBase<C_BOTTOM extends GateConnectionBase, C_TOP extend
 
         for (GateConnectionBase c : getConnections())
             if (c != null)
-                c.refesh();
+                c.refresh();
 
         for (GateConnectionBase c : getConnections())
             if (c != null)

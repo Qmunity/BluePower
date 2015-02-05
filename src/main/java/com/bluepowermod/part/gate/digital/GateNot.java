@@ -34,9 +34,7 @@ public class GateNot extends GateSimpleDigital {
     @Override
     protected void initComponents() {
 
-        t = new GateComponentTorch(this, 0x0000FF, 4 / 16D, true);
-        t.setState(true);
-        addComponent(t);
+        addComponent(t = new GateComponentTorch(this, 0x0000FF, 4 / 16D, true).setState(true));
 
         addComponent(new GateComponentWire(this, 0x18FF00, RedwireType.BLUESTONE).bind(front()));
         addComponent(new GateComponentWire(this, 0xFFF600, RedwireType.BLUESTONE).bind(right()));
