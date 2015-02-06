@@ -129,6 +129,7 @@ public class GateComponentTorch extends GateComponent {
 
     public GateComponentTorch setState(boolean state) {
 
+        // System.out.println(state + " vs " + this.state + " -> " + (state != this.state));
         if (state != this.state)
             setNeedsSyncing(true);
         this.state = state;
