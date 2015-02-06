@@ -179,4 +179,9 @@ public class GuiCircuitTable extends GuiBase {
         return true;
     }
 
+    public void updateScrollbar(int slotsScrolled) {
+
+        currentScroll = slotsScrolled;
+    }
+
 }
