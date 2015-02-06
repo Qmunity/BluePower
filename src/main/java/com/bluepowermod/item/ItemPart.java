@@ -20,7 +20,7 @@ package com.bluepowermod.item;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.block.Block;
+import net.minecraft.block.Block.SoundType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.audio.SoundCategory;
@@ -138,17 +138,22 @@ public class ItemPart extends ItemMultipart implements IDatabaseSaveable {
         if (!super.onItemUse(item, player, world, x, y, z, face, x_, y_, z_))
             return false;
 
-        Block.SoundType sound = PartManager.getExample(item).getPlacementSound();
         if (world.isRemote)
-            Minecraft
-            .getMinecraft()
-            .getSoundHandler()
-            .playSound(
-                    new PositionedSoundRecord(new ResourceLocation(sound.func_150496_b()), (sound.getVolume() + 3)
-                            * Minecraft.getMinecraft().gameSettings.getSoundLevel(SoundCategory.BLOCKS), sound.getPitch() * 0.85F,
-                            x + 0.5F, y + 0.5F, z + 0.5F));
+            playPlacementSound(x, y, z, PartManager.getExample(item).getPlacementSound());
 
         return true;
+    }
+
+    @SideOnly(Side.CLIENT)
+    private void playPlacementSound(int x, int y, int z, SoundType sound) {
+
+        Minecraft
+        .getMinecraft()
+        .getSoundHandler()
+        .playSound(
+                new PositionedSoundRecord(new ResourceLocation(sound.func_150496_b()), (sound.getVolume() + 3)
+                        * Minecraft.getMinecraft().gameSettings.getSoundLevel(SoundCategory.BLOCKS), sound.getPitch() * 0.85F,
+                        x + 0.5F, y + 0.5F, z + 0.5F));
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })

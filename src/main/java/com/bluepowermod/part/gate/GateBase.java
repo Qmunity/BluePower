@@ -904,14 +904,20 @@ IRedstoneDevice, IBundledDevice, IPartTicking, IPartRenderPlacement, IIntegrated
 
     protected void playTickSound() {
 
-        if (getWorld().isRemote && Config.enableGateSounds)
+        if (getWorld().isRemote)
+            playTickSound_do();
+    }
+
+    @SideOnly(Side.CLIENT)
+    private void playTickSound_do() {
+
+        if (Config.enableGateSounds)
             Minecraft
             .getMinecraft()
             .getSoundHandler()
             .playSound(
                     new PositionedSoundRecord(new ResourceLocation("random.click"), 0.3F, 0.5F, getX() + 0.5F, getY() + 0.5F,
                             getZ() + 0.5F));
-
     }
 
     @Override
