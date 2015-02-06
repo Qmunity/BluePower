@@ -6,5 +6,7 @@ import net.minecraft.item.ItemStack;
 public interface IScrewdriver {
 
     public boolean damage(ItemStack stack, int damage, EntityPlayer player, boolean simulated);
+    
+    public boolean isScrewdriver(ItemStack stack);
 
 }
