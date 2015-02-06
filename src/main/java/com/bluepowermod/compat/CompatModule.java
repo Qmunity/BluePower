@@ -43,7 +43,7 @@ public abstract class CompatModule {
 
     public boolean isScrewdriver(ItemStack item) {
 
-        return item != null && item.getItem() instanceof IScrewdriver;
+        return item != null && item.getItem() instanceof IScrewdriver && ((IScrewdriver)item.getItem().isScrewdriver(item));
     }
 
 }
