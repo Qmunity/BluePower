@@ -38,7 +38,6 @@ import uk.co.qmunity.lib.transform.Rotation;
 import uk.co.qmunity.lib.vec.Vec3d;
 import uk.co.qmunity.lib.vec.Vec3dCube;
 import uk.co.qmunity.lib.vec.Vec3i;
-import coloredlightscore.src.api.CLApi;
 
 import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.api.wire.ConnectionType;
@@ -269,18 +268,33 @@ public abstract class PartLamp extends BPPartFace implements IPartRedstone, IRed
         int pow = (inverted ? 15 - power : power);
 
         if (Loader.isModLoaded("coloredlightscore")) {
-            float brightness = pow / 15F;
             int color = this.color.getHex();
 
-            int r = (color >> 16) & 0xFF;
-            int g = (color >> 8) & 0xFF;
-            int b = (color >> 0) & 0xFF;
+            int ri = (color >> 16) & 0xFF;
+            int gi = (color >> 8) & 0xFF;
+            int bi = (color >> 0) & 0xFF;
 
-            float rf = r / 256F;
-            float gf = g / 256F;
-            float bf = b / 256F;
+            float r = ri / 256F;
+            float g = gi / 256F;
+            float b = bi / 256F;
 
-            return CLApi.makeRGBLightValue(Math.min(rf, brightness), Math.min(gf, brightness), Math.min(bf, brightness), brightness);
+            // Clamp color channels
+            if (r < 0.0f)
+                r = 0.0f;
+            else if (r > 1.0f)
+                r = 1.0f;
+
+            if (g < 0.0f)
+                g = 0.0f;
+            else if (g > 1.0f)
+                g = 1.0f;
+
+            if (b < 0.0f)
+                b = 0.0f;
+            else if (b > 1.0f)
+                b = 1.0f;
+
+            return pow | ((((int) (15.0F * b)) << 15) + (((int) (15.0F * g)) << 10) + (((int) (15.0F * r)) << 5));
         }
 
         return pow;
