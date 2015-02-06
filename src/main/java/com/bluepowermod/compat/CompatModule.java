@@ -24,6 +24,8 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+import com.bluepowermod.api.misc.IScrewdriver;
+
 public abstract class CompatModule {
 
     public abstract void preInit(FMLPreInitializationEvent ev);
@@ -41,7 +43,7 @@ public abstract class CompatModule {
 
     public boolean isScrewdriver(ItemStack item) {
 
-        return false;
+        return item != null && item.getItem() instanceof IScrewdriver;
     }
 
 }
