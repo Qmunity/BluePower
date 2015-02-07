@@ -141,6 +141,8 @@ public class TileLamp extends TileBase implements IBundledDevice {
     @Override
     public boolean canConnect(ForgeDirection side, IBundledDevice dev, ConnectionType type) {
 
+        if (!(getWorld().getBlock(getX(), getY(), getZ()) instanceof BlockLampRGB))
+            return false;
         if (dev instanceof IInsulatedRedstoneDevice)
             return false;
         if (dev instanceof TileLamp)
