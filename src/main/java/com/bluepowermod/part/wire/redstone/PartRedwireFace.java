@@ -300,14 +300,13 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
 
                 for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
                     IConnection<IRedstoneDevice> c = connections.getConnectionOnSide(dir);
-                    if (c == null)
-                        continue;
-                    IRedstoneDevice dev = c.getB();
+                    IRedstoneDevice dev = null;
+                    if (c != null)
+                        dev = c.getB();
                     if (dir == getFace()) {
                         RedstoneHelper.notifyRedstoneUpdate(getWorld(), getX(), getY(), getZ(), dir, true);
                     } else if (dev == null || dev instanceof DummyRedstoneDevice) {
                         RedstoneHelper.notifyRedstoneUpdate(getWorld(), getX(), getY(), getZ(), dir, false);
-                        System.out.println("Hello?");
                     }
                 }
 
@@ -458,9 +457,6 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
         public int getStrongPower(ForgeDirection side) {
 
             if (!RedstoneApi.getInstance().shouldWiresOutputPower(hasLoss(side)))
-                return 0;
-
-            if (new Vec3i(this).add(side).getBlock() instanceof BlockRedstoneWire)
                 return 0;
 
             if (side != getFace())
