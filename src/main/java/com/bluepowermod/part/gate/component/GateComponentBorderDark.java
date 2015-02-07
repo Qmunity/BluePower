@@ -26,6 +26,7 @@ public class GateComponentBorderDark extends GateComponentLocationArray {
         double scale = 1D / getGate().getLayout().getLayout(layoutColor).getWidth();
 
         renderer.setRenderSides(false, true, true, true, true, true);
+        renderer.setColor(0x555555);
         for (Rectangle r : getGate().getLayout().getSimplifiedLayout(layoutColor).getRectangles())
             renderer.renderBox(
                     new Vec2dRect(r).extrude(height).transform(new Scale(scale, 1, scale)).add(-0.5 + 1 / 64D, 2 / 16D, -0.5 + 1 / 64D),
@@ -50,6 +51,7 @@ public class GateComponentBorderDark extends GateComponentLocationArray {
         // }
         // }
         // }
+        renderer.setColor(0xFFFFFF);
         renderer.resetRenderedSides();
     }
 
