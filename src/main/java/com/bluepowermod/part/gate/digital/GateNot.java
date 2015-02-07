@@ -53,6 +53,9 @@ public class GateNot extends GateSimpleDigital {
     @Override
     public void tick() {
 
+        if (getWorld().isRemote)
+            return;
+
         buf.shift();
 
         boolean pow = buf.get(0);

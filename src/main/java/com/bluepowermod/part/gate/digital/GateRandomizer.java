@@ -69,23 +69,24 @@ public class GateRandomizer extends GateSimpleDigital {
     @Override
     public void tick() {
 
-        if (!getWorld().isRemote) {
-            if (back().getInput()) {
-                if (ticks % 5 == 0) {
-                    out[0] = random.nextBoolean();
-                    out[1] = random.nextBoolean();
-                    out[2] = random.nextBoolean();
-                    left().setOutput(out[0]);
-                    front().setOutput(out[1]);
-                    right().setOutput(out[2]);
-                    c1.setState(out[0]);
-                    c2.setState(out[1]);
-                    c3.setState(out[2]);
-                }
-                ticks++;
-            } else {
-                ticks = 0;
+        if (getWorld().isRemote)
+            return;
+
+        if (back().getInput()) {
+            if (ticks % 5 == 0) {
+                out[0] = random.nextBoolean();
+                out[1] = random.nextBoolean();
+                out[2] = random.nextBoolean();
+                left().setOutput(out[0]);
+                front().setOutput(out[1]);
+                right().setOutput(out[2]);
+                c1.setState(out[0]);
+                c2.setState(out[1]);
+                c3.setState(out[2]);
             }
+            ticks++;
+        } else {
+            ticks = 0;
         }
     }
 
