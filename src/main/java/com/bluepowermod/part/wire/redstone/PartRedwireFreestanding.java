@@ -30,6 +30,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -65,6 +66,7 @@ import com.bluepowermod.api.wire.redstone.IRedstoneDevice;
 import com.bluepowermod.api.wire.redstone.IRedwire;
 import com.bluepowermod.api.wire.redstone.RedwireType;
 import com.bluepowermod.client.render.IconSupplier;
+import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.part.gate.ic.FakeMultipartTileIC;
 import com.bluepowermod.part.wire.PartWireFreestanding;
 import com.bluepowermod.redstone.BundledConnectionCache;
@@ -73,7 +75,7 @@ import com.bluepowermod.redstone.RedstoneApi;
 import com.bluepowermod.redstone.RedstoneConnectionCache;
 
 public abstract class PartRedwireFreestanding extends PartWireFreestanding implements IRedwire, IRedConductor, IIntegratedCircuitPart,
-IPartRedstone {
+        IPartRedstone {
 
     private RedwireType type;
 
@@ -213,8 +215,14 @@ IPartRedstone {
         return true;
     }
 
+    @Override
+    public CreativeTabs getCreativeTab() {
+
+        return BPCreativeTabs.wiring;
+    }
+
     public static class PartRedwireFreestandingUninsulated extends PartRedwireFreestanding implements IAdvancedRedstoneConductor,
-    IConnectionListener {
+            IConnectionListener {
 
         private RedstoneConnectionCache connections = RedstoneApi.getInstance().createRedstoneConnectionCache(this);
         private boolean hasUpdated = false;
@@ -470,7 +478,7 @@ IPartRedstone {
     }
 
     public static class PartRedwireFreestandingInsulated extends PartRedwireFreestanding implements IAdvancedRedstoneConductor,
-    IInsulatedRedstoneDevice, IAdvancedBundledConductor, IConnectionListener {
+            IInsulatedRedstoneDevice, IAdvancedBundledConductor, IConnectionListener {
 
         private RedstoneConnectionCache connections = RedstoneApi.getInstance().createRedstoneConnectionCache(this);
         private BundledConnectionCache bundledConnections = RedstoneApi.getInstance().createBundledConnectionCache(this);
@@ -816,7 +824,7 @@ IPartRedstone {
     }
 
     public static class PartRedwireFreestandingBundled extends PartRedwireFreestanding implements IAdvancedBundledConductor,
-    IConnectionListener {
+            IConnectionListener {
 
         private BundledConnectionCache bundledConnections = RedstoneApi.getInstance().createBundledConnectionCache(this);
         private byte[] power = new byte[16];

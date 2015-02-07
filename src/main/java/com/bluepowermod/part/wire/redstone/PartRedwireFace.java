@@ -30,6 +30,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
@@ -63,6 +64,7 @@ import com.bluepowermod.api.wire.redstone.IRedwire;
 import com.bluepowermod.api.wire.redstone.RedwireType;
 import com.bluepowermod.client.render.IconSupplier;
 import com.bluepowermod.helper.VectorHelper;
+import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.part.gate.ic.FakeMultipartTileIC;
 import com.bluepowermod.part.wire.PartWireFace;
 import com.bluepowermod.redstone.BundledConnectionCache;
@@ -189,6 +191,12 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
     public boolean canPlaceOnIntegratedCircuit() {
 
         return true;
+    }
+
+    @Override
+    public CreativeTabs getCreativeTab() {
+
+        return BPCreativeTabs.wiring;
     }
 
     public static class PartRedwireFaceUninsulated extends PartRedwireFace implements IAdvancedRedstoneConductor, IConnectionListener {
@@ -474,7 +482,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
     }
 
     public static class PartRedwireFaceInsulated extends PartRedwireFace implements IAdvancedRedstoneConductor, IInsulatedRedstoneDevice,
-    IAdvancedBundledConductor, IConnectionListener, IInsulatedRedwire {
+            IAdvancedBundledConductor, IConnectionListener, IInsulatedRedwire {
 
         private RedstoneConnectionCache connections = RedstoneApi.getInstance().createRedstoneConnectionCache(this);
         private BundledConnectionCache bundledConnections = RedstoneApi.getInstance().createBundledConnectionCache(this);
