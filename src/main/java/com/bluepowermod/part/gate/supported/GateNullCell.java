@@ -59,9 +59,9 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class GateNullCell
-extends
-GateSupported<GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase>
-implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor {
+        extends
+        GateSupported<GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase>
+        implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor {
 
     private RedwireType typeA = null, typeB = null;
     private boolean bundledA = false, bundledB = false;
@@ -131,7 +131,7 @@ implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor {
             renderer.renderBox(new Vec3dCube(7 / 16D, 2 / 16D, 0 / 16D, 9 / 16D,
                     2 / 16D + (height / /* (nullcells[dir.ordinal()] ? 1 : */2/* ) */), 1 / 16D), wire);
             renderer.renderBox(new Vec3dCube(7 / 16D, 2 / 16D, 15 / 16D, 9 / 16D, 2 / 16D + (height / (nullcells[dir.getOpposite()
-                                                                                                                 .ordinal()] ? 1 : 2)), 16 / 16D), wire);
+                    .ordinal()] ? 1 : 2)), 16 / 16D), wire);
         }
 
         if (typeB != null) { // Supported
@@ -439,11 +439,11 @@ implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor {
         int type = getType(side);
 
         if (type == 1 && typeA != null) {
-            updatedA = true;
+            updatedA |= powerA != power;
             powerA = power;
         }
         if (type == 2 && typeB != null) {
-            updatedB = true;
+            updatedB |= powerA != powerB;
             powerB = power;
         }
     }
