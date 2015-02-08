@@ -62,19 +62,22 @@ public class RedstoneConnectionCache implements IConnectionCache<IRedstoneDevice
             boolean wasConnected = connections[d.ordinal()] != null;
             RedstoneConnection con = WireHelper.getNeighbor(self, d);
             if (con != null) {
-                onConnect(con.getSideA(), con.getB(), con.getSideB(), con.getType());
-                ((IConnectionCache<IRedstoneDevice>) con.getB().getRedstoneConnectionCache()).onConnect(con.getSideB(), con.getA(),
-                        con.getSideA(), con.getType());
+                if (!wasConnected || connections[d.ordinal()].getB() != con.getB() || connections[d.ordinal()].getSideB() != con.getSideB()
+                        || connections[d.ordinal()].getType() != con.getType()) {
+                    onConnect(con.getSideA(), con.getB(), con.getSideB(), con.getType());
+                    ((IConnectionCache<IRedstoneDevice>) con.getB().getRedstoneConnectionCache()).onConnect(con.getSideB(), con.getA(),
+                            con.getSideA(), con.getType());
 
-                IConnection<IRedstoneDevice> con2 = (IConnection<IRedstoneDevice>) con.getB().getRedstoneConnectionCache()
-                        .getConnectionOnSide(con.getSideB());
-                con = connections[d.ordinal()];
+                    IConnection<IRedstoneDevice> con2 = (IConnection<IRedstoneDevice>) con.getB().getRedstoneConnectionCache()
+                            .getConnectionOnSide(con.getSideB());
+                    con = connections[d.ordinal()];
 
-                if (con == null)
-                    return;
+                    if (con == null)
+                        return;
 
-                con.setComplementaryConnection(con2);
-                con2.setComplementaryConnection(con);
+                    con.setComplementaryConnection(con2);
+                    con2.setComplementaryConnection(con);
+                }
             } else if (wasConnected) {
                 con = connections[d.ordinal()];
 

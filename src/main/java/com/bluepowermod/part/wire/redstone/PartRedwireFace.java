@@ -482,7 +482,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
     }
 
     public static class PartRedwireFaceInsulated extends PartRedwireFace implements IAdvancedRedstoneConductor, IInsulatedRedstoneDevice,
-            IAdvancedBundledConductor, IConnectionListener, IInsulatedRedwire {
+    IAdvancedBundledConductor, IConnectionListener, IInsulatedRedwire {
 
         private RedstoneConnectionCache connections = RedstoneApi.getInstance().createRedstoneConnectionCache(this);
         private BundledConnectionCache bundledConnections = RedstoneApi.getInstance().createBundledConnectionCache(this);

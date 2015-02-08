@@ -62,19 +62,22 @@ public class BundledConnectionCache implements IConnectionCache<IBundledDevice> 
             boolean wasConnected = connections[d.ordinal()] != null;
             BundledConnection con = WireHelper.getBundledNeighbor(self, d);
             if (con != null) {
-                onConnect(con.getSideA(), con.getB(), con.getSideB(), con.getType());
-                ((IConnectionCache<IBundledDevice>) con.getB().getBundledConnectionCache()).onConnect(con.getSideB(), con.getA(),
-                        con.getSideA(), con.getType());
+                if (!wasConnected || connections[d.ordinal()].getB() != con.getB() || connections[d.ordinal()].getSideB() != con.getSideB()
+                        || connections[d.ordinal()].getType() != con.getType()) {
+                    onConnect(con.getSideA(), con.getB(), con.getSideB(), con.getType());
+                    ((IConnectionCache<IBundledDevice>) con.getB().getBundledConnectionCache()).onConnect(con.getSideB(), con.getA(),
+                            con.getSideA(), con.getType());
 
-                IConnection<IBundledDevice> con2 = (IConnection<IBundledDevice>) con.getB().getBundledConnectionCache()
-                        .getConnectionOnSide(con.getSideB());
-                con = connections[d.ordinal()];
+                    IConnection<IBundledDevice> con2 = (IConnection<IBundledDevice>) con.getB().getBundledConnectionCache()
+                            .getConnectionOnSide(con.getSideB());
+                    con = connections[d.ordinal()];
 
-                if (con == null)
-                    return;
+                    if (con == null)
+                        return;
 
-                con.setComplementaryConnection(con2);
-                con2.setComplementaryConnection(con);
+                    con.setComplementaryConnection(con2);
+                    con2.setComplementaryConnection(con);
+                }
             } else if (wasConnected) {
                 con = connections[d.ordinal()];
 
