@@ -49,6 +49,7 @@ public class Layout {
         try {
             InputStream stream = getClass().getResourceAsStream(path + ".png");
             layout = ImageIO.read(stream);
+            stream.close();
             try {
                 config = new LayoutConfiguration(layout, path + ".layout");
             } catch (Exception ex) {

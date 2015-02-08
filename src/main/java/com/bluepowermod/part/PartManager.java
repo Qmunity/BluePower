@@ -38,6 +38,7 @@ import com.bluepowermod.part.gate.digital.GateStateCell;
 import com.bluepowermod.part.gate.digital.GateSynchronizer;
 import com.bluepowermod.part.gate.digital.GateTimer;
 import com.bluepowermod.part.gate.digital.GateToggleLatch;
+import com.bluepowermod.part.gate.digital.GateTransparentLatch;
 import com.bluepowermod.part.gate.digital.GateXnor;
 import com.bluepowermod.part.gate.digital.GateXor;
 import com.bluepowermod.part.gate.ic.GateIntegratedCircuit;
@@ -142,7 +143,7 @@ public class PartManager {
         registerPart(GateRSLatch.class);
         registerPart(GateStateCell.class);
         registerPart(GateRepeater.class);
-        // registerPart(GateTransparentLatch.class);
+        registerPart(GateTransparentLatch.class);
         registerPart(GateSynchronizer.class);
 
         // Analog gates
