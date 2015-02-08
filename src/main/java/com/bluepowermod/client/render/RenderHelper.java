@@ -118,16 +118,16 @@ public class RenderHelper {
         GL11.glPopMatrix();
     }
 
-    public static void renderRandomizerButton(double x, double y, double z, boolean state) {
+    public static void renderRandomizerButton(double x, double y, double z, boolean tainted) {
 
-        String res = Refs.MODID + ":textures/blocks/gates/randomizer/button_" + (state ? "on" : "off") + ".png";
+        String res = Refs.MODID + ":textures/blocks/gates/components/" + (tainted ? "tainted_" : "") + "silicon_chip_on.png";
         String resSide = Refs.MODID + ":textures/blocks/gates/randomizer/button_side.png";
         renderButton(x, y, z, res, resSide);
     }
 
     public static void renderQuartzResonator(double x, double y, double z) {
 
-        String res = Refs.MODID + ":textures/blocks/gates/comparator/resonator.png";
+        String res = Refs.MODID + ":textures/blocks/gates/components/resonator.png";
         String resSide = Refs.MODID + ":textures/blocks/gates/randomizer/button_side.png";
         renderButton(x, y, z, res, resSide);
     }

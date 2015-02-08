@@ -31,7 +31,7 @@ public class GateTransparentLatch extends GateSimpleDigital {
     private boolean mirrored = false;
 
     private GateComponentTorch t1, t2, t3, t4, t5;
-    private GateComponentWire w1, w2, w3, w4;
+    private GateComponentWire w1, w2, w3;
 
     private ShiftingBuffer<Boolean> buf = new ShiftingBuffer<Boolean>(10, 2, false);
 

@@ -11,10 +11,15 @@ import net.minecraftforge.client.IItemRenderer;
 import org.lwjgl.opengl.GL11;
 
 import uk.co.qmunity.lib.client.render.RenderHelper;
+import uk.co.qmunity.lib.transform.Translation;
 import uk.co.qmunity.lib.vec.Vec3dCube;
+import uk.co.qmunity.lib.vec.Vec3i;
 
 import com.bluepowermod.api.wire.redstone.RedwireType;
 import com.bluepowermod.init.BPItems;
+import com.bluepowermod.part.gate.component.GateComponentQuartzResonator;
+import com.bluepowermod.part.gate.component.GateComponentSiliconChip;
+import com.bluepowermod.part.gate.component.GateComponentTaintedSiliconChip;
 import com.bluepowermod.part.wire.redstone.WireHelper;
 
 public class RenderCircuitTile implements IItemRenderer {
@@ -153,17 +158,6 @@ public class RenderCircuitTile implements IItemRenderer {
                 Tessellator.instance.draw();
             }
 
-            // Misc renderers
-            rh.setColor(0xFFFFFF);
-            if (item.getItem() == BPItems.quartz_resonator_tile) {
-                com.bluepowermod.client.render.RenderHelper.renderQuartzResonator(0, 0, -0.125);
-            }
-            if (item.getItem() == BPItems.silicon_chip_tile) {
-                com.bluepowermod.client.render.RenderHelper.renderRandomizerButton(0, 0, -0.125, false);
-            }
-            if (item.getItem() == BPItems.tainted_silicon_chip_tile) {
-                com.bluepowermod.client.render.RenderHelper.renderRandomizerButton(0, 0, -0.125, true);
-            }
             if (item.getItem() == BPItems.stone_bundle) {
                 GL11.glPushMatrix();
                 {
@@ -178,6 +172,20 @@ public class RenderCircuitTile implements IItemRenderer {
                 GL11.glPopMatrix();
             }
 
+            // Misc renderers
+            rh.setColor(0xFFFFFF);
+            rh.addTransformation(new Translation(0.375, 0, 0.375));
+            Tessellator.instance.startDrawingQuads();
+            if (item.getItem() == BPItems.quartz_resonator_tile) {
+                new GateComponentQuartzResonator(null, -1).renderStatic(new Vec3i(0, 0, 0), rh, 0);
+            }
+            if (item.getItem() == BPItems.silicon_chip_tile) {
+                new GateComponentSiliconChip(null, -1).setState(true).renderStatic(new Vec3i(0, 0, 0), rh, 0);
+            }
+            if (item.getItem() == BPItems.tainted_silicon_chip_tile) {
+                new GateComponentTaintedSiliconChip(null, -1).setState(true).renderStatic(new Vec3i(0, 0, 0), rh, 0);
+            }
+            Tessellator.instance.draw();
             rh.reset();
         }
         GL11.glPopMatrix();
