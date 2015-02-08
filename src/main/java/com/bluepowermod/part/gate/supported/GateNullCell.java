@@ -59,9 +59,9 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class GateNullCell
-        extends
-        GateSupported<GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase>
-        implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor {
+extends
+GateSupported<GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase>
+implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor {
 
     private RedwireType typeA = null, typeB = null;
     private boolean bundledA = false, bundledB = false;
@@ -131,7 +131,7 @@ public class GateNullCell
             renderer.renderBox(new Vec3dCube(7 / 16D, 2 / 16D, 0 / 16D, 9 / 16D,
                     2 / 16D + (height / /* (nullcells[dir.ordinal()] ? 1 : */2/* ) */), 1 / 16D), wire);
             renderer.renderBox(new Vec3dCube(7 / 16D, 2 / 16D, 15 / 16D, 9 / 16D, 2 / 16D + (height / (nullcells[dir.getOpposite()
-                    .ordinal()] ? 1 : 2)), 16 / 16D), wire);
+                                                                                                                 .ordinal()] ? 1 : 2)), 16 / 16D), wire);
         }
 
         if (typeB != null) { // Supported
@@ -367,6 +367,35 @@ public class GateNullCell
 
     // Connectivity and propagation
 
+    @Override
+    public void onUpdate() {
+
+        // Don't to anything if propagation-related stuff is going on
+        if (!RedstoneApi.getInstance().shouldWiresHandleUpdates())
+            return;
+
+        // Do not do anything if we're on the client
+        if (getWorld().isRemote)
+            return;
+
+        // Refresh connections
+        redstoneConnections.recalculateConnections();
+        // bundledConnections.recalculateConnections();
+
+        ForgeDirection d1 = null;
+        ForgeDirection d2 = null;
+        for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
+            if (d != getFace() && d != getFace().getOpposite()) {
+                if (d1 == null)
+                    d1 = d;
+                else if (d2 == null && d != d1.getOpposite())
+                    d2 = d;
+            }
+        }
+        RedstoneApi.getInstance().getRedstonePropagator(this, d1).propagate();
+        RedstoneApi.getInstance().getRedstonePropagator(this, d2).propagate();
+    }
+
     private RedstoneConnectionCache redstoneConnections = new RedstoneConnectionCache(this);
     private boolean updatedA = false;
     private boolean updatedB = false;
@@ -395,7 +424,7 @@ public class GateNullCell
                 return typeB.canConnectTo(((IRedwire) device).getRedwireType());
         }
 
-        return false;
+        return true;
     }
 
     @Override
