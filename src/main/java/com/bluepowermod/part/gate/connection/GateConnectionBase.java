@@ -168,4 +168,11 @@ public abstract class GateConnectionBase implements IGateConnection {
         this.needsSyncing = needsSyncing;
     }
 
+    public GateConnectionBase reset() {
+
+        enabled = false;
+
+        return this;
+    }
+
 }

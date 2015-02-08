@@ -30,6 +30,7 @@ import com.bluepowermod.part.gate.digital.GateNor;
 import com.bluepowermod.part.gate.digital.GateNot;
 import com.bluepowermod.part.gate.digital.GateOr;
 import com.bluepowermod.part.gate.digital.GatePulseFormer;
+import com.bluepowermod.part.gate.digital.GateRSLatch;
 import com.bluepowermod.part.gate.digital.GateRandomizer;
 import com.bluepowermod.part.gate.digital.GateRepeater;
 import com.bluepowermod.part.gate.digital.GateSequencer;
@@ -138,7 +139,7 @@ public class PartManager {
         registerPart(GatePulseFormer.class);
         registerPart(GateRandomizer.class);
         registerPart(GateToggleLatch.class);
-        // registerPart(GateRSLatch.class);
+        registerPart(GateRSLatch.class);
         registerPart(GateStateCell.class);
         registerPart(GateRepeater.class);
         // registerPart(GateTransparentLatch.class);

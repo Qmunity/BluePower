@@ -198,4 +198,15 @@ public class GateConnectionBundledAnalogue extends GateConnectionBase {
 
     }
 
+    @Override
+    public GateConnectionBundledAnalogue reset() {
+
+        super.reset();
+
+        input = new byte[16];
+        output = new byte[16];
+
+        return this;
+    }
+
 }

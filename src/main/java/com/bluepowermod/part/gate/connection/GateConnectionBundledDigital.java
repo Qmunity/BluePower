@@ -203,4 +203,15 @@ public class GateConnectionBundledDigital extends GateConnectionBase {
 
     }
 
+    @Override
+    public GateConnectionBundledDigital reset() {
+
+        super.reset();
+
+        input = new boolean[16];
+        output = new boolean[16];
+
+        return this;
+    }
+
 }

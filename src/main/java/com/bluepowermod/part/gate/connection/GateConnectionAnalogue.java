@@ -195,4 +195,16 @@ public class GateConnectionAnalogue extends GateConnectionBase {
             notifyUpdate();
     }
 
+    @Override
+    public GateConnectionAnalogue reset() {
+
+        super.reset();
+
+        input = 0;
+        output = 0;
+        lastOutput = (byte) 255;
+
+        return this;
+    }
+
 }

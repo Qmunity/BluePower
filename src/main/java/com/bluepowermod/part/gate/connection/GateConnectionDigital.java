@@ -195,4 +195,16 @@ public class GateConnectionDigital extends GateConnectionBase {
             notifyUpdate();
     }
 
+    @Override
+    public GateConnectionDigital reset() {
+
+        super.reset();
+
+        input = false;
+        output = false;
+        lastOutput = true;
+
+        return this;
+    }
+
 }
