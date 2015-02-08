@@ -72,8 +72,8 @@ public class LogicRecipes {
         // TODO: stone_redwire recipe and stone_bundle recipe
 
         {
-            int i = 0;
             for (RedwireType t : RedwireType.values()) {
+                int i = 0;
                 for (MinecraftColor c : MinecraftColor.WIRE_COLORS) {
                     ItemStack stack = PartManager.getPartInfo(
                             "wire." + t.getName() + (c == MinecraftColor.NONE ? "" : "." + c.name().toLowerCase())).getStack(12);
