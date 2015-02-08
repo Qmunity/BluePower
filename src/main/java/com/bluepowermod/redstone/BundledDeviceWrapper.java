@@ -148,7 +148,7 @@ public class BundledDeviceWrapper implements IAdvancedRedstoneConductor {
             IConnection<IRedstoneDevice> c = connections.getConnectionOnSide(d);
             if (c != null)
                 l.add(new Pair<IConnection<IRedstoneDevice>, Boolean>(c, c.getB() instanceof IRedwire && device instanceof IRedwire
-                        && ((IRedwire) c.getB()).getRedwireType() != ((IRedwire) device).getRedwireType()));
+                        && ((IRedwire) c.getB()).getRedwireType(c.getSideB()) != ((IRedwire) device).getRedwireType(c.getSideA())));
         }
 
         return l;

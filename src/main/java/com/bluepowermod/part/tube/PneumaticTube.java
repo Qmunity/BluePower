@@ -429,7 +429,7 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
                 BPPart part = PartManager.getExample(item);
                 if (redwireType == null && part instanceof PartRedwireFaceUninsulated) {
                     if (!getWorld().isRemote) {
-                        redwireType = ((IRedwire) part).getRedwireType();
+                        redwireType = ((IRedwire) part).getRedwireType(ForgeDirection.UNKNOWN);
                         if (!player.capabilities.isCreativeMode)
                             item.stackSize--;
 

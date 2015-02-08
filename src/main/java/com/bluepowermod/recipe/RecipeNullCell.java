@@ -6,6 +6,7 @@ import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 import uk.co.qmunity.lib.part.IPart;
 
 import com.bluepowermod.BluePower;
@@ -259,7 +260,7 @@ public class RecipeNullCell implements IRecipe {
                         IPart p = ((ItemPart) wire.getItem()).createPart(wire, BluePower.proxy.getPlayer(), null, null);
 
                         if (p != null && p instanceof PartRedwireFaceUninsulated) {
-                            RedwireType t = ((PartRedwireFace) p).getRedwireType();
+                            RedwireType t = ((PartRedwireFace) p).getRedwireType(ForgeDirection.UNKNOWN);
                             boolean bundled = false;
                             boolean can = true;
                             if (centerY < 2)
@@ -281,7 +282,7 @@ public class RecipeNullCell implements IRecipe {
                         IPart p = ((ItemPart) wire.getItem()).createPart(wire, BluePower.proxy.getPlayer(), null, null);
 
                         if (p != null && p instanceof PartRedwireFaceUninsulated) {
-                            RedwireType t = ((PartRedwireFace) p).getRedwireType();
+                            RedwireType t = ((PartRedwireFace) p).getRedwireType(ForgeDirection.UNKNOWN);
                             boolean bundled = false;
                             boolean can = true;
                             if (centerY > 0)
@@ -306,9 +307,9 @@ public class RecipeNullCell implements IRecipe {
 
                         if (pA != null && pA instanceof PartRedwireFaceUninsulated && pB != null
                                 && pB instanceof PartRedwireFaceUninsulated) {
-                            RedwireType tA = ((PartRedwireFace) pA).getRedwireType();
+                            RedwireType tA = ((PartRedwireFace) pA).getRedwireType(ForgeDirection.UNKNOWN);
                             boolean bundledA = false;
-                            RedwireType tB = ((PartRedwireFace) pB).getRedwireType();
+                            RedwireType tB = ((PartRedwireFace) pB).getRedwireType(ForgeDirection.UNKNOWN);
                             boolean bundledB = false;
                             boolean can = true;
                             if (centerX > 0)

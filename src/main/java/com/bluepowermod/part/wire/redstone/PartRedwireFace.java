@@ -86,7 +86,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
     }
 
     @Override
-    public RedwireType getRedwireType() {
+    public RedwireType getRedwireType(ForgeDirection side) {
 
         return type;
     }
@@ -159,13 +159,13 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
     @Override
     public boolean hasLoss(ForgeDirection side) {
 
-        return getRedwireType().hasLoss();
+        return getRedwireType(ForgeDirection.UNKNOWN).hasLoss();
     }
 
     @Override
     public boolean isAnalogue(ForgeDirection side) {
 
-        return getRedwireType().isAnalogue();
+        return getRedwireType(ForgeDirection.UNKNOWN).isAnalogue();
     }
 
     // NBT
@@ -214,7 +214,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
         @Override
         public String getType() {
 
-            return "wire." + getRedwireType().getName();
+            return "wire." + getRedwireType(ForgeDirection.UNKNOWN).getName();
         }
 
         @Override
@@ -232,7 +232,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
         @Override
         protected int getColorMultiplier() {
 
-            return WireHelper.getColorForPowerLevel(getRedwireType(), power);
+            return WireHelper.getColorForPowerLevel(getRedwireType(ForgeDirection.UNKNOWN), power);
         }
 
         @Override
@@ -250,8 +250,17 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
                     return false;
             }
 
-            if (device instanceof IRedwire && !getRedwireType().canConnectTo(((IRedwire) device).getRedwireType()))
-                return false;
+            if (device instanceof IRedwire) {
+                RedwireType rwt = getRedwireType(side);
+                if (type == null)
+                    return false;
+                RedwireType rwt_ = ((IRedwire) device).getRedwireType(type == ConnectionType.STRAIGHT ? side.getOpposite()
+                        : (type == ConnectionType.CLOSED_CORNER ? getFace() : getFace().getOpposite()));
+                if (rwt_ == null)
+                    return false;
+                if (!rwt.canConnectTo(rwt_))
+                    return false;
+            }
 
             if (OcclusionHelper.microblockOcclusionTest(getParent(), MicroblockShape.EDGE, 1, getFace(), side))
                 return false;
@@ -340,7 +349,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
                 IConnection<IRedstoneDevice> c = connections.getConnectionOnSide(d);
                 if (c != null)
                     l.add(new Pair<IConnection<IRedstoneDevice>, Boolean>(c, c.getB() instanceof IRedwire
-                            && ((IRedwire) c.getB()).getRedwireType() != getRedwireType()));
+                            && ((IRedwire) c.getB()).getRedwireType(c.getSideB()) != getRedwireType(c.getSideA())));
             }
 
             return l;
@@ -482,7 +491,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
     }
 
     public static class PartRedwireFaceInsulated extends PartRedwireFace implements IAdvancedRedstoneConductor, IInsulatedRedstoneDevice,
-    IAdvancedBundledConductor, IConnectionListener, IInsulatedRedwire {
+            IAdvancedBundledConductor, IConnectionListener, IInsulatedRedwire {
 
         private RedstoneConnectionCache connections = RedstoneApi.getInstance().createRedstoneConnectionCache(this);
         private BundledConnectionCache bundledConnections = RedstoneApi.getInstance().createBundledConnectionCache(this);
@@ -501,7 +510,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
         @Override
         public String getType() {
 
-            return "wire." + getRedwireType().getName() + "." + color.name().toLowerCase();
+            return "wire." + getRedwireType(ForgeDirection.UNKNOWN).getName() + "." + color.name().toLowerCase();
         }
 
         @Override
@@ -547,8 +556,17 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
                     return false;
             }
 
-            if (device instanceof IRedwire && !getRedwireType().canConnectTo(((IRedwire) device).getRedwireType()))
-                return false;
+            if (device instanceof IRedwire) {
+                RedwireType rwt = getRedwireType(side);
+                if (type == null)
+                    return false;
+                RedwireType rwt_ = ((IRedwire) device).getRedwireType(type == ConnectionType.STRAIGHT ? side.getOpposite()
+                        : (type == ConnectionType.CLOSED_CORNER ? getFace() : getFace().getOpposite()));
+                if (rwt_ == null)
+                    return false;
+                if (!rwt.canConnectTo(rwt_))
+                    return false;
+            }
 
             if (OcclusionHelper.microblockOcclusionTest(getParent(), MicroblockShape.EDGE, 1, getFace(), side))
                 return false;
@@ -562,8 +580,17 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
             if (device instanceof IInsulatedRedstoneDevice)
                 return false;
 
-            if (device instanceof IRedwire && !getRedwireType().canConnectTo(((IRedwire) device).getRedwireType()))
-                return false;
+            if (device instanceof IRedwire) {
+                RedwireType rwt = getRedwireType(side);
+                if (type == null)
+                    return false;
+                RedwireType rwt_ = ((IRedwire) device).getRedwireType(type == ConnectionType.STRAIGHT ? side.getOpposite()
+                        : (type == ConnectionType.CLOSED_CORNER ? getFace() : getFace().getOpposite()));
+                if (rwt_ == null)
+                    return false;
+                if (!rwt.canConnectTo(rwt_))
+                    return false;
+            }
 
             if (OcclusionHelper.microblockOcclusionTest(getParent(), MicroblockShape.EDGE, 1, getFace(), side))
                 return false;
@@ -690,13 +717,13 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
                 IConnection<IRedstoneDevice> c = connections.getConnectionOnSide(d);
                 if (c != null)
                     l.add(new Pair<IConnection<IRedstoneDevice>, Boolean>(c, c.getB() instanceof IRedwire
-                            && ((IRedwire) c.getB()).getRedwireType() != getRedwireType()));
+                            && ((IRedwire) c.getB()).getRedwireType(c.getSideB()) != getRedwireType(c.getSideA())));
 
                 IConnection<IBundledDevice> cB = bundledConnections.getConnectionOnSide(d);
                 if (cB != null)
                     l.add(new Pair<IConnection<IRedstoneDevice>, Boolean>(new RedstoneConnection(this, BundledDeviceWrapper.wrap(cB.getB(),
                             color), cB.getSideA(), cB.getSideB(), cB.getType()), cB.getB() instanceof IRedwire
-                            && ((IRedwire) cB.getB()).getRedwireType() != getRedwireType()));
+                            && ((IRedwire) cB.getB()).getRedwireType(cB.getSideB()) != getRedwireType(cB.getSideA())));
             }
 
             return l;
@@ -711,7 +738,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
                 IConnection<IBundledDevice> c = bundledConnections.getConnectionOnSide(d);
                 if (c != null)
                     l.add(new Pair<IConnection<IBundledDevice>, Boolean>(c, c.getB() instanceof IRedwire
-                            && ((IRedwire) c.getB()).getRedwireType() != getRedwireType()));
+                            && ((IRedwire) c.getB()).getRedwireType(c.getSideB()) != getRedwireType(c.getSideA())));
             }
 
             return l;
@@ -836,7 +863,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
             double width = 1 / 32D;
             double height = getHeight() / 16D;
 
-            renderer.setColor(WireHelper.getColorForPowerLevel(getRedwireType(), power));
+            renderer.setColor(WireHelper.getColorForPowerLevel(getRedwireType(ForgeDirection.UNKNOWN), power));
 
             // Center
             if ((s1 && s3) || (s3 && s2) || (s2 && s4) || (s4 && s1)) {
@@ -974,7 +1001,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
         @Override
         public String getType() {
 
-            return "wire." + getRedwireType().getName() + ".bundled"
+            return "wire." + getRedwireType(ForgeDirection.UNKNOWN).getName() + ".bundled"
                     + (color != MinecraftColor.NONE ? ("." + color.name().toLowerCase()) : "");
         }
 
@@ -1067,8 +1094,17 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
                     return false;
             }
 
-            if (device instanceof IRedwire && !getRedwireType().canConnectTo(((IRedwire) device).getRedwireType()))
-                return false;
+            if (device instanceof IRedwire) {
+                RedwireType rwt = getRedwireType(side);
+                if (type == null)
+                    return false;
+                RedwireType rwt_ = ((IRedwire) device).getRedwireType(type == ConnectionType.STRAIGHT ? side.getOpposite()
+                        : (type == ConnectionType.CLOSED_CORNER ? getFace() : getFace().getOpposite()));
+                if (rwt_ == null)
+                    return false;
+                if (!rwt.canConnectTo(rwt_))
+                    return false;
+            }
 
             if (!color.canConnect(device.getBundledColor(type == ConnectionType.STRAIGHT ? side.getOpposite()
                     : (type == ConnectionType.CLOSED_CORNER ? getFace() : getFace().getOpposite()))))
@@ -1138,7 +1174,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
                 IConnection<IBundledDevice> c = bundledConnections.getConnectionOnSide(d);
                 if (c != null)
                     l.add(new Pair<IConnection<IBundledDevice>, Boolean>(c, c.getB() instanceof IRedwire
-                            && ((IRedwire) c.getB()).getRedwireType() != getRedwireType()));
+                            && ((IRedwire) c.getB()).getRedwireType(c.getSideB()) != getRedwireType(c.getSideA())));
             }
 
             return l;
@@ -1258,7 +1294,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
             double width = 1 / 48D;
             double height = getHeight() / 16D;
 
-            renderer.setColor(WireHelper.getColorForPowerLevel(getRedwireType(), (byte) (255 / 2)/* power */));
+            renderer.setColor(WireHelper.getColorForPowerLevel(getRedwireType(ForgeDirection.UNKNOWN), (byte) (255 / 2)/* power */));
 
             // Center
             if ((s1 && s3) || (s3 && s2) || (s2 && s4) || (s4 && s1)) {

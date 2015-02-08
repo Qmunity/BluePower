@@ -75,7 +75,7 @@ import com.bluepowermod.redstone.RedstoneApi;
 import com.bluepowermod.redstone.RedstoneConnectionCache;
 
 public abstract class PartRedwireFreestanding extends PartWireFreestanding implements IRedwire, IRedConductor, IIntegratedCircuitPart,
-        IPartRedstone {
+IPartRedstone {
 
     private RedwireType type;
 
@@ -86,7 +86,7 @@ public abstract class PartRedwireFreestanding extends PartWireFreestanding imple
     }
 
     @Override
-    public RedwireType getRedwireType() {
+    public RedwireType getRedwireType(ForgeDirection side) {
 
         return type;
     }
@@ -181,13 +181,13 @@ public abstract class PartRedwireFreestanding extends PartWireFreestanding imple
     @Override
     public boolean hasLoss(ForgeDirection side) {
 
-        return getRedwireType().hasLoss();
+        return getRedwireType(ForgeDirection.UNKNOWN).hasLoss();
     }
 
     @Override
     public boolean isAnalogue(ForgeDirection side) {
 
-        return getRedwireType().isAnalogue();
+        return getRedwireType(ForgeDirection.UNKNOWN).isAnalogue();
     }
 
     // NBT
@@ -222,7 +222,7 @@ public abstract class PartRedwireFreestanding extends PartWireFreestanding imple
     }
 
     public static class PartRedwireFreestandingUninsulated extends PartRedwireFreestanding implements IAdvancedRedstoneConductor,
-            IConnectionListener {
+    IConnectionListener {
 
         private RedstoneConnectionCache connections = RedstoneApi.getInstance().createRedstoneConnectionCache(this);
         private boolean hasUpdated = false;
@@ -237,7 +237,7 @@ public abstract class PartRedwireFreestanding extends PartWireFreestanding imple
         @Override
         public String getType() {
 
-            return "wire.freestanding." + getRedwireType().getName();
+            return "wire.freestanding." + getRedwireType(ForgeDirection.UNKNOWN).getName();
         }
 
         @Override
@@ -255,7 +255,7 @@ public abstract class PartRedwireFreestanding extends PartWireFreestanding imple
         @Override
         protected int getColorMultiplier() {
 
-            return WireHelper.getColorForPowerLevel(getRedwireType(), power);
+            return WireHelper.getColorForPowerLevel(getRedwireType(ForgeDirection.UNKNOWN), power);
         }
 
         @Override
@@ -269,8 +269,16 @@ public abstract class PartRedwireFreestanding extends PartWireFreestanding imple
                     return false;
             }
 
-            if (device instanceof IRedwire && !getRedwireType().canConnectTo(((IRedwire) device).getRedwireType()))
-                return false;
+            if (device instanceof IRedwire) {
+                RedwireType rwt = getRedwireType(side);
+                if (type == null)
+                    return false;
+                RedwireType rwt_ = ((IRedwire) device).getRedwireType(type == ConnectionType.STRAIGHT ? side.getOpposite() : side);
+                if (rwt_ == null)
+                    return false;
+                if (!rwt.canConnectTo(rwt_))
+                    return false;
+            }
 
             if (OcclusionHelper.microblockOcclusionTest(getParent(), MicroblockShape.FACE_HOLLOW, 1, side))
                 return false;
@@ -356,7 +364,7 @@ public abstract class PartRedwireFreestanding extends PartWireFreestanding imple
                 IConnection<IRedstoneDevice> c = connections.getConnectionOnSide(d);
                 if (c != null)
                     l.add(new Pair<IConnection<IRedstoneDevice>, Boolean>(c, c.getB() instanceof IRedwire
-                            && ((IRedwire) c.getB()).getRedwireType() != getRedwireType()));
+                            && ((IRedwire) c.getB()).getRedwireType(c.getSideB()) != getRedwireType(c.getSideA())));
             }
 
             return l;
@@ -478,7 +486,7 @@ public abstract class PartRedwireFreestanding extends PartWireFreestanding imple
     }
 
     public static class PartRedwireFreestandingInsulated extends PartRedwireFreestanding implements IAdvancedRedstoneConductor,
-            IInsulatedRedstoneDevice, IAdvancedBundledConductor, IConnectionListener {
+    IInsulatedRedstoneDevice, IAdvancedBundledConductor, IConnectionListener {
 
         private RedstoneConnectionCache connections = RedstoneApi.getInstance().createRedstoneConnectionCache(this);
         private BundledConnectionCache bundledConnections = RedstoneApi.getInstance().createBundledConnectionCache(this);
@@ -497,7 +505,7 @@ public abstract class PartRedwireFreestanding extends PartWireFreestanding imple
         @Override
         public String getType() {
 
-            return "wire.freestanding." + getRedwireType().getName() + "." + color.name().toLowerCase();
+            return "wire.freestanding." + getRedwireType(ForgeDirection.UNKNOWN).getName() + "." + color.name().toLowerCase();
         }
 
         @Override
@@ -539,8 +547,17 @@ public abstract class PartRedwireFreestanding extends PartWireFreestanding imple
                     return false;
             }
 
-            if (device instanceof IRedwire && !getRedwireType().canConnectTo(((IRedwire) device).getRedwireType()))
-                return false;
+            if (device instanceof IRedwire) {
+                RedwireType rwt = getRedwireType(side);
+                if (type == null)
+                    return false;
+                RedwireType rwt_ = ((IRedwire) device).getRedwireType(type == ConnectionType.STRAIGHT ? side.getOpposite() : side
+                        .getOpposite());
+                if (rwt_ == null)
+                    return false;
+                if (!rwt.canConnectTo(rwt_))
+                    return false;
+            }
 
             if (OcclusionHelper.microblockOcclusionTest(getParent(), MicroblockShape.FACE_HOLLOW, 1, side))
                 return false;
@@ -691,7 +708,7 @@ public abstract class PartRedwireFreestanding extends PartWireFreestanding imple
                 IConnection<IRedstoneDevice> c = connections.getConnectionOnSide(d);
                 if (c != null)
                     l.add(new Pair<IConnection<IRedstoneDevice>, Boolean>(c, c.getB() instanceof IRedwire
-                            && ((IRedwire) c.getB()).getRedwireType() != getRedwireType()));
+                            && ((IRedwire) c.getB()).getRedwireType(c.getSideB()) != getRedwireType(c.getSideA())));
             }
 
             return l;
@@ -706,7 +723,7 @@ public abstract class PartRedwireFreestanding extends PartWireFreestanding imple
                 IConnection<IBundledDevice> c = bundledConnections.getConnectionOnSide(d);
                 if (c != null)
                     l.add(new Pair<IConnection<IBundledDevice>, Boolean>(c, c.getB() instanceof IRedwire
-                            && ((IRedwire) c.getB()).getRedwireType() != getRedwireType()));
+                            && ((IRedwire) c.getB()).getRedwireType(c.getSideB()) != getRedwireType(c.getSideA())));
             }
 
             return l;
@@ -824,7 +841,7 @@ public abstract class PartRedwireFreestanding extends PartWireFreestanding imple
     }
 
     public static class PartRedwireFreestandingBundled extends PartRedwireFreestanding implements IAdvancedBundledConductor,
-            IConnectionListener {
+    IConnectionListener {
 
         private BundledConnectionCache bundledConnections = RedstoneApi.getInstance().createBundledConnectionCache(this);
         private byte[] power = new byte[16];
@@ -841,7 +858,7 @@ public abstract class PartRedwireFreestanding extends PartWireFreestanding imple
         @Override
         public String getType() {
 
-            return "wire.freestanding." + getRedwireType().getName() + ".bundled"
+            return "wire.freestanding." + getRedwireType(ForgeDirection.UNKNOWN).getName() + ".bundled"
                     + (color != MinecraftColor.NONE ? ("." + color.name().toLowerCase()) : "");
         }
 
@@ -921,8 +938,17 @@ public abstract class PartRedwireFreestanding extends PartWireFreestanding imple
             if ((type == ConnectionType.STRAIGHT || type == ConnectionType.CLOSED_CORNER) && side == ForgeDirection.UNKNOWN)
                 return false;
 
-            if (device instanceof IRedwire && !getRedwireType().canConnectTo(((IRedwire) device).getRedwireType()))
-                return false;
+            if (device instanceof IRedwire) {
+                RedwireType rwt = getRedwireType(side);
+                if (type == null)
+                    return false;
+                RedwireType rwt_ = ((IRedwire) device).getRedwireType(type == ConnectionType.STRAIGHT ? side.getOpposite() : side
+                        .getOpposite());
+                if (rwt_ == null)
+                    return false;
+                if (!rwt.canConnectTo(rwt_))
+                    return false;
+            }
 
             if (!color.canConnect(device.getBundledColor(side.getOpposite())))
                 return false;
@@ -991,7 +1017,7 @@ public abstract class PartRedwireFreestanding extends PartWireFreestanding imple
                 IConnection<IBundledDevice> c = bundledConnections.getConnectionOnSide(d);
                 if (c != null)
                     l.add(new Pair<IConnection<IBundledDevice>, Boolean>(c, c.getB() instanceof IRedwire
-                            && ((IRedwire) c.getB()).getRedwireType() != getRedwireType()));
+                            && ((IRedwire) c.getB()).getRedwireType(c.getSideB()) != getRedwireType(c.getSideA())));
             }
 
             return l;

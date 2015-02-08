@@ -46,6 +46,7 @@ import com.bluepowermod.api.wire.redstone.RedwireType;
 import com.bluepowermod.client.render.IconSupplier;
 import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.item.ItemPart;
+import com.bluepowermod.part.BPPartFaceRotate;
 import com.bluepowermod.part.PartManager;
 import com.bluepowermod.part.gate.connection.GateConnectionBase;
 import com.bluepowermod.part.wire.redstone.PartRedwireFace;
@@ -59,9 +60,9 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class GateNullCell
-        extends
-        GateSupported<GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase>
-        implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor {
+extends
+GateSupported<GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase>
+implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor, IRedwire {
 
     private RedwireType typeA = null, typeB = null;
     private boolean bundledA = false, bundledB = false;
@@ -128,10 +129,10 @@ public class GateNullCell
                 dir = dir.getRotation(getFace());
 
             renderer.renderBox(new Vec3dCube(7 / 16D, 2 / 16D, 1 / 16D, 9 / 16D, 2 / 16D + height, 15 / 16D), wire);
-            renderer.renderBox(new Vec3dCube(7 / 16D, 2 / 16D, 0 / 16D, 9 / 16D,
-                    2 / 16D + (height / /* (nullcells[dir.ordinal()] ? 1 : */2/* ) */), 1 / 16D), wire);
+            renderer.renderBox(new Vec3dCube(7 / 16D, 2 / 16D, 0 / 16D, 9 / 16D, 2 / 16D + (height / (nullcells[dir.ordinal()] ? 1 : 2)),
+                    1 / 16D), wire);
             renderer.renderBox(new Vec3dCube(7 / 16D, 2 / 16D, 15 / 16D, 9 / 16D, 2 / 16D + (height / (nullcells[dir.getOpposite()
-                    .ordinal()] ? 1 : 2)), 16 / 16D), wire);
+                                                                                                                 .ordinal()] ? 1 : 2)), 16 / 16D), wire);
         }
 
         if (typeB != null) { // Supported
@@ -141,10 +142,10 @@ public class GateNullCell
             if (getRotation() % 2 == 1)
                 dir2 = dir2.getRotation(getFace());
 
-            // if (!nullcells[dir2.ordinal()])
-            renderer.renderBox(new Vec3dCube(0 / 16D, 2 / 16D, 7 / 16D, 2 / 16D, 10 / 16D, 9 / 16D), wire);
-            // if (!nullcells[dir2.getOpposite().ordinal()])
-            renderer.renderBox(new Vec3dCube(14 / 16D, 2 / 16D, 7 / 16D, 16 / 16D, 10 / 16D, 9 / 16D), wire);
+            if (!nullcells[dir2.ordinal()])
+                renderer.renderBox(new Vec3dCube(0 / 16D, 2 / 16D, 7 / 16D, 2 / 16D, 10 / 16D, 9 / 16D), wire);
+            if (!nullcells[dir2.getOpposite().ordinal()])
+                renderer.renderBox(new Vec3dCube(14 / 16D, 2 / 16D, 7 / 16D, 16 / 16D, 10 / 16D, 9 / 16D), wire);
             renderer.renderBox(new Vec3dCube(0 / 16D, 10 / 16D, 7 / 16D, 16 / 16D, 12 / 16D, 9 / 16D), wire);
         }
 
@@ -326,11 +327,20 @@ public class GateNullCell
                 buffer.writeBoolean(bundledB);
             }
         }
+
         if (channel == 1 || channel == -1) {
             buffer.writeByte(powerA);
         }
         if (channel == 2 || channel == -1) {
             buffer.writeByte(powerB);
+        }
+
+        if (channel == 3 || channel == -1) {
+            for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
+                IConnection<IRedstoneDevice> c = redstoneConnections.getConnectionOnSide(d);
+                buffer.writeBoolean(c != null && c.getB() instanceof GateNullCell
+                        && (getType(d) == 1 || ((BPPartFaceRotate) c.getB()).getRotation() % 2 == getRotation() % 2));
+            }
         }
     }
 
@@ -361,6 +371,10 @@ public class GateNullCell
         if (channel == 2 || channel == -1) {
             powerB = buffer.readByte();
         }
+
+        if (channel == 3 || channel == -1)
+            for (int i = 0; i < 6; i++)
+                nullcells[i] = buffer.readBoolean();
 
         getWorld().markBlockRangeForRenderUpdate(getX(), getY(), getZ(), getX(), getY(), getZ());
     }
@@ -416,12 +430,14 @@ public class GateNullCell
         }
 
         if (device instanceof IRedwire) {
-            int t = getType(side);
-
-            if (t == 1 && typeA != null)
-                return typeA.canConnectTo(((IRedwire) device).getRedwireType());
-            if (t == 2 && typeB != null)
-                return typeB.canConnectTo(((IRedwire) device).getRedwireType());
+            RedwireType rwt = getRedwireType(side);
+            if (type == null)
+                return false;
+            RedwireType rwt_ = ((IRedwire) device).getRedwireType(type == ConnectionType.STRAIGHT ? side.getOpposite()
+                    : (type == ConnectionType.CLOSED_CORNER ? getFace() : getFace().getOpposite()));
+            if (rwt_ == null)
+                return false;
+            return rwt.canConnectTo(rwt_);
         }
 
         return true;
@@ -489,6 +505,14 @@ public class GateNullCell
     }
 
     @Override
+    public RedwireType getRedwireType(ForgeDirection side) {
+
+        int type = getType(side);
+
+        return type == 0 ? null : (type == 1 ? typeA : typeB);
+    }
+
+    @Override
     public boolean hasLoss(ForgeDirection side) {
 
         int type = getType(side);
@@ -537,6 +561,18 @@ public class GateNullCell
             l.add(new Pair<IConnection<IRedstoneDevice>, Boolean>(c2, false));
 
         return l;
+    }
+
+    @Override
+    public void onConnect(IConnection<?> connection) {
+
+        sendUpdatePacket(3);
+    }
+
+    @Override
+    public void onDisconnect(IConnection<?> connection) {
+
+        sendUpdatePacket(3);
     }
 
     // Placement disabling
@@ -649,7 +685,7 @@ public class GateNullCell
                     renderer.addTransformation(new Rotation(0, 90 * -rotation, 0));
 
                 renderer.setOpacity(0.5);
-                renderer.setColor(WireHelper.getColorForPowerLevel(wire.getRedwireType(), (byte) (255 / 2)));
+                renderer.setColor(WireHelper.getColorForPowerLevel(wire.getRedwireType(ForgeDirection.UNKNOWN), (byte) (255 / 2)));
 
                 ForgeDirection dir = ForgeDirection.NORTH;
                 if (getRotation() % 2 == 1)
@@ -753,7 +789,7 @@ public class GateNullCell
                             if (getWorld().isRemote)
                                 return true;
 
-                            typeB = wire.getRedwireType();
+                            typeB = wire.getRedwireType(ForgeDirection.UNKNOWN);
                             bundledB = false;
                             inWorldB = true;
 
@@ -770,7 +806,7 @@ public class GateNullCell
                             if (getWorld().isRemote)
                                 return true;
 
-                            typeA = wire.getRedwireType();
+                            typeA = wire.getRedwireType(ForgeDirection.UNKNOWN);
                             bundledA = false;
                             inWorldA = true;
 

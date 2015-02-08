@@ -57,6 +57,7 @@ import com.bluepowermod.api.wire.redstone.IBundledDevice;
 import com.bluepowermod.api.wire.redstone.IRedstoneConductor.IAdvancedRedstoneConductor;
 import com.bluepowermod.api.wire.redstone.IRedstoneDevice;
 import com.bluepowermod.api.wire.redstone.IRedwire;
+import com.bluepowermod.api.wire.redstone.RedwireType;
 import com.bluepowermod.api.wireless.IFrequency;
 import com.bluepowermod.api.wireless.IWirelessDevice;
 import com.bluepowermod.client.gui.gate.GuiGateWireless;
@@ -75,9 +76,9 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class GateTransceiver extends
-GateBase<GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase>
-implements IGateLogic<GateTransceiver>, IWirelessDevice, IWirelessGate, IGuiButtonSensitive, IAdvancedRedstoneConductor,
-IAdvancedBundledConductor {
+        GateBase<GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase>
+        implements IGateLogic<GateTransceiver>, IWirelessDevice, IWirelessGate, IGuiButtonSensitive, IAdvancedRedstoneConductor,
+        IAdvancedBundledConductor {
 
     private static final List<GateTransceiver> transceivers = new ArrayList<GateTransceiver>();
 
@@ -363,8 +364,14 @@ IAdvancedBundledConductor {
     @Override
     public boolean canConnect(ForgeDirection side, IRedstoneDevice device, ConnectionType type) {
 
-        if (device instanceof IRedwire && ((IRedwire) device).getRedwireType().isAnalogue() != isAnalogue(side))
-            return false;
+        if (device instanceof IRedwire) {
+            RedwireType rwt = ((IRedwire) device).getRedwireType(type == ConnectionType.STRAIGHT ? side.getOpposite()
+                    : (type == ConnectionType.CLOSED_CORNER ? getFace() : getFace().getOpposite()));
+            if (rwt == null)
+                return false;
+            if (rwt.isAnalogue() != isAnalogue(side))
+                return false;
+        }
 
         return !isBundled && super.canConnect(side, device, type);
     }
@@ -372,8 +379,14 @@ IAdvancedBundledConductor {
     @Override
     public boolean canConnect(ForgeDirection side, IBundledDevice device, ConnectionType type) {
 
-        if (device instanceof IRedwire && ((IRedwire) device).getRedwireType().isAnalogue() != isAnalogue(side))
-            return false;
+        if (device instanceof IRedwire) {
+            RedwireType rwt = ((IRedwire) device).getRedwireType(type == ConnectionType.STRAIGHT ? side.getOpposite()
+                    : (type == ConnectionType.CLOSED_CORNER ? getFace() : getFace().getOpposite()));
+            if (rwt == null)
+                return false;
+            if (rwt.isAnalogue() != isAnalogue(side))
+                return false;
+        }
 
         return isBundled && super.canConnect(side, device, type);
     }

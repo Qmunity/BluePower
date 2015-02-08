@@ -74,12 +74,20 @@ public class RedstoneConductorTube implements IRedstoneConductor, IConnectionLis
     public boolean canConnect(ForgeDirection side, IRedstoneDevice device, ConnectionType type) {
 
         if (type == ConnectionType.STRAIGHT) {
-            if (getRedwireType() == null)
+            if (getRedwireType(side) == null)
                 return false;
 
-            if (device instanceof IRedwire && ((IRedwire) device).getRedwireType() != null
-                    && !((IRedwire) device).getRedwireType().canConnectTo(getRedwireType()))
-                return false;
+            if (device instanceof IRedwire) {
+                RedwireType rwt = getRedwireType(side);
+                if (type == null)
+                    return false;
+                RedwireType rwt_ = ((IRedwire) device).getRedwireType(type == ConnectionType.STRAIGHT ? side.getOpposite() : side
+                        .getOpposite());
+                if (rwt_ == null)
+                    return false;
+                if (!rwt.canConnectTo(rwt_))
+                    return false;
+            }
 
             if (device instanceof IFace)
                 return false;
@@ -178,7 +186,7 @@ public class RedstoneConductorTube implements IRedstoneConductor, IConnectionLis
     }
 
     @Override
-    public RedwireType getRedwireType() {
+    public RedwireType getRedwireType(ForgeDirection side) {
 
         return tube.getRedwireType();
     }
