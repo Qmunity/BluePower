@@ -25,7 +25,9 @@ import cpw.mods.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
 
 public class RecipeNullCell implements IRecipe {
 
-    public RecipeNullCell() {
+    public static final RecipeNullCell instance = new RecipeNullCell();
+
+    private RecipeNullCell() {
 
         FMLCommonHandler.instance().bus().register(this);
     }

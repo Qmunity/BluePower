@@ -68,7 +68,7 @@ implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor, IRedwire {
     private boolean bundledA = false, bundledB = false;
     private boolean inWorldA = false, inWorldB = false;
     private byte powerA, powerB;
-    private boolean[] nullcells = new boolean[6];
+    private boolean[] nullcells = new boolean[7];
 
     public GateNullCell() {
 
@@ -125,8 +125,9 @@ implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor, IRedwire {
             renderer.setColor(WireHelper.getColorForPowerLevel(typeA, powerA));
 
             ForgeDirection dir = ForgeDirection.NORTH;
-            if (getRotation() % 2 == 1)
+            for (int i = 0; i < getRotation(); i++)
                 dir = dir.getRotation(getFace());
+            dir = new Vec3d(0, 0, 0).add(dir).rotateUndo(getFace(), Vec3d.center).toForgeDirection();
 
             renderer.renderBox(new Vec3dCube(7 / 16D, 2 / 16D, 1 / 16D, 9 / 16D, 2 / 16D + height, 15 / 16D), wire);
             renderer.renderBox(new Vec3dCube(7 / 16D, 2 / 16D, 0 / 16D, 9 / 16D, 2 / 16D + (height / (nullcells[dir.ordinal()] ? 1 : 2)),
@@ -138,13 +139,14 @@ implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor, IRedwire {
         if (typeB != null) { // Supported
             renderer.setColor(WireHelper.getColorForPowerLevel(typeB, powerB));
 
-            ForgeDirection dir2 = ForgeDirection.WEST;
-            if (getRotation() % 2 == 1)
-                dir2 = dir2.getRotation(getFace());
+            ForgeDirection dir = ForgeDirection.WEST;
+            for (int i = 0; i < getRotation(); i++)
+                dir = dir.getRotation(getFace());
+            dir = new Vec3d(0, 0, 0).add(dir).rotateUndo(getFace(), Vec3d.center).toForgeDirection();
 
-            if (!nullcells[dir2.ordinal()])
+            if (!nullcells[dir.ordinal()])
                 renderer.renderBox(new Vec3dCube(0 / 16D, 2 / 16D, 7 / 16D, 2 / 16D, 10 / 16D, 9 / 16D), wire);
-            if (!nullcells[dir2.getOpposite().ordinal()])
+            if (!nullcells[dir.getOpposite().ordinal()])
                 renderer.renderBox(new Vec3dCube(14 / 16D, 2 / 16D, 7 / 16D, 16 / 16D, 10 / 16D, 9 / 16D), wire);
             renderer.renderBox(new Vec3dCube(0 / 16D, 10 / 16D, 7 / 16D, 16 / 16D, 12 / 16D, 9 / 16D), wire);
         }
@@ -865,6 +867,16 @@ implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor, IRedwire {
         }
 
         return super.onActivated(player, mop, item);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+
+        if (!(obj instanceof GateNullCell))
+            return false;
+        GateNullCell g = (GateNullCell) obj;
+
+        return g.typeA == typeA && g.bundledA == bundledA && g.typeB == typeB && g.bundledB == bundledB;
     }
 
 }

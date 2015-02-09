@@ -186,6 +186,6 @@ public class LogicRecipes {
                 PartManager.getPartInfo("integratedCircuit7x7").getStack(), 'B', Blocks.bookshelf, 'T', BPBlocks.circuit_table));
 
         // Custom crafting for nullcells
-        GameRegistry.addRecipe(new RecipeNullCell());
+        GameRegistry.addRecipe(RecipeNullCell.instance);
     }
 }
