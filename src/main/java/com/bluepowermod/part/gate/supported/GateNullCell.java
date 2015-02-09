@@ -60,9 +60,9 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class GateNullCell
-extends
-GateSupported<GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase>
-implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor, IRedwire {
+        extends
+        GateSupported<GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase>
+        implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor, IRedwire {
 
     private RedwireType typeA = null, typeB = null;
     private boolean bundledA = false, bundledB = false;
@@ -72,6 +72,7 @@ implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor, IRedwire {
 
     public GateNullCell() {
 
+        redstoneConnections.listen();
     }
 
     public GateNullCell(RedwireType typeA, boolean bundledA, RedwireType typeB, boolean bundledB) {
@@ -81,6 +82,8 @@ implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor, IRedwire {
 
         this.typeB = typeB;
         this.bundledB = bundledB;
+
+        redstoneConnections.listen();
     }
 
     public RedwireType getTypeA() {
@@ -126,14 +129,14 @@ implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor, IRedwire {
 
             ForgeDirection dir = ForgeDirection.NORTH;
             for (int i = 0; i < getRotation(); i++)
-                dir = dir.getRotation(getFace());
+                dir = dir.getRotation(getFace().getOpposite());
             dir = new Vec3d(0, 0, 0).add(dir).rotateUndo(getFace(), Vec3d.center).toForgeDirection();
 
             renderer.renderBox(new Vec3dCube(7 / 16D, 2 / 16D, 1 / 16D, 9 / 16D, 2 / 16D + height, 15 / 16D), wire);
             renderer.renderBox(new Vec3dCube(7 / 16D, 2 / 16D, 0 / 16D, 9 / 16D, 2 / 16D + (height / (nullcells[dir.ordinal()] ? 1 : 2)),
                     1 / 16D), wire);
             renderer.renderBox(new Vec3dCube(7 / 16D, 2 / 16D, 15 / 16D, 9 / 16D, 2 / 16D + (height / (nullcells[dir.getOpposite()
-                                                                                                                 .ordinal()] ? 1 : 2)), 16 / 16D), wire);
+                    .ordinal()] ? 1 : 2)), 16 / 16D), wire);
         }
 
         if (typeB != null) { // Supported
@@ -141,7 +144,7 @@ implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor, IRedwire {
 
             ForgeDirection dir = ForgeDirection.WEST;
             for (int i = 0; i < getRotation(); i++)
-                dir = dir.getRotation(getFace());
+                dir = dir.getRotation(getFace().getOpposite());
             dir = new Vec3d(0, 0, 0).add(dir).rotateUndo(getFace(), Vec3d.center).toForgeDirection();
 
             if (!nullcells[dir.ordinal()])
@@ -433,7 +436,7 @@ implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor, IRedwire {
 
         if (device instanceof IRedwire) {
             RedwireType rwt = getRedwireType(side);
-            if (type == null)
+            if (rwt == null)
                 return false;
             RedwireType rwt_ = ((IRedwire) device).getRedwireType(type == ConnectionType.STRAIGHT ? side.getOpposite()
                     : (type == ConnectionType.CLOSED_CORNER ? getFace() : getFace().getOpposite()));
