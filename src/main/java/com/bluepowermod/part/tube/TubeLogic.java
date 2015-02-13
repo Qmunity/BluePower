@@ -178,7 +178,7 @@ public class TubeLogic implements IPneumaticTube {
                         else
                             remainder = null;
                     }
-                    if (remainder != null)
+                    if (remainder == null)
                         remainder = IOHelper.insert(output, remainder, tubeStack.heading.getOpposite(), tubeStack.color, false);
                     if (remainder != null) {
                         if (injectStack(remainder, tubeStack.heading.getOpposite(), tubeStack.color, true)) {
