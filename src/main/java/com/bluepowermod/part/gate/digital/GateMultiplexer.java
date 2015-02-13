@@ -13,7 +13,7 @@ public class GateMultiplexer extends GateSimpleDigital {
     private GateComponentTorch t1, t2, t3, t4;
     private GateComponentWire w1, w2;
 
-    private ShiftingBuffer<Boolean> buf = new ShiftingBuffer<Boolean>(6, 2, false);
+    private ShiftingBuffer<Boolean> buf = null;
 
     @Override
     protected void initializeConnections() {
@@ -50,6 +50,16 @@ public class GateMultiplexer extends GateSimpleDigital {
     @Override
     public void doLogic() {
 
+        if (buf == null) {
+            buf = new ShiftingBuffer<Boolean>(6, 2, false);
+
+            buf.set(4, true);
+            buf.set(0, true);
+            buf.set(3, true);
+
+            buf.shift();
+        }
+
         buf.set(0, back().getInput());
         buf.set(1, left().getInput());
         buf.set(2, right().getInput());
@@ -60,6 +70,16 @@ public class GateMultiplexer extends GateSimpleDigital {
 
         if (getWorld().isRemote)
             return;
+
+        if (buf == null) {
+            buf = new ShiftingBuffer<Boolean>(6, 2, false);
+
+            buf.set(4, true);
+            buf.set(0, true);
+            buf.set(3, true);
+
+            buf.shift();
+        }
 
         buf.shift();
 
