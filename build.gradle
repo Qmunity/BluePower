@@ -65,7 +65,7 @@ dependencies {
     compile "mcp.mobius.waila:Waila:1.5.7a_1.7.10"
     compile "li.cil.oc:OpenComputers:MC1.7.10-1.4.2.16:api"
     compile 'net.industrial-craft:industrialcraft-2:2.2.658-experimental:api'
-    compile "qmunity:QmunityLib:0.1.82:deobf"
+    compile "qmunity:QmunityLib:0.1.83:deobf"
 }
 
 minecraft {
