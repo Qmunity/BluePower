@@ -17,6 +17,8 @@
 
 package com.bluepowermod.part.gate.digital;
 
+import uk.co.qmunity.lib.misc.ShiftingBuffer;
+
 import com.bluepowermod.api.wire.redstone.RedwireType;
 import com.bluepowermod.part.gate.component.GateComponentBorder;
 import com.bluepowermod.part.gate.component.GateComponentTorch;
@@ -24,7 +26,7 @@ import com.bluepowermod.part.gate.component.GateComponentWire;
 
 public class GatePulseFormer extends GateSimpleDigital {
 
-    private final boolean power[] = new boolean[4];
+    private ShiftingBuffer<Boolean> buf = new ShiftingBuffer<Boolean>(1, 4, false);
     private GateComponentTorch t1, t2, t3;
     private GateComponentWire w1, w2;
 
@@ -60,7 +62,7 @@ public class GatePulseFormer extends GateSimpleDigital {
     @Override
     public void doLogic() {
 
-        power[0] = back().getInput();
+        buf.set(0, back().getInput());
     }
 
     @Override
@@ -69,17 +71,15 @@ public class GatePulseFormer extends GateSimpleDigital {
         if (getWorld().isRemote)
             return;
 
-        power[3] = power[2];
-        power[2] = power[1];
-        power[1] = power[0];
+        buf.shift();
 
-        t1.setState(!power[1]);
-        w2.setPower(!power[1] ? (byte) 255 : 0);
-        t2.setState(power[2]);
+        t1.setState(!buf.get(0, 1));
+        w2.setPower(!buf.get(0, 1) ? (byte) 255 : 0);
+        t2.setState(buf.get(0, 2));
 
-        t3.setState(!power[2] && power[1]);
+        t3.setState(!buf.get(0, 2) && buf.get(0, 1));
 
-        front().setOutput(!power[2] && power[1]);
-        w1.setPower(!(!power[2] && power[1]) ? (byte) 255 : 0);
+        front().setOutput(!buf.get(0, 2) && buf.get(0, 1));
+        w1.setPower(!(!buf.get(0, 2) && buf.get(0, 1)) ? (byte) 255 : 0);
     }
 }

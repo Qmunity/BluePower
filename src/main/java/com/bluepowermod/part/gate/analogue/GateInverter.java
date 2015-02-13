@@ -1,5 +1,7 @@
 package com.bluepowermod.part.gate.analogue;
 
+import net.minecraft.nbt.NBTTagCompound;
+import uk.co.qmunity.lib.misc.ShiftingBuffer;
 import uk.co.qmunity.lib.util.Dir;
 
 import com.bluepowermod.api.wire.redstone.RedwireType;
@@ -10,7 +12,7 @@ import com.bluepowermod.part.gate.connection.GateConnectionAnalogue;
 
 public class GateInverter extends GateSimpleAnalogue {
 
-    private byte[] power = new byte[3];
+    private ShiftingBuffer<Byte> buf = new ShiftingBuffer<Byte>(1, 3, (byte) 0);
 
     private GateComponentTorch t;
 
@@ -46,16 +48,18 @@ public class GateInverter extends GateSimpleAnalogue {
     @Override
     public void doLogic() {
 
-        power[0] = back().getInput();
+        buf.set(0, back().getInput());
     }
 
     @Override
     public void tick() {
 
-        power[2] = power[1];
-        power[1] = power[0];
+        if (getWorld().isRemote)
+            return;
 
-        byte state = (byte) (255 - (power[2] & 0xFF));
+        buf.shift();
+
+        byte state = (byte) (255 - (buf.get(0) & 0xFF));
 
         t.setState((state & 0xFF) > 0);
 
@@ -90,6 +94,22 @@ public class GateInverter extends GateSimpleAnalogue {
             front().enable();
         }
         return true;
+    }
+
+    @Override
+    public void writeToNBT(NBTTagCompound tag) {
+
+        super.writeToNBT(tag);
+
+        buf.writeToNBT(tag, "buffer");
+    }
+
+    @Override
+    public void readFromNBT(NBTTagCompound tag) {
+
+        super.readFromNBT(tag);
+
+        buf.readFromNBT(tag, "buffer");
     }
 
 }

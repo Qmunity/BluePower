@@ -83,8 +83,10 @@ public class GateSequencer extends GateSimpleDigital implements IGuiButtonSensit
     @Override
     public void tick() {
 
-        if (getWorld().isRemote)
+        if (getWorld().isRemote) {
+            // FIXME
             return;
+        }
 
         if (ticks % 500 == 0) {
             p.setIncrement(0);

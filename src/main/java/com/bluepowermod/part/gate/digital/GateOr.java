@@ -10,6 +10,7 @@ package com.bluepowermod.part.gate.digital;
 import java.util.List;
 
 import net.minecraft.client.resources.I18n;
+import net.minecraft.nbt.NBTTagCompound;
 import uk.co.qmunity.lib.misc.ShiftingBuffer;
 import uk.co.qmunity.lib.util.Dir;
 
@@ -127,5 +128,21 @@ public class GateOr extends GateSimpleDigital {
                 + (back().isEnabled() ? Color.GREEN + I18n.format("random.enabled") : Color.RED + I18n.format("random.disabled")));
         info.add("  " + Dir.RIGHT.getLocalizedName() + ": "
                 + (right().isEnabled() ? Color.GREEN + I18n.format("random.enabled") : Color.RED + I18n.format("random.disabled")));
+    }
+
+    @Override
+    public void writeToNBT(NBTTagCompound tag) {
+
+        super.writeToNBT(tag);
+
+        buf.writeToNBT(tag, "buffer");
+    }
+
+    @Override
+    public void readFromNBT(NBTTagCompound tag) {
+
+        super.readFromNBT(tag);
+
+        buf.readFromNBT(tag, "buffer");
     }
 }

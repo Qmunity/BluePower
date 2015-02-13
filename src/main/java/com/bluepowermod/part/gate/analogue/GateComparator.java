@@ -43,10 +43,10 @@ public class GateComparator extends GateSimpleAnalogue {
     public void initComponents() {
 
         addComponent(t1 = new GateComponentTorch(this, 0x0000FF, 4 / 16D, false).setState(true));
-        addComponent(t2 = new GateComponentTorch(this, 0x6F00B5, 4 / 16D, false).setState(false));
-        addComponent(t3 = new GateComponentTorch(this, 0x3e94dc, 5 / 16D, false).setState(true));
+        addComponent(t2 = new GateComponentTorch(this, 0x6F00B5, 4 / 16D, false).setState(true));
+        addComponent(t3 = new GateComponentTorch(this, 0x3e94dc, 5 / 16D, false).setState(false));
 
-        addComponent(w = new GateComponentWire(this, 0x18FF00, RedwireType.RED_ALLOY));
+        addComponent(w = new GateComponentWire(this, 0x18FF00, RedwireType.RED_ALLOY).setPower((byte) 255));
         addComponent(new GateComponentWire(this, 0xFFF600, RedwireType.RED_ALLOY).bind(right()));
         addComponent(new GateComponentWire(this, 0xC600FF, RedwireType.RED_ALLOY).bind(back()));
         addComponent(new GateComponentWire(this, 0xFF0000, RedwireType.RED_ALLOY).bind(left()));
@@ -85,8 +85,8 @@ public class GateComparator extends GateSimpleAnalogue {
         t2.setState(right().getInput() == 0);
 
         w.setPower((byte) (255 - (power & 0xFF)));
-        t3.setState(power == 0);
-        front().setOutput((byte) Math.max(power - Math.max(left().getInput() & 0xFF, right().getInput() & 0xFF), 0));
+        t3.setState(power != 0);
+        front().setOutput((byte) Math.max((power & 0xFF) - Math.max(left().getInput() & 0xFF, right().getInput() & 0xFF), 0));
     }
 
     @Override

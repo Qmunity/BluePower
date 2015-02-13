@@ -8,9 +8,11 @@ import net.minecraft.nbt.NBTTagCompound;
 import uk.co.qmunity.lib.helper.RedstoneHelper;
 import uk.co.qmunity.lib.util.Dir;
 
+import com.bluepowermod.api.wire.IConnection;
 import com.bluepowermod.api.wire.redstone.IBundledDevice;
 import com.bluepowermod.api.wire.redstone.IRedstoneDevice;
 import com.bluepowermod.part.gate.GateBase;
+import com.bluepowermod.redstone.DummyRedstoneDevice;
 
 public class GateConnectionDigital extends GateConnectionBase {
 
@@ -25,7 +27,9 @@ public class GateConnectionDigital extends GateConnectionBase {
     @Override
     public void refresh() {
 
-        if (getGate().getRedstoneConnectionCache().getConnectionOnSide(getForgeDirection()) == null)
+        IConnection<? extends IRedstoneDevice> c = gate.getRedstoneConnectionCache().getConnectionOnSide(getForgeDirection());
+
+        if (c == null || c.getB() instanceof DummyRedstoneDevice)
             input = RedstoneHelper.getInput(getGate().getWorld(), getGate().getX(), getGate().getY(), getGate().getZ(),
                     getForgeDirection(), getGate().getFace()) > 0;
     }

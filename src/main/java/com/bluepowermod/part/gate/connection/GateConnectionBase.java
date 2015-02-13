@@ -14,6 +14,7 @@ import com.bluepowermod.api.gate.IGateConnection;
 import com.bluepowermod.api.wire.IConnection;
 import com.bluepowermod.api.wire.redstone.IRedstoneDevice;
 import com.bluepowermod.part.gate.GateBase;
+import com.bluepowermod.redstone.DummyRedstoneDevice;
 import com.bluepowermod.redstone.RedstoneApi;
 
 public abstract class GateConnectionBase implements IGateConnection {
@@ -57,7 +58,7 @@ public abstract class GateConnectionBase implements IGateConnection {
         ForgeDirection d = getForgeDirection();
         IConnection<? extends IRedstoneDevice> c = gate.getRedstoneConnectionCache().getConnectionOnSide(d);
 
-        if (c == null) {
+        if (c == null || c.getB() instanceof DummyRedstoneDevice) {
             World world = gate.getWorld();
             int x = gate.getX(), y = gate.getY(), z = gate.getZ();
 

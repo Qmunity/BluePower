@@ -1,5 +1,6 @@
 package com.bluepowermod.part.gate.digital;
 
+import net.minecraft.nbt.NBTTagCompound;
 import uk.co.qmunity.lib.misc.ShiftingBuffer;
 
 import com.bluepowermod.api.wire.redstone.RedwireType;
@@ -76,5 +77,21 @@ public class GateMultiplexer extends GateSimpleDigital {
         buf.set(3, !buf.get(0));
         buf.set(4, (!buf.get(0) && !buf.get(2)) || (!buf.get(3) && !buf.get(1)));
         buf.set(5, !buf.get(4));
+    }
+
+    @Override
+    public void writeToNBT(NBTTagCompound tag) {
+
+        super.writeToNBT(tag);
+
+        buf.writeToNBT(tag, "buffer");
+    }
+
+    @Override
+    public void readFromNBT(NBTTagCompound tag) {
+
+        super.readFromNBT(tag);
+
+        buf.readFromNBT(tag, "buffer");
     }
 }
