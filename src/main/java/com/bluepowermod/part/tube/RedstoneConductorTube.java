@@ -91,7 +91,7 @@ public class RedstoneConductorTube implements IRedstoneConductor, IConnectionLis
 
             if (device instanceof IFace)
                 return false;
-            if (OcclusionHelper.microblockOcclusionTest(new Vec3i(this), MicroblockShape.FACE_HOLLOW, 8, side))
+            if (!OcclusionHelper.microblockOcclusionTest(new Vec3i(this), MicroblockShape.FACE_HOLLOW, 8, side))
                 return false;
             if (device instanceof RedstoneConductorTube)
                 if (((RedstoneConductorTube) device).tube instanceof MagTube != tube instanceof MagTube)
