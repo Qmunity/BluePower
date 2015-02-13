@@ -1,5 +1,9 @@
 package com.bluepowermod.part.gate.digital;
 
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
+
 import net.minecraft.nbt.NBTTagCompound;
 import uk.co.qmunity.lib.misc.ShiftingBuffer;
 
@@ -18,6 +22,10 @@ public class GateRSLatch extends GateSimpleDigital {
     private GateComponentWire w1, w2;
 
     private ShiftingBuffer<Boolean> buf;
+
+    public GateRSLatch() {
+
+    }
 
     @Override
     protected void initializeConnections() {
@@ -123,13 +131,22 @@ public class GateRSLatch extends GateSimpleDigital {
         buf = null;
         doLogic();
 
+        sendUpdatePacket(1);
+
         return true;
     }
 
     @Override
     public void writeToNBT(NBTTagCompound tag) {
 
+        tag.setInteger("mode", mode);
+
         super.writeToNBT(tag);
+
+        if (buf == null) {
+            buf = new ShiftingBuffer<Boolean>(4, 2, false);
+            buf.set(mode == 0 || mode == 3 ? 3 : 2, true);
+        }
 
         buf.writeToNBT(tag, "buffer");
     }
@@ -137,9 +154,37 @@ public class GateRSLatch extends GateSimpleDigital {
     @Override
     public void readFromNBT(NBTTagCompound tag) {
 
+        int lastMode = mode;
+        mode = tag.getInteger("mode");
+
         super.readFromNBT(tag);
 
+        buf = new ShiftingBuffer<Boolean>(4, 2, false);
+        buf.set(mode == 0 || mode == 3 ? 3 : 2, true);
+
         buf.readFromNBT(tag, "buffer");
+    }
+
+    @Override
+    public void writeUpdateData(DataOutput buffer, int channel) throws IOException {
+
+        buffer.writeInt(mode);
+
+        super.writeUpdateData(buffer, channel);
+    }
+
+    @Override
+    public void readUpdateData(DataInput buffer, int channel) throws IOException {
+
+        mode = buffer.readInt();
+
+        if (channel == 1) {
+            getComponents().clear();
+            initComponents();
+            buf = null;
+        }
+
+        super.readUpdateData(buffer, channel);
     }
 
 }

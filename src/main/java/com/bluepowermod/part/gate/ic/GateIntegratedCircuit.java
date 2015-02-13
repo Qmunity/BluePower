@@ -7,15 +7,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.client.renderer.RenderBlocks;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.IIcon;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import uk.co.qmunity.lib.client.render.RenderHelper;
 import uk.co.qmunity.lib.part.IPart;
 import uk.co.qmunity.lib.part.IPartFace;
+import uk.co.qmunity.lib.part.IPartPlacement;
 import uk.co.qmunity.lib.part.IPartTicking;
 import uk.co.qmunity.lib.part.IPartUpdateListener;
 import uk.co.qmunity.lib.part.PartRegistry;
@@ -32,6 +36,7 @@ import uk.co.qmunity.lib.vec.Vec3i;
 import com.bluepowermod.api.gate.IGateComponent;
 import com.bluepowermod.api.gate.IGateLogic;
 import com.bluepowermod.api.gate.IIntegratedCircuitPart;
+import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.api.wire.redstone.IBundledDevice;
 import com.bluepowermod.api.wire.redstone.IBundledDeviceWrapper;
 import com.bluepowermod.api.wire.redstone.IRedstoneDevice;
@@ -40,13 +45,14 @@ import com.bluepowermod.item.ItemPart;
 import com.bluepowermod.part.gate.GateBase;
 import com.bluepowermod.part.gate.component.GateComponentBorder;
 import com.bluepowermod.part.gate.connection.GateConnectionBase;
+import com.bluepowermod.util.DebugHelper;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class GateIntegratedCircuit extends
-GateBase<GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase>
-implements IGateLogic<GateIntegratedCircuit>, IRedstoneDeviceWrapper, IBundledDeviceWrapper {
+        GateBase<GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase>
+        implements IGateLogic<GateIntegratedCircuit>, IRedstoneDeviceWrapper, IBundledDeviceWrapper {
 
     private int size;
     private IIntegratedCircuitPart[][] parts = null;
@@ -561,5 +567,24 @@ implements IGateLogic<GateIntegratedCircuit>, IRedstoneDeviceWrapper, IBundledDe
         if (p instanceof IBundledDevice)
             return (IBundledDevice) p;
         return null;
+    }
+
+    @Override
+    public IPartPlacement getPlacement(IPart part, World world, Vec3i location, ForgeDirection face, MovingObjectPosition mop,
+            EntityPlayer player) {
+
+        if (!DebugHelper.isDebugModeEnabled())
+            return null;
+
+        return super.getPlacement(part, world, location, face, mop, player);
+    }
+
+    @Override
+    public void addTooltip(ItemStack item, List<String> tip) {
+
+        if (!DebugHelper.isDebugModeEnabled())
+            tip.add(MinecraftColor.RED + I18n.format("Disabled temporarily. Still not fully working."));
+        else
+            tip.add(MinecraftColor.CYAN + I18n.format("Disabled temporarily. Still not fully working."));
     }
 }

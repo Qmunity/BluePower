@@ -112,6 +112,16 @@ public class GateMultiplexer extends GateSimpleDigital {
 
         super.readFromNBT(tag);
 
+        if (buf == null) {
+            buf = new ShiftingBuffer<Boolean>(6, 2, false);
+
+            buf.set(4, true);
+            buf.set(0, true);
+            buf.set(3, true);
+
+            buf.shift();
+        }
+
         buf.readFromNBT(tag, "buffer");
     }
 }

@@ -76,9 +76,9 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class GateTransceiver extends
-        GateBase<GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase>
-        implements IGateLogic<GateTransceiver>, IWirelessDevice, IWirelessGate, IGuiButtonSensitive, IAdvancedRedstoneConductor,
-        IAdvancedBundledConductor {
+GateBase<GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase>
+implements IGateLogic<GateTransceiver>, IWirelessDevice, IWirelessGate, IGuiButtonSensitive, IAdvancedRedstoneConductor,
+IAdvancedBundledConductor {
 
     private static final List<GateTransceiver> transceivers = new ArrayList<GateTransceiver>();
 
@@ -440,6 +440,8 @@ public class GateTransceiver extends
 
         if (!DebugHelper.isDebugModeEnabled())
             tip.add(MinecraftColor.RED + I18n.format("Disabled temporarily. Still not fully working."));
+        else
+            tip.add(MinecraftColor.CYAN + I18n.format("Disabled temporarily. Still not fully working."));
     }
 
 }
