@@ -124,8 +124,6 @@ IPartInteractable, IDatabaseSaveable, IPartWAILAProvider {
     @Override
     public void onNeighborTileChange() {
 
-        if (!getWorld().isRemote)
-            onUpdate();
     }
 
     @Override

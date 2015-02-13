@@ -266,7 +266,7 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
             if (otherTubeColor != TubeColor.NONE && getColor(dir) != TubeColor.NONE && getColor(dir) != otherTubeColor)
                 return false;
         }
-        return getWorld() == null || !OcclusionHelper.microblockOcclusionTest(getParent(), MicroblockShape.FACE_HOLLOW, 8, dir);
+        return getWorld() == null && OcclusionHelper.microblockOcclusionTest(getParent(), MicroblockShape.FACE_HOLLOW, 8, dir);
     }
 
     @Override

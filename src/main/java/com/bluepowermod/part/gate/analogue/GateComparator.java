@@ -33,6 +33,13 @@ public class GateComparator extends GateSimpleAnalogue {
     }
 
     @Override
+    public void onNeighborTileChange() {
+
+        if (!getWorld().isRemote)
+            onUpdate();
+    }
+
+    @Override
     public void initComponents() {
 
         addComponent(t1 = new GateComponentTorch(this, 0x0000FF, 4 / 16D, false).setState(true));

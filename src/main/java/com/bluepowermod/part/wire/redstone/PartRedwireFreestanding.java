@@ -75,7 +75,7 @@ import com.bluepowermod.redstone.RedstoneApi;
 import com.bluepowermod.redstone.RedstoneConnectionCache;
 
 public abstract class PartRedwireFreestanding extends PartWireFreestanding implements IRedwire, IRedConductor, IIntegratedCircuitPart,
-IPartRedstone {
+        IPartRedstone {
 
     private RedwireType type;
 
@@ -222,7 +222,7 @@ IPartRedstone {
     }
 
     public static class PartRedwireFreestandingUninsulated extends PartRedwireFreestanding implements IAdvancedRedstoneConductor,
-    IConnectionListener {
+            IConnectionListener {
 
         private RedstoneConnectionCache connections = RedstoneApi.getInstance().createRedstoneConnectionCache(this);
         private boolean hasUpdated = false;
@@ -280,7 +280,7 @@ IPartRedstone {
                     return false;
             }
 
-            if (OcclusionHelper.microblockOcclusionTest(getParent(), MicroblockShape.FACE_HOLLOW, 1, side))
+            if (!OcclusionHelper.microblockOcclusionTest(getParent(), MicroblockShape.FACE_HOLLOW, 1, side))
                 return false;
 
             return true;
@@ -486,7 +486,7 @@ IPartRedstone {
     }
 
     public static class PartRedwireFreestandingInsulated extends PartRedwireFreestanding implements IAdvancedRedstoneConductor,
-    IInsulatedRedstoneDevice, IAdvancedBundledConductor, IConnectionListener {
+            IInsulatedRedstoneDevice, IAdvancedBundledConductor, IConnectionListener {
 
         private RedstoneConnectionCache connections = RedstoneApi.getInstance().createRedstoneConnectionCache(this);
         private BundledConnectionCache bundledConnections = RedstoneApi.getInstance().createBundledConnectionCache(this);
@@ -559,7 +559,7 @@ IPartRedstone {
                     return false;
             }
 
-            if (OcclusionHelper.microblockOcclusionTest(getParent(), MicroblockShape.FACE_HOLLOW, 1, side))
+            if (!OcclusionHelper.microblockOcclusionTest(getParent(), MicroblockShape.FACE_HOLLOW, 1, side))
                 return false;
 
             return true;
@@ -841,7 +841,7 @@ IPartRedstone {
     }
 
     public static class PartRedwireFreestandingBundled extends PartRedwireFreestanding implements IAdvancedBundledConductor,
-    IConnectionListener {
+            IConnectionListener {
 
         private BundledConnectionCache bundledConnections = RedstoneApi.getInstance().createBundledConnectionCache(this);
         private byte[] power = new byte[16];
@@ -953,7 +953,7 @@ IPartRedstone {
             if (!color.canConnect(device.getBundledColor(side.getOpposite())))
                 return false;
 
-            if (OcclusionHelper.microblockOcclusionTest(getParent(), MicroblockShape.EDGE, 1, side, side))
+            if (!OcclusionHelper.microblockOcclusionTest(getParent(), MicroblockShape.EDGE, 1, side, side))
                 return false;
 
             return true;

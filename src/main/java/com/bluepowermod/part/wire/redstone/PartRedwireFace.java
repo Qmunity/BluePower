@@ -262,7 +262,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
                     return false;
             }
 
-            if (OcclusionHelper.microblockOcclusionTest(getParent(), MicroblockShape.EDGE, 1, getFace(), side))
+            if (!OcclusionHelper.microblockOcclusionTest(getParent(), MicroblockShape.EDGE, 2, getFace(), side))
                 return false;
 
             return true;
@@ -491,7 +491,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
     }
 
     public static class PartRedwireFaceInsulated extends PartRedwireFace implements IAdvancedRedstoneConductor, IInsulatedRedstoneDevice,
-            IAdvancedBundledConductor, IConnectionListener, IInsulatedRedwire {
+    IAdvancedBundledConductor, IConnectionListener, IInsulatedRedwire {
 
         private RedstoneConnectionCache connections = RedstoneApi.getInstance().createRedstoneConnectionCache(this);
         private BundledConnectionCache bundledConnections = RedstoneApi.getInstance().createBundledConnectionCache(this);
@@ -568,7 +568,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
                     return false;
             }
 
-            if (OcclusionHelper.microblockOcclusionTest(getParent(), MicroblockShape.EDGE, 1, getFace(), side))
+            if (!OcclusionHelper.microblockOcclusionTest(getParent(), MicroblockShape.EDGE, 2, getFace(), side))
                 return false;
 
             return true;
@@ -592,7 +592,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
                     return false;
             }
 
-            if (OcclusionHelper.microblockOcclusionTest(getParent(), MicroblockShape.EDGE, 1, getFace(), side))
+            if (!OcclusionHelper.microblockOcclusionTest(getParent(), MicroblockShape.EDGE, 2, getFace(), side))
                 return false;
 
             return true;
@@ -1110,7 +1110,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
                     : (type == ConnectionType.CLOSED_CORNER ? getFace() : getFace().getOpposite()))))
                 return false;
 
-            if (OcclusionHelper.microblockOcclusionTest(getParent(), MicroblockShape.EDGE, 1, getFace(), side))
+            if (!OcclusionHelper.microblockOcclusionTest(getParent(), MicroblockShape.EDGE, 2, getFace(), side))
                 return false;
 
             return true;
