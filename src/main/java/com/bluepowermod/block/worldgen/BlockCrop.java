@@ -322,7 +322,7 @@ public class BlockCrop extends BlockCrops implements IGrowable {
         if ((world.getBlockMetadata(x, y , z) == 8) && (world.getBlockMetadata(x, y - 1, z) != 7)) {
             world.setBlockToAir(x, y, z);
         }
-        if ((world.getBlockMetadata(x, y, z) < 8) && (world.getBlock(x,y - 1, z) instanceof BlockCrop)) {
+        if ((world.getBlockMetadata(x, y, z) < 8) && (world.getBlock(x, y - 1, z) instanceof BlockCrop)) {
             world.setBlockToAir(x, y, z);
         }
         this.checkAndDropBlock(world, x, y, z);
@@ -348,7 +348,7 @@ public class BlockCrop extends BlockCrops implements IGrowable {
     public boolean canBlockStay(World world, int x, int y, int z) {
 
         if (world.getBlock(x, y, z) != this) return super.canBlockStay(world, x, y, z);
-        if (world.getBlock(x, y - 1, z).canSustainPlant(world, x, y, z, ForgeDirection.UP, this) && world.getBlock(x, y - 1, z).isFertile(world, x, y, z)) {
+        if (world.getBlock(x, y - 1, z).canSustainPlant(world, x, y - 1, z, ForgeDirection.UP, this) && world.getBlock(x, y - 1, z).isFertile(world, x, y - 1, z)) {
             return true;
         }
         return (world.getBlock(x, y - 1, z) instanceof com.bluepowermod.block.worldgen.BlockCrop) && (world.getBlockMetadata(x, y - 1, z) == 7);
