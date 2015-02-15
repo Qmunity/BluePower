@@ -41,6 +41,7 @@ import uk.co.qmunity.lib.vec.Vec3i;
 
 import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.api.wire.ConnectionType;
+import com.bluepowermod.api.wire.IConnection;
 import com.bluepowermod.api.wire.IConnectionCache;
 import com.bluepowermod.api.wire.redstone.IRedstoneDevice;
 import com.bluepowermod.init.BPCreativeTabs;
@@ -328,8 +329,8 @@ public abstract class PartLamp extends BPPartFace implements IPartRedstone, IRed
 
         int pow = 0;
         for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
-            IRedstoneDevice dev = connections.getConnectionOnSide(d).getB();
-            if (dev != null) {
+            IConnection<IRedstoneDevice> con = connections.getConnectionOnSide(d);
+            if (con != null) {
                 pow = Math.max(pow, input[d.ordinal()] & 0xFF);
             } else {
                 pow = Math.max(pow, MathHelper.map(RedstoneHelper.getInput(getWorld(), getX(), getY(), getZ(), d), 0, 15, 0, 255));
