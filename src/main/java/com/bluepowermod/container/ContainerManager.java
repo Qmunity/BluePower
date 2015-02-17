@@ -24,10 +24,10 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import uk.co.qmunity.lib.client.gui.GuiContainerBase;
 
 import com.bluepowermod.ClientProxy;
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
-import com.bluepowermod.client.gui.GuiBase;
 import com.bluepowermod.tile.tier3.TileManager;
 
 import cpw.mods.fml.relauncher.Side;
@@ -45,6 +45,7 @@ public class ContainerManager extends ContainerMachineBase {
     private int fuzzySetting = -0;
 
     public ContainerManager(InventoryPlayer invPlayer, TileManager manager) {
+
         super(manager);
         tileManager = manager;
 
@@ -107,19 +108,19 @@ public class ContainerManager extends ContainerMachineBase {
 
         if (id == 0) {
             tileManager.filterColor = TubeColor.values()[value];
-            ((GuiBase) ClientProxy.getOpenedGui()).redraw();
+            ((GuiContainerBase) ClientProxy.getOpenedGui()).redraw();
         }
         if (id == 1) {
             tileManager.priority = value;
-            ((GuiBase) ClientProxy.getOpenedGui()).redraw();
+            ((GuiContainerBase) ClientProxy.getOpenedGui()).redraw();
         }
         if (id == 2) {
             tileManager.mode = value;
-            ((GuiBase) ClientProxy.getOpenedGui()).redraw();
+            ((GuiContainerBase) ClientProxy.getOpenedGui()).redraw();
         }
         if (id == 3) {
             tileManager.fuzzySetting = value;
-            ((GuiBase) ClientProxy.getOpenedGui()).redraw();
+            ((GuiContainerBase) ClientProxy.getOpenedGui()).redraw();
         }
     }
 

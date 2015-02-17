@@ -23,47 +23,51 @@ import net.minecraft.item.ItemDye;
 
 import org.lwjgl.opengl.GL11;
 
+import uk.co.qmunity.lib.client.gui.widget.BaseWidget;
+
 import com.bluepowermod.util.Refs;
 
 /**
  * @author MineMaarten
  */
 public class WidgetColor extends BaseWidget {
-    
+
     public WidgetColor(int id, int x, int y) {
-    
+
         super(id, x, y, 14, 14, Refs.MODID + ":textures/gui/widgets/color_widget.png");
     }
-    
+
     @Override
     public void onMouseClicked(int mouseX, int mouseY, int button) {
-    
+
         if (button == 0) {
-            if (++value > 16) value = 0;
+            if (++value > 16)
+                value = 0;
         } else if (button == 1) {
-            if (--value < 0) value = 16;
+            if (--value < 0)
+                value = 16;
         }
         super.onMouseClicked(mouseX, mouseY, button);
     }
-    
+
     @Override
-    public void render(int mouseX, int mouseY) {
-    
-        super.render(mouseX, mouseY);
+    public void render(int mouseX, int mouseY, float frame) {
+
+        super.render(mouseX, mouseY, frame);
         if (value < 16) {
             Gui.drawRect(x + 5, y + 5, x + 9, y + 9, 0xFF000000 + ItemDye.field_150922_c[value]);
             GL11.glColor4d(1, 1, 1, 1);
         }
     }
-    
+
     @Override
     public void addTooltip(int mouseX, int mouseY, List<String> curTooltip, boolean shiftPressed) {
-    
+
         if (value < 16) {
             curTooltip.add("gui.widget.color." + ItemDye.field_150923_a[value]);
         } else {
             curTooltip.add("gui.widget.color.none");
         }
     }
-    
+
 }

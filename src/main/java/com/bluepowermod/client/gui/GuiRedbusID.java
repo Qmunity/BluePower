@@ -15,25 +15,29 @@ import com.bluepowermod.container.ContainerRedbusID;
 import com.bluepowermod.tile.tier3.IRedBusWindow;
 import com.bluepowermod.util.Refs;
 
-public class GuiRedbusID extends GuiBase {
-private final IRedBusWindow device;
+public class GuiRedbusID extends GuiContainerBaseBP {
 
-	private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID+":textures/gui/redbusgui.png");
+    private final IRedBusWindow device;
 
-	public GuiRedbusID (InventoryPlayer invPlayer, IRedBusWindow device) {
-		super(new ContainerRedbusID(invPlayer, device), resLoc);
-		this.device = device;
-		
-		this.xSize = 123;
-		this.ySize = 81;
-	}
-	
-	@Override
-    protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-        drawHorizontalAlignedString(7, 4, xSize - 14, StatCollector.translateToLocal("gui.redbusgui"), true);
-        
-        drawHorizontalAlignedString(7, 60, xSize - 14, StatCollector.translateToLocal("gui.redbus.id") + ":" + device.redbus_id, true);
+    private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID + ":textures/gui/redbusgui.png");
+
+    public GuiRedbusID(InventoryPlayer invPlayer, IRedBusWindow device) {
+
+        super(new ContainerRedbusID(invPlayer, device), resLoc);
+        this.device = device;
+
+        xSize = 123;
+        ySize = 81;
     }
-	
-	//TODO: clicking on switches toggles state and updates redbus_id
+
+    @Override
+    protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
+
+        drawHorizontalAlignedString(7, 4, xSize - 14, StatCollector.translateToLocal("gui.redbusgui"), true);
+
+        drawHorizontalAlignedString(7, 60, xSize - 14, StatCollector.translateToLocal("gui.redbus.id") + ":" + IRedBusWindow.redbus_id,
+                true);
+    }
+
+    // TODO: clicking on switches toggles state and updates redbus_id
 }

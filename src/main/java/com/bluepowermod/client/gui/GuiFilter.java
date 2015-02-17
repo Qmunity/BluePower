@@ -21,9 +21,9 @@ package com.bluepowermod.client.gui;
 
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
+import uk.co.qmunity.lib.client.gui.widget.BaseWidget;
+import uk.co.qmunity.lib.client.gui.widget.IGuiWidget;
 
-import com.bluepowermod.client.gui.widget.BaseWidget;
-import com.bluepowermod.client.gui.widget.IGuiWidget;
 import com.bluepowermod.client.gui.widget.WidgetColor;
 import com.bluepowermod.client.gui.widget.WidgetFuzzySetting;
 import com.bluepowermod.container.ContainerFilter;
@@ -35,7 +35,7 @@ import com.bluepowermod.util.Refs;
 /**
  * @author MineMaarten
  */
-public class GuiFilter extends GuiBase {
+public class GuiFilter extends GuiContainerBaseBP {
 
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/seedBag.png");
     protected TileFilter filter;

@@ -13,7 +13,7 @@
  *
  *     You should have received a copy of the GNU General Public License
  *     along with Blue Power.  If not, see <http://www.gnu.org/licenses/>
- *     
+ *
  *     @author Lumien
  */
 
@@ -26,12 +26,12 @@ import net.minecraft.util.ResourceLocation;
 import com.bluepowermod.container.ContainerSeedBag;
 import com.bluepowermod.util.Refs;
 
-public class GuiSeedBag extends GuiBase {
-    
+public class GuiSeedBag extends GuiContainerBaseBP {
+
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/seedBag.png");
-    
+
     public GuiSeedBag(ItemStack bag, IInventory playerInventory, IInventory seedBagInventory) {
-    
+
         super(seedBagInventory, new ContainerSeedBag(bag, playerInventory, seedBagInventory), resLoc);
     }
 }

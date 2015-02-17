@@ -12,8 +12,8 @@ import java.util.List;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
+import uk.co.qmunity.lib.client.gui.widget.WidgetMode;
 
-import com.bluepowermod.client.gui.widget.WidgetMode;
 import com.bluepowermod.container.ContainerRetriever;
 import com.bluepowermod.tile.tier2.TileRetriever;
 import com.bluepowermod.util.Refs;

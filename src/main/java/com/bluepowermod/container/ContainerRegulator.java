@@ -24,10 +24,10 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import uk.co.qmunity.lib.client.gui.GuiContainerBase;
 
 import com.bluepowermod.ClientProxy;
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
-import com.bluepowermod.client.gui.GuiBase;
 import com.bluepowermod.container.slot.SlotPhantom;
 import com.bluepowermod.tile.tier2.TileRegulator;
 
@@ -45,6 +45,7 @@ public class ContainerRegulator extends ContainerMachineBase {
     private int fuzzySetting = -1;
 
     public ContainerRegulator(InventoryPlayer invPlayer, TileRegulator regulator) {
+
         super(regulator);
         tileRegulator = regulator;
 
@@ -113,15 +114,15 @@ public class ContainerRegulator extends ContainerMachineBase {
 
         if (id == 0) {
             tileRegulator.color = TubeColor.values()[value];
-            ((GuiBase) ClientProxy.getOpenedGui()).redraw();
+            ((GuiContainerBase) ClientProxy.getOpenedGui()).redraw();
         }
         if (id == 2) {
             tileRegulator.mode = value;
-            ((GuiBase) ClientProxy.getOpenedGui()).redraw();
+            ((GuiContainerBase) ClientProxy.getOpenedGui()).redraw();
         }
         if (id == 3) {
             tileRegulator.fuzzySetting = value;
-            ((GuiBase) ClientProxy.getOpenedGui()).redraw();
+            ((GuiContainerBase) ClientProxy.getOpenedGui()).redraw();
         }
     }
 

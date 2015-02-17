@@ -26,13 +26,13 @@ import com.bluepowermod.container.ContainerRelay;
 import com.bluepowermod.tile.tier1.TileRelay;
 import com.bluepowermod.util.Refs;
 
-public class GuiRelay extends GuiBase {
-    
+public class GuiRelay extends GuiContainerBaseBP {
+
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/seedBag.png");
-    
+
     public GuiRelay(InventoryPlayer invPlayer, TileRelay relay) {
-    
+
         super(relay, new ContainerRelay(invPlayer, relay), resLoc);
     }
-    
+
 }

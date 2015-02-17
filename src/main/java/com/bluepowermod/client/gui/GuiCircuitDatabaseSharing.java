@@ -13,11 +13,11 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import uk.co.qmunity.lib.client.gui.widget.BaseWidget;
+import uk.co.qmunity.lib.client.gui.widget.IGuiWidget;
+import uk.co.qmunity.lib.client.gui.widget.WidgetTab;
 
 import com.bluepowermod.BluePower;
-import com.bluepowermod.client.gui.widget.BaseWidget;
-import com.bluepowermod.client.gui.widget.IGuiWidget;
-import com.bluepowermod.client.gui.widget.WidgetTab;
 import com.bluepowermod.container.ContainerCircuitDatabaseSharing;
 import com.bluepowermod.network.BPNetworkHandler;
 import com.bluepowermod.network.message.MessageCircuitDatabaseTemplate;

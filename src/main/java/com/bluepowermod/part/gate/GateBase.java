@@ -31,6 +31,7 @@ import uk.co.qmunity.lib.part.IPartRedstone;
 import uk.co.qmunity.lib.part.IPartRenderPlacement;
 import uk.co.qmunity.lib.part.IPartTicking;
 import uk.co.qmunity.lib.raytrace.QMovingObjectPosition;
+import uk.co.qmunity.lib.texture.Layout;
 import uk.co.qmunity.lib.transform.Rotation;
 import uk.co.qmunity.lib.vec.Vec3d;
 import uk.co.qmunity.lib.vec.Vec3dCube;
@@ -62,7 +63,6 @@ import com.bluepowermod.part.gate.connection.GateConnectionBase;
 import com.bluepowermod.redstone.BundledConnectionCache;
 import com.bluepowermod.redstone.RedstoneApi;
 import com.bluepowermod.redstone.RedstoneConnectionCache;
-import com.bluepowermod.util.Layout;
 import com.bluepowermod.util.Refs;
 
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -70,8 +70,8 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public abstract class GateBase<C_BOTTOM extends GateConnectionBase, C_TOP extends GateConnectionBase, C_LEFT extends GateConnectionBase, C_RIGHT extends GateConnectionBase, C_FRONT extends GateConnectionBase, C_BACK extends GateConnectionBase>
-        extends BPPartFaceRotate implements IGate<C_BOTTOM, C_TOP, C_LEFT, C_RIGHT, C_FRONT, C_BACK>, IPartRedstone, IConnectionListener,
-        IRedstoneDevice, IBundledDevice, IPartTicking, IPartRenderPlacement, IIntegratedCircuitPart {
+extends BPPartFaceRotate implements IGate<C_BOTTOM, C_TOP, C_LEFT, C_RIGHT, C_FRONT, C_BACK>, IPartRedstone, IConnectionListener,
+IRedstoneDevice, IBundledDevice, IPartTicking, IPartRenderPlacement, IIntegratedCircuitPart {
 
     // Static var declarations
     private static Vec3dCube BOX = new Vec3dCube(0, 0, 0, 1, 2D / 16D, 1);
@@ -99,9 +99,11 @@ public abstract class GateBase<C_BOTTOM extends GateConnectionBase, C_TOP extend
 
     public GateBase() {
 
+        if (getLayout() == null)
+            loadLayout();
+
         initConnections();
-        if (getLayout() != null)
-            initComponents();
+        initComponents();
 
         IConnectionCache<IRedstoneDevice> c1 = getRedstoneConnectionCache();
         if (c1 != null)
@@ -233,6 +235,9 @@ public abstract class GateBase<C_BOTTOM extends GateConnectionBase, C_TOP extend
         } catch (Exception ex) {
         }
 
+        if (part == this)
+            return layout;
+
         return ((GateBase<?, ?, ?, ?, ?, ?>) part).layout;
     }
 
@@ -258,6 +263,9 @@ public abstract class GateBase<C_BOTTOM extends GateConnectionBase, C_TOP extend
 
     @Override
     public final void update() {
+
+        if (getLayout() == null && !getWorld().isRemote)
+            loadLayout();
 
         if (!getWorld().isRemote) {
             getRedstoneConnectionCache().recalculateConnections();
@@ -285,6 +293,9 @@ public abstract class GateBase<C_BOTTOM extends GateConnectionBase, C_TOP extend
     @Override
     public void onUpdate() {
 
+        if (getLayout() == null && !getWorld().isRemote)
+            loadLayout();
+
         if (RedstoneApi.getInstance().shouldWiresHandleUpdates()) {
             getRedstoneConnectionCache().recalculateConnections();
             getBundledConnectionCache().recalculateConnections();
@@ -304,6 +315,9 @@ public abstract class GateBase<C_BOTTOM extends GateConnectionBase, C_TOP extend
     }
 
     private void doLogicStuff() {
+
+        if (getLayout() == null && !getWorld().isRemote)
+            loadLayout();
 
         logic().doLogic();
 
@@ -331,6 +345,9 @@ public abstract class GateBase<C_BOTTOM extends GateConnectionBase, C_TOP extend
 
     private void sendUpdateIfNeeded() {
 
+        if (getLayout() == null && !getWorld().isRemote)
+            loadLayout();
+
         boolean send = false;
         for (IGateComponent c : getComponents()) {
             if (c.needsSyncing()) {
@@ -355,6 +372,9 @@ public abstract class GateBase<C_BOTTOM extends GateConnectionBase, C_TOP extend
 
     @Override
     public boolean onActivated(EntityPlayer player, QMovingObjectPosition mop, ItemStack item) {
+
+        if (getLayout() == null && !getWorld().isRemote)
+            loadLayout();
 
         if (item != null && item.getItem() instanceof IScrewdriver) {
             if (player.isSneaking()) {
@@ -783,11 +803,18 @@ public abstract class GateBase<C_BOTTOM extends GateConnectionBase, C_TOP extend
         iconSide = reg.registerIcon(Refs.MODID + ":gates/side");
         iconDark = reg.registerIcon(Refs.MODID + ":gates/gate_dark");
 
-        if (layout == null)
-            layout = new Layout("/assets/" + Refs.MODID + "/textures/blocks/gates/" + getGateType());
-        layout.reload();
+        if (getLayout() == null)
+            loadLayout();
+        else
+            layout.reload();
         components.clear();
         initComponents();
+    }
+
+    protected void loadLayout() {
+
+        if (layout == null)
+            layout = new Layout("/assets/" + Refs.MODID + "/textures/blocks/gates/" + getGateType());
     }
 
     @SideOnly(Side.CLIENT)
@@ -911,11 +938,11 @@ public abstract class GateBase<C_BOTTOM extends GateConnectionBase, C_TOP extend
 
         if (Config.enableGateSounds)
             Minecraft
-                    .getMinecraft()
-                    .getSoundHandler()
-                    .playSound(
-                            new PositionedSoundRecord(new ResourceLocation("random.click"), 0.3F, 0.5F, getX() + 0.5F, getY() + 0.5F,
-                                    getZ() + 0.5F));
+            .getMinecraft()
+            .getSoundHandler()
+            .playSound(
+                    new PositionedSoundRecord(new ResourceLocation("random.click"), 0.3F, 0.5F, getX() + 0.5F, getY() + 0.5F,
+                            getZ() + 0.5F));
     }
 
     @Override

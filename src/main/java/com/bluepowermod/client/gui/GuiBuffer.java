@@ -13,7 +13,7 @@
  *
  *     You should have received a copy of the GNU General Public License
  *     along with Blue Power.  If not, see <http://www.gnu.org/licenses/>
- *     
+ *
  *     @author Quetzi
  */
 
@@ -26,13 +26,13 @@ import com.bluepowermod.container.ContainerBuffer;
 import com.bluepowermod.tile.tier1.TileBuffer;
 import com.bluepowermod.util.Refs;
 
-public class GuiBuffer extends GuiBase {
-    
+public class GuiBuffer extends GuiContainerBaseBP {
+
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/buffer.png");
-    private final TileBuffer              buffer;
-    
+    private final TileBuffer buffer;
+
     public GuiBuffer(InventoryPlayer invPlayer, TileBuffer buffer) {
-    
+
         super(buffer, new ContainerBuffer(invPlayer, buffer), resLoc);
         this.buffer = buffer;
         ySize = 186;

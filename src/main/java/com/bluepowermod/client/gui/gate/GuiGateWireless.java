@@ -21,12 +21,12 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
+import uk.co.qmunity.lib.client.gui.widget.IGuiWidget;
+import uk.co.qmunity.lib.client.gui.widget.WidgetMode;
 import uk.co.qmunity.lib.util.AlphanumComparator;
 
 import com.bluepowermod.api.misc.Accessibility;
 import com.bluepowermod.api.wireless.IFrequency;
-import com.bluepowermod.client.gui.widget.IGuiWidget;
-import com.bluepowermod.client.gui.widget.WidgetMode;
 import com.bluepowermod.network.BPNetworkHandler;
 import com.bluepowermod.network.message.MessageWirelessNewFreq;
 import com.bluepowermod.network.message.MessageWirelessRemoveFreq;

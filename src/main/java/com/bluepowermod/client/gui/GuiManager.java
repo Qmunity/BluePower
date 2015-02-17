@@ -23,12 +23,12 @@ import java.util.List;
 
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
+import uk.co.qmunity.lib.client.gui.widget.BaseWidget;
+import uk.co.qmunity.lib.client.gui.widget.IGuiWidget;
+import uk.co.qmunity.lib.client.gui.widget.WidgetMode;
 
-import com.bluepowermod.client.gui.widget.BaseWidget;
-import com.bluepowermod.client.gui.widget.IGuiWidget;
 import com.bluepowermod.client.gui.widget.WidgetColor;
 import com.bluepowermod.client.gui.widget.WidgetFuzzySetting;
-import com.bluepowermod.client.gui.widget.WidgetMode;
 import com.bluepowermod.client.gui.widget.WidgetNumber;
 import com.bluepowermod.container.ContainerManager;
 import com.bluepowermod.network.BPNetworkHandler;
@@ -39,7 +39,7 @@ import com.bluepowermod.util.Refs;
 /**
  * @author MineMaarten
  */
-public class GuiManager extends GuiBase {
+public class GuiManager extends GuiContainerBaseBP {
 
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/manager.png");
     protected TileManager manager;

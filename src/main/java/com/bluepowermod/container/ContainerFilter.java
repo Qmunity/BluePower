@@ -24,10 +24,10 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import uk.co.qmunity.lib.client.gui.GuiContainerBase;
 
 import com.bluepowermod.ClientProxy;
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
-import com.bluepowermod.client.gui.GuiBase;
 import com.bluepowermod.tile.tier1.TileFilter;
 
 import cpw.mods.fml.relauncher.Side;
@@ -43,6 +43,7 @@ public class ContainerFilter extends ContainerMachineBase {
     private int fuzzySetting = -1;
 
     public ContainerFilter(InventoryPlayer invPlayer, TileFilter filter) {
+
         super(filter);
         tileFilter = filter;
 
@@ -95,13 +96,14 @@ public class ContainerFilter extends ContainerMachineBase {
     @Override
     @SideOnly(Side.CLIENT)
     public void updateProgressBar(int id, int value) {
+
         if (id == 0) {
             tileFilter.filterColor = TubeColor.values()[value];
-            ((GuiBase) ClientProxy.getOpenedGui()).redraw();
+            ((GuiContainerBase) ClientProxy.getOpenedGui()).redraw();
         }
         if (id == 1) {
             tileFilter.fuzzySetting = value;
-            ((GuiBase) ClientProxy.getOpenedGui()).redraw();
+            ((GuiContainerBase) ClientProxy.getOpenedGui()).redraw();
         }
     }
 

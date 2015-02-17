@@ -14,20 +14,20 @@ import com.bluepowermod.container.ContainerIOExpander;
 import com.bluepowermod.tile.tier3.TileIOExpander;
 import com.bluepowermod.util.Refs;
 
-public class GuiIOExpander extends GuiBase {
-    
-    private final TileIOExpander          ioExpander;
-    
+public class GuiIOExpander extends GuiContainerBaseBP {
+
+    private final TileIOExpander ioExpander;
+
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID + ":textures/gui/ioexpandergui.png");
-    
+
     public GuiIOExpander(InventoryPlayer invPlayer, TileIOExpander ioExpander) {
-    
+
         super(new ContainerIOExpander(invPlayer, ioExpander), resLoc);
         this.ioExpander = ioExpander;
     }
-    
+
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-    
+
     }
 }

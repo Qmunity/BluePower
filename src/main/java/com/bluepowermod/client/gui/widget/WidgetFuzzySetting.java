@@ -9,24 +9,29 @@ package com.bluepowermod.client.gui.widget;
 
 import java.util.List;
 
+import uk.co.qmunity.lib.client.gui.widget.WidgetMode;
+
 import com.bluepowermod.util.Refs;
 
 public class WidgetFuzzySetting extends WidgetMode {
 
     public WidgetFuzzySetting(int id, int x, int y) {
+
         super(id, x, y, 0, 3, new String[] { Refs.MODID + ":textures/gui/widgets/fuzzy_widget_normal.png",
                 Refs.MODID + ":textures/gui/widgets/fuzzy_widget_fuzzy.png", Refs.MODID + ":textures/gui/widgets/fuzzy_widget_exact.png" });
 
     }
 
     @Override
-    public void render(int mouseX, int mouseY) {
+    public void render(int mouseX, int mouseY, float frame) {
+
         textureIndex = value;
-        super.render(mouseX, mouseY);
+        super.render(mouseX, mouseY, frame);
     }
 
     @Override
     public void addTooltip(int mouseX, int mouseY, List<String> curTip, boolean shiftPressed) {
+
         curTip.add("gui.widget.fuzzy");
         switch (value) {
         case 0:

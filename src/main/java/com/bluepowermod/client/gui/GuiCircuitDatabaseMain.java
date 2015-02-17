@@ -19,11 +19,12 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
-import com.bluepowermod.client.gui.widget.BaseWidget;
-import com.bluepowermod.client.gui.widget.IGuiWidget;
-import com.bluepowermod.client.gui.widget.WidgetMode;
-import com.bluepowermod.client.gui.widget.WidgetSidewaysTab;
-import com.bluepowermod.client.gui.widget.WidgetTab;
+import uk.co.qmunity.lib.client.gui.widget.BaseWidget;
+import uk.co.qmunity.lib.client.gui.widget.IGuiWidget;
+import uk.co.qmunity.lib.client.gui.widget.WidgetMode;
+import uk.co.qmunity.lib.client.gui.widget.WidgetSidewaysTab;
+import uk.co.qmunity.lib.client.gui.widget.WidgetTab;
+
 import com.bluepowermod.container.ContainerCircuitDatabaseMain;
 import com.bluepowermod.network.BPNetworkHandler;
 import com.bluepowermod.network.message.MessageGuiUpdate;
@@ -31,7 +32,7 @@ import com.bluepowermod.network.message.MessageUpdateTextfield;
 import com.bluepowermod.tile.tier3.TileCircuitDatabase;
 import com.bluepowermod.util.Refs;
 
-public class GuiCircuitDatabaseMain extends GuiBase {
+public class GuiCircuitDatabaseMain extends GuiContainerBaseBP {
 
     private final TileCircuitDatabase circuitDatabase;
     private static final ResourceLocation copyTabTexture = new ResourceLocation(Refs.MODID, "textures/gui/circuit_database.png");
@@ -215,5 +216,11 @@ public class GuiCircuitDatabaseMain extends GuiBase {
                 && circuitDatabase.copyInventory.getStackInSlot(1) != null
                 && circuitDatabase.copy(Minecraft.getMinecraft().thePlayer, circuitDatabase.copyInventory.getStackInSlot(0),
                         circuitDatabase.copyInventory.getStackInSlot(1), true);
+    }
+
+    @Override
+    protected boolean isInfoStatLeftSided() {
+
+        return false;
     }
 }

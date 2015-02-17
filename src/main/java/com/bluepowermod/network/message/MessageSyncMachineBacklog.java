@@ -8,10 +8,10 @@ import java.util.List;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import uk.co.qmunity.lib.client.gui.GuiContainerBase;
 import uk.co.qmunity.lib.network.LocatedPacket;
 
 import com.bluepowermod.ClientProxy;
-import com.bluepowermod.client.gui.GuiBase;
 import com.bluepowermod.part.tube.TubeStack;
 import com.bluepowermod.tile.TileMachineBase;
 
@@ -59,7 +59,7 @@ public class MessageSyncMachineBacklog extends LocatedPacket<MessageSyncMachineB
         TileEntity te = player.worldObj.getTileEntity(x, y, z);
         if (te instanceof TileMachineBase) {
             ((TileMachineBase) te).setBacklog(stacks);
-            GuiBase gui = (GuiBase) ClientProxy.getOpenedGui();
+            GuiContainerBase gui = (GuiContainerBase) ClientProxy.getOpenedGui();
             if (gui != null)
                 gui.redraw();
         }

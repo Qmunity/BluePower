@@ -13,7 +13,7 @@
  *
  *     You should have received a copy of the GNU General Public License
  *     along with Blue Power.  If not, see <http://www.gnu.org/licenses/>
- *     
+ *
  *     @author Quetzi
  */
 
@@ -29,13 +29,13 @@ import com.bluepowermod.util.Refs;
 /**
  * @author MineMaarten
  */
-public class GuiDeployer extends GuiBase {
-    
+public class GuiDeployer extends GuiContainerBaseBP {
+
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/deployer.png");
-    private final TileDeployer            deployer;
-    
+    private final TileDeployer deployer;
+
     public GuiDeployer(InventoryPlayer invPlayer, TileDeployer deployer) {
-    
+
         super(deployer, new ContainerDeployer(invPlayer, deployer), resLoc);
         this.deployer = deployer;
         ySize = 166;

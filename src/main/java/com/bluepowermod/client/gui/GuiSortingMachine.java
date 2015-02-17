@@ -22,12 +22,12 @@ import java.util.List;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
+import uk.co.qmunity.lib.client.gui.widget.BaseWidget;
+import uk.co.qmunity.lib.client.gui.widget.IGuiWidget;
+import uk.co.qmunity.lib.client.gui.widget.WidgetMode;
 
-import com.bluepowermod.client.gui.widget.BaseWidget;
-import com.bluepowermod.client.gui.widget.IGuiWidget;
 import com.bluepowermod.client.gui.widget.WidgetColor;
 import com.bluepowermod.client.gui.widget.WidgetFuzzySetting;
-import com.bluepowermod.client.gui.widget.WidgetMode;
 import com.bluepowermod.container.ContainerSortingMachine;
 import com.bluepowermod.network.BPNetworkHandler;
 import com.bluepowermod.network.message.MessageGuiUpdate;
@@ -41,7 +41,7 @@ import com.bluepowermod.util.Refs;
  * @author MineMaarten
  */
 
-public class GuiSortingMachine extends GuiBase {
+public class GuiSortingMachine extends GuiContainerBaseBP {
 
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/sorting_machine.png");
     private final TileSortingMachine sortingMachine;

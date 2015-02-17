@@ -551,6 +551,11 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
         return shouldRenderNode || connectionCount == 0 || connectionCount > 2;
     }
 
+    private double getAddedThickness() {
+
+        return 0.125 / 16D;
+    }
+
     /**
      * This render method gets called whenever there's a block update in the chunk. You should use this to remove load from the renderer if a part of
      * the rendering code doesn't need to get called too often or just doesn't change at all. To call a render update to re-render this just call
@@ -585,9 +590,11 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
                 IIcon icon = IconSupplier.restrictionTubeSide;
                 renderer.renderBox(new Vec3dCube(0.25, 0.25, 0.25, 0.75, 0.75, 0.75), icon);
             }
+            double addedThickness = getAddedThickness();
+
             double wireSize = getSize() / 16D;
-            double frameSeparation = 4 / 16D - (wireSize - 2 / 16D);
-            double frameThickness = 1 / 16D;
+            double frameSeparation = 6 / 16D - addedThickness - addedThickness;
+            double frameThickness = 1 / 16D + addedThickness;
 
             if (renderFully) {
 
@@ -605,19 +612,34 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
 
                 renderer.setColor(0xFFFFFF);
             } else {
-                super.renderStatic(loc, renderer, renderBlocks, 0);
+                boolean isInWorld = getParent() != null;
+
+                boolean down = shouldRenderConnection(ForgeDirection.DOWN);
+                boolean up = shouldRenderConnection(ForgeDirection.UP);
+                boolean north = shouldRenderConnection(ForgeDirection.NORTH);
+                boolean south = shouldRenderConnection(ForgeDirection.SOUTH);
+                boolean west = shouldRenderConnection(ForgeDirection.WEST);
+                boolean east = shouldRenderConnection(ForgeDirection.EAST);
+
+                renderer.setColor(getFrameColorMultiplier());
+
+                // Frame
+                renderFrame(renderer, wireSize, frameSeparation, frameThickness, down, up, west, east, north, south, isInWorld,
+                        getFrameIcon(), getFrameColorMultiplier());
             }
 
             // Tube coloring
             {
-                Vec3dCube side = new Vec3dCube(0.25 + 5 / 128D, 0, 0.25 - 1 / 128D, 0.25 + 9 / 128D, 0.25, 0.25 + 2 / 128D);
-                Vec3dCube side2 = new Vec3dCube(0.25 - 1 / 128D, 0, 0.25 + 5 / 128D, 0.25 + 2 / 128D, 0.25, 0.25 + 9 / 128D);
-                Vec3dCube side3 = new Vec3dCube(0.25 - 1 / 128D, 0.25 - 1 / 128D, 0.25 + 5 / 128D, 0.25 + 2 / 128D, 0.25 + 2 / 128D,
-                        0.25 + 59 / 128D);
-                Vec3dCube side4 = new Vec3dCube(0.25 + 5 / 128D, 0.25 - 1 / 128D, 0.25 + 5 / 128D, 0.25 + 9 / 128D, 0.25 + 2 / 128D,
-                        0.25 + 56 / 128D);
-                Vec3dCube side5 = new Vec3dCube(0.25 + 5 / 128D, 0.25 - 1 / 128D, 0.25 - 1 / 128D, 0.25 + 9 / 128D, 0.25 + 2 / 128D,
-                        0.25 + 65 / 128D);
+                Vec3dCube side = new Vec3dCube(0.25 + 5 / 128D, 0, 0.25 - addedThickness, 0.25 + 9 / 128D + addedThickness, 0.25,
+                        0.25 + 2 / 128D);
+                Vec3dCube side2 = new Vec3dCube(0.25 - addedThickness, 0, 0.25 + 5 / 128D, 0.25 + 2 / 128D, 0.25,
+                        0.25 + 9 / 128D + addedThickness);
+                Vec3dCube side3 = new Vec3dCube(0.25 - addedThickness, 0.25 - addedThickness, 0.25 + 5 / 128D, 0.25 + 2 / 128D,
+                        0.25 + 4 / 128D, 0.25 + 59 / 128D);
+                Vec3dCube side4 = new Vec3dCube(0.25 + 5 / 128D, 0.25 - addedThickness, 0.25 + 5 / 128D, 0.25 + 9 / 128D + addedThickness,
+                        0.25 + 2 / 128D, 0.25 + 56 / 128D);
+                Vec3dCube side5 = new Vec3dCube(0.25 + 5 / 128D, 0.25 - addedThickness, 0.25 - 1 / 128D, 0.25 + 9 / 128D + addedThickness,
+                        0.25 + 2 / 128D, 0.25 + 65 / 128D);
                 for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
                     TubeColor c = color[d.ordinal()];
                     if (c != TubeColor.NONE) {

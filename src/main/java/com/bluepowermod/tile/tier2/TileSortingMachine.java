@@ -29,7 +29,7 @@ import com.bluepowermod.part.tube.TubeStack;
 import com.bluepowermod.tile.TileMachineBase;
 
 /**
- * 
+ *
  * @author MineMaarten
  */
 
@@ -43,7 +43,8 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
     private int savedPulses;
     public final TubeColor[] colors = new TubeColor[9];
     public int[] fuzzySettings = new int[8];
-    private ItemStack nonAcceptedStack;//will be set to the latest accepted stack via tubes.. It will reject any following items from that stack that tick.
+    private ItemStack nonAcceptedStack;// will be set to the latest accepted stack via tubes.. It will reject any following items from that stack that
+    // tick.
 
     public TileSortingMachine() {
 
@@ -88,6 +89,7 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
 
     @Override
     public void updateEntity() {
+
         nonAcceptedStack = null;
         super.updateEntity();
         if (!sweepTriggered && savedPulses > 0) {
@@ -246,7 +248,8 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
         case ANY_ITEM_DEFAULT:
             for (int i = 0; i < inventory.length; i++) {
                 ItemStack filter = inventory[i];
-                if (filter != null && ItemStackHelper.areStacksEqual(filter, stack, fuzzySettings[i % 8]) && stack.stackSize >= filter.stackSize) {
+                if (filter != null && ItemStackHelper.areStacksEqual(filter, stack, fuzzySettings[i % 8])
+                        && stack.stackSize >= filter.stackSize) {
                     if (!simulate) {
                         addItemToOutputBuffer(filter.copy(), colors[i % 8]);
                     }
@@ -309,6 +312,9 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
 
     @Override
     public void onButtonPress(EntityPlayer player, int messageId, int value) {
+
+        if (messageId < 0)
+            return;
 
         if (messageId < 9) {
             colors[messageId] = TubeColor.values()[value];
@@ -438,6 +444,7 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
 
     @Override
     public TubeStack acceptItemFromTube(TubeStack stack, ForgeDirection from, boolean simulate) {
+
         if (from == getOutputDirection()) {
             return super.acceptItemFromTube(stack, from, simulate);
         } else if (!isBufferEmpty() && !ejectionScheduled) {
