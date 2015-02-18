@@ -17,12 +17,9 @@
 
 package com.bluepowermod.world;
 
-import static net.minecraftforge.common.ChestGenHooks.DUNGEON_CHEST;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
+import com.bluepowermod.init.BPBlocks;
+import com.bluepowermod.init.BPItems;
+import com.bluepowermod.init.Config;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
@@ -35,8 +32,11 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ChestGenHooks;
 import net.minecraftforge.common.util.ForgeDirection;
 
-import com.bluepowermod.init.BPBlocks;
-import com.bluepowermod.init.Config;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
+import static net.minecraftforge.common.ChestGenHooks.DUNGEON_CHEST;
 
 /**
  * 
@@ -244,7 +244,7 @@ public class WorldGenVolcano {
         world.setBlock(x, y, z, Blocks.chest, dir.getOpposite().ordinal(), 3);
         if (rand.nextInt(5) == 0) {
             ((TileEntityChest) world.getTileEntity(x, y, z)).setInventorySlotContents(13,
-                    new ItemStack(BPBlocks.tungsten_block, 5 + rand.nextInt(10)));
+                    new ItemStack(BPItems.tungsten_ingot, 5 + rand.nextInt(10)));
         } else {
             WeightedRandomChestContent.generateChestContents(rand, ChestGenHooks.getItems(DUNGEON_CHEST, rand),
                     (TileEntityChest) world.getTileEntity(x, y, z), ChestGenHooks.getCount(DUNGEON_CHEST, rand));//Possibly to be added with IC designs from the community.
