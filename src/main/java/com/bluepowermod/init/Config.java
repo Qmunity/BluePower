@@ -126,7 +126,7 @@ public class Config {
         maxSapphireY = config.get(Refs.CONFIG_SAPPHIRE, "maxSapphireY", 48).getInt();
         veinCountSapphire = config.get(Refs.CONFIG_SAPPHIRE, "veinCountSapphire", 2).getInt();
         veinSizeSapphire = config.get(Refs.CONFIG_SAPPHIRE, "veinSizeSapphire", 5).getInt();
-        volcanoSpawnChance = config.get(Refs.CONFIG_WORLDGEN, "volcanoSpawnChance", 0.02).getDouble(0);
+        volcanoSpawnChance = config.get(Refs.CONFIG_WORLDGEN, "volcanoSpawnChance", 0.01).getDouble(0);
         volcanoActiveToInactiveRatio = config.get(Refs.CONFIG_WORLDGEN, "volcanoActiveToInactiveRatio", 0.5).getDouble(0);
         veinSizeMarble = config.get(Refs.CONFIG_WORLDGEN, "veinSizeMarble", 2048).getInt();
 
