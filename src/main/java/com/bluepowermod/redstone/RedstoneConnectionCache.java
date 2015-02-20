@@ -95,8 +95,8 @@ public class RedstoneConnectionCache implements IConnectionCache<IRedstoneDevice
         for (RedstoneConnection con : connections) {
             if (con == null)
                 continue;
-            onDisconnect(con.getSideA());
             con.getB().getRedstoneConnectionCache().onDisconnect(con.getSideB());
+            onDisconnect(con.getSideA());
         }
     }
 

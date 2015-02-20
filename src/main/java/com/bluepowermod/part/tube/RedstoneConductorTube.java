@@ -5,6 +5,7 @@ import java.util.List;
 
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import uk.co.qmunity.lib.helper.RedstoneHelper;
 import uk.co.qmunity.lib.part.MicroblockShape;
 import uk.co.qmunity.lib.part.compat.OcclusionHelper;
 import uk.co.qmunity.lib.vec.Vec3i;
@@ -18,6 +19,7 @@ import com.bluepowermod.api.wire.redstone.IRedstoneConductor;
 import com.bluepowermod.api.wire.redstone.IRedstoneDevice;
 import com.bluepowermod.api.wire.redstone.IRedwire;
 import com.bluepowermod.api.wire.redstone.RedwireType;
+import com.bluepowermod.redstone.DummyRedstoneDevice;
 import com.bluepowermod.redstone.RedstoneApi;
 import com.bluepowermod.redstone.RedstoneConnectionCache;
 
@@ -90,7 +92,7 @@ public class RedstoneConductorTube implements IRedstoneConductor, IConnectionLis
             }
 
             if (device instanceof IFace)
-                return false;
+                return ((IFace) device).getFace() == side.getOpposite();
             if (!OcclusionHelper.microblockOcclusionTest(new Vec3i(this), MicroblockShape.FACE_HOLLOW, 8, side))
                 return false;
             if (device instanceof RedstoneConductorTube)
@@ -141,6 +143,15 @@ public class RedstoneConductorTube implements IRedstoneConductor, IConnectionLis
 
     @Override
     public void onRedstoneUpdate() {
+
+        for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
+            IConnection<IRedstoneDevice> c = connections.getConnectionOnSide(dir);
+            IRedstoneDevice dev = null;
+            if (c != null)
+                dev = c.getB();
+            if (dev == null || dev instanceof DummyRedstoneDevice)
+                RedstoneHelper.notifyRedstoneUpdate(getWorld(), getX(), getY(), getZ(), dir, false);
+        }
 
         tube.sendUpdatePacket();
     }

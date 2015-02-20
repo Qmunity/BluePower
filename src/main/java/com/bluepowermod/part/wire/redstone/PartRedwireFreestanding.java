@@ -335,9 +335,9 @@ public abstract class PartRedwireFreestanding extends PartWireFreestanding imple
 
                 for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
                     IConnection<IRedstoneDevice> c = connections.getConnectionOnSide(dir);
-                    if (c == null)
-                        continue;
-                    IRedstoneDevice dev = c.getB();
+                    IRedstoneDevice dev = null;
+                    if (c != null)
+                        dev = c.getB();
                     if (dev == null || dev instanceof DummyRedstoneDevice)
                         RedstoneHelper.notifyRedstoneUpdate(getWorld(), getX(), getY(), getZ(), dir, false);
                 }
@@ -648,14 +648,17 @@ public abstract class PartRedwireFreestanding extends PartWireFreestanding imple
         @Override
         public void onRedstoneUpdate() {
 
+            if (getParent() instanceof FakeMultipartTileIC)
+                ((FakeMultipartTileIC) getParent()).getIC().loadWorld();
+
             if (hasUpdated) {
                 sendUpdatePacket();
 
                 for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
                     IConnection<IRedstoneDevice> c = connections.getConnectionOnSide(dir);
-                    if (c == null)
-                        continue;
-                    IRedstoneDevice dev = c.getB();
+                    IRedstoneDevice dev = null;
+                    if (c != null)
+                        dev = c.getB();
                     if (dev == null || dev instanceof DummyRedstoneDevice)
                         RedstoneHelper.notifyRedstoneUpdate(getWorld(), getX(), getY(), getZ(), dir, false);
                 }

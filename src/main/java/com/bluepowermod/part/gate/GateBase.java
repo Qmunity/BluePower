@@ -267,15 +267,6 @@ IRedstoneDevice, IBundledDevice, IPartTicking, IPartRenderPlacement, IIntegrated
         if (getLayout() == null && !getWorld().isRemote)
             loadLayout();
 
-        if (!getWorld().isRemote) {
-            getRedstoneConnectionCache().recalculateConnections();
-            getBundledConnectionCache().recalculateConnections();
-
-            for (GateConnectionBase c : getConnections())
-                if (c != null)
-                    c.refresh();
-        }
-
         logic().tick();
 
         for (IGateComponent c : getComponents())
@@ -306,7 +297,8 @@ IRedstoneDevice, IBundledDevice, IPartTicking, IPartRenderPlacement, IIntegrated
 
             for (GateConnectionBase c : getConnections())
                 if (c != null)
-                    RedstoneApi.getInstance().getRedstonePropagator(this, c.getForgeDirection()).propagate();
+                    if (getRedstoneConnectionCache().getConnectionOnSide(c.getForgeDirection()) != null)
+                        RedstoneApi.getInstance().getRedstonePropagator(this, c.getForgeDirection()).propagate();
         }
 
         logic().doLogic();

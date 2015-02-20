@@ -35,6 +35,8 @@ import net.minecraftforge.common.util.ForgeDirection;
 import org.lwjgl.opengl.GL11;
 
 import uk.co.qmunity.lib.client.render.RenderHelper;
+import uk.co.qmunity.lib.helper.MathHelper;
+import uk.co.qmunity.lib.part.IPartRedstone;
 import uk.co.qmunity.lib.part.IPartThruHole;
 import uk.co.qmunity.lib.part.IPartTicking;
 import uk.co.qmunity.lib.part.MicroblockShape;
@@ -78,7 +80,7 @@ import cpw.mods.fml.relauncher.SideOnly;
  * @author MineMaarten
  */
 
-public class PneumaticTube extends PartWireFreestanding implements IPartTicking, IPartThruHole {
+public class PneumaticTube extends PartWireFreestanding implements IPartTicking, IPartThruHole, IPartRedstone {
 
     public final boolean[] connections = new boolean[6];
     public final boolean[] redstoneConnections = new boolean[6];
@@ -174,18 +176,23 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
     public void onUpdate() {
 
         if (getParent() != null && getWorld() != null) {
+
             // Redstone update
-            RedstoneConductorTube device = RedstoneConductorTube.getDevice(this);
-            device.getRedstoneConnectionCache().recalculateConnections();
 
-            ForgeDirection d = ForgeDirection.UNKNOWN;
-            for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS)
-                if (device.getDeviceOnSide(dir) != null)
-                    d = dir;
+            // Don't to anything if propagation-related stuff is going on
+            if (RedstoneApi.getInstance().shouldWiresHandleUpdates()) {
+                RedstoneConductorTube device = RedstoneConductorTube.getDevice(this);
+                device.getRedstoneConnectionCache().recalculateConnections();
 
-            RedstoneApi.getInstance().getRedstonePropagator(device, d).propagate();
+                ForgeDirection d = ForgeDirection.UNKNOWN;
+                for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS)
+                    if (device.getDeviceOnSide(dir) != null)
+                        d = dir;
 
-            sendUpdatePacket();
+                RedstoneApi.getInstance().getRedstonePropagator(device, d).propagate();
+
+                sendUpdatePacket();
+            }
 
             // Cache and connection refresh
             clearCache();
@@ -266,7 +273,7 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
             if (otherTubeColor != TubeColor.NONE && getColor(dir) != TubeColor.NONE && getColor(dir) != otherTubeColor)
                 return false;
         }
-        return getWorld() == null || OcclusionHelper.microblockOcclusionTest(getParent(), MicroblockShape.FACE_HOLLOW, 8, dir);
+        return getWorld() == null || OcclusionHelper.microblockOcclusionTest(getParent(), true, MicroblockShape.FACE_HOLLOW, 8, dir);
     }
 
     @Override
@@ -663,10 +670,10 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
                                 for (int i = 1; i < 4; i += 2)
                                     renderer.renderBox(
                                             side5.clone()
-                                                    .rotate(0,
-                                                            (i + ((shouldRenderConnection(ForgeDirection.NORTH) || (shouldRenderConnection(ForgeDirection.UP) && (d == ForgeDirection.NORTH || d == ForgeDirection.SOUTH))) ? 1
-                                                                    : 0)) * 90, 0, Vec3d.center).rotate(d, Vec3d.center),
-                                            IconSupplier.pneumaticTubeColoring);
+                                            .rotate(0,
+                                                    (i + ((shouldRenderConnection(ForgeDirection.NORTH) || (shouldRenderConnection(ForgeDirection.UP) && (d == ForgeDirection.NORTH || d == ForgeDirection.SOUTH))) ? 1
+                                                            : 0)) * 90, 0, Vec3d.center).rotate(d, Vec3d.center),
+                                                            IconSupplier.pneumaticTubeColoring);
                             }
                             renderer.setColor(0xFFFFFF);
                         } catch (Exception ex) {
@@ -682,10 +689,10 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
 
                 renderFrame(renderer, wireSize, frameSeparation, frameThickness,
                         renderFully || shouldRenderConnection(ForgeDirection.DOWN), renderFully
-                                || shouldRenderConnection(ForgeDirection.UP), renderFully || shouldRenderConnection(ForgeDirection.WEST),
+                        || shouldRenderConnection(ForgeDirection.UP), renderFully || shouldRenderConnection(ForgeDirection.WEST),
                         renderFully || shouldRenderConnection(ForgeDirection.EAST), renderFully
-                                || shouldRenderConnection(ForgeDirection.NORTH), renderFully
-                                || shouldRenderConnection(ForgeDirection.SOUTH), redstoneConnections[ForgeDirection.DOWN.ordinal()],
+                        || shouldRenderConnection(ForgeDirection.NORTH), renderFully
+                        || shouldRenderConnection(ForgeDirection.SOUTH), redstoneConnections[ForgeDirection.DOWN.ordinal()],
                         redstoneConnections[ForgeDirection.UP.ordinal()], redstoneConnections[ForgeDirection.WEST.ordinal()],
                         redstoneConnections[ForgeDirection.EAST.ordinal()], redstoneConnections[ForgeDirection.NORTH.ordinal()],
                         redstoneConnections[ForgeDirection.SOUTH.ordinal()], getParent() != null && getWorld() != null, IconSupplier.wire,
@@ -841,7 +848,7 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
                             redstoneConnections[ForgeDirection.UP.ordinal()], redstoneConnections[ForgeDirection.WEST.ordinal()],
                             redstoneConnections[ForgeDirection.EAST.ordinal()], redstoneConnections[ForgeDirection.NORTH.ordinal()],
                             redstoneConnections[ForgeDirection.SOUTH.ordinal()], getParent() != null && getWorld() != null), start, end,
-                    new Vec3i(this));
+                            new Vec3i(this));
             QMovingObjectPosition frame = RayTracer.instance().rayTraceCubes(getFrameBoxes(), start, end, new Vec3i(this));
 
             if (wire != null) {
@@ -865,5 +872,29 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
             return (ItemStack) o;
 
         return super.getPickedItem(mop);
+    }
+
+    @Override
+    public int getStrongPower(ForgeDirection side) {
+
+        return 0;
+    }
+
+    @Override
+    public int getWeakPower(ForgeDirection side) {
+
+        if (getRedwireType() == null)
+            return 0;
+
+        return MathHelper.map(RedstoneConductorTube.getDevice(this).getPower() & 0xFF, 0, 255, 0, 15);
+    }
+
+    @Override
+    public boolean canConnectRedstone(ForgeDirection side) {
+
+        if (getRedwireType() == null)
+            return false;
+
+        return true;
     }
 }

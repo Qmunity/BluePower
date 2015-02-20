@@ -42,7 +42,7 @@ public class GateComponentWire extends GateComponentLocationArray {
         int colorMax = isEnabled() ? type.getMaxColor() : 0x6A6A6A;
 
         renderer.setColor(WireHelper.getColorForPowerLevel(colorMin, colorMax, power));
-        double height = 1 / 48D;
+        double height = 1 / 32D;
         // double size = 1 / ((double) pixels.length);
         double scale = 1D / getGate().getLayout().getLayout(layoutColor).getWidth();
 

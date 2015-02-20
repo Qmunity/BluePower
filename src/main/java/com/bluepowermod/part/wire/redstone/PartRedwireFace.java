@@ -43,6 +43,7 @@ import uk.co.qmunity.lib.helper.MathHelper;
 import uk.co.qmunity.lib.helper.RedstoneHelper;
 import uk.co.qmunity.lib.misc.Pair;
 import uk.co.qmunity.lib.part.IPartRedstone;
+import uk.co.qmunity.lib.part.IPartTicking;
 import uk.co.qmunity.lib.part.MicroblockShape;
 import uk.co.qmunity.lib.part.compat.OcclusionHelper;
 import uk.co.qmunity.lib.vec.Vec3dCube;
@@ -146,7 +147,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
         List<Vec3dCube> boxes = new ArrayList<Vec3dCube>();
 
         double h = getHeight() / 16D;
-        double d = 0.25;
+        double d = 4 / 16D;
 
         boxes.add(new Vec3dCube(d, 0, d, 1 - d, h, 1 - d));
 
@@ -199,11 +200,13 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
         return BPCreativeTabs.wiring;
     }
 
-    public static class PartRedwireFaceUninsulated extends PartRedwireFace implements IAdvancedRedstoneConductor, IConnectionListener {
+    public static class PartRedwireFaceUninsulated extends PartRedwireFace implements IAdvancedRedstoneConductor, IConnectionListener,
+    IPartTicking {
 
         private RedstoneConnectionCache connections = RedstoneApi.getInstance().createRedstoneConnectionCache(this);
         private boolean hasUpdated = false;
         private byte power = 0;
+        private boolean scheduled = false;
 
         public PartRedwireFaceUninsulated(RedwireType type) {
 
@@ -283,6 +286,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
         @Override
         public void onDisconnect(IConnection<?> connection) {
 
+            scheduled = true;
             sendUpdatePacket();
         }
 
@@ -378,6 +382,14 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
             }
 
             RedstoneApi.getInstance().getRedstonePropagator(this, getFace()).propagate();
+        }
+
+        @Override
+        public void update() {
+
+            if (scheduled)
+                onUpdate();
+            scheduled = false;
         }
 
         @Override
@@ -491,13 +503,14 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
     }
 
     public static class PartRedwireFaceInsulated extends PartRedwireFace implements IAdvancedRedstoneConductor, IInsulatedRedstoneDevice,
-    IAdvancedBundledConductor, IConnectionListener, IInsulatedRedwire {
+    IAdvancedBundledConductor, IConnectionListener, IInsulatedRedwire, IPartTicking {
 
         private RedstoneConnectionCache connections = RedstoneApi.getInstance().createRedstoneConnectionCache(this);
         private BundledConnectionCache bundledConnections = RedstoneApi.getInstance().createBundledConnectionCache(this);
         private boolean hasUpdated = false;
         private byte power = 0;
         private MinecraftColor color;
+        private boolean scheduled = false;
 
         public PartRedwireFaceInsulated(RedwireType type, MinecraftColor color) {
 
@@ -619,6 +632,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
         @Override
         public void onDisconnect(IConnection<?> connection) {
 
+            scheduled = true;
             sendUpdatePacket();
         }
 
@@ -769,6 +783,14 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
 
             RedstoneApi.getInstance().getRedstonePropagator(this, getFace()).propagate();
             RedstoneApi.getInstance().getBundledPropagator(this, getFace()).propagate();
+        }
+
+        @Override
+        public void update() {
+
+            if (scheduled)
+                onUpdate();
+            scheduled = false;
         }
 
         @Override

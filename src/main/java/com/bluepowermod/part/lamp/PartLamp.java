@@ -46,6 +46,7 @@ import com.bluepowermod.api.wire.IConnectionCache;
 import com.bluepowermod.api.wire.redstone.IRedstoneDevice;
 import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.part.BPPartFace;
+import com.bluepowermod.part.tube.PneumaticTube;
 import com.bluepowermod.part.wire.redstone.PartRedwireFreestanding;
 import com.bluepowermod.redstone.RedstoneApi;
 import com.bluepowermod.redstone.RedstoneConnectionCache;
@@ -134,7 +135,7 @@ public abstract class PartLamp extends BPPartFace implements IPartRedstone, IRed
     @SideOnly(Side.CLIENT)
     public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
 
-        power = (byte) 255;
+        power = (byte) 0;
 
         RenderHelper rh = RenderHelper.instance;
         rh.setRenderCoords(null, 0, 0, 0);
@@ -398,8 +399,13 @@ public abstract class PartLamp extends BPPartFace implements IPartRedstone, IRed
 
         Vec3i loc = new Vec3i(this).add(getFace());
 
-        if (MultipartCompatibility.getPartHolder(getWorld(), loc) != null)
-            return MultipartCompatibility.getPart(getWorld(), loc, PartRedwireFreestanding.class) != null;
+        if (MultipartCompatibility.getPartHolder(getWorld(), loc) != null) {
+            if (MultipartCompatibility.getPart(getWorld(), loc, PartRedwireFreestanding.class) != null)
+                return true;
+            PneumaticTube t = MultipartCompatibility.getPart(getWorld(), loc, PneumaticTube.class);
+            if (t != null && t.getRedwireType() != null)
+                return true;
+        }
 
         return super.canStay();
     }
@@ -419,7 +425,7 @@ public abstract class PartLamp extends BPPartFace implements IPartRedstone, IRed
         if (side == ForgeDirection.UNKNOWN)
             return false;
 
-        if (OcclusionHelper.microblockOcclusionTest(getParent(), MicroblockShape.EDGE, 1, getFace(), side))
+        if (!OcclusionHelper.microblockOcclusionTest(getParent(), MicroblockShape.EDGE, 1, getFace(), side))
             return false;
 
         return true;
