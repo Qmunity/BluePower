@@ -104,9 +104,8 @@ public class WorldGenerationHandler implements IWorldGenerator {
             int x = chunkX * 16 + random.nextInt(16);
             int z = chunkZ * 16 + random.nextInt(16);//20
             int y = world.getHeightValue(x, z) + 50 + random.nextInt(40);
-            y = (y > 255) ? 255 : y;
 
-            if (world.getBlock(x, 10, z) == Blocks.lava) {
+            if (world.getBlock(x, 10, z) == Blocks.lava && world.getHeightValue(x, z) <= 120) {
                 new WorldGenVolcano().generate(world, random, x, y, z);
             }
         }
