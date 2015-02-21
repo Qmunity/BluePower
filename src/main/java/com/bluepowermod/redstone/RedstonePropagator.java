@@ -17,7 +17,6 @@ import com.bluepowermod.api.wire.redstone.IRedstoneConductor;
 import com.bluepowermod.api.wire.redstone.IRedstoneConductor.IAdvancedRedstoneConductor;
 import com.bluepowermod.api.wire.redstone.IRedstoneDevice;
 import com.bluepowermod.part.gate.GateBase;
-import com.bluepowermod.part.gate.connection.GateConnectionDigital;
 
 @SuppressWarnings("unchecked")
 public abstract class RedstonePropagator implements IPropagator<IRedstoneDevice> {
@@ -359,7 +358,7 @@ public abstract class RedstonePropagator implements IPropagator<IRedstoneDevice>
                         } catch (Exception ex) {
                             ex.printStackTrace();
                         }
-                    } else if (c instanceof GateConnectionDigital) {
+                    } else {
                         try {
                             new LosslessPropagator(getDevice(), getSide()).propagate();
                         } catch (Exception ex) {

@@ -29,10 +29,9 @@ public class GateConnectionDigital extends GateConnectionBase {
 
         IConnection<? extends IRedstoneDevice> c = gate.getRedstoneConnectionCache().getConnectionOnSide(getForgeDirection());
 
-        if (c == null || c.getB() instanceof DummyRedstoneDevice) {
+        if (c == null || c.getB() instanceof DummyRedstoneDevice)
             input = RedstoneHelper.getInput(getGate().getWorld(), getGate().getX(), getGate().getY(), getGate().getZ(),
                     getForgeDirection(), getGate().getFace()) > 0;
-        }
     }
 
     @Override

@@ -158,12 +158,15 @@ public class GateStateCell extends GateSimpleDigital implements IGuiButtonSensit
     @Override
     public boolean changeMode() {
 
-        mirrored = !mirrored;
+        if (!getWorld().isRemote) {
+            mirrored = !mirrored;
 
-        getComponents().clear();
-        initConnections();
-        initComponents();
-        doLogic();
+            getComponents().clear();
+            initConnections();
+            initComponents();
+            doLogic();
+            sendUpdatePacket();
+        }
 
         return true;
     }
@@ -171,40 +174,54 @@ public class GateStateCell extends GateSimpleDigital implements IGuiButtonSensit
     @Override
     public void writeToNBT(NBTTagCompound tag) {
 
+        tag.setBoolean("mirrored", mirrored);
+
         super.writeToNBT(tag);
         tag.setInteger("ticks", ticks);
         tag.setInteger("time", time);
-        tag.setBoolean("mirrored", mirrored);
         tag.setBoolean("triggered", triggered);
     }
 
     @Override
     public void readFromNBT(NBTTagCompound tag) {
 
+        boolean wasMirrored = mirrored;
+        mirrored = tag.getBoolean("mirrored");
+        if (wasMirrored != mirrored) {
+            getComponents().clear();
+            initComponents();
+        }
+
         super.readFromNBT(tag);
         ticks = tag.getInteger("ticks");
         time = tag.getInteger("time");
-        mirrored = tag.getBoolean("mirrored");
         triggered = tag.getBoolean("triggered");
     }
 
     @Override
     public void writeUpdateData(DataOutput buffer) throws IOException {
 
+        buffer.writeBoolean(mirrored);
+
         super.writeUpdateData(buffer);
         buffer.writeInt(ticks);
         buffer.writeInt(time);
-        buffer.writeBoolean(mirrored);
         buffer.writeBoolean(triggered);
     }
 
     @Override
     public void readUpdateData(DataInput buffer) throws IOException {
 
+        boolean wasMirrored = mirrored;
+        mirrored = buffer.readBoolean();
+        if (wasMirrored != mirrored) {
+            getComponents().clear();
+            initComponents();
+        }
+
         super.readUpdateData(buffer);
         ticks = buffer.readInt();
         time = buffer.readInt();
-        mirrored = buffer.readBoolean();
         triggered = buffer.readBoolean();
     }
 

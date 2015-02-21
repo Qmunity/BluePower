@@ -99,7 +99,7 @@ public class PartFixture extends PartLamp {
             GL11.glDisable(GL11.GL_LIGHTING);
             GL11.glBegin(GL11.GL_QUADS);
             com.bluepowermod.client.render.RenderHelper.drawColoredCube(vector.clone().expand(0.5 / 16D), r, g, b,
-                    ((inverted ? 255 - (power & 0xFF) : (power & 0xFF)) / 255D) * 0.625);
+                    ((inverted ? 255 - (power & 0xFF) : (power & 0xFF)) / 256D) * 0.625);
             GL11.glEnd();
             GL11.glEnable(GL11.GL_CULL_FACE);
             GL11.glEnable(GL11.GL_LIGHTING);

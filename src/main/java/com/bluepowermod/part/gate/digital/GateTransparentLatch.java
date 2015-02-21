@@ -17,6 +17,10 @@
 
 package com.bluepowermod.part.gate.digital;
 
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
+
 import net.minecraft.nbt.NBTTagCompound;
 import uk.co.qmunity.lib.misc.ShiftingBuffer;
 import uk.co.qmunity.lib.texture.Layout;
@@ -105,12 +109,15 @@ public class GateTransparentLatch extends GateSimpleDigital {
     @Override
     public boolean changeMode() {
 
-        mirrored = !mirrored;
+        if (!getWorld().isRemote) {
+            mirrored = !mirrored;
 
-        getComponents().clear();
-        initConnections();
-        initComponents();
-        doLogic();
+            getComponents().clear();
+            initConnections();
+            initComponents();
+            doLogic();
+            sendUpdatePacket();
+        }
 
         return true;
     }
@@ -127,6 +134,8 @@ public class GateTransparentLatch extends GateSimpleDigital {
     @Override
     public void writeToNBT(NBTTagCompound tag) {
 
+        tag.setBoolean("mirrored", mirrored);
+
         super.writeToNBT(tag);
 
         buf.writeToNBT(tag, "buffer");
@@ -135,8 +144,36 @@ public class GateTransparentLatch extends GateSimpleDigital {
     @Override
     public void readFromNBT(NBTTagCompound tag) {
 
+        boolean wasMirrored = mirrored;
+        mirrored = tag.getBoolean("mirrored");
+        if (wasMirrored != mirrored) {
+            getComponents().clear();
+            initComponents();
+        }
+
         super.readFromNBT(tag);
 
         buf.readFromNBT(tag, "buffer");
+    }
+
+    @Override
+    public void writeUpdateData(DataOutput buffer, int channel) throws IOException {
+
+        buffer.writeBoolean(mirrored);
+
+        super.writeUpdateData(buffer, channel);
+    }
+
+    @Override
+    public void readUpdateData(DataInput buffer, int channel) throws IOException {
+
+        boolean wasMirrored = mirrored;
+        mirrored = buffer.readBoolean();
+        if (wasMirrored != mirrored) {
+            getComponents().clear();
+            initComponents();
+        }
+
+        super.readUpdateData(buffer, channel);
     }
 }
