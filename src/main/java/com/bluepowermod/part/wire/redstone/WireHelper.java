@@ -144,9 +144,9 @@ public class WireHelper {
         // In same block
         do {
             Vec3i loc = new Vec3i(device);
-            IBundledDevice dev = RedstoneApi.getInstance().getBundledDevice(loc.getWorld(), loc.getX(), loc.getY(), loc.getZ(), side,
-                    face == ForgeDirection.UNKNOWN ? side.getOpposite() : face);
-            if (dev == null)
+            IBundledDevice dev = RedstoneApi.getInstance().getBundledDevice(loc.getWorld(), loc.getX(), loc.getY(), loc.getZ(),
+                    side == face.getOpposite() ? ForgeDirection.UNKNOWN : side, face == ForgeDirection.UNKNOWN ? side.getOpposite() : face);
+            if (dev == null || dev == device || dev instanceof DummyRedstoneDevice)
                 break;
 
             ConnectionType type = (device instanceof IFace || dev instanceof IFace) && !(device instanceof IFace == dev instanceof IFace) ? ConnectionType.STRAIGHT
@@ -161,12 +161,12 @@ public class WireHelper {
                 Vec3i loc = new Vec3i(device).add(face).add(side);
                 IBundledDevice dev = RedstoneApi.getInstance().getBundledDevice(loc.getWorld(), loc.getX(), loc.getY(), loc.getZ(),
                         side.getOpposite(), face.getOpposite());
-                if (dev == null)
+                if (dev == null || dev == device)
                     break;
 
                 Vec3i block = new Vec3i(device).add(side);
                 // Full block check
-                if (block.getBlock().isNormalCube(block.getWorld(), block.getX(), block.getY(), block.getZ()))
+                if (block.getBlock().isNormalCube())
                     break;
                 // Microblock check
                 if (!OcclusionHelper.microblockOcclusionTest(block, MicroblockShape.EDGE, 1, face, side.getOpposite()))
@@ -198,7 +198,7 @@ public class WireHelper {
                 }
             }
 
-            if (dev == null)
+            if (dev == null || dev == device)
                 break;
 
             if (device.canConnect(side, dev, ConnectionType.STRAIGHT)
