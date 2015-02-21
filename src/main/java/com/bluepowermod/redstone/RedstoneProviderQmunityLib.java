@@ -73,6 +73,7 @@ public class RedstoneProviderQmunityLib implements IRedstoneProvider {
 
         ITilePartHolder holder = MultipartCompatibility.getPartHolder(world, x, y, z);
         if (holder != null) {
+            boolean foundOnlyFace = holder.getParts().size() > 0;
             for (IPart p : holder.getParts()) {
                 if (p instanceof IBundledDeviceWrapper) {
                     if (p instanceof IFace) {
@@ -90,8 +91,14 @@ public class RedstoneProviderQmunityLib implements IRedstoneProvider {
                         if (face == ForgeDirection.UNKNOWN)
                             return (IBundledDevice) p;
                     }
+                    foundOnlyFace = true;
+                } else {
+                    if (!(p instanceof IFace))
+                        foundOnlyFace = false;
                 }
             }
+            if (foundOnlyFace)
+                return null;// RedstoneApi.getInstance().getReturnDevice();
         }
 
         return null;
