@@ -654,127 +654,134 @@ item.bluepower:paint_brush.red.name=Roter Pinsel
 item.bluepower:paint_brush.black.name=Schwarzer Pinsel
 
 # Creative tabs
-itemGroup.tabBluePowerMachines=Blue Power Maschinen
-itemGroup.tabBluePowerBlocks=Blue Power Blöcke
-itemGroup.tabBluePowerItems=Blue Power Items
-itemGroup.tabBluePowerTools=Blue Power Werkzeuge
-itemGroup.tabBluePowerCircuits=Blue Power Gatter
-itemGroup.tabBluePowerLighting=Blue Power Lampen
-itemGroup.tabBluePowerWiring=Blue Power Kabel
+itemGroup.bluepower:machines=Blue Power Maschinen
+itemGroup.bluepower:blocks=Blue Power Blöcke
+itemGroup.bluepower:items=Blue Power Items
+itemGroup.bluepower:tools=Blue Power Werkzeuge
+itemGroup.bluepower:circuits=Blue Power Gatter
+itemGroup.bluepower:lighting=Blue Power Lampen
+itemGroup.bluepower:wiring=Blue Power Kabel
 
 # Enchantments
-enchantment.vorpal.name=Vorpal
-enchantment.disjunction.name=Disjunction
+enchantment.bluepower:vorpal.name=Vorpal
+enchantment:disjunction.name=Disjunction
 
-# GUI buttons and tooltips
-gui.projectTable.clearGrid=Leere Crafting Feld
-gui.timerInterval=Timer Interval
-gui.counterMax=Maximum
-gui.counterIncrement=Hoch zählen um
-gui.counterDecrement=Runter zählen um
-gui.counterCount=Anzahl
-gui.connections=Verbindungen
-gui.passThrough=Passieren
+# Gui buttons and tooltips
+gui.bluepower:projectTable.clearGrid=Leere Crafting Feld
+gui.bluepower:timer.interval=Timer Interval
+gui.bluepower:counter.max=Maximum
+gui.bluepower:counter.increment=Hoch zählen um
+gui.bluepower:counter.decrement=Runter zählen um
+gui.bluepower:counter.count=Anzahl
 
-gui.sortMode=§bSortier Modus
-gui.pullMode=§bBezugs Modus
-gui.mode=§bModus
-gui.priority=§bPriorität
-gui.priority.info=Je höher die Nummer, desto höher die Priorität.
-gui.sortMode.any_stack_sequential=§3Jedes Stack, Sequentiell
-gui.sortMode.any_stack_sequential.info=Ein Stack in einer Reihe müssen übereinstimmen (Menge einbezogen). Dieses Item wird bezogen und die Maschine geht zur nächsten Reihe.
-gui.sortMode.all_stacks_sequential=§3Alle Stacks, Sequentiell
-gui.sortMode.all_stacks_sequential.info=Alle Stacks in einer Reihe müssen übereinstimmen (Menge einbezogen). Items werden bezogen und Maschine geht zur nächsten Reihe.
-gui.sortMode.all_stacks_random=§3Alle Stacks, zufällig
-gui.sortMode.all_stacks_random.info=Alle Stacks in einer Reihe müssen übereinstimmen (Menge einbezogen). Items werden bezogen. Die Reihe ist egal.
-gui.sortMode.any_item=§3Jedes Item
-gui.sortMode.any_item.info=Ausgewählte Items werden bezogen mit der festgelegten menge des Filter Stacks.
-gui.sortMode.any_item_default=§3Jedes standartmäßige Item
-gui.sortMode.any_item_default.info=Ausgewählte Items werden bezogen mit den festgelegten Mengen des Filter Stacks. Eine standart Farbe für unpassende Items kann festgelegt werden.
-gui.sortMode.any_stack=§3Jedes Stack
-gui.sortMode.any_stack.info=Ausgewählte Items werden bezogen, bis zu einem vollen Stack.
-gui.sortMode.any_stack_default=§3Jedes standartmäßige Stack
-gui.sortMode.any_stack_default.info=Ausgewählte Items werden bezogen, bis zu einem vollen Stack. Eine standart Farbe für unpassende Items kann festgelegt werden.
-gui.pullMode.single_step=§Einzelner Schritt
-gui.pullMode.single_step.info=Ein Item/Reihe (Je nach Modus) wird bezogen für jedes Redstone Signal.
-gui.pullMode.automatic=§3Automatisch
-gui.pullMode.automatic.info=Bezieht automatisch regelmäßig Items.
-gui.pullMode.single_sweep=§3Einzelner Schwung
-gui.pullMode.single_sweep.info=Die Maschine versucht für jedes Redstone Signal durch alle Reihen zu gehen. Signale werden gespeichert.
+gui.bluepower:sortingMachine.sortMode=§bSortier Modus
+gui.bluepower:sortingMachine.pullMode=§bBezugs Modus
+gui.bluepower:sortingMachine.mode=§bModus
+gui.bluepower:sortingMachine.priority=§bPriorität
+gui.bluepower:sortingMachine.priority.info=Je höher die Nummer, desto höher die Priorität.
+gui.bluepower:sortingMachine.sortMode.any_stack_sequential=§3Jedes Stack, Sequentiell
+gui.bluepower:sortingMachine.sortMode.any_stack_sequential.info=Ein Stack in einer Reihe müssen übereinstimmen (Menge einbezogen). Dieses Item wird bezogen und die Maschine geht zur nächsten Reihe.
+gui.bluepower:sortingMachine.sortMode.all_stacks_sequential=§3Alle Stacks, Sequentiell
+gui.bluepower:sortingMachine.sortMode.all_stacks_sequential.info=Alle Stacks in einer Reihe müssen übereinstimmen (Menge einbezogen). Items werden bezogen und Maschine geht zur nächsten Reihe.
+gui.bluepower:sortingMachine.sortMode.all_stacks_random=§3Alle Stacks, zufällig
+gui.bluepower:sortingMachine.sortMode.all_stacks_random.info=Alle Stacks in einer Reihe müssen übereinstimmen (Menge einbezogen). Items werden bezogen. Die Reihe ist egal.
+gui.bluepower:sortingMachine.sortMode.any_item=§3Jedes Item
+gui.bluepower:sortingMachine.sortMode.any_item.info=Ausgewählte Items werden bezogen mit der festgelegten menge des Filter Stacks.
+gui.bluepower:sortingMachine.sortMode.any_item_default=§3Jedes standartmäßige Item
+gui.bluepower:sortingMachine.sortMode.any_item_default.info=Ausgewählte Items werden bezogen mit den festgelegten Mengen des Filter Stacks. Eine standart Farbe für unpassende Items kann festgelegt werden.
+gui.bluepower:sortingMachine.sortMode.any_stack=§3Jedes Stack
+gui.bluepower:sortingMachine.sortMode.any_stack.info=Ausgewählte Items werden bezogen, bis zu einem vollen Stack.
+gui.bluepower:sortingMachine.sortMode.any_stack_default=§3Jedes standartmäßige Stack
+gui.bluepower:sortingMachine.sortMode.any_stack_default.info=Ausgewählte Items werden bezogen, bis zu einem vollen Stack. Eine standart Farbe für unpassende Items kann festgelegt werden.
+gui.bluepower:sortingMachine.pullMode.single_step=§Einzelner Schritt
+gui.bluepower:sortingMachine.pullMode.single_step.info=Ein Item/Reihe (Je nach Modus) wird bezogen für jedes Redstone Signal.
+gui.bluepower:sortingMachine.pullMode.automatic=§3Automatisch
+gui.bluepower:sortingMachine.pullMode.automatic.info=Bezieht automatisch regelmäßig Items.
+gui.bluepower:sortingMachine.pullMode.single_sweep=§3Einzelner Schwung
+gui.bluepower:sortingMachine.pullMode.single_sweep.info=Die Maschine versucht für jedes Redstone Signal durch alle Reihen zu gehen. Signale werden gespeichert.
 
-gui.retriever.mode.sequential=§3Sequentiell
-gui.retriever.mode.sequential.info=Versucht das ausgewählte Item mit festgelegter Menge zu beziehen. Macht mit dem nächsten Item weiter, wenn dies passiert ist.
-gui.retriever.mode.any=§3Jedes Item
-gui.retriever.mode.any.info=Versucht alle gefilterten Items mit der festgelegten Menge zu beziehen.
+gui.bluepower:retriever.mode.sequential=§3Sequentiell
+gui.bluepower:retriever.mode.sequential.info=Versucht das ausgewählte Item mit festgelegter Menge zu beziehen. Macht mit dem nächsten Item weiter, wenn dies passiert ist.
+gui.bluepower:retriever.mode.any=§3Jedes Item
+gui.bluepower:retriever.mode.any.info=Versucht alle gefilterten Items mit der festgelegten Menge zu beziehen.
 
-gui.regulator.mode.ratio=§3Rationaler Modus
-gui.regulator.mode.ratio.info=Wartet bis das mittige Inventar die gleichen Items wie der Filter auf der linken Seite enthält.
-gui.regulator.mode.supply=§3Versorgungs Modus
-gui.regulator.mode.supply.info=Dieser spezielle Modus ist nur für Regulatoren mit einem angeschlossenen Invetar hat die Priorität das Inventar mit Items zu versorgen. Die Items können durch den rechten Filter festgelegt werden.
+gui.bluepower:regulator.mode.ratio=§3Rationaler Modus
+gui.bluepower:regulator.mode.ratio.info=Wartet bis das mittige Inventar die gleichen Items wie der Filter auf der linken Seite enthält.
+gui.bluepower:regulator.mode.supply=§3Versorgungs Modus
+gui.bluepower:regulator.mode.supply.info=Dieser spezielle Modus ist nur für Regulatoren mit einem angeschlossenen Invetar hat die Priorität das Inventar mit Items zu versorgen. Die Items können durch den rechten Filter festgelegt werden.
 
-gui.itemDetector.mode.item=§3Item Modus
-gui.itemDetector.mode.item.info=Sendet ein Redstone Signal für jedes passierende Item.
-gui.itemDetector.mode.stack=§3Stack Modus
-gui.itemDetector.mode.stack.info=Sendet ein Redstone Signal für jedes passierende Stack.
-gui.itemDetector.mode.stuffed=§3Überschuss Modus
-gui.itemDetector.mode.stuffed.info=Sendet ein Redstone Signal solange der Auswurf inheralb des Puffers verstopft ist.
+gui.bluepower:itemDetector.mode.item=§3Item Modus
+gui.bluepower:itemDetector.mode.item.info=Sendet ein Redstone Signal für jedes passierende Item.
+gui.bluepower:itemDetector.mode.stack=§3Stack Modus
+gui.bluepower:itemDetector.mode.stack.info=Sendet ein Redstone Signal für jedes passierende Stack.
+gui.bluepower:itemDetector.mode.stuffed=§3Überschuss Modus
+gui.bluepower:itemDetector.mode.stuffed.info=Sendet ein Redstone Signal solange der Auswurf inheralb des Puffers verstopft ist.
 
-gui.manager.mode.exact=§3Exakter Modus
-gui.manager.mode.exact.info=Versucht das Inventar mit der exakten Anzahl an Items im Inventar des Managers zu versorgen.
-gui.manager.mode.all=§3Alle Modi
-gui.manager.mode.all.info=Festgelegte Items im Inventar des Mangers werden benutzt um das angeschlossene Inventar zu versorgen. Das einzige Limit ist die Größe des Inventars.
+gui.bluepower:manager.mode.exact=§3Exakter Modus
+gui.bluepower:manager.mode.exact.info=Versucht das Inventar mit der exakten Anzahl an Items im Inventar des Managers zu versorgen.
+gui.bluepower:manager.mode.all=§3Alle Modi
+gui.bluepower:manager.mode.all.info=Festgelegte Items im Inventar des Mangers werden benutzt um das angeschlossene Inventar zu versorgen. Das einzige Limit ist die Größe des Inventars.
 
-gui.circuitDatabase.tab.copyAndShare=Kopieren & Teilen
-gui.circuitDatabase.tab.private=Privater Bibliothek
-gui.circuitDatabase.tab.server=Server Bibliothek
+gui.bluepower:circuitDatabase.tab.copyAndShare=Kopieren & Teilen
+gui.bluepower:circuitDatabase.tab.private=Privater Bibliothek
+gui.bluepower:circuitDatabase.tab.server=Server Bibliothek
 
-gui.circuitDatabase.action.cancel=Abbrechen
-gui.circuitDatabase.action.savePrivate=In Privater Bibliothek speichern
-gui.circuitDatabase.action.saveServer=In Server Bibliothek speichern
-gui.circuitDatabase.action.copy=Kopieren
+gui.bluepower:circuitDatabase.action.cancel=Abbrechen
+gui.bluepower:circuitDatabase.action.savePrivate=In Privater Bibliothek speichern
+gui.bluepower:circuitDatabase.action.saveServer=In Server Bibliothek speichern
+gui.bluepower:circuitDatabase.action.copy=Kopieren
 
-gui.circuitDatabase.info.serverOnly=§cNur im Multiplayer vorhanden.
-gui.circuitDatabase.info.nameTaken=§cDieser Name exestiert bereits.
-gui.circuitDatabase.info.opsOnly=§cDer Server erlaubt es nur Operatoren auf die Server Bibliothek zu zugreifen.
-gui.circuitDatabase.info.sneakClickToConfirmDeleting=§cSicher? Shift-Klicke zum Akzeptieren.
-gui.circuitDatabase.info.sneakClickToDelete=Shift-klicke zum löschen.
+gui.bluepower:circuitDatabase.info.serverOnly=§cNur im Multiplayer vorhanden.
+gui.bluepower:circuitDatabase.info.nameTaken=§cDieser Name exestiert bereits.
+gui.bluepower:circuitDatabase.info.opsOnly=§cDer Server erlaubt es nur Operatoren auf die Server Bibliothek zu zugreifen.
+gui.bluepower:circuitDatabase.info.sneakClickToConfirmDeleting=§cSicher? Shift-Klicke zum Akzeptieren.
+gui.bluepower:circuitDatabase.info.sneakClickToDelete=Shift-klicke zum löschen.
 
-gui.circuitDatabase.name=Name:
+gui.bluepower:circuitDatabase.name=Name:
 
-gui.sneakForInfo=Schleiche für mehr Info
+gui.bluepower:tooltip.sneakForInfo=Schleiche für mehr Info
 
-gui.widget.fuzzy=§bFilter Genauigkeit
-gui.widget.fuzzy.normal=§3Normal
-gui.widget.fuzzy.normal.info=Hält Items für gleich wenn das Item gleich ist und deren Item Schaden.
-gui.widget.fuzzy.fuzzy=§3Undeutlich
-gui.widget.fuzzy.fuzzy.info=Hält Items für gleich when ihr Ore Dictionary eintrag gleich ist.
-gui.widget.fuzzy.exact=§3Exakt
-gui.widget.fuzzy.exact.info=Hält Items für gleich wenn sie exakt gleich sind. NBT Info einbezogen. Das heißt ein Diamant Schwert ist unterschiedlich von einem verzaberten.
+gui.bluepower:wireless=Wireless Redstone
 
-gui.tooltip.hasSilkyData=§eEnthält extra Info
+gui.bluepower:widget.fuzzy=§bFilter Genauigkeit
+gui.bluepower:widget.fuzzy.normal=§3Normal
+gui.bluepower:widget.fuzzy.normal.info=Hält Items für gleich wenn das Item gleich ist und deren Item Schaden.
+gui.bluepower:widget.fuzzy.fuzzy=§3Undeutlich
+gui.bluepower:widget.fuzzy.fuzzy.info=Hält Items für gleich when ihr Ore Dictionary eintrag gleich ist.
+gui.bluepower:widget.fuzzy.exact=§3Exakt
+gui.bluepower:widget.fuzzy.exact.info=Hält Items für gleich wenn sie exakt gleich sind. NBT Info einbezogen. Das heißt ein Diamant Schwert ist unterschiedlich von einem verzaberten.
 
-gui.tab.stuffed=Überschüssige Items
-gui.tab.stuffed.noItems=Keine Überschüssigen Items
-gui.tab.info=Information
+gui.bluepower:tooltip.hasSilkyData=§eEnthält extra Info
+
+gui.bluepower:tab.stuffed=Überschüssige Items
+gui.bluepower:tab.stuffed.noItems=Keine Überschüssigen Items
+gui.bluepower:tab.info=Information
+
+gui.bluepower:transceiver.mode.sendreceive=Send./Empf.
+gui.bluepower:transceiver.mode.send=Senden
+gui.bluepower:transceiver.mode.receive=Empfangen
+
+gui.bluepower:transceiver.filter.none=None
+gui.bluepower:transceiver.filter.admin=Admin
 
 # Colors
-gui.widget.color.none=Keine Farbe
-gui.widget.color.black=Schwarz
-gui.widget.color.red=Rot
-gui.widget.color.green=Grün
-gui.widget.color.brown=Braun
-gui.widget.color.blue=Blau
-gui.widget.color.purple=Lila
-gui.widget.color.cyan=Cyan
-gui.widget.color.silver=Hell Grau
-gui.widget.color.gray=Grau
-gui.widget.color.pink=Pink
-gui.widget.color.lime=Hell Grün
-gui.widget.color.yellow=Gelb
-gui.widget.color.lightBlue=Hell Blau
-gui.widget.color.magenta=Magenta
-gui.widget.color.orange=Orange
-gui.widget.color.white=Weiß
+bluepower:color.none=Keine Farbe
+bluepower:color.black=Schwarz
+bluepower:color.red=Rot
+bluepower:color.green=Grün
+bluepower:color.brown=Braun
+bluepower:color.blue=Blau
+bluepower:color.purple=Lila
+bluepower:color.cyan=Cyan
+bluepower:color.silver=Hell Grau
+bluepower:color.gray=Grau
+bluepower:color.pink=Pink
+bluepower:color.lime=Hell Grün
+bluepower:color.yellow=Gelb
+bluepower:color.lightBlue=Hell Blau
+bluepower:color.magenta=Magenta
+bluepower:color.orange=Orange
+bluepower:color.white=Weiß
 
 # Info tab
 tile.bluepower:alloyfurnace.info=Dieser Block kann Metalle verschmelzen. Er kann genutzt werden um Messing aus 3 Kupfer und 1 Zink herzustellen.
@@ -793,80 +800,74 @@ tile.bluepower:circuit_database.info=Diese Maschine ermöglicht es Schaltkreise 
 tile.bluepower:manager.info=Eine Fortgeschrittene Maschine zum regeln eines Inventars. Kann eingestellt werden um ein Inventar mit spezifischen Items/Mengen zu versorgen. Kann auch so viele Items, von einem bestimmten Typ, beziehen wie möglich. Prioritäten legen fest, dass Manager nicht von anderen Managern mit höheren Prioritäten Items beziehen können.
 
 # Directions
-direction.front=Front
-direction.left=Links
-direction.back=Hinten
-direction.right=Rechts
+bluepower:direction.front=Front
+bluepower:direction.left=Links
+bluepower:direction.back=Hinten
+bluepower:direction.right=Rechts
 
 # Cardinal directions
-rotation.north=Norden
-rotation.south=Süden
-rotation.up=Oben
-rotation.down=Unten
-rotation.west=Westen
-rotation.east=Osten
+bluepower:face.north=Norden
+bluepower:face.south=Süden
+bluepower:face.up=Oben
+bluepower:face.down=Unten
+bluepower:face.west=Westen
+bluepower:face.east=Osten
 
 # Misc
-random.enabled=Aktiviert
-random.disabled=Deaktiviert
+bluepower:misc.enabled=Aktiviert
+bluepower:misc.disabled=Deaktiviert
 
 # Config file options
-bluepower.config.settings.tooltip=Generelle Mod Einstellungen.
-bluepower.config.recipes.tooltip=Rezept Einstellungen.
-bluepower.config.enchantments.tooltip=Verzauberungs Einstellungen.
-bluepower.config.tubes.tooltip=Rohr Optionen.
-bluepower.config.circuitDatabase=Schaltkreis Dataenbank Optionen.
-bluepower.config.copper.tooltip=Adjustiere Kupfer Erz generation.
-bluepower.config.zinc.tooltip=Adjustiere Zink Erz generation.
-bluepower.config.silver.tooltip=Adjustiere Silber Erz generation.
-bluepower.config.tungsten.tooltip=Adjustiere Tungsten Erz generation.
-bluepower.config.ruby.tooltip=Adjustiere Rubin Erz generation.
-bluepower.config.amethyst.tooltip=Adjustiere Amethyst Erz generation.
-bluepower.config.sapphire.tooltip=Adjustiere Sapphir Erz generation.
-bluepower.config.teslatite.tooltip=Adjustiere Teslatit Erz generation.
-bluepower.config.worldgen.tooltip=Konfiguriere verschiedene Weltgenerations Optionen.
-bluepower.config.circuitDatabase.tooltip=Schaltkreis Datenbank Optionen.
+config.bluepower:settings.tooltip=Generelle Mod Einstellungen.
+config.bluepower:recipes.tooltip=Rezept Einstellungen.
+config.bluepower:enchantments.tooltip=Verzauberungs Einstellungen.
+config.bluepower:tubes.tooltip=Rohr Optionen.
+config.bluepower:circuitDatabase.tooltip=Schaltkreis Dataenbank Optionen.
+config.bluepower:copper.tooltip=Adjustiere Kupfer Erz generation.
+config.bluepower:zinc.tooltip=Adjustiere Zink Erz generation.
+config.bluepower:silver.tooltip=Adjustiere Silber Erz generation.
+config.bluepower:tungsten.tooltip=Adjustiere Tungsten Erz generation.
+config.bluepower:ruby.tooltip=Adjustiere Rubin Erz generation.
+config.bluepower:amethyst.tooltip=Adjustiere Amethyst Erz generation.
+config.bluepower:sapphire.tooltip=Adjustiere Sapphir Erz generation.
+config.bluepower:teslatite.tooltip=Adjustiere Teslatit Erz generation.
+config.bluepower:worldgen.tooltip=Konfiguriere verschiedene Weltgenerations Optionen.
+config.bluepower:circuitDatabase.tooltip=Schaltkreis Datenbank Optionen.
 
 # WAILA
-bluepower.waila.rsLatch.feedback=Feedback
-bluepower.waila.rsLatch.noFeedback=Kein Feedback
-waila.pneumaticTube.color=Farben
-waila.machine.stuffed=Verstopft
+waila.bluepower:gate.connections=Verbindungen
+waila.bluepower:gate.mux.passthrough=Passieren
+waila.bluepower:gate.rsLatch.feedback=Feedback
+waila.bluepower:gate.rsLatch.nofeedback=Kein Feedback
+waila.bluepower:tube.color=Farben
+waila.bluepower:machine.stuffed=Verstopft
 
-bluepower.accessability.public=Global
-bluepower.accessability.shared=Begrenzt
-bluepower.accessability.private=Privat
-
-bluepower.mode.sendreceive=Send./Empf.
-bluepower.mode.send=Senden
-bluepower.mode.receive=Empfangen
-
-bluepower.gui.none=None
-bluepower.gui.admin=Admin
-
-bluepower.gui.wireless=Wireless Redstone
+# Misc
+bluepower:accessability.public=Global
+bluepower:accessability.shared=Begrenzt
+bluepower:accessability.private=Privat
 
 
 # Achievements
-bluepower.gui.achievements=Bluepower
+achievement.bluepower=Bluepower
 
-achievement.vorpal=Gut ausgestattet
-achievement.vorpal.desc=Nutz die Vorpal Verzauberung
+achievement.bluepower:vorpal=Gut ausgestattet
+achievement.bluepower:vorpal.desc=Nutz die Vorpal Verzauberung
 
-achievement.sort=Ordnungswahn
-achievement.sort.desc=Baue eine Sortiermaschine
+achievement.bluepower:sort=Ordnungswahn
+achievement.bluepower:sort.desc=Baue eine Sortiermaschine
 
-achievement.tungsten=Nicht mehr nutzlos
-achievement.tungsten.desc=Baue Tungsten ab
+achievement.bluepower:tungsten=Nicht mehr nutzlos
+achievement.bluepower:tungsten.desc=Baue Tungsten ab
 
-achievement.dope=Guter Stoff, bro!
-achievement.dope.desc=Stelle dotiertes Wafer her
+achievement.bluepower:dope=Guter Stoff, bro!
+achievement.bluepower:dope.desc=Stelle dotiertes Wafer her
 
-achievement.tube=Tu-be or not tu-be
-achievement.tube.desc=Baue ein Rohr
+achievement.bluepower:tube=Tu-be or not tu-be
+achievement.bluepower:tube.desc=Baue ein Rohr
 
-achievement.magtube=Need for Speed
-achievement.magtube.desc=Baue ein Mag-Rohr
+achievement.bluepower:magtube=Need for Speed
+achievement.bluepower:magtube.desc=Baue ein Mag-Rohr
 
-achievement.circuitception=Schaltkreisel
-achievement.circuitception.desc=Baue einen Integrierten Schaltkreis
+achievement.bluepower:circuitception=Schaltkreisel
+achievement.bluepower:circuitception.desc=Baue einen Integrierten Schaltkreis

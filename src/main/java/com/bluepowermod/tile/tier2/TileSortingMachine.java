@@ -44,6 +44,7 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
     public final TubeColor[] colors = new TubeColor[9];
     public int[] fuzzySettings = new int[8];
     private ItemStack nonAcceptedStack;// will be set to the latest accepted stack via tubes.. It will reject any following items from that stack that
+
     // tick.
 
     public TileSortingMachine() {
@@ -65,7 +66,7 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
         @Override
         public String toString() {
 
-            return "gui.pullMode." + name;
+            return "gui.bluepower:sortingMachine.pullMode." + name;
         }
     }
 
@@ -83,7 +84,7 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
         @Override
         public String toString() {
 
-            return "gui.sortMode." + name;
+            return "gui.bluepower:sortingMachine.sortMode." + name;
         }
     }
 

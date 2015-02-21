@@ -270,7 +270,7 @@ public class GateStateCell extends GateSimpleDigital implements IGuiButtonSensit
             t = time + "ms";
         }
 
-        info.add(I18n.format("gui.timerInterval") + ": " + SpecialChars.WHITE + t);
+        info.add(I18n.format("gui.bluepower:timer.interval") + ": " + SpecialChars.WHITE + t);
     }
 
     @Override

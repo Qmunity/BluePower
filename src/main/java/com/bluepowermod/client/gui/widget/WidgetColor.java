@@ -64,9 +64,9 @@ public class WidgetColor extends BaseWidget {
     public void addTooltip(int mouseX, int mouseY, List<String> curTooltip, boolean shiftPressed) {
 
         if (value < 16) {
-            curTooltip.add("gui.widget.color." + ItemDye.field_150923_a[value]);
+            curTooltip.add("bluepower:color." + ItemDye.field_150923_a[value]);
         } else {
-            curTooltip.add("gui.widget.color.none");
+            curTooltip.add("bluepower:color.none");
         }
     }
 

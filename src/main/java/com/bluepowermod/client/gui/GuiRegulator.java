@@ -63,12 +63,12 @@ public class GuiRegulator extends GuiContainerBaseBP {
             @Override
             public void addTooltip(int mouseX, int mouseY, List<String> curTip, boolean shiftPressed) {
 
-                curTip.add("gui.mode");
-                curTip.add("gui.regulator.mode." + (value == 0 ? "ratio" : "supply"));
+                curTip.add("gui.bluepower:sortingMachine.mode");
+                curTip.add("gui.bluepower:regulator.mode." + (value == 0 ? "ratio" : "supply"));
                 if (shiftPressed) {
-                    curTip.add("gui.regulator.mode." + (value == 0 ? "ratio" : "supply") + ".info");
+                    curTip.add("gui.bluepower:regulator.mode." + (value == 0 ? "ratio" : "supply") + ".info");
                 } else {
-                    curTip.add("gui.sneakForInfo");
+                    curTip.add("gui.bluepower:tooltip.sneakForInfo");
                 }
             }
         };

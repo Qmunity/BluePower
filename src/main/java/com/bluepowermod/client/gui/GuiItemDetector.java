@@ -45,24 +45,24 @@ public class GuiItemDetector extends GuiContainerBaseBP {
             @Override
             public void addTooltip(int mouseX, int mouseY, List<String> curTip, boolean shiftPressed) {
 
-                curTip.add("gui.mode");
+                curTip.add("gui.bluepower:sortingMachine.mode");
                 String mode;
                 switch (value) {
                 case 0:
-                    mode = "gui.itemDetector.mode.item";
+                    mode = "gui.bluepower:itemDetector.mode.item";
                     break;
                 case 1:
-                    mode = "gui.itemDetector.mode.stack";
+                    mode = "gui.bluepower:itemDetector.mode.stack";
                     break;
                 default:
-                    mode = "gui.itemDetector.mode.stuffed";
+                    mode = "gui.bluepower:itemDetector.mode.stuffed";
 
                 }
                 curTip.add(mode);
                 if (shiftPressed) {
                     curTip.add(mode + ".info");
                 } else {
-                    curTip.add("gui.sneakForInfo");
+                    curTip.add("gui.bluepower:tooltip.sneakForInfo");
                 }
             }
         };

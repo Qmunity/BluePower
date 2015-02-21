@@ -32,26 +32,26 @@ public class WidgetFuzzySetting extends WidgetMode {
     @Override
     public void addTooltip(int mouseX, int mouseY, List<String> curTip, boolean shiftPressed) {
 
-        curTip.add("gui.widget.fuzzy");
+        curTip.add("gui.bluepower:widget.fuzzy");
         switch (value) {
         case 0:
-            curTip.add("gui.widget.fuzzy.normal");
+            curTip.add("gui.bluepower:widget.fuzzy.normal");
             if (shiftPressed)
-                curTip.add("gui.widget.fuzzy.normal.info");
+                curTip.add("gui.bluepower:widget.fuzzy.normal.info");
             break;
         case 1:
-            curTip.add("gui.widget.fuzzy.fuzzy");
+            curTip.add("gui.bluepower:widget.fuzzy.fuzzy");
             if (shiftPressed)
-                curTip.add("gui.widget.fuzzy.fuzzy.info");
+                curTip.add("gui.bluepower:widget.fuzzy.fuzzy.info");
             break;
         case 2:
-            curTip.add("gui.widget.fuzzy.exact");
+            curTip.add("gui.bluepower:widget.fuzzy.exact");
             if (shiftPressed)
-                curTip.add("gui.widget.fuzzy.exact.info");
+                curTip.add("gui.bluepower:widget.fuzzy.exact.info");
             break;
         }
         if (!shiftPressed)
-            curTip.add("gui.sneakForInfo");
+            curTip.add("gui.bluepower:tooltip.sneakForInfo");
     }
 
     @Override

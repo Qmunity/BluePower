@@ -122,13 +122,22 @@ public class GateNand extends GateSimpleDigital {
     @SideOnly(Side.CLIENT)
     public void addWAILABody(List<String> info) {
 
-        info.add(Color.YELLOW + I18n.format("gui.connections") + ":");
-        info.add("  " + Dir.LEFT.getLocalizedName() + ": "
-                + (left().isEnabled() ? Color.GREEN + I18n.format("random.enabled") : Color.RED + I18n.format("random.disabled")));
-        info.add("  " + Dir.BACK.getLocalizedName() + ": "
-                + (back().isEnabled() ? Color.GREEN + I18n.format("random.enabled") : Color.RED + I18n.format("random.disabled")));
-        info.add("  " + Dir.RIGHT.getLocalizedName() + ": "
-                + (right().isEnabled() ? Color.GREEN + I18n.format("random.enabled") : Color.RED + I18n.format("random.disabled")));
+        info.add(Color.YELLOW + I18n.format("waila.bluepower:gate.connections") + ":");
+        info.add("  "
+                + Dir.LEFT.getLocalizedName()
+                + ": "
+                + (left().isEnabled() ? Color.GREEN + I18n.format("bluepower:misc.enabled") : Color.RED
+                        + I18n.format("bluepower:misc.disabled")));
+        info.add("  "
+                + Dir.BACK.getLocalizedName()
+                + ": "
+                + (back().isEnabled() ? Color.GREEN + I18n.format("bluepower:misc.enabled") : Color.RED
+                        + I18n.format("bluepower:misc.disabled")));
+        info.add("  "
+                + Dir.RIGHT.getLocalizedName()
+                + ": "
+                + (right().isEnabled() ? Color.GREEN + I18n.format("bluepower:misc.enabled") : Color.RED
+                        + I18n.format("bluepower:misc.disabled")));
     }
 
     @Override

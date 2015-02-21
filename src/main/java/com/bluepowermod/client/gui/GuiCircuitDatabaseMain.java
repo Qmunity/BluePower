@@ -59,15 +59,15 @@ public class GuiCircuitDatabaseMain extends GuiContainerBaseBP {
 
                 switch (curHoveredTab) {
                 case 0:
-                    curTip.add("gui.circuitDatabase.tab.copyAndShare");
+                    curTip.add("gui.bluepower:circuitDatabase.tab.copyAndShare");
                     break;
                 case 1:
-                    curTip.add("gui.circuitDatabase.tab.private");
+                    curTip.add("gui.bluepower:circuitDatabase.tab.private");
                     break;
                 case 2:
-                    curTip.add("gui.circuitDatabase.tab.server");
+                    curTip.add("gui.bluepower:circuitDatabase.tab.server");
                     if (Minecraft.getMinecraft().isSingleplayer())
-                        curTip.add("gui.circuitDatabase.info.serverOnly");
+                        curTip.add("gui.bluepower:circuitDatabase.info.serverOnly");
                     break;
                 }
             }
@@ -84,20 +84,20 @@ public class GuiCircuitDatabaseMain extends GuiContainerBaseBP {
 
                 switch (curHoveredTab) {
                 case 0:
-                    curTip.add("gui.circuitDatabase.action.cancel");
+                    curTip.add("gui.bluepower:circuitDatabase.action.cancel");
                     break;
                 case 1:
-                    curTip.add("gui.circuitDatabase.action.savePrivate");
+                    curTip.add("gui.bluepower:circuitDatabase.action.savePrivate");
                     if (!enabledTabs[curHoveredTab]) {
-                        curTip.add("gui.circuitDatabase.info.nameTaken");
+                        curTip.add("gui.bluepower:circuitDatabase.info.nameTaken");
                     }
                     break;
                 case 2:
-                    curTip.add("gui.circuitDatabase.action.saveServer");
+                    curTip.add("gui.bluepower:circuitDatabase.action.saveServer");
                     if (Minecraft.getMinecraft().isSingleplayer()) {
-                        curTip.add("gui.circuitDatabase.info.serverOnly");
+                        curTip.add("gui.bluepower:circuitDatabase.info.serverOnly");
                     } else if (!enabledTabs[curHoveredTab]) {
-                        curTip.add("gui.circuitDatabase.info.nameTaken");
+                        curTip.add("gui.bluepower:circuitDatabase.info.nameTaken");
                     }
                     break;
                 }
@@ -111,7 +111,7 @@ public class GuiCircuitDatabaseMain extends GuiContainerBaseBP {
             @Override
             public void addTooltip(int x, int y, List<String> curTip, boolean shiftPressed) {
 
-                curTip.add("gui.circuitDatabase.action.copy");
+                curTip.add("gui.bluepower:circuitDatabase.action.copy");
             }
         };
         addWidget(copyButton);
@@ -161,7 +161,7 @@ public class GuiCircuitDatabaseMain extends GuiContainerBaseBP {
 
         super.drawGuiContainerBackgroundLayer(par1, par2, par3);
 
-        this.drawString(guiLeft + 95, guiTop + 25, I18n.format("gui.circuitDatabase.name"), false);
+        this.drawString(guiLeft + 95, guiTop + 25, I18n.format("gui.bluepower:circuitDatabase.name"), false);
         nameField.drawTextBox();
 
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);

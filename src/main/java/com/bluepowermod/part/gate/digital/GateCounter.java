@@ -224,9 +224,9 @@ public class GateCounter extends GateSimpleDigital implements IGuiButtonSensitiv
     @SideOnly(Side.CLIENT)
     public void addWAILABody(List<String> info) {
 
-        info.add(I18n.format("gui.counterMax") + ": " + Color.YELLOW + max);
-        info.add(I18n.format("gui.counterCount") + ": " + Color.YELLOW + count);
-        info.add(I18n.format("gui.counterIncrement") + ": " + Color.WHITE + increment);
-        info.add(I18n.format("gui.counterDecrement") + ": " + Color.WHITE + decrement);
+        info.add(I18n.format("gui.bluepower:counter.max") + ": " + Color.YELLOW + max);
+        info.add(I18n.format("gui.bluepower:counter.count") + ": " + Color.YELLOW + count);
+        info.add(I18n.format("gui.bluepower:counter.increment") + ": " + Color.WHITE + increment);
+        info.add(I18n.format("gui.bluepower:counter.decrement") + ": " + Color.WHITE + decrement);
     }
 }

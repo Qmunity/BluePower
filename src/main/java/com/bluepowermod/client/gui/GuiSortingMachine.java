@@ -77,12 +77,12 @@ public class GuiSortingMachine extends GuiContainerBaseBP {
             @Override
             public void addTooltip(int mouseX, int mouseY, List<String> curTip, boolean shiftPressed) {
 
-                curTip.add("gui.pullMode");
+                curTip.add("gui.bluepower:sortingMachine.pullMode");
                 curTip.add(PullMode.values()[value].toString());
                 if (shiftPressed) {
                     curTip.add(PullMode.values()[value].toString() + ".info");
                 } else {
-                    curTip.add("gui.sneakForInfo");
+                    curTip.add("gui.bluepower:tooltip.sneakForInfo");
                 }
             }
         };
@@ -95,12 +95,12 @@ public class GuiSortingMachine extends GuiContainerBaseBP {
             @Override
             public void addTooltip(int mouseX, int mouseY, List<String> curTip, boolean shiftPressed) {
 
-                curTip.add("gui.sortMode");
+                curTip.add("gui.bluepower:sortingMachine.sortMode");
                 curTip.add(TileSortingMachine.SortMode.values()[value].toString());
                 if (shiftPressed) {
                     curTip.add(TileSortingMachine.SortMode.values()[value].toString() + ".info");
                 } else {
-                    curTip.add("gui.sneakForInfo");
+                    curTip.add("gui.bluepower:tooltip.sneakForInfo");
                 }
             }
         };

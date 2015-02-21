@@ -670,10 +670,10 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
                                 for (int i = 1; i < 4; i += 2)
                                     renderer.renderBox(
                                             side5.clone()
-                                            .rotate(0,
-                                                    (i + ((shouldRenderConnection(ForgeDirection.NORTH) || (shouldRenderConnection(ForgeDirection.UP) && (d == ForgeDirection.NORTH || d == ForgeDirection.SOUTH))) ? 1
-                                                            : 0)) * 90, 0, Vec3d.center).rotate(d, Vec3d.center),
-                                                            IconSupplier.pneumaticTubeColoring);
+                                                    .rotate(0,
+                                                            (i + ((shouldRenderConnection(ForgeDirection.NORTH) || (shouldRenderConnection(ForgeDirection.UP) && (d == ForgeDirection.NORTH || d == ForgeDirection.SOUTH))) ? 1
+                                                                    : 0)) * 90, 0, Vec3d.center).rotate(d, Vec3d.center),
+                                            IconSupplier.pneumaticTubeColoring);
                             }
                             renderer.setColor(0xFFFFFF);
                         } catch (Exception ex) {
@@ -689,10 +689,10 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
 
                 renderFrame(renderer, wireSize, frameSeparation, frameThickness,
                         renderFully || shouldRenderConnection(ForgeDirection.DOWN), renderFully
-                        || shouldRenderConnection(ForgeDirection.UP), renderFully || shouldRenderConnection(ForgeDirection.WEST),
+                                || shouldRenderConnection(ForgeDirection.UP), renderFully || shouldRenderConnection(ForgeDirection.WEST),
                         renderFully || shouldRenderConnection(ForgeDirection.EAST), renderFully
-                        || shouldRenderConnection(ForgeDirection.NORTH), renderFully
-                        || shouldRenderConnection(ForgeDirection.SOUTH), redstoneConnections[ForgeDirection.DOWN.ordinal()],
+                                || shouldRenderConnection(ForgeDirection.NORTH), renderFully
+                                || shouldRenderConnection(ForgeDirection.SOUTH), redstoneConnections[ForgeDirection.DOWN.ordinal()],
                         redstoneConnections[ForgeDirection.UP.ordinal()], redstoneConnections[ForgeDirection.WEST.ordinal()],
                         redstoneConnections[ForgeDirection.EAST.ordinal()], redstoneConnections[ForgeDirection.NORTH.ordinal()],
                         redstoneConnections[ForgeDirection.SOUTH.ordinal()], getParent() != null && getWorld() != null, IconSupplier.wire,
@@ -772,13 +772,13 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
             }
         }
         if (addTooltip) {
-            info.add(Color.YELLOW + I18n.format("waila.pneumaticTube.color"));
+            info.add(Color.YELLOW + I18n.format("waila.bluepower:pneumaticTube.color"));
             for (int i = 0; i < 6; i++) {
                 if (color[i] != TubeColor.NONE) {
                     if (color[i] != TubeColor.NONE)
                         info.add(EnumChatFormatting.DARK_AQUA
-                                + I18n.format("rotation." + ForgeDirection.getOrientation(i).toString().toLowerCase()) + ": "
-                                + EnumChatFormatting.WHITE + I18n.format("gui.widget.color." + ItemDye.field_150923_a[color[i].ordinal()]));
+                                + I18n.format("bluepower:face." + ForgeDirection.getOrientation(i).toString().toLowerCase()) + ": "
+                                + EnumChatFormatting.WHITE + I18n.format("bluepower:color." + ItemDye.field_150923_a[color[i].ordinal()]));
                 }
             }
         }
@@ -848,7 +848,7 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
                             redstoneConnections[ForgeDirection.UP.ordinal()], redstoneConnections[ForgeDirection.WEST.ordinal()],
                             redstoneConnections[ForgeDirection.EAST.ordinal()], redstoneConnections[ForgeDirection.NORTH.ordinal()],
                             redstoneConnections[ForgeDirection.SOUTH.ordinal()], getParent() != null && getWorld() != null), start, end,
-                            new Vec3i(this));
+                    new Vec3i(this));
             QMovingObjectPosition frame = RayTracer.instance().rayTraceCubes(getFrameBoxes(), start, end, new Vec3i(this));
 
             if (wire != null) {

@@ -64,21 +64,21 @@ public class GuiManager extends GuiContainerBaseBP {
             @Override
             public void addTooltip(int mouseX, int mouseY, List<String> curTip, boolean shiftPressed) {
 
-                curTip.add("gui.mode");
+                curTip.add("gui.bluepower:sortingMachine.mode");
                 String mode = null;
                 switch (value) {
                 case 0:
-                    mode = "gui.manager.mode.exact";
+                    mode = "gui.bluepower:manager.mode.exact";
                     break;
                 case 1:
-                    mode = "gui.manager.mode.all";
+                    mode = "gui.bluepower:manager.mode.all";
                     break;
                 }
                 curTip.add(mode);
                 if (shiftPressed) {
                     curTip.add(mode + ".info");
                 } else {
-                    curTip.add("gui.sneakForInfo");
+                    curTip.add("gui.bluepower:tooltip.sneakForInfo");
                 }
             }
         };
@@ -90,8 +90,8 @@ public class GuiManager extends GuiContainerBaseBP {
             @Override
             public void addTooltip(int mouseX, int mouseY, List<String> curTip, boolean shiftPressed) {
 
-                curTip.add("gui.priority");
-                curTip.add("gui.priority.info");
+                curTip.add("gui.bluepower:sortingMachine.priority");
+                curTip.add("gui.bluepower:sortingMachine.priority.info");
             }
         };
         numberWidget.value = manager.priority;

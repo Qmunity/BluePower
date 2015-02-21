@@ -39,12 +39,12 @@ public class GuiRetriever extends GuiFilter {
             @Override
             public void addTooltip(int mouseX, int mouseY, List<String> curTip, boolean shiftPressed) {
 
-                curTip.add("gui.mode");
-                curTip.add("gui.retriever.mode." + (value == 0 ? "sequential" : "any"));
+                curTip.add("gui.bluepower:sortingMachine.mode");
+                curTip.add("gui.bluepower:retriever.mode." + (value == 0 ? "sequential" : "any"));
                 if (shiftPressed) {
-                    curTip.add("gui.retriever.mode." + (value == 0 ? "sequential" : "any") + ".info");
+                    curTip.add("gui.bluepower:retriever.mode." + (value == 0 ? "sequential" : "any") + ".info");
                 } else {
-                    curTip.add("gui.sneakForInfo");
+                    curTip.add("gui.bluepower:tooltip.sneakForInfo");
                 }
             }
         };

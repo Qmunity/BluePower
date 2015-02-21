@@ -56,7 +56,7 @@ public class GuiProjectTable extends GuiContainerBaseBP {
             @Override
             public void addTooltip(int mouseX, int mouseY, List<String> curTip, boolean shift) {
 
-                curTip.add("gui.projectTable.clearGrid");
+                curTip.add("gui.bluepower:projectTable.clearGrid");
             }
         });
     }

@@ -42,7 +42,7 @@ public class GuiContainerBaseBP extends GuiContainerBase implements INEIGuiHandl
         lastLeftStat = lastRightStat = null;
 
         if (inventory instanceof TileMachineBase) {
-            WidgetTabItemLister backlogTab = new WidgetTabItemLister(this, "gui.tab.stuffed", Refs.MODID
+            WidgetTabItemLister backlogTab = new WidgetTabItemLister(this, "gui.bluepower:tab.stuffed", Refs.MODID
                     + ":textures/gui/widgets/gui_stuffed.png", guiLeft + xSize, guiTop + 5, 0xFFc13d40, null, false);
             lastRightStat = backlogTab;
             backlogTab.setItems(((TileMachineBase) inventory).getBacklog());
@@ -52,8 +52,8 @@ public class GuiContainerBaseBP extends GuiContainerBase implements INEIGuiHandl
         String unlocalizedInfo = inventory.getInventoryName() + ".info";
         String localizedInfo = I18n.format(unlocalizedInfo);
         if (!unlocalizedInfo.equals(localizedInfo)) {
-            addAnimatedStat("gui.tab.info", Refs.MODID + ":textures/gui/widgets/gui_info.png", 0xFF8888FF, isInfoStatLeftSided()).setText(
-                    unlocalizedInfo);
+            addAnimatedStat("gui.bluepower:tab.info", Refs.MODID + ":textures/gui/widgets/gui_info.png", 0xFF8888FF, isInfoStatLeftSided())
+                    .setText(unlocalizedInfo);
 
         }
     }

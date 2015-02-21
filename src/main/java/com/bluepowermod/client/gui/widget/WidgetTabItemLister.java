@@ -69,7 +69,7 @@ public class WidgetTabItemLister extends GuiAnimatedStat {
     @Override
     public void render(FontRenderer fontRenderer, float zLevel, float partialTicks) {
 
-        this.setText(showingItems.size() == 0 ? "gui.tab.stuffed.noItems" : "");
+        this.setText(showingItems.size() == 0 ? "gui.bluepower:tab.stuffed.noItems" : "");
         super.render(fontRenderer, zLevel, partialTicks);
         if (isDoneExpanding()) {
             if (showingItems.size() > 0) {

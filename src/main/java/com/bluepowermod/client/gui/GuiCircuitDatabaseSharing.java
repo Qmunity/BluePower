@@ -53,15 +53,15 @@ public class GuiCircuitDatabaseSharing extends GuiCircuitTable {
 
                 switch (curHoveredTab) {
                 case 0:
-                    curTip.add("gui.circuitDatabase.tab.copyAndShare");
+                    curTip.add("gui.bluepower:circuitDatabase.tab.copyAndShare");
                     break;
                 case 1:
-                    curTip.add("gui.circuitDatabase.tab.private");
+                    curTip.add("gui.bluepower:circuitDatabase.tab.private");
                     break;
                 case 2:
-                    curTip.add("gui.circuitDatabase.tab.server");
+                    curTip.add("gui.bluepower:circuitDatabase.tab.server");
                     if (Minecraft.getMinecraft().isSingleplayer())
-                        curTip.add("gui.circuitDatabase.info.serverOnly");
+                        curTip.add("gui.bluepower:circuitDatabase.info.serverOnly");
                     break;
                 }
             }
@@ -121,5 +121,11 @@ public class GuiCircuitDatabaseSharing extends GuiCircuitTable {
             circuitDatabase.clientCurrentTab = ((BaseWidget) widget).value;
         }
         BPNetworkHandler.INSTANCE.sendToServer(new MessageGuiUpdate(circuitDatabase, widget.getID(), ((BaseWidget) widget).value));
+    }
+
+    @Override
+    protected boolean isInfoStatLeftSided() {
+
+        return false;
     }
 }
