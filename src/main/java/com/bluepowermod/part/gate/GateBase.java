@@ -468,6 +468,9 @@ IRedstoneDevice, IBundledDevice, IPartTicking, IPartRenderPlacement, IIntegrated
         if (con == null)
             return false;
 
+        if (type == ConnectionType.OPEN_CORNER && device instanceof IGate<?, ?, ?, ?, ?, ?>)
+            return false;
+
         return con.isEnabled() && con.canConnect(device);
     }
 
@@ -519,6 +522,9 @@ IRedstoneDevice, IBundledDevice, IPartTicking, IPartRenderPlacement, IIntegrated
 
         GateConnectionBase con = getConnection(side);
         if (con == null)
+            return false;
+
+        if (type == ConnectionType.OPEN_CORNER && device instanceof IGate<?, ?, ?, ?, ?, ?>)
             return false;
 
         return con.isEnabled() && con.canConnect(device);
