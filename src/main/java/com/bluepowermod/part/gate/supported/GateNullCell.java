@@ -60,9 +60,9 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class GateNullCell
-extends
-GateSupported<GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase>
-implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor, IRedwire {
+        extends
+        GateSupported<GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase>
+        implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor, IRedwire {
 
     private RedwireType typeA = null, typeB = null;
     private boolean bundledA = false, bundledB = false;
@@ -136,7 +136,7 @@ implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor, IRedwire {
             renderer.renderBox(new Vec3dCube(7 / 16D, 2 / 16D, 0 / 16D, 9 / 16D, 2 / 16D + (height / (nullcells[dir.ordinal()] ? 1 : 2)),
                     1 / 16D), wire);
             renderer.renderBox(new Vec3dCube(7 / 16D, 2 / 16D, 15 / 16D, 9 / 16D, 2 / 16D + (height / (nullcells[dir.getOpposite()
-                                                                                                                 .ordinal()] ? 1 : 2)), 16 / 16D), wire);
+                    .ordinal()] ? 1 : 2)), 16 / 16D), wire);
         }
 
         if (typeB != null) { // Supported
@@ -196,7 +196,7 @@ implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor, IRedwire {
             tip.add(gnc.typeA + (gnc.bundledA ? " (bundled)" : "") + " x " + gnc.typeB + (gnc.bundledB ? " (bundled)" : ""));
 
             if (gnc.bundledA || gnc.bundledB)
-                tip.add(MinecraftColor.RED + "Disabled temporarily.");
+                tip.add(MinecraftColor.RED + "Disabled temporarily. Still not fully working.");
         } catch (Exception ex) {
         }
     }
