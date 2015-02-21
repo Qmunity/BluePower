@@ -705,14 +705,14 @@ gui.bluepower:retriever.mode.sequential.info=Versucht das ausgewählte Item mit 
 gui.bluepower:retriever.mode.any=§3Jedes Item
 gui.bluepower:retriever.mode.any.info=Versucht alle gefilterten Items mit der festgelegten Menge zu beziehen.
 
-gui.bluepower:regulator.mode.ratio=§3Rationaler Modus
-gui.bluepower:regulator.mode.ratio.info=Wartet bis das mittige Inventar die gleichen Items wie der Filter auf der linken Seite enthält.
-gui.bluepower:regulator.mode.supply=§3Versorgungs Modus
-gui.bluepower:regulator.mode.supply.info=Dieser spezielle Modus ist nur für Regulatoren mit einem angeschlossenen Invetar hat die Priorität das Inventar mit Items zu versorgen. Die Items können durch den rechten Filter festgelegt werden.
+gui.bluepower:regulator.ratio=§3Rationaler Modus
+gui.bluepower:regulator.ratio.info=Wartet bis das mittige Inventar die gleichen Items wie der Filter auf der linken Seite enthält.
+gui.bluepower:regulator.supply=§3Versorgungs Modus
+gui.bluepower:regulator.supply.info=Dieser spezielle Modus ist nur für Regulatoren mit einem angeschlossenen Invetar hat die Priorität das Inventar mit Items zu versorgen. Die Items können durch den rechten Filter festgelegt werden.
 
 gui.bluepower:itemDetector.mode.item=§3Item Modus
 gui.bluepower:itemDetector.mode.item.info=Sendet ein Redstone Signal für jedes passierende Item.
-gui.bluepower:itemDetector.mode.stack=§3Stack Modus
+gui.bluepower:itemDetector.stack.item=§3Stack Modus
 gui.bluepower:itemDetector.mode.stack.info=Sendet ein Redstone Signal für jedes passierende Stack.
 gui.bluepower:itemDetector.mode.stuffed=§3Überschuss Modus
 gui.bluepower:itemDetector.mode.stuffed.info=Sendet ein Redstone Signal solange der Auswurf inheralb des Puffers verstopft ist.
@@ -737,7 +737,7 @@ gui.bluepower:circuitDatabase.info.opsOnly=§cDer Server erlaubt es nur Operator
 gui.bluepower:circuitDatabase.info.sneakClickToConfirmDeleting=§cSicher? Shift-Klicke zum Akzeptieren.
 gui.bluepower:circuitDatabase.info.sneakClickToDelete=Shift-klicke zum löschen.
 
-gui.bluepower:circuitDatabase.name=Name:
+gui.bluepower:circuitDatabase=Name:
 
 gui.bluepower:tooltip.sneakForInfo=Schleiche für mehr Info
 
@@ -822,7 +822,7 @@ config.bluepower:settings.tooltip=Generelle Mod Einstellungen.
 config.bluepower:recipes.tooltip=Rezept Einstellungen.
 config.bluepower:enchantments.tooltip=Verzauberungs Einstellungen.
 config.bluepower:tubes.tooltip=Rohr Optionen.
-config.bluepower:circuitDatabase.tooltip=Schaltkreis Dataenbank Optionen.
+config.bluepower:circuitDatabase.tooltip=Schaltkreis Datenbank Optionen.
 config.bluepower:copper.tooltip=Adjustiere Kupfer Erz generation.
 config.bluepower:zinc.tooltip=Adjustiere Zink Erz generation.
 config.bluepower:silver.tooltip=Adjustiere Silber Erz generation.
@@ -841,6 +841,8 @@ waila.bluepower:gate.rsLatch.feedback=Feedback
 waila.bluepower:gate.rsLatch.nofeedback=Kein Feedback
 waila.bluepower:tube.color=Farben
 waila.bluepower:machine.stuffed=Verstopft
+##waila.bluepower:repeater.delay=
+##waila.bluepower:repeater.ticks=
 
 # Misc
 bluepower:accessability.public=Global

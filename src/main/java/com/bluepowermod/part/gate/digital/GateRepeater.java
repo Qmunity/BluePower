@@ -118,8 +118,8 @@ public class GateRepeater extends GateSimpleDigital {
     @SideOnly(Side.CLIENT)
     public void addWAILABody(List<String> info) {
 
-        info.add(Color.YELLOW + I18n.format("gui.bluepower:repeater.delay") + ": " + ticks[location]
-                + I18n.format("gui.bluepower:timer.ticks"));
+        info.add(I18n.format("waila.bluepower:repeater.delay") + ": " + Color.WHITE + ticks[location] + " "
+                + I18n.format("waila.bluepower:repeater.ticks"));
     }
 
     @Override

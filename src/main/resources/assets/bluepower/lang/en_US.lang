@@ -705,14 +705,14 @@ gui.bluepower:retriever.mode.sequential.info=Tries to retrieve the highlighted i
 gui.bluepower:retriever.mode.any=§3Any Item
 gui.bluepower:retriever.mode.any.info=Tries to retrieve any of the filtered items with the given item count.
 
-gui.bluepower:regulator.mode.ratio=§3Ratio Mode
-gui.bluepower:regulator.mode.ratio.info=Waits for the middle inventory to have the amount of items specified in the left filter.
-gui.bluepower:regulator.mode.supply=§3Supply Mode
-gui.bluepower:regulator.mode.supply.info=This mode, which only applies to Regulators attached to an inventory, has a priority to supply the attached inventory with items. The items that are tried to be supplied are the items specified in the right filter.
+gui.bluepower:regulator.ratio=§3Ratio Mode
+gui.bluepower:regulator.ratio.info=Waits for the middle inventory to have the amount of items specified in the left filter.
+gui.bluepower:regulator.supply=§3Supply Mode
+gui.bluepower:regulator.supply.info=This mode, which only applies to Regulators attached to an inventory, has a priority to supply the attached inventory with items. The items that are tried to be supplied are the items specified in the right filter.
 
 gui.bluepower:itemDetector.mode.item=§3Item Mode
 gui.bluepower:itemDetector.mode.item.info=Emits a redstone pulse for every single item going through.
-gui.bluepower:itemDetector.mode.stack=§3Stack Mode
+gui.bluepower:itemDetector.stack.item=§3Stack Mode
 gui.bluepower:itemDetector.mode.stack.info=Emits a redstone pulse for every item stack going through.
 gui.bluepower:itemDetector.mode.stuffed=§3Stuffed Mode
 gui.bluepower:itemDetector.mode.stuffed.info=Emits a redstone signal as long as the output buffer stuffed inside the machine.
@@ -737,7 +737,7 @@ gui.bluepower:circuitDatabase.info.opsOnly=§cServer is configurated to only all
 gui.bluepower:circuitDatabase.info.sneakClickToConfirmDeleting=§cAre you sure? Sneak-click to confirm.
 gui.bluepower:circuitDatabase.info.sneakClickToDelete=Sneak-click to delete.
 
-gui.bluepower:circuitDatabase.name=Name:
+gui.bluepower:circuitDatabase=Name:
 
 gui.bluepower:tooltip.sneakForInfo=Sneak for info
 
@@ -841,6 +841,8 @@ waila.bluepower:gate.rsLatch.feedback=Feedback
 waila.bluepower:gate.rsLatch.nofeedback=No Feedback
 waila.bluepower:tube.color=Colors
 waila.bluepower:machine.stuffed=Stuffed
+waila.bluepower:repeater.delay=Delay
+waila.bluepower:repeater.ticks=tick(s)
 
 # Misc
 bluepower:accessability.public=Public

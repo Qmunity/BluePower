@@ -10,8 +10,11 @@ package com.bluepowermod.part.gate.digital;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
+import java.util.List;
 
+import mcp.mobius.waila.api.SpecialChars;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -159,5 +162,25 @@ public class GateTimer extends GateSimpleDigital implements IGuiButtonSensitive 
     protected boolean hasGUI() {
 
         return true;
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void addWAILABody(List<String> info) {
+
+        String t = "";
+
+        int time = this.time * 50;
+        if (time >= 1000) {
+            String ms = "" + time % 1000;
+            if (ms.length() > 1)
+                while (ms.length() < 3)
+                    ms = "0" + ms;
+            t = time / 1000 + "." + ms + "s";
+        } else {
+            t = time + "ms";
+        }
+
+        info.add(I18n.format("gui.bluepower:timer.interval") + ": " + SpecialChars.WHITE + t);
     }
 }
