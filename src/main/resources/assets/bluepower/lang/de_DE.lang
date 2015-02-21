@@ -1,4 +1,4 @@
-﻿/*
+/*
  * This file is part of Blue Power. Blue Power is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
  * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version. Blue Power is
  * distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
@@ -6,50 +6,63 @@
  * with Blue Power. If not, see <http://www.gnu.org/licenses/>
  *
  * @author UniversalLP
- *
  */
 
+# Basalt
 tile.bluepower:basalt.name=Basalt
-tile.bluepower:marble.name=Marmor
 tile.bluepower:basalt_brick.name=Basalt Ziegel
-tile.bluepower:marble_brick.name=Marmor Ziegel
-tile.bluepower:basalt_cobble.name=Basalt Bruchstein
-tile.bluepower:cracked_basalt_lava.name=Zerbrochener Basalt
-tile.bluepower:alloy_furnace.name=Legierungs Ofen
-tile.bluepower:amethyst_ore.name=Amethyst Erz
 tile.bluepower:basaltbrick_cracked.name=Zerbrochener Basalt Ziegel
 tile.bluepower:basalt_brick_small.name=Kleine Basalt Ziegel
-tile.bluepower:marble_brick_small.name=Kleine Marmor Ziegel
 tile.bluepower:fancy_basalt.name=Gemeiselter Basalt Ziegel
-tile.bluepower:fancy_marble.name=Gemeiselter marmor Ziegel
-tile.bluepower:marble_tile.name=Marble Platte
 tile.bluepower:basalt_tile.name=Basalt Platte
 tile.bluepower:basalt_paver.name=Basalt Pflasterstein
+
+tile.bluepower:cracked_basalt_lava.name=Zerbrochener Basalt
+tile.bluepower:basalt_cobble.name=Basalt Bruchstein
+
+# Marble
+tile.bluepower:marble.name=Marmor
+tile.bluepower:marble_brick.name=Marmor Ziegel
+tile.bluepower:marble_brick_small.name=Kleine Marmor Ziegel
+tile.bluepower:fancy_marble.name=Gemeiselter marmor Ziegel
+tile.bluepower:marble_tile.name=Marble Platte
 tile.bluepower:marble_paver.name=Marmor Pflasterstein
+
+# Basalt and marble tiles
 tile.bluepower:tiles.name=Basalt und Marmor Fliesen
+
+# Ores and ore blocks
+tile.bluepower:amethyst_ore.name=Amethyst Erz
 tile.bluepower:ruby_ore.name=Rubin Erz
 tile.bluepower:sapphire_ore.name=Spahir Erz
 tile.bluepower:teslatite_ore.name=Teslatit Erz
+
 tile.bluepower:amethyst_block.name=Amethyst Block
+tile.bluepower:ruby_block.name=Rubin Block
 tile.bluepower:sapphire_block.name=Spahir Block
 tile.bluepower:teslatite_block.name=Teslatit Block
-tile.bluepower:ruby_block.name=Rubin Block
+
 tile.bluepower:copper_ore.name=Kupfer Erz
 tile.bluepower:silver_ore.name=Silber Erz
 tile.bluepower:zinc_ore.name=Zink Erz
+tile.bluepower:tungsten_ore.name=Tungsten Erz
+
 tile.bluepower:copper_block.name=Kupfer Block
 tile.bluepower:silver_block.name=Silber Block
 tile.bluepower:zinc_block.name=Zink Block
-tile.bluepower:flax_crop.name=Flachs
-tile.bluepower:indigo_flower.name=Indigo Blume
-tile.bluepower:tungsten_ore.name=Tungsten Erz
 tile.bluepower:tungsten_block.name=Tungsten Block
 
+# Plants
+tile.bluepower:flax_crop.name=Flachs
+tile.bluepower:indigo_flower.name=Indigo Blume
+
+# Glass
 tile.bluepower:sapphire_glass.name=Spahir Glas
 tile.bluepower:reinforced_sapphire_glass.name=Verstärktes Spahir Glas
-tile.bluepower:reinforced_sapphire_glass.desc=Witherfest
 
+# Machines
 tile.bluepower:alloyfurnace.name=Legierungs Ofen
+
 tile.bluepower:block_breaker.name=Block Zerbrecher
 tile.bluepower:igniter.name=Igniter
 tile.bluepower:buffer.name=Puffer
@@ -59,362 +72,28 @@ tile.bluepower:relay.name=Relais
 tile.bluepower:deployer.name=Deployer
 tile.bluepower:filter.name=Filter
 tile.bluepower:retriever.name=Retriever
-tile.bluepower:project_table.name=Projekt Tisch
-tile.bluepower:circuit_table.name=Schaltkreis Werkbank
-tile.bluepower:circuit_database.name=Schaltkreis Datenbank
 tile.bluepower:sortron.name=Sortron
 tile.bluepower:sorting_machine.name=Sortier Maschine
-tile.bluepower:windmill.name=Vertical Windmühle
-tile.bluepower:kinetic_generator.name=Kinetischer Generator
-tile.bluepower:engine.name=Blue Power Motor
-tile.bluepower:cpu.name=CPU
-tile.bluepower:monitor.name=Monitor
-tile.bluepower:disk_drive.name=Disketten Laufwerk
-tile.bluepower:io_expander.name=IO Expander
 tile.bluepower:regulator.name=Regulierer
 tile.bluepower:item_detector.name=Item Detektor
 tile.bluepower:manager.name=Manager
 
-item.part.bluepower:bluestoneWire.name=Bluestone Kabel
-item.part.bluepower:bluestoneWire.white.name=Weißes Bluestone Kabel
-item.part.bluepower:bluestoneWire.orange.name=Oranges Bluestone Kabel
-item.part.bluepower:bluestoneWire.magenta.name=Magentanes Bluestone Kabel
-item.part.bluepower:bluestoneWire.light_blue.name=Hellblaues Bluestone Kabel
-item.part.bluepower:bluestoneWire.yellow.name=Gelbes Bluestone Kabel
-item.part.bluepower:bluestoneWire.lime.name=Hellgrünes Bluestone Kabel
-item.part.bluepower:bluestoneWire.pink.name=Pinkes Bluestone Kabel
-item.part.bluepower:bluestoneWire.gray.name=Graues Bluestone Kabel
-item.part.bluepower:bluestoneWire.silver.name=Hellgraues Bluestone Kabel
-item.part.bluepower:bluestoneWire.cyan.name=Zyanes Bluestone Kabel
-item.part.bluepower:bluestoneWire.purple.name=Lilanes Bluestone Kabel
-item.part.bluepower:bluestoneWire.blue.name=Blaues Bluestone Kabel
-item.part.bluepower:bluestoneWire.brown.name=Braunes Bluestone Kabel
-item.part.bluepower:bluestoneWire.green.name=Grünes Bluestone Kabel
-item.part.bluepower:bluestoneWire.red.name=Rotes Bluestone Kabel
-item.part.bluepower:bluestoneWire.black.name=Schwarzes Bluestone Kabel
+tile.bluepower:windmill.name=Vertical Windmühle
+tile.bluepower:kinetic_generator.name=Kinetischer Generator
+tile.bluepower:engine.name=Blue Power Motor
 
-item.part.bluepower:bluestoneWire.bundled.name=Gebündeltes Kabel
-item.part.bluepower:bluestoneWire.bundled.white.name=Weißes Gebündeltes Kabel
-item.part.bluepower:bluestoneWire.bundled.orange.name=Oranges Gebündeltes Kabel
-item.part.bluepower:bluestoneWire.bundled.magenta.name=Magentanes Gebündeltes Kabel
-item.part.bluepower:bluestoneWire.bundled.light_blue.name=Hellblaues Gebündeltes Kabel
-item.part.bluepower:bluestoneWire.bundled.yellow.name=Gelbes Gebündeltes Kabel
-item.part.bluepower:bluestoneWire.bundled.lime.name=Hellgrünes Gebündeltes Kabel
-item.part.bluepower:bluestoneWire.bundled.pink.name=Pinkes Gebündeltes Kabel
-item.part.bluepower:bluestoneWire.bundled.gray.name=Graues Gebündeltes Kabel
-item.part.bluepower:bluestoneWire.bundled.silver.name=Hellgraues Gebündeltes Kabel
-item.part.bluepower:bluestoneWire.bundled.cyan.name=Zyanes Gebündeltes Kabel
-item.part.bluepower:bluestoneWire.bundled.purple.name=Lilanes Gebündeltes Kabel
-item.part.bluepower:bluestoneWire.bundled.blue.name=Blaues Gebündeltes Kabel
-item.part.bluepower:bluestoneWire.bundled.brown.name=Braunes Gebündeltes Kabel
-item.part.bluepower:bluestoneWire.bundled.green.name=Grünes Gebündeltes Kabel
-item.part.bluepower:bluestoneWire.bundled.red.name=Rotes Gebündeltes Kabel
-item.part.bluepower:bluestoneWire.bundled.black.name=Schwarzes Gebündeltes Kabel
+# Computer
+tile.bluepower:cpu.name=CPU
+tile.bluepower:monitor.name=Monitor
+tile.bluepower:disk_drive.name=Disketten Laufwerk
+tile.bluepower:io_expander.name=IO Expander
 
-tile.bluepower:lamp.white.name=Weiße Lampe
-tile.bluepower:lamp.white.inverted.name=Invertierte Weiße Lampe
-item.part.bluepower:cagelamp.white.name=Weiße Industrie Lampe
-item.part.bluepower:cagelamp.white.inverted.name=Invertierte Weiße Industrie Lampe
-item.part.bluepower:fixture.white.name=Weiße Fixtur
-item.part.bluepower:fixture.white.inverted.name=Invertierte Weiße Fixtur
-tile.bluepower:lamp.orange.name=Orange Lampe
-tile.bluepower:lamp.orange.inverted.name=Invertierte Orange Lampe
-item.part.bluepower:cagelamp.orange.name=Orange Industrie Lampe
-item.part.bluepower:cagelamp.orange.inverted.name=Invertierte Orange Industrie Lampe
-item.part.bluepower:fixture.orange.name=Orange Fixtur
-item.part.bluepower:fixture.orange.inverted.name=Invertierte Orange Fixtur
-tile.bluepower:lamp.magenta.name=Magentane Lampe
-tile.bluepower:lamp.magenta.inverted.name=Invertierte Magentane Lampe
-item.part.bluepower:cagelamp.magenta.name=Magentane Industrie Lampe
-item.part.bluepower:cagelamp.magenta.inverted.name=Invertierte Magentane Industrie Lampe
-item.part.bluepower:fixture.magenta.name=Magentane Fixtur
-item.part.bluepower:fixture.magenta.inverted.name=Invertierte Magentane Fixtur
-tile.bluepower:lamp.light_blue.name=Hellblaue Lampe
-tile.bluepower:lamp.light_blue.inverted.name=Invertierte Hellblaue Lampe
-item.part.bluepower:cagelamp.light_blue.name=Hellblaue Industrie Lampe
-item.part.bluepower:cagelamp.light_blue.inverted.name=Invertierte Hellblaue Industrie Lampe
-item.part.bluepower:fixture.light_blue.name=Hellblaue Fixtur
-item.part.bluepower:fixture.light_blue.inverted.name=Invertierte Hellblaue Fixtur
-tile.bluepower:lamp.yellow.name=Gelbe Lampe
-tile.bluepower:lamp.yellow.inverted.name=Invertierte Gelbe Lampe
-item.part.bluepower:cagelamp.yellow.name=Gelbe Industrie Lampe
-item.part.bluepower:cagelamp.yellow.inverted.name=Invertierte Gelbe Industrie Lampe
-item.part.bluepower:fixture.yellow.name=Gelbe Fixtur
-item.part.bluepower:fixture.yellow.inverted.name=Invertierte Gelbe Fixtur
-tile.bluepower:lamp.lime.name=Hellgrüne Lampe
-tile.bluepower:lamp.lime.inverted.name=Invertierte Hellgrüne Lampe
-item.part.bluepower:cagelamp.lime.name=Hellgrüne Industrie Lampe
-item.part.bluepower:cagelamp.lime.inverted.name=Invertierte Hellgrüne Industrie Lampe
-item.part.bluepower:fixture.lime.name=Hellgrüne Fixtur
-item.part.bluepower:fixture.lime.inverted.name=Invertierte Hellgrüne Fixtur
-tile.bluepower:lamp.pink.name=Pinke Lampe
-tile.bluepower:lamp.pink.inverted.name=Invertierte Pinke Lampe
-item.part.bluepower:cagelamp.pink.name=Pinke Industrie Lampe
-item.part.bluepower:cagelamp.pink.inverted.name=Invertierte Pinke Industrie Lampe
-item.part.bluepower:fixture.pink.name=Pinke Fixtur
-item.part.bluepower:fixture.pink.inverted.name=Invertierte Pinke Fixtur
-tile.bluepower:lamp.gray.name=Graue Lampe
-tile.bluepower:lamp.gray.inverted.name=Invertierte Graue Lampe
-item.part.bluepower:cagelamp.gray.name=Graue Industrie Lampe
-item.part.bluepower:cagelamp.gray.inverted.name=Invertierte Graue Industrie Lampe
-item.part.bluepower:fixture.gray.name=Graue Fixtur
-item.part.bluepower:fixture.gray.inverted.name=Invertierte Graue Fixtur
-tile.bluepower:lamp.light_gray.name=Hellgraue Lampe
-tile.bluepower:lamp.light_gray.inverted.name=Invertierte Hellgraue Lampe
-item.part.bluepower:cagelamp.light_gray.name=Hellgraue Industrie Lampe
-item.part.bluepower:cagelamp.light_gray.inverted.name=Invertierte Hellgraue Industrie Lampe
-item.part.bluepower:fixture.light_gray.name=Hellgraue Fixtur
-item.part.bluepower:fixture.light_gray.inverted.name=Invertierte Hellgraue Fixtur
-tile.bluepower:lamp.cyan.name=Zyane Lampe
-tile.bluepower:lamp.cyan.inverted.name=Invertierte Zyane Lampe
-item.part.bluepower:cagelamp.cyan.name=Zyane Industrie Lampe
-item.part.bluepower:cagelamp.cyan.inverted.name=Invertierte Zyane Industrie Lampe
-item.part.bluepower:fixture.cyan.name=Zyane Fixtur
-item.part.bluepower:fixture.cyan.inverted.name=Invertierte Zyane Fixtur
-tile.bluepower:lamp.purple.name=Lilane Lampes
-tile.bluepower:lamp.purple.inverted.name=Invertierte Lilane Lampe
-item.part.bluepower:cagelamp.purple.name=Lilane Industrie Lampe
-item.part.bluepower:cagelamp.purple.inverted.name=Invertierte Lilane Industrie Lampe
-item.part.bluepower:fixture.purple.name=Lilane Fixtur
-item.part.bluepower:fixture.purple.inverted.name=Invertierte Lilane Fixtur
-tile.bluepower:lamp.blue.name=Blaue Lampe
-tile.bluepower:lamp.blue.inverted.name=Invertierte Blaue Lampe
-item.part.bluepower:cagelamp.blue.name=Blaue Industrie Lampe
-item.part.bluepower:cagelamp.blue.inverted.name=Invertierte Blaue Industrie Lampe
-item.part.bluepower:fixture.blue.name=Blaue Fixtur
-item.part.bluepower:fixture.blue.inverted.name=Invertierte Blaue Fixtur
-tile.bluepower:lamp.brown.name=Braun Lampe
-tile.bluepower:lamp.brown.inverted.name=Invertierte Braune Lampe
-item.part.bluepower:cagelamp.brown.name=Braun Industrie Lampe
-item.part.bluepower:cagelamp.brown.inverted.name=Invertierte Braun Industrie Lampe
-item.part.bluepower:fixture.brown.name=Braune Fixtur
-item.part.bluepower:fixture.brown.inverted.name=Invertierte Braune Fixtur
-tile.bluepower:lamp.green.name=Grüne Lampe
-tile.bluepower:lamp.green.inverted.name=Invertierte Grüne Lampe
-item.part.bluepower:cagelamp.green.name=Grüne Industrie Lampe
-item.part.bluepower:cagelamp.green.inverted.name=Invertierte Grüne Industrie Lampe
-item.part.bluepower:fixture.green.name=Grüne Fixtur
-item.part.bluepower:fixture.green.inverted.name=Invertierte Grüne Fixtur
-tile.bluepower:lamp.red.name=Rote Lampe
-tile.bluepower:lamp.red.inverted.name=Invertierte Rote Lampe
-item.part.bluepower:cagelamp.red.name=Rote Industrie Lampe
-item.part.bluepower:cagelamp.red.inverted.name=Invertierte Rote Industrie Lampe
-item.part.bluepower:fixture.red.name=Rote Fixtur
-item.part.bluepower:fixture.red.inverted.name=Invertierte Rote Fixtur
-tile.bluepower:lamp.black.name=Schwarze Lampe
-tile.bluepower:lamp.black.inverted.name=Invertierte Black Lampe
-item.part.bluepower:cagelamp.black.name=Schwarze Industrie Lampe
-item.part.bluepower:cagelamp.black.inverted.name=Invertierte Schwarze Lampe
-item.part.bluepower:fixture.black.name=Schwarze Fixtur
-item.part.bluepower:fixture.black.inverted.name=Invertierte Schwarze Fixtur
+# Tables
+tile.bluepower:project_table.name=Projekt Tisch
+tile.bluepower:circuit_table.name=Schaltkreis Werkbank
+tile.bluepower:circuit_database.name=Schaltkreis Datenbank
 
-tile.bluepower:lamp.rgb.inverted.name=Invertierte RGB Lampe
-tile.bluepower:lamp.rgb.name=RGB Lampe
-
-
-item.bluepower:ruby_gem.name=Rubin
-item.bluepower:amethyst_gem.name=Amethyst
-item.bluepower:sapphire_gem.name=Spahir
-item.bluepower:teslatite_dust.name=Teslatit
-item.bluepower:copper_ingot.name=Kupfer Barren
-item.bluepower:silver_ingot.name=Silber Barren
-item.bluepower:zinc_ingot.name=Zink Barren
-item.bluepower:red_alloy_ingot.name=Red Alloy Barren
-item.bluepower:blue_alloy_ingot.name=Blue Alloy Barren
-item.bluepower:purple_alloy_ingot.name=Purple Alloy Barren
-item.bluepower:brass_ingot.name=Messing Barren
-item.bluepower:tungsten_ingot.name=Tungsten Barren
-item.bluepower:tungsten_nugget.name=Tungsten Nugget
-
-item.bluepower:zinc_ore_crushed.name=Zertrümmertes Zink Erz
-item.bluepower:zinc_dust.name=Zink Staub
-item.bluepower:zinc_tiny_dust.name=Kleiner Haufen Zink Staub
-item.bluepower:zinc_ore_purified.name=Pures Zertrümmertes Zink Erz
-
-item.bluepower:flax_seeds.name=Flachs Samen
-item.bluepower:indigo_flower.name=Indigo Blume
-item.bluepower:indigo_dye.name=Indigo Farbstoff
-
-item.bluepower:ruby_sword.name=Rubin Schwert
-item.bluepower:ruby_shovel.name=Rubin Schaufel
-item.bluepower:ruby_axe.name=Rubin Axt
-item.bluepower:ruby_pickaxe.name=Rubin Spitzhacke
-item.bluepower:ruby_hoe.name=Rubin Hacke
-item.bluepower:ruby_sickle.name=Rubin Sichel
-
-item.bluepower:sapphire_sword.name=Spahir Schwert
-item.bluepower:sapphire_shovel.name=Spahir Schaufel
-item.bluepower:sapphire_axe.name=Spahir Axt
-item.bluepower:sapphire_pickaxe.name=Spahir Spitzhacke
-item.bluepower:sapphire_hoe.name=Sapphir Hacke
-item.bluepower:sapphire_sickle.name=Spahir Sichel
-
-item.bluepower:amethyst_sword.name=Amethyst Schwert
-item.bluepower:amethyst_shovel.name=Amethyst Schaufel
-item.bluepower:amethyst_axe.name=Amethyst Axt
-item.bluepower:amethyst_pickaxe.name=Amethyst Spitzhacke
-item.bluepower:amethyst_hoe.name=Amethyst Hacke
-item.bluepower:amethyst_sickle.name=Amethyst Sichel
-
-item.bluepower:wood_sickle.name=Holz Sichel
-item.bluepower:stone_sickle.name=Stein Sichel
-item.bluepower:iron_sickle.name=Eisen Sichel
-item.bluepower:gold_sickle.name=Gold Sichel
-item.bluepower:diamond_sickle.name=Diamant Sichel
-
-item.bluepower:iron_saw.name=Eisen Säge
-item.bluepower:amethyst_saw.name=Amethyst Säge
-item.bluepower:ruby_saw.name=Rubin Säge
-item.bluepower:sapphire_saw.name=Saphir Säge
-item.bluepower:diamond_saw.name=Diamant Säge
-
-item.bluepower:canvas_bag.white.name=Schriftrollen Beutel
-item.bluepower:canvas_bag.orange.name=Oranger Schriftrollen Beutel
-item.bluepower:canvas_bag.magenta.name=Magentaner Schriftrollen Beutel
-item.bluepower:canvas_bag.lightBlue.name=Hellblauer Schriftrollen Beutel
-item.bluepower:canvas_bag.yellow.name=Gelber Schriftrollen Beutel
-item.bluepower:canvas_bag.lime.name=Hellgrüner Schriftrollen Beutel
-item.bluepower:canvas_bag.pink.name=Pinker Schriftrollen Beutel
-item.bluepower:canvas_bag.gray.name=Grauer Schriftrollen Beutel
-item.bluepower:canvas_bag.silver.name=Hellgrauer Schriftrollen Beutel
-item.bluepower:canvas_bag.cyan.name=Zyaner Schriftrollen Beutel
-item.bluepower:canvas_bag.purple.name=Lilaner Schriftrollen Beutel
-item.bluepower:canvas_bag.blue.name=Blauer Schriftrollen Beutel
-item.bluepower:canvas_bag.brown.name=Brauner Schriftrollen Beutel
-item.bluepower:canvas_bag.green.name=Grüner Schriftrollen Beutel
-item.bluepower:canvas_bag.red.name=Roter Schriftrollen Beutel
-item.bluepower:canvas_bag.black.name=Schwarzer Schriftrollen Beutel
-
-item.bluepower:silicon_boule.name=Silikon Boule
-item.bluepower:silicon_wafer.name=Silikon Wafer
-item.bluepower:blue_doped_wafer.name=Blaues dotiertes Wafer
-item.bluepower:red_doped_wafer.name=Rotes dotiertes Wafer
-item.bluepower:athame.name=Athame
-item.bluepower:screwdriver.name=Schraubenzieher
-item.bluepower:silky_screwdriver.name=Samtiger Schraubenzieher
-item.bluepower:zincplate.name=Zink Plate
-item.bluepower:stone_tile.name=Stone Platte
-item.bluepower:bluestone_wire_tile.name=Bluestone Kabel Platte
-item.bluepower:bluestone_anode_tile.name=Bluestone Anode Platte
-item.bluepower:bluestone_cathode_tile.name=Bluestone Kathode Platte
-item.bluepower:bluestone_pointer_tile.name=Bluestone Zeiger Platte
-item.bluepower:redstone_wire_tile.name=Redstone Kabel Platte
-item.bluepower:redstone_anode_tile.name=Redstone Anode Platte
-item.bluepower:redstone_cathode_tile.name=Redstone Kathode Platte
-item.bluepower:redstone_pointer_tile.name=Redstone Zeiger Platte
-item.bluepower:silicon_chip_tile.name=Silikon Chip Platte
-item.bluepower:tainted_silicon_chip_tile.name=Behaftete Silkcon Chip Platte
-item.bluepower:quartz_resonator_tile.name=Quarz Resonator Platte
-item.bluepower:plate_assembly.name=Montierungs Platte
-item.bluepower:stone_redwire.name=Steinerne Redwire Platte
-item.bluepower:stone_bundle.name=Steinerne Gebündelte Platte
-item.bluepower:screwdriver_handle.name=Schraubenzieher Griff
-item.bluepower:seed_bag.name=Samen Beutel
-item.bluepower:canvas_bag.name=Schriftrollen Beutel
-item.bluepower:canvas.name=Schriftrolle
-item.bluepower:wool_card.name=Wool Card
-item.bluepower:diamond_drawplate.name=Diamant Schneide
-item.bluepower:iron_wire.name=Feiner Eisen Draht
-item.bluepower:copper_wire.name=Feiner Kupfer Draht
-item.bluepower:infused_teslatite_dust.name=Infundierter Teslatit Staub
-
-item.part.bluepower:gate.and.name=AND Gatter
-item.part.bluepower:gate.buffer.name=Puffer Gatter
-item.part.bluepower:gate.bustransceiver.name=Bus Transceiver
-item.part.bluepower:gate.counter.name=Zähler
-item.part.bluepower:gate.invert.name=Invertierte Zelle
-item.part.bluepower:gate.lightCell.name=Licht Sensor
-item.part.bluepower:gate.multiplexer.name=Multiplexer
-item.part.bluepower:gate.nand.name=NAND Gatter
-item.part.bluepower:gate.noninvert.name=Nicht-Invertierte Zelle
-item.part.bluepower:gate.nor.name=NOR Gatter
-item.part.bluepower:gate.not.name=NOT Gatter
-item.part.bluepower:gate.null.name=Null Zelle
-item.part.bluepower:gate.or.name=OR Gatter
-item.part.bluepower:gate.pulseformer.name=Pulse Generator
-item.part.bluepower:gate.randomizer.name=Zufallsgenerator
-item.part.bluepower:gate.repeater.name=Verstärker
-item.part.bluepower:gate.rs.name=RS Latch
-item.part.bluepower:gate.sequencer.name=Sequencer
-item.part.bluepower:gate.state.name=Status Zelle
-item.part.bluepower:gate.synchronizer.name=Synchronisierer
-item.part.bluepower:gate.timer.name=Timer
-item.part.bluepower:gate.toggle.name=Toggle Latch
-item.part.bluepower:gate.transparent.name=Transparent Latch
-item.part.bluepower:gate.xnor.name=XNOR Gatter
-item.part.bluepower:gate.xor.name=XOR Gatter
-item.part.bluepower:gate.integratedCircuit3x3.name=3x3 Integrierter Schaltkreis
-item.part.bluepower:gate.integratedCircuit5x5.name=5x5 Integrierter Schaltkreis
-item.part.bluepower:gate.integratedCircuit7x7.name=7x7 Integrierter Schaltkreis
-item.part.bluepower:gate.inverter.name=Inverter
-item.part.bluepower:gate.comparator.name=Komparator
-item.part.bluepower:gate.wirelesstransceiver.name=Digitaler Wireless Transceiver
-item.part.bluepower:gate.wirelesstransceiver.analog.name=Analoger Wireless Transceiver
-item.part.bluepower:gate.wirelesstransceiver.bundled.name=Digitaler Gebündelter Wireless Transceiver
-item.part.bluepower:gate.wirelesstransceiver.analog.bundled.name=Analoger Gebündelter Wireless Transceiver
-item.part.bluepower:gate.nullcell.name=Digitale Null Zelle
-item.part.bluepower:gate.nullcell.analog.name=Analoge Null Zelle
-item.part.bluepower:pneumaticTube.name=Pneumatisches Rohr
-item.part.bluepower:pneumaticTubeOpaque.name=Undurchsichtiges Pneumatisches Rohr
-item.part.bluepower:restrictionTube.name=Überschuss Rohr
-item.part.bluepower:restrictionTubeOpaque.name=Undurchsichtiges Überschuss Rohr
-item.part.bluepower:magTube.name=Mag-Rohr
-item.part.bluepower:accelerator.name=Beschleuniger
-
-item.part.bluepower:wire.bluestone.bundled.name=Gebündeltes Bluestone Kabel
-item.part.bluepower:wire.bluestone.bundled.white.name=Weißes Gebündeltes Bluestone Kabel
-item.part.bluepower:wire.bluestone.bundled.orange.name=Oranges Gebündeltes Bluestone Kabel
-item.part.bluepower:wire.bluestone.bundled.magenta.name=Magentanes Gebündeltes Bluestone Kabel
-item.part.bluepower:wire.bluestone.bundled.light_blue.name=Hellblaues Gebündeltes Bluestone Kabel
-item.part.bluepower:wire.bluestone.bundled.yellow.name=Gelbes Gebündeltes Bluestone Kabel
-item.part.bluepower:wire.bluestone.bundled.lime.name=Hellgrünes Gebündeltes Bluestone Kabel
-item.part.bluepower:wire.bluestone.bundled.pink.name=Pinkes Gebündeltes Bluestone Kabel
-item.part.bluepower:wire.bluestone.bundled.gray.name=Graues Gebündeltes Bluestone Kabel
-item.part.bluepower:wire.bluestone.bundled.light_gray.name=Hellgraues Gebündeltes Bluestone Kabel
-item.part.bluepower:wire.bluestone.bundled.cyan.name=Zyanes Gebündeltes Bluestone Kabel
-item.part.bluepower:wire.bluestone.bundled.purple.name=Lilanes Gebündeltes Bluestone Kabel
-item.part.bluepower:wire.bluestone.bundled.blue.name=Blaues Gebündeltes Bluestone Kabel
-item.part.bluepower:wire.bluestone.bundled.brown.name=Braunes Gebündeltes Bluestone Kabel
-item.part.bluepower:wire.bluestone.bundled.green.name=Grünes Gebündeltes Bluestone Kabel
-item.part.bluepower:wire.bluestone.bundled.red.name=Rotes Gebündeltes Bluestone Kabel
-item.part.bluepower:wire.bluestone.bundled.black.name=Schwarzes Gebündeltes Bluestone Kabel
-
-item.part.bluepower:wire.redalloy.bundled.name=Gebündeltes Red Alloy Kabel
-item.part.bluepower:wire.redalloy.bundled.white.name=Weißes Gebündeltes Red Alloy Kabel
-item.part.bluepower:wire.redalloy.bundled.orange.name=Oranges Gebündeltes Red Alloy Kabel
-item.part.bluepower:wire.redalloy.bundled.magenta.name=Magentanes Gebündeltes Red Alloy Kabel
-item.part.bluepower:wire.redalloy.bundled.light_blue.name=Hellblaues Gebündeltes Red Alloy Kabel
-item.part.bluepower:wire.redalloy.bundled.yellow.name=Gelbes Gebündeltes Red Alloy Kabel
-item.part.bluepower:wire.redalloy.bundled.lime.name=Hellgrünes Gebündeltes Red Alloy Kabel
-item.part.bluepower:wire.redalloy.bundled.pink.name=Pinkes Gebündeltes Red Alloy Kabel
-item.part.bluepower:wire.redalloy.bundled.gray.name=Graues Gebündeltes Red Alloy Kabel
-item.part.bluepower:wire.redalloy.bundled.light_gray.name=Hellgraues Gebündeltes Red Alloy Kabel
-item.part.bluepower:wire.redalloy.bundled.cyan.name=Zyanes Gebündeltes Red Alloy Kabel
-item.part.bluepower:wire.redalloy.bundled.purple.name=Lilanes Gebündeltes Red Alloy Kabel
-item.part.bluepower:wire.redalloy.bundled.blue.name=Blaues Gebündeltes Red Alloy Kabel
-item.part.bluepower:wire.redalloy.bundled.brown.name=Braunes Gebündeltes Red Alloy Kabel
-item.part.bluepower:wire.redalloy.bundled.green.name=Grünes Gebündeltes Red Alloy Kabel
-item.part.bluepower:wire.redalloy.bundled.red.name=Rotes Gebündeltes Red Alloy Kabel
-item.part.bluepower:wire.redalloy.bundled.black.name=Schwarzes Gebündeltes Red Alloy Kabel
-
-item.part.bluepower:wire.infusedteslatite.bundled.name=Gebündeltes Infundiertes Teslatit Kabel
-item.part.bluepower:wire.infusedteslatite.bundled.white.name=Weißes Gebündeltes Infundiertes Teslatit Kabel
-item.part.bluepower:wire.infusedteslatite.bundled.orange.name=Oranges Gebündeltes Infundiertes Teslatit Kabel
-item.part.bluepower:wire.infusedteslatite.bundled.magenta.name=Magentanes Gebündeltes Infundiertes Teslatit Kabel
-item.part.bluepower:wire.infusedteslatite.bundled.light_blue.name=Hellblaues Gebündeltes Infundiertes Teslatit Kabel
-item.part.bluepower:wire.infusedteslatite.bundled.yellow.name=Gelbes Gebündeltes Infundiertes Teslatit Kabel
-item.part.bluepower:wire.infusedteslatite.bundled.lime.name=Hellgrünes Gebündeltes Infundiertes Teslatit Kabel
-item.part.bluepower:wire.infusedteslatite.bundled.pink.name=Pinkes Gebündeltes Infundiertes Teslatit Kabel
-item.part.bluepower:wire.infusedteslatite.bundled.gray.name=Graues Gebündeltes Infundiertes Teslatit Kabel
-item.part.bluepower:wire.infusedteslatite.bundled.light_gray.name=Hellgraues Gebündeltes Infundiertes Teslatit Kabel
-item.part.bluepower:wire.infusedteslatite.bundled.cyan.name=Zyanes Gebündeltes Infundiertes Teslatit Kabel
-item.part.bluepower:wire.infusedteslatite.bundled.purple.name=Lilanes Gebündeltes Infundiertes Teslatit Kabel
-item.part.bluepower:wire.infusedteslatite.bundled.blue.name=Blaues Gebündeltes Infundiertes Teslatit Kabel
-item.part.bluepower:wire.infusedteslatite.bundled.brown.name=Braun Gebündeltes Infundiertes Teslatit Kabel
-item.part.bluepower:wire.infusedteslatite.bundled.green.name=Grünes Gebündeltes Infundiertes Teslatit Kabel
-item.part.bluepower:wire.infusedteslatite.bundled.red.name=Rotes Gebündeltes Infundiertes Teslatit Kabel
-item.part.bluepower:wire.infusedteslatite.bundled.black.name=Schwarzes Gebündeltes Infundiertes Teslatit Kabel
-
+# Wires (not bundled, face)
 item.part.bluepower:wire.bluestone.name=Bluestone Kabel
 item.part.bluepower:wire.bluestone.white.name=Weißes Bluestone Kabel
 item.part.bluepower:wire.bluestone.orange.name=Oranges Bluestone Kabel
@@ -469,24 +148,62 @@ item.part.bluepower:wire.infusedteslatite.green.name=Grünes Infundiertes Teslat
 item.part.bluepower:wire.infusedteslatite.red.name=Rotes Infundiertes Teslatit Kabel
 item.part.bluepower:wire.infusedteslatite.black.name=Schwarz Infundiertes Teslatit Kabel
 
-item.part.bluepower:wire.freestanding.infusedteslatite.name=Freistehendes Infundiertes Teslatit Kabel
-item.part.bluepower:wire.freestanding.infusedteslatite.white.name=Weißes Freistehendes Infundiertes Teslatit Kabel
-item.part.bluepower:wire.freestanding.infusedteslatite.orange.name=Oranges Freistehendes Infundiertes Teslatit Kabel
-item.part.bluepower:wire.freestanding.infusedteslatite.magenta.name=Magentanes Freistehendes Infundiertes Teslatit Kabel
-item.part.bluepower:wire.freestanding.infusedteslatite.light_blue.name=Hellblaues Freistehendes Infundiertes Teslatit Kabel
-item.part.bluepower:wire.freestanding.infusedteslatite.yellow.name=Gelbes Freistehendes Infundiertes Teslatit Kabel
-item.part.bluepower:wire.freestanding.infusedteslatite.lime.name=Hellgrünes Freistehendes Infundiertes Teslatit Kabel
-item.part.bluepower:wire.freestanding.infusedteslatite.pink.name=Pinkes Freistehendes Infundiertes Teslatit Kabel
-item.part.bluepower:wire.freestanding.infusedteslatite.gray.name=Graues Freistehendes Infundiertes Teslatit Kabel
-item.part.bluepower:wire.freestanding.infusedteslatite.light_gray.name=Hellgraues Freistehendes Infundiertes Teslatit Kabel
-item.part.bluepower:wire.freestanding.infusedteslatite.cyan.name=Zyanes Freistehendes Infundiertes Teslatit Kabel
-item.part.bluepower:wire.freestanding.infusedteslatite.purple.name=Lilanes Freistehendes Infundiertes Teslatit Kabel
-item.part.bluepower:wire.freestanding.infusedteslatite.blue.name=Blaues Freistehendes Infundiertes Teslatit Kabel
-item.part.bluepower:wire.freestanding.infusedteslatite.brown.name=Braunes Freistehendes Infundiertes Teslatit Kabel
-item.part.bluepower:wire.freestanding.infusedteslatite.green.name=Grünes Freistehendes Infundiertes Teslatit Kabel
-item.part.bluepower:wire.freestanding.infusedteslatite.red.name=Rotes Freistehendes Infundiertes Teslatit Kabel
-item.part.bluepower:wire.freestanding.infusedteslatite.black.name=Schwarzes Freistehendes Infundiertes Teslatit Kabel
+# Wires (bundled, face)
+item.part.bluepower:wire.bluestone.bundled.name=Gebündeltes Bluestone Kabel
+item.part.bluepower:wire.bluestone.bundled.white.name=Weißes Gebündeltes Bluestone Kabel
+item.part.bluepower:wire.bluestone.bundled.orange.name=Oranges Gebündeltes Bluestone Kabel
+item.part.bluepower:wire.bluestone.bundled.magenta.name=Magentanes Gebündeltes Bluestone Kabel
+item.part.bluepower:wire.bluestone.bundled.light_blue.name=Hellblaues Gebündeltes Bluestone Kabel
+item.part.bluepower:wire.bluestone.bundled.yellow.name=Gelbes Gebündeltes Bluestone Kabel
+item.part.bluepower:wire.bluestone.bundled.lime.name=Hellgrünes Gebündeltes Bluestone Kabel
+item.part.bluepower:wire.bluestone.bundled.pink.name=Pinkes Gebündeltes Bluestone Kabel
+item.part.bluepower:wire.bluestone.bundled.gray.name=Graues Gebündeltes Bluestone Kabel
+item.part.bluepower:wire.bluestone.bundled.light_gray.name=Hellgraues Gebündeltes Bluestone Kabel
+item.part.bluepower:wire.bluestone.bundled.cyan.name=Zyanes Gebündeltes Bluestone Kabel
+item.part.bluepower:wire.bluestone.bundled.purple.name=Lilanes Gebündeltes Bluestone Kabel
+item.part.bluepower:wire.bluestone.bundled.blue.name=Blaues Gebündeltes Bluestone Kabel
+item.part.bluepower:wire.bluestone.bundled.brown.name=Braunes Gebündeltes Bluestone Kabel
+item.part.bluepower:wire.bluestone.bundled.green.name=Grünes Gebündeltes Bluestone Kabel
+item.part.bluepower:wire.bluestone.bundled.red.name=Rotes Gebündeltes Bluestone Kabel
+item.part.bluepower:wire.bluestone.bundled.black.name=Schwarzes Gebündeltes Bluestone Kabel
 
+item.part.bluepower:wire.redalloy.bundled.name=Gebündeltes Red Alloy Kabel
+item.part.bluepower:wire.redalloy.bundled.white.name=Weißes Gebündeltes Red Alloy Kabel
+item.part.bluepower:wire.redalloy.bundled.orange.name=Oranges Gebündeltes Red Alloy Kabel
+item.part.bluepower:wire.redalloy.bundled.magenta.name=Magentanes Gebündeltes Red Alloy Kabel
+item.part.bluepower:wire.redalloy.bundled.light_blue.name=Hellblaues Gebündeltes Red Alloy Kabel
+item.part.bluepower:wire.redalloy.bundled.yellow.name=Gelbes Gebündeltes Red Alloy Kabel
+item.part.bluepower:wire.redalloy.bundled.lime.name=Hellgrünes Gebündeltes Red Alloy Kabel
+item.part.bluepower:wire.redalloy.bundled.pink.name=Pinkes Gebündeltes Red Alloy Kabel
+item.part.bluepower:wire.redalloy.bundled.gray.name=Graues Gebündeltes Red Alloy Kabel
+item.part.bluepower:wire.redalloy.bundled.light_gray.name=Hellgraues Gebündeltes Red Alloy Kabel
+item.part.bluepower:wire.redalloy.bundled.cyan.name=Zyanes Gebündeltes Red Alloy Kabel
+item.part.bluepower:wire.redalloy.bundled.purple.name=Lilanes Gebündeltes Red Alloy Kabel
+item.part.bluepower:wire.redalloy.bundled.blue.name=Blaues Gebündeltes Red Alloy Kabel
+item.part.bluepower:wire.redalloy.bundled.brown.name=Braunes Gebündeltes Red Alloy Kabel
+item.part.bluepower:wire.redalloy.bundled.green.name=Grünes Gebündeltes Red Alloy Kabel
+item.part.bluepower:wire.redalloy.bundled.red.name=Rotes Gebündeltes Red Alloy Kabel
+item.part.bluepower:wire.redalloy.bundled.black.name=Schwarzes Gebündeltes Red Alloy Kabel
+
+item.part.bluepower:wire.infusedteslatite.bundled.name=Gebündeltes Infundiertes Teslatit Kabel
+item.part.bluepower:wire.infusedteslatite.bundled.white.name=Weißes Gebündeltes Infundiertes Teslatit Kabel
+item.part.bluepower:wire.infusedteslatite.bundled.orange.name=Oranges Gebündeltes Infundiertes Teslatit Kabel
+item.part.bluepower:wire.infusedteslatite.bundled.magenta.name=Magentanes Gebündeltes Infundiertes Teslatit Kabel
+item.part.bluepower:wire.infusedteslatite.bundled.light_blue.name=Hellblaues Gebündeltes Infundiertes Teslatit Kabel
+item.part.bluepower:wire.infusedteslatite.bundled.yellow.name=Gelbes Gebündeltes Infundiertes Teslatit Kabel
+item.part.bluepower:wire.infusedteslatite.bundled.lime.name=Hellgrünes Gebündeltes Infundiertes Teslatit Kabel
+item.part.bluepower:wire.infusedteslatite.bundled.pink.name=Pinkes Gebündeltes Infundiertes Teslatit Kabel
+item.part.bluepower:wire.infusedteslatite.bundled.gray.name=Graues Gebündeltes Infundiertes Teslatit Kabel
+item.part.bluepower:wire.infusedteslatite.bundled.light_gray.name=Hellgraues Gebündeltes Infundiertes Teslatit Kabel
+item.part.bluepower:wire.infusedteslatite.bundled.cyan.name=Zyanes Gebündeltes Infundiertes Teslatit Kabel
+item.part.bluepower:wire.infusedteslatite.bundled.purple.name=Lilanes Gebündeltes Infundiertes Teslatit Kabel
+item.part.bluepower:wire.infusedteslatite.bundled.blue.name=Blaues Gebündeltes Infundiertes Teslatit Kabel
+item.part.bluepower:wire.infusedteslatite.bundled.brown.name=Braun Gebündeltes Infundiertes Teslatit Kabel
+item.part.bluepower:wire.infusedteslatite.bundled.green.name=Grünes Gebündeltes Infundiertes Teslatit Kabel
+item.part.bluepower:wire.infusedteslatite.bundled.red.name=Rotes Gebündeltes Infundiertes Teslatit Kabel
+item.part.bluepower:wire.infusedteslatite.bundled.black.name=Schwarzes Gebündeltes Infundiertes Teslatit Kabel
+
+# Wires (not bundled, freestanding)
 item.part.bluepower:wire.freestanding.bluestone.name=Freistehendes Bluestone Kabel
 item.part.bluepower:wire.freestanding.bluestone.white.name=Weißes Freistehendes Bluestone Kabel
 item.part.bluepower:wire.freestanding.bluestone.orange.name=Oranges Freistehendes Bluestone Kabel
@@ -523,24 +240,25 @@ item.part.bluepower:wire.freestanding.redalloy.green.name=Grünes Freistehendes 
 item.part.bluepower:wire.freestanding.redalloy.red.name=Rotes Freistehendes Red Alloy Kabel
 item.part.bluepower:wire.freestanding.redalloy.black.name=Schwarzes Freistehendes Red Alloy Kabel
 
-item.part.bluepower:wire.freestanding.infusedteslatite.bundled.name=Freistehndes Gebündeltes Infundiertes Teslatit Kabel
-item.part.bluepower:wire.freestanding.infusedteslatite.bundled.white.name=Weißes Freistehendes Gebündeltes Infundiertes Teslatit Kabel
-item.part.bluepower:wire.freestanding.infusedteslatite.bundled.orange.name=Oranges Freistehendes Gebündeltes Infundiertes Teslatit Kabel
-item.part.bluepower:wire.freestanding.infusedteslatite.bundled.magenta.name=Magentanes Freistehendes Gebündeltes Infundiertes Teslatit Kabel
-item.part.bluepower:wire.freestanding.infusedteslatite.bundled.light_blue.name=Hellblaues Freistehendes Gebündeltes Infundiertes Teslatit Kabel
-item.part.bluepower:wire.freestanding.infusedteslatite.bundled.yellow.name=Gelbes Freistehendes Gebündeltes Infundiertes Teslatit Kabel
-item.part.bluepower:wire.freestanding.infusedteslatite.bundled.lime.name=Hellgrünes Freistehendes Gebündeltes Infundiertes Teslatit Kabel
-item.part.bluepower:wire.freestanding.infusedteslatite.bundled.pink.name=Pinkes Freistehendes Gebündeltes Infundiertes Teslatit Kabel
-item.part.bluepower:wire.freestanding.infusedteslatite.bundled.gray.name=Graues Freistehendes Gebündeltes Infundiertes Teslatit Kabel
-item.part.bluepower:wire.freestanding.infusedteslatite.bundled.light_gray.name=Hellgraues Freistehendes Gebündeltes Infundiertes Teslatit Kabel
-item.part.bluepower:wire.freestanding.infusedteslatite.bundled.cyan.name=Zyanes Freistehendes Gebündeltes Infundiertes Teslatit Kabel
-item.part.bluepower:wire.freestanding.infusedteslatite.bundled.purple.name=Lilanes Freistehendes Gebündeltes Infundiertes Teslatit Kabel
-item.part.bluepower:wire.freestanding.infusedteslatite.bundled.blue.name=Blaues Freistehendes Gebündeltes Infundiertes Teslatit Kabel
-item.part.bluepower:wire.freestanding.infusedteslatite.bundled.brown.name=Braunes Freistehendes Gebündeltes Infundiertes Teslatit Kabel
-item.part.bluepower:wire.freestanding.infusedteslatite.bundled.green.name=Grünes Freistehendes Gebündeltes Infundiertes Teslatit Kabel
-item.part.bluepower:wire.freestanding.infusedteslatite.bundled.red.name=Rotes Freistehendes Gebündeltes Infundiertes Teslatit Kabel
-item.part.bluepower:wire.freestanding.infusedteslatite.bundled.black.name=Schwarzes Freistehendes Gebündeltes Infundiertes Teslatit Kabel
+item.part.bluepower:wire.freestanding.infusedteslatite.name=Freistehendes Infundiertes Teslatit Kabel
+item.part.bluepower:wire.freestanding.infusedteslatite.white.name=Weißes Freistehendes Infundiertes Teslatit Kabel
+item.part.bluepower:wire.freestanding.infusedteslatite.orange.name=Oranges Freistehendes Infundiertes Teslatit Kabel
+item.part.bluepower:wire.freestanding.infusedteslatite.magenta.name=Magentanes Freistehendes Infundiertes Teslatit Kabel
+item.part.bluepower:wire.freestanding.infusedteslatite.light_blue.name=Hellblaues Freistehendes Infundiertes Teslatit Kabel
+item.part.bluepower:wire.freestanding.infusedteslatite.yellow.name=Gelbes Freistehendes Infundiertes Teslatit Kabel
+item.part.bluepower:wire.freestanding.infusedteslatite.lime.name=Hellgrünes Freistehendes Infundiertes Teslatit Kabel
+item.part.bluepower:wire.freestanding.infusedteslatite.pink.name=Pinkes Freistehendes Infundiertes Teslatit Kabel
+item.part.bluepower:wire.freestanding.infusedteslatite.gray.name=Graues Freistehendes Infundiertes Teslatit Kabel
+item.part.bluepower:wire.freestanding.infusedteslatite.light_gray.name=Hellgraues Freistehendes Infundiertes Teslatit Kabel
+item.part.bluepower:wire.freestanding.infusedteslatite.cyan.name=Zyanes Freistehendes Infundiertes Teslatit Kabel
+item.part.bluepower:wire.freestanding.infusedteslatite.purple.name=Lilanes Freistehendes Infundiertes Teslatit Kabel
+item.part.bluepower:wire.freestanding.infusedteslatite.blue.name=Blaues Freistehendes Infundiertes Teslatit Kabel
+item.part.bluepower:wire.freestanding.infusedteslatite.brown.name=Braunes Freistehendes Infundiertes Teslatit Kabel
+item.part.bluepower:wire.freestanding.infusedteslatite.green.name=Grünes Freistehendes Infundiertes Teslatit Kabel
+item.part.bluepower:wire.freestanding.infusedteslatite.red.name=Rotes Freistehendes Infundiertes Teslatit Kabel
+item.part.bluepower:wire.freestanding.infusedteslatite.black.name=Schwarzes Freistehendes Infundiertes Teslatit Kabel
 
+# Wires (bundled, freestanding)
 item.part.bluepower:wire.freestanding.bluestone.bundled.name=Freistehendes Gebündeltes Bluestone Kabel
 item.part.bluepower:wire.freestanding.bluestone.bundled.white.name=Weißes Freistehendes Gebündeltes Bluestone Kabel
 item.part.bluepower:wire.freestanding.bluestone.bundled.orange.name=Oranges Freistehendes Gebündeltes Bluestone Kabel
@@ -577,11 +295,309 @@ item.part.bluepower:wire.freestanding.redalloy.bundled.green.name=Grünes Freist
 item.part.bluepower:wire.freestanding.redalloy.bundled.red.name=Rotes Freistehendes Gebündeltes Red Alloy Kabel
 item.part.bluepower:wire.freestanding.redalloy.bundled.black.name=Schwarzes Freistehendes Gebündeltes Red Alloy Kabel
 
+item.part.bluepower:wire.freestanding.infusedteslatite.bundled.name=Freistehndes Gebündeltes Infundiertes Teslatit Kabel
+item.part.bluepower:wire.freestanding.infusedteslatite.bundled.white.name=Weißes Freistehendes Gebündeltes Infundiertes Teslatit Kabel
+item.part.bluepower:wire.freestanding.infusedteslatite.bundled.orange.name=Oranges Freistehendes Gebündeltes Infundiertes Teslatit Kabel
+item.part.bluepower:wire.freestanding.infusedteslatite.bundled.magenta.name=Magentanes Freistehendes Gebündeltes Infundiertes Teslatit Kabel
+item.part.bluepower:wire.freestanding.infusedteslatite.bundled.light_blue.name=Hellblaues Freistehendes Gebündeltes Infundiertes Teslatit Kabel
+item.part.bluepower:wire.freestanding.infusedteslatite.bundled.yellow.name=Gelbes Freistehendes Gebündeltes Infundiertes Teslatit Kabel
+item.part.bluepower:wire.freestanding.infusedteslatite.bundled.lime.name=Hellgrünes Freistehendes Gebündeltes Infundiertes Teslatit Kabel
+item.part.bluepower:wire.freestanding.infusedteslatite.bundled.pink.name=Pinkes Freistehendes Gebündeltes Infundiertes Teslatit Kabel
+item.part.bluepower:wire.freestanding.infusedteslatite.bundled.gray.name=Graues Freistehendes Gebündeltes Infundiertes Teslatit Kabel
+item.part.bluepower:wire.freestanding.infusedteslatite.bundled.light_gray.name=Hellgraues Freistehendes Gebündeltes Infundiertes Teslatit Kabel
+item.part.bluepower:wire.freestanding.infusedteslatite.bundled.cyan.name=Zyanes Freistehendes Gebündeltes Infundiertes Teslatit Kabel
+item.part.bluepower:wire.freestanding.infusedteslatite.bundled.purple.name=Lilanes Freistehendes Gebündeltes Infundiertes Teslatit Kabel
+item.part.bluepower:wire.freestanding.infusedteslatite.bundled.blue.name=Blaues Freistehendes Gebündeltes Infundiertes Teslatit Kabel
+item.part.bluepower:wire.freestanding.infusedteslatite.bundled.brown.name=Braunes Freistehendes Gebündeltes Infundiertes Teslatit Kabel
+item.part.bluepower:wire.freestanding.infusedteslatite.bundled.green.name=Grünes Freistehendes Gebündeltes Infundiertes Teslatit Kabel
+item.part.bluepower:wire.freestanding.infusedteslatite.bundled.red.name=Rotes Freistehendes Gebündeltes Infundiertes Teslatit Kabel
+item.part.bluepower:wire.freestanding.infusedteslatite.bundled.black.name=Schwarzes Freistehendes Gebündeltes Infundiertes Teslatit Kabel
+
+# Lamps (full block, not inverted)
+tile.bluepower:lamp.white.name=Weiße Lampe
+tile.bluepower:lamp.orange.name=Orange Lampe
+tile.bluepower:lamp.magenta.name=Magentane Lampe
+tile.bluepower:lamp.light_blue.name=Hellblaue Lampe
+tile.bluepower:lamp.yellow.name=Gelbe Lampe
+tile.bluepower:lamp.lime.name=Hellgrüne Lampe
+tile.bluepower:lamp.pink.name=Pinke Lampe
+tile.bluepower:lamp.gray.name=Graue Lampe
+tile.bluepower:lamp.light_gray.name=Hellgraue Lampe
+tile.bluepower:lamp.cyan.name=Zyane Lampe
+tile.bluepower:lamp.purple.name=Lilane Lampes
+tile.bluepower:lamp.blue.name=Blaue Lampe
+tile.bluepower:lamp.brown.name=Braun Lampe
+tile.bluepower:lamp.green.name=Grüne Lampe
+tile.bluepower:lamp.red.name=Rote Lampe
+tile.bluepower:lamp.black.name=Schwarze Lampe
+tile.bluepower:lamp.rgb.name=RGB Lampe
+
+# Lamps (full block, inverted)
+tile.bluepower:lamp.white.inverted.name=Invertierte Weiße Lampe
+tile.bluepower:lamp.orange.inverted.name=Invertierte Orange Lampe
+tile.bluepower:lamp.magenta.inverted.name=Invertierte Magentane Lampe
+tile.bluepower:lamp.light_blue.inverted.name=Invertierte Hellblaue Lampe
+tile.bluepower:lamp.yellow.inverted.name=Invertierte Gelbe Lampe
+tile.bluepower:lamp.lime.inverted.name=Invertierte Hellgrüne Lampe
+tile.bluepower:lamp.pink.inverted.name=Invertierte Pinke Lampe
+tile.bluepower:lamp.gray.inverted.name=Invertierte Graue Lampe
+tile.bluepower:lamp.light_gray.inverted.name=Invertierte Hellgraue Lampe
+tile.bluepower:lamp.cyan.inverted.name=Invertierte Zyane Lampe
+tile.bluepower:lamp.purple.inverted.name=Invertierte Lilane Lampe
+tile.bluepower:lamp.blue.inverted.name=Invertierte Blaue Lampe
+tile.bluepower:lamp.brown.inverted.name=Invertierte Braune Lampe
+tile.bluepower:lamp.green.inverted.name=Invertierte Grüne Lampe
+tile.bluepower:lamp.red.inverted.name=Invertierte Rote Lampe
+tile.bluepower:lamp.black.inverted.name=Invertierte Black Lampe
+tile.bluepower:lamp.rgb.inverted.name=Invertierte RGB Lampe
+
+# Lamps (fixture, not inverted)
+item.part.bluepower:fixture.white.name=Weiße Fixtur
+item.part.bluepower:fixture.orange.name=Orange Fixtur
+item.part.bluepower:fixture.magenta.name=Magentane Fixtur
+item.part.bluepower:fixture.light_blue.name=Hellblaue Fixtur
+item.part.bluepower:fixture.yellow.name=Gelbe Fixtur
+item.part.bluepower:fixture.lime.name=Hellgrüne Fixtur
+item.part.bluepower:fixture.pink.name=Pinke Fixtur
+item.part.bluepower:fixture.gray.name=Graue Fixtur
+item.part.bluepower:fixture.light_gray.name=Hellgraue Fixtur
+item.part.bluepower:fixture.cyan.name=Zyane Fixtur
+item.part.bluepower:fixture.purple.name=Lilane Fixtur
+item.part.bluepower:fixture.blue.name=Blaue Fixtur
+item.part.bluepower:fixture.brown.name=Braune Fixtur
+item.part.bluepower:fixture.green.name=Grüne Fixtur
+item.part.bluepower:fixture.red.name=Rote Fixtur
+item.part.bluepower:fixture.black.name=Schwarze Fixtur
+
+# Lamps (fixture, inverted)
+item.part.bluepower:fixture.white.inverted.name=Invertierte Weiße Fixtur
+item.part.bluepower:fixture.orange.inverted.name=Invertierte Orange Fixtur
+item.part.bluepower:fixture.magenta.inverted.name=Invertierte Magentane Fixtur
+item.part.bluepower:fixture.light_blue.inverted.name=Invertierte Hellblaue Fixtur
+item.part.bluepower:fixture.yellow.inverted.name=Invertierte Gelbe Fixtur
+item.part.bluepower:fixture.lime.inverted.name=Invertierte Hellgrüne Fixtur
+item.part.bluepower:fixture.pink.inverted.name=Invertierte Pinke Fixtur
+item.part.bluepower:fixture.gray.inverted.name=Invertierte Graue Fixtur
+item.part.bluepower:fixture.light_gray.inverted.name=Invertierte Hellgraue Fixtur
+item.part.bluepower:fixture.cyan.inverted.name=Invertierte Zyane Fixtur
+item.part.bluepower:fixture.purple.inverted.name=Invertierte Lilane Fixtur
+item.part.bluepower:fixture.blue.inverted.name=Invertierte Blaue Fixtur
+item.part.bluepower:fixture.brown.inverted.name=Invertierte Braune Fixtur
+item.part.bluepower:fixture.green.inverted.name=Invertierte Grüne Fixtur
+item.part.bluepower:fixture.red.inverted.name=Invertierte Rote Fixtur
+item.part.bluepower:fixture.black.inverted.name=Invertierte Schwarze Fixtur
+
+# Lamps (caged, not inverted)
+item.part.bluepower:cagelamp.white.name=Weiße Industrie Lampe
+item.part.bluepower:cagelamp.orange.name=Orange Industrie Lampe
+item.part.bluepower:cagelamp.magenta.name=Magentane Industrie Lampe
+item.part.bluepower:cagelamp.light_blue.name=Hellblaue Industrie Lampe
+item.part.bluepower:cagelamp.yellow.name=Gelbe Industrie Lampe
+item.part.bluepower:cagelamp.lime.name=Hellgrüne Industrie Lampe
+item.part.bluepower:cagelamp.pink.name=Pinke Industrie Lampe
+item.part.bluepower:cagelamp.gray.name=Graue Industrie Lampe
+item.part.bluepower:cagelamp.light_gray.name=Hellgraue Industrie Lampe
+item.part.bluepower:cagelamp.cyan.name=Zyane Industrie Lampe
+item.part.bluepower:cagelamp.purple.name=Lilane Industrie Lampe
+item.part.bluepower:cagelamp.blue.name=Blaue Industrie Lampe
+item.part.bluepower:cagelamp.brown.name=Braun Industrie Lampe
+item.part.bluepower:cagelamp.green.name=Grüne Industrie Lampe
+item.part.bluepower:cagelamp.red.name=Rote Industrie Lampe
+item.part.bluepower:cagelamp.black.name=Schwarze Industrie Lampe
+
+# Lamps (caged, inverted)
+item.part.bluepower:cagelamp.white.inverted.name=Invertierte Weiße Industrie Lampe
+item.part.bluepower:cagelamp.orange.inverted.name=Invertierte Orange Industrie Lampe
+item.part.bluepower:cagelamp.magenta.inverted.name=Invertierte Magentane Industrie Lampe
+item.part.bluepower:cagelamp.light_blue.inverted.name=Invertierte Hellblaue Industrie Lampe
+item.part.bluepower:cagelamp.yellow.inverted.name=Invertierte Gelbe Industrie Lampe
+item.part.bluepower:cagelamp.lime.inverted.name=Invertierte Hellgrüne Industrie Lampe
+item.part.bluepower:cagelamp.pink.inverted.name=Invertierte Pinke Industrie Lampe
+item.part.bluepower:cagelamp.gray.inverted.name=Invertierte Graue Industrie Lampe
+item.part.bluepower:cagelamp.light_gray.inverted.name=Invertierte Hellgraue Industrie Lampe
+item.part.bluepower:cagelamp.cyan.inverted.name=Invertierte Zyane Industrie Lampe
+item.part.bluepower:cagelamp.purple.inverted.name=Invertierte Lilane Industrie Lampe
+item.part.bluepower:cagelamp.blue.inverted.name=Invertierte Blaue Industrie Lampe
+item.part.bluepower:cagelamp.brown.inverted.name=Invertierte Braun Industrie Lampe
+item.part.bluepower:cagelamp.green.inverted.name=Invertierte Grüne Industrie Lampe
+item.part.bluepower:cagelamp.red.inverted.name=Invertierte Rote Industrie Lampe
+item.part.bluepower:cagelamp.black.inverted.name=Invertierte Schwarze Lampe
+
+# Gems, dusts, ingots and nuggets
+item.bluepower:ruby_gem.name=Rubin
+item.bluepower:amethyst_gem.name=Amethyst
+item.bluepower:sapphire_gem.name=Spahir
+
+item.bluepower:teslatite_dust.name=Teslatit
+
+item.bluepower:copper_ingot.name=Kupfer Barren
+item.bluepower:silver_ingot.name=Silber Barren
+item.bluepower:zinc_ingot.name=Zink Barren
+
+item.bluepower:red_alloy_ingot.name=Red Alloy Barren
+item.bluepower:blue_alloy_ingot.name=Blue Alloy Barren
+item.bluepower:purple_alloy_ingot.name=Purple Alloy Barren
+
+item.bluepower:brass_ingot.name=Messing Barren
+
+item.bluepower:tungsten_ingot.name=Tungsten Barren
+item.bluepower:tungsten_nugget.name=Tungsten Nugget
+
+# IC2-compat zinc
+item.bluepower:zinc_ore_crushed.name=Zertrümmertes Zink Erz
+item.bluepower:zinc_dust.name=Zink Staub
+item.bluepower:zinc_tiny_dust.name=Kleiner Haufen Zink Staub
+item.bluepower:zinc_ore_purified.name=Pures Zertrümmertes Zink Erz
+
+# Plant items
+item.bluepower:flax_seeds.name=Flachs Samen
+item.bluepower:indigo_flower.name=Indigo Blume
+item.bluepower:indigo_dye.name=Indigo Farbstoff
+
+# Tools and weapons
+item.bluepower:ruby_sword.name=Rubin Schwert
+item.bluepower:ruby_shovel.name=Rubin Schaufel
+item.bluepower:ruby_axe.name=Rubin Axt
+item.bluepower:ruby_pickaxe.name=Rubin Spitzhacke
+item.bluepower:ruby_hoe.name=Rubin Hacke
+item.bluepower:ruby_sickle.name=Rubin Sichel
+
+item.bluepower:sapphire_sword.name=Spahir Schwert
+item.bluepower:sapphire_shovel.name=Spahir Schaufel
+item.bluepower:sapphire_axe.name=Spahir Axt
+item.bluepower:sapphire_pickaxe.name=Spahir Spitzhacke
+item.bluepower:sapphire_hoe.name=Sapphir Hacke
+item.bluepower:sapphire_sickle.name=Spahir Sichel
+
+item.bluepower:amethyst_sword.name=Amethyst Schwert
+item.bluepower:amethyst_shovel.name=Amethyst Schaufel
+item.bluepower:amethyst_axe.name=Amethyst Axt
+item.bluepower:amethyst_pickaxe.name=Amethyst Spitzhacke
+item.bluepower:amethyst_hoe.name=Amethyst Hacke
+item.bluepower:amethyst_sickle.name=Amethyst Sichel
+
+item.bluepower:wood_sickle.name=Holz Sichel
+item.bluepower:stone_sickle.name=Stein Sichel
+item.bluepower:iron_sickle.name=Eisen Sichel
+item.bluepower:gold_sickle.name=Gold Sichel
+item.bluepower:diamond_sickle.name=Diamant Sichel
+
+item.bluepower:athame.name=Athame
+item.bluepower:screwdriver.name=Schraubenzieher
+item.bluepower:silky_screwdriver.name=Samtiger Schraubenzieher
+
+item.bluepower:wool_card.name=Wool Card
+item.bluepower:diamond_drawplate.name=Diamant Schneide
+
+# Saws
+item.bluepower:iron_saw.name=Eisen Säge
+item.bluepower:amethyst_saw.name=Amethyst Säge
+item.bluepower:ruby_saw.name=Rubin Säge
+item.bluepower:sapphire_saw.name=Saphir Säge
+item.bluepower:diamond_saw.name=Diamant Säge
+
+# Canvas bags
+item.bluepower:canvas_bag.white.name=Schriftrollen Beutel
+item.bluepower:canvas_bag.orange.name=Oranger Schriftrollen Beutel
+item.bluepower:canvas_bag.magenta.name=Magentaner Schriftrollen Beutel
+item.bluepower:canvas_bag.lightBlue.name=Hellblauer Schriftrollen Beutel
+item.bluepower:canvas_bag.yellow.name=Gelber Schriftrollen Beutel
+item.bluepower:canvas_bag.lime.name=Hellgrüner Schriftrollen Beutel
+item.bluepower:canvas_bag.pink.name=Pinker Schriftrollen Beutel
+item.bluepower:canvas_bag.gray.name=Grauer Schriftrollen Beutel
+item.bluepower:canvas_bag.silver.name=Hellgrauer Schriftrollen Beutel
+item.bluepower:canvas_bag.cyan.name=Zyaner Schriftrollen Beutel
+item.bluepower:canvas_bag.purple.name=Lilaner Schriftrollen Beutel
+item.bluepower:canvas_bag.blue.name=Blauer Schriftrollen Beutel
+item.bluepower:canvas_bag.brown.name=Brauner Schriftrollen Beutel
+item.bluepower:canvas_bag.green.name=Grüner Schriftrollen Beutel
+item.bluepower:canvas_bag.red.name=Roter Schriftrollen Beutel
+item.bluepower:canvas_bag.black.name=Schwarzer Schriftrollen Beutel
+
+# Circuit items
+item.bluepower:silicon_boule.name=Silikon Boule
+item.bluepower:silicon_wafer.name=Silikon Wafer
+item.bluepower:blue_doped_wafer.name=Blaues dotiertes Wafer
+item.bluepower:red_doped_wafer.name=Rotes dotiertes Wafer
+
+item.bluepower:stone_tile.name=Stone Platte
+item.bluepower:bluestone_wire_tile.name=Bluestone Kabel Platte
+item.bluepower:bluestone_anode_tile.name=Bluestone Anode Platte
+item.bluepower:bluestone_cathode_tile.name=Bluestone Kathode Platte
+item.bluepower:bluestone_pointer_tile.name=Bluestone Zeiger Platte
+item.bluepower:redstone_wire_tile.name=Redstone Kabel Platte
+item.bluepower:redstone_anode_tile.name=Redstone Anode Platte
+item.bluepower:redstone_cathode_tile.name=Redstone Kathode Platte
+item.bluepower:redstone_pointer_tile.name=Redstone Zeiger Platte
+item.bluepower:silicon_chip_tile.name=Silikon Chip Platte
+item.bluepower:tainted_silicon_chip_tile.name=Behaftete Silkcon Chip Platte
+item.bluepower:quartz_resonator_tile.name=Quarz Resonator Platte
+item.bluepower:plate_assembly.name=Montierungs Platte
+item.bluepower:stone_redwire.name=Steinerne Redwire Platte
+item.bluepower:stone_bundle.name=Steinerne Gebündelte Platte
+
+# Misc crafting items
+item.bluepower:zincplate.name=Zink Plate
+
+item.bluepower:screwdriver_handle.name=Schraubenzieher Griff
+
+item.bluepower:canvas.name=Schriftrolle
+item.bluepower:seed_bag.name=Samen Beutel
+item.bluepower:canvas_bag.name=Schriftrollen Beutel
+
+item.bluepower:iron_wire.name=Feiner Eisen Draht
+item.bluepower:copper_wire.name=Feiner Kupfer Draht
+
+item.bluepower:infused_teslatite_dust.name=Infundierter Teslatit Staub
+
+# Gates
+item.part.bluepower:gate.and.name=AND Gatter
+item.part.bluepower:gate.buffer.name=Puffer Gatter
+item.part.bluepower:gate.bustransceiver.name=Bus Transceiver
+item.part.bluepower:gate.counter.name=Zähler
+item.part.bluepower:gate.invert.name=Invertierte Zelle
+item.part.bluepower:gate.lightCell.name=Licht Sensor
+item.part.bluepower:gate.multiplexer.name=Multiplexer
+item.part.bluepower:gate.nand.name=NAND Gatter
+item.part.bluepower:gate.noninvert.name=Nicht-Invertierte Zelle
+item.part.bluepower:gate.nor.name=NOR Gatter
+item.part.bluepower:gate.not.name=NOT Gatter
+item.part.bluepower:gate.nullcell.name=Digitale Null Zelle
+item.part.bluepower:gate.or.name=OR Gatter
+item.part.bluepower:gate.pulseformer.name=Pulse Generator
+item.part.bluepower:gate.randomizer.name=Zufallsgenerator
+item.part.bluepower:gate.repeater.name=Verstärker
+item.part.bluepower:gate.rs.name=RS Latch
+item.part.bluepower:gate.sequencer.name=Sequencer
+item.part.bluepower:gate.state.name=Status Zelle
+item.part.bluepower:gate.synchronizer.name=Synchronisierer
+item.part.bluepower:gate.timer.name=Timer
+item.part.bluepower:gate.toggle.name=Toggle Latch
+item.part.bluepower:gate.transparent.name=Transparent Latch
+item.part.bluepower:gate.xnor.name=XNOR Gatter
+item.part.bluepower:gate.xor.name=XOR Gatter
+item.part.bluepower:gate.integratedCircuit3x3.name=3x3 Integrierter Schaltkreis
+item.part.bluepower:gate.integratedCircuit5x5.name=5x5 Integrierter Schaltkreis
+item.part.bluepower:gate.integratedCircuit7x7.name=7x7 Integrierter Schaltkreis
+item.part.bluepower:gate.inverter.name=Inverter
+item.part.bluepower:gate.comparator.name=Komparator
+item.part.bluepower:gate.wirelesstransceiver.name=Digitaler Wireless Transceiver
+item.part.bluepower:gate.wirelesstransceiver.analog.name=Analoger Wireless Transceiver
+item.part.bluepower:gate.wirelesstransceiver.bundled.name=Digitaler Gebündelter Wireless Transceiver
+item.part.bluepower:gate.wirelesstransceiver.analog.bundled.name=Analoger Gebündelter Wireless Transceiver
+item.part.bluepower:pneumaticTube.name=Pneumatisches Rohr
+item.part.bluepower:pneumaticTubeOpaque.name=Undurchsichtiges Pneumatisches Rohr
+item.part.bluepower:restrictionTube.name=Überschuss Rohr
+item.part.bluepower:restrictionTubeOpaque.name=Undurchsichtiges Überschuss Rohr
+item.part.bluepower:magTube.name=Mag-Rohr
+item.part.bluepower:accelerator.name=Beschleuniger
+
 item.part.bluepower:wirelesstransceiver.bundled.name=Gebündelter Wireless Transceiver
 item.part.bluepower:wirelesstransceiver.analog.bundled.name=Analoger gebündelter Wireless Transceiver
 item.part.bluepower:wirelesstransceiver.name=Wireless Transceiver
 item.part.bluepower:wirelesstransceiver.analog.name=Analoger Wireless Transceiver
 
+# Lumar
 item.bluepower:lumar.white.name=Weißer Leuchtstaub
 item.bluepower:lumar.orange.name=Oranger Leuchtstaub
 item.bluepower:lumar.magenta.name=Magentaner Leuchtstaub
@@ -598,6 +614,8 @@ item.bluepower:lumar.brown.name=Brauner Leuchtstaub
 item.bluepower:lumar.green.name=Grüner Leuchtstaub
 item.bluepower:lumar.red.name=Roter Leuchtstaub
 item.bluepower:lumar.black.name=Schwarzer Leuchtstaub
+
+# Paint cans
 item.bluepower:paint_can.empty.name=Farbtopf
 item.bluepower:paint_can.white.name=Weißer Farbtopf
 item.bluepower:paint_can.orange.name=Oranger Farbtopf
@@ -615,6 +633,8 @@ item.bluepower:paint_can.brown.name=Brauner Farbtopf
 item.bluepower:paint_can.green.name=Grüner Farbtopf
 item.bluepower:paint_can.red.name=Roter Farbtopf
 item.bluepower:paint_can.black.name=Schwarzer Farbtopf
+
+# Paint brushes
 item.bluepower:paint_brush.empty.name=Pinsel
 item.bluepower:paint_brush.white.name=Weißer Pinsel
 item.bluepower:paint_brush.orange.name=Oranger Pinsel
@@ -633,6 +653,7 @@ item.bluepower:paint_brush.green.name=Grüner Pinsel
 item.bluepower:paint_brush.red.name=Roter Pinsel
 item.bluepower:paint_brush.black.name=Schwarzer Pinsel
 
+# Creative tabs
 itemGroup.tabBluePowerMachines=Blue Power Maschinen
 itemGroup.tabBluePowerBlocks=Blue Power Blöcke
 itemGroup.tabBluePowerItems=Blue Power Items
@@ -641,9 +662,11 @@ itemGroup.tabBluePowerCircuits=Blue Power Gatter
 itemGroup.tabBluePowerLighting=Blue Power Lampen
 itemGroup.tabBluePowerWiring=Blue Power Kabel
 
+# Enchantments
 enchantment.vorpal.name=Vorpal
 enchantment.disjunction.name=Disjunction
 
+# GUI buttons and tooltips
 gui.projectTable.clearGrid=Leere Crafting Feld
 gui.timerInterval=Timer Interval
 gui.counterMax=Maximum
@@ -672,7 +695,6 @@ gui.sortMode.any_stack=§3Jedes Stack
 gui.sortMode.any_stack.info=Ausgewählte Items werden bezogen, bis zu einem vollen Stack.
 gui.sortMode.any_stack_default=§3Jedes standartmäßige Stack
 gui.sortMode.any_stack_default.info=Ausgewählte Items werden bezogen, bis zu einem vollen Stack. Eine standart Farbe für unpassende Items kann festgelegt werden.
-
 gui.pullMode.single_step=§Einzelner Schritt
 gui.pullMode.single_step.info=Ein Item/Reihe (Je nach Modus) wird bezogen für jedes Redstone Signal.
 gui.pullMode.automatic=§3Automatisch
@@ -701,6 +723,7 @@ gui.manager.mode.exact=§3Exakter Modus
 gui.manager.mode.exact.info=Versucht das Inventar mit der exakten Anzahl an Items im Inventar des Managers zu versorgen.
 gui.manager.mode.all=§3Alle Modi
 gui.manager.mode.all.info=Festgelegte Items im Inventar des Mangers werden benutzt um das angeschlossene Inventar zu versorgen. Das einzige Limit ist die Größe des Inventars.
+
 gui.circuitDatabase.tab.copyAndShare=Kopieren & Teilen
 gui.circuitDatabase.tab.private=Privater Bibliothek
 gui.circuitDatabase.tab.server=Server Bibliothek
@@ -720,6 +743,21 @@ gui.circuitDatabase.name=Name:
 
 gui.sneakForInfo=Schleiche für mehr Info
 
+gui.widget.fuzzy=§bFilter Genauigkeit
+gui.widget.fuzzy.normal=§3Normal
+gui.widget.fuzzy.normal.info=Hält Items für gleich wenn das Item gleich ist und deren Item Schaden.
+gui.widget.fuzzy.fuzzy=§3Undeutlich
+gui.widget.fuzzy.fuzzy.info=Hält Items für gleich when ihr Ore Dictionary eintrag gleich ist.
+gui.widget.fuzzy.exact=§3Exakt
+gui.widget.fuzzy.exact.info=Hält Items für gleich wenn sie exakt gleich sind. NBT Info einbezogen. Das heißt ein Diamant Schwert ist unterschiedlich von einem verzaberten.
+
+gui.tooltip.hasSilkyData=§eEnthält extra Info
+
+gui.tab.stuffed=Überschüssige Items
+gui.tab.stuffed.noItems=Keine Überschüssigen Items
+gui.tab.info=Information
+
+# Colors
 gui.widget.color.none=Keine Farbe
 gui.widget.color.black=Schwarz
 gui.widget.color.red=Rot
@@ -738,20 +776,7 @@ gui.widget.color.magenta=Magenta
 gui.widget.color.orange=Orange
 gui.widget.color.white=Weiß
 
-gui.widget.fuzzy=§bFilter Genauigkeit
-gui.widget.fuzzy.normal=§3Normal
-gui.widget.fuzzy.normal.info=Hält Items für gleich wenn das Item gleich ist und deren Item Schaden.
-gui.widget.fuzzy.fuzzy=§3Undeutlich
-gui.widget.fuzzy.fuzzy.info=Hält Items für gleich when ihr Ore Dictionary eintrag gleich ist.
-gui.widget.fuzzy.exact=§3Exakt
-gui.widget.fuzzy.exact.info=Hält Items für gleich wenn sie exakt gleich sind. NBT Info einbezogen. Das heißt ein Diamant Schwert ist unterschiedlich von einem verzaberten.
-
-gui.tooltip.hasSilkyData=§eEnthält extra Info
-
-gui.tab.stuffed=Überschüssige Items
-gui.tab.stuffed.noItems=Keine Überschüssigen Items
-gui.tab.info=Information
-
+# Info tab
 tile.bluepower:alloyfurnace.info=Dieser Block kann Metalle verschmelzen. Er kann genutzt werden um Messing aus 3 Kupfer und 1 Zink herzustellen.
 tile.bluepower:buffer.info=Alle außer eine Seite haben ihre eigene Abteilung für zugreifbaren Lagerraum. Die übrige Seite hat zugriff auf alle Abteilungen.
 tile.bluepower:deployer.info=Diese Maschine führt einen rechst Klick auf jeden/s Block/Tier vor sich aus. Dabei wernden Items aus dem Inventar zum rechtsklicken benutzt. Dies kann z.B. genutzt werden um eine Kuh zu melken indem ein Eimer in das Inventar gelegt wird und vor dem Block eine Kuh steht.
@@ -767,11 +792,13 @@ tile.bluepower:sorting_machine.info=Diese Maschine teilt Items nach vorgegebenen
 tile.bluepower:circuit_database.info=Diese Maschine ermöglicht es Schaltkreise mit anderen zu Teilen. Zum kopieren, lege eine Vorlage in den linken Slot und einen leeren Schaltkreis in den rechten. Wenn alle benötigten Gatter vorahnden sind drücke den Kopieren Knopf. Lege zum Teilen eine Vorlage ein und drücke einen der beiden Knöpfe. Beim privaten speichern wird ein Ordner bei deiner Minecraft Instanz erstellt. Diese kannst du in andere Welten kopieren. Gespeicherte Voragen auf einem Server sind öffentlich.
 tile.bluepower:manager.info=Eine Fortgeschrittene Maschine zum regeln eines Inventars. Kann eingestellt werden um ein Inventar mit spezifischen Items/Mengen zu versorgen. Kann auch so viele Items, von einem bestimmten Typ, beziehen wie möglich. Prioritäten legen fest, dass Manager nicht von anderen Managern mit höheren Prioritäten Items beziehen können.
 
+# Directions
 direction.front=Front
 direction.left=Links
 direction.back=Hinten
 direction.right=Rechts
 
+# Cardinal directions
 rotation.north=Norden
 rotation.south=Süden
 rotation.up=Oben
@@ -779,9 +806,11 @@ rotation.down=Unten
 rotation.west=Westen
 rotation.east=Osten
 
+# Misc
 random.enabled=Aktiviert
 random.disabled=Deaktiviert
 
+# Config file options
 bluepower.config.settings.tooltip=Generelle Mod Einstellungen.
 bluepower.config.recipes.tooltip=Rezept Einstellungen.
 bluepower.config.enchantments.tooltip=Verzauberungs Einstellungen.
@@ -798,12 +827,11 @@ bluepower.config.teslatite.tooltip=Adjustiere Teslatit Erz generation.
 bluepower.config.worldgen.tooltip=Konfiguriere verschiedene Weltgenerations Optionen.
 bluepower.config.circuitDatabase.tooltip=Schaltkreis Datenbank Optionen.
 
+# WAILA
 bluepower.waila.rsLatch.feedback=Feedback
 bluepower.waila.rsLatch.noFeedback=Kein Feedback
 waila.pneumaticTube.color=Farben
 waila.machine.stuffed=Verstopft
-
-message.oldpart=Dies ist ein alter Part. Lege ihn ins Inventar um ihn zu konvertieren.
 
 bluepower.accessability.public=Global
 bluepower.accessability.shared=Begrenzt
@@ -819,8 +847,7 @@ bluepower.gui.admin=Admin
 bluepower.gui.wireless=Wireless Redstone
 
 
-/******** ACHIEVEMENTS ********/
-
+# Achievements
 bluepower.gui.achievements=Bluepower
 
 achievement.vorpal=Gut ausgestattet

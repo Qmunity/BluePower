@@ -1,4 +1,4 @@
-﻿/*
+/*
  * This file is part of Blue Power. Blue Power is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
  * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version. Blue Power is
  * distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
@@ -8,42 +8,61 @@
  * @author HagiZ (daniel@hagiz.se) - 2014-09-06
  */
 
+# Basalt
 tile.bluepower:basalt.name=Basalt
-tile.bluepower:marble.name=Marmor
 tile.bluepower:basalt_brick.name=Basalttegelsten
-tile.bluepower:marble_brick.name=Marmortegelsten
-tile.bluepower:basalt_cobble.name=Basaltsten
-tile.bluepower:cracked_basalt_lava.name=Spräckt basalt
-tile.bluepower:alloy_furnace.name=Legeringsugn
-tile.bluepower:amethyst_ore.name=Ametistmineral
 tile.bluepower:basaltbrick_cracked.name=Spräckt basalttegel
 tile.bluepower:basalt_brick_small.name=Små basalttegel
-tile.bluepower:marble_brick_small.name=Små marmortegel
 tile.bluepower:fancy_basalt.name=Mejslat basalttegel
-tile.bluepower:fancy_marble.name=Mejslat marmortegel
-tile.bluepower:marble_tile.name=Marmorklinkers
 tile.bluepower:basalt_tile.name=Basaltklinkers
 tile.bluepower:basalt_paver.name=Basaltplatta
+
+tile.bluepower:cracked_basalt_lava.name=Spräckt basalt
+tile.bluepower:basalt_cobble.name=Basaltsten
+
+# Marble
+tile.bluepower:marble.name=Marmor
+tile.bluepower:marble_brick.name=Marmortegelsten
+tile.bluepower:marble_brick_small.name=Små marmortegel
+tile.bluepower:fancy_marble.name=Mejslat marmortegel
+tile.bluepower:marble_tile.name=Marmorklinkers
 tile.bluepower:marble_paver.name=Marmorplatta
+
+# Basalt and marble tiles
+##tile.bluepower:tiles.name=
+
+# Ores and ore blocks
+tile.bluepower:amethyst_ore.name=Ametistmineral
 tile.bluepower:ruby_ore.name=Rubinmineral
 tile.bluepower:sapphire_ore.name=Safirmineral
 tile.bluepower:teslatite_ore.name=Teslatitemineral
+
 tile.bluepower:amethyst_block.name=Ametistblock
+tile.bluepower:ruby_block.name=Rubinblock
 tile.bluepower:sapphire_block.name=Safirblock
 tile.bluepower:teslatite_block.name=Teslatiteblock
-tile.bluepower:ruby_block.name=Rubinblock
+
 tile.bluepower:copper_ore.name=Kopparmalm
 tile.bluepower:silver_ore.name=Silvermalm
 tile.bluepower:zinc_ore.name=Zinkmalm
+tile.bluepower:tungsten_ore.name=Tungstensmineral
+
 tile.bluepower:copper_block.name=Kopparblock
 tile.bluepower:silver_block.name=Silverblock
 tile.bluepower:zinc_block.name=Zinkblock
-tile.bluepower:flax_crop.name=Lin
-tile.bluepower:indigo_flower.name=Indigoblomma
-tile.bluepower:tungsten_ore.name=Tungstensmineral
 tile.bluepower:tungsten_block.name=Tungstensblock
 
+# Plants
+tile.bluepower:flax_crop.name=Lin
+tile.bluepower:indigo_flower.name=Indigoblomma
+
+# Glass
+##tile.bluepower:sapphire_glass.name=
+##tile.bluepower:reinforced_sapphire_glass.name=
+
+# Machines
 tile.bluepower:alloyfurnace.name=Legeringsugn
+
 tile.bluepower:block_breaker.name=Blockspräckare
 tile.bluepower:igniter.name=Tändare
 tile.bluepower:buffer.name=Buffert
@@ -53,176 +72,389 @@ tile.bluepower:relay.name=Relä
 tile.bluepower:deployer.name=Placerare
 tile.bluepower:filter.name=Filter
 tile.bluepower:retriever.name=Hämtare
-tile.bluepower:project_table.name=Projektbord
-tile.bluepower:circuit_table.name=Kretsbord
-tile.bluepower:circuit_database.name=Kretsdatabas
 tile.bluepower:sortron.name=Sortron
 tile.bluepower:sorting_machine.name=Sorteringsmaskin
-tile.bluepower:windmill.name=Vertikalt vindkraftverk
-tile.bluepower:kinetic_generator.name=Kinetisk generator
-tile.bluepower:engine.name=Blue Power Motor
-tile.bluepower:cpu.name=CPU
-tile.bluepower:monitor.name=Monitor
-tile.bluepower:disk_drive.name=Hårddisk
-tile.bluepower:io_expander.name=IO Expanderare
 tile.bluepower:regulator.name=Regulator
 tile.bluepower:item_detector.name=Föremålsdetektor
 tile.bluepower:manager.name=Hanterare
 
-part.bluepower:bluestoneWire.name=Blåstenskabel
-part.bluepower:bluestoneWire.white.name=Vit blåstenskabel
-part.bluepower:bluestoneWire.orange.name=Orange blåstenskabel
-part.bluepower:bluestoneWire.magenta.name=Magenta blåstenskabel
-part.bluepower:bluestoneWire.light_blue.name=Ljusblå blåstenskabel
-part.bluepower:bluestoneWire.yellow.name=Gul blåstenskabel
-part.bluepower:bluestoneWire.lime.name=Lime blåstenskabel
-part.bluepower:bluestoneWire.pink.name=Rosa blåstenskabel
-part.bluepower:bluestoneWire.gray.name=Grå blåstenskabel
-part.bluepower:bluestoneWire.silver.name=Ljusgrå blåstenskabel
-part.bluepower:bluestoneWire.cyan.name=Cyan blåstenskabel
-part.bluepower:bluestoneWire.purple.name=Lila blåstenskabel
-part.bluepower:bluestoneWire.blue.name=Blå blåstenskabel
-part.bluepower:bluestoneWire.brown.name=Brun blåstenskabel
-part.bluepower:bluestoneWire.green.name=Grön blåstenskabel
-part.bluepower:bluestoneWire.red.name=Röd blåstenskabel
-part.bluepower:bluestoneWire.black.name=Svart blåstenskabel
+tile.bluepower:windmill.name=Vertikalt vindkraftverk
+tile.bluepower:kinetic_generator.name=Kinetisk generator
+tile.bluepower:engine.name=Blue Power Motor
 
-part.bluepower:bluestoneWire.bundled.name=Samlad kabel
-part.bluepower:bluestoneWire.bundled.white.name=Vit samlingskabel
-part.bluepower:bluestoneWire.bundled.orange.name=Orange samlingskabel
-part.bluepower:bluestoneWire.bundled.magenta.name=Magenta samlingskabel
-part.bluepower:bluestoneWire.bundled.light_blue.name=Ljusblå samlingskabel
-part.bluepower:bluestoneWire.bundled.yellow.name=Gul samlingskabel
-part.bluepower:bluestoneWire.bundled.lime.name=Lime samlingskabel
-part.bluepower:bluestoneWire.bundled.pink.name=Rosa samlingskabel
-part.bluepower:bluestoneWire.bundled.gray.name=Grå samlingskabel
-part.bluepower:bluestoneWire.bundled.silver.name=Ljusgrå samlingskabel
-part.bluepower:bluestoneWire.bundled.cyan.name=Cyan samlingskabel
-part.bluepower:bluestoneWire.bundled.purple.name=Lila samlingskabel
-part.bluepower:bluestoneWire.bundled.blue.name=Blå samlingskabel
-part.bluepower:bluestoneWire.bundled.brown.name=Brun samlingskabel
-part.bluepower:bluestoneWire.bundled.green.name=Grön samlingskabel
-part.bluepower:bluestoneWire.bundled.red.name=Röd samlingskabel
-part.bluepower:bluestoneWire.bundled.black.name=Svart samlingskabel
+# Computer
+tile.bluepower:cpu.name=CPU
+tile.bluepower:monitor.name=Monitor
+tile.bluepower:disk_drive.name=Hårddisk
+tile.bluepower:io_expander.name=IO Expanderare
 
-tile.bluepower:lampwhite.name=Vit lampa
-tile.bluepower:lampinvertedwhite.name=Inverterad vit lampa
-part.bluepower:cagelampwhite.name=Vit arbetslampa
-part.bluepower:invertedcagelampwhite.name=Inverterad vit arbetslampa
-part.bluepower:fixturewhite.name=Vit fixtur
-part.bluepower:invertedfixturewhite.name=Inverterad vit fixtur
-tile.bluepower:lamporange.name=Orange lampa
-tile.bluepower:lampinvertedorange.name=Inverterad orange lampa
-part.bluepower:cagelamporange.name=Orange arbetslampa
-part.bluepower:invertedcagelamporange.name=Inverterad orange arbetslampa
-part.bluepower:fixtureorange.name=Orange fixtur
-part.bluepower:invertedfixtureorange.name=Inverterad orange fixtur
-tile.bluepower:lampmagenta.name=Magenta lampa
-tile.bluepower:lampinvertedmagenta.name=Inverterad magenta lampa
-part.bluepower:cagelampmagenta.name=Magenta arbetslampa
-part.bluepower:invertedcagelampmagenta.name=Inverterad magenta arbetslampa
-part.bluepower:fixturemagenta.name=Magenta fixtur
-part.bluepower:invertedfixturemagenta.name=Inverterad magentafixtur
-tile.bluepower:lamplight_blue.name=Ljusblå lampa
-tile.bluepower:lampinvertedlight_blue.name=Inverterad ljusblå lampa
-part.bluepower:cagelamplight_blue.name=Ljusblå arbetslampa
-part.bluepower:invertedcagelamplight_blue.name=Inverterad ljusblå arbetslampa
-part.bluepower:fixturelight_blue.name=Ljusblå fixtur
-part.bluepower:invertedfixturelight_blue.name=Inverterad ljusblå fixtur
-tile.bluepower:lampyellow.name=Gul lampa
-tile.bluepower:lampinvertedyellow.name=Inverterad gul lampa
-part.bluepower:cagelampyellow.name=Gul arbetslampa
-part.bluepower:invertedcagelampyellow.name=Inverterad gul arbetslampa
-part.bluepower:fixtureyellow.name=Gul fixtur
-part.bluepower:invertedfixtureyellow.name=Inverterad gul fixtur
-tile.bluepower:lamplime.name=Lime lampa
-tile.bluepower:lampinvertedlime.name=Inverterad lime lampa
-part.bluepower:cagelamplime.name=Lime arbetslampa
-part.bluepower:invertedcagelamplime.name=Inverterad lime arbetslampa
-part.bluepower:fixturelime.name=Lime fixtur
-part.bluepower:invertedfixturelime.name=Inverterad lime fixtur
-tile.bluepower:lamppink.name=Rosa lampa
-tile.bluepower:lampinvertedpink.name=Inverterad rosa lampa
-part.bluepower:cagelamppink.name=Rosa arbetslampa
-part.bluepower:invertedcagelamppink.name=Inverterad rosa arbetslampa
-part.bluepower:fixturepink.name=Rosa fixtur
-part.bluepower:invertedfixturepink.name=Inverterad rosa fixtur
-tile.bluepower:lampgray.name=Grå lampa
-tile.bluepower:lampinvertedgray.name=Inverterad grå lampa
-part.bluepower:cagelampgray.name=Grå arbetslampa
-part.bluepower:invertedcagelampgray.name=Inverterad grå arbetslampa
-part.bluepower:fixturegray.name=Grå fixtur
-part.bluepower:invertedfixturegray.name=Inverterad grå fixtur
-tile.bluepower:lampsilver.name=Ljusgrå lampa
-tile.bluepower:lampinvertedsilver.name=Inverterad ljusgrå lampa
-part.bluepower:cagelampsilver.name=Ljusgrå arbetslampa
-part.bluepower:invertedcagelampsilver.name=Inverterad ljusgrå arbetslampa
-part.bluepower:fixturesilver.name=Ljusgrå fixtur
-part.bluepower:invertedfixturesilver.name=Inverterad ljusgrå fixtur
-tile.bluepower:lampcyan.name=Cyan lampa
-tile.bluepower:lampinvertedcyan.name=Inverterad cyan lampa
-part.bluepower:cagelampcyan.name=Cyan arbetslampa
-part.bluepower:invertedcagelampcyan.name=Inverterad cyan arbetslampa
-part.bluepower:fixturecyan.name=Cyan fixtur
-part.bluepower:invertedfixturecyan.name=Inverterad cyan fixtur
-tile.bluepower:lamppurple.name=Lila lampa
-tile.bluepower:lampinvertedpurple.name=Inverterad lila lampa
-part.bluepower:cagelamppurple.name=Lila arbetslampa
-part.bluepower:invertedcagelamppurple.name=Inverterad lila arbetslampa
-part.bluepower:fixturepurple.name=Lila fixtur
-part.bluepower:invertedfixturepurple.name=Inverterad lila fixtur
-tile.bluepower:lampblue.name=Blå lampa
-tile.bluepower:lampinvertedblue.name=Inverterad blå lampa
-part.bluepower:cagelampblue.name=Blå arbetslampa
-part.bluepower:invertedcagelampblue.name=Inverterad blå arbetslampa
-part.bluepower:fixtureblue.name=Blå fixtur
-part.bluepower:invertedfixtureblue.name=Inverterad blå fixtur
-tile.bluepower:lampbrown.name=Brun lampa
-tile.bluepower:lampinvertedbrown.name=Inverterad brun lampa
-part.bluepower:cagelampbrown.name=Brun arbetslampa
-part.bluepower:invertedcagelampbrown.name=Inverterad brun arbetslampa
-part.bluepower:fixturebrown.name=Brun fixtur
-part.bluepower:invertedfixturebrown.name=Inverterad brun fixtur
-tile.bluepower:lampgreen.name=Grön lampa
-tile.bluepower:lampinvertedgreen.name=Inverterad grön lampa
-part.bluepower:cagelampgreen.name=Grön arbetslampa
-part.bluepower:invertedcagelampgreen.name=Inverterad grön arbetslampa
-part.bluepower:fixturegreen.name=Grön fixtur
-part.bluepower:invertedfixturegreen.name=Inverterad grön fixtur
-tile.bluepower:lampred.name=Röd lampa
-tile.bluepower:lampinvertedred.name=Inverterad röd lampa
-part.bluepower:cagelampred.name=Röd arbetslampa
-part.bluepower:invertedcagelampred.name=Inverterad röd arbetslampa
-part.bluepower:fixturered.name=Röd fixtur
-part.bluepower:invertedfixturered.name=Inverterad röd fixtur
-tile.bluepower:lampblack.name=Svart lampa
-tile.bluepower:lampinvertedblack.name=Inverterad svart lampa
-part.bluepower:cagelampblack.name=Svart arbetslampa
-part.bluepower:invertedcagelampblack.name=Inverterad svart arbetslampa
-part.bluepower:fixtureblack.name=Svart fixtur
-part.bluepower:invertedfixtureblack.name=Inverterad svart fixtur
+# Tables
+tile.bluepower:project_table.name=Projektbord
+tile.bluepower:circuit_table.name=Kretsbord
+tile.bluepower:circuit_database.name=Kretsdatabas
 
+# Wires (not bundled, face)
+##item.part.bluepower:wire.bluestone.name=
+##item.part.bluepower:wire.bluestone.white.name=
+##item.part.bluepower:wire.bluestone.orange.name=
+##item.part.bluepower:wire.bluestone.magenta.name=
+##item.part.bluepower:wire.bluestone.light_blue.name=
+##item.part.bluepower:wire.bluestone.yellow.name=
+##item.part.bluepower:wire.bluestone.lime.name=
+##item.part.bluepower:wire.bluestone.pink.name=
+##item.part.bluepower:wire.bluestone.gray.name=
+##item.part.bluepower:wire.bluestone.light_gray.name=
+##item.part.bluepower:wire.bluestone.cyan.name=
+##item.part.bluepower:wire.bluestone.purple.name=
+##item.part.bluepower:wire.bluestone.blue.name=
+##item.part.bluepower:wire.bluestone.brown.name=
+##item.part.bluepower:wire.bluestone.green.name=
+##item.part.bluepower:wire.bluestone.red.name=
+##item.part.bluepower:wire.bluestone.black.name=
+
+##item.part.bluepower:wire.redalloy.name=
+##item.part.bluepower:wire.redalloy.white.name=
+##item.part.bluepower:wire.redalloy.orange.name=
+##item.part.bluepower:wire.redalloy.magenta.name=
+##item.part.bluepower:wire.redalloy.light_blue.name=
+##item.part.bluepower:wire.redalloy.yellow.name=
+##item.part.bluepower:wire.redalloy.lime.name=
+##item.part.bluepower:wire.redalloy.pink.name=
+##item.part.bluepower:wire.redalloy.gray.name=
+##item.part.bluepower:wire.redalloy.light_gray.name=
+##item.part.bluepower:wire.redalloy.cyan.name=
+##item.part.bluepower:wire.redalloy.purple.name=
+##item.part.bluepower:wire.redalloy.blue.name=
+##item.part.bluepower:wire.redalloy.brown.name=
+##item.part.bluepower:wire.redalloy.green.name=
+##item.part.bluepower:wire.redalloy.red.name=
+##item.part.bluepower:wire.redalloy.black.name=
+
+##item.part.bluepower:wire.infusedteslatite.name=
+##item.part.bluepower:wire.infusedteslatite.white.name=
+##item.part.bluepower:wire.infusedteslatite.orange.name=
+##item.part.bluepower:wire.infusedteslatite.magenta.name=
+##item.part.bluepower:wire.infusedteslatite.light_blue.name=
+##item.part.bluepower:wire.infusedteslatite.yellow.name=
+##item.part.bluepower:wire.infusedteslatite.lime.name=
+##item.part.bluepower:wire.infusedteslatite.pink.name=
+##item.part.bluepower:wire.infusedteslatite.gray.name=
+##item.part.bluepower:wire.infusedteslatite.light_gray.name=
+##item.part.bluepower:wire.infusedteslatite.cyan.name=
+##item.part.bluepower:wire.infusedteslatite.purple.name=
+##item.part.bluepower:wire.infusedteslatite.blue.name=
+##item.part.bluepower:wire.infusedteslatite.brown.name=
+##item.part.bluepower:wire.infusedteslatite.green.name=
+##item.part.bluepower:wire.infusedteslatite.red.name=
+##item.part.bluepower:wire.infusedteslatite.black.name=
+
+# Wires (bundled, face)
+##item.part.bluepower:wire.bluestone.bundled.name=
+##item.part.bluepower:wire.bluestone.bundled.white.name=
+##item.part.bluepower:wire.bluestone.bundled.orange.name=
+##item.part.bluepower:wire.bluestone.bundled.magenta.name=
+##item.part.bluepower:wire.bluestone.bundled.light_blue.name=
+##item.part.bluepower:wire.bluestone.bundled.yellow.name=
+##item.part.bluepower:wire.bluestone.bundled.lime.name=
+##item.part.bluepower:wire.bluestone.bundled.pink.name=
+##item.part.bluepower:wire.bluestone.bundled.gray.name=
+##item.part.bluepower:wire.bluestone.bundled.light_gray.name=
+##item.part.bluepower:wire.bluestone.bundled.cyan.name=
+##item.part.bluepower:wire.bluestone.bundled.purple.name=
+##item.part.bluepower:wire.bluestone.bundled.blue.name=
+##item.part.bluepower:wire.bluestone.bundled.brown.name=
+##item.part.bluepower:wire.bluestone.bundled.green.name=
+##item.part.bluepower:wire.bluestone.bundled.red.name=
+##item.part.bluepower:wire.bluestone.bundled.black.name=
+
+##item.part.bluepower:wire.redalloy.bundled.name=
+##item.part.bluepower:wire.redalloy.bundled.white.name=
+##item.part.bluepower:wire.redalloy.bundled.orange.name=
+##item.part.bluepower:wire.redalloy.bundled.magenta.name=
+##item.part.bluepower:wire.redalloy.bundled.light_blue.name=
+##item.part.bluepower:wire.redalloy.bundled.yellow.name=
+##item.part.bluepower:wire.redalloy.bundled.lime.name=
+##item.part.bluepower:wire.redalloy.bundled.pink.name=
+##item.part.bluepower:wire.redalloy.bundled.gray.name=
+##item.part.bluepower:wire.redalloy.bundled.light_gray.name=
+##item.part.bluepower:wire.redalloy.bundled.cyan.name=
+##item.part.bluepower:wire.redalloy.bundled.purple.name=
+##item.part.bluepower:wire.redalloy.bundled.blue.name=
+##item.part.bluepower:wire.redalloy.bundled.brown.name=
+##item.part.bluepower:wire.redalloy.bundled.green.name=
+##item.part.bluepower:wire.redalloy.bundled.red.name=
+##item.part.bluepower:wire.redalloy.bundled.black.name=
+
+##item.part.bluepower:wire.infusedteslatite.bundled.name=
+##item.part.bluepower:wire.infusedteslatite.bundled.white.name=
+##item.part.bluepower:wire.infusedteslatite.bundled.orange.name=
+##item.part.bluepower:wire.infusedteslatite.bundled.magenta.name=
+##item.part.bluepower:wire.infusedteslatite.bundled.light_blue.name=
+##item.part.bluepower:wire.infusedteslatite.bundled.yellow.name=
+##item.part.bluepower:wire.infusedteslatite.bundled.lime.name=
+##item.part.bluepower:wire.infusedteslatite.bundled.pink.name=
+##item.part.bluepower:wire.infusedteslatite.bundled.gray.name=
+##item.part.bluepower:wire.infusedteslatite.bundled.light_gray.name=
+##item.part.bluepower:wire.infusedteslatite.bundled.cyan.name=
+##item.part.bluepower:wire.infusedteslatite.bundled.purple.name=
+##item.part.bluepower:wire.infusedteslatite.bundled.blue.name=
+##item.part.bluepower:wire.infusedteslatite.bundled.brown.name=
+##item.part.bluepower:wire.infusedteslatite.bundled.green.name=
+##item.part.bluepower:wire.infusedteslatite.bundled.red.name=
+##item.part.bluepower:wire.infusedteslatite.bundled.black.name=
+
+# Wires (not bundled, freestanding)
+##item.part.bluepower:wire.freestanding.bluestone.name=
+##item.part.bluepower:wire.freestanding.bluestone.white.name=
+##item.part.bluepower:wire.freestanding.bluestone.orange.name=
+##item.part.bluepower:wire.freestanding.bluestone.magenta.name=
+##item.part.bluepower:wire.freestanding.bluestone.light_blue.name=
+##item.part.bluepower:wire.freestanding.bluestone.yellow.name=
+##item.part.bluepower:wire.freestanding.bluestone.lime.name=
+##item.part.bluepower:wire.freestanding.bluestone.pink.name=
+##item.part.bluepower:wire.freestanding.bluestone.gray.name=
+##item.part.bluepower:wire.freestanding.bluestone.light_gray.name=
+##item.part.bluepower:wire.freestanding.bluestone.cyan.name=
+##item.part.bluepower:wire.freestanding.bluestone.purple.name=
+##item.part.bluepower:wire.freestanding.bluestone.blue.name=
+##item.part.bluepower:wire.freestanding.bluestone.brown.name=
+##item.part.bluepower:wire.freestanding.bluestone.green.name=
+##item.part.bluepower:wire.freestanding.bluestone.red.name=
+##item.part.bluepower:wire.freestanding.bluestone.black.name=
+
+##item.part.bluepower:wire.freestanding.redalloy.name=
+##item.part.bluepower:wire.freestanding.redalloy.white.name=
+##item.part.bluepower:wire.freestanding.redalloy.orange.name=
+##item.part.bluepower:wire.freestanding.redalloy.magenta.name=
+##item.part.bluepower:wire.freestanding.redalloy.light_blue.name=
+##item.part.bluepower:wire.freestanding.redalloy.yellow.name=
+##item.part.bluepower:wire.freestanding.redalloy.lime.name=
+##item.part.bluepower:wire.freestanding.redalloy.pink.name=
+##item.part.bluepower:wire.freestanding.redalloy.gray.name=
+##item.part.bluepower:wire.freestanding.redalloy.light_gray.name=
+##item.part.bluepower:wire.freestanding.redalloy.cyan.name=
+##item.part.bluepower:wire.freestanding.redalloy.purple.name=
+##item.part.bluepower:wire.freestanding.redalloy.blue.name=
+##item.part.bluepower:wire.freestanding.redalloy.brown.name=
+##item.part.bluepower:wire.freestanding.redalloy.green.name=
+##item.part.bluepower:wire.freestanding.redalloy.red.name=
+##item.part.bluepower:wire.freestanding.redalloy.black.name=
+
+##item.part.bluepower:wire.freestanding.infusedteslatite.name=
+##item.part.bluepower:wire.freestanding.infusedteslatite.white.name=
+##item.part.bluepower:wire.freestanding.infusedteslatite.orange.name=
+##item.part.bluepower:wire.freestanding.infusedteslatite.magenta.name=
+##item.part.bluepower:wire.freestanding.infusedteslatite.light_blue.name=
+##item.part.bluepower:wire.freestanding.infusedteslatite.yellow.name=
+##item.part.bluepower:wire.freestanding.infusedteslatite.lime.name=
+##item.part.bluepower:wire.freestanding.infusedteslatite.pink.name=
+##item.part.bluepower:wire.freestanding.infusedteslatite.gray.name=
+##item.part.bluepower:wire.freestanding.infusedteslatite.light_gray.name=
+##item.part.bluepower:wire.freestanding.infusedteslatite.cyan.name=
+##item.part.bluepower:wire.freestanding.infusedteslatite.purple.name=
+##item.part.bluepower:wire.freestanding.infusedteslatite.blue.name=
+##item.part.bluepower:wire.freestanding.infusedteslatite.brown.name=
+##item.part.bluepower:wire.freestanding.infusedteslatite.green.name=
+##item.part.bluepower:wire.freestanding.infusedteslatite.red.name=
+##item.part.bluepower:wire.freestanding.infusedteslatite.black.name=
+
+# Wires (bundled, freestanding)
+##item.part.bluepower:wire.freestanding.bluestone.bundled.name=
+##item.part.bluepower:wire.freestanding.bluestone.bundled.white.name=
+##item.part.bluepower:wire.freestanding.bluestone.bundled.orange.name=
+##item.part.bluepower:wire.freestanding.bluestone.bundled.magenta.name=
+##item.part.bluepower:wire.freestanding.bluestone.bundled.light_blue.name=
+##item.part.bluepower:wire.freestanding.bluestone.bundled.yellow.name=
+##item.part.bluepower:wire.freestanding.bluestone.bundled.lime.name=
+##item.part.bluepower:wire.freestanding.bluestone.bundled.pink.name=
+##item.part.bluepower:wire.freestanding.bluestone.bundled.gray.name=
+##item.part.bluepower:wire.freestanding.bluestone.bundled.light_gray.name=
+##item.part.bluepower:wire.freestanding.bluestone.bundled.cyan.name=
+##item.part.bluepower:wire.freestanding.bluestone.bundled.purple.name=
+##item.part.bluepower:wire.freestanding.bluestone.bundled.blue.name=
+##item.part.bluepower:wire.freestanding.bluestone.bundled.brown.name=
+##item.part.bluepower:wire.freestanding.bluestone.bundled.green.name=
+##item.part.bluepower:wire.freestanding.bluestone.bundled.red.name=
+##item.part.bluepower:wire.freestanding.bluestone.bundled.black.name=
+
+##item.part.bluepower:wire.freestanding.redalloy.bundled.name=
+##item.part.bluepower:wire.freestanding.redalloy.bundled.white.name=
+##item.part.bluepower:wire.freestanding.redalloy.bundled.orange.name=
+##item.part.bluepower:wire.freestanding.redalloy.bundled.magenta.name=
+##item.part.bluepower:wire.freestanding.redalloy.bundled.light_blue.name=
+##item.part.bluepower:wire.freestanding.redalloy.bundled.yellow.name=
+##item.part.bluepower:wire.freestanding.redalloy.bundled.lime.name=
+##item.part.bluepower:wire.freestanding.redalloy.bundled.pink.name=
+##item.part.bluepower:wire.freestanding.redalloy.bundled.gray.name=
+##item.part.bluepower:wire.freestanding.redalloy.bundled.light_gray.name=
+##item.part.bluepower:wire.freestanding.redalloy.bundled.cyan.name=
+##item.part.bluepower:wire.freestanding.redalloy.bundled.purple.name=
+##item.part.bluepower:wire.freestanding.redalloy.bundled.blue.name=
+##item.part.bluepower:wire.freestanding.redalloy.bundled.brown.name=
+##item.part.bluepower:wire.freestanding.redalloy.bundled.green.name=
+##item.part.bluepower:wire.freestanding.redalloy.bundled.red.name=
+##item.part.bluepower:wire.freestanding.redalloy.bundled.black.name=
+
+##item.part.bluepower:wire.freestanding.infusedteslatite.bundled.name=
+##item.part.bluepower:wire.freestanding.infusedteslatite.bundled.white.name=
+##item.part.bluepower:wire.freestanding.infusedteslatite.bundled.orange.name=
+##item.part.bluepower:wire.freestanding.infusedteslatite.bundled.magenta.name=
+##item.part.bluepower:wire.freestanding.infusedteslatite.bundled.light_blue.name=
+##item.part.bluepower:wire.freestanding.infusedteslatite.bundled.yellow.name=
+##item.part.bluepower:wire.freestanding.infusedteslatite.bundled.lime.name=
+##item.part.bluepower:wire.freestanding.infusedteslatite.bundled.pink.name=
+##item.part.bluepower:wire.freestanding.infusedteslatite.bundled.gray.name=
+##item.part.bluepower:wire.freestanding.infusedteslatite.bundled.light_gray.name=
+##item.part.bluepower:wire.freestanding.infusedteslatite.bundled.cyan.name=
+##item.part.bluepower:wire.freestanding.infusedteslatite.bundled.purple.name=
+##item.part.bluepower:wire.freestanding.infusedteslatite.bundled.blue.name=
+##item.part.bluepower:wire.freestanding.infusedteslatite.bundled.brown.name=
+##item.part.bluepower:wire.freestanding.infusedteslatite.bundled.green.name=
+##item.part.bluepower:wire.freestanding.infusedteslatite.bundled.red.name=
+##item.part.bluepower:wire.freestanding.infusedteslatite.bundled.black.name=
+
+# Lamps (full block, not inverted)
+##tile.bluepower:lamp.white.name=
+##tile.bluepower:lamp.orange.name=
+##tile.bluepower:lamp.magenta.name=
+##tile.bluepower:lamp.light_blue.name=
+##tile.bluepower:lamp.yellow.name=
+##tile.bluepower:lamp.lime.name=
+##tile.bluepower:lamp.pink.name=
+##tile.bluepower:lamp.gray.name=
+##tile.bluepower:lamp.light_gray.name=
+##tile.bluepower:lamp.cyan.name=
+##tile.bluepower:lamp.purple.name=
+##tile.bluepower:lamp.blue.name=
+##tile.bluepower:lamp.brown.name=
+##tile.bluepower:lamp.green.name=
+##tile.bluepower:lamp.red.name=
+##tile.bluepower:lamp.black.name=
+##tile.bluepower:lamp.rgb.name=
+
+# Lamps (full block, inverted)
+##tile.bluepower:lamp.white.inverted.name=
+##tile.bluepower:lamp.orange.inverted.name=
+##tile.bluepower:lamp.magenta.inverted.name=
+##tile.bluepower:lamp.light_blue.inverted.name=
+##tile.bluepower:lamp.yellow.inverted.name=
+##tile.bluepower:lamp.lime.inverted.name=
+##tile.bluepower:lamp.pink.inverted.name=
+##tile.bluepower:lamp.gray.inverted.name=
+##tile.bluepower:lamp.light_gray.inverted.name=
+##tile.bluepower:lamp.cyan.inverted.name=
+##tile.bluepower:lamp.purple.inverted.name=
+##tile.bluepower:lamp.blue.inverted.name=
+##tile.bluepower:lamp.brown.inverted.name=
+##tile.bluepower:lamp.green.inverted.name=
+##tile.bluepower:lamp.red.inverted.name=
+##tile.bluepower:lamp.black.inverted.name=
+##tile.bluepower:lamp.rgb.inverted.name=
+
+# Lamps (fixture, not inverted)
+##item.part.bluepower:fixture.white.name=
+##item.part.bluepower:fixture.orange.name=
+##item.part.bluepower:fixture.magenta.name=
+##item.part.bluepower:fixture.light_blue.name=
+##item.part.bluepower:fixture.yellow.name=
+##item.part.bluepower:fixture.lime.name=
+##item.part.bluepower:fixture.pink.name=
+##item.part.bluepower:fixture.gray.name=
+##item.part.bluepower:fixture.light_gray.name=
+##item.part.bluepower:fixture.cyan.name=
+##item.part.bluepower:fixture.purple.name=
+##item.part.bluepower:fixture.blue.name=
+##item.part.bluepower:fixture.brown.name=
+##item.part.bluepower:fixture.green.name=
+##item.part.bluepower:fixture.red.name=
+##item.part.bluepower:fixture.black.name=
+
+# Lamps (fixture, inverted)
+##item.part.bluepower:fixture.white.inverted.name=
+##item.part.bluepower:fixture.orange.inverted.name=
+##item.part.bluepower:fixture.magenta.inverted.name=
+##item.part.bluepower:fixture.light_blue.inverted.name=
+##item.part.bluepower:fixture.yellow.inverted.name=
+##item.part.bluepower:fixture.lime.inverted.name=
+##item.part.bluepower:fixture.pink.inverted.name=
+##item.part.bluepower:fixture.gray.inverted.name=
+##item.part.bluepower:fixture.light_gray.inverted.name=
+##item.part.bluepower:fixture.cyan.inverted.name=
+##item.part.bluepower:fixture.purple.inverted.name=
+##item.part.bluepower:fixture.blue.inverted.name=
+##item.part.bluepower:fixture.brown.inverted.name=
+##item.part.bluepower:fixture.green.inverted.name=
+##item.part.bluepower:fixture.red.inverted.name=
+##item.part.bluepower:fixture.black.inverted.name=
+
+# Lamps (caged, not inverted)
+##item.part.bluepower:cagelamp.white.name=
+##item.part.bluepower:cagelamp.orange.name=
+##item.part.bluepower:cagelamp.magenta.name=
+##item.part.bluepower:cagelamp.light_blue.name=
+##item.part.bluepower:cagelamp.yellow.name=
+##item.part.bluepower:cagelamp.lime.name=
+##item.part.bluepower:cagelamp.pink.name=
+##item.part.bluepower:cagelamp.gray.name=
+##item.part.bluepower:cagelamp.light_gray.name=
+##item.part.bluepower:cagelamp.cyan.name=
+##item.part.bluepower:cagelamp.purple.name=
+##item.part.bluepower:cagelamp.blue.name=
+##item.part.bluepower:cagelamp.brown.name=
+##item.part.bluepower:cagelamp.green.name=
+##item.part.bluepower:cagelamp.red.name=
+##item.part.bluepower:cagelamp.black.name=
+
+# Lamps (caged, inverted)
+##item.part.bluepower:cagelamp.white.inverted.name=
+##item.part.bluepower:cagelamp.orange.inverted.name=
+##item.part.bluepower:cagelamp.magenta.inverted.name=
+##item.part.bluepower:cagelamp.light_blue.inverted.name=
+##item.part.bluepower:cagelamp.yellow.inverted.name=
+##item.part.bluepower:cagelamp.lime.inverted.name=
+##item.part.bluepower:cagelamp.pink.inverted.name=
+##item.part.bluepower:cagelamp.gray.inverted.name=
+##item.part.bluepower:cagelamp.light_gray.inverted.name=
+##item.part.bluepower:cagelamp.cyan.inverted.name=
+##item.part.bluepower:cagelamp.purple.inverted.name=
+##item.part.bluepower:cagelamp.blue.inverted.name=
+##item.part.bluepower:cagelamp.brown.inverted.name=
+##item.part.bluepower:cagelamp.green.inverted.name=
+##item.part.bluepower:cagelamp.red.inverted.name=
+##item.part.bluepower:cagelamp.black.inverted.name=
+
+# Gems, dusts, ingots and nuggets
 item.bluepower:ruby_gem.name=Rubin
 item.bluepower:amethyst_gem.name=Ametist
 item.bluepower:sapphire_gem.name=Safir
+
 item.bluepower:teslatite_dust.name=Teslatite
+
 item.bluepower:copper_ingot.name=Koppartacka
 item.bluepower:silver_ingot.name=Silvertacka
 item.bluepower:zinc_ingot.name=Zinktacka
+
 item.bluepower:red_alloy_ingot.name=Röd legeringstacka
 item.bluepower:blue_alloy_ingot.name=Blå legeringstacka
-item.bluepower:brass_ingot.name=Mässningstacka
-item.bluepower:tungsten_ingot.name=Tungstenstacka
+##item.bluepower:purple_alloy_ingot.name=
 
+item.bluepower:brass_ingot.name=Mässningstacka
+
+item.bluepower:tungsten_ingot.name=Tungstenstacka
+##item.bluepower:tungsten_nugget.name=
+
+# IC2-compat zinc
 item.bluepower:zinc_ore_crushed.name=Krossad zinkmalm
 item.bluepower:zinc_dust.name=Zinkdamm
 item.bluepower:zinc_tiny_dust.name=Liten hög med zinkdamm
 item.bluepower:zinc_ore_purified.name=Förädlad krossad zinkmalm
 
+# Plant items
 item.bluepower:flax_seeds.name=Linfrö
 item.bluepower:indigo_flower.name=Indigoblomma
 item.bluepower:indigo_dye.name=Indigofärg
 
+# Tools and weapons
 item.bluepower:ruby_sword.name=Rubinsvärd
 item.bluepower:ruby_shovel.name=Rubinspade
 item.bluepower:ruby_axe.name=Rubinyxa
@@ -250,12 +482,21 @@ item.bluepower:iron_sickle.name=Järnskära
 item.bluepower:gold_sickle.name=Guldskära
 item.bluepower:diamond_sickle.name=Diamantskära
 
+item.bluepower:athame.name=Athame
+item.bluepower:screwdriver.name=Skruvmejsel
+item.bluepower:silky_screwdriver.name=Silkesskruvmejsel
+
+item.bluepower:wool_card.name=Ullkarda
+item.bluepower:diamond_drawplate.name=Diamantdragplatta
+
+# Saws
 item.bluepower:iron_saw.name=Järnsåg
 item.bluepower:amethyst_saw.name=Ametistsåg
 item.bluepower:ruby_saw.name=Rubinsåg
 item.bluepower:sapphire_saw.name=Safirsåg
 item.bluepower:diamond_saw.name=Diamantsåg
 
+# Canvas bags
 item.bluepower:canvas_bag.white.name=Kanvaspåse
 item.bluepower:canvas_bag.orange.name=Orange kanvaspåse
 item.bluepower:canvas_bag.magenta.name=Magenta kanvaspåse
@@ -273,66 +514,90 @@ item.bluepower:canvas_bag.green.name=Grön kanvaspåse
 item.bluepower:canvas_bag.red.name=Röd kanvaspåse
 item.bluepower:canvas_bag.black.name=Svart kanvaspåse
 
+# Circuit items
 item.bluepower:silicon_boule.name=Kiselcylinder
 item.bluepower:silicon_wafer.name=Kiselplatta
 item.bluepower:blue_doped_wafer.name=Blådopad kiselplatta
 item.bluepower:red_doped_wafer.name=Röddopad kiselplatta
-item.bluepower:athame.name=Athame
-item.bluepower:screwdriver.name=Skruvmejsel
-item.bluepower:silky_screwdriver.name=Silkesskruvmejsel
-item.bluepower:zincplate.name=Zinkplatta
+
 item.bluepower:stone_tile.name=Stenplatta
-item.bluepower:stone_wire.name=Trådstenplatta
-item.bluepower:stone_anode.name=Anodstenplatta
-item.bluepower:stone_cathode.name=Katodstenplatta
-item.bluepower:stone_pointer.name=Pekarstenplatta
-item.bluepower:silicon_chip.name=Kiselchipplatta
-item.bluepower:taintedsilicon_chip.name=Skämd kiselchipplatta
+##item.bluepower:bluestone_wire_tile.name=
+##item.bluepower:bluestone_anode_tile.name=
+##item.bluepower:bluestone_cathode_tile.name=
+##item.bluepower:bluestone_pointer_tile.name=
+##item.bluepower:redstone_wire_tile.name=
+##item.bluepower:redstone_anode_tile.name=
+##item.bluepower:redstone_cathode_tile.name=
+##item.bluepower:redstone_pointer_tile.name=
+##item.bluepower:silicon_chip_tile.name=
+##item.bluepower:tainted_silicon_chip_tile.name=
+##item.bluepower:quartz_resonator_tile.name=
 item.bluepower:plate_assembly.name=Monteringsplatta
 item.bluepower:stone_redwire.name=Rödtrådsstenplatta
 item.bluepower:stone_bundle.name=Flertrådsstenplatta
+
+# Misc crafting items
+item.bluepower:zincplate.name=Zinkplatta
+
 item.bluepower:screwdriver_handle.name=Skruvmejselhandtag
+
+item.bluepower:canvas.name=Kanvastyg
 item.bluepower:seed_bag.name=Fröpåse
 item.bluepower:canvas_bag.name=Kanvaspåse
-item.bluepower:canvas.name=Kanvastyg
-item.bluepower:wool_card.name=Ullkarda
-item.bluepower:diamond_drawplate.name=Diamantdragplatta
+
 item.bluepower:iron_wire.name=Tunn järntråd
 item.bluepower:copper_wire.name=Tunn koppartråd
 
-part.bluepower:and.name=AND-grind
-part.bluepower:buffer.name=Buffertgrind
-part.bluepower:bustransceiver.name=Bussöverförare
-part.bluepower:counter.name=Räknare
-part.bluepower:invert.name=Inverteringscell
-part.bluepower:lightCell.name=Ljussensor
-part.bluepower:multiplexer.name=Multiplexer
-part.bluepower:nand.name=NAND-grind
-part.bluepower:noninvert.name=Icke-inverteringscell
-part.bluepower:nor.name=NOR-grind
-part.bluepower:not.name=NOT-grind
-part.bluepower:null.name=Nollcell
-part.bluepower:or.name=OR-grind
-part.bluepower:pulseformer.name=Pulsformare
-part.bluepower:randomizer.name=Slumpgenerator
-part.bluepower:repeater.name=Repeterare
-part.bluepower:rs.name=RS-lås
-part.bluepower:sequencer.name=Sekvensgenerator
-part.bluepower:state.name=Lägescell
-part.bluepower:synchronizer.name=Synkroniseringsgenerator
-part.bluepower:timer.name=Timer
-part.bluepower:toggle.name=Vipplås
-part.bluepower:transparent.name=Transparent lås
-part.bluepower:xnor.name=XNOR-grind
-part.bluepower:xor.name=XOR-grind
-part.bluepower:integratedCircuit3x3.name=3x3 integrerad krets
-part.bluepower:integratedCircuit5x5.name=5x5 integrerad krets
-part.bluepower:integratedCircuit7x7.name=7x7 integrerad krets
-part.bluepower:pneumaticTube.name=Pneumatisk tub
-part.bluepower:restrictionTube.name=Restriktionstub
-part.bluepower:magTube.name=Magnetisk tub
-part.bluepower:accelerator.name=Accelerator
+##item.bluepower:infused_teslatite_dust.name=
 
+# Gates
+##item.part.bluepower:gate.and.name=
+##item.part.bluepower:gate.buffer.name=
+##item.part.bluepower:gate.bustransceiver.name=
+##item.part.bluepower:gate.counter.name=
+##item.part.bluepower:gate.invert.name=
+##item.part.bluepower:gate.lightCell.name=
+##item.part.bluepower:gate.multiplexer.name=
+##item.part.bluepower:gate.nand.name=
+##item.part.bluepower:gate.noninvert.name=
+##item.part.bluepower:gate.nor.name=
+##item.part.bluepower:gate.not.name=
+##item.part.bluepower:gate.nullcell.name=
+##item.part.bluepower:gate.or.name=
+##item.part.bluepower:gate.pulseformer.name=
+##item.part.bluepower:gate.randomizer.name=
+##item.part.bluepower:gate.repeater.name=
+##item.part.bluepower:gate.rs.name=
+##item.part.bluepower:gate.sequencer.name=
+##item.part.bluepower:gate.state.name=
+##item.part.bluepower:gate.synchronizer.name=
+##item.part.bluepower:gate.timer.name=
+##item.part.bluepower:gate.toggle.name=
+##item.part.bluepower:gate.transparent.name=
+##item.part.bluepower:gate.xnor.name=
+##item.part.bluepower:gate.xor.name=
+##item.part.bluepower:gate.integratedCircuit3x3.name=
+##item.part.bluepower:gate.integratedCircuit5x5.name=
+##item.part.bluepower:gate.integratedCircuit7x7.name=
+##item.part.bluepower:gate.inverter.name=
+##item.part.bluepower:gate.comparator.name=
+##item.part.bluepower:gate.wirelesstransceiver.name=
+##item.part.bluepower:gate.wirelesstransceiver.analog.name=
+##item.part.bluepower:gate.wirelesstransceiver.bundled.name=
+##item.part.bluepower:gate.wirelesstransceiver.analog.bundled.name=
+##item.part.bluepower:pneumaticTube.name=
+##item.part.bluepower:pneumaticTubeOpaque.name=
+##item.part.bluepower:restrictionTube.name=
+##item.part.bluepower:restrictionTubeOpaque.name=
+##item.part.bluepower:magTube.name=
+##item.part.bluepower:accelerator.name=
+
+##item.part.bluepower:wirelesstransceiver.bundled.name=
+##item.part.bluepower:wirelesstransceiver.analog.bundled.name=
+##item.part.bluepower:wirelesstransceiver.name=
+##item.part.bluepower:wirelesstransceiver.analog.name=
+
+# Lumar
 item.bluepower:lumar.white.name=Vit Lumar
 item.bluepower:lumar.orange.name=Orange Lumar
 item.bluepower:lumar.magenta.name=Magenta Lumar
@@ -349,6 +614,8 @@ item.bluepower:lumar.brown.name=Brun Lumar
 item.bluepower:lumar.green.name=Grön Lumar
 item.bluepower:lumar.red.name=Röd Lumar
 item.bluepower:lumar.black.name=Svart Lumar
+
+# Paint cans
 item.bluepower:paint_can.empty.name=Färgburk
 item.bluepower:paint_can.white.name=Vit färgburk
 item.bluepower:paint_can.orange.name=Orange färgburk
@@ -366,6 +633,8 @@ item.bluepower:paint_can.brown.name=Brun färgburk
 item.bluepower:paint_can.green.name=Grön färgburk
 item.bluepower:paint_can.red.name=Röd färgburk
 item.bluepower:paint_can.black.name=Svart färgburk
+
+# Paint brushes
 item.bluepower:paint_brush.empty.name=Målarpensel
 item.bluepower:paint_brush.white.name=Vit målarpensel
 item.bluepower:paint_brush.orange.name=Orange målarpensel
@@ -384,16 +653,20 @@ item.bluepower:paint_brush.green.name=Grön målarpensel
 item.bluepower:paint_brush.red.name=Röd målarpensel
 item.bluepower:paint_brush.black.name=Svart målarpensel
 
+# Creative tabs
 itemGroup.tabBluePowerMachines=Blue Power Maskiner
 itemGroup.tabBluePowerBlocks=Blue Power Block
 itemGroup.tabBluePowerItems=Blue Power Saker
 itemGroup.tabBluePowerTools=Blue Power Verktyg
 itemGroup.tabBluePowerCircuits=Blue Power Logiska kretsar
 itemGroup.tabBluePowerLighting=Blue Power Ljus
+##itemGroup.tabBluePowerWiring=
 
+# Enchantments
 enchantment.vorpal.name=Vorpal
 enchantment.disjunction.name=Disjunktion
 
+# GUI buttons and tooltips
 gui.projectTable.clearGrid=Rensa skaparfälten
 gui.timerInterval=Timerintervall
 gui.counterMax=Maximum
@@ -470,6 +743,21 @@ gui.circuitDatabase.name=Namn:
 
 gui.sneakForInfo=Smyg för information
 
+gui.widget.fuzzy=§bFiltrets nogrannhet
+gui.widget.fuzzy.normal=§3Normal
+gui.widget.fuzzy.normal.info=Anser att föremål är lika när föremål och skadevärden är samma.
+gui.widget.fuzzy.fuzzy=§3Nogrann
+gui.widget.fuzzy.fuzzy.info=Anser att föremålen är lika när de tillhör samma typ i "Ore Dictionary". T.ex alla typer av koppartackor är samma sak.
+gui.widget.fuzzy.exact=§3Exakt
+gui.widget.fuzzy.exact.info=Anser att föremålen är lika när de är exakt lika. Inklusive NBT-data. Detta betyder t.ex att ett vanligt diamantsvärd skiljer sig från ett förtollat diamantsvärd.
+
+gui.tooltip.hasSilkyData=§eHar extra silkesdata
+
+##gui.tab.stuffed=
+##gui.tab.stuffed.noItems=
+##gui.tab.info=
+
+# Colors
 gui.widget.color.none=Ingen
 gui.widget.color.black=Svart
 gui.widget.color.red=Röd
@@ -488,21 +776,29 @@ gui.widget.color.magenta=Magenta
 gui.widget.color.orange=Orange
 gui.widget.color.white=Vit
 
-gui.widget.fuzzy=§bFiltrets nogrannhet
-gui.widget.fuzzy.normal=§3Normal
-gui.widget.fuzzy.normal.info=Anser att föremål är lika när föremål och skadevärden är samma.
-gui.widget.fuzzy.fuzzy=§3Nogrann
-gui.widget.fuzzy.fuzzy.info=Anser att föremålen är lika när de tillhör samma typ i "Ore Dictionary". T.ex alla typer av koppartackor är samma sak.
-gui.widget.fuzzy.exact=§3Exakt
-gui.widget.fuzzy.exact.info=Anser att föremålen är lika när de är exakt lika. Inklusive NBT-data. Detta betyder t.ex att ett vanligt diamantsvärd skiljer sig från ett förtollat diamantsvärd.
+# Info tab
+##tile.bluepower:alloyfurnace.info=
+##tile.bluepower:buffer.info=
+##tile.bluepower:deployer.info=
+##tile.bluepower:ejector.info=
+##tile.bluepower:filter.info=
+##tile.bluepower:item_detector.info=
+##tile.bluepower:project_table.info=
+##tile.bluepower:relay.info=
+##tile.bluepower:circuit_table.info=
+##tile.bluepower:regulator.info=
+##tile.bluepower:retriever.info=
+##tile.bluepower:sorting_machine.info=
+##tile.bluepower:circuit_database.info=
+##tile.bluepower:manager.info=
 
-gui.tooltip.hasSilkyData=§eHar extra silkesdata
-
+# Directions
 direction.front=Fram
 direction.left=Vänster
 direction.back=Bak
 direction.right=Höger
 
+# Cardinal directions
 rotation.north=Norr
 rotation.south=Söder
 rotation.up=Upp
@@ -510,9 +806,11 @@ rotation.down=Ner
 rotation.west=Väster
 rotation.east=Öster
 
+# Misc
 random.enabled=Aktiverad
 random.disabled=Inaktiverad
 
+# Config file options
 bluepower.config.settings.tooltip=Generella mod-inställningar.
 bluepower.config.recipes.tooltip=Receptinställningar.
 bluepower.config.enchantments.tooltip=Förtrollningsinställningar.
@@ -529,8 +827,46 @@ bluepower.config.teslatite.tooltip=Justera teslatitens världsgenerering
 bluepower.config.worldgen.tooltip=Justera diverse världsgenereingsalternativ
 bluepower.config.circuitDatabase.tooltip=Inställnigar för kretsdatabasen.
 
+# WAILA
 bluepower.waila.rsLatch.feedback=Feedback
 bluepower.waila.rsLatch.noFeedback=Ingen feedback
 waila.pneumaticTube.color=Färger
 waila.machine.stuffed=Fylld
 
+##bluepower.accessability.public=
+##bluepower.accessability.shared=
+##bluepower.accessability.private=
+
+##bluepower.mode.sendreceive=
+##bluepower.mode.send=
+##bluepower.mode.receive=
+
+##bluepower.gui.none=
+##bluepower.gui.admin=
+
+##bluepower.gui.wireless=
+
+
+# Achievements
+##bluepower.gui.achievements=
+
+##achievement.vorpal=
+##achievement.vorpal.desc=
+
+##achievement.sort=
+##achievement.sort.desc=
+
+##achievement.tungsten=
+##achievement.tungsten.desc=
+
+##achievement.dope=
+##achievement.dope.desc=
+
+##achievement.tube=
+##achievement.tube.desc=
+
+##achievement.magtube=
+##achievement.magtube.desc=
+
+##achievement.circuitception=
+##achievement.circuitception.desc=

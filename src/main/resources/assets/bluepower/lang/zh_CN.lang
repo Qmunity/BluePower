@@ -8,532 +8,865 @@
  * @author crafteverywhere
  */
 
+# Basalt
 tile.bluepower:basalt.name=玄武岩
-tile.bluepower:marble.name=大理石
-tile.bluepower:basalt_brick.name=玄武岩砖块
-tile.bluepower:marble_brick.name=大理石砖块
-tile.bluepower:basalt_cobble.name=玄武岩圆石
-tile.bluepower:cracked_basalt_lava.name=碎裂玄武岩
-tile.bluepower:alloy_furnace.name=合金炉
-tile.bluepower:amethyst_ore.name=紫晶矿石
-tile.bluepower:basaltbrick_cracked.name=碎裂玄武岩砖块
-tile.bluepower:basalt_brick_small.name=小型玄武岩砖块
-tile.bluepower:marble_brick_small.name=小型大理石砖块
-tile.bluepower:fancy_basalt.name=錾制玄武岩砖块
-tile.bluepower:fancy_marble.name=錾制大理石砖块
-tile.bluepower:marble_tile.name=大理石瓷砖
+tile.bluepower:basalt_brick.name=玄武岩砖�?�
+tile.bluepower:basaltbrick_cracked.name=碎裂玄武岩砖�?�
+tile.bluepower:basalt_brick_small.name=�?型玄武岩砖�?�
+tile.bluepower:fancy_basalt.name=錾制玄武岩砖�?�
 tile.bluepower:basalt_tile.name=玄武岩瓷砖
 tile.bluepower:basalt_paver.name=玄武岩路基
-tile.bluepower:marble_paver.name=大理石路基
-tile.bluepower:ruby_ore.name=红宝石矿石
-tile.bluepower:sapphire_ore.name=蓝宝石矿石
-tile.bluepower:teslatite_ore.name=蓝石矿石
-tile.bluepower:amethyst_block.name=紫晶方块
-tile.bluepower:sapphire_block.name=蓝宝石方块
-tile.bluepower:teslatite_block.name=特斯拉方块
-tile.bluepower:ruby_block.name=红宝石方块
+
+tile.bluepower:cracked_basalt_lava.name=碎裂玄武岩
+tile.bluepower:basalt_cobble.name=玄武岩圆石
+
+# Marble
+tile.bluepower:marble.name=大�?�石
+tile.bluepower:marble_brick.name=大�?�石砖�?�
+tile.bluepower:marble_brick_small.name=�?型大�?�石砖�?�
+tile.bluepower:fancy_marble.name=錾制大�?�石砖�?�
+tile.bluepower:marble_tile.name=大�?�石瓷砖
+tile.bluepower:marble_paver.name=大�?�石路基
+
+# Basalt and marble tiles
+##tile.bluepower:tiles.name=
+
+# Ores and ore blocks
+tile.bluepower:amethyst_ore.name=紫晶矿石
+tile.bluepower:ruby_ore.name=红�?石矿石
+tile.bluepower:sapphire_ore.name=�?�?石矿石
+tile.bluepower:teslatite_ore.name=�?石矿石
+
+tile.bluepower:amethyst_block.name=紫晶方�?�
+tile.bluepower:ruby_block.name=红�?石方�?�
+tile.bluepower:sapphire_block.name=�?�?石方�?�
+tile.bluepower:teslatite_block.name=特斯拉方�?�
+
 tile.bluepower:copper_ore.name=铜矿石
 tile.bluepower:silver_ore.name=银矿石
 tile.bluepower:zinc_ore.name=锌矿石
-tile.bluepower:copper_block.name=铜块
-tile.bluepower:silver_block.name=银块
-tile.bluepower:zinc_block.name=锌块
-tile.bluepower:flax_crop.name=亚麻
-tile.bluepower:indigo_flower.name=靛蓝花
 tile.bluepower:tungsten_ore.name=钨矿石
-tile.bluepower:tungsten_block.name=钨块
 
-tile.bluepower:alloyfurnace.name=合金炉
-tile.bluepower:block_breaker.name=方块破坏机
-tile.bluepower:igniter.name=点火器
+tile.bluepower:copper_block.name=铜�?�
+tile.bluepower:silver_block.name=银�?�
+tile.bluepower:zinc_block.name=锌�?�
+tile.bluepower:tungsten_block.name=钨�?�
+
+# Plants
+tile.bluepower:flax_crop.name=亚麻
+tile.bluepower:indigo_flower.name=�?��?花
+
+# Glass
+##tile.bluepower:sapphire_glass.name=
+##tile.bluepower:reinforced_sapphire_glass.name=
+
+# Machines
+tile.bluepower:alloyfurnace.name=�?�金炉
+
+tile.bluepower:block_breaker.name=方�?�破�??机
+tile.bluepower:igniter.name=点�?�器
 tile.bluepower:buffer.name=缓存器
-tile.bluepower:transposer.name=换位器
+tile.bluepower:transposer.name=�?��?器
 tile.bluepower:ejector.name=弹射器
 tile.bluepower:relay.name=中继器
 tile.bluepower:deployer.name=执行器
 tile.bluepower:filter.name=过滤器
-tile.bluepower:retriever.name=提取器
-tile.bluepower:project_table.name=计划台
-tile.bluepower:circuit_table.name=元件台
-tile.bluepower:circuit_database.name=元件数据库
-tile.bluepower:sortron.name=程控排序器
-tile.bluepower:sorting_machine.name=排序机
+tile.bluepower:retriever.name=�??�?�器
+tile.bluepower:sortron.name=程控排�?器
+tile.bluepower:sorting_machine.name=排�?机
+tile.bluepower:regulator.name=校准器
+tile.bluepower:item_detector.name=物�?探测器
+tile.bluepower:manager.name=物�?管�?�器
+
 tile.bluepower:windmill.name=垂直风车
-tile.bluepower:kinetic_generator.name=动力发电机
-tile.bluepower:engine.name=蓝石能量引擎
+tile.bluepower:kinetic_generator.name=动力�?�电机
+tile.bluepower:engine.name=�?石能�?引擎
+
+# Computer
 tile.bluepower:cpu.name=CPU
 tile.bluepower:monitor.name=显示器
-tile.bluepower:disk_drive.name=磁盘驱动器
+tile.bluepower:disk_drive.name=�?盘驱动器
 tile.bluepower:io_expander.name=IO扩展器
-tile.bluepower:regulator.name=校准器
-tile.bluepower:item_detector.name=物品探测器
-tile.bluepower:manager.name=物流管理器
 
-part.bluepower:bluestoneWire.name=蓝石线缆
-part.bluepower:bluestoneWire.white.name=白色蓝石线缆
-part.bluepower:bluestoneWire.orange.name=橙色蓝石线缆
-part.bluepower:bluestoneWire.magenta.name=品红色蓝石线缆
-part.bluepower:bluestoneWire.light_blue.name=浅蓝色蓝石线缆
-part.bluepower:bluestoneWire.yellow.name=黄色蓝石线缆
-part.bluepower:bluestoneWire.lime.name=柠檬色蓝石线缆
-part.bluepower:bluestoneWire.pink.name=粉色蓝石线缆
-part.bluepower:bluestoneWire.gray.name=灰色蓝石线缆
-part.bluepower:bluestoneWire.silver.name=浅灰色蓝石线缆
-part.bluepower:bluestoneWire.cyan.name=青色蓝石线缆
-part.bluepower:bluestoneWire.purple.name=紫色蓝石线缆
-part.bluepower:bluestoneWire.blue.name=蓝色蓝石线缆
-part.bluepower:bluestoneWire.brown.name=棕色蓝石线缆
-part.bluepower:bluestoneWire.green.name=绿色蓝石线缆
-part.bluepower:bluestoneWire.red.name=红色蓝石线缆
-part.bluepower:bluestoneWire.black.name=黑色蓝石线缆
+# Tables
+tile.bluepower:project_table.name=计划�?�
+tile.bluepower:circuit_table.name=元件�?�
+tile.bluepower:circuit_database.name=元件数�?�库
 
-part.bluepower:bluestoneWire.bundled.name=集束线缆
-part.bluepower:bluestoneWire.bundled.white.name=白色集束线缆
-part.bluepower:bluestoneWire.bundled.orange.name=橙色集束线缆
-part.bluepower:bluestoneWire.bundled.magenta.name=品红色集束线缆
-part.bluepower:bluestoneWire.bundled.light_blue.name=浅蓝色集束线缆
-part.bluepower:bluestoneWire.bundled.yellow.name=黄色集束线缆
-part.bluepower:bluestoneWire.bundled.lime.name=柠檬色集束线缆
-part.bluepower:bluestoneWire.bundled.pink.name=粉色集束线缆
-part.bluepower:bluestoneWire.bundled.gray.name=灰色集束线缆
-part.bluepower:bluestoneWire.bundled.silver.name=浅灰色集束线缆
-part.bluepower:bluestoneWire.bundled.cyan.name=青色集束线缆
-part.bluepower:bluestoneWire.bundled.purple.name=紫色集束线缆
-part.bluepower:bluestoneWire.bundled.blue.name=蓝色集束线缆
-part.bluepower:bluestoneWire.bundled.brown.name=棕色集束线缆
-part.bluepower:bluestoneWire.bundled.green.name=绿色集束线缆
-part.bluepower:bluestoneWire.bundled.red.name=红色集束线缆
-part.bluepower:bluestoneWire.bundled.black.name=黑色集束线缆
+# Wires (not bundled, face)
+##item.part.bluepower:wire.bluestone.name=
+##item.part.bluepower:wire.bluestone.white.name=
+##item.part.bluepower:wire.bluestone.orange.name=
+##item.part.bluepower:wire.bluestone.magenta.name=
+##item.part.bluepower:wire.bluestone.light_blue.name=
+##item.part.bluepower:wire.bluestone.yellow.name=
+##item.part.bluepower:wire.bluestone.lime.name=
+##item.part.bluepower:wire.bluestone.pink.name=
+##item.part.bluepower:wire.bluestone.gray.name=
+##item.part.bluepower:wire.bluestone.light_gray.name=
+##item.part.bluepower:wire.bluestone.cyan.name=
+##item.part.bluepower:wire.bluestone.purple.name=
+##item.part.bluepower:wire.bluestone.blue.name=
+##item.part.bluepower:wire.bluestone.brown.name=
+##item.part.bluepower:wire.bluestone.green.name=
+##item.part.bluepower:wire.bluestone.red.name=
+##item.part.bluepower:wire.bluestone.black.name=
 
-tile.bluepower:lampwhite.name=白色灯
-tile.bluepower:lampinvertedwhite.name=反相白色灯
-part.bluepower:cagelampwhite.name=白色罩笼灯
-part.bluepower:invertedcagelampwhite.name=反相白色罩笼灯
-part.bluepower:fixturewhite.name=白色壁灯
-part.bluepower:invertedfixturewhite.name=反相白色壁灯
-tile.bluepower:lamporange.name=橙色灯
-tile.bluepower:lampinvertedorange.name=反相橙色灯
-part.bluepower:cagelamporange.name=橙色罩笼灯
-part.bluepower:invertedcagelamporange.name=反相橙色罩笼灯
-part.bluepower:fixtureorange.name=橙色壁灯
-part.bluepower:invertedfixtureorange.name=反相橙色壁灯
-tile.bluepower:lampmagenta.name=品红色灯
-tile.bluepower:lampinvertedmagenta.name=反相品红色灯
-part.bluepower:cagelampmagenta.name=品红色罩笼灯
-part.bluepower:invertedcagelampmagenta.name=反相品红色罩笼灯
-part.bluepower:fixturemagenta.name=品红色壁灯
-part.bluepower:invertedfixturemagenta.name=反相品红色壁灯
-tile.bluepower:lamplight_blue.name=浅蓝色灯
-tile.bluepower:lampinvertedlight_blue.name=反相浅蓝色灯
-part.bluepower:cagelamplight_blue.name=浅蓝色罩笼灯
-part.bluepower:invertedcagelamplight_blue.name=反相浅蓝色罩笼灯
-part.bluepower:fixturelight_blue.name=浅蓝色壁灯
-part.bluepower:invertedfixturelight_blue.name=反相浅蓝色壁灯
-tile.bluepower:lampyellow.name=黄色灯
-tile.bluepower:lampinvertedyellow.name=反相黄色灯
-part.bluepower:cagelampyellow.name=黄色罩笼灯
-part.bluepower:invertedcagelampyellow.name=反相黄色罩笼灯
-part.bluepower:fixtureyellow.name=黄色壁灯
-part.bluepower:invertedfixtureyellow.name=反相黄色壁灯
-tile.bluepower:lamplime.name=柠檬色灯
-tile.bluepower:lampinvertedlime.name=反相柠檬色灯
-part.bluepower:cagelamplime.name=柠檬色罩笼灯
-part.bluepower:invertedcagelamplime.name=反相柠檬色罩笼灯
-part.bluepower:fixturelime.name=柠檬色壁灯
-part.bluepower:invertedfixturelime.name=反相柠檬色壁灯
-tile.bluepower:lamppink.name=粉色灯
-tile.bluepower:lampinvertedpink.name=反相粉色灯
-part.bluepower:cagelamppink.name=粉色罩笼灯
-part.bluepower:invertedcagelamppink.name=反相粉色罩笼灯
-part.bluepower:fixturepink.name=粉色壁灯
-part.bluepower:invertedfixturepink.name=反相粉色壁灯
-tile.bluepower:lampgray.name=灰色灯
-tile.bluepower:lampinvertedgray.name=反相灰色灯
-part.bluepower:cagelampgray.name=灰色罩笼灯
-part.bluepower:invertedcagelampgray.name=反相灰色罩笼灯
-part.bluepower:fixturegray.name=灰色壁灯
-part.bluepower:invertedfixturegray.name=反相灰色壁灯
-tile.bluepower:lampsilver.name=浅灰色灯
-tile.bluepower:lampinvertedsilver.name=反相浅灰色灯
-part.bluepower:cagelampsilver.name=浅灰色罩笼灯
-part.bluepower:invertedcagelampsilver.name=反相浅灰色罩笼灯
-part.bluepower:fixturesilver.name=浅灰色壁灯
-part.bluepower:invertedfixturesilver.name=反相浅灰色壁灯
-tile.bluepower:lampcyan.name=青色灯
-tile.bluepower:lampinvertedcyan.name=反相青色灯
-part.bluepower:cagelampcyan.name=青色罩笼灯
-part.bluepower:invertedcagelampcyan.name=反相青色罩笼灯
-part.bluepower:fixturecyan.name=青色壁灯
-part.bluepower:invertedfixturecyan.name=反相青色壁灯
-tile.bluepower:lamppurple.name=紫色灯
-tile.bluepower:lampinvertedpurple.name=反相紫色灯
-part.bluepower:cagelamppurple.name=紫色罩笼灯
-part.bluepower:invertedcagelamppurple.name=反相紫色罩笼灯
-part.bluepower:fixturepurple.name=紫色壁灯
-part.bluepower:invertedfixturepurple.name=反相紫色壁灯
-tile.bluepower:lampblue.name=蓝色灯
-tile.bluepower:lampinvertedblue.name=反相蓝色灯
-part.bluepower:cagelampblue.name=蓝色罩笼灯
-part.bluepower:invertedcagelampblue.name=反相蓝色罩笼灯
-part.bluepower:fixtureblue.name=蓝色壁灯
-part.bluepower:invertedfixtureblue.name=反相蓝色壁灯
-tile.bluepower:lampbrown.name=棕色灯
-tile.bluepower:lampinvertedbrown.name=反相棕色灯
-part.bluepower:cagelampbrown.name=棕色罩笼灯
-part.bluepower:invertedcagelampbrown.name=反相棕色罩笼灯
-part.bluepower:fixturebrown.name=棕色壁灯
-part.bluepower:invertedfixturebrown.name=反相棕色壁灯
-tile.bluepower:lampgreen.name=绿色灯
-tile.bluepower:lampinvertedgreen.name=反相绿色灯
-part.bluepower:cagelampgreen.name=绿色罩笼灯
-part.bluepower:invertedcagelampgreen.name=反相绿色罩笼灯
-part.bluepower:fixturegreen.name=绿色壁灯
-part.bluepower:invertedfixturegreen.name=反相绿色壁灯
-tile.bluepower:lampred.name=红色灯
-tile.bluepower:lampinvertedred.name=反相红色灯
-part.bluepower:cagelampred.name=红色罩笼灯
-part.bluepower:invertedcagelampred.name=反相红色罩笼灯
-part.bluepower:fixturered.name=红色壁灯
-part.bluepower:invertedfixturered.name=反相红色壁灯
-tile.bluepower:lampblack.name=黑色灯
-tile.bluepower:lampinvertedblack.name=反相黑色灯
-part.bluepower:cagelampblack.name=黑色罩笼灯
-part.bluepower:invertedcagelampblack.name=反相黑色罩笼灯
-part.bluepower:fixtureblack.name=黑色壁灯
-part.bluepower:invertedfixtureblack.name=反相黑色壁灯
+##item.part.bluepower:wire.redalloy.name=
+##item.part.bluepower:wire.redalloy.white.name=
+##item.part.bluepower:wire.redalloy.orange.name=
+##item.part.bluepower:wire.redalloy.magenta.name=
+##item.part.bluepower:wire.redalloy.light_blue.name=
+##item.part.bluepower:wire.redalloy.yellow.name=
+##item.part.bluepower:wire.redalloy.lime.name=
+##item.part.bluepower:wire.redalloy.pink.name=
+##item.part.bluepower:wire.redalloy.gray.name=
+##item.part.bluepower:wire.redalloy.light_gray.name=
+##item.part.bluepower:wire.redalloy.cyan.name=
+##item.part.bluepower:wire.redalloy.purple.name=
+##item.part.bluepower:wire.redalloy.blue.name=
+##item.part.bluepower:wire.redalloy.brown.name=
+##item.part.bluepower:wire.redalloy.green.name=
+##item.part.bluepower:wire.redalloy.red.name=
+##item.part.bluepower:wire.redalloy.black.name=
 
-item.bluepower:ruby_gem.name=红宝石
+##item.part.bluepower:wire.infusedteslatite.name=
+##item.part.bluepower:wire.infusedteslatite.white.name=
+##item.part.bluepower:wire.infusedteslatite.orange.name=
+##item.part.bluepower:wire.infusedteslatite.magenta.name=
+##item.part.bluepower:wire.infusedteslatite.light_blue.name=
+##item.part.bluepower:wire.infusedteslatite.yellow.name=
+##item.part.bluepower:wire.infusedteslatite.lime.name=
+##item.part.bluepower:wire.infusedteslatite.pink.name=
+##item.part.bluepower:wire.infusedteslatite.gray.name=
+##item.part.bluepower:wire.infusedteslatite.light_gray.name=
+##item.part.bluepower:wire.infusedteslatite.cyan.name=
+##item.part.bluepower:wire.infusedteslatite.purple.name=
+##item.part.bluepower:wire.infusedteslatite.blue.name=
+##item.part.bluepower:wire.infusedteslatite.brown.name=
+##item.part.bluepower:wire.infusedteslatite.green.name=
+##item.part.bluepower:wire.infusedteslatite.red.name=
+##item.part.bluepower:wire.infusedteslatite.black.name=
+
+# Wires (bundled, face)
+##item.part.bluepower:wire.bluestone.bundled.name=
+##item.part.bluepower:wire.bluestone.bundled.white.name=
+##item.part.bluepower:wire.bluestone.bundled.orange.name=
+##item.part.bluepower:wire.bluestone.bundled.magenta.name=
+##item.part.bluepower:wire.bluestone.bundled.light_blue.name=
+##item.part.bluepower:wire.bluestone.bundled.yellow.name=
+##item.part.bluepower:wire.bluestone.bundled.lime.name=
+##item.part.bluepower:wire.bluestone.bundled.pink.name=
+##item.part.bluepower:wire.bluestone.bundled.gray.name=
+##item.part.bluepower:wire.bluestone.bundled.light_gray.name=
+##item.part.bluepower:wire.bluestone.bundled.cyan.name=
+##item.part.bluepower:wire.bluestone.bundled.purple.name=
+##item.part.bluepower:wire.bluestone.bundled.blue.name=
+##item.part.bluepower:wire.bluestone.bundled.brown.name=
+##item.part.bluepower:wire.bluestone.bundled.green.name=
+##item.part.bluepower:wire.bluestone.bundled.red.name=
+##item.part.bluepower:wire.bluestone.bundled.black.name=
+
+##item.part.bluepower:wire.redalloy.bundled.name=
+##item.part.bluepower:wire.redalloy.bundled.white.name=
+##item.part.bluepower:wire.redalloy.bundled.orange.name=
+##item.part.bluepower:wire.redalloy.bundled.magenta.name=
+##item.part.bluepower:wire.redalloy.bundled.light_blue.name=
+##item.part.bluepower:wire.redalloy.bundled.yellow.name=
+##item.part.bluepower:wire.redalloy.bundled.lime.name=
+##item.part.bluepower:wire.redalloy.bundled.pink.name=
+##item.part.bluepower:wire.redalloy.bundled.gray.name=
+##item.part.bluepower:wire.redalloy.bundled.light_gray.name=
+##item.part.bluepower:wire.redalloy.bundled.cyan.name=
+##item.part.bluepower:wire.redalloy.bundled.purple.name=
+##item.part.bluepower:wire.redalloy.bundled.blue.name=
+##item.part.bluepower:wire.redalloy.bundled.brown.name=
+##item.part.bluepower:wire.redalloy.bundled.green.name=
+##item.part.bluepower:wire.redalloy.bundled.red.name=
+##item.part.bluepower:wire.redalloy.bundled.black.name=
+
+##item.part.bluepower:wire.infusedteslatite.bundled.name=
+##item.part.bluepower:wire.infusedteslatite.bundled.white.name=
+##item.part.bluepower:wire.infusedteslatite.bundled.orange.name=
+##item.part.bluepower:wire.infusedteslatite.bundled.magenta.name=
+##item.part.bluepower:wire.infusedteslatite.bundled.light_blue.name=
+##item.part.bluepower:wire.infusedteslatite.bundled.yellow.name=
+##item.part.bluepower:wire.infusedteslatite.bundled.lime.name=
+##item.part.bluepower:wire.infusedteslatite.bundled.pink.name=
+##item.part.bluepower:wire.infusedteslatite.bundled.gray.name=
+##item.part.bluepower:wire.infusedteslatite.bundled.light_gray.name=
+##item.part.bluepower:wire.infusedteslatite.bundled.cyan.name=
+##item.part.bluepower:wire.infusedteslatite.bundled.purple.name=
+##item.part.bluepower:wire.infusedteslatite.bundled.blue.name=
+##item.part.bluepower:wire.infusedteslatite.bundled.brown.name=
+##item.part.bluepower:wire.infusedteslatite.bundled.green.name=
+##item.part.bluepower:wire.infusedteslatite.bundled.red.name=
+##item.part.bluepower:wire.infusedteslatite.bundled.black.name=
+
+# Wires (not bundled, freestanding)
+##item.part.bluepower:wire.freestanding.bluestone.name=
+##item.part.bluepower:wire.freestanding.bluestone.white.name=
+##item.part.bluepower:wire.freestanding.bluestone.orange.name=
+##item.part.bluepower:wire.freestanding.bluestone.magenta.name=
+##item.part.bluepower:wire.freestanding.bluestone.light_blue.name=
+##item.part.bluepower:wire.freestanding.bluestone.yellow.name=
+##item.part.bluepower:wire.freestanding.bluestone.lime.name=
+##item.part.bluepower:wire.freestanding.bluestone.pink.name=
+##item.part.bluepower:wire.freestanding.bluestone.gray.name=
+##item.part.bluepower:wire.freestanding.bluestone.light_gray.name=
+##item.part.bluepower:wire.freestanding.bluestone.cyan.name=
+##item.part.bluepower:wire.freestanding.bluestone.purple.name=
+##item.part.bluepower:wire.freestanding.bluestone.blue.name=
+##item.part.bluepower:wire.freestanding.bluestone.brown.name=
+##item.part.bluepower:wire.freestanding.bluestone.green.name=
+##item.part.bluepower:wire.freestanding.bluestone.red.name=
+##item.part.bluepower:wire.freestanding.bluestone.black.name=
+
+##item.part.bluepower:wire.freestanding.redalloy.name=
+##item.part.bluepower:wire.freestanding.redalloy.white.name=
+##item.part.bluepower:wire.freestanding.redalloy.orange.name=
+##item.part.bluepower:wire.freestanding.redalloy.magenta.name=
+##item.part.bluepower:wire.freestanding.redalloy.light_blue.name=
+##item.part.bluepower:wire.freestanding.redalloy.yellow.name=
+##item.part.bluepower:wire.freestanding.redalloy.lime.name=
+##item.part.bluepower:wire.freestanding.redalloy.pink.name=
+##item.part.bluepower:wire.freestanding.redalloy.gray.name=
+##item.part.bluepower:wire.freestanding.redalloy.light_gray.name=
+##item.part.bluepower:wire.freestanding.redalloy.cyan.name=
+##item.part.bluepower:wire.freestanding.redalloy.purple.name=
+##item.part.bluepower:wire.freestanding.redalloy.blue.name=
+##item.part.bluepower:wire.freestanding.redalloy.brown.name=
+##item.part.bluepower:wire.freestanding.redalloy.green.name=
+##item.part.bluepower:wire.freestanding.redalloy.red.name=
+##item.part.bluepower:wire.freestanding.redalloy.black.name=
+
+##item.part.bluepower:wire.freestanding.infusedteslatite.name=
+##item.part.bluepower:wire.freestanding.infusedteslatite.white.name=
+##item.part.bluepower:wire.freestanding.infusedteslatite.orange.name=
+##item.part.bluepower:wire.freestanding.infusedteslatite.magenta.name=
+##item.part.bluepower:wire.freestanding.infusedteslatite.light_blue.name=
+##item.part.bluepower:wire.freestanding.infusedteslatite.yellow.name=
+##item.part.bluepower:wire.freestanding.infusedteslatite.lime.name=
+##item.part.bluepower:wire.freestanding.infusedteslatite.pink.name=
+##item.part.bluepower:wire.freestanding.infusedteslatite.gray.name=
+##item.part.bluepower:wire.freestanding.infusedteslatite.light_gray.name=
+##item.part.bluepower:wire.freestanding.infusedteslatite.cyan.name=
+##item.part.bluepower:wire.freestanding.infusedteslatite.purple.name=
+##item.part.bluepower:wire.freestanding.infusedteslatite.blue.name=
+##item.part.bluepower:wire.freestanding.infusedteslatite.brown.name=
+##item.part.bluepower:wire.freestanding.infusedteslatite.green.name=
+##item.part.bluepower:wire.freestanding.infusedteslatite.red.name=
+##item.part.bluepower:wire.freestanding.infusedteslatite.black.name=
+
+# Wires (bundled, freestanding)
+##item.part.bluepower:wire.freestanding.bluestone.bundled.name=
+##item.part.bluepower:wire.freestanding.bluestone.bundled.white.name=
+##item.part.bluepower:wire.freestanding.bluestone.bundled.orange.name=
+##item.part.bluepower:wire.freestanding.bluestone.bundled.magenta.name=
+##item.part.bluepower:wire.freestanding.bluestone.bundled.light_blue.name=
+##item.part.bluepower:wire.freestanding.bluestone.bundled.yellow.name=
+##item.part.bluepower:wire.freestanding.bluestone.bundled.lime.name=
+##item.part.bluepower:wire.freestanding.bluestone.bundled.pink.name=
+##item.part.bluepower:wire.freestanding.bluestone.bundled.gray.name=
+##item.part.bluepower:wire.freestanding.bluestone.bundled.light_gray.name=
+##item.part.bluepower:wire.freestanding.bluestone.bundled.cyan.name=
+##item.part.bluepower:wire.freestanding.bluestone.bundled.purple.name=
+##item.part.bluepower:wire.freestanding.bluestone.bundled.blue.name=
+##item.part.bluepower:wire.freestanding.bluestone.bundled.brown.name=
+##item.part.bluepower:wire.freestanding.bluestone.bundled.green.name=
+##item.part.bluepower:wire.freestanding.bluestone.bundled.red.name=
+##item.part.bluepower:wire.freestanding.bluestone.bundled.black.name=
+
+##item.part.bluepower:wire.freestanding.redalloy.bundled.name=
+##item.part.bluepower:wire.freestanding.redalloy.bundled.white.name=
+##item.part.bluepower:wire.freestanding.redalloy.bundled.orange.name=
+##item.part.bluepower:wire.freestanding.redalloy.bundled.magenta.name=
+##item.part.bluepower:wire.freestanding.redalloy.bundled.light_blue.name=
+##item.part.bluepower:wire.freestanding.redalloy.bundled.yellow.name=
+##item.part.bluepower:wire.freestanding.redalloy.bundled.lime.name=
+##item.part.bluepower:wire.freestanding.redalloy.bundled.pink.name=
+##item.part.bluepower:wire.freestanding.redalloy.bundled.gray.name=
+##item.part.bluepower:wire.freestanding.redalloy.bundled.light_gray.name=
+##item.part.bluepower:wire.freestanding.redalloy.bundled.cyan.name=
+##item.part.bluepower:wire.freestanding.redalloy.bundled.purple.name=
+##item.part.bluepower:wire.freestanding.redalloy.bundled.blue.name=
+##item.part.bluepower:wire.freestanding.redalloy.bundled.brown.name=
+##item.part.bluepower:wire.freestanding.redalloy.bundled.green.name=
+##item.part.bluepower:wire.freestanding.redalloy.bundled.red.name=
+##item.part.bluepower:wire.freestanding.redalloy.bundled.black.name=
+
+##item.part.bluepower:wire.freestanding.infusedteslatite.bundled.name=
+##item.part.bluepower:wire.freestanding.infusedteslatite.bundled.white.name=
+##item.part.bluepower:wire.freestanding.infusedteslatite.bundled.orange.name=
+##item.part.bluepower:wire.freestanding.infusedteslatite.bundled.magenta.name=
+##item.part.bluepower:wire.freestanding.infusedteslatite.bundled.light_blue.name=
+##item.part.bluepower:wire.freestanding.infusedteslatite.bundled.yellow.name=
+##item.part.bluepower:wire.freestanding.infusedteslatite.bundled.lime.name=
+##item.part.bluepower:wire.freestanding.infusedteslatite.bundled.pink.name=
+##item.part.bluepower:wire.freestanding.infusedteslatite.bundled.gray.name=
+##item.part.bluepower:wire.freestanding.infusedteslatite.bundled.light_gray.name=
+##item.part.bluepower:wire.freestanding.infusedteslatite.bundled.cyan.name=
+##item.part.bluepower:wire.freestanding.infusedteslatite.bundled.purple.name=
+##item.part.bluepower:wire.freestanding.infusedteslatite.bundled.blue.name=
+##item.part.bluepower:wire.freestanding.infusedteslatite.bundled.brown.name=
+##item.part.bluepower:wire.freestanding.infusedteslatite.bundled.green.name=
+##item.part.bluepower:wire.freestanding.infusedteslatite.bundled.red.name=
+##item.part.bluepower:wire.freestanding.infusedteslatite.bundled.black.name=
+
+# Lamps (full block, not inverted)
+##tile.bluepower:lamp.white.name=
+##tile.bluepower:lamp.orange.name=
+##tile.bluepower:lamp.magenta.name=
+##tile.bluepower:lamp.light_blue.name=
+##tile.bluepower:lamp.yellow.name=
+##tile.bluepower:lamp.lime.name=
+##tile.bluepower:lamp.pink.name=
+##tile.bluepower:lamp.gray.name=
+##tile.bluepower:lamp.light_gray.name=
+##tile.bluepower:lamp.cyan.name=
+##tile.bluepower:lamp.purple.name=
+##tile.bluepower:lamp.blue.name=
+##tile.bluepower:lamp.brown.name=
+##tile.bluepower:lamp.green.name=
+##tile.bluepower:lamp.red.name=
+##tile.bluepower:lamp.black.name=
+##tile.bluepower:lamp.rgb.name=
+
+# Lamps (full block, inverted)
+##tile.bluepower:lamp.white.inverted.name=
+##tile.bluepower:lamp.orange.inverted.name=
+##tile.bluepower:lamp.magenta.inverted.name=
+##tile.bluepower:lamp.light_blue.inverted.name=
+##tile.bluepower:lamp.yellow.inverted.name=
+##tile.bluepower:lamp.lime.inverted.name=
+##tile.bluepower:lamp.pink.inverted.name=
+##tile.bluepower:lamp.gray.inverted.name=
+##tile.bluepower:lamp.light_gray.inverted.name=
+##tile.bluepower:lamp.cyan.inverted.name=
+##tile.bluepower:lamp.purple.inverted.name=
+##tile.bluepower:lamp.blue.inverted.name=
+##tile.bluepower:lamp.brown.inverted.name=
+##tile.bluepower:lamp.green.inverted.name=
+##tile.bluepower:lamp.red.inverted.name=
+##tile.bluepower:lamp.black.inverted.name=
+##tile.bluepower:lamp.rgb.inverted.name=
+
+# Lamps (fixture, not inverted)
+##item.part.bluepower:fixture.white.name=
+##item.part.bluepower:fixture.orange.name=
+##item.part.bluepower:fixture.magenta.name=
+##item.part.bluepower:fixture.light_blue.name=
+##item.part.bluepower:fixture.yellow.name=
+##item.part.bluepower:fixture.lime.name=
+##item.part.bluepower:fixture.pink.name=
+##item.part.bluepower:fixture.gray.name=
+##item.part.bluepower:fixture.light_gray.name=
+##item.part.bluepower:fixture.cyan.name=
+##item.part.bluepower:fixture.purple.name=
+##item.part.bluepower:fixture.blue.name=
+##item.part.bluepower:fixture.brown.name=
+##item.part.bluepower:fixture.green.name=
+##item.part.bluepower:fixture.red.name=
+##item.part.bluepower:fixture.black.name=
+
+# Lamps (fixture, inverted)
+##item.part.bluepower:fixture.white.inverted.name=
+##item.part.bluepower:fixture.orange.inverted.name=
+##item.part.bluepower:fixture.magenta.inverted.name=
+##item.part.bluepower:fixture.light_blue.inverted.name=
+##item.part.bluepower:fixture.yellow.inverted.name=
+##item.part.bluepower:fixture.lime.inverted.name=
+##item.part.bluepower:fixture.pink.inverted.name=
+##item.part.bluepower:fixture.gray.inverted.name=
+##item.part.bluepower:fixture.light_gray.inverted.name=
+##item.part.bluepower:fixture.cyan.inverted.name=
+##item.part.bluepower:fixture.purple.inverted.name=
+##item.part.bluepower:fixture.blue.inverted.name=
+##item.part.bluepower:fixture.brown.inverted.name=
+##item.part.bluepower:fixture.green.inverted.name=
+##item.part.bluepower:fixture.red.inverted.name=
+##item.part.bluepower:fixture.black.inverted.name=
+
+# Lamps (caged, not inverted)
+##item.part.bluepower:cagelamp.white.name=
+##item.part.bluepower:cagelamp.orange.name=
+##item.part.bluepower:cagelamp.magenta.name=
+##item.part.bluepower:cagelamp.light_blue.name=
+##item.part.bluepower:cagelamp.yellow.name=
+##item.part.bluepower:cagelamp.lime.name=
+##item.part.bluepower:cagelamp.pink.name=
+##item.part.bluepower:cagelamp.gray.name=
+##item.part.bluepower:cagelamp.light_gray.name=
+##item.part.bluepower:cagelamp.cyan.name=
+##item.part.bluepower:cagelamp.purple.name=
+##item.part.bluepower:cagelamp.blue.name=
+##item.part.bluepower:cagelamp.brown.name=
+##item.part.bluepower:cagelamp.green.name=
+##item.part.bluepower:cagelamp.red.name=
+##item.part.bluepower:cagelamp.black.name=
+
+# Lamps (caged, inverted)
+##item.part.bluepower:cagelamp.white.inverted.name=
+##item.part.bluepower:cagelamp.orange.inverted.name=
+##item.part.bluepower:cagelamp.magenta.inverted.name=
+##item.part.bluepower:cagelamp.light_blue.inverted.name=
+##item.part.bluepower:cagelamp.yellow.inverted.name=
+##item.part.bluepower:cagelamp.lime.inverted.name=
+##item.part.bluepower:cagelamp.pink.inverted.name=
+##item.part.bluepower:cagelamp.gray.inverted.name=
+##item.part.bluepower:cagelamp.light_gray.inverted.name=
+##item.part.bluepower:cagelamp.cyan.inverted.name=
+##item.part.bluepower:cagelamp.purple.inverted.name=
+##item.part.bluepower:cagelamp.blue.inverted.name=
+##item.part.bluepower:cagelamp.brown.inverted.name=
+##item.part.bluepower:cagelamp.green.inverted.name=
+##item.part.bluepower:cagelamp.red.inverted.name=
+##item.part.bluepower:cagelamp.black.inverted.name=
+
+# Gems, dusts, ingots and nuggets
+item.bluepower:ruby_gem.name=红�?石
 item.bluepower:amethyst_gem.name=紫晶
-item.bluepower:sapphire_gem.name=蓝宝石
-item.bluepower:teslatite_dust.name=蓝石粉
+item.bluepower:sapphire_gem.name=�?�?石
+
+item.bluepower:teslatite_dust.name=�?石粉
+
 item.bluepower:copper_ingot.name=铜锭
 item.bluepower:silver_ingot.name=银锭
 item.bluepower:zinc_ingot.name=锌锭
-item.bluepower:red_alloy_ingot.name=红石合金锭
-item.bluepower:blue_alloy_ingot.name=蓝石合金锭
-item.bluepower:brass_ingot.name=黄铜锭
-item.bluepower:tungsten_ingot.name=钨锭
 
+item.bluepower:red_alloy_ingot.name=红石�?�金锭
+item.bluepower:blue_alloy_ingot.name=�?石�?�金锭
+##item.bluepower:purple_alloy_ingot.name=
+
+item.bluepower:brass_ingot.name=黄铜锭
+
+item.bluepower:tungsten_ingot.name=钨锭
+##item.bluepower:tungsten_nugget.name=
+
+# IC2-compat zinc
 item.bluepower:zinc_ore_crushed.name=粉碎锌矿石
 item.bluepower:zinc_dust.name=锌粉
-item.bluepower:zinc_tiny_dust.name=小堆锌粉
+item.bluepower:zinc_tiny_dust.name=�?堆锌粉
 item.bluepower:zinc_ore_purified.name=纯净粉碎锌矿石
 
-item.bluepower:flax_seeds.name=亚麻种子
-item.bluepower:indigo_flower.name=靛蓝花
-item.bluepower:indigo_dye.name=靛蓝颜料
+# Plant items
+item.bluepower:flax_seeds.name=亚麻�?�?
+item.bluepower:indigo_flower.name=�?��?花
+item.bluepower:indigo_dye.name=�?��?颜料
 
-item.bluepower:ruby_sword.name=红宝石剑
-item.bluepower:ruby_shovel.name=红宝石铲
-item.bluepower:ruby_axe.name=红宝石斧
-item.bluepower:ruby_pickaxe.name=红宝石镐
-item.bluepower:ruby_hoe.name=红宝石锄
-item.bluepower:ruby_sickle.name=红宝石镰刀
+# Tools and weapons
+item.bluepower:ruby_sword.name=红�?石剑
+item.bluepower:ruby_shovel.name=红�?石铲
+item.bluepower:ruby_axe.name=红�?石斧
+item.bluepower:ruby_pickaxe.name=红�?石�?
+item.bluepower:ruby_hoe.name=红�?石锄
+item.bluepower:ruby_sickle.name=红�?石镰刀
 
-item.bluepower:sapphire_sword.name=蓝宝石剑
-item.bluepower:sapphire_shovel.name=蓝宝石铲
-item.bluepower:sapphire_axe.name=蓝宝石斧
-item.bluepower:sapphire_pickaxe.name=蓝宝石镐
-item.bluepower:sapphire_hoe.name=蓝宝石锄
-item.bluepower:sapphire_sickle.name=蓝宝石镰刀
+item.bluepower:sapphire_sword.name=�?�?石剑
+item.bluepower:sapphire_shovel.name=�?�?石铲
+item.bluepower:sapphire_axe.name=�?�?石斧
+item.bluepower:sapphire_pickaxe.name=�?�?石�?
+item.bluepower:sapphire_hoe.name=�?�?石锄
+item.bluepower:sapphire_sickle.name=�?�?石镰刀
 
 item.bluepower:amethyst_sword.name=紫晶剑
 item.bluepower:amethyst_shovel.name=紫晶铲
 item.bluepower:amethyst_axe.name=紫晶斧
-item.bluepower:amethyst_pickaxe.name=紫晶镐
+item.bluepower:amethyst_pickaxe.name=紫晶�?
 item.bluepower:amethyst_hoe.name=紫晶锄
 item.bluepower:amethyst_sickle.name=紫晶镰刀
 
 item.bluepower:wood_sickle.name=木镰刀
 item.bluepower:stone_sickle.name=石镰刀
-item.bluepower:iron_sickle.name=铁镰刀
+item.bluepower:iron_sickle.name=�?镰刀
 item.bluepower:gold_sickle.name=金镰刀
 item.bluepower:diamond_sickle.name=钻石镰刀
 
-item.bluepower:iron_saw.name=铁锯
+item.bluepower:athame.name=仪祭匕首
+item.bluepower:screwdriver.name=螺�?刀
+item.bluepower:silky_screwdriver.name=精准螺�?刀
+
+item.bluepower:wool_card.name=羊毛梳
+item.bluepower:diamond_drawplate.name=钻石拉模�?�
+
+# Saws
+item.bluepower:iron_saw.name=�?锯
 item.bluepower:amethyst_saw.name=紫晶锯
-item.bluepower:ruby_saw.name=红宝石锯
-item.bluepower:sapphire_saw.name=蓝宝石锯
+item.bluepower:ruby_saw.name=红�?石锯
+item.bluepower:sapphire_saw.name=�?�?石锯
 item.bluepower:diamond_saw.name=钻石锯
 
+# Canvas bags
 item.bluepower:canvas_bag.white.name=帆布袋
 item.bluepower:canvas_bag.orange.name=橙色帆布袋
-item.bluepower:canvas_bag.magenta.name=品红色帆布袋
-item.bluepower:canvas_bag.lightBlue.name=浅蓝色帆布袋
+item.bluepower:canvas_bag.magenta.name=�?红色帆布袋
+item.bluepower:canvas_bag.lightBlue.name=浅�?色帆布袋
 item.bluepower:canvas_bag.yellow.name=黄色帆布袋
 item.bluepower:canvas_bag.lime.name=柠檬色帆布袋
 item.bluepower:canvas_bag.pink.name=粉色帆布袋
-item.bluepower:canvas_bag.gray.name=灰色帆布袋
-item.bluepower:canvas_bag.silver.name=浅灰色帆布袋
-item.bluepower:canvas_bag.cyan.name=青色帆布袋
+item.bluepower:canvas_bag.gray.name=�?�色帆布袋
+item.bluepower:canvas_bag.silver.name=浅�?�色帆布袋
+item.bluepower:canvas_bag.cyan.name=�?�色帆布袋
 item.bluepower:canvas_bag.purple.name=紫色帆布袋
-item.bluepower:canvas_bag.blue.name=蓝色帆布袋
+item.bluepower:canvas_bag.blue.name=�?色帆布袋
 item.bluepower:canvas_bag.brown.name=棕色帆布袋
 item.bluepower:canvas_bag.green.name=绿色帆布袋
 item.bluepower:canvas_bag.red.name=红色帆布袋
 item.bluepower:canvas_bag.black.name=黑色帆布袋
 
+# Circuit items
 item.bluepower:silicon_boule.name=硅晶锭
 item.bluepower:silicon_wafer.name=硅片
-item.bluepower:blue_doped_wafer.name=蓝色掺杂晶片
-item.bluepower:red_doped_wafer.name=红色掺杂晶片
-item.bluepower:athame.name=仪祭匕首
-item.bluepower:screwdriver.name=螺丝刀
-item.bluepower:silky_screwdriver.name=精准螺丝刀
-item.bluepower:zincplate.name=锌板
-item.bluepower:stone_tile.name=石质板
-item.bluepower:stone_wire.name=石质线板
-item.bluepower:stone_anode.name=石质阳极
-item.bluepower:stone_cathode.name=石质阴极
-item.bluepower:stone_pointer.name=石质指针
-item.bluepower:silicon_chip.name=硅芯片
-item.bluepower:taintedsilicon_chip.name=浸染硅芯片
-item.bluepower:plate_assembly.name=装配板
-item.bluepower:stone_redwire.name=石质红石线板
-item.bluepower:stone_bundle.name=石质集束板
-item.bluepower:screwdriver_handle.name=螺丝刀手柄
-item.bluepower:seed_bag.name=种子袋
-item.bluepower:canvas_bag.name=帆布袋
+item.bluepower:blue_doped_wafer.name=�?色掺�?�晶片
+item.bluepower:red_doped_wafer.name=红色掺�?�晶片
+
+item.bluepower:stone_tile.name=石质�?�
+##item.bluepower:bluestone_wire_tile.name=
+##item.bluepower:bluestone_anode_tile.name=
+##item.bluepower:bluestone_cathode_tile.name=
+##item.bluepower:bluestone_pointer_tile.name=
+##item.bluepower:redstone_wire_tile.name=
+##item.bluepower:redstone_anode_tile.name=
+##item.bluepower:redstone_cathode_tile.name=
+##item.bluepower:redstone_pointer_tile.name=
+##item.bluepower:silicon_chip_tile.name=
+##item.bluepower:tainted_silicon_chip_tile.name=
+##item.bluepower:quartz_resonator_tile.name=
+item.bluepower:plate_assembly.name=装�?�?�
+item.bluepower:stone_redwire.name=石质红石线�?�
+item.bluepower:stone_bundle.name=石质集�?��?�
+
+# Misc crafting items
+item.bluepower:zincplate.name=锌�?�
+
+item.bluepower:screwdriver_handle.name=螺�?刀手柄
+
 item.bluepower:canvas.name=帆布
-item.bluepower:wool_card.name=羊毛梳
-item.bluepower:diamond_drawplate.name=钻石拉模板
-item.bluepower:iron_wire.name=细铁丝
-item.bluepower:copper_wire.name=细铜丝
+item.bluepower:seed_bag.name=�?�?袋
+item.bluepower:canvas_bag.name=帆布袋
 
-part.bluepower:and.name=与门
-part.bluepower:buffer.name=缓冲门
-part.bluepower:bustransceiver.name=总线收发器
-part.bluepower:counter.name=计数器
-part.bluepower:invert.name=取反单元
-part.bluepower:lightCell.name=光感器
-part.bluepower:multiplexer.name=多路转换器
-part.bluepower:nand.name=与非门
-part.bluepower:noninvert.name=取正单元
-part.bluepower:nor.name=或非门
-part.bluepower:not.name=非门
-part.bluepower:null.name=空单元
-part.bluepower:or.name=或门
-part.bluepower:pulseformer.name=脉冲发生器
-part.bluepower:randomizer.name=随机脉冲发生器
-part.bluepower:repeater.name=延时器
-part.bluepower:rs.name=RS触发器
-part.bluepower:sequencer.name=定序器
-part.bluepower:state.name=状态单元
-part.bluepower:synchronizer.name=同步器
-part.bluepower:timer.name=计时器
-part.bluepower:toggle.name=T触发器
-part.bluepower:transparent.name=透明锁存器
-part.bluepower:xnor.name=异或非门
-part.bluepower:xor.name=异或门
-part.bluepower:integratedCircuit3x3.name=3x3集成芯片
-part.bluepower:integratedCircuit5x5.name=5x5集成芯片
-part.bluepower:integratedCircuit7x7.name=7x7集成芯片
-part.bluepower:pneumaticTube.name=气动管
-part.bluepower:pneumaticTubeOpaque.name=缓速气动管
-part.bluepower:restrictionTube.name=限位气动管
-part.bluepower:restrictionTubeOpaque.name=缓速限位气动管
-part.bluepower:magTube.name=线圈气动管
-part.bluepower:accelerator.name=加速器
+item.bluepower:iron_wire.name=细�?�?
+item.bluepower:copper_wire.name=细铜�?
 
-item.bluepower:lumar.white.name=白色荧光粉
-item.bluepower:lumar.orange.name=橙色荧光粉
-item.bluepower:lumar.magenta.name=品红色荧光粉
-item.bluepower:lumar.lightblue.name=浅蓝色荧光粉
-item.bluepower:lumar.yellow.name=黄色荧光粉
-item.bluepower:lumar.lime.name=柠檬色荧光粉
-item.bluepower:lumar.pink.name=粉色荧光粉
-item.bluepower:lumar.gray.name=灰色荧光粉
-item.bluepower:lumar.lightgray.name=浅灰色荧光粉
-item.bluepower:lumar.cyan.name=青色荧光粉
-item.bluepower:lumar.purple.name=紫色荧光粉
-item.bluepower:lumar.blue.name=蓝色荧光粉
-item.bluepower:lumar.brown.name=棕色荧光粉
-item.bluepower:lumar.green.name=绿色荧光粉
-item.bluepower:lumar.red.name=红色荧光粉
-item.bluepower:lumar.black.name=黑色荧光粉
-item.bluepower:paint_can.empty.name=颜料罐
-item.bluepower:paint_can.white.name=白色颜料罐
-item.bluepower:paint_can.orange.name=橙色颜料罐
-item.bluepower:paint_can.magenta.name=品红色颜料罐
-item.bluepower:paint_can.lightBlue.name=浅蓝色颜料罐
-item.bluepower:paint_can.yellow.name=黄色颜料罐
-item.bluepower:paint_can.lime.name=柠檬色颜料罐
-item.bluepower:paint_can.pink.name=粉色颜料罐
-item.bluepower:paint_can.gray.name=灰色颜料罐
-item.bluepower:paint_can.silver.name=浅灰色颜料罐
-item.bluepower:paint_can.cyan.name=青色颜料罐
-item.bluepower:paint_can.purple.name=紫色颜料罐
-item.bluepower:paint_can.blue.name=蓝色颜料罐
-item.bluepower:paint_can.brown.name=棕色颜料罐
-item.bluepower:paint_can.green.name=绿色颜料罐
-item.bluepower:paint_can.red.name=红色颜料罐
-item.bluepower:paint_can.black.name=黑色颜料罐
+##item.bluepower:infused_teslatite_dust.name=
+
+# Gates
+##item.part.bluepower:gate.and.name=
+##item.part.bluepower:gate.buffer.name=
+##item.part.bluepower:gate.bustransceiver.name=
+##item.part.bluepower:gate.counter.name=
+##item.part.bluepower:gate.invert.name=
+##item.part.bluepower:gate.lightCell.name=
+##item.part.bluepower:gate.multiplexer.name=
+##item.part.bluepower:gate.nand.name=
+##item.part.bluepower:gate.noninvert.name=
+##item.part.bluepower:gate.nor.name=
+##item.part.bluepower:gate.not.name=
+##item.part.bluepower:gate.nullcell.name=
+##item.part.bluepower:gate.or.name=
+##item.part.bluepower:gate.pulseformer.name=
+##item.part.bluepower:gate.randomizer.name=
+##item.part.bluepower:gate.repeater.name=
+##item.part.bluepower:gate.rs.name=
+##item.part.bluepower:gate.sequencer.name=
+##item.part.bluepower:gate.state.name=
+##item.part.bluepower:gate.synchronizer.name=
+##item.part.bluepower:gate.timer.name=
+##item.part.bluepower:gate.toggle.name=
+##item.part.bluepower:gate.transparent.name=
+##item.part.bluepower:gate.xnor.name=
+##item.part.bluepower:gate.xor.name=
+##item.part.bluepower:gate.integratedCircuit3x3.name=
+##item.part.bluepower:gate.integratedCircuit5x5.name=
+##item.part.bluepower:gate.integratedCircuit7x7.name=
+##item.part.bluepower:gate.inverter.name=
+##item.part.bluepower:gate.comparator.name=
+##item.part.bluepower:gate.wirelesstransceiver.name=
+##item.part.bluepower:gate.wirelesstransceiver.analog.name=
+##item.part.bluepower:gate.wirelesstransceiver.bundled.name=
+##item.part.bluepower:gate.wirelesstransceiver.analog.bundled.name=
+##item.part.bluepower:pneumaticTube.name=
+##item.part.bluepower:pneumaticTubeOpaque.name=
+##item.part.bluepower:restrictionTube.name=
+##item.part.bluepower:restrictionTubeOpaque.name=
+##item.part.bluepower:magTube.name=
+##item.part.bluepower:accelerator.name=
+
+##item.part.bluepower:wirelesstransceiver.bundled.name=
+##item.part.bluepower:wirelesstransceiver.analog.bundled.name=
+##item.part.bluepower:wirelesstransceiver.name=
+##item.part.bluepower:wirelesstransceiver.analog.name=
+
+# Lumar
+item.bluepower:lumar.white.name=白色�?�光粉
+item.bluepower:lumar.orange.name=橙色�?�光粉
+item.bluepower:lumar.magenta.name=�?红色�?�光粉
+item.bluepower:lumar.lightblue.name=浅�?色�?�光粉
+item.bluepower:lumar.yellow.name=黄色�?�光粉
+item.bluepower:lumar.lime.name=柠檬色�?�光粉
+item.bluepower:lumar.pink.name=粉色�?�光粉
+item.bluepower:lumar.gray.name=�?�色�?�光粉
+item.bluepower:lumar.lightgray.name=浅�?�色�?�光粉
+item.bluepower:lumar.cyan.name=�?�色�?�光粉
+item.bluepower:lumar.purple.name=紫色�?�光粉
+item.bluepower:lumar.blue.name=�?色�?�光粉
+item.bluepower:lumar.brown.name=棕色�?�光粉
+item.bluepower:lumar.green.name=绿色�?�光粉
+item.bluepower:lumar.red.name=红色�?�光粉
+item.bluepower:lumar.black.name=黑色�?�光粉
+
+# Paint cans
+item.bluepower:paint_can.empty.name=颜料�?
+item.bluepower:paint_can.white.name=白色颜料�?
+item.bluepower:paint_can.orange.name=橙色颜料�?
+item.bluepower:paint_can.magenta.name=�?红色颜料�?
+item.bluepower:paint_can.lightBlue.name=浅�?色颜料�?
+item.bluepower:paint_can.yellow.name=黄色颜料�?
+item.bluepower:paint_can.lime.name=柠檬色颜料�?
+item.bluepower:paint_can.pink.name=粉色颜料�?
+item.bluepower:paint_can.gray.name=�?�色颜料�?
+item.bluepower:paint_can.silver.name=浅�?�色颜料�?
+item.bluepower:paint_can.cyan.name=�?�色颜料�?
+item.bluepower:paint_can.purple.name=紫色颜料�?
+item.bluepower:paint_can.blue.name=�?色颜料�?
+item.bluepower:paint_can.brown.name=棕色颜料�?
+item.bluepower:paint_can.green.name=绿色颜料�?
+item.bluepower:paint_can.red.name=红色颜料�?
+item.bluepower:paint_can.black.name=黑色颜料�?
+
+# Paint brushes
 item.bluepower:paint_brush.empty.name=颜料刷
 item.bluepower:paint_brush.white.name=白色颜料刷
 item.bluepower:paint_brush.orange.name=橙色颜料刷
-item.bluepower:paint_brush.magenta.name=品红色颜料刷
-item.bluepower:paint_brush.lightBlue.name=浅蓝色颜料刷
+item.bluepower:paint_brush.magenta.name=�?红色颜料刷
+item.bluepower:paint_brush.lightBlue.name=浅�?色颜料刷
 item.bluepower:paint_brush.yellow.name=黄色颜料刷
 item.bluepower:paint_brush.lime.name=柠檬色颜料刷
 item.bluepower:paint_brush.pink.name=粉色颜料刷
-item.bluepower:paint_brush.gray.name=灰色颜料刷
-item.bluepower:paint_brush.silver.name=浅灰色颜料刷
-item.bluepower:paint_brush.cyan.name=青色颜料刷
+item.bluepower:paint_brush.gray.name=�?�色颜料刷
+item.bluepower:paint_brush.silver.name=浅�?�色颜料刷
+item.bluepower:paint_brush.cyan.name=�?�色颜料刷
 item.bluepower:paint_brush.purple.name=紫色颜料刷
-item.bluepower:paint_brush.blue.name=蓝色颜料刷
+item.bluepower:paint_brush.blue.name=�?色颜料刷
 item.bluepower:paint_brush.brown.name=棕色颜料刷
 item.bluepower:paint_brush.green.name=绿色颜料刷
 item.bluepower:paint_brush.red.name=红色颜料刷
 item.bluepower:paint_brush.black.name=黑色颜料刷
 
-itemGroup.tabBluePowerMachines=蓝石能量|机器
-itemGroup.tabBluePowerBlocks=蓝石能量|方块
-itemGroup.tabBluePowerItems=蓝石能量|物品
-itemGroup.tabBluePowerTools=蓝石能量|工具
-itemGroup.tabBluePowerCircuits=蓝石能量|逻辑
-itemGroup.tabBluePowerLighting=蓝石能量|照明
+# Creative tabs
+itemGroup.tabBluePowerMachines=�?石能�?|机器
+itemGroup.tabBluePowerBlocks=�?石能�?|方�?�
+itemGroup.tabBluePowerItems=�?石能�?|物�?
+itemGroup.tabBluePowerTools=�?石能�?|工具
+itemGroup.tabBluePowerCircuits=�?石能�?|逻辑
+itemGroup.tabBluePowerLighting=�?石能�?|照明
+##itemGroup.tabBluePowerWiring=
 
+# Enchantments
 enchantment.vorpal.name=斩首
 enchantment.disjunction.name=解离
 
-gui.projectTable.clearGrid=清除合成网格
+# GUI buttons and tooltips
+gui.projectTable.clearGrid=清除�?��?网格
 gui.timerInterval=定时器间隔
 gui.counterMax=最大值
-gui.counterIncrement=增量
-gui.counterDecrement=减量
+gui.counterIncrement=增�?
+gui.counterDecrement=�?�?
 gui.counterCount=计数
 gui.connections=连接
 gui.passThrough=通过
 
-gui.sortMode=§b排序模式
-gui.pullMode=§b牵拉模式
-gui.mode=§b模式
+gui.sortMode=§b排�?模�?
+gui.pullMode=§b牵拉模�?
+gui.mode=§b模�?
 gui.priority=§b优先级
 gui.priority.info=数字越高优先级也越好.
-gui.sortMode.any_stack_sequential=§3任意堆叠,顺序
-gui.sortMode.any_stack_sequential.info=一列内某一堆叠可被匹配(包括物品数量).会弹出该物品将其移动到下一列.
-gui.sortMode.all_stacks_sequential=§3全堆叠,顺序
-gui.sortMode.all_stacks_sequential.info=一列内所有堆叠可被匹配(包括物品数量).会弹出该物品将其移动到下一列.
-gui.sortMode.all_stacks_random=§3全堆叠,随机
-gui.sortMode.all_stacks_random.info=一列内所有堆叠可被匹配(包括物品数量).会弹出这些物品.无关哪一列被匹配.
-gui.sortMode.any_item=§3任意物品
-gui.sortMode.any_item.info=被选定物品达到过滤堆叠中数量时会被弹出.
-gui.sortMode.any_item_default=§3默认下任意物品
-gui.sortMode.any_item_default.info=被选定物品达到过滤堆叠中数量时会被弹出.可将不匹配物品设定为默认颜色.
-gui.sortMode.any_stack=§3任意堆叠
-gui.sortMode.any_stack.info=被选定物品满堆叠时会被弹出.
-gui.sortMode.any_stack_default=§3默认下任意堆叠
-gui.sortMode.any_stack_default.info=被选定物品满堆叠时会被弹出.可将不匹配物品设定为默认颜色.
-gui.pullMode.single_step=§3单步
-gui.pullMode.single_step.info=每个脉冲信号只牵拉一个或一列(根据模式不同)物品.
+gui.sortMode.any_stack_sequential=§3任�?堆�?�,顺�?
+gui.sortMode.any_stack_sequential.info=一列内�?一堆�?��?�被匹�?(包括物�?数�?).会弹出该物�?将其移动到下一列.
+gui.sortMode.all_stacks_sequential=§3全堆�?�,顺�?
+gui.sortMode.all_stacks_sequential.info=一列内所有堆�?��?�被匹�?(包括物�?数�?).会弹出该物�?将其移动到下一列.
+gui.sortMode.all_stacks_random=§3全堆�?�,�?机
+gui.sortMode.all_stacks_random.info=一列内所有堆�?��?�被匹�?(包括物�?数�?).会弹出这些物�?.无关哪一列被匹�?.
+gui.sortMode.any_item=§3任�?物�?
+gui.sortMode.any_item.info=被选定物�?达到过滤堆�?�中数�?时会被弹出.
+gui.sortMode.any_item_default=§3默认下任�?物�?
+gui.sortMode.any_item_default.info=被选定物�?达到过滤堆�?�中数�?时会被弹出.�?�将�?匹�?物�?设定为默认颜色.
+gui.sortMode.any_stack=§3任�?堆�?�
+gui.sortMode.any_stack.info=被选定物�?满堆�?�时会被弹出.
+gui.sortMode.any_stack_default=§3默认下任�?堆�?�
+gui.sortMode.any_stack_default.info=被选定物�?满堆�?�时会被弹出.�?�将�?匹�?物�?设定为默认颜色.
+gui.pullMode.single_step=§3�?�步
+gui.pullMode.single_step.info=�?个脉冲信�?��?�牵拉一个或一列(根�?�模�?�?�?�)物�?.
 gui.pullMode.automatic=§3自动
-gui.pullMode.automatic.info=以常规间隔时间自动牵拉物品.
-gui.pullMode.single_sweep=§3单扫描
-gui.pullMode.single_sweep.info=每接受一次红石信号机器处理一列,脉冲会被保存.
+gui.pullMode.automatic.info=以常规间隔时间自动牵拉物�?.
+gui.pullMode.single_sweep=§3�?�扫�??
+gui.pullMode.single_sweep.info=�?接�?�一次红石信�?�机器处�?�一列,脉冲会被�?存.
 
-gui.retriever.mode.sequential=§3顺序
-gui.retriever.mode.sequential.info=试图提取指定数量的高亮物品.成功后目标转移到下一对象.
-gui.retriever.mode.any=§3任意物品
-gui.retriever.mode.any.info=试图提取指定数量的任意过滤物品.
+gui.retriever.mode.sequential=§3顺�?
+gui.retriever.mode.sequential.info=试图�??�?�指定数�?的高亮物�?.�?功�?�目标转移到下一对象.
+gui.retriever.mode.any=§3任�?物�?
+gui.retriever.mode.any.info=试图�??�?�指定数�?的任�?过滤物�?.
 
-gui.regulator.mode.ratio=§3比率模式
-gui.regulator.mode.ratio.info=等待直至中间的物品栏中数量与左侧过滤栏中所设置的相同.
-gui.regulator.mode.supply=§3供应模式
-gui.regulator.mode.supply.info=这种模式仅用于连接容器的校准器,将优先为依附容器供应右侧过滤栏指定的物品.
+gui.regulator.mode.ratio=§3比率模�?
+gui.regulator.mode.ratio.info=等待直至中间的物�?�?中数�?与左侧过滤�?中所设置的相�?�.
+gui.regulator.mode.supply=§3供应模�?
+gui.regulator.mode.supply.info=这�?模�?仅用于连接容器的校准器,将优先为�?附容器供应�?�侧过滤�?指定的物�?.
 
-gui.itemDetector.mode.item=§3物品模式
-gui.itemDetector.mode.item.info=每个物品经过时发出一次红石脉冲信号.
-gui.itemDetector.mode.stack=§3堆叠模式
-gui.itemDetector.mode.stack.info=每堆物品经过时发出一次红石脉冲信号.
-gui.itemDetector.mode.stuffed=§3非空模式
-gui.itemDetector.mode.stuffed.info=只要机器内缓存非空即发出红石信号.
+gui.itemDetector.mode.item=§3物�?模�?
+gui.itemDetector.mode.item.info=�?个物�?�?过时�?�出一次红石脉冲信�?�.
+gui.itemDetector.mode.stack=§3堆�?�模�?
+gui.itemDetector.mode.stack.info=�?堆物�?�?过时�?�出一次红石脉冲信�?�.
+gui.itemDetector.mode.stuffed=§3�?�空模�?
+gui.itemDetector.mode.stuffed.info=�?��?机器内缓存�?�空�?��?�出红石信�?�.
 
-gui.manager.mode.exact=§3精确模式
-gui.manager.mode.exact.info=试图保持物流管理器内存有精确数量的指定物品.
-gui.manager.mode.all=§3全体模式
-gui.manager.mode.all.info=物流管理器物品栏内指定物品将会被传入管理器物品栏.不限定数量.
+gui.manager.mode.exact=§3精确模�?
+gui.manager.mode.exact.info=试图�?�?物�?管�?�器内存有精确数�?的指定物�?.
+gui.manager.mode.all=§3全体模�?
+gui.manager.mode.all.info=物�?管�?�器物�?�?内指定物�?将会被传入管�?�器物�?�?.�?�?定数�?.
 
-gui.circuitDatabase.tab.copyAndShare=复制并分享
+gui.circuitDatabase.tab.copyAndShare=�?制并分享
 gui.circuitDatabase.tab.private=个人库
-gui.circuitDatabase.tab.server=服务器库
+gui.circuitDatabase.tab.server=�?务器库
 
-gui.circuitDatabase.action.cancel=取消
-gui.circuitDatabase.action.savePrivate=保存至个人库
-gui.circuitDatabase.action.saveServer=保存至服务器库
-gui.circuitDatabase.action.copy=复制
+gui.circuitDatabase.action.cancel=�?�消
+gui.circuitDatabase.action.savePrivate=�?存至个人库
+gui.circuitDatabase.action.saveServer=�?存至�?务器库
+gui.circuitDatabase.action.copy=�?制
 
-gui.circuitDatabase.info.serverOnly=§c仅限服务器使用.
-gui.circuitDatabase.info.nameTaken=§c当前数据库该物品名称已被占用.
-gui.circuitDatabase.info.opsOnly=§c服务器被设定为服务器库仅限op操作.
-gui.circuitDatabase.info.sneakClickToConfirmDeleting=§c你确定吗?潜行下点击以确认.
+gui.circuitDatabase.info.serverOnly=§c仅�?�?务器使用.
+gui.circuitDatabase.info.nameTaken=§c当�?数�?�库该物�?�??称已被�?�用.
+gui.circuitDatabase.info.opsOnly=§c�?务器被设定为�?务器库仅�?op�?作.
+gui.circuitDatabase.info.sneakClickToConfirmDeleting=§c你确定�?�?潜行下点击以确认.
 gui.circuitDatabase.info.sneakClickToDelete=潜行点击以删除.
 
-gui.circuitDatabase.name=名称:
+gui.circuitDatabase.name=�??称:
 
-gui.sneakForInfo=潜行查看信息
+gui.sneakForInfo=潜行查看信�?�
 
+gui.widget.fuzzy=§b过滤器模糊设定
+gui.widget.fuzzy.normal=§3标准
+gui.widget.fuzzy.normal.info=�?�类且伤害值相�?�视为�?�一物�?.
+gui.widget.fuzzy.fuzzy=§3模糊
+gui.widget.fuzzy.fuzzy.info=�?�属一类矿物辞典�?�视为�?�一物�?.
+gui.widget.fuzzy.exact=§3精确
+gui.widget.fuzzy.exact.info=�?�类,伤害值相�?�且NBT数�?�完全相�?��?视为�?�一物�?.这�?味�?�钻石剑被认为有别于附魔钻石剑.
+
+gui.tooltip.hasSilkyData=§e是�?�有�?外精准数�?�
+
+##gui.tab.stuffed=
+##gui.tab.stuffed.noItems=
+##gui.tab.info=
+
+# Colors
 gui.widget.color.none=None
 gui.widget.color.black=黑色
 gui.widget.color.red=红色
 gui.widget.color.green=绿色
 gui.widget.color.brown=棕色
-gui.widget.color.blue=蓝色
+gui.widget.color.blue=�?色
 gui.widget.color.purple=紫色
-gui.widget.color.cyan=青色
-gui.widget.color.silver=浅灰色
-gui.widget.color.gray=灰色
+gui.widget.color.cyan=�?�色
+gui.widget.color.silver=浅�?�色
+gui.widget.color.gray=�?�色
 gui.widget.color.pink=粉色
 gui.widget.color.lime=柠檬色
 gui.widget.color.yellow=黄色
-gui.widget.color.lightBlue=浅蓝色
-gui.widget.color.magenta=品红色
+gui.widget.color.lightBlue=浅�?色
+gui.widget.color.magenta=�?红色
 gui.widget.color.orange=橙色
 gui.widget.color.white=白色
 
-gui.widget.fuzzy=§b过滤器模糊设定
-gui.widget.fuzzy.normal=§3标准
-gui.widget.fuzzy.normal.info=同类且伤害值相同视为同一物品.
-gui.widget.fuzzy.fuzzy=§3模糊
-gui.widget.fuzzy.fuzzy.info=同属一类矿物辞典即视为同一物品.
-gui.widget.fuzzy.exact=§3精确
-gui.widget.fuzzy.exact.info=同类,伤害值相同且NBT数据完全相同才视为同一物品.这意味着钻石剑被认为有别于附魔钻石剑.
+# Info tab
+##tile.bluepower:alloyfurnace.info=
+##tile.bluepower:buffer.info=
+##tile.bluepower:deployer.info=
+##tile.bluepower:ejector.info=
+##tile.bluepower:filter.info=
+##tile.bluepower:item_detector.info=
+##tile.bluepower:project_table.info=
+##tile.bluepower:relay.info=
+##tile.bluepower:circuit_table.info=
+##tile.bluepower:regulator.info=
+##tile.bluepower:retriever.info=
+##tile.bluepower:sorting_machine.info=
+##tile.bluepower:circuit_database.info=
+##tile.bluepower:manager.info=
 
-gui.tooltip.hasSilkyData=§e是否有额外精准数据
-
-direction.front=前
+# Directions
+direction.front=�?
 direction.left=左
-direction.back=后
-direction.right=右
+direction.back=�?�
+direction.right=�?�
 
+# Cardinal directions
 rotation.north=北
-rotation.south=南
+rotation.south=�?�
 rotation.up=上
 rotation.down=下
 rotation.west=西
 rotation.east=东
 
-random.enabled=允许
-random.disabled=禁止
+# Misc
+random.enabled=�?许
+random.disabled=�?止
 
+# Config file options
 bluepower.config.settings.tooltip=通用模组设定.
-bluepower.config.recipes.tooltip=合成设定.
+bluepower.config.recipes.tooltip=�?��?设定.
 bluepower.config.enchantments.tooltip=附魔设定.
 bluepower.config.tubes.tooltip=气动管设定.
-bluepower.config.circuitDatabase=元件数据库设定.
-bluepower.config.copper.tooltip=铜矿生成设定.
-bluepower.config.zinc.tooltip=锌矿生成设定.
-bluepower.config.silver.tooltip=银矿生成设定.
-bluepower.config.tungsten.tooltip=钨矿生成设定.
-bluepower.config.ruby.tooltip=红宝石矿生成设定.
-bluepower.config.amethyst.tooltip=紫晶矿生成设定.
-bluepower.config.sapphire.tooltip=蓝宝石矿生成设定.
-bluepower.config.teslatite.tooltip=蓝石矿生成设定.
-bluepower.config.worldgen.tooltip=配置多种世界生成设定.
-bluepower.config.circuitDatabase.tooltip=元件数据库设定.
+bluepower.config.circuitDatabase=元件数�?�库设定.
+bluepower.config.copper.tooltip=铜矿生�?设定.
+bluepower.config.zinc.tooltip=锌矿生�?设定.
+bluepower.config.silver.tooltip=银矿生�?设定.
+bluepower.config.tungsten.tooltip=钨矿生�?设定.
+bluepower.config.ruby.tooltip=红�?石矿生�?设定.
+bluepower.config.amethyst.tooltip=紫晶矿生�?设定.
+bluepower.config.sapphire.tooltip=�?�?石矿生�?设定.
+bluepower.config.teslatite.tooltip=�?石矿生�?设定.
+bluepower.config.worldgen.tooltip=�?置多�?世界生�?设定.
+bluepower.config.circuitDatabase.tooltip=元件数�?�库设定.
 
-bluepower.waila.rsLatch.feedback=反馈
-bluepower.waila.rsLatch.noFeedback=无反馈
+# WAILA
+bluepower.waila.rsLatch.feedback=�??馈
+bluepower.waila.rsLatch.noFeedback=无�??馈
 waila.pneumaticTube.color=颜色
-waila.machine.stuffed=容纳有物品
+waila.machine.stuffed=容纳有物�?
 
-message.oldpart=这属于旧版本物品.放入玩家物品栏以恢复.
+##bluepower.accessability.public=
+##bluepower.accessability.shared=
+##bluepower.accessability.private=
+
+##bluepower.mode.sendreceive=
+##bluepower.mode.send=
+##bluepower.mode.receive=
+
+##bluepower.gui.none=
+##bluepower.gui.admin=
+
+##bluepower.gui.wireless=
+
+
+# Achievements
+##bluepower.gui.achievements=
+
+##achievement.vorpal=
+##achievement.vorpal.desc=
+
+##achievement.sort=
+##achievement.sort.desc=
+
+##achievement.tungsten=
+##achievement.tungsten.desc=
+
+##achievement.dope=
+##achievement.dope.desc=
+
+##achievement.tube=
+##achievement.tube.desc=
+
+##achievement.magtube=
+##achievement.magtube.desc=
+
+##achievement.circuitception=
+##achievement.circuitception.desc=
