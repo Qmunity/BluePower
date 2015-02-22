@@ -29,6 +29,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 import uk.co.qmunity.lib.client.render.RenderHelper;
 import uk.co.qmunity.lib.part.IPart;
@@ -52,6 +53,42 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public abstract class BPPart extends PartBase implements IPartSelectable, IPartCollidable, IPartOccluding, IPartUpdateListener,
 IPartInteractable, IDatabaseSaveable, IPartWAILAProvider {
+
+    @Override
+    public World getWorld() {
+
+        if (getParent() == null)
+            return null;
+
+        return super.getWorld();
+    }
+
+    @Override
+    public int getX() {
+
+        if (getParent() == null)
+            return 0;
+
+        return super.getX();
+    }
+
+    @Override
+    public int getY() {
+
+        if (getParent() == null)
+            return 0;
+
+        return super.getY();
+    }
+
+    @Override
+    public int getZ() {
+
+        if (getParent() == null)
+            return 0;
+
+        return super.getZ();
+    }
 
     public abstract String getUnlocalizedName();
 

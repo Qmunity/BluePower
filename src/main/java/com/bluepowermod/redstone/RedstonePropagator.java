@@ -329,7 +329,7 @@ public abstract class RedstonePropagator implements IPropagator<IRedstoneDevice>
         @Override
         protected void doPropagate() {
 
-            if (getDevice().getWorld().isRemote)
+            if (getDevice().getWorld() == null || getDevice().getWorld().isRemote)
                 return;
 
             if (getDevice() instanceof IRedConductor) {

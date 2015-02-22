@@ -65,9 +65,18 @@ public class OreDictionarySetup {
 
         for (RedwireType t : RedwireType.values()) {
             for (MinecraftColor c : MinecraftColor.VALID_COLORS) {
-                ItemStack wire = PartManager.getPartInfo("wire." + t.getName() + "." + c.name().toLowerCase()).getStack(1);
-                OreDictionary.registerOre(t.getName() + "Insulated", wire.getItem());
+                ItemStack wireInsulated = PartManager.getPartInfo("wire." + t.getName() + "." + c.name().toLowerCase()).getStack(1);
+                OreDictionary.registerOre(t.getName() + "Insulated", wireInsulated.getItem());
+                OreDictionary.registerOre("wireInsulated", wireInsulated.getItem());
+
+                ItemStack wireBundled = PartManager.getPartInfo("wire." + t.getName() + ".bundled." + c.name().toLowerCase()).getStack(1);
+                OreDictionary.registerOre(t.getName() + "Bundled", wireBundled.getItem());
+                OreDictionary.registerOre("wireBundled", wireBundled.getItem());
             }
+
+            ItemStack wireBundled = PartManager.getPartInfo("wire." + t.getName() + ".bundled").getStack(1);
+            OreDictionary.registerOre(t.getName() + "Bundled", wireBundled.getItem());
+            OreDictionary.registerOre("wireBundled", wireBundled.getItem());
         }
     }
 

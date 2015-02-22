@@ -30,6 +30,7 @@ import com.bluepowermod.api.wire.redstone.RedwireType;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.init.BPItems;
 import com.bluepowermod.part.PartManager;
+import com.bluepowermod.part.gate.supported.GateNullCell;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 
@@ -49,6 +50,8 @@ public class LogicRecipes {
                 '#', Blocks.redstone_torch, 'W', BPItems.stone_tile));
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.bluestone_pointer_tile, 1), " S ", "T#T", " W ", 'S', "stone",
                 '#', Blocks.redstone_torch, 'W', BPItems.stone_tile, 'T', "dustTeslatite"));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.bluestone_pointer_tile, 1), "S", "T", 'S', "stone", 'T',
+                BPItems.bluestone_cathode_tile));
 
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.redstone_wire_tile, 1), "#", "W", '#', "dustRedstone", 'W',
                 BPItems.stone_tile));
@@ -58,6 +61,8 @@ public class LogicRecipes {
                 BPItems.stone_tile);
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.redstone_pointer_tile, 1), "S", "#", "W", 'S', "stone", '#',
                 Blocks.redstone_torch, 'W', BPItems.stone_tile));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.redstone_pointer_tile, 1), "S", "T", 'S', "stone", 'T',
+                BPItems.redstone_cathode_tile));
 
         GameRegistry.addRecipe(new ItemStack(BPItems.silicon_chip_tile, 1), " # ", "WWW", '#', BPItems.blue_doped_wafer, 'W',
                 BPItems.stone_tile);
@@ -68,8 +73,10 @@ public class LogicRecipes {
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.quartz_resonator_tile, 3), " # ", "###", "WWW", '#', "gemQuartz",
                 'W', BPItems.stone_tile));
 
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.stone_bundle, 1), "#", "W", '#', "wireBundled", 'W',
+                BPItems.stone_tile));
+
         GameRegistry.addShapelessRecipe(new ItemStack(BPItems.infused_teslatite_dust, 1), BPItems.teslatite_dust, Items.redstone);
-        // TODO: stone_redwire recipe and stone_bundle recipe
 
         {
             for (RedwireType t : RedwireType.values()) {
@@ -175,6 +182,9 @@ public class LogicRecipes {
                 BPItems.quartz_resonator_tile);
         GameRegistry.addRecipe(PartManager.getPartInfo("inverter").getStack(), "#A#", "ACA", "#W#", '#', BPItems.stone_tile, 'A',
                 BPItems.redstone_anode_tile, 'C', BPItems.redstone_cathode_tile, 'W', BPItems.redstone_wire_tile);
+
+        GameRegistry.addRecipe(new ShapedOreRecipe(GateNullCell.getStackWithData(new GateNullCell()), "SSS", "S S", "WWW", 'S',
+                "stickWood", 'W', BPItems.stone_tile));
 
         GameRegistry.addRecipe(PartManager.getPartInfo("integratedCircuit3x3").getStack(), "TST", "SSS", "TST", 'T', BPItems.stone_tile,
                 'S', BPItems.silicon_chip_tile);

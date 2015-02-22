@@ -113,6 +113,9 @@ public class NullCellHandler extends ShapedRecipeHandler {
     @Override
     public void loadCraftingRecipes(ItemStack result) {
 
+        if (result == null || !(result.getItem() instanceof ItemPart))
+            return;
+
         try {
             for (int i = 0; i < 4; i++) {
                 GateNullCell base = new GateNullCell(null, false, null, false);
@@ -128,20 +131,20 @@ public class NullCellHandler extends ShapedRecipeHandler {
                                 if (r.getResult() != null
                                         && ((ItemPart) r.getResult().item.getItem()).createPart(r.getResult().item,
                                                 BluePower.proxy.getPlayer(), null, null).equals(
-                                                ((ItemPart) result.getItem()).createPart(result, BluePower.proxy.getPlayer(), null, null)))
+                                                        ((ItemPart) result.getItem()).createPart(result, BluePower.proxy.getPlayer(), null, null)))
                                     arecipes.add(r);
                             }
                             NullCellRecipe r = new NullCellRecipe(base, t1, false, null, false);
                             if (r.getResult() != null
                                     && ((ItemPart) r.getResult().item.getItem()).createPart(r.getResult().item,
                                             BluePower.proxy.getPlayer(), null, null).equals(
-                                            ((ItemPart) result.getItem()).createPart(result, BluePower.proxy.getPlayer(), null, null)))
+                                                    ((ItemPart) result.getItem()).createPart(result, BluePower.proxy.getPlayer(), null, null)))
                                 arecipes.add(r);
                             r = new NullCellRecipe(base, null, false, t1, false);
                             if (r.getResult() != null
                                     && ((ItemPart) r.getResult().item.getItem()).createPart(r.getResult().item,
                                             BluePower.proxy.getPlayer(), null, null).equals(
-                                            ((ItemPart) result.getItem()).createPart(result, BluePower.proxy.getPlayer(), null, null)))
+                                                    ((ItemPart) result.getItem()).createPart(result, BluePower.proxy.getPlayer(), null, null)))
                                 arecipes.add(r);
                         }
                     } else {
