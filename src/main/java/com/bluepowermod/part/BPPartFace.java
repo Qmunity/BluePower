@@ -99,6 +99,9 @@ public abstract class BPPartFace extends BPPart implements IPartFace, IFace, IPa
 
         super.onNeighborBlockChange();
 
+        if (getParent() == null || getWorld() == null || getWorld().isRemote)
+            return;
+
         if (!canStay())
             breakAndDrop(false);
     }
