@@ -65,6 +65,9 @@ public class RenderLamp extends TileEntitySpecialRenderer implements ISimpleBloc
     @Override
     public void renderTileEntityAt(TileEntity te, double x, double y, double z, float f) {
 
+        if (!(te.getBlockType() instanceof BlockLamp))
+            return;
+
         if (pass != 0) {
             BlockLamp bLamp = (BlockLamp) te.getBlockType();
             int power = ((TileLamp) te).getPower();
