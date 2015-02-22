@@ -255,13 +255,16 @@ public abstract class RedstonePropagator implements IPropagator<IRedstoneDevice>
                 RedstoneApi.getInstance().setWiresHandleUpdates(false);
                 getDevice().onRedstoneUpdate();
                 RedstoneApi.getInstance().setWiresHandleUpdates(did);
-
-                RedstoneApi.getInstance().setWiresOutputPower(true, false);
+                RedstoneApi.getInstance().setWiresOutputPower(true, true);
 
                 return;
             }
 
             List<Pair<IRedstoneDevice, ForgeDirection>> l = simplifyDeviceList(connections);
+            List<IRedstoneDevice> devs = new ArrayList<IRedstoneDevice>();
+            for (Pair<IRedstoneDevice, ForgeDirection> p : l)
+                if (!devs.contains(p.getKey()))
+                    devs.add(p.getKey());
 
             for (IConnection<IRedstoneDevice> c : connections)
                 c.getA().setRedstonePower(c.getSideA(), (byte) 0);
@@ -276,8 +279,8 @@ public abstract class RedstonePropagator implements IPropagator<IRedstoneDevice>
 
             boolean did = RedstoneApi.getInstance().shouldWiresHandleUpdates();
             RedstoneApi.getInstance().setWiresHandleUpdates(false);
-            for (Pair<IRedstoneDevice, ForgeDirection> p : l)
-                p.getKey().onRedstoneUpdate();
+            for (IRedstoneDevice d : devs)
+                d.onRedstoneUpdate();
             RedstoneApi.getInstance().setWiresHandleUpdates(did);
 
             List<RedstonePropagator> scheduled = new ArrayList<RedstonePropagator>();

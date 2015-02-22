@@ -63,8 +63,8 @@ public abstract class GuiGateSingleTime extends GuiGate {
     @Override
     public void renderGUI(int x, int y, float partialTicks) {
 
-        drawCenteredString(fontRendererObj, I18n.format("gui.timerInterval") + ": " + getTimerValue(getCurrentIntervalTicks()), guiLeft
-                + xSize / 2, guiTop + 10, 0xFFFFFF);
+        drawCenteredString(fontRendererObj, I18n.format("gui.bluepower:timer.interval") + ": " + getTimerValue(getCurrentIntervalTicks()),
+                guiLeft + xSize / 2, guiTop + 10, 0xFFFFFF);
     }
 
     private String getTimerValue(int ticks) {

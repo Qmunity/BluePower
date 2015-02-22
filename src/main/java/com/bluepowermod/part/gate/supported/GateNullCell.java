@@ -35,6 +35,7 @@ import uk.co.qmunity.lib.vec.Vec3i;
 
 import com.bluepowermod.BluePower;
 import com.bluepowermod.api.block.IAdvancedSilkyRemovable;
+import com.bluepowermod.api.gate.IGate;
 import com.bluepowermod.api.misc.IScrewdriver;
 import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.api.wire.ConnectionType;
@@ -49,6 +50,7 @@ import com.bluepowermod.item.ItemPart;
 import com.bluepowermod.part.BPPartFaceRotate;
 import com.bluepowermod.part.PartManager;
 import com.bluepowermod.part.gate.connection.GateConnectionBase;
+import com.bluepowermod.part.gate.ic.FakeMultipartTileIC;
 import com.bluepowermod.part.wire.redstone.PartRedwireFace;
 import com.bluepowermod.part.wire.redstone.PartRedwireFace.PartRedwireFaceUninsulated;
 import com.bluepowermod.part.wire.redstone.WireHelper;
@@ -60,9 +62,9 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class GateNullCell
-        extends
-        GateSupported<GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase>
-        implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor, IRedwire {
+extends
+GateSupported<GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase>
+implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor, IRedwire {
 
     private RedwireType typeA = null, typeB = null;
     private boolean bundledA = false, bundledB = false;
@@ -136,7 +138,7 @@ public class GateNullCell
             renderer.renderBox(new Vec3dCube(7 / 16D, 2 / 16D, 0 / 16D, 9 / 16D, 2 / 16D + (height / (nullcells[dir.ordinal()] ? 1 : 2)),
                     1 / 16D), wire);
             renderer.renderBox(new Vec3dCube(7 / 16D, 2 / 16D, 15 / 16D, 9 / 16D, 2 / 16D + (height / (nullcells[dir.getOpposite()
-                    .ordinal()] ? 1 : 2)), 16 / 16D), wire);
+                                                                                                                 .ordinal()] ? 1 : 2)), 16 / 16D), wire);
         }
 
         if (typeB != null) { // Supported
@@ -381,7 +383,8 @@ public class GateNullCell
             for (int i = 0; i < 6; i++)
                 nullcells[i] = buffer.readBoolean();
 
-        getWorld().markBlockRangeForRenderUpdate(getX(), getY(), getZ(), getX(), getY(), getZ());
+        if (getParent() != null && getWorld() != null)
+            getWorld().markBlockRangeForRenderUpdate(getX(), getY(), getZ(), getX(), getY(), getZ());
     }
 
     // Connectivity and propagation
@@ -422,6 +425,9 @@ public class GateNullCell
     @Override
     public boolean canConnect(ForgeDirection side, IRedstoneDevice device, ConnectionType type) {
 
+        if (type == ConnectionType.OPEN_CORNER && device instanceof IGate<?, ?, ?, ?, ?, ?>)
+            return false;
+
         if (type == ConnectionType.STRAIGHT)
             if ((side == getFace().getOpposite() || side == ForgeDirection.UNKNOWN) && device instanceof DummyRedstoneDevice)
                 return false;
@@ -442,6 +448,7 @@ public class GateNullCell
                     : (type == ConnectionType.CLOSED_CORNER ? getFace() : getFace().getOpposite()));
             if (rwt_ == null)
                 return false;
+
             return rwt.canConnectTo(rwt_);
         }
 
@@ -464,9 +471,14 @@ public class GateNullCell
             powerA = power;
         }
         if (type == 2 && typeB != null) {
-            updatedB |= powerA != powerB;
+            updatedB |= powerB != power;
             powerB = power;
         }
+        // powerA = power;
+        // powerB = power;
+        // updatedA = true;
+        // updatedB = true;
+        // sendUpdatePacket(-1);
     }
 
     @Override
@@ -494,7 +506,7 @@ public class GateNullCell
         }
         if (updatedB) {
             sendUpdatePacket(2);
-            updatedA = false;
+            updatedB = false;
         }
     }
 
@@ -552,7 +564,20 @@ public class GateNullCell
     @Override
     public Collection<Entry<IConnection<IRedstoneDevice>, Boolean>> propagate(ForgeDirection fromSide) {
 
+        if (getParent() instanceof FakeMultipartTileIC)
+            ((FakeMultipartTileIC) getParent()).getIC().loadWorld();
+
         List<Entry<IConnection<IRedstoneDevice>, Boolean>> l = new ArrayList<Entry<IConnection<IRedstoneDevice>, Boolean>>();
+
+        // // System.out.println("Propagating at (" + getX() + " " + getY() + " " + getZ() + ")");
+        // for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
+        // IConnection<IRedstoneDevice> c = redstoneConnections.getConnectionOnSide(d);
+        // if (c != null) {
+        // l.add(new Pair<IConnection<IRedstoneDevice>, Boolean>(c, c.getB() instanceof IRedwire
+        // && ((IRedwire) c.getB()).getRedwireType(c.getSideB()) != getRedwireType(c.getSideA())));
+        // // System.out.println(" - " + c.getA() + "  " + c.getB());
+        // }
+        // }
 
         if (!canPropagateFrom(fromSide))
             return l;
@@ -877,9 +902,13 @@ public class GateNullCell
 
         if (!(obj instanceof GateNullCell))
             return false;
-        GateNullCell g = (GateNullCell) obj;
 
-        return g.typeA == typeA && g.bundledA == bundledA && g.typeB == typeB && g.bundledB == bundledB;
+        if (getParent() == null && getWorld() == null) {
+            GateNullCell g = (GateNullCell) obj;
+            return g.typeA == typeA && g.bundledA == bundledA && g.typeB == typeB && g.bundledB == bundledB;
+        }
+
+        return super.equals(obj);
     }
 
 }

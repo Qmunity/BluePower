@@ -17,6 +17,9 @@
 
 package com.bluepowermod.part.gate.digital;
 
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.util.Arrays;
@@ -83,15 +86,8 @@ public class GateSequencer extends GateSimpleDigital implements IGuiButtonSensit
     @Override
     public void tick() {
 
-        if (getWorld().isRemote) {
-            // FIXME
+        if (getWorld().isRemote)
             return;
-        }
-
-        if (ticks % 500 == 0) {
-            p.setIncrement(0);
-            p.setIncrement(4 / (double) time);
-        }
 
         Arrays.fill(power, false);
 
@@ -107,20 +103,36 @@ public class GateSequencer extends GateSimpleDigital implements IGuiButtonSensit
 
         if (t >= 2D / 8D && t < 4D / 8D) {
             power[2] = true;
-            if (right().getOutput())
+            if (!right().getOutput()) {
                 playTickSound();
+
+                p.setAngle(p.getAngle());
+                p.setIncrement(4 / (double) time);
+            }
         } else if (t >= 4D / 8D && t < 6D / 8D) {
             power[3] = true;
-            if (back().getOutput())
+            if (!back().getOutput()) {
                 playTickSound();
+
+                p.setAngle(p.getAngle());
+                p.setIncrement(4 / (double) time);
+            }
         } else if (t >= 6D / 8D && t < 8D / 8D) {
             power[0] = true;
-            if (left().getOutput())
+            if (!left().getOutput()) {
                 playTickSound();
+
+                p.setAngle(p.getAngle());
+                p.setIncrement(4 / (double) time);
+            }
         } else if (t >= 0D / 8D && t < 2D / 8D) {
             power[1] = true;
-            if (front().getOutput())
+            if (!front().getOutput()) {
                 playTickSound();
+
+                p.setAngle(p.getAngle());
+                p.setIncrement(4 / (double) time);
+            }
         }
 
         left().setOutput(power[0]);
@@ -158,6 +170,20 @@ public class GateSequencer extends GateSimpleDigital implements IGuiButtonSensit
         start = tag.getInteger("start");
         ticks = tag.getInteger("ticks");
         time = tag.getInteger("time");
+    }
+
+    @Override
+    public void writeUpdateData(DataOutput buffer) throws IOException {
+
+        super.writeUpdateData(buffer);
+        buffer.writeInt(time);
+    }
+
+    @Override
+    public void readUpdateData(DataInput buffer) throws IOException {
+
+        super.readUpdateData(buffer);
+        time = buffer.readInt();
     }
 
     @Override

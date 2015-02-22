@@ -89,12 +89,12 @@ public abstract class GuiGateCounter extends GuiGate {
     @Override
     public void renderGUI(int x, int y, float partialTicks) {
 
-        drawCenteredString(fontRendererObj, I18n.format("gui.counterMax") + ": " + getCurrentMax(), guiLeft + xSize / 2, guiTop + 10,
-                0xFFFFFF);
-        drawCenteredString(fontRendererObj, I18n.format("gui.counterIncrement") + ": " + getCurrentIncrement(), guiLeft + xSize / 2,
-                guiTop + 10 + 38, 0xFFFFFF);
-        drawCenteredString(fontRendererObj, I18n.format("gui.counterDecrement") + ": " + getCurrentDecrement(), guiLeft + xSize / 2,
-                guiTop + 10 + 38 + 35, 0xFFFFFF);
+        drawCenteredString(fontRendererObj, I18n.format("gui.bluepower:counter.max") + ": " + getCurrentMax(), guiLeft + xSize / 2,
+                guiTop + 10, 0xFFFFFF);
+        drawCenteredString(fontRendererObj, I18n.format("gui.bluepower:counter.increment") + ": " + getCurrentIncrement(), guiLeft + xSize
+                / 2, guiTop + 10 + 38, 0xFFFFFF);
+        drawCenteredString(fontRendererObj, I18n.format("gui.bluepower:counter.decrement") + ": " + getCurrentDecrement(), guiLeft + xSize
+                / 2, guiTop + 10 + 38 + 35, 0xFFFFFF);
     }
 
     protected abstract int getCurrentMax();
