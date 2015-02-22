@@ -158,6 +158,7 @@ public class RenderCircuitTile implements IItemRenderer {
                 Tessellator.instance.draw();
             }
 
+            rh.setColor(0xFFFFFF);
             if (item.getItem() == BPItems.stone_bundle) {
                 GL11.glPushMatrix();
                 {
@@ -166,7 +167,8 @@ public class RenderCircuitTile implements IItemRenderer {
                     GL11.glTranslated(-0.5, 0.125, -0.5);
                     Tessellator.instance.startDrawingQuads();
                     rh.renderBox(new Vec3dCube(0.5 - (bundledWidth / 2), 2 / 16D, 0, 0.5 + (bundledWidth / 2), 2 / 16D + bundledHeight, 1),
-                            IconSupplier.wireBundledStraight1);
+                            null, IconSupplier.wireBundledStraight1, IconSupplier.wireBundledSide1, IconSupplier.wireBundledSide2,
+                            IconSupplier.wireBundledConnection, IconSupplier.wireBundledConnection);
                     Tessellator.instance.draw();
                 }
                 GL11.glPopMatrix();
