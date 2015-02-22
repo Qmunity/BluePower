@@ -103,7 +103,7 @@ public abstract class BPPartFace extends BPPart implements IPartFace, IFace, IPa
             return;
 
         if (!canStay())
-            breakAndDrop(false);
+            breakAndDrop(null, null);
     }
 
 }

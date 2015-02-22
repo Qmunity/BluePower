@@ -388,10 +388,8 @@ public abstract class PartLamp extends BPPartFace implements IPartRedstone, IRed
         super.readUpdateData(buffer);
         power = buffer.readByte();
 
-        try {
+        if (getParent() != null && getWorld() != null)
             getWorld().updateLightByType(EnumSkyBlock.Block, getX(), getY(), getZ());
-        } catch (Exception ex) {
-        }
     }
 
     @Override
