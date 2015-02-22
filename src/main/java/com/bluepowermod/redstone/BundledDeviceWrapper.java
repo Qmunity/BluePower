@@ -180,28 +180,29 @@ public class BundledDeviceWrapper implements IAdvancedRedstoneConductor {
         public IConnection<IRedstoneDevice> getConnectionOnSide(ForgeDirection side) {
 
             if (wrapper.device instanceof IInsulatedRedwire && ((IRedstoneDevice) wrapper.device).getRedstoneConnectionCache() != null) {
-                return (IConnection<IRedstoneDevice>) ((IRedstoneDevice) wrapper.device).getRedstoneConnectionCache().getConnectionOnSide(
-                        side);
-            } else {
-                IConnection<? extends IBundledDevice> original = wrapper.device.getBundledConnectionCache().getConnectionOnSide(side);
-
-                if (original != originalCons[side.ordinal()]) {
-                    if (original != null) {
-                        if (!(original.getB() instanceof IInsulatedRedstoneDevice)
-                                || (original.getB() instanceof IInsulatedRedstoneDevice && wrapper.color
-                                        .equals(((IInsulatedRedstoneDevice) original.getB()).getInsulationColor(original.getSideB()))))
-                            cons[side.ordinal()] = new RedstoneConnection(BundledDeviceWrapper.this, wrap(original.getB(), color), side,
-                                    original.getSideB(), original.getType());
-                        else
-                            cons[side.ordinal()] = null;
-                    } else {
-                        cons[side.ordinal()] = null;
-                    }
-                    originalCons[side.ordinal()] = original;
-                }
-
-                return cons[side.ordinal()];
+                IConnection<IRedstoneDevice> c = (IConnection<IRedstoneDevice>) ((IRedstoneDevice) wrapper.device)
+                        .getRedstoneConnectionCache().getConnectionOnSide(side);
+                if (c != null)
+                    return c;
             }
+            IConnection<? extends IBundledDevice> original = wrapper.device.getBundledConnectionCache().getConnectionOnSide(side);
+
+            if (original != originalCons[side.ordinal()]) {
+                if (original != null) {
+                    if (!(original.getB() instanceof IInsulatedRedstoneDevice)
+                            || (original.getB() instanceof IInsulatedRedstoneDevice && wrapper.color
+                                    .equals(((IInsulatedRedstoneDevice) original.getB()).getInsulationColor(original.getSideB()))))
+                        cons[side.ordinal()] = new RedstoneConnection(BundledDeviceWrapper.this, wrap(original.getB(), color), side,
+                                original.getSideB(), original.getType());
+                    else
+                        cons[side.ordinal()] = null;
+                } else {
+                    cons[side.ordinal()] = null;
+                }
+                originalCons[side.ordinal()] = original;
+            }
+
+            return cons[side.ordinal()];
         }
 
         @Override

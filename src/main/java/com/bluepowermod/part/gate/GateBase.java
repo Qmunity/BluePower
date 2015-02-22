@@ -33,6 +33,7 @@ import uk.co.qmunity.lib.part.IPartTicking;
 import uk.co.qmunity.lib.raytrace.QMovingObjectPosition;
 import uk.co.qmunity.lib.texture.Layout;
 import uk.co.qmunity.lib.transform.Rotation;
+import uk.co.qmunity.lib.transform.Transformation;
 import uk.co.qmunity.lib.vec.Vec3d;
 import uk.co.qmunity.lib.vec.Vec3dCube;
 import uk.co.qmunity.lib.vec.Vec3i;
@@ -70,8 +71,8 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public abstract class GateBase<C_BOTTOM extends GateConnectionBase, C_TOP extends GateConnectionBase, C_LEFT extends GateConnectionBase, C_RIGHT extends GateConnectionBase, C_FRONT extends GateConnectionBase, C_BACK extends GateConnectionBase>
-extends BPPartFaceRotate implements IGate<C_BOTTOM, C_TOP, C_LEFT, C_RIGHT, C_FRONT, C_BACK>, IPartRedstone, IConnectionListener,
-IRedstoneDevice, IBundledDevice, IPartTicking, IPartRenderPlacement, IIntegratedCircuitPart {
+        extends BPPartFaceRotate implements IGate<C_BOTTOM, C_TOP, C_LEFT, C_RIGHT, C_FRONT, C_BACK>, IPartRedstone, IConnectionListener,
+        IRedstoneDevice, IBundledDevice, IPartTicking, IPartRenderPlacement, IIntegratedCircuitPart {
 
     // Static var declarations
     private static Vec3dCube BOX = new Vec3dCube(0, 0, 0, 1, 2D / 16D, 1);
@@ -655,27 +656,19 @@ IRedstoneDevice, IBundledDevice, IPartTicking, IPartRenderPlacement, IIntegrated
     @SideOnly(Side.CLIENT)
     public boolean renderStatic(Vec3i translation, RenderHelper renderer, RenderBlocks renderBlocks, int pass) {
 
-        switch (getFace()) {
-        case DOWN:
-            break;
-        case UP:
-            renderer.addTransformation(new Rotation(180, 180, 0, Vec3d.center));
-            break;
-        case NORTH:
-            renderer.addTransformation(new Rotation(90, 0, 0, Vec3d.center));
-            break;
-        case SOUTH:
-            renderer.addTransformation(new Rotation(-90, 0, 0, Vec3d.center));
-            break;
-        case WEST:
-            renderer.addTransformation(new Rotation(0, 0, -90, Vec3d.center));
-            break;
-        case EAST:
-            renderer.addTransformation(new Rotation(0, 0, 90, Vec3d.center));
-            break;
-        default:
-            break;
-        }
+        Transformation t = null;
+        if (getFace() == ForgeDirection.UP)
+            t = new Rotation(180, 180, 0, Vec3d.center);
+        if (getFace() == ForgeDirection.NORTH)
+            t = new Rotation(90, 0, 0, Vec3d.center);
+        if (getFace() == ForgeDirection.SOUTH)
+            t = new Rotation(-90, 0, 0, Vec3d.center);
+        if (getFace() == ForgeDirection.WEST)
+            t = new Rotation(0, 0, -90, Vec3d.center);
+        if (getFace() == ForgeDirection.EAST)
+            t = new Rotation(0, 0, 90, Vec3d.center);
+        if (t != null)
+            renderer.addTransformation(t);
 
         int rotation = getRotation();
         if (rotation != -1)
@@ -686,6 +679,11 @@ IRedstoneDevice, IBundledDevice, IPartTicking, IPartRenderPlacement, IIntegrated
 
         for (IGateComponent c : getComponents())
             c.renderStatic(translation, renderer, pass);
+
+        if (rotation != -1)
+            renderer.removeTransformation();
+        if (t != null)
+            renderer.removeTransformation();
 
         return true;
     }
@@ -936,11 +934,11 @@ IRedstoneDevice, IBundledDevice, IPartTicking, IPartRenderPlacement, IIntegrated
 
         if (Config.enableGateSounds)
             Minecraft
-            .getMinecraft()
-            .getSoundHandler()
-            .playSound(
-                    new PositionedSoundRecord(new ResourceLocation("random.click"), 0.3F, 0.5F, getX() + 0.5F, getY() + 0.5F,
-                            getZ() + 0.5F));
+                    .getMinecraft()
+                    .getSoundHandler()
+                    .playSound(
+                            new PositionedSoundRecord(new ResourceLocation("random.click"), 0.3F, 0.5F, getX() + 0.5F, getY() + 0.5F,
+                                    getZ() + 0.5F));
     }
 
     @Override
