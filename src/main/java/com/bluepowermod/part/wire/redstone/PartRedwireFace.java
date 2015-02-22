@@ -945,22 +945,22 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
             // Sides
             if (s4 || s3) {
                 if (s3 || (!s1 && !s2))
-                    renderer.renderBox(new Vec3dCube(s3 ? (cornerConnect[d3.ordinal()] ? -height - size : 0) : 5 / 16D, y, 8 / 16D - width,
-                            8 / 16D - width, height + size, 8 / 16D + width), IconSupplier.wire);
+                    renderer.renderBox(new Vec3dCube(s3 ? (cornerConnect[d3.ordinal()] ? -height - size : 0.001) : 5 / 16D, y,
+                            8 / 16D - width, 8 / 16D - width, height + size, 8 / 16D + width), IconSupplier.wire);
                 if (s4 || (!s1 && !s2))
                     renderer.renderBox(new Vec3dCube(8 / 16D + width, y, 8 / 16D - width, s4 ? (cornerConnect[d4.ordinal()] ? 1 + height
-                            + size : 1) : 11 / 16D, height + size, 8 / 16D + width), IconSupplier.wire);
+                            + size : 0.999) : 11 / 16D, height + size, 8 / 16D + width), IconSupplier.wire);
                 if (s1)
-                    renderer.renderBox(new Vec3dCube(8 / 16D - width, y, s1 ? (cornerConnect[d1.ordinal()] ? -height - size : 0) : 4 / 16D,
-                            8 / 16D + width, height + size, 8 / 16D - width), IconSupplier.wire);
+                    renderer.renderBox(new Vec3dCube(8 / 16D - width, y, s1 ? (cornerConnect[d1.ordinal()] ? -height - size : 0.001)
+                            : 4 / 16D, 8 / 16D + width, height + size, 8 / 16D - width), IconSupplier.wire);
                 if (s2)
                     renderer.renderBox(new Vec3dCube(8 / 16D - width, y, 8 / 16D + width, 8 / 16D + width, height + size,
-                            s2 ? (cornerConnect[d2.ordinal()] ? 1 + height + size : 1) : 12 / 16D), IconSupplier.wire);
+                            s2 ? (cornerConnect[d2.ordinal()] ? 1 + height + size : 0.999) : 12 / 16D), IconSupplier.wire);
             } else {
-                renderer.renderBox(new Vec3dCube(8 / 16D - width, y, s1 ? (cornerConnect[d1.ordinal()] ? -height - size : 0) : 5 / 16D,
+                renderer.renderBox(new Vec3dCube(8 / 16D - width, y, s1 ? (cornerConnect[d1.ordinal()] ? -height - size : 0.001) : 5 / 16D,
                         8 / 16D + width, height + size, 8 / 16D - width), IconSupplier.wire);
                 renderer.renderBox(new Vec3dCube(8 / 16D - width, y, 8 / 16D + width, 8 / 16D + width, height + size,
-                        s2 ? (cornerConnect[d2.ordinal()] ? 1 + height + size : 1) : 11 / 16D), IconSupplier.wire);
+                        s2 ? (cornerConnect[d2.ordinal()] ? 1 + height + size : 0.999) : 11 / 16D), IconSupplier.wire);
             }
 
             double len = 1 / 16D;
@@ -1035,7 +1035,8 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
                                     render = true;
                                 if (getInsulationColor(bc.getSideA()) == MinecraftColor.NONE)
                                     render = true;
-                            } else if (!(dev instanceof IInsulatedRedstoneDevice)) {
+                            }
+                            if (!(dev instanceof IInsulatedRedstoneDevice)) {
                                 render = true;
                                 connected = true;
                             }
@@ -1418,6 +1419,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
             double size = 1 / 64D;
 
             double width = 1 / 48D;
+            double y = 0;
             double height = getHeight() / 16D;
 
             renderer.setColor(WireHelper.getColorForPowerLevel(getRedwireType(ForgeDirection.UNKNOWN), (byte) (255 / 2)/* power */));
@@ -1434,23 +1436,22 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
             // Sides
             if (s4 || s3) {
                 if (s3 || (!s1 && !s2))
-                    renderer.renderBox(new Vec3dCube(s3 ? (cornerConnect[d3.ordinal()] ? -height - size : 0) : 5 / 16D, height,
+                    renderer.renderBox(new Vec3dCube(s3 ? (cornerConnect[d3.ordinal()] ? -height - size : -size) : 5 / 16D, y,
                             8 / 16D - width, 8 / 16D - width, height + size, 8 / 16D + width), IconSupplier.wire);
                 if (s4 || (!s1 && !s2))
-                    renderer.renderBox(new Vec3dCube(8 / 16D + width, height, 8 / 16D - width, s4 ? (cornerConnect[d4.ordinal()] ? 1
-                            + height + size : 1) : 11 / 16D, height + size, 8 / 16D + width), IconSupplier.wire);
+                    renderer.renderBox(new Vec3dCube(8 / 16D + width, y, 8 / 16D - width, s4 ? (cornerConnect[d4.ordinal()] ? 1 + height
+                            + size : 1 + size) : 11 / 16D, height + size, 8 / 16D + width), IconSupplier.wire);
                 if (s1)
-                    renderer.renderBox(new Vec3dCube(8 / 16D - width, height, s1 ? (cornerConnect[d1.ordinal()] ? -height - size : 0)
+                    renderer.renderBox(new Vec3dCube(8 / 16D - width, y, s1 ? (cornerConnect[d1.ordinal()] ? -height - size : -size)
                             : 4 / 16D, 8 / 16D + width, height + size, 8 / 16D - width), IconSupplier.wire);
                 if (s2)
-                    renderer.renderBox(new Vec3dCube(8 / 16D - width, height, 8 / 16D + width, 8 / 16D + width, height + size,
-                            s2 ? (cornerConnect[d2.ordinal()] ? 1 + height + size : 1) : 12 / 16D), IconSupplier.wire);
+                    renderer.renderBox(new Vec3dCube(8 / 16D - width, y, 8 / 16D + width, 8 / 16D + width, height + size,
+                            s2 ? (cornerConnect[d2.ordinal()] ? 1 + height + size : 1 + size) : 12 / 16D), IconSupplier.wire);
             } else {
-                renderer.renderBox(
-                        new Vec3dCube(8 / 16D - width, height, s1 ? (cornerConnect[d1.ordinal()] ? -height - size : 0) : 5 / 16D,
-                                8 / 16D + width, height + size, 8 / 16D - width), IconSupplier.wire);
-                renderer.renderBox(new Vec3dCube(8 / 16D - width, height, 8 / 16D + width, 8 / 16D + width, height + size,
-                        s2 ? (cornerConnect[d2.ordinal()] ? 1 + height + size : 1) : 11 / 16D), IconSupplier.wire);
+                renderer.renderBox(new Vec3dCube(8 / 16D - width, y, s1 ? (cornerConnect[d1.ordinal()] ? -height - size : -size) : 5 / 16D,
+                        8 / 16D + width, height + size, 8 / 16D - width), IconSupplier.wire);
+                renderer.renderBox(new Vec3dCube(8 / 16D - width, y, 8 / 16D + width, 8 / 16D + width, height + size,
+                        s2 ? (cornerConnect[d2.ordinal()] ? 1 + height + size : 1 + size) : 11 / 16D), IconSupplier.wire);
             }
 
             return true;
@@ -1495,8 +1496,8 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
 
             super.readUpdateData(buffer);
 
-            // if (getParent() != null && getWorld() != null)
-            // getWorld().markBlockRangeForRenderUpdate(getX(), getY(), getZ(), getX(), getY(), getZ());
+            if (getParent() != null && getWorld() != null)
+                getWorld().markBlockRangeForRenderUpdate(getX(), getY(), getZ(), getX(), getY(), getZ());
         }
 
         @Override
