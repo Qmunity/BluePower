@@ -70,8 +70,10 @@ import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.part.gate.ic.FakeMultipartTileIC;
 import com.bluepowermod.part.wire.PartWireFreestanding;
 import com.bluepowermod.redstone.BundledConnectionCache;
+import com.bluepowermod.redstone.BundledDeviceWrapper;
 import com.bluepowermod.redstone.DummyRedstoneDevice;
 import com.bluepowermod.redstone.RedstoneApi;
+import com.bluepowermod.redstone.RedstoneConnection;
 import com.bluepowermod.redstone.RedstoneConnectionCache;
 
 public abstract class PartRedwireFreestanding extends PartWireFreestanding implements IRedwire, IRedConductor, IIntegratedCircuitPart,
@@ -486,7 +488,7 @@ IPartRedstone {
     }
 
     public static class PartRedwireFreestandingInsulated extends PartRedwireFreestanding implements IAdvancedRedstoneConductor,
-    IInsulatedRedstoneDevice, IAdvancedBundledConductor, IConnectionListener {
+    IInsulatedRedstoneDevice, IAdvancedBundledConductor, IInsulatedRedwire, IConnectionListener {
 
         private RedstoneConnectionCache connections = RedstoneApi.getInstance().createRedstoneConnectionCache(this);
         private BundledConnectionCache bundledConnections = RedstoneApi.getInstance().createBundledConnectionCache(this);
@@ -712,7 +714,15 @@ IPartRedstone {
                 if (c != null)
                     l.add(new Pair<IConnection<IRedstoneDevice>, Boolean>(c, c.getB() instanceof IRedwire
                             && ((IRedwire) c.getB()).getRedwireType(c.getSideB()) != getRedwireType(c.getSideA())));
+
+                IConnection<IBundledDevice> cB = bundledConnections.getConnectionOnSide(d);
+                if (cB != null)
+                    l.add(new Pair<IConnection<IRedstoneDevice>, Boolean>(new RedstoneConnection(this, BundledDeviceWrapper.wrap(cB.getB(),
+                            color), cB.getSideA(), cB.getSideB(), cB.getType()), cB.getB() instanceof IRedwire
+                            && ((IRedwire) cB.getB()).getRedwireType(cB.getSideB()) != getRedwireType(cB.getSideA())));
             }
+
+            System.out.println("Propagating");
 
             return l;
         }
@@ -753,11 +763,10 @@ IPartRedstone {
 
             // Refresh connections
             connections.recalculateConnections();
-            ForgeDirection d = ForgeDirection.UNKNOWN;
-            for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS)
-                if (getRedstoneConnectionCache().getConnectionOnSide(dir) != null)
-                    d = dir;
-            RedstoneApi.getInstance().getRedstonePropagator(this, d).propagate();
+            bundledConnections.recalculateConnections();
+
+            RedstoneApi.getInstance().getRedstonePropagator(this, ForgeDirection.DOWN).propagate();
+            RedstoneApi.getInstance().getBundledPropagator(this, ForgeDirection.DOWN).propagate();
         }
 
         // Rendering methods
@@ -1016,6 +1025,7 @@ IPartRedstone {
         public Collection<Entry<IConnection<IBundledDevice>, Boolean>> propagateBundled(ForgeDirection fromSide) {
 
             List<Entry<IConnection<IBundledDevice>, Boolean>> l = new ArrayList<Entry<IConnection<IBundledDevice>, Boolean>>();
+
             for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
                 IConnection<IBundledDevice> c = bundledConnections.getConnectionOnSide(d);
                 if (c != null)
@@ -1047,6 +1057,7 @@ IPartRedstone {
 
             // Refresh connections
             bundledConnections.recalculateConnections();
+
             RedstoneApi.getInstance().getBundledPropagator(this, ForgeDirection.DOWN).propagate();
         }
 
