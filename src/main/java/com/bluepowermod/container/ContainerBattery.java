@@ -1,12 +1,17 @@
 package com.bluepowermod.container;
 
+import com.bluepowermod.ClientProxy;
 import com.bluepowermod.container.slot.SlotMachineInput;
 import com.bluepowermod.tile.tier2.TileBattery;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
+import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import uk.co.qmunity.lib.client.gui.GuiContainerBase;
 
 /**!
  * @author Koen Beckers (K4Unl)
@@ -15,6 +20,10 @@ import net.minecraft.item.ItemStack;
 public class ContainerBattery extends Container {
 
     private final TileBattery tileBattery;
+    private final static int AMPSTORED = 0;
+    private final static int AMPMAX = 1;
+    public float ampStored;
+    public float ampMax;
 
     public ContainerBattery(InventoryPlayer invPlayer, TileBattery battery) {
 
@@ -50,7 +59,7 @@ public class ContainerBattery extends Container {
     @Override
     public ItemStack transferStackInSlot(EntityPlayer player, int par2) {
 
-        //TODO: A check that checks if it's ICharchable
+        //TODO: A check that checks if it's IChargable
         ItemStack itemstack = null;
         Slot slot = (Slot) inventorySlots.get(par2);
         if (slot != null && slot.getHasStack()) {
@@ -71,5 +80,46 @@ public class ContainerBattery extends Container {
             }
         }
         return itemstack;
+    }
+
+    /**
+     * Looks for changes made in the container, sends them to every listener.
+     */
+    @Override
+    public void detectAndSendChanges() {
+
+        super.detectAndSendChanges();
+
+        for (Object crafter : crafters) {
+            ICrafting icrafting = (ICrafting) crafter;
+
+            if (ampStored != tileBattery.getHandler().getAmpStored()) {
+                icrafting.sendProgressBarUpdate(this, AMPSTORED, (int)tileBattery.getHandler().getAmpStored());
+            }
+
+            if (ampMax != tileBattery.getHandler().getMaxAmp()) {
+                icrafting.sendProgressBarUpdate(this, AMPMAX, (int)tileBattery.getHandler().getMaxAmp());
+            }
+
+        }
+
+        ampStored = tileBattery.getHandler().getAmpStored();
+        ampMax = tileBattery.getHandler().getMaxAmp();
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void updateProgressBar(int index, int value) {
+
+        if (index == AMPSTORED) {
+            //tileBattery.getHandler().getAmpStored()
+            tileBattery.setAmpStored(value);
+            ((GuiContainerBase) ClientProxy.getOpenedGui()).redraw();
+        }
+        if(index == AMPMAX){
+            tileBattery.setMaxAmp(value);
+            ((GuiContainerBase) ClientProxy.getOpenedGui()).redraw();
+        }
+
     }
 }

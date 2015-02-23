@@ -11,14 +11,16 @@ import net.minecraft.util.ResourceLocation;
  * @author Koen Beckers (K4Unl)
  */
 
-public class GuiBattery extends GuiBase {
+public class GuiBattery extends GuiContainerBaseBP {
 
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/batterybox.png");
+    private TileBattery tile;
 
     public GuiBattery(InventoryPlayer invPlayer, TileBattery battery) {
 
         super(battery, new ContainerBattery(invPlayer, battery), resLoc);
         ySize = 170;
+        tile = battery;
     }
 
 
@@ -26,7 +28,8 @@ public class GuiBattery extends GuiBase {
     public void initGui() {
 
         super.initGui();
-        WidgetPowerBar mainPowerWidget = new WidgetPowerBar(0, guiLeft + 59, guiTop + 25);
+        float percentage = tile.getAmpStored() / tile.getMaxAmp();
+        WidgetPowerBar mainPowerWidget = new WidgetPowerBar(0, guiLeft + 59, guiTop + 25, percentage);
         addWidget(mainPowerWidget);
     }
 }

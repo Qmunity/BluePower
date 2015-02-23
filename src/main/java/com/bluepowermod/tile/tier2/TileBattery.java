@@ -6,7 +6,9 @@ import com.bluepowermod.api.bluepower.IBluePowered;
 import com.bluepowermod.api.bluepower.IChargable;
 import com.bluepowermod.api.bluepower.IPowerBase;
 import com.bluepowermod.init.BPBlocks;
-import com.bluepowermod.tile.TileMachineBase;
+import com.bluepowermod.tile.TileBase;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -16,10 +18,17 @@ import net.minecraftforge.common.util.ForgeDirection;
 /**
  * @author Koen Beckers (K4Unl)
  */
-public class TileBattery extends TileMachineBase implements IBluePowered, IInventory {
+public class TileBattery extends TileBase implements IBluePowered, IInventory {
 
     private ItemStack[] inventory = new ItemStack[2];
+
     private IPowerBase handler;
+
+    @SideOnly(Side.CLIENT)
+    private float ampStored;
+    @SideOnly(Side.CLIENT)
+    private float maxAmp;
+
 
     @Override
     public boolean isPowered() {
@@ -35,6 +44,9 @@ public class TileBattery extends TileMachineBase implements IBluePowered, IInven
 
     @Override
     public IPowerBase getHandler() {
+        if(worldObj.isRemote){
+            throw new IllegalStateException("Handler can only be accessed from the server!");
+        }
 
         if(handler == null){
 
@@ -160,4 +172,26 @@ public class TileBattery extends TileMachineBase implements IBluePowered, IInven
 
         return itemToTest.getItem() instanceof IChargable;
     }
+
+
+    @SideOnly(Side.CLIENT)
+    public void setAmpStored(float newAmp){
+        ampStored = newAmp;
+    }
+
+    @SideOnly(Side.CLIENT)
+    public void setMaxAmp(float newAmp){
+        maxAmp = newAmp;
+    }
+
+    @SideOnly(Side.CLIENT)
+    public float getAmpStored(){
+        return ampStored;
+    }
+
+    @SideOnly(Side.CLIENT)
+    public float getMaxAmp(){
+        return maxAmp;
+    }
+
 }
