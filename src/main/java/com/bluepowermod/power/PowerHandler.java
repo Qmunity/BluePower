@@ -117,7 +117,7 @@ public class PowerHandler implements IPowerBase {
             getNetwork().setCurrentStored(getNetwork().getCurrentStored() + amp);
         }else{
             //Explode?
-
+            getNetwork().setCurrentStored((getNetwork().getMaxStored()));
         }
     }
 
