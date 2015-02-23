@@ -7,10 +7,10 @@
  */
 package com.bluepowermod.tile.tier2;
 
-import uk.co.qmunity.lib.part.compat.MultipartCompatibility;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import uk.co.qmunity.lib.part.compat.MultipartCompatibility;
 
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.part.tube.PneumaticTube;

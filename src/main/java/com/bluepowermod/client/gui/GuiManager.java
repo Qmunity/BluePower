@@ -23,15 +23,15 @@ import java.util.List;
 
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
+import uk.co.qmunity.lib.client.gui.widget.BaseWidget;
+import uk.co.qmunity.lib.client.gui.widget.IGuiWidget;
+import uk.co.qmunity.lib.client.gui.widget.WidgetMode;
 
-import com.bluepowermod.client.gui.widget.BaseWidget;
-import com.bluepowermod.client.gui.widget.IGuiWidget;
 import com.bluepowermod.client.gui.widget.WidgetColor;
 import com.bluepowermod.client.gui.widget.WidgetFuzzySetting;
-import com.bluepowermod.client.gui.widget.WidgetMode;
 import com.bluepowermod.client.gui.widget.WidgetNumber;
 import com.bluepowermod.container.ContainerManager;
-import com.bluepowermod.network.NetworkHandler;
+import com.bluepowermod.network.BPNetworkHandler;
 import com.bluepowermod.network.message.MessageGuiUpdate;
 import com.bluepowermod.tile.tier3.TileManager;
 import com.bluepowermod.util.Refs;
@@ -39,7 +39,7 @@ import com.bluepowermod.util.Refs;
 /**
  * @author MineMaarten
  */
-public class GuiManager extends GuiBase {
+public class GuiManager extends GuiContainerBaseBP {
 
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/manager.png");
     protected TileManager manager;
@@ -64,21 +64,21 @@ public class GuiManager extends GuiBase {
             @Override
             public void addTooltip(int mouseX, int mouseY, List<String> curTip, boolean shiftPressed) {
 
-                curTip.add("gui.mode");
+                curTip.add("gui.bluepower:sortingMachine.mode");
                 String mode = null;
                 switch (value) {
                 case 0:
-                    mode = "gui.manager.mode.exact";
+                    mode = "gui.bluepower:manager.mode.exact";
                     break;
                 case 1:
-                    mode = "gui.manager.mode.all";
+                    mode = "gui.bluepower:manager.mode.all";
                     break;
                 }
                 curTip.add(mode);
                 if (shiftPressed) {
                     curTip.add(mode + ".info");
                 } else {
-                    curTip.add("gui.sneakForInfo");
+                    curTip.add("gui.bluepower:tooltip.sneakForInfo");
                 }
             }
         };
@@ -90,8 +90,8 @@ public class GuiManager extends GuiBase {
             @Override
             public void addTooltip(int mouseX, int mouseY, List<String> curTip, boolean shiftPressed) {
 
-                curTip.add("gui.priority");
-                curTip.add("gui.priority.info");
+                curTip.add("gui.bluepower:sortingMachine.priority");
+                curTip.add("gui.bluepower:sortingMachine.priority.info");
             }
         };
         numberWidget.value = manager.priority;
@@ -106,6 +106,6 @@ public class GuiManager extends GuiBase {
     public void actionPerformed(IGuiWidget widget) {
 
         BaseWidget baseWidget = (BaseWidget) widget;
-        NetworkHandler.sendToServer(new MessageGuiUpdate(manager, widget.getID(), baseWidget.value));
+        BPNetworkHandler.INSTANCE.sendToServer(new MessageGuiUpdate(manager, widget.getID(), baseWidget.value));
     }
 }

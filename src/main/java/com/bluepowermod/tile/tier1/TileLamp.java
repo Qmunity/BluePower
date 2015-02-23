@@ -15,14 +15,18 @@ import uk.co.qmunity.lib.helper.MathHelper;
 import uk.co.qmunity.lib.helper.RedstoneHelper;
 
 import com.bluepowermod.api.misc.MinecraftColor;
-import com.bluepowermod.api.redstone.IBundledDevice;
+import com.bluepowermod.api.wire.ConnectionType;
+import com.bluepowermod.api.wire.redstone.IBundledDevice;
+import com.bluepowermod.api.wire.redstone.IInsulatedRedstoneDevice;
 import com.bluepowermod.block.machine.BlockLamp;
 import com.bluepowermod.block.machine.BlockLampRGB;
 import com.bluepowermod.client.render.RenderLamp;
+import com.bluepowermod.redstone.BundledConnectionCache;
+import com.bluepowermod.redstone.RedstoneApi;
 import com.bluepowermod.tile.TileBase;
 
 /**
- * @author Koen Beckers (K4Unl) Yes. I only need this class to do the getPower() function.. damn :(
+ * @author Koen Beckers (K4Unl) and Amadornes. Yes. I only need this class to do the getPower() function.. damn :(
  */
 public class TileLamp extends TileBase implements IBundledDevice {
 
@@ -30,7 +34,7 @@ public class TileLamp extends TileBase implements IBundledDevice {
 
     private byte[] bundledPower = new byte[16];
 
-    private IBundledDevice[] devices = new IBundledDevice[6];
+    private BundledConnectionCache connections = RedstoneApi.getInstance().createBundledConnectionCache(this);
 
     public int getPower() {
 
@@ -40,6 +44,14 @@ public class TileLamp extends TileBase implements IBundledDevice {
     public void onUpdate() {
 
         if (blockType instanceof BlockLampRGB) {
+            connections.recalculateConnections();
+            int connected = 0;
+            for (ForgeDirection s : ForgeDirection.VALID_DIRECTIONS)
+                connected += (connections.getConnectionOnSide(s) != null) ? 1 : 0;
+
+            if (connected == 0)
+                bundledPower = new byte[16];
+
             int pow = 0;
             if (((BlockLamp) blockType).isInverted()) {
                 pow = 255 - Math.min(
@@ -58,7 +70,10 @@ public class TileLamp extends TileBase implements IBundledDevice {
                 power = pow;
                 sendUpdatePacket();
                 getWorldObj().markBlockRangeForRenderUpdate(xCoord, yCoord, zCoord, xCoord, yCoord, zCoord);
-                getWorldObj().updateLightByType(EnumSkyBlock.Block, xCoord, yCoord, zCoord);
+                try {
+                    getWorldObj().updateLightByType(EnumSkyBlock.Block, xCoord, yCoord, zCoord);
+                } catch (Exception ex) {
+                }
                 getWorldObj().notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, getBlockType());
             }
         }
@@ -124,33 +139,22 @@ public class TileLamp extends TileBase implements IBundledDevice {
     }
 
     @Override
-    public boolean canConnectBundledStraight(ForgeDirection side, IBundledDevice device) {
+    public boolean canConnect(ForgeDirection side, IBundledDevice dev, ConnectionType type) {
 
-        return side != ForgeDirection.UNKNOWN;
+        if (!(getWorld().getBlock(getX(), getY(), getZ()) instanceof BlockLampRGB))
+            return false;
+        if (dev instanceof IInsulatedRedstoneDevice)
+            return false;
+        if (dev instanceof TileLamp)
+            return false;
+
+        return type == ConnectionType.STRAIGHT && side != ForgeDirection.UNKNOWN;
     }
 
     @Override
-    public boolean canConnectBundledOpenCorner(ForgeDirection side, IBundledDevice device) {
+    public BundledConnectionCache getBundledConnectionCache() {
 
-        return false;
-    }
-
-    @Override
-    public void onConnect(ForgeDirection side, IBundledDevice device) {
-
-        devices[side.ordinal()] = device;
-    }
-
-    @Override
-    public void onDisconnect(ForgeDirection side) {
-
-        devices[side.ordinal()] = null;
-    }
-
-    @Override
-    public IBundledDevice getBundledDeviceOnSide(ForgeDirection side) {
-
-        return devices[side.ordinal()];
+        return connections;
     }
 
     @Override
@@ -178,21 +182,9 @@ public class TileLamp extends TileBase implements IBundledDevice {
     }
 
     @Override
-    public MinecraftColor getBundledColor() {
+    public MinecraftColor getBundledColor(ForgeDirection side) {
 
         return MinecraftColor.NONE;
-    }
-
-    @Override
-    public boolean isBundled() {
-
-        return blockType instanceof BlockLampRGB;
-    }
-
-    @Override
-    public boolean isNormalBlock() {
-
-        return true;
     }
 
     public int getColor() {
@@ -202,5 +194,11 @@ public class TileLamp extends TileBase implements IBundledDevice {
         int b = MathHelper.map(bundledPower[MinecraftColor.BLUE.ordinal()] & 0xFF, 0, 255, 20, 235);
 
         return (r << 16) + (g << 8) + b;
+    }
+
+    @Override
+    public boolean isNormalFace(ForgeDirection side) {
+
+        return true;
     }
 }

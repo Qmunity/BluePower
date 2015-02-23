@@ -9,7 +9,7 @@ package com.bluepowermod.api;
 
 import com.bluepowermod.api.bluepower.IPowerBase;
 import com.bluepowermod.api.recipe.IAlloyFurnaceRegistry;
-import com.bluepowermod.api.redstone.IRedstoneApi;
+import com.bluepowermod.api.wire.redstone.IRedstoneApi;
 import com.bluepowermod.part.BPPart;
 import cpw.mods.fml.common.Loader;
 import net.minecraft.item.ItemStack;

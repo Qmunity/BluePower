@@ -1,8 +1,11 @@
 package com.bluepowermod.network.message;
 
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
 import uk.co.qmunity.lib.network.LocatedPacket;
 import uk.co.qmunity.lib.part.IPart;
@@ -10,7 +13,7 @@ import uk.co.qmunity.lib.part.ITilePartHolder;
 import uk.co.qmunity.lib.part.compat.MultipartCompatibility;
 
 import com.bluepowermod.api.misc.Accessibility;
-import com.bluepowermod.network.NetworkHandler;
+import com.bluepowermod.network.BPNetworkHandler;
 import com.bluepowermod.part.gate.wireless.Frequency;
 import com.bluepowermod.part.gate.wireless.IWirelessGate;
 import com.bluepowermod.part.gate.wireless.WirelessManager;
@@ -37,12 +40,12 @@ public class MessageWirelessNewFreq extends LocatedPacket<MessageWirelessNewFreq
     }
 
     @Override
-    public void handleClientSide(MessageWirelessNewFreq message, EntityPlayer player) {
+    public void handleClientSide(EntityPlayer player) {
 
     }
 
     @Override
-    public void handleServerSide(MessageWirelessNewFreq message, EntityPlayer player) {
+    public void handleServerSide(EntityPlayer player) {
 
         Frequency freq = (Frequency) WirelessManager.COMMON_INSTANCE.registerFrequency(player, name, acc, bundled);
 
@@ -59,28 +62,28 @@ public class MessageWirelessNewFreq extends LocatedPacket<MessageWirelessNewFreq
 
         p.setFrequency(freq);
 
-        NetworkHandler.sendTo(new MessageWirelessFrequencySync(player), (EntityPlayerMP) player);
+        BPNetworkHandler.INSTANCE.sendTo(new MessageWirelessFrequencySync(player), (EntityPlayerMP) player);
     }
 
     @Override
-    public void write(NBTTagCompound tag) {
+    public void write(DataOutput buffer) throws IOException {
 
-        super.write(tag);
+        super.write(buffer);
 
-        tag.setInteger("acc", acc.ordinal());
-        tag.setString("name", name);
-        tag.setBoolean("bundled", bundled);
-        tag.setInteger("gate", face.ordinal());
+        buffer.writeInt(acc.ordinal());
+        buffer.writeUTF(name);
+        buffer.writeBoolean(bundled);
+        buffer.writeInt(face.ordinal());
     }
 
     @Override
-    public void read(NBTTagCompound tag) {
+    public void read(DataInput buffer) throws IOException {
 
-        super.read(tag);
+        super.read(buffer);
 
-        acc = Accessibility.values()[tag.getInteger("acc")];
-        name = tag.getString("name");
-        bundled = tag.getBoolean("bundled");
-        face = ForgeDirection.getOrientation(tag.getInteger("gate"));
+        acc = Accessibility.values()[buffer.readInt()];
+        name = buffer.readUTF();
+        bundled = buffer.readBoolean();
+        face = ForgeDirection.getOrientation(buffer.readInt());
     }
 }

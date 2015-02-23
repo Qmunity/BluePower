@@ -9,56 +9,70 @@ package com.bluepowermod.network.message;
 
 import io.netty.buffer.ByteBuf;
 
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import uk.co.qmunity.lib.network.Packet;
 
 import com.bluepowermod.tile.tier3.TileCircuitDatabase;
 
 import cpw.mods.fml.common.network.ByteBufUtils;
 
-public class MessageSendClientServerTemplates extends AbstractPacket<MessageSendClientServerTemplates> {
-    
+public class MessageSendClientServerTemplates extends Packet<MessageSendClientServerTemplates> {
+
     private List<ItemStack> stacks;
-    
+
     public MessageSendClientServerTemplates() {
-    
+
     }
-    
+
     public MessageSendClientServerTemplates(List<ItemStack> stacks) {
-    
+
         this.stacks = stacks;
     }
-    
+
     @Override
     public void fromBytes(ByteBuf buf) {
-    
+
         int amount = buf.readInt();
         stacks = new ArrayList<ItemStack>();
         for (int i = 0; i < amount; i++) {
             stacks.add(ByteBufUtils.readItemStack(buf));
         }
     }
-    
+
     @Override
     public void toBytes(ByteBuf buf) {
-    
+
         buf.writeInt(stacks.size());
         for (ItemStack stack : stacks)
             ByteBufUtils.writeItemStack(buf, stack);
     }
-    
+
     @Override
-    public void handleClientSide(MessageSendClientServerTemplates message, EntityPlayer player) {
-    
-        TileCircuitDatabase.serverDatabaseStacks = message.stacks;
+    public void write(DataOutput buffer) throws IOException {
+
     }
-    
+
     @Override
-    public void handleServerSide(MessageSendClientServerTemplates message, EntityPlayer player) {
-    
+    public void read(DataInput buffer) throws IOException {
+
     }
-    
+
+    @Override
+    public void handleClientSide(EntityPlayer player) {
+
+        TileCircuitDatabase.serverDatabaseStacks = stacks;
+    }
+
+    @Override
+    public void handleServerSide(EntityPlayer player) {
+
+    }
+
 }

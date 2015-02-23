@@ -17,14 +17,14 @@ import com.bluepowermod.container.ContainerMonitor;
 import com.bluepowermod.tile.tier3.TileMonitor;
 import com.bluepowermod.util.Refs;
 
-public class GuiMonitor extends GuiBase {
-    
-    private static final ResourceLocation resLoc            = new ResourceLocation(Refs.MODID + ":textures/gui/monitorgui.png");
+public class GuiMonitor extends GuiContainerBaseBP {
+
+    private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID + ":textures/gui/monitorgui.png");
     private static final ResourceLocation chracterSetResLoc = new ResourceLocation(Refs.MODID + ":textures/gui/65el02_chars.png");
-    private final TileMonitor             monitor;
-    
+    private final TileMonitor monitor;
+
     public GuiMonitor(InventoryPlayer invPlayer, TileMonitor monitor) {
-    
+
         super(new ContainerMonitor(invPlayer, monitor), resLoc);
         this.monitor = monitor;
         xSize = 350;
@@ -32,25 +32,25 @@ public class GuiMonitor extends GuiBase {
         width = 350 / 2;
         // TODO: fix height and width fields as well
     }
-    
+
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-    
+
     }
-    
+
     @Override
     protected void drawGuiContainerBackgroundLayer(float f, int i, int j) {
-    
+
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        this.mc.getTextureManager().bindTexture(resLoc);
-        int k = (this.width - this.xSize) / 2;
-        int l = (this.height - this.ySize) / 2;
-        this.drawTexturedModalRect2(k, l, 0, 0, this.xSize, this.ySize);
-        
+        mc.getTextureManager().bindTexture(resLoc);
+        int k = (width - xSize) / 2;
+        int l = (height - ySize) / 2;
+        drawTexturedModalRect2(k, l, 0, 0, xSize, ySize);
+
         // screen color
-        this.mc.getTextureManager().bindTexture(chracterSetResLoc);
-        GL11.glColor4f(monitor.screenColor[0], monitor.screenColor[1], monitor.screenColor[2], 1.0F);
-        
+        mc.getTextureManager().bindTexture(chracterSetResLoc);
+        GL11.glColor4f(TileMonitor.screenColor[0], TileMonitor.screenColor[1], TileMonitor.screenColor[2], 1.0F);
+
         for (int row = 0; row < 50; row++) {
             for (int col = 0; col < 80; col++) {
                 byte character = monitor.screenMemory[row * 80 + col];
@@ -61,13 +61,13 @@ public class GuiMonitor extends GuiBase {
             }
         }
     }
-    
+
     private void drawCharacter(int row, int col, byte character) {
-    
+
         int x = (width - xSize) / 2;
         int y = (height - ySize) / 2;
         int tempOffset = 0; // 350;
-        if (monitor.mode80x40) {
+        if (TileMonitor.mode80x40) {
             // Not implemented yet
             drawTexturedModalRect3(x + 15 + col * 4, y + 15 + row * 4, tempOffset + (character & 0xF) * 8, (character >> 4) * 8, 8, 8);
         } else {
@@ -75,43 +75,35 @@ public class GuiMonitor extends GuiBase {
             drawTexturedModalRect3(x + 15 + col * 4, y + 15 + row * 4, tempOffset + (character & 0xF) * 8, (character >> 4) * 8, 8, 8);
         }
     }
-    
+
     /**
      * Draws a textured rectangle at the stored z-value. Args: x, y, u, v, width, height
      */
     @SuppressWarnings("cast")
     public void drawTexturedModalRect2(int x, int z, int u, int v, int w, int h) {
-    
+
         float f = 0.00195313F;
         float f1 = 0.00390625F;
         Tessellator tessellator = Tessellator.instance;
         tessellator.startDrawingQuads();
-        tessellator.addVertexWithUV((double) (x + 0), (double) (z + h), (double) this.zLevel, (double) ((float) (u + 0) * f),
-                (double) ((float) (v + h) * f1));
-        tessellator.addVertexWithUV((double) (x + w), (double) (z + h), (double) this.zLevel, (double) ((float) (u + w) * f),
-                (double) ((float) (v + h) * f1));
-        tessellator.addVertexWithUV((double) (x + w), (double) (z + 0), (double) this.zLevel, (double) ((float) (u + w) * f),
-                (double) ((float) (v + 0) * f1));
-        tessellator.addVertexWithUV((double) (x + 0), (double) (z + 0), (double) this.zLevel, (double) ((float) (u + 0) * f),
-                (double) ((float) (v + 0) * f1));
+        tessellator.addVertexWithUV(x + 0, z + h, zLevel, (u + 0) * f, (v + h) * f1);
+        tessellator.addVertexWithUV(x + w, z + h, zLevel, (u + w) * f, (v + h) * f1);
+        tessellator.addVertexWithUV(x + w, z + 0, zLevel, (u + w) * f, (v + 0) * f1);
+        tessellator.addVertexWithUV(x + 0, z + 0, zLevel, (u + 0) * f, (v + 0) * f1);
         tessellator.draw();
     }
-    
+
     @SuppressWarnings("cast")
     public void drawTexturedModalRect3(int x, int z, int u, int v, int w, int h) {
-    
+
         float f = 0.00390625F;
         float f1 = 0.00390625F;
         Tessellator tessellator = Tessellator.instance;
         tessellator.startDrawingQuads();
-        tessellator.addVertexWithUV((double) (x + 0), (double) (z + h), (double) this.zLevel, (double) ((float) (u + 0) * f),
-                (double) ((float) (v + h) * f1));
-        tessellator.addVertexWithUV((double) (x + w), (double) (z + h), (double) this.zLevel, (double) ((float) (u + w) * f),
-                (double) ((float) (v + h) * f1));
-        tessellator.addVertexWithUV((double) (x + w), (double) (z + 0), (double) this.zLevel, (double) ((float) (u + w) * f),
-                (double) ((float) (v + 0) * f1));
-        tessellator.addVertexWithUV((double) (x + 0), (double) (z + 0), (double) this.zLevel, (double) ((float) (u + 0) * f),
-                (double) ((float) (v + 0) * f1));
+        tessellator.addVertexWithUV(x + 0, z + h, zLevel, (u + 0) * f, (v + h) * f1);
+        tessellator.addVertexWithUV(x + w, z + h, zLevel, (u + w) * f, (v + h) * f1);
+        tessellator.addVertexWithUV(x + w, z + 0, zLevel, (u + w) * f, (v + 0) * f1);
+        tessellator.addVertexWithUV(x + 0, z + 0, zLevel, (u + 0) * f, (v + 0) * f1);
         tessellator.draw();
     }
 }

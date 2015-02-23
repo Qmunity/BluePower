@@ -9,7 +9,11 @@ import net.minecraftforge.common.util.ForgeDirection;
 import uk.co.qmunity.lib.vec.Vec3i;
 
 import com.bluepowermod.api.misc.MinecraftColor;
-import com.bluepowermod.api.redstone.IBundledDevice;
+import com.bluepowermod.api.wire.ConnectionType;
+import com.bluepowermod.api.wire.IConnectionCache;
+import com.bluepowermod.api.wire.redstone.IBundledDevice;
+import com.bluepowermod.redstone.BundledConnectionCache;
+import com.bluepowermod.redstone.RedstoneApi;
 
 import dan200.computercraft.api.ComputerCraftAPI;
 
@@ -31,10 +35,8 @@ public class BundledDeviceCCComputer implements IBundledDevice {
     }
 
     private Vec3i loc;
-
-    private IBundledDevice[] devices = new IBundledDevice[6];
-
     private byte[][] curPow = new byte[6][16];
+    private BundledConnectionCache connections = RedstoneApi.getInstance().createBundledConnectionCache(this);
 
     public BundledDeviceCCComputer(Vec3i loc) {
 
@@ -66,33 +68,15 @@ public class BundledDeviceCCComputer implements IBundledDevice {
     }
 
     @Override
-    public boolean canConnectBundledStraight(ForgeDirection side, IBundledDevice device) {
+    public boolean canConnect(ForgeDirection side, IBundledDevice dev, ConnectionType type) {
 
-        return side != ForgeDirection.UNKNOWN;
+        return type == ConnectionType.STRAIGHT || side != ForgeDirection.UNKNOWN;
     }
 
     @Override
-    public boolean canConnectBundledOpenCorner(ForgeDirection side, IBundledDevice device) {
+    public IConnectionCache<? extends IBundledDevice> getBundledConnectionCache() {
 
-        return false;// side != ForgeDirection.UNKNOWN;
-    }
-
-    @Override
-    public void onConnect(ForgeDirection side, IBundledDevice device) {
-
-        devices[side.ordinal()] = device;
-    }
-
-    @Override
-    public void onDisconnect(ForgeDirection side) {
-
-        devices[side.ordinal()] = null;
-    }
-
-    @Override
-    public IBundledDevice getBundledDeviceOnSide(ForgeDirection side) {
-
-        return devices[side.ordinal()];
+        return connections;
     }
 
     @Override
@@ -133,21 +117,15 @@ public class BundledDeviceCCComputer implements IBundledDevice {
     }
 
     @Override
-    public MinecraftColor getBundledColor() {
+    public MinecraftColor getBundledColor(ForgeDirection side) {
 
         return MinecraftColor.NONE;
     }
 
     @Override
-    public boolean isBundled() {
+    public boolean isNormalFace(ForgeDirection side) {
 
         return true;
-    }
-
-    @Override
-    public boolean isNormalBlock() {
-
-        return false;
     }
 
 }

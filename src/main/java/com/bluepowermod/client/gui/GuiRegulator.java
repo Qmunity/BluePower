@@ -23,14 +23,14 @@ import java.util.List;
 
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
+import uk.co.qmunity.lib.client.gui.widget.BaseWidget;
+import uk.co.qmunity.lib.client.gui.widget.IGuiWidget;
+import uk.co.qmunity.lib.client.gui.widget.WidgetMode;
 
-import com.bluepowermod.client.gui.widget.BaseWidget;
-import com.bluepowermod.client.gui.widget.IGuiWidget;
 import com.bluepowermod.client.gui.widget.WidgetColor;
 import com.bluepowermod.client.gui.widget.WidgetFuzzySetting;
-import com.bluepowermod.client.gui.widget.WidgetMode;
 import com.bluepowermod.container.ContainerRegulator;
-import com.bluepowermod.network.NetworkHandler;
+import com.bluepowermod.network.BPNetworkHandler;
 import com.bluepowermod.network.message.MessageGuiUpdate;
 import com.bluepowermod.tile.tier2.TileRegulator;
 import com.bluepowermod.util.Refs;
@@ -38,7 +38,7 @@ import com.bluepowermod.util.Refs;
 /**
  * @author MineMaarten
  */
-public class GuiRegulator extends GuiBase {
+public class GuiRegulator extends GuiContainerBaseBP {
 
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/regulator.png");
     protected TileRegulator regulator;
@@ -63,12 +63,12 @@ public class GuiRegulator extends GuiBase {
             @Override
             public void addTooltip(int mouseX, int mouseY, List<String> curTip, boolean shiftPressed) {
 
-                curTip.add("gui.mode");
-                curTip.add("gui.regulator.mode." + (value == 0 ? "ratio" : "supply"));
+                curTip.add("gui.bluepower:sortingMachine.mode");
+                curTip.add("gui.bluepower:regulator.mode." + (value == 0 ? "ratio" : "supply"));
                 if (shiftPressed) {
-                    curTip.add("gui.regulator.mode." + (value == 0 ? "ratio" : "supply") + ".info");
+                    curTip.add("gui.bluepower:regulator.mode." + (value == 0 ? "ratio" : "supply") + ".info");
                 } else {
-                    curTip.add("gui.sneakForInfo");
+                    curTip.add("gui.bluepower:tooltip.sneakForInfo");
                 }
             }
         };
@@ -84,6 +84,6 @@ public class GuiRegulator extends GuiBase {
     public void actionPerformed(IGuiWidget widget) {
 
         BaseWidget baseWidget = (BaseWidget) widget;
-        NetworkHandler.sendToServer(new MessageGuiUpdate(regulator, widget.getID(), baseWidget.value));
+        BPNetworkHandler.INSTANCE.sendToServer(new MessageGuiUpdate(regulator, widget.getID(), baseWidget.value));
     }
 }

@@ -28,12 +28,13 @@ import com.bluepowermod.init.Config;
 import com.bluepowermod.init.OreDictionarySetup;
 import com.bluepowermod.init.Recipes;
 import com.bluepowermod.init.TileEntities;
-import com.bluepowermod.network.NetworkHandler;
+import com.bluepowermod.network.BPNetworkHandler;
 import com.bluepowermod.part.PartManager;
-import com.bluepowermod.part.wire.redstone.RedstoneApi;
-import com.bluepowermod.part.wire.redstone.RedstoneProviderQmunityLib;
-import com.bluepowermod.part.wire.redstone.RedstoneProviderVanilla;
+import com.bluepowermod.part.tube.RedstoneProviderTube;
 import com.bluepowermod.recipe.AlloyFurnaceRegistry;
+import com.bluepowermod.redstone.RedstoneApi;
+import com.bluepowermod.redstone.RedstoneProviderQmunityLib;
+import com.bluepowermod.redstone.RedstoneProviderVanilla;
 import com.bluepowermod.util.Achievements;
 import com.bluepowermod.util.Refs;
 import com.bluepowermod.world.WorldGenerationHandler;
@@ -90,6 +91,7 @@ public class BluePower {
         MinecraftForge.EVENT_BUS.register(new WorldConversionEventHandler());
 
         RedstoneApi.getInstance().registerRedstoneProvider(new RedstoneProviderQmunityLib());
+        RedstoneApi.getInstance().registerRedstoneProvider(new RedstoneProviderTube());
     }
 
     @EventHandler
@@ -106,7 +108,7 @@ public class BluePower {
         GameRegistry.registerWorldGenerator(new WorldGenerationHandler(), 0);
 
         proxy.init();
-        NetworkHandler.init();
+        BPNetworkHandler.initBP();
         NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GUIHandler());
         CompatibilityUtils.init(event);
 
@@ -115,8 +117,6 @@ public class BluePower {
 
     @EventHandler
     public void postInit(FMLPostInitializationEvent event) {
-
-        PartManager.registerItems();
 
         CompatibilityUtils.postInit(event);
         proxy.initRenderers();

@@ -13,7 +13,7 @@
  *
  *     You should have received a copy of the GNU General Public License
  *     along with Blue Power.  If not, see <http://www.gnu.org/licenses/>
- *     
+ *
  *     @author Quetzi
  */
 
@@ -26,15 +26,15 @@ import com.bluepowermod.container.ContainerKinect;
 import com.bluepowermod.tile.tier3.TileKinectGenerator;
 import com.bluepowermod.util.Refs;
 
-public class GuiKinect extends GuiBase {
+public class GuiKinect extends GuiContainerBaseBP {
 
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/kinect.png");
-    private final TileKinectGenerator              kinect;
+    private final TileKinectGenerator kinect;
 
     public GuiKinect(InventoryPlayer invPlayer, TileKinectGenerator kinect) {
 
         super(new ContainerKinect(invPlayer, kinect), resLoc);
         this.kinect = kinect;
-        this.ySize = 165;
+        ySize = 165;
     }
 }

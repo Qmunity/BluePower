@@ -7,6 +7,8 @@
  */
 package com.bluepowermod.part.tube;
 
+import java.io.DataInput;
+import java.io.DataOutput;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -37,7 +39,7 @@ import com.bluepowermod.api.tube.ITubeConnection;
 import com.bluepowermod.api.tube.IWeightedTubeInventory;
 import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.init.Config;
-import com.bluepowermod.network.NetworkHandler;
+import com.bluepowermod.network.BPNetworkHandler;
 import com.bluepowermod.network.message.MessageRedirectTubeStack;
 import com.bluepowermod.tile.IFuzzyRetrieving;
 import com.bluepowermod.tile.tier3.TileManager;
@@ -153,7 +155,7 @@ public class TubeLogic implements IPneumaticTube {
                         } else {
                             tubeStack.heading = heading.getKey();
                         }
-                        NetworkHandler.sendToAllAround(new MessageRedirectTubeStack(tube, tubeStack), tube.getWorld());
+                        BPNetworkHandler.INSTANCE.sendToAllAround(new MessageRedirectTubeStack(tube, tubeStack), tube.getWorld());
                     } else {
                         tubeStack.enabled = false;
                     }
@@ -418,6 +420,14 @@ public class TubeLogic implements IPneumaticTube {
         roundRobinCounter = tag.getInteger("roundRobinCounter");
     }
 
+    public void writeData(DataOutput buffer) {
+
+    }
+
+    public void readData(DataInput buffer) {
+
+    }
+
     @SideOnly(Side.CLIENT)
     public void renderDynamic(Vec3d pos, float partialTick) {
 
@@ -459,7 +469,7 @@ public class TubeLogic implements IPneumaticTube {
                     int colorMask = nodeTube.getColor(ForgeDirection.getOrientation(i)) != TubeColor.NONE ? 1 << nodeTube.getColor(
                             ForgeDirection.getOrientation(i)).ordinal() : 0;
                     if (tube != null) {
-                        int dist = tube.getWeigth();
+                        int dist = tube.getWeight();
                         if (tube.getColor(ForgeDirection.getOrientation(i).getOpposite()) != TubeColor.NONE)
                             colorMask = colorMask | 1 << tube.getColor(ForgeDirection.getOrientation(i).getOpposite()).ordinal();
                         ForgeDirection curDir = ForgeDirection.getOrientation(i);
@@ -485,7 +495,7 @@ public class TubeLogic implements IPneumaticTube {
                                 } else {
                                     if (!tube.initialized)
                                         break;
-                                    dist += tube.getWeigth();
+                                    dist += tube.getWeight();
                                     if (tube.getColor(curDir.getOpposite()) != TubeColor.NONE) {
                                         colorMask = colorMask | 1 << tube.getColor(curDir.getOpposite()).ordinal();
                                     }

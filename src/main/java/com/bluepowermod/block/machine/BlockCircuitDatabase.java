@@ -25,7 +25,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import com.bluepowermod.helper.ItemStackDatabase;
-import com.bluepowermod.network.NetworkHandler;
+import com.bluepowermod.network.BPNetworkHandler;
 import com.bluepowermod.network.message.MessageSendClientServerTemplates;
 import com.bluepowermod.tile.TileBase;
 import com.bluepowermod.tile.tier3.TileCircuitDatabase;
@@ -34,46 +34,47 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockCircuitDatabase extends BlockProjectTable {
-    
+
     public BlockCircuitDatabase(Class<? extends TileBase> tileClass) {
-    
+
         super(tileClass);
     }
-    
+
     @Override
     @SideOnly(Side.CLIENT)
     public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
-    
+
         if (side < 2) {
             return super.getIcon(world, x, y, z, side);
         } else {
             return textureSide;
         }
-        
+
     }
-    
+
     @Override
     @SideOnly(Side.CLIENT)
     public void registerBlockIcons(IIconRegister iconRegister) {
-    
+
         textureTop = iconRegister.registerIcon(getTextureName() + "_top");
         textureBottom = iconRegister.registerIcon(getTextureName() + "_bottom");
         textureSide = iconRegister.registerIcon(getTextureName() + "_side");
     }
-    
+
     @Override
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int par6, float par7, float par8, float par9) {
-    
+
         if (super.onBlockActivated(world, x, y, z, player, par6, par7, par8, par9)) {
             TileCircuitDatabase database = (TileCircuitDatabase) world.getTileEntity(x, y, z);
             database.clientCurrentTab = 0;
             if (!world.isRemote) {
-                NetworkHandler.sendTo(new MessageSendClientServerTemplates(new ItemStackDatabase().loadItemStacks()), (EntityPlayerMP) player);
+                BPNetworkHandler.INSTANCE.sendTo(new MessageSendClientServerTemplates(new ItemStackDatabase().loadItemStacks()),
+                        (EntityPlayerMP) player);
             }
             return true;
         } else {
             return false;
         }
     }
-    
+
 }

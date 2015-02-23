@@ -19,12 +19,15 @@
 
 package com.bluepowermod.container;
 
-import com.bluepowermod.util.Dependencies;
-
-import cpw.mods.fml.common.Optional;
 import invtweaks.api.container.ChestContainer;
 import invtweaks.api.container.ContainerSection;
 import invtweaks.api.container.ContainerSectionCallback;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
@@ -35,11 +38,9 @@ import com.bluepowermod.container.inventory.InventoryItem;
 import com.bluepowermod.container.slot.SlotExclude;
 import com.bluepowermod.container.slot.SlotLocked;
 import com.bluepowermod.init.BPItems;
+import com.bluepowermod.util.Dependencies;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import cpw.mods.fml.common.Optional;
 
 @ChestContainer
 public class ContainerCanvasBag extends Container {

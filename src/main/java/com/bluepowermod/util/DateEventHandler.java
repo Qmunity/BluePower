@@ -30,6 +30,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 
 public class DateEventHandler {
+
     private static Random rand = new Random();
 
     public static enum Event {
@@ -39,21 +40,25 @@ public class DateEventHandler {
         private final int day;
 
         Event(int day, int month) {
+
             this.month = month;
             this.day = day;
         }
 
         public boolean isEvent(Calendar calendar) {
+
             return calendar.get(2) + 1 == month && calendar.get(5) == day;
         }
     }
 
     public static boolean isEvent(Event event) {
+
         Calendar calendar = Calendar.getInstance();
         return event.isEvent(calendar);
     }
 
     public static void spawnFirework(World world, double x, double y, double z) {
+
         ItemStack rocket = new ItemStack(Items.fireworks);
 
         ItemStack itemstack1 = getFireworkCharge();
@@ -78,11 +83,12 @@ public class DateEventHandler {
     }
 
     private static ItemStack getFireworkCharge() {
+
         ItemStack charge = new ItemStack(Items.firework_charge);
         NBTTagCompound nbttagcompound = new NBTTagCompound();
         NBTTagCompound nbttagcompound1 = new NBTTagCompound();
         byte b0 = 0;
-        ArrayList arraylist = new ArrayList();
+        ArrayList<Integer> arraylist = new ArrayList<Integer>();
 
         arraylist.add(Integer.valueOf(ItemDye.field_150922_c[rand.nextInt(16)]));
 
@@ -97,7 +103,7 @@ public class DateEventHandler {
         int[] aint = new int[arraylist.size()];
 
         for (int j2 = 0; j2 < aint.length; ++j2) {
-            aint[j2] = ((Integer) arraylist.get(j2)).intValue();
+            aint[j2] = arraylist.get(j2).intValue();
         }
 
         nbttagcompound1.setIntArray("Colors", aint);

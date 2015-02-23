@@ -11,11 +11,16 @@ import net.minecraftforge.client.IItemRenderer;
 import org.lwjgl.opengl.GL11;
 
 import uk.co.qmunity.lib.client.render.RenderHelper;
+import uk.co.qmunity.lib.transform.Translation;
 import uk.co.qmunity.lib.vec.Vec3dCube;
+import uk.co.qmunity.lib.vec.Vec3i;
 
+import com.bluepowermod.api.wire.redstone.RedwireType;
 import com.bluepowermod.init.BPItems;
-import com.bluepowermod.part.wire.redstone.RedwireType;
-import com.bluepowermod.part.wire.redstone.WireCommons;
+import com.bluepowermod.part.gate.component.GateComponentQuartzResonator;
+import com.bluepowermod.part.gate.component.GateComponentSiliconChip;
+import com.bluepowermod.part.gate.component.GateComponentTaintedSiliconChip;
+import com.bluepowermod.part.wire.redstone.WireHelper;
 
 public class RenderCircuitTile implements IItemRenderer {
 
@@ -78,7 +83,7 @@ public class RenderCircuitTile implements IItemRenderer {
             IIcon wireTexture = IconSupplier.wire;
 
             // Bluestone tiles
-            rh.setColor(WireCommons.getColorForPowerLevel(RedwireType.BLUESTONE.getColor(), (byte) (255 / 2)));
+            rh.setColor(WireHelper.getColorForPowerLevel(RedwireType.BLUESTONE, (byte) (255 / 2)));
             if (item.getItem() == BPItems.bluestone_cathode_tile) {
                 com.bluepowermod.client.render.RenderHelper.renderDigitalRedstoneTorch(0, 0, 0, 13 / 16D, true);
                 Tessellator.instance.startDrawingQuads();
@@ -116,7 +121,7 @@ public class RenderCircuitTile implements IItemRenderer {
             }
 
             // Redstone tiles
-            rh.setColor(WireCommons.getColorForPowerLevel(RedwireType.RED_ALLOY.getColor(), (byte) (255 / 2)));
+            rh.setColor(WireHelper.getColorForPowerLevel(RedwireType.RED_ALLOY, (byte) (255 / 2)));
             if (item.getItem() == BPItems.redstone_cathode_tile) {
                 com.bluepowermod.client.render.RenderHelper.renderAnalogRedstoneTorch(0, 0, 0, 13 / 16D, true);
                 Tessellator.instance.startDrawingQuads();
@@ -153,18 +158,8 @@ public class RenderCircuitTile implements IItemRenderer {
                 Tessellator.instance.draw();
             }
 
-            // Misc renderers
             rh.setColor(0xFFFFFF);
-            if (item.getItem() == BPItems.quartz_resonator_tile) {
-                com.bluepowermod.client.render.RenderHelper.renderQuartzResonator(0, 0, -0.125);
-            }
-            if (item.getItem() == BPItems.silicon_chip_tile) {
-                com.bluepowermod.client.render.RenderHelper.renderRandomizerButton(0, 0, -0.125, false);
-            }
-            if (item.getItem() == BPItems.taintedsilicon_chip_tile) {
-                com.bluepowermod.client.render.RenderHelper.renderRandomizerButton(0, 0, -0.125, true);
-            }
-            if (item.getItem() == BPItems.stone_bundle_tile) {
+            if (item.getItem() == BPItems.stone_bundle) {
                 GL11.glPushMatrix();
                 {
                     GL11.glTranslated(0.5, 0, 0.5);
@@ -172,13 +167,27 @@ public class RenderCircuitTile implements IItemRenderer {
                     GL11.glTranslated(-0.5, 0.125, -0.5);
                     Tessellator.instance.startDrawingQuads();
                     rh.renderBox(new Vec3dCube(0.5 - (bundledWidth / 2), 2 / 16D, 0, 0.5 + (bundledWidth / 2), 2 / 16D + bundledHeight, 1),
-                            IconSupplier.wireBundled, IconSupplier.wireBundled, IconSupplier.wireBundled2, IconSupplier.wireBundled3,
-                            IconSupplier.wireBundled, IconSupplier.wireBundled);
+                            null, IconSupplier.wireBundledStraight1, IconSupplier.wireBundledSide1, IconSupplier.wireBundledSide2,
+                            IconSupplier.wireBundledConnection, IconSupplier.wireBundledConnection);
                     Tessellator.instance.draw();
                 }
                 GL11.glPopMatrix();
             }
 
+            // Misc renderers
+            rh.setColor(0xFFFFFF);
+            rh.addTransformation(new Translation(0.375, 0, 0.375));
+            Tessellator.instance.startDrawingQuads();
+            if (item.getItem() == BPItems.quartz_resonator_tile) {
+                new GateComponentQuartzResonator(null, -1).renderStatic(new Vec3i(0, 0, 0), rh, 0);
+            }
+            if (item.getItem() == BPItems.silicon_chip_tile) {
+                new GateComponentSiliconChip(null, -1).setState(true).renderStatic(new Vec3i(0, 0, 0), rh, 0);
+            }
+            if (item.getItem() == BPItems.tainted_silicon_chip_tile) {
+                new GateComponentTaintedSiliconChip(null, -1).setState(true).renderStatic(new Vec3i(0, 0, 0), rh, 0);
+            }
+            Tessellator.instance.draw();
             rh.reset();
         }
         GL11.glPopMatrix();

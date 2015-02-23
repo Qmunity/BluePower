@@ -17,12 +17,13 @@
 
 package com.bluepowermod.block.worldgen;
 
-import com.bluepowermod.init.BPItems;
+import java.util.Random;
+
 import net.minecraft.item.Item;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 
-import java.util.Random;
+import com.bluepowermod.init.BPItems;
 
 /**
  * Created by Quetzi on 03/09/14.

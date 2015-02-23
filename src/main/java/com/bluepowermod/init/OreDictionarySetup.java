@@ -21,8 +21,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
 import com.bluepowermod.api.misc.MinecraftColor;
+import com.bluepowermod.api.wire.redstone.RedwireType;
 import com.bluepowermod.part.PartManager;
-import com.bluepowermod.part.wire.redstone.RedwireType;
 
 public class OreDictionarySetup {
 
@@ -46,13 +46,6 @@ public class OreDictionarySetup {
         OreDictionary.registerOre("blockRuby", BPBlocks.ruby_block);
         OreDictionary.registerOre("blockSapphire", BPBlocks.sapphire_block);
 
-        OreDictionary.registerOre("glass", BPBlocks.sapphire_glass);
-        OreDictionary.registerOre("blockGlass", BPBlocks.sapphire_glass);
-        OreDictionary.registerOre("blockGlassColorless", BPBlocks.sapphire_glass);
-        OreDictionary.registerOre("glass", BPBlocks.reinforced_sapphire_glass);
-        OreDictionary.registerOre("blockGlass", BPBlocks.reinforced_sapphire_glass);
-        OreDictionary.registerOre("blockGlassColorless", BPBlocks.reinforced_sapphire_glass);
-
         OreDictionary.registerOre("gemRuby", BPItems.ruby_gem);
         OreDictionary.registerOre("gemAmethyst", BPItems.amethyst_gem);
         OreDictionary.registerOre("gemSapphire", BPItems.sapphire_gem);
@@ -72,9 +65,18 @@ public class OreDictionarySetup {
 
         for (RedwireType t : RedwireType.values()) {
             for (MinecraftColor c : MinecraftColor.VALID_COLORS) {
-                ItemStack wire = PartManager.getPartInfo("wire." + t.getName() + "." + c.name().toLowerCase()).getStack(1);
-                OreDictionary.registerOre(t.getName() + "Insulated", wire.getItem());
+                ItemStack wireInsulated = PartManager.getPartInfo("wire." + t.getName() + "." + c.name().toLowerCase()).getStack(1);
+                OreDictionary.registerOre(t.getName() + "Insulated", wireInsulated.getItem());
+                OreDictionary.registerOre("wireInsulated", wireInsulated.getItem());
+
+                ItemStack wireBundled = PartManager.getPartInfo("wire." + t.getName() + ".bundled." + c.name().toLowerCase()).getStack(1);
+                OreDictionary.registerOre(t.getName() + "Bundled", wireBundled.getItem());
+                OreDictionary.registerOre("wireBundled", wireBundled.getItem());
             }
+
+            ItemStack wireBundled = PartManager.getPartInfo("wire." + t.getName() + ".bundled").getStack(1);
+            OreDictionary.registerOre(t.getName() + "Bundled", wireBundled.getItem());
+            OreDictionary.registerOre("wireBundled", wireBundled.getItem());
         }
     }
 

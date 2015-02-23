@@ -51,14 +51,39 @@ public abstract class PartWireFace extends BPPartFace {
     @SideOnly(Side.CLIENT)
     protected abstract IIcon getWireIcon(ForgeDirection side);
 
+    @SideOnly(Side.CLIENT)
+    protected IIcon getWireIcon(ForgeDirection side, ForgeDirection face) {
+
+        return getWireIcon(face);
+    }
+
+    @SideOnly(Side.CLIENT)
+    protected IIcon[] getIcons(ForgeDirection side) {
+
+        return new IIcon[] { getWireIcon(side, ForgeDirection.DOWN), getWireIcon(side, ForgeDirection.UP),
+                getWireIcon(side, ForgeDirection.WEST), getWireIcon(side, ForgeDirection.EAST), getWireIcon(side, ForgeDirection.NORTH),
+                getWireIcon(side, ForgeDirection.SOUTH) };
+    }
+
+    protected boolean shouldIgnoreLighting() {
+
+        return false;
+    }
+
+    protected int getBrightness() {
+
+        return 0xF000F0;
+    }
+
     @Override
     @SideOnly(Side.CLIENT)
     public boolean renderStatic(Vec3i translation, RenderHelper renderer, RenderBlocks renderBlocks, int pass) {
 
+        renderer.setIgnoreLighting(shouldIgnoreLighting());
+        renderer.setLightingOverride(getBrightness());
+
         double height = (getHeight() / 16D) - 0.001;
         double width = getWidth() / 32D;
-        IIcon[] icons = new IIcon[] { getWireIcon(ForgeDirection.DOWN), getWireIcon(ForgeDirection.UP), getWireIcon(ForgeDirection.WEST),
-                getWireIcon(ForgeDirection.EAST), getWireIcon(ForgeDirection.NORTH), getWireIcon(ForgeDirection.SOUTH) };
         int color = getColorMultiplier();
 
         ForgeDirection d1 = ForgeDirection.NORTH;
@@ -121,27 +146,31 @@ public abstract class PartWireFace extends BPPartFace {
         renderer.setColor(color);
 
         // Center
-        renderer.renderBox(new Vec3dCube(8 / 16D - width, 0, 8 / 16D - width, 8 / 16D + width, height, 8 / 16D + width), icons);
+        renderer.renderBox(new Vec3dCube(8 / 16D - width, 0, 8 / 16D - width, 8 / 16D + width, height, 8 / 16D + width),
+                getIcons(ForgeDirection.UNKNOWN));
         // Sides
         if (s4 || s3) {
             if (s3 || (!s3 && s4 && !s1 && !s2))
                 renderer.renderBox(new Vec3dCube(s3 ? (extendsToCorner(d3) ? -height : 0) : 4 / 16D, 0, 8 / 16D - width, 8 / 16D - width,
-                        height, 8 / 16D + width), icons);
+                        height, 8 / 16D + width), getIcons(ForgeDirection.WEST));
             if (s4 || (s3 && !s4 && !s1 && !s2))
                 renderer.renderBox(new Vec3dCube(8 / 16D + width, 0, 8 / 16D - width, s4 ? 1 + (extendsToCorner(d4) ? height : 0)
-                        : 12 / 16D, height, 8 / 16D + width), icons);
+                        : 12 / 16D, height, 8 / 16D + width), getIcons(ForgeDirection.EAST));
             if (s1)
                 renderer.renderBox(new Vec3dCube(8 / 16D - width, 0, s1 ? (extendsToCorner(d1) ? -height : 0) : 4 / 16D, 8 / 16D + width,
-                        height, 8 / 16D - width), icons);
+                        height, 8 / 16D - width), getIcons(ForgeDirection.NORTH));
             if (s2)
                 renderer.renderBox(new Vec3dCube(8 / 16D - width, 0, 8 / 16D + width, 8 / 16D + width, height,
-                        s2 ? 1 + (extendsToCorner(d2) ? height : 0) : 12 / 16D), icons);
+                        s2 ? 1 + (extendsToCorner(d2) ? height : 0) : 12 / 16D), getIcons(ForgeDirection.SOUTH));
         } else {
             renderer.renderBox(new Vec3dCube(8 / 16D - width, 0, s1 ? (extendsToCorner(d1) ? -height : 0) : 4 / 16D, 8 / 16D + width,
-                    height, 8 / 16D - width), icons);
+                    height, 8 / 16D - width), getIcons(ForgeDirection.NORTH));
             renderer.renderBox(new Vec3dCube(8 / 16D - width, 0, 8 / 16D + width, 8 / 16D + width, height,
-                    s2 ? 1 + (extendsToCorner(d2) ? height : 0) : 12 / 16D), icons);
+                    s2 ? 1 + (extendsToCorner(d2) ? height : 0) : 12 / 16D), getIcons(ForgeDirection.SOUTH));
         }
+
+        renderer.setIgnoreLighting(false);
+        renderer.setColor(0xFFFFFF);
 
         return true;
     }

@@ -14,6 +14,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.minecraft.item.ItemStack;
+
 import com.bluepowermod.compat.cc.CompatModuleCC;
 import com.bluepowermod.compat.fmp.CompatModuleFMP;
 import com.bluepowermod.compat.hydcraft.CompatModuleHydCraft;
@@ -113,6 +115,14 @@ public class CompatibilityUtils {
 
         for (CompatModule m : getLoadedModules())
             m.registerRenders();
+    }
+
+    public static boolean isScrewdriver(ItemStack item) {
+
+        for (CompatModule m : getLoadedModules())
+            if (m.isScrewdriver(item))
+                return true;
+        return false;
     }
 
     /**

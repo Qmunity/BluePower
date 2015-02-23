@@ -7,22 +7,6 @@
  */
 package com.bluepowermod.event;
 
-import com.bluepowermod.ClientProxy;
-import com.bluepowermod.client.gui.GuiCircuitDatabaseSharing;
-import com.bluepowermod.container.ContainerSeedBag;
-import com.bluepowermod.container.inventory.InventoryItem;
-import com.bluepowermod.init.BPBlocks;
-import com.bluepowermod.init.BPEnchantments;
-import com.bluepowermod.init.BPItems;
-import com.bluepowermod.item.ItemSeedBag;
-import com.bluepowermod.item.ItemSickle;
-import com.bluepowermod.part.PartManager;
-import com.bluepowermod.util.Achievements;
-import cpw.mods.fml.common.eventhandler.Event.Result;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.PlayerEvent;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -45,9 +29,25 @@ import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 
-public class BPEventHandler {
+import com.bluepowermod.ClientProxy;
+import com.bluepowermod.client.gui.GuiCircuitDatabaseSharing;
+import com.bluepowermod.container.ContainerSeedBag;
+import com.bluepowermod.container.inventory.InventoryItem;
+import com.bluepowermod.init.BPBlocks;
+import com.bluepowermod.init.BPEnchantments;
+import com.bluepowermod.init.BPItems;
+import com.bluepowermod.item.ItemSeedBag;
+import com.bluepowermod.item.ItemSickle;
+import com.bluepowermod.part.PartManager;
+import com.bluepowermod.util.Achievements;
 
-    private boolean warned = false;
+import cpw.mods.fml.common.eventhandler.Event.Result;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.PlayerEvent;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
+public class BPEventHandler {
 
     @SubscribeEvent
     public void onAnvilEvent(AnvilUpdateEvent event) {
@@ -68,8 +68,8 @@ public class BPEventHandler {
         if (event.action == PlayerInteractEvent.Action.LEFT_CLICK_BLOCK && event.entityPlayer.capabilities.isCreativeMode) {
             ItemStack heldItem = event.entityPlayer.getCurrentEquippedItem();
             if (heldItem != null && heldItem.getItem() instanceof ItemSickle) {
-                heldItem.getItem().onBlockDestroyed(heldItem, event.world, event.world.getBlock(event.x, event.y, event.z), event.x, event.y,
-                        event.z, event.entityPlayer);
+                heldItem.getItem().onBlockDestroyed(heldItem, event.world, event.world.getBlock(event.x, event.y, event.z), event.x,
+                        event.y, event.z, event.entityPlayer);
             }
         }
     }
@@ -101,7 +101,7 @@ public class BPEventHandler {
             }
         }
 
-        if(pickUp.getItem().equals(Item.getItemFromBlock(BPBlocks.tungsten_ore))){
+        if (pickUp.getItem().equals(Item.getItemFromBlock(BPBlocks.tungsten_ore))) {
             player.addStat(Achievements.tungstenAchievement, 1);
         }
     }
@@ -119,9 +119,11 @@ public class BPEventHandler {
                 EntityPlayer killer = (EntityPlayer) entitySource.getEntity();
 
                 if (killer.inventory.getCurrentItem() != null) {
-                    if (EnchantmentHelper.getEnchantments(killer.inventory.getCurrentItem()).containsKey(BPEnchantments.disjunction.effectId)) {
+                    if (EnchantmentHelper.getEnchantments(killer.inventory.getCurrentItem()).containsKey(
+                            BPEnchantments.disjunction.effectId)) {
                         if (event.entityLiving instanceof EntityEnderman || event.entityLiving instanceof EntityDragon) {
-                            int level = EnchantmentHelper.getEnchantmentLevel(BPEnchantments.disjunction.effectId, killer.inventory.getCurrentItem());
+                            int level = EnchantmentHelper.getEnchantmentLevel(BPEnchantments.disjunction.effectId,
+                                    killer.inventory.getCurrentItem());
                             isAttacking = true;
                             event.entityLiving.attackEntityFrom(event.source, event.ammount * (level * 0.5F + 1));
                             isAttacking = false;
@@ -145,7 +147,8 @@ public class BPEventHandler {
 
                 if (killer.inventory.getCurrentItem() != null) {
                     if (EnchantmentHelper.getEnchantments(killer.inventory.getCurrentItem()).containsKey(BPEnchantments.vorpal.effectId)) {
-                        int level = EnchantmentHelper.getEnchantmentLevel(BPEnchantments.vorpal.effectId, killer.inventory.getCurrentItem());
+                        int level = EnchantmentHelper
+                                .getEnchantmentLevel(BPEnchantments.vorpal.effectId, killer.inventory.getCurrentItem());
 
                         if (level == 1) {
                             if (killer.worldObj.rand.nextInt(6) == 1) {
@@ -194,7 +197,8 @@ public class BPEventHandler {
     @SideOnly(Side.CLIENT)
     public void onItemTooltip(ItemTooltipEvent event) {
 
-        if (event.itemStack.hasTagCompound() && event.itemStack.getTagCompound().hasKey("tileData")) {
+        if (event.itemStack.hasTagCompound() && event.itemStack.getTagCompound().hasKey("tileData")
+                && !event.itemStack.getTagCompound().getBoolean("hideSilkyTooltip")) {
             event.toolTip.add(I18n.format("gui.tooltip.hasSilkyData"));
         }
 
@@ -208,23 +212,24 @@ public class BPEventHandler {
         }
     }
 
-
     @SubscribeEvent
     public void onCrafting(PlayerEvent.ItemCraftedEvent event) {
-        Item item = event.crafting.getItem();
-        if(item == null) return;
 
-        if(item.equals(BPItems.blue_doped_wafer) || item.equals(BPItems.red_doped_wafer)){
+        Item item = event.crafting.getItem();
+        if (item == null)
+            return;
+
+        if (item.equals(BPItems.blue_doped_wafer) || item.equals(BPItems.red_doped_wafer)) {
             event.player.addStat(Achievements.dopeAchievement, 1);
-        }else if(item.equals(PartManager.getPartInfo("pneumaticTube").getItem())){
+        } else if (item.equals(PartManager.getPartInfo("pneumaticTube").getItem())) {
             event.player.addStat(Achievements.tubeAchievement, 1);
-        }else if(item.equals(Item.getItemFromBlock(BPBlocks.sorting_machine))){
+        } else if (item.equals(Item.getItemFromBlock(BPBlocks.sorting_machine))) {
             event.player.addStat(Achievements.sortAchievement, 1);
-        }else if(item.equals(PartManager.getPartInfo("magTube").getItem())){
+        } else if (item.equals(PartManager.getPartInfo("magTube").getItem())) {
             event.player.addStat(Achievements.magTubeAchievement, 1);
-        }else if(item.equals(PartManager.getPartInfo("integratedCircuit3x3").getItem())
-                ||item.equals(PartManager.getPartInfo("integratedCircuit5x5").getItem())
-                ||item.equals(PartManager.getPartInfo("integratedCircuit7x7").getItem())){
+        } else if (item.equals(PartManager.getPartInfo("integratedCircuit3x3").getItem())
+                || item.equals(PartManager.getPartInfo("integratedCircuit5x5").getItem())
+                || item.equals(PartManager.getPartInfo("integratedCircuit7x7").getItem())) {
             event.player.addStat(Achievements.circuitCeptionAchievement, 1);
         }
     }

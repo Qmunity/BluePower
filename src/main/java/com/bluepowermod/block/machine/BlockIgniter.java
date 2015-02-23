@@ -17,14 +17,6 @@
 
 package com.bluepowermod.block.machine;
 
-import com.bluepowermod.block.BlockContainerBase;
-import com.bluepowermod.client.render.RendererBlockBase.EnumFaceType;
-import com.bluepowermod.tile.IRotatable;
-import com.bluepowermod.tile.tier1.TileIgniter;
-import com.bluepowermod.util.Refs;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -33,6 +25,15 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+
+import com.bluepowermod.block.BlockContainerBase;
+import com.bluepowermod.client.render.RendererBlockBase.EnumFaceType;
+import com.bluepowermod.tile.IRotatable;
+import com.bluepowermod.tile.tier1.TileIgniter;
+import com.bluepowermod.util.Refs;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockIgniter extends BlockContainerBase {
     

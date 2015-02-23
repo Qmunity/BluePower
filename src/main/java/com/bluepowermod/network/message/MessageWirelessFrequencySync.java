@@ -1,17 +1,19 @@
 package com.bluepowermod.network.message;
 
-import io.netty.buffer.ByteBuf;
-
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
+import uk.co.qmunity.lib.network.Packet;
 
 import com.bluepowermod.api.wireless.IFrequency;
 import com.bluepowermod.part.gate.wireless.Frequency;
 import com.bluepowermod.part.gate.wireless.WirelessManager;
 
-public class MessageWirelessFrequencySync extends AbstractPacket<MessageWirelessFrequencySync> {
+public class MessageWirelessFrequencySync extends Packet<MessageWirelessFrequencySync> {
 
     private List<Frequency> frequencies = new ArrayList<Frequency>();
     private EntityPlayer player;
@@ -26,18 +28,7 @@ public class MessageWirelessFrequencySync extends AbstractPacket<MessageWireless
     }
 
     @Override
-    public void fromBytes(ByteBuf buf) {
-
-        int amt = buf.readInt();
-        for (int i = 0; i < amt; i++) {
-            Frequency f = new Frequency();
-            f.readFromBuffer(buf);
-            frequencies.add(f);
-        }
-    }
-
-    @Override
-    public void toBytes(ByteBuf buf) {
+    public void write(DataOutput buffer) throws IOException {
 
         List<IFrequency> frequencies = null;
         if (player == null || player.capabilities.isCreativeMode) {
@@ -48,24 +39,35 @@ public class MessageWirelessFrequencySync extends AbstractPacket<MessageWireless
             frequencies.addAll(WirelessManager.COMMON_INSTANCE.getAvailableBundledFrequencies(player));
         }
 
-        buf.writeInt(frequencies.size());
+        buffer.writeInt(frequencies.size());
         for (IFrequency f : frequencies)
-            ((Frequency) f).writeToBuffer(buf);
+            ((Frequency) f).writeToBuffer(buffer);
     }
 
     @Override
-    public void handleClientSide(MessageWirelessFrequencySync message, EntityPlayer player) {
+    public void read(DataInput buffer) throws IOException {
+
+        int amt = buffer.readInt();
+        for (int i = 0; i < amt; i++) {
+            Frequency f = new Frequency();
+            f.readFromBuffer(buffer);
+            frequencies.add(f);
+        }
+    }
+
+    @Override
+    public void handleClientSide(EntityPlayer player) {
 
         WirelessManager m = WirelessManager.CLIENT_INSTANCE;
 
         m.unloadFrequencies();
 
-        for (Frequency f : message.frequencies)
+        for (Frequency f : frequencies)
             m.registerFrequency(f);
     }
 
     @Override
-    public void handleServerSide(MessageWirelessFrequencySync message, EntityPlayer player) {
+    public void handleServerSide(EntityPlayer player) {
 
     }
 

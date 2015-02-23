@@ -25,8 +25,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.util.ForgeDirection;
 
 import com.bluepowermod.init.BPBlocks;
+import com.bluepowermod.part.tube.TubeStack;
 import com.bluepowermod.tile.TileMachineBase;
 
 public class TileRelay extends TileMachineBase implements IInventory {
@@ -222,5 +224,11 @@ public class TileRelay extends TileMachineBase implements IInventory {
     public boolean canConnectRedstone() {
 
         return true;
+    }
+
+    @Override
+    public TubeStack acceptItemFromTube(TubeStack stack, ForgeDirection from, boolean simulate) {
+
+        return from == getFacingDirection() ? stack : super.acceptItemFromTube(stack, from, simulate);
     }
 }

@@ -21,14 +21,13 @@ package com.bluepowermod.container;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import uk.co.qmunity.lib.client.gui.GuiContainerBase;
 
 import com.bluepowermod.ClientProxy;
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
-import com.bluepowermod.client.gui.GuiBase;
 import com.bluepowermod.tile.tier3.TileManager;
 
 import cpw.mods.fml.relauncher.Side;
@@ -37,7 +36,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 /**
  * @author MineMaarten
  */
-public class ContainerManager extends Container {
+public class ContainerManager extends ContainerMachineBase {
 
     private final TileManager tileManager;
     private int filterColor = -1;
@@ -47,6 +46,7 @@ public class ContainerManager extends Container {
 
     public ContainerManager(InventoryPlayer invPlayer, TileManager manager) {
 
+        super(manager);
         tileManager = manager;
 
         for (int i = 0; i < 4; ++i) {
@@ -108,19 +108,19 @@ public class ContainerManager extends Container {
 
         if (id == 0) {
             tileManager.filterColor = TubeColor.values()[value];
-            ((GuiBase) ClientProxy.getOpenedGui()).redraw();
+            ((GuiContainerBase) ClientProxy.getOpenedGui()).redraw();
         }
         if (id == 1) {
             tileManager.priority = value;
-            ((GuiBase) ClientProxy.getOpenedGui()).redraw();
+            ((GuiContainerBase) ClientProxy.getOpenedGui()).redraw();
         }
         if (id == 2) {
             tileManager.mode = value;
-            ((GuiBase) ClientProxy.getOpenedGui()).redraw();
+            ((GuiContainerBase) ClientProxy.getOpenedGui()).redraw();
         }
         if (id == 3) {
             tileManager.fuzzySetting = value;
-            ((GuiBase) ClientProxy.getOpenedGui()).redraw();
+            ((GuiContainerBase) ClientProxy.getOpenedGui()).redraw();
         }
     }
 

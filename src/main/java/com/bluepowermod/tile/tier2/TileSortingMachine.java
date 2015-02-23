@@ -32,7 +32,7 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * 
+ *
  * @author MineMaarten
  */
 
@@ -46,7 +46,9 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
     private int savedPulses;
     public final TubeColor[] colors = new TubeColor[9];
     public int[] fuzzySettings = new int[8];
-    private ItemStack nonAcceptedStack;//will be set to the latest accepted stack via tubes.. It will reject any following items from that stack that tick.
+    private ItemStack nonAcceptedStack;// will be set to the latest accepted stack via tubes.. It will reject any following items from that stack that
+
+    // tick.
 
     private IPowerBase handler;
 
@@ -101,7 +103,7 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
         @Override
         public String toString() {
 
-            return "gui.pullMode." + name;
+            return "gui.bluepower:sortingMachine.pullMode." + name;
         }
     }
 
@@ -119,12 +121,13 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
         @Override
         public String toString() {
 
-            return "gui.sortMode." + name;
+            return "gui.bluepower:sortingMachine.sortMode." + name;
         }
     }
 
     @Override
     public void updateEntity() {
+
         nonAcceptedStack = null;
         super.updateEntity();
         if (!sweepTriggered && savedPulses > 0) {
@@ -284,7 +287,8 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
         case ANY_ITEM_DEFAULT:
             for (int i = 0; i < inventory.length; i++) {
                 ItemStack filter = inventory[i];
-                if (filter != null && ItemStackHelper.areStacksEqual(filter, stack, fuzzySettings[i % 8]) && stack.stackSize >= filter.stackSize) {
+                if (filter != null && ItemStackHelper.areStacksEqual(filter, stack, fuzzySettings[i % 8])
+                        && stack.stackSize >= filter.stackSize) {
                     if (!simulate) {
                         addItemToOutputBuffer(filter.copy(), colors[i % 8]);
                     }
@@ -347,6 +351,9 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
 
     @Override
     public void onButtonPress(EntityPlayer player, int messageId, int value) {
+
+        if (messageId < 0)
+            return;
 
         if (messageId < 9) {
             colors[messageId] = TubeColor.values()[value];
@@ -476,8 +483,11 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
 
     @Override
     public TubeStack acceptItemFromTube(TubeStack stack, ForgeDirection from, boolean simulate) {
+
         if (from == getOutputDirection()) {
             return super.acceptItemFromTube(stack, from, simulate);
+        } else if (!isBufferEmpty() && !ejectionScheduled) {
+            return stack;
         } else {
             boolean success = !ItemStack.areItemStacksEqual(stack.stack, nonAcceptedStack) && tryProcessItem(stack.stack, simulate);
             if (success) {

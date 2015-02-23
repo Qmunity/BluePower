@@ -22,6 +22,7 @@ import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.tile.tier1.TileLamp;
 import com.bluepowermod.util.Refs;
 
+import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -57,7 +58,7 @@ public class BlockLamp extends BlockContainerBase {
         return (TileLamp) te;
     }
 
-    protected int getPower(IBlockAccess w, int x, int y, int z) {
+    public int getPower(IBlockAccess w, int x, int y, int z) {
 
         TileLamp te = get(w, x, y, z);
         if (te == null)
@@ -80,7 +81,39 @@ public class BlockLamp extends BlockContainerBase {
     @Override
     public int getLightValue(IBlockAccess w, int x, int y, int z) {
 
-        return getPower(w, x, y, z);
+        int pow = getPower(w, x, y, z);
+
+        if (Loader.isModLoaded("coloredlightscore")) {
+            int color = getColor(w, x, y, z);
+
+            int ri = (color >> 16) & 0xFF;
+            int gi = (color >> 8) & 0xFF;
+            int bi = (color >> 0) & 0xFF;
+
+            float r = ri / 256F;
+            float g = gi / 256F;
+            float b = bi / 256F;
+
+            // Clamp color channels
+            if (r < 0.0f)
+                r = 0.0f;
+            else if (r > 1.0f)
+                r = 1.0f;
+
+            if (g < 0.0f)
+                g = 0.0f;
+            else if (g > 1.0f)
+                g = 1.0f;
+
+            if (b < 0.0f)
+                b = 0.0f;
+            else if (b > 1.0f)
+                b = 1.0f;
+
+            return pow | ((((int) (15.0F * b)) << 15) + (((int) (15.0F * g)) << 10) + (((int) (15.0F * r)) << 5));
+        }
+
+        return pow;
     }
 
     @Override
@@ -108,7 +141,7 @@ public class BlockLamp extends BlockContainerBase {
     @Override
     public boolean canConnectRedstone(IBlockAccess world, int x, int y, int z, int side) {
 
-        return true;
+        return !(world.getBlock(x, y, z) instanceof BlockLampRGB);
     }
 
     @Override
@@ -153,6 +186,9 @@ public class BlockLamp extends BlockContainerBase {
     public void onNeighborBlockChange(World world, int x, int y, int z, Block block) {
 
         super.onNeighborBlockChange(world, x, y, z, block);
+
+        if (this instanceof BlockLampRGB && block instanceof BlockLampRGB)
+            return;
 
         TileLamp te = get(world, x, y, z);
         if (te == null)

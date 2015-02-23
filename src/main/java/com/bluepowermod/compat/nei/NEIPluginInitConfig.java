@@ -28,6 +28,8 @@ public class NEIPluginInitConfig implements IConfigureNEI {
         API.registerRecipeHandler(new AlloyFurnaceHandler());
         API.registerGuiOverlayHandler(GuiProjectTable.class, new ProjectTableOverlayHandler(), "crafting");
         GuiContainerManager.addTooltipHandler(new DebugTooltipHandler());
+        API.registerUsageHandler(new NullCellHandler());
+        API.registerRecipeHandler(new NullCellHandler());
     }
 
     @Override

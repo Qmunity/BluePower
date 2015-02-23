@@ -17,8 +17,9 @@
 
 package com.bluepowermod.part.gate.wireless;
 
-import io.netty.buffer.ByteBuf;
-
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.UUID;
 
@@ -31,8 +32,6 @@ import com.bluepowermod.api.wireless.IFrequency;
 import com.bluepowermod.api.wireless.IRedstoneFrequency;
 import com.bluepowermod.api.wireless.IWirelessDevice;
 import com.mojang.authlib.GameProfile;
-
-import cpw.mods.fml.common.network.ByteBufUtils;
 
 public class Frequency implements IFrequency {
 
@@ -110,12 +109,12 @@ public class Frequency implements IFrequency {
         bundled = tag.getBoolean("freq_bundled");
     }
 
-    public void writeToBuffer(ByteBuf buf) {
+    public void writeToBuffer(DataOutput buf) throws IOException {
 
         buf.writeInt(accessibility.ordinal());
-        ByteBufUtils.writeUTF8String(buf, owner.toString());
-        ByteBufUtils.writeUTF8String(buf, ownerName);
-        ByteBufUtils.writeUTF8String(buf, frequency);
+        buf.writeUTF(owner.toString());
+        buf.writeUTF(ownerName.toString());
+        buf.writeUTF(frequency.toString());
         buf.writeBoolean(isBundled());
 
         int amt = 0;
@@ -125,12 +124,12 @@ public class Frequency implements IFrequency {
         buf.writeInt(amt);
     }
 
-    public void readFromBuffer(ByteBuf buf) {
+    public void readFromBuffer(DataInput buf) throws IOException {
 
         accessibility = Accessibility.values()[buf.readInt()];
-        owner = UUID.fromString(ByteBufUtils.readUTF8String(buf));
-        ownerName = ByteBufUtils.readUTF8String(buf);
-        frequency = ByteBufUtils.readUTF8String(buf);
+        owner = UUID.fromString(buf.readUTF());
+        ownerName = buf.readUTF();
+        frequency = buf.readUTF();
         bundled = buf.readBoolean();
         devices = buf.readInt();
     }

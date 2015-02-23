@@ -9,9 +9,9 @@ package com.bluepowermod.container;
 
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ICrafting;
+import uk.co.qmunity.lib.client.gui.GuiContainerBase;
 
 import com.bluepowermod.ClientProxy;
-import com.bluepowermod.client.gui.GuiBase;
 import com.bluepowermod.tile.tier2.TileRetriever;
 
 import cpw.mods.fml.relauncher.Side;
@@ -64,7 +64,7 @@ public class ContainerRetriever extends ContainerFilter {
         }
         if (id == 3) {
             retriever.mode = value;
-            ((GuiBase) ClientProxy.getOpenedGui()).redraw();
+            ((GuiContainerBase) ClientProxy.getOpenedGui()).redraw();
         }
     }
 }

@@ -24,10 +24,10 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import uk.co.qmunity.lib.client.gui.GuiContainerBase;
 
 import com.bluepowermod.ClientProxy;
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
-import com.bluepowermod.client.gui.GuiBase;
 import com.bluepowermod.container.slot.SlotPhantom;
 import com.bluepowermod.tile.tier2.TileSortingMachine;
 
@@ -35,10 +35,10 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 /**
- * 
+ *
  * @author MineMaarten
  */
-public class ContainerSortingMachine extends ContainerGhosts {
+public class ContainerSortingMachine extends ContainerMachineBase {
 
     private final TileSortingMachine sortingMachine;
 
@@ -48,6 +48,7 @@ public class ContainerSortingMachine extends ContainerGhosts {
 
     public ContainerSortingMachine(InventoryPlayer invPlayer, TileSortingMachine sortingMachine) {
 
+        super(sortingMachine);
         this.sortingMachine = sortingMachine;
 
         for (int i = 0; i < 5; i++) {
@@ -136,17 +137,17 @@ public class ContainerSortingMachine extends ContainerGhosts {
 
         if (id < 9) {
             sortingMachine.colors[id] = TubeColor.values()[value];
-            ((GuiBase) ClientProxy.getOpenedGui()).redraw();
+            ((GuiContainerBase) ClientProxy.getOpenedGui()).redraw();
         }
 
         if (id == 9) {
             sortingMachine.pullMode = TileSortingMachine.PullMode.values()[value];
-            ((GuiBase) ClientProxy.getOpenedGui()).redraw();
+            ((GuiContainerBase) ClientProxy.getOpenedGui()).redraw();
         }
 
         if (id == 10) {
             sortingMachine.sortMode = TileSortingMachine.SortMode.values()[value];
-            ((GuiBase) ClientProxy.getOpenedGui()).redraw();
+            ((GuiContainerBase) ClientProxy.getOpenedGui()).redraw();
         }
 
         if (id == 11) {
@@ -155,7 +156,7 @@ public class ContainerSortingMachine extends ContainerGhosts {
 
         if (id >= 12 && id < 21) {
             sortingMachine.fuzzySettings[id - 12] = value;
-            ((GuiBase) ClientProxy.getOpenedGui()).redraw();
+            ((GuiContainerBase) ClientProxy.getOpenedGui()).redraw();
         }
     }
 

@@ -39,6 +39,7 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
@@ -107,13 +108,23 @@ public class BlockContainerBase extends BlockBase implements ITileEntityProvider
         return tileEntityClass;
     }
 
+    protected TileBase get(IBlockAccess w, int x, int y, int z) {
+
+        TileEntity te = w.getTileEntity(x, y, z);
+
+        if (te == null || !(te instanceof TileBase))
+            return null;
+
+        return (TileBase) te;
+    }
+
     @Override
     public void onNeighborBlockChange(World world, int x, int y, int z, Block block) {
 
         super.onNeighborBlockChange(world, x, y, z, block);
         // Only do this on the server side.
         if (!world.isRemote) {
-            TileBase tileEntity = (TileBase) world.getTileEntity(x, y, z);
+            TileBase tileEntity = get(world, x, y, z);
             if (tileEntity != null) {
                 tileEntity.onBlockNeighbourChanged();
             }
@@ -129,7 +140,7 @@ public class BlockContainerBase extends BlockBase implements ITileEntityProvider
     @Override
     public int isProvidingWeakPower(IBlockAccess par1IBlockAccess, int par2, int par3, int par4, int par5) {
 
-        TileEntity te = par1IBlockAccess.getTileEntity(par2, par3, par4);
+        TileEntity te = get(par1IBlockAccess, par2, par3, par4);
         if (te instanceof TileBase) {
             TileBase tileBase = (TileBase) te;
             return tileBase.getOutputtingRedstone();
@@ -152,7 +163,7 @@ public class BlockContainerBase extends BlockBase implements ITileEntityProvider
             return false;
         }
 
-        TileEntity entity = world.getTileEntity(x, y, z);
+        TileEntity entity = get(world, x, y, z);
         if (entity == null || !(entity instanceof TileBase)) {
             return false;
         }
@@ -169,7 +180,7 @@ public class BlockContainerBase extends BlockBase implements ITileEntityProvider
     public void breakBlock(World world, int x, int y, int z, Block block, int meta) {
 
         if (!isSilkyRemoving) {
-            TileBase tile = (TileBase) world.getTileEntity(x, y, z);
+            TileBase tile = get(world, x, y, z);
             if (tile != null) {
                 for (ItemStack stack : tile.getDrops()) {
                     IOHelper.spawnItemInWorld(world, stack, x + 0.5, y + 0.5, z + 0.5);
@@ -187,7 +198,7 @@ public class BlockContainerBase extends BlockBase implements ITileEntityProvider
     public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase player, ItemStack iStack) {
 
         BPApi.getInstance().loadSilkySettings(world, x, y, z, iStack);
-        TileEntity te = world.getTileEntity(x, y, z);
+        TileEntity te = get(world, x, y, z);
         if (te instanceof IRotatable) {
             ((IRotatable) te).setFacingDirection(ForgeDirectionUtils.getDirectionFacing(player, canRotateVertical()).getOpposite());
         }
@@ -201,7 +212,7 @@ public class BlockContainerBase extends BlockBase implements ITileEntityProvider
     @Override
     public boolean rotateBlock(World worldObj, int x, int y, int z, ForgeDirection axis) {
 
-        TileEntity te = worldObj.getTileEntity(x, y, z);
+        TileEntity te = get(worldObj, x, y, z);
         if (te instanceof IRotatable) {
             IRotatable rotatable = (IRotatable) te;
             ForgeDirection dir = rotatable.getFacingDirection();
@@ -276,7 +287,7 @@ public class BlockContainerBase extends BlockBase implements ITileEntityProvider
 
         if (textures == null)
             return super.getIcon(world, x, y, z, side);
-        TileEntity te = world.getTileEntity(x, y, z);
+        TileEntity te = get(world, x, y, z);
         RendererBlockBase.EnumFaceType faceType = EnumFaceType.SIDE;
         boolean powered = false;
         boolean ejecting = false;
@@ -331,6 +342,19 @@ public class BlockContainerBase extends BlockBase implements ITileEntityProvider
     public void postSilkyRemoval(World world, int x, int y, int z) {
 
         isSilkyRemoving = false;
+    }
+
+    @Override
+    public boolean writeSilkyData(World world, int x, int y, int z, NBTTagCompound tag) {
+
+        world.getTileEntity(x, y, z).writeToNBT(tag);
+        return false;
+    }
+
+    @Override
+    public void readSilkyData(World world, int x, int y, int z, NBTTagCompound tag) {
+
+        world.getTileEntity(x, y, z).readFromNBT(tag);
     }
 
     @Override

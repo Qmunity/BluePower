@@ -8,34 +8,35 @@
 package com.bluepowermod.network.message;
 
 import net.minecraft.entity.player.EntityPlayer;
+import uk.co.qmunity.lib.network.LocatedPacket;
 
 import com.bluepowermod.helper.Debugger;
 
 /**
- * 
- * @author MineMaarten
+ *
+ * @author MineMaarten, amadornes
  */
 
-public class MessageDebugBlock extends LocationIntPacket<MessageDebugBlock> {
-    
+public class MessageDebugBlock extends LocatedPacket<MessageDebugBlock> {
+
     public MessageDebugBlock() {
-    
+
     }
-    
+
     public MessageDebugBlock(int x, int y, int z) {
-    
+
         super(x, y, z);
     }
-    
+
     @Override
-    public void handleClientSide(MessageDebugBlock message, EntityPlayer player) {
-    
-        Debugger.indicateBlock(player.worldObj, message.x, message.y, message.z);
+    public void handleClientSide(EntityPlayer player) {
+
+        Debugger.indicateBlock(player.worldObj, x, y, z);
     }
-    
+
     @Override
-    public void handleServerSide(MessageDebugBlock message, EntityPlayer player) {
-    
+    public void handleServerSide(EntityPlayer player) {
+
     }
-    
+
 }

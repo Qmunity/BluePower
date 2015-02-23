@@ -11,13 +11,13 @@ import java.util.List;
 
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
+import uk.co.qmunity.lib.client.gui.widget.BaseWidget;
+import uk.co.qmunity.lib.client.gui.widget.IGuiWidget;
+import uk.co.qmunity.lib.client.gui.widget.WidgetMode;
 
-import com.bluepowermod.client.gui.widget.BaseWidget;
-import com.bluepowermod.client.gui.widget.IGuiWidget;
 import com.bluepowermod.client.gui.widget.WidgetFuzzySetting;
-import com.bluepowermod.client.gui.widget.WidgetMode;
 import com.bluepowermod.container.ContainerItemDetector;
-import com.bluepowermod.network.NetworkHandler;
+import com.bluepowermod.network.BPNetworkHandler;
 import com.bluepowermod.network.message.MessageGuiUpdate;
 import com.bluepowermod.tile.tier1.TileItemDetector;
 import com.bluepowermod.util.Refs;
@@ -25,7 +25,7 @@ import com.bluepowermod.util.Refs;
 /**
  * @author MineMaarten
  */
-public class GuiItemDetector extends GuiBase {
+public class GuiItemDetector extends GuiContainerBaseBP {
 
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/item_detector.png");
     private final TileItemDetector itemDetector;
@@ -45,24 +45,24 @@ public class GuiItemDetector extends GuiBase {
             @Override
             public void addTooltip(int mouseX, int mouseY, List<String> curTip, boolean shiftPressed) {
 
-                curTip.add("gui.mode");
+                curTip.add("gui.bluepower:sortingMachine.mode");
                 String mode;
                 switch (value) {
                 case 0:
-                    mode = "gui.itemDetector.mode.item";
+                    mode = "gui.bluepower:itemDetector.mode.item";
                     break;
                 case 1:
-                    mode = "gui.itemDetector.mode.stack";
+                    mode = "gui.bluepower:itemDetector.mode.stack";
                     break;
                 default:
-                    mode = "gui.itemDetector.mode.stuffed";
+                    mode = "gui.bluepower:itemDetector.mode.stuffed";
 
                 }
                 curTip.add(mode);
                 if (shiftPressed) {
                     curTip.add(mode + ".info");
                 } else {
-                    curTip.add("gui.sneakForInfo");
+                    curTip.add("gui.bluepower:tooltip.sneakForInfo");
                 }
             }
         };
@@ -78,6 +78,6 @@ public class GuiItemDetector extends GuiBase {
     public void actionPerformed(IGuiWidget widget) {
 
         BaseWidget baseWidget = (BaseWidget) widget;
-        NetworkHandler.sendToServer(new MessageGuiUpdate(itemDetector, widget.getID(), baseWidget.value));
+        BPNetworkHandler.INSTANCE.sendToServer(new MessageGuiUpdate(itemDetector, widget.getID(), baseWidget.value));
     }
 }

@@ -13,7 +13,7 @@
  *
  *     You should have received a copy of the GNU General Public License
  *     along with Blue Power.  If not, see <http://www.gnu.org/licenses/>
- *     
+ *
  *     @author Lumien
  */
 
@@ -26,22 +26,22 @@ import net.minecraft.util.ResourceLocation;
 import com.bluepowermod.container.ContainerCanvasBag;
 import com.bluepowermod.util.Refs;
 
-public class GuiCanvasBag extends GuiBase {
-    
+public class GuiCanvasBag extends GuiContainerBaseBP {
+
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/canvas_bag.png");
-    ItemStack                             bag;
-    
+    ItemStack bag;
+
     public GuiCanvasBag(ItemStack bag, IInventory playerInventory, IInventory canvasBagInventory) {
-    
+
         super(canvasBagInventory, new ContainerCanvasBag(bag, playerInventory, canvasBagInventory), resLoc);
-        
+
         this.bag = bag;
     }
-    
+
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-    
+
         super.drawGuiContainerForegroundLayer(mouseX, mouseY);
-        
+
     }
 }

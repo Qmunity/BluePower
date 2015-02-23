@@ -29,7 +29,7 @@ public abstract class GuiGateSingleTime extends GuiGate {
     private static final String[] buttonTexts = { "-10s", "-1s", "-50ms", "+50ms", "+1s", "+10s" };
     private static final int[] buttonActions = { -200, -20, -1, 1, 20, 200 };
 
-    public GuiGateSingleTime(GateBase gate) {
+    public GuiGateSingleTime(GateBase<?, ?, ?, ?, ?, ?> gate) {
 
         super(gate, 228, 66);
     }
@@ -63,15 +63,19 @@ public abstract class GuiGateSingleTime extends GuiGate {
     @Override
     public void renderGUI(int x, int y, float partialTicks) {
 
-        drawCenteredString(fontRendererObj, I18n.format("gui.timerInterval") + ": " + getTimerValue(getCurrentIntervalTicks()), guiLeft
-                + xSize / 2, guiTop + 10, 0xFFFFFF);
+        drawCenteredString(fontRendererObj, I18n.format("gui.bluepower:timer.interval") + ": " + getTimerValue(getCurrentIntervalTicks()),
+                guiLeft + xSize / 2, guiTop + 10, 0xFFFFFF);
     }
 
     private String getTimerValue(int ticks) {
 
         int time = ticks * 50;
         if (time >= 1000) {
-            return time / 1000 + "." + time % 1000 + "s";
+            String ms = "" + time % 1000;
+            if (ms.length() > 1)
+                while (ms.length() < 3)
+                    ms = "0" + ms;
+            return time / 1000 + "." + ms + "s";
         } else {
             return time + "ms";
         }

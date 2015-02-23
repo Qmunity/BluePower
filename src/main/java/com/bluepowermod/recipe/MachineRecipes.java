@@ -46,7 +46,7 @@ public class MachineRecipes {
         GameRegistry.addRecipe(new ShapedOreRecipe(PartManager.getPartInfo("pneumaticTube").getStack(8), "BGB", 'B', "ingotBrass", 'G',
                 "blockGlass"));
         GameRegistry.addRecipe(new ShapedOreRecipe(PartManager.getPartInfo("pneumaticTubeOpaque").getStack(8), "BGB", 'B', "ingotBrass",
-                'G', "ingotSilver"));
+                'G', "stone"));
         GameRegistry.addRecipe(new ShapelessOreRecipe(PartManager.getPartInfo("restrictionTube").getStack(), "ingotIron", PartManager
                 .getPartInfo("pneumaticTube").getStack()));
         GameRegistry.addRecipe(new ShapelessOreRecipe(PartManager.getPartInfo("restrictionTubeOpaque").getStack(), "ingotIron", PartManager

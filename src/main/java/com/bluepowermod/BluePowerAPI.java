@@ -7,19 +7,22 @@
  */
 package com.bluepowermod;
 
+import com.bluepowermod.api.BPApi.IBPApi;
+import com.bluepowermod.api.block.IAdvancedSilkyRemovable;
 import com.bluepowermod.api.bluepower.IPowerBase;
 import com.bluepowermod.api.recipe.IAlloyFurnaceRegistry;
-import com.bluepowermod.api.redstone.IRedstoneApi;
+import com.bluepowermod.api.wire.redstone.IRedstoneApi;
 import com.bluepowermod.part.BPPart;
-import com.bluepowermod.part.wire.redstone.RedstoneApi;
 import com.bluepowermod.power.PowerHandler;
 import com.bluepowermod.recipe.AlloyFurnaceRegistry;
+import com.bluepowermod.redstone.RedstoneApi;
+import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import com.bluepowermod.api.BPApi.IBPApi;
 import uk.co.qmunity.lib.part.IPart;
+
 
 public class BluePowerAPI implements IBPApi {
 
@@ -52,6 +55,7 @@ public class BluePowerAPI implements IBPApi {
     public void loadSilkySettings(World world, int x, int y, int z, ItemStack stack) {
 
         TileEntity te = world.getTileEntity(x, y, z);
+        Block b = world.getBlock(x, y, z);
         if (te == null)
             throw new IllegalStateException("This block doesn't have a tile entity?!");
         if (stack == null)
@@ -59,11 +63,17 @@ public class BluePowerAPI implements IBPApi {
         if (stack.hasTagCompound()) {
             NBTTagCompound tag = stack.getTagCompound();
             if (tag.hasKey("tileData")) {
-                NBTTagCompound tileTag = tag.getCompoundTag("tileData");
-                tileTag.setInteger("x", x);
-                tileTag.setInteger("y", y);
-                tileTag.setInteger("z", z);
-                te.readFromNBT(tileTag);
+                if (te instanceof IAdvancedSilkyRemovable) {
+                    ((IAdvancedSilkyRemovable) te).readSilkyData(world, x, y, z, tag.getCompoundTag("tileData"));
+                } else if (b instanceof IAdvancedSilkyRemovable) {
+                    ((IAdvancedSilkyRemovable) b).readSilkyData(world, x, y, z, tag.getCompoundTag("tileData"));
+                } else {
+                    NBTTagCompound tileTag = tag.getCompoundTag("tileData");
+                    tileTag.setInteger("x", x);
+                    tileTag.setInteger("y", y);
+                    tileTag.setInteger("z", z);
+                    te.readFromNBT(tileTag);
+                }
             }
         }
     }
@@ -77,7 +87,25 @@ public class BluePowerAPI implements IBPApi {
             NBTTagCompound tag = stack.getTagCompound();
             if (tag.hasKey("tileData")) {
                 NBTTagCompound tileTag = tag.getCompoundTag("tileData");
-                part.readFromNBT(tileTag);
+                boolean err = false;
+                if (part instanceof IAdvancedSilkyRemovable) {
+                    try {
+                        part.getWorld();
+                        part.getX();
+                        part.getY();
+                        part.getZ();
+                    } catch (Exception ex) {
+                        err = true;
+                    }
+
+                    if (err) {
+                        ((IAdvancedSilkyRemovable) part).readSilkyData(null, 0, 0, 0, tileTag);
+                    } else {
+                        ((IAdvancedSilkyRemovable) part).readSilkyData(part.getWorld(), part.getX(), part.getY(), part.getZ(), tileTag);
+                    }
+                } else {
+                    part.readFromNBT(tileTag);
+                }
             }
         }
     }

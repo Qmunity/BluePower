@@ -136,7 +136,7 @@ public final class WirelessManager implements IWirelessManager {
         }
 
         System.out
-        .println(":/ " + owner.worldObj.isRemote + " " + owner.getGameProfile().getId() + " - " + frequency + " " + accessibility);
+                .println(":/ " + owner.worldObj.isRemote + " " + owner.getGameProfile().getId() + " - " + frequency + " " + accessibility);
 
         RedstoneFrequency freq = new RedstoneFrequency(accessibility, owner == null ? UUID.randomUUID() : owner.getGameProfile().getId(),
                 frequency);

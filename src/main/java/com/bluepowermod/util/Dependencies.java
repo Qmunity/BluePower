@@ -17,6 +17,7 @@ public class Dependencies {
     public static final String IC2 = "IC2";
     public static final String HC = "HydCraft";
     public static final String THAUMCRAFT = "Thaumcraft";
+    public static final String NEI = "NotEnoughItems";
 
     public static final String INVTWEAKS = "inventorytweaks";
 }

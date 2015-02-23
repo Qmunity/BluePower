@@ -17,9 +17,14 @@
 
 package com.bluepowermod.part.gate.wireless;
 
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map.Entry;
 
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.RenderBlocks;
@@ -27,6 +32,7 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
@@ -36,79 +42,77 @@ import uk.co.qmunity.lib.client.render.RenderHelper;
 import uk.co.qmunity.lib.misc.Pair;
 import uk.co.qmunity.lib.part.IPart;
 import uk.co.qmunity.lib.part.IPartPlacement;
-import uk.co.qmunity.lib.part.MicroblockShape;
-import uk.co.qmunity.lib.part.compat.OcclusionHelper;
 import uk.co.qmunity.lib.transform.Rotation;
+import uk.co.qmunity.lib.util.Dir;
 import uk.co.qmunity.lib.vec.Vec3d;
 import uk.co.qmunity.lib.vec.Vec3dCube;
 import uk.co.qmunity.lib.vec.Vec3i;
 
+import com.bluepowermod.api.gate.IGateLogic;
 import com.bluepowermod.api.misc.MinecraftColor;
-import com.bluepowermod.api.redstone.IBundledConductor;
-import com.bluepowermod.api.redstone.IBundledDevice;
-import com.bluepowermod.api.redstone.IFaceBundledDevice;
-import com.bluepowermod.api.redstone.IFaceRedstoneDevice;
-import com.bluepowermod.api.redstone.IRedstoneConductor;
-import com.bluepowermod.api.redstone.IRedstoneDevice;
-import com.bluepowermod.api.wireless.IBundledFrequency;
+import com.bluepowermod.api.wire.ConnectionType;
+import com.bluepowermod.api.wire.IConnection;
+import com.bluepowermod.api.wire.redstone.IBundledConductor.IAdvancedBundledConductor;
+import com.bluepowermod.api.wire.redstone.IBundledDevice;
+import com.bluepowermod.api.wire.redstone.IRedstoneConductor.IAdvancedRedstoneConductor;
+import com.bluepowermod.api.wire.redstone.IRedstoneDevice;
+import com.bluepowermod.api.wire.redstone.IRedwire;
+import com.bluepowermod.api.wire.redstone.RedwireType;
 import com.bluepowermod.api.wireless.IFrequency;
-import com.bluepowermod.api.wireless.IRedstoneFrequency;
 import com.bluepowermod.api.wireless.IWirelessDevice;
 import com.bluepowermod.client.gui.gate.GuiGateWireless;
-import com.bluepowermod.network.NetworkHandler;
+import com.bluepowermod.network.BPNetworkHandler;
 import com.bluepowermod.network.message.MessageWirelessFrequencySync;
 import com.bluepowermod.part.IGuiButtonSensitive;
 import com.bluepowermod.part.gate.GateBase;
-import com.bluepowermod.part.wire.redstone.RedstoneApi;
-import com.bluepowermod.part.wire.redstone.WireCommons;
-import com.bluepowermod.part.wire.redstone.propagation.WirePropagator;
+import com.bluepowermod.part.gate.connection.GateConnectionAnalogue;
+import com.bluepowermod.part.gate.connection.GateConnectionBase;
+import com.bluepowermod.part.gate.connection.GateConnectionBundledAnalogue;
+import com.bluepowermod.part.gate.connection.GateConnectionBundledDigital;
+import com.bluepowermod.part.gate.connection.GateConnectionDigital;
+import com.bluepowermod.util.DebugHelper;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class GateTransceiver extends GateBase implements IWirelessDevice, IFaceRedstoneDevice, IRedstoneConductor, IFaceBundledDevice,
-IBundledConductor, IGuiButtonSensitive, IWirelessGate {
+public class GateTransceiver extends
+GateBase<GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase>
+implements IGateLogic<GateTransceiver>, IWirelessDevice, IWirelessGate, IGuiButtonSensitive, IAdvancedRedstoneConductor,
+IAdvancedBundledConductor {
 
     private static final List<GateTransceiver> transceivers = new ArrayList<GateTransceiver>();
 
     private boolean isBundled;
-    private boolean isAnalog;
+    private boolean isAnalogue;
 
     private Frequency frequency = null;
 
-    private IRedstoneDevice[] devices = new IRedstoneDevice[6];
-    private IBundledDevice[] bundledDevices = new IBundledDevice[6];
-
     private WirelessMode mode = WirelessMode.BOTH;
 
-    public GateTransceiver(Boolean isBundled, Boolean isAnalog) {
+    public GateTransceiver(Boolean isBundled, Boolean isAnalogue) {
 
         this.isBundled = isBundled;
-        this.isAnalog = isAnalog;
+        this.isAnalogue = isAnalogue;
     }
 
     @Override
-    public void initializeConnections() {
+    public void initConnections() {
 
-        front().setEnabled(true);
+        front(
+                isBundled ? (isAnalogue ? new GateConnectionBundledAnalogue(this, Dir.FRONT) : new GateConnectionBundledDigital(this,
+                        Dir.FRONT)) : (isAnalogue ? new GateConnectionAnalogue(this, Dir.FRONT)
+                        : new GateConnectionDigital(this, Dir.FRONT))).setEnabled(true);
     }
 
     @Override
-    public String getId() {
+    public void initComponents() {
 
-        return "wirelesstransceiver" + (isAnalog ? ".analog" : "") + (isBundled ? ".bundled" : "");
     }
 
     @Override
-    protected String getTextureName() {
+    public String getGateType() {
 
-        return "wirelesstransceiver";
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    protected void renderTop(float frame) {
-
+        return "wirelesstransceiver" + (isAnalogue ? ".analog" : "") + (isBundled ? ".bundled" : "");
     }
 
     @Override
@@ -128,9 +132,8 @@ IBundledConductor, IGuiButtonSensitive, IWirelessGate {
         // Base
         renderer.renderBox(new Vec3dCube(7 / 16D, 2 / 16D, 7 / 16D, 9 / 16D, 8 / 16D, 9 / 16D), obsidian);
 
-        if (rendering != null) {
-            renderer.addTransformation(new Rotation(0, (System.currentTimeMillis() / 100D) % 360, 0));
-        }
+        if (getParent() == null || getWorld() == null)
+            renderer.addTransformation(new Rotation(0, -(System.currentTimeMillis() / 100D) % 360, 0));
         renderer.addTransformation(new Rotation(45, 0, 0));
 
         // Post
@@ -168,230 +171,121 @@ IBundledConductor, IGuiButtonSensitive, IWirelessGate {
     }
 
     @Override
-    public boolean canConnectStraight(ForgeDirection side, IRedstoneDevice device) {
-
-        if (!super.canConnectStraight(side, device))
-            return false;
-
-        return side == front().getDirection().toForgeDirection(getFace(), getRotation());
-    }
-
-    @Override
-    public boolean canConnectOpenCorner(ForgeDirection side, IRedstoneDevice device) {
-
-        if (!super.canConnectOpenCorner(side, device))
-            return false;
-
-        return side == front().getDirection().toForgeDirection(getFace(), getRotation());
-    }
-
-    @Override
-    public boolean canConnectClosedCorner(ForgeDirection side, IRedstoneDevice device) {
-
-        if (!super.canConnectClosedCorner(side, device))
-            return false;
-
-        return side == front().getDirection().toForgeDirection(getFace(), getRotation());
-    }
-
-    @Override
-    public void onConnect(ForgeDirection side, IRedstoneDevice device) {
-
-        devices[side.ordinal()] = device;
-        sendUpdatePacket();
-    }
-
-    @Override
-    public void onDisconnect(ForgeDirection side) {
-
-        devices[side.ordinal()] = null;
-        sendUpdatePacket();
-    }
-
-    @Override
-    public IRedstoneDevice getDeviceOnSide(ForgeDirection side) {
-
-        return devices[side.ordinal()];
-    }
-
-    @Override
-    public byte getRedstonePower(ForgeDirection side) {
-
-        if (mode == WirelessMode.SEND)
-            return 0;
-        if (!RedstoneApi.getInstance().shouldWiresOutputPower())
-            return 0;
-        if (isBundled)
-            return 0;
-        if (frequency == null)
-            return 0;
-
-        return ((IRedstoneFrequency) frequency).getSignal();
-    }
-
-    @Override
-    public void setRedstonePower(ForgeDirection side, byte power) {
-
-        if (mode == WirelessMode.RECEIVE)
-            return;
-        if (isBundled)
-            return;
-        if (frequency == null)
-            return;
-
-        ((IRedstoneFrequency) frequency).setSignal(power);
-    }
-
-    @Override
-    public void onRedstoneUpdate() {
+    public void tick() {
 
     }
 
     @Override
-    public MinecraftColor getInsulationColor() {
-
-        return MinecraftColor.NONE;
-    }
-
-    @Override
-    public boolean isNormalBlock() {
+    public boolean changeMode() {
 
         return false;
     }
 
     @Override
-    public boolean hasLoss() {
+    public IGateLogic<? extends GateBase<GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase>> logic() {
 
-        return false;
+        return this;
     }
 
     @Override
-    public boolean isAnalog() {
+    public GateTransceiver getGate() {
 
-        return isAnalog;
+        return this;
     }
 
     @Override
-    public Collection<Pair<IRedstoneDevice, ForgeDirection>> propagate(ForgeDirection fromSide) {
+    public void setFrequency(IFrequency freq) {
 
-        List<Pair<IRedstoneDevice, ForgeDirection>> devices = new ArrayList<Pair<IRedstoneDevice, ForgeDirection>>();
+        frequency = (Frequency) freq;
+    }
 
-        if (frequency == null)
-            return devices;
+    @Override
+    public Frequency getFrequency() {
 
-        if (mode != WirelessMode.RECEIVE) {
-            for (GateTransceiver t : transceivers) {
-                if (t == this)
-                    continue;
-                if (t.frequency != frequency)
-                    continue;
-                devices.add(new Pair<IRedstoneDevice, ForgeDirection>(t, ForgeDirection.UNKNOWN));
-            }
+        return frequency;
+    }
+
+    @Override
+    public WirelessMode getMode() {
+
+        return mode;
+    }
+
+    @Override
+    public void setMode(WirelessMode mode) {
+
+        this.mode = mode;
+    }
+
+    @Override
+    public void writeToNBT(NBTTagCompound tag) {
+
+        super.writeToNBT(tag);
+        tag.setInteger("mode", mode.ordinal());
+
+        if (frequency != null)
+            frequency.writeToNBT(tag);
+    }
+
+    @Override
+    public void readFromNBT(NBTTagCompound tag) {
+
+        super.readFromNBT(tag);
+        mode = WirelessMode.values()[tag.getInteger("mode")];
+
+        if (tag.hasKey("freq_name")) {
+            Frequency f = new Frequency();
+            f.readFromNBT(tag);
+            frequency = (Frequency) WirelessManager.COMMON_INSTANCE.getFrequency(f.getAccessibility(), f.getFrequencyName(), f.getOwner());
+        } else {
+            frequency = null;
         }
+    }
 
-        if (mode != WirelessMode.SEND) {
-            if (fromSide == ForgeDirection.UNKNOWN) {
-                for (int i = 0; i < 6; i++) {
-                    IRedstoneDevice d = this.devices[i];
-                    if (d != null)
-                        devices.add(new Pair<IRedstoneDevice, ForgeDirection>(d, ForgeDirection.getOrientation(i)));
-                }
-            }
+    @Override
+    public void writeUpdateData(DataOutput buffer) throws IOException {
+
+        super.writeUpdateData(buffer);
+        buffer.writeInt(mode.ordinal());
+
+        buffer.writeBoolean(frequency != null);
+        if (frequency != null)
+            frequency.writeToBuffer(buffer);
+    }
+
+    @Override
+    public void readUpdateData(DataInput buffer, int channel) throws IOException {
+
+        super.readUpdateData(buffer, channel);
+        mode = WirelessMode.values()[buffer.readInt()];
+
+        if (buffer.readBoolean()) {
+            if (frequency == null)
+                frequency = new Frequency();
+            frequency.readFromBuffer(buffer);
+        } else {
+            frequency = null;
         }
-
-        return devices;
     }
 
     @Override
-    public boolean canConnectBundledStraight(ForgeDirection side, IBundledDevice device) {
+    protected void handleGUIServer(EntityPlayer player) {
 
-        if (!isBundled)
-            return false;
-
-        if (OcclusionHelper.microblockOcclusionTest(getParent(), MicroblockShape.EDGE, 1, getFace(), side))
-            return false;
-
-        return true;
-    }
-
-    @Override
-    public boolean canConnectBundledOpenCorner(ForgeDirection side, IBundledDevice device) {
-
-        if (!isBundled)
-            return false;
-
-        if (OcclusionHelper.microblockOcclusionTest(getParent(), MicroblockShape.EDGE, 1, getFace(), side))
-            return false;
-
-        return true;
-    }
-
-    @Override
-    public boolean canConnectBundledClosedCorner(ForgeDirection side, IBundledDevice device) {
-
-        if (!isBundled)
-            return false;
-
-        if (OcclusionHelper.microblockOcclusionTest(getParent(), MicroblockShape.EDGE, 1, getFace(), side))
-            return false;
-
-        return true;
-    }
-
-    @Override
-    public void onConnect(ForgeDirection side, IBundledDevice device) {
-
-        bundledDevices[side.ordinal()] = device;
         sendUpdatePacket();
+        BPNetworkHandler.INSTANCE.sendTo(new MessageWirelessFrequencySync(player), (EntityPlayerMP) player);
     }
 
     @Override
-    public IBundledDevice getBundledDeviceOnSide(ForgeDirection side) {
+    @SideOnly(Side.CLIENT)
+    protected GuiScreen getGui(EntityPlayer player) {
 
-        return bundledDevices[side.ordinal()];
+        return new GuiGateWireless(this, isBundled, mode);
     }
 
     @Override
-    public byte[] getBundledOutput(ForgeDirection side) {
+    protected boolean hasGUI() {
 
-        if (mode == WirelessMode.SEND)
-            return new byte[16];
-        if (!isBundled)
-            return new byte[16];
-        if (frequency == null)
-            return new byte[16];
-
-        return ((IBundledFrequency) frequency).getSignal();
-    }
-
-    @Override
-    public void setBundledPower(ForgeDirection side, byte[] power) {
-
-        if (mode == WirelessMode.RECEIVE)
-            return;
-        if (!isBundled)
-            return;
-        if (frequency == null)
-            return;
-
-        ((IBundledFrequency) frequency).setSignal(power);
-    }
-
-    @Override
-    public byte[] getBundledPower(ForgeDirection side) {
-
-        return getBundledOutput(side);
-    }
-
-    @Override
-    public void onBundledUpdate() {
-
-    }
-
-    @Override
-    public MinecraftColor getBundledColor() {
-
-        return MinecraftColor.NONE;
+        return true;
     }
 
     @Override
@@ -401,37 +295,100 @@ IBundledConductor, IGuiButtonSensitive, IWirelessGate {
     }
 
     @Override
-    public Collection<Pair<IBundledDevice, ForgeDirection>> propagateBundled(ForgeDirection fromSide) {
+    public void onButtonPress(EntityPlayer player, int messageId, int value) {
 
-        List<Pair<IBundledDevice, ForgeDirection>> devices = new ArrayList<Pair<IBundledDevice, ForgeDirection>>();
-
-        if (frequency == null)
-            return devices;
-
-        for (GateTransceiver t : transceivers) {
-            if (t == this)
-                continue;
-            if (t.frequency != frequency)
-                continue;
-            devices.add(new Pair<IBundledDevice, ForgeDirection>(t, ForgeDirection.UNKNOWN));
+        if (messageId == 0)
+            mode = WirelessMode.values()[value];
+        if (messageId == 1) {
+            setFrequency(null);
+            BPNetworkHandler.INSTANCE.sendTo(new MessageWirelessFrequencySync(player), (EntityPlayerMP) player);
         }
 
-        if (fromSide == ForgeDirection.UNKNOWN)
-            for (int i = 0; i < 6; i++) {
-                IBundledDevice d = bundledDevices[i];
-                if (d != null)
-                    devices.add(new Pair<IBundledDevice, ForgeDirection>(d, ForgeDirection.getOrientation(i)));
-            }
-
-        return devices;
+        sendUpdatePacket();
     }
 
     @Override
-    public void onUpdate() {
+    public boolean hasLoss(ForgeDirection side) {
 
-        super.onUpdate();
+        return false;
+    }
 
-        WireCommons.refreshConnections(this, this);
+    @Override
+    public boolean isAnalogue(ForgeDirection side) {
+
+        return isAnalogue;
+    }
+
+    @Override
+    public boolean canPropagateFrom(ForgeDirection fromSide) {
+
+        return !isBundled;
+    }
+
+    @Override
+    public boolean canPropagateBundledFrom(ForgeDirection fromSide) {
+
+        return isBundled;
+    }
+
+    @Override
+    public Collection<Entry<IConnection<IRedstoneDevice>, Boolean>> propagate(ForgeDirection fromSide) {
+
+        List<Entry<IConnection<IRedstoneDevice>, Boolean>> l = new ArrayList<Entry<IConnection<IRedstoneDevice>, Boolean>>();
+
+        if (frequency == null)
+            return l;
+
+        l.add(new Pair<IConnection<IRedstoneDevice>, Boolean>(getRedstoneConnectionCache().getConnectionOnSide(fromSide), false));
+
+        for (IWirelessDevice d : WirelessManager.COMMON_INSTANCE.getDevices()) {
+            if (d != this && d.getFrequency() != null && d.getFrequency().equals(getFrequency())) {
+                if (d instanceof GateTransceiver) {
+                    IConnection<IRedstoneDevice> c = ((GateTransceiver) d).getRedstoneConnectionCache().getConnectionOnSide(
+                            ((GateTransceiver) d).front().getForgeDirection());
+                    if (c != null)
+                        l.add(new Pair<IConnection<IRedstoneDevice>, Boolean>(c, false));
+                }
+            }
+        }
+
+        return l;
+    }
+
+    @Override
+    public Collection<Entry<IConnection<IBundledDevice>, Boolean>> propagateBundled(ForgeDirection fromSide) {
+
+        return Collections.emptyList();
+    }
+
+    @Override
+    public boolean canConnect(ForgeDirection side, IRedstoneDevice device, ConnectionType type) {
+
+        if (device instanceof IRedwire) {
+            RedwireType rwt = ((IRedwire) device).getRedwireType(type == ConnectionType.STRAIGHT ? side.getOpposite()
+                    : (type == ConnectionType.CLOSED_CORNER ? getFace() : getFace().getOpposite()));
+            if (rwt == null)
+                return false;
+            if (rwt.isAnalogue() != isAnalogue(side))
+                return false;
+        }
+
+        return !isBundled && super.canConnect(side, device, type);
+    }
+
+    @Override
+    public boolean canConnect(ForgeDirection side, IBundledDevice device, ConnectionType type) {
+
+        if (device instanceof IRedwire) {
+            RedwireType rwt = ((IRedwire) device).getRedwireType(type == ConnectionType.STRAIGHT ? side.getOpposite()
+                    : (type == ConnectionType.CLOSED_CORNER ? getFace() : getFace().getOpposite()));
+            if (rwt == null)
+                return false;
+            if (rwt.isAnalogue() != isAnalogue(side))
+                return false;
+        }
+
+        return isBundled && super.canConnect(side, device, type);
     }
 
     @Override
@@ -469,135 +426,22 @@ IBundledConductor, IGuiButtonSensitive, IWirelessGate {
     }
 
     @Override
-    public void setFrequency(IFrequency freq) {
-
-        if (getWorld().isRemote)
-            return;
-        if (!(freq instanceof Frequency) && freq != null)
-            return;
-
-        transceivers.remove(this);
-        WireCommons.refreshConnections(this, this);
-        WirePropagator.INSTANCE.onPowerLevelChange(this, ForgeDirection.UNKNOWN, (byte) 0, (byte) 0);
-        frequency = (Frequency) freq;
-        transceivers.add(this);
-        WirePropagator.INSTANCE.onPowerLevelChange(this, ForgeDirection.UNKNOWN, (byte) 0, (byte) 0);
-
-        sendUpdatePacket();
-    }
-
-    @Override
-    public Frequency getFrequency() {
-
-        return frequency;
-    }
-
-    @Override
-    public void writeToNBT(NBTTagCompound tag) {
-
-        super.writeToNBT(tag);
-        tag.setInteger("mode", mode.ordinal());
-
-        if (frequency != null)
-            frequency.writeToNBT(tag);
-    }
-
-    @Override
-    public void readFromNBT(NBTTagCompound tag) {
-
-        super.readFromNBT(tag);
-        mode = WirelessMode.values()[tag.getInteger("mode")];
-
-        if (tag.hasKey("freq_name")) {
-            Frequency f = new Frequency();
-            f.readFromNBT(tag);
-            frequency = (Frequency) WirelessManager.COMMON_INSTANCE.getFrequency(f.getAccessibility(), f.getFrequencyName(), f.getOwner());
-        } else {
-            frequency = null;
-        }
-    }
-
-    @Override
-    public void writeUpdateToNBT(NBTTagCompound tag) {
-
-        super.writeUpdateToNBT(tag);
-        tag.setInteger("mode", mode.ordinal());
-
-        if (frequency != null)
-            frequency.writeToNBT(tag);
-    }
-
-    @Override
-    public void readUpdateFromNBT(NBTTagCompound tag) {
-
-        super.readUpdateFromNBT(tag);
-        mode = WirelessMode.values()[tag.getInteger("mode")];
-
-        if (tag.hasKey("freq_name")) {
-            if (frequency == null)
-                frequency = new Frequency();
-            frequency.readFromNBT(tag);
-        } else {
-            frequency = null;
-        }
-    }
-
-    @Override
-    protected void handleGUIServer(EntityPlayer player) {
-
-        sendUpdatePacket();
-        NetworkHandler.sendTo(new MessageWirelessFrequencySync(player), (EntityPlayerMP) player);
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    protected GuiScreen getGui(EntityPlayer player) {
-
-        return new GuiGateWireless(this, isBundled, mode);
-    }
-
-    @Override
-    protected boolean hasGUI() {
-
-        return true;
-    }
-
-    @Override
-    public WirelessMode getMode() {
-
-        return mode;
-    }
-
-    @Override
-    public void setMode(WirelessMode mode) {
-
-        this.mode = mode;
-    }
-
-    @Override
-    public void onButtonPress(EntityPlayer player, int messageId, int value) {
-
-        if (messageId == 0)
-            mode = WirelessMode.values()[value];
-        if (messageId == 1) {
-            setFrequency(null);
-            NetworkHandler.sendTo(new MessageWirelessFrequencySync(player), (EntityPlayerMP) player);
-        }
-
-        sendUpdatePacket();
-    }
-
-    @Override
     public IPartPlacement getPlacement(IPart part, World world, Vec3i location, ForgeDirection face, MovingObjectPosition mop,
             EntityPlayer player) {
 
-        return null;
+        if (!DebugHelper.isDebugModeEnabled())
+            return null;
+
+        return super.getPlacement(part, world, location, face, mop, player);
     }
 
     @Override
-    public void addTooltip(List<String> tip) {
+    public void addTooltip(ItemStack item, List<String> tip) {
 
-        tip.add(MinecraftColor.RED + I18n.format("Disabled temporarily. Still not fully working."));
+        if (!DebugHelper.isDebugModeEnabled())
+            tip.add(MinecraftColor.RED + I18n.format("Disabled temporarily. Still not fully working."));
+        else
+            tip.add(MinecraftColor.CYAN + I18n.format("Disabled temporarily. Still not fully working."));
     }
 
 }

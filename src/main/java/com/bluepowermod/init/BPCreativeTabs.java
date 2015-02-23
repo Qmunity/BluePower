@@ -24,6 +24,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
+import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.part.PartManager;
 
 import cpw.mods.fml.relauncher.Side;
@@ -42,7 +43,7 @@ public class BPCreativeTabs {
 
     static {
 
-        blocks = new BPCreativeTab("tabBluePowerBlocks") {
+        blocks = new BPCreativeTab("bluepower:blocks") {
 
             @Override
             @SideOnly(Side.CLIENT)
@@ -57,7 +58,7 @@ public class BPCreativeTabs {
             }
         };
 
-        machines = new BPCreativeTab("tabBluePowerMachines") {
+        machines = new BPCreativeTab("bluepower:machines") {
 
             @Override
             @SideOnly(Side.CLIENT)
@@ -72,7 +73,7 @@ public class BPCreativeTabs {
             }
         };
 
-        items = new BPCreativeTab("tabBluePowerItems") {
+        items = new BPCreativeTab("bluepower:items") {
 
             @Override
             @SideOnly(Side.CLIENT)
@@ -87,7 +88,7 @@ public class BPCreativeTabs {
             }
         };
 
-        tools = new BPCreativeTab("tabBluePowerTools") {
+        tools = new BPCreativeTab("bluepower:tools") {
 
             @Override
             @SideOnly(Side.CLIENT)
@@ -102,7 +103,7 @@ public class BPCreativeTabs {
             }
         };
 
-        circuits = new BPCreativeTab("tabBluePowerCircuits", true) {
+        circuits = new BPCreativeTab("bluepower:circuits", true) {
 
             @Override
             @SideOnly(Side.CLIENT)
@@ -124,7 +125,7 @@ public class BPCreativeTabs {
             }
         };
 
-        wiring = new BPCreativeTab("tabBluePowerWiring", true) {
+        wiring = new BPCreativeTab("bluepower:wiring", true) {
 
             @Override
             @SideOnly(Side.CLIENT)
@@ -137,7 +138,7 @@ public class BPCreativeTabs {
             @SideOnly(Side.CLIENT)
             public ItemStack getIconItemStack() {
 
-                ItemStack iconItem = PartManager.getPartInfo("wire.freestanding.bluestone").getStack();
+                ItemStack iconItem = PartManager.getPartInfo("wire.bluestone").getStack();
                 if (iconItem != null) {
                     return iconItem;
                 } else {
@@ -146,13 +147,33 @@ public class BPCreativeTabs {
             }
         };
 
-        lighting = new BPCreativeTab("tabBluePowerLighting", true) {
+        lighting = new BPCreativeTab("bluepower:lighting", true) {
 
             @Override
             @SideOnly(Side.CLIENT)
             public Item getTabIconItem() {
 
-                return Item.getItemFromBlock(Blocks.redstone_lamp);
+                return null;
+            }
+
+            @Override
+            @SideOnly(Side.CLIENT)
+            public ItemStack getIconItemStack() {
+
+                int t = 1000;
+
+                int i = (int) ((System.currentTimeMillis() / t) % MinecraftColor.VALID_COLORS.length);
+                boolean b = ((System.currentTimeMillis() / t) % (MinecraftColor.VALID_COLORS.length * 2)) >= MinecraftColor.VALID_COLORS.length;
+                boolean b2 = ((System.currentTimeMillis() / t) % (MinecraftColor.VALID_COLORS.length * 4)) >= MinecraftColor.VALID_COLORS.length;
+
+                ItemStack iconItem = PartManager.getPartInfo(
+                        (b2 ? "fixture" : "cagelamp") + "." + MinecraftColor.VALID_COLORS[i].name().toLowerCase() + (b ? ".inverted" : ""))
+                        .getStack();
+                if (iconItem != null) {
+                    return iconItem;
+                } else {
+                    return new ItemStack(Blocks.stone);
+                }
             }
         };
 

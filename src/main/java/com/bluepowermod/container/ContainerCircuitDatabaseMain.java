@@ -12,10 +12,10 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import uk.co.qmunity.lib.client.gui.GuiContainerBase;
 
 import com.bluepowermod.ClientProxy;
 import com.bluepowermod.api.item.IDatabaseSaveable;
-import com.bluepowermod.client.gui.GuiBase;
 import com.bluepowermod.container.slot.SlotPhantom;
 import com.bluepowermod.tile.tier3.TileCircuitDatabase;
 
@@ -23,77 +23,77 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class ContainerCircuitDatabaseMain extends ContainerGhosts {
-    
-    private int                       curUploadProgress, curCopyProgress, selectedShareOption;
+
+    private int curUploadProgress, curCopyProgress, selectedShareOption;
     private final TileCircuitDatabase circuitDatabase;
-    
+
     public ContainerCircuitDatabaseMain(InventoryPlayer invPlayer, TileCircuitDatabase circuitDatabase) {
-    
+
         this.circuitDatabase = circuitDatabase;
         addSlotToContainer(new SlotPhantom(circuitDatabase.copyInventory, 0, 57, 64) {
-            
+
             @Override
             public boolean isItemValid(ItemStack stack) {
-            
+
                 return stack.getItem() instanceof IDatabaseSaveable && ((IDatabaseSaveable) stack.getItem()).canGoInCopySlot(stack);
             }
-            
+
             @Override
             public int getSlotStackLimit() {
-            
+
                 return 1;
             }
         });
         addSlotToContainer(new Slot(circuitDatabase.copyInventory, 1, 108, 64) {
-            
+
             @Override
             public boolean isItemValid(ItemStack stack) {
-            
+
                 return stack.getItem() instanceof IDatabaseSaveable && ((IDatabaseSaveable) stack.getItem()).canGoInCopySlot(stack);
             }
         });
-        
+
         for (int i = 0; i < 2; ++i) {
             for (int j = 0; j < 9; ++j) {
                 addSlotToContainer(new Slot(circuitDatabase, j + i * 9, 8 + j * 18, 95 + i * 18));
             }
         }
-        
+
         bindPlayerInventory(invPlayer);
     }
-    
+
     protected void bindPlayerInventory(InventoryPlayer invPlayer) {
-    
+
         // Render inventory
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 9; j++) {
                 addSlotToContainer(new Slot(invPlayer, j + i * 9 + 9, 8 + j * 18, 142 + i * 18));
             }
         }
-        
+
         // Render hotbar
         for (int j = 0; j < 9; j++) {
             addSlotToContainer(new Slot(invPlayer, j, 8 + j * 18, 200));
         }
     }
-    
+
     @Override
     public boolean canInteractWith(EntityPlayer player) {
-    
+
         return true;
     }
-    
+
     /**
      * Looks for changes made in the container, sends them to every listener.
      */
     @Override
     public void detectAndSendChanges() {
-    
+
         super.detectAndSendChanges();
-        
+
         for (Object crafter : crafters) {
             ICrafting icrafting = (ICrafting) crafter;
-            
+
             if (curUploadProgress != circuitDatabase.curUploadProgress) {
                 icrafting.sendProgressBarUpdate(this, 0, circuitDatabase.curUploadProgress);
             }
@@ -108,11 +108,11 @@ public class ContainerCircuitDatabaseMain extends ContainerGhosts {
         curCopyProgress = circuitDatabase.curCopyProgress;
         selectedShareOption = circuitDatabase.selectedShareOption;
     }
-    
+
     @Override
     @SideOnly(Side.CLIENT)
     public void updateProgressBar(int id, int value) {
-    
+
         if (id == 0) {
             circuitDatabase.curUploadProgress = value;
         }
@@ -121,22 +121,24 @@ public class ContainerCircuitDatabaseMain extends ContainerGhosts {
         }
         if (id == 2) {
             circuitDatabase.selectedShareOption = value;
-            ((GuiBase) ClientProxy.getOpenedGui()).redraw();
+            ((GuiContainerBase) ClientProxy.getOpenedGui()).redraw();
         }
     }
-    
+
     @Override
     public ItemStack transferStackInSlot(EntityPlayer player, int par2) {
-    
+
         ItemStack itemstack = null;
         Slot slot = (Slot) inventorySlots.get(par2);
         if (slot != null && slot.getHasStack()) {
             ItemStack itemstack1 = slot.getStack();
             itemstack = itemstack1.copy();
             if (par2 < 20) {
-                if (!mergeItemStack(itemstack1, 20, 55, false)) return null;
+                if (!mergeItemStack(itemstack1, 20, 55, false))
+                    return null;
             } else {
-                if (!mergeItemStack(itemstack1, 2, 20, false)) return null;
+                if (!mergeItemStack(itemstack1, 2, 20, false))
+                    return null;
             }
             if (itemstack1.stackSize == 0) {
                 slot.putStack(null);
@@ -151,5 +153,5 @@ public class ContainerCircuitDatabaseMain extends ContainerGhosts {
         }
         return itemstack;
     }
-    
+
 }

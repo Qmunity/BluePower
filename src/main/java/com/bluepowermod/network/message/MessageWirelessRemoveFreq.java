@@ -1,14 +1,18 @@
 package com.bluepowermod.network.message;
 
-import io.netty.buffer.ByteBuf;
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import uk.co.qmunity.lib.network.Packet;
 
-import com.bluepowermod.network.NetworkHandler;
+import com.bluepowermod.network.BPNetworkHandler;
 import com.bluepowermod.part.gate.wireless.Frequency;
 import com.bluepowermod.part.gate.wireless.WirelessManager;
 
-public class MessageWirelessRemoveFreq extends AbstractPacket<MessageWirelessRemoveFreq> {
+public class MessageWirelessRemoveFreq extends Packet<MessageWirelessRemoveFreq> {
 
     private Frequency freq;
 
@@ -22,29 +26,30 @@ public class MessageWirelessRemoveFreq extends AbstractPacket<MessageWirelessRem
     }
 
     @Override
-    public void handleClientSide(MessageWirelessRemoveFreq message, EntityPlayer player) {
+    public void write(DataOutput buffer) throws IOException {
 
+        freq.writeToBuffer(buffer);
     }
 
     @Override
-    public void handleServerSide(MessageWirelessRemoveFreq message, EntityPlayer player) {
-
-        WirelessManager.COMMON_INSTANCE.unregisterFrequency(WirelessManager.COMMON_INSTANCE.getFrequency(message.freq.getAccessibility(),
-                message.freq.getFrequencyName(), message.freq.getOwner()));
-
-        NetworkHandler.sendTo(new MessageWirelessFrequencySync(player), (EntityPlayerMP) player);
-    }
-
-    @Override
-    public void fromBytes(ByteBuf buf) {
+    public void read(DataInput buffer) throws IOException {
 
         freq = new Frequency();
-        freq.readFromBuffer(buf);
+        freq.readFromBuffer(buffer);
     }
 
     @Override
-    public void toBytes(ByteBuf buf) {
+    public void handleClientSide(EntityPlayer player) {
 
-        freq.writeToBuffer(buf);
+    }
+
+    @Override
+    public void handleServerSide(EntityPlayer player) {
+
+        WirelessManager.COMMON_INSTANCE.unregisterFrequency(WirelessManager.COMMON_INSTANCE.getFrequency(freq.getAccessibility(),
+                freq.getFrequencyName(), freq.getOwner()));
+
+        BPNetworkHandler.INSTANCE.sendTo(new MessageWirelessFrequencySync(player), (EntityPlayerMP) player);
+
     }
 }

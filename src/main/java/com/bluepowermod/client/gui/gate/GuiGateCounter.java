@@ -11,7 +11,7 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 
-import com.bluepowermod.part.gate.GateBase;
+import com.bluepowermod.part.gate.digital.GateCounter;
 import com.bluepowermod.util.Refs;
 
 import cpw.mods.fml.relauncher.Side;
@@ -24,7 +24,7 @@ public abstract class GuiGateCounter extends GuiGate {
     private static final String[] buttonTexts = { "-25", "-5", "-1", "+1", "+5", "+25" };
     private static final int[] buttonActions = { -25, -5, -1, +1, +5, +25 };
 
-    public GuiGateCounter(GateBase gate) {
+    public GuiGateCounter(GateCounter gate) {
 
         super(gate, 228, 120);
     }
@@ -89,12 +89,12 @@ public abstract class GuiGateCounter extends GuiGate {
     @Override
     public void renderGUI(int x, int y, float partialTicks) {
 
-        drawCenteredString(fontRendererObj, I18n.format("gui.counterMax") + ": " + getCurrentMax(), guiLeft + xSize / 2, guiTop + 10,
-                0xFFFFFF);
-        drawCenteredString(fontRendererObj, I18n.format("gui.counterIncrement") + ": " + getCurrentIncrement(), guiLeft + xSize / 2,
-                guiTop + 10 + 38, 0xFFFFFF);
-        drawCenteredString(fontRendererObj, I18n.format("gui.counterDecrement") + ": " + getCurrentDecrement(), guiLeft + xSize / 2,
-                guiTop + 10 + 38 + 35, 0xFFFFFF);
+        drawCenteredString(fontRendererObj, I18n.format("gui.bluepower:counter.max") + ": " + getCurrentMax(), guiLeft + xSize / 2,
+                guiTop + 10, 0xFFFFFF);
+        drawCenteredString(fontRendererObj, I18n.format("gui.bluepower:counter.increment") + ": " + getCurrentIncrement(), guiLeft + xSize
+                / 2, guiTop + 10 + 38, 0xFFFFFF);
+        drawCenteredString(fontRendererObj, I18n.format("gui.bluepower:counter.decrement") + ": " + getCurrentDecrement(), guiLeft + xSize
+                / 2, guiTop + 10 + 38 + 35, 0xFFFFFF);
     }
 
     protected abstract int getCurrentMax();

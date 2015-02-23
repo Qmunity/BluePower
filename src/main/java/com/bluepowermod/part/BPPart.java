@@ -28,9 +28,17 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 import uk.co.qmunity.lib.client.render.RenderHelper;
-import uk.co.qmunity.lib.part.*;
+import uk.co.qmunity.lib.part.IPart;
+import uk.co.qmunity.lib.part.IPartCollidable;
+import uk.co.qmunity.lib.part.IPartInteractable;
+import uk.co.qmunity.lib.part.IPartOccluding;
+import uk.co.qmunity.lib.part.IPartSelectable;
+import uk.co.qmunity.lib.part.IPartUpdateListener;
+import uk.co.qmunity.lib.part.IPartWAILAProvider;
+import uk.co.qmunity.lib.part.PartBase;
 import uk.co.qmunity.lib.raytrace.QMovingObjectPosition;
 import uk.co.qmunity.lib.raytrace.RayTracer;
 import uk.co.qmunity.lib.vec.Vec3d;
@@ -38,10 +46,47 @@ import uk.co.qmunity.lib.vec.Vec3dCube;
 import uk.co.qmunity.lib.vec.Vec3i;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public abstract class BPPart extends PartBase implements IPartSelectable, IPartCollidable, IPartOccluding, IPartUpdateListener,
-        IPartInteractable, IDatabaseSaveable, IPartWAILAProvider {
+IPartInteractable, IDatabaseSaveable, IPartWAILAProvider {
+
+    @Override
+    public World getWorld() {
+
+        if (getParent() == null)
+            return null;
+
+        return super.getWorld();
+    }
+
+    @Override
+    public int getX() {
+
+        if (getParent() == null)
+            return 0;
+
+        return super.getX();
+    }
+
+    @Override
+    public int getY() {
+
+        if (getParent() == null)
+            return 0;
+
+        return super.getY();
+    }
+
+    @Override
+    public int getZ() {
+
+        if (getParent() == null)
+            return 0;
+
+        return super.getZ();
+    }
 
     public abstract String getUnlocalizedName();
 
@@ -53,7 +98,7 @@ public abstract class BPPart extends PartBase implements IPartSelectable, IPartC
         if (partInfo == null)
             partInfo = PartManager.getPartInfo(getType());
 
-        return partInfo.getStack().copy();
+        return partInfo.getStack();
     }
 
     @Override
@@ -114,8 +159,6 @@ public abstract class BPPart extends PartBase implements IPartSelectable, IPartC
     @Override
     public void onNeighborTileChange() {
 
-        if (!getWorld().isRemote)
-            onUpdate();
     }
 
     @Override
@@ -214,8 +257,13 @@ public abstract class BPPart extends PartBase implements IPartSelectable, IPartC
     }
 
     @SideOnly(Side.CLIENT)
-    public void addTooltip(List<String> tip) {
+    public void addTooltip(ItemStack item, List<String> tip) {
 
+    }
+
+    public List<ItemStack> getSubItems() {
+
+        return Arrays.asList(getItem());
     }
 
 }

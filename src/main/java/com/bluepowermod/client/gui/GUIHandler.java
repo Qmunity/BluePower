@@ -110,7 +110,7 @@ public class GUIHandler implements IGuiHandler {
                 return null;
             }
             return new ContainerMonitor(player.inventory, (TileMonitor) ent);
-        case DISK_DRIVE: // FIXME: this conditional will always be false (for fabricator77)
+        case DISK_DRIVE: // TODO: this conditional will always be false (for fabricator77)
             if (player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() instanceof ItemScrewdriver
             && player.getCurrentEquippedItem().getItem() instanceof ItemFloppyDisk) {
                 return null;
@@ -190,7 +190,7 @@ public class GUIHandler implements IGuiHandler {
                 return null;
             }
             return new GuiMonitor(player.inventory, (TileMonitor) ent);
-        case DISK_DRIVE: // FIXME: this conditional will always be false (for fabricator77)
+        case DISK_DRIVE: // TODO: this conditional will always be false (for fabricator77)
             if (player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() instanceof ItemScrewdriver
             && player.getCurrentEquippedItem().getItem() instanceof ItemFloppyDisk) {
                 return null;

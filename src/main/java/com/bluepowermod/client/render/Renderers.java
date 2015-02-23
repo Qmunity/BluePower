@@ -58,8 +58,8 @@ public class Renderers {
         MinecraftForgeClient.registerItemRenderer(BPItems.redstone_pointer_tile, rct);
         MinecraftForgeClient.registerItemRenderer(BPItems.redstone_wire_tile, rct);
         MinecraftForgeClient.registerItemRenderer(BPItems.silicon_chip_tile, rct);
-        MinecraftForgeClient.registerItemRenderer(BPItems.taintedsilicon_chip_tile, rct);
+        MinecraftForgeClient.registerItemRenderer(BPItems.tainted_silicon_chip_tile, rct);
         MinecraftForgeClient.registerItemRenderer(BPItems.quartz_resonator_tile, rct);
-        MinecraftForgeClient.registerItemRenderer(BPItems.stone_bundle_tile, rct);
+        MinecraftForgeClient.registerItemRenderer(BPItems.stone_bundle, rct);
     }
 }

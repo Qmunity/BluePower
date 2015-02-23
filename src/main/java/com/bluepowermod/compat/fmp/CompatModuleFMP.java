@@ -16,7 +16,7 @@ import codechicken.microblock.MicroMaterialRegistry;
 import com.bluepowermod.compat.CompatModule;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.init.BPItems;
-import com.bluepowermod.part.wire.redstone.RedstoneApi;
+import com.bluepowermod.redstone.RedstoneApi;
 
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;

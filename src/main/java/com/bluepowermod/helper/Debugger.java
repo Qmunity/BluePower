@@ -9,16 +9,16 @@ package com.bluepowermod.helper;
 
 import java.util.Random;
 
-import uk.co.qmunity.lib.part.IPart;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import uk.co.qmunity.lib.part.IPart;
 
-import com.bluepowermod.network.NetworkHandler;
+import com.bluepowermod.network.BPNetworkHandler;
 import com.bluepowermod.network.message.MessageDebugBlock;
 
 /**
  * Class aimed for debugging purposes only
- * 
+ *
  * @author MineMaarten
  */
 public class Debugger {
@@ -46,7 +46,7 @@ public class Debugger {
                     world.spawnParticle("flame", dx, dy, dz, 0, 0, 0);
                 }
             } else {
-                NetworkHandler.sendToAllAround(new MessageDebugBlock(x, y, z), world);
+                BPNetworkHandler.INSTANCE.sendToAllAround(new MessageDebugBlock(x, y, z), world);
             }
         }
     }

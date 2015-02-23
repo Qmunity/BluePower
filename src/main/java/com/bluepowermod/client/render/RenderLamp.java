@@ -20,8 +20,8 @@ import net.minecraftforge.common.util.ForgeDirection;
 import org.lwjgl.opengl.GL11;
 
 import uk.co.qmunity.lib.client.render.RenderHelper;
-import uk.co.qmunity.lib.vec.Vec3d;
 import uk.co.qmunity.lib.vec.Vec3dCube;
+import uk.co.qmunity.lib.vec.Vec3i;
 
 import com.bluepowermod.block.machine.BlockLamp;
 import com.bluepowermod.tile.tier1.TileLamp;
@@ -65,6 +65,9 @@ public class RenderLamp extends TileEntitySpecialRenderer implements ISimpleBloc
     @Override
     public void renderTileEntityAt(TileEntity te, double x, double y, double z, float f) {
 
+        if (!(te.getBlockType() instanceof BlockLamp))
+            return;
+
         if (pass != 0) {
             BlockLamp bLamp = (BlockLamp) te.getBlockType();
             int power = ((TileLamp) te).getPower();
@@ -80,13 +83,15 @@ public class RenderLamp extends TileEntitySpecialRenderer implements ISimpleBloc
                 power = 15 - power;
             }
             // power = 15;
-            Vec3d vector = new Vec3d(te);
+            Vec3i vector = new Vec3i(te);
             Vec3dCube box = new Vec3dCube(-0.5, -0.5, -0.5, 0.5, 0.5, 0.5).expand(0.8 / 16D);
 
             boolean[] renderFaces = new boolean[] { true, true, true, true, true, true };
 
             for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
-                if (vector.getRelative(d).getBlock() instanceof BlockLamp) {
+                Vec3i v = vector.getRelative(d);
+                Block bl = v.getBlock();
+                if (bl instanceof BlockLamp && ((BlockLamp) bl).getPower(v.getWorld(), v.getX(), v.getY(), v.getZ()) > 0) {
                     if (d.offsetX < 0) {
                         box.getMin().setX(-0.5);
                         renderFaces[2] = false;

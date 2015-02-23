@@ -14,20 +14,20 @@ import com.bluepowermod.container.ContainerDiskDrive;
 import com.bluepowermod.tile.tier3.TileDiskDrive;
 import com.bluepowermod.util.Refs;
 
-public class GuiDiskDrive extends GuiBase {
-    
-    private final TileDiskDrive           diskDrive;
-    
+public class GuiDiskDrive extends GuiContainerBaseBP {
+
+    private final TileDiskDrive diskDrive;
+
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID + ":textures/gui/diskdrivegui.png");
-    
+
     public GuiDiskDrive(InventoryPlayer invPlayer, TileDiskDrive diskDrive) {
-    
+
         super(new ContainerDiskDrive(invPlayer, diskDrive), resLoc);
         this.diskDrive = diskDrive;
     }
-    
+
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-    
+
     }
 }

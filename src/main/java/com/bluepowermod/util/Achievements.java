@@ -1,10 +1,11 @@
 package com.bluepowermod.util;
 
+import net.minecraft.stats.Achievement;
+import net.minecraftforge.common.AchievementPage;
+
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.init.BPItems;
 import com.bluepowermod.part.PartManager;
-import net.minecraft.stats.Achievement;
-import net.minecraftforge.common.AchievementPage;
 
 /**
  * @author K4Unl (Koen Beckers)

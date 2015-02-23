@@ -22,14 +22,14 @@ import java.util.List;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
+import uk.co.qmunity.lib.client.gui.widget.BaseWidget;
+import uk.co.qmunity.lib.client.gui.widget.IGuiWidget;
+import uk.co.qmunity.lib.client.gui.widget.WidgetMode;
 
-import com.bluepowermod.client.gui.widget.BaseWidget;
-import com.bluepowermod.client.gui.widget.IGuiWidget;
 import com.bluepowermod.client.gui.widget.WidgetColor;
 import com.bluepowermod.client.gui.widget.WidgetFuzzySetting;
-import com.bluepowermod.client.gui.widget.WidgetMode;
 import com.bluepowermod.container.ContainerSortingMachine;
-import com.bluepowermod.network.NetworkHandler;
+import com.bluepowermod.network.BPNetworkHandler;
 import com.bluepowermod.network.message.MessageGuiUpdate;
 import com.bluepowermod.tile.tier2.TileSortingMachine;
 import com.bluepowermod.tile.tier2.TileSortingMachine.PullMode;
@@ -37,11 +37,11 @@ import com.bluepowermod.tile.tier2.TileSortingMachine.SortMode;
 import com.bluepowermod.util.Refs;
 
 /**
- * 
+ *
  * @author MineMaarten
  */
 
-public class GuiSortingMachine extends GuiBase {
+public class GuiSortingMachine extends GuiContainerBaseBP {
 
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/sorting_machine.png");
     private final TileSortingMachine sortingMachine;
@@ -77,30 +77,30 @@ public class GuiSortingMachine extends GuiBase {
             @Override
             public void addTooltip(int mouseX, int mouseY, List<String> curTip, boolean shiftPressed) {
 
-                curTip.add("gui.pullMode");
+                curTip.add("gui.bluepower:sortingMachine.pullMode");
                 curTip.add(PullMode.values()[value].toString());
                 if (shiftPressed) {
                     curTip.add(PullMode.values()[value].toString() + ".info");
                 } else {
-                    curTip.add("gui.sneakForInfo");
+                    curTip.add("gui.bluepower:tooltip.sneakForInfo");
                 }
             }
         };
         pullModeWidget.value = sortingMachine.pullMode.ordinal();
         addWidget(pullModeWidget);
 
-        WidgetMode sortModeWidget = new WidgetMode(10, guiLeft + 7, guiTop + 106, 210, TileSortingMachine.SortMode.values().length, Refs.MODID
-                + ":textures/gui/sorting_machine.png") {
+        WidgetMode sortModeWidget = new WidgetMode(10, guiLeft + 7, guiTop + 106, 210, TileSortingMachine.SortMode.values().length,
+                Refs.MODID + ":textures/gui/sorting_machine.png") {
 
             @Override
             public void addTooltip(int mouseX, int mouseY, List<String> curTip, boolean shiftPressed) {
 
-                curTip.add("gui.sortMode");
+                curTip.add("gui.bluepower:sortingMachine.sortMode");
                 curTip.add(TileSortingMachine.SortMode.values()[value].toString());
                 if (shiftPressed) {
                     curTip.add(TileSortingMachine.SortMode.values()[value].toString() + ".info");
                 } else {
-                    curTip.add("gui.sneakForInfo");
+                    curTip.add("gui.bluepower:tooltip.sneakForInfo");
                 }
             }
         };
@@ -118,7 +118,7 @@ public class GuiSortingMachine extends GuiBase {
     public void actionPerformed(IGuiWidget widget) {
 
         BaseWidget baseWidget = (BaseWidget) widget;
-        NetworkHandler.sendToServer(new MessageGuiUpdate(sortingMachine, widget.getID(), baseWidget.value));
+        BPNetworkHandler.INSTANCE.sendToServer(new MessageGuiUpdate(sortingMachine, widget.getID(), baseWidget.value));
     }
 
     @Override

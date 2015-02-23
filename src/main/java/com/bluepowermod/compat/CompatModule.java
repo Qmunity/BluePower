@@ -17,6 +17,7 @@
 
 package com.bluepowermod.compat;
 
+import net.minecraft.item.ItemStack;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
@@ -37,5 +38,10 @@ public abstract class CompatModule {
 
     @SideOnly(Side.CLIENT)
     public abstract void registerRenders();
+
+    public boolean isScrewdriver(ItemStack item) {
+
+        return false;
+    }
 
 }

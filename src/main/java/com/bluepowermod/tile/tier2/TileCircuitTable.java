@@ -12,6 +12,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryBasic;
 import net.minecraft.item.ItemStack;
@@ -33,7 +34,7 @@ public class TileCircuitTable extends TileBase implements IInventory, IGuiButton
 
     protected ItemStack[] inventory = new ItemStack[18];
     public final InventoryBasic circuitInventory = new InventoryBasic("circuitInventory", false, 24);
-    private int slotsScrolled;
+    public int slotsScrolled;
     private String textboxString = "";
 
     public TileCircuitTable() {
@@ -42,7 +43,7 @@ public class TileCircuitTable extends TileBase implements IInventory, IGuiButton
     }
 
     public void updateGateInventory() {
-
+        //       if (worldObj == null || !worldObj.isRemote) {
         List<ItemStack> gates = getApplicableItems();
         Iterator<ItemStack> iterator = gates.iterator();
         while (iterator.hasNext()) {
@@ -54,6 +55,7 @@ public class TileCircuitTable extends TileBase implements IInventory, IGuiButton
             ItemStack stack = gates.size() > slotsScrolled * 8 + i ? gates.get(slotsScrolled * 8 + i) : null;
             circuitInventory.setInventorySlotContents(i, stack);
         }
+        //   }
     }
 
     protected List<ItemStack> getApplicableItems() {
@@ -61,7 +63,8 @@ public class TileCircuitTable extends TileBase implements IInventory, IGuiButton
         List<ItemStack> gates = new ArrayList<ItemStack>();
         List<PartInfo> registeredParts = PartManager.getRegisteredParts();
         for (PartInfo part : registeredParts) {
-            if (part.getExample() instanceof GateBase && ((GateBase) part.getExample()).isCraftableInCircuitTable()) {
+            if (part.getExample() instanceof GateBase<?, ?, ?, ?, ?, ?>
+            && ((GateBase<?, ?, ?, ?, ?, ?>) part.getExample()).isCraftableInCircuitTable()) {
                 ItemStack partStack = part.getStack().copy();
                 gates.add(partStack);
             }
@@ -69,12 +72,17 @@ public class TileCircuitTable extends TileBase implements IInventory, IGuiButton
         return gates;
     }
 
+    public int getRequiredScrollStates() {
+        return (getApplicableItems().size() - 17) / 8;
+    }
+
     @Override
     public void onButtonPress(EntityPlayer player, int messageId, int value) {
-
-        if (messageId == 0)
+        if (messageId == 0) {
             slotsScrolled = value;
+        }
         updateGateInventory();
+        ((ICrafting) player).sendContainerAndContentsToPlayer(player.openContainer, player.openContainer.getInventory());
     }
 
     @Override

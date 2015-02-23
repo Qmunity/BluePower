@@ -24,6 +24,7 @@ import net.minecraftforge.client.IItemRenderer;
 
 import org.lwjgl.opengl.GL11;
 
+import com.bluepowermod.part.BPPart;
 import com.bluepowermod.part.PartManager;
 
 import cpw.mods.fml.relauncher.Side;
@@ -89,7 +90,8 @@ public class RenderPartItem implements IItemRenderer {
         GL11.glTranslatef(x, y, z);
         Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
         try {
-            PartManager.getExample(item).renderItem(type, item, data);
+            BPPart part = PartManager.getExample(item);
+            part.renderItem(type, item, data);
         } catch (Exception ex) {
         }
         GL11.glPopMatrix();
@@ -99,5 +101,4 @@ public class RenderPartItem implements IItemRenderer {
         if (!alpha)
             GL11.glDisable(GL11.GL_ALPHA_TEST);
     }
-
 }

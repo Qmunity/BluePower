@@ -60,22 +60,22 @@ public class BPGuiConfig extends GuiConfig {
         List<IConfigElement> listEnchants = new ConfigElement(BluePower.config.getCategory(Refs.CONFIG_ENCHANTS)).getChildElements();
         List<IConfigElement> listPneumaticTube = new ConfigElement(BluePower.config.getCategory(Refs.CONFIG_TUBES)).getChildElements();
         List<IConfigElement> listCircuitDatabase = new ConfigElement(BluePower.config.getCategory(Refs.CONFIG_CIRCUIT_DATABASE))
-                .getChildElements();
+        .getChildElements();
 
-        list.add(new DummyConfigElement.DummyCategoryElement("World Gen", "bluepower.config.worldgen", listWorldGen));
-        list.add(new DummyConfigElement.DummyCategoryElement("Settings", "bluepower.config.settings", listSettings));
-        list.add(new DummyConfigElement.DummyCategoryElement("Recipes", "bluepower.config.recipes", listRecipes));
-        list.add(new DummyConfigElement.DummyCategoryElement("Enchantments", "bluepower.config.enchantments", listEnchants));
-        list.add(new DummyConfigElement.DummyCategoryElement("Pneumatic Tubes", "bluepower.config.tubes", listPneumaticTube));
-        list.add(new DummyConfigElement.DummyCategoryElement("Circuit Database", "bluepower.config.circuitDatabase", listCircuitDatabase));
-        list.add(new DummyConfigElement.DummyCategoryElement("Copper", "bluepower.config.copper", listCopper));
-        list.add(new DummyConfigElement.DummyCategoryElement("Zinc", "bluepower.config.zinc", listZinc));
-        list.add(new DummyConfigElement.DummyCategoryElement("Silver", "bluepower.config.silver", listSilver));
-        list.add(new DummyConfigElement.DummyCategoryElement("Tungsten", "bluepower.config.tungsten", listTungsten));
-        list.add(new DummyConfigElement.DummyCategoryElement("Ruby", "bluepower.config.ruby", listRuby));
-        list.add(new DummyConfigElement.DummyCategoryElement("Amethyst", "bluepower.config.amethyst", listAmethyst));
-        list.add(new DummyConfigElement.DummyCategoryElement("Sapphire", "bluepower.config.sapphire", listSapphire));
-        list.add(new DummyConfigElement.DummyCategoryElement("Teslatite", "bluepower.config.teslatite", listTeslatite));
+        list.add(new DummyConfigElement.DummyCategoryElement("World Gen", "config.bluepower:worldgen", listWorldGen));
+        list.add(new DummyConfigElement.DummyCategoryElement("Settings", "config.bluepower:settings", listSettings));
+        list.add(new DummyConfigElement.DummyCategoryElement("Recipes", "config.bluepower:recipes", listRecipes));
+        list.add(new DummyConfigElement.DummyCategoryElement("Enchantments", "config.bluepower:enchantments", listEnchants));
+        list.add(new DummyConfigElement.DummyCategoryElement("Pneumatic Tubes", "config.bluepower:tubes", listPneumaticTube));
+        list.add(new DummyConfigElement.DummyCategoryElement("Circuit Database", "config.bluepower:circuitDatabase", listCircuitDatabase));
+        list.add(new DummyConfigElement.DummyCategoryElement("Copper", "config.bluepower:copper", listCopper));
+        list.add(new DummyConfigElement.DummyCategoryElement("Zinc", "config.bluepower:zinc", listZinc));
+        list.add(new DummyConfigElement.DummyCategoryElement("Silver", "config.bluepower:silver", listSilver));
+        list.add(new DummyConfigElement.DummyCategoryElement("Tungsten", "config.bluepower:tungsten", listTungsten));
+        list.add(new DummyConfigElement.DummyCategoryElement("Ruby", "config.bluepower:ruby", listRuby));
+        list.add(new DummyConfigElement.DummyCategoryElement("Amethyst", "config.bluepower:amethyst", listAmethyst));
+        list.add(new DummyConfigElement.DummyCategoryElement("Sapphire", "config.bluepower:sapphire", listSapphire));
+        list.add(new DummyConfigElement.DummyCategoryElement("Teslatite", "config.bluepower:teslatite", listTeslatite));
         return list;
     }
 }

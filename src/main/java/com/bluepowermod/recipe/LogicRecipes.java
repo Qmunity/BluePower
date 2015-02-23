@@ -26,10 +26,11 @@ import net.minecraftforge.oredict.ShapedOreRecipe;
 import org.apache.commons.lang3.StringUtils;
 
 import com.bluepowermod.api.misc.MinecraftColor;
+import com.bluepowermod.api.wire.redstone.RedwireType;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.init.BPItems;
 import com.bluepowermod.part.PartManager;
-import com.bluepowermod.part.wire.redstone.RedwireType;
+import com.bluepowermod.part.gate.supported.GateNullCell;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 
@@ -49,6 +50,8 @@ public class LogicRecipes {
                 '#', Blocks.redstone_torch, 'W', BPItems.stone_tile));
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.bluestone_pointer_tile, 1), " S ", "T#T", " W ", 'S', "stone",
                 '#', Blocks.redstone_torch, 'W', BPItems.stone_tile, 'T', "dustTeslatite"));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.bluestone_pointer_tile, 1), "S", "T", 'S', "stone", 'T',
+                BPItems.bluestone_cathode_tile));
 
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.redstone_wire_tile, 1), "#", "W", '#', "dustRedstone", 'W',
                 BPItems.stone_tile));
@@ -58,22 +61,26 @@ public class LogicRecipes {
                 BPItems.stone_tile);
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.redstone_pointer_tile, 1), "S", "#", "W", 'S', "stone", '#',
                 Blocks.redstone_torch, 'W', BPItems.stone_tile));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.redstone_pointer_tile, 1), "S", "T", 'S', "stone", 'T',
+                BPItems.redstone_cathode_tile));
 
         GameRegistry.addRecipe(new ItemStack(BPItems.silicon_chip_tile, 1), " # ", "WWW", '#', BPItems.blue_doped_wafer, 'W',
                 BPItems.stone_tile);
         // GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.plate_assembly, 1), " # ", "SRS", "#C#", '#', BPItems.stone_tile, 'S',
         // "stickWood", 'R', BPItems.red_alloy_ingot, 'C', BPItems.stone_cathode));
-        GameRegistry
-        .addShapelessRecipe(new ItemStack(BPItems.taintedsilicon_chip_tile, 1), BPItems.silicon_chip_tile, Items.glowstone_dust);
+        GameRegistry.addShapelessRecipe(new ItemStack(BPItems.tainted_silicon_chip_tile, 1), BPItems.silicon_chip_tile,
+                Items.glowstone_dust);
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.quartz_resonator_tile, 3), " # ", "###", "WWW", '#', "gemQuartz",
                 'W', BPItems.stone_tile));
 
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.stone_bundle, 1), "#", "W", '#', "wireBundled", 'W',
+                BPItems.stone_tile));
+
         GameRegistry.addShapelessRecipe(new ItemStack(BPItems.infused_teslatite_dust, 1), BPItems.teslatite_dust, Items.redstone);
-        // TODO: stone_redwire recipe and stone_bundle recipe
 
         {
-            int i = 0;
             for (RedwireType t : RedwireType.values()) {
+                int i = 0;
                 for (MinecraftColor c : MinecraftColor.WIRE_COLORS) {
                     ItemStack stack = PartManager.getPartInfo(
                             "wire." + t.getName() + (c == MinecraftColor.NONE ? "" : "." + c.name().toLowerCase())).getStack(12);
@@ -144,7 +151,7 @@ public class LogicRecipes {
         GameRegistry.addRecipe(PartManager.getPartInfo("or").getStack(), "#C#", "WCW", "#W#", '#', BPItems.stone_tile, 'C',
                 BPItems.bluestone_cathode_tile, 'W', BPItems.bluestone_wire_tile);
         GameRegistry.addRecipe(PartManager.getPartInfo("randomizer").getStack(), "#T#", "WWW", "TWT", '#', BPItems.stone_tile, 'T',
-                BPItems.taintedsilicon_chip_tile, 'W', BPItems.bluestone_wire_tile);
+                BPItems.tainted_silicon_chip_tile, 'W', BPItems.bluestone_wire_tile);
         GameRegistry.addRecipe(PartManager.getPartInfo("pulseformer").getStack(), "ACA", "CAC", "WW#", '#', BPItems.stone_tile, 'A',
                 BPItems.bluestone_anode_tile, 'C', BPItems.bluestone_cathode_tile, 'W', BPItems.bluestone_wire_tile);
         GameRegistry.addRecipe(PartManager.getPartInfo("repeater").getStack(), "#CW", "#AW", "#WC", '#', BPItems.stone_tile, 'A',
@@ -176,6 +183,9 @@ public class LogicRecipes {
         GameRegistry.addRecipe(PartManager.getPartInfo("inverter").getStack(), "#A#", "ACA", "#W#", '#', BPItems.stone_tile, 'A',
                 BPItems.redstone_anode_tile, 'C', BPItems.redstone_cathode_tile, 'W', BPItems.redstone_wire_tile);
 
+        GameRegistry.addRecipe(new ShapedOreRecipe(GateNullCell.getStackWithData(new GateNullCell()), "SSS", "S S", "WWW", 'S',
+                "stickWood", 'W', BPItems.stone_tile));
+
         GameRegistry.addRecipe(PartManager.getPartInfo("integratedCircuit3x3").getStack(), "TST", "SSS", "TST", 'T', BPItems.stone_tile,
                 'S', BPItems.silicon_chip_tile);
         GameRegistry.addRecipe(PartManager.getPartInfo("integratedCircuit5x5").getStack(), "II", "II", 'I',
@@ -185,5 +195,7 @@ public class LogicRecipes {
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPBlocks.circuit_database, 1), "#C#", "BTB", "###", '#', "ingotIron", 'C',
                 PartManager.getPartInfo("integratedCircuit7x7").getStack(), 'B', Blocks.bookshelf, 'T', BPBlocks.circuit_table));
 
+        // Custom crafting for nullcells
+        GameRegistry.addRecipe(RecipeNullCell.instance);
     }
 }

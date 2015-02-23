@@ -7,13 +7,6 @@
  */
 package com.bluepowermod.part.tube;
 
-import net.minecraft.util.IIcon;
-
-import com.bluepowermod.client.render.IconSupplier;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
 /**
  * @author MineMaarten
  */
@@ -32,22 +25,8 @@ public class RestrictionTube extends PneumaticTube {
     }
 
     @Override
-    public int getWeigth() {
+    public int getWeight() {
 
         return 5000;
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    protected IIcon getSideIcon() {
-
-        return IconSupplier.restrictionTubeSide;
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    protected IIcon getNodeIcon() {
-
-        return IconSupplier.restrictionTubeNode;
     }
 }

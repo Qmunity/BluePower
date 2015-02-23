@@ -10,7 +10,6 @@ package com.bluepowermod.client.render;
 import java.nio.DoubleBuffer;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureMap;
@@ -84,11 +83,6 @@ public class RenderHelper {
                 rb.overrideBlockTexture = state ? Blocks.redstone_torch.getIcon(0, 0) : Blocks.unlit_redstone_torch.getIcon(0, 0);
             }
 
-            float bX = OpenGlHelper.lastBrightnessX;
-            float bY = OpenGlHelper.lastBrightnessY;
-
-            OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, Math.max(150, bX), Math.max(150, bY));
-
             GL11.glEnable(GL11.GL_CLIP_PLANE0);
             GL11.glClipPlane(GL11.GL_CLIP_PLANE0, uk.co.qmunity.lib.client.render.RenderUtils.planeEquation(0, 1, 0));
 
@@ -119,23 +113,21 @@ public class RenderHelper {
 
             GL11.glDisable(GL11.GL_CLIP_PLANE0);
 
-            OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, bX, bY);
-
             rb.overrideBlockTexture = null;
         }
         GL11.glPopMatrix();
     }
 
-    public static void renderRandomizerButton(double x, double y, double z, boolean state) {
+    public static void renderRandomizerButton(double x, double y, double z, boolean tainted) {
 
-        String res = Refs.MODID + ":textures/blocks/gates/randomizer/button_" + (state ? "on" : "off") + ".png";
+        String res = Refs.MODID + ":textures/blocks/gates/components/" + (tainted ? "tainted_" : "") + "silicon_chip_on.png";
         String resSide = Refs.MODID + ":textures/blocks/gates/randomizer/button_side.png";
         renderButton(x, y, z, res, resSide);
     }
 
     public static void renderQuartzResonator(double x, double y, double z) {
 
-        String res = Refs.MODID + ":textures/blocks/gates/comparator/resonator.png";
+        String res = Refs.MODID + ":textures/blocks/gates/components/resonator.png";
         String resSide = Refs.MODID + ":textures/blocks/gates/randomizer/button_side.png";
         renderButton(x, y, z, res, resSide);
     }
@@ -201,7 +193,7 @@ public class RenderHelper {
             GL11.glTranslated(x, y, z);
 
             GL11.glTranslated(0.5, 0.5, 0.5);
-            GL11.glRotated(360 * angle, 0, 1, 0);
+            GL11.glRotated(180 + 360 * -angle, 0, 1, 0);
             GL11.glTranslated(-0.5, -0.5, -0.5);
 
             Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation("minecraft:textures/blocks/stone.png"));
@@ -210,20 +202,20 @@ public class RenderHelper {
             {
                 GL11.glNormal3d(0, -1, 0);
                 // Bottom
-                addVertexWithTexture(0.5, 0, 1D / 16D, 0.5, 1D / 16D);
+                addVertexWithTexture(0.5, 0, 2D / 16D, 0.5, 1D / 16D);
                 addVertexWithTexture(0.5 + 1D / 8D, 0, 0.5, 0.5 + 1D / 8D, 0.5);
                 addVertexWithTexture(0.5, 0, 0.5 + 1D / 8D, 0.5, 0.5 + 1D / 8D);
                 addVertexWithTexture(0.5 - 1D / 8D, 0, 0.5, 0.5 - 1D / 8D, 0.5);
                 GL11.glNormal3d(0, 1, 0);
                 // Top
-                addVertexWithTexture(0.5, 1D / 16D, 1D / 16D, 0.5, 1D / 16D);
+                addVertexWithTexture(0.5, 1D / 16D, 2D / 16D, 0.5, 1D / 16D);
                 addVertexWithTexture(0.5 - 1D / 8D, 1D / 16D, 0.5, 0.5 - 1D / 8D, 0.5);
                 addVertexWithTexture(0.5, 1D / 16D, 0.5 + 1D / 8D, 0.5, 0.5 + 1D / 8D);
                 addVertexWithTexture(0.5 + 1D / 8D, 1D / 16D, 0.5, 0.5 + 1D / 8D, 0.5);
                 GL11.glNormal3d(1, 0, 0);
                 // Side 1
-                addVertexWithTexture(0.5, 1D / 16D, 1D / 16D, 0.5, 1D / 16D);
-                addVertexWithTexture(0.5, 0, 1D / 16D, 0.5, 1D / 16D);
+                addVertexWithTexture(0.5, 1D / 16D, 2D / 16D, 0.5, 1D / 16D);
+                addVertexWithTexture(0.5, 0, 2D / 16D, 0.5, 1D / 16D);
                 addVertexWithTexture(0.5 - 1D / 8D, 0, 0.5, 0.5 - 1D / 8D, 0.5);
                 addVertexWithTexture(0.5 - 1D / 8D, 1D / 16D, 0.5, 0.5 - 1D / 8D, 0.5);
                 // Side 2
@@ -240,8 +232,8 @@ public class RenderHelper {
                 // Side 4
                 addVertexWithTexture(0.5 + 1D / 8D, 1D / 16D, 0.5, 0.5 + 1D / 8D, 0.5);
                 addVertexWithTexture(0.5 + 1D / 8D, 0, 0.5, 0.5 + 1D / 8D, 0.5);
-                addVertexWithTexture(0.5, 0, 1D / 16D, 0.5, 1D / 16D);
-                addVertexWithTexture(0.5, 1D / 16D, 1D / 16D, 0.5, 1D / 16D);
+                addVertexWithTexture(0.5, 0, 2D / 16D, 0.5, 1D / 16D);
+                addVertexWithTexture(0.5, 1D / 16D, 2D / 16D, 0.5, 1D / 16D);
             }
             GL11.glEnd();
 

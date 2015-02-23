@@ -16,12 +16,13 @@ import net.minecraft.util.ResourceLocation;
 
 import org.apache.commons.lang3.text.WordUtils;
 
+import uk.co.qmunity.lib.client.gui.widget.BaseWidget;
+import uk.co.qmunity.lib.client.gui.widget.IGuiWidget;
+import uk.co.qmunity.lib.client.gui.widget.IWidgetListener;
+
 import com.bluepowermod.BluePower;
 import com.bluepowermod.client.gui.GuiScreenBase;
-import com.bluepowermod.client.gui.widget.BaseWidget;
-import com.bluepowermod.client.gui.widget.IGuiWidget;
-import com.bluepowermod.client.gui.widget.IWidgetListener;
-import com.bluepowermod.network.NetworkHandler;
+import com.bluepowermod.network.BPNetworkHandler;
 import com.bluepowermod.network.message.MessageGuiUpdate;
 import com.bluepowermod.part.gate.GateBase;
 
@@ -36,23 +37,23 @@ import cpw.mods.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class GuiGate extends GuiScreenBase implements IWidgetListener {
 
-    private final GateBase gate;
+    private final GateBase<?, ?, ?, ?, ?, ?> gate;
     private final List<IGuiWidget> widgets = new ArrayList<IGuiWidget>();
 
-    public GuiGate(GateBase gate, int xSize, int ySize) {
+    public GuiGate(GateBase<?, ?, ?, ?, ?, ?> gate, int xSize, int ySize) {
 
         super(xSize, ySize);
         this.gate = gate;
     }
 
-    public GateBase getGate() {
+    public GateBase<?, ?, ?, ?, ?, ?> getGate() {
 
         return gate;
     }
 
     protected void sendToServer(int id, int value) {
 
-        NetworkHandler.sendToServer(new MessageGuiUpdate(gate, id, value));
+        BPNetworkHandler.INSTANCE.sendToServer(new MessageGuiUpdate(gate, id, value));
     }
 
     @Override
@@ -92,7 +93,7 @@ public class GuiGate extends GuiScreenBase implements IWidgetListener {
         super.drawScreen(x, y, partialTick);
 
         for (IGuiWidget widget : widgets)
-            widget.render(x, y);
+            widget.render(x, y, partialTick);
 
         renderGUI(x, y, partialTick);
 
@@ -132,7 +133,6 @@ public class GuiGate extends GuiScreenBase implements IWidgetListener {
     @Override
     protected ResourceLocation getTexture() {
 
-        // TODO Auto-generated method stub
         return null;
     }
 }
