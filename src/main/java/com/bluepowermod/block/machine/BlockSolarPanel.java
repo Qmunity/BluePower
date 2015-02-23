@@ -58,5 +58,11 @@ public class BlockSolarPanel extends BlockContainerBase {
         setBlockBounds(minX, minY, minZ, maxX, maxY, maxZ);
     }
 
+    @Override
+    public boolean isOpaqueCube()
+    {
+        return false;
+    }
+
 
 }
