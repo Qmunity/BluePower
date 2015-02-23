@@ -17,8 +17,12 @@
 
 package com.bluepowermod.container;
 
-import java.util.Arrays;
-
+import com.bluepowermod.ClientProxy;
+import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
+import com.bluepowermod.container.slot.SlotPhantom;
+import com.bluepowermod.tile.tier2.TileSortingMachine;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ICrafting;
@@ -26,13 +30,7 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import uk.co.qmunity.lib.client.gui.GuiContainerBase;
 
-import com.bluepowermod.ClientProxy;
-import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
-import com.bluepowermod.container.slot.SlotPhantom;
-import com.bluepowermod.tile.tier2.TileSortingMachine;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import java.util.Arrays;
 
 /**
  *
@@ -45,6 +43,12 @@ public class ContainerSortingMachine extends ContainerMachineBase {
     private int pullMode = -1, sortMode = -1, curColumn = -1;
     private final int[] colors = new int[9];
     private final int[] fuzzySettings = new int[8];
+
+    private final static int AMPSTORED = 22;
+    private final static int AMPMAX = 23;
+    public float ampStored;
+    public float ampMax;
+
 
     public ContainerSortingMachine(InventoryPlayer invPlayer, TileSortingMachine sortingMachine) {
 
@@ -118,6 +122,14 @@ public class ContainerSortingMachine extends ContainerMachineBase {
                     icrafting.sendProgressBarUpdate(this, i + 12, sortingMachine.fuzzySettings[i]);
                 }
             }
+
+            if (ampStored != sortingMachine.getHandler().getAmpStored()) {
+                icrafting.sendProgressBarUpdate(this, AMPSTORED, (int)sortingMachine.getHandler().getAmpStored());
+            }
+
+            if (ampMax != sortingMachine.getHandler().getMaxAmp()) {
+                icrafting.sendProgressBarUpdate(this, AMPMAX, (int)sortingMachine.getHandler().getMaxAmp());
+            }
         }
 
         pullMode = sortingMachine.pullMode.ordinal();
@@ -129,6 +141,8 @@ public class ContainerSortingMachine extends ContainerMachineBase {
         for (int i = 0; i < fuzzySettings.length; i++) {
             fuzzySettings[i] = sortingMachine.fuzzySettings[i];
         }
+        ampStored = sortingMachine.getHandler().getAmpStored();
+        ampMax = sortingMachine.getHandler().getMaxAmp();
     }
 
     @Override
@@ -156,6 +170,15 @@ public class ContainerSortingMachine extends ContainerMachineBase {
 
         if (id >= 12 && id < 21) {
             sortingMachine.fuzzySettings[id - 12] = value;
+            ((GuiContainerBase) ClientProxy.getOpenedGui()).redraw();
+        }
+
+        if (id == AMPSTORED) {
+            sortingMachine.setAmpStored(value);
+            ((GuiContainerBase) ClientProxy.getOpenedGui()).redraw();
+        }
+        if(id == AMPMAX){
+            sortingMachine.setMaxAmp(value);
             ((GuiContainerBase) ClientProxy.getOpenedGui()).redraw();
         }
     }

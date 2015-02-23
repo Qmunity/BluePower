@@ -18,6 +18,9 @@ import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.part.IGuiButtonSensitive;
 import com.bluepowermod.part.tube.TubeStack;
 import com.bluepowermod.tile.TileMachineBase;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
@@ -51,6 +54,12 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
     // tick.
 
     private IPowerBase handler;
+
+    @SideOnly(Side.CLIENT)
+    private float ampStored;
+    @SideOnly(Side.CLIENT)
+    private float maxAmp;
+
 
     public TileSortingMachine() {
 
@@ -138,7 +147,9 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
                 && (pullMode == PullMode.SINGLE_SWEEP && sweepTriggered || pullMode == PullMode.AUTOMATIC)) {
             triggerSorting();
         }
-        getHandler().update();
+        if(!worldObj.isRemote) {
+            getHandler().update();
+        }
 
     }
 
@@ -566,6 +577,35 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
     public boolean canConnectRedstone() {
 
         return true;
+    }
+
+
+    @SideOnly(Side.CLIENT)
+    public void setAmpStored(float newAmp){
+        ampStored = newAmp;
+    }
+
+    @SideOnly(Side.CLIENT)
+    public void setMaxAmp(float newAmp){
+        maxAmp = newAmp;
+    }
+
+    @SideOnly(Side.CLIENT)
+    public float getAmpStored(){
+        return ampStored;
+    }
+
+    @SideOnly(Side.CLIENT)
+    public float getMaxAmp(){
+        return maxAmp;
+    }
+
+    @Override
+    public void invalidate(){
+        super.invalidate();
+        if(FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
+            getHandler().invalidate();
+        }
     }
 
 }

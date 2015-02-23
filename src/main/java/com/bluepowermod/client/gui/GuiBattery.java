@@ -28,8 +28,7 @@ public class GuiBattery extends GuiContainerBaseBP {
     public void initGui() {
 
         super.initGui();
-        float percentage = tile.getAmpStored() / tile.getMaxAmp();
-        WidgetPowerBar mainPowerWidget = new WidgetPowerBar(0, guiLeft + 59, guiTop + 25, percentage);
+        WidgetPowerBar mainPowerWidget = new WidgetPowerBar(0, guiLeft + 59, guiTop + 25, tile.getAmpStored(), tile.getMaxAmp());
         addWidget(mainPowerWidget);
     }
 }

@@ -5,6 +5,8 @@ import com.bluepowermod.api.bluepower.BluePowerTier;
 import com.bluepowermod.api.bluepower.IBluePowered;
 import com.bluepowermod.api.bluepower.IPowerBase;
 import com.bluepowermod.tile.TileMachineBase;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.Side;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.EnumSkyBlock;
@@ -96,5 +98,13 @@ public class TileSolarPanel extends TileMachineBase implements IBluePowered {
     @Override
     public void writeToNBT(NBTTagCompound tagCompound){
         getHandler().writeToNBT(tagCompound);
+    }
+
+    @Override
+    public void invalidate(){
+        super.invalidate();
+        if(FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
+            getHandler().invalidate();
+        }
     }
 }

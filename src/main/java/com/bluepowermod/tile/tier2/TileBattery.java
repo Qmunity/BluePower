@@ -7,6 +7,7 @@ import com.bluepowermod.api.bluepower.IChargable;
 import com.bluepowermod.api.bluepower.IPowerBase;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.tile.TileBase;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
@@ -194,4 +195,11 @@ public class TileBattery extends TileBase implements IBluePowered, IInventory {
         return maxAmp;
     }
 
+    @Override
+    public void invalidate(){
+        super.invalidate();
+        if(FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
+            getHandler().invalidate();
+        }
+    }
 }

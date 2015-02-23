@@ -199,7 +199,9 @@ public class PowerHandler implements IPowerBase {
     @Override
     public void invalidate(){
         if(FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER){
-            getNetwork().removeMachine(iTarget);
+            if(getNetwork() != null) {
+                getNetwork().removeMachine(iTarget);
+            }
         }
     }
 }

@@ -112,7 +112,6 @@ public class ContainerBattery extends Container {
     public void updateProgressBar(int index, int value) {
 
         if (index == AMPSTORED) {
-            //tileBattery.getHandler().getAmpStored()
             tileBattery.setAmpStored(value);
             ((GuiContainerBase) ClientProxy.getOpenedGui()).redraw();
         }

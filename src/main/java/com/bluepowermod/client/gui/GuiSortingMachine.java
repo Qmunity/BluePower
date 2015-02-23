@@ -17,17 +17,9 @@
 
 package com.bluepowermod.client.gui;
 
-import java.util.List;
-
-import net.minecraft.client.gui.Gui;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.util.ResourceLocation;
-import uk.co.qmunity.lib.client.gui.widget.BaseWidget;
-import uk.co.qmunity.lib.client.gui.widget.IGuiWidget;
-import uk.co.qmunity.lib.client.gui.widget.WidgetMode;
-
 import com.bluepowermod.client.gui.widget.WidgetColor;
 import com.bluepowermod.client.gui.widget.WidgetFuzzySetting;
+import com.bluepowermod.client.gui.widget.WidgetPowerBar;
 import com.bluepowermod.container.ContainerSortingMachine;
 import com.bluepowermod.network.BPNetworkHandler;
 import com.bluepowermod.network.message.MessageGuiUpdate;
@@ -35,6 +27,14 @@ import com.bluepowermod.tile.tier2.TileSortingMachine;
 import com.bluepowermod.tile.tier2.TileSortingMachine.PullMode;
 import com.bluepowermod.tile.tier2.TileSortingMachine.SortMode;
 import com.bluepowermod.util.Refs;
+import net.minecraft.client.gui.Gui;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.util.ResourceLocation;
+import uk.co.qmunity.lib.client.gui.widget.BaseWidget;
+import uk.co.qmunity.lib.client.gui.widget.IGuiWidget;
+import uk.co.qmunity.lib.client.gui.widget.WidgetMode;
+
+import java.util.List;
 
 /**
  *
@@ -112,6 +112,9 @@ public class GuiSortingMachine extends GuiContainerBaseBP {
             fuzzyWidget.value = sortingMachine.fuzzySettings[i];
             addWidget(fuzzyWidget);
         }
+
+        WidgetPowerBar mainPowerWidget = new WidgetPowerBar(0, guiLeft + 6, guiTop + 37, sortingMachine.getAmpStored(), sortingMachine.getMaxAmp());
+        addWidget(mainPowerWidget);
     }
 
     @Override

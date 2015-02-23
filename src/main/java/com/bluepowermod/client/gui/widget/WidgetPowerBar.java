@@ -6,16 +6,23 @@ import net.minecraft.client.gui.Gui;
 import org.lwjgl.opengl.GL11;
 import uk.co.qmunity.lib.client.gui.widget.BaseWidget;
 
+import java.util.List;
+
 /**
  * @author K-4U (Koen Beckers)
  */
 public class WidgetPowerBar extends BaseWidget {
 
     private float ampPercentage;
-    public WidgetPowerBar(int id, int x, int y, float ampPercentage_) {
+    private float ampStored;
+    private float maxAmp;
+
+    public WidgetPowerBar(int id, int x, int y, float ampStored_, float maxAmp_) {
 
         super(id, x, y, 7, 50, Refs.MODID + ":textures/gui/widgets/powerbar_widget_fill.png", Refs.MODID + ":textures/gui/widgets/powerbar_widget.png");
-        ampPercentage = ampPercentage_;
+        ampPercentage = ampStored_ / maxAmp_;
+        ampStored = ampStored_;
+        maxAmp = maxAmp_;
     }
 
     @Override
@@ -50,6 +57,11 @@ public class WidgetPowerBar extends BaseWidget {
         //And then the fill..
         Minecraft.getMinecraft().getTextureManager().bindTexture(textures[0]);
         int h = (int)(((float)(height - 2)) * ampPercentage);
-        Gui.func_146110_a(x+1, (y+height)-h-1, getTextureU() + h, getTextureV(), width-2, h, getTextureWidth()-2, getTextureHeight()-2);
+        Gui.func_146110_a(x+1, (y+height)-h-1, getTextureU(), getTextureV(), width-2, h, getTextureWidth()-2, getTextureHeight()-2);
+    }
+
+    @Override
+    public void addTooltip(int mouseX, int mouseY, List<String> curTip, boolean shiftPressed) {
+        curTip.add(ampStored + "/" + maxAmp + " mA");
     }
 }
