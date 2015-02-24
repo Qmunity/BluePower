@@ -46,6 +46,8 @@ public class GuiAlloyFurnace extends GuiContainerBaseBP {
         int x = (width - xSize) / 2;
         int y = (height - ySize) / 2;
 
+        mc.renderEngine.bindTexture(resLoc);
+
         int burningPercentage = (int) (furnace.getBurningPercentage() * 14);
         drawTexturedModalRect(x + 22, y + 54 + 14 - burningPercentage, 177, 14 - burningPercentage, 14, burningPercentage + 0);
 
