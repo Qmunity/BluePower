@@ -202,18 +202,18 @@ public class ContainerProjectTable extends Container {
         List<Slot> slotsChest = new ArrayList<Slot>();
         List<Slot> slotsInventory = new ArrayList<Slot>();
         List<Slot> slotsInventoryHotbar = new ArrayList<Slot>();
-        for (int i = 0; i < 9; i++) {
+        for (int i = 0; i < 8; i++) {
             slotsCraftingIn.add(i, (Slot) inventorySlots.get(i));
         }
         slotsCraftingOut.add(0, (Slot) inventorySlots.get(9));
-        for (int i = 0; i < 18; i++) {
-            slotsChest.add(i, (Slot) inventorySlots.get(i + 10));
+        for (int i = 0; i < 17; i++) {
+            slotsChest.add(i, (Slot) inventorySlots.get(i + 9));
         }
-        for (int i = 0; i < 27; i++) {
-            slotsInventory.add(0, (Slot) inventorySlots.get(i + 28));
+        for (int i = 0; i < 26; i++) {
+            slotsInventory.add(0, (Slot) inventorySlots.get(i + 27));
         }
-        for (int i = 0; i < 9; i++) {
-            slotsInventoryHotbar.add(0, (Slot) inventorySlots.get(i + 55));
+        for (int i = 0; i < 8; i++) {
+            slotsInventoryHotbar.add(0, (Slot) inventorySlots.get(i + 54));
         }
         sections.put(ContainerSection.CRAFTING_IN, slotsCraftingIn);
         sections.put(ContainerSection.CRAFTING_OUT, slotsCraftingOut);
