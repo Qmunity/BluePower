@@ -475,7 +475,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
                             if (dev instanceof IInsulatedRedstoneDevice
                                     && ((IInsulatedRedstoneDevice) dev).getInsulationColor(c.getSideB()) != MinecraftColor.NONE)
                                 render = true;
-                            if (getFace().ordinal() > ((PartRedwireFace) dev).getFace().ordinal())
+                            if (dev instanceof IFace && getFace().ordinal() > ((IFace) dev).getFace().ordinal())
                                 render = true;
                         } else {
                             connected = true;
@@ -1005,7 +1005,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
                             if (dev instanceof IInsulatedRedstoneDevice
                                     && ((IInsulatedRedstoneDevice) dev).getInsulationColor(c.getSideB()) != MinecraftColor.NONE)
                                 connected = true;
-                            if (getFace().ordinal() > ((PartRedwireFace) dev).getFace().ordinal()) {
+                            if (dev instanceof IFace && getFace().ordinal() > ((IFace) dev).getFace().ordinal()) {
                                 if (dev instanceof IInsulatedRedstoneDevice
                                         && ((IInsulatedRedstoneDevice) dev).getInsulationColor(c.getSideB()) == getInsulationColor(c
                                                 .getSideA()))
@@ -1028,7 +1028,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
                             if (dev instanceof IInsulatedRedstoneDevice
                                     && ((IInsulatedRedstoneDevice) dev).getInsulationColor(bc.getSideB()) != MinecraftColor.NONE)
                                 connected = true;
-                            if (getFace().ordinal() > ((PartRedwireFace) dev).getFace().ordinal()) {
+                            if (dev instanceof IFace && getFace().ordinal() > ((IFace) dev).getFace().ordinal()) {
                                 if (dev instanceof IInsulatedRedstoneDevice
                                         && ((IInsulatedRedstoneDevice) dev).getInsulationColor(bc.getSideB()) == getInsulationColor(bc
                                                 .getSideA()))
@@ -1471,7 +1471,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
                     IBundledDevice dev = bc.getB();
                     if (dev instanceof IFace && ((IFace) dev).getFace() == ForgeDirection.getOrientation(i).getOpposite()) {
                         if (dev instanceof IRedwire) {
-                            if (getFace().ordinal() > ((PartRedwireFace) dev).getFace().ordinal()) {
+                            if (dev instanceof IFace && getFace().ordinal() > ((IFace) dev).getFace().ordinal()) {
                                 if (!(dev instanceof IInsulatedRedstoneDevice) && dev instanceof IRedwire) {
                                     render = true;
                                     connected = true;
