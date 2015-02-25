@@ -56,8 +56,6 @@ public class FMPRedstoneDevice implements IRedstoneDevice, IFace {
                 return false;
             if (!(device instanceof IFace))
                 return false;
-            if (((IFace) device).getFace() != getFace())
-                return false;
 
             return ((IRedstonePart) part).canConnectRedstone(side.ordinal());
         }
