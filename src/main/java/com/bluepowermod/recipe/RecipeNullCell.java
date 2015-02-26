@@ -75,6 +75,9 @@ public class RecipeNullCell implements IRecipe {
 
     private ItemStack getCraftingResult(IInventory inv, EntityPlayer player, boolean isCrafting) {
 
+        if (inv.getSizeInventory() < 4)
+            return null;
+
         int centerX = 0;
         int centerY = 0;
         GateNullCell gnc = null;
