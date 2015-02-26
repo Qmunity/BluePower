@@ -341,7 +341,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
                         dev = c.getB();
                     if (dir == getFace()) {
                         RedstoneHelper.notifyRedstoneUpdate(getWorld(), getX(), getY(), getZ(), dir, true);
-                    } else if (dev == null || dev instanceof DummyRedstoneDevice) {
+                    } else if ((dev == null || dev instanceof DummyRedstoneDevice) && dir != getFace().getOpposite()) {
                         RedstoneHelper.notifyRedstoneUpdate(getWorld(), getX(), getY(), getZ(), dir, false);
                     }
                 }
@@ -410,23 +410,21 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
         @Override
         public void onRemoved() {
 
-            if (!getWorld().isRemote) {
-                power = 0;
-                hasUpdated = true;
-                onRedstoneUpdate();
-            }
+            if (getWorld().isRemote)
+                return;
 
             // Don't to anything if propagation-related stuff is going on
             if (!RedstoneApi.getInstance().shouldWiresHandleUpdates())
                 return;
 
-            super.onRemoved();
+            power = 0;
+            hasUpdated = true;
 
-            // Do not do anything if we're on the client
-            if (getWorld().isRemote)
-                return;
-
+            boolean should = RedstoneApi.getInstance().shouldWiresHandleUpdates();
+            RedstoneApi.getInstance().setWiresHandleUpdates(false);
+            onRedstoneUpdate();
             connections.disconnectAll();
+            RedstoneApi.getInstance().setWiresHandleUpdates(should);
         }
 
         // Rendering methods
@@ -566,6 +564,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
             this.color = color;
 
             connections.listen();
+            bundledConnections.listen();
         }
 
         @Override
@@ -744,7 +743,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
                     IRedstoneDevice dev = c.getB();
                     if (dir == getFace())
                         RedstoneHelper.notifyRedstoneUpdate(getWorld(), getX(), getY(), getZ(), dir, true);
-                    else if (dev == null || dev instanceof DummyRedstoneDevice)
+                    else if ((dev == null || dev instanceof DummyRedstoneDevice) && dir != getFace().getOpposite())
                         RedstoneHelper.notifyRedstoneUpdate(getWorld(), getX(), getY(), getZ(), dir, false);
                 }
 
@@ -844,6 +843,16 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
         @Override
         public void onRemoved() {
 
+            if (!getWorld().isRemote) {
+                power = 0;
+                hasUpdated = true;
+
+                boolean should = RedstoneApi.getInstance().shouldWiresHandleUpdates();
+                RedstoneApi.getInstance().setWiresHandleUpdates(false);
+                onRedstoneUpdate();
+                RedstoneApi.getInstance().setWiresHandleUpdates(should);
+            }
+
             // Don't to anything if propagation-related stuff is going on
             if (!RedstoneApi.getInstance().shouldWiresHandleUpdates())
                 return;
@@ -854,8 +863,11 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
             if (getWorld().isRemote)
                 return;
 
+            boolean should = RedstoneApi.getInstance().shouldWiresHandleUpdates();
+            RedstoneApi.getInstance().setWiresHandleUpdates(false);
             connections.disconnectAll();
             bundledConnections.disconnectAll();
+            RedstoneApi.getInstance().setWiresHandleUpdates(should);
         }
 
         // Rendering methods
@@ -1346,7 +1358,10 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
             if (getWorld().isRemote)
                 return;
 
+            boolean should = RedstoneApi.getInstance().shouldWiresHandleUpdates();
+            RedstoneApi.getInstance().setWiresHandleUpdates(false);
             bundledConnections.disconnectAll();
+            RedstoneApi.getInstance().setWiresHandleUpdates(should);
         }
 
         // Rendering methods

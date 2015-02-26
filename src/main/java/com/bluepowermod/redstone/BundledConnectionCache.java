@@ -95,8 +95,8 @@ public class BundledConnectionCache implements IConnectionCache<IBundledDevice> 
         for (BundledConnection con : connections) {
             if (con == null)
                 continue;
-            onDisconnect(con.getSideA());
             con.getB().getBundledConnectionCache().onDisconnect(con.getSideB());
+            onDisconnect(con.getSideA());
         }
     }
 
