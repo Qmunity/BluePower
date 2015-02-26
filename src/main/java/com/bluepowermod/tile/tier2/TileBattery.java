@@ -3,7 +3,7 @@ package com.bluepowermod.tile.tier2;
 import com.bluepowermod.api.BPApi;
 import com.bluepowermod.api.bluepower.BluePowerTier;
 import com.bluepowermod.api.bluepower.IBluePowered;
-import com.bluepowermod.api.bluepower.IChargable;
+import com.bluepowermod.api.bluepower.iRechargeable;
 import com.bluepowermod.api.bluepower.IPowerBase;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.tile.TileBase;
@@ -171,7 +171,7 @@ public class TileBattery extends TileBase implements IBluePowered, IInventory {
     @Override
     public boolean isItemValidForSlot(int index, ItemStack itemToTest) {
 
-        return itemToTest.getItem() instanceof IChargable;
+        return itemToTest.getItem() instanceof iRechargeable;
     }
 
 

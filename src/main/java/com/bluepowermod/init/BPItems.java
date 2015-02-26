@@ -124,7 +124,7 @@ public class BPItems {
     public static final Item amethyst_sickle  = new ItemSickle(BluePower.gemMaterial, Refs.AMETHYSTSICKLE_NAME, BPItems.amethyst_gem);
 
     public static final Item multimeter = new ItemMultimeter();
-    public static final Item battery    = new ItemBattery();
+    public static final Item battery    = new ItemBattery(1000);
 
     public static void init() {
 
