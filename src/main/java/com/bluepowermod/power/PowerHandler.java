@@ -96,9 +96,11 @@ public class PowerHandler implements IPowerBase {
     }
 
     @Override
-    public void removeEnergy(float amp){
+    public float removeEnergy(float amp){
 
-        if(getNetwork() == null) return;
+        if(getNetwork() == null) return 0.0F;
+
+        float oldPower = getAmpStored();
         int compare = Float.compare(getNetwork().getCurrentStored() - amp, 0.0F);
         if(compare == 1) {
             getNetwork().setCurrentStored(getNetwork().getCurrentStored() - amp);
@@ -106,12 +108,15 @@ public class PowerHandler implements IPowerBase {
             //Implode?
 
         }
+        return getAmpStored() - oldPower;
     }
 
     @Override
-    public void addEnergy(float amp){
+    public float addEnergy(float amp){
 
-        if(getNetwork() == null) return;
+        if(getNetwork() == null) return 0.0F;
+
+        float oldPower = getAmpStored();
         int compare = Float.compare(getNetwork().getCurrentStored() + amp, getMaxAmp());
         if(compare == -1) {
             getNetwork().setCurrentStored(getNetwork().getCurrentStored() + amp);
@@ -119,6 +124,8 @@ public class PowerHandler implements IPowerBase {
             //Explode?
             getNetwork().setCurrentStored((getNetwork().getMaxStored()));
         }
+
+        return getAmpStored() - oldPower;
     }
 
     private void setEnergy(float amp){

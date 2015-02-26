@@ -3,7 +3,7 @@ package com.bluepowermod.tile.tier2;
 import com.bluepowermod.api.BPApi;
 import com.bluepowermod.api.bluepower.BluePowerTier;
 import com.bluepowermod.api.bluepower.IBluePowered;
-import com.bluepowermod.api.bluepower.iRechargeable;
+import com.bluepowermod.api.bluepower.IRechargeable;
 import com.bluepowermod.api.bluepower.IPowerBase;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.tile.TileBase;
@@ -22,6 +22,8 @@ import net.minecraftforge.common.util.ForgeDirection;
 public class TileBattery extends TileBase implements IBluePowered, IInventory {
 
     private ItemStack[] inventory = new ItemStack[2];
+
+    private static float powerTransfer = 0.1F; //The ammount of Amps being transfered into or out of a battery, every tick
 
     private IPowerBase handler;
 
@@ -75,6 +77,31 @@ public class TileBattery extends TileBase implements IBluePowered, IInventory {
         if(!getWorldObj().isRemote){
 
             getHandler().update();
+
+            //Check if there's an item in the inventory
+            if(inventory[0] != null){
+                //The slot for discharging
+                if(inventory[0].getItem() instanceof IRechargeable){
+                    IRechargeable battery = ((IRechargeable)inventory[0].getItem());
+                    if(battery.getAmpStored(inventory[0]) > powerTransfer){
+                        //Transfer power, with a certain rate, which we should maybe configurize?
+                        float powerTransfered = getHandler().addEnergy(powerTransfer);
+                        battery.removeEnergy(inventory[0], powerTransfered);
+                    }
+                }
+
+            }
+            if(inventory[1] != null){
+                //The slot for charging
+                if(inventory[1].getItem() instanceof IRechargeable){
+                    IRechargeable battery = ((IRechargeable)inventory[1].getItem());
+                    if(getHandler().getAmpStored() > powerTransfer){
+                        //Transfer power, with a certain rate, which we should maybe configurize?
+                        float powerTransfered = battery.addEnergy(inventory[1], powerTransfer);
+                        getHandler().removeEnergy(powerTransfered);
+                    }
+                }
+            }
         }
 
     }
@@ -171,7 +198,7 @@ public class TileBattery extends TileBase implements IBluePowered, IInventory {
     @Override
     public boolean isItemValidForSlot(int index, ItemStack itemToTest) {
 
-        return itemToTest.getItem() instanceof iRechargeable;
+        return itemToTest.getItem() instanceof IRechargeable;
     }
 
 

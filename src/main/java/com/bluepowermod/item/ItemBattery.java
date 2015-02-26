@@ -1,12 +1,13 @@
 package com.bluepowermod.item;
 
 import com.bluepowermod.api.bluepower.BluePowerTier;
-import com.bluepowermod.api.bluepower.iRechargeable;
+import com.bluepowermod.api.bluepower.IRechargeable;
 import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.util.Refs;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
@@ -15,9 +16,8 @@ import java.util.List;
 /**
  * @author Koen Beckers (K4Unl)
  */
-public class ItemBattery extends ItemBase implements iRechargeable {
+public class ItemBattery extends ItemBase implements IRechargeable {
 
-    private float ampStored;
     private int maxAmp;
 
 
@@ -28,8 +28,8 @@ public class ItemBattery extends ItemBase implements iRechargeable {
         setCreativeTab(BPCreativeTabs.power);
         this.setTextureName(Refs.MODID + ":" + Refs.BATTERY_ITEM_NAME);
         setMaxStackSize(1);
-        setMaxDamage(maxAmp);
         maxAmp = maxAmp_;
+        setMaxDamage(maxAmp);
         setNoRepair();
     }
 
@@ -40,9 +40,9 @@ public class ItemBattery extends ItemBase implements iRechargeable {
     }
 
     @Override
-    public float getAmpStored() {
+    public float getAmpStored(ItemStack stack) {
 
-        return ampStored;
+        return maxAmp - stack.getItemDamage();
     }
 
     @Override
@@ -52,25 +52,25 @@ public class ItemBattery extends ItemBase implements iRechargeable {
     }
 
     @Override
-    public float removeEnergy(float amp) {
-        float oldAmp = ampStored;
-        if(getAmpStored() - amp > 0){
-            ampStored = ampStored - amp;
+    public float removeEnergy(ItemStack stack, float amp) {
+        float oldAmp = getAmpStored(stack);
+        if(getAmpStored(stack) - amp > 0){
+            stack.setItemDamage(getMaxDamage() - (int)(getAmpStored(stack) - amp));
         }else{
-            ampStored = 0;
+            stack.setItemDamage(maxAmp);
         }
-        return ampStored - oldAmp;
+        return getAmpStored(stack) - oldAmp;
     }
 
     @Override
-    public float addEnergy(float amp) {
-        float oldAmp = ampStored;
-        if(amp + getAmpStored() < getMaxAmp()){
-            ampStored = ampStored + amp;
+    public float addEnergy(ItemStack stack, float amp) {
+        float oldAmp = getAmpStored(stack);
+        if(amp + getAmpStored(stack) < getMaxAmp()){
+            stack.setItemDamage(getMaxDamage() - (int)(getAmpStored(stack) + amp));
         }else{
-            ampStored = getMaxAmp();
+            stack.setItemDamage(getMaxDamage());
         }
-        return ampStored - oldAmp;
+        return getAmpStored(stack) - oldAmp;
     }
 
     @Override
@@ -80,6 +80,11 @@ public class ItemBattery extends ItemBase implements iRechargeable {
      */
     public void getSubItems(Item par1, CreativeTabs par2CreativeTabs, List par3List){
         par3List.add(new ItemStack(par1, 1, 0));
-        par3List.add(new ItemStack(par1, 1, getMaxDamage()/10));
+        par3List.add(new ItemStack(par1, 1, getMaxDamage()));
+    }
+
+    @Override
+    public void addInformation(ItemStack stack, EntityPlayer player, List infoList, boolean par4){
+        infoList.add("Power: " + Math.round(getAmpStored(stack))  + " mA");
     }
 }

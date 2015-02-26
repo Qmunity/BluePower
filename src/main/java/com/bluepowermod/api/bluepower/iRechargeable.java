@@ -1,13 +1,15 @@
 package com.bluepowermod.api.bluepower;
 
+import net.minecraft.item.ItemStack;
+
 /**
  * @author Koen Beckers (K4Unl)
  */
-public interface iRechargeable {
+public interface IRechargeable {
 
     public BluePowerTier getTier();
 
-    public float getAmpStored();
+    public float getAmpStored(ItemStack stack);
 
     public float getMaxAmp();
 
@@ -16,13 +18,13 @@ public interface iRechargeable {
      * @param amp The amount of energy to drain
      * @return The amount of energy that has been drained
      */
-    public float removeEnergy(float amp);
+    public float removeEnergy(ItemStack stack, float amp);
 
     /**!
      * Adds energy to the rechargeable item.
      * @param amp The amount of energy to add
      * @return The amount of energy that has been added
      */
-    public float addEnergy(float amp);
+    public float addEnergy(ItemStack stack, float amp);
 
 }

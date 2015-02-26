@@ -23,9 +23,9 @@ public interface IPowerBase {
 
     public float getMaxAmp();
 
-    public void removeEnergy(float amp);
+    public float removeEnergy(float amp);
 
-    public void addEnergy(float amp);
+    public float addEnergy(float amp);
 
     public Vec3i getBlockLocation();
 
