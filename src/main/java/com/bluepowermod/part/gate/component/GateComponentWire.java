@@ -92,7 +92,8 @@ public class GateComponentWire extends GateComponentLocationArray {
 
     public byte getPower() {
 
-        if (connection != null && getGate().getParent() != null && (getGate().getParent().isSimulated() || !getGate().getWorld().isRemote)) {
+        if (connection != null && getGate().getParent() != null && getGate().getWorld() != null
+                && (getGate().getParent().isSimulated() || !getGate().getWorld().isRemote)) {
             if (connection.isEnabled()) {
                 return (byte) (connection.getSignal() * 255);
             } else {
@@ -105,7 +106,8 @@ public class GateComponentWire extends GateComponentLocationArray {
 
     public boolean isEnabled() {
 
-        if (connection != null && getGate().getParent() != null && (getGate().getParent().isSimulated() || !getGate().getWorld().isRemote))
+        if (connection != null && getGate().getParent() != null && getGate().getWorld() != null
+                && (getGate().getParent().isSimulated() || !getGate().getWorld().isRemote))
             return connection.isEnabled();
 
         return enabled;
