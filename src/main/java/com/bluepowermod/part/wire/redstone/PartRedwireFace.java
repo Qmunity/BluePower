@@ -256,9 +256,8 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
         @Override
         public boolean canConnect(ForgeDirection side, IRedstoneDevice device, ConnectionType type) {
 
-            if (type == ConnectionType.STRAIGHT)
-                if ((side == getFace().getOpposite() || side == ForgeDirection.UNKNOWN) && device instanceof DummyRedstoneDevice)
-                    return false;
+            if (type == ConnectionType.STRAIGHT && side == getFace().getOpposite() || side == ForgeDirection.UNKNOWN)
+                return false;
             if (type == ConnectionType.CLOSED_CORNER) {
                 if (side == getFace())
                     return false;
@@ -597,9 +596,8 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
         @Override
         public boolean canConnect(ForgeDirection side, IRedstoneDevice device, ConnectionType type) {
 
-            if (type == ConnectionType.STRAIGHT)
-                if ((side == getFace().getOpposite() || side == ForgeDirection.UNKNOWN) && device instanceof DummyRedstoneDevice)
-                    return false;
+            if (type == ConnectionType.STRAIGHT && side == getFace().getOpposite() || side == ForgeDirection.UNKNOWN)
+                return false;
             if (type == ConnectionType.CLOSED_CORNER) {
                 if (side == getFace())
                     return false;
