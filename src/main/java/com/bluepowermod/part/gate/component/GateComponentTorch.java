@@ -58,6 +58,8 @@ public class GateComponentTorch extends GateComponent {
 
         IIcon icon = digital ? (state ? IconSupplier.bluestoneTorchOn : IconSupplier.bluestoneTorchOff) : (state ? Blocks.redstone_torch
                 .getIcon(0, 0) : Blocks.unlit_redstone_torch.getIcon(0, 0));
+        IIcon override = renderer.getOverrideTexture();
+        renderer.setOverrideTexture(null);
 
         double height = 10 / 16D - this.height;
 
@@ -79,6 +81,8 @@ public class GateComponentTorch extends GateComponent {
         renderer.resetRenderedSides();
 
         renderer.removeTransformation();
+
+        renderer.setOverrideTexture(override);
     }
 
     @Override
