@@ -15,6 +15,8 @@ public class GateComponentPointer extends GateComponentTorch {
     private double angle = 0;
     private double increment = 0;
 
+    private boolean sync = true;
+
     public GateComponentPointer(GateBase<?, ?, ?, ?, ?, ?> gate, int color, double height, boolean digital) {
 
         super(gate, color, height, digital);
@@ -36,7 +38,7 @@ public class GateComponentPointer extends GateComponentTorch {
     public GateComponentPointer setAngle(double angle) {
 
         if (this.angle != angle)
-            setNeedsSyncing(true);
+            setNeedsSyncing(shouldSync());
         this.angle = angle;
 
         return this;
@@ -45,7 +47,7 @@ public class GateComponentPointer extends GateComponentTorch {
     public GateComponentPointer setIncrement(double increment) {
 
         if (this.increment != increment)
-            setNeedsSyncing(true);
+            setNeedsSyncing(shouldSync());
         this.increment = increment;
 
         return this;
@@ -59,6 +61,18 @@ public class GateComponentPointer extends GateComponentTorch {
     public double getIncrement() {
 
         return increment;
+    }
+
+    public GateComponentPointer setShouldSync(boolean sync) {
+
+        this.sync = sync;
+
+        return this;
+    }
+
+    public boolean shouldSync() {
+
+        return sync;
     }
 
     @Override
@@ -90,16 +104,20 @@ public class GateComponentPointer extends GateComponentTorch {
     public void writeData(DataOutput buffer) throws IOException {
 
         super.writeData(buffer);
-        buffer.writeDouble(angle);
-        buffer.writeDouble(increment);
+        if (shouldSync()) {
+            buffer.writeDouble(angle);
+            buffer.writeDouble(increment);
+        }
     }
 
     @Override
     public void readData(DataInput buffer) throws IOException {
 
         super.readData(buffer);
-        angle = buffer.readDouble();
-        increment = buffer.readDouble();
+        if (shouldSync()) {
+            angle = buffer.readDouble();
+            increment = buffer.readDouble();
+        }
     }
 
 }

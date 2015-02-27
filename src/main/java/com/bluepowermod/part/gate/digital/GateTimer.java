@@ -32,10 +32,11 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class GateTimer extends GateSimpleDigital implements IGuiButtonSensitive {
 
     private int time = 40;
-    private int curTime = 0;
+    private long start = -1;
 
     private GateComponentPointer p;
     private GateComponentTorch t;
+    private GateComponentWire w;
 
     @Override
     public void initializeConnections() {
@@ -49,10 +50,10 @@ public class GateTimer extends GateSimpleDigital implements IGuiButtonSensitive 
     @Override
     public void initComponents() {
 
-        addComponent((p = new GateComponentPointer(this, 0x0000FF, 7 / 16D, true)).setState(true));
+        addComponent((p = new GateComponentPointer(this, 0x0000FF, 7 / 16D, true)).setShouldSync(false).setState(true));
         addComponent(t = new GateComponentTorch(this, 0x6F00B5, 3 / 16D, true));
 
-        addComponent(new GateComponentWire(this, 0x18FF00, RedwireType.BLUESTONE));
+        addComponent(w = new GateComponentWire(this, 0x18FF00, RedwireType.BLUESTONE).setPower((byte) 255));
         addComponent(new GateComponentWire(this, 0xFFF600, RedwireType.BLUESTONE).bind(right()));
         addComponent(new GateComponentWire(this, 0xC600FF, RedwireType.BLUESTONE).bind(back()));
         addComponent(new GateComponentWire(this, 0xFF0000, RedwireType.BLUESTONE).bind(left()));
@@ -69,47 +70,64 @@ public class GateTimer extends GateSimpleDigital implements IGuiButtonSensitive 
     @Override
     public void doLogic() {
 
+        sendUpdatePacket();
     }
 
     @Override
     public void tick() {
+
+        if ((back().getInput() && !front().getOutput()) || (left().getInput() && !left().getOutput())
+                || (right().getInput() && !right().getOutput())) {
+            start = -1;
+
+            p.setAngle(0);
+            p.setIncrement(0);
+
+            return;
+        }
 
         if (!getWorld().isRemote) {
             front().setOutput(false);
             left().setOutput(false);
             right().setOutput(false);
             t.setState(false);
+            w.setPower((byte) 255);
 
             left().notifyUpdateIfNeeded();
             right().notifyUpdateIfNeeded();
         }
 
-        if (!back().getInput() && !(!front().getOutput() && (left().getInput() || right().getInput()))) {
-            p.setState(true);
-            p.setIncrement(1 / (double) time);
-            if (++curTime >= time) {
-                if (!getWorld().isRemote) {
-                    front().setOutput(true);
-                    left().setOutput(true);
-                    right().setOutput(true);
-                    t.setState(true);
-                    p.setAngle(0);
-                }
-                playTickSound();
-                curTime = 0;
+        long curTime = getWorld().getTotalWorldTime();
+
+        if (start != -1 && curTime != start && (curTime - start) >= time) {
+            while ((curTime - start) >= time)
+                start += time;
+
+            playTickSound();
+            if (!getWorld().isRemote) {
+                front().setOutput(true);
+                left().setOutput(true);
+                right().setOutput(true);
+                t.setState(true);
+                w.setPower((byte) 0);
+
+                left().notifyUpdateIfNeeded();
+                right().notifyUpdateIfNeeded();
             }
-        } else {
-            curTime = 0;
-            p.setState(false);
-            p.setAngle(0);
         }
+
+        if (start == -1)
+            start = curTime;
+
+        p.setAngle((curTime - start) / (double) time);
+        p.setIncrement(1 / (double) time);
     }
 
     @Override
     public void writeToNBT(NBTTagCompound tag) {
 
         super.writeToNBT(tag);
-        tag.setInteger("curTime", curTime);
+        tag.setLong("start", start);
         tag.setInteger("time", time);
     }
 
@@ -117,7 +135,7 @@ public class GateTimer extends GateSimpleDigital implements IGuiButtonSensitive 
     public void readFromNBT(NBTTagCompound tag) {
 
         super.readFromNBT(tag);
-        curTime = tag.getInteger("curTime");
+        start = tag.getLong("start");
         time = tag.getInteger("time");
     }
 
@@ -139,7 +157,7 @@ public class GateTimer extends GateSimpleDigital implements IGuiButtonSensitive 
     public void onButtonPress(EntityPlayer player, int messageId, int value) {
 
         time = value;
-        curTime = 0;
+        start = 0;
         sendUpdatePacket();
     }
 
