@@ -7,7 +7,6 @@ import com.bluepowermod.api.wire.IConnection;
 import com.bluepowermod.api.wire.IConnectionCache;
 import com.bluepowermod.api.wire.IConnectionListener;
 import com.bluepowermod.api.wire.redstone.IRedstoneDevice;
-import com.bluepowermod.part.wire.redstone.WireHelper;
 
 public class RedstoneConnectionCache implements IConnectionCache<IRedstoneDevice> {
 
@@ -60,7 +59,7 @@ public class RedstoneConnectionCache implements IConnectionCache<IRedstoneDevice
         IRedstoneDevice self = getSelf();
         for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
             boolean wasConnected = connections[d.ordinal()] != null;
-            RedstoneConnection con = WireHelper.getNeighbor(self, d);
+            RedstoneConnection con = ConnectionHelper.getNeighbor(self, d);
             if (con != null) {
                 if (!wasConnected || connections[d.ordinal()].getB() != con.getB() || connections[d.ordinal()].getSideB() != con.getSideB()
                         || connections[d.ordinal()].getType() != con.getType()) {
