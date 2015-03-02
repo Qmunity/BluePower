@@ -23,7 +23,7 @@ public class TileBattery extends TileBase implements IBluePowered, IInventory {
 
     private ItemStack[] inventory = new ItemStack[2];
 
-    private static float powerTransfer = 0.1F; //The ammount of Amps being transfered into or out of a battery, every tick
+    private static int powerTransfer = 1; //The ammount of Amps being transfered into or out of a battery, every tick
 
     private IPowerBase handler;
 
