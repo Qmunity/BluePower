@@ -30,6 +30,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.part.tube.TubeStack;
 import com.bluepowermod.tile.TileMachineBase;
+import com.bluepowermod.helper.IOHelper;
 
 public class TileRelay extends TileMachineBase implements IInventory {
 
@@ -228,7 +229,19 @@ public class TileRelay extends TileMachineBase implements IInventory {
 
     @Override
     public TubeStack acceptItemFromTube(TubeStack stack, ForgeDirection from, boolean simulate) {
-
-        return from == getFacingDirection() ? stack : super.acceptItemFromTube(stack, from, simulate);
+        if ( from == getFacingDirection() )
+        {
+            return stack;
+        }
+        ItemStack ret = IOHelper.insert((IInventory)this,stack.stack,from.ordinal(),simulate);
+        if ( ret == null)
+        {
+            return null;
+        }
+        else
+        {
+            stack.stack=ret;
+            return stack;
+        }
     }
 }
