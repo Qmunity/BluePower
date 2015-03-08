@@ -79,4 +79,18 @@ public class RedstoneConnection implements IConnection<IRedstoneDevice> {
         complementary = con;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+
+        if (obj == null)
+            return false;
+        if (!(obj instanceof RedstoneConnection))
+            return false;
+
+        RedstoneConnection c = (RedstoneConnection) obj;
+
+        return getA().equals(c.getA()) && getB().equals(c.getB()) && getSideA() == c.getSideA() && getSideB() == c.getSideB()
+                && getType() == c.getType();
+    }
+
 }

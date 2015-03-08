@@ -121,31 +121,31 @@ public abstract class RedstonePropagator implements IPropagator<IRedstoneDevice>
 
         List<IConnection<IRedstoneDevice>> newDevices = new ArrayList<IConnection<IRedstoneDevice>>();
 
-        // while (current.size() > 0) {
-        // List<Entry<IConnection<IRedstoneDevice>, Boolean>> tmp = new ArrayList<Entry<IConnection<IRedstoneDevice>, Boolean>>();
-        // for (IConnection<IRedstoneDevice> c : current) {
-        // tmp.addAll(getPropagation(c.getB(), c.getSideB()));
-        //
-        // for (Entry<IConnection<IRedstoneDevice>, Boolean> p : tmp) {
-        // if (p.getValue()) {
-        // schedule(new RedPropagator(p.getKey().getB(), p.getKey().getSideB()));
-        // } else if (!connections.contains(p)) {
-        // newDevices.add(p.getKey());
-        // }
-        // }
-        //
-        // tmp.clear();
-        // }
-        //
-        // connections.addAll(current);
-        // current.clear();
-        //
-        // for (IConnection<IRedstoneDevice> c : newDevices)
-        // if (!connections.contains(c))
-        // current.add(c);
-        //
-        // newDevices.clear();
-        // }
+        while (current.size() > 0) {
+            List<Entry<IConnection<IRedstoneDevice>, Boolean>> tmp = new ArrayList<Entry<IConnection<IRedstoneDevice>, Boolean>>();
+            for (IConnection<IRedstoneDevice> c : current) {
+                tmp.addAll(getPropagation(c.getB(), c.getSideB()));
+
+                for (Entry<IConnection<IRedstoneDevice>, Boolean> p : tmp) {
+                    if (p.getValue()) {
+                        // schedule(new RedPropagator(p.getKey().getB(), p.getKey().getSideB()));
+                    } else if (!connections.contains(p.getKey()) && !newDevices.contains(p.getKey())) {
+                        newDevices.add(p.getKey());
+                    }
+                }
+
+                tmp.clear();
+            }
+
+            connections.addAll(current);
+            current.clear();
+
+            for (IConnection<IRedstoneDevice> c : newDevices)
+                if (!connections.contains(c))
+                    current.add(c);
+
+            newDevices.clear();
+        }
 
         return connections;
     }
