@@ -664,7 +664,7 @@ itemGroup.bluepower:wiring=Blue Power Kabel
 
 # Enchantments
 enchantment.bluepower:vorpal.name=Vorpal
-enchantment:disjunction.name=Disjunction
+enchantment:bluepower.disjunction.name=Disjunction
 
 # Gui buttons and tooltips
 gui.bluepower:projectTable.clearGrid=Leere Crafting Feld

@@ -664,7 +664,7 @@ itemGroup.bluepower:lighting=Blue Power Ljus
 
 # Enchantments
 enchantment.bluepower:vorpal.name=Vorpal
-enchantment:disjunction.name=Disjunktion
+enchantment:bluepower.disjunction.name=Disjunktion
 
 # Gui buttons and tooltips
 gui.bluepower:projectTable.clearGrid=Rensa skaparfälten

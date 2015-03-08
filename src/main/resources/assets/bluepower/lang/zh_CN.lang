@@ -664,7 +664,7 @@ itemGroup.bluepower:lighting=�?石能�?|照明
 
 # Enchantments
 enchantment.bluepower:vorpal.name=斩首
-enchantment:disjunction.name=解离
+enchantment:bluepower.disjunction.name=解离
 
 # Gui buttons and tooltips
 gui.bluepower:projectTable.clearGrid=清除�?��?网格

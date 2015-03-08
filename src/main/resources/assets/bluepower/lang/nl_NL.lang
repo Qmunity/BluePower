@@ -664,7 +664,7 @@ itemGroup.bluepower:lighting=Blue Power Verlichting
 
 # Enchantments
 enchantment.bluepower:vorpal.name=Vorpal
-enchantment:disjunction.name=Disjunctie
+enchantment:bluepower.disjunction.name=Disjunctie
 
 # Gui buttons and tooltips
 gui.bluepower:projectTable.clearGrid=Crafting gebied leegmaken
