@@ -22,7 +22,7 @@ import net.minecraft.item.ItemHoe;
 import net.minecraft.item.ItemStack;
 
 import com.bluepowermod.init.BPCreativeTabs;
-import com.bluepowermod.util.Refs;
+import com.bluepowermod.reference.Refs;
 
 public class ItemGemHoe extends ItemHoe {
 

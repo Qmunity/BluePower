@@ -23,8 +23,8 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 
 import com.bluepowermod.container.ContainerEjector;
+import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier1.TileEjector;
-import com.bluepowermod.util.Refs;
 
 public class GuiEjector extends GuiContainerBaseBP {
 

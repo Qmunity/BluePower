@@ -13,7 +13,7 @@ import net.minecraftforge.client.event.TextureStitchEvent;
 
 import com.bluepowermod.part.PartInfo;
 import com.bluepowermod.part.PartManager;
-import com.bluepowermod.util.Refs;
+import com.bluepowermod.reference.Refs;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;

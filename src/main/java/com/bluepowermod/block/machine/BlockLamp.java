@@ -19,8 +19,8 @@ import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.block.BlockContainerBase;
 import com.bluepowermod.client.render.RenderLamp;
 import com.bluepowermod.init.BPCreativeTabs;
+import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier1.TileLamp;
-import com.bluepowermod.util.Refs;
 
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.relauncher.Side;

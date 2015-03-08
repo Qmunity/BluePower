@@ -35,7 +35,7 @@ import uk.co.qmunity.lib.raytrace.RayTracer;
 import com.bluepowermod.api.block.IAdvancedSilkyRemovable;
 import com.bluepowermod.api.block.ISilkyRemovable;
 import com.bluepowermod.init.BPCreativeTabs;
-import com.bluepowermod.util.Refs;
+import com.bluepowermod.reference.Refs;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

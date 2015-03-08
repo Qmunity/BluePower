@@ -32,7 +32,7 @@ import com.bluepowermod.BluePower;
 import com.bluepowermod.container.inventory.InventoryItem;
 import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.reference.GuiIDs;
-import com.bluepowermod.util.Refs;
+import com.bluepowermod.reference.Refs;
 
 public class ItemSeedBag extends ItemBase {
 

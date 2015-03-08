@@ -44,6 +44,7 @@ import com.bluepowermod.block.worldgen.BlockStoneOreConnected;
 import com.bluepowermod.block.worldgen.BlockTeslatiteOre;
 import com.bluepowermod.item.ItemBlockTooltip;
 import com.bluepowermod.reference.GuiIDs;
+import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier1.TileBlockBreaker;
 import com.bluepowermod.tile.tier1.TileBuffer;
 import com.bluepowermod.tile.tier1.TileDeployer;
@@ -59,7 +60,6 @@ import com.bluepowermod.tile.tier2.TileSortingMachine;
 import com.bluepowermod.tile.tier3.TileCircuitDatabase;
 import com.bluepowermod.tile.tier3.TileManager;
 import com.bluepowermod.util.Dependencies;
-import com.bluepowermod.util.Refs;
 
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.registry.GameRegistry;

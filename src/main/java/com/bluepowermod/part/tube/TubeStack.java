@@ -27,7 +27,7 @@ import uk.co.qmunity.lib.vec.Vec3dCube;
 
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
 import com.bluepowermod.client.render.RenderHelper;
-import com.bluepowermod.util.Refs;
+import com.bluepowermod.reference.Refs;
 
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.network.ByteBufUtils;

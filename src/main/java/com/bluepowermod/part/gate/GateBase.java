@@ -64,7 +64,7 @@ import com.bluepowermod.part.gate.connection.GateConnectionBase;
 import com.bluepowermod.redstone.BundledConnectionCache;
 import com.bluepowermod.redstone.RedstoneApi;
 import com.bluepowermod.redstone.RedstoneConnectionCache;
-import com.bluepowermod.util.Refs;
+import com.bluepowermod.reference.Refs;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;

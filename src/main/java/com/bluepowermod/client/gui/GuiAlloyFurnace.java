@@ -21,8 +21,8 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 
 import com.bluepowermod.container.ContainerAlloyFurnace;
+import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier1.TileAlloyFurnace;
-import com.bluepowermod.util.Refs;
 
 /**
  * @author MineMaarten

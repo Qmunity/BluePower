@@ -24,8 +24,8 @@ import com.bluepowermod.block.BlockContainerBase;
 import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.init.BPItems;
 import com.bluepowermod.reference.GuiIDs;
+import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier3.TileEngine;
-import com.bluepowermod.util.Refs;
 
 /**
  *

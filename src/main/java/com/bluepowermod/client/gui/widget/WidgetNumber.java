@@ -10,7 +10,7 @@ package com.bluepowermod.client.gui.widget;
 import uk.co.qmunity.lib.client.gui.widget.WidgetMode;
 import net.minecraft.client.Minecraft;
 
-import com.bluepowermod.util.Refs;
+import com.bluepowermod.reference.Refs;
 
 public class WidgetNumber extends WidgetMode {
 

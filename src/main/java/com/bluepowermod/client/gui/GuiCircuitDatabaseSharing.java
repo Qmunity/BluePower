@@ -22,8 +22,8 @@ import com.bluepowermod.container.ContainerCircuitDatabaseSharing;
 import com.bluepowermod.network.BPNetworkHandler;
 import com.bluepowermod.network.message.MessageCircuitDatabaseTemplate;
 import com.bluepowermod.network.message.MessageGuiUpdate;
+import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier3.TileCircuitDatabase;
-import com.bluepowermod.util.Refs;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

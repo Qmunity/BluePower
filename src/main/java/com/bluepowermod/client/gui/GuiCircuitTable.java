@@ -19,8 +19,8 @@ import com.bluepowermod.container.ContainerCircuitTable;
 import com.bluepowermod.container.slot.SlotCircuitTableCrafting;
 import com.bluepowermod.network.BPNetworkHandler;
 import com.bluepowermod.network.message.MessageUpdateTextfield;
+import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier2.TileCircuitTable;
-import com.bluepowermod.util.Refs;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

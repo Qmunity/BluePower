@@ -15,8 +15,8 @@ import net.minecraft.util.ResourceLocation;
 import uk.co.qmunity.lib.client.gui.widget.WidgetMode;
 
 import com.bluepowermod.container.ContainerRetriever;
+import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier2.TileRetriever;
-import com.bluepowermod.util.Refs;
 
 /**
  * @author MineMaarten

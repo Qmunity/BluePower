@@ -21,7 +21,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 
 import com.bluepowermod.init.BPCreativeTabs;
-import com.bluepowermod.util.Refs;
+import com.bluepowermod.reference.Refs;
 
 public abstract class BlockBase extends Block {
     

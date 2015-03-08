@@ -14,8 +14,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
 import com.bluepowermod.init.BPCreativeTabs;
+import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier2.TileWindmill;
-import com.bluepowermod.util.Refs;
 
 /**
  * 

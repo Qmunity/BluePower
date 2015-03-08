@@ -11,7 +11,7 @@ import java.util.List;
 
 import uk.co.qmunity.lib.client.gui.widget.WidgetMode;
 
-import com.bluepowermod.util.Refs;
+import com.bluepowermod.reference.Refs;
 
 public class WidgetFuzzySetting extends WidgetMode {
 

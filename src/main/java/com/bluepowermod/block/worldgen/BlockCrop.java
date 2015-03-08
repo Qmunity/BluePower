@@ -40,7 +40,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.init.BPItems;
-import com.bluepowermod.util.Refs;
+import com.bluepowermod.reference.Refs;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

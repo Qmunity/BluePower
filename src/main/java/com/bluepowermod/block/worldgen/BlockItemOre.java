@@ -24,7 +24,7 @@ import net.minecraft.item.Item;
 
 import com.bluepowermod.block.BlockBase;
 import com.bluepowermod.init.BPCreativeTabs;
-import com.bluepowermod.util.Refs;
+import com.bluepowermod.reference.Refs;
 
 public class BlockItemOre extends BlockBase {
 

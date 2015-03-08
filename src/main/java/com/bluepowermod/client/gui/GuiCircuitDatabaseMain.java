@@ -29,8 +29,8 @@ import com.bluepowermod.container.ContainerCircuitDatabaseMain;
 import com.bluepowermod.network.BPNetworkHandler;
 import com.bluepowermod.network.message.MessageGuiUpdate;
 import com.bluepowermod.network.message.MessageUpdateTextfield;
+import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier3.TileCircuitDatabase;
-import com.bluepowermod.util.Refs;
 
 public class GuiCircuitDatabaseMain extends GuiContainerBaseBP {
 

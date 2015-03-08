@@ -39,7 +39,7 @@ import com.bluepowermod.api.misc.IScrewdriver;
 import com.bluepowermod.block.BlockContainerBase;
 import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.reference.GuiIDs;
-import com.bluepowermod.util.Refs;
+import com.bluepowermod.reference.Refs;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

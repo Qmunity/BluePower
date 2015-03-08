@@ -12,7 +12,7 @@ import codechicken.nei.api.IConfigureNEI;
 import codechicken.nei.guihook.GuiContainerManager;
 
 import com.bluepowermod.client.gui.GuiProjectTable;
-import com.bluepowermod.util.Refs;
+import com.bluepowermod.reference.Refs;
 
 /**
  *

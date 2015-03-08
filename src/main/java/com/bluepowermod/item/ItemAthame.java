@@ -28,7 +28,7 @@ import net.minecraftforge.common.util.EnumHelper;
 
 import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.init.BPItems;
-import com.bluepowermod.util.Refs;
+import com.bluepowermod.reference.Refs;
 
 public class ItemAthame extends ItemSword {
     

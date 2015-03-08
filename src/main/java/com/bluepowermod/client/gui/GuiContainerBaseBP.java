@@ -18,8 +18,8 @@ import codechicken.nei.api.INEIGuiHandler;
 import codechicken.nei.api.TaggedInventoryArea;
 
 import com.bluepowermod.client.gui.widget.WidgetTabItemLister;
+import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.TileMachineBase;
-import com.bluepowermod.util.Refs;
 
 import cpw.mods.fml.common.Optional;
 

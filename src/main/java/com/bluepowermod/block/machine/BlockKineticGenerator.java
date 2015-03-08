@@ -12,8 +12,8 @@ import net.minecraft.block.material.Material;
 import com.bluepowermod.block.BlockContainerBase;
 import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.reference.GuiIDs;
+import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier3.TileKinectGenerator;
-import com.bluepowermod.util.Refs;
 
 /**
  * 

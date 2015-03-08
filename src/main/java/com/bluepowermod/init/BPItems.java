@@ -45,8 +45,8 @@ import com.bluepowermod.item.ItemScrewdriver;
 import com.bluepowermod.item.ItemSeedBag;
 import com.bluepowermod.item.ItemSickle;
 import com.bluepowermod.item.ItemSilkyScrewdriver;
+import com.bluepowermod.reference.Refs;
 import com.bluepowermod.util.Dependencies;
-import com.bluepowermod.util.Refs;
 
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.registry.GameRegistry;

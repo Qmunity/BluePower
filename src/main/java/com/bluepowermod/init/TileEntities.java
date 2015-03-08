@@ -17,6 +17,7 @@
 
 package com.bluepowermod.init;
 
+import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier1.TileAlloyFurnace;
 import com.bluepowermod.tile.tier1.TileBlockBreaker;
 import com.bluepowermod.tile.tier1.TileBuffer;
@@ -37,7 +38,6 @@ import com.bluepowermod.tile.tier3.TileCircuitDatabase;
 import com.bluepowermod.tile.tier3.TileEngine;
 import com.bluepowermod.tile.tier3.TileManager;
 import com.bluepowermod.tile.tier3.TileSortron;
-import com.bluepowermod.util.Refs;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 

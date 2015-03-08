@@ -43,11 +43,11 @@ import com.bluepowermod.client.render.RendererBlockBase.EnumFaceType;
 import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.init.BPItems;
 import com.bluepowermod.reference.GuiIDs;
+import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.IBluePowered;
 import com.bluepowermod.tile.IEjectAnimator;
 import com.bluepowermod.tile.IRotatable;
 import com.bluepowermod.tile.TileBase;
-import com.bluepowermod.util.Refs;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

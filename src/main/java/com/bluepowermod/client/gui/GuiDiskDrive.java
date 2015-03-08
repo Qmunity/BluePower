@@ -11,8 +11,8 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 
 import com.bluepowermod.container.ContainerDiskDrive;
+import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier3.TileDiskDrive;
-import com.bluepowermod.util.Refs;
 
 public class GuiDiskDrive extends GuiContainerBaseBP {
 
