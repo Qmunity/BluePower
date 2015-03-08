@@ -120,24 +120,24 @@ public abstract class RedstonePropagator implements IPropagator<IRedstoneDevice>
             return connections;
 
         List<IConnection<IRedstoneDevice>> newDevices = new ArrayList<IConnection<IRedstoneDevice>>();
-        List<Entry<IConnection<IRedstoneDevice>, Boolean>> tmp = new ArrayList<Entry<IConnection<IRedstoneDevice>, Boolean>>();
 
         while (current.size() > 0) {
+            List<Entry<IConnection<IRedstoneDevice>, Boolean>> tmp = new ArrayList<Entry<IConnection<IRedstoneDevice>, Boolean>>();
             for (IConnection<IRedstoneDevice> c : current) {
                 tmp.addAll(getPropagation(c.getB(), c.getSideB()));
 
-                for (Entry<IConnection<IRedstoneDevice>, Boolean> p : tmp)
-                    if (p.getValue())
+                for (Entry<IConnection<IRedstoneDevice>, Boolean> p : tmp) {
+                    if (p.getValue()) {
                         schedule(new RedPropagator(p.getKey().getB(), p.getKey().getSideB()));
-                    else if (!connections.contains(p) && !current.contains(p) && !tmp.contains(p))
+                    } else if (!connections.contains(p)) {
                         newDevices.add(p.getKey());
+                    }
+                }
 
                 tmp.clear();
             }
 
-            for (IConnection<IRedstoneDevice> c : current)
-                if (!connections.contains(c))
-                    connections.add(c);
+            connections.addAll(current);
             current.clear();
 
             for (IConnection<IRedstoneDevice> c : newDevices)
