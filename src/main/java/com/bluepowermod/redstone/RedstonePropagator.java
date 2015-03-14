@@ -128,7 +128,7 @@ public abstract class RedstonePropagator implements IPropagator<IRedstoneDevice>
 
                 for (Entry<IConnection<IRedstoneDevice>, Boolean> p : tmp) {
                     if (p.getValue()) {
-                        // schedule(new RedPropagator(p.getKey().getB(), p.getKey().getSideB()));
+                        schedule(new RedPropagator(p.getKey().getB(), p.getKey().getSideB()));
                     } else if (!connections.contains(p.getKey()) && !newDevices.contains(p.getKey())) {
                         newDevices.add(p.getKey());
                     }
