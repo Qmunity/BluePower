@@ -590,7 +590,7 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
             }
 
             renderFully |= count > 2 || count == 0;
-            renderFully |= this instanceof RestrictionTube;
+            renderFully |= this instanceof RestrictionTube || this instanceof Accelerator;
             renderFully |= getParent() == null || getWorld() == null;
 
             if (this instanceof RestrictionTube) {
@@ -600,7 +600,7 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
             double addedThickness = getAddedThickness();
 
             double wireSize = getSize() / 16D;
-            double frameSeparation = 6 / 16D - addedThickness - addedThickness;
+            double frameSeparation = 6 / 16D - addedThickness - addedThickness - 0.001;
             double frameThickness = 1 / 16D + addedThickness;
 
             if (renderFully) {
