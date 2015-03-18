@@ -21,6 +21,7 @@ import com.bluepowermod.item.ItemPart;
 import com.bluepowermod.part.gate.analogue.GateComparator;
 import com.bluepowermod.part.gate.analogue.GateInverter;
 import com.bluepowermod.part.gate.analogue.GateLightCell;
+import com.bluepowermod.part.gate.analogue.GateRegulableTorch;
 import com.bluepowermod.part.gate.digital.GateAnd;
 import com.bluepowermod.part.gate.digital.GateBuffer;
 import com.bluepowermod.part.gate.digital.GateCounter;
@@ -146,10 +147,11 @@ public class PartManager {
         registerPart(GateTransparentLatch.class);
         registerPart(GateSynchronizer.class);
 
-        // Analog gates
+        // Analogue gates
         registerPart(GateInverter.class);
         registerPart(GateComparator.class);
         registerPart(GateLightCell.class);
+        registerPart(GateRegulableTorch.class);
 
         // Wireless gates
         registerPart(GateTransceiver.class, false, false);

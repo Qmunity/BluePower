@@ -23,13 +23,13 @@ import cpw.mods.fml.relauncher.SideOnly;
  */
 
 @SideOnly(Side.CLIENT)
-public abstract class GuiGateSingleTime extends GuiGate {
+public abstract class GuiGateSingleCounter extends GuiGate {
 
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/gate.png");
     private static final String[] buttonTexts = { "-10s", "-1s", "-50ms", "+50ms", "+1s", "+10s" };
     private static final int[] buttonActions = { -200, -20, -1, 1, 20, 200 };
 
-    public GuiGateSingleTime(GateBase<?, ?, ?, ?, ?, ?> gate) {
+    public GuiGateSingleCounter(GateBase<?, ?, ?, ?, ?, ?> gate) {
 
         super(gate, 228, 66);
     }
@@ -38,19 +38,23 @@ public abstract class GuiGateSingleTime extends GuiGate {
     @Override
     public void initGui() {
 
+        String[] text = getButtonText();
+
         super.initGui();
         int buttonWidth = 35;
-        for (int i = 0; i < buttonTexts.length; i++) {
-            buttonList.add(new GuiButton(i, guiLeft + 4 + i * (buttonWidth + 2), guiTop + 35, buttonWidth, 20, buttonTexts[i]));
+        for (int i = 0; i < text.length; i++) {
+            buttonList.add(new GuiButton(i, guiLeft + 4 + i * (buttonWidth + 2), guiTop + 35, buttonWidth, 20, text[i]));
         }
     }
 
     @Override
     public void actionPerformed(GuiButton button) {
 
-        int newTimerValue = getCurrentIntervalTicks() + buttonActions[button.id];
-        if (newTimerValue <= 1)
-            newTimerValue = 2;
+        int newTimerValue = getCurrentAmount() + getButtonActions()[button.id];
+        if (newTimerValue < getMinValue())
+            newTimerValue = getMinValue();
+        if (newTimerValue > getMaxValue())
+            newTimerValue = getMaxValue();
         sendToServer(0, newTimerValue);
     }
 
@@ -63,13 +67,13 @@ public abstract class GuiGateSingleTime extends GuiGate {
     @Override
     public void renderGUI(int x, int y, float partialTicks) {
 
-        drawCenteredString(fontRendererObj, I18n.format("gui.bluepower:timer.interval") + ": " + getTimerValue(getCurrentIntervalTicks()),
-                guiLeft + xSize / 2, guiTop + 10, 0xFFFFFF);
+        drawCenteredString(fontRendererObj, I18n.format(getTitle()) + ": " + getDisplayedString(), guiLeft + xSize / 2, guiTop + 10,
+                0xFFFFFF);
     }
 
-    private String getTimerValue(int ticks) {
+    protected String getDisplayedString() {
 
-        int time = ticks * 50;
+        int time = getCurrentAmount() * 50;
         if (time >= 1000) {
             String ms = "" + time % 1000;
             if (ms.length() > 1)
@@ -81,6 +85,30 @@ public abstract class GuiGateSingleTime extends GuiGate {
         }
     }
 
-    protected abstract int getCurrentIntervalTicks();
+    protected abstract int getCurrentAmount();
 
+    protected String[] getButtonText() {
+
+        return buttonTexts;
+    }
+
+    protected int[] getButtonActions() {
+
+        return buttonActions;
+    }
+
+    protected String getTitle() {
+
+        return "gui.bluepower:timer.interval";
+    }
+
+    protected int getMinValue() {
+
+        return 2;
+    }
+
+    protected int getMaxValue() {
+
+        return Integer.MAX_VALUE;
+    }
 }

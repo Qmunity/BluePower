@@ -216,7 +216,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
     }
 
     public static class PartRedwireFaceUninsulated extends PartRedwireFace implements IAdvancedRedstoneConductor, IConnectionListener,
-    IPartTicking {
+            IPartTicking {
 
         private RedstoneConnectionCache connections = RedstoneApi.getInstance().createRedstoneConnectionCache(this);
         private boolean hasUpdated = false;
@@ -256,7 +256,8 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
         @Override
         public boolean canConnect(ForgeDirection side, IRedstoneDevice device, ConnectionType type) {
 
-            if (type == ConnectionType.STRAIGHT && side == getFace().getOpposite() || side == ForgeDirection.UNKNOWN)
+            if ((type == ConnectionType.STRAIGHT && side == getFace().getOpposite() && device instanceof IFace)
+                    || side == ForgeDirection.UNKNOWN)
                 return false;
             if (type == ConnectionType.CLOSED_CORNER) {
                 if (side == getFace())
@@ -548,7 +549,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
     }
 
     public static class PartRedwireFaceInsulated extends PartRedwireFace implements IAdvancedRedstoneConductor, IInsulatedRedstoneDevice,
-    IAdvancedBundledConductor, IConnectionListener, IInsulatedRedwire, IPartTicking {
+            IAdvancedBundledConductor, IConnectionListener, IInsulatedRedwire, IPartTicking {
 
         private RedstoneConnectionCache connections = RedstoneApi.getInstance().createRedstoneConnectionCache(this);
         private BundledConnectionCache bundledConnections = RedstoneApi.getInstance().createBundledConnectionCache(this);
