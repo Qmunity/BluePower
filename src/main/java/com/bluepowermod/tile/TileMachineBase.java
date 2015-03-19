@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import com.bluepowermod.BluePower;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
@@ -44,6 +45,7 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
     protected static final int ANIMATION_TIME = 7;
     private boolean isAnimating;
     protected boolean ejectionScheduled;
+    private static final int WARNING_INTERVAL = 600; // Every 30s
 
     @Override
     public void updateEntity() {
@@ -60,6 +62,9 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
                     animationTicker = -1;
                     sendUpdatePacket();
                 }
+            }
+            if (getBacklog().size() > 50 && getTicker() % WARNING_INTERVAL  == 0) {
+                BluePower.log.warn("Large backlog (" + getBacklog().size() + " stacks) detected in " + this.getBlockType().getLocalizedName() + " at: " + this.xCoord + ", " + this.yCoord + ", " + this.zCoord);
             }
         }
     }
