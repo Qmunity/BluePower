@@ -290,4 +290,10 @@ public class Accelerator extends PneumaticTube implements IPartCustomPlacement {
         return new PartPlacementAccelerator(player);
     }
 
+    @Override
+    protected boolean shouldRenderFully() {
+
+        return true;
+    }
+
 }

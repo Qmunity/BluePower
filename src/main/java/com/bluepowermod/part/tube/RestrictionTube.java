@@ -29,4 +29,10 @@ public class RestrictionTube extends PneumaticTube {
 
         return 5000;
     }
+
+    @Override
+    protected boolean shouldRenderFully() {
+
+        return true;
+    }
 }

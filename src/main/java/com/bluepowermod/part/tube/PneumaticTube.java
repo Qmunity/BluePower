@@ -533,6 +533,7 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
         RenderBlocks rb = new RenderBlocks();
 
         renderStatic(new Vec3i(0, 0, 0), renderer, rb, 0);
+        renderStatic(new Vec3i(0, 0, 0), renderer, rb, 1);
 
         t.draw();
         renderSide();
@@ -560,58 +561,58 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
 
     private double getAddedThickness() {
 
-        return 0.125 / 16D;
+        return 0;// 0.125 / 16D;
     }
 
-    /**
-     * This render method gets called whenever there's a block update in the chunk. You should use this to remove load from the renderer if a part of
-     * the rendering code doesn't need to get called too often or just doesn't change at all. To call a render update to re-render this just call
-     * {@link BPPart#markPartForRenderUpdate()}
-     *
-     * @param loc
-     *            Distance from the player's position
-     * @param pass
-     *            Render pass (0 or 1)
-     * @return Whether or not it rendered something
-     */
+    protected boolean shouldRenderFully() {
+
+        boolean renderFully = false;
+        int count = 0;
+
+        for (int i = 0; i < 6; i++) {
+            if (shouldRenderConnection(ForgeDirection.getOrientation(i)))
+                count++;
+            if (i % 2 == 0 && connections[i] != connections[i + 1])
+                renderFully = true;
+        }
+
+        renderFully |= count > 2 || count == 0;
+        renderFully |= getParent() == null || getWorld() == null;
+
+        return renderFully;
+    }
+
     @Override
     @SideOnly(Side.CLIENT)
     public boolean renderStatic(Vec3i loc, RenderHelper renderer, RenderBlocks renderBlocks, int pass) {
 
+        boolean down = shouldRenderConnection(ForgeDirection.DOWN);
+        boolean up = shouldRenderConnection(ForgeDirection.UP);
+        boolean north = shouldRenderConnection(ForgeDirection.NORTH);
+        boolean south = shouldRenderConnection(ForgeDirection.SOUTH);
+        boolean west = shouldRenderConnection(ForgeDirection.WEST);
+        boolean east = shouldRenderConnection(ForgeDirection.EAST);
+
+        boolean renderFully = shouldRenderFully();
+
+        if (this instanceof RestrictionTube) {
+            IIcon icon = IconSupplier.restrictionTubeSide;
+            renderer.renderBox(new Vec3dCube(0.25, 0.25, 0.25, 0.75, 0.75, 0.75), icon);
+        }
+        double addedThickness = getAddedThickness();
+
+        double wireSize = getSize() / 16D;
+        double frameSeparation = 6 / 16D - addedThickness - addedThickness - 0.001;
+        double frameThickness = 1 / 16D + addedThickness;
+
         if (pass == 0) {
-            boolean renderFully = false;
-            int count = 0;
-
-            for (int i = 0; i < 6; i++) {
-                if (shouldRenderConnection(ForgeDirection.getOrientation(i)))
-                    count++;
-                if (i % 2 == 0 && connections[i] != connections[i + 1])
-                    renderFully = true;
-            }
-
-            renderFully |= count > 2 || count == 0;
-            renderFully |= this instanceof RestrictionTube || this instanceof Accelerator;
-            renderFully |= getParent() == null || getWorld() == null;
 
             if (this instanceof RestrictionTube) {
                 IIcon icon = IconSupplier.restrictionTubeSide;
                 renderer.renderBox(new Vec3dCube(0.25, 0.25, 0.25, 0.75, 0.75, 0.75), icon);
             }
-            double addedThickness = getAddedThickness();
-
-            double wireSize = getSize() / 16D;
-            double frameSeparation = 6 / 16D - addedThickness - addedThickness - 0.001;
-            double frameThickness = 1 / 16D + addedThickness;
 
             if (renderFully) {
-
-                boolean down = shouldRenderConnection(ForgeDirection.DOWN);
-                boolean up = shouldRenderConnection(ForgeDirection.UP);
-                boolean north = shouldRenderConnection(ForgeDirection.NORTH);
-                boolean south = shouldRenderConnection(ForgeDirection.SOUTH);
-                boolean west = shouldRenderConnection(ForgeDirection.WEST);
-                boolean east = shouldRenderConnection(ForgeDirection.EAST);
-
                 renderer.setColor(getColorMultiplier());
 
                 renderFrame(renderer, wireSize, frameSeparation, frameThickness, true, true, true, true, true, true, down, up, west, east,
@@ -620,14 +621,6 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
                 renderer.setColor(0xFFFFFF);
             } else {
                 boolean isInWorld = getParent() != null;
-
-                boolean down = shouldRenderConnection(ForgeDirection.DOWN);
-                boolean up = shouldRenderConnection(ForgeDirection.UP);
-                boolean north = shouldRenderConnection(ForgeDirection.NORTH);
-                boolean south = shouldRenderConnection(ForgeDirection.SOUTH);
-                boolean west = shouldRenderConnection(ForgeDirection.WEST);
-                boolean east = shouldRenderConnection(ForgeDirection.EAST);
-
                 renderer.setColor(getFrameColorMultiplier());
 
                 // Frame
@@ -713,6 +706,61 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
                     }
                 }
                 renderer.setColor(0xFFFFFF);
+            }
+        } else {
+            IIcon glass = this instanceof MagTube ? IconSupplier.magTubeGlass : IconSupplier.pneumaticTubeGlass;
+            IIcon glass2 = this instanceof MagTube ? IconSupplier.magTubeGlass2 : IconSupplier.pneumaticTubeGlass2;
+
+            if (!(this instanceof RestrictionTube)) {
+                renderer.setRenderSides(!down, !up, !west, !east, !north, !south);
+                if (renderFully) {
+                    renderer.renderBox(new Vec3dCube(4.5 / 16D, 4.5 / 16D, 4.5 / 16D, 11.5 / 16D, 11.5 / 16D, 11.5 / 16D), glass);
+                } else {
+                    boolean ud = west || east;
+                    boolean we = north || south;
+                    boolean ns = west || east;
+
+                    renderer.setTextureRotations(ud ? 1 : 0, ud ? 1 : 0, we ? 1 : 0, we ? 1 : 0, ns ? 1 : 0, ns ? 1 : 0);
+                    renderer.renderBox(new Vec3dCube(4.5 / 16D, 4.5 / 16D, 4.5 / 16D, 11.5 / 16D, 11.5 / 16D, 11.5 / 16D), glass2);
+                }
+                renderer.resetRenderedSides();
+                renderer.resetTextureRotations();
+            }
+
+            Vec3dCube c = new Vec3dCube(4.5 / 16D, 0, 4.5 / 16D, 11.5 / 16D, 4.5 / 16D, 11.5 / 16D);
+            if (renderFully) {
+                boolean ud = west || east;
+                boolean we = north || south;
+                boolean ns = west || east;
+
+                renderer.setTextureRotations(ud ? 1 : 0, ud ? 1 : 0, we ? 1 : 0, we ? 1 : 0, ns ? 1 : 0, ns ? 1 : 0);
+                for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
+                    if (shouldRenderConnection(d)) {
+                        renderer.setRenderSide(d, false);
+                        renderer.setRenderSide(d.getOpposite(), false);
+
+                        renderer.renderBox(c.clone().rotate(d, Vec3d.center), glass);
+
+                        renderer.resetRenderedSides();
+                    }
+                }
+            } else {
+                boolean ud = west || east;
+                boolean we = north || south;
+                boolean ns = west || east;
+
+                renderer.setTextureRotations(ud ? 1 : 0, ud ? 1 : 0, we ? 1 : 0, we ? 1 : 0, ns ? 1 : 0, ns ? 1 : 0);
+                for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
+                    if (shouldRenderConnection(d)) {
+                        renderer.setRenderSide(d, false);
+                        renderer.setRenderSide(d.getOpposite(), false);
+
+                        renderer.renderBox(c.clone().rotate(d, Vec3d.center), glass2);
+
+                        renderer.resetRenderedSides();
+                    }
+                }
+
             }
         }
 

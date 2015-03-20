@@ -77,7 +77,7 @@ import com.bluepowermod.redstone.RedstoneConnection;
 import com.bluepowermod.redstone.RedstoneConnectionCache;
 
 public abstract class PartRedwireFreestanding extends PartWireFreestanding implements IRedwire, IRedConductor, IIntegratedCircuitPart,
-        IPartRedstone {
+IPartRedstone {
 
     private RedwireType type;
 
@@ -145,16 +145,9 @@ public abstract class PartRedwireFreestanding extends PartWireFreestanding imple
 
         Vec3dCube box = new Vec3dCube(0.5 - (size / 2), 0, 0.5 - (size / 2), 0.5 + (size / 2), 0.5 - (size / 2), 0.5 + (size / 2));
 
-        if (getWorld().isRemote) {
-            for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
-                if (shouldRenderConnection(d))
-                    boxes.add(box.clone().rotate(d, Vec3d.center));
-            }
-        } else {
-            for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
-                if (isConnected(d))
-                    boxes.add(box.clone().rotate(d, Vec3d.center));
-            }
+        for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
+            if (isConnected(d) || shouldRenderConnection(d))
+                boxes.add(box.clone().rotate(d, Vec3d.center));
         }
 
         return boxes;
@@ -224,7 +217,7 @@ public abstract class PartRedwireFreestanding extends PartWireFreestanding imple
     }
 
     public static class PartRedwireFreestandingUninsulated extends PartRedwireFreestanding implements IAdvancedRedstoneConductor,
-            IConnectionListener {
+    IConnectionListener {
 
         private RedstoneConnectionCache connections = RedstoneApi.getInstance().createRedstoneConnectionCache(this);
         private boolean hasUpdated = false;
@@ -487,7 +480,7 @@ public abstract class PartRedwireFreestanding extends PartWireFreestanding imple
     }
 
     public static class PartRedwireFreestandingInsulated extends PartRedwireFreestanding implements IAdvancedRedstoneConductor,
-            IInsulatedRedstoneDevice, IAdvancedBundledConductor, IInsulatedRedwire, IConnectionListener {
+    IInsulatedRedstoneDevice, IAdvancedBundledConductor, IInsulatedRedwire, IConnectionListener {
 
         private RedstoneConnectionCache connections = RedstoneApi.getInstance().createRedstoneConnectionCache(this);
         private BundledConnectionCache bundledConnections = RedstoneApi.getInstance().createBundledConnectionCache(this);
@@ -867,7 +860,7 @@ public abstract class PartRedwireFreestanding extends PartWireFreestanding imple
     }
 
     public static class PartRedwireFreestandingBundled extends PartRedwireFreestanding implements IAdvancedBundledConductor,
-            IConnectionListener {
+    IConnectionListener {
 
         private BundledConnectionCache bundledConnections = RedstoneApi.getInstance().createBundledConnectionCache(this);
         private byte[] power = new byte[16];

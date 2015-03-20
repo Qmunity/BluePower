@@ -29,6 +29,8 @@ public class IconSupplier {
     public static IIcon pneumaticTubeOpaqueSide;
     public static IIcon pneumaticTubeOpaqueNode;
     public static IIcon pneumaticTubeColoring;
+    public static IIcon pneumaticTubeGlass;
+    public static IIcon pneumaticTubeGlass2;
 
     public static IIcon restrictionTubeSide;
     public static IIcon restrictionTubeNodeOpaque;
@@ -37,6 +39,8 @@ public class IconSupplier {
     public static IIcon magTubeSide;
     public static IIcon magCoilSide;
     public static IIcon magCoilFront;
+    public static IIcon magTubeGlass;
+    public static IIcon magTubeGlass2;
 
     public static IIcon acceleratorFront;
     public static IIcon acceleratorSide;
@@ -89,6 +93,8 @@ public class IconSupplier {
 
         if (reg.getTextureType() == 0) {
             pneumaticTubeSide = reg.registerIcon(Refs.MODID + ":tubes/pneumatic_tube_side");
+            pneumaticTubeGlass = reg.registerIcon(Refs.MODID + ":tubes/glass");
+            pneumaticTubeGlass2 = reg.registerIcon(Refs.MODID + ":tubes/glass2");
             pneumaticTubeOpaqueSide = reg.registerIcon(Refs.MODID + ":tubes/pneumatic_tube_side_opaque");
             pneumaticTubeOpaqueNode = reg.registerIcon(Refs.MODID + ":tubes/pneumatic_tube_end_opaque");
             restrictionTubeSide = reg.registerIcon(Refs.MODID + ":tubes/restriction_tube_side");
@@ -97,6 +103,8 @@ public class IconSupplier {
             magTubeSide = reg.registerIcon(Refs.MODID + ":tubes/mag_side");
             magCoilSide = reg.registerIcon(Refs.MODID + ":tubes/mag_casing");
             magCoilFront = reg.registerIcon(Refs.MODID + ":tubes/mag_casing_end");
+            magTubeGlass = reg.registerIcon(Refs.MODID + ":tubes/glass_reinforced");
+            magTubeGlass2 = reg.registerIcon(Refs.MODID + ":tubes/glass_reinforced2");
             acceleratorFront = reg.registerIcon(Refs.MODID + ":machines/accelerator_front");
             acceleratorFrontPowered = reg.registerIcon(Refs.MODID + ":machines/accelerator_front_powered");
             acceleratorSide = reg.registerIcon(Refs.MODID + ":machines/accelerator_side");
