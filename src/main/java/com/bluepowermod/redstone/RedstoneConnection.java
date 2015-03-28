@@ -2,8 +2,8 @@ package com.bluepowermod.redstone;
 
 import net.minecraftforge.common.util.ForgeDirection;
 
-import com.bluepowermod.api.wire.ConnectionType;
-import com.bluepowermod.api.wire.IConnection;
+import com.bluepowermod.api.connect.ConnectionType;
+import com.bluepowermod.api.connect.IConnection;
 import com.bluepowermod.api.wire.redstone.IRedstoneDevice;
 
 public class RedstoneConnection implements IConnection<IRedstoneDevice> {

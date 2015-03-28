@@ -2,10 +2,10 @@ package com.bluepowermod.redstone;
 
 import net.minecraftforge.common.util.ForgeDirection;
 
-import com.bluepowermod.api.wire.ConnectionType;
-import com.bluepowermod.api.wire.IConnection;
-import com.bluepowermod.api.wire.IConnectionCache;
-import com.bluepowermod.api.wire.IConnectionListener;
+import com.bluepowermod.api.connect.ConnectionType;
+import com.bluepowermod.api.connect.IConnection;
+import com.bluepowermod.api.connect.IConnectionCache;
+import com.bluepowermod.api.connect.IConnectionListener;
 import com.bluepowermod.api.wire.redstone.IBundledDevice;
 
 public class BundledConnectionCache implements IConnectionCache<IBundledDevice> {

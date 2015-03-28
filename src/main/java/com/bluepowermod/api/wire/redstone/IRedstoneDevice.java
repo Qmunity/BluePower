@@ -3,8 +3,8 @@ package com.bluepowermod.api.wire.redstone;
 import net.minecraftforge.common.util.ForgeDirection;
 import uk.co.qmunity.lib.vec.IWorldLocation;
 
-import com.bluepowermod.api.wire.ConnectionType;
-import com.bluepowermod.api.wire.IConnectionCache;
+import com.bluepowermod.api.connect.ConnectionType;
+import com.bluepowermod.api.connect.IConnectionCache;
 
 public interface IRedstoneDevice extends IWorldLocation {
 

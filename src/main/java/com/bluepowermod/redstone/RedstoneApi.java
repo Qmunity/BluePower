@@ -23,7 +23,7 @@ import java.util.List;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
-import com.bluepowermod.api.wire.ConnectionType;
+import com.bluepowermod.api.connect.ConnectionType;
 import com.bluepowermod.api.wire.redstone.IBundledDevice;
 import com.bluepowermod.api.wire.redstone.IPropagator;
 import com.bluepowermod.api.wire.redstone.IRedstoneApi;

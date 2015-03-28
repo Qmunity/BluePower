@@ -9,8 +9,8 @@ import java.util.Map.Entry;
 import net.minecraftforge.common.util.ForgeDirection;
 import uk.co.qmunity.lib.misc.Pair;
 
+import com.bluepowermod.api.connect.IConnection;
 import com.bluepowermod.api.gate.IGateConnection;
-import com.bluepowermod.api.wire.IConnection;
 import com.bluepowermod.api.wire.redstone.IPropagator;
 import com.bluepowermod.api.wire.redstone.IRedConductor;
 import com.bluepowermod.api.wire.redstone.IRedstoneConductor;

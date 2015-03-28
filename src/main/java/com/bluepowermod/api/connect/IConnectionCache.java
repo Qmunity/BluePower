@@ -1,4 +1,4 @@
-package com.bluepowermod.api.wire;
+package com.bluepowermod.api.connect;
 
 import net.minecraftforge.common.util.ForgeDirection;
 

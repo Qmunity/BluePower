@@ -10,8 +10,8 @@ import net.minecraftforge.common.util.ForgeDirection;
 import uk.co.qmunity.lib.helper.RedstoneHelper;
 import uk.co.qmunity.lib.util.Dir;
 
+import com.bluepowermod.api.connect.IConnection;
 import com.bluepowermod.api.gate.IGateConnection;
-import com.bluepowermod.api.wire.IConnection;
 import com.bluepowermod.api.wire.redstone.IRedstoneDevice;
 import com.bluepowermod.part.gate.GateBase;
 import com.bluepowermod.redstone.DummyRedstoneDevice;

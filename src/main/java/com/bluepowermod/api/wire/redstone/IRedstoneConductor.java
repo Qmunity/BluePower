@@ -5,7 +5,7 @@ import java.util.Map.Entry;
 
 import net.minecraftforge.common.util.ForgeDirection;
 
-import com.bluepowermod.api.wire.IConnection;
+import com.bluepowermod.api.connect.IConnection;
 
 public interface IRedstoneConductor extends IRedstoneDevice, IRedConductor {
 
