@@ -43,8 +43,8 @@ public class BPOredictNames {
 
     // Gems
     public static final String GEM_AMETHYST = "gemAmethyst";
-    public static final String GEM_RUBY = "ingotRuby";
-    public static final String GEM_SAPPHIRE = "ingotSapphire";
+    public static final String GEM_RUBY = "gemRuby";
+    public static final String GEM_SAPPHIRE = "gemSapphire";
 
     // Dyes
     public static final String DYE_INDIGO = "dyePurple";
