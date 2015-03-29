@@ -17,7 +17,7 @@
 
 package com.bluepowermod.item;
 
-import com.bluepowermod.util.Refs;
+import com.bluepowermod.reference.Refs;
 
 public class ItemFloppyDisk extends ItemBase {
 

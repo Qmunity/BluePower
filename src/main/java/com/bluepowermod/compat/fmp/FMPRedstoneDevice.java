@@ -7,9 +7,9 @@ import codechicken.multipart.IFaceRedstonePart;
 import codechicken.multipart.IRedstonePart;
 import codechicken.multipart.TMultiPart;
 
+import com.bluepowermod.api.connect.ConnectionType;
+import com.bluepowermod.api.connect.IConnectionCache;
 import com.bluepowermod.api.misc.IFace;
-import com.bluepowermod.api.wire.ConnectionType;
-import com.bluepowermod.api.wire.IConnectionCache;
 import com.bluepowermod.api.wire.redstone.IRedstoneDevice;
 import com.bluepowermod.redstone.RedstoneApi;
 import com.bluepowermod.redstone.RedstoneConnectionCache;
@@ -55,8 +55,6 @@ public class FMPRedstoneDevice implements IRedstoneDevice, IFace {
             if (side == ForgeDirection.UNKNOWN)
                 return false;
             if (!(device instanceof IFace))
-                return false;
-            if (((IFace) device).getFace() != getFace())
                 return false;
 
             return ((IRedstonePart) part).canConnectRedstone(side.ordinal());

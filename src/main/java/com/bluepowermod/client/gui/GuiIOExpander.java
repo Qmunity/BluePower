@@ -11,8 +11,8 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 
 import com.bluepowermod.container.ContainerIOExpander;
+import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier3.TileIOExpander;
-import com.bluepowermod.util.Refs;
 
 public class GuiIOExpander extends GuiContainerBaseBP {
 

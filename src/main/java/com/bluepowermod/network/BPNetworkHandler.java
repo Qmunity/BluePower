@@ -30,7 +30,7 @@ import com.bluepowermod.network.message.MessageWirelessFrequencySync;
 import com.bluepowermod.network.message.MessageWirelessNewFreq;
 import com.bluepowermod.network.message.MessageWirelessRemoveFreq;
 import com.bluepowermod.network.message.MessageWirelessSaveFreq;
-import com.bluepowermod.util.Refs;
+import com.bluepowermod.reference.Refs;
 
 import cpw.mods.fml.relauncher.Side;
 

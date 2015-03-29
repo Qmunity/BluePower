@@ -32,7 +32,7 @@ import net.minecraft.item.ItemTool;
 import net.minecraft.world.World;
 
 import com.bluepowermod.init.BPCreativeTabs;
-import com.bluepowermod.util.Refs;
+import com.bluepowermod.reference.Refs;
 import com.google.common.collect.Sets;
 
 public class ItemSickle extends ItemTool {

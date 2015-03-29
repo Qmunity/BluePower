@@ -21,7 +21,7 @@ import com.bluepowermod.api.recipe.IAlloyFurnaceRecipe;
 import com.bluepowermod.client.gui.GuiAlloyFurnace;
 import com.bluepowermod.recipe.AlloyFurnaceRegistry;
 import com.bluepowermod.recipe.AlloyFurnaceRegistry.StandardAlloyFurnaceRecipe;
-import com.bluepowermod.util.Refs;
+import com.bluepowermod.reference.Refs;
 
 /**
  * 

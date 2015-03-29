@@ -207,13 +207,13 @@ public class ContainerProjectTable extends Container {
         }
         slotsCraftingOut.add(0, (Slot) inventorySlots.get(9));
         for (int i = 0; i < 18; i++) {
-            slotsChest.add(i, (Slot) inventorySlots.get(i + 10));
+            slotsChest.add(i, (Slot) inventorySlots.get(i + 9));
         }
         for (int i = 0; i < 27; i++) {
-            slotsInventory.add(0, (Slot) inventorySlots.get(i + 28));
+            slotsInventory.add(0, (Slot) inventorySlots.get(i + 27));
         }
         for (int i = 0; i < 9; i++) {
-            slotsInventoryHotbar.add(0, (Slot) inventorySlots.get(i + 55));
+            slotsInventoryHotbar.add(0, (Slot) inventorySlots.get(i + 54));
         }
         sections.put(ContainerSection.CRAFTING_IN, slotsCraftingIn);
         sections.put(ContainerSection.CRAFTING_OUT, slotsCraftingOut);

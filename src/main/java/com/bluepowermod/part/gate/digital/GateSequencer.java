@@ -22,7 +22,6 @@ import java.io.DataOutput;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.MathContext;
-import java.util.Arrays;
 import java.util.List;
 
 import mcp.mobius.waila.api.SpecialChars;
@@ -31,7 +30,7 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 
-import com.bluepowermod.client.gui.gate.GuiGateSingleTime;
+import com.bluepowermod.client.gui.gate.GuiGateSingleCounter;
 import com.bluepowermod.part.IGuiButtonSensitive;
 import com.bluepowermod.part.gate.component.GateComponentBorder;
 import com.bluepowermod.part.gate.component.GateComponentPointer;
@@ -42,8 +41,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class GateSequencer extends GateSimpleDigital implements IGuiButtonSensitive {
 
-    private final boolean[] power = new boolean[4];
-    private int start = -1;
+    private long start = -1;
     private int time = 160;
     private int ticks = 0;
 
@@ -67,7 +65,7 @@ public class GateSequencer extends GateSimpleDigital implements IGuiButtonSensit
         addComponent(t3 = new GateComponentTorch(this, 0x3e94dc, 3 / 16D, true).setState(true));
         addComponent(t4 = new GateComponentTorch(this, 0x6F00B5, 3 / 16D, true));
 
-        addComponent((p = new GateComponentPointer(this, 0xFFFF00, 7 / 16D, true)).setState(true));
+        addComponent((p = new GateComponentPointer(this, 0xFFFF00, 7 / 16D, true)).setShouldSync(false).setState(true));
 
         addComponent(new GateComponentBorder(this, 0x7D7D7D));
     }
@@ -86,65 +84,107 @@ public class GateSequencer extends GateSimpleDigital implements IGuiButtonSensit
     @Override
     public void tick() {
 
-        if (getWorld().isRemote)
-            return;
+        long curTime = getWorld().getTotalWorldTime();
 
-        Arrays.fill(power, false);
+        if (start != -1 && curTime != start && (curTime - start) >= time)
+            while ((curTime - start) >= time)
+                start += time;
 
-        if (start >= 0) {
-            if (ticks >= start + (time / 4D)) {
-                start = ticks;
-            }
-        } else {
-            start = ticks;
-        }
+        if (start != -1 && (curTime - start) % (time / 4) == 0) {
+            playTickSound();
+            if (!getWorld().isRemote) {
+                front().setOutput(false);
+                back().setOutput(false);
+                left().setOutput(false);
+                right().setOutput(false);
 
-        double t = (ticks - start) / (time / 4D);
+                t1.setState(false);
+                t2.setState(false);
+                t3.setState(false);
+                t4.setState(false);
 
-        if (t >= 2D / 8D && t < 4D / 8D) {
-            power[2] = true;
-            if (!right().getOutput()) {
-                playTickSound();
-
-                p.setAngle(p.getAngle());
-                p.setIncrement(4 / (double) time);
-            }
-        } else if (t >= 4D / 8D && t < 6D / 8D) {
-            power[3] = true;
-            if (!back().getOutput()) {
-                playTickSound();
-
-                p.setAngle(p.getAngle());
-                p.setIncrement(4 / (double) time);
-            }
-        } else if (t >= 6D / 8D && t < 8D / 8D) {
-            power[0] = true;
-            if (!left().getOutput()) {
-                playTickSound();
-
-                p.setAngle(p.getAngle());
-                p.setIncrement(4 / (double) time);
-            }
-        } else if (t >= 0D / 8D && t < 2D / 8D) {
-            power[1] = true;
-            if (!front().getOutput()) {
-                playTickSound();
-
-                p.setAngle(p.getAngle());
-                p.setIncrement(4 / (double) time);
+                int i = (int) ((curTime - start) / (time / 4));
+                if (i == 0) {
+                    t3.setState(true);
+                    front().setOutput(true);
+                } else if (i == 1) {
+                    t4.setState(true);
+                    right().setOutput(true);
+                } else if (i == 2) {
+                    t1.setState(true);
+                    back().setOutput(true);
+                } else if (i == 3) {
+                    t2.setState(true);
+                    left().setOutput(true);
+                }
             }
         }
 
-        left().setOutput(power[0]);
-        front().setOutput(power[1]);
-        right().setOutput(power[2]);
-        back().setOutput(power[3]);
-        t2.setState(power[0]);
-        t3.setState(power[1]);
-        t4.setState(power[2]);
-        t1.setState(power[3]);
+        if (start == -1)
+            start = curTime;
 
-        ticks++;
+        p.setAngle((curTime - start) / (double) time);
+        p.setIncrement(1 / (double) time);
+
+        // if (getWorld().isRemote)
+        // return;
+        //
+        // Arrays.fill(power, false);
+        //
+        // if (start >= 0) {
+        // if (ticks >= start + (time / 4D)) {
+        // start = ticks;
+        // }
+        // } else {
+        // start = ticks;
+        // }
+        //
+        // double t = (ticks - start) / (time / 4D);
+        //
+        // if (t >= 2D / 8D && t < 4D / 8D) {
+        // power[2] = true;
+        // if (!right().getOutput()) {
+        // playTickSound();
+        //
+        // p.setAngle(p.getAngle());
+        // p.setIncrement(4 / (double) time);
+        // }
+        // } else if (t >= 4D / 8D && t < 6D / 8D) {
+        // power[3] = true;
+        // if (!back().getOutput()) {
+        // playTickSound();
+        //
+        // p.setAngle(p.getAngle());
+        // p.setIncrement(4 / (double) time);
+        // }
+        // } else if (t >= 6D / 8D && t < 8D / 8D) {
+        // power[0] = true;
+        // if (!left().getOutput()) {
+        // playTickSound();
+        //
+        // p.setAngle(p.getAngle());
+        // p.setIncrement(4 / (double) time);
+        // }
+        // } else if (t >= 0D / 8D && t < 2D / 8D) {
+        // power[1] = true;
+        // if (!front().getOutput()) {
+        // playTickSound();
+        //
+        // p.setAngle(p.getAngle());
+        // p.setIncrement(4 / (double) time);
+        // }
+        // }
+        //
+        // left().setOutput(power[0]);
+        // front().setOutput(power[1]);
+        // right().setOutput(power[2]);
+        // back().setOutput(power[3]);
+        // t2.setState(power[0]);
+        // t3.setState(power[1]);
+        // t4.setState(power[2]);
+        // t1.setState(power[3]);
+        //
+        // ticks++;
     }
 
     @Override
@@ -158,7 +198,7 @@ public class GateSequencer extends GateSimpleDigital implements IGuiButtonSensit
     public void writeToNBT(NBTTagCompound tag) {
 
         super.writeToNBT(tag);
-        tag.setInteger("start", start);
+        tag.setLong("start", start);
         tag.setInteger("ticks", ticks);
         tag.setInteger("time", time);
     }
@@ -167,7 +207,7 @@ public class GateSequencer extends GateSimpleDigital implements IGuiButtonSensit
     public void readFromNBT(NBTTagCompound tag) {
 
         super.readFromNBT(tag);
-        start = tag.getInteger("start");
+        start = tag.getLong("start");
         ticks = tag.getInteger("ticks");
         time = tag.getInteger("time");
     }
@@ -190,10 +230,10 @@ public class GateSequencer extends GateSimpleDigital implements IGuiButtonSensit
     @SideOnly(Side.CLIENT)
     public GuiScreen getGui(EntityPlayer player) {
 
-        return new GuiGateSingleTime(this) {
+        return new GuiGateSingleCounter(this) {
 
             @Override
-            protected int getCurrentIntervalTicks() {
+            protected int getCurrentAmount() {
 
                 return time / 4;
             }

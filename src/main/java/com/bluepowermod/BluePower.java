@@ -35,8 +35,8 @@ import com.bluepowermod.recipe.AlloyFurnaceRegistry;
 import com.bluepowermod.redstone.RedstoneApi;
 import com.bluepowermod.redstone.RedstoneProviderQmunityLib;
 import com.bluepowermod.redstone.RedstoneProviderVanilla;
+import com.bluepowermod.reference.Refs;
 import com.bluepowermod.util.Achievements;
-import com.bluepowermod.util.Refs;
 import com.bluepowermod.world.WorldGenerationHandler;
 
 import cpw.mods.fml.common.FMLCommonHandler;

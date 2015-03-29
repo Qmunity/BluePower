@@ -23,60 +23,92 @@ import net.minecraftforge.oredict.OreDictionary;
 import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.api.wire.redstone.RedwireType;
 import com.bluepowermod.part.PartManager;
+import com.bluepowermod.reference.BPOredictNames;
 
 public class OreDictionarySetup {
 
     public static void init() {
 
-        OreDictionary.registerOre("oreCopper", BPBlocks.copper_ore);
-        OreDictionary.registerOre("oreZinc", BPBlocks.zinc_ore);
-        OreDictionary.registerOre("oreSilver", BPBlocks.silver_ore);
-        OreDictionary.registerOre("oreTungsten", BPBlocks.tungsten_ore);
-        OreDictionary.registerOre("oreTeslatite", BPBlocks.teslatite_ore);
-        OreDictionary.registerOre("oreAmethyst", BPBlocks.amethyst_ore);
-        OreDictionary.registerOre("oreRuby", BPBlocks.ruby_ore);
-        OreDictionary.registerOre("oreSapphire", BPBlocks.sapphire_ore);
-        OreDictionary.registerOre("marble", BPBlocks.marble);
-        OreDictionary.registerOre("basalt", BPBlocks.basalt);
-        OreDictionary.registerOre("blockCopper", BPBlocks.copper_block);
-        OreDictionary.registerOre("blockZinc", BPBlocks.zinc_block);
-        OreDictionary.registerOre("blockSilver", BPBlocks.silver_block);
-        OreDictionary.registerOre("blockTeslatite", BPBlocks.teslatite_block);
-        OreDictionary.registerOre("blockAmethyst", BPBlocks.amethyst_block);
-        OreDictionary.registerOre("blockRuby", BPBlocks.ruby_block);
-        OreDictionary.registerOre("blockSapphire", BPBlocks.sapphire_block);
+        // Ores
+        OreDictionary.registerOre(BPOredictNames.ORE_COPPER, BPBlocks.copper_ore);
+        OreDictionary.registerOre(BPOredictNames.ORE_ZINC, BPBlocks.zinc_ore);
+        OreDictionary.registerOre(BPOredictNames.ORE_SILVER, BPBlocks.silver_ore);
+        OreDictionary.registerOre(BPOredictNames.ORE_TUNGSTEN, BPBlocks.tungsten_ore);
+        OreDictionary.registerOre(BPOredictNames.ORE_TESLATITE, BPBlocks.teslatite_ore);
+        OreDictionary.registerOre(BPOredictNames.ORE_AMETHYST, BPBlocks.amethyst_ore);
+        OreDictionary.registerOre(BPOredictNames.ORE_RUBY, BPBlocks.ruby_ore);
+        OreDictionary.registerOre(BPOredictNames.ORE_SAPPHIRE, BPBlocks.sapphire_ore);
 
-        OreDictionary.registerOre("gemRuby", BPItems.ruby_gem);
-        OreDictionary.registerOre("gemAmethyst", BPItems.amethyst_gem);
-        OreDictionary.registerOre("gemSapphire", BPItems.sapphire_gem);
-        OreDictionary.registerOre("dustTeslatite", BPItems.teslatite_dust);
-        OreDictionary.registerOre("dustInfusedTeslatite", BPItems.infused_teslatite_dust);
-        OreDictionary.registerOre("ingotCopper", BPItems.copper_ingot);
-        OreDictionary.registerOre("ingotZinc", BPItems.zinc_ingot);
-        OreDictionary.registerOre("ingotSilver", BPItems.silver_ingot);
-        OreDictionary.registerOre("ingotBrass", BPItems.brass_ingot);
-        OreDictionary.registerOre("ingotTungsten", BPItems.tungsten_ingot);
+        // Storage blocks
+        OreDictionary.registerOre(BPOredictNames.BLOCK_COPPER, BPBlocks.copper_block);
+        OreDictionary.registerOre(BPOredictNames.BLOCK_ZINC, BPBlocks.zinc_block);
+        OreDictionary.registerOre(BPOredictNames.BLOCK_SILVER, BPBlocks.silver_block);
+        OreDictionary.registerOre(BPOredictNames.BLOCK_TUNGSTEN, BPBlocks.tungsten_block);
+        OreDictionary.registerOre(BPOredictNames.BLOCK_TESLATITE, BPBlocks.teslatite_block);
+        OreDictionary.registerOre(BPOredictNames.BLOCK_AMETHYST, BPBlocks.amethyst_block);
+        OreDictionary.registerOre(BPOredictNames.BLOCK_RUBY, BPBlocks.ruby_block);
+        OreDictionary.registerOre(BPOredictNames.BLOCK_SAPPHIRE, BPBlocks.sapphire_block);
+
+        // Ingots
+        OreDictionary.registerOre(BPOredictNames.INGOT_COPPER, BPItems.copper_ingot);
+        OreDictionary.registerOre(BPOredictNames.INGOT_ZINC, BPItems.zinc_ingot);
+        OreDictionary.registerOre(BPOredictNames.INGOT_SILVER, BPItems.silver_ingot);
+        OreDictionary.registerOre(BPOredictNames.INGOT_TUNGSTEN, BPItems.tungsten_ingot);
+
+        OreDictionary.registerOre(BPOredictNames.INGOT_BLUE_ALLOY, BPItems.blue_alloy_ingot);
+        OreDictionary.registerOre(BPOredictNames.INGOT_RED_ALLOY, BPItems.red_alloy_ingot);
+        OreDictionary.registerOre(BPOredictNames.INGOT_PURPLE_ALLOY, BPItems.purple_alloy_ingot);
+
+        OreDictionary.registerOre(BPOredictNames.INGOT_BRASS, BPItems.brass_ingot);
+
+        // Dusts
+        OreDictionary.registerOre(BPOredictNames.DUST_TESLATITE, BPItems.teslatite_dust);
+        OreDictionary.registerOre(BPOredictNames.DUST_INFUSED_TESLATITE, BPItems.infused_teslatite_dust);
+
+        // Nuggets
         OreDictionary.registerOre("nuggetTungsten", BPItems.tungsten_nugget);
-        OreDictionary.registerOre("dyePurple", BPItems.indigo_dye);
-        OreDictionary.registerOre("ingotBlueAlloy", BPItems.blue_alloy_ingot);
-        OreDictionary.registerOre("ingotRedAlloy", BPItems.red_alloy_ingot);
-        OreDictionary.registerOre("ingotPurpleAlloy", BPItems.purple_alloy_ingot);
-        OreDictionary.registerOre("waferStone", BPItems.stone_tile);
+
+        // Gems
+        OreDictionary.registerOre(BPOredictNames.GEM_AMETHYST, BPItems.amethyst_gem);
+        OreDictionary.registerOre(BPOredictNames.GEM_RUBY, BPItems.ruby_gem);
+        OreDictionary.registerOre(BPOredictNames.GEM_SAPPHIRE, BPItems.sapphire_gem);
+
+        // Dyes
+        OreDictionary.registerOre(BPOredictNames.DYE_INDIGO, BPItems.indigo_dye);
+
+        // Circuitry
+        OreDictionary.registerOre(BPOredictNames.STONE_TILE, BPItems.stone_tile);
+        OreDictionary.registerOre(BPOredictNames.BLUESTONE_TILE, BPItems.bluestone_wire_tile);
+        OreDictionary.registerOre(BPOredictNames.BLUESTONE_ANODE, BPItems.bluestone_anode_tile);
+        OreDictionary.registerOre(BPOredictNames.BLUESTONE_CATHODE, BPItems.bluestone_cathode_tile);
+        OreDictionary.registerOre(BPOredictNames.BLUESTONE_POINTER, BPItems.bluestone_pointer_tile);
+        OreDictionary.registerOre(BPOredictNames.REDSTONE_TILE, BPItems.redstone_wire_tile);
+        OreDictionary.registerOre(BPOredictNames.REDSTONE_ANODE, BPItems.redstone_anode_tile);
+        OreDictionary.registerOre(BPOredictNames.REDSTONE_CATHODE, BPItems.redstone_cathode_tile);
+        OreDictionary.registerOre(BPOredictNames.REDSTONE_POINTER, BPItems.redstone_pointer_tile);
+        OreDictionary.registerOre(BPOredictNames.SILICON_CHIP, BPItems.silicon_chip_tile);
+        OreDictionary.registerOre(BPOredictNames.TAINTED_SILICON_CHIP, BPItems.tainted_silicon_chip_tile);
+        OreDictionary.registerOre(BPOredictNames.QUARTZ_RESONATOR, BPItems.quartz_resonator_tile);
+        OreDictionary.registerOre(BPOredictNames.BUNDLED_TILE, BPItems.stone_bundle);
+
+        // Other
+        OreDictionary.registerOre(BPOredictNames.MARBLE, BPBlocks.marble);
+        OreDictionary.registerOre(BPOredictNames.BASALT, BPBlocks.basalt);
 
         for (RedwireType t : RedwireType.values()) {
             for (MinecraftColor c : MinecraftColor.VALID_COLORS) {
                 ItemStack wireInsulated = PartManager.getPartInfo("wire." + t.getName() + "." + c.name().toLowerCase()).getStack(1);
-                OreDictionary.registerOre(t.getName() + "Insulated", wireInsulated.getItem());
-                OreDictionary.registerOre("wireInsulated", wireInsulated.getItem());
+                OreDictionary.registerOre(String.format(BPOredictNames.WIRE_INSULATED_, t.getName()), wireInsulated.getItem());
+                OreDictionary.registerOre(BPOredictNames.WIRE_INSULATED, wireInsulated.getItem());
 
                 ItemStack wireBundled = PartManager.getPartInfo("wire." + t.getName() + ".bundled." + c.name().toLowerCase()).getStack(1);
-                OreDictionary.registerOre(t.getName() + "Bundled", wireBundled.getItem());
-                OreDictionary.registerOre("wireBundled", wireBundled.getItem());
+                OreDictionary.registerOre(String.format(BPOredictNames.WIRE_BUNDLED_, t.getName()), wireBundled.getItem());
+                OreDictionary.registerOre(BPOredictNames.WIRE_BUNDLED, wireBundled.getItem());
             }
 
             ItemStack wireBundled = PartManager.getPartInfo("wire." + t.getName() + ".bundled").getStack(1);
-            OreDictionary.registerOre(t.getName() + "Bundled", wireBundled.getItem());
-            OreDictionary.registerOre("wireBundled", wireBundled.getItem());
+            OreDictionary.registerOre(String.format(BPOredictNames.WIRE_BUNDLED_, t.getName()), wireBundled.getItem());
+            OreDictionary.registerOre(BPOredictNames.WIRE_BUNDLED, wireBundled.getItem());
         }
     }
 

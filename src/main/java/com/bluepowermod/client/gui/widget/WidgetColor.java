@@ -25,7 +25,7 @@ import org.lwjgl.opengl.GL11;
 
 import uk.co.qmunity.lib.client.gui.widget.BaseWidget;
 
-import com.bluepowermod.util.Refs;
+import com.bluepowermod.reference.Refs;
 
 /**
  * @author MineMaarten

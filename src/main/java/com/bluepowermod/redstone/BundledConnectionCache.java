@@ -2,12 +2,11 @@ package com.bluepowermod.redstone;
 
 import net.minecraftforge.common.util.ForgeDirection;
 
-import com.bluepowermod.api.wire.ConnectionType;
-import com.bluepowermod.api.wire.IConnection;
-import com.bluepowermod.api.wire.IConnectionCache;
-import com.bluepowermod.api.wire.IConnectionListener;
+import com.bluepowermod.api.connect.ConnectionType;
+import com.bluepowermod.api.connect.IConnection;
+import com.bluepowermod.api.connect.IConnectionCache;
+import com.bluepowermod.api.connect.IConnectionListener;
 import com.bluepowermod.api.wire.redstone.IBundledDevice;
-import com.bluepowermod.part.wire.redstone.WireHelper;
 
 public class BundledConnectionCache implements IConnectionCache<IBundledDevice> {
 
@@ -60,7 +59,7 @@ public class BundledConnectionCache implements IConnectionCache<IBundledDevice> 
         IBundledDevice self = getSelf();
         for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
             boolean wasConnected = connections[d.ordinal()] != null;
-            BundledConnection con = WireHelper.getBundledNeighbor(self, d);
+            BundledConnection con = ConnectionHelper.getBundledNeighbor(self, d);
             if (con != null) {
                 if (!wasConnected || connections[d.ordinal()].getB() != con.getB() || connections[d.ordinal()].getSideB() != con.getSideB()
                         || connections[d.ordinal()].getType() != con.getType()) {
@@ -95,8 +94,8 @@ public class BundledConnectionCache implements IConnectionCache<IBundledDevice> 
         for (BundledConnection con : connections) {
             if (con == null)
                 continue;
-            onDisconnect(con.getSideA());
             con.getB().getBundledConnectionCache().onDisconnect(con.getSideB());
+            onDisconnect(con.getSideA());
         }
     }
 

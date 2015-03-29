@@ -1,7 +1,7 @@
 package com.bluepowermod.item;
 
 import com.bluepowermod.api.bluepower.BluePowerTier;
-import com.bluepowermod.api.bluepower.IRechargeable;
+import com.bluepowermod.api.bluepower.Rechargeable;
 import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.util.Refs;
 import cpw.mods.fml.relauncher.Side;
@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * @author Koen Beckers (K4Unl)
  */
-public class ItemBattery extends ItemBase implements IRechargeable {
+public class ItemBattery extends ItemBase implements Rechargeable {
 
     private int maxAmp;
 

@@ -27,7 +27,7 @@ import net.minecraftforge.oredict.ShapelessOreRecipe;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.init.BPItems;
 import com.bluepowermod.part.PartManager;
-import com.bluepowermod.util.Refs;
+import com.bluepowermod.reference.Refs;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 

@@ -24,7 +24,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
 import com.bluepowermod.container.ContainerSeedBag;
-import com.bluepowermod.util.Refs;
+import com.bluepowermod.reference.Refs;
 
 public class GuiSeedBag extends GuiContainerBaseBP {
 

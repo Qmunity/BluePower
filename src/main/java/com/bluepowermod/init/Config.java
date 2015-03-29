@@ -22,7 +22,7 @@ import net.minecraftforge.common.config.Property;
 
 import com.bluepowermod.BluePower;
 import com.bluepowermod.part.tube.TubeStack;
-import com.bluepowermod.util.Refs;
+import com.bluepowermod.reference.Refs;
 
 import cpw.mods.fml.client.event.ConfigChangedEvent;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;

@@ -41,6 +41,10 @@ import uk.co.qmunity.lib.vec.Vec3i;
 import com.bluepowermod.BluePower;
 import com.bluepowermod.api.block.IAdvancedSilkyRemovable;
 import com.bluepowermod.api.block.ISilkyRemovable;
+import com.bluepowermod.api.connect.ConnectionType;
+import com.bluepowermod.api.connect.IConnection;
+import com.bluepowermod.api.connect.IConnectionCache;
+import com.bluepowermod.api.connect.IConnectionListener;
 import com.bluepowermod.api.gate.IGate;
 import com.bluepowermod.api.gate.IGateComponent;
 import com.bluepowermod.api.gate.IGateConnection;
@@ -48,10 +52,6 @@ import com.bluepowermod.api.gate.IGateLogic;
 import com.bluepowermod.api.gate.IIntegratedCircuitPart;
 import com.bluepowermod.api.misc.IScrewdriver;
 import com.bluepowermod.api.misc.MinecraftColor;
-import com.bluepowermod.api.wire.ConnectionType;
-import com.bluepowermod.api.wire.IConnection;
-import com.bluepowermod.api.wire.IConnectionCache;
-import com.bluepowermod.api.wire.IConnectionListener;
 import com.bluepowermod.api.wire.redstone.IBundledDevice;
 import com.bluepowermod.api.wire.redstone.IRedstoneDevice;
 import com.bluepowermod.helper.VectorHelper;
@@ -64,15 +64,15 @@ import com.bluepowermod.part.gate.connection.GateConnectionBase;
 import com.bluepowermod.redstone.BundledConnectionCache;
 import com.bluepowermod.redstone.RedstoneApi;
 import com.bluepowermod.redstone.RedstoneConnectionCache;
-import com.bluepowermod.util.Refs;
+import com.bluepowermod.reference.Refs;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public abstract class GateBase<C_BOTTOM extends GateConnectionBase, C_TOP extends GateConnectionBase, C_LEFT extends GateConnectionBase, C_RIGHT extends GateConnectionBase, C_FRONT extends GateConnectionBase, C_BACK extends GateConnectionBase>
-extends BPPartFaceRotate implements IGate<C_BOTTOM, C_TOP, C_LEFT, C_RIGHT, C_FRONT, C_BACK>, IPartRedstone, IConnectionListener,
-IRedstoneDevice, IBundledDevice, IPartTicking, IPartRenderPlacement, IIntegratedCircuitPart {
+        extends BPPartFaceRotate implements IGate<C_BOTTOM, C_TOP, C_LEFT, C_RIGHT, C_FRONT, C_BACK>, IPartRedstone, IConnectionListener,
+        IRedstoneDevice, IBundledDevice, IPartTicking, IPartRenderPlacement, IIntegratedCircuitPart {
 
     // Static var declarations
     private static Vec3dCube BOX = new Vec3dCube(0, 0, 0, 1, 2D / 16D, 1);
@@ -930,11 +930,11 @@ IRedstoneDevice, IBundledDevice, IPartTicking, IPartRenderPlacement, IIntegrated
 
         if (Config.enableGateSounds)
             Minecraft
-            .getMinecraft()
-            .getSoundHandler()
-            .playSound(
-                    new PositionedSoundRecord(new ResourceLocation("random.click"), 0.3F, 0.5F, getX() + 0.5F, getY() + 0.5F,
-                            getZ() + 0.5F));
+                    .getMinecraft()
+                    .getSoundHandler()
+                    .playSound(
+                            new PositionedSoundRecord(new ResourceLocation("random.click"), 0.3F, 0.5F, getX() + 0.5F, getY() + 0.5F,
+                                    getZ() + 0.5F));
     }
 
     @Override

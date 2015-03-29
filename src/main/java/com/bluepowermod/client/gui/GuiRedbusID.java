@@ -12,8 +12,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 
 import com.bluepowermod.container.ContainerRedbusID;
+import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier3.IRedBusWindow;
-import com.bluepowermod.util.Refs;
 
 public class GuiRedbusID extends GuiContainerBaseBP {
 

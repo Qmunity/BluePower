@@ -24,7 +24,7 @@ import java.util.Random;
 import net.minecraft.item.ItemStack;
 
 import com.bluepowermod.init.BPCreativeTabs;
-import com.bluepowermod.util.Refs;
+import com.bluepowermod.reference.Refs;
 
 public class ItemLimitedCrafting extends ItemBase {
     

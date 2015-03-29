@@ -3,7 +3,7 @@ package com.bluepowermod.tile.tier2;
 import com.bluepowermod.api.BPApi;
 import com.bluepowermod.api.bluepower.BluePowerTier;
 import com.bluepowermod.api.bluepower.IBluePowered;
-import com.bluepowermod.api.bluepower.IRechargeable;
+import com.bluepowermod.api.bluepower.Rechargeable;
 import com.bluepowermod.api.bluepower.IPowerBase;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.tile.TileBase;
@@ -81,8 +81,8 @@ public class TileBattery extends TileBase implements IBluePowered, IInventory {
             //Check if there's an item in the inventory
             if(inventory[0] != null){
                 //The slot for discharging
-                if(inventory[0].getItem() instanceof IRechargeable){
-                    IRechargeable battery = ((IRechargeable)inventory[0].getItem());
+                if(inventory[0].getItem() instanceof Rechargeable){
+                    Rechargeable battery = ((Rechargeable)inventory[0].getItem());
                     if(battery.getAmpStored(inventory[0]) > powerTransfer){
                         //Transfer power, with a certain rate, which we should maybe configurize?
                         float powerTransfered = getHandler().addEnergy(powerTransfer);
@@ -93,8 +93,8 @@ public class TileBattery extends TileBase implements IBluePowered, IInventory {
             }
             if(inventory[1] != null){
                 //The slot for charging
-                if(inventory[1].getItem() instanceof IRechargeable){
-                    IRechargeable battery = ((IRechargeable)inventory[1].getItem());
+                if(inventory[1].getItem() instanceof Rechargeable){
+                    Rechargeable battery = ((Rechargeable)inventory[1].getItem());
                     if(getHandler().getAmpStored() > powerTransfer){
                         //Transfer power, with a certain rate, which we should maybe configurize?
                         float powerTransfered = battery.addEnergy(inventory[1], powerTransfer);
@@ -198,7 +198,7 @@ public class TileBattery extends TileBase implements IBluePowered, IInventory {
     @Override
     public boolean isItemValidForSlot(int index, ItemStack itemToTest) {
 
-        return itemToTest.getItem() instanceof IRechargeable;
+        return itemToTest.getItem() instanceof Rechargeable;
     }
 
 

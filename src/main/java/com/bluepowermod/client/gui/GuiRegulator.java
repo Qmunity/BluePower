@@ -32,8 +32,8 @@ import com.bluepowermod.client.gui.widget.WidgetFuzzySetting;
 import com.bluepowermod.container.ContainerRegulator;
 import com.bluepowermod.network.BPNetworkHandler;
 import com.bluepowermod.network.message.MessageGuiUpdate;
+import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier2.TileRegulator;
-import com.bluepowermod.util.Refs;
 
 /**
  * @author MineMaarten

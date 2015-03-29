@@ -49,13 +49,13 @@ import uk.co.qmunity.lib.part.compat.OcclusionHelper;
 import uk.co.qmunity.lib.vec.Vec3dCube;
 import uk.co.qmunity.lib.vec.Vec3i;
 
+import com.bluepowermod.api.connect.ConnectionType;
+import com.bluepowermod.api.connect.IConnection;
+import com.bluepowermod.api.connect.IConnectionCache;
+import com.bluepowermod.api.connect.IConnectionListener;
 import com.bluepowermod.api.gate.IIntegratedCircuitPart;
 import com.bluepowermod.api.misc.IFace;
 import com.bluepowermod.api.misc.MinecraftColor;
-import com.bluepowermod.api.wire.ConnectionType;
-import com.bluepowermod.api.wire.IConnection;
-import com.bluepowermod.api.wire.IConnectionCache;
-import com.bluepowermod.api.wire.IConnectionListener;
 import com.bluepowermod.api.wire.redstone.IBundledConductor.IAdvancedBundledConductor;
 import com.bluepowermod.api.wire.redstone.IBundledDevice;
 import com.bluepowermod.api.wire.redstone.IInsulatedRedstoneDevice;
@@ -216,7 +216,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
     }
 
     public static class PartRedwireFaceUninsulated extends PartRedwireFace implements IAdvancedRedstoneConductor, IConnectionListener,
-    IPartTicking {
+            IPartTicking {
 
         private RedstoneConnectionCache connections = RedstoneApi.getInstance().createRedstoneConnectionCache(this);
         private boolean hasUpdated = false;
@@ -256,9 +256,9 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
         @Override
         public boolean canConnect(ForgeDirection side, IRedstoneDevice device, ConnectionType type) {
 
-            if (type == ConnectionType.STRAIGHT)
-                if ((side == getFace().getOpposite() || side == ForgeDirection.UNKNOWN) && device instanceof DummyRedstoneDevice)
-                    return false;
+            if ((type == ConnectionType.STRAIGHT && side == getFace().getOpposite() && device instanceof IFace)
+                    || side == ForgeDirection.UNKNOWN)
+                return false;
             if (type == ConnectionType.CLOSED_CORNER) {
                 if (side == getFace())
                     return false;
@@ -341,7 +341,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
                         dev = c.getB();
                     if (dir == getFace()) {
                         RedstoneHelper.notifyRedstoneUpdate(getWorld(), getX(), getY(), getZ(), dir, true);
-                    } else if (dev == null || dev instanceof DummyRedstoneDevice) {
+                    } else if ((dev == null || dev instanceof DummyRedstoneDevice) && dir != getFace().getOpposite()) {
                         RedstoneHelper.notifyRedstoneUpdate(getWorld(), getX(), getY(), getZ(), dir, false);
                     }
                 }
@@ -410,23 +410,21 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
         @Override
         public void onRemoved() {
 
-            if (!getWorld().isRemote) {
-                power = 0;
-                hasUpdated = true;
-                onRedstoneUpdate();
-            }
+            if (getWorld().isRemote)
+                return;
 
             // Don't to anything if propagation-related stuff is going on
             if (!RedstoneApi.getInstance().shouldWiresHandleUpdates())
                 return;
 
-            super.onRemoved();
+            power = 0;
+            hasUpdated = true;
 
-            // Do not do anything if we're on the client
-            if (getWorld().isRemote)
-                return;
-
+            boolean should = RedstoneApi.getInstance().shouldWiresHandleUpdates();
+            RedstoneApi.getInstance().setWiresHandleUpdates(false);
+            onRedstoneUpdate();
             connections.disconnectAll();
+            RedstoneApi.getInstance().setWiresHandleUpdates(should);
         }
 
         // Rendering methods
@@ -475,7 +473,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
                             if (dev instanceof IInsulatedRedstoneDevice
                                     && ((IInsulatedRedstoneDevice) dev).getInsulationColor(c.getSideB()) != MinecraftColor.NONE)
                                 render = true;
-                            if (getFace().ordinal() > ((PartRedwireFace) dev).getFace().ordinal())
+                            if (dev instanceof IFace && getFace().ordinal() > ((IFace) dev).getFace().ordinal())
                                 render = true;
                         } else {
                             connected = true;
@@ -551,7 +549,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
     }
 
     public static class PartRedwireFaceInsulated extends PartRedwireFace implements IAdvancedRedstoneConductor, IInsulatedRedstoneDevice,
-    IAdvancedBundledConductor, IConnectionListener, IInsulatedRedwire, IPartTicking {
+            IAdvancedBundledConductor, IConnectionListener, IInsulatedRedwire, IPartTicking {
 
         private RedstoneConnectionCache connections = RedstoneApi.getInstance().createRedstoneConnectionCache(this);
         private BundledConnectionCache bundledConnections = RedstoneApi.getInstance().createBundledConnectionCache(this);
@@ -566,6 +564,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
             this.color = color;
 
             connections.listen();
+            bundledConnections.listen();
         }
 
         @Override
@@ -598,9 +597,8 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
         @Override
         public boolean canConnect(ForgeDirection side, IRedstoneDevice device, ConnectionType type) {
 
-            if (type == ConnectionType.STRAIGHT)
-                if ((side == getFace().getOpposite() || side == ForgeDirection.UNKNOWN) && device instanceof DummyRedstoneDevice)
-                    return false;
+            if (type == ConnectionType.STRAIGHT && side == getFace().getOpposite() || side == ForgeDirection.UNKNOWN)
+                return false;
             if (type == ConnectionType.CLOSED_CORNER) {
                 if (side == getFace())
                     return false;
@@ -744,7 +742,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
                     IRedstoneDevice dev = c.getB();
                     if (dir == getFace())
                         RedstoneHelper.notifyRedstoneUpdate(getWorld(), getX(), getY(), getZ(), dir, true);
-                    else if (dev == null || dev instanceof DummyRedstoneDevice)
+                    else if ((dev == null || dev instanceof DummyRedstoneDevice) && dir != getFace().getOpposite())
                         RedstoneHelper.notifyRedstoneUpdate(getWorld(), getX(), getY(), getZ(), dir, false);
                 }
 
@@ -844,6 +842,16 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
         @Override
         public void onRemoved() {
 
+            if (!getWorld().isRemote) {
+                power = 0;
+                hasUpdated = true;
+
+                boolean should = RedstoneApi.getInstance().shouldWiresHandleUpdates();
+                RedstoneApi.getInstance().setWiresHandleUpdates(false);
+                onRedstoneUpdate();
+                RedstoneApi.getInstance().setWiresHandleUpdates(should);
+            }
+
             // Don't to anything if propagation-related stuff is going on
             if (!RedstoneApi.getInstance().shouldWiresHandleUpdates())
                 return;
@@ -854,8 +862,11 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
             if (getWorld().isRemote)
                 return;
 
+            boolean should = RedstoneApi.getInstance().shouldWiresHandleUpdates();
+            RedstoneApi.getInstance().setWiresHandleUpdates(false);
             connections.disconnectAll();
             bundledConnections.disconnectAll();
+            RedstoneApi.getInstance().setWiresHandleUpdates(should);
         }
 
         // Rendering methods
@@ -1005,7 +1016,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
                             if (dev instanceof IInsulatedRedstoneDevice
                                     && ((IInsulatedRedstoneDevice) dev).getInsulationColor(c.getSideB()) != MinecraftColor.NONE)
                                 connected = true;
-                            if (getFace().ordinal() > ((PartRedwireFace) dev).getFace().ordinal()) {
+                            if (dev instanceof IFace && getFace().ordinal() > ((IFace) dev).getFace().ordinal()) {
                                 if (dev instanceof IInsulatedRedstoneDevice
                                         && ((IInsulatedRedstoneDevice) dev).getInsulationColor(c.getSideB()) == getInsulationColor(c
                                                 .getSideA()))
@@ -1028,7 +1039,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
                             if (dev instanceof IInsulatedRedstoneDevice
                                     && ((IInsulatedRedstoneDevice) dev).getInsulationColor(bc.getSideB()) != MinecraftColor.NONE)
                                 connected = true;
-                            if (getFace().ordinal() > ((PartRedwireFace) dev).getFace().ordinal()) {
+                            if (dev instanceof IFace && getFace().ordinal() > ((IFace) dev).getFace().ordinal()) {
                                 if (dev instanceof IInsulatedRedstoneDevice
                                         && ((IInsulatedRedstoneDevice) dev).getInsulationColor(bc.getSideB()) == getInsulationColor(bc
                                                 .getSideA()))
@@ -1346,7 +1357,10 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
             if (getWorld().isRemote)
                 return;
 
+            boolean should = RedstoneApi.getInstance().shouldWiresHandleUpdates();
+            RedstoneApi.getInstance().setWiresHandleUpdates(false);
             bundledConnections.disconnectAll();
+            RedstoneApi.getInstance().setWiresHandleUpdates(should);
         }
 
         // Rendering methods
@@ -1471,7 +1485,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
                     IBundledDevice dev = bc.getB();
                     if (dev instanceof IFace && ((IFace) dev).getFace() == ForgeDirection.getOrientation(i).getOpposite()) {
                         if (dev instanceof IRedwire) {
-                            if (getFace().ordinal() > ((PartRedwireFace) dev).getFace().ordinal()) {
+                            if (dev instanceof IFace && getFace().ordinal() > ((IFace) dev).getFace().ordinal()) {
                                 if (!(dev instanceof IInsulatedRedstoneDevice) && dev instanceof IRedwire) {
                                     render = true;
                                     connected = true;

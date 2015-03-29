@@ -22,7 +22,7 @@ public class GateComponentTorch extends GateComponent {
 
     private final Random rnd = new Random();
 
-    private boolean state = false;
+    protected boolean state = false;
 
     private int layoutColor = -1;
     protected double x = 0, z = 0;
@@ -58,6 +58,8 @@ public class GateComponentTorch extends GateComponent {
 
         IIcon icon = digital ? (state ? IconSupplier.bluestoneTorchOn : IconSupplier.bluestoneTorchOff) : (state ? Blocks.redstone_torch
                 .getIcon(0, 0) : Blocks.unlit_redstone_torch.getIcon(0, 0));
+        IIcon override = renderer.getOverrideTexture();
+        renderer.setOverrideTexture(null);
 
         double height = 10 / 16D - this.height;
 
@@ -73,17 +75,11 @@ public class GateComponentTorch extends GateComponent {
 
         renderer.setRenderSides(false, true, false, false, false, false);
         renderer.renderBox(new Vec3dCube(7 / 16D, 10 / 16D, 6 / 16D, 9 / 16D, 10 / 16D, 8 / 16D), icon);
-
-        renderer.removeTransformation();
-
         renderer.resetRenderedSides();
 
-        renderer.removeTransformation();
-    }
+        renderer.removeTransformations(2);
 
-    @Override
-    public void renderDynamic(Vec3d translation, double delta, int pass) {
-
+        renderer.setOverrideTexture(override);
     }
 
     @Override

@@ -2,8 +2,8 @@ package com.bluepowermod.redstone;
 
 import net.minecraftforge.common.util.ForgeDirection;
 
-import com.bluepowermod.api.wire.ConnectionType;
-import com.bluepowermod.api.wire.IConnection;
+import com.bluepowermod.api.connect.ConnectionType;
+import com.bluepowermod.api.connect.IConnection;
 import com.bluepowermod.api.wire.redstone.IRedstoneDevice;
 
 public class RedstoneConnection implements IConnection<IRedstoneDevice> {
@@ -77,6 +77,20 @@ public class RedstoneConnection implements IConnection<IRedstoneDevice> {
     public void setComplementaryConnection(IConnection<IRedstoneDevice> con) {
 
         complementary = con;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+
+        if (obj == null)
+            return false;
+        if (!(obj instanceof RedstoneConnection))
+            return false;
+
+        RedstoneConnection c = (RedstoneConnection) obj;
+
+        return getA().equals(c.getA()) && getB().equals(c.getB()) && getSideA() == c.getSideA() && getSideB() == c.getSideB()
+                && getType() == c.getType();
     }
 
 }

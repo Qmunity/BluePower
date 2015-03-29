@@ -14,8 +14,8 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 import com.bluepowermod.container.ContainerMonitor;
+import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier3.TileMonitor;
-import com.bluepowermod.util.Refs;
 
 public class GuiMonitor extends GuiContainerBaseBP {
 

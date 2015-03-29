@@ -41,7 +41,7 @@ import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.part.BPPart;
 import com.bluepowermod.part.PartInfo;
 import com.bluepowermod.part.PartManager;
-import com.bluepowermod.util.Refs;
+import com.bluepowermod.reference.Refs;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

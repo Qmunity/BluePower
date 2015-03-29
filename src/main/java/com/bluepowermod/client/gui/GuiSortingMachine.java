@@ -23,10 +23,11 @@ import com.bluepowermod.client.gui.widget.WidgetPowerBar;
 import com.bluepowermod.container.ContainerSortingMachine;
 import com.bluepowermod.network.BPNetworkHandler;
 import com.bluepowermod.network.message.MessageGuiUpdate;
+import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier2.TileSortingMachine;
 import com.bluepowermod.tile.tier2.TileSortingMachine.PullMode;
 import com.bluepowermod.tile.tier2.TileSortingMachine.SortMode;
-import com.bluepowermod.util.Refs;
+
 import net.minecraft.client.gui.Gui;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;

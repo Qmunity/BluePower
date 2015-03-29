@@ -29,8 +29,8 @@ import uk.co.qmunity.lib.client.gui.widget.WidgetMode;
 import com.bluepowermod.container.ContainerProjectTable;
 import com.bluepowermod.network.BPNetworkHandler;
 import com.bluepowermod.network.message.MessageGuiUpdate;
+import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier1.TileProjectTable;
-import com.bluepowermod.util.Refs;
 
 /**
  * @author MineMaarten

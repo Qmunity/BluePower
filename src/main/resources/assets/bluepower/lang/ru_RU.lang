@@ -664,7 +664,7 @@ itemGroup.bluepower:lighting=BluePower О�?вещение
 
 # Enchantments
 enchantment.bluepower:vorpal.name=Рубка голов
-enchantment:disjunction.name=Разъединение
+enchantment:bluepower.disjunction.name=Разъединение
 
 # Gui buttons and tooltips
 gui.bluepower:projectTable.clearGrid=Clear Crafting Grid

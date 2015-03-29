@@ -14,8 +14,8 @@ import net.minecraftforge.common.util.ForgeDirection;
 import uk.co.qmunity.lib.helper.MathHelper;
 import uk.co.qmunity.lib.helper.RedstoneHelper;
 
+import com.bluepowermod.api.connect.ConnectionType;
 import com.bluepowermod.api.misc.MinecraftColor;
-import com.bluepowermod.api.wire.ConnectionType;
 import com.bluepowermod.api.wire.redstone.IBundledDevice;
 import com.bluepowermod.api.wire.redstone.IInsulatedRedstoneDevice;
 import com.bluepowermod.block.machine.BlockLamp;

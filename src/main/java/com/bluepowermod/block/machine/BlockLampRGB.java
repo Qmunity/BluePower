@@ -5,8 +5,8 @@ import java.awt.Color;
 import net.minecraft.world.IBlockAccess;
 
 import com.bluepowermod.api.misc.MinecraftColor;
+import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier1.TileLamp;
-import com.bluepowermod.util.Refs;
 
 public class BlockLampRGB extends BlockLamp {
 

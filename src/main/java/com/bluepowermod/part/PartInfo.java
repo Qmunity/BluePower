@@ -25,7 +25,7 @@ import net.minecraftforge.client.MinecraftForgeClient;
 
 import com.bluepowermod.client.render.RenderPartItem;
 import com.bluepowermod.item.ItemPart;
-import com.bluepowermod.util.Refs;
+import com.bluepowermod.reference.Refs;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;

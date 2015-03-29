@@ -25,6 +25,7 @@ import net.minecraftforge.common.MinecraftForge;
 import org.lwjgl.input.Keyboard;
 
 import com.bluepowermod.client.render.IconSupplier;
+import com.bluepowermod.client.render.RenderDebugScreen;
 import com.bluepowermod.client.render.Renderers;
 import com.bluepowermod.compat.CompatibilityUtils;
 import com.bluepowermod.part.PartManager;
@@ -45,6 +46,7 @@ public class ClientProxy extends CommonProxy {
     public void initRenderers() {
 
         MinecraftForge.EVENT_BUS.register(new IconSupplier());
+        MinecraftForge.EVENT_BUS.register(new RenderDebugScreen());
         PartManager.registerRenderers();
         Renderers.init();
 

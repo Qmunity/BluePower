@@ -39,10 +39,10 @@ import uk.co.qmunity.lib.vec.Vec3d;
 import uk.co.qmunity.lib.vec.Vec3dCube;
 import uk.co.qmunity.lib.vec.Vec3i;
 
+import com.bluepowermod.api.connect.ConnectionType;
+import com.bluepowermod.api.connect.IConnection;
+import com.bluepowermod.api.connect.IConnectionCache;
 import com.bluepowermod.api.misc.MinecraftColor;
-import com.bluepowermod.api.wire.ConnectionType;
-import com.bluepowermod.api.wire.IConnection;
-import com.bluepowermod.api.wire.IConnectionCache;
 import com.bluepowermod.api.wire.redstone.IRedstoneDevice;
 import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.part.BPPartFace;

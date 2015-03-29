@@ -664,7 +664,7 @@ itemGroup.bluepower:lighting=Blue Power: osvjetljenje
 
 # Enchantments
 enchantment.bluepower:vorpal.name=ObezglavljivaÄ?
-enchantment:disjunction.name=Razdvajanje
+enchantment:bluepower.disjunction.name=Razdvajanje
 
 # Gui buttons and tooltips
 ##gui.bluepower:projectTable.clearGrid=

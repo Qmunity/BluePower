@@ -18,7 +18,7 @@
 package com.bluepowermod.item;
 
 import com.bluepowermod.init.BPCreativeTabs;
-import com.bluepowermod.util.Refs;
+import com.bluepowermod.reference.Refs;
 
 public class ItemCrafting extends ItemBase {
 

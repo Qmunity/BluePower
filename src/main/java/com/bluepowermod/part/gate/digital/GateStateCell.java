@@ -30,7 +30,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import uk.co.qmunity.lib.texture.Layout;
 
 import com.bluepowermod.api.wire.redstone.RedwireType;
-import com.bluepowermod.client.gui.gate.GuiGateSingleTime;
+import com.bluepowermod.client.gui.gate.GuiGateSingleCounter;
 import com.bluepowermod.part.IGuiButtonSensitive;
 import com.bluepowermod.part.gate.component.GateComponentBorder;
 import com.bluepowermod.part.gate.component.GateComponentButton;
@@ -236,10 +236,10 @@ public class GateStateCell extends GateSimpleDigital implements IGuiButtonSensit
     @SideOnly(Side.CLIENT)
     protected GuiScreen getGui(EntityPlayer player) {
 
-        return new GuiGateSingleTime(this) {
+        return new GuiGateSingleCounter(this) {
 
             @Override
-            protected int getCurrentIntervalTicks() {
+            protected int getCurrentAmount() {
 
                 return time;
             }

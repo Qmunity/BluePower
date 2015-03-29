@@ -18,11 +18,12 @@ import codechicken.nei.api.INEIGuiHandler;
 import codechicken.nei.api.TaggedInventoryArea;
 
 import com.bluepowermod.client.gui.widget.WidgetTabItemLister;
+import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.TileMachineBase;
-import com.bluepowermod.util.Refs;
 
 import cpw.mods.fml.common.Optional;
 
+@Optional.Interface(iface = "codechicken.nei.api.INEIGuiHandler", modid = Dependencies.NEI)
 public class GuiContainerBaseBP extends GuiContainerBase implements INEIGuiHandler {
 
     public GuiContainerBaseBP(Container mainContainer, ResourceLocation _resLoc) {
@@ -52,8 +53,8 @@ public class GuiContainerBaseBP extends GuiContainerBase implements INEIGuiHandl
         String unlocalizedInfo = inventory.getInventoryName() + ".info";
         String localizedInfo = I18n.format(unlocalizedInfo);
         if (!unlocalizedInfo.equals(localizedInfo)) {
-            addAnimatedStat("gui.bluepower:tab.info", Refs.MODID + ":textures/gui/widgets/gui_info.png", 0xFF8888FF, isInfoStatLeftSided())
-                    .setText(unlocalizedInfo);
+            addAnimatedStat("gui.bluepower:tab.info", Refs.MODID + ":textures/gui/widgets/gui_info.png", 0xFF8888FF, isInfoStatLeftSided()).setText(
+                    unlocalizedInfo);
 
         }
     }

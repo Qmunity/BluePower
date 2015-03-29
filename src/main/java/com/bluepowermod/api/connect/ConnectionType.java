@@ -1,4 +1,4 @@
-package com.bluepowermod.api.wire;
+package com.bluepowermod.api.connect;
 
 public enum ConnectionType {
     /**

@@ -8,7 +8,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import uk.co.qmunity.lib.helper.RedstoneHelper;
 import uk.co.qmunity.lib.util.Dir;
 
-import com.bluepowermod.api.wire.IConnection;
+import com.bluepowermod.api.connect.IConnection;
 import com.bluepowermod.api.wire.redstone.IBundledDevice;
 import com.bluepowermod.api.wire.redstone.IRedstoneDevice;
 import com.bluepowermod.part.gate.GateBase;

@@ -3,9 +3,9 @@ package com.bluepowermod.api.wire.redstone;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
-import com.bluepowermod.api.wire.ConnectionType;
-import com.bluepowermod.api.wire.IConnection;
-import com.bluepowermod.api.wire.IConnectionCache;
+import com.bluepowermod.api.connect.ConnectionType;
+import com.bluepowermod.api.connect.IConnection;
+import com.bluepowermod.api.connect.IConnectionCache;
 
 public interface IRedstoneApi {
 

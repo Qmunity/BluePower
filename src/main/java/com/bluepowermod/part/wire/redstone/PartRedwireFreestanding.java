@@ -51,12 +51,12 @@ import uk.co.qmunity.lib.vec.Vec3d;
 import uk.co.qmunity.lib.vec.Vec3dCube;
 import uk.co.qmunity.lib.vec.Vec3i;
 
+import com.bluepowermod.api.connect.ConnectionType;
+import com.bluepowermod.api.connect.IConnection;
+import com.bluepowermod.api.connect.IConnectionCache;
+import com.bluepowermod.api.connect.IConnectionListener;
 import com.bluepowermod.api.gate.IIntegratedCircuitPart;
 import com.bluepowermod.api.misc.MinecraftColor;
-import com.bluepowermod.api.wire.ConnectionType;
-import com.bluepowermod.api.wire.IConnection;
-import com.bluepowermod.api.wire.IConnectionCache;
-import com.bluepowermod.api.wire.IConnectionListener;
 import com.bluepowermod.api.wire.redstone.IBundledConductor.IAdvancedBundledConductor;
 import com.bluepowermod.api.wire.redstone.IBundledDevice;
 import com.bluepowermod.api.wire.redstone.IInsulatedRedstoneDevice;
@@ -145,16 +145,9 @@ IPartRedstone {
 
         Vec3dCube box = new Vec3dCube(0.5 - (size / 2), 0, 0.5 - (size / 2), 0.5 + (size / 2), 0.5 - (size / 2), 0.5 + (size / 2));
 
-        if (getWorld().isRemote) {
-            for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
-                if (shouldRenderConnection(d))
-                    boxes.add(box.clone().rotate(d, Vec3d.center));
-            }
-        } else {
-            for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
-                if (isConnected(d))
-                    boxes.add(box.clone().rotate(d, Vec3d.center));
-            }
+        for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
+            if (isConnected(d) || shouldRenderConnection(d))
+                boxes.add(box.clone().rotate(d, Vec3d.center));
         }
 
         return boxes;
@@ -266,10 +259,8 @@ IPartRedstone {
             if (type == ConnectionType.STRAIGHT)
                 if (side == ForgeDirection.UNKNOWN && device instanceof DummyRedstoneDevice)
                     return false;
-            if (type == ConnectionType.CLOSED_CORNER) {
-                if (side == ForgeDirection.UNKNOWN)
-                    return false;
-            }
+            if (type == ConnectionType.CLOSED_CORNER && side == ForgeDirection.UNKNOWN)
+                return false;
 
             if (device instanceof IRedwire) {
                 RedwireType rwt = getRedwireType(side);
@@ -538,10 +529,8 @@ IPartRedstone {
             if (type == ConnectionType.STRAIGHT)
                 if (side == ForgeDirection.UNKNOWN && device instanceof DummyRedstoneDevice)
                     return false;
-            if (type == ConnectionType.CLOSED_CORNER) {
-                if (side == ForgeDirection.UNKNOWN)
-                    return false;
-            }
+            if (type == ConnectionType.CLOSED_CORNER && side == ForgeDirection.UNKNOWN)
+                return false;
 
             if (device instanceof IInsulatedRedstoneDevice) {
                 MinecraftColor c = ((IInsulatedRedstoneDevice) device).getInsulationColor(type == ConnectionType.STRAIGHT ? side
@@ -554,8 +543,7 @@ IPartRedstone {
                 RedwireType rwt = getRedwireType(side);
                 if (type == null)
                     return false;
-                RedwireType rwt_ = ((IRedwire) device).getRedwireType(type == ConnectionType.STRAIGHT ? side.getOpposite() : side
-                        .getOpposite());
+                RedwireType rwt_ = ((IRedwire) device).getRedwireType(type == ConnectionType.STRAIGHT ? side.getOpposite() : side);
                 if (rwt_ == null)
                     return false;
                 if (!rwt.canConnectTo(rwt_))
@@ -571,11 +559,30 @@ IPartRedstone {
         @Override
         public boolean canConnect(ForgeDirection side, IBundledDevice device, ConnectionType type) {
 
+            if (type == ConnectionType.STRAIGHT)
+                if (side == ForgeDirection.UNKNOWN && device instanceof DummyRedstoneDevice)
+                    return false;
+            if (type == ConnectionType.CLOSED_CORNER && side == ForgeDirection.UNKNOWN)
+                return false;
+
             if (device instanceof IInsulatedRedstoneDevice)
                 return false;
 
-            if (device instanceof IRedwire)
+            if (!OcclusionHelper.microblockOcclusionTest(getParent(), MicroblockShape.FACE_HOLLOW, 1, side))
+                return false;
+
+            if (device instanceof IRedwire) {
+                RedwireType rwt = getRedwireType(side);
+                if (type == null)
+                    return false;
+                RedwireType rwt_ = ((IRedwire) device).getRedwireType(type == ConnectionType.STRAIGHT ? side.getOpposite() : side);
+                if (rwt_ == null)
+                    return false;
+                if (!rwt.canConnectTo(rwt_))
+                    return false;
+
                 return true;
+            }
 
             return false;
         }
@@ -947,25 +954,24 @@ IPartRedstone {
         @Override
         public boolean canConnect(ForgeDirection side, IBundledDevice device, ConnectionType type) {
 
-            if ((type == ConnectionType.STRAIGHT || type == ConnectionType.CLOSED_CORNER) && side == ForgeDirection.UNKNOWN)
+            if (type == ConnectionType.STRAIGHT)
+                if (side == ForgeDirection.UNKNOWN && device instanceof DummyRedstoneDevice)
+                    return false;
+            if (type == ConnectionType.CLOSED_CORNER && side == ForgeDirection.UNKNOWN)
                 return false;
 
             if (device instanceof IRedwire) {
                 RedwireType rwt = getRedwireType(side);
                 if (type == null)
                     return false;
-                RedwireType rwt_ = ((IRedwire) device).getRedwireType(type == ConnectionType.STRAIGHT ? side.getOpposite() : side
-                        .getOpposite());
+                RedwireType rwt_ = ((IRedwire) device).getRedwireType(type == ConnectionType.STRAIGHT ? side.getOpposite() : side);
                 if (rwt_ == null)
                     return false;
                 if (!rwt.canConnectTo(rwt_))
                     return false;
             }
 
-            if (!color.canConnect(device.getBundledColor(side.getOpposite())))
-                return false;
-
-            if (!OcclusionHelper.microblockOcclusionTest(getParent(), MicroblockShape.EDGE, 1, side, side))
+            if (!OcclusionHelper.microblockOcclusionTest(getParent(), MicroblockShape.FACE_HOLLOW, 1, side))
                 return false;
 
             return true;

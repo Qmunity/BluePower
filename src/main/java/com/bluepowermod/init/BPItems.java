@@ -18,9 +18,30 @@
         package com.bluepowermod.init;
 
 import com.bluepowermod.BluePower;
-import com.bluepowermod.item.*;
+import com.bluepowermod.item.ItemAthame;
+import com.bluepowermod.item.ItemBase;
+import com.bluepowermod.item.ItemBattery;
+import com.bluepowermod.item.ItemCanvasBag;
+import com.bluepowermod.item.ItemCrafting;
+import com.bluepowermod.item.ItemCropSeed;
+import com.bluepowermod.item.ItemGemAxe;
+import com.bluepowermod.item.ItemGemHoe;
+import com.bluepowermod.item.ItemGemPickaxe;
+import com.bluepowermod.item.ItemGemSpade;
+import com.bluepowermod.item.ItemGemSword;
+import com.bluepowermod.item.ItemIndigoDye;
+import com.bluepowermod.item.ItemLimitedCrafting;
+import com.bluepowermod.item.ItemLumar;
+import com.bluepowermod.item.ItemMultimeter;
+import com.bluepowermod.item.ItemPaintBrush;
+import com.bluepowermod.item.ItemPaintCan;
+import com.bluepowermod.item.ItemSaw;
+import com.bluepowermod.item.ItemScrewdriver;
+import com.bluepowermod.item.ItemSeedBag;
+import com.bluepowermod.item.ItemSickle;
+import com.bluepowermod.item.ItemSilkyScrewdriver;
+import com.bluepowermod.reference.Refs;
 import com.bluepowermod.util.Dependencies;
-import com.bluepowermod.util.Refs;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.init.Blocks;
@@ -29,6 +50,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.Item.ToolMaterial;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
+
 
 @GameRegistry.ObjectHolder(Refs.MODID)
 public class BPItems {

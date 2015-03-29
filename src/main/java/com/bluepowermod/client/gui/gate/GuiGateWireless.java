@@ -37,7 +37,7 @@ import com.bluepowermod.part.gate.wireless.Frequency;
 import com.bluepowermod.part.gate.wireless.IWirelessGate;
 import com.bluepowermod.part.gate.wireless.WirelessManager;
 import com.bluepowermod.part.gate.wireless.WirelessMode;
-import com.bluepowermod.util.Refs;
+import com.bluepowermod.reference.Refs;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

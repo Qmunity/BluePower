@@ -26,7 +26,7 @@ import codechicken.lib.vec.TransformationList;
 import codechicken.lib.vec.Translation;
 
 import com.bluepowermod.init.BPItems;
-import com.bluepowermod.util.Refs;
+import com.bluepowermod.reference.Refs;
 
 public class SawRenderFMP implements IItemRenderer {
 

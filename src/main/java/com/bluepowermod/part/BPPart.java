@@ -50,7 +50,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public abstract class BPPart extends PartBase implements IPartSelectable, IPartCollidable, IPartOccluding, IPartUpdateListener,
-IPartInteractable, IDatabaseSaveable, IPartWAILAProvider {
+        IPartInteractable, IDatabaseSaveable, IPartWAILAProvider {
 
     @Override
     public World getWorld() {
@@ -145,14 +145,14 @@ IPartInteractable, IDatabaseSaveable, IPartWAILAProvider {
     @Override
     public void onPartChanged(IPart part) {
 
-        if (!getWorld().isRemote)
+        if (getWorld() != null && !getWorld().isRemote)
             onUpdate();
     }
 
     @Override
     public void onNeighborBlockChange() {
 
-        if (!getWorld().isRemote)
+        if (getWorld() != null && !getWorld().isRemote)
             onUpdate();
     }
 
@@ -164,7 +164,7 @@ IPartInteractable, IDatabaseSaveable, IPartWAILAProvider {
     @Override
     public void onAdded() {
 
-        if (!getWorld().isRemote)
+        if (getWorld() != null && !getWorld().isRemote)
             onUpdate();
     }
 
@@ -176,7 +176,7 @@ IPartInteractable, IDatabaseSaveable, IPartWAILAProvider {
     @Override
     public void onLoaded() {
 
-        if (!getWorld().isRemote)
+        if (getWorld() != null && !getWorld().isRemote)
             onUpdate();
     }
 
