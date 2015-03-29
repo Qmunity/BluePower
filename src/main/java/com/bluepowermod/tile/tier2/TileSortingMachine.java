@@ -60,6 +60,9 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
     @SideOnly(Side.CLIENT)
     private float maxAmp;
 
+    //Todo: Magic number
+    private int usagePerItem = 2; //2 mA
+
 
     public TileSortingMachine() {
 
@@ -285,6 +288,12 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
     }
 
     private boolean tryProcessItem(ItemStack stack, boolean simulate) {
+
+        //Use powah
+
+        if(getHandler().getAmpStored() < (stack.stackSize * usagePerItem)){
+            return false;
+        }
 
         switch (sortMode) {
         case ANYSTACK_SEQUENTIAL:
@@ -606,6 +615,14 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
         if(FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
             getHandler().invalidate();
         }
+    }
+
+    @Override
+    protected void addItemToOutputBuffer(ItemStack stack, TubeColor color) {
+
+        getHandler().removeEnergy(stack.stackSize * usagePerItem);
+        super.addItemToOutputBuffer(stack, color);
+
     }
 
 }
