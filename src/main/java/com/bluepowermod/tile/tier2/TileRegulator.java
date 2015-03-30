@@ -182,23 +182,39 @@ public class TileRegulator extends TileMachineBase implements ISidedInventory, I
             int allowedItems = inputFilterItems - bufferItems;
             if (allowedItems <= 0)
                 return stack;
-            if (stack.stack.stackSize <= allowedItems) {
-                ItemStack remainder = IOHelper.insert(this, stack.stack, ForgeDirection.UNKNOWN.ordinal(), simulate);
-                if (remainder == null)
+
+            ItemStack acceptedStack = stack.stack.splitStack(Math.min(allowedItems, stack.stack.stackSize));
+
+            if (acceptedStack != null && acceptedStack.stackSize > 0) {
+                for (int i = EnumSection.INPUT_FILTER.ordinal() * 9; i < EnumSection.INPUT_FILTER.ordinal() * 9 + 9; i++) {
+                    if (inventory[i] != null && ItemStackHelper.areStacksEqual(acceptedStack, inventory[i], fuzzySetting)) {
+                        acceptedStack = IOHelper.insert(this, acceptedStack, EnumSection.BUFFER.ordinal() * 9 + i, ForgeDirection.UNKNOWN.ordinal(), simulate);
+
+                        if (acceptedStack == null) {
+                            break;
+                        }
+                    }
+                }
+
+                if (acceptedStack != null && acceptedStack.stackSize != 0) {
+                    ItemStack remainder = IOHelper.insert(this, acceptedStack, ForgeDirection.UNKNOWN.ordinal(), simulate);
+                    if (remainder != null) {
+                        stack.stack.stackSize += remainder.stackSize;
+                    }
+                }
+                if (stack.stack.stackSize > 0)
+                    return stack;
+                else
                     return null;
-                stack.stack = remainder;
+            } else {
                 return stack;
             }
-            ItemStack acceptedStack = stack.stack.splitStack(allowedItems);
-            ItemStack remainder = IOHelper.insert(this, acceptedStack, ForgeDirection.UNKNOWN.ordinal(), simulate);
-            if (remainder != null) {
-                stack.stack.stackSize += remainder.stackSize;
-            }
-            return stack;
+
         } else {
             return super.acceptItemFromTube(stack, from, simulate);
         }
     }
+    
 
     private int getItemsInSection(ItemStack type, EnumSection section) {
 
