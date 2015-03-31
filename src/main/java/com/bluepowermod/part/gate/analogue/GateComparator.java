@@ -78,7 +78,7 @@ public class GateComparator extends GateSimpleAnalogue {
             Block bb = b.getBlock(false);
             if (bb.hasComparatorInputOverride())
                 power = (byte) MathHelper.map(
-                        ba.getComparatorInputOverride(getWorld(), b.getX(), b.getY(), b.getZ(), d.getOpposite().ordinal()), 0, 15, 0, 255);
+                        bb.getComparatorInputOverride(getWorld(), b.getX(), b.getY(), b.getZ(), d.getOpposite().ordinal()), 0, 15, 0, 255);
         }
 
         t1.setState(left().getInput() == 0);
