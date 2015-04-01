@@ -27,10 +27,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.part.tube.TubeStack;
 import com.bluepowermod.tile.TileMachineBase;
-import com.bluepowermod.helper.IOHelper;
 
 public class TileRelay extends TileMachineBase implements IInventory {
 
