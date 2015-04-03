@@ -14,6 +14,8 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class RenderDebugScreen {
 
+    private final DecimalFormat df = new DecimalFormat("#####.###");
+
     @SubscribeEvent
     public void onRenderDebugScreen(RenderGameOverlayEvent event) {
 
@@ -33,7 +35,7 @@ public class RenderDebugScreen {
             if (sv != null) {
                 double ms = MathHelper.mean(sv.worldTickTimes.get(mc.theWorld.provider.dimensionId)) * 1.0E-6D;
                 double tps = Math.min(1000.0 / ms, 20);
-                text.add("TPS: " + tps + " (" + new DecimalFormat("#####.###").format(ms) + "ms)");
+                text.add("TPS: " + df.format(tps) + " (" + df.format(ms) + "ms)");
             } else {
                 text.add("Server TPS coming soon!");
             }

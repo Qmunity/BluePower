@@ -17,9 +17,12 @@
 
 package com.bluepowermod.world;
 
-import com.bluepowermod.init.BPBlocks;
-import com.bluepowermod.init.BPItems;
-import com.bluepowermod.init.Config;
+import static net.minecraftforge.common.ChestGenHooks.DUNGEON_CHEST;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
@@ -32,11 +35,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ChestGenHooks;
 import net.minecraftforge.common.util.ForgeDirection;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
-import static net.minecraftforge.common.ChestGenHooks.DUNGEON_CHEST;
+import com.bluepowermod.init.BPBlocks;
+import com.bluepowermod.init.BPItems;
+import com.bluepowermod.init.Config;
 
 /**
  * 

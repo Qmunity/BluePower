@@ -391,9 +391,9 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
             connections.recalculateConnections();
             // Add bottom device (forced)
             if (connections.getConnectionOnSide(getFace()) == null) {
-                IRedstoneDevice drd = DummyRedstoneDevice.getDeviceAt(new Vec3i(this).add(getFace()));
+                DummyRedstoneDevice drd = DummyRedstoneDevice.getDeviceAt(new Vec3i(this).add(getFace()));
                 connections.onConnect(getFace(), drd, getFace().getOpposite(), ConnectionType.STRAIGHT);
-                drd.getRedstoneConnectionCache().onConnect(getFace().getOpposite(), null, getFace(), ConnectionType.STRAIGHT);
+                drd.getRedstoneConnectionCache().onConnect(getFace().getOpposite(), this, getFace(), ConnectionType.STRAIGHT);
             }
 
             RedstoneApi.getInstance().getRedstonePropagator(this, getFace()).propagate();

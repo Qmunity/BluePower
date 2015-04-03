@@ -28,7 +28,6 @@ import uk.co.qmunity.lib.helper.RedstoneHelper;
 import uk.co.qmunity.lib.vec.Vec3i;
 
 import com.bluepowermod.api.connect.ConnectionType;
-import com.bluepowermod.api.connect.IConnectionCache;
 import com.bluepowermod.api.misc.IFace;
 import com.bluepowermod.api.wire.redstone.IRedstoneDevice;
 
@@ -82,7 +81,7 @@ public class DummyRedstoneDevice implements IRedstoneDevice {
     }
 
     @Override
-    public IConnectionCache<? extends IRedstoneDevice> getRedstoneConnectionCache() {
+    public RedstoneConnectionCache getRedstoneConnectionCache() {
 
         return connections;
     }

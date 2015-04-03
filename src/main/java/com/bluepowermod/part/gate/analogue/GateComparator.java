@@ -12,6 +12,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import uk.co.qmunity.lib.helper.MathHelper;
 import uk.co.qmunity.lib.vec.Vec3i;
 
+import com.bluepowermod.api.gate.IAnalogueComparatorReadout;
 import com.bluepowermod.api.wire.redstone.RedwireType;
 import com.bluepowermod.part.gate.component.GateComponentBorder;
 import com.bluepowermod.part.gate.component.GateComponentQuartzResonator;
@@ -73,12 +74,18 @@ public class GateComparator extends GateSimpleAnalogue {
         if (ba.hasComparatorInputOverride())
             power = (byte) MathHelper.map(
                     ba.getComparatorInputOverride(getWorld(), a.getX(), a.getY(), a.getZ(), d.getOpposite().ordinal()), 0, 15, 0, 255);
+        if (ba instanceof IAnalogueComparatorReadout && ((IAnalogueComparatorReadout) ba).hasAnalogueComparatorInputOverride())
+            power = ((IAnalogueComparatorReadout) ba).getAnalogueComparatorInputOverride(getWorld(), a.getX(), a.getY(), a.getZ(), d
+                    .getOpposite().ordinal());
         if (ba.isOpaqueCube()) {
             Vec3i b = a.getRelative(d);
             Block bb = b.getBlock(false);
             if (bb.hasComparatorInputOverride())
                 power = (byte) MathHelper.map(
-                        ba.getComparatorInputOverride(getWorld(), b.getX(), b.getY(), b.getZ(), d.getOpposite().ordinal()), 0, 15, 0, 255);
+                        bb.getComparatorInputOverride(getWorld(), b.getX(), b.getY(), b.getZ(), d.getOpposite().ordinal()), 0, 15, 0, 255);
+            if (bb instanceof IAnalogueComparatorReadout && ((IAnalogueComparatorReadout) bb).hasAnalogueComparatorInputOverride())
+                power = ((IAnalogueComparatorReadout) bb).getAnalogueComparatorInputOverride(getWorld(), b.getX(), b.getY(), b.getZ(), d
+                        .getOpposite().ordinal());
         }
 
         t1.setState(left().getInput() == 0);

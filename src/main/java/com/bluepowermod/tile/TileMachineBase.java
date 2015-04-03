@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import com.bluepowermod.BluePower;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
@@ -20,6 +19,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import com.bluepowermod.BluePower;
 import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
 import com.bluepowermod.api.tube.ITubeConnection;
