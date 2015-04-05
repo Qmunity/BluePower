@@ -4,12 +4,14 @@ import java.awt.image.BufferedImage;
 
 import uk.co.qmunity.lib.client.render.RenderHelper;
 import uk.co.qmunity.lib.transform.Translation;
-import uk.co.qmunity.lib.vec.Vec3d;
 import uk.co.qmunity.lib.vec.Vec3dCube;
 import uk.co.qmunity.lib.vec.Vec3i;
 
 import com.bluepowermod.client.render.IconSupplier;
 import com.bluepowermod.part.gate.GateBase;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class GateComponentSolarPanel extends GateComponent {
 
@@ -35,17 +37,13 @@ public class GateComponentSolarPanel extends GateComponent {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void renderStatic(Vec3i translation, RenderHelper renderer, int pass) {
 
         renderer.addTransformation(new Translation(-3 / 16D + x, 0, -4 / 16D + z));
         renderer.renderBox(new Vec3dCube(3 / 16D, 2 / 16D, 4 / 16D, 13 / 16D, 4 / 16D, 12 / 16D), null, IconSupplier.gateSolarPanel,
                 IconSupplier.gateButton, IconSupplier.gateButton, IconSupplier.gateButton, IconSupplier.gateButton);
         renderer.removeTransformation();
-    }
-
-    @Override
-    public void renderDynamic(Vec3d translation, double delta, int pass) {
-
     }
 
     @Override

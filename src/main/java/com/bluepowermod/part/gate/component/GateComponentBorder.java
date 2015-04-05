@@ -4,6 +4,9 @@ import net.minecraft.util.IIcon;
 
 import com.bluepowermod.part.gate.GateBase;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 public class GateComponentBorder extends GateComponentCubes {
 
     public GateComponentBorder(GateBase<?, ?, ?, ?, ?, ?> gate, int color) {
@@ -12,6 +15,7 @@ public class GateComponentBorder extends GateComponentCubes {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public IIcon getIcon() {
 
         return getGate().getDarkTop();

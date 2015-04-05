@@ -59,6 +59,7 @@ public abstract class GateComponentCubes extends GateComponent {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void renderStatic(Vec3i translation, RenderHelper renderer, int pass) {
 
         renderer.setColor(getColor());

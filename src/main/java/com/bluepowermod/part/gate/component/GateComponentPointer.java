@@ -10,6 +10,9 @@ import uk.co.qmunity.lib.vec.Vec3d;
 import com.bluepowermod.client.render.RenderHelper;
 import com.bluepowermod.part.gate.GateBase;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 public class GateComponentPointer extends GateComponentTorch {
 
     private double angle = 0;
@@ -28,6 +31,7 @@ public class GateComponentPointer extends GateComponentTorch {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void renderDynamic(Vec3d translation, double delta, int pass) {
 
         RenderHelper.renderPointer((1 - x) - 9 / 16D, height - 4 / 32D, (1 - (z + 1 / 16D)) - 8 / 16D, angle

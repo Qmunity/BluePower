@@ -5,6 +5,9 @@ import net.minecraft.util.IIcon;
 import com.bluepowermod.client.render.IconSupplier;
 import com.bluepowermod.part.gate.GateBase;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 public class GateComponentQuartzResonator extends GateComponentButton {
 
     public GateComponentQuartzResonator(GateBase<?, ?, ?, ?, ?, ?> gate, int color) {
@@ -18,6 +21,7 @@ public class GateComponentQuartzResonator extends GateComponentButton {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     protected IIcon getIcon() {
 
         return IconSupplier.quartzResonator;

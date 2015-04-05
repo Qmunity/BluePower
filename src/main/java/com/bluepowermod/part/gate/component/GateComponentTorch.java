@@ -18,6 +18,9 @@ import uk.co.qmunity.lib.vec.Vec3i;
 import com.bluepowermod.client.render.IconSupplier;
 import com.bluepowermod.part.gate.GateBase;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 public class GateComponentTorch extends GateComponent {
 
     private final Random rnd = new Random();
@@ -54,6 +57,7 @@ public class GateComponentTorch extends GateComponent {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void renderStatic(Vec3i translation, RenderHelper renderer, int pass) {
 
         IIcon icon = digital ? (state ? IconSupplier.bluestoneTorchOn : IconSupplier.bluestoneTorchOff) : (state ? Blocks.redstone_torch
