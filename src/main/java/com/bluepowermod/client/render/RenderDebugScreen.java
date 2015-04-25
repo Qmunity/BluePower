@@ -19,7 +19,7 @@ public class RenderDebugScreen {
     @SubscribeEvent
     public void onRenderDebugScreen(RenderGameOverlayEvent event) {
 
-        if (event.type.equals(RenderGameOverlayEvent.ElementType.DEBUG)) {
+        if (event.type == RenderGameOverlayEvent.ElementType.DEBUG) {
             Minecraft mc = Minecraft.getMinecraft();
             FontRenderer fr = mc.fontRenderer;
             MinecraftServer sv = MinecraftServer.getServer();
