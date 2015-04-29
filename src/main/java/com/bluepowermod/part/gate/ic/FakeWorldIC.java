@@ -8,18 +8,22 @@ import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.profiler.Profiler;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.MinecraftException;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldProvider;
+import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.chunk.storage.IChunkLoader;
 import net.minecraft.world.storage.IPlayerFileData;
 import net.minecraft.world.storage.ISaveHandler;
 import net.minecraft.world.storage.WorldInfo;
 import net.minecraftforge.common.util.ForgeDirection;
-import uk.co.qmunity.lib.init.QLBlocks;
-import uk.co.qmunity.lib.tile.TileMultipart;
 import uk.co.qmunity.lib.vec.Vec3d;
+
+import com.bluepowermod.util.CachedBlock;
 
 public class FakeWorldIC extends World {
 
@@ -31,6 +35,7 @@ public class FakeWorldIC extends World {
     }
 
     private GateIntegratedCircuit ic;
+    private Chunk[][] chunks = new Chunk[3][3];
 
     public FakeWorldIC() {
 
@@ -42,6 +47,27 @@ public class FakeWorldIC extends World {
                 return "IC_Fake_World";
             }
         }, new Profiler());
+
+        for (int x = 0; x < 3; x++) {
+            for (int z = 0; z < 3; z++) {
+                chunks[x][z] = new Chunk(this, x - 1, z - 1) {
+
+                    @Override
+                    public boolean func_150807_a(int x, int y, int z, Block b, int meta) {
+
+                        setBlock(xPosition * 16 + x, y, zPosition * 16 + z, b, meta, 3);
+                        return true;
+                    }
+
+                    @Override
+                    public void func_150812_a(int x, int y, int z, TileEntity te) {
+
+                        te.setWorldObj(worldObj);
+                        setTileEntity(te.xCoord = xPosition * 16 + x, te.yCoord = y, te.zCoord = zPosition * 16 + z, te);
+                    }
+                };
+            }
+        }
     }
 
     public void setIC(GateIntegratedCircuit ic) {
@@ -52,16 +78,6 @@ public class FakeWorldIC extends World {
     public GateIntegratedCircuit getIC() {
 
         return ic;
-    }
-
-    private TileMultipart getTile(int x, int z) {
-
-        GateIntegratedCircuit ic = getIC();
-
-        if (ic == null)
-            return null;
-
-        return ic.getTile(x, z);
     }
 
     @Override
@@ -105,15 +121,14 @@ public class FakeWorldIC extends World {
                 d = ForgeDirection.NORTH;
             if (x == ((ic.getSize() - 1) / 2) && z == ic.getSize())
                 d = ForgeDirection.SOUTH;
-            if (d != null) {
+            if (d != null)
                 return new Vec3d(0, 0, 0, ic.getWorld()).add(d).rotate(0, 90 * -ic.getRotation(), 0).add(ic.getX(), ic.getY(), ic.getZ())
                         .getBlock();
-            }
 
             if (x < 0 || x >= ic.getSize() || z < 0 || z >= ic.getSize())
                 return Blocks.air;
 
-            return QLBlocks.multipart;
+            return ic.getBlock(x, z).block();
         } catch (Exception ex) {
         }
 
@@ -139,6 +154,8 @@ public class FakeWorldIC extends World {
             if (d != null)
                 return new Vec3d(0, 0, 0, ic.getWorld()).add(d).rotate(0, 90 * -ic.getRotation(), 0).add(ic.getX(), ic.getY(), ic.getZ())
                         .getBlockMeta();
+
+            return ic.getBlock(x, z).meta();
         } catch (Exception ex) {
         }
 
@@ -168,11 +185,49 @@ public class FakeWorldIC extends World {
                 return new Vec3d(0, 0, 0, ic.getWorld()).add(d).rotate(0, 90 * -ic.getRotation(), 0).add(ic.getX(), ic.getY(), ic.getZ())
                         .getTileEntity();
 
-            return getTile(x, z);
+            return ic.getBlock(x, z).tile();
         } catch (Exception ex) {
         }
 
         return null;
+    }
+
+    @Override
+    public boolean setBlock(int x, int y, int z, Block b, int meta, int update) {
+
+        if (x < 0 || z < 0 || x >= ic.getSize() || z >= ic.getSize())
+            return false;
+        if (y != 64)
+            return false;
+
+        CachedBlock cb = ic.getOrCreateBlock(x, z);
+        cb.setBlock(b);
+        cb.setMeta(meta);
+
+        return true;
+    }
+
+    @Override
+    public boolean setBlockMetadataWithNotify(int x, int y, int z, int meta, int update) {
+
+        if (x < 0 || z < 0 || x >= ic.getSize() || z >= ic.getSize())
+            return false;
+        if (y != 64)
+            return false;
+
+        ic.getOrCreateBlock(x, z).setMeta(meta);
+        return true;
+    }
+
+    @Override
+    public void setTileEntity(int x, int y, int z, TileEntity te) {
+
+        if (x < 0 || z < 0 || x >= ic.getSize() || z >= ic.getSize())
+            return;
+        if (y != 64)
+            return;
+
+        ic.getOrCreateBlock(x, z).setTile(te);
     }
 
     @Override
@@ -188,13 +243,50 @@ public class FakeWorldIC extends World {
     @Override
     public boolean isSideSolid(int x, int y, int z, ForgeDirection side) {
 
-        return side == ForgeDirection.UP;
+        return y != 64 && side == ForgeDirection.UP;
     }
 
     @Override
     public boolean isSideSolid(int x, int y, int z, ForgeDirection side, boolean _default) {
 
-        return side == ForgeDirection.UP;
+        return y != 64 ? _default : side == ForgeDirection.UP;
+    }
+
+    @Override
+    protected boolean chunkExists(int p_72916_1_, int p_72916_2_) {
+
+        return true;
+    }
+
+    @Override
+    public boolean checkNoEntityCollision(AxisAlignedBB p_72917_1_, Entity p_72917_2_) {
+
+        return true;
+    }
+
+    @Override
+    public Chunk getChunkFromChunkCoords(int x, int z) {
+
+        return chunks[x + 1][z + 1];
+    }
+
+    @Override
+    public boolean checkNoEntityCollision(AxisAlignedBB p_72855_1_) {
+
+        return true;
+    }
+
+    @Override
+    public MovingObjectPosition func_147447_a(Vec3 start, Vec3 end, boolean fluids, boolean unknown1, boolean unknown2) {
+
+        Vec3 s = new Vec3d(start).sub(ic.getX(), ic.getY(), ic.getZ())
+                .sub(GateIntegratedCircuit.border, GateIntegratedCircuit.border, GateIntegratedCircuit.border)
+                .div(1 - 2 * GateIntegratedCircuit.border).mul(ic.getSize()).add(0, 64, 0).toVec3();
+        Vec3 e = new Vec3d(end).sub(ic.getX(), ic.getY(), ic.getZ())
+                .sub(GateIntegratedCircuit.border, GateIntegratedCircuit.border, GateIntegratedCircuit.border)
+                .div(1 - 2 * GateIntegratedCircuit.border).mul(ic.getSize()).add(0, 64, 0).toVec3();
+
+        return super.func_147447_a(s, e, fluids, unknown1, unknown2);
     }
 
     private static class FakeWorldSaveHandler implements ISaveHandler {

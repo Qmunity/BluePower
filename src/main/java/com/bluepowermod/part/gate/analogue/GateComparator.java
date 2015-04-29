@@ -91,9 +91,11 @@ public class GateComparator extends GateSimpleAnalogue {
         t1.setState(left().getInput() == 0);
         t2.setState(right().getInput() == 0);
 
-        w.setPower((byte) (255 - (power & 0xFF)));
-        t3.setState(power != 0);
-        front().setOutput((byte) Math.max((power & 0xFF) - Math.max(left().getInput() & 0xFF, right().getInput() & 0xFF), 0));
+        byte out = (byte) Math.max((power & 0xFF) - Math.max(left().getInput() & 0xFF, right().getInput() & 0xFF), 0);
+
+        w.setPower((byte) (255 - (out & 0xFF)));
+        t3.setState(out != 0);
+        front().setOutput(out);
     }
 
     @Override

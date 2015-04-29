@@ -11,6 +11,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import uk.co.qmunity.lib.part.IPart;
 
+import com.bluepowermod.api.gate.ic.IIntegratedCircuitRegistry;
 import com.bluepowermod.api.recipe.IAlloyFurnaceRegistry;
 import com.bluepowermod.api.wire.redstone.IRedstoneApi;
 
@@ -32,8 +33,6 @@ public class BPApi {
     }
 
     public static interface IBPApi {
-
-        // public IPneumaticTube getPneumaticTube(TileEntity te);
 
         public IAlloyFurnaceRegistry getAlloyFurnaceRegistry();
 
@@ -58,6 +57,11 @@ public class BPApi {
         public void loadSilkySettings(IPart part, ItemStack stack);
 
         public IRedstoneApi getRedstoneApi();
+
+        /**
+         * Gets a class where you can register your own IC parts
+         */
+        public IIntegratedCircuitRegistry getICRegistry();
     }
 
     /**

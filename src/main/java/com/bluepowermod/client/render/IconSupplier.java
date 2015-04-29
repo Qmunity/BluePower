@@ -83,6 +83,8 @@ public class IconSupplier {
     public static IIcon siliconChipOn = null;
     public static IIcon taintedSiliconChipOff = null;
     public static IIcon taintedSiliconChipOn = null;
+    public static IIcon redSiliconChipOff = null;
+    public static IIcon redSiliconChipOn = null;
     public static IIcon quartzResonator = null;
     public static IIcon gateSolarPanel = null;
 
@@ -153,6 +155,8 @@ public class IconSupplier {
             siliconChipOn = reg.registerIcon(Refs.MODID + ":gates/components/silicon_chip_on");
             taintedSiliconChipOff = reg.registerIcon(Refs.MODID + ":gates/components/tainted_silicon_chip_off");
             taintedSiliconChipOn = reg.registerIcon(Refs.MODID + ":gates/components/tainted_silicon_chip_on");
+            redSiliconChipOff = reg.registerIcon(Refs.MODID + ":gates/components/red_silicon_chip_off");
+            redSiliconChipOn = reg.registerIcon(Refs.MODID + ":gates/components/red_silicon_chip_on");
             quartzResonator = reg.registerIcon(Refs.MODID + ":gates/components/resonator");
             gateSolarPanel = reg.registerIcon(Refs.MODID + ":gates/components/solarpanel");
 

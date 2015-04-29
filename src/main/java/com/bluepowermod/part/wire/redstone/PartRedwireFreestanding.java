@@ -55,7 +55,7 @@ import com.bluepowermod.api.connect.ConnectionType;
 import com.bluepowermod.api.connect.IConnection;
 import com.bluepowermod.api.connect.IConnectionCache;
 import com.bluepowermod.api.connect.IConnectionListener;
-import com.bluepowermod.api.gate.IIntegratedCircuitPart;
+import com.bluepowermod.api.gate.ic.IIntegratedCircuitPart;
 import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.api.wire.redstone.IBundledConductor.IAdvancedBundledConductor;
 import com.bluepowermod.api.wire.redstone.IBundledDevice;
@@ -67,7 +67,6 @@ import com.bluepowermod.api.wire.redstone.IRedwire;
 import com.bluepowermod.api.wire.redstone.RedwireType;
 import com.bluepowermod.client.render.IconSupplier;
 import com.bluepowermod.init.BPCreativeTabs;
-import com.bluepowermod.part.gate.ic.FakeMultipartTileIC;
 import com.bluepowermod.part.wire.PartWireFreestanding;
 import com.bluepowermod.redstone.BundledConnectionCache;
 import com.bluepowermod.redstone.BundledDeviceWrapper;
@@ -77,7 +76,7 @@ import com.bluepowermod.redstone.RedstoneConnection;
 import com.bluepowermod.redstone.RedstoneConnectionCache;
 
 public abstract class PartRedwireFreestanding extends PartWireFreestanding implements IRedwire, IRedConductor, IIntegratedCircuitPart,
-IPartRedstone {
+        IPartRedstone {
 
     private RedwireType type;
 
@@ -127,6 +126,31 @@ IPartRedstone {
     protected IIcon getFrameIcon() {
 
         return Blocks.planks.getIcon(0, 0);
+    }
+
+    @Override
+    protected boolean shouldRenderFullFrame() {
+
+        int count = 0;
+        ForgeDirection ld = null;
+
+        for (int i = 0; i < 6; i++) {
+            ForgeDirection d = ForgeDirection.getOrientation(i);
+            if (shouldRenderConnection(d)) {
+                count++;
+                if (ld == null)
+                    ld = d;
+                if (d != ld && d != ld.getOpposite())
+                    return true;
+            }
+        }
+
+        if (count > 2 || count == 0)
+            return true;
+        if (getParent() == null || getWorld() == null)
+            return true;
+
+        return false;
     }
 
     // Selection and occlusion boxes
@@ -217,7 +241,7 @@ IPartRedstone {
     }
 
     public static class PartRedwireFreestandingUninsulated extends PartRedwireFreestanding implements IAdvancedRedstoneConductor,
-    IConnectionListener {
+            IConnectionListener {
 
         private RedstoneConnectionCache connections = RedstoneApi.getInstance().createRedstoneConnectionCache(this);
         private boolean hasUpdated = false;
@@ -320,9 +344,6 @@ IPartRedstone {
         @Override
         public void onRedstoneUpdate() {
 
-            if (getParent() instanceof FakeMultipartTileIC)
-                ((FakeMultipartTileIC) getParent()).getIC().loadWorld();
-
             if (hasUpdated) {
                 sendUpdatePacket();
 
@@ -347,9 +368,6 @@ IPartRedstone {
 
         @Override
         public List<Entry<IConnection<IRedstoneDevice>, Boolean>> propagate(ForgeDirection fromSide) {
-
-            if (getParent() instanceof FakeMultipartTileIC)
-                ((FakeMultipartTileIC) getParent()).getIC().loadWorld();
 
             List<Entry<IConnection<IRedstoneDevice>, Boolean>> l = new ArrayList<Entry<IConnection<IRedstoneDevice>, Boolean>>();
 
@@ -480,7 +498,7 @@ IPartRedstone {
     }
 
     public static class PartRedwireFreestandingInsulated extends PartRedwireFreestanding implements IAdvancedRedstoneConductor,
-    IInsulatedRedstoneDevice, IAdvancedBundledConductor, IInsulatedRedwire, IConnectionListener {
+            IInsulatedRedstoneDevice, IAdvancedBundledConductor, IInsulatedRedwire, IConnectionListener {
 
         private RedstoneConnectionCache connections = RedstoneApi.getInstance().createRedstoneConnectionCache(this);
         private BundledConnectionCache bundledConnections = RedstoneApi.getInstance().createBundledConnectionCache(this);
@@ -657,9 +675,6 @@ IPartRedstone {
 
         @Override
         public void onRedstoneUpdate() {
-
-            if (getParent() instanceof FakeMultipartTileIC)
-                ((FakeMultipartTileIC) getParent()).getIC().loadWorld();
 
             if (hasUpdated) {
                 sendUpdatePacket();
@@ -860,7 +875,7 @@ IPartRedstone {
     }
 
     public static class PartRedwireFreestandingBundled extends PartRedwireFreestanding implements IAdvancedBundledConductor,
-    IConnectionListener {
+            IConnectionListener {
 
         private BundledConnectionCache bundledConnections = RedstoneApi.getInstance().createBundledConnectionCache(this);
         private byte[] power = new byte[16];

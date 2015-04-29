@@ -67,7 +67,7 @@ public class TileBase extends TileEntity implements IRotatable {
 
     /**
      * Tags written in here are synced upon markBlockForUpdate.
-     * 
+     *
      * @param tCompound
      */
     protected void writeToPacketNBT(NBTTagCompound tCompound) {
@@ -156,7 +156,7 @@ public class TileBase extends TileEntity implements IRotatable {
 
     /**
      * Before being able to use this, remember to mark the block as redstone emitter by calling BlockContainerBase#emitsRedstone()
-     * 
+     *
      * @param newValue
      */
     public void setOutputtingRedstone(boolean newValue) {
@@ -166,7 +166,7 @@ public class TileBase extends TileEntity implements IRotatable {
 
     /**
      * Before being able to use this, remember to mark the block as redstone emitter by calling BlockContainerBase#emitsRedstone()
-     * 
+     *
      * @param value
      */
     public void setOutputtingRedstone(int value) {
@@ -186,7 +186,7 @@ public class TileBase extends TileEntity implements IRotatable {
 
     /**
      * This method can be overwritten to get alerted when the redstone level has changed.
-     * 
+     *
      * @param newValue
      *            The redstone level it is at now
      */
@@ -205,7 +205,7 @@ public class TileBase extends TileEntity implements IRotatable {
 
     /**
      * Returns the ticker of the Tile, this number wll increase every tick
-     * 
+     *
      * @return the ticker
      */
     public int getTicker() {
@@ -218,7 +218,7 @@ public class TileBase extends TileEntity implements IRotatable {
      */
     protected void onTileLoaded() {
 
-        if (!worldObj.isRemote)
+        if (worldObj != null && !worldObj.isRemote)
             onBlockNeighbourChanged();
     }
 

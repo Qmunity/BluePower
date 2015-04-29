@@ -53,7 +53,7 @@ import com.bluepowermod.api.connect.ConnectionType;
 import com.bluepowermod.api.connect.IConnection;
 import com.bluepowermod.api.connect.IConnectionCache;
 import com.bluepowermod.api.connect.IConnectionListener;
-import com.bluepowermod.api.gate.IIntegratedCircuitPart;
+import com.bluepowermod.api.gate.ic.IIntegratedCircuitPart;
 import com.bluepowermod.api.misc.IFace;
 import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.api.wire.redstone.IBundledConductor.IAdvancedBundledConductor;
@@ -67,7 +67,6 @@ import com.bluepowermod.api.wire.redstone.RedwireType;
 import com.bluepowermod.client.render.IconSupplier;
 import com.bluepowermod.helper.VectorHelper;
 import com.bluepowermod.init.BPCreativeTabs;
-import com.bluepowermod.part.gate.ic.FakeMultipartTileIC;
 import com.bluepowermod.part.wire.PartWireFace;
 import com.bluepowermod.redstone.BundledConnectionCache;
 import com.bluepowermod.redstone.BundledDeviceWrapper;
@@ -320,16 +319,13 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
         @Override
         public void setRedstonePower(ForgeDirection side, byte power) {
 
-            byte pow = hasLoss(side) ? power : (((power & 0xFF) > 0) ? (byte) 255 : (byte) 0);
+            byte pow = isAnalogue(side) ? power : (((power & 0xFF) > 0) ? (byte) 255 : (byte) 0);
             hasUpdated = hasUpdated | (pow != this.power);
             this.power = pow;
         }
 
         @Override
         public void onRedstoneUpdate() {
-
-            if (getParent() instanceof FakeMultipartTileIC)
-                ((FakeMultipartTileIC) getParent()).getIC().loadWorld();
 
             if (hasUpdated) {
                 sendUpdatePacket();
@@ -358,9 +354,6 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
 
         @Override
         public List<Entry<IConnection<IRedstoneDevice>, Boolean>> propagate(ForgeDirection fromSide) {
-
-            if (getParent() instanceof FakeMultipartTileIC)
-                ((FakeMultipartTileIC) getParent()).getIC().loadWorld();
 
             List<Entry<IConnection<IRedstoneDevice>, Boolean>> l = new ArrayList<Entry<IConnection<IRedstoneDevice>, Boolean>>();
 

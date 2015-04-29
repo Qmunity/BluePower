@@ -87,6 +87,11 @@ public abstract class PartWireFreestanding extends BPPart implements IPartThruHo
         return getFrameBoxes(wireSize, frameSeparation, frameThickness, down, up, west, east, north, south, isInWorld);
     }
 
+    protected boolean shouldRenderFullFrame() {
+
+        return false;
+    }
+
     protected List<Vec3dCube> getFrameBoxes(double wireSize, double frameSeparation, double frameThickness, boolean down, boolean up,
             boolean west, boolean east, boolean north, boolean south, boolean isInWorld) {
 
@@ -101,55 +106,55 @@ public abstract class PartWireFreestanding extends BPPart implements IPartThruHo
         List<Vec3dCube> boxes = new ArrayList<Vec3dCube>();
 
         // Top
-        if (west == up || !isInWorld)
+        if (west == up || !isInWorld || shouldRenderFullFrame())
             boxes.add(new Vec3dCube(0.5 - ((wireSize + frameSeparation) / 2) - frameThickness, 0.5 + ((wireSize + frameSeparation) / 2),
                     0.5 - ((wireSize + frameSeparation) / 2), 0.5 - ((wireSize + frameSeparation) / 2), 0.5
-                    + ((wireSize + frameSeparation) / 2) + frameThickness, 0.5 + ((wireSize + frameSeparation) / 2)));
-        if (east == up || !isInWorld)
+                            + ((wireSize + frameSeparation) / 2) + frameThickness, 0.5 + ((wireSize + frameSeparation) / 2)));
+        if (east == up || !isInWorld || shouldRenderFullFrame())
             boxes.add(new Vec3dCube(0.5 + ((wireSize + frameSeparation) / 2), 0.5 + ((wireSize + frameSeparation) / 2),
                     0.5 - ((wireSize + frameSeparation) / 2), 0.5 + ((wireSize + frameSeparation) / 2) + frameThickness, 0.5
-                    + ((wireSize + frameSeparation) / 2) + frameThickness, 0.5 + ((wireSize + frameSeparation) / 2)));
-        if (south == up || !isInWorld)
+                            + ((wireSize + frameSeparation) / 2) + frameThickness, 0.5 + ((wireSize + frameSeparation) / 2)));
+        if (south == up || !isInWorld || shouldRenderFullFrame())
             boxes.add(new Vec3dCube(0.5 + ((wireSize + frameSeparation) / 2), 0.5 + ((wireSize + frameSeparation) / 2),
                     0.5 + ((wireSize + frameSeparation) / 2), 0.5 - ((wireSize + frameSeparation) / 2), 0.5
-                    + ((wireSize + frameSeparation) / 2) + frameThickness, 0.5 + ((wireSize + frameSeparation) / 2)
-                    + frameThickness));
-        if (north == up || !isInWorld)
+                            + ((wireSize + frameSeparation) / 2) + frameThickness, 0.5 + ((wireSize + frameSeparation) / 2)
+                            + frameThickness));
+        if (north == up || !isInWorld || shouldRenderFullFrame())
             boxes.add(new Vec3dCube(0.5 + ((wireSize + frameSeparation) / 2), 0.5 + ((wireSize + frameSeparation) / 2), 0.5
                     - ((wireSize + frameSeparation) / 2) - frameThickness, 0.5 - ((wireSize + frameSeparation) / 2), 0.5
                     + ((wireSize + frameSeparation) / 2) + frameThickness, 0.5 - ((wireSize + frameSeparation) / 2)));
         // Bottom
-        if (west == down || !isInWorld)
+        if (west == down || !isInWorld || shouldRenderFullFrame())
             boxes.add(new Vec3dCube(0.5 - ((wireSize + frameSeparation) / 2) - frameThickness, 0.5 - ((wireSize + frameSeparation) / 2)
                     - frameThickness, 0.5 - ((wireSize + frameSeparation) / 2), 0.5 - ((wireSize + frameSeparation) / 2),
                     0.5 - ((wireSize + frameSeparation) / 2), 0.5 + ((wireSize + frameSeparation) / 2)));
-        if (east == down || !isInWorld)
+        if (east == down || !isInWorld || shouldRenderFullFrame())
             boxes.add(new Vec3dCube(0.5 + ((wireSize + frameSeparation) / 2), 0.5 - ((wireSize + frameSeparation) / 2) - frameThickness,
                     0.5 - ((wireSize + frameSeparation) / 2), 0.5 + ((wireSize + frameSeparation) / 2) + frameThickness,
                     0.5 - ((wireSize + frameSeparation) / 2), 0.5 + ((wireSize + frameSeparation) / 2)));
-        if (south == down || !isInWorld)
+        if (south == down || !isInWorld || shouldRenderFullFrame())
             boxes.add(new Vec3dCube(0.5 + ((wireSize + frameSeparation) / 2), 0.5 - ((wireSize + frameSeparation) / 2) - frameThickness,
                     0.5 + ((wireSize + frameSeparation) / 2), 0.5 - ((wireSize + frameSeparation) / 2),
                     0.5 - ((wireSize + frameSeparation) / 2), 0.5 + ((wireSize + frameSeparation) / 2) + frameThickness));
-        if (north == down || !isInWorld)
+        if (north == down || !isInWorld || shouldRenderFullFrame())
             boxes.add(new Vec3dCube(0.5 + ((wireSize + frameSeparation) / 2), 0.5 - ((wireSize + frameSeparation) / 2) - frameThickness,
                     0.5 - ((wireSize + frameSeparation) / 2) - frameThickness, 0.5 - ((wireSize + frameSeparation) / 2),
                     0.5 - ((wireSize + frameSeparation) / 2), 0.5 - ((wireSize + frameSeparation) / 2)));
 
         // Sides
-        if (north == west || !isInWorld)
+        if (north == west || !isInWorld || shouldRenderFullFrame())
             boxes.add(new Vec3dCube(0.5 - ((wireSize + frameSeparation) / 2) - frameThickness, 0.5 - ((wireSize + frameSeparation) / 2),
                     0.5 - ((wireSize + frameSeparation) / 2) - frameThickness, 0.5 - ((wireSize + frameSeparation) / 2),
                     0.5 + ((wireSize + frameSeparation) / 2), 0.5 - ((wireSize + frameSeparation) / 2)));
-        if (south == west || !isInWorld)
+        if (south == west || !isInWorld || shouldRenderFullFrame())
             boxes.add(new Vec3dCube(0.5 - ((wireSize + frameSeparation) / 2) - frameThickness, 0.5 - ((wireSize + frameSeparation) / 2),
                     0.5 + ((wireSize + frameSeparation) / 2), 0.5 - ((wireSize + frameSeparation) / 2),
                     0.5 + ((wireSize + frameSeparation) / 2), 0.5 + ((wireSize + frameSeparation) / 2) + frameThickness));
-        if (north == east || !isInWorld)
+        if (north == east || !isInWorld || shouldRenderFullFrame())
             boxes.add(new Vec3dCube(0.5 + ((wireSize + frameSeparation) / 2), 0.5 - ((wireSize + frameSeparation) / 2), 0.5
                     - ((wireSize + frameSeparation) / 2) - frameThickness, 0.5 + ((wireSize + frameSeparation) / 2) + frameThickness,
                     0.5 + ((wireSize + frameSeparation) / 2), 0.5 - ((wireSize + frameSeparation) / 2)));
-        if (south == east || !isInWorld)
+        if (south == east || !isInWorld || shouldRenderFullFrame())
             boxes.add(new Vec3dCube(0.5 + ((wireSize + frameSeparation) / 2), 0.5 - ((wireSize + frameSeparation) / 2),
                     0.5 + ((wireSize + frameSeparation) / 2), 0.5 + ((wireSize + frameSeparation) / 2) + frameThickness,
                     0.5 + ((wireSize + frameSeparation) / 2), 0.5 + ((wireSize + frameSeparation) / 2) + frameThickness));
@@ -160,13 +165,13 @@ public abstract class PartWireFreestanding extends BPPart implements IPartThruHo
                 + ((wireSize + frameSeparation) / 2) + frameThickness, 0.5 - ((wireSize + frameSeparation) / 2)));
         boxes.add(new Vec3dCube(0.5 - ((wireSize + frameSeparation) / 2) - frameThickness, 0.5 + ((wireSize + frameSeparation) / 2),
                 0.5 + ((wireSize + frameSeparation) / 2), 0.5 - ((wireSize + frameSeparation) / 2), 0.5
-                + ((wireSize + frameSeparation) / 2) + frameThickness, 0.5 + ((wireSize + frameSeparation) / 2) + frameThickness));
+                        + ((wireSize + frameSeparation) / 2) + frameThickness, 0.5 + ((wireSize + frameSeparation) / 2) + frameThickness));
         boxes.add(new Vec3dCube(0.5 + ((wireSize + frameSeparation) / 2), 0.5 + ((wireSize + frameSeparation) / 2), 0.5
                 - ((wireSize + frameSeparation) / 2) - frameThickness, 0.5 + ((wireSize + frameSeparation) / 2) + frameThickness, 0.5
                 + ((wireSize + frameSeparation) / 2) + frameThickness, 0.5 - ((wireSize + frameSeparation) / 2)));
         boxes.add(new Vec3dCube(0.5 + ((wireSize + frameSeparation) / 2), 0.5 + ((wireSize + frameSeparation) / 2),
                 0.5 + ((wireSize + frameSeparation) / 2), 0.5 + ((wireSize + frameSeparation) / 2) + frameThickness, 0.5
-                + ((wireSize + frameSeparation) / 2) + frameThickness, 0.5 + ((wireSize + frameSeparation) / 2) + frameThickness));
+                        + ((wireSize + frameSeparation) / 2) + frameThickness, 0.5 + ((wireSize + frameSeparation) / 2) + frameThickness));
 
         boxes.add(new Vec3dCube(0.5 - ((wireSize + frameSeparation) / 2) - frameThickness, 0.5 - ((wireSize + frameSeparation) / 2)
                 - frameThickness, 0.5 - ((wireSize + frameSeparation) / 2) - frameThickness, 0.5 - ((wireSize + frameSeparation) / 2),
@@ -240,7 +245,7 @@ public abstract class PartWireFreestanding extends BPPart implements IPartThruHo
 
         int color = getColorMultiplier();
 
-        boolean isInWorld = getParent() != null;
+        boolean isInWorld = getParent() != null && getWorld() != null;
 
         boolean down = shouldRenderConnection(ForgeDirection.DOWN);
         boolean up = shouldRenderConnection(ForgeDirection.UP);

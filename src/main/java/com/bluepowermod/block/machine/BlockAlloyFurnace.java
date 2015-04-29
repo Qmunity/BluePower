@@ -152,6 +152,8 @@ public class BlockAlloyFurnace extends BlockContainerBase {
     public int getLightValue(IBlockAccess world, int x, int y, int z) {
 
         TileAlloyFurnace te = (TileAlloyFurnace) world.getTileEntity(x, y, z);
+        if (te == null)
+            return 0;
         return te.getIsActive() ? 13 : 0;
     }
 

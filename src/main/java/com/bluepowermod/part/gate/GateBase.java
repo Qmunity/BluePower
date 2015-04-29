@@ -49,7 +49,7 @@ import com.bluepowermod.api.gate.IGate;
 import com.bluepowermod.api.gate.IGateComponent;
 import com.bluepowermod.api.gate.IGateConnection;
 import com.bluepowermod.api.gate.IGateLogic;
-import com.bluepowermod.api.gate.IIntegratedCircuitPart;
+import com.bluepowermod.api.gate.ic.IIntegratedCircuitPart;
 import com.bluepowermod.api.misc.IScrewdriver;
 import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.api.wire.redstone.IBundledDevice;
@@ -100,8 +100,7 @@ public abstract class GateBase<C_BOTTOM extends GateConnectionBase, C_TOP extend
 
     public GateBase() {
 
-        if (getLayout() == null)
-            loadLayout();
+        loadLayout();
 
         initConnections();
         initComponents();
@@ -750,7 +749,8 @@ public abstract class GateBase<C_BOTTOM extends GateConnectionBase, C_TOP extend
                 GL11.glTranslated(-0.25, 0.75, 0.25);
             }
             if (type == ItemRenderType.ENTITY && item.getItemFrame() != null) {
-                GL11.glTranslated(19 / 32D, 8 / 16D, 1);
+                GL11.glTranslated(7.5 / 16D, 10 / 16D, 18 / 16D);
+                GL11.glScaled(1.25, 1.25, 1.25);
                 GL11.glRotated(-90, 0, 0, 1);
                 GL11.glRotated(90, 0, 1, 0);
             }

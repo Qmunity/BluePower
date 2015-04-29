@@ -36,7 +36,7 @@ public abstract class BPPartFaceRotate extends BPPartFace {
 
     public int getRotation() {
 
-        return rotation;
+        return rotation % 4;
     }
 
     public void setRotation(int rotation) {

@@ -306,7 +306,10 @@ public abstract class RedstonePropagator implements IPropagator<IRedstoneDevice>
                 return;
 
             for (Entry<IConnection<IRedstoneDevice>, Boolean> e : getPropagation(dev, side)) {
-                e.getKey().getA().setRedstonePower(e.getKey().getSideA(), power);
+                e.getKey()
+                        .getA()
+                        .setRedstonePower(e.getKey().getSideA(),
+                                !(dev instanceof IRedstoneConductor) ? ((byte) Math.max(0, Math.min((power & 0xFF) + 1, 255))) : power);
                 boolean found = false;
                 for (RedstonePropagator p : getScheduledPropagations()) {
                     if (p.getDevice() == e.getKey().getB() && p.getSide() == e.getKey().getSideB()) {
@@ -314,7 +317,7 @@ public abstract class RedstonePropagator implements IPropagator<IRedstoneDevice>
                         break;
                     }
                 }
-                if (!found)
+                if (!found && ((power & 0xFF) > 0 || !(dev instanceof IRedstoneConductor)))
                     propagate(e.getKey().getB(), e.getKey().getSideB(),
                             (byte) ((power & 0xFF) - (dev instanceof IRedstoneConductor ? 1 : 0)));
             }

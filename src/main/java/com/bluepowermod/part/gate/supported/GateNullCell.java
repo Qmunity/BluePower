@@ -50,7 +50,6 @@ import com.bluepowermod.item.ItemPart;
 import com.bluepowermod.part.BPPartFaceRotate;
 import com.bluepowermod.part.PartManager;
 import com.bluepowermod.part.gate.connection.GateConnectionBase;
-import com.bluepowermod.part.gate.ic.FakeMultipartTileIC;
 import com.bluepowermod.part.wire.redstone.PartRedwireFace;
 import com.bluepowermod.part.wire.redstone.PartRedwireFace.PartRedwireFaceUninsulated;
 import com.bluepowermod.part.wire.redstone.WireHelper;
@@ -62,9 +61,9 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class GateNullCell
-extends
-GateSupported<GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase>
-implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor, IRedwire {
+        extends
+        GateSupported<GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase>
+        implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor, IRedwire {
 
     private RedwireType typeA = null, typeB = null;
     private boolean bundledA = false, bundledB = false;
@@ -138,7 +137,7 @@ implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor, IRedwire {
             renderer.renderBox(new Vec3dCube(7 / 16D, 2 / 16D, 0 / 16D, 9 / 16D, 2 / 16D + (height / (nullcells[dir.ordinal()] ? 1 : 2)),
                     1 / 16D), wire);
             renderer.renderBox(new Vec3dCube(7 / 16D, 2 / 16D, 15 / 16D, 9 / 16D, 2 / 16D + (height / (nullcells[dir.getOpposite()
-                                                                                                                 .ordinal()] ? 1 : 2)), 16 / 16D), wire);
+                    .ordinal()] ? 1 : 2)), 16 / 16D), wire);
         }
 
         if (typeB != null) { // Supported
@@ -563,9 +562,6 @@ implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor, IRedwire {
 
     @Override
     public Collection<Entry<IConnection<IRedstoneDevice>, Boolean>> propagate(ForgeDirection fromSide) {
-
-        if (getParent() instanceof FakeMultipartTileIC)
-            ((FakeMultipartTileIC) getParent()).getIC().loadWorld();
 
         List<Entry<IConnection<IRedstoneDevice>, Boolean>> l = new ArrayList<Entry<IConnection<IRedstoneDevice>, Boolean>>();
 

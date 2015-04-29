@@ -1,4 +1,4 @@
-package com.bluepowermod.api.gate;
+package com.bluepowermod.api.gate.ic;
 
 import uk.co.qmunity.lib.part.IPart;
 
