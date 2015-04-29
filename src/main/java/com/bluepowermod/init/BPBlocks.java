@@ -53,6 +53,7 @@ import com.bluepowermod.tile.tier1.TileFilter;
 import com.bluepowermod.tile.tier1.TileItemDetector;
 import com.bluepowermod.tile.tier1.TileRelay;
 import com.bluepowermod.tile.tier1.TileTransposer;
+import com.bluepowermod.tile.tier2.TileAutoProjectTable;
 import com.bluepowermod.tile.tier2.TileCircuitTable;
 import com.bluepowermod.tile.tier2.TileRegulator;
 import com.bluepowermod.tile.tier2.TileRetriever;
@@ -118,6 +119,7 @@ public class BPBlocks {
     public static Block transposer;
     public static Block sorting_machine;
     public static Block project_table;
+    public static Block auto_project_table;
     public static Block circuit_table;
     public static Block circuit_database;
     public static Block ejector;
@@ -202,27 +204,26 @@ public class BPBlocks {
         block_breaker = new BlockContainerFrontRender(Material.rock, TileBlockBreaker.class).setBlockName(Refs.BLOCKBREAKER_NAME);
         igniter = new BlockIgniter();
         buffer = new BlockContainerBase(Material.rock, TileBuffer.class).setGuiId(GuiIDs.BUFFER).setBlockName(Refs.BLOCKBUFFER_NAME);
-        deployer = new BlockContainerFrontRender(Material.rock, TileDeployer.class).setGuiId(GuiIDs.DEPLOYER_ID).setBlockName(
-                Refs.BLOCKDEPLOYER_NAME);
+        deployer = new BlockContainerFrontRender(Material.rock, TileDeployer.class).setGuiId(GuiIDs.DEPLOYER_ID)
+                .setBlockName(Refs.BLOCKDEPLOYER_NAME);
         transposer = new BlockContainerBase(Material.rock, TileTransposer.class).setBlockName(Refs.TRANSPOSER_NAME);
         sorting_machine = new BlockContainerBase(Material.rock, TileSortingMachine.class).setGuiId(GuiIDs.SORTING_MACHINE).setBlockName(
                 Refs.SORTING_MACHINE_NAME);
         project_table = new BlockProjectTable().setGuiId(GuiIDs.PROJECTTABLE_ID);
+        auto_project_table = new BlockProjectTable(TileAutoProjectTable.class).setGuiId(GuiIDs.PROJECTTABLE_ID).setBlockName(
+                Refs.AUTOPROJECTTABLE_NAME);
         circuit_table = new BlockProjectTable(TileCircuitTable.class).setGuiId(GuiIDs.CIRCUITTABLE_ID).setBlockName(Refs.CIRCUITTABLE_NAME);
         circuit_database = new BlockCircuitDatabase(TileCircuitDatabase.class).setGuiId(GuiIDs.CIRCUITDATABASE_MAIN_ID).setBlockName(
                 Refs.CIRCUITDATABASE_NAME);
-        ejector = new BlockContainerTwoSideRender(Material.rock, TileEjector.class).setGuiId(GuiIDs.EJECTOR_ID).setBlockName(
-                Refs.EJECTOR_NAME);
+        ejector = new BlockContainerTwoSideRender(Material.rock, TileEjector.class).setGuiId(GuiIDs.EJECTOR_ID).setBlockName(Refs.EJECTOR_NAME);
         relay = new BlockContainerTwoSideRender(Material.rock, TileRelay.class).setGuiId(GuiIDs.RELAY_ID).setBlockName(Refs.RELAY_NAME);
         filter = new BlockContainerBase(Material.rock, TileFilter.class).setGuiId(GuiIDs.FILTER_ID).setBlockName(Refs.FILTER_NAME);
-        retriever = new BlockContainerBase(Material.rock, TileRetriever.class).setGuiId(GuiIDs.RETRIEVER_ID).setBlockName(
-                Refs.RETRIEVER_NAME);
+        retriever = new BlockContainerBase(Material.rock, TileRetriever.class).setGuiId(GuiIDs.RETRIEVER_ID).setBlockName(Refs.RETRIEVER_NAME);
         regulator = new BlockContainerTwoSideRender(Material.rock, TileRegulator.class).setGuiId(GuiIDs.REGULATOR_ID).emitsRedstone()
                 .setBlockName(Refs.REGULATOR_NAME);
-        item_detector = new BlockContainerTwoSideRender(Material.rock, TileItemDetector.class).setGuiId(GuiIDs.ITEMDETECTOR_ID)
-                .emitsRedstone().setBlockName(Refs.ITEMDETECTOR_NAME);
-        manager = new BlockRejecting(Material.rock, TileManager.class).setGuiId(GuiIDs.MANAGER_ID).emitsRedstone()
-                .setBlockName(Refs.MANAGER_NAME);
+        item_detector = new BlockContainerTwoSideRender(Material.rock, TileItemDetector.class).setGuiId(GuiIDs.ITEMDETECTOR_ID).emitsRedstone()
+                .setBlockName(Refs.ITEMDETECTOR_NAME);
+        manager = new BlockRejecting(Material.rock, TileManager.class).setGuiId(GuiIDs.MANAGER_ID).emitsRedstone().setBlockName(Refs.MANAGER_NAME);
 
         // engine = new BlockEngine();
         // kinetic_generator = new BlockKineticGenerator();
@@ -296,6 +297,7 @@ public class BPBlocks {
         GameRegistry.registerBlock(buffer, Refs.BLOCKBUFFER_NAME);
         GameRegistry.registerBlock(deployer, Refs.BLOCKDEPLOYER_NAME);
         GameRegistry.registerBlock(project_table, Refs.PROJECTTABLE_NAME);
+        GameRegistry.registerBlock(auto_project_table, Refs.AUTOPROJECTTABLE_NAME);
         GameRegistry.registerBlock(circuit_table, Refs.CIRCUITTABLE_NAME);
         GameRegistry.registerBlock(circuit_database, Refs.CIRCUITDATABASE_NAME);
         GameRegistry.registerBlock(transposer, Refs.TRANSPOSER_NAME);
