@@ -66,7 +66,7 @@ public class ConnectionHelper {
                 if (b.isNormalCube() || b == Blocks.redstone_block)
                     break;
                 // Microblock check
-                if (!OcclusionHelper.microblockOcclusionTest(block, MicroblockShape.EDGE, 1, face, side.getOpposite()))
+                if (!OcclusionHelper.microblockOcclusionTest(block, MicroblockShape.EDGE, 2, face, side.getOpposite()))
                     break;
 
                 if (device.canConnect(side, dev, ConnectionType.OPEN_CORNER)
