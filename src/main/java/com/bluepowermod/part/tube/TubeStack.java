@@ -52,7 +52,7 @@ public class TubeStack {
     private TileEntity target; // only should have a value when retrieving items. this is the target the item wants to go to.
     private int targetX, targetY, targetZ;
     private ForgeDirection targetEntryDir = ForgeDirection.UNKNOWN; // Which side should this item make its entry.
-    public static final double ITEM_SPEED = 0.04;
+    public static final double ITEM_SPEED = 0.0625;
     private double speed = ITEM_SPEED;
 
     @SideOnly(Side.CLIENT)
@@ -186,6 +186,7 @@ public class TubeStack {
 
     @SideOnly(Side.CLIENT)
     public void render(float partialTick) {
+
         if (renderMode == RenderMode.AUTO) {
             renderMode = Minecraft.getMinecraft().gameSettings.fancyGraphics ? RenderMode.NORMAL : RenderMode.REDUCED;
         }
