@@ -67,111 +67,182 @@ import cpw.mods.fml.common.registry.GameRegistry;
 @GameRegistry.ObjectHolder(Refs.MODID)
 public class BPBlocks {
 
-    public static final Block basalt = new BlockBasalt(Refs.BASALT_NAME).setResistance(25.0F);
-    public static final Block marble = new BlockStoneOre(Refs.MARBLE_NAME).setResistance(1.0F).setHardness(1.5F);
-    public static final Block basalt_cobble = new BlockStoneOre(Refs.BASALTCOBBLE_NAME);
-    public static final Block basalt_brick = new BlockStoneOre(Refs.BASALTBRICK_NAME);
-    public static final Block marble_brick = new BlockStoneOre(Refs.MARBLEBRICK_NAME);
-    public static final Block cracked_basalt_lava = new BlockCrackedBasalt(Refs.CRACKED_BASALT);
+    public static Block basalt;
+    public static Block marble;
+    public static Block basalt_cobble;
+    public static Block basalt_brick;
+    public static Block marble_brick;
+    public static Block cracked_basalt_lava;
 
-    public static final Block basaltbrick_cracked = new BlockStoneOre(Refs.CRACKEDBASALTBRICK_NAME);
-    public static final Block basalt_brick_small = new BlockStoneOre(Refs.SMALLBASALTBRICK_NAME);
-    public static final Block marble_brick_small = new BlockStoneOre(Refs.SMALLMARBLEBRICK_NAME);
-    public static final Block fancy_basalt = new BlockStoneOre(Refs.CHISELEDBASALTBRICK_NAME);
-    public static final Block fancy_marble = new BlockStoneOre(Refs.CHISELEDMARBLEBRICK_NAME);
-    public static final Block marble_tile = new BlockStoneOreConnected(Refs.MARBLETILE_NAME);
-    public static final Block basalt_tile = new BlockStoneOreConnected(Refs.BASALTTILE_NAME);
-    public static final Block marble_paver = new BlockStoneOre(Refs.MARBLEPAVER_NAME);
-    public static final Block basalt_paver = new BlockStoneOre(Refs.BASALTPAVER_NAME);
-    public static final Block tiles = new BlockStoneOre(Refs.TILES);
+    public static Block basaltbrick_cracked;
+    public static Block basalt_brick_small;
+    public static Block marble_brick_small;
+    public static Block fancy_basalt;
+    public static Block fancy_marble;
+    public static Block marble_tile;
+    public static Block basalt_tile;
+    public static Block marble_paver;
+    public static Block basalt_paver;
+    public static Block tiles;
 
-    public static final Block teslatite_ore = new BlockTeslatiteOre(Refs.TESLATITEORE_NAME);
-    public static final Block ruby_ore = new BlockRubyOre(Refs.RUBYORE_NAME);
-    public static final Block sapphire_ore = new BlockSapphireOre(Refs.SAPPHIREORE_NAME);
-    public static final Block amethyst_ore = new BlockAmethystOre(Refs.AMETHYSTORE_NAME);
+    public static Block teslatite_ore;
+    public static Block ruby_ore;
+    public static Block sapphire_ore;
+    public static Block amethyst_ore;
 
-    public static final Block copper_ore = new BlockStoneOre(Refs.COPPERORE_NAME);
-    public static final Block silver_ore = new BlockStoneOre(Refs.SILVERORE_NAME).setToolLevel(2);
-    public static final Block zinc_ore = new BlockStoneOre(Refs.ZINCORE_NAME);
-    public static final Block tungsten_ore = new BlockStoneOre(Refs.TUNGSTENORE_NAME).setToolLevel(3).setResistance(6.0F)
-            .setHardness(15.0F);
+    public static Block copper_ore;
+    public static Block silver_ore;
+    public static Block zinc_ore;
+    public static Block tungsten_ore;
 
-    public static final Block ruby_block = new BlockStoneOre(Refs.RUBYBLOCK_NAME).setToolLevel(2);
-    public static final Block sapphire_block = new BlockStoneOre(Refs.SAPPHIREBLOCK_NAME).setToolLevel(2);
-    public static final Block amethyst_block = new BlockStoneOre(Refs.AMETHYSTBLOCK_NAME).setToolLevel(2);
-    public static final Block teslatite_block = new BlockStoneOre(Refs.TESLATITEBLOCK_NAME).setToolLevel(2);
-    public static final Block copper_block = new BlockStoneOre(Refs.COPPERBLOCK_NAME);
-    public static final Block silver_block = new BlockStoneOre(Refs.SILVERBLOCK_NAME).setToolLevel(2);
-    public static final Block zinc_block = new BlockStoneOre(Refs.ZINCBLOCK_NAME);
-    public static final Block tungsten_block = new BlockStoneOre(Refs.TUNGSTENBLOCK_NAME).setToolLevel(3).setResistance(25.0F)
-            .setHardness(5.0F);
+    public static Block ruby_block;
+    public static Block sapphire_block;
+    public static Block amethyst_block;
+    public static Block teslatite_block;
+    public static Block copper_block;
+    public static Block silver_block;
+    public static Block zinc_block;
+    public static Block tungsten_block;
 
-    public static final Block sapphire_glass = new BlockStoneOreConnected(Refs.SAPPHIREGLASS_NAME).setTransparent(true).setHardness(10)
-            .setResistance(10000);
-    public static final Block reinforced_sapphire_glass = new BlockStoneOreConnected(Refs.REINFORCEDSAPPHIREGLASS_NAME)
-    .setTransparent(true).setWitherproof(true).setTooltip(MinecraftColor.RED.getChatColor() + "Witherproof").setHardness(30)
-    .setResistance(Integer.MAX_VALUE);
+    public static Block sapphire_glass;
+    public static Block reinforced_sapphire_glass;
 
-    public static final Block flax_crop = new BlockCrop().setBlockName(Refs.FLAXCROP_NAME);
-    public static final Block indigo_flower = new BlockCustomFlower(Refs.INDIGOFLOWER_NAME);
+    public static Block flax_crop;
+    public static Block indigo_flower;
 
-    public static final Block alloyfurnace = new BlockAlloyFurnace();
-    public static final Block block_breaker = new BlockContainerFrontRender(Material.rock, TileBlockBreaker.class)
-    .setBlockName(Refs.BLOCKBREAKER_NAME);
-    public static final Block igniter = new BlockIgniter();
-    public static final Block buffer = new BlockContainerBase(Material.rock, TileBuffer.class).setGuiId(GuiIDs.BUFFER).setBlockName(
-            Refs.BLOCKBUFFER_NAME);
-    public static final Block deployer = new BlockContainerFrontRender(Material.rock, TileDeployer.class).setGuiId(GuiIDs.DEPLOYER_ID)
-            .setBlockName(Refs.BLOCKDEPLOYER_NAME);
-    public static final Block transposer = new BlockContainerBase(Material.rock, TileTransposer.class).setBlockName(Refs.TRANSPOSER_NAME);
-    public static final Block sorting_machine = new BlockContainerBase(Material.rock, TileSortingMachine.class).setGuiId(
-            GuiIDs.SORTING_MACHINE).setBlockName(Refs.SORTING_MACHINE_NAME);
-    public static final Block project_table = new BlockProjectTable().setGuiId(GuiIDs.PROJECTTABLE_ID);
-    public static final Block circuit_table = new BlockProjectTable(TileCircuitTable.class).setGuiId(GuiIDs.CIRCUITTABLE_ID).setBlockName(
-            Refs.CIRCUITTABLE_NAME);
-    public static final Block circuit_database = new BlockCircuitDatabase(TileCircuitDatabase.class).setGuiId(
-            GuiIDs.CIRCUITDATABASE_MAIN_ID).setBlockName(Refs.CIRCUITDATABASE_NAME);
-    public static final Block ejector = new BlockContainerTwoSideRender(Material.rock, TileEjector.class).setGuiId(GuiIDs.EJECTOR_ID)
-            .setBlockName(Refs.EJECTOR_NAME);
-    public static final Block relay = new BlockContainerTwoSideRender(Material.rock, TileRelay.class).setGuiId(GuiIDs.RELAY_ID)
-            .setBlockName(Refs.RELAY_NAME);
-    public static final Block filter = new BlockContainerBase(Material.rock, TileFilter.class).setGuiId(GuiIDs.FILTER_ID).setBlockName(
-            Refs.FILTER_NAME);
-    public static final Block retriever = new BlockContainerBase(Material.rock, TileRetriever.class).setGuiId(GuiIDs.RETRIEVER_ID)
-            .setBlockName(Refs.RETRIEVER_NAME);
-    public static final Block regulator = new BlockContainerTwoSideRender(Material.rock, TileRegulator.class).setGuiId(GuiIDs.REGULATOR_ID)
-            .emitsRedstone().setBlockName(Refs.REGULATOR_NAME);
-    public static final Block item_detector = new BlockContainerTwoSideRender(Material.rock, TileItemDetector.class)
-    .setGuiId(GuiIDs.ITEMDETECTOR_ID).emitsRedstone().setBlockName(Refs.ITEMDETECTOR_NAME);
-    public static final Block manager = new BlockRejecting(Material.rock, TileManager.class).setGuiId(GuiIDs.MANAGER_ID).emitsRedstone()
-            .setBlockName(Refs.MANAGER_NAME);
+    public static Block alloyfurnace;
+    public static Block block_breaker;
+    public static Block igniter;
+    public static Block buffer;
+    public static Block deployer;
+    public static Block transposer;
+    public static Block sorting_machine;
+    public static Block project_table;
+    public static Block circuit_table;
+    public static Block circuit_database;
+    public static Block ejector;
+    public static Block relay;
+    public static Block filter;
+    public static Block retriever;
+    public static Block regulator;
+    public static Block item_detector;
+    public static Block manager;
 
-    // public static final Block engine = new BlockEngine();
-    // public static final Block kinetic_generator = new BlockKineticGenerator();
-    // public static final Block windmill = new BlockWindmill();
+    // public static Block engine;
+    // public static Block kinetic_generator;
+    // public static Block windmill;
 
-    // public static final Block cpu = new BlockCPU();
-    // public static final Block monitor = new BlockMonitor();
-    // public static final Block disk_drive = new BlockDiskDrive();
-    // public static final Block io_expander = new BlockIOExpander();
+    // public static Block cpu;
+    // public static Block monitor;
+    // public static Block disk_drive;
+    // public static Block io_expander;
 
-    public static Block[] blockLamp = new Block[MinecraftColor.VALID_COLORS.length];
-    public static Block blockLampRGB = new BlockLampRGB(false);
+    public static Block[] blockLamp;
+    public static Block blockLampRGB;
 
-    public static Block[] blockLampInverted = new Block[MinecraftColor.VALID_COLORS.length];
-    public static Block blockLampRGBInverted = new BlockLampRGB(true);
+    public static Block[] blockLampInverted;
+    public static Block blockLampRGBInverted;
 
     public static Block sortron;
 
     public static void init() {
 
+        instantiateBlocks();
+        registerBlocks();
+        initModDependantBlocks();
+    }
+
+    private static void instantiateBlocks() {
+
+        basalt = new BlockBasalt(Refs.BASALT_NAME).setResistance(25.0F);
+        marble = new BlockStoneOre(Refs.MARBLE_NAME).setResistance(1.0F).setHardness(1.5F);
+        basalt_cobble = new BlockStoneOre(Refs.BASALTCOBBLE_NAME);
+        basalt_brick = new BlockStoneOre(Refs.BASALTBRICK_NAME);
+        marble_brick = new BlockStoneOre(Refs.MARBLEBRICK_NAME);
+        cracked_basalt_lava = new BlockCrackedBasalt(Refs.CRACKED_BASALT);
+
+        basaltbrick_cracked = new BlockStoneOre(Refs.CRACKEDBASALTBRICK_NAME);
+        basalt_brick_small = new BlockStoneOre(Refs.SMALLBASALTBRICK_NAME);
+        marble_brick_small = new BlockStoneOre(Refs.SMALLMARBLEBRICK_NAME);
+        fancy_basalt = new BlockStoneOre(Refs.CHISELEDBASALTBRICK_NAME);
+        fancy_marble = new BlockStoneOre(Refs.CHISELEDMARBLEBRICK_NAME);
+        marble_tile = new BlockStoneOreConnected(Refs.MARBLETILE_NAME);
+        basalt_tile = new BlockStoneOreConnected(Refs.BASALTTILE_NAME);
+        marble_paver = new BlockStoneOre(Refs.MARBLEPAVER_NAME);
+        basalt_paver = new BlockStoneOre(Refs.BASALTPAVER_NAME);
+        tiles = new BlockStoneOre(Refs.TILES);
+
+        teslatite_ore = new BlockTeslatiteOre(Refs.TESLATITEORE_NAME);
+        ruby_ore = new BlockRubyOre(Refs.RUBYORE_NAME);
+        sapphire_ore = new BlockSapphireOre(Refs.SAPPHIREORE_NAME);
+        amethyst_ore = new BlockAmethystOre(Refs.AMETHYSTORE_NAME);
+
+        copper_ore = new BlockStoneOre(Refs.COPPERORE_NAME);
+        silver_ore = new BlockStoneOre(Refs.SILVERORE_NAME).setToolLevel(2);
+        zinc_ore = new BlockStoneOre(Refs.ZINCORE_NAME);
+        tungsten_ore = new BlockStoneOre(Refs.TUNGSTENORE_NAME).setToolLevel(3).setResistance(6.0F).setHardness(15.0F);
+
+        ruby_block = new BlockStoneOre(Refs.RUBYBLOCK_NAME).setToolLevel(2);
+        sapphire_block = new BlockStoneOre(Refs.SAPPHIREBLOCK_NAME).setToolLevel(2);
+        amethyst_block = new BlockStoneOre(Refs.AMETHYSTBLOCK_NAME).setToolLevel(2);
+        teslatite_block = new BlockStoneOre(Refs.TESLATITEBLOCK_NAME).setToolLevel(2);
+        copper_block = new BlockStoneOre(Refs.COPPERBLOCK_NAME);
+        silver_block = new BlockStoneOre(Refs.SILVERBLOCK_NAME).setToolLevel(2);
+        zinc_block = new BlockStoneOre(Refs.ZINCBLOCK_NAME);
+        tungsten_block = new BlockStoneOre(Refs.TUNGSTENBLOCK_NAME).setToolLevel(3).setResistance(25.0F).setHardness(5.0F);
+
+        sapphire_glass = new BlockStoneOreConnected(Refs.SAPPHIREGLASS_NAME).setTransparent(true).setHardness(10).setResistance(10000);
+        reinforced_sapphire_glass = new BlockStoneOreConnected(Refs.REINFORCEDSAPPHIREGLASS_NAME).setTransparent(true).setWitherproof(true)
+                .setTooltip(MinecraftColor.RED.getChatColor() + "Witherproof").setHardness(30).setResistance(Integer.MAX_VALUE);
+
+        flax_crop = new BlockCrop().setBlockName(Refs.FLAXCROP_NAME);
+        indigo_flower = new BlockCustomFlower(Refs.INDIGOFLOWER_NAME);
+
+        alloyfurnace = new BlockAlloyFurnace();
+        block_breaker = new BlockContainerFrontRender(Material.rock, TileBlockBreaker.class).setBlockName(Refs.BLOCKBREAKER_NAME);
+        igniter = new BlockIgniter();
+        buffer = new BlockContainerBase(Material.rock, TileBuffer.class).setGuiId(GuiIDs.BUFFER).setBlockName(Refs.BLOCKBUFFER_NAME);
+        deployer = new BlockContainerFrontRender(Material.rock, TileDeployer.class).setGuiId(GuiIDs.DEPLOYER_ID).setBlockName(
+                Refs.BLOCKDEPLOYER_NAME);
+        transposer = new BlockContainerBase(Material.rock, TileTransposer.class).setBlockName(Refs.TRANSPOSER_NAME);
+        sorting_machine = new BlockContainerBase(Material.rock, TileSortingMachine.class).setGuiId(GuiIDs.SORTING_MACHINE).setBlockName(
+                Refs.SORTING_MACHINE_NAME);
+        project_table = new BlockProjectTable().setGuiId(GuiIDs.PROJECTTABLE_ID);
+        circuit_table = new BlockProjectTable(TileCircuitTable.class).setGuiId(GuiIDs.CIRCUITTABLE_ID).setBlockName(Refs.CIRCUITTABLE_NAME);
+        circuit_database = new BlockCircuitDatabase(TileCircuitDatabase.class).setGuiId(GuiIDs.CIRCUITDATABASE_MAIN_ID).setBlockName(
+                Refs.CIRCUITDATABASE_NAME);
+        ejector = new BlockContainerTwoSideRender(Material.rock, TileEjector.class).setGuiId(GuiIDs.EJECTOR_ID).setBlockName(
+                Refs.EJECTOR_NAME);
+        relay = new BlockContainerTwoSideRender(Material.rock, TileRelay.class).setGuiId(GuiIDs.RELAY_ID).setBlockName(Refs.RELAY_NAME);
+        filter = new BlockContainerBase(Material.rock, TileFilter.class).setGuiId(GuiIDs.FILTER_ID).setBlockName(Refs.FILTER_NAME);
+        retriever = new BlockContainerBase(Material.rock, TileRetriever.class).setGuiId(GuiIDs.RETRIEVER_ID).setBlockName(
+                Refs.RETRIEVER_NAME);
+        regulator = new BlockContainerTwoSideRender(Material.rock, TileRegulator.class).setGuiId(GuiIDs.REGULATOR_ID).emitsRedstone()
+                .setBlockName(Refs.REGULATOR_NAME);
+        item_detector = new BlockContainerTwoSideRender(Material.rock, TileItemDetector.class).setGuiId(GuiIDs.ITEMDETECTOR_ID)
+                .emitsRedstone().setBlockName(Refs.ITEMDETECTOR_NAME);
+        manager = new BlockRejecting(Material.rock, TileManager.class).setGuiId(GuiIDs.MANAGER_ID).emitsRedstone()
+                .setBlockName(Refs.MANAGER_NAME);
+
+        // engine = new BlockEngine();
+        // kinetic_generator = new BlockKineticGenerator();
+        // windmill = new BlockWindmill();
+
+        // cpu = new BlockCPU();
+        // monitor = new BlockMonitor();
+        // disk_drive = new BlockDiskDrive();
+        // io_expander = new BlockIOExpander();
+
+        blockLamp = new Block[MinecraftColor.VALID_COLORS.length];
+        blockLampRGB = new BlockLampRGB(false);
+
+        blockLampInverted = new Block[MinecraftColor.VALID_COLORS.length];
+        blockLampRGBInverted = new BlockLampRGB(true);
+
         for (int i = 0; i < MinecraftColor.VALID_COLORS.length; i++)
             blockLamp[i] = new BlockLamp(false, MinecraftColor.VALID_COLORS[i]);
         for (int i = 0; i < MinecraftColor.VALID_COLORS.length; i++)
             blockLampInverted[i] = new BlockLamp(true, MinecraftColor.VALID_COLORS[i]);
-
-        registerBlocks();
-        initModDependantBlocks();
     }
 
     private static void registerBlocks() {
@@ -239,7 +310,7 @@ public class BPBlocks {
         /*
          * GameRegistry.registerBlock(cpu, Refs.BLOCKCPU_NAME); GameRegistry.registerBlock(monitor, Refs.BLOCKMONITOR_NAME);
          * GameRegistry.registerBlock(disk_drive, Refs.BLOCKDISKDRIVE_NAME); GameRegistry.registerBlock(io_expander, Refs.BLOCKIOEXPANDER_NAME);
-         *
+         * 
          * GameRegistry.registerBlock(engine, Refs.ENGINE_NAME); GameRegistry.registerBlock(kinetic_generator, Refs.KINETICGENERATOR_NAME);
          * GameRegistry.registerBlock(windmill, Refs.WINDMILL_NAME);
          */
