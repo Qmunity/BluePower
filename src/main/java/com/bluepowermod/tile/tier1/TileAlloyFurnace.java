@@ -47,6 +47,8 @@ public class TileAlloyFurnace extends TileBase implements ISidedInventory {
     private ItemStack[] inventory;
     private ItemStack fuelInventory;
     private ItemStack outputInventory;
+    private IAlloyFurnaceRecipe currentRecipe;
+    private boolean updatingRecipe = true;
 
     public TileAlloyFurnace() {
 
@@ -136,8 +138,11 @@ public class TileAlloyFurnace extends TileBase implements ISidedInventory {
             if (isActive) {
                 currentBurnTime--;
             }
-            IAlloyFurnaceRecipe recipe = AlloyFurnaceRegistry.getInstance().getMatchingRecipe(inventory, outputInventory);
-            if (recipe != null) {
+            if (updatingRecipe) {
+                currentRecipe = AlloyFurnaceRegistry.getInstance().getMatchingRecipe(inventory, outputInventory);
+                updatingRecipe = false;
+            }
+            if (currentRecipe != null) {
                 if (currentBurnTime <= 0) {
                     if (TileEntityFurnace.isItemFuel(fuelInventory)) {
                         // Put new item in
@@ -156,11 +161,12 @@ public class TileAlloyFurnace extends TileBase implements ISidedInventory {
                 if (++currentProcessTime >= 200) {
                     currentProcessTime = 0;
                     if (outputInventory != null) {
-                        outputInventory.stackSize += recipe.getCraftingResult(inventory).stackSize;
+                        outputInventory.stackSize += currentRecipe.getCraftingResult(inventory).stackSize;
                     } else {
-                        outputInventory = recipe.getCraftingResult(inventory).copy();
+                        outputInventory = currentRecipe.getCraftingResult(inventory).copy();
                     }
-                    recipe.useItems(inventory);
+                    currentRecipe.useItems(inventory);
+                    updatingRecipe = true;
                 }
             } else {
                 currentProcessTime = 0;
@@ -224,7 +230,7 @@ public class TileAlloyFurnace extends TileBase implements ISidedInventory {
 
     @Override
     public ItemStack getStackInSlot(int var1) {
-
+        updatingRecipe = true;
         if (var1 == 0) {
             return fuelInventory;
         } else if (var1 == 1) {
@@ -280,6 +286,7 @@ public class TileAlloyFurnace extends TileBase implements ISidedInventory {
         } else {
             inventory[var1 - 2] = itemStack;
         }
+        updatingRecipe = true;
     }
 
     @Override
