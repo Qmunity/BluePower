@@ -21,8 +21,10 @@ import com.bluepowermod.client.gui.GUIHandler;
 import com.bluepowermod.compat.CompatibilityUtils;
 import com.bluepowermod.convert.WorldConversionEventHandler;
 import com.bluepowermod.event.BPEventHandler;
+import com.bluepowermod.fluid.CastRegistry;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.init.BPEnchantments;
+import com.bluepowermod.init.BPFluids;
 import com.bluepowermod.init.BPItems;
 import com.bluepowermod.init.Config;
 import com.bluepowermod.init.OreDictionarySetup;
@@ -101,6 +103,7 @@ public class BluePower {
 
         BPBlocks.init();
         BPItems.init();
+        BPFluids.init();
         PartManager.registerItems();
 
         TileEntities.init();
@@ -113,6 +116,8 @@ public class BluePower {
         CompatibilityUtils.init(event);
 
         Achievements.init();
+
+        CastRegistry.init();
     }
 
     @EventHandler

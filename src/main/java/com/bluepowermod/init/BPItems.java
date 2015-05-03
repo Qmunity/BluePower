@@ -28,6 +28,7 @@ import com.bluepowermod.BluePower;
 import com.bluepowermod.item.ItemAthame;
 import com.bluepowermod.item.ItemBase;
 import com.bluepowermod.item.ItemCanvasBag;
+import com.bluepowermod.item.ItemCast;
 import com.bluepowermod.item.ItemCrafting;
 import com.bluepowermod.item.ItemCropSeed;
 import com.bluepowermod.item.ItemGemAxe;
@@ -137,6 +138,8 @@ public class BPItems {
     public static Item amethyst_hoe;
     public static Item amethyst_sickle;
 
+    public static Item cast;
+
     public static void init() {
 
         if (!Loader.isModLoaded("ForgeMicroblock")) {// FMP already has an iron and diamond saw
@@ -234,6 +237,8 @@ public class BPItems {
         amethyst_shovel = new ItemGemSpade(BluePower.gemMaterial, Refs.AMETHYSTSPADE_NAME, BPItems.amethyst_gem);
         amethyst_hoe = new ItemGemHoe(BluePower.gemMaterial, Refs.AMETHYSTHOE_NAME, BPItems.amethyst_gem);
         amethyst_sickle = new ItemSickle(BluePower.gemMaterial, Refs.AMETHYSTSICKLE_NAME, BPItems.amethyst_gem);
+
+        cast = new ItemCast();
     }
 
     public static void registerItems() {
@@ -332,6 +337,8 @@ public class BPItems {
 
         GameRegistry.registerItem(copper_wire, Refs.COPPERWIRE_NAME);
         GameRegistry.registerItem(iron_wire, Refs.IRONWIRE_NAME);
+
+        GameRegistry.registerItem(cast, Refs.CAST_NAME);
 
         MinecraftForge.addGrassSeed(new ItemStack(flax_seeds), 5);
     }

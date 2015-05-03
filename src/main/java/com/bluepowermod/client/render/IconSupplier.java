@@ -86,6 +86,10 @@ public class IconSupplier {
     public static IIcon quartzResonator = null;
     public static IIcon gateSolarPanel = null;
 
+    public static IIcon castingTableBottom = null;
+    public static IIcon castingTableSide = null;
+    public static IIcon castingTableTop = null;
+
     @SubscribeEvent
     public void onTextureStitch(TextureStitchEvent.Pre event) {
 
@@ -155,6 +159,10 @@ public class IconSupplier {
             taintedSiliconChipOn = reg.registerIcon(Refs.MODID + ":gates/components/tainted_silicon_chip_on");
             quartzResonator = reg.registerIcon(Refs.MODID + ":gates/components/resonator");
             gateSolarPanel = reg.registerIcon(Refs.MODID + ":gates/components/solarpanel");
+
+            castingTableBottom = reg.registerIcon(Refs.MODID + ":casting_table_bottom");
+            castingTableSide = reg.registerIcon(Refs.MODID + ":casting_table_side");
+            castingTableTop = reg.registerIcon(Refs.MODID + ":casting_table_top");
 
             for (PartInfo i : PartManager.getRegisteredParts())
                 i.getExample().registerIcons(reg);

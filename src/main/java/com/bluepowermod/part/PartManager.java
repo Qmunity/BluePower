@@ -18,6 +18,7 @@ import uk.co.qmunity.lib.part.PartRegistry;
 import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.api.wire.redstone.RedwireType;
 import com.bluepowermod.item.ItemPart;
+import com.bluepowermod.part.fluid.PartCastingTable;
 import com.bluepowermod.part.gate.analogue.GateComparator;
 import com.bluepowermod.part.gate.analogue.GateInverter;
 import com.bluepowermod.part.gate.analogue.GateLightCell;
@@ -200,6 +201,9 @@ public class PartManager {
             for (MinecraftColor color : MinecraftColor.VALID_COLORS)
                 registerPart(PartRedwireFreestandingBundled.class, type, color);
         }
+
+        // Fluid crafting
+        registerPart(PartCastingTable.class);
     }
 
     public static void registerItems() {

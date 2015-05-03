@@ -11,6 +11,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import uk.co.qmunity.lib.part.IPart;
 
+import com.bluepowermod.api.fluid.ICastRegistry;
 import com.bluepowermod.api.recipe.IAlloyFurnaceRegistry;
 import com.bluepowermod.api.wire.redstone.IRedstoneApi;
 
@@ -58,6 +59,8 @@ public class BPApi {
         public void loadSilkySettings(IPart part, ItemStack stack);
 
         public IRedstoneApi getRedstoneApi();
+
+        public ICastRegistry getCastRegistry();
     }
 
     /**
