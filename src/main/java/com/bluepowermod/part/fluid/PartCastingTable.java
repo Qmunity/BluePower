@@ -62,7 +62,7 @@ public class PartCastingTable extends BPPart {
         renderer.renderBox(new Vec3dCube(2 / 16D, 0.5 - 1 / 16D, 2 / 16D, 1 - 2 / 16D, 0.5, 1 - 2 / 16D), IconSupplier.castingTableBottom, null,
                 IconSupplier.castingTableSide, IconSupplier.castingTableSide, IconSupplier.castingTableSide, IconSupplier.castingTableSide);
         renderer.setRenderFromInside(false);
-        return false;
+        return true;
     }
 
     @Override
