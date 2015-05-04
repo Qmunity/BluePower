@@ -19,6 +19,7 @@ import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.api.wire.redstone.RedwireType;
 import com.bluepowermod.item.ItemPart;
 import com.bluepowermod.part.fluid.PartCastingTable;
+import com.bluepowermod.part.fluid.PartFaucet;
 import com.bluepowermod.part.gate.analogue.GateComparator;
 import com.bluepowermod.part.gate.analogue.GateInverter;
 import com.bluepowermod.part.gate.analogue.GateLightCell;
@@ -204,6 +205,7 @@ public class PartManager {
 
         // Fluid crafting
         registerPart(PartCastingTable.class);
+        registerPart(PartFaucet.class);
     }
 
     public static void registerItems() {
