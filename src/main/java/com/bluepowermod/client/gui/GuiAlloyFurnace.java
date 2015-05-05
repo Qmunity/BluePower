@@ -22,7 +22,7 @@ import net.minecraft.util.ResourceLocation;
 
 import com.bluepowermod.container.ContainerAlloyFurnace;
 import com.bluepowermod.reference.Refs;
-import com.bluepowermod.tile.tier1.TileAlloyFurnace;
+import com.bluepowermod.tile.tier1.TileAlloyCrucible;
 
 /**
  * @author MineMaarten
@@ -30,9 +30,9 @@ import com.bluepowermod.tile.tier1.TileAlloyFurnace;
 public class GuiAlloyFurnace extends GuiContainerBaseBP {
 
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/alloy_furnace.png");
-    private final TileAlloyFurnace furnace;
+    private final TileAlloyCrucible furnace;
 
-    public GuiAlloyFurnace(InventoryPlayer invPlayer, TileAlloyFurnace furnace) {
+    public GuiAlloyFurnace(InventoryPlayer invPlayer, TileAlloyCrucible furnace) {
 
         super(furnace, new ContainerAlloyFurnace(invPlayer, furnace), resLoc);
         this.furnace = furnace;

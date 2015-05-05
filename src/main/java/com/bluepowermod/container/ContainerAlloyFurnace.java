@@ -27,7 +27,7 @@ import net.minecraft.tileentity.TileEntityFurnace;
 
 import com.bluepowermod.container.slot.SlotMachineInput;
 import com.bluepowermod.container.slot.SlotMachineOutput;
-import com.bluepowermod.tile.tier1.TileAlloyFurnace;
+import com.bluepowermod.tile.tier1.TileAlloyCrucible;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -37,13 +37,13 @@ import cpw.mods.fml.relauncher.SideOnly;
  */
 public class ContainerAlloyFurnace extends Container {
     
-    private final TileAlloyFurnace tileFurnace;
+    private final TileAlloyCrucible tileFurnace;
     
     private int                    currentBurnTime;
     private int                    maxBurnTime;
     private int                    currentProcessTime;
     
-    public ContainerAlloyFurnace(InventoryPlayer invPlayer, TileAlloyFurnace furnace) {
+    public ContainerAlloyFurnace(InventoryPlayer invPlayer, TileAlloyCrucible furnace) {
     
         tileFurnace = furnace;
         

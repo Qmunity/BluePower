@@ -63,7 +63,7 @@ public class BPCreativeTabs {
             @SideOnly(Side.CLIENT)
             public Item getTabIconItem() {
 
-                Block iconBlock = BPBlocks.alloyfurnace;
+                Block iconBlock = BPBlocks.alloycrucible;
                 if (iconBlock != null) {
                     return Item.getItemFromBlock(iconBlock);
                 } else {

@@ -29,8 +29,11 @@ public class Renderers {
     public static void init() {
 
         RenderingRegistry.registerBlockHandler(new RendererBlockBase());
-
         RenderingRegistry.registerBlockHandler(new RenderLamp());
+
+        RenderAlloyCrucible rac = new RenderAlloyCrucible();
+        RenderingRegistry.registerBlockHandler(rac);
+        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BPBlocks.alloycrucible), rac);
 
         // ClientRegistry.bindTileEntitySpecialRenderer(TileEngine.class, new RenderEngine());
         // MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BPBlocks.engine), new RenderItemEngine());

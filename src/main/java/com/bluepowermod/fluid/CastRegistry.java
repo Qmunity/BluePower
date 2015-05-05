@@ -184,9 +184,9 @@ public class CastRegistry implements ICastRegistry {
     public ICast getCastFromStack(ItemStack stack) {
 
         if (stack == null)
-            throw new NullPointerException("Attempted to get a cast from a null stack");
+            return null;
         if (stack.getTagCompound() == null)
-            throw new NullPointerException("Attempted to get a cast from a stack with a null NBT tag");
+            return null;
 
         return getCast(stack.getTagCompound().getString("type"));
     }

@@ -22,7 +22,7 @@ import net.minecraft.block.material.Material;
 
 import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.block.BlockContainerBase;
-import com.bluepowermod.block.machine.BlockAlloyFurnace;
+import com.bluepowermod.block.machine.BlockAlloyCrucible;
 import com.bluepowermod.block.machine.BlockCircuitDatabase;
 import com.bluepowermod.block.machine.BlockContainerFrontRender;
 import com.bluepowermod.block.machine.BlockContainerTwoSideRender;
@@ -111,7 +111,7 @@ public class BPBlocks {
     public static Block flax_crop;
     public static Block indigo_flower;
 
-    public static Block alloyfurnace;
+    public static Block alloycrucible;
     public static Block block_breaker;
     public static Block igniter;
     public static Block buffer;
@@ -200,7 +200,7 @@ public class BPBlocks {
         flax_crop = new BlockCrop().setBlockName(Refs.FLAXCROP_NAME);
         indigo_flower = new BlockCustomFlower(Refs.INDIGOFLOWER_NAME);
 
-        alloyfurnace = new BlockAlloyFurnace();
+        alloycrucible = new BlockAlloyCrucible();
         block_breaker = new BlockContainerFrontRender(Material.rock, TileBlockBreaker.class).setBlockName(Refs.BLOCKBREAKER_NAME);
         igniter = new BlockIgniter();
         buffer = new BlockContainerBase(Material.rock, TileBuffer.class).setGuiId(GuiIDs.BUFFER).setBlockName(Refs.BLOCKBUFFER_NAME);
@@ -290,7 +290,7 @@ public class BPBlocks {
         GameRegistry.registerBlock(flax_crop, Refs.FLAXCROP_NAME);
         GameRegistry.registerBlock(indigo_flower, Refs.INDIGOFLOWER_NAME);
 
-        GameRegistry.registerBlock(alloyfurnace, Refs.ALLOYFURNACE_NAME);
+        GameRegistry.registerBlock(alloycrucible, Refs.ALLOYCRUCIBLE_NAME);
         GameRegistry.registerBlock(sorting_machine, Refs.SORTING_MACHINE_NAME);
         GameRegistry.registerBlock(block_breaker, Refs.BLOCKBREAKER_NAME);
         GameRegistry.registerBlock(igniter, Refs.BLOCKIGNITER_NAME);

@@ -38,7 +38,7 @@ import cpw.mods.fml.relauncher.SideOnly;
  * @author MineMaarten, Koen Beckers (K4Unl), amadornes
  */
 
-public class TileAlloyFurnace extends TileBase implements ISidedInventory {
+public class TileAlloyCrucible extends TileBase implements ISidedInventory {
 
     private boolean isActive;
     public int currentBurnTime;
@@ -50,7 +50,7 @@ public class TileAlloyFurnace extends TileBase implements ISidedInventory {
     private IAlloyFurnaceRecipe currentRecipe;
     private boolean updatingRecipe = true;
 
-    public TileAlloyFurnace() {
+    public TileAlloyCrucible() {
 
         inventory = new ItemStack[9];
     }
@@ -292,7 +292,7 @@ public class TileAlloyFurnace extends TileBase implements ISidedInventory {
     @Override
     public String getInventoryName() {
 
-        return BPBlocks.alloyfurnace.getUnlocalizedName();
+        return BPBlocks.alloycrucible.getUnlocalizedName();
     }
 
     @Override

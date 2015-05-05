@@ -51,7 +51,7 @@ import com.bluepowermod.item.ItemFloppyDisk;
 import com.bluepowermod.item.ItemScrewdriver;
 import com.bluepowermod.item.ItemSeedBag;
 import com.bluepowermod.reference.GuiIDs;
-import com.bluepowermod.tile.tier1.TileAlloyFurnace;
+import com.bluepowermod.tile.tier1.TileAlloyCrucible;
 import com.bluepowermod.tile.tier1.TileBuffer;
 import com.bluepowermod.tile.tier1.TileDeployer;
 import com.bluepowermod.tile.tier1.TileEjector;
@@ -85,8 +85,8 @@ public class GUIHandler implements IGuiHandler {
         TileEntity ent = world.getTileEntity(x, y, z);
         // ID is the GUI ID
         switch (GuiIDs.values()[ID]) {
-        case ALLOY_FURNACE:
-            return new ContainerAlloyFurnace(player.inventory, (TileAlloyFurnace) ent);
+        case ALLOY_CRUCIBLE:
+            return new ContainerAlloyFurnace(player.inventory, (TileAlloyCrucible) ent);
         case BUFFER:
             return new ContainerBuffer(player.inventory, (TileBuffer) ent);
         case SORTING_MACHINE:
@@ -164,8 +164,8 @@ public class GUIHandler implements IGuiHandler {
         TileEntity ent = world.getTileEntity(x, y, z);
         // ID is the GUI ID
         switch (GuiIDs.values()[ID]) {
-        case ALLOY_FURNACE:
-            return new GuiAlloyFurnace(player.inventory, (TileAlloyFurnace) ent);
+        case ALLOY_CRUCIBLE:
+            return new GuiAlloyFurnace(player.inventory, (TileAlloyCrucible) ent);
         case BUFFER:
             return new GuiBuffer(player.inventory, (TileBuffer) ent);
         case SORTING_MACHINE:

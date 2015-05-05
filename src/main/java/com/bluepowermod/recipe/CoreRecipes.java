@@ -54,7 +54,7 @@ public class CoreRecipes {
         GameRegistry.addRecipe(new ItemStack(BPItems.zinc_dust, 1), "###", "###", "###", '#', BPItems.zinc_tiny_dust);
 
         // Blocks
-        GameRegistry.addRecipe(new ItemStack(BPBlocks.alloyfurnace, 1), "###", "# #", "###", '#', Blocks.brick_block);
+        GameRegistry.addRecipe(new ItemStack(BPBlocks.alloycrucible, 1), "###", "# #", "###", '#', Blocks.brick_block);
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPBlocks.project_table), "SSS", "WCW", "WIW", 'S', "stone", 'W', "plankWood", 'C',
                 Blocks.crafting_table, 'I', Blocks.chest));
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPBlocks.auto_project_table), "PCP", "CTC", "PCP", 'P', Blocks.piston, 'C',
