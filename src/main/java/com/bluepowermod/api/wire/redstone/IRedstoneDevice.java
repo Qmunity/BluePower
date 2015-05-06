@@ -36,7 +36,7 @@ public interface IRedstoneDevice extends IWorldLocation {
     public void onRedstoneUpdate();
 
     /**
-     * Returns whether or not this is a normal face (if face devices should be able to connect to it)
+     * Returns whether or not this is a full face (if face devices should be able to connect to it)
      */
     public boolean isNormalFace(ForgeDirection side);
 
