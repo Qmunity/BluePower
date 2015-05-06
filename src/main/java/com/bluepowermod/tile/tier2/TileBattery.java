@@ -3,8 +3,8 @@ package com.bluepowermod.tile.tier2;
 import com.bluepowermod.api.BPApi;
 import com.bluepowermod.api.bluepower.BluePowerTier;
 import com.bluepowermod.api.bluepower.IBluePowered;
-import com.bluepowermod.api.bluepower.IRechargeable;
 import com.bluepowermod.api.bluepower.IPowerBase;
+import com.bluepowermod.api.bluepower.IRechargeable;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.tile.TileBase;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -24,6 +24,7 @@ public class TileBattery extends TileBase implements IBluePowered, IInventory {
     private ItemStack[] inventory = new ItemStack[2];
 
     private static int powerTransfer = 1; //The ammount of Amps being transfered into or out of a battery, every tick
+    private int textureIndex;
 
     private IPowerBase handler;
 
@@ -64,7 +65,8 @@ public class TileBattery extends TileBase implements IBluePowered, IInventory {
         return true;
     }
 
-    @Override public float getMaxStorage() {
+    @Override
+    public float getMaxStorage() {
 
         return 3000;
     }
@@ -102,18 +104,45 @@ public class TileBattery extends TileBase implements IBluePowered, IInventory {
                     }
                 }
             }
+            recalculateTextureIndex();
         }
 
     }
 
+    private void recalculateTextureIndex() {
+
+        int newIndex = (int)Math.floor((getHandler().getAmpStored() / getHandler().getMaxAmp()) * 6.0);
+        if(newIndex != textureIndex){
+            textureIndex = newIndex;
+            worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+        }
+    }
+
+    protected void readFromPacketNBT(NBTTagCompound tCompound) {
+
+        super.readFromPacketNBT(tCompound);
+        textureIndex = tCompound.getInteger("textureIndex");
+    }
+
+    @Override
+    protected void writeToPacketNBT(NBTTagCompound tCompound) {
+
+        super.writeToPacketNBT(tCompound);
+        tCompound.setInteger("textureIndex", textureIndex);
+    }
+
     @Override
     public void readFromNBT(NBTTagCompound tagCompound){
+        super.readFromNBT(tagCompound);
         getHandler().readFromNBT(tagCompound);
+        textureIndex = tagCompound.getInteger("textureIndex");
     }
 
     @Override
     public void writeToNBT(NBTTagCompound tagCompound){
+        super.writeToNBT(tagCompound);
         getHandler().writeToNBT(tagCompound);
+        tagCompound.setInteger("textureIndex", textureIndex);
     }
 
     @Override
@@ -228,5 +257,9 @@ public class TileBattery extends TileBase implements IBluePowered, IInventory {
         if(FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
             getHandler().invalidate();
         }
+    }
+
+    public int getTextureIndex(){
+        return textureIndex;
     }
 }
