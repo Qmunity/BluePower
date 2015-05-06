@@ -90,4 +90,11 @@ public class BlockBattery extends BlockContainerBase {
 
         return false;
     }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public int getRenderType() {
+
+        return 0;
+    }
 }
