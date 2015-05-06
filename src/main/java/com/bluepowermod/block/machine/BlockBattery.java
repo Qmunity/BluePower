@@ -2,8 +2,8 @@ package com.bluepowermod.block.machine;
 
 import com.bluepowermod.block.BlockContainerBase;
 import com.bluepowermod.reference.GuiIDs;
+import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier2.TileBattery;
-import com.bluepowermod.util.Refs;
 import net.minecraft.block.material.Material;
 
 /**

@@ -1,6 +1,6 @@
 package com.bluepowermod.client.gui.widget;
 
-import com.bluepowermod.util.Refs;
+import com.bluepowermod.reference.Refs;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import org.lwjgl.opengl.GL11;

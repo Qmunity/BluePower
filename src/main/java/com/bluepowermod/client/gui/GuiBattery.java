@@ -2,8 +2,8 @@ package com.bluepowermod.client.gui;
 
 import com.bluepowermod.client.gui.widget.WidgetPowerBar;
 import com.bluepowermod.container.ContainerBattery;
+import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier2.TileBattery;
-import com.bluepowermod.util.Refs;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 
@@ -22,7 +22,6 @@ public class GuiBattery extends GuiContainerBaseBP {
         ySize = 170;
         tile = battery;
     }
-
 
     @Override
     public void initGui() {

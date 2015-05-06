@@ -5,7 +5,7 @@ import net.minecraft.item.ItemStack;
 /**
  * @author Koen Beckers (K4Unl)
  */
-public interface Rechargeable {
+public interface IRechargeable {
 
     public BluePowerTier getTier();
 

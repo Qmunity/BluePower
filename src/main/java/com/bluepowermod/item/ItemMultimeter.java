@@ -2,7 +2,7 @@ package com.bluepowermod.item;
 
 import com.bluepowermod.api.bluepower.IBluePowered;
 import com.bluepowermod.init.BPCreativeTabs;
-import com.bluepowermod.util.Refs;
+import com.bluepowermod.reference.Refs;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
