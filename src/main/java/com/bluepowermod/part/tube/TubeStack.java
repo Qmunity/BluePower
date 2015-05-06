@@ -54,6 +54,7 @@ public class TubeStack {
     private ForgeDirection targetEntryDir = ForgeDirection.UNKNOWN; // Which side should this item make its entry.
     public static final double ITEM_SPEED = 0.0625;
     private double speed = ITEM_SPEED;
+    public static double tickTimeMultiplier = 1;//Used client side to correct for TPS lag. This is being synchronized from the server.
 
     @SideOnly(Side.CLIENT)
     private static RenderItem customRenderItem;
@@ -89,15 +90,14 @@ public class TubeStack {
 
     /**
      * Updates the movement by the given m/tick.
-     *
      * @return true if the stack has gone past the center, meaning logic needs to be triggered.
      */
-    public boolean update() {
+    public boolean update(World worldObj) {
 
         oldProgress = progress;
         if (enabled) {
             boolean isEntering = progress < 0.5;
-            progress += speed;
+            progress += speed * (worldObj.isRemote ? tickTimeMultiplier : 1);
             return progress >= 0.5 && isEntering;
         } else {
             idleCounter++;

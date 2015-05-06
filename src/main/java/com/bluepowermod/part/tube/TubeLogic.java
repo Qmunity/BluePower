@@ -131,7 +131,7 @@ public class TubeLogic implements IPneumaticTube {
         Iterator<TubeStack> iterator = tubeStacks.iterator();
         while (iterator.hasNext()) {
             TubeStack tubeStack = iterator.next();
-            if (tubeStack.update()) {
+            if (tubeStack.update(tube.getWorld())) {
                 if (!tube.isCrossOver) {
                     for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
                         if (tube.connections[dir.ordinal()] && dir != tubeStack.heading.getOpposite()) {
@@ -168,7 +168,7 @@ public class TubeLogic implements IPneumaticTube {
                 if (tube != null) {// we don't need to check connections, that's catched earlier.
                     TubeLogic logic = tube.getLogic();
                     tubeStack.progress = 0;
-                    tubeStack.oldProgress = -tubeStack.getSpeed();
+                    tubeStack.oldProgress = -tubeStack.getSpeed() * TubeStack.tickTimeMultiplier;
                     logic.tubeStacks.add(tubeStack);// transfer to another tube.
                     iterator.remove();
                 } else if (!this.tube.getWorld().isRemote) {
