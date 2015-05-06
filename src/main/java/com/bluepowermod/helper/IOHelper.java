@@ -88,8 +88,7 @@ public class IOHelper {
         return null;
     }
 
-    public static ItemStack extract(TileEntity tile, ForgeDirection direction, ItemStack requestedStack, boolean useItemCount,
-            boolean simulate) {
+    public static ItemStack extract(TileEntity tile, ForgeDirection direction, ItemStack requestedStack, boolean useItemCount, boolean simulate) {
 
         return extract(tile, direction, requestedStack, useItemCount, simulate, 0);
     }
@@ -141,8 +140,8 @@ public class IOHelper {
      *            ,
      * @return
      */
-    public static ItemStack extract(TileEntity tile, ForgeDirection direction, ItemStack requestedStack, boolean useItemCount,
-            boolean simulate, int fuzzySetting) {
+    public static ItemStack extract(TileEntity tile, ForgeDirection direction, ItemStack requestedStack, boolean useItemCount, boolean simulate,
+            int fuzzySetting) {
 
         if (requestedStack == null)
             return requestedStack;
@@ -160,7 +159,7 @@ public class IOHelper {
             for (int slot : accessibleSlots) {
                 ItemStack stack = inv.getStackInSlot(slot);
                 if (stack != null && ItemStackHelper.areStacksEqual(stack, requestedStack, fuzzySetting)
-                        && IOHelper.canExtractItemFromInventory(inv, stack, slot, direction.ordinal())) {
+                        && IOHelper.canExtractItemFromInventory(inv, requestedStack, slot, direction.ordinal())) {
                     if (!useItemCount) {
                         if (!simulate) {
                             inv.setInventorySlotContents(slot, null);
@@ -176,7 +175,7 @@ public class IOHelper {
                 for (int slot : accessibleSlots) {
                     ItemStack stack = inv.getStackInSlot(slot);
                     if (stack != null && ItemStackHelper.areStacksEqual(stack, requestedStack, fuzzySetting)
-                            && IOHelper.canExtractItemFromInventory(inv, stack, slot, direction.ordinal())) {
+                            && IOHelper.canExtractItemFromInventory(inv, requestedStack, slot, direction.ordinal())) {
                         int itemsSubstracted = Math.min(itemsNeeded, stack.stackSize);
                         if (itemsSubstracted > 0)
                             exportedStack = stack;
@@ -212,7 +211,8 @@ public class IOHelper {
             }
             for (int slot : accessibleSlots) {
                 ItemStack stack = inv.getStackInSlot(slot);
-                if (stack != null && IOHelper.canExtractItemFromInventory(inv, stack, slot, dir.ordinal())) {
+                ItemStack retrievingStack = stack == null ? null : stack.copy().splitStack(1);
+                if (stack != null && IOHelper.canExtractItemFromInventory(inv, retrievingStack, slot, dir.ordinal())) {
                     ItemStack ret = stack.splitStack(1);
                     if (stack.stackSize == 0)
                         inv.setInventorySlotContents(slot, null);
@@ -235,8 +235,8 @@ public class IOHelper {
             return itemStack;
 
         if (tile instanceof ITubeConnection) {
-            TubeStack tubeStack = ((ITubeConnection) tile).acceptItemFromTube(new TubeStack(itemStack, direction.getOpposite(), color),
-                    direction, simulate);
+            TubeStack tubeStack = ((ITubeConnection) tile).acceptItemFromTube(new TubeStack(itemStack, direction.getOpposite(), color), direction,
+                    simulate);
             if (tubeStack == null)
                 return null;
             return tubeStack.stack;
@@ -376,8 +376,7 @@ public class IOHelper {
         return canInterfaceWith(tile, direction, null, true);
     }
 
-    public static boolean canInterfaceWith(TileEntity tile, ForgeDirection direction, PneumaticTube requester,
-            boolean canInterfaceWithIInventory) {
+    public static boolean canInterfaceWith(TileEntity tile, ForgeDirection direction, PneumaticTube requester, boolean canInterfaceWithIInventory) {
 
         PneumaticTube tube = tile != null ? MultipartCompatibility.getPart(tile.getWorldObj(), tile.xCoord, tile.yCoord, tile.zCoord,
                 PneumaticTube.class) : null;
@@ -386,8 +385,7 @@ public class IOHelper {
         if (!canInterfaceWithIInventory)
             return false;
         if (tile instanceof IInventory) {
-            return !(tile instanceof ISidedInventory)
-                    || ((ISidedInventory) tile).getAccessibleSlotsFromSide(direction.ordinal()).length > 0;
+            return !(tile instanceof ISidedInventory) || ((ISidedInventory) tile).getAccessibleSlotsFromSide(direction.ordinal()).length > 0;
         }
         return false;
     }

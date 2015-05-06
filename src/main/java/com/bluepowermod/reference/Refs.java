@@ -187,8 +187,9 @@ public class Refs {
     public static final String PAINTCAN_NAME   = "paint_can";
     public static final String PAINTBRUSH_NAME = "paint_brush";
 
-    public static final String PROJECTTABLE_NAME    = "project_table";
-    public static final String CIRCUITTABLE_NAME    = "circuit_table";
+    public static final String PROJECTTABLE_NAME = "project_table";
+    public static final String AUTOPROJECTTABLE_NAME = "auto_project_table";
+    public static final String CIRCUITTABLE_NAME = "circuit_table";
     public static final String CIRCUITDATABASE_NAME = "circuit_database";
     public static final String BLUESTONETORCH_NAME  = "bluestone_torch";
 

@@ -55,8 +55,12 @@ public class CoreRecipes {
 
         // Blocks
         GameRegistry.addRecipe(new ItemStack(BPBlocks.alloyfurnace, 1), "###", "# #", "###", '#', Blocks.brick_block);
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPBlocks.project_table), "SSS", "WCW", "WIW", 'S', "stone", 'W',
-                "plankWood", 'C', Blocks.crafting_table, 'I', Blocks.chest));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPBlocks.project_table), "SSS", "WCW", "WIW", 'S', "stone", 'W', "plankWood", 'C',
+                Blocks.crafting_table, 'I', Blocks.chest));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPBlocks.auto_project_table), "PCP", "CTC", "PCP", 'P', Blocks.piston, 'C',
+                Blocks.crafting_table, 'T', BPBlocks.project_table));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPBlocks.auto_project_table), "CPC", "PTP", "CPC", 'P', Blocks.piston, 'C',
+                Blocks.crafting_table, 'T', BPBlocks.project_table));
 
         // Decoration
         GameRegistry.addSmelting(BPBlocks.basalt_brick, new ItemStack(BPBlocks.basaltbrick_cracked, 1), 0);
@@ -105,77 +109,63 @@ public class CoreRecipes {
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.silky_screwdriver, 1), " t", "S ", 't', "nuggetTungsten", 'S',
                 BPItems.screwdriver));
 
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.canvas, 1), "SSS", "SiS", "SSS", 'S', Items.string, 'i',
-                "stickWood"));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.canvas, 1), "SSS", "SiS", "SSS", 'S', Items.string, 'i', "stickWood"));
         GameRegistry.addRecipe(new ItemStack(BPItems.seed_bag, 1), " S ", "C C", "CCC", 'S', Items.string, 'C', BPItems.canvas);
         GameRegistry.addRecipe(new ItemStack(BPItems.canvas_bag, 1, 15), "SSS", "S S", "SSS", 'S', BPItems.canvas);
         registerCanvasBagRecipes(new ItemStack(BPItems.canvas_bag));
         GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(Items.string, 4, 0), new ItemStack(BPItems.wool_card, 1,
                 OreDictionary.WILDCARD_VALUE), new ItemStack(Blocks.wool, 1, OreDictionary.WILDCARD_VALUE)));
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.wool_card, 1, 0), "f", "p", "s", 'f', BPItems.iron_wire, 'p',
-                "plankWood", 's', "stickWood"));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.wool_card, 1, 0), "f", "p", "s", 'f', BPItems.iron_wire, 'p', "plankWood",
+                's', "stickWood"));
         GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(BPItems.iron_wire, 1), new ItemStack(BPItems.diamond_drawplate, 1,
                 OreDictionary.WILDCARD_VALUE), "ingotIron"));
 
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.ruby_axe, 1), "GG ", "GS ", " S ", 'G', "gemRuby", 'S',
-                "stickWood"));
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.ruby_axe, 1), " GG", " SG", " S ", 'G', "gemRuby", 'S',
-                "stickWood"));
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.ruby_pickaxe, 1), "GGG", " S ", " S ", 'G', "gemRuby", 'S',
-                "stickWood"));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.ruby_axe, 1), "GG ", "GS ", " S ", 'G', "gemRuby", 'S', "stickWood"));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.ruby_axe, 1), " GG", " SG", " S ", 'G', "gemRuby", 'S', "stickWood"));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.ruby_pickaxe, 1), "GGG", " S ", " S ", 'G', "gemRuby", 'S', "stickWood"));
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.ruby_sword, 1), "G", "G", "S", 'G', "gemRuby", 'S', "stickWood"));
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.ruby_shovel, 1), "G", "S", "S", 'G', "gemRuby", 'S', "stickWood"));
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.ruby_hoe, 1), "GG ", " S ", " S ", 'G', "gemRuby", 'S',
-                "stickWood"));
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.ruby_hoe, 1), " GG", " S ", " S ", 'G', "gemRuby", 'S',
-                "stickWood"));
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.ruby_sickle, 1), " G ", "  G", "SG ", 'G', "gemRuby", 'S',
-                "stickWood"));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.ruby_hoe, 1), "GG ", " S ", " S ", 'G', "gemRuby", 'S', "stickWood"));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.ruby_hoe, 1), " GG", " S ", " S ", 'G', "gemRuby", 'S', "stickWood"));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.ruby_sickle, 1), " G ", "  G", "SG ", 'G', "gemRuby", 'S', "stickWood"));
 
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.sapphire_axe, 1), "GG ", "GS ", " S ", 'G', "gemSapphire", 'S',
+        GameRegistry
+                .addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.sapphire_axe, 1), "GG ", "GS ", " S ", 'G', "gemSapphire", 'S', "stickWood"));
+        GameRegistry
+                .addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.sapphire_axe, 1), " GG", " SG", " S ", 'G', "gemSapphire", 'S', "stickWood"));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.sapphire_pickaxe, 1), "GGG", " S ", " S ", 'G', "gemSapphire", 'S',
                 "stickWood"));
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.sapphire_axe, 1), " GG", " SG", " S ", 'G', "gemSapphire", 'S',
-                "stickWood"));
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.sapphire_pickaxe, 1), "GGG", " S ", " S ", 'G', "gemSapphire",
-                'S', "stickWood"));
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.sapphire_sword, 1), "G", "G", "S", 'G', "gemSapphire", 'S',
-                "stickWood"));
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.sapphire_shovel, 1), "G", "S", "S", 'G', "gemSapphire", 'S',
-                "stickWood"));
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.sapphire_hoe, 1), "GG ", " S ", " S ", 'G', "gemSapphire", 'S',
-                "stickWood"));
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.sapphire_hoe, 1), " GG", " S ", " S ", 'G', "gemSapphire", 'S',
-                "stickWood"));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.sapphire_sword, 1), "G", "G", "S", 'G', "gemSapphire", 'S', "stickWood"));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.sapphire_shovel, 1), "G", "S", "S", 'G', "gemSapphire", 'S', "stickWood"));
+        GameRegistry
+                .addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.sapphire_hoe, 1), "GG ", " S ", " S ", 'G', "gemSapphire", 'S', "stickWood"));
+        GameRegistry
+                .addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.sapphire_hoe, 1), " GG", " S ", " S ", 'G', "gemSapphire", 'S', "stickWood"));
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.sapphire_sickle, 1), " G ", "  G", "SG ", 'G', "gemSapphire", 'S',
                 "stickWood"));
 
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.amethyst_axe, 1), "GG ", "GS ", " S ", 'G', "gemAmethyst", 'S',
+        GameRegistry
+                .addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.amethyst_axe, 1), "GG ", "GS ", " S ", 'G', "gemAmethyst", 'S', "stickWood"));
+        GameRegistry
+                .addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.amethyst_axe, 1), " GG", " SG", " S ", 'G', "gemAmethyst", 'S', "stickWood"));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.amethyst_pickaxe, 1), "GGG", " S ", " S ", 'G', "gemAmethyst", 'S',
                 "stickWood"));
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.amethyst_axe, 1), " GG", " SG", " S ", 'G', "gemAmethyst", 'S',
-                "stickWood"));
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.amethyst_pickaxe, 1), "GGG", " S ", " S ", 'G', "gemAmethyst",
-                'S', "stickWood"));
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.amethyst_sword, 1), "G", "G", "S", 'G', "gemAmethyst", 'S',
-                "stickWood"));
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.amethyst_shovel, 1), "G", "S", "S", 'G', "gemAmethyst", 'S',
-                "stickWood"));
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.amethyst_hoe, 1), "GG ", " S ", " S ", 'G', "gemAmethyst", 'S',
-                "stickWood"));
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.amethyst_hoe, 1), " GG", " S ", " S ", 'G', "gemAmethyst", 'S',
-                "stickWood"));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.amethyst_sword, 1), "G", "G", "S", 'G', "gemAmethyst", 'S', "stickWood"));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.amethyst_shovel, 1), "G", "S", "S", 'G', "gemAmethyst", 'S', "stickWood"));
+        GameRegistry
+                .addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.amethyst_hoe, 1), "GG ", " S ", " S ", 'G', "gemAmethyst", 'S', "stickWood"));
+        GameRegistry
+                .addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.amethyst_hoe, 1), " GG", " S ", " S ", 'G', "gemAmethyst", 'S', "stickWood"));
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.amethyst_sickle, 1), " G ", "  G", "SG ", 'G', "gemAmethyst", 'S',
                 "stickWood"));
 
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.wood_sickle, 1), " G ", "  G", "SG ", 'G', "plankWood", 'S',
-                "stickWood"));
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.stone_sickle, 1), " G ", "  G", "SG ", 'G', "cobblestone", 'S',
-                "stickWood"));
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.iron_sickle, 1), " G ", "  G", "SG ", 'G', "ingotIron", 'S',
-                "stickWood"));
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.gold_sickle, 1), " G ", "  G", "SG ", 'G', "ingotGold", 'S',
-                "stickWood"));
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.diamond_sickle, 1), " G ", "  G", "SG ", 'G', "gemDiamond", 'S',
-                "stickWood"));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.wood_sickle, 1), " G ", "  G", "SG ", 'G', "plankWood", 'S', "stickWood"));
+        GameRegistry
+                .addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.stone_sickle, 1), " G ", "  G", "SG ", 'G', "cobblestone", 'S', "stickWood"));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.iron_sickle, 1), " G ", "  G", "SG ", 'G', "ingotIron", 'S', "stickWood"));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.gold_sickle, 1), " G ", "  G", "SG ", 'G', "ingotGold", 'S', "stickWood"));
+        GameRegistry
+                .addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.diamond_sickle, 1), " G ", "  G", "SG ", 'G', "gemDiamond", 'S', "stickWood"));
 
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.athame, 1), "# ", " S", '#', "ingotSilver", 'S', "stickWood"));
 
@@ -198,19 +188,17 @@ public class CoreRecipes {
 
             GameRegistry.addRecipe(new ShapedOreRecipe(BPItems.amethyst_saw, "WSS", "WGS", 'W', "stickWood", 'S', "rodStone", 'G',
                     BPItems.amethyst_gem));
-            GameRegistry.addRecipe(new ShapedOreRecipe(BPItems.ruby_saw, "WSS", "WGS", 'W', "stickWood", 'S', "rodStone", 'G',
-                    BPItems.ruby_gem));
+            GameRegistry.addRecipe(new ShapedOreRecipe(BPItems.ruby_saw, "WSS", "WGS", 'W', "stickWood", 'S', "rodStone", 'G', BPItems.ruby_gem));
             GameRegistry.addRecipe(new ShapedOreRecipe(BPItems.sapphire_saw, "WSS", "WGS", 'W', "stickWood", 'S', "rodStone", 'G',
                     BPItems.sapphire_gem));
         } else {
-            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.diamond_drawplate), "IDI", "IDI", "IDI", 'I', "ingotIron",
-                    'D', "gemDiamond"));
+            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.diamond_drawplate), "IDI", "IDI", "IDI", 'I', "ingotIron", 'D',
+                    "gemDiamond"));
             GameRegistry.addShapelessRecipe(new ItemStack(BPItems.silicon_wafer, 16), new ItemStack(BPItems.diamond_saw, 1,
                     OreDictionary.WILDCARD_VALUE), new ItemStack(BPItems.silicon_boule));
-            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.iron_saw, 1), "SSS", " II", " II", 'S', "stickWood", 'I',
-                    "ingotIron"));
-            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.ruby_saw, 1), "SSS", " II", " ##", 'S', "stickWood", 'I',
-                    "ingotIron", '#', "gemRuby"));
+            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.iron_saw, 1), "SSS", " II", " II", 'S', "stickWood", 'I', "ingotIron"));
+            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.ruby_saw, 1), "SSS", " II", " ##", 'S', "stickWood", 'I', "ingotIron",
+                    '#', "gemRuby"));
             GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.amethyst_saw, 1), "SSS", " II", " ##", 'S', "stickWood", 'I',
                     "ingotIron", '#', "gemAmethyst"));
             GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.sapphire_saw, 1), "SSS", " II", " ##", 'S', "stickWood", 'I',
@@ -222,8 +210,7 @@ public class CoreRecipes {
 
     private static void registerCanvasBagRecipes(ItemStack is) {
 
-        RecipeSorter.register(Refs.MODID + ":canvasBag", CanvasBagRecipe.class, RecipeSorter.Category.SHAPELESS,
-                "after:minecraft:shapeless");
+        RecipeSorter.register(Refs.MODID + ":canvasBag", CanvasBagRecipe.class, RecipeSorter.Category.SHAPELESS, "after:minecraft:shapeless");
         for (int damage = Refs.oreDictDyes.length - 1; damage >= 0; damage--) {
             ItemStack input = is.copy();
             input.setItemDamage(damage);

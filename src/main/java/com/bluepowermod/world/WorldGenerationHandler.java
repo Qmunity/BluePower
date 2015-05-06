@@ -17,9 +17,8 @@
 
 package com.bluepowermod.world;
 
-import com.bluepowermod.init.BPBlocks;
-import com.bluepowermod.init.Config;
-import cpw.mods.fml.common.IWorldGenerator;
+import java.util.Random;
+
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
@@ -28,7 +27,10 @@ import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.feature.WorldGenFlowers;
 import net.minecraft.world.gen.feature.WorldGenMinable;
 
-import java.util.Random;
+import com.bluepowermod.init.BPBlocks;
+import com.bluepowermod.init.Config;
+
+import cpw.mods.fml.common.IWorldGenerator;
 
 public class WorldGenerationHandler implements IWorldGenerator {
 
