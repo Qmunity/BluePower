@@ -59,7 +59,7 @@ public class BundledConnectionCache implements IConnectionCache<IBundledDevice> 
         IBundledDevice self = getSelf();
         for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
             boolean wasConnected = connections[d.ordinal()] != null;
-            BundledConnection con = ConnectionHelper.getBundledNeighbor(self, d);
+            BundledConnection con = RedConnectionHelper.getBundledNeighbor(self, d);
             if (con != null) {
                 if (!wasConnected || connections[d.ordinal()].getB() != con.getB() || connections[d.ordinal()].getSideB() != con.getSideB()
                         || connections[d.ordinal()].getType() != con.getType()) {
