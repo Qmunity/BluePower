@@ -17,9 +17,21 @@
 
 package com.bluepowermod.block;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import com.bluepowermod.BluePower;
+import com.bluepowermod.api.BPApi;
+import com.bluepowermod.api.block.IAdvancedSilkyRemovable;
+import com.bluepowermod.api.bluepower.IBluePowered;
+import com.bluepowermod.client.render.RendererBlockBase;
+import com.bluepowermod.client.render.RendererBlockBase.EnumFaceType;
+import com.bluepowermod.helper.IOHelper;
+import com.bluepowermod.init.BPItems;
+import com.bluepowermod.reference.GuiIDs;
+import com.bluepowermod.reference.Refs;
+import com.bluepowermod.tile.IEjectAnimator;
+import com.bluepowermod.tile.IRotatable;
+import com.bluepowermod.tile.TileBase;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
@@ -35,23 +47,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import uk.co.qmunity.lib.misc.ForgeDirectionUtils;
 
-import com.bluepowermod.BluePower;
-import com.bluepowermod.api.BPApi;
-import com.bluepowermod.api.block.IAdvancedSilkyRemovable;
-import com.bluepowermod.api.block.IPowered;
-import com.bluepowermod.api.power.IBluePowered;
-import com.bluepowermod.client.render.RendererBlockBase;
-import com.bluepowermod.client.render.RendererBlockBase.EnumFaceType;
-import com.bluepowermod.helper.IOHelper;
-import com.bluepowermod.init.BPItems;
-import com.bluepowermod.reference.GuiIDs;
-import com.bluepowermod.reference.Refs;
-import com.bluepowermod.tile.IEjectAnimator;
-import com.bluepowermod.tile.IRotatable;
-import com.bluepowermod.tile.TileBase;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author MineMaarten
@@ -302,7 +299,7 @@ public class BlockContainerBase extends BlockBase implements ITileEntityProvider
                 faceType = EnumFaceType.BACK;
         }
         if (te instanceof IBluePowered) {
-            powered = ((IPowered) te).isPowered();
+            powered = ((IBluePowered) te).isPowered();
         }
         if (te instanceof IEjectAnimator) {
             ejecting = ((IEjectAnimator) te).isEjecting();

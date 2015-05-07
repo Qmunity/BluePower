@@ -16,13 +16,13 @@ import org.lwjgl.opengl.GL11;
 
 import uk.co.qmunity.lib.client.render.RenderHelper;
 import uk.co.qmunity.lib.part.IPartTicking;
+import uk.co.qmunity.lib.part.compat.MultipartCompatibility;
 import uk.co.qmunity.lib.vec.Vec3i;
 
 import com.bluepowermod.api.BPApi;
-import com.bluepowermod.api.connect.ConnectionType;
-import com.bluepowermod.api.power.IBluePowered;
-import com.bluepowermod.api.power.IPowerHandler;
-import com.bluepowermod.api.power.PowerTier;
+import com.bluepowermod.api.bluepower.BluePowerTier;
+import com.bluepowermod.api.bluepower.IBluePowered;
+import com.bluepowermod.api.bluepower.IPowerBase;
 import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.part.wire.PartWireFace;
 
@@ -37,18 +37,18 @@ public class WireBluePower extends PartWireFace implements IBluePowered, IPartTi
 
     protected final boolean[] connections = new boolean[6];
 
-    private IPowerHandler handler;
+    private IPowerBase handler;
 
     @Override
     public String getType() {
 
-        return "powerWire";
+        return "bluepowerWire";
     }
 
     @Override
     public String getUnlocalizedName() {
 
-        return "powerWire";
+        return "bluepowerWire";
     }
 
     @Override
@@ -61,7 +61,7 @@ public class WireBluePower extends PartWireFace implements IBluePowered, IPartTi
     public void update() {
 
         if (!getWorld().isRemote) {
-            getPowerHandler().update();
+            getHandler().update();
         }
     }
 
@@ -93,40 +93,49 @@ public class WireBluePower extends PartWireFace implements IBluePowered, IPartTi
     }
 
     @Override
-    public PowerTier getPowerTier() {
-
-        return PowerTier.LOWVOLTAGE;
-    }
-
-    @Override
-    public IPowerHandler getPowerHandler(ForgeDirection side) {
-
-        return getPowerHandler();
-    }
-
-    public IPowerHandler getPowerHandler() {
-
-        if (handler == null)
-            handler = BPApi.getInstance().getNewPowerHandler(this, 10);
-        return handler;
-    }
-
-    @Override
-    public boolean isNormalFace(ForgeDirection side) {
+    public boolean isPowered() {
 
         return false;
     }
 
     @Override
-    public boolean canConnectPower(ForgeDirection side, IBluePowered dev, ConnectionType type) {
+    public BluePowerTier getTier() {
 
-        return true;
+        return BluePowerTier.LOWVOLTAGE;
+    }
+
+    @Override
+    public IPowerBase getHandler() {
+
+        if (handler == null) {
+            handler = BPApi.getInstance().getNewPowerHandler(this);
+        }
+        return handler;
+    }
+
+    @Override
+    public boolean canConnectTo(ForgeDirection dir) {
+
+        Vec3i thisLoc = new Vec3i(this);
+        Vec3i target = thisLoc.add(dir).setWorld(getWorld());
+
+        if (target.getTileEntity() instanceof IBluePowered) {
+            return true;
+        }
+        IBluePowered p = MultipartCompatibility.getPart(getWorld(), target.getX(), target.getY(), target.getZ(), IBluePowered.class);
+        return p != null;
+    }
+
+    @Override
+    public float getMaxStorage() {
+
+        return 10;
     }
 
     @Override
     protected boolean shouldRenderConnection(ForgeDirection side) {
 
-        return connections[side.ordinal()];
+        return canConnectTo(side);
     }
 
     @Override

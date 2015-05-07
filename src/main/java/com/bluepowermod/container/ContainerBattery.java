@@ -1,5 +1,10 @@
 package com.bluepowermod.container;
 
+import com.bluepowermod.ClientProxy;
+import com.bluepowermod.container.slot.SlotMachineInput;
+import com.bluepowermod.tile.tier2.TileBattery;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -8,16 +13,7 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import uk.co.qmunity.lib.client.gui.GuiContainerBase;
 
-import com.bluepowermod.ClientProxy;
-import com.bluepowermod.container.slot.SlotMachineInput;
-import com.bluepowermod.tile.tier2.TileBattery;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
-/**
- * !
- *
+/**!
  * @author Koen Beckers (K4Unl)
  */
 
@@ -63,18 +59,15 @@ public class ContainerBattery extends Container {
     @Override
     public ItemStack transferStackInSlot(EntityPlayer player, int par2) {
 
-        // TODO: A check that checks if it's IChargable
+        //TODO: A check that checks if it's IChargable
         ItemStack itemstack = null;
         Slot slot = (Slot) inventorySlots.get(par2);
         if (slot != null && slot.getHasStack()) {
             ItemStack itemstack1 = slot.getStack();
             itemstack = itemstack1.copy();
             if (par2 < 2) {
-                if (!mergeItemStack(itemstack1, 2, 37, true))
-                    return null;
-            } else if (!mergeItemStack(itemstack1, 0, 2, false)) {
-                return null;
-            }
+                if (!mergeItemStack(itemstack1, 2, 37, true)) return null;
+            } else if (!mergeItemStack(itemstack1, 0, 2, false)) { return null; }
             if (itemstack1.stackSize == 0) {
                 slot.putStack(null);
             } else {
@@ -100,18 +93,18 @@ public class ContainerBattery extends Container {
         for (Object crafter : crafters) {
             ICrafting icrafting = (ICrafting) crafter;
 
-            if (ampStored != tileBattery.getPowerHandler().getAmpsStored()) {
-                icrafting.sendProgressBarUpdate(this, AMPSTORED, (int) tileBattery.getPowerHandler().getAmpsStored());
+            if (ampStored != tileBattery.getHandler().getAmpStored()) {
+                icrafting.sendProgressBarUpdate(this, AMPSTORED, (int)tileBattery.getHandler().getAmpStored());
             }
 
-            if (ampMax != tileBattery.getPowerHandler().getMaxAmps()) {
-                icrafting.sendProgressBarUpdate(this, AMPMAX, (int) tileBattery.getPowerHandler().getMaxAmps());
+            if (ampMax != tileBattery.getHandler().getMaxAmp()) {
+                icrafting.sendProgressBarUpdate(this, AMPMAX, (int)tileBattery.getHandler().getMaxAmp());
             }
 
         }
 
-        ampStored = tileBattery.getPowerHandler().getAmpsStored();
-        ampMax = tileBattery.getPowerHandler().getMaxAmps();
+        ampStored = tileBattery.getHandler().getAmpStored();
+        ampMax = tileBattery.getHandler().getMaxAmp();
     }
 
     @Override
@@ -122,7 +115,7 @@ public class ContainerBattery extends Container {
             tileBattery.setAmpStored(value);
             ((GuiContainerBase) ClientProxy.getOpenedGui()).redraw();
         }
-        if (index == AMPMAX) {
+        if(index == AMPMAX){
             tileBattery.setMaxAmp(value);
             ((GuiContainerBase) ClientProxy.getOpenedGui()).redraw();
         }

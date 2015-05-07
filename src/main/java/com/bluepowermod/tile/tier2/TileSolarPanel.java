@@ -1,90 +1,89 @@
 package com.bluepowermod.tile.tier2;
 
+import com.bluepowermod.api.BPApi;
+import com.bluepowermod.api.bluepower.BluePowerTier;
+import com.bluepowermod.api.bluepower.IBluePowered;
+import com.bluepowermod.api.bluepower.IPowerBase;
+import com.bluepowermod.tile.TileMachineBase;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.Side;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraftforge.common.util.ForgeDirection;
-
-import com.bluepowermod.api.BPApi;
-import com.bluepowermod.api.connect.ConnectionType;
-import com.bluepowermod.api.power.IBluePowered;
-import com.bluepowermod.api.power.IPowerHandler;
-import com.bluepowermod.api.power.PowerTier;
-import com.bluepowermod.tile.TileMachineBase;
 
 /**
  * @author Koen Beckers (K4Unl)
  */
 public class TileSolarPanel extends TileMachineBase implements IBluePowered {
 
-    private IPowerHandler handler;
+    private IPowerBase handler;
 
     @Override
-    public PowerTier getPowerTier() {
+    public boolean isPowered() {
 
-        return PowerTier.MEDIUMVOLTAGE;
+        return false;
     }
 
     @Override
-    public IPowerHandler getPowerHandler(ForgeDirection side) {
+    public BluePowerTier getTier() {
 
-        return getPowerHandler();
+        return BluePowerTier.MEDIUMVOLTAGE;
     }
 
-    public IPowerHandler getPowerHandler() {
-
-        if (handler == null)
-            handler = BPApi.getInstance().getNewPowerHandler(this, 500);
-
+    @Override
+    public IPowerBase getHandler() {
+        if(handler == null){
+            handler = BPApi.getInstance().getNewPowerHandler(this);
+        }
         return handler;
     }
 
     @Override
-    public boolean isNormalFace(ForgeDirection side) {
+    public boolean canConnectTo(ForgeDirection dir) {
 
-        return side == ForgeDirection.DOWN;
+        return !dir.equals(ForgeDirection.UP);
     }
 
     @Override
-    public boolean canConnectPower(ForgeDirection side, IBluePowered dev, ConnectionType type) {
+    public float getMaxStorage() {
 
-        return !side.equals(ForgeDirection.UP);
+        return 500;
     }
 
     @Override
-    public void updateEntity() {
+    public void updateEntity(){
 
         super.updateEntity();
 
-        if (!getWorldObj().isRemote) {
-            // TODO: Add me as a config
-            getPowerHandler().injectEnergy(getDaylightStrength() / 10, false);
+        if(!getWorldObj().isRemote){
+            //TODO: Add me as a config
+            getHandler().addEnergy(getDaylightStrength() / 10);
 
-            getPowerHandler().update();
+            getHandler().update();
         }
 
     }
 
-    public int getDaylightStrength() {
-
-        int i1 = getWorldObj().skylightSubtracted;
-        int savedLight = getWorldObj().getSavedLightValue(EnumSkyBlock.Sky, xCoord, yCoord + 1, zCoord);
+    public int getDaylightStrength(){
+        int i1 =  getWorldObj().skylightSubtracted;
+        int savedLight = getWorldObj().getSavedLightValue(EnumSkyBlock.Sky, xCoord, yCoord+1, zCoord);
         i1 = savedLight - i1;
         float f = getWorldObj().getCelestialAngleRadians(1.0F);
 
-        if (f < (float) Math.PI) {
+        if (f < (float)Math.PI){
             f += (0.0F - f) * 0.2F;
         } else {
-            f += (((float) Math.PI * 2F) - f) * 0.2F;
+            f += (((float)Math.PI * 2F) - f) * 0.2F;
         }
 
-        i1 = Math.round(i1 * MathHelper.cos(f));
+        i1 = Math.round((float)i1 * MathHelper.cos(f));
 
-        if (i1 < 0) {
+        if (i1 < 0){
             i1 = 0;
         }
 
-        if (i1 > 15) {
+        if (i1 > 15){
             i1 = 15;
         }
 
@@ -92,23 +91,20 @@ public class TileSolarPanel extends TileMachineBase implements IBluePowered {
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound tagCompound) {
-
-        getPowerHandler().readFromNBT(tagCompound);
+    public void readFromNBT(NBTTagCompound tagCompound){
+        getHandler().readFromNBT(tagCompound);
     }
 
     @Override
-    public void writeToNBT(NBTTagCompound tagCompound) {
-
-        getPowerHandler().writeToNBT(tagCompound);
+    public void writeToNBT(NBTTagCompound tagCompound){
+        getHandler().writeToNBT(tagCompound);
     }
 
     @Override
-    public void invalidate() {
-
+    public void invalidate(){
         super.invalidate();
-        if (!getWorld().isRemote) {
-            getPowerHandler().invalidate();
+        if(FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
+            getHandler().invalidate();
         }
     }
 }
