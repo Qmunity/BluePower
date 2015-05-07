@@ -21,7 +21,7 @@ public class MessageServerTickTime extends Packet<MessageServerTickTime> {
 
     @Override
     public void handleClientSide(EntityPlayer player) {
-        TubeStack.tickTimeMultiplier = Math.min(1, 50D / (tickTime - 5));//Let the client stack go a _little_ bit faster than the real value (50 / tickTime), as else if the server stacks arrive first, glitches happen.
+        TubeStack.tickTimeMultiplier = Math.min(1, 50D / Math.max(tickTime - 5, 0.01));//Let the client stack go a _little_ bit faster than the real value (50 / tickTime), as else if the server stacks arrive first, glitches happen.
     }
 
     @Override
