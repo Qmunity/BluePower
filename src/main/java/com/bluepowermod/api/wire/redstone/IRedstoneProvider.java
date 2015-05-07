@@ -19,7 +19,7 @@ public interface IRedstoneProvider {
      * @param side
      *            Side of the device we're looking for
      * @param face
-     *            Face the device must be placed on or {@link ForgeDirection#UNKNOWN} if not know or not a face device
+     *            Face the device must be placed on or {@link ForgeDirection#UNKNOWN} if it's not a face device
      * @return The redstone device at the specified coords, side and face.
      */
     public IRedstoneDevice getRedstoneDeviceAt(World world, int x, int y, int z, ForgeDirection side, ForgeDirection face);
@@ -38,7 +38,7 @@ public interface IRedstoneProvider {
      * @param side
      *            Side of the device we're looking for
      * @param face
-     *            Face the device must be placed on or {@link ForgeDirection#UNKNOWN} if not know or not a face device
+     *            Face the device must be placed on or {@link ForgeDirection#UNKNOWN} if it's not a face device
      * @return The bundled device at the specified coords, side and face.
      */
     public IBundledDevice getBundledDeviceAt(World world, int x, int y, int z, ForgeDirection side, ForgeDirection face);

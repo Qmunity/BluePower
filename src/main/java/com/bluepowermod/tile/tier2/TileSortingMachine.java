@@ -7,20 +7,10 @@
  */
 package com.bluepowermod.tile.tier2;
 
-import com.bluepowermod.api.BPApi;
-import com.bluepowermod.api.bluepower.BluePowerTier;
-import com.bluepowermod.api.bluepower.IBluePowered;
-import com.bluepowermod.api.bluepower.IPowerBase;
-import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
-import com.bluepowermod.helper.IOHelper;
-import com.bluepowermod.helper.ItemStackHelper;
-import com.bluepowermod.init.BPBlocks;
-import com.bluepowermod.part.IGuiButtonSensitive;
-import com.bluepowermod.part.tube.TubeStack;
-import com.bluepowermod.tile.TileMachineBase;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
@@ -30,9 +20,22 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import com.bluepowermod.api.BPApi;
+import com.bluepowermod.api.connect.ConnectionType;
+import com.bluepowermod.api.power.IBluePowered;
+import com.bluepowermod.api.power.IPowerHandler;
+import com.bluepowermod.api.power.PowerTier;
+import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
+import com.bluepowermod.helper.IOHelper;
+import com.bluepowermod.helper.ItemStackHelper;
+import com.bluepowermod.init.BPBlocks;
+import com.bluepowermod.part.IGuiButtonSensitive;
+import com.bluepowermod.part.tube.TubeStack;
+import com.bluepowermod.tile.TileMachineBase;
+
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  *
@@ -53,16 +56,15 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
 
     // tick.
 
-    private IPowerBase handler;
+    private IPowerHandler handler;
 
     @SideOnly(Side.CLIENT)
     private float ampStored;
     @SideOnly(Side.CLIENT)
     private float maxAmp;
 
-    //Todo: Magic number
-    private int usagePerItem = 2; //2 mA
-
+    // Todo: Magic number
+    private int usagePerItem = 2; // 2 mA
 
     public TileSortingMachine() {
 
@@ -71,35 +73,35 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
     }
 
     @Override
-    public boolean isPowered() {
-
-        return false;
-    }
-
-    @Override
-    public BluePowerTier getTier() {
+    public PowerTier getPowerTier() {
 
         return null;
     }
 
     @Override
-    public IPowerBase getHandler() {
-        if(handler == null){
-            handler = BPApi.getInstance().getNewPowerHandler(this);
+    public IPowerHandler getPowerHandler(ForgeDirection side) {
+
+        return getPowerHandler();
+    }
+
+    public IPowerHandler getPowerHandler() {
+
+        if (handler == null) {
+            handler = BPApi.getInstance().getNewPowerHandler(this, 700);
         }
         return handler;
     }
 
     @Override
-    public boolean canConnectTo(ForgeDirection dir) {
+    public boolean isNormalFace(ForgeDirection side) {
 
         return true;
     }
 
     @Override
-    public float getMaxStorage() {
+    public boolean canConnectPower(ForgeDirection side, IBluePowered dev, ConnectionType type) {
 
-        return 700;
+        return true;
     }
 
     public enum PullMode {
@@ -150,8 +152,8 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
                 && (pullMode == PullMode.SINGLE_SWEEP && sweepTriggered || pullMode == PullMode.AUTOMATIC)) {
             triggerSorting();
         }
-        if(!worldObj.isRemote) {
-            getHandler().update();
+        if (!worldObj.isRemote) {
+            getPowerHandler().update();
         }
 
     }
@@ -289,9 +291,9 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
 
     private boolean tryProcessItem(ItemStack stack, boolean simulate) {
 
-        //Use powah
+        // Use powah
 
-        if(getHandler().getAmpStored() < (stack.stackSize * usagePerItem)){
+        if (getPowerHandler().getAmpsStored() < (stack.stackSize * usagePerItem)) {
             return false;
         }
 
@@ -307,8 +309,7 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
         case ANY_ITEM_DEFAULT:
             for (int i = 0; i < inventory.length; i++) {
                 ItemStack filter = inventory[i];
-                if (filter != null && ItemStackHelper.areStacksEqual(filter, stack, fuzzySettings[i % 8])
-                        && stack.stackSize >= filter.stackSize) {
+                if (filter != null && ItemStackHelper.areStacksEqual(filter, stack, fuzzySettings[i % 8]) && stack.stackSize >= filter.stackSize) {
                     if (!simulate) {
                         addItemToOutputBuffer(filter.copy(), colors[i % 8]);
                     }
@@ -588,39 +589,43 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
         return true;
     }
 
-
     @SideOnly(Side.CLIENT)
-    public void setAmpStored(float newAmp){
+    public void setAmpStored(float newAmp) {
+
         ampStored = newAmp;
     }
 
     @SideOnly(Side.CLIENT)
-    public void setMaxAmp(float newAmp){
+    public void setMaxAmp(float newAmp) {
+
         maxAmp = newAmp;
     }
 
     @SideOnly(Side.CLIENT)
-    public float getAmpStored(){
+    public float getAmpStored() {
+
         return ampStored;
     }
 
     @SideOnly(Side.CLIENT)
-    public float getMaxAmp(){
+    public float getMaxAmp() {
+
         return maxAmp;
     }
 
     @Override
-    public void invalidate(){
+    public void invalidate() {
+
         super.invalidate();
-        if(FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
-            getHandler().invalidate();
+        if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
+            getPowerHandler().invalidate();
         }
     }
 
     @Override
     protected void addItemToOutputBuffer(ItemStack stack, TubeColor color) {
 
-        getHandler().removeEnergy(stack.stackSize * usagePerItem);
+        getPowerHandler().drainEnergy(stack.stackSize * usagePerItem, true);
         super.addItemToOutputBuffer(stack, color);
 
     }
