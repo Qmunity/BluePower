@@ -60,6 +60,8 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
     @SideOnly(Side.CLIENT)
     private float maxAmp;
 
+    private boolean isPowered;
+
     //Todo: Magic number
     private int usagePerItem = 2; //2 mA
 
@@ -73,7 +75,7 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
     @Override
     public boolean isPowered() {
 
-        return false;
+        return isPowered;
     }
 
     @Override
@@ -152,6 +154,10 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
         }
         if(!worldObj.isRemote) {
             getHandler().update();
+        }
+        if(!worldObj.isRemote && worldObj.getWorldTime() % 20 ==0){
+            isPowered = getHandler().getAmpHourStored() > 2.0F;
+            worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
         }
 
     }
@@ -413,6 +419,8 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
             }
         }
         tag.setTag("Items", tagList);
+
+        getHandler().writeToNBT(tag);
     }
 
     @Override
@@ -441,6 +449,8 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
                 inventory[slot] = ItemStack.loadItemStackFromNBT(tagCompound);
             }
         }
+
+        getHandler().readFromNBT(tag);
     }
 
     @Override

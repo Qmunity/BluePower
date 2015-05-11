@@ -93,18 +93,18 @@ public class ContainerBattery extends Container {
         for (Object crafter : crafters) {
             ICrafting icrafting = (ICrafting) crafter;
 
-            if (ampStored != tileBattery.getHandler().getAmpStored()) {
-                icrafting.sendProgressBarUpdate(this, AMPSTORED, (int)tileBattery.getHandler().getAmpStored());
+            if (ampStored != tileBattery.getHandler().getAmpHourStored()) {
+                icrafting.sendProgressBarUpdate(this, AMPSTORED, (int)tileBattery.getHandler().getAmpHourStored());
             }
 
-            if (ampMax != tileBattery.getHandler().getMaxAmp()) {
-                icrafting.sendProgressBarUpdate(this, AMPMAX, (int)tileBattery.getHandler().getMaxAmp());
+            if (ampMax != tileBattery.getHandler().getMaxAmpHour()) {
+                icrafting.sendProgressBarUpdate(this, AMPMAX, (int)tileBattery.getHandler().getMaxAmpHour());
             }
 
         }
 
-        ampStored = tileBattery.getHandler().getAmpStored();
-        ampMax = tileBattery.getHandler().getMaxAmp();
+        ampStored = tileBattery.getHandler().getAmpHourStored();
+        ampMax = tileBattery.getHandler().getMaxAmpHour();
     }
 
     @Override
