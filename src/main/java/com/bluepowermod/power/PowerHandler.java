@@ -76,62 +76,62 @@ public class PowerHandler implements IPowerBase {
     }
 
 
-    public float getAmpStored(){
+    public float getAmpHourStored(){
         if(getNetwork() == null){
             //Fuck, we need to fix this..
             updateNetworkOnNextTick(0);
             return 0;
         }
-        return getNetwork().getCurrentStored();
+        return getNetwork().getAmpHourStored();
     }
 
     @Override
-    public float getMaxAmp() {
+    public float getMaxAmpHour() {
         if(getNetwork() == null){
             //Fuck, we need to fix this..
             updateNetworkOnNextTick(0);
             return 0;
         }
-        return getNetwork().getMaxStored();
+        return getNetwork().getMaxAmpHourStored();
     }
 
     @Override
-    public float removeEnergy(float amp){
+    public float removeEnergy(float ampHour){
 
         if(getNetwork() == null) return 0.0F;
 
-        float oldPower = getAmpStored();
-        int compare = Float.compare(getNetwork().getCurrentStored() - amp, 0.0F);
+        float oldPower = getAmpHourStored();
+        int compare = Float.compare(getNetwork().getAmpHourStored() - ampHour, 0.0F);
         if(compare == 1) {
-            getNetwork().setCurrentStored(getNetwork().getCurrentStored() - amp);
+            getNetwork().setAmpHourStored(getNetwork().getAmpHourStored() - ampHour);
         }else{
             //Implode?
 
         }
-        return getAmpStored() - oldPower;
+        return getAmpHourStored() - oldPower;
     }
 
     @Override
-    public float addEnergy(float amp){
+    public float addEnergy(float ampHour){
 
         if(getNetwork() == null) return 0.0F;
 
-        float oldPower = getAmpStored();
-        int compare = Float.compare(getNetwork().getCurrentStored() + amp, getMaxAmp());
+        float oldPower = getAmpHourStored();
+        int compare = Float.compare(getNetwork().getAmpHourStored() + ampHour, getMaxAmpHour());
         if(compare == -1) {
-            getNetwork().setCurrentStored(getNetwork().getCurrentStored() + amp);
+            getNetwork().setAmpHourStored(getNetwork().getAmpHourStored() + ampHour);
         }else{
             //Explode?
-            getNetwork().setCurrentStored((getNetwork().getMaxStored()));
+            getNetwork().setAmpHourStored((getNetwork().getMaxAmpHourStored()));
         }
 
-        return getAmpStored() - oldPower;
+        return getAmpHourStored() - oldPower;
     }
 
-    private void setEnergy(float amp){
+    private void setEnergy(float ampHour){
 
         if(getNetwork() == null) return;
-        getNetwork().setCurrentStored(amp);
+        getNetwork().setAmpHourStored(ampHour);
     }
 
     @Override

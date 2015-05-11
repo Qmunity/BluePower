@@ -291,7 +291,7 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
 
         //Use powah
 
-        if(getHandler().getAmpStored() < (stack.stackSize * usagePerItem)){
+        if(getHandler().getAmpHourStored() < (stack.stackSize * usagePerItem)){
             return false;
         }
 

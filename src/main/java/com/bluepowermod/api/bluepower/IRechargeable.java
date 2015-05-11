@@ -15,16 +15,16 @@ public interface IRechargeable {
 
     /**!
      * Removes energy from the rechargeable item.
-     * @param amp The amount of energy to drain
+     * @param ampHour The amount of energy to drain
      * @return The amount of energy that has been drained
      */
-    public float removeEnergy(ItemStack stack, float amp);
+    public float removeEnergy(ItemStack stack, float ampHour);
 
     /**!
      * Adds energy to the rechargeable item.
-     * @param amp The amount of energy to add
+     * @param ampHour The amount of energy to add
      * @return The amount of energy that has been added
      */
-    public float addEnergy(ItemStack stack, float amp);
+    public float addEnergy(ItemStack stack, float ampHour);
 
 }

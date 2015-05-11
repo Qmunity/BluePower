@@ -19,9 +19,9 @@ public interface IPowerBase {
     /*
      * Functions for power
      */
-    public float getAmpStored();
+    public float getAmpHourStored();
 
-    public float getMaxAmp();
+    public float getMaxAmpHour();
 
     public float removeEnergy(float amp);
 

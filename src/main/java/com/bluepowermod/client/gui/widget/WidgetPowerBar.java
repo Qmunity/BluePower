@@ -13,16 +13,16 @@ import java.util.List;
  */
 public class WidgetPowerBar extends BaseWidget {
 
-    private float ampPercentage;
-    private float ampStored;
-    private float maxAmp;
+    private float ampHourPercentage;
+    private float ampHourStored;
+    private float maxAmpHour;
 
     public WidgetPowerBar(int id, int x, int y, float ampStored_, float maxAmp_) {
 
         super(id, x, y, 7, 50, Refs.MODID + ":textures/gui/widgets/powerbar_widget_fill.png", Refs.MODID + ":textures/gui/widgets/powerbar_widget.png");
-        ampPercentage = ampStored_ / maxAmp_;
-        ampStored = ampStored_;
-        maxAmp = maxAmp_;
+        ampHourPercentage = ampStored_ / maxAmp_;
+        ampHourStored = ampStored_;
+        maxAmpHour = maxAmp_;
     }
 
     @Override
@@ -56,12 +56,12 @@ public class WidgetPowerBar extends BaseWidget {
 
         //And then the fill..
         Minecraft.getMinecraft().getTextureManager().bindTexture(textures[0]);
-        int h = (int)(((float)(height - 2)) * ampPercentage);
+        int h = (int)(((float)(height - 2)) * ampHourPercentage);
         Gui.func_146110_a(x+1, (y+height)-h-1, getTextureU(), getTextureV(), width-2, h, getTextureWidth()-2, getTextureHeight()-2);
     }
 
     @Override
     public void addTooltip(int mouseX, int mouseY, List<String> curTip, boolean shiftPressed) {
-        curTip.add(ampStored + "/" + maxAmp + " mA");
+        curTip.add(ampHourStored + "/" + maxAmpHour + " mAh");
     }
 }

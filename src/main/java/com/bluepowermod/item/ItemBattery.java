@@ -52,10 +52,10 @@ public class ItemBattery extends ItemBase implements IRechargeable {
     }
 
     @Override
-    public float removeEnergy(ItemStack stack, float amp) {
+    public float removeEnergy(ItemStack stack, float ampHour) {
         float oldAmp = getAmpStored(stack);
-        if(getAmpStored(stack) - amp > 0){
-            stack.setItemDamage(getMaxDamage() - (int)(getAmpStored(stack) - amp));
+        if(getAmpStored(stack) - ampHour > 0){
+            stack.setItemDamage(getMaxDamage() - (int)(getAmpStored(stack) - ampHour));
         }else{
             stack.setItemDamage(maxAmp);
         }
@@ -63,10 +63,10 @@ public class ItemBattery extends ItemBase implements IRechargeable {
     }
 
     @Override
-    public float addEnergy(ItemStack stack, float amp) {
+    public float addEnergy(ItemStack stack, float ampHour) {
         float oldAmp = getAmpStored(stack);
-        if(amp + getAmpStored(stack) < getMaxAmp()){
-            stack.setItemDamage(getMaxDamage() - (int)(getAmpStored(stack) + amp));
+        if(ampHour + getAmpStored(stack) < getMaxAmp()){
+            stack.setItemDamage(getMaxDamage() - (int)(getAmpStored(stack) + ampHour));
         }else{
             stack.setItemDamage(getMaxDamage());
         }

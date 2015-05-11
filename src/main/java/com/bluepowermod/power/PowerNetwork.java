@@ -36,48 +36,49 @@ public class PowerNetwork {
 
     private int randomNumber = 0;
 
-    private float currentStored = 0.0F;
-    private float maxStored = 0.0F;
+    private float ampHourStored    = 0.0F;
+    private float maxAmpHourStored = 0.0F;
     private List<networkEntry> machines;
-    private IBlockAccess world;
+    private IBlockAccess       world;
 
-    public PowerNetwork(IBluePowered machine, float beginCurrent){
+    public PowerNetwork(IBluePowered machine, float beginCurrent) {
 
         randomNumber = new Random().nextInt();
 
         machines = new ArrayList<networkEntry>();
         machines.add(new networkEntry(machine.getHandler().getBlockLocation()));
 
-        maxStored = machine.getMaxStorage();
+        maxAmpHourStored = machine.getMaxStorage();
 
-        currentStored = beginCurrent;
-        world = ((PowerHandler)machine.getHandler()).getWorld();
+        ampHourStored = beginCurrent;
+        world = ((PowerHandler) machine.getHandler()).getWorld();
     }
 
-    public int getRandomNumber(){
+    public int getRandomNumber() {
+
         return randomNumber;
     }
 
-    private int contains(IBluePowered machine){
+    private int contains(IBluePowered machine) {
 
         int i = 0;
-        for(i=0; i < machines.size(); i++){
-            if(machines.get(i).getLocation().equals(machine.getHandler().getBlockLocation())){
+        for (i = 0; i < machines.size(); i++) {
+            if (machines.get(i).getLocation().equals(machine.getHandler().getBlockLocation())) {
                 return i;
             }
         }
         return -1;
     }
 
-    public void addMachine(IBluePowered machine, float currentToAdd){
+    public void addMachine(IBluePowered machine, float ampHourToAdd){
 
         if(contains(machine) == -1){
-            float oAmp = currentStored * machines.size();
+            float oAmpHour = ampHourStored * machines.size();
 
-            oAmp += currentToAdd;
+            oAmpHour += ampHourToAdd;
             machines.add(new networkEntry(machine.getHandler().getBlockLocation()));
-            currentStored = oAmp / machines.size();
-            maxStored+= machine.getMaxStorage();
+            ampHourStored = oAmpHour / machines.size();
+            maxAmpHourStored += machine.getMaxStorage();
 
             if(world == null){
                 world = ((PowerHandler)machine.getHandler()).getWorld();
@@ -85,9 +86,9 @@ public class PowerNetwork {
         }
     }
 
-    public float getMaxStored() {
+    public float getMaxAmpHourStored() {
 
-        return maxStored;
+        return maxAmpHourStored;
     }
 
     public void removeMachine(IBluePowered machine){
@@ -96,7 +97,7 @@ public class PowerNetwork {
         if(machineIndex != -1){
             ((PowerHandler)machine.getHandler()).setNetwork(null);
             machines.remove(machineIndex);
-            maxStored = 0.0F;
+            maxAmpHourStored = 0.0F;
         }
 
         for(networkEntry entry : machines){
@@ -105,13 +106,13 @@ public class PowerNetwork {
             if(ent instanceof IBluePowered){
                 IBluePowered target = ((IBluePowered) ent);
                 ((PowerHandler)target.getHandler()).setNetwork(null);
-                ((PowerHandler)machine.getHandler()).updateNetworkOnNextTick(getCurrentStored());
+                ((PowerHandler)machine.getHandler()).updateNetworkOnNextTick(getAmpHourStored());
             }
 
             IBluePowered p = MultipartCompatibility.getPart(loc.getWorld(), loc.getX(), loc.getY(), loc.getZ(), IBluePowered.class);
             if(p != null){
                 ((PowerHandler)p.getHandler()).setNetwork(null);
-                ((PowerHandler)p.getHandler()).updateNetworkOnNextTick(getCurrentStored());
+                ((PowerHandler)p.getHandler()).updateNetworkOnNextTick(getAmpHourStored());
             }
         }
     }
@@ -120,8 +121,8 @@ public class PowerNetwork {
         BluePower.log.info("Trying to merge network " + toMerge.getRandomNumber() + " into " + getRandomNumber());
         if(toMerge.equals(this)) return;
 
-        float newCurrent = ((currentStored - toMerge.getCurrentStored()) / 2) + toMerge.getCurrentStored();
-        setCurrentStored(newCurrent);
+        float newCurrent = ((ampHourStored - toMerge.getAmpHourStored()) / 2) + toMerge.getAmpHourStored();
+        setAmpHourStored(newCurrent);
 
         List<networkEntry> otherList = toMerge.getMachines();
 
@@ -143,12 +144,12 @@ public class PowerNetwork {
         BluePower.log.info("Merged network " + toMerge.getRandomNumber() + " into " + getRandomNumber());
     }
 
-    public float getCurrentStored(){
-        return currentStored;
+    public float getAmpHourStored(){
+        return ampHourStored;
     }
 
-    public void setCurrentStored(float newCurrent){
-        currentStored = newCurrent;
+    public void setAmpHourStored(float newAmpHour){
+        ampHourStored = newAmpHour;
     }
 
     public List<networkEntry> getMachines(){
@@ -156,11 +157,11 @@ public class PowerNetwork {
     }
 
     public void writeToNBT(NBTTagCompound tagCompound) {
-        tagCompound.setFloat("currentStored", currentStored);
+        tagCompound.setFloat("ampHourStored", ampHourStored);
     }
 
     public void readFromNBT(NBTTagCompound tagCompound) {
-        currentStored = tagCompound.getFloat("currentStored");
+        ampHourStored = tagCompound.getFloat("ampHourStored");
     }
 
     public static PowerNetwork getNetworkInDir(Vec3i loc, ForgeDirection dir){

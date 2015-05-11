@@ -97,7 +97,7 @@ public class TileBattery extends TileBase implements IBluePowered, IInventory {
                 //The slot for charging
                 if(inventory[1].getItem() instanceof IRechargeable){
                     IRechargeable battery = ((IRechargeable)inventory[1].getItem());
-                    if(getHandler().getAmpStored() > powerTransfer){
+                    if(getHandler().getAmpHourStored() > powerTransfer){
                         //Transfer power, with a certain rate, which we should maybe configurize?
                         float powerTransfered = battery.addEnergy(inventory[1], powerTransfer);
                         getHandler().removeEnergy(powerTransfered);
@@ -111,7 +111,7 @@ public class TileBattery extends TileBase implements IBluePowered, IInventory {
 
     private void recalculateTextureIndex() {
 
-        int newIndex = (int)Math.floor((getHandler().getAmpStored() / getHandler().getMaxAmp()) * 6.0);
+        int newIndex = (int)Math.floor((getHandler().getAmpHourStored() / getHandler().getMaxAmpHour()) * 6.0);
         if(newIndex != textureIndex){
             textureIndex = newIndex;
             worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);

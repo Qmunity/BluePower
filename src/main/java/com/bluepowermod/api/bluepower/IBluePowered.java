@@ -51,7 +51,7 @@ public interface IBluePowered {
 
     /**
      * @author Koen Beckers (K4Unl)
-     * Returns the storage of milliAmps this block has,
+     * Returns the storage of mAh this block has,
      * @return int
      */
     float getMaxStorage();
