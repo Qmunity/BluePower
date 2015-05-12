@@ -85,7 +85,7 @@ public class WorldGenVolcano {
                 break;
         }
         generateLavaColumn(world, middleX, volcanoHeight, middleZ, rand);
-        generateLootChamber(world, middleX, volcanoHeight - 20, middleZ, rand);
+        generateLootChamber(world, middleX, rand.nextInt(volcanoHeight - 20 - world.getHeightValue(middleX, middleZ)) + world.getHeightValue(middleX, middleZ), middleZ, rand);
     }
 
     private boolean canReplace(World world, int x, int y, int z) {
