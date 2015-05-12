@@ -54,6 +54,7 @@ public class WorldGenVolcano {
     public void generate(World world, Random rand, int middleX, int volcanoHeight, int middleZ) {
         List<Pos>[] distMap = calculateDistMap();
         boolean first = true;
+        int centreWorldHeight = world.getHeightValue(middleX, middleZ);
         for (int dist = 0; dist < distMap.length; dist++) {// Loop through every XZ position of the volcano, in order of how close the positions are
             // from the center. The volcano will be generated from the center to the edge.
             List<Pos> distList = distMap[dist];
@@ -85,7 +86,7 @@ public class WorldGenVolcano {
                 break;
         }
         generateLavaColumn(world, middleX, volcanoHeight, middleZ, rand);
-        generateLootChamber(world, middleX, rand.nextInt(volcanoHeight - 20 - world.getHeightValue(middleX, middleZ)) + world.getHeightValue(middleX, middleZ), middleZ, rand);
+        generateLootChamber(world, middleX, rand.nextInt(volcanoHeight - 20 - centreWorldHeight) + centreWorldHeight, middleZ, rand);
     }
 
     private boolean canReplace(World world, int x, int y, int z) {
