@@ -39,8 +39,8 @@ public abstract class RedstonePropagator implements IPropagator<IRedstoneDevice>
 
         doPropagate();
 
-        for (RedstonePropagator p : scheduledPropagations)
-            p.propagate();
+        // for (RedstonePropagator p : scheduledPropagations)
+        // p.propagate();
     }
 
     public IRedstoneDevice getDevice() {
@@ -318,8 +318,7 @@ public abstract class RedstonePropagator implements IPropagator<IRedstoneDevice>
                     }
                 }
                 if (!found && ((power & 0xFF) > 0 || !(dev instanceof IRedstoneConductor)))
-                    propagate(e.getKey().getB(), e.getKey().getSideB(),
-                            (byte) ((power & 0xFF) - (dev instanceof IRedstoneConductor ? 1 : 0)));
+                    propagate(e.getKey().getB(), e.getKey().getSideB(), (byte) ((power & 0xFF) - (dev instanceof IRedstoneConductor ? 1 : 0)));
             }
         }
 
@@ -355,8 +354,8 @@ public abstract class RedstonePropagator implements IPropagator<IRedstoneDevice>
                 return;
             } else if (getDevice() instanceof GateBase<?, ?, ?, ?, ?, ?>) {
                 IGateConnection c = ((GateBase<?, ?, ?, ?, ?, ?>) getDevice()).getConnection(getSide());
-                IConnection<IRedstoneDevice> con = (IConnection<IRedstoneDevice>) getDevice().getRedstoneConnectionCache()
-                        .getConnectionOnSide(getSide());
+                IConnection<IRedstoneDevice> con = (IConnection<IRedstoneDevice>) getDevice().getRedstoneConnectionCache().getConnectionOnSide(
+                        getSide());
                 if (c != null) {
                     if (con != null && con.getB() instanceof IRedConductor && ((IRedConductor) con.getB()).hasLoss(con.getSideB())) {
                         try {
