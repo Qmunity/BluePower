@@ -10,16 +10,20 @@ package com.bluepowermod.tile.tier1;
 import java.lang.reflect.Field;
 import java.util.List;
 
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.InventoryCraftResult;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 
 import com.bluepowermod.BluePower;
 import com.bluepowermod.container.ContainerProjectTable;
+import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.part.IGuiButtonSensitive;
 import com.bluepowermod.tile.TileBase;
@@ -32,12 +36,25 @@ import cpw.mods.fml.relauncher.ReflectionHelper;
 public class TileProjectTable extends TileBase implements IInventory, IGuiButtonSensitive {
 
     private ItemStack[] inventory = new ItemStack[18];
-    private ItemStack[] craftingGrid = new ItemStack[9];
+    protected ItemStack[] craftingGrid = new ItemStack[9];
+    public final IInventory craftResult = new InventoryCraftResult();
     private static Field stackListFieldInventoryCrafting;
 
     public InventoryCrafting getCraftingGrid(Container listener) {
+        InventoryCrafting inventoryCrafting = new InventoryCrafting(listener, 3, 3) {
+            @Override
+            public void setInventorySlotContents(int slot, ItemStack stack) {
+                super.setInventorySlotContents(slot, stack);
+                updateCraftingGrid();
+            }
 
-        InventoryCrafting inventoryCrafting = new InventoryCrafting(listener, 3, 3);
+            @Override
+            public ItemStack decrStackSize(int p_70298_1_, int p_70298_2_) {
+                ItemStack stack = super.decrStackSize(p_70298_1_, p_70298_2_);
+                updateCraftingGrid();
+                return stack;
+            }
+        };
         if (stackListFieldInventoryCrafting == null) {
             stackListFieldInventoryCrafting = ReflectionHelper.findField(InventoryCrafting.class, "field_70466_a", "stackList");
         }
@@ -50,6 +67,17 @@ public class TileProjectTable extends TileBase implements IInventory, IGuiButton
             e.printStackTrace();
             return null;
         }
+    }
+
+    public InventoryCrafting getCraftingGrid() {
+        return getCraftingGrid(new Container() {
+            @Override
+            public boolean canInteractWith(EntityPlayer p_75145_1_) {
+
+                return false;
+            }
+
+        });
     }
 
     @Override
@@ -129,7 +157,7 @@ public class TileProjectTable extends TileBase implements IInventory, IGuiButton
     @Override
     public ItemStack getStackInSlot(int i) {
 
-        return inventory[i];
+        return i < inventory.length ? inventory[i] : craftResult.getStackInSlot(0);
     }
 
     @Override
@@ -163,7 +191,13 @@ public class TileProjectTable extends TileBase implements IInventory, IGuiButton
     @Override
     public void setInventorySlotContents(int i, ItemStack itemStack) {
 
-        inventory[i] = itemStack;
+        if (i < inventory.length) {
+            inventory[i] = itemStack;
+        } else {
+            craftResult.setInventorySlotContents(0, itemStack);
+            craft();
+        }
+        updateCraftingGrid();
     }
 
     @Override
@@ -211,6 +245,45 @@ public class TileProjectTable extends TileBase implements IInventory, IGuiButton
         Container container = player.openContainer;
         if (container instanceof ContainerProjectTable) {
             ((ContainerProjectTable) container).clearCraftingGrid();
+        }
+    }
+
+    private void updateCraftingGrid() {
+        craftResult.setInventorySlotContents(0, CraftingManager.getInstance().findMatchingRecipe(getCraftingGrid(), getWorldObj()));
+    }
+
+    private void craft() {
+        // FMLCommonHandler.instance().firePlayerCraftingEvent(p_82870_1_, p_82870_2_, craftMatrix);
+
+        for (int i = 0; i < craftingGrid.length; ++i) {
+            ItemStack itemstack1 = craftingGrid[i];
+
+            if (itemstack1 != null) {
+                boolean pulledFromInventory = false;
+                if (craftingGrid[i].stackSize == 1) {
+                    ItemStack stackFromTable = ContainerProjectTable.extractStackFromTable(this, craftingGrid[i], false);
+                    pulledFromInventory = stackFromTable != null;
+                }
+                if (!pulledFromInventory) {
+                    craftingGrid[i].stackSize--;
+                    if (craftingGrid[i].stackSize <= 0)
+                        craftingGrid[i] = null;
+                }
+                if (itemstack1.getItem().hasContainerItem(itemstack1)) {
+                    ItemStack itemstack2 = itemstack1.getItem().getContainerItem(itemstack1);
+
+                    if (itemstack2 != null && itemstack2.isItemStackDamageable() && itemstack2.getItemDamage() > itemstack2.getMaxDamage()) {
+                        continue;
+                    }
+
+                    if (!itemstack1.getItem().doesContainerItemLeaveCraftingGrid(itemstack1)) {
+                        ItemStack remainder = IOHelper.insert(this, itemstack2, 0, false);
+                        if (remainder != null) {
+                            worldObj.spawnEntityInWorld(new EntityItem(worldObj, xCoord, yCoord, zCoord, remainder));
+                        }
+                    }
+                }
+            }
         }
     }
 

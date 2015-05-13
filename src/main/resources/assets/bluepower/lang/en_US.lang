@@ -90,6 +90,7 @@ tile.bluepower:io_expander.name=IO Expander
 
 # Tables
 tile.bluepower:project_table.name=Project Table
+tile.bluepower:auto_project_table.name=Auto Project Table
 tile.bluepower:circuit_table.name=Circuit Table
 tile.bluepower:circuit_database.name=Circuit Database
 
@@ -791,6 +792,7 @@ tile.bluepower:ejector.info=When pulsed by redstone, the Ejector will try to eje
 tile.bluepower:filter.info=When pulsed by redstone, the Filter will try to take a stack out of a connected inventory and eject it on the other side. The allowed items can be specified using the filter slots, and the ejected stack also can be colored.
 tile.bluepower:item_detector.info=Used to detect items going through tubes. It can be set to emit a redstone pulse once per stack, or once for every single item in a stack. It can also be used to detect a system getting stuffed.
 tile.bluepower:project_table.info=A Project Table is an enhanced Crafting Table. It can be used for mass crafting. Put in a 'template' into the crafting grid. Any items used by crafting will be pulled from the Table's inventory.
+tile.bluepower:auto_project_table.info=The Auto Project Table behaves for the most part the same as the Project table. The only difference is that when you are using automation (Hoppers, Filters, Transposers) to pull out items, you will pull from the crafting output slot, and therefore craft.
 tile.bluepower:relay.info=Automatically tries to eject any item in its inventory. It can be used as an interface between different mods, or simply as a faster Hopper.
 tile.bluepower:circuit_table.info=Crafting Gates can be painful. The Circuit Table allows you to craft a gate by simply clicking on the gate you want, provided the items needed to craft the gate are in the Table's inventory.
 tile.bluepower:regulator.info=Very versatile machine. It can be used to keep an inventory supplied with a certain amount of items, detect whether inventories have certain items, and much more.

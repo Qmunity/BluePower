@@ -24,6 +24,7 @@ import com.bluepowermod.network.message.MessageDebugBlock;
 import com.bluepowermod.network.message.MessageGuiUpdate;
 import com.bluepowermod.network.message.MessageRedirectTubeStack;
 import com.bluepowermod.network.message.MessageSendClientServerTemplates;
+import com.bluepowermod.network.message.MessageServerTickTime;
 import com.bluepowermod.network.message.MessageSyncMachineBacklog;
 import com.bluepowermod.network.message.MessageUpdateTextfield;
 import com.bluepowermod.network.message.MessageWirelessFrequencySync;
@@ -47,6 +48,7 @@ public class BPNetworkHandler {
         INSTANCE.registerPacket(MessageDebugBlock.class, MessageDebugBlock.class, Side.CLIENT);
         INSTANCE.registerPacket(MessageSendClientServerTemplates.class, MessageSendClientServerTemplates.class, Side.CLIENT);
         INSTANCE.registerPacket(MessageRedirectTubeStack.class, MessageRedirectTubeStack.class, Side.CLIENT);
+        INSTANCE.registerPacket(MessageServerTickTime.class, Side.CLIENT);
 
         INSTANCE.registerPacket(MessageWirelessNewFreq.class, MessageWirelessNewFreq.class, Side.SERVER);
         INSTANCE.registerPacket(MessageWirelessSaveFreq.class, MessageWirelessSaveFreq.class, Side.SERVER);

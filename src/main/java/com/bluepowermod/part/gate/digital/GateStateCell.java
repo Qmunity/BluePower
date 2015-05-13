@@ -69,7 +69,7 @@ public class GateStateCell extends GateSimpleDigital implements IGuiButtonSensit
     @Override
     public void initComponents() {
 
-        addComponent(t1 = new GateComponentPointer(this, 0x0000FF, 7 / 16D, true).setAngle(0.75).setIncrement(0.025));
+        addComponent(t1 = new GateComponentPointer(this, 0x0000FF, 7 / 16D, true).setAngle(0.75));
         addComponent(t2 = new GateComponentTorch(this, 0x6F00B5, 4 / 16D, true).setState(false));
 
         addComponent(w1 = new GateComponentWire(this, 0x18FF00, RedwireType.BLUESTONE).setPower((byte) 255));
@@ -120,6 +120,8 @@ public class GateStateCell extends GateSimpleDigital implements IGuiButtonSensit
             t1.setAngle(mirrored ? 0.25 : 0.75);
             t1.setIncrement((mirrored ? -1 : 1) * 0.1575 * (1 / (double) time));
         }
+
+        sendUpdatePacket();
     }
 
     @Override
@@ -135,7 +137,7 @@ public class GateStateCell extends GateSimpleDigital implements IGuiButtonSensit
 
         GateConnectionDigital out = mirrored ? right() : left();
 
-        if (triggered)
+        if (triggered && !locked)
             ticks++;
 
         if (!triggered || locked)
