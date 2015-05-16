@@ -59,8 +59,8 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class GateIntegratedCircuit extends
-        GateBase<GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase>
-        implements IGateLogic<GateIntegratedCircuit>, IRedstoneDeviceWrapper, IBundledDeviceWrapper, IPartSelectableCustom {
+        GateBase<GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase> implements
+        IGateLogic<GateIntegratedCircuit>, IRedstoneDeviceWrapper, IBundledDeviceWrapper, IPartSelectableCustom {
 
     private int size;
     private CachedBlock[][] cachedBlocks = null;
@@ -172,8 +172,8 @@ public class GateIntegratedCircuit extends
             MovingObjectPosition mop2 = rayTraceCircuit(start, end);
             if (mop2 != null && mop2.blockY == 64) {
                 FakeWorldIC w = load();
-                AxisAlignedBB aabb = w.getBlock(mop2.blockX, mop2.blockY, mop2.blockZ).getSelectedBoundingBoxFromPool(w, mop2.blockX,
-                        mop2.blockY, mop2.blockZ);
+                AxisAlignedBB aabb = w.getBlock(mop2.blockX, mop2.blockY, mop2.blockZ).getSelectedBoundingBoxFromPool(w, mop2.blockX, mop2.blockY,
+                        mop2.blockZ);
                 if (aabb != null) {
                     double s = (1 - border * 2) / size;
                     double t = ((size - 1) / 2D);
@@ -187,8 +187,6 @@ public class GateIntegratedCircuit extends
                                     .setData(new Pair<Integer, Integer>(mop2.blockX, mop2.blockZ))), start, end, new Vec3i(this));
                     if (mop3 != null) {
                         mop = mop3;
-                        if (mop.getCube() != null) {
-                        }
                     }
                 }
             }
@@ -267,12 +265,15 @@ public class GateIntegratedCircuit extends
                 if (r1 != null)
                     renderer.addTransformation(r1);
 
+                renderer.setColor((x + y) % 2 == 1 ? 0xEEEEEE : 0xBBBBBB);
+                renderer.renderBox(new Vec3dCube(border + x * s, border, border + y * s, border + (x + 1) * s, border, border + (y + 1) * s), null,
+                        Blocks.stone_slab.getIcon(0, 0), null, null, null, null);
+                renderer.setColor(0xFFFFFF);
+
                 renderer.addTransformation(new Scale(s, s, s));
                 renderer.addTransformation(new Translation(-t, -t, -t));
 
                 renderer.addTransformation(new Translation(x, 0, y));
-
-                renderer.renderBox(new Vec3dCube(0, 0, 0, 1, 0, 1), null, Blocks.stone_slab.getIcon(0, 0), null, null, null, null);
 
                 CachedBlock b = cachedBlocks[x][y];
                 if (b != null) {
@@ -283,9 +284,10 @@ public class GateIntegratedCircuit extends
                         // i1 = i2 = i3 = i4 = i5 = i6 = Blocks.stone.getIcon(0, 0);
 
                         renderer.setColor(b.block().colorMultiplier(FakeWorldIC.getInstance(), x, 64, y));
-                        renderer.renderBox(new Vec3dCube(b.block().getBlockBoundsMinX(), b.block().getBlockBoundsMinY(), b.block()
-                                .getBlockBoundsMinZ(), b.block().getBlockBoundsMaxX(), b.block().getBlockBoundsMaxY(), b.block()
-                                .getBlockBoundsMaxZ()), i1, i2, i3, i4, i5, i6);
+                        renderer.renderBox(
+                                new Vec3dCube(b.block().getBlockBoundsMinX(), b.block().getBlockBoundsMinY(), b.block().getBlockBoundsMinZ(), b
+                                        .block().getBlockBoundsMaxX(), b.block().getBlockBoundsMaxY(), b.block().getBlockBoundsMaxZ()), i1, i2, i3,
+                                i4, i5, i6);
                         renderer.setColor(0xFFFFFF);
                     } else {
                         ICRegistry.instance.renderStatic(x, y, b, renderer, pass);
@@ -354,8 +356,8 @@ public class GateIntegratedCircuit extends
         if (cachedBlocks[x][y] != null) {
             renderer.addTransformation(new Translation(x, 0, y));
             CachedBlock b = cachedBlocks[x][y];
-            renderer.renderBox(new Vec3dCube(0, 0, 0, 1, 1, 1), b.block().getIcon(0, b.meta()), b.block().getIcon(1, b.meta()), b.block()
-                    .getIcon(2, b.meta()), b.block().getIcon(3, b.meta()), b.block().getIcon(4, b.meta()), b.block().getIcon(5, b.meta()));
+            renderer.renderBox(new Vec3dCube(0, 0, 0, 1, 1, 1), b.block().getIcon(0, b.meta()), b.block().getIcon(1, b.meta()),
+                    b.block().getIcon(2, b.meta()), b.block().getIcon(3, b.meta()), b.block().getIcon(4, b.meta()), b.block().getIcon(5, b.meta()));
             renderer.removeTransformation();
         }
         renderer.removeTransformations(2);
@@ -384,7 +386,7 @@ public class GateIntegratedCircuit extends
         int x = hit.blockX;
         int z = hit.blockZ;
 
-        if (x < 0 || z < 0 || x >= size || z >= size)
+        if (x < 0 || z < 0 || x >= size || z >= size || hit.blockY != 64)
             return false;
 
         boolean result = false;
@@ -447,8 +449,7 @@ public class GateIntegratedCircuit extends
     // Connectivity
 
     @Override
-    public IPartPlacement getPlacement(IPart part, World world, Vec3i location, ForgeDirection face, MovingObjectPosition mop,
-            EntityPlayer player) {
+    public IPartPlacement getPlacement(IPart part, World world, Vec3i location, ForgeDirection face, MovingObjectPosition mop, EntityPlayer player) {
 
         if (!DebugHelper.isDebugModeEnabled())
             return null;
@@ -496,8 +497,8 @@ public class GateIntegratedCircuit extends
         boolean action = false;
 
         if (item != null) {
-            Vec3d pos = RayTracer.getStartVector(player).clone().sub(getX(), getY(), getZ()).sub(border, border, border)
-                    .div(1 - 2 * border).mul(getSize()).add(0, 64, 0);
+            Vec3d pos = RayTracer.getStartVector(player).clone().sub(getX(), getY(), getZ()).sub(border, border, border).div(1 - 2 * border)
+                    .mul(getSize()).add(0, 64, 0);
 
             World w = player.worldObj;
             double px = player.posX, py = player.posY, pz = player.posZ;
