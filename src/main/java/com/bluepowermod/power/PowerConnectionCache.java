@@ -1,4 +1,4 @@
-package com.bluepowermod.redstone;
+package com.bluepowermod.power;
 
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -6,36 +6,35 @@ import com.bluepowermod.api.connect.ConnectionType;
 import com.bluepowermod.api.connect.IConnection;
 import com.bluepowermod.api.connect.IConnectionCache;
 import com.bluepowermod.api.connect.IConnectionListener;
-import com.bluepowermod.api.wire.redstone.IRedstoneDevice;
+import com.bluepowermod.api.power.IPowerBase;
 
-public class RedstoneConnectionCache implements IConnectionCache<IRedstoneDevice> {
+public class PowerConnectionCache implements IConnectionCache<IPowerBase> {
 
-    private IRedstoneDevice dev;
-    private RedstoneConnection[] connections = new RedstoneConnection[7];
+    private IPowerBase dev;
+    private PowerConnection[] connections = new PowerConnection[7];
     private IConnectionListener listener;
 
-    public RedstoneConnectionCache(IRedstoneDevice dev) {
+    public PowerConnectionCache(IPowerBase dev) {
 
         this.dev = dev;
     }
 
     @Override
-    public IRedstoneDevice getSelf() {
+    public IPowerBase getSelf() {
 
         return dev;
     }
 
     @Override
-    public IConnection<IRedstoneDevice> getConnectionOnSide(ForgeDirection side) {
+    public IConnection<IPowerBase> getConnectionOnSide(ForgeDirection side) {
 
         return connections[side.ordinal()];
     }
 
     @Override
-    public void onConnect(ForgeDirection side, IRedstoneDevice connectable, ForgeDirection connectableSide, ConnectionType type) {
+    public void onConnect(ForgeDirection side, IPowerBase connectable, ForgeDirection connectableSide, ConnectionType type) {
 
-        RedstoneConnection con = connections[side.ordinal()] = RedstoneApi.getInstance().createConnection(getSelf(), connectable, side,
-                connectableSide, type);
+        PowerConnection con = connections[side.ordinal()] = new PowerConnection(getSelf(), connectable, side, connectableSide, type);
         if (listener != null)
             listener.onConnect(con);
     }
@@ -43,32 +42,29 @@ public class RedstoneConnectionCache implements IConnectionCache<IRedstoneDevice
     @Override
     public void onDisconnect(ForgeDirection side) {
 
-        RedstoneConnection con = connections[side.ordinal()];
+        PowerConnection con = connections[side.ordinal()];
         connections[side.ordinal()] = null;
         if (listener != null)
             listener.onDisconnect(con);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public void recalculateConnections() {
 
-        if (dev.getWorld().isRemote)
+        if (dev.getDevice() == null || dev.getDevice().getWorld() == null || dev.getDevice().getWorld().isRemote)
             return;
 
-        IRedstoneDevice self = getSelf();
+        IPowerBase self = getSelf();
         for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
             boolean wasConnected = connections[d.ordinal()] != null;
-            RedstoneConnection con = RedConnectionHelper.getNeighbor(self, d);
+            PowerConnection con = PowerConnectionHelper.getNeighbor(self, d);
             if (con != null) {
                 if (!wasConnected || connections[d.ordinal()].getB() != con.getB() || connections[d.ordinal()].getSideB() != con.getSideB()
                         || connections[d.ordinal()].getType() != con.getType()) {
                     onConnect(con.getSideA(), con.getB(), con.getSideB(), con.getType());
-                    ((IConnectionCache<IRedstoneDevice>) con.getB().getRedstoneConnectionCache()).onConnect(con.getSideB(), con.getA(),
-                            con.getSideA(), con.getType());
+                    con.getB().getConnectionCache().onConnect(con.getSideB(), con.getA(), con.getSideA(), con.getType());
 
-                    IConnection<IRedstoneDevice> con2 = (IConnection<IRedstoneDevice>) con.getB().getRedstoneConnectionCache()
-                            .getConnectionOnSide(con.getSideB());
+                    IConnection<IPowerBase> con2 = con.getB().getConnectionCache().getConnectionOnSide(con.getSideB());
                     con = connections[d.ordinal()];
 
                     if (con == null)
@@ -82,7 +78,7 @@ public class RedstoneConnectionCache implements IConnectionCache<IRedstoneDevice
 
                 if (con != null) {
                     onDisconnect(con.getSideA());
-                    con.getB().getRedstoneConnectionCache().onDisconnect(con.getSideB());
+                    con.getB().getConnectionCache().onDisconnect(con.getSideB());
                 }
             }
         }
@@ -91,10 +87,10 @@ public class RedstoneConnectionCache implements IConnectionCache<IRedstoneDevice
     @Override
     public void disconnectAll() {
 
-        for (RedstoneConnection con : connections) {
+        for (PowerConnection con : connections) {
             if (con == null)
                 continue;
-            con.getB().getRedstoneConnectionCache().onDisconnect(con.getSideB());
+            con.getB().getConnectionCache().onDisconnect(con.getSideB());
             onDisconnect(con.getSideA());
         }
     }

@@ -1,38 +1,39 @@
 package com.bluepowermod.tile.tier2;
 
-import com.bluepowermod.api.BPApi;
-import com.bluepowermod.api.bluepower.BluePowerTier;
-import com.bluepowermod.api.bluepower.IBluePowered;
-import com.bluepowermod.api.bluepower.IPowerBase;
-import com.bluepowermod.api.bluepower.IRechargeable;
-import com.bluepowermod.init.BPBlocks;
-import com.bluepowermod.tile.TileBase;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import com.bluepowermod.api.BPApi;
+import com.bluepowermod.api.connect.ConnectionType;
+import com.bluepowermod.api.power.IPowerBase;
+import com.bluepowermod.api.power.IPowered;
+import com.bluepowermod.api.power.IRechargeable;
+import com.bluepowermod.api.power.PowerTier;
+import com.bluepowermod.init.BPBlocks;
+import com.bluepowermod.tile.TileBase;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 /**
  * @author Koen Beckers (K4Unl)
  */
-public class TileBattery extends TileBase implements IBluePowered, IInventory {
+public class TileBattery extends TileBase implements IPowered, IInventory {
 
     private ItemStack[] inventory = new ItemStack[2];
 
-    private static int powerTransfer = 1; //The amount of Amps being transferred into or out of a battery, every tick
+    private static int powerTransfer = 1; // The amount of Amps being transferred into or out of a battery, every tick
     private int textureIndex;
 
-    private IPowerBase handler;
+    private IPowerBase handler = BPApi.getInstance().getPowerApi().createPowerHandler(this);
 
     @SideOnly(Side.CLIENT)
     private float ampStored;
     @SideOnly(Side.CLIENT)
     private float maxAmp;
-
 
     @Override
     public boolean isPowered() {
@@ -41,66 +42,65 @@ public class TileBattery extends TileBase implements IBluePowered, IInventory {
     }
 
     @Override
-    public BluePowerTier getTier() {
+    public PowerTier getPowerTier() {
 
-        return BluePowerTier.MEDIUMVOLTAGE;
+        return PowerTier.MEDIUMVOLTAGE;
     }
 
     @Override
-    public IPowerBase getHandler() {
-        if(worldObj.isRemote){
-            throw new IllegalStateException("Handler can only be accessed from the server!");
-        }
+    public IPowerBase getPowerHandler(ForgeDirection side) {
 
-        if(handler == null){
-
-            handler = BPApi.getInstance().getNewPowerHandler(this);
-        }
         return handler;
     }
 
     @Override
-    public boolean canConnectTo(ForgeDirection dir) {
+    public boolean canConnectPower(ForgeDirection side, IPowered dev, ConnectionType type) {
 
         return true;
     }
 
     @Override
-    public float getMaxStorage() {
+    public boolean isNormalFace(ForgeDirection side) {
+
+        return true;
+    }
+
+    @Override
+    public float getMaxPowerStorage() {
 
         return 3000;
     }
 
     @Override
-    public void updateEntity(){
+    public void updateEntity() {
 
         super.updateEntity();
 
-        if(!getWorldObj().isRemote){
+        if (!getWorldObj().isRemote) {
 
-            getHandler().update();
+            handler.update();
 
-            //Check if there's an item in the inventory
-            if(inventory[0] != null){
-                //The slot for discharging
-                if(inventory[0].getItem() instanceof IRechargeable){
-                    IRechargeable battery = ((IRechargeable)inventory[0].getItem());
-                    if(battery.getAmpStored(inventory[0]) > powerTransfer){
-                        //Transfer power, with a certain rate, which we should maybe configurize?
-                        float powerTransfered = getHandler().addEnergy(powerTransfer);
+            // Check if there's an item in the inventory
+            if (inventory[0] != null) {
+                // The slot for discharging
+                if (inventory[0].getItem() instanceof IRechargeable) {
+                    IRechargeable battery = ((IRechargeable) inventory[0].getItem());
+                    if (battery.getAmpStored(inventory[0]) > powerTransfer) {
+                        // Transfer power, with a certain rate, which we should maybe configurize?
+                        float powerTransfered = handler.addEnergy(powerTransfer);
                         battery.removeEnergy(inventory[0], powerTransfered);
                     }
                 }
 
             }
-            if(inventory[1] != null){
-                //The slot for charging
-                if(inventory[1].getItem() instanceof IRechargeable){
-                    IRechargeable battery = ((IRechargeable)inventory[1].getItem());
-                    if(getHandler().getAmpHourStored() > powerTransfer){
-                        //Transfer power, with a certain rate, which we should maybe configurize?
+            if (inventory[1] != null) {
+                // The slot for charging
+                if (inventory[1].getItem() instanceof IRechargeable) {
+                    IRechargeable battery = ((IRechargeable) inventory[1].getItem());
+                    if (handler.getAmpHourStored() > powerTransfer) {
+                        // Transfer power, with a certain rate, which we should maybe configurize?
                         float powerTransfered = battery.addEnergy(inventory[1], powerTransfer);
-                        getHandler().removeEnergy(powerTransfered);
+                        handler.removeEnergy(powerTransfered);
                     }
                 }
             }
@@ -111,13 +111,14 @@ public class TileBattery extends TileBase implements IBluePowered, IInventory {
 
     private void recalculateTextureIndex() {
 
-        int newIndex = (int)Math.floor((getHandler().getAmpHourStored() / getHandler().getMaxAmpHour()) * 6.0);
-        if(newIndex != textureIndex){
+        int newIndex = (int) Math.floor((handler.getAmpHourStored() / handler.getMaxAmpHour()) * 6.0);
+        if (newIndex != textureIndex) {
             textureIndex = newIndex;
             worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
         }
     }
 
+    @Override
     protected void readFromPacketNBT(NBTTagCompound tCompound) {
 
         super.readFromPacketNBT(tCompound);
@@ -132,16 +133,18 @@ public class TileBattery extends TileBase implements IBluePowered, IInventory {
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound tagCompound){
+    public void readFromNBT(NBTTagCompound tagCompound) {
+
         super.readFromNBT(tagCompound);
-        getHandler().readFromNBT(tagCompound);
+        handler.readFromNBT(tagCompound);
         textureIndex = tagCompound.getInteger("textureIndex");
     }
 
     @Override
-    public void writeToNBT(NBTTagCompound tagCompound){
+    public void writeToNBT(NBTTagCompound tagCompound) {
+
         super.writeToNBT(tagCompound);
-        getHandler().writeToNBT(tagCompound);
+        handler.writeToNBT(tagCompound);
         tagCompound.setInteger("textureIndex", textureIndex);
     }
 
@@ -187,6 +190,7 @@ public class TileBattery extends TileBase implements IBluePowered, IInventory {
 
     @Override
     public void setInventorySlotContents(int index, ItemStack toSet) {
+
         inventory[index] = toSet;
     }
 
@@ -230,36 +234,53 @@ public class TileBattery extends TileBase implements IBluePowered, IInventory {
         return itemToTest.getItem() instanceof IRechargeable;
     }
 
-
     @SideOnly(Side.CLIENT)
-    public void setAmpStored(float newAmp){
+    public void setAmpStored(float newAmp) {
+
         ampStored = newAmp;
     }
 
     @SideOnly(Side.CLIENT)
-    public void setMaxAmp(float newAmp){
+    public void setMaxAmp(float newAmp) {
+
         maxAmp = newAmp;
     }
 
     @SideOnly(Side.CLIENT)
-    public float getAmpStored(){
+    public float getAmpStored() {
+
         return ampStored;
     }
 
     @SideOnly(Side.CLIENT)
-    public float getMaxAmp(){
+    public float getMaxAmp() {
+
         return maxAmp;
     }
 
-    @Override
-    public void invalidate(){
-        super.invalidate();
-        if(FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
-            getHandler().invalidate();
-        }
+    public int getTextureIndex() {
+
+        return textureIndex;
     }
 
-    public int getTextureIndex(){
-        return textureIndex;
+    @Override
+    public void invalidate() {
+
+        super.invalidate();
+        handler.disconnect();
+    }
+
+    @Override
+    public void onNeighborBlockChanged() {
+
+        super.onNeighborBlockChanged();
+        handler.onNeighborUpdate();
+    }
+
+    @Override
+    protected void onTileLoaded() {
+
+        super.onTileLoaded();
+        handler.onNeighborUpdate();
     }
 }

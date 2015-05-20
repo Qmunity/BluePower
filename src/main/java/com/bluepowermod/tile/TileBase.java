@@ -26,14 +26,16 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import uk.co.qmunity.lib.vec.IWorldLocation;
 
 import com.bluepowermod.BluePower;
 
 /**
  * @author MineMaarten
  */
-public class TileBase extends TileEntity implements IRotatable {
+public class TileBase extends TileEntity implements IRotatable, IWorldLocation {
 
     private boolean isRedstonePowered;
     private int outputtingRedstone;
@@ -67,7 +69,7 @@ public class TileBase extends TileEntity implements IRotatable {
 
     /**
      * Tags written in here are synced upon markBlockForUpdate.
-     * 
+     *
      * @param tCompound
      */
     protected void writeToPacketNBT(NBTTagCompound tCompound) {
@@ -132,11 +134,11 @@ public class TileBase extends TileEntity implements IRotatable {
         ticker++;
     }
 
-    /**
+    /*
      * ************** ADDED FUNCTIONS ****************
      */
 
-    public void onBlockNeighbourChanged() {
+    public void onNeighborBlockChanged() {
 
         checkRedstonePower();
     }
@@ -156,7 +158,7 @@ public class TileBase extends TileEntity implements IRotatable {
 
     /**
      * Before being able to use this, remember to mark the block as redstone emitter by calling BlockContainerBase#emitsRedstone()
-     * 
+     *
      * @param newValue
      */
     public void setOutputtingRedstone(boolean newValue) {
@@ -166,7 +168,7 @@ public class TileBase extends TileEntity implements IRotatable {
 
     /**
      * Before being able to use this, remember to mark the block as redstone emitter by calling BlockContainerBase#emitsRedstone()
-     * 
+     *
      * @param value
      */
     public void setOutputtingRedstone(int value) {
@@ -186,7 +188,7 @@ public class TileBase extends TileEntity implements IRotatable {
 
     /**
      * This method can be overwritten to get alerted when the redstone level has changed.
-     * 
+     *
      * @param newValue
      *            The redstone level it is at now
      */
@@ -205,7 +207,7 @@ public class TileBase extends TileEntity implements IRotatable {
 
     /**
      * Returns the ticker of the Tile, this number wll increase every tick
-     * 
+     *
      * @return the ticker
      */
     public int getTicker() {
@@ -219,7 +221,7 @@ public class TileBase extends TileEntity implements IRotatable {
     protected void onTileLoaded() {
 
         if (!worldObj.isRemote)
-            onBlockNeighbourChanged();
+            onNeighborBlockChanged();
     }
 
     public List<ItemStack> getDrops() {
@@ -246,5 +248,34 @@ public class TileBase extends TileEntity implements IRotatable {
     public boolean canConnectRedstone() {
 
         return false;
+    }
+
+    public boolean isPowered() {
+
+        return false;
+    }
+
+    @Override
+    public World getWorld() {
+
+        return getWorldObj();
+    }
+
+    @Override
+    public int getX() {
+
+        return xCoord;
+    }
+
+    @Override
+    public int getY() {
+
+        return yCoord;
+    }
+
+    @Override
+    public int getZ() {
+
+        return zCoord;
     }
 }

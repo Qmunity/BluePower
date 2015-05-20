@@ -1,9 +1,10 @@
 package com.bluepowermod.item;
 
-import com.bluepowermod.api.bluepower.BluePowerTier;
-import com.bluepowermod.api.bluepower.IRechargeable;
+import com.bluepowermod.api.power.PowerTier;
+import com.bluepowermod.api.power.IRechargeable;
 import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.reference.Refs;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.creativetab.CreativeTabs;
@@ -34,9 +35,9 @@ public class ItemBattery extends ItemBase implements IRechargeable {
     }
 
     @Override
-    public BluePowerTier getTier() {
+    public PowerTier getTier() {
 
-        return BluePowerTier.MEDIUMVOLTAGE;
+        return PowerTier.MEDIUMVOLTAGE;
     }
 
     @Override

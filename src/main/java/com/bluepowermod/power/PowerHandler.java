@@ -1,214 +1,129 @@
 package com.bluepowermod.power;
 
-import com.bluepowermod.BluePower;
-import com.bluepowermod.api.bluepower.BluePowerTier;
-import com.bluepowermod.api.bluepower.IBluePowered;
-import com.bluepowermod.api.bluepower.IPowerBase;
-import com.bluepowermod.part.BPPart;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.relauncher.Side;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
-import uk.co.qmunity.lib.vec.Vec3i;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.bluepowermod.api.connect.IConnectionCache;
+import com.bluepowermod.api.misc.IFace;
+import com.bluepowermod.api.power.IPowerBase;
+import com.bluepowermod.api.power.IPowered;
 
 /**
  * @author Koen Beckers (K4Unl)
  */
-public class PowerHandler implements IPowerBase {
+public class PowerHandler implements IPowerBase, IFace {
 
-    private boolean      isMultipart;
-    private BPPart       pTarget;
-    private TileEntity   tTarget;
-    private IBluePowered iTarget;
-    private World        tWorld;
+    private IPowered device;
+    private PowerConnectionCache cache = new PowerConnectionCache(this);
+    private boolean[] connections = new boolean[6];
 
-    private PowerNetwork pNetwork;
+    public PowerHandler(IPowered device) {
 
-    private BluePowerTier tier;
-    private boolean shouldUpdateNetworkOnNextTick = true;
-    protected List<ForgeDirection> connectedSides;
-    private   float                oldCurrent;
-
-    public PowerHandler(TileEntity _target) {
-
-        tTarget = _target;
-        iTarget = (IBluePowered) _target;
-        tWorld = _target.getWorldObj();
-        connectedSides = new ArrayList<ForgeDirection>();
-    }
-
-    public PowerHandler(BPPart _target) {
-
-        pTarget = _target;
-        iTarget = (IBluePowered) _target;
-        isMultipart = true;
-        tWorld = _target.getWorld();
-        connectedSides = new ArrayList<ForgeDirection>();
+        this.device = device;
     }
 
     @Override
     public void readFromNBT(NBTTagCompound tagCompound) {
 
+        // TODO
     }
 
     @Override
     public void writeToNBT(NBTTagCompound tagCompound) {
 
+        // TODO
     }
 
-    public World getWorld(){
+    @Override
+    public void readUpdateFromNBT(NBTTagCompound tagCompound) {
 
-        if(tWorld == null){
-            if(isMultipart){
-                tWorld = pTarget.getWorld();
-            }else{
-                if(tTarget != null){
-                    tWorld = tTarget.getWorldObj();
-                }
-            }
-        }
-        return tWorld;
+        NBTTagCompound tag = tagCompound.getCompoundTag("powerHandler");
+        for (int i = 0; i < 6; i++)
+            connections[i] = tag.getBoolean("connected_" + i);
+
+        // TODO
     }
 
+    @Override
+    public void writeUpdateToNBT(NBTTagCompound tagCompound) {
 
-    public float getAmpHourStored(){
-        if(getNetwork() == null){
-            //Fuck, we need to fix this..
-            updateNetworkOnNextTick(0);
-            return 0;
-        }
-        return getNetwork().getAmpHourStored();
+        NBTTagCompound tag = new NBTTagCompound();
+        for (int i = 0; i < 6; i++)
+            tag.setBoolean("connected_" + i, cache.getConnectionOnSide(ForgeDirection.getOrientation(i)) != null);
+        tagCompound.setTag("powerHandler", tag);
+
+        // TODO
+    }
+
+    @Override
+    public void update() {
+
+        // TODO
+    }
+
+    @Override
+    public void onNeighborUpdate() {
+
+        cache.recalculateConnections();
+    }
+
+    @Override
+    public float getAmpHourStored() {
+
+        return 0; // TODO
     }
 
     @Override
     public float getMaxAmpHour() {
-        if(getNetwork() == null){
-            //Fuck, we need to fix this..
-            updateNetworkOnNextTick(0);
-            return 0;
-        }
-        return getNetwork().getMaxAmpHourStored();
+
+        return 0; // TODO
     }
 
     @Override
-    public float removeEnergy(float ampHour){
+    public float removeEnergy(float ampHour) {
 
-        if(getNetwork() == null) return 0.0F;
-
-        float oldPower = getAmpHourStored();
-        int compare = Float.compare(getNetwork().getAmpHourStored() - ampHour, 0.0F);
-        if(compare == 1) {
-            getNetwork().setAmpHourStored(getNetwork().getAmpHourStored() - ampHour);
-        }else{
-            //Implode?
-
-        }
-        return getAmpHourStored() - oldPower;
+        return 0; // TODO
     }
 
     @Override
-    public float addEnergy(float ampHour){
+    public float addEnergy(float ampHour) {
 
-        if(getNetwork() == null) return 0.0F;
-
-        float oldPower = getAmpHourStored();
-        int compare = Float.compare(getNetwork().getAmpHourStored() + ampHour, getMaxAmpHour());
-        if(compare == -1) {
-            getNetwork().setAmpHourStored(getNetwork().getAmpHourStored() + ampHour);
-        }else{
-            //Explode?
-            getNetwork().setAmpHourStored((getNetwork().getMaxAmpHourStored()));
-        }
-
-        return getAmpHourStored() - oldPower;
-    }
-
-    private void setEnergy(float ampHour){
-
-        if(getNetwork() == null) return;
-        getNetwork().setAmpHourStored(ampHour);
+        return 0; // TODO
     }
 
     @Override
-    public Vec3i getBlockLocation() {
+    public IConnectionCache<IPowerBase> getConnectionCache() {
 
-        if(isMultipart) {
-            return new Vec3i(pTarget.getX(), pTarget.getY(), pTarget.getZ(), getWorld());
-        }else{
-            return new Vec3i(tTarget.xCoord, tTarget.yCoord, tTarget.zCoord, getWorld());
-        }
-    }
-
-    public void setNetwork(PowerNetwork newNetwork) {
-        pNetwork = newNetwork;
-    }
-
-    public void updateNetworkOnNextTick(float _oldCurrent){
-        if(getWorld() != null && !getWorld().isRemote){
-            shouldUpdateNetworkOnNextTick = true;
-            this.pNetwork = null;
-            this.oldCurrent = _oldCurrent;
-        }
+        return cache;
     }
 
     @Override
-    public void update(){
-        if(shouldUpdateNetworkOnNextTick){
-            shouldUpdateNetworkOnNextTick = false;
-            updateNetwork(this.oldCurrent);
-        }
-    }
+    public boolean isConnected(ForgeDirection side) {
 
-    public PowerNetwork getNetwork() {
-        return pNetwork;
-    }
+        if (device.getWorld() != null && !device.getWorld().isRemote)
+            return cache.getConnectionOnSide(side) != null;
 
-    public void updateNetwork(float oldCurrent) {
-        PowerNetwork newNetwork = null;
-        PowerNetwork foundNetwork = null;
-        PowerNetwork endNetwork = null;
-        //This block can merge networks!
-        for(ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS){
-            if(iTarget.canConnectTo(dir)){
-                foundNetwork = PowerNetwork.getNetworkInDir(getBlockLocation(), dir);
-                if(foundNetwork != null){
-                    if(endNetwork == null){
-                        endNetwork = foundNetwork;
-                    }else{
-                        newNetwork = foundNetwork;
-                    }
-                    connectedSides.add(dir);
-                }
-
-                if(newNetwork != null && endNetwork != null){
-                    //Hmm.. More networks!? What's this!?
-                    endNetwork.mergeNetwork(newNetwork);
-                    newNetwork = null;
-                }
-            }
-        }
-
-        if(endNetwork != null){
-            pNetwork = endNetwork;
-            pNetwork.addMachine(iTarget, oldCurrent);
-            BluePower.log.info("Found an existing network (" + pNetwork.getRandomNumber() + ") @ " + getBlockLocation().getX() + "," + getBlockLocation().getY() + "," + getBlockLocation().getZ());
-        }else{
-            pNetwork = new PowerNetwork(iTarget, oldCurrent);
-            BluePower.log.info("Created a new network (" + pNetwork.getRandomNumber() + ") @ " + getBlockLocation().getX() + "," + getBlockLocation().getY() + "," + getBlockLocation().getZ());
-        }
+        return connections[side.ordinal()];
     }
 
     @Override
-    public void invalidate(){
-        if(FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER){
-            if(getNetwork() != null) {
-                getNetwork().removeMachine(iTarget);
-            }
-        }
+    public IPowered getDevice() {
+
+        return device;
+    }
+
+    @Override
+    public void disconnect() {
+
+        cache.disconnectAll();
+    }
+
+    @Override
+    public ForgeDirection getFace() {
+
+        if (device instanceof IFace)
+            return ((IFace) device).getFace();
+
+        return ForgeDirection.UNKNOWN;
     }
 }

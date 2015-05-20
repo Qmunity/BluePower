@@ -1,4 +1,4 @@
-package com.bluepowermod.api.bluepower;
+package com.bluepowermod.api.power;
 
 import net.minecraft.item.ItemStack;
 
@@ -7,7 +7,7 @@ import net.minecraft.item.ItemStack;
  */
 public interface IRechargeable {
 
-    public BluePowerTier getTier();
+    public PowerTier getTier();
 
     public float getAmpStored(ItemStack stack);
 

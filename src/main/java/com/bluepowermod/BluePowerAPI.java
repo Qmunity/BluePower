@@ -7,15 +7,6 @@
  */
 package com.bluepowermod;
 
-import com.bluepowermod.api.BPApi.IBPApi;
-import com.bluepowermod.api.block.IAdvancedSilkyRemovable;
-import com.bluepowermod.api.bluepower.IPowerBase;
-import com.bluepowermod.api.recipe.IAlloyFurnaceRegistry;
-import com.bluepowermod.api.wire.redstone.IRedstoneApi;
-import com.bluepowermod.part.BPPart;
-import com.bluepowermod.power.PowerHandler;
-import com.bluepowermod.recipe.AlloyFurnaceRegistry;
-import com.bluepowermod.redstone.RedstoneApi;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -23,6 +14,14 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import uk.co.qmunity.lib.part.IPart;
 
+import com.bluepowermod.api.BPApi.IBPApi;
+import com.bluepowermod.api.block.IAdvancedSilkyRemovable;
+import com.bluepowermod.api.power.IPowerApi;
+import com.bluepowermod.api.recipe.IAlloyFurnaceRegistry;
+import com.bluepowermod.api.wire.redstone.IRedstoneApi;
+import com.bluepowermod.power.PowerApi;
+import com.bluepowermod.recipe.AlloyFurnaceRegistry;
+import com.bluepowermod.redstone.RedstoneApi;
 
 public class BluePowerAPI implements IBPApi {
 
@@ -40,17 +39,11 @@ public class BluePowerAPI implements IBPApi {
     }
 
     @Override
-    public IPowerBase getNewPowerHandler(BPPart part) {
+    public IPowerApi getPowerApi() {
 
-        return new PowerHandler(part);
+        return PowerApi.getInstance();
     }
 
-    @Override
-    public IPowerBase getNewPowerHandler(TileEntity tileEntity) {
-
-        return new PowerHandler(tileEntity);
-    }
-    
     @Override
     public void loadSilkySettings(World world, int x, int y, int z, ItemStack stack) {
 

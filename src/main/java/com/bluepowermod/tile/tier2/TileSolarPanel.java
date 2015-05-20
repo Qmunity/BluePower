@@ -1,23 +1,30 @@
 package com.bluepowermod.tile.tier2;
 
-import com.bluepowermod.api.BPApi;
-import com.bluepowermod.api.bluepower.BluePowerTier;
-import com.bluepowermod.api.bluepower.IBluePowered;
-import com.bluepowermod.api.bluepower.IPowerBase;
-import com.bluepowermod.tile.TileMachineBase;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.relauncher.Side;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import com.bluepowermod.api.BPApi;
+import com.bluepowermod.api.connect.ConnectionType;
+import com.bluepowermod.api.misc.IFace;
+import com.bluepowermod.api.power.IPowerBase;
+import com.bluepowermod.api.power.IPowered;
+import com.bluepowermod.api.power.PowerTier;
+import com.bluepowermod.tile.TileMachineBase;
+
 /**
  * @author Koen Beckers (K4Unl)
  */
-public class TileSolarPanel extends TileMachineBase implements IBluePowered {
+public class TileSolarPanel extends TileMachineBase implements IPowered, IFace {
 
-    private IPowerBase handler;
+    private IPowerBase handler = BPApi.getInstance().getPowerApi().createPowerHandler(this);
+
+    @Override
+    public ForgeDirection getFace() {
+
+        return ForgeDirection.DOWN;
+    }
 
     @Override
     public boolean isPowered() {
@@ -26,64 +33,76 @@ public class TileSolarPanel extends TileMachineBase implements IBluePowered {
     }
 
     @Override
-    public BluePowerTier getTier() {
+    public PowerTier getPowerTier() {
 
-        return BluePowerTier.MEDIUMVOLTAGE;
+        return PowerTier.MEDIUMVOLTAGE;
     }
 
     @Override
-    public IPowerBase getHandler() {
-        if(handler == null){
-            handler = BPApi.getInstance().getNewPowerHandler(this);
-        }
+    public IPowerBase getPowerHandler(ForgeDirection side) {
+
         return handler;
     }
 
     @Override
-    public boolean canConnectTo(ForgeDirection dir) {
+    public boolean canConnectPower(ForgeDirection side, IPowered dev, ConnectionType type) {
 
-        return !dir.equals(ForgeDirection.UP);
+        if (side == ForgeDirection.UP)
+            return false;
+        if (type == ConnectionType.OPEN_CORNER && side == ForgeDirection.DOWN)
+            return false;
+        if (dev instanceof IFace && type == ConnectionType.OPEN_CORNER && dev.getY() == getY() && ((IFace) dev).getFace() != ForgeDirection.DOWN)
+            return false;
+
+        return true;
     }
 
     @Override
-    public float getMaxStorage() {
+    public boolean isNormalFace(ForgeDirection side) {
+
+        return side == ForgeDirection.DOWN;
+    }
+
+    @Override
+    public float getMaxPowerStorage() {
 
         return 500;
     }
 
     @Override
-    public void updateEntity(){
+    public void updateEntity() {
 
         super.updateEntity();
 
-        if(!getWorldObj().isRemote){
-            //TODO: Add me as a config
-            getHandler().addEnergy(getDaylightStrength() / 10);
+        if (!getWorldObj().isRemote) {
+            // TODO: Add me as a config
+            handler.addEnergy(getDaylightStrength() / 10);
 
-            getHandler().update();
+            handler.update();
         }
 
     }
 
-    public int getDaylightStrength(){
-        int i1 =  getWorldObj().skylightSubtracted;
-        int savedLight = getWorldObj().getSavedLightValue(EnumSkyBlock.Sky, xCoord, yCoord+1, zCoord);
+    public int getDaylightStrength() {
+
+        int i1 = getWorldObj().skylightSubtracted;
+        int savedLight = getWorldObj().getSavedLightValue(EnumSkyBlock.Sky, xCoord, yCoord + 1, zCoord);
         i1 = savedLight - i1;
         float f = getWorldObj().getCelestialAngleRadians(1.0F);
 
-        if (f < (float)Math.PI){
+        if (f < (float) Math.PI) {
             f += (0.0F - f) * 0.2F;
         } else {
-            f += (((float)Math.PI * 2F) - f) * 0.2F;
+            f += (((float) Math.PI * 2F) - f) * 0.2F;
         }
 
-        i1 = Math.round((float)i1 * MathHelper.cos(f));
+        i1 = Math.round(i1 * MathHelper.cos(f));
 
-        if (i1 < 0){
+        if (i1 < 0) {
             i1 = 0;
         }
 
-        if (i1 > 15){
+        if (i1 > 15) {
             i1 = 15;
         }
 
@@ -91,20 +110,36 @@ public class TileSolarPanel extends TileMachineBase implements IBluePowered {
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound tagCompound){
-        getHandler().readFromNBT(tagCompound);
+    public void readFromNBT(NBTTagCompound tagCompound) {
+
+        handler.readFromNBT(tagCompound);
     }
 
     @Override
-    public void writeToNBT(NBTTagCompound tagCompound){
-        getHandler().writeToNBT(tagCompound);
+    public void writeToNBT(NBTTagCompound tagCompound) {
+
+        handler.writeToNBT(tagCompound);
     }
 
     @Override
-    public void invalidate(){
+    public void invalidate() {
+
         super.invalidate();
-        if(FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
-            getHandler().invalidate();
-        }
+        handler.disconnect();
     }
+
+    @Override
+    public void onNeighborBlockChanged() {
+
+        super.onNeighborBlockChanged();
+        handler.onNeighborUpdate();
+    }
+
+    @Override
+    protected void onTileLoaded() {
+
+        super.onTileLoaded();
+        handler.onNeighborUpdate();
+    }
+
 }

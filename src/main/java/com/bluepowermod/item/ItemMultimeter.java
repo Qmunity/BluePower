@@ -1,25 +1,27 @@
 package com.bluepowermod.item;
 
-import com.bluepowermod.api.bluepower.IBluePowered;
-import com.bluepowermod.init.BPCreativeTabs;
-import com.bluepowermod.reference.Refs;
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 import uk.co.qmunity.lib.part.compat.MultipartCompatibility;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.bluepowermod.api.power.IPowered;
+import com.bluepowermod.init.BPCreativeTabs;
+import com.bluepowermod.reference.Refs;
 
 /**
  * @author Koen Beckers (K4Unl)
  */
 public class ItemMultimeter extends ItemBase {
 
-    public ItemMultimeter(){
+    public ItemMultimeter() {
 
         super();
 
@@ -29,32 +31,33 @@ public class ItemMultimeter extends ItemBase {
         setMaxStackSize(1);
     }
 
-    public boolean onItemUse(ItemStack itemStack, EntityPlayer player, World world, int x, int y, int z, int side, float xC, float yC, float zC){
+    @Override
+    public boolean onItemUse(ItemStack itemStack, EntityPlayer player, World world, int x, int y, int z, int side, float xC, float yC, float zC) {
 
-        if(!world.isRemote){
+        if (!world.isRemote) {
             TileEntity ent = world.getTileEntity(x, y, z);
             Block block = world.getBlock(x, y, z);
-            IBluePowered part = MultipartCompatibility.getPart(world, x, y, z, IBluePowered.class);
-            if(ent != null){
-                if(ent instanceof IBluePowered || part != null){ //TODO: Add multipart checking
-                    IBluePowered machine = null;
+            IPowered part = MultipartCompatibility.getPart(world, x, y, z, IPowered.class);
+            if (ent != null) {
+                if (ent instanceof IPowered || part != null) { // TODO: Add multipart checking
+                    IPowered machine = null;
 
-                    if(part == null) {
-                        machine = (IBluePowered) ent;
-                    }else{
+                    if (part == null) {
+                        machine = (IPowered) ent;
+                    } else {
                         machine = part;
                     }
 
                     List<String> messages = new ArrayList<String>();
-                    if(machine.getHandler() != null) {
-                        messages.add("Charge: " + machine.getHandler().getAmpHourStored() + "/" + machine.getHandler().getMaxAmpHour() + "mAh");
-                    }else{
+                    if (machine.getPowerHandler(ForgeDirection.UNKNOWN) != null) {
+                        messages.add("Charge: " + machine.getPowerHandler(ForgeDirection.UNKNOWN).getAmpHourStored() + "/"
+                                + machine.getPowerHandler(ForgeDirection.UNKNOWN).getMaxAmpHour() + "mAh");
+                    } else {
                         messages.add("No handler found!");
                     }
 
-
-                    if(messages.size() > 0){
-                        for(String msg : messages){
+                    if (messages.size() > 0) {
+                        for (String msg : messages) {
                             player.addChatComponentMessage(new ChatComponentText(msg));
                         }
                     }

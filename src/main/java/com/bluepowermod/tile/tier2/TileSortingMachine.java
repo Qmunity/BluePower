@@ -7,20 +7,10 @@
  */
 package com.bluepowermod.tile.tier2;
 
-import com.bluepowermod.api.BPApi;
-import com.bluepowermod.api.bluepower.BluePowerTier;
-import com.bluepowermod.api.bluepower.IBluePowered;
-import com.bluepowermod.api.bluepower.IPowerBase;
-import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
-import com.bluepowermod.helper.IOHelper;
-import com.bluepowermod.helper.ItemStackHelper;
-import com.bluepowermod.init.BPBlocks;
-import com.bluepowermod.part.IGuiButtonSensitive;
-import com.bluepowermod.part.tube.TubeStack;
-import com.bluepowermod.tile.TileMachineBase;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
@@ -30,16 +20,28 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import com.bluepowermod.api.BPApi;
+import com.bluepowermod.api.connect.ConnectionType;
+import com.bluepowermod.api.power.IPowerBase;
+import com.bluepowermod.api.power.IPowered;
+import com.bluepowermod.api.power.PowerTier;
+import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
+import com.bluepowermod.helper.IOHelper;
+import com.bluepowermod.helper.ItemStackHelper;
+import com.bluepowermod.init.BPBlocks;
+import com.bluepowermod.part.IGuiButtonSensitive;
+import com.bluepowermod.part.tube.TubeStack;
+import com.bluepowermod.tile.TileMachineBase;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  *
  * @author MineMaarten
  */
 
-public class TileSortingMachine extends TileMachineBase implements ISidedInventory, IGuiButtonSensitive, IBluePowered {
+public class TileSortingMachine extends TileMachineBase implements ISidedInventory, IGuiButtonSensitive, IPowered {
 
     private ItemStack[] inventory = new ItemStack[40];
     public int curColumn = 0;
@@ -53,7 +55,7 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
 
     // tick.
 
-    private IPowerBase handler;
+    private IPowerBase handler = BPApi.getInstance().getPowerApi().createPowerHandler(this);
 
     @SideOnly(Side.CLIENT)
     private float ampStored;
@@ -62,9 +64,8 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
 
     private boolean isPowered;
 
-    //Todo: Magic number
-    private int usagePerItem = 2; //2 mA
-
+    // Todo: Magic number
+    private int usagePerItem = 2; // 2 mA
 
     public TileSortingMachine() {
 
@@ -79,27 +80,31 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
     }
 
     @Override
-    public BluePowerTier getTier() {
+    public PowerTier getPowerTier() {
 
         return null;
     }
 
     @Override
-    public IPowerBase getHandler() {
-        if(handler == null){
-            handler = BPApi.getInstance().getNewPowerHandler(this);
-        }
+    public IPowerBase getPowerHandler(ForgeDirection side) {
+
         return handler;
     }
 
     @Override
-    public boolean canConnectTo(ForgeDirection dir) {
+    public boolean canConnectPower(ForgeDirection side, IPowered dev, ConnectionType type) {
 
         return true;
     }
 
     @Override
-    public float getMaxStorage() {
+    public boolean isNormalFace(ForgeDirection side) {
+
+        return true;
+    }
+
+    @Override
+    public float getMaxPowerStorage() {
 
         return 700;
     }
@@ -152,11 +157,11 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
                 && (pullMode == PullMode.SINGLE_SWEEP && sweepTriggered || pullMode == PullMode.AUTOMATIC)) {
             triggerSorting();
         }
-        if(!worldObj.isRemote) {
-            getHandler().update();
+        if (!worldObj.isRemote) {
+            handler.update();
         }
-        if(!worldObj.isRemote && worldObj.getWorldTime() % 20 ==0){
-            isPowered = getHandler().getAmpHourStored() > 2.0F;
+        if (!worldObj.isRemote && worldObj.getWorldTime() % 20 == 0) {
+            isPowered = handler.getAmpHourStored() > 2.0F;
             worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
         }
 
@@ -295,9 +300,9 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
 
     private boolean tryProcessItem(ItemStack stack, boolean simulate) {
 
-        //Use powah
+        // Use powah
 
-        if(getHandler().getAmpHourStored() < (stack.stackSize * usagePerItem)){
+        if (handler.getAmpHourStored() < (stack.stackSize * usagePerItem)) {
             return false;
         }
 
@@ -313,8 +318,7 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
         case ANY_ITEM_DEFAULT:
             for (int i = 0; i < inventory.length; i++) {
                 ItemStack filter = inventory[i];
-                if (filter != null && ItemStackHelper.areStacksEqual(filter, stack, fuzzySettings[i % 8])
-                        && stack.stackSize >= filter.stackSize) {
+                if (filter != null && ItemStackHelper.areStacksEqual(filter, stack, fuzzySettings[i % 8]) && stack.stackSize >= filter.stackSize) {
                     if (!simulate) {
                         addItemToOutputBuffer(filter.copy(), colors[i % 8]);
                     }
@@ -420,7 +424,7 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
         }
         tag.setTag("Items", tagList);
 
-        getHandler().writeToNBT(tag);
+        handler.writeToNBT(tag);
     }
 
     @Override
@@ -450,7 +454,7 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
             }
         }
 
-        getHandler().readFromNBT(tag);
+        handler.readFromNBT(tag);
     }
 
     @Override
@@ -598,41 +602,56 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
         return true;
     }
 
-
     @SideOnly(Side.CLIENT)
-    public void setAmpStored(float newAmp){
+    public void setAmpStored(float newAmp) {
+
         ampStored = newAmp;
     }
 
     @SideOnly(Side.CLIENT)
-    public void setMaxAmp(float newAmp){
+    public void setMaxAmp(float newAmp) {
+
         maxAmp = newAmp;
     }
 
     @SideOnly(Side.CLIENT)
-    public float getAmpStored(){
+    public float getAmpStored() {
+
         return ampStored;
     }
 
     @SideOnly(Side.CLIENT)
-    public float getMaxAmp(){
-        return maxAmp;
-    }
+    public float getMaxAmp() {
 
-    @Override
-    public void invalidate(){
-        super.invalidate();
-        if(FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
-            getHandler().invalidate();
-        }
+        return maxAmp;
     }
 
     @Override
     protected void addItemToOutputBuffer(ItemStack stack, TubeColor color) {
 
-        getHandler().removeEnergy(stack.stackSize * usagePerItem);
+        handler.removeEnergy(stack.stackSize * usagePerItem);
         super.addItemToOutputBuffer(stack, color);
+    }
 
+    @Override
+    public void invalidate() {
+
+        super.invalidate();
+        handler.disconnect();
+    }
+
+    @Override
+    public void onNeighborBlockChanged() {
+
+        super.onNeighborBlockChanged();
+        handler.onNeighborUpdate();
+    }
+
+    @Override
+    protected void onTileLoaded() {
+
+        super.onTileLoaded();
+        handler.onNeighborUpdate();
     }
 
 }

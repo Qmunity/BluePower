@@ -17,20 +17,23 @@
 
 package com.bluepowermod.container;
 
-import com.bluepowermod.ClientProxy;
-import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
-import com.bluepowermod.container.slot.SlotPhantom;
-import com.bluepowermod.tile.tier2.TileSortingMachine;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import java.util.Arrays;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.util.ForgeDirection;
 import uk.co.qmunity.lib.client.gui.GuiContainerBase;
 
-import java.util.Arrays;
+import com.bluepowermod.ClientProxy;
+import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
+import com.bluepowermod.container.slot.SlotPhantom;
+import com.bluepowermod.tile.tier2.TileSortingMachine;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  *
@@ -48,7 +51,6 @@ public class ContainerSortingMachine extends ContainerMachineBase {
     private final static int AMPMAX = 23;
     public float ampStored;
     public float ampMax;
-
 
     public ContainerSortingMachine(InventoryPlayer invPlayer, TileSortingMachine sortingMachine) {
 
@@ -123,14 +125,14 @@ public class ContainerSortingMachine extends ContainerMachineBase {
                 }
             }
 
-            if (ampStored != sortingMachine.getHandler().getAmpHourStored()) {
-                icrafting.sendProgressBarUpdate(this, AMPSTORED, (int)sortingMachine.getHandler().getAmpHourStored());
-                ampStored = sortingMachine.getHandler().getAmpHourStored();
+            if (ampStored != sortingMachine.getPowerHandler(ForgeDirection.UNKNOWN).getAmpHourStored()) {
+                icrafting.sendProgressBarUpdate(this, AMPSTORED, (int) sortingMachine.getPowerHandler(ForgeDirection.UNKNOWN).getAmpHourStored());
+                ampStored = sortingMachine.getPowerHandler(ForgeDirection.UNKNOWN).getAmpHourStored();
             }
 
-            if (ampMax != sortingMachine.getHandler().getMaxAmpHour()) {
-                icrafting.sendProgressBarUpdate(this, AMPMAX, (int)sortingMachine.getHandler().getMaxAmpHour());
-                ampMax = sortingMachine.getHandler().getMaxAmpHour();
+            if (ampMax != sortingMachine.getPowerHandler(ForgeDirection.UNKNOWN).getMaxAmpHour()) {
+                icrafting.sendProgressBarUpdate(this, AMPMAX, (int) sortingMachine.getPowerHandler(ForgeDirection.UNKNOWN).getMaxAmpHour());
+                ampMax = sortingMachine.getPowerHandler(ForgeDirection.UNKNOWN).getMaxAmpHour();
             }
         }
 
@@ -143,7 +145,6 @@ public class ContainerSortingMachine extends ContainerMachineBase {
         for (int i = 0; i < fuzzySettings.length; i++) {
             fuzzySettings[i] = sortingMachine.fuzzySettings[i];
         }
-
 
     }
 
@@ -179,7 +180,7 @@ public class ContainerSortingMachine extends ContainerMachineBase {
             sortingMachine.setAmpStored(value);
             ((GuiContainerBase) ClientProxy.getOpenedGui()).redraw();
         }
-        if(id == AMPMAX){
+        if (id == AMPMAX) {
             sortingMachine.setMaxAmp(value);
             ((GuiContainerBase) ClientProxy.getOpenedGui()).redraw();
         }

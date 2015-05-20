@@ -7,8 +7,9 @@
  */
 package com.bluepowermod.compat.waila;
 
-import com.bluepowermod.api.bluepower.IBluePowered;
-import com.bluepowermod.tile.TileMachineBase;
+import java.util.ArrayList;
+import java.util.List;
+
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 import mcp.mobius.waila.api.IWailaDataProvider;
@@ -17,9 +18,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.bluepowermod.api.power.IPowered;
+import com.bluepowermod.tile.TileMachineBase;
 
 /**
  * @author amadornes
@@ -38,8 +40,8 @@ public class WailaProviderMachines implements IWailaDataProvider {
         tip.addAll(info);
         info.clear();
 
-        if(machine instanceof IBluePowered){
-            tip.add(((IBluePowered)machine).getHandler().getAmpHourStored() + "mAh");
+        if (machine instanceof IPowered) {
+            tip.add(((IPowered) machine).getPowerHandler(ForgeDirection.UNKNOWN).getAmpHourStored() + "mAh");
         }
 
         return tip;

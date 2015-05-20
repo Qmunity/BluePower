@@ -110,9 +110,9 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
     }
 
     @Override
-    public void onBlockNeighbourChanged() {
+    public void onNeighborBlockChanged() {
 
-        super.onBlockNeighbourChanged();
+        super.onNeighborBlockChanged();
         tileCache = null;
     }
 

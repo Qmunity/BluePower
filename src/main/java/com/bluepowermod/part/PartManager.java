@@ -45,13 +45,14 @@ import com.bluepowermod.part.tube.PneumaticTube;
 import com.bluepowermod.part.tube.PneumaticTubeOpaque;
 import com.bluepowermod.part.tube.RestrictionTube;
 import com.bluepowermod.part.tube.RestrictionTubeOpaque;
-import com.bluepowermod.part.wire.bluepower.WireBluePower;
+import com.bluepowermod.part.wire.power.WirePower;
 import com.bluepowermod.part.wire.redstone.PartRedwireFace.PartRedwireFaceBundled;
 import com.bluepowermod.part.wire.redstone.PartRedwireFace.PartRedwireFaceInsulated;
 import com.bluepowermod.part.wire.redstone.PartRedwireFace.PartRedwireFaceUninsulated;
 import com.bluepowermod.part.wire.redstone.PartRedwireFreestanding.PartRedwireFreestandingBundled;
 import com.bluepowermod.part.wire.redstone.PartRedwireFreestanding.PartRedwireFreestandingInsulated;
 import com.bluepowermod.part.wire.redstone.PartRedwireFreestanding.PartRedwireFreestandingUninsulated;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.item.ItemStack;
@@ -200,7 +201,7 @@ public class PartManager {
                 registerPart(PartRedwireFreestandingBundled.class, type, color);
         }
 
-        registerPart(WireBluePower.class);
+        registerPart(WirePower.class);
     }
 
     public static void registerItems() {

@@ -12,7 +12,7 @@ public class BundledConnectionCache implements IConnectionCache<IBundledDevice> 
 
     private IBundledDevice dev;
     private BundledConnection[] connections = new BundledConnection[7];
-    private boolean listening = false;
+    private IConnectionListener listener;
 
     public BundledConnectionCache(IBundledDevice dev) {
 
@@ -36,8 +36,8 @@ public class BundledConnectionCache implements IConnectionCache<IBundledDevice> 
 
         BundledConnection con = connections[side.ordinal()] = RedstoneApi.getInstance().createConnection(getSelf(), connectable, side,
                 connectableSide, type);
-        if (listening)
-            ((IConnectionListener) dev).onConnect(con);
+        if (listener != null)
+            listener.onConnect(con);
     }
 
     @Override
@@ -45,8 +45,8 @@ public class BundledConnectionCache implements IConnectionCache<IBundledDevice> 
 
         BundledConnection con = connections[side.ordinal()];
         connections[side.ordinal()] = null;
-        if (listening)
-            ((IConnectionListener) dev).onDisconnect(con);
+        if (listener != null)
+            listener.onDisconnect(con);
     }
 
     @SuppressWarnings("unchecked")
@@ -64,8 +64,8 @@ public class BundledConnectionCache implements IConnectionCache<IBundledDevice> 
                 if (!wasConnected || connections[d.ordinal()].getB() != con.getB() || connections[d.ordinal()].getSideB() != con.getSideB()
                         || connections[d.ordinal()].getType() != con.getType()) {
                     onConnect(con.getSideA(), con.getB(), con.getSideB(), con.getType());
-                    ((IConnectionCache<IBundledDevice>) con.getB().getBundledConnectionCache()).onConnect(con.getSideB(), con.getA(),
-                            con.getSideA(), con.getType());
+                    ((IConnectionCache<IBundledDevice>) con.getB().getBundledConnectionCache()).onConnect(con.getSideB(), con.getA(), con.getSideA(),
+                            con.getType());
 
                     IConnection<IBundledDevice> con2 = (IConnection<IBundledDevice>) con.getB().getBundledConnectionCache()
                             .getConnectionOnSide(con.getSideB());
@@ -102,7 +102,14 @@ public class BundledConnectionCache implements IConnectionCache<IBundledDevice> 
     @Override
     public void listen() {
 
-        listening = dev instanceof IConnectionListener;
+        if (dev instanceof IConnectionListener)
+            listener = (IConnectionListener) dev;
+    }
+
+    @Override
+    public void listen(IConnectionListener listener) {
+
+        this.listener = listener;
     }
 
 }

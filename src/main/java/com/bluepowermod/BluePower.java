@@ -31,6 +31,9 @@ import com.bluepowermod.init.TileEntities;
 import com.bluepowermod.network.BPNetworkHandler;
 import com.bluepowermod.part.PartManager;
 import com.bluepowermod.part.tube.RedstoneProviderTube;
+import com.bluepowermod.power.PowerApi;
+import com.bluepowermod.power.PoweredDeviceProviderQmunityLib;
+import com.bluepowermod.power.PoweredDeviceProviderVanilla;
 import com.bluepowermod.recipe.AlloyFurnaceRegistry;
 import com.bluepowermod.redstone.RedstoneApi;
 import com.bluepowermod.redstone.RedstoneProviderQmunityLib;
@@ -92,6 +95,8 @@ public class BluePower {
 
         RedstoneApi.getInstance().registerRedstoneProvider(new RedstoneProviderQmunityLib());
         RedstoneApi.getInstance().registerRedstoneProvider(new RedstoneProviderTube());
+
+        PowerApi.getInstance().registerPoweredDeviceProvider(new PoweredDeviceProviderQmunityLib());
     }
 
     @EventHandler
@@ -125,6 +130,8 @@ public class BluePower {
         AlloyFurnaceRegistry.getInstance().generateRecyclingRecipes();
 
         RedstoneApi.getInstance().registerRedstoneProvider(new RedstoneProviderVanilla());
+
+        PowerApi.getInstance().registerPoweredDeviceProvider(new PoweredDeviceProviderVanilla());
     }
 
     @EventHandler
