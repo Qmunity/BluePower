@@ -3,6 +3,8 @@ package com.bluepowermod.part.wire.power;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
@@ -22,6 +24,8 @@ import uk.co.qmunity.lib.client.render.RenderHelper;
 import uk.co.qmunity.lib.network.PacketHelper;
 import uk.co.qmunity.lib.part.IPart;
 import uk.co.qmunity.lib.part.IPartTicking;
+import uk.co.qmunity.lib.vec.Vec3d;
+import uk.co.qmunity.lib.vec.Vec3dCube;
 import uk.co.qmunity.lib.vec.Vec3i;
 
 import com.bluepowermod.api.BPApi;
@@ -71,6 +75,18 @@ public class WirePower extends PartWireFace implements IPowered, IPartTicking, I
             handler.update();
         }
         handler.getConnectionCache().listen(this);
+    }
+
+    @Override
+    public List<Vec3dCube> getSelectionBoxes() {
+
+        return Arrays.asList(new Vec3dCube(0, 0, 0, 1, getHeight() / 16D, 1).rotate(getFace(), Vec3d.center));
+    }
+
+    @Override
+    public List<Vec3dCube> getOcclusionBoxes() {
+
+        return getSelectionBoxes();
     }
 
     @Override
