@@ -1,20 +1,23 @@
 package com.bluepowermod.client.gui;
 
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.util.ForgeDirection;
+
+import com.bluepowermod.client.gui.widget.WidgetBarBase;
 import com.bluepowermod.client.gui.widget.WidgetPowerBar;
 import com.bluepowermod.container.ContainerBattery;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier2.TileBattery;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.util.ResourceLocation;
 
 /**!
- * @author Koen Beckers (K4Unl)
+ * @author MineMaarten, Koen Beckers (K4Unl)
  */
 
 public class GuiBattery extends GuiContainerBaseBP {
 
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/batterybox.png");
-    private TileBattery tile;
+    private final TileBattery tile;
 
     public GuiBattery(InventoryPlayer invPlayer, TileBattery battery) {
 
@@ -27,7 +30,13 @@ public class GuiBattery extends GuiContainerBaseBP {
     public void initGui() {
 
         super.initGui();
-        WidgetPowerBar mainPowerWidget = new WidgetPowerBar(0, guiLeft + 59, guiTop + 25, tile.getAmpStored(), tile.getMaxAmp());
-        addWidget(mainPowerWidget);
+        addWidget(new WidgetPowerBar(guiLeft + 59, guiTop + 24, tile.getPowerHandler(ForgeDirection.UNKNOWN)));
+        addWidget(new WidgetBarBase(guiLeft + 66, guiTop + 24) {
+            @Override
+            protected double getBarPercentage() {
+                return tile.getBufferPercentage();
+            }
+
+        });
     }
 }

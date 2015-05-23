@@ -9,37 +9,44 @@ package com.bluepowermod.container;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import uk.co.qmunity.lib.inventory.ContainerBase;
+import uk.co.qmunity.lib.tile.TileBase;
 
 import com.bluepowermod.container.slot.IPhantomSlot;
 
 /**
  * @author MineMaarten
  */
-public abstract class ContainerGhosts extends Container {
-    
+public abstract class ContainerGhosts<Tile extends TileBase> extends ContainerBase<Tile> {
+
+    public ContainerGhosts(Tile te) {
+        super(te);
+    }
+
     /**
      * This class is copied from the BuildCraft code, which can be found here: https://github.com/BuildCraft/BuildCraft
      * @author CovertJaguar <http://www.railcraft.info>
      */
     @Override
     public ItemStack slotClick(int slotNum, int mouseButton, int modifier, EntityPlayer player) {
-    
+
         Slot slot = slotNum < 0 ? null : (Slot) inventorySlots.get(slotNum);
-        if (slot instanceof IPhantomSlot) { return slotClickPhantom(slot, mouseButton, modifier, player); }
+        if (slot instanceof IPhantomSlot) {
+            return slotClickPhantom(slot, mouseButton, modifier, player);
+        }
         return super.slotClick(slotNum, mouseButton, modifier, player);
     }
-    
+
     /**
      * This method is copied from the BuildCraft code, which can be found here: https://github.com/BuildCraft/BuildCraft
      * @author CovertJaguar <http://www.railcraft.info>
      */
     private ItemStack slotClickPhantom(Slot slot, int mouseButton, int modifier, EntityPlayer player) {
-    
+
         ItemStack stack = null;
-        
+
         if (mouseButton == 2) {
             if (((IPhantomSlot) slot).canAdjust()) {
                 slot.putStack(null);
@@ -49,11 +56,11 @@ public abstract class ContainerGhosts extends Container {
             slot.onSlotChanged();
             ItemStack stackSlot = slot.getStack();
             ItemStack stackHeld = playerInv.getItemStack();
-            
+
             if (stackSlot != null) {
                 stack = stackSlot.copy();
             }
-            
+
             if (stackSlot == null) {
                 if (stackHeld != null && slot.isItemValid(stackHeld)) {
                     fillPhantomSlot(slot, stackHeld, mouseButton, modifier);
@@ -71,27 +78,32 @@ public abstract class ContainerGhosts extends Container {
         }
         return stack;
     }
-    
+
     /**
      * This method is copied from the BuildCraft code, which can be found here: https://github.com/BuildCraft/BuildCraft
      * @author CovertJaguar <http://www.railcraft.info>
      */
     public boolean canStacksMerge(ItemStack stack1, ItemStack stack2) {
-    
-        if (stack1 == null || stack2 == null) return false;
-        if (!stack1.isItemEqual(stack2)) return false;
-        if (!ItemStack.areItemStackTagsEqual(stack1, stack2)) return false;
+
+        if (stack1 == null || stack2 == null)
+            return false;
+        if (!stack1.isItemEqual(stack2))
+            return false;
+        if (!ItemStack.areItemStackTagsEqual(stack1, stack2))
+            return false;
         return true;
-        
+
     }
-    
+
     /**
      * This method is copied from the BuildCraft code, which can be found here: https://github.com/BuildCraft/BuildCraft
      * @author CovertJaguar <http://www.railcraft.info>
      */
     protected void adjustPhantomSlot(Slot slot, int mouseButton, int modifier) {
-    
-        if (!((IPhantomSlot) slot).canAdjust()) { return; }
+
+        if (!((IPhantomSlot) slot).canAdjust()) {
+            return;
+        }
         ItemStack stackSlot = slot.getStack();
         int stackSize;
         if (modifier == 1) {
@@ -99,33 +111,35 @@ public abstract class ContainerGhosts extends Container {
         } else {
             stackSize = mouseButton == 0 ? stackSlot.stackSize - 1 : stackSlot.stackSize + 1;
         }
-        
+
         if (stackSize > slot.getSlotStackLimit()) {
             stackSize = slot.getSlotStackLimit();
         }
-        
+
         stackSlot.stackSize = stackSize;
-        
+
         if (stackSlot.stackSize <= 0) {
             slot.putStack((ItemStack) null);
         }
     }
-    
+
     /**
      * This method is copied from the BuildCraft code, which can be found here: https://github.com/BuildCraft/BuildCraft
      * @author CovertJaguar <http://www.railcraft.info>
      */
     protected void fillPhantomSlot(Slot slot, ItemStack stackHeld, int mouseButton, int modifier) {
-    
-        if (!((IPhantomSlot) slot).canAdjust()) { return; }
+
+        if (!((IPhantomSlot) slot).canAdjust()) {
+            return;
+        }
         int stackSize = mouseButton == 0 ? stackHeld.stackSize : 1;
         if (stackSize > slot.getSlotStackLimit()) {
             stackSize = slot.getSlotStackLimit();
         }
         ItemStack phantomStack = stackHeld.copy();
         phantomStack.stackSize = stackSize;
-        
+
         slot.putStack(phantomStack);
     }
-    
+
 }

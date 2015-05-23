@@ -24,11 +24,11 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraftforge.common.util.ForgeDirection;
+import uk.co.qmunity.lib.tile.IRotatable;
+import uk.co.qmunity.lib.tile.TileBase;
 
 import com.bluepowermod.block.BlockContainerBase;
 import com.bluepowermod.client.render.RendererBlockBase.EnumFaceType;
-import com.bluepowermod.tile.IRotatable;
-import com.bluepowermod.tile.TileBase;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

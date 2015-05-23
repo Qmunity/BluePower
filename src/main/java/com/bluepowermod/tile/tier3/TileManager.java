@@ -16,8 +16,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
+import uk.co.qmunity.lib.network.annotation.GuiSynced;
 import uk.co.qmunity.lib.part.compat.MultipartCompatibility;
 
+import com.bluepowermod.api.power.IPowerBase;
+import com.bluepowermod.api.power.IPowered;
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
 import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.init.BPBlocks;
@@ -31,7 +34,7 @@ import com.bluepowermod.tile.TileMachineBase;
 /**
  * @author MineMaarten
  */
-public class TileManager extends TileMachineBase implements ISidedInventory, IGuiButtonSensitive, IRejectAnimator, IFuzzyRetrieving {
+public class TileManager extends TileMachineBase implements ISidedInventory, IGuiButtonSensitive, IRejectAnimator, IFuzzyRetrieving, IPowered {
 
     protected final ItemStack[] inventory = new ItemStack[24];
     public TubeColor filterColor = TubeColor.NONE;
@@ -39,6 +42,9 @@ public class TileManager extends TileMachineBase implements ISidedInventory, IGu
     public int mode;
     public int fuzzySetting;
     private int rejectTicker = -1;
+    private static final double ENERGY_PER_ACTION = 1;
+    @GuiSynced
+    private final IPowerBase powerBase = getPowerHandler(ForgeDirection.UNKNOWN);
 
     @Override
     public TubeStack acceptItemFromTube(TubeStack stack, ForgeDirection from, boolean simulate) {
@@ -95,7 +101,7 @@ public class TileManager extends TileMachineBase implements ISidedInventory, IGu
     @Override
     public void updateEntity() {
 
-        if (!worldObj.isRemote && getTicker() % BUFFER_EMPTY_INTERVAL == 0 && isBufferEmpty()) {
+        if (!worldObj.isRemote && isPowered() && getTicker() % BUFFER_EMPTY_INTERVAL == 0 && isBufferEmpty()) {
             dumpUnwantedItems();
             retrieveItemsFromManagers();
             setOutputtingRedstone(mode == 0 && shouldEmitRedstone());
@@ -128,8 +134,10 @@ public class TileManager extends TileMachineBase implements ISidedInventory, IGu
                 if (acceptedItems > 0) {
                     ItemStack retrievingStack = stack.copy();
                     retrievingStack.stackSize = retrievingStack.getMaxStackSize();
-                    if (tube.getLogic().retrieveStack(this, getOutputDirection(), retrievingStack, filterColor))
+                    if (tube.getLogic().retrieveStack(this, getOutputDirection(), retrievingStack, filterColor)) {
+                        powerBase.addEnergy(-ENERGY_PER_ACTION, false);
                         return;
+                    }
                 }
             }
         }
@@ -150,6 +158,7 @@ public class TileManager extends TileMachineBase implements ISidedInventory, IGu
                 rejectingStack = IOHelper.extract(te, getFacingDirection().getOpposite(), rejectingStack, true, false, fuzzySetting);
                 if (rejectingStack != null) {
                     this.addItemToOutputBuffer(rejectingStack, filterColor);
+                    powerBase.addEnergy(-ENERGY_PER_ACTION, false);
                 }
             }
         }

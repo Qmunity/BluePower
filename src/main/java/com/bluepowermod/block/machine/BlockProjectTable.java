@@ -22,11 +22,11 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.util.ForgeDirection;
+import uk.co.qmunity.lib.tile.IRotatable;
+import uk.co.qmunity.lib.tile.TileBase;
 
 import com.bluepowermod.block.BlockContainerBase;
 import com.bluepowermod.reference.Refs;
-import com.bluepowermod.tile.IRotatable;
-import com.bluepowermod.tile.TileBase;
 import com.bluepowermod.tile.tier1.TileProjectTable;
 
 import cpw.mods.fml.relauncher.Side;

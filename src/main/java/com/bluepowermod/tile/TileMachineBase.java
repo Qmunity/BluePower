@@ -34,7 +34,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 /**
  * @author MineMaarten
  */
-public class TileMachineBase extends TileBase implements ITubeConnection, IWeightedTubeInventory, IEjectAnimator {
+public class TileMachineBase extends TileBluePowerBase implements ITubeConnection, IWeightedTubeInventory, IEjectAnimator {
 
     protected boolean spawnItemsInWorld = true;
     protected boolean acceptsTubeItems = true;
@@ -63,8 +63,9 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
                     sendUpdatePacket();
                 }
             }
-            if (getBacklog().size() > 50 && getTicker() % WARNING_INTERVAL  == 0) {
-                BluePower.log.warn("Large backlog (" + getBacklog().size() + " stacks) detected in " + this.getBlockType().getLocalizedName() + " at: " + this.xCoord + ", " + this.yCoord + ", " + this.zCoord);
+            if (getBacklog().size() > 50 && getTicker() % WARNING_INTERVAL == 0) {
+                BluePower.log.warn("Large backlog (" + getBacklog().size() + " stacks) detected in " + getBlockType().getLocalizedName() + " at: "
+                        + xCoord + ", " + yCoord + ", " + zCoord);
             }
         }
     }

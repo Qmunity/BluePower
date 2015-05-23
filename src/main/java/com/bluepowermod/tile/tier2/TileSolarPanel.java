@@ -1,16 +1,12 @@
 package com.bluepowermod.tile.tier2;
 
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraftforge.common.util.ForgeDirection;
 
-import com.bluepowermod.api.BPApi;
 import com.bluepowermod.api.connect.ConnectionType;
 import com.bluepowermod.api.misc.IFace;
-import com.bluepowermod.api.power.IPowerBase;
 import com.bluepowermod.api.power.IPowered;
-import com.bluepowermod.api.power.PowerTier;
 import com.bluepowermod.tile.TileMachineBase;
 
 /**
@@ -18,30 +14,10 @@ import com.bluepowermod.tile.TileMachineBase;
  */
 public class TileSolarPanel extends TileMachineBase implements IPowered, IFace {
 
-    private IPowerBase handler = BPApi.getInstance().getPowerApi().createPowerHandler(this);
-
     @Override
     public ForgeDirection getFace() {
 
         return ForgeDirection.DOWN;
-    }
-
-    @Override
-    public boolean isPowered() {
-
-        return false;
-    }
-
-    @Override
-    public PowerTier getPowerTier() {
-
-        return PowerTier.MEDIUMVOLTAGE;
-    }
-
-    @Override
-    public IPowerBase getPowerHandler(ForgeDirection side) {
-
-        return handler;
     }
 
     @Override
@@ -64,21 +40,13 @@ public class TileSolarPanel extends TileMachineBase implements IPowered, IFace {
     }
 
     @Override
-    public float getMaxPowerStorage() {
-
-        return 500;
-    }
-
-    @Override
     public void updateEntity() {
 
         super.updateEntity();
 
+        double addedEnergy = getDaylightStrength() / 10D;
         if (!getWorldObj().isRemote) {
-            // TODO: Add me as a config
-            handler.addEnergy(getDaylightStrength() / 10);
-
-            handler.update();
+            getPowerHandler(ForgeDirection.UNKNOWN).addEnergy(addedEnergy, false);
         }
 
     }
@@ -93,7 +61,7 @@ public class TileSolarPanel extends TileMachineBase implements IPowered, IFace {
         if (f < (float) Math.PI) {
             f += (0.0F - f) * 0.2F;
         } else {
-            f += (((float) Math.PI * 2F) - f) * 0.2F;
+            f += ((float) Math.PI * 2F - f) * 0.2F;
         }
 
         i1 = Math.round(i1 * MathHelper.cos(f));
@@ -107,39 +75,6 @@ public class TileSolarPanel extends TileMachineBase implements IPowered, IFace {
         }
 
         return i1;
-    }
-
-    @Override
-    public void readFromNBT(NBTTagCompound tagCompound) {
-
-        handler.readFromNBT(tagCompound);
-    }
-
-    @Override
-    public void writeToNBT(NBTTagCompound tagCompound) {
-
-        handler.writeToNBT(tagCompound);
-    }
-
-    @Override
-    public void invalidate() {
-
-        super.invalidate();
-        handler.disconnect();
-    }
-
-    @Override
-    public void onNeighborBlockChanged() {
-
-        super.onNeighborBlockChanged();
-        handler.onNeighborUpdate();
-    }
-
-    @Override
-    protected void onTileLoaded() {
-
-        super.onTileLoaded();
-        handler.onNeighborUpdate();
     }
 
 }

@@ -11,9 +11,9 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import net.minecraft.init.Blocks;
+import uk.co.qmunity.lib.tile.TileBase;
 
 import com.bluepowermod.BluePower;
-import com.bluepowermod.tile.TileBase;
 
 /**
  * @author fabricator77

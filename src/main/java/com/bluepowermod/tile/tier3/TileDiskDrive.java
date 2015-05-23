@@ -7,7 +7,7 @@
  */
 package com.bluepowermod.tile.tier3;
 
-import com.bluepowermod.tile.TileBase;
+import uk.co.qmunity.lib.tile.TileBase;
 
 /**
  * @author fabricator77

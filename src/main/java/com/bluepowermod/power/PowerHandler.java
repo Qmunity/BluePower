@@ -2,7 +2,9 @@ package com.bluepowermod.power;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
+import uk.co.qmunity.lib.network.annotation.GuiSynced;
 
+import com.bluepowermod.api.connect.IConnection;
 import com.bluepowermod.api.connect.IConnectionCache;
 import com.bluepowermod.api.misc.IFace;
 import com.bluepowermod.api.power.IPowerBase;
@@ -13,9 +15,12 @@ import com.bluepowermod.api.power.IPowered;
  */
 public class PowerHandler implements IPowerBase, IFace {
 
-    private IPowered device;
-    private PowerConnectionCache cache = new PowerConnectionCache(this);
-    private boolean[] connections = new boolean[6];
+    private final IPowered device;
+    private final PowerConnectionCache cache = new PowerConnectionCache(this);
+    private final boolean[] connections = new boolean[6];
+
+    @GuiSynced
+    private double voltage;
 
     public PowerHandler(IPowered device) {
 
@@ -24,14 +29,12 @@ public class PowerHandler implements IPowerBase, IFace {
 
     @Override
     public void readFromNBT(NBTTagCompound tagCompound) {
-
-        // TODO
+        voltage = tagCompound.getDouble("voltage");
     }
 
     @Override
     public void writeToNBT(NBTTagCompound tagCompound) {
-
-        // TODO
+        tagCompound.setDouble("voltage", voltage);
     }
 
     @Override
@@ -57,8 +60,24 @@ public class PowerHandler implements IPowerBase, IFace {
 
     @Override
     public void update() {
+        double avgVoltage = getVoltage();
+        int neighborCount = 1;
+        for (ForgeDirection dir : ForgeDirection.values()) {//Loop through the cache (including UNKNOWN)
+            IConnection<IPowerBase> neighbor = cache.getConnectionOnSide(dir);
+            if (neighbor != null) {
+                avgVoltage += neighbor.getB().getVoltage();
+                neighborCount++;
+            }
+        }
+        avgVoltage /= neighborCount;
 
-        // TODO
+        addEnergy(avgVoltage - getVoltage(), false);
+        for (ForgeDirection dir : ForgeDirection.values()) {
+            IConnection<IPowerBase> neighbor = cache.getConnectionOnSide(dir);
+            if (neighbor != null) {
+                neighbor.getB().addEnergy(avgVoltage - neighbor.getB().getVoltage(), false);
+            }
+        }
     }
 
     @Override
@@ -68,27 +87,26 @@ public class PowerHandler implements IPowerBase, IFace {
     }
 
     @Override
-    public float getAmpHourStored() {
-
-        return 0; // TODO
+    public double getVoltage() {
+        return voltage;
     }
 
     @Override
-    public float getMaxAmpHour() {
-
-        return 0; // TODO
+    public double addEnergy(double energy, boolean simulate) {
+        double actualEnergy;
+        if (energy > 0) {
+            actualEnergy = Math.min(getMaxVoltage() - getVoltage(), energy);
+        } else {
+            actualEnergy = Math.max(energy, -getVoltage());
+        }
+        if (!simulate)
+            voltage += actualEnergy;
+        return actualEnergy;
     }
 
     @Override
-    public float removeEnergy(float ampHour) {
-
-        return 0; // TODO
-    }
-
-    @Override
-    public float addEnergy(float ampHour) {
-
-        return 0; // TODO
+    public double getMaxVoltage() {
+        return 12;
     }
 
     @Override
@@ -126,4 +144,5 @@ public class PowerHandler implements IPowerBase, IFace {
 
         return ForgeDirection.UNKNOWN;
     }
+
 }

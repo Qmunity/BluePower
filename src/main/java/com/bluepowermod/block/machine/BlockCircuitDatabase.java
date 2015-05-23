@@ -23,11 +23,11 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import uk.co.qmunity.lib.tile.TileBase;
 
 import com.bluepowermod.helper.ItemStackDatabase;
 import com.bluepowermod.network.BPNetworkHandler;
 import com.bluepowermod.network.message.MessageSendClientServerTemplates;
-import com.bluepowermod.tile.TileBase;
 import com.bluepowermod.tile.tier3.TileCircuitDatabase;
 
 import cpw.mods.fml.relauncher.Side;

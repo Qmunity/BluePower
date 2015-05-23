@@ -6,7 +6,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import com.bluepowermod.api.connect.IConnectionCache;
 
 /**
- * @author Koen Beckers (K4Unl)
+ * @author MineMaarten, Koen Beckers (K4Unl)
  */
 public interface IPowerBase {
 
@@ -26,16 +26,17 @@ public interface IPowerBase {
 
     public void onNeighborUpdate();
 
-    /*
-     * Functions for power
+    /**
+     * Negative energy for removal
+     * @param energy
+     * @param when true, no power will be added, but the return value can be used to determine if adding power is possible.
+     * @return the added power.
      */
-    public float getAmpHourStored();
+    public double addEnergy(double energy, boolean simulate);
 
-    public float getMaxAmpHour();
+    public double getVoltage();
 
-    public float removeEnergy(float amp);
-
-    public float addEnergy(float amp);
+    public double getMaxVoltage();
 
     /*
      * Connections

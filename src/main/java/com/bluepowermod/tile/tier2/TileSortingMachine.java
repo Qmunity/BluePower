@@ -19,12 +19,10 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
+import uk.co.qmunity.lib.network.annotation.GuiSynced;
 
-import com.bluepowermod.api.BPApi;
-import com.bluepowermod.api.connect.ConnectionType;
 import com.bluepowermod.api.power.IPowerBase;
 import com.bluepowermod.api.power.IPowered;
-import com.bluepowermod.api.power.PowerTier;
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
 import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.helper.ItemStackHelper;
@@ -32,9 +30,6 @@ import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.part.IGuiButtonSensitive;
 import com.bluepowermod.part.tube.TubeStack;
 import com.bluepowermod.tile.TileMachineBase;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  *
@@ -51,62 +46,16 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
     private int savedPulses;
     public final TubeColor[] colors = new TubeColor[9];
     public int[] fuzzySettings = new int[8];
-    private ItemStack nonAcceptedStack;// will be set to the latest accepted stack via tubes.. It will reject any following items from that stack that
+    private ItemStack nonAcceptedStack;// will be set to the latest accepted stack via tubes.. It will reject any following items from that stack that tick
 
-    // tick.
-
-    private IPowerBase handler = BPApi.getInstance().getPowerApi().createPowerHandler(this);
-
-    @SideOnly(Side.CLIENT)
-    private float ampStored;
-    @SideOnly(Side.CLIENT)
-    private float maxAmp;
-
-    private boolean isPowered;
-
-    // Todo: Magic number
-    private int usagePerItem = 2; // 2 mA
+    @GuiSynced
+    private final IPowerBase powerBase = getPowerHandler(ForgeDirection.UNKNOWN);
+    private final double POWER_USAGE_PER_ITEM = 0.1;
 
     public TileSortingMachine() {
 
         for (int i = 0; i < colors.length; i++)
             colors[i] = TubeColor.NONE;
-    }
-
-    @Override
-    public boolean isPowered() {
-
-        return isPowered;
-    }
-
-    @Override
-    public PowerTier getPowerTier() {
-
-        return null;
-    }
-
-    @Override
-    public IPowerBase getPowerHandler(ForgeDirection side) {
-
-        return handler;
-    }
-
-    @Override
-    public boolean canConnectPower(ForgeDirection side, IPowered dev, ConnectionType type) {
-
-        return true;
-    }
-
-    @Override
-    public boolean isNormalFace(ForgeDirection side) {
-
-        return true;
-    }
-
-    @Override
-    public float getMaxPowerStorage() {
-
-        return 700;
     }
 
     public enum PullMode {
@@ -157,14 +106,6 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
                 && (pullMode == PullMode.SINGLE_SWEEP && sweepTriggered || pullMode == PullMode.AUTOMATIC)) {
             triggerSorting();
         }
-        if (!worldObj.isRemote) {
-            handler.update();
-        }
-        if (!worldObj.isRemote && worldObj.getWorldTime() % 20 == 0) {
-            isPowered = handler.getAmpHourStored() > 2.0F;
-            worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-        }
-
     }
 
     @Override
@@ -299,12 +240,8 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
     }
 
     private boolean tryProcessItem(ItemStack stack, boolean simulate) {
-
-        // Use powah
-
-        if (handler.getAmpHourStored() < (stack.stackSize * usagePerItem)) {
+        if (!isPowered())
             return false;
-        }
 
         switch (sortMode) {
         case ANYSTACK_SEQUENTIAL:
@@ -423,8 +360,6 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
             }
         }
         tag.setTag("Items", tagList);
-
-        handler.writeToNBT(tag);
     }
 
     @Override
@@ -453,8 +388,6 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
                 inventory[slot] = ItemStack.loadItemStackFromNBT(tagCompound);
             }
         }
-
-        handler.readFromNBT(tag);
     }
 
     @Override
@@ -602,56 +535,11 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
         return true;
     }
 
-    @SideOnly(Side.CLIENT)
-    public void setAmpStored(float newAmp) {
-
-        ampStored = newAmp;
-    }
-
-    @SideOnly(Side.CLIENT)
-    public void setMaxAmp(float newAmp) {
-
-        maxAmp = newAmp;
-    }
-
-    @SideOnly(Side.CLIENT)
-    public float getAmpStored() {
-
-        return ampStored;
-    }
-
-    @SideOnly(Side.CLIENT)
-    public float getMaxAmp() {
-
-        return maxAmp;
-    }
-
     @Override
     protected void addItemToOutputBuffer(ItemStack stack, TubeColor color) {
 
-        handler.removeEnergy(stack.stackSize * usagePerItem);
+        powerBase.addEnergy(-stack.stackSize * POWER_USAGE_PER_ITEM, false);
         super.addItemToOutputBuffer(stack, color);
-    }
-
-    @Override
-    public void invalidate() {
-
-        super.invalidate();
-        handler.disconnect();
-    }
-
-    @Override
-    public void onNeighborBlockChanged() {
-
-        super.onNeighborBlockChanged();
-        handler.onNeighborUpdate();
-    }
-
-    @Override
-    protected void onTileLoaded() {
-
-        super.onTileLoaded();
-        handler.onNeighborUpdate();
     }
 
 }

@@ -32,12 +32,12 @@ import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action;
+import uk.co.qmunity.lib.tile.TileBase;
 
 import com.bluepowermod.BluePower;
 import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.tile.IEjectAnimator;
-import com.bluepowermod.tile.TileBase;
 import com.mojang.authlib.GameProfile;
 
 /**

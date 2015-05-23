@@ -38,7 +38,6 @@ import uk.co.qmunity.lib.vec.Vec3i;
 import com.bluepowermod.api.misc.IScrewdriver;
 import com.bluepowermod.block.BlockContainerBase;
 import com.bluepowermod.init.BPCreativeTabs;
-import com.bluepowermod.reference.GuiIDs;
 import com.bluepowermod.reference.Refs;
 
 import cpw.mods.fml.relauncher.Side;
@@ -56,8 +55,7 @@ public class ItemScrewdriver extends ItemBase implements IScrewdriver {
     }
 
     @Override
-    public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY,
-            float hitZ) {
+    public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
 
         Block block = world.getBlock(x, y, z);
 
@@ -65,8 +63,7 @@ public class ItemScrewdriver extends ItemBase implements IScrewdriver {
             ITilePartHolder itph = MultipartCompatibility.getPartHolder(world, new Vec3i(x, y, z));
 
             if (itph != null) {
-                QMovingObjectPosition mop = itph.rayTrace(RayTracer.instance().getStartVector(player),
-                        RayTracer.instance().getEndVector(player));
+                QMovingObjectPosition mop = itph.rayTrace(RayTracer.instance().getStartVector(player), RayTracer.instance().getEndVector(player));
                 if (mop == null)
                     return false;
                 IPart p = mop.getPart();
@@ -76,7 +73,7 @@ public class ItemScrewdriver extends ItemBase implements IScrewdriver {
         }
 
         if (block instanceof BlockContainerBase) {
-            if (((BlockContainerBase) block).getGuiID() != GuiIDs.INVALID) {
+            if (((BlockContainerBase) block).getGuiId() >= 0) {
                 if (player.isSneaking()) {
                     block.rotateBlock(world, x, y, z, ForgeDirection.getOrientation(side));
                     damage(stack, 1, player, false);
@@ -110,7 +107,7 @@ public class ItemScrewdriver extends ItemBase implements IScrewdriver {
 
         if (player != null && player.capabilities.isCreativeMode)
             return true;
-        if ((stack.getItemDamage() % stack.getMaxDamage()) + damage > stack.getMaxDamage())
+        if (stack.getItemDamage() % stack.getMaxDamage() + damage > stack.getMaxDamage())
             return false;
 
         if (!simulated) {

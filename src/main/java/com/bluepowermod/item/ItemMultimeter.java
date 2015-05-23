@@ -27,7 +27,7 @@ public class ItemMultimeter extends ItemBase {
 
         setUnlocalizedName(Refs.MULTIMETER_NAME);
         setCreativeTab(BPCreativeTabs.power);
-        this.setTextureName(Refs.MODID + ":" + Refs.MULTIMETER_NAME);
+        setTextureName(Refs.MODID + ":" + Refs.MULTIMETER_NAME);
         setMaxStackSize(1);
     }
 
@@ -50,8 +50,8 @@ public class ItemMultimeter extends ItemBase {
 
                     List<String> messages = new ArrayList<String>();
                     if (machine.getPowerHandler(ForgeDirection.UNKNOWN) != null) {
-                        messages.add("Charge: " + machine.getPowerHandler(ForgeDirection.UNKNOWN).getAmpHourStored() + "/"
-                                + machine.getPowerHandler(ForgeDirection.UNKNOWN).getMaxAmpHour() + "mAh");
+                        messages.add("Charge: " + machine.getPowerHandler(ForgeDirection.UNKNOWN).getVoltage() + "/"
+                                + machine.getPowerHandler(ForgeDirection.UNKNOWN).getVoltage() + "V");
                     } else {
                         messages.add("No handler found!");
                     }

@@ -9,10 +9,10 @@ package com.bluepowermod.block.machine;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.world.IBlockAccess;
+import uk.co.qmunity.lib.tile.TileBase;
 
 import com.bluepowermod.block.BlockContainerBase;
 import com.bluepowermod.client.render.RendererBlockBase.EnumFaceType;
-import com.bluepowermod.tile.TileBase;
 
 /**
  * @author MineMaarten

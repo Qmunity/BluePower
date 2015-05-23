@@ -2,37 +2,21 @@ package com.bluepowermod.container;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.util.ForgeDirection;
-import uk.co.qmunity.lib.client.gui.GuiContainerBase;
+import uk.co.qmunity.lib.inventory.ContainerBase;
 
-import com.bluepowermod.ClientProxy;
 import com.bluepowermod.container.slot.SlotMachineInput;
 import com.bluepowermod.tile.tier2.TileBattery;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
 /**
- * !
- *
  * @author Koen Beckers (K4Unl)
  */
 
-public class ContainerBattery extends Container {
-
-    private final TileBattery tileBattery;
-    private final static int AMPSTORED = 0;
-    private final static int AMPMAX = 1;
-    public float ampStored;
-    public float ampMax;
+public class ContainerBattery extends ContainerBase<TileBattery> {
 
     public ContainerBattery(InventoryPlayer invPlayer, TileBattery battery) {
-
-        tileBattery = battery;
+        super(battery);
 
         addSlotToContainer(new SlotMachineInput(battery, 0, 120, 27));
         addSlotToContainer(new SlotMachineInput(battery, 1, 120, 55));
@@ -58,7 +42,7 @@ public class ContainerBattery extends Container {
     @Override
     public boolean canInteractWith(EntityPlayer player) {
 
-        return tileBattery.isUseableByPlayer(player);
+        return te.isUseableByPlayer(player);
     }
 
     @Override
@@ -88,45 +72,5 @@ public class ContainerBattery extends Container {
             }
         }
         return itemstack;
-    }
-
-    /**
-     * Looks for changes made in the container, sends them to every listener.
-     */
-    @Override
-    public void detectAndSendChanges() {
-
-        super.detectAndSendChanges();
-
-        for (Object crafter : crafters) {
-            ICrafting icrafting = (ICrafting) crafter;
-
-            if (ampStored != tileBattery.getPowerHandler(ForgeDirection.UNKNOWN).getAmpHourStored()) {
-                icrafting.sendProgressBarUpdate(this, AMPSTORED, (int) tileBattery.getPowerHandler(ForgeDirection.UNKNOWN).getAmpHourStored());
-            }
-
-            if (ampMax != tileBattery.getPowerHandler(ForgeDirection.UNKNOWN).getMaxAmpHour()) {
-                icrafting.sendProgressBarUpdate(this, AMPMAX, (int) tileBattery.getPowerHandler(ForgeDirection.UNKNOWN).getMaxAmpHour());
-            }
-
-        }
-
-        ampStored = tileBattery.getPowerHandler(ForgeDirection.UNKNOWN).getAmpHourStored();
-        ampMax = tileBattery.getPowerHandler(ForgeDirection.UNKNOWN).getMaxAmpHour();
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void updateProgressBar(int index, int value) {
-
-        if (index == AMPSTORED) {
-            tileBattery.setAmpStored(value);
-            ((GuiContainerBase) ClientProxy.getOpenedGui()).redraw();
-        }
-        if (index == AMPMAX) {
-            tileBattery.setMaxAmp(value);
-            ((GuiContainerBase) ClientProxy.getOpenedGui()).redraw();
-        }
-
     }
 }

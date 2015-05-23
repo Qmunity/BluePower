@@ -34,7 +34,6 @@ import com.bluepowermod.api.connect.IConnection;
 import com.bluepowermod.api.connect.IConnectionListener;
 import com.bluepowermod.api.power.IPowerBase;
 import com.bluepowermod.api.power.IPowered;
-import com.bluepowermod.api.power.PowerTier;
 import com.bluepowermod.client.render.IconSupplier;
 import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.part.wire.PartWireFace;
@@ -48,7 +47,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class WirePower extends PartWireFace implements IPowered, IPartTicking, IConnectionListener {
 
-    private IPowerBase handler = BPApi.getInstance().getPowerApi().createPowerHandler(this);
+    private final IPowerBase handler = BPApi.getInstance().getPowerApi().createPowerHandler(this);
 
     @Override
     public String getType() {
@@ -117,12 +116,6 @@ public class WirePower extends PartWireFace implements IPowered, IPartTicking, I
     }
 
     @Override
-    public PowerTier getPowerTier() {
-
-        return PowerTier.LOWVOLTAGE;
-    }
-
-    @Override
     public IPowerBase getPowerHandler(ForgeDirection side) {
 
         return handler;
@@ -138,12 +131,6 @@ public class WirePower extends PartWireFace implements IPowered, IPartTicking, I
     public boolean isNormalFace(ForgeDirection side) {
 
         return false;
-    }
-
-    @Override
-    public float getMaxPowerStorage() {
-
-        return 10;
     }
 
     @Override

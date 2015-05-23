@@ -21,9 +21,9 @@ import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
+import uk.co.qmunity.lib.tile.TileBase;
 
 import com.bluepowermod.tile.IEjectAnimator;
-import com.bluepowermod.tile.TileBase;
 
 public class TileIgniter extends TileBase implements IEjectAnimator {
 

@@ -17,31 +17,22 @@
 
 package com.bluepowermod.block;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import uk.co.qmunity.lib.block.BlockBase;
 
 import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.reference.Refs;
 
-public abstract class BlockBase extends Block {
-    
-    public BlockBase(Material material) {
-    
+public abstract class BlockBluePowerBase extends BlockBase {
+
+    public BlockBluePowerBase(Material material) {
+
         super(material);
-        setStepSound(soundTypeStone);
         setCreativeTab(BPCreativeTabs.machines);
-        blockHardness = 3.0F;
     }
-    
+
     @Override
-    public String getUnlocalizedName() {
-    
-        return String.format("tile.%s:%s", Refs.MODID, getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
+    protected String getModId() {
+        return Refs.MODID;
     }
-    
-    protected String getUnwrappedUnlocalizedName(String name) {
-    
-        return name.substring(name.indexOf(".") + 1);
-    }
-    
 }

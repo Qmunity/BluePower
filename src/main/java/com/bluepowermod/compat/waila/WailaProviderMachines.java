@@ -29,7 +29,7 @@ import com.bluepowermod.tile.TileMachineBase;
  */
 public class WailaProviderMachines implements IWailaDataProvider {
 
-    private List<String> info = new ArrayList<String>();
+    private final List<String> info = new ArrayList<String>();
 
     @Override
     public List<String> getWailaBody(ItemStack item, List<String> tip, IWailaDataAccessor accessor, IWailaConfigHandler config) {
@@ -41,7 +41,7 @@ public class WailaProviderMachines implements IWailaDataProvider {
         info.clear();
 
         if (machine instanceof IPowered) {
-            tip.add(((IPowered) machine).getPowerHandler(ForgeDirection.UNKNOWN).getAmpHourStored() + "mAh");
+            tip.add(((IPowered) machine).getPowerHandler(ForgeDirection.UNKNOWN).getVoltage() + "V");
         }
 
         return tip;

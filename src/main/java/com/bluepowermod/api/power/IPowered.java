@@ -22,12 +22,6 @@ import com.bluepowermod.api.connect.ConnectionType;
 public interface IPowered extends IWorldLocation {
 
     /**
-     * @author Koen Beckers (K4Unl) Gets the tier of the machine.
-     * @return
-     */
-    public PowerTier getPowerTier();
-
-    /**
      * @author Koen Beckers (K4Unl) Gets the powerHandler
      * @return
      */
@@ -45,9 +39,4 @@ public interface IPowered extends IWorldLocation {
      */
     public boolean isNormalFace(ForgeDirection side);
 
-    /**
-     * @author Koen Beckers (K4Unl) Returns the storage of mAh this block has,
-     * @return int
-     */
-    public float getMaxPowerStorage();
 }

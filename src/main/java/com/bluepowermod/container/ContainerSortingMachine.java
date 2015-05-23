@@ -24,7 +24,6 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.util.ForgeDirection;
 import uk.co.qmunity.lib.client.gui.GuiContainerBase;
 
 import com.bluepowermod.ClientProxy;
@@ -46,11 +45,6 @@ public class ContainerSortingMachine extends ContainerMachineBase {
     private int pullMode = -1, sortMode = -1, curColumn = -1;
     private final int[] colors = new int[9];
     private final int[] fuzzySettings = new int[8];
-
-    private final static int AMPSTORED = 22;
-    private final static int AMPMAX = 23;
-    public float ampStored;
-    public float ampMax;
 
     public ContainerSortingMachine(InventoryPlayer invPlayer, TileSortingMachine sortingMachine) {
 
@@ -125,7 +119,7 @@ public class ContainerSortingMachine extends ContainerMachineBase {
                 }
             }
 
-            if (ampStored != sortingMachine.getPowerHandler(ForgeDirection.UNKNOWN).getAmpHourStored()) {
+            /*if (ampStored != sortingMachine.getPowerHandler(ForgeDirection.UNKNOWN).getAmpHourStored()) {
                 icrafting.sendProgressBarUpdate(this, AMPSTORED, (int) sortingMachine.getPowerHandler(ForgeDirection.UNKNOWN).getAmpHourStored());
                 ampStored = sortingMachine.getPowerHandler(ForgeDirection.UNKNOWN).getAmpHourStored();
             }
@@ -133,7 +127,7 @@ public class ContainerSortingMachine extends ContainerMachineBase {
             if (ampMax != sortingMachine.getPowerHandler(ForgeDirection.UNKNOWN).getMaxAmpHour()) {
                 icrafting.sendProgressBarUpdate(this, AMPMAX, (int) sortingMachine.getPowerHandler(ForgeDirection.UNKNOWN).getMaxAmpHour());
                 ampMax = sortingMachine.getPowerHandler(ForgeDirection.UNKNOWN).getMaxAmpHour();
-            }
+            }*/
         }
 
         pullMode = sortingMachine.pullMode.ordinal();
@@ -176,14 +170,6 @@ public class ContainerSortingMachine extends ContainerMachineBase {
             ((GuiContainerBase) ClientProxy.getOpenedGui()).redraw();
         }
 
-        if (id == AMPSTORED) {
-            sortingMachine.setAmpStored(value);
-            ((GuiContainerBase) ClientProxy.getOpenedGui()).redraw();
-        }
-        if (id == AMPMAX) {
-            sortingMachine.setMaxAmp(value);
-            ((GuiContainerBase) ClientProxy.getOpenedGui()).redraw();
-        }
     }
 
     @Override

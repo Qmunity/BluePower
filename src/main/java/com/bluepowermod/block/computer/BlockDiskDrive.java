@@ -38,12 +38,7 @@ public class BlockDiskDrive extends BlockContainerBase {
 
         super(Material.iron, TileDiskDrive.class);
         setBlockName(Refs.BLOCKDISKDRIVE_NAME);
-    }
-
-    @Override
-    public GuiIDs getGuiID() {
-
-        return GuiIDs.DISK_DRIVE;
+        setGuiId(GuiIDs.DISK_DRIVE);
     }
 
     @Override

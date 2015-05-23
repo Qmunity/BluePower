@@ -17,16 +17,7 @@
 
 package com.bluepowermod.client.gui;
 
-import com.bluepowermod.client.gui.widget.WidgetColor;
-import com.bluepowermod.client.gui.widget.WidgetFuzzySetting;
-import com.bluepowermod.client.gui.widget.WidgetPowerBar;
-import com.bluepowermod.container.ContainerSortingMachine;
-import com.bluepowermod.network.BPNetworkHandler;
-import com.bluepowermod.network.message.MessageGuiUpdate;
-import com.bluepowermod.reference.Refs;
-import com.bluepowermod.tile.tier2.TileSortingMachine;
-import com.bluepowermod.tile.tier2.TileSortingMachine.PullMode;
-import com.bluepowermod.tile.tier2.TileSortingMachine.SortMode;
+import java.util.List;
 
 import net.minecraft.client.gui.Gui;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -35,7 +26,15 @@ import uk.co.qmunity.lib.client.gui.widget.BaseWidget;
 import uk.co.qmunity.lib.client.gui.widget.IGuiWidget;
 import uk.co.qmunity.lib.client.gui.widget.WidgetMode;
 
-import java.util.List;
+import com.bluepowermod.client.gui.widget.WidgetColor;
+import com.bluepowermod.client.gui.widget.WidgetFuzzySetting;
+import com.bluepowermod.container.ContainerSortingMachine;
+import com.bluepowermod.network.BPNetworkHandler;
+import com.bluepowermod.network.message.MessageGuiUpdate;
+import com.bluepowermod.reference.Refs;
+import com.bluepowermod.tile.tier2.TileSortingMachine;
+import com.bluepowermod.tile.tier2.TileSortingMachine.PullMode;
+import com.bluepowermod.tile.tier2.TileSortingMachine.SortMode;
 
 /**
  *
@@ -90,8 +89,8 @@ public class GuiSortingMachine extends GuiContainerBaseBP {
         pullModeWidget.value = sortingMachine.pullMode.ordinal();
         addWidget(pullModeWidget);
 
-        WidgetMode sortModeWidget = new WidgetMode(10, guiLeft + 7, guiTop + 106, 210, TileSortingMachine.SortMode.values().length,
-                Refs.MODID + ":textures/gui/sorting_machine.png") {
+        WidgetMode sortModeWidget = new WidgetMode(10, guiLeft + 7, guiTop + 106, 210, TileSortingMachine.SortMode.values().length, Refs.MODID
+                + ":textures/gui/sorting_machine.png") {
 
             @Override
             public void addTooltip(int mouseX, int mouseY, List<String> curTip, boolean shiftPressed) {
@@ -113,9 +112,6 @@ public class GuiSortingMachine extends GuiContainerBaseBP {
             fuzzyWidget.value = sortingMachine.fuzzySettings[i];
             addWidget(fuzzyWidget);
         }
-
-        WidgetPowerBar mainPowerWidget = new WidgetPowerBar(0, guiLeft + 6, guiTop + 37, sortingMachine.getAmpStored(), sortingMachine.getMaxAmp());
-        addWidget(mainPowerWidget);
     }
 
     @Override

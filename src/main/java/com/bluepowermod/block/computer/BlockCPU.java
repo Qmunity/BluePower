@@ -42,6 +42,7 @@ public class BlockCPU extends BlockContainerBase {
 
         super(Material.iron, TileCPU.class);
         setBlockName(Refs.BLOCKCPU_NAME);
+        setGuiId(GuiIDs.CPU);
     }
 
     @Override
@@ -50,12 +51,6 @@ public class BlockCPU extends BlockContainerBase {
         TileEntity tileEntity = world.getTileEntity(x, y, z);
         if (tileEntity instanceof TileCPU) {
         }
-    }
-
-    @Override
-    public GuiIDs getGuiID() {
-
-        return GuiIDs.CPU;
     }
 
     @Override
