@@ -63,4 +63,14 @@ public class GuiRetriever extends GuiFilter {
         }
     }
 
+    @Override
+    protected int getPowerBarXPos() {
+        return 12;
+    }
+
+    @Override
+    protected int getPowerBarYPos() {
+        return 22;
+    }
+
 }

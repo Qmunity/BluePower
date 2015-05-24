@@ -63,10 +63,18 @@ public class GuiContainerBaseBP extends GuiContainerBase implements INEIGuiHandl
         }
 
         if (inventory instanceof IPowered) {
-            WidgetBarBase mainPowerWidget = new WidgetPowerBar(guiLeft + 6, guiTop + 37,
+            WidgetBarBase mainPowerWidget = new WidgetPowerBar(guiLeft + getPowerBarXPos(), guiTop + getPowerBarYPos(),
                     ((IPowered) inventory).getPowerHandler(ForgeDirection.UNKNOWN));
             addWidget(mainPowerWidget);
         }
+    }
+
+    protected int getPowerBarXPos() {
+        return 6;
+    }
+
+    protected int getPowerBarYPos() {
+        return 37;
     }
 
     // -----------NEI support

@@ -1,11 +1,11 @@
 package com.bluepowermod.client.gui;
 
+import java.util.List;
+
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.util.ForgeDirection;
 
 import com.bluepowermod.client.gui.widget.WidgetBarBase;
-import com.bluepowermod.client.gui.widget.WidgetPowerBar;
 import com.bluepowermod.container.ContainerBattery;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier2.TileBattery;
@@ -30,13 +30,26 @@ public class GuiBattery extends GuiContainerBaseBP {
     public void initGui() {
 
         super.initGui();
-        addWidget(new WidgetPowerBar(guiLeft + 59, guiTop + 24, tile.getPowerHandler(ForgeDirection.UNKNOWN)));
-        addWidget(new WidgetBarBase(guiLeft + 66, guiTop + 24) {
+        addWidget(new WidgetBarBase(guiLeft + 87, guiTop + 24, 18) {
             @Override
             protected double getBarPercentage() {
                 return tile.getBufferPercentage();
             }
 
+            @Override
+            public void addTooltip(int mouseX, int mouseY, List<String> curTip, boolean shiftPressed) {
+                curTip.add((int) (getBarPercentage() * 100) + "%%");
+            }
         });
+    }
+
+    @Override
+    protected int getPowerBarXPos() {
+        return 58;
+    }
+
+    @Override
+    protected int getPowerBarYPos() {
+        return 24;
     }
 }
