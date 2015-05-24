@@ -41,7 +41,10 @@ public class TileBattery extends TileBluePowerBase implements IPowered, IInvento
         super.updateEntity();
 
         if (!getWorldObj().isRemote) {
-            if (powerBase.getVoltage() < 0.9 * powerBase.getMaxVoltage() && energyBuffer > 0) {
+            //TODO; Change me.
+            //Originally, this value is set at 0.9. However, there's a pretty big range where the energy is high enough to be between 0.9 and 0.95,
+            // where it would not discharge. I've tweaked it to 0.949, however, with this the value jitters a lot.
+            if (powerBase.getVoltage() < 0.949 * powerBase.getMaxVoltage() && energyBuffer > 0) {
                 energyBuffer--;
                 powerBase.addEnergy(1, false);
             } else if (powerBase.getVoltage() > 0.95 * powerBase.getMaxVoltage() && energyBuffer < MAX_ENERGY_BUFFER) {
