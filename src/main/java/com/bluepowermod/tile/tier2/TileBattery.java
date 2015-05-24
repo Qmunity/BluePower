@@ -5,6 +5,7 @@ import com.bluepowermod.item.ItemBattery;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
 import uk.co.qmunity.lib.network.annotation.DescSynced;
 import uk.co.qmunity.lib.network.annotation.GuiSynced;
@@ -161,5 +162,38 @@ public class TileBattery extends TileBluePowerBase implements IPowered, IInvento
     public int getTextureIndex() {
 
         return textureIndex;
+    }
+
+    /**
+     * This function gets called whenever the world/chunk loads
+     */
+    @Override
+    public void readFromNBT(NBTTagCompound tCompound) {
+
+        super.readFromNBT(tCompound);
+
+        for (int i = 0; i < 2; i++) {
+            NBTTagCompound tc = tCompound.getCompoundTag("inventory" + i);
+            inventory[i] = ItemStack.loadItemStackFromNBT(tc);
+        }
+        energyBuffer = tCompound.getInteger("energyBuffer");
+    }
+
+    /**
+     * This function gets called whenever the world/chunk is saved
+     */
+    @Override
+    public void writeToNBT(NBTTagCompound tCompound) {
+
+        super.writeToNBT(tCompound);
+
+        for (int i = 0; i < 2; i++) {
+            if (inventory[i] != null) {
+                NBTTagCompound tc = new NBTTagCompound();
+                inventory[i].writeToNBT(tc);
+                tCompound.setTag("inventory" + i, tc);
+            }
+        }
+        tCompound.setInteger("energyBuffer", energyBuffer);
     }
 }
