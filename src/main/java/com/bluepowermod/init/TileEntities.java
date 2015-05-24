@@ -77,5 +77,6 @@ public class TileEntities {
         GameRegistry.registerTileEntity(TileSolarPanel.class, Refs.MODID + ".solarPanel");
         GameRegistry.registerTileEntity(TileBattery.class, Refs.MODID + ".battery");
         GameRegistry.registerTileEntity(TileThermopile.class, Refs.MODID + ".thermopile");
+        GameRegistry.registerTileEntity(TileChargingBench.class, Refs.MODID + ".chargingbench");
     }
 }

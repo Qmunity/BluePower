@@ -141,6 +141,7 @@ public class BPBlocks {
     public static Block solar_panel;
     public static Block battery;
     public static Block thermopile;
+    public static Block chargingBench;
 
     public static void init() {
 
@@ -238,6 +239,7 @@ public class BPBlocks {
         solar_panel = new BlockSolarPanel();
         battery = new BlockBattery();
         thermopile = new BlockThermopile();
+        chargingBench = new BlockChargingBench();
 
         for (int i = 0; i < MinecraftColor.VALID_COLORS.length; i++)
             blockLamp[i] = new BlockLamp(false, MinecraftColor.VALID_COLORS[i]);
@@ -311,6 +313,7 @@ public class BPBlocks {
         GameRegistry.registerBlock(solar_panel, Refs.SOLAR_PANEL_NAME);
         GameRegistry.registerBlock(battery, Refs.BATTERY_NAME);
         GameRegistry.registerBlock(thermopile, Refs.THERMOPILE_NAME);
+        GameRegistry.registerBlock(chargingBench, Refs.CHARGINGBENCH_NAME);
 
         /*
          * GameRegistry.registerBlock(cpu, Refs.BLOCKCPU_NAME); GameRegistry.registerBlock(monitor, Refs.BLOCKMONITOR_NAME);

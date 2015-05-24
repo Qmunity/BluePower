@@ -17,30 +17,7 @@
 
 package com.bluepowermod.client.gui;
 
-import com.bluepowermod.container.ContainerAlloyFurnace;
-import com.bluepowermod.container.ContainerBattery;
-import com.bluepowermod.container.ContainerBuffer;
-import com.bluepowermod.container.ContainerCPU;
-import com.bluepowermod.container.ContainerCanvasBag;
-import com.bluepowermod.container.ContainerCircuitDatabaseMain;
-import com.bluepowermod.container.ContainerCircuitDatabaseSharing;
-import com.bluepowermod.container.ContainerCircuitTable;
-import com.bluepowermod.container.ContainerDeployer;
-import com.bluepowermod.container.ContainerDiskDrive;
-import com.bluepowermod.container.ContainerEjector;
-import com.bluepowermod.container.ContainerFilter;
-import com.bluepowermod.container.ContainerIOExpander;
-import com.bluepowermod.container.ContainerItemDetector;
-import com.bluepowermod.container.ContainerKinect;
-import com.bluepowermod.container.ContainerManager;
-import com.bluepowermod.container.ContainerMonitor;
-import com.bluepowermod.container.ContainerProjectTable;
-import com.bluepowermod.container.ContainerRedbusID;
-import com.bluepowermod.container.ContainerRegulator;
-import com.bluepowermod.container.ContainerRelay;
-import com.bluepowermod.container.ContainerRetriever;
-import com.bluepowermod.container.ContainerSeedBag;
-import com.bluepowermod.container.ContainerSortingMachine;
+import com.bluepowermod.container.*;
 import com.bluepowermod.container.inventory.InventoryItem;
 import com.bluepowermod.init.BPItems;
 import com.bluepowermod.item.ItemCanvasBag;
@@ -56,11 +33,7 @@ import com.bluepowermod.tile.tier1.TileFilter;
 import com.bluepowermod.tile.tier1.TileItemDetector;
 import com.bluepowermod.tile.tier1.TileProjectTable;
 import com.bluepowermod.tile.tier1.TileRelay;
-import com.bluepowermod.tile.tier2.TileBattery;
-import com.bluepowermod.tile.tier2.TileCircuitTable;
-import com.bluepowermod.tile.tier2.TileRegulator;
-import com.bluepowermod.tile.tier2.TileRetriever;
-import com.bluepowermod.tile.tier2.TileSortingMachine;
+import com.bluepowermod.tile.tier2.*;
 import com.bluepowermod.tile.tier3.IRedBusWindow;
 import com.bluepowermod.tile.tier3.TileCPU;
 import com.bluepowermod.tile.tier3.TileCircuitDatabase;
@@ -153,6 +126,8 @@ public class GUIHandler implements IGuiHandler {
             return new ContainerCircuitDatabaseMain(player.inventory, (TileCircuitDatabase) ent);
         case BATTERY_ID:
             return new ContainerBattery(player.inventory, (TileBattery) ent);
+        case CHARGINGBENCH_ID:
+            return new ContainerChargingBench(player.inventory, (TileChargingBench) ent);
         default:
             break;
         }
@@ -231,6 +206,8 @@ public class GUIHandler implements IGuiHandler {
             return new GuiCircuitDatabaseSharing(player.inventory, (TileCircuitDatabase) ent);
         case BATTERY_ID:
             return new GuiBattery(player.inventory, (TileBattery) ent);
+        case CHARGINGBENCH_ID:
+            return new GuiChargingBench(player.inventory, (TileChargingBench) ent);
         default:
             break;
         }

@@ -78,6 +78,7 @@ public class TileThermopile extends TileMachineBase implements IPowered {
             }
         }
 
+        BluePower.log.info("We found " + amountOfBlocks + " L:" + lowestTemperature + " T:" + temperature);
         temperature = temperature - (lowestTemperature * amountOfBlocks);
 
         return temperature;

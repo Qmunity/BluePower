@@ -1,5 +1,7 @@
 package com.bluepowermod.tile.tier2;
 
+import com.bluepowermod.init.BPItems;
+import com.bluepowermod.item.ItemBattery;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -153,7 +155,7 @@ public class TileBattery extends TileBluePowerBase implements IPowered, IInvento
     @Override
     public boolean isItemValidForSlot(int index, ItemStack itemToTest) {
 
-        return itemToTest != null && itemToTest.getItem() instanceof IRechargeable;
+        return itemToTest != null && itemToTest.getItem() == BPItems.battery;
     }
 
     public int getTextureIndex() {

@@ -187,11 +187,11 @@ public class Refs {
     public static final String PAINTCAN_NAME   = "paint_can";
     public static final String PAINTBRUSH_NAME = "paint_brush";
 
-    public static final String PROJECTTABLE_NAME = "project_table";
+    public static final String PROJECTTABLE_NAME     = "project_table";
     public static final String AUTOPROJECTTABLE_NAME = "auto_project_table";
-    public static final String CIRCUITTABLE_NAME = "circuit_table";
-    public static final String CIRCUITDATABASE_NAME = "circuit_database";
-    public static final String BLUESTONETORCH_NAME  = "bluestone_torch";
+    public static final String CIRCUITTABLE_NAME     = "circuit_table";
+    public static final String CIRCUITDATABASE_NAME  = "circuit_database";
+    public static final String BLUESTONETORCH_NAME   = "bluestone_torch";
 
     public static final String BLOCKCPU_NAME        = "cpu";
     public static final String BLOCKMONITOR_NAME    = "monitor";
@@ -200,7 +200,7 @@ public class Refs {
     public static final String FLOPPY_DISK          = "floppy_disk";
 
     public static final String[] oreDictDyes             = new String[] { "dyeBlack", "dyeRed", "dyeGreen", "dyeBrown", "dyeBlue", "dyePurple",
-            "dyeCyan", "dyeLightGray", "dyeGray", "dyePink", "dyeLime", "dyeYellow", "dyeLightBlue", "dyeMagenta", "dyeOrange", "dyeWhite" };
+      "dyeCyan", "dyeLightGray", "dyeGray", "dyePink", "dyeLime", "dyeYellow", "dyeLightBlue", "dyeMagenta", "dyeOrange", "dyeWhite" };
     public static final String   LAMP_NAME               = "lamp";
     public static final String   CONFIG_WORLDGEN         = "world gen";
     public static final String   CONFIG_TUNGSTEN         = "tungsten";
@@ -219,10 +219,12 @@ public class Refs {
 
     public static final String MULTIMETER_NAME = "multimeter";
 
-    public static final String SOLAR_PANEL_NAME  = "solar_panel";
-    public static final String BATTERY_NAME      = "batteryBlock";
-    public static final String BATTERY_ITEM_NAME = "battery";
-    public static final String THERMOPILE_NAME   = "thermopile";
+    public static final String SOLAR_PANEL_NAME       = "solar_panel";
+    public static final String BATTERY_NAME           = "batteryBlock";
+    public static final String BATTERY_ITEM_NAME      = "battery";
+    public static final String THERMOPILE_NAME        = "thermopile";
+    public static final String SONIC_SCREWDRIVER_NAME = "sonic_screwdriver";
+    public static final String CHARGINGBENCH_NAME     = "chargingbench";
 
     public static String fullVersionString() {
 

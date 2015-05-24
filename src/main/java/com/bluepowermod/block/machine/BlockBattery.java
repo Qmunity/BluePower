@@ -25,7 +25,7 @@ public class BlockBattery extends BlockContainerBase {
 
     public BlockBattery() {
 
-        super(Material.rock, TileBattery.class);
+        super(Material.iron, TileBattery.class);
         setBlockName(Refs.BATTERY_NAME);
         setGuiId(GuiIDs.BATTERY_ID);
     }
