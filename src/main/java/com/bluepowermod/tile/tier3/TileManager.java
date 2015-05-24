@@ -27,6 +27,7 @@ import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.part.IGuiButtonSensitive;
 import com.bluepowermod.part.tube.PneumaticTube;
 import com.bluepowermod.part.tube.TubeStack;
+import com.bluepowermod.reference.PowerConstants;
 import com.bluepowermod.tile.IFuzzyRetrieving;
 import com.bluepowermod.tile.IRejectAnimator;
 import com.bluepowermod.tile.TileMachineBase;
@@ -42,7 +43,6 @@ public class TileManager extends TileMachineBase implements ISidedInventory, IGu
     public int mode;
     public int fuzzySetting;
     private int rejectTicker = -1;
-    private static final double ENERGY_PER_ACTION = 1;
     @GuiSynced
     private final IPowerBase powerBase = getPowerHandler(ForgeDirection.UNKNOWN);
 
@@ -135,7 +135,7 @@ public class TileManager extends TileMachineBase implements ISidedInventory, IGu
                     ItemStack retrievingStack = stack.copy();
                     retrievingStack.stackSize = retrievingStack.getMaxStackSize();
                     if (tube.getLogic().retrieveStack(this, getOutputDirection(), retrievingStack, filterColor)) {
-                        powerBase.addEnergy(-ENERGY_PER_ACTION, false);
+                        powerBase.addEnergy(-PowerConstants.POWER_PER_ACTION, false);
                         return;
                     }
                 }
@@ -158,7 +158,7 @@ public class TileManager extends TileMachineBase implements ISidedInventory, IGu
                 rejectingStack = IOHelper.extract(te, getFacingDirection().getOpposite(), rejectingStack, true, false, fuzzySetting);
                 if (rejectingStack != null) {
                     this.addItemToOutputBuffer(rejectingStack, filterColor);
-                    powerBase.addEnergy(-ENERGY_PER_ACTION, false);
+                    powerBase.addEnergy(-PowerConstants.POWER_PER_ACTION, false);
                 }
             }
         }

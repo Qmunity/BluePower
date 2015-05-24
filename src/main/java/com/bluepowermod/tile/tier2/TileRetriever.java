@@ -18,6 +18,7 @@ import com.bluepowermod.api.power.IPowerBase;
 import com.bluepowermod.api.power.IPowered;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.part.tube.PneumaticTube;
+import com.bluepowermod.reference.PowerConstants;
 import com.bluepowermod.tile.IFuzzyRetrieving;
 import com.bluepowermod.tile.tier1.TileFilter;
 
@@ -30,7 +31,6 @@ public class TileRetriever extends TileFilter implements IFuzzyRetrieving, IPowe
     public int mode;
     @GuiSynced
     private final IPowerBase powerBase = getPowerHandler(ForgeDirection.UNKNOWN);
-    private static final double ENERGY_PER_PULL = 1;
 
     @Override
     protected void pullItem() {
@@ -63,7 +63,7 @@ public class TileRetriever extends TileFilter implements IFuzzyRetrieving, IPowe
                 if (everythingNull) {
                     boolean success = tube.getLogic().retrieveStack(this, getFacingDirection(), null);
                     if (success) {
-                        powerBase.addEnergy(-ENERGY_PER_PULL, false);
+                        powerBase.addEnergy(-PowerConstants.POWER_PER_ACTION, false);
                     }
                     slotIndex = 0;
                 }

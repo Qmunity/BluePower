@@ -7,6 +7,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import com.bluepowermod.api.connect.ConnectionType;
 import com.bluepowermod.api.misc.IFace;
 import com.bluepowermod.api.power.IPowered;
+import com.bluepowermod.reference.PowerConstants;
 import com.bluepowermod.tile.TileMachineBase;
 
 /**
@@ -44,7 +45,7 @@ public class TileSolarPanel extends TileMachineBase implements IPowered, IFace {
 
         super.updateEntity();
 
-        double addedEnergy = getDaylightStrength() / 1000D;
+        double addedEnergy = getDaylightStrength() * PowerConstants.SOLAR_PANEL_MULTIPLIER;
         if (!getWorldObj().isRemote) {
             getPowerHandler(ForgeDirection.UNKNOWN).addEnergy(addedEnergy, false);
         }

@@ -29,6 +29,7 @@ import com.bluepowermod.helper.ItemStackHelper;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.part.IGuiButtonSensitive;
 import com.bluepowermod.part.tube.TubeStack;
+import com.bluepowermod.reference.PowerConstants;
 import com.bluepowermod.tile.TileMachineBase;
 
 /**
@@ -50,7 +51,6 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
 
     @GuiSynced
     private final IPowerBase powerBase = getPowerHandler(ForgeDirection.UNKNOWN);
-    private final double POWER_USAGE_PER_ITEM = 0.1;
 
     public TileSortingMachine() {
 
@@ -538,7 +538,7 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
     @Override
     protected void addItemToOutputBuffer(ItemStack stack, TubeColor color) {
 
-        powerBase.addEnergy(-stack.stackSize * POWER_USAGE_PER_ITEM, false);
+        powerBase.addEnergy(-PowerConstants.POWER_PER_ACTION, false);
         super.addItemToOutputBuffer(stack, color);
     }
 
