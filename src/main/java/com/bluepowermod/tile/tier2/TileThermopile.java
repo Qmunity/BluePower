@@ -59,6 +59,13 @@ public class TileThermopile extends TileMachineBase implements IPowered {
 
             Block toCheck = getWorld().getBlock(x, y, z);
             Fluid blockFluid = FluidRegistry.lookupFluidForBlock(toCheck);
+            if(toCheck == Blocks.flowing_lava && blockFluid == null){
+                blockFluid = FluidRegistry.LAVA;
+            }
+            if(toCheck == Blocks.flowing_water && blockFluid == null){
+                blockFluid = FluidRegistry.WATER;
+            }
+
             if(blockFluid != null){
                 lowestTemperature = Math.min(blockFluid.getTemperature(getWorld(), x, y, z), lowestTemperature);
                 temperature += blockFluid.getTemperature(getWorld(), x, y, z);
