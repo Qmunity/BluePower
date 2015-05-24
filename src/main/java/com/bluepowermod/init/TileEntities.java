@@ -30,13 +30,7 @@ import com.bluepowermod.tile.tier1.TileLamp;
 import com.bluepowermod.tile.tier1.TileProjectTable;
 import com.bluepowermod.tile.tier1.TileRelay;
 import com.bluepowermod.tile.tier1.TileTransposer;
-import com.bluepowermod.tile.tier2.TileBattery;
-import com.bluepowermod.tile.tier2.TileAutoProjectTable;
-import com.bluepowermod.tile.tier2.TileCircuitTable;
-import com.bluepowermod.tile.tier2.TileRegulator;
-import com.bluepowermod.tile.tier2.TileRetriever;
-import com.bluepowermod.tile.tier2.TileSolarPanel;
-import com.bluepowermod.tile.tier2.TileSortingMachine;
+import com.bluepowermod.tile.tier2.*;
 import com.bluepowermod.tile.tier3.TileCircuitDatabase;
 import com.bluepowermod.tile.tier3.TileEngine;
 import com.bluepowermod.tile.tier3.TileManager;
@@ -82,5 +76,6 @@ public class TileEntities {
 
         GameRegistry.registerTileEntity(TileSolarPanel.class, Refs.MODID + ".solarPanel");
         GameRegistry.registerTileEntity(TileBattery.class, Refs.MODID + ".battery");
+        GameRegistry.registerTileEntity(TileThermopile.class, Refs.MODID + ".thermopile");
     }
 }
