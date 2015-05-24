@@ -44,7 +44,7 @@ public class TileSolarPanel extends TileMachineBase implements IPowered, IFace {
 
         super.updateEntity();
 
-        double addedEnergy = getDaylightStrength() / 10D;
+        double addedEnergy = getDaylightStrength() / 1000D;
         if (!getWorldObj().isRemote) {
             getPowerHandler(ForgeDirection.UNKNOWN).addEnergy(addedEnergy, false);
         }

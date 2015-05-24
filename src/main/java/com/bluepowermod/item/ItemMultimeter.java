@@ -50,8 +50,8 @@ public class ItemMultimeter extends ItemBase {
 
                     List<String> messages = new ArrayList<String>();
                     if (machine.getPowerHandler(ForgeDirection.UNKNOWN) != null) {
-                        messages.add("Charge: " + machine.getPowerHandler(ForgeDirection.UNKNOWN).getVoltage() + "/"
-                                + machine.getPowerHandler(ForgeDirection.UNKNOWN).getVoltage() + "V");
+                        messages.add(String.format("Charge: %.1f/%.1fV", machine.getPowerHandler(ForgeDirection.UNKNOWN).getVoltage(), machine
+                                .getPowerHandler(ForgeDirection.UNKNOWN).getMaxVoltage()));
                     } else {
                         messages.add("No handler found!");
                     }

@@ -18,25 +18,22 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 
-import com.bluepowermod.tile.TileMachineBase;
+import com.bluepowermod.api.power.IPowered;
 
 /**
  * @author amadornes
  *
  */
-public class WailaProviderMachines implements IWailaDataProvider {
+public class WailaProviderPowered implements IWailaDataProvider {
 
     private final List<String> info = new ArrayList<String>();
 
     @Override
     public List<String> getWailaBody(ItemStack item, List<String> tip, IWailaDataAccessor accessor, IWailaConfigHandler config) {
 
-        TileMachineBase machine = (TileMachineBase) accessor.getTileEntity();
-
-        machine.addWailaInfo(info);
-        tip.addAll(info);
-        info.clear();
+        tip.add(String.format("%.1fV", accessor.getNBTData().getDouble("voltage")));
 
         return tip;
     }
@@ -61,7 +58,8 @@ public class WailaProviderMachines implements IWailaDataProvider {
 
     @Override
     public NBTTagCompound getNBTData(EntityPlayerMP player, TileEntity te, NBTTagCompound tag, World w, int x, int y, int z) {
-
+        IPowered machine = (IPowered) te;
+        tag.setDouble("voltage", machine.getPowerHandler(ForgeDirection.UNKNOWN).getVoltage());
         return tag;
     }
 }
