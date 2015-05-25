@@ -2,6 +2,7 @@ package com.bluepowermod.tile.tier2;
 
 import com.bluepowermod.init.BPItems;
 import com.bluepowermod.item.ItemBattery;
+import com.bluepowermod.reference.PowerConstants;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -28,7 +29,6 @@ public class TileBattery extends TileBluePowerBase implements IPowered, IInvento
 
     @GuiSynced
     private final IPowerBase powerBase = getPowerHandler(ForgeDirection.UNKNOWN);
-    private final int powerTransfer = 1;
 
     @GuiSynced
     private int energyBuffer;
@@ -41,25 +41,24 @@ public class TileBattery extends TileBluePowerBase implements IPowered, IInvento
         super.updateEntity();
 
         if (!getWorldObj().isRemote) {
-            //TODO; Change me.
-            //Originally, this value is set at 0.9. However, there's a pretty big range where the energy is high enough to be between 0.9 and 0.95,
-            // where it would not discharge. I've tweaked it to 0.949, however, with this the value jitters a lot.
-            if (powerBase.getVoltage() < 0.949 * powerBase.getMaxVoltage() && energyBuffer > 0) {
-                energyBuffer--;
-                powerBase.addEnergy(1, false);
+
+            if (powerBase.getVoltage() < 0.9 * powerBase.getMaxVoltage() && energyBuffer > 0) {
+                energyBuffer -= PowerConstants.BATTERYBOX_POWERTRANSFER_DISCHARGING;
+                powerBase.addEnergy(PowerConstants.BATTERYBOX_POWERTRANSFER_DISCHARGING, false);
             } else if (powerBase.getVoltage() > 0.95 * powerBase.getMaxVoltage() && energyBuffer < MAX_ENERGY_BUFFER) {
-                energyBuffer++;
-                powerBase.addEnergy(-1, false);
+                energyBuffer += PowerConstants.BATTERYBOX_POWERTRANSFER_CHARGING;
+                powerBase.addEnergy(PowerConstants.BATTERYBOX_POWERTRANSFER_CHARGING, false);
             }
 
             // Check if there's an item in the inventory
             if (inventory[0] != null && inventory[0].getItem() instanceof IRechargeable) {
                 IRechargeable battery = (IRechargeable) inventory[0].getItem();
-                energyBuffer += -battery.addEnergy(inventory[0], -Math.min(powerTransfer, MAX_ENERGY_BUFFER - energyBuffer));
+                energyBuffer += -battery.addEnergy(inventory[0], -Math.min((int) PowerConstants.BATTERYBOX_DISCHARGING_TRANSFER, MAX_ENERGY_BUFFER -
+                  energyBuffer));
             }
             if (inventory[1] != null && inventory[1].getItem() instanceof IRechargeable) {
                 IRechargeable battery = (IRechargeable) inventory[1].getItem();
-                energyBuffer -= battery.addEnergy(inventory[1], Math.min(powerTransfer, energyBuffer));
+                energyBuffer -= battery.addEnergy(inventory[1], Math.min((int)PowerConstants.BATTERYBOX_CHARGING_TRANSFER, energyBuffer));
             }
             if (worldObj.getWorldTime() % 20 == 0)
                 recalculateTextureIndex();

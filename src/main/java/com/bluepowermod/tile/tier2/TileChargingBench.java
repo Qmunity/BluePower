@@ -4,6 +4,7 @@ import com.bluepowermod.api.power.IPowerBase;
 import com.bluepowermod.api.power.IPowered;
 import com.bluepowermod.api.power.IRechargeable;
 import com.bluepowermod.init.BPBlocks;
+import com.bluepowermod.reference.PowerConstants;
 import com.bluepowermod.tile.TileBluePowerBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -38,18 +39,14 @@ public class TileChargingBench extends TileBluePowerBase implements IPowered, II
         super.updateEntity();
 
         if (!getWorldObj().isRemote) {
-            if (powerBase.getVoltage() < 0.9 * powerBase.getMaxVoltage() && energyBuffer > 0) {
-                energyBuffer--;
-                powerBase.addEnergy(1, false);
-            } else if (powerBase.getVoltage() > 0.95 * powerBase.getMaxVoltage() && energyBuffer < MAX_ENERGY_BUFFER) {
-                energyBuffer++;
-                powerBase.addEnergy(-1, false);
+            if(isPowered() && energyBuffer < 100){
+                fillPowerBuffer();
             }
 
             for(int i = 0; i < inventory.length; i++) {
                 if (inventory[i] != null && inventory[i].getItem() instanceof IRechargeable) {
                     IRechargeable battery = (IRechargeable) inventory[i].getItem();
-                    energyBuffer -= battery.addEnergy(inventory[i], Math.min(powerTransfer, energyBuffer));
+                    energyBuffer -= battery.addEnergy(inventory[i], Math.min((int)PowerConstants.CHARGINGBENCH_CHARGING_TRANSFER, energyBuffer));
                 }
             }
             if (worldObj.getWorldTime() % 20 == 0)
@@ -58,6 +55,11 @@ public class TileChargingBench extends TileBluePowerBase implements IPowered, II
 
         if (worldObj.getWorldTime() % 20 == 0)
             recalculateTextureIndex();
+    }
+
+    private void fillPowerBuffer(){
+        energyBuffer += PowerConstants.CHARGINGBENCH_POWERTRANSFER;
+        powerBase.addEnergy(-PowerConstants.CHARGINGBENCH_POWERTRANSFER, false);
     }
 
     private void recalculateTextureIndex() {
