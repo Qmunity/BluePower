@@ -24,7 +24,7 @@ public class ItemSonicScrewdriver extends ItemBattery implements IScrewdriver {
 
     public ItemSonicScrewdriver() {
 
-        super(1000);
+        super(1000);//How much power this screwdriver holds.
 
         setUnlocalizedName(Refs.SONIC_SCREWDRIVER_NAME);
         setTextureName(Refs.MODID + ":" + Refs.SONIC_SCREWDRIVER_NAME);
@@ -39,7 +39,7 @@ public class ItemSonicScrewdriver extends ItemBattery implements IScrewdriver {
             addEnergy(stack, -(int)PowerConstants.POWER_PER_ACTION);
         }
 
-        return getAmpStored(stack) > 0;
+        return getVoltage(stack) > 0;
     }
 
     @Override

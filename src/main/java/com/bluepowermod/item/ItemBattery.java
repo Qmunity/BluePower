@@ -19,49 +19,50 @@ import cpw.mods.fml.relauncher.SideOnly;
  */
 public class ItemBattery extends ItemBase implements IRechargeable {
 
-    private final int maxAmp;
+    private final int maxVoltage;
 
-    public ItemBattery(int maxAmp_) {
+    public ItemBattery(int maxVoltage_) {
+
         super();
 
         setUnlocalizedName(Refs.BATTERY_ITEM_NAME);
         setCreativeTab(BPCreativeTabs.power);
         setTextureName(Refs.MODID + ":" + Refs.BATTERY_ITEM_NAME);
         setMaxStackSize(1);
-        maxAmp = maxAmp_;
-        setMaxDamage(maxAmp);
+        maxVoltage = maxVoltage_;
+        setMaxDamage(maxVoltage);
         setNoRepair();
     }
 
     @Override
-    public int getAmpStored(ItemStack stack) {
+    public int getVoltage(ItemStack stack) {
 
-        return maxAmp - stack.getItemDamage();
+        return maxVoltage - stack.getItemDamage();
     }
 
     @Override
-    public float getMaxAmp() {
+    public int getMaxVoltage() {
 
-        return maxAmp;
+        return maxVoltage;
     }
 
     @Override
-    public int addEnergy(ItemStack stack, int ampHour) {
-        int oldAmp = getAmpStored(stack);
-        if (ampHour > 0) {
-            if (ampHour + getAmpStored(stack) < getMaxAmp()) {
-                stack.setItemDamage(getMaxDamage() - (getAmpStored(stack) + ampHour));
+    public int addEnergy(ItemStack stack, int voltage) {
+        int oldAmp = getVoltage(stack);
+        if (voltage > 0) {
+            if (voltage + getVoltage(stack) < getMaxVoltage()) {
+                stack.setItemDamage(getMaxDamage() - (getVoltage(stack) + voltage));
             } else {
                 stack.setItemDamage(0/*getMaxDamage()*/);
             }
         } else {
-            if (getAmpStored(stack) + ampHour > 0) {
-                stack.setItemDamage(getMaxDamage() - (getAmpStored(stack) + ampHour));
+            if (getVoltage(stack) + voltage > 0) {
+                stack.setItemDamage(getMaxDamage() - (getVoltage(stack) + voltage));
             } else {
-                stack.setItemDamage(maxAmp);
+                stack.setItemDamage(maxVoltage);
             }
         }
-        return getAmpStored(stack) - oldAmp;
+        return getVoltage(stack) - oldAmp;
     }
 
     @Override
@@ -76,6 +77,6 @@ public class ItemBattery extends ItemBase implements IRechargeable {
 
     @Override
     public void addInformation(ItemStack stack, EntityPlayer player, List infoList, boolean par4) {
-        infoList.add("Power: " + Math.round(getAmpStored(stack)) + " mA");
+        infoList.add("Charge: " + Math.round(((double)getVoltage(stack) / (double)getMaxVoltage()) * 100) + "%");
     }
 }

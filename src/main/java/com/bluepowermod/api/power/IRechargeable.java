@@ -7,13 +7,14 @@ import net.minecraft.item.ItemStack;
  */
 public interface IRechargeable {
 
-    public int getAmpStored(ItemStack stack);
+    public int getVoltage(ItemStack stack);
 
-    public float getMaxAmp();
+    public int getMaxVoltage();
 
     /**
      * Adds energy to the rechargeable item, or removes energy (if the energy is negative)
-     * @param ampHour The amount of energy to add
+     * @param stack The itemstack to apply to
+     * @param energy The amount of energy to add
      * @return The amount of energy that has been added
      */
     public int addEnergy(ItemStack stack, int energy);
