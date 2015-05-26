@@ -55,24 +55,34 @@ public class ItemSonicScrewdriver extends ItemBattery implements IScrewdriver {
                 if (mop == null)
                     return false;
                 IPart p = mop.getPart();
-                if (p instanceof IPartInteractable)
-                    ((IPartInteractable) p).onActivated(player, mop, stack);
+                if (p instanceof IPartInteractable) {
+                    if (((IPartInteractable) p).onActivated(player, mop, stack)) {
+                        damage(stack, 1, player, false);
+                        return true;
+                    }
+                }
             }
         }
 
         if (block instanceof BlockContainerBase) {
             if (((BlockContainerBase) block).getGuiId() >= 0) {
                 if (player.isSneaking()) {
-                    block.rotateBlock(world, x, y, z, ForgeDirection.getOrientation(side));
-                    damage(stack, 1, player, false);
+                    if (block.rotateBlock(world, x, y, z, ForgeDirection.getOrientation(side))) {
+                        damage(stack, 1, player, false);
+                        return true;
+                    }
                 }
             } else {
-                if (block.rotateBlock(world, x, y, z, ForgeDirection.getOrientation(side)))
+                if (!player.isSneaking() && block.rotateBlock(world, x, y, z, ForgeDirection.getOrientation(side))) {
                     damage(stack, 1, player, false);
+                    return true;
+                }
             }
         } else {
-            if (block.rotateBlock(world, x, y, z, ForgeDirection.getOrientation(side)))
+            if (!player.isSneaking() && block.rotateBlock(world, x, y, z, ForgeDirection.getOrientation(side))) {
                 damage(stack, 1, player, false);
+                return true;
+            }
         }
         return false;
     }
