@@ -21,7 +21,6 @@ import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
@@ -67,24 +66,34 @@ public class ItemScrewdriver extends ItemBase implements IScrewdriver {
                 if (mop == null)
                     return false;
                 IPart p = mop.getPart();
-                if (p instanceof IPartInteractable)
-                    ((IPartInteractable) p).onActivated(player, mop, stack);
+                if (p instanceof IPartInteractable) {
+                    if (((IPartInteractable) p).onActivated(player, mop, stack)) {
+                        damage(stack, 1, player, false);
+                        return true;
+                    }
+                }
             }
         }
 
         if (block instanceof BlockContainerBase) {
             if (((BlockContainerBase) block).getGuiId() >= 0) {
                 if (player.isSneaking()) {
-                    block.rotateBlock(world, x, y, z, ForgeDirection.getOrientation(side));
-                    damage(stack, 1, player, false);
+                    if (block.rotateBlock(world, x, y, z, ForgeDirection.getOrientation(side))) {
+                        damage(stack, 1, player, false);
+                        return true;
+                    }
                 }
             } else {
-                if (block.rotateBlock(world, x, y, z, ForgeDirection.getOrientation(side)))
+                if (!player.isSneaking() && block.rotateBlock(world, x, y, z, ForgeDirection.getOrientation(side))) {
                     damage(stack, 1, player, false);
+                    return true;
+                }
             }
         } else {
-            if (block.rotateBlock(world, x, y, z, ForgeDirection.getOrientation(side)))
+            if (!player.isSneaking() && block.rotateBlock(world, x, y, z, ForgeDirection.getOrientation(side))) {
                 damage(stack, 1, player, false);
+                return true;
+            }
         }
         return false;
     }
@@ -94,12 +103,6 @@ public class ItemScrewdriver extends ItemBase implements IScrewdriver {
     public boolean isFull3D() {
 
         return true;
-    }
-
-    @Override
-    public EnumAction getItemUseAction(ItemStack par1ItemStack) {
-
-        return EnumAction.block;
     }
 
     @Override

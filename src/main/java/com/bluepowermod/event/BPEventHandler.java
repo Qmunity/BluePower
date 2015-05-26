@@ -20,6 +20,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntityHopper;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraftforge.event.AnvilUpdateEvent;
@@ -28,6 +29,7 @@ import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import uk.co.qmunity.lib.helper.MathHelper;
 
 import com.bluepowermod.ClientProxy;
 import com.bluepowermod.client.gui.GuiCircuitDatabaseSharing;
@@ -38,16 +40,29 @@ import com.bluepowermod.init.BPEnchantments;
 import com.bluepowermod.init.BPItems;
 import com.bluepowermod.item.ItemSeedBag;
 import com.bluepowermod.item.ItemSickle;
+import com.bluepowermod.network.BPNetworkHandler;
+import com.bluepowermod.network.message.MessageServerTickTime;
 import com.bluepowermod.part.PartManager;
 import com.bluepowermod.util.Achievements;
 
 import cpw.mods.fml.common.eventhandler.Event.Result;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent;
+import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class BPEventHandler {
+
+    @SubscribeEvent
+    public void tick(TickEvent.WorldTickEvent event) {
+        if (event.phase == TickEvent.Phase.END) {
+            if (event.world.getWorldTime() % 200 == 0) {
+                double tickTime = MathHelper.mean(MinecraftServer.getServer().tickTimeArray) * 1.0E-6D;//In case world are going to get their own thread: MinecraftServer.getServer().worldTickTimes.get(event.world.provider.dimensionId)
+                BPNetworkHandler.INSTANCE.sendToDimension(new MessageServerTickTime(tickTime), event.world.provider.dimensionId);
+            }
+        }
+    }
 
     @SubscribeEvent
     public void onAnvilEvent(AnvilUpdateEvent event) {
@@ -68,8 +83,8 @@ public class BPEventHandler {
         if (event.action == PlayerInteractEvent.Action.LEFT_CLICK_BLOCK && event.entityPlayer.capabilities.isCreativeMode) {
             ItemStack heldItem = event.entityPlayer.getCurrentEquippedItem();
             if (heldItem != null && heldItem.getItem() instanceof ItemSickle) {
-                heldItem.getItem().onBlockDestroyed(heldItem, event.world, event.world.getBlock(event.x, event.y, event.z), event.x,
-                        event.y, event.z, event.entityPlayer);
+                heldItem.getItem().onBlockDestroyed(heldItem, event.world, event.world.getBlock(event.x, event.y, event.z), event.x, event.y,
+                        event.z, event.entityPlayer);
             }
         }
     }
@@ -119,11 +134,9 @@ public class BPEventHandler {
                 EntityPlayer killer = (EntityPlayer) entitySource.getEntity();
 
                 if (killer.inventory.getCurrentItem() != null) {
-                    if (EnchantmentHelper.getEnchantments(killer.inventory.getCurrentItem()).containsKey(
-                            BPEnchantments.disjunction.effectId)) {
+                    if (EnchantmentHelper.getEnchantments(killer.inventory.getCurrentItem()).containsKey(BPEnchantments.disjunction.effectId)) {
                         if (event.entityLiving instanceof EntityEnderman || event.entityLiving instanceof EntityDragon) {
-                            int level = EnchantmentHelper.getEnchantmentLevel(BPEnchantments.disjunction.effectId,
-                                    killer.inventory.getCurrentItem());
+                            int level = EnchantmentHelper.getEnchantmentLevel(BPEnchantments.disjunction.effectId, killer.inventory.getCurrentItem());
                             isAttacking = true;
                             event.entityLiving.attackEntityFrom(event.source, event.ammount * (level * 0.5F + 1));
                             isAttacking = false;
@@ -147,8 +160,7 @@ public class BPEventHandler {
 
                 if (killer.inventory.getCurrentItem() != null) {
                     if (EnchantmentHelper.getEnchantments(killer.inventory.getCurrentItem()).containsKey(BPEnchantments.vorpal.effectId)) {
-                        int level = EnchantmentHelper
-                                .getEnchantmentLevel(BPEnchantments.vorpal.effectId, killer.inventory.getCurrentItem());
+                        int level = EnchantmentHelper.getEnchantmentLevel(BPEnchantments.vorpal.effectId, killer.inventory.getCurrentItem());
 
                         if (level == 1) {
                             if (killer.worldObj.rand.nextInt(6) == 1) {
