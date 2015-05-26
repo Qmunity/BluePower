@@ -31,10 +31,7 @@ import com.bluepowermod.tile.tier1.TileProjectTable;
 import com.bluepowermod.tile.tier1.TileRelay;
 import com.bluepowermod.tile.tier1.TileTransposer;
 import com.bluepowermod.tile.tier2.*;
-import com.bluepowermod.tile.tier3.TileCircuitDatabase;
-import com.bluepowermod.tile.tier3.TileEngine;
-import com.bluepowermod.tile.tier3.TileManager;
-import com.bluepowermod.tile.tier3.TileSortron;
+import com.bluepowermod.tile.tier3.*;
 
 
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -57,9 +54,9 @@ public class TileEntities {
         // GameRegistry.registerTileEntity(TileMonitor.class, "monitor");
         // GameRegistry.registerTileEntity(TileDiskDrive.class, "diskDrive");
         // GameRegistry.registerTileEntity(TileIOExpander.class, "IOExpander");
-        GameRegistry.registerTileEntity(TileEngine.class, Refs.MODID + ".engine");
+        //GameRegistry.registerTileEntity(TileEngine.class, Refs.MODID + ".engine");
         // GameRegistry.registerTileEntity(TileWindmill.class, "windmill");
-        // GameRegistry.registerTileEntity(TileKinectGenerator.class, "kinectgenerator");
+
         GameRegistry.registerTileEntity(TileDeployer.class, Refs.MODID + ".deployer");
         GameRegistry.registerTileEntity(TileEjector.class, Refs.MODID + ".ejector");
         GameRegistry.registerTileEntity(TileRelay.class, Refs.MODID + ".relay");
@@ -78,5 +75,6 @@ public class TileEntities {
         GameRegistry.registerTileEntity(TileBattery.class, Refs.MODID + ".battery");
         GameRegistry.registerTileEntity(TileThermopile.class, Refs.MODID + ".thermopile");
         GameRegistry.registerTileEntity(TileChargingBench.class, Refs.MODID + ".chargingbench");
+        GameRegistry.registerTileEntity(TileKineticGenerator.class, Refs.MODID + "kineticGenerator");
     }
 }

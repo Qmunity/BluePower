@@ -9,19 +9,18 @@ package com.bluepowermod.tile.tier3;
 
 import java.util.List;
 
+import com.bluepowermod.init.BPBlocks;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import uk.co.qmunity.lib.tile.TileBase;
 
-public class TileKinectGenerator extends TileBase implements ISidedInventory{
+public class TileKineticGenerator extends TileBase implements ISidedInventory{
 
 	public int windspeed = 10;
 	public int windtick = 0;
-	public TileKinectGenerator(){
-		
-		
+	public TileKineticGenerator(){
 		
 	}
 	
@@ -114,7 +113,7 @@ public class TileKinectGenerator extends TileBase implements ISidedInventory{
     @Override
     public String getInventoryName() {
 
-        return "tile.kinect.name";
+        return BPBlocks.kinetic_generator.getUnlocalizedName();
     }
 
     @Override
@@ -126,7 +125,7 @@ public class TileKinectGenerator extends TileBase implements ISidedInventory{
     @Override
     public int getInventoryStackLimit() {
 
-        return 64;
+        return 1;
     }
 
     @Override

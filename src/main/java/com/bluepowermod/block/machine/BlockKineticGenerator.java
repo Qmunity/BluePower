@@ -13,7 +13,7 @@ import com.bluepowermod.block.BlockContainerBase;
 import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.reference.GuiIDs;
 import com.bluepowermod.reference.Refs;
-import com.bluepowermod.tile.tier3.TileKinectGenerator;
+import com.bluepowermod.tile.tier3.TileKineticGenerator;
 
 /**
  * 
@@ -24,10 +24,9 @@ public class BlockKineticGenerator extends BlockContainerBase {
 
     public BlockKineticGenerator() {
 
-        super(Material.iron, TileKinectGenerator.class);
+        super(Material.iron, TileKineticGenerator.class);
         setCreativeTab(BPCreativeTabs.machines);
         setBlockName(Refs.KINETICGENERATOR_NAME);
-        setBlockTextureName(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + Refs.KINETICGENERATOR_NAME + "_front");
         setGuiId(GuiIDs.KINETICGENERATOR_ID);
     }
 

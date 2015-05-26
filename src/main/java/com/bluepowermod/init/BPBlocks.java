@@ -122,7 +122,7 @@ public class BPBlocks {
     public static Block manager;
 
     // public static Block engine;
-    // public static Block kinetic_generator;
+     public static Block kinetic_generator;
     // public static Block windmill;
 
     // public static Block cpu;
@@ -222,7 +222,7 @@ public class BPBlocks {
         manager = new BlockRejecting(Material.rock, TileManager.class).setGuiId(GuiIDs.MANAGER_ID).emitsRedstone().setBlockName(Refs.MANAGER_NAME);
 
         // engine = new BlockEngine();
-        // kinetic_generator = new BlockKineticGenerator();
+        kinetic_generator = new BlockKineticGenerator();
         // windmill = new BlockWindmill();
 
         // cpu = new BlockCPU();
@@ -314,6 +314,7 @@ public class BPBlocks {
         GameRegistry.registerBlock(battery, Refs.BATTERY_NAME);
         GameRegistry.registerBlock(thermopile, Refs.THERMOPILE_NAME);
         GameRegistry.registerBlock(chargingBench, Refs.CHARGINGBENCH_NAME);
+        GameRegistry.registerBlock(kinetic_generator, Refs.KINETICGENERATOR_NAME);
 
         /*
          * GameRegistry.registerBlock(cpu, Refs.BLOCKCPU_NAME); GameRegistry.registerBlock(monitor, Refs.BLOCKMONITOR_NAME);

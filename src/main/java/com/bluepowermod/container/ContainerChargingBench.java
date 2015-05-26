@@ -10,7 +10,7 @@ import uk.co.qmunity.lib.inventory.ContainerBase;
 /**
  * @author Koen Beckers (K-4U)
  */
-public class ContainerChargingBench extends ContainerBase {
+public class ContainerChargingBench extends ContainerBase<TileChargingBench> {
 
     private final TileChargingBench tileChargingBench;
 

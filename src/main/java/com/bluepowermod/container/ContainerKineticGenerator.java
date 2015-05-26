@@ -23,19 +23,20 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
-import com.bluepowermod.tile.tier3.TileKinectGenerator;
+import com.bluepowermod.tile.tier3.TileKineticGenerator;
+import uk.co.qmunity.lib.inventory.ContainerBase;
 
-public class ContainerKinect extends Container {
+public class ContainerKineticGenerator extends ContainerBase<TileKineticGenerator> {
 
-    private final TileKinectGenerator tilekinect;
+    private final TileKineticGenerator tilekinect;
 
-    public ContainerKinect(InventoryPlayer invPlayer, TileKinectGenerator kinect) {
+    public ContainerKineticGenerator(InventoryPlayer invPlayer, TileKineticGenerator kineticGenerator) {
+        super(kineticGenerator);
+        tilekinect = kineticGenerator;
 
-        tilekinect = kinect;
-        
         //Inventory for Turbines
-        addSlotToContainer(new Slot(kinect, 0, 80, 35));
-        
+        addSlotToContainer(new Slot(kineticGenerator, 0, 80, 35));
+
         bindPlayerInventory(invPlayer);
     }
 
@@ -62,9 +63,9 @@ public class ContainerKinect extends Container {
 
     @Override
     public ItemStack transferStackInSlot(EntityPlayer player, int par2) {
-    	
-    	return null;
-     }
-    
-    
+        //TODO; Fill this magic function with its magic goodness of magicness
+        return null;
+    }
+
+
 }

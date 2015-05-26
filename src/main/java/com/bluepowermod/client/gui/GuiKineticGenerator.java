@@ -22,18 +22,18 @@ package com.bluepowermod.client.gui;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 
-import com.bluepowermod.container.ContainerKinect;
+import com.bluepowermod.container.ContainerKineticGenerator;
 import com.bluepowermod.reference.Refs;
-import com.bluepowermod.tile.tier3.TileKinectGenerator;
+import com.bluepowermod.tile.tier3.TileKineticGenerator;
 
-public class GuiKinect extends GuiContainerBaseBP {
+public class GuiKineticGenerator extends GuiContainerBaseBP {
 
-    private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/kinect.png");
-    private final TileKinectGenerator kinect;
+    private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/kinetic_generator.png");
+    private final TileKineticGenerator kinect;
 
-    public GuiKinect(InventoryPlayer invPlayer, TileKinectGenerator kinect) {
+    public GuiKineticGenerator(InventoryPlayer invPlayer, TileKineticGenerator kinect) {
 
-        super(new ContainerKinect(invPlayer, kinect), resLoc);
+        super(new ContainerKineticGenerator(invPlayer, kinect), resLoc);
         this.kinect = kinect;
         ySize = 165;
     }

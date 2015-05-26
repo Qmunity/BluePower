@@ -39,7 +39,7 @@ import com.bluepowermod.tile.tier3.TileCPU;
 import com.bluepowermod.tile.tier3.TileCircuitDatabase;
 import com.bluepowermod.tile.tier3.TileDiskDrive;
 import com.bluepowermod.tile.tier3.TileIOExpander;
-import com.bluepowermod.tile.tier3.TileKinectGenerator;
+import com.bluepowermod.tile.tier3.TileKineticGenerator;
 import com.bluepowermod.tile.tier3.TileManager;
 import com.bluepowermod.tile.tier3.TileMonitor;
 import cpw.mods.fml.common.network.IGuiHandler;
@@ -99,7 +99,7 @@ public class GUIHandler implements IGuiHandler {
             return new ContainerRedbusID(player.inventory, (IRedBusWindow) ent);
 
         case KINETICGENERATOR_ID:
-            return new ContainerKinect(player.inventory, (TileKinectGenerator) ent);
+            return new ContainerKineticGenerator(player.inventory, (TileKineticGenerator) ent);
         case DEPLOYER_ID:
             return new ContainerDeployer(player.inventory, (TileDeployer) ent);
         case RELAY_ID:
@@ -179,7 +179,7 @@ public class GUIHandler implements IGuiHandler {
         case REDBUS_ID:
             return new GuiRedbusID(player.inventory, (IRedBusWindow) ent);
         case KINETICGENERATOR_ID:
-            return new GuiKinect(player.inventory, (TileKinectGenerator) ent);
+            return new GuiKineticGenerator(player.inventory, (TileKineticGenerator) ent);
         case DEPLOYER_ID:
             return new GuiDeployer(player.inventory, (TileDeployer) ent);
         case RELAY_ID:
