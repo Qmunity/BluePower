@@ -59,8 +59,8 @@ archivesBaseName = "BluePower"
 
 dependencies {
     compile "codechicken:CodeChickenLib:1.7.10-1.1.1.105:dev"
-    compile "codechicken:CodeChickenCore:1.7.10-1.0.2.29:dev"
-    compile "codechicken:NotEnoughItems:1.7.10-1.0.2.64:dev"
+    compile "codechicken:CodeChickenCore:1.7.10-1.0.4.29:dev"
+    compile "codechicken:NotEnoughItems:1.7.10-1.0.3.64:dev"
     compile "codechicken:ForgeMultipart:1.7.10-1.1.0.311:dev"
     compile "mcp.mobius.waila:Waila:1.5.7a_1.7.10"
     compile "li.cil.oc:OpenComputers:MC1.7.10-1.4.2.16:api"
