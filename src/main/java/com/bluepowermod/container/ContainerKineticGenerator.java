@@ -17,13 +17,13 @@
 
 package com.bluepowermod.container;
 
+import com.bluepowermod.container.slot.SlotMachineInput;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
-import com.bluepowermod.tile.tier3.TileKineticGenerator;
+import com.bluepowermod.tile.tier2.TileKineticGenerator;
 import uk.co.qmunity.lib.inventory.ContainerBase;
 
 public class ContainerKineticGenerator extends ContainerBase<TileKineticGenerator> {
@@ -35,7 +35,7 @@ public class ContainerKineticGenerator extends ContainerBase<TileKineticGenerato
         tilekinect = kineticGenerator;
 
         //Inventory for Turbines
-        addSlotToContainer(new Slot(kineticGenerator, 0, 80, 35));
+        addSlotToContainer(new SlotMachineInput(kineticGenerator, 0, 80, 35));
 
         bindPlayerInventory(invPlayer);
     }
@@ -63,9 +63,30 @@ public class ContainerKineticGenerator extends ContainerBase<TileKineticGenerato
 
     @Override
     public ItemStack transferStackInSlot(EntityPlayer player, int par2) {
-        //TODO; Fill this magic function with its magic goodness of magicness
-        return null;
-    }
 
+        ItemStack itemstack = null;
+        Slot slot = (Slot) inventorySlots.get(par2);
+        if (slot != null && slot.getHasStack()) {
+            ItemStack itemstack1 = slot.getStack();
+            itemstack = itemstack1.copy();
+            if (par2 < 1) {
+                if (!mergeItemStack(itemstack1, 1, 36, true))
+                    return null;
+            } else if (!mergeItemStack(itemstack1, 0, 1, false)) {
+                return null;
+            }
+            if (itemstack1.stackSize == 0) {
+                slot.putStack(null);
+            } else {
+                slot.onSlotChanged();
+            }
+            if (itemstack1.stackSize != itemstack.stackSize) {
+                slot.onPickupFromSlot(player, itemstack1);
+            } else {
+                return null;
+            }
+        }
+        return itemstack;
+    }
 
 }

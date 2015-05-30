@@ -24,17 +24,26 @@ import net.minecraft.util.ResourceLocation;
 
 import com.bluepowermod.container.ContainerKineticGenerator;
 import com.bluepowermod.reference.Refs;
-import com.bluepowermod.tile.tier3.TileKineticGenerator;
+import com.bluepowermod.tile.tier2.TileKineticGenerator;
 
 public class GuiKineticGenerator extends GuiContainerBaseBP {
 
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/kinetic_generator.png");
-    private final TileKineticGenerator kinect;
+    private final TileKineticGenerator kineticGenerator;
 
-    public GuiKineticGenerator(InventoryPlayer invPlayer, TileKineticGenerator kinect) {
+    public GuiKineticGenerator(InventoryPlayer invPlayer, TileKineticGenerator kineticGenerator) {
 
-        super(new ContainerKineticGenerator(invPlayer, kinect), resLoc);
-        this.kinect = kinect;
+        super(kineticGenerator, new ContainerKineticGenerator(invPlayer, kineticGenerator), resLoc);
+        this.kineticGenerator = kineticGenerator;
         ySize = 165;
     }
+
+    protected int getPowerBarXPos() {
+        return 6;
+    }
+
+    protected int getPowerBarYPos() {
+        return 37;
+    }
+
 }

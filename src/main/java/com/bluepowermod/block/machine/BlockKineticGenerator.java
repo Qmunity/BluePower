@@ -7,13 +7,12 @@
  */
 package com.bluepowermod.block.machine;
 
-import net.minecraft.block.material.Material;
-
 import com.bluepowermod.block.BlockContainerBase;
-import com.bluepowermod.init.BPCreativeTabs;
+import com.bluepowermod.client.render.RendererBlockBase;
 import com.bluepowermod.reference.GuiIDs;
 import com.bluepowermod.reference.Refs;
-import com.bluepowermod.tile.tier3.TileKineticGenerator;
+import com.bluepowermod.tile.tier2.TileKineticGenerator;
+import net.minecraft.block.material.Material;
 
 /**
  * 
@@ -25,9 +24,15 @@ public class BlockKineticGenerator extends BlockContainerBase {
     public BlockKineticGenerator() {
 
         super(Material.iron, TileKineticGenerator.class);
-        setCreativeTab(BPCreativeTabs.machines);
         setBlockName(Refs.KINETICGENERATOR_NAME);
         setGuiId(GuiIDs.KINETICGENERATOR_ID);
+    }
+
+    @Override
+    protected String getIconName(RendererBlockBase.EnumFaceType faceType, boolean ejecting, boolean powered) {
+
+        String iconName = textureName + "_" + faceType.toString().toLowerCase();
+        return iconName;
     }
 
 }

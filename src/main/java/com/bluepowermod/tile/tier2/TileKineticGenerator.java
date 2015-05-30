@@ -5,26 +5,25 @@
  * PARTICULAR PURPOSE. See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along
  * with Blue Power. If not, see <http://www.gnu.org/licenses/>
  */
-package com.bluepowermod.tile.tier3;
+package com.bluepowermod.tile.tier2;
 
-import java.util.List;
-
+import com.bluepowermod.api.power.IPowered;
 import com.bluepowermod.init.BPBlocks;
+import com.bluepowermod.tile.TileBluePowerBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import uk.co.qmunity.lib.tile.TileBase;
 
-public class TileKineticGenerator extends TileBase implements ISidedInventory{
+import java.util.List;
+
+public class TileKineticGenerator extends TileBluePowerBase implements IPowered, ISidedInventory {
 
 	public int windspeed = 10;
 	public int windtick = 0;
 	public TileKineticGenerator(){
 		
 	}
-	
-	
 	
 	@Override
 	public void updateEntity() {

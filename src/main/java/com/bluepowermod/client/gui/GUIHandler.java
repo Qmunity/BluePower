@@ -39,7 +39,7 @@ import com.bluepowermod.tile.tier3.TileCPU;
 import com.bluepowermod.tile.tier3.TileCircuitDatabase;
 import com.bluepowermod.tile.tier3.TileDiskDrive;
 import com.bluepowermod.tile.tier3.TileIOExpander;
-import com.bluepowermod.tile.tier3.TileKineticGenerator;
+import com.bluepowermod.tile.tier2.TileKineticGenerator;
 import com.bluepowermod.tile.tier3.TileManager;
 import com.bluepowermod.tile.tier3.TileMonitor;
 import cpw.mods.fml.common.network.IGuiHandler;
