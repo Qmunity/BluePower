@@ -44,6 +44,7 @@ import com.bluepowermod.part.gate.digital.GateXnor;
 import com.bluepowermod.part.gate.digital.GateXor;
 import com.bluepowermod.part.gate.ic.GateIntegratedCircuit;
 import com.bluepowermod.part.gate.supported.GateNullCell;
+import com.bluepowermod.part.gate.GateNote;
 import com.bluepowermod.part.gate.wireless.GateTransceiver;
 import com.bluepowermod.part.lamp.PartCageLamp;
 import com.bluepowermod.part.lamp.PartFixture;
@@ -166,6 +167,9 @@ public class PartManager {
 
         // Supported gates
         registerPart(GateNullCell.class);
+
+        // Misc gates?
+        registerPart(GateNote.class);
 
         // Lamps
         for (int i = 0; i < 2; i++)
