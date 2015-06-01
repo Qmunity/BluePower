@@ -36,6 +36,14 @@ public class GateComponentNote extends GateComponentCubes {
         return Blocks.noteblock.getIcon(0, 0);
     }
 
+    public byte getPitch() {
+        return pitch;
+    }
+
+    public String getSound() {
+        return sound;
+    }
+
     @Override
     public void tick() {
 
