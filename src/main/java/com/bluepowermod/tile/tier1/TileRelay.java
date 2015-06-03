@@ -229,11 +229,7 @@ public class TileRelay extends TileMachineBase implements IInventory {
 
     @Override
     public TubeStack acceptItemFromTube(TubeStack stack, ForgeDirection from, boolean simulate) {
-
-        if (from == getFacingDirection())
-            return stack;
-
-        stack.stack = IOHelper.insert((IInventory) this, stack.stack, from.ordinal(), simulate);
+        stack.stack = IOHelper.insert(this, stack.stack, from.ordinal(), simulate);
         return stack.stack == null ? null : stack;
     }
 }
