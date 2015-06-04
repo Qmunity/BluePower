@@ -7,17 +7,6 @@
  */
 package com.bluepowermod.part.gate.digital;
 
-import java.io.DataInput;
-import java.io.DataOutput;
-import java.io.IOException;
-import java.util.List;
-
-import mcp.mobius.waila.api.SpecialChars;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
-
 import com.bluepowermod.api.wire.redstone.RedwireType;
 import com.bluepowermod.client.gui.gate.GuiGateSingleCounter;
 import com.bluepowermod.part.IGuiButtonSensitive;
@@ -25,9 +14,18 @@ import com.bluepowermod.part.gate.component.GateComponentBorder;
 import com.bluepowermod.part.gate.component.GateComponentPointer;
 import com.bluepowermod.part.gate.component.GateComponentTorch;
 import com.bluepowermod.part.gate.component.GateComponentWire;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import mcp.mobius.waila.api.SpecialChars;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
+
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
+import java.util.List;
 
 public class GateTimer extends GateSimpleDigital implements IGuiButtonSensitive {
 
@@ -82,6 +80,8 @@ public class GateTimer extends GateSimpleDigital implements IGuiButtonSensitive 
 
             p.setAngle(0);
             p.setIncrement(0);
+
+            back().setInput(false);
 
             return;
         }
@@ -158,6 +158,7 @@ public class GateTimer extends GateSimpleDigital implements IGuiButtonSensitive 
 
         time = value;
         start = 0;
+        back().setInput(true);
         sendUpdatePacket();
     }
 
