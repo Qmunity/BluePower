@@ -31,6 +31,8 @@ public class GateTimer extends GateSimpleDigital implements IGuiButtonSensitive 
 
     private int time = 40;
     private long start = -1;
+    private boolean needsReset;
+    private boolean backRedstone;
 
     private GateComponentPointer p;
     private GateComponentTorch t;
@@ -81,7 +83,11 @@ public class GateTimer extends GateSimpleDigital implements IGuiButtonSensitive 
             p.setAngle(0);
             p.setIncrement(0);
 
-            back().setInput(false);
+            // Still starts to run when adjusting timer while stopped
+            if (needsReset){
+                back().setInput(false);
+                needsReset = false;
+            }
 
             return;
         }
@@ -118,6 +124,7 @@ public class GateTimer extends GateSimpleDigital implements IGuiButtonSensitive 
 
         if (start == -1)
             start = curTime;
+
 
         p.setAngle((curTime - start) / (double) time);
         p.setIncrement(1 / (double) time);
@@ -159,6 +166,7 @@ public class GateTimer extends GateSimpleDigital implements IGuiButtonSensitive 
         time = value;
         start = 0;
         back().setInput(true);
+        needsReset = true;
         sendUpdatePacket();
     }
 
