@@ -59,9 +59,22 @@ public class ItemScrewdriver extends ItemBase implements IScrewdriver {
 
         Block block = world.getBlock(x, y, z);
 
+        if (block instanceof BlockContainerBase) {
+            if (((BlockContainerBase) block).getGuiID() != GuiIDs.INVALID) {
+                if (player.isSneaking()) {
+                    if (block.rotateBlock(world, x, y, z, ForgeDirection.getOrientation(side))) {
+                        damage(stack, 1, player, false);
+                        return true;
+                    }
+                }
+            }
+        } else if (!player.isSneaking() && block.rotateBlock(world, x, y, z, ForgeDirection.getOrientation(side))) {
+            damage(stack, 1, player, false);
+            return true;
+        }
+
         if (player.isSneaking()) {
             ITilePartHolder itph = MultipartCompatibility.getPartHolder(world, new Vec3i(x, y, z));
-
             if (itph != null) {
                 QMovingObjectPosition mop = itph.rayTrace(RayTracer.instance().getStartVector(player), RayTracer.instance().getEndVector(player));
                 if (mop == null)
@@ -76,26 +89,6 @@ public class ItemScrewdriver extends ItemBase implements IScrewdriver {
             }
         }
 
-        if (block instanceof BlockContainerBase) {
-            if (((BlockContainerBase) block).getGuiID() != GuiIDs.INVALID) {
-                if (player.isSneaking()) {
-                    if (block.rotateBlock(world, x, y, z, ForgeDirection.getOrientation(side))) {
-                        damage(stack, 1, player, false);
-                        return true;
-                    }
-                }
-            } else {
-                if (!player.isSneaking() && block.rotateBlock(world, x, y, z, ForgeDirection.getOrientation(side))) {
-                    damage(stack, 1, player, false);
-                    return true;
-                }
-            }
-        } else {
-            if (!player.isSneaking() && block.rotateBlock(world, x, y, z, ForgeDirection.getOrientation(side))) {
-                damage(stack, 1, player, false);
-                return true;
-            }
-        }
         return false;
     }
 
