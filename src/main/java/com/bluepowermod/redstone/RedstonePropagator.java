@@ -278,11 +278,13 @@ public abstract class RedstonePropagator implements IPropagator<IRedstoneDevice>
             for (IConnection<IRedstoneDevice> c : connections)
                 c.getA().setRedstonePower(c.getSideA(), (byte) 0);
 
+            RedstoneApi.getInstance().setWiresOutputPower(false, true);
             boolean did = RedstoneApi.getInstance().shouldWiresHandleUpdates();
             RedstoneApi.getInstance().setWiresHandleUpdates(false);
             for (IRedstoneDevice d : devs)
                 d.onRedstoneUpdate();
             RedstoneApi.getInstance().setWiresHandleUpdates(did);
+            RedstoneApi.getInstance().setWiresOutputPower(true, true);
 
             for (Pair<IRedstoneDevice, ForgeDirection> pair : l) {
                 RedstoneApi.getInstance().setWiresOutputPower(false, true);
