@@ -17,6 +17,7 @@
 
 package com.bluepowermod.init;
 
+import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
@@ -94,6 +95,11 @@ public class OreDictionarySetup {
         // Other
         OreDictionary.registerOre(BPOredictNames.MARBLE, BPBlocks.marble);
         OreDictionary.registerOre(BPOredictNames.BASALT, BPBlocks.basalt);
+
+        for (Block b : BPBlocks.blockLamp)
+            OreDictionary.registerOre("lampBP", b);
+        for (Block b : BPBlocks.blockLampInverted)
+            OreDictionary.registerOre("lampInvertedBP", b);
 
         for (RedwireType t : RedwireType.values()) {
             for (MinecraftColor c : MinecraftColor.VALID_COLORS) {
