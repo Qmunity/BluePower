@@ -314,7 +314,7 @@ public abstract class RedstonePropagator implements IPropagator<IRedstoneDevice>
             if (shouldPreventStackOverflows())
                 return;
 
-            if ((power & 0xFF) < 0)
+            if ((power & 0xFF) <= 0)
                 return;
             if ((dev.getRedstonePower(side) & 0xFF) > (power & 0xFF))
                 return;
