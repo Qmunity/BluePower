@@ -70,6 +70,7 @@ public class BlockContainerBase extends BlockTileBase implements IAdvancedSilkyR
     }
 
     public BlockContainerBase setGuiId(GuiIDs guiId) {
+
         setGuiId(guiId.ordinal());
         return this;
     }
@@ -113,16 +114,19 @@ public class BlockContainerBase extends BlockTileBase implements IAdvancedSilkyR
 
     @Override
     protected Object getModInstance() {
+
         return BluePower.instance;
     }
 
     @Override
     protected String getModId() {
+
         return Refs.MODID;
     }
 
     @Override
     protected boolean shouldDropItems() {
+
         return !isSilkyRemoving;
     }
 

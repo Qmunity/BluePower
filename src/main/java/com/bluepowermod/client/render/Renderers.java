@@ -8,16 +8,19 @@
 
 package com.bluepowermod.client.render;
 
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
+import net.minecraftforge.client.MinecraftForgeClient;
+
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.init.BPItems;
 import com.bluepowermod.tile.tier1.TileLamp;
+import com.bluepowermod.tile.tier2.TileChargingBench;
+
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
-import net.minecraftforge.client.MinecraftForgeClient;
 
 @SideOnly(Side.CLIENT)
 public class Renderers {
@@ -28,17 +31,17 @@ public class Renderers {
 
         RenderingRegistry.registerBlockHandler(new RendererBlockBase());
 
-        RenderingRegistry.registerBlockHandler(new RenderLamp());
-
-        RenderingRegistry.registerBlockHandler(new RendererSolarPanel());
+        RenderSolarPanel sp = new RenderSolarPanel();
+        RenderingRegistry.registerBlockHandler(sp);
+        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BPBlocks.solar_panel), sp);
 
         // ClientRegistry.bindTileEntitySpecialRenderer(TileEngine.class, new RenderEngine());
         // MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BPBlocks.engine), new RenderItemEngine());
         // ClientRegistry.bindTileEntitySpecialRenderer(TileWindmill.class, new RenderWindmill());
 
-        ClientRegistry.bindTileEntitySpecialRenderer(TileLamp.class, new RenderLamp());
-
         RenderLamp rl = new RenderLamp();
+        RenderingRegistry.registerBlockHandler(rl);
+        ClientRegistry.bindTileEntitySpecialRenderer(TileLamp.class, rl);
         for (Block l : BPBlocks.blockLamp)
             MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(l), rl);
         for (Block l : BPBlocks.blockLampInverted)
@@ -61,5 +64,10 @@ public class Renderers {
         MinecraftForgeClient.registerItemRenderer(BPItems.tainted_silicon_chip_tile, rct);
         MinecraftForgeClient.registerItemRenderer(BPItems.quartz_resonator_tile, rct);
         MinecraftForgeClient.registerItemRenderer(BPItems.stone_bundle, rct);
+
+        RenderChargingBench chargingBench = new RenderChargingBench();
+        RenderingRegistry.registerBlockHandler(chargingBench);
+        ClientRegistry.bindTileEntitySpecialRenderer(TileChargingBench.class, chargingBench);
+        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BPBlocks.chargingBench), chargingBench);
     }
 }

@@ -9,7 +9,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import com.bluepowermod.block.BlockContainerBase;
-import com.bluepowermod.client.render.RendererSolarPanel;
+import com.bluepowermod.client.render.RenderSolarPanel;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier2.TileSolarPanel;
 
@@ -30,7 +30,7 @@ public class BlockSolarPanel extends BlockContainerBase {
     @SideOnly(Side.CLIENT)
     public int getRenderType() {
 
-        return RendererSolarPanel.RENDER_ID;
+        return RenderSolarPanel.RENDER_ID;
     }
 
     @Override

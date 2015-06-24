@@ -29,11 +29,13 @@ public class PowerHandler implements IPowerBase, IFace {
 
     @Override
     public void readFromNBT(NBTTagCompound tagCompound) {
+
         voltage = tagCompound.getDouble("voltage");
     }
 
     @Override
     public void writeToNBT(NBTTagCompound tagCompound) {
+
         tagCompound.setDouble("voltage", voltage);
     }
 
@@ -60,9 +62,10 @@ public class PowerHandler implements IPowerBase, IFace {
 
     @Override
     public void update() {
+
         double avgVoltage = getVoltage();
         int neighborCount = 1;
-        for (ForgeDirection dir : ForgeDirection.values()) {//Loop through the cache (including UNKNOWN)
+        for (ForgeDirection dir : ForgeDirection.values()) {// Loop through the cache (including UNKNOWN)
             IConnection<IPowerBase> neighbor = cache.getConnectionOnSide(dir);
             if (neighbor != null) {
                 avgVoltage += neighbor.getB().getVoltage();
@@ -88,11 +91,13 @@ public class PowerHandler implements IPowerBase, IFace {
 
     @Override
     public double getVoltage() {
+
         return voltage;
     }
 
     @Override
     public double addEnergy(double energy, boolean simulate) {
+
         double actualEnergy;
         if (energy > 0) {
             actualEnergy = Math.min(getMaxVoltage() - getVoltage(), energy);
@@ -106,6 +111,7 @@ public class PowerHandler implements IPowerBase, IFace {
 
     @Override
     public double getMaxVoltage() {
+
         return 12;
     }
 

@@ -1,11 +1,5 @@
 package com.bluepowermod.tile.tier2;
 
-import com.bluepowermod.api.power.IPowerBase;
-import com.bluepowermod.api.power.IPowered;
-import com.bluepowermod.api.power.IRechargeable;
-import com.bluepowermod.init.BPBlocks;
-import com.bluepowermod.reference.PowerConstants;
-import com.bluepowermod.tile.TileBluePowerBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -13,6 +7,13 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
 import uk.co.qmunity.lib.network.annotation.DescSynced;
 import uk.co.qmunity.lib.network.annotation.GuiSynced;
+
+import com.bluepowermod.api.power.IPowerBase;
+import com.bluepowermod.api.power.IPowered;
+import com.bluepowermod.api.power.IRechargeable;
+import com.bluepowermod.init.BPBlocks;
+import com.bluepowermod.reference.PowerConstants;
+import com.bluepowermod.tile.TileBluePowerBase;
 
 /**
  * @author Koen Beckers (K-4U)
@@ -25,8 +26,8 @@ public class TileChargingBench extends TileBluePowerBase implements IPowered, II
     private int textureIndex;
 
     @GuiSynced
-    private final IPowerBase powerBase     = getPowerHandler(ForgeDirection.UNKNOWN);
-    private final int        powerTransfer = 2;
+    private final IPowerBase powerBase = getPowerHandler(ForgeDirection.UNKNOWN);
+    private final int powerTransfer = 2;
 
     @GuiSynced
     private int energyBuffer;
@@ -39,14 +40,14 @@ public class TileChargingBench extends TileBluePowerBase implements IPowered, II
         super.updateEntity();
 
         if (!getWorldObj().isRemote) {
-            if(isPowered() && energyBuffer < 100){
+            if (isPowered() && energyBuffer < 100) {
                 fillPowerBuffer();
             }
 
-            for(int i = 0; i < inventory.length; i++) {
+            for (int i = 0; i < inventory.length; i++) {
                 if (inventory[i] != null && inventory[i].getItem() instanceof IRechargeable) {
                     IRechargeable battery = (IRechargeable) inventory[i].getItem();
-                    energyBuffer -= battery.addEnergy(inventory[i], Math.min((int)PowerConstants.CHARGINGBENCH_CHARGING_TRANSFER, energyBuffer));
+                    energyBuffer -= battery.addEnergy(inventory[i], Math.min((int) PowerConstants.CHARGINGBENCH_CHARGING_TRANSFER, energyBuffer));
                 }
             }
             if (worldObj.getWorldTime() % 20 == 0)
@@ -57,7 +58,8 @@ public class TileChargingBench extends TileBluePowerBase implements IPowered, II
             recalculateTextureIndex();
     }
 
-    private void fillPowerBuffer(){
+    private void fillPowerBuffer() {
+
         energyBuffer += PowerConstants.CHARGINGBENCH_POWERTRANSFER;
         powerBase.addEnergy(-PowerConstants.CHARGINGBENCH_POWERTRANSFER, false);
     }
@@ -67,20 +69,20 @@ public class TileChargingBench extends TileBluePowerBase implements IPowered, II
         textureIndex = (int) Math.floor((double) energyBuffer / MAX_ENERGY_BUFFER * 4.0);
     }
 
-
     public int getTextureIndex() {
 
         return textureIndex;
     }
 
     public double getBufferPercentage() {
+
         return (double) energyBuffer / MAX_ENERGY_BUFFER;
     }
 
     @Override
     public int getSizeInventory() {
 
-        return 24;
+        return inventory.length;
     }
 
     @Override

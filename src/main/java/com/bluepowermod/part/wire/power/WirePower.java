@@ -42,7 +42,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 /**
- * @author Koen Beckers (K4Unl);
+ * @author Amadornes
  */
 
 public class WirePower extends PartWireFace implements IPowered, IPartTicking, IConnectionListener {
@@ -85,7 +85,8 @@ public class WirePower extends PartWireFace implements IPowered, IPartTicking, I
     @Override
     public List<Vec3dCube> getOcclusionBoxes() {
 
-        return getSelectionBoxes();
+        return Arrays.asList(new Vec3dCube(getHeight() / 16D, 0, getHeight() / 16D, 1 - getHeight() / 16D, getHeight() / 16D, 1 - getHeight() / 16D)
+                .rotate(getFace(), Vec3d.center));
     }
 
     @Override
@@ -162,6 +163,10 @@ public class WirePower extends PartWireFace implements IPowered, IPartTicking, I
 
         super.onNeighborBlockChange();
         handler.onNeighborUpdate();
+
+        // System.out.println(shouldRenderConnection(ForgeDirection.DOWN) + " " + shouldRenderConnection(ForgeDirection.UP) + " "
+        // + shouldRenderConnection(ForgeDirection.WEST) + " " + shouldRenderConnection(ForgeDirection.EAST) + " "
+        // + shouldRenderConnection(ForgeDirection.NORTH) + " " + shouldRenderConnection(ForgeDirection.SOUTH) + " ");
     }
 
     @Override

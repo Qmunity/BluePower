@@ -6,6 +6,7 @@ import uk.co.qmunity.lib.part.IPart;
 import uk.co.qmunity.lib.part.ITilePartHolder;
 import uk.co.qmunity.lib.part.compat.MultipartCompatibility;
 
+import com.bluepowermod.api.misc.IFace;
 import com.bluepowermod.api.power.IPowered;
 import com.bluepowermod.api.power.IPoweredDeviceProvider;
 
@@ -18,15 +19,13 @@ public class PoweredDeviceProviderQmunityLib implements IPoweredDeviceProvider {
         if (holder != null) {
             for (IPart p : holder.getParts()) {
                 if (p instanceof IPowered) {
-                    // if (p instanceof IFace) {
-                    // if (((IFace) p).getFace() == face)
-                    // return (IPowered) p;
-                    // } else {
-                    // if (face == ForgeDirection.UNKNOWN || ((IPowered) p).isNormalFace(side))
-                    // return (IPowered) p;
-                    // }
-                    // FIXME Fix this... or whatever the hell is causing it >_>
-                    return (IPowered) p;
+                    if (p instanceof IFace) {
+                        if (((IFace) p).getFace() == face && ((IPowered) p).getPowerHandler(side) != null)
+                            return (IPowered) p;
+                    } else {
+                        if (face == ForgeDirection.UNKNOWN && ((IPowered) p).getPowerHandler(side) != null)
+                            return (IPowered) p;
+                    }
                 }
             }
         }
