@@ -448,22 +448,33 @@ public abstract class GateBase<C_BOTTOM extends GateConnectionBase, C_TOP extend
 
         if (bottom() != null && bottom().getForgeDirection() == side)
             return bottom();
-
         if (top() != null && top().getForgeDirection() == side)
             return top();
-
         if (left() != null && left().getForgeDirection() == side)
             return left();
-
         if (right() != null && right().getForgeDirection() == side)
             return right();
-
         if (front() != null && front().getForgeDirection() == side)
             return front();
-
         if (back() != null && back().getForgeDirection() == side)
             return back();
+        return null;
+    }
 
+    public GateConnectionBase getConnection(Dir direction) {
+
+        if (bottom() != null && bottom().getDirection() == direction)
+            return bottom();
+        if (top() != null && top().getDirection() == direction)
+            return top();
+        if (left() != null && left().getDirection() == direction)
+            return left();
+        if (right() != null && right().getDirection() == direction)
+            return right();
+        if (front() != null && front().getDirection() == direction)
+            return front();
+        if (back() != null && back().getDirection() == direction)
+            return back();
         return null;
     }
 
@@ -717,13 +728,12 @@ public abstract class GateBase<C_BOTTOM extends GateConnectionBase, C_TOP extend
 
         Vec3dCube w = new Vec3dCube(7 / 16D, 0, -2 / 16D, 9 / 16D, 2 / 16D, 0 / 16D);
         for (Dir d : Dir.values()) {
-            if (d.ordinal() == 0 || d.ordinal() == 1)
+            if (d.ordinal() == 4 || d.ordinal() == 5)
                 continue;
-            if (wires[d.ordinal() - 2] != null) {
-                renderer.setColor(WireHelper.getColorForPowerLevel(wires[d.ordinal() - 2].getType(),
-                        getConnection(d.getOpposite().toForgeDirection(getFace(), rotation)).getRedstoneOutput()));
-                renderer.renderBox(w.clone().rotate(0, ((d.ordinal() > 1 ? d.ordinal() ^ 1 : d.ordinal()) + 1) * 90, 0, Vec3d.center),
-                        IconSupplier.wire);
+            if (wires[d.ordinal()] != null) {
+                renderer.setColor(WireHelper.getColorForPowerLevel(wires[d.ordinal()].getType(), (byte) ((int) (getConnection(d).getSignal() * 255))));
+                int r = d == Dir.FRONT ? 0 : (d == Dir.LEFT ? 1 : (d == Dir.BACK ? 2 : 3));
+                renderer.renderBox(w.clone().rotate(0, r * 90, 0, Vec3d.center), IconSupplier.wire);
             }
         }
 
