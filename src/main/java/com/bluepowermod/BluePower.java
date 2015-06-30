@@ -30,6 +30,8 @@ import com.bluepowermod.init.Recipes;
 import com.bluepowermod.init.TileEntities;
 import com.bluepowermod.network.BPNetworkHandler;
 import com.bluepowermod.part.PartManager;
+import com.bluepowermod.part.gate.ic.ICProxyBPPart;
+import com.bluepowermod.part.gate.ic.ICRegistry;
 import com.bluepowermod.part.tube.RedstoneProviderTube;
 import com.bluepowermod.recipe.AlloyFurnaceRegistry;
 import com.bluepowermod.redstone.RedstoneApi;
@@ -92,6 +94,8 @@ public class BluePower {
 
         RedstoneApi.getInstance().registerRedstoneProvider(new RedstoneProviderQmunityLib());
         RedstoneApi.getInstance().registerRedstoneProvider(new RedstoneProviderTube());
+
+        ICRegistry.instance.registerProxy(new ICProxyBPPart());
     }
 
     @EventHandler

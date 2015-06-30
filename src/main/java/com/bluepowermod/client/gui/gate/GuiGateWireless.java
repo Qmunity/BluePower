@@ -43,7 +43,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class GuiGateWireless extends GuiGate {
+public class GuiGateWireless extends GuiGate<GateBase<?, ?, ?, ?, ?, ?>> {
 
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/wirelessRedstone.png");
 
@@ -136,8 +136,7 @@ public class GuiGateWireless extends GuiGate {
             }
         });
 
-        addWidget(modeSelector = new WidgetMode(6, guiLeft + 10, guiTop + 57, 228, (14 * 5), 3, Refs.MODID
-                + ":textures/gui/wirelessRedstone.png"));
+        addWidget(modeSelector = new WidgetMode(6, guiLeft + 10, guiTop + 57, 228, (14 * 5), 3, Refs.MODID + ":textures/gui/wirelessRedstone.png"));
         modeSelector.value = gate.getMode().ordinal();
 
         frequencyName = new GuiTextField(fontRendererObj, guiLeft + 88, guiTop + 22, 133, 10);
@@ -192,8 +191,8 @@ public class GuiGateWireless extends GuiGate {
                     if (y > yPos && y < yPos + 11) {
                         if (button == 0) {
                             if (f.equals(selected)) {
-                                BPNetworkHandler.INSTANCE.sendToServer(new MessageWirelessNewFreq(gate, f.getAccessibility(), f
-                                        .getFrequencyName(), f.isBundled()));
+                                BPNetworkHandler.INSTANCE.sendToServer(new MessageWirelessNewFreq(gate, f.getAccessibility(), f.getFrequencyName(), f
+                                        .isBundled()));
                             } else {
                                 selected = f;
                                 frequencyName.setText(f.getFrequencyName());
@@ -283,8 +282,7 @@ public class GuiGateWireless extends GuiGate {
         {
             String txt = frequencyName.getText();
 
-            removeFrequency.enabled = (gate.getFrequency() != null && (gate.getFrequency().getOwner()
-                    .equals(player.getGameProfile().getId()) || player.capabilities.isCreativeMode))
+            removeFrequency.enabled = (gate.getFrequency() != null && (gate.getFrequency().getOwner().equals(player.getGameProfile().getId()) || player.capabilities.isCreativeMode))
                     || (selected != null && (selected.getOwner().equals(player.getGameProfile().getId()) || player.capabilities.isCreativeMode));
 
             accessLevel.enabled = selected != null || (txt.trim().length() > 0 && checkNoMatches());
@@ -305,15 +303,15 @@ public class GuiGateWireless extends GuiGate {
                     : (filterAccessLevel.value == 1 ? "bluepower.accessability.shared"
                             : (filterAccessLevel.value == 2 ? "bluepower.accessability.private"
                                     : (filterAccessLevel.value == 3 ? "bluepower.gui.admin" : "bluepower.gui.none")));
-            drawString(fontRendererObj, I18n.format(accessLevelLabel), guiLeft + 12 + 14 + 3, guiTop + 35 + 3,
-                    filterAccessLevel.enabled ? 0xEFEFEF : 0x565656);
+            drawString(fontRendererObj, I18n.format(accessLevelLabel), guiLeft + 12 + 14 + 3, guiTop + 35 + 3, filterAccessLevel.enabled ? 0xEFEFEF
+                    : 0x565656);
         }
 
         // Label for the access level
         String accessLevelLabel = accessLevel.value == 0 ? "bluepower.accessability.public"
                 : (accessLevel.value == 1 ? "bluepower.accessability.shared" : "bluepower.accessability.private");
-        drawString(fontRendererObj, I18n.format(accessLevelLabel), guiLeft + 10 + 14 + 3, guiTop + ySize - 24 + 3,
-                accessLevel.enabled ? 0xEFEFEF : 0x565656);
+        drawString(fontRendererObj, I18n.format(accessLevelLabel), guiLeft + 10 + 14 + 3, guiTop + ySize - 24 + 3, accessLevel.enabled ? 0xEFEFEF
+                : 0x565656);
 
         // Label for the mode
         String modeLabel = modeSelector.value == 0 ? "bluepower.mode.sendreceive" : (modeSelector.value == 1 ? "bluepower.mode.send"
@@ -350,8 +348,7 @@ public class GuiGateWireless extends GuiGate {
                     GL11.glEnable(GL11.GL_LIGHTING);
                 GL11.glTranslated(guiLeft + 88 + 1, yPos - 2, 0);
                 GL11.glScaled(0.75, 0.75, 0.75);
-                ForgeHooksClient
-                .renderInventoryItem(RenderBlocks.getInstance(), Minecraft.getMinecraft().renderEngine, item, true, 1, 1, 1);
+                ForgeHooksClient.renderInventoryItem(RenderBlocks.getInstance(), Minecraft.getMinecraft().renderEngine, item, true, 1, 1, 1);
                 if (f.isBundled() != gate.isBundled())
                     GL11.glDisable(GL11.GL_LIGHTING);
             }
@@ -366,12 +363,9 @@ public class GuiGateWireless extends GuiGate {
             int yPos = guiTop + 22 + 10 + 2 + (i * 12);
             if (x > guiLeft + 88 && x <= guiLeft + 88 + 133 - (frequencies.size() > 12 ? 11 : 0) && y > yPos && y <= yPos + 11
                     && f.isBundled() == gate.isBundled()) {
-                func_146283_a(
-                        Arrays.asList(
-                                "Frequency: " + f.getFrequencyName(),
-                                EnumChatFormatting.GRAY + "Accessibility: "
-                                        + StringUtils.capitalize(f.getAccessibility().name().toLowerCase()), EnumChatFormatting.GRAY
-                                        + "Owner: " + f.getOwnerName(), "Devices: " + f.getDevices()), x, y);
+                func_146283_a(Arrays.asList("Frequency: " + f.getFrequencyName(),
+                        EnumChatFormatting.GRAY + "Accessibility: " + StringUtils.capitalize(f.getAccessibility().name().toLowerCase()),
+                        EnumChatFormatting.GRAY + "Owner: " + f.getOwnerName(), "Devices: " + f.getDevices()), x, y);
             }
         }
     }

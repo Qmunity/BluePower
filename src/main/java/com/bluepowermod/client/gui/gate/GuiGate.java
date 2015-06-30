@@ -35,18 +35,18 @@ import cpw.mods.fml.relauncher.SideOnly;
  */
 
 @SideOnly(Side.CLIENT)
-public class GuiGate extends GuiScreenBase implements IWidgetListener {
+public abstract class GuiGate<T extends GateBase<?, ?, ?, ?, ?, ?>> extends GuiScreenBase implements IWidgetListener {
 
-    private final GateBase<?, ?, ?, ?, ?, ?> gate;
+    private final T gate;
     private final List<IGuiWidget> widgets = new ArrayList<IGuiWidget>();
 
-    public GuiGate(GateBase<?, ?, ?, ?, ?, ?> gate, int xSize, int ySize) {
+    public GuiGate(T gate, int xSize, int ySize) {
 
         super(xSize, ySize);
         this.gate = gate;
     }
 
-    public GateBase<?, ?, ?, ?, ?, ?> getGate() {
+    public T getGate() {
 
         return gate;
     }
@@ -131,8 +131,5 @@ public class GuiGate extends GuiScreenBase implements IWidgetListener {
     }
 
     @Override
-    protected ResourceLocation getTexture() {
-
-        return null;
-    }
+    protected abstract ResourceLocation getTexture();
 }

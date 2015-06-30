@@ -8,7 +8,7 @@ import net.minecraft.client.renderer.Tessellator;
 
 public class TessellatorHelper {
 
-    private static Field vertexCount, rawBuffer, hasTexture, hasBrightness, hasColor, hasNormals;
+    private static Field vertexCount, rawBuffer, hasTexture, hasBrightness, hasColor, hasNormals, offsetX, offsetY, offsetZ;
     static {
         try {
             Class<Tessellator> c = Tessellator.class;
@@ -30,11 +30,19 @@ public class TessellatorHelper {
 
             hasNormals = c.getDeclaredField("hasNormals");
             hasNormals.setAccessible(true);
+
+            offsetX = c.getDeclaredField("xOffset");
+            offsetX.setAccessible(true);
+            offsetY = c.getDeclaredField("yOffset");
+            offsetY.setAccessible(true);
+            offsetZ = c.getDeclaredField("zOffset");
+            offsetZ.setAccessible(true);
         } catch (Exception ex) {
         }
     }
 
     private static int oldCount = -1;
+    public static double oldX, oldY, oldZ;
 
     public static void saveCurrent() {
 
@@ -52,6 +60,37 @@ public class TessellatorHelper {
         }
 
         return null;
+    }
+
+    public static void saveTranslation() {
+
+        try {
+            st();
+        } catch (Exception ex) {
+        }
+    }
+
+    public static void resetTranslation() {
+
+        try {
+            rt();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private static void st() throws Exception {
+
+        oldX = offsetX.getDouble(Tessellator.instance);
+        oldY = offsetY.getDouble(Tessellator.instance);
+        oldZ = offsetZ.getDouble(Tessellator.instance);
+    }
+
+    private static void rt() throws Exception {
+
+        offsetX.setDouble(Tessellator.instance, oldX);
+        offsetY.setDouble(Tessellator.instance, oldY);
+        offsetZ.setDouble(Tessellator.instance, oldZ);
     }
 
     private static void sc() throws Exception {
@@ -80,8 +119,7 @@ public class TessellatorHelper {
         return l;
     }
 
-    @SuppressWarnings("unused")
-    private static class TessellatorVertex {
+    public static class TessellatorVertex {
 
         private int[] buf;
         private int index;

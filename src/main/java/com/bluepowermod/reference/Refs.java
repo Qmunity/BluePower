@@ -187,6 +187,8 @@ public class Refs {
     public static final String PAINTCAN_NAME = "paint_can";
     public static final String PAINTBRUSH_NAME = "paint_brush";
 
+    public static final String MONOCLE_NAME = "monocle";
+
     public static final String PROJECTTABLE_NAME = "project_table";
     public static final String AUTOPROJECTTABLE_NAME = "auto_project_table";
     public static final String CIRCUITTABLE_NAME = "circuit_table";
@@ -199,8 +201,8 @@ public class Refs {
     public static final String BLOCKIOEXPANDER_NAME = "io_expander";
     public static final String FLOPPY_DISK = "floppy_disk";
 
-    public static final String[] oreDictDyes = new String[] { "dyeBlack", "dyeRed", "dyeGreen", "dyeBrown", "dyeBlue", "dyePurple",
-        "dyeCyan", "dyeLightGray", "dyeGray", "dyePink", "dyeLime", "dyeYellow", "dyeLightBlue", "dyeMagenta", "dyeOrange", "dyeWhite" };
+    public static final String[] oreDictDyes = new String[] { "dyeBlack", "dyeRed", "dyeGreen", "dyeBrown", "dyeBlue", "dyePurple", "dyeCyan",
+            "dyeLightGray", "dyeGray", "dyePink", "dyeLime", "dyeYellow", "dyeLightBlue", "dyeMagenta", "dyeOrange", "dyeWhite" };
     public static final String LAMP_NAME = "lamp";
     public static final String CONFIG_WORLDGEN = "world gen";
     public static final String CONFIG_TUNGSTEN = "tungsten";

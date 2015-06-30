@@ -4,31 +4,35 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
-import uk.co.qmunity.lib.client.render.RenderHelper;
 
 import com.bluepowermod.api.misc.ICachedBlock;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+public interface IIntegratedCircuitProxy {
 
-public interface IIntegratedCircuitRegistry {
+    public boolean canHandlePlacement(ItemStack stack);
 
-    public void registerProxy(IIntegratedCircuitProxy proxy);
-
+    /**
+     * @param player
+     *            Fake player until there's an implementation of the API that requires an actual player (physical raytracing).
+     */
     public boolean placeOnIC(World world, MovingObjectPosition hit, EntityPlayer player, ItemStack stack);
+
+    public boolean canHandle(ICachedBlock block);
 
     public void onBlockUpdate(ICachedBlock block);
 
     public void onTileUpdate(ICachedBlock block);
 
+    /**
+     * @param player
+     *            Fake player until there's an implementation of the API that requires an actual player (physical raytracing).
+     */
     public boolean onActivated(ICachedBlock block, MovingObjectPosition mop, EntityPlayer player, ItemStack item);
 
+    /**
+     * @param player
+     *            Fake player until there's an implementation of the API that requires an actual player (physical raytracing).
+     */
     public void onClicked(ICachedBlock block, EntityPlayer player, ItemStack item);
-
-    @SideOnly(Side.CLIENT)
-    public boolean renderStatic(ICachedBlock block, RenderHelper helper, int pass);
-
-    @SideOnly(Side.CLIENT)
-    public void renderDynamic(ICachedBlock block, RenderHelper helper, int pass, float frame);
 
 }

@@ -23,7 +23,7 @@ import cpw.mods.fml.relauncher.SideOnly;
  */
 
 @SideOnly(Side.CLIENT)
-public abstract class GuiGateSingleCounter extends GuiGate {
+public abstract class GuiGateSingleCounter extends GuiGate<GateBase<?, ?, ?, ?, ?, ?>> {
 
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/gate.png");
     private static final String[] buttonTexts = { "-10s", "-1s", "-50ms", "+50ms", "+1s", "+10s" };
@@ -67,8 +67,7 @@ public abstract class GuiGateSingleCounter extends GuiGate {
     @Override
     public void renderGUI(int x, int y, float partialTicks) {
 
-        drawCenteredString(fontRendererObj, I18n.format(getTitle()) + ": " + getDisplayedString(), guiLeft + xSize / 2, guiTop + 10,
-                0xFFFFFF);
+        drawCenteredString(fontRendererObj, I18n.format(getTitle()) + ": " + getDisplayedString(), guiLeft + xSize / 2, guiTop + 10, 0xFFFFFF);
     }
 
     protected String getDisplayedString() {
