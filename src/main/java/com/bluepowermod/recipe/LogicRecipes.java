@@ -46,51 +46,50 @@ public class LogicRecipes {
         // Components
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.bluestone_wire_tile, 1), "#", "W", '#', "dustTeslatite", 'W',
                 BPOredictNames.STONE_TILE));
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.bluestone_anode_tile, 3), " # ", "###", "WWW", '#',
-                "dustTeslatite", 'W', BPOredictNames.STONE_TILE));
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.bluestone_cathode_tile, 1), "T#T", " W ", 'T', "dustTeslatite",
-                '#', Blocks.redstone_torch, 'W', BPOredictNames.STONE_TILE));
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.bluestone_pointer_tile, 1), " S ", "T#T", " W ", 'S', "stone",
-                '#', Blocks.redstone_torch, 'W', BPOredictNames.STONE_TILE, 'T', "dustTeslatite"));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.bluestone_anode_tile, 3), " # ", "###", "WWW", '#', "dustTeslatite", 'W',
+                BPOredictNames.STONE_TILE));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.bluestone_cathode_tile, 1), "T#T", " W ", 'T', "dustTeslatite", '#',
+                Blocks.redstone_torch, 'W', BPOredictNames.STONE_TILE));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.bluestone_pointer_tile, 1), " S ", "T#T", " W ", 'S', "stone", '#',
+                Blocks.redstone_torch, 'W', BPOredictNames.STONE_TILE, 'T', "dustTeslatite"));
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.bluestone_pointer_tile, 1), "S", "T", 'S', "stone", 'T',
                 BPOredictNames.BLUESTONE_CATHODE));
 
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.redstone_wire_tile, 1), "#", "W", '#', "dustRedstone", 'W',
                 BPOredictNames.STONE_TILE));
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.redstone_anode_tile, 3), " # ", "###", "WWW", '#', "dustRedstone",
-                'W', BPOredictNames.STONE_TILE));
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.redstone_cathode_tile, 1), "#", "W", '#', Blocks.redstone_torch,
-                'W', BPOredictNames.STONE_TILE));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.redstone_anode_tile, 3), " # ", "###", "WWW", '#', "dustRedstone", 'W',
+                BPOredictNames.STONE_TILE));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.redstone_cathode_tile, 1), "#", "W", '#', Blocks.redstone_torch, 'W',
+                BPOredictNames.STONE_TILE));
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.redstone_pointer_tile, 1), "S", "#", "W", 'S', "stone", '#',
                 Blocks.redstone_torch, 'W', BPOredictNames.STONE_TILE));
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.redstone_pointer_tile, 1), "S", "T", 'S', "stone", 'T',
                 BPOredictNames.REDSTONE_CATHODE));
 
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.silicon_chip_tile, 1), " # ", "WWW", '#',
-                BPItems.blue_doped_wafer, 'W', BPOredictNames.STONE_TILE));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.silicon_chip_tile, 1), " # ", "WWW", '#', BPItems.blue_doped_wafer, 'W',
+                BPOredictNames.STONE_TILE));
         // GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.plate_assembly, 1), " # ", "SRS", "#C#", '#', BPOredictNames.STONE_TILE,
         // 'S',
         // "stickWood", 'R', BPItems.red_alloy_ingot, 'C', BPItems.stone_cathode)));
         GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(BPItems.tainted_silicon_chip_tile, 1), BPOredictNames.SILICON_CHIP,
                 Items.glowstone_dust));
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.quartz_resonator_tile, 3), " # ", "###", "WWW", '#', "gemQuartz",
-                'W', BPOredictNames.STONE_TILE));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.quartz_resonator_tile, 3), " # ", "###", "WWW", '#', "gemQuartz", 'W',
+                BPOredictNames.STONE_TILE));
 
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.stone_bundle, 1), "#", "W", '#', "wireBundled", 'W',
                 BPOredictNames.STONE_TILE));
 
-        GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(BPItems.infused_teslatite_dust, 1), BPOredictNames.DUST_TESLATITE,
-                Items.redstone));
+        GameRegistry
+                .addRecipe(new ShapelessOreRecipe(new ItemStack(BPItems.infused_teslatite_dust, 1), BPOredictNames.DUST_TESLATITE, Items.redstone));
 
         {
             for (RedwireType t : RedwireType.values()) {
                 int i = 0;
                 for (MinecraftColor c : MinecraftColor.WIRE_COLORS) {
-                    ItemStack stack = PartManager.getPartInfo(
-                            "wire." + t.getName() + (c == MinecraftColor.NONE ? "" : "." + c.name().toLowerCase())).getStack(12);
+                    ItemStack stack = PartManager.getPartInfo("wire." + t.getName() + (c == MinecraftColor.NONE ? "" : "." + c.name().toLowerCase()))
+                            .getStack(12);
                     ItemStack freestanding = PartManager.getPartInfo(
-                            "wire.freestanding." + t.getName() + (c == MinecraftColor.NONE ? "" : "." + c.name().toLowerCase()))
-                            .getStack(1);
+                            "wire.freestanding." + t.getName() + (c == MinecraftColor.NONE ? "" : "." + c.name().toLowerCase())).getStack(1);
 
                     if (c == MinecraftColor.NONE) {
                         GameRegistry.addRecipe(new ShapedOreRecipe(stack.copy(), "iii", 'i', t.getIngotOredictName()));
@@ -124,16 +123,14 @@ public class LogicRecipes {
         }
 
         // Blocks
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPBlocks.circuit_table), "WIW", "WCW", "WPW", 'W', "plankWood", 'I',
-                PartManager.getPartInfo("integratedCircuit3x3").getStack(), 'C', Blocks.chest, 'P', BPBlocks.project_table));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPBlocks.circuit_table), "WIW", "WCW", "WPW", 'W', "plankWood", 'I', PartManager
+                .getPartInfo("integratedCircuit3x3").getStack(), 'C', Blocks.chest, 'P', BPBlocks.project_table));
 
         // Gates and Circuits
-        GameRegistry.addRecipe(new ShapedOreRecipe(PartManager.getPartInfo("and").getStack(), "ACA", "CCC", "#W#", '#',
-                BPOredictNames.STONE_TILE, 'A', BPOredictNames.BLUESTONE_ANODE, 'C', BPOredictNames.BLUESTONE_CATHODE, 'W',
-                BPOredictNames.BLUESTONE_TILE));
-        GameRegistry.addRecipe(new ShapedOreRecipe(PartManager.getPartInfo("buffer").getStack(), "ACA", "WCW", "#W#", '#',
-                BPOredictNames.STONE_TILE, 'A', BPOredictNames.BLUESTONE_ANODE, 'C', BPOredictNames.BLUESTONE_CATHODE, 'W',
-                BPOredictNames.BLUESTONE_TILE));
+        GameRegistry.addRecipe(new ShapedOreRecipe(PartManager.getPartInfo("and").getStack(), "ACA", "CCC", "#W#", '#', BPOredictNames.STONE_TILE,
+                'A', BPOredictNames.BLUESTONE_ANODE, 'C', BPOredictNames.BLUESTONE_CATHODE, 'W', BPOredictNames.BLUESTONE_TILE));
+        GameRegistry.addRecipe(new ShapedOreRecipe(PartManager.getPartInfo("buffer").getStack(), "ACA", "WCW", "#W#", '#', BPOredictNames.STONE_TILE,
+                'A', BPOredictNames.BLUESTONE_ANODE, 'C', BPOredictNames.BLUESTONE_CATHODE, 'W', BPOredictNames.BLUESTONE_TILE));
         // craftManager.addRecipe(new ShapedOreRecipe(PartManager.getPartInfo("bustransceiver"), "BBB", "N#N", "BBB", '#', BPOredictNames.STONE_TILE,
         // 'B',
         // BPItems.stone_bundle, 'N', BPItems.red_doped_wafer));
@@ -147,21 +144,18 @@ public class LogicRecipes {
         GameRegistry.addRecipe(new ShapedOreRecipe(PartManager.getPartInfo("multiplexer").getStack(), "ACA", "C#C", "ACW", '#',
                 BPOredictNames.STONE_TILE, 'A', BPOredictNames.BLUESTONE_ANODE, 'C', BPOredictNames.BLUESTONE_CATHODE, 'W',
                 BPOredictNames.BLUESTONE_TILE));
-        GameRegistry.addRecipe(new ShapedOreRecipe(PartManager.getPartInfo("nand").getStack(), "AAA", "CCC", "#W#", '#',
-                BPOredictNames.STONE_TILE, 'A', BPOredictNames.BLUESTONE_ANODE, 'C', BPOredictNames.BLUESTONE_CATHODE, 'W',
-                BPOredictNames.BLUESTONE_TILE));
+        GameRegistry.addRecipe(new ShapedOreRecipe(PartManager.getPartInfo("nand").getStack(), "AAA", "CCC", "#W#", '#', BPOredictNames.STONE_TILE,
+                'A', BPOredictNames.BLUESTONE_ANODE, 'C', BPOredictNames.BLUESTONE_CATHODE, 'W', BPOredictNames.BLUESTONE_TILE));
         // craftManager.addRecipe(PartManager.getPartInfo("noninvert"), "#R#", "ROR", "#RC", '#', BPOredictNames.STONE_TILE, 'C',
         // BPItems.stone_cathode, 'O', BPItems.plate_assembly, 'R', BPItems.stone_redwire));
-        GameRegistry.addRecipe(new ShapedOreRecipe(PartManager.getPartInfo("nor").getStack(), "#A#", "WCW", "#W#", '#',
-                BPOredictNames.STONE_TILE, 'A', BPOredictNames.BLUESTONE_ANODE, 'C', BPOredictNames.BLUESTONE_CATHODE, 'W',
-                BPOredictNames.BLUESTONE_TILE));
-        GameRegistry.addRecipe(new ShapedOreRecipe(PartManager.getPartInfo("not").getStack(), "#A#", "ACA", "#W#", '#',
-                BPOredictNames.STONE_TILE, 'A', BPOredictNames.BLUESTONE_ANODE, 'C', BPOredictNames.BLUESTONE_CATHODE, 'W',
-                BPOredictNames.BLUESTONE_TILE));
+        GameRegistry.addRecipe(new ShapedOreRecipe(PartManager.getPartInfo("nor").getStack(), "#A#", "WCW", "#W#", '#', BPOredictNames.STONE_TILE,
+                'A', BPOredictNames.BLUESTONE_ANODE, 'C', BPOredictNames.BLUESTONE_CATHODE, 'W', BPOredictNames.BLUESTONE_TILE));
+        GameRegistry.addRecipe(new ShapedOreRecipe(PartManager.getPartInfo("not").getStack(), "#A#", "ACA", "#W#", '#', BPOredictNames.STONE_TILE,
+                'A', BPOredictNames.BLUESTONE_ANODE, 'C', BPOredictNames.BLUESTONE_CATHODE, 'W', BPOredictNames.BLUESTONE_TILE));
         // craftManager.addRecipe(PartManager.getPartInfo("null"), "#R#", "RRR", "#R#", '#', BPOredictNames.STONE_TILE, 'R',
         // BPItems.stone_redwire));
-        GameRegistry.addRecipe(new ShapedOreRecipe(PartManager.getPartInfo("or").getStack(), "#C#", "WCW", "#W#", '#',
-                BPOredictNames.STONE_TILE, 'C', BPOredictNames.BLUESTONE_CATHODE, 'W', BPOredictNames.BLUESTONE_TILE));
+        GameRegistry.addRecipe(new ShapedOreRecipe(PartManager.getPartInfo("or").getStack(), "#C#", "WCW", "#W#", '#', BPOredictNames.STONE_TILE,
+                'C', BPOredictNames.BLUESTONE_CATHODE, 'W', BPOredictNames.BLUESTONE_TILE));
         GameRegistry.addRecipe(new ShapedOreRecipe(PartManager.getPartInfo("randomizer").getStack(), "#T#", "WWW", "TWT", '#',
                 BPOredictNames.STONE_TILE, 'T', BPOredictNames.TAINTED_SILICON_CHIP, 'W', BPOredictNames.BLUESTONE_TILE));
         GameRegistry.addRecipe(new ShapedOreRecipe(PartManager.getPartInfo("pulseformer").getStack(), "ACA", "CAC", "WW#", '#',
@@ -170,22 +164,21 @@ public class LogicRecipes {
         GameRegistry.addRecipe(new ShapedOreRecipe(PartManager.getPartInfo("repeater").getStack(), "#CW", "#AW", "#WC", '#',
                 BPOredictNames.STONE_TILE, 'A', BPOredictNames.BLUESTONE_ANODE, 'C', BPOredictNames.BLUESTONE_CATHODE, 'W',
                 BPOredictNames.BLUESTONE_TILE));
-        GameRegistry.addRecipe(new ShapedOreRecipe(PartManager.getPartInfo("rs").getStack(), "WWA", "C#C", "AWW", '#',
-                BPOredictNames.STONE_TILE, 'A', BPOredictNames.BLUESTONE_ANODE, 'C', BPOredictNames.BLUESTONE_CATHODE, 'W',
-                BPOredictNames.BLUESTONE_TILE));
+        GameRegistry.addRecipe(new ShapedOreRecipe(PartManager.getPartInfo("rs").getStack(), "WWA", "C#C", "AWW", '#', BPOredictNames.STONE_TILE,
+                'A', BPOredictNames.BLUESTONE_ANODE, 'C', BPOredictNames.BLUESTONE_CATHODE, 'W', BPOredictNames.BLUESTONE_TILE));
         GameRegistry.addRecipe(new ShapedOreRecipe(PartManager.getPartInfo("sequencer").getStack(), "#C#", "CPC", "#C#", '#',
                 BPOredictNames.STONE_TILE, 'C', BPOredictNames.BLUESTONE_CATHODE, 'P', BPOredictNames.BLUESTONE_POINTER));
-        GameRegistry.addRecipe(new ShapedOreRecipe(PartManager.getPartInfo("state").getStack(), "#AC", "WXP", "#W#", '#',
-                BPOredictNames.STONE_TILE, 'A', BPOredictNames.BLUESTONE_ANODE, 'C', BPOredictNames.BLUESTONE_CATHODE, 'P',
-                BPOredictNames.BLUESTONE_POINTER, 'W', BPOredictNames.BLUESTONE_TILE, 'X', BPOredictNames.SILICON_CHIP));
+        GameRegistry.addRecipe(new ShapedOreRecipe(PartManager.getPartInfo("state").getStack(), "#AC", "WXP", "#W#", '#', BPOredictNames.STONE_TILE,
+                'A', BPOredictNames.BLUESTONE_ANODE, 'C', BPOredictNames.BLUESTONE_CATHODE, 'P', BPOredictNames.BLUESTONE_POINTER, 'W',
+                BPOredictNames.BLUESTONE_TILE, 'X', BPOredictNames.SILICON_CHIP));
         GameRegistry.addRecipe(new ShapedOreRecipe(PartManager.getPartInfo("synchronizer").getStack(), "WCW", "XAX", "WWW", 'A',
                 BPOredictNames.BLUESTONE_ANODE, 'C', BPOredictNames.BLUESTONE_CATHODE, 'W', BPOredictNames.BLUESTONE_TILE, 'X',
                 BPOredictNames.SILICON_CHIP));
-        GameRegistry.addRecipe(new ShapedOreRecipe(PartManager.getPartInfo("timer").getStack(), "#W#", "WPW", "ACA", '#',
-                BPOredictNames.STONE_TILE, 'A', BPOredictNames.BLUESTONE_ANODE, 'C', BPOredictNames.BLUESTONE_CATHODE, 'W',
-                BPOredictNames.BLUESTONE_TILE, 'P', BPOredictNames.BLUESTONE_POINTER));
-        GameRegistry.addRecipe(new ShapedOreRecipe(PartManager.getPartInfo("toggle").getStack(), "C##", "WLW", "C##", '#',
-                BPOredictNames.STONE_TILE, 'C', BPOredictNames.BLUESTONE_CATHODE, 'W', BPOredictNames.BLUESTONE_TILE, 'L', Blocks.lever));
+        GameRegistry.addRecipe(new ShapedOreRecipe(PartManager.getPartInfo("timer").getStack(), "#W#", "WPW", "ACA", '#', BPOredictNames.STONE_TILE,
+                'A', BPOredictNames.BLUESTONE_ANODE, 'C', BPOredictNames.BLUESTONE_CATHODE, 'W', BPOredictNames.BLUESTONE_TILE, 'P',
+                BPOredictNames.BLUESTONE_POINTER));
+        GameRegistry.addRecipe(new ShapedOreRecipe(PartManager.getPartInfo("toggle").getStack(), "C##", "WLW", "C##", '#', BPOredictNames.STONE_TILE,
+                'C', BPOredictNames.BLUESTONE_CATHODE, 'W', BPOredictNames.BLUESTONE_TILE, 'L', Blocks.lever));
         GameRegistry.addRecipe(new ShapedOreRecipe(PartManager.getPartInfo("transparent").getStack(), "ACW", "CCC", "CW#", '#',
                 BPOredictNames.STONE_TILE, 'A', BPOredictNames.BLUESTONE_ANODE, 'C', BPOredictNames.BLUESTONE_CATHODE, 'W',
                 BPOredictNames.BLUESTONE_TILE));
@@ -200,9 +193,11 @@ public class LogicRecipes {
         GameRegistry.addRecipe(new ShapedOreRecipe(PartManager.getPartInfo("inverter").getStack(), "#A#", "ACA", "#W#", '#',
                 BPOredictNames.STONE_TILE, 'A', BPOredictNames.REDSTONE_ANODE, 'C', BPOredictNames.REDSTONE_CATHODE, 'W',
                 BPOredictNames.REDSTONE_TILE));
+        GameRegistry.addRecipe(new ShapedOreRecipe(PartManager.getPartInfo("regulabletorch").getStack(), "#W#", "#P#", "###", '#',
+                BPOredictNames.STONE_TILE, 'P', BPOredictNames.REDSTONE_POINTER, 'W', BPOredictNames.REDSTONE_TILE));
 
-        GameRegistry.addRecipe(new ShapedOreRecipe(GateNullCell.getStackWithData(new GateNullCell()), "SSS", "S S", "WWW", 'S',
-                "stickWood", 'W', BPOredictNames.STONE_TILE));
+        GameRegistry.addRecipe(new ShapedOreRecipe(GateNullCell.getStackWithData(new GateNullCell()), "SSS", "S S", "WWW", 'S', "stickWood", 'W',
+                BPOredictNames.STONE_TILE));
 
         GameRegistry.addRecipe(new ShapedOreRecipe(PartManager.getPartInfo("integratedCircuit3x3").getStack(), "TST", "SSS", "TST", 'T',
                 BPOredictNames.STONE_TILE, 'S', BPOredictNames.SILICON_CHIP));

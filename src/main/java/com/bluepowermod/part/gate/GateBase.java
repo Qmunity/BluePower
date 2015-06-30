@@ -673,8 +673,8 @@ public abstract class GateBase<C_BOTTOM extends GateConnectionBase, C_TOP extend
         if (rotation != -1)
             renderer.addTransformation(new Rotation(0, 90 * -rotation, 0));
 
-        renderer.renderBox(BOX, getIcon(ForgeDirection.DOWN), getIcon(ForgeDirection.UP), getIcon(ForgeDirection.WEST),
-                getIcon(ForgeDirection.EAST), getIcon(ForgeDirection.NORTH), getIcon(ForgeDirection.SOUTH));
+        renderer.renderBox(BOX, getIcon(ForgeDirection.DOWN), getIcon(ForgeDirection.UP), getIcon(ForgeDirection.WEST), getIcon(ForgeDirection.EAST),
+                getIcon(ForgeDirection.NORTH), getIcon(ForgeDirection.SOUTH));
 
         for (IGateComponent c : getComponents())
             c.renderStatic(translation, renderer, pass);
@@ -734,8 +734,8 @@ public abstract class GateBase<C_BOTTOM extends GateConnectionBase, C_TOP extend
 
         if (this instanceof ISilkyRemovable) {
             if (this instanceof IAdvancedSilkyRemovable) {
-                ((IAdvancedSilkyRemovable) this).readSilkyData(null, 0, 0, 0,
-                        item.hasTagCompound() ? item.getTagCompound().getCompoundTag("tileData") : new NBTTagCompound());
+                ((IAdvancedSilkyRemovable) this).readSilkyData(null, 0, 0, 0, item.hasTagCompound() ? item.getTagCompound()
+                        .getCompoundTag("tileData") : new NBTTagCompound());
             } else {
                 readFromNBT(item.hasTagCompound() ? item.getTagCompound().getCompoundTag("tileData") : new NBTTagCompound());
             }
@@ -933,8 +933,7 @@ public abstract class GateBase<C_BOTTOM extends GateConnectionBase, C_TOP extend
                     .getMinecraft()
                     .getSoundHandler()
                     .playSound(
-                            new PositionedSoundRecord(new ResourceLocation("random.click"), 0.3F, 0.5F, getX() + 0.5F, getY() + 0.5F,
-                                    getZ() + 0.5F));
+                            new PositionedSoundRecord(new ResourceLocation("random.click"), 0.3F, 0.5F, getX() + 0.5F, getY() + 0.5F, getZ() + 0.5F));
     }
 
     @Override

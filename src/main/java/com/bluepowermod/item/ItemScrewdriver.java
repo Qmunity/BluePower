@@ -21,19 +21,11 @@ import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
-import uk.co.qmunity.lib.part.IPart;
-import uk.co.qmunity.lib.part.IPartInteractable;
-import uk.co.qmunity.lib.part.ITilePartHolder;
-import uk.co.qmunity.lib.part.compat.MultipartCompatibility;
-import uk.co.qmunity.lib.raytrace.QMovingObjectPosition;
-import uk.co.qmunity.lib.raytrace.RayTracer;
-import uk.co.qmunity.lib.vec.Vec3i;
 
 import com.bluepowermod.api.misc.IScrewdriver;
 import com.bluepowermod.block.BlockContainerBase;
@@ -56,39 +48,24 @@ public class ItemScrewdriver extends ItemBase implements IScrewdriver {
     }
 
     @Override
-    public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY,
-            float hitZ) {
+    public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
 
         Block block = world.getBlock(x, y, z);
-
-        if (player.isSneaking()) {
-            ITilePartHolder itph = MultipartCompatibility.getPartHolder(world, new Vec3i(x, y, z));
-
-            if (itph != null) {
-                QMovingObjectPosition mop = itph.rayTrace(RayTracer.instance().getStartVector(player),
-                        RayTracer.instance().getEndVector(player));
-                if (mop == null)
-                    return false;
-                IPart p = mop.getPart();
-                if (p instanceof IPartInteractable)
-                    ((IPartInteractable) p).onActivated(player, mop, stack);
-            }
-        }
 
         if (block instanceof BlockContainerBase) {
             if (((BlockContainerBase) block).getGuiID() != GuiIDs.INVALID) {
                 if (player.isSneaking()) {
-                    block.rotateBlock(world, x, y, z, ForgeDirection.getOrientation(side));
-                    damage(stack, 1, player, false);
+                    if (block.rotateBlock(world, x, y, z, ForgeDirection.getOrientation(side))) {
+                        damage(stack, 1, player, false);
+                        return true;
+                    }
                 }
-            } else {
-                if (block.rotateBlock(world, x, y, z, ForgeDirection.getOrientation(side)))
-                    damage(stack, 1, player, false);
             }
-        } else {
-            if (block.rotateBlock(world, x, y, z, ForgeDirection.getOrientation(side)))
-                damage(stack, 1, player, false);
+        } else if (!player.isSneaking() && block.rotateBlock(world, x, y, z, ForgeDirection.getOrientation(side))) {
+            damage(stack, 1, player, false);
+            return true;
         }
+
         return false;
     }
 
@@ -97,12 +74,6 @@ public class ItemScrewdriver extends ItemBase implements IScrewdriver {
     public boolean isFull3D() {
 
         return true;
-    }
-
-    @Override
-    public EnumAction getItemUseAction(ItemStack par1ItemStack) {
-
-        return EnumAction.block;
     }
 
     @Override
@@ -128,6 +99,12 @@ public class ItemScrewdriver extends ItemBase implements IScrewdriver {
                 stack.setItemDamage(0);
             }
         }
+
+        return true;
+    }
+
+    @Override
+    public boolean doesSneakBypassUse(World world, int x, int y, int z, EntityPlayer player) {
 
         return true;
     }

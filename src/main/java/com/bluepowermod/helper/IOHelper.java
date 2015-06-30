@@ -384,6 +384,9 @@ public class IOHelper {
             return true;
         if (!canInterfaceWithIInventory)
             return false;
+        if (tile instanceof ITubeConnection) {
+            return true;
+        }
         if (tile instanceof IInventory) {
             return !(tile instanceof ISidedInventory) || ((ISidedInventory) tile).getAccessibleSlotsFromSide(direction.ordinal()).length > 0;
         }

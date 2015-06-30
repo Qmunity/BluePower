@@ -585,6 +585,7 @@ item.part.bluepower:gate.integratedCircuit5x5.name=5x5 Integrated Circuit
 item.part.bluepower:gate.integratedCircuit7x7.name=7x7 Integrated Circuit
 item.part.bluepower:gate.inverter.name=Inverter
 item.part.bluepower:gate.comparator.name=Comparator
+item.part.bluepower:gate.regulabletorch.name=Regulable Torch
 item.part.bluepower:gate.wirelesstransceiver.name=Digital Wireless Transceiver
 item.part.bluepower:gate.wirelesstransceiver.analog.name=Analog Wireless Transceiver
 item.part.bluepower:gate.wirelesstransceiver.bundled.name=Digital Bundled Wireless Transceiver
@@ -867,7 +868,7 @@ achievement.bluepower:sort.desc=Craft a sorting machine
 achievement.bluepower:tungsten=No longer useless!
 achievement.bluepower:tungsten.desc=Mine tungsten ore
 
-achievement.bluepower:dope=That's dope bro!
+achievement.bluepower:dope=Dopey!
 achievement.bluepower:dope.desc=Make a doped wafer
 
 achievement.bluepower:tube=Tu-be or not tu-be
