@@ -60,7 +60,7 @@ public class GateComponentLeverBig extends GateComponentLever {
             double maxU = icon.getMaxU();
             double maxV = icon.getMaxV();
 
-            GL11.glTranslated(-x + 5 / 16D, 4.5 / 16D, -z + 11 / 16D);
+            GL11.glTranslated(-x + 5 / 16D, 4.25 / 16D, -z + 11 / 16D);
 
             GL11.glTranslated(0, 0, 1 / 16D);
             GL11.glRotated(state ? 40 : -40, 1, 0, 0);

@@ -34,6 +34,7 @@ import uk.co.qmunity.lib.raytrace.QMovingObjectPosition;
 import uk.co.qmunity.lib.texture.Layout;
 import uk.co.qmunity.lib.transform.Rotation;
 import uk.co.qmunity.lib.transform.Transformation;
+import uk.co.qmunity.lib.util.Dir;
 import uk.co.qmunity.lib.vec.Vec3d;
 import uk.co.qmunity.lib.vec.Vec3dCube;
 import uk.co.qmunity.lib.vec.Vec3i;
@@ -54,13 +55,20 @@ import com.bluepowermod.api.misc.IScrewdriver;
 import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.api.wire.redstone.IBundledDevice;
 import com.bluepowermod.api.wire.redstone.IRedstoneDevice;
+import com.bluepowermod.api.wire.redstone.IRedwire;
+import com.bluepowermod.client.render.IconSupplier;
 import com.bluepowermod.helper.VectorHelper;
 import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.init.Config;
+import com.bluepowermod.item.ItemPart;
 import com.bluepowermod.part.BPPart;
 import com.bluepowermod.part.BPPartFaceRotate;
 import com.bluepowermod.part.PartManager;
+import com.bluepowermod.part.gate.connection.GateConnectionAnalogue;
 import com.bluepowermod.part.gate.connection.GateConnectionBase;
+import com.bluepowermod.part.gate.connection.GateConnectionDigital;
+import com.bluepowermod.part.wire.redstone.PartRedwireFace.PartRedwireFaceUninsulated;
+import com.bluepowermod.part.wire.redstone.WireHelper;
 import com.bluepowermod.redstone.BundledConnectionCache;
 import com.bluepowermod.redstone.RedstoneApi;
 import com.bluepowermod.redstone.RedstoneConnectionCache;
@@ -97,6 +105,8 @@ public abstract class GateBase<C_BOTTOM extends GateConnectionBase, C_TOP extend
     private C_BACK connectionBack = null;
 
     private Layout layout = null;
+
+    private GateWire[] wires = new GateWire[4];
 
     public GateBase() {
 
@@ -362,6 +372,11 @@ public abstract class GateBase<C_BOTTOM extends GateConnectionBase, C_TOP extend
 
     // Interaction
 
+    protected final int getWire(ForgeDirection side) {
+
+        return Dir.getDirection(side, getFace(), getRotation()).ordinal();
+    }
+
     @Override
     public boolean onActivated(EntityPlayer player, QMovingObjectPosition mop, ItemStack item) {
 
@@ -395,7 +410,28 @@ public abstract class GateBase<C_BOTTOM extends GateConnectionBase, C_TOP extend
             }
 
             return true;
-        } else if (hasGUI()) {
+        } else if (item != null && item.getItem() instanceof ItemPart && mop.sideHit != getFace().ordinal()
+                && mop.sideHit != getFace().getOpposite().ordinal()) {
+            GateConnectionBase con = getConnection(ForgeDirection.getOrientation(mop.sideHit));
+            int wid = getWire(ForgeDirection.getOrientation(mop.sideHit));
+            BPPart p = ((ItemPart) item.getItem()).createPart(item, player, getWorld(), mop);
+            if (wires[wid] == null && p instanceof PartRedwireFaceUninsulated
+                    && (con instanceof GateConnectionAnalogue || con instanceof GateConnectionDigital)) {
+                if (getWorld().isRemote)
+                    return true;
+                wires[wid] = new GateWire(item.splitStack(1), ((IRedwire) p).getRedwireType(ForgeDirection.UNKNOWN));
+                if (player.capabilities.isCreativeMode)
+                    item.stackSize++;
+                getRedstoneConnectionCache().recalculateConnections();
+                getBundledConnectionCache().recalculateConnections();
+                for (GateConnectionBase c : getConnections())
+                    if (c != null)
+                        c.notifyUpdate();
+                sendUpdatePacket();
+                return true;
+            }
+        }
+        if (hasGUI()) {
             if (getWorld().isRemote) {
                 FMLCommonHandler.instance().showGuiScreen(getGui(player));
             } else {
@@ -469,7 +505,10 @@ public abstract class GateBase<C_BOTTOM extends GateConnectionBase, C_TOP extend
             return false;
 
         if (type == ConnectionType.OPEN_CORNER && device instanceof IGate<?, ?, ?, ?, ?, ?>)
-            return false;
+            if (wires[getWire(side)] == null
+                    && (!(device instanceof GateBase<?, ?, ?, ?, ?, ?>) || (((GateBase<?, ?, ?, ?, ?, ?>) device).wires[((GateBase<?, ?, ?, ?, ?, ?>) device)
+                            .getWire(getFace().getOpposite())] == null)))
+                return false;
 
         return con.isEnabled() && con.canConnect(device);
     }
@@ -676,6 +715,20 @@ public abstract class GateBase<C_BOTTOM extends GateConnectionBase, C_TOP extend
         renderer.renderBox(BOX, getIcon(ForgeDirection.DOWN), getIcon(ForgeDirection.UP), getIcon(ForgeDirection.WEST), getIcon(ForgeDirection.EAST),
                 getIcon(ForgeDirection.NORTH), getIcon(ForgeDirection.SOUTH));
 
+        Vec3dCube w = new Vec3dCube(7 / 16D, 0, -2 / 16D, 9 / 16D, 2 / 16D, 0 / 16D);
+        for (Dir d : Dir.values()) {
+            if (d.ordinal() == 0 || d.ordinal() == 1)
+                continue;
+            if (wires[d.ordinal() - 2] != null) {
+                renderer.setColor(WireHelper.getColorForPowerLevel(wires[d.ordinal() - 2].getType(),
+                        getConnection(d.getOpposite().toForgeDirection(getFace(), rotation)).getRedstoneOutput()));
+                renderer.renderBox(w.clone().rotate(0, ((d.ordinal() > 1 ? d.ordinal() ^ 1 : d.ordinal()) + 1) * 90, 0, Vec3d.center),
+                        IconSupplier.wire);
+            }
+        }
+
+        renderer.setColor(0xFFFFFF);
+
         for (IGateComponent c : getComponents())
             c.renderStatic(translation, renderer, pass);
 
@@ -842,6 +895,15 @@ public abstract class GateBase<C_BOTTOM extends GateConnectionBase, C_TOP extend
         }
         tag.setTag("connections", connections);
 
+        for (int i = 0; i < 4; i++) {
+            GateWire w = wires[i];
+            if (w != null) {
+                NBTTagCompound t = new NBTTagCompound();
+                w.writeToNBT(t);
+                tag.setTag("wire_" + i, t);
+            }
+        }
+
         NBTTagCompound t = new NBTTagCompound();
         int i = 0;
         for (IGateComponent c : getComponents()) {
@@ -863,6 +925,18 @@ public abstract class GateBase<C_BOTTOM extends GateConnectionBase, C_TOP extend
             if (c != null)
                 c.readFromNBT(connections.getCompoundTag(c.getDirection().name()));
 
+        for (int i = 0; i < 4; i++) {
+            if (tag.hasKey("wire_" + i)) {
+                NBTTagCompound t = tag.getCompoundTag("wire_" + i);
+                GateWire w = wires[i];
+                if (w == null)
+                    wires[i] = w = new GateWire();
+                w.readFromNBT(t);
+            } else {
+                wires[i] = null;
+            }
+        }
+
         NBTTagCompound components = tag.getCompoundTag("components");
         int i = 0;
         for (IGateComponent c : getComponents()) {
@@ -879,6 +953,13 @@ public abstract class GateBase<C_BOTTOM extends GateConnectionBase, C_TOP extend
         for (IGateComponent c : getComponents())
             c.writeData(buffer);
 
+        for (int i = 0; i < 4; i++) {
+            GateWire w = wires[i];
+            buffer.writeBoolean(w != null);
+            if (w != null)
+                w.writeUpdate(buffer);
+        }
+
         for (GateConnectionBase c : getConnections())
             if (c != null)
                 c.writeData(buffer);
@@ -891,6 +972,17 @@ public abstract class GateBase<C_BOTTOM extends GateConnectionBase, C_TOP extend
 
         for (IGateComponent c : getComponents())
             c.readData(buffer);
+
+        for (int i = 0; i < 4; i++) {
+            if (buffer.readBoolean()) {
+                GateWire w = wires[i];
+                if (w == null)
+                    wires[i] = w = new GateWire();
+                w.readUpdate(buffer);
+            } else {
+                wires[i] = null;
+            }
+        }
 
         for (GateConnectionBase c : getConnections())
             if (c != null)
