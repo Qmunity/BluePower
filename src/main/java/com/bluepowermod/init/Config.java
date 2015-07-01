@@ -154,8 +154,8 @@ public class Config {
         boolean hadEnchantCategory = config.hasCategory(Refs.CONFIG_ENCHANTS);
         config.addCustomCategoryComment(Refs.CONFIG_ENCHANTS, "Enchantment ids");
         vorpalEnchantmentId = config.get(Refs.CONFIG_ENCHANTS, "vorpalEnchantmentId", hadEnchantCategory ? 110 : findFreeEnchantID()).getInt();
-        disjunctionEnchantmentId = config.get(Refs.CONFIG_ENCHANTS, "disjunctionEnchantmentId", hadEnchantCategory ? 111 : findFreeEnchantID() + 1)
-                .getInt();
+        disjunctionEnchantmentId = config.get(Refs.CONFIG_ENCHANTS, "disjunctionEnchantmentId",
+                hadEnchantCategory ? 111 : findFreeEnchantID(vorpalEnchantmentId)).getInt();
 
         enableGateSounds = config.get(Refs.CONFIG_SETTINGS, "Enable Gate Ticking Sounds", true).getBoolean();
 
@@ -172,11 +172,19 @@ public class Config {
         }
     }
 
-    private static int findFreeEnchantID() {
+    private static int findFreeEnchantID(int... ignored) {
 
-        for (int i = 20; i < Enchantment.enchantmentsList.length; i++)
-            if (Enchantment.enchantmentsList[i] == null)
+        for (int i = 20; i < Enchantment.enchantmentsList.length; i++) {
+            boolean ignore = false;
+            for (int ig : ignored) {
+                if (ig == i) {
+                    ignore = true;
+                    break;
+                }
+            }
+            if (!ignore && Enchantment.enchantmentsList[i] == null)
                 return i;
+        }
         return 0;
     }
 }
