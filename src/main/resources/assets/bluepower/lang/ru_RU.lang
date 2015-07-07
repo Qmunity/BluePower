@@ -549,7 +549,7 @@ item.bluepower:canvas_bag.name=Рюкзак
 item.bluepower:iron_wire.name=Качественная железная проволока
 item.bluepower:copper_wire.name=Качественная железная проволока
 
-item.bluepower:infused_teslatite_dust.name=Infused Teslatite Dust
+item.bluepower:infused_teslatite_dust.name=Заряженная теслатитовая пыль
 
 # Gates
 item.part.bluepower:gate.and.name=AND Gate
@@ -580,19 +580,19 @@ item.part.bluepower:gate.xor.name=XOR Gate
 item.part.bluepower:gate.integratedCircuit3x3.name=3x3 Integrated Circuit
 item.part.bluepower:gate.integratedCircuit5x5.name=5x5 Integrated Circuit
 item.part.bluepower:gate.integratedCircuit7x7.name=7x7 Integrated Circuit
-item.part.bluepower:gate.inverter.name=Inverter
-item.part.bluepower:gate.comparator.name=Comparator
+item.part.bluepower:gate.inverter.name=Инвертор
+item.part.bluepower:gate.comparator.name=Компаратор
 item.part.bluepower:gate.regulabletorch.name=Regulable Torch
 item.part.bluepower:gate.wirelesstransceiver.name=Digital Wireless Transceiver
 item.part.bluepower:gate.wirelesstransceiver.analog.name=Analog Wireless Transceiver
 item.part.bluepower:gate.wirelesstransceiver.bundled.name=Digital Bundled Wireless Transceiver
 item.part.bluepower:gate.wirelesstransceiver.analog.bundled.name=Analog Bundled Wireless Transceiver
-item.part.bluepower:pneumaticTube.name=Pneumatic Tube
-item.part.bluepower:pneumaticTubeOpaque.name=Opaque Pneumatic Tube
-item.part.bluepower:restrictionTube.name=Restriction Tube
-item.part.bluepower:restrictionTubeOpaque.name=Opaque Restriction Tube
-item.part.bluepower:magTube.name=Magtube
-item.part.bluepower:accelerator.name=Accelerator
+item.part.bluepower:pneumaticTube.name=Пневматическая труба
+item.part.bluepower:pneumaticTubeOpaque.name=Непрозрачная пневматическая труба
+item.part.bluepower:restrictionTube.name=Ограничивающая труба
+item.part.bluepower:restrictionTubeOpaque.name=Непрозрачная ограничивающая труба
+item.part.bluepower:magTube.name=Магнитная труба
+item.part.bluepower:accelerator.name=Ускоритель
 
 item.part.bluepower:wirelesstransceiver.bundled.name=Bundled Wireless Transceiver
 item.part.bluepower:wirelesstransceiver.analog.bundled.name=Analogue Bundled Wireless Transceiver
@@ -739,7 +739,7 @@ gui.bluepower:circuitDatabase.info.opsOnly=§cServer is configurated to only all
 gui.bluepower:circuitDatabase.info.sneakClickToConfirmDeleting=§cAre you sure? Sneak-click to confirm.
 gui.bluepower:circuitDatabase.info.sneakClickToDelete=Sneak-click to delete.
 
-gui.bluepower:circuitDatabase=Name:
+gui.bluepower:circuitDatabase=Название:
 
 gui.bluepower:tooltip.sneakForInfo=Sneak for info
 
@@ -757,17 +757,17 @@ gui.bluepower:tooltip.hasSilkyData=§eHas Extra Silky Data
 
 gui.bluepower:tab.stuffed=Stuffed Items
 gui.bluepower:tab.stuffed.noItems=No items stuffed
-gui.bluepower:tab.info=Information
+gui.bluepower:tab.info=Информация
 
 gui.bluepower:transceiver.mode.sendreceive=Send & Rec.
 gui.bluepower:transceiver.mode.send=Send
 gui.bluepower:transceiver.mode.receive=Receive
 
-gui.bluepower:transceiver.filter.none=None
+gui.bluepower:transceiver.filter.none=Нет
 gui.bluepower:transceiver.filter.admin=Admin
 
 # Colors
-bluepower:color.none=None
+bluepower:color.none=Нет
 bluepower:color.black=Black
 bluepower:color.red=Red
 bluepower:color.green=Green
@@ -803,22 +803,22 @@ tile.bluepower:circuit_database.info=With this machine you can copy and share In
 tile.bluepower:manager.info=High tier machine used to manage an inventory. It can be set to keep an inventory supplied with exactly the specified items/amounts, or it can be set to retrieve all the items it is able to get of a specified type. Priorities can be set, meaning Managers with a lower priority can't pull from a Manager with a higher priority.
 
 # Directions
-bluepower:direction.front=Front
-bluepower:direction.left=Left
-bluepower:direction.back=Back
-bluepower:direction.right=Right
+bluepower:direction.front=Спереди
+bluepower:direction.left=Слева
+bluepower:direction.back=Сзади
+bluepower:direction.right=Справа
 
 # Cardinal directions
-bluepower:face.north=North
-bluepower:face.south=South
-bluepower:face.up=Up
-bluepower:face.down=Down
-bluepower:face.west=West
-bluepower:face.east=East
+bluepower:face.north=Север
+bluepower:face.south=Юг
+bluepower:face.up=Вверх
+bluepower:face.down=Вниз
+bluepower:face.west=Запад
+bluepower:face.east=Восток
 
 # Misc
-bluepower:misc.enabled=Enabled
-bluepower:misc.disabled=Disabled
+bluepower:misc.enabled=Включен
+bluepower:misc.disabled=Выключен
 
 # Config file options
 config.bluepower:settings.tooltip=General mod settings.
@@ -842,10 +842,10 @@ waila.bluepower:gate.connections=Connections
 waila.bluepower:gate.mux.passthrough=Passing through
 waila.bluepower:gate.rsLatch.feedback=Feedback
 waila.bluepower:gate.rsLatch.nofeedback=No Feedback
-waila.bluepower:tube.color=Colors
+waila.bluepower:tube.color=Цвета
 waila.bluepower:machine.stuffed=Stuffed
 waila.bluepower:repeater.delay=Delay
-waila.bluepower:repeater.ticks=tick(s)
+waila.bluepower:repeater.ticks=тик(ов)
 
 # Misc
 bluepower:accessability.public=Public
@@ -856,11 +856,11 @@ bluepower:accessability.private=Private
 # Achievements
 achievement.bluepower=Bluepower
 
-achievement.bluepower:vorpal=Well endowed
-achievement.bluepower:vorpal.desc=Get Vorpal enchant on an item
+achievement.bluepower:vorpal=Хорошо наделены
+achievement.bluepower:vorpal.desc=Зачаровать предмет на Рубка голов
 
-achievement.bluepower:sort=Sorting your life out
-achievement.bluepower:sort.desc=Craft a sorting machine
+achievement.bluepower:sort=Сортируй до конца жизни
+achievement.bluepower:sort.desc=Скрафтить сортировочную машину
 
 achievement.bluepower:tungsten=No longer useless!
 achievement.bluepower:tungsten.desc=Mine tungsten ore
@@ -868,11 +868,11 @@ achievement.bluepower:tungsten.desc=Mine tungsten ore
 achievement.bluepower:dope=Dopey!
 achievement.bluepower:dope.desc=Make a doped wafer
 
-achievement.bluepower:tube=Tu-be or not tu-be
-achievement.bluepower:tube.desc=Craft a tube
+achievement.bluepower:tube=Тру-ба или не тру-ба
+achievement.bluepower:tube.desc=Скрафтить трубу 
 
-achievement.bluepower:magtube=Need for Speed
-achievement.bluepower:magtube.desc=Craft a magtube
+achievement.bluepower:magtube=Жажда скорости
+achievement.bluepower:magtube.desc=Скрафтить магнитную трубу
 
 achievement.bluepower:circuitception=Circuitception
 achievement.bluepower:circuitception.desc=Craft an integrated circuit
