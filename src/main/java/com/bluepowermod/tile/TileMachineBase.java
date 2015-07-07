@@ -7,18 +7,6 @@
  */
 package com.bluepowermod.tile;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
-import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.util.ForgeDirection;
-
 import com.bluepowermod.BluePower;
 import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
@@ -27,9 +15,21 @@ import com.bluepowermod.api.tube.IWeightedTubeInventory;
 import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.helper.TileEntityCache;
 import com.bluepowermod.part.tube.TubeStack;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.block.BlockLiquid;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.IFluidBlock;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * @author MineMaarten
@@ -90,8 +90,10 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
                 }
             } else if (spawnItemsInWorld) {
                 ForgeDirection direction = getFacingDirection().getOpposite();
-                if (worldObj.getBlock(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ).getBlocksMovement(worldObj,
-                        xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ)) {
+                if ((worldObj.getBlock(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ).getBlocksMovement(worldObj,
+                        xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ)) || (worldObj
+                        .getBlock(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ) instanceof BlockLiquid) || (worldObj
+                        .getBlock(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ) instanceof IFluidBlock)) {
                     ejectItemInWorld(tubeStack.stack, direction);
                     iterator.remove();
                     markDirty();
