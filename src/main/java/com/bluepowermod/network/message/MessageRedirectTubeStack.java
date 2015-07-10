@@ -36,7 +36,7 @@ public class MessageRedirectTubeStack extends LocatedPacket<MessageRedirectTubeS
 
     public MessageRedirectTubeStack(PneumaticTube tube, TubeStack stack) {
 
-        super(tube.getX(), tube.getY(), tube.getZ());
+        super(tube.getPos());
         this.stack = stack;
     }
 

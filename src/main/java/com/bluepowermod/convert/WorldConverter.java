@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.bluepowermod.BluePower;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -76,7 +77,8 @@ public class WorldConverter {
             File f = new File(worldFolder, "bluepower/worldconversion");
             f.getParentFile().mkdirs();
             f.createNewFile();
-        } catch (Exception e) {
+        } catch (Exception ex) {
+            BluePower.log.error(ex.getMessage());
         }
     }
 

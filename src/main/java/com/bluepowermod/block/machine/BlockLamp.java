@@ -48,6 +48,7 @@ public class BlockLamp extends BlockContainerBase {
 
     }
 
+    @Override
     protected TileLamp get(IBlockAccess w, int x, int y, int z) {
 
         TileEntity te = w.getTileEntity(x, y, z);

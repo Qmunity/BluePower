@@ -2,6 +2,7 @@ package com.bluepowermod.part.gate.ic;
 
 import java.io.File;
 
+import com.bluepowermod.BluePower;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
@@ -106,7 +107,7 @@ public class FakeWorldIC extends World {
             if (x == ((ic.getSize() - 1) / 2) && z == ic.getSize())
                 d = ForgeDirection.SOUTH;
             if (d != null) {
-                return new Vec3d(0, 0, 0, ic.getWorld()).add(d).rotate(0, 90 * -ic.getRotation(), 0).add(ic.getX(), ic.getY(), ic.getZ())
+                return new Vec3d(0, 0, 0, ic.getWorld()).add(d).rotate(0, 90 * -ic.getRotation(), 0).add(ic.getPos().getX(), ic.getPos().getY(), ic.getPos().getZ())
                         .getBlock();
             }
 
@@ -115,6 +116,7 @@ public class FakeWorldIC extends World {
 
             return QLBlocks.multipart;
         } catch (Exception ex) {
+            BluePower.log.error(ex.getMessage());
         }
 
         return Blocks.air;
@@ -137,9 +139,10 @@ public class FakeWorldIC extends World {
             if (x == ((ic.getSize() - 1) / 2) && z == ic.getSize())
                 d = ForgeDirection.SOUTH;
             if (d != null)
-                return new Vec3d(0, 0, 0, ic.getWorld()).add(d).rotate(0, 90 * -ic.getRotation(), 0).add(ic.getX(), ic.getY(), ic.getZ())
+                return new Vec3d(0, 0, 0, ic.getWorld()).add(d).rotate(0, 90 * -ic.getRotation(), 0).add(ic.getPos().getX(), ic.getPos().getY(), ic.getPos().getZ())
                         .getBlockMeta();
         } catch (Exception ex) {
+            BluePower.log.error(ex.getMessage());
         }
 
         return 0;
@@ -165,11 +168,12 @@ public class FakeWorldIC extends World {
             if (x == ((ic.getSize() - 1) / 2) && z == ic.getSize())
                 d = ForgeDirection.SOUTH;
             if (d != null)
-                return new Vec3d(0, 0, 0, ic.getWorld()).add(d).rotate(0, 90 * -ic.getRotation(), 0).add(ic.getX(), ic.getY(), ic.getZ())
+                return new Vec3d(0, 0, 0, ic.getWorld()).add(d).rotate(0, 90 * -ic.getRotation(), 0).add(ic.getPos().getX(), ic.getPos().getY(), ic.getPos().getZ())
                         .getTileEntity();
 
             return getTile(x, z);
         } catch (Exception ex) {
+            BluePower.log.error(ex.getMessage());
         }
 
         return null;

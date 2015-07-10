@@ -119,7 +119,7 @@ public class GateComponentTorch extends GateComponent {
         Vec3d v = new Vec3d(x + 1 / 16D, height + 2 / 16D, z + 1 / 16D).sub(Vec3d.center).rotate(0, 90 * -gate.getRotation(), 0)
                 .add(Vec3d.center).rotate(gate.getFace(), Vec3d.center);
         if (rnd.nextInt(10) == 0)
-            gate.getWorld().spawnParticle("reddust", gate.getX() + v.getX(), gate.getY() + v.getY(), gate.getZ() + v.getZ(),
+            gate.getWorld().spawnParticle("reddust", gate.getPos().getX() + v.getX(), gate.getPos().getY() + v.getY(), gate.getPos().getZ() + v.getZ(),
                     digital ? -1 : 0, 0, digital ? 1 : 0);
     }
 

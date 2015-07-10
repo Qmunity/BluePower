@@ -52,7 +52,7 @@ public class GateLightCell extends GateSimpleAnalogue {
     public void tick() {
 
         // if (getWorld().getWorldTime() % 5 == 0)
-        front().setOutput((byte) MathHelper.map(getWorld().getBlockLightValue(getX(), getY(), getZ()), 0, 15, 0, 255));
+        front().setOutput((byte) MathHelper.map(getWorld().getBlockLightValue(getPos().getX(), getPos().getY(), getPos().getZ()), 0, 15, 0, 255));
     }
 
     @Override

@@ -1,9 +1,6 @@
 package com.bluepowermod.redstone;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.Map.Entry;
 
 import net.minecraftforge.common.util.ForgeDirection;
@@ -87,9 +84,9 @@ public abstract class RedstonePropagator implements IPropagator<IRedstoneDevice>
 
         IConnection<IRedstoneDevice> c = (IConnection<IRedstoneDevice>) dev.getRedstoneConnectionCache().getConnectionOnSide(fromSide);
         if (c != null)
-            return Arrays.asList((Entry<IConnection<IRedstoneDevice>, Boolean>) new Pair<IConnection<IRedstoneDevice>, Boolean>(c, false));
+            return Collections.singletonList((Entry<IConnection<IRedstoneDevice>, Boolean>) new Pair<IConnection<IRedstoneDevice>, Boolean>(c, false));
 
-        return Arrays.asList();
+        return Collections.emptyList();
     }
 
     protected List<IConnection<IRedstoneDevice>> performPropagation() {

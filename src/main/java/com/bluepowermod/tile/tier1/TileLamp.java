@@ -11,6 +11,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import uk.co.qmunity.lib.helper.BlockPos;
 import uk.co.qmunity.lib.helper.MathHelper;
 import uk.co.qmunity.lib.helper.RedstoneHelper;
 
@@ -65,7 +66,7 @@ public class TileLamp extends TileBase implements IBundledDevice {
             power = (int) ((pow / 256D) * 15);
             sendUpdatePacket();
         } else {
-            int pow = RedstoneHelper.getInput(getWorldObj(), xCoord, yCoord, zCoord);
+            int pow = RedstoneHelper.getInput(getWorldObj(), new BlockPos(xCoord, yCoord, zCoord));
             if (pow != power) {
                 power = pow;
                 sendUpdatePacket();
@@ -136,6 +137,12 @@ public class TileLamp extends TileBase implements IBundledDevice {
     public int getZ() {
 
         return zCoord;
+    }
+
+    @Override
+    public BlockPos getPos() {
+
+        return new BlockPos(xCoord, yCoord, zCoord);
     }
 
     @Override

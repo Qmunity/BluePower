@@ -4,6 +4,7 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.nbt.NBTTagCompound;
@@ -40,7 +41,7 @@ public abstract class GateComponent implements IGateComponent {
     @Override
     public List<Vec3dCube> getOcclusionBoxes() {
 
-        return Arrays.asList();
+        return Collections.emptyList();
     }
 
     @Override

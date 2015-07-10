@@ -113,8 +113,8 @@ public class Frequency implements IFrequency {
 
         buf.writeInt(accessibility.ordinal());
         buf.writeUTF(owner.toString());
-        buf.writeUTF(ownerName.toString());
-        buf.writeUTF(frequency.toString());
+        buf.writeUTF(ownerName);
+        buf.writeUTF(frequency);
         buf.writeBoolean(isBundled());
 
         int amt = 0;

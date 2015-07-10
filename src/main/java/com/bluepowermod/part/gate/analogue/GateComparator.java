@@ -69,7 +69,7 @@ public class GateComparator extends GateSimpleAnalogue {
         byte power = back().getInput();
 
         ForgeDirection d = back().getDirection().toForgeDirection(getFace(), getRotation());
-        Vec3i a = new Vec3i(getX(), getY(), getZ(), getWorld()).add(d);
+        Vec3i a = new Vec3i(getWorld(), getPos()).add(d);
         Block ba = a.getBlock(false);
         if (ba.hasComparatorInputOverride())
             power = (byte) MathHelper.map(

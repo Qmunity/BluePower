@@ -9,6 +9,7 @@ package com.bluepowermod.helper;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import uk.co.qmunity.lib.helper.BlockPos;
 
 /**
  * 
@@ -17,15 +18,27 @@ import net.minecraft.world.World;
 
 public class TileEntityCache extends LocationCache<TileEntity> {
 
+    @Deprecated
     public TileEntityCache(World world, int x, int y, int z) {
 
-        super(world, x, y, z);
+        this(world, new BlockPos(x, y, z));
+    }
+
+    public TileEntityCache(World world, BlockPos pos) {
+
+        super(world, pos);
     }
 
     @Override
     protected TileEntity getNewValue(World world, int x, int y, int z, Object... extraArgs) {
 
         return world.getTileEntity(x, y, z);
+    }
+
+    @Override
+    protected TileEntity getNewValue(World world, BlockPos pos, Object... extraArgs) {
+
+        return world.getTileEntity(pos.getX(), pos.getY(), pos.getZ());
     }
 
 }

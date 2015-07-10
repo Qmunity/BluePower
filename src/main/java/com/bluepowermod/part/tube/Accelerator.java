@@ -136,7 +136,7 @@ public class Accelerator extends PneumaticTube implements IPartCustomPlacement {
 
         if (dir == rotation || dir.getOpposite() == rotation) {
             return getWorld() == null
-                    || !MultipartCompatibility.checkOcclusion(getWorld(), getX(), getY(), getZ(), sideBB.clone().rotate(dir, Vec3d.center));
+                    || !MultipartCompatibility.checkOcclusion(getWorld(), getPos(), sideBB.clone().rotate(dir, Vec3d.center));
         } else {
             return false;
         }

@@ -7,6 +7,7 @@ import java.io.IOException;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import uk.co.qmunity.lib.helper.BlockPos;
 import uk.co.qmunity.lib.helper.RedstoneHelper;
 import uk.co.qmunity.lib.util.Dir;
 
@@ -59,10 +60,7 @@ public abstract class GateConnectionBase implements IGateConnection {
         IConnection<? extends IRedstoneDevice> c = gate.getRedstoneConnectionCache().getConnectionOnSide(d);
 
         if (c == null || c.getB() instanceof DummyRedstoneDevice) {
-            World world = gate.getWorld();
-            int x = gate.getX(), y = gate.getY(), z = gate.getZ();
-
-            RedstoneHelper.notifyRedstoneUpdate(world, x, y, z, d, true);
+            RedstoneHelper.notifyRedstoneUpdate(gate.getWorld(), gate.getPos(), d, true);
         } else {
             RedstoneApi.getInstance().getRedstonePropagator(getGate(), d).propagate();
         }

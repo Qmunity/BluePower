@@ -35,6 +35,7 @@ import com.bluepowermod.reference.Refs;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import uk.co.qmunity.lib.helper.BlockPos;
 
 public class BlockStoneOre extends Block {
 
@@ -66,7 +67,7 @@ public class BlockStoneOre extends Block {
     @Override
     public String getUnlocalizedName() {
 
-        return String.format("tile." + Refs.MODID + ":" + name);
+        return "tile." + Refs.MODID + ":" + name;
     }
 
     @Override
@@ -85,6 +86,11 @@ public class BlockStoneOre extends Block {
     // Allow storage blocks to be used as a beacon base
     @Override
     public boolean isBeaconBase(IBlockAccess worldObj, int x, int y, int z, int beaconX, int beaconY, int beaconZ) {
+
+        return isBeaconBase(worldObj, new BlockPos(x, y, z), new BlockPos(beaconX, beaconY, beaconZ));
+    }
+
+    public boolean isBeaconBase(IBlockAccess world, BlockPos pos, BlockPos beaconPos) {
 
         return this == BPBlocks.amethyst_block || this == BPBlocks.ruby_block || this == BPBlocks.sapphire_block
                 || this == BPBlocks.copper_block || this == BPBlocks.zinc_block || this == BPBlocks.silver_block
@@ -154,7 +160,6 @@ public class BlockStoneOre extends Block {
     public BlockStoneOre setWitherproof(boolean witherproof) {
 
         this.witherproof = witherproof;
-
         return this;
     }
 
@@ -177,7 +182,7 @@ public class BlockStoneOre extends Block {
     @Override
     public boolean canDropFromExplosion(Explosion explosion) {
 
-        return witherproof ? false : super.canDropFromExplosion(explosion);
+        return !witherproof && super.canDropFromExplosion(explosion);
     }
 
     public BlockStoneOre setTooltip(String... tooltip) {

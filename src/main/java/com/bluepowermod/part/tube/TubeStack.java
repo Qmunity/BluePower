@@ -62,7 +62,7 @@ public class TubeStack {
 
     public static RenderMode renderMode;
 
-    public static enum RenderMode {
+    public enum RenderMode {
         AUTO, NORMAL, REDUCED, NONE
     }
 

@@ -46,7 +46,7 @@ public abstract class BPPartFace extends BPPart implements IPartFace, IFace, IPa
 
     public boolean canStay() {
 
-        return getWorld().isSideSolid(getX() + getFace().offsetX, getY() + getFace().offsetY, getZ() + getFace().offsetZ,
+        return getWorld().isSideSolid(getPos().getX() + getFace().offsetX, getPos().getY() + getFace().offsetY, getPos().getZ() + getFace().offsetZ,
                 getFace().getOpposite());
     }
 

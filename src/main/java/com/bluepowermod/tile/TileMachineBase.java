@@ -26,6 +26,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.IFluidBlock;
+import uk.co.qmunity.lib.helper.BlockPos;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -165,7 +166,7 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
     public TileEntity getTileCache(ForgeDirection d) {
 
         if (tileCache == null) {
-            tileCache = new TileEntityCache(worldObj, xCoord, yCoord, zCoord);
+            tileCache = new TileEntityCache(worldObj, new BlockPos(xCoord, yCoord, zCoord));
         }
         return tileCache.getValue(d);
     }

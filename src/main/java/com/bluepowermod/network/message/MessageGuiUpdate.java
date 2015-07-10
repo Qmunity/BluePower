@@ -20,6 +20,7 @@ import uk.co.qmunity.lib.part.compat.MultipartCompatibility;
 
 import com.bluepowermod.BluePower;
 import com.bluepowermod.part.IGuiButtonSensitive;
+import uk.co.qmunity.lib.vec.Vec3i;
 
 /**
  *
@@ -46,7 +47,7 @@ public class MessageGuiUpdate extends LocatedPacket<MessageGuiUpdate> {
      */
     public MessageGuiUpdate(IPart part, int messageId, int value) {
 
-        super(part.getX(), part.getY(), part.getZ());
+        super(part.getPos());
 
         // if (part instanceof GateBase && ((GateBase) part).parentCircuit != null) {
         // icId = ((GateBase) part).parentCircuit.getGateIndex((GateBase) part);
@@ -70,7 +71,7 @@ public class MessageGuiUpdate extends LocatedPacket<MessageGuiUpdate> {
 
     private int getPartId(IPart part) {
 
-        List<IPart> parts = MultipartCompatibility.getPartHolder(part.getWorld(), part.getX(), part.getY(), part.getZ()).getParts();
+        List<IPart> parts = MultipartCompatibility.getPartHolder(part.getWorld(), new Vec3i(part.getPos())).getParts();
         return parts.indexOf(part);
     }
 

@@ -31,6 +31,7 @@ import com.bluepowermod.util.DateEventHandler.Event;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import uk.co.qmunity.lib.helper.BlockPos;
 
 /**
  * 
@@ -64,7 +65,7 @@ public class BlockCrackedBasalt extends BlockStoneOre {
         if (!world.isRemote && (meta > 0 || random.nextInt(100) == 0)) {
 
             if (meta > 4) {
-                spawnLava(world, x, y, z, random);
+                spawnLava(world, new BlockPos(x, y, z), random);
             }
             if (meta < 15) {
                 if (random.nextInt(40) == 0 || meta == 0)
@@ -82,11 +83,12 @@ public class BlockCrackedBasalt extends BlockStoneOre {
         return false;
     }
 
-    private void spawnLava(World world, int x, int y, int z, Random random) {
+    private void spawnLava(World world, BlockPos pos, Random random) {
+
         if (DateEventHandler.isEvent(Event.NEW_YEAR)) {
-            DateEventHandler.spawnFirework(world, x + 0.5, y + 0.5, z + 0.5);
+            DateEventHandler.spawnFirework(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
         } else {
-            EntityFallingBlock entity = new EntityFallingBlock(world, x + 0.5, y + 0.5, z + 0.5,
+            EntityFallingBlock entity = new EntityFallingBlock(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
                     DateEventHandler.isEvent(Event.HALLOWEEN) ? Blocks.lit_pumpkin : Blocks.flowing_lava);
             entity.motionY = 1 + random.nextDouble();
             entity.motionX = (random.nextDouble() - 0.5) * 0.8D;

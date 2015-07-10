@@ -41,6 +41,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import org.lwjgl.opengl.GL11;
 
 import uk.co.qmunity.lib.client.render.RenderHelper;
+import uk.co.qmunity.lib.helper.BlockPos;
 import uk.co.qmunity.lib.helper.MathHelper;
 import uk.co.qmunity.lib.helper.RedstoneHelper;
 import uk.co.qmunity.lib.misc.Pair;
@@ -332,7 +333,7 @@ IPartRedstone {
                     if (c != null)
                         dev = c.getB();
                     if (dev == null || dev instanceof DummyRedstoneDevice)
-                        RedstoneHelper.notifyRedstoneUpdate(getWorld(), getX(), getY(), getZ(), dir, false);
+                        RedstoneHelper.notifyRedstoneUpdate(getWorld(), getPos(), dir, false);
                 }
 
                 hasUpdated = false;
@@ -436,7 +437,7 @@ IPartRedstone {
             power = buffer.readByte();
 
             if (getParent() != null && getWorld() != null)
-                getWorld().markBlockRangeForRenderUpdate(getX(), getY(), getZ(), getX(), getY(), getZ());
+                getWorld().markBlockRangeForRenderUpdate(getPos().getX(), getPos().getY(), getPos().getZ(), getPos().getX(), getPos().getY(), getPos().getZ());
         }
 
         @Override
@@ -670,7 +671,7 @@ IPartRedstone {
                     if (c != null)
                         dev = c.getB();
                     if (dev == null || dev instanceof DummyRedstoneDevice)
-                        RedstoneHelper.notifyRedstoneUpdate(getWorld(), getX(), getY(), getZ(), dir, false);
+                        RedstoneHelper.notifyRedstoneUpdate(getWorld(), getPos(), dir, false);
                 }
 
                 hasUpdated = false;
@@ -810,7 +811,7 @@ IPartRedstone {
             power = buffer.readByte();
 
             if (getParent() != null && getWorld() != null)
-                getWorld().markBlockRangeForRenderUpdate(getX(), getY(), getZ(), getX(), getY(), getZ());
+                getWorld().markBlockRangeForRenderUpdate(getPos().getX(), getPos().getY(), getPos().getZ(), getPos().getX(), getPos().getY(), getPos().getZ());
         }
 
         @Override
@@ -1216,7 +1217,7 @@ IPartRedstone {
             super.readUpdateData(buffer);
 
             if (getParent() != null && getWorld() != null)
-                getWorld().markBlockRangeForRenderUpdate(getX(), getY(), getZ(), getX(), getY(), getZ());
+                getWorld().markBlockRangeForRenderUpdate(getPos().getX(), getPos().getY(), getPos().getZ(), getPos().getX(), getPos().getY(), getPos().getZ());
         }
 
         @Override
@@ -1244,5 +1245,4 @@ IPartRedstone {
         }
 
     }
-
 }

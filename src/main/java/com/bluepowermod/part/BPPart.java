@@ -32,6 +32,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 import uk.co.qmunity.lib.client.render.RenderHelper;
+import uk.co.qmunity.lib.helper.BlockPos;
 import uk.co.qmunity.lib.part.IPart;
 import uk.co.qmunity.lib.part.IPartCollidable;
 import uk.co.qmunity.lib.part.IPartInteractable;
@@ -63,31 +64,43 @@ public abstract class BPPart extends PartBase implements IPartSelectable, IPartC
         return super.getWorld();
     }
 
+    @Deprecated
     @Override
     public int getX() {
 
         if (getParent() == null)
             return 0;
 
-        return super.getX();
+        return super.getPos().getX();
     }
 
+    @Deprecated
     @Override
     public int getY() {
 
         if (getParent() == null)
             return 0;
 
-        return super.getY();
+        return super.getPos().getY();
     }
 
+    @Deprecated
     @Override
     public int getZ() {
 
         if (getParent() == null)
             return 0;
 
-        return super.getZ();
+        return super.getPos().getZ();
+    }
+
+    @Override
+    public BlockPos getPos() {
+
+        if (getParent() == null)
+            return new BlockPos (0, 0, 0);
+
+        return super.getPos();
     }
 
     public abstract String getUnlocalizedName();
@@ -240,7 +253,7 @@ public abstract class BPPart extends PartBase implements IPartSelectable, IPartC
 
     public void notifyUpdate() {
 
-        getWorld().notifyBlockChange(getX(), getY(), getZ(), Blocks.air);
+        getWorld().notifyBlockChange(getPos().getX(), getPos().getY(), getPos().getZ(), Blocks.air);
     }
 
     public CreativeTabs[] getCreativeTabs() {

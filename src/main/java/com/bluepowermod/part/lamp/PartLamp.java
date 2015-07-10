@@ -11,6 +11,7 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.client.Minecraft;
@@ -28,6 +29,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import org.lwjgl.opengl.GL11;
 
 import uk.co.qmunity.lib.client.render.RenderHelper;
+import uk.co.qmunity.lib.helper.BlockPos;
 import uk.co.qmunity.lib.helper.MathHelper;
 import uk.co.qmunity.lib.helper.RedstoneHelper;
 import uk.co.qmunity.lib.part.IPartRedstone;
@@ -73,8 +75,6 @@ public abstract class PartLamp extends BPPartFace implements IPartRedstone, IRed
 
     /**
      * @author amadornes
-     * @param colorName
-     * @param colorVal
      * @param inverted
      */
     public PartLamp(MinecraftColor color, Boolean inverted) {
@@ -125,7 +125,7 @@ public abstract class PartLamp extends BPPartFace implements IPartRedstone, IRed
     @Override
     public List<Vec3dCube> getSelectionBoxes() {
 
-        return Arrays.asList(new Vec3dCube(0.0, 0.0, 0.0, 1.0, 1.0, 1.0));
+        return Collections.singletonList(new Vec3dCube(0.0, 0.0, 0.0, 1.0, 1.0, 1.0));
     }
 
     /**
@@ -192,7 +192,6 @@ public abstract class PartLamp extends BPPartFace implements IPartRedstone, IRed
     /**
      * This render method gets called whenever there's a block update in the chunk. You should use this to remove load from the renderer if a part of
      * the rendering code doesn't need to get called too often or just doesn't change at all. To call a render update to re-render this just call
-     * {@link com.bluepowermod.part.BPPart#markPartForRenderUpdate()}
      *
      * @param loc
      *            Distance from the player's position
@@ -245,7 +244,6 @@ public abstract class PartLamp extends BPPartFace implements IPartRedstone, IRed
      *
      * @author Koen Beckers (K4Unl)
      * @param renderer
-     * @param pass
      */
     @SideOnly(Side.CLIENT)
     public void renderLamp(RenderHelper renderer) {
@@ -334,7 +332,7 @@ public abstract class PartLamp extends BPPartFace implements IPartRedstone, IRed
             if (con != null) {
                 pow = Math.max(pow, input[d.ordinal()] & 0xFF);
             } else {
-                pow = Math.max(pow, MathHelper.map(RedstoneHelper.getInput(getWorld(), getX(), getY(), getZ(), d), 0, 15, 0, 255));
+                pow = Math.max(pow, MathHelper.map(RedstoneHelper.getInput(getWorld(), getPos(), d), 0, 15, 0, 255));
             }
         }
         power = (byte) pow;
@@ -389,7 +387,7 @@ public abstract class PartLamp extends BPPartFace implements IPartRedstone, IRed
         power = buffer.readByte();
 
         if (getParent() != null && getWorld() != null)
-            getWorld().updateLightByType(EnumSkyBlock.Block, getX(), getY(), getZ());
+            getWorld().updateLightByType(EnumSkyBlock.Block, getPos().getX(), getPos().getY(), getPos().getZ());
     }
 
     @Override

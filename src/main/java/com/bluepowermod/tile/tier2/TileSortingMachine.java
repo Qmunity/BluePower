@@ -58,7 +58,7 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
 
         private final String name;
 
-        private PullMode(String name) {
+        PullMode(String name) {
 
             this.name = name;
         }
@@ -76,7 +76,7 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
 
         private final String name;
 
-        private SortMode(String name) {
+        SortMode(String name) {
 
             this.name = name;
         }

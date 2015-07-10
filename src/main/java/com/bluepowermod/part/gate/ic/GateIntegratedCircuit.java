@@ -499,7 +499,7 @@ public class GateIntegratedCircuit extends
 
         super.readUpdateData(buffer, channel);
 
-        getWorld().markBlockRangeForRenderUpdate(getX(), getY(), getZ(), getX(), getY(), getZ());
+        getWorld().markBlockRangeForRenderUpdate(getPos().getX(), getPos().getY(), getPos().getZ(), getPos().getX(), getPos().getY(), getPos().getZ());
 
         if (channel < 10)
             return;

@@ -6,6 +6,7 @@ import java.util.List;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import uk.co.qmunity.lib.helper.BlockPos;
 import uk.co.qmunity.lib.vec.Vec3i;
 
 import com.bluepowermod.api.connect.ConnectionType;
@@ -65,6 +66,12 @@ public class BundledDeviceCCComputer implements IBundledDevice {
     public int getZ() {
 
         return loc.getZ();
+    }
+
+    @Override
+    public BlockPos getPos() {
+
+        return loc.getPos();
     }
 
     @Override

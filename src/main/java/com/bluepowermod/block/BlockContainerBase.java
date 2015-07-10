@@ -33,6 +33,7 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import uk.co.qmunity.lib.helper.BlockPos;
 import uk.co.qmunity.lib.misc.ForgeDirectionUtils;
 
 import com.bluepowermod.BluePower;
@@ -112,21 +113,30 @@ public class BlockContainerBase extends BlockBase implements ITileEntityProvider
 
     protected TileBase get(IBlockAccess w, int x, int y, int z) {
 
-        TileEntity te = w.getTileEntity(x, y, z);
+        return get(w, new BlockPos(x, y, z));
+    }
+
+    protected TileBase get(IBlockAccess world, BlockPos pos) {
+
+        TileEntity te = world.getTileEntity(pos.getX(), pos.getY(), pos.getZ());
 
         if (te == null || !(te instanceof TileBase))
             return null;
-
-        return (TileBase) te;
+        return (TileBase)te;
     }
 
     @Override
     public void onNeighborBlockChange(World world, int x, int y, int z, Block block) {
 
-        super.onNeighborBlockChange(world, x, y, z, block);
-        // Only do this on the server side.
+        onNeighborBlockChange(world, new BlockPos(x, y, z), block);
+    }
+
+    public void onNeighborBlockChange(World world, BlockPos pos, Block block) {
+
+        super.onNeighborBlockChange(world, pos.getX(), pos.getY(), pos.getZ(), block);
+        //Only do this on the server side.
         if (!world.isRemote) {
-            TileBase tileEntity = get(world, x, y, z);
+            TileBase tileEntity = get(world, pos);
             if (tileEntity != null) {
                 tileEntity.onBlockNeighbourChanged();
             }
@@ -140,9 +150,14 @@ public class BlockContainerBase extends BlockBase implements ITileEntityProvider
     }
 
     @Override
-    public int isProvidingWeakPower(IBlockAccess par1IBlockAccess, int par2, int par3, int par4, int par5) {
+    public int isProvidingWeakPower(IBlockAccess world, int x, int y, int z, int par5) {
 
-        TileEntity te = get(par1IBlockAccess, par2, par3, par4);
+        return isProvidingWeakPower(world, new BlockPos(x, y, z), par5);
+    }
+
+    public int isProvidingWeakPower(IBlockAccess world, BlockPos pos, int par3) {
+
+        TileEntity te = get(world, pos.getX(), pos.getY(), pos.getZ());
         if (te instanceof TileBase) {
             TileBase tileBase = (TileBase) te;
             return tileBase.getOutputtingRedstone();
@@ -151,7 +166,12 @@ public class BlockContainerBase extends BlockBase implements ITileEntityProvider
     }
 
     @Override
-    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int par6, float par7, float par8, float par9) {
+    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int par6, float hitX, float hitY, float hitZ) {
+
+        return onBlockActivated(world, new BlockPos(x, y, z), player, par6, hitX, hitY, hitZ);
+    }
+
+    public boolean onBlockActivated(World world, BlockPos pos, EntityPlayer player, int par6, float hitX, float hitY, float hitZ) {
 
         if (player.isSneaking()) {
             if (player.getHeldItem() != null) {
@@ -165,14 +185,14 @@ public class BlockContainerBase extends BlockBase implements ITileEntityProvider
             return false;
         }
 
-        TileEntity entity = get(world, x, y, z);
+        TileEntity entity = get(world, pos.getX(), pos.getY(), pos.getZ());
         if (entity == null || !(entity instanceof TileBase)) {
             return false;
         }
 
         if (getGuiID() != GuiIDs.INVALID) {
             if (!world.isRemote)
-                player.openGui(BluePower.instance, getGuiID().ordinal(), world, x, y, z);
+                player.openGui(BluePower.instance, getGuiID().ordinal(), world, pos.getX(), pos.getY(), pos.getZ());
             return true;
         }
         return false;
@@ -181,26 +201,36 @@ public class BlockContainerBase extends BlockBase implements ITileEntityProvider
     @Override
     public void breakBlock(World world, int x, int y, int z, Block block, int meta) {
 
+        breakBlock(world, new BlockPos(x, y, z), block, meta);
+    }
+
+    public void breakBlock(World world, BlockPos pos, Block block, int meta) {
+
         if (!isSilkyRemoving) {
-            TileBase tile = get(world, x, y, z);
+            TileBase tile = get(world, pos.getX(), pos.getY(), pos.getZ());
             if (tile != null) {
                 for (ItemStack stack : tile.getDrops()) {
-                    IOHelper.spawnItemInWorld(world, stack, x + 0.5, y + 0.5, z + 0.5);
+                    IOHelper.spawnItemInWorld(world, stack, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
                 }
             }
         }
-        super.breakBlock(world, x, y, z, block, meta);
-        world.removeTileEntity(x, y, z);
+        super.breakBlock(world, pos.getX(), pos.getY(), pos.getZ(), block, meta);
+        world.removeTileEntity(pos.getX(), pos.getY(), pos.getZ());
     }
 
     /**
      * Method to detect how the block was placed, and what way it's facing.
      */
     @Override
-    public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase player, ItemStack iStack) {
+    public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase player, ItemStack stack) {
 
-        BPApi.getInstance().loadSilkySettings(world, x, y, z, iStack);
-        TileEntity te = get(world, x, y, z);
+        onBlockPlacedBy(world, new BlockPos(x, y, z), player, stack);
+    }
+
+    public void onBlockPlacedBy(World world, BlockPos pos, EntityLivingBase player, ItemStack stack) {
+
+        BPApi.getInstance().loadSilkySettings(world, pos.getX(), pos.getY(), pos.getZ(), stack);
+        TileEntity te = get(world, pos.getX(), pos.getY(), pos.getZ());
         if (te instanceof IRotatable) {
             ((IRotatable) te).setFacingDirection(ForgeDirectionUtils.getDirectionFacing(player, canRotateVertical()).getOpposite());
         }
@@ -212,9 +242,14 @@ public class BlockContainerBase extends BlockBase implements ITileEntityProvider
     }
 
     @Override
-    public boolean rotateBlock(World worldObj, int x, int y, int z, ForgeDirection axis) {
+    public boolean rotateBlock(World world, int x, int y, int z, ForgeDirection axis) {
 
-        TileEntity te = get(worldObj, x, y, z);
+        return rotateBlock(world, new BlockPos(x, y, z), axis);
+    }
+
+    public boolean rotateBlock(World world, BlockPos pos, ForgeDirection axis) {
+
+        TileEntity te = get(world, pos.getX(), pos.getY(), pos.getZ());
         if (te instanceof IRotatable) {
             IRotatable rotatable = (IRotatable) te;
             ForgeDirection dir = rotatable.getFacingDirection();
@@ -362,6 +397,11 @@ public class BlockContainerBase extends BlockBase implements ITileEntityProvider
     @Override
     public boolean canConnectRedstone(IBlockAccess world, int x, int y, int z, int side) {
 
-        return ((TileBase) world.getTileEntity(x, y, z)).canConnectRedstone();
+        return canConnectRedstone(world, new BlockPos(x, y, z), side);
+    }
+
+    public boolean canConnectRedstone(IBlockAccess world, BlockPos pos, int side) {
+
+        return ((TileBase)world.getTileEntity(pos.getX(), pos.getY(), pos.getZ())).canConnectRedstone();
     }
 }

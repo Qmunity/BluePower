@@ -33,7 +33,7 @@ public class DateEventHandler {
 
     private static Random rand = new Random();
 
-    public static enum Event {
+    public enum Event {
         HALLOWEEN(31, 10), NEW_YEAR(1, 1);
 
         private final int month;
@@ -90,7 +90,7 @@ public class DateEventHandler {
         byte b0 = 0;
         ArrayList<Integer> arraylist = new ArrayList<Integer>();
 
-        arraylist.add(Integer.valueOf(ItemDye.field_150922_c[rand.nextInt(16)]));
+        arraylist.add(ItemDye.field_150922_c[rand.nextInt(16)]);
 
         if (rand.nextBoolean())
             nbttagcompound1.setBoolean("Flicker", true);
@@ -103,7 +103,7 @@ public class DateEventHandler {
         int[] aint = new int[arraylist.size()];
 
         for (int j2 = 0; j2 < aint.length; ++j2) {
-            aint[j2] = arraylist.get(j2).intValue();
+            aint[j2] = arraylist.get(j2);
         }
 
         nbttagcompound1.setIntArray("Colors", aint);

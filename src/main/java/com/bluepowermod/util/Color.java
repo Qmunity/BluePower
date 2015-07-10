@@ -39,7 +39,7 @@ public enum Color {
     
     public String code = "";
     
-    private Color(String code) {
+    Color(String code) {
     
         this.code = code;
     }

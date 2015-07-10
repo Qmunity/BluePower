@@ -8,6 +8,7 @@
 package com.bluepowermod.client.gui.gate;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.client.Minecraft;
@@ -108,9 +109,7 @@ public class GuiGate extends GuiScreenBase implements IWidgetListener {
             for (String line : tooltip) {
                 String localizedLine = I18n.format(line);
                 String[] lines = WordUtils.wrap(localizedLine, 50).split(System.getProperty("line.separator"));
-                for (String locLine : lines) {
-                    localizedTooltip.add(locLine);
-                }
+                Collections.addAll(localizedTooltip, lines);
             }
             drawHoveringText(localizedTooltip, x, y, fontRendererObj);
         }

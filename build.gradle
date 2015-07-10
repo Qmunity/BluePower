@@ -43,7 +43,7 @@ apply plugin: 'maven'
 
 project.ext {
     major = "0"
-    minor = "2"
+    minor = "3"
     if (System.getenv().BUILD_NUMBER != null) {
         build = System.getenv().BUILD_NUMBER
     } else {

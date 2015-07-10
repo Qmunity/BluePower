@@ -25,6 +25,7 @@ import com.bluepowermod.api.connect.IConnectionCache;
 import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.api.wire.redstone.IBundledDevice;
 import com.bluepowermod.api.wire.redstone.IRedstoneDevice;
+import uk.co.qmunity.lib.helper.BlockPos;
 
 public class ReturnDevice implements IRedstoneDevice, IBundledDevice {
 
@@ -53,6 +54,12 @@ public class ReturnDevice implements IRedstoneDevice, IBundledDevice {
     public int getZ() {
 
         return 0;
+    }
+
+    @Override
+    public BlockPos getPos() {
+
+        return new BlockPos(0, 0, 0);
     }
 
     @Override

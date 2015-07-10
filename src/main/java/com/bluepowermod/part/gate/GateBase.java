@@ -234,6 +234,7 @@ public abstract class GateBase<C_BOTTOM extends GateConnectionBase, C_TOP extend
         try {
             part = PartManager.getExample(getType());
         } catch (Exception ex) {
+            BluePower.log.error(ex.getMessage());
         }
 
         if (part == this)
@@ -897,7 +898,7 @@ public abstract class GateBase<C_BOTTOM extends GateConnectionBase, C_TOP extend
                 c.readData(buffer);
 
         if (getParent() != null && getWorld() != null)
-            getWorld().markBlockRangeForRenderUpdate(getX(), getY(), getZ(), getX(), getY(), getZ());
+            getWorld().markBlockRangeForRenderUpdate(getPos().getX(), getPos().getY(), getPos().getZ(), getPos().getX(), getPos().getY(), getPos().getZ());
     }
 
     // GUIs
@@ -933,7 +934,7 @@ public abstract class GateBase<C_BOTTOM extends GateConnectionBase, C_TOP extend
                     .getMinecraft()
                     .getSoundHandler()
                     .playSound(
-                            new PositionedSoundRecord(new ResourceLocation("random.click"), 0.3F, 0.5F, getX() + 0.5F, getY() + 0.5F, getZ() + 0.5F));
+                            new PositionedSoundRecord(new ResourceLocation("random.click"), 0.3F, 0.5F, getPos().getX() + 0.5F, getPos().getY() + 0.5F, getPos().getZ() + 0.5F));
     }
 
     @Override

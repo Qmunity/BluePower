@@ -25,7 +25,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class RendererBlockBase implements ISimpleBlockRenderingHandler {
 
-    public static enum EnumFaceType {
+    public enum EnumFaceType {
         SIDE, FRONT, BACK
     }
 

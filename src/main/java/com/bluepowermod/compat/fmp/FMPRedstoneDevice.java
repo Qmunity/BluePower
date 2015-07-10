@@ -2,6 +2,7 @@ package com.bluepowermod.compat.fmp;
 
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import uk.co.qmunity.lib.helper.BlockPos;
 import uk.co.qmunity.lib.helper.MathHelper;
 import codechicken.multipart.IFaceRedstonePart;
 import codechicken.multipart.IRedstonePart;
@@ -46,6 +47,12 @@ public class FMPRedstoneDevice implements IRedstoneDevice, IFace {
     public int getZ() {
 
         return part.z();
+    }
+
+    @Override
+    public BlockPos getPos() {
+
+        return new BlockPos(part.x(), part.y(), part.z());
     }
 
     @Override

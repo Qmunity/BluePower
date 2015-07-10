@@ -5,6 +5,7 @@ import java.io.DataOutput;
 import java.io.IOException;
 
 import net.minecraft.nbt.NBTTagCompound;
+import uk.co.qmunity.lib.helper.BlockPos;
 import uk.co.qmunity.lib.helper.MathHelper;
 import uk.co.qmunity.lib.helper.RedstoneHelper;
 import uk.co.qmunity.lib.util.Dir;
@@ -31,8 +32,7 @@ public class GateConnectionAnalogue extends GateConnectionBase {
         IConnection<? extends IRedstoneDevice> c = gate.getRedstoneConnectionCache().getConnectionOnSide(getForgeDirection());
 
         if (c == null || c.getB() instanceof DummyRedstoneDevice)
-            input = (byte) MathHelper.map(RedstoneHelper.getInput(getGate().getWorld(), getGate().getX(), getGate().getY(), getGate()
-                    .getZ(), getForgeDirection(), getGate().getFace()), 0, 15, 0, 255);
+            input = (byte) MathHelper.map(RedstoneHelper.getInput(getGate().getWorld(), getGate().getPos(), getForgeDirection(), getGate().getFace()), 0, 15, 0, 255);
     }
 
     @Override

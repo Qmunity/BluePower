@@ -23,6 +23,7 @@ import java.util.List;
 import net.minecraft.block.BlockRedstoneWire;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import uk.co.qmunity.lib.helper.BlockPos;
 import uk.co.qmunity.lib.helper.MathHelper;
 import uk.co.qmunity.lib.helper.RedstoneHelper;
 import uk.co.qmunity.lib.vec.Vec3i;
@@ -81,6 +82,12 @@ public class DummyRedstoneDevice implements IRedstoneDevice {
     }
 
     @Override
+    public BlockPos getPos() {
+
+        return loc.getPos();
+    }
+
+    @Override
     public RedstoneConnectionCache getRedstoneConnectionCache() {
 
         return connections;
@@ -90,7 +97,7 @@ public class DummyRedstoneDevice implements IRedstoneDevice {
     public boolean canConnect(ForgeDirection side, IRedstoneDevice dev, ConnectionType type) {
 
         if (type == ConnectionType.STRAIGHT)
-            return RedstoneHelper.canConnect(getWorld(), getX(), getY(), getZ(), side, dev instanceof IFace ? ((IFace) dev).getFace()
+            return RedstoneHelper.canConnect(getWorld(), new BlockPos(getX(), getY(), getZ()), side, dev instanceof IFace ? ((IFace) dev).getFace()
                     : ForgeDirection.UNKNOWN);
 
         return false;
@@ -112,7 +119,7 @@ public class DummyRedstoneDevice implements IRedstoneDevice {
         if (side == ForgeDirection.UNKNOWN)
             return 0;
 
-        return (byte) MathHelper.map(RedstoneHelper.getOutput(getWorld(), getX(), getY(), getZ(), side), 0, 15, 0, 255);
+        return (byte) MathHelper.map(RedstoneHelper.getOutput(getWorld(), new BlockPos(getX(), getY(), getZ()), side), 0, 15, 0, 255);
     }
 
     @Override

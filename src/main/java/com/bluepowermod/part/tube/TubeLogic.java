@@ -190,9 +190,9 @@ public class TubeLogic implements IPneumaticTube {
                             tubeStack.heading = tubeStack.heading.getOpposite();
                             this.tube.sendUpdatePacket();
                         } else {
-                            EntityItem entity = new EntityItem(this.tube.getWorld(), this.tube.getX() + 0.5 + tubeStack.heading.offsetX
-                                    * tubeStack.progress * 0.5, this.tube.getY() + 0.5 + tubeStack.heading.offsetY * tubeStack.progress * 0.5,
-                                    this.tube.getZ() + 0.5 + tubeStack.heading.offsetX * tubeStack.progress * 0.5, remainder);
+                            EntityItem entity = new EntityItem(this.tube.getWorld(), this.tube.getPos().getX() + 0.5 + tubeStack.heading.offsetX
+                                    * tubeStack.progress * 0.5, this.tube.getPos().getY() + 0.5 + tubeStack.heading.offsetY * tubeStack.progress * 0.5,
+                                    this.tube.getPos().getZ() + 0.5 + tubeStack.heading.offsetX * tubeStack.progress * 0.5, remainder);
                             this.tube.getWorld().spawnEntityInWorld(entity);
                             iterator.remove();
                         }
@@ -261,9 +261,7 @@ public class TubeLogic implements IPneumaticTube {
      *
      * @param simulate
      *            The only difference between simulate and not simulate is the fact that the round robin handling will be updated in non-simulate.
-     * @param from
-     *            The direction this item came from, this direction will never be a valid heading. Is null in normal item routing, as the from
-     *            direction IS a valid output.
+     * @param stack
      */
     @SuppressWarnings({ "rawtypes", "unchecked" })
     private Pair<ForgeDirection, TileEntity> getHeadingForItem(TubeStack stack, boolean simulate) {

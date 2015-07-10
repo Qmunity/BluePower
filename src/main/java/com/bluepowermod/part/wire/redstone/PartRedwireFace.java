@@ -39,6 +39,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import org.lwjgl.opengl.GL11;
 
 import uk.co.qmunity.lib.client.render.RenderHelper;
+import uk.co.qmunity.lib.helper.BlockPos;
 import uk.co.qmunity.lib.helper.MathHelper;
 import uk.co.qmunity.lib.helper.RedstoneHelper;
 import uk.co.qmunity.lib.misc.Pair;
@@ -340,9 +341,9 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
                     if (c != null)
                         dev = c.getB();
                     if (dir == getFace()) {
-                        RedstoneHelper.notifyRedstoneUpdate(getWorld(), getX(), getY(), getZ(), dir, true);
+                        RedstoneHelper.notifyRedstoneUpdate(getWorld(), getPos(), dir, true);
                     } else if ((dev == null || dev instanceof DummyRedstoneDevice) && dir != getFace().getOpposite()) {
-                        RedstoneHelper.notifyRedstoneUpdate(getWorld(), getX(), getY(), getZ(), dir, false);
+                        RedstoneHelper.notifyRedstoneUpdate(getWorld(), getPos(), dir, false);
                     }
                 }
 
@@ -496,7 +497,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
             power = buffer.readByte();
 
             if (getParent() != null && getWorld() != null)
-                getWorld().markBlockRangeForRenderUpdate(getX(), getY(), getZ(), getX(), getY(), getZ());
+                getWorld().markBlockRangeForRenderUpdate(getPos().getX(), getPos().getY(), getPos().getZ(), getPos().getX(), getPos().getY(), getPos().getZ());
         }
 
         @Override
@@ -741,9 +742,9 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
                         continue;
                     IRedstoneDevice dev = c.getB();
                     if (dir == getFace())
-                        RedstoneHelper.notifyRedstoneUpdate(getWorld(), getX(), getY(), getZ(), dir, true);
+                        RedstoneHelper.notifyRedstoneUpdate(getWorld(), getPos(), dir, true);
                     else if ((dev == null || dev instanceof DummyRedstoneDevice) && dir != getFace().getOpposite())
-                        RedstoneHelper.notifyRedstoneUpdate(getWorld(), getX(), getY(), getZ(), dir, false);
+                        RedstoneHelper.notifyRedstoneUpdate(getWorld(), getPos(), dir, false);
                 }
 
                 hasUpdated = false;
@@ -1016,7 +1017,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
                             if (dev instanceof IInsulatedRedstoneDevice
                                     && ((IInsulatedRedstoneDevice) dev).getInsulationColor(c.getSideB()) != MinecraftColor.NONE)
                                 connected = true;
-                            if (dev instanceof IFace && getFace().ordinal() > ((IFace) dev).getFace().ordinal()) {
+                            if (getFace().ordinal() > ((IFace) dev).getFace().ordinal()) {
                                 if (dev instanceof IInsulatedRedstoneDevice
                                         && ((IInsulatedRedstoneDevice) dev).getInsulationColor(c.getSideB()) == getInsulationColor(c
                                                 .getSideA()))
@@ -1039,7 +1040,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
                             if (dev instanceof IInsulatedRedstoneDevice
                                     && ((IInsulatedRedstoneDevice) dev).getInsulationColor(bc.getSideB()) != MinecraftColor.NONE)
                                 connected = true;
-                            if (dev instanceof IFace && getFace().ordinal() > ((IFace) dev).getFace().ordinal()) {
+                            if (getFace().ordinal() > ((IFace) dev).getFace().ordinal()) {
                                 if (dev instanceof IInsulatedRedstoneDevice
                                         && ((IInsulatedRedstoneDevice) dev).getInsulationColor(bc.getSideB()) == getInsulationColor(bc
                                                 .getSideA()))
@@ -1072,7 +1073,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
             power = buffer.readByte();
 
             if (getParent() != null && getWorld() != null)
-                getWorld().markBlockRangeForRenderUpdate(getX(), getY(), getZ(), getX(), getY(), getZ());
+                getWorld().markBlockRangeForRenderUpdate(getPos().getX(), getPos().getY(), getPos().getZ(), getPos().getX(), getPos().getY(), getPos().getZ());
         }
 
         @Override
@@ -1485,8 +1486,8 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
                     IBundledDevice dev = bc.getB();
                     if (dev instanceof IFace && ((IFace) dev).getFace() == ForgeDirection.getOrientation(i).getOpposite()) {
                         if (dev instanceof IRedwire) {
-                            if (dev instanceof IFace && getFace().ordinal() > ((IFace) dev).getFace().ordinal()) {
-                                if (!(dev instanceof IInsulatedRedstoneDevice) && dev instanceof IRedwire) {
+                            if (getFace().ordinal() > ((IFace) dev).getFace().ordinal()) {
+                                if (!(dev instanceof IInsulatedRedstoneDevice)) {
                                     render = true;
                                     connected = true;
                                 }
@@ -1511,7 +1512,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
             super.readUpdateData(buffer);
 
             if (getParent() != null && getWorld() != null)
-                getWorld().markBlockRangeForRenderUpdate(getX(), getY(), getZ(), getX(), getY(), getZ());
+                getWorld().markBlockRangeForRenderUpdate(getPos().getX(), getPos().getY(), getPos().getZ(), getPos().getX(), getPos().getY(), getPos().getZ());
         }
 
         @Override

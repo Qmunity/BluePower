@@ -200,6 +200,7 @@ implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor, IRedwire {
             if (gnc.bundledA || gnc.bundledB)
                 tip.add(MinecraftColor.RED + "Disabled temporarily. Still not fully working.");
         } catch (Exception ex) {
+            BluePower.log.error(ex.getMessage());
         }
     }
 
@@ -384,7 +385,7 @@ implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor, IRedwire {
                 nullcells[i] = buffer.readBoolean();
 
         if (getParent() != null && getWorld() != null)
-            getWorld().markBlockRangeForRenderUpdate(getX(), getY(), getZ(), getX(), getY(), getZ());
+            getWorld().markBlockRangeForRenderUpdate(getPos().getX(), getPos().getY(), getPos().getZ(), getPos().getX(), getPos().getY(), getPos().getZ());
     }
 
     // Connectivity and propagation
@@ -674,7 +675,7 @@ implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor, IRedwire {
 
             RenderHelper renderer = RenderHelper.instance;
             renderer.fullReset();
-            renderer.setRenderCoords(getWorld(), getX(), getY(), getZ());
+            renderer.setRenderCoords(getWorld(), getPos().getX(), getPos().getY(), getPos().getZ());
 
             double height = 2 / 16D;
 
@@ -857,8 +858,8 @@ implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor, IRedwire {
                         if (getWorld().isRemote)
                             return true;
 
-                        IOHelper.spawnItemInWorld(getWorld(), typeB.getPartInfo(MinecraftColor.NONE, bundledB).getStack(), getX() + 0.5,
-                                getY() + 0.5, getZ() + 0.5);
+                        IOHelper.spawnItemInWorld(getWorld(), typeB.getPartInfo(MinecraftColor.NONE, bundledB).getStack(), getPos().getX() + 0.5,
+                                                  getPos().getY() + 0.5, getPos().getZ() + 0.5);
 
                         typeB = null;
                         bundledB = false;
@@ -876,8 +877,8 @@ implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor, IRedwire {
                         if (getWorld().isRemote)
                             return true;
 
-                        IOHelper.spawnItemInWorld(getWorld(), typeA.getPartInfo(MinecraftColor.NONE, bundledA).getStack(), getX() + 0.5,
-                                getY() + 0.5, getZ() + 0.5);
+                        IOHelper.spawnItemInWorld(getWorld(), typeA.getPartInfo(MinecraftColor.NONE, bundledA).getStack(), getPos().getX() + 0.5,
+                                                  getPos().getY() + 0.5, getPos().getZ() + 0.5);
 
                         typeA = null;
                         bundledA = false;

@@ -76,17 +76,14 @@ public class BluePowerAPI implements IBPApi {
                 if (part instanceof IAdvancedSilkyRemovable) {
                     try {
                         part.getWorld();
-                        part.getX();
-                        part.getY();
-                        part.getZ();
+                        part.getPos();
                     } catch (Exception ex) {
                         err = true;
                     }
-
                     if (err) {
                         ((IAdvancedSilkyRemovable) part).readSilkyData(null, 0, 0, 0, tileTag);
                     } else {
-                        ((IAdvancedSilkyRemovable) part).readSilkyData(part.getWorld(), part.getX(), part.getY(), part.getZ(), tileTag);
+                        ((IAdvancedSilkyRemovable) part).readSilkyData(part.getWorld(), part.getPos().getX(), part.getPos().getY(), part.getPos().getZ(), tileTag);
                     }
                 } else {
                     part.readFromNBT(tileTag);

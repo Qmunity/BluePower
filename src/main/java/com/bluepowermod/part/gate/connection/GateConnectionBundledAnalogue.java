@@ -64,8 +64,7 @@ public class GateConnectionBundledAnalogue extends GateConnectionBase {
     @Override
     public void setBundledPower(byte[] power) {
 
-        for (int i = 0; i < power.length; i++)
-            input[i] = power[i];
+        System.arraycopy(power, 0, input, 0, power.length);
     }
 
     public byte[] getInput() {

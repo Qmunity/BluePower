@@ -35,6 +35,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import org.lwjgl.opengl.GL11;
 
 import uk.co.qmunity.lib.client.render.RenderHelper;
+import uk.co.qmunity.lib.helper.BlockPos;
 import uk.co.qmunity.lib.helper.MathHelper;
 import uk.co.qmunity.lib.helper.RedstoneHelper;
 import uk.co.qmunity.lib.part.IPartRedstone;
@@ -213,7 +214,7 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
     public TileEntity getTileCache(ForgeDirection d) {
 
         if (tileCache == null) {
-            tileCache = new TileEntityCache(getWorld(), getX(), getY(), getZ());
+            tileCache = new TileEntityCache(getWorld(), getPos());
         }
         return tileCache.getValue(d);
     }
@@ -221,7 +222,7 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
     public PneumaticTube getPartCache(ForgeDirection d) {
 
         if (partCache == null) {
-            partCache = new PartCache<PneumaticTube>(getWorld(), getX(), getY(), getZ(), PneumaticTube.class);
+            partCache = new PartCache<PneumaticTube>(getWorld(), getPos(), PneumaticTube.class);
         }
         return partCache.getValue(d);
     }
@@ -329,7 +330,7 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
         setRedstonePower(null, tag.getByte("power"));
 
         if (getParent() != null && getWorld() != null)
-            getWorld().markBlockRangeForRenderUpdate(getX(), getY(), getZ(), getX(), getY(), getZ());
+            getWorld().markBlockRangeForRenderUpdate(getPos().getX(), getPos().getY(), getPos().getZ(), getPos().getX(), getPos().getY(), getPos().getZ());
 
         NBTTagCompound logicTag = tag.getCompoundTag("logic");
         logic.readFromNBT(logicTag);
@@ -347,8 +348,7 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
             buffer.writeBoolean(getDeviceOnSide(ForgeDirection.getOrientation(i)) != null);
 
         // Colors
-        for (int i = 0; i < color.length; i++)
-            buffer.writeInt(color[i].ordinal());
+        for (TubeColor aColor : color) buffer.writeInt(aColor.ordinal());
 
         // Redwire
         if (redwireType != null) {
@@ -397,7 +397,7 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
 
         // Render update
         if (getParent() != null && getWorld() != null)
-            getWorld().markBlockRangeForRenderUpdate(getX(), getY(), getZ(), getX(), getY(), getZ());
+            getWorld().markBlockRangeForRenderUpdate(getPos().getX(), getPos().getY(), getPos().getZ(), getPos().getX(), getPos().getY(), getPos().getZ());
     }
 
     /**
@@ -463,8 +463,8 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
             // Removing redwire
             if (redwireType != null && item.getItem() instanceof IScrewdriver && player.isSneaking()) {
                 if (!getWorld().isRemote) {
-                    IOHelper.spawnItemInWorld(getWorld(), PartManager.getPartInfo("wire." + redwireType.getName()).getStack(), getX() + 0.5,
-                            getY() + 0.5, getZ() + 0.5);
+                    IOHelper.spawnItemInWorld(getWorld(), PartManager.getPartInfo("wire." + redwireType.getName()).getStack(), getPos().getX() + 0.5,
+                                              getPos().getY() + 0.5, getPos().getZ() + 0.5);
                     redwireType = null;
 
                     // Redstone update
@@ -1029,7 +1029,7 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
             if (c != null)
                 dev = c.getB();
             if (dev == null || dev instanceof DummyRedstoneDevice)
-                RedstoneHelper.notifyRedstoneUpdate(getWorld(), getX(), getY(), getZ(), dir, false);
+                RedstoneHelper.notifyRedstoneUpdate(getWorld(), getPos(), dir, false);
         }
 
         sendUpdatePacket();

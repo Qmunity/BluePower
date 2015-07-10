@@ -7,6 +7,7 @@ import java.util.Map.Entry;
 
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import uk.co.qmunity.lib.helper.BlockPos;
 import uk.co.qmunity.lib.misc.Pair;
 
 import com.bluepowermod.api.connect.ConnectionType;
@@ -56,19 +57,25 @@ public class BundledDeviceWrapper implements IAdvancedRedstoneConductor {
     @Override
     public int getX() {
 
-        return device.getX();
+        return device.getPos().getX();
     }
 
     @Override
     public int getY() {
 
-        return device.getY();
+        return device.getPos().getY();
     }
 
     @Override
     public int getZ() {
 
-        return device.getZ();
+        return device.getPos().getZ();
+    }
+
+    @Override
+    public BlockPos getPos() {
+
+        return device.getPos();
     }
 
     @Override

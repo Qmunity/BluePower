@@ -17,6 +17,7 @@
 
 package com.bluepowermod.client.render;
 
+import com.bluepowermod.BluePower;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.item.ItemStack;
@@ -93,6 +94,7 @@ public class RenderPartItem implements IItemRenderer {
             BPPart part = PartManager.getExample(item);
             part.renderItem(type, item, data);
         } catch (Exception ex) {
+            BluePower.log.error(ex.getMessage());
         }
         GL11.glPopMatrix();
 

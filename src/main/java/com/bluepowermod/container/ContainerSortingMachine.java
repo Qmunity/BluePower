@@ -126,9 +126,7 @@ public class ContainerSortingMachine extends ContainerMachineBase {
         for (int i = 0; i < colors.length; i++) {
             colors[i] = sortingMachine.colors[i].ordinal();
         }
-        for (int i = 0; i < fuzzySettings.length; i++) {
-            fuzzySettings[i] = sortingMachine.fuzzySettings[i];
-        }
+        System.arraycopy(sortingMachine.fuzzySettings, 0, fuzzySettings, 0, fuzzySettings.length);
     }
 
     @Override
