@@ -18,6 +18,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
@@ -27,6 +28,8 @@ import org.lwjgl.opengl.GL11;
 
 import uk.co.qmunity.lib.client.render.RenderHelper;
 import uk.co.qmunity.lib.helper.MathHelper;
+import uk.co.qmunity.lib.part.IPart;
+import uk.co.qmunity.lib.part.IPartPlacementFlat;
 import uk.co.qmunity.lib.part.IPartRedstone;
 import uk.co.qmunity.lib.part.IPartRenderPlacement;
 import uk.co.qmunity.lib.part.IPartTicking;
@@ -51,6 +54,7 @@ import com.bluepowermod.api.gate.IGateComponent;
 import com.bluepowermod.api.gate.IGateConnection;
 import com.bluepowermod.api.gate.IGateLogic;
 import com.bluepowermod.api.gate.ic.IIntegratedCircuitPart;
+import com.bluepowermod.api.item.IMachineBlueprint;
 import com.bluepowermod.api.misc.IScrewdriver;
 import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.api.wire.redstone.IBundledDevice;
@@ -64,6 +68,8 @@ import com.bluepowermod.item.ItemPart;
 import com.bluepowermod.part.BPPart;
 import com.bluepowermod.part.BPPartFaceRotate;
 import com.bluepowermod.part.PartManager;
+import com.bluepowermod.part.PartPlacementFaceRotateFlat;
+import com.bluepowermod.part.PartRotationHelper;
 import com.bluepowermod.part.gate.connection.GateConnectionAnalogue;
 import com.bluepowermod.part.gate.connection.GateConnectionBase;
 import com.bluepowermod.part.gate.connection.GateConnectionDigital;
@@ -78,9 +84,8 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public abstract class GateBase<C_BOTTOM extends GateConnectionBase, C_TOP extends GateConnectionBase, C_LEFT extends GateConnectionBase, C_RIGHT extends GateConnectionBase, C_FRONT extends GateConnectionBase, C_BACK extends GateConnectionBase>
-        extends BPPartFaceRotate implements IGate<C_BOTTOM, C_TOP, C_LEFT, C_RIGHT, C_FRONT, C_BACK>, IPartRedstone, IConnectionListener,
-        IRedstoneDevice, IBundledDevice, IPartTicking, IPartRenderPlacement, IIntegratedCircuitPart {
+public abstract class GateBase extends BPPartFaceRotate implements IGate, IPartRedstone, IConnectionListener, IRedstoneDevice, IBundledDevice,
+        IPartTicking, IPartRenderPlacement, IIntegratedCircuitPart {
 
     // Static var declarations
     private static Vec3dCube BOX = new Vec3dCube(0, 0, 0, 1, 2D / 16D, 1);
@@ -97,12 +102,12 @@ public abstract class GateBase<C_BOTTOM extends GateConnectionBase, C_TOP extend
 
     private List<IGateComponent> components = new ArrayList<IGateComponent>();
 
-    private C_BOTTOM connectionBottom = null;
-    private C_TOP connectionTop = null;
-    private C_LEFT connectionLeft = null;
-    private C_RIGHT connectionRight = null;
-    private C_FRONT connectionFront = null;
-    private C_BACK connectionBack = null;
+    private GateConnectionBase connectionBottom = null;
+    private GateConnectionBase connectionTop = null;
+    private GateConnectionBase connectionLeft = null;
+    private GateConnectionBase connectionRight = null;
+    private GateConnectionBase connectionFront = null;
+    private GateConnectionBase connectionBack = null;
 
     private Layout layout = null;
 
@@ -153,67 +158,67 @@ public abstract class GateBase<C_BOTTOM extends GateConnectionBase, C_TOP extend
     }
 
     @Override
-    public C_BOTTOM bottom() {
+    public GateConnectionBase bottom() {
 
         return connectionBottom;
     }
 
     @Override
-    public C_TOP top() {
+    public GateConnectionBase top() {
 
         return connectionTop;
     }
 
     @Override
-    public C_LEFT left() {
+    public GateConnectionBase left() {
 
         return connectionLeft;
     }
 
     @Override
-    public C_RIGHT right() {
+    public GateConnectionBase right() {
 
         return connectionRight;
     }
 
     @Override
-    public C_FRONT front() {
+    public GateConnectionBase front() {
 
         return connectionFront;
     }
 
     @Override
-    public C_BACK back() {
+    public GateConnectionBase back() {
 
         return connectionBack;
     }
 
-    public C_BOTTOM bottom(C_BOTTOM connection) {
+    public GateConnectionBase bottom(GateConnectionBase connection) {
 
         return connectionBottom = connection;
     }
 
-    public C_TOP top(C_TOP connection) {
+    public GateConnectionBase top(GateConnectionBase connection) {
 
         return connectionTop = connection;
     }
 
-    public C_LEFT left(C_LEFT connection) {
+    public GateConnectionBase left(GateConnectionBase connection) {
 
         return connectionLeft = connection;
     }
 
-    public C_RIGHT right(C_RIGHT connection) {
+    public GateConnectionBase right(GateConnectionBase connection) {
 
         return connectionRight = connection;
     }
 
-    public C_FRONT front(C_FRONT connection) {
+    public GateConnectionBase front(GateConnectionBase connection) {
 
         return connectionFront = connection;
     }
 
-    public C_BACK back(C_BACK connection) {
+    public GateConnectionBase back(GateConnectionBase connection) {
 
         return connectionBack = connection;
     }
@@ -233,7 +238,7 @@ public abstract class GateBase<C_BOTTOM extends GateConnectionBase, C_TOP extend
     }
 
     @Override
-    public abstract IGateLogic<? extends GateBase<C_BOTTOM, C_TOP, C_LEFT, C_RIGHT, C_FRONT, C_BACK>> logic();
+    public abstract IGateLogic<? extends GateBase> logic();
 
     // Layout
 
@@ -248,7 +253,7 @@ public abstract class GateBase<C_BOTTOM extends GateConnectionBase, C_TOP extend
         if (part == this)
             return layout;
 
-        return ((GateBase<?, ?, ?, ?, ?, ?>) part).layout;
+        return ((GateBase) part).layout;
     }
 
     // Overridable methods
@@ -430,6 +435,27 @@ public abstract class GateBase<C_BOTTOM extends GateConnectionBase, C_TOP extend
                 sendUpdatePacket();
                 return true;
             }
+        } else if (item != null && item.getItem() instanceof IMachineBlueprint && hasSettings()) {
+            if (player.isSneaking()) {
+                if (!getWorld().isRemote) {
+                    NBTTagCompound tag = new NBTTagCompound();
+                    writeSettings(tag);
+                    ((IMachineBlueprint) item.getItem()).saveMachineSettings(item, getMachineBlueprintType(), tag);
+                    player.addChatComponentMessage(new ChatComponentText("Saved settings to the Machine Blueprint"));
+                }
+                return true;
+            } else {
+                if (((IMachineBlueprint) item.getItem()).getStoredSettings(item) != null
+                        && getMachineBlueprintType().equals(((IMachineBlueprint) item.getItem()).getStoredSettingsType(item))) {
+                    if (!getWorld().isRemote) {
+                        readSettings(((IMachineBlueprint) item.getItem()).getStoredSettings(item));
+                        player.addChatComponentMessage(new ChatComponentText("Loaded settings from the Machine Blueprint"));
+                        sendUpdatePacket();
+                    }
+                    return true;
+                }
+                return false;
+            }
         }
         if (hasGUI()) {
             if (getWorld().isRemote) {
@@ -515,10 +541,9 @@ public abstract class GateBase<C_BOTTOM extends GateConnectionBase, C_TOP extend
         if (con == null)
             return false;
 
-        if (type == ConnectionType.OPEN_CORNER && device instanceof IGate<?, ?, ?, ?, ?, ?>)
+        if (type == ConnectionType.OPEN_CORNER && device instanceof IGate)
             if (wires[getWire(side)] == null
-                    && (!(device instanceof GateBase<?, ?, ?, ?, ?, ?>) || (((GateBase<?, ?, ?, ?, ?, ?>) device).wires[((GateBase<?, ?, ?, ?, ?, ?>) device)
-                            .getWire(getFace().getOpposite())] == null)))
+                    && (!(device instanceof GateBase) || (((GateBase) device).wires[((GateBase) device).getWire(getFace().getOpposite())] == null)))
                 return false;
 
         return con.isEnabled() && con.canConnect(device);
@@ -574,7 +599,7 @@ public abstract class GateBase<C_BOTTOM extends GateConnectionBase, C_TOP extend
         if (con == null)
             return false;
 
-        if (type == ConnectionType.OPEN_CORNER && device instanceof IGate<?, ?, ?, ?, ?, ?>)
+        if (type == ConnectionType.OPEN_CORNER && device instanceof IGate)
             return false;
 
         return con.isEnabled() && con.canConnect(device);
@@ -1044,4 +1069,27 @@ public abstract class GateBase<C_BOTTOM extends GateConnectionBase, C_TOP extend
         return true;
     }
 
+    @Override
+    public IPartPlacementFlat getFlatPlacement(IPart part, double hitX, double hitZ) {
+
+        return new PartPlacementFaceRotateFlat((PartRotationHelper.getPlacementRotation(hitX, hitZ) + 2) % 4);
+    }
+
+    public boolean hasSettings() {
+
+        return true;
+    }
+
+    public String getMachineBlueprintType() {
+
+        return "part_" + getType();
+    }
+
+    public void writeSettings(NBTTagCompound tag) {
+
+    }
+
+    public void readSettings(NBTTagCompound tag) {
+
+    }
 }

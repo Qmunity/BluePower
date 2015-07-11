@@ -20,22 +20,13 @@ package com.bluepowermod.part.gate.analogue;
 import java.util.Random;
 
 import net.minecraft.nbt.NBTTagCompound;
-import uk.co.qmunity.lib.util.Dir;
 
-import com.bluepowermod.api.gate.IGateLogic;
 import com.bluepowermod.api.wire.redstone.RedwireType;
-import com.bluepowermod.part.gate.GateBase;
 import com.bluepowermod.part.gate.component.GateComponentBorder;
 import com.bluepowermod.part.gate.component.GateComponentRedstoneSiliconChip;
 import com.bluepowermod.part.gate.component.GateComponentWire;
-import com.bluepowermod.part.gate.connection.GateConnectionAnalogue;
-import com.bluepowermod.part.gate.connection.GateConnectionBase;
-import com.bluepowermod.part.gate.connection.GateConnectionDigital;
 
-public class GateAnalogueRandomizer
-        extends
-        GateBase<GateConnectionBase, GateConnectionBase, GateConnectionAnalogue, GateConnectionAnalogue, GateConnectionAnalogue, GateConnectionDigital>
-        implements IGateLogic<GateAnalogueRandomizer> {
+public class GateAnalogueRandomizer extends GateSimpleAnalogue {
 
     private static final Random random = new Random();
 
@@ -46,12 +37,7 @@ public class GateAnalogueRandomizer
     private GateComponentRedstoneSiliconChip c1, c2, c3;
 
     @Override
-    protected final void initConnections() {
-
-        front(new GateConnectionAnalogue(this, Dir.FRONT));
-        back(new GateConnectionDigital(this, Dir.BACK));
-        left(new GateConnectionAnalogue(this, Dir.LEFT));
-        right(new GateConnectionAnalogue(this, Dir.RIGHT));
+    protected void initializeConnections() {
 
         front().enable().setOutputOnly();
         left().enable().setOutputOnly();
@@ -86,7 +72,7 @@ public class GateAnalogueRandomizer
         if (getWorld().isRemote)
             return;
 
-        if (back().getInput()) {
+        if (back().getInput() != 0) {
             if (ticks % 5 == 0) {
                 out[0] = (byte) random.nextInt(255);
                 out[1] = (byte) random.nextInt(255);
@@ -125,23 +111,5 @@ public class GateAnalogueRandomizer
     @Override
     public void doLogic() {
 
-    }
-
-    @Override
-    public GateAnalogueRandomizer getGate() {
-
-        return this;
-    }
-
-    @Override
-    public boolean changeMode() {
-
-        return false;
-    }
-
-    @Override
-    public GateAnalogueRandomizer logic() {
-
-        return this;
     }
 }

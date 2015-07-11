@@ -677,6 +677,8 @@ gui.bluepower:counter.max=Maksimalno
 gui.bluepower:counter.increment=+
 gui.bluepower:counter.decrement=-
 gui.bluepower:counter.count=BrojaÄ?
+##gui.bluepower:regulabletorch.255=
+##gui.bluepower:regulabletorch.15=
 
 gui.bluepower:sortingMachine.sortMode=Â§bNaÄ?in sortiranja
 gui.bluepower:sortingMachine.pullMode=Â§bNaÄ?in izvlaÄ?enja

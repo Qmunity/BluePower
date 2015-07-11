@@ -9,7 +9,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class GateComponentBorderDark extends GateComponentCubes {
 
-    public GateComponentBorderDark(GateBase<?, ?, ?, ?, ?, ?> gate, int color) {
+    public GateComponentBorderDark(GateBase gate, int color) {
 
         super(gate, color);
     }

@@ -42,6 +42,8 @@ import uk.co.qmunity.lib.client.render.RenderHelper;
 import uk.co.qmunity.lib.helper.MathHelper;
 import uk.co.qmunity.lib.helper.RedstoneHelper;
 import uk.co.qmunity.lib.misc.Pair;
+import uk.co.qmunity.lib.part.IPart;
+import uk.co.qmunity.lib.part.IPartPlacementFlat;
 import uk.co.qmunity.lib.part.IPartRedstone;
 import uk.co.qmunity.lib.part.IPartTicking;
 import uk.co.qmunity.lib.part.MicroblockShape;
@@ -67,6 +69,7 @@ import com.bluepowermod.api.wire.redstone.RedwireType;
 import com.bluepowermod.client.render.IconSupplier;
 import com.bluepowermod.helper.VectorHelper;
 import com.bluepowermod.init.BPCreativeTabs;
+import com.bluepowermod.part.PartPlacementFaceFlat;
 import com.bluepowermod.part.wire.PartWireFace;
 import com.bluepowermod.redstone.BundledConnectionCache;
 import com.bluepowermod.redstone.BundledDeviceWrapper;
@@ -212,6 +215,12 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
     public CreativeTabs getCreativeTab() {
 
         return BPCreativeTabs.wiring;
+    }
+
+    @Override
+    public IPartPlacementFlat getFlatPlacement(IPart part, double hitX, double hitZ) {
+
+        return new PartPlacementFaceFlat();
     }
 
     public static class PartRedwireFaceUninsulated extends PartRedwireFace implements IAdvancedRedstoneConductor, IConnectionListener, IPartTicking {
@@ -509,8 +518,8 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
 
             if (!RedstoneApi.getInstance().shouldWiresOutputPower(hasLoss(side)))
                 return 0;
-            if (new Vec3i(this).add(side).getBlock() instanceof BlockRedstoneWire)
-                return 0;
+            // if (new Vec3i(this).add(side).getBlock() instanceof BlockRedstoneWire)
+            // return 0;
             if (side == getFace().getOpposite())
                 return 0;
             if (!OcclusionHelper.microblockOcclusionTest(getParent(), MicroblockShape.EDGE, 1, getFace(), side))
@@ -589,7 +598,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
         @Override
         public boolean canConnect(ForgeDirection side, IRedstoneDevice device, ConnectionType type) {
 
-            if (type == ConnectionType.STRAIGHT && side == getFace().getOpposite() || side == ForgeDirection.UNKNOWN)
+            if ((type == ConnectionType.STRAIGHT && side == getFace().getOpposite() && device instanceof IFace) && side == ForgeDirection.UNKNOWN)
                 return false;
             if (type == ConnectionType.CLOSED_CORNER) {
                 if (side == getFace())

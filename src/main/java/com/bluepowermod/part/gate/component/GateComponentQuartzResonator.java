@@ -10,12 +10,12 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class GateComponentQuartzResonator extends GateComponentButton {
 
-    public GateComponentQuartzResonator(GateBase<?, ?, ?, ?, ?, ?> gate, int color) {
+    public GateComponentQuartzResonator(GateBase gate, int color) {
 
         super(gate, color);
     }
 
-    public GateComponentQuartzResonator(GateBase<?, ?, ?, ?, ?, ?> gate, double x, double z) {
+    public GateComponentQuartzResonator(GateBase gate, double x, double z) {
 
         super(gate, x, z);
     }

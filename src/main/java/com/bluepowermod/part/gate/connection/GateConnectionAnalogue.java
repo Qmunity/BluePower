@@ -20,7 +20,7 @@ public class GateConnectionAnalogue extends GateConnectionBase {
     private byte input = 0, output = 0;
     private byte lastOutput = 0;
 
-    public GateConnectionAnalogue(GateBase<?, ?, ?, ?, ?, ?> gate, Dir direction) {
+    public GateConnectionAnalogue(GateBase gate, Dir direction) {
 
         super(gate, direction);
     }
@@ -31,8 +31,8 @@ public class GateConnectionAnalogue extends GateConnectionBase {
         IConnection<? extends IRedstoneDevice> c = gate.getRedstoneConnectionCache().getConnectionOnSide(getForgeDirection());
 
         if (c == null || c.getB() instanceof DummyRedstoneDevice)
-            input = (byte) MathHelper.map(RedstoneHelper.getInput(getGate().getWorld(), getGate().getX(), getGate().getY(), getGate()
-                    .getZ(), getForgeDirection(), getGate().getFace()), 0, 15, 0, 255);
+            input = (byte) MathHelper.map(RedstoneHelper.getInput(getGate().getWorld(), getGate().getX(), getGate().getY(), getGate().getZ(),
+                    getForgeDirection(), getGate().getFace()), 0, 15, 0, 255);
     }
 
     @Override
@@ -74,6 +74,18 @@ public class GateConnectionAnalogue extends GateConnectionBase {
     @Override
     public void setBundledPower(byte[] power) {
 
+    }
+
+    @Override
+    public byte getRedstoneInput() {
+
+        return input;
+    }
+
+    @Override
+    public byte[] getBundledInput() {
+
+        return new byte[16];
     }
 
     public byte getInput() {

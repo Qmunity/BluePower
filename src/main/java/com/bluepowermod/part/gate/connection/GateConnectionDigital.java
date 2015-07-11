@@ -19,7 +19,7 @@ public class GateConnectionDigital extends GateConnectionBase {
     private boolean input = false, output = false;
     private boolean lastOutput = false;
 
-    public GateConnectionDigital(GateBase<?, ?, ?, ?, ?, ?> gate, Dir direction) {
+    public GateConnectionDigital(GateBase gate, Dir direction) {
 
         super(gate, direction);
     }
@@ -30,8 +30,8 @@ public class GateConnectionDigital extends GateConnectionBase {
         IConnection<? extends IRedstoneDevice> c = gate.getRedstoneConnectionCache().getConnectionOnSide(getForgeDirection());
 
         if (c == null || c.getB() instanceof DummyRedstoneDevice)
-            input = RedstoneHelper.getInput(getGate().getWorld(), getGate().getX(), getGate().getY(), getGate().getZ(),
-                    getForgeDirection(), getGate().getFace()) > 0;
+            input = RedstoneHelper.getInput(getGate().getWorld(), getGate().getX(), getGate().getY(), getGate().getZ(), getForgeDirection(),
+                    getGate().getFace()) > 0;
     }
 
     @Override
@@ -73,6 +73,18 @@ public class GateConnectionDigital extends GateConnectionBase {
     @Override
     public void setBundledPower(byte[] power) {
 
+    }
+
+    @Override
+    public byte getRedstoneInput() {
+
+        return (byte) (input ? 255 : 0);
+    }
+
+    @Override
+    public byte[] getBundledInput() {
+
+        return new byte[16];
     }
 
     public boolean getInput() {

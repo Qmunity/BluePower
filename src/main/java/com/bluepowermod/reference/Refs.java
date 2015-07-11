@@ -188,6 +188,7 @@ public class Refs {
     public static final String PAINTBRUSH_NAME = "paint_brush";
 
     public static final String MONOCLE_NAME = "monocle";
+    public static final String MACHINE_BLUEPRINT_NAME = "machine_blueprint";
 
     public static final String PROJECTTABLE_NAME = "project_table";
     public static final String AUTOPROJECTTABLE_NAME = "auto_project_table";

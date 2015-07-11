@@ -30,8 +30,6 @@ import com.bluepowermod.init.Recipes;
 import com.bluepowermod.init.TileEntities;
 import com.bluepowermod.network.BPNetworkHandler;
 import com.bluepowermod.part.PartManager;
-import com.bluepowermod.part.gate.ic.ICProxyBPPart;
-import com.bluepowermod.part.gate.ic.ICRegistry;
 import com.bluepowermod.recipe.AlloyFurnaceRegistry;
 import com.bluepowermod.redstone.RedstoneApi;
 import com.bluepowermod.redstone.RedstoneProviderQmunityLib;
@@ -92,8 +90,6 @@ public class BluePower {
         MinecraftForge.EVENT_BUS.register(new WorldConversionEventHandler());
 
         RedstoneApi.getInstance().registerRedstoneProvider(new RedstoneProviderQmunityLib());
-
-        ICRegistry.instance.registerProxy(new ICProxyBPPart());
     }
 
     @EventHandler

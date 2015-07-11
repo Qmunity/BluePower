@@ -20,7 +20,7 @@ public class GateComponentSolarPanel extends GateComponent {
     private int layoutColor = -1;
     private double x = 0, z = 0;
 
-    public GateComponentSolarPanel(GateBase<?, ?, ?, ?, ?, ?> gate, int color) {
+    public GateComponentSolarPanel(GateBase gate, int color) {
 
         super(gate);
 
@@ -28,7 +28,7 @@ public class GateComponentSolarPanel extends GateComponent {
         onLayoutRefresh();
     }
 
-    public GateComponentSolarPanel(GateBase<?, ?, ?, ?, ?, ?> gate, double x, double z) {
+    public GateComponentSolarPanel(GateBase gate, double x, double z) {
 
         super(gate);
 

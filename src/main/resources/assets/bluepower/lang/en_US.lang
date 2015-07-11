@@ -681,6 +681,8 @@ gui.bluepower:counter.max=Maximum
 gui.bluepower:counter.increment=Increment
 gui.bluepower:counter.decrement=Decrement
 gui.bluepower:counter.count=Count
+gui.bluepower:regulabletorch.255=Regulable Torch Output (0-255)
+gui.bluepower:regulabletorch.15=Regulable Torch Output (0-15)
 
 gui.bluepower:sortingMachine.sortMode=§bSort Mode
 gui.bluepower:sortingMachine.pullMode=§bPull Mode

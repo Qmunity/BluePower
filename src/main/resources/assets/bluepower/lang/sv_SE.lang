@@ -677,6 +677,8 @@ gui.bluepower:counter.max=Maximum
 gui.bluepower:counter.increment=Ökning
 gui.bluepower:counter.decrement=Minskning
 gui.bluepower:counter.count=Räkna
+##gui.bluepower:regulabletorch.255=
+##gui.bluepower:regulabletorch.15=
 
 gui.bluepower:sortingMachine.sortMode=§1Sorteringsläge
 gui.bluepower:sortingMachine.pullMode=§1Dragande läge

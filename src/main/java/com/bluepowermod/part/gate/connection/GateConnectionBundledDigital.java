@@ -16,7 +16,7 @@ public class GateConnectionBundledDigital extends GateConnectionBase {
 
     private boolean[] input = new boolean[16], output = new boolean[16];
 
-    public GateConnectionBundledDigital(GateBase<?, ?, ?, ?, ?, ?> gate, Dir direction) {
+    public GateConnectionBundledDigital(GateBase gate, Dir direction) {
 
         super(gate, direction);
     }
@@ -71,6 +71,23 @@ public class GateConnectionBundledDigital extends GateConnectionBase {
 
         for (int i = 0; i < power.length; i++)
             input[i] = (power[i] & 0xFF) > 0;
+    }
+
+    @Override
+    public byte getRedstoneInput() {
+
+        return (byte) 0;
+    }
+
+    @Override
+    public byte[] getBundledInput() {
+
+        byte[] in = new byte[16];
+
+        for (int i = 0; i < in.length; i++)
+            in[i] = (byte) (input[i] ? 255 : 0);
+
+        return in;
     }
 
     public boolean[] getInput() {

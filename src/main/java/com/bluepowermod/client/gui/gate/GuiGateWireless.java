@@ -43,7 +43,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class GuiGateWireless extends GuiGate<GateBase<?, ?, ?, ?, ?, ?>> {
+public class GuiGateWireless extends GuiGate<GateBase> {
 
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/wirelessRedstone.png");
 
@@ -68,7 +68,7 @@ public class GuiGateWireless extends GuiGate<GateBase<?, ?, ?, ?, ?, ?>> {
 
     private int scrolled = 0;
 
-    public GuiGateWireless(GateBase<?, ?, ?, ?, ?, ?> gate, boolean bundled, WirelessMode mode) {
+    public GuiGateWireless(GateBase gate, boolean bundled, WirelessMode mode) {
 
         super(gate, 228, 184);
         this.gate = (IWirelessGate) gate;
@@ -138,6 +138,7 @@ public class GuiGateWireless extends GuiGate<GateBase<?, ?, ?, ?, ?, ?>> {
 
         addWidget(modeSelector = new WidgetMode(6, guiLeft + 10, guiTop + 57, 228, (14 * 5), 3, Refs.MODID + ":textures/gui/wirelessRedstone.png"));
         modeSelector.value = gate.getMode().ordinal();
+        modeSelector.enabled = false;
 
         frequencyName = new GuiTextField(fontRendererObj, guiLeft + 88, guiTop + 22, 133, 10);
 
@@ -294,29 +295,30 @@ public class GuiGateWireless extends GuiGate<GateBase<?, ?, ?, ?, ?, ?>> {
         }
 
         // Render title
-        drawCenteredString(fontRendererObj, I18n.format("bluepower.gui.wireless"), guiLeft + (xSize / 2), guiTop + 8, 0xEFEFEF);
+        drawCenteredString(fontRendererObj, I18n.format("gui.bluepower:wireless"), guiLeft + (xSize / 2), guiTop + 8, 0xEFEFEF);
 
         // Filter
         {
             drawCenteredString(fontRendererObj, "Filter", guiLeft + 45, guiTop + 22 + 3, 0xEFEFEF);
-            String accessLevelLabel = filterAccessLevel.value == 0 ? "bluepower.accessability.public"
-                    : (filterAccessLevel.value == 1 ? "bluepower.accessability.shared"
-                            : (filterAccessLevel.value == 2 ? "bluepower.accessability.private"
-                                    : (filterAccessLevel.value == 3 ? "bluepower.gui.admin" : "bluepower.gui.none")));
+            String accessLevelLabel = filterAccessLevel.value == 0 ? "bluepower:accessability.public"
+                    : (filterAccessLevel.value == 1 ? "bluepower:accessability.shared"
+                            : (filterAccessLevel.value == 2 ? "bluepower:accessability.private"
+                                    : (filterAccessLevel.value == 3 ? "gui.bluepower:transceiver.filter.admin"
+                                            : "gui.bluepower:transceiver.filter.none")));
             drawString(fontRendererObj, I18n.format(accessLevelLabel), guiLeft + 12 + 14 + 3, guiTop + 35 + 3, filterAccessLevel.enabled ? 0xEFEFEF
                     : 0x565656);
         }
 
         // Label for the access level
-        String accessLevelLabel = accessLevel.value == 0 ? "bluepower.accessability.public"
-                : (accessLevel.value == 1 ? "bluepower.accessability.shared" : "bluepower.accessability.private");
+        String accessLevelLabel = accessLevel.value == 0 ? "bluepower:accessability.public"
+                : (accessLevel.value == 1 ? "bluepower:accessability.shared" : "bluepower:accessability.private");
         drawString(fontRendererObj, I18n.format(accessLevelLabel), guiLeft + 10 + 14 + 3, guiTop + ySize - 24 + 3, accessLevel.enabled ? 0xEFEFEF
                 : 0x565656);
 
         // Label for the mode
-        String modeLabel = modeSelector.value == 0 ? "bluepower.mode.sendreceive" : (modeSelector.value == 1 ? "bluepower.mode.send"
-                : "bluepower.mode.receive");
-        drawString(fontRendererObj, I18n.format(modeLabel), guiLeft + 10 + 14 + 3, guiTop + 57 + 3, 0xEFEFEF);
+        String modeLabel = modeSelector.value == 0 ? "gui.bluepower:transceiver.mode.sendreceive"
+                : (modeSelector.value == 1 ? "gui.bluepower:transceiver.mode.send" : "gui.bluepower:transceiver.mode.receive");
+        drawString(fontRendererObj, I18n.format(modeLabel), guiLeft + 10 + 14 + 3, guiTop + 57 + 3, modeSelector.enabled ? 0xEFEFEF : 0x565656);
 
         // Render the textbox
         frequencyName.drawTextBox();

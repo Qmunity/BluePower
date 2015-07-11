@@ -21,12 +21,12 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class GateComponentLeverSmall extends GateComponentLever {
 
-    public GateComponentLeverSmall(GateBase<?, ?, ?, ?, ?, ?> gate, int color) {
+    public GateComponentLeverSmall(GateBase gate, int color) {
 
         super(gate, color);
     }
 
-    public GateComponentLeverSmall(GateBase<?, ?, ?, ?, ?, ?> gate, double x, double z) {
+    public GateComponentLeverSmall(GateBase gate, double x, double z) {
 
         super(gate, x, z);
     }

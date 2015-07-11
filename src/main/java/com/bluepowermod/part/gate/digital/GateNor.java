@@ -62,8 +62,8 @@ public class GateNor extends GateSimpleDigital {
     @Override
     public void doLogic() {
 
-        buf.set(0, (back().isEnabled() && back().getInput()) && (left().isEnabled() && left().getInput())
-                && (right().isEnabled() && right().getInput()));
+        buf.set(0, (back().isEnabled() && back().getInput()) || (left().isEnabled() && left().getInput())
+                || (right().isEnabled() && right().getInput()));
     }
 
     @Override
@@ -116,21 +116,12 @@ public class GateNor extends GateSimpleDigital {
     public void addWAILABody(List<String> info) {
 
         info.add(Color.YELLOW + I18n.format("waila.bluepower:gate.connections") + ":");
-        info.add("  "
-                + Dir.LEFT.getLocalizedName()
-                + ": "
-                + (left().isEnabled() ? Color.GREEN + I18n.format("bluepower:misc.enabled") : Color.RED
-                        + I18n.format("bluepower:misc.disabled")));
-        info.add("  "
-                + Dir.BACK.getLocalizedName()
-                + ": "
-                + (back().isEnabled() ? Color.GREEN + I18n.format("bluepower:misc.enabled") : Color.RED
-                        + I18n.format("bluepower:misc.disabled")));
-        info.add("  "
-                + Dir.RIGHT.getLocalizedName()
-                + ": "
-                + (right().isEnabled() ? Color.GREEN + I18n.format("bluepower:misc.enabled") : Color.RED
-                        + I18n.format("bluepower:misc.disabled")));
+        info.add("  " + Dir.LEFT.getLocalizedName() + ": "
+                + (left().isEnabled() ? Color.GREEN + I18n.format("bluepower:misc.enabled") : Color.RED + I18n.format("bluepower:misc.disabled")));
+        info.add("  " + Dir.BACK.getLocalizedName() + ": "
+                + (back().isEnabled() ? Color.GREEN + I18n.format("bluepower:misc.enabled") : Color.RED + I18n.format("bluepower:misc.disabled")));
+        info.add("  " + Dir.RIGHT.getLocalizedName() + ": "
+                + (right().isEnabled() ? Color.GREEN + I18n.format("bluepower:misc.enabled") : Color.RED + I18n.format("bluepower:misc.disabled")));
     }
 
     @Override

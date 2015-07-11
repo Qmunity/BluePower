@@ -54,6 +54,11 @@ public class PartRotationHelper {
         if (z < 0)
             z = 1 + z;
 
+        return getPlacementRotation(x, z);
+    }
+
+    public static int getPlacementRotation(double x, double z) {
+
         x -= 0.5;
         z -= 0.5;
 

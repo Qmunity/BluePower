@@ -43,7 +43,8 @@ public class TileCircuitTable extends TileBase implements IInventory, IGuiButton
     }
 
     public void updateGateInventory() {
-        //       if (worldObj == null || !worldObj.isRemote) {
+
+        // if (worldObj == null || !worldObj.isRemote) {
         List<ItemStack> gates = getApplicableItems();
         Iterator<ItemStack> iterator = gates.iterator();
         while (iterator.hasNext()) {
@@ -55,7 +56,7 @@ public class TileCircuitTable extends TileBase implements IInventory, IGuiButton
             ItemStack stack = gates.size() > slotsScrolled * 8 + i ? gates.get(slotsScrolled * 8 + i) : null;
             circuitInventory.setInventorySlotContents(i, stack);
         }
-        //   }
+        // }
     }
 
     protected List<ItemStack> getApplicableItems() {
@@ -63,8 +64,7 @@ public class TileCircuitTable extends TileBase implements IInventory, IGuiButton
         List<ItemStack> gates = new ArrayList<ItemStack>();
         List<PartInfo> registeredParts = PartManager.getRegisteredParts();
         for (PartInfo part : registeredParts) {
-            if (part.getExample() instanceof GateBase<?, ?, ?, ?, ?, ?>
-            && ((GateBase<?, ?, ?, ?, ?, ?>) part.getExample()).isCraftableInCircuitTable()) {
+            if (part.getExample() instanceof GateBase && ((GateBase) part.getExample()).isCraftableInCircuitTable()) {
                 ItemStack partStack = part.getStack().copy();
                 gates.add(partStack);
             }
@@ -73,11 +73,13 @@ public class TileCircuitTable extends TileBase implements IInventory, IGuiButton
     }
 
     public int getRequiredScrollStates() {
+
         return (getApplicableItems().size() - 17) / 8;
     }
 
     @Override
     public void onButtonPress(EntityPlayer player, int messageId, int value) {
+
         if (messageId == 0) {
             slotsScrolled = value;
         }

@@ -24,7 +24,7 @@ public abstract class GateComponentButton extends GateComponent {
     private int layoutColor = -1;
     private double x = 0, z = 0;
 
-    public GateComponentButton(GateBase<?, ?, ?, ?, ?, ?> gate, int color) {
+    public GateComponentButton(GateBase gate, int color) {
 
         super(gate);
 
@@ -32,7 +32,7 @@ public abstract class GateComponentButton extends GateComponent {
         onLayoutRefresh();
     }
 
-    public GateComponentButton(GateBase<?, ?, ?, ?, ?, ?> gate, double x, double z) {
+    public GateComponentButton(GateBase gate, double x, double z) {
 
         super(gate);
 
@@ -48,8 +48,7 @@ public abstract class GateComponentButton extends GateComponent {
     public void renderStatic(Vec3i translation, RenderHelper renderer, int pass) {
 
         renderer.renderBox(new Vec3dCube(x, 2 / 16D, z, x + 4 / 16D, 3.5 / 16D, z + 4 / 16D), IconSupplier.gateButton);
-        renderer.renderBox(new Vec3dCube(x + 1 / 32D, 3.5 / 16D, z + 1 / 32D, x + 4 / 16D - 1 / 32D, 4 / 16D, z + 4 / 16D - 1 / 32D),
-                getIcon());
+        renderer.renderBox(new Vec3dCube(x + 1 / 32D, 3.5 / 16D, z + 1 / 32D, x + 4 / 16D - 1 / 32D, 4 / 16D, z + 4 / 16D - 1 / 32D), getIcon());
     }
 
     @Override

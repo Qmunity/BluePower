@@ -677,6 +677,8 @@ gui.bluepower:counter.max=Maximum
 gui.bluepower:counter.increment=Toevoegen
 gui.bluepower:counter.decrement=Aftrekken
 gui.bluepower:counter.count=Teller
+##gui.bluepower:regulabletorch.255=
+##gui.bluepower:regulabletorch.15=
 
 gui.bluepower:sortingMachine.sortMode=§bSorteer modus
 gui.bluepower:sortingMachine.pullMode=§bPull Modus

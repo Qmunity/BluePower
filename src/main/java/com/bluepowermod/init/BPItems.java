@@ -38,6 +38,7 @@ import com.bluepowermod.item.ItemGemSword;
 import com.bluepowermod.item.ItemIndigoDye;
 import com.bluepowermod.item.ItemLimitedCrafting;
 import com.bluepowermod.item.ItemLumar;
+import com.bluepowermod.item.ItemMachineBlueprint;
 import com.bluepowermod.item.ItemMonocle;
 import com.bluepowermod.item.ItemPaintBrush;
 import com.bluepowermod.item.ItemPaintCan;
@@ -138,6 +139,7 @@ public class BPItems {
     public static Item amethyst_hoe;
     public static Item amethyst_sickle;
     public static Item monocle;
+    public static Item machine_blueprint;
 
     public static void init() {
 
@@ -237,6 +239,7 @@ public class BPItems {
         amethyst_hoe = new ItemGemHoe(BluePower.gemMaterial, Refs.AMETHYSTHOE_NAME, BPItems.amethyst_gem);
         amethyst_sickle = new ItemSickle(BluePower.gemMaterial, Refs.AMETHYSTSICKLE_NAME, BPItems.amethyst_gem);
         monocle = new ItemMonocle();
+        machine_blueprint = new ItemMachineBlueprint();
     }
 
     public static void registerItems() {
@@ -337,6 +340,7 @@ public class BPItems {
         GameRegistry.registerItem(iron_wire, Refs.IRONWIRE_NAME);
 
         GameRegistry.registerItem(monocle, Refs.MONOCLE_NAME);
+        GameRegistry.registerItem(machine_blueprint, Refs.MACHINE_BLUEPRINT_NAME);
 
         MinecraftForge.addGrassSeed(new ItemStack(flax_seeds), 5);
     }

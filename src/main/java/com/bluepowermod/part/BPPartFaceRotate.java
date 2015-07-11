@@ -76,8 +76,7 @@ public abstract class BPPartFaceRotate extends BPPartFace {
     }
 
     @Override
-    public IPartPlacement getPlacement(IPart part, World world, Vec3i location, ForgeDirection face, MovingObjectPosition mop,
-            EntityPlayer player) {
+    public IPartPlacement getPlacement(IPart part, World world, Vec3i location, ForgeDirection face, MovingObjectPosition mop, EntityPlayer player) {
 
         int rot = PartRotationHelper.getPlacementRotation(mop);
 

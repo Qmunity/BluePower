@@ -20,17 +20,17 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public abstract class GateComponent implements IGateComponent {
 
-    private GateBase<?, ?, ?, ?, ?, ?> gate;
+    private GateBase gate;
 
     private boolean needsSyncing = false;
 
-    public GateComponent(GateBase<?, ?, ?, ?, ?, ?> gate) {
+    public GateComponent(GateBase gate) {
 
         this.gate = gate;
     }
 
     @Override
-    public GateBase<?, ?, ?, ?, ?, ?> getGate() {
+    public GateBase getGate() {
 
         return gate;
     }

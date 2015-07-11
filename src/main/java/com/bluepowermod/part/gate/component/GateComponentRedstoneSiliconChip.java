@@ -10,12 +10,12 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class GateComponentRedstoneSiliconChip extends GateComponentButton {
 
-    public GateComponentRedstoneSiliconChip(GateBase<?, ?, ?, ?, ?, ?> gate, int color) {
+    public GateComponentRedstoneSiliconChip(GateBase gate, int color) {
 
         super(gate, color);
     }
 
-    public GateComponentRedstoneSiliconChip(GateBase<?, ?, ?, ?, ?, ?> gate, double x, double z) {
+    public GateComponentRedstoneSiliconChip(GateBase gate, double x, double z) {
 
         super(gate, x, z);
     }

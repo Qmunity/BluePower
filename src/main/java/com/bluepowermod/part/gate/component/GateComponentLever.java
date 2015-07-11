@@ -16,7 +16,7 @@ public abstract class GateComponentLever extends GateComponent {
     private int layoutColor = -1;
     protected double x = 0, z = 0;
 
-    public GateComponentLever(GateBase<?, ?, ?, ?, ?, ?> gate, int color) {
+    public GateComponentLever(GateBase gate, int color) {
 
         super(gate);
 
@@ -24,7 +24,7 @@ public abstract class GateComponentLever extends GateComponent {
         onLayoutRefresh();
     }
 
-    public GateComponentLever(GateBase<?, ?, ?, ?, ?, ?> gate, double x, double z) {
+    public GateComponentLever(GateBase gate, double x, double z) {
 
         super(gate);
 

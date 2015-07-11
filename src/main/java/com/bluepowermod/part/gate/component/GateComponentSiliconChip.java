@@ -10,12 +10,12 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class GateComponentSiliconChip extends GateComponentButton {
 
-    public GateComponentSiliconChip(GateBase<?, ?, ?, ?, ?, ?> gate, int color) {
+    public GateComponentSiliconChip(GateBase gate, int color) {
 
         super(gate, color);
     }
 
-    public GateComponentSiliconChip(GateBase<?, ?, ?, ?, ?, ?> gate, double x, double z) {
+    public GateComponentSiliconChip(GateBase gate, double x, double z) {
 
         super(gate, x, z);
     }

@@ -49,7 +49,6 @@ import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.item.ItemPart;
 import com.bluepowermod.part.BPPartFaceRotate;
 import com.bluepowermod.part.PartManager;
-import com.bluepowermod.part.gate.connection.GateConnectionBase;
 import com.bluepowermod.part.wire.redstone.PartRedwireFace;
 import com.bluepowermod.part.wire.redstone.PartRedwireFace.PartRedwireFaceUninsulated;
 import com.bluepowermod.part.wire.redstone.WireHelper;
@@ -60,10 +59,7 @@ import com.bluepowermod.redstone.RedstoneConnectionCache;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class GateNullCell
-        extends
-        GateSupported<GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase>
-        implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor, IRedwire {
+public class GateNullCell extends GateSupported implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor, IRedwire {
 
     private RedwireType typeA = null, typeB = null;
     private boolean bundledA = false, bundledB = false;
@@ -134,10 +130,10 @@ public class GateNullCell
             dir = new Vec3d(0, 0, 0).add(dir).rotateUndo(getFace(), Vec3d.center).toForgeDirection();
 
             renderer.renderBox(new Vec3dCube(7 / 16D, 2 / 16D, 1 / 16D, 9 / 16D, 2 / 16D + height, 15 / 16D), wire);
-            renderer.renderBox(new Vec3dCube(7 / 16D, 2 / 16D, 0 / 16D, 9 / 16D, 2 / 16D + (height / (nullcells[dir.ordinal()] ? 1 : 2)),
-                    1 / 16D), wire);
-            renderer.renderBox(new Vec3dCube(7 / 16D, 2 / 16D, 15 / 16D, 9 / 16D, 2 / 16D + (height / (nullcells[dir.getOpposite()
-                    .ordinal()] ? 1 : 2)), 16 / 16D), wire);
+            renderer.renderBox(new Vec3dCube(7 / 16D, 2 / 16D, 0 / 16D, 9 / 16D, 2 / 16D + (height / (nullcells[dir.ordinal()] ? 1 : 2)), 1 / 16D),
+                    wire);
+            renderer.renderBox(new Vec3dCube(7 / 16D, 2 / 16D, 15 / 16D, 9 / 16D,
+                    2 / 16D + (height / (nullcells[dir.getOpposite().ordinal()] ? 1 : 2)), 16 / 16D), wire);
         }
 
         if (typeB != null) { // Supported
@@ -168,8 +164,8 @@ public class GateNullCell
 
         List<ItemStack> l = new ArrayList<ItemStack>();
 
-        l.add(getStackWithData(new GateNullCell(inWorldA ? null : typeA, inWorldA ? false : bundledA, inWorldB ? null : typeB,
-                inWorldB ? false : bundledB)));
+        l.add(getStackWithData(new GateNullCell(inWorldA ? null : typeA, inWorldA ? false : bundledA, inWorldB ? null : typeB, inWorldB ? false
+                : bundledB)));
         if (inWorldA && typeA != null)
             l.add(typeA.getPartInfo(MinecraftColor.NONE, bundledA).getStack());
         if (inWorldB && typeB != null)
@@ -424,7 +420,7 @@ public class GateNullCell
     @Override
     public boolean canConnect(ForgeDirection side, IRedstoneDevice device, ConnectionType type) {
 
-        if (type == ConnectionType.OPEN_CORNER && device instanceof IGate<?, ?, ?, ?, ?, ?>)
+        if (type == ConnectionType.OPEN_CORNER && device instanceof IGate)
             return false;
 
         if (type == ConnectionType.STRAIGHT)
@@ -604,8 +600,7 @@ public class GateNullCell
     // Placement disabling
 
     @Override
-    public IPartPlacement getPlacement(IPart part, World world, Vec3i location, ForgeDirection face, MovingObjectPosition mop,
-            EntityPlayer player) {
+    public IPartPlacement getPlacement(IPart part, World world, Vec3i location, ForgeDirection face, MovingObjectPosition mop, EntityPlayer player) {
 
         if (bundledA || bundledB)
             return null;

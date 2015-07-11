@@ -368,8 +368,8 @@ public abstract class RedstonePropagator implements IPropagator<IRedstoneDevice>
                     }
                 }
                 return;
-            } else if (getDevice() instanceof GateBase<?, ?, ?, ?, ?, ?>) {
-                IGateConnection c = ((GateBase<?, ?, ?, ?, ?, ?>) getDevice()).getConnection(getSide());
+            } else if (getDevice() instanceof GateBase) {
+                IGateConnection c = ((GateBase) getDevice()).getConnection(getSide());
                 IConnection<IRedstoneDevice> con = (IConnection<IRedstoneDevice>) getDevice().getRedstoneConnectionCache().getConnectionOnSide(
                         getSide());
                 if (c != null) {

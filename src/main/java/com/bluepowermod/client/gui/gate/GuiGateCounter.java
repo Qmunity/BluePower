@@ -19,7 +19,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public abstract class GuiGateCounter extends GuiGate<GateBase<?, ?, ?, ?, ?, ?>> {
+public abstract class GuiGateCounter extends GuiGate<GateBase> {
 
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/gateBig.png");
     private static final String[] buttonTexts = { "-25", "-5", "-1", "+1", "+5", "+25" };

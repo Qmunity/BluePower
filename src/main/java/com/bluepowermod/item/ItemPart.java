@@ -126,6 +126,11 @@ public class ItemPart extends ItemMultipart implements IDatabaseSaveable {
     @Override
     public BPPart createPart(ItemStack item, EntityPlayer player, World world, MovingObjectPosition mop) {
 
+        return createPart(item);
+    }
+
+    public BPPart createPart(ItemStack item) {
+
         BPPart part = info.create();
         BPApi.getInstance().loadSilkySettings(part, item);
         return part;

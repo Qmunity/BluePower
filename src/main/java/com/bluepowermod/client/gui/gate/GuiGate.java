@@ -35,7 +35,7 @@ import cpw.mods.fml.relauncher.SideOnly;
  */
 
 @SideOnly(Side.CLIENT)
-public abstract class GuiGate<T extends GateBase<?, ?, ?, ?, ?, ?>> extends GuiScreenBase implements IWidgetListener {
+public abstract class GuiGate<T extends GateBase> extends GuiScreenBase implements IWidgetListener {
 
     private final T gate;
     private final List<IGuiWidget> widgets = new ArrayList<IGuiWidget>();

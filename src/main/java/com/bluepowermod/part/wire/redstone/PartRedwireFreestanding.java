@@ -44,6 +44,8 @@ import uk.co.qmunity.lib.client.render.RenderHelper;
 import uk.co.qmunity.lib.helper.MathHelper;
 import uk.co.qmunity.lib.helper.RedstoneHelper;
 import uk.co.qmunity.lib.misc.Pair;
+import uk.co.qmunity.lib.part.IPart;
+import uk.co.qmunity.lib.part.IPartPlacementFlat;
 import uk.co.qmunity.lib.part.IPartRedstone;
 import uk.co.qmunity.lib.part.MicroblockShape;
 import uk.co.qmunity.lib.part.compat.OcclusionHelper;
@@ -67,6 +69,7 @@ import com.bluepowermod.api.wire.redstone.IRedwire;
 import com.bluepowermod.api.wire.redstone.RedwireType;
 import com.bluepowermod.client.render.IconSupplier;
 import com.bluepowermod.init.BPCreativeTabs;
+import com.bluepowermod.part.PartPlacementDefaultFlat;
 import com.bluepowermod.part.wire.PartWireFreestanding;
 import com.bluepowermod.redstone.BundledConnectionCache;
 import com.bluepowermod.redstone.BundledDeviceWrapper;
@@ -75,8 +78,7 @@ import com.bluepowermod.redstone.RedstoneApi;
 import com.bluepowermod.redstone.RedstoneConnection;
 import com.bluepowermod.redstone.RedstoneConnectionCache;
 
-public abstract class PartRedwireFreestanding extends PartWireFreestanding implements IRedwire, IRedConductor, IIntegratedCircuitPart,
-        IPartRedstone {
+public abstract class PartRedwireFreestanding extends PartWireFreestanding implements IRedwire, IRedConductor, IIntegratedCircuitPart, IPartRedstone {
 
     private RedwireType type;
 
@@ -145,7 +147,7 @@ public abstract class PartRedwireFreestanding extends PartWireFreestanding imple
             }
         }
 
-        if (count > 2 || count == 0)
+        if (count != 2)
             return true;
         if (getParent() == null || getWorld() == null)
             return true;
@@ -240,8 +242,13 @@ public abstract class PartRedwireFreestanding extends PartWireFreestanding imple
         return BPCreativeTabs.wiring;
     }
 
-    public static class PartRedwireFreestandingUninsulated extends PartRedwireFreestanding implements IAdvancedRedstoneConductor,
-            IConnectionListener {
+    @Override
+    public IPartPlacementFlat getFlatPlacement(IPart part, double hitX, double hitZ) {
+
+        return new PartPlacementDefaultFlat();
+    }
+
+    public static class PartRedwireFreestandingUninsulated extends PartRedwireFreestanding implements IAdvancedRedstoneConductor, IConnectionListener {
 
         private RedstoneConnectionCache connections = RedstoneApi.getInstance().createRedstoneConnectionCache(this);
         private boolean hasUpdated = false;
@@ -551,8 +558,8 @@ public abstract class PartRedwireFreestanding extends PartWireFreestanding imple
                 return false;
 
             if (device instanceof IInsulatedRedstoneDevice) {
-                MinecraftColor c = ((IInsulatedRedstoneDevice) device).getInsulationColor(type == ConnectionType.STRAIGHT ? side
-                        .getOpposite() : null);
+                MinecraftColor c = ((IInsulatedRedstoneDevice) device)
+                        .getInsulationColor(type == ConnectionType.STRAIGHT ? side.getOpposite() : null);
                 if (c != null && c != getInsulationColor(side))
                     return false;
             }
@@ -740,8 +747,8 @@ public abstract class PartRedwireFreestanding extends PartWireFreestanding imple
 
                 IConnection<IBundledDevice> cB = bundledConnections.getConnectionOnSide(d);
                 if (cB != null)
-                    l.add(new Pair<IConnection<IRedstoneDevice>, Boolean>(new RedstoneConnection(this, BundledDeviceWrapper.wrap(cB.getB(),
-                            color), cB.getSideA(), cB.getSideB(), cB.getType()), cB.getB() instanceof IRedwire
+                    l.add(new Pair<IConnection<IRedstoneDevice>, Boolean>(new RedstoneConnection(this, BundledDeviceWrapper.wrap(cB.getB(), color),
+                            cB.getSideA(), cB.getSideB(), cB.getType()), cB.getB() instanceof IRedwire
                             && ((IRedwire) cB.getB()).getRedwireType(cB.getSideB()) != getRedwireType(cB.getSideA())));
             }
 
@@ -874,8 +881,7 @@ public abstract class PartRedwireFreestanding extends PartWireFreestanding imple
 
     }
 
-    public static class PartRedwireFreestandingBundled extends PartRedwireFreestanding implements IAdvancedBundledConductor,
-            IConnectionListener {
+    public static class PartRedwireFreestandingBundled extends PartRedwireFreestanding implements IAdvancedBundledConductor, IConnectionListener {
 
         private BundledConnectionCache bundledConnections = RedstoneApi.getInstance().createBundledConnectionCache(this);
         private byte[] power = new byte[16];

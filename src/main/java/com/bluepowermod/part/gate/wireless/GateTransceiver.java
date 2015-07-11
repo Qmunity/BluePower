@@ -39,6 +39,8 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import uk.co.qmunity.lib.client.render.RenderHelper;
+import uk.co.qmunity.lib.helper.MathHelper;
+import uk.co.qmunity.lib.helper.RedstoneHelper;
 import uk.co.qmunity.lib.misc.Pair;
 import uk.co.qmunity.lib.part.IPart;
 import uk.co.qmunity.lib.part.IPartPlacement;
@@ -66,19 +68,17 @@ import com.bluepowermod.network.message.MessageWirelessFrequencySync;
 import com.bluepowermod.part.IGuiButtonSensitive;
 import com.bluepowermod.part.gate.GateBase;
 import com.bluepowermod.part.gate.connection.GateConnectionAnalogue;
-import com.bluepowermod.part.gate.connection.GateConnectionBase;
 import com.bluepowermod.part.gate.connection.GateConnectionBundledAnalogue;
 import com.bluepowermod.part.gate.connection.GateConnectionBundledDigital;
 import com.bluepowermod.part.gate.connection.GateConnectionDigital;
+import com.bluepowermod.redstone.RedstoneApi;
 import com.bluepowermod.util.DebugHelper;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class GateTransceiver extends
-GateBase<GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase>
-implements IGateLogic<GateTransceiver>, IWirelessDevice, IWirelessGate, IGuiButtonSensitive, IAdvancedRedstoneConductor,
-IAdvancedBundledConductor {
+public class GateTransceiver extends GateBase implements IGateLogic<GateTransceiver>, IWirelessDevice, IWirelessGate, IGuiButtonSensitive,
+        IAdvancedRedstoneConductor, IAdvancedBundledConductor {
 
     private static final List<GateTransceiver> transceivers = new ArrayList<GateTransceiver>();
 
@@ -87,7 +87,13 @@ IAdvancedBundledConductor {
 
     private Frequency frequency = null;
 
-    private WirelessMode mode = WirelessMode.BOTH;
+    protected WirelessMode mode = WirelessMode.BOTH;
+
+    protected byte input = 0;
+    protected byte[] inputBundled = new byte[16];
+
+    protected byte freqPow = 0;
+    protected byte[] freqPowBundled = new byte[16];
 
     public GateTransceiver(Boolean isBundled, Boolean isAnalogue) {
 
@@ -99,9 +105,8 @@ IAdvancedBundledConductor {
     public void initConnections() {
 
         front(
-                isBundled ? (isAnalogue ? new GateConnectionBundledAnalogue(this, Dir.FRONT) : new GateConnectionBundledDigital(this,
-                        Dir.FRONT)) : (isAnalogue ? new GateConnectionAnalogue(this, Dir.FRONT)
-                        : new GateConnectionDigital(this, Dir.FRONT))).setEnabled(true);
+                isBundled ? (isAnalogue ? new GateConnectionBundledAnalogue(this, Dir.FRONT) : new GateConnectionBundledDigital(this, Dir.FRONT))
+                        : (isAnalogue ? new GateConnectionAnalogue(this, Dir.FRONT) : new GateConnectionDigital(this, Dir.FRONT))).setEnabled(true);
     }
 
     @Override
@@ -145,24 +150,31 @@ IAdvancedBundledConductor {
         renderer.renderBox(new Vec3dCube(5 / 16D, 8 / 16D, 6 / 16D, 11 / 16D, 9 / 16D, 10 / 16D), quartz);
 
         for (int i = 0; i < 4; i++) {
-            renderer.renderBox(new Vec3dCube(5 / 16D, 9 / 16D, 10 / 16D, 6 / 16D, 10 / 16D, 11 / 16D).rotate(0, i * 90, 0, Vec3d.center),
-                    quartz);
+            renderer.renderBox(new Vec3dCube(5 / 16D, 9 / 16D, 10 / 16D, 6 / 16D, 10 / 16D, 11 / 16D).rotate(0, i * 90, 0, Vec3d.center), quartz);
 
-            renderer.renderBox(new Vec3dCube(4 / 16D, 9 / 16D, 6 / 16D, 5 / 16D, 10 / 16D, 10 / 16D).rotate(0, i * 90, 0, Vec3d.center),
-                    quartz);
-            renderer.renderBox(new Vec3dCube(4 / 16D, 10 / 16D, 5 / 16D, 5 / 16D, 11 / 16D, 11 / 16D).rotate(0, i * 90, 0, Vec3d.center),
-                    quartz);
+            renderer.renderBox(new Vec3dCube(4 / 16D, 9 / 16D, 6 / 16D, 5 / 16D, 10 / 16D, 10 / 16D).rotate(0, i * 90, 0, Vec3d.center), quartz);
+            renderer.renderBox(new Vec3dCube(4 / 16D, 10 / 16D, 5 / 16D, 5 / 16D, 11 / 16D, 11 / 16D).rotate(0, i * 90, 0, Vec3d.center), quartz);
 
-            renderer.renderBox(new Vec3dCube(4 / 16D, 11 / 16D, 11 / 16D, 5 / 16D, 12 / 16D, 12 / 16D).rotate(0, i * 90, 0, Vec3d.center),
-                    quartz);
+            renderer.renderBox(new Vec3dCube(4 / 16D, 11 / 16D, 11 / 16D, 5 / 16D, 12 / 16D, 12 / 16D).rotate(0, i * 90, 0, Vec3d.center), quartz);
 
-            renderer.renderBox(new Vec3dCube(3 / 16D, 11 / 16D, 4 / 16D, 4 / 16D, 12 / 16D, 12 / 16D).rotate(0, i * 90, 0, Vec3d.center),
-                    quartz);
+            renderer.renderBox(new Vec3dCube(3 / 16D, 11 / 16D, 4 / 16D, 4 / 16D, 12 / 16D, 12 / 16D).rotate(0, i * 90, 0, Vec3d.center), quartz);
         }
 
         renderer.resetTransformations();
 
         return true;
+    }
+
+    private boolean propagating = false;
+
+    private void propagate() {
+
+        if (propagating)
+            return;
+
+        propagating = true;
+        RedstoneApi.getInstance().getRedstonePropagator(this, ForgeDirection.UNKNOWN).propagate();
+        propagating = false;
     }
 
     @Override
@@ -182,7 +194,7 @@ IAdvancedBundledConductor {
     }
 
     @Override
-    public IGateLogic<? extends GateBase<GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase>> logic() {
+    public IGateLogic<? extends GateBase> logic() {
 
         return this;
     }
@@ -197,6 +209,8 @@ IAdvancedBundledConductor {
     public void setFrequency(IFrequency freq) {
 
         frequency = (Frequency) freq;
+        if (!getWorld().isRemote)
+            propagate();
     }
 
     @Override
@@ -308,6 +322,90 @@ IAdvancedBundledConductor {
     }
 
     @Override
+    public void setRedstonePower(ForgeDirection side, byte power) {
+
+        if (side == ForgeDirection.UNKNOWN)
+            freqPow = power;
+        else if (side == Dir.FRONT.toForgeDirection(getFace(), getRotation()) && mode == WirelessMode.SEND)
+            input = power;
+        else
+            input = 0;
+    }
+
+    @Override
+    public void setBundledPower(ForgeDirection side, byte[] power) {
+
+        if (side == ForgeDirection.UNKNOWN)
+            freqPowBundled = power;
+        else if (side == Dir.FRONT.toForgeDirection(getFace(), getRotation()) && mode == WirelessMode.SEND)
+            inputBundled = power;
+        else
+            inputBundled = new byte[16];
+    }
+
+    @Override
+    public byte getRedstonePower(ForgeDirection side) {
+
+        if (side == ForgeDirection.UNKNOWN)
+            return input;
+        else if (side == Dir.FRONT.toForgeDirection(getFace(), getRotation()) && mode == WirelessMode.RECEIVE)
+            return freqPow;
+        return 0;
+    }
+
+    @Override
+    public byte[] getBundledPower(ForgeDirection side) {
+
+        if (side == ForgeDirection.UNKNOWN)
+            return freqPowBundled;
+        else if (side == Dir.FRONT.toForgeDirection(getFace(), getRotation()) && mode == WirelessMode.RECEIVE)
+            return inputBundled;
+        return new byte[16];
+    }
+
+    @Override
+    public byte[] getBundledOutput(ForgeDirection side) {
+
+        if (side == ForgeDirection.UNKNOWN)
+            return inputBundled;
+        else if (side == Dir.FRONT.toForgeDirection(getFace(), getRotation()) && mode == WirelessMode.RECEIVE)
+            return freqPowBundled;
+        return new byte[16];
+    }
+
+    @Override
+    public void onRedstoneUpdate() {
+
+        System.out.println("Hey!");
+
+        propagate();
+        for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS)
+            RedstoneHelper.notifyRedstoneUpdate(getWorld(), getX(), getY(), getZ(), d, true);
+    }
+
+    @Override
+    public int getWeakPower(ForgeDirection side) {
+
+        if (mode == WirelessMode.SEND)
+            return 0;
+        return Dir.FRONT.toForgeDirection(getFace(), getRotation()) == side ? MathHelper.map(freqPow & 0xFF, 0, 255, 0, 15) : 0;
+    }
+
+    @Override
+    public int getStrongPower(ForgeDirection side) {
+
+        if (mode == WirelessMode.SEND)
+            return 0;
+        return Dir.FRONT.toForgeDirection(getFace(), getRotation()) == side ? MathHelper.map(freqPow & 0xFF, 0, 255, 0, 15) : 0;
+    }
+
+    @Override
+    public boolean canConnectRedstone(ForgeDirection side) {
+
+        return Dir.FRONT.toForgeDirection(getFace(), getRotation()) == side;
+    }
+
+    @Override
     public boolean hasLoss(ForgeDirection side) {
 
         return false;
@@ -322,13 +420,13 @@ IAdvancedBundledConductor {
     @Override
     public boolean canPropagateFrom(ForgeDirection fromSide) {
 
-        return !isBundled;
+        return mode == WirelessMode.BOTH && !isBundled;
     }
 
     @Override
     public boolean canPropagateBundledFrom(ForgeDirection fromSide) {
 
-        return isBundled;
+        return mode == WirelessMode.BOTH && isBundled;
     }
 
     @Override
@@ -336,18 +434,24 @@ IAdvancedBundledConductor {
 
         List<Entry<IConnection<IRedstoneDevice>, Boolean>> l = new ArrayList<Entry<IConnection<IRedstoneDevice>, Boolean>>();
 
-        if (frequency == null)
+        if (frequency == null || mode != WirelessMode.BOTH)
             return l;
 
-        l.add(new Pair<IConnection<IRedstoneDevice>, Boolean>(getRedstoneConnectionCache().getConnectionOnSide(fromSide), false));
+        if (mode == WirelessMode.BOTH)
+            l.add(new Pair<IConnection<IRedstoneDevice>, Boolean>(getRedstoneConnectionCache().getConnectionOnSide(
+                    Dir.FRONT.toForgeDirection(getFace(), getRotation())), false));
 
         for (IWirelessDevice d : WirelessManager.COMMON_INSTANCE.getDevices()) {
             if (d != this && d.getFrequency() != null && d.getFrequency().equals(getFrequency())) {
                 if (d instanceof GateTransceiver) {
-                    IConnection<IRedstoneDevice> c = ((GateTransceiver) d).getRedstoneConnectionCache().getConnectionOnSide(
-                            ((GateTransceiver) d).front().getForgeDirection());
-                    if (c != null)
-                        l.add(new Pair<IConnection<IRedstoneDevice>, Boolean>(c, false));
+                    l.add(new Pair<IConnection<IRedstoneDevice>, Boolean>(RedstoneApi.getInstance().createConnection(this, (IRedstoneDevice) d,
+                            ForgeDirection.UNKNOWN, ForgeDirection.UNKNOWN, ConnectionType.STRAIGHT), false));
+                    if (((GateTransceiver) d).mode == WirelessMode.BOTH) {
+                        IConnection<IRedstoneDevice> c = ((GateTransceiver) d).getRedstoneConnectionCache().getConnectionOnSide(
+                                Dir.FRONT.toForgeDirection(((GateTransceiver) d).getFace(), ((GateTransceiver) d).getRotation()));
+                        if (c != null)
+                            l.add(new Pair<IConnection<IRedstoneDevice>, Boolean>(c, false));
+                    }
                 }
             }
         }
@@ -426,8 +530,7 @@ IAdvancedBundledConductor {
     }
 
     @Override
-    public IPartPlacement getPlacement(IPart part, World world, Vec3i location, ForgeDirection face, MovingObjectPosition mop,
-            EntityPlayer player) {
+    public IPartPlacement getPlacement(IPart part, World world, Vec3i location, ForgeDirection face, MovingObjectPosition mop, EntityPlayer player) {
 
         if (!DebugHelper.isDebugModeEnabled())
             return null;

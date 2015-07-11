@@ -677,6 +677,8 @@ gui.bluepower:counter.max=最大值
 gui.bluepower:counter.increment=增�?
 gui.bluepower:counter.decrement=�?�?
 gui.bluepower:counter.count=计数
+##gui.bluepower:regulabletorch.255=
+##gui.bluepower:regulabletorch.15=
 
 gui.bluepower:sortingMachine.sortMode=§b排�?模�?
 gui.bluepower:sortingMachine.pullMode=§b牵拉模�?
