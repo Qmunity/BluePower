@@ -48,6 +48,7 @@ public class BlockLamp extends BlockContainerBase {
 
     }
 
+    @Override
     protected TileLamp get(IBlockAccess w, int x, int y, int z) {
 
         TileEntity te = w.getTileEntity(x, y, z);
@@ -149,14 +150,14 @@ public class BlockLamp extends BlockContainerBase {
     public boolean canRenderInPass(int pass) {
 
         RenderLamp.pass = pass;
-        return true;
+        return pass == 0;
     }
 
     @Override
     @SideOnly(Side.CLIENT)
     public int getRenderBlockPass() {
 
-        return 1;
+        return 0;
     }
 
     @Override
