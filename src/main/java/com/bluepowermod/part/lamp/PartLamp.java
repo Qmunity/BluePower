@@ -271,7 +271,8 @@ public abstract class PartLamp extends BPPartFace implements IPartRedstone, IRed
     @Override
     public int getLightValue() {
 
-        int pow = (inverted ? 15 - power : power);
+        int pow = MathHelper.map(this.power & 0xFF, 0, 255, 0, 15);
+        pow = (inverted ? 15 - pow : pow);
 
         if (Loader.isModLoaded("coloredlightscore")) {
             int color = this.color.getHex();
