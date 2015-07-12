@@ -115,8 +115,7 @@ public class RenderLamp extends TileEntitySpecialRenderer implements ISimpleBloc
                 }
             }
 
-            box.getMin().add(0.5, 0.5, 0.5);
-            box.getMax().add(0.5, 0.5, 0.5);
+            box.add(0.5, 0.5, 0.5);
 
             GL11.glPushMatrix();
             {
@@ -125,24 +124,23 @@ public class RenderLamp extends TileEntitySpecialRenderer implements ISimpleBloc
                 GL11.glDisable(GL11.GL_TEXTURE_2D);
                 GL11.glDisable(GL11.GL_LIGHTING);
 
-                float powerDivision = power / 18F;
+                float powerDivision = power / 15F;
 
                 float lastX = OpenGlHelper.lastBrightnessX, lastY = OpenGlHelper.lastBrightnessY;
                 OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, powerDivision * 240, powerDivision * 240);
 
                 GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
                 GL11.glBegin(GL11.GL_QUADS);
-                com.bluepowermod.client.render.RenderHelper.drawColoredCube(box, r / 256D, g / 256D, b / 256D, powerDivision * 0.375);
+                com.bluepowermod.client.render.RenderHelper.drawColoredCube(box, r / 256D, g / 256D, b / 256D, powerDivision * 0.375, renderFaces);
                 GL11.glEnd();
 
                 GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
                 GL11.glBegin(GL11.GL_QUADS);
-                com.bluepowermod.client.render.RenderHelper.drawColoredCube(box, r / 256D, g / 256D, b / 256D, powerDivision * 0.375);
+                com.bluepowermod.client.render.RenderHelper.drawColoredCube(box, r / 256D, g / 256D, b / 256D, powerDivision * 0.375, renderFaces);
                 GL11.glEnd();
 
                 OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, lastX, lastY);
 
-                GL11.glEnable(GL11.GL_CULL_FACE);
                 GL11.glEnable(GL11.GL_LIGHTING);
                 GL11.glEnable(GL11.GL_TEXTURE_2D);
                 GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
