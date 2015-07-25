@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map.Entry;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
@@ -24,7 +23,6 @@ import net.minecraftforge.common.util.ForgeDirection;
 import org.lwjgl.opengl.GL11;
 
 import uk.co.qmunity.lib.client.render.RenderHelper;
-import uk.co.qmunity.lib.misc.Pair;
 import uk.co.qmunity.lib.part.IPart;
 import uk.co.qmunity.lib.part.IPartPlacement;
 import uk.co.qmunity.lib.raytrace.QMovingObjectPosition;
@@ -551,15 +549,13 @@ public class GateNullCell extends GateSupported implements IAdvancedSilkyRemovab
     }
 
     @Override
-    public boolean canPropagateFrom(ForgeDirection fromSide) {
+    public boolean canPropagateFrom(ForgeDirection fromSide) {// FIXME IMPORTANT add a use for canPropagateFrom
 
         return fromSide != getFace() && fromSide != getFace().getOpposite();
     }
 
     @Override
-    public Collection<Entry<IConnection<IRedstoneDevice>, Boolean>> propagate(ForgeDirection fromSide) {
-
-        List<Entry<IConnection<IRedstoneDevice>, Boolean>> l = new ArrayList<Entry<IConnection<IRedstoneDevice>, Boolean>>();
+    public void propagate(ForgeDirection fromSide, Collection<IConnection<IRedstoneDevice>> propagation) {
 
         // // System.out.println("Propagating at (" + getX() + " " + getY() + " " + getZ() + ")");
         // for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
@@ -571,18 +567,13 @@ public class GateNullCell extends GateSupported implements IAdvancedSilkyRemovab
         // }
         // }
 
-        if (!canPropagateFrom(fromSide))
-            return l;
-
         IConnection<IRedstoneDevice> c1 = getRedstoneConnectionCache().getConnectionOnSide(fromSide);
         IConnection<IRedstoneDevice> c2 = getRedstoneConnectionCache().getConnectionOnSide(fromSide.getOpposite());
 
         if (c1 != null)
-            l.add(new Pair<IConnection<IRedstoneDevice>, Boolean>(c1, false));
+            propagation.add(c1);
         if (c2 != null)
-            l.add(new Pair<IConnection<IRedstoneDevice>, Boolean>(c2, false));
-
-        return l;
+            propagation.add(c2);
     }
 
     @Override

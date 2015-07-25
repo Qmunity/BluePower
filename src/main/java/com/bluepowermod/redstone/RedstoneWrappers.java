@@ -1,7 +1,6 @@
 package com.bluepowermod.redstone;
 
 import java.util.Collection;
-import java.util.Map.Entry;
 
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -151,9 +150,9 @@ public class RedstoneWrappers {
         }
 
         @Override
-        public Collection<Entry<IConnection<IRedstoneDevice>, Boolean>> propagate(ForgeDirection fromSide) {
+        public void propagate(ForgeDirection fromSide, Collection<IConnection<IRedstoneDevice>> propagation) {
 
-            return ((IAdvancedRedstoneConductor) dev).propagate(computeDirection(dev, fromSide));
+            ((IAdvancedRedstoneConductor) dev).propagate(computeDirection(dev, fromSide), propagation);
         }
 
     }

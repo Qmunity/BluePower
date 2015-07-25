@@ -22,9 +22,7 @@ import java.io.DataOutput;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
-import java.util.Map.Entry;
 
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.RenderBlocks;
@@ -41,7 +39,6 @@ import net.minecraftforge.common.util.ForgeDirection;
 import uk.co.qmunity.lib.client.render.RenderHelper;
 import uk.co.qmunity.lib.helper.MathHelper;
 import uk.co.qmunity.lib.helper.RedstoneHelper;
-import uk.co.qmunity.lib.misc.Pair;
 import uk.co.qmunity.lib.part.IPart;
 import uk.co.qmunity.lib.part.IPartPlacement;
 import uk.co.qmunity.lib.transform.Rotation;
@@ -430,39 +427,33 @@ public class GateTransceiver extends GateBase implements IGateLogic<GateTranscei
     }
 
     @Override
-    public Collection<Entry<IConnection<IRedstoneDevice>, Boolean>> propagate(ForgeDirection fromSide) {
-
-        List<Entry<IConnection<IRedstoneDevice>, Boolean>> l = new ArrayList<Entry<IConnection<IRedstoneDevice>, Boolean>>();
+    public void propagate(ForgeDirection fromSide, Collection<IConnection<IRedstoneDevice>> propagation) {
 
         if (frequency == null || mode != WirelessMode.BOTH)
-            return l;
+            return;
 
         if (mode == WirelessMode.BOTH)
-            l.add(new Pair<IConnection<IRedstoneDevice>, Boolean>(getRedstoneConnectionCache().getConnectionOnSide(
-                    Dir.FRONT.toForgeDirection(getFace(), getRotation())), false));
+            propagation.add(getRedstoneConnectionCache().getConnectionOnSide(Dir.FRONT.toForgeDirection(getFace(), getRotation())));
 
         for (IWirelessDevice d : WirelessManager.COMMON_INSTANCE.getDevices()) {
             if (d != this && d.getFrequency() != null && d.getFrequency().equals(getFrequency())) {
                 if (d instanceof GateTransceiver) {
-                    l.add(new Pair<IConnection<IRedstoneDevice>, Boolean>(RedstoneApi.getInstance().createConnection(this, (IRedstoneDevice) d,
-                            ForgeDirection.UNKNOWN, ForgeDirection.UNKNOWN, ConnectionType.STRAIGHT), false));
+                    propagation.add(RedstoneApi.getInstance().createConnection(this, (IRedstoneDevice) d, ForgeDirection.UNKNOWN,
+                            ForgeDirection.UNKNOWN, ConnectionType.STRAIGHT));
                     if (((GateTransceiver) d).mode == WirelessMode.BOTH) {
                         IConnection<IRedstoneDevice> c = ((GateTransceiver) d).getRedstoneConnectionCache().getConnectionOnSide(
                                 Dir.FRONT.toForgeDirection(((GateTransceiver) d).getFace(), ((GateTransceiver) d).getRotation()));
                         if (c != null)
-                            l.add(new Pair<IConnection<IRedstoneDevice>, Boolean>(c, false));
+                            propagation.add(c);
                     }
                 }
             }
         }
-
-        return l;
     }
 
     @Override
-    public Collection<Entry<IConnection<IBundledDevice>, Boolean>> propagateBundled(ForgeDirection fromSide) {
+    public void propagateBundled(ForgeDirection fromSide, Collection<IConnection<IBundledDevice>> propagation) {
 
-        return Collections.emptyList();
     }
 
     @Override

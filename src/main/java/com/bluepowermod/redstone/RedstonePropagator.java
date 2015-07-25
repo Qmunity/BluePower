@@ -1,10 +1,11 @@
 package com.bluepowermod.redstone;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
-import java.util.Map.Entry;
+import java.util.Set;
 
 import net.minecraftforge.common.util.ForgeDirection;
 import uk.co.qmunity.lib.misc.Pair;
@@ -67,27 +68,25 @@ public abstract class RedstonePropagator implements IPropagator<IRedstoneDevice>
 
     // Utilities
 
-    protected Collection<Entry<IConnection<IRedstoneDevice>, Boolean>> getPropagation(IRedstoneDevice dev, ForgeDirection fromSide) {
+    protected void getPropagation(IRedstoneDevice dev, ForgeDirection fromSide, Collection<IConnection<IRedstoneDevice>> propagation) {
 
         if (dev instanceof IRedstoneConductor) {
             if (dev instanceof IAdvancedRedstoneConductor) {
-                return ((IAdvancedRedstoneConductor) dev).propagate(fromSide);
+                ((IAdvancedRedstoneConductor) dev).propagate(fromSide, propagation);
+                return;
             } else {
-                List<Entry<IConnection<IRedstoneDevice>, Boolean>> l = new ArrayList<Entry<IConnection<IRedstoneDevice>, Boolean>>();
                 for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
                     IConnection<IRedstoneDevice> c = (IConnection<IRedstoneDevice>) dev.getRedstoneConnectionCache().getConnectionOnSide(d);
                     if (c != null)
-                        l.add(new Pair<IConnection<IRedstoneDevice>, Boolean>(c, false));
+                        propagation.add(c);
                 }
-                return l;
+                return;
             }
         }
 
         IConnection<IRedstoneDevice> c = (IConnection<IRedstoneDevice>) dev.getRedstoneConnectionCache().getConnectionOnSide(fromSide);
         if (c != null)
-            return Arrays.asList((Entry<IConnection<IRedstoneDevice>, Boolean>) new Pair<IConnection<IRedstoneDevice>, Boolean>(c, false));
-
-        return Arrays.asList();
+            propagation.add(c);
     }
 
     protected List<IConnection<IRedstoneDevice>> performPropagation() {
@@ -100,24 +99,25 @@ public abstract class RedstonePropagator implements IPropagator<IRedstoneDevice>
         if (firstCon == null)
             return connections;
 
-        List<IConnection<IRedstoneDevice>> currentPass = new ArrayList<IConnection<IRedstoneDevice>>();
-        List<IConnection<IRedstoneDevice>> nextPass = new ArrayList<IConnection<IRedstoneDevice>>();
+        Set<IConnection<IRedstoneDevice>> currentPass = new HashSet<IConnection<IRedstoneDevice>>();
+        Set<IConnection<IRedstoneDevice>> nextPass = new HashSet<IConnection<IRedstoneDevice>>();
 
         currentPass.add(firstCon);
 
         while (!currentPass.isEmpty()) {
-            for (IConnection<IRedstoneDevice> current : currentPass) {
+            Iterator<IConnection<IRedstoneDevice>> it = currentPass.iterator();
+            while (it.hasNext()) {
+                IConnection<IRedstoneDevice> current = it.next();
+                it.remove();
                 if (connections.contains(current))
                     continue;
                 connections.add(current);
 
-                IRedstoneDevice next = current.getB();
-                for (Entry<IConnection<IRedstoneDevice>, Boolean> pair : getPropagation(next, current.getSideB()))
-                    nextPass.add(pair.getKey());
+                getPropagation(current.getB(), current.getSideB(), nextPass);
             }
-            currentPass.clear();
-            currentPass.addAll(nextPass);
-            nextPass.clear();
+            Set<IConnection<IRedstoneDevice>> after = currentPass;
+            currentPass = nextPass;
+            nextPass = after;
         }
 
         // List<IConnection<IRedstoneDevice>> current = new ArrayList<IConnection<IRedstoneDevice>>();
@@ -287,11 +287,10 @@ public abstract class RedstonePropagator implements IPropagator<IRedstoneDevice>
                 return;
             }
 
-            List<Pair<IRedstoneDevice, ForgeDirection>> l = simplifyDeviceList(connections);
             List<IRedstoneDevice> devs = new ArrayList<IRedstoneDevice>();
-            for (Pair<IRedstoneDevice, ForgeDirection> p : l)
-                if (!devs.contains(p.getKey()))
-                    devs.add(p.getKey());
+            for (IConnection<IRedstoneDevice> p : connections)
+                if (!devs.contains(p.getA()))
+                    devs.add(p.getA());
 
             for (IConnection<IRedstoneDevice> c : connections)
                 c.getA().setRedstonePower(c.getSideA(), (byte) 0);
@@ -304,12 +303,12 @@ public abstract class RedstonePropagator implements IPropagator<IRedstoneDevice>
             RedstoneApi.getInstance().setWiresHandleUpdates(did);
             RedstoneApi.getInstance().setWiresOutputPower(true, true);
 
-            for (Pair<IRedstoneDevice, ForgeDirection> pair : l) {
+            for (IConnection<IRedstoneDevice> c : connections) {
                 RedstoneApi.getInstance().setWiresOutputPower(false, true);
-                byte power = pair.getKey().getRedstonePower(pair.getValue());
+                byte power = c.getA().getRedstonePower(c.getSideA());
                 RedstoneApi.getInstance().setWiresOutputPower(true, true);
                 if ((power & 0xFF) > 0)
-                    propagate(pair.getKey(), pair.getValue(), power);
+                    propagate(c.getA(), c.getSideA(), power);
             }
 
             RedstoneApi.getInstance().setWiresHandleUpdates(false);
@@ -339,23 +338,23 @@ public abstract class RedstonePropagator implements IPropagator<IRedstoneDevice>
             if ((dev.getRedstonePower(side) & 0xFF) > (power & 0xFF))
                 return;
 
-            for (Entry<IConnection<IRedstoneDevice>, Boolean> e : getPropagation(dev, side)) {
-                e.getKey()
-                        .getA()
-                        .setRedstonePower(e.getKey().getSideA(),
-                                !(dev instanceof IRedstoneConductor) ? ((byte) Math.max(0, Math.min((power & 0xFF) + 1, 255))) : power);
+            List<IConnection<IRedstoneDevice>> runList = new ArrayList<IConnection<IRedstoneDevice>>();
+            getPropagation(dev, side, runList);
+            for (IConnection<IRedstoneDevice> c : runList) {
+                c.getA().setRedstonePower(c.getSideA(),
+                        !(dev instanceof IRedstoneConductor) ? ((byte) Math.max(0, Math.min((power & 0xFF) + 1, 255))) : power);
                 boolean found = false;
                 for (RedstonePropagator p : getScheduledPropagations()) {
-                    if (p.getDevice() == e.getKey().getB() && p.getSide() == e.getKey().getSideB()) {
+                    if (p.getDevice() == c.getB() && p.getSide() == c.getSideB()) {
                         found = true;
                         break;
                     }
                 }
                 if (!found)
-                    propagate(e.getKey().getB(), e.getKey().getSideB(), (byte) ((power & 0xFF) - (dev instanceof IRedstoneConductor ? 1 : 0)));
+                    propagate(c.getB(), c.getSideB(), (byte) ((power & 0xFF) - (dev instanceof IRedstoneConductor ? 1 : 0)));
             }
+            runList.clear();
         }
-
     }
 
     public static class RedPropagator extends RedstonePropagator {

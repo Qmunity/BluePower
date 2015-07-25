@@ -41,7 +41,6 @@ import uk.co.qmunity.lib.tile.TileMultipart;
 import uk.co.qmunity.lib.transform.Rotation;
 import uk.co.qmunity.lib.transform.Scale;
 import uk.co.qmunity.lib.transform.Translation;
-import uk.co.qmunity.lib.util.Dir;
 import uk.co.qmunity.lib.vec.Vec3d;
 import uk.co.qmunity.lib.vec.Vec3dCube;
 import uk.co.qmunity.lib.vec.Vec3i;
@@ -49,36 +48,32 @@ import uk.co.qmunity.lib.vec.Vec3i;
 import com.bluepowermod.api.gate.IGateComponent;
 import com.bluepowermod.api.gate.IGateLogic;
 import com.bluepowermod.api.gate.ic.IIntegratedCircuitPart;
-import com.bluepowermod.api.misc.IFace;
 import com.bluepowermod.api.misc.MinecraftColor;
-import com.bluepowermod.api.wire.redstone.IBundledDevice;
-import com.bluepowermod.api.wire.redstone.IBundledDeviceWrapper;
-import com.bluepowermod.api.wire.redstone.IRedstoneDevice;
-import com.bluepowermod.api.wire.redstone.IRedstoneDeviceWrapper;
+import com.bluepowermod.client.render.IconSupplier;
 import com.bluepowermod.item.ItemPart;
 import com.bluepowermod.part.BPPart;
 import com.bluepowermod.part.gate.GateBase;
 import com.bluepowermod.part.gate.component.GateComponentBorder;
-import com.bluepowermod.util.DebugHelper;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class GateIntegratedCircuit extends GateBase implements IGateLogic<GateIntegratedCircuit>, IRedstoneDeviceWrapper, IBundledDeviceWrapper,
-        IPartSelectableCustom {
+public class GateIntegratedCircuit extends GateBase implements IGateLogic<GateIntegratedCircuit>, IPartSelectableCustom {
 
     public static final double border = 1 / 16D;
     public static boolean shouldActivate = false;
 
     private int size;
     protected TileMultipart[][] tiles = null;
+    protected boolean[] modes = null;
     private boolean showBG = true;
 
     public GateIntegratedCircuit(Integer size) {
 
         this.size = size;
         tiles = new TileMultipart[size][size];
+        modes = new boolean[size * 4];
     }
 
     // Gate methods
@@ -302,6 +297,21 @@ public class GateIntegratedCircuit extends GateBase implements IGateLogic<GateIn
         renderer.renderBox(new Vec3dCube(0, showBG ? border : 0, 0, 1 / 16D, showBG ? 2 * border : border, 1), icons);
         renderer.renderBox(new Vec3dCube(15 / 16D, showBG ? border : 0, 0, 1, showBG ? 2 * border : border, 1), icons);
 
+        renderer.addTransformation(new Scale(1 / 16D, 1 / 16D, 1 / 16D, new Vec3d(0, 0, 0)));
+
+        renderer.addTransformation(new Translation(7.5, 1.001, 0));
+        renderer.addTransformation(new Scale(1.75, 1, 1.75));
+        renderer.renderBox(new Vec3dCube(0, 0, 0, 1, 1, 1), null, IconSupplier.icArrowOut, null, null, null, null);
+        renderer.removeTransformations(2);
+
+        renderer.addTransformation(new Rotation(0, 180, 0, new Vec3d(8, 8, 8)));
+        renderer.addTransformation(new Translation(7.5, 1.001, 0));
+        renderer.addTransformation(new Scale(1.75, 1, 1.75));
+        renderer.renderBox(new Vec3dCube(0, 0, 0, 1, 1, 1), null, IconSupplier.icArrowIn, null, null, null, null);
+        renderer.removeTransformations(3);
+
+        renderer.removeTransformation();
+
         renderer.setColor(0xFFFFFF);
 
         for (IGateComponent c : getComponents())
@@ -492,8 +502,8 @@ public class GateIntegratedCircuit extends GateBase implements IGateLogic<GateIn
     @Override
     public IPartPlacement getPlacement(IPart part, World world, Vec3i location, ForgeDirection face, MovingObjectPosition mop, EntityPlayer player) {
 
-        if (!DebugHelper.isDebugModeEnabled())
-            return null;
+        // if (!DebugHelper.isDebugModeEnabled())
+        // return null;
 
         return super.getPlacement(part, world, location, face, mop, player);
     }
@@ -501,51 +511,54 @@ public class GateIntegratedCircuit extends GateBase implements IGateLogic<GateIn
     @Override
     public void addTooltip(ItemStack item, List<String> tip) {
 
-        tip.add((!DebugHelper.isDebugModeEnabled() ? MinecraftColor.RED : MinecraftColor.CYAN)
-                + I18n.format("Disabled temporarily. Still not fully working."));
+        // tip.add((!DebugHelper.isDebugModeEnabled() ? MinecraftColor.RED : MinecraftColor.CYAN)
+        // + I18n.format("Disabled temporarily. Still not fully working."));
+        tip.add(MinecraftColor.CYAN + I18n.format("Can only be placed on the ground and connected to directly"));
+        tip.add(MinecraftColor.CYAN + I18n.format("from the side as of now. This is something we're working on."));
     }
 
-    @Override
-    public IBundledDevice getBundledDeviceOnSide(ForgeDirection side) {
-
-        Dir dir = Dir.getDirection(side, getFace(), getRotation());
-        TileMultipart te = null;
-        if (dir == Dir.FRONT && tiles[(getSize() - 1) / 2][0] != null)
-            te = tiles[(getSize() - 1) / 2][0];
-        if (dir == Dir.BACK && tiles[(getSize() - 1) / 2][getSize() - 1] != null)
-            te = tiles[(getSize() - 1) / 2][getSize() - 1];
-        if (dir == Dir.LEFT && tiles[0][(getSize() - 1) / 2] != null)
-            te = tiles[0][(getSize() - 1) / 2];
-        if (dir == Dir.RIGHT && tiles[getSize() - 1][(getSize() - 1) / 2] != null)
-            te = tiles[getSize() - 1][(getSize() - 1) / 2];
-        if (te == null)
-            return null;
-        for (IPart p : te.getParts())
-            if (p instanceof IFace && ((IFace) p).getFace() == ForgeDirection.DOWN && p instanceof IBundledDevice)
-                return (IBundledDevice) p;
-        return null;
-    }
-
-    @Override
-    public IRedstoneDevice getDeviceOnSide(ForgeDirection side) {
-
-        Dir dir = Dir.getDirection(side, getFace(), getRotation());
-        TileMultipart te = null;
-        if (dir == Dir.FRONT && tiles[(getSize() - 1) / 2][0] != null)
-            te = tiles[(getSize() - 1) / 2][0];
-        if (dir == Dir.BACK && tiles[(getSize() - 1) / 2][getSize() - 1] != null)
-            te = tiles[(getSize() - 1) / 2][getSize() - 1];
-        if (dir == Dir.LEFT && tiles[0][(getSize() - 1) / 2] != null)
-            te = tiles[0][(getSize() - 1) / 2];
-        if (dir == Dir.RIGHT && tiles[getSize() - 1][(getSize() - 1) / 2] != null)
-            te = tiles[getSize() - 1][(getSize() - 1) / 2];
-        if (te == null)
-            return null;
-        for (IPart p : te.getParts())
-            if (p instanceof IFace && ((IFace) p).getFace() == ForgeDirection.DOWN && p instanceof IRedstoneDevice)
-                return (IRedstoneDevice) p;
-        return null;
-    }
+    // TODO: Have a look at this!
+    // @Override
+    // public IBundledDevice getBundledDeviceOnSide(ForgeDirection side) {
+    //
+    // Dir dir = Dir.getDirection(side, getFace(), getRotation());
+    // TileMultipart te = null;
+    // if (dir == Dir.FRONT && tiles[(getSize() - 1) / 2][0] != null)
+    // te = tiles[(getSize() - 1) / 2][0];
+    // if (dir == Dir.BACK && tiles[(getSize() - 1) / 2][getSize() - 1] != null)
+    // te = tiles[(getSize() - 1) / 2][getSize() - 1];
+    // if (dir == Dir.LEFT && tiles[0][(getSize() - 1) / 2] != null)
+    // te = tiles[0][(getSize() - 1) / 2];
+    // if (dir == Dir.RIGHT && tiles[getSize() - 1][(getSize() - 1) / 2] != null)
+    // te = tiles[getSize() - 1][(getSize() - 1) / 2];
+    // if (te == null)
+    // return null;
+    // for (IPart p : te.getParts())
+    // if (p instanceof IFace && ((IFace) p).getFace() == ForgeDirection.DOWN && p instanceof IBundledDevice)
+    // return (IBundledDevice) p;
+    // return null;
+    // }
+    //
+    // @Override
+    // public IRedstoneDevice getDeviceOnSide(ForgeDirection side) {
+    //
+    // Dir dir = Dir.getDirection(side, getFace(), getRotation());
+    // TileMultipart te = null;
+    // if (dir == Dir.FRONT && tiles[(getSize() - 1) / 2][0] != null)
+    // te = tiles[(getSize() - 1) / 2][0];
+    // if (dir == Dir.BACK && tiles[(getSize() - 1) / 2][getSize() - 1] != null)
+    // te = tiles[(getSize() - 1) / 2][getSize() - 1];
+    // if (dir == Dir.LEFT && tiles[0][(getSize() - 1) / 2] != null)
+    // te = tiles[0][(getSize() - 1) / 2];
+    // if (dir == Dir.RIGHT && tiles[getSize() - 1][(getSize() - 1) / 2] != null)
+    // te = tiles[getSize() - 1][(getSize() - 1) / 2];
+    // if (te == null)
+    // return null;
+    // for (IPart p : te.getParts())
+    // if (p instanceof IFace && ((IFace) p).getFace() == ForgeDirection.DOWN && p instanceof IRedstoneDevice)
+    // return (IRedstoneDevice) p;
+    // return null;
+    // }
 
     @Override
     public boolean onActivated(EntityPlayer player, QMovingObjectPosition mop, ItemStack item) {
@@ -668,7 +681,7 @@ public class GateIntegratedCircuit extends GateBase implements IGateLogic<GateIn
         }
         TileMultipart te = tiles[x][z];
         if (te == null)
-            te = mktile(x, z);
+            tiles[x][z] = te = mktile(x, z);
         int amt = buffer.readInt();
         for (int i = 0; i < amt; i++) {
             String id = buffer.readUTF();

@@ -23,7 +23,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map.Entry;
 
 import net.minecraft.block.BlockRedstoneWire;
 import net.minecraft.client.Minecraft;
@@ -41,7 +40,6 @@ import org.lwjgl.opengl.GL11;
 import uk.co.qmunity.lib.client.render.RenderHelper;
 import uk.co.qmunity.lib.helper.MathHelper;
 import uk.co.qmunity.lib.helper.RedstoneHelper;
-import uk.co.qmunity.lib.misc.Pair;
 import uk.co.qmunity.lib.part.IPart;
 import uk.co.qmunity.lib.part.IPartPlacementFlat;
 import uk.co.qmunity.lib.part.IPartRedstone;
@@ -360,18 +358,13 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
         }
 
         @Override
-        public List<Entry<IConnection<IRedstoneDevice>, Boolean>> propagate(ForgeDirection fromSide) {
-
-            List<Entry<IConnection<IRedstoneDevice>, Boolean>> l = new ArrayList<Entry<IConnection<IRedstoneDevice>, Boolean>>();
+        public void propagate(ForgeDirection fromSide, Collection<IConnection<IRedstoneDevice>> propagation) {
 
             for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
                 IConnection<IRedstoneDevice> c = connections.getConnectionOnSide(d);
                 if (c != null)
-                    l.add(new Pair<IConnection<IRedstoneDevice>, Boolean>(c, c.getB() instanceof IRedwire
-                            && ((IRedwire) c.getB()).getRedwireType(c.getSideB()) != getRedwireType(c.getSideA())));
+                    propagation.add(c);
             }
-
-            return l;
         }
 
         @Override
@@ -770,39 +763,28 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
         }
 
         @Override
-        public List<Entry<IConnection<IRedstoneDevice>, Boolean>> propagate(ForgeDirection fromSide) {
-
-            List<Entry<IConnection<IRedstoneDevice>, Boolean>> l = new ArrayList<Entry<IConnection<IRedstoneDevice>, Boolean>>();
+        public void propagate(ForgeDirection fromSide, Collection<IConnection<IRedstoneDevice>> propagation) {
 
             for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
                 IConnection<IRedstoneDevice> c = connections.getConnectionOnSide(d);
                 if (c != null)
-                    l.add(new Pair<IConnection<IRedstoneDevice>, Boolean>(c, c.getB() instanceof IRedwire
-                            && ((IRedwire) c.getB()).getRedwireType(c.getSideB()) != getRedwireType(c.getSideA())));
+                    propagation.add(c);
 
                 IConnection<IBundledDevice> cB = bundledConnections.getConnectionOnSide(d);
                 if (cB != null)
-                    l.add(new Pair<IConnection<IRedstoneDevice>, Boolean>(new RedstoneConnection(this, BundledDeviceWrapper.wrap(cB.getB(), color),
-                            cB.getSideA(), cB.getSideB(), cB.getType()), cB.getB() instanceof IRedwire
-                            && ((IRedwire) cB.getB()).getRedwireType(cB.getSideB()) != getRedwireType(cB.getSideA())));
+                    propagation.add(new RedstoneConnection(this, BundledDeviceWrapper.wrap(cB.getB(), color), cB.getSideA(), cB.getSideB(), cB
+                            .getType()));
             }
-
-            return l;
         }
 
         @Override
-        public Collection<Entry<IConnection<IBundledDevice>, Boolean>> propagateBundled(ForgeDirection fromSide) {
-
-            List<Entry<IConnection<IBundledDevice>, Boolean>> l = new ArrayList<Entry<IConnection<IBundledDevice>, Boolean>>();
+        public void propagateBundled(ForgeDirection fromSide, Collection<IConnection<IBundledDevice>> propagation) {
 
             for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
                 IConnection<IBundledDevice> c = bundledConnections.getConnectionOnSide(d);
                 if (c != null)
-                    l.add(new Pair<IConnection<IBundledDevice>, Boolean>(c, c.getB() instanceof IRedwire
-                            && ((IRedwire) c.getB()).getRedwireType(c.getSideB()) != getRedwireType(c.getSideA())));
+                    propagation.add(c);
             }
-
-            return l;
         }
 
         @Override
@@ -1302,17 +1284,13 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
         }
 
         @Override
-        public Collection<Entry<IConnection<IBundledDevice>, Boolean>> propagateBundled(ForgeDirection fromSide) {
+        public void propagateBundled(ForgeDirection fromSide, Collection<IConnection<IBundledDevice>> propagation) {
 
-            List<Entry<IConnection<IBundledDevice>, Boolean>> l = new ArrayList<Entry<IConnection<IBundledDevice>, Boolean>>();
             for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
                 IConnection<IBundledDevice> c = bundledConnections.getConnectionOnSide(d);
                 if (c != null)
-                    l.add(new Pair<IConnection<IBundledDevice>, Boolean>(c, c.getB() instanceof IRedwire
-                            && ((IRedwire) c.getB()).getRedwireType(c.getSideB()) != getRedwireType(c.getSideA())));
+                    propagation.add(c);
             }
-
-            return l;
         }
 
         @Override
