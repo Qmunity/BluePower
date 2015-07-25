@@ -79,6 +79,11 @@ public class GateToggleLatch extends GateSimpleDigital {
     @Override
     public void doLogic() {
 
+    }
+
+    @Override
+    public void tick() {
+
         if (!mode) {
             if ((power != right().getInput() || left().getInput()) && !power) {
                 state = !state;
@@ -99,11 +104,6 @@ public class GateToggleLatch extends GateSimpleDigital {
             right().setOutput(state);
         }
         l.setState(state);
-    }
-
-    @Override
-    public void tick() {
-
     }
 
     @Override
