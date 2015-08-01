@@ -65,6 +65,7 @@ public class OreDictionarySetup {
         // Dusts
         OreDictionary.registerOre(BPOredictNames.DUST_TESLATITE, BPItems.teslatite_dust);
         OreDictionary.registerOre(BPOredictNames.DUST_INFUSED_TESLATITE, BPItems.infused_teslatite_dust);
+        OreDictionary.registerOre(BPOredictNames.DUST_ZINC, BPItems.zinc_dust);
 
         // Nuggets
         OreDictionary.registerOre("nuggetTungsten", BPItems.tungsten_nugget);
