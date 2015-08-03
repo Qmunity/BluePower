@@ -79,6 +79,7 @@ public class Config {
 
     public static boolean enableTubeCaching;
     public static boolean enableGateSounds;
+    public static int minTimerTicks;
 
     public static int veinSizeMarble;
 
@@ -158,6 +159,7 @@ public class Config {
                 hadEnchantCategory ? 111 : findFreeEnchantID(vorpalEnchantmentId)).getInt();
 
         enableGateSounds = config.get(Refs.CONFIG_SETTINGS, "Enable Gate Ticking Sounds", true).getBoolean();
+        minTimerTicks = config.get(Refs.CONFIG_SETTINGS, "Minimum Timer Ticks", 2).getInt();
 
         if (config.hasChanged()) {
             config.save();

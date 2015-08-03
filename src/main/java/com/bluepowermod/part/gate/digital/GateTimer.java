@@ -12,6 +12,7 @@ import java.io.DataOutput;
 import java.io.IOException;
 import java.util.List;
 
+import com.bluepowermod.init.Config;
 import mcp.mobius.waila.api.SpecialChars;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
@@ -155,6 +156,10 @@ public class GateTimer extends GateSimpleDigital implements IGuiButtonSensitive 
 
     @Override
     public void onButtonPress(EntityPlayer player, int messageId, int value) {
+
+        if (value < Config.minTimerTicks) {
+            value = Config.minTimerTicks;
+        }
 
         time = value;
         start = 0;
