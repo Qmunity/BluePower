@@ -55,13 +55,16 @@ public class GateToggleLatch extends GateSimpleDigital {
     @Override
     public void initComponents() {
 
-        if (mode) {
-            addComponent(l = new GateComponentLeverBig(this, 5 / 16D, 4 / 16D));
-        } else {
-            addComponent(t1 = new GateComponentTorch(this, 0x0000FF, 4 / 16D, true));
-            addComponent(t2 = new GateComponentTorch(this, 0x6F00B5, 4 / 16D, true).setState(true));
+        if (getWorld() == null)
+            state = true;
 
-            addComponent(l = new GateComponentLeverSmall(this, 0x00FF00).setState(true));
+        if (mode) {
+            addComponent(l = new GateComponentLeverBig(this, 5 / 16D, 4 / 16D).setState(state));
+        } else {
+            addComponent(t1 = new GateComponentTorch(this, 0x0000FF, 4 / 16D, true).setState(!state));
+            addComponent(t2 = new GateComponentTorch(this, 0x6F00B5, 4 / 16D, true).setState(state));
+
+            addComponent(l = new GateComponentLeverSmall(this, 0x00FF00).setState(state));
 
             addComponent(new GateComponentWire(this, 0xFFF600, RedwireType.BLUESTONE).bind(right()));
             addComponent(new GateComponentWire(this, 0xFF0000, RedwireType.BLUESTONE).bind(left()));
@@ -83,6 +86,9 @@ public class GateToggleLatch extends GateSimpleDigital {
 
     @Override
     public void tick() {
+
+        if (getWorld().isRemote)
+            return;
 
         if (!mode) {
             if ((power != right().getInput() || left().getInput()) && !power) {
@@ -160,6 +166,20 @@ public class GateToggleLatch extends GateSimpleDigital {
             left().setBidirectional();
             right().setBidirectional();
         }
+
+        state = !state;
+        if (!mode) {
+            front().setOutput(state);
+            back().setOutput(!state);
+            t1.setState(!state);
+            t2.setState(state);
+        } else {
+            front().setOutput(state);
+            back().setOutput(state);
+            left().setOutput(state);
+            right().setOutput(state);
+        }
+        l.setState(state);
 
         getComponents().clear();
         initConnections();

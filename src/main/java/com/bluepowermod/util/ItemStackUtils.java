@@ -22,6 +22,7 @@ import java.util.List;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
+import com.bluepowermod.api.misc.IScrewdriver;
 import com.bluepowermod.compat.CompatibilityUtils;
 
 /**
@@ -64,6 +65,6 @@ public class ItemStackUtils {
         if (item.getItem() == null)
             return false;
 
-        return CompatibilityUtils.isScrewdriver(item);
+        return item.getItem() instanceof IScrewdriver || CompatibilityUtils.isScrewdriver(item);
     }
 }

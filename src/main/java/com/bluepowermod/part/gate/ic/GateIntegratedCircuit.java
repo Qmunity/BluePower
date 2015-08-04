@@ -9,12 +9,14 @@ import java.util.Map.Entry;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
+import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
@@ -32,7 +34,6 @@ import uk.co.qmunity.lib.part.IPartRenderPlacement;
 import uk.co.qmunity.lib.part.IPartSelectable;
 import uk.co.qmunity.lib.part.IPartSelectableCustom;
 import uk.co.qmunity.lib.part.IPartTicking;
-import uk.co.qmunity.lib.part.IPartUpdateListener;
 import uk.co.qmunity.lib.part.PartRegistry;
 import uk.co.qmunity.lib.part.compat.OcclusionHelper;
 import uk.co.qmunity.lib.raytrace.QMovingObjectPosition;
@@ -41,19 +42,24 @@ import uk.co.qmunity.lib.tile.TileMultipart;
 import uk.co.qmunity.lib.transform.Rotation;
 import uk.co.qmunity.lib.transform.Scale;
 import uk.co.qmunity.lib.transform.Translation;
+import uk.co.qmunity.lib.util.Dir;
 import uk.co.qmunity.lib.vec.Vec3d;
 import uk.co.qmunity.lib.vec.Vec3dCube;
 import uk.co.qmunity.lib.vec.Vec3i;
 
+import com.bluepowermod.api.connect.ConnectionType;
 import com.bluepowermod.api.gate.IGateComponent;
 import com.bluepowermod.api.gate.IGateLogic;
 import com.bluepowermod.api.gate.ic.IIntegratedCircuitPart;
 import com.bluepowermod.api.misc.MinecraftColor;
+import com.bluepowermod.api.wire.redstone.IBundledDevice;
+import com.bluepowermod.api.wire.redstone.IRedstoneDevice;
 import com.bluepowermod.client.render.IconSupplier;
 import com.bluepowermod.item.ItemPart;
 import com.bluepowermod.part.BPPart;
 import com.bluepowermod.part.gate.GateBase;
 import com.bluepowermod.part.gate.component.GateComponentBorder;
+import com.bluepowermod.util.ItemStackUtils;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
@@ -66,14 +72,20 @@ public class GateIntegratedCircuit extends GateBase implements IGateLogic<GateIn
 
     private int size;
     protected TileMultipart[][] tiles = null;
-    protected boolean[] modes = null;
+    protected RSTileIC[][] rsTiles = null;
+    protected int[][] modes = null;
     private boolean showBG = true;
 
     public GateIntegratedCircuit(Integer size) {
 
         this.size = size;
         tiles = new TileMultipart[size][size];
-        modes = new boolean[size * 4];
+        modes = new int[4][size];
+
+        rsTiles = new RSTileIC[4][size];
+        for (int i = 0; i < 4; i++)
+            for (int j = 0; j < size; j++)
+                rsTiles[i][j] = new RSTileIC(this, Dir.values()[i], j);
     }
 
     // Gate methods
@@ -120,15 +132,18 @@ public class GateIntegratedCircuit extends GateBase implements IGateLogic<GateIn
         return this;
     }
 
+    private boolean propagating = false;
+
     @Override
     public void doLogic() {
 
-        for (int x = 0; x < getSize(); x++)
-            for (int z = 0; z < getSize(); z++)
-                if (tiles[x][z] != null)
-                    for (IPart p : tiles[x][z].getParts())
-                        if (p instanceof IPartUpdateListener)
-                            ((IPartUpdateListener) p).onNeighborBlockChange();
+        if (propagating)
+            return;
+
+        propagating = true;
+        for (int i = 0; i < 4; i++)
+            rsTiles[i][(getSize() - 1) / 2].repropagate();
+        propagating = false;
     }
 
     @Override
@@ -299,16 +314,24 @@ public class GateIntegratedCircuit extends GateBase implements IGateLogic<GateIn
 
         renderer.addTransformation(new Scale(1 / 16D, 1 / 16D, 1 / 16D, new Vec3d(0, 0, 0)));
 
-        renderer.addTransformation(new Translation(7.5, 1.001, 0));
-        renderer.addTransformation(new Scale(1.75, 1, 1.75));
-        renderer.renderBox(new Vec3dCube(0, 0, 0, 1, 1, 1), null, IconSupplier.icArrowOut, null, null, null, null);
-        renderer.removeTransformations(2);
+        for (int rot = 0; rot < 4; rot++) {
+            renderer.addTransformation(new Rotation(0, -90 * rot, 0, new Vec3d(8, 8, 8)));
+            renderer.addTransformation(new Translation(7.5 + 1 / 16D, 0.001 + (showBG ? 1 : 0), 0));
 
-        renderer.addTransformation(new Rotation(0, 180, 0, new Vec3d(8, 8, 8)));
-        renderer.addTransformation(new Translation(7.5, 1.001, 0));
-        renderer.addTransformation(new Scale(1.75, 1, 1.75));
-        renderer.renderBox(new Vec3dCube(0, 0, 0, 1, 1, 1), null, IconSupplier.icArrowIn, null, null, null, null);
-        renderer.removeTransformations(3);
+            for (int i = -getSize() / 2; i < (getSize() + 1) / 2; i++) {
+                int m = modes[rot][i + -(-getSize() / 2)];
+                if (m == 0)
+                    continue;
+
+                renderer.addTransformation(new Translation(i * (14D / getSize()), 0, 0));
+                renderer.addTransformation(new Scale(1.75, 1, 1.75));
+                renderer.renderBox(new Vec3dCube(0, 0, 0, 1, 1, 1), null, m == 1 ? IconSupplier.icArrowIn : (m == 2 ? IconSupplier.icArrowOut
+                        : (m == 3 ? IconSupplier.icArrowInBundled : IconSupplier.icArrowOutBundled)), null, null, null, null);
+                renderer.removeTransformations(2);
+            }
+
+            renderer.removeTransformations(2);
+        }
 
         renderer.removeTransformation();
 
@@ -472,6 +495,46 @@ public class GateIntegratedCircuit extends GateBase implements IGateLogic<GateIn
                     GL11.glDisable(GL11.GL_BLEND);
             }
             GL11.glPopMatrix();
+        } else if (!((x_ < 0 && z_ < 0) || (x_ < 0 && z_ >= getSize()) || (x_ >= getSize() && z_ < 0) || (x_ >= getSize() && z_ >= getSize()))
+                && ItemStackUtils.isScrewdriver(item)) {
+            Vec3 pos = player.getPosition(frame);
+            GL11.glPushMatrix();
+            {
+                GL11.glTranslated(getX() - pos.xCoord, getY() - pos.yCoord, getZ() - pos.zCoord);
+
+                GL11.glTranslated(0.5, 0.5, 0.5);
+                {
+                    ForgeDirection face = getFace();
+                    if (face == ForgeDirection.UP) {
+                        GL11.glRotated(180, 0, 1, 0);
+                        GL11.glRotated(180, 1, 0, 0);
+                    } else if (face == ForgeDirection.NORTH) {
+                        GL11.glRotated(90, 1, 0, 0);
+                    } else if (face == ForgeDirection.SOUTH) {
+                        GL11.glRotated(90, -1, 0, 0);
+                    } else if (face == ForgeDirection.WEST) {
+                        GL11.glRotated(90, 0, 0, -1);
+                    } else if (face == ForgeDirection.EAST) {
+                        GL11.glRotated(90, 0, 0, 1);
+                    }
+                    int rotation = getRotation();
+                    GL11.glRotated(-90 * rotation, 0, 1, 0);
+                }
+                GL11.glTranslated(-0.5, -0.5, -0.5);
+
+                GL11.glTranslated(border, showBG ? border : 0, border);
+                GL11.glTranslated(x_ * (14 / 16D) / getSize(), 0, z_ * (14 / 16D) / getSize());
+
+                Vec3 min = Vec3.createVectorHelper(x > 0 ? 0 : (14 / 16D) / getSize() - border, border + 0.001, z > 0 ? 0 : (14 / 16D) / getSize()
+                        - border);
+                Vec3 max = Vec3.createVectorHelper(x < getSize() ? (14 / 16D) / getSize() : border, border + 0.001, z < getSize() ? (14 / 16D)
+                        / getSize() : border);
+
+                RenderGlobal.drawOutlinedBoundingBox(
+                        AxisAlignedBB.getBoundingBox(min.xCoord, min.yCoord, min.zCoord, max.xCoord, max.yCoord, max.zCoord), 0);
+            }
+            GL11.glPopMatrix();
+            return true;
         }
 
         return false;
@@ -567,7 +630,7 @@ public class GateIntegratedCircuit extends GateBase implements IGateLogic<GateIn
                 .rotate(0, getRotation() * 90, 0).add(0.5, 0.5, 0.5).sub(border, showBG ? border : 0, border).div(14 / 16D).mul(getSize());
         double x = click.getX(), z = click.getZ();
 
-        if (x >= 0 && z >= 0 && x < getSize() && z < getSize() && activate(player, item, x, z))
+        if (activate(player, item, x, z))
             return true;
 
         return super.onActivated(player, mop, item);
@@ -577,22 +640,66 @@ public class GateIntegratedCircuit extends GateBase implements IGateLogic<GateIn
 
         int x_ = (int) Math.floor(x), z_ = (int) Math.floor(z);
 
-        // Placement
-        BPPart part = getPlacedPart(item, x, z);
-        if (part == null)
-            return false;
-        TileMultipart tile = tiles[x_][z_];
-        if (tile == null)
-            tile = mktile(x_, z_);
-        if (tile.canAddPart(part)) {
-            tiles[x_][z_] = tile;
-            if (!getWorld().isRemote) {
-                tile.addPart(part);
-                sendUpdatePacket(x_ * getSize() + z_ + 1);
-                if (!player.capabilities.isCreativeMode)
-                    item.stackSize--;
+        // Toggling modes
+        if ((((x_ < 0 || x_ >= getSize()) && (z_ >= 0 && z_ < getSize())) || ((z_ < 0 || z_ >= getSize()) && (x_ >= 0 && x_ < getSize())))
+                && ItemStackUtils.isScrewdriver(item)) {
+            int s = 0;
+            int p = (getSize() - 1) / 2;
+
+            if (z_ < 0) {
+                s = 0;
+                p = x_;
+            } else if (z_ >= getSize()) {
+                s = 2;
+                p = getSize() - 1 - x_;
+            } else if (x_ < 0) {
+                s = 3;
+                p = getSize() - 1 - z_;
+            } else if (x_ >= getSize()) {
+                s = 1;
+                p = z_;
             }
+
+            int i = modes[s][p];
+
+            if (!player.isSneaking())
+                i++;
+            else
+                i--;
+
+            if (i > 4)
+                i = 0;
+            if (i < 0)
+                i = 4;
+            modes[s][p] = i;
+
+            if (!getWorld().isRemote) {
+                rsTiles[s][p].notifyUpdate();
+                notifyUpdate();
+                sendUpdatePacket();
+            }
+
             return true;
+        }
+
+        // Placement
+        if (x >= 0 && z >= 0 && x < getSize() && z < getSize()) {
+            BPPart part = getPlacedPart(item, x, z);
+            if (part == null)
+                return false;
+            TileMultipart tile = tiles[x_][z_];
+            if (tile == null)
+                tile = mktile(x_, z_);
+            if (tile.canAddPart(part)) {
+                tiles[x_][z_] = tile;
+                if (!getWorld().isRemote) {
+                    tile.addPart(part);
+                    sendUpdatePacket(x_ * getSize() + z_ + 1);
+                    if (!player.capabilities.isCreativeMode)
+                        item.stackSize--;
+                }
+                return true;
+            }
         }
 
         return false;
@@ -623,6 +730,94 @@ public class GateIntegratedCircuit extends GateBase implements IGateLogic<GateIn
     }
 
     @Override
+    public boolean canConnect(ForgeDirection side, IRedstoneDevice device, ConnectionType type) {
+
+        if (side == ForgeDirection.UNKNOWN || side == getFace() || side == getFace().getOpposite())
+            return false;
+
+        int m = modes[Dir.getDirection(side, getFace(), getRotation()).ordinal()][(getSize() - 1) / 2];
+        return m == 1 || m == 2;
+    }
+
+    @Override
+    public boolean canConnect(ForgeDirection side, IBundledDevice device, ConnectionType type) {
+
+        if (side == ForgeDirection.UNKNOWN || side == getFace() || side == getFace().getOpposite())
+            return false;
+
+        int m = modes[Dir.getDirection(side, getFace(), getRotation()).ordinal()][(getSize() - 1) / 2];
+        return m == 3 || m == 4;
+    }
+
+    @Override
+    public boolean canConnectRedstone(ForgeDirection side) {
+
+        if (side == ForgeDirection.UNKNOWN || side == getFace() || side == getFace().getOpposite())
+            return false;
+
+        int m = modes[Dir.getDirection(side, getFace(), getRotation()).ordinal()][(getSize() - 1) / 2];
+        return m == 1 || m == 2;
+    }
+
+    @Override
+    public byte getRedstonePower(ForgeDirection side) {
+
+        if (side == ForgeDirection.UNKNOWN || side == getFace() || side == getFace().getOpposite())
+            return 0;
+
+        if (modes[Dir.getDirection(side, getFace(), getRotation()).ordinal()][(getSize() - 1) / 2] == 2)
+            return rsTiles[Dir.getDirection(side, getFace(), getRotation()).ordinal()][(getSize() - 1) / 2].rsFW;
+        return 0;
+    }
+
+    @Override
+    public void setRedstonePower(ForgeDirection side, byte power) {
+
+        rsTiles[Dir.getDirection(side, getFace(), getRotation()).ordinal()][(getSize() - 1) / 2].rsRW = power;
+    }
+
+    @Override
+    public byte[] getBundledPower(ForgeDirection side) {
+
+        if (side == ForgeDirection.UNKNOWN || side == getFace() || side == getFace().getOpposite())
+            return new byte[16];
+
+        return rsTiles[Dir.getDirection(side, getFace(), getRotation()).ordinal()][(getSize() - 1) / 2].bRW;
+    }
+
+    @Override
+    public byte[] getBundledOutput(ForgeDirection side) {
+
+        if (side == ForgeDirection.UNKNOWN || side == getFace() || side == getFace().getOpposite())
+            return new byte[16];
+
+        if (modes[Dir.getDirection(side, getFace(), getRotation()).ordinal()][(getSize() - 1) / 2] == 4)
+            return rsTiles[Dir.getDirection(side, getFace(), getRotation()).ordinal()][(getSize() - 1) / 2].bFW;
+        return new byte[16];
+    }
+
+    @Override
+    public void setBundledPower(ForgeDirection side, byte[] power) {
+
+        if (side == ForgeDirection.UNKNOWN || side == getFace() || side == getFace().getOpposite())
+            return;
+
+        rsTiles[Dir.getDirection(side, getFace(), getRotation()).ordinal()][(getSize() - 1) / 2].bRW = power;
+    }
+
+    @Override
+    public void onRedstoneUpdate() {
+
+        doLogic();
+    }
+
+    @Override
+    public void onBundledUpdate() {
+
+        doLogic();
+    }
+
+    @Override
     public void writeUpdateData(DataOutput buffer, int channel) throws IOException {
 
         super.writeUpdateData(buffer, channel);
@@ -632,6 +827,9 @@ public class GateIntegratedCircuit extends GateBase implements IGateLogic<GateIn
             for (int x = 0; x < getSize(); x++)
                 for (int z = 0; z < getSize(); z++)
                     writeTileUpdate(buffer, x, z);
+            for (int i = 0; i < 4; i++)
+                for (int j = 0; j < getSize(); j++)
+                    buffer.writeInt(modes[i][j]);
         }
 
         // Send tile updates if needed
@@ -649,6 +847,9 @@ public class GateIntegratedCircuit extends GateBase implements IGateLogic<GateIn
             for (int x = 0; x < getSize(); x++)
                 for (int z = 0; z < getSize(); z++)
                     readTileUpdate(buffer, x, z);
+            for (int i = 0; i < 4; i++)
+                for (int j = 0; j < getSize(); j++)
+                    modes[i][j] = buffer.readInt();
         }
 
         // Read tile updates if needed
@@ -710,6 +911,10 @@ public class GateIntegratedCircuit extends GateBase implements IGateLogic<GateIn
             }
         }
 
+        for (int i = 0; i < 4; i++)
+            for (int j = 0; j < getSize(); j++)
+                tag.setInteger("mode_" + i + "_" + j, modes[i][j]);
+
         tag.setBoolean("showBG", showBG);
     }
 
@@ -722,6 +927,10 @@ public class GateIntegratedCircuit extends GateBase implements IGateLogic<GateIn
             for (int z = 0; z < getSize(); z++)
                 if (tag.hasKey("tile_" + x + "_" + z))
                     (tiles[x][z] = mktile(x, z)).readFromNBT(tag.getCompoundTag("tile_" + x + "_" + z));
+
+        for (int i = 0; i < 4; i++)
+            for (int j = 0; j < getSize(); j++)
+                modes[i][j] = tag.getInteger("mode_" + i + "_" + j);
 
         showBG = tag.getBoolean("showBG");
     }
@@ -773,11 +982,5 @@ public class GateIntegratedCircuit extends GateBase implements IGateLogic<GateIn
         tile.yCoord = 64;
         tile.zCoord = z;
         return tile;
-    }
-
-    @Override
-    public int getRotation() {
-
-        return 0;
     }
 }

@@ -28,8 +28,6 @@ import net.minecraftforge.common.util.ForgeDirection;
 import uk.co.qmunity.lib.init.QLBlocks;
 import uk.co.qmunity.lib.part.IPart;
 import uk.co.qmunity.lib.part.IPartUpdateListener;
-import uk.co.qmunity.lib.util.Dir;
-import uk.co.qmunity.lib.vec.Vec3i;
 
 import com.bluepowermod.helper.IOHelper;
 
@@ -84,46 +82,8 @@ public class FakeWorldIC extends World {
         if (y == 64) {
             if (x >= 0 && z >= 0 && x < ic.getSize() && z < ic.getSize())
                 return ic.tiles[x][z] != null ? QLBlocks.multipart : Blocks.air;
-            if (z == -1) {
-                Vec3i vec = new Vec3i(ic).add(Dir.FRONT.toForgeDirection(ic.getFace(), ic.getRotation()));
-                TileEntity te = vec.getTileEntity();
-                // if (x >= 0 && x < ic.getSize() && te != null && te instanceof TileMultipart)
-                // for (IPart p : ((TileMultipart) te).getParts())
-                // if (p instanceof GateIntegratedCircuit && ((GateIntegratedCircuit) p).getFace() == ic.getFace())
-                // return QLBlocks.multipart;
-                if (x == (ic.getSize() - 1) / 2)
-                    return vec.getBlock();
-            }
-            if (z == ic.getSize()) {
-                Vec3i vec = new Vec3i(ic).add(Dir.BACK.toForgeDirection(ic.getFace(), ic.getRotation()));
-                // TileEntity te = vec.getTileEntity();
-                // if (x >= 0 && x < ic.getSize() && te != null && te instanceof TileMultipart)
-                // for (IPart p : ((TileMultipart) te).getParts())
-                // if (p instanceof GateIntegratedCircuit && ((GateIntegratedCircuit) p).getFace() == ic.getFace())
-                // return QLBlocks.multipart;
-                if (x == (ic.getSize() - 1) / 2)
-                    return vec.getBlock();
-            }
-            if (x == -1) {
-                Vec3i vec = new Vec3i(ic).add(Dir.LEFT.toForgeDirection(ic.getFace(), ic.getRotation()));
-                // TileEntity te = vec.getTileEntity();
-                // if (z >= 0 && z < ic.getSize() && te != null && te instanceof TileMultipart)
-                // for (IPart p : ((TileMultipart) te).getParts())
-                // if (p instanceof GateIntegratedCircuit && ((GateIntegratedCircuit) p).getFace() == ic.getFace())
-                // return QLBlocks.multipart;
-                if (z == (ic.getSize() - 1) / 2)
-                    return vec.getBlock();
-            }
-            if (x == ic.getSize()) {
-                Vec3i vec = new Vec3i(ic).add(Dir.RIGHT.toForgeDirection(ic.getFace(), ic.getRotation()));
-                // TileEntity te = vec.getTileEntity();
-                // if (z >= 0 && z < ic.getSize() && te != null && te instanceof TileMultipart)
-                // for (IPart p : ((TileMultipart) te).getParts())
-                // if (p instanceof GateIntegratedCircuit && ((GateIntegratedCircuit) p).getFace() == ic.getFace())
-                // return QLBlocks.multipart;
-                if (z == (ic.getSize() - 1) / 2)
-                    return vec.getBlock();
-            }
+            if (((x == -1 || x == ic.getSize()) && z >= 0 && z < ic.getSize()) || ((z == -1 || z == ic.getSize()) && x >= 0 && x < ic.getSize()))
+                return Blocks.stone;
         }
 
         return Blocks.air;
@@ -132,18 +92,6 @@ public class FakeWorldIC extends World {
     @Override
     public int getBlockMetadata(int x, int y, int z) {
 
-        if (y == 64) {
-            if (x >= 0 && z >= 0 && x < ic.getSize() && z < ic.getSize())
-                return 0;
-            if (x == (ic.getSize() - 1) / 2 && z == -1)
-                return new Vec3i(ic).add(Dir.FRONT.toForgeDirection(ic.getFace(), ic.getRotation())).getBlockMeta();
-            if (x == (ic.getSize() - 1) / 2 && z == ic.getSize())
-                return new Vec3i(ic).add(Dir.BACK.toForgeDirection(ic.getFace(), ic.getRotation())).getBlockMeta();
-            if (x == -1 && z == (ic.getSize() - 1) / 2)
-                return new Vec3i(ic).add(Dir.LEFT.toForgeDirection(ic.getFace(), ic.getRotation())).getBlockMeta();
-            if (x == ic.getSize() && z == (ic.getSize() - 1) / 2)
-                return new Vec3i(ic).add(Dir.RIGHT.toForgeDirection(ic.getFace(), ic.getRotation())).getBlockMeta();
-        }
         return 0;
     }
 
@@ -153,65 +101,23 @@ public class FakeWorldIC extends World {
         if (y == 64) {
             if (x >= 0 && z >= 0 && x < ic.getSize() && z < ic.getSize())
                 return ic.tiles[x][z];
-            if (z == -1) {
-                TileEntity te = new Vec3i(ic).add(Dir.FRONT.toForgeDirection(ic.getFace(), ic.getRotation())).getTileEntity();
-                // if (x >= 0 && x < ic.getSize() && te != null && te instanceof TileMultipart) {
-                // for (IPart p : ((TileMultipart) te).getParts()) {
-                // if (p instanceof GateIntegratedCircuit && ((GateIntegratedCircuit) p).getFace() == ic.getFace()) {
-                // int v = ((((GateIntegratedCircuit) p).getSize() - 1) / 2) - ((ic.getSize() - 1) / 2) + x;
-                // if (v < 0 || v >= ((GateIntegratedCircuit) p).getSize())
-                // return null;
-                // return ((GateIntegratedCircuit) p).tiles[v][((GateIntegratedCircuit) p).getSize() - 1];
-                // }
-                // }
-                // }
-                if (x == (ic.getSize() - 1) / 2)
-                    return te;
-            }
-            if (z == ic.getSize()) {
-                TileEntity te = new Vec3i(ic).add(Dir.BACK.toForgeDirection(ic.getFace(), ic.getRotation())).getTileEntity();
-                // if (x >= 0 && x < ic.getSize() && te != null && te instanceof TileMultipart) {
-                // for (IPart p : ((TileMultipart) te).getParts()) {
-                // if (p instanceof GateIntegratedCircuit && ((GateIntegratedCircuit) p).getFace() == ic.getFace()) {
-                // int v = ((((GateIntegratedCircuit) p).getSize() - 1) / 2) - ((ic.getSize() - 1) / 2) + x;
-                // if (v < 0 || v >= ((GateIntegratedCircuit) p).getSize())
-                // return null;
-                // return ((GateIntegratedCircuit) p).tiles[v][0];
-                // }
-                // }
-                // }
-                if (x == (ic.getSize() - 1) / 2)
-                    return te;
-            }
-            if (x == -1) {
-                TileEntity te = new Vec3i(ic).add(Dir.LEFT.toForgeDirection(ic.getFace(), ic.getRotation())).getTileEntity();
-                // if (z >= 0 && z < ic.getSize() && te != null && te instanceof TileMultipart) {
-                // for (IPart p : ((TileMultipart) te).getParts()) {
-                // if (p instanceof GateIntegratedCircuit && ((GateIntegratedCircuit) p).getFace() == ic.getFace()) {
-                // int v = ((((GateIntegratedCircuit) p).getSize() - 1) / 2) - ((ic.getSize() - 1) / 2) + z;
-                // if (v < 0 || v >= ((GateIntegratedCircuit) p).getSize())
-                // return null;
-                // return ((GateIntegratedCircuit) p).tiles[((GateIntegratedCircuit) p).getSize() - 1][v];
-                // }
-                // }
-                // }
-                if (z == (ic.getSize() - 1) / 2)
-                    return te;
-            }
-            if (x == ic.getSize()) {
-                TileEntity te = new Vec3i(ic).add(Dir.RIGHT.toForgeDirection(ic.getFace(), ic.getRotation())).getTileEntity();
-                // if (z >= 0 && z < ic.getSize() && te != null && te instanceof TileMultipart) {
-                // for (IPart p : ((TileMultipart) te).getParts()) {
-                // if (p instanceof GateIntegratedCircuit && ((GateIntegratedCircuit) p).getFace() == ic.getFace()) {
-                // int v = ((((GateIntegratedCircuit) p).getSize() - 1) / 2) - ((ic.getSize() - 1) / 2) + z;
-                // if (v < 0 || v >= ((GateIntegratedCircuit) p).getSize())
-                // return null;
-                // return ((GateIntegratedCircuit) p).tiles[0][v];
-                // }
-                // }
-                // }
-                if (z == (ic.getSize() - 1) / 2)
-                    return te;
+            if (((x == -1 || x == ic.getSize()) && z >= 0 && z < ic.getSize()) || ((z == -1 || z == ic.getSize()) && x >= 0 && x < ic.getSize())) {
+                int s = 0;
+                int p = 0;
+                if (z < 0) {
+                    s = 0;
+                    p = x;
+                } else if (z >= ic.getSize()) {
+                    s = 2;
+                    p = ic.getSize() - 1 - x;
+                } else if (x < 0) {
+                    s = 3;
+                    p = ic.getSize() - 1 - z;
+                } else if (x >= ic.getSize()) {
+                    s = 1;
+                    p = z;
+                }
+                return ic.rsTiles[s][p];
             }
         }
 

@@ -6,6 +6,7 @@ import java.util.List;
 
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import scala.actors.threadpool.Arrays;
 
 import com.bluepowermod.api.connect.ConnectionType;
 import com.bluepowermod.api.connect.IConnection;
@@ -97,6 +98,8 @@ public class BundledDeviceWrapper implements IAdvancedRedstoneConductor {
         byte[] b = device.getBundledPower(side);
         if (b == null)
             b = new byte[16];
+        else
+            b = Arrays.copyOf(b, b.length);
 
         b[color.ordinal()] = power;
 

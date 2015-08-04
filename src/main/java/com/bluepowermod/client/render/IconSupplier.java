@@ -90,6 +90,8 @@ public class IconSupplier {
 
     public static IIcon icArrowIn;
     public static IIcon icArrowOut;
+    public static IIcon icArrowInBundled;
+    public static IIcon icArrowOutBundled;
 
     @SubscribeEvent
     public void onTextureStitch(TextureStitchEvent.Pre event) {
@@ -165,6 +167,8 @@ public class IconSupplier {
 
             icArrowIn = reg.registerIcon(Refs.MODID + ":gates/integratedCircuitArrowIn");
             icArrowOut = reg.registerIcon(Refs.MODID + ":gates/integratedCircuitArrowOut");
+            icArrowInBundled = reg.registerIcon(Refs.MODID + ":gates/integratedCircuitArrowInBundled");
+            icArrowOutBundled = reg.registerIcon(Refs.MODID + ":gates/integratedCircuitArrowOutBundled");
 
             for (PartInfo i : PartManager.getRegisteredParts())
                 i.getExample().registerIcons(reg);
