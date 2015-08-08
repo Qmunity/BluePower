@@ -68,6 +68,14 @@ public class GateToggleLatch extends GateSimpleDigital {
     @Override
     public void doLogic() {
 
+    }
+
+    @Override
+    public void tick() {
+
+        if (getWorld().isRemote)
+            return;
+
         if ((power != right().getInput() || left().getInput()) && !power) {
             state = !state;
             playTickSound();
@@ -79,11 +87,6 @@ public class GateToggleLatch extends GateSimpleDigital {
         t1.setState(!state);
         t2.setState(state);
         l.setState(state);
-    }
-
-    @Override
-    public void tick() {
-
     }
 
     @Override
