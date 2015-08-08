@@ -45,7 +45,6 @@ import com.bluepowermod.part.tube.PneumaticTube;
 import com.bluepowermod.part.tube.PneumaticTubeOpaque;
 import com.bluepowermod.part.tube.RestrictionTube;
 import com.bluepowermod.part.tube.RestrictionTubeOpaque;
-import com.bluepowermod.part.wire.power.WirePower;
 import com.bluepowermod.part.wire.redstone.PartRedwireFace.PartRedwireFaceBundled;
 import com.bluepowermod.part.wire.redstone.PartRedwireFace.PartRedwireFaceInsulated;
 import com.bluepowermod.part.wire.redstone.PartRedwireFace.PartRedwireFaceUninsulated;
@@ -201,7 +200,6 @@ public class PartManager {
                 registerPart(PartRedwireFreestandingBundled.class, type, color);
         }
 
-        registerPart(WirePower.class);
     }
 
     public static void registerItems() {
