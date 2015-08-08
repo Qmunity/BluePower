@@ -37,6 +37,7 @@ public class BPOredictNames {
     // Dusts
     public static final String DUST_TESLATITE = "dustTeslatite";
     public static final String DUST_INFUSED_TESLATITE = "dustInfusedTeslatite";
+    public static final String DUST_ZINC = "dustZinc";
 
     // Nuggets
     public static final String NUGGET_TUNGSTEN = "nuggetTungsten";

@@ -7,6 +7,26 @@
  */
 package com.bluepowermod.event;
 
+import com.bluepowermod.ClientProxy;
+import com.bluepowermod.client.gui.GuiCircuitDatabaseSharing;
+import com.bluepowermod.container.ContainerSeedBag;
+import com.bluepowermod.container.inventory.InventoryItem;
+import com.bluepowermod.init.BPBlocks;
+import com.bluepowermod.init.BPEnchantments;
+import com.bluepowermod.init.BPItems;
+import com.bluepowermod.item.ItemSeedBag;
+import com.bluepowermod.item.ItemSickle;
+import com.bluepowermod.network.BPNetworkHandler;
+import com.bluepowermod.network.message.MessageServerTickTime;
+import com.bluepowermod.part.PartManager;
+import com.bluepowermod.util.Achievements;
+import cpw.mods.fml.common.eventhandler.Event.Result;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.PlayerEvent;
+import cpw.mods.fml.common.gameevent.TickEvent;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.block.BlockGrass;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -26,31 +46,11 @@ import net.minecraft.util.EntityDamageSource;
 import net.minecraftforge.event.AnvilUpdateEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.player.BonemealEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import uk.co.qmunity.lib.helper.MathHelper;
-
-import com.bluepowermod.ClientProxy;
-import com.bluepowermod.client.gui.GuiCircuitDatabaseSharing;
-import com.bluepowermod.container.ContainerSeedBag;
-import com.bluepowermod.container.inventory.InventoryItem;
-import com.bluepowermod.init.BPBlocks;
-import com.bluepowermod.init.BPEnchantments;
-import com.bluepowermod.init.BPItems;
-import com.bluepowermod.item.ItemSeedBag;
-import com.bluepowermod.item.ItemSickle;
-import com.bluepowermod.network.BPNetworkHandler;
-import com.bluepowermod.network.message.MessageServerTickTime;
-import com.bluepowermod.part.PartManager;
-import com.bluepowermod.util.Achievements;
-
-import cpw.mods.fml.common.eventhandler.Event.Result;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.PlayerEvent;
-import cpw.mods.fml.common.gameevent.TickEvent;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class BPEventHandler {
 
@@ -243,6 +243,26 @@ public class BPEventHandler {
                 || item.equals(PartManager.getPartInfo("integratedCircuit5x5").getItem())
                 || item.equals(PartManager.getPartInfo("integratedCircuit7x7").getItem())) {
             event.player.addStat(Achievements.circuitCeptionAchievement, 1);
+        }
+    }
+
+    @SubscribeEvent
+    public void onBonemealEvent(BonemealEvent event) {
+
+        if (!event.world.isRemote) {
+            if (event.block instanceof BlockGrass) {
+                for (int x = event.x - 2; x < event.x + 3; x++) {
+                    for (int z = event.z - 2; z < event.z + 3; z++) {
+                        if (event.world.isAirBlock(x, event.y + 1, z)) {
+                            if (event.world.rand.nextInt(50) == 1) {
+                                if (BPBlocks.indigo_flower.canBlockStay(event.world, event.x, event.y + 1, event.z)) {
+                                    event.world.setBlock(event.x, event.y + 1, event.z, BPBlocks.indigo_flower);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }

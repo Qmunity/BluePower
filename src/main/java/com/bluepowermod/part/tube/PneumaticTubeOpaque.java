@@ -75,7 +75,7 @@ public class PneumaticTubeOpaque extends PneumaticTube {
 
             IIcon icon = this instanceof RestrictionTubeOpaque ? (renderFully ? IconSupplier.restrictionTubeNodeOpaque
                     : IconSupplier.restrictionTubeSideOpaque) : renderFully ? IconSupplier.pneumaticTubeOpaqueNode
-                            : IconSupplier.pneumaticTubeOpaqueSide;
+                    : IconSupplier.pneumaticTubeOpaqueSide;
 
             if (shouldRenderConnection(ForgeDirection.EAST) || shouldRenderConnection(ForgeDirection.WEST))
                 renderer.setTextureRotations(1, 1, 0, 0, 1, 1);
@@ -89,8 +89,8 @@ public class PneumaticTubeOpaque extends PneumaticTube {
             for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
                 if (shouldRenderConnection(d)) {
                     renderer.addTransformation(new Rotation(d));
-                    renderer.renderBox(new Vec3dCube(0.25, 0, 0.25, 0.75, 0.25, 0.75), IconSupplier.pneumaticTubeOpaqueNode, null, icon,
-                            icon, icon, icon);
+                    renderer.renderBox(new Vec3dCube(0.25, 0, 0.25, 0.75, 0.25, 0.75), IconSupplier.pneumaticTubeOpaqueNode, null, icon, icon, icon,
+                            icon);
                     renderer.removeTransformation();
                 }
             }
@@ -102,28 +102,23 @@ public class PneumaticTubeOpaque extends PneumaticTube {
                 frameThickness /= 1.5;
                 frameSeparation -= 1 / 32D;
 
-                renderFrame(renderer, wireSize, frameSeparation, frameThickness,
-                        renderFully || shouldRenderConnection(ForgeDirection.DOWN), renderFully
-                        || shouldRenderConnection(ForgeDirection.UP), renderFully || shouldRenderConnection(ForgeDirection.WEST),
-                        renderFully || shouldRenderConnection(ForgeDirection.EAST), renderFully
-                        || shouldRenderConnection(ForgeDirection.NORTH), renderFully
-                        || shouldRenderConnection(ForgeDirection.SOUTH), redstoneConnections[ForgeDirection.DOWN.ordinal()],
+                renderFrame(renderer, wireSize, frameSeparation, frameThickness, renderFully || shouldRenderConnection(ForgeDirection.DOWN),
+                        renderFully || shouldRenderConnection(ForgeDirection.UP), renderFully || shouldRenderConnection(ForgeDirection.WEST),
+                        renderFully || shouldRenderConnection(ForgeDirection.EAST), renderFully || shouldRenderConnection(ForgeDirection.NORTH),
+                        renderFully || shouldRenderConnection(ForgeDirection.SOUTH), redstoneConnections[ForgeDirection.DOWN.ordinal()],
                         redstoneConnections[ForgeDirection.UP.ordinal()], redstoneConnections[ForgeDirection.WEST.ordinal()],
                         redstoneConnections[ForgeDirection.EAST.ordinal()], redstoneConnections[ForgeDirection.NORTH.ordinal()],
                         redstoneConnections[ForgeDirection.SOUTH.ordinal()], getParent() != null && getWorld() != null, IconSupplier.wire,
-                        WireHelper.getColorForPowerLevel(getRedwireType(), RedstoneConductorTube.getDevice(this).getPower()));
+                        WireHelper.getColorForPowerLevel(getRedwireType(), getPower()));
             }
 
             // Tube coloring
             {
                 Vec3dCube side = new Vec3dCube(0.25 + 5 / 128D, 0, 0.25 - 1 / 128D, 0.25 + 9 / 128D, 0.25, 0.25 + 2 / 128D);
                 Vec3dCube side2 = new Vec3dCube(0.25 - 1 / 128D, 0, 0.25 + 5 / 128D, 0.25 + 2 / 128D, 0.25, 0.25 + 9 / 128D);
-                Vec3dCube side3 = new Vec3dCube(0.25 - 1 / 128D, 0.25 - 1 / 128D, 0.25 + 5 / 128D, 0.25 + 2 / 128D, 0.25 + 2 / 128D,
-                        0.25 + 59 / 128D);
-                Vec3dCube side4 = new Vec3dCube(0.25 + 5 / 128D, 0.25 - 1 / 128D, 0.25 + 5 / 128D, 0.25 + 9 / 128D, 0.25 + 2 / 128D,
-                        0.25 + 56 / 128D);
-                Vec3dCube side5 = new Vec3dCube(0.25 + 5 / 128D, 0.25 - 1 / 128D, 0.25 - 1 / 128D, 0.25 + 9 / 128D, 0.25 + 2 / 128D,
-                        0.25 + 65 / 128D);
+                Vec3dCube side3 = new Vec3dCube(0.25 - 1 / 128D, 0.25 - 1 / 128D, 0.25 + 5 / 128D, 0.25 + 2 / 128D, 0.25 + 2 / 128D, 0.25 + 59 / 128D);
+                Vec3dCube side4 = new Vec3dCube(0.25 + 5 / 128D, 0.25 - 1 / 128D, 0.25 + 5 / 128D, 0.25 + 9 / 128D, 0.25 + 2 / 128D, 0.25 + 56 / 128D);
+                Vec3dCube side5 = new Vec3dCube(0.25 + 5 / 128D, 0.25 - 1 / 128D, 0.25 - 1 / 128D, 0.25 + 9 / 128D, 0.25 + 2 / 128D, 0.25 + 65 / 128D);
                 for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
                     TubeColor c = color[d.ordinal()];
                     if (c != TubeColor.NONE) {
@@ -147,10 +142,10 @@ public class PneumaticTubeOpaque extends PneumaticTube {
                                 for (int i = 1; i < 4; i += 2)
                                     renderer.renderBox(
                                             side5.clone()
-                                            .rotate(0,
-                                                    (i + ((shouldRenderConnection(ForgeDirection.NORTH) || (shouldRenderConnection(ForgeDirection.UP) && (d == ForgeDirection.NORTH || d == ForgeDirection.SOUTH))) ? 1
-                                                            : 0)) * 90, 0, Vec3d.center).rotate(d, Vec3d.center),
-                                                            IconSupplier.pneumaticTubeColoring);
+                                                    .rotate(0,
+                                                            (i + ((shouldRenderConnection(ForgeDirection.NORTH) || (shouldRenderConnection(ForgeDirection.UP) && (d == ForgeDirection.NORTH || d == ForgeDirection.SOUTH))) ? 1
+                                                                    : 0)) * 90, 0, Vec3d.center).rotate(d, Vec3d.center),
+                                            IconSupplier.pneumaticTubeColoring);
                             }
                             renderer.setColor(0xFFFFFF);
                         } catch (Exception ex) {

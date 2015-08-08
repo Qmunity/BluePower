@@ -581,6 +581,7 @@ item.bluepower:infused_teslatite_dust.name=Infused Teslatite Stof
 ##item.part.bluepower:gate.integratedCircuit7x7.name=
 ##item.part.bluepower:gate.inverter.name=
 ##item.part.bluepower:gate.comparator.name=
+##item.part.bluepower:gate.regulabletorch.name=
 ##item.part.bluepower:gate.wirelesstransceiver.name=
 ##item.part.bluepower:gate.wirelesstransceiver.analog.name=
 ##item.part.bluepower:gate.wirelesstransceiver.bundled.name=

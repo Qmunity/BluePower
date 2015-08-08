@@ -202,6 +202,16 @@ public abstract class RedstonePropagator implements IPropagator<IRedstoneDevice>
 
             List<Pair<IRedstoneDevice, ForgeDirection>> l = simplifyDeviceList(connections);
 
+            boolean did = RedstoneApi.getInstance().shouldWiresHandleUpdates();
+            RedstoneApi.getInstance().setWiresOutputPower(false, false);
+            RedstoneApi.getInstance().setWiresHandleUpdates(false);
+            for (Pair<IRedstoneDevice, ForgeDirection> p : l)
+                p.getKey().setRedstonePower(p.getValue(), (byte) 0);
+            for (Pair<IRedstoneDevice, ForgeDirection> p : l)
+                p.getKey().onRedstoneUpdate();
+            RedstoneApi.getInstance().setWiresHandleUpdates(did);
+            RedstoneApi.getInstance().setWiresOutputPower(true, false);
+
             int pow = 0;
 
             RedstoneApi.getInstance().setWiresOutputPower(false, false);
@@ -212,7 +222,6 @@ public abstract class RedstonePropagator implements IPropagator<IRedstoneDevice>
             for (Pair<IRedstoneDevice, ForgeDirection> p : l)
                 p.getKey().setRedstonePower(p.getValue(), (byte) pow);
 
-            boolean did = RedstoneApi.getInstance().shouldWiresHandleUpdates();
             RedstoneApi.getInstance().setWiresHandleUpdates(false);
             for (Pair<IRedstoneDevice, ForgeDirection> p : l)
                 p.getKey().onRedstoneUpdate();
@@ -269,6 +278,14 @@ public abstract class RedstonePropagator implements IPropagator<IRedstoneDevice>
             for (IConnection<IRedstoneDevice> c : connections)
                 c.getA().setRedstonePower(c.getSideA(), (byte) 0);
 
+            RedstoneApi.getInstance().setWiresOutputPower(false, true);
+            boolean did = RedstoneApi.getInstance().shouldWiresHandleUpdates();
+            RedstoneApi.getInstance().setWiresHandleUpdates(false);
+            for (IRedstoneDevice d : devs)
+                d.onRedstoneUpdate();
+            RedstoneApi.getInstance().setWiresHandleUpdates(did);
+            RedstoneApi.getInstance().setWiresOutputPower(true, true);
+
             for (Pair<IRedstoneDevice, ForgeDirection> pair : l) {
                 RedstoneApi.getInstance().setWiresOutputPower(false, true);
                 byte power = pair.getKey().getRedstonePower(pair.getValue());
@@ -277,7 +294,6 @@ public abstract class RedstonePropagator implements IPropagator<IRedstoneDevice>
                     propagate(pair.getKey(), pair.getValue(), power);
             }
 
-            boolean did = RedstoneApi.getInstance().shouldWiresHandleUpdates();
             RedstoneApi.getInstance().setWiresHandleUpdates(false);
             for (IRedstoneDevice d : devs)
                 d.onRedstoneUpdate();
@@ -300,7 +316,7 @@ public abstract class RedstonePropagator implements IPropagator<IRedstoneDevice>
             if (shouldPreventStackOverflows())
                 return;
 
-            if ((power & 0xFF) < 0)
+            if ((power & 0xFF) <= 0)
                 return;
             if ((dev.getRedstonePower(side) & 0xFF) > (power & 0xFF))
                 return;
@@ -315,8 +331,7 @@ public abstract class RedstonePropagator implements IPropagator<IRedstoneDevice>
                     }
                 }
                 if (!found)
-                    propagate(e.getKey().getB(), e.getKey().getSideB(),
-                            (byte) ((power & 0xFF) - (dev instanceof IRedstoneConductor ? 1 : 0)));
+                    propagate(e.getKey().getB(), e.getKey().getSideB(), (byte) ((power & 0xFF) - (dev instanceof IRedstoneConductor ? 1 : 0)));
             }
         }
 
@@ -352,8 +367,8 @@ public abstract class RedstonePropagator implements IPropagator<IRedstoneDevice>
                 return;
             } else if (getDevice() instanceof GateBase<?, ?, ?, ?, ?, ?>) {
                 IGateConnection c = ((GateBase<?, ?, ?, ?, ?, ?>) getDevice()).getConnection(getSide());
-                IConnection<IRedstoneDevice> con = (IConnection<IRedstoneDevice>) getDevice().getRedstoneConnectionCache()
-                        .getConnectionOnSide(getSide());
+                IConnection<IRedstoneDevice> con = (IConnection<IRedstoneDevice>) getDevice().getRedstoneConnectionCache().getConnectionOnSide(
+                        getSide());
                 if (c != null) {
                     if (con != null && con.getB() instanceof IRedConductor && ((IRedConductor) con.getB()).hasLoss(con.getSideB())) {
                         try {

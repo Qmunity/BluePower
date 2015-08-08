@@ -17,6 +17,7 @@
 
 package com.bluepowermod.init;
 
+import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
@@ -64,6 +65,7 @@ public class OreDictionarySetup {
         // Dusts
         OreDictionary.registerOre(BPOredictNames.DUST_TESLATITE, BPItems.teslatite_dust);
         OreDictionary.registerOre(BPOredictNames.DUST_INFUSED_TESLATITE, BPItems.infused_teslatite_dust);
+        OreDictionary.registerOre(BPOredictNames.DUST_ZINC, BPItems.zinc_dust);
 
         // Nuggets
         OreDictionary.registerOre("nuggetTungsten", BPItems.tungsten_nugget);
@@ -94,6 +96,11 @@ public class OreDictionarySetup {
         // Other
         OreDictionary.registerOre(BPOredictNames.MARBLE, BPBlocks.marble);
         OreDictionary.registerOre(BPOredictNames.BASALT, BPBlocks.basalt);
+
+        for (Block b : BPBlocks.blockLamp)
+            OreDictionary.registerOre("lampBP", b);
+        for (Block b : BPBlocks.blockLampInverted)
+            OreDictionary.registerOre("lampInvertedBP", b);
 
         for (RedwireType t : RedwireType.values()) {
             for (MinecraftColor c : MinecraftColor.VALID_COLORS) {

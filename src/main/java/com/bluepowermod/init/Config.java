@@ -17,6 +17,7 @@
 
 package com.bluepowermod.init;
 
+import net.minecraft.enchantment.Enchantment;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 
@@ -29,51 +30,51 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class Config {
 
-    public static boolean  generateTungsten;
-    public static int      minTungstenY;
-    public static int      maxTungstenY;
-    public static int      veinCountTungsten;
-    public static int      veinSizeTungsten;
-    public static boolean  generateCopper;
-    public static int      minCopperY;
-    public static int      maxCopperY;
-    public static int      veinCountCopper;
-    public static int      veinSizeCopper;
-    public static boolean  generateSilver;
-    public static int      minSilverY;
-    public static int      maxSilverY;
-    public static int      veinCountSilver;
-    public static int      veinSizeSilver;
-    public static boolean  generateZinc;
-    public static int      minZincY;
-    public static int      maxZincY;
-    public static int      veinCountZinc;
-    public static int      veinSizeZinc;
-    public static boolean  generateTeslatite;
-    public static int      minTeslatiteY;
-    public static int      maxTeslatiteY;
-    public static int      veinCountTeslatite;
-    public static int      veinSizeTeslatite;
-    public static boolean  generateRuby;
-    public static int      minRubyY;
-    public static int      maxRubyY;
-    public static int      veinCountRuby;
-    public static int      veinSizeRuby;
-    public static boolean  generateAmethyst;
-    public static int      minAmethystY;
-    public static int      maxAmethystY;
-    public static int      veinCountAmethyst;
-    public static int      veinSizeAmethyst;
-    public static boolean  generateSapphire;
-    public static int      minSapphireY;
-    public static int      maxSapphireY;
-    public static int      veinCountSapphire;
-    public static int      veinSizeSapphire;
-    public static double   volcanoActiveToInactiveRatio;
-    public static double   volcanoSpawnChance; // chance of a volcano spawning per chunk.
-    public static boolean  useAltScrewdriverRecipe;
-    public static int      vorpalEnchantmentId;
-    public static int      disjunctionEnchantmentId;
+    public static boolean generateTungsten;
+    public static int minTungstenY;
+    public static int maxTungstenY;
+    public static int veinCountTungsten;
+    public static int veinSizeTungsten;
+    public static boolean generateCopper;
+    public static int minCopperY;
+    public static int maxCopperY;
+    public static int veinCountCopper;
+    public static int veinSizeCopper;
+    public static boolean generateSilver;
+    public static int minSilverY;
+    public static int maxSilverY;
+    public static int veinCountSilver;
+    public static int veinSizeSilver;
+    public static boolean generateZinc;
+    public static int minZincY;
+    public static int maxZincY;
+    public static int veinCountZinc;
+    public static int veinSizeZinc;
+    public static boolean generateTeslatite;
+    public static int minTeslatiteY;
+    public static int maxTeslatiteY;
+    public static int veinCountTeslatite;
+    public static int veinSizeTeslatite;
+    public static boolean generateRuby;
+    public static int minRubyY;
+    public static int maxRubyY;
+    public static int veinCountRuby;
+    public static int veinSizeRuby;
+    public static boolean generateAmethyst;
+    public static int minAmethystY;
+    public static int maxAmethystY;
+    public static int veinCountAmethyst;
+    public static int veinSizeAmethyst;
+    public static boolean generateSapphire;
+    public static int minSapphireY;
+    public static int maxSapphireY;
+    public static int veinCountSapphire;
+    public static int veinSizeSapphire;
+    public static double volcanoActiveToInactiveRatio;
+    public static double volcanoSpawnChance; // chance of a volcano spawning per chunk.
+    public static boolean useAltScrewdriverRecipe;
+    public static int vorpalEnchantmentId;
+    public static int disjunctionEnchantmentId;
     public static String[] alloyFurnaceBlacklist;
 
     public static boolean enableTubeCaching;
@@ -133,7 +134,7 @@ public class Config {
         config.addCustomCategoryComment(Refs.CONFIG_RECIPES, "Toggle recipes to be enabled or not");
         alloyFurnaceBlacklist = config
                 .get(Refs.CONFIG_RECIPES, "alloyFurnaceBlacklist", new String[0],
-                     "Any item name ('minecraft:bucket', 'minecraft:minecart') added here will be blacklisted from being able to melt down into its raw materials.")
+                        "Any item name ('minecraft:bucket', 'minecraft:minecart') added here will be blacklisted from being able to melt down into its raw materials.")
                 .getStringList();
 
         Property prop = config.get(Refs.CONFIG_TUBES, "Enable Tube Caching", true);
@@ -150,9 +151,11 @@ public class Config {
 
         serverCircuitSavingOpOnly = config.get(Refs.CONFIG_CIRCUIT_DATABASE, "Server Template Saving by Ops only", false).getBoolean(false);
 
-        config.addCustomCategoryComment(Refs.CONFIG_ENCHANTS, "Toggle enchantment ids");
-        vorpalEnchantmentId = config.get(Refs.CONFIG_ENCHANTS, "vorpalEnchantmentId", 110).getInt();
-        disjunctionEnchantmentId = config.get(Refs.CONFIG_ENCHANTS, "disjunctionEnchantmentId", 111).getInt();
+        boolean hadEnchantCategory = config.hasCategory(Refs.CONFIG_ENCHANTS);
+        config.addCustomCategoryComment(Refs.CONFIG_ENCHANTS, "Enchantment ids");
+        vorpalEnchantmentId = config.get(Refs.CONFIG_ENCHANTS, "vorpalEnchantmentId", hadEnchantCategory ? 110 : findFreeEnchantID()).getInt();
+        disjunctionEnchantmentId = config.get(Refs.CONFIG_ENCHANTS, "disjunctionEnchantmentId",
+                hadEnchantCategory ? 111 : findFreeEnchantID(vorpalEnchantmentId)).getInt();
 
         enableGateSounds = config.get(Refs.CONFIG_SETTINGS, "Enable Gate Ticking Sounds", true).getBoolean();
 
@@ -167,5 +170,21 @@ public class Config {
         if (event.modID.equals(Refs.MODID)) {
             syncConfig(BluePower.config);
         }
+    }
+
+    private static int findFreeEnchantID(int... ignored) {
+
+        for (int i = 20; i < Enchantment.enchantmentsList.length; i++) {
+            boolean ignore = false;
+            for (int ig : ignored) {
+                if (ig == i) {
+                    ignore = true;
+                    break;
+                }
+            }
+            if (!ignore && Enchantment.enchantmentsList[i] == null)
+                return i;
+        }
+        return 0;
     }
 }

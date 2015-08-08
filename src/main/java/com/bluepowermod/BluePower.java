@@ -30,7 +30,6 @@ import com.bluepowermod.init.Recipes;
 import com.bluepowermod.init.TileEntities;
 import com.bluepowermod.network.BPNetworkHandler;
 import com.bluepowermod.part.PartManager;
-import com.bluepowermod.part.tube.RedstoneProviderTube;
 import com.bluepowermod.power.PowerApi;
 import com.bluepowermod.power.PoweredDeviceProviderQmunityLib;
 import com.bluepowermod.power.PoweredDeviceProviderVanilla;
@@ -94,7 +93,6 @@ public class BluePower {
         MinecraftForge.EVENT_BUS.register(new WorldConversionEventHandler());
 
         RedstoneApi.getInstance().registerRedstoneProvider(new RedstoneProviderQmunityLib());
-        RedstoneApi.getInstance().registerRedstoneProvider(new RedstoneProviderTube());
 
         PowerApi.getInstance().registerPoweredDeviceProvider(new PoweredDeviceProviderQmunityLib());
     }

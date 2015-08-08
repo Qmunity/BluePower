@@ -37,7 +37,7 @@ public class TileProjectTable extends TileBase implements IInventory, IGuiButton
 
     private ItemStack[] inventory = new ItemStack[18];
     protected ItemStack[] craftingGrid = new ItemStack[9];
-    public final IInventory craftResult = new InventoryCraftResult();
+    protected final IInventory craftResult = new InventoryCraftResult();
     private static Field stackListFieldInventoryCrafting;
 
     public InventoryCrafting getCraftingGrid(Container listener) {
@@ -119,7 +119,6 @@ public class TileProjectTable extends TileBase implements IInventory, IGuiButton
             }
         }
         tag.setTag("CraftingGrid", tagList);
-
     }
 
     @Override
@@ -156,8 +155,7 @@ public class TileProjectTable extends TileBase implements IInventory, IGuiButton
 
     @Override
     public ItemStack getStackInSlot(int i) {
-
-        return i < inventory.length ? inventory[i] : craftResult.getStackInSlot(0);
+        return inventory[i];
     }
 
     @Override
@@ -190,14 +188,7 @@ public class TileProjectTable extends TileBase implements IInventory, IGuiButton
 
     @Override
     public void setInventorySlotContents(int i, ItemStack itemStack) {
-
-        if (i < inventory.length) {
-            inventory[i] = itemStack;
-        } else {
-            craftResult.setInventorySlotContents(0, itemStack);
-            craft();
-        }
-        updateCraftingGrid();
+        inventory[i] = itemStack;
     }
 
     @Override
@@ -248,11 +239,11 @@ public class TileProjectTable extends TileBase implements IInventory, IGuiButton
         }
     }
 
-    private void updateCraftingGrid() {
+    protected void updateCraftingGrid() {
         craftResult.setInventorySlotContents(0, CraftingManager.getInstance().findMatchingRecipe(getCraftingGrid(), getWorldObj()));
     }
 
-    private void craft() {
+    protected void craft() {
         // FMLCommonHandler.instance().firePlayerCraftingEvent(p_82870_1_, p_82870_2_, craftMatrix);
 
         for (int i = 0; i < craftingGrid.length; ++i) {

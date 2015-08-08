@@ -65,5 +65,8 @@ public class LightingRecipes {
                             BPItems.lumar, 1, 15 - i), 'R', Blocks.redstone_torch));
 
         }
+        GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(BPBlocks.blockLampRGB, 4), "lampBP", "lampBP", "lampBP", "lampBP"));
+        GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(BPBlocks.blockLampRGBInverted, 4), "lampInvertedBP", "lampInvertedBP",
+                "lampInvertedBP", "lampInvertedBP"));
     }
 }
