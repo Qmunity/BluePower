@@ -53,6 +53,7 @@ public class BluePowerAPI implements IBPApi {
             throw new IllegalStateException("This block doesn't have a tile entity?!");
         if (stack == null)
             throw new IllegalArgumentException("ItemStack is null!");
+
         if (stack.hasTagCompound()) {
             NBTTagCompound tag = stack.getTagCompound();
             if (tag.hasKey("tileData")) {

@@ -12,33 +12,33 @@
 tile.bluepower:basalt.name=Basalto
 tile.bluepower:basalt_brick.name=Ladrillos de basalto
 tile.bluepower:basaltbrick_cracked.name=Ladrillos de basalto rotos
-tile.bluepower:basalt_brick_small.name=Ladrillos de basalto pequeños
+tile.bluepower:basalt_brick_small.name=Ladrillos de basalto pequeï¿½os
 tile.bluepower:fancy_basalt.name=Ladrillos de basalto cincelados
 tile.bluepower:basalt_tile.name=Baldosa de basalto
-tile.bluepower:basalt_paver.name=Adoquín de basalto
+tile.bluepower:basalt_paver.name=Adoquï¿½n de basalto
 
 tile.bluepower:cracked_basalt_lava.name=Basalto agrietado
 tile.bluepower:basalt_cobble.name=Roca de basalto
 
 # Marble
-tile.bluepower:marble.name=Mármol
-tile.bluepower:marble_brick.name=Ladrillos de mármol
-tile.bluepower:marble_brick_small.name=Ladrillos de mármol pequeños
-tile.bluepower:fancy_marble.name=Ladrillos de mármol cincelados
-tile.bluepower:marble_tile.name=Baldosa de mármol
-tile.bluepower:marble_paver.name=Adoquín de mármol
+tile.bluepower:marble.name=Mï¿½rmol
+tile.bluepower:marble_brick.name=Ladrillos de mï¿½rmol
+tile.bluepower:marble_brick_small.name=Ladrillos de mï¿½rmol pequeï¿½os
+tile.bluepower:fancy_marble.name=Ladrillos de mï¿½rmol cincelados
+tile.bluepower:marble_tile.name=Baldosa de mï¿½rmol
+tile.bluepower:marble_paver.name=Adoquï¿½n de mï¿½rmol
 
 # Basalt and marble tiles
 ##tile.bluepower:tiles.name=
 
 # Ores and ore blocks
 tile.bluepower:amethyst_ore.name=Mena de amatista
-tile.bluepower:ruby_ore.name=Mena de rubí
+tile.bluepower:ruby_ore.name=Mena de rubï¿½
 tile.bluepower:sapphire_ore.name=Mena de zafiro
 tile.bluepower:teslatite_ore.name=Mena de teslatita
 
 tile.bluepower:amethyst_block.name=Bloque de amatista
-tile.bluepower:ruby_block.name=Bloque de rubí
+tile.bluepower:ruby_block.name=Bloque de rubï¿½
 tile.bluepower:sapphire_block.name=Bloque de zafiro
 tile.bluepower:teslatite_block.name=Bloque de teslatita
 
@@ -54,7 +54,7 @@ tile.bluepower:tungsten_block.name=Bloque de tungsteno
 
 # Plants
 tile.bluepower:flax_crop.name=Lino
-tile.bluepower:indigo_flower.name=Flor índigo
+tile.bluepower:indigo_flower.name=Flor ï¿½ndigo
 
 # Glass
 ##tile.bluepower:sapphire_glass.name=
@@ -65,21 +65,21 @@ tile.bluepower:alloyfurnace.name=Horno de aleaciones
 
 tile.bluepower:block_breaker.name=Block Breaker
 tile.bluepower:igniter.name=Encendedor
-tile.bluepower:buffer.name=Búfer
+tile.bluepower:buffer.name=Bï¿½fer
 tile.bluepower:transposer.name=Transposer
 tile.bluepower:ejector.name=Eyector
-tile.bluepower:relay.name=Relé
+tile.bluepower:relay.name=Relï¿½
 tile.bluepower:deployer.name=Deployer
 tile.bluepower:filter.name=Filtro
 tile.bluepower:retriever.name=Retriever
 tile.bluepower:sortron.name=Organizador
-tile.bluepower:sorting_machine.name=Máquina de organización
+tile.bluepower:sorting_machine.name=Mï¿½quina de organizaciï¿½n
 tile.bluepower:regulator.name=Regulador
 tile.bluepower:item_detector.name=Detector de items
 ##tile.bluepower:manager.name=
 
 tile.bluepower:windmill.name=Molino de viento vertical
-tile.bluepower:kinetic_generator.name=Generador kinético
+tile.bluepower:kinetic_generator.name=Generador kinï¿½tico
 tile.bluepower:engine.name=Motor de Blue Power
 
 # Computer
@@ -424,7 +424,7 @@ tile.bluepower:project_table.name=Mesa de proyectos
 ##item.part.bluepower:cagelamp.black.inverted.name=
 
 # Gems, dusts, ingots and nuggets
-item.bluepower:ruby_gem.name=Rubí
+item.bluepower:ruby_gem.name=Rubï¿½
 item.bluepower:amethyst_gem.name=Amatista
 item.bluepower:sapphire_gem.name=Zafiro
 
@@ -434,11 +434,11 @@ item.bluepower:copper_ingot.name=Lingote de cobre
 item.bluepower:silver_ingot.name=Lingote de plata
 item.bluepower:zinc_ingot.name=Lingote de zinc
 
-item.bluepower:red_alloy_ingot.name=Lingote de aleación roja
-item.bluepower:blue_alloy_ingot.name=Lingote de aleación azul
+item.bluepower:red_alloy_ingot.name=Lingote de aleaciï¿½n roja
+item.bluepower:blue_alloy_ingot.name=Lingote de aleaciï¿½n azul
 ##item.bluepower:purple_alloy_ingot.name=
 
-item.bluepower:brass_ingot.name=Lingote de latón
+item.bluepower:brass_ingot.name=Lingote de latï¿½n
 
 item.bluepower:tungsten_ingot.name=Lingote de tungsteno
 ##item.bluepower:tungsten_nugget.name=
@@ -446,21 +446,21 @@ item.bluepower:tungsten_ingot.name=Lingote de tungsteno
 # IC2-compat zinc
 item.bluepower:zinc_ore_crushed.name=Mena de zinc triturada
 item.bluepower:zinc_dust.name=Polvo de zinc
-item.bluepower:zinc_tiny_dust.name=Pequeña pila de polvo de zinc
+item.bluepower:zinc_tiny_dust.name=Pequeï¿½a pila de polvo de zinc
 item.bluepower:zinc_ore_purified.name=Mena de zinc purificada
 
 # Plant items
 item.bluepower:flax_seeds.name=Semillas de lino
-item.bluepower:indigo_flower.name=Flor índigo
-item.bluepower:indigo_dye.name=Tinte índigo
+item.bluepower:indigo_flower.name=Flor ï¿½ndigo
+item.bluepower:indigo_dye.name=Tinte ï¿½ndigo
 
 # Tools and weapons
-item.bluepower:ruby_sword.name=Espada de rubí
-item.bluepower:ruby_shovel.name=Pala de rubí
-item.bluepower:ruby_axe.name=Hacha de rubí
-item.bluepower:ruby_pickaxe.name=Pico de rubí
-item.bluepower:ruby_hoe.name=Azada de rubí
-item.bluepower:ruby_sickle.name=Hoz de rubí
+item.bluepower:ruby_sword.name=Espada de rubï¿½
+item.bluepower:ruby_shovel.name=Pala de rubï¿½
+item.bluepower:ruby_axe.name=Hacha de rubï¿½
+item.bluepower:ruby_pickaxe.name=Pico de rubï¿½
+item.bluepower:ruby_hoe.name=Azada de rubï¿½
+item.bluepower:ruby_sickle.name=Hoz de rubï¿½
 
 item.bluepower:sapphire_sword.name=Espada de zafiro
 item.bluepower:sapphire_shovel.name=Pala de zafiro
@@ -492,7 +492,7 @@ item.bluepower:diamond_drawplate.name=Diamond Drawplate
 # Saws
 item.bluepower:iron_saw.name=Sierra de hierro
 item.bluepower:amethyst_saw.name=Sierra de amatista
-item.bluepower:ruby_saw.name=Sierra de rubí
+item.bluepower:ruby_saw.name=Sierra de rubï¿½
 item.bluepower:sapphire_saw.name=Sierra de zafiro
 item.bluepower:diamond_saw.name=Sierra de diamante
 
@@ -506,10 +506,10 @@ item.bluepower:canvas_bag.lime.name=Bolsa de lona lima
 item.bluepower:canvas_bag.pink.name=Bolsa de lona rosa
 item.bluepower:canvas_bag.gray.name=Bolsa de lona gris
 item.bluepower:canvas_bag.silver.name=Bolsa de lona gris clara
-item.bluepower:canvas_bag.cyan.name=Bolsa de lona cián
+item.bluepower:canvas_bag.cyan.name=Bolsa de lona ciï¿½n
 item.bluepower:canvas_bag.purple.name=Bolsa de lona morada
 item.bluepower:canvas_bag.blue.name=Bolsa de lona azul
-item.bluepower:canvas_bag.brown.name=Bolsa de lona marrón
+item.bluepower:canvas_bag.brown.name=Bolsa de lona marrï¿½n
 item.bluepower:canvas_bag.green.name=Bolsa de lona verde
 item.bluepower:canvas_bag.red.name=Bolsa de lona roja
 item.bluepower:canvas_bag.black.name=Bolsa de lona negra
@@ -582,6 +582,9 @@ item.bluepower:copper_wire.name=Fine Copper Wire
 ##item.part.bluepower:gate.inverter.name=
 ##item.part.bluepower:gate.comparator.name=
 ##item.part.bluepower:gate.regulabletorch.name=
+##item.part.bluepower:gate.adder.name=
+##item.part.bluepower:gate.divider.name=
+##item.part.bluepower:gate.analogue_randomizer.name=
 ##item.part.bluepower:gate.wirelesstransceiver.name=
 ##item.part.bluepower:gate.wirelesstransceiver.analog.name=
 ##item.part.bluepower:gate.wirelesstransceiver.bundled.name=
@@ -674,6 +677,8 @@ gui.bluepower:counter.max=Maximum
 gui.bluepower:counter.increment=Increment
 gui.bluepower:counter.decrement=Decrement
 gui.bluepower:counter.count=Count
+##gui.bluepower:regulabletorch.255=
+##gui.bluepower:regulabletorch.15=
 
 gui.bluepower:sortingMachine.sortMode=Â§bSort Mode
 gui.bluepower:sortingMachine.pullMode=Â§bPull Mode

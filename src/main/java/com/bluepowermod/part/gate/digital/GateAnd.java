@@ -98,27 +98,16 @@ public class GateAnd extends GateSimpleDigital {
         if (getWorld().isRemote)
             return true;
 
-        if (left().isEnabled() && back().isEnabled() && right().isEnabled()) {
+        if (left().isEnabled() && back().isEnabled() && right().isEnabled()) {// Right disabled
             right().disable();
-        } else if (left().isEnabled() && back().isEnabled()) {
+        } else if (left().isEnabled() && back().isEnabled()) {// Back disabled
             back().disable();
             right().enable();
-        } else if (left().isEnabled() && right().isEnabled()) {
+        } else if (left().isEnabled() && right().isEnabled()) {// Left disabled
             left().disable();
             back().enable();
-        } else if (back().isEnabled() && right().isEnabled()) {
+        } else {// All enabled
             left().enable();
-            back().disable();
-            right().disable();
-        } else if (left().isEnabled()) {
-            left().disable();
-            back().enable();
-        } else if (back().isEnabled()) {
-            back().disable();
-            right().enable();
-        } else {// right enabled
-            left().enable();
-            back().enable();
         }
         return true;
     }
@@ -128,21 +117,12 @@ public class GateAnd extends GateSimpleDigital {
     public void addWAILABody(List<String> info) {
 
         info.add(Color.YELLOW + I18n.format("waila.bluepower:gate.connections") + ":");
-        info.add("  "
-                + Dir.LEFT.getLocalizedName()
-                + ": "
-                + (left().isEnabled() ? Color.GREEN + I18n.format("bluepower:misc.enabled") : Color.RED
-                        + I18n.format("bluepower:misc.disabled")));
-        info.add("  "
-                + Dir.BACK.getLocalizedName()
-                + ": "
-                + (back().isEnabled() ? Color.GREEN + I18n.format("bluepower:misc.enabled") : Color.RED
-                        + I18n.format("bluepower:misc.disabled")));
-        info.add("  "
-                + Dir.RIGHT.getLocalizedName()
-                + ": "
-                + (right().isEnabled() ? Color.GREEN + I18n.format("bluepower:misc.enabled") : Color.RED
-                        + I18n.format("bluepower:misc.disabled")));
+        info.add("  " + Dir.LEFT.getLocalizedName() + ": "
+                + (left().isEnabled() ? Color.GREEN + I18n.format("bluepower:misc.enabled") : Color.RED + I18n.format("bluepower:misc.disabled")));
+        info.add("  " + Dir.BACK.getLocalizedName() + ": "
+                + (back().isEnabled() ? Color.GREEN + I18n.format("bluepower:misc.enabled") : Color.RED + I18n.format("bluepower:misc.disabled")));
+        info.add("  " + Dir.RIGHT.getLocalizedName() + ": "
+                + (right().isEnabled() ? Color.GREEN + I18n.format("bluepower:misc.enabled") : Color.RED + I18n.format("bluepower:misc.disabled")));
     }
 
     @Override

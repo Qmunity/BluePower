@@ -498,9 +498,14 @@ item.bluepower:silky_screwdriver.name=Silky Screwdriver
 item.bluepower:wool_card.name=Wool Card
 item.bluepower:diamond_drawplate.name=Diamond Drawplate
 
+<<<<<<< HEAD
 item.bluepower:battery.name=Battery
 item.bluepower:sonic_screwdriver.name=Sonic Screwdriver
 
+=======
+item.bluepower:monocle.name=Monocle
+item.bluepower:monocle_magnifying.name=Magnificent Magnifying Monocle
+>>>>>>> AmaDev
 
 # Saws
 item.bluepower:iron_saw.name=Iron Saw
@@ -595,6 +600,9 @@ item.part.bluepower:gate.integratedCircuit7x7.name=7x7 Integrated Circuit
 item.part.bluepower:gate.inverter.name=Inverter
 item.part.bluepower:gate.comparator.name=Comparator
 item.part.bluepower:gate.regulabletorch.name=Regulable Torch
+item.part.bluepower:gate.adder.name=Adder
+item.part.bluepower:gate.divider.name=Divider
+item.part.bluepower:gate.analogue_randomizer.name=Analogue Randomizer
 item.part.bluepower:gate.wirelesstransceiver.name=Digital Wireless Transceiver
 item.part.bluepower:gate.wirelesstransceiver.analog.name=Analog Wireless Transceiver
 item.part.bluepower:gate.wirelesstransceiver.bundled.name=Digital Bundled Wireless Transceiver
@@ -687,6 +695,8 @@ gui.bluepower:counter.max=Maximum
 gui.bluepower:counter.increment=Increment
 gui.bluepower:counter.decrement=Decrement
 gui.bluepower:counter.count=Count
+gui.bluepower:regulabletorch.255=Regulable Torch Output (0-255)
+gui.bluepower:regulabletorch.15=Regulable Torch Output (0-15)
 
 gui.bluepower:sortingMachine.sortMode=§bSort Mode
 gui.bluepower:sortingMachine.pullMode=§bPull Mode

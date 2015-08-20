@@ -12,7 +12,7 @@ import com.bluepowermod.api.wire.redstone.IRedstoneDevice;
 
 public interface IGateConnection {
 
-    public IGate<?, ?, ?, ?, ?, ?> getGate();
+    public IGate getGate();
 
     public Dir getDirection();
 
@@ -57,5 +57,9 @@ public interface IGateConnection {
     public void setRedstonePower(byte power);
 
     public void setBundledPower(byte[] power);
+
+    public byte getRedstoneInput();
+
+    public byte[] getBundledInput();
 
 }

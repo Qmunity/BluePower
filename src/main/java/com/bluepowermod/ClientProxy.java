@@ -17,6 +17,8 @@
 
 package com.bluepowermod;
 
+import java.lang.reflect.Field;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
@@ -28,9 +30,11 @@ import com.bluepowermod.client.render.IconSupplier;
 import com.bluepowermod.client.render.RenderDebugScreen;
 import com.bluepowermod.client.render.Renderers;
 import com.bluepowermod.compat.CompatibilityUtils;
+import com.bluepowermod.item.ItemMonocle;
 import com.bluepowermod.part.PartManager;
 
 import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -40,6 +44,7 @@ public class ClientProxy extends CommonProxy {
     @Override
     public void init() {
 
+        ClientRegistry.registerKeyBinding(ItemMonocle.keybind);
     }
 
     @Override
@@ -74,5 +79,39 @@ public class ClientProxy extends CommonProxy {
     public String getSavePath() {
 
         return Minecraft.getMinecraft().mcDataDir.getAbsolutePath();
+    }
+
+    @Override
+    public void setFOVMultiplier(EntityPlayer player, float fovmult) {
+
+        Field movementfactor = getMovementFactorField();
+        try {
+            movementfactor.set(player, fovmult);
+        } catch (IllegalAccessException e) {
+        }
+    }
+
+    protected static Field movementfactorfieldinstance;
+
+    public static Field getMovementFactorField() {
+
+        if (movementfactorfieldinstance == null) {
+            try {
+                movementfactorfieldinstance = EntityPlayer.class.getDeclaredField("speedOnGround");
+                movementfactorfieldinstance.setAccessible(true);
+            } catch (NoSuchFieldException e) {
+                try {
+                    movementfactorfieldinstance = EntityPlayer.class.getDeclaredField("field_71108_cd");
+                    movementfactorfieldinstance.setAccessible(true);
+                } catch (NoSuchFieldException e1) {
+                    try {
+                        movementfactorfieldinstance = EntityPlayer.class.getDeclaredField("ci");
+                        movementfactorfieldinstance.setAccessible(true);
+                    } catch (NoSuchFieldException e2) {
+                    }
+                }
+            }
+        }
+        return movementfactorfieldinstance;
     }
 }

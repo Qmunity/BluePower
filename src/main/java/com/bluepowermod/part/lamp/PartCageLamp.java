@@ -10,6 +10,7 @@ package com.bluepowermod.part.lamp;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.util.IIcon;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -105,13 +106,27 @@ public class PartCageLamp extends PartLamp {
 
         if (pass == 1) {
             GL11.glEnable(GL11.GL_BLEND);
-            GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
             GL11.glDisable(GL11.GL_TEXTURE_2D);
             GL11.glDisable(GL11.GL_LIGHTING);
+
+            float lastX = OpenGlHelper.lastBrightnessX, lastY = OpenGlHelper.lastBrightnessY;
+            OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, ((inverted ? 255 - (power & 0xFF) : (power & 0xFF)) / 256F) * 240,
+                    ((inverted ? 255 - (power & 0xFF) : (power & 0xFF)) / 256F) * 240);
+
+            GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
             GL11.glBegin(GL11.GL_QUADS);
-            com.bluepowermod.client.render.RenderHelper.drawColoredCube(vector.clone().expand(0.5 / 16D), r, g, b,
-                    ((inverted ? 255 - (power & 0xFF) : (power & 0xFF)) / 255D) * 0.625);
+            com.bluepowermod.client.render.RenderHelper.drawColoredCube(vector.clone().expand(0.5 / 16D), r, g, b, ((inverted ? 255 - (power & 0xFF)
+                    : (power & 0xFF)) / 256D) * 0.375);
             GL11.glEnd();
+
+            GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
+            GL11.glBegin(GL11.GL_QUADS);
+            com.bluepowermod.client.render.RenderHelper.drawColoredCube(vector.clone().expand(0.5 / 16D), r, g, b, ((inverted ? 255 - (power & 0xFF)
+                    : (power & 0xFF)) / 256D) * 0.375);
+            GL11.glEnd();
+
+            OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, lastX, lastY);
+
             GL11.glEnable(GL11.GL_CULL_FACE);
             GL11.glEnable(GL11.GL_LIGHTING);
             GL11.glEnable(GL11.GL_TEXTURE_2D);

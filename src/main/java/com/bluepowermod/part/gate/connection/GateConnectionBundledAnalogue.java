@@ -16,7 +16,7 @@ public class GateConnectionBundledAnalogue extends GateConnectionBase {
 
     private byte[] input = new byte[16], output = new byte[16];
 
-    public GateConnectionBundledAnalogue(GateBase<?, ?, ?, ?, ?, ?> gate, Dir direction) {
+    public GateConnectionBundledAnalogue(GateBase gate, Dir direction) {
 
         super(gate, direction);
     }
@@ -66,6 +66,18 @@ public class GateConnectionBundledAnalogue extends GateConnectionBase {
 
         for (int i = 0; i < power.length; i++)
             input[i] = power[i];
+    }
+
+    @Override
+    public byte getRedstoneInput() {
+
+        return (byte) 0;
+    }
+
+    @Override
+    public byte[] getBundledInput() {
+
+        return input;
     }
 
     public byte[] getInput() {

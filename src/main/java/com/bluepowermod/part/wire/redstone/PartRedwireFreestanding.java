@@ -23,7 +23,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map.Entry;
 
 import net.minecraft.block.BlockRedstoneWire;
 import net.minecraft.client.Minecraft;
@@ -43,7 +42,8 @@ import org.lwjgl.opengl.GL11;
 import uk.co.qmunity.lib.client.render.RenderHelper;
 import uk.co.qmunity.lib.helper.MathHelper;
 import uk.co.qmunity.lib.helper.RedstoneHelper;
-import uk.co.qmunity.lib.misc.Pair;
+import uk.co.qmunity.lib.part.IPart;
+import uk.co.qmunity.lib.part.IPartPlacementFlat;
 import uk.co.qmunity.lib.part.IPartRedstone;
 import uk.co.qmunity.lib.part.MicroblockShape;
 import uk.co.qmunity.lib.part.compat.OcclusionHelper;
@@ -55,7 +55,7 @@ import com.bluepowermod.api.connect.ConnectionType;
 import com.bluepowermod.api.connect.IConnection;
 import com.bluepowermod.api.connect.IConnectionCache;
 import com.bluepowermod.api.connect.IConnectionListener;
-import com.bluepowermod.api.gate.IIntegratedCircuitPart;
+import com.bluepowermod.api.gate.ic.IIntegratedCircuitPart;
 import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.api.wire.redstone.IBundledConductor.IAdvancedBundledConductor;
 import com.bluepowermod.api.wire.redstone.IBundledDevice;
@@ -67,7 +67,7 @@ import com.bluepowermod.api.wire.redstone.IRedwire;
 import com.bluepowermod.api.wire.redstone.RedwireType;
 import com.bluepowermod.client.render.IconSupplier;
 import com.bluepowermod.init.BPCreativeTabs;
-import com.bluepowermod.part.gate.ic.FakeMultipartTileIC;
+import com.bluepowermod.part.PartPlacementDefaultFlat;
 import com.bluepowermod.part.wire.PartWireFreestanding;
 import com.bluepowermod.redstone.BundledConnectionCache;
 import com.bluepowermod.redstone.BundledDeviceWrapper;
@@ -76,8 +76,7 @@ import com.bluepowermod.redstone.RedstoneApi;
 import com.bluepowermod.redstone.RedstoneConnection;
 import com.bluepowermod.redstone.RedstoneConnectionCache;
 
-public abstract class PartRedwireFreestanding extends PartWireFreestanding implements IRedwire, IRedConductor, IIntegratedCircuitPart,
-IPartRedstone {
+public abstract class PartRedwireFreestanding extends PartWireFreestanding implements IRedwire, IRedConductor, IIntegratedCircuitPart, IPartRedstone {
 
     private RedwireType type;
 
@@ -127,6 +126,31 @@ IPartRedstone {
     protected IIcon getFrameIcon() {
 
         return Blocks.planks.getIcon(0, 0);
+    }
+
+    @Override
+    protected boolean shouldRenderFullFrame() {
+
+        int count = 0;
+        ForgeDirection ld = null;
+
+        for (int i = 0; i < 6; i++) {
+            ForgeDirection d = ForgeDirection.getOrientation(i);
+            if (shouldRenderConnection(d)) {
+                count++;
+                if (ld == null)
+                    ld = d;
+                if (d != ld && d != ld.getOpposite())
+                    return true;
+            }
+        }
+
+        if (count != 2)
+            return true;
+        if (getParent() == null || getWorld() == null)
+            return true;
+
+        return false;
     }
 
     // Selection and occlusion boxes
@@ -216,8 +240,13 @@ IPartRedstone {
         return BPCreativeTabs.wiring;
     }
 
-    public static class PartRedwireFreestandingUninsulated extends PartRedwireFreestanding implements IAdvancedRedstoneConductor,
-    IConnectionListener {
+    @Override
+    public IPartPlacementFlat getFlatPlacement(IPart part, double hitX, double hitZ) {
+
+        return new PartPlacementDefaultFlat();
+    }
+
+    public static class PartRedwireFreestandingUninsulated extends PartRedwireFreestanding implements IAdvancedRedstoneConductor, IConnectionListener {
 
         private RedstoneConnectionCache connections = RedstoneApi.getInstance().createRedstoneConnectionCache(this);
         private boolean hasUpdated = false;
@@ -320,9 +349,6 @@ IPartRedstone {
         @Override
         public void onRedstoneUpdate() {
 
-            if (getParent() instanceof FakeMultipartTileIC)
-                ((FakeMultipartTileIC) getParent()).getIC().loadWorld();
-
             if (hasUpdated) {
                 sendUpdatePacket();
 
@@ -346,21 +372,13 @@ IPartRedstone {
         }
 
         @Override
-        public List<Entry<IConnection<IRedstoneDevice>, Boolean>> propagate(ForgeDirection fromSide) {
-
-            if (getParent() instanceof FakeMultipartTileIC)
-                ((FakeMultipartTileIC) getParent()).getIC().loadWorld();
-
-            List<Entry<IConnection<IRedstoneDevice>, Boolean>> l = new ArrayList<Entry<IConnection<IRedstoneDevice>, Boolean>>();
+        public void propagate(ForgeDirection fromSide, Collection<IConnection<IRedstoneDevice>> propagation) {
 
             for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
                 IConnection<IRedstoneDevice> c = connections.getConnectionOnSide(d);
                 if (c != null)
-                    l.add(new Pair<IConnection<IRedstoneDevice>, Boolean>(c, c.getB() instanceof IRedwire
-                            && ((IRedwire) c.getB()).getRedwireType(c.getSideB()) != getRedwireType(c.getSideA())));
+                    propagation.add(c);
             }
-
-            return l;
         }
 
         @Override
@@ -480,7 +498,7 @@ IPartRedstone {
     }
 
     public static class PartRedwireFreestandingInsulated extends PartRedwireFreestanding implements IAdvancedRedstoneConductor,
-    IInsulatedRedstoneDevice, IAdvancedBundledConductor, IInsulatedRedwire, IConnectionListener {
+            IInsulatedRedstoneDevice, IAdvancedBundledConductor, IInsulatedRedwire, IConnectionListener {
 
         private RedstoneConnectionCache connections = RedstoneApi.getInstance().createRedstoneConnectionCache(this);
         private BundledConnectionCache bundledConnections = RedstoneApi.getInstance().createBundledConnectionCache(this);
@@ -533,8 +551,8 @@ IPartRedstone {
                 return false;
 
             if (device instanceof IInsulatedRedstoneDevice) {
-                MinecraftColor c = ((IInsulatedRedstoneDevice) device).getInsulationColor(type == ConnectionType.STRAIGHT ? side
-                        .getOpposite() : null);
+                MinecraftColor c = ((IInsulatedRedstoneDevice) device)
+                        .getInsulationColor(type == ConnectionType.STRAIGHT ? side.getOpposite() : null);
                 if (c != null && c != getInsulationColor(side))
                     return false;
             }
@@ -658,9 +676,6 @@ IPartRedstone {
         @Override
         public void onRedstoneUpdate() {
 
-            if (getParent() instanceof FakeMultipartTileIC)
-                ((FakeMultipartTileIC) getParent()).getIC().loadWorld();
-
             if (hasUpdated) {
                 sendUpdatePacket();
 
@@ -713,39 +728,28 @@ IPartRedstone {
         }
 
         @Override
-        public List<Entry<IConnection<IRedstoneDevice>, Boolean>> propagate(ForgeDirection fromSide) {
-
-            List<Entry<IConnection<IRedstoneDevice>, Boolean>> l = new ArrayList<Entry<IConnection<IRedstoneDevice>, Boolean>>();
+        public void propagate(ForgeDirection fromSide, Collection<IConnection<IRedstoneDevice>> propagation) {
 
             for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
                 IConnection<IRedstoneDevice> c = connections.getConnectionOnSide(d);
                 if (c != null)
-                    l.add(new Pair<IConnection<IRedstoneDevice>, Boolean>(c, c.getB() instanceof IRedwire
-                            && ((IRedwire) c.getB()).getRedwireType(c.getSideB()) != getRedwireType(c.getSideA())));
+                    propagation.add(c);
 
                 IConnection<IBundledDevice> cB = bundledConnections.getConnectionOnSide(d);
                 if (cB != null)
-                    l.add(new Pair<IConnection<IRedstoneDevice>, Boolean>(new RedstoneConnection(this, BundledDeviceWrapper.wrap(cB.getB(),
-                            color), cB.getSideA(), cB.getSideB(), cB.getType()), cB.getB() instanceof IRedwire
-                            && ((IRedwire) cB.getB()).getRedwireType(cB.getSideB()) != getRedwireType(cB.getSideA())));
+                    propagation.add(new RedstoneConnection(this, BundledDeviceWrapper.wrap(cB.getB(), color), cB.getSideA(), cB.getSideB(), cB
+                            .getType()));
             }
-
-            return l;
         }
 
         @Override
-        public Collection<Entry<IConnection<IBundledDevice>, Boolean>> propagateBundled(ForgeDirection fromSide) {
-
-            List<Entry<IConnection<IBundledDevice>, Boolean>> l = new ArrayList<Entry<IConnection<IBundledDevice>, Boolean>>();
+        public void propagateBundled(ForgeDirection fromSide, Collection<IConnection<IBundledDevice>> propagation) {
 
             for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
                 IConnection<IBundledDevice> c = bundledConnections.getConnectionOnSide(d);
                 if (c != null)
-                    l.add(new Pair<IConnection<IBundledDevice>, Boolean>(c, c.getB() instanceof IRedwire
-                            && ((IRedwire) c.getB()).getRedwireType(c.getSideB()) != getRedwireType(c.getSideA())));
+                    propagation.add(c);
             }
-
-            return l;
         }
 
         @Override
@@ -859,8 +863,7 @@ IPartRedstone {
 
     }
 
-    public static class PartRedwireFreestandingBundled extends PartRedwireFreestanding implements IAdvancedBundledConductor,
-    IConnectionListener {
+    public static class PartRedwireFreestandingBundled extends PartRedwireFreestanding implements IAdvancedBundledConductor, IConnectionListener {
 
         private BundledConnectionCache bundledConnections = RedstoneApi.getInstance().createBundledConnectionCache(this);
         private byte[] power = new byte[16];
@@ -1028,18 +1031,13 @@ IPartRedstone {
         }
 
         @Override
-        public Collection<Entry<IConnection<IBundledDevice>, Boolean>> propagateBundled(ForgeDirection fromSide) {
-
-            List<Entry<IConnection<IBundledDevice>, Boolean>> l = new ArrayList<Entry<IConnection<IBundledDevice>, Boolean>>();
+        public void propagateBundled(ForgeDirection fromSide, Collection<IConnection<IBundledDevice>> propagation) {
 
             for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
                 IConnection<IBundledDevice> c = bundledConnections.getConnectionOnSide(d);
                 if (c != null)
-                    l.add(new Pair<IConnection<IBundledDevice>, Boolean>(c, c.getB() instanceof IRedwire
-                            && ((IRedwire) c.getB()).getRedwireType(c.getSideB()) != getRedwireType(c.getSideA())));
+                    propagation.add(c);
             }
-
-            return l;
         }
 
         @Override

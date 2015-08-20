@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map.Entry;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
@@ -24,7 +23,6 @@ import net.minecraftforge.common.util.ForgeDirection;
 import org.lwjgl.opengl.GL11;
 
 import uk.co.qmunity.lib.client.render.RenderHelper;
-import uk.co.qmunity.lib.misc.Pair;
 import uk.co.qmunity.lib.part.IPart;
 import uk.co.qmunity.lib.part.IPartPlacement;
 import uk.co.qmunity.lib.raytrace.QMovingObjectPosition;
@@ -49,8 +47,6 @@ import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.item.ItemPart;
 import com.bluepowermod.part.BPPartFaceRotate;
 import com.bluepowermod.part.PartManager;
-import com.bluepowermod.part.gate.connection.GateConnectionBase;
-import com.bluepowermod.part.gate.ic.FakeMultipartTileIC;
 import com.bluepowermod.part.wire.redstone.PartRedwireFace;
 import com.bluepowermod.part.wire.redstone.PartRedwireFace.PartRedwireFaceUninsulated;
 import com.bluepowermod.part.wire.redstone.WireHelper;
@@ -61,10 +57,7 @@ import com.bluepowermod.redstone.RedstoneConnectionCache;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class GateNullCell
-extends
-GateSupported<GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase>
-implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor, IRedwire {
+public class GateNullCell extends GateSupported implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor, IRedwire {
 
     private RedwireType typeA = null, typeB = null;
     private boolean bundledA = false, bundledB = false;
@@ -135,10 +128,10 @@ implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor, IRedwire {
             dir = new Vec3d(0, 0, 0).add(dir).rotateUndo(getFace(), Vec3d.center).toForgeDirection();
 
             renderer.renderBox(new Vec3dCube(7 / 16D, 2 / 16D, 1 / 16D, 9 / 16D, 2 / 16D + height, 15 / 16D), wire);
-            renderer.renderBox(new Vec3dCube(7 / 16D, 2 / 16D, 0 / 16D, 9 / 16D, 2 / 16D + (height / (nullcells[dir.ordinal()] ? 1 : 2)),
-                    1 / 16D), wire);
-            renderer.renderBox(new Vec3dCube(7 / 16D, 2 / 16D, 15 / 16D, 9 / 16D, 2 / 16D + (height / (nullcells[dir.getOpposite()
-                                                                                                                 .ordinal()] ? 1 : 2)), 16 / 16D), wire);
+            renderer.renderBox(new Vec3dCube(7 / 16D, 2 / 16D, 0 / 16D, 9 / 16D, 2 / 16D + (height / (nullcells[dir.ordinal()] ? 1 : 2)), 1 / 16D),
+                    wire);
+            renderer.renderBox(new Vec3dCube(7 / 16D, 2 / 16D, 15 / 16D, 9 / 16D,
+                    2 / 16D + (height / (nullcells[dir.getOpposite().ordinal()] ? 1 : 2)), 16 / 16D), wire);
         }
 
         if (typeB != null) { // Supported
@@ -169,8 +162,8 @@ implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor, IRedwire {
 
         List<ItemStack> l = new ArrayList<ItemStack>();
 
-        l.add(getStackWithData(new GateNullCell(inWorldA ? null : typeA, inWorldA ? false : bundledA, inWorldB ? null : typeB,
-                inWorldB ? false : bundledB)));
+        l.add(getStackWithData(new GateNullCell(inWorldA ? null : typeA, inWorldA ? false : bundledA, inWorldB ? null : typeB, inWorldB ? false
+                : bundledB)));
         if (inWorldA && typeA != null)
             l.add(typeA.getPartInfo(MinecraftColor.NONE, bundledA).getStack());
         if (inWorldB && typeB != null)
@@ -425,7 +418,7 @@ implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor, IRedwire {
     @Override
     public boolean canConnect(ForgeDirection side, IRedstoneDevice device, ConnectionType type) {
 
-        if (type == ConnectionType.OPEN_CORNER && device instanceof IGate<?, ?, ?, ?, ?, ?>)
+        if (type == ConnectionType.OPEN_CORNER && device instanceof IGate)
             return false;
 
         if (type == ConnectionType.STRAIGHT)
@@ -556,18 +549,13 @@ implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor, IRedwire {
     }
 
     @Override
-    public boolean canPropagateFrom(ForgeDirection fromSide) {
+    public boolean canPropagateFrom(ForgeDirection fromSide) {// FIXME IMPORTANT add a use for canPropagateFrom
 
         return fromSide != getFace() && fromSide != getFace().getOpposite();
     }
 
     @Override
-    public Collection<Entry<IConnection<IRedstoneDevice>, Boolean>> propagate(ForgeDirection fromSide) {
-
-        if (getParent() instanceof FakeMultipartTileIC)
-            ((FakeMultipartTileIC) getParent()).getIC().loadWorld();
-
-        List<Entry<IConnection<IRedstoneDevice>, Boolean>> l = new ArrayList<Entry<IConnection<IRedstoneDevice>, Boolean>>();
+    public void propagate(ForgeDirection fromSide, Collection<IConnection<IRedstoneDevice>> propagation) {
 
         // // System.out.println("Propagating at (" + getX() + " " + getY() + " " + getZ() + ")");
         // for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
@@ -579,18 +567,13 @@ implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor, IRedwire {
         // }
         // }
 
-        if (!canPropagateFrom(fromSide))
-            return l;
-
         IConnection<IRedstoneDevice> c1 = getRedstoneConnectionCache().getConnectionOnSide(fromSide);
         IConnection<IRedstoneDevice> c2 = getRedstoneConnectionCache().getConnectionOnSide(fromSide.getOpposite());
 
         if (c1 != null)
-            l.add(new Pair<IConnection<IRedstoneDevice>, Boolean>(c1, false));
+            propagation.add(c1);
         if (c2 != null)
-            l.add(new Pair<IConnection<IRedstoneDevice>, Boolean>(c2, false));
-
-        return l;
+            propagation.add(c2);
     }
 
     @Override
@@ -608,8 +591,7 @@ implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor, IRedwire {
     // Placement disabling
 
     @Override
-    public IPartPlacement getPlacement(IPart part, World world, Vec3i location, ForgeDirection face, MovingObjectPosition mop,
-            EntityPlayer player) {
+    public IPartPlacement getPlacement(IPart part, World world, Vec3i location, ForgeDirection face, MovingObjectPosition mop, EntityPlayer player) {
 
         if (bundledA || bundledB)
             return null;

@@ -51,11 +51,10 @@ public class GateMultiplexer extends GateSimpleDigital {
     public void doLogic() {
 
         if (buf == null) {
-            buf = new ShiftingBuffer<Boolean>(6, 2, false);
+            buf = new ShiftingBuffer<Boolean>(5, 2, false);
 
-            buf.set(4, true);
-            buf.set(0, true);
             buf.set(3, true);
+            buf.set(0, true);
 
             buf.shift();
         }
@@ -72,11 +71,10 @@ public class GateMultiplexer extends GateSimpleDigital {
             return;
 
         if (buf == null) {
-            buf = new ShiftingBuffer<Boolean>(6, 2, false);
+            buf = new ShiftingBuffer<Boolean>(5, 2, false);
 
-            buf.set(4, true);
-            buf.set(0, true);
             buf.set(3, true);
+            buf.set(0, true);
 
             buf.shift();
         }
@@ -86,17 +84,16 @@ public class GateMultiplexer extends GateSimpleDigital {
         t2.setState(!buf.get(0));
         t3.setState(!buf.get(0) && !buf.get(2));
 
-        w2.setPower((byte) (buf.get(3) ? 255 : 0));
-        t1.setState(!buf.get(3) && !buf.get(1));
+        w2.setPower((byte) (!buf.get(0) ? 255 : 0));
+        t1.setState(buf.get(0) && !buf.get(1));
 
-        w1.setPower((byte) (buf.get(4) ? 255 : 0));
+        w1.setPower((byte) (buf.get(3) ? 255 : 0));
 
-        t4.setState(buf.get(5));
-        front().setOutput(buf.get(5));
+        t4.setState(buf.get(4));
+        front().setOutput(buf.get(4));
 
-        buf.set(3, !buf.get(0));
-        buf.set(4, (!buf.get(0) && !buf.get(2)) || (!buf.get(3) && !buf.get(1)));
-        buf.set(5, !buf.get(4));
+        buf.set(3, (!buf.get(0) && !buf.get(2)) || (buf.get(0) && !buf.get(1)));
+        buf.set(4, !buf.get(3));
     }
 
     @Override
@@ -113,11 +110,10 @@ public class GateMultiplexer extends GateSimpleDigital {
         super.readFromNBT(tag);
 
         if (buf == null) {
-            buf = new ShiftingBuffer<Boolean>(6, 2, false);
+            buf = new ShiftingBuffer<Boolean>(5, 2, false);
 
-            buf.set(4, true);
-            buf.set(0, true);
             buf.set(3, true);
+            buf.set(0, true);
 
             buf.shift();
         }

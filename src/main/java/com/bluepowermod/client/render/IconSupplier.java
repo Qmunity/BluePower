@@ -83,11 +83,18 @@ public class IconSupplier {
     public static IIcon siliconChipOn;
     public static IIcon taintedSiliconChipOff;
     public static IIcon taintedSiliconChipOn;
+    public static IIcon redSiliconChipOff;
+    public static IIcon redSiliconChipOn;
     public static IIcon quartzResonator;
     public static IIcon gateSolarPanel;
 
     public static IIcon powerCableLV1;
     public static IIcon powerCableLV2;
+
+    public static IIcon icArrowIn;
+    public static IIcon icArrowOut;
+    public static IIcon icArrowInBundled;
+    public static IIcon icArrowOutBundled;
 
     @SubscribeEvent
     public void onTextureStitch(TextureStitchEvent.Pre event) {
@@ -156,11 +163,18 @@ public class IconSupplier {
             siliconChipOn = reg.registerIcon(Refs.MODID + ":gates/components/silicon_chip_on");
             taintedSiliconChipOff = reg.registerIcon(Refs.MODID + ":gates/components/tainted_silicon_chip_off");
             taintedSiliconChipOn = reg.registerIcon(Refs.MODID + ":gates/components/tainted_silicon_chip_on");
+            redSiliconChipOff = reg.registerIcon(Refs.MODID + ":gates/components/red_silicon_chip_off");
+            redSiliconChipOn = reg.registerIcon(Refs.MODID + ":gates/components/red_silicon_chip_on");
             quartzResonator = reg.registerIcon(Refs.MODID + ":gates/components/resonator");
             gateSolarPanel = reg.registerIcon(Refs.MODID + ":gates/components/solarpanel");
 
             powerCableLV1 = reg.registerIcon(Refs.MODID + ":cable/lv_cable1");
             powerCableLV2 = reg.registerIcon(Refs.MODID + ":cable/lv_cable2");
+
+            icArrowIn = reg.registerIcon(Refs.MODID + ":gates/integratedCircuitArrowIn");
+            icArrowOut = reg.registerIcon(Refs.MODID + ":gates/integratedCircuitArrowOut");
+            icArrowInBundled = reg.registerIcon(Refs.MODID + ":gates/integratedCircuitArrowInBundled");
+            icArrowOutBundled = reg.registerIcon(Refs.MODID + ":gates/integratedCircuitArrowOutBundled");
 
             for (PartInfo i : PartManager.getRegisteredParts())
                 i.getExample().registerIcons(reg);

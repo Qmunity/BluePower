@@ -33,7 +33,6 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import uk.co.qmunity.lib.item.ItemMultipart;
-import uk.co.qmunity.lib.part.IPart;
 
 import com.bluepowermod.api.BPApi;
 import com.bluepowermod.api.item.IDatabaseSaveable;
@@ -125,9 +124,14 @@ public class ItemPart extends ItemMultipart implements IDatabaseSaveable {
     }
 
     @Override
-    public IPart createPart(ItemStack item, EntityPlayer player, World world, MovingObjectPosition mop) {
+    public BPPart createPart(ItemStack item, EntityPlayer player, World world, MovingObjectPosition mop) {
 
-        IPart part = info.create();
+        return createPart(item);
+    }
+
+    public BPPart createPart(ItemStack item) {
+
+        BPPart part = info.create();
         BPApi.getInstance().loadSilkySettings(part, item);
         return part;
     }
@@ -148,12 +152,12 @@ public class ItemPart extends ItemMultipart implements IDatabaseSaveable {
     private void playPlacementSound(int x, int y, int z, SoundType sound) {
 
         Minecraft
-        .getMinecraft()
-        .getSoundHandler()
-        .playSound(
-                new PositionedSoundRecord(new ResourceLocation(sound.func_150496_b()), (sound.getVolume() + 3)
-                        * Minecraft.getMinecraft().gameSettings.getSoundLevel(SoundCategory.BLOCKS), sound.getPitch() * 0.85F,
-                        x + 0.5F, y + 0.5F, z + 0.5F));
+                .getMinecraft()
+                .getSoundHandler()
+                .playSound(
+                        new PositionedSoundRecord(new ResourceLocation(sound.func_150496_b()), (sound.getVolume() + 3)
+                                * Minecraft.getMinecraft().gameSettings.getSoundLevel(SoundCategory.BLOCKS), sound.getPitch() * 0.85F, x + 0.5F,
+                                y + 0.5F, z + 0.5F));
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })

@@ -582,7 +582,7 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
                 renderFully = true;
         }
 
-        renderFully |= count > 2 || count == 0;
+        renderFully |= count > 2 || count < 2;
         renderFully |= getParent() == null || getWorld() == null;
 
         return renderFully;

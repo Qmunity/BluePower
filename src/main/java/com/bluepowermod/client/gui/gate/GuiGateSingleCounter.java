@@ -23,13 +23,13 @@ import cpw.mods.fml.relauncher.SideOnly;
  */
 
 @SideOnly(Side.CLIENT)
-public abstract class GuiGateSingleCounter extends GuiGate {
+public abstract class GuiGateSingleCounter extends GuiGate<GateBase> {
 
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/gate.png");
     private static final String[] buttonTexts = { "-10s", "-1s", "-50ms", "+50ms", "+1s", "+10s" };
     private static final int[] buttonActions = { -200, -20, -1, 1, 20, 200 };
 
-    public GuiGateSingleCounter(GateBase<?, ?, ?, ?, ?, ?> gate) {
+    public GuiGateSingleCounter(GateBase gate) {
 
         super(gate, 228, 66);
     }
@@ -67,8 +67,17 @@ public abstract class GuiGateSingleCounter extends GuiGate {
     @Override
     public void renderGUI(int x, int y, float partialTicks) {
 
-        drawCenteredString(fontRendererObj, I18n.format(getTitle()) + ": " + getDisplayedString(), guiLeft + xSize / 2, guiTop + 10,
-                0xFFFFFF);
+        int i = 0;
+        for (String s : getTitleAdv()) {
+            drawCenteredString(fontRendererObj, I18n.format(s) + ": " + getDisplayedString(i), guiLeft + xSize / 2, guiTop + 10 + i
+                    * fontRendererObj.FONT_HEIGHT, 0xFFFFFF);
+            i++;
+        }
+    }
+
+    protected String getDisplayedString(int i) {
+
+        return getDisplayedString();
     }
 
     protected String getDisplayedString() {
@@ -100,6 +109,11 @@ public abstract class GuiGateSingleCounter extends GuiGate {
     protected String getTitle() {
 
         return "gui.bluepower:timer.interval";
+    }
+
+    protected String[] getTitleAdv() {
+
+        return new String[] { getTitle() };
     }
 
     protected int getMinValue() {

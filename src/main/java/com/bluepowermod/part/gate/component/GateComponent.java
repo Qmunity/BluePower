@@ -15,19 +15,22 @@ import uk.co.qmunity.lib.vec.Vec3i;
 import com.bluepowermod.api.gate.IGateComponent;
 import com.bluepowermod.part.gate.GateBase;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 public abstract class GateComponent implements IGateComponent {
 
-    private GateBase<?, ?, ?, ?, ?, ?> gate;
+    private GateBase gate;
 
     private boolean needsSyncing = false;
 
-    public GateComponent(GateBase<?, ?, ?, ?, ?, ?> gate) {
+    public GateComponent(GateBase gate) {
 
         this.gate = gate;
     }
 
     @Override
-    public GateBase<?, ?, ?, ?, ?, ?> getGate() {
+    public GateBase getGate() {
 
         return gate;
     }
@@ -49,11 +52,13 @@ public abstract class GateComponent implements IGateComponent {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void renderStatic(Vec3i translation, RenderHelper renderer, int pass) {
 
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void renderDynamic(Vec3d translation, double delta, int pass) {
 
     }

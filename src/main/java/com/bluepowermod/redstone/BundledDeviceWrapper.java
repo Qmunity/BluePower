@@ -3,11 +3,9 @@ package com.bluepowermod.redstone;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map.Entry;
 
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
-import uk.co.qmunity.lib.misc.Pair;
 
 import com.bluepowermod.api.connect.ConnectionType;
 import com.bluepowermod.api.connect.IConnection;
@@ -18,7 +16,6 @@ import com.bluepowermod.api.wire.redstone.IBundledDevice;
 import com.bluepowermod.api.wire.redstone.IInsulatedRedstoneDevice;
 import com.bluepowermod.api.wire.redstone.IRedstoneConductor.IAdvancedRedstoneConductor;
 import com.bluepowermod.api.wire.redstone.IRedstoneDevice;
-import com.bluepowermod.api.wire.redstone.IRedwire;
 import com.bluepowermod.api.wire.redstone.IRedwire.IInsulatedRedwire;
 
 public class BundledDeviceWrapper implements IAdvancedRedstoneConductor {
@@ -140,18 +137,13 @@ public class BundledDeviceWrapper implements IAdvancedRedstoneConductor {
     }
 
     @Override
-    public Collection<Entry<IConnection<IRedstoneDevice>, Boolean>> propagate(ForgeDirection fromSide) {
-
-        List<Entry<IConnection<IRedstoneDevice>, Boolean>> l = new ArrayList<Entry<IConnection<IRedstoneDevice>, Boolean>>();
+    public void propagate(ForgeDirection fromSide, Collection<IConnection<IRedstoneDevice>> propagation) {
 
         for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
             IConnection<IRedstoneDevice> c = connections.getConnectionOnSide(d);
             if (c != null)
-                l.add(new Pair<IConnection<IRedstoneDevice>, Boolean>(c, c.getB() instanceof IRedwire && device instanceof IRedwire
-                        && ((IRedwire) c.getB()).getRedwireType(c.getSideB()) != ((IRedwire) device).getRedwireType(c.getSideA())));
+                propagation.add(c);
         }
-
-        return l;
     }
 
     @Override
@@ -180,8 +172,8 @@ public class BundledDeviceWrapper implements IAdvancedRedstoneConductor {
         public IConnection<IRedstoneDevice> getConnectionOnSide(ForgeDirection side) {
 
             if (wrapper.device instanceof IInsulatedRedwire && ((IRedstoneDevice) wrapper.device).getRedstoneConnectionCache() != null) {
-                IConnection<IRedstoneDevice> c = (IConnection<IRedstoneDevice>) ((IRedstoneDevice) wrapper.device)
-                        .getRedstoneConnectionCache().getConnectionOnSide(side);
+                IConnection<IRedstoneDevice> c = (IConnection<IRedstoneDevice>) ((IRedstoneDevice) wrapper.device).getRedstoneConnectionCache()
+                        .getConnectionOnSide(side);
                 if (c != null)
                     return c;
             }
@@ -190,8 +182,8 @@ public class BundledDeviceWrapper implements IAdvancedRedstoneConductor {
             if (original != originalCons[side.ordinal()]) {
                 if (original != null) {
                     if (!(original.getB() instanceof IInsulatedRedstoneDevice)
-                            || (original.getB() instanceof IInsulatedRedstoneDevice && wrapper.color
-                                    .equals(((IInsulatedRedstoneDevice) original.getB()).getInsulationColor(original.getSideB()))))
+                            || (original.getB() instanceof IInsulatedRedstoneDevice && wrapper.color.equals(((IInsulatedRedstoneDevice) original
+                                    .getB()).getInsulationColor(original.getSideB()))))
                         cons[side.ordinal()] = new RedstoneConnection(BundledDeviceWrapper.this, wrap(original.getB(), color), side,
                                 original.getSideB(), original.getType());
                     else

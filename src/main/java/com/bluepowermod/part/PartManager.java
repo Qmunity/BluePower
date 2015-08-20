@@ -7,10 +7,21 @@
  */
 package com.bluepowermod.part;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
+import net.minecraft.item.ItemStack;
+import uk.co.qmunity.lib.part.PartRegistry;
+
 import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.api.wire.redstone.RedwireType;
 import com.bluepowermod.item.ItemPart;
+import com.bluepowermod.part.gate.analogue.GateAdder;
+import com.bluepowermod.part.gate.analogue.GateAnalogueRandomizer;
 import com.bluepowermod.part.gate.analogue.GateComparator;
+import com.bluepowermod.part.gate.analogue.GateDivider;
 import com.bluepowermod.part.gate.analogue.GateInverter;
 import com.bluepowermod.part.gate.analogue.GateLightCell;
 import com.bluepowermod.part.gate.analogue.GateRegulableTorch;
@@ -45,6 +56,7 @@ import com.bluepowermod.part.tube.PneumaticTube;
 import com.bluepowermod.part.tube.PneumaticTubeOpaque;
 import com.bluepowermod.part.tube.RestrictionTube;
 import com.bluepowermod.part.tube.RestrictionTubeOpaque;
+import com.bluepowermod.part.wire.PartSeparator;
 import com.bluepowermod.part.wire.redstone.PartRedwireFace.PartRedwireFaceBundled;
 import com.bluepowermod.part.wire.redstone.PartRedwireFace.PartRedwireFaceInsulated;
 import com.bluepowermod.part.wire.redstone.PartRedwireFace.PartRedwireFaceUninsulated;
@@ -54,13 +66,6 @@ import com.bluepowermod.part.wire.redstone.PartRedwireFreestanding.PartRedwireFr
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.item.ItemStack;
-import uk.co.qmunity.lib.part.PartRegistry;
-
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
 
 public class PartManager {
 
@@ -148,9 +153,14 @@ public class PartManager {
 
         // Analogue gates
         registerPart(GateInverter.class);
-        registerPart(GateComparator.class);
         registerPart(GateLightCell.class);
         registerPart(GateRegulableTorch.class);
+
+        registerPart(GateAdder.class);
+        registerPart(GateComparator.class);
+        registerPart(GateDivider.class);
+
+        registerPart(GateAnalogueRandomizer.class);
 
         // Wireless gates
         registerPart(GateTransceiver.class, false, false);
@@ -200,6 +210,8 @@ public class PartManager {
                 registerPart(PartRedwireFreestandingBundled.class, type, color);
         }
 
+        // Part separator
+        registerPart(PartSeparator.class);
     }
 
     public static void registerItems() {

@@ -30,6 +30,8 @@ import org.lwjgl.opengl.GL11;
 import uk.co.qmunity.lib.client.render.RenderHelper;
 import uk.co.qmunity.lib.helper.MathHelper;
 import uk.co.qmunity.lib.helper.RedstoneHelper;
+import uk.co.qmunity.lib.part.IPart;
+import uk.co.qmunity.lib.part.IPartPlacementFlat;
 import uk.co.qmunity.lib.part.IPartRedstone;
 import uk.co.qmunity.lib.part.MicroblockShape;
 import uk.co.qmunity.lib.part.compat.MultipartCompatibility;
@@ -42,10 +44,12 @@ import uk.co.qmunity.lib.vec.Vec3i;
 import com.bluepowermod.api.connect.ConnectionType;
 import com.bluepowermod.api.connect.IConnection;
 import com.bluepowermod.api.connect.IConnectionCache;
+import com.bluepowermod.api.gate.ic.IIntegratedCircuitPart;
 import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.api.wire.redstone.IRedstoneDevice;
 import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.part.BPPartFace;
+import com.bluepowermod.part.PartPlacementFaceFlat;
 import com.bluepowermod.part.tube.PneumaticTube;
 import com.bluepowermod.part.wire.redstone.PartRedwireFreestanding;
 import com.bluepowermod.redstone.RedstoneApi;
@@ -61,7 +65,7 @@ import cpw.mods.fml.relauncher.SideOnly;
  * @author Koen Beckers (K4Unl), Amadornes
  *
  */
-public abstract class PartLamp extends BPPartFace implements IPartRedstone, IRedstoneDevice {
+public abstract class PartLamp extends BPPartFace implements IPartRedstone, IRedstoneDevice, IIntegratedCircuitPart {
 
     protected final MinecraftColor color;
     protected final boolean inverted;
@@ -267,7 +271,8 @@ public abstract class PartLamp extends BPPartFace implements IPartRedstone, IRed
     @Override
     public int getLightValue() {
 
-        int pow = (inverted ? 15 - power : power);
+        int pow = MathHelper.map(this.power & 0xFF, 0, 255, 0, 15);
+        pow = (inverted ? 15 - pow : pow);
 
         if (Loader.isModLoaded("coloredlightscore")) {
             int color = this.color.getHex();
@@ -457,6 +462,18 @@ public abstract class PartLamp extends BPPartFace implements IPartRedstone, IRed
     public boolean isNormalFace(ForgeDirection side) {
 
         return false;
+    }
+
+    @Override
+    public boolean canPlaceOnIntegratedCircuit() {
+
+        return true;
+    }
+
+    @Override
+    public IPartPlacementFlat getFlatPlacement(IPart part, double hitX, double hitZ) {
+
+        return new PartPlacementFaceFlat();
     }
 
 }

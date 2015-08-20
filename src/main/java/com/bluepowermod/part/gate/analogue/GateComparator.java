@@ -7,7 +7,12 @@
  */
 package com.bluepowermod.part.gate.analogue;
 
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
+
 import net.minecraft.block.Block;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
 import uk.co.qmunity.lib.helper.MathHelper;
 import uk.co.qmunity.lib.vec.Vec3i;
@@ -23,6 +28,8 @@ public class GateComparator extends GateSimpleAnalogue {
 
     private GateComponentTorch t1, t2, t3;
     private GateComponentWire w;
+
+    private boolean mode = false;
 
     @Override
     public void initializeConnections() {
@@ -72,17 +79,17 @@ public class GateComparator extends GateSimpleAnalogue {
         Vec3i a = new Vec3i(getX(), getY(), getZ(), getWorld()).add(d);
         Block ba = a.getBlock(false);
         if (ba.hasComparatorInputOverride())
-            power = (byte) MathHelper.map(
-                    ba.getComparatorInputOverride(getWorld(), a.getX(), a.getY(), a.getZ(), d.getOpposite().ordinal()), 0, 15, 0, 255);
+            power = (byte) MathHelper.map(ba.getComparatorInputOverride(getWorld(), a.getX(), a.getY(), a.getZ(), d.getOpposite().ordinal()), 0, 15,
+                    0, mode ? 15 : 255);
         if (ba instanceof IAnalogueComparatorReadout && ((IAnalogueComparatorReadout) ba).hasAnalogueComparatorInputOverride())
-            power = ((IAnalogueComparatorReadout) ba).getAnalogueComparatorInputOverride(getWorld(), a.getX(), a.getY(), a.getZ(), d
-                    .getOpposite().ordinal());
+            power = ((IAnalogueComparatorReadout) ba).getAnalogueComparatorInputOverride(getWorld(), a.getX(), a.getY(), a.getZ(), d.getOpposite()
+                    .ordinal());
         if (ba.isOpaqueCube()) {
             Vec3i b = a.getRelative(d);
             Block bb = b.getBlock(false);
             if (bb.hasComparatorInputOverride())
-                power = (byte) MathHelper.map(
-                        bb.getComparatorInputOverride(getWorld(), b.getX(), b.getY(), b.getZ(), d.getOpposite().ordinal()), 0, 15, 0, 255);
+                power = (byte) MathHelper.map(bb.getComparatorInputOverride(getWorld(), b.getX(), b.getY(), b.getZ(), d.getOpposite().ordinal()), 0,
+                        15, 0, mode ? 15 : 255);
             if (bb instanceof IAnalogueComparatorReadout && ((IAnalogueComparatorReadout) bb).hasAnalogueComparatorInputOverride())
                 power = ((IAnalogueComparatorReadout) bb).getAnalogueComparatorInputOverride(getWorld(), b.getX(), b.getY(), b.getZ(), d
                         .getOpposite().ordinal());
@@ -91,13 +98,62 @@ public class GateComparator extends GateSimpleAnalogue {
         t1.setState(left().getInput() == 0);
         t2.setState(right().getInput() == 0);
 
-        w.setPower((byte) (255 - (power & 0xFF)));
-        t3.setState(power != 0);
-        front().setOutput((byte) Math.max((power & 0xFF) - Math.max(left().getInput() & 0xFF, right().getInput() & 0xFF), 0));
+        byte out = (byte) Math.max(
+                (power & 0xFF) - MathHelper.map(Math.max(left().getInput() & 0xFF, right().getInput() & 0xFF), 0, 255, 0, mode ? 15 : 255), 0);
+
+        w.setPower((byte) ((mode ? 15 : 255) - (out & 0xFF)));
+        t3.setState(out != 0);
+        front().setOutput(out);
     }
 
     @Override
     public void tick() {
 
+    }
+
+    @Override
+    public boolean changeMode() {
+
+        if (!getWorld().isRemote) {
+            mode = !mode;
+            sendUpdatePacket();
+        }
+
+        return true;
+    }
+
+    @Override
+    public void writeUpdateData(DataOutput buffer, int channel) throws IOException {
+
+        super.writeUpdateData(buffer, channel);
+
+        buffer.writeBoolean(mode);
+    }
+
+    @Override
+    public void readUpdateData(DataInput buffer, int channel) throws IOException {
+
+        super.readUpdateData(buffer, channel);
+
+        mode = buffer.readBoolean();
+
+        if (getWorld() != null)
+            getWorld().markBlockRangeForRenderUpdate(getX(), getY(), getZ(), getX(), getY(), getZ());
+    }
+
+    @Override
+    public void writeToNBT(NBTTagCompound tag) {
+
+        super.writeToNBT(tag);
+
+        tag.setBoolean("showBG", mode);
+    }
+
+    @Override
+    public void readFromNBT(NBTTagCompound tag) {
+
+        super.readFromNBT(tag);
+
+        mode = tag.getBoolean("showBG");
     }
 }

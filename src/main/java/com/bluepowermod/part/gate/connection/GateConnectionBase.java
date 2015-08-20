@@ -19,21 +19,21 @@ import com.bluepowermod.redstone.RedstoneApi;
 
 public abstract class GateConnectionBase implements IGateConnection {
 
-    protected GateBase<?, ?, ?, ?, ?, ?> gate;
+    protected GateBase gate;
     protected Dir direction;
     protected boolean enabled = false;
     protected boolean outputOnly;
 
     private boolean needsSyncing = false;
 
-    public GateConnectionBase(GateBase<?, ?, ?, ?, ?, ?> gate, Dir direction) {
+    public GateConnectionBase(GateBase gate, Dir direction) {
 
         this.gate = gate;
         this.direction = direction;
     }
 
     @Override
-    public GateBase<?, ?, ?, ?, ?, ?> getGate() {
+    public GateBase getGate() {
 
         return gate;
     }

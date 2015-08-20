@@ -18,6 +18,9 @@ import uk.co.qmunity.lib.vec.Vec3i;
 import com.bluepowermod.client.render.IconSupplier;
 import com.bluepowermod.part.gate.GateBase;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 public class GateComponentTorch extends GateComponent {
 
     private final Random rnd = new Random();
@@ -30,7 +33,7 @@ public class GateComponentTorch extends GateComponent {
 
     private boolean digital;
 
-    public GateComponentTorch(GateBase<?, ?, ?, ?, ?, ?> gate, int color, double height, boolean digital) {
+    public GateComponentTorch(GateBase gate, int color, double height, boolean digital) {
 
         super(gate);
 
@@ -42,7 +45,7 @@ public class GateComponentTorch extends GateComponent {
         this.digital = digital;
     }
 
-    public GateComponentTorch(GateBase<?, ?, ?, ?, ?, ?> gate, double x, double z, double height, boolean digital) {
+    public GateComponentTorch(GateBase gate, double x, double z, double height, boolean digital) {
 
         super(gate);
 
@@ -54,6 +57,7 @@ public class GateComponentTorch extends GateComponent {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void renderStatic(Vec3i translation, RenderHelper renderer, int pass) {
 
         IIcon icon = digital ? (state ? IconSupplier.bluestoneTorchOn : IconSupplier.bluestoneTorchOff) : (state ? Blocks.redstone_torch
@@ -111,16 +115,16 @@ public class GateComponentTorch extends GateComponent {
         if (!state)
             return;
 
-        GateBase<?, ?, ?, ?, ?, ?> gate = getGate();
+        GateBase gate = getGate();
 
         if (!gate.getWorld().isRemote)
             return;
 
-        Vec3d v = new Vec3d(x + 1 / 16D, height + 2 / 16D, z + 1 / 16D).sub(Vec3d.center).rotate(0, 90 * -gate.getRotation(), 0)
-                .add(Vec3d.center).rotate(gate.getFace(), Vec3d.center);
+        Vec3d v = new Vec3d(x + 1 / 16D, height + 2 / 16D, z + 1 / 16D).sub(Vec3d.center).rotate(0, 90 * -gate.getRotation(), 0).add(Vec3d.center)
+                .rotate(gate.getFace(), Vec3d.center);
         if (rnd.nextInt(10) == 0)
-            gate.getWorld().spawnParticle("reddust", gate.getX() + v.getX(), gate.getY() + v.getY(), gate.getZ() + v.getZ(),
-                    digital ? -1 : 0, 0, digital ? 1 : 0);
+            gate.getWorld().spawnParticle("reddust", gate.getX() + v.getX(), gate.getY() + v.getY(), gate.getZ() + v.getZ(), digital ? -1 : 0, 0,
+                    digital ? 1 : 0);
     }
 
     public GateComponentTorch setState(boolean state) {

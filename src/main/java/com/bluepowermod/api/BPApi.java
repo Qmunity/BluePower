@@ -34,8 +34,6 @@ public class BPApi {
 
     public static interface IBPApi {
 
-        // public IPneumaticTube getPneumaticTube(TileEntity te);
-
         public IAlloyFurnaceRegistry getAlloyFurnaceRegistry();
 
         public IPowerApi getPowerApi();

@@ -3,18 +3,55 @@ package com.bluepowermod.part.gate;
 import com.bluepowermod.api.gate.IGateLogic;
 import com.bluepowermod.part.gate.connection.GateConnectionBase;
 
-public abstract class GateSimple<C extends GateConnectionBase> extends GateBase<C, C, C, C, C, C> implements IGateLogic<GateSimple<C>> {
+@SuppressWarnings("unchecked")
+public abstract class GateSimple<CONNECTION extends GateConnectionBase> extends GateBase implements IGateLogic<GateSimple<CONNECTION>> {
 
     @Override
-    public GateSimple<C> getGate() {
+    public GateSimple<CONNECTION> getGate() {
 
         return this;
     }
 
     @Override
-    public IGateLogic<? extends GateSimple<C>> logic() {
+    public IGateLogic<? extends GateSimple<CONNECTION>> logic() {
 
         return this;
+    }
+
+    @Override
+    public CONNECTION front() {
+
+        return (CONNECTION) super.front();
+    }
+
+    @Override
+    public CONNECTION back() {
+
+        return (CONNECTION) super.back();
+    }
+
+    @Override
+    public CONNECTION left() {
+
+        return (CONNECTION) super.left();
+    }
+
+    @Override
+    public CONNECTION right() {
+
+        return (CONNECTION) super.right();
+    }
+
+    @Override
+    public CONNECTION bottom() {
+
+        return (CONNECTION) super.bottom();
+    }
+
+    @Override
+    public CONNECTION top() {
+
+        return (CONNECTION) super.top();
     }
 
     @Override

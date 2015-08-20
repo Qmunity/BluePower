@@ -8,6 +8,7 @@
 package com.bluepowermod.client.render;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -114,28 +115,38 @@ public class RenderLamp extends TileEntitySpecialRenderer implements ISimpleBloc
                 }
             }
 
-            box.getMin().add(0.5, 0.5, 0.5);
-            box.getMax().add(0.5, 0.5, 0.5);
+            box.add(0.5, 0.5, 0.5);
 
-            GL11.glTranslated(x, y, z);
-            GL11.glEnable(GL11.GL_BLEND);
-            GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
-            GL11.glDisable(GL11.GL_TEXTURE_2D);
-            GL11.glDisable(GL11.GL_LIGHTING);
-            // GL11.glDisable(GL11.GL_CULL_FACE);
-            GL11.glBegin(GL11.GL_QUADS);
-            double powerDivision = power / 18D;
-            com.bluepowermod.client.render.RenderHelper.drawColoredCube(box, r / 256D, g / 256D, b / 256D, powerDivision * 0.625D,
-                    renderFaces);
-            GL11.glEnd();
-            GL11.glEnable(GL11.GL_CULL_FACE);
-            GL11.glEnable(GL11.GL_LIGHTING);
-            GL11.glEnable(GL11.GL_TEXTURE_2D);
-            GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-            // GL11.glAlphaFunc(GL11.GL_GREATER, 0.1F);
-            GL11.glDisable(GL11.GL_BLEND);
+            GL11.glPushMatrix();
+            {
+                GL11.glTranslated(x, y, z);
+                GL11.glEnable(GL11.GL_BLEND);
+                GL11.glDisable(GL11.GL_TEXTURE_2D);
+                GL11.glDisable(GL11.GL_LIGHTING);
 
-            GL11.glTranslated(-x, -y, -z);
+                float powerDivision = power / 15F;
+
+                float lastX = OpenGlHelper.lastBrightnessX, lastY = OpenGlHelper.lastBrightnessY;
+                OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, powerDivision * 240, powerDivision * 240);
+
+                GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+                GL11.glBegin(GL11.GL_QUADS);
+                com.bluepowermod.client.render.RenderHelper.drawColoredCube(box, r / 256D, g / 256D, b / 256D, powerDivision * 0.375, renderFaces);
+                GL11.glEnd();
+
+                GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
+                GL11.glBegin(GL11.GL_QUADS);
+                com.bluepowermod.client.render.RenderHelper.drawColoredCube(box, r / 256D, g / 256D, b / 256D, powerDivision * 0.375, renderFaces);
+                GL11.glEnd();
+
+                OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, lastX, lastY);
+
+                GL11.glEnable(GL11.GL_LIGHTING);
+                GL11.glEnable(GL11.GL_TEXTURE_2D);
+                GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+                GL11.glDisable(GL11.GL_BLEND);
+            }
+            GL11.glPopMatrix();
         }
     }
 
@@ -193,16 +204,20 @@ public class RenderLamp extends TileEntitySpecialRenderer implements ISimpleBloc
             t.draw();
             if (block.isInverted()) {
                 GL11.glEnable(GL11.GL_BLEND);
-                GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
-                // GL11.glAlphaFunc(GL11.GL_EQUAL, (power / 15F) * 1F);
                 GL11.glDisable(GL11.GL_TEXTURE_2D);
                 GL11.glDisable(GL11.GL_LIGHTING);
-                // GL11.glDisable(GL11.GL_CULL_FACE);
                 GL11.glDepthMask(false);
+
+                GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
                 GL11.glBegin(GL11.GL_QUADS);
-                com.bluepowermod.client.render.RenderHelper.drawColoredCube(cube.clone().expand(0.8 / 16D), r / 256D, g / 256D, b / 256D,
-                        0.625D);
+                com.bluepowermod.client.render.RenderHelper.drawColoredCube(cube.clone().expand(0.8 / 16D), r / 256D, g / 256D, b / 256D, 0.375);
                 GL11.glEnd();
+
+                GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
+                GL11.glBegin(GL11.GL_QUADS);
+                com.bluepowermod.client.render.RenderHelper.drawColoredCube(cube.clone().expand(0.8 / 16D), r / 256D, g / 256D, b / 256D, 0.375);
+                GL11.glEnd();
+
                 GL11.glDepthMask(true);
                 GL11.glEnable(GL11.GL_CULL_FACE);
                 GL11.glEnable(GL11.GL_LIGHTING);

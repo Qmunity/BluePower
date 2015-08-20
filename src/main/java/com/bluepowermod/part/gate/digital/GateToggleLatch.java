@@ -17,6 +17,10 @@
 
 package com.bluepowermod.part.gate.digital;
 
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -25,6 +29,8 @@ import uk.co.qmunity.lib.raytrace.QMovingObjectPosition;
 import com.bluepowermod.api.wire.redstone.RedwireType;
 import com.bluepowermod.part.gate.component.GateComponentBorder;
 import com.bluepowermod.part.gate.component.GateComponentLever;
+import com.bluepowermod.part.gate.component.GateComponentLeverBig;
+import com.bluepowermod.part.gate.component.GateComponentLeverSmall;
 import com.bluepowermod.part.gate.component.GateComponentTorch;
 import com.bluepowermod.part.gate.component.GateComponentWire;
 
@@ -32,6 +38,7 @@ public class GateToggleLatch extends GateSimpleDigital {
 
     private boolean power = false;
     private boolean state = true;
+    private boolean mode = false;
 
     private GateComponentTorch t1, t2;
     private GateComponentLever l;
@@ -40,23 +47,30 @@ public class GateToggleLatch extends GateSimpleDigital {
     public void initializeConnections() {
 
         front().enable().setOutputOnly();
-        left().enable();
-        right().enable();
+        left().enable().setOutput(false);
+        right().enable().setOutput(false);
         back().enable().setOutputOnly();
     }
 
     @Override
     public void initComponents() {
 
-        addComponent(t1 = new GateComponentTorch(this, 0x0000FF, 4 / 16D, true));
-        addComponent(t2 = new GateComponentTorch(this, 0x6F00B5, 4 / 16D, true).setState(true));
+        if (getWorld() == null)
+            state = true;
 
-        addComponent(l = new GateComponentLever(this, 0x00FF00).setState(true));
+        if (mode) {
+            addComponent(l = new GateComponentLeverBig(this, 5 / 16D, 4 / 16D).setState(state));
+        } else {
+            addComponent(t1 = new GateComponentTorch(this, 0x0000FF, 4 / 16D, true).setState(!state));
+            addComponent(t2 = new GateComponentTorch(this, 0x6F00B5, 4 / 16D, true).setState(state));
 
-        addComponent(new GateComponentWire(this, 0xFFF600, RedwireType.BLUESTONE).bind(right()));
-        addComponent(new GateComponentWire(this, 0xFF0000, RedwireType.BLUESTONE).bind(left()));
+            addComponent(l = new GateComponentLeverSmall(this, 0x00FF00).setState(state));
 
-        addComponent(new GateComponentBorder(this, 0x7D7D7D));
+            addComponent(new GateComponentWire(this, 0xFFF600, RedwireType.BLUESTONE).bind(right()));
+            addComponent(new GateComponentWire(this, 0xFF0000, RedwireType.BLUESTONE).bind(left()));
+
+            addComponent(new GateComponentBorder(this, 0x7D7D7D));
+        }
     }
 
     @Override
@@ -76,22 +90,32 @@ public class GateToggleLatch extends GateSimpleDigital {
         if (getWorld().isRemote)
             return;
 
-        if ((power != right().getInput() || left().getInput()) && !power) {
-            state = !state;
-            playTickSound();
+        if (!mode) {
+            if ((power != right().getInput() || left().getInput()) && !power) {
+                state = !state;
+                playTickSound();
+            }
+            power = right().getInput() || left().getInput();
         }
-        power = right().getInput() || left().getInput();
 
-        front().setOutput(state);
-        back().setOutput(!state);
-        t1.setState(!state);
-        t2.setState(state);
+        if (!mode) {
+            front().setOutput(state);
+            back().setOutput(!state);
+            t1.setState(!state);
+            t2.setState(state);
+        } else {
+            front().setOutput(state);
+            back().setOutput(state);
+            left().setOutput(state);
+            right().setOutput(state);
+        }
         l.setState(state);
     }
 
     @Override
     public void writeToNBT(NBTTagCompound tag) {
 
+        tag.setBoolean("mode", mode);
         super.writeToNBT(tag);
         tag.setBoolean("state", state);
     }
@@ -99,8 +123,71 @@ public class GateToggleLatch extends GateSimpleDigital {
     @Override
     public void readFromNBT(NBTTagCompound tag) {
 
+        boolean lastMode = mode;
+        mode = tag.getBoolean("mode");
+        if (lastMode != mode) {
+            getComponents().clear();
+            initComponents();
+        }
         super.readFromNBT(tag);
         state = tag.getBoolean("state");
+    }
+
+    @Override
+    public void writeUpdateData(DataOutput buffer) throws IOException {
+
+        buffer.writeBoolean(mode);
+        super.writeUpdateData(buffer);
+    }
+
+    @Override
+    public void readUpdateData(DataInput buffer) throws IOException {
+
+        boolean lastMode = mode;
+        mode = buffer.readBoolean();
+        if (lastMode != mode) {
+            getComponents().clear();
+            initComponents();
+        }
+        super.readUpdateData(buffer);
+    }
+
+    @Override
+    public boolean changeMode() {
+
+        if (getWorld().isRemote)
+            return true;
+
+        mode = !mode;
+        if (mode) {
+            left().setOutputOnly();
+            right().setOutputOnly();
+        } else {
+            left().setBidirectional();
+            right().setBidirectional();
+        }
+
+        state = !state;
+        if (!mode) {
+            front().setOutput(state);
+            back().setOutput(!state);
+            t1.setState(!state);
+            t2.setState(state);
+        } else {
+            front().setOutput(state);
+            back().setOutput(state);
+            left().setOutput(state);
+            right().setOutput(state);
+        }
+        l.setState(state);
+
+        getComponents().clear();
+        initConnections();
+        initComponents();
+        doLogic();
+        sendUpdatePacket();
+
+        return true;
     }
 
     @Override
@@ -109,12 +196,16 @@ public class GateToggleLatch extends GateSimpleDigital {
         if (super.onActivated(player, hit, item))
             return true;
 
-        if (!getWorld().isRemote) {
-            state = !state;
-            doLogic();
+        if (!player.isSneaking()) {
+            if (!getWorld().isRemote) {
+                state = !state;
+                doLogic();
+            }
+            playTickSound();
+
+            return true;
         }
-        playTickSound();
-        return true;
+        return false;
     }
 
 }

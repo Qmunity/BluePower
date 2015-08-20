@@ -44,4 +44,8 @@ public class CommonProxy {
 
         return FMLServerHandler.instance().getSavesDirectory().getAbsolutePath();
     }
+
+    public void setFOVMultiplier(EntityPlayer player, float fovmult) {
+
+    }
 }

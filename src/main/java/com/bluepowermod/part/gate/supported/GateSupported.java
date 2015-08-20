@@ -17,14 +17,11 @@ import uk.co.qmunity.lib.vec.Vec3i;
 import com.bluepowermod.api.gate.IGateLogic;
 import com.bluepowermod.part.gate.GateBase;
 import com.bluepowermod.part.gate.component.GateComponentBorder;
-import com.bluepowermod.part.gate.connection.GateConnectionBase;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public abstract class GateSupported<C_BOTTOM extends GateConnectionBase, C_TOP extends GateConnectionBase, C_LEFT extends GateConnectionBase, C_RIGHT extends GateConnectionBase, C_FRONT extends GateConnectionBase, C_BACK extends GateConnectionBase>
-        extends GateBase<C_BOTTOM, C_TOP, C_LEFT, C_RIGHT, C_FRONT, C_BACK> implements
-        IGateLogic<GateSupported<C_BOTTOM, C_TOP, C_LEFT, C_RIGHT, C_FRONT, C_BACK>>, IPartSelectableCustom {
+public abstract class GateSupported extends GateBase implements IGateLogic<GateSupported>, IPartSelectableCustom {
 
     public GateSupported() {
 
@@ -85,13 +82,13 @@ public abstract class GateSupported<C_BOTTOM extends GateConnectionBase, C_TOP e
     // Misc
 
     @Override
-    public IGateLogic<GateSupported<C_BOTTOM, C_TOP, C_LEFT, C_RIGHT, C_FRONT, C_BACK>> logic() {
+    public IGateLogic<GateSupported> logic() {
 
         return this;
     }
 
     @Override
-    public GateSupported<C_BOTTOM, C_TOP, C_LEFT, C_RIGHT, C_FRONT, C_BACK> getGate() {
+    public GateSupported getGate() {
 
         return this;
     }

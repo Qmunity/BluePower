@@ -552,6 +552,7 @@ item.bluepower:copper_wire.name=细铜丝
 item.bluepower:infused_teslatite_dust.name=充能蓝石粉
 
 # Gates
+<<<<<<< HEAD
 item.part.bluepower:gate.and.name=与门
 item.part.bluepower:gate.buffer.name=缓冲门
 item.part.bluepower:gate.bustransceiver.name=总线收发器
@@ -598,6 +599,57 @@ item.part.bluepower:wirelesstransceiver.bundled.name=集束无线收发机
 item.part.bluepower:wirelesstransceiver.analog.bundled.name=模拟集束无线收发机
 item.part.bluepower:wirelesstransceiver.name=无线收发机
 item.part.bluepower:wirelesstransceiver.analog.name=模拟无线收发机
+=======
+##item.part.bluepower:gate.and.name=
+##item.part.bluepower:gate.buffer.name=
+##item.part.bluepower:gate.bustransceiver.name=
+##item.part.bluepower:gate.counter.name=
+##item.part.bluepower:gate.invert.name=
+##item.part.bluepower:gate.lightCell.name=
+##item.part.bluepower:gate.multiplexer.name=
+##item.part.bluepower:gate.nand.name=
+##item.part.bluepower:gate.noninvert.name=
+##item.part.bluepower:gate.nor.name=
+##item.part.bluepower:gate.not.name=
+##item.part.bluepower:gate.nullcell.name=
+##item.part.bluepower:gate.or.name=
+##item.part.bluepower:gate.pulseformer.name=
+##item.part.bluepower:gate.randomizer.name=
+##item.part.bluepower:gate.repeater.name=
+##item.part.bluepower:gate.rs.name=
+##item.part.bluepower:gate.sequencer.name=
+##item.part.bluepower:gate.state.name=
+##item.part.bluepower:gate.synchronizer.name=
+##item.part.bluepower:gate.timer.name=
+##item.part.bluepower:gate.toggle.name=
+##item.part.bluepower:gate.transparent.name=
+##item.part.bluepower:gate.xnor.name=
+##item.part.bluepower:gate.xor.name=
+##item.part.bluepower:gate.integratedCircuit3x3.name=
+##item.part.bluepower:gate.integratedCircuit5x5.name=
+##item.part.bluepower:gate.integratedCircuit7x7.name=
+##item.part.bluepower:gate.inverter.name=
+##item.part.bluepower:gate.comparator.name=
+##item.part.bluepower:gate.regulabletorch.name=
+##item.part.bluepower:gate.adder.name=
+##item.part.bluepower:gate.divider.name=
+##item.part.bluepower:gate.analogue_randomizer.name=
+##item.part.bluepower:gate.wirelesstransceiver.name=
+##item.part.bluepower:gate.wirelesstransceiver.analog.name=
+##item.part.bluepower:gate.wirelesstransceiver.bundled.name=
+##item.part.bluepower:gate.wirelesstransceiver.analog.bundled.name=
+##item.part.bluepower:pneumaticTube.name=
+##item.part.bluepower:pneumaticTubeOpaque.name=
+##item.part.bluepower:restrictionTube.name=
+##item.part.bluepower:restrictionTubeOpaque.name=
+##item.part.bluepower:magTube.name=
+##item.part.bluepower:accelerator.name=
+
+##item.part.bluepower:wirelesstransceiver.bundled.name=
+##item.part.bluepower:wirelesstransceiver.analog.bundled.name=
+##item.part.bluepower:wirelesstransceiver.name=
+##item.part.bluepower:wirelesstransceiver.analog.name=
+>>>>>>> AmaDev
 
 # Lumar
 item.bluepower:lumar.white.name=白色荧光粉
@@ -675,6 +727,8 @@ gui.bluepower:counter.max=最大值
 gui.bluepower:counter.increment=增量
 gui.bluepower:counter.decrement=减量
 gui.bluepower:counter.count=计数
+##gui.bluepower:regulabletorch.255=
+##gui.bluepower:regulabletorch.15=
 
 gui.bluepower:sortingMachine.sortMode=§b排序模式
 gui.bluepower:sortingMachine.pullMode=§b牵拉模式

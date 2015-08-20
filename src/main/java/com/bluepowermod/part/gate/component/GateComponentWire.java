@@ -22,7 +22,7 @@ public class GateComponentWire extends GateComponentCubes {
     private byte power;
     private boolean enabled = true;
 
-    public GateComponentWire(GateBase<?, ?, ?, ?, ?, ?> gate, int color, RedwireType type) {
+    public GateComponentWire(GateBase gate, int color, RedwireType type) {
 
         super(gate, color);
 
@@ -83,11 +83,13 @@ public class GateComponentWire extends GateComponentCubes {
 
     public boolean isEnabled() {
 
+        if (!enabled)
+            return false;
         if (connection != null && getGate().getParent() != null && getGate().getWorld() != null
                 && (getGate().getParent().isSimulated() || !getGate().getWorld().isRemote))
             return connection.isEnabled();
 
-        return enabled;
+        return true;
     }
 
     public void setEnabled(boolean enabled) {

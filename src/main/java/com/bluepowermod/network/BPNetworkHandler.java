@@ -22,6 +22,8 @@ import uk.co.qmunity.lib.network.NetworkHandler;
 import com.bluepowermod.network.message.MessageCircuitDatabaseTemplate;
 import com.bluepowermod.network.message.MessageDebugBlock;
 import com.bluepowermod.network.message.MessageGuiUpdate;
+import com.bluepowermod.network.message.MessageICInteract;
+import com.bluepowermod.network.message.MessageICPlace;
 import com.bluepowermod.network.message.MessageRedirectTubeStack;
 import com.bluepowermod.network.message.MessageSendClientServerTemplates;
 import com.bluepowermod.network.message.MessageServerTickTime;
@@ -56,6 +58,9 @@ public class BPNetworkHandler {
         INSTANCE.registerPacket(MessageWirelessRemoveFreq.class, MessageWirelessRemoveFreq.class, Side.SERVER);
 
         INSTANCE.registerPacket(MessageSyncMachineBacklog.class, MessageSyncMachineBacklog.class, Side.CLIENT);
+
+        INSTANCE.registerPacket(MessageICInteract.class, Side.SERVER);
+        INSTANCE.registerPacket(MessageICPlace.class, Side.SERVER);
     }
 
 }

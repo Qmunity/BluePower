@@ -8,6 +8,7 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import uk.co.qmunity.lib.helper.MathHelper;
 import uk.co.qmunity.lib.raytrace.QMovingObjectPosition;
 
 import com.bluepowermod.api.wire.redstone.RedwireType;
@@ -83,15 +84,15 @@ public class GateRegulableTorch extends GateSimpleAnalogue implements IGuiButton
             }
 
             @Override
-            protected String getDisplayedString() {
+            protected String getDisplayedString(int i) {
 
-                return "" + getCurrentAmount();
+                return "" + (i == 0 ? getCurrentAmount() : MathHelper.map(getCurrentAmount(), 0, 255, 0, 15));
             }
 
             @Override
-            protected String getTitle() {
+            protected String[] getTitleAdv() {
 
-                return "gui.bluepower:regulabletorch";
+                return new String[] { "gui.bluepower:regulabletorch.255", "gui.bluepower:regulabletorch.15" };
             }
 
             @Override
