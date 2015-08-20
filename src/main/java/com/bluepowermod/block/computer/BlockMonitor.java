@@ -42,6 +42,7 @@ public class BlockMonitor extends BlockContainerBase {
 
         super(Material.iron, TileMonitor.class);
         setBlockName(Refs.BLOCKMONITOR_NAME);
+        setGuiId(GuiIDs.MONITOR);
     }
 
     @Override
@@ -52,12 +53,6 @@ public class BlockMonitor extends BlockContainerBase {
             // ((TileCPU)tileEntity).updateEntity();
             // Logs.log(Level.INFO, "[BluePowerControl] CPU TE ticked");
         }
-    }
-
-    @Override
-    public GuiIDs getGuiID() {
-
-        return GuiIDs.MONITOR;
     }
 
     @Override

@@ -38,12 +38,7 @@ public class BlockIOExpander extends BlockContainerBase {
 
         super(Material.iron, TileIOExpander.class);
         setBlockName(Refs.BLOCKIOEXPANDER_NAME);
-    }
-
-    @Override
-    public GuiIDs getGuiID() {
-
-        return GuiIDs.IO_EXPANDER;
+        setGuiId(GuiIDs.IO_EXPANDER);
     }
 
     @Override

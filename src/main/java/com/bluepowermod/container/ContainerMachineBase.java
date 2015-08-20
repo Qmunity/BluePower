@@ -7,14 +7,12 @@ import com.bluepowermod.network.BPNetworkHandler;
 import com.bluepowermod.network.message.MessageSyncMachineBacklog;
 import com.bluepowermod.tile.TileMachineBase;
 
-public abstract class ContainerMachineBase extends ContainerGhosts {
+public abstract class ContainerMachineBase extends ContainerGhosts<TileMachineBase> {
 
     private int backlogSize = -1;
-    private final TileMachineBase machine;
 
     public ContainerMachineBase(TileMachineBase machine) {
-
-        this.machine = machine;
+        super(machine);
     }
 
     /**
@@ -28,10 +26,10 @@ public abstract class ContainerMachineBase extends ContainerGhosts {
         for (Object crafter : crafters) {
             ICrafting icrafting = (ICrafting) crafter;
 
-            if (backlogSize != machine.getBacklog().size() && icrafting instanceof EntityPlayerMP) {
-                BPNetworkHandler.INSTANCE.sendTo(new MessageSyncMachineBacklog(machine, machine.getBacklog()), (EntityPlayerMP) icrafting);
+            if (backlogSize != te.getBacklog().size() && icrafting instanceof EntityPlayerMP) {
+                BPNetworkHandler.INSTANCE.sendTo(new MessageSyncMachineBacklog(te, te.getBacklog()), (EntityPlayerMP) icrafting);
             }
         }
-        backlogSize = machine.getBacklog().size();
+        backlogSize = te.getBacklog().size();
     }
 }

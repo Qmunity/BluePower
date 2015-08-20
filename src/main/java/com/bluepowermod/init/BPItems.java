@@ -15,8 +15,14 @@
  *     along with Blue Power.  If not, see <http://www.gnu.org/licenses/>
  */
 
-package com.bluepowermod.init;
+        package com.bluepowermod.init;
 
+import com.bluepowermod.BluePower;
+import com.bluepowermod.item.*;
+import com.bluepowermod.reference.Refs;
+import com.bluepowermod.util.Dependencies;
+import cpw.mods.fml.common.Loader;
+import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -24,32 +30,6 @@ import net.minecraft.item.Item.ToolMaterial;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 
-import com.bluepowermod.BluePower;
-import com.bluepowermod.item.ItemAthame;
-import com.bluepowermod.item.ItemBase;
-import com.bluepowermod.item.ItemCanvasBag;
-import com.bluepowermod.item.ItemCrafting;
-import com.bluepowermod.item.ItemCropSeed;
-import com.bluepowermod.item.ItemGemAxe;
-import com.bluepowermod.item.ItemGemHoe;
-import com.bluepowermod.item.ItemGemPickaxe;
-import com.bluepowermod.item.ItemGemSpade;
-import com.bluepowermod.item.ItemGemSword;
-import com.bluepowermod.item.ItemIndigoDye;
-import com.bluepowermod.item.ItemLimitedCrafting;
-import com.bluepowermod.item.ItemLumar;
-import com.bluepowermod.item.ItemPaintBrush;
-import com.bluepowermod.item.ItemPaintCan;
-import com.bluepowermod.item.ItemSaw;
-import com.bluepowermod.item.ItemScrewdriver;
-import com.bluepowermod.item.ItemSeedBag;
-import com.bluepowermod.item.ItemSickle;
-import com.bluepowermod.item.ItemSilkyScrewdriver;
-import com.bluepowermod.reference.Refs;
-import com.bluepowermod.util.Dependencies;
-
-import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.common.registry.GameRegistry;
 
 @GameRegistry.ObjectHolder(Refs.MODID)
 public class BPItems {
@@ -136,6 +116,9 @@ public class BPItems {
     public static Item amethyst_shovel;
     public static Item amethyst_hoe;
     public static Item amethyst_sickle;
+    public static Item multimeter;
+    public static Item battery;
+    public static Item sonicScrewdriver;
 
     public static void init() {
 
@@ -234,6 +217,10 @@ public class BPItems {
         amethyst_shovel = new ItemGemSpade(BluePower.gemMaterial, Refs.AMETHYSTSPADE_NAME, BPItems.amethyst_gem);
         amethyst_hoe = new ItemGemHoe(BluePower.gemMaterial, Refs.AMETHYSTHOE_NAME, BPItems.amethyst_gem);
         amethyst_sickle = new ItemSickle(BluePower.gemMaterial, Refs.AMETHYSTSICKLE_NAME, BPItems.amethyst_gem);
+
+        multimeter = new ItemMultimeter();
+        battery = new ItemBattery(1000);
+        sonicScrewdriver = new ItemSonicScrewdriver();
     }
 
     public static void registerItems() {
@@ -333,6 +320,12 @@ public class BPItems {
         GameRegistry.registerItem(copper_wire, Refs.COPPERWIRE_NAME);
         GameRegistry.registerItem(iron_wire, Refs.IRONWIRE_NAME);
 
+        GameRegistry.registerItem(multimeter, Refs.MULTIMETER_NAME);
+        GameRegistry.registerItem(battery, Refs.BATTERY_ITEM_NAME);
+
         MinecraftForge.addGrassSeed(new ItemStack(flax_seeds), 5);
+
+        GameRegistry.registerItem(sonicScrewdriver, Refs.SONIC_SCREWDRIVER_NAME);
     }
 }
+

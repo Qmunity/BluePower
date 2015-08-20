@@ -78,13 +78,16 @@ public class IconSupplier {
     public static IIcon wireBundledSide2;
     public static IIcon wireBundledConnection;
 
-    public static IIcon gateButton = null;
-    public static IIcon siliconChipOff = null;
-    public static IIcon siliconChipOn = null;
-    public static IIcon taintedSiliconChipOff = null;
-    public static IIcon taintedSiliconChipOn = null;
-    public static IIcon quartzResonator = null;
-    public static IIcon gateSolarPanel = null;
+    public static IIcon gateButton;
+    public static IIcon siliconChipOff;
+    public static IIcon siliconChipOn;
+    public static IIcon taintedSiliconChipOff;
+    public static IIcon taintedSiliconChipOn;
+    public static IIcon quartzResonator;
+    public static IIcon gateSolarPanel;
+
+    public static IIcon powerCableLV1;
+    public static IIcon powerCableLV2;
 
     @SubscribeEvent
     public void onTextureStitch(TextureStitchEvent.Pre event) {
@@ -155,6 +158,9 @@ public class IconSupplier {
             taintedSiliconChipOn = reg.registerIcon(Refs.MODID + ":gates/components/tainted_silicon_chip_on");
             quartzResonator = reg.registerIcon(Refs.MODID + ":gates/components/resonator");
             gateSolarPanel = reg.registerIcon(Refs.MODID + ":gates/components/solarpanel");
+
+            powerCableLV1 = reg.registerIcon(Refs.MODID + ":cable/lv_cable1");
+            powerCableLV2 = reg.registerIcon(Refs.MODID + ":cable/lv_cable2");
 
             for (PartInfo i : PartManager.getRegisteredParts())
                 i.getExample().registerIcons(reg);

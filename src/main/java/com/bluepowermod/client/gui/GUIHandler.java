@@ -17,33 +17,7 @@
 
 package com.bluepowermod.client.gui;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
-
-import com.bluepowermod.container.ContainerAlloyFurnace;
-import com.bluepowermod.container.ContainerBuffer;
-import com.bluepowermod.container.ContainerCPU;
-import com.bluepowermod.container.ContainerCanvasBag;
-import com.bluepowermod.container.ContainerCircuitDatabaseMain;
-import com.bluepowermod.container.ContainerCircuitDatabaseSharing;
-import com.bluepowermod.container.ContainerCircuitTable;
-import com.bluepowermod.container.ContainerDeployer;
-import com.bluepowermod.container.ContainerDiskDrive;
-import com.bluepowermod.container.ContainerEjector;
-import com.bluepowermod.container.ContainerFilter;
-import com.bluepowermod.container.ContainerIOExpander;
-import com.bluepowermod.container.ContainerItemDetector;
-import com.bluepowermod.container.ContainerKinect;
-import com.bluepowermod.container.ContainerManager;
-import com.bluepowermod.container.ContainerMonitor;
-import com.bluepowermod.container.ContainerProjectTable;
-import com.bluepowermod.container.ContainerRedbusID;
-import com.bluepowermod.container.ContainerRegulator;
-import com.bluepowermod.container.ContainerRelay;
-import com.bluepowermod.container.ContainerRetriever;
-import com.bluepowermod.container.ContainerSeedBag;
-import com.bluepowermod.container.ContainerSortingMachine;
+import com.bluepowermod.container.*;
 import com.bluepowermod.container.inventory.InventoryItem;
 import com.bluepowermod.init.BPItems;
 import com.bluepowermod.item.ItemCanvasBag;
@@ -59,22 +33,21 @@ import com.bluepowermod.tile.tier1.TileFilter;
 import com.bluepowermod.tile.tier1.TileItemDetector;
 import com.bluepowermod.tile.tier1.TileProjectTable;
 import com.bluepowermod.tile.tier1.TileRelay;
-import com.bluepowermod.tile.tier2.TileCircuitTable;
-import com.bluepowermod.tile.tier2.TileRegulator;
-import com.bluepowermod.tile.tier2.TileRetriever;
-import com.bluepowermod.tile.tier2.TileSortingMachine;
+import com.bluepowermod.tile.tier2.*;
 import com.bluepowermod.tile.tier3.IRedBusWindow;
 import com.bluepowermod.tile.tier3.TileCPU;
 import com.bluepowermod.tile.tier3.TileCircuitDatabase;
 import com.bluepowermod.tile.tier3.TileDiskDrive;
 import com.bluepowermod.tile.tier3.TileIOExpander;
-import com.bluepowermod.tile.tier3.TileKinectGenerator;
+import com.bluepowermod.tile.tier2.TileKineticGenerator;
 import com.bluepowermod.tile.tier3.TileManager;
 import com.bluepowermod.tile.tier3.TileMonitor;
-
 import cpw.mods.fml.common.network.IGuiHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
 
 public class GUIHandler implements IGuiHandler {
 
@@ -126,7 +99,7 @@ public class GUIHandler implements IGuiHandler {
             return new ContainerRedbusID(player.inventory, (IRedBusWindow) ent);
 
         case KINETICGENERATOR_ID:
-            return new ContainerKinect(player.inventory, (TileKinectGenerator) ent);
+            return new ContainerKineticGenerator(player.inventory, (TileKineticGenerator) ent);
         case DEPLOYER_ID:
             return new ContainerDeployer(player.inventory, (TileDeployer) ent);
         case RELAY_ID:
@@ -151,6 +124,10 @@ public class GUIHandler implements IGuiHandler {
             return new ContainerCircuitDatabaseSharing(player.inventory, (TileCircuitDatabase) ent);
         case CIRCUITDATABASE_MAIN_ID:
             return new ContainerCircuitDatabaseMain(player.inventory, (TileCircuitDatabase) ent);
+        case BATTERY_ID:
+            return new ContainerBattery(player.inventory, (TileBattery) ent);
+        case CHARGINGBENCH_ID:
+            return new ContainerChargingBench(player.inventory, (TileChargingBench) ent);
         default:
             break;
         }
@@ -202,7 +179,7 @@ public class GUIHandler implements IGuiHandler {
         case REDBUS_ID:
             return new GuiRedbusID(player.inventory, (IRedBusWindow) ent);
         case KINETICGENERATOR_ID:
-            return new GuiKinect(player.inventory, (TileKinectGenerator) ent);
+            return new GuiKineticGenerator(player.inventory, (TileKineticGenerator) ent);
         case DEPLOYER_ID:
             return new GuiDeployer(player.inventory, (TileDeployer) ent);
         case RELAY_ID:
@@ -227,6 +204,10 @@ public class GUIHandler implements IGuiHandler {
             return new GuiCircuitDatabaseMain(player.inventory, (TileCircuitDatabase) ent);
         case CIRCUITDATABASE_SHARING_ID:
             return new GuiCircuitDatabaseSharing(player.inventory, (TileCircuitDatabase) ent);
+        case BATTERY_ID:
+            return new GuiBattery(player.inventory, (TileBattery) ent);
+        case CHARGINGBENCH_ID:
+            return new GuiChargingBench(player.inventory, (TileChargingBench) ent);
         default:
             break;
         }

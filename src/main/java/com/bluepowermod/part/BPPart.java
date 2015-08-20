@@ -17,10 +17,9 @@
 
 package com.bluepowermod.part;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
+import com.bluepowermod.api.item.IDatabaseSaveable;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -46,10 +45,9 @@ import uk.co.qmunity.lib.vec.Vec3d;
 import uk.co.qmunity.lib.vec.Vec3dCube;
 import uk.co.qmunity.lib.vec.Vec3i;
 
-import com.bluepowermod.api.item.IDatabaseSaveable;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public abstract class BPPart extends PartBase implements IPartSelectable, IPartCollidable, IPartOccluding, IPartUpdateListener,
         IPartInteractable, IDatabaseSaveable, IPartWAILAProvider {

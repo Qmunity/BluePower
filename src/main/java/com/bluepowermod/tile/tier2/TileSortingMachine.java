@@ -19,13 +19,17 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
+import uk.co.qmunity.lib.network.annotation.GuiSynced;
 
+import com.bluepowermod.api.power.IPowerBase;
+import com.bluepowermod.api.power.IPowered;
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
 import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.helper.ItemStackHelper;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.part.IGuiButtonSensitive;
 import com.bluepowermod.part.tube.TubeStack;
+import com.bluepowermod.reference.PowerConstants;
 import com.bluepowermod.tile.TileMachineBase;
 
 /**
@@ -33,7 +37,7 @@ import com.bluepowermod.tile.TileMachineBase;
  * @author MineMaarten
  */
 
-public class TileSortingMachine extends TileMachineBase implements ISidedInventory, IGuiButtonSensitive {
+public class TileSortingMachine extends TileMachineBase implements ISidedInventory, IGuiButtonSensitive, IPowered {
 
     private ItemStack[] inventory = new ItemStack[40];
     public int curColumn = 0;
@@ -43,9 +47,10 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
     private int savedPulses;
     public final TubeColor[] colors = new TubeColor[9];
     public int[] fuzzySettings = new int[8];
-    private ItemStack nonAcceptedStack;// will be set to the latest accepted stack via tubes.. It will reject any following items from that stack that
+    private ItemStack nonAcceptedStack;// will be set to the latest accepted stack via tubes.. It will reject any following items from that stack that tick
 
-    // tick.
+    @GuiSynced
+    private final IPowerBase powerBase = getPowerHandler(ForgeDirection.UNKNOWN);
 
     public TileSortingMachine() {
 
@@ -101,7 +106,6 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
                 && (pullMode == PullMode.SINGLE_SWEEP && sweepTriggered || pullMode == PullMode.AUTOMATIC)) {
             triggerSorting();
         }
-
     }
 
     @Override
@@ -236,6 +240,8 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
     }
 
     private boolean tryProcessItem(ItemStack stack, boolean simulate) {
+        if (!isPowered())
+            return false;
 
         switch (sortMode) {
         case ANYSTACK_SEQUENTIAL:
@@ -249,8 +255,7 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
         case ANY_ITEM_DEFAULT:
             for (int i = 0; i < inventory.length; i++) {
                 ItemStack filter = inventory[i];
-                if (filter != null && ItemStackHelper.areStacksEqual(filter, stack, fuzzySettings[i % 8])
-                        && stack.stackSize >= filter.stackSize) {
+                if (filter != null && ItemStackHelper.areStacksEqual(filter, stack, fuzzySettings[i % 8]) && stack.stackSize >= filter.stackSize) {
                     if (!simulate) {
                         addItemToOutputBuffer(filter.copy(), colors[i % 8]);
                     }
@@ -528,6 +533,13 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
     public boolean canConnectRedstone() {
 
         return true;
+    }
+
+    @Override
+    protected void addItemToOutputBuffer(ItemStack stack, TubeColor color) {
+
+        powerBase.addEnergy(-PowerConstants.POWER_PER_ACTION, false);
+        super.addItemToOutputBuffer(stack, color);
     }
 
 }

@@ -22,11 +22,11 @@ import java.util.Random;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
 
-import com.bluepowermod.block.BlockBase;
+import com.bluepowermod.block.BlockBluePowerBase;
 import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.reference.Refs;
 
-public class BlockItemOre extends BlockBase {
+public class BlockItemOre extends BlockBluePowerBase {
 
     protected Random rand = new Random();
 

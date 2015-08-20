@@ -108,4 +108,9 @@ public class GuiManager extends GuiContainerBaseBP {
         BaseWidget baseWidget = (BaseWidget) widget;
         BPNetworkHandler.INSTANCE.sendToServer(new MessageGuiUpdate(manager, widget.getID(), baseWidget.value));
     }
+
+    @Override
+    protected int getPowerBarYPos() {
+        return 20;
+    }
 }

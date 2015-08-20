@@ -30,7 +30,6 @@ import net.minecraftforge.common.util.ForgeDirection;
 import com.bluepowermod.api.misc.IScrewdriver;
 import com.bluepowermod.block.BlockContainerBase;
 import com.bluepowermod.init.BPCreativeTabs;
-import com.bluepowermod.reference.GuiIDs;
 import com.bluepowermod.reference.Refs;
 
 import cpw.mods.fml.relauncher.Side;
@@ -53,7 +52,7 @@ public class ItemScrewdriver extends ItemBase implements IScrewdriver {
         Block block = world.getBlock(x, y, z);
 
         if (block instanceof BlockContainerBase) {
-            if (((BlockContainerBase) block).getGuiID() != GuiIDs.INVALID) {
+            if (((BlockContainerBase) block).getGuiId() >= 0) {
                 if (player.isSneaking()) {
                     if (block.rotateBlock(world, x, y, z, ForgeDirection.getOrientation(side))) {
                         damage(stack, 1, player, false);
@@ -81,7 +80,7 @@ public class ItemScrewdriver extends ItemBase implements IScrewdriver {
 
         if (player != null && player.capabilities.isCreativeMode)
             return true;
-        if ((stack.getItemDamage() % stack.getMaxDamage()) + damage > stack.getMaxDamage())
+        if (stack.getItemDamage() % stack.getMaxDamage() + damage > stack.getMaxDamage())
             return false;
 
         if (!simulated) {

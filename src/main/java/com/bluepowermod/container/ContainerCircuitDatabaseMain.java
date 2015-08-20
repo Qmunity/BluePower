@@ -22,14 +22,12 @@ import com.bluepowermod.tile.tier3.TileCircuitDatabase;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class ContainerCircuitDatabaseMain extends ContainerGhosts {
+public class ContainerCircuitDatabaseMain extends ContainerGhosts<TileCircuitDatabase> {
 
     private int curUploadProgress, curCopyProgress, selectedShareOption;
-    private final TileCircuitDatabase circuitDatabase;
 
     public ContainerCircuitDatabaseMain(InventoryPlayer invPlayer, TileCircuitDatabase circuitDatabase) {
-
-        this.circuitDatabase = circuitDatabase;
+        super(circuitDatabase);
         addSlotToContainer(new SlotPhantom(circuitDatabase.copyInventory, 0, 57, 64) {
 
             @Override
@@ -94,19 +92,19 @@ public class ContainerCircuitDatabaseMain extends ContainerGhosts {
         for (Object crafter : crafters) {
             ICrafting icrafting = (ICrafting) crafter;
 
-            if (curUploadProgress != circuitDatabase.curUploadProgress) {
-                icrafting.sendProgressBarUpdate(this, 0, circuitDatabase.curUploadProgress);
+            if (curUploadProgress != te.curUploadProgress) {
+                icrafting.sendProgressBarUpdate(this, 0, te.curUploadProgress);
             }
-            if (curCopyProgress != circuitDatabase.curCopyProgress) {
-                icrafting.sendProgressBarUpdate(this, 1, circuitDatabase.curCopyProgress);
+            if (curCopyProgress != te.curCopyProgress) {
+                icrafting.sendProgressBarUpdate(this, 1, te.curCopyProgress);
             }
-            if (selectedShareOption != circuitDatabase.selectedShareOption) {
-                icrafting.sendProgressBarUpdate(this, 2, circuitDatabase.selectedShareOption);
+            if (selectedShareOption != te.selectedShareOption) {
+                icrafting.sendProgressBarUpdate(this, 2, te.selectedShareOption);
             }
         }
-        curUploadProgress = circuitDatabase.curUploadProgress;
-        curCopyProgress = circuitDatabase.curCopyProgress;
-        selectedShareOption = circuitDatabase.selectedShareOption;
+        curUploadProgress = te.curUploadProgress;
+        curCopyProgress = te.curCopyProgress;
+        selectedShareOption = te.selectedShareOption;
     }
 
     @Override
@@ -114,13 +112,13 @@ public class ContainerCircuitDatabaseMain extends ContainerGhosts {
     public void updateProgressBar(int id, int value) {
 
         if (id == 0) {
-            circuitDatabase.curUploadProgress = value;
+            te.curUploadProgress = value;
         }
         if (id == 1) {
-            circuitDatabase.curCopyProgress = value;
+            te.curCopyProgress = value;
         }
         if (id == 2) {
-            circuitDatabase.selectedShareOption = value;
+            te.selectedShareOption = value;
             ((GuiContainerBase) ClientProxy.getOpenedGui()).redraw();
         }
     }

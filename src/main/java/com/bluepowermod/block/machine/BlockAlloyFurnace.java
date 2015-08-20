@@ -48,7 +48,7 @@ public class BlockAlloyFurnace extends BlockContainerBase {
 
         super(Material.rock, TileAlloyFurnace.class);
         setBlockName(Refs.ALLOYFURNACE_NAME);
-
+        setGuiId(GuiIDs.ALLOY_FURNACE);
     }
 
     @Override
@@ -144,8 +144,7 @@ public class BlockAlloyFurnace extends BlockContainerBase {
         textureBottom = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + Refs.ALLOYFURNACE_NAME + "_bottom");
         textureSide = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + Refs.ALLOYFURNACE_NAME + "_side");
         textureFrontOn = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + Refs.ALLOYFURNACE_NAME + "_front_on");
-        textureFrontOff = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + Refs.ALLOYFURNACE_NAME
-                + "_front_off");
+        textureFrontOff = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + Refs.ALLOYFURNACE_NAME + "_front_off");
     }
 
     @Override
@@ -153,12 +152,6 @@ public class BlockAlloyFurnace extends BlockContainerBase {
 
         TileAlloyFurnace te = (TileAlloyFurnace) world.getTileEntity(x, y, z);
         return te.getIsActive() ? 13 : 0;
-    }
-
-    @Override
-    public GuiIDs getGuiID() {
-
-        return GuiIDs.ALLOY_FURNACE;
     }
 
     @Override

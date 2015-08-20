@@ -12,7 +12,7 @@ public class RedstoneConnectionCache implements IConnectionCache<IRedstoneDevice
 
     private IRedstoneDevice dev;
     private RedstoneConnection[] connections = new RedstoneConnection[7];
-    private boolean listening = false;
+    private IConnectionListener listener;
 
     public RedstoneConnectionCache(IRedstoneDevice dev) {
 
@@ -36,8 +36,8 @@ public class RedstoneConnectionCache implements IConnectionCache<IRedstoneDevice
 
         RedstoneConnection con = connections[side.ordinal()] = RedstoneApi.getInstance().createConnection(getSelf(), connectable, side,
                 connectableSide, type);
-        if (listening)
-            ((IConnectionListener) dev).onConnect(con);
+        if (listener != null)
+            listener.onConnect(con);
     }
 
     @Override
@@ -45,8 +45,8 @@ public class RedstoneConnectionCache implements IConnectionCache<IRedstoneDevice
 
         RedstoneConnection con = connections[side.ordinal()];
         connections[side.ordinal()] = null;
-        if (listening)
-            ((IConnectionListener) dev).onDisconnect(con);
+        if (listener != null)
+            listener.onDisconnect(con);
     }
 
     @SuppressWarnings("unchecked")
@@ -102,7 +102,14 @@ public class RedstoneConnectionCache implements IConnectionCache<IRedstoneDevice
     @Override
     public void listen() {
 
-        listening = dev instanceof IConnectionListener;
+        if (dev instanceof IConnectionListener)
+            listener = (IConnectionListener) dev;
+    }
+
+    @Override
+    public void listen(IConnectionListener listener) {
+
+        this.listener = listener;
     }
 
 }

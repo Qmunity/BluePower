@@ -7,14 +7,6 @@
  */
 package com.bluepowermod.part;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-
-import net.minecraft.item.ItemStack;
-import uk.co.qmunity.lib.part.PartRegistry;
-
 import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.api.wire.redstone.RedwireType;
 import com.bluepowermod.item.ItemPart;
@@ -62,6 +54,13 @@ import com.bluepowermod.part.wire.redstone.PartRedwireFreestanding.PartRedwireFr
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.item.ItemStack;
+import uk.co.qmunity.lib.part.PartRegistry;
+
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 public class PartManager {
 
@@ -200,6 +199,7 @@ public class PartManager {
             for (MinecraftColor color : MinecraftColor.VALID_COLORS)
                 registerPart(PartRedwireFreestandingBundled.class, type, color);
         }
+
     }
 
     public static void registerItems() {

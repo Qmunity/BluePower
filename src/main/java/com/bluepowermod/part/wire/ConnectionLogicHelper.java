@@ -12,11 +12,13 @@ import uk.co.qmunity.lib.vec.Vec3i;
 import com.bluepowermod.api.connect.ConnectionType;
 import com.bluepowermod.api.misc.IFace;
 
-public class ConnectionLogicHelper<T extends IWorldLocation, C> {
+public class ConnectionLogicHelper<T, C> {
 
-    public static interface IConnectableProvider<T extends IWorldLocation, C> {
+    public static interface IConnectableProvider<T, C> {
 
         public T getConnectableAt(World world, int x, int y, int z, ForgeDirection face, ForgeDirection side);
+
+        public IWorldLocation getLocation(T o);
 
         public C createConnection(T a, T b, ForgeDirection sideA, ForgeDirection sideB, ConnectionType type);
 
@@ -46,7 +48,7 @@ public class ConnectionLogicHelper<T extends IWorldLocation, C> {
 
         // In same block
         do {
-            Vec3i loc = new Vec3i(device);
+            Vec3i loc = new Vec3i(provider.getLocation(device));
             T dev = provider.getConnectableAt(loc.getWorld(), loc.getX(), loc.getY(), loc.getZ(), side == face.getOpposite() ? ForgeDirection.UNKNOWN
                     : side, face == ForgeDirection.UNKNOWN ? side.getOpposite() : face);
             if (dev == null || dev == device || !provider.isValidClosedCorner(dev))
@@ -54,19 +56,20 @@ public class ConnectionLogicHelper<T extends IWorldLocation, C> {
 
             ConnectionType type = (device instanceof IFace || dev instanceof IFace) && !(device instanceof IFace == dev instanceof IFace) ? ConnectionType.STRAIGHT
                     : ConnectionType.CLOSED_CORNER;
-            if (provider.canConnect(device, dev, side, type) && provider.canConnect(dev, device, face, type))
+            if (provider.canConnect(device, dev, side, type) && provider.canConnect(dev, device, face, type)) {
                 return provider.createConnection(device, dev, side, face, type);
+            }
         } while (false);
 
         // On same block
         if (face != ForgeDirection.UNKNOWN) {
             do {
-                Vec3i loc = new Vec3i(device).add(face).add(side);
+                Vec3i loc = new Vec3i(provider.getLocation(device)).add(face).add(side);
                 T dev = provider.getConnectableAt(loc.getWorld(), loc.getX(), loc.getY(), loc.getZ(), side.getOpposite(), face.getOpposite());
                 if (dev == null || dev == device || !provider.isValidOpenCorner(dev))
                     break;
 
-                Vec3i block = new Vec3i(device).add(side);
+                Vec3i block = new Vec3i(provider.getLocation(device)).add(side);
                 Block b = block.getBlock();
                 // Full block check
                 if (b.isNormalCube() || b == Blocks.redstone_block)
@@ -83,7 +86,7 @@ public class ConnectionLogicHelper<T extends IWorldLocation, C> {
 
         // Straight connection
         do {
-            Vec3i loc = new Vec3i(device).add(side);
+            Vec3i loc = new Vec3i(provider.getLocation(device)).add(side);
             T dev = provider.getConnectableAt(loc.getWorld(), loc.getX(), loc.getY(), loc.getZ(), face, side.getOpposite());
             if (dev == null) {
                 dev = provider.getConnectableAt(loc.getWorld(), loc.getX(), loc.getY(), loc.getZ(), side.getOpposite(), side.getOpposite());

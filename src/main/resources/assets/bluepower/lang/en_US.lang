@@ -78,9 +78,15 @@ tile.bluepower:regulator.name=Regulator
 tile.bluepower:item_detector.name=Item Detector
 tile.bluepower:manager.name=Manager
 
+# Powered
 tile.bluepower:windmill.name=Vertical Windmill
 tile.bluepower:kinetic_generator.name=Kinetic Generator
 tile.bluepower:engine.name=Blue Power Engine
+tile.bluepower:batteryBlock.name=Batterybox
+tile.bluepower:solar_panel.name=Solar Panel
+tile.bluepower:chargingbench.name=Charging Bench
+tile.bluepower:thermopile.name=Thermopile
+
 
 # Computer
 tile.bluepower:cpu.name=CPU
@@ -314,6 +320,8 @@ item.part.bluepower:wire.freestanding.infusedteslatite.bundled.green.name=Green 
 item.part.bluepower:wire.freestanding.infusedteslatite.bundled.red.name=Red Freestanding Bundled Infused Teslatite Wire
 item.part.bluepower:wire.freestanding.infusedteslatite.bundled.black.name=Black Freestanding Bundled Infused Teslatite Wire
 
+item.part.bluepower:powerWire.name=Bluepower wire
+
 # Lamps (full block, not inverted)
 tile.bluepower:lamp.white.name=White Lamp
 tile.bluepower:lamp.orange.name=Orange Lamp
@@ -489,6 +497,10 @@ item.bluepower:silky_screwdriver.name=Silky Screwdriver
 
 item.bluepower:wool_card.name=Wool Card
 item.bluepower:diamond_drawplate.name=Diamond Drawplate
+
+item.bluepower:battery.name=Battery
+item.bluepower:sonic_screwdriver.name=Sonic Screwdriver
+
 
 # Saws
 item.bluepower:iron_saw.name=Iron Saw

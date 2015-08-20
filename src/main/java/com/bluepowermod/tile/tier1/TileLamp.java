@@ -23,18 +23,18 @@ import com.bluepowermod.block.machine.BlockLampRGB;
 import com.bluepowermod.client.render.RenderLamp;
 import com.bluepowermod.redstone.BundledConnectionCache;
 import com.bluepowermod.redstone.RedstoneApi;
-import com.bluepowermod.tile.TileBase;
+import com.bluepowermod.tile.TileBluePowerBase;
 
 /**
  * @author Koen Beckers (K4Unl) and Amadornes. Yes. I only need this class to do the getPower() function.. damn :(
  */
-public class TileLamp extends TileBase implements IBundledDevice {
+public class TileLamp extends TileBluePowerBase implements IBundledDevice {
 
     private int power;
 
     private byte[] bundledPower = new byte[16];
 
-    private BundledConnectionCache connections = RedstoneApi.getInstance().createBundledConnectionCache(this);
+    private final BundledConnectionCache connections = RedstoneApi.getInstance().createBundledConnectionCache(this);
 
     public int getPower() {
 
@@ -47,7 +47,7 @@ public class TileLamp extends TileBase implements IBundledDevice {
             connections.recalculateConnections();
             int connected = 0;
             for (ForgeDirection s : ForgeDirection.VALID_DIRECTIONS)
-                connected += (connections.getConnectionOnSide(s) != null) ? 1 : 0;
+                connected += connections.getConnectionOnSide(s) != null ? 1 : 0;
 
             if (connected == 0)
                 bundledPower = new byte[16];
@@ -58,11 +58,10 @@ public class TileLamp extends TileBase implements IBundledDevice {
                         Math.min(bundledPower[MinecraftColor.RED.ordinal()] & 0xFF, bundledPower[MinecraftColor.GREEN.ordinal()] & 0xFF),
                         bundledPower[MinecraftColor.BLUE.ordinal()] & 0xFF);
             } else {
-                pow = Math.max(
-                        Math.max(bundledPower[MinecraftColor.RED.ordinal()] & 0xFF, bundledPower[MinecraftColor.GREEN.ordinal()] & 0xFF),
+                pow = Math.max(Math.max(bundledPower[MinecraftColor.RED.ordinal()] & 0xFF, bundledPower[MinecraftColor.GREEN.ordinal()] & 0xFF),
                         bundledPower[MinecraftColor.BLUE.ordinal()] & 0xFF);
             }
-            power = (int) ((pow / 256D) * 15);
+            power = (int) (pow / 256D * 15);
             sendUpdatePacket();
         } else {
             int pow = RedstoneHelper.getInput(getWorldObj(), xCoord, yCoord, zCoord);
@@ -80,7 +79,7 @@ public class TileLamp extends TileBase implements IBundledDevice {
     }
 
     @Override
-    protected void writeToPacketNBT(NBTTagCompound tCompound) {
+    public void writeToPacketNBT(NBTTagCompound tCompound) {
 
         tCompound.setInteger("power", power);
         if (blockType instanceof BlockLampRGB) {
@@ -91,7 +90,7 @@ public class TileLamp extends TileBase implements IBundledDevice {
     }
 
     @Override
-    protected void readFromPacketNBT(NBTTagCompound tCompound) {
+    public void readFromPacketNBT(NBTTagCompound tCompound) {
 
         power = tCompound.getInteger("power");
         if (tCompound.hasKey("red")) {

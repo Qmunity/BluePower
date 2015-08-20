@@ -118,6 +118,16 @@ public class ContainerSortingMachine extends ContainerMachineBase {
                     icrafting.sendProgressBarUpdate(this, i + 12, sortingMachine.fuzzySettings[i]);
                 }
             }
+
+            /*if (ampStored != sortingMachine.getPowerHandler(ForgeDirection.UNKNOWN).getAmpHourStored()) {
+                icrafting.sendProgressBarUpdate(this, AMPSTORED, (int) sortingMachine.getPowerHandler(ForgeDirection.UNKNOWN).getAmpHourStored());
+                ampStored = sortingMachine.getPowerHandler(ForgeDirection.UNKNOWN).getAmpHourStored();
+            }
+
+            if (ampMax != sortingMachine.getPowerHandler(ForgeDirection.UNKNOWN).getMaxAmpHour()) {
+                icrafting.sendProgressBarUpdate(this, AMPMAX, (int) sortingMachine.getPowerHandler(ForgeDirection.UNKNOWN).getMaxAmpHour());
+                ampMax = sortingMachine.getPowerHandler(ForgeDirection.UNKNOWN).getMaxAmpHour();
+            }*/
         }
 
         pullMode = sortingMachine.pullMode.ordinal();
@@ -129,6 +139,7 @@ public class ContainerSortingMachine extends ContainerMachineBase {
         for (int i = 0; i < fuzzySettings.length; i++) {
             fuzzySettings[i] = sortingMachine.fuzzySettings[i];
         }
+
     }
 
     @Override
@@ -158,6 +169,7 @@ public class ContainerSortingMachine extends ContainerMachineBase {
             sortingMachine.fuzzySettings[id - 12] = value;
             ((GuiContainerBase) ClientProxy.getOpenedGui()).redraw();
         }
+
     }
 
     @Override

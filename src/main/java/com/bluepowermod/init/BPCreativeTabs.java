@@ -39,6 +39,7 @@ public class BPCreativeTabs {
     public static CreativeTabs circuits;
     public static CreativeTabs wiring;
     public static CreativeTabs lighting;
+    public static CreativeTabs power;
 
     static {
 
@@ -175,6 +176,22 @@ public class BPCreativeTabs {
                 }
             }
         };
+
+
+
+        power = new BPCreativeTab("tabBluePowerPower") {
+
+            @Override
+            public Item getTabIconItem() {
+
+                Block iconBlock = BPBlocks.marble;
+                if (iconBlock != null) {
+                    return Item.getItemFromBlock(iconBlock);
+                } else {
+                    return Item.getItemFromBlock(Blocks.stone);
+                }
+            }
+        };
     }
 
     private static abstract class BPCreativeTab extends CreativeTabs {
@@ -213,3 +230,4 @@ public class BPCreativeTabs {
 
     }
 }
+

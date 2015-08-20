@@ -25,11 +25,11 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import uk.co.qmunity.lib.tile.IRotatable;
 
 import com.bluepowermod.block.BlockContainerBase;
 import com.bluepowermod.client.render.RendererBlockBase.EnumFaceType;
 import com.bluepowermod.reference.Refs;
-import com.bluepowermod.tile.IRotatable;
 import com.bluepowermod.tile.tier1.TileIgniter;
 
 import cpw.mods.fml.relauncher.Side;

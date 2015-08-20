@@ -9,6 +9,7 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.util.ForgeDirection;
 import uk.co.qmunity.lib.client.gui.GuiContainerBase;
 import uk.co.qmunity.lib.client.gui.widget.GuiAnimatedStat;
 import uk.co.qmunity.lib.client.gui.widget.IGuiWidget;
@@ -17,6 +18,9 @@ import codechicken.nei.VisiblityData;
 import codechicken.nei.api.INEIGuiHandler;
 import codechicken.nei.api.TaggedInventoryArea;
 
+import com.bluepowermod.api.power.IPowered;
+import com.bluepowermod.client.gui.widget.WidgetBarBase;
+import com.bluepowermod.client.gui.widget.WidgetPowerBar;
 import com.bluepowermod.client.gui.widget.WidgetTabItemLister;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.TileMachineBase;
@@ -57,6 +61,20 @@ public class GuiContainerBaseBP extends GuiContainerBase implements INEIGuiHandl
                     unlocalizedInfo);
 
         }
+
+        if (inventory instanceof IPowered) {
+            WidgetBarBase mainPowerWidget = new WidgetPowerBar(guiLeft + getPowerBarXPos(), guiTop + getPowerBarYPos(),
+                    ((IPowered) inventory).getPowerHandler(ForgeDirection.UNKNOWN));
+            addWidget(mainPowerWidget);
+        }
+    }
+
+    protected int getPowerBarXPos() {
+        return 6;
+    }
+
+    protected int getPowerBarYPos() {
+        return 37;
     }
 
     // -----------NEI support

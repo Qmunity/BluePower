@@ -17,21 +17,12 @@
 
 package com.bluepowermod.init;
 
+import com.bluepowermod.block.machine.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 
 import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.block.BlockContainerBase;
-import com.bluepowermod.block.machine.BlockAlloyFurnace;
-import com.bluepowermod.block.machine.BlockCircuitDatabase;
-import com.bluepowermod.block.machine.BlockContainerFrontRender;
-import com.bluepowermod.block.machine.BlockContainerTwoSideRender;
-import com.bluepowermod.block.machine.BlockIgniter;
-import com.bluepowermod.block.machine.BlockLamp;
-import com.bluepowermod.block.machine.BlockLampRGB;
-import com.bluepowermod.block.machine.BlockProjectTable;
-import com.bluepowermod.block.machine.BlockRejecting;
-import com.bluepowermod.block.machine.BlockSortron;
 import com.bluepowermod.block.worldgen.BlockAmethystOre;
 import com.bluepowermod.block.worldgen.BlockBasalt;
 import com.bluepowermod.block.worldgen.BlockCrackedBasalt;
@@ -131,7 +122,7 @@ public class BPBlocks {
     public static Block manager;
 
     // public static Block engine;
-    // public static Block kinetic_generator;
+     public static Block kinetic_generator;
     // public static Block windmill;
 
     // public static Block cpu;
@@ -146,6 +137,11 @@ public class BPBlocks {
     public static Block blockLampRGBInverted;
 
     public static Block sortron;
+
+    public static Block solar_panel;
+    public static Block battery;
+    public static Block thermopile;
+    public static Block chargingBench;
 
     public static void init() {
 
@@ -226,7 +222,7 @@ public class BPBlocks {
         manager = new BlockRejecting(Material.rock, TileManager.class).setGuiId(GuiIDs.MANAGER_ID).emitsRedstone().setBlockName(Refs.MANAGER_NAME);
 
         // engine = new BlockEngine();
-        // kinetic_generator = new BlockKineticGenerator();
+        kinetic_generator = new BlockKineticGenerator();
         // windmill = new BlockWindmill();
 
         // cpu = new BlockCPU();
@@ -239,6 +235,11 @@ public class BPBlocks {
 
         blockLampInverted = new Block[MinecraftColor.VALID_COLORS.length];
         blockLampRGBInverted = new BlockLampRGB(true);
+
+        solar_panel = new BlockSolarPanel();
+        battery = new BlockBattery();
+        thermopile = new BlockThermopile();
+        chargingBench = new BlockChargingBench();
 
         for (int i = 0; i < MinecraftColor.VALID_COLORS.length; i++)
             blockLamp[i] = new BlockLamp(false, MinecraftColor.VALID_COLORS[i]);
@@ -308,6 +309,12 @@ public class BPBlocks {
         GameRegistry.registerBlock(regulator, Refs.REGULATOR_NAME);
         GameRegistry.registerBlock(item_detector, Refs.ITEMDETECTOR_NAME);
         GameRegistry.registerBlock(manager, Refs.MANAGER_NAME);
+
+        GameRegistry.registerBlock(solar_panel, Refs.SOLAR_PANEL_NAME);
+        GameRegistry.registerBlock(battery, Refs.BATTERY_NAME);
+        GameRegistry.registerBlock(thermopile, Refs.THERMOPILE_NAME);
+        GameRegistry.registerBlock(chargingBench, Refs.CHARGINGBENCH_NAME);
+        GameRegistry.registerBlock(kinetic_generator, Refs.KINETICGENERATOR_NAME);
 
         /*
          * GameRegistry.registerBlock(cpu, Refs.BLOCKCPU_NAME); GameRegistry.registerBlock(monitor, Refs.BLOCKMONITOR_NAME);

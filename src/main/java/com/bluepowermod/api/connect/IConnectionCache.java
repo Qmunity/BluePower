@@ -35,8 +35,14 @@ public interface IConnectionCache<T> {
     public void disconnectAll();
 
     /**
-     * Makes the object the cache is bound to, if instance of {@link IConnectionListener}, listen to connect/disconnect events.
+     * Makes the object the cache is bound to, if instance of {@link IConnectionListener}, listen to connect/disconnect events. Replaces the current
+     * one (if existing).
      */
     public void listen();
+
+    /**
+     * Makes the object that gets passed in as an argument listen to connect/disconnect events. Replaces the current one (if existing).
+     */
+    public void listen(IConnectionListener listener);
 
 }

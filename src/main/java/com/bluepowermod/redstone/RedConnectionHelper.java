@@ -19,6 +19,7 @@ package com.bluepowermod.redstone;
 
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import uk.co.qmunity.lib.vec.IWorldLocation;
 
 import com.bluepowermod.api.connect.ConnectionType;
 import com.bluepowermod.api.wire.redstone.IBundledDevice;
@@ -35,6 +36,12 @@ public class RedConnectionHelper {
                 public IRedstoneDevice getConnectableAt(World world, int x, int y, int z, ForgeDirection face, ForgeDirection side) {
 
                     return RedstoneApi.getInstance().getRedstoneDevice(world, x, y, z, face, side);
+                }
+
+                @Override
+                public IWorldLocation getLocation(IRedstoneDevice o) {
+
+                    return o;
                 }
 
                 @Override
@@ -82,6 +89,12 @@ public class RedConnectionHelper {
                 public IBundledDevice getConnectableAt(World world, int x, int y, int z, ForgeDirection face, ForgeDirection side) {
 
                     return RedstoneApi.getInstance().getBundledDevice(world, x, y, z, face, side);
+                }
+
+                @Override
+                public IWorldLocation getLocation(IBundledDevice o) {
+
+                    return o;
                 }
 
                 @Override

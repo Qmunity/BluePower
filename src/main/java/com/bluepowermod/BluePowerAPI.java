@@ -16,8 +16,10 @@ import uk.co.qmunity.lib.part.IPart;
 
 import com.bluepowermod.api.BPApi.IBPApi;
 import com.bluepowermod.api.block.IAdvancedSilkyRemovable;
+import com.bluepowermod.api.power.IPowerApi;
 import com.bluepowermod.api.recipe.IAlloyFurnaceRegistry;
 import com.bluepowermod.api.wire.redstone.IRedstoneApi;
+import com.bluepowermod.power.PowerApi;
 import com.bluepowermod.recipe.AlloyFurnaceRegistry;
 import com.bluepowermod.redstone.RedstoneApi;
 
@@ -34,6 +36,12 @@ public class BluePowerAPI implements IBPApi {
     public IAlloyFurnaceRegistry getAlloyFurnaceRegistry() {
 
         return AlloyFurnaceRegistry.getInstance();
+    }
+
+    @Override
+    public IPowerApi getPowerApi() {
+
+        return PowerApi.getInstance();
     }
 
     @Override

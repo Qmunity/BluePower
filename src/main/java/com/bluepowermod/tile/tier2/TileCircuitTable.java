@@ -18,6 +18,7 @@ import net.minecraft.inventory.InventoryBasic;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import uk.co.qmunity.lib.tile.TileBase;
 
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.part.IGuiButtonSensitive;
@@ -25,7 +26,6 @@ import com.bluepowermod.part.PartInfo;
 import com.bluepowermod.part.PartManager;
 import com.bluepowermod.part.gate.GateBase;
 import com.bluepowermod.tile.IGUITextFieldSensitive;
-import com.bluepowermod.tile.TileBase;
 
 /**
  * @author MineMaarten

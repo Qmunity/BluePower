@@ -10,25 +10,31 @@ package com.bluepowermod.tile.tier2;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.util.ForgeDirection;
+import uk.co.qmunity.lib.network.annotation.GuiSynced;
 import uk.co.qmunity.lib.part.compat.MultipartCompatibility;
 
+import com.bluepowermod.api.power.IPowerBase;
+import com.bluepowermod.api.power.IPowered;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.part.tube.PneumaticTube;
+import com.bluepowermod.reference.PowerConstants;
 import com.bluepowermod.tile.IFuzzyRetrieving;
 import com.bluepowermod.tile.tier1.TileFilter;
 
 /**
  * @author MineMaarten
  */
-public class TileRetriever extends TileFilter implements IFuzzyRetrieving {
+public class TileRetriever extends TileFilter implements IFuzzyRetrieving, IPowered {
 
     public int slotIndex;
     public int mode;
+    @GuiSynced
+    private final IPowerBase powerBase = getPowerHandler(ForgeDirection.UNKNOWN);
 
     @Override
     protected void pullItem() {
-
-        if (isBufferEmpty()) {
+        if (isBufferEmpty() && isPowered()) {
             PneumaticTube tube = MultipartCompatibility.getPart(worldObj, xCoord + getFacingDirection().offsetX, yCoord
                     + getFacingDirection().offsetY, zCoord + getFacingDirection().offsetZ, PneumaticTube.class);
             if (tube != null) {
@@ -55,7 +61,10 @@ public class TileRetriever extends TileFilter implements IFuzzyRetrieving {
                     }
                 }
                 if (everythingNull) {
-                    tube.getLogic().retrieveStack(this, getFacingDirection(), null);
+                    boolean success = tube.getLogic().retrieveStack(this, getFacingDirection(), null);
+                    if (success) {
+                        powerBase.addEnergy(-PowerConstants.POWER_PER_ACTION, false);
+                    }
                     slotIndex = 0;
                 }
             } else {

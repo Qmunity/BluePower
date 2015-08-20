@@ -20,13 +20,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import uk.co.qmunity.lib.tile.TileBase;
 
 import com.bluepowermod.BluePower;
 import com.bluepowermod.container.ContainerProjectTable;
 import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.part.IGuiButtonSensitive;
-import com.bluepowermod.tile.TileBase;
 
 import cpw.mods.fml.relauncher.ReflectionHelper;
 
