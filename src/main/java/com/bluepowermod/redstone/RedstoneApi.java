@@ -160,7 +160,7 @@ public class RedstoneApi implements IRedstoneApi {
     @Override
     public IPropagator<IRedstoneDevice> getRedstonePropagator(IRedstoneDevice device, ForgeDirection side) {
 
-        return new RedstonePropagator(device, side);
+        return new RedstonePropagator.RedPropagator(device, side);
     }
 
     @Override

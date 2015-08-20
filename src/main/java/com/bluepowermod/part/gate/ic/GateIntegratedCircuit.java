@@ -238,7 +238,7 @@ public class GateIntegratedCircuit extends GateBase implements IGateLogic<GateIn
                             if (hit != null) {
                                 double d = hit.hitVec.distanceTo(start.toVec3());
                                 if (d < dist) {
-                                    mop = new QMovingObjectPosition(hit, p, this, hit.getCube().clone().expand(-0.001));
+                                    mop = new QMovingObjectPosition(hit, p, hit.getCube().clone().expand(-0.001));
                                     dist = d;
                                 }
                             }
@@ -249,8 +249,8 @@ public class GateIntegratedCircuit extends GateBase implements IGateLogic<GateIn
         }
 
         if (mop != null && mop.getPart() == this) {
-            return new QMovingObjectPosition(mop, this, new Vec3dCube(0, 0, 0, 1, showBG ? 2 * border : border, 1).expand(-0.001).rotate(getFace(),
-                    Vec3d.center));
+            return new QMovingObjectPosition(mop, this, new Vec3dCube(0, 0, 0, 1, showBG ? 2 * border : border, 1).expand(-0.001).rotate(
+                    getFace(), Vec3d.center));
         }
 
         return mop;
@@ -325,8 +325,9 @@ public class GateIntegratedCircuit extends GateBase implements IGateLogic<GateIn
 
                 renderer.addTransformation(new Translation(i * (14D / getSize()), 0, 0));
                 renderer.addTransformation(new Scale(1.75, 1, 1.75));
-                renderer.renderBox(new Vec3dCube(0, 0, 0, 1, 1, 1), null, m == 1 ? IconSupplier.icArrowIn : (m == 2 ? IconSupplier.icArrowOut
-                        : (m == 3 ? IconSupplier.icArrowInBundled : IconSupplier.icArrowOutBundled)), null, null, null, null);
+                renderer.renderBox(new Vec3dCube(0, 0, 0, 1, 1, 1), null, m == 1 ? IconSupplier.icArrowIn
+                        : (m == 2 ? IconSupplier.icArrowOut : (m == 3 ? IconSupplier.icArrowInBundled : IconSupplier.icArrowOutBundled)),
+                        null, null, null, null);
                 renderer.removeTransformations(2);
             }
 
@@ -355,8 +356,8 @@ public class GateIntegratedCircuit extends GateBase implements IGateLogic<GateIn
 
                 if (showBG) {
                     renderer.setColor((x + z) % 2 == 1 ? 0xEEEEEE : 0xBBBBBB);
-                    renderer.renderBox(new Vec3dCube(border + x * s, border, border + z * s, border + (x + 1) * s, border, border + (z + 1) * s),
-                            null, getIcon(ForgeDirection.UP), null, null, null, null);
+                    renderer.renderBox(new Vec3dCube(border + x * s, border, border + z * s, border + (x + 1) * s, border, border + (z + 1)
+                            * s), null, getIcon(ForgeDirection.UP), null, null, null, null);
                 }
                 renderer.setColor(0xFFFFFF);
 
@@ -525,10 +526,10 @@ public class GateIntegratedCircuit extends GateBase implements IGateLogic<GateIn
                 GL11.glTranslated(border, showBG ? border : 0, border);
                 GL11.glTranslated(x_ * (14 / 16D) / getSize(), 0, z_ * (14 / 16D) / getSize());
 
-                Vec3 min = Vec3.createVectorHelper(x > 0 ? 0 : (14 / 16D) / getSize() - border, border + 0.001, z > 0 ? 0 : (14 / 16D) / getSize()
-                        - border);
-                Vec3 max = Vec3.createVectorHelper(x < getSize() ? (14 / 16D) / getSize() : border, border + 0.001, z < getSize() ? (14 / 16D)
-                        / getSize() : border);
+                Vec3 min = Vec3.createVectorHelper(x > 0 ? 0 : (14 / 16D) / getSize() - border, border + 0.001, z > 0 ? 0 : (14 / 16D)
+                        / getSize() - border);
+                Vec3 max = Vec3.createVectorHelper(x < getSize() ? (14 / 16D) / getSize() : border, border + 0.001,
+                        z < getSize() ? (14 / 16D) / getSize() : border);
 
                 RenderGlobal.drawOutlinedBoundingBox(
                         AxisAlignedBB.getBoundingBox(min.xCoord, min.yCoord, min.zCoord, max.xCoord, max.yCoord, max.zCoord), 0);
@@ -563,7 +564,8 @@ public class GateIntegratedCircuit extends GateBase implements IGateLogic<GateIn
     }
 
     @Override
-    public IPartPlacement getPlacement(IPart part, World world, Vec3i location, ForgeDirection face, MovingObjectPosition mop, EntityPlayer player) {
+    public IPartPlacement getPlacement(IPart part, World world, Vec3i location, ForgeDirection face, MovingObjectPosition mop,
+            EntityPlayer player) {
 
         // if (!DebugHelper.isDebugModeEnabled())
         // return null;
@@ -962,7 +964,7 @@ public class GateIntegratedCircuit extends GateBase implements IGateLogic<GateIn
             @Override
             public void markDirty() {
 
-                GateIntegratedCircuit.this.getParent().markDirty();
+                // GateIntegratedCircuit.this.getParent().markDirty();
             }
 
             @Override
