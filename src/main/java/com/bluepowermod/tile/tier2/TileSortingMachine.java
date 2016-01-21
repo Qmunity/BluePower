@@ -258,13 +258,13 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
                     return true;
                 }
             }
-            if (sortMode == SortMode.ANY_ITEM_DEFAULT) {
+            /*if (sortMode == SortMode.ANY_ITEM_DEFAULT) {
                 if (!simulate) {
                     addItemToOutputBuffer(stack.copy(), colors[8]);
                 }
                 stack.stackSize = 0;
                 return true;
-            }
+            }*/
             break;
         case ANY_STACK:
         case ANY_STACK_DEFAULT:
