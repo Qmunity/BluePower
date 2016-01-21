@@ -308,11 +308,11 @@ public class TileAlloyFurnace extends TileBase implements ISidedInventory {
     }
 
     @Override
-    public boolean isUseableByPlayer(EntityPlayer var1) {
+    public boolean isUseableByPlayer(EntityPlayer player) {
 
         // Todo: Some fancy code here that detects whether the player is far
         // away
-        return true;
+        return this.worldObj.getTileEntity(this.xCoord, this.yCoord, this.zCoord) != this ? false : player.getDistanceSq((double)this.xCoord + 0.5D, (double)this.yCoord + 0.5D, (double)this.zCoord + 0.5D) <= 64.0D;
     }
 
     @Override

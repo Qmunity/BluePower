@@ -252,7 +252,9 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
                 if (filter != null && ItemStackHelper.areStacksEqual(filter, stack, fuzzySettings[i % 8])
                         && stack.stackSize >= filter.stackSize) {
                     if (!simulate) {
-                        addItemToOutputBuffer(filter.copy(), colors[i % 8]);
+			ItemStack temp = stack.copy();
+			temp.stackSize = filter.stackSize;
+                        addItemToOutputBuffer(temp, colors[i % 8]);
                     }
                     stack.stackSize -= filter.stackSize;
                     return true;
@@ -473,9 +475,8 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
     }
 
     @Override
-    public boolean isUseableByPlayer(EntityPlayer var1) {
-
-        return true;
+    public boolean isUseableByPlayer(EntityPlayer player) {
+        return this.worldObj.getTileEntity(this.xCoord, this.yCoord, this.zCoord) != this ? false : player.getDistanceSq((double)this.xCoord + 0.5D, (double)this.yCoord + 0.5D, (double)this.zCoord + 0.5D) <= 64.0D;
     }
 
     @Override
