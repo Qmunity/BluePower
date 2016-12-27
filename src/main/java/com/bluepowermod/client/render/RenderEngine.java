@@ -12,7 +12,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.AdvancedModelLoader;
 import net.minecraftforge.client.model.IModelCustom;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;;
 
 import org.lwjgl.opengl.GL11;
 
@@ -52,32 +52,32 @@ public class RenderEngine extends TileEntitySpecialRenderer {
             GL11.glDisable(GL11.GL_LIGHTING);
             TileEngine tile = (TileEngine) engine.getWorldObj().getTileEntity(engine.xCoord, engine.yCoord, engine.zCoord);
             
-            ForgeDirection direction = tile.getOrientation();
+            EnumFacing direction = tile.getOrientation();
             
             GL11.glTranslated(x, y, z);
             GL11.glScaled(.0315, .0315, .0315);
             
-            if (direction == ForgeDirection.UP) {
+            if (direction == EnumFacing.UP) {
                 GL11.glTranslated(16, 28, 16);
                 GL11.glRotatef(180, 1, 0, 0);
             }
-            if (direction == ForgeDirection.DOWN) {
+            if (direction == EnumFacing.DOWN) {
                 GL11.glTranslated(16, 4, 16);
                 GL11.glRotatef(0, 0, 0, 0);
             }
-            if (direction == ForgeDirection.EAST) {
+            if (direction == EnumFacing.EAST) {
                 GL11.glTranslated(28, 16, 16);
                 GL11.glRotatef(90, 0, 0, 1);
             }
-            if (direction == ForgeDirection.WEST) {
+            if (direction == EnumFacing.WEST) {
                 GL11.glTranslated(4, 16, 16);
                 GL11.glRotatef(90, 0, 0, -1);
             }
-            if (direction == ForgeDirection.NORTH) {
+            if (direction == EnumFacing.NORTH) {
                 GL11.glTranslated(16, 16, 4);
                 GL11.glRotatef(90, 1, 0, 0);
             }
-            if (direction == ForgeDirection.SOUTH) {
+            if (direction == EnumFacing.SOUTH) {
                 GL11.glTranslated(16, 16, 28);
                 GL11.glRotatef(90, -1, 0, 0);
             }

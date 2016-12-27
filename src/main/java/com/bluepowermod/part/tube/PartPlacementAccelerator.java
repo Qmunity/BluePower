@@ -19,8 +19,8 @@ package com.bluepowermod.part.tube;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
-import uk.co.qmunity.lib.misc.ForgeDirectionUtils;
+import net.minecraft.util.EnumFacing;;
+import uk.co.qmunity.lib.misc.EnumFacingUtils;
 import uk.co.qmunity.lib.part.IPart;
 import uk.co.qmunity.lib.part.PartPlacementDefault;
 import uk.co.qmunity.lib.part.compat.IMultipartCompat;
@@ -28,11 +28,11 @@ import uk.co.qmunity.lib.vec.Vec3i;
 
 public class PartPlacementAccelerator extends PartPlacementDefault {
 
-    private ForgeDirection rotation;
+    private EnumFacing rotation;
 
     public PartPlacementAccelerator(EntityPlayer player) {
 
-        rotation = ForgeDirectionUtils.getDirectionFacing(player, true);
+        rotation = EnumFacingUtils.getDirectionFacing(player, true);
     }
 
     @Override

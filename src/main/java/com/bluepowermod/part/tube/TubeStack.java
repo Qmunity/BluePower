@@ -19,7 +19,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;;
 
 import org.lwjgl.opengl.GL11;
 
@@ -45,13 +45,13 @@ public class TubeStack {
     public final TubeColor color;
     public double progress; // 0 at the start, 0.5 on an intersection, 1 at the end.
     public double oldProgress;
-    public ForgeDirection heading;
+    public EnumFacing heading;
     public boolean enabled = true; // will be disabled when the client sided stack is at an intersection, at which point it needs to wait for server
     // input. This just serves a visual purpose.
     public int idleCounter; // increased when the stack is standing still. This will cause the client to remove the stack when a timeout occurs.
     private TileEntity target; // only should have a value when retrieving items. this is the target the item wants to go to.
     private int targetX, targetY, targetZ;
-    private ForgeDirection targetEntryDir = ForgeDirection.UNKNOWN; // Which side should this item make its entry.
+    private EnumFacing targetEntryDir = EnumFacing.UNKNOWN; // Which side should this item make its entry.
     public static final double ITEM_SPEED = 0.0625;
     private double speed = ITEM_SPEED;
     public static double tickTimeMultiplier = 1;//Used client side to correct for TPS lag. This is being synchronized from the server.
@@ -66,12 +66,12 @@ public class TubeStack {
         AUTO, NORMAL, REDUCED, NONE
     }
 
-    public TubeStack(ItemStack stack, ForgeDirection from) {
+    public TubeStack(ItemStack stack, EnumFacing from) {
 
         this(stack, from, TubeColor.NONE);
     }
 
-    public TubeStack(ItemStack stack, ForgeDirection from, TubeColor color) {
+    public TubeStack(ItemStack stack, EnumFacing from, TubeColor color) {
 
         heading = from;
         this.stack = stack;
@@ -113,12 +113,12 @@ public class TubeStack {
         return target;
     }
 
-    public ForgeDirection getTargetEntryDir() {
+    public EnumFacing getTargetEntryDir() {
 
         return targetEntryDir;
     }
 
-    public void setTarget(TileEntity tileEntity, ForgeDirection targetEntryDir) {
+    public void setTarget(TileEntity tileEntity, EnumFacing targetEntryDir) {
 
         this.targetEntryDir = targetEntryDir;
         target = tileEntity;
@@ -155,14 +155,14 @@ public class TubeStack {
 
     public static TubeStack loadFromNBT(NBTTagCompound tag) {
 
-        TubeStack stack = new TubeStack(ItemStack.loadItemStackFromNBT(tag), ForgeDirection.getOrientation(tag.getByte("heading")),
+        TubeStack stack = new TubeStack(ItemStack.loadItemStackFromNBT(tag), EnumFacing.getOrientation(tag.getByte("heading")),
                 TubeColor.values()[tag.getByte("color")]);
         stack.progress = tag.getDouble("progress");
         stack.speed = tag.getDouble("speed");
         stack.targetX = tag.getInteger("targetX");
         stack.targetY = tag.getInteger("targetY");
         stack.targetZ = tag.getInteger("targetZ");
-        stack.targetEntryDir = ForgeDirection.getOrientation(tag.getByte("targetEntryDir"));
+        stack.targetEntryDir = EnumFacing.getOrientation(tag.getByte("targetEntryDir"));
         return stack;
     }
 
@@ -177,7 +177,7 @@ public class TubeStack {
 
     public static TubeStack loadFromPacket(ByteBuf buf) {
 
-        TubeStack stack = new TubeStack(ByteBufUtils.readItemStack(buf), ForgeDirection.getOrientation(buf.readByte()),
+        TubeStack stack = new TubeStack(ByteBufUtils.readItemStack(buf), EnumFacing.getOrientation(buf.readByte()),
                 TubeColor.values()[buf.readByte()]);
         stack.speed = buf.readDouble();
         stack.progress = buf.readDouble();

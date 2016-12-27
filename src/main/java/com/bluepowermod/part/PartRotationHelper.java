@@ -18,13 +18,13 @@
 package com.bluepowermod.part;
 
 import net.minecraft.util.MovingObjectPosition;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;;
 
 public class PartRotationHelper {
 
     public static int getPlacementRotation(MovingObjectPosition mop) {
 
-        ForgeDirection faceHit = ForgeDirection.getOrientation(mop.sideHit);
+        EnumFacing faceHit = EnumFacing.getOrientation(mop.sideHit);
 
         double x = 0;
         double z = 0;

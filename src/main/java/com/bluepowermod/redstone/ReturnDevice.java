@@ -18,7 +18,7 @@
 package com.bluepowermod.redstone;
 
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;;
 
 import com.bluepowermod.api.connect.ConnectionType;
 import com.bluepowermod.api.connect.IConnectionCache;
@@ -68,25 +68,25 @@ public class ReturnDevice implements IRedstoneDevice, IBundledDevice {
     }
 
     @Override
-    public boolean canConnect(ForgeDirection side, IRedstoneDevice dev, ConnectionType type) {
+    public boolean canConnect(EnumFacing side, IRedstoneDevice dev, ConnectionType type) {
 
         return false;
     }
 
     @Override
-    public boolean canConnect(ForgeDirection side, IBundledDevice dev, ConnectionType type) {
+    public boolean canConnect(EnumFacing side, IBundledDevice dev, ConnectionType type) {
 
         return false;
     }
 
     @Override
-    public byte getRedstonePower(ForgeDirection side) {
+    public byte getRedstonePower(EnumFacing side) {
 
         return 0;
     }
 
     @Override
-    public void setRedstonePower(ForgeDirection side, byte power) {
+    public void setRedstonePower(EnumFacing side, byte power) {
 
     }
 
@@ -96,18 +96,18 @@ public class ReturnDevice implements IRedstoneDevice, IBundledDevice {
     }
 
     @Override
-    public byte[] getBundledOutput(ForgeDirection side) {
+    public byte[] getBundledOutput(EnumFacing side) {
 
         return null;
     }
 
     @Override
-    public void setBundledPower(ForgeDirection side, byte[] power) {
+    public void setBundledPower(EnumFacing side, byte[] power) {
 
     }
 
     @Override
-    public byte[] getBundledPower(ForgeDirection side) {
+    public byte[] getBundledPower(EnumFacing side) {
 
         return null;
     }
@@ -118,13 +118,13 @@ public class ReturnDevice implements IRedstoneDevice, IBundledDevice {
     }
 
     @Override
-    public MinecraftColor getBundledColor(ForgeDirection side) {
+    public MinecraftColor getBundledColor(EnumFacing side) {
 
         return null;
     }
 
     @Override
-    public boolean isNormalFace(ForgeDirection side) {
+    public boolean isNormalFace(EnumFacing side) {
 
         return false;
     }

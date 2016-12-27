@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.util.IIcon;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;;
 
 import org.lwjgl.opengl.GL11;
 
@@ -71,7 +71,7 @@ public class PartCageLamp extends PartLamp {
         topIcon = IconSupplier.cagedLampCageTop;
         sideIcon = IconSupplier.cagedLampCageSide;
 
-        renderer.setRenderSide(ForgeDirection.DOWN, false);
+        renderer.setRenderSide(EnumFacing.DOWN, false);
 
         for (int i = 0; i < 2; i++) {
             renderer.setRenderFromInside(i == 1);

@@ -30,7 +30,7 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IIcon;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;;
 
 import org.lwjgl.opengl.GL11;
 
@@ -142,7 +142,7 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
 
         List<Vec3dCube> aabbs = getOcclusionBoxes();
         for (int i = 0; i < 6; i++) {
-            ForgeDirection d = ForgeDirection.getOrientation(i);
+            EnumFacing d = EnumFacing.getOrientation(i);
             if (connections[i] || redstoneConnections[i] || getDeviceOnSide(d) != null) {
                 Vec3dCube c = sideBB.clone().rotate(d, Vec3d.center);
                 aabbs.add(c);
@@ -194,8 +194,8 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
             if (RedstoneApi.getInstance().shouldWiresHandleUpdates()) {
                 getRedstoneConnectionCache().recalculateConnections();
 
-                ForgeDirection d = ForgeDirection.UNKNOWN;
-                for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS)
+                EnumFacing d = EnumFacing.UNKNOWN;
+                for (EnumFacing dir : EnumFacing.VALUES)
                     if (getDeviceOnSide(dir) != null)
                         d = dir;
 
@@ -210,7 +210,7 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
         }
     }
 
-    public TileEntity getTileCache(ForgeDirection d) {
+    public TileEntity getTileCache(EnumFacing d) {
 
         if (tileCache == null) {
             tileCache = new TileEntityCache(getWorld(), getX(), getY(), getZ());
@@ -218,7 +218,7 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
         return tileCache.getValue(d);
     }
 
-    public PneumaticTube getPartCache(ForgeDirection d) {
+    public PneumaticTube getPartCache(EnumFacing d) {
 
         if (partCache == null) {
             partCache = new PartCache<PneumaticTube>(getWorld(), getX(), getY(), getZ(), PneumaticTube.class);
@@ -250,7 +250,7 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
             clearCache();
             for (int i = 0; i < 6; i++) {
                 boolean oldState = connections[i];
-                ForgeDirection d = ForgeDirection.getOrientation(i);
+                EnumFacing d = EnumFacing.getOrientation(i);
                 TileEntity neighbor = getTileCache(d);
                 connections[i] = IOHelper.canInterfaceWith(neighbor, d.getOpposite(), this, canConnectToInventories());
 
@@ -273,7 +273,7 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
         initialized = true;
     }
 
-    public boolean isConnected(ForgeDirection dir, PneumaticTube otherTube) {
+    public boolean isConnected(EnumFacing dir, PneumaticTube otherTube) {
 
         if (otherTube != null) {
             if (!(this instanceof Accelerator) && this instanceof MagTube != otherTube instanceof MagTube && !(otherTube instanceof Accelerator))
@@ -292,7 +292,7 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
 
         for (int i = 0; i < 6; i++) {
             tag.setBoolean("connections" + i, connections[i]);
-            tag.setBoolean("redstoneConnections" + i, getDeviceOnSide(ForgeDirection.getOrientation(i)) != null);
+            tag.setBoolean("redstoneConnections" + i, getDeviceOnSide(EnumFacing.getOrientation(i)) != null);
         }
         for (int i = 0; i < color.length; i++)
             tag.setByte("tubeColor" + i, (byte) color[i].ordinal());
@@ -344,7 +344,7 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
         for (int i = 0; i < 6; i++)
             buffer.writeBoolean(connections[i]);
         for (int i = 0; i < 6; i++)
-            buffer.writeBoolean(getDeviceOnSide(ForgeDirection.getOrientation(i)) != null);
+            buffer.writeBoolean(getDeviceOnSide(EnumFacing.getOrientation(i)) != null);
 
         // Colors
         for (int i = 0; i < color.length; i++)
@@ -444,13 +444,13 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
                 BPPart part = PartManager.getExample(item);
                 if (redwireType == null && part instanceof PartRedwireFaceUninsulated) {
                     if (!getWorld().isRemote) {
-                        redwireType = ((IRedwire) part).getRedwireType(ForgeDirection.UNKNOWN);
+                        redwireType = ((IRedwire) part).getRedwireType(EnumFacing.UNKNOWN);
                         if (!player.capabilities.isCreativeMode)
                             item.stackSize--;
 
                         // Redstone update
                         getRedstoneConnectionCache().recalculateConnections();
-                        RedstoneApi.getInstance().getRedstonePropagator(this, ForgeDirection.DOWN).propagate();
+                        RedstoneApi.getInstance().getRedstonePropagator(this, EnumFacing.DOWN).propagate();
 
                         updateConnections();
                         getLogic().clearNodeCaches();
@@ -469,7 +469,7 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
 
                     // Redstone update
                     getRedstoneConnectionCache().recalculateConnections();
-                    RedstoneApi.getInstance().getRedstonePropagator(this, ForgeDirection.DOWN).propagate();
+                    RedstoneApi.getInstance().getRedstonePropagator(this, EnumFacing.DOWN).propagate();
 
                     ((IScrewdriver) item.getItem()).damage(item, 1, player, false);
 
@@ -504,7 +504,7 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
         return 1;
     }
 
-    public TubeColor getColor(ForgeDirection dir) {
+    public TubeColor getColor(EnumFacing dir) {
 
         return color[dir.ordinal()];
     }
@@ -531,8 +531,8 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
         Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
         t.startDrawingQuads();
 
-        connections[ForgeDirection.DOWN.ordinal()] = true;
-        connections[ForgeDirection.UP.ordinal()] = true;
+        connections[EnumFacing.DOWN.ordinal()] = true;
+        connections[EnumFacing.UP.ordinal()] = true;
 
         RenderHelper renderer = RenderHelper.instance;
         renderer.fullReset();
@@ -576,7 +576,7 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
         int count = 0;
 
         for (int i = 0; i < 6; i++) {
-            if (shouldRenderConnection(ForgeDirection.getOrientation(i)))
+            if (shouldRenderConnection(EnumFacing.getOrientation(i)))
                 count++;
             if (i % 2 == 0 && connections[i] != connections[i + 1])
                 renderFully = true;
@@ -592,12 +592,12 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
     @SideOnly(Side.CLIENT)
     public boolean renderStatic(Vec3i loc, RenderHelper renderer, RenderBlocks renderBlocks, int pass) {
 
-        boolean down = shouldRenderConnection(ForgeDirection.DOWN);
-        boolean up = shouldRenderConnection(ForgeDirection.UP);
-        boolean north = shouldRenderConnection(ForgeDirection.NORTH);
-        boolean south = shouldRenderConnection(ForgeDirection.SOUTH);
-        boolean west = shouldRenderConnection(ForgeDirection.WEST);
-        boolean east = shouldRenderConnection(ForgeDirection.EAST);
+        boolean down = shouldRenderConnection(EnumFacing.DOWN);
+        boolean up = shouldRenderConnection(EnumFacing.UP);
+        boolean north = shouldRenderConnection(EnumFacing.NORTH);
+        boolean south = shouldRenderConnection(EnumFacing.SOUTH);
+        boolean west = shouldRenderConnection(EnumFacing.WEST);
+        boolean east = shouldRenderConnection(EnumFacing.EAST);
 
         boolean renderFully = shouldRenderFully();
 
@@ -644,7 +644,7 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
                         0.25 + 2 / 128D, 0.25 + 56 / 128D);
                 Vec3dCube side5 = new Vec3dCube(0.25 + 5 / 128D, 0.25 - addedThickness, 0.25 - 1 / 128D, 0.25 + 9 / 128D + addedThickness,
                         0.25 + 2 / 128D, 0.25 + 65 / 128D);
-                for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
+                for (EnumFacing d : EnumFacing.VALUES) {
                     TubeColor c = color[d.ordinal()];
                     if (c != TubeColor.NONE) {
                         try {
@@ -668,7 +668,7 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
                                     renderer.renderBox(
                                             side5.clone()
                                                     .rotate(0,
-                                                            (i + ((shouldRenderConnection(ForgeDirection.NORTH) || (shouldRenderConnection(ForgeDirection.UP) && (d == ForgeDirection.NORTH || d == ForgeDirection.SOUTH))) ? 1
+                                                            (i + ((shouldRenderConnection(EnumFacing.NORTH) || (shouldRenderConnection(EnumFacing.UP) && (d == EnumFacing.NORTH || d == EnumFacing.SOUTH))) ? 1
                                                                     : 0)) * 90, 0, Vec3d.center).rotate(d, Vec3d.center),
                                             IconSupplier.pneumaticTubeColoring);
                             }
@@ -684,19 +684,19 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
                 frameThickness /= 1.5;
                 frameSeparation -= 1 / 32D;
 
-                renderFrame(renderer, wireSize, frameSeparation, frameThickness, renderFully || shouldRenderConnection(ForgeDirection.DOWN),
-                        renderFully || shouldRenderConnection(ForgeDirection.UP), renderFully || shouldRenderConnection(ForgeDirection.WEST),
-                        renderFully || shouldRenderConnection(ForgeDirection.EAST), renderFully || shouldRenderConnection(ForgeDirection.NORTH),
-                        renderFully || shouldRenderConnection(ForgeDirection.SOUTH), redstoneConnections[ForgeDirection.DOWN.ordinal()],
-                        redstoneConnections[ForgeDirection.UP.ordinal()], redstoneConnections[ForgeDirection.WEST.ordinal()],
-                        redstoneConnections[ForgeDirection.EAST.ordinal()], redstoneConnections[ForgeDirection.NORTH.ordinal()],
-                        redstoneConnections[ForgeDirection.SOUTH.ordinal()], getParent() != null && getWorld() != null, IconSupplier.wire,
+                renderFrame(renderer, wireSize, frameSeparation, frameThickness, renderFully || shouldRenderConnection(EnumFacing.DOWN),
+                        renderFully || shouldRenderConnection(EnumFacing.UP), renderFully || shouldRenderConnection(EnumFacing.WEST),
+                        renderFully || shouldRenderConnection(EnumFacing.EAST), renderFully || shouldRenderConnection(EnumFacing.NORTH),
+                        renderFully || shouldRenderConnection(EnumFacing.SOUTH), redstoneConnections[EnumFacing.DOWN.ordinal()],
+                        redstoneConnections[EnumFacing.UP.ordinal()], redstoneConnections[EnumFacing.WEST.ordinal()],
+                        redstoneConnections[EnumFacing.EAST.ordinal()], redstoneConnections[EnumFacing.NORTH.ordinal()],
+                        redstoneConnections[EnumFacing.SOUTH.ordinal()], getParent() != null && getWorld() != null, IconSupplier.wire,
                         WireHelper.getColorForPowerLevel(redwireType, getPower()));
 
                 Vec3dCube c = new Vec3dCube(0.5 - 1 / 56D, 0, 0.2, 0.5 + 1 / 56D, 1 / 32D, 0.8);
 
                 renderer.setColor(WireHelper.getColorForPowerLevel(redwireType, getPower()));
-                for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
+                for (EnumFacing d : EnumFacing.VALUES) {
                     if (redstoneConnections[d.ordinal()] && !connections[d.ordinal()]) {
                         renderer.addTransformation(new Rotation(d));
                         for (int i = 0; i < 2; i++) {
@@ -736,7 +736,7 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
                 boolean ns = west || east;
 
                 renderer.setTextureRotations(ud ? 1 : 0, ud ? 1 : 0, we ? 1 : 0, we ? 1 : 0, ns ? 1 : 0, ns ? 1 : 0);
-                for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
+                for (EnumFacing d : EnumFacing.VALUES) {
                     if (shouldRenderConnection(d)) {
                         renderer.setRenderSide(d, false);
                         renderer.setRenderSide(d.getOpposite(), false);
@@ -752,7 +752,7 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
                 boolean ns = west || east;
 
                 renderer.setTextureRotations(ud ? 1 : 0, ud ? 1 : 0, we ? 1 : 0, we ? 1 : 0, ns ? 1 : 0, ns ? 1 : 0);
-                for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
+                for (EnumFacing d : EnumFacing.VALUES) {
                     if (shouldRenderConnection(d)) {
                         renderer.setRenderSide(d, false);
                         renderer.setRenderSide(d.getOpposite(), false);
@@ -827,7 +827,7 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
                 if (color[i] != TubeColor.NONE) {
                     if (color[i] != TubeColor.NONE)
                         info.add(EnumChatFormatting.DARK_AQUA
-                                + I18n.format("bluepower:face." + ForgeDirection.getOrientation(i).toString().toLowerCase()) + ": "
+                                + I18n.format("bluepower:face." + EnumFacing.getOrientation(i).toString().toLowerCase()) + ": "
                                 + EnumChatFormatting.WHITE + I18n.format("bluepower:color." + ItemDye.field_150923_a[color[i].ordinal()]));
                 }
             }
@@ -841,13 +841,13 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
     }
 
     @Override
-    public int getHollowSize(ForgeDirection side) {
+    public int getHollowSize(EnumFacing side) {
 
         return 8;
     }
 
     @Override
-    protected boolean shouldRenderConnection(ForgeDirection side) {
+    protected boolean shouldRenderConnection(EnumFacing side) {
 
         return connections[side.ordinal()] || redstoneConnections[side.ordinal()];
     }
@@ -859,7 +859,7 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
     }
 
     @Override
-    protected IIcon getWireIcon(ForgeDirection side) {
+    protected IIcon getWireIcon(EnumFacing side) {
 
         return null;
     }
@@ -891,13 +891,13 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
             frameSeparation -= 1 / 32D;
 
             QMovingObjectPosition wire = RayTracer.instance().rayTraceCubes(
-                    getFrameBoxes(wireSize, frameSeparation, frameThickness, shouldRenderConnection(ForgeDirection.DOWN),
-                            shouldRenderConnection(ForgeDirection.UP), shouldRenderConnection(ForgeDirection.WEST),
-                            shouldRenderConnection(ForgeDirection.EAST), shouldRenderConnection(ForgeDirection.NORTH),
-                            shouldRenderConnection(ForgeDirection.SOUTH), redstoneConnections[ForgeDirection.DOWN.ordinal()],
-                            redstoneConnections[ForgeDirection.UP.ordinal()], redstoneConnections[ForgeDirection.WEST.ordinal()],
-                            redstoneConnections[ForgeDirection.EAST.ordinal()], redstoneConnections[ForgeDirection.NORTH.ordinal()],
-                            redstoneConnections[ForgeDirection.SOUTH.ordinal()], getParent() != null && getWorld() != null), start, end,
+                    getFrameBoxes(wireSize, frameSeparation, frameThickness, shouldRenderConnection(EnumFacing.DOWN),
+                            shouldRenderConnection(EnumFacing.UP), shouldRenderConnection(EnumFacing.WEST),
+                            shouldRenderConnection(EnumFacing.EAST), shouldRenderConnection(EnumFacing.NORTH),
+                            shouldRenderConnection(EnumFacing.SOUTH), redstoneConnections[EnumFacing.DOWN.ordinal()],
+                            redstoneConnections[EnumFacing.UP.ordinal()], redstoneConnections[EnumFacing.WEST.ordinal()],
+                            redstoneConnections[EnumFacing.EAST.ordinal()], redstoneConnections[EnumFacing.NORTH.ordinal()],
+                            redstoneConnections[EnumFacing.SOUTH.ordinal()], getParent() != null && getWorld() != null), start, end,
                     new Vec3i(this));
             QMovingObjectPosition frame = RayTracer.instance().rayTraceCubes(getFrameBoxes(), start, end, new Vec3i(this));
 
@@ -925,13 +925,13 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
     }
 
     @Override
-    public int getStrongPower(ForgeDirection side) {
+    public int getStrongPower(EnumFacing side) {
 
         return 0;
     }
 
     @Override
-    public int getWeakPower(ForgeDirection side) {
+    public int getWeakPower(EnumFacing side) {
 
         if (getRedwireType() == null)
             return 0;
@@ -940,7 +940,7 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
     }
 
     @Override
-    public boolean canConnectRedstone(ForgeDirection side) {
+    public boolean canConnectRedstone(EnumFacing side) {
 
         if (getRedwireType() == null)
             return false;
@@ -953,7 +953,7 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
     private byte power = 0;
 
     @Override
-    public boolean canConnect(ForgeDirection side, IRedstoneDevice device, ConnectionType type) {
+    public boolean canConnect(EnumFacing side, IRedstoneDevice device, ConnectionType type) {
 
         if (type == ConnectionType.STRAIGHT) {
             if (getRedwireType(side) == null)
@@ -1003,7 +1003,7 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
     }
 
     @Override
-    public byte getRedstonePower(ForgeDirection side) {
+    public byte getRedstonePower(EnumFacing side) {
 
         if (!RedstoneApi.getInstance().shouldWiresOutputPower(hasLoss(side)))
             return 0;
@@ -1015,7 +1015,7 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
     }
 
     @Override
-    public void setRedstonePower(ForgeDirection side, byte power) {
+    public void setRedstonePower(EnumFacing side, byte power) {
 
         this.power = power;
     }
@@ -1023,7 +1023,7 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
     @Override
     public void onRedstoneUpdate() {
 
-        for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
+        for (EnumFacing dir : EnumFacing.VALUES) {
             IConnection<IRedstoneDevice> c = redConnections.getConnectionOnSide(dir);
             IRedstoneDevice dev = null;
             if (c != null)
@@ -1036,7 +1036,7 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
     }
 
     @Override
-    public boolean hasLoss(ForgeDirection side) {
+    public boolean hasLoss(EnumFacing side) {
 
         if (getRedwireType() == null)
             return false;
@@ -1045,7 +1045,7 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
     }
 
     @Override
-    public boolean isAnalogue(ForgeDirection side) {
+    public boolean isAnalogue(EnumFacing side) {
 
         if (getRedwireType() == null)
             return false;
@@ -1054,7 +1054,7 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
     }
 
     @Override
-    public boolean canPropagateFrom(ForgeDirection fromSide) {
+    public boolean canPropagateFrom(EnumFacing fromSide) {
 
         return true;// getRedwireType() != null;
     }
@@ -1064,7 +1064,7 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
         return power;
     }
 
-    public IRedstoneDevice getDeviceOnSide(ForgeDirection d) {
+    public IRedstoneDevice getDeviceOnSide(EnumFacing d) {
 
         @SuppressWarnings("unchecked")
         IConnection<IRedstoneDevice> c = (IConnection<IRedstoneDevice>) getRedstoneConnectionCache().getConnectionOnSide(d);
@@ -1076,13 +1076,13 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
     }
 
     @Override
-    public RedwireType getRedwireType(ForgeDirection side) {
+    public RedwireType getRedwireType(EnumFacing side) {
 
         return getRedwireType();
     }
 
     @Override
-    public boolean isNormalFace(ForgeDirection side) {
+    public boolean isNormalFace(EnumFacing side) {
 
         return false;
     }

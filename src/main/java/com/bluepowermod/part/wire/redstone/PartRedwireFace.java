@@ -34,7 +34,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;;
 
 import org.lwjgl.opengl.GL11;
 
@@ -88,7 +88,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
     }
 
     @Override
-    public RedwireType getRedwireType(ForgeDirection side) {
+    public RedwireType getRedwireType(EnumFacing side) {
 
         return type;
     }
@@ -107,7 +107,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
     private boolean connections[] = new boolean[6];
 
     @Override
-    protected boolean shouldRenderConnection(ForgeDirection side) {
+    protected boolean shouldRenderConnection(EnumFacing side) {
 
         if (getParent() == null || getWorld() == null)
             return isConnected(side);
@@ -115,7 +115,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
         return connections[side.ordinal()];
     }
 
-    protected abstract boolean isConnected(ForgeDirection side);
+    protected abstract boolean isConnected(EnumFacing side);
 
     @Override
     protected double getWidth() {
@@ -130,7 +130,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
     }
 
     @Override
-    protected boolean extendsToCorner(ForgeDirection side) {
+    protected boolean extendsToCorner(EnumFacing side) {
 
         return cornerRender[side.ordinal()];
     }
@@ -165,15 +165,15 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
     // Conductor
 
     @Override
-    public boolean hasLoss(ForgeDirection side) {
+    public boolean hasLoss(EnumFacing side) {
 
-        return getRedwireType(ForgeDirection.UNKNOWN).hasLoss();
+        return getRedwireType(EnumFacing.UNKNOWN).hasLoss();
     }
 
     @Override
-    public boolean isAnalogue(ForgeDirection side) {
+    public boolean isAnalogue(EnumFacing side) {
 
-        return getRedwireType(ForgeDirection.UNKNOWN).isAnalogue();
+        return getRedwireType(EnumFacing.UNKNOWN).isAnalogue();
     }
 
     // NBT
@@ -186,7 +186,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
 
         super.writeUpdateData(buffer);
 
-        for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS)
+        for (EnumFacing d : EnumFacing.VALUES)
             buffer.writeBoolean(isConnected(d));
     }
 
@@ -194,7 +194,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
     public void readUpdateData(DataInput buffer) throws IOException {
 
         super.readUpdateData(buffer);
-        for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS)
+        for (EnumFacing d : EnumFacing.VALUES)
             connections[d.ordinal()] = buffer.readBoolean();
 
         for (int i = 0; i < 6; i++) {
@@ -232,17 +232,17 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
         @Override
         public String getType() {
 
-            return "wire." + getRedwireType(ForgeDirection.UNKNOWN).getName();
+            return "wire." + getRedwireType(EnumFacing.UNKNOWN).getName();
         }
 
         @Override
-        protected boolean isConnected(ForgeDirection side) {
+        protected boolean isConnected(EnumFacing side) {
 
             return connections.getConnectionOnSide(side) != null;
         }
 
         @Override
-        protected IIcon getWireIcon(ForgeDirection side) {
+        protected IIcon getWireIcon(EnumFacing side) {
 
             return IconSupplier.wire;
         }
@@ -250,21 +250,21 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
         @Override
         protected int getColorMultiplier() {
 
-            return WireHelper.getColorForPowerLevel(getRedwireType(ForgeDirection.UNKNOWN), power);
+            return WireHelper.getColorForPowerLevel(getRedwireType(EnumFacing.UNKNOWN), power);
         }
 
         @Override
-        public boolean canConnect(ForgeDirection side, IRedstoneDevice device, ConnectionType type) {
+        public boolean canConnect(EnumFacing side, IRedstoneDevice device, ConnectionType type) {
 
             if ((type == ConnectionType.STRAIGHT && side == getFace().getOpposite() && device instanceof IFace)
-                    || side == ForgeDirection.UNKNOWN)
+                    || side == EnumFacing.UNKNOWN)
                 return false;
             if (type == ConnectionType.CLOSED_CORNER) {
                 if (side == getFace())
                     return false;
                 if (side == getFace().getOpposite())
                     return false;
-                if (side == ForgeDirection.UNKNOWN)
+                if (side == EnumFacing.UNKNOWN)
                     return false;
             }
 
@@ -306,7 +306,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
         }
 
         @Override
-        public byte getRedstonePower(ForgeDirection side) {
+        public byte getRedstonePower(EnumFacing side) {
 
             if (!RedstoneApi.getInstance().shouldWiresOutputPower(hasLoss(side)))
                 return 0;
@@ -318,7 +318,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
         }
 
         @Override
-        public void setRedstonePower(ForgeDirection side, byte power) {
+        public void setRedstonePower(EnumFacing side, byte power) {
 
             byte pow = hasLoss(side) ? power : (((power & 0xFF) > 0) ? (byte) 255 : (byte) 0);
             hasUpdated = hasUpdated | (pow != this.power);
@@ -334,7 +334,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
             if (hasUpdated) {
                 sendUpdatePacket();
 
-                for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
+                for (EnumFacing dir : EnumFacing.VALUES) {
                     IConnection<IRedstoneDevice> c = connections.getConnectionOnSide(dir);
                     IRedstoneDevice dev = null;
                     if (c != null)
@@ -351,20 +351,20 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
         }
 
         @Override
-        public boolean canPropagateFrom(ForgeDirection fromSide) {
+        public boolean canPropagateFrom(EnumFacing fromSide) {
 
             return true;
         }
 
         @Override
-        public List<Entry<IConnection<IRedstoneDevice>, Boolean>> propagate(ForgeDirection fromSide) {
+        public List<Entry<IConnection<IRedstoneDevice>, Boolean>> propagate(EnumFacing fromSide) {
 
             if (getParent() instanceof FakeMultipartTileIC)
                 ((FakeMultipartTileIC) getParent()).getIC().loadWorld();
 
             List<Entry<IConnection<IRedstoneDevice>, Boolean>> l = new ArrayList<Entry<IConnection<IRedstoneDevice>, Boolean>>();
 
-            for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
+            for (EnumFacing d : EnumFacing.VALUES) {
                 IConnection<IRedstoneDevice> c = connections.getConnectionOnSide(d);
                 if (c != null)
                     l.add(new Pair<IConnection<IRedstoneDevice>, Boolean>(c, c.getB() instanceof IRedwire
@@ -465,10 +465,10 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
                 boolean connected = false;
                 boolean render = false;
 
-                IConnection<IRedstoneDevice> c = getRedstoneConnectionCache().getConnectionOnSide(ForgeDirection.getOrientation(i));
+                IConnection<IRedstoneDevice> c = getRedstoneConnectionCache().getConnectionOnSide(EnumFacing.getOrientation(i));
                 if (c != null) {
                     IRedstoneDevice dev = c.getB();
-                    if (dev instanceof IFace && ((IFace) dev).getFace() == ForgeDirection.getOrientation(i).getOpposite()) {
+                    if (dev instanceof IFace && ((IFace) dev).getFace() == EnumFacing.getOrientation(i).getOpposite()) {
                         if (dev instanceof IRedwire) {
                             if (dev instanceof IInsulatedRedstoneDevice
                                     && ((IInsulatedRedstoneDevice) dev).getInsulationColor(c.getSideB()) != MinecraftColor.NONE)
@@ -508,13 +508,13 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
         }
 
         @Override
-        public boolean canConnectRedstone(ForgeDirection side) {
+        public boolean canConnectRedstone(EnumFacing side) {
 
             return side != getFace().getOpposite();
         }
 
         @Override
-        public int getWeakPower(ForgeDirection side) {
+        public int getWeakPower(EnumFacing side) {
 
             if (!RedstoneApi.getInstance().shouldWiresOutputPower(hasLoss(side)))
                 return 0;
@@ -529,7 +529,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
         }
 
         @Override
-        public int getStrongPower(ForgeDirection side) {
+        public int getStrongPower(EnumFacing side) {
 
             if (!RedstoneApi.getInstance().shouldWiresOutputPower(hasLoss(side)))
                 return 0;
@@ -541,7 +541,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
         }
 
         @Override
-        public boolean isNormalFace(ForgeDirection side) {
+        public boolean isNormalFace(EnumFacing side) {
 
             return false;
         }
@@ -570,11 +570,11 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
         @Override
         public String getType() {
 
-            return "wire." + getRedwireType(ForgeDirection.UNKNOWN).getName() + "." + color.name().toLowerCase();
+            return "wire." + getRedwireType(EnumFacing.UNKNOWN).getName() + "." + color.name().toLowerCase();
         }
 
         @Override
-        protected boolean isConnected(ForgeDirection side) {
+        protected boolean isConnected(EnumFacing side) {
 
             if (getParent() == null || getWorld() == null)
                 return true;
@@ -583,9 +583,9 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
         }
 
         @Override
-        protected IIcon getWireIcon(ForgeDirection side) {
+        protected IIcon getWireIcon(EnumFacing side) {
 
-            return side == ForgeDirection.UP || side == ForgeDirection.DOWN ? IconSupplier.wireInsulation1 : IconSupplier.wireInsulation2;
+            return side == EnumFacing.UP || side == EnumFacing.DOWN ? IconSupplier.wireInsulation1 : IconSupplier.wireInsulation2;
         }
 
         @Override
@@ -595,16 +595,16 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
         }
 
         @Override
-        public boolean canConnect(ForgeDirection side, IRedstoneDevice device, ConnectionType type) {
+        public boolean canConnect(EnumFacing side, IRedstoneDevice device, ConnectionType type) {
 
-            if (type == ConnectionType.STRAIGHT && side == getFace().getOpposite() || side == ForgeDirection.UNKNOWN)
+            if (type == ConnectionType.STRAIGHT && side == getFace().getOpposite() || side == EnumFacing.UNKNOWN)
                 return false;
             if (type == ConnectionType.CLOSED_CORNER) {
                 if (side == getFace())
                     return false;
                 if (side == getFace().getOpposite())
                     return false;
-                if (side == ForgeDirection.UNKNOWN)
+                if (side == EnumFacing.UNKNOWN)
                     return false;
             }
 
@@ -634,7 +634,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
         }
 
         @Override
-        public boolean canConnect(ForgeDirection side, IBundledDevice device, ConnectionType type) {
+        public boolean canConnect(EnumFacing side, IBundledDevice device, ConnectionType type) {
 
             if (device instanceof IInsulatedRedstoneDevice)
                 return false;
@@ -683,7 +683,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
         }
 
         @Override
-        public byte getRedstonePower(ForgeDirection side) {
+        public byte getRedstonePower(EnumFacing side) {
 
             if (!RedstoneApi.getInstance().shouldWiresOutputPower(hasLoss(side)))
                 return 0;
@@ -695,7 +695,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
         }
 
         @Override
-        public void setRedstonePower(ForgeDirection side, byte power) {
+        public void setRedstonePower(EnumFacing side, byte power) {
 
             byte pow = isAnalogue(side) ? power : (((power & 0xFF) > 0) ? (byte) 255 : (byte) 0);
             hasUpdated = hasUpdated | (pow != this.power);
@@ -703,7 +703,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
         }
 
         @Override
-        public byte[] getBundledOutput(ForgeDirection side) {
+        public byte[] getBundledOutput(EnumFacing side) {
 
             if (!RedstoneApi.getInstance().shouldWiresOutputPower(hasLoss(side)))
                 return new byte[16];
@@ -712,14 +712,14 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
         }
 
         @Override
-        public void setBundledPower(ForgeDirection side, byte[] power) {
+        public void setBundledPower(EnumFacing side, byte[] power) {
 
             this.power = power[getInsulationColor(side).ordinal()];
             hasUpdated = true;
         }
 
         @Override
-        public byte[] getBundledPower(ForgeDirection side) {
+        public byte[] getBundledPower(EnumFacing side) {
 
             byte[] val = new byte[16];
             val[color.ordinal()] = power;
@@ -735,7 +735,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
             if (hasUpdated) {
                 sendUpdatePacket();
 
-                for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
+                for (EnumFacing dir : EnumFacing.VALUES) {
                     IConnection<IRedstoneDevice> c = connections.getConnectionOnSide(dir);
                     if (c == null)
                         continue;
@@ -757,23 +757,23 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
         }
 
         @Override
-        public boolean canPropagateFrom(ForgeDirection fromSide) {
+        public boolean canPropagateFrom(EnumFacing fromSide) {
 
             return true;
         }
 
         @Override
-        public boolean canPropagateBundledFrom(ForgeDirection fromSide) {
+        public boolean canPropagateBundledFrom(EnumFacing fromSide) {
 
             return true;
         }
 
         @Override
-        public List<Entry<IConnection<IRedstoneDevice>, Boolean>> propagate(ForgeDirection fromSide) {
+        public List<Entry<IConnection<IRedstoneDevice>, Boolean>> propagate(EnumFacing fromSide) {
 
             List<Entry<IConnection<IRedstoneDevice>, Boolean>> l = new ArrayList<Entry<IConnection<IRedstoneDevice>, Boolean>>();
 
-            for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
+            for (EnumFacing d : EnumFacing.VALUES) {
                 IConnection<IRedstoneDevice> c = connections.getConnectionOnSide(d);
                 if (c != null)
                     l.add(new Pair<IConnection<IRedstoneDevice>, Boolean>(c, c.getB() instanceof IRedwire
@@ -790,11 +790,11 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
         }
 
         @Override
-        public Collection<Entry<IConnection<IBundledDevice>, Boolean>> propagateBundled(ForgeDirection fromSide) {
+        public Collection<Entry<IConnection<IBundledDevice>, Boolean>> propagateBundled(EnumFacing fromSide) {
 
             List<Entry<IConnection<IBundledDevice>, Boolean>> l = new ArrayList<Entry<IConnection<IBundledDevice>, Boolean>>();
 
-            for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
+            for (EnumFacing d : EnumFacing.VALUES) {
                 IConnection<IBundledDevice> c = bundledConnections.getConnectionOnSide(d);
                 if (c != null)
                     l.add(new Pair<IConnection<IBundledDevice>, Boolean>(c, c.getB() instanceof IRedwire
@@ -805,7 +805,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
         }
 
         @Override
-        public MinecraftColor getBundledColor(ForgeDirection side) {
+        public MinecraftColor getBundledColor(EnumFacing side) {
 
             return MinecraftColor.NONE;
         }
@@ -903,29 +903,29 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
 
             super.renderStatic(translation, renderer, renderBlocks, pass);
 
-            ForgeDirection d1 = ForgeDirection.NORTH;
-            ForgeDirection d2 = ForgeDirection.SOUTH;
-            ForgeDirection d3 = ForgeDirection.WEST;
-            ForgeDirection d4 = ForgeDirection.EAST;
+            EnumFacing d1 = EnumFacing.NORTH;
+            EnumFacing d2 = EnumFacing.SOUTH;
+            EnumFacing d3 = EnumFacing.WEST;
+            EnumFacing d4 = EnumFacing.EAST;
 
-            if (getFace() == ForgeDirection.NORTH) {
-                d1 = ForgeDirection.UP;
-                d2 = ForgeDirection.DOWN;
-            } else if (getFace() == ForgeDirection.SOUTH) {
-                d1 = ForgeDirection.DOWN;
-                d2 = ForgeDirection.UP;
-            } else if (getFace() == ForgeDirection.WEST) {
-                d3 = ForgeDirection.UP;
-                d4 = ForgeDirection.DOWN;
-            } else if (getFace() == ForgeDirection.EAST) {
-                d3 = ForgeDirection.DOWN;
-                d4 = ForgeDirection.UP;
-            } else if (getFace() == ForgeDirection.UP) {
-                d3 = ForgeDirection.EAST;
-                d4 = ForgeDirection.WEST;
+            if (getFace() == EnumFacing.NORTH) {
+                d1 = EnumFacing.UP;
+                d2 = EnumFacing.DOWN;
+            } else if (getFace() == EnumFacing.SOUTH) {
+                d1 = EnumFacing.DOWN;
+                d2 = EnumFacing.UP;
+            } else if (getFace() == EnumFacing.WEST) {
+                d3 = EnumFacing.UP;
+                d4 = EnumFacing.DOWN;
+            } else if (getFace() == EnumFacing.EAST) {
+                d3 = EnumFacing.DOWN;
+                d4 = EnumFacing.UP;
+            } else if (getFace() == EnumFacing.UP) {
+                d3 = EnumFacing.EAST;
+                d4 = EnumFacing.WEST;
             }
 
-            if (getFace() == ForgeDirection.NORTH || getFace() == ForgeDirection.SOUTH) {
+            if (getFace() == EnumFacing.NORTH || getFace() == EnumFacing.SOUTH) {
                 d1 = d1.getRotation(getFace());
                 d2 = d2.getRotation(getFace());
                 d3 = d3.getRotation(getFace());
@@ -943,7 +943,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
             double y = 0.001;// getHeight() / 16D;
             double height = getHeight() / 16D;
 
-            renderer.setColor(WireHelper.getColorForPowerLevel(getRedwireType(ForgeDirection.UNKNOWN), power));
+            renderer.setColor(WireHelper.getColorForPowerLevel(getRedwireType(EnumFacing.UNKNOWN), power));
 
             // Center
             if ((s1 && s3) || (s3 && s2) || (s2 && s4) || (s4 && s1)) {
@@ -1008,10 +1008,10 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
                 boolean render = false;
 
                 IConnection<? extends IRedstoneDevice> c = getRedstoneConnectionCache().getConnectionOnSide(
-                        ForgeDirection.getOrientation(i));
+                        EnumFacing.getOrientation(i));
                 if (c != null) {
                     IRedstoneDevice dev = c.getB();
-                    if (dev instanceof IFace && ((IFace) dev).getFace() == ForgeDirection.getOrientation(i).getOpposite()) {
+                    if (dev instanceof IFace && ((IFace) dev).getFace() == EnumFacing.getOrientation(i).getOpposite()) {
                         if (dev instanceof IRedwire) {
                             if (dev instanceof IInsulatedRedstoneDevice
                                     && ((IInsulatedRedstoneDevice) dev).getInsulationColor(c.getSideB()) != MinecraftColor.NONE)
@@ -1031,10 +1031,10 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
                     }
                 }
                 IConnection<? extends IBundledDevice> bc = getBundledConnectionCache()
-                        .getConnectionOnSide(ForgeDirection.getOrientation(i));
+                        .getConnectionOnSide(EnumFacing.getOrientation(i));
                 if (bc != null) {
                     IBundledDevice dev = bc.getB();
-                    if (dev instanceof IFace && ((IFace) dev).getFace() == ForgeDirection.getOrientation(i).getOpposite()) {
+                    if (dev instanceof IFace && ((IFace) dev).getFace() == EnumFacing.getOrientation(i).getOpposite()) {
                         if (dev instanceof IRedwire) {
                             if (dev instanceof IInsulatedRedstoneDevice
                                     && ((IInsulatedRedstoneDevice) dev).getInsulationColor(bc.getSideB()) != MinecraftColor.NONE)
@@ -1084,19 +1084,19 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
         }
 
         @Override
-        public MinecraftColor getInsulationColor(ForgeDirection side) {
+        public MinecraftColor getInsulationColor(EnumFacing side) {
 
             return color;
         }
 
         @Override
-        public boolean canConnectRedstone(ForgeDirection side) {
+        public boolean canConnectRedstone(EnumFacing side) {
 
             return side != getFace().getOpposite();
         }
 
         @Override
-        public int getWeakPower(ForgeDirection side) {
+        public int getWeakPower(EnumFacing side) {
 
             if (!RedstoneApi.getInstance().shouldWiresOutputPower(hasLoss(side)))
                 return 0;
@@ -1111,13 +1111,13 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
         }
 
         @Override
-        public int getStrongPower(ForgeDirection side) {
+        public int getStrongPower(EnumFacing side) {
 
             return 0;
         }
 
         @Override
-        public boolean isNormalFace(ForgeDirection side) {
+        public boolean isNormalFace(EnumFacing side) {
 
             return false;
         }
@@ -1141,12 +1141,12 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
         @Override
         public String getType() {
 
-            return "wire." + getRedwireType(ForgeDirection.UNKNOWN).getName() + ".bundled"
+            return "wire." + getRedwireType(EnumFacing.UNKNOWN).getName() + ".bundled"
                     + (color != MinecraftColor.NONE ? ("." + color.name().toLowerCase()) : "");
         }
 
         @Override
-        protected boolean isConnected(ForgeDirection side) {
+        protected boolean isConnected(EnumFacing side) {
 
             if (getParent() == null || getWorld() == null)
                 return true;
@@ -1155,39 +1155,39 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
         }
 
         @Override
-        protected IIcon getWireIcon(ForgeDirection side) {
+        protected IIcon getWireIcon(EnumFacing side) {
 
             return null;
         }
 
         @Override
-        protected IIcon getWireIcon(ForgeDirection side, ForgeDirection face) {
+        protected IIcon getWireIcon(EnumFacing side, EnumFacing face) {
 
-            if (face == ForgeDirection.UP || face == ForgeDirection.DOWN) {
-                if (side == ForgeDirection.UNKNOWN) {
-                    ForgeDirection d1 = ForgeDirection.NORTH;
-                    ForgeDirection d2 = ForgeDirection.SOUTH;
-                    ForgeDirection d3 = ForgeDirection.WEST;
-                    ForgeDirection d4 = ForgeDirection.EAST;
+            if (face == EnumFacing.UP || face == EnumFacing.DOWN) {
+                if (side == EnumFacing.UNKNOWN) {
+                    EnumFacing d1 = EnumFacing.NORTH;
+                    EnumFacing d2 = EnumFacing.SOUTH;
+                    EnumFacing d3 = EnumFacing.WEST;
+                    EnumFacing d4 = EnumFacing.EAST;
 
-                    if (getFace() == ForgeDirection.NORTH) {
-                        d1 = ForgeDirection.UP;
-                        d2 = ForgeDirection.DOWN;
-                    } else if (getFace() == ForgeDirection.SOUTH) {
-                        d1 = ForgeDirection.DOWN;
-                        d2 = ForgeDirection.UP;
-                    } else if (getFace() == ForgeDirection.WEST) {
-                        d3 = ForgeDirection.UP;
-                        d4 = ForgeDirection.DOWN;
-                    } else if (getFace() == ForgeDirection.EAST) {
-                        d3 = ForgeDirection.DOWN;
-                        d4 = ForgeDirection.UP;
-                    } else if (getFace() == ForgeDirection.UP) {
-                        d3 = ForgeDirection.EAST;
-                        d4 = ForgeDirection.WEST;
+                    if (getFace() == EnumFacing.NORTH) {
+                        d1 = EnumFacing.UP;
+                        d2 = EnumFacing.DOWN;
+                    } else if (getFace() == EnumFacing.SOUTH) {
+                        d1 = EnumFacing.DOWN;
+                        d2 = EnumFacing.UP;
+                    } else if (getFace() == EnumFacing.WEST) {
+                        d3 = EnumFacing.UP;
+                        d4 = EnumFacing.DOWN;
+                    } else if (getFace() == EnumFacing.EAST) {
+                        d3 = EnumFacing.DOWN;
+                        d4 = EnumFacing.UP;
+                    } else if (getFace() == EnumFacing.UP) {
+                        d3 = EnumFacing.EAST;
+                        d4 = EnumFacing.WEST;
                     }
 
-                    if (getFace() == ForgeDirection.NORTH || getFace() == ForgeDirection.SOUTH) {
+                    if (getFace() == EnumFacing.NORTH || getFace() == EnumFacing.SOUTH) {
                         d1 = d1.getRotation(getFace());
                         d2 = d2.getRotation(getFace());
                         d3 = d3.getRotation(getFace());
@@ -1210,7 +1210,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
             if (side == face)
                 return IconSupplier.wireBundledConnection;
 
-            if (face == ForgeDirection.UP || face == ForgeDirection.WEST || face == ForgeDirection.NORTH)
+            if (face == EnumFacing.UP || face == EnumFacing.WEST || face == EnumFacing.NORTH)
                 return IconSupplier.wireBundledSide1;
 
             return IconSupplier.wireBundledSide2;
@@ -1223,14 +1223,14 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
         }
 
         @Override
-        public boolean canConnect(ForgeDirection side, IBundledDevice device, ConnectionType type) {
+        public boolean canConnect(EnumFacing side, IBundledDevice device, ConnectionType type) {
 
             if (type == ConnectionType.CLOSED_CORNER) {
                 if (side == getFace())
                     return false;
                 if (side == getFace().getOpposite())
                     return false;
-                if (side == ForgeDirection.UNKNOWN)
+                if (side == EnumFacing.UNKNOWN)
                     return false;
             }
 
@@ -1275,7 +1275,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
         }
 
         @Override
-        public byte[] getBundledOutput(ForgeDirection side) {
+        public byte[] getBundledOutput(EnumFacing side) {
 
             if (!RedstoneApi.getInstance().shouldWiresOutputPower(hasLoss(side)))
                 return new byte[16];
@@ -1284,13 +1284,13 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
         }
 
         @Override
-        public void setBundledPower(ForgeDirection side, byte[] power) {
+        public void setBundledPower(EnumFacing side, byte[] power) {
 
             this.power = power;
         }
 
         @Override
-        public byte[] getBundledPower(ForgeDirection side) {
+        public byte[] getBundledPower(EnumFacing side) {
 
             return power;
         }
@@ -1301,16 +1301,16 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
         }
 
         @Override
-        public boolean canPropagateBundledFrom(ForgeDirection fromSide) {
+        public boolean canPropagateBundledFrom(EnumFacing fromSide) {
 
             return true;
         }
 
         @Override
-        public Collection<Entry<IConnection<IBundledDevice>, Boolean>> propagateBundled(ForgeDirection fromSide) {
+        public Collection<Entry<IConnection<IBundledDevice>, Boolean>> propagateBundled(EnumFacing fromSide) {
 
             List<Entry<IConnection<IBundledDevice>, Boolean>> l = new ArrayList<Entry<IConnection<IBundledDevice>, Boolean>>();
-            for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
+            for (EnumFacing d : EnumFacing.VALUES) {
                 IConnection<IBundledDevice> c = bundledConnections.getConnectionOnSide(d);
                 if (c != null)
                     l.add(new Pair<IConnection<IBundledDevice>, Boolean>(c, c.getB() instanceof IRedwire
@@ -1321,7 +1321,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
         }
 
         @Override
-        public MinecraftColor getBundledColor(ForgeDirection side) {
+        public MinecraftColor getBundledColor(EnumFacing side) {
 
             return color;
         }
@@ -1396,29 +1396,29 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
 
             super.renderStatic(translation, renderer, renderBlocks, pass);
 
-            ForgeDirection d1 = ForgeDirection.NORTH;
-            ForgeDirection d2 = ForgeDirection.SOUTH;
-            ForgeDirection d3 = ForgeDirection.WEST;
-            ForgeDirection d4 = ForgeDirection.EAST;
+            EnumFacing d1 = EnumFacing.NORTH;
+            EnumFacing d2 = EnumFacing.SOUTH;
+            EnumFacing d3 = EnumFacing.WEST;
+            EnumFacing d4 = EnumFacing.EAST;
 
-            if (getFace() == ForgeDirection.NORTH) {
-                d1 = ForgeDirection.UP;
-                d2 = ForgeDirection.DOWN;
-            } else if (getFace() == ForgeDirection.SOUTH) {
-                d1 = ForgeDirection.DOWN;
-                d2 = ForgeDirection.UP;
-            } else if (getFace() == ForgeDirection.WEST) {
-                d3 = ForgeDirection.UP;
-                d4 = ForgeDirection.DOWN;
-            } else if (getFace() == ForgeDirection.EAST) {
-                d3 = ForgeDirection.DOWN;
-                d4 = ForgeDirection.UP;
-            } else if (getFace() == ForgeDirection.UP) {
-                d3 = ForgeDirection.EAST;
-                d4 = ForgeDirection.WEST;
+            if (getFace() == EnumFacing.NORTH) {
+                d1 = EnumFacing.UP;
+                d2 = EnumFacing.DOWN;
+            } else if (getFace() == EnumFacing.SOUTH) {
+                d1 = EnumFacing.DOWN;
+                d2 = EnumFacing.UP;
+            } else if (getFace() == EnumFacing.WEST) {
+                d3 = EnumFacing.UP;
+                d4 = EnumFacing.DOWN;
+            } else if (getFace() == EnumFacing.EAST) {
+                d3 = EnumFacing.DOWN;
+                d4 = EnumFacing.UP;
+            } else if (getFace() == EnumFacing.UP) {
+                d3 = EnumFacing.EAST;
+                d4 = EnumFacing.WEST;
             }
 
-            if (getFace() == ForgeDirection.NORTH || getFace() == ForgeDirection.SOUTH) {
+            if (getFace() == EnumFacing.NORTH || getFace() == EnumFacing.SOUTH) {
                 d1 = d1.getRotation(getFace());
                 d2 = d2.getRotation(getFace());
                 d3 = d3.getRotation(getFace());
@@ -1436,7 +1436,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
             double y = 0;
             double height = getHeight() / 16D;
 
-            renderer.setColor(WireHelper.getColorForPowerLevel(getRedwireType(ForgeDirection.UNKNOWN), (byte) (255 / 2)/* power */));
+            renderer.setColor(WireHelper.getColorForPowerLevel(getRedwireType(EnumFacing.UNKNOWN), (byte) (255 / 2)/* power */));
 
             // Center
             if ((s1 && s3) || (s3 && s2) || (s2 && s4) || (s4 && s1)) {
@@ -1480,10 +1480,10 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
                 boolean connected = false;
                 boolean render = false;
                 IConnection<? extends IBundledDevice> bc = getBundledConnectionCache()
-                        .getConnectionOnSide(ForgeDirection.getOrientation(i));
+                        .getConnectionOnSide(EnumFacing.getOrientation(i));
                 if (bc != null) {
                     IBundledDevice dev = bc.getB();
-                    if (dev instanceof IFace && ((IFace) dev).getFace() == ForgeDirection.getOrientation(i).getOpposite()) {
+                    if (dev instanceof IFace && ((IFace) dev).getFace() == EnumFacing.getOrientation(i).getOpposite()) {
                         if (dev instanceof IRedwire) {
                             if (dev instanceof IFace && getFace().ordinal() > ((IFace) dev).getFace().ordinal()) {
                                 if (!(dev instanceof IInsulatedRedstoneDevice) && dev instanceof IRedwire) {
@@ -1515,25 +1515,25 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
         }
 
         @Override
-        public boolean canConnectRedstone(ForgeDirection side) {
+        public boolean canConnectRedstone(EnumFacing side) {
 
             return false;
         }
 
         @Override
-        public int getWeakPower(ForgeDirection side) {
+        public int getWeakPower(EnumFacing side) {
 
             return 0;
         }
 
         @Override
-        public int getStrongPower(ForgeDirection side) {
+        public int getStrongPower(EnumFacing side) {
 
             return 0;
         }
 
         @Override
-        public boolean isNormalFace(ForgeDirection side) {
+        public boolean isNormalFace(EnumFacing side) {
 
             return false;
         }

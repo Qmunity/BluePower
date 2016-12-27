@@ -10,7 +10,7 @@ package com.bluepowermod.tile.tier1;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;;
 import uk.co.qmunity.lib.helper.MathHelper;
 import uk.co.qmunity.lib.helper.RedstoneHelper;
 
@@ -46,7 +46,7 @@ public class TileLamp extends TileBase implements IBundledDevice {
         if (blockType instanceof BlockLampRGB) {
             connections.recalculateConnections();
             int connected = 0;
-            for (ForgeDirection s : ForgeDirection.VALID_DIRECTIONS)
+            for (EnumFacing s : EnumFacing.VALUES)
                 connected += (connections.getConnectionOnSide(s) != null) ? 1 : 0;
 
             if (connected == 0)
@@ -139,7 +139,7 @@ public class TileLamp extends TileBase implements IBundledDevice {
     }
 
     @Override
-    public boolean canConnect(ForgeDirection side, IBundledDevice dev, ConnectionType type) {
+    public boolean canConnect(EnumFacing side, IBundledDevice dev, ConnectionType type) {
 
         if (!(getWorld().getBlock(getX(), getY(), getZ()) instanceof BlockLampRGB))
             return false;
@@ -148,7 +148,7 @@ public class TileLamp extends TileBase implements IBundledDevice {
         if (dev instanceof TileLamp)
             return false;
 
-        return type == ConnectionType.STRAIGHT && side != ForgeDirection.UNKNOWN;
+        return type == ConnectionType.STRAIGHT && side != EnumFacing.UNKNOWN;
     }
 
     @Override
@@ -158,19 +158,19 @@ public class TileLamp extends TileBase implements IBundledDevice {
     }
 
     @Override
-    public byte[] getBundledOutput(ForgeDirection side) {
+    public byte[] getBundledOutput(EnumFacing side) {
 
         return new byte[16];
     }
 
     @Override
-    public void setBundledPower(ForgeDirection side, byte[] power) {
+    public void setBundledPower(EnumFacing side, byte[] power) {
 
         bundledPower = power;
     }
 
     @Override
-    public byte[] getBundledPower(ForgeDirection side) {
+    public byte[] getBundledPower(EnumFacing side) {
 
         return bundledPower;
     }
@@ -182,7 +182,7 @@ public class TileLamp extends TileBase implements IBundledDevice {
     }
 
     @Override
-    public MinecraftColor getBundledColor(ForgeDirection side) {
+    public MinecraftColor getBundledColor(EnumFacing side) {
 
         return MinecraftColor.NONE;
     }
@@ -197,7 +197,7 @@ public class TileLamp extends TileBase implements IBundledDevice {
     }
 
     @Override
-    public boolean isNormalFace(ForgeDirection side) {
+    public boolean isNormalFace(EnumFacing side) {
 
         return true;
     }

@@ -31,7 +31,7 @@ public class TileSortron extends TileMachineBase {// implements IPeripheral/* , 
     // public void onBlockNeighbourChanged() {
     //
     // super.onBlockNeighbourChanged();
-    // ForgeDirection direction = ForgeDirection.getOrientation(getBlockMetadata());
+    // EnumFacing direction = EnumFacing.getOrientation(getBlockMetadata());
     // TileEntity tile = worldObj.getTileEntity(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ);
     // if (tile instanceof IInventory) {
     // connectedInventory = (IInventory) tile;
@@ -228,7 +228,7 @@ public class TileSortron extends TileMachineBase {// implements IPeripheral/* , 
     // */
     //
     // @Override
-    // public TubeStack acceptItemFromTube(TubeStack stack, ForgeDirection from, boolean simulate) {
+    // public TubeStack acceptItemFromTube(TubeStack stack, EnumFacing from, boolean simulate) {
     //
     // if (acceptedStackSize <= 0)
     // return stack;

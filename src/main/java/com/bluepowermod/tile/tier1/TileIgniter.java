@@ -20,7 +20,7 @@ package com.bluepowermod.tile.tier1;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;;
 
 import com.bluepowermod.tile.IEjectAnimator;
 import com.bluepowermod.tile.TileBase;
@@ -35,7 +35,7 @@ public class TileIgniter extends TileBase implements IEjectAnimator {
         super.redstoneChanged(newValue);
         isActive = newValue;
         sendUpdatePacket();
-        ForgeDirection direction = getFacingDirection();
+        EnumFacing direction = getFacingDirection();
         if (getIsRedstonePowered()) {
             ignite(direction);
         } else {
@@ -59,14 +59,14 @@ public class TileIgniter extends TileBase implements IEjectAnimator {
             markForRenderUpdate();
     }
 
-    private void ignite(ForgeDirection direction) {
+    private void ignite(EnumFacing direction) {
 
         if (getIsRedstonePowered() && worldObj.isAirBlock(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ)) {
             worldObj.setBlock(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ, Blocks.fire);
         }
     }
 
-    private void extinguish(ForgeDirection direction) {
+    private void extinguish(EnumFacing direction) {
 
         Block target = worldObj.getBlock(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ);
         if (!getIsRedstonePowered() && (target == Blocks.fire || target == Blocks.portal)) {

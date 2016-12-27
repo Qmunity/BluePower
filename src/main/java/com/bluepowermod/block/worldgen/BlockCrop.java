@@ -36,7 +36,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.EnumPlantType;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;;
 
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.init.BPItems;
@@ -348,7 +348,7 @@ public class BlockCrop extends BlockCrops implements IGrowable {
     public boolean canBlockStay(World world, int x, int y, int z) {
 
         if (world.getBlock(x, y, z) != this) return super.canBlockStay(world, x, y, z);
-        if (world.getBlock(x, y - 1, z).canSustainPlant(world, x, y - 1, z, ForgeDirection.UP, this) && world.getBlock(x, y - 1, z).isFertile(world, x, y - 1, z)) {
+        if (world.getBlock(x, y - 1, z).canSustainPlant(world, x, y - 1, z, EnumFacing.UP, this) && world.getBlock(x, y - 1, z).isFertile(world, x, y - 1, z)) {
             return true;
         }
         return (world.getBlock(x, y - 1, z) instanceof com.bluepowermod.block.worldgen.BlockCrop) && (world.getBlockMetadata(x, y - 1, z) == 7);

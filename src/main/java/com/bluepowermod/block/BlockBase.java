@@ -18,6 +18,7 @@
 package com.bluepowermod.block;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 
 import com.bluepowermod.init.BPCreativeTabs;
@@ -28,7 +29,7 @@ public abstract class BlockBase extends Block {
     public BlockBase(Material material) {
     
         super(material);
-        setStepSound(soundTypeStone);
+        setSoundType(SoundType.STONE);
         setCreativeTab(BPCreativeTabs.machines);
         blockHardness = 3.0F;
     }

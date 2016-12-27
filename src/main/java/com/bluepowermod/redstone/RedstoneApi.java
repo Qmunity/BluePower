@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;;
 
 import com.bluepowermod.api.connect.ConnectionType;
 import com.bluepowermod.api.wire.redstone.IBundledDevice;
@@ -50,7 +50,7 @@ public class RedstoneApi implements IRedstoneApi {
     private DummyRedstoneDevice returnDevice = DummyRedstoneDevice.getDeviceAt(null);
 
     @Override
-    public IRedstoneDevice getRedstoneDevice(World world, int x, int y, int z, ForgeDirection face, ForgeDirection side) {
+    public IRedstoneDevice getRedstoneDevice(World world, int x, int y, int z, EnumFacing face, EnumFacing side) {
 
         boolean returned = false;
         for (IRedstoneProvider provider : providers) {
@@ -69,7 +69,7 @@ public class RedstoneApi implements IRedstoneApi {
     }
 
     @Override
-    public IBundledDevice getBundledDevice(World world, int x, int y, int z, ForgeDirection face, ForgeDirection side) {
+    public IBundledDevice getBundledDevice(World world, int x, int y, int z, EnumFacing face, EnumFacing side) {
 
         for (IRedstoneProvider provider : providers) {
             IBundledDevice device = provider.getBundledDeviceAt(world, x, y, z, face, side);
@@ -126,7 +126,7 @@ public class RedstoneApi implements IRedstoneApi {
     }
 
     @Override
-    public RedstoneConnection createConnection(IRedstoneDevice a, IRedstoneDevice b, ForgeDirection sideA, ForgeDirection sideB,
+    public RedstoneConnection createConnection(IRedstoneDevice a, IRedstoneDevice b, EnumFacing sideA, EnumFacing sideB,
             ConnectionType type) {
 
         if (a == null || b == null || sideA == null || sideB == null || type == null || a == b)
@@ -136,7 +136,7 @@ public class RedstoneApi implements IRedstoneApi {
     }
 
     @Override
-    public BundledConnection createConnection(IBundledDevice a, IBundledDevice b, ForgeDirection sideA, ForgeDirection sideB,
+    public BundledConnection createConnection(IBundledDevice a, IBundledDevice b, EnumFacing sideA, EnumFacing sideB,
             ConnectionType type) {
 
         if (a == null || b == null || sideA == null || sideB == null || type == null || a == b)
@@ -158,13 +158,13 @@ public class RedstoneApi implements IRedstoneApi {
     }
 
     @Override
-    public IPropagator<IRedstoneDevice> getRedstonePropagator(IRedstoneDevice device, ForgeDirection side) {
+    public IPropagator<IRedstoneDevice> getRedstonePropagator(IRedstoneDevice device, EnumFacing side) {
 
         return new RedstonePropagator.RedPropagator(device, side);
     }
 
     @Override
-    public IPropagator<IBundledDevice> getBundledPropagator(IBundledDevice device, ForgeDirection side) {
+    public IPropagator<IBundledDevice> getBundledPropagator(IBundledDevice device, EnumFacing side) {
 
         return new BundledPropagator(device, side);
     }

@@ -21,7 +21,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;;
 
 import org.lwjgl.opengl.GL11;
 
@@ -298,8 +298,8 @@ public abstract class GateBase<C_BOTTOM extends GateConnectionBase, C_TOP extend
 
             for (GateConnectionBase c : getConnections())
                 if (c != null)
-                    if (getRedstoneConnectionCache().getConnectionOnSide(c.getForgeDirection()) != null)
-                        RedstoneApi.getInstance().getRedstonePropagator(this, c.getForgeDirection()).propagate();
+                    if (getRedstoneConnectionCache().getConnectionOnSide(c.getEnumFacing()) != null)
+                        RedstoneApi.getInstance().getRedstonePropagator(this, c.getEnumFacing()).propagate();
         }
 
         logic().doLogic();
@@ -409,31 +409,31 @@ public abstract class GateBase<C_BOTTOM extends GateConnectionBase, C_TOP extend
 
     // Redstone logic and connectivity
 
-    public GateConnectionBase getConnection(ForgeDirection side) {
+    public GateConnectionBase getConnection(EnumFacing side) {
 
-        if (bottom() != null && bottom().getForgeDirection() == side)
+        if (bottom() != null && bottom().getEnumFacing() == side)
             return bottom();
 
-        if (top() != null && top().getForgeDirection() == side)
+        if (top() != null && top().getEnumFacing() == side)
             return top();
 
-        if (left() != null && left().getForgeDirection() == side)
+        if (left() != null && left().getEnumFacing() == side)
             return left();
 
-        if (right() != null && right().getForgeDirection() == side)
+        if (right() != null && right().getEnumFacing() == side)
             return right();
 
-        if (front() != null && front().getForgeDirection() == side)
+        if (front() != null && front().getEnumFacing() == side)
             return front();
 
-        if (back() != null && back().getForgeDirection() == side)
+        if (back() != null && back().getEnumFacing() == side)
             return back();
 
         return null;
     }
 
     @Override
-    public int getStrongPower(ForgeDirection side) {
+    public int getStrongPower(EnumFacing side) {
 
         GateConnectionBase con = getConnection(side);
         if (con == null)
@@ -443,7 +443,7 @@ public abstract class GateBase<C_BOTTOM extends GateConnectionBase, C_TOP extend
     }
 
     @Override
-    public int getWeakPower(ForgeDirection side) {
+    public int getWeakPower(EnumFacing side) {
 
         GateConnectionBase con = getConnection(side);
         if (con == null)
@@ -453,7 +453,7 @@ public abstract class GateBase<C_BOTTOM extends GateConnectionBase, C_TOP extend
     }
 
     @Override
-    public boolean canConnectRedstone(ForgeDirection side) {
+    public boolean canConnectRedstone(EnumFacing side) {
 
         GateConnectionBase con = getConnection(side);
         if (con == null)
@@ -463,7 +463,7 @@ public abstract class GateBase<C_BOTTOM extends GateConnectionBase, C_TOP extend
     }
 
     @Override
-    public boolean canConnect(ForgeDirection side, IRedstoneDevice device, ConnectionType type) {
+    public boolean canConnect(EnumFacing side, IRedstoneDevice device, ConnectionType type) {
 
         GateConnectionBase con = getConnection(side);
         if (con == null)
@@ -493,7 +493,7 @@ public abstract class GateBase<C_BOTTOM extends GateConnectionBase, C_TOP extend
     }
 
     @Override
-    public byte getRedstonePower(ForgeDirection side) {
+    public byte getRedstonePower(EnumFacing side) {
 
         GateConnectionBase con = getConnection(side);
         if (con == null)
@@ -503,7 +503,7 @@ public abstract class GateBase<C_BOTTOM extends GateConnectionBase, C_TOP extend
     }
 
     @Override
-    public void setRedstonePower(ForgeDirection side, byte power) {
+    public void setRedstonePower(EnumFacing side, byte power) {
 
         GateConnectionBase con = getConnection(side);
         if (con == null)
@@ -519,7 +519,7 @@ public abstract class GateBase<C_BOTTOM extends GateConnectionBase, C_TOP extend
     }
 
     @Override
-    public boolean canConnect(ForgeDirection side, IBundledDevice device, ConnectionType type) {
+    public boolean canConnect(EnumFacing side, IBundledDevice device, ConnectionType type) {
 
         GateConnectionBase con = getConnection(side);
         if (con == null)
@@ -532,13 +532,13 @@ public abstract class GateBase<C_BOTTOM extends GateConnectionBase, C_TOP extend
     }
 
     @Override
-    public byte[] getBundledOutput(ForgeDirection side) {
+    public byte[] getBundledOutput(EnumFacing side) {
 
         return getBundledPower(side);
     }
 
     @Override
-    public void setBundledPower(ForgeDirection side, byte[] power) {
+    public void setBundledPower(EnumFacing side, byte[] power) {
 
         GateConnectionBase con = getConnection(side);
         if (con == null)
@@ -548,7 +548,7 @@ public abstract class GateBase<C_BOTTOM extends GateConnectionBase, C_TOP extend
     }
 
     @Override
-    public byte[] getBundledPower(ForgeDirection side) {
+    public byte[] getBundledPower(EnumFacing side) {
 
         GateConnectionBase con = getConnection(side);
         if (con == null)
@@ -564,7 +564,7 @@ public abstract class GateBase<C_BOTTOM extends GateConnectionBase, C_TOP extend
     }
 
     @Override
-    public MinecraftColor getBundledColor(ForgeDirection side) {
+    public MinecraftColor getBundledColor(EnumFacing side) {
 
         return MinecraftColor.NONE;
     }
@@ -587,7 +587,7 @@ public abstract class GateBase<C_BOTTOM extends GateConnectionBase, C_TOP extend
     }
 
     @Override
-    public boolean isNormalFace(ForgeDirection side) {
+    public boolean isNormalFace(EnumFacing side) {
 
         return false;
     }
@@ -657,15 +657,15 @@ public abstract class GateBase<C_BOTTOM extends GateConnectionBase, C_TOP extend
     public boolean renderStatic(Vec3i translation, RenderHelper renderer, RenderBlocks renderBlocks, int pass) {
 
         Transformation t = null;
-        if (getFace() == ForgeDirection.UP)
+        if (getFace() == EnumFacing.UP)
             t = new Rotation(180, 180, 0, Vec3d.center);
-        if (getFace() == ForgeDirection.NORTH)
+        if (getFace() == EnumFacing.NORTH)
             t = new Rotation(90, 0, 0, Vec3d.center);
-        if (getFace() == ForgeDirection.SOUTH)
+        if (getFace() == EnumFacing.SOUTH)
             t = new Rotation(-90, 0, 0, Vec3d.center);
-        if (getFace() == ForgeDirection.WEST)
+        if (getFace() == EnumFacing.WEST)
             t = new Rotation(0, 0, -90, Vec3d.center);
-        if (getFace() == ForgeDirection.EAST)
+        if (getFace() == EnumFacing.EAST)
             t = new Rotation(0, 0, 90, Vec3d.center);
         if (t != null)
             renderer.addTransformation(t);
@@ -674,8 +674,8 @@ public abstract class GateBase<C_BOTTOM extends GateConnectionBase, C_TOP extend
         if (rotation != -1)
             renderer.addTransformation(new Rotation(0, 90 * -rotation, 0));
 
-        renderer.renderBox(BOX, getIcon(ForgeDirection.DOWN), getIcon(ForgeDirection.UP), getIcon(ForgeDirection.WEST), getIcon(ForgeDirection.EAST),
-                getIcon(ForgeDirection.NORTH), getIcon(ForgeDirection.SOUTH));
+        renderer.renderBox(BOX, getIcon(EnumFacing.DOWN), getIcon(EnumFacing.UP), getIcon(EnumFacing.WEST), getIcon(EnumFacing.EAST),
+                getIcon(EnumFacing.NORTH), getIcon(EnumFacing.SOUTH));
 
         for (IGateComponent c : getComponents())
             c.renderStatic(translation, renderer, pass);
@@ -809,11 +809,11 @@ public abstract class GateBase<C_BOTTOM extends GateConnectionBase, C_TOP extend
     }
 
     @SideOnly(Side.CLIENT)
-    public IIcon getIcon(ForgeDirection face) {
+    public IIcon getIcon(EnumFacing face) {
 
-        if (face == ForgeDirection.DOWN)
+        if (face == EnumFacing.DOWN)
             return icon;
-        if (face == ForgeDirection.UP)
+        if (face == EnumFacing.UP)
             return icon;
 
         return iconSide;

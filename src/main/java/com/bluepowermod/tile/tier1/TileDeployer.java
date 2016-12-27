@@ -28,7 +28,7 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.FakePlayerFactory;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action;
@@ -118,7 +118,7 @@ public class TileDeployer extends TileBase implements ISidedInventory, IEjectAni
     
         if (useItems > 9) throw new IllegalArgumentException("Hotbar is 9 items in width! You're trying " + useItems + "!");
         
-        ForgeDirection faceDir = getFacingDirection();
+        EnumFacing faceDir = getFacingDirection();
         int dx = faceDir.offsetX;
         int dy = faceDir.offsetY;
         int dz = faceDir.offsetZ;
@@ -154,7 +154,7 @@ public class TileDeployer extends TileBase implements ISidedInventory, IEjectAni
             if (entity != null) {
                 for (int i = 0; i < useItems; i++) {
                     player.inventory.currentItem = i;
-                    ItemStack stack = player.getCurrentEquippedItem();
+                    ItemStack stack = player.getHeldItemMainhand();
                     if (canDeployItem(stack) && stack.getItem().itemInteractionForEntity(stack, player, (EntityLivingBase) entity)) return true;
                     if (entity instanceof EntityAnimal && ((EntityAnimal) entity).interact(player)) return true;
                 }
@@ -162,7 +162,7 @@ public class TileDeployer extends TileBase implements ISidedInventory, IEjectAni
             
             for (int i = 0; i < useItems; i++) {
                 player.inventory.currentItem = i;
-                ItemStack stack = player.getCurrentEquippedItem();
+                ItemStack stack = player.getHeldItemMainhand();
                 if (canDeployItem(stack) && stack.getItem().onItemUseFirst(stack, player, worldObj, x, y, z, faceDir.ordinal(), dx, dy, dz)) return true;
             }
             
@@ -173,7 +173,7 @@ public class TileDeployer extends TileBase implements ISidedInventory, IEjectAni
             
             for (int i = 0; i < useItems; i++) {
                 player.inventory.currentItem = i;
-                ItemStack stack = player.getCurrentEquippedItem();
+                ItemStack stack = player.getHeldItemMainhand();
                 boolean isGoingToShift = false;              
                 if(stack != null){
                 	if(stack.getItem() instanceof ItemReed || stack.getItem() instanceof ItemRedstone){
@@ -188,7 +188,7 @@ public class TileDeployer extends TileBase implements ISidedInventory, IEjectAni
             
             for (int i = 0; i < useItems; i++) {
                 player.inventory.currentItem = i;
-                ItemStack stack = player.getCurrentEquippedItem();
+                ItemStack stack = player.getHeldItemMainhand();
                 if (canDeployItem(stack)) {
                     ItemStack copy = stack.copy();
                     player.setCurrentItemOrArmor(0, stack.getItem().onItemRightClick(stack, worldObj, player));
@@ -345,7 +345,7 @@ public class TileDeployer extends TileBase implements ISidedInventory, IEjectAni
     @Override
     public int[] getAccessibleSlotsFromSide(int var1) {
     
-        ForgeDirection direction = getFacingDirection();
+        EnumFacing direction = getFacingDirection();
         
         if (var1 == direction.ordinal()) { return new int[] {}; }
         return new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8 };

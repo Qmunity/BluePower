@@ -17,7 +17,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.ShapedRecipes;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 
 import com.bluepowermod.helper.IOHelper;
@@ -52,7 +52,7 @@ public class SlotCircuitTableCrafting extends SlotCrafting {
         if (requiredItems.size() == 0)
             return false;
         for (ItemStack requiredItem : requiredItems) {
-            ItemStack extractedStack = IOHelper.extract(circuitTable, ForgeDirection.UNKNOWN, requiredItem, true, true);
+            ItemStack extractedStack = IOHelper.extract(circuitTable, EnumFacing.UNKNOWN, requiredItem, true, true);
             if (extractedStack == null || extractedStack.stackSize < requiredItem.stackSize)
                 return false;
         }
@@ -66,7 +66,7 @@ public class SlotCircuitTableCrafting extends SlotCrafting {
         this.onCrafting(craftedItem);
         List<ItemStack> requiredItems = getCraftingComponents(craftedItem);
         for (ItemStack requiredItem : requiredItems) {
-            IOHelper.extract(circuitTable, ForgeDirection.UNKNOWN, requiredItem, true, false, 1);
+            IOHelper.extract(circuitTable, EnumFacing.UNKNOWN, requiredItem, true, false, 1);
         }
         ItemStack item = craftedItem.copy();
         item.stackSize = 1;

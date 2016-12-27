@@ -17,23 +17,11 @@
 
 package com.bluepowermod.network;
 
+import com.bluepowermod.network.message.*;
+import com.bluepowermod.reference.Refs;
+import net.minecraftforge.fml.relauncher.Side;
 import uk.co.qmunity.lib.network.NetworkHandler;
 
-import com.bluepowermod.network.message.MessageCircuitDatabaseTemplate;
-import com.bluepowermod.network.message.MessageDebugBlock;
-import com.bluepowermod.network.message.MessageGuiUpdate;
-import com.bluepowermod.network.message.MessageRedirectTubeStack;
-import com.bluepowermod.network.message.MessageSendClientServerTemplates;
-import com.bluepowermod.network.message.MessageServerTickTime;
-import com.bluepowermod.network.message.MessageSyncMachineBacklog;
-import com.bluepowermod.network.message.MessageUpdateTextfield;
-import com.bluepowermod.network.message.MessageWirelessFrequencySync;
-import com.bluepowermod.network.message.MessageWirelessNewFreq;
-import com.bluepowermod.network.message.MessageWirelessRemoveFreq;
-import com.bluepowermod.network.message.MessageWirelessSaveFreq;
-import com.bluepowermod.reference.Refs;
-
-import cpw.mods.fml.relauncher.Side;
 
 public class BPNetworkHandler {
 

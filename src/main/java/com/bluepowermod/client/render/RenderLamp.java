@@ -7,29 +7,20 @@
  */
 package com.bluepowermod.client.render;
 
+import com.bluepowermod.block.machine.BlockLamp;
+import com.bluepowermod.tile.tier1.TileLamp;
 import net.minecraft.block.Block;
-import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
-import net.minecraftforge.client.IItemRenderer;
-import net.minecraftforge.common.util.ForgeDirection;
-
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
-
-import uk.co.qmunity.lib.client.render.RenderHelper;
 import uk.co.qmunity.lib.vec.Vec3dCube;
 import uk.co.qmunity.lib.vec.Vec3i;
-
-import com.bluepowermod.block.machine.BlockLamp;
-import com.bluepowermod.tile.tier1.TileLamp;
-
-import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
-import cpw.mods.fml.client.registry.RenderingRegistry;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class RenderLamp extends TileEntitySpecialRenderer implements ISimpleBlockRenderingHandler, IItemRenderer {
@@ -88,7 +79,7 @@ public class RenderLamp extends TileEntitySpecialRenderer implements ISimpleBloc
 
             boolean[] renderFaces = new boolean[] { true, true, true, true, true, true };
 
-            for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
+            for (EnumFacing d : EnumFacing.VALUES) {
                 Vec3i v = vector.getRelative(d);
                 Block bl = v.getBlock();
                 if (bl instanceof BlockLamp && ((BlockLamp) bl).getPower(v.getWorld(), v.getX(), v.getY(), v.getZ()) > 0) {

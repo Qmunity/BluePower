@@ -25,7 +25,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.EnumPlantType;
 import net.minecraftforge.common.IPlantable;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;;
 
 import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.reference.Refs;
@@ -48,7 +48,7 @@ public class ItemCropSeed extends ItemSeeds implements IPlantable {
         if (side != 1) {
             return false;
         } else if (player.canPlayerEdit(x, y, z, side, itemStack) && player.canPlayerEdit(x, y + 1, z, side, itemStack)) {
-            if (world.getBlock(x, y, z).canSustainPlant(world, x, y, z, ForgeDirection.UP, this) && world.isAirBlock(x, y + 1, z)
+            if (world.getBlock(x, y, z).canSustainPlant(world, x, y, z, EnumFacing.UP, this) && world.isAirBlock(x, y + 1, z)
                     && (world.getBlock(x, y, z).isFertile(world, x, y, z))) {
                 world.setBlock(x, y + 1, z, field_150925_a, 0, 2);
                 --itemStack.stackSize;

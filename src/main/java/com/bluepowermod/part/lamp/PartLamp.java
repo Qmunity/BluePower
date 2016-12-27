@@ -23,7 +23,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;;
 
 import org.lwjgl.opengl.GL11;
 
@@ -329,7 +329,7 @@ public abstract class PartLamp extends BPPartFace implements IPartRedstone, IRed
         int old = power;
 
         int pow = 0;
-        for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
+        for (EnumFacing d : EnumFacing.VALUES) {
             IConnection<IRedstoneDevice> con = connections.getConnectionOnSide(d);
             if (con != null) {
                 pow = Math.max(pow, input[d.ordinal()] & 0xFF);
@@ -344,19 +344,19 @@ public abstract class PartLamp extends BPPartFace implements IPartRedstone, IRed
     }
 
     @Override
-    public int getStrongPower(ForgeDirection side) {
+    public int getStrongPower(EnumFacing side) {
 
         return 0;
     }
 
     @Override
-    public int getWeakPower(ForgeDirection side) {
+    public int getWeakPower(EnumFacing side) {
 
         return 0;
     }
 
     @Override
-    public boolean canConnectRedstone(ForgeDirection side) {
+    public boolean canConnectRedstone(EnumFacing side) {
 
         return true;
     }
@@ -418,9 +418,9 @@ public abstract class PartLamp extends BPPartFace implements IPartRedstone, IRed
     }
 
     @Override
-    public boolean canConnect(ForgeDirection side, IRedstoneDevice dev, ConnectionType type) {
+    public boolean canConnect(EnumFacing side, IRedstoneDevice dev, ConnectionType type) {
 
-        if (side == ForgeDirection.UNKNOWN)
+        if (side == EnumFacing.UNKNOWN)
             return false;
 
         if (!OcclusionHelper.microblockOcclusionTest(getParent(), MicroblockShape.EDGE, 1, getFace(), side))
@@ -436,13 +436,13 @@ public abstract class PartLamp extends BPPartFace implements IPartRedstone, IRed
     }
 
     @Override
-    public byte getRedstonePower(ForgeDirection side) {
+    public byte getRedstonePower(EnumFacing side) {
 
         return 0;
     }
 
     @Override
-    public void setRedstonePower(ForgeDirection side, byte power) {
+    public void setRedstonePower(EnumFacing side, byte power) {
 
         input[side.ordinal()] = power;
     }
@@ -454,7 +454,7 @@ public abstract class PartLamp extends BPPartFace implements IPartRedstone, IRed
     }
 
     @Override
-    public boolean isNormalFace(ForgeDirection side) {
+    public boolean isNormalFace(EnumFacing side) {
 
         return false;
     }

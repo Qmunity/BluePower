@@ -27,11 +27,11 @@ public class GateConnectionDigital extends GateConnectionBase {
     @Override
     public void refresh() {
 
-        IConnection<? extends IRedstoneDevice> c = gate.getRedstoneConnectionCache().getConnectionOnSide(getForgeDirection());
+        IConnection<? extends IRedstoneDevice> c = gate.getRedstoneConnectionCache().getConnectionOnSide(getEnumFacing());
 
         if (c == null || c.getB() instanceof DummyRedstoneDevice)
             input = RedstoneHelper.getInput(getGate().getWorld(), getGate().getX(), getGate().getY(), getGate().getZ(),
-                    getForgeDirection(), getGate().getFace()) > 0;
+                    getEnumFacing(), getGate().getFace()) > 0;
     }
 
     @Override

@@ -19,19 +19,19 @@ package com.bluepowermod.helper;
 
 import java.util.List;
 
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;;
 import uk.co.qmunity.lib.vec.Vec3d;
 import uk.co.qmunity.lib.vec.Vec3dCube;
 
 public class VectorHelper {
 
-    public static final void rotateBoxes(List<Vec3dCube> boxes, ForgeDirection face, int rotation) {
+    public static final void rotateBoxes(List<Vec3dCube> boxes, EnumFacing face, int rotation) {
 
         for (Vec3dCube box : boxes)
             rotateBox(box, face, rotation);
     }
 
-    public static final void rotateBox(Vec3dCube box, ForgeDirection face, int rotation) {
+    public static final void rotateBox(Vec3dCube box, EnumFacing face, int rotation) {
 
         box.rotate(0, rotation * 90, 0, Vec3d.center);
         box.rotate(face, Vec3d.center);

@@ -10,7 +10,7 @@ package com.bluepowermod.block.machine;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.util.IIcon;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;;
 
 import com.bluepowermod.block.BlockContainerBase;
 import com.bluepowermod.reference.GuiIDs;
@@ -29,7 +29,7 @@ public class BlockSortron extends BlockContainerBase {
     
     public BlockSortron() {
     
-        super(Material.rock, TileSortron.class);
+        super(Material.ROCK, TileSortron.class);
         setBlockName(Refs.BLOCKSORTRON_NAME);
     }
     
@@ -43,7 +43,7 @@ public class BlockSortron extends BlockContainerBase {
     @SideOnly(Side.CLIENT)
     public IIcon getIcon(int side, int meta) {
     
-        ForgeDirection direction = ForgeDirection.getOrientation(meta);
+        EnumFacing direction = EnumFacing.getOrientation(meta);
         if (side == direction.ordinal()) {
             return icons[0];
         } else if (side == direction.getOpposite().ordinal()) { return icons[1]; }
@@ -56,7 +56,7 @@ public class BlockSortron extends BlockContainerBase {
      
          
                  TileSortron tile = (TileSortron) world.getTileEntity(x, y, z);
-                 ForgeDirection dir = tile.getFacingDirection();
+                 EnumFacing dir = tile.getFacingDirection();
                  if (dir.ordinal() == side) {
                      return icons[0];
                  } else if (dir.getOpposite().ordinal() == side) {

@@ -29,8 +29,7 @@ public class RendererBlockBase implements ISimpleBlockRenderingHandler {
         SIDE, FRONT, BACK
     }
 
-    public static final int RENDER_ID = RenderingRegistry.getNextAvailableRenderId();
-    public static final Block FAKE_RENDER_BLOCK = new Block(Material.rock) {
+    public static final Block FAKE_RENDER_BLOCK = new Block(Material.ROCK) {
 
         @Override
         @SideOnly(Side.CLIENT)

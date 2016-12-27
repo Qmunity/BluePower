@@ -13,7 +13,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;;
 
 import com.bluepowermod.helper.ItemStackHelper;
 import com.bluepowermod.init.BPBlocks;
@@ -63,7 +63,7 @@ public class TileItemDetector extends TileMachineBase implements ISidedInventory
     }
 
     @Override
-    public TubeStack acceptItemFromTube(TubeStack stack, ForgeDirection from, boolean simulate) {
+    public TubeStack acceptItemFromTube(TubeStack stack, EnumFacing from, boolean simulate) {
 
         if (from == getFacingDirection() && !isItemAccepted(stack.stack))
             return stack;
@@ -226,7 +226,7 @@ public class TileItemDetector extends TileMachineBase implements ISidedInventory
     @Override
     public int[] getAccessibleSlotsFromSide(int var1) {
 
-        ForgeDirection direction = getFacingDirection();
+        EnumFacing direction = getFacingDirection();
 
         if (var1 == direction.ordinal() || var1 == direction.getOpposite().ordinal()) {
             return new int[] {};

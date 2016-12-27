@@ -18,7 +18,7 @@
 package com.bluepowermod.redstone;
 
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;;
 import uk.co.qmunity.lib.part.IPart;
 import uk.co.qmunity.lib.part.ITilePartHolder;
 import uk.co.qmunity.lib.part.compat.MultipartCompatibility;
@@ -33,7 +33,7 @@ import com.bluepowermod.api.wire.redstone.IRedstoneProvider;
 public class RedstoneProviderQmunityLib implements IRedstoneProvider {
 
     @Override
-    public IRedstoneDevice getRedstoneDeviceAt(World world, int x, int y, int z, ForgeDirection face, ForgeDirection side) {
+    public IRedstoneDevice getRedstoneDeviceAt(World world, int x, int y, int z, EnumFacing face, EnumFacing side) {
 
         ITilePartHolder holder = MultipartCompatibility.getPartHolder(world, x, y, z);
         if (holder != null) {
@@ -44,7 +44,7 @@ public class RedstoneProviderQmunityLib implements IRedstoneProvider {
                         if (((IFace) p).getFace() == face)
                             return ((IRedstoneDeviceWrapper) p).getDeviceOnSide(side);
                     } else {
-                        if (face == ForgeDirection.UNKNOWN)
+                        if (face == EnumFacing.UNKNOWN)
                             return ((IRedstoneDeviceWrapper) p).getDeviceOnSide(side);
                     }
                 } else if (p instanceof IRedstoneDevice) {
@@ -52,7 +52,7 @@ public class RedstoneProviderQmunityLib implements IRedstoneProvider {
                         if (((IFace) p).getFace() == face)
                             return (IRedstoneDevice) p;
                     } else {
-                        if (face == ForgeDirection.UNKNOWN)
+                        if (face == EnumFacing.UNKNOWN)
                             return (IRedstoneDevice) p;
                     }
                     foundOnlyFace = true;
@@ -69,7 +69,7 @@ public class RedstoneProviderQmunityLib implements IRedstoneProvider {
     }
 
     @Override
-    public IBundledDevice getBundledDeviceAt(World world, int x, int y, int z, ForgeDirection face, ForgeDirection side) {
+    public IBundledDevice getBundledDeviceAt(World world, int x, int y, int z, EnumFacing face, EnumFacing side) {
 
         ITilePartHolder holder = MultipartCompatibility.getPartHolder(world, x, y, z);
         if (holder != null) {
@@ -80,7 +80,7 @@ public class RedstoneProviderQmunityLib implements IRedstoneProvider {
                         if (((IFace) p).getFace() == face)
                             return ((IBundledDeviceWrapper) p).getBundledDeviceOnSide(side);
                     } else {
-                        if (face == ForgeDirection.UNKNOWN)
+                        if (face == EnumFacing.UNKNOWN)
                             return ((IBundledDeviceWrapper) p).getBundledDeviceOnSide(side);
                     }
                 } else if (p instanceof IBundledDevice) {
@@ -88,7 +88,7 @@ public class RedstoneProviderQmunityLib implements IRedstoneProvider {
                         if (((IFace) p).getFace() == face)
                             return (IBundledDevice) p;
                     } else {
-                        if (face == ForgeDirection.UNKNOWN)
+                        if (face == EnumFacing.UNKNOWN)
                             return (IBundledDevice) p;
                     }
                     foundOnlyFace = true;

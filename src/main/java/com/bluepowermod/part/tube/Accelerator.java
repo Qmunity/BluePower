@@ -23,7 +23,7 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;;
 
 import org.lwjgl.opengl.GL11;
 
@@ -48,7 +48,7 @@ import cpw.mods.fml.relauncher.SideOnly;
  */
 public class Accelerator extends PneumaticTube implements IPartCustomPlacement {
 
-    private ForgeDirection rotation = ForgeDirection.UP;
+    private EnumFacing rotation = EnumFacing.UP;
 
     @Override
     public String getType() {
@@ -62,7 +62,7 @@ public class Accelerator extends PneumaticTube implements IPartCustomPlacement {
         return getType();
     }
 
-    public void setRotation(ForgeDirection rotation) {
+    public void setRotation(EnumFacing rotation) {
 
         this.rotation = rotation;
     }
@@ -77,9 +77,9 @@ public class Accelerator extends PneumaticTube implements IPartCustomPlacement {
 
         List<Vec3dCube> aabbs = new ArrayList<Vec3dCube>();
 
-        if (rotation == ForgeDirection.DOWN || rotation == ForgeDirection.UP) {
+        if (rotation == EnumFacing.DOWN || rotation == EnumFacing.UP) {
             aabbs.add(new Vec3dCube(0, 4 / 16D, 0, 1, 12 / 16D, 1));
-        } else if (rotation == ForgeDirection.NORTH || rotation == ForgeDirection.SOUTH) {
+        } else if (rotation == EnumFacing.NORTH || rotation == EnumFacing.SOUTH) {
             aabbs.add(new Vec3dCube(0, 0, 4 / 16D, 1, 1, 12 / 16D));
         } else {
             aabbs.add(new Vec3dCube(4 / 16D, 0, 0, 12 / 16D, 1, 1));
@@ -114,7 +114,7 @@ public class Accelerator extends PneumaticTube implements IPartCustomPlacement {
     public void readFromNBT(NBTTagCompound tag) {
 
         super.readFromNBT(tag);
-        rotation = ForgeDirection.getOrientation(tag.getByte("rotation"));
+        rotation = EnumFacing.getOrientation(tag.getByte("rotation"));
     }
 
     @Override
@@ -128,11 +128,11 @@ public class Accelerator extends PneumaticTube implements IPartCustomPlacement {
     public void readUpdateData(DataInput buffer) throws IOException {
 
         super.readUpdateData(buffer);
-        rotation = ForgeDirection.getOrientation(buffer.readInt());
+        rotation = EnumFacing.getOrientation(buffer.readInt());
     }
 
     @Override
-    public boolean isConnected(ForgeDirection dir, PneumaticTube otherTube) {
+    public boolean isConnected(EnumFacing dir, PneumaticTube otherTube) {
 
         if (dir == rotation || dir.getOpposite() == rotation) {
             return getWorld() == null
@@ -149,7 +149,7 @@ public class Accelerator extends PneumaticTube implements IPartCustomPlacement {
 
     // @Override
     // @SideOnly(Side.CLIENT)
-    // protected IIcon getSideIcon(ForgeDirection side) {
+    // protected IIcon getSideIcon(EnumFacing side) {
     //
     // return getPartCache(side) instanceof MagTube ? IconSupplier.magTubeSide : IconSupplier.pneumaticTubeSide;
     // }
@@ -170,7 +170,7 @@ public class Accelerator extends PneumaticTube implements IPartCustomPlacement {
             GL11.glTranslated(0, -0.125, 0);
 
             Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
-            rotation = ForgeDirection.UP;
+            rotation = EnumFacing.UP;
             renderDynamic(new Vec3d(0, 0, 0), 0, 0);
         }
         GL11.glPopMatrix();
@@ -187,9 +187,9 @@ public class Accelerator extends PneumaticTube implements IPartCustomPlacement {
 
             GL11.glPushMatrix();
             GL11.glTranslatef((float) loc.getX() + 0.5F, (float) loc.getY() + 0.5F, (float) loc.getZ() + 0.5F);
-            if (rotation == ForgeDirection.NORTH || rotation == ForgeDirection.SOUTH) {
+            if (rotation == EnumFacing.NORTH || rotation == EnumFacing.SOUTH) {
                 GL11.glRotated(90, 1, 0, 0);
-            } else if (rotation == ForgeDirection.EAST || rotation == ForgeDirection.WEST) {
+            } else if (rotation == EnumFacing.EAST || rotation == EnumFacing.WEST) {
                 GL11.glRotated(90, 0, 0, 1);
             }
             GL11.glTranslatef((float) -loc.getX() - 0.5F, (float) -loc.getY() - 0.5F, (float) -loc.getZ() - 0.5F);
@@ -284,7 +284,7 @@ public class Accelerator extends PneumaticTube implements IPartCustomPlacement {
     }
 
     @Override
-    public IPartPlacement getPlacement(IPart part, World world, Vec3i location, ForgeDirection face, MovingObjectPosition mop,
+    public IPartPlacement getPlacement(IPart part, World world, Vec3i location, EnumFacing face, MovingObjectPosition mop,
             EntityPlayer player) {
 
         return new PartPlacementAccelerator(player);

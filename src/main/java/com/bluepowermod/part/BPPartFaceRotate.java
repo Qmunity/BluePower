@@ -25,7 +25,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;;
 import uk.co.qmunity.lib.part.IPart;
 import uk.co.qmunity.lib.part.IPartPlacement;
 import uk.co.qmunity.lib.vec.Vec3i;
@@ -76,17 +76,17 @@ public abstract class BPPartFaceRotate extends BPPartFace {
     }
 
     @Override
-    public IPartPlacement getPlacement(IPart part, World world, Vec3i location, ForgeDirection face, MovingObjectPosition mop,
+    public IPartPlacement getPlacement(IPart part, World world, Vec3i location, EnumFacing face, MovingObjectPosition mop,
             EntityPlayer player) {
 
         int rot = PartRotationHelper.getPlacementRotation(mop);
 
-        if (face == ForgeDirection.UP || face == ForgeDirection.NORTH || face == ForgeDirection.WEST)
+        if (face == EnumFacing.UP || face == EnumFacing.NORTH || face == EnumFacing.WEST)
             rot += 2;
-        if (face == ForgeDirection.DOWN || face == ForgeDirection.EAST)
+        if (face == EnumFacing.DOWN || face == EnumFacing.EAST)
             if (rot == 0 || rot == 2)
                 rot += 2;
-        if (face == ForgeDirection.SOUTH)
+        if (face == EnumFacing.SOUTH)
             if (rot == 1 || rot == 3)
                 rot += 2;
 

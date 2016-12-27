@@ -3,7 +3,7 @@ package com.bluepowermod.part.wire;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;;
 import uk.co.qmunity.lib.part.MicroblockShape;
 import uk.co.qmunity.lib.part.compat.OcclusionHelper;
 import uk.co.qmunity.lib.vec.IWorldLocation;
@@ -16,11 +16,11 @@ public class ConnectionLogicHelper<T extends IWorldLocation, C> {
 
     public static interface IConnectableProvider<T extends IWorldLocation, C> {
 
-        public T getConnectableAt(World world, int x, int y, int z, ForgeDirection face, ForgeDirection side);
+        public T getConnectableAt(World world, int x, int y, int z, EnumFacing face, EnumFacing side);
 
-        public C createConnection(T a, T b, ForgeDirection sideA, ForgeDirection sideB, ConnectionType type);
+        public C createConnection(T a, T b, EnumFacing sideA, EnumFacing sideB, ConnectionType type);
 
-        public boolean canConnect(T from, T to, ForgeDirection side, ConnectionType type);
+        public boolean canConnect(T from, T to, EnumFacing side, ConnectionType type);
 
         public boolean isValidClosedCorner(T o);
 
@@ -28,7 +28,7 @@ public class ConnectionLogicHelper<T extends IWorldLocation, C> {
 
         public boolean isValidStraight(T o);
 
-        public boolean isNormalFace(T o, ForgeDirection face);
+        public boolean isNormalFace(T o, EnumFacing face);
     }
 
     private IConnectableProvider<T, C> provider;
@@ -38,17 +38,17 @@ public class ConnectionLogicHelper<T extends IWorldLocation, C> {
         this.provider = provider;
     }
 
-    public C getNeighbor(T device, ForgeDirection side) {
+    public C getNeighbor(T device, EnumFacing side) {
 
-        ForgeDirection face = ForgeDirection.UNKNOWN;
+        EnumFacing face = EnumFacing.UNKNOWN;
         if (device instanceof IFace)
             face = ((IFace) device).getFace();
 
         // In same block
         do {
             Vec3i loc = new Vec3i(device);
-            T dev = provider.getConnectableAt(loc.getWorld(), loc.getX(), loc.getY(), loc.getZ(), side == face.getOpposite() ? ForgeDirection.UNKNOWN
-                    : side, face == ForgeDirection.UNKNOWN ? side.getOpposite() : face);
+            T dev = provider.getConnectableAt(loc.getWorld(), loc.getX(), loc.getY(), loc.getZ(), side == face.getOpposite() ? EnumFacing.UNKNOWN
+                    : side, face == EnumFacing.UNKNOWN ? side.getOpposite() : face);
             if (dev == null || dev == device || !provider.isValidClosedCorner(dev))
                 break;
 
@@ -59,7 +59,7 @@ public class ConnectionLogicHelper<T extends IWorldLocation, C> {
         } while (false);
 
         // On same block
-        if (face != ForgeDirection.UNKNOWN) {
+        if (face != EnumFacing.UNKNOWN) {
             do {
                 Vec3i loc = new Vec3i(device).add(face).add(side);
                 T dev = provider.getConnectableAt(loc.getWorld(), loc.getX(), loc.getY(), loc.getZ(), side.getOpposite(), face.getOpposite());
@@ -87,8 +87,8 @@ public class ConnectionLogicHelper<T extends IWorldLocation, C> {
             T dev = provider.getConnectableAt(loc.getWorld(), loc.getX(), loc.getY(), loc.getZ(), face, side.getOpposite());
             if (dev == null) {
                 dev = provider.getConnectableAt(loc.getWorld(), loc.getX(), loc.getY(), loc.getZ(), side.getOpposite(), side.getOpposite());
-                if (dev == null && face == ForgeDirection.UNKNOWN && provider.isNormalFace(device, side)) {
-                    for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
+                if (dev == null && face == EnumFacing.UNKNOWN && provider.isNormalFace(device, side)) {
+                    for (EnumFacing d : EnumFacing.VALUES) {
                         if (d != side && d != side.getOpposite()) {
                             dev = provider.getConnectableAt(loc.getWorld(), loc.getX(), loc.getY(), loc.getZ(), d, side.getOpposite());
                             if (dev != null)

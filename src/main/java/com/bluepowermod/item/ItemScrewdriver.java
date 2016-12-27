@@ -25,7 +25,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;;
 
 import com.bluepowermod.api.misc.IScrewdriver;
 import com.bluepowermod.block.BlockContainerBase;
@@ -55,13 +55,13 @@ public class ItemScrewdriver extends ItemBase implements IScrewdriver {
         if (block instanceof BlockContainerBase) {
             if (((BlockContainerBase) block).getGuiID() != GuiIDs.INVALID) {
                 if (player.isSneaking()) {
-                    if (block.rotateBlock(world, x, y, z, ForgeDirection.getOrientation(side))) {
+                    if (block.rotateBlock(world, x, y, z, EnumFacing.getOrientation(side))) {
                         damage(stack, 1, player, false);
                         return true;
                     }
                 }
             }
-        } else if (!player.isSneaking() && block.rotateBlock(world, x, y, z, ForgeDirection.getOrientation(side))) {
+        } else if (!player.isSneaking() && block.rotateBlock(world, x, y, z, EnumFacing.getOrientation(side))) {
             damage(stack, 1, player, false);
             return true;
         }

@@ -16,7 +16,7 @@ import net.minecraft.world.chunk.storage.IChunkLoader;
 import net.minecraft.world.storage.IPlayerFileData;
 import net.minecraft.world.storage.ISaveHandler;
 import net.minecraft.world.storage.WorldInfo;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;;
 import uk.co.qmunity.lib.init.QLBlocks;
 import uk.co.qmunity.lib.tile.TileMultipart;
 import uk.co.qmunity.lib.vec.Vec3d;
@@ -96,15 +96,15 @@ public class FakeWorldIC extends World {
             if (ic == null || ic.getParent() == null || ic.getWorld() == null)
                 return Blocks.air;
 
-            ForgeDirection d = null;
+            EnumFacing d = null;
             if (x == -1 && z == ((ic.getSize() - 1) / 2))
-                d = ForgeDirection.WEST;
+                d = EnumFacing.WEST;
             if (x == ic.getSize() && z == ((ic.getSize() - 1) / 2))
-                d = ForgeDirection.EAST;
+                d = EnumFacing.EAST;
             if (x == ((ic.getSize() - 1) / 2) && z == -1)
-                d = ForgeDirection.NORTH;
+                d = EnumFacing.NORTH;
             if (x == ((ic.getSize() - 1) / 2) && z == ic.getSize())
-                d = ForgeDirection.SOUTH;
+                d = EnumFacing.SOUTH;
             if (d != null) {
                 return new Vec3d(0, 0, 0, ic.getWorld()).add(d).rotate(0, 90 * -ic.getRotation(), 0).add(ic.getX(), ic.getY(), ic.getZ())
                         .getBlock();
@@ -127,15 +127,15 @@ public class FakeWorldIC extends World {
             if (ic == null || ic.getParent() == null || ic.getWorld() == null)
                 return 0;
 
-            ForgeDirection d = null;
+            EnumFacing d = null;
             if (x == -1 && z == ((ic.getSize() - 1) / 2))
-                d = ForgeDirection.WEST;
+                d = EnumFacing.WEST;
             if (x == ic.getSize() && z == ((ic.getSize() - 1) / 2))
-                d = ForgeDirection.EAST;
+                d = EnumFacing.EAST;
             if (x == ((ic.getSize() - 1) / 2) && z == -1)
-                d = ForgeDirection.NORTH;
+                d = EnumFacing.NORTH;
             if (x == ((ic.getSize() - 1) / 2) && z == ic.getSize())
-                d = ForgeDirection.SOUTH;
+                d = EnumFacing.SOUTH;
             if (d != null)
                 return new Vec3d(0, 0, 0, ic.getWorld()).add(d).rotate(0, 90 * -ic.getRotation(), 0).add(ic.getX(), ic.getY(), ic.getZ())
                         .getBlockMeta();
@@ -155,15 +155,15 @@ public class FakeWorldIC extends World {
             if (ic == null || ic.getParent() == null || ic.getWorld() == null)
                 return null;
 
-            ForgeDirection d = null;
+            EnumFacing d = null;
             if (x == -1 && z == ((ic.getSize() - 1) / 2))
-                d = ForgeDirection.WEST;
+                d = EnumFacing.WEST;
             if (x == ic.getSize() && z == ((ic.getSize() - 1) / 2))
-                d = ForgeDirection.EAST;
+                d = EnumFacing.EAST;
             if (x == ((ic.getSize() - 1) / 2) && z == -1)
-                d = ForgeDirection.NORTH;
+                d = EnumFacing.NORTH;
             if (x == ((ic.getSize() - 1) / 2) && z == ic.getSize())
-                d = ForgeDirection.SOUTH;
+                d = EnumFacing.SOUTH;
             if (d != null)
                 return new Vec3d(0, 0, 0, ic.getWorld()).add(d).rotate(0, 90 * -ic.getRotation(), 0).add(ic.getX(), ic.getY(), ic.getZ())
                         .getTileEntity();
@@ -186,15 +186,15 @@ public class FakeWorldIC extends World {
     }
 
     @Override
-    public boolean isSideSolid(int x, int y, int z, ForgeDirection side) {
+    public boolean isSideSolid(int x, int y, int z, EnumFacing side) {
 
-        return side == ForgeDirection.UP;
+        return side == EnumFacing.UP;
     }
 
     @Override
-    public boolean isSideSolid(int x, int y, int z, ForgeDirection side, boolean _default) {
+    public boolean isSideSolid(int x, int y, int z, EnumFacing side, boolean _default) {
 
-        return side == ForgeDirection.UP;
+        return side == EnumFacing.UP;
     }
 
     private static class FakeWorldSaveHandler implements ISaveHandler {

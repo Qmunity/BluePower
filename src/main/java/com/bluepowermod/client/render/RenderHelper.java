@@ -15,7 +15,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
@@ -734,7 +734,7 @@ public class RenderHelper {
      * @author amadornes
      * @param d
      */
-    public static void rotateRenderMatrix(ForgeDirection d) {
+    public static void rotateRenderMatrix(EnumFacing d) {
 
         switch (d) {
         case UP:

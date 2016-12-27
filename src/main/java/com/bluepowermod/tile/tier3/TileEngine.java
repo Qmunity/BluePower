@@ -11,7 +11,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;;
 
 import com.bluepowermod.tile.TileMachineBase;
 
@@ -22,7 +22,7 @@ import com.bluepowermod.tile.TileMachineBase;
  */
 public class TileEngine extends TileMachineBase{
 
-	private ForgeDirection orientation;
+	private EnumFacing orientation;
 	public boolean isActive = false;
 	public byte pumpTick;
 	public byte pumpSpeed;
@@ -76,17 +76,17 @@ public class TileEngine extends TileMachineBase{
         readFromNBT(packet.func_148857_g());
     }
     
-    public void setOrientation(ForgeDirection orientation)
+    public void setOrientation(EnumFacing orientation)
     {
         this.orientation = orientation;
     }
 
     public void setOrientation(int orientation)
     {
-        this.orientation = ForgeDirection.getOrientation(orientation);
+        this.orientation = EnumFacing.getOrientation(orientation);
     }
     
-    public ForgeDirection getOrientation()
+    public EnumFacing getOrientation()
     {
         return orientation;
     }

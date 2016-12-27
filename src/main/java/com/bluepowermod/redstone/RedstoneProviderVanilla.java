@@ -19,7 +19,7 @@ package com.bluepowermod.redstone;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;;
 import uk.co.qmunity.lib.vec.Vec3i;
 
 import com.bluepowermod.api.wire.redstone.IBundledDevice;
@@ -29,7 +29,7 @@ import com.bluepowermod.api.wire.redstone.IRedstoneProvider;
 public class RedstoneProviderVanilla implements IRedstoneProvider {
 
     @Override
-    public IRedstoneDevice getRedstoneDeviceAt(World world, int x, int y, int z, ForgeDirection face, ForgeDirection side) {
+    public IRedstoneDevice getRedstoneDeviceAt(World world, int x, int y, int z, EnumFacing face, EnumFacing side) {
 
         TileEntity te = world.getTileEntity(x, y, z);
         if (te != null && te instanceof IRedstoneDevice)
@@ -39,7 +39,7 @@ public class RedstoneProviderVanilla implements IRedstoneProvider {
     }
 
     @Override
-    public IBundledDevice getBundledDeviceAt(World world, int x, int y, int z, ForgeDirection face, ForgeDirection side) {
+    public IBundledDevice getBundledDeviceAt(World world, int x, int y, int z, EnumFacing face, EnumFacing side) {
 
         TileEntity te = world.getTileEntity(x, y, z);
         if (te != null && te instanceof IBundledDevice)

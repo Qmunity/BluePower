@@ -17,7 +17,7 @@ import net.minecraft.inventory.InventoryBasic;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChatComponentTranslation;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;;
 
 import com.bluepowermod.BluePower;
 import com.bluepowermod.api.item.IDatabaseSaveable;
@@ -184,13 +184,13 @@ public class TileCircuitDatabase extends TileCircuitTable {
                             if (count > 0) {// At this point we need assist from the inventory.
                                 ItemStack retrievedStack = templateStack.copy();
                                 retrievedStack.stackSize = count;
-                                retrievedStack = IOHelper.extract(this, ForgeDirection.UNKNOWN, retrievedStack, true, simulate, 2);
+                                retrievedStack = IOHelper.extract(this, EnumFacing.UNKNOWN, retrievedStack, true, simulate, 2);
                                 if (retrievedStack == null || retrievedStack.stackSize < count)
                                     return false;
                             } else if (count < 0) {
                                 ItemStack returnedStack = templateStack.copy();
                                 returnedStack.stackSize = -count;
-                                returnedStack = IOHelper.insert(this, returnedStack, ForgeDirection.UNKNOWN, simulate);
+                                returnedStack = IOHelper.insert(this, returnedStack, EnumFacing.UNKNOWN, simulate);
                                 if (returnedStack != null && !simulate) {
                                     IOHelper.spawnItemInWorld(worldObj, returnedStack, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5);
                                 }

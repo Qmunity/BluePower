@@ -26,7 +26,7 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;;
 
 import com.bluepowermod.BluePower;
 
@@ -38,7 +38,7 @@ public class TileBase extends TileEntity implements IRotatable {
     private boolean isRedstonePowered;
     private int outputtingRedstone;
     private int ticker = 0;
-    private ForgeDirection rotation = ForgeDirection.UP;
+    private EnumFacing rotation = EnumFacing.UP;
 
     /*************** BASIC TE FUNCTIONS **************/
 
@@ -78,10 +78,10 @@ public class TileBase extends TileEntity implements IRotatable {
 
     protected void readFromPacketNBT(NBTTagCompound tCompound) {
 
-        rotation = ForgeDirection.getOrientation(tCompound.getByte("rotation"));
+        rotation = EnumFacing.getOrientation(tCompound.getByte("rotation"));
         if (rotation.ordinal() > 5) {
             BluePower.log.warn("invalid rotation!");
-            rotation = ForgeDirection.UP;
+            rotation = EnumFacing.UP;
         }
         outputtingRedstone = tCompound.getByte("outputtingRedstone");
         if (worldObj != null)
@@ -228,7 +228,7 @@ public class TileBase extends TileEntity implements IRotatable {
     }
 
     @Override
-    public void setFacingDirection(ForgeDirection dir) {
+    public void setFacingDirection(EnumFacing dir) {
 
         rotation = dir;
         if (worldObj != null) {
@@ -238,7 +238,7 @@ public class TileBase extends TileEntity implements IRotatable {
     }
 
     @Override
-    public ForgeDirection getFacingDirection() {
+    public EnumFacing getFacingDirection() {
 
         return rotation;
     }

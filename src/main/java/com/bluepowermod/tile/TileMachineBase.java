@@ -24,7 +24,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;;
 import net.minecraftforge.fluids.IFluidBlock;
 
 import java.util.ArrayList;
@@ -89,7 +89,7 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
                     break;
                 }
             } else if (spawnItemsInWorld) {
-                ForgeDirection direction = getFacingDirection().getOpposite();
+                EnumFacing direction = getFacingDirection().getOpposite();
                 if ((worldObj.getBlock(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ).getBlocksMovement(worldObj,
                         xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ)) || (worldObj
                         .getBlock(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ) instanceof BlockLiquid) || (worldObj
@@ -162,7 +162,7 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
         return internalItemStackBuffer.isEmpty();// also say the buffer is empty when a immediate injection is scheduled.
     }
 
-    public TileEntity getTileCache(ForgeDirection d) {
+    public TileEntity getTileCache(EnumFacing d) {
 
         if (tileCache == null) {
             tileCache = new TileEntityCache(worldObj, xCoord, yCoord, zCoord);
@@ -170,7 +170,7 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
         return tileCache.getValue(d);
     }
 
-    public ForgeDirection getOutputDirection() {
+    public EnumFacing getOutputDirection() {
 
         return getFacingDirection().getOpposite();
     }
@@ -225,7 +225,7 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
         }
     }
 
-    public void ejectItemInWorld(ItemStack stack, ForgeDirection oppDirection) {
+    public void ejectItemInWorld(ItemStack stack, EnumFacing oppDirection) {
 
         float spawnX = xCoord + 0.5F + oppDirection.offsetX * 0.8F;
         float spawnY = yCoord + 0.5F + oppDirection.offsetY * 0.8F;
@@ -250,14 +250,14 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
     }
 
     @Override
-    public boolean isConnectedTo(ForgeDirection from) {
+    public boolean isConnectedTo(EnumFacing from) {
 
-        ForgeDirection dir = getOutputDirection();
+        EnumFacing dir = getOutputDirection();
         return from == dir.getOpposite() || acceptsTubeItems && from == dir;
     }
 
     @Override
-    public TubeStack acceptItemFromTube(TubeStack stack, ForgeDirection from, boolean simulate) {
+    public TubeStack acceptItemFromTube(TubeStack stack, EnumFacing from, boolean simulate) {
 
         if (from == getFacingDirection() && !isBufferEmpty() && !ejectionScheduled)
             return stack;
@@ -267,7 +267,7 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
     }
 
     @Override
-    public int getWeight(ForgeDirection from) {
+    public int getWeight(EnumFacing from) {
 
         return from == getOutputDirection().getOpposite() ? 1000000 : 0;// make the buffer side the last place to go
     }

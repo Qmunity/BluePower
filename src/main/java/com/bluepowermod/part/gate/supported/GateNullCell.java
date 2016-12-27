@@ -19,7 +19,7 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;;
 
 import org.lwjgl.opengl.GL11;
 
@@ -129,10 +129,10 @@ implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor, IRedwire {
         if (typeA != null) { // Flat
             renderer.setColor(WireHelper.getColorForPowerLevel(typeA, powerA));
 
-            ForgeDirection dir = ForgeDirection.NORTH;
+            EnumFacing dir = EnumFacing.NORTH;
             for (int i = 0; i < getRotation(); i++)
                 dir = dir.getRotation(getFace().getOpposite());
-            dir = new Vec3d(0, 0, 0).add(dir).rotateUndo(getFace(), Vec3d.center).toForgeDirection();
+            dir = new Vec3d(0, 0, 0).add(dir).rotateUndo(getFace(), Vec3d.center).toEnumFacing();
 
             renderer.renderBox(new Vec3dCube(7 / 16D, 2 / 16D, 1 / 16D, 9 / 16D, 2 / 16D + height, 15 / 16D), wire);
             renderer.renderBox(new Vec3dCube(7 / 16D, 2 / 16D, 0 / 16D, 9 / 16D, 2 / 16D + (height / (nullcells[dir.ordinal()] ? 1 : 2)),
@@ -144,10 +144,10 @@ implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor, IRedwire {
         if (typeB != null) { // Supported
             renderer.setColor(WireHelper.getColorForPowerLevel(typeB, powerB));
 
-            ForgeDirection dir = ForgeDirection.WEST;
+            EnumFacing dir = EnumFacing.WEST;
             for (int i = 0; i < getRotation(); i++)
                 dir = dir.getRotation(getFace().getOpposite());
-            dir = new Vec3d(0, 0, 0).add(dir).rotateUndo(getFace(), Vec3d.center).toForgeDirection();
+            dir = new Vec3d(0, 0, 0).add(dir).rotateUndo(getFace(), Vec3d.center).toEnumFacing();
 
             if (!nullcells[dir.ordinal()])
                 renderer.renderBox(new Vec3dCube(0 / 16D, 2 / 16D, 7 / 16D, 2 / 16D, 10 / 16D, 9 / 16D), wire);
@@ -343,7 +343,7 @@ implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor, IRedwire {
         }
 
         if (channel == 3 || channel == -1) {
-            for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
+            for (EnumFacing d : EnumFacing.VALUES) {
                 IConnection<IRedstoneDevice> c = redstoneConnections.getConnectionOnSide(d);
                 buffer.writeBoolean(c != null && c.getB() instanceof GateNullCell
                         && (getType(d) == 1 || ((BPPartFaceRotate) c.getB()).getRotation() % 2 == getRotation() % 2));
@@ -404,9 +404,9 @@ implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor, IRedwire {
         redstoneConnections.recalculateConnections();
         // bundledConnections.recalculateConnections();
 
-        ForgeDirection d1 = null;
-        ForgeDirection d2 = null;
-        for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
+        EnumFacing d1 = null;
+        EnumFacing d2 = null;
+        for (EnumFacing d : EnumFacing.VALUES) {
             if (d != getFace() && d != getFace().getOpposite()) {
                 if (d1 == null)
                     d1 = d;
@@ -423,20 +423,20 @@ implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor, IRedwire {
     private boolean updatedB = false;
 
     @Override
-    public boolean canConnect(ForgeDirection side, IRedstoneDevice device, ConnectionType type) {
+    public boolean canConnect(EnumFacing side, IRedstoneDevice device, ConnectionType type) {
 
         if (type == ConnectionType.OPEN_CORNER && device instanceof IGate<?, ?, ?, ?, ?, ?>)
             return false;
 
         if (type == ConnectionType.STRAIGHT)
-            if ((side == getFace().getOpposite() || side == ForgeDirection.UNKNOWN) && device instanceof DummyRedstoneDevice)
+            if ((side == getFace().getOpposite() || side == EnumFacing.UNKNOWN) && device instanceof DummyRedstoneDevice)
                 return false;
         if (type == ConnectionType.CLOSED_CORNER) {
             if (side == getFace())
                 return false;
             if (side == getFace().getOpposite())
                 return false;
-            if (side == ForgeDirection.UNKNOWN)
+            if (side == EnumFacing.UNKNOWN)
                 return false;
         }
 
@@ -462,7 +462,7 @@ implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor, IRedwire {
     }
 
     @Override
-    public void setRedstonePower(ForgeDirection side, byte power) {
+    public void setRedstonePower(EnumFacing side, byte power) {
 
         int type = getType(side);
 
@@ -482,7 +482,7 @@ implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor, IRedwire {
     }
 
     @Override
-    public byte getRedstonePower(ForgeDirection side) {
+    public byte getRedstonePower(EnumFacing side) {
 
         if (!RedstoneApi.getInstance().shouldWiresOutputPower(hasLoss(side)))
             return 0;
@@ -510,19 +510,19 @@ implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor, IRedwire {
         }
     }
 
-    private int getType(ForgeDirection side) {
+    private int getType(EnumFacing side) {
 
-        ForgeDirection d = new Vec3d(0, 0, 0).add(side).rotateUndo(getFace(), new Vec3d(0, 0, 0)).rotate(0, 90 * -getRotation(), 0)
-                .toForgeDirection();
-        if (d == ForgeDirection.NORTH || d == ForgeDirection.SOUTH)
+        EnumFacing d = new Vec3d(0, 0, 0).add(side).rotateUndo(getFace(), new Vec3d(0, 0, 0)).rotate(0, 90 * -getRotation(), 0)
+                .toEnumFacing();
+        if (d == EnumFacing.NORTH || d == EnumFacing.SOUTH)
             return 1;
-        if (d == ForgeDirection.WEST || d == ForgeDirection.EAST)
+        if (d == EnumFacing.WEST || d == EnumFacing.EAST)
             return 2;
         return 0;
     }
 
     @Override
-    public RedwireType getRedwireType(ForgeDirection side) {
+    public RedwireType getRedwireType(EnumFacing side) {
 
         int type = getType(side);
 
@@ -530,7 +530,7 @@ implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor, IRedwire {
     }
 
     @Override
-    public boolean hasLoss(ForgeDirection side) {
+    public boolean hasLoss(EnumFacing side) {
 
         int type = getType(side);
 
@@ -543,7 +543,7 @@ implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor, IRedwire {
     }
 
     @Override
-    public boolean isAnalogue(ForgeDirection side) {
+    public boolean isAnalogue(EnumFacing side) {
 
         int type = getType(side);
 
@@ -556,13 +556,13 @@ implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor, IRedwire {
     }
 
     @Override
-    public boolean canPropagateFrom(ForgeDirection fromSide) {
+    public boolean canPropagateFrom(EnumFacing fromSide) {
 
         return fromSide != getFace() && fromSide != getFace().getOpposite();
     }
 
     @Override
-    public Collection<Entry<IConnection<IRedstoneDevice>, Boolean>> propagate(ForgeDirection fromSide) {
+    public Collection<Entry<IConnection<IRedstoneDevice>, Boolean>> propagate(EnumFacing fromSide) {
 
         if (getParent() instanceof FakeMultipartTileIC)
             ((FakeMultipartTileIC) getParent()).getIC().loadWorld();
@@ -570,7 +570,7 @@ implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor, IRedwire {
         List<Entry<IConnection<IRedstoneDevice>, Boolean>> l = new ArrayList<Entry<IConnection<IRedstoneDevice>, Boolean>>();
 
         // // System.out.println("Propagating at (" + getX() + " " + getY() + " " + getZ() + ")");
-        // for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
+        // for (EnumFacing d : EnumFacing.VALUES) {
         // IConnection<IRedstoneDevice> c = redstoneConnections.getConnectionOnSide(d);
         // if (c != null) {
         // l.add(new Pair<IConnection<IRedstoneDevice>, Boolean>(c, c.getB() instanceof IRedwire
@@ -608,7 +608,7 @@ implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor, IRedwire {
     // Placement disabling
 
     @Override
-    public IPartPlacement getPlacement(IPart part, World world, Vec3i location, ForgeDirection face, MovingObjectPosition mop,
+    public IPartPlacement getPlacement(IPart part, World world, Vec3i location, EnumFacing face, MovingObjectPosition mop,
             EntityPlayer player) {
 
         if (bundledA || bundledB)
@@ -647,7 +647,7 @@ implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor, IRedwire {
         // EntityPlayer player = BluePower.proxy.getPlayer();
 
         // if (mop != null
-        // && (player == null || (player != null && player.getCurrentEquippedItem() != null && !(player.getCurrentEquippedItem()
+        // && (player == null || (player != null && player.getHeldItemMainhand() != null && !(player.getHeldItemMainhand()
         // .getItem() instanceof IScrewdriver))))
         if (mop != null)
             mop = new QMovingObjectPosition(mop, mop.getPart(), Vec3dCube.merge(getSelectionBoxes()));
@@ -661,7 +661,7 @@ implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor, IRedwire {
         Vec3d hit = new Vec3d(mop.hitVec).sub(mop.blockX, mop.blockY, mop.blockZ).rotateUndo(getFace(), Vec3d.center);
         Vec3 pos = player.getPosition(frame);
 
-        ItemStack held = player.getCurrentEquippedItem();
+        ItemStack held = player.getHeldItemMainhand();
         if (held == null)
             return false;
         if (held.getItem() instanceof ItemPart) {
@@ -715,9 +715,9 @@ implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor, IRedwire {
                     renderer.addTransformation(new Rotation(0, 90 * -rotation, 0));
 
                 renderer.setOpacity(0.5);
-                renderer.setColor(WireHelper.getColorForPowerLevel(wire.getRedwireType(ForgeDirection.UNKNOWN), (byte) (255 / 2)));
+                renderer.setColor(WireHelper.getColorForPowerLevel(wire.getRedwireType(EnumFacing.UNKNOWN), (byte) (255 / 2)));
 
-                ForgeDirection dir = ForgeDirection.NORTH;
+                EnumFacing dir = EnumFacing.NORTH;
                 if (getRotation() % 2 == 1)
                     dir = dir.getRotation(getFace());
 
@@ -819,7 +819,7 @@ implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor, IRedwire {
                             if (getWorld().isRemote)
                                 return true;
 
-                            typeB = wire.getRedwireType(ForgeDirection.UNKNOWN);
+                            typeB = wire.getRedwireType(EnumFacing.UNKNOWN);
                             bundledB = false;
                             inWorldB = true;
 
@@ -836,7 +836,7 @@ implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor, IRedwire {
                             if (getWorld().isRemote)
                                 return true;
 
-                            typeA = wire.getRedwireType(ForgeDirection.UNKNOWN);
+                            typeA = wire.getRedwireType(EnumFacing.UNKNOWN);
                             bundledA = false;
                             inWorldA = true;
 

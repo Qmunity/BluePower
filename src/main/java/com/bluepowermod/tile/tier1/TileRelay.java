@@ -25,7 +25,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;;
 
 import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.init.BPBlocks;
@@ -228,7 +228,7 @@ public class TileRelay extends TileMachineBase implements IInventory {
     }
 
     @Override
-    public TubeStack acceptItemFromTube(TubeStack stack, ForgeDirection from, boolean simulate) {
+    public TubeStack acceptItemFromTube(TubeStack stack, EnumFacing from, boolean simulate) {
         stack.stack = IOHelper.insert(this, stack.stack, from.ordinal(), simulate);
         return stack.stack == null ? null : stack;
     }

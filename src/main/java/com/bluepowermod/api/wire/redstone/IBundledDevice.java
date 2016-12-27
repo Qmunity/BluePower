@@ -1,6 +1,6 @@
 package com.bluepowermod.api.wire.redstone;
 
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;;
 import uk.co.qmunity.lib.vec.IWorldLocation;
 
 import com.bluepowermod.api.connect.ConnectionType;
@@ -13,7 +13,7 @@ public interface IBundledDevice extends IWorldLocation {
      * Returns whether or not the device passed as an argument can be connected to this device on the specified side. It also takes a ConnectionType,
      * which determines the type of connection to this device.
      */
-    public boolean canConnect(ForgeDirection side, IBundledDevice dev, ConnectionType type);
+    public boolean canConnect(EnumFacing side, IBundledDevice dev, ConnectionType type);
 
     /**
      * Returns a cache of all the connections of other devices with this one. Create an instance of this class by calling
@@ -24,17 +24,17 @@ public interface IBundledDevice extends IWorldLocation {
     /**
      * Gets the output of this device on the specified side.
      */
-    public byte[] getBundledOutput(ForgeDirection side);
+    public byte[] getBundledOutput(EnumFacing side);
 
     /**
      * Sets the power level on the specified side to a set power level.
      */
-    public void setBundledPower(ForgeDirection side, byte[] power);
+    public void setBundledPower(EnumFacing side, byte[] power);
 
     /**
      * Gets the input of this device on the specified side.
      */
-    public byte[] getBundledPower(ForgeDirection side);
+    public byte[] getBundledPower(EnumFacing side);
 
     /**
      * Notifies the device of a power change. (Usually called after propagation)
@@ -44,11 +44,11 @@ public interface IBundledDevice extends IWorldLocation {
     /**
      * Gets the color of this bundled device. Normally used to determine if other blocks should connect to it.
      */
-    public MinecraftColor getBundledColor(ForgeDirection side);
+    public MinecraftColor getBundledColor(EnumFacing side);
 
     /**
      * Returns whether or not this is a normal face (if face devices should be able to connect to it)
      */
-    public boolean isNormalFace(ForgeDirection side);
+    public boolean isNormalFace(EnumFacing side);
 
 }

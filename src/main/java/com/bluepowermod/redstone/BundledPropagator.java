@@ -1,6 +1,6 @@
 package com.bluepowermod.redstone;
 
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;;
 import uk.co.qmunity.lib.part.IPart;
 
 import com.bluepowermod.api.misc.MinecraftColor;
@@ -12,9 +12,9 @@ import com.bluepowermod.api.wire.redstone.IRedwire.IInsulatedRedwire;
 public class BundledPropagator implements IPropagator<IBundledDevice> {
 
     private IBundledDevice device;
-    private ForgeDirection side;
+    private EnumFacing side;
 
-    public BundledPropagator(IBundledDevice device, ForgeDirection side) {
+    public BundledPropagator(IBundledDevice device, EnumFacing side) {
 
         this.device = device;
         this.side = side;

@@ -18,7 +18,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;;
 
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
 import com.bluepowermod.helper.IOHelper;
@@ -120,7 +120,7 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
     private void triggerSorting() {
 
         if (isBufferEmpty()) {
-            ForgeDirection dir = getOutputDirection().getOpposite();
+            EnumFacing dir = getOutputDirection().getOpposite();
             TileEntity inputTE = getTileCache(dir);// might need opposite
 
             if (inputTE instanceof IInventory) {
@@ -444,7 +444,7 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
     }
 
     @Override
-    public TubeStack acceptItemFromTube(TubeStack stack, ForgeDirection from, boolean simulate) {
+    public TubeStack acceptItemFromTube(TubeStack stack, EnumFacing from, boolean simulate) {
 
         if (from == getOutputDirection()) {
             return super.acceptItemFromTube(stack, from, simulate);

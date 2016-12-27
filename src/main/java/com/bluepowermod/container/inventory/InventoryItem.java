@@ -124,7 +124,7 @@ public class InventoryItem extends InventoryBasic {
     protected void setNBT(ItemStack is) {
     
         if (is == null && player != null) {
-            is = player.getCurrentEquippedItem();
+            is = player.getHeldItemMainhand();
         }
         
         if (is != null && is.getItem() == this.item.getItem()) {

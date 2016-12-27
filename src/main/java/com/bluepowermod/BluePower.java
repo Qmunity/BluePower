@@ -8,26 +8,12 @@
 
 package com.bluepowermod;
 
-import net.minecraft.item.Item;
-import net.minecraft.item.crafting.CraftingManager;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.common.util.EnumHelper;
-
-import org.apache.logging.log4j.Logger;
-
 import com.bluepowermod.api.BPApi;
 import com.bluepowermod.client.gui.GUIHandler;
 import com.bluepowermod.compat.CompatibilityUtils;
 import com.bluepowermod.convert.WorldConversionEventHandler;
 import com.bluepowermod.event.BPEventHandler;
-import com.bluepowermod.init.BPBlocks;
-import com.bluepowermod.init.BPEnchantments;
-import com.bluepowermod.init.BPItems;
-import com.bluepowermod.init.Config;
-import com.bluepowermod.init.OreDictionarySetup;
-import com.bluepowermod.init.Recipes;
-import com.bluepowermod.init.TileEntities;
+import com.bluepowermod.init.*;
 import com.bluepowermod.network.BPNetworkHandler;
 import com.bluepowermod.part.PartManager;
 import com.bluepowermod.recipe.AlloyFurnaceRegistry;
@@ -37,27 +23,26 @@ import com.bluepowermod.redstone.RedstoneProviderVanilla;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.util.Achievements;
 import com.bluepowermod.world.WorldGenerationHandler;
+import net.minecraft.item.Item;
+import net.minecraft.item.crafting.CraftingManager;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.common.util.EnumHelper;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.event.*;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.common.registry.GameData;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+import org.apache.logging.log4j.Logger;
 
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.Mod.EventHandler;
-import cpw.mods.fml.common.Mod.Instance;
-import cpw.mods.fml.common.SidedProxy;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLMissingMappingsEvent;
-import cpw.mods.fml.common.event.FMLMissingMappingsEvent.MissingMapping;
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.event.FMLServerStartingEvent;
-import cpw.mods.fml.common.network.NetworkRegistry;
-import cpw.mods.fml.common.registry.GameData;
-import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.common.registry.GameRegistry.Type;
 
 @Mod(modid = Refs.MODID, name = Refs.NAME, dependencies = "required-after:qmunitylib", guiFactory = Refs.GUIFACTORY)
 public class BluePower {
 
-    @Instance(Refs.MODID)
+    @Mod.Instance(Refs.MODID)
     public static BluePower instance;
 
     @SidedProxy(clientSide = Refs.PROXY_LOCATION + ".ClientProxy", serverSide = Refs.PROXY_LOCATION + ".CommonProxy")
@@ -66,7 +51,7 @@ public class BluePower {
     public static Configuration config;
     public static Item.ToolMaterial gemMaterial = EnumHelper.addToolMaterial("GEM", 2, 750, 6.0F, 2.0F, 18);
 
-    @EventHandler
+    @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
 
         event.getModMetadata().version = Refs.fullVersionString();
@@ -92,7 +77,7 @@ public class BluePower {
         RedstoneApi.getInstance().registerRedstoneProvider(new RedstoneProviderQmunityLib());
     }
 
-    @EventHandler
+    @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
 
         PartManager.registerParts();
@@ -113,7 +98,7 @@ public class BluePower {
         Achievements.init();
     }
 
-    @EventHandler
+    @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event) {
 
         CompatibilityUtils.postInit(event);
@@ -125,23 +110,23 @@ public class BluePower {
         RedstoneApi.getInstance().registerRedstoneProvider(new RedstoneProviderVanilla());
     }
 
-    @EventHandler
+    @Mod.EventHandler
     public void serverStarting(FMLServerStartingEvent event) {
 
         // register commands
     }
 
-    @EventHandler
+    @Mod.EventHandler
     public void event(FMLMissingMappingsEvent event) {
 
-        for (MissingMapping mapping : event.get()) {
+        for (FMLMissingMappingsEvent.MissingMapping mapping : event.get()) {
             String name = mapping.name;
             if (mapping.name.startsWith("bluepower:lamp")) {
                 name = name.replace("silver", "light_gray");
-                if (mapping.type == Type.BLOCK) {
-                    mapping.remap(GameData.getBlockRegistry().getObject(name));
+                if (mapping.type == GameRegistry.Type.BLOCK) {
+                    mapping.remap(GameData.getBlockRegistry().getObject(new ResourceLocation(name)));
                 } else {
-                    mapping.remap(GameData.getItemRegistry().getObject(name));
+                    mapping.remap(GameData.getItemRegistry().getObject(new ResourceLocation(name)));
                 }
                 continue;
             }
@@ -174,7 +159,7 @@ public class BluePower {
             if (name.equals("bluepower:quartz_resonator"))
                 name = "bluepower:quartz_resonator_tile";
 
-            Item item = GameData.getItemRegistry().getObject(name);
+            Item item = GameData.getItemRegistry().getObject(new ResourceLocation(name));
             if (item == null)
                 continue;
             mapping.remap(item);

@@ -1,6 +1,6 @@
 package com.bluepowermod.redstone;
 
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;;
 
 import com.bluepowermod.api.connect.ConnectionType;
 import com.bluepowermod.api.connect.IConnection;
@@ -26,13 +26,13 @@ public class RedstoneConnectionCache implements IConnectionCache<IRedstoneDevice
     }
 
     @Override
-    public IConnection<IRedstoneDevice> getConnectionOnSide(ForgeDirection side) {
+    public IConnection<IRedstoneDevice> getConnectionOnSide(EnumFacing side) {
 
         return connections[side.ordinal()];
     }
 
     @Override
-    public void onConnect(ForgeDirection side, IRedstoneDevice connectable, ForgeDirection connectableSide, ConnectionType type) {
+    public void onConnect(EnumFacing side, IRedstoneDevice connectable, EnumFacing connectableSide, ConnectionType type) {
 
         RedstoneConnection con = connections[side.ordinal()] = RedstoneApi.getInstance().createConnection(getSelf(), connectable, side,
                 connectableSide, type);
@@ -41,7 +41,7 @@ public class RedstoneConnectionCache implements IConnectionCache<IRedstoneDevice
     }
 
     @Override
-    public void onDisconnect(ForgeDirection side) {
+    public void onDisconnect(EnumFacing side) {
 
         RedstoneConnection con = connections[side.ordinal()];
         connections[side.ordinal()] = null;
@@ -57,7 +57,7 @@ public class RedstoneConnectionCache implements IConnectionCache<IRedstoneDevice
             return;
 
         IRedstoneDevice self = getSelf();
-        for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
+        for (EnumFacing d : EnumFacing.VALUES) {
             boolean wasConnected = connections[d.ordinal()] != null;
             RedstoneConnection con = RedConnectionHelper.getNeighbor(self, d);
             if (con != null) {

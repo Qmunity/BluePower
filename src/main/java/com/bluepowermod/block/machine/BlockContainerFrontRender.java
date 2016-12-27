@@ -7,12 +7,15 @@
  */
 package com.bluepowermod.block.machine;
 
+import com.bluepowermod.block.BlockContainerBase;
+import com.bluepowermod.tile.TileBase;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 
-import com.bluepowermod.block.BlockContainerBase;
-import com.bluepowermod.client.render.RendererBlockBase.EnumFaceType;
-import com.bluepowermod.tile.TileBase;
+import javax.annotation.Nullable;
 
 /**
  * @author MineMaarten
@@ -25,20 +28,8 @@ public class BlockContainerFrontRender extends BlockContainerBase {
     }
 
     @Override
-    protected String getIconName(EnumFaceType faceType, boolean ejecting, boolean powered) {
-
-        String iconName = textureName + "_" + faceType.toString().toLowerCase();
-        if (faceType == EnumFaceType.FRONT) {
-            if (ejecting)
-                iconName += "_active";
-        }
-        return iconName;
-    }
-
-    @Override
-    public boolean canConnectRedstone(IBlockAccess world, int x, int y, int z, int side) {
-
-        TileBase tb = (TileBase) world.getTileEntity(x, y, z);
+    public boolean canConnectRedstone(IBlockState state, IBlockAccess world, BlockPos pos, @Nullable EnumFacing side) {
+        TileBase tb = (TileBase) world.getTileEntity(pos);
         if (tb == null)
             return false;
 

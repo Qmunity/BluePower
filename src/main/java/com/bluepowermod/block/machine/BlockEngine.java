@@ -7,25 +7,28 @@
  */
 package com.bluepowermod.block.machine;
 
-import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
-import net.minecraft.util.MathHelper;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
-
 import com.bluepowermod.block.BlockContainerBase;
 import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.init.BPItems;
 import com.bluepowermod.reference.GuiIDs;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier3.TileEngine;
+import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumBlockRenderType;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
+
+;import javax.annotation.Nullable;
 
 /**
  *
@@ -36,36 +39,30 @@ public class BlockEngine extends BlockContainerBase {
 
     public BlockEngine() {
 
-        super(Material.iron, TileEngine.class);
+        super(Material.IRON, TileEngine.class);
         setCreativeTab(BPCreativeTabs.machines);
-        setBlockName(Refs.ENGINE_NAME);
-        setBlockTextureName("models/engineoff");
-
+        setRegistryName(Refs.ENGINE_NAME);
     }
 
     @Override
-    public boolean renderAsNormalBlock() {
-
+    public boolean isOpaqueCube(IBlockState state) {
         return false;
     }
 
     @Override
-    public boolean isOpaqueCube() {
-
+    public boolean isNormalCube(IBlockState state, IBlockAccess world, BlockPos pos) {
         return false;
     }
 
     @Override
-    public int getRenderType() {
-
-        return -1;
+    public EnumBlockRenderType getRenderType(IBlockState state) {
+        return EnumBlockRenderType.ENTITYBLOCK_ANIMATED;
     }
 
     @SuppressWarnings("cast")
     @Override
-    public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase player, ItemStack stack) {
-
-        if (world.getTileEntity(x, y, z) instanceof TileEngine) {
+    public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase player, ItemStack iStack) {
+        if (world.getTileEntity(pos) instanceof TileEngine) {
 
             int direction = 0;
             int facing;
@@ -78,29 +75,29 @@ public class BlockEngine extends BlockContainerBase {
                 facing = 4;
             } else {
 
-                facing = MathHelper.floor_double(player.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
+                facing = MathHelper.floor(player.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
             }
 
             if (facing == 0) {
 
-                direction = ForgeDirection.SOUTH.ordinal();
+                direction = EnumFacing.SOUTH.ordinal();
             } else if (facing == 1) {
 
-                direction = ForgeDirection.WEST.ordinal();
+                direction = EnumFacing.WEST.ordinal();
             } else if (facing == 2) {
 
-                direction = ForgeDirection.NORTH.ordinal();
+                direction = EnumFacing.NORTH.ordinal();
             } else if (facing == 3) {
 
-                direction = ForgeDirection.EAST.ordinal();
+                direction = EnumFacing.EAST.ordinal();
             } else if (facing == 4) {
 
-                direction = ForgeDirection.UP.ordinal();
+                direction = EnumFacing.UP.ordinal();
             } else if (facing == 5) {
 
-                direction = ForgeDirection.DOWN.ordinal();
+                direction = EnumFacing.DOWN.ordinal();
             }
-            TileEngine tile = (TileEngine) world.getTileEntity(x, y, z);
+            TileEngine tile = (TileEngine) world.getTileEntity(pos);
             tile.setOrientation(direction);
 
         }
@@ -112,23 +109,9 @@ public class BlockEngine extends BlockContainerBase {
         return new TileEngine();
     }
 
-    @Override
-    public IIcon getIcon(int p_149691_1_, int p_149691_2_) {
-
-        return blockIcon;
-    }
-
-    @Override
-    public void registerBlockIcons(IIconRegister p_149651_1_) {
-
-        blockIcon = p_149651_1_.registerIcon(Refs.MODID + ":" + "models/engineoff");
-    }
-
     @SuppressWarnings("cast")
     @Override
-    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int p_149727_6_, float p_149727_7_,
-            float p_149727_8_, float p_149727_9_) {
-
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing efacing, float hitX, float hitY, float hitZ) {
         if (player.inventory.getCurrentItem() != null) {
             Item item = player.inventory.getCurrentItem().getItem();
             if (item == BPItems.screwdriver) {
@@ -141,45 +124,58 @@ public class BlockEngine extends BlockContainerBase {
                     } else if (player.rotationPitch < -45) {
                         facing = 4;
                     } else {
-                        facing = MathHelper.floor_double(player.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
+                        facing = MathHelper.floor(player.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
                     }
 
-                    TileEngine engine = (TileEngine) world.getTileEntity(x, y, z);
+                    TileEngine engine = (TileEngine) world.getTileEntity(pos);
 
                     if (facing == 0) {
-                        if (player.isSneaking())
-                            direction = ForgeDirection.NORTH.ordinal();
-                        direction = ForgeDirection.SOUTH.ordinal();
+                        if (player.isSneaking()) {
+                            direction = EnumFacing.NORTH.ordinal();
+                        }else {
+                            direction = EnumFacing.SOUTH.ordinal();
+                        }
                     } else if (facing == 1) {
-                        if (player.isSneaking())
-                            direction = ForgeDirection.EAST.ordinal();
-                        direction = ForgeDirection.WEST.ordinal();
+                        if (player.isSneaking()) {
+                            direction = EnumFacing.EAST.ordinal();
+                        }else {
+                            direction = EnumFacing.WEST.ordinal();
+                        }
                     } else if (facing == 2) {
-                        if (player.isSneaking())
-                            direction = ForgeDirection.SOUTH.ordinal();
-                        direction = ForgeDirection.NORTH.ordinal();
+                        if (player.isSneaking()) {
+                            direction = EnumFacing.SOUTH.ordinal();
+                        }else {
+                            direction = EnumFacing.NORTH.ordinal();
+                        }
                     } else if (facing == 3) {
-                        if (player.isSneaking())
-                            direction = ForgeDirection.WEST.ordinal();
-                        direction = ForgeDirection.EAST.ordinal();
+                        if (player.isSneaking()){
+                            direction = EnumFacing.WEST.ordinal();
+                        }else {
+                            direction = EnumFacing.EAST.ordinal();
+                        }
                     } else if (facing == 4) {
-                        if (player.isSneaking())
-                            direction = ForgeDirection.DOWN.ordinal();
-                        direction = ForgeDirection.UP.ordinal();
+                        if (player.isSneaking()) {
+                            direction = EnumFacing.DOWN.ordinal();
+                        }else {
+                            direction = EnumFacing.UP.ordinal();
+                        }
                     } else if (facing == 5) {
-                        if (player.isSneaking())
-                            direction = ForgeDirection.UP.ordinal();
-                        direction = ForgeDirection.DOWN.ordinal();
+                        if (player.isSneaking()) {
+                            direction = EnumFacing.UP.ordinal();
+                        }else {
+                            direction = EnumFacing.DOWN.ordinal();
+                        }
                     }
 
                     engine.setOrientation(direction);
-                    world.markBlockForUpdate(x, y, z);
+                    //TODO Check this - world.markBlockForUpdate(x, y, z);
                 }
             }
         }
 
         return false;
     }
+
 
     /**
      * Method to be overwritten that returns a GUI ID
@@ -193,8 +189,8 @@ public class BlockEngine extends BlockContainerBase {
     }
 
     @Override
-    public boolean canConnectRedstone(IBlockAccess world, int x, int y, int z, int side) {
-
+    public boolean canConnectRedstone(IBlockState state, IBlockAccess world, BlockPos pos, @Nullable EnumFacing side) {
         return true;
     }
+
 }

@@ -19,19 +19,9 @@
 
 package com.bluepowermod.block.machine;
 
-import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
-import net.minecraftforge.common.util.ForgeDirection;
-
 import com.bluepowermod.block.BlockContainerBase;
-import com.bluepowermod.client.render.RendererBlockBase.EnumFaceType;
-import com.bluepowermod.tile.IRotatable;
 import com.bluepowermod.tile.TileBase;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.block.material.Material;
 
 /**
  * @author MineMaarten
@@ -43,36 +33,5 @@ public class BlockContainerTwoSideRender extends BlockContainerBase {
         super(material, tileEntityClass);
     }
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerBlockIcons(IIconRegister iconRegister) {
-
-        super.registerBlockIcons(iconRegister);
-        blockIcon = iconRegister.registerIcon(getTextureName() + "_side_0");
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public IIcon getIcon(int side, int meta) {
-
-        return side == 2 || side == 3 ? blockIcon : super.getIcon(side, meta);
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    protected IIcon getIcon(EnumFaceType faceType, boolean ejecting, boolean powered, int side, TileEntity te) {
-
-        if (faceType == EnumFaceType.SIDE) {
-            ForgeDirection orientation = ((IRotatable) te).getFacingDirection();
-            if (orientation.ordinal() < 2) {
-                if (side == ForgeDirection.WEST.ordinal() || side == ForgeDirection.EAST.ordinal())
-                    return blockIcon;
-            } else {
-                if (side == ForgeDirection.UP.ordinal() || side == ForgeDirection.DOWN.ordinal())
-                    return blockIcon;
-            }
-        }
-        return super.getIcon(faceType, ejecting, powered, side, te);
-    }
 
 }

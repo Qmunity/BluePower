@@ -37,7 +37,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;;
 import uk.co.qmunity.lib.client.render.RenderHelper;
 import uk.co.qmunity.lib.misc.Pair;
 import uk.co.qmunity.lib.part.IPart;
@@ -308,31 +308,31 @@ IAdvancedBundledConductor {
     }
 
     @Override
-    public boolean hasLoss(ForgeDirection side) {
+    public boolean hasLoss(EnumFacing side) {
 
         return false;
     }
 
     @Override
-    public boolean isAnalogue(ForgeDirection side) {
+    public boolean isAnalogue(EnumFacing side) {
 
         return isAnalogue;
     }
 
     @Override
-    public boolean canPropagateFrom(ForgeDirection fromSide) {
+    public boolean canPropagateFrom(EnumFacing fromSide) {
 
         return !isBundled;
     }
 
     @Override
-    public boolean canPropagateBundledFrom(ForgeDirection fromSide) {
+    public boolean canPropagateBundledFrom(EnumFacing fromSide) {
 
         return isBundled;
     }
 
     @Override
-    public Collection<Entry<IConnection<IRedstoneDevice>, Boolean>> propagate(ForgeDirection fromSide) {
+    public Collection<Entry<IConnection<IRedstoneDevice>, Boolean>> propagate(EnumFacing fromSide) {
 
         List<Entry<IConnection<IRedstoneDevice>, Boolean>> l = new ArrayList<Entry<IConnection<IRedstoneDevice>, Boolean>>();
 
@@ -345,7 +345,7 @@ IAdvancedBundledConductor {
             if (d != this && d.getFrequency() != null && d.getFrequency().equals(getFrequency())) {
                 if (d instanceof GateTransceiver) {
                     IConnection<IRedstoneDevice> c = ((GateTransceiver) d).getRedstoneConnectionCache().getConnectionOnSide(
-                            ((GateTransceiver) d).front().getForgeDirection());
+                            ((GateTransceiver) d).front().getEnumFacing());
                     if (c != null)
                         l.add(new Pair<IConnection<IRedstoneDevice>, Boolean>(c, false));
                 }
@@ -356,13 +356,13 @@ IAdvancedBundledConductor {
     }
 
     @Override
-    public Collection<Entry<IConnection<IBundledDevice>, Boolean>> propagateBundled(ForgeDirection fromSide) {
+    public Collection<Entry<IConnection<IBundledDevice>, Boolean>> propagateBundled(EnumFacing fromSide) {
 
         return Collections.emptyList();
     }
 
     @Override
-    public boolean canConnect(ForgeDirection side, IRedstoneDevice device, ConnectionType type) {
+    public boolean canConnect(EnumFacing side, IRedstoneDevice device, ConnectionType type) {
 
         if (device instanceof IRedwire) {
             RedwireType rwt = ((IRedwire) device).getRedwireType(type == ConnectionType.STRAIGHT ? side.getOpposite()
@@ -377,7 +377,7 @@ IAdvancedBundledConductor {
     }
 
     @Override
-    public boolean canConnect(ForgeDirection side, IBundledDevice device, ConnectionType type) {
+    public boolean canConnect(EnumFacing side, IBundledDevice device, ConnectionType type) {
 
         if (device instanceof IRedwire) {
             RedwireType rwt = ((IRedwire) device).getRedwireType(type == ConnectionType.STRAIGHT ? side.getOpposite()
@@ -426,7 +426,7 @@ IAdvancedBundledConductor {
     }
 
     @Override
-    public IPartPlacement getPlacement(IPart part, World world, Vec3i location, ForgeDirection face, MovingObjectPosition mop,
+    public IPartPlacement getPlacement(IPart part, World world, Vec3i location, EnumFacing face, MovingObjectPosition mop,
             EntityPlayer player) {
 
         if (!DebugHelper.isDebugModeEnabled())

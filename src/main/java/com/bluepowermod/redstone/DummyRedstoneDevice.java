@@ -22,7 +22,7 @@ import java.util.List;
 
 import net.minecraft.block.BlockRedstoneWire;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;;
 import uk.co.qmunity.lib.helper.MathHelper;
 import uk.co.qmunity.lib.helper.RedstoneHelper;
 import uk.co.qmunity.lib.vec.Vec3i;
@@ -87,17 +87,17 @@ public class DummyRedstoneDevice implements IRedstoneDevice {
     }
 
     @Override
-    public boolean canConnect(ForgeDirection side, IRedstoneDevice dev, ConnectionType type) {
+    public boolean canConnect(EnumFacing side, IRedstoneDevice dev, ConnectionType type) {
 
         if (type == ConnectionType.STRAIGHT)
             return RedstoneHelper.canConnect(getWorld(), getX(), getY(), getZ(), side, dev instanceof IFace ? ((IFace) dev).getFace()
-                    : ForgeDirection.UNKNOWN);
+                    : EnumFacing.UNKNOWN);
 
         return false;
     }
 
     @Override
-    public byte getRedstonePower(ForgeDirection side) {
+    public byte getRedstonePower(EnumFacing side) {
 
         // if (loc.getBlock() instanceof BlockRedstoneWire) {
         // boolean wiresHandledUpdates = RedstoneApi.getInstance().shouldWiresHandleUpdates();
@@ -109,14 +109,14 @@ public class DummyRedstoneDevice implements IRedstoneDevice {
         // RedstoneApi.getInstance().setWiresOutputPower(wiresOutputtedPower);
         // }
 
-        if (side == ForgeDirection.UNKNOWN)
+        if (side == EnumFacing.UNKNOWN)
             return 0;
 
         return (byte) MathHelper.map(RedstoneHelper.getOutput(getWorld(), getX(), getY(), getZ(), side), 0, 15, 0, 255);
     }
 
     @Override
-    public void setRedstonePower(ForgeDirection side, byte power) {
+    public void setRedstonePower(EnumFacing side, byte power) {
 
         // if (loc.getBlock() instanceof BlockRedstoneWire) {
         // boolean wiresHandledUpdates = RedstoneApi.getInstance().shouldWiresHandleUpdates();
@@ -161,7 +161,7 @@ public class DummyRedstoneDevice implements IRedstoneDevice {
     }
 
     @Override
-    public boolean isNormalFace(ForgeDirection side) {
+    public boolean isNormalFace(EnumFacing side) {
 
         return loc.getBlock().isSideSolid(loc.getWorld(), loc.getX(), loc.getY(), loc.getZ(), side);
     }

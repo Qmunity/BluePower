@@ -6,7 +6,7 @@ import java.io.IOException;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;;
 import uk.co.qmunity.lib.helper.RedstoneHelper;
 import uk.co.qmunity.lib.util.Dir;
 
@@ -44,9 +44,9 @@ public abstract class GateConnectionBase implements IGateConnection {
         return direction;
     }
 
-    public ForgeDirection getForgeDirection() {
+    public EnumFacing getEnumFacing() {
 
-        return getDirection().toForgeDirection(gate.getFace(), gate.getRotation());
+        return getDirection().toEnumFacing(gate.getFace(), gate.getRotation());
     }
 
     @Override
@@ -55,7 +55,7 @@ public abstract class GateConnectionBase implements IGateConnection {
         if (gate.getParent() == null || gate.getWorld() == null)
             return;
 
-        ForgeDirection d = getForgeDirection();
+        EnumFacing d = getEnumFacing();
         IConnection<? extends IRedstoneDevice> c = gate.getRedstoneConnectionCache().getConnectionOnSide(d);
 
         if (c == null || c.getB() instanceof DummyRedstoneDevice) {

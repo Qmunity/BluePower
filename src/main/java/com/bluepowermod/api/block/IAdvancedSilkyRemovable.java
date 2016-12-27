@@ -8,6 +8,7 @@
 package com.bluepowermod.api.block;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 /**
@@ -20,25 +21,21 @@ public interface IAdvancedSilkyRemovable extends ISilkyRemovable {
     /**
      *
      * @param world
-     * @param x
-     * @param y
-     * @param z
+     * @param pos
      * @return return false to prevent silky removing.
      */
-    public boolean preSilkyRemoval(World world, int x, int y, int z);
+    public boolean preSilkyRemoval(World world, BlockPos pos);
 
-    public void postSilkyRemoval(World world, int x, int y, int z);
+    public void postSilkyRemoval(World world, BlockPos pos);
 
     /**
      *
      * @param world
-     * @param x
-     * @param y
-     * @param z
+     * @param pos
      * @param tag
      * @return Return true if you want the "Has silky data" tooltip to be hidden
      */
-    public boolean writeSilkyData(World world, int x, int y, int z, NBTTagCompound tag);
+    public boolean writeSilkyData(World world, BlockPos pos, NBTTagCompound tag);
 
-    public void readSilkyData(World world, int x, int y, int z, NBTTagCompound tag);
+    public void readSilkyData(World world, BlockPos pos, NBTTagCompound tag);
 }

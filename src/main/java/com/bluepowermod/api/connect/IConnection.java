@@ -1,6 +1,7 @@
 package com.bluepowermod.api.connect;
 
-import net.minecraftforge.common.util.ForgeDirection;
+
+import net.minecraft.util.EnumFacing;
 
 public interface IConnection<T> {
 
@@ -17,12 +18,12 @@ public interface IConnection<T> {
     /**
      * Returns the side of the first device this connection is on.
      */
-    public ForgeDirection getSideA();
+    public EnumFacing getSideA();
 
     /**
      * Returns the side of the second device this connection is on.
      */
-    public ForgeDirection getSideB();
+    public EnumFacing getSideB();
 
     /**
      * Returns the type of connection.

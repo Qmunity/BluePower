@@ -66,7 +66,7 @@ public class ContainerSeedBag extends Container {
     @Override
     public boolean canInteractWith(EntityPlayer player) {
     
-        return player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() instanceof ItemSeedBag;
+        return player.getHeldItemMainhand() != null && player.getHeldItemMainhand().getItem() instanceof ItemSeedBag;
     }
     
     @Override

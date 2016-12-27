@@ -6,7 +6,7 @@ import java.io.IOException;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;;
 import uk.co.qmunity.lib.network.LocatedPacket;
 import uk.co.qmunity.lib.part.IPart;
 import uk.co.qmunity.lib.part.ITilePartHolder;
@@ -23,7 +23,7 @@ public class MessageWirelessNewFreq extends LocatedPacket<MessageWirelessNewFreq
     private Accessibility acc;
     private String name;
     private boolean bundled;
-    private ForgeDirection face;
+    private EnumFacing face;
 
     public MessageWirelessNewFreq(IWirelessGate gate, Accessibility newAccessibility, String newName, boolean bundled) {
 
@@ -84,6 +84,6 @@ public class MessageWirelessNewFreq extends LocatedPacket<MessageWirelessNewFreq
         acc = Accessibility.values()[buffer.readInt()];
         name = buffer.readUTF();
         bundled = buffer.readBoolean();
-        face = ForgeDirection.getOrientation(buffer.readInt());
+        face = EnumFacing.getOrientation(buffer.readInt());
     }
 }

@@ -1,7 +1,7 @@
 package com.bluepowermod.compat.fmp;
 
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;;
 import uk.co.qmunity.lib.helper.MathHelper;
 import codechicken.multipart.IFaceRedstonePart;
 import codechicken.multipart.IRedstonePart;
@@ -49,10 +49,10 @@ public class FMPRedstoneDevice implements IRedstoneDevice, IFace {
     }
 
     @Override
-    public boolean canConnect(ForgeDirection side, IRedstoneDevice device, ConnectionType type) {
+    public boolean canConnect(EnumFacing side, IRedstoneDevice device, ConnectionType type) {
 
         if (type == ConnectionType.STRAIGHT || type == ConnectionType.CLOSED_CORNER) {
-            if (side == ForgeDirection.UNKNOWN)
+            if (side == EnumFacing.UNKNOWN)
                 return false;
             if (!(device instanceof IFace))
                 return false;
@@ -70,7 +70,7 @@ public class FMPRedstoneDevice implements IRedstoneDevice, IFace {
     }
 
     @Override
-    public byte getRedstonePower(ForgeDirection side) {
+    public byte getRedstonePower(EnumFacing side) {
 
         IFaceRedstonePart p = ((IFaceRedstonePart) part);
 
@@ -83,7 +83,7 @@ public class FMPRedstoneDevice implements IRedstoneDevice, IFace {
     }
 
     @Override
-    public void setRedstonePower(ForgeDirection side, byte power) {
+    public void setRedstonePower(EnumFacing side, byte power) {
 
     }
 
@@ -95,13 +95,13 @@ public class FMPRedstoneDevice implements IRedstoneDevice, IFace {
     }
 
     @Override
-    public ForgeDirection getFace() {
+    public EnumFacing getFace() {
 
-        return ForgeDirection.getOrientation(((IFaceRedstonePart) part).getFace());
+        return EnumFacing.getOrientation(((IFaceRedstonePart) part).getFace());
     }
 
     @Override
-    public boolean isNormalFace(ForgeDirection side) {
+    public boolean isNormalFace(EnumFacing side) {
 
         return false;
     }

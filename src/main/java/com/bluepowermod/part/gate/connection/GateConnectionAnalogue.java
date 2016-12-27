@@ -28,11 +28,11 @@ public class GateConnectionAnalogue extends GateConnectionBase {
     @Override
     public void refresh() {
 
-        IConnection<? extends IRedstoneDevice> c = gate.getRedstoneConnectionCache().getConnectionOnSide(getForgeDirection());
+        IConnection<? extends IRedstoneDevice> c = gate.getRedstoneConnectionCache().getConnectionOnSide(getEnumFacing());
 
         if (c == null || c.getB() instanceof DummyRedstoneDevice)
             input = (byte) MathHelper.map(RedstoneHelper.getInput(getGate().getWorld(), getGate().getX(), getGate().getY(), getGate()
-                    .getZ(), getForgeDirection(), getGate().getFace()), 0, 15, 0, 255);
+                    .getZ(), getEnumFacing(), getGate().getFace()), 0, 15, 0, 255);
     }
 
     @Override

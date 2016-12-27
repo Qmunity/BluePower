@@ -15,7 +15,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;;
 import uk.co.qmunity.lib.client.render.RenderHelper;
 import uk.co.qmunity.lib.part.IPart;
 import uk.co.qmunity.lib.part.IPartFace;
@@ -184,7 +184,7 @@ public class GateIntegratedCircuit extends
         parts[x][z] = part;
 
         if (part instanceof IPartFace)
-            ((IPartFace) part).setFace(ForgeDirection.DOWN);
+            ((IPartFace) part).setFace(EnumFacing.DOWN);
 
         tmp.addPart(part);
 
@@ -329,8 +329,8 @@ public class GateIntegratedCircuit extends
         if (rotation != -1)
             renderer.addTransformation(new Rotation(0, 90 * -rotation, 0));
 
-        IIcon[] icons = new IIcon[] { getIcon(ForgeDirection.DOWN), getIcon(ForgeDirection.UP), getIcon(ForgeDirection.WEST),
-                getIcon(ForgeDirection.EAST), getIcon(ForgeDirection.NORTH), getIcon(ForgeDirection.SOUTH) };
+        IIcon[] icons = new IIcon[] { getIcon(EnumFacing.DOWN), getIcon(EnumFacing.UP), getIcon(EnumFacing.WEST),
+                getIcon(EnumFacing.EAST), getIcon(EnumFacing.NORTH), getIcon(EnumFacing.SOUTH) };
 
         renderer.renderBox(new Vec3dCube(0, 0, 0, 1, 1 / 16D, 1), icons);
 
@@ -534,9 +534,9 @@ public class GateIntegratedCircuit extends
 
     // Connectivity
 
-    public IIntegratedCircuitPart getCircuitPartOnSide(ForgeDirection side) {
+    public IIntegratedCircuitPart getCircuitPartOnSide(EnumFacing side) {
 
-        if (side.offsetY != 0 || side == ForgeDirection.UNKNOWN)
+        if (side.offsetY != 0 || side == EnumFacing.UNKNOWN)
             return null;
 
         return getPart(side.offsetX == 0 ? (getSize() - 1) / 2 : (side.offsetX > 0 ? getSize() - 1 : 0),
@@ -544,9 +544,9 @@ public class GateIntegratedCircuit extends
     }
 
     @Override
-    public IRedstoneDevice getDeviceOnSide(ForgeDirection side) {
+    public IRedstoneDevice getDeviceOnSide(EnumFacing side) {
 
-        side = new Vec3d(0, 0, 0).add(side).rotate(0, 90 * -getRotation(), 0).toForgeDirection();
+        side = new Vec3d(0, 0, 0).add(side).rotate(0, 90 * -getRotation(), 0).toEnumFacing();
 
         IPart p = getCircuitPartOnSide(side);
         if (p == null)
@@ -557,9 +557,9 @@ public class GateIntegratedCircuit extends
     }
 
     @Override
-    public IBundledDevice getBundledDeviceOnSide(ForgeDirection side) {
+    public IBundledDevice getBundledDeviceOnSide(EnumFacing side) {
 
-        side = new Vec3d(0, 0, 0).add(side).rotate(0, 90 * -getRotation(), 0).toForgeDirection();
+        side = new Vec3d(0, 0, 0).add(side).rotate(0, 90 * -getRotation(), 0).toEnumFacing();
 
         IPart p = getCircuitPartOnSide(side);
         if (p == null)
@@ -570,7 +570,7 @@ public class GateIntegratedCircuit extends
     }
 
     @Override
-    public IPartPlacement getPlacement(IPart part, World world, Vec3i location, ForgeDirection face, MovingObjectPosition mop,
+    public IPartPlacement getPlacement(IPart part, World world, Vec3i location, EnumFacing face, MovingObjectPosition mop,
             EntityPlayer player) {
 
         if (!DebugHelper.isDebugModeEnabled())

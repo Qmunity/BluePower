@@ -17,141 +17,77 @@
 
 package com.bluepowermod.block.machine;
 
-import java.util.Random;
-
-import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.item.Item;
-import net.minecraft.util.IIcon;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
-
 import com.bluepowermod.block.BlockContainerBase;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.reference.GuiIDs;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier1.TileAlloyFurnace;
+import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.item.Item;
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import java.util.Random;
+
+;
+
 
 public class BlockAlloyFurnace extends BlockContainerBase {
 
-    public static IIcon textureTop;
-    private IIcon textureBottom;
-    private IIcon textureSide;
-    private IIcon textureFrontOn;
-    private IIcon textureFrontOff;
 
     public BlockAlloyFurnace() {
 
-        super(Material.rock, TileAlloyFurnace.class);
-        setBlockName(Refs.ALLOYFURNACE_NAME);
+        super(Material.ROCK, TileAlloyFurnace.class);
+        setRegistryName(Refs.ALLOYFURNACE_NAME);
 
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
-    public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
-
-        TileAlloyFurnace te = (TileAlloyFurnace) world.getTileEntity(x, y, z);
-        ForgeDirection forgeSide = ForgeDirection.getOrientation(side);
-        if (forgeSide == ForgeDirection.UP)
-            return textureTop;
-        if (forgeSide == ForgeDirection.DOWN)
-            return textureBottom;
-        if (forgeSide == te.getFacingDirection())
-            return te.getIsActive() ? textureFrontOn : textureFrontOff;
-        return textureSide;
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public IIcon getIcon(int side, int meta) {
-
-        ForgeDirection s = ForgeDirection.getOrientation(side);
-        // If is facing
-
-        if (3 == side) {
-            return textureFrontOff;
-        }
-        switch (s) {
-        case UP:
-            return textureTop;
-        case DOWN:
-            return textureBottom;
-        case EAST:
-        case NORTH:
-        case SOUTH:
-        case WEST:
-        case UNKNOWN:
-            return textureSide;
-        default:
-            break;
-
-        }
-        return null;
-    }
-
-    @Override
-    public boolean isOpaqueCube() {
-
+    public boolean isOpaqueCube(IBlockState state) {
         return true;
     }
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void randomDisplayTick(World world, int x, int y, int z, Random rnd) {
 
-        TileAlloyFurnace te = (TileAlloyFurnace) world.getTileEntity(x, y, z);
+    @Override
+    public void randomDisplayTick(IBlockState stateIn, World world, BlockPos pos, Random rnd) {
+
+        TileAlloyFurnace te = (TileAlloyFurnace) world.getTileEntity(pos);
         if (te.getIsActive()) {
             int l = te.getFacingDirection().ordinal();
-            float f = x + 0.5F;
-            float f1 = y + 0.0F + rnd.nextFloat() * 6.0F / 16.0F;
-            float f2 = z + 0.5F;
+            float f = pos.getX() + 0.5F;
+            float f1 = pos.getY() + 0.0F + rnd.nextFloat() * 6.0F / 16.0F;
+            float f2 = pos.getZ() + 0.5F;
             float f3 = 0.52F;
             float f4 = rnd.nextFloat() * 0.6F - 0.3F;
 
             if (l == 4) {
-                world.spawnParticle("smoke", f - f3, f1, f2 + f4, 0.0D, 0.0D, 0.0D);
-                world.spawnParticle("flame", f - f3, f1, f2 + f4, 0.0D, 0.0D, 0.0D);
+                world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, f - f3, f1, f2 + f4, 0.0D, 0.0D, 0.0D);
+                world.spawnParticle(EnumParticleTypes.FLAME, f - f3, f1, f2 + f4, 0.0D, 0.0D, 0.0D);
             } else if (l == 5) {
-                world.spawnParticle("smoke", f + f3, f1, f2 + f4, 0.0D, 0.0D, 0.0D);
-                world.spawnParticle("flame", f + f3, f1, f2 + f4, 0.0D, 0.0D, 0.0D);
+                world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, f + f3, f1, f2 + f4, 0.0D, 0.0D, 0.0D);
+                world.spawnParticle(EnumParticleTypes.FLAME, f + f3, f1, f2 + f4, 0.0D, 0.0D, 0.0D);
             } else if (l == 2) {
-                world.spawnParticle("smoke", f + f4, f1, f2 - f3, 0.0D, 0.0D, 0.0D);
-                world.spawnParticle("flame", f + f4, f1, f2 - f3, 0.0D, 0.0D, 0.0D);
+                world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, f + f4, f1, f2 - f3, 0.0D, 0.0D, 0.0D);
+                world.spawnParticle(EnumParticleTypes.FLAME, f + f4, f1, f2 - f3, 0.0D, 0.0D, 0.0D);
             } else if (l == 3) {
-                world.spawnParticle("smoke", f + f4, f1, f2 + f3, 0.0D, 0.0D, 0.0D);
-                world.spawnParticle("flame", f + f4, f1, f2 + f3, 0.0D, 0.0D, 0.0D);
+                world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, f + f4, f1, f2 + f3, 0.0D, 0.0D, 0.0D);
+                world.spawnParticle(EnumParticleTypes.FLAME, f + f4, f1, f2 + f3, 0.0D, 0.0D, 0.0D);
             }
         }
     }
 
     // Not sure if you need this function.
     @Override
-    public Item getItemDropped(int p_149650_1_, Random random, int p_149650_3_) {
-
+    public Item getItemDropped(IBlockState state, Random rand, int fortune) {
         return Item.getItemFromBlock(BPBlocks.alloyfurnace);
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
-    public void registerBlockIcons(IIconRegister iconRegister) {
-
-        textureTop = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + Refs.ALLOYFURNACE_NAME + "_top");
-        textureBottom = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + Refs.ALLOYFURNACE_NAME + "_bottom");
-        textureSide = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + Refs.ALLOYFURNACE_NAME + "_side");
-        textureFrontOn = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + Refs.ALLOYFURNACE_NAME + "_front_on");
-        textureFrontOff = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + Refs.ALLOYFURNACE_NAME
-                + "_front_off");
-    }
-
-    @Override
-    public int getLightValue(IBlockAccess world, int x, int y, int z) {
-
-        TileAlloyFurnace te = (TileAlloyFurnace) world.getTileEntity(x, y, z);
+    public int getLightValue(IBlockState state, IBlockAccess world, BlockPos pos) {
+        TileAlloyFurnace te = (TileAlloyFurnace) world.getTileEntity(pos);
         return te.getIsActive() ? 13 : 0;
     }
 
@@ -167,10 +103,4 @@ public class BlockAlloyFurnace extends BlockContainerBase {
         return false;
     }
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public int getRenderType() {
-
-        return 0;
-    }
 }

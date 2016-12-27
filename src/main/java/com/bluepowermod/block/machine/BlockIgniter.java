@@ -17,77 +17,56 @@
 
 package com.bluepowermod.block.machine;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.init.Blocks;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
-
 import com.bluepowermod.block.BlockContainerBase;
-import com.bluepowermod.client.render.RendererBlockBase.EnumFaceType;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.IRotatable;
 import com.bluepowermod.tile.tier1.TileIgniter;
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import javax.annotation.Nullable;
+
+;
 
 public class BlockIgniter extends BlockContainerBase {
     
     public BlockIgniter() {
     
-        super(Material.rock, TileIgniter.class);
-        setBlockName(Refs.BLOCKIGNITER_NAME);
+        super(Material.ROCK, TileIgniter.class);
+        setRegistryName(Refs.BLOCKIGNITER_NAME);
     }
-    
+
     @Override
-    @SideOnly(Side.CLIENT)
-    public void registerBlockIcons(IIconRegister iconRegister) {
-    
-        super.registerBlockIcons(iconRegister);
-        blockIcon = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + Refs.BLOCKIGNITER_NAME + "_side_0");
-    }
-    
-    @Override
-    protected String getIconName(EnumFaceType faceType, boolean ejecting, boolean powered) {
-    
-        String iconName = textureName + "_" + faceType.toString().toLowerCase();
-        if (faceType == EnumFaceType.FRONT) {
-            if (ejecting) iconName += "_active";
-        }
-        return iconName;
-    }
-    
-    @Override
-    public boolean isFireSource(World world, int x, int y, int z, ForgeDirection side) {
-    
-        TileIgniter tile = (TileIgniter) world.getTileEntity(x, y, z);
-        boolean orientation = tile.getFacingDirection() == ForgeDirection.UP;
+    public boolean isFireSource(World world, BlockPos pos, EnumFacing side) {
+        TileIgniter tile = (TileIgniter) world.getTileEntity(pos);
+        boolean orientation = tile.getFacingDirection() == EnumFacing.UP;
         return orientation && tile.getIsRedstonePowered();
     }
-    
+
     @Override
-    public boolean canConnectRedstone(IBlockAccess world, int x, int y, int z, int side) {
-    
+    public boolean canConnectRedstone(IBlockState state, IBlockAccess world, BlockPos pos, @Nullable EnumFacing side) {
         return true;
     }
 
     @Override
-    public boolean rotateBlock(World worldObj, int x, int y, int z, ForgeDirection axis) {
-
-        TileEntity te = worldObj.getTileEntity(x, y, z);
+    public boolean rotateBlock(World worldObj, BlockPos pos, EnumFacing orDir) {
+        TileEntity te = worldObj.getTileEntity(pos);
         if (te instanceof IRotatable) {
             IRotatable rotatable = (IRotatable) te;
-            ForgeDirection dir = rotatable.getFacingDirection();
-            Block target = worldObj.getBlock(x + dir.offsetX, y + dir.offsetY, z + dir.offsetZ);
-            if (target == Blocks.fire || target == Blocks.portal) {
-                worldObj.setBlock(x + dir.offsetX, y + dir.offsetY, z + dir.offsetZ, Blocks.air);
+            EnumFacing dir = rotatable.getFacingDirection();
+            Block target = worldObj.getBlockState(pos.offset(dir)).getBlock();
+            if (target == Blocks.FIRE || target == Blocks.PORTAL) {
+                worldObj.setBlockToAir(pos.offset(dir));
             }
-            dir = dir.getRotation(axis);
-            if (dir != ForgeDirection.UP && dir != ForgeDirection.DOWN || canRotateVertical()) {
+            dir = orDir;
+            if (dir != EnumFacing.UP && dir != EnumFacing.DOWN || canRotateVertical()) {
                 rotatable.setFacingDirection(dir);
                 return true;
             }

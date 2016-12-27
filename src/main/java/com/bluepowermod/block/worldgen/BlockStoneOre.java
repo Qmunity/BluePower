@@ -46,7 +46,7 @@ public class BlockStoneOre extends Block {
 
     public BlockStoneOre(String name) {
 
-        super(Material.rock);
+        super(Material.ROCK);
 
         this.name = name;
         setResistance(5.0F);

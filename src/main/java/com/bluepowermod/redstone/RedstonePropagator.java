@@ -6,7 +6,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map.Entry;
 
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;;
 import uk.co.qmunity.lib.misc.Pair;
 
 import com.bluepowermod.api.connect.IConnection;
@@ -23,9 +23,9 @@ public abstract class RedstonePropagator implements IPropagator<IRedstoneDevice>
 
     private List<RedstonePropagator> scheduledPropagations = new ArrayList<RedstonePropagator>();
     private IRedstoneDevice device;
-    private ForgeDirection side;
+    private EnumFacing side;
 
-    public RedstonePropagator(IRedstoneDevice device, ForgeDirection side) {
+    public RedstonePropagator(IRedstoneDevice device, EnumFacing side) {
 
         this.device = device;
         this.side = side;
@@ -48,7 +48,7 @@ public abstract class RedstonePropagator implements IPropagator<IRedstoneDevice>
         return device;
     }
 
-    public ForgeDirection getSide() {
+    public EnumFacing getSide() {
 
         return side;
     }
@@ -67,7 +67,7 @@ public abstract class RedstonePropagator implements IPropagator<IRedstoneDevice>
 
     // Utilities
 
-    protected Collection<Entry<IConnection<IRedstoneDevice>, Boolean>> getPropagation(IRedstoneDevice dev, ForgeDirection fromSide) {
+    protected Collection<Entry<IConnection<IRedstoneDevice>, Boolean>> getPropagation(IRedstoneDevice dev, EnumFacing fromSide) {
 
         if (dev instanceof IRedstoneConductor) {
             if (dev instanceof IAdvancedRedstoneConductor) {
@@ -75,7 +75,7 @@ public abstract class RedstonePropagator implements IPropagator<IRedstoneDevice>
             } else {
                 List<Entry<IConnection<IRedstoneDevice>, Boolean>> l = new ArrayList<Entry<IConnection<IRedstoneDevice>, Boolean>>();
 
-                for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
+                for (EnumFacing d : EnumFacing.VALUES) {
                     IConnection<IRedstoneDevice> c = (IConnection<IRedstoneDevice>) dev.getRedstoneConnectionCache().getConnectionOnSide(d);
                     if (c != null)
                         l.add(new Pair<IConnection<IRedstoneDevice>, Boolean>(c, false));
@@ -150,15 +150,15 @@ public abstract class RedstonePropagator implements IPropagator<IRedstoneDevice>
         return connections;
     }
 
-    protected List<Pair<IRedstoneDevice, ForgeDirection>> simplifyDeviceList(List<IConnection<IRedstoneDevice>> connections) {
+    protected List<Pair<IRedstoneDevice, EnumFacing>> simplifyDeviceList(List<IConnection<IRedstoneDevice>> connections) {
 
-        List<Pair<IRedstoneDevice, ForgeDirection>> l = new ArrayList<Pair<IRedstoneDevice, ForgeDirection>>();
+        List<Pair<IRedstoneDevice, EnumFacing>> l = new ArrayList<Pair<IRedstoneDevice, EnumFacing>>();
 
         for (IConnection<IRedstoneDevice> c : connections) {
-            Pair<IRedstoneDevice, ForgeDirection> p1 = new Pair<IRedstoneDevice, ForgeDirection>(c.getA(), c.getSideA());
+            Pair<IRedstoneDevice, EnumFacing> p1 = new Pair<IRedstoneDevice, EnumFacing>(c.getA(), c.getSideA());
             if (!l.contains(p1) && l != null && p1.getKey() != null && p1.getValue() != null)
                 l.add(p1);
-            Pair<IRedstoneDevice, ForgeDirection> p2 = new Pair<IRedstoneDevice, ForgeDirection>(c.getB(), c.getSideB());
+            Pair<IRedstoneDevice, EnumFacing> p2 = new Pair<IRedstoneDevice, EnumFacing>(c.getB(), c.getSideB());
             if (!l.contains(p2) && l != null && p2.getKey() != null && p2.getValue() != null)
                 l.add(p2);
         }
@@ -175,7 +175,7 @@ public abstract class RedstonePropagator implements IPropagator<IRedstoneDevice>
 
     public static class LosslessPropagator extends RedstonePropagator {
 
-        public LosslessPropagator(IRedstoneDevice device, ForgeDirection side) {
+        public LosslessPropagator(IRedstoneDevice device, EnumFacing side) {
 
             super(device, side);
         }
@@ -200,14 +200,14 @@ public abstract class RedstonePropagator implements IPropagator<IRedstoneDevice>
                 return;
             }
 
-            List<Pair<IRedstoneDevice, ForgeDirection>> l = simplifyDeviceList(connections);
+            List<Pair<IRedstoneDevice, EnumFacing>> l = simplifyDeviceList(connections);
 
             boolean did = RedstoneApi.getInstance().shouldWiresHandleUpdates();
             RedstoneApi.getInstance().setWiresOutputPower(false, false);
             RedstoneApi.getInstance().setWiresHandleUpdates(false);
-            for (Pair<IRedstoneDevice, ForgeDirection> p : l)
+            for (Pair<IRedstoneDevice, EnumFacing> p : l)
                 p.getKey().setRedstonePower(p.getValue(), (byte) 0);
-            for (Pair<IRedstoneDevice, ForgeDirection> p : l)
+            for (Pair<IRedstoneDevice, EnumFacing> p : l)
                 p.getKey().onRedstoneUpdate();
             RedstoneApi.getInstance().setWiresHandleUpdates(did);
             RedstoneApi.getInstance().setWiresOutputPower(true, false);
@@ -215,15 +215,15 @@ public abstract class RedstonePropagator implements IPropagator<IRedstoneDevice>
             int pow = 0;
 
             RedstoneApi.getInstance().setWiresOutputPower(false, false);
-            for (Pair<IRedstoneDevice, ForgeDirection> p : l)
+            for (Pair<IRedstoneDevice, EnumFacing> p : l)
                 pow = Math.max(pow, p.getKey().getRedstonePower(p.getValue()) & 0xFF);
             RedstoneApi.getInstance().setWiresOutputPower(true, false);
 
-            for (Pair<IRedstoneDevice, ForgeDirection> p : l)
+            for (Pair<IRedstoneDevice, EnumFacing> p : l)
                 p.getKey().setRedstonePower(p.getValue(), (byte) pow);
 
             RedstoneApi.getInstance().setWiresHandleUpdates(false);
-            for (Pair<IRedstoneDevice, ForgeDirection> p : l)
+            for (Pair<IRedstoneDevice, EnumFacing> p : l)
                 p.getKey().onRedstoneUpdate();
             RedstoneApi.getInstance().setWiresHandleUpdates(did);
 
@@ -247,7 +247,7 @@ public abstract class RedstonePropagator implements IPropagator<IRedstoneDevice>
 
     public static class LossyPropagator extends RedstonePropagator {
 
-        public LossyPropagator(IRedstoneDevice device, ForgeDirection side) {
+        public LossyPropagator(IRedstoneDevice device, EnumFacing side) {
 
             super(device, side);
         }
@@ -269,9 +269,9 @@ public abstract class RedstonePropagator implements IPropagator<IRedstoneDevice>
                 return;
             }
 
-            List<Pair<IRedstoneDevice, ForgeDirection>> l = simplifyDeviceList(connections);
+            List<Pair<IRedstoneDevice, EnumFacing>> l = simplifyDeviceList(connections);
             List<IRedstoneDevice> devs = new ArrayList<IRedstoneDevice>();
-            for (Pair<IRedstoneDevice, ForgeDirection> p : l)
+            for (Pair<IRedstoneDevice, EnumFacing> p : l)
                 if (!devs.contains(p.getKey()))
                     devs.add(p.getKey());
 
@@ -286,7 +286,7 @@ public abstract class RedstonePropagator implements IPropagator<IRedstoneDevice>
             RedstoneApi.getInstance().setWiresHandleUpdates(did);
             RedstoneApi.getInstance().setWiresOutputPower(true, true);
 
-            for (Pair<IRedstoneDevice, ForgeDirection> pair : l) {
+            for (Pair<IRedstoneDevice, EnumFacing> pair : l) {
                 RedstoneApi.getInstance().setWiresOutputPower(false, true);
                 byte power = pair.getKey().getRedstonePower(pair.getValue());
                 RedstoneApi.getInstance().setWiresOutputPower(true, true);
@@ -311,7 +311,7 @@ public abstract class RedstonePropagator implements IPropagator<IRedstoneDevice>
             }
         }
 
-        private void propagate(IRedstoneDevice dev, ForgeDirection side, byte power) {
+        private void propagate(IRedstoneDevice dev, EnumFacing side, byte power) {
 
             if (shouldPreventStackOverflows())
                 return;
@@ -339,7 +339,7 @@ public abstract class RedstonePropagator implements IPropagator<IRedstoneDevice>
 
     public static class RedPropagator extends RedstonePropagator {
 
-        public RedPropagator(IRedstoneDevice device, ForgeDirection side) {
+        public RedPropagator(IRedstoneDevice device, EnumFacing side) {
 
             super(device, side);
         }

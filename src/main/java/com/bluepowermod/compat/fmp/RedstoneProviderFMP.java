@@ -18,7 +18,7 @@
 package com.bluepowermod.compat.fmp;
 
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;;
 import codechicken.lib.vec.BlockCoord;
 import codechicken.multipart.IFaceRedstonePart;
 import codechicken.multipart.TMultiPart;
@@ -32,7 +32,7 @@ import com.bluepowermod.api.wire.redstone.IRedstoneProvider;
 public class RedstoneProviderFMP implements IRedstoneProvider {
 
     @Override
-    public IRedstoneDevice getRedstoneDeviceAt(World world, int x, int y, int z, ForgeDirection face, ForgeDirection side) {
+    public IRedstoneDevice getRedstoneDeviceAt(World world, int x, int y, int z, EnumFacing face, EnumFacing side) {
 
         TileMultipart tmp = TileMultipart.getTile(world, new BlockCoord(x, y, z));
         if (tmp == null)
@@ -44,13 +44,13 @@ public class RedstoneProviderFMP implements IRedstoneProvider {
                     if (((IFace) p).getFace() == face)
                         return (IRedstoneDevice) p;
                 } else {
-                    if (face == ForgeDirection.UNKNOWN)
+                    if (face == EnumFacing.UNKNOWN)
                         return (IRedstoneDevice) p;
                 }
             }
         }
 
-        if (face != null && face != ForgeDirection.UNKNOWN)
+        if (face != null && face != EnumFacing.UNKNOWN)
             for (TMultiPart p : tmp.jPartList())
                 if (p instanceof IFaceRedstonePart && ((IFaceRedstonePart) p).getFace() == face.ordinal())
                     return new FMPRedstoneDevice(p);
@@ -59,7 +59,7 @@ public class RedstoneProviderFMP implements IRedstoneProvider {
     }
 
     @Override
-    public IBundledDevice getBundledDeviceAt(World world, int x, int y, int z, ForgeDirection face, ForgeDirection side) {
+    public IBundledDevice getBundledDeviceAt(World world, int x, int y, int z, EnumFacing face, EnumFacing side) {
 
         TileMultipart tmp = TileMultipart.getTile(world, new BlockCoord(x, y, z));
         if (tmp == null)
@@ -71,7 +71,7 @@ public class RedstoneProviderFMP implements IRedstoneProvider {
                     if (((IFace) p).getFace() == face)
                         return (IBundledDevice) p;
                 } else {
-                    if (face == ForgeDirection.UNKNOWN)
+                    if (face == EnumFacing.UNKNOWN)
                         return (IBundledDevice) p;
                 }
             }

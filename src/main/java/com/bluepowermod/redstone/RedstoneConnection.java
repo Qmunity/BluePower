@@ -1,6 +1,6 @@
 package com.bluepowermod.redstone;
 
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;;
 
 import com.bluepowermod.api.connect.ConnectionType;
 import com.bluepowermod.api.connect.IConnection;
@@ -9,11 +9,11 @@ import com.bluepowermod.api.wire.redstone.IRedstoneDevice;
 public class RedstoneConnection implements IConnection<IRedstoneDevice> {
 
     private IRedstoneDevice a, b;
-    private ForgeDirection sideA, sideB;
+    private EnumFacing sideA, sideB;
     private ConnectionType type;
     private IConnection<IRedstoneDevice> complementary;
 
-    public RedstoneConnection(IRedstoneDevice a, IRedstoneDevice b, ForgeDirection sideA, ForgeDirection sideB, ConnectionType type) {
+    public RedstoneConnection(IRedstoneDevice a, IRedstoneDevice b, EnumFacing sideA, EnumFacing sideB, ConnectionType type) {
 
         this.a = a;
         this.b = b;
@@ -22,7 +22,7 @@ public class RedstoneConnection implements IConnection<IRedstoneDevice> {
         this.type = type;
     }
 
-    public RedstoneConnection(IRedstoneDevice a, IRedstoneDevice b, ForgeDirection sideA, ForgeDirection sideB, ConnectionType type,
+    public RedstoneConnection(IRedstoneDevice a, IRedstoneDevice b, EnumFacing sideA, EnumFacing sideB, ConnectionType type,
             IConnection<IRedstoneDevice> complementary) {
 
         this(a, b, sideA, sideB, type);
@@ -42,13 +42,13 @@ public class RedstoneConnection implements IConnection<IRedstoneDevice> {
     }
 
     @Override
-    public ForgeDirection getSideA() {
+    public EnumFacing getSideA() {
 
         return sideA;
     }
 
     @Override
-    public ForgeDirection getSideB() {
+    public EnumFacing getSideB() {
 
         return sideB;
     }

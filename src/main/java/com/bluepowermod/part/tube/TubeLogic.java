@@ -26,7 +26,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;;
 
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
@@ -90,7 +90,7 @@ public class TubeLogic implements IPneumaticTube {
         while (!todoTubes.isEmpty()) {
             PneumaticTube tube = todoTubes.pop();
             if (tube.getParent() != null && tube.getWorld() != null) {
-                for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
+                for (EnumFacing d : EnumFacing.VALUES) {
                     PneumaticTube neighbor = tube.getPartCache(d);
                     if (neighbor != null) {
                         if (!clearedTubes.contains(neighbor)) {
@@ -133,7 +133,7 @@ public class TubeLogic implements IPneumaticTube {
             TubeStack tubeStack = iterator.next();
             if (tubeStack.update(tube.getWorld())) {
                 if (!tube.isCrossOver) {
-                    for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
+                    for (EnumFacing dir : EnumFacing.VALUES) {
                         if (tube.connections[dir.ordinal()] && dir != tubeStack.heading.getOpposite()) {
                             tubeStack.heading = dir;
                             break;
@@ -141,15 +141,15 @@ public class TubeLogic implements IPneumaticTube {
                     }
                 } else {// when we are at an intersection
                     if (!tube.getWorld().isRemote) {
-                        Pair<ForgeDirection, TileEntity> heading = getHeadingForItem(tubeStack, false);
+                        Pair<EnumFacing, TileEntity> heading = getHeadingForItem(tubeStack, false);
                         if (heading == null) {// if no valid destination
                             for (int i = 0; i < 6; i++) {
                                 TubeEdge edge = getNode().edges[i];
                                 if (edge != null) {
-                                    tubeStack.heading = ForgeDirection.getOrientation(i);// this will allow the item to ignore the color mask when
+                                    tubeStack.heading = EnumFacing.getOrientation(i);// this will allow the item to ignore the color mask when
                                     // there's really no option left.
                                     if (canPassThroughMask(tubeStack.color, edge.colorMask)) {
-                                        tubeStack.heading = ForgeDirection.getOrientation(i);// just a specific direction for now.
+                                        tubeStack.heading = EnumFacing.getOrientation(i);// just a specific direction for now.
                                         break;
                                     }
                                 }
@@ -209,19 +209,19 @@ public class TubeLogic implements IPneumaticTube {
         }
     }
 
-    public boolean retrieveStack(TileEntity target, ForgeDirection dirToRetrieveInto, ItemStack filter) {
+    public boolean retrieveStack(TileEntity target, EnumFacing dirToRetrieveInto, ItemStack filter) {
 
         return retrieveStack(target, dirToRetrieveInto, filter, TubeColor.NONE);
     }
 
-    public boolean retrieveStack(TileEntity target, ForgeDirection dirToRetrieveInto, ItemStack filter, TubeColor color) {
+    public boolean retrieveStack(TileEntity target, EnumFacing dirToRetrieveInto, ItemStack filter, TubeColor color) {
 
         if (tube.getWorld() == null)
             return false;
         TubeStack stack = new TubeStack(filter, null, color);
         stack.setTarget(target, dirToRetrieveInto);
 
-        Pair<ForgeDirection, TileEntity> result = getHeadingForItem(stack, false);
+        Pair<EnumFacing, TileEntity> result = getHeadingForItem(stack, false);
         if (result == null)
             return false;
 
@@ -266,12 +266,12 @@ public class TubeLogic implements IPneumaticTube {
      *            direction IS a valid output.
      */
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    private Pair<ForgeDirection, TileEntity> getHeadingForItem(TubeStack stack, boolean simulate) {
+    private Pair<EnumFacing, TileEntity> getHeadingForItem(TubeStack stack, boolean simulate) {
 
         Map<TubeNode, Integer> distances = new HashMap<TubeNode, Integer>();
         Queue<TubeNode> traversingNodes = new LinkedBlockingQueue<TubeNode>();
-        Queue<ForgeDirection> trackingExportDirection = new LinkedBlockingQueue<ForgeDirection>();
-        Map<TubeEdge, ForgeDirection> validDestinations = new LinkedHashMap<TubeEdge, ForgeDirection>();// using a LinkedHashMap so the order doesn't
+        Queue<EnumFacing> trackingExportDirection = new LinkedBlockingQueue<EnumFacing>();
+        Map<TubeEdge, EnumFacing> validDestinations = new LinkedHashMap<TubeEdge, EnumFacing>();// using a LinkedHashMap so the order doesn't
         // change, used for round robin.
 
         if (getNode() != null) {
@@ -285,10 +285,10 @@ public class TubeLogic implements IPneumaticTube {
             TubeNode node = traversingNodes.poll();
             if (node.edges == null)
                 node.init();
-            ForgeDirection heading = firstRun ? null : trackingExportDirection.poll();
+            EnumFacing heading = firstRun ? null : trackingExportDirection.poll();
             for (int i = 0; i < 6; i++) {
                 if (firstRun)
-                    heading = ForgeDirection.getOrientation(i);
+                    heading = EnumFacing.getOrientation(i);
                 if (node.edges != null) {
                     TubeEdge edge = node.edges[i];
                     if (edge != null && canPassThroughMask(stack.color, edge.colorMask)) {// if this item can travel through this color mask proceed.
@@ -326,15 +326,15 @@ public class TubeLogic implements IPneumaticTube {
 
         if (validDestinations.size() == 0) {
             if (stack.getTarget(tube.getWorld()) != null && stack.heading != null && !simulate) {
-                stack.setTarget(null, ForgeDirection.UNKNOWN);// if we can't reach the retrieving target anymore, reroute as normal.
+                stack.setTarget(null, EnumFacing.UNKNOWN);// if we can't reach the retrieving target anymore, reroute as normal.
                 return getHeadingForItem(stack, simulate);
             } else {
                 return null;
             }
         }
 
-        List<Pair<ForgeDirection, TileEntity>> validDirections = new ArrayList<Pair<ForgeDirection, TileEntity>>();
-        for (Map.Entry<TubeEdge, ForgeDirection> entry : validDestinations.entrySet()) {
+        List<Pair<EnumFacing, TileEntity>> validDirections = new ArrayList<Pair<EnumFacing, TileEntity>>();
+        for (Map.Entry<TubeEdge, EnumFacing> entry : validDestinations.entrySet()) {
             if (distances.get(entry.getKey().target) == closestDest) {
                 validDirections.add(new ImmutablePair(entry.getValue(), entry.getKey().target.target));
             }
@@ -373,16 +373,16 @@ public class TubeLogic implements IPneumaticTube {
     }
 
     @Override
-    public boolean injectStack(ItemStack stack, ForgeDirection from, TubeColor itemColor, boolean simulate) {
+    public boolean injectStack(ItemStack stack, EnumFacing from, TubeColor itemColor, boolean simulate) {
 
         return injectStack(new TubeStack(stack.copy(), from, itemColor), from, simulate);
     }
 
-    public boolean injectStack(TubeStack stack, ForgeDirection from, boolean simulate) {
+    public boolean injectStack(TubeStack stack, EnumFacing from, boolean simulate) {
 
         if (tube.getWorld() != null && tube.getWorld().isRemote)
             throw new IllegalArgumentException("[Pneumatic Tube] You can't inject items from the client side!");
-        Pair<ForgeDirection, TileEntity> heading = getHeadingForItem(stack, simulate);
+        Pair<EnumFacing, TileEntity> heading = getHeadingForItem(stack, simulate);
         if (heading != null && heading.getKey() != from.getOpposite()) {
             if (!simulate) {
                 tubeStacks.add(stack);
@@ -466,18 +466,18 @@ public class TubeLogic implements IPneumaticTube {
             edges = new TubeEdge[6];
             for (int i = 0; i < 6; i++) {
                 if (tube.connections[i]) {
-                    TileEntity neighbor = nodeTube.getTileCache(ForgeDirection.getOrientation(i));
-                    PneumaticTube tube = nodeTube.getPartCache(ForgeDirection.getOrientation(i));
+                    TileEntity neighbor = nodeTube.getTileCache(EnumFacing.getOrientation(i));
+                    PneumaticTube tube = nodeTube.getPartCache(EnumFacing.getOrientation(i));
 
-                    int colorMask = nodeTube.getColor(ForgeDirection.getOrientation(i)) != TubeColor.NONE ? 1 << nodeTube.getColor(
-                            ForgeDirection.getOrientation(i)).ordinal() : 0;
+                    int colorMask = nodeTube.getColor(EnumFacing.getOrientation(i)) != TubeColor.NONE ? 1 << nodeTube.getColor(
+                            EnumFacing.getOrientation(i)).ordinal() : 0;
                     if (tube != null) {
                         int dist = tube.getWeight();
-                        if (tube.getColor(ForgeDirection.getOrientation(i).getOpposite()) != TubeColor.NONE)
-                            colorMask = colorMask | 1 << tube.getColor(ForgeDirection.getOrientation(i).getOpposite()).ordinal();
-                        ForgeDirection curDir = ForgeDirection.getOrientation(i);
+                        if (tube.getColor(EnumFacing.getOrientation(i).getOpposite()) != TubeColor.NONE)
+                            colorMask = colorMask | 1 << tube.getColor(EnumFacing.getOrientation(i).getOpposite()).ordinal();
+                        EnumFacing curDir = EnumFacing.getOrientation(i);
                         while (!tube.isCrossOver && tube.initialized) {// traverse the tubes
-                            for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
+                            for (EnumFacing dir : EnumFacing.VALUES) {
                                 if (dir != curDir.getOpposite() && tube.connections[dir.ordinal()]) {
                                     curDir = dir;
                                     break;
@@ -510,8 +510,8 @@ public class TubeLogic implements IPneumaticTube {
                         // to itself.
 
                     } else if (neighbor != null) {
-                        edges[i] = new TubeEdge(new TubeNode(neighbor), ForgeDirection.getOrientation(i), colorMask,
-                                neighbor instanceof IWeightedTubeInventory ? ((IWeightedTubeInventory) neighbor).getWeight(ForgeDirection
+                        edges[i] = new TubeEdge(new TubeNode(neighbor), EnumFacing.getOrientation(i), colorMask,
+                                neighbor instanceof IWeightedTubeInventory ? ((IWeightedTubeInventory) neighbor).getWeight(EnumFacing
                                         .getOrientation(i)) : 0);
                     }
                 }
@@ -522,13 +522,13 @@ public class TubeLogic implements IPneumaticTube {
     public class TubeEdge {
 
         public TubeNode target;
-        private final ForgeDirection targetConnectionSide;
+        private final EnumFacing targetConnectionSide;
         public final int distance;
         public int colorMask; // bitmask of disallowed colored items through the tube. Least significant bit is TubeColor.values()[0]. only least
 
         // significant 16 bits are used
 
-        public TubeEdge(TubeNode target, ForgeDirection targetConnectionSide, int colorMask, int distance) {
+        public TubeEdge(TubeNode target, EnumFacing targetConnectionSide, int colorMask, int distance) {
 
             this.target = target;
             this.targetConnectionSide = targetConnectionSide;

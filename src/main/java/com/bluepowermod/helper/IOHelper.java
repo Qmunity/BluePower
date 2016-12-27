@@ -16,7 +16,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;;
 import uk.co.qmunity.lib.part.compat.MultipartCompatibility;
 
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
@@ -45,7 +45,7 @@ public class IOHelper {
         }
     }
 
-    public static ItemStack extract(TileEntity inventory, ForgeDirection direction, boolean simulate) {
+    public static ItemStack extract(TileEntity inventory, EnumFacing direction, boolean simulate) {
 
         IInventory inv = getInventoryForTE(inventory);
         if (inv != null)
@@ -53,7 +53,7 @@ public class IOHelper {
         return null;
     }
 
-    public static ItemStack extract(IInventory inventory, ForgeDirection direction, boolean simulate) {
+    public static ItemStack extract(IInventory inventory, EnumFacing direction, boolean simulate) {
 
         if (inventory instanceof ISidedInventory) {
             ISidedInventory isidedinventory = (ISidedInventory) inventory;
@@ -76,7 +76,7 @@ public class IOHelper {
         return null;
     }
 
-    public static ItemStack extract(IInventory inventory, ForgeDirection direction, int slot, boolean simulate) {
+    public static ItemStack extract(IInventory inventory, EnumFacing direction, int slot, boolean simulate) {
 
         ItemStack itemstack = inventory.getStackInSlot(slot);
 
@@ -88,12 +88,12 @@ public class IOHelper {
         return null;
     }
 
-    public static ItemStack extract(TileEntity tile, ForgeDirection direction, ItemStack requestedStack, boolean useItemCount, boolean simulate) {
+    public static ItemStack extract(TileEntity tile, EnumFacing direction, ItemStack requestedStack, boolean useItemCount, boolean simulate) {
 
         return extract(tile, direction, requestedStack, useItemCount, simulate, 0);
     }
 
-    public static int[] getAccessibleSlotsForInventory(IInventory inv, ForgeDirection side) {
+    public static int[] getAccessibleSlotsForInventory(IInventory inv, EnumFacing side) {
 
         int[] accessibleSlots;
         if (inv != null) {
@@ -110,7 +110,7 @@ public class IOHelper {
         }
     }
 
-    public static int getItemCount(ItemStack type, TileEntity inv, ForgeDirection side, int fuzzySetting) {
+    public static int getItemCount(ItemStack type, TileEntity inv, EnumFacing side, int fuzzySetting) {
 
         IInventory inventory = getInventoryForTE(inv);
         int[] slots = getAccessibleSlotsForInventory(inventory, side);
@@ -140,7 +140,7 @@ public class IOHelper {
      *            ,
      * @return
      */
-    public static ItemStack extract(TileEntity tile, ForgeDirection direction, ItemStack requestedStack, boolean useItemCount, boolean simulate,
+    public static ItemStack extract(TileEntity tile, EnumFacing direction, ItemStack requestedStack, boolean useItemCount, boolean simulate,
             int fuzzySetting) {
 
         if (requestedStack == null)
@@ -197,7 +197,7 @@ public class IOHelper {
 
     }
 
-    public static ItemStack extractOneItem(TileEntity tile, ForgeDirection dir) {
+    public static ItemStack extractOneItem(TileEntity tile, EnumFacing dir) {
 
         IInventory inv = getInventoryForTE(tile);
         if (inv != null) {
@@ -224,12 +224,12 @@ public class IOHelper {
         return null;
     }
 
-    public static ItemStack insert(TileEntity tile, ItemStack itemStack, ForgeDirection direction, boolean simulate) {
+    public static ItemStack insert(TileEntity tile, ItemStack itemStack, EnumFacing direction, boolean simulate) {
 
         return insert(tile, itemStack, direction, TubeColor.NONE, simulate);
     }
 
-    public static ItemStack insert(TileEntity tile, ItemStack itemStack, ForgeDirection direction, TubeColor color, boolean simulate) {
+    public static ItemStack insert(TileEntity tile, ItemStack itemStack, EnumFacing direction, TubeColor color, boolean simulate) {
 
         if (tile == null || itemStack == null)
             return itemStack;
@@ -371,12 +371,12 @@ public class IOHelper {
         itemStack.stackSize = 0;
     }
 
-    public static boolean canInterfaceWith(TileEntity tile, ForgeDirection direction) {
+    public static boolean canInterfaceWith(TileEntity tile, EnumFacing direction) {
 
         return canInterfaceWith(tile, direction, null, true);
     }
 
-    public static boolean canInterfaceWith(TileEntity tile, ForgeDirection direction, PneumaticTube requester, boolean canInterfaceWithIInventory) {
+    public static boolean canInterfaceWith(TileEntity tile, EnumFacing direction, PneumaticTube requester, boolean canInterfaceWithIInventory) {
 
         PneumaticTube tube = tile != null ? MultipartCompatibility.getPart(tile.getWorldObj(), tile.xCoord, tile.yCoord, tile.zCoord,
                 PneumaticTube.class) : null;

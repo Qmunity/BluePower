@@ -18,7 +18,7 @@
 package com.bluepowermod.part;
 
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;;
 import uk.co.qmunity.lib.part.IPart;
 import uk.co.qmunity.lib.part.compat.IMultipartCompat;
 import uk.co.qmunity.lib.tile.TileMultipart;
@@ -26,7 +26,7 @@ import uk.co.qmunity.lib.vec.Vec3i;
 
 public class PartPlacementFace extends uk.co.qmunity.lib.part.PartPlacementFace {
 
-    public PartPlacementFace(ForgeDirection face) {
+    public PartPlacementFace(EnumFacing face) {
 
         super(face);
     }

@@ -18,7 +18,7 @@
 package com.bluepowermod.redstone;
 
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;;
 
 import com.bluepowermod.api.connect.ConnectionType;
 import com.bluepowermod.api.wire.redstone.IBundledDevice;
@@ -32,20 +32,20 @@ public class RedConnectionHelper {
             new IConnectableProvider<IRedstoneDevice, RedstoneConnection>() {
 
                 @Override
-                public IRedstoneDevice getConnectableAt(World world, int x, int y, int z, ForgeDirection face, ForgeDirection side) {
+                public IRedstoneDevice getConnectableAt(World world, int x, int y, int z, EnumFacing face, EnumFacing side) {
 
                     return RedstoneApi.getInstance().getRedstoneDevice(world, x, y, z, face, side);
                 }
 
                 @Override
-                public RedstoneConnection createConnection(IRedstoneDevice a, IRedstoneDevice b, ForgeDirection sideA, ForgeDirection sideB,
+                public RedstoneConnection createConnection(IRedstoneDevice a, IRedstoneDevice b, EnumFacing sideA, EnumFacing sideB,
                         ConnectionType type) {
 
                     return RedstoneApi.getInstance().createConnection(a, b, sideA, sideB, type);
                 }
 
                 @Override
-                public boolean canConnect(IRedstoneDevice from, IRedstoneDevice to, ForgeDirection side, ConnectionType type) {
+                public boolean canConnect(IRedstoneDevice from, IRedstoneDevice to, EnumFacing side, ConnectionType type) {
 
                     return from.canConnect(side, to, type);
                 }
@@ -69,7 +69,7 @@ public class RedConnectionHelper {
                 }
 
                 @Override
-                public boolean isNormalFace(IRedstoneDevice o, ForgeDirection face) {
+                public boolean isNormalFace(IRedstoneDevice o, EnumFacing face) {
 
                     return o.isNormalFace(face);
                 }
@@ -79,20 +79,20 @@ public class RedConnectionHelper {
             new IConnectableProvider<IBundledDevice, BundledConnection>() {
 
                 @Override
-                public IBundledDevice getConnectableAt(World world, int x, int y, int z, ForgeDirection face, ForgeDirection side) {
+                public IBundledDevice getConnectableAt(World world, int x, int y, int z, EnumFacing face, EnumFacing side) {
 
                     return RedstoneApi.getInstance().getBundledDevice(world, x, y, z, face, side);
                 }
 
                 @Override
-                public BundledConnection createConnection(IBundledDevice a, IBundledDevice b, ForgeDirection sideA, ForgeDirection sideB,
+                public BundledConnection createConnection(IBundledDevice a, IBundledDevice b, EnumFacing sideA, EnumFacing sideB,
                         ConnectionType type) {
 
                     return RedstoneApi.getInstance().createConnection(a, b, sideA, sideB, type);
                 }
 
                 @Override
-                public boolean canConnect(IBundledDevice from, IBundledDevice to, ForgeDirection side, ConnectionType type) {
+                public boolean canConnect(IBundledDevice from, IBundledDevice to, EnumFacing side, ConnectionType type) {
 
                     return from.canConnect(side, to, type);
                 }
@@ -116,18 +116,18 @@ public class RedConnectionHelper {
                 }
 
                 @Override
-                public boolean isNormalFace(IBundledDevice o, ForgeDirection face) {
+                public boolean isNormalFace(IBundledDevice o, EnumFacing face) {
 
                     return o.isNormalFace(face);
                 }
             });
 
-    public static RedstoneConnection getNeighbor(IRedstoneDevice device, ForgeDirection side) {
+    public static RedstoneConnection getNeighbor(IRedstoneDevice device, EnumFacing side) {
 
         return redstone.getNeighbor(device, side);
     }
 
-    public static BundledConnection getBundledNeighbor(IBundledDevice device, ForgeDirection side) {
+    public static BundledConnection getBundledNeighbor(IBundledDevice device, EnumFacing side) {
 
         return bundled.getNeighbor(device, side);
     }

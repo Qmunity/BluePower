@@ -23,7 +23,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;;
 
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.tile.TileBase;
@@ -157,8 +157,8 @@ public class TileBuffer extends TileBase implements ISidedInventory {
     @Override
     public int[] getAccessibleSlotsFromSide(int var1) {
     
-        ForgeDirection access = ForgeDirection.getOrientation(var1);
-        ForgeDirection dir = getFacingDirection();
+        EnumFacing access = EnumFacing.getOrientation(var1);
+        EnumFacing dir = getFacingDirection();
         if (access == dir) {
             int[] allSlots = new int[allInventories.length];
             for (int i = 0; i < allSlots.length; i++)

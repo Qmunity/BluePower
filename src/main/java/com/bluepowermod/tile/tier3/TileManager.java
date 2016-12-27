@@ -15,7 +15,7 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;;
 import uk.co.qmunity.lib.part.compat.MultipartCompatibility;
 
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
@@ -41,7 +41,7 @@ public class TileManager extends TileMachineBase implements ISidedInventory, IGu
     private int rejectTicker = -1;
 
     @Override
-    public TubeStack acceptItemFromTube(TubeStack stack, ForgeDirection from, boolean simulate) {
+    public TubeStack acceptItemFromTube(TubeStack stack, EnumFacing from, boolean simulate) {
 
         if (from == getFacingDirection().getOpposite()) {
             // if (!isBufferEmpty()) return stack;
@@ -86,7 +86,7 @@ public class TileManager extends TileMachineBase implements ISidedInventory, IGu
 
         if (item == null)
             return 0;
-        int managerCount = IOHelper.getItemCount(item, this, ForgeDirection.UNKNOWN, fuzzySetting);
+        int managerCount = IOHelper.getItemCount(item, this, EnumFacing.UNKNOWN, fuzzySetting);
         if (mode == 1 && managerCount > 0)
             return item.stackSize;
         return managerCount - IOHelper.getItemCount(item, getTileCache(getFacingDirection()), getFacingDirection().getOpposite(), fuzzySetting);
@@ -308,7 +308,7 @@ public class TileManager extends TileMachineBase implements ISidedInventory, IGu
     @Override
     public int[] getAccessibleSlotsFromSide(int var1) {
 
-        ForgeDirection direction = getFacingDirection();
+        EnumFacing direction = getFacingDirection();
 
         if (var1 == direction.ordinal() || var1 == direction.getOpposite().ordinal()) {
             return new int[] {};

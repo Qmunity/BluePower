@@ -15,7 +15,7 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;;
 
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
 import com.bluepowermod.helper.IOHelper;
@@ -83,7 +83,7 @@ public class TileRegulator extends TileMachineBase implements ISidedInventory, I
                             if (supplyingInvCount < outputFilterItems) {
                                 ItemStack requestedStack = inventory[i].copy();
                                 requestedStack.stackSize = outputFilterItems - supplyingInvCount;
-                                ItemStack bufferItems = IOHelper.extract(this, ForgeDirection.UNKNOWN, requestedStack, true, false, fuzzySetting);// try
+                                ItemStack bufferItems = IOHelper.extract(this, EnumFacing.UNKNOWN, requestedStack, true, false, fuzzySetting);// try
                                                                                                                                                   // to
                                                                                                                                                   // extract
                                 // the items
@@ -95,7 +95,7 @@ public class TileRegulator extends TileMachineBase implements ISidedInventory, I
                                     ItemStack remainder = IOHelper.insert(inv, bufferItems, getFacingDirection().ordinal(), false);// insert into
                                                                                                                                    // supplying inv.
                                     if (remainder != null) {
-                                        IOHelper.insert(this, remainder, ForgeDirection.UNKNOWN, false);// when not every item can be supplied, return
+                                        IOHelper.insert(this, remainder, EnumFacing.UNKNOWN, false);// when not every item can be supplied, return
                                                                                                         // those to the buffer.
                                     }
                                 }
@@ -165,7 +165,7 @@ public class TileRegulator extends TileMachineBase implements ISidedInventory, I
                 int inputFilterItems = getItemsInSection(inventory[i], EnumSection.INPUT_FILTER);
                 int bufferItems = getItemsInSection(inventory[i], EnumSection.BUFFER);
                 if (bufferItems >= inputFilterItems) {
-                    ItemStack stackFromBuffer = IOHelper.extract(this, ForgeDirection.UNKNOWN, inventory[i], true, false, fuzzySetting);
+                    ItemStack stackFromBuffer = IOHelper.extract(this, EnumFacing.UNKNOWN, inventory[i], true, false, fuzzySetting);
                     this.addItemToOutputBuffer(stackFromBuffer, color);
                 }
             }
@@ -173,7 +173,7 @@ public class TileRegulator extends TileMachineBase implements ISidedInventory, I
     }
 
     @Override
-    public TubeStack acceptItemFromTube(TubeStack stack, ForgeDirection from, boolean simulate) {
+    public TubeStack acceptItemFromTube(TubeStack stack, EnumFacing from, boolean simulate) {
 
         if (from == getFacingDirection() && isBufferEmpty()) {
             stack = stack.copy();
@@ -188,7 +188,7 @@ public class TileRegulator extends TileMachineBase implements ISidedInventory, I
             if (acceptedStack != null && acceptedStack.stackSize > 0) {
                 for (int i = EnumSection.INPUT_FILTER.ordinal() * 9; i < EnumSection.INPUT_FILTER.ordinal() * 9 + 9; i++) {
                     if (inventory[i] != null && ItemStackHelper.areStacksEqual(acceptedStack, inventory[i], fuzzySetting)) {
-                        acceptedStack = IOHelper.insert(this, acceptedStack, EnumSection.BUFFER.ordinal() * 9 + i, ForgeDirection.UNKNOWN.ordinal(), simulate);
+                        acceptedStack = IOHelper.insert(this, acceptedStack, EnumSection.BUFFER.ordinal() * 9 + i, EnumFacing.UNKNOWN.ordinal(), simulate);
 
                         if (acceptedStack == null) {
                             break;
@@ -197,7 +197,7 @@ public class TileRegulator extends TileMachineBase implements ISidedInventory, I
                 }
 
                 if (acceptedStack != null && acceptedStack.stackSize != 0) {
-                    ItemStack remainder = IOHelper.insert(this, acceptedStack, ForgeDirection.UNKNOWN.ordinal(), simulate);
+                    ItemStack remainder = IOHelper.insert(this, acceptedStack, EnumFacing.UNKNOWN.ordinal(), simulate);
                     if (remainder != null) {
                         stack.stack.stackSize += remainder.stackSize;
                     }

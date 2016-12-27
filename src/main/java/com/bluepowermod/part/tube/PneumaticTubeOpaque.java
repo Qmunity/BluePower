@@ -20,7 +20,7 @@ package com.bluepowermod.part.tube;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.IIcon;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;;
 import uk.co.qmunity.lib.client.render.RenderHelper;
 import uk.co.qmunity.lib.transform.Rotation;
 import uk.co.qmunity.lib.vec.Vec3d;
@@ -77,16 +77,16 @@ public class PneumaticTubeOpaque extends PneumaticTube {
                     : IconSupplier.restrictionTubeSideOpaque) : renderFully ? IconSupplier.pneumaticTubeOpaqueNode
                     : IconSupplier.pneumaticTubeOpaqueSide;
 
-            if (shouldRenderConnection(ForgeDirection.EAST) || shouldRenderConnection(ForgeDirection.WEST))
+            if (shouldRenderConnection(EnumFacing.EAST) || shouldRenderConnection(EnumFacing.WEST))
                 renderer.setTextureRotations(1, 1, 0, 0, 1, 1);
-            if (shouldRenderConnection(ForgeDirection.NORTH) || shouldRenderConnection(ForgeDirection.SOUTH))
+            if (shouldRenderConnection(EnumFacing.NORTH) || shouldRenderConnection(EnumFacing.SOUTH))
                 renderer.setTextureRotations(0, 0, 1, 1, 0, 0);
 
             renderer.renderBox(new Vec3dCube(0.25, 0.25, 0.25, 0.75, 0.75, 0.75), icon);
 
             renderer.resetTextureRotations();
 
-            for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
+            for (EnumFacing d : EnumFacing.VALUES) {
                 if (shouldRenderConnection(d)) {
                     renderer.addTransformation(new Rotation(d));
                     renderer.renderBox(new Vec3dCube(0.25, 0, 0.25, 0.75, 0.25, 0.75), IconSupplier.pneumaticTubeOpaqueNode, null, icon, icon, icon,
@@ -102,13 +102,13 @@ public class PneumaticTubeOpaque extends PneumaticTube {
                 frameThickness /= 1.5;
                 frameSeparation -= 1 / 32D;
 
-                renderFrame(renderer, wireSize, frameSeparation, frameThickness, renderFully || shouldRenderConnection(ForgeDirection.DOWN),
-                        renderFully || shouldRenderConnection(ForgeDirection.UP), renderFully || shouldRenderConnection(ForgeDirection.WEST),
-                        renderFully || shouldRenderConnection(ForgeDirection.EAST), renderFully || shouldRenderConnection(ForgeDirection.NORTH),
-                        renderFully || shouldRenderConnection(ForgeDirection.SOUTH), redstoneConnections[ForgeDirection.DOWN.ordinal()],
-                        redstoneConnections[ForgeDirection.UP.ordinal()], redstoneConnections[ForgeDirection.WEST.ordinal()],
-                        redstoneConnections[ForgeDirection.EAST.ordinal()], redstoneConnections[ForgeDirection.NORTH.ordinal()],
-                        redstoneConnections[ForgeDirection.SOUTH.ordinal()], getParent() != null && getWorld() != null, IconSupplier.wire,
+                renderFrame(renderer, wireSize, frameSeparation, frameThickness, renderFully || shouldRenderConnection(EnumFacing.DOWN),
+                        renderFully || shouldRenderConnection(EnumFacing.UP), renderFully || shouldRenderConnection(EnumFacing.WEST),
+                        renderFully || shouldRenderConnection(EnumFacing.EAST), renderFully || shouldRenderConnection(EnumFacing.NORTH),
+                        renderFully || shouldRenderConnection(EnumFacing.SOUTH), redstoneConnections[EnumFacing.DOWN.ordinal()],
+                        redstoneConnections[EnumFacing.UP.ordinal()], redstoneConnections[EnumFacing.WEST.ordinal()],
+                        redstoneConnections[EnumFacing.EAST.ordinal()], redstoneConnections[EnumFacing.NORTH.ordinal()],
+                        redstoneConnections[EnumFacing.SOUTH.ordinal()], getParent() != null && getWorld() != null, IconSupplier.wire,
                         WireHelper.getColorForPowerLevel(getRedwireType(), getPower()));
             }
 
@@ -119,7 +119,7 @@ public class PneumaticTubeOpaque extends PneumaticTube {
                 Vec3dCube side3 = new Vec3dCube(0.25 - 1 / 128D, 0.25 - 1 / 128D, 0.25 + 5 / 128D, 0.25 + 2 / 128D, 0.25 + 2 / 128D, 0.25 + 59 / 128D);
                 Vec3dCube side4 = new Vec3dCube(0.25 + 5 / 128D, 0.25 - 1 / 128D, 0.25 + 5 / 128D, 0.25 + 9 / 128D, 0.25 + 2 / 128D, 0.25 + 56 / 128D);
                 Vec3dCube side5 = new Vec3dCube(0.25 + 5 / 128D, 0.25 - 1 / 128D, 0.25 - 1 / 128D, 0.25 + 9 / 128D, 0.25 + 2 / 128D, 0.25 + 65 / 128D);
-                for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
+                for (EnumFacing d : EnumFacing.VALUES) {
                     TubeColor c = color[d.ordinal()];
                     if (c != TubeColor.NONE) {
                         try {
@@ -143,7 +143,7 @@ public class PneumaticTubeOpaque extends PneumaticTube {
                                     renderer.renderBox(
                                             side5.clone()
                                                     .rotate(0,
-                                                            (i + ((shouldRenderConnection(ForgeDirection.NORTH) || (shouldRenderConnection(ForgeDirection.UP) && (d == ForgeDirection.NORTH || d == ForgeDirection.SOUTH))) ? 1
+                                                            (i + ((shouldRenderConnection(EnumFacing.NORTH) || (shouldRenderConnection(EnumFacing.UP) && (d == EnumFacing.NORTH || d == EnumFacing.SOUTH))) ? 1
                                                                     : 0)) * 90, 0, Vec3d.center).rotate(d, Vec3d.center),
                                             IconSupplier.pneumaticTubeColoring);
                             }

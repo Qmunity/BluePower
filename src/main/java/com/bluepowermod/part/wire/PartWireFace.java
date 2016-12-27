@@ -18,7 +18,7 @@ package com.bluepowermod.part.wire;
 
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.util.IIcon;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;;
 import uk.co.qmunity.lib.client.render.RenderHelper;
 import uk.co.qmunity.lib.transform.Rotation;
 import uk.co.qmunity.lib.vec.Vec3d;
@@ -32,7 +32,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public abstract class PartWireFace extends BPPartFace {
 
-    protected abstract boolean shouldRenderConnection(ForgeDirection side);
+    protected abstract boolean shouldRenderConnection(EnumFacing side);
 
     protected abstract double getWidth();
 
@@ -43,26 +43,26 @@ public abstract class PartWireFace extends BPPartFace {
         return 0xFFFFFF;
     }
 
-    protected boolean extendsToCorner(ForgeDirection side) {
+    protected boolean extendsToCorner(EnumFacing side) {
 
         return false;
     }
 
     @SideOnly(Side.CLIENT)
-    protected abstract IIcon getWireIcon(ForgeDirection side);
+    protected abstract IIcon getWireIcon(EnumFacing side);
 
     @SideOnly(Side.CLIENT)
-    protected IIcon getWireIcon(ForgeDirection side, ForgeDirection face) {
+    protected IIcon getWireIcon(EnumFacing side, EnumFacing face) {
 
         return getWireIcon(face);
     }
 
     @SideOnly(Side.CLIENT)
-    protected IIcon[] getIcons(ForgeDirection side) {
+    protected IIcon[] getIcons(EnumFacing side) {
 
-        return new IIcon[] { getWireIcon(side, ForgeDirection.DOWN), getWireIcon(side, ForgeDirection.UP),
-                getWireIcon(side, ForgeDirection.WEST), getWireIcon(side, ForgeDirection.EAST), getWireIcon(side, ForgeDirection.NORTH),
-                getWireIcon(side, ForgeDirection.SOUTH) };
+        return new IIcon[] { getWireIcon(side, EnumFacing.DOWN), getWireIcon(side, EnumFacing.UP),
+                getWireIcon(side, EnumFacing.WEST), getWireIcon(side, EnumFacing.EAST), getWireIcon(side, EnumFacing.NORTH),
+                getWireIcon(side, EnumFacing.SOUTH) };
     }
 
     protected boolean shouldIgnoreLighting() {
@@ -86,26 +86,26 @@ public abstract class PartWireFace extends BPPartFace {
         double width = getWidth() / 32D;
         int color = getColorMultiplier();
 
-        ForgeDirection d1 = ForgeDirection.NORTH;
-        ForgeDirection d2 = ForgeDirection.SOUTH;
-        ForgeDirection d3 = ForgeDirection.WEST;
-        ForgeDirection d4 = ForgeDirection.EAST;
+        EnumFacing d1 = EnumFacing.NORTH;
+        EnumFacing d2 = EnumFacing.SOUTH;
+        EnumFacing d3 = EnumFacing.WEST;
+        EnumFacing d4 = EnumFacing.EAST;
 
-        if (getFace() == ForgeDirection.NORTH) {
-            d1 = ForgeDirection.UP;
-            d2 = ForgeDirection.DOWN;
-        } else if (getFace() == ForgeDirection.SOUTH) {
-            d1 = ForgeDirection.DOWN;
-            d2 = ForgeDirection.UP;
-        } else if (getFace() == ForgeDirection.WEST) {
-            d3 = ForgeDirection.UP;
-            d4 = ForgeDirection.DOWN;
-        } else if (getFace() == ForgeDirection.EAST) {
-            d3 = ForgeDirection.DOWN;
-            d4 = ForgeDirection.UP;
-        } else if (getFace() == ForgeDirection.UP) {
-            d3 = ForgeDirection.EAST;
-            d4 = ForgeDirection.WEST;
+        if (getFace() == EnumFacing.NORTH) {
+            d1 = EnumFacing.UP;
+            d2 = EnumFacing.DOWN;
+        } else if (getFace() == EnumFacing.SOUTH) {
+            d1 = EnumFacing.DOWN;
+            d2 = EnumFacing.UP;
+        } else if (getFace() == EnumFacing.WEST) {
+            d3 = EnumFacing.UP;
+            d4 = EnumFacing.DOWN;
+        } else if (getFace() == EnumFacing.EAST) {
+            d3 = EnumFacing.DOWN;
+            d4 = EnumFacing.UP;
+        } else if (getFace() == EnumFacing.UP) {
+            d3 = EnumFacing.EAST;
+            d4 = EnumFacing.WEST;
         }
 
         switch (getFace()) {
@@ -147,26 +147,26 @@ public abstract class PartWireFace extends BPPartFace {
 
         // Center
         renderer.renderBox(new Vec3dCube(8 / 16D - width, 0, 8 / 16D - width, 8 / 16D + width, height, 8 / 16D + width),
-                getIcons(ForgeDirection.UNKNOWN));
+                getIcons(EnumFacing.UNKNOWN));
         // Sides
         if (s4 || s3) {
             if (s3 || (!s3 && s4 && !s1 && !s2))
                 renderer.renderBox(new Vec3dCube(s3 ? (extendsToCorner(d3) ? -height : 0) : 4 / 16D, 0, 8 / 16D - width, 8 / 16D - width,
-                        height, 8 / 16D + width), getIcons(ForgeDirection.WEST));
+                        height, 8 / 16D + width), getIcons(EnumFacing.WEST));
             if (s4 || (s3 && !s4 && !s1 && !s2))
                 renderer.renderBox(new Vec3dCube(8 / 16D + width, 0, 8 / 16D - width, s4 ? 1 + (extendsToCorner(d4) ? height : 0)
-                        : 12 / 16D, height, 8 / 16D + width), getIcons(ForgeDirection.EAST));
+                        : 12 / 16D, height, 8 / 16D + width), getIcons(EnumFacing.EAST));
             if (s1)
                 renderer.renderBox(new Vec3dCube(8 / 16D - width, 0, s1 ? (extendsToCorner(d1) ? -height : 0) : 4 / 16D, 8 / 16D + width,
-                        height, 8 / 16D - width), getIcons(ForgeDirection.NORTH));
+                        height, 8 / 16D - width), getIcons(EnumFacing.NORTH));
             if (s2)
                 renderer.renderBox(new Vec3dCube(8 / 16D - width, 0, 8 / 16D + width, 8 / 16D + width, height,
-                        s2 ? 1 + (extendsToCorner(d2) ? height : 0) : 12 / 16D), getIcons(ForgeDirection.SOUTH));
+                        s2 ? 1 + (extendsToCorner(d2) ? height : 0) : 12 / 16D), getIcons(EnumFacing.SOUTH));
         } else {
             renderer.renderBox(new Vec3dCube(8 / 16D - width, 0, s1 ? (extendsToCorner(d1) ? -height : 0) : 4 / 16D, 8 / 16D + width,
-                    height, 8 / 16D - width), getIcons(ForgeDirection.NORTH));
+                    height, 8 / 16D - width), getIcons(EnumFacing.NORTH));
             renderer.renderBox(new Vec3dCube(8 / 16D - width, 0, 8 / 16D + width, 8 / 16D + width, height,
-                    s2 ? 1 + (extendsToCorner(d2) ? height : 0) : 12 / 16D), getIcons(ForgeDirection.SOUTH));
+                    s2 ? 1 + (extendsToCorner(d2) ? height : 0) : 12 / 16D), getIcons(EnumFacing.SOUTH));
         }
 
         renderer.setIgnoreLighting(false);

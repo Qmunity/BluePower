@@ -7,7 +7,7 @@ import java.util.Map;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;;
 
 import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.init.BPBlocks;
@@ -134,7 +134,7 @@ public class TileAutoProjectTable extends TileProjectTable implements ISidedInve
             for (Map.Entry<ItemStack, Integer> entry : recipeItems.entrySet()) {
                 ItemStack s = entry.getKey().copy();
                 s.stackSize = entry.getValue();
-                ItemStack extracted = IOHelper.extract(this, ForgeDirection.UNKNOWN, s, true, true);
+                ItemStack extracted = IOHelper.extract(this, EnumFacing.UNKNOWN, s, true, true);
                 if (extracted == null) {
                     canCraft = false;
                     break;

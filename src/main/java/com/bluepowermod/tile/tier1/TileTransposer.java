@@ -25,7 +25,7 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;;
 
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
 import com.bluepowermod.helper.IOHelper;
@@ -48,7 +48,7 @@ public class TileTransposer extends TileMachineBase {
     protected void redstoneChanged(boolean newValue) {
 
         super.redstoneChanged(newValue);
-        ForgeDirection direction = getFacingDirection();
+        EnumFacing direction = getFacingDirection();
 
         if (!worldObj.isRemote && isBufferEmpty() && newValue) {
             if (worldObj.isAirBlock(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ)) {
@@ -61,7 +61,7 @@ public class TileTransposer extends TileMachineBase {
     }
 
     @Override
-    public TubeStack acceptItemFromTube(TubeStack stack, ForgeDirection from, boolean simulate) {
+    public TubeStack acceptItemFromTube(TubeStack stack, EnumFacing from, boolean simulate) {
 
         if (from == getFacingDirection() && getIsRedstonePowered())
             return stack;
@@ -71,7 +71,7 @@ public class TileTransposer extends TileMachineBase {
 
     protected void pullItem() {
 
-        ForgeDirection dir = getOutputDirection().getOpposite();
+        EnumFacing dir = getOutputDirection().getOpposite();
         TileEntity inputTE = getTileCache(dir);
         ItemStack extractedStack = IOHelper.extractOneItem(inputTE, dir.getOpposite());
         if (extractedStack != null)
@@ -103,7 +103,7 @@ public class TileTransposer extends TileMachineBase {
 
     private void suckEntity() {
 
-        ForgeDirection direction = getFacingDirection();
+        EnumFacing direction = getFacingDirection();
         AxisAlignedBB box = AxisAlignedBB.getBoundingBox(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ, xCoord
                 + direction.offsetX + 1, yCoord + direction.offsetY + 1, zCoord + direction.offsetZ + 1);
         for (EntityItem entity : (List<EntityItem>) worldObj.getEntitiesWithinAABB(EntityItem.class, box)) {

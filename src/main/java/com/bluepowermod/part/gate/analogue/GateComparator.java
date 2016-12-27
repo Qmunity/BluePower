@@ -8,7 +8,7 @@
 package com.bluepowermod.part.gate.analogue;
 
 import net.minecraft.block.Block;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;;
 import uk.co.qmunity.lib.helper.MathHelper;
 import uk.co.qmunity.lib.vec.Vec3i;
 
@@ -68,7 +68,7 @@ public class GateComparator extends GateSimpleAnalogue {
 
         byte power = back().getInput();
 
-        ForgeDirection d = back().getDirection().toForgeDirection(getFace(), getRotation());
+        EnumFacing d = back().getDirection().toEnumFacing(getFace(), getRotation());
         Vec3i a = new Vec3i(getX(), getY(), getZ(), getWorld()).add(d);
         Block ba = a.getBlock(false);
         if (ba.hasComparatorInputOverride())

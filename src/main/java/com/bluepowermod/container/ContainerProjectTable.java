@@ -36,7 +36,7 @@ import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;;
 
 import com.bluepowermod.container.slot.SlotProjectTableCrafting;
 import com.bluepowermod.helper.IOHelper;
@@ -137,7 +137,7 @@ public class ContainerProjectTable extends Container {
 
     public static ItemStack extractStackFromTable(TileProjectTable table, ItemStack stack, boolean simulate) {
 
-        return IOHelper.extract(table, ForgeDirection.UNKNOWN, stack, true, simulate);
+        return IOHelper.extract(table, EnumFacing.UNKNOWN, stack, true, simulate);
     }
 
     public void clearCraftingGrid() {

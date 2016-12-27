@@ -16,7 +16,7 @@
  */
 package com.bluepowermod.api.tube;
 
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 
 /**
     This interface is implemented by inventories with a buffer inventory, in which the tube _can_ but doesn't prefer to
@@ -30,6 +30,6 @@ public interface IWeightedTubeInventory {
         By default this can be seen as 0 for non implementing inventories. return a high value to make it less prefered
         by the tubes.
     */
-    public int getWeight(ForgeDirection from);
+    public int getWeight(EnumFacing from);
     
 }

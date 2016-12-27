@@ -26,7 +26,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IPlantable;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;;
 
 import com.bluepowermod.BluePower;
 import com.bluepowermod.container.inventory.InventoryItem;
@@ -118,7 +118,7 @@ public class ItemSeedBag extends ItemBase {
             for (int modX = -2; modX < 3; modX++) {
                 for (int modZ = -2; modZ < 3; modZ++) {
                     Block b = par3World.getBlock(posX + modX, posY, posZ + modZ);
-                    if (b.canSustainPlant(par3World, posX, posY, posZ, ForgeDirection.UP, plant)
+                    if (b.canSustainPlant(par3World, posX, posY, posZ, EnumFacing.UP, plant)
                             && par3World.isAirBlock(posX + modX, posY + 1, posZ + modZ)) {
                         for (int i = 0; i < seedBagInventory.getSizeInventory(); i++) {
                             ItemStack is = seedBagInventory.getStackInSlot(i);

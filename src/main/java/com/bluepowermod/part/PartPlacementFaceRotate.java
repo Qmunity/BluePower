@@ -18,7 +18,7 @@
 package com.bluepowermod.part;
 
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;;
 import uk.co.qmunity.lib.part.IPart;
 import uk.co.qmunity.lib.part.compat.IMultipartCompat;
 import uk.co.qmunity.lib.vec.Vec3i;
@@ -27,7 +27,7 @@ public class PartPlacementFaceRotate extends PartPlacementFace {
 
     protected int rotation;
 
-    public PartPlacementFaceRotate(ForgeDirection face, int rotation) {
+    public PartPlacementFaceRotate(EnumFacing face, int rotation) {
 
         super(face);
         this.rotation = rotation;

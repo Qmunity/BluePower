@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;;
 import uk.co.qmunity.lib.misc.Pair;
 
 import com.bluepowermod.api.connect.ConnectionType;
@@ -72,7 +72,7 @@ public class BundledDeviceWrapper implements IAdvancedRedstoneConductor {
     }
 
     @Override
-    public boolean canConnect(ForgeDirection side, IRedstoneDevice dev, ConnectionType type) {
+    public boolean canConnect(EnumFacing side, IRedstoneDevice dev, ConnectionType type) {
 
         return true;
     }
@@ -84,7 +84,7 @@ public class BundledDeviceWrapper implements IAdvancedRedstoneConductor {
     }
 
     @Override
-    public byte getRedstonePower(ForgeDirection side) {
+    public byte getRedstonePower(EnumFacing side) {
 
         byte[] b = device.getBundledOutput(side);
 
@@ -95,7 +95,7 @@ public class BundledDeviceWrapper implements IAdvancedRedstoneConductor {
     }
 
     @Override
-    public void setRedstonePower(ForgeDirection side, byte power) {
+    public void setRedstonePower(EnumFacing side, byte power) {
 
         byte[] b = device.getBundledPower(side);
         if (b == null)
@@ -113,7 +113,7 @@ public class BundledDeviceWrapper implements IAdvancedRedstoneConductor {
     }
 
     @Override
-    public boolean canPropagateFrom(ForgeDirection fromSide) {
+    public boolean canPropagateFrom(EnumFacing fromSide) {
 
         if (!(device instanceof IBundledConductor))
             return false;
@@ -122,7 +122,7 @@ public class BundledDeviceWrapper implements IAdvancedRedstoneConductor {
     }
 
     @Override
-    public boolean hasLoss(ForgeDirection side) {
+    public boolean hasLoss(EnumFacing side) {
 
         if (!(device instanceof IBundledConductor))
             return false;
@@ -131,7 +131,7 @@ public class BundledDeviceWrapper implements IAdvancedRedstoneConductor {
     }
 
     @Override
-    public boolean isAnalogue(ForgeDirection side) {
+    public boolean isAnalogue(EnumFacing side) {
 
         if (!(device instanceof IBundledConductor))
             return false;
@@ -140,11 +140,11 @@ public class BundledDeviceWrapper implements IAdvancedRedstoneConductor {
     }
 
     @Override
-    public Collection<Entry<IConnection<IRedstoneDevice>, Boolean>> propagate(ForgeDirection fromSide) {
+    public Collection<Entry<IConnection<IRedstoneDevice>, Boolean>> propagate(EnumFacing fromSide) {
 
         List<Entry<IConnection<IRedstoneDevice>, Boolean>> l = new ArrayList<Entry<IConnection<IRedstoneDevice>, Boolean>>();
 
-        for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
+        for (EnumFacing d : EnumFacing.VALUES) {
             IConnection<IRedstoneDevice> c = connections.getConnectionOnSide(d);
             if (c != null)
                 l.add(new Pair<IConnection<IRedstoneDevice>, Boolean>(c, c.getB() instanceof IRedwire && device instanceof IRedwire
@@ -155,7 +155,7 @@ public class BundledDeviceWrapper implements IAdvancedRedstoneConductor {
     }
 
     @Override
-    public boolean isNormalFace(ForgeDirection side) {
+    public boolean isNormalFace(EnumFacing side) {
 
         return device.isNormalFace(side);
     }
@@ -177,7 +177,7 @@ public class BundledDeviceWrapper implements IAdvancedRedstoneConductor {
 
         @SuppressWarnings("unchecked")
         @Override
-        public IConnection<IRedstoneDevice> getConnectionOnSide(ForgeDirection side) {
+        public IConnection<IRedstoneDevice> getConnectionOnSide(EnumFacing side) {
 
             if (wrapper.device instanceof IInsulatedRedwire && ((IRedstoneDevice) wrapper.device).getRedstoneConnectionCache() != null) {
                 IConnection<IRedstoneDevice> c = (IConnection<IRedstoneDevice>) ((IRedstoneDevice) wrapper.device)

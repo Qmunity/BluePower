@@ -1,7 +1,7 @@
 package com.bluepowermod.convert.part;
 
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;;
 import uk.co.qmunity.lib.part.IPart;
 
 import com.bluepowermod.convert.IPartConverter;
@@ -28,7 +28,7 @@ public class PartConverterWire implements IPartConverter {
 
         NBTTagCompound data = old.getCompoundTag("partData");
 
-        part.setFace(ForgeDirection.getOrientation(data.getInteger("face")));
+        part.setFace(EnumFacing.getOrientation(data.getInteger("face")));
 
         return part;
     }

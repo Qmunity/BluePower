@@ -25,7 +25,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;;
 import uk.co.qmunity.lib.part.IPart;
 import uk.co.qmunity.lib.part.IPartCustomPlacement;
 import uk.co.qmunity.lib.part.IPartFace;
@@ -36,10 +36,10 @@ import com.bluepowermod.api.misc.IFace;
 
 public abstract class BPPartFace extends BPPart implements IPartFace, IFace, IPartCustomPlacement {
 
-    private ForgeDirection face = ForgeDirection.UNKNOWN;
+    private EnumFacing face = EnumFacing.UNKNOWN;
 
     @Override
-    public ForgeDirection getFace() {
+    public EnumFacing getFace() {
 
         return face;
     }
@@ -51,7 +51,7 @@ public abstract class BPPartFace extends BPPart implements IPartFace, IFace, IPa
     }
 
     @Override
-    public void setFace(ForgeDirection face) {
+    public void setFace(EnumFacing face) {
 
         this.face = face;
     }
@@ -65,7 +65,7 @@ public abstract class BPPartFace extends BPPart implements IPartFace, IFace, IPa
     @Override
     public void readFromNBT(NBTTagCompound tag) {
 
-        face = ForgeDirection.getOrientation(tag.getInteger("face"));
+        face = EnumFacing.getOrientation(tag.getInteger("face"));
     }
 
     @Override
@@ -81,11 +81,11 @@ public abstract class BPPartFace extends BPPart implements IPartFace, IFace, IPa
 
         super.readUpdateData(buffer);
 
-        face = ForgeDirection.getOrientation(buffer.readInt());
+        face = EnumFacing.getOrientation(buffer.readInt());
     }
 
     @Override
-    public IPartPlacement getPlacement(IPart part, World world, Vec3i location, ForgeDirection face, MovingObjectPosition mop,
+    public IPartPlacement getPlacement(IPart part, World world, Vec3i location, EnumFacing face, MovingObjectPosition mop,
             EntityPlayer player) {
 
         return new PartPlacementFace(face.getOpposite());

@@ -5,7 +5,7 @@ import java.util.List;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;;
 import uk.co.qmunity.lib.vec.Vec3i;
 
 import com.bluepowermod.api.connect.ConnectionType;
@@ -68,9 +68,9 @@ public class BundledDeviceCCComputer implements IBundledDevice {
     }
 
     @Override
-    public boolean canConnect(ForgeDirection side, IBundledDevice dev, ConnectionType type) {
+    public boolean canConnect(EnumFacing side, IBundledDevice dev, ConnectionType type) {
 
-        return type == ConnectionType.STRAIGHT || side != ForgeDirection.UNKNOWN;
+        return type == ConnectionType.STRAIGHT || side != EnumFacing.UNKNOWN;
     }
 
     @Override
@@ -80,7 +80,7 @@ public class BundledDeviceCCComputer implements IBundledDevice {
     }
 
     @Override
-    public byte[] getBundledOutput(ForgeDirection side) {
+    public byte[] getBundledOutput(EnumFacing side) {
 
         int out = ComputerCraftAPI.getBundledRedstoneOutput(getWorld(), getX(), getY(), getZ(), side.ordinal());
 
@@ -91,16 +91,16 @@ public class BundledDeviceCCComputer implements IBundledDevice {
     }
 
     @Override
-    public void setBundledPower(ForgeDirection side, byte[] power) {
+    public void setBundledPower(EnumFacing side, byte[] power) {
 
-        if (side == ForgeDirection.UNKNOWN)
+        if (side == EnumFacing.UNKNOWN)
             return;
 
         curPow[side.ordinal()] = power;
     }
 
     @Override
-    public byte[] getBundledPower(ForgeDirection side) {
+    public byte[] getBundledPower(EnumFacing side) {
 
         return getBundledOutput(side);
     }
@@ -111,19 +111,19 @@ public class BundledDeviceCCComputer implements IBundledDevice {
         getWorld().notifyBlockOfNeighborChange(getX(), getY(), getZ(), Blocks.air);
     }
 
-    public byte[] getCurPow(ForgeDirection side) {
+    public byte[] getCurPow(EnumFacing side) {
 
         return curPow[side.ordinal()];
     }
 
     @Override
-    public MinecraftColor getBundledColor(ForgeDirection side) {
+    public MinecraftColor getBundledColor(EnumFacing side) {
 
         return MinecraftColor.NONE;
     }
 
     @Override
-    public boolean isNormalFace(ForgeDirection side) {
+    public boolean isNormalFace(EnumFacing side) {
 
         return true;
     }

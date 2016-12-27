@@ -21,7 +21,7 @@ import java.util.List;
 
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.util.IIcon;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;;
 import uk.co.qmunity.lib.client.render.RenderHelper;
 import uk.co.qmunity.lib.part.IPartThruHole;
 import uk.co.qmunity.lib.vec.Vec3d;
@@ -35,7 +35,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public abstract class PartWireFreestanding extends BPPart implements IPartThruHole {
 
-    protected abstract boolean shouldRenderConnection(ForgeDirection side);
+    protected abstract boolean shouldRenderConnection(EnumFacing side);
 
     protected abstract int getSize();
 
@@ -50,20 +50,20 @@ public abstract class PartWireFreestanding extends BPPart implements IPartThruHo
     }
 
     @SideOnly(Side.CLIENT)
-    protected abstract IIcon getWireIcon(ForgeDirection side);
+    protected abstract IIcon getWireIcon(EnumFacing side);
 
     @SideOnly(Side.CLIENT)
-    protected IIcon getWireIcon(ForgeDirection side, ForgeDirection face) {
+    protected IIcon getWireIcon(EnumFacing side, EnumFacing face) {
 
         return getWireIcon(face);
     }
 
     @SideOnly(Side.CLIENT)
-    protected IIcon[] getIcons(ForgeDirection side) {
+    protected IIcon[] getIcons(EnumFacing side) {
 
-        return new IIcon[] { getWireIcon(side, ForgeDirection.DOWN), getWireIcon(side, ForgeDirection.UP),
-                getWireIcon(side, ForgeDirection.WEST), getWireIcon(side, ForgeDirection.EAST), getWireIcon(side, ForgeDirection.NORTH),
-                getWireIcon(side, ForgeDirection.SOUTH) };
+        return new IIcon[] { getWireIcon(side, EnumFacing.DOWN), getWireIcon(side, EnumFacing.UP),
+                getWireIcon(side, EnumFacing.WEST), getWireIcon(side, EnumFacing.EAST), getWireIcon(side, EnumFacing.NORTH),
+                getWireIcon(side, EnumFacing.SOUTH) };
     }
 
     @SideOnly(Side.CLIENT)
@@ -77,12 +77,12 @@ public abstract class PartWireFreestanding extends BPPart implements IPartThruHo
 
         boolean isInWorld = getParent() != null;
 
-        boolean down = shouldRenderConnection(ForgeDirection.DOWN);
-        boolean up = shouldRenderConnection(ForgeDirection.UP);
-        boolean north = shouldRenderConnection(ForgeDirection.NORTH);
-        boolean south = shouldRenderConnection(ForgeDirection.SOUTH);
-        boolean west = shouldRenderConnection(ForgeDirection.WEST);
-        boolean east = shouldRenderConnection(ForgeDirection.EAST);
+        boolean down = shouldRenderConnection(EnumFacing.DOWN);
+        boolean up = shouldRenderConnection(EnumFacing.UP);
+        boolean north = shouldRenderConnection(EnumFacing.NORTH);
+        boolean south = shouldRenderConnection(EnumFacing.SOUTH);
+        boolean west = shouldRenderConnection(EnumFacing.WEST);
+        boolean east = shouldRenderConnection(EnumFacing.EAST);
 
         return getFrameBoxes(wireSize, frameSeparation, frameThickness, down, up, west, east, north, south, isInWorld);
     }
@@ -189,22 +189,22 @@ public abstract class PartWireFreestanding extends BPPart implements IPartThruHo
 
             if (sideDown)
                 for (int i = 0; i < 4; i++)
-                    boxes.add(box.clone().rotate(0, 90 * i, 0, Vec3d.center).rotate(ForgeDirection.DOWN, Vec3d.center));
+                    boxes.add(box.clone().rotate(0, 90 * i, 0, Vec3d.center).rotate(EnumFacing.DOWN, Vec3d.center));
             if (sideUp)
                 for (int i = 0; i < 4; i++)
-                    boxes.add(box.clone().rotate(0, 90 * i, 0, Vec3d.center).rotate(ForgeDirection.UP, Vec3d.center));
+                    boxes.add(box.clone().rotate(0, 90 * i, 0, Vec3d.center).rotate(EnumFacing.UP, Vec3d.center));
             if (sideWest)
                 for (int i = 0; i < 4; i++)
-                    boxes.add(box.clone().rotate(0, 90 * i, 0, Vec3d.center).rotate(ForgeDirection.WEST, Vec3d.center));
+                    boxes.add(box.clone().rotate(0, 90 * i, 0, Vec3d.center).rotate(EnumFacing.WEST, Vec3d.center));
             if (sideEast)
                 for (int i = 0; i < 4; i++)
-                    boxes.add(box.clone().rotate(0, 90 * i, 0, Vec3d.center).rotate(ForgeDirection.EAST, Vec3d.center));
+                    boxes.add(box.clone().rotate(0, 90 * i, 0, Vec3d.center).rotate(EnumFacing.EAST, Vec3d.center));
             if (sideNorth)
                 for (int i = 0; i < 4; i++)
-                    boxes.add(box.clone().rotate(0, 90 * i, 0, Vec3d.center).rotate(ForgeDirection.NORTH, Vec3d.center));
+                    boxes.add(box.clone().rotate(0, 90 * i, 0, Vec3d.center).rotate(EnumFacing.NORTH, Vec3d.center));
             if (sideSouth)
                 for (int i = 0; i < 4; i++)
-                    boxes.add(box.clone().rotate(0, 90 * i, 0, Vec3d.center).rotate(ForgeDirection.SOUTH, Vec3d.center));
+                    boxes.add(box.clone().rotate(0, 90 * i, 0, Vec3d.center).rotate(EnumFacing.SOUTH, Vec3d.center));
         }
 
         return boxes;
@@ -242,36 +242,36 @@ public abstract class PartWireFreestanding extends BPPart implements IPartThruHo
 
         boolean isInWorld = getParent() != null;
 
-        boolean down = shouldRenderConnection(ForgeDirection.DOWN);
-        boolean up = shouldRenderConnection(ForgeDirection.UP);
-        boolean north = shouldRenderConnection(ForgeDirection.NORTH);
-        boolean south = shouldRenderConnection(ForgeDirection.SOUTH);
-        boolean west = shouldRenderConnection(ForgeDirection.WEST);
-        boolean east = shouldRenderConnection(ForgeDirection.EAST);
+        boolean down = shouldRenderConnection(EnumFacing.DOWN);
+        boolean up = shouldRenderConnection(EnumFacing.UP);
+        boolean north = shouldRenderConnection(EnumFacing.NORTH);
+        boolean south = shouldRenderConnection(EnumFacing.SOUTH);
+        boolean west = shouldRenderConnection(EnumFacing.WEST);
+        boolean east = shouldRenderConnection(EnumFacing.EAST);
 
         renderer.setColor(color);
 
         // Wire
         renderer.renderBox(new Vec3dCube(0.5 - (wireSize / 2), 0.5 - (wireSize / 2), 0.5 - (wireSize / 2), 0.5 + (wireSize / 2),
-                0.5 + (wireSize / 2), 0.5 + (wireSize / 2)), getIcons(ForgeDirection.UNKNOWN));
+                0.5 + (wireSize / 2), 0.5 + (wireSize / 2)), getIcons(EnumFacing.UNKNOWN));
         if (up || !isInWorld)
             renderer.renderBox(new Vec3dCube(0.5 - (wireSize / 2), 0.5 + (wireSize / 2), 0.5 - (wireSize / 2), 0.5 + (wireSize / 2), 1,
-                    0.5 + (wireSize / 2)), getIcons(ForgeDirection.UP));
+                    0.5 + (wireSize / 2)), getIcons(EnumFacing.UP));
         if (down || !isInWorld)
             renderer.renderBox(new Vec3dCube(0.5 - (wireSize / 2), 0, 0.5 - (wireSize / 2), 0.5 + (wireSize / 2), 0.5 - (wireSize / 2),
-                    0.5 + (wireSize / 2)), getIcons(ForgeDirection.DOWN));
+                    0.5 + (wireSize / 2)), getIcons(EnumFacing.DOWN));
         if (north || !isInWorld)
             renderer.renderBox(new Vec3dCube(0.5 - (wireSize / 2), 0.5 - (wireSize / 2), 0, 0.5 + (wireSize / 2), 0.5 + (wireSize / 2),
-                    0.5 - (wireSize / 2)), getIcons(ForgeDirection.NORTH));
+                    0.5 - (wireSize / 2)), getIcons(EnumFacing.NORTH));
         if (south || !isInWorld)
             renderer.renderBox(new Vec3dCube(0.5 - (wireSize / 2), 0.5 - (wireSize / 2), 0.5 + (wireSize / 2), 0.5 + (wireSize / 2),
-                    0.5 + (wireSize / 2), 1), getIcons(ForgeDirection.SOUTH));
+                    0.5 + (wireSize / 2), 1), getIcons(EnumFacing.SOUTH));
         if (west || !isInWorld)
             renderer.renderBox(new Vec3dCube(0, 0.5 - (wireSize / 2), 0.5 - (wireSize / 2), 0.5 - (wireSize / 2), 0.5 + (wireSize / 2),
-                    0.5 + (wireSize / 2)), getIcons(ForgeDirection.WEST));
+                    0.5 + (wireSize / 2)), getIcons(EnumFacing.WEST));
         if (east || !isInWorld)
             renderer.renderBox(new Vec3dCube(0.5 + (wireSize / 2), 0.5 - (wireSize / 2), 0.5 - (wireSize / 2), 1, 0.5 + (wireSize / 2),
-                    0.5 + (wireSize / 2)), getIcons(ForgeDirection.EAST));
+                    0.5 + (wireSize / 2)), getIcons(EnumFacing.EAST));
 
         renderer.setColor(getFrameColorMultiplier());
 
@@ -283,7 +283,7 @@ public abstract class PartWireFreestanding extends BPPart implements IPartThruHo
     }
 
     @Override
-    public int getHollowSize(ForgeDirection side) {
+    public int getHollowSize(EnumFacing side) {
 
         return 8;
     }

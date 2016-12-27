@@ -80,7 +80,7 @@ public class ContainerCanvasBag extends Container {
     @Override
     public boolean canInteractWith(EntityPlayer player) {
     
-        return ItemStack.areItemStacksEqual(player.getCurrentEquippedItem(), bag);
+        return ItemStack.areItemStacksEqual(player.getHeldItemMainhand(), bag);
     }
     
     @Override
