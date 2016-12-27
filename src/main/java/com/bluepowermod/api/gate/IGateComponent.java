@@ -1,12 +1,12 @@
 package com.bluepowermod.api.gate;
 
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.Vec3i;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import uk.co.qmunity.lib.client.render.RenderHelper;
-import uk.co.qmunity.lib.vec.Vec3d;
-import uk.co.qmunity.lib.vec.Vec3dCube;
-import uk.co.qmunity.lib.vec.Vec3i;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -17,9 +17,9 @@ public interface IGateComponent {
 
     public IGate<?, ?, ?, ?, ?, ?> getGate();
 
-    public void addCollisionBoxes(List<Vec3dCube> boxes);
+    public void addCollisionBoxes(List<BlockPos> boxes);
 
-    public List<Vec3dCube> getOcclusionBoxes();
+    public List<BlockPos> getOcclusionBoxes();
 
     public void tick();
 

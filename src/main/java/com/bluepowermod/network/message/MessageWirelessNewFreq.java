@@ -1,22 +1,27 @@
 package com.bluepowermod.network.message;
 
-import java.io.DataInput;
-import java.io.DataOutput;
-import java.io.IOException;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.util.EnumFacing;;
-import uk.co.qmunity.lib.network.LocatedPacket;
-import uk.co.qmunity.lib.part.IPart;
-import uk.co.qmunity.lib.part.ITilePartHolder;
-import uk.co.qmunity.lib.part.compat.MultipartCompatibility;
-
 import com.bluepowermod.api.misc.Accessibility;
 import com.bluepowermod.network.BPNetworkHandler;
 import com.bluepowermod.part.gate.wireless.Frequency;
 import com.bluepowermod.part.gate.wireless.IWirelessGate;
 import com.bluepowermod.part.gate.wireless.WirelessManager;
+import mcmultipart.api.capability.MCMPCapabilities;
+import mcmultipart.api.container.IMultipartContainer;
+import mcmultipart.api.multipart.IMultipart;
+import mcmultipart.api.multipart.MultipartHelper;
+import mcmultipart.api.slot.IPartSlot;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
+import uk.co.qmunity.lib.network.LocatedPacket;
+
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
+
+;
 
 public class MessageWirelessNewFreq extends LocatedPacket<MessageWirelessNewFreq> {
 
@@ -48,21 +53,21 @@ public class MessageWirelessNewFreq extends LocatedPacket<MessageWirelessNewFreq
     public void handleServerSide(EntityPlayer player) {
 
         Frequency freq = (Frequency) WirelessManager.COMMON_INSTANCE.registerFrequency(player, name, acc, bundled);
+        IMultipartContainer h = MultipartHelper.getContainer(player.world, new BlockPos(x, y ,z)).get();
 
-        ITilePartHolder h = MultipartCompatibility.getPartHolder(player.worldObj, x, y, z);
-        if (h == null)
-            return;
+        if (h != null) {
+            IWirelessGate p = null;
+            //TODO Looks like a fault in the latest MCMultipart
+            for (IMultipart pa : h.getParts())
+                if (pa instanceof IWirelessGate && ((IWirelessGate) pa).getFace() == face)
+                    p = (IWirelessGate) pa;
+            if (p == null)
+                return;
 
-        IWirelessGate p = null;
-        for (IPart pa : h.getParts())
-            if (pa instanceof IWirelessGate && ((IWirelessGate) pa).getFace() == face)
-                p = (IWirelessGate) pa;
-        if (p == null)
-            return;
+            p.setFrequency(freq);
 
-        p.setFrequency(freq);
-
-        BPNetworkHandler.INSTANCE.sendTo(new MessageWirelessFrequencySync(player), (EntityPlayerMP) player);
+            BPNetworkHandler.INSTANCE.sendTo(new MessageWirelessFrequencySync(player), (EntityPlayerMP) player);
+        }
     }
 
     @Override
@@ -84,6 +89,6 @@ public class MessageWirelessNewFreq extends LocatedPacket<MessageWirelessNewFreq
         acc = Accessibility.values()[buffer.readInt()];
         name = buffer.readUTF();
         bundled = buffer.readBoolean();
-        face = EnumFacing.getOrientation(buffer.readInt());
+        face = EnumFacing.getFront(buffer.readInt());
     }
 }

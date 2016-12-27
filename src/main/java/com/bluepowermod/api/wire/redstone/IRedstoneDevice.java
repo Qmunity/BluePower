@@ -1,10 +1,9 @@
 package com.bluepowermod.api.wire.redstone;
 
-import net.minecraft.util.EnumFacing;;
-import uk.co.qmunity.lib.vec.IWorldLocation;
-
 import com.bluepowermod.api.connect.ConnectionType;
 import com.bluepowermod.api.connect.IConnectionCache;
+import mcmultipart.util.IWorldLocation;
+import net.minecraft.util.EnumFacing;
 
 public interface IRedstoneDevice extends IWorldLocation {
 

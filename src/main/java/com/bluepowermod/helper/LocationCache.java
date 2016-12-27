@@ -17,23 +17,24 @@
 
 package com.bluepowermod.helper;
 
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.util.EnumFacing;;
 
 public abstract class LocationCache<CachedType> {
     private final CachedType[] cachedValue;
 
-    public LocationCache(World world, int x, int y, int z, Object... extraArgs) {
+    public LocationCache(World world, BlockPos pos, Object... extraArgs) {
 
         if (world == null)
             throw new NullPointerException("World can't be null!");
         cachedValue = (CachedType[]) new Object[6];
         for (EnumFacing d : EnumFacing.VALUES) {
-            cachedValue[d.ordinal()] = getNewValue(world, x + d.offsetX, y + d.offsetY, z + d.offsetZ, extraArgs);
+            cachedValue[d.ordinal()] = getNewValue(world, pos.offset(d), extraArgs);
         }
     }
 
-    protected abstract CachedType getNewValue(World world, int x, int y, int z, Object... extraArgs);
+    protected abstract CachedType getNewValue(World world, BlockPos pos, Object... extraArgs);
 
     public CachedType getValue(EnumFacing side) {
         return cachedValue[side.ordinal()];

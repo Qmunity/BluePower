@@ -9,11 +9,11 @@ package com.bluepowermod.api;
 
 import com.bluepowermod.api.recipe.IAlloyFurnaceRegistry;
 import com.bluepowermod.api.wire.redstone.IRedstoneApi;
+import mcmultipart.multipart.IMultipart;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.Loader;
-import uk.co.qmunity.lib.part.IPart;
 
 /**
  * This is then main hub where you can interface with BluePower as a modder. Note that the 'instance' in this class will be filled in BluePower's
@@ -52,7 +52,7 @@ public class BPApi {
          * @param part
          * @param stack
          */
-        public void loadSilkySettings(IPart part, ItemStack stack);
+        public void loadSilkySettings(IMultipart part, ItemStack stack);
 
         public IRedstoneApi getRedstoneApi();
     }

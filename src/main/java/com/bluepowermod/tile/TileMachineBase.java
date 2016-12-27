@@ -15,8 +15,6 @@ import com.bluepowermod.api.tube.IWeightedTubeInventory;
 import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.helper.TileEntityCache;
 import com.bluepowermod.part.tube.TubeStack;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.item.EntityItem;
@@ -24,12 +22,16 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;;
+import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.IFluidBlock;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+;
 
 /**
  * @author MineMaarten
@@ -48,11 +50,11 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
     private static final int WARNING_INTERVAL = 600; // Every 30s
 
     @Override
-    public void updateEntity() {
+    public void update() {
 
-        super.updateEntity();
+        super.update();
 
-        if (!worldObj.isRemote) {
+        if (!world.isRemote) {
             if (ejectionScheduled || getTicker() % BUFFER_EMPTY_INTERVAL == 0) {
                 ejectItems();
                 ejectionScheduled = false;
@@ -64,7 +66,7 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
                 }
             }
             if (getBacklog().size() > 50 && getTicker() % WARNING_INTERVAL  == 0) {
-                BluePower.log.warn("Large backlog (" + getBacklog().size() + " stacks) detected in " + this.getBlockType().getLocalizedName() + " at: " + this.xCoord + ", " + this.yCoord + ", " + this.zCoord);
+                BluePower.log.warn("Large backlog (" + getBacklog().size() + " stacks) detected in " + this.getBlockType().getLocalizedName() + " at: " + this.pos.toString());
             }
         }
     }
@@ -81,7 +83,7 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
                     markDirty();
                     if (!ejectionScheduled)
                         break;
-                } else if (returnedStack.stackSize != tubeStack.stack.stackSize) {
+                } else if (returnedStack.getCount() != tubeStack.stack.getCount()) {
                     markDirty();
                     if (!ejectionScheduled)
                         break;
@@ -90,10 +92,9 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
                 }
             } else if (spawnItemsInWorld) {
                 EnumFacing direction = getFacingDirection().getOpposite();
-                if ((worldObj.getBlock(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ).getBlocksMovement(worldObj,
-                        xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ)) || (worldObj
-                        .getBlock(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ) instanceof BlockLiquid) || (worldObj
-                        .getBlock(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ) instanceof IFluidBlock)) {
+                if (!(world.getBlockState(pos.offset(direction)).isFullBlock()
+                        || ((world.getBlockState(pos.offset(direction))) instanceof BlockLiquid)
+                        || ((world.getBlockState(pos.offset(direction))) instanceof IFluidBlock))) {
                     ejectItemInWorld(tubeStack.stack, direction);
                     iterator.remove();
                     markDirty();
@@ -120,7 +121,7 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
 
     protected void addItemToOutputBuffer(ItemStack stack, TubeColor color) {
 
-        if (!worldObj.isRemote) {
+        if (!world.isRemote) {
             internalItemStackBuffer.add(new TubeStack(stack, getOutputDirection().getOpposite(), color));
             if (internalItemStackBuffer.size() == 1)
                 ejectionScheduled = true;
@@ -165,7 +166,7 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
     public TileEntity getTileCache(EnumFacing d) {
 
         if (tileCache == null) {
-            tileCache = new TileEntityCache(worldObj, xCoord, yCoord, zCoord);
+            tileCache = new TileEntityCache(world, pos);
         }
         return tileCache.getValue(d);
     }
@@ -189,7 +190,7 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
     }
 
     @Override
-    public void writeToNBT(NBTTagCompound compound) {
+    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 
         super.writeToNBT(compound);
         NBTTagList nbttaglist = new NBTTagList();
@@ -201,8 +202,8 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
                 nbttaglist.appendTag(nbttagcompound1);
             }
         }
-
         compound.setTag("ItemBuffer", nbttaglist);
+        return compound;
     }
 
     @Override
@@ -220,24 +221,24 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
         isAnimating = compound.getBoolean("animating");
         if (isAnimating)
             animationTicker = 0;
-        if (worldObj != null && wasAnimating != isEjecting()) {
+        if (world != null && wasAnimating != isEjecting()) {
             markForRenderUpdate();
         }
     }
 
     public void ejectItemInWorld(ItemStack stack, EnumFacing oppDirection) {
 
-        float spawnX = xCoord + 0.5F + oppDirection.offsetX * 0.8F;
-        float spawnY = yCoord + 0.5F + oppDirection.offsetY * 0.8F;
-        float spawnZ = zCoord + 0.5F + oppDirection.offsetZ * 0.8F;
+        float spawnX = pos.getX() + 0.5F + oppDirection.getFrontOffsetX() * 0.8F;
+        float spawnY = pos.getY() + 0.5F + oppDirection.getFrontOffsetY() * 0.8F;
+        float spawnZ = pos.getZ() + 0.5F + oppDirection.getFrontOffsetZ() * 0.8F;
 
-        EntityItem droppedItem = new EntityItem(worldObj, spawnX, spawnY, spawnZ, stack);
+        EntityItem droppedItem = new EntityItem(world, spawnX, spawnY, spawnZ, stack);
 
-        droppedItem.motionX = oppDirection.offsetX * 0.20F;
-        droppedItem.motionY = oppDirection.offsetY * 0.20F;
-        droppedItem.motionZ = oppDirection.offsetZ * 0.20F;
+        droppedItem.motionX = oppDirection.getFrontOffsetX() * 0.20F;
+        droppedItem.motionY = oppDirection.getFrontOffsetY() * 0.20F;
+        droppedItem.motionZ = oppDirection.getFrontOffsetZ() * 0.20F;
 
-        worldObj.spawnEntityInWorld(droppedItem);
+        world.spawnEntity(droppedItem);
     }
 
     @Override
