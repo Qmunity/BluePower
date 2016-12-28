@@ -30,7 +30,7 @@ import uk.co.qmunity.lib.helper.MathHelper;
 import uk.co.qmunity.lib.part.IPartRedstone;
 import uk.co.qmunity.lib.part.IPartRenderPlacement;
 import uk.co.qmunity.lib.part.IPartTicking;
-import uk.co.qmunity.lib.raytrace.QMovingObjectPosition;
+import uk.co.qmunity.lib.raytrace.QRayTraceResult;
 import uk.co.qmunity.lib.texture.Layout;
 import uk.co.qmunity.lib.transform.Rotation;
 import uk.co.qmunity.lib.transform.Transformation;
@@ -364,7 +364,7 @@ public abstract class GateBase<C_BOTTOM extends GateConnectionBase, C_TOP extend
     // Interaction
 
     @Override
-    public boolean onActivated(EntityPlayer player, QMovingObjectPosition mop, ItemStack item) {
+    public boolean onActivated(EntityPlayer player, QRayTraceResult mop, ItemStack item) {
 
         if (getLayout() == null && !getWorld().isRemote)
             loadLayout();

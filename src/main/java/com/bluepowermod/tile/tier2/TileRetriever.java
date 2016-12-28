@@ -7,6 +7,7 @@
  */
 package com.bluepowermod.tile.tier2;
 
+import mcmultipart.api.multipart.MultipartHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -29,8 +30,7 @@ public class TileRetriever extends TileFilter implements IFuzzyRetrieving {
     protected void pullItem() {
 
         if (isBufferEmpty()) {
-            PneumaticTube tube = MultipartCompatibility.getPart(worldObj, xCoord + getFacingDirection().offsetX, yCoord
-                    + getFacingDirection().offsetY, zCoord + getFacingDirection().offsetZ, PneumaticTube.class);
+            PneumaticTube tube = MultipartHelper.getPart(world, pos.offset(getFacingDirection()), PneumaticTube.class);
             if (tube != null) {
                 boolean everythingNull = true;
                 for (int i = 0; i < inventory.length; i++) {

@@ -7,18 +7,6 @@
  */
 package com.bluepowermod.tile.tier2;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.ICrafting;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.InventoryBasic;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.part.IGuiButtonSensitive;
 import com.bluepowermod.part.PartInfo;
@@ -26,6 +14,17 @@ import com.bluepowermod.part.PartManager;
 import com.bluepowermod.part.gate.GateBase;
 import com.bluepowermod.tile.IGUITextFieldSensitive;
 import com.bluepowermod.tile.TileBase;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IContainerListener;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.InventoryBasic;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * @author MineMaarten
@@ -82,7 +81,7 @@ public class TileCircuitTable extends TileBase implements IInventory, IGuiButton
             slotsScrolled = value;
         }
         updateGateInventory();
-        ((ICrafting) player).sendContainerAndContentsToPlayer(player.openContainer, player.openContainer.getInventory());
+        ((IContainerListener) player).sendAllWindowProperties(player.openContainer, (IInventory) player.openContainer.getInventory());
     }
 
     @Override
@@ -109,7 +108,7 @@ public class TileCircuitTable extends TileBase implements IInventory, IGuiButton
     }
 
     @Override
-    public void writeToNBT(NBTTagCompound tag) {
+    public NBTTagCompound writeToNBT(NBTTagCompound tag) {
 
         super.writeToNBT(tag);
 
@@ -125,7 +124,7 @@ public class TileCircuitTable extends TileBase implements IInventory, IGuiButton
         tag.setTag("Items", tagList);
 
         tag.setString("textboxString", textboxString);
-
+        return tag;
     }
 
     @Override
@@ -139,7 +138,7 @@ public class TileCircuitTable extends TileBase implements IInventory, IGuiButton
             NBTTagCompound tagCompound = tagList.getCompoundTagAt(i);
             byte slot = tagCompound.getByte("Slot");
             if (slot >= 0 && slot < inventory.length) {
-                inventory[slot] = ItemStack.loadItemStackFromNBT(tagCompound);
+                inventory[slot] = new ItemStack(tagCompound);
             }
         }
 
@@ -163,11 +162,11 @@ public class TileCircuitTable extends TileBase implements IInventory, IGuiButton
 
         ItemStack itemStack = getStackInSlot(slot);
         if (itemStack != null) {
-            if (itemStack.stackSize <= amount) {
+            if (itemStack.getCount() <= amount) {
                 setInventorySlotContents(slot, null);
             } else {
                 itemStack = itemStack.splitStack(amount);
-                if (itemStack.stackSize == 0) {
+                if (itemStack.getCount() == 0) {
                     setInventorySlotContents(slot, null);
                 }
             }
@@ -177,8 +176,7 @@ public class TileCircuitTable extends TileBase implements IInventory, IGuiButton
     }
 
     @Override
-    public ItemStack getStackInSlotOnClosing(int i) {
-
+    public ItemStack removeStackFromSlot(int i) {
         ItemStack itemStack = getStackInSlot(i);
         if (itemStack != null) {
             setInventorySlotContents(i, null);
@@ -193,13 +191,13 @@ public class TileCircuitTable extends TileBase implements IInventory, IGuiButton
     }
 
     @Override
-    public String getInventoryName() {
+    public String getName() {
 
         return BPBlocks.circuit_table.getUnlocalizedName();
     }
 
     @Override
-    public boolean hasCustomInventoryName() {
+    public boolean hasCustomName() {
 
         return false;
     }
@@ -211,18 +209,19 @@ public class TileCircuitTable extends TileBase implements IInventory, IGuiButton
     }
 
     @Override
-    public boolean isUseableByPlayer(EntityPlayer player) {
+    public boolean isUsableByPlayer(EntityPlayer player) {
 
         return true;
     }
 
+
     @Override
-    public void openInventory() {
+    public void openInventory(EntityPlayer player) {
 
     }
 
     @Override
-    public void closeInventory() {
+    public void closeInventory(EntityPlayer player) {
 
     }
 

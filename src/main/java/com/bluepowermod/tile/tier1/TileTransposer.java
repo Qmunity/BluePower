@@ -19,26 +19,27 @@
 
 package com.bluepowermod.tile.tier1;
 
-import java.util.List;
-
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.EnumFacing;;
-
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
 import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.part.tube.TubeStack;
 import com.bluepowermod.tile.TileMachineBase;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.AxisAlignedBB;
+
+import java.util.List;
+
+;
 
 public class TileTransposer extends TileMachineBase {
 
     @Override
-    public void updateEntity() {
+    public void update() {
 
-        super.updateEntity();
-        if (isBufferEmpty() && !worldObj.isRemote) {
+        super.update();
+        if (isBufferEmpty() && !world.isRemote) {
             suckEntity();
         }
 
@@ -50,8 +51,8 @@ public class TileTransposer extends TileMachineBase {
         super.redstoneChanged(newValue);
         EnumFacing direction = getFacingDirection();
 
-        if (!worldObj.isRemote && isBufferEmpty() && newValue) {
-            if (worldObj.isAirBlock(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ)) {
+        if (!world.isRemote && isBufferEmpty() && newValue) {
+            if (world.isAirBlock(pos.offset(direction))) {
                 suckItems();
             } else {
                 pullItem();
@@ -81,18 +82,17 @@ public class TileTransposer extends TileMachineBase {
     private static AxisAlignedBB[] ITEM_SUCK_AABBS;
     static {
         ITEM_SUCK_AABBS = new AxisAlignedBB[6];
-        ITEM_SUCK_AABBS[0] = AxisAlignedBB.getBoundingBox(-1, -1, -1, 2, 0, 2);
-        ITEM_SUCK_AABBS[1] = AxisAlignedBB.getBoundingBox(-1, 1, -1, 2, 2, 2);
-        ITEM_SUCK_AABBS[2] = AxisAlignedBB.getBoundingBox(-1, -1, -1, 2, 2, 0);
-        ITEM_SUCK_AABBS[3] = AxisAlignedBB.getBoundingBox(-1, -1, 1, 2, 2, 2);
-        ITEM_SUCK_AABBS[4] = AxisAlignedBB.getBoundingBox(-1, -1, -1, 0, 2, 2);
-        ITEM_SUCK_AABBS[5] = AxisAlignedBB.getBoundingBox(1, -1, -1, 2, 2, 2);
+        ITEM_SUCK_AABBS[0] = new AxisAlignedBB(-1, -1, -1, 2, 0, 2);
+        ITEM_SUCK_AABBS[1] = new AxisAlignedBB(-1, 1, -1, 2, 2, 2);
+        ITEM_SUCK_AABBS[2] = new AxisAlignedBB(-1, -1, -1, 2, 2, 0);
+        ITEM_SUCK_AABBS[3] = new AxisAlignedBB(-1, -1, 1, 2, 2, 2);
+        ITEM_SUCK_AABBS[4] = new AxisAlignedBB(-1, -1, -1, 0, 2, 2);
+        ITEM_SUCK_AABBS[5] = new AxisAlignedBB(1, -1, -1, 2, 2, 2);
     }
 
     private void suckItems() {
 
-        for (EntityItem entity : (List<EntityItem>) worldObj.getEntitiesWithinAABB(EntityItem.class, ITEM_SUCK_AABBS[getFacingDirection().ordinal()]
-                .copy().offset(xCoord, yCoord, zCoord))) {
+        for (EntityItem entity : (List<EntityItem>) world.getEntitiesWithinAABB(EntityItem.class, ITEM_SUCK_AABBS[getFacingDirection().ordinal()].offset(pos))) {
             ItemStack stack = entity.getEntityItem();
             if (isItemAccepted(stack) && !entity.isDead) {
                 addItemToOutputBuffer(stack, getAcceptedItemColor(stack));
@@ -104,9 +104,9 @@ public class TileTransposer extends TileMachineBase {
     private void suckEntity() {
 
         EnumFacing direction = getFacingDirection();
-        AxisAlignedBB box = AxisAlignedBB.getBoundingBox(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ, xCoord
-                + direction.offsetX + 1, yCoord + direction.offsetY + 1, zCoord + direction.offsetZ + 1);
-        for (EntityItem entity : (List<EntityItem>) worldObj.getEntitiesWithinAABB(EntityItem.class, box)) {
+        AxisAlignedBB box = new AxisAlignedBB(pos.getX() + direction.getFrontOffsetX(), pos.getY() + direction.getFrontOffsetY(), pos.getZ() + direction.getFrontOffsetZ(), pos.getX()
+                + direction.getFrontOffsetX() + 1, pos.getY() + direction.getFrontOffsetY() + 1, pos.getZ() + direction.getFrontOffsetZ() + 1);
+        for (EntityItem entity : (List<EntityItem>) world.getEntitiesWithinAABB(EntityItem.class, box)) {
             ItemStack stack = entity.getEntityItem();
             if (isItemAccepted(stack) && !entity.isDead) {
                 addItemToOutputBuffer(stack, getAcceptedItemColor(stack));

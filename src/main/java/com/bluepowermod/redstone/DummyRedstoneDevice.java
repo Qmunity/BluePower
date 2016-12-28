@@ -17,40 +17,42 @@
 
 package com.bluepowermod.redstone;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import net.minecraft.block.BlockRedstoneWire;
-import net.minecraft.world.World;
-import net.minecraft.util.EnumFacing;;
-import uk.co.qmunity.lib.helper.MathHelper;
-import uk.co.qmunity.lib.helper.RedstoneHelper;
-import uk.co.qmunity.lib.vec.Vec3i;
-
 import com.bluepowermod.api.connect.ConnectionType;
 import com.bluepowermod.api.misc.IFace;
 import com.bluepowermod.api.wire.redstone.IRedstoneDevice;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockRedstoneWire;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import uk.co.qmunity.lib.helper.MathHelper;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class DummyRedstoneDevice implements IRedstoneDevice {
 
     private static final List<DummyRedstoneDevice> dummyDevices = new ArrayList<DummyRedstoneDevice>();
 
-    public static DummyRedstoneDevice getDeviceAt(Vec3i loc) {
+    public static DummyRedstoneDevice getDeviceAt(BlockPos loc, World world, Block block) {
 
         for (DummyRedstoneDevice dev : new ArrayList<DummyRedstoneDevice>(dummyDevices))
             if (dev.loc != null && dev.loc.equals(loc))
                 return dev;
 
-        DummyRedstoneDevice dev = new DummyRedstoneDevice(loc);
+        DummyRedstoneDevice dev = new DummyRedstoneDevice(loc, block, world);
         dummyDevices.add(dev);
         return dev;
     }
 
-    private Vec3i loc;
+    private BlockPos loc;
+    private Block block;
+    private World world;
     private RedstoneConnectionCache connections;
 
-    private DummyRedstoneDevice(Vec3i loc) {
-
+    private DummyRedstoneDevice(BlockPos loc, Block block, World world) {
+        this.block = block;
+        this.world = world;
         this.loc = loc;
         if (loc != null)
             connections = RedstoneApi.getInstance().createRedstoneConnectionCache(this);
@@ -58,8 +60,7 @@ public class DummyRedstoneDevice implements IRedstoneDevice {
 
     @Override
     public World getWorld() {
-
-        return loc.getWorld();
+        return world;
     }
 
     @Override
@@ -91,7 +92,7 @@ public class DummyRedstoneDevice implements IRedstoneDevice {
 
         if (type == ConnectionType.STRAIGHT)
             return RedstoneHelper.canConnect(getWorld(), getX(), getY(), getZ(), side, dev instanceof IFace ? ((IFace) dev).getFace()
-                    : EnumFacing.UNKNOWN);
+                    : null);
 
         return false;
     }
@@ -104,12 +105,12 @@ public class DummyRedstoneDevice implements IRedstoneDevice {
         // boolean wiresOutputtedPower = RedstoneApi.getInstance().shouldWiresOutputPower();
         // RedstoneApi.getInstance().setWiresOutputPower(false);
         // RedstoneApi.getInstance().setWiresHandleUpdates(false);
-        // loc.getBlock().onNeighborBlockChange(loc.getWorld(), loc.getX(), loc.getY(), loc.getZ(), new Vec3i(this).getBlock());
+        // loc.getBlock().onNeighborBlockChange(loc.getWorld(), loc.getX(), loc.getY(), loc.getZ(), new BlockPos(this).getBlock());
         // RedstoneApi.getInstance().setWiresHandleUpdates(wiresHandledUpdates);
         // RedstoneApi.getInstance().setWiresOutputPower(wiresOutputtedPower);
         // }
 
-        if (side == EnumFacing.UNKNOWN)
+        if (side == null)
             return 0;
 
         return (byte) MathHelper.map(RedstoneHelper.getOutput(getWorld(), getX(), getY(), getZ(), side), 0, 15, 0, 255);
@@ -123,7 +124,7 @@ public class DummyRedstoneDevice implements IRedstoneDevice {
         // boolean wiresOutputtedPower = RedstoneApi.getInstance().shouldWiresOutputPower();
         // RedstoneApi.getInstance().setWiresOutputPower(false);
         // RedstoneApi.getInstance().setWiresHandleUpdates(false);
-        // loc.getBlock().onNeighborBlockChange(loc.getWorld(), loc.getX(), loc.getY(), loc.getZ(), new Vec3i(this).getBlock());
+        // loc.getBlock().onNeighborBlockChange(loc.getWorld(), loc.getX(), loc.getY(), loc.getZ(), new BlockPos(this).getBlock());
         // RedstoneApi.getInstance().setWiresHandleUpdates(wiresHandledUpdates);
         // RedstoneApi.getInstance().setWiresOutputPower(wiresOutputtedPower);
         // }
@@ -131,12 +132,12 @@ public class DummyRedstoneDevice implements IRedstoneDevice {
 
     public int getRedstoneOutput(int def) {
 
-        if (loc.getBlock() instanceof BlockRedstoneWire) {
+        if (block instanceof BlockRedstoneWire) {
             // boolean wiresHandledUpdates = RedstoneApi.getInstance().shouldWiresHandleUpdates();
             // boolean wiresOutputtedPower = RedstoneApi.getInstance().shouldWiresOutputPower();
             // RedstoneApi.getInstance().setWiresOutputPower(false);
             // RedstoneApi.getInstance().setWiresHandleUpdates(false);
-            // // loc.getBlock().onNeighborBlockChange(loc.getWorld(), loc.getX(), loc.getY(), loc.getZ(), new Vec3i(this).getBlock());
+            // // loc.getBlock().onNeighborBlockChange(loc.getWorld(), loc.getX(), loc.getY(), loc.getZ(), new BlockPos(this).getBlock());
             // RedstoneApi.getInstance().setWiresHandleUpdates(wiresHandledUpdates);
             // RedstoneApi.getInstance().setWiresOutputPower(wiresOutputtedPower);
             // int powNow = loc.getBlockMeta();
@@ -163,7 +164,7 @@ public class DummyRedstoneDevice implements IRedstoneDevice {
     @Override
     public boolean isNormalFace(EnumFacing side) {
 
-        return loc.getBlock().isSideSolid(loc.getWorld(), loc.getX(), loc.getY(), loc.getZ(), side);
+        return block.isSideSolid(world.getBlockState(loc), world, loc, side);
     }
 
 }

@@ -9,7 +9,7 @@ package com.bluepowermod.api;
 
 import com.bluepowermod.api.recipe.IAlloyFurnaceRegistry;
 import com.bluepowermod.api.wire.redstone.IRedstoneApi;
-import mcmultipart.multipart.IMultipart;
+import com.bluepowermod.part.BPPart;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -52,7 +52,7 @@ public class BPApi {
          * @param part
          * @param stack
          */
-        public void loadSilkySettings(IMultipart part, ItemStack stack);
+        public void loadSilkySettings(BPPart part, ItemStack stack);
 
         public IRedstoneApi getRedstoneApi();
     }

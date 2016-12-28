@@ -35,7 +35,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
-import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraft.util.EnumFacing;;
 import uk.co.qmunity.lib.client.render.RenderHelper;
@@ -426,7 +426,7 @@ IAdvancedBundledConductor {
     }
 
     @Override
-    public IPartPlacement getPlacement(IPart part, World world, Vec3i location, EnumFacing face, MovingObjectPosition mop,
+    public IPartPlacement getPlacement(IPart part, World world, Vec3i location, EnumFacing face, RayTraceResult mop,
             EntityPlayer player) {
 
         if (!DebugHelper.isDebugModeEnabled())

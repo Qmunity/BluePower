@@ -9,7 +9,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.IIcon;
 import uk.co.qmunity.lib.client.render.RenderHelper;
 import uk.co.qmunity.lib.part.IPartSelectableCustom;
-import uk.co.qmunity.lib.raytrace.QMovingObjectPosition;
+import uk.co.qmunity.lib.raytrace.QRayTraceResult;
 import uk.co.qmunity.lib.vec.Vec3d;
 import uk.co.qmunity.lib.vec.Vec3dCube;
 import uk.co.qmunity.lib.vec.Vec3i;
@@ -122,18 +122,18 @@ public abstract class GateSupported<C_BOTTOM extends GateConnectionBase, C_TOP e
     }
 
     @Override
-    public QMovingObjectPosition rayTrace(Vec3d start, Vec3d end) {
+    public QRayTraceResult rayTrace(Vec3d start, Vec3d end) {
 
-        QMovingObjectPosition mop = super.rayTrace(start, end);
+        QRayTraceResult mop = super.rayTrace(start, end);
 
         if (mop != null && this.getClass() == GateSupported.class)
-            mop = new QMovingObjectPosition(mop, mop.getPart(), Vec3dCube.merge(getSelectionBoxes()));
+            mop = new QRayTraceResult(mop, mop.getPart(), Vec3dCube.merge(getSelectionBoxes()));
 
         return mop;
     }
 
     @Override
-    public boolean drawHighlight(QMovingObjectPosition mop, EntityPlayer player, float frame) {
+    public boolean drawHighlight(QRayTraceResult mop, EntityPlayer player, float frame) {
 
         return false;
     }

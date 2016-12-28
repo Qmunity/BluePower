@@ -17,6 +17,7 @@
 
 package com.bluepowermod.part;
 
+import mcmultipart.api.multipart.IMultipart;
 import net.minecraft.world.World;
 import net.minecraft.util.EnumFacing;;
 import uk.co.qmunity.lib.part.IPart;
@@ -34,7 +35,7 @@ public class PartPlacementFaceRotate extends PartPlacementFace {
     }
 
     @Override
-    public boolean placePart(IPart part, World world, Vec3i location, IMultipartCompat multipartSystem, boolean simulated) {
+    public boolean placePart(IMultipart part, World world, Vec3i location, boolean simulated) {
 
         if (part instanceof BPPartFaceRotate)
             ((BPPartFaceRotate) part).setRotation(rotation);

@@ -17,31 +17,32 @@
 
 package com.bluepowermod.redstone;
 
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
-import net.minecraft.util.EnumFacing;;
-import uk.co.qmunity.lib.vec.Vec3i;
-
 import com.bluepowermod.api.wire.redstone.IBundledDevice;
 import com.bluepowermod.api.wire.redstone.IRedstoneDevice;
 import com.bluepowermod.api.wire.redstone.IRedstoneProvider;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+
+;
 
 public class RedstoneProviderVanilla implements IRedstoneProvider {
 
     @Override
-    public IRedstoneDevice getRedstoneDeviceAt(World world, int x, int y, int z, EnumFacing face, EnumFacing side) {
+    public IRedstoneDevice getRedstoneDeviceAt(World world, BlockPos pos, EnumFacing face, EnumFacing side) {
 
-        TileEntity te = world.getTileEntity(x, y, z);
+        TileEntity te = world.getTileEntity(pos);
         if (te != null && te instanceof IRedstoneDevice)
             return (IRedstoneDevice) te;
 
-        return DummyRedstoneDevice.getDeviceAt(new Vec3i(x, y, z, world));
+        return DummyRedstoneDevice.getDeviceAt(pos, world, world.getBlockState(pos).getBlock());
     }
 
     @Override
-    public IBundledDevice getBundledDeviceAt(World world, int x, int y, int z, EnumFacing face, EnumFacing side) {
+    public IBundledDevice getBundledDeviceAt(World world, BlockPos pos, EnumFacing face, EnumFacing side) {
 
-        TileEntity te = world.getTileEntity(x, y, z);
+        TileEntity te = world.getTileEntity(pos);
         if (te != null && te instanceof IBundledDevice)
             return (IBundledDevice) te;
 

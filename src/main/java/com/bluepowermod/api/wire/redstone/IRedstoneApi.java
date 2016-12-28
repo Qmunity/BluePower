@@ -1,11 +1,13 @@
 package com.bluepowermod.api.wire.redstone;
 
-import net.minecraft.world.World;
-import net.minecraft.util.EnumFacing;;
-
 import com.bluepowermod.api.connect.ConnectionType;
 import com.bluepowermod.api.connect.IConnection;
 import com.bluepowermod.api.connect.IConnectionCache;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+
+;
 
 public interface IRedstoneApi {
 
@@ -15,19 +17,15 @@ public interface IRedstoneApi {
      *
      * @param world
      *            The world where the device is
-     * @param x
-     *            X coordinate of the device
-     * @param y
-     *            Y coordinate of the device
-     * @param z
-     *            Z coordinate of the device
+     * @param pos
+     *            Coordinate of the device
      * @param side
      *            Side of the device we're looking for
      * @param face
-     *            Face the device must be placed on or {@link EnumFacing#UNKNOWN} if not know or not a face device
+     *            Face the device must be placed on or {@link null} if not know or not a face device
      * @return The redstone device at the specified coords, side and face.
      */
-    public IRedstoneDevice getRedstoneDevice(World world, int x, int y, int z, EnumFacing face, EnumFacing side);
+    public IRedstoneDevice getRedstoneDevice(World world, BlockPos pos, EnumFacing face, EnumFacing side);
 
     /**
      * Returns the bundled device at the specified coordinates and on the specified side and face. Data gotten from the registered
@@ -35,19 +33,15 @@ public interface IRedstoneApi {
      *
      * @param world
      *            The world where the device is
-     * @param x
-     *            X coordinate of the device
-     * @param y
-     *            Y coordinate of the device
-     * @param z
-     *            Z coordinate of the device
+     * @param pos
+     *            coordinate of the device
      * @param side
      *            Side of the device we're looking for
      * @param face
-     *            Face the device must be placed on or {@link EnumFacing#UNKNOWN} if not know or not a face device
+     *            Face the device must be placed on or {@link null} if not know or not a face device
      * @return The redstone device at the specified coords, side and face.
      */
-    public IBundledDevice getBundledDevice(World world, int x, int y, int z, EnumFacing face, EnumFacing side);
+    public IBundledDevice getBundledDevice(World world, BlockPos pos, EnumFacing face, EnumFacing side);
 
     /**
      * Registers a redstone/bundled device provider.

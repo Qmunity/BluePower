@@ -36,14 +36,14 @@ public class TileEjector extends TileMachineBase implements IInventory {
 
         super.redstoneChanged(newValue);
 
-        if (!worldObj.isRemote && isBufferEmpty() && newValue) {
+        if (!world.isRemote && isBufferEmpty() && newValue) {
             for (int i = 0; i < inventory.length; i++) {
-                if (inventory[i] != null && inventory[i].stackSize > 0) {
+                if (inventory[i] != null && inventory[i].getCount() > 0) {
                     ItemStack output = inventory[i].copy();
-                    output.stackSize = 1;
+                    output.setCount(1);
                     addItemToOutputBuffer(output);
-                    inventory[i].stackSize--;
-                    if (inventory[i].stackSize == 0)
+                    inventory[i].setCount(inventory[i].getCount() - 1);
+                    if (inventory[i].getCount() == 0)
                         inventory[i] = null;
                     break;
                 }
@@ -61,7 +61,7 @@ public class TileEjector extends TileMachineBase implements IInventory {
 
         for (int i = 0; i < 9; i++) {
             NBTTagCompound tc = tCompound.getCompoundTag("inventory" + i);
-            inventory[i] = ItemStack.loadItemStackFromNBT(tc);
+            inventory[i] = new ItemStack(tc);
         }
     }
 
@@ -69,7 +69,7 @@ public class TileEjector extends TileMachineBase implements IInventory {
      * This function gets called whenever the world/chunk is saved
      */
     @Override
-    public void writeToNBT(NBTTagCompound tCompound) {
+    public NBTTagCompound writeToNBT(NBTTagCompound tCompound) {
 
         super.writeToNBT(tCompound);
 
@@ -80,6 +80,8 @@ public class TileEjector extends TileMachineBase implements IInventory {
                 tCompound.setTag("inventory" + i, tc);
             }
         }
+
+        return tCompound;
     }
 
     /**
@@ -113,11 +115,11 @@ public class TileEjector extends TileMachineBase implements IInventory {
 
         ItemStack itemStack = getStackInSlot(slot);
         if (itemStack != null) {
-            if (itemStack.stackSize <= amount) {
+            if (itemStack.getCount() <= amount) {
                 setInventorySlotContents(slot, null);
             } else {
                 itemStack = itemStack.splitStack(amount);
-                if (itemStack.stackSize == 0) {
+                if (itemStack.getCount() == 0) {
                     setInventorySlotContents(slot, null);
                 }
             }
@@ -133,8 +135,7 @@ public class TileEjector extends TileMachineBase implements IInventory {
      * @param slot
      */
     @Override
-    public ItemStack getStackInSlotOnClosing(int slot) {
-
+    public ItemStack removeStackFromSlot(int slot) {
         return getStackInSlot(slot);
     }
 
@@ -154,7 +155,7 @@ public class TileEjector extends TileMachineBase implements IInventory {
      * Returns the name of the inventory
      */
     @Override
-    public String getInventoryName() {
+    public String getName() {
 
         return BPBlocks.ejector.getUnlocalizedName();
     }
@@ -163,7 +164,7 @@ public class TileEjector extends TileMachineBase implements IInventory {
      * Returns if the inventory is named
      */
     @Override
-    public boolean hasCustomInventoryName() {
+    public boolean hasCustomName() {
 
         return true;
     }
@@ -183,18 +184,18 @@ public class TileEjector extends TileMachineBase implements IInventory {
      * @param var1
      */
     @Override
-    public boolean isUseableByPlayer(EntityPlayer var1) {
+    public boolean isUsableByPlayer(EntityPlayer var1) {
 
         return true;
     }
 
     @Override
-    public void openInventory() {
+    public void openInventory(EntityPlayer player) {
 
     }
 
     @Override
-    public void closeInventory() {
+    public void closeInventory(EntityPlayer player) {
 
     }
 

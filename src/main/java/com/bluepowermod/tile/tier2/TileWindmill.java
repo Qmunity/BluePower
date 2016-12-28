@@ -8,8 +8,9 @@
 package com.bluepowermod.tile.tier2;
 
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ITickable;
 
-public class TileWindmill extends TileEntity {
+public class TileWindmill extends TileEntity implements ITickable {
 
 	
 	public int turbineTick;
@@ -19,8 +20,8 @@ public class TileWindmill extends TileEntity {
 	}
 	
 	@Override
-	public void updateEntity() {
-		if(worldObj.isRemote){
+	public void update() {
+		if(world.isRemote){
 			
 			turbineTick++;
 		}

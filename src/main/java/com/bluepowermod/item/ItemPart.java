@@ -17,24 +17,6 @@
 
 package com.bluepowermod.item;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import net.minecraft.block.Block.SoundType;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.PositionedSoundRecord;
-import net.minecraft.client.audio.SoundCategory;
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
-import uk.co.qmunity.lib.item.ItemMultipart;
-import uk.co.qmunity.lib.part.IPart;
-
 import com.bluepowermod.api.BPApi;
 import com.bluepowermod.api.item.IDatabaseSaveable;
 import com.bluepowermod.init.BPCreativeTabs;
@@ -42,16 +24,31 @@ import com.bluepowermod.part.BPPart;
 import com.bluepowermod.part.PartInfo;
 import com.bluepowermod.part.PartManager;
 import com.bluepowermod.reference.Refs;
+import mcmultipart.api.item.ItemBlockMultipart;
+import mcmultipart.api.multipart.IMultipart;
+import net.minecraft.block.SoundType;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.PositionedSoundRecord;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.*;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import java.util.ArrayList;
+import java.util.List;
 
-public class ItemPart extends ItemMultipart implements IDatabaseSaveable {
+
+public class ItemPart extends ItemBlockMultipart implements IDatabaseSaveable {
 
     private final PartInfo info;
 
     public ItemPart(PartInfo info) {
-
         setUnlocalizedName("part." + Refs.MODID + ":");
 
         setCreativeTab(BPCreativeTabs.items);
@@ -74,16 +71,15 @@ public class ItemPart extends ItemMultipart implements IDatabaseSaveable {
     @Override
     public CreativeTabs[] getCreativeTabs() {
 
-        return CreativeTabs.creativeTabArray;
+        return CreativeTabs.CREATIVE_TAB_ARRAY;
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
-    public void getSubItems(Item unused, CreativeTabs tab, List l) {
-
+    public void getSubItems(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> subItems) {
         for (CreativeTabs t : info.getExample().getCreativeTabs())
             if (t != null && t.equals(tab) || tab == null)
-                l.addAll(info.getExample().getSubItems());
+                subItems.addAll(info.getExample().getSubItems());
     }
 
     @Override
@@ -119,29 +115,28 @@ public class ItemPart extends ItemMultipart implements IDatabaseSaveable {
     }
 
     @Override
-    public String getCreatedPartType(ItemStack item, EntityPlayer player, World world, MovingObjectPosition mop) {
+    public String getCreatedPartType(ItemStack item, EntityPlayer player, World world, RayTraceResult mop) {
 
         return null;
     }
 
     @Override
-    public IPart createPart(ItemStack item, EntityPlayer player, World world, MovingObjectPosition mop) {
+    public IMultipart createPart(ItemStack item, EntityPlayer player, World world, RayTraceResult mop) {
 
-        IPart part = info.create();
+        IMultipart part = info.create();
         BPApi.getInstance().loadSilkySettings(part, item);
         return part;
     }
 
     @Override
-    public boolean onItemUse(ItemStack item, EntityPlayer player, World world, int x, int y, int z, int face, float x_, float y_, float z_) {
-
+    public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         if (!super.onItemUse(item, player, world, x, y, z, face, x_, y_, z_))
-            return false;
+            return EnumActionResult.PASS;
 
         if (world.isRemote)
             playPlacementSound(x, y, z, PartManager.getExample(item).getPlacementSound());
 
-        return true;
+        return EnumActionResult.SUCCESS;
     }
 
     @SideOnly(Side.CLIENT)
@@ -167,12 +162,6 @@ public class ItemPart extends ItemMultipart implements IDatabaseSaveable {
         List<String> l = new ArrayList<String>();
         part.addTooltip(item, l);
         list.addAll(l);
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerIcons(IIconRegister p_94581_1_) {
-
     }
 
     public String getPartType() {

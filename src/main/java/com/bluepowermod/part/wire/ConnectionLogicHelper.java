@@ -1,22 +1,21 @@
 package com.bluepowermod.part.wire;
 
-import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
-import net.minecraft.world.World;
-import net.minecraft.util.EnumFacing;;
-import uk.co.qmunity.lib.part.MicroblockShape;
-import uk.co.qmunity.lib.part.compat.OcclusionHelper;
-import uk.co.qmunity.lib.vec.IWorldLocation;
-import uk.co.qmunity.lib.vec.Vec3i;
-
 import com.bluepowermod.api.connect.ConnectionType;
 import com.bluepowermod.api.misc.IFace;
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import uk.co.qmunity.lib.vec.IWorldLocation;
+
+;
 
 public class ConnectionLogicHelper<T extends IWorldLocation, C> {
 
     public static interface IConnectableProvider<T extends IWorldLocation, C> {
 
-        public T getConnectableAt(World world, int x, int y, int z, EnumFacing face, EnumFacing side);
+        public T getConnectableAt(World world, BlockPos pos, EnumFacing face, EnumFacing side);
 
         public C createConnection(T a, T b, EnumFacing sideA, EnumFacing sideB, ConnectionType type);
 
@@ -40,15 +39,14 @@ public class ConnectionLogicHelper<T extends IWorldLocation, C> {
 
     public C getNeighbor(T device, EnumFacing side) {
 
-        EnumFacing face = EnumFacing.UNKNOWN;
+        EnumFacing face = null;
         if (device instanceof IFace)
             face = ((IFace) device).getFace();
 
         // In same block
         do {
-            Vec3i loc = new Vec3i(device);
-            T dev = provider.getConnectableAt(loc.getWorld(), loc.getX(), loc.getY(), loc.getZ(), side == face.getOpposite() ? EnumFacing.UNKNOWN
-                    : side, face == EnumFacing.UNKNOWN ? side.getOpposite() : face);
+            T dev = provider.getConnectableAt(device.getWorld(), new BlockPos(device.getX(), device.getY(), device.getZ()), side == face.getOpposite() ? null
+                    : side, face == null ? side.getOpposite() : face);
             if (dev == null || dev == device || !provider.isValidClosedCorner(dev))
                 break;
 
@@ -59,17 +57,17 @@ public class ConnectionLogicHelper<T extends IWorldLocation, C> {
         } while (false);
 
         // On same block
-        if (face != EnumFacing.UNKNOWN) {
+        if (face != null) {
             do {
-                Vec3i loc = new Vec3i(device).add(face).add(side);
-                T dev = provider.getConnectableAt(loc.getWorld(), loc.getX(), loc.getY(), loc.getZ(), side.getOpposite(), face.getOpposite());
+                BlockPos loc = new BlockPos(device.getX(), device.getY(), device.getZ()).offset(face).offset(side);
+                T dev = provider.getConnectableAt(device.getWorld(), loc, side.getOpposite(), face.getOpposite());
                 if (dev == null || dev == device || !provider.isValidOpenCorner(dev))
                     break;
 
-                Vec3i block = new Vec3i(device).add(side);
-                Block b = block.getBlock();
+                BlockPos block = new BlockPos(device.getX(), device.getY(), device.getZ()).offset(side);
+                Block b = device.getWorld().getBlockState(block).getBlock();
                 // Full block check
-                if (b.isNormalCube() || b == Blocks.redstone_block)
+                if (b.isNormalCube(device.getWorld().getBlockState(block)) || b == Blocks.REDSTONE_BLOCK)
                     break;
                 // Microblock check
                 if (!OcclusionHelper.microblockOcclusionTest(block, MicroblockShape.EDGE, 2, face, side.getOpposite()))
@@ -83,14 +81,14 @@ public class ConnectionLogicHelper<T extends IWorldLocation, C> {
 
         // Straight connection
         do {
-            Vec3i loc = new Vec3i(device).add(side);
-            T dev = provider.getConnectableAt(loc.getWorld(), loc.getX(), loc.getY(), loc.getZ(), face, side.getOpposite());
+            BlockPos loc = new BlockPos(device.getX(), device.getY(), device.getZ()).offset(side);
+            T dev = provider.getConnectableAt(device.getWorld(), loc, face, side.getOpposite());
             if (dev == null) {
-                dev = provider.getConnectableAt(loc.getWorld(), loc.getX(), loc.getY(), loc.getZ(), side.getOpposite(), side.getOpposite());
-                if (dev == null && face == EnumFacing.UNKNOWN && provider.isNormalFace(device, side)) {
+                dev = provider.getConnectableAt(device.getWorld(), loc, side.getOpposite(), side.getOpposite());
+                if (dev == null && face == null && provider.isNormalFace(device, side)) {
                     for (EnumFacing d : EnumFacing.VALUES) {
                         if (d != side && d != side.getOpposite()) {
-                            dev = provider.getConnectableAt(loc.getWorld(), loc.getX(), loc.getY(), loc.getZ(), d, side.getOpposite());
+                            dev = provider.getConnectableAt(device.getWorld(), loc, d, side.getOpposite());
                             if (dev != null)
                                 break;
                         }

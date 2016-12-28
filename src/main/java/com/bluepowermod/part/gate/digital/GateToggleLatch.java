@@ -20,7 +20,7 @@ package com.bluepowermod.part.gate.digital;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import uk.co.qmunity.lib.raytrace.QMovingObjectPosition;
+import uk.co.qmunity.lib.raytrace.QRayTraceResult;
 
 import com.bluepowermod.api.wire.redstone.RedwireType;
 import com.bluepowermod.part.gate.component.GateComponentBorder;
@@ -104,7 +104,7 @@ public class GateToggleLatch extends GateSimpleDigital {
     }
 
     @Override
-    public boolean onActivated(EntityPlayer player, QMovingObjectPosition hit, ItemStack item) {
+    public boolean onActivated(EntityPlayer player, QRayTraceResult hit, ItemStack item) {
 
         if (super.onActivated(player, hit, item))
             return true;

@@ -17,13 +17,11 @@
 
 package com.bluepowermod.recipe;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import com.bluepowermod.BluePower;
+import com.bluepowermod.api.recipe.IAlloyFurnaceRecipe;
+import com.bluepowermod.api.recipe.IAlloyFurnaceRegistry;
+import com.bluepowermod.init.Config;
+import com.bluepowermod.util.ItemStackUtils;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -31,19 +29,15 @@ import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.item.crafting.ShapelessRecipes;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.ModContainer;
+import net.minecraftforge.fml.common.registry.GameData;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 
-import com.bluepowermod.BluePower;
-import com.bluepowermod.api.recipe.IAlloyFurnaceRecipe;
-import com.bluepowermod.api.recipe.IAlloyFurnaceRegistry;
-import com.bluepowermod.init.Config;
-import com.bluepowermod.util.ItemStackUtils;
-
-import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.common.ModContainer;
-import cpw.mods.fml.common.registry.GameData;
+import java.util.*;
 
 /**
  *
@@ -133,7 +127,7 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
         Collections.addAll(blacklist, Config.alloyFurnaceBlacklist);
         List<Item> blacklist = new ArrayList<Item>();
         for (String configString : this.blacklist) {
-            Item item = GameData.getItemRegistry().getObject(configString);
+            Item item = GameData.getItemRegistry().getObject(new ResourceLocation(configString));
             if (item != null) {
                 blacklist.add(item);
             } else {
@@ -160,7 +154,7 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
                                     if (currentlyRecycledInto == null
                                             || ItemStackUtils.isItemFuzzyEqual(currentlyRecycledInto, moltenDownItem)) {
                                         currentlyRecycledInto = moltenDownItem;
-                                        recyclingAmount += moltenDownItem.stackSize;
+                                        recyclingAmount += moltenDownItem.getCount();
                                     }
                                 }
                             }
@@ -174,7 +168,7 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
                                     if (currentlyRecycledInto == null
                                             || ItemStackUtils.isItemFuzzyEqual(currentlyRecycledInto, moltenDownItem)) {
                                         currentlyRecycledInto = moltenDownItem;
-                                        recyclingAmount += moltenDownItem.stackSize;
+                                        recyclingAmount += moltenDownItem.getCount();
                                     }
                                 }
                             }
@@ -197,7 +191,7 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
                                             if (currentlyRecycledInto == null
                                                     || ItemStackUtils.isItemFuzzyEqual(currentlyRecycledInto, moltenDownItem)) {
                                                 currentlyRecycledInto = moltenDownItem;
-                                                recyclingAmount += moltenDownItem.stackSize;
+                                                recyclingAmount += moltenDownItem.getCount();
                                             }
                                             break;
                                         }
@@ -222,7 +216,7 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
                                         if (currentlyRecycledInto == null
                                                 || ItemStackUtils.isItemFuzzyEqual(currentlyRecycledInto, moltenDownItem)) {
                                             currentlyRecycledInto = moltenDownItem;
-                                            recyclingAmount += moltenDownItem.stackSize;
+                                            recyclingAmount += moltenDownItem.getCount();
                                         }
                                         break;
                                     }
@@ -236,11 +230,11 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
                     e.printStackTrace();
                 }
             }
-            if (recyclingAmount > 0 && recipe.getRecipeOutput().stackSize > 0) {
+            if (recyclingAmount > 0 && recipe.getRecipeOutput().getCount() > 0) {
                 boolean shouldAdd = true;
                 for (int i = 0; i < registeredRecycledItems.size(); i++) {
                     if (ItemStackUtils.isItemFuzzyEqual(registeredRecycledItems.get(i), recipe.getRecipeOutput())) {
-                        if (registeredResultItems.get(i).stackSize < recyclingAmount) {
+                        if (registeredResultItems.get(i).getCount() < recyclingAmount) {
                             shouldAdd = false;
                             break;
                         } else {
@@ -285,7 +279,7 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
                     ItemStack craftingResult = recipe.getCraftingResult(input);
                     if (!ItemStack.areItemStackTagsEqual(outputSlot, craftingResult) || !outputSlot.isItemEqual(craftingResult)) {
                         continue;
-                    } else if (craftingResult.stackSize + outputSlot.stackSize > outputSlot.getMaxStackSize()) {
+                    } else if (craftingResult.getCount() + outputSlot.getCount() > outputSlot.getMaxStackSize()) {
                         continue;
                     }
                 }
@@ -326,10 +320,10 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
         public boolean matches(ItemStack[] input) {
 
             for (ItemStack requiredItem : requiredItems) {
-                int itemsNeeded = requiredItem.stackSize;
+                int itemsNeeded = requiredItem.getCount();
                 for (ItemStack inputStack : input) {
                     if (inputStack != null && ItemStackUtils.isItemFuzzyEqual(inputStack, requiredItem)) {
-                        itemsNeeded -= inputStack.stackSize;
+                        itemsNeeded -= inputStack.getCount();
                         if (itemsNeeded <= 0)
                             break;
                     }
@@ -344,13 +338,13 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
         public void useItems(ItemStack[] input) {
 
             for (ItemStack requiredItem : requiredItems) {
-                int itemsNeeded = requiredItem.stackSize;
+                int itemsNeeded = requiredItem.getCount();
                 for (int i = 0; i < input.length; i++) {
                     ItemStack inputStack = input[i];
                     if (inputStack != null && ItemStackUtils.isItemFuzzyEqual(inputStack, requiredItem)) {
-                        int itemsSubstracted = Math.min(inputStack.stackSize, itemsNeeded);
-                        inputStack.stackSize -= itemsSubstracted;
-                        if (inputStack.stackSize <= 0)
+                        int itemsSubstracted = Math.min(inputStack.getCount(), itemsNeeded);
+                        inputStack.setCount(inputStack.getCount() - itemsSubstracted);
+                        if (inputStack.getCount() <= 0)
                             input[i] = null;
                         itemsNeeded -= itemsSubstracted;
                         if (itemsNeeded <= 0)

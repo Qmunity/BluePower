@@ -105,8 +105,8 @@ public class TileBase extends TileEntity implements IRotatable, ITickable {
 
     protected void sendUpdatePacket() {
 
-        //if (!world.isRemote)
-            //TODO find Replacement for these - world.markBlockForUpdate(xCoord, yCoord, zCoord);
+        if (!world.isRemote)
+        world.notifyNeighborsOfStateChange(pos, getBlockType(), true);
     }
 
     protected void markForRenderUpdate() {

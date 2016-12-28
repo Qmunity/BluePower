@@ -17,18 +17,16 @@
 
 package com.bluepowermod.redstone;
 
+import com.bluepowermod.api.connect.ConnectionType;
+import com.bluepowermod.api.wire.redstone.*;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.world.World;
-import net.minecraft.util.EnumFacing;;
-
-import com.bluepowermod.api.connect.ConnectionType;
-import com.bluepowermod.api.wire.redstone.IBundledDevice;
-import com.bluepowermod.api.wire.redstone.IPropagator;
-import com.bluepowermod.api.wire.redstone.IRedstoneApi;
-import com.bluepowermod.api.wire.redstone.IRedstoneDevice;
-import com.bluepowermod.api.wire.redstone.IRedstoneProvider;
+;
 
 public class RedstoneApi implements IRedstoneApi {
 
@@ -47,16 +45,16 @@ public class RedstoneApi implements IRedstoneApi {
     private boolean shouldWiresOutputPower = true;
     private boolean shouldLossyWiresOutputPower = true;
     private boolean shouldWiresHandleUpdates = true;
-    private DummyRedstoneDevice returnDevice = DummyRedstoneDevice.getDeviceAt(null);
+    private DummyRedstoneDevice returnDevice = DummyRedstoneDevice.getDeviceAt(null, null, null);
 
     @Override
-    public IRedstoneDevice getRedstoneDevice(World world, int x, int y, int z, EnumFacing face, EnumFacing side) {
+    public IRedstoneDevice getRedstoneDevice(World world, BlockPos pos, EnumFacing face, EnumFacing side) {
 
         boolean returned = false;
         for (IRedstoneProvider provider : providers) {
             if (returned && provider instanceof RedstoneProviderVanilla)
                 continue;
-            IRedstoneDevice device = provider.getRedstoneDeviceAt(world, x, y, z, face, side);
+            IRedstoneDevice device = provider.getRedstoneDeviceAt(world, pos, face, side);
             if (device == returnDevice) {
                 returned = true;
                 continue;
@@ -69,10 +67,10 @@ public class RedstoneApi implements IRedstoneApi {
     }
 
     @Override
-    public IBundledDevice getBundledDevice(World world, int x, int y, int z, EnumFacing face, EnumFacing side) {
+    public IBundledDevice getBundledDevice(World world, BlockPos pos, EnumFacing face, EnumFacing side) {
 
         for (IRedstoneProvider provider : providers) {
-            IBundledDevice device = provider.getBundledDeviceAt(world, x, y, z, face, side);
+            IBundledDevice device = provider.getBundledDeviceAt(world, pos, face, side);
             if (device == returnDevice)
                 return null;
             if (device != null)

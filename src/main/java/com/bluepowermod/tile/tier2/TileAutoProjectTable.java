@@ -34,7 +34,7 @@ public class TileAutoProjectTable extends TileProjectTable implements ISidedInve
     }
 
     @Override
-    public void writeToNBT(NBTTagCompound tag) {
+    public NBTTagCompound writeToNBT(NBTTagCompound tag) {
         super.writeToNBT(tag);
 
         if (craftBuffer != null) {
@@ -42,6 +42,8 @@ public class TileAutoProjectTable extends TileProjectTable implements ISidedInve
             craftBuffer.writeToNBT(bufferTag);
             tag.setTag("craftBuffer", bufferTag);
         }
+
+        return tag;
     }
 
     @Override
@@ -49,7 +51,7 @@ public class TileAutoProjectTable extends TileProjectTable implements ISidedInve
         super.readFromNBT(tag);
 
         if (tag.hasKey("craftBuffer")) {
-            craftBuffer = ItemStack.loadItemStackFromNBT(tag.getCompoundTag("craftBuffer"));
+            craftBuffer = new ItemStack(tag.getCompoundTag("craftBuffer"));
         } else {
             craftBuffer = null;
         }
@@ -68,21 +70,25 @@ public class TileAutoProjectTable extends TileProjectTable implements ISidedInve
     }
 
     @Override
-    public int[] getAccessibleSlotsFromSide(int p_94128_1_) {
+    public int[] getSlotsForFace(EnumFacing side) {
+        return new int[0];
+    }
+
+    public static int[] getSlots() {
         return slots;
     }
 
     @Override
-    public boolean canInsertItem(int slot, ItemStack stack, int side) {
+    public boolean canInsertItem(int slot, ItemStack itemStackIn, EnumFacing direction) {
         return slot < 18;
     }
 
     @Override
-    public boolean canExtractItem(int slot, ItemStack extractedStack, int side) {
+    public boolean canExtractItem(int slot, ItemStack stack, EnumFacing side) {
         if (slot == 18) {
             return true;
         } else {
-            return side > 5;
+            return side.ordinal() > 5;
         }
     }
 
@@ -113,8 +119,8 @@ public class TileAutoProjectTable extends TileProjectTable implements ISidedInve
     }
 
     @Override
-    public void updateEntity() {
-        super.updateEntity();
+    public void update() {
+        super.update();
         if (markedForBufferFill) {
             updateCraftingGrid();
             tryFillCraftBuffer();
@@ -123,7 +129,7 @@ public class TileAutoProjectTable extends TileProjectTable implements ISidedInve
     }
 
     private void tryFillCraftBuffer() {
-        if (craftBuffer == null && craftResult.getStackInSlot(0) != null && !worldObj.isRemote) {
+        if (craftBuffer == null && craftResult.getStackInSlot(0) != null && !world.isRemote) {
             Map<ItemStack, Integer> recipeItems = new HashMap<ItemStack, Integer>();
             for (ItemStack s : craftingGrid) {
                 if (s != null) {
@@ -133,8 +139,8 @@ public class TileAutoProjectTable extends TileProjectTable implements ISidedInve
             boolean canCraft = true;
             for (Map.Entry<ItemStack, Integer> entry : recipeItems.entrySet()) {
                 ItemStack s = entry.getKey().copy();
-                s.stackSize = entry.getValue();
-                ItemStack extracted = IOHelper.extract(this, EnumFacing.UNKNOWN, s, true, true);
+                s.setCount(entry.getValue());
+                ItemStack extracted = IOHelper.extract(this, null, s, true, true);
                 if (extracted == null) {
                     canCraft = false;
                     break;
@@ -148,7 +154,7 @@ public class TileAutoProjectTable extends TileProjectTable implements ISidedInve
     }
 
     @Override
-    public String getInventoryName() {
+    public String getName() {
 
         return BPBlocks.auto_project_table.getUnlocalizedName();
     }

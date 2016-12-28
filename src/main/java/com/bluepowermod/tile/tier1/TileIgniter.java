@@ -55,32 +55,32 @@ public class TileIgniter extends TileBase implements IEjectAnimator {
 
         super.readFromPacketNBT(tCompound);
         isActive = tCompound.getBoolean("isActive");
-        if (worldObj != null)
+        if (world != null)
             markForRenderUpdate();
     }
 
     private void ignite(EnumFacing direction) {
 
-        if (getIsRedstonePowered() && worldObj.isAirBlock(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ)) {
-            worldObj.setBlock(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ, Blocks.fire);
+        if (getIsRedstonePowered() && world.isAirBlock(pos.offset(direction))) {
+            world.setBlockState(pos.offset(direction), Blocks.FIRE.getDefaultState());
         }
     }
 
     private void extinguish(EnumFacing direction) {
 
-        Block target = worldObj.getBlock(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ);
-        if (!getIsRedstonePowered() && (target == Blocks.fire || target == Blocks.portal)) {
-            worldObj.setBlock(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ, Blocks.air);
+        Block target = world.getBlockState(pos.offset(direction)).getBlock();
+        if (!getIsRedstonePowered() && (target == Blocks.FIRE || target == Blocks.PORTAL)) {
+            world.setBlockToAir(pos.offset(direction));
         }
     }
 
     @Override
-    public void updateEntity() {
+    public void update() {
 
         if (getTicker() % 5 == 0) {
             ignite(getFacingDirection());
         }
-        super.updateEntity();
+        super.update();
     }
 
     @Override

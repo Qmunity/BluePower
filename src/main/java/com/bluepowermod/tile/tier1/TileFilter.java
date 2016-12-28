@@ -100,7 +100,7 @@ public class TileFilter extends TileTransposer implements ISidedInventory, IGuiB
 
         for (int i = 0; i < 9; i++) {
             NBTTagCompound tc = tCompound.getCompoundTag("inventory" + i);
-            inventory[i] = ItemStack.loadItemStackFromNBT(tc);
+            inventory[i] = new ItemStack(tc);
         }
         filterColor = TubeColor.values()[tCompound.getByte("filterColor")];
         fuzzySetting = tCompound.getByte("fuzzySetting");
@@ -110,7 +110,7 @@ public class TileFilter extends TileTransposer implements ISidedInventory, IGuiB
      * This function gets called whenever the world/chunk is saved
      */
     @Override
-    public void writeToNBT(NBTTagCompound tCompound) {
+    public NBTTagCompound writeToNBT(NBTTagCompound tCompound) {
 
         super.writeToNBT(tCompound);
 
@@ -124,6 +124,8 @@ public class TileFilter extends TileTransposer implements ISidedInventory, IGuiB
 
         tCompound.setByte("filterColor", (byte) filterColor.ordinal());
         tCompound.setByte("fuzzySetting", (byte) fuzzySetting);
+
+        return tCompound;
     }
 
     @Override
@@ -143,11 +145,11 @@ public class TileFilter extends TileTransposer implements ISidedInventory, IGuiB
 
         ItemStack itemStack = getStackInSlot(slot);
         if (itemStack != null) {
-            if (itemStack.stackSize <= amount) {
+            if (itemStack.getCount() <= amount) {
                 setInventorySlotContents(slot, null);
             } else {
                 itemStack = itemStack.splitStack(amount);
-                if (itemStack.stackSize == 0) {
+                if (itemStack.getCount() == 0) {
                     setInventorySlotContents(slot, null);
                 }
             }
@@ -157,15 +159,13 @@ public class TileFilter extends TileTransposer implements ISidedInventory, IGuiB
     }
 
     @Override
-    public ItemStack getStackInSlotOnClosing(int i) {
-
+    public ItemStack removeStackFromSlot(int i) {
         ItemStack itemStack = getStackInSlot(i);
         if (itemStack != null) {
             setInventorySlotContents(i, null);
         }
         return itemStack;
     }
-
     @Override
     public void setInventorySlotContents(int i, ItemStack itemStack) {
 
@@ -173,36 +173,32 @@ public class TileFilter extends TileTransposer implements ISidedInventory, IGuiB
     }
 
     @Override
-    public String getInventoryName() {
-
+    public String getName() {
         return BPBlocks.filter.getUnlocalizedName();
     }
 
     @Override
-    public boolean hasCustomInventoryName() {
-
+    public boolean hasCustomName() {
         return false;
     }
 
     @Override
     public int getInventoryStackLimit() {
-
         return 64;
     }
 
     @Override
-    public boolean isUseableByPlayer(EntityPlayer player) {
-
+    public boolean isUsableByPlayer(EntityPlayer player) {
         return true;
     }
 
     @Override
-    public void openInventory() {
+    public void openInventory(EntityPlayer player) {
 
     }
 
     @Override
-    public void closeInventory() {
+    public void closeInventory(EntityPlayer player) {
 
     }
 
@@ -223,27 +219,25 @@ public class TileFilter extends TileTransposer implements ISidedInventory, IGuiB
     }
 
     @Override
-    public int[] getAccessibleSlotsFromSide(int var1) {
-
+    public int[] getSlotsForFace(EnumFacing side) {
         EnumFacing direction = getFacingDirection();
 
-        if (var1 == direction.ordinal() || var1 == direction.getOpposite().ordinal()) {
+        if (side == direction || side == direction.getOpposite()) {
             return new int[] {};
         }
         return new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8 };
     }
 
     @Override
-    public boolean canInsertItem(int slot, ItemStack itemStack, int side) {
-
+    public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction) {
         return true;
     }
 
     @Override
-    public boolean canExtractItem(int slot, ItemStack itemStack, int side) {
-
+    public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
         return true;
     }
+
 
     @Override
     public void onButtonPress(EntityPlayer player, int messageId, int value) {

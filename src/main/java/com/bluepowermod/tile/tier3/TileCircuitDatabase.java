@@ -10,13 +10,13 @@ package com.bluepowermod.tile.tier3;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryBasic;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.EnumFacing;;
 
 import com.bluepowermod.BluePower;
@@ -30,6 +30,7 @@ import com.bluepowermod.network.message.MessageCircuitDatabaseTemplate;
 import com.bluepowermod.network.message.MessageSendClientServerTemplates;
 import com.bluepowermod.reference.GuiIDs;
 import com.bluepowermod.tile.tier2.TileCircuitTable;
+import net.minecraft.util.text.TextComponentString;
 
 public class TileCircuitDatabase extends TileCircuitTable {
 
@@ -58,7 +59,7 @@ public class TileCircuitDatabase extends TileCircuitTable {
     protected List<ItemStack> getApplicableItems() {
 
         List<ItemStack> items = new ArrayList<ItemStack>();
-        if (worldObj == null || !worldObj.isRemote) {
+        if (world == null || !world.isRemote) {
             return items;
         } else {
             items.addAll(clientCurrentTab == 1 ? stackDatabase.loadItemStacks() : serverDatabaseStacks);
@@ -72,8 +73,8 @@ public class TileCircuitDatabase extends TileCircuitTable {
         switch (messageId) {
         case 1:
             player.openGui(BluePower.instance,
-                    value == 0 ? GuiIDs.CIRCUITDATABASE_MAIN_ID.ordinal() : GuiIDs.CIRCUITDATABASE_SHARING_ID.ordinal(), worldObj, xCoord,
-                    yCoord, zCoord);
+                    value == 0 ? GuiIDs.CIRCUITDATABASE_MAIN_ID.ordinal() : GuiIDs.CIRCUITDATABASE_SHARING_ID.ordinal(), world, pos.getX(),
+                    pos.getY(), pos.getZ());
             break;
         case 2:
             if (value == 2 && !hasPermissions(player))
@@ -99,8 +100,8 @@ public class TileCircuitDatabase extends TileCircuitTable {
     public static boolean hasPermissions(EntityPlayer player) {
 
         if (Config.serverCircuitSavingOpOnly) {
-            if (!player.canCommandSenderUseCommand(2, "saveTemplate")) {
-                player.addChatMessage(new ChatComponentTranslation("gui.circuitDatabase.info.opsOnly"));
+            if (!player.canUseCommand(2, "saveTemplate")) {
+                player.addChatMessage(new TextComponentString("gui.circuitDatabase.info.opsOnly"));
                 return false;
             }
         }
@@ -169,37 +170,37 @@ public class TileCircuitDatabase extends TileCircuitTable {
                             int count = 0;
                             for (ItemStack stack : stacksInTemplate) {
                                 if (stack.isItemEqual(templateStack) && ItemStack.areItemStackTagsEqual(stack, templateStack)) {
-                                    count += stack.stackSize;
+                                    count += stack.getCount();
                                 }
                             }
 
                             for (ItemStack stack : stacksInOutput) {
                                 if (stack.isItemEqual(templateStack) && ItemStack.areItemStackTagsEqual(stack, templateStack)) {
-                                    count -= stack.stackSize;
+                                    count -= stack.getCount();
                                 }
                             }
 
-                            count *= target.stackSize;// if 5 items are inserted to be copied, the required items are x5.
+                            count *= target.getCount();// if 5 items are inserted to be copied, the required items are x5.
 
                             if (count > 0) {// At this point we need assist from the inventory.
                                 ItemStack retrievedStack = templateStack.copy();
-                                retrievedStack.stackSize = count;
-                                retrievedStack = IOHelper.extract(this, EnumFacing.UNKNOWN, retrievedStack, true, simulate, 2);
-                                if (retrievedStack == null || retrievedStack.stackSize < count)
+                                retrievedStack.setCount(count);
+                                retrievedStack = IOHelper.extract(this, null, retrievedStack, true, simulate, 2);
+                                if (retrievedStack == null || retrievedStack.getCount() < count)
                                     return false;
                             } else if (count < 0) {
                                 ItemStack returnedStack = templateStack.copy();
-                                returnedStack.stackSize = -count;
-                                returnedStack = IOHelper.insert(this, returnedStack, EnumFacing.UNKNOWN, simulate);
+                                returnedStack.setCount(-count);
+                                returnedStack = IOHelper.insert(this, returnedStack, null, simulate);
                                 if (returnedStack != null && !simulate) {
-                                    IOHelper.spawnItemInWorld(worldObj, returnedStack, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5);
+                                    IOHelper.spawnItemInWorld(world, returnedStack, pos.getX()+ 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
                                 }
                             }
                         }
                     }
                     if (!simulate) {
                         ItemStack copyStack = template.copy();
-                        copyStack.stackSize = target.stackSize;
+                        copyStack.setCount(target.getCount());
                         copyInventory.setInventorySlotContents(1, copyStack);
                     }
                     return true;
@@ -210,10 +211,10 @@ public class TileCircuitDatabase extends TileCircuitTable {
     }
 
     @Override
-    public void updateEntity() {
+    public void update() {
 
-        super.updateEntity();
-        if (!worldObj.isRemote) {
+        super.update();
+        if (!world.isRemote) {
             if (copyInventory.getStackInSlot(0) != null) {
                 if (curCopyProgress >= 0) {
                     if (++curCopyProgress > UPLOAD_AND_COPY_TIME) {
@@ -277,13 +278,13 @@ public class TileCircuitDatabase extends TileCircuitTable {
         super.readFromNBT(tag);
 
         if (tag.hasKey("copyTemplateStack")) {
-            copyInventory.setInventorySlotContents(0, ItemStack.loadItemStackFromNBT(tag.getCompoundTag("copyTemplateStack")));
+            copyInventory.setInventorySlotContents(0, new ItemStack(tag.getCompoundTag("copyTemplateStack")));
         } else {
             copyInventory.setInventorySlotContents(0, null);
         }
 
         if (tag.hasKey("copyOutputStack")) {
-            copyInventory.setInventorySlotContents(1, ItemStack.loadItemStackFromNBT(tag.getCompoundTag("copyOutputStack")));
+            copyInventory.setInventorySlotContents(1, new ItemStack(tag.getCompoundTag("copyOutputStack")));
         } else {
             copyInventory.setInventorySlotContents(1, null);
         }

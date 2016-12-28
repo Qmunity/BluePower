@@ -40,7 +40,7 @@ import uk.co.qmunity.lib.part.IPartSelectable;
 import uk.co.qmunity.lib.part.IPartUpdateListener;
 import uk.co.qmunity.lib.part.IPartWAILAProvider;
 import uk.co.qmunity.lib.part.PartBase;
-import uk.co.qmunity.lib.raytrace.QMovingObjectPosition;
+import uk.co.qmunity.lib.raytrace.QRayTraceResult;
 import uk.co.qmunity.lib.raytrace.RayTracer;
 import uk.co.qmunity.lib.vec.Vec3d;
 import uk.co.qmunity.lib.vec.Vec3dCube;
@@ -105,7 +105,7 @@ public abstract class BPPart extends PartBase implements IPartSelectable, IPartC
 
     @Override
     @SideOnly(Side.CLIENT)
-    public boolean renderBreaking(Vec3i translation, RenderHelper renderer, RenderBlocks renderBlocks, int pass, QMovingObjectPosition mop) {
+    public boolean renderBreaking(Vec3i translation, RenderHelper renderer, RenderBlocks renderBlocks, int pass, QRayTraceResult mop) {
 
         return renderStatic(translation, renderer, renderBlocks, pass);
     }
@@ -122,7 +122,7 @@ public abstract class BPPart extends PartBase implements IPartSelectable, IPartC
     }
 
     @Override
-    public QMovingObjectPosition rayTrace(Vec3d start, Vec3d end) {
+    public QRayTraceResult rayTrace(Vec3d start, Vec3d end) {
 
         return RayTracer.instance().rayTraceCubes(this, start, end);
     }
@@ -134,7 +134,7 @@ public abstract class BPPart extends PartBase implements IPartSelectable, IPartC
     }
 
     @Override
-    public ItemStack getPickedItem(QMovingObjectPosition mop) {
+    public ItemStack getPickedItem(QRayTraceResult mop) {
 
         return getItem();
     }
@@ -224,13 +224,13 @@ public abstract class BPPart extends PartBase implements IPartSelectable, IPartC
     }
 
     @Override
-    public boolean onActivated(EntityPlayer player, QMovingObjectPosition hit, ItemStack item) {
+    public boolean onActivated(EntityPlayer player, QRayTraceResult hit, ItemStack item) {
 
         return false;
     }
 
     @Override
-    public void onClicked(EntityPlayer player, QMovingObjectPosition hit, ItemStack item) {
+    public void onClicked(EntityPlayer player, QRayTraceResult hit, ItemStack item) {
 
     }
 

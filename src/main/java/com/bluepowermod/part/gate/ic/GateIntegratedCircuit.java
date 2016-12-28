@@ -13,7 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.IIcon;
-import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraft.util.EnumFacing;;
 import uk.co.qmunity.lib.client.render.RenderHelper;
@@ -23,7 +23,7 @@ import uk.co.qmunity.lib.part.IPartPlacement;
 import uk.co.qmunity.lib.part.IPartTicking;
 import uk.co.qmunity.lib.part.IPartUpdateListener;
 import uk.co.qmunity.lib.part.PartRegistry;
-import uk.co.qmunity.lib.raytrace.QMovingObjectPosition;
+import uk.co.qmunity.lib.raytrace.QRayTraceResult;
 import uk.co.qmunity.lib.tile.TileMultipart;
 import uk.co.qmunity.lib.transform.Rotation;
 import uk.co.qmunity.lib.transform.Scale;
@@ -262,20 +262,20 @@ public class GateIntegratedCircuit extends
     }
 
     @Override
-    public QMovingObjectPosition rayTrace(Vec3d start, Vec3d end) {
+    public QRayTraceResult rayTrace(Vec3d start, Vec3d end) {
 
-        QMovingObjectPosition mop = super.rayTrace(start, end);
+        QRayTraceResult mop = super.rayTrace(start, end);
 
         if (mop != null) {
             if (mop.getPart() == this)
-                return new QMovingObjectPosition(mop, this, new Vec3dCube(0, 0, 0, 1, 2 / 16D, 1));
+                return new QRayTraceResult(mop, this, new Vec3dCube(0, 0, 0, 1, 2 / 16D, 1));
         }
 
         return mop;
     }
 
     @Override
-    public boolean onActivated(final EntityPlayer player, QMovingObjectPosition hit, ItemStack item) {
+    public boolean onActivated(final EntityPlayer player, QRayTraceResult hit, ItemStack item) {
 
         Vec2d v = new Vec2d(hit.hitVec.xCoord - hit.blockX, hit.hitVec.zCoord - hit.blockZ).sub(0.5, 0.5).rotate(90 * -getRotation())
                 .add(0.5, 0.5);
@@ -570,7 +570,7 @@ public class GateIntegratedCircuit extends
     }
 
     @Override
-    public IPartPlacement getPlacement(IPart part, World world, Vec3i location, EnumFacing face, MovingObjectPosition mop,
+    public IPartPlacement getPlacement(IPart part, World world, Vec3i location, EnumFacing face, RayTraceResult mop,
             EntityPlayer player) {
 
         if (!DebugHelper.isDebugModeEnabled())

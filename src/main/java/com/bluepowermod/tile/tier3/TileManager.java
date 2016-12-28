@@ -240,8 +240,7 @@ public class TileManager extends TileMachineBase implements ISidedInventory, IGu
     }
 
     @Override
-    public ItemStack getStackInSlotOnClosing(int i) {
-
+    public ItemStack removeStackFromSlot(int i) {
         ItemStack itemStack = getStackInSlot(i);
         if (itemStack != ItemStack.EMPTY) {
             setInventorySlotContents(i, ItemStack.EMPTY);
@@ -256,14 +255,12 @@ public class TileManager extends TileMachineBase implements ISidedInventory, IGu
     }
 
     @Override
-    public String getInventoryName() {
-
+    public String getName() {
         return BPBlocks.manager.getUnlocalizedName();
     }
 
     @Override
-    public boolean hasCustomInventoryName() {
-
+    public boolean hasCustomName() {
         return false;
     }
 
@@ -274,18 +271,17 @@ public class TileManager extends TileMachineBase implements ISidedInventory, IGu
     }
 
     @Override
-    public boolean isUseableByPlayer(EntityPlayer player) {
-
+    public boolean isUsableByPlayer(EntityPlayer player) {
         return true;
     }
 
     @Override
-    public void openInventory() {
+    public void openInventory(EntityPlayer player) {
 
     }
 
     @Override
-    public void closeInventory() {
+    public void closeInventory(EntityPlayer player) {
 
     }
 
@@ -306,11 +302,10 @@ public class TileManager extends TileMachineBase implements ISidedInventory, IGu
     }
 
     @Override
-    public int[] getAccessibleSlotsFromSide(int var1) {
-
+    public int[] getSlotsForFace(EnumFacing side) {
         EnumFacing direction = getFacingDirection();
 
-        if (var1 == direction.ordinal() || var1 == direction.getOpposite().ordinal()) {
+        if (side == direction || side == direction.getOpposite()) {
             return new int[] {};
         }
         int[] slots = new int[inventory.length];
@@ -320,14 +315,12 @@ public class TileManager extends TileMachineBase implements ISidedInventory, IGu
     }
 
     @Override
-    public boolean canInsertItem(int slot, ItemStack itemStack, int side) {
-
+    public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction) {
         return true;
     }
 
     @Override
-    public boolean canExtractItem(int slot, ItemStack itemStack, int side) {
-
+    public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
         return true;
     }
 

@@ -10,7 +10,7 @@ package com.bluepowermod.tile.tier3;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
-import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.util.EnumFacing;;
 
 import com.bluepowermod.tile.TileMachineBase;
@@ -38,10 +38,10 @@ public class TileEngine extends TileMachineBase{
 	}
 	
 	@Override
-	public void updateEntity() {
-		super.updateEntity();
+	public void update() {
+		super.update();
 		
-		if(worldObj.isRemote){
+		if(world.isRemote){
 			if(isActive){
 				gearTick++;
 				pumpTick++;
@@ -62,30 +62,23 @@ public class TileEngine extends TileMachineBase{
 		
 		isActive = true;
 	}
-	
-	
-	@Override
+
 	public Packet getDescriptionPacket() {
         NBTTagCompound nbtTag = new NBTTagCompound();
         this.writeToNBT(nbtTag);
-        return new S35PacketUpdateTileEntity(this.xCoord, this.yCoord, this.zCoord, 1, nbtTag);
+        return new SPacketUpdateTileEntity(this.pos, 1, nbtTag);
     }
 
-    @Override
-	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity packet) {
-        readFromNBT(packet.func_148857_g());
-    }
+	@Override
+	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
+		readFromNBT(pkt.getNbtCompound());
+	}
     
     public void setOrientation(EnumFacing orientation)
     {
         this.orientation = orientation;
     }
 
-    public void setOrientation(int orientation)
-    {
-        this.orientation = EnumFacing.getOrientation(orientation);
-    }
-    
     public EnumFacing getOrientation()
     {
         return orientation;
@@ -93,13 +86,14 @@ public class TileEngine extends TileMachineBase{
     
     
     @Override
-    public void writeToNBT(NBTTagCompound compound) {
+    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
     	super.writeToNBT(compound);
     	int rotation = orientation.ordinal();
     	compound.setInteger("rotation", rotation);
 //    	compound.setByte("pumpTick", pumpTick);
 //    	compound.setByte("pumpSpeed", pumpSpeed);
 //    	compound.setByte("gearTick", gearTick);
+		return compound;
     	
     }
     
@@ -107,7 +101,7 @@ public class TileEngine extends TileMachineBase{
     public void readFromNBT(NBTTagCompound compound) {
     	super.readFromNBT(compound);
     	
-    	setOrientation(compound.getInteger("rotation"));
+    	setOrientation(EnumFacing.fromAngle(compound.getInteger("rotation")));
 //    	pumpTick  = compound.getByte("pumpTick");
 //    	pumpSpeed =compound.getByte("pumpSpeed");
 //    	gearTick =compound.getByte("gearTick");

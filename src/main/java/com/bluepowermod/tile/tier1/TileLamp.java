@@ -8,11 +8,11 @@
 package com.bluepowermod.tile.tier1;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 import net.minecraft.util.EnumFacing;;
 import uk.co.qmunity.lib.helper.MathHelper;
-import uk.co.qmunity.lib.helper.RedstoneHelper;
 
 import com.bluepowermod.api.connect.ConnectionType;
 import com.bluepowermod.api.misc.MinecraftColor;
@@ -65,16 +65,16 @@ public class TileLamp extends TileBase implements IBundledDevice {
             power = (int) ((pow / 256D) * 15);
             sendUpdatePacket();
         } else {
-            int pow = RedstoneHelper.getInput(getWorldObj(), xCoord, yCoord, zCoord);
+            int pow = RedstoneHelper.getInput(getWorld(), pos);
             if (pow != power) {
                 power = pow;
                 sendUpdatePacket();
-                getWorldObj().markBlockRangeForRenderUpdate(xCoord, yCoord, zCoord, xCoord, yCoord, zCoord);
+                getWorld().markBlockRangeForRenderUpdate(pos, pos);
                 try {
-                    getWorldObj().updateLightByType(EnumSkyBlock.Block, xCoord, yCoord, zCoord);
+                    getWorld().checkLightFor(EnumSkyBlock.BLOCK, pos);
                 } catch (Exception ex) {
                 }
-                getWorldObj().notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, getBlockType());
+                getWorld().notifyNeighborsOfStateChange(pos, getBlockType(), true);
             }
         }
     }
@@ -101,9 +101,9 @@ public class TileLamp extends TileBase implements IBundledDevice {
             pow[MinecraftColor.BLUE.ordinal()] = tCompound.getByte("blue");
             bundledPower = pow;
         }
-        if (getWorldObj() != null) {
-            getWorldObj().markBlockRangeForRenderUpdate(xCoord, yCoord, zCoord, xCoord, yCoord, zCoord);
-            getWorldObj().updateLightByType(EnumSkyBlock.Block, xCoord, yCoord, zCoord);
+        if (getWorld() != null) {
+            getWorld().markBlockRangeForRenderUpdate(pos, pos);
+            getWorld().checkLightFor(EnumSkyBlock.BLOCK, pos);
         }
     }
 
@@ -117,38 +117,25 @@ public class TileLamp extends TileBase implements IBundledDevice {
     @Override
     public World getWorld() {
 
-        return getWorldObj();
+        return getWorld();
     }
 
     @Override
-    public int getX() {
-
-        return xCoord;
-    }
-
-    @Override
-    public int getY() {
-
-        return yCoord;
-    }
-
-    @Override
-    public int getZ() {
-
-        return zCoord;
+    public BlockPos getPos() {
+        return pos;
     }
 
     @Override
     public boolean canConnect(EnumFacing side, IBundledDevice dev, ConnectionType type) {
 
-        if (!(getWorld().getBlock(getX(), getY(), getZ()) instanceof BlockLampRGB))
+        if (!(getWorld().getBlockState(getPos()).getBlock() instanceof BlockLampRGB))
             return false;
         if (dev instanceof IInsulatedRedstoneDevice)
             return false;
         if (dev instanceof TileLamp)
             return false;
 
-        return type == ConnectionType.STRAIGHT && side != EnumFacing.UNKNOWN;
+        return type == ConnectionType.STRAIGHT && side != null;
     }
 
     @Override

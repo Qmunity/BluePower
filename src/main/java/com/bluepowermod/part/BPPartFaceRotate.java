@@ -23,7 +23,7 @@ import java.io.IOException;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraft.util.EnumFacing;;
 import uk.co.qmunity.lib.part.IPart;
@@ -76,7 +76,7 @@ public abstract class BPPartFaceRotate extends BPPartFace {
     }
 
     @Override
-    public IPartPlacement getPlacement(IPart part, World world, Vec3i location, EnumFacing face, MovingObjectPosition mop,
+    public IPartPlacement getPlacement(IPart part, World world, Vec3i location, EnumFacing face, RayTraceResult mop,
             EntityPlayer player) {
 
         int rot = PartRotationHelper.getPlacementRotation(mop);

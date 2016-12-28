@@ -7,21 +7,18 @@
  */
 package com.bluepowermod.network.message;
 
+import com.bluepowermod.tile.tier3.TileCircuitDatabase;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.common.network.ByteBufUtils;
+import uk.co.qmunity.lib.network.Packet;
 
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import uk.co.qmunity.lib.network.Packet;
-
-import com.bluepowermod.tile.tier3.TileCircuitDatabase;
-
-import cpw.mods.fml.common.network.ByteBufUtils;
 
 public class MessageSendClientServerTemplates extends Packet<MessageSendClientServerTemplates> {
 

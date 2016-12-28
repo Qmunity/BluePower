@@ -17,16 +17,19 @@
 
 package com.bluepowermod.tile.tier1;
 
-import java.util.ArrayList;
-
+import com.bluepowermod.tile.TileMachineBase;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.util.EnumFacing;;
 import net.minecraftforge.fluids.IFluidBlock;
 
-import com.bluepowermod.tile.TileMachineBase;
+import java.util.List;
+
+;
 
 public class TileBlockBreaker extends TileMachineBase {
     
@@ -35,21 +38,19 @@ public class TileBlockBreaker extends TileMachineBase {
     
         super.redstoneChanged(newValue);
         
-        if (!worldObj.isRemote && newValue && isBufferEmpty()) {
+        if (!world.isRemote && newValue && isBufferEmpty()) {
             EnumFacing direction = getFacingDirection();
-            Block breakBlock = worldObj.getBlock(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ);
-            if (!canBreakBlock(breakBlock, worldObj, xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ)) return;
-            int breakMeta = worldObj.getBlockMetadata(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ);
-            ArrayList<ItemStack> breakStacks = breakBlock.getDrops(worldObj, xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ, breakMeta, 0);
-            
-            worldObj.func_147480_a(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ, false); // destroyBlock
+            IBlockState breakState = world.getBlockState(pos.offset(direction));
+            if (!canBreakBlock(breakState.getBlock(), world, breakState, pos.offset(direction))) return;
+            List<ItemStack> breakStacks = breakState.getBlock().getDrops(world, pos.offset(direction), breakState, 0);
+            world.destroyBlock(pos.offset(direction), false); // destroyBlock
             addItemsToOutputBuffer(breakStacks);
         }
     }
+
+    private boolean canBreakBlock(Block block, World world, IBlockState state, BlockPos pos) {
     
-    private boolean canBreakBlock(Block block, World world, int x, int y, int z) {
-    
-        return !world.isAirBlock(x, y, z) && !(block instanceof BlockLiquid) && !(block instanceof IFluidBlock) && block.getBlockHardness(world, x, y, z) > -1.0F;
+        return !world.isAirBlock(pos) && !(block instanceof BlockLiquid) && !(block instanceof IFluidBlock) && block.getBlockHardness(state, world, pos) > -1.0F;
     }
     
     @Override

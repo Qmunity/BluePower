@@ -16,7 +16,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
-import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.RayTraceResult;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraft.util.EnumFacing;;
@@ -27,7 +27,7 @@ import uk.co.qmunity.lib.client.render.RenderHelper;
 import uk.co.qmunity.lib.misc.Pair;
 import uk.co.qmunity.lib.part.IPart;
 import uk.co.qmunity.lib.part.IPartPlacement;
-import uk.co.qmunity.lib.raytrace.QMovingObjectPosition;
+import uk.co.qmunity.lib.raytrace.QRayTraceResult;
 import uk.co.qmunity.lib.transform.Rotation;
 import uk.co.qmunity.lib.vec.Vec3d;
 import uk.co.qmunity.lib.vec.Vec3dCube;
@@ -180,7 +180,7 @@ implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor, IRedwire {
     }
 
     @Override
-    public ItemStack getPickedItem(QMovingObjectPosition mop) {
+    public ItemStack getPickedItem(QRayTraceResult mop) {
 
         if (BluePower.proxy.getPlayer().isSneaking()) {
             return getStackWithData(new GateNullCell(null, false, null, false));
@@ -608,7 +608,7 @@ implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor, IRedwire {
     // Placement disabling
 
     @Override
-    public IPartPlacement getPlacement(IPart part, World world, Vec3i location, EnumFacing face, MovingObjectPosition mop,
+    public IPartPlacement getPlacement(IPart part, World world, Vec3i location, EnumFacing face, RayTraceResult mop,
             EntityPlayer player) {
 
         if (bundledA || bundledB)
@@ -640,9 +640,9 @@ implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor, IRedwire {
     }
 
     @Override
-    public QMovingObjectPosition rayTrace(Vec3d start, Vec3d end) {
+    public QRayTraceResult rayTrace(Vec3d start, Vec3d end) {
 
-        QMovingObjectPosition mop = super.rayTrace(start, end);
+        QRayTraceResult mop = super.rayTrace(start, end);
 
         // EntityPlayer player = BluePower.proxy.getPlayer();
 
@@ -650,13 +650,13 @@ implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor, IRedwire {
         // && (player == null || (player != null && player.getHeldItemMainhand() != null && !(player.getHeldItemMainhand()
         // .getItem() instanceof IScrewdriver))))
         if (mop != null)
-            mop = new QMovingObjectPosition(mop, mop.getPart(), Vec3dCube.merge(getSelectionBoxes()));
+            mop = new QRayTraceResult(mop, mop.getPart(), Vec3dCube.merge(getSelectionBoxes()));
 
         return mop;
     }
 
     @Override
-    public boolean drawHighlight(QMovingObjectPosition mop, EntityPlayer player, float frame) {
+    public boolean drawHighlight(QRayTraceResult mop, EntityPlayer player, float frame) {
 
         Vec3d hit = new Vec3d(mop.hitVec).sub(mop.blockX, mop.blockY, mop.blockZ).rotateUndo(getFace(), Vec3d.center);
         Vec3 pos = player.getPosition(frame);
@@ -804,7 +804,7 @@ implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor, IRedwire {
     // In-world customization
 
     @Override
-    public boolean onActivated(EntityPlayer player, QMovingObjectPosition mop, ItemStack item) {
+    public boolean onActivated(EntityPlayer player, QRayTraceResult mop, ItemStack item) {
 
         Vec3d hit = new Vec3d(mop.hitVec).sub(mop.blockX, mop.blockY, mop.blockZ).rotateUndo(getFace(), Vec3d.center);
 

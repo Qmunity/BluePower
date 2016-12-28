@@ -42,7 +42,7 @@ public class TileBuffer extends TileBase implements ISidedInventory {
         
         for (int i = 0; i < 20; i++) {
             NBTTagCompound tc = tCompound.getCompoundTag("inventory" + i);
-            allInventories[i] = ItemStack.loadItemStackFromNBT(tc);
+            allInventories[i] = new ItemStack(tc);
         }
     }
     
@@ -50,7 +50,7 @@ public class TileBuffer extends TileBase implements ISidedInventory {
      * This function gets called whenever the world/chunk is saved
      */
     @Override
-    public void writeToNBT(NBTTagCompound tCompound) {
+    public NBTTagCompound writeToNBT(NBTTagCompound tCompound) {
     
         super.writeToNBT(tCompound);
         
@@ -61,6 +61,7 @@ public class TileBuffer extends TileBase implements ISidedInventory {
                 tCompound.setTag("inventory" + i, tc);
             }
         }
+        return  tCompound;
     }
     
     @Override
@@ -80,11 +81,11 @@ public class TileBuffer extends TileBase implements ISidedInventory {
     
         ItemStack itemStack = getStackInSlot(slot);
         if (itemStack != null) {
-            if (itemStack.stackSize <= amount) {
+            if (itemStack.getCount() <= amount) {
                 setInventorySlotContents(slot, null);
             } else {
                 itemStack = itemStack.splitStack(amount);
-                if (itemStack.stackSize == 0) {
+                if (itemStack.getCount() == 0) {
                     setInventorySlotContents(slot, null);
                 }
             }
@@ -92,13 +93,12 @@ public class TileBuffer extends TileBase implements ISidedInventory {
         
         return itemStack;
     }
-    
+
     @Override
-    public ItemStack getStackInSlotOnClosing(int i) {
-    
+    public ItemStack removeStackFromSlot(int i) {
         return getStackInSlot(i);
     }
-    
+
     @Override
     public void setInventorySlotContents(int i, ItemStack itemStack) {
     
@@ -106,13 +106,13 @@ public class TileBuffer extends TileBase implements ISidedInventory {
     }
     
     @Override
-    public String getInventoryName() {
+    public String getName() {
     
         return BPBlocks.buffer.getUnlocalizedName();
     }
     
     @Override
-    public boolean hasCustomInventoryName() {
+    public boolean hasCustomName() {
     
         return true;
     }
@@ -122,23 +122,23 @@ public class TileBuffer extends TileBase implements ISidedInventory {
     
         return 64;
     }
-    
+
     @Override
-    public boolean isUseableByPlayer(EntityPlayer player) {
+    public boolean isUsableByPlayer(EntityPlayer player) {
     
         return true;
     }
-    
+
     @Override
-    public void openInventory() {
-    
+    public void openInventory(EntityPlayer player) {
+
     }
-    
+
     @Override
-    public void closeInventory() {
-    
+    public void closeInventory(EntityPlayer player) {
+
     }
-    
+
     @Override
     public boolean isItemValidForSlot(int i, ItemStack itemStack) {
     
@@ -153,13 +153,12 @@ public class TileBuffer extends TileBase implements ISidedInventory {
             if (stack != null) drops.add(stack);
         return drops;
     }
-    
+
     @Override
-    public int[] getAccessibleSlotsFromSide(int var1) {
-    
-        EnumFacing access = EnumFacing.getOrientation(var1);
+    public int[] getSlotsForFace(EnumFacing side) {
+        int var1 = side.ordinal();
         EnumFacing dir = getFacingDirection();
-        if (access == dir) {
+        if (side == dir) {
             int[] allSlots = new int[allInventories.length];
             for (int i = 0; i < allSlots.length; i++)
                 allSlots[i] = i;
@@ -172,16 +171,15 @@ public class TileBuffer extends TileBase implements ISidedInventory {
         }
         return slots;
     }
+
     
     @Override
     public boolean canInsertItem(int slot, ItemStack itemStack, int side) {
-    
         return true;
     }
     
     @Override
     public boolean canExtractItem(int slot, ItemStack itemStack, int side) {
-    
         return true;
     }
 }

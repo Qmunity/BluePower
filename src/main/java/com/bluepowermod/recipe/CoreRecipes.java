@@ -17,22 +17,21 @@
 
 package com.bluepowermod.recipe;
 
+import com.bluepowermod.init.BPBlocks;
+import com.bluepowermod.init.BPItems;
+import com.bluepowermod.reference.Refs;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.registry.GameData;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.RecipeSorter;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
-
-import com.bluepowermod.init.BPBlocks;
-import com.bluepowermod.init.BPItems;
-import com.bluepowermod.reference.Refs;
-
-import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.common.registry.GameData;
-import cpw.mods.fml.common.registry.GameRegistry;
 
 /**
  * Created by Quetzi on 27/10/14.
@@ -47,20 +46,20 @@ public class CoreRecipes {
         GameRegistry.addSmelting(BPBlocks.zinc_ore, new ItemStack(BPItems.zinc_ingot), 0.5F);
         GameRegistry.addSmelting(BPBlocks.silver_ore, new ItemStack(BPItems.silver_ingot), 0.7F);
         GameRegistry.addSmelting(BPBlocks.tungsten_ore, new ItemStack(BPItems.tungsten_nugget), 0.8F);
-        GameRegistry.addSmelting(Blocks.stone, new ItemStack(BPItems.stone_tile, 2), 0);
+        GameRegistry.addSmelting(Blocks.STONE, new ItemStack(BPItems.stone_tile, 2), 0);
         GameRegistry.addSmelting(BPItems.zinc_ore_crushed, new ItemStack(BPItems.zinc_ingot), 0.5F);
         GameRegistry.addSmelting(BPItems.zinc_dust, new ItemStack(BPItems.zinc_ingot), 0.5F);
         GameRegistry.addSmelting(BPItems.zinc_ore_purified, new ItemStack(BPItems.zinc_ingot), 0.5F);
         GameRegistry.addRecipe(new ItemStack(BPItems.zinc_dust, 1), "###", "###", "###", '#', BPItems.zinc_tiny_dust);
 
         // Blocks
-        GameRegistry.addRecipe(new ItemStack(BPBlocks.alloyfurnace, 1), "###", "# #", "###", '#', Blocks.brick_block);
+        GameRegistry.addRecipe(new ItemStack(BPBlocks.alloyfurnace, 1), "###", "# #", "###", '#', Blocks.BRICK_BLOCK);
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPBlocks.project_table), "SSS", "WCW", "WIW", 'S', "stone", 'W', "plankWood", 'C',
-                Blocks.crafting_table, 'I', Blocks.chest));
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPBlocks.auto_project_table), "PCP", "CTC", "PCP", 'P', Blocks.piston, 'C',
-                Blocks.crafting_table, 'T', BPBlocks.project_table));
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPBlocks.auto_project_table), "CPC", "PTP", "CPC", 'P', Blocks.piston, 'C',
-                Blocks.crafting_table, 'T', BPBlocks.project_table));
+                Blocks.CRAFTING_TABLE, 'I', Blocks.CHEST));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPBlocks.auto_project_table), "PCP", "CTC", "PCP", 'P', Blocks.PISTON, 'C',
+                Blocks.CRAFTING_TABLE, 'T', BPBlocks.project_table));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPBlocks.auto_project_table), "CPC", "PTP", "CPC", 'P', Blocks.PISTON, 'C',
+                Blocks.CRAFTING_TABLE, 'T', BPBlocks.project_table));
 
         // Decoration
         GameRegistry.addSmelting(BPBlocks.basalt_brick, new ItemStack(BPBlocks.basaltbrick_cracked, 1), 0);
@@ -109,12 +108,12 @@ public class CoreRecipes {
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.silky_screwdriver, 1), " t", "S ", 't', "nuggetTungsten", 'S',
                 BPItems.screwdriver));
 
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.canvas, 1), "SSS", "SiS", "SSS", 'S', Items.string, 'i', "stickWood"));
-        GameRegistry.addRecipe(new ItemStack(BPItems.seed_bag, 1), " S ", "C C", "CCC", 'S', Items.string, 'C', BPItems.canvas);
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.canvas, 1), "SSS", "SiS", "SSS", 'S', Items.STRING, 'i', "stickWood"));
+        GameRegistry.addRecipe(new ItemStack(BPItems.seed_bag, 1), " S ", "C C", "CCC", 'S', Items.STRING, 'C', BPItems.canvas);
         GameRegistry.addRecipe(new ItemStack(BPItems.canvas_bag, 1, 15), "SSS", "S S", "SSS", 'S', BPItems.canvas);
         registerCanvasBagRecipes(new ItemStack(BPItems.canvas_bag));
-        GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(Items.string, 4, 0), new ItemStack(BPItems.wool_card, 1,
-                OreDictionary.WILDCARD_VALUE), new ItemStack(Blocks.wool, 1, OreDictionary.WILDCARD_VALUE)));
+        GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(Items.STRING, 4, 0), new ItemStack(BPItems.wool_card, 1,
+                OreDictionary.WILDCARD_VALUE), new ItemStack(Blocks.WOOL, 1, OreDictionary.WILDCARD_VALUE)));
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.wool_card, 1, 0), "f", "p", "s", 'f', BPItems.iron_wire, 'p', "plankWood",
                 's', "stickWood"));
         GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(BPItems.iron_wire, 1), new ItemStack(BPItems.diamond_drawplate, 1,
@@ -170,19 +169,19 @@ public class CoreRecipes {
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.athame, 1), "# ", " S", '#', "ingotSilver", 'S', "stickWood"));
 
         if (Loader.isModLoaded("ForgeMicroblock")) {
-            ItemStack diamondPanel = new ItemStack(GameData.getItemRegistry().getObject("ForgeMicroblock:microblock"), 1, 2);
+            ItemStack diamondPanel = new ItemStack(GameData.getItemRegistry().getObject(new ResourceLocation("ForgeMicroblock:microblock")), 1, 2);
             NBTTagCompound tag = new NBTTagCompound();
             tag.setString("mat", "tile.blockDiamond");
             diamondPanel.setTagCompound(tag);
 
-            ItemStack ironStrip = new ItemStack(GameData.getItemRegistry().getObject("ForgeMicroblock:microblock"), 1, 769);
+            ItemStack ironStrip = new ItemStack(GameData.getItemRegistry().getObject(new ResourceLocation("ForgeMicroblock:microblock")), 1, 769);
             tag = new NBTTagCompound();
             tag.setString("mat", "tile.blockIron");
             ironStrip.setTagCompound(tag);
 
             GameRegistry.addRecipe(new ItemStack(BPItems.diamond_drawplate), " i ", "idi", " i ", 'i', ironStrip, 'd', diamondPanel);
 
-            ItemStack diamondSawFMP = new ItemStack(GameData.getItemRegistry().getObject("ForgeMicroblock:sawDiamond"), 1,
+            ItemStack diamondSawFMP = new ItemStack(GameData.getItemRegistry().getObject(new ResourceLocation("ForgeMicroblock:sawDiamond")), 1,
                     OreDictionary.WILDCARD_VALUE);
             GameRegistry.addShapelessRecipe(new ItemStack(BPItems.silicon_wafer, 16), diamondSawFMP, new ItemStack(BPItems.silicon_boule));
 

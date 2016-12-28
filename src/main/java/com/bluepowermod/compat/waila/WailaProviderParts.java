@@ -28,7 +28,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import uk.co.qmunity.lib.part.IPartWAILAProvider;
-import uk.co.qmunity.lib.raytrace.QMovingObjectPosition;
+import uk.co.qmunity.lib.raytrace.QRayTraceResult;
 
 public class WailaProviderParts implements IWailaDataProvider {
 
@@ -41,8 +41,8 @@ public class WailaProviderParts implements IWailaDataProvider {
     @Override
     public List<String> getWailaBody(ItemStack item, List<String> l, IWailaDataAccessor data, IWailaConfigHandler cfg) {
 
-        if (data.getPosition() instanceof QMovingObjectPosition) {
-            QMovingObjectPosition mop = (QMovingObjectPosition) data.getPosition();
+        if (data.getPosition() instanceof QRayTraceResult) {
+            QRayTraceResult mop = (QRayTraceResult) data.getPosition();
             if (mop.getPart() != null && mop.getPart() instanceof IPartWAILAProvider)
                 ((IPartWAILAProvider) mop.getPart()).addWAILABody(l);
         }
@@ -53,7 +53,7 @@ public class WailaProviderParts implements IWailaDataProvider {
         // if (h == null)
         // return l;
         //
-        // QMovingObjectPosition mop = h.rayTrace(RayTracer.instance().getStartVector(data.getPlayer()),
+        // QRayTraceResult mop = h.rayTrace(RayTracer.instance().getStartVector(data.getPlayer()),
         // RayTracer.instance().getEndVector(data.getPlayer()));
         // if (mop != null && mop.getPart() != null && mop.getPart() instanceof IPartWAILAProvider) {
         // if (mop.hitVec.distanceTo(data.getPosition().hitVec) < 0.01)

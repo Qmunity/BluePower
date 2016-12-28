@@ -11,8 +11,13 @@ import io.netty.buffer.ByteBuf;
 
 import java.util.List;
 
+import mcmultipart.api.container.IMultipartContainer;
+import mcmultipart.api.multipart.IMultipart;
+import mcmultipart.api.multipart.IMultipartTile;
+import mcmultipart.api.multipart.MultipartHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
 import uk.co.qmunity.lib.network.LocatedPacket;
 import uk.co.qmunity.lib.part.IPart;
 import uk.co.qmunity.lib.part.ITilePartHolder;
@@ -44,9 +49,9 @@ public class MessageGuiUpdate extends LocatedPacket<MessageGuiUpdate> {
      * @param messageId
      * @param value
      */
-    public MessageGuiUpdate(IPart part, int messageId, int value) {
+    public MessageGuiUpdate(IMultipartTile part, int messageId, int value) {
 
-        super(part.getX(), part.getY(), part.getZ());
+        super(part.getPos());
 
         // if (part instanceof GateBase && ((GateBase) part).parentCircuit != null) {
         // icId = ((GateBase) part).parentCircuit.getGateIndex((GateBase) part);
@@ -62,15 +67,15 @@ public class MessageGuiUpdate extends LocatedPacket<MessageGuiUpdate> {
 
     public MessageGuiUpdate(TileEntity tile, int messageId, int value) {
 
-        super(tile.xCoord, tile.yCoord, tile.zCoord);
+        super(tile.getPos());
         partId = -1;
         this.messageId = messageId;
         this.value = value;
     }
 
-    private int getPartId(IPart part) {
+    private int getPartId(IMultipartTile part) {
 
-        List<IPart> parts = MultipartCompatibility.getPartHolder(part.getWorld(), part.getX(), part.getY(), part.getZ()).getParts();
+        List<IMultipartTile> parts = MultipartHelper.getContainer(part.getWorld(), part.getPos()).getParts();
         return parts.indexOf(part);
     }
 
@@ -102,22 +107,22 @@ public class MessageGuiUpdate extends LocatedPacket<MessageGuiUpdate> {
     @Override
     public void handleServerSide(EntityPlayer player) {
 
-        ITilePartHolder partHolder = MultipartCompatibility.getPartHolder(player.worldObj, x, y, z);
+        IMultipartContainer partHolder = MultipartHelper.getContainer(player.world, new BlockPos(x, y, z)).get();
         if (partHolder != null) {
             messagePart(player, partHolder);
         } else {
-            TileEntity te = player.worldObj.getTileEntity(x, y, z);
+            TileEntity te = player.world.getTileEntity(new BlockPos(x, y, z));
             if (te instanceof IGuiButtonSensitive) {
                 ((IGuiButtonSensitive) te).onButtonPress(player, messageId, value);
             }
         }
     }
 
-    private void messagePart(EntityPlayer player, ITilePartHolder partHolder) {
+    private void messagePart(EntityPlayer player, IMultipartContainer partHolder) {
 
-        List<IPart> parts = partHolder.getParts();
+        List<IMultipartTile> parts = partHolder.getParts();
         if (partId < parts.size()) {
-            IPart part = parts.get(partId);
+            IMultipartTile part = parts.get(partId);
             // IntegratedCircuit circuit = null;
             // if (part instanceof IntegratedCircuit) {
             // circuit = (IntegratedCircuit) part;

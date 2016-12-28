@@ -32,12 +32,12 @@ public class TileItemDetector extends TileMachineBase implements ISidedInventory
     public int fuzzySetting;
 
     @Override
-    public void updateEntity() {
+    public void update() {
 
-        super.updateEntity();
-        if (!worldObj.isRemote) {
+        super.update();
+        if (!world.isRemote) {
             if (mode == 0 || mode == 1) {
-                if (worldObj.getWorldTime() % 2 == 0) {
+                if (world.getWorldTime() % 2 == 0) {
                     if (getOutputtingRedstone() > 0) {
                         this.setOutputtingRedstone(false);
                         sendUpdatePacket();
@@ -69,7 +69,7 @@ public class TileItemDetector extends TileMachineBase implements ISidedInventory
             return stack;
         TubeStack remainder = super.acceptItemFromTube(stack, from, simulate);
         if (remainder == null && !simulate && mode < 2) {
-            savedPulses += mode == 0 ? stack.stack.stackSize : 1;
+            savedPulses += mode == 0 ? stack.stack.getCount() : 1;
         }
         return remainder;
     }
@@ -98,7 +98,7 @@ public class TileItemDetector extends TileMachineBase implements ISidedInventory
 
         for (int i = 0; i < 9; i++) {
             NBTTagCompound tc = tCompound.getCompoundTag("inventory" + i);
-            inventory[i] = ItemStack.loadItemStackFromNBT(tc);
+            inventory[i] = new ItemStack(tc);
         }
 
         mode = tCompound.getByte("mode");
@@ -110,7 +110,7 @@ public class TileItemDetector extends TileMachineBase implements ISidedInventory
      * This function gets called whenever the world/chunk is saved
      */
     @Override
-    public void writeToNBT(NBTTagCompound tCompound) {
+    public NBTTagCompound writeToNBT(NBTTagCompound tCompound) {
 
         super.writeToNBT(tCompound);
 
@@ -125,6 +125,8 @@ public class TileItemDetector extends TileMachineBase implements ISidedInventory
         tCompound.setByte("mode", (byte) mode);
         tCompound.setByte("fuzzySetting", (byte) fuzzySetting);
         tCompound.setInteger("savedPulses", savedPulses);
+
+        return tCompound;
     }
 
     @Override
@@ -144,11 +146,11 @@ public class TileItemDetector extends TileMachineBase implements ISidedInventory
 
         ItemStack itemStack = getStackInSlot(slot);
         if (itemStack != null) {
-            if (itemStack.stackSize <= amount) {
+            if (itemStack.getCount() <= amount) {
                 setInventorySlotContents(slot, null);
             } else {
                 itemStack = itemStack.splitStack(amount);
-                if (itemStack.stackSize == 0) {
+                if (itemStack.getCount() == 0) {
                     setInventorySlotContents(slot, null);
                 }
             }
@@ -158,8 +160,7 @@ public class TileItemDetector extends TileMachineBase implements ISidedInventory
     }
 
     @Override
-    public ItemStack getStackInSlotOnClosing(int i) {
-
+    public ItemStack removeStackFromSlot(int i) {
         ItemStack itemStack = getStackInSlot(i);
         if (itemStack != null) {
             setInventorySlotContents(i, null);
@@ -174,13 +175,13 @@ public class TileItemDetector extends TileMachineBase implements ISidedInventory
     }
 
     @Override
-    public String getInventoryName() {
+    public String getName() {
 
         return BPBlocks.item_detector.getUnlocalizedName();
     }
 
     @Override
-    public boolean hasCustomInventoryName() {
+    public boolean hasCustomName() {
 
         return false;
     }
@@ -192,18 +193,17 @@ public class TileItemDetector extends TileMachineBase implements ISidedInventory
     }
 
     @Override
-    public boolean isUseableByPlayer(EntityPlayer player) {
-
+    public boolean isUsableByPlayer(EntityPlayer player) {
         return true;
     }
 
     @Override
-    public void openInventory() {
+    public void openInventory(EntityPlayer player) {
 
     }
 
     @Override
-    public void closeInventory() {
+    public void closeInventory(EntityPlayer player) {
 
     }
 
@@ -224,27 +224,25 @@ public class TileItemDetector extends TileMachineBase implements ISidedInventory
     }
 
     @Override
-    public int[] getAccessibleSlotsFromSide(int var1) {
-
+    public int[] getSlotsForFace(EnumFacing side) {
         EnumFacing direction = getFacingDirection();
 
-        if (var1 == direction.ordinal() || var1 == direction.getOpposite().ordinal()) {
+        if (side == direction || side == direction.getOpposite()) {
             return new int[] {};
         }
         return new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8 };
     }
 
     @Override
-    public boolean canInsertItem(int slot, ItemStack itemStack, int side) {
-
+    public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction) {
         return true;
     }
 
     @Override
-    public boolean canExtractItem(int slot, ItemStack itemStack, int side) {
-
+    public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
         return true;
     }
+
 
     @Override
     public void onButtonPress(EntityPlayer player, int messageId, int value) {

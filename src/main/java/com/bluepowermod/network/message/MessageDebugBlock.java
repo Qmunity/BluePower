@@ -31,7 +31,7 @@ public class MessageDebugBlock extends LocatedPacket<MessageDebugBlock> {
     @Override
     public void handleClientSide(EntityPlayer player) {
 
-        Debugger.indicateBlock(player.worldObj, x, y, z);
+        Debugger.indicateBlock(player.world, x, y, z);
     }
 
     @Override

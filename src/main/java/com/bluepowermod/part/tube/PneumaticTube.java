@@ -42,7 +42,7 @@ import uk.co.qmunity.lib.part.IPartThruHole;
 import uk.co.qmunity.lib.part.IPartTicking;
 import uk.co.qmunity.lib.part.MicroblockShape;
 import uk.co.qmunity.lib.part.compat.OcclusionHelper;
-import uk.co.qmunity.lib.raytrace.QMovingObjectPosition;
+import uk.co.qmunity.lib.raytrace.QRayTraceResult;
 import uk.co.qmunity.lib.raytrace.RayTracer;
 import uk.co.qmunity.lib.transform.Rotation;
 import uk.co.qmunity.lib.vec.Vec3d;
@@ -410,7 +410,7 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
      * @return Whether or not an action occurred
      */
     @Override
-    public boolean onActivated(EntityPlayer player, QMovingObjectPosition mop, ItemStack item) {
+    public boolean onActivated(EntityPlayer player, QRayTraceResult mop, ItemStack item) {
 
         if (getWorld() == null)
             return false;
@@ -876,9 +876,9 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
     }
 
     @Override
-    public QMovingObjectPosition rayTrace(Vec3d start, Vec3d end) {
+    public QRayTraceResult rayTrace(Vec3d start, Vec3d end) {
 
-        QMovingObjectPosition mop = super.rayTrace(start, end);
+        QRayTraceResult mop = super.rayTrace(start, end);
         if (mop == null)
             return null;
 
@@ -890,7 +890,7 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
             frameThickness /= 1.5;
             frameSeparation -= 1 / 32D;
 
-            QMovingObjectPosition wire = RayTracer.instance().rayTraceCubes(
+            QRayTraceResult wire = RayTracer.instance().rayTraceCubes(
                     getFrameBoxes(wireSize, frameSeparation, frameThickness, shouldRenderConnection(EnumFacing.DOWN),
                             shouldRenderConnection(EnumFacing.UP), shouldRenderConnection(EnumFacing.WEST),
                             shouldRenderConnection(EnumFacing.EAST), shouldRenderConnection(EnumFacing.NORTH),
@@ -899,7 +899,7 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
                             redstoneConnections[EnumFacing.EAST.ordinal()], redstoneConnections[EnumFacing.NORTH.ordinal()],
                             redstoneConnections[EnumFacing.SOUTH.ordinal()], getParent() != null && getWorld() != null), start, end,
                     new Vec3i(this));
-            QMovingObjectPosition frame = RayTracer.instance().rayTraceCubes(getFrameBoxes(), start, end, new Vec3i(this));
+            QRayTraceResult frame = RayTracer.instance().rayTraceCubes(getFrameBoxes(), start, end, new Vec3i(this));
 
             if (wire != null) {
                 if (frame != null) {
@@ -915,7 +915,7 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
     }
 
     @Override
-    public ItemStack getPickedItem(QMovingObjectPosition mop) {
+    public ItemStack getPickedItem(QRayTraceResult mop) {
 
         Object o = mop.hitInfo;
         if (o != null && o instanceof ItemStack)

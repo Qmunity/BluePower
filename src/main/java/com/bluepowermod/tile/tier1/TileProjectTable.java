@@ -7,9 +7,12 @@
  */
 package com.bluepowermod.tile.tier1;
 
-import java.lang.reflect.Field;
-import java.util.List;
-
+import com.bluepowermod.BluePower;
+import com.bluepowermod.container.ContainerProjectTable;
+import com.bluepowermod.helper.IOHelper;
+import com.bluepowermod.init.BPBlocks;
+import com.bluepowermod.part.IGuiButtonSensitive;
+import com.bluepowermod.tile.TileBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
@@ -20,15 +23,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
 
-import com.bluepowermod.BluePower;
-import com.bluepowermod.container.ContainerProjectTable;
-import com.bluepowermod.helper.IOHelper;
-import com.bluepowermod.init.BPBlocks;
-import com.bluepowermod.part.IGuiButtonSensitive;
-import com.bluepowermod.tile.TileBase;
-
-import cpw.mods.fml.relauncher.ReflectionHelper;
+import java.lang.reflect.Field;
+import java.util.List;
 
 /**
  * @author MineMaarten
@@ -94,7 +92,7 @@ public class TileProjectTable extends TileBase implements IInventory, IGuiButton
     }
 
     @Override
-    public void writeToNBT(NBTTagCompound tag) {
+    public NBTTagCompound writeToNBT(NBTTagCompound tag) {
 
         super.writeToNBT(tag);
 
@@ -119,6 +117,7 @@ public class TileProjectTable extends TileBase implements IInventory, IGuiButton
             }
         }
         tag.setTag("CraftingGrid", tagList);
+        return tag;
     }
 
     @Override
@@ -132,7 +131,7 @@ public class TileProjectTable extends TileBase implements IInventory, IGuiButton
             NBTTagCompound tagCompound = tagList.getCompoundTagAt(i);
             byte slot = tagCompound.getByte("Slot");
             if (slot >= 0 && slot < inventory.length) {
-                inventory[slot] = ItemStack.loadItemStackFromNBT(tagCompound);
+                inventory[slot] = new ItemStack(tagCompound);
             }
         }
 
@@ -142,7 +141,7 @@ public class TileProjectTable extends TileBase implements IInventory, IGuiButton
             NBTTagCompound tagCompound = tagList.getCompoundTagAt(i);
             byte slot = tagCompound.getByte("Slot");
             if (slot >= 0 && slot < craftingGrid.length) {
-                craftingGrid[slot] = ItemStack.loadItemStackFromNBT(tagCompound);
+                craftingGrid[slot] = new ItemStack(tagCompound);
             }
         }
     }
@@ -163,11 +162,11 @@ public class TileProjectTable extends TileBase implements IInventory, IGuiButton
 
         ItemStack itemStack = getStackInSlot(slot);
         if (itemStack != null) {
-            if (itemStack.stackSize <= amount) {
+            if (itemStack.getCount() <= amount) {
                 setInventorySlotContents(slot, null);
             } else {
                 itemStack = itemStack.splitStack(amount);
-                if (itemStack.stackSize == 0) {
+                if (itemStack.getCount() == 0) {
                     setInventorySlotContents(slot, null);
                 }
             }
@@ -177,8 +176,7 @@ public class TileProjectTable extends TileBase implements IInventory, IGuiButton
     }
 
     @Override
-    public ItemStack getStackInSlotOnClosing(int i) {
-
+    public ItemStack removeStackFromSlot(int i) {
         ItemStack itemStack = getStackInSlot(i);
         if (itemStack != null) {
             setInventorySlotContents(i, null);
@@ -192,13 +190,13 @@ public class TileProjectTable extends TileBase implements IInventory, IGuiButton
     }
 
     @Override
-    public String getInventoryName() {
+    public String getName() {
 
         return BPBlocks.project_table.getUnlocalizedName();
     }
 
     @Override
-    public boolean hasCustomInventoryName() {
+    public boolean hasCustomName() {
 
         return false;
     }
@@ -210,18 +208,17 @@ public class TileProjectTable extends TileBase implements IInventory, IGuiButton
     }
 
     @Override
-    public boolean isUseableByPlayer(EntityPlayer player) {
-
+    public boolean isUsableByPlayer(EntityPlayer player) {
         return true;
     }
 
     @Override
-    public void openInventory() {
+    public void openInventory(EntityPlayer player) {
 
     }
 
     @Override
-    public void closeInventory() {
+    public void closeInventory(EntityPlayer player) {
 
     }
 
@@ -240,7 +237,7 @@ public class TileProjectTable extends TileBase implements IInventory, IGuiButton
     }
 
     protected void updateCraftingGrid() {
-        craftResult.setInventorySlotContents(0, CraftingManager.getInstance().findMatchingRecipe(getCraftingGrid(), getWorldObj()));
+        craftResult.setInventorySlotContents(0, CraftingManager.getInstance().findMatchingRecipe(getCraftingGrid(), getWorld()));
     }
 
     protected void craft() {
@@ -251,13 +248,13 @@ public class TileProjectTable extends TileBase implements IInventory, IGuiButton
 
             if (itemstack1 != null) {
                 boolean pulledFromInventory = false;
-                if (craftingGrid[i].stackSize == 1) {
+                if (craftingGrid[i].getCount() == 1) {
                     ItemStack stackFromTable = ContainerProjectTable.extractStackFromTable(this, craftingGrid[i], false);
                     pulledFromInventory = stackFromTable != null;
                 }
                 if (!pulledFromInventory) {
-                    craftingGrid[i].stackSize--;
-                    if (craftingGrid[i].stackSize <= 0)
+                    craftingGrid[i].setCount(craftingGrid[i].getCount() - 1);
+                    if (craftingGrid[i].getCount() <= 0)
                         craftingGrid[i] = null;
                 }
                 if (itemstack1.getItem().hasContainerItem(itemstack1)) {
@@ -267,12 +264,9 @@ public class TileProjectTable extends TileBase implements IInventory, IGuiButton
                         continue;
                     }
 
-                    if (!itemstack1.getItem().doesContainerItemLeaveCraftingGrid(itemstack1)) {
-                        ItemStack remainder = IOHelper.insert(this, itemstack2, 0, false);
-                        if (remainder != null) {
-                            worldObj.spawnEntityInWorld(new EntityItem(worldObj, xCoord, yCoord, zCoord, remainder));
-                        }
-                    }
+                    //Removed remainder as this is now handled by minecraft.
+                    IOHelper.insert(this, itemstack2, 0, false);
+
                 }
             }
         }

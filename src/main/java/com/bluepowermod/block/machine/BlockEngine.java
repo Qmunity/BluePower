@@ -98,8 +98,7 @@ public class BlockEngine extends BlockContainerBase {
                 direction = EnumFacing.DOWN.ordinal();
             }
             TileEngine tile = (TileEngine) world.getTileEntity(pos);
-            tile.setOrientation(direction);
-
+            tile.setOrientation(EnumFacing.getFront(direction));
         }
     }
 
@@ -167,8 +166,8 @@ public class BlockEngine extends BlockContainerBase {
                         }
                     }
 
-                    engine.setOrientation(direction);
-                    //TODO Check this - world.markBlockForUpdate(x, y, z);
+                    engine.setOrientation(EnumFacing.getFront(direction));
+                    world.notifyNeighborsOfStateChange(pos, this, true);
                 }
             }
         }

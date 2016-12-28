@@ -17,12 +17,13 @@
 
 package com.bluepowermod.part;
 
+import mcmultipart.api.multipart.IMultipart;
+import mcmultipart.api.multipart.IMultipartTile;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.util.EnumFacing;;
-import uk.co.qmunity.lib.part.IPart;
-import uk.co.qmunity.lib.part.compat.IMultipartCompat;
-import uk.co.qmunity.lib.tile.TileMultipart;
-import uk.co.qmunity.lib.vec.Vec3i;
+
+;
 
 public class PartPlacementFace extends uk.co.qmunity.lib.part.PartPlacementFace {
 
@@ -32,10 +33,10 @@ public class PartPlacementFace extends uk.co.qmunity.lib.part.PartPlacementFace 
     }
 
     @Override
-    public boolean placePart(IPart part, World world, Vec3i location, IMultipartCompat multipartSystem, boolean simulated) {
+    public boolean placePart(IMultipart part, World world, BlockPos location, boolean simulated) {
 
         if (part instanceof BPPartFace) {
-            TileMultipart te = new TileMultipart(true);
+            IMultipartTile te = new TileMultipart(true);
             te.xCoord = location.getX();
             te.yCoord = location.getY();
             te.zCoord = location.getZ();

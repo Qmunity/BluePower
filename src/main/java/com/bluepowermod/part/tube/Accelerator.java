@@ -20,7 +20,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
-import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 import net.minecraft.util.EnumFacing;;
@@ -284,7 +284,7 @@ public class Accelerator extends PneumaticTube implements IPartCustomPlacement {
     }
 
     @Override
-    public IPartPlacement getPlacement(IPart part, World world, Vec3i location, EnumFacing face, MovingObjectPosition mop,
+    public IPartPlacement getPlacement(IPart part, World world, Vec3i location, EnumFacing face, RayTraceResult mop,
             EntityPlayer player) {
 
         return new PartPlacementAccelerator(player);

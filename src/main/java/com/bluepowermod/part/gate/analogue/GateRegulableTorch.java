@@ -8,7 +8,7 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import uk.co.qmunity.lib.raytrace.QMovingObjectPosition;
+import uk.co.qmunity.lib.raytrace.QRayTraceResult;
 
 import com.bluepowermod.api.wire.redstone.RedwireType;
 import com.bluepowermod.client.gui.gate.GuiGateSingleCounter;
@@ -127,7 +127,7 @@ public class GateRegulableTorch extends GateSimpleAnalogue implements IGuiButton
     }
 
     @Override
-    public boolean onActivated(EntityPlayer player, QMovingObjectPosition mop, ItemStack item) {
+    public boolean onActivated(EntityPlayer player, QRayTraceResult mop, ItemStack item) {
 
         return super.onActivated(player, mop, item);
     }

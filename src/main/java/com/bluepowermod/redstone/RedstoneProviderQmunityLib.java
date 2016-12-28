@@ -17,34 +17,30 @@
 
 package com.bluepowermod.redstone;
 
-import net.minecraft.world.World;
-import net.minecraft.util.EnumFacing;;
-import uk.co.qmunity.lib.part.IPart;
-import uk.co.qmunity.lib.part.ITilePartHolder;
-import uk.co.qmunity.lib.part.compat.MultipartCompatibility;
-
 import com.bluepowermod.api.misc.IFace;
-import com.bluepowermod.api.wire.redstone.IBundledDevice;
-import com.bluepowermod.api.wire.redstone.IBundledDeviceWrapper;
-import com.bluepowermod.api.wire.redstone.IRedstoneDevice;
-import com.bluepowermod.api.wire.redstone.IRedstoneDeviceWrapper;
-import com.bluepowermod.api.wire.redstone.IRedstoneProvider;
+import com.bluepowermod.api.wire.redstone.*;
+import mcmultipart.api.container.IMultipartContainer;
+import mcmultipart.api.multipart.IMultipart;
+import mcmultipart.api.multipart.MultipartHelper;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 public class RedstoneProviderQmunityLib implements IRedstoneProvider {
 
     @Override
-    public IRedstoneDevice getRedstoneDeviceAt(World world, int x, int y, int z, EnumFacing face, EnumFacing side) {
+    public IRedstoneDevice getRedstoneDeviceAt(World world, BlockPos pos, EnumFacing face, EnumFacing side) {
 
-        ITilePartHolder holder = MultipartCompatibility.getPartHolder(world, x, y, z);
+        IMultipartContainer holder = MultipartHelper.getContainer(world, pos).get();
         if (holder != null) {
             boolean foundOnlyFace = holder.getParts().size() > 0;
-            for (IPart p : holder.getParts()) {
+            for (IMultipart p : holder.getParts()) {
                 if (p instanceof IRedstoneDeviceWrapper) {
                     if (p instanceof IFace) {
                         if (((IFace) p).getFace() == face)
                             return ((IRedstoneDeviceWrapper) p).getDeviceOnSide(side);
                     } else {
-                        if (face == EnumFacing.UNKNOWN)
+                        if (face == null)
                             return ((IRedstoneDeviceWrapper) p).getDeviceOnSide(side);
                     }
                 } else if (p instanceof IRedstoneDevice) {
@@ -52,7 +48,7 @@ public class RedstoneProviderQmunityLib implements IRedstoneProvider {
                         if (((IFace) p).getFace() == face)
                             return (IRedstoneDevice) p;
                     } else {
-                        if (face == EnumFacing.UNKNOWN)
+                        if (face == null)
                             return (IRedstoneDevice) p;
                     }
                     foundOnlyFace = true;
@@ -69,18 +65,18 @@ public class RedstoneProviderQmunityLib implements IRedstoneProvider {
     }
 
     @Override
-    public IBundledDevice getBundledDeviceAt(World world, int x, int y, int z, EnumFacing face, EnumFacing side) {
+    public IBundledDevice getBundledDeviceAt(World world, BlockPos pos, EnumFacing face, EnumFacing side) {
 
-        ITilePartHolder holder = MultipartCompatibility.getPartHolder(world, x, y, z);
+        IMultipartContainer holder = MultipartHelper.getContainer(world, pos).get();
         if (holder != null) {
             boolean foundOnlyFace = holder.getParts().size() > 0;
-            for (IPart p : holder.getParts()) {
+            for (IMultipart p : holder.getParts()) {
                 if (p instanceof IBundledDeviceWrapper) {
                     if (p instanceof IFace) {
                         if (((IFace) p).getFace() == face)
                             return ((IBundledDeviceWrapper) p).getBundledDeviceOnSide(side);
                     } else {
-                        if (face == EnumFacing.UNKNOWN)
+                        if (face == null)
                             return ((IBundledDeviceWrapper) p).getBundledDeviceOnSide(side);
                     }
                 } else if (p instanceof IBundledDevice) {
@@ -88,7 +84,7 @@ public class RedstoneProviderQmunityLib implements IRedstoneProvider {
                         if (((IFace) p).getFace() == face)
                             return (IBundledDevice) p;
                     } else {
-                        if (face == EnumFacing.UNKNOWN)
+                        if (face == null)
                             return (IBundledDevice) p;
                     }
                     foundOnlyFace = true;

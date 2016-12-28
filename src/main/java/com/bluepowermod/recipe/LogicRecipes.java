@@ -17,15 +17,6 @@
 
 package com.bluepowermod.recipe;
 
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemDye;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.oredict.ShapedOreRecipe;
-import net.minecraftforge.oredict.ShapelessOreRecipe;
-
-import org.apache.commons.lang3.StringUtils;
-
 import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.api.wire.redstone.RedwireType;
 import com.bluepowermod.init.BPBlocks;
@@ -33,8 +24,13 @@ import com.bluepowermod.init.BPItems;
 import com.bluepowermod.part.PartManager;
 import com.bluepowermod.part.gate.supported.GateNullCell;
 import com.bluepowermod.reference.BPOredictNames;
-
-import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemDye;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.oredict.ShapedOreRecipe;
+import net.minecraftforge.oredict.ShapelessOreRecipe;
 
 /**
  * Created by Quetzi on 27/10/14.
@@ -49,9 +45,9 @@ public class LogicRecipes {
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.bluestone_anode_tile, 3), " # ", "###", "WWW", '#', "dustTeslatite", 'W',
                 BPOredictNames.STONE_TILE));
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.bluestone_cathode_tile, 1), "T#T", " W ", 'T', "dustTeslatite", '#',
-                Blocks.redstone_torch, 'W', BPOredictNames.STONE_TILE));
+                Blocks.REDSTONE_TORCH, 'W', BPOredictNames.STONE_TILE));
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.bluestone_pointer_tile, 1), " S ", "T#T", " W ", 'S', "stone", '#',
-                Blocks.redstone_torch, 'W', BPOredictNames.STONE_TILE, 'T', "dustTeslatite"));
+                Blocks.REDSTONE_TORCH, 'W', BPOredictNames.STONE_TILE, 'T', "dustTeslatite"));
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.bluestone_pointer_tile, 1), "S", "T", 'S', "stone", 'T',
                 BPOredictNames.BLUESTONE_CATHODE));
 
@@ -59,10 +55,10 @@ public class LogicRecipes {
                 BPOredictNames.STONE_TILE));
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.redstone_anode_tile, 3), " # ", "###", "WWW", '#', "dustRedstone", 'W',
                 BPOredictNames.STONE_TILE));
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.redstone_cathode_tile, 1), "#", "W", '#', Blocks.redstone_torch, 'W',
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.redstone_cathode_tile, 1), "#", "W", '#', Blocks.REDSTONE_TORCH, 'W',
                 BPOredictNames.STONE_TILE));
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.redstone_pointer_tile, 1), "S", "#", "W", 'S', "stone", '#',
-                Blocks.redstone_torch, 'W', BPOredictNames.STONE_TILE));
+                Blocks.REDSTONE_TORCH, 'W', BPOredictNames.STONE_TILE));
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.redstone_pointer_tile, 1), "S", "T", 'S', "stone", 'T',
                 BPOredictNames.REDSTONE_CATHODE));
 
@@ -72,7 +68,7 @@ public class LogicRecipes {
         // 'S',
         // "stickWood", 'R', BPItems.red_alloy_ingot, 'C', BPItems.stone_cathode)));
         GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(BPItems.tainted_silicon_chip_tile, 1), BPOredictNames.SILICON_CHIP,
-                Items.glowstone_dust));
+                Items.GLOWSTONE_DUST));
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPItems.quartz_resonator_tile, 3), " # ", "###", "WWW", '#', "gemQuartz", 'W',
                 BPOredictNames.STONE_TILE));
 
@@ -80,7 +76,7 @@ public class LogicRecipes {
                 BPOredictNames.STONE_TILE));
 
         GameRegistry
-                .addRecipe(new ShapelessOreRecipe(new ItemStack(BPItems.infused_teslatite_dust, 1), BPOredictNames.DUST_TESLATITE, Items.redstone));
+                .addRecipe(new ShapelessOreRecipe(new ItemStack(BPItems.infused_teslatite_dust, 1), BPOredictNames.DUST_TESLATITE, Items.REDSTONE));
 
         {
             for (RedwireType t : RedwireType.values()) {
@@ -96,9 +92,9 @@ public class LogicRecipes {
                         GameRegistry.addRecipe(new ShapedOreRecipe(stack.copy(), "i", "i", "i", 'i', t.getIngotOredictName()));
                     } else {
                         GameRegistry.addRecipe(new ShapedOreRecipe(stack.copy(), "www", "iii", "www", 'i', t.getIngotOredictName(), 'w',
-                                new ItemStack(Blocks.wool, 1, i)));
+                                new ItemStack(Blocks.WOOL, 1, i)));
                         GameRegistry.addRecipe(new ShapedOreRecipe(stack.copy(), "wiw", "wiw", "wiw", 'i', t.getIngotOredictName(), 'w',
-                                new ItemStack(Blocks.wool, 1, i)));
+                                new ItemStack(Blocks.WOOL, 1, i)));
                     }
                     GameRegistry.addRecipe(new ShapedOreRecipe(freestanding, " s ", "sws", " s ", 's', "stickWood", 'w', stack.copy()));
                     i++;
@@ -111,20 +107,20 @@ public class LogicRecipes {
             ItemStack bundled = PartManager.getPartInfo("wire." + t.getName() + ".bundled").getStack(1);
             ItemStack freestanding = PartManager.getPartInfo("wire.freestanding." + t.getName() + ".bundled").getStack(1);
 
-            GameRegistry.addRecipe(new ShapedOreRecipe(bundled, "sws", "www", "sws", 'w', t.getName() + "Insulated", 's', Items.string));
+            GameRegistry.addRecipe(new ShapedOreRecipe(bundled, "sws", "www", "sws", 'w', t.getName() + "Insulated", 's', Items.STRING));
             GameRegistry.addRecipe(new ShapedOreRecipe(freestanding, " s ", "sws", " s ", 's', "stickWood", 'w', bundled.copy()));
 
             for (MinecraftColor c : MinecraftColor.VALID_COLORS) {
                 ItemStack stack = PartManager.getPartInfo(
                         "wire." + t.getName() + ".bundled" + (c == MinecraftColor.NONE ? "" : "." + c.name().toLowerCase())).getStack(8);
-                GameRegistry.addRecipe(new ShapedOreRecipe(stack, "www", "wdw", "www", 'w', bundled, 'd', "dye"
-                        + StringUtils.capitalize(ItemDye.field_150923_a[15 - c.ordinal()])));
+                //ToDo Change this back to OreDict
+                GameRegistry.addRecipe(new ShapedOreRecipe(stack, "www", "wdw", "www", 'w', bundled, 'd', ItemDye.getByNameOrId(String.valueOf(15 - c.ordinal()))));
             }
         }
 
         // Blocks
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPBlocks.circuit_table), "WIW", "WCW", "WPW", 'W', "plankWood", 'I', PartManager
-                .getPartInfo("integratedCircuit3x3").getStack(), 'C', Blocks.chest, 'P', BPBlocks.project_table));
+                .getPartInfo("integratedCircuit3x3").getStack(), 'C', Blocks.CHEST, 'P', BPBlocks.project_table));
 
         // Gates and Circuits
         GameRegistry.addRecipe(new ShapedOreRecipe(PartManager.getPartInfo("and").getStack(), "ACA", "CCC", "#W#", '#', BPOredictNames.STONE_TILE,
@@ -178,7 +174,7 @@ public class LogicRecipes {
                 'A', BPOredictNames.BLUESTONE_ANODE, 'C', BPOredictNames.BLUESTONE_CATHODE, 'W', BPOredictNames.BLUESTONE_TILE, 'P',
                 BPOredictNames.BLUESTONE_POINTER));
         GameRegistry.addRecipe(new ShapedOreRecipe(PartManager.getPartInfo("toggle").getStack(), "C##", "WLW", "C##", '#', BPOredictNames.STONE_TILE,
-                'C', BPOredictNames.BLUESTONE_CATHODE, 'W', BPOredictNames.BLUESTONE_TILE, 'L', Blocks.lever));
+                'C', BPOredictNames.BLUESTONE_CATHODE, 'W', BPOredictNames.BLUESTONE_TILE, 'L', Blocks.LEVER));
         GameRegistry.addRecipe(new ShapedOreRecipe(PartManager.getPartInfo("transparent").getStack(), "ACW", "CCC", "CW#", '#',
                 BPOredictNames.STONE_TILE, 'A', BPOredictNames.BLUESTONE_ANODE, 'C', BPOredictNames.BLUESTONE_CATHODE, 'W',
                 BPOredictNames.BLUESTONE_TILE));
@@ -206,7 +202,7 @@ public class LogicRecipes {
         GameRegistry.addRecipe(new ShapedOreRecipe(PartManager.getPartInfo("integratedCircuit7x7").getStack(), "II", "II", 'I', PartManager
                 .getPartInfo("integratedCircuit5x5").getStack()));
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BPBlocks.circuit_database, 1), "#C#", "BTB", "###", '#', "ingotIron", 'C',
-                PartManager.getPartInfo("integratedCircuit7x7").getStack(), 'B', Blocks.bookshelf, 'T', BPBlocks.circuit_table));
+                PartManager.getPartInfo("integratedCircuit7x7").getStack(), 'B', Blocks.BOOKSHELF, 'T', BPBlocks.circuit_table));
 
         // Custom crafting for nullcells
         GameRegistry.addRecipe(RecipeNullCell.instance);
