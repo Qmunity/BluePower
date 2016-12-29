@@ -100,7 +100,7 @@ public class WorldGenerationHandler implements IWorldGenerator {
                 int x = chunkX * 16 + random.nextInt(16);
                 int y = 32 + random.nextInt(32);
                 int z = chunkZ * 16 + random.nextInt(16);
-                new WorldGenMarble(BPBlocks.marble, random.nextInt(Config.veinSizeMarble)).generate(world, random, x, y, z);
+                new WorldGenMarble(BPBlocks.marble, random.nextInt(Config.veinSizeMarble)).generate(world, random, new BlockPos(x, y, z));
             }
         }
         if (random.nextDouble() < Config.volcanoSpawnChance) {

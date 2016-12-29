@@ -7,15 +7,14 @@
  */
 package com.bluepowermod.tile.tier3;
 
-import java.util.List;
-
+import com.bluepowermod.tile.TileBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-
-import com.bluepowermod.tile.TileBase;
 import net.minecraft.util.EnumFacing;
+
+import java.util.List;
 
 public class TileKinectGenerator extends TileBase implements ISidedInventory{
 
@@ -70,6 +69,7 @@ public class TileKinectGenerator extends TileBase implements ISidedInventory{
 
         return allInventories.length;
     }
+
 
     @Override
     public ItemStack getStackInSlot(int i) {
@@ -145,6 +145,32 @@ public class TileKinectGenerator extends TileBase implements ISidedInventory{
     public boolean isItemValidForSlot(int i, ItemStack itemStack) {
 
         return true;
+    }
+
+    //Todo Feilds
+    @Override
+    public boolean isEmpty() {
+        return allInventories.length == 0;
+    }
+
+    @Override
+    public int getField(int id) {
+        return 0;
+    }
+
+    @Override
+    public void setField(int id, int value) {
+
+    }
+
+    @Override
+    public int getFieldCount() {
+        return 0;
+    }
+
+    @Override
+    public void clear() {
+
     }
 
     @Override

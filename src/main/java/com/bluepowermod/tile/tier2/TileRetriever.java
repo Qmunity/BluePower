@@ -11,7 +11,6 @@ import mcmultipart.api.multipart.MultipartHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import uk.co.qmunity.lib.part.compat.MultipartCompatibility;
 
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.part.tube.PneumaticTube;
@@ -65,7 +64,7 @@ public class TileRetriever extends TileFilter implements IFuzzyRetrieving {
     }
 
     @Override
-    public String getInventoryName() {
+    public String getName() {
 
         return BPBlocks.retriever.getUnlocalizedName();
     }
@@ -81,11 +80,12 @@ public class TileRetriever extends TileFilter implements IFuzzyRetrieving {
     }
 
     @Override
-    public void writeToNBT(NBTTagCompound tag) {
+    public NBTTagCompound writeToNBT(NBTTagCompound tag) {
 
         super.writeToNBT(tag);
         tag.setByte("slotIndex", (byte) slotIndex);
         tag.setByte("mode", (byte) mode);
+        return tag;
     }
 
     @Override

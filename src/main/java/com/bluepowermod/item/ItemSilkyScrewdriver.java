@@ -21,10 +21,12 @@ import com.bluepowermod.api.block.IAdvancedSilkyRemovable;
 import com.bluepowermod.api.block.ISilkyRemovable;
 import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.reference.Refs;
+import mcmultipart.MCMultiPart;
 import mcmultipart.RayTraceHelper;
 import mcmultipart.api.container.IMultipartContainer;
-import mcmultipart.api.multipart.IMultipartTile;
 import mcmultipart.api.multipart.MultipartHelper;
+import mcmultipart.api.slot.IPartSlot;
+import mcmultipart.block.BlockMultipartContainer;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
@@ -61,11 +63,11 @@ public class ItemSilkyScrewdriver extends ItemBase {
         TileEntity te = world.getTileEntity(pos);
         ItemStack stack = player.getHeldItem(hand);
 
-        IMultipartContainer h = MultipartHelper.getContainer(world, pos).get();
+        BlockMultipartContainer h = (BlockMultipartContainer) MultipartHelper.getContainer(world, pos).get();
         if (h != null) {
-            RayTraceResult mop = h.raytrace(RayTraceHelper.getRayTraceVectors(player));
-            if (mop != null) {
-                IMultipartTile p = mop.getPart();
+            RayTraceResult mop = h.collisionRayTrace(world.getBlockState(pos), world, pos, RayTraceHelper.getRayTraceVectors(player).getLeft(), RayTraceHelper.getRayTraceVectors(player).getRight());
+            if (mop != null && mop instanceof IMultipartContainer) {
+                IPartSlot p = MCMultiPart.slotRegistry.getObjectById(mop.subHit);
                 if (p instanceof ISilkyRemovable && !world.isRemote) {
                     if (p instanceof IAdvancedSilkyRemovable && !((IAdvancedSilkyRemovable) p).preSilkyRemoval(world, pos))
                         return EnumActionResult.PASS;
@@ -74,9 +76,10 @@ public class ItemSilkyScrewdriver extends ItemBase {
                     if (p instanceof IAdvancedSilkyRemovable) {
                         hideTooltip = ((IAdvancedSilkyRemovable) p).writeSilkyData(world, pos, tag);
                     } else {
-                        p.writeToNBT(tag);
+                        ((IMultipartContainer)h).getPartTile(p).get().writeToNBT(tag);
                     }
-                    ItemStack droppedStack = p.getItem();
+                    //ToDo Confirm this
+                    ItemStack droppedStack = new ItemStack(((IMultipartContainer)h).getPart(p).get().getBlock());
                     NBTTagCompound stackTag = droppedStack.getTagCompound();
                     if (stackTag == null) {
                         stackTag = new NBTTagCompound();
@@ -85,7 +88,7 @@ public class ItemSilkyScrewdriver extends ItemBase {
                     stackTag.setTag("tileData", tag);
                     stackTag.setBoolean("hideSilkyTooltip", hideTooltip);
                     world.spawnEntity(new EntityItem(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, droppedStack));
-                    h.removePart(p);
+                    ((IMultipartContainer)h).removePart(p);
                     if (p instanceof IAdvancedSilkyRemovable)
                         ((IAdvancedSilkyRemovable) p).postSilkyRemoval(world, pos);
                     stack.damageItem(1, player);

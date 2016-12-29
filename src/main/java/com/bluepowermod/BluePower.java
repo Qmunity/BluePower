@@ -39,7 +39,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import org.apache.logging.log4j.Logger;
 
 
-@Mod(modid = Refs.MODID, name = Refs.NAME, dependencies = "required-after:qmunitylib", guiFactory = Refs.GUIFACTORY)
+@Mod(modid = Refs.MODID, name = Refs.NAME, dependencies = "required-after:qmunitylib,mcmultipart", guiFactory = Refs.GUIFACTORY)
 public class BluePower {
 
     @Mod.Instance(Refs.MODID)

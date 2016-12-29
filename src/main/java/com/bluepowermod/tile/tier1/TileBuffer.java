@@ -17,16 +17,17 @@
 
 package com.bluepowermod.tile.tier1;
 
-import java.util.List;
-
+import com.bluepowermod.init.BPBlocks;
+import com.bluepowermod.tile.TileBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;;
+import net.minecraft.util.EnumFacing;
 
-import com.bluepowermod.init.BPBlocks;
-import com.bluepowermod.tile.TileBase;
+import java.util.List;
+
+;
 
 public class TileBuffer extends TileBase implements ISidedInventory {
     
@@ -172,14 +173,39 @@ public class TileBuffer extends TileBase implements ISidedInventory {
         return slots;
     }
 
-    
     @Override
-    public boolean canInsertItem(int slot, ItemStack itemStack, int side) {
+    public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction) {
         return true;
     }
-    
+
     @Override
-    public boolean canExtractItem(int slot, ItemStack itemStack, int side) {
+    public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
         return true;
+    }
+
+    //Todo Fields
+    @Override
+    public boolean isEmpty() {
+        return allInventories.length == 0;
+    }
+
+    @Override
+    public int getField(int id) {
+        return 0;
+    }
+
+    @Override
+    public void setField(int id, int value) {
+
+    }
+
+    @Override
+    public int getFieldCount() {
+        return 0;
+    }
+
+    @Override
+    public void clear() {
+
     }
 }

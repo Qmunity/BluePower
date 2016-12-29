@@ -252,7 +252,7 @@ public class TileCircuitDatabase extends TileCircuitTable {
     }
 
     @Override
-    public void writeToNBT(NBTTagCompound tag) {
+    public NBTTagCompound writeToNBT(NBTTagCompound tag) {
 
         super.writeToNBT(tag);
 
@@ -270,6 +270,7 @@ public class TileCircuitDatabase extends TileCircuitTable {
         tag.setInteger("curUploadProgress", curUploadProgress);
         tag.setInteger("curCopyProgress", curCopyProgress);
         tag.setByte("selectedShareOption", (byte) selectedShareOption);
+        return tag;
     }
 
     @Override
@@ -294,8 +295,9 @@ public class TileCircuitDatabase extends TileCircuitTable {
         selectedShareOption = tag.getByte("selectedShareOption");
     }
 
+
     @Override
-    public String getInventoryName() {
+    public String getName() {
 
         return BPBlocks.circuit_database.getUnlocalizedName();
     }

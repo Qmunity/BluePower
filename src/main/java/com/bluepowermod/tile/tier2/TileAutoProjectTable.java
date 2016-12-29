@@ -1,17 +1,18 @@
 package com.bluepowermod.tile.tier2;
 
+import com.bluepowermod.helper.IOHelper;
+import com.bluepowermod.init.BPBlocks;
+import com.bluepowermod.tile.tier1.TileProjectTable;
+import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;;
-
-import com.bluepowermod.helper.IOHelper;
-import com.bluepowermod.init.BPBlocks;
-import com.bluepowermod.tile.tier1.TileProjectTable;
+;
 
 public class TileAutoProjectTable extends TileProjectTable implements ISidedInventory {
     private static int[] slots;
@@ -157,6 +158,32 @@ public class TileAutoProjectTable extends TileProjectTable implements ISidedInve
     public String getName() {
 
         return BPBlocks.auto_project_table.getUnlocalizedName();
+    }
+
+    //Todo Fields
+    @Override
+    public boolean isEmpty() {
+        return craftBuffer == ItemStack.EMPTY;
+    }
+
+    @Override
+    public int getField(int id) {
+        return 0;
+    }
+
+    @Override
+    public void setField(int id, int value) {
+
+    }
+
+    @Override
+    public int getFieldCount() {
+        return 0;
+    }
+
+    @Override
+    public void clear() {
+
     }
 
 }

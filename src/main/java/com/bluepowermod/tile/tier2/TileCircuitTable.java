@@ -225,6 +225,33 @@ public class TileCircuitTable extends TileBase implements IInventory, IGuiButton
 
     }
 
+
+    //Todo Feilds
+    @Override
+    public boolean isEmpty() {
+        return inventory.length == 0;
+    }
+
+    @Override
+    public int getField(int id) {
+        return 0;
+    }
+
+    @Override
+    public void setField(int id, int value) {
+
+    }
+
+    @Override
+    public int getFieldCount() {
+        return 0;
+    }
+
+    @Override
+    public void clear() {
+
+    }
+
     @Override
     public boolean isItemValidForSlot(int p_94041_1_, ItemStack p_94041_2_) {
 

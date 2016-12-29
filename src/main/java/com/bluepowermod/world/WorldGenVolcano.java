@@ -28,9 +28,10 @@ import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.storage.loot.LootTableList;
 
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
@@ -42,7 +43,7 @@ public class WorldGenVolcano {
 
     private static final int MAX_VOLCANO_RADIUS = 200; // absolute max radius a volcano can have, this should be a
     // magnitude bigger than an average volcano radius.
-    private final HashSet volcanoMap = new HashSet();
+    private final HashMap<BlockPos, Integer> volcanoMap = new HashMap<BlockPos, Integer>();
     private static final Block[] ALTAR_BLOCKS = new Block[] { BPBlocks.amethyst_block, BPBlocks.ruby_block, BPBlocks.sapphire_block,
             BPBlocks.tungsten_block };
 
@@ -62,7 +63,7 @@ public class WorldGenVolcano {
                     // height is higher
                     // than the world
                     // height, generate.
-                    volcanoMap.add(ChunkCoordIntPair.chunkXZ2Int(p.x, p.z), posHeight);
+                    volcanoMap.put(new BlockPos(p.x, 0, p.z), posHeight);
                     if (!first) {
                         for (int i = posHeight; i > 0 && (i > worldHeight || canReplace(world, p.x + middleX, i, p.z + middleZ)); i--) {
                             world.setBlockState(new BlockPos(p.x + middleX, i, p.z + middleZ), BPBlocks.basalt.getDefaultState(), 2);
@@ -155,7 +156,7 @@ public class WorldGenVolcano {
         int totalHeight = 0;
         for (int x = requestedPos.x - 1; x <= requestedPos.x + 1; x++) {
             for (int z = requestedPos.z - 1; z <= requestedPos.z + 1; z++) {
-                Integer neighborHeight = (Integer) volcanoMap.getValueByKey(ChunkCoordIntPair.chunkXZ2Int(x, z));
+                Integer neighborHeight = volcanoMap.get(new BlockPos(x, 0, z));
                 if (neighborHeight != null) {
                     neighborCount++;
                     totalHeight += neighborHeight;
@@ -213,12 +214,12 @@ public class WorldGenVolcano {
     }
 
     private void generateAltar(World world, int startX, int startY, int startZ, Random rand, EnumFacing dir) {
-        generateLootChest(world, startX, startY + 1, startZ, rand, dir);
+        generateLootChest(world, new BlockPos(startX, startY + 1, startZ), rand, dir);
         EnumFacing opDir = dir.getOpposite();
         Block altarBlock = ALTAR_BLOCKS[rand.nextInt(ALTAR_BLOCKS.length)];
         setAltarBlockAndPossiblyTrap(world, startX, startY, startZ, rand, altarBlock);
         setAltarBlockAndPossiblyTrap(world, startX + opDir.getFrontOffsetX(), startY, startZ + opDir.getFrontOffsetZ(), rand, altarBlock);
-        EnumFacing sideDir = dir.getRotation(EnumFacing.DOWN);
+        EnumFacing sideDir = EnumFacing.DOWN;
         setAltarBlockAndPossiblyTrap(world, startX + sideDir.getFrontOffsetX(), startY, startZ + sideDir.getFrontOffsetZ(), rand, altarBlock);
         setAltarBlockAndPossiblyTrap(world, startX + sideDir.getFrontOffsetX() + opDir.getFrontOffsetX(), startY, startZ + sideDir.getFrontOffsetZ() + opDir.getFrontOffsetZ(), rand,
                 altarBlock);
@@ -237,14 +238,13 @@ public class WorldGenVolcano {
         }
     }
 
-    private void generateLootChest(World world, int x, int y, int z, Random rand, EnumFacing dir) {
-        world.setBlockState(new BlockPos(x, y, z), Blocks.CHEST.getDefaultState(), dir.getOpposite().ordinal());
+    private void generateLootChest(World world, BlockPos pos, Random rand, EnumFacing dir) {
+        world.setBlockState(pos, Blocks.CHEST.getDefaultState(), dir.getOpposite().ordinal());
         if (rand.nextInt(5) == 0) {
-            ((TileEntityChest) world.getTileEntity(new BlockPos(x, y, z))).setInventorySlotContents(13,
+            ((TileEntityChest) world.getTileEntity(pos)).setInventorySlotContents(13,
                     new ItemStack(BPItems.tungsten_ingot, 5 + rand.nextInt(10)));
         } else {
-            WeightedRandomChestContent.generateChestContents(rand, ChestGenHooks.getItems(DUNGEON_CHEST, rand),
-                    (TileEntityChest) world.getTileEntity(x, y, z), ChestGenHooks.getCount(DUNGEON_CHEST, rand));//Possibly to be added with IC designs from the community.
+            ((TileEntityChest) world.getTileEntity(pos)).setLootTable(LootTableList.CHESTS_SIMPLE_DUNGEON, rand.nextInt());//Possibly to be added with IC designs from the community.
         }
     }
 

@@ -365,4 +365,30 @@ public class TileAlloyFurnace extends TileBase implements ISidedInventory {
         return slot == 1;
     }
 
+    //Todo Fields
+    @Override
+    public boolean isEmpty() {
+        return inventory.length == 0;
+    }
+
+    @Override
+    public int getField(int id) {
+        return 0;
+    }
+
+    @Override
+    public void setField(int id, int value) {
+
+    }
+
+    @Override
+    public int getFieldCount() {
+        return 0;
+    }
+
+    @Override
+    public void clear() {
+
+    }
+
 }

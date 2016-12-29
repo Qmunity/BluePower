@@ -121,6 +121,21 @@ public class TileLamp extends TileBase implements IBundledDevice {
     }
 
     @Override
+    public int getX() {
+        return pos.getX();
+    }
+
+    @Override
+    public int getY() {
+        return pos.getY();
+    }
+
+    @Override
+    public int getZ() {
+        return pos.getZ();
+    }
+
+    @Override
     public BlockPos getPos() {
         return pos;
     }
@@ -188,4 +203,6 @@ public class TileLamp extends TileBase implements IBundledDevice {
 
         return true;
     }
+
+
 }

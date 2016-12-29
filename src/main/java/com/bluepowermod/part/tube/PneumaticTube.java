@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import mcmultipart.api.multipart.IMultipartTile;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
@@ -90,7 +91,7 @@ import cpw.mods.fml.relauncher.SideOnly;
  * @author MineMaarten
  */
 
-public class PneumaticTube extends PartWireFreestanding implements IPartTicking, IPartThruHole, IPartRedstone, IRedstoneConductor,
+public class PneumaticTube extends PartWireFreestanding implements IMultipartTile, IPartTicking, IPartThruHole, IPartRedstone, IRedstoneConductor,
         IConnectionListener, IRedwire {
 
     public final boolean[] connections = new boolean[6];

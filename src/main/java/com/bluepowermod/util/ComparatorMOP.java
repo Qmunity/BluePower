@@ -7,19 +7,19 @@
  */
 package com.bluepowermod.util;
 
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
+
 import java.util.Comparator;
 
-import net.minecraft.util.RayTraceResult;
-import net.minecraft.util.Vec3;
-import uk.co.qmunity.lib.vec.Vec3d;
 
 public class ComparatorMOP implements Comparator<RayTraceResult> {
 
-    private Vec3 start = null;
+    private Vec3d start = null;
 
     public ComparatorMOP(Vec3d start) {
 
-        this.start = start.toVec3();
+        this.start = start;
     }
 
     @Override

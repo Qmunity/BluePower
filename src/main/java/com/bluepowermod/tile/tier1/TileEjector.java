@@ -17,15 +17,14 @@
 
 package com.bluepowermod.tile.tier1;
 
-import java.util.List;
-
+import com.bluepowermod.init.BPBlocks;
+import com.bluepowermod.tile.TileMachineBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
-import com.bluepowermod.init.BPBlocks;
-import com.bluepowermod.tile.TileMachineBase;
+import java.util.List;
 
 public class TileEjector extends TileMachineBase implements IInventory {
 
@@ -226,4 +225,31 @@ public class TileEjector extends TileMachineBase implements IInventory {
 
         return true;
     }
+
+    //Todo Fields
+    @Override
+    public boolean isEmpty() {
+        return inventory.length == 0;
+    }
+
+    @Override
+    public int getField(int id) {
+        return 0;
+    }
+
+    @Override
+    public void setField(int id, int value) {
+
+    }
+
+    @Override
+    public int getFieldCount() {
+        return 0;
+    }
+
+    @Override
+    public void clear() {
+
+    }
+
 }

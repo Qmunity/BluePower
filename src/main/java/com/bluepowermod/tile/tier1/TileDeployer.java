@@ -381,4 +381,31 @@ public class TileDeployer extends TileBase implements ISidedInventory, IEjectAni
     	
     	return true;
     }
+
+    //Todo Fields
+    @Override
+    public boolean isEmpty() {
+        return inventory.length == 0;
+    }
+
+    @Override
+    public int getField(int id) {
+        return 0;
+    }
+
+    @Override
+    public void setField(int id, int value) {
+
+    }
+
+    @Override
+    public int getFieldCount() {
+        return 0;
+    }
+
+    @Override
+    public void clear() {
+
+    }
+
 }
