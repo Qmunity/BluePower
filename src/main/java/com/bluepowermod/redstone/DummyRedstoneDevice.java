@@ -58,28 +58,6 @@ public class DummyRedstoneDevice implements IRedstoneDevice {
             connections = RedstoneApi.getInstance().createRedstoneConnectionCache(this);
     }
 
-    @Override
-    public World getWorld() {
-        return world;
-    }
-
-    @Override
-    public int getX() {
-
-        return loc.getX();
-    }
-
-    @Override
-    public int getY() {
-
-        return loc.getY();
-    }
-
-    @Override
-    public int getZ() {
-
-        return loc.getZ();
-    }
 
     @Override
     public RedstoneConnectionCache getRedstoneConnectionCache() {
@@ -91,7 +69,7 @@ public class DummyRedstoneDevice implements IRedstoneDevice {
     public boolean canConnect(EnumFacing side, IRedstoneDevice dev, ConnectionType type) {
 
         if (type == ConnectionType.STRAIGHT)
-            return RedstoneHelper.canConnect(getWorld(), getX(), getY(), getZ(), side, dev instanceof IFace ? ((IFace) dev).getFace()
+            return  RedstoneHelper.canConnect(world, loc, side, dev instanceof IFace ? ((IFace) dev).getFace()
                     : null);
 
         return false;
@@ -113,7 +91,7 @@ public class DummyRedstoneDevice implements IRedstoneDevice {
         if (side == null)
             return 0;
 
-        return (byte) MathHelper.map(RedstoneHelper.getOutput(getWorld(), getX(), getY(), getZ(), side), 0, 15, 0, 255);
+        return (byte) MathHelper.map(RedstoneHelper.getOutput(world, loc, side), 0, 15, 0, 255);
     }
 
     @Override
@@ -167,4 +145,13 @@ public class DummyRedstoneDevice implements IRedstoneDevice {
         return block.isSideSolid(world.getBlockState(loc), world, loc, side);
     }
 
+    @Override
+    public World getWorld() {
+        return world;
+    }
+
+    @Override
+    public BlockPos getPos() {
+        return loc;
+    }
 }

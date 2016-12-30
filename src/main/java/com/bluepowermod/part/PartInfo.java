@@ -17,19 +17,16 @@
 
 package com.bluepowermod.part;
 
-import java.lang.reflect.Constructor;
-
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.client.MinecraftForgeClient;
-
-import com.bluepowermod.client.render.RenderPartItem;
 import com.bluepowermod.item.ItemPart;
 import com.bluepowermod.reference.Refs;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import java.lang.reflect.Constructor;
 
 public class PartInfo {
 
@@ -96,7 +93,7 @@ public class PartInfo {
     public ItemStack getStack(int stackSize) {
 
         ItemStack ret = stack.copy();
-        ret.stackSize = stackSize;
+        ret.setCount(stackSize);
         return ret;
     }
 
@@ -107,13 +104,13 @@ public class PartInfo {
 
     public void registerItem() {
 
-        GameRegistry.registerItem(item, Refs.MULTIPART_NAME + "." + type);
+        GameRegistry.register(item, new ResourceLocation(Refs.MULTIPART_NAME + "." + type));
     }
 
     @SideOnly(Side.CLIENT)
     public void registerRenderer() {
 
-        MinecraftForgeClient.registerItemRenderer(item, RenderPartItem.instance);
+       // MinecraftForgeClient.registerItemRenderer(item, RenderPartItem.instance);
     }
 
 }

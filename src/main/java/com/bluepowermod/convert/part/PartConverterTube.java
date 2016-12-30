@@ -4,7 +4,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import uk.co.qmunity.lib.part.IPart;
 
 import com.bluepowermod.convert.IPartConverter;
-import com.bluepowermod.part.PartInfo;
+import com.bluepowermod.part.BPPartInfo;
 import com.bluepowermod.part.PartManager;
 import com.bluepowermod.part.tube.PneumaticTube;
 
@@ -21,7 +21,7 @@ public class PartConverterTube implements IPartConverter {
     @Override
     public IPart convert(NBTTagCompound old) {
 
-        PartInfo info = PartManager.getPartInfo(old.getString("part_id"));
+        BPPartInfo info = PartManager.getPartInfo(old.getString("part_id"));
         if (info == null)
             return null;
 

@@ -91,7 +91,7 @@ import cpw.mods.fml.relauncher.SideOnly;
  * @author MineMaarten
  */
 
-public class PneumaticTube extends PartWireFreestanding implements IMultipartTile, IPartTicking, IPartThruHole, IPartRedstone, IRedstoneConductor,
+public class PneumaticTube extends PartWireFreestanding implements IPartTicking, IPartThruHole, IPartRedstone, IRedstoneConductor,
         IConnectionListener, IRedwire {
 
     public final boolean[] connections = new boolean[6];

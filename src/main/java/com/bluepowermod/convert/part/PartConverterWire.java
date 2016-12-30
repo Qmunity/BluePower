@@ -5,7 +5,7 @@ import net.minecraft.util.EnumFacing;;
 import uk.co.qmunity.lib.part.IPart;
 
 import com.bluepowermod.convert.IPartConverter;
-import com.bluepowermod.part.PartInfo;
+import com.bluepowermod.part.BPPartInfo;
 import com.bluepowermod.part.PartManager;
 import com.bluepowermod.part.wire.redstone.PartRedwireFace;
 
@@ -21,7 +21,7 @@ public class PartConverterWire implements IPartConverter {
     public IPart convert(NBTTagCompound old) {
 
         String id = old.getString("part_id").replace("bluestoneWire", "wire.bluestone").replace("silver", "light_gray");
-        PartInfo info = PartManager.getPartInfo(id);
+        BPPartInfo info = PartManager.getPartInfo(id);
         if (info == null)
             return null;
         PartRedwireFace part = (PartRedwireFace) info.create();

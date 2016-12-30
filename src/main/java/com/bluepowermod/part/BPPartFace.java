@@ -17,26 +17,25 @@
 
 package com.bluepowermod.part;
 
-import java.io.DataInput;
-import java.io.DataOutput;
-import java.io.IOException;
-
+import com.bluepowermod.api.misc.IFace;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.RayTraceResult;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
-import net.minecraft.util.EnumFacing;;
 import uk.co.qmunity.lib.part.IPart;
 import uk.co.qmunity.lib.part.IPartCustomPlacement;
 import uk.co.qmunity.lib.part.IPartFace;
 import uk.co.qmunity.lib.part.IPartPlacement;
-import uk.co.qmunity.lib.vec.Vec3i;
 
-import com.bluepowermod.api.misc.IFace;
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
 
 public abstract class BPPartFace extends BPPart implements IPartFace, IFace, IPartCustomPlacement {
 
-    private EnumFacing face = EnumFacing.UNKNOWN;
+    private EnumFacing face = null;
 
     @Override
     public EnumFacing getFace() {
@@ -46,7 +45,7 @@ public abstract class BPPartFace extends BPPart implements IPartFace, IFace, IPa
 
     public boolean canStay() {
 
-        return getWorld().isSideSolid(getX() + getFace().offsetX, getY() + getFace().offsetY, getZ() + getFace().offsetZ,
+        return getWorld().isSideSolid(getPos().offset(getFace()),
                 getFace().getOpposite());
     }
 
@@ -65,7 +64,7 @@ public abstract class BPPartFace extends BPPart implements IPartFace, IFace, IPa
     @Override
     public void readFromNBT(NBTTagCompound tag) {
 
-        face = EnumFacing.getOrientation(tag.getInteger("face"));
+        face = EnumFacing.getFront(tag.getInteger("face"));
     }
 
     @Override
@@ -81,12 +80,12 @@ public abstract class BPPartFace extends BPPart implements IPartFace, IFace, IPa
 
         super.readUpdateData(buffer);
 
-        face = EnumFacing.getOrientation(buffer.readInt());
+        face = EnumFacing.getFront(buffer.readInt());
     }
 
     @Override
-    public IPartPlacement getPlacement(IPart part, World world, Vec3i location, EnumFacing face, RayTraceResult mop,
-            EntityPlayer player) {
+    public IPartPlacement getPlacement(IPart part, World world, BlockPos location, EnumFacing face, RayTraceResult mop,
+                                       EntityPlayer player) {
 
         return new PartPlacementFace(face.getOpposite());
     }

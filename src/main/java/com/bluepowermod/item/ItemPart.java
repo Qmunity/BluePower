@@ -21,10 +21,10 @@ import com.bluepowermod.api.BPApi;
 import com.bluepowermod.api.item.IDatabaseSaveable;
 import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.part.BPPart;
+import com.bluepowermod.part.BPPartInfo;
 import com.bluepowermod.part.PartInfo;
 import com.bluepowermod.part.PartManager;
 import com.bluepowermod.reference.Refs;
-import mcmultipart.api.item.ItemBlockMultipart;
 import mcmultipart.api.multipart.IMultipart;
 import net.minecraft.block.SoundType;
 import net.minecraft.client.Minecraft;
@@ -39,12 +39,13 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import uk.co.qmunity.lib.item.ItemMultipart;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class ItemPart extends ItemBlockMultipart implements IDatabaseSaveable {
+public class ItemPart extends ItemMultipart implements IDatabaseSaveable {
 
     private final PartInfo info;
 
@@ -121,26 +122,26 @@ public class ItemPart extends ItemBlockMultipart implements IDatabaseSaveable {
     }
 
     @Override
-    public IMultipart createPart(ItemStack item, EntityPlayer player, World world, RayTraceResult mop) {
+    public BPPart createPart(ItemStack item, EntityPlayer player, World world, RayTraceResult mop) {
 
-        IMultipart part = info.create();
+        BPPart part = info.create();
         BPApi.getInstance().loadSilkySettings(part, item);
         return part;
     }
 
     @Override
     public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        if (!super.onItemUse(item, player, world, x, y, z, face, x_, y_, z_))
+        if (!(super.onItemUse(player, world, pos, hand, facing, hitX, hitY, hitZ) == EnumActionResult.SUCCESS))
             return EnumActionResult.PASS;
 
         if (world.isRemote)
-            playPlacementSound(x, y, z, PartManager.getExample(item).getPlacementSound());
+            playPlacementSound(pos, PartManager.getExample(player.getHeldItem(hand)).getPlacementSound());
 
         return EnumActionResult.SUCCESS;
     }
 
     @SideOnly(Side.CLIENT)
-    private void playPlacementSound(int x, int y, int z, SoundType sound) {
+    private void playPlacementSound(BlockPos pos, SoundType sound) {
 
         Minecraft
         .getMinecraft()
@@ -148,7 +149,7 @@ public class ItemPart extends ItemBlockMultipart implements IDatabaseSaveable {
         .playSound(
                 new PositionedSoundRecord(new ResourceLocation(sound.func_150496_b()), (sound.getVolume() + 3)
                         * Minecraft.getMinecraft().gameSettings.getSoundLevel(SoundCategory.BLOCKS), sound.getPitch() * 0.85F,
-                        x + 0.5F, y + 0.5F, z + 0.5F));
+                        pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F));
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })

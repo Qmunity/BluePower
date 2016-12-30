@@ -11,7 +11,7 @@ import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.util.IIcon;
 import net.minecraftforge.client.event.TextureStitchEvent;
 
-import com.bluepowermod.part.PartInfo;
+import com.bluepowermod.part.BPPartInfo;
 import com.bluepowermod.part.PartManager;
 import com.bluepowermod.reference.Refs;
 
@@ -156,7 +156,7 @@ public class IconSupplier {
             quartzResonator = reg.registerIcon(Refs.MODID + ":gates/components/resonator");
             gateSolarPanel = reg.registerIcon(Refs.MODID + ":gates/components/solarpanel");
 
-            for (PartInfo i : PartManager.getRegisteredParts())
+            for (BPPartInfo i : PartManager.getRegisteredParts())
                 i.getExample().registerIcons(reg);
         }
     }

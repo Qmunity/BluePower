@@ -17,14 +17,16 @@
 
 package com.bluepowermod.redstone;
 
-import net.minecraft.world.World;
-import net.minecraft.util.EnumFacing;;
-
 import com.bluepowermod.api.connect.ConnectionType;
 import com.bluepowermod.api.wire.redstone.IBundledDevice;
 import com.bluepowermod.api.wire.redstone.IRedstoneDevice;
 import com.bluepowermod.part.wire.ConnectionLogicHelper;
 import com.bluepowermod.part.wire.ConnectionLogicHelper.IConnectableProvider;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+
+;
 
 public class RedConnectionHelper {
 
@@ -32,9 +34,9 @@ public class RedConnectionHelper {
             new IConnectableProvider<IRedstoneDevice, RedstoneConnection>() {
 
                 @Override
-                public IRedstoneDevice getConnectableAt(World world, int x, int y, int z, EnumFacing face, EnumFacing side) {
+                public IRedstoneDevice getConnectableAt(World world, BlockPos pos, EnumFacing face, EnumFacing side) {
 
-                    return RedstoneApi.getInstance().getRedstoneDevice(world, x, y, z, face, side);
+                    return RedstoneApi.getInstance().getRedstoneDevice(world, pos, face, side);
                 }
 
                 @Override
@@ -79,9 +81,9 @@ public class RedConnectionHelper {
             new IConnectableProvider<IBundledDevice, BundledConnection>() {
 
                 @Override
-                public IBundledDevice getConnectableAt(World world, int x, int y, int z, EnumFacing face, EnumFacing side) {
+                public IBundledDevice getConnectableAt(World world, BlockPos pos, EnumFacing face, EnumFacing side) {
 
-                    return RedstoneApi.getInstance().getBundledDevice(world, x, y, z, face, side);
+                    return RedstoneApi.getInstance().getBundledDevice(world, pos, face, side);
                 }
 
                 @Override

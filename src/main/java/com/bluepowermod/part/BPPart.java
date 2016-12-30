@@ -1,58 +1,31 @@
-/*
- * This file is part of Blue Power.
- *
- *     Blue Power is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU General Public License as published by
- *     the Free Software Foundation, either version 3 of the License, or
- *     (at your option) any later version.
- *
- *     Blue Power is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
- *
- *     You should have received a copy of the GNU General Public License
- *     along with Blue Power.  If not, see <http://www.gnu.org/licenses/>
- */
-
 package com.bluepowermod.part;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import net.minecraft.block.Block;
-import net.minecraft.client.renderer.RenderBlocks;
-import net.minecraft.client.renderer.texture.IIconRegister;
+import com.bluepowermod.api.item.IDatabaseSaveable;
+import net.minecraft.block.SoundType;
+import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
-import net.minecraftforge.client.IItemRenderer.ItemRenderType;
-import uk.co.qmunity.lib.client.render.RenderHelper;
-import uk.co.qmunity.lib.part.IPart;
-import uk.co.qmunity.lib.part.IPartCollidable;
-import uk.co.qmunity.lib.part.IPartInteractable;
-import uk.co.qmunity.lib.part.IPartOccluding;
-import uk.co.qmunity.lib.part.IPartSelectable;
-import uk.co.qmunity.lib.part.IPartUpdateListener;
-import uk.co.qmunity.lib.part.IPartWAILAProvider;
-import uk.co.qmunity.lib.part.PartBase;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import uk.co.qmunity.lib.part.*;
 import uk.co.qmunity.lib.raytrace.QRayTraceResult;
 import uk.co.qmunity.lib.raytrace.RayTracer;
-import uk.co.qmunity.lib.vec.Vec3d;
 import uk.co.qmunity.lib.vec.Vec3dCube;
-import uk.co.qmunity.lib.vec.Vec3i;
 
-import com.bluepowermod.api.item.IDatabaseSaveable;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public abstract class BPPart extends PartBase implements IPartSelectable, IPartCollidable, IPartOccluding, IPartUpdateListener,
         IPartInteractable, IDatabaseSaveable, IPartWAILAProvider {
+
 
     @Override
     public World getWorld() {
@@ -64,30 +37,12 @@ public abstract class BPPart extends PartBase implements IPartSelectable, IPartC
     }
 
     @Override
-    public int getX() {
+    public BlockPos getPos(){
 
         if (getParent() == null)
-            return 0;
+            return null;
 
-        return super.getX();
-    }
-
-    @Override
-    public int getY() {
-
-        if (getParent() == null)
-            return 0;
-
-        return super.getY();
-    }
-
-    @Override
-    public int getZ() {
-
-        if (getParent() == null)
-            return 0;
-
-        return super.getZ();
+        return super.getPos();
     }
 
     public abstract String getUnlocalizedName();
@@ -105,11 +60,13 @@ public abstract class BPPart extends PartBase implements IPartSelectable, IPartC
 
     @Override
     @SideOnly(Side.CLIENT)
-    public boolean renderBreaking(Vec3i translation, RenderHelper renderer, RenderBlocks renderBlocks, int pass, QRayTraceResult mop) {
+    public boolean renderBreaking(Vec3i translation, VertexBuffer renderer, int pass, QRayTraceResult mop) {
 
-        return renderStatic(translation, renderer, renderBlocks, pass);
+        return renderStatic(translation, renderer, pass);
     }
 
+    
+    
     @Override
     public List<Vec3dCube> getOcclusionBoxes() {
 
@@ -137,11 +94,6 @@ public abstract class BPPart extends PartBase implements IPartSelectable, IPartC
     public ItemStack getPickedItem(QRayTraceResult mop) {
 
         return getItem();
-    }
-
-    @SideOnly(Side.CLIENT)
-    public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
-
     }
 
     @Override
@@ -218,11 +170,6 @@ public abstract class BPPart extends PartBase implements IPartSelectable, IPartC
         return new ArrayList<ItemStack>();
     }
 
-    @SideOnly(Side.CLIENT)
-    public void registerIcons(IIconRegister reg) {
-
-    }
-
     @Override
     public boolean onActivated(EntityPlayer player, QRayTraceResult hit, ItemStack item) {
 
@@ -240,7 +187,7 @@ public abstract class BPPart extends PartBase implements IPartSelectable, IPartC
 
     public void notifyUpdate() {
 
-        getWorld().notifyBlockChange(getX(), getY(), getZ(), Blocks.air);
+        getWorld().updateObservingBlocksAt(getPos(), Blocks.AIR);
     }
 
     public CreativeTabs[] getCreativeTabs() {
@@ -253,9 +200,9 @@ public abstract class BPPart extends PartBase implements IPartSelectable, IPartC
         return null;
     }
 
-    public Block.SoundType getPlacementSound() {
+    public SoundType getPlacementSound() {
 
-        return Block.soundTypeGlass;
+        return SoundType.GLASS;
     }
 
     @SideOnly(Side.CLIENT)

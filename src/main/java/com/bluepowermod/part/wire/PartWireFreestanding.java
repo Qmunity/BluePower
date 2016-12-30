@@ -16,22 +16,13 @@
  */
 package com.bluepowermod.part.wire;
 
+import com.bluepowermod.part.BPPart;
+import net.minecraft.util.EnumFacing;
+import uk.co.qmunity.lib.part.IPartThruHole;
+import uk.co.qmunity.lib.vec.Vec3dCube;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import net.minecraft.client.renderer.RenderBlocks;
-import net.minecraft.util.IIcon;
-import net.minecraft.util.EnumFacing;;
-import uk.co.qmunity.lib.client.render.RenderHelper;
-import uk.co.qmunity.lib.part.IPartThruHole;
-import uk.co.qmunity.lib.vec.Vec3d;
-import uk.co.qmunity.lib.vec.Vec3dCube;
-import uk.co.qmunity.lib.vec.Vec3i;
-
-import com.bluepowermod.part.BPPart;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public abstract class PartWireFreestanding extends BPPart implements IPartThruHole {
 
@@ -49,25 +40,6 @@ public abstract class PartWireFreestanding extends BPPart implements IPartThruHo
         return 0xFFFFFF;
     }
 
-    @SideOnly(Side.CLIENT)
-    protected abstract IIcon getWireIcon(EnumFacing side);
-
-    @SideOnly(Side.CLIENT)
-    protected IIcon getWireIcon(EnumFacing side, EnumFacing face) {
-
-        return getWireIcon(face);
-    }
-
-    @SideOnly(Side.CLIENT)
-    protected IIcon[] getIcons(EnumFacing side) {
-
-        return new IIcon[] { getWireIcon(side, EnumFacing.DOWN), getWireIcon(side, EnumFacing.UP),
-                getWireIcon(side, EnumFacing.WEST), getWireIcon(side, EnumFacing.EAST), getWireIcon(side, EnumFacing.NORTH),
-                getWireIcon(side, EnumFacing.SOUTH) };
-    }
-
-    @SideOnly(Side.CLIENT)
-    protected abstract IIcon getFrameIcon();
 
     protected List<Vec3dCube> getFrameBoxes() {
 

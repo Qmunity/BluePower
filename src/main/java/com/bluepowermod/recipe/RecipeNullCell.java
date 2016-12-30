@@ -15,7 +15,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -52,6 +52,13 @@ public class RecipeNullCell implements IRecipe {
     public ItemStack getRecipeOutput() {
 
         return GateNullCell.getStackWithData(new GateNullCell(null, false, null, false));
+    }
+
+
+    //Todo Check if a remainder is needed
+    @Override
+    public NonNullList<ItemStack> getRemainingItems(InventoryCrafting inv) {
+        return null;
     }
 
     @SubscribeEvent

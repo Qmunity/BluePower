@@ -7,6 +7,8 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import uk.co.qmunity.lib.part.MicroblockShape;
+import uk.co.qmunity.lib.part.compat.OcclusionHelper;
 import uk.co.qmunity.lib.vec.IWorldLocation;
 
 ;
@@ -45,7 +47,7 @@ public class ConnectionLogicHelper<T extends IWorldLocation, C> {
 
         // In same block
         do {
-            T dev = provider.getConnectableAt(device.getWorld(), new BlockPos(device.getX(), device.getY(), device.getZ()), side == face.getOpposite() ? null
+            T dev = provider.getConnectableAt(device.getWorld(), device.getPos(), side == face.getOpposite() ? null
                     : side, face == null ? side.getOpposite() : face);
             if (dev == null || dev == device || !provider.isValidClosedCorner(dev))
                 break;
@@ -59,18 +61,18 @@ public class ConnectionLogicHelper<T extends IWorldLocation, C> {
         // On same block
         if (face != null) {
             do {
-                BlockPos loc = new BlockPos(device.getX(), device.getY(), device.getZ()).offset(face).offset(side);
+                BlockPos loc = device.getPos().offset(face).offset(side);
                 T dev = provider.getConnectableAt(device.getWorld(), loc, side.getOpposite(), face.getOpposite());
                 if (dev == null || dev == device || !provider.isValidOpenCorner(dev))
                     break;
 
-                BlockPos block = new BlockPos(device.getX(), device.getY(), device.getZ()).offset(side);
+                BlockPos block = device.getPos().offset(side);
                 Block b = device.getWorld().getBlockState(block).getBlock();
                 // Full block check
                 if (b.isNormalCube(device.getWorld().getBlockState(block)) || b == Blocks.REDSTONE_BLOCK)
                     break;
                 // Microblock check
-                if (!OcclusionHelper.microblockOcclusionTest(block, MicroblockShape.EDGE, 2, face, side.getOpposite()))
+                if (!OcclusionHelper.microblockOcclusionTest(device.getWorld(), block, MicroblockShape.EDGE, 2, face, side.getOpposite()))
                     break;
 
                 if (provider.canConnect(device, dev, side, ConnectionType.OPEN_CORNER)
@@ -81,7 +83,7 @@ public class ConnectionLogicHelper<T extends IWorldLocation, C> {
 
         // Straight connection
         do {
-            BlockPos loc = new BlockPos(device.getX(), device.getY(), device.getZ()).offset(side);
+            BlockPos loc = device.getPos().offset(side);
             T dev = provider.getConnectableAt(device.getWorld(), loc, face, side.getOpposite());
             if (dev == null) {
                 dev = provider.getConnectableAt(device.getWorld(), loc, side.getOpposite(), side.getOpposite());

@@ -1,25 +1,23 @@
 package com.bluepowermod.redstone;
 
+import com.bluepowermod.api.connect.ConnectionType;
+import com.bluepowermod.api.connect.IConnection;
+import com.bluepowermod.api.connect.IConnectionCache;
+import com.bluepowermod.api.misc.MinecraftColor;
+import com.bluepowermod.api.wire.redstone.*;
+import com.bluepowermod.api.wire.redstone.IRedstoneConductor.IAdvancedRedstoneConductor;
+import com.bluepowermod.api.wire.redstone.IRedwire.IInsulatedRedwire;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import uk.co.qmunity.lib.misc.Pair;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map.Entry;
 
-import net.minecraft.world.World;
-import net.minecraft.util.EnumFacing;;
-import uk.co.qmunity.lib.misc.Pair;
-
-import com.bluepowermod.api.connect.ConnectionType;
-import com.bluepowermod.api.connect.IConnection;
-import com.bluepowermod.api.connect.IConnectionCache;
-import com.bluepowermod.api.misc.MinecraftColor;
-import com.bluepowermod.api.wire.redstone.IBundledConductor;
-import com.bluepowermod.api.wire.redstone.IBundledDevice;
-import com.bluepowermod.api.wire.redstone.IInsulatedRedstoneDevice;
-import com.bluepowermod.api.wire.redstone.IRedstoneConductor.IAdvancedRedstoneConductor;
-import com.bluepowermod.api.wire.redstone.IRedstoneDevice;
-import com.bluepowermod.api.wire.redstone.IRedwire;
-import com.bluepowermod.api.wire.redstone.IRedwire.IInsulatedRedwire;
+;
 
 public class BundledDeviceWrapper implements IAdvancedRedstoneConductor {
 
@@ -54,21 +52,8 @@ public class BundledDeviceWrapper implements IAdvancedRedstoneConductor {
     }
 
     @Override
-    public int getX() {
-
-        return device.getX();
-    }
-
-    @Override
-    public int getY() {
-
-        return device.getY();
-    }
-
-    @Override
-    public int getZ() {
-
-        return device.getZ();
+    public BlockPos getPos() {
+        return device.getPos();
     }
 
     @Override

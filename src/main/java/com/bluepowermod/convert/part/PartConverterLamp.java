@@ -5,7 +5,7 @@ import net.minecraft.util.EnumFacing;;
 import uk.co.qmunity.lib.part.IPart;
 
 import com.bluepowermod.convert.IPartConverter;
-import com.bluepowermod.part.PartInfo;
+import com.bluepowermod.part.BPPartInfo;
 import com.bluepowermod.part.PartManager;
 import com.bluepowermod.part.lamp.PartLamp;
 
@@ -24,7 +24,7 @@ public class PartConverterLamp implements IPartConverter {
         id = id.replace("cagelamp", "cagelamp.").replace("fixture", "fixture.").replace("silver", "light_gray");
         if (id.startsWith("inverted"))
             id = id.substring("inverted".length()) + ".inverted";
-        PartInfo info = PartManager.getPartInfo(id);
+        BPPartInfo info = PartManager.getPartInfo(id);
         if (info == null)
             return null;
         PartLamp part = (PartLamp) info.create();

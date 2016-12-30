@@ -17,10 +17,9 @@
 
 package com.bluepowermod.part;
 
+
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.RayTraceResult;
-
-;
 
 public class PartRotationHelper {
 

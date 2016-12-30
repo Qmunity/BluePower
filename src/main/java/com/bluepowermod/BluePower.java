@@ -15,7 +15,6 @@ import com.bluepowermod.convert.WorldConversionEventHandler;
 import com.bluepowermod.event.BPEventHandler;
 import com.bluepowermod.init.*;
 import com.bluepowermod.network.BPNetworkHandler;
-import com.bluepowermod.part.PartManager;
 import com.bluepowermod.recipe.AlloyFurnaceRegistry;
 import com.bluepowermod.redstone.RedstoneApi;
 import com.bluepowermod.redstone.RedstoneProviderQmunityLib;
@@ -80,11 +79,8 @@ public class BluePower {
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
 
-        PartManager.registerParts();
-
         BPBlocks.init();
         BPItems.init();
-        PartManager.registerItems();
 
         TileEntities.init();
         OreDictionarySetup.init();
