@@ -17,21 +17,20 @@
 
 package com.bluepowermod.part.gate.wireless;
 
-import java.io.DataInput;
-import java.io.DataOutput;
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.UUID;
-
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.server.MinecraftServer;
-
 import com.bluepowermod.api.misc.Accessibility;
 import com.bluepowermod.api.wireless.IBundledFrequency;
 import com.bluepowermod.api.wireless.IFrequency;
 import com.bluepowermod.api.wireless.IRedstoneFrequency;
 import com.bluepowermod.api.wireless.IWirelessDevice;
 import com.mojang.authlib.GameProfile;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.UUID;
 
 public class Frequency implements IFrequency {
 
@@ -48,7 +47,7 @@ public class Frequency implements IFrequency {
         this.owner = owner;
         this.frequency = frequency;
 
-        for (GameProfile p : MinecraftServer.getServer().func_152357_F()) {
+        for (GameProfile p : FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getOnlinePlayerProfiles()) {
             if (p.getId().equals(owner)) {
                 ownerName = p.getName();
                 break;

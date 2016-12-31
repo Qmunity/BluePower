@@ -17,16 +17,14 @@
 
 package com.bluepowermod.item;
 
-import java.util.Random;
-
-import net.minecraft.item.ItemStack;
-import codechicken.microblock.Saw;
-
 import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.util.Dependencies;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.common.Optional;
 
-import cpw.mods.fml.common.Optional;
+import java.util.Random;
+
 
 @Optional.Interface(modid = Dependencies.FMP, iface = "codechicken.microblock.Saw")
 public class ItemSaw extends ItemBase implements Saw {
@@ -37,7 +35,7 @@ public class ItemSaw extends ItemBase implements Saw {
 
         setCreativeTab(BPCreativeTabs.tools);
         this.sawLevel = sawLevel;
-        setTextureName(Refs.MODID + ":" + name);
+        setRegistryName(Refs.MODID + ":" + name);
         setUnlocalizedName(name);
         maxStackSize = 1;
         setMaxDamage(1 << sawLevel + 8);

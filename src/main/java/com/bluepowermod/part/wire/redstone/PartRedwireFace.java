@@ -17,27 +17,28 @@
 
 package com.bluepowermod.part.wire.redstone;
 
-import java.io.DataInput;
-import java.io.DataOutput;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map.Entry;
-
+import com.bluepowermod.api.connect.ConnectionType;
+import com.bluepowermod.api.connect.IConnection;
+import com.bluepowermod.api.connect.IConnectionCache;
+import com.bluepowermod.api.connect.IConnectionListener;
+import com.bluepowermod.api.gate.IIntegratedCircuitPart;
+import com.bluepowermod.api.misc.IFace;
+import com.bluepowermod.api.misc.MinecraftColor;
+import com.bluepowermod.api.wire.redstone.IBundledConductor.IAdvancedBundledConductor;
+import com.bluepowermod.api.wire.redstone.*;
+import com.bluepowermod.api.wire.redstone.IRedstoneConductor.IAdvancedRedstoneConductor;
+import com.bluepowermod.client.render.IconSupplier;
+import com.bluepowermod.helper.VectorHelper;
+import com.bluepowermod.init.BPCreativeTabs;
+import com.bluepowermod.part.gate.ic.FakeMultipartTileIC;
+import com.bluepowermod.part.wire.PartWireFace;
+import com.bluepowermod.redstone.*;
 import net.minecraft.block.BlockRedstoneWire;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.RenderBlocks;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
-import net.minecraftforge.client.IItemRenderer.ItemRenderType;
-import net.minecraft.util.EnumFacing;;
-
-import org.lwjgl.opengl.GL11;
-
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import uk.co.qmunity.lib.client.render.RenderHelper;
 import uk.co.qmunity.lib.helper.MathHelper;
 import uk.co.qmunity.lib.helper.RedstoneHelper;
@@ -47,34 +48,14 @@ import uk.co.qmunity.lib.part.IPartTicking;
 import uk.co.qmunity.lib.part.MicroblockShape;
 import uk.co.qmunity.lib.part.compat.OcclusionHelper;
 import uk.co.qmunity.lib.vec.Vec3dCube;
-import uk.co.qmunity.lib.vec.Vec3i;
 
-import com.bluepowermod.api.connect.ConnectionType;
-import com.bluepowermod.api.connect.IConnection;
-import com.bluepowermod.api.connect.IConnectionCache;
-import com.bluepowermod.api.connect.IConnectionListener;
-import com.bluepowermod.api.gate.IIntegratedCircuitPart;
-import com.bluepowermod.api.misc.IFace;
-import com.bluepowermod.api.misc.MinecraftColor;
-import com.bluepowermod.api.wire.redstone.IBundledConductor.IAdvancedBundledConductor;
-import com.bluepowermod.api.wire.redstone.IBundledDevice;
-import com.bluepowermod.api.wire.redstone.IInsulatedRedstoneDevice;
-import com.bluepowermod.api.wire.redstone.IRedConductor;
-import com.bluepowermod.api.wire.redstone.IRedstoneConductor.IAdvancedRedstoneConductor;
-import com.bluepowermod.api.wire.redstone.IRedstoneDevice;
-import com.bluepowermod.api.wire.redstone.IRedwire;
-import com.bluepowermod.api.wire.redstone.RedwireType;
-import com.bluepowermod.client.render.IconSupplier;
-import com.bluepowermod.helper.VectorHelper;
-import com.bluepowermod.init.BPCreativeTabs;
-import com.bluepowermod.part.gate.ic.FakeMultipartTileIC;
-import com.bluepowermod.part.wire.PartWireFace;
-import com.bluepowermod.redstone.BundledConnectionCache;
-import com.bluepowermod.redstone.BundledDeviceWrapper;
-import com.bluepowermod.redstone.DummyRedstoneDevice;
-import com.bluepowermod.redstone.RedstoneApi;
-import com.bluepowermod.redstone.RedstoneConnection;
-import com.bluepowermod.redstone.RedstoneConnectionCache;
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map.Entry;
 
 public abstract class PartRedwireFace extends PartWireFace implements IRedwire, IRedConductor, IIntegratedCircuitPart, IPartRedstone {
 
@@ -167,13 +148,13 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
     @Override
     public boolean hasLoss(EnumFacing side) {
 
-        return getRedwireType(EnumFacing.UNKNOWN).hasLoss();
+        return getRedwireType(null).hasLoss();
     }
 
     @Override
     public boolean isAnalogue(EnumFacing side) {
 
-        return getRedwireType(EnumFacing.UNKNOWN).isAnalogue();
+        return getRedwireType(null).isAnalogue();
     }
 
     // NBT
@@ -232,7 +213,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
         @Override
         public String getType() {
 
-            return "wire." + getRedwireType(EnumFacing.UNKNOWN).getName();
+            return "wire." + getRedwireType(null).getName();
         }
 
         @Override
@@ -242,7 +223,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
         }
 
         @Override
-        protected IIcon getWireIcon(EnumFacing side) {
+        protected TextureAtlasSprite getWireIcon(EnumFacing side) {
 
             return IconSupplier.wire;
         }
@@ -250,21 +231,21 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
         @Override
         protected int getColorMultiplier() {
 
-            return WireHelper.getColorForPowerLevel(getRedwireType(EnumFacing.UNKNOWN), power);
+            return WireHelper.getColorForPowerLevel(getRedwireType(null), power);
         }
 
         @Override
         public boolean canConnect(EnumFacing side, IRedstoneDevice device, ConnectionType type) {
 
             if ((type == ConnectionType.STRAIGHT && side == getFace().getOpposite() && device instanceof IFace)
-                    || side == EnumFacing.UNKNOWN)
+                    || side == null)
                 return false;
             if (type == ConnectionType.CLOSED_CORNER) {
                 if (side == getFace())
                     return false;
                 if (side == getFace().getOpposite())
                     return false;
-                if (side == EnumFacing.UNKNOWN)
+                if (side == null)
                     return false;
             }
 
@@ -340,9 +321,9 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
                     if (c != null)
                         dev = c.getB();
                     if (dir == getFace()) {
-                        RedstoneHelper.notifyRedstoneUpdate(getWorld(), getX(), getY(), getZ(), dir, true);
+                        RedstoneHelper.notifyRedstoneUpdate(getWorld(), getPos(), dir, true);
                     } else if ((dev == null || dev instanceof DummyRedstoneDevice) && dir != getFace().getOpposite()) {
-                        RedstoneHelper.notifyRedstoneUpdate(getWorld(), getX(), getY(), getZ(), dir, false);
+                        RedstoneHelper.notifyRedstoneUpdate(getWorld(), getPos(), dir, false);
                     }
                 }
 
@@ -391,7 +372,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
             connections.recalculateConnections();
             // Add bottom device (forced)
             if (connections.getConnectionOnSide(getFace()) == null) {
-                DummyRedstoneDevice drd = DummyRedstoneDevice.getDeviceAt(new Vec3i(this).add(getFace()));
+                DummyRedstoneDevice drd = DummyRedstoneDevice.getDeviceAt(this.getPos().offset(getFace()), this.getWorld(), this.getWorld().getBlockState(this.getPos()).getBlock());
                 connections.onConnect(getFace(), drd, getFace().getOpposite(), ConnectionType.STRAIGHT);
                 drd.getRedstoneConnectionCache().onConnect(getFace().getOpposite(), this, getFace(), ConnectionType.STRAIGHT);
             }
@@ -427,35 +408,6 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
             RedstoneApi.getInstance().setWiresHandleUpdates(should);
         }
 
-        // Rendering methods
-
-        @Override
-        public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
-
-            power = (byte) 255;
-            double scale = 2;
-            double translation = 0.5;
-            double droppedTranslation = -0.5;
-
-            RenderHelper rh = RenderHelper.instance;
-            rh.setRenderCoords(null, 0, 0, 0);
-            Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
-
-            GL11.glPushMatrix();
-            {
-                if (type == ItemRenderType.ENTITY)
-                    GL11.glTranslated(droppedTranslation, 0, droppedTranslation);
-                GL11.glTranslated(0, translation, 0);
-                GL11.glScaled(scale, scale, scale);
-                Tessellator.instance.startDrawingQuads();
-                renderStatic(new Vec3i(0, 0, 0), rh, RenderBlocks.getInstance(), 0);
-                Tessellator.instance.draw();
-            }
-            GL11.glPopMatrix();
-
-            rh.reset();
-        }
-
         @Override
         public void writeUpdateData(DataOutput buffer) throws IOException {
 
@@ -465,10 +417,10 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
                 boolean connected = false;
                 boolean render = false;
 
-                IConnection<IRedstoneDevice> c = getRedstoneConnectionCache().getConnectionOnSide(EnumFacing.getOrientation(i));
+                IConnection<IRedstoneDevice> c = getRedstoneConnectionCache().getConnectionOnSide(EnumFacing.getFront(i));
                 if (c != null) {
                     IRedstoneDevice dev = c.getB();
-                    if (dev instanceof IFace && ((IFace) dev).getFace() == EnumFacing.getOrientation(i).getOpposite()) {
+                    if (dev instanceof IFace && ((IFace) dev).getFace() == EnumFacing.getFront(i).getOpposite()) {
                         if (dev instanceof IRedwire) {
                             if (dev instanceof IInsulatedRedstoneDevice
                                     && ((IInsulatedRedstoneDevice) dev).getInsulationColor(c.getSideB()) != MinecraftColor.NONE)
@@ -496,7 +448,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
             power = buffer.readByte();
 
             if (getParent() != null && getWorld() != null)
-                getWorld().markBlockRangeForRenderUpdate(getX(), getY(), getZ(), getX(), getY(), getZ());
+                getWorld().markBlockRangeForRenderUpdate(getPos(), getPos());
         }
 
         @Override
@@ -519,7 +471,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
             if (!RedstoneApi.getInstance().shouldWiresOutputPower(hasLoss(side)))
                 return 0;
 
-            if (new Vec3i(this).add(side).getBlock() instanceof BlockRedstoneWire)
+            if (getWorld().getBlockState(getPos().offset(side)).getBlock() instanceof BlockRedstoneWire)
                 return 0;
 
             if (side == getFace().getOpposite())
@@ -570,7 +522,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
         @Override
         public String getType() {
 
-            return "wire." + getRedwireType(EnumFacing.UNKNOWN).getName() + "." + color.name().toLowerCase();
+            return "wire." + getRedwireType(null).getName() + "." + color.name().toLowerCase();
         }
 
         @Override
@@ -583,7 +535,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
         }
 
         @Override
-        protected IIcon getWireIcon(EnumFacing side) {
+        protected TextureAtlasSprite getWireIcon(EnumFacing side) {
 
             return side == EnumFacing.UP || side == EnumFacing.DOWN ? IconSupplier.wireInsulation1 : IconSupplier.wireInsulation2;
         }
@@ -597,14 +549,14 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
         @Override
         public boolean canConnect(EnumFacing side, IRedstoneDevice device, ConnectionType type) {
 
-            if (type == ConnectionType.STRAIGHT && side == getFace().getOpposite() || side == EnumFacing.UNKNOWN)
+            if (type == ConnectionType.STRAIGHT && side == getFace().getOpposite() || side == null)
                 return false;
             if (type == ConnectionType.CLOSED_CORNER) {
                 if (side == getFace())
                     return false;
                 if (side == getFace().getOpposite())
                     return false;
-                if (side == EnumFacing.UNKNOWN)
+                if (side == null)
                     return false;
             }
 
@@ -741,9 +693,9 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
                         continue;
                     IRedstoneDevice dev = c.getB();
                     if (dir == getFace())
-                        RedstoneHelper.notifyRedstoneUpdate(getWorld(), getX(), getY(), getZ(), dir, true);
+                        RedstoneHelper.notifyRedstoneUpdate(getWorld(), getPos(), dir, true);
                     else if ((dev == null || dev instanceof DummyRedstoneDevice) && dir != getFace().getOpposite())
-                        RedstoneHelper.notifyRedstoneUpdate(getWorld(), getX(), getY(), getZ(), dir, false);
+                        RedstoneHelper.notifyRedstoneUpdate(getWorld(), getPos(), dir, false);
                 }
 
                 hasUpdated = false;
@@ -869,37 +821,8 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
             RedstoneApi.getInstance().setWiresHandleUpdates(should);
         }
 
-        // Rendering methods
-
         @Override
-        public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
-
-            power = (byte) 255;
-            double scale = 1.25;
-            double translation = 0.25;
-            double droppedTranslation = 0;
-
-            RenderHelper rh = RenderHelper.instance;
-            rh.setRenderCoords(null, 0, 0, 0);
-            Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
-
-            GL11.glPushMatrix();
-            {
-                if (type == ItemRenderType.ENTITY)
-                    GL11.glTranslated(droppedTranslation, 0, droppedTranslation);
-                GL11.glTranslated(0, translation, 0);
-                GL11.glScaled(scale, scale, scale);
-                Tessellator.instance.startDrawingQuads();
-                renderStatic(new Vec3i(0, 0, 0), rh, RenderBlocks.getInstance(), 0);
-                Tessellator.instance.draw();
-            }
-            GL11.glPopMatrix();
-
-            rh.reset();
-        }
-
-        @Override
-        public boolean renderStatic(Vec3i translation, RenderHelper renderer, RenderBlocks renderBlocks, int pass) {
+        public boolean renderStatic(BlockPos translation, RenderHelper renderer, VertexBuffer renderBlocks, int pass) {
 
             super.renderStatic(translation, renderer, renderBlocks, pass);
 
@@ -926,10 +849,10 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
             }
 
             if (getFace() == EnumFacing.NORTH || getFace() == EnumFacing.SOUTH) {
-                d1 = d1.getRotation(getFace());
-                d2 = d2.getRotation(getFace());
-                d3 = d3.getRotation(getFace());
-                d4 = d4.getRotation(getFace());
+                d1 = d1.rotateAround(getFace().getAxis());
+                d2 = d2.rotateAround(getFace().getAxis());
+                d3 = d3.rotateAround(getFace().getAxis());
+                d4 = d4.rotateAround(getFace().getAxis());
             }
 
             boolean s1 = shouldRenderConnection(d1);
@@ -943,7 +866,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
             double y = 0.001;// getHeight() / 16D;
             double height = getHeight() / 16D;
 
-            renderer.setColor(WireHelper.getColorForPowerLevel(getRedwireType(EnumFacing.UNKNOWN), power));
+            renderer.setColor(WireHelper.getColorForPowerLevel(getRedwireType(null), power));
 
             // Center
             if ((s1 && s3) || (s3 && s2) || (s2 && s4) || (s4 && s1)) {
@@ -1008,10 +931,10 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
                 boolean render = false;
 
                 IConnection<? extends IRedstoneDevice> c = getRedstoneConnectionCache().getConnectionOnSide(
-                        EnumFacing.getOrientation(i));
+                        EnumFacing.getFront(i));
                 if (c != null) {
                     IRedstoneDevice dev = c.getB();
-                    if (dev instanceof IFace && ((IFace) dev).getFace() == EnumFacing.getOrientation(i).getOpposite()) {
+                    if (dev instanceof IFace && ((IFace) dev).getFace() == EnumFacing.getFront(i).getOpposite()) {
                         if (dev instanceof IRedwire) {
                             if (dev instanceof IInsulatedRedstoneDevice
                                     && ((IInsulatedRedstoneDevice) dev).getInsulationColor(c.getSideB()) != MinecraftColor.NONE)
@@ -1031,10 +954,10 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
                     }
                 }
                 IConnection<? extends IBundledDevice> bc = getBundledConnectionCache()
-                        .getConnectionOnSide(EnumFacing.getOrientation(i));
+                        .getConnectionOnSide(EnumFacing.getFront(i));
                 if (bc != null) {
                     IBundledDevice dev = bc.getB();
-                    if (dev instanceof IFace && ((IFace) dev).getFace() == EnumFacing.getOrientation(i).getOpposite()) {
+                    if (dev instanceof IFace && ((IFace) dev).getFace() == EnumFacing.getFront(i).getOpposite()) {
                         if (dev instanceof IRedwire) {
                             if (dev instanceof IInsulatedRedstoneDevice
                                     && ((IInsulatedRedstoneDevice) dev).getInsulationColor(bc.getSideB()) != MinecraftColor.NONE)
@@ -1072,7 +995,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
             power = buffer.readByte();
 
             if (getParent() != null && getWorld() != null)
-                getWorld().markBlockRangeForRenderUpdate(getX(), getY(), getZ(), getX(), getY(), getZ());
+                getWorld().markBlockRangeForRenderUpdate(getPos(), getPos());
         }
 
         @Override
@@ -1101,7 +1024,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
             if (!RedstoneApi.getInstance().shouldWiresOutputPower(hasLoss(side)))
                 return 0;
 
-            if (new Vec3i(this).add(side).getBlock() instanceof BlockRedstoneWire)
+            if (this.getWorld().getBlockState(getPos().offset(side)).getBlock() instanceof BlockRedstoneWire)
                 return 0;
 
             if (side == getFace() || side == getFace().getOpposite())
@@ -1141,7 +1064,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
         @Override
         public String getType() {
 
-            return "wire." + getRedwireType(EnumFacing.UNKNOWN).getName() + ".bundled"
+            return "wire." + getRedwireType(null).getName() + ".bundled"
                     + (color != MinecraftColor.NONE ? ("." + color.name().toLowerCase()) : "");
         }
 
@@ -1155,16 +1078,16 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
         }
 
         @Override
-        protected IIcon getWireIcon(EnumFacing side) {
+        protected TextureAtlasSprite getWireIcon(EnumFacing side) {
 
             return null;
         }
 
         @Override
-        protected IIcon getWireIcon(EnumFacing side, EnumFacing face) {
+        protected TextureAtlasSprite getWireIcon(EnumFacing side, EnumFacing face) {
 
             if (face == EnumFacing.UP || face == EnumFacing.DOWN) {
-                if (side == EnumFacing.UNKNOWN) {
+                if (side == null) {
                     EnumFacing d1 = EnumFacing.NORTH;
                     EnumFacing d2 = EnumFacing.SOUTH;
                     EnumFacing d3 = EnumFacing.WEST;
@@ -1188,10 +1111,10 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
                     }
 
                     if (getFace() == EnumFacing.NORTH || getFace() == EnumFacing.SOUTH) {
-                        d1 = d1.getRotation(getFace());
-                        d2 = d2.getRotation(getFace());
-                        d3 = d3.getRotation(getFace());
-                        d4 = d4.getRotation(getFace());
+                        d1 = d1.rotateAround(getFace().getAxis());
+                        d2 = d2.rotateAround(getFace().getAxis());
+                        d3 = d3.rotateAround(getFace().getAxis());
+                        d4 = d4.rotateAround(getFace().getAxis());
                     }
 
                     boolean s1 = shouldRenderConnection(d1);
@@ -1230,7 +1153,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
                     return false;
                 if (side == getFace().getOpposite())
                     return false;
-                if (side == EnumFacing.UNKNOWN)
+                if (side == null)
                     return false;
             }
 
@@ -1363,36 +1286,8 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
             RedstoneApi.getInstance().setWiresHandleUpdates(should);
         }
 
-        // Rendering methods
-
         @Override
-        public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
-
-            double scale = 1.25;
-            double translation = 0.25;
-            double droppedTranslation = 0;
-
-            RenderHelper rh = RenderHelper.instance;
-            rh.setRenderCoords(null, 0, 0, 0);
-            Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
-
-            GL11.glPushMatrix();
-            {
-                if (type == ItemRenderType.ENTITY)
-                    GL11.glTranslated(droppedTranslation, 0, droppedTranslation);
-                GL11.glTranslated(0, translation, 0);
-                GL11.glScaled(scale, scale, scale);
-                Tessellator.instance.startDrawingQuads();
-                renderStatic(new Vec3i(0, 0, 0), rh, RenderBlocks.getInstance(), 0);
-                Tessellator.instance.draw();
-            }
-            GL11.glPopMatrix();
-
-            rh.reset();
-        }
-
-        @Override
-        public boolean renderStatic(Vec3i translation, RenderHelper renderer, RenderBlocks renderBlocks, int pass) {
+        public boolean renderStatic(BlockPos translation, RenderHelper renderer, VertexBuffer renderBlocks, int pass) {
 
             super.renderStatic(translation, renderer, renderBlocks, pass);
 
@@ -1419,10 +1314,10 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
             }
 
             if (getFace() == EnumFacing.NORTH || getFace() == EnumFacing.SOUTH) {
-                d1 = d1.getRotation(getFace());
-                d2 = d2.getRotation(getFace());
-                d3 = d3.getRotation(getFace());
-                d4 = d4.getRotation(getFace());
+                d1 = d1.rotateAround(getFace().getAxis());
+                d2 = d2.rotateAround(getFace().getAxis());
+                d3 = d3.rotateAround(getFace().getAxis());
+                d4 = d4.rotateAround(getFace().getAxis());
             }
 
             boolean s1 = shouldRenderConnection(d1);
@@ -1436,7 +1331,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
             double y = 0;
             double height = getHeight() / 16D;
 
-            renderer.setColor(WireHelper.getColorForPowerLevel(getRedwireType(EnumFacing.UNKNOWN), (byte) (255 / 2)/* power */));
+            renderer.setColor(WireHelper.getColorForPowerLevel(getRedwireType(null), (byte) (255 / 2)/* power */));
 
             // Center
             if ((s1 && s3) || (s3 && s2) || (s2 && s4) || (s4 && s1)) {
@@ -1480,10 +1375,10 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
                 boolean connected = false;
                 boolean render = false;
                 IConnection<? extends IBundledDevice> bc = getBundledConnectionCache()
-                        .getConnectionOnSide(EnumFacing.getOrientation(i));
+                        .getConnectionOnSide(EnumFacing.getFront(i));
                 if (bc != null) {
                     IBundledDevice dev = bc.getB();
-                    if (dev instanceof IFace && ((IFace) dev).getFace() == EnumFacing.getOrientation(i).getOpposite()) {
+                    if (dev instanceof IFace && ((IFace) dev).getFace() == EnumFacing.getFront(i).getOpposite()) {
                         if (dev instanceof IRedwire) {
                             if (dev instanceof IFace && getFace().ordinal() > ((IFace) dev).getFace().ordinal()) {
                                 if (!(dev instanceof IInsulatedRedstoneDevice) && dev instanceof IRedwire) {
@@ -1511,7 +1406,7 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
             super.readUpdateData(buffer);
 
             if (getParent() != null && getWorld() != null)
-                getWorld().markBlockRangeForRenderUpdate(getX(), getY(), getZ(), getX(), getY(), getZ());
+                getWorld().markBlockRangeForRenderUpdate(getPos(), getPos());
         }
 
         @Override

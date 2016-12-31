@@ -7,38 +7,6 @@
  */
 package com.bluepowermod.part.lamp;
 
-import java.io.DataInput;
-import java.io.DataOutput;
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.RenderBlocks;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.Entity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.EnumSkyBlock;
-import net.minecraftforge.client.IItemRenderer.ItemRenderType;
-import net.minecraft.util.EnumFacing;;
-
-import org.lwjgl.opengl.GL11;
-
-import uk.co.qmunity.lib.client.render.RenderHelper;
-import uk.co.qmunity.lib.helper.MathHelper;
-import uk.co.qmunity.lib.helper.RedstoneHelper;
-import uk.co.qmunity.lib.part.IPartRedstone;
-import uk.co.qmunity.lib.part.MicroblockShape;
-import uk.co.qmunity.lib.part.compat.MultipartCompatibility;
-import uk.co.qmunity.lib.part.compat.OcclusionHelper;
-import uk.co.qmunity.lib.transform.Rotation;
-import uk.co.qmunity.lib.vec.Vec3d;
-import uk.co.qmunity.lib.vec.Vec3dCube;
-import uk.co.qmunity.lib.vec.Vec3i;
-
 import com.bluepowermod.api.connect.ConnectionType;
 import com.bluepowermod.api.connect.IConnection;
 import com.bluepowermod.api.connect.IConnectionCache;
@@ -50,10 +18,36 @@ import com.bluepowermod.part.tube.PneumaticTube;
 import com.bluepowermod.part.wire.redstone.PartRedwireFreestanding;
 import com.bluepowermod.redstone.RedstoneApi;
 import com.bluepowermod.redstone.RedstoneConnectionCache;
+import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.Vec3i;
+import net.minecraft.world.EnumSkyBlock;
+import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import uk.co.qmunity.lib.client.render.RenderHelper;
+import uk.co.qmunity.lib.helper.MathHelper;
+import uk.co.qmunity.lib.helper.RedstoneHelper;
+import uk.co.qmunity.lib.part.IPartRedstone;
+import uk.co.qmunity.lib.part.MicroblockShape;
+import uk.co.qmunity.lib.part.compat.MultipartCompatibility;
+import uk.co.qmunity.lib.part.compat.OcclusionHelper;
+import uk.co.qmunity.lib.transform.Rotation;
+import uk.co.qmunity.lib.vec.Vec3dCube;
+import uk.co.qmunity.lib.vec.Vec3dHelper;
 
-import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
+
+;
 
 /**
  * Base class for the lamps that are multiparts.
@@ -73,8 +67,7 @@ public abstract class PartLamp extends BPPartFace implements IPartRedstone, IRed
 
     /**
      * @author amadornes
-     * @param colorName
-     * @param colorVal
+     * @param color
      * @param inverted
      */
     public PartLamp(MinecraftColor color, Boolean inverted) {
@@ -128,31 +121,6 @@ public abstract class PartLamp extends BPPartFace implements IPartRedstone, IRed
         return Arrays.asList(new Vec3dCube(0.0, 0.0, 0.0, 1.0, 1.0, 1.0));
     }
 
-    /**
-     * @author Koen Beckers (K4Unl)
-     */
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
-
-        power = (byte) 0;
-
-        RenderHelper rh = RenderHelper.instance;
-        rh.setRenderCoords(null, 0, 0, 0);
-        Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
-
-        Tessellator.instance.startDrawingQuads();
-        renderStatic(new Vec3i(0, 0, 0), rh, RenderBlocks.getInstance(), 0);
-        Tessellator.instance.draw();
-
-        rh.reset();
-
-        GL11.glPushMatrix();
-        renderGlow(1);
-        GL11.glPopMatrix();
-
-        Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationItemsTexture);
-    }
 
     /**
      * @author Koen Beckers (K4Unl), Amadornes
@@ -168,19 +136,19 @@ public abstract class PartLamp extends BPPartFace implements IPartRedstone, IRed
         case 0:
             break;
         case 1:
-            renderer.addTransformation(new Rotation(180, 0, 0, Vec3d.center));
+            renderer.addTransformation(new Rotation(180, 0, 0, Vec3dHelper.CENTER));
             break;
         case 2:
-            renderer.addTransformation(new Rotation(90, 0, 0, Vec3d.center));
+            renderer.addTransformation(new Rotation(90, 0, 0, Vec3dHelper.CENTER));
             break;
         case 3:
-            renderer.addTransformation(new Rotation(-90, 0, 0, Vec3d.center));
+            renderer.addTransformation(new Rotation(-90, 0, 0, Vec3dHelper.CENTER));
             break;
         case 4:
-            renderer.addTransformation(new Rotation(0, 0, -90, Vec3d.center));
+            renderer.addTransformation(new Rotation(0, 0, -90, Vec3dHelper.CENTER));
             break;
         case 5:
-            renderer.addTransformation(new Rotation(0, 0, 90, Vec3d.center));
+            renderer.addTransformation(new Rotation(0, 0, 90, Vec3dHelper.CENTER));
             break;
         }
 
@@ -192,7 +160,7 @@ public abstract class PartLamp extends BPPartFace implements IPartRedstone, IRed
     /**
      * This render method gets called whenever there's a block update in the chunk. You should use this to remove load from the renderer if a part of
      * the rendering code doesn't need to get called too often or just doesn't change at all. To call a render update to re-render this just call
-     * {@link com.bluepowermod.part.BPPart#markPartForRenderUpdate()}
+     * {@link com.bluepowermod.part.BPPart#renderStatic(Vec3i loc, RenderHelper renderer, VertexBuffer buffer, int pass)}
      *
      * @param loc
      *            Distance from the player's position
@@ -203,25 +171,25 @@ public abstract class PartLamp extends BPPartFace implements IPartRedstone, IRed
 
     @Override
     @SideOnly(Side.CLIENT)
-    public boolean renderStatic(Vec3i loc, RenderHelper renderer, RenderBlocks renderBlocks, int pass) {
+    public boolean renderStatic(Vec3i loc, RenderHelper renderer, VertexBuffer buffer, int pass) {
 
         switch (getFace().ordinal()) {
         case 0:
             break;
         case 1:
-            renderer.addTransformation(new Rotation(180, 0, 0, Vec3d.center));
+            renderer.addTransformation(new Rotation(180, 0, 0, Vec3dHelper.CENTER));
             break;
         case 2:
-            renderer.addTransformation(new Rotation(90, 0, 0, Vec3d.center));
+            renderer.addTransformation(new Rotation(90, 0, 0, Vec3dHelper.CENTER));
             break;
         case 3:
-            renderer.addTransformation(new Rotation(-90, 0, 0, Vec3d.center));
+            renderer.addTransformation(new Rotation(-90, 0, 0, Vec3dHelper.CENTER));
             break;
         case 4:
-            renderer.addTransformation(new Rotation(0, 0, -90, Vec3d.center));
+            renderer.addTransformation(new Rotation(0, 0, -90, Vec3dHelper.CENTER));
             break;
         case 5:
-            renderer.addTransformation(new Rotation(0, 0, 90, Vec3d.center));
+            renderer.addTransformation(new Rotation(0, 0, 90, Vec3dHelper.CENTER));
             break;
         }
 
@@ -245,7 +213,6 @@ public abstract class PartLamp extends BPPartFace implements IPartRedstone, IRed
      *
      * @author Koen Beckers (K4Unl)
      * @param renderer
-     * @param pass
      */
     @SideOnly(Side.CLIENT)
     public void renderLamp(RenderHelper renderer) {
@@ -334,7 +301,7 @@ public abstract class PartLamp extends BPPartFace implements IPartRedstone, IRed
             if (con != null) {
                 pow = Math.max(pow, input[d.ordinal()] & 0xFF);
             } else {
-                pow = Math.max(pow, MathHelper.map(RedstoneHelper.getInput(getWorld(), getX(), getY(), getZ(), d), 0, 15, 0, 255));
+                pow = Math.max(pow, MathHelper.map(RedstoneHelper.getInput(getWorld(), getPos(), d), 0, 15, 0, 255));
             }
         }
         power = (byte) pow;
@@ -389,13 +356,13 @@ public abstract class PartLamp extends BPPartFace implements IPartRedstone, IRed
         power = buffer.readByte();
 
         if (getParent() != null && getWorld() != null)
-            getWorld().updateLightByType(EnumSkyBlock.Block, getX(), getY(), getZ());
+            getWorld().checkLightFor(EnumSkyBlock.BLOCK, getPos());
     }
 
     @Override
     public boolean canStay() {
 
-        Vec3i loc = new Vec3i(this).add(getFace());
+        BlockPos loc = this.getPos().offset(getFace());
 
         if (MultipartCompatibility.getPartHolder(getWorld(), loc) != null) {
             if (MultipartCompatibility.getPart(getWorld(), loc, PartRedwireFreestanding.class) != null)
@@ -420,7 +387,7 @@ public abstract class PartLamp extends BPPartFace implements IPartRedstone, IRed
     @Override
     public boolean canConnect(EnumFacing side, IRedstoneDevice dev, ConnectionType type) {
 
-        if (side == EnumFacing.UNKNOWN)
+        if (side == null)
             return false;
 
         if (!OcclusionHelper.microblockOcclusionTest(getParent(), MicroblockShape.EDGE, 1, getFace(), side))

@@ -16,16 +16,13 @@
  */
 package com.bluepowermod.client.gui.widget;
 
-import java.util.List;
-
+import com.bluepowermod.reference.Refs;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.item.ItemDye;
-
 import org.lwjgl.opengl.GL11;
-
 import uk.co.qmunity.lib.client.gui.widget.BaseWidget;
 
-import com.bluepowermod.reference.Refs;
+import java.util.List;
 
 /**
  * @author MineMaarten
@@ -55,7 +52,7 @@ public class WidgetColor extends BaseWidget {
 
         super.render(mouseX, mouseY, frame);
         if (value < 16) {
-            Gui.drawRect(x + 5, y + 5, x + 9, y + 9, 0xFF000000 + ItemDye.field_150922_c[value]);
+            Gui.drawRect(x + 5, y + 5, x + 9, y + 9, 0xFF000000 + ItemDye.DYE_COLORS[value]);
             GL11.glColor4d(1, 1, 1, 1);
         }
     }
@@ -64,7 +61,7 @@ public class WidgetColor extends BaseWidget {
     public void addTooltip(int mouseX, int mouseY, List<String> curTooltip, boolean shiftPressed) {
 
         if (value < 16) {
-            curTooltip.add("bluepower:color." + ItemDye.field_150923_a[value]);
+            curTooltip.add("bluepower:color." + ItemDye.DYE_COLORS[value]);
         } else {
             curTooltip.add("bluepower:color.none");
         }

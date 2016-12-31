@@ -12,7 +12,7 @@ import java.util.List;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.util.IIcon;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 
 import org.lwjgl.opengl.GL11;
 
@@ -20,8 +20,8 @@ import uk.co.qmunity.lib.vec.Vec3dCube;
 
 import com.bluepowermod.client.render.IconSupplier;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * @author MineMaarten
@@ -42,7 +42,7 @@ public class MagTube extends PneumaticTube {
 
     @Override
     @SideOnly(Side.CLIENT)
-    protected IIcon getSideIcon() {
+    protected TextureAtlasSprite getSideIcon() {
 
         return IconSupplier.magTubeSide;
     }
@@ -79,8 +79,8 @@ public class MagTube extends PneumaticTube {
     @SideOnly(Side.CLIENT)
     protected void renderSide() {
 
-        Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.locationBlocksTexture);
-        Tessellator t = Tessellator.instance;
+        Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+        Tessellator t = Tessellator.getInstance();
         GL11.glPushMatrix();
         GL11.glTranslatef(0.5F, 0.5F, 0.5F);
         if (getParent() == null || getWorld() == null) {
@@ -101,7 +101,7 @@ public class MagTube extends PneumaticTube {
         double inMin = 12.001 / 16D;
         double inMax = 3.999 / 16D;
 
-        IIcon icon = IconSupplier.magCoilSide;
+        TextureAtlasSprite icon = IconSupplier.magCoilSide;
 
         double minX = icon.getInterpolatedU(min * 16);
         double maxX = icon.getInterpolatedU(max * 16);
@@ -194,7 +194,7 @@ public class MagTube extends PneumaticTube {
  * 
  * double min = 2 / 16D; double max = 14 / 16D;
  * 
- * Tessellator t = Tessellator.instance; IIcon icon = IconSupplier.magCoilSide;
+ * Tessellator t = Tessellator.instance; TextureAtlasSprite icon = IconSupplier.magCoilSide;
  * 
  * double minX = icon.getInterpolatedU(min * 16); double maxX = icon.getInterpolatedU(max * 16); double minY = icon.getInterpolatedV(min * 16); double
  * maxY = icon.getInterpolatedV(max * 16);

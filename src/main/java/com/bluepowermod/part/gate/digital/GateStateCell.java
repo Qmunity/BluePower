@@ -17,31 +17,24 @@
 
 package com.bluepowermod.part.gate.digital;
 
-import java.io.DataInput;
-import java.io.DataOutput;
-import java.io.IOException;
-import java.util.List;
-
+import com.bluepowermod.api.wire.redstone.RedwireType;
+import com.bluepowermod.client.gui.gate.GuiGateSingleCounter;
+import com.bluepowermod.part.IGuiButtonSensitive;
+import com.bluepowermod.part.gate.component.*;
+import com.bluepowermod.part.gate.connection.GateConnectionDigital;
 import mcp.mobius.waila.api.SpecialChars;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import uk.co.qmunity.lib.texture.Layout;
 
-import com.bluepowermod.api.wire.redstone.RedwireType;
-import com.bluepowermod.client.gui.gate.GuiGateSingleCounter;
-import com.bluepowermod.part.IGuiButtonSensitive;
-import com.bluepowermod.part.gate.component.GateComponentBorder;
-import com.bluepowermod.part.gate.component.GateComponentButton;
-import com.bluepowermod.part.gate.component.GateComponentPointer;
-import com.bluepowermod.part.gate.component.GateComponentSiliconChip;
-import com.bluepowermod.part.gate.component.GateComponentTorch;
-import com.bluepowermod.part.gate.component.GateComponentWire;
-import com.bluepowermod.part.gate.connection.GateConnectionDigital;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
+import java.util.List;
 
 public class GateStateCell extends GateSimpleDigital implements IGuiButtonSensitive {
 

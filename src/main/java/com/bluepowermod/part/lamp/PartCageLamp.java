@@ -7,23 +7,21 @@
  */
 package com.bluepowermod.part.lamp;
 
+import com.bluepowermod.api.misc.MinecraftColor;
+import com.bluepowermod.client.render.IconSupplier;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.util.EnumFacing;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.opengl.GL11;
+import uk.co.qmunity.lib.client.render.RenderHelper;
+import uk.co.qmunity.lib.vec.Vec3dCube;
+import uk.co.qmunity.lib.vec.Vec3dHelper;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.util.IIcon;
-import net.minecraft.util.EnumFacing;;
-
-import org.lwjgl.opengl.GL11;
-
-import uk.co.qmunity.lib.client.render.RenderHelper;
-import uk.co.qmunity.lib.vec.Vec3d;
-import uk.co.qmunity.lib.vec.Vec3dCube;
-
-import com.bluepowermod.api.misc.MinecraftColor;
-import com.bluepowermod.client.render.IconSupplier;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+;
 
 /**
  *
@@ -51,8 +49,8 @@ public class PartCageLamp extends PartLamp {
 
         List<Vec3dCube> boxes = new ArrayList<Vec3dCube>();
 
-        boxes.add(new Vec3dCube(3 / 16D, 0.0, 3 / 16D, 13 / 16D, 2 / 16D, 1.0 - 3 / 16D).rotate(getFace(), Vec3d.center));
-        boxes.add(new Vec3dCube(4 / 16D, 2 / 16D, 4 / 16D, 12 / 16D, 12 / 16D, 12 / 16D).rotate(getFace(), Vec3d.center));
+        boxes.add(new Vec3dCube(3 / 16D, 0.0, 3 / 16D, 13 / 16D, 2 / 16D, 1.0 - 3 / 16D).rotate(getFace(), Vec3dHelper.CENTER));
+        boxes.add(new Vec3dCube(4 / 16D, 2 / 16D, 4 / 16D, 12 / 16D, 12 / 16D, 12 / 16D).rotate(getFace(), Vec3dHelper.CENTER));
 
         return boxes;
     }
@@ -62,8 +60,8 @@ public class PartCageLamp extends PartLamp {
     public void renderLamp(RenderHelper renderer) {
 
         Vec3dCube vector = new Vec3dCube(3 / 16D, 0.0, 3 / 16D, 13 / 16D, 2 / 16D, 13 / 16D);
-        IIcon topIcon = IconSupplier.cagedLampFootTop;
-        IIcon sideIcon = IconSupplier.cagedLampFootSide;
+        TextureAtlasSprite topIcon = IconSupplier.cagedLampFootTop;
+        TextureAtlasSprite sideIcon = IconSupplier.cagedLampFootSide;
 
         renderer.renderBox(vector, topIcon, topIcon, sideIcon, sideIcon, sideIcon, sideIcon);
 
@@ -97,7 +95,7 @@ public class PartCageLamp extends PartLamp {
     @SideOnly(Side.CLIENT)
     public void renderGlow(int pass) {
 
-        Vec3dCube vector = new Vec3dCube(5 / 16D, 2 / 16D, 5 / 16D, 11 / 16D, 11 / 16D, 11 / 16D).rotate(getFace(), Vec3d.center);
+        Vec3dCube vector = new Vec3dCube(5 / 16D, 2 / 16D, 5 / 16D, 11 / 16D, 11 / 16D, 11 / 16D).rotate(getFace(), Vec3dHelper.CENTER);
 
         double r = ((color.getHex() & 0xFF0000) >> 16) / 256D;
         double g = ((color.getHex() & 0x00FF00) >> 8) / 256D;

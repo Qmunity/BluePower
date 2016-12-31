@@ -44,13 +44,13 @@ public class RedstoneProviderFMP implements IRedstoneProvider {
                     if (((IFace) p).getFace() == face)
                         return (IRedstoneDevice) p;
                 } else {
-                    if (face == EnumFacing.UNKNOWN)
+                    if (face == null)
                         return (IRedstoneDevice) p;
                 }
             }
         }
 
-        if (face != null && face != EnumFacing.UNKNOWN)
+        if (face != null && face != null)
             for (TMultiPart p : tmp.jPartList())
                 if (p instanceof IFaceRedstonePart && ((IFaceRedstonePart) p).getFace() == face.ordinal())
                     return new FMPRedstoneDevice(p);
@@ -71,7 +71,7 @@ public class RedstoneProviderFMP implements IRedstoneProvider {
                     if (((IFace) p).getFace() == face)
                         return (IBundledDevice) p;
                 } else {
-                    if (face == EnumFacing.UNKNOWN)
+                    if (face == null)
                         return (IBundledDevice) p;
                 }
             }

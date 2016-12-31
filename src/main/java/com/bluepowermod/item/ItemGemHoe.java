@@ -34,7 +34,7 @@ public class ItemGemHoe extends ItemHoe {
         super(material);
         this.setUnlocalizedName(name);
         this.setCreativeTab(BPCreativeTabs.tools);
-        this.setTextureName(Refs.MODID + ":" + name);
+        this.setRegistryName(Refs.MODID + ":" + name);
         this.customCraftingMaterial = repairItem;
     }
 

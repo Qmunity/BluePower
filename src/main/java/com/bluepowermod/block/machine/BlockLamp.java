@@ -7,24 +7,27 @@
  */
 package com.bluepowermod.block.machine;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
-
 import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.block.BlockContainerBase;
 import com.bluepowermod.client.render.RenderLamp;
 import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier1.TileLamp;
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import javax.annotation.Nullable;
 
 /**
  * @author Koen Beckers (K4Unl)
@@ -36,7 +39,7 @@ public class BlockLamp extends BlockContainerBase {
     private final MinecraftColor color;
 
     @SideOnly(Side.CLIENT)
-    public static IIcon off, on;
+    public static TextureAtlasSprite off, on;
 
     public BlockLamp(boolean isInverted, MinecraftColor color) {
 
@@ -72,7 +75,7 @@ public class BlockLamp extends BlockContainerBase {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void registerBlockIcons(IIconRegister iconRegister) {
+    public void registerBlockIcons(TextureMap iconRegister) {
 
         on = iconRegister.registerIcon(Refs.MODID + ":lamps/lamp_on");
         off = iconRegister.registerIcon(Refs.MODID + ":lamps/lamp_off");
@@ -139,16 +142,13 @@ public class BlockLamp extends BlockContainerBase {
     }
 
     @Override
-    public boolean canConnectRedstone(IBlockAccess world, int x, int y, int z, int side) {
-
-        return !(world.getBlock(x, y, z) instanceof BlockLampRGB);
+    public boolean canConnectRedstone(IBlockState state, IBlockAccess world, BlockPos pos, @Nullable EnumFacing side) {
+        return !(world.getBlockState(pos) instanceof BlockLampRGB);
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
-    public boolean canRenderInPass(int pass) {
-
-        RenderLamp.pass = pass;
+    public boolean canRenderInLayer(IBlockState state, BlockRenderLayer layer) {
+        RenderLamp.pass = layer;
         return true;
     }
 
@@ -168,7 +168,7 @@ public class BlockLamp extends BlockContainerBase {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
+    public TextureAtlasSprite getIcon(IBlockAccess world, int x, int y, int z, int side) {
 
         int power = getPower(world, x, y, z);
 
@@ -177,7 +177,7 @@ public class BlockLamp extends BlockContainerBase {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public IIcon getIcon(int side, int meta) {
+    public TextureAtlasSprite getIcon(int side, int meta) {
 
         return isInverted ? on : off;
     }

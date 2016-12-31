@@ -7,49 +7,6 @@
  */
 package com.bluepowermod.part.tube;
 
-import java.io.DataInput;
-import java.io.DataOutput;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import mcmultipart.api.multipart.IMultipartTile;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.RenderBlocks;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemDye;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.IIcon;
-import net.minecraftforge.client.IItemRenderer.ItemRenderType;
-import net.minecraft.util.EnumFacing;;
-
-import org.lwjgl.opengl.GL11;
-
-import uk.co.qmunity.lib.client.render.RenderHelper;
-import uk.co.qmunity.lib.helper.MathHelper;
-import uk.co.qmunity.lib.helper.RedstoneHelper;
-import uk.co.qmunity.lib.part.IPartRedstone;
-import uk.co.qmunity.lib.part.IPartThruHole;
-import uk.co.qmunity.lib.part.IPartTicking;
-import uk.co.qmunity.lib.part.MicroblockShape;
-import uk.co.qmunity.lib.part.compat.OcclusionHelper;
-import uk.co.qmunity.lib.raytrace.QRayTraceResult;
-import uk.co.qmunity.lib.raytrace.RayTracer;
-import uk.co.qmunity.lib.transform.Rotation;
-import uk.co.qmunity.lib.vec.Vec3d;
-import uk.co.qmunity.lib.vec.Vec3dCube;
-import uk.co.qmunity.lib.vec.Vec3i;
-
 import com.bluepowermod.BluePower;
 import com.bluepowermod.api.connect.ConnectionType;
 import com.bluepowermod.api.connect.IConnection;
@@ -82,9 +39,45 @@ import com.bluepowermod.redstone.DummyRedstoneDevice;
 import com.bluepowermod.redstone.RedstoneApi;
 import com.bluepowermod.redstone.RedstoneConnectionCache;
 import com.bluepowermod.util.Color;
+import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemDye;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import uk.co.qmunity.lib.client.render.RenderHelper;
+import uk.co.qmunity.lib.helper.MathHelper;
+import uk.co.qmunity.lib.helper.RedstoneHelper;
+import uk.co.qmunity.lib.part.IPartRedstone;
+import uk.co.qmunity.lib.part.IPartThruHole;
+import uk.co.qmunity.lib.part.IPartTicking;
+import uk.co.qmunity.lib.part.MicroblockShape;
+import uk.co.qmunity.lib.part.compat.OcclusionHelper;
+import uk.co.qmunity.lib.raytrace.QRayTraceResult;
+import uk.co.qmunity.lib.raytrace.RayTracer;
+import uk.co.qmunity.lib.transform.Rotation;
+import uk.co.qmunity.lib.vec.Vec3dCube;
+import uk.co.qmunity.lib.vec.Vec3dHelper;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+;
 
 /**
  *
@@ -100,7 +93,7 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
      * true when != 2 connections, when this is true the logic doesn't have to 'think' which way an item should go.
      */
     public boolean isCrossOver;
-    protected final Vec3dCube sideBB = new Vec3dCube(AxisAlignedBB.getBoundingBox(0.25, 0, 0.25, 0.75, 0.25, 0.75));
+    protected final Vec3dCube sideBB = new Vec3dCube(new AxisAlignedBB(0.25, 0, 0.25, 0.75, 0.25, 0.75));
     private TileEntityCache tileCache;
     private PartCache<PneumaticTube> partCache;
     protected final TubeColor[] color = { TubeColor.NONE, TubeColor.NONE, TubeColor.NONE, TubeColor.NONE, TubeColor.NONE, TubeColor.NONE };
@@ -143,9 +136,9 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
 
         List<Vec3dCube> aabbs = getOcclusionBoxes();
         for (int i = 0; i < 6; i++) {
-            EnumFacing d = EnumFacing.getOrientation(i);
+            EnumFacing d = EnumFacing.getFront(i);
             if (connections[i] || redstoneConnections[i] || getDeviceOnSide(d) != null) {
-                Vec3dCube c = sideBB.clone().rotate(d, Vec3d.center);
+                Vec3dCube c = sideBB.clone().rotate(d, Vec3dHelper.CENTER);
                 aabbs.add(c);
             }
         }
@@ -195,7 +188,7 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
             if (RedstoneApi.getInstance().shouldWiresHandleUpdates()) {
                 getRedstoneConnectionCache().recalculateConnections();
 
-                EnumFacing d = EnumFacing.UNKNOWN;
+                EnumFacing d = null;
                 for (EnumFacing dir : EnumFacing.VALUES)
                     if (getDeviceOnSide(dir) != null)
                         d = dir;
@@ -214,7 +207,7 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
     public TileEntity getTileCache(EnumFacing d) {
 
         if (tileCache == null) {
-            tileCache = new TileEntityCache(getWorld(), getX(), getY(), getZ());
+            tileCache = new TileEntityCache(getWorld(), getPos());
         }
         return tileCache.getValue(d);
     }
@@ -222,7 +215,7 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
     public PneumaticTube getPartCache(EnumFacing d) {
 
         if (partCache == null) {
-            partCache = new PartCache<PneumaticTube>(getWorld(), getX(), getY(), getZ(), PneumaticTube.class);
+            partCache = new PartCache<PneumaticTube>(getWorld(), getPos().getX(), getPos().getY(), getPos().getZ(), PneumaticTube.class);
         }
         return partCache.getValue(d);
     }
@@ -251,7 +244,7 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
             clearCache();
             for (int i = 0; i < 6; i++) {
                 boolean oldState = connections[i];
-                EnumFacing d = EnumFacing.getOrientation(i);
+                EnumFacing d = EnumFacing.getFront(i);
                 TileEntity neighbor = getTileCache(d);
                 connections[i] = IOHelper.canInterfaceWith(neighbor, d.getOpposite(), this, canConnectToInventories());
 
@@ -293,7 +286,7 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
 
         for (int i = 0; i < 6; i++) {
             tag.setBoolean("connections" + i, connections[i]);
-            tag.setBoolean("redstoneConnections" + i, getDeviceOnSide(EnumFacing.getOrientation(i)) != null);
+            tag.setBoolean("redstoneConnections" + i, getDeviceOnSide(EnumFacing.getFront(i)) != null);
         }
         for (int i = 0; i < color.length; i++)
             tag.setByte("tubeColor" + i, (byte) color[i].ordinal());
@@ -330,7 +323,7 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
         setRedstonePower(null, tag.getByte("power"));
 
         if (getParent() != null && getWorld() != null)
-            getWorld().markBlockRangeForRenderUpdate(getX(), getY(), getZ(), getX(), getY(), getZ());
+            getWorld().markBlockRangeForRenderUpdate(getPos(), getPos());
 
         NBTTagCompound logicTag = tag.getCompoundTag("logic");
         logic.readFromNBT(logicTag);
@@ -345,7 +338,7 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
         for (int i = 0; i < 6; i++)
             buffer.writeBoolean(connections[i]);
         for (int i = 0; i < 6; i++)
-            buffer.writeBoolean(getDeviceOnSide(EnumFacing.getOrientation(i)) != null);
+            buffer.writeBoolean(getDeviceOnSide(EnumFacing.getFront(i)) != null);
 
         // Colors
         for (int i = 0; i < color.length; i++)
@@ -398,7 +391,7 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
 
         // Render update
         if (getParent() != null && getWorld() != null)
-            getWorld().markBlockRangeForRenderUpdate(getX(), getY(), getZ(), getX(), getY(), getZ());
+            getWorld().markBlockRangeForRenderUpdate(getPos(), getPos());
     }
 
     /**
@@ -420,7 +413,7 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
             TubeColor newColor = null;
             if (item.getItem() == BPItems.paint_brush && ((ItemDamageableColorableOverlay) BPItems.paint_brush).tryUseItem(item)) {
                 newColor = TubeColor.values()[item.getItemDamage()];
-            } else if (item.getItem() == Items.water_bucket || (item.getItem() == BPItems.paint_brush && item.getItemDamage() == 16)) {
+            } else if (item.getItem() == Items.WATER_BUCKET || (item.getItem() == BPItems.paint_brush && item.getItemDamage() == 16)) {
                 newColor = TubeColor.NONE;
             }
             if (newColor != null) {
@@ -429,7 +422,7 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
                     Vec3dCube box = mop.getCube();
                     int face = -1;
                     if (box.equals(boxes.get(0))) {
-                        face = mop.sideHit;
+                        face = mop.sideHit.ordinal();
                     } else {
                         face = getSideFromAABBIndex(boxes.indexOf(box));
                     }
@@ -445,9 +438,9 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
                 BPPart part = PartManager.getExample(item);
                 if (redwireType == null && part instanceof PartRedwireFaceUninsulated) {
                     if (!getWorld().isRemote) {
-                        redwireType = ((IRedwire) part).getRedwireType(EnumFacing.UNKNOWN);
+                        redwireType = ((IRedwire) part).getRedwireType(null);
                         if (!player.capabilities.isCreativeMode)
-                            item.stackSize--;
+                            item.setCount(item.getCount() - 1);
 
                         // Redstone update
                         getRedstoneConnectionCache().recalculateConnections();
@@ -464,8 +457,8 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
             // Removing redwire
             if (redwireType != null && item.getItem() instanceof IScrewdriver && player.isSneaking()) {
                 if (!getWorld().isRemote) {
-                    IOHelper.spawnItemInWorld(getWorld(), PartManager.getPartInfo("wire." + redwireType.getName()).getStack(), getX() + 0.5,
-                            getY() + 0.5, getZ() + 0.5);
+                    IOHelper.spawnItemInWorld(getWorld(), PartManager.getPartInfo("wire." + redwireType.getName()).getStack(), getPos().getX() + 0.5,
+                            getPos().getY() + 0.5, getPos().getZ() + 0.5);
                     redwireType = null;
 
                     // Redstone update
@@ -521,34 +514,6 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
         }
     }
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
-
-        GL11.glPushMatrix();
-        GL11.glTranslated(0, -0.125D, 0);
-
-        Tessellator t = Tessellator.instance;
-        Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
-        t.startDrawingQuads();
-
-        connections[EnumFacing.DOWN.ordinal()] = true;
-        connections[EnumFacing.UP.ordinal()] = true;
-
-        RenderHelper renderer = RenderHelper.instance;
-        renderer.fullReset();
-        RenderBlocks rb = new RenderBlocks();
-
-        renderStatic(new Vec3i(0, 0, 0), renderer, rb, 0);
-        renderStatic(new Vec3i(0, 0, 0), renderer, rb, 1);
-
-        t.draw();
-        renderSide();
-        Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationItemsTexture);
-
-        GL11.glPopMatrix();
-    }
-
     protected boolean shouldRenderNode() {
 
         boolean shouldRenderNode = false;
@@ -577,7 +542,7 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
         int count = 0;
 
         for (int i = 0; i < 6; i++) {
-            if (shouldRenderConnection(EnumFacing.getOrientation(i)))
+            if (shouldRenderConnection(EnumFacing.getFront(i)))
                 count++;
             if (i % 2 == 0 && connections[i] != connections[i + 1])
                 renderFully = true;
@@ -591,7 +556,7 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
 
     @Override
     @SideOnly(Side.CLIENT)
-    public boolean renderStatic(Vec3i loc, RenderHelper renderer, RenderBlocks renderBlocks, int pass) {
+    public boolean renderStatic(BlockPos loc, RenderHelper renderer, VertexBuffer buffer, int pass) {
 
         boolean down = shouldRenderConnection(EnumFacing.DOWN);
         boolean up = shouldRenderConnection(EnumFacing.UP);
@@ -603,7 +568,7 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
         boolean renderFully = shouldRenderFully();
 
         if (this instanceof RestrictionTube) {
-            IIcon icon = IconSupplier.restrictionTubeSide;
+            TextureAtlasSprite icon = IconSupplier.restrictionTubeSide;
             renderer.renderBox(new Vec3dCube(0.25, 0.25, 0.25, 0.75, 0.75, 0.75), icon);
         }
         double addedThickness = getAddedThickness();
@@ -615,7 +580,7 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
         if (pass == 0) {
 
             if (this instanceof RestrictionTube) {
-                IIcon icon = IconSupplier.restrictionTubeSide;
+                TextureAtlasSprite icon = IconSupplier.restrictionTubeSide;
                 renderer.renderBox(new Vec3dCube(0.25, 0.25, 0.25, 0.75, 0.75, 0.75), icon);
             }
 
@@ -652,17 +617,17 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
                             renderer.setColor(MinecraftColor.values()[15 - c.ordinal()].getHex());
                             if (connections[d.ordinal()]) {
                                 for (int i = 0; i < 4; i++) {
-                                    renderer.renderBox(side.clone().rotate(0, i * 90, 0, Vec3d.center).rotate(d, Vec3d.center),
+                                    renderer.renderBox(side.clone().rotate(0, i * 90, 0, Vec3dHelper.CENTER).rotate(d, Vec3dHelper.CENTER),
                                             IconSupplier.pneumaticTubeColoring);
-                                    renderer.renderBox(side2.clone().rotate(0, i * 90, 0, Vec3d.center).rotate(d, Vec3d.center),
+                                    renderer.renderBox(side2.clone().rotate(0, i * 90, 0, Vec3dHelper.CENTER).rotate(d, Vec3dHelper.CENTER),
                                             IconSupplier.pneumaticTubeColoring);
                                     if (renderFully)
-                                        renderer.renderBox(side3.clone().rotate(0, i * 90, 0, Vec3d.center).rotate(d, Vec3d.center),
+                                        renderer.renderBox(side3.clone().rotate(0, i * 90, 0, Vec3dHelper.CENTER).rotate(d, Vec3dHelper.CENTER),
                                                 IconSupplier.pneumaticTubeColoring);
                                 }
                             } else if (renderFully) {
                                 for (int i = 0; i < 4; i++)
-                                    renderer.renderBox(side4.clone().rotate(0, i * 90, 0, Vec3d.center).rotate(d, Vec3d.center),
+                                    renderer.renderBox(side4.clone().rotate(0, i * 90, 0, Vec3dHelper.CENTER).rotate(d, Vec3dHelper.CENTER),
                                             IconSupplier.pneumaticTubeColoring);
                             } else {
                                 for (int i = 1; i < 4; i += 2)
@@ -670,7 +635,7 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
                                             side5.clone()
                                                     .rotate(0,
                                                             (i + ((shouldRenderConnection(EnumFacing.NORTH) || (shouldRenderConnection(EnumFacing.UP) && (d == EnumFacing.NORTH || d == EnumFacing.SOUTH))) ? 1
-                                                                    : 0)) * 90, 0, Vec3d.center).rotate(d, Vec3d.center),
+                                                                    : 0)) * 90, 0, Vec3dHelper.CENTER).rotate(d, Vec3dHelper.CENTER),
                                             IconSupplier.pneumaticTubeColoring);
                             }
                             renderer.setColor(0xFFFFFF);
@@ -711,8 +676,8 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
                 renderer.setColor(0xFFFFFF);
             }
         } else {
-            IIcon glass = this instanceof MagTube ? IconSupplier.magTubeGlass : IconSupplier.pneumaticTubeGlass;
-            IIcon glass2 = this instanceof MagTube ? IconSupplier.magTubeGlass2 : IconSupplier.pneumaticTubeGlass2;
+            TextureAtlasSprite glass = this instanceof MagTube ? IconSupplier.magTubeGlass : IconSupplier.pneumaticTubeGlass;
+            TextureAtlasSprite glass2 = this instanceof MagTube ? IconSupplier.magTubeGlass2 : IconSupplier.pneumaticTubeGlass2;
 
             if (!(this instanceof RestrictionTube)) {
                 renderer.setRenderSides(!down, !up, !west, !east, !north, !south);
@@ -742,7 +707,7 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
                         renderer.setRenderSide(d, false);
                         renderer.setRenderSide(d.getOpposite(), false);
 
-                        renderer.renderBox(c.clone().rotate(d, Vec3d.center), glass);
+                        renderer.renderBox(c.clone().rotate(d, Vec3dHelper.CENTER), glass);
 
                         renderer.resetRenderedSides();
                     }
@@ -758,7 +723,7 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
                         renderer.setRenderSide(d, false);
                         renderer.setRenderSide(d.getOpposite(), false);
 
-                        renderer.renderBox(c.clone().rotate(d, Vec3d.center), glass2);
+                        renderer.renderBox(c.clone().rotate(d, Vec3dHelper.CENTER), glass2);
 
                         renderer.resetRenderedSides();
                     }
@@ -799,7 +764,7 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
     }
 
     @SideOnly(Side.CLIENT)
-    protected IIcon getSideIcon() {
+    protected TextureAtlasSprite getSideIcon() {
 
         return IconSupplier.pneumaticTubeSide;
     }
@@ -827,9 +792,9 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
             for (int i = 0; i < 6; i++) {
                 if (color[i] != TubeColor.NONE) {
                     if (color[i] != TubeColor.NONE)
-                        info.add(EnumChatFormatting.DARK_AQUA
-                                + I18n.format("bluepower:face." + EnumFacing.getOrientation(i).toString().toLowerCase()) + ": "
-                                + EnumChatFormatting.WHITE + I18n.format("bluepower:color." + ItemDye.field_150923_a[color[i].ordinal()]));
+                        info.add(TextFormatting.DARK_AQUA
+                                + I18n.format("bluepower:face." + EnumFacing.getFront(i).toString().toLowerCase()) + ": "
+                                + TextFormatting.WHITE + I18n.format("bluepower:color." + ItemDye.DYE_COLORS[color[i].ordinal()]));
                 }
             }
         }
@@ -860,13 +825,13 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
     }
 
     @Override
-    protected IIcon getWireIcon(EnumFacing side) {
+    protected TextureAtlasSprite getWireIcon(EnumFacing side) {
 
         return null;
     }
 
     @Override
-    protected IIcon getFrameIcon() {
+    protected TextureAtlasSprite getFrameIcon() {
 
         return getSideIcon();
     }
@@ -899,12 +864,12 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
                             redstoneConnections[EnumFacing.UP.ordinal()], redstoneConnections[EnumFacing.WEST.ordinal()],
                             redstoneConnections[EnumFacing.EAST.ordinal()], redstoneConnections[EnumFacing.NORTH.ordinal()],
                             redstoneConnections[EnumFacing.SOUTH.ordinal()], getParent() != null && getWorld() != null), start, end,
-                    new Vec3i(this));
-            QRayTraceResult frame = RayTracer.instance().rayTraceCubes(getFrameBoxes(), start, end, new Vec3i(this));
+                    this.getPos());
+            QRayTraceResult frame = RayTracer.instance().rayTraceCubes(getFrameBoxes(), start, end, this.getPos());
 
             if (wire != null) {
                 if (frame != null) {
-                    if (wire.hitVec.distanceTo(start.toVec3()) < frame.hitVec.distanceTo(start.toVec3()))
+                    if (wire.hitVec.distanceTo(start) < frame.hitVec.distanceTo(start))
                         mop.hitInfo = PartManager.getPartInfo("wire." + redwireType.getName()).getStack();
                 } else {
                     mop.hitInfo = PartManager.getPartInfo("wire." + redwireType.getName()).getStack();
@@ -973,7 +938,7 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
 
             if (device instanceof IFace)
                 return ((IFace) device).getFace() == side.getOpposite();
-            if (!OcclusionHelper.microblockOcclusionTest(new Vec3i(this), MicroblockShape.FACE_HOLLOW, 8, side))
+            if (!OcclusionHelper.microblockOcclusionTest(this.getWorld(), this.getPos(), MicroblockShape.FACE_HOLLOW, 8, side))
                 return false;
             if (device instanceof PneumaticTube)
                 if (device instanceof MagTube != this instanceof MagTube)
@@ -1030,7 +995,7 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
             if (c != null)
                 dev = c.getB();
             if (dev == null || dev instanceof DummyRedstoneDevice)
-                RedstoneHelper.notifyRedstoneUpdate(getWorld(), getX(), getY(), getZ(), dir, false);
+                RedstoneHelper.notifyRedstoneUpdate(getWorld(), getPos(), dir, false);
         }
 
         sendUpdatePacket();

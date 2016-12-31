@@ -15,6 +15,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.ClickType;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
@@ -24,8 +25,8 @@ import com.bluepowermod.client.gui.GuiCircuitTable;
 import com.bluepowermod.container.slot.SlotCircuitTableCrafting;
 import com.bluepowermod.tile.tier2.TileCircuitTable;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 @ChestContainer
 public class ContainerCircuitTable extends Container {
@@ -101,10 +102,10 @@ public class ContainerCircuitTable extends Container {
     protected void retrySlotClick(int slot, int p_75133_2_, boolean p_75133_3_, EntityPlayer p_75133_4_) {
 
         ItemStack stackInSlot = ((Slot) inventorySlots.get(slot)).getStack();
-        itemsCrafted += stackInSlot.stackSize;
+        itemsCrafted += stackInSlot.getCount();
         isRetrying = true;
         if (itemsCrafted < stackInSlot.getMaxStackSize()) {
-            slotClick(slot, p_75133_2_, 1, p_75133_4_);//only crafting slot doesn't retry clicking so no more than 64 items get crafted at a time
+            slotClick(slot, p_75133_2_, ClickType.values()[1], p_75133_4_);//only crafting slot doesn't retry clicking so no more than 64 items get crafted at a time
         }
         isRetrying = false;
     }
@@ -127,13 +128,13 @@ public class ContainerCircuitTable extends Container {
                 if (!mergeItemStack(itemstack1, 24, 42, false))
                     return null;
             }
-            if (itemstack1.stackSize == 0) {
+            if (itemstack1.getCount() == 0) {
                 slot.putStack(null);
             } else {
                 slot.onSlotChanged();
             }
-            if (itemstack1.stackSize != itemstack.stackSize) {
-                slot.onPickupFromSlot(player, itemstack1);
+            if (itemstack1.getCount() != itemstack.getCount()) {
+                slot.onSlotChange(itemstack, itemstack1);
             } else {
                 return null;
             }

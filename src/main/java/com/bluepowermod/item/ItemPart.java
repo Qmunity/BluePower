@@ -21,11 +21,9 @@ import com.bluepowermod.api.BPApi;
 import com.bluepowermod.api.item.IDatabaseSaveable;
 import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.part.BPPart;
-import com.bluepowermod.part.BPPartInfo;
 import com.bluepowermod.part.PartInfo;
 import com.bluepowermod.part.PartManager;
 import com.bluepowermod.reference.Refs;
-import mcmultipart.api.multipart.IMultipart;
 import net.minecraft.block.SoundType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
@@ -147,7 +145,7 @@ public class ItemPart extends ItemMultipart implements IDatabaseSaveable {
         .getMinecraft()
         .getSoundHandler()
         .playSound(
-                new PositionedSoundRecord(new ResourceLocation(sound.func_150496_b()), (sound.getVolume() + 3)
+                new PositionedSoundRecord(sound.getPlaceSound(), SoundCategory.PLAYERS, (sound.getVolume() + 3)
                         * Minecraft.getMinecraft().gameSettings.getSoundLevel(SoundCategory.BLOCKS), sound.getPitch() * 0.85F,
                         pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F));
     }

@@ -1,7 +1,7 @@
 package com.bluepowermod.api.gate;
 
 import com.bluepowermod.api.misc.IFace;
-import mcmultipart.util.IWorldLocation;
+import uk.co.qmunity.lib.vec.IWorldLocation;
 
 import java.util.Collection;
 

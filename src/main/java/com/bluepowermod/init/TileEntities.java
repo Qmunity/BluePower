@@ -18,29 +18,13 @@
 package com.bluepowermod.init;
 
 import com.bluepowermod.reference.Refs;
-import com.bluepowermod.tile.tier1.TileAlloyFurnace;
-import com.bluepowermod.tile.tier1.TileBlockBreaker;
-import com.bluepowermod.tile.tier1.TileBuffer;
-import com.bluepowermod.tile.tier1.TileDeployer;
-import com.bluepowermod.tile.tier1.TileEjector;
-import com.bluepowermod.tile.tier1.TileFilter;
-import com.bluepowermod.tile.tier1.TileIgniter;
-import com.bluepowermod.tile.tier1.TileItemDetector;
-import com.bluepowermod.tile.tier1.TileLamp;
-import com.bluepowermod.tile.tier1.TileProjectTable;
-import com.bluepowermod.tile.tier1.TileRelay;
-import com.bluepowermod.tile.tier1.TileTransposer;
-import com.bluepowermod.tile.tier2.TileAutoProjectTable;
-import com.bluepowermod.tile.tier2.TileCircuitTable;
-import com.bluepowermod.tile.tier2.TileRegulator;
-import com.bluepowermod.tile.tier2.TileRetriever;
-import com.bluepowermod.tile.tier2.TileSortingMachine;
+import com.bluepowermod.tile.tier1.*;
+import com.bluepowermod.tile.tier2.*;
 import com.bluepowermod.tile.tier3.TileCircuitDatabase;
 import com.bluepowermod.tile.tier3.TileEngine;
 import com.bluepowermod.tile.tier3.TileManager;
 import com.bluepowermod.tile.tier3.TileSortron;
-
-import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class TileEntities {
 

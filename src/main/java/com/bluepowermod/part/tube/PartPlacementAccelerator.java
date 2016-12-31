@@ -18,13 +18,16 @@
 package com.bluepowermod.part.tube;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.util.EnumFacing;;
 import uk.co.qmunity.lib.misc.EnumFacingUtils;
 import uk.co.qmunity.lib.part.IPart;
 import uk.co.qmunity.lib.part.PartPlacementDefault;
 import uk.co.qmunity.lib.part.compat.IMultipartCompat;
-import uk.co.qmunity.lib.vec.Vec3i;
+
+;
+
 
 public class PartPlacementAccelerator extends PartPlacementDefault {
 
@@ -36,7 +39,7 @@ public class PartPlacementAccelerator extends PartPlacementDefault {
     }
 
     @Override
-    public boolean placePart(IPart part, World world, Vec3i location, IMultipartCompat multipartSystem, boolean simulated) {
+    public boolean placePart(IPart part, World world, BlockPos location, IMultipartCompat multipartSystem, boolean simulated) {
 
         if (part instanceof Accelerator)
             ((Accelerator) part).setRotation(rotation);

@@ -7,21 +7,19 @@
  */
 package com.bluepowermod.part.gate.digital;
 
-import java.util.List;
-
-import net.minecraft.client.resources.I18n;
-import net.minecraft.nbt.NBTTagCompound;
-import uk.co.qmunity.lib.misc.ShiftingBuffer;
-import uk.co.qmunity.lib.util.Dir;
-
 import com.bluepowermod.api.wire.redstone.RedwireType;
 import com.bluepowermod.part.gate.component.GateComponentBorder;
 import com.bluepowermod.part.gate.component.GateComponentTorch;
 import com.bluepowermod.part.gate.component.GateComponentWire;
 import com.bluepowermod.util.Color;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import uk.co.qmunity.lib.misc.ShiftingBuffer;
+import uk.co.qmunity.lib.util.Dir;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import java.util.List;
 
 public class GateAnd extends GateSimpleDigital {
 

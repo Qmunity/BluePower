@@ -21,6 +21,9 @@ package com.bluepowermod.item;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 
 import com.bluepowermod.BluePower;
@@ -32,14 +35,14 @@ public class ItemCanvasBag extends ItemColorableOverlay {
     
         super(name);
     }
-    
+
+
     @Override
-    public ItemStack onItemRightClick(ItemStack itemstack, World worldObj, EntityPlayer playerEntity) {
-    
-        if (!worldObj.isRemote) {
-            playerEntity.openGui(BluePower.instance, GuiIDs.CANVAS_BAG.ordinal(), worldObj, (int) playerEntity.posX, (int) playerEntity.posY, (int) playerEntity.posZ);
+    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand handIn) {
+        if (!world.isRemote) {
+            player.openGui(BluePower.instance, GuiIDs.CANVAS_BAG.ordinal(), world, (int) player.posX, (int) player.posY, (int) player.posZ);
         }
-        return itemstack;
+        return new ActionResult<ItemStack>(EnumActionResult.SUCCESS ,player.getHeldItem(handIn));
     }
     
 }

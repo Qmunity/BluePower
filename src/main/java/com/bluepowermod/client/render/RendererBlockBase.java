@@ -12,15 +12,15 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.world.IBlockAccess;
 
 import com.bluepowermod.tile.IRotatable;
 
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import cpw.mods.fml.client.registry.RenderingRegistry;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class RendererBlockBase implements ISimpleBlockRenderingHandler {
@@ -33,7 +33,7 @@ public class RendererBlockBase implements ISimpleBlockRenderingHandler {
 
         @Override
         @SideOnly(Side.CLIENT)
-        public IIcon getIcon(int meta, int side) {
+        public TextureAtlasSprite getIcon(int meta, int side) {
 
             return currentBlockToRender.getIcon(meta, side);
         }

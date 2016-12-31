@@ -7,22 +7,18 @@
  */
 package com.bluepowermod.part.lamp;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import net.minecraft.util.IIcon;
-
-import org.lwjgl.opengl.GL11;
-
-import uk.co.qmunity.lib.client.render.RenderHelper;
-import uk.co.qmunity.lib.vec.Vec3d;
-import uk.co.qmunity.lib.vec.Vec3dCube;
-
 import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.client.render.IconSupplier;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.opengl.GL11;
+import uk.co.qmunity.lib.client.render.RenderHelper;
+import uk.co.qmunity.lib.vec.Vec3dCube;
+import uk.co.qmunity.lib.vec.Vec3dHelper;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -50,8 +46,8 @@ public class PartFixture extends PartLamp {
 
         List<Vec3dCube> boxes = new ArrayList<Vec3dCube>();
 
-        boxes.add(new Vec3dCube(2 / 16D, 0.0, 2 / 16D, 14 / 16D, 2 / 16D, 14 / 16D).rotate(getFace(), Vec3d.center));
-        boxes.add(new Vec3dCube(3 / 16D, 2 / 16D, 3 / 16D, 13 / 16D, 8 / 16D, 13 / 16D).expand(0.5 / 16D).rotate(getFace(), Vec3d.center));
+        boxes.add(new Vec3dCube(2 / 16D, 0.0, 2 / 16D, 14 / 16D, 2 / 16D, 14 / 16D).rotate(getFace(), Vec3dHelper.CENTER));
+        boxes.add(new Vec3dCube(3 / 16D, 2 / 16D, 3 / 16D, 13 / 16D, 8 / 16D, 13 / 16D).expand(0.5 / 16D).rotate(getFace(), Vec3dHelper.CENTER));
 
         return boxes;
     }
@@ -64,8 +60,8 @@ public class PartFixture extends PartLamp {
     public void renderLamp(RenderHelper renderer) {
 
         Vec3dCube vector = new Vec3dCube(2 / 16D, 0.0, 2 / 16D, 1.0 - (2 / 16D), 2 / 16D, 1.0 - 2 / 16D);
-        IIcon topIcon = IconSupplier.fixtureFootTop;
-        IIcon sideIcon = IconSupplier.fixtureFootSide;
+        TextureAtlasSprite topIcon = IconSupplier.fixtureFootTop;
+        TextureAtlasSprite sideIcon = IconSupplier.fixtureFootSide;
 
         renderer.renderBox(vector, topIcon, topIcon, sideIcon, sideIcon, sideIcon, sideIcon);
 
@@ -87,7 +83,7 @@ public class PartFixture extends PartLamp {
     @SideOnly(Side.CLIENT)
     public void renderGlow(int pass) {
 
-        Vec3dCube vector = new Vec3dCube(3 / 16D, 2 / 16D, 3 / 16D, 1.0 - (3 / 16D), 8 / 16D, 13 / 16D).rotate(getFace(), Vec3d.center);
+        Vec3dCube vector = new Vec3dCube(3 / 16D, 2 / 16D, 3 / 16D, 1.0 - (3 / 16D), 8 / 16D, 13 / 16D).rotate(getFace(), Vec3dHelper.CENTER);
 
         double r = ((color.getHex() & 0xFF0000) >> 16) / 256D;
         double g = ((color.getHex() & 0x00FF00) >> 8) / 256D;

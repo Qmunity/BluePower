@@ -17,9 +17,16 @@
 package com.bluepowermod.part.wire;
 
 import com.bluepowermod.part.BPPart;
+import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.Vec3i;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import uk.co.qmunity.lib.client.render.RenderHelper;
 import uk.co.qmunity.lib.part.IPartThruHole;
 import uk.co.qmunity.lib.vec.Vec3dCube;
+import uk.co.qmunity.lib.vec.Vec3dHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -161,30 +168,30 @@ public abstract class PartWireFreestanding extends BPPart implements IPartThruHo
 
             if (sideDown)
                 for (int i = 0; i < 4; i++)
-                    boxes.add(box.clone().rotate(0, 90 * i, 0, Vec3d.center).rotate(EnumFacing.DOWN, Vec3d.center));
+                    boxes.add(box.clone().rotate(0, 90 * i, 0, Vec3dHelper.CENTER).rotate(EnumFacing.DOWN, Vec3dHelper.CENTER));
             if (sideUp)
                 for (int i = 0; i < 4; i++)
-                    boxes.add(box.clone().rotate(0, 90 * i, 0, Vec3d.center).rotate(EnumFacing.UP, Vec3d.center));
+                    boxes.add(box.clone().rotate(0, 90 * i, 0, Vec3dHelper.CENTER).rotate(EnumFacing.UP, Vec3dHelper.CENTER));
             if (sideWest)
                 for (int i = 0; i < 4; i++)
-                    boxes.add(box.clone().rotate(0, 90 * i, 0, Vec3d.center).rotate(EnumFacing.WEST, Vec3d.center));
+                    boxes.add(box.clone().rotate(0, 90 * i, 0, Vec3dHelper.CENTER).rotate(EnumFacing.WEST, Vec3dHelper.CENTER));
             if (sideEast)
                 for (int i = 0; i < 4; i++)
-                    boxes.add(box.clone().rotate(0, 90 * i, 0, Vec3d.center).rotate(EnumFacing.EAST, Vec3d.center));
+                    boxes.add(box.clone().rotate(0, 90 * i, 0, Vec3dHelper.CENTER).rotate(EnumFacing.EAST, Vec3dHelper.CENTER));
             if (sideNorth)
                 for (int i = 0; i < 4; i++)
-                    boxes.add(box.clone().rotate(0, 90 * i, 0, Vec3d.center).rotate(EnumFacing.NORTH, Vec3d.center));
+                    boxes.add(box.clone().rotate(0, 90 * i, 0, Vec3dHelper.CENTER).rotate(EnumFacing.NORTH, Vec3dHelper.CENTER));
             if (sideSouth)
                 for (int i = 0; i < 4; i++)
-                    boxes.add(box.clone().rotate(0, 90 * i, 0, Vec3d.center).rotate(EnumFacing.SOUTH, Vec3d.center));
+                    boxes.add(box.clone().rotate(0, 90 * i, 0, Vec3dHelper.CENTER).rotate(EnumFacing.SOUTH, Vec3dHelper.CENTER));
         }
 
         return boxes;
     }
 
     protected void renderFrame(RenderHelper helper, double wireSize, double frameSeparation, double frameThickness, boolean down,
-            boolean up, boolean west, boolean east, boolean north, boolean south, boolean sideDown, boolean sideUp, boolean sideWest,
-            boolean sideEast, boolean sideNorth, boolean sideSouth, boolean isInWorld, IIcon texture, int color) {
+                               boolean up, boolean west, boolean east, boolean north, boolean south, boolean sideDown, boolean sideUp, boolean sideWest,
+                               boolean sideEast, boolean sideNorth, boolean sideSouth, boolean isInWorld, TextureAtlasSprite texture, int color) {
 
         helper.setColor(color);
 
@@ -196,7 +203,7 @@ public abstract class PartWireFreestanding extends BPPart implements IPartThruHo
     }
 
     protected void renderFrame(RenderHelper helper, double wireSize, double frameSeparation, double frameThickness, boolean down,
-            boolean up, boolean west, boolean east, boolean north, boolean south, boolean isInWorld, IIcon texture, int color) {
+            boolean up, boolean west, boolean east, boolean north, boolean south, boolean isInWorld, TextureAtlasSprite texture, int color) {
 
         renderFrame(helper, wireSize, frameSeparation, frameThickness, down, up, west, east, north, south, down, up, west, east, north,
                 south, isInWorld, texture, color);
@@ -204,7 +211,7 @@ public abstract class PartWireFreestanding extends BPPart implements IPartThruHo
 
     @Override
     @SideOnly(Side.CLIENT)
-    public boolean renderStatic(Vec3i translation, RenderHelper renderer, RenderBlocks renderBlocks, int pass) {
+    public boolean renderStatic(Vec3i translation, RenderHelper renderer, VertexBuffer buffer, int pass) {
 
         double wireSize = getSize() / 16D;
         double frameSeparation = 4 / 16D - (wireSize - 2 / 16D);
@@ -225,7 +232,7 @@ public abstract class PartWireFreestanding extends BPPart implements IPartThruHo
 
         // Wire
         renderer.renderBox(new Vec3dCube(0.5 - (wireSize / 2), 0.5 - (wireSize / 2), 0.5 - (wireSize / 2), 0.5 + (wireSize / 2),
-                0.5 + (wireSize / 2), 0.5 + (wireSize / 2)), getIcons(EnumFacing.UNKNOWN));
+                0.5 + (wireSize / 2), 0.5 + (wireSize / 2)), getIcons(null));
         if (up || !isInWorld)
             renderer.renderBox(new Vec3dCube(0.5 - (wireSize / 2), 0.5 + (wireSize / 2), 0.5 - (wireSize / 2), 0.5 + (wireSize / 2), 1,
                     0.5 + (wireSize / 2)), getIcons(EnumFacing.UP));
@@ -259,5 +266,26 @@ public abstract class PartWireFreestanding extends BPPart implements IPartThruHo
 
         return 8;
     }
+
+    @SideOnly(Side.CLIENT)
+    protected abstract TextureAtlasSprite getWireIcon(EnumFacing side);
+
+    @SideOnly(Side.CLIENT)
+    protected TextureAtlasSprite getWireIcon(EnumFacing side, EnumFacing face) {
+
+        return getWireIcon(face);
+    }
+
+    @SideOnly(Side.CLIENT)
+    protected TextureAtlasSprite[] getIcons(EnumFacing side) {
+
+        return new TextureAtlasSprite[] { getWireIcon(side, EnumFacing.DOWN), getWireIcon(side, EnumFacing.UP),
+                getWireIcon(side, EnumFacing.WEST), getWireIcon(side, EnumFacing.EAST), getWireIcon(side, EnumFacing.NORTH),
+                getWireIcon(side, EnumFacing.SOUTH) };
+    }
+
+    @SideOnly(Side.CLIENT)
+    protected abstract TextureAtlasSprite getFrameIcon();
+
 
 }

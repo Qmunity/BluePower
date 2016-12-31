@@ -31,7 +31,7 @@ public class TileSortron extends TileMachineBase {// implements IPeripheral/* , 
     // public void onBlockNeighbourChanged() {
     //
     // super.onBlockNeighbourChanged();
-    // EnumFacing direction = EnumFacing.getOrientation(getBlockMetadata());
+    // EnumFacing direction = EnumFacing.getFront(getBlockMetadata());
     // TileEntity tile = worldObj.getTileEntity(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ);
     // if (tile instanceof IInventory) {
     // connectedInventory = (IInventory) tile;
@@ -170,8 +170,8 @@ public class TileSortron extends TileMachineBase {// implements IPeripheral/* , 
     // if (stack.getItemDamage() != OreDictionary.WILDCARD_VALUE) {
     // string += " " + stack.getItemDamage();
     // }
-    // if (stack.stackSize != 0) {
-    // string += " " + stack.stackSize;
+    // if (stack.getCount() != 0) {
+    // string += " " + stack.getCount();
     // }
     // return string;
     // }
@@ -191,8 +191,8 @@ public class TileSortron extends TileMachineBase {// implements IPeripheral/* , 
     // if (input.isEmpty()) {
     // return -1;
     // }
-    // for (byte color = 0; color < ItemDye.field_150923_a.length; color++) {
-    // String colorName = ItemDye.field_150923_a[color];
+    // for (byte color = 0; color < ItemDye.DYE_COLORS.length; color++) {
+    // String colorName = ItemDye.DYE_COLORS[color];
     // if (colorName.equals(input)) {
     // return color;
     // }
@@ -235,13 +235,13 @@ public class TileSortron extends TileMachineBase {// implements IPeripheral/* , 
     //
     // if ((acceptedStack == null || doItemStacksMatch(stack.stack, acceptedStack))
     // && (acceptedColor == -1 || acceptedColor == stack.color.ordinal())) {
-    // int acceptedSize = Math.min(stack.stack.stackSize, acceptedStackSize);
+    // int acceptedSize = Math.min(stack.stack.getCount(), acceptedStackSize);
     // removeFromAcceptedStack(acceptedSize);
     // ItemStack stack1 = stack.stack.splitStack(acceptedSize);
     // TubeStack tubeStack = super.acceptItemFromTube(new TubeStack(stack1, from, stack.color), from, simulate);
     // if (tubeStack != null)
-    // stack.stack.stackSize += tubeStack.stack.stackSize;
-    // if (stack.stack.stackSize == 0)
+    // stack.stack.getCount() += tubeStack.stack.getCount();
+    // if (stack.stack.getCount() == 0)
     // return null;
     // return stack;
     // }

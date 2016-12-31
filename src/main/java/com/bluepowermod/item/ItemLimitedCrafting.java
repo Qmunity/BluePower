@@ -19,12 +19,11 @@
 
 package com.bluepowermod.item;
 
-import java.util.Random;
-
-import net.minecraft.item.ItemStack;
-
 import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.reference.Refs;
+import net.minecraft.item.ItemStack;
+
+import java.util.Random;
 
 public class ItemLimitedCrafting extends ItemBase {
     
@@ -32,16 +31,10 @@ public class ItemLimitedCrafting extends ItemBase {
     
         this.setCreativeTab(BPCreativeTabs.items);
         this.setUnlocalizedName(name);
-        this.setTextureName(Refs.MODID + ":" + name);
+        this.setRegistryName(Refs.MODID + ":" + name);
         this.setMaxDamage(uses - 1);
         
         this.setContainerItem(this);
-    }
-    
-    @Override
-    public boolean doesContainerItemLeaveCraftingGrid(ItemStack par1ItemStack) {
-    
-        return false;
     }
     
     @Override

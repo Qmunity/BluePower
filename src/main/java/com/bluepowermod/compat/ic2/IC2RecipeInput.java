@@ -28,7 +28,7 @@ public class IC2RecipeInput implements IRecipeInput{
 
     @Override
     public int getAmount(){
-        return input.stackSize;
+        return input.getCount();
     }
 
     @Override

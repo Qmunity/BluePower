@@ -18,8 +18,8 @@ import org.lwjgl.opengl.GL11;
 import com.bluepowermod.reference.Refs;
 
 import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 /**
  * 
  * @author TheFjonG

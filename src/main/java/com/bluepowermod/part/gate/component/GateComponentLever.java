@@ -1,26 +1,23 @@
 package com.bluepowermod.part.gate.component;
 
+import com.bluepowermod.part.gate.GateBase;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.init.Blocks;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.Vec3i;
+import org.lwjgl.opengl.GL11;
+import uk.co.qmunity.lib.client.render.RenderHelper;
+import uk.co.qmunity.lib.transform.Translation;
+import uk.co.qmunity.lib.vec.Vec3dCube;
+
 import java.awt.image.BufferedImage;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.init.Blocks;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.IIcon;
-
-import org.lwjgl.opengl.GL11;
-
-import uk.co.qmunity.lib.client.render.RenderHelper;
-import uk.co.qmunity.lib.transform.Translation;
-import uk.co.qmunity.lib.vec.Vec3d;
-import uk.co.qmunity.lib.vec.Vec3dCube;
-import uk.co.qmunity.lib.vec.Vec3i;
-
-import com.bluepowermod.part.gate.GateBase;
 
 public class GateComponentLever extends GateComponent {
 
@@ -49,14 +46,14 @@ public class GateComponentLever extends GateComponent {
     public void renderStatic(Vec3i translation, RenderHelper renderer, int pass) {
 
         renderer.addTransformation(new Translation(x, 0, z));
-        renderer.renderBox(new Vec3dCube(0, 2 / 16D, 0, 4 / 16D, 4 / 16D, 7 / 16D), Blocks.cobblestone.getIcon(0, 0));
+        renderer.renderBox(new Vec3dCube(0, 2 / 16D, 0, 4 / 16D, 4 / 16D, 7 / 16D), Blocks.COBBLESTONE.getIcon(0, 0));
         renderer.removeTransformation();
     }
 
     @Override
     public void renderDynamic(Vec3d translation, double delta, int pass) {
 
-        Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
+        Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 
         GL11.glPushMatrix();
         {
@@ -64,9 +61,9 @@ public class GateComponentLever extends GateComponent {
             GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
             GL11.glEnable(GL11.GL_ALPHA_TEST);
 
-            Tessellator t = Tessellator.instance;
+            Tessellator t = Tessellator.getInstance();
 
-            IIcon icon = Blocks.lever.getIcon(0, 0);
+            TextureAtlasSprite icon = Blocks.LEVER.getIcon(0, 0);
             double minU = icon.getMinU();
             double minV = icon.getMinV();
             double maxU = icon.getMaxU();

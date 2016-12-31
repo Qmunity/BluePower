@@ -7,17 +7,19 @@
  */
 package com.bluepowermod.part.gate.analogue;
 
-import net.minecraft.block.Block;
-import net.minecraft.util.EnumFacing;;
-import uk.co.qmunity.lib.helper.MathHelper;
-import uk.co.qmunity.lib.vec.Vec3i;
-
 import com.bluepowermod.api.gate.IAnalogueComparatorReadout;
 import com.bluepowermod.api.wire.redstone.RedwireType;
 import com.bluepowermod.part.gate.component.GateComponentBorder;
 import com.bluepowermod.part.gate.component.GateComponentQuartzResonator;
 import com.bluepowermod.part.gate.component.GateComponentTorch;
 import com.bluepowermod.part.gate.component.GateComponentWire;
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
+import uk.co.qmunity.lib.helper.MathHelper;
+
+;
 
 public class GateComparator extends GateSimpleAnalogue {
 
@@ -69,20 +71,22 @@ public class GateComparator extends GateSimpleAnalogue {
         byte power = back().getInput();
 
         EnumFacing d = back().getDirection().toEnumFacing(getFace(), getRotation());
-        Vec3i a = new Vec3i(getX(), getY(), getZ(), getWorld()).add(d);
-        Block ba = a.getBlock(false);
-        if (ba.hasComparatorInputOverride())
+        BlockPos a = getPos().offset(d);
+        IBlockState state = getWorld().getBlockState(a);
+        Block ba = state.getBlock();
+        if (ba.hasComparatorInputOverride(state))
             power = (byte) MathHelper.map(
-                    ba.getComparatorInputOverride(getWorld(), a.getX(), a.getY(), a.getZ(), d.getOpposite().ordinal()), 0, 15, 0, 255);
+                    ba.getComparatorInputOverride(state, getWorld(), a), 0, 15, 0, 255);
         if (ba instanceof IAnalogueComparatorReadout && ((IAnalogueComparatorReadout) ba).hasAnalogueComparatorInputOverride())
             power = ((IAnalogueComparatorReadout) ba).getAnalogueComparatorInputOverride(getWorld(), a.getX(), a.getY(), a.getZ(), d
                     .getOpposite().ordinal());
-        if (ba.isOpaqueCube()) {
-            Vec3i b = a.getRelative(d);
-            Block bb = b.getBlock(false);
-            if (bb.hasComparatorInputOverride())
+        if (ba.isOpaqueCube(state)) {
+            BlockPos b = a.offset(d);
+            IBlockState stateb = getWorld().getBlockState(a);
+            Block bb = stateb.getBlock();
+            if (bb.hasComparatorInputOverride(stateb))
                 power = (byte) MathHelper.map(
-                        bb.getComparatorInputOverride(getWorld(), b.getX(), b.getY(), b.getZ(), d.getOpposite().ordinal()), 0, 15, 0, 255);
+                        bb.getComparatorInputOverride(stateb, getWorld(), b), 0, 15, 0, 255);
             if (bb instanceof IAnalogueComparatorReadout && ((IAnalogueComparatorReadout) bb).hasAnalogueComparatorInputOverride())
                 power = ((IAnalogueComparatorReadout) bb).getAnalogueComparatorInputOverride(getWorld(), b.getX(), b.getY(), b.getZ(), d
                         .getOpposite().ordinal());

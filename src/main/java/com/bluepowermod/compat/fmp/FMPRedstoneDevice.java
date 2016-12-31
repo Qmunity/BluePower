@@ -52,7 +52,7 @@ public class FMPRedstoneDevice implements IRedstoneDevice, IFace {
     public boolean canConnect(EnumFacing side, IRedstoneDevice device, ConnectionType type) {
 
         if (type == ConnectionType.STRAIGHT || type == ConnectionType.CLOSED_CORNER) {
-            if (side == EnumFacing.UNKNOWN)
+            if (side == null)
                 return false;
             if (!(device instanceof IFace))
                 return false;
@@ -97,7 +97,7 @@ public class FMPRedstoneDevice implements IRedstoneDevice, IFace {
     @Override
     public EnumFacing getFace() {
 
-        return EnumFacing.getOrientation(((IFaceRedstonePart) part).getFace());
+        return EnumFacing.getFront(((IFaceRedstonePart) part).getFace());
     }
 
     @Override

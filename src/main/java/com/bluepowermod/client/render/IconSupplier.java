@@ -7,17 +7,16 @@
  */
 package com.bluepowermod.client.render;
 
-import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.util.IIcon;
-import net.minecraftforge.client.event.TextureStitchEvent;
-
-import com.bluepowermod.part.BPPartInfo;
+import com.bluepowermod.part.PartInfo;
 import com.bluepowermod.part.PartManager;
 import com.bluepowermod.reference.Refs;
-
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * @author MineMaarten
@@ -25,139 +24,137 @@ import cpw.mods.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class IconSupplier {
 
-    public static IIcon pneumaticTubeSide;
-    public static IIcon pneumaticTubeOpaqueSide;
-    public static IIcon pneumaticTubeOpaqueNode;
-    public static IIcon pneumaticTubeColoring;
-    public static IIcon pneumaticTubeGlass;
-    public static IIcon pneumaticTubeGlass2;
+    public static TextureAtlasSprite pneumaticTubeSide;
+    public static TextureAtlasSprite pneumaticTubeOpaqueSide;
+    public static TextureAtlasSprite pneumaticTubeOpaqueNode;
+    public static TextureAtlasSprite pneumaticTubeColoring;
+    public static TextureAtlasSprite pneumaticTubeGlass;
+    public static TextureAtlasSprite pneumaticTubeGlass2;
 
-    public static IIcon restrictionTubeSide;
-    public static IIcon restrictionTubeNodeOpaque;
-    public static IIcon restrictionTubeSideOpaque;
+    public static TextureAtlasSprite restrictionTubeSide;
+    public static TextureAtlasSprite restrictionTubeNodeOpaque;
+    public static TextureAtlasSprite restrictionTubeSideOpaque;
 
-    public static IIcon magTubeSide;
-    public static IIcon magCoilSide;
-    public static IIcon magCoilFront;
-    public static IIcon magTubeGlass;
-    public static IIcon magTubeGlass2;
+    public static TextureAtlasSprite magTubeSide;
+    public static TextureAtlasSprite magCoilSide;
+    public static TextureAtlasSprite magCoilFront;
+    public static TextureAtlasSprite magTubeGlass;
+    public static TextureAtlasSprite magTubeGlass2;
 
-    public static IIcon acceleratorFront;
-    public static IIcon acceleratorSide;
-    public static IIcon acceleratorFrontPowered;
-    public static IIcon acceleratorSidePowered;
-    public static IIcon acceleratorInside;
+    public static TextureAtlasSprite acceleratorFront;
+    public static TextureAtlasSprite acceleratorSide;
+    public static TextureAtlasSprite acceleratorFrontPowered;
+    public static TextureAtlasSprite acceleratorSidePowered;
+    public static TextureAtlasSprite acceleratorInside;
 
-    public static IIcon cagedLampFootSide;
-    public static IIcon cagedLampFootTop;
-    public static IIcon cagedLampCageSide;
-    public static IIcon cagedLampCageTop;
-    public static IIcon cagedLampLampActive;
-    public static IIcon cagedLampLampInactive;
-    public static IIcon cagedLampLampActiveTop;
-    public static IIcon cagedLampLampInactiveTop;
-    public static IIcon fixtureFootSide;
-    public static IIcon fixtureFootTop;
-    public static IIcon fixtureLampSideOn;
-    public static IIcon fixtureLampTopOn;
-    public static IIcon fixtureLampSideOff;
-    public static IIcon fixtureLampTopOff;
-    public static IIcon lampOn;
-    public static IIcon lampOff;
-    public static IIcon bluestoneTorchOn;
-    public static IIcon bluestoneTorchOff;
+    public static TextureAtlasSprite cagedLampFootSide;
+    public static TextureAtlasSprite cagedLampFootTop;
+    public static TextureAtlasSprite cagedLampCageSide;
+    public static TextureAtlasSprite cagedLampCageTop;
+    public static TextureAtlasSprite cagedLampLampActive;
+    public static TextureAtlasSprite cagedLampLampInactive;
+    public static TextureAtlasSprite cagedLampLampActiveTop;
+    public static TextureAtlasSprite cagedLampLampInactiveTop;
+    public static TextureAtlasSprite fixtureFootSide;
+    public static TextureAtlasSprite fixtureFootTop;
+    public static TextureAtlasSprite fixtureLampSideOn;
+    public static TextureAtlasSprite fixtureLampTopOn;
+    public static TextureAtlasSprite fixtureLampSideOff;
+    public static TextureAtlasSprite fixtureLampTopOff;
+    public static TextureAtlasSprite lampOn;
+    public static TextureAtlasSprite lampOff;
+    public static TextureAtlasSprite bluestoneTorchOn;
+    public static TextureAtlasSprite bluestoneTorchOff;
 
-    public static IIcon wire;
-    public static IIcon wireInsulation1;
-    public static IIcon wireInsulation2;
+    public static TextureAtlasSprite wire;
+    public static TextureAtlasSprite wireInsulation1;
+    public static TextureAtlasSprite wireInsulation2;
 
-    public static IIcon wireBundledCross;
-    public static IIcon wireBundledStraight1;
-    public static IIcon wireBundledStraight2;
-    public static IIcon wireBundledSide1;
-    public static IIcon wireBundledSide2;
-    public static IIcon wireBundledConnection;
+    public static TextureAtlasSprite wireBundledCross;
+    public static TextureAtlasSprite wireBundledStraight1;
+    public static TextureAtlasSprite wireBundledStraight2;
+    public static TextureAtlasSprite wireBundledSide1;
+    public static TextureAtlasSprite wireBundledSide2;
+    public static TextureAtlasSprite wireBundledConnection;
 
-    public static IIcon gateButton = null;
-    public static IIcon siliconChipOff = null;
-    public static IIcon siliconChipOn = null;
-    public static IIcon taintedSiliconChipOff = null;
-    public static IIcon taintedSiliconChipOn = null;
-    public static IIcon quartzResonator = null;
-    public static IIcon gateSolarPanel = null;
+    public static TextureAtlasSprite gateButton = null;
+    public static TextureAtlasSprite siliconChipOff = null;
+    public static TextureAtlasSprite siliconChipOn = null;
+    public static TextureAtlasSprite taintedSiliconChipOff = null;
+    public static TextureAtlasSprite taintedSiliconChipOn = null;
+    public static TextureAtlasSprite quartzResonator = null;
+    public static TextureAtlasSprite gateSolarPanel = null;
 
     @SubscribeEvent
     public void onTextureStitch(TextureStitchEvent.Pre event) {
 
-        TextureMap reg = event.map;
+        TextureMap reg = event.getMap();
 
-        if (reg.getTextureType() == 0) {
-            pneumaticTubeSide = reg.registerIcon(Refs.MODID + ":tubes/pneumatic_tube_side");
-            pneumaticTubeGlass = reg.registerIcon(Refs.MODID + ":tubes/glass");
-            pneumaticTubeGlass2 = reg.registerIcon(Refs.MODID + ":tubes/glass2");
-            pneumaticTubeOpaqueSide = reg.registerIcon(Refs.MODID + ":tubes/pneumatic_tube_side_opaque");
-            pneumaticTubeOpaqueNode = reg.registerIcon(Refs.MODID + ":tubes/pneumatic_tube_end_opaque");
-            restrictionTubeSide = reg.registerIcon(Refs.MODID + ":tubes/restriction_tube_side");
-            restrictionTubeNodeOpaque = reg.registerIcon(Refs.MODID + ":tubes/restriction_tube_end_opaque");
-            restrictionTubeSideOpaque = reg.registerIcon(Refs.MODID + ":tubes/restriction_tube_side_opaque");
-            magTubeSide = reg.registerIcon(Refs.MODID + ":tubes/mag_side");
-            magCoilSide = reg.registerIcon(Refs.MODID + ":tubes/mag_casing");
-            magCoilFront = reg.registerIcon(Refs.MODID + ":tubes/mag_casing_end");
-            magTubeGlass = reg.registerIcon(Refs.MODID + ":tubes/glass_reinforced");
-            magTubeGlass2 = reg.registerIcon(Refs.MODID + ":tubes/glass_reinforced2");
-            acceleratorFront = reg.registerIcon(Refs.MODID + ":machines/accelerator_front");
-            acceleratorFrontPowered = reg.registerIcon(Refs.MODID + ":machines/accelerator_front_powered");
-            acceleratorSide = reg.registerIcon(Refs.MODID + ":machines/accelerator_side");
-            acceleratorSidePowered = reg.registerIcon(Refs.MODID + ":machines/accelerator_side_powered");
-            acceleratorInside = reg.registerIcon(Refs.MODID + ":machines/accelerator_inside");
-            pneumaticTubeColoring = reg.registerIcon(Refs.MODID + ":tubes/coloring");
+            pneumaticTubeSide = reg.registerSprite(new ResourceLocation(Refs.MODID + ":tubes/pneumatic_tube_side"));
+            pneumaticTubeGlass = reg.registerSprite(new ResourceLocation(Refs.MODID + ":tubes/glass"));
+            pneumaticTubeGlass2 = reg.registerSprite(new ResourceLocation(Refs.MODID + ":tubes/glass2"));
+            pneumaticTubeOpaqueSide = reg.registerSprite(new ResourceLocation(Refs.MODID + ":tubes/pneumatic_tube_side_opaque"));
+            pneumaticTubeOpaqueNode = reg.registerSprite(new ResourceLocation(Refs.MODID + ":tubes/pneumatic_tube_end_opaque"));
+            restrictionTubeSide = reg.registerSprite(new ResourceLocation(Refs.MODID + ":tubes/restriction_tube_side"));
+            restrictionTubeNodeOpaque = reg.registerSprite(new ResourceLocation(Refs.MODID + ":tubes/restriction_tube_end_opaque"));
+            restrictionTubeSideOpaque = reg.registerSprite(new ResourceLocation(Refs.MODID + ":tubes/restriction_tube_side_opaque"));
+            magTubeSide = reg.registerSprite(new ResourceLocation(Refs.MODID + ":tubes/mag_side"));
+            magCoilSide = reg.registerSprite(new ResourceLocation(Refs.MODID + ":tubes/mag_casing"));
+            magCoilFront = reg.registerSprite(new ResourceLocation(Refs.MODID + ":tubes/mag_casing_end"));
+            magTubeGlass = reg.registerSprite(new ResourceLocation(Refs.MODID + ":tubes/glass_reinforced"));
+            magTubeGlass2 = reg.registerSprite(new ResourceLocation(Refs.MODID + ":tubes/glass_reinforced2"));
+            acceleratorFront = reg.registerSprite(new ResourceLocation(Refs.MODID + ":machines/accelerator_front"));
+            acceleratorFrontPowered = reg.registerSprite(new ResourceLocation(Refs.MODID + ":machines/accelerator_front_powered"));
+            acceleratorSide = reg.registerSprite(new ResourceLocation(Refs.MODID + ":machines/accelerator_side"));
+            acceleratorSidePowered = reg.registerSprite(new ResourceLocation(Refs.MODID + ":machines/accelerator_side_powered"));
+            acceleratorInside = reg.registerSprite(new ResourceLocation(Refs.MODID + ":machines/accelerator_inside"));
+            pneumaticTubeColoring = reg.registerSprite(new ResourceLocation(Refs.MODID + ":tubes/coloring"));
 
-            cagedLampFootSide = reg.registerIcon(Refs.MODID + ":lamps/cage_foot_side");
-            cagedLampFootTop = reg.registerIcon(Refs.MODID + ":lamps/cage_foot_top");
-            cagedLampCageSide = reg.registerIcon(Refs.MODID + ":lamps/cage");
-            cagedLampCageTop = reg.registerIcon(Refs.MODID + ":lamps/cage_top");
+            cagedLampFootSide = reg.registerSprite(new ResourceLocation(Refs.MODID + ":lamps/cage_foot_side"));
+            cagedLampFootTop = reg.registerSprite(new ResourceLocation(Refs.MODID + ":lamps/cage_foot_top"));
+            cagedLampCageSide = reg.registerSprite(new ResourceLocation(Refs.MODID + ":lamps/cage"));
+            cagedLampCageTop = reg.registerSprite(new ResourceLocation(Refs.MODID + ":lamps/cage_top"));
 
-            cagedLampLampActive = reg.registerIcon(Refs.MODID + ":lamps/cage_lamp_on");
-            cagedLampLampInactive = reg.registerIcon(Refs.MODID + ":lamps/cage_lamp_off");
+            cagedLampLampActive = reg.registerSprite(new ResourceLocation(Refs.MODID + ":lamps/cage_lamp_on"));
+            cagedLampLampInactive = reg.registerSprite(new ResourceLocation(Refs.MODID + ":lamps/cage_lamp_off"));
 
-            cagedLampLampActiveTop = reg.registerIcon(Refs.MODID + ":lamps/cage_lamp_on_top");
-            cagedLampLampInactiveTop = reg.registerIcon(Refs.MODID + ":lamps/cage_lamp_off_top");
+            cagedLampLampActiveTop = reg.registerSprite(new ResourceLocation(Refs.MODID + ":lamps/cage_lamp_on_top"));
+            cagedLampLampInactiveTop = reg.registerSprite(new ResourceLocation(Refs.MODID + ":lamps/cage_lamp_off_top"));
 
-            fixtureFootSide = reg.registerIcon(Refs.MODID + ":lamps/fixture_foot_side");
-            fixtureFootTop = reg.registerIcon(Refs.MODID + ":lamps/fixture_foot_top");
-            fixtureLampSideOn = reg.registerIcon(Refs.MODID + ":lamps/fixture_lamp_on");
-            fixtureLampTopOn = reg.registerIcon(Refs.MODID + ":lamps/fixture_lamp_on_top");
+            fixtureFootSide = reg.registerSprite(new ResourceLocation(Refs.MODID + ":lamps/fixture_foot_side"));
+            fixtureFootTop = reg.registerSprite(new ResourceLocation(Refs.MODID + ":lamps/fixture_foot_top"));
+            fixtureLampSideOn = reg.registerSprite(new ResourceLocation(Refs.MODID + ":lamps/fixture_lamp_on"));
+            fixtureLampTopOn = reg.registerSprite(new ResourceLocation(Refs.MODID + ":lamps/fixture_lamp_on_top"));
 
-            fixtureLampSideOff = reg.registerIcon(Refs.MODID + ":lamps/fixture_lamp_off");
-            fixtureLampTopOff = reg.registerIcon(Refs.MODID + ":lamps/fixture_lamp_off_top");
+            fixtureLampSideOff = reg.registerSprite(new ResourceLocation(Refs.MODID + ":lamps/fixture_lamp_off"));
+            fixtureLampTopOff = reg.registerSprite(new ResourceLocation(Refs.MODID + ":lamps/fixture_lamp_off_top"));
 
-            lampOn = reg.registerIcon(Refs.MODID + ":lamps/lamp_off");
-            lampOff = reg.registerIcon(Refs.MODID + ":lamps/lamp_on");
+            lampOn = reg.registerSprite(new ResourceLocation(Refs.MODID + ":lamps/lamp_off"));
+            lampOff = reg.registerSprite(new ResourceLocation(Refs.MODID + ":lamps/lamp_on"));
 
-            bluestoneTorchOff = reg.registerIcon(Refs.MODID + ":bluestone_torch_off");
-            bluestoneTorchOn = reg.registerIcon(Refs.MODID + ":bluestone_torch_on");
+            bluestoneTorchOff = reg.registerSprite(new ResourceLocation(Refs.MODID + ":bluestone_torch_off"));
+            bluestoneTorchOn = reg.registerSprite(new ResourceLocation(Refs.MODID + ":bluestone_torch_on"));
 
-            wire = reg.registerIcon(Refs.MODID + ":wire/wire");
-            wireInsulation1 = reg.registerIcon(Refs.MODID + ":wire/insulation1");
-            wireInsulation2 = reg.registerIcon(Refs.MODID + ":wire/insulation2");
+            wire = reg.registerSprite(new ResourceLocation(Refs.MODID + ":wire/wire"));
+            wireInsulation1 = reg.registerSprite(new ResourceLocation(Refs.MODID + ":wire/insulation1"));
+            wireInsulation2 = reg.registerSprite(new ResourceLocation(Refs.MODID + ":wire/insulation2"));
 
-            wireBundledConnection = reg.registerIcon(Refs.MODID + ":wire/bundled_connection");
-            wireBundledCross = reg.registerIcon(Refs.MODID + ":wire/bundled_cross");
-            wireBundledStraight1 = reg.registerIcon(Refs.MODID + ":wire/bundled_straight_1");
-            wireBundledStraight2 = reg.registerIcon(Refs.MODID + ":wire/bundled_straight_2");
-            wireBundledSide1 = reg.registerIcon(Refs.MODID + ":wire/bundled_side_1");
-            wireBundledSide2 = reg.registerIcon(Refs.MODID + ":wire/bundled_side_2");
+            wireBundledConnection = reg.registerSprite(new ResourceLocation(Refs.MODID + ":wire/bundled_connection"));
+            wireBundledCross = reg.registerSprite(new ResourceLocation(Refs.MODID + ":wire/bundled_cross"));
+            wireBundledStraight1 = reg.registerSprite(new ResourceLocation(Refs.MODID + ":wire/bundled_straight_1"));
+            wireBundledStraight2 = reg.registerSprite(new ResourceLocation(Refs.MODID + ":wire/bundled_straight_2"));
+            wireBundledSide1 = reg.registerSprite(new ResourceLocation(Refs.MODID + ":wire/bundled_side_1"));
+            wireBundledSide2 = reg.registerSprite(new ResourceLocation(Refs.MODID + ":wire/bundled_side_2"));
 
-            gateButton = reg.registerIcon(Refs.MODID + ":gates/components/button");
-            siliconChipOff = reg.registerIcon(Refs.MODID + ":gates/components/silicon_chip_off");
-            siliconChipOn = reg.registerIcon(Refs.MODID + ":gates/components/silicon_chip_on");
-            taintedSiliconChipOff = reg.registerIcon(Refs.MODID + ":gates/components/tainted_silicon_chip_off");
-            taintedSiliconChipOn = reg.registerIcon(Refs.MODID + ":gates/components/tainted_silicon_chip_on");
-            quartzResonator = reg.registerIcon(Refs.MODID + ":gates/components/resonator");
-            gateSolarPanel = reg.registerIcon(Refs.MODID + ":gates/components/solarpanel");
+            gateButton = reg.registerSprite(new ResourceLocation(Refs.MODID + ":gates/components/button"));
+            siliconChipOff = reg.registerSprite(new ResourceLocation(Refs.MODID + ":gates/components/silicon_chip_off"));
+            siliconChipOn = reg.registerSprite(new ResourceLocation(Refs.MODID + ":gates/components/silicon_chip_on"));
+            taintedSiliconChipOff = reg.registerSprite(new ResourceLocation(Refs.MODID + ":gates/components/tainted_silicon_chip_off"));
+            taintedSiliconChipOn = reg.registerSprite(new ResourceLocation(Refs.MODID + ":gates/components/tainted_silicon_chip_on"));
+            quartzResonator = reg.registerSprite(new ResourceLocation(Refs.MODID + ":gates/components/resonator"));
+            gateSolarPanel = reg.registerSprite(new ResourceLocation(Refs.MODID + ":gates/components/solarpanel"));
 
-            for (BPPartInfo i : PartManager.getRegisteredParts())
+            for (PartInfo i : PartManager.getRegisteredParts())
                 i.getExample().registerIcons(reg);
-        }
     }
 }

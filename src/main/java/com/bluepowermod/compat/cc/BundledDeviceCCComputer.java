@@ -6,7 +6,7 @@ import java.util.List;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 import net.minecraft.util.EnumFacing;;
-import uk.co.qmunity.lib.vec.Vec3i;
+
 
 import com.bluepowermod.api.connect.ConnectionType;
 import com.bluepowermod.api.connect.IConnectionCache;
@@ -23,7 +23,7 @@ public class BundledDeviceCCComputer implements IBundledDevice {
 
     public static BundledDeviceCCComputer getDeviceAt(World world, int x, int y, int z) {
 
-        Vec3i loc = new Vec3i(x, y, z, world);
+        BlockPos loc = new BlockPos(x, y, z, world);
 
         for (BundledDeviceCCComputer c : list)
             if (c.loc.equals(loc))
@@ -34,11 +34,11 @@ public class BundledDeviceCCComputer implements IBundledDevice {
         return c;
     }
 
-    private Vec3i loc;
+    private BlockPos loc;
     private byte[][] curPow = new byte[6][16];
     private BundledConnectionCache connections = RedstoneApi.getInstance().createBundledConnectionCache(this);
 
-    public BundledDeviceCCComputer(Vec3i loc) {
+    public BundledDeviceCCComputer(BlockPos loc) {
 
         this.loc = loc;
     }
@@ -70,7 +70,7 @@ public class BundledDeviceCCComputer implements IBundledDevice {
     @Override
     public boolean canConnect(EnumFacing side, IBundledDevice dev, ConnectionType type) {
 
-        return type == ConnectionType.STRAIGHT || side != EnumFacing.UNKNOWN;
+        return type == ConnectionType.STRAIGHT || side != null;
     }
 
     @Override
@@ -93,7 +93,7 @@ public class BundledDeviceCCComputer implements IBundledDevice {
     @Override
     public void setBundledPower(EnumFacing side, byte[] power) {
 
-        if (side == EnumFacing.UNKNOWN)
+        if (side == null)
             return;
 
         curPow[side.ordinal()] = power;

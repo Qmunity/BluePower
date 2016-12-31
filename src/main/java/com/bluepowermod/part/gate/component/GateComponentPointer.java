@@ -1,14 +1,13 @@
 package com.bluepowermod.part.gate.component;
 
+import com.bluepowermod.client.render.RenderHelper;
+import com.bluepowermod.part.gate.GateBase;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.Vec3d;
+
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
-
-import net.minecraft.nbt.NBTTagCompound;
-import uk.co.qmunity.lib.vec.Vec3d;
-
-import com.bluepowermod.client.render.RenderHelper;
-import com.bluepowermod.part.gate.GateBase;
 
 public class GateComponentPointer extends GateComponentTorch {
 
@@ -29,10 +28,8 @@ public class GateComponentPointer extends GateComponentTorch {
 
     @Override
     public void renderDynamic(Vec3d translation, double delta, int pass) {
-
         RenderHelper.renderPointer((1 - x) - 9 / 16D, height - 4 / 32D, (1 - (z + 1 / 16D)) - 8 / 16D, angle
                 + (getState() ? (delta * increment) : 0));
-
     }
 
     public GateComponentPointer setAngle(double angle) {

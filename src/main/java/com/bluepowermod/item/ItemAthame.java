@@ -41,14 +41,12 @@ public class ItemAthame extends ItemSword {
         this.setCreativeTab(BPCreativeTabs.tools);
         this.setMaxDamage(100);
         this.setUnlocalizedName(Refs.ATHAME_NAME);
-        this.setTextureName(Refs.MODID + ":" + Refs.ATHAME_NAME);
+        this.setRegistryName(Refs.MODID + ":" + Refs.ATHAME_NAME);
         this.maxStackSize = 1;
         this.setFull3D();
     }
-    
-    @Override
-    public float func_150931_i() {
-    
+
+    public float getDamageDealt() {
         return this.damageDealt;
     }
     

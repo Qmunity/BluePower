@@ -21,8 +21,8 @@ public class ItemStackHelper {
 
         return itemStack1 == null && itemStack2 == null || !(itemStack1 == null || itemStack2 == null)
                 && itemStack1.getItem() == itemStack2.getItem() && itemStack1.getItemDamage() == itemStack2.getItemDamage()
-                && !(itemStack1.stackTagCompound == null && itemStack2.stackTagCompound != null)
-                && (itemStack1.stackTagCompound == null || itemStack1.stackTagCompound.equals(itemStack2.stackTagCompound));
+                && !(itemStack1.getTagCompound() == null && itemStack2.getTagCompound() != null)
+                && (itemStack1.getTagCompound() == null || itemStack1.getTagCompound().equals(itemStack2.getTagCompound()));
     }
 
     /**

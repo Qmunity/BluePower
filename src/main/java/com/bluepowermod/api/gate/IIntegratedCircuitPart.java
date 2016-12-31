@@ -1,8 +1,8 @@
 package com.bluepowermod.api.gate;
 
-import mcmultipart.multipart.IMultipart;
+import uk.co.qmunity.lib.part.IPart;
 
-public interface IIntegratedCircuitPart extends IMultipart {
+public interface IIntegratedCircuitPart extends IPart {
 
     public boolean canPlaceOnIntegratedCircuit();
 

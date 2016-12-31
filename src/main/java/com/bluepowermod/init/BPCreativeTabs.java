@@ -27,8 +27,8 @@ import net.minecraft.item.ItemStack;
 import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.part.PartManager;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BPCreativeTabs {
 
@@ -46,13 +46,13 @@ public class BPCreativeTabs {
 
             @Override
             @SideOnly(Side.CLIENT)
-            public Item getTabIconItem() {
+            public ItemStack getTabIconItem() {
 
                 Block iconBlock = BPBlocks.marble;
                 if (iconBlock != null) {
-                    return Item.getItemFromBlock(iconBlock);
+                    return new ItemStack(iconBlock);
                 } else {
-                    return Item.getItemFromBlock(Blocks.stone);
+                    return new ItemStack(Blocks.STONE);
                 }
             }
         };
@@ -61,13 +61,13 @@ public class BPCreativeTabs {
 
             @Override
             @SideOnly(Side.CLIENT)
-            public Item getTabIconItem() {
+            public ItemStack getTabIconItem() {
 
                 Block iconBlock = BPBlocks.alloyfurnace;
                 if (iconBlock != null) {
-                    return Item.getItemFromBlock(iconBlock);
+                    return new ItemStack(iconBlock);
                 } else {
-                    return Item.getItemFromBlock(Blocks.furnace);
+                    return new ItemStack(Blocks.FURNACE);
                 }
             }
         };
@@ -76,13 +76,13 @@ public class BPCreativeTabs {
 
             @Override
             @SideOnly(Side.CLIENT)
-            public Item getTabIconItem() {
+            public ItemStack getTabIconItem() {
 
                 Item iconItem = BPItems.ruby_gem;
                 if (iconItem != null) {
-                    return BPItems.ruby_gem;
+                    return new ItemStack(BPItems.ruby_gem);
                 } else {
-                    return Items.diamond;
+                    return new ItemStack(Items.DIAMOND);
                 }
             }
         };
@@ -91,13 +91,13 @@ public class BPCreativeTabs {
 
             @Override
             @SideOnly(Side.CLIENT)
-            public Item getTabIconItem() {
+            public ItemStack getTabIconItem() {
 
                 Item iconItem = BPItems.screwdriver;
                 if (iconItem != null) {
-                    return BPItems.screwdriver;
+                    return new ItemStack(BPItems.screwdriver);
                 } else {
-                    return Items.diamond_pickaxe;
+                    return new ItemStack(Items.DIAMOND_PICKAXE);
                 }
             }
         };
@@ -106,7 +106,7 @@ public class BPCreativeTabs {
 
             @Override
             @SideOnly(Side.CLIENT)
-            public Item getTabIconItem() {
+            public ItemStack getTabIconItem() {
 
                 return null;
             }
@@ -119,7 +119,7 @@ public class BPCreativeTabs {
                 if (iconItem != null) {
                     return iconItem;
                 } else {
-                    return new ItemStack(Blocks.stone);
+                    return new ItemStack(Blocks.STONE);
                 }
             }
         };
@@ -128,7 +128,7 @@ public class BPCreativeTabs {
 
             @Override
             @SideOnly(Side.CLIENT)
-            public Item getTabIconItem() {
+            public ItemStack getTabIconItem() {
 
                 return null;
             }
@@ -141,7 +141,7 @@ public class BPCreativeTabs {
                 if (iconItem != null) {
                     return iconItem;
                 } else {
-                    return new ItemStack(Blocks.stone);
+                    return new ItemStack(Blocks.STONE);
                 }
             }
         };
@@ -150,7 +150,7 @@ public class BPCreativeTabs {
 
             @Override
             @SideOnly(Side.CLIENT)
-            public Item getTabIconItem() {
+            public ItemStack getTabIconItem() {
 
                 return null;
             }
@@ -171,7 +171,7 @@ public class BPCreativeTabs {
                 if (iconItem != null) {
                     return iconItem;
                 } else {
-                    return new ItemStack(Blocks.stone);
+                    return new ItemStack(Blocks.STONE);
                 }
             }
         };

@@ -1,12 +1,11 @@
 package com.bluepowermod.convert.part;
 
-import net.minecraft.nbt.NBTTagCompound;
-import uk.co.qmunity.lib.part.IPart;
-
 import com.bluepowermod.convert.IPartConverter;
-import com.bluepowermod.part.BPPartInfo;
+import com.bluepowermod.part.PartInfo;
 import com.bluepowermod.part.PartManager;
 import com.bluepowermod.part.gate.GateBase;
+import net.minecraft.nbt.NBTTagCompound;
+import uk.co.qmunity.lib.part.IPart;
 
 public class PartConverterGate implements IPartConverter {
 
@@ -20,7 +19,7 @@ public class PartConverterGate implements IPartConverter {
     public IPart convert(NBTTagCompound old) {
 
         String id = old.getString("part_id");
-        BPPartInfo info = PartManager.getPartInfo(id);
+        PartInfo info = PartManager.getPartInfo(id);
         if (info == null)
             return null;
 

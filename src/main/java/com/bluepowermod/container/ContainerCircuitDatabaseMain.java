@@ -19,8 +19,8 @@ import com.bluepowermod.api.item.IDatabaseSaveable;
 import com.bluepowermod.container.slot.SlotPhantom;
 import com.bluepowermod.tile.tier3.TileCircuitDatabase;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ContainerCircuitDatabaseMain extends ContainerGhosts {
 
@@ -140,12 +140,12 @@ public class ContainerCircuitDatabaseMain extends ContainerGhosts {
                 if (!mergeItemStack(itemstack1, 2, 20, false))
                     return null;
             }
-            if (itemstack1.stackSize == 0) {
+            if (itemstack1.getCount() == 0) {
                 slot.putStack(null);
             } else {
                 slot.onSlotChanged();
             }
-            if (itemstack1.stackSize != itemstack.stackSize) {
+            if (itemstack1.getCount() != itemstack.getCount()) {
                 slot.onPickupFromSlot(player, itemstack1);
             } else {
                 return null;

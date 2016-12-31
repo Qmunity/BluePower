@@ -20,7 +20,6 @@ package com.bluepowermod.container;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityFurnace;
@@ -29,8 +28,8 @@ import com.bluepowermod.container.slot.SlotMachineInput;
 import com.bluepowermod.container.slot.SlotMachineOutput;
 import com.bluepowermod.tile.tier1.TileAlloyFurnace;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * @author MineMaarten
@@ -93,15 +92,15 @@ public class ContainerAlloyFurnace extends Container {
                 var4.onSlotChange(var5, var3);
             }
             
-            if (var5.stackSize == 0) {
+            if (var5.getCount() == 0) {
                 var4.putStack((ItemStack) null);
             } else {
                 var4.onSlotChanged();
             }
             
-            if (var5.stackSize == var3.stackSize) return null;
+            if (var5.getCount() == var3.getCount()) return null;
             
-            var4.onPickupFromSlot(par1EntityPlayer, var5);
+            var4.onSlotChange(var3, var5);
         }
         
         return var3;
@@ -156,7 +155,7 @@ public class ContainerAlloyFurnace extends Container {
     @Override
     public boolean canInteractWith(EntityPlayer entityplayer) {
     
-        return tileFurnace.isUseableByPlayer(entityplayer);
+        return tileFurnace.isUsableByPlayer(entityplayer);
     }
     
 }

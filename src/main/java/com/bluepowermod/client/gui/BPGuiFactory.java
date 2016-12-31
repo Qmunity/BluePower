@@ -21,11 +21,11 @@
 
 package com.bluepowermod.client.gui;
 
-import java.util.Set;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
-import cpw.mods.fml.client.IModGuiFactory;
+import net.minecraftforge.fml.client.IModGuiFactory;
+
+import java.util.Set;
 
 public class BPGuiFactory implements IModGuiFactory {
 
@@ -81,8 +81,8 @@ public class BPGuiFactory implements IModGuiFactory {
     }
 
     /**
-     * Return an instance of a {@link cpw.mods.fml.client.IModGuiFactory.RuntimeOptionGuiHandler} that handles painting the right hand side option
-     * screen for the specified {@link cpw.mods.fml.client.IModGuiFactory.RuntimeOptionCategoryElement}.
+     * Return an instance of a {@link net.minecraftforge.fml.client.IModGuiFactory.RuntimeOptionGuiHandler} that handles painting the right hand side option
+     * screen for the specified {@link net.minecraftforge.fml.client.IModGuiFactory.RuntimeOptionCategoryElement}.
      *
      * @param element
      *            The element we wish to paint for

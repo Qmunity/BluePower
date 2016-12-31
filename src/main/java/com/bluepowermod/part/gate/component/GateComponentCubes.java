@@ -1,21 +1,19 @@
 package com.bluepowermod.part.gate.component;
 
-import java.awt.Rectangle;
-import java.util.ArrayList;
-import java.util.List;
-
-import net.minecraft.util.IIcon;
+import com.bluepowermod.part.gate.GateBase;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.util.math.Vec3i;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import uk.co.qmunity.lib.client.render.RenderHelper;
 import uk.co.qmunity.lib.transform.Scale;
 import uk.co.qmunity.lib.transform.Transformation;
 import uk.co.qmunity.lib.vec.Vec2dRect;
 import uk.co.qmunity.lib.vec.Vec3dCube;
-import uk.co.qmunity.lib.vec.Vec3i;
 
-import com.bluepowermod.part.gate.GateBase;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class GateComponentCubes extends GateComponent {
 
@@ -72,7 +70,7 @@ public abstract class GateComponentCubes extends GateComponent {
     }
 
     @SideOnly(Side.CLIENT)
-    public IIcon getIcon() {
+    public TextureAtlasSprite getIcon() {
 
         return null;
     }

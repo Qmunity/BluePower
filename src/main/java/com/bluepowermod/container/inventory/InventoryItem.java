@@ -58,28 +58,26 @@ public class InventoryItem extends InventoryBasic {
     
         return item;
     }
-    
+
     @Override
-    public void openInventory() {
-    
+    public void openInventory(EntityPlayer player) {
         loadInventory();
     }
-    
+
     @Override
-    public void closeInventory() {
-    
-        closeInventory(null);
+    public void closeInventory(EntityPlayer player) {
+        super.closeInventory(player);
     }
+
     
     public void closeInventory(ItemStack is) {
-    
         saveInventory(is);
     }
     
     private boolean hasInventory() {
     
-        if (item.stackTagCompound == null) { return false; }
-        return item.stackTagCompound.getTag("Inventory") != null;
+        if (item.getTagCompound() == null) { return false; }
+        return item.getTagCompound().getTag("Inventory") != null;
     }
     
     private void createInventory() {
@@ -89,8 +87,8 @@ public class InventoryItem extends InventoryBasic {
     
     protected void writeToNBT() {
     
-        if (item.stackTagCompound == null) {
-            item.stackTagCompound = new NBTTagCompound();
+        if (item.getTagCompound() == null) {
+            item.setTagCompound(new NBTTagCompound());
         }
         NBTTagList itemList = new NBTTagList();
         for (int i = 0; i < getSizeInventory(); i++) {
@@ -103,7 +101,7 @@ public class InventoryItem extends InventoryBasic {
         }
         NBTTagCompound inventory = new NBTTagCompound();
         inventory.setTag("Items", itemList);
-        item.stackTagCompound.setTag("Inventory", inventory);
+        item.getTagCompound().setTag("Inventory", inventory);
     }
     
     public void loadInventory() {
@@ -136,13 +134,13 @@ public class InventoryItem extends InventoryBasic {
     
         reading = true;
         
-        NBTTagList itemList = (NBTTagList) ((NBTTagCompound) item.stackTagCompound.getTag("Inventory")).getTag("Items");
+        NBTTagList itemList = (NBTTagList) ((NBTTagCompound) item.getTagCompound().getTag("Inventory")).getTag("Items");
         for (int i = 0; i < itemList.tagCount(); i++) {
             NBTTagCompound slotEntry = itemList.getCompoundTagAt(i);
             int j = slotEntry.getByte("Slot") & 0xff;
             
             if (j >= 0 && j < getSizeInventory()) {
-                setInventorySlotContents(j, ItemStack.loadItemStackFromNBT(slotEntry));
+                setInventorySlotContents(j, new ItemStack(slotEntry));
             }
         }
         reading = false;

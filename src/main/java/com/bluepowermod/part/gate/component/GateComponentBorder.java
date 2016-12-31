@@ -1,6 +1,6 @@
 package com.bluepowermod.part.gate.component;
 
-import net.minecraft.util.IIcon;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 
 import com.bluepowermod.part.gate.GateBase;
 
@@ -12,7 +12,7 @@ public class GateComponentBorder extends GateComponentCubes {
     }
 
     @Override
-    public IIcon getIcon() {
+    public TextureAtlasSprite getIcon() {
 
         return getGate().getDarkTop();
     }

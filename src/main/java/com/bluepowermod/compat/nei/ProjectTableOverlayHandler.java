@@ -85,10 +85,10 @@ public class ProjectTableOverlayHandler implements IOverlayHandler {
             for (ItemStack pstack : posstack.items) {
                 for (int j = 0; j < ingredStacks.size(); j++) {
                     DistributedIngred istack = ingredStacks.get(j);
-                    if (!InventoryUtils.canStack(pstack, istack.stack) || istack.invAmount - istack.distributed < pstack.stackSize)
+                    if (!InventoryUtils.canStack(pstack, istack.stack) || istack.invAmount - istack.distributed < pstack.getCount())
                         continue;
 
-                    int relsize = (istack.invAmount - istack.invAmount / istack.recipeAmount * istack.distributed) / pstack.stackSize;
+                    int relsize = (istack.invAmount - istack.invAmount / istack.recipeAmount * istack.distributed) / pstack.getCount();
                     if (relsize > biggestSize) {
                         biggestSize = relsize;
                         biggestIngred = istack;
@@ -101,7 +101,7 @@ public class ProjectTableOverlayHandler implements IOverlayHandler {
             if (biggestIngred == null) // not enough ingreds
                 return null;
 
-            biggestIngred.distributed += permutation.stackSize;
+            biggestIngred.distributed += permutation.getCount();
             assignedIngredients.add(new IngredientDistribution(biggestIngred, permutation));
         }
 
@@ -117,7 +117,7 @@ public class ProjectTableOverlayHandler implements IOverlayHandler {
                 DistributedIngred istack = findIngred(ingredStacks, pstack);
                 if (istack == null)
                     ingredStacks.add(istack = new DistributedIngred(pstack));
-                istack.recipeAmount += pstack.stackSize;
+                istack.recipeAmount += pstack.getCount();
             }
         }
         return ingredStacks;
@@ -195,7 +195,7 @@ public class ProjectTableOverlayHandler implements IOverlayHandler {
                 ItemStack pstack = slot.getStack();
                 DistributedIngred istack = findIngred(ingredStacks, pstack);
                 if (istack != null)
-                    istack.invAmount += pstack.stackSize;
+                    istack.invAmount += pstack.getCount();
             }
         }
     }
@@ -213,7 +213,7 @@ public class ProjectTableOverlayHandler implements IOverlayHandler {
 
         for (IngredientDistribution distrib : assignedIngredients) {
             ItemStack pstack = distrib.permutation;
-            int transferCap = quantity * pstack.stackSize;
+            int transferCap = quantity * pstack.getCount();
             int transferred = 0;
 
             int destSlotIndex = 0;
@@ -230,7 +230,7 @@ public class ProjectTableOverlayHandler implements IOverlayHandler {
                     continue;
 
                 FastTransferManager.clickSlot(gui, slot.slotNumber);
-                int amount = Math.min(transferCap - transferred, stack.stackSize);
+                int amount = Math.min(transferCap - transferred, stack.getCount());
                 for (int c = 0; c < amount; c++) {
                     FastTransferManager.clickSlot(gui, dest.slotNumber, 1);
                     transferred++;

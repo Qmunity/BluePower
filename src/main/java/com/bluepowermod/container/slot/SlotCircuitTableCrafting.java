@@ -7,32 +7,31 @@
  */
 package com.bluepowermod.container.slot;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.bluepowermod.helper.IOHelper;
+import com.bluepowermod.tile.tier2.TileCircuitTable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.inventory.SlotCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.ShapedRecipes;
-import net.minecraft.util.EnumFacing;;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 
-import com.bluepowermod.helper.IOHelper;
-import com.bluepowermod.tile.tier2.TileCircuitTable;
+import java.util.ArrayList;
+import java.util.List;
 
-import cpw.mods.fml.common.FMLCommonHandler;
+;
 
 public class SlotCircuitTableCrafting extends SlotCrafting {
 
     private final TileCircuitTable circuitTable;
 
-    public SlotCircuitTableCrafting(EntityPlayer p_i1823_1_, IInventory circuitTable, IInventory craftSlot, int p_i1823_4_, int p_i1823_5_,
-            int p_i1823_6_) {
+    public SlotCircuitTableCrafting(EntityPlayer p_i1823_1_, IInventory circuitTable, InventoryCrafting craftSlot, int p_i1823_4_, int p_i1823_5_,
+                                    int p_i1823_6_) {
 
-        super(p_i1823_1_, circuitTable, craftSlot, p_i1823_4_, p_i1823_5_, p_i1823_6_);
+        super(p_i1823_1_, craftSlot, circuitTable, p_i1823_4_, p_i1823_5_, p_i1823_6_);
         this.circuitTable = (TileCircuitTable) circuitTable;
     }
 
@@ -52,26 +51,26 @@ public class SlotCircuitTableCrafting extends SlotCrafting {
         if (requiredItems.size() == 0)
             return false;
         for (ItemStack requiredItem : requiredItems) {
-            ItemStack extractedStack = IOHelper.extract(circuitTable, EnumFacing.UNKNOWN, requiredItem, true, true);
-            if (extractedStack == null || extractedStack.stackSize < requiredItem.stackSize)
+            ItemStack extractedStack = IOHelper.extract(circuitTable, null, requiredItem, true, true);
+            if (extractedStack == null || extractedStack.getCount() < requiredItem.getCount())
                 return false;
         }
         return true;
     }
 
     @Override
-    public void onPickupFromSlot(EntityPlayer player, ItemStack craftedItem) {
-
-        FMLCommonHandler.instance().firePlayerCraftingEvent(player, craftedItem, circuitTable);
+    public void onSlotChange(ItemStack p_75220_1_,  ItemStack craftedItem) {
+        //FMLCommonHandler.instance().firePlayerCraftingEvent(player, craftedItem, circuitTable);
         this.onCrafting(craftedItem);
         List<ItemStack> requiredItems = getCraftingComponents(craftedItem);
         for (ItemStack requiredItem : requiredItems) {
-            IOHelper.extract(circuitTable, EnumFacing.UNKNOWN, requiredItem, true, false, 1);
+            IOHelper.extract(circuitTable, null, requiredItem, true, false, 1);
         }
         ItemStack item = craftedItem.copy();
-        item.stackSize = 1;
+        item.setCount(1);
         putStack(item);
     }
+
 
     private static List<ItemStack> getCraftingComponents(ItemStack gate) {
 
@@ -95,7 +94,7 @@ public class SlotCircuitTableCrafting extends SlotCrafting {
                                 boolean needsAdding = true;
                                 for (ItemStack listStack : requiredItems) {
                                     if (listStack.isItemEqual(stack)) {
-                                        listStack.stackSize++;
+                                        listStack.setCount(listStack.getCount() + 1);
                                         needsAdding = false;
                                         break;
                                     }
@@ -113,7 +112,7 @@ public class SlotCircuitTableCrafting extends SlotCrafting {
                             boolean needsAdding = true;
                             for (ItemStack listStack : requiredItems) {
                                 if (listStack.isItemEqual(stack)) {
-                                    listStack.stackSize++;
+                                    listStack.setCount(listStack.getCount() + 1);
                                     needsAdding = false;
                                     break;
                                 }

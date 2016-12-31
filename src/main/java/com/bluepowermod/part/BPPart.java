@@ -3,6 +3,7 @@ package com.bluepowermod.part;
 import com.bluepowermod.api.item.IDatabaseSaveable;
 import net.minecraft.block.SoundType;
 import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -10,10 +11,11 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import uk.co.qmunity.lib.client.render.RenderHelper;
 import uk.co.qmunity.lib.part.*;
 import uk.co.qmunity.lib.raytrace.QRayTraceResult;
 import uk.co.qmunity.lib.raytrace.RayTracer;
@@ -60,9 +62,9 @@ public abstract class BPPart extends PartBase implements IPartSelectable, IPartC
 
     @Override
     @SideOnly(Side.CLIENT)
-    public boolean renderBreaking(Vec3i translation, VertexBuffer renderer, int pass, QRayTraceResult mop) {
+    public boolean renderBreaking(BlockPos translation, RenderHelper renderer, VertexBuffer buffer, int pass, QRayTraceResult mop) {
 
-        return renderStatic(translation, renderer, pass);
+        return renderStatic(translation, renderer, buffer, pass);
     }
 
     
@@ -213,6 +215,11 @@ public abstract class BPPart extends PartBase implements IPartSelectable, IPartC
     public List<ItemStack> getSubItems() {
 
         return Arrays.asList(getItem());
+    }
+
+    @SideOnly(Side.CLIENT)
+    public void registerIcons(TextureMap reg) {
+
     }
 
 }

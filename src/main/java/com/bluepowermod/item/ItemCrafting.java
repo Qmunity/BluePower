@@ -25,6 +25,6 @@ public class ItemCrafting extends ItemBase {
     public ItemCrafting(String name) {
         this.setCreativeTab(BPCreativeTabs.items);
         this.setUnlocalizedName(name);
-        this.setTextureName(Refs.MODID + ":" + name);
+        this.setRegistryName(Refs.MODID + ":" + name);
     }
 }

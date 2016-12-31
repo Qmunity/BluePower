@@ -1,19 +1,18 @@
 package com.bluepowermod.part.gate.component;
 
+import com.bluepowermod.client.render.IconSupplier;
+import com.bluepowermod.part.gate.GateBase;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.Vec3i;
+import uk.co.qmunity.lib.client.render.RenderHelper;
+import uk.co.qmunity.lib.vec.Vec3dCube;
+
 import java.awt.image.BufferedImage;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
-
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.IIcon;
-import uk.co.qmunity.lib.client.render.RenderHelper;
-import uk.co.qmunity.lib.vec.Vec3d;
-import uk.co.qmunity.lib.vec.Vec3dCube;
-import uk.co.qmunity.lib.vec.Vec3i;
-
-import com.bluepowermod.client.render.IconSupplier;
-import com.bluepowermod.part.gate.GateBase;
 
 public abstract class GateComponentButton extends GateComponent {
 
@@ -38,7 +37,7 @@ public abstract class GateComponentButton extends GateComponent {
         this.z = z;
     }
 
-    protected abstract IIcon getIcon();
+    protected abstract TextureAtlasSprite getIcon();
 
     @Override
     public void renderStatic(Vec3i translation, RenderHelper renderer, int pass) {

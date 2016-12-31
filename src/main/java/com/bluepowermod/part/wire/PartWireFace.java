@@ -16,19 +16,21 @@
  */
 package com.bluepowermod.part.wire;
 
-import net.minecraft.client.renderer.RenderBlocks;
-import net.minecraft.util.IIcon;
-import net.minecraft.util.EnumFacing;;
+import com.bluepowermod.part.BPPartFace;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.Vec3i;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import uk.co.qmunity.lib.client.render.RenderHelper;
 import uk.co.qmunity.lib.transform.Rotation;
-import uk.co.qmunity.lib.vec.Vec3d;
 import uk.co.qmunity.lib.vec.Vec3dCube;
-import uk.co.qmunity.lib.vec.Vec3i;
+import uk.co.qmunity.lib.vec.Vec3dHelper;
 
-import com.bluepowermod.part.BPPartFace;
+;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public abstract class PartWireFace extends BPPartFace {
 
@@ -48,23 +50,6 @@ public abstract class PartWireFace extends BPPartFace {
         return false;
     }
 
-    @SideOnly(Side.CLIENT)
-    protected abstract IIcon getWireIcon(EnumFacing side);
-
-    @SideOnly(Side.CLIENT)
-    protected IIcon getWireIcon(EnumFacing side, EnumFacing face) {
-
-        return getWireIcon(face);
-    }
-
-    @SideOnly(Side.CLIENT)
-    protected IIcon[] getIcons(EnumFacing side) {
-
-        return new IIcon[] { getWireIcon(side, EnumFacing.DOWN), getWireIcon(side, EnumFacing.UP),
-                getWireIcon(side, EnumFacing.WEST), getWireIcon(side, EnumFacing.EAST), getWireIcon(side, EnumFacing.NORTH),
-                getWireIcon(side, EnumFacing.SOUTH) };
-    }
-
     protected boolean shouldIgnoreLighting() {
 
         return false;
@@ -77,10 +62,9 @@ public abstract class PartWireFace extends BPPartFace {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public boolean renderStatic(Vec3i translation, RenderHelper renderer, RenderBlocks renderBlocks, int pass) {
-
-        renderer.setIgnoreLighting(shouldIgnoreLighting());
-        renderer.setLightingOverride(getBrightness());
+    public boolean renderStatic(Vec3i translation, RenderHelper renderer, VertexBuffer buffer, int pass) {
+        GlStateManager.disableLighting();
+        GlStateManager.enableLight(getBrightness());
 
         double height = (getHeight() / 16D) - 0.001;
         double width = getWidth() / 32D;
@@ -112,27 +96,27 @@ public abstract class PartWireFace extends BPPartFace {
         case DOWN:
             break;
         case UP:
-            renderer.addTransformation(new Rotation(180, 180, 0, Vec3d.center));
+            renderer.addTransformation(new Rotation(180, 180, 0, Vec3dHelper.CENTER));
             break;
         case NORTH:
-            renderer.addTransformation(new Rotation(90, 90, 0, Vec3d.center));
-            d1 = d1.getRotation(getFace());
-            d2 = d2.getRotation(getFace());
-            d3 = d3.getRotation(getFace());
-            d4 = d4.getRotation(getFace());
+            renderer.addTransformation(new Rotation(90, 90, 0, Vec3dHelper.CENTER));
+            d1 = d1.rotateAround(getFace().getAxis());
+            d2 = d2.rotateAround(getFace().getAxis());
+            d3 = d3.rotateAround(getFace().getAxis());
+            d4 = d4.rotateAround(getFace().getAxis());
             break;
         case SOUTH:
-            renderer.addTransformation(new Rotation(-90, 90, 0, Vec3d.center));
-            d1 = d1.getRotation(getFace());
-            d2 = d2.getRotation(getFace());
-            d3 = d3.getRotation(getFace());
-            d4 = d4.getRotation(getFace());
+            renderer.addTransformation(new Rotation(-90, 90, 0, Vec3dHelper.CENTER));
+            d1 = d1.rotateAround(getFace().getAxis());
+            d2 = d2.rotateAround(getFace().getAxis());
+            d3 = d3.rotateAround(getFace().getAxis());
+            d4 = d4.rotateAround(getFace().getAxis());
             break;
         case WEST:
-            renderer.addTransformation(new Rotation(0, 0, -90, Vec3d.center));
+            renderer.addTransformation(new Rotation(0, 0, -90, Vec3dHelper.CENTER));
             break;
         case EAST:
-            renderer.addTransformation(new Rotation(0, 0, 90, Vec3d.center));
+            renderer.addTransformation(new Rotation(0, 0, 90, Vec3dHelper.CENTER));
             break;
         default:
             break;
@@ -147,7 +131,7 @@ public abstract class PartWireFace extends BPPartFace {
 
         // Center
         renderer.renderBox(new Vec3dCube(8 / 16D - width, 0, 8 / 16D - width, 8 / 16D + width, height, 8 / 16D + width),
-                getIcons(EnumFacing.UNKNOWN));
+                getIcons(null));
         // Sides
         if (s4 || s3) {
             if (s3 || (!s3 && s4 && !s1 && !s2))
@@ -173,6 +157,23 @@ public abstract class PartWireFace extends BPPartFace {
         renderer.setColor(0xFFFFFF);
 
         return true;
+    }
+
+    @SideOnly(Side.CLIENT)
+    protected abstract TextureAtlasSprite getWireIcon(EnumFacing side);
+
+    @SideOnly(Side.CLIENT)
+    protected TextureAtlasSprite getWireIcon(EnumFacing side, EnumFacing face) {
+
+        return getWireIcon(face);
+    }
+
+    @SideOnly(Side.CLIENT)
+    protected TextureAtlasSprite[] getIcons(EnumFacing side) {
+
+        return new TextureAtlasSprite[] { getWireIcon(side, EnumFacing.DOWN), getWireIcon(side, EnumFacing.UP),
+                getWireIcon(side, EnumFacing.WEST), getWireIcon(side, EnumFacing.EAST), getWireIcon(side, EnumFacing.NORTH),
+                getWireIcon(side, EnumFacing.SOUTH) };
     }
 
 }

@@ -5,17 +5,13 @@ import com.bluepowermod.network.BPNetworkHandler;
 import com.bluepowermod.part.gate.wireless.Frequency;
 import com.bluepowermod.part.gate.wireless.IWirelessGate;
 import com.bluepowermod.part.gate.wireless.WirelessManager;
-import mcmultipart.api.capability.MCMPCapabilities;
-import mcmultipart.api.container.IMultipartContainer;
-import mcmultipart.api.multipart.IMultipart;
-import mcmultipart.api.multipart.MultipartHelper;
-import mcmultipart.api.slot.IPartSlot;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.BlockPos;
 import uk.co.qmunity.lib.network.LocatedPacket;
+import uk.co.qmunity.lib.part.IPart;
+import uk.co.qmunity.lib.part.ITilePartHolder;
+import uk.co.qmunity.lib.part.compat.MultipartCompatibility;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -53,12 +49,12 @@ public class MessageWirelessNewFreq extends LocatedPacket<MessageWirelessNewFreq
     public void handleServerSide(EntityPlayer player) {
 
         Frequency freq = (Frequency) WirelessManager.COMMON_INSTANCE.registerFrequency(player, name, acc, bundled);
-        IMultipartContainer h = MultipartHelper.getContainer(player.world, new BlockPos(x, y ,z)).get();
+        ITilePartHolder h = MultipartCompatibility.getPartHolder(player.world, pos);
 
         if (h != null) {
             IWirelessGate p = null;
             //TODO Looks like a fault in the latest MCMultipart
-            for (IMultipart pa : h.getParts())
+            for (IPart pa : h.getParts())
                 if (pa instanceof IWirelessGate && ((IWirelessGate) pa).getFace() == face)
                     p = (IWirelessGate) pa;
             if (p == null)

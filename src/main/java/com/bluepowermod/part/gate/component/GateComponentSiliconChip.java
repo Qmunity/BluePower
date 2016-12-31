@@ -1,6 +1,6 @@
 package com.bluepowermod.part.gate.component;
 
-import net.minecraft.util.IIcon;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 
 import com.bluepowermod.client.render.IconSupplier;
 import com.bluepowermod.part.gate.GateBase;
@@ -18,7 +18,7 @@ public class GateComponentSiliconChip extends GateComponentButton {
     }
 
     @Override
-    protected IIcon getIcon() {
+    protected TextureAtlasSprite getIcon() {
 
         return getState() ? IconSupplier.siliconChipOn : IconSupplier.siliconChipOff;
     }

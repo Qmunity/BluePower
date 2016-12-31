@@ -17,6 +17,36 @@
 
 package com.bluepowermod.part.wire.redstone;
 
+import com.bluepowermod.api.connect.ConnectionType;
+import com.bluepowermod.api.connect.IConnection;
+import com.bluepowermod.api.connect.IConnectionCache;
+import com.bluepowermod.api.connect.IConnectionListener;
+import com.bluepowermod.api.gate.IIntegratedCircuitPart;
+import com.bluepowermod.api.misc.MinecraftColor;
+import com.bluepowermod.api.wire.redstone.IBundledConductor.IAdvancedBundledConductor;
+import com.bluepowermod.api.wire.redstone.*;
+import com.bluepowermod.api.wire.redstone.IRedstoneConductor.IAdvancedRedstoneConductor;
+import com.bluepowermod.client.render.IconSupplier;
+import com.bluepowermod.init.BPCreativeTabs;
+import com.bluepowermod.part.gate.ic.FakeMultipartTileIC;
+import com.bluepowermod.part.wire.PartWireFreestanding;
+import com.bluepowermod.redstone.*;
+import net.minecraft.block.BlockRedstoneWire;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
+import net.minecraft.init.Blocks;
+import net.minecraft.util.EnumFacing;
+import uk.co.qmunity.lib.helper.MathHelper;
+import uk.co.qmunity.lib.helper.RedstoneHelper;
+import uk.co.qmunity.lib.misc.Pair;
+import uk.co.qmunity.lib.part.IPartRedstone;
+import uk.co.qmunity.lib.part.MicroblockShape;
+import uk.co.qmunity.lib.part.compat.OcclusionHelper;
+import uk.co.qmunity.lib.vec.Vec3dCube;
+import uk.co.qmunity.lib.vec.Vec3dHelper;
+
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
@@ -25,56 +55,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map.Entry;
 
-import net.minecraft.block.BlockRedstoneWire;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.RenderBlocks;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.Entity;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
-import net.minecraftforge.client.IItemRenderer.ItemRenderType;
-import net.minecraft.util.EnumFacing;;
-
-import org.lwjgl.opengl.GL11;
-
-import uk.co.qmunity.lib.client.render.RenderHelper;
-import uk.co.qmunity.lib.helper.MathHelper;
-import uk.co.qmunity.lib.helper.RedstoneHelper;
-import uk.co.qmunity.lib.misc.Pair;
-import uk.co.qmunity.lib.part.IPartRedstone;
-import uk.co.qmunity.lib.part.MicroblockShape;
-import uk.co.qmunity.lib.part.compat.OcclusionHelper;
-import uk.co.qmunity.lib.vec.Vec3d;
-import uk.co.qmunity.lib.vec.Vec3dCube;
-import uk.co.qmunity.lib.vec.Vec3i;
-
-import com.bluepowermod.api.connect.ConnectionType;
-import com.bluepowermod.api.connect.IConnection;
-import com.bluepowermod.api.connect.IConnectionCache;
-import com.bluepowermod.api.connect.IConnectionListener;
-import com.bluepowermod.api.gate.IIntegratedCircuitPart;
-import com.bluepowermod.api.misc.MinecraftColor;
-import com.bluepowermod.api.wire.redstone.IBundledConductor.IAdvancedBundledConductor;
-import com.bluepowermod.api.wire.redstone.IBundledDevice;
-import com.bluepowermod.api.wire.redstone.IInsulatedRedstoneDevice;
-import com.bluepowermod.api.wire.redstone.IRedConductor;
-import com.bluepowermod.api.wire.redstone.IRedstoneConductor.IAdvancedRedstoneConductor;
-import com.bluepowermod.api.wire.redstone.IRedstoneDevice;
-import com.bluepowermod.api.wire.redstone.IRedwire;
-import com.bluepowermod.api.wire.redstone.RedwireType;
-import com.bluepowermod.client.render.IconSupplier;
-import com.bluepowermod.init.BPCreativeTabs;
-import com.bluepowermod.part.gate.ic.FakeMultipartTileIC;
-import com.bluepowermod.part.wire.PartWireFreestanding;
-import com.bluepowermod.redstone.BundledConnectionCache;
-import com.bluepowermod.redstone.BundledDeviceWrapper;
-import com.bluepowermod.redstone.DummyRedstoneDevice;
-import com.bluepowermod.redstone.RedstoneApi;
-import com.bluepowermod.redstone.RedstoneConnection;
-import com.bluepowermod.redstone.RedstoneConnectionCache;
+;
 
 public abstract class PartRedwireFreestanding extends PartWireFreestanding implements IRedwire, IRedConductor, IIntegratedCircuitPart,
 IPartRedstone {
@@ -124,9 +105,9 @@ IPartRedstone {
     }
 
     @Override
-    protected IIcon getFrameIcon() {
+    protected TextureAtlasSprite getFrameIcon() {
 
-        return Blocks.planks.getIcon(0, 0);
+        return Minecraft.getMinecraft().getTextureMapBlocks().getTextureExtry(Blocks.PLANKS.getRegistryName().toString());
     }
 
     // Selection and occlusion boxes
@@ -147,7 +128,7 @@ IPartRedstone {
 
         for (EnumFacing d : EnumFacing.VALUES) {
             if (isConnected(d) || shouldRenderConnection(d))
-                boxes.add(box.clone().rotate(d, Vec3d.center));
+                boxes.add(box.clone().rotate(d, Vec3dHelper.CENTER));
         }
 
         return boxes;
@@ -176,13 +157,13 @@ IPartRedstone {
     @Override
     public boolean hasLoss(EnumFacing side) {
 
-        return getRedwireType(EnumFacing.UNKNOWN).hasLoss();
+        return getRedwireType(null).hasLoss();
     }
 
     @Override
     public boolean isAnalogue(EnumFacing side) {
 
-        return getRedwireType(EnumFacing.UNKNOWN).isAnalogue();
+        return getRedwireType(null).isAnalogue();
     }
 
     // NBT
@@ -232,7 +213,7 @@ IPartRedstone {
         @Override
         public String getType() {
 
-            return "wire.freestanding." + getRedwireType(EnumFacing.UNKNOWN).getName();
+            return "wire.freestanding." + getRedwireType(null).getName();
         }
 
         @Override
@@ -242,7 +223,7 @@ IPartRedstone {
         }
 
         @Override
-        protected IIcon getWireIcon(EnumFacing side) {
+        protected TextureAtlasSprite getWireIcon(EnumFacing side) {
 
             return IconSupplier.wire;
         }
@@ -250,16 +231,16 @@ IPartRedstone {
         @Override
         protected int getColorMultiplier() {
 
-            return WireHelper.getColorForPowerLevel(getRedwireType(EnumFacing.UNKNOWN), power);
+            return WireHelper.getColorForPowerLevel(getRedwireType(null), power);
         }
 
         @Override
         public boolean canConnect(EnumFacing side, IRedstoneDevice device, ConnectionType type) {
 
             if (type == ConnectionType.STRAIGHT)
-                if (side == EnumFacing.UNKNOWN && device instanceof DummyRedstoneDevice)
+                if (side == null && device instanceof DummyRedstoneDevice)
                     return false;
-            if (type == ConnectionType.CLOSED_CORNER && side == EnumFacing.UNKNOWN)
+            if (type == ConnectionType.CLOSED_CORNER && side == null)
                 return false;
 
             if (device instanceof IRedwire) {
@@ -332,7 +313,7 @@ IPartRedstone {
                     if (c != null)
                         dev = c.getB();
                     if (dev == null || dev instanceof DummyRedstoneDevice)
-                        RedstoneHelper.notifyRedstoneUpdate(getWorld(), getX(), getY(), getZ(), dir, false);
+                        RedstoneHelper.notifyRedstoneUpdate(getWorld(), getPos(), dir, false);
                 }
 
                 hasUpdated = false;
@@ -378,7 +359,7 @@ IPartRedstone {
 
             // Refresh connections
             connections.recalculateConnections();
-            EnumFacing d = EnumFacing.UNKNOWN;
+            EnumFacing d = null;
             for (EnumFacing dir : EnumFacing.VALUES)
                 if (getRedstoneConnectionCache().getConnectionOnSide(dir) != null)
                     d = dir;
@@ -401,27 +382,6 @@ IPartRedstone {
             connections.disconnectAll();
         }
 
-        // Rendering methods
-
-        @Override
-        public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
-
-            power = (byte) 255;
-
-            RenderHelper rh = RenderHelper.instance;
-            rh.setRenderCoords(null, 0, 0, 0);
-            Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
-
-            GL11.glTranslated(0, -0.125, 0);
-            GL11.glScaled(1.25, 1.25, 1.25);
-            Tessellator.instance.startDrawingQuads();
-            renderStatic(new Vec3i(0, 0, 0), rh, RenderBlocks.getInstance(), 0);
-            Tessellator.instance.draw();
-            GL11.glScaled(1 / 1.25, 1 / 1.25, 1 / 1.25);
-
-            rh.reset();
-        }
-
         @Override
         public void writeUpdateData(DataOutput buffer) throws IOException {
 
@@ -436,7 +396,7 @@ IPartRedstone {
             power = buffer.readByte();
 
             if (getParent() != null && getWorld() != null)
-                getWorld().markBlockRangeForRenderUpdate(getX(), getY(), getZ(), getX(), getY(), getZ());
+                getWorld().markBlockRangeForRenderUpdate(getPos(), getPos());
         }
 
         @Override
@@ -459,7 +419,7 @@ IPartRedstone {
             if (!RedstoneApi.getInstance().shouldWiresOutputPower(hasLoss(side)))
                 return 0;
 
-            if (new Vec3i(this).add(side).getBlock() instanceof BlockRedstoneWire)
+            if (this.getWorld().getBlockState(getPos().offset(side)).getBlock() instanceof BlockRedstoneWire)
                 return 0;
 
             return MathHelper.map(power & 0xFF, 0, 255, 0, 15);
@@ -499,7 +459,7 @@ IPartRedstone {
         @Override
         public String getType() {
 
-            return "wire.freestanding." + getRedwireType(EnumFacing.UNKNOWN).getName() + "." + color.name().toLowerCase();
+            return "wire.freestanding." + getRedwireType(null).getName() + "." + color.name().toLowerCase();
         }
 
         @Override
@@ -512,7 +472,7 @@ IPartRedstone {
         }
 
         @Override
-        protected IIcon getWireIcon(EnumFacing side) {
+        protected TextureAtlasSprite getWireIcon(EnumFacing side) {
 
             return IconSupplier.wireInsulation1;
         }
@@ -527,9 +487,9 @@ IPartRedstone {
         public boolean canConnect(EnumFacing side, IRedstoneDevice device, ConnectionType type) {
 
             if (type == ConnectionType.STRAIGHT)
-                if (side == EnumFacing.UNKNOWN && device instanceof DummyRedstoneDevice)
+                if (side == null && device instanceof DummyRedstoneDevice)
                     return false;
-            if (type == ConnectionType.CLOSED_CORNER && side == EnumFacing.UNKNOWN)
+            if (type == ConnectionType.CLOSED_CORNER && side == null)
                 return false;
 
             if (device instanceof IInsulatedRedstoneDevice) {
@@ -560,9 +520,9 @@ IPartRedstone {
         public boolean canConnect(EnumFacing side, IBundledDevice device, ConnectionType type) {
 
             if (type == ConnectionType.STRAIGHT)
-                if (side == EnumFacing.UNKNOWN && device instanceof DummyRedstoneDevice)
+                if (side == null && device instanceof DummyRedstoneDevice)
                     return false;
-            if (type == ConnectionType.CLOSED_CORNER && side == EnumFacing.UNKNOWN)
+            if (type == ConnectionType.CLOSED_CORNER && side == null)
                 return false;
 
             if (device instanceof IInsulatedRedstoneDevice)
@@ -670,7 +630,7 @@ IPartRedstone {
                     if (c != null)
                         dev = c.getB();
                     if (dev == null || dev instanceof DummyRedstoneDevice)
-                        RedstoneHelper.notifyRedstoneUpdate(getWorld(), getX(), getY(), getZ(), dir, false);
+                        RedstoneHelper.notifyRedstoneUpdate(getWorld(), getPos(), dir, false);
                 }
 
                 hasUpdated = false;
@@ -775,27 +735,6 @@ IPartRedstone {
             RedstoneApi.getInstance().getBundledPropagator(this, EnumFacing.DOWN).propagate();
         }
 
-        // Rendering methods
-
-        @Override
-        public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
-
-            power = (byte) 255;
-
-            RenderHelper rh = RenderHelper.instance;
-            rh.setRenderCoords(null, 0, 0, 0);
-            Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
-
-            GL11.glTranslated(0, -0.125, 0);
-            GL11.glScaled(1.25, 1.25, 1.25);
-            Tessellator.instance.startDrawingQuads();
-            renderStatic(new Vec3i(0, 0, 0), rh, RenderBlocks.getInstance(), 0);
-            Tessellator.instance.draw();
-            GL11.glScaled(1 / 1.25, 1 / 1.25, 1 / 1.25);
-
-            rh.reset();
-        }
-
         @Override
         public void writeUpdateData(DataOutput buffer) throws IOException {
 
@@ -810,7 +749,7 @@ IPartRedstone {
             power = buffer.readByte();
 
             if (getParent() != null && getWorld() != null)
-                getWorld().markBlockRangeForRenderUpdate(getX(), getY(), getZ(), getX(), getY(), getZ());
+                getWorld().markBlockRangeForRenderUpdate(getPos(), getPos());
         }
 
         @Override
@@ -839,7 +778,7 @@ IPartRedstone {
             if (!RedstoneApi.getInstance().shouldWiresOutputPower(hasLoss(side)))
                 return 0;
 
-            if (new Vec3i(this).add(side).getBlock() instanceof BlockRedstoneWire)
+            if (this.getWorld().getBlockState(getPos().offset(side)).getBlock() instanceof BlockRedstoneWire)
                 return 0;
 
             return MathHelper.map(power & 0xFF, 0, 255, 0, 15);
@@ -877,7 +816,7 @@ IPartRedstone {
         @Override
         public String getType() {
 
-            return "wire.freestanding." + getRedwireType(EnumFacing.UNKNOWN).getName() + ".bundled"
+            return "wire.freestanding." + getRedwireType(null).getName() + ".bundled"
                     + (color != MinecraftColor.NONE ? ("." + color.name().toLowerCase()) : "");
         }
 
@@ -891,15 +830,15 @@ IPartRedstone {
         }
 
         @Override
-        protected IIcon getWireIcon(EnumFacing side) {
+        protected TextureAtlasSprite getWireIcon(EnumFacing side) {
 
             return null;
         }
 
         @Override
-        protected IIcon getWireIcon(EnumFacing side, EnumFacing face) {
+        protected TextureAtlasSprite getWireIcon(EnumFacing side, EnumFacing face) {
 
-            if (side == EnumFacing.UNKNOWN) {
+            if (side == null) {
                 boolean up = shouldRenderConnection(EnumFacing.UP);
                 boolean down = shouldRenderConnection(EnumFacing.DOWN);
                 boolean west = shouldRenderConnection(EnumFacing.WEST);
@@ -955,9 +894,9 @@ IPartRedstone {
         public boolean canConnect(EnumFacing side, IBundledDevice device, ConnectionType type) {
 
             if (type == ConnectionType.STRAIGHT)
-                if (side == EnumFacing.UNKNOWN && device instanceof DummyRedstoneDevice)
+                if (side == null && device instanceof DummyRedstoneDevice)
                     return false;
-            if (type == ConnectionType.CLOSED_CORNER && side == EnumFacing.UNKNOWN)
+            if (type == ConnectionType.CLOSED_CORNER && side == null)
                 return false;
 
             if (device instanceof IRedwire) {
@@ -1083,27 +1022,9 @@ IPartRedstone {
             bundledConnections.disconnectAll();
         }
 
-        // Rendering methods
-
-        @Override
-        public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
-
-            RenderHelper rh = RenderHelper.instance;
-            rh.setRenderCoords(null, 0, 0, 0);
-            Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
-
-            GL11.glTranslated(0, -0.125, 0);
-            GL11.glScaled(1.25, 1.25, 1.25);
-            Tessellator.instance.startDrawingQuads();
-            renderStatic(new Vec3i(0, 0, 0), rh, RenderBlocks.getInstance(), 0);
-            Tessellator.instance.draw();
-            GL11.glScaled(1 / 1.25, 1 / 1.25, 1 / 1.25);
-
-            rh.reset();
-        }
 
         // @Override
-        // public boolean renderStatic(Vec3i translation, RenderHelper renderer, RenderBlocks renderBlocks, int pass) {
+        // public boolean renderStatic(BlockPos translation, RenderHelper renderer, RenderBlocks renderBlocks, int pass) {
         //
         // super.renderStatic(translation, renderer, renderBlocks, pass);
         //
@@ -1216,7 +1137,7 @@ IPartRedstone {
             super.readUpdateData(buffer);
 
             if (getParent() != null && getWorld() != null)
-                getWorld().markBlockRangeForRenderUpdate(getX(), getY(), getZ(), getX(), getY(), getZ());
+                getWorld().markBlockRangeForRenderUpdate(getPos(), getPos());
         }
 
         @Override

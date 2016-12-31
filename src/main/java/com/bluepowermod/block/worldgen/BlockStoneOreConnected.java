@@ -17,19 +17,19 @@
 
 package com.bluepowermod.block.worldgen;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.util.IIcon;
+import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.world.IBlockAccess;
 
 import com.bluepowermod.reference.Refs;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockStoneOreConnected extends BlockStoneOre {
 
     @SideOnly(Side.CLIENT)
-    public IIcon[] icons;
+    public TextureAtlasSprite[] icons;
     public static int[] iconRefByID = { 0, 0, 6, 6, 0, 0, 6, 6, 3, 3, 19, 15, 3, 3, 19, 15, 1, 1, 18, 18, 1, 1, 13, 13, 2, 2, 23, 31, 2, 2,
             27, 14, 0, 0, 6, 6, 0, 0, 6, 6, 3, 3, 19, 15, 3, 3, 19, 15, 1, 1, 18, 18, 1, 1, 13, 13, 2, 2, 23, 31, 2, 2, 27, 14, 4, 4, 5, 5,
             4, 4, 5, 5, 17, 17, 22, 26, 17, 17, 22, 26, 16, 16, 20, 20, 16, 16, 28, 28, 21, 21, 46, 42, 21, 21, 43, 38, 4, 4, 5, 5, 4, 4,
@@ -49,14 +49,14 @@ public class BlockStoneOreConnected extends BlockStoneOre {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public IIcon getIcon(int side, int meta) {
+    public TextureAtlasSprite getIcon(int side, int meta) {
 
         return icons[0];
     }
 
     @Override
     @SideOnly(Side.CLIENT)
-    public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
+    public TextureAtlasSprite getIcon(IBlockAccess world, int x, int y, int z, int side) {
 
         boolean[] bitMatrix = new boolean[8];
 
@@ -104,9 +104,9 @@ public class BlockStoneOreConnected extends BlockStoneOre {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void registerBlockIcons(IIconRegister iconRegister) {
+    public void registerBlockIcons(TextureMap iconRegister) {
 
-        icons = new IIcon[iconRefByID.length];
+        icons = new TextureAtlasSprite[iconRefByID.length];
 
         for (int i = 0; i < 47; i++)
             icons[i] = iconRegister.registerIcon(Refs.MODID + ":" + name + "/" + name + "_" + (i + 1));

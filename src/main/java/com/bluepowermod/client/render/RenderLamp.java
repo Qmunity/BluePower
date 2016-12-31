@@ -14,20 +14,20 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
+import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 import uk.co.qmunity.lib.vec.Vec3dCube;
-import uk.co.qmunity.lib.vec.Vec3i;
+
 
 @SideOnly(Side.CLIENT)
 public class RenderLamp extends TileEntitySpecialRenderer implements ISimpleBlockRenderingHandler, IItemRenderer {
 
-    public static final int RENDER_ID = RenderingRegistry.getNextAvailableRenderId();
-
-    public static int pass;
+    public static BlockRenderLayer pass;
 
     @Override
     public void renderInventoryBlock(Block block, int metadata, int modelId, RenderBlocks renderer) {
@@ -44,12 +44,6 @@ public class RenderLamp extends TileEntitySpecialRenderer implements ISimpleBloc
     public boolean shouldRender3DInInventory(int modelId) {
 
         return true;
-    }
-
-    @Override
-    public int getRenderId() {
-
-        return RENDER_ID;
     }
 
     /******* TESR ***********/
@@ -74,13 +68,13 @@ public class RenderLamp extends TileEntitySpecialRenderer implements ISimpleBloc
                 power = 15 - power;
             }
             // power = 15;
-            Vec3i vector = new Vec3i(te);
+            BlockPos vector = new BlockPos(te);
             Vec3dCube box = new Vec3dCube(-0.5, -0.5, -0.5, 0.5, 0.5, 0.5).expand(0.8 / 16D);
 
             boolean[] renderFaces = new boolean[] { true, true, true, true, true, true };
 
             for (EnumFacing d : EnumFacing.VALUES) {
-                Vec3i v = vector.getRelative(d);
+                BlockPos v = vector.getRelative(d);
                 Block bl = v.getBlock();
                 if (bl instanceof BlockLamp && ((BlockLamp) bl).getPower(v.getWorld(), v.getX(), v.getY(), v.getZ()) > 0) {
                     if (d.offsetX < 0) {

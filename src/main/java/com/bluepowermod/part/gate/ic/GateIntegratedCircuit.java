@@ -1,38 +1,5 @@
 package com.bluepowermod.part.gate.ic;
 
-import java.io.DataInput;
-import java.io.DataOutput;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import net.minecraft.client.renderer.RenderBlocks;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.util.IIcon;
-import net.minecraft.util.RayTraceResult;
-import net.minecraft.world.World;
-import net.minecraft.util.EnumFacing;;
-import uk.co.qmunity.lib.client.render.RenderHelper;
-import uk.co.qmunity.lib.part.IPart;
-import uk.co.qmunity.lib.part.IPartFace;
-import uk.co.qmunity.lib.part.IPartPlacement;
-import uk.co.qmunity.lib.part.IPartTicking;
-import uk.co.qmunity.lib.part.IPartUpdateListener;
-import uk.co.qmunity.lib.part.PartRegistry;
-import uk.co.qmunity.lib.raytrace.QRayTraceResult;
-import uk.co.qmunity.lib.tile.TileMultipart;
-import uk.co.qmunity.lib.transform.Rotation;
-import uk.co.qmunity.lib.transform.Scale;
-import uk.co.qmunity.lib.transform.Translation;
-import uk.co.qmunity.lib.vec.Vec2d;
-import uk.co.qmunity.lib.vec.Vec3d;
-import uk.co.qmunity.lib.vec.Vec3dCube;
-import uk.co.qmunity.lib.vec.Vec3i;
-
 import com.bluepowermod.api.gate.IGateComponent;
 import com.bluepowermod.api.gate.IGateLogic;
 import com.bluepowermod.api.gate.IIntegratedCircuitPart;
@@ -41,14 +8,45 @@ import com.bluepowermod.api.wire.redstone.IBundledDevice;
 import com.bluepowermod.api.wire.redstone.IBundledDeviceWrapper;
 import com.bluepowermod.api.wire.redstone.IRedstoneDevice;
 import com.bluepowermod.api.wire.redstone.IRedstoneDeviceWrapper;
+import com.bluepowermod.helper.VectorHelper;
 import com.bluepowermod.item.ItemPart;
 import com.bluepowermod.part.gate.GateBase;
 import com.bluepowermod.part.gate.component.GateComponentBorder;
 import com.bluepowermod.part.gate.connection.GateConnectionBase;
 import com.bluepowermod.util.DebugHelper;
+import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.Vec3i;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import uk.co.qmunity.lib.client.render.RenderHelper;
+import uk.co.qmunity.lib.part.*;
+import uk.co.qmunity.lib.raytrace.QRayTraceResult;
+import uk.co.qmunity.lib.tile.TileMultipart;
+import uk.co.qmunity.lib.transform.Rotation;
+import uk.co.qmunity.lib.transform.Scale;
+import uk.co.qmunity.lib.transform.Translation;
+import uk.co.qmunity.lib.vec.Vec2d;
+import uk.co.qmunity.lib.vec.Vec3dCube;
+import uk.co.qmunity.lib.vec.Vec3dHelper;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+;
 
 public class GateIntegratedCircuit extends
         GateBase<GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase>
@@ -175,10 +173,8 @@ public class GateIntegratedCircuit extends
         loadWorld();
 
         FakeMultipartTileIC tmp = new FakeMultipartTileIC(this);
-        tmp.setWorldObj(FakeWorldIC.getInstance());
-        tmp.xCoord = x;
-        tmp.yCoord = 64;
-        tmp.zCoord = z;
+        tmp.setWorld(FakeWorldIC.getInstance());
+        tmp.setPos(new BlockPos(x, 64, z));
 
         tiles[x][z] = tmp;
         parts[x][z] = part;
@@ -277,7 +273,7 @@ public class GateIntegratedCircuit extends
     @Override
     public boolean onActivated(final EntityPlayer player, QRayTraceResult hit, ItemStack item) {
 
-        Vec2d v = new Vec2d(hit.hitVec.xCoord - hit.blockX, hit.hitVec.zCoord - hit.blockZ).sub(0.5, 0.5).rotate(90 * -getRotation())
+        Vec2d v = new Vec2d(hit.hitVec.xCoord - hit.getBlockPos().getX(), hit.hitVec.zCoord - hit.getBlockPos().getZ()).sub(0.5, 0.5).rotate(90 * -getRotation())
                 .add(0.5, 0.5);
 
         int x = (int) (v.getX() * getSize());
@@ -301,25 +297,25 @@ public class GateIntegratedCircuit extends
 
     @Override
     @SideOnly(Side.CLIENT)
-    public boolean renderStatic(Vec3i translation, RenderHelper renderer, RenderBlocks renderBlocks, int pass) {
+    public boolean renderStatic(Vec3i translation, RenderHelper renderer, VertexBuffer buffer, int pass) {
 
         switch (getFace()) {
         case DOWN:
             break;
         case UP:
-            renderer.addTransformation(new Rotation(180, 180, 0, Vec3d.center));
+            renderer.addTransformation(new Rotation(180, 180, 0, Vec3dHelper.CENTER));
             break;
         case NORTH:
-            renderer.addTransformation(new Rotation(90, 0, 0, Vec3d.center));
+            renderer.addTransformation(new Rotation(90, 0, 0, Vec3dHelper.CENTER));
             break;
         case SOUTH:
-            renderer.addTransformation(new Rotation(-90, 0, 0, Vec3d.center));
+            renderer.addTransformation(new Rotation(-90, 0, 0, Vec3dHelper.CENTER));
             break;
         case WEST:
-            renderer.addTransformation(new Rotation(0, 0, -90, Vec3d.center));
+            renderer.addTransformation(new Rotation(0, 0, -90, Vec3dHelper.CENTER));
             break;
         case EAST:
-            renderer.addTransformation(new Rotation(0, 0, 90, Vec3d.center));
+            renderer.addTransformation(new Rotation(0, 0, 90, Vec3dHelper.CENTER));
             break;
         default:
             break;
@@ -329,7 +325,7 @@ public class GateIntegratedCircuit extends
         if (rotation != -1)
             renderer.addTransformation(new Rotation(0, 90 * -rotation, 0));
 
-        IIcon[] icons = new IIcon[] { getIcon(EnumFacing.DOWN), getIcon(EnumFacing.UP), getIcon(EnumFacing.WEST),
+        TextureAtlasSprite[] icons = new TextureAtlasSprite[] { getIcon(EnumFacing.DOWN), getIcon(EnumFacing.UP), getIcon(EnumFacing.WEST),
                 getIcon(EnumFacing.EAST), getIcon(EnumFacing.NORTH), getIcon(EnumFacing.SOUTH) };
 
         renderer.renderBox(new Vec3dCube(0, 0, 0, 1, 1 / 16D, 1), icons);
@@ -359,7 +355,7 @@ public class GateIntegratedCircuit extends
                 double a = (getSize() - 1) / 2D;
 
                 renderer.addTransformation(new Translation(-(s - x - a), -a, -(s - z - a)));
-                part.renderStatic(translation, renderer, renderBlocks, pass);
+                part.renderStatic(translation, renderer, buffer, pass);
                 renderer.addTransformation(new Translation(s - x - a, a, s - z - a));
             }
         }
@@ -499,7 +495,7 @@ public class GateIntegratedCircuit extends
 
         super.readUpdateData(buffer, channel);
 
-        getWorld().markBlockRangeForRenderUpdate(getX(), getY(), getZ(), getX(), getY(), getZ());
+        getWorld().markBlockRangeForRenderUpdate(getPos(), getPos());
 
         if (channel < 10)
             return;
@@ -536,17 +532,17 @@ public class GateIntegratedCircuit extends
 
     public IIntegratedCircuitPart getCircuitPartOnSide(EnumFacing side) {
 
-        if (side.offsetY != 0 || side == EnumFacing.UNKNOWN)
+        if (side.getFrontOffsetY() != 0 || side == null)
             return null;
 
-        return getPart(side.offsetX == 0 ? (getSize() - 1) / 2 : (side.offsetX > 0 ? getSize() - 1 : 0),
-                side.offsetZ == 0 ? (getSize() - 1) / 2 : (side.offsetZ > 0 ? getSize() - 1 : 0));
+        return getPart(side.getFrontOffsetX() == 0 ? (getSize() - 1) / 2 : (side.getFrontOffsetX() > 0 ? getSize() - 1 : 0),
+                side.getFrontOffsetZ() == 0 ? (getSize() - 1) / 2 : (side.getFrontOffsetZ() > 0 ? getSize() - 1 : 0));
     }
 
     @Override
     public IRedstoneDevice getDeviceOnSide(EnumFacing side) {
 
-        side = new Vec3d(0, 0, 0).add(side).rotate(0, 90 * -getRotation(), 0).toEnumFacing();
+        side = VectorHelper.toEnumFacing(Vec3dHelper.rotate(new Vec3d(new BlockPos(0, 0, 0).offset(side)), 0, 90 * -getRotation(), 0));
 
         IPart p = getCircuitPartOnSide(side);
         if (p == null)
@@ -559,7 +555,7 @@ public class GateIntegratedCircuit extends
     @Override
     public IBundledDevice getBundledDeviceOnSide(EnumFacing side) {
 
-        side = new Vec3d(0, 0, 0).add(side).rotate(0, 90 * -getRotation(), 0).toEnumFacing();
+        side = VectorHelper.toEnumFacing(Vec3dHelper.rotate(new Vec3d(new BlockPos(0, 0, 0).offset(side)), 0, 90 * -getRotation(), 0));
 
         IPart p = getCircuitPartOnSide(side);
         if (p == null)
@@ -570,7 +566,7 @@ public class GateIntegratedCircuit extends
     }
 
     @Override
-    public IPartPlacement getPlacement(IPart part, World world, Vec3i location, EnumFacing face, RayTraceResult mop,
+    public IPartPlacement getPlacement(IPart part, World world, BlockPos location, EnumFacing face, RayTraceResult mop,
             EntityPlayer player) {
 
         if (!DebugHelper.isDebugModeEnabled())

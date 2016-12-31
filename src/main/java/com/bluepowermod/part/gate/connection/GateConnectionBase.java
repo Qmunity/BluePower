@@ -1,21 +1,22 @@
 package com.bluepowermod.part.gate.connection;
 
-import java.io.DataInput;
-import java.io.DataOutput;
-import java.io.IOException;
-
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
-import net.minecraft.util.EnumFacing;;
-import uk.co.qmunity.lib.helper.RedstoneHelper;
-import uk.co.qmunity.lib.util.Dir;
-
 import com.bluepowermod.api.connect.IConnection;
 import com.bluepowermod.api.gate.IGateConnection;
 import com.bluepowermod.api.wire.redstone.IRedstoneDevice;
 import com.bluepowermod.part.gate.GateBase;
 import com.bluepowermod.redstone.DummyRedstoneDevice;
 import com.bluepowermod.redstone.RedstoneApi;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.world.World;
+import uk.co.qmunity.lib.helper.RedstoneHelper;
+import uk.co.qmunity.lib.util.Dir;
+
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
+
+;
 
 public abstract class GateConnectionBase implements IGateConnection {
 
@@ -60,7 +61,7 @@ public abstract class GateConnectionBase implements IGateConnection {
 
         if (c == null || c.getB() instanceof DummyRedstoneDevice) {
             World world = gate.getWorld();
-            int x = gate.getX(), y = gate.getY(), z = gate.getZ();
+            int x = gate.getPos().getX(), y = gate.getPos().getY(), z = gate.getPos().getZ();
 
             RedstoneHelper.notifyRedstoneUpdate(world, x, y, z, d, true);
         } else {

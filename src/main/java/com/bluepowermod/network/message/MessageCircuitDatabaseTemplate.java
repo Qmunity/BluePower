@@ -16,7 +16,6 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import uk.co.qmunity.lib.network.LocatedPacket;
 
@@ -67,7 +66,7 @@ public class MessageCircuitDatabaseTemplate extends LocatedPacket<MessageCircuit
     @Override
     public void handleClientSide(EntityPlayer player) {
 
-        TileEntity te = player.world.getTileEntity(new BlockPos(x, y, z));
+        TileEntity te = player.world.getTileEntity(pos);
         if (te instanceof TileCircuitDatabase) {
             ((TileCircuitDatabase) te).saveToPrivateLibrary(stack);
         }
@@ -83,10 +82,10 @@ public class MessageCircuitDatabaseTemplate extends LocatedPacket<MessageCircuit
                 BPNetworkHandler.INSTANCE.sendToAll(new MessageSendClientServerTemplates(stackDatabase.loadItemStacks()));
             }
         } else {
-            TileEntity te = player.world.getTileEntity(new BlockPos(x, y, z));
+            TileEntity te = player.world.getTileEntity(pos);
             if (te instanceof TileCircuitDatabase) {
                 ((TileCircuitDatabase) te).copyInventory.setInventorySlotContents(0, stack);
-                player.openGui(BluePower.instance, GuiIDs.CIRCUITDATABASE_MAIN_ID.ordinal(), player.world, x, y, z);
+                player.openGui(BluePower.instance, GuiIDs.CIRCUITDATABASE_MAIN_ID.ordinal(), player.world, pos.getX(), pos.getY(), pos.getZ());
             }
         }
     }

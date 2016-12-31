@@ -1,19 +1,18 @@
 package com.bluepowermod.part.gate.component;
 
+import com.bluepowermod.api.gate.IGateComponent;
+import com.bluepowermod.part.gate.GateBase;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.Vec3i;
+import uk.co.qmunity.lib.client.render.RenderHelper;
+import uk.co.qmunity.lib.vec.Vec3dCube;
+
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
-
-import net.minecraft.nbt.NBTTagCompound;
-import uk.co.qmunity.lib.client.render.RenderHelper;
-import uk.co.qmunity.lib.vec.Vec3d;
-import uk.co.qmunity.lib.vec.Vec3dCube;
-import uk.co.qmunity.lib.vec.Vec3i;
-
-import com.bluepowermod.api.gate.IGateComponent;
-import com.bluepowermod.part.gate.GateBase;
 
 public abstract class GateComponent implements IGateComponent {
 

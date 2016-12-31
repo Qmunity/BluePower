@@ -1,22 +1,23 @@
 package com.bluepowermod.part.gate.component;
 
+import com.bluepowermod.client.render.IconSupplier;
+import com.bluepowermod.part.gate.GateBase;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.init.Blocks;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.Vec3i;
+import uk.co.qmunity.lib.client.render.RenderHelper;
+import uk.co.qmunity.lib.transform.Translation;
+import uk.co.qmunity.lib.vec.Vec3dCube;
+import uk.co.qmunity.lib.vec.Vec3dHelper;
+
 import java.awt.image.BufferedImage;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.util.Random;
-
-import net.minecraft.init.Blocks;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.IIcon;
-import uk.co.qmunity.lib.client.render.RenderHelper;
-import uk.co.qmunity.lib.transform.Translation;
-import uk.co.qmunity.lib.vec.Vec3d;
-import uk.co.qmunity.lib.vec.Vec3dCube;
-import uk.co.qmunity.lib.vec.Vec3i;
-
-import com.bluepowermod.client.render.IconSupplier;
-import com.bluepowermod.part.gate.GateBase;
 
 public class GateComponentTorch extends GateComponent {
 
@@ -56,9 +57,9 @@ public class GateComponentTorch extends GateComponent {
     @Override
     public void renderStatic(Vec3i translation, RenderHelper renderer, int pass) {
 
-        IIcon icon = digital ? (state ? IconSupplier.bluestoneTorchOn : IconSupplier.bluestoneTorchOff) : (state ? Blocks.redstone_torch
-                .getIcon(0, 0) : Blocks.unlit_redstone_torch.getIcon(0, 0));
-        IIcon override = renderer.getOverrideTexture();
+        TextureAtlasSprite icon = digital ? (state ? IconSupplier.bluestoneTorchOn : IconSupplier.bluestoneTorchOff) : (state ? Blocks.REDSTONE_TORCH
+                .getIcon(0, 0) : Blocks.UNLIT_REDSTONE_TORCH.getIcon(0, 0));
+        TextureAtlasSprite override = renderer.getOverrideTexture();
         renderer.setOverrideTexture(null);
 
         double height = 10 / 16D - this.height;
@@ -116,10 +117,11 @@ public class GateComponentTorch extends GateComponent {
         if (!gate.getWorld().isRemote)
             return;
 
-        Vec3d v = new Vec3d(x + 1 / 16D, height + 2 / 16D, z + 1 / 16D).sub(Vec3d.center).rotate(0, 90 * -gate.getRotation(), 0)
-                .add(Vec3d.center).rotate(gate.getFace(), Vec3d.center);
+        Vec3d v = Vec3dHelper.rotate(Vec3dHelper.rotate(new Vec3d(x + 1 / 16D, height + 2 / 16D, z + 1 / 16D)
+                .subtract(Vec3dHelper.CENTER), 0, 90 * -gate.getRotation(), 0)
+                .add(Vec3dHelper.CENTER), gate.getFace(), Vec3dHelper.CENTER);
         if (rnd.nextInt(10) == 0)
-            gate.getWorld().spawnParticle("reddust", gate.getX() + v.getX(), gate.getY() + v.getY(), gate.getZ() + v.getZ(),
+            gate.getWorld().spawnParticle(EnumParticleTypes.REDSTONE, gate.getPos().getX() + v.xCoord, gate.getPos().getY() + v.yCoord, gate.getPos().getZ() + v.zCoord,
                     digital ? -1 : 0, 0, digital ? 1 : 0);
     }
 

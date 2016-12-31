@@ -13,13 +13,13 @@ import com.bluepowermod.api.recipe.IAlloyFurnaceRegistry;
 import com.bluepowermod.api.wire.redstone.IRedstoneApi;
 import com.bluepowermod.recipe.AlloyFurnaceRegistry;
 import com.bluepowermod.redstone.RedstoneApi;
-import mcmultipart.api.multipart.IMultipartTile;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import uk.co.qmunity.lib.part.IPart;
 
 public class BluePowerAPI implements IBPApi {
 
@@ -64,7 +64,7 @@ public class BluePowerAPI implements IBPApi {
 
 
     @Override
-    public void loadSilkySettings(IMultipartTile part, ItemStack stack) {
+    public void loadSilkySettings(IPart part, ItemStack stack) {
 
         if (stack == null)
             throw new IllegalArgumentException("ItemStack is null!");

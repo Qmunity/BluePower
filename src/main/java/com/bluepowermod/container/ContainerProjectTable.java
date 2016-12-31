@@ -18,32 +18,26 @@
 
 package com.bluepowermod.container;
 
+import com.bluepowermod.container.slot.SlotProjectTableCrafting;
+import com.bluepowermod.helper.IOHelper;
+import com.bluepowermod.tile.tier1.TileProjectTable;
+import com.bluepowermod.util.Dependencies;
 import invtweaks.api.container.ChestContainer;
 import invtweaks.api.container.ContainerSection;
 import invtweaks.api.container.ContainerSectionCallback;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.*;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.CraftingManager;
+import net.minecraftforge.fml.common.Optional;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.InventoryCraftResult;
-import net.minecraft.inventory.InventoryCrafting;
-import net.minecraft.inventory.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.CraftingManager;
-import net.minecraft.util.EnumFacing;;
-
-import com.bluepowermod.container.slot.SlotProjectTableCrafting;
-import com.bluepowermod.helper.IOHelper;
-import com.bluepowermod.tile.tier1.TileProjectTable;
-import com.bluepowermod.util.Dependencies;
-
-import cpw.mods.fml.common.Optional;
+;
 
 /**
  * @author MineMaarten
@@ -109,14 +103,14 @@ public class ContainerProjectTable extends Container {
     @Override
     public boolean canInteractWith(EntityPlayer player) {
 
-        return projectTable.isUseableByPlayer(player);
+        return projectTable.isUsableByPlayer(player);
     }
 
     @Override
     protected void retrySlotClick(int slot, int p_75133_2_, boolean p_75133_3_, EntityPlayer p_75133_4_) {
 
         ItemStack stackInSlot = ((Slot) inventorySlots.get(slot)).getStack();
-        itemsCrafted += stackInSlot.stackSize;
+        itemsCrafted += stackInSlot.getCount();
         isRetrying = true;
         if (slot != 9 || !isLastCraftingOperation() && itemsCrafted < stackInSlot.getMaxStackSize()) {
             slotClick(slot, p_75133_2_, 1, p_75133_4_);//only crafting slot doesn't retry clicking so no more than 64 items get crafted at a time
@@ -128,7 +122,7 @@ public class ContainerProjectTable extends Container {
 
         for (int i = 0; i < 9; i++) {
             ItemStack stack = craftingGrid.getStackInSlot(i);
-            if (stack != null && stack.stackSize == 1 && extractStackFromTable(projectTable, stack, true) == null
+            if (stack != null && stack.getCount() == 1 && extractStackFromTable(projectTable, stack, true) == null
                     && (!stack.getItem().hasContainerItem(stack) || stack.getItem().doesContainerItemLeaveCraftingGrid(stack)))
                 return true;
         }
@@ -137,7 +131,7 @@ public class ContainerProjectTable extends Container {
 
     public static ItemStack extractStackFromTable(TileProjectTable table, ItemStack stack, boolean simulate) {
 
-        return IOHelper.extract(table, EnumFacing.UNKNOWN, stack, true, simulate);
+        return IOHelper.extract(table, null, stack, true, simulate);
     }
 
     public void clearCraftingGrid() {
@@ -145,7 +139,7 @@ public class ContainerProjectTable extends Container {
             Slot slot = (Slot) inventorySlots.get(i);
             if (slot.getHasStack()) {
                 mergeItemStack(slot.getStack(), 10, 28, false);
-                if (slot.getStack().stackSize <= 0)
+                if (slot.getStack().getCount() <= 0)
                     slot.putStack(null);
             }
         }
@@ -178,12 +172,12 @@ public class ContainerProjectTable extends Container {
                 if (!mergeItemStack(itemstack1, 10, 28, false))
                     return null;
             }
-            if (itemstack1.stackSize == 0) {
+            if (itemstack1.getCount() == 0) {
                 slot.putStack(null);
             } else {
                 slot.onSlotChanged();
             }
-            if (itemstack1.stackSize != itemstack.stackSize) {
+            if (itemstack1.getCount() != itemstack.getCount()) {
                 slot.onPickupFromSlot(player, itemstack1);
             } else {
                 return null;

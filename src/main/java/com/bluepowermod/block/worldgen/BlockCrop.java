@@ -25,13 +25,13 @@ import net.minecraft.block.BlockAir;
 import net.minecraft.block.BlockCrops;
 import net.minecraft.block.BlockFarmland;
 import net.minecraft.block.IGrowable;
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -42,13 +42,13 @@ import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.init.BPItems;
 import com.bluepowermod.reference.Refs;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockCrop extends BlockCrops implements IGrowable {
 
     @SideOnly(Side.CLIENT)
-    private IIcon[] iconArray;
+    private TextureAtlasSprite[] iconArray;
 
     public BlockCrop() {
 
@@ -137,7 +137,7 @@ public class BlockCrop extends BlockCrops implements IGrowable {
      */
     @SideOnly(Side.CLIENT)
     @Override
-    public IIcon getIcon(int side, int meta) {
+    public TextureAtlasSprite getIcon(int side, int meta) {
 
         if (meta < 0 || meta > 8) {
             meta = 8;
@@ -241,9 +241,9 @@ public class BlockCrop extends BlockCrops implements IGrowable {
 
     @SideOnly(Side.CLIENT)
     @Override
-    public void registerBlockIcons(IIconRegister iconRegister) {
+    public void registerBlockIcons(TextureMap iconRegister) {
 
-        this.iconArray = new IIcon[9];
+        this.iconArray = new TextureAtlasSprite[9];
 
         for (int i = 0; i < this.iconArray.length; ++i) {
             int tex = 0;

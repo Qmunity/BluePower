@@ -24,6 +24,6 @@ public class ItemFloppyDisk extends ItemBase {
     public ItemFloppyDisk(String name) {
 
         this.setUnlocalizedName(name);
-        this.setTextureName(Refs.MODID + ":" + name);
+        this.setRegistryName(Refs.MODID + ":" + name);
     }
 }

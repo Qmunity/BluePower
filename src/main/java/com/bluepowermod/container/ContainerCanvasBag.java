@@ -19,28 +19,26 @@
 
 package com.bluepowermod.container;
 
-import invtweaks.api.container.ChestContainer;
-import invtweaks.api.container.ContainerSection;
-import invtweaks.api.container.ContainerSectionCallback;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Slot;
-import net.minecraft.item.ItemStack;
-
 import com.bluepowermod.container.inventory.InventoryItem;
 import com.bluepowermod.container.slot.SlotExclude;
 import com.bluepowermod.container.slot.SlotLocked;
 import com.bluepowermod.init.BPItems;
 import com.bluepowermod.util.Dependencies;
+import invtweaks.api.container.ChestContainer;
+import invtweaks.api.container.ContainerSection;
+import invtweaks.api.container.ContainerSectionCallback;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.ClickType;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.common.Optional;
 
-import cpw.mods.fml.common.Optional;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @ChestContainer
 public class ContainerCanvasBag extends Container {
@@ -52,7 +50,7 @@ public class ContainerCanvasBag extends Container {
     
         this.bag = bag;
         int i = -1 * 18;
-        canvasBagInventory.openInventory();
+        //canvasBagInventory.openInventory();
         for (int j = 0; j < 3; ++j) {
             for (int k = 0; k < 9; ++k) {
                 addSlotToContainer(new SlotExclude(canvasBagInventory, k + j * 9, 8 + k * 18, 18 + j * 18, BPItems.canvas_bag));
@@ -84,9 +82,9 @@ public class ContainerCanvasBag extends Container {
     }
     
     @Override
-    public ItemStack slotClick(int par1, int par2, int par3, EntityPlayer player) {
+    public ItemStack slotClick(int par1, int par2, ClickType par3, EntityPlayer player) {
     
-        if (par3 != 2 || player.inventory.currentItem != par2) {
+        if (par3.ordinal() != 2 || player.inventory.currentItem != par2) {
             return super.slotClick(par1, par2, par3, player);
         } else {
             return null;
@@ -107,15 +105,15 @@ public class ContainerCanvasBag extends Container {
                 if (!mergeItemStack(itemstack1, 27, 63, true)) { return null; }
             } else if (!mergeItemStack(itemstack1, 0, 27, false)) { return null; }
             
-            if (itemstack1.stackSize == 0) {
+            if (itemstack1.getCount() == 0) {
                 slot.putStack((ItemStack) null);
             } else {
                 slot.onSlotChanged();
             }
             
-            if (itemstack1.stackSize == itemstack.stackSize) { return null; }
+            if (itemstack1.getCount() == itemstack.getCount()) { return null; }
             
-            slot.onPickupFromSlot(par1EntityPlayer, itemstack1);
+            slot.onSlotChange(itemstack, itemstack1);
         }
         
         return itemstack;
@@ -135,21 +133,21 @@ public class ContainerCanvasBag extends Container {
         ItemStack itemstack1;
         
         if (par1ItemStack.isStackable()) {
-            while (par1ItemStack.stackSize > 0 && (!par4 && k < par3 || par4 && k >= par2)) {
+            while (par1ItemStack.getCount() > 0 && (!par4 && k < par3 || par4 && k >= par2)) {
                 slot = (Slot) inventorySlots.get(k);
                 itemstack1 = slot.getStack();
                 
                 if (itemstack1 != null && itemstack1.getItem() == par1ItemStack.getItem() && (!par1ItemStack.getHasSubtypes() || par1ItemStack.getItemDamage() == itemstack1.getItemDamage()) && ItemStack.areItemStackTagsEqual(par1ItemStack, itemstack1) && slot.isItemValid(par1ItemStack)) {
-                    int l = itemstack1.stackSize + par1ItemStack.stackSize;
+                    int l = itemstack1.getCount() + par1ItemStack.getCount();
                     
                     if (l <= par1ItemStack.getMaxStackSize()) {
-                        par1ItemStack.stackSize = 0;
-                        itemstack1.stackSize = l;
+                        par1ItemStack.setCount(0);
+                        itemstack1.setCount(l);
                         slot.onSlotChanged();
                         flag1 = true;
-                    } else if (itemstack1.stackSize < par1ItemStack.getMaxStackSize()) {
-                        par1ItemStack.stackSize -= par1ItemStack.getMaxStackSize() - itemstack1.stackSize;
-                        itemstack1.stackSize = par1ItemStack.getMaxStackSize();
+                    } else if (itemstack1.getCount() < par1ItemStack.getMaxStackSize()) {
+                        par1ItemStack.setCount(par1ItemStack.getCount() - par1ItemStack.getMaxStackSize() - itemstack1.getCount());
+                        itemstack1.setCount(par1ItemStack.getMaxStackSize());
                         slot.onSlotChanged();
                         flag1 = true;
                     }
@@ -163,7 +161,7 @@ public class ContainerCanvasBag extends Container {
             }
         }
         
-        if (par1ItemStack.stackSize > 0) {
+        if (par1ItemStack.getCount() > 0) {
             if (par4) {
                 k = par3 - 1;
             } else {
@@ -175,18 +173,18 @@ public class ContainerCanvasBag extends Container {
                 itemstack1 = slot.getStack();
                 
                 if (itemstack1 == null && slot.isItemValid(par1ItemStack)) {
-                    if (1 < par1ItemStack.stackSize) {
+                    if (1 < par1ItemStack.getCount()) {
                         ItemStack copy = par1ItemStack.copy();
-                        copy.stackSize = 1;
+                        copy.setCount(1);
                         slot.putStack(copy);
-                        
-                        par1ItemStack.stackSize -= 1;
+
+                        par1ItemStack.setCount(par1ItemStack.getCount() - 1);
                         flag1 = true;
                         break;
                     } else {
                         slot.putStack(par1ItemStack.copy());
                         slot.onSlotChanged();
-                        par1ItemStack.stackSize = 0;
+                        par1ItemStack.setCount(0);
                         flag1 = true;
                         break;
                     }

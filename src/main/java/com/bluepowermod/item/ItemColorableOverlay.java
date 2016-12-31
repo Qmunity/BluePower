@@ -7,81 +7,51 @@
  */
 package com.bluepowermod.item;
 
-import java.util.List;
-
-import net.minecraft.client.renderer.texture.IIconRegister;
+import com.bluepowermod.init.BPCreativeTabs;
+import com.bluepowermod.reference.Refs;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
-
-import com.bluepowermod.init.BPCreativeTabs;
-import com.bluepowermod.reference.Refs;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.util.NonNullList;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * @author MineMaarten
  */
 public class ItemColorableOverlay extends ItemBase {
     
-    private IIcon overlayTexture;
+    private TextureAtlasSprite overlayTexture;
     
     public ItemColorableOverlay(String name) {
     
         setUnlocalizedName(name);
         setCreativeTab(BPCreativeTabs.items);
-        setTextureName(Refs.MODID + ":" + name);
+        setRegistryName(Refs.MODID + ":" + name);
         setHasSubtypes(true);
         setMaxStackSize(1);
     }
-    
+
+
     @Override
-    @SideOnly(Side.CLIENT)
-    public void registerIcons(IIconRegister iconRegister) {
-    
-        super.registerIcons(iconRegister);
-        overlayTexture = iconRegister.registerIcon(getIconString() + "_overlay");
-    }
-    
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void getSubItems(Item par1, CreativeTabs tab, List subItems) {
-    
+    public void getSubItems(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> subItems) {
         for (int i = 0; i < 16; i++) {
             subItems.add(new ItemStack(this, 1, i));
         }
     }
-    
-    @Override
+
     @SideOnly(Side.CLIENT)
     public int getColorFromItemStack(ItemStack itemStack, int renderPass) {
     
-        return renderPass == 0 || itemStack.getItemDamage() >= 16 ? super.getColorFromItemStack(itemStack, renderPass) : ItemDye.field_150922_c[itemStack.getItemDamage()];
+        return renderPass == 0 || itemStack.getItemDamage() >= 16 ? 0 : ItemDye.DYE_COLORS[itemStack.getItemDamage()];
     }
-    
-    @Override
-    @SideOnly(Side.CLIENT)
-    public boolean requiresMultipleRenderPasses() {
-    
-        return true;
-    }
-    
-    /**
-     * Gets an icon index based on an item's damage value and the given render pass
-     */
-    @Override
-    @SideOnly(Side.CLIENT)
-    public IIcon getIconFromDamageForRenderPass(int meta, int renderPass) {
-    
-        return renderPass == 0 || meta >= 16 ? itemIcon : overlayTexture;
-    }
+
     
     @Override
     public String getUnlocalizedName(ItemStack stack) {
     
-        return super.getUnlocalizedName() + "." + (stack.getItemDamage() >= 16 ? "empty" : ItemDye.field_150923_a[stack.getItemDamage()]);
+        return super.getUnlocalizedName() + "." + (stack.getItemDamage() >= 16 ? "empty" : ItemDye.DYE_COLORS[stack.getItemDamage()]);
     }
 }

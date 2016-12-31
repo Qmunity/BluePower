@@ -1,17 +1,15 @@
 package com.bluepowermod.item;
 
-import java.util.List;
-
+import com.bluepowermod.block.worldgen.BlockStoneOre;
 import net.minecraft.block.Block;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-import com.bluepowermod.block.worldgen.BlockStoneOre;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import java.util.List;
 
 public class ItemBlockTooltip extends ItemBlock {
 

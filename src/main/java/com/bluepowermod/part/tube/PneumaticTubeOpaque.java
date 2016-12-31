@@ -17,23 +17,23 @@
 
 package com.bluepowermod.part.tube;
 
-import net.minecraft.client.renderer.RenderBlocks;
-import net.minecraft.init.Blocks;
-import net.minecraft.util.IIcon;
-import net.minecraft.util.EnumFacing;;
-import uk.co.qmunity.lib.client.render.RenderHelper;
-import uk.co.qmunity.lib.transform.Rotation;
-import uk.co.qmunity.lib.vec.Vec3d;
-import uk.co.qmunity.lib.vec.Vec3dCube;
-import uk.co.qmunity.lib.vec.Vec3i;
-
 import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
 import com.bluepowermod.client.render.IconSupplier;
 import com.bluepowermod.part.wire.redstone.WireHelper;
+import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.init.Blocks;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import uk.co.qmunity.lib.client.render.RenderHelper;
+import uk.co.qmunity.lib.transform.Rotation;
+import uk.co.qmunity.lib.vec.Vec3dCube;
+import uk.co.qmunity.lib.vec.Vec3dHelper;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+;
 
 public class PneumaticTubeOpaque extends PneumaticTube {
 
@@ -51,14 +51,14 @@ public class PneumaticTubeOpaque extends PneumaticTube {
 
     @Override
     @SideOnly(Side.CLIENT)
-    protected IIcon getSideIcon() {
+    protected TextureAtlasSprite getSideIcon() {
 
-        return Blocks.stone.getIcon(0, 0);// IconSupplier.pneumaticTubeOpaqueSide;
+        return Blocks.STONE.getIcon(0, 0);// IconSupplier.pneumaticTubeOpaqueSide;
     }
 
     @Override
     @SideOnly(Side.CLIENT)
-    public boolean renderStatic(Vec3i loc, RenderHelper renderer, RenderBlocks renderBlocks, int pass) {
+    public boolean renderStatic(BlockPos loc, RenderHelper renderer, VertexBuffer buffer, int pass) {
 
         if (pass == 0) {
             boolean renderFully = false;
@@ -73,7 +73,7 @@ public class PneumaticTubeOpaque extends PneumaticTube {
 
             renderFully |= count > 2 || count == 0;
 
-            IIcon icon = this instanceof RestrictionTubeOpaque ? (renderFully ? IconSupplier.restrictionTubeNodeOpaque
+            TextureAtlasSprite icon = this instanceof RestrictionTubeOpaque ? (renderFully ? IconSupplier.restrictionTubeNodeOpaque
                     : IconSupplier.restrictionTubeSideOpaque) : renderFully ? IconSupplier.pneumaticTubeOpaqueNode
                     : IconSupplier.pneumaticTubeOpaqueSide;
 
@@ -126,17 +126,17 @@ public class PneumaticTubeOpaque extends PneumaticTube {
                             renderer.setColor(MinecraftColor.values()[15 - c.ordinal()].getHex());
                             if (connections[d.ordinal()]) {
                                 for (int i = 0; i < 4; i++) {
-                                    renderer.renderBox(side.clone().rotate(0, i * 90, 0, Vec3d.center).rotate(d, Vec3d.center),
+                                    renderer.renderBox(side.clone().rotate(0, i * 90, 0, Vec3dHelper.CENTER).rotate(d, Vec3dHelper.CENTER),
                                             IconSupplier.pneumaticTubeColoring);
-                                    renderer.renderBox(side2.clone().rotate(0, i * 90, 0, Vec3d.center).rotate(d, Vec3d.center),
+                                    renderer.renderBox(side2.clone().rotate(0, i * 90, 0, Vec3dHelper.CENTER).rotate(d, Vec3dHelper.CENTER),
                                             IconSupplier.pneumaticTubeColoring);
                                     if (renderFully)
-                                        renderer.renderBox(side3.clone().rotate(0, i * 90, 0, Vec3d.center).rotate(d, Vec3d.center),
+                                        renderer.renderBox(side3.clone().rotate(0, i * 90, 0, Vec3dHelper.CENTER).rotate(d, Vec3dHelper.CENTER),
                                                 IconSupplier.pneumaticTubeColoring);
                                 }
                             } else if (renderFully) {
                                 for (int i = 0; i < 4; i++)
-                                    renderer.renderBox(side4.clone().rotate(0, i * 90, 0, Vec3d.center).rotate(d, Vec3d.center),
+                                    renderer.renderBox(side4.clone().rotate(0, i * 90, 0, Vec3dHelper.CENTER).rotate(d, Vec3dHelper.CENTER),
                                             IconSupplier.pneumaticTubeColoring);
                             } else {
                                 for (int i = 1; i < 4; i += 2)
@@ -144,7 +144,7 @@ public class PneumaticTubeOpaque extends PneumaticTube {
                                             side5.clone()
                                                     .rotate(0,
                                                             (i + ((shouldRenderConnection(EnumFacing.NORTH) || (shouldRenderConnection(EnumFacing.UP) && (d == EnumFacing.NORTH || d == EnumFacing.SOUTH))) ? 1
-                                                                    : 0)) * 90, 0, Vec3d.center).rotate(d, Vec3d.center),
+                                                                    : 0)) * 90, 0, Vec3dHelper.CENTER).rotate(d, Vec3dHelper.CENTER),
                                             IconSupplier.pneumaticTubeColoring);
                             }
                             renderer.setColor(0xFFFFFF);

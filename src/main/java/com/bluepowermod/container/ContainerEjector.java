@@ -60,7 +60,7 @@ public class ContainerEjector extends ContainerMachineBase {
     @Override
     public boolean canInteractWith(EntityPlayer player) {
 
-        return tileEjector.isUseableByPlayer(player);
+        return tileEjector.isUsableByPlayer(player);
     }
 
     @Override
@@ -77,13 +77,13 @@ public class ContainerEjector extends ContainerMachineBase {
             } else if (!mergeItemStack(itemstack1, 0, 9, false)) {
                 return null;
             }
-            if (itemstack1.stackSize == 0) {
+            if (itemstack1.getCount() == 0) {
                 slot.putStack(null);
             } else {
                 slot.onSlotChanged();
             }
-            if (itemstack1.stackSize != itemstack.stackSize) {
-                slot.onPickupFromSlot(player, itemstack1);
+            if (itemstack1.getCount() != itemstack.getCount()) {
+                slot.onSlotChange(itemstack, itemstack1);
             } else {
                 return null;
             }

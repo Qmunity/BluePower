@@ -17,11 +17,14 @@
 
 package com.bluepowermod.helper;
 
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.Vec3d;
+import uk.co.qmunity.lib.vec.Vec3dCube;
+import uk.co.qmunity.lib.vec.Vec3dHelper;
+
 import java.util.List;
 
-import net.minecraft.util.EnumFacing;;
-import uk.co.qmunity.lib.vec.Vec3d;
-import uk.co.qmunity.lib.vec.Vec3dCube;
+;
 
 public class VectorHelper {
 
@@ -33,8 +36,28 @@ public class VectorHelper {
 
     public static final void rotateBox(Vec3dCube box, EnumFacing face, int rotation) {
 
-        box.rotate(0, rotation * 90, 0, Vec3d.center);
-        box.rotate(face, Vec3d.center);
+        box.rotate(0, rotation * 90, 0, Vec3dHelper.CENTER);
+        box.rotate(face, Vec3dHelper.CENTER);
+    }
+
+    public  static final EnumFacing toEnumFacing(Vec3d vec3) {
+
+        if (vec3.zCoord == 1)
+            return EnumFacing.SOUTH;
+        if (vec3.zCoord == -1)
+            return EnumFacing.NORTH;
+
+        if (vec3.xCoord == 1)
+            return EnumFacing.EAST;
+        if (vec3.xCoord == -1)
+            return EnumFacing.WEST;
+
+        if (vec3.yCoord == 1)
+            return EnumFacing.UP;
+        if (vec3.yCoord == -1)
+            return EnumFacing.DOWN;
+
+        return null;
     }
 
 }

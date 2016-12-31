@@ -7,24 +7,17 @@
  */
 package com.bluepowermod.network.message;
 
+import com.bluepowermod.BluePower;
+import com.bluepowermod.part.IGuiButtonSensitive;
 import io.netty.buffer.ByteBuf;
-
-import java.util.List;
-
-import mcmultipart.api.container.IMultipartContainer;
-import mcmultipart.api.multipart.IMultipart;
-import mcmultipart.api.multipart.IMultipartTile;
-import mcmultipart.api.multipart.MultipartHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
 import uk.co.qmunity.lib.network.LocatedPacket;
 import uk.co.qmunity.lib.part.IPart;
 import uk.co.qmunity.lib.part.ITilePartHolder;
 import uk.co.qmunity.lib.part.compat.MultipartCompatibility;
 
-import com.bluepowermod.BluePower;
-import com.bluepowermod.part.IGuiButtonSensitive;
+import java.util.List;
 
 /**
  *
@@ -49,7 +42,7 @@ public class MessageGuiUpdate extends LocatedPacket<MessageGuiUpdate> {
      * @param messageId
      * @param value
      */
-    public MessageGuiUpdate(IMultipartTile part, int messageId, int value) {
+    public MessageGuiUpdate(IPart part, int messageId, int value) {
 
         super(part.getPos());
 
@@ -73,9 +66,9 @@ public class MessageGuiUpdate extends LocatedPacket<MessageGuiUpdate> {
         this.value = value;
     }
 
-    private int getPartId(IMultipartTile part) {
+    private int getPartId(IPart part) {
 
-        List<IMultipartTile> parts = MultipartHelper.getContainer(part.getWorld(), part.getPos()).getParts();
+        List<IPart> parts = MultipartCompatibility.getPartHolder(part.getWorld(), part.getPos()).getParts();
         return parts.indexOf(part);
     }
 
@@ -107,22 +100,22 @@ public class MessageGuiUpdate extends LocatedPacket<MessageGuiUpdate> {
     @Override
     public void handleServerSide(EntityPlayer player) {
 
-        IMultipartContainer partHolder = MultipartHelper.getContainer(player.world, new BlockPos(x, y, z)).get();
+        ITilePartHolder partHolder = MultipartCompatibility.getPartHolder(player.world, pos);
         if (partHolder != null) {
             messagePart(player, partHolder);
         } else {
-            TileEntity te = player.world.getTileEntity(new BlockPos(x, y, z));
+            TileEntity te = player.world.getTileEntity(pos);
             if (te instanceof IGuiButtonSensitive) {
                 ((IGuiButtonSensitive) te).onButtonPress(player, messageId, value);
             }
         }
     }
 
-    private void messagePart(EntityPlayer player, IMultipartContainer partHolder) {
+    private void messagePart(EntityPlayer player, ITilePartHolder partHolder) {
 
-        List<IMultipartTile> parts = partHolder.getParts();
+        List<IPart> parts = partHolder.getParts();
         if (partId < parts.size()) {
-            IMultipartTile part = parts.get(partId);
+            IPart part = parts.get(partId);
             // IntegratedCircuit circuit = null;
             // if (part instanceof IntegratedCircuit) {
             // circuit = (IntegratedCircuit) part;

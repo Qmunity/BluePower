@@ -35,7 +35,7 @@ public class SlotSeedBag extends Slot {
     public boolean isItemValid(ItemStack itemstack) {
     
         itemstack = itemstack.copy();
-        itemstack.stackSize = 1;
+        itemstack.setCount(1);
         if (itemstack.getItem() instanceof ItemSeeds) {
             ItemStack seedType = null;
             
@@ -43,7 +43,7 @@ public class SlotSeedBag extends Slot {
                 ItemStack is = this.inventory.getStackInSlot(i);
                 if (is != null) {
                     seedType = is.copy();
-                    seedType.stackSize = 1;
+                    seedType.setCount(1);
                     break;
                 }
             }

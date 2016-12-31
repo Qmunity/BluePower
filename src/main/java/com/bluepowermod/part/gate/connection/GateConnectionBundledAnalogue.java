@@ -1,16 +1,15 @@
 package com.bluepowermod.part.gate.connection;
 
-import java.io.DataInput;
-import java.io.DataOutput;
-import java.io.IOException;
-
-import net.minecraft.nbt.NBTTagCompound;
-import uk.co.qmunity.lib.util.Dir;
-
 import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.api.wire.redstone.IBundledDevice;
 import com.bluepowermod.api.wire.redstone.IRedstoneDevice;
 import com.bluepowermod.part.gate.GateBase;
+import net.minecraft.nbt.NBTTagCompound;
+import uk.co.qmunity.lib.util.Dir;
+
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
 
 public class GateConnectionBundledAnalogue extends GateConnectionBase {
 

@@ -20,10 +20,12 @@ package com.bluepowermod.item;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 
 import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.reference.Refs;
+import net.minecraft.util.EnumHand;
 
 public class ItemIndigoDye extends ItemBase {
 
@@ -31,17 +33,16 @@ public class ItemIndigoDye extends ItemBase {
 
         this.setUnlocalizedName(name);
         this.setCreativeTab(BPCreativeTabs.items);
-        this.setTextureName(Refs.MODID + ":" + name);
+        this.setRegistryName(Refs.MODID + ":" + name);
     }
 
 	@Override
-	public boolean itemInteractionForEntity(ItemStack stack, EntityPlayer player, EntityLivingBase entity) {
-	
+	public boolean itemInteractionForEntity(ItemStack stack, EntityPlayer playerIn, EntityLivingBase entity, EnumHand hand) {
 		if (entity instanceof EntitySheep) {
 			EntitySheep sheep = (EntitySheep) entity;
-			if (!sheep.getSheared() && sheep.getFleeceColor() != 10) {
-				sheep.setFleeceColor(10);
-				--stack.stackSize;
+			if (!sheep.getSheared() && sheep.getFleeceColor() != EnumDyeColor.PURPLE) {
+				sheep.setFleeceColor(EnumDyeColor.PURPLE);
+				stack.setCount(stack.getCount() - 1);
 			}
 			return true;
 		}

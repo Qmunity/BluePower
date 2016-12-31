@@ -17,27 +17,25 @@
 
 package com.bluepowermod.part.gate.digital;
 
+import com.bluepowermod.client.gui.gate.GuiGateSingleCounter;
+import com.bluepowermod.part.IGuiButtonSensitive;
+import com.bluepowermod.part.gate.component.GateComponentBorder;
+import com.bluepowermod.part.gate.component.GateComponentPointer;
+import com.bluepowermod.part.gate.component.GateComponentTorch;
+import mcp.mobius.waila.api.SpecialChars;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.util.List;
-
-import mcp.mobius.waila.api.SpecialChars;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
-
-import com.bluepowermod.client.gui.gate.GuiGateSingleCounter;
-import com.bluepowermod.part.IGuiButtonSensitive;
-import com.bluepowermod.part.gate.component.GateComponentBorder;
-import com.bluepowermod.part.gate.component.GateComponentPointer;
-import com.bluepowermod.part.gate.component.GateComponentTorch;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class GateSequencer extends GateSimpleDigital implements IGuiButtonSensitive {
 

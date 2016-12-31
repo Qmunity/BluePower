@@ -3,7 +3,7 @@ package com.bluepowermod.api.gate;
 import com.bluepowermod.api.wire.redstone.IBundledDevice;
 import com.bluepowermod.api.wire.redstone.IRedstoneDevice;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
+import uk.co.qmunity.lib.util.Dir;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -13,7 +13,7 @@ public interface IGateConnection {
 
     public IGate<?, ?, ?, ?, ?, ?> getGate();
 
-    public EnumFacing getDirection();
+    public Dir getDirection();
 
     public void notifyUpdate();
 

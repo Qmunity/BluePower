@@ -17,22 +17,23 @@
 
 package com.bluepowermod.helper;
 
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import uk.co.qmunity.lib.part.IPart;
 import uk.co.qmunity.lib.part.compat.MultipartCompatibility;
 
 public class PartCache<CachedPart extends IPart> extends LocationCache<CachedPart> {
 
-    public <T> PartCache(World world, int x, int y, int z, Class<? extends IPart> searchedParts) {
+    public <T> PartCache(World world, BlockPos pos, Class<? extends IPart> searchedParts) {
 
-        super(world, x, y, z, searchedParts);
+        super(world, pos, searchedParts);
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    protected CachedPart getNewValue(World world, int x, int y, int z, Object... extraArgs) {
+    protected CachedPart getNewValue(World world, BlockPos pos, Object... extraArgs) {
 
-        return (CachedPart) MultipartCompatibility.getPart(world, x, y, z, (Class<? extends IPart>) extraArgs[0]);
+        return (CachedPart) MultipartCompatibility.getPart(world, pos, (Class<? extends IPart>) extraArgs[0]);
     }
 
 }

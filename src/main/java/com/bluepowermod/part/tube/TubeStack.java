@@ -7,9 +7,12 @@
  */
 package com.bluepowermod.part.tube;
 
+import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
+import com.bluepowermod.client.render.RenderHelper;
+import com.bluepowermod.reference.Refs;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.entity.RenderItem;
+import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemBlock;
@@ -17,22 +20,18 @@ import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.util.EnumFacing;;
-
+import net.minecraftforge.fml.client.FMLClientHandler;
+import net.minecraftforge.fml.common.network.ByteBufUtils;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
-
 import uk.co.qmunity.lib.vec.Vec3dCube;
 
-import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
-import com.bluepowermod.client.render.RenderHelper;
-import com.bluepowermod.reference.Refs;
-
-import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.common.network.ByteBufUtils;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+;
 
 /**
  *
@@ -51,7 +50,7 @@ public class TubeStack {
     public int idleCounter; // increased when the stack is standing still. This will cause the client to remove the stack when a timeout occurs.
     private TileEntity target; // only should have a value when retrieving items. this is the target the item wants to go to.
     private int targetX, targetY, targetZ;
-    private EnumFacing targetEntryDir = EnumFacing.UNKNOWN; // Which side should this item make its entry.
+    private EnumFacing targetEntryDir = null; // Which side should this item make its entry.
     public static final double ITEM_SPEED = 0.0625;
     private double speed = ITEM_SPEED;
     public static double tickTimeMultiplier = 1;//Used client side to correct for TPS lag. This is being synchronized from the server.
@@ -108,7 +107,7 @@ public class TubeStack {
     public TileEntity getTarget(World world) {
 
         if (target == null && (targetX != 0 || targetY != 0 || targetZ != 0)) {
-            target = world.getTileEntity(targetX, targetY, targetZ);
+            target = world.getTileEntity(new BlockPos(targetX, targetY, targetZ));
         }
         return target;
     }
@@ -123,9 +122,9 @@ public class TubeStack {
         this.targetEntryDir = targetEntryDir;
         target = tileEntity;
         if (target != null) {
-            targetX = target.xCoord;
-            targetY = target.yCoord;
-            targetZ = target.zCoord;
+            targetX = target.getPos().getX();
+            targetY = target.getPos().getY();
+            targetZ = target.getPos().getZ();
         } else {
             targetX = 0;
             targetY = 0;
@@ -155,14 +154,14 @@ public class TubeStack {
 
     public static TubeStack loadFromNBT(NBTTagCompound tag) {
 
-        TubeStack stack = new TubeStack(ItemStack.loadItemStackFromNBT(tag), EnumFacing.getOrientation(tag.getByte("heading")),
+        TubeStack stack = new TubeStack(new ItemStack(tag), EnumFacing.getFront(tag.getByte("heading")),
                 TubeColor.values()[tag.getByte("color")]);
         stack.progress = tag.getDouble("progress");
         stack.speed = tag.getDouble("speed");
         stack.targetX = tag.getInteger("targetX");
         stack.targetY = tag.getInteger("targetY");
         stack.targetZ = tag.getInteger("targetZ");
-        stack.targetEntryDir = EnumFacing.getOrientation(tag.getByte("targetEntryDir"));
+        stack.targetEntryDir = EnumFacing.getFront(tag.getByte("targetEntryDir"));
         return stack;
     }
 
@@ -177,7 +176,7 @@ public class TubeStack {
 
     public static TubeStack loadFromPacket(ByteBuf buf) {
 
-        TubeStack stack = new TubeStack(ByteBufUtils.readItemStack(buf), EnumFacing.getOrientation(buf.readByte()),
+        TubeStack stack = new TubeStack(ByteBufUtils.readItemStack(buf), EnumFacing.getFront(buf.readByte()),
                 TubeColor.values()[buf.readByte()]);
         stack.speed = buf.readDouble();
         stack.progress = buf.readDouble();
@@ -218,10 +217,10 @@ public class TubeStack {
         double renderProgress = (oldProgress + (progress - oldProgress) * partialTick) * 2 - 1;
 
         GL11.glPushMatrix();
-        GL11.glTranslated(heading.offsetX * renderProgress * 0.5, heading.offsetY * renderProgress * 0.5, heading.offsetZ * renderProgress * 0.5);
+        GL11.glTranslated(heading.getFrontOffsetX() * renderProgress * 0.5, heading.getFrontOffsetY() * renderProgress * 0.5, heading.getFrontOffsetZ() * renderProgress * 0.5);
         if (finalRenderMode != RenderMode.NONE) {
             GL11.glPushMatrix();
-            if (stack.stackSize > 5) {
+            if (stack.getCount() > 5) {
                 GL11.glScaled(0.8, 0.8, 0.8);
             }
             if (!(stack.getItem() instanceof ItemBlock)) {
@@ -244,7 +243,7 @@ public class TubeStack {
 
             float size = 0.2F;
 
-            int colorInt = ItemDye.field_150922_c[color.ordinal()];
+            int colorInt = ItemDye.DYE_COLORS[color.ordinal()];
             float red = (colorInt >> 16) / 256F;
             float green = (colorInt >> 8 & 255) / 256F;
             float blue = (colorInt & 255) / 256F;

@@ -1,12 +1,11 @@
 package com.bluepowermod.convert.part;
 
-import net.minecraft.nbt.NBTTagCompound;
-import uk.co.qmunity.lib.part.IPart;
-
 import com.bluepowermod.convert.IPartConverter;
-import com.bluepowermod.part.BPPartInfo;
+import com.bluepowermod.part.PartInfo;
 import com.bluepowermod.part.PartManager;
 import com.bluepowermod.part.tube.PneumaticTube;
+import net.minecraft.nbt.NBTTagCompound;
+import uk.co.qmunity.lib.part.IPart;
 
 public class PartConverterTube implements IPartConverter {
 
@@ -21,7 +20,7 @@ public class PartConverterTube implements IPartConverter {
     @Override
     public IPart convert(NBTTagCompound old) {
 
-        BPPartInfo info = PartManager.getPartInfo(old.getString("part_id"));
+        PartInfo info = PartManager.getPartInfo(old.getString("part_id"));
         if (info == null)
             return null;
 

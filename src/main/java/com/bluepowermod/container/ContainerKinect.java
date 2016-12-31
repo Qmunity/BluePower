@@ -57,7 +57,7 @@ public class ContainerKinect extends Container {
     @Override
     public boolean canInteractWith(EntityPlayer player) {
 
-        return tilekinect.isUseableByPlayer(player);
+        return tilekinect.isUsableByPlayer(player);
     }
 
     @Override

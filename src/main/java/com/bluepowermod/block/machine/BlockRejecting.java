@@ -8,17 +8,17 @@
 package com.bluepowermod.block.machine;
 
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 
 import com.bluepowermod.block.BlockContainerBase;
 import com.bluepowermod.client.render.RendererBlockBase.EnumFaceType;
 import com.bluepowermod.tile.IRejectAnimator;
 import com.bluepowermod.tile.TileBase;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * @author MineMaarten
@@ -32,7 +32,7 @@ public class BlockRejecting extends BlockContainerBase {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void registerBlockIcons(IIconRegister iconRegister) {
+    public void registerBlockIcons(TextureMap iconRegister) {
 
         super.registerBlockIcons(iconRegister);
 
@@ -54,7 +54,7 @@ public class BlockRejecting extends BlockContainerBase {
 
     @Override
     @SideOnly(Side.CLIENT)
-    protected IIcon getIcon(EnumFaceType faceType, boolean ejecting, boolean powered, int side, TileEntity te) {
+    protected TextureAtlasSprite getIcon(EnumFaceType faceType, boolean ejecting, boolean powered, int side, TileEntity te) {
 
         boolean isRejecting = ((IRejectAnimator) te).isRejecting();
         if (faceType == EnumFaceType.SIDE && isRejecting) {

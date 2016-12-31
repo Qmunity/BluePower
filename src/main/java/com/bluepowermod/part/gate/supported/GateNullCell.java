@@ -15,7 +15,7 @@ import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.IIcon;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.RayTraceResult;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
@@ -31,7 +31,7 @@ import uk.co.qmunity.lib.raytrace.QRayTraceResult;
 import uk.co.qmunity.lib.transform.Rotation;
 import uk.co.qmunity.lib.vec.Vec3d;
 import uk.co.qmunity.lib.vec.Vec3dCube;
-import uk.co.qmunity.lib.vec.Vec3i;
+
 
 import com.bluepowermod.BluePower;
 import com.bluepowermod.api.block.IAdvancedSilkyRemovable;
@@ -58,8 +58,8 @@ import com.bluepowermod.redstone.DummyRedstoneDevice;
 import com.bluepowermod.redstone.RedstoneApi;
 import com.bluepowermod.redstone.RedstoneConnectionCache;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class GateNullCell
 extends
@@ -118,13 +118,13 @@ implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor, IRedwire {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public boolean renderStatic(Vec3i translation, RenderHelper renderer, RenderBlocks renderBlocks, int pass) {
+    public boolean renderStatic(BlockPos translation, RenderHelper renderer, RenderBlocks renderBlocks, int pass) {
 
         super.renderStatic(translation, renderer, renderBlocks, pass);
 
         double height = 2 / 16D;
 
-        IIcon wire = IconSupplier.wire;
+        TextureAtlasSprite wire = IconSupplier.wire;
 
         if (typeA != null) { // Flat
             renderer.setColor(WireHelper.getColorForPowerLevel(typeA, powerA));
@@ -132,7 +132,7 @@ implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor, IRedwire {
             EnumFacing dir = EnumFacing.NORTH;
             for (int i = 0; i < getRotation(); i++)
                 dir = dir.getRotation(getFace().getOpposite());
-            dir = new Vec3d(0, 0, 0).add(dir).rotateUndo(getFace(), Vec3d.center).toEnumFacing();
+            dir = new Vec3d(0, 0, 0).add(dir).rotateUndo(getFace(), Vec3dHelper.CENTER).toEnumFacing();
 
             renderer.renderBox(new Vec3dCube(7 / 16D, 2 / 16D, 1 / 16D, 9 / 16D, 2 / 16D + height, 15 / 16D), wire);
             renderer.renderBox(new Vec3dCube(7 / 16D, 2 / 16D, 0 / 16D, 9 / 16D, 2 / 16D + (height / (nullcells[dir.ordinal()] ? 1 : 2)),
@@ -147,7 +147,7 @@ implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor, IRedwire {
             EnumFacing dir = EnumFacing.WEST;
             for (int i = 0; i < getRotation(); i++)
                 dir = dir.getRotation(getFace().getOpposite());
-            dir = new Vec3d(0, 0, 0).add(dir).rotateUndo(getFace(), Vec3d.center).toEnumFacing();
+            dir = new Vec3d(0, 0, 0).add(dir).rotateUndo(getFace(), Vec3dHelper.CENTER).toEnumFacing();
 
             if (!nullcells[dir.ordinal()])
                 renderer.renderBox(new Vec3dCube(0 / 16D, 2 / 16D, 7 / 16D, 2 / 16D, 10 / 16D, 9 / 16D), wire);
@@ -384,7 +384,7 @@ implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor, IRedwire {
                 nullcells[i] = buffer.readBoolean();
 
         if (getParent() != null && getWorld() != null)
-            getWorld().markBlockRangeForRenderUpdate(getX(), getY(), getZ(), getX(), getY(), getZ());
+            getWorld().markBlockRangeForRenderUpdate(getPos(), getPos());
     }
 
     // Connectivity and propagation
@@ -429,14 +429,14 @@ implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor, IRedwire {
             return false;
 
         if (type == ConnectionType.STRAIGHT)
-            if ((side == getFace().getOpposite() || side == EnumFacing.UNKNOWN) && device instanceof DummyRedstoneDevice)
+            if ((side == getFace().getOpposite() || side == null) && device instanceof DummyRedstoneDevice)
                 return false;
         if (type == ConnectionType.CLOSED_CORNER) {
             if (side == getFace())
                 return false;
             if (side == getFace().getOpposite())
                 return false;
-            if (side == EnumFacing.UNKNOWN)
+            if (side == null)
                 return false;
         }
 
@@ -608,7 +608,7 @@ implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor, IRedwire {
     // Placement disabling
 
     @Override
-    public IPartPlacement getPlacement(IPart part, World world, Vec3i location, EnumFacing face, RayTraceResult mop,
+    public IPartPlacement getPlacement(IPart part, World world, BlockPos location, EnumFacing face, RayTraceResult mop,
             EntityPlayer player) {
 
         if (bundledA || bundledB)
@@ -658,7 +658,7 @@ implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor, IRedwire {
     @Override
     public boolean drawHighlight(QRayTraceResult mop, EntityPlayer player, float frame) {
 
-        Vec3d hit = new Vec3d(mop.hitVec).sub(mop.blockX, mop.blockY, mop.blockZ).rotateUndo(getFace(), Vec3d.center);
+        Vec3d hit = new Vec3d(mop.hitVec).sub(mop.blockX, mop.blockY, mop.blockZ).rotateUndo(getFace(), Vec3dHelper.CENTER);
         Vec3 pos = player.getPosition(frame);
 
         ItemStack held = player.getHeldItemMainhand();
@@ -678,7 +678,7 @@ implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor, IRedwire {
 
             double height = 2 / 16D;
 
-            IIcon wireIcon = IconSupplier.wire;
+            TextureAtlasSprite wireIcon = IconSupplier.wire;
 
             GL11.glEnable(GL11.GL_BLEND);
             GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
@@ -692,19 +692,19 @@ implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor, IRedwire {
                 case DOWN:
                     break;
                 case UP:
-                    renderer.addTransformation(new Rotation(180, 180, 0, Vec3d.center));
+                    renderer.addTransformation(new Rotation(180, 180, 0, Vec3dHelper.CENTER));
                     break;
                 case NORTH:
-                    renderer.addTransformation(new Rotation(90, 0, 0, Vec3d.center));
+                    renderer.addTransformation(new Rotation(90, 0, 0, Vec3dHelper.CENTER));
                     break;
                 case SOUTH:
-                    renderer.addTransformation(new Rotation(-90, 0, 0, Vec3d.center));
+                    renderer.addTransformation(new Rotation(-90, 0, 0, Vec3dHelper.CENTER));
                     break;
                 case WEST:
-                    renderer.addTransformation(new Rotation(0, 0, -90, Vec3d.center));
+                    renderer.addTransformation(new Rotation(0, 0, -90, Vec3dHelper.CENTER));
                     break;
                 case EAST:
-                    renderer.addTransformation(new Rotation(0, 0, 90, Vec3d.center));
+                    renderer.addTransformation(new Rotation(0, 0, 90, Vec3dHelper.CENTER));
                     break;
                 default:
                     break;
@@ -715,7 +715,7 @@ implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor, IRedwire {
                     renderer.addTransformation(new Rotation(0, 90 * -rotation, 0));
 
                 renderer.setOpacity(0.5);
-                renderer.setColor(WireHelper.getColorForPowerLevel(wire.getRedwireType(EnumFacing.UNKNOWN), (byte) (255 / 2)));
+                renderer.setColor(WireHelper.getColorForPowerLevel(wire.getRedwireType(null), (byte) (255 / 2)));
 
                 EnumFacing dir = EnumFacing.NORTH;
                 if (getRotation() % 2 == 1)
@@ -745,7 +745,7 @@ implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor, IRedwire {
             // super.addBoxes(l);
             // boolean def = false;
             // for (Vec3dCube c : l)
-            // if (mop.getCube().equals(c.clone().rotate(getFace(), Vec3d.center).rotate(0, 90 * -getRotation(), 0, Vec3d.center)))
+            // if (mop.getCube().equals(c.clone().rotate(getFace(), Vec3dHelper.CENTER).rotate(0, 90 * -getRotation(), 0, Vec3dHelper.CENTER)))
             // def = true;
             // if (def || hit.getY() <= 2 / 16D) {
             // Vec3dCube c = Vec3dCube.merge(getSelectionBoxes()).expand(0.001);
@@ -806,7 +806,7 @@ implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor, IRedwire {
     @Override
     public boolean onActivated(EntityPlayer player, QRayTraceResult mop, ItemStack item) {
 
-        Vec3d hit = new Vec3d(mop.hitVec).sub(mop.blockX, mop.blockY, mop.blockZ).rotateUndo(getFace(), Vec3d.center);
+        Vec3d hit = new Vec3d(mop.hitVec).sub(mop.blockX, mop.blockY, mop.blockZ).rotateUndo(getFace(), Vec3dHelper.CENTER);
 
         if (item != null) {
             if (item.getItem() instanceof ItemPart) {
@@ -819,7 +819,7 @@ implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor, IRedwire {
                             if (getWorld().isRemote)
                                 return true;
 
-                            typeB = wire.getRedwireType(EnumFacing.UNKNOWN);
+                            typeB = wire.getRedwireType(null);
                             bundledB = false;
                             inWorldB = true;
 
@@ -828,7 +828,7 @@ implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor, IRedwire {
                             sendUpdatePacket();
 
                             if (!player.capabilities.isCreativeMode)
-                                item.stackSize--;
+                                item.setCount(item.getCount() - 1);
                             return true;
                         }
                     } else {
@@ -836,7 +836,7 @@ implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor, IRedwire {
                             if (getWorld().isRemote)
                                 return true;
 
-                            typeA = wire.getRedwireType(EnumFacing.UNKNOWN);
+                            typeA = wire.getRedwireType(null);
                             bundledA = false;
                             inWorldA = true;
 
@@ -845,7 +845,7 @@ implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor, IRedwire {
                             sendUpdatePacket();
 
                             if (!player.capabilities.isCreativeMode)
-                                item.stackSize--;
+                                item.setCount(item.getCount() - 1);
                             return true;
                         }
                     }

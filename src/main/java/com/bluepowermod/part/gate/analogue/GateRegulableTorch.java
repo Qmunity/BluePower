@@ -1,15 +1,5 @@
 package com.bluepowermod.part.gate.analogue;
 
-import java.io.DataInput;
-import java.io.DataOutput;
-import java.io.IOException;
-
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import uk.co.qmunity.lib.raytrace.QRayTraceResult;
-
 import com.bluepowermod.api.wire.redstone.RedwireType;
 import com.bluepowermod.client.gui.gate.GuiGateSingleCounter;
 import com.bluepowermod.part.IGuiButtonSensitive;
@@ -17,9 +7,17 @@ import com.bluepowermod.part.gate.component.GateComponentBorder;
 import com.bluepowermod.part.gate.component.GateComponentBorderDark;
 import com.bluepowermod.part.gate.component.GateComponentPointer;
 import com.bluepowermod.part.gate.component.GateComponentWire;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import uk.co.qmunity.lib.raytrace.QRayTraceResult;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
 
 public class GateRegulableTorch extends GateSimpleAnalogue implements IGuiButtonSensitive {
 

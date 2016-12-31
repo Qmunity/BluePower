@@ -1,30 +1,5 @@
 package com.bluepowermod.client.gui.gate;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiTextField;
-import net.minecraft.client.renderer.RenderBlocks;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.ForgeHooksClient;
-
-import org.apache.commons.lang3.StringUtils;
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.GL11;
-
-import uk.co.qmunity.lib.client.gui.widget.IGuiWidget;
-import uk.co.qmunity.lib.client.gui.widget.WidgetMode;
-import uk.co.qmunity.lib.util.AlphanumComparator;
-
 import com.bluepowermod.api.misc.Accessibility;
 import com.bluepowermod.api.wireless.IFrequency;
 import com.bluepowermod.network.BPNetworkHandler;
@@ -38,9 +13,25 @@ import com.bluepowermod.part.gate.wireless.IWirelessGate;
 import com.bluepowermod.part.gate.wireless.WirelessManager;
 import com.bluepowermod.part.gate.wireless.WirelessMode;
 import com.bluepowermod.reference.Refs;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiTextField;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.client.ForgeHooksClient;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import org.apache.commons.lang3.StringUtils;
+import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.GL11;
+import uk.co.qmunity.lib.client.gui.widget.IGuiWidget;
+import uk.co.qmunity.lib.client.gui.widget.WidgetMode;
+import uk.co.qmunity.lib.util.AlphanumComparator;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import java.util.*;
 
 @SideOnly(Side.CLIENT)
 public class GuiGateWireless extends GuiGate {
@@ -94,7 +85,7 @@ public class GuiGateWireless extends GuiGate {
             @Override
             public void addTooltip(int mouseX, int mouseY, List<String> curTip, boolean shiftPressed) {
 
-                curTip.add((accessLevel.enabled ? "" : EnumChatFormatting.GRAY) + "Accessability");
+                curTip.add((accessLevel.enabled ? "" : TextFormatting.GRAY) + "Accessability");
             }
         });
 
@@ -108,7 +99,7 @@ public class GuiGateWireless extends GuiGate {
             @Override
             public void addTooltip(int mouseX, int mouseY, List<String> curTip, boolean shiftPressed) {
 
-                curTip.add((addFrequency.enabled ? "" : EnumChatFormatting.GRAY) + "Add frequency");
+                curTip.add((addFrequency.enabled ? "" : TextFormatting.GRAY) + "Add frequency");
             }
         });
         addWidget(saveFrequency = new WidgetMode(4, guiLeft + 37, guiTop + ySize - 24 - 14 - 3, 228 + 14, 28, 1, Refs.MODID
@@ -117,7 +108,7 @@ public class GuiGateWireless extends GuiGate {
             @Override
             public void addTooltip(int mouseX, int mouseY, List<String> curTip, boolean shiftPressed) {
 
-                curTip.add((saveFrequency.enabled ? "" : EnumChatFormatting.GRAY) + "Save changes");
+                curTip.add((saveFrequency.enabled ? "" : TextFormatting.GRAY) + "Save changes");
             }
         });
         addWidget(removeFrequency = new WidgetMode(5, guiLeft + 88 - 10 - 14, guiTop + ySize - 24 - 14 - 3, 228 + 14, 14, 1, Refs.MODID
@@ -131,7 +122,7 @@ public class GuiGateWireless extends GuiGate {
                 } else if (selected != null) {
                     curTip.add("Remove frequency");
                 } else {
-                    curTip.add(EnumChatFormatting.GRAY + "Select a frequency");
+                    curTip.add(TextFormatting.GRAY + "Select a frequency");
                 }
             }
         });
@@ -336,7 +327,7 @@ public class GuiGateWireless extends GuiGate {
             int textColor = f.equals(gate.getFrequency()) ? 0x333333 : (f.isBundled() != gate.isBundled() ? 0x999999 : 0xFFFFFF);
             drawRect(guiLeft + 88, yPos, guiLeft + 88 + 133 - (frequencies.size() > 12 ? 11 : 0), yPos + 11, (0xFF << 24) + color);
 
-            String format = f.isBundled() != gate.isBundled() ? EnumChatFormatting.STRIKETHROUGH.toString() : "";
+            String format = f.isBundled() != gate.isBundled() ? TextFormatting.STRIKETHROUGH.toString() : "";
             String txt = format
                     + f.getFrequencyName()
                     + ((filterAccessLevel.value == 3 || filterAccessLevel.value == 4) ? " ["
@@ -369,8 +360,8 @@ public class GuiGateWireless extends GuiGate {
                 func_146283_a(
                         Arrays.asList(
                                 "Frequency: " + f.getFrequencyName(),
-                                EnumChatFormatting.GRAY + "Accessibility: "
-                                        + StringUtils.capitalize(f.getAccessibility().name().toLowerCase()), EnumChatFormatting.GRAY
+                                TextFormatting.GRAY + "Accessibility: "
+                                        + StringUtils.capitalize(f.getAccessibility().name().toLowerCase()), TextFormatting.GRAY
                                         + "Owner: " + f.getOwnerName(), "Devices: " + f.getDevices()), x, y);
             }
         }

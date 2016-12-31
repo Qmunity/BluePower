@@ -7,25 +7,25 @@
  */
 package com.bluepowermod.block.machine;
 
-import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.util.IIcon;
-import net.minecraft.util.EnumFacing;;
-
 import com.bluepowermod.block.BlockContainerBase;
 import com.bluepowermod.reference.GuiIDs;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier3.TileSortron;
+import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.util.EnumFacing;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+;
 
 /**
  * @author Dynious
  */
 public class BlockSortron extends BlockContainerBase {
     
-    private final IIcon[] icons = new IIcon[8];
+    private final TextureAtlasSprite[] icons = new TextureAtlasSprite[8];
     
     public BlockSortron() {
     
@@ -41,9 +41,9 @@ public class BlockSortron extends BlockContainerBase {
     
     @Override
     @SideOnly(Side.CLIENT)
-    public IIcon getIcon(int side, int meta) {
+    public TextureAtlasSprite getIcon(int side, int meta) {
     
-        EnumFacing direction = EnumFacing.getOrientation(meta);
+        EnumFacing direction = EnumFacing.getFront(meta);
         if (side == direction.ordinal()) {
             return icons[0];
         } else if (side == direction.getOpposite().ordinal()) { return icons[1]; }
@@ -52,7 +52,7 @@ public class BlockSortron extends BlockContainerBase {
     
     /* @Override
      @SideOnly(Side.CLIENT)
-     public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
+     public TextureAtlasSprite getIcon(IBlockAccess world, int x, int y, int z, int side) {
      
          
                  TileSortron tile = (TileSortron) world.getTileEntity(x, y, z);
@@ -73,7 +73,7 @@ public class BlockSortron extends BlockContainerBase {
     
     @Override
     @SideOnly(Side.CLIENT)
-    public void registerBlockIcons(IIconRegister iconRegister) {
+    public void registerBlockIcons(TextureMap iconRegister) {
     
         icons[0] = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + Refs.BLOCKSORTRON_NAME + "_front");
         icons[1] = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + Refs.BLOCKSORTRON_NAME + "_back");

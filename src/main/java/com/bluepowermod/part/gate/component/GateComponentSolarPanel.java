@@ -1,15 +1,14 @@
 package com.bluepowermod.part.gate.component;
 
-import java.awt.image.BufferedImage;
-
-import uk.co.qmunity.lib.client.render.RenderHelper;
-import uk.co.qmunity.lib.transform.Translation;
-import uk.co.qmunity.lib.vec.Vec3d;
-import uk.co.qmunity.lib.vec.Vec3dCube;
-import uk.co.qmunity.lib.vec.Vec3i;
-
 import com.bluepowermod.client.render.IconSupplier;
 import com.bluepowermod.part.gate.GateBase;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.Vec3i;
+import uk.co.qmunity.lib.client.render.RenderHelper;
+import uk.co.qmunity.lib.transform.Translation;
+import uk.co.qmunity.lib.vec.Vec3dCube;
+
+import java.awt.image.BufferedImage;
 
 public class GateComponentSolarPanel extends GateComponent {
 

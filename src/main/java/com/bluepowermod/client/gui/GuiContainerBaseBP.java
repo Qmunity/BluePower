@@ -117,7 +117,7 @@ public class GuiContainerBaseBP extends GuiContainerBase implements INEIGuiHandl
      * @param button
      *            The button presed
      * @return True if the drag n drop was handled. False to resume processing through other routes. The held stack will be deleted if
-     *         draggedStack.stackSize == 0
+     *         draggedStack.getCount() == 0
      */
     @Override
     public boolean handleDragNDrop(GuiContainer gui, int mousex, int mousey, ItemStack draggedStack, int button) {

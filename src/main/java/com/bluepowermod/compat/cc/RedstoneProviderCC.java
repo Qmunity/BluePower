@@ -20,7 +20,7 @@ public class RedstoneProviderCC implements IRedstoneProvider {
     public IBundledDevice getBundledDeviceAt(World world, int x, int y, int z, EnumFacing face, EnumFacing side) {
 
         Block b = world.getBlock(x, y, z);
-        if (b == null || face == EnumFacing.UNKNOWN || side == EnumFacing.UNKNOWN)
+        if (b == null || face == null || side == null)
             return null;
 
         if (b.getClass().getName().startsWith("dan200.computercraft"))

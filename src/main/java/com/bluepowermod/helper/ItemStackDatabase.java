@@ -7,26 +7,18 @@
  */
 package com.bluepowermod.helper;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
+import com.bluepowermod.BluePower;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTSizeTracker;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
-import com.bluepowermod.BluePower;
-
-import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.common.registry.GameRegistry.UniqueIdentifier;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ItemStackDatabase {
 
@@ -101,15 +93,14 @@ public class ItemStackDatabase {
                         byte[] abyte = new byte[short1];
                         dos.read(abyte);
                         NBTTagCompound tag = CompressedStreamTools.func_152457_a(abyte, new NBTSizeTracker(2097152L));
-                        ItemStack stack = new ItemStack(Items.stick);
-                        stack.readFromNBT(tag);
-                        if (stack.getItem() != null) {
+                        ItemStack stack = new ItemStack(tag);
+                        if (stack.getItem() != Items.AIR) {
                             stacks.add(stack);
                         } else {
                             BluePower.log.error("Couldn't retrieve an itemstack with item id: " + tag.getShort("id"));
                             Item item = GameRegistry.findItem(tag.getString("owner"), tag.getString("name"));
                             if (item != null) {
-                                ItemStack backupStack = new ItemStack(item, stack.stackSize, tag.getShort("Damage"));
+                                ItemStack backupStack = new ItemStack(item, stack.getCount(), tag.getShort("Damage"));
                                 if (stack.hasTagCompound()) {
                                     backupStack.setTagCompound(stack.getTagCompound());
                                 }

@@ -1,18 +1,17 @@
 package com.bluepowermod.part.gate.connection;
 
-import java.io.DataInput;
-import java.io.DataOutput;
-import java.io.IOException;
-
-import net.minecraft.nbt.NBTTagCompound;
-import uk.co.qmunity.lib.helper.RedstoneHelper;
-import uk.co.qmunity.lib.util.Dir;
-
 import com.bluepowermod.api.connect.IConnection;
 import com.bluepowermod.api.wire.redstone.IBundledDevice;
 import com.bluepowermod.api.wire.redstone.IRedstoneDevice;
 import com.bluepowermod.part.gate.GateBase;
 import com.bluepowermod.redstone.DummyRedstoneDevice;
+import net.minecraft.nbt.NBTTagCompound;
+import uk.co.qmunity.lib.helper.RedstoneHelper;
+import uk.co.qmunity.lib.util.Dir;
+
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
 
 public class GateConnectionDigital extends GateConnectionBase {
 
@@ -30,8 +29,7 @@ public class GateConnectionDigital extends GateConnectionBase {
         IConnection<? extends IRedstoneDevice> c = gate.getRedstoneConnectionCache().getConnectionOnSide(getEnumFacing());
 
         if (c == null || c.getB() instanceof DummyRedstoneDevice)
-            input = RedstoneHelper.getInput(getGate().getWorld(), getGate().getX(), getGate().getY(), getGate().getZ(),
-                    getEnumFacing(), getGate().getFace()) > 0;
+            input = RedstoneHelper.getInput(getGate().getWorld(), getGate().getPos(), getEnumFacing(), getGate().getFace()) > 0;
     }
 
     @Override

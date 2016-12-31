@@ -82,7 +82,7 @@ public class WidgetTabItemLister extends GuiAnimatedStat {
                     int x = getBaseX() + i * 18 + 9;
                     int y = getAffectedY() + j * 18 + 18;
                     if (stack.color != TubeColor.NONE) {
-                        Gui.drawRect(x, y, x + 16, y + 16, 0xFF000000 + ItemDye.field_150922_c[stack.color.ordinal()]);
+                        Gui.drawRect(x, y, x + 16, y + 16, 0xFF000000 + ItemDye.DYE_COLORS[stack.color.ordinal()]);
                     }
                     renderItem(fontRenderer, x, y, stack.stack);
                 }

@@ -1,55 +1,10 @@
 package com.bluepowermod.part.gate;
 
-import java.io.DataInput;
-import java.io.DataOutput;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.PositionedSoundRecord;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.client.renderer.RenderBlocks;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.IIcon;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.IItemRenderer.ItemRenderType;
-import net.minecraft.util.EnumFacing;;
-
-import org.lwjgl.opengl.GL11;
-
-import uk.co.qmunity.lib.client.render.RenderHelper;
-import uk.co.qmunity.lib.helper.MathHelper;
-import uk.co.qmunity.lib.part.IPartRedstone;
-import uk.co.qmunity.lib.part.IPartRenderPlacement;
-import uk.co.qmunity.lib.part.IPartTicking;
-import uk.co.qmunity.lib.raytrace.QRayTraceResult;
-import uk.co.qmunity.lib.texture.Layout;
-import uk.co.qmunity.lib.transform.Rotation;
-import uk.co.qmunity.lib.transform.Transformation;
-import uk.co.qmunity.lib.vec.Vec3d;
-import uk.co.qmunity.lib.vec.Vec3dCube;
-import uk.co.qmunity.lib.vec.Vec3i;
-
-import com.bluepowermod.BluePower;
-import com.bluepowermod.api.block.IAdvancedSilkyRemovable;
-import com.bluepowermod.api.block.ISilkyRemovable;
 import com.bluepowermod.api.connect.ConnectionType;
 import com.bluepowermod.api.connect.IConnection;
 import com.bluepowermod.api.connect.IConnectionCache;
 import com.bluepowermod.api.connect.IConnectionListener;
-import com.bluepowermod.api.gate.IGate;
-import com.bluepowermod.api.gate.IGateComponent;
-import com.bluepowermod.api.gate.IGateConnection;
-import com.bluepowermod.api.gate.IGateLogic;
-import com.bluepowermod.api.gate.IIntegratedCircuitPart;
+import com.bluepowermod.api.gate.*;
 import com.bluepowermod.api.misc.IScrewdriver;
 import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.api.wire.redstone.IBundledDevice;
@@ -65,10 +20,46 @@ import com.bluepowermod.redstone.BundledConnectionCache;
 import com.bluepowermod.redstone.RedstoneApi;
 import com.bluepowermod.redstone.RedstoneConnectionCache;
 import com.bluepowermod.reference.Refs;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.PositionedSoundRecord;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.Vec3i;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.opengl.GL11;
+import uk.co.qmunity.lib.client.render.RenderHelper;
+import uk.co.qmunity.lib.helper.MathHelper;
+import uk.co.qmunity.lib.part.IPartRedstone;
+import uk.co.qmunity.lib.part.IPartRenderPlacement;
+import uk.co.qmunity.lib.part.IPartTicking;
+import uk.co.qmunity.lib.raytrace.QRayTraceResult;
+import uk.co.qmunity.lib.texture.Layout;
+import uk.co.qmunity.lib.transform.Rotation;
+import uk.co.qmunity.lib.transform.Transformation;
+import uk.co.qmunity.lib.vec.Vec3dCube;
+import uk.co.qmunity.lib.vec.Vec3dHelper;
 
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+;
 
 public abstract class GateBase<C_BOTTOM extends GateConnectionBase, C_TOP extends GateConnectionBase, C_LEFT extends GateConnectionBase, C_RIGHT extends GateConnectionBase, C_FRONT extends GateConnectionBase, C_BACK extends GateConnectionBase>
         extends BPPartFaceRotate implements IGate<C_BOTTOM, C_TOP, C_LEFT, C_RIGHT, C_FRONT, C_BACK>, IPartRedstone, IConnectionListener,
@@ -646,27 +637,27 @@ public abstract class GateBase<C_BOTTOM extends GateConnectionBase, C_TOP extend
     // Rendering
 
     @SideOnly(Side.CLIENT)
-    private static IIcon icon;
+    private static TextureAtlasSprite icon;
     @SideOnly(Side.CLIENT)
-    private static IIcon iconSide;
+    private static TextureAtlasSprite iconSide;
     @SideOnly(Side.CLIENT)
-    private static IIcon iconDark;
+    private static TextureAtlasSprite iconDark;
 
     @Override
     @SideOnly(Side.CLIENT)
-    public boolean renderStatic(Vec3i translation, RenderHelper renderer, RenderBlocks renderBlocks, int pass) {
+    public boolean renderStatic(Vec3i translation, RenderHelper renderer, VertexBuffer buffer, int pass) {
 
         Transformation t = null;
         if (getFace() == EnumFacing.UP)
-            t = new Rotation(180, 180, 0, Vec3d.center);
+            t = new Rotation(180, 180, 0, Vec3dHelper.CENTER);
         if (getFace() == EnumFacing.NORTH)
-            t = new Rotation(90, 0, 0, Vec3d.center);
+            t = new Rotation(90, 0, 0, Vec3dHelper.CENTER);
         if (getFace() == EnumFacing.SOUTH)
-            t = new Rotation(-90, 0, 0, Vec3d.center);
+            t = new Rotation(-90, 0, 0, Vec3dHelper.CENTER);
         if (getFace() == EnumFacing.WEST)
-            t = new Rotation(0, 0, -90, Vec3d.center);
+            t = new Rotation(0, 0, -90, Vec3dHelper.CENTER);
         if (getFace() == EnumFacing.EAST)
-            t = new Rotation(0, 0, 90, Vec3d.center);
+            t = new Rotation(0, 0, 90, Vec3dHelper.CENTER);
         if (t != null)
             renderer.addTransformation(t);
 
@@ -689,7 +680,7 @@ public abstract class GateBase<C_BOTTOM extends GateConnectionBase, C_TOP extend
 
         GL11.glPushMatrix();
         {
-            GL11.glTranslated(translation.getX(), translation.getY(), translation.getZ());
+            GL11.glTranslated(translation.xCoord, translation.yCoord, translation.zCoord);
 
             GL11.glTranslated(0.5, 0.5, 0.5);
             {
@@ -731,68 +722,11 @@ public abstract class GateBase<C_BOTTOM extends GateConnectionBase, C_TOP extend
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
+    public void registerIcons(TextureMap reg) {
 
-        if (this instanceof ISilkyRemovable) {
-            if (this instanceof IAdvancedSilkyRemovable) {
-                ((IAdvancedSilkyRemovable) this).readSilkyData(null, 0, 0, 0, item.hasTagCompound() ? item.getTagCompound()
-                        .getCompoundTag("tileData") : new NBTTagCompound());
-            } else {
-                readFromNBT(item.hasTagCompound() ? item.getTagCompound().getCompoundTag("tileData") : new NBTTagCompound());
-            }
-        }
-        GL11.glPushMatrix();
-        {
-            RenderHelper rh = RenderHelper.instance;
-            rh.reset();
-
-            if (type == ItemRenderType.EQUIPPED_FIRST_PERSON) {
-                GL11.glTranslated(-0.25, 0.75, 0.25);
-            }
-            if (type == ItemRenderType.ENTITY && item.getItemFrame() != null) {
-                GL11.glTranslated(19 / 32D, 8 / 16D, 1);
-                GL11.glRotated(-90, 0, 0, 1);
-                GL11.glRotated(90, 0, 1, 0);
-            }
-
-            if (type == ItemRenderType.INVENTORY && BluePower.proxy.isSneakingInGui()) {
-                GuiScreen gui = Minecraft.getMinecraft().currentScreen;
-                if (gui != null && gui instanceof GuiContainer) {
-                    GL11.glRotatef(90F, 0.0F, 1.0F, 0.0F);
-                    GL11.glRotatef(-45F, 0.0F, 1.0F, 0.0F);
-                    GL11.glRotatef(-210F, 1.0F, 0.0F, 0.0F);
-                    GL11.glScaled(1.5, 1.5, 1.5);
-                    GL11.glTranslated(-0.5, 0, 0);
-
-                    GL11.glTranslated(0, -0.5, 0);
-                    GL11.glRotated(-90, 1, 0, 0);
-                    GL11.glTranslated(0, 0.5, 0);
-                }
-            }
-
-            Tessellator.instance.startDrawingQuads();
-            if (shouldRenderOnPass(0))
-                renderStatic(new Vec3i(0, 0, 0), rh, RenderBlocks.getInstance(), 0);
-            rh.reset();
-            if (shouldRenderOnPass(1))
-                renderStatic(new Vec3i(0, 0, 0), rh, RenderBlocks.getInstance(), 1);
-            rh.reset();
-            Tessellator.instance.draw();
-            if (shouldRenderOnPass(0))
-                renderDynamic(new Vec3d(0, 0, 0), 0, 0);
-            if (shouldRenderOnPass(1))
-                renderDynamic(new Vec3d(0, 0, 0), 0, 1);
-        }
-        GL11.glPopMatrix();
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerIcons(IIconRegister reg) {
-
-        icon = reg.registerIcon(Refs.MODID + ":gates/gate");
-        iconSide = reg.registerIcon(Refs.MODID + ":gates/side");
-        iconDark = reg.registerIcon(Refs.MODID + ":gates/gate_dark");
+        icon = reg.registerSprite(new ResourceLocation(Refs.MODID + ":gates/gate"));
+        iconSide = reg.registerSprite(new ResourceLocation(Refs.MODID + ":gates/side"));
+        iconDark = reg.registerSprite(new ResourceLocation(Refs.MODID + ":gates/gate_dark"));
 
         if (getLayout() == null)
             loadLayout();
@@ -809,7 +743,7 @@ public abstract class GateBase<C_BOTTOM extends GateConnectionBase, C_TOP extend
     }
 
     @SideOnly(Side.CLIENT)
-    public IIcon getIcon(EnumFacing face) {
+    public TextureAtlasSprite getIcon(EnumFacing face) {
 
         if (face == EnumFacing.DOWN)
             return icon;
@@ -820,7 +754,7 @@ public abstract class GateBase<C_BOTTOM extends GateConnectionBase, C_TOP extend
     }
 
     @SideOnly(Side.CLIENT)
-    public IIcon getDarkTop() {
+    public TextureAtlasSprite getDarkTop() {
 
         return iconDark;
     }
@@ -897,7 +831,7 @@ public abstract class GateBase<C_BOTTOM extends GateConnectionBase, C_TOP extend
                 c.readData(buffer);
 
         if (getParent() != null && getWorld() != null)
-            getWorld().markBlockRangeForRenderUpdate(getX(), getY(), getZ(), getX(), getY(), getZ());
+            getWorld().markBlockRangeForRenderUpdate(getPos(), getPos());
     }
 
     // GUIs
@@ -933,7 +867,7 @@ public abstract class GateBase<C_BOTTOM extends GateConnectionBase, C_TOP extend
                     .getMinecraft()
                     .getSoundHandler()
                     .playSound(
-                            new PositionedSoundRecord(new ResourceLocation("random.click"), 0.3F, 0.5F, getX() + 0.5F, getY() + 0.5F, getZ() + 0.5F));
+                            new PositionedSoundRecord(SoundEvents.BLOCK_COMPARATOR_CLICK, SoundCategory.BLOCKS, 0.3F, 0.5F, getPos().getX() + 0.5F, getPos().getY() + 0.5F, getPos().getZ() + 0.5F));
     }
 
     @Override

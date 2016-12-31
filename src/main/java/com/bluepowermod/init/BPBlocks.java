@@ -171,29 +171,29 @@ public class BPBlocks {
         indigo_flower = new BlockCustomFlower(Refs.INDIGOFLOWER_NAME);
 
         alloyfurnace = new BlockAlloyFurnace();
-        block_breaker = new BlockContainerFrontRender(Material.ROCK, TileBlockBreaker.class).setBlockName(Refs.BLOCKBREAKER_NAME);
+        block_breaker = new BlockContainerFrontRender(Material.ROCK, TileBlockBreaker.class).setRegistryName(Refs.BLOCKBREAKER_NAME);
         igniter = new BlockIgniter();
-        buffer = new BlockContainerBase(Material.ROCK, TileBuffer.class).setGuiId(GuiIDs.BUFFER).setBlockName(Refs.BLOCKBUFFER_NAME);
+        buffer = new BlockContainerBase(Material.ROCK, TileBuffer.class).setGuiId(GuiIDs.BUFFER).setRegistryName(Refs.BLOCKBUFFER_NAME);
         deployer = new BlockContainerFrontRender(Material.ROCK, TileDeployer.class).setGuiId(GuiIDs.DEPLOYER_ID)
-                .setBlockName(Refs.BLOCKDEPLOYER_NAME);
-        transposer = new BlockContainerBase(Material.ROCK, TileTransposer.class).setBlockName(Refs.TRANSPOSER_NAME);
-        sorting_machine = new BlockContainerBase(Material.ROCK, TileSortingMachine.class).setGuiId(GuiIDs.SORTING_MACHINE).setBlockName(
+                .setRegistryName(Refs.BLOCKDEPLOYER_NAME);
+        transposer = new BlockContainerBase(Material.ROCK, TileTransposer.class).setRegistryName(Refs.TRANSPOSER_NAME);
+        sorting_machine = new BlockContainerBase(Material.ROCK, TileSortingMachine.class).setGuiId(GuiIDs.SORTING_MACHINE).setRegistryName(
                 Refs.SORTING_MACHINE_NAME);
         project_table = new BlockProjectTable().setGuiId(GuiIDs.PROJECTTABLE_ID);
-        auto_project_table = new BlockProjectTable(TileAutoProjectTable.class).setGuiId(GuiIDs.PROJECTTABLE_ID).setBlockName(
+        auto_project_table = new BlockProjectTable(TileAutoProjectTable.class).setGuiId(GuiIDs.PROJECTTABLE_ID).setRegistryName(
                 Refs.AUTOPROJECTTABLE_NAME);
-        circuit_table = new BlockProjectTable(TileCircuitTable.class).setGuiId(GuiIDs.CIRCUITTABLE_ID).setBlockName(Refs.CIRCUITTABLE_NAME);
-        circuit_database = new BlockCircuitDatabase(TileCircuitDatabase.class).setGuiId(GuiIDs.CIRCUITDATABASE_MAIN_ID).setBlockName(
+        circuit_table = new BlockProjectTable(TileCircuitTable.class).setGuiId(GuiIDs.CIRCUITTABLE_ID).setRegistryName(Refs.CIRCUITTABLE_NAME);
+        circuit_database = new BlockCircuitDatabase(TileCircuitDatabase.class).setGuiId(GuiIDs.CIRCUITDATABASE_MAIN_ID).setRegistryName(
                 Refs.CIRCUITDATABASE_NAME);
-        ejector = new BlockContainerTwoSideRender(Material.ROCK, TileEjector.class).setGuiId(GuiIDs.EJECTOR_ID).setBlockName(Refs.EJECTOR_NAME);
-        relay = new BlockContainerTwoSideRender(Material.ROCK, TileRelay.class).setGuiId(GuiIDs.RELAY_ID).setBlockName(Refs.RELAY_NAME);
-        filter = new BlockContainerBase(Material.ROCK, TileFilter.class).setGuiId(GuiIDs.FILTER_ID).setBlockName(Refs.FILTER_NAME);
-        retriever = new BlockContainerBase(Material.ROCK, TileRetriever.class).setGuiId(GuiIDs.RETRIEVER_ID).setBlockName(Refs.RETRIEVER_NAME);
+        ejector = new BlockContainerTwoSideRender(Material.ROCK, TileEjector.class).setGuiId(GuiIDs.EJECTOR_ID).setRegistryName(Refs.EJECTOR_NAME);
+        relay = new BlockContainerTwoSideRender(Material.ROCK, TileRelay.class).setGuiId(GuiIDs.RELAY_ID).setRegistryName(Refs.RELAY_NAME);
+        filter = new BlockContainerBase(Material.ROCK, TileFilter.class).setGuiId(GuiIDs.FILTER_ID).setRegistryName(Refs.FILTER_NAME);
+        retriever = new BlockContainerBase(Material.ROCK, TileRetriever.class).setGuiId(GuiIDs.RETRIEVER_ID).setRegistryName(Refs.RETRIEVER_NAME);
         regulator = new BlockContainerTwoSideRender(Material.ROCK, TileRegulator.class).setGuiId(GuiIDs.REGULATOR_ID).emitsRedstone()
-                .setBlockName(Refs.REGULATOR_NAME);
+                .setRegistryName(Refs.REGULATOR_NAME);
         item_detector = new BlockContainerTwoSideRender(Material.ROCK, TileItemDetector.class).setGuiId(GuiIDs.ITEMDETECTOR_ID).emitsRedstone()
-                .setBlockName(Refs.ITEMDETECTOR_NAME);
-        manager = new BlockRejecting(Material.ROCK, TileManager.class).setGuiId(GuiIDs.MANAGER_ID).emitsRedstone().setBlockName(Refs.MANAGER_NAME);
+                .setRegistryName(Refs.ITEMDETECTOR_NAME);
+        manager = new BlockRejecting(Material.ROCK, TileManager.class).setGuiId(GuiIDs.MANAGER_ID).emitsRedstone().setRegistryName(Refs.MANAGER_NAME);
 
         // engine = new BlockEngine();
         // kinetic_generator = new BlockKineticGenerator();

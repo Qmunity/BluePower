@@ -17,27 +17,21 @@
 
 package com.bluepowermod.part.gate.wireless;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
+import com.bluepowermod.api.misc.Accessibility;
+import com.bluepowermod.api.wireless.*;
+import com.bluepowermod.part.gate.wireless.Frequency.BundledFrequency;
+import com.bluepowermod.part.gate.wireless.Frequency.RedstoneFrequency;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import net.minecraftforge.event.world.WorldEvent;
+import net.minecraftforge.fml.common.event.FMLServerStoppingEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import uk.co.qmunity.lib.friend.FriendManager;
 import uk.co.qmunity.lib.friend.IPlayer;
 
-import com.bluepowermod.api.misc.Accessibility;
-import com.bluepowermod.api.wireless.IBundledFrequency;
-import com.bluepowermod.api.wireless.IFrequency;
-import com.bluepowermod.api.wireless.IRedstoneFrequency;
-import com.bluepowermod.api.wireless.IWirelessDevice;
-import com.bluepowermod.api.wireless.IWirelessManager;
-import com.bluepowermod.part.gate.wireless.Frequency.BundledFrequency;
-import com.bluepowermod.part.gate.wireless.Frequency.RedstoneFrequency;
-
-import cpw.mods.fml.common.event.FMLServerStoppingEvent;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 public final class WirelessManager implements IWirelessManager {
 
@@ -136,7 +130,7 @@ public final class WirelessManager implements IWirelessManager {
         }
 
         System.out
-                .println(":/ " + owner.worldObj.isRemote + " " + owner.getGameProfile().getId() + " - " + frequency + " " + accessibility);
+                .println(":/ " + owner.world.isRemote + " " + owner.getGameProfile().getId() + " - " + frequency + " " + accessibility);
 
         RedstoneFrequency freq = new RedstoneFrequency(accessibility, owner == null ? UUID.randomUUID() : owner.getGameProfile().getId(),
                 frequency);

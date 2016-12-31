@@ -17,37 +17,6 @@
 
 package com.bluepowermod.part.gate.wireless;
 
-import java.io.DataInput;
-import java.io.DataOutput;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map.Entry;
-
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.renderer.RenderBlocks;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.IIcon;
-import net.minecraft.util.RayTraceResult;
-import net.minecraft.world.World;
-import net.minecraft.util.EnumFacing;;
-import uk.co.qmunity.lib.client.render.RenderHelper;
-import uk.co.qmunity.lib.misc.Pair;
-import uk.co.qmunity.lib.part.IPart;
-import uk.co.qmunity.lib.part.IPartPlacement;
-import uk.co.qmunity.lib.transform.Rotation;
-import uk.co.qmunity.lib.util.Dir;
-import uk.co.qmunity.lib.vec.Vec3d;
-import uk.co.qmunity.lib.vec.Vec3dCube;
-import uk.co.qmunity.lib.vec.Vec3i;
-
 import com.bluepowermod.api.connect.ConnectionType;
 import com.bluepowermod.api.connect.IConnection;
 import com.bluepowermod.api.gate.IGateLogic;
@@ -65,15 +34,41 @@ import com.bluepowermod.network.BPNetworkHandler;
 import com.bluepowermod.network.message.MessageWirelessFrequencySync;
 import com.bluepowermod.part.IGuiButtonSensitive;
 import com.bluepowermod.part.gate.GateBase;
-import com.bluepowermod.part.gate.connection.GateConnectionAnalogue;
-import com.bluepowermod.part.gate.connection.GateConnectionBase;
-import com.bluepowermod.part.gate.connection.GateConnectionBundledAnalogue;
-import com.bluepowermod.part.gate.connection.GateConnectionBundledDigital;
-import com.bluepowermod.part.gate.connection.GateConnectionDigital;
+import com.bluepowermod.part.gate.connection.*;
 import com.bluepowermod.util.DebugHelper;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import uk.co.qmunity.lib.client.render.RenderHelper;
+import uk.co.qmunity.lib.misc.Pair;
+import uk.co.qmunity.lib.part.IPart;
+import uk.co.qmunity.lib.part.IPartPlacement;
+import uk.co.qmunity.lib.transform.Rotation;
+import uk.co.qmunity.lib.vec.Vec3dCube;
+import uk.co.qmunity.lib.vec.Vec3dHelper;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map.Entry;
+
+;
 
 public class GateTransceiver extends
 GateBase<GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase>
@@ -99,9 +94,9 @@ IAdvancedBundledConductor {
     public void initConnections() {
 
         front(
-                isBundled ? (isAnalogue ? new GateConnectionBundledAnalogue(this, Dir.FRONT) : new GateConnectionBundledDigital(this,
-                        Dir.FRONT)) : (isAnalogue ? new GateConnectionAnalogue(this, Dir.FRONT)
-                        : new GateConnectionDigital(this, Dir.FRONT))).setEnabled(true);
+                isBundled ? (isAnalogue ? new GateConnectionBundledAnalogue(this, this.getFace()) : new GateConnectionBundledDigital(this,
+                        this.getFace())) : (isAnalogue ? new GateConnectionAnalogue(this, this.getFace())
+                        : new GateConnectionDigital(this, this.getFace()))).setEnabled(true);
     }
 
     @Override
@@ -117,17 +112,17 @@ IAdvancedBundledConductor {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public boolean renderStatic(Vec3i translation, RenderHelper renderer, RenderBlocks renderBlocks, int pass) {
+    public boolean renderStatic(BlockPos translation, RenderHelper renderer, VertexBuffer renderBlocks, int pass) {
 
         super.renderStatic(translation, renderer, renderBlocks, pass);
 
         if (getParent() != null)
             renderer.addTransformation(new Rotation(0, 180, 0));
 
-        IIcon obsidian = Blocks.obsidian.getIcon(0, 0);
-        IIcon quartz = Blocks.quartz_block.getIcon(0, 0);
-        IIcon iron = Blocks.iron_block.getIcon(0, 0);
-        IIcon gold = Blocks.gold_block.getIcon(0, 0);
+        TextureAtlasSprite obsidian = Blocks.OBSIDIAN.getIcon(0, 0);
+        TextureAtlasSprite quartz = Blocks.QUARTZ_BLOCK.getIcon(0, 0);
+        TextureAtlasSprite iron = Blocks.IRON_BLOCK.getIcon(0, 0);
+        TextureAtlasSprite gold = Blocks.GOLD_BLOCK.getIcon(0, 0);
 
         // Base
         renderer.renderBox(new Vec3dCube(7 / 16D, 2 / 16D, 7 / 16D, 9 / 16D, 8 / 16D, 9 / 16D), obsidian);
@@ -145,18 +140,18 @@ IAdvancedBundledConductor {
         renderer.renderBox(new Vec3dCube(5 / 16D, 8 / 16D, 6 / 16D, 11 / 16D, 9 / 16D, 10 / 16D), quartz);
 
         for (int i = 0; i < 4; i++) {
-            renderer.renderBox(new Vec3dCube(5 / 16D, 9 / 16D, 10 / 16D, 6 / 16D, 10 / 16D, 11 / 16D).rotate(0, i * 90, 0, Vec3d.center),
+            renderer.renderBox(new Vec3dCube(5 / 16D, 9 / 16D, 10 / 16D, 6 / 16D, 10 / 16D, 11 / 16D).rotate(0, i * 90, 0, Vec3dHelper.CENTER),
                     quartz);
 
-            renderer.renderBox(new Vec3dCube(4 / 16D, 9 / 16D, 6 / 16D, 5 / 16D, 10 / 16D, 10 / 16D).rotate(0, i * 90, 0, Vec3d.center),
+            renderer.renderBox(new Vec3dCube(4 / 16D, 9 / 16D, 6 / 16D, 5 / 16D, 10 / 16D, 10 / 16D).rotate(0, i * 90, 0, Vec3dHelper.CENTER),
                     quartz);
-            renderer.renderBox(new Vec3dCube(4 / 16D, 10 / 16D, 5 / 16D, 5 / 16D, 11 / 16D, 11 / 16D).rotate(0, i * 90, 0, Vec3d.center),
-                    quartz);
-
-            renderer.renderBox(new Vec3dCube(4 / 16D, 11 / 16D, 11 / 16D, 5 / 16D, 12 / 16D, 12 / 16D).rotate(0, i * 90, 0, Vec3d.center),
+            renderer.renderBox(new Vec3dCube(4 / 16D, 10 / 16D, 5 / 16D, 5 / 16D, 11 / 16D, 11 / 16D).rotate(0, i * 90, 0, Vec3dHelper.CENTER),
                     quartz);
 
-            renderer.renderBox(new Vec3dCube(3 / 16D, 11 / 16D, 4 / 16D, 4 / 16D, 12 / 16D, 12 / 16D).rotate(0, i * 90, 0, Vec3d.center),
+            renderer.renderBox(new Vec3dCube(4 / 16D, 11 / 16D, 11 / 16D, 5 / 16D, 12 / 16D, 12 / 16D).rotate(0, i * 90, 0, Vec3dHelper.CENTER),
+                    quartz);
+
+            renderer.renderBox(new Vec3dCube(3 / 16D, 11 / 16D, 4 / 16D, 4 / 16D, 12 / 16D, 12 / 16D).rotate(0, i * 90, 0, Vec3dHelper.CENTER),
                     quartz);
         }
 
@@ -426,7 +421,7 @@ IAdvancedBundledConductor {
     }
 
     @Override
-    public IPartPlacement getPlacement(IPart part, World world, Vec3i location, EnumFacing face, RayTraceResult mop,
+    public IPartPlacement getPlacement(IPart part, World world, BlockPos location, EnumFacing face, RayTraceResult mop,
             EntityPlayer player) {
 
         if (!DebugHelper.isDebugModeEnabled())

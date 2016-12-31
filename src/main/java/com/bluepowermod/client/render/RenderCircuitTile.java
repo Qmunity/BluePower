@@ -5,7 +5,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraftforge.client.IItemRenderer;
 
 import org.lwjgl.opengl.GL11;
@@ -13,7 +13,6 @@ import org.lwjgl.opengl.GL11;
 import uk.co.qmunity.lib.client.render.RenderHelper;
 import uk.co.qmunity.lib.transform.Translation;
 import uk.co.qmunity.lib.vec.Vec3dCube;
-import uk.co.qmunity.lib.vec.Vec3i;
 
 import com.bluepowermod.api.wire.redstone.RedwireType;
 import com.bluepowermod.init.BPItems;
@@ -80,7 +79,7 @@ public class RenderCircuitTile implements IItemRenderer {
             double bundledHeight = 4 / 32D;
             double bundledWidth = 6 / 16D;
 
-            IIcon wireTexture = IconSupplier.wire;
+            TextureAtlasSprite wireTexture = IconSupplier.wire;
 
             // Bluestone tiles
             rh.setColor(WireHelper.getColorForPowerLevel(RedwireType.BLUESTONE, (byte) (255 / 2)));
@@ -179,13 +178,13 @@ public class RenderCircuitTile implements IItemRenderer {
             rh.addTransformation(new Translation(0.375, 0, 0.375));
             Tessellator.instance.startDrawingQuads();
             if (item.getItem() == BPItems.quartz_resonator_tile) {
-                new GateComponentQuartzResonator(null, -1).renderStatic(new Vec3i(0, 0, 0), rh, 0);
+                new GateComponentQuartzResonator(null, -1).renderStatic(new BlockPos(0, 0, 0), rh, 0);
             }
             if (item.getItem() == BPItems.silicon_chip_tile) {
-                new GateComponentSiliconChip(null, -1).setState(true).renderStatic(new Vec3i(0, 0, 0), rh, 0);
+                new GateComponentSiliconChip(null, -1).setState(true).renderStatic(new BlockPos(0, 0, 0), rh, 0);
             }
             if (item.getItem() == BPItems.tainted_silicon_chip_tile) {
-                new GateComponentTaintedSiliconChip(null, -1).setState(true).renderStatic(new Vec3i(0, 0, 0), rh, 0);
+                new GateComponentTaintedSiliconChip(null, -1).setState(true).renderStatic(new BlockPos(0, 0, 0), rh, 0);
             }
             Tessellator.instance.draw();
             rh.reset();
