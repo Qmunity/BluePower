@@ -38,7 +38,7 @@ import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3i;
 import uk.co.qmunity.lib.client.render.RenderHelper;
 import uk.co.qmunity.lib.helper.MathHelper;
 import uk.co.qmunity.lib.helper.RedstoneHelper;
@@ -822,9 +822,8 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
         }
 
         @Override
-        public boolean renderStatic(BlockPos translation, RenderHelper renderer, VertexBuffer renderBlocks, int pass) {
-
-            super.renderStatic(translation, renderer, renderBlocks, pass);
+        public boolean renderStatic(Vec3i translation, RenderHelper renderer, VertexBuffer buffer, int pass) {
+            super.renderStatic(translation, renderer, buffer, pass);
 
             EnumFacing d1 = EnumFacing.NORTH;
             EnumFacing d2 = EnumFacing.SOUTH;
@@ -1287,9 +1286,8 @@ public abstract class PartRedwireFace extends PartWireFace implements IRedwire, 
         }
 
         @Override
-        public boolean renderStatic(BlockPos translation, RenderHelper renderer, VertexBuffer renderBlocks, int pass) {
-
-            super.renderStatic(translation, renderer, renderBlocks, pass);
+        public boolean renderStatic(Vec3i translation, RenderHelper renderer, VertexBuffer buffer, int pass) {
+            super.renderStatic(translation, renderer, buffer, pass);
 
             EnumFacing d1 = EnumFacing.NORTH;
             EnumFacing d2 = EnumFacing.SOUTH;

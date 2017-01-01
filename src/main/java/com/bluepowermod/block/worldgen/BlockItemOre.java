@@ -17,14 +17,14 @@
 
 package com.bluepowermod.block.worldgen;
 
-import java.util.Random;
-
-import net.minecraft.block.material.Material;
-import net.minecraft.item.Item;
-
 import com.bluepowermod.block.BlockBase;
 import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.reference.Refs;
+import net.minecraft.block.SoundType;
+import net.minecraft.block.material.Material;
+import net.minecraft.item.Item;
+
+import java.util.Random;
 
 public class BlockItemOre extends BlockBase {
 
@@ -32,13 +32,12 @@ public class BlockItemOre extends BlockBase {
 
     public BlockItemOre(String type) {
 
-        super(Material.iron);
+        super(Material.IRON);
         this.setCreativeTab(BPCreativeTabs.blocks);
-        this.setStepSound(soundTypeStone);
+        this.setSoundType(SoundType.STONE);
         this.setHardness(2.5F);
         this.setResistance(10.0F);
-        this.textureName = Refs.MODID + ":" + type;
-        this.setBlockName(type);
+        this.setRegistryName(Refs.MODID + ":" + type);
         this.setHarvestLevel("pickaxe", 2);
     }
 
@@ -57,7 +56,7 @@ public class BlockItemOre extends BlockBase {
     @Override
     public int quantityDroppedWithBonus(int quantity, Random rand) {
 
-        if (quantity > 0 && Item.getItemFromBlock(this) != this.getItemDropped(0, rand, quantity)) {
+        if (quantity > 0 && Item.getItemFromBlock(this) != this.getItemDropped(this.getDefaultState(), rand, quantity)) {
             int j = rand.nextInt(quantity + 2) - 1;
             if (j < 0) {
                 j = 0;

@@ -19,20 +19,18 @@
 
 package com.bluepowermod.container;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.ICrafting;
-import net.minecraft.inventory.Slot;
-import net.minecraft.item.ItemStack;
-import uk.co.qmunity.lib.client.gui.GuiContainerBase;
-
 import com.bluepowermod.ClientProxy;
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
 import com.bluepowermod.container.slot.SlotPhantom;
 import com.bluepowermod.tile.tier2.TileRegulator;
-
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.IContainerListener;
+import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import uk.co.qmunity.lib.client.gui.GuiContainerBase;
 
 /**
  * @author MineMaarten
@@ -90,8 +88,8 @@ public class ContainerRegulator extends ContainerMachineBase {
 
         super.detectAndSendChanges();
 
-        for (Object crafter : crafters) {
-            ICrafting icrafting = (ICrafting) crafter;
+        for (Object crafter : listeners) {
+            IContainerListener icrafting = (IContainerListener) crafter;
 
             if (filterColor != tileRegulator.color.ordinal()) {
                 icrafting.sendProgressBarUpdate(this, 0, tileRegulator.color.ordinal());
@@ -129,7 +127,7 @@ public class ContainerRegulator extends ContainerMachineBase {
     @Override
     public boolean canInteractWith(EntityPlayer player) {
 
-        return tileRegulator.isUseableByPlayer(player);
+        return tileRegulator.isUsableByPlayer(player);
     }
 
     @Override

@@ -19,24 +19,22 @@ package com.bluepowermod.redstone;
 
 import com.bluepowermod.api.misc.IFace;
 import com.bluepowermod.api.wire.redstone.*;
-import mcmultipart.api.container.IMultipartContainer;
-import mcmultipart.api.multipart.IMultipartTile;
-import mcmultipart.api.multipart.MultipartHelper;
-import mcmultipart.api.slot.IPartSlot;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import uk.co.qmunity.lib.part.IPart;
+import uk.co.qmunity.lib.part.ITilePartHolder;
+import uk.co.qmunity.lib.part.compat.MultipartCompatibility;
 
 public class RedstoneProviderQmunityLib implements IRedstoneProvider {
 
     @Override
     public IRedstoneDevice getRedstoneDeviceAt(World world, BlockPos pos, EnumFacing face, EnumFacing side) {
 
-        IMultipartContainer holder = MultipartHelper.getContainer(world, pos).get();
+        ITilePartHolder holder = MultipartCompatibility.getPartHolder(world, pos);
         if (holder != null) {
             boolean foundOnlyFace = holder.getParts().size() > 0;
-            for (IPartSlot ps : holder.getParts().keySet()) {
-                IMultipartTile p = holder.getPartTile(ps).get();
+            for (IPart p : holder.getParts()) {
                 if (p instanceof IRedstoneDeviceWrapper) {
                     if (p instanceof IFace) {
                         if (((IFace) p).getFace() == face)
@@ -69,11 +67,10 @@ public class RedstoneProviderQmunityLib implements IRedstoneProvider {
     @Override
     public IBundledDevice getBundledDeviceAt(World world, BlockPos pos, EnumFacing face, EnumFacing side) {
 
-        IMultipartContainer holder = MultipartHelper.getContainer(world, pos).get();
+        ITilePartHolder holder = MultipartCompatibility.getPartHolder(world, pos);
         if (holder != null) {
             boolean foundOnlyFace = holder.getParts().size() > 0;
-            for (IPartSlot ps : holder.getParts().keySet()) {
-                IMultipartTile p = holder.getPartTile(ps).get();
+            for (IPart p : holder.getParts()) {
                 if (p instanceof IBundledDeviceWrapper) {
                     if (p instanceof IFace) {
                         if (((IFace) p).getFace() == face)

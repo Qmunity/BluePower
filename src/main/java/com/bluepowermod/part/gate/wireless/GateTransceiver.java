@@ -36,6 +36,7 @@ import com.bluepowermod.part.IGuiButtonSensitive;
 import com.bluepowermod.part.gate.GateBase;
 import com.bluepowermod.part.gate.connection.*;
 import com.bluepowermod.util.DebugHelper;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -48,6 +49,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -56,6 +58,7 @@ import uk.co.qmunity.lib.misc.Pair;
 import uk.co.qmunity.lib.part.IPart;
 import uk.co.qmunity.lib.part.IPartPlacement;
 import uk.co.qmunity.lib.transform.Rotation;
+import uk.co.qmunity.lib.util.Dir;
 import uk.co.qmunity.lib.vec.Vec3dCube;
 import uk.co.qmunity.lib.vec.Vec3dHelper;
 
@@ -68,7 +71,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map.Entry;
 
-;
 
 public class GateTransceiver extends
 GateBase<GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase>
@@ -94,9 +96,9 @@ IAdvancedBundledConductor {
     public void initConnections() {
 
         front(
-                isBundled ? (isAnalogue ? new GateConnectionBundledAnalogue(this, this.getFace()) : new GateConnectionBundledDigital(this,
-                        this.getFace())) : (isAnalogue ? new GateConnectionAnalogue(this, this.getFace())
-                        : new GateConnectionDigital(this, this.getFace()))).setEnabled(true);
+                isBundled ? (isAnalogue ? new GateConnectionBundledAnalogue(this, Dir.FRONT) : new GateConnectionBundledDigital(this,
+                        Dir.FRONT)) : (isAnalogue ? new GateConnectionAnalogue(this, Dir.FRONT)
+                        : new GateConnectionDigital(this, Dir.FRONT))).setEnabled(true);
     }
 
     @Override
@@ -112,17 +114,17 @@ IAdvancedBundledConductor {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public boolean renderStatic(BlockPos translation, RenderHelper renderer, VertexBuffer renderBlocks, int pass) {
+    public boolean renderStatic(Vec3i translation, RenderHelper renderer, VertexBuffer renderBlocks, int pass) {
 
         super.renderStatic(translation, renderer, renderBlocks, pass);
 
         if (getParent() != null)
             renderer.addTransformation(new Rotation(0, 180, 0));
 
-        TextureAtlasSprite obsidian = Blocks.OBSIDIAN.getIcon(0, 0);
-        TextureAtlasSprite quartz = Blocks.QUARTZ_BLOCK.getIcon(0, 0);
-        TextureAtlasSprite iron = Blocks.IRON_BLOCK.getIcon(0, 0);
-        TextureAtlasSprite gold = Blocks.GOLD_BLOCK.getIcon(0, 0);
+        TextureAtlasSprite obsidian =  Minecraft.getMinecraft().getTextureMapBlocks().getTextureExtry(Blocks.OBSIDIAN.getRegistryName().toString());
+        TextureAtlasSprite quartz =  Minecraft.getMinecraft().getTextureMapBlocks().getTextureExtry(Blocks.QUARTZ_BLOCK.getRegistryName().toString());
+        TextureAtlasSprite iron = Minecraft.getMinecraft().getTextureMapBlocks().getTextureExtry(Blocks.IRON_BLOCK.getRegistryName().toString());
+        TextureAtlasSprite gold = Minecraft.getMinecraft().getTextureMapBlocks().getTextureExtry(Blocks.GOLD_BLOCK.getRegistryName().toString());
 
         // Base
         renderer.renderBox(new Vec3dCube(7 / 16D, 2 / 16D, 7 / 16D, 9 / 16D, 8 / 16D, 9 / 16D), obsidian);

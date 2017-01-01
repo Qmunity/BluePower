@@ -1,38 +1,5 @@
 package com.bluepowermod.part.gate.supported;
 
-import java.io.DataInput;
-import java.io.DataOutput;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map.Entry;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.RenderBlocks;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.util.RayTraceResult;
-import net.minecraft.util.Vec3;
-import net.minecraft.world.World;
-import net.minecraft.util.EnumFacing;;
-
-import org.lwjgl.opengl.GL11;
-
-import uk.co.qmunity.lib.client.render.RenderHelper;
-import uk.co.qmunity.lib.misc.Pair;
-import uk.co.qmunity.lib.part.IPart;
-import uk.co.qmunity.lib.part.IPartPlacement;
-import uk.co.qmunity.lib.raytrace.QRayTraceResult;
-import uk.co.qmunity.lib.transform.Rotation;
-import uk.co.qmunity.lib.vec.Vec3d;
-import uk.co.qmunity.lib.vec.Vec3dCube;
-
-
 import com.bluepowermod.BluePower;
 import com.bluepowermod.api.block.IAdvancedSilkyRemovable;
 import com.bluepowermod.api.connect.ConnectionType;
@@ -46,6 +13,7 @@ import com.bluepowermod.api.wire.redstone.IRedwire;
 import com.bluepowermod.api.wire.redstone.RedwireType;
 import com.bluepowermod.client.render.IconSupplier;
 import com.bluepowermod.helper.IOHelper;
+import com.bluepowermod.helper.VectorHelper;
 import com.bluepowermod.item.ItemPart;
 import com.bluepowermod.part.BPPartFaceRotate;
 import com.bluepowermod.part.PartManager;
@@ -57,13 +25,44 @@ import com.bluepowermod.part.wire.redstone.WireHelper;
 import com.bluepowermod.redstone.DummyRedstoneDevice;
 import com.bluepowermod.redstone.RedstoneApi;
 import com.bluepowermod.redstone.RedstoneConnectionCache;
-
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.Vec3i;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.opengl.GL11;
+import uk.co.qmunity.lib.client.render.RenderHelper;
+import uk.co.qmunity.lib.misc.Pair;
+import uk.co.qmunity.lib.part.IPart;
+import uk.co.qmunity.lib.part.IPartPlacement;
+import uk.co.qmunity.lib.raytrace.QRayTraceResult;
+import uk.co.qmunity.lib.transform.Rotation;
+import uk.co.qmunity.lib.vec.Vec3dCube;
+import uk.co.qmunity.lib.vec.Vec3dHelper;
 
-public class GateNullCell
-extends
-GateSupported<GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase>
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map.Entry;
+
+;
+
+public class GateNullCell extends GateSupported<GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase, GateConnectionBase>
 implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor, IRedwire {
 
     private RedwireType typeA = null, typeB = null;
@@ -118,9 +117,9 @@ implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor, IRedwire {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public boolean renderStatic(BlockPos translation, RenderHelper renderer, RenderBlocks renderBlocks, int pass) {
+    public boolean renderStatic(Vec3i translation, RenderHelper renderer, VertexBuffer buffer, int pass) {
 
-        super.renderStatic(translation, renderer, renderBlocks, pass);
+        super.renderStatic(translation, renderer, buffer, pass);
 
         double height = 2 / 16D;
 
@@ -131,8 +130,8 @@ implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor, IRedwire {
 
             EnumFacing dir = EnumFacing.NORTH;
             for (int i = 0; i < getRotation(); i++)
-                dir = dir.getRotation(getFace().getOpposite());
-            dir = new Vec3d(0, 0, 0).add(dir).rotateUndo(getFace(), Vec3dHelper.CENTER).toEnumFacing();
+                dir = dir.rotateAround(getFace().getOpposite().getAxis());
+            dir = Vec3dHelper.toEnumFacing(VectorHelper.rotateUndo(new BlockPos(0, 0, 0).offset(dir), getFace(), Vec3dHelper.CENTER));
 
             renderer.renderBox(new Vec3dCube(7 / 16D, 2 / 16D, 1 / 16D, 9 / 16D, 2 / 16D + height, 15 / 16D), wire);
             renderer.renderBox(new Vec3dCube(7 / 16D, 2 / 16D, 0 / 16D, 9 / 16D, 2 / 16D + (height / (nullcells[dir.ordinal()] ? 1 : 2)),
@@ -146,8 +145,8 @@ implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor, IRedwire {
 
             EnumFacing dir = EnumFacing.WEST;
             for (int i = 0; i < getRotation(); i++)
-                dir = dir.getRotation(getFace().getOpposite());
-            dir = new Vec3d(0, 0, 0).add(dir).rotateUndo(getFace(), Vec3dHelper.CENTER).toEnumFacing();
+                dir = dir.rotateAround(getFace().getOpposite().getAxis());
+            dir = Vec3dHelper.toEnumFacing(VectorHelper.rotateUndo(new BlockPos(0, 0, 0).offset(dir), getFace(), Vec3dHelper.CENTER));
 
             if (!nullcells[dir.ordinal()])
                 renderer.renderBox(new Vec3dCube(0 / 16D, 2 / 16D, 7 / 16D, 2 / 16D, 10 / 16D, 9 / 16D), wire);
@@ -231,18 +230,18 @@ implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor, IRedwire {
     }
 
     @Override
-    public boolean preSilkyRemoval(World world, int x, int y, int z) {
-
+    public boolean preSilkyRemoval(World world, BlockPos pos) {
         return true;
     }
 
+
     @Override
-    public void postSilkyRemoval(World world, int x, int y, int z) {
+    public void postSilkyRemoval(World world, BlockPos pos) {
 
     }
 
     @Override
-    public boolean writeSilkyData(World world, int x, int y, int z, NBTTagCompound tag) {
+    public boolean writeSilkyData(World world, BlockPos pos, NBTTagCompound tag) {
 
         if (typeA != null) {
             tag.setInteger("typeA", typeA.ordinal());
@@ -257,7 +256,7 @@ implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor, IRedwire {
     }
 
     @Override
-    public void readSilkyData(World world, int x, int y, int z, NBTTagCompound tag) {
+    public void readSilkyData(World world,  BlockPos pos, NBTTagCompound tag) {
 
         if (tag.hasKey("typeA")) {
             typeA = RedwireType.values()[tag.getInteger("typeA")];
@@ -512,8 +511,7 @@ implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor, IRedwire {
 
     private int getType(EnumFacing side) {
 
-        EnumFacing d = new Vec3d(0, 0, 0).add(side).rotateUndo(getFace(), new Vec3d(0, 0, 0)).rotate(0, 90 * -getRotation(), 0)
-                .toEnumFacing();
+        EnumFacing d = Vec3dHelper.toEnumFacing(Vec3dHelper.rotate(VectorHelper.rotateUndo(new BlockPos(0, 0, 0).offset(side), getFace(), new Vec3d(0, 0, 0)), 0, 90 * -getRotation(), 0));
         if (d == EnumFacing.NORTH || d == EnumFacing.SOUTH)
             return 1;
         if (d == EnumFacing.WEST || d == EnumFacing.EAST)
@@ -658,8 +656,8 @@ implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor, IRedwire {
     @Override
     public boolean drawHighlight(QRayTraceResult mop, EntityPlayer player, float frame) {
 
-        Vec3d hit = new Vec3d(mop.hitVec).sub(mop.blockX, mop.blockY, mop.blockZ).rotateUndo(getFace(), Vec3dHelper.CENTER);
-        Vec3 pos = player.getPosition(frame);
+        Vec3d hit = VectorHelper.rotateUndo(new BlockPos(mop.hitVec).subtract(mop.getBlockPos()), getFace(), Vec3dHelper.CENTER);
+        BlockPos pos = player.getPosition();
 
         ItemStack held = player.getHeldItemMainhand();
         if (held == null)
@@ -674,7 +672,7 @@ implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor, IRedwire {
 
             RenderHelper renderer = RenderHelper.instance;
             renderer.fullReset();
-            renderer.setRenderCoords(getWorld(), getX(), getY(), getZ());
+            renderer.setRenderCoords(getWorld(), getPos().getX(), getPos().getY(), getPos().getZ());
 
             double height = 2 / 16D;
 
@@ -683,10 +681,10 @@ implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor, IRedwire {
             GL11.glEnable(GL11.GL_BLEND);
             GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
-            Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
+            Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 
-            Tessellator.instance.startDrawingQuads();
-            Tessellator.instance.addTranslation((float) -pos.xCoord, (float) -pos.yCoord, (float) -pos.zCoord);
+            Tessellator.getInstance().getBuffer().begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+            Tessellator.getInstance().getBuffer().setTranslation((float) -pos.getX(), (float) -pos.getY(), (float) -pos.getZ());
             {
                 switch (getFace()) {
                 case DOWN:
@@ -719,9 +717,9 @@ implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor, IRedwire {
 
                 EnumFacing dir = EnumFacing.NORTH;
                 if (getRotation() % 2 == 1)
-                    dir = dir.getRotation(getFace());
+                    dir = dir.rotateAround(getFace().getAxis());
 
-                if (hit.getY() > 2 / 16D) {
+                if (hit.yCoord > 2 / 16D) {
                     if (typeB == null) {
                         renderer.renderBox(new Vec3dCube(0 / 16D, 2 / 16D, 7 / 16D, 2 / 16D, 10 / 16D, 9 / 16D), wireIcon);
                         renderer.renderBox(new Vec3dCube(14 / 16D, 2 / 16D, 7 / 16D, 16 / 16D, 10 / 16D, 9 / 16D), wireIcon);
@@ -734,8 +732,8 @@ implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor, IRedwire {
 
                 renderer.fullReset();
             }
-            Tessellator.instance.addTranslation((float) pos.xCoord, (float) pos.yCoord, (float) pos.zCoord);
-            Tessellator.instance.draw();
+            Tessellator.getInstance().getBuffer().setTranslation((float) pos.getX(), (float) pos.getY(), (float) pos.getZ());
+            Tessellator.getInstance().draw();
 
             GL11.glDisable(GL11.GL_BLEND);
 
@@ -806,7 +804,7 @@ implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor, IRedwire {
     @Override
     public boolean onActivated(EntityPlayer player, QRayTraceResult mop, ItemStack item) {
 
-        Vec3d hit = new Vec3d(mop.hitVec).sub(mop.blockX, mop.blockY, mop.blockZ).rotateUndo(getFace(), Vec3dHelper.CENTER);
+        Vec3d hit = VectorHelper.rotateUndo(new BlockPos(mop.hitVec).subtract(mop.getBlockPos()), getFace(), Vec3dHelper.CENTER);
 
         if (item != null) {
             if (item.getItem() instanceof ItemPart) {
@@ -814,7 +812,7 @@ implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor, IRedwire {
                 if (part != null && part instanceof PartRedwireFaceUninsulated) {
                     PartRedwireFace wire = (PartRedwireFace) part;
 
-                    if (hit.getY() > 2 / 16D) {
+                    if (hit.yCoord > 2 / 16D) {
                         if (typeB == null) {
                             if (getWorld().isRemote)
                                 return true;
@@ -851,14 +849,13 @@ implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor, IRedwire {
                     }
                 }
             } else if (item.getItem() instanceof IScrewdriver && player.isSneaking()) {
-                if (hit.getY() > 2 / 16D
-                        && ((hit.getY() <= 4 / 16D && hit.getX() > 0.5 - 1 / 16D && hit.getX() > 0.5 + 1 / 16D) || hit.getY() > 4 / 16D)) {
+                if (hit.yCoord > 2 / 16D
+                        && ((hit.yCoord <= 4 / 16D && hit.xCoord > 0.5 - 1 / 16D && hit.xCoord > 0.5 + 1 / 16D) || hit.yCoord > 4 / 16D)) {
                     if (typeB != null) {
                         if (getWorld().isRemote)
                             return true;
 
-                        IOHelper.spawnItemInWorld(getWorld(), typeB.getPartInfo(MinecraftColor.NONE, bundledB).getStack(), getX() + 0.5,
-                                getY() + 0.5, getZ() + 0.5);
+                        IOHelper.spawnItemInWorld(getWorld(), typeB.getPartInfo(MinecraftColor.NONE, bundledB).getStack(), getPos().add(0.5,0.5,0.5));
 
                         typeB = null;
                         bundledB = false;
@@ -871,13 +868,12 @@ implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor, IRedwire {
                         sendUpdatePacket();
                         return true;
                     }
-                } else if (hit.getY() > 2 / 16D) {
+                } else if (hit.yCoord > 2 / 16D) {
                     if (typeA != null) {
                         if (getWorld().isRemote)
                             return true;
 
-                        IOHelper.spawnItemInWorld(getWorld(), typeA.getPartInfo(MinecraftColor.NONE, bundledA).getStack(), getX() + 0.5,
-                                getY() + 0.5, getZ() + 0.5);
+                        IOHelper.spawnItemInWorld(getWorld(), typeA.getPartInfo(MinecraftColor.NONE, bundledA).getStack(), getPos().add(0.5,0.5,0.5));
 
                         typeA = null;
                         bundledA = false;

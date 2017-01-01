@@ -1,12 +1,11 @@
 package com.bluepowermod.block.machine;
 
-import java.awt.Color;
-
-import net.minecraft.world.IBlockAccess;
-
 import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier1.TileLamp;
+import net.minecraft.world.IBlockAccess;
+
+import java.awt.*;
 
 public class BlockLampRGB extends BlockLamp {
 
@@ -14,7 +13,8 @@ public class BlockLampRGB extends BlockLamp {
 
         super(isInverted, MinecraftColor.NONE);
 
-        setBlockName(Refs.LAMP_NAME + ".rgb" + (isInverted ? ".inverted" : ""));
+        setUnlocalizedName(Refs.LAMP_NAME + ".rgb" + (isInverted ? ".inverted" : ""));
+        setRegistryName(Refs.MODID ,Refs.LAMP_NAME + ".rgb" + (isInverted ? ".inverted" : ""));
     }
 
     @Override

@@ -8,6 +8,7 @@
 package com.bluepowermod.container;
 
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.IContainerListener;
 import uk.co.qmunity.lib.client.gui.GuiContainerBase;
 
 import com.bluepowermod.ClientProxy;
@@ -38,8 +39,8 @@ public class ContainerRetriever extends ContainerFilter {
 
         super.detectAndSendChanges();
 
-        for (Object crafter : crafters) {
-            ICrafting icrafting = (ICrafting) crafter;
+        for (Object crafter : listeners) {
+            IContainerListener icrafting = (IContainerListener) crafter;
 
             if (slotIndex != retriever.slotIndex) {
                 icrafting.sendProgressBarUpdate(this, 2, retriever.slotIndex);

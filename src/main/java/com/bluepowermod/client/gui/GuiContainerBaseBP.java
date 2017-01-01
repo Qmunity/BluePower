@@ -1,27 +1,25 @@
 package com.bluepowermod.client.gui;
 
-import java.awt.Rectangle;
-import java.util.List;
-
+import codechicken.nei.VisiblityData;
+import codechicken.nei.api.INEIGuiHandler;
+import codechicken.nei.api.TaggedInventoryArea;
+import com.bluepowermod.client.gui.widget.WidgetTabItemLister;
+import com.bluepowermod.reference.Refs;
+import com.bluepowermod.tile.TileMachineBase;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.Optional;
 import uk.co.qmunity.lib.client.gui.GuiContainerBase;
 import uk.co.qmunity.lib.client.gui.widget.GuiAnimatedStat;
 import uk.co.qmunity.lib.client.gui.widget.IGuiWidget;
 import uk.co.qmunity.lib.ref.Dependencies;
-import codechicken.nei.VisiblityData;
-import codechicken.nei.api.INEIGuiHandler;
-import codechicken.nei.api.TaggedInventoryArea;
 
-import com.bluepowermod.client.gui.widget.WidgetTabItemLister;
-import com.bluepowermod.reference.Refs;
-import com.bluepowermod.tile.TileMachineBase;
-
-import cpw.mods.fml.common.Optional;
+import java.awt.*;
+import java.util.List;
 
 @Optional.Interface(iface = "codechicken.nei.api.INEIGuiHandler", modid = Dependencies.NEI)
 public class GuiContainerBaseBP extends GuiContainerBase implements INEIGuiHandler {
@@ -50,7 +48,7 @@ public class GuiContainerBaseBP extends GuiContainerBase implements INEIGuiHandl
             addWidget(backlogTab);
         }
 
-        String unlocalizedInfo = inventory.getInventoryName() + ".info";
+        String unlocalizedInfo = inventory.getName() + ".info";
         String localizedInfo = I18n.format(unlocalizedInfo);
         if (!unlocalizedInfo.equals(localizedInfo)) {
             addAnimatedStat("gui.bluepower:tab.info", Refs.MODID + ":textures/gui/widgets/gui_info.png", 0xFF8888FF, isInfoStatLeftSided()).setText(

@@ -7,25 +7,13 @@
  */
 package com.bluepowermod.client.render;
 
-import java.nio.DoubleBuffer;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.RenderBlocks;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.init.Blocks;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.EnumFacing;;
-
-import org.lwjgl.BufferUtils;
-import org.lwjgl.opengl.GL11;
-
-import uk.co.qmunity.lib.vec.Vec3dCube;
-
-import com.bluepowermod.reference.Refs;
-
+import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.opengl.GL11;
+import uk.co.qmunity.lib.vec.Vec3dCube;
+
+;
 
 @SideOnly(Side.CLIENT)
 public class RenderHelper {
@@ -59,7 +47,7 @@ public class RenderHelper {
         GL11.glVertex3d(x, y, z);
     }
 
-    private static RenderBlocks rb = new RenderBlocks();
+/*    private static RenderBlocks rb = new RenderBlocks();
 
     public static void renderDigitalRedstoneTorch(double x, double y, double z, double height, boolean state) {
 
@@ -179,13 +167,13 @@ public class RenderHelper {
         GL11.glPopMatrix();
     }
 
-    /**
+    *//**
      * @author amadornes
      * @param x
      * @param y
      * @param z
      * @param angle
-     */
+     *//*
     public static void renderPointer(double x, double y, double z, double angle) {
 
         GL11.glPushMatrix();
@@ -242,7 +230,7 @@ public class RenderHelper {
 
     }
 
-    /**
+    *//**
      * @author amadornes
      * @param x1
      * @param y1
@@ -254,7 +242,7 @@ public class RenderHelper {
      * @param y3
      * @param z3
      * @return TODO: Maybe move this function?
-     */
+     *//*
     public static DoubleBuffer planeEquation(double x1, double y1, double z1, double x2, double y2, double z2, double x3, double y3,
             double z3) {
 
@@ -266,7 +254,7 @@ public class RenderHelper {
         DoubleBuffer b = BufferUtils.createDoubleBuffer(8).put(eq);
         b.flip();
         return b;
-    }
+    }*/
 
     /**
      * Draws a colored cube with the size of vector. Every face has a different color This uses OpenGL
@@ -330,7 +318,6 @@ public class RenderHelper {
      *
      * @author Koen Beckers (K4Unl) and Amadornes
      * @param vector
-     * @param color
      */
     public static void drawColoredCube(Vec3dCube vector, double r, double g, double b, double a, boolean... renderFaces) {
 
@@ -393,13 +380,13 @@ public class RenderHelper {
         GL11.glColor4d(1, 1, 1, 1);
     }
 
-    /**
+  /*  *//**
      * Draws a colored cube with the size of vector. All faces have the specified color. This uses Tesselator
      *
      * @author Koen Beckers (K4Unl) and Amadornes
      * @param vector
      * @param color
-     */
+     *//*
     public static void drawTesselatedColoredCube(Vec3dCube vector, int r, int g, int b, int a) {
 
         Tessellator t = Tessellator.instance;
@@ -463,12 +450,12 @@ public class RenderHelper {
         }
     }
 
-    /**
+    *//**
      * Draws a colored cube with the size of vector. Every face has a different color This uses the Tessellator
      *
      * @author Koen Beckers (K4Unl)
      * @param vector
-     */
+     *//*
     public static void drawTesselatedColoredCube(Vec3dCube vector) {
 
         Tessellator t = Tessellator.instance;
@@ -534,12 +521,12 @@ public class RenderHelper {
         }
     }
 
-    /**
+    *//**
      * Draws a cube with the size of vector. It uses the texture that is already bound and maps that completely This uses the Tessellator
      *
      * @author Koen Beckers (K4Unl)
      * @param vector
-     */
+     *//*
     public static void drawTesselatedTexturedCube(Vec3dCube vector) {
 
         Tessellator t = Tessellator.instance;
@@ -604,12 +591,12 @@ public class RenderHelper {
         }
     }
 
-    /**
+    *//**
      * Draws a cube with the size of vector. Every face has the same color This uses the Tessellator
      *
      * @author Koen Beckers (K4Unl)
      * @param vector
-     */
+     *//*
     public static void drawTesselatedCube(Vec3dCube vector) {
 
         Tessellator t = Tessellator.instance;
@@ -669,12 +656,12 @@ public class RenderHelper {
         }
     }
 
-    /**
+    *//**
      * ???
      *
      * @author ???
      * @param vector
-     */
+     *//*
     public static void drawTesselatedCubeWithoutNormals(Vec3dCube vector) {
 
         Tessellator t = Tessellator.instance;
@@ -726,7 +713,7 @@ public class RenderHelper {
         if (!wasTesselating) {
             t.draw();
         }
-    }
+    }*/
 
     /**
      * ???

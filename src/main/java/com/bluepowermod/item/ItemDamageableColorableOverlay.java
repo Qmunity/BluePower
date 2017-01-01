@@ -11,10 +11,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
-import java.util.List;
+import net.minecraft.util.NonNullList;
 
 /**
  * @author MineMaarten
@@ -27,12 +24,9 @@ public abstract class ItemDamageableColorableOverlay extends ItemColorableOverla
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
-    public void getSubItems(Item par1, CreativeTabs tab, List subItems) {
-
+    public void getSubItems(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> subItems) {
         subItems.add(new ItemStack(this, 1, 16));
-        super.getSubItems(par1, tab, subItems);
-
+        super.getSubItems(itemIn, tab, subItems);
     }
 
     public static int getUsesUsed(ItemStack stack) {

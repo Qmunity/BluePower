@@ -8,6 +8,8 @@
 package com.bluepowermod.client.gui;
 
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 
@@ -84,12 +86,13 @@ public class GuiMonitor extends GuiContainerBaseBP {
 
         float f = 0.00195313F;
         float f1 = 0.00390625F;
-        Tessellator tessellator = Tessellator.instance;
-        tessellator.startDrawingQuads();
-        tessellator.addVertexWithUV(x + 0, z + h, zLevel, (u + 0) * f, (v + h) * f1);
-        tessellator.addVertexWithUV(x + w, z + h, zLevel, (u + w) * f, (v + h) * f1);
-        tessellator.addVertexWithUV(x + w, z + 0, zLevel, (u + w) * f, (v + 0) * f1);
-        tessellator.addVertexWithUV(x + 0, z + 0, zLevel, (u + 0) * f, (v + 0) * f1);
+        Tessellator tessellator = Tessellator.getInstance();
+        VertexBuffer buffer = tessellator.getBuffer();
+        buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+        buffer.pos(x + 0, z + h, zLevel).tex((u + 0) * f, (v + h) * f1).endVertex();
+        buffer.pos(x + w, z + h, zLevel).tex((u + w) * f, (v + h) * f1).endVertex();
+        buffer.pos(x + w, z + 0, zLevel).tex((u + w) * f, (v + 0) * f1).endVertex();
+        buffer.pos(x + 0, z + 0, zLevel).tex((u + 0) * f, (v + 0) * f1).endVertex();
         tessellator.draw();
     }
 
@@ -98,12 +101,13 @@ public class GuiMonitor extends GuiContainerBaseBP {
 
         float f = 0.00390625F;
         float f1 = 0.00390625F;
-        Tessellator tessellator = Tessellator.instance;
-        tessellator.startDrawingQuads();
-        tessellator.addVertexWithUV(x + 0, z + h, zLevel, (u + 0) * f, (v + h) * f1);
-        tessellator.addVertexWithUV(x + w, z + h, zLevel, (u + w) * f, (v + h) * f1);
-        tessellator.addVertexWithUV(x + w, z + 0, zLevel, (u + w) * f, (v + 0) * f1);
-        tessellator.addVertexWithUV(x + 0, z + 0, zLevel, (u + 0) * f, (v + 0) * f1);
+        Tessellator tessellator = Tessellator.getInstance();
+        VertexBuffer buffer = tessellator.getBuffer();
+        buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+        buffer.pos(x + 0, z + h, zLevel).tex((u + 0) * f, (v + h) * f1).endVertex();
+        buffer.pos(x + w, z + h, zLevel).tex((u + w) * f, (v + h) * f1).endVertex();
+        buffer.pos(x + w, z + 0, zLevel).tex((u + w) * f, (v + 0) * f1).endVertex();
+        buffer.pos(x + 0, z + 0, zLevel).tex((u + 0) * f, (v + 0) * f1).endVertex();
         tessellator.draw();
     }
 }

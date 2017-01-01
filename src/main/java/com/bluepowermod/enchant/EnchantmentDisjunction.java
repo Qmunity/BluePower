@@ -14,9 +14,8 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 
 public class EnchantmentDisjunction extends Enchantment {
 
-    public EnchantmentDisjunction(Rarity par1, EntityEquipmentSlot[] par2) {
-
-        super(par1, EnumEnchantmentType.WEAPON, par2);
+    public EnchantmentDisjunction(int enchantId, Rarity rarity) {
+        super(rarity, EnumEnchantmentType.WEAPON, EntityEquipmentSlot.values());
     }
 
     @Override

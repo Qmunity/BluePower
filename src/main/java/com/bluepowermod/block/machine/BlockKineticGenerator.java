@@ -24,10 +24,10 @@ public class BlockKineticGenerator extends BlockContainerBase {
     
     public BlockKineticGenerator() {
     
-        super(Material.iron, TileKinectGenerator.class);
+        super(Material.IRON, TileKinectGenerator.class);
         setCreativeTab(BPCreativeTabs.machines);
-        setBlockName(Refs.KINETICGENERATOR_NAME);
-        setBlockTextureName(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + Refs.KINETICGENERATOR_NAME + "_front");
+        setUnlocalizedName(Refs.KINETICGENERATOR_NAME);
+        setRegistryName(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + Refs.KINETICGENERATOR_NAME + "_front");
     }
     
     @Override

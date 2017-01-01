@@ -7,18 +7,6 @@
  */
 package com.bluepowermod.tile.tier3;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.InventoryBasic;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;;
-
 import com.bluepowermod.BluePower;
 import com.bluepowermod.api.item.IDatabaseSaveable;
 import com.bluepowermod.helper.IOHelper;
@@ -30,7 +18,18 @@ import com.bluepowermod.network.message.MessageCircuitDatabaseTemplate;
 import com.bluepowermod.network.message.MessageSendClientServerTemplates;
 import com.bluepowermod.reference.GuiIDs;
 import com.bluepowermod.tile.tier2.TileCircuitTable;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.InventoryBasic;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.text.TextComponentString;
+
+import java.util.ArrayList;
+import java.util.List;
+
+;
 
 public class TileCircuitDatabase extends TileCircuitTable {
 
@@ -101,7 +100,7 @@ public class TileCircuitDatabase extends TileCircuitTable {
 
         if (Config.serverCircuitSavingOpOnly) {
             if (!player.canUseCommand(2, "saveTemplate")) {
-                player.addChatMessage(new TextComponentString("gui.circuitDatabase.info.opsOnly"));
+                player.sendMessage(new TextComponentString("gui.circuitDatabase.info.opsOnly"));
                 return false;
             }
         }

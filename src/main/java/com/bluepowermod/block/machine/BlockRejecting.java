@@ -7,18 +7,9 @@
  */
 package com.bluepowermod.block.machine;
 
-import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-
 import com.bluepowermod.block.BlockContainerBase;
-import com.bluepowermod.client.render.RendererBlockBase.EnumFaceType;
-import com.bluepowermod.tile.IRejectAnimator;
 import com.bluepowermod.tile.TileBase;
-
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraft.block.material.Material;
 
 /**
  * @author MineMaarten
@@ -30,38 +21,4 @@ public class BlockRejecting extends BlockContainerBase {
         super(material, tileEntityClass);
     }
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerBlockIcons(TextureMap iconRegister) {
-
-        super.registerBlockIcons(iconRegister);
-
-        boolean ejecting = false;
-        boolean powered = false;
-
-        do {
-            do {
-                String iconName = getIconName(EnumFaceType.SIDE, ejecting, powered) + "_rejecting";
-                if (!textures.containsKey(iconName)) {
-                    textures.put(iconName, iconRegister.registerIcon(iconName));
-                }
-
-                powered = !powered;
-            } while (powered);
-            ejecting = !ejecting;
-        } while (ejecting);
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    protected TextureAtlasSprite getIcon(EnumFaceType faceType, boolean ejecting, boolean powered, int side, TileEntity te) {
-
-        boolean isRejecting = ((IRejectAnimator) te).isRejecting();
-        if (faceType == EnumFaceType.SIDE && isRejecting) {
-            String iconName = getIconName(faceType, ejecting, powered);
-            return textures.get(iconName + "_rejecting");
-        } else {
-            return super.getIcon(faceType, ejecting, powered, side, te);
-        }
-    }
 }

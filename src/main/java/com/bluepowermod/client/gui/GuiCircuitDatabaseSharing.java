@@ -7,16 +7,6 @@
  */
 package com.bluepowermod.client.gui;
 
-import java.util.List;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Slot;
-import net.minecraft.item.ItemStack;
-import uk.co.qmunity.lib.client.gui.widget.BaseWidget;
-import uk.co.qmunity.lib.client.gui.widget.IGuiWidget;
-import uk.co.qmunity.lib.client.gui.widget.WidgetTab;
-
 import com.bluepowermod.BluePower;
 import com.bluepowermod.container.ContainerCircuitDatabaseSharing;
 import com.bluepowermod.network.BPNetworkHandler;
@@ -24,9 +14,18 @@ import com.bluepowermod.network.message.MessageCircuitDatabaseTemplate;
 import com.bluepowermod.network.message.MessageGuiUpdate;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier3.TileCircuitDatabase;
-
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.ClickType;
+import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import uk.co.qmunity.lib.client.gui.widget.BaseWidget;
+import uk.co.qmunity.lib.client.gui.widget.IGuiWidget;
+import uk.co.qmunity.lib.client.gui.widget.WidgetTab;
+
+import java.util.List;
 
 @SideOnly(Side.CLIENT)
 public class GuiCircuitDatabaseSharing extends GuiCircuitTable {
@@ -73,7 +72,7 @@ public class GuiCircuitDatabaseSharing extends GuiCircuitTable {
     }
 
     @Override
-    protected void handleMouseClick(Slot slot, int p_146984_2_, int p_146984_3_, int p_146984_4_) {
+    protected void handleMouseClick(Slot slot, int slotId, int mouseButton, ClickType type) {
 
         if (slot != null && slot.getHasStack() && slot.inventory == circuitDatabase.circuitInventory) {
             if (BluePower.proxy.isSneakingInGui()) {
@@ -93,7 +92,7 @@ public class GuiCircuitDatabaseSharing extends GuiCircuitTable {
                 BPNetworkHandler.INSTANCE.sendToServer(new MessageCircuitDatabaseTemplate(circuitDatabase, slot.getStack()));
             }
         } else {
-            super.handleMouseClick(slot, p_146984_2_, p_146984_3_, p_146984_4_);
+            super.handleMouseClick(slot, slotId, mouseButton, type);
         }
         curDeletingTemplate = -1;
     }
@@ -108,7 +107,7 @@ public class GuiCircuitDatabaseSharing extends GuiCircuitTable {
 
         if ((circuitDatabase.clientCurrentTab == 1 || circuitDatabase.clientCurrentTab == 2)
                 && circuitDatabase.copyInventory.getStackInSlot(1) != null) {
-            return !circuitDatabase.copy(Minecraft.getMinecraft().thePlayer, stack, circuitDatabase.copyInventory.getStackInSlot(1), true);
+            return !circuitDatabase.copy(Minecraft.getMinecraft().player, stack, circuitDatabase.copyInventory.getStackInSlot(1), true);
         } else {
             return false;
         }

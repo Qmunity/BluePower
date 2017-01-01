@@ -2,6 +2,7 @@ package com.bluepowermod.part.gate.component;
 
 import com.bluepowermod.client.render.IconSupplier;
 import com.bluepowermod.part.gate.GateBase;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
@@ -57,8 +58,9 @@ public class GateComponentTorch extends GateComponent {
     @Override
     public void renderStatic(Vec3i translation, RenderHelper renderer, int pass) {
 
-        TextureAtlasSprite icon = digital ? (state ? IconSupplier.bluestoneTorchOn : IconSupplier.bluestoneTorchOff) : (state ? Blocks.REDSTONE_TORCH
-                .getIcon(0, 0) : Blocks.UNLIT_REDSTONE_TORCH.getIcon(0, 0));
+        TextureAtlasSprite icon = digital ? (state ? IconSupplier.bluestoneTorchOn : IconSupplier.bluestoneTorchOff) :
+                (state ? Minecraft.getMinecraft().getTextureMapBlocks().getTextureExtry(Blocks.REDSTONE_TORCH.getRegistryName().toString()) :
+                        Minecraft.getMinecraft().getTextureMapBlocks().getTextureExtry(Blocks.UNLIT_REDSTONE_TORCH.getRegistryName().toString()));
         TextureAtlasSprite override = renderer.getOverrideTexture();
         renderer.setOverrideTexture(null);
 

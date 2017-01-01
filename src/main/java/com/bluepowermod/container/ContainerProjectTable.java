@@ -37,7 +37,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-;
 
 /**
  * @author MineMaarten
@@ -97,7 +96,7 @@ public class ContainerProjectTable extends Container {
     public void onCraftMatrixChanged(IInventory p_75130_1_) {
 
         if (craftingGrid != null)
-            craftResult.setInventorySlotContents(0, CraftingManager.getInstance().findMatchingRecipe(craftingGrid, projectTable.getWorldObj()));
+            craftResult.setInventorySlotContents(0, CraftingManager.getInstance().findMatchingRecipe(craftingGrid, projectTable.getWorld()));
     }
 
     @Override
@@ -113,7 +112,7 @@ public class ContainerProjectTable extends Container {
         itemsCrafted += stackInSlot.getCount();
         isRetrying = true;
         if (slot != 9 || !isLastCraftingOperation() && itemsCrafted < stackInSlot.getMaxStackSize()) {
-            slotClick(slot, p_75133_2_, 1, p_75133_4_);//only crafting slot doesn't retry clicking so no more than 64 items get crafted at a time
+            slotClick(slot, p_75133_2_, ClickType.values()[1], p_75133_4_);//only crafting slot doesn't retry clicking so no more than 64 items get crafted at a time
         }
         isRetrying = false;
     }
@@ -178,7 +177,7 @@ public class ContainerProjectTable extends Container {
                 slot.onSlotChanged();
             }
             if (itemstack1.getCount() != itemstack.getCount()) {
-                slot.onPickupFromSlot(player, itemstack1);
+                slot.onSlotChange(itemstack, itemstack1);
             } else {
                 return null;
             }

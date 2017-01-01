@@ -10,14 +10,13 @@ package com.bluepowermod.client.render;
 import com.bluepowermod.block.machine.BlockLamp;
 import com.bluepowermod.tile.tier1.TileLamp;
 import net.minecraft.block.Block;
-import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.world.IBlockAccess;
-import net.minecraftforge.fml.client.registry.RenderingRegistry;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
@@ -25,39 +24,21 @@ import uk.co.qmunity.lib.vec.Vec3dCube;
 
 
 @SideOnly(Side.CLIENT)
-public class RenderLamp extends TileEntitySpecialRenderer implements ISimpleBlockRenderingHandler, IItemRenderer {
+public class RenderLamp extends TileEntitySpecialRenderer {
 
     public static BlockRenderLayer pass;
 
-    @Override
-    public void renderInventoryBlock(Block block, int metadata, int modelId, RenderBlocks renderer) {
-
-    }
 
     @Override
-    public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer) {
-
-        return false;
-    }
-
-    @Override
-    public boolean shouldRender3DInInventory(int modelId) {
-
-        return true;
-    }
-
-    /******* TESR ***********/
-    @Override
-    public void renderTileEntityAt(TileEntity te, double x, double y, double z, float f) {
-
+    public void renderTileEntityAt(TileEntity te, double x, double y, double z, float partialTicks, int destroyStage) {
         if (!(te.getBlockType() instanceof BlockLamp))
             return;
 
-        if (pass != 0) {
+        if (pass.ordinal() != 0) {
             BlockLamp bLamp = (BlockLamp) te.getBlockType();
             int power = ((TileLamp) te).getPower();
 
-            int color = bLamp.getColor(te.getWorldObj(), te.xCoord, te.yCoord, te.zCoord);
+            int color = bLamp.getColor(te.getWorld(), te.getPos().getX(), te.getPos().getY(), te.getPos().getZ());
 
             int redMask = 0xFF0000, greenMask = 0xFF00, blueMask = 0xFF;
             int r = (color & redMask) >> 16;
@@ -68,39 +49,40 @@ public class RenderLamp extends TileEntitySpecialRenderer implements ISimpleBloc
                 power = 15 - power;
             }
             // power = 15;
-            BlockPos vector = new BlockPos(te);
+            BlockPos vector = te.getPos();
             Vec3dCube box = new Vec3dCube(-0.5, -0.5, -0.5, 0.5, 0.5, 0.5).expand(0.8 / 16D);
 
             boolean[] renderFaces = new boolean[] { true, true, true, true, true, true };
 
             for (EnumFacing d : EnumFacing.VALUES) {
-                BlockPos v = vector.getRelative(d);
-                Block bl = v.getBlock();
-                if (bl instanceof BlockLamp && ((BlockLamp) bl).getPower(v.getWorld(), v.getX(), v.getY(), v.getZ()) > 0) {
-                    if (d.offsetX < 0) {
-                        box.getMin().setX(-0.5);
+                BlockPos v = vector.offset(d);
+                IBlockState vs = te.getWorld().getBlockState(v);
+                Block bl = vs.getBlock();
+                if (bl instanceof BlockLamp && ((BlockLamp) bl).getPower(te.getWorld(), v.getX(), v.getY(), v.getZ()) > 0) {
+                    if (d.getFrontOffsetX() < 0) {
+                        box = new Vec3dCube(new Vec3d(-0.5, box.getMinY(), box.getMinZ()), box.getMax());
                         renderFaces[2] = false;
-                    } else if (d.offsetY < 0) {
-                        box.getMin().setY(-0.5);
+                    } else if (d.getFrontOffsetY() < 0) {
+                        box = new Vec3dCube(new Vec3d(box.getMinX(), -0.5, box.getMinZ()), box.getMax());
                         renderFaces[1] = false;
-                    } else if (d.offsetZ < 0) {
-                        box.getMin().setZ(-0.5);
+                    } else if (d.getFrontOffsetZ() < 0) {
+                        box = new Vec3dCube(new Vec3d(box.getMinX(), box.getMinY(), -0.5), box.getMax());
                         renderFaces[4] = false;
-                    } else if (d.offsetX > 0) {
-                        box.getMax().setX(0.5);
+                    } else if (d.getFrontOffsetX() > 0) {
+                        box = new Vec3dCube(box.getMin(), new Vec3d(0.5, box.getMaxY(), box.getMaxZ()));
                         renderFaces[3] = false;
-                    } else if (d.offsetY > 0) {
-                        box.getMax().setY(0.5);
+                    } else if (d.getFrontOffsetY() > 0) {
+                        box = new Vec3dCube(box.getMin(), new Vec3d(box.getMaxX(), 0.5, box.getMaxZ()));
                         renderFaces[0] = false;
-                    } else if (d.offsetZ > 0) {
-                        box.getMax().setZ(0.5);
+                    } else if (d.getFrontOffsetZ() > 0) {
+                        box = new Vec3dCube(box.getMin(), new Vec3d(box.getMaxX(), box.getMaxY(), 0.5));
                         renderFaces[5] = false;
                     }
                 }
             }
 
-            box.getMin().add(0.5, 0.5, 0.5);
-            box.getMax().add(0.5, 0.5, 0.5);
+            box.getMin().add(new Vec3d(0.5, 0.5, 0.5));
+            box.getMax().add(new Vec3d(0.5, 0.5, 0.5));
 
             GL11.glTranslated(x, y, z);
             GL11.glEnable(GL11.GL_BLEND);
@@ -122,82 +104,6 @@ public class RenderLamp extends TileEntitySpecialRenderer implements ISimpleBloc
 
             GL11.glTranslated(-x, -y, -z);
         }
-    }
-
-    @Override
-    public boolean handleRenderType(ItemStack item, ItemRenderType type) {
-
-        return true;
-    }
-
-    @Override
-    public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item, ItemRendererHelper helper) {
-
-        return true;
-    }
-
-    @Override
-    public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
-
-        GL11.glPushMatrix();
-        {
-            switch (type) {
-            case ENTITY:
-                GL11.glTranslated(-0.5, -0.5, -0.5);
-                break;
-            case EQUIPPED:
-                break;
-            case EQUIPPED_FIRST_PERSON:
-                GL11.glTranslated(0, -0.1, 0);
-                break;
-            case INVENTORY:
-                GL11.glTranslated(0, -0.1, 0);
-                break;
-            default:
-                break;
-            }
-
-            BlockLamp block = (BlockLamp) Block.getBlockFromItem(item.getItem());
-            int redMask = 0xFF0000, greenMask = 0xFF00, blueMask = 0xFF;
-            int r = (block.getColor() & redMask) >> 16;
-            int g = (block.getColor() & greenMask) >> 8;
-            int b = (block.getColor() & blueMask);
-
-            Vec3dCube cube = new Vec3dCube(0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
-
-            Tessellator t = Tessellator.instance;
-            t.startDrawingQuads();
-            t.setColorOpaque(r, g, b);
-
-            RenderHelper h = RenderHelper.instance;
-            h.reset();
-            h.setColor(block.getColor());
-            h.renderBox(cube, block.isInverted() ? BlockLamp.on : BlockLamp.off);
-            h.reset();
-
-            t.draw();
-            if (block.isInverted()) {
-                GL11.glEnable(GL11.GL_BLEND);
-                GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
-                // GL11.glAlphaFunc(GL11.GL_EQUAL, (power / 15F) * 1F);
-                GL11.glDisable(GL11.GL_TEXTURE_2D);
-                GL11.glDisable(GL11.GL_LIGHTING);
-                // GL11.glDisable(GL11.GL_CULL_FACE);
-                GL11.glDepthMask(false);
-                GL11.glBegin(GL11.GL_QUADS);
-                com.bluepowermod.client.render.RenderHelper.drawColoredCube(cube.clone().expand(0.8 / 16D), r / 256D, g / 256D, b / 256D,
-                        0.625D);
-                GL11.glEnd();
-                GL11.glDepthMask(true);
-                GL11.glEnable(GL11.GL_CULL_FACE);
-                GL11.glEnable(GL11.GL_LIGHTING);
-                GL11.glEnable(GL11.GL_TEXTURE_2D);
-                GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-                // GL11.glAlphaFunc(GL11.GL_GREATER, 0.1F);
-                GL11.glDisable(GL11.GL_BLEND);
-            }
-        }
-        GL11.glPopMatrix();
     }
 
 }

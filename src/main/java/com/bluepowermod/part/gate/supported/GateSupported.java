@@ -4,6 +4,7 @@ import com.bluepowermod.api.gate.IGateLogic;
 import com.bluepowermod.part.gate.GateBase;
 import com.bluepowermod.part.gate.component.GateComponentBorder;
 import com.bluepowermod.part.gate.connection.GateConnectionBase;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.Entity;
@@ -65,7 +66,7 @@ public abstract class GateSupported<C_BOTTOM extends GateConnectionBase, C_TOP e
 
         super.renderStatic(translation, renderer, buffer, pass);
 
-        TextureAtlasSprite planks = Blocks.PLANKS.getIcon(0, 0);
+        TextureAtlasSprite planks = Minecraft.getMinecraft().getTextureMapBlocks().getTextureExtry(Blocks.PLANKS.getRegistryName().toString());
 
         renderer.renderBox(new Vec3dCube(2 / 16D, 2 / 16D, 2 / 16D, 3 / 16D, 10 / 16D, 3 / 16D), planks);
         renderer.renderBox(new Vec3dCube(2 / 16D, 2 / 16D, 13 / 16D, 3 / 16D, 10 / 16D, 14 / 16D), planks);

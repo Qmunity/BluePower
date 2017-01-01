@@ -25,6 +25,8 @@ import com.bluepowermod.tile.tier2.TileCircuitTable;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.io.IOException;
+
 @SideOnly(Side.CLIENT)
 public class GuiCircuitTable extends GuiContainerBaseBP {
 
@@ -76,7 +78,7 @@ public class GuiCircuitTable extends GuiContainerBaseBP {
         super.initGui();
         buttonList.clear();
         Keyboard.enableRepeatEvents(true);
-        searchField = new GuiTextField(fontRendererObj, guiLeft + 8, guiTop + 20, 89, fontRendererObj.FONT_HEIGHT);
+        searchField = new GuiTextField(0, fontRendererObj, guiLeft + 8, guiTop + 20, 89, fontRendererObj.FONT_HEIGHT);
         searchField.setMaxStringLength(15);
         searchField.setEnableBackgroundDrawing(true);
         searchField.setVisible(true);
@@ -113,7 +115,7 @@ public class GuiCircuitTable extends GuiContainerBaseBP {
      * Fired when a key is typed. This is the equivalent of KeyListener.keyTyped(KeyEvent e).
      */
     @Override
-    protected void keyTyped(char par1, int par2) {
+    protected void keyTyped(char par1, int par2) throws IOException {
 
         if (field_74234_w) {
             field_74234_w = false;

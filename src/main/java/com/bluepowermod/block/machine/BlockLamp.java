@@ -20,10 +20,13 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -43,17 +46,19 @@ public class BlockLamp extends BlockContainerBase {
 
     public BlockLamp(boolean isInverted, MinecraftColor color) {
 
-        super(Material.iron, TileLamp.class);
+        super(Material.IRON, TileLamp.class);
         this.isInverted = isInverted;
         this.color = color;
-        setBlockName(Refs.LAMP_NAME + "." + color.name().toLowerCase() + (isInverted ? ".inverted" : ""));
+        setRegistryName(Refs.LAMP_NAME + "." + color.name().toLowerCase() + (isInverted ? ".inverted" : ""));
+        setRegistryName(Refs.MODID, Refs.LAMP_NAME + "." + color.name().toLowerCase() + (isInverted ? ".inverted" : ""));
         setCreativeTab(BPCreativeTabs.lighting);
 
     }
 
-    protected TileLamp get(IBlockAccess w, int x, int y, int z) {
 
-        TileEntity te = w.getTileEntity(x, y, z);
+    protected TileLamp get(IBlockAccess w, BlockPos pos) {
+
+        TileEntity te = w.getTileEntity(pos);
 
         if (te == null || !(te instanceof TileLamp))
             return null;
@@ -61,9 +66,9 @@ public class BlockLamp extends BlockContainerBase {
         return (TileLamp) te;
     }
 
-    public int getPower(IBlockAccess w, int x, int y, int z) {
+    public int getPower(IBlockAccess w, BlockPos pos) {
 
-        TileLamp te = get(w, x, y, z);
+        TileLamp te = get(w, pos);
         if (te == null)
             return 0;
 
@@ -73,21 +78,19 @@ public class BlockLamp extends BlockContainerBase {
         return power;
     }
 
-    @Override
     @SideOnly(Side.CLIENT)
     public void registerBlockIcons(TextureMap iconRegister) {
 
-        on = iconRegister.registerIcon(Refs.MODID + ":lamps/lamp_on");
-        off = iconRegister.registerIcon(Refs.MODID + ":lamps/lamp_off");
+        on = iconRegister.registerSprite(new ResourceLocation(Refs.MODID + ":lamps/lamp_on"));
+        off = iconRegister.registerSprite(new ResourceLocation(Refs.MODID + ":lamps/lamp_off"));
     }
 
     @Override
-    public int getLightValue(IBlockAccess w, int x, int y, int z) {
-
-        int pow = getPower(w, x, y, z);
+    public int getLightValue(IBlockState state, IBlockAccess w, BlockPos pos) {
+        int pow = getPower(w, pos);
 
         if (Loader.isModLoaded("coloredlightscore")) {
-            int color = getColor(w, x, y, z);
+            int color = getColor(w, pos);
 
             int ri = (color >> 16) & 0xFF;
             int gi = (color >> 8) & 0xFF;
@@ -120,13 +123,11 @@ public class BlockLamp extends BlockContainerBase {
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
-    public int getRenderType() {
-
-        return 0;
+    public EnumBlockRenderType getRenderType(IBlockState state) {
+        return EnumBlockRenderType.ENTITYBLOCK_ANIMATED;
     }
 
-    public int getColor(IBlockAccess w, int x, int y, int z) {
+    public int getColor(IBlockAccess w, BlockPos pos) {
 
         return color.getHex();
     }
@@ -152,30 +153,20 @@ public class BlockLamp extends BlockContainerBase {
         return true;
     }
 
-    @Override
     @SideOnly(Side.CLIENT)
-    public int getRenderBlockPass() {
+    public int colorMultiplier(IBlockAccess world, BlockPos pos) {
 
-        return 1;
+        return getColor(world, pos);
     }
 
-    @Override
     @SideOnly(Side.CLIENT)
-    public int colorMultiplier(IBlockAccess world, int x, int y, int z) {
+    public TextureAtlasSprite getIcon(IBlockAccess world, BlockPos pos, int side) {
 
-        return getColor(world, x, y, z);
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public TextureAtlasSprite getIcon(IBlockAccess world, int x, int y, int z, int side) {
-
-        int power = getPower(world, x, y, z);
+        int power = getPower(world, pos);
 
         return power > 0 ? on : off;
     }
 
-    @Override
     @SideOnly(Side.CLIENT)
     public TextureAtlasSprite getIcon(int side, int meta) {
 
@@ -183,25 +174,24 @@ public class BlockLamp extends BlockContainerBase {
     }
 
     @Override
-    public void onNeighborBlockChange(World world, int x, int y, int z, Block block) {
-
-        super.onNeighborBlockChange(world, x, y, z, block);
+    public void neighborChanged(IBlockState state, World world, BlockPos pos, Block block, BlockPos fromPos) {
+        super.neighborChanged(state, world, pos, block, fromPos);
 
         if (this instanceof BlockLampRGB && block instanceof BlockLampRGB)
             return;
 
-        TileLamp te = get(world, x, y, z);
+        TileLamp te = get(world, pos);
         if (te == null)
             return;
         te.onUpdate();
     }
 
     @Override
-    public void onBlockAdded(World world, int x, int y, int z) {
+    public void onBlockAdded(World world, BlockPos pos, IBlockState state) {
 
-        super.onBlockAdded(world, x, y, z);
+        super.onBlockAdded(world, pos, state);
 
-        TileLamp te = get(world, x, y, z);
+        TileLamp te = get(world, pos);
         if (te == null)
             return;
         te.onUpdate();

@@ -52,8 +52,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.Vec3i;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -215,7 +215,7 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
     public PneumaticTube getPartCache(EnumFacing d) {
 
         if (partCache == null) {
-            partCache = new PartCache<PneumaticTube>(getWorld(), getPos().getX(), getPos().getY(), getPos().getZ(), PneumaticTube.class);
+            partCache = new PartCache<PneumaticTube>(getWorld(), getPos(), PneumaticTube.class);
         }
         return partCache.getValue(d);
     }
@@ -555,9 +555,7 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
-    public boolean renderStatic(BlockPos loc, RenderHelper renderer, VertexBuffer buffer, int pass) {
-
+    public boolean renderStatic(Vec3i translation, RenderHelper renderer, VertexBuffer buffer, int pass) {
         boolean down = shouldRenderConnection(EnumFacing.DOWN);
         boolean up = shouldRenderConnection(EnumFacing.UP);
         boolean north = shouldRenderConnection(EnumFacing.NORTH);

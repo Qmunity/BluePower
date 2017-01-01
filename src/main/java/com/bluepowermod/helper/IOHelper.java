@@ -349,6 +349,11 @@ public class IOHelper {
         }
     }
 
+    public static void spawnItemInWorld(World world, ItemStack itemStack, BlockPos pos) {
+        spawnItemInWorld(world, itemStack, pos.getX(), pos.getY(), pos.getZ());
+    }
+
+
     public static void spawnItemInWorld(World world, ItemStack itemStack, double x, double y, double z) {
 
         if (world.isRemote)

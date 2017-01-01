@@ -7,17 +7,6 @@
  */
 package com.bluepowermod.tile.tier3;
 
-import java.util.List;
-
-import mcmultipart.api.multipart.MultipartHelper;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
 import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.init.BPBlocks;
@@ -27,6 +16,16 @@ import com.bluepowermod.part.tube.TubeStack;
 import com.bluepowermod.tile.IFuzzyRetrieving;
 import com.bluepowermod.tile.IRejectAnimator;
 import com.bluepowermod.tile.TileMachineBase;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
+import uk.co.qmunity.lib.part.compat.MultipartCompatibility;
+
+import java.util.List;
 
 /**
  * @author MineMaarten
@@ -120,7 +119,7 @@ public class TileManager extends TileMachineBase implements ISidedInventory, IGu
 
     private void retrieveItemsFromManagers() {
 
-        PneumaticTube tube = MultipartHelper.getPart(world, pos.offset(getOutputDirection()), PneumaticTube.class);
+        PneumaticTube tube = MultipartCompatibility.getPart(world, pos.offset(getOutputDirection()), PneumaticTube.class);
         if (tube != null) {
             for (ItemStack stack : inventory) {
                 int acceptedItems = acceptedItems(stack);
@@ -216,6 +215,11 @@ public class TileManager extends TileMachineBase implements ISidedInventory, IGu
     }
 
     @Override
+    public boolean isEmpty() {
+        return inventory.length == 0;
+    }
+
+    @Override
     public ItemStack getStackInSlot(int i) {
 
         return inventory[i];
@@ -289,6 +293,26 @@ public class TileManager extends TileMachineBase implements ISidedInventory, IGu
     public boolean isItemValidForSlot(int i, ItemStack itemStack) {
 
         return true;
+    }
+
+    @Override
+    public int getField(int id) {
+        return 0;
+    }
+
+    @Override
+    public void setField(int id, int value) {
+
+    }
+
+    @Override
+    public int getFieldCount() {
+        return 0;
+    }
+
+    @Override
+    public void clear() {
+
     }
 
     @Override

@@ -33,7 +33,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.FakePlayerFactory;
-import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 
 import java.util.ArrayList;
@@ -145,7 +144,7 @@ public class TileDeployer extends TileBase implements ISidedInventory, IEjectAni
         }
         
         try {
-            PlayerInteractEvent event = ForgeEventFactory.onPlayerInteract(player, Action.RIGHT_CLICK_AIR, x, y, z, faceDir.ordinal(), world);
+            PlayerInteractEvent event =  new PlayerInteractEvent.RightClickEmpty(player, EnumHand.MAIN_HAND);
             if (event.isCanceled()) return false;
             
             Block block = world.getBlockState(new BlockPos(x, y, z)).getBlock();
@@ -158,7 +157,7 @@ public class TileDeployer extends TileBase implements ISidedInventory, IEjectAni
                     player.inventory.currentItem = i;
                     ItemStack stack = player.getHeldItemMainhand();
                     if (canDeployItem(stack) && stack.getItem().itemInteractionForEntity(stack, player, (EntityLivingBase) entity, EnumHand.MAIN_HAND)) return true;
-                    if (entity instanceof EntityAnimal && ((EntityAnimal) entity).interact(player)) return true;
+                    if (entity instanceof EntityAnimal && ((EntityAnimal) entity).processInteract(player, EnumHand.MAIN_HAND)) return true;
                 }
             }
             

@@ -11,7 +11,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -61,14 +61,10 @@ public abstract class BPPart extends PartBase implements IPartSelectable, IPartC
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
-    public boolean renderBreaking(BlockPos translation, RenderHelper renderer, VertexBuffer buffer, int pass, QRayTraceResult mop) {
-
+    public boolean renderBreaking(Vec3i translation, RenderHelper renderer, VertexBuffer buffer, int pass, QRayTraceResult mop) {
         return renderStatic(translation, renderer, buffer, pass);
     }
 
-    
-    
     @Override
     public List<Vec3dCube> getOcclusionBoxes() {
 

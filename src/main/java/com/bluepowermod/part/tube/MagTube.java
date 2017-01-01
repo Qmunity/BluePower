@@ -7,21 +7,19 @@
  */
 package com.bluepowermod.part.tube;
 
-import java.util.List;
-
+import com.bluepowermod.client.render.IconSupplier;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-
-import org.lwjgl.opengl.GL11;
-
-import uk.co.qmunity.lib.vec.Vec3dCube;
-
-import com.bluepowermod.client.render.IconSupplier;
-
+import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.opengl.GL11;
+import uk.co.qmunity.lib.vec.Vec3dCube;
+
+import java.util.List;
 
 /**
  * @author MineMaarten
@@ -81,6 +79,7 @@ public class MagTube extends PneumaticTube {
 
         Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
         Tessellator t = Tessellator.getInstance();
+        VertexBuffer b = t.getBuffer();
         GL11.glPushMatrix();
         GL11.glTranslatef(0.5F, 0.5F, 0.5F);
         if (getParent() == null || getWorld() == null) {
@@ -94,7 +93,7 @@ public class MagTube extends PneumaticTube {
         }
         GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
 
-        t.startDrawingQuads();
+        b.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
 
         double min = 2 / 16D;
         double max = 14 / 16D;
@@ -108,49 +107,49 @@ public class MagTube extends PneumaticTube {
         double minY = icon.getInterpolatedV(min * 16);
         double maxY = icon.getInterpolatedV(max * 16);
 
-        t.setNormal(0, 0, 1);
-        t.addVertexWithUV(min, min, max, maxX, maxY);// maxZ
-        t.addVertexWithUV(max, min, max, minX, maxY);
-        t.addVertexWithUV(max, max, max, minX, minY);
-        t.addVertexWithUV(min, max, max, maxX, minY);
+        b.normal(0, 0, 1);
+        b.pos(min, min, max).tex(maxX, maxY).endVertex();// maxZ
+        b.pos(max, min, max).tex(minX, maxY).endVertex();
+        b.pos(max, max, max).tex(minX, minY).endVertex();
+        b.pos(min, max, max).tex(maxX, minY).endVertex();
 
-        t.addVertexWithUV(min, min, inMax, maxX, maxY);// inside maxZ
-        t.addVertexWithUV(max, min, inMax, minX, maxY);
-        t.addVertexWithUV(max, max, inMax, minX, minY);
-        t.addVertexWithUV(min, max, inMax, maxX, minY);
+        b.pos(min, min, inMax).tex(maxX, maxY).endVertex();// inside maxZ
+        b.pos(max, min, inMax).tex(minX, maxY).endVertex();
+        b.pos(max, max, inMax).tex(minX, minY).endVertex();
+        b.pos(min, max, inMax).tex(maxX, minY).endVertex();
 
-        t.setNormal(0, 0, -1);
-        t.addVertexWithUV(min, min, min, minX, maxY);// minZ
-        t.addVertexWithUV(min, max, min, minX, minY);
-        t.addVertexWithUV(max, max, min, maxX, minY);
-        t.addVertexWithUV(max, min, min, maxX, maxY);
+        b.normal(0, 0, -1);
+        b.pos(min, min, min).tex(minX, maxY).endVertex();// minZ
+        b.pos(min, max, min).tex(minX, minY).endVertex();
+        b.pos(max, max, min).tex(maxX, minY).endVertex();
+        b.pos(max, min, min).tex(maxX, maxY).endVertex();
 
-        t.addVertexWithUV(min, min, inMin, maxX, maxY);// inside minZ
-        t.addVertexWithUV(min, max, inMin, minX, minY);
-        t.addVertexWithUV(max, max, inMin, minX, minY);
-        t.addVertexWithUV(max, min, inMin, maxX, maxY);
+        b.pos(min, min, inMin).tex(maxX, maxY).endVertex();// inside minZ
+        b.pos(min, max, inMin).tex(minX, minY).endVertex();
+        b.pos(max, max, inMin).tex(minX, minY).endVertex();
+        b.pos(max, min, inMin).tex(maxX, maxY).endVertex();
 
-        t.setNormal(-1, 0, 0);
-        t.addVertexWithUV(min, min, min, maxX, maxY);// minX
-        t.addVertexWithUV(min, min, max, minX, maxY);
-        t.addVertexWithUV(min, max, max, minX, minY);
-        t.addVertexWithUV(min, max, min, maxX, minY);
+        b.normal(-1, 0, 0);
+        b.pos(min, min, min).tex(maxX, maxY).endVertex();// minX
+        b.pos(min, min, max).tex(minX, maxY).endVertex();
+        b.pos(min, max, max).tex(minX, minY).endVertex();
+        b.pos(min, max, min).tex(maxX, minY).endVertex();
 
-        t.addVertexWithUV(inMin, min, min, maxX, maxY);// inside minX
-        t.addVertexWithUV(inMin, min, max, minX, maxY);
-        t.addVertexWithUV(inMin, max, max, minX, minY);
-        t.addVertexWithUV(inMin, max, min, maxX, minY);
+        b.pos(inMin, min, min).tex(maxX, maxY).endVertex();// inside minX
+        b.pos(inMin, min, max).tex(minX, maxY).endVertex();
+        b.pos(inMin, max, max).tex(minX, minY).endVertex();
+        b.pos(inMin, max, min).tex(maxX, minY).endVertex();
 
-        t.setNormal(1, 0, 0);
-        t.addVertexWithUV(max, min, min, minX, minY);// maxX
-        t.addVertexWithUV(max, max, min, minX, maxY);
-        t.addVertexWithUV(max, max, max, maxX, maxY);
-        t.addVertexWithUV(max, min, max, maxX, minY);
+        b.normal(1, 0, 0);
+        b.pos(max, min, min).tex(minX, minY).endVertex();// maxX
+        b.pos(max, max, min).tex(minX, maxY).endVertex();
+        b.pos(max, max, max).tex(maxX, maxY).endVertex();
+        b.pos(max, min, max).tex(maxX, minY).endVertex();
 
-        t.addVertexWithUV(inMax, min, min, maxX, minY);// maxX
-        t.addVertexWithUV(inMax, max, min, minX, maxY);
-        t.addVertexWithUV(inMax, max, max, minX, maxY);
-        t.addVertexWithUV(inMax, min, max, maxX, minY);
+        b.pos(inMax, min, min).tex(maxX, minY).endVertex();// maxX
+        b.pos(inMax, max, min).tex(minX, maxY).endVertex();
+        b.pos(inMax, max, max).tex(minX, maxY).endVertex();
+        b.pos(inMax, min, max).tex(maxX, minY).endVertex();
 
         icon = IconSupplier.magCoilFront;
         minX = icon.getInterpolatedU(min * 16);
@@ -158,17 +157,17 @@ public class MagTube extends PneumaticTube {
         minY = icon.getInterpolatedV(min * 16);
         maxY = icon.getInterpolatedV(max * 16);
         for (int i = 2; i < 16; i += 8) {
-            t.setNormal(0, 1, 0);
-            t.addVertexWithUV(min, 1 - i / 16D, min, maxX, maxY);// maxY
-            t.addVertexWithUV(min, 1 - i / 16D, max, minX, maxY);
-            t.addVertexWithUV(max, 1 - i / 16D, max, minX, minY);
-            t.addVertexWithUV(max, 1 - i / 16D, min, maxX, minY);
+            b.normal(0, 1, 0);
+            b.pos(min, 1 - i / 16D, min).tex(maxX, maxY).endVertex();// maxY
+            b.pos(min, 1 - i / 16D, max).tex(minX, maxY).endVertex();
+            b.pos(max, 1 - i / 16D, max).tex(minX, minY).endVertex();
+            b.pos(max, 1 - i / 16D, min).tex(maxX, minY).endVertex();
 
-            t.setNormal(0, -1, 0);
-            t.addVertexWithUV(min, i / 16D, min, maxX, maxY);// minY
-            t.addVertexWithUV(max, i / 16D, min, minX, maxY);
-            t.addVertexWithUV(max, i / 16D, max, minX, minY);
-            t.addVertexWithUV(min, i / 16D, max, maxX, minY);
+            b.normal(0, -1, 0);
+            b.pos(min, i / 16D, min).tex(maxX, maxY).endVertex();// minY
+            b.pos(max, i / 16D, min).tex(minX, maxY).endVertex();
+            b.pos(max, i / 16D, max).tex(minX, minY).endVertex();
+            b.pos(min, i / 16D, max).tex(maxX, minY).endVertex();
         }
         t.draw();
         GL11.glPopMatrix();

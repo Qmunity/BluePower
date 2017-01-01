@@ -3,8 +3,10 @@ package com.bluepowermod.part.gate.component;
 import com.bluepowermod.part.gate.GateBase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.Vec3d;
@@ -46,7 +48,7 @@ public class GateComponentLever extends GateComponent {
     public void renderStatic(Vec3i translation, RenderHelper renderer, int pass) {
 
         renderer.addTransformation(new Translation(x, 0, z));
-        renderer.renderBox(new Vec3dCube(0, 2 / 16D, 0, 4 / 16D, 4 / 16D, 7 / 16D), Blocks.COBBLESTONE.getIcon(0, 0));
+        renderer.renderBox(new Vec3dCube(0, 2 / 16D, 0, 4 / 16D, 4 / 16D, 7 / 16D), Minecraft.getMinecraft().getTextureMapBlocks().getTextureExtry(Blocks.COBBLESTONE.getRegistryName().toString()));
         renderer.removeTransformation();
     }
 
@@ -62,8 +64,9 @@ public class GateComponentLever extends GateComponent {
             GL11.glEnable(GL11.GL_ALPHA_TEST);
 
             Tessellator t = Tessellator.getInstance();
+            VertexBuffer b = t.getBuffer();
 
-            TextureAtlasSprite icon = Blocks.LEVER.getIcon(0, 0);
+            TextureAtlasSprite icon = Minecraft.getMinecraft().getTextureMapBlocks().getTextureExtry(Blocks.LEVER.getRegistryName().toString());
             double minU = icon.getMinU();
             double minV = icon.getMinV();
             double maxU = icon.getMaxU();
@@ -75,46 +78,46 @@ public class GateComponentLever extends GateComponent {
             GL11.glRotated(state ? 40 : -40, 1, 0, 0);
             GL11.glTranslated(0, 0, -1 / 16D);
 
-            t.startDrawingQuads();
+            b.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
             {
-                t.setNormal(0, 1, 0);
+                b.normal(0, 1, 0);
 
-                t.addVertexWithUV(0, 0, 0, minU, maxV);
-                t.addVertexWithUV(0, 6F / 8F, 0, minU, minV);
-                t.addVertexWithUV(1, 6F / 8F, 0, maxU, minV);
-                t.addVertexWithUV(1, 0, 0, maxU, maxV);
+                b.pos(0, 0, 0).tex(minU, maxV).endVertex();
+                b.pos(0, 6F / 8F, 0).tex(minU, minV).endVertex();
+                b.pos(1, 6F / 8F, 0).tex(maxU, minV).endVertex();
+                b.pos(1, 0, 0).tex(maxU, maxV).endVertex();
 
-                t.addTranslation(0, 0, 2 / 16F);
-                t.addVertexWithUV(0, 0, 0, maxU, maxV);
-                t.addVertexWithUV(1, 0, 0, minU, maxV);
-                t.addVertexWithUV(1, 6F / 8F, 0, minU, minV);
-                t.addVertexWithUV(0, 6F / 8F, 0, maxU, minV);
-                t.addTranslation(0, 0, -2 / 16F);
+                b.setTranslation(0, 0, 2 / 16F);
+                b.pos(0, 0, 0).tex(maxU, maxV).endVertex();
+                b.pos(1, 0, 0).tex(minU, maxV).endVertex();
+                b.pos(1, 6F / 8F, 0).tex(minU, minV).endVertex();
+                b.pos(0, 6F / 8F, 0).tex(maxU, minV).endVertex();
+                b.setTranslation(0, 0, -2 / 16F);
 
-                t.addTranslation(7 / 16F, 0, -7 / 16F);
-                t.addVertexWithUV(0, 0, 0, maxU, maxV);
-                t.addVertexWithUV(0, 0, 1, minU, maxV);
-                t.addVertexWithUV(0, 6F / 8F, 1, minU, minV);
-                t.addVertexWithUV(0, 6F / 8F, 0, maxU, minV);
-                t.addTranslation(-7 / 16F, 0, 7 / 16F);
+                b.setTranslation(7 / 16F, 0, -7 / 16F);
+                b.pos(0, 0, 0).tex(maxU, maxV).endVertex();
+                b.pos(0, 0, 1).tex(minU, maxV).endVertex();
+                b.pos(0, 6F / 8F, 1).tex(minU, minV).endVertex();
+                b.pos(0, 6F / 8F, 0).tex(maxU, minV).endVertex();
+                b.setTranslation(-7 / 16F, 0, 7 / 16F);
 
-                t.addTranslation(9 / 16F, 0, -7 / 16F);
-                t.addVertexWithUV(0, 0, 0, minU, maxV);
-                t.addVertexWithUV(0, 6F / 8F, 0, minU, minV);
-                t.addVertexWithUV(0, 6F / 8F, 1, maxU, minV);
-                t.addVertexWithUV(0, 0, 1, maxU, maxV);
-                t.addTranslation(-9 / 16F, 0, 7 / 16F);
+                b.setTranslation(9 / 16F, 0, -7 / 16F);
+                b.pos(0, 0, 0).tex(minU, maxV).endVertex();
+                b.pos(0, 6F / 8F, 0).tex(minU, minV).endVertex();
+                b.pos(0, 6F / 8F, 1).tex(maxU, minV).endVertex();
+                b.pos(0, 0, 1).tex(maxU, maxV).endVertex();
+                b.setTranslation(-9 / 16F, 0, 7 / 16F);
 
-                t.addTranslation(7 / 16F, 0, 0);
+                b.setTranslation(7 / 16F, 0, 0);
                 minU = icon.getInterpolatedU(7);
                 maxU = icon.getInterpolatedU(9);
                 minV = icon.getInterpolatedV(6);
                 maxV = icon.getInterpolatedV(8);
-                t.addVertexWithUV(0, 15 / 32D, 0, minU, maxV);
-                t.addVertexWithUV(0, 15 / 32D, 1 / 8D, minU, minV);
-                t.addVertexWithUV(1 / 8D, 15 / 32D, 1 / 8D, maxU, minV);
-                t.addVertexWithUV(1 / 8D, 15 / 32D, 0, maxU, maxV);
-                t.addTranslation(-7 / 16F, 0, 0);
+                b.pos(0, 15 / 32D, 0).tex(minU, maxV).endVertex();
+                b.pos(0, 15 / 32D, 1 / 8D).tex(minU, minV).endVertex();
+                b.pos(1 / 8D, 15 / 32D, 1 / 8D).tex(maxU, minV).endVertex();
+                b.pos(1 / 8D, 15 / 32D, 0).tex(maxU, maxV).endVertex();
+                b.setTranslation(-7 / 16F, 0, 0);
             }
             t.draw();
         }

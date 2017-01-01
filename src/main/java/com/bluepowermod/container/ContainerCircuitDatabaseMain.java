@@ -9,7 +9,7 @@ package com.bluepowermod.container;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import uk.co.qmunity.lib.client.gui.GuiContainerBase;
@@ -91,8 +91,8 @@ public class ContainerCircuitDatabaseMain extends ContainerGhosts {
 
         super.detectAndSendChanges();
 
-        for (Object crafter : crafters) {
-            ICrafting icrafting = (ICrafting) crafter;
+        for (Object crafter : listeners) {
+            IContainerListener icrafting = (IContainerListener) crafter;
 
             if (curUploadProgress != circuitDatabase.curUploadProgress) {
                 icrafting.sendProgressBarUpdate(this, 0, circuitDatabase.curUploadProgress);
@@ -146,7 +146,7 @@ public class ContainerCircuitDatabaseMain extends ContainerGhosts {
                 slot.onSlotChanged();
             }
             if (itemstack1.getCount() != itemstack.getCount()) {
-                slot.onPickupFromSlot(player, itemstack1);
+                slot.onSlotChange(itemstack, itemstack1);
             } else {
                 return null;
             }

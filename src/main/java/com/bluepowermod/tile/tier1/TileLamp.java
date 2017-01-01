@@ -7,13 +7,6 @@
  */
 package com.bluepowermod.tile.tier1;
 
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.EnumSkyBlock;
-import net.minecraft.world.World;
-import net.minecraft.util.EnumFacing;;
-import uk.co.qmunity.lib.helper.MathHelper;
-
 import com.bluepowermod.api.connect.ConnectionType;
 import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.api.wire.redstone.IBundledDevice;
@@ -24,6 +17,15 @@ import com.bluepowermod.client.render.RenderLamp;
 import com.bluepowermod.redstone.BundledConnectionCache;
 import com.bluepowermod.redstone.RedstoneApi;
 import com.bluepowermod.tile.TileBase;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.EnumSkyBlock;
+import net.minecraft.world.World;
+import uk.co.qmunity.lib.helper.MathHelper;
+import uk.co.qmunity.lib.helper.RedstoneHelper;
+
+;
 
 /**
  * @author Koen Beckers (K4Unl) and Amadornes. Yes. I only need this class to do the getPower() function.. damn :(
@@ -118,21 +120,6 @@ public class TileLamp extends TileBase implements IBundledDevice {
     public World getWorld() {
 
         return getWorld();
-    }
-
-    @Override
-    public int getX() {
-        return pos.getX();
-    }
-
-    @Override
-    public int getY() {
-        return pos.getY();
-    }
-
-    @Override
-    public int getZ() {
-        return pos.getZ();
     }
 
     @Override

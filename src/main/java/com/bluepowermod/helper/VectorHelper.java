@@ -18,6 +18,7 @@
 package com.bluepowermod.helper;
 
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import uk.co.qmunity.lib.vec.Vec3dCube;
 import uk.co.qmunity.lib.vec.Vec3dHelper;
@@ -58,6 +59,34 @@ public class VectorHelper {
             return EnumFacing.DOWN;
 
         return null;
+    }
+
+    public static Vec3d rotate(Vec3d vec, int x, int y, int z, Vec3d center) {
+        vec = Vec3dHelper.rotate(vec.subtract(center), x, y, z).add(center);
+        double mul = 1.0E7D;
+        return new Vec3d((double)Math.round(vec.xCoord * mul) / mul, (double)Math.round(vec.yCoord * mul) / mul, (double)Math.round(vec.zCoord * mul) / mul);
+    }
+
+    public static Vec3d rotateUndo(BlockPos pos, EnumFacing face, Vec3d center) {
+
+        switch (face) {
+            case DOWN:
+                return new Vec3d(pos);
+            case UP:
+                return rotate(new Vec3d(pos), 0, 0, -2 * 90, center);
+            case WEST:
+                return rotate(new Vec3d(pos), 0, 0, 90, center);
+            case EAST:
+                return rotate(new Vec3d(pos), 0, 0, -1 * 90, center);
+            case NORTH:
+                return rotate(new Vec3d(pos), -1 * 90, 0, 0, center);
+            case SOUTH:
+                return rotate(new Vec3d(pos), 90, 0, 0, center);
+            default:
+                break;
+        }
+
+        return new Vec3d(pos);
     }
 
 }

@@ -20,6 +20,7 @@ package com.bluepowermod.container;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
+import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityFurnace;
@@ -114,8 +115,8 @@ public class ContainerAlloyFurnace extends Container {
     
         super.detectAndSendChanges();
         
-        for (Object crafter : crafters) {
-            ICrafting icrafting = (ICrafting) crafter;
+        for (Object crafter : listeners) {
+            IContainerListener icrafting = (IContainerListener) crafter;
             
             if (currentBurnTime != tileFurnace.currentBurnTime) {
                 icrafting.sendProgressBarUpdate(this, 0, tileFurnace.currentBurnTime);

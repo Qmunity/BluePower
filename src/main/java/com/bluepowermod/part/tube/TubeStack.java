@@ -13,7 +13,7 @@ import com.bluepowermod.reference.Refs;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderItem;
-import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemDye;
@@ -192,21 +192,18 @@ public class TubeStack {
         final RenderMode finalRenderMode = renderMode;
 
         if (customRenderItem == null) {
-            customRenderItem = new RenderItem() {
+            customRenderItem = new RenderItem(Minecraft.getMinecraft().getTextureManager(), Minecraft.getMinecraft().getRenderItem().getItemModelMesher().getModelManager(), Minecraft.getMinecraft().getItemColors()) {
 
-                @Override
                 public boolean shouldBob() {
 
                     return false;
-                };
-
-                @Override
+                }
                 public byte getMiniBlockCount(ItemStack stack, byte original) {
 
                     return finalRenderMode == RenderMode.REDUCED ? (byte) 1 : original;
                 }
             };
-            customRenderItem.setRenderManager(RenderManager.instance);
+            //customRenderItem.setRenderManager(RenderManager.instance);
 
             renderedItem = new EntityItem(FMLClientHandler.instance().getWorldClient());
             renderedItem.hoverStart = 0.0F;
@@ -228,7 +225,7 @@ public class TubeStack {
                 GL11.glTranslated(0, -0.15, 0);
             }
 
-            customRenderItem.doRender(renderedItem, 0, 0, 0, 0, 0);
+            customRenderItem.renderItem(renderedItem.getEntityItem(), ItemCameraTransforms.TransformType.GUI);
             GL11.glPopMatrix();
         } else {
             float size = 0.02F;

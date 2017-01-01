@@ -9,7 +9,7 @@ package com.bluepowermod.tile.tier2;
 
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.part.IGuiButtonSensitive;
-import com.bluepowermod.part.BPPartInfo;
+import com.bluepowermod.part.PartInfo;
 import com.bluepowermod.part.PartManager;
 import com.bluepowermod.part.gate.GateBase;
 import com.bluepowermod.tile.IGUITextFieldSensitive;
@@ -60,8 +60,8 @@ public class TileCircuitTable extends TileBase implements IInventory, IGuiButton
     protected List<ItemStack> getApplicableItems() {
 
         List<ItemStack> gates = new ArrayList<ItemStack>();
-        List<BPPartInfo> registeredParts = PartManager.getRegisteredParts();
-        for (BPPartInfo part : registeredParts) {
+        List<PartInfo> registeredParts = PartManager.getRegisteredParts();
+        for (PartInfo part : registeredParts) {
             if (part.getExample() instanceof GateBase<?, ?, ?, ?, ?, ?>
             && ((GateBase<?, ?, ?, ?, ?, ?>) part.getExample()).isCraftableInCircuitTable()) {
                 ItemStack partStack = part.getStack().copy();

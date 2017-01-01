@@ -21,11 +21,12 @@ import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
 import com.bluepowermod.client.render.IconSupplier;
 import com.bluepowermod.part.wire.redstone.WireHelper;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3i;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import uk.co.qmunity.lib.client.render.RenderHelper;
@@ -52,13 +53,11 @@ public class PneumaticTubeOpaque extends PneumaticTube {
     @Override
     @SideOnly(Side.CLIENT)
     protected TextureAtlasSprite getSideIcon() {
-
-        return Blocks.STONE.getIcon(0, 0);// IconSupplier.pneumaticTubeOpaqueSide;
+        return Minecraft.getMinecraft().getTextureMapBlocks().getTextureExtry(Blocks.STONE.getRegistryName().toString());// IconSupplier.pneumaticTubeOpaqueSide;
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
-    public boolean renderStatic(BlockPos loc, RenderHelper renderer, VertexBuffer buffer, int pass) {
+    public boolean renderStatic(Vec3i translation, RenderHelper renderer, VertexBuffer buffer, int pass) {
 
         if (pass == 0) {
             boolean renderFully = false;

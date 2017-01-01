@@ -17,7 +17,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ClickType;
 import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
@@ -82,7 +82,7 @@ public class ContainerCircuitTable extends Container {
         super.detectAndSendChanges();
         if (scrollState != circuitTable.slotsScrolled) {
             scrollState = circuitTable.slotsScrolled;
-            for (ICrafting crafter : (List<ICrafting>) crafters) {
+            for (IContainerListener crafter : (List<IContainerListener>) listeners) {
                 crafter.sendProgressBarUpdate(this, 0, circuitTable.slotsScrolled);
             }
         }

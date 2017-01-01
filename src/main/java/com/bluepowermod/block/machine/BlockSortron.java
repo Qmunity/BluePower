@@ -14,7 +14,7 @@ import com.bluepowermod.tile.tier3.TileSortron;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -30,7 +30,8 @@ public class BlockSortron extends BlockContainerBase {
     public BlockSortron() {
     
         super(Material.ROCK, TileSortron.class);
-        setBlockName(Refs.BLOCKSORTRON_NAME);
+        setUnlocalizedName(Refs.BLOCKSORTRON_NAME);
+        setRegistryName(Refs.MODID, Refs.BLOCKSORTRON_NAME);
     }
     
     @Override
@@ -38,17 +39,7 @@ public class BlockSortron extends BlockContainerBase {
     
         return GuiIDs.INVALID;
     }
-    
-    @Override
-    @SideOnly(Side.CLIENT)
-    public TextureAtlasSprite getIcon(int side, int meta) {
-    
-        EnumFacing direction = EnumFacing.getFront(meta);
-        if (side == direction.ordinal()) {
-            return icons[0];
-        } else if (side == direction.getOpposite().ordinal()) { return icons[1]; }
-        return icons[2];
-    }
+
     
     /* @Override
      @SideOnly(Side.CLIENT)
@@ -70,17 +61,16 @@ public class BlockSortron extends BlockContainerBase {
                  }
          //TODO: different icons when powered
      }*/
-    
-    @Override
+
     @SideOnly(Side.CLIENT)
     public void registerBlockIcons(TextureMap iconRegister) {
     
-        icons[0] = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + Refs.BLOCKSORTRON_NAME + "_front");
-        icons[1] = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + Refs.BLOCKSORTRON_NAME + "_back");
-        icons[2] = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + Refs.BLOCKSORTRON_NAME + "_side_off");
-        icons[3] = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + Refs.BLOCKSORTRON_NAME + "_side_on");
-        icons[4] = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + Refs.BLOCKSORTRON_NAME + "_side_on_1");
-        icons[5] = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + Refs.BLOCKSORTRON_NAME + "_side");
-        icons[6] = iconRegister.registerIcon(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + Refs.BLOCKSORTRON_NAME + "_side_active");
+        icons[0] = iconRegister.registerSprite(new ResourceLocation(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + Refs.BLOCKSORTRON_NAME + "_front"));
+        icons[1] = iconRegister.registerSprite(new ResourceLocation(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + Refs.BLOCKSORTRON_NAME + "_back"));
+        icons[2] = iconRegister.registerSprite(new ResourceLocation(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + Refs.BLOCKSORTRON_NAME + "_side_off"));
+        icons[3] = iconRegister.registerSprite(new ResourceLocation(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + Refs.BLOCKSORTRON_NAME + "_side_on"));
+        icons[4] = iconRegister.registerSprite(new ResourceLocation(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + Refs.BLOCKSORTRON_NAME + "_side_on_1"));
+        icons[5] = iconRegister.registerSprite(new ResourceLocation(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + Refs.BLOCKSORTRON_NAME + "_side"));
+        icons[6] = iconRegister.registerSprite(new ResourceLocation(Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + Refs.BLOCKSORTRON_NAME + "_side_active"));
     }
 }

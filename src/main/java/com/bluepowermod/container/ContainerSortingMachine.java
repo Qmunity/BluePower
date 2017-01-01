@@ -17,21 +17,20 @@
 
 package com.bluepowermod.container;
 
-import java.util.Arrays;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Slot;
-import net.minecraft.item.ItemStack;
-import uk.co.qmunity.lib.client.gui.GuiContainerBase;
-
 import com.bluepowermod.ClientProxy;
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
 import com.bluepowermod.container.slot.SlotPhantom;
 import com.bluepowermod.tile.tier2.TileSortingMachine;
-
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.IContainerListener;
+import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import uk.co.qmunity.lib.client.gui.GuiContainerBase;
+
+import java.util.Arrays;
 
 /**
  *
@@ -91,8 +90,8 @@ public class ContainerSortingMachine extends ContainerMachineBase {
 
         super.detectAndSendChanges();
 
-        for (Object crafter : crafters) {
-            ICrafting icrafting = (ICrafting) crafter;
+        for (Object crafter : listeners) {
+            IContainerListener icrafting = (IContainerListener) crafter;
 
             for (int i = 0; i < 9; i++) {
                 if (colors[i] != sortingMachine.colors[i].ordinal()) {
@@ -162,7 +161,7 @@ public class ContainerSortingMachine extends ContainerMachineBase {
     @Override
     public boolean canInteractWith(EntityPlayer entityplayer) {
 
-        return sortingMachine.isUseableByPlayer(entityplayer);
+        return sortingMachine.isUsableByPlayer(entityplayer);
     }
 
 }

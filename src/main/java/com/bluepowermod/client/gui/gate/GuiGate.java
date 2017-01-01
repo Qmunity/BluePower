@@ -7,27 +7,24 @@
  */
 package com.bluepowermod.client.gui.gate;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.util.ResourceLocation;
-
-import org.apache.commons.lang3.text.WordUtils;
-
-import uk.co.qmunity.lib.client.gui.widget.BaseWidget;
-import uk.co.qmunity.lib.client.gui.widget.IGuiWidget;
-import uk.co.qmunity.lib.client.gui.widget.IWidgetListener;
-
 import com.bluepowermod.BluePower;
 import com.bluepowermod.client.gui.GuiScreenBase;
 import com.bluepowermod.network.BPNetworkHandler;
 import com.bluepowermod.network.message.MessageGuiUpdate;
 import com.bluepowermod.part.gate.GateBase;
-
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.apache.commons.lang3.text.WordUtils;
+import uk.co.qmunity.lib.client.gui.widget.BaseWidget;
+import uk.co.qmunity.lib.client.gui.widget.IGuiWidget;
+import uk.co.qmunity.lib.client.gui.widget.IWidgetListener;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -121,7 +118,7 @@ public class GuiGate extends GuiScreenBase implements IWidgetListener {
     }
 
     @Override
-    protected void mouseClicked(int x, int y, int button) {
+    protected void mouseClicked(int x, int y, int button) throws IOException {
 
         super.mouseClicked(x, y, button);
         for (IGuiWidget widget : widgets) {

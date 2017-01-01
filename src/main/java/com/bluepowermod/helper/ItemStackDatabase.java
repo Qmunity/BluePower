@@ -12,9 +12,8 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
-import net.minecraft.nbt.NBTSizeTracker;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraft.util.ResourceLocation;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -40,15 +39,17 @@ public class ItemStackDatabase {
         NBTTagCompound tag = new NBTTagCompound();
         stack.writeToNBT(tag);
 
-        UniqueIdentifier ui = GameRegistry.findUniqueIdentifierFor(stack.getItem());
-        tag.setString("owner", ui.modId);
-        tag.setString("name", ui.name);
+        ResourceLocation ui = stack.getItem().getRegistryName();
+        tag.setString("owner", ui.getResourceDomain());
+        tag.setString("name", ui.getResourcePath());
 
         try {
             FileOutputStream fos = new FileOutputStream(targetLocation);
             DataOutputStream dos = new DataOutputStream(fos);
 
-            byte[] abyte = CompressedStreamTools.compress(tag);
+            ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
+            CompressedStreamTools.writeCompressed(tag, byteStream);
+            byte[] abyte = byteStream.toByteArray();
             dos.writeShort((short) abyte.length);
             dos.write(abyte);
 
@@ -92,13 +93,14 @@ public class ItemStackDatabase {
                         short short1 = dos.readShort();
                         byte[] abyte = new byte[short1];
                         dos.read(abyte);
-                        NBTTagCompound tag = CompressedStreamTools.func_152457_a(abyte, new NBTSizeTracker(2097152L));
+                        ByteArrayInputStream byteStream = new ByteArrayInputStream(abyte);
+                        NBTTagCompound tag = CompressedStreamTools.readCompressed(byteStream);
                         ItemStack stack = new ItemStack(tag);
                         if (stack.getItem() != Items.AIR) {
                             stacks.add(stack);
                         } else {
                             BluePower.log.error("Couldn't retrieve an itemstack with item id: " + tag.getShort("id"));
-                            Item item = GameRegistry.findItem(tag.getString("owner"), tag.getString("name"));
+                            Item item = Item.REGISTRY.getObject(new ResourceLocation(tag.getString("owner"), tag.getString("name")));
                             if (item != null) {
                                 ItemStack backupStack = new ItemStack(item, stack.getCount(), tag.getShort("Damage"));
                                 if (stack.hasTagCompound()) {

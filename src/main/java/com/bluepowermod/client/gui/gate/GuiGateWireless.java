@@ -20,7 +20,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.commons.lang3.StringUtils;
@@ -31,6 +30,7 @@ import uk.co.qmunity.lib.client.gui.widget.IGuiWidget;
 import uk.co.qmunity.lib.client.gui.widget.WidgetMode;
 import uk.co.qmunity.lib.util.AlphanumComparator;
 
+import java.io.IOException;
 import java.util.*;
 
 @SideOnly(Side.CLIENT)
@@ -131,7 +131,7 @@ public class GuiGateWireless extends GuiGate {
                 + ":textures/gui/wirelessRedstone.png"));
         modeSelector.value = gate.getMode().ordinal();
 
-        frequencyName = new GuiTextField(fontRendererObj, guiLeft + 88, guiTop + 22, 133, 10);
+        frequencyName = new GuiTextField(0, fontRendererObj, guiLeft + 88, guiTop + 22, 133, 10);
 
         accessLevel.enabled = false;
         saveFrequency.enabled = false;
@@ -146,7 +146,7 @@ public class GuiGateWireless extends GuiGate {
     }
 
     @Override
-    protected void keyTyped(char c, int key) {
+    protected void keyTyped(char c, int key) throws IOException {
 
         super.keyTyped(c, key);
         if (c == 13) {
@@ -202,7 +202,7 @@ public class GuiGateWireless extends GuiGate {
     }
 
     @Override
-    public void handleMouseInput() {
+    public void handleMouseInput() throws IOException {
 
         super.handleMouseInput();
 
@@ -228,7 +228,7 @@ public class GuiGateWireless extends GuiGate {
         super.actionPerformed(widget);
 
         if (widget == filterAccessLevel) {
-            if (filterAccessLevel.value == 3 && !Minecraft.getMinecraft().thePlayer.capabilities.isCreativeMode) {
+            if (filterAccessLevel.value == 3 && !Minecraft.getMinecraft().player.capabilities.isCreativeMode) {
                 filterAccessLevel.value++;
             }
             if (selected != null && !selected.equals(gate.getFrequency())) {
@@ -268,7 +268,7 @@ public class GuiGateWireless extends GuiGate {
 
         super.renderGUI(x, y, partialTick);
 
-        EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+        EntityPlayer player = Minecraft.getMinecraft().player;
 
         // Enable/disable components depending on our needs
         {
@@ -341,8 +341,8 @@ public class GuiGateWireless extends GuiGate {
                     GL11.glEnable(GL11.GL_LIGHTING);
                 GL11.glTranslated(guiLeft + 88 + 1, yPos - 2, 0);
                 GL11.glScaled(0.75, 0.75, 0.75);
-                ForgeHooksClient
-                .renderInventoryItem(RenderBlocks.getInstance(), Minecraft.getMinecraft().renderEngine, item, true, 1, 1, 1);
+                //ToDo Item Rendering
+                //ForgeHooksClient.renderInventoryItem(RenderBlocks.getInstance(), Minecraft.getMinecraft().renderEngine, item, true, 1, 1, 1);
                 if (f.isBundled() != gate.isBundled())
                     GL11.glDisable(GL11.GL_LIGHTING);
             }
@@ -357,7 +357,7 @@ public class GuiGateWireless extends GuiGate {
             int yPos = guiTop + 22 + 10 + 2 + (i * 12);
             if (x > guiLeft + 88 && x <= guiLeft + 88 + 133 - (frequencies.size() > 12 ? 11 : 0) && y > yPos && y <= yPos + 11
                     && f.isBundled() == gate.isBundled()) {
-                func_146283_a(
+                drawHoveringText(
                         Arrays.asList(
                                 "Frequency: " + f.getFrequencyName(),
                                 TextFormatting.GRAY + "Accessibility: "

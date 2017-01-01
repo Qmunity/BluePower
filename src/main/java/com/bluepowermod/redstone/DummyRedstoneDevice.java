@@ -26,6 +26,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import uk.co.qmunity.lib.helper.MathHelper;
+import uk.co.qmunity.lib.helper.RedstoneHelper;
 
 import java.util.ArrayList;
 import java.util.List;

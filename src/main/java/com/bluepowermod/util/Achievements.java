@@ -21,7 +21,7 @@ public class Achievements {
     public static Achievement dopeAchievement = new Achievement("achievement.bluepower:dope", "bluepower:dope", 2, 2, BPItems.blue_doped_wafer,
             (Achievement) null);
     public static Achievement tubeAchievement = new Achievement("achievement.bluepower:tube", "bluepower:tube", 0, 0, PartManager.getPartInfo(
-            "pneumaticTube"), (Achievement) null);
+            "pneumaticTube").getItem(), (Achievement) null);
     public static Achievement magTubeAchievement = new Achievement("achievement.bluepower:magtube", "bluepower:magtube", -2, -2, PartManager
             .getPartInfo("magTube").getItem(), (Achievement) null);
     public static Achievement circuitCeptionAchievement = new Achievement("achievement.bluepower:circuitception", "bluepower:circuitception", 0, -2,

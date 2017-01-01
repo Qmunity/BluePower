@@ -9,7 +9,6 @@ import com.bluepowermod.part.PartManager;
 import com.bluepowermod.part.gate.supported.GateNullCell;
 import com.bluepowermod.part.wire.redstone.PartRedwireFace;
 import com.bluepowermod.part.wire.redstone.PartRedwireFace.PartRedwireFaceUninsulated;
-import mcmultipart.api.multipart.IMultipart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryCrafting;
@@ -20,6 +19,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
+import uk.co.qmunity.lib.part.IPart;
 
 public class RecipeNullCell implements IRecipe {
 
@@ -95,7 +95,7 @@ public class RecipeNullCell implements IRecipe {
                     continue;
                 if (!(item.getItem() instanceof ItemPart))
                     continue;
-                IMultipart p = ((ItemPart) item.getItem()).createPart(item, BluePower.proxy.getPlayer(), null, null);
+                IPart p = ((ItemPart) item.getItem()).createPart(item, BluePower.proxy.getPlayer(), null, null);
                 if (p != null && p instanceof GateNullCell) {
                     gnc = (GateNullCell) p;
                     centerX = x;
@@ -267,7 +267,7 @@ public class RecipeNullCell implements IRecipe {
                 if (centerY > 0 && gnc.getTypeB() == null) {
                     ItemStack wire = getItemAt(inv, centerX, centerY - 1);
                     if (wire != null && wire.getItem() instanceof ItemPart) {
-                        IMultipart p = ((ItemPart) wire.getItem()).createPart(wire, BluePower.proxy.getPlayer(), null, null);
+                        IPart p = ((ItemPart) wire.getItem()).createPart(wire, BluePower.proxy.getPlayer(), null, null);
 
                         if (p != null && p instanceof PartRedwireFaceUninsulated) {
                             RedwireType t = ((PartRedwireFace) p).getRedwireType(null);
@@ -289,7 +289,7 @@ public class RecipeNullCell implements IRecipe {
                 if (centerY < 2 && gnc.getTypeA() == null) {
                     ItemStack wire = getItemAt(inv, centerX, centerY + 1);
                     if (wire != null && wire.getItem() instanceof ItemPart) {
-                        IMultipart p = ((ItemPart) wire.getItem()).createPart(wire, BluePower.proxy.getPlayer(), null, null);
+                        IPart p = ((ItemPart) wire.getItem()).createPart(wire, BluePower.proxy.getPlayer(), null, null);
 
                         if (p != null && p instanceof PartRedwireFaceUninsulated) {
                             RedwireType t = ((PartRedwireFace) p).getRedwireType(null);
@@ -312,8 +312,8 @@ public class RecipeNullCell implements IRecipe {
                     ItemStack wireA = getItemAt(inv, centerX, centerY + 1);
                     ItemStack wireB = getItemAt(inv, centerX, centerY - 1);
                     if (wireA != null && wireA.getItem() instanceof ItemPart && wireB != null && wireB.getItem() instanceof ItemPart) {
-                        IMultipart pA = ((ItemPart) wireA.getItem()).createPart(wireA, BluePower.proxy.getPlayer(), null, null);
-                        IMultipart pB = ((ItemPart) wireB.getItem()).createPart(wireB, BluePower.proxy.getPlayer(), null, null);
+                        IPart pA = ((ItemPart) wireA.getItem()).createPart(wireA, BluePower.proxy.getPlayer(), null, null);
+                        IPart pB = ((ItemPart) wireB.getItem()).createPart(wireB, BluePower.proxy.getPlayer(), null, null);
 
                         if (pA != null && pA instanceof PartRedwireFaceUninsulated && pB != null
                                 && pB instanceof PartRedwireFaceUninsulated) {

@@ -19,19 +19,17 @@
 
 package com.bluepowermod.container;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.ICrafting;
-import net.minecraft.inventory.Slot;
-import net.minecraft.item.ItemStack;
-import uk.co.qmunity.lib.client.gui.GuiContainerBase;
-
 import com.bluepowermod.ClientProxy;
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
 import com.bluepowermod.tile.tier1.TileFilter;
-
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.IContainerListener;
+import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import uk.co.qmunity.lib.client.gui.GuiContainerBase;
 
 /**
  * @author MineMaarten
@@ -78,8 +76,8 @@ public class ContainerFilter extends ContainerMachineBase {
 
         super.detectAndSendChanges();
 
-        for (Object crafter : crafters) {
-            ICrafting icrafting = (ICrafting) crafter;
+        for (Object crafter : listeners) {
+            IContainerListener icrafting = (IContainerListener) crafter;
 
             if (filterColor != tileFilter.filterColor.ordinal()) {
                 icrafting.sendProgressBarUpdate(this, 0, tileFilter.filterColor.ordinal());
@@ -110,7 +108,7 @@ public class ContainerFilter extends ContainerMachineBase {
     @Override
     public boolean canInteractWith(EntityPlayer player) {
 
-        return tileFilter.isUseableByPlayer(player);
+        return tileFilter.isUsableByPlayer(player);
     }
 
     @Override
@@ -133,7 +131,7 @@ public class ContainerFilter extends ContainerMachineBase {
                 slot.onSlotChanged();
             }
             if (itemstack1.getCount() != itemstack.getCount()) {
-                slot.onPickupFromSlot(player, itemstack1);
+                slot.onSlotChange(itemstack, itemstack1);
             } else {
                 return null;
             }

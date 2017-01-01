@@ -10,8 +10,10 @@ package com.bluepowermod.part.tube;
 import com.bluepowermod.client.render.IconSupplier;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -167,7 +169,8 @@ public class Accelerator extends PneumaticTube implements IPartCustomPlacement {
         if (pass == 0) {
             Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
             Tessellator t = Tessellator.getInstance();
-
+            VertexBuffer b = t.getBuffer();
+            
             GL11.glPushMatrix();
             GL11.glTranslatef((float) loc.xCoord + 0.5F, (float) loc.yCoord + 0.5F, (float) loc.zCoord + 0.5F);
             if (rotation == EnumFacing.NORTH || rotation == EnumFacing.SOUTH) {
@@ -177,10 +180,10 @@ public class Accelerator extends PneumaticTube implements IPartCustomPlacement {
             }
             GL11.glTranslatef((float) -loc.xCoord - 0.5F, (float) -loc.yCoord - 0.5F, (float) -loc.zCoord - 0.5F);
 
-            t.startDrawingQuads();
-
-            t.setColorOpaque_F(1, 1, 1);
-            t.addTranslation((float) loc.xCoord, (float) loc.yCoord, (float) loc.zCoord);
+            b.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+            
+            b.putColorRGB_F4(1, 1, 1);
+            b.setTranslation((float) loc.xCoord, (float) loc.yCoord, (float) loc.zCoord);
 
             TextureAtlasSprite icon = isPowered() ? IconSupplier.acceleratorFrontPowered : IconSupplier.acceleratorFront;
 
@@ -189,17 +192,17 @@ public class Accelerator extends PneumaticTube implements IPartCustomPlacement {
             double minY = icon.getInterpolatedV(0);
             double maxY = icon.getInterpolatedV(16);
 
-            t.setNormal(0, -1, 0);
-            t.addVertexWithUV(0, 4 / 16D, 0, maxX, maxY);// minY
-            t.addVertexWithUV(1, 4 / 16D, 0, minX, maxY);
-            t.addVertexWithUV(1, 4 / 16D, 1, minX, minY);
-            t.addVertexWithUV(0, 4 / 16D, 1, maxX, minY);
+            b.normal(0, -1, 0);
+            b.pos(0, 4 / 16D, 0).tex(maxX, maxY).endVertex();// minY
+            b.pos(1, 4 / 16D, 0).tex(minX, maxY);
+            b.pos(1, 4 / 16D, 1).tex(minX, minY);
+            b.pos(0, 4 / 16D, 1).tex(maxX, minY);
 
-            t.setNormal(0, 1, 1);
-            t.addVertexWithUV(0, 12 / 16D, 0, maxX, maxY);// maxY
-            t.addVertexWithUV(0, 12 / 16D, 1, minX, maxY);
-            t.addVertexWithUV(1, 12 / 16D, 1, minX, minY);
-            t.addVertexWithUV(1, 12 / 16D, 0, maxX, minY);
+            b.normal(0, 1, 1);
+            b.pos(0, 12 / 16D, 0).tex(maxX, maxY);// maxY
+            b.pos(0, 12 / 16D, 1).tex(minX, maxY);
+            b.pos(1, 12 / 16D, 1).tex(minX, minY);
+            b.pos(1, 12 / 16D, 0).tex(maxX, minY);
 
             icon = isPowered() ? IconSupplier.acceleratorSidePowered : IconSupplier.acceleratorSide;
 
@@ -208,29 +211,29 @@ public class Accelerator extends PneumaticTube implements IPartCustomPlacement {
             minY = icon.getInterpolatedV(0);
             maxY = icon.getInterpolatedV(16);
 
-            t.setNormal(0, 0, 1);
-            t.addVertexWithUV(0, 4 / 16D, 1, maxX, minY);// maxZ
-            t.addVertexWithUV(1, 4 / 16D, 1, maxX, maxY);
-            t.addVertexWithUV(1, 12 / 16D, 1, minX, maxY);
-            t.addVertexWithUV(0, 12 / 16D, 1, minX, minY);
+            b.normal(0, 0, 1);
+            b.pos(0, 4 / 16D, 1).tex(maxX, minY).endVertex();// maxZ
+            b.pos(1, 4 / 16D, 1).tex(maxX, maxY).endVertex();
+            b.pos(1, 12 / 16D, 1).tex(minX, maxY).endVertex();
+            b.pos(0, 12 / 16D, 1).tex(minX, minY).endVertex();
 
-            t.setNormal(0, 0, -1);
-            t.addVertexWithUV(0, 4 / 16D, 0, minX, maxY);// minZ
-            t.addVertexWithUV(0, 12 / 16D, 0, maxX, maxY);
-            t.addVertexWithUV(1, 12 / 16D, 0, maxX, minY);
-            t.addVertexWithUV(1, 4 / 16D, 0, minX, minY);
+            b.normal(0, 0, -1);
+            b.pos(0, 4 / 16D, 0).tex(minX, maxY).endVertex();// minZ
+            b.pos(0, 12 / 16D, 0).tex(maxX, maxY).endVertex();
+            b.pos(1, 12 / 16D, 0).tex(maxX, minY).endVertex();
+            b.pos(1, 4 / 16D, 0).tex(minX, minY).endVertex();
 
-            t.setNormal(-1, 0, 0);
-            t.addVertexWithUV(0, 4 / 16D, 0, maxX, minY);// minX
-            t.addVertexWithUV(0, 4 / 16D, 1, maxX, maxY);
-            t.addVertexWithUV(0, 12 / 16D, 1, minX, maxY);
-            t.addVertexWithUV(0, 12 / 16D, 0, minX, minY);
+            b.normal(-1, 0, 0);
+            b.pos(0, 4 / 16D, 0).tex(maxX, minY).endVertex();// minX
+            b.pos(0, 4 / 16D, 1).tex(maxX, maxY).endVertex();
+            b.pos(0, 12 / 16D, 1).tex(minX, maxY).endVertex();
+            b.pos(0, 12 / 16D, 0).tex(minX, minY).endVertex();
 
-            t.setNormal(1, 0, 0);
-            t.addVertexWithUV(1, 4 / 16D, 0, maxX, maxY);// maxX
-            t.addVertexWithUV(1, 12 / 16D, 0, minX, maxY);
-            t.addVertexWithUV(1, 12 / 16D, 1, minX, minY);
-            t.addVertexWithUV(1, 4 / 16D, 1, maxX, minY);
+            b.normal(1, 0, 0);
+            b.pos(1, 4 / 16D, 0).tex(maxX, maxY).endVertex();// maxX
+            b.pos(1, 12 / 16D, 0).tex(minX, maxY).endVertex();
+            b.pos(1, 12 / 16D, 1).tex(minX, minY).endVertex();
+            b.pos(1, 4 / 16D, 1).tex(maxX, minY).endVertex();
 
             icon = IconSupplier.acceleratorInside;
 
@@ -239,27 +242,27 @@ public class Accelerator extends PneumaticTube implements IPartCustomPlacement {
             minY = icon.getInterpolatedV(4);
             maxY = icon.getInterpolatedV(12);
 
-            t.addVertexWithUV(0, 4 / 16D, 6 / 16D, minX, minY);// inside maxZ
-            t.addVertexWithUV(1, 4 / 16D, 6 / 16D, maxX, maxY);
-            t.addVertexWithUV(1, 12 / 16D, 6 / 16D, maxX, maxY);
-            t.addVertexWithUV(0, 12 / 16D, 6 / 16D, minX, minY);
+            b.pos(0, 4 / 16D, 6 / 16D).tex(minX, minY).endVertex();// inside maxZ
+            b.pos(1, 4 / 16D, 6 / 16D).tex(maxX, maxY).endVertex();
+            b.pos(1, 12 / 16D, 6 / 16D).tex(maxX, maxY).endVertex();
+            b.pos(0, 12 / 16D, 6 / 16D).tex(minX, minY).endVertex();
 
-            t.addVertexWithUV(0, 4 / 16D, 10 / 16D, minX, maxY);// inside minZ
-            t.addVertexWithUV(0, 12 / 16D, 10 / 16D, minX, minY);
-            t.addVertexWithUV(1, 12 / 16D, 10 / 16D, maxX, minY);
-            t.addVertexWithUV(1, 4 / 16D, 10 / 16D, maxX, maxY);
+            b.pos(0, 4 / 16D, 10 / 16D).tex(minX, maxY).endVertex();// inside minZ
+            b.pos(0, 12 / 16D, 10 / 16D).tex(minX, minY).endVertex();
+            b.pos(1, 12 / 16D, 10 / 16D).tex(maxX, minY).endVertex();
+            b.pos(1, 4 / 16D, 10 / 16D).tex(maxX, maxY).endVertex();
 
-            t.addVertexWithUV(10 / 16D, 4 / 16D, 0, minX, minY);// inside minX
-            t.addVertexWithUV(10 / 16D, 4 / 16D, 1, maxX, maxY);
-            t.addVertexWithUV(10 / 16D, 12 / 16D, 1, maxX, maxY);
-            t.addVertexWithUV(10 / 16D, 12 / 16D, 0, minX, minY);
+            b.pos(10 / 16D, 4 / 16D, 0).tex(minX, minY).endVertex();// inside minX
+            b.pos(10 / 16D, 4 / 16D, 1).tex(maxX, maxY).endVertex();
+            b.pos(10 / 16D, 12 / 16D, 1).tex(maxX, maxY).endVertex();
+            b.pos(10 / 16D, 12 / 16D, 0).tex(minX, minY).endVertex();
 
-            t.addVertexWithUV(6 / 16D, 4 / 16D, 0, minX, minY);// inside maxX
-            t.addVertexWithUV(6 / 16D, 12 / 16D, 0, minX, maxY);
-            t.addVertexWithUV(6 / 16D, 12 / 16D, 1, maxX, maxY);
-            t.addVertexWithUV(6 / 16D, 4 / 16D, 1, maxX, minY);
+            b.pos(6 / 16D, 4 / 16D, 0).tex(minX, minY).endVertex();// inside maxX
+            b.pos(6 / 16D, 12 / 16D, 0).tex(minX, maxY).endVertex();
+            b.pos(6 / 16D, 12 / 16D, 1).tex(maxX, maxY).endVertex();
+            b.pos(6 / 16D, 4 / 16D, 1).tex(maxX, minY).endVertex();
 
-            t.addTranslation((float) -loc.xCoord, (float) -loc.yCoord, (float) -loc.zCoord);
+            b.setTranslation((float) -loc.xCoord, (float) -loc.yCoord, (float) -loc.zCoord);
             t.draw();
             GL11.glPopMatrix();
         }
