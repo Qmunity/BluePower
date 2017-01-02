@@ -122,7 +122,7 @@ public class ContainerProjectTable extends Container {
         for (int i = 0; i < 9; i++) {
             ItemStack stack = craftingGrid.getStackInSlot(i);
             if (stack != null && stack.getCount() == 1 && extractStackFromTable(projectTable, stack, true) == null
-                    && (!stack.getItem().hasContainerItem(stack) || stack.getItem().doesContainerItemLeaveCraftingGrid(stack)))
+                    && (!stack.getItem().hasContainerItem(stack) )) //|| stack.getItem().doesContainerItemLeaveCraftingGrid(stack)
                 return true;
         }
         return false;

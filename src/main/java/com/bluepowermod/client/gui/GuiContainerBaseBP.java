@@ -1,28 +1,19 @@
 package com.bluepowermod.client.gui;
 
-import codechicken.nei.VisiblityData;
+/*import codechicken.nei.VisibilityData;
 import codechicken.nei.api.INEIGuiHandler;
-import codechicken.nei.api.TaggedInventoryArea;
+import codechicken.nei.api.TaggedInventoryArea;*/
 import com.bluepowermod.client.gui.widget.WidgetTabItemLister;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.TileMachineBase;
-import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.common.Optional;
 import uk.co.qmunity.lib.client.gui.GuiContainerBase;
-import uk.co.qmunity.lib.client.gui.widget.GuiAnimatedStat;
-import uk.co.qmunity.lib.client.gui.widget.IGuiWidget;
-import uk.co.qmunity.lib.ref.Dependencies;
 
-import java.awt.*;
-import java.util.List;
-
-@Optional.Interface(iface = "codechicken.nei.api.INEIGuiHandler", modid = Dependencies.NEI)
-public class GuiContainerBaseBP extends GuiContainerBase implements INEIGuiHandler {
+//@Optional.Interface(iface = "codechicken.nei.api.INEIGuiHandler", modid = Dependencies.NEI)
+public class GuiContainerBaseBP extends GuiContainerBase { //implements INEIGuiHandler
 
     public GuiContainerBaseBP(Container mainContainer, ResourceLocation _resLoc) {
 
@@ -58,11 +49,10 @@ public class GuiContainerBaseBP extends GuiContainerBase implements INEIGuiHandl
     }
 
     // -----------NEI support
-
+/*
     @Override
     @Optional.Method(modid = Dependencies.NEI)
-    public VisiblityData modifyVisiblity(GuiContainer gui, VisiblityData currentVisibility) {
-
+    public VisibilityData modifyVisiblity(GuiContainer guiContainer, VisibilityData currentVisibility) {
         for (IGuiWidget widget : widgets) {
             if (widget instanceof GuiAnimatedStat) {
                 GuiAnimatedStat stat = (GuiAnimatedStat) widget;
@@ -81,26 +71,26 @@ public class GuiContainerBaseBP extends GuiContainerBase implements INEIGuiHandl
         return currentVisibility;
     }
 
-    /**
+    *//**
      * NEI will give the specified item to the InventoryRange returned if the player's inventory is full. return null for no range
      */
-    @Override
+   /* @Override
     public Iterable<Integer> getItemSpawnSlots(GuiContainer gui, ItemStack item) {
 
         return null;
     }
 
-    /**
+    *//**
      * @return A list of TaggedInventoryAreas that will be used with the savestates.
-     */
+     *//*
     @Override
     @Optional.Method(modid = Dependencies.NEI)
     public List<TaggedInventoryArea> getInventoryAreas(GuiContainer gui) {
 
         return null;
-    }
+    }*/
 
-    /**
+   /* *//**
      * Handles clicks while an itemstack has been dragged from the item panel. Use this to set configurable slots and the like. Changes made to the
      * stackSize of the dragged stack will be kept
      *
@@ -116,14 +106,14 @@ public class GuiContainerBaseBP extends GuiContainerBase implements INEIGuiHandl
      *            The button presed
      * @return True if the drag n drop was handled. False to resume processing through other routes. The held stack will be deleted if
      *         draggedStack.getCount() == 0
-     */
+     *//*
     @Override
     public boolean handleDragNDrop(GuiContainer gui, int mousex, int mousey, ItemStack draggedStack, int button) {
 
         return false;
     }
 
-    /**
+    *//**
      * Used to prevent the item panel from drawing on top of other gui elements.
      *
      * @param x
@@ -135,7 +125,7 @@ public class GuiContainerBaseBP extends GuiContainerBase implements INEIGuiHandl
      * @param h
      *            The h coordinate of the rectangle bounding the slot
      * @return true if the item panel slot within the specified rectangle should not be rendered.
-     */
+     *//*
     @Override
     public boolean hideItemPanelSlot(GuiContainer gui, int x, int y, int w, int h) {
 
@@ -144,6 +134,6 @@ public class GuiContainerBaseBP extends GuiContainerBase implements INEIGuiHandl
                 return true;
         }
         return false;
-    }
+    }*/
 
 }

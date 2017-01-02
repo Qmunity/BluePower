@@ -1,0 +1,14 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "transform": "forge:default-item",
+    "model": "forge:item-layer"
+  },
+  "variants": {
+    "amethyst": [{ "textures": { "layer0": "bluepower:items/amethyst_pickaxe" }}],
+    "malachite": [{ "textures": { "layer0": "bluepower:items/malachite_pickaxe" }}],
+    "ruby": [{ "textures": { "layer0": "bluepower:items/ruby_pickaxe" }}],
+    "sapphire": [{ "textures": { "layer0": "bluepower:items/sapphire_pickaxe" }}],
+    "tungcarb": [{ "textures": { "layer0": "bluepower:items/tungcarb_pickaxe" }}]
+  }
+}

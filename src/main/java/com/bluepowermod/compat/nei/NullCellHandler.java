@@ -1,14 +1,8 @@
 package com.bluepowermod.compat.nei;
 
-import java.awt.Rectangle;
-
-import net.minecraft.init.Blocks;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import codechicken.nei.InventoryCraftingDummy;
-import codechicken.nei.PositionedStack;
+/*import codechicken.nei.api.stack.PositionedStack;
+import codechicken.nei.container.InventoryCraftingDummy;
 import codechicken.nei.recipe.ShapedRecipeHandler;
-
 import com.bluepowermod.BluePower;
 import com.bluepowermod.api.wire.redstone.RedwireType;
 import com.bluepowermod.init.BPItems;
@@ -16,6 +10,11 @@ import com.bluepowermod.item.ItemPart;
 import com.bluepowermod.part.PartManager;
 import com.bluepowermod.part.gate.supported.GateNullCell;
 import com.bluepowermod.recipe.RecipeNullCell;
+import net.minecraft.init.Blocks;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
+
+import java.awt.*;
 
 public class NullCellHandler extends ShapedRecipeHandler {
 
@@ -387,7 +386,7 @@ public class NullCellHandler extends ShapedRecipeHandler {
         return grid;
     }
 
-    private static final ItemStack error = new ItemStack(Blocks.cocoa);
+    private static final ItemStack error = new ItemStack(Blocks.COCOA);
 
     private class NullCellRecipe extends CachedShapedRecipe {
 
@@ -413,4 +412,4 @@ public class NullCellHandler extends ShapedRecipeHandler {
         }
     }
 
-}
+}*/

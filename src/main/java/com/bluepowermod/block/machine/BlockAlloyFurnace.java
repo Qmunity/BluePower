@@ -41,7 +41,8 @@ public class BlockAlloyFurnace extends BlockContainerBase {
     public BlockAlloyFurnace() {
 
         super(Material.ROCK, TileAlloyFurnace.class);
-        setRegistryName(Refs.ALLOYFURNACE_NAME);
+        setUnlocalizedName(Refs.ALLOYFURNACE_NAME);
+        setRegistryName(Refs.MODID, Refs.ALLOYFURNACE_NAME);
 
     }
 

@@ -106,7 +106,7 @@ public class WorldGenerationHandler implements IWorldGenerator {
         if (random.nextDouble() < Config.volcanoSpawnChance) {
             int x = chunkX * 16 + random.nextInt(16);
             int z = chunkZ * 16 + random.nextInt(16);//20
-            int y = world.getHeight(x, z + 30 + random.nextInt(40));
+            int y = world.getHeight(x, z) + 30 + random.nextInt(40);
 
             if (world.getBlockState(new BlockPos(x, 10, z)).getBlock() == Blocks.LAVA && world.getHeight(x, z) <= 90) {
                 new WorldGenVolcano().generate(world, random, x, y, z);

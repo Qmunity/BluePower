@@ -13,7 +13,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -26,7 +25,7 @@ import uk.co.qmunity.lib.vec.Vec3dCube;
 @SideOnly(Side.CLIENT)
 public class RenderLamp extends TileEntitySpecialRenderer {
 
-    public static BlockRenderLayer pass;
+    public static int pass;
 
 
     @Override
@@ -34,11 +33,11 @@ public class RenderLamp extends TileEntitySpecialRenderer {
         if (!(te.getBlockType() instanceof BlockLamp))
             return;
 
-        if (pass.ordinal() != 0) {
+        if (pass != 0) {
             BlockLamp bLamp = (BlockLamp) te.getBlockType();
             int power = ((TileLamp) te).getPower();
 
-            int color = bLamp.getColor(te.getWorld(), te.getPos().getX(), te.getPos().getY(), te.getPos().getZ());
+            int color = bLamp.getColor(te.getWorld(), te.getPos());
 
             int redMask = 0xFF0000, greenMask = 0xFF00, blueMask = 0xFF;
             int r = (color & redMask) >> 16;
@@ -58,7 +57,7 @@ public class RenderLamp extends TileEntitySpecialRenderer {
                 BlockPos v = vector.offset(d);
                 IBlockState vs = te.getWorld().getBlockState(v);
                 Block bl = vs.getBlock();
-                if (bl instanceof BlockLamp && ((BlockLamp) bl).getPower(te.getWorld(), v.getX(), v.getY(), v.getZ()) > 0) {
+                if (bl instanceof BlockLamp && ((BlockLamp) bl).getPower(te.getWorld(), v) > 0) {
                     if (d.getFrontOffsetX() < 0) {
                         box = new Vec3dCube(new Vec3d(-0.5, box.getMinY(), box.getMinZ()), box.getMax());
                         renderFaces[2] = false;

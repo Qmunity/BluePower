@@ -96,8 +96,7 @@ public class BlockCrackedBasalt extends BlockStoneOre {
     }
 
     @Override
-    public Item getItemDropped(int par1, Random par2, int par3) {
-
+    public Item getItemDropped(IBlockState state, Random rand, int fortune) {
         return Item.getItemFromBlock(BPBlocks.basalt_cobble);
     }
 

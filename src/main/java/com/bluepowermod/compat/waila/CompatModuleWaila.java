@@ -7,17 +7,15 @@
  */
 package com.bluepowermod.compat.waila;
 
-import mcp.mobius.waila.api.IWailaRegistrar;
-import net.minecraft.tileentity.TileEntity;
-
 import com.bluepowermod.compat.CompatModule;
 import com.bluepowermod.tile.TileMachineBase;
 import com.bluepowermod.util.Dependencies;
-
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLInterModComms;
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import mcp.mobius.waila.api.IWailaRegistrar;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLInterModComms;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 

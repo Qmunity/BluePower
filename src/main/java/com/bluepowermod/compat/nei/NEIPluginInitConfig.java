@@ -7,18 +7,11 @@
  */
 package com.bluepowermod.compat.nei;
 
-import codechicken.nei.api.API;
-import codechicken.nei.api.IConfigureNEI;
-import codechicken.nei.guihook.GuiContainerManager;
-
-import com.bluepowermod.client.gui.GuiProjectTable;
-import com.bluepowermod.reference.Refs;
-
 /**
  *
  * @author MineMaarten
  */
-
+/*
 public class NEIPluginInitConfig implements IConfigureNEI {
 
     @Override
@@ -44,4 +37,4 @@ public class NEIPluginInitConfig implements IConfigureNEI {
         return Refs.fullVersionString();
     }
 
-}
+}*/

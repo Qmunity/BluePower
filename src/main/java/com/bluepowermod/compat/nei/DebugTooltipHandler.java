@@ -7,7 +7,7 @@
  */
 package com.bluepowermod.compat.nei;
 
-import java.util.List;
+/*import java.util.List;
 
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.item.ItemStack;
@@ -44,4 +44,4 @@ public class DebugTooltipHandler implements IContainerTooltipHandler {
         // }
         return currenttip;
     }
-}
+}*/

@@ -1,0 +1,20 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "transform": "forge:default-block",
+    "model": "cube_all"
+  },
+  "variants": {
+    "type": {
+      "copper":{"textures": { "all": "bluepower:blocks/copper_ore"}},
+      "silver":{"textures": { "all": "bluepower:blocks/silver_ore"}},
+      "tungsten":{"textures": { "all": "bluepower:blocks/tungsten_ore"}},
+      "zinc":{"textures": { "all": "bluepower:blocks/zinc_ore"}},
+      "teslatite":{"textures": { "all": "bluepower:blocks/teslatite_ore"}},
+      "amethyst":{"textures": { "all": "bluepower:blocks/amethyst_ore"}},
+      "ruby":{"textures": { "all": "bluepower:blocks/ruby_ore"}},
+      "malachite":{"textures": { "all": "bluepower:blocks/malachite_ore"}},
+      "sapphire":{"textures": { "all": "bluepower:blocks/sapphire_ore"}}
+    }
+  }
+}

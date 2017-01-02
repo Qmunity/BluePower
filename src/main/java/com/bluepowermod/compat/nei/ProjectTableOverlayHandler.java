@@ -6,32 +6,30 @@
  * with Blue Power. If not, see <http://www.gnu.org/licenses/>
  */
 package com.bluepowermod.compat.nei;
+/*
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.InventoryCrafting;
-import net.minecraft.inventory.Slot;
-import net.minecraft.item.ItemStack;
-import codechicken.lib.inventory.InventoryUtils;
 import codechicken.nei.FastTransferManager;
-import codechicken.nei.PositionedStack;
 import codechicken.nei.api.IOverlayHandler;
+import codechicken.nei.api.stack.PositionedStack;
 import codechicken.nei.recipe.DefaultOverlayHandler.DistributedIngred;
 import codechicken.nei.recipe.DefaultOverlayHandler.IngredientDistribution;
 import codechicken.nei.recipe.IRecipeHandler;
-
+import com.bluepowermod.helper.ItemStackHelper;
 import com.bluepowermod.tile.tier1.TileProjectTable;
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.ClickType;
+import net.minecraft.inventory.InventoryCrafting;
+import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
 
+import java.util.*;
+
+*/
 /**
  * @author MineMaarten This class is very closely derived from ChickenBones' NEI DefaultOverlayHandler class.
- */
+ *//*
+
 public class ProjectTableOverlayHandler implements IOverlayHandler {
 
     @Override
@@ -85,7 +83,7 @@ public class ProjectTableOverlayHandler implements IOverlayHandler {
             for (ItemStack pstack : posstack.items) {
                 for (int j = 0; j < ingredStacks.size(); j++) {
                     DistributedIngred istack = ingredStacks.get(j);
-                    if (!InventoryUtils.canStack(pstack, istack.stack) || istack.invAmount - istack.distributed < pstack.getCount())
+                    if (!ItemStackHelper.canStack(pstack, istack.stack) || istack.invAmount - istack.distributed < pstack.getCount())
                         continue;
 
                     int relsize = (istack.invAmount - istack.invAmount / istack.recipeAmount * istack.distributed) / pstack.getCount();
@@ -177,8 +175,8 @@ public class ProjectTableOverlayHandler implements IOverlayHandler {
             if (slot.inventory instanceof InventoryCrafting) {
                 if (!slot.getHasStack())
                     continue;
-
-                FastTransferManager.clickSlot(gui, slot.slotNumber, 0, 1);
+                //todo check this
+                FastTransferManager.clickSlot(gui, slot.slotNumber, 0, ClickType.PICKUP);
                 if (slot.getHasStack())
                     return false;
             }
@@ -203,7 +201,7 @@ public class ProjectTableOverlayHandler implements IOverlayHandler {
     public DistributedIngred findIngred(List<DistributedIngred> ingredStacks, ItemStack pstack) {
 
         for (DistributedIngred istack : ingredStacks)
-            if (InventoryUtils.canStack(pstack, istack.stack))
+            if (ItemStackHelper.canStack(pstack, istack.stack))
                 return istack;
         return null;
     }
@@ -226,7 +224,7 @@ public class ProjectTableOverlayHandler implements IOverlayHandler {
                     continue;
 
                 ItemStack stack = slot.getStack();
-                if (!InventoryUtils.canStack(stack, pstack))
+                if (!ItemStackHelper.canStack(stack, pstack))
                     continue;
 
                 FastTransferManager.clickSlot(gui, slot.slotNumber);
@@ -261,7 +259,7 @@ public class ProjectTableOverlayHandler implements IOverlayHandler {
             LinkedList<Slot> recipeSlots = new LinkedList<Slot>();
             PositionedStack pstack = ingredients.get(i);
             for (Slot slot : (List<Slot>) gui.inventorySlots.inventorySlots) {
-                if (slot.xDisplayPosition == pstack.relx + 9 && slot.yDisplayPosition == pstack.rely + 10) {
+                if (slot.xPos == pstack.relx + 9 && slot.yPos == pstack.rely + 10) {
                     recipeSlots.add(slot);
                     break;
                 }
@@ -271,3 +269,4 @@ public class ProjectTableOverlayHandler implements IOverlayHandler {
         return recipeSlotList;
     }
 }
+*/

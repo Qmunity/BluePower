@@ -41,7 +41,8 @@ public class BlockEngine extends BlockContainerBase {
 
         super(Material.IRON, TileEngine.class);
         setCreativeTab(BPCreativeTabs.machines);
-        setRegistryName(Refs.ENGINE_NAME);
+        setUnlocalizedName(Refs.ENGINE_NAME);
+        setRegistryName(Refs.MODID, Refs.ENGINE_NAME);
     }
 
     @Override

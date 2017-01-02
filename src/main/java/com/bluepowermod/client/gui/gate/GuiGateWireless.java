@@ -162,7 +162,7 @@ public class GuiGateWireless extends GuiGate {
     }
 
     @Override
-    protected void mouseClicked(int x, int y, int button) {
+    protected void mouseClicked(int x, int y, int button) throws IOException {
 
         super.mouseClicked(x, y, button);
 

@@ -17,24 +17,27 @@
 
 package com.bluepowermod.block.worldgen;
 
-import java.util.Random;
-
+import com.bluepowermod.init.BPBlocks;
+import com.bluepowermod.init.BPCreativeTabs;
+import com.bluepowermod.reference.Refs;
 import net.minecraft.block.Block;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.boss.EntityWither;
 import net.minecraft.item.Item;
+import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
-import com.bluepowermod.init.BPBlocks;
-import com.bluepowermod.init.BPCreativeTabs;
-import com.bluepowermod.reference.Refs;
-
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.Random;
 
 public class BlockStoneOre extends Block {
 
@@ -52,9 +55,9 @@ public class BlockStoneOre extends Block {
         setResistance(5.0F);
         setHardness(4.0F);
         this.setHarvestLevel("pickaxe", 1);
-        setBlockName(name);
+        setUnlocalizedName(name);
         setCreativeTab(BPCreativeTabs.blocks);
-        setStepSound(soundTypeStone);
+        setSoundType(SoundType.STONE);
     }
 
     public Block setToolLevel(int level) {
@@ -70,22 +73,20 @@ public class BlockStoneOre extends Block {
     }
 
     @Override
-    public Item getItemDropped(int par1, Random par2, int par3) {
-
+    public Item getItemDropped(IBlockState state, Random rand, int fortune) {
         return Item.getItemFromBlock(Block.getBlockFromName(Refs.MODID + ":" + name));
     }
 
-    @Override
+
     @SideOnly(Side.CLIENT)
     public void registerBlockIcons(TextureMap iconRegister) {
 
-        blockIcon = iconRegister.registerIcon(Refs.MODID + ":" + name);
+        //blockIcon = iconRegister.registerSprite(Refs.MODID + ":" + name);
     }
 
     // Allow storage blocks to be used as a beacon base
     @Override
-    public boolean isBeaconBase(IBlockAccess worldObj, int x, int y, int z, int beaconX, int beaconY, int beaconZ) {
-
+    public boolean isBeaconBase(IBlockAccess worldObj, BlockPos pos, BlockPos beacon) {
         return this == BPBlocks.amethyst_block || this == BPBlocks.ruby_block || this == BPBlocks.sapphire_block
                 || this == BPBlocks.copper_block || this == BPBlocks.zinc_block || this == BPBlocks.silver_block
                 || this == BPBlocks.tungsten_block;
@@ -99,56 +100,35 @@ public class BlockStoneOre extends Block {
     }
 
     @Override
-    public boolean isNormalCube() {
-
+    public boolean isNormalCube(IBlockState state, IBlockAccess world, BlockPos pos) {
         return !transparent;
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
-    public boolean isBlockNormalCube() {
-
+    public boolean isNormalCube(IBlockState state) {
         return !transparent;
     }
 
     @Override
-    public boolean isOpaqueCube() {
-
+    public boolean isOpaqueCube(IBlockState state) {
         return !transparent;
     }
 
     @Override
-    public boolean renderAsNormalBlock() {
-
-        return !transparent;
+    public boolean canRenderInLayer(IBlockState state, BlockRenderLayer layer) {
+        return transparent ? true : super.canRenderInLayer(state, layer);
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
-    public boolean canRenderInPass(int pass) {
-
-        return transparent ? true : super.canRenderInPass(pass);
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public int getRenderBlockPass() {
-
-        return transparent ? 1 : super.getRenderBlockPass();
-    }
-
-    @Override
-    public boolean shouldSideBeRendered(IBlockAccess w, int x, int y, int z, int p_149646_5_) {
-
+    public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess w, BlockPos pos, EnumFacing side) {
         if (transparent)
-            return w.getBlock(x, y, z) != this;
-        return super.shouldSideBeRendered(w, x, y, z, p_149646_5_);
+            return w.getBlockState(pos).getBlock() != this;
+        return super.shouldSideBeRendered(blockState, w, pos, side);
     }
 
     @Override
-    public int getLightOpacity() {
-
-        return transparent ? 0 : super.getLightOpacity();
+    public int getLightOpacity(IBlockState state, IBlockAccess world, BlockPos pos) {
+        return transparent ? 0 : super.getLightOpacity(state, world, pos);
     }
 
     public BlockStoneOre setWitherproof(boolean witherproof) {
@@ -159,19 +139,17 @@ public class BlockStoneOre extends Block {
     }
 
     @Override
-    public boolean canEntityDestroy(IBlockAccess world, int x, int y, int z, Entity entity) {
-
+    public boolean canEntityDestroy(IBlockState state, IBlockAccess world, BlockPos pos, Entity entity) {
         if (witherproof)
-            return !(entity instanceof EntityWither) && super.canEntityDestroy(world, x, y, z, entity);
+            return !(entity instanceof EntityWither) && super.canEntityDestroy(state, world, pos, entity);
 
-        return super.canEntityDestroy(world, x, y, z, entity);
+        return super.canEntityDestroy(state, world, pos, entity);
     }
 
     @Override
-    public void onBlockExploded(World world, int x, int y, int z, Explosion explosion) {
-
+    public void onBlockExploded(World world, BlockPos pos, Explosion explosion) {
         if (!witherproof)
-            super.onBlockExploded(world, x, y, z, explosion);
+            super.onBlockExploded(world, pos, explosion);
     }
 
     @Override

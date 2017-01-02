@@ -1,5 +1,5 @@
 package com.bluepowermod.compat.cc;
-
+/*
 import net.minecraft.block.Block;
 import net.minecraft.world.World;
 import net.minecraft.util.EnumFacing;;
@@ -29,4 +29,4 @@ public class RedstoneProviderCC implements IRedstoneProvider {
         return null;
     }
 
-}
+}*/

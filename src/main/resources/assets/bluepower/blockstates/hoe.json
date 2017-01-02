@@ -1,0 +1,14 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "transform": "forge:default-item",
+    "model": "forge:item-layer"
+  },
+  "variants": {
+    "amethyst": [{ "textures": { "layer0": "bluepower:items/amethyst_hoe" }}],
+    "malachite": [{ "textures": { "layer0": "bluepower:items/malachite_hoe" }}],
+    "ruby": [{ "textures": { "layer0": "bluepower:items/ruby_hoe" }}],
+    "sapphire": [{ "textures": { "layer0": "bluepower:items/sapphire_hoe" }}],
+    "tungcarb": [{ "textures": { "layer0": "bluepower:items/tungcarb_hoe" }}]
+  }
+}

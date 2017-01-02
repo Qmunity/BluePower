@@ -15,6 +15,7 @@ import com.bluepowermod.convert.WorldConversionEventHandler;
 import com.bluepowermod.event.BPEventHandler;
 import com.bluepowermod.init.*;
 import com.bluepowermod.network.BPNetworkHandler;
+import com.bluepowermod.part.PartManager;
 import com.bluepowermod.recipe.AlloyFurnaceRegistry;
 import com.bluepowermod.redstone.RedstoneApi;
 import com.bluepowermod.redstone.RedstoneProviderQmunityLib;
@@ -38,7 +39,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import org.apache.logging.log4j.Logger;
 
 
-@Mod(modid = Refs.MODID, name = Refs.NAME, dependencies = "required-after:qmunitylib,mcmultipart", guiFactory = Refs.GUIFACTORY)
+@Mod(modid = Refs.MODID, name = Refs.NAME, dependencies = "required-after:qmunitylib", guiFactory = Refs.GUIFACTORY)
 public class BluePower {
 
     @Mod.Instance(Refs.MODID)
@@ -79,8 +80,11 @@ public class BluePower {
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
 
+        PartManager.registerParts();
+
         BPBlocks.init();
         BPItems.init();
+        PartManager.registerItems();
 
         TileEntities.init();
         OreDictionarySetup.init();

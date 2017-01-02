@@ -20,13 +20,11 @@ package com.bluepowermod.init;
 import com.bluepowermod.BluePower;
 import com.bluepowermod.item.*;
 import com.bluepowermod.reference.Refs;
-import com.bluepowermod.util.Dependencies;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.Item.ToolMaterial;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -120,8 +118,8 @@ public class BPItems {
     public static void init() {
 
         if (!Loader.isModLoaded("ForgeMicroblock")) {// FMP already has an iron and diamond saw
-            iron_saw = new ItemSaw(2, Refs.IRONSAW_NAME);
-            diamond_saw = new ItemSaw(3, Refs.DIAMONDSAW_NAME);
+            //iron_saw = new ItemSaw(2, Refs.IRONSAW_NAME);
+            //diamond_saw = new ItemSaw(3, Refs.DIAMONDSAW_NAME);
         }
 
         initializeItems();
@@ -151,9 +149,9 @@ public class BPItems {
                 .setCreativeTab(BPCreativeTabs.items);
         zinc_tiny_dust = new ItemBase().setUnlocalizedName(Refs.ZINCDUST_TINY_NAME).setRegistryName(Refs.MODID + ":" + Refs.ZINCDUST_TINY_NAME)
                 .setCreativeTab(BPCreativeTabs.items);
-        ruby_saw = new ItemSaw(2, Refs.RUBYSAW_NAME);
-        sapphire_saw = new ItemSaw(2, Refs.SAPPHIRESAW_NAME);
-        amethyst_saw = new ItemSaw(2, Refs.AMETHYSTSAW_NAME);
+       // ruby_saw = new ItemSaw(2, Refs.RUBYSAW_NAME);
+       // sapphire_saw = new ItemSaw(2, Refs.SAPPHIRESAW_NAME);
+       // amethyst_saw = new ItemSaw(2, Refs.AMETHYSTSAW_NAME);
         wood_sickle = new ItemSickle(ToolMaterial.WOOD, Refs.WOODSICKLE_NAME, Item.getItemFromBlock(Blocks.PLANKS));
         stone_sickle = new ItemSickle(ToolMaterial.STONE, Refs.STONESICKLE_NAME, Item.getItemFromBlock(Blocks.COBBLESTONE));
         iron_sickle = new ItemSickle(ToolMaterial.IRON, Refs.IRONSICKLE_NAME, Items.IRON_INGOT);
@@ -218,100 +216,100 @@ public class BPItems {
 
     public static void registerItems() {
 
-        GameRegistry.register(amethyst_gem, new ResourceLocation(Refs.AMETHYST_NAME));
-        GameRegistry.register(sapphire_gem, new ResourceLocation(Refs.SAPPHIRE_NAME));
-        GameRegistry.register(ruby_gem, new ResourceLocation(Refs.RUBY_NAME));
-        GameRegistry.register(teslatite_dust, new ResourceLocation(Refs.TESLATITE_NAME));
-        GameRegistry.register(copper_ingot, new ResourceLocation(Refs.COPPERINGOT_NAME));
-        GameRegistry.register(silver_ingot, new ResourceLocation(Refs.SILVERINGOT_NAME));
-        GameRegistry.register(zinc_ingot, new ResourceLocation(Refs.ZINCINGOT_NAME));
-        GameRegistry.register(tungsten_ingot, new ResourceLocation(Refs.TUNGSTENINGOT_NAME));
-        GameRegistry.register(brass_ingot, new ResourceLocation(Refs.BRASSINGOT_NAME));
-        GameRegistry.register(blue_alloy_ingot, new ResourceLocation(Refs.BLUEALLOYINGOT_NAME));
-        GameRegistry.register(red_alloy_ingot, new ResourceLocation(Refs.REDALLOYINGOT_NAME));
-        GameRegistry.register(purple_alloy_ingot, new ResourceLocation(Refs.PURPLEALLOYINGOT_NAME));
+        GameRegistry.register(amethyst_gem);
+        GameRegistry.register(sapphire_gem);
+        GameRegistry.register(ruby_gem);
+        GameRegistry.register(teslatite_dust);
+        GameRegistry.register(copper_ingot);
+        GameRegistry.register(silver_ingot);
+        GameRegistry.register(zinc_ingot);
+        GameRegistry.register(tungsten_ingot);
+        GameRegistry.register(brass_ingot);
+        GameRegistry.register(blue_alloy_ingot);
+        GameRegistry.register(red_alloy_ingot);
+        GameRegistry.register(purple_alloy_ingot);
 
-        GameRegistry.register(zinc_dust, new ResourceLocation(Refs.ZINCDUST_NAME));
-        GameRegistry.register(zinc_ore_crushed, new ResourceLocation(Refs.ZINC_ORE_CRUSHED_NAME));
-        GameRegistry.register(zinc_ore_purified, new ResourceLocation(Refs.ZINC_ORE_CRUSHED_PURIFIED_NAME));
-        GameRegistry.register(zinc_tiny_dust, new ResourceLocation(Refs.ZINCDUST_TINY_NAME));
-        GameRegistry.register(tungsten_nugget, new ResourceLocation(Refs.TUNGSTENNUGGET_NAME));
+        GameRegistry.register(zinc_dust);
+        GameRegistry.register(zinc_ore_crushed);
+        GameRegistry.register(zinc_ore_purified);
+        GameRegistry.register(zinc_tiny_dust);
+        GameRegistry.register(tungsten_nugget);
 
-        GameRegistry.register(ruby_axe, new ResourceLocation(Refs.RUBYAXE_NAME));
-        GameRegistry.register(ruby_sword, new ResourceLocation(Refs.RUBYSWORD_NAME));
-        GameRegistry.register(ruby_pickaxe, new ResourceLocation(Refs.RUBYPICKAXE_NAME));
-        GameRegistry.register(ruby_shovel, new ResourceLocation(Refs.RUBYSPADE_NAME));
-        GameRegistry.register(ruby_hoe, new ResourceLocation(Refs.RUBYHOE_NAME));
-        GameRegistry.register(ruby_sickle, new ResourceLocation(Refs.RUBYSICKLE_NAME));
+        GameRegistry.register(ruby_axe);
+        GameRegistry.register(ruby_sword);
+        GameRegistry.register(ruby_pickaxe);
+        GameRegistry.register(ruby_shovel);
+        GameRegistry.register(ruby_hoe);
+        GameRegistry.register(ruby_sickle);
 
-        GameRegistry.register(sapphire_axe, new ResourceLocation(Refs.SAPPHIREAXE_NAME));
-        GameRegistry.register(sapphire_sword, new ResourceLocation(Refs.SAPPHIRESWORD_NAME));
-        GameRegistry.register(sapphire_pickaxe, new ResourceLocation(Refs.SAPPHIREPICKAXE_NAME));
-        GameRegistry.register(sapphire_shovel, new ResourceLocation(Refs.SAPPHIRESPADE_NAME));
-        GameRegistry.register(sapphire_hoe, new ResourceLocation(Refs.SAPPHIREHOE_NAME));
-        GameRegistry.register(sapphire_sickle, new ResourceLocation(Refs.SAPPHIRESICKLE_NAME));
+        GameRegistry.register(sapphire_axe);
+        GameRegistry.register(sapphire_sword);
+        GameRegistry.register(sapphire_pickaxe);
+        GameRegistry.register(sapphire_shovel);
+        GameRegistry.register(sapphire_hoe);
+        GameRegistry.register(sapphire_sickle);
 
-        GameRegistry.register(amethyst_axe, new ResourceLocation(Refs.AMETHYSTAXE_NAME));
-        GameRegistry.register(amethyst_sword, new ResourceLocation(Refs.AMETHYSTSWORD_NAME));
-        GameRegistry.register(amethyst_pickaxe, new ResourceLocation(Refs.AMETHYSTPICKAXE_NAME));
-        GameRegistry.register(amethyst_shovel, new ResourceLocation(Refs.AMETHYSTSPADE_NAME));
-        GameRegistry.register(amethyst_hoe, new ResourceLocation(Refs.AMETHYSTHOE_NAME));
-        GameRegistry.register(amethyst_sickle, new ResourceLocation(Refs.AMETHYSTSICKLE_NAME));
+        GameRegistry.register(amethyst_axe);
+        GameRegistry.register(amethyst_sword);
+        GameRegistry.register(amethyst_pickaxe);
+        GameRegistry.register(amethyst_shovel);
+        GameRegistry.register(amethyst_hoe);
+        GameRegistry.register(amethyst_sickle);
 
-        GameRegistry.register(wood_sickle, new ResourceLocation(Refs.WOODSICKLE_NAME));
-        GameRegistry.register(stone_sickle, new ResourceLocation(Refs.STONESICKLE_NAME));
-        GameRegistry.register(iron_sickle, new ResourceLocation(Refs.IRONSICKLE_NAME));
-        GameRegistry.register(gold_sickle, new ResourceLocation(Refs.GOLDSICKLE_NAME));
-        GameRegistry.register(diamond_sickle, new ResourceLocation(Refs.DIAMONDSICKLE_NAME));
+        GameRegistry.register(wood_sickle);
+        GameRegistry.register(stone_sickle);
+        GameRegistry.register(iron_sickle);
+        GameRegistry.register(gold_sickle);
+        GameRegistry.register(diamond_sickle);
 
-        if (!Loader.isModLoaded(Dependencies.FMP)) {
-            GameRegistry.register(iron_saw, new ResourceLocation(Refs.IRONSAW_NAME));
-            GameRegistry.register(diamond_saw, new ResourceLocation(Refs.DIAMONDSAW_NAME));
-        }
-        GameRegistry.register(ruby_saw, new ResourceLocation(Refs.RUBYSAW_NAME));
-        GameRegistry.register(sapphire_saw, new ResourceLocation(Refs.SAPPHIRESAW_NAME));
-        GameRegistry.register(amethyst_saw, new ResourceLocation(Refs.AMETHYSTSAW_NAME));
+       // if (!Loader.isModLoaded(Dependencies.FMP)) {
+       //     GameRegistry.register(iron_saw, new ResourceLocation(Refs.IRONSAW_NAME));
+       //     GameRegistry.register(diamond_saw, new ResourceLocation(Refs.DIAMONDSAW_NAME));
+       // }
+       // GameRegistry.register(ruby_saw);
+       // GameRegistry.register(sapphire_saw);
+       // GameRegistry.register(amethyst_saw);
 
-        GameRegistry.register(flax_seeds, new ResourceLocation(Refs.FLAXSEED_NAME));
-        GameRegistry.register(indigo_dye, new ResourceLocation(Refs.INDIGODYE_NAME));
-        GameRegistry.register(silicon_boule, new ResourceLocation(Refs.SILICONBOULE_NAME));
-        GameRegistry.register(silicon_wafer, new ResourceLocation(Refs.SILICONWAFER_NAME));
-        GameRegistry.register(blue_doped_wafer, new ResourceLocation(Refs.BLUEDOPEDWAFER_NAME));
-        GameRegistry.register(red_doped_wafer, new ResourceLocation(Refs.REDDOPEDWAFER_NAME));
-        GameRegistry.register(screwdriver, new ResourceLocation(Refs.SCREWDRIVER_NAME));
-        GameRegistry.register(silky_screwdriver, new ResourceLocation(Refs.SILKYSCREWDRIVER_NAME));
-        GameRegistry.register(athame, new ResourceLocation(Refs.ATHAME_NAME));
-        GameRegistry.register(zincplate, new ResourceLocation(Refs.ZINCPLATE_NAME));
-        GameRegistry.register(infused_teslatite_dust, new ResourceLocation(Refs.INFUSEDTESLATITEDUST_NAME));
+        GameRegistry.register(flax_seeds);
+        GameRegistry.register(indigo_dye);
+        GameRegistry.register(silicon_boule);
+        GameRegistry.register(silicon_wafer);
+        GameRegistry.register(blue_doped_wafer);
+        GameRegistry.register(red_doped_wafer);
+        GameRegistry.register(screwdriver);
+        GameRegistry.register(silky_screwdriver);
+        GameRegistry.register(athame);
+        GameRegistry.register(zincplate);
+        GameRegistry.register(infused_teslatite_dust);
 
-        GameRegistry.register(stone_tile, new ResourceLocation(Refs.STONETILE_NAME));
-        GameRegistry.register(bluestone_wire_tile, new ResourceLocation(Refs.BLUESTONEWIRETILE_NAME));
-        GameRegistry.register(bluestone_anode_tile, new ResourceLocation(Refs.BLUESTONEANODETILE_NAME));
-        GameRegistry.register(bluestone_cathode_tile, new ResourceLocation(Refs.BLUESTONECATHODE_NAME));
-        GameRegistry.register(bluestone_pointer_tile, new ResourceLocation(Refs.BLUESTONEPOINTER_NAME));
-        GameRegistry.register(silicon_chip_tile, new ResourceLocation(Refs.SILICONCHIP_NAME));
-        GameRegistry.register(tainted_silicon_chip_tile, new ResourceLocation(Refs.TAINTEDSILICONCHIP_NAME));
-        GameRegistry.register(quartz_resonator_tile, new ResourceLocation(Refs.QUARTZRESONATOR_NAME));
-        GameRegistry.register(redstone_wire_tile, new ResourceLocation(Refs.REDSTONEWIRETILE_NAME));
-        GameRegistry.register(redstone_anode_tile, new ResourceLocation(Refs.REDSTONEANODETILE_NAME));
-        GameRegistry.register(redstone_cathode_tile, new ResourceLocation(Refs.REDSTONECATHODE_NAME));
-        GameRegistry.register(redstone_pointer_tile, new ResourceLocation(Refs.REDSTONEPOINTER_NAME));
+        GameRegistry.register(stone_tile);
+        GameRegistry.register(bluestone_wire_tile);
+        GameRegistry.register(bluestone_anode_tile);
+        GameRegistry.register(bluestone_cathode_tile);
+        GameRegistry.register(bluestone_pointer_tile);
+        GameRegistry.register(silicon_chip_tile);
+        GameRegistry.register(tainted_silicon_chip_tile);
+        GameRegistry.register(quartz_resonator_tile);
+        GameRegistry.register(redstone_wire_tile);
+        GameRegistry.register(redstone_anode_tile);
+        GameRegistry.register(redstone_cathode_tile);
+        GameRegistry.register(redstone_pointer_tile);
         // GameRegistry.register(stone_redwire, Refs.STONEREDWIRE_NAME);
         // GameRegistry.register(plate_assembly, Refs.PLATEASSEMBLY_NAME);
-        GameRegistry.register(stone_bundle, new ResourceLocation(Refs.STONEBUNDLE_NAME));
-        GameRegistry.register(screwdriver_handle, new ResourceLocation(Refs.SCREWDRIVERHANDLE_NAME));
-        GameRegistry.register(seed_bag, new ResourceLocation(Refs.SEEDBAG_NAME));
-        GameRegistry.register(canvas_bag, new ResourceLocation(Refs.CANVASBAG_NAME));
-        GameRegistry.register(canvas, new ResourceLocation(Refs.CANVAS_NAME));
-        GameRegistry.register(lumar, new ResourceLocation(Refs.LUMAR_NAME));
-        GameRegistry.register(wool_card, new ResourceLocation(Refs.WOOLCARD_NAME));
-        GameRegistry.register(diamond_drawplate, new ResourceLocation(Refs.DIAMONDDRAWPLATE_NAME));
+        GameRegistry.register(stone_bundle);
+        GameRegistry.register(screwdriver_handle);
+        GameRegistry.register(seed_bag);
+        GameRegistry.register(canvas_bag);
+        GameRegistry.register(canvas);
+        GameRegistry.register(lumar);
+        GameRegistry.register(wool_card);
+        GameRegistry.register(diamond_drawplate);
 
-        GameRegistry.register(paint_can, new ResourceLocation(Refs.PAINTCAN_NAME));
-        GameRegistry.register(paint_brush, new ResourceLocation(Refs.PAINTBRUSH_NAME));
+        GameRegistry.register(paint_can);
+        GameRegistry.register(paint_brush);
 
-        GameRegistry.register(copper_wire, new ResourceLocation(Refs.COPPERWIRE_NAME));
-        GameRegistry.register(iron_wire, new ResourceLocation(Refs.IRONWIRE_NAME));
+        GameRegistry.register(copper_wire);
+        GameRegistry.register(iron_wire);
 
         MinecraftForge.addGrassSeed(new ItemStack(flax_seeds), 5);
     }

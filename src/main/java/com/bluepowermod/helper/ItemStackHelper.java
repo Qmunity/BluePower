@@ -49,4 +49,13 @@ public class ItemStackHelper {
             return OreDictionary.itemMatches(stack1, stack2, false) && ItemStack.areItemStackTagsEqual(stack1, stack2);
         }
     }
+
+    public static boolean canStack(ItemStack stack1, ItemStack stack2) {
+        return stack1 == ItemStack.EMPTY || stack2 == ItemStack.EMPTY ||
+                (stack1.getItem() == stack2.getItem() &&
+                        (!stack2.getHasSubtypes() || stack2.getItemDamage() == stack1.getItemDamage()) &&
+                        ItemStack.areItemStackTagsEqual(stack2, stack1)) &&
+                        stack1.isStackable();
+    }
+
 }

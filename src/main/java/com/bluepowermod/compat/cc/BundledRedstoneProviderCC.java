@@ -1,11 +1,12 @@
 package com.bluepowermod.compat.cc;
 
+/*
+Waiting on Computercraft
+
 import dan200.computercraft.api.redstone.IBundledRedstoneProvider;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
-;
 
 public class BundledRedstoneProviderCC implements IBundledRedstoneProvider {
 
@@ -19,3 +20,4 @@ public class BundledRedstoneProviderCC implements IBundledRedstoneProvider {
     }
 
 }
+*/

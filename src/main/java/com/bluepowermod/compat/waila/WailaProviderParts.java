@@ -17,8 +17,6 @@
 
 package com.bluepowermod.compat.waila;
 
-import java.util.List;
-
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 import mcp.mobius.waila.api.IWailaDataProvider;
@@ -26,9 +24,12 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import uk.co.qmunity.lib.part.IPartWAILAProvider;
 import uk.co.qmunity.lib.raytrace.QRayTraceResult;
+
+import java.util.List;
 
 public class WailaProviderParts implements IWailaDataProvider {
 
@@ -41,8 +42,8 @@ public class WailaProviderParts implements IWailaDataProvider {
     @Override
     public List<String> getWailaBody(ItemStack item, List<String> l, IWailaDataAccessor data, IWailaConfigHandler cfg) {
 
-        if (data.getPosition() instanceof QRayTraceResult) {
-            QRayTraceResult mop = (QRayTraceResult) data.getPosition();
+        if (data.getMOP() instanceof QRayTraceResult) {
+            QRayTraceResult mop = (QRayTraceResult) data.getMOP();
             if (mop.getPart() != null && mop.getPart() instanceof IPartWAILAProvider)
                 ((IPartWAILAProvider) mop.getPart()).addWAILABody(l);
         }
@@ -76,7 +77,7 @@ public class WailaProviderParts implements IWailaDataProvider {
     }
 
     @Override
-    public NBTTagCompound getNBTData(EntityPlayerMP player, TileEntity te, NBTTagCompound tag, World w, int x, int y, int z) {
+    public NBTTagCompound getNBTData(EntityPlayerMP player, TileEntity te, NBTTagCompound tag, World w, BlockPos pos) {
 
         return tag;
     }

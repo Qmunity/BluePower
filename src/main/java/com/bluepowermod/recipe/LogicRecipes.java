@@ -26,7 +26,6 @@ import com.bluepowermod.part.gate.supported.GateNullCell;
 import com.bluepowermod.reference.BPOredictNames;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.ShapedOreRecipe;
@@ -111,10 +110,9 @@ public class LogicRecipes {
             GameRegistry.addRecipe(new ShapedOreRecipe(freestanding, " s ", "sws", " s ", 's', "stickWood", 'w', bundled.copy()));
 
             for (MinecraftColor c : MinecraftColor.VALID_COLORS) {
-                ItemStack stack = PartManager.getPartInfo(
-                        "wire." + t.getName() + ".bundled" + (c == MinecraftColor.NONE ? "" : "." + c.name().toLowerCase())).getStack(8);
+                ItemStack stack = PartManager.getPartInfo("wire." + t.getName() + ".bundled" + (c == MinecraftColor.NONE ? "" : "." + c.name().toLowerCase())).getStack(8);
                 //ToDo Change this back to OreDict
-                GameRegistry.addRecipe(new ShapedOreRecipe(stack, "www", "wdw", "www", 'w', bundled, 'd', ItemDye.getByNameOrId(String.valueOf(15 - c.ordinal()))));
+                GameRegistry.addRecipe(new ShapedOreRecipe(stack, "www", "wdw", "www", 'w', bundled, 'd', "dye" + c.name().substring(0, 1).toUpperCase() + c.name().substring(1).toLowerCase()));
             }
         }
 

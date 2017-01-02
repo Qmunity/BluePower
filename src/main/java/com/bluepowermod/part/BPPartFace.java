@@ -35,7 +35,7 @@ import java.io.IOException;
 
 public abstract class BPPartFace extends BPPart implements IPartFace, IFace, IPartCustomPlacement {
 
-    private EnumFacing face = null;
+    private EnumFacing face = EnumFacing.NORTH;
 
     @Override
     public EnumFacing getFace() {

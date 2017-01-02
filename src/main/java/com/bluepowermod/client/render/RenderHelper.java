@@ -7,7 +7,12 @@
  */
 package com.bluepowermod.client.render;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
@@ -167,13 +172,14 @@ public class RenderHelper {
         GL11.glPopMatrix();
     }
 
-    *//**
+    */
+    /*
      * @author amadornes
      * @param x
      * @param y
      * @param z
      * @param angle
-     *//*
+     */
     public static void renderPointer(double x, double y, double z, double angle) {
 
         GL11.glPushMatrix();
@@ -229,7 +235,7 @@ public class RenderHelper {
         GL11.glPopMatrix();
 
     }
-
+    /*
     *//**
      * @author amadornes
      * @param x1
@@ -526,15 +532,16 @@ public class RenderHelper {
      *
      * @author Koen Beckers (K4Unl)
      * @param vector
-     *//*
+     */
     public static void drawTesselatedTexturedCube(Vec3dCube vector) {
 
-        Tessellator t = Tessellator.instance;
+        Tessellator t = Tessellator.getInstance();
+        VertexBuffer b = t.getBuffer();
         boolean wasTesselating = false;
 
         // Check if we were already tesselating
         try {
-            t.startDrawingQuads();
+            b.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
         } catch (IllegalStateException e) {
             wasTesselating = true;
         }
@@ -545,52 +552,52 @@ public class RenderHelper {
         double maxV = 1;
 
         // Top side
-        t.setNormal(0, 1, 0);
-        t.addVertexWithUV(vector.getMinX(), vector.getMaxY(), vector.getMaxZ(), minU, maxV);
-        t.addVertexWithUV(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ(), minU, minV);
-        t.addVertexWithUV(vector.getMaxX(), vector.getMaxY(), vector.getMinZ(), maxU, minV);
-        t.addVertexWithUV(vector.getMinX(), vector.getMaxY(), vector.getMinZ(), maxU, maxV);
+        b.normal(0, 1, 0);
+        b.pos(vector.getMinX(), vector.getMaxY(), vector.getMaxZ()).tex(minU, maxV).endVertex();
+        b.pos(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ()).tex(minU, minV).endVertex();
+        b.pos(vector.getMaxX(), vector.getMaxY(), vector.getMinZ()).tex(maxU, minV).endVertex();
+        b.pos(vector.getMinX(), vector.getMaxY(), vector.getMinZ()).tex(maxU, maxV).endVertex();
 
         // Bottom side
-        t.setNormal(0, -1, 0);
-        t.addVertexWithUV(vector.getMaxX(), vector.getMinY(), vector.getMaxZ(), minU, maxV);
-        t.addVertexWithUV(vector.getMinX(), vector.getMinY(), vector.getMaxZ(), minU, minV);
-        t.addVertexWithUV(vector.getMinX(), vector.getMinY(), vector.getMinZ(), maxU, minV);
-        t.addVertexWithUV(vector.getMaxX(), vector.getMinY(), vector.getMinZ(), maxU, maxV);
+        b.normal(0, -1, 0);
+        b.pos(vector.getMaxX(), vector.getMinY(), vector.getMaxZ()).tex(minU, maxV).endVertex();
+        b.pos(vector.getMinX(), vector.getMinY(), vector.getMaxZ()).tex(minU, minV).endVertex();
+        b.pos(vector.getMinX(), vector.getMinY(), vector.getMinZ()).tex(maxU, minV).endVertex();
+        b.pos(vector.getMaxX(), vector.getMinY(), vector.getMinZ()).tex(maxU, maxV).endVertex();
 
         // Draw west side:
-        t.setNormal(-1, 0, 0);
-        t.addVertexWithUV(vector.getMinX(), vector.getMinY(), vector.getMaxZ(), minU, maxV);
-        t.addVertexWithUV(vector.getMinX(), vector.getMaxY(), vector.getMaxZ(), minU, minV);
-        t.addVertexWithUV(vector.getMinX(), vector.getMaxY(), vector.getMinZ(), maxU, minV);
-        t.addVertexWithUV(vector.getMinX(), vector.getMinY(), vector.getMinZ(), maxU, maxV);
+        b.normal(-1, 0, 0);
+        b.pos(vector.getMinX(), vector.getMinY(), vector.getMaxZ()).tex(minU, maxV).endVertex();
+        b.pos(vector.getMinX(), vector.getMaxY(), vector.getMaxZ()).tex(minU, minV).endVertex();
+        b.pos(vector.getMinX(), vector.getMaxY(), vector.getMinZ()).tex(maxU, minV).endVertex();
+        b.pos(vector.getMinX(), vector.getMinY(), vector.getMinZ()).tex(maxU, maxV).endVertex();
 
         // Draw east side:
-        t.setNormal(1, 0, 0);
-        t.addVertexWithUV(vector.getMaxX(), vector.getMinY(), vector.getMinZ(), minU, maxV);
-        t.addVertexWithUV(vector.getMaxX(), vector.getMaxY(), vector.getMinZ(), minU, minV);
-        t.addVertexWithUV(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ(), maxU, minV);
-        t.addVertexWithUV(vector.getMaxX(), vector.getMinY(), vector.getMaxZ(), maxU, maxV);
+        b.normal(1, 0, 0);
+        b.pos(vector.getMaxX(), vector.getMinY(), vector.getMinZ()).tex(minU, maxV).endVertex();
+        b.pos(vector.getMaxX(), vector.getMaxY(), vector.getMinZ()).tex(minU, minV).endVertex();
+        b.pos(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ()).tex(maxU, minV).endVertex();
+        b.pos(vector.getMaxX(), vector.getMinY(), vector.getMaxZ()).tex(maxU, maxV).endVertex();
 
         // Draw north side
-        t.setNormal(0, 0, -1);
-        t.addVertexWithUV(vector.getMinX(), vector.getMinY(), vector.getMinZ(), minU, maxV);
-        t.addVertexWithUV(vector.getMinX(), vector.getMaxY(), vector.getMinZ(), minU, minV);
-        t.addVertexWithUV(vector.getMaxX(), vector.getMaxY(), vector.getMinZ(), maxU, minV);
-        t.addVertexWithUV(vector.getMaxX(), vector.getMinY(), vector.getMinZ(), maxU, maxV);
+        b.normal(0, 0, -1);
+        b.pos(vector.getMinX(), vector.getMinY(), vector.getMinZ()).tex(minU, maxV).endVertex();
+        b.pos(vector.getMinX(), vector.getMaxY(), vector.getMinZ()).tex(minU, minV).endVertex();
+        b.pos(vector.getMaxX(), vector.getMaxY(), vector.getMinZ()).tex(maxU, minV).endVertex();
+        b.pos(vector.getMaxX(), vector.getMinY(), vector.getMinZ()).tex(maxU, maxV).endVertex();
 
         // Draw south side
-        t.setNormal(0, 0, 1);
-        t.addVertexWithUV(vector.getMinX(), vector.getMinY(), vector.getMaxZ(), minU, maxV);
-        t.addVertexWithUV(vector.getMaxX(), vector.getMinY(), vector.getMaxZ(), minU, minV);
-        t.addVertexWithUV(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ(), maxU, minV);
-        t.addVertexWithUV(vector.getMinX(), vector.getMaxY(), vector.getMaxZ(), maxU, maxV);
+        b.normal(0, 0, 1);
+        b.pos(vector.getMinX(), vector.getMinY(), vector.getMaxZ()).tex(minU, maxV).endVertex();
+        b.pos(vector.getMaxX(), vector.getMinY(), vector.getMaxZ()).tex(minU, minV).endVertex();
+        b.pos(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ()).tex(maxU, minV).endVertex();
+        b.pos(vector.getMinX(), vector.getMaxY(), vector.getMaxZ()).tex(maxU, maxV).endVertex();
 
         if (!wasTesselating) {
             t.draw();
         }
     }
-
+    /*
     *//**
      * Draws a cube with the size of vector. Every face has the same color This uses the Tessellator
      *

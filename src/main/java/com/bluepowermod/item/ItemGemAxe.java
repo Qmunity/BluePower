@@ -31,7 +31,7 @@ public class ItemGemAxe extends ItemAxe {
 
     public ItemGemAxe(ToolMaterial material, String name, Item repairItem) {
 
-        super(material);
+        super(material, material.getDamageVsEntity(), material.getEfficiencyOnProperMaterial());
         this.setUnlocalizedName(name);
         this.setCreativeTab(BPCreativeTabs.tools);
         this.setRegistryName(Refs.MODID + ":" + name);

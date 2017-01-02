@@ -1,6 +1,6 @@
 package com.bluepowermod.compat.cc;
 
-import com.bluepowermod.api.connect.ConnectionType;
+/*import com.bluepowermod.api.connect.ConnectionType;
 import com.bluepowermod.api.connect.IConnectionCache;
 import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.api.wire.redstone.IBundledDevice;
@@ -114,4 +114,4 @@ public class BundledDeviceCCComputer implements IBundledDevice {
         return true;
     }
 
-}
+}*/

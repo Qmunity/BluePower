@@ -1,0 +1,14 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "transform": "forge:default-item",
+    "model": "forge:item-layer"
+  },
+  "variants": {
+    "amethyst": [{ "textures": { "layer0": "bluepower:items/amethyst_sword" }}],
+    "malachite": [{ "textures": { "layer0": "bluepower:items/malachite_sword" }}],
+    "ruby": [{ "textures": { "layer0": "bluepower:items/ruby_sword" }}],
+    "sapphire": [{ "textures": { "layer0": "bluepower:items/sapphire_sword" }}],
+    "tungcarb": [{ "textures": { "layer0": "bluepower:items/tungcarb_sword" }}]
+  }
+}

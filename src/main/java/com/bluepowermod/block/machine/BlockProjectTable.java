@@ -30,7 +30,8 @@ public class BlockProjectTable extends BlockContainerBase {
     public BlockProjectTable() {
 
         super(Material.WOOD, TileProjectTable.class);
-        setRegistryName(Refs.PROJECTTABLE_NAME);
+        setUnlocalizedName(Refs.PROJECTTABLE_NAME);
+        setRegistryName(Refs.MODID, Refs.PROJECTTABLE_NAME);
     }
 
     public BlockProjectTable(Class<? extends TileBase> tileClass) {

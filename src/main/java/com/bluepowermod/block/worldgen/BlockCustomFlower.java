@@ -38,7 +38,8 @@ public class BlockCustomFlower extends BlockBush {
         this.setCreativeTab(BPCreativeTabs.blocks);
         this.setHardness(0.0F);
         this.setSoundType(SoundType.PLANT);
-        this.setRegistryName(name);
+        this.setUnlocalizedName(name);
+        this.setRegistryName(Refs.MODID, name);
     }
 
     @Override

@@ -17,24 +17,21 @@
 
 package com.bluepowermod.convert;
 
+import com.bluepowermod.convert.part.PartConverterGate;
+import com.bluepowermod.convert.part.PartConverterLamp;
+import com.bluepowermod.convert.part.PartConverterTube;
+import com.bluepowermod.convert.part.PartConverterWire;
+import net.minecraft.nbt.CompressedStreamTools;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.world.chunk.storage.RegionFile;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import net.minecraft.nbt.CompressedStreamTools;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.world.chunk.storage.RegionFile;
-import uk.co.qmunity.lib.part.IPart;
-import uk.co.qmunity.lib.part.compat.fmp.FMPPart;
-
-import com.bluepowermod.convert.part.PartConverterGate;
-import com.bluepowermod.convert.part.PartConverterLamp;
-import com.bluepowermod.convert.part.PartConverterTube;
-import com.bluepowermod.convert.part.PartConverterWire;
 
 public class WorldConverter {
 
@@ -157,7 +154,7 @@ public class WorldConverter {
 
     private boolean convertTile(NBTTagCompound tag) {
 
-        NBTTagList parts = tag.getTagList("parts", new NBTTagCompound().getId());
+/*        NBTTagList parts = tag.getTagList("parts", new NBTTagCompound().getId());
         int count = parts.tagCount();
 
         FMPPart fmppart = new FMPPart(true);
@@ -185,7 +182,7 @@ public class WorldConverter {
             parts.appendTag(part);
 
             return true;
-        }
+        }*/
         return false;
     }
 }

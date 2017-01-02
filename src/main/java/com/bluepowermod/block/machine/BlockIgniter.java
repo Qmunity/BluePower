@@ -40,7 +40,8 @@ public class BlockIgniter extends BlockContainerBase {
     public BlockIgniter() {
     
         super(Material.ROCK, TileIgniter.class);
-        setRegistryName(Refs.BLOCKIGNITER_NAME);
+        setUnlocalizedName(Refs.BLOCKIGNITER_NAME);
+        setRegistryName(Refs.MODID, Refs.BLOCKIGNITER_NAME);
     }
 
     @Override

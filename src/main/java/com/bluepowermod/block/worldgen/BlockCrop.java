@@ -60,6 +60,7 @@ public class BlockCrop extends BlockCrops implements IGrowable {
         this.setHardness(0.0F);
         this.setSoundType(SoundType.PLANT);
         this.disableStats();
+        this.setUnlocalizedName(Refs.FLAXCROP_NAME);
         this.setRegistryName(Refs.MODID + ":" + Refs.FLAXCROP_NAME);
     }
 

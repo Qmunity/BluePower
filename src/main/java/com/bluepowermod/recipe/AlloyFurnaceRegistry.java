@@ -83,6 +83,8 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
 
         if (craftingResult == null || craftingResult.getItem() == null)
             throw new NullPointerException("Can't register an Alloy Furnace recipe with a null output stack or item");
+        if (craftingResult.isEmpty())
+            throw new NullPointerException("Can't register an Alloy Furnace recipe with a invalid output stack or item");
         ItemStack[] requiredStacks = new ItemStack[requiredItems.length];
         for (int i = 0; i < requiredStacks.length; i++) {
             if (requiredItems[i] instanceof ItemStack) {
@@ -149,7 +151,7 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
                         ShapedRecipes shaped = (ShapedRecipes) recipe;
                         if (shaped.recipeItems != null) {
                             for (ItemStack input : shaped.recipeItems) {
-                                if (input != null && ItemStackUtils.isItemFuzzyEqual(input, recyclingItem)) {
+                                if (!input.isEmpty() && ItemStackUtils.isItemFuzzyEqual(input, recyclingItem)) {
                                     ItemStack moltenDownItem = getRecyclingStack(recyclingItem);
                                     if (currentlyRecycledInto == null
                                             || ItemStackUtils.isItemFuzzyEqual(currentlyRecycledInto, moltenDownItem)) {
@@ -163,7 +165,7 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
                         ShapelessRecipes shapeless = (ShapelessRecipes) recipe;
                         if (shapeless.recipeItems != null) {
                             for (ItemStack input : (List<ItemStack>) shapeless.recipeItems) {
-                                if (input != null && ItemStackUtils.isItemFuzzyEqual(input, recyclingItem)) {
+                                if (!input.isEmpty() && ItemStackUtils.isItemFuzzyEqual(input, recyclingItem)) {
                                     ItemStack moltenDownItem = getRecyclingStack(recyclingItem);
                                     if (currentlyRecycledInto == null
                                             || ItemStackUtils.isItemFuzzyEqual(currentlyRecycledInto, moltenDownItem)) {
@@ -179,14 +181,14 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
                             for (Object input : shapedOreRecipe.getInput()) {
                                 if (input != null) {
                                     List<ItemStack> itemList;
-                                    if (input instanceof ItemStack) {
+                                    if (input instanceof ItemStack && !((ItemStack) input).isEmpty()) {
                                         itemList = new ArrayList<ItemStack>();
                                         itemList.add((ItemStack) input);
                                     } else {
                                         itemList = (List<ItemStack>) input;
                                     }
                                     for (ItemStack item : itemList) {
-                                        if (item != null && ItemStackUtils.isItemFuzzyEqual(item, recyclingItem)) {
+                                        if (!item.isEmpty() && ItemStackUtils.isItemFuzzyEqual(item, recyclingItem)) {
                                             ItemStack moltenDownItem = getRecyclingStack(recyclingItem);
                                             if (currentlyRecycledInto == null
                                                     || ItemStackUtils.isItemFuzzyEqual(currentlyRecycledInto, moltenDownItem)) {
@@ -204,14 +206,14 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
                         for (Object input : shapeless.getInput()) {
                             if (input != null) {
                                 List<ItemStack> itemList;
-                                if (input instanceof ItemStack) {
+                                if (input instanceof ItemStack && !((ItemStack) input).isEmpty()) {
                                     itemList = new ArrayList<ItemStack>();
                                     itemList.add((ItemStack) input);
                                 } else {
                                     itemList = (List<ItemStack>) input;
                                 }
                                 for (ItemStack item : itemList) {
-                                    if (item != null && ItemStackUtils.isItemFuzzyEqual(item, recyclingItem)) {
+                                    if (!item.isEmpty() && ItemStackUtils.isItemFuzzyEqual(item, recyclingItem)) {
                                         ItemStack moltenDownItem = getRecyclingStack(recyclingItem);
                                         if (currentlyRecycledInto == null
                                                 || ItemStackUtils.isItemFuzzyEqual(currentlyRecycledInto, moltenDownItem)) {

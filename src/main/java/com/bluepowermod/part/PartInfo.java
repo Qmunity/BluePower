@@ -104,7 +104,7 @@ public class PartInfo {
 
     public void registerItem() {
 
-        GameRegistry.register(item, new ResourceLocation(Refs.MULTIPART_NAME + "." + type));
+        GameRegistry.register(item, new ResourceLocation(Refs.MODID, Refs.MULTIPART_NAME + "." + type));
     }
 
     @SideOnly(Side.CLIENT)

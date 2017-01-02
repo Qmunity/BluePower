@@ -1,0 +1,19 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "transform": "forge:default-item",
+    "model": "forge:item-layer"
+  },
+  "variants": {
+    "amethyst": [{ "textures": { "layer0": "bluepower:items/amethyst_sickel" }}],
+    "malachite": [{ "textures": { "layer0": "bluepower:items/malachite_sickel" }}],
+    "ruby": [{ "textures": { "layer0": "bluepower:items/ruby_sickel" }}],
+    "sapphire": [{ "textures": { "layer0": "bluepower:items/sapphire_sickel" }}],
+    "tungcarb": [{ "textures": { "layer0": "bluepower:items/tungcarb_sickel" }}],
+    "diamond":[{ "textures": { "layer0": "bluepower:items/diamond_sickel" }}],
+    "iron":[{ "textures": { "layer0": "bluepower:items/iron_sickel" }}],
+    "gold":[{ "textures": { "layer0": "bluepower:items/gold_sickel" }}],
+    "stone":[{ "textures": { "layer0": "bluepower:items/stone_sickel" }}],
+    "wood":[{ "textures": { "layer0": "bluepower:items/wood_sickel" }}]
+  }
+}

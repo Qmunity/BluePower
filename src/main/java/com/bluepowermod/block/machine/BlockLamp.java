@@ -9,7 +9,6 @@ package com.bluepowermod.block.machine;
 
 import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.block.BlockContainerBase;
-import com.bluepowermod.client.render.RenderLamp;
 import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier1.TileLamp;
@@ -49,8 +48,7 @@ public class BlockLamp extends BlockContainerBase {
         super(Material.IRON, TileLamp.class);
         this.isInverted = isInverted;
         this.color = color;
-        setRegistryName(Refs.LAMP_NAME + "." + color.name().toLowerCase() + (isInverted ? ".inverted" : ""));
-        setRegistryName(Refs.MODID, Refs.LAMP_NAME + "." + color.name().toLowerCase() + (isInverted ? ".inverted" : ""));
+        setUnlocalizedName(Refs.LAMP_NAME + "." + color.name().toLowerCase() + (isInverted ? ".inverted" : ""));
         setCreativeTab(BPCreativeTabs.lighting);
 
     }
@@ -149,7 +147,7 @@ public class BlockLamp extends BlockContainerBase {
 
     @Override
     public boolean canRenderInLayer(IBlockState state, BlockRenderLayer layer) {
-        RenderLamp.pass = layer;
+        //RenderLamp.pass = layer;
         return true;
     }
 

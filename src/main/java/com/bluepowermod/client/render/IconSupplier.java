@@ -90,69 +90,69 @@ public class IconSupplier {
 
         TextureMap reg = event.getMap();
 
-            pneumaticTubeSide = reg.registerSprite(new ResourceLocation(Refs.MODID + ":tubes/pneumatic_tube_side"));
-            pneumaticTubeGlass = reg.registerSprite(new ResourceLocation(Refs.MODID + ":tubes/glass"));
-            pneumaticTubeGlass2 = reg.registerSprite(new ResourceLocation(Refs.MODID + ":tubes/glass2"));
-            pneumaticTubeOpaqueSide = reg.registerSprite(new ResourceLocation(Refs.MODID + ":tubes/pneumatic_tube_side_opaque"));
-            pneumaticTubeOpaqueNode = reg.registerSprite(new ResourceLocation(Refs.MODID + ":tubes/pneumatic_tube_end_opaque"));
-            restrictionTubeSide = reg.registerSprite(new ResourceLocation(Refs.MODID + ":tubes/restriction_tube_side"));
-            restrictionTubeNodeOpaque = reg.registerSprite(new ResourceLocation(Refs.MODID + ":tubes/restriction_tube_end_opaque"));
-            restrictionTubeSideOpaque = reg.registerSprite(new ResourceLocation(Refs.MODID + ":tubes/restriction_tube_side_opaque"));
-            magTubeSide = reg.registerSprite(new ResourceLocation(Refs.MODID + ":tubes/mag_side"));
-            magCoilSide = reg.registerSprite(new ResourceLocation(Refs.MODID + ":tubes/mag_casing"));
-            magCoilFront = reg.registerSprite(new ResourceLocation(Refs.MODID + ":tubes/mag_casing_end"));
-            magTubeGlass = reg.registerSprite(new ResourceLocation(Refs.MODID + ":tubes/glass_reinforced"));
-            magTubeGlass2 = reg.registerSprite(new ResourceLocation(Refs.MODID + ":tubes/glass_reinforced2"));
-            acceleratorFront = reg.registerSprite(new ResourceLocation(Refs.MODID + ":machines/accelerator_front"));
-            acceleratorFrontPowered = reg.registerSprite(new ResourceLocation(Refs.MODID + ":machines/accelerator_front_powered"));
-            acceleratorSide = reg.registerSprite(new ResourceLocation(Refs.MODID + ":machines/accelerator_side"));
-            acceleratorSidePowered = reg.registerSprite(new ResourceLocation(Refs.MODID + ":machines/accelerator_side_powered"));
-            acceleratorInside = reg.registerSprite(new ResourceLocation(Refs.MODID + ":machines/accelerator_inside"));
-            pneumaticTubeColoring = reg.registerSprite(new ResourceLocation(Refs.MODID + ":tubes/coloring"));
+            pneumaticTubeSide = reg.registerSprite(new ResourceLocation(Refs.MODID + ":blocks/tubes/pneumatic_tube_side"));
+            pneumaticTubeGlass = reg.registerSprite(new ResourceLocation(Refs.MODID + ":blocks/tubes/glass"));
+            pneumaticTubeGlass2 = reg.registerSprite(new ResourceLocation(Refs.MODID + ":blocks/tubes/glass2"));
+            pneumaticTubeOpaqueSide = reg.registerSprite(new ResourceLocation(Refs.MODID + ":blocks/tubes/pneumatic_tube_side_opaque"));
+            pneumaticTubeOpaqueNode = reg.registerSprite(new ResourceLocation(Refs.MODID + ":blocks/tubes/pneumatic_tube_end_opaque"));
+            restrictionTubeSide = reg.registerSprite(new ResourceLocation(Refs.MODID + ":blocks/tubes/restriction_tube_side"));
+            restrictionTubeNodeOpaque = reg.registerSprite(new ResourceLocation(Refs.MODID + ":blocks/tubes/restriction_tube_end_opaque"));
+            restrictionTubeSideOpaque = reg.registerSprite(new ResourceLocation(Refs.MODID + ":blocks/tubes/restriction_tube_side_opaque"));
+            magTubeSide = reg.registerSprite(new ResourceLocation(Refs.MODID + ":blocks/tubes/mag_side"));
+            magCoilSide = reg.registerSprite(new ResourceLocation(Refs.MODID + ":blocks/tubes/mag_casing"));
+            magCoilFront = reg.registerSprite(new ResourceLocation(Refs.MODID + ":blocks/tubes/mag_casing_end"));
+            magTubeGlass = reg.registerSprite(new ResourceLocation(Refs.MODID + ":blocks/tubes/glass_reinforced"));
+            magTubeGlass2 = reg.registerSprite(new ResourceLocation(Refs.MODID + ":blocks/tubes/glass_reinforced2"));
+            acceleratorFront = reg.registerSprite(new ResourceLocation(Refs.MODID + ":blocks/machines/accelerator_front"));
+            acceleratorFrontPowered = reg.registerSprite(new ResourceLocation(Refs.MODID + ":blocks/machines/accelerator_front_powered"));
+            acceleratorSide = reg.registerSprite(new ResourceLocation(Refs.MODID + ":blocks/machines/accelerator_side"));
+            acceleratorSidePowered = reg.registerSprite(new ResourceLocation(Refs.MODID + ":blocks/machines/accelerator_side_powered"));
+            acceleratorInside = reg.registerSprite(new ResourceLocation(Refs.MODID + ":blocks/machines/accelerator_inside"));
+            pneumaticTubeColoring = reg.registerSprite(new ResourceLocation(Refs.MODID + ":blocks/tubes/coloring"));
 
-            cagedLampFootSide = reg.registerSprite(new ResourceLocation(Refs.MODID + ":lamps/cage_foot_side"));
-            cagedLampFootTop = reg.registerSprite(new ResourceLocation(Refs.MODID + ":lamps/cage_foot_top"));
-            cagedLampCageSide = reg.registerSprite(new ResourceLocation(Refs.MODID + ":lamps/cage"));
-            cagedLampCageTop = reg.registerSprite(new ResourceLocation(Refs.MODID + ":lamps/cage_top"));
+            cagedLampFootSide = reg.registerSprite(new ResourceLocation(Refs.MODID + ":blocks/lamps/cage_foot_side"));
+            cagedLampFootTop = reg.registerSprite(new ResourceLocation(Refs.MODID + ":blocks/lamps/cage_foot_top"));
+            cagedLampCageSide = reg.registerSprite(new ResourceLocation(Refs.MODID + ":blocks/lamps/cage"));
+            cagedLampCageTop = reg.registerSprite(new ResourceLocation(Refs.MODID + ":blocks/lamps/cage_top"));
 
-            cagedLampLampActive = reg.registerSprite(new ResourceLocation(Refs.MODID + ":lamps/cage_lamp_on"));
-            cagedLampLampInactive = reg.registerSprite(new ResourceLocation(Refs.MODID + ":lamps/cage_lamp_off"));
+            cagedLampLampActive = reg.registerSprite(new ResourceLocation(Refs.MODID + ":blocks/lamps/cage_lamp_on"));
+            cagedLampLampInactive = reg.registerSprite(new ResourceLocation(Refs.MODID + ":blocks/lamps/cage_lamp_off"));
 
-            cagedLampLampActiveTop = reg.registerSprite(new ResourceLocation(Refs.MODID + ":lamps/cage_lamp_on_top"));
-            cagedLampLampInactiveTop = reg.registerSprite(new ResourceLocation(Refs.MODID + ":lamps/cage_lamp_off_top"));
+            cagedLampLampActiveTop = reg.registerSprite(new ResourceLocation(Refs.MODID + ":blocks/lamps/cage_lamp_on_top"));
+            cagedLampLampInactiveTop = reg.registerSprite(new ResourceLocation(Refs.MODID + ":blocks/lamps/cage_lamp_off_top"));
 
-            fixtureFootSide = reg.registerSprite(new ResourceLocation(Refs.MODID + ":lamps/fixture_foot_side"));
-            fixtureFootTop = reg.registerSprite(new ResourceLocation(Refs.MODID + ":lamps/fixture_foot_top"));
-            fixtureLampSideOn = reg.registerSprite(new ResourceLocation(Refs.MODID + ":lamps/fixture_lamp_on"));
-            fixtureLampTopOn = reg.registerSprite(new ResourceLocation(Refs.MODID + ":lamps/fixture_lamp_on_top"));
+            fixtureFootSide = reg.registerSprite(new ResourceLocation(Refs.MODID + ":blocks/lamps/fixture_foot_side"));
+            fixtureFootTop = reg.registerSprite(new ResourceLocation(Refs.MODID + ":blocks/lamps/fixture_foot_top"));
+            fixtureLampSideOn = reg.registerSprite(new ResourceLocation(Refs.MODID + ":blocks/lamps/fixture_lamp_on"));
+            fixtureLampTopOn = reg.registerSprite(new ResourceLocation(Refs.MODID + ":blocks/lamps/fixture_lamp_on_top"));
 
-            fixtureLampSideOff = reg.registerSprite(new ResourceLocation(Refs.MODID + ":lamps/fixture_lamp_off"));
-            fixtureLampTopOff = reg.registerSprite(new ResourceLocation(Refs.MODID + ":lamps/fixture_lamp_off_top"));
+            fixtureLampSideOff = reg.registerSprite(new ResourceLocation(Refs.MODID + ":blocks/lamps/fixture_lamp_off"));
+            fixtureLampTopOff = reg.registerSprite(new ResourceLocation(Refs.MODID + ":blocks/lamps/fixture_lamp_off_top"));
 
-            lampOn = reg.registerSprite(new ResourceLocation(Refs.MODID + ":lamps/lamp_off"));
-            lampOff = reg.registerSprite(new ResourceLocation(Refs.MODID + ":lamps/lamp_on"));
+            lampOn = reg.registerSprite(new ResourceLocation(Refs.MODID + ":blocks/lamps/lamp_off"));
+            lampOff = reg.registerSprite(new ResourceLocation(Refs.MODID + ":blocks/lamps/lamp_on"));
 
-            bluestoneTorchOff = reg.registerSprite(new ResourceLocation(Refs.MODID + ":bluestone_torch_off"));
-            bluestoneTorchOn = reg.registerSprite(new ResourceLocation(Refs.MODID + ":bluestone_torch_on"));
+            bluestoneTorchOff = reg.registerSprite(new ResourceLocation(Refs.MODID + ":blocks/bluestone_torch_off"));
+            bluestoneTorchOn = reg.registerSprite(new ResourceLocation(Refs.MODID + ":blocks/bluestone_torch_on"));
 
-            wire = reg.registerSprite(new ResourceLocation(Refs.MODID + ":wire/wire"));
-            wireInsulation1 = reg.registerSprite(new ResourceLocation(Refs.MODID + ":wire/insulation1"));
-            wireInsulation2 = reg.registerSprite(new ResourceLocation(Refs.MODID + ":wire/insulation2"));
+            wire = reg.registerSprite(new ResourceLocation(Refs.MODID + ":blocks/wire/wire"));
+            wireInsulation1 = reg.registerSprite(new ResourceLocation(Refs.MODID + ":blocks/wire/insulation1"));
+            wireInsulation2 = reg.registerSprite(new ResourceLocation(Refs.MODID + ":blocks/wire/insulation2"));
 
-            wireBundledConnection = reg.registerSprite(new ResourceLocation(Refs.MODID + ":wire/bundled_connection"));
-            wireBundledCross = reg.registerSprite(new ResourceLocation(Refs.MODID + ":wire/bundled_cross"));
-            wireBundledStraight1 = reg.registerSprite(new ResourceLocation(Refs.MODID + ":wire/bundled_straight_1"));
-            wireBundledStraight2 = reg.registerSprite(new ResourceLocation(Refs.MODID + ":wire/bundled_straight_2"));
-            wireBundledSide1 = reg.registerSprite(new ResourceLocation(Refs.MODID + ":wire/bundled_side_1"));
-            wireBundledSide2 = reg.registerSprite(new ResourceLocation(Refs.MODID + ":wire/bundled_side_2"));
+            wireBundledConnection = reg.registerSprite(new ResourceLocation(Refs.MODID + ":blocks/wire/bundled_connection"));
+            wireBundledCross = reg.registerSprite(new ResourceLocation(Refs.MODID + ":blocks/wire/bundled_cross"));
+            wireBundledStraight1 = reg.registerSprite(new ResourceLocation(Refs.MODID + ":blocks/wire/bundled_straight_1"));
+            wireBundledStraight2 = reg.registerSprite(new ResourceLocation(Refs.MODID + ":blocks/wire/bundled_straight_2"));
+            wireBundledSide1 = reg.registerSprite(new ResourceLocation(Refs.MODID + ":blocks/wire/bundled_side_1"));
+            wireBundledSide2 = reg.registerSprite(new ResourceLocation(Refs.MODID + ":blocks/wire/bundled_side_2"));
 
-            gateButton = reg.registerSprite(new ResourceLocation(Refs.MODID + ":gates/components/button"));
-            siliconChipOff = reg.registerSprite(new ResourceLocation(Refs.MODID + ":gates/components/silicon_chip_off"));
-            siliconChipOn = reg.registerSprite(new ResourceLocation(Refs.MODID + ":gates/components/silicon_chip_on"));
-            taintedSiliconChipOff = reg.registerSprite(new ResourceLocation(Refs.MODID + ":gates/components/tainted_silicon_chip_off"));
-            taintedSiliconChipOn = reg.registerSprite(new ResourceLocation(Refs.MODID + ":gates/components/tainted_silicon_chip_on"));
-            quartzResonator = reg.registerSprite(new ResourceLocation(Refs.MODID + ":gates/components/resonator"));
-            gateSolarPanel = reg.registerSprite(new ResourceLocation(Refs.MODID + ":gates/components/solarpanel"));
+            gateButton = reg.registerSprite(new ResourceLocation(Refs.MODID + ":blocks/gates/components/button"));
+            siliconChipOff = reg.registerSprite(new ResourceLocation(Refs.MODID + ":blocks/gates/components/silicon_chip_off"));
+            siliconChipOn = reg.registerSprite(new ResourceLocation(Refs.MODID + ":blocks/gates/components/silicon_chip_on"));
+            taintedSiliconChipOff = reg.registerSprite(new ResourceLocation(Refs.MODID + ":blocks/gates/components/tainted_silicon_chip_off"));
+            taintedSiliconChipOn = reg.registerSprite(new ResourceLocation(Refs.MODID + ":blocks/gates/components/tainted_silicon_chip_on"));
+            quartzResonator = reg.registerSprite(new ResourceLocation(Refs.MODID + ":blocks/gates/components/resonator"));
+            gateSolarPanel = reg.registerSprite(new ResourceLocation(Refs.MODID + ":blocks/gates/components/solarpanel"));
 
             for (PartInfo i : PartManager.getRegisteredParts())
                 i.getExample().registerIcons(reg);

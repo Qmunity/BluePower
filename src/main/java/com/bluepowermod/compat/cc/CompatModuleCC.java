@@ -6,7 +6,7 @@
  * with Blue Power. If not, see <http://www.gnu.org/licenses/>
  */
 package com.bluepowermod.compat.cc;
-
+/*
 import com.bluepowermod.compat.CompatModule;
 import com.bluepowermod.redstone.RedstoneApi;
 
@@ -52,4 +52,4 @@ public class CompatModuleCC extends CompatModule {
     public void registerRenders() {
 
     }
-}
+}*/

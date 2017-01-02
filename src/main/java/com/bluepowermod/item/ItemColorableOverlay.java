@@ -7,6 +7,7 @@
  */
 package com.bluepowermod.item;
 
+import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.reference.Refs;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -52,6 +53,6 @@ public class ItemColorableOverlay extends ItemBase {
     @Override
     public String getUnlocalizedName(ItemStack stack) {
     
-        return super.getUnlocalizedName() + "." + (stack.getItemDamage() >= 16 ? "empty" : ItemDye.DYE_COLORS[stack.getItemDamage()]);
+        return super.getUnlocalizedName() + "." + (stack.getItemDamage() >= 16 ? "empty" : MinecraftColor.values()[stack.getItemDamage()].name().toLowerCase());
     }
 }

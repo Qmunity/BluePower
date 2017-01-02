@@ -1,0 +1,17 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "transform": "forge:default-item",
+    "model": "forge:item-layer"
+  },
+  "variants": {
+    "copper": [{ "textures": { "layer0": "bluepower:items/copper_ingot" }}],
+    "silver": [{ "textures": { "layer0": "bluepower:items/silver_ingot" }}],
+    "tungsten": [{ "textures": { "layer0": "bluepower:items/tungsten_ingot" }}],
+    "zink": [{ "textures": { "layer0": "bluepower:items/zink_ingot" }}],
+    "brass": [{ "textures": { "layer0": "bluepower:items/brass_ingot" }}],
+    "blue_alloy": [{ "textures": { "layer0": "bluepower:items/blue_alloy_ingot" }}],
+    "red_alloy": [{ "textures": { "layer0": "bluepower:items/red_alloy_ingot" }}],
+    "purple_alloy": [{ "textures": { "layer0": "bluepower:items/purple_alloy_ingot" }}]
+  }
+}
