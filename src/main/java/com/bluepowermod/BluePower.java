@@ -75,16 +75,19 @@ public class BluePower {
         MinecraftForge.EVENT_BUS.register(new WorldConversionEventHandler());
 
         RedstoneApi.getInstance().registerRedstoneProvider(new RedstoneProviderQmunityLib());
-    }
-
-    @Mod.EventHandler
-    public void init(FMLInitializationEvent event) {
 
         PartManager.registerParts();
 
         BPBlocks.init();
         BPItems.init();
         PartManager.registerItems();
+
+        proxy.initRenderers();
+    }
+
+    @Mod.EventHandler
+    public void init(FMLInitializationEvent event) {
+
 
         TileEntities.init();
         OreDictionarySetup.init();
@@ -96,13 +99,13 @@ public class BluePower {
         CompatibilityUtils.init(event);
 
         Achievements.init();
+
     }
 
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event) {
 
         CompatibilityUtils.postInit(event);
-        proxy.initRenderers();
 
         Recipes.init(CraftingManager.getInstance());
         AlloyFurnaceRegistry.getInstance().generateRecyclingRecipes();

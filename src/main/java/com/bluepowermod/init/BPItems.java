@@ -29,9 +29,12 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @GameRegistry.ObjectHolder(Refs.MODID)
 public class BPItems {
-
+    public static List<Item> renderlist = new ArrayList<Item>();
     public static Item amethyst_gem;
     public static Item sapphire_gem;
     public static Item ruby_gem;
@@ -216,101 +219,107 @@ public class BPItems {
 
     public static void registerItems() {
 
-        GameRegistry.register(amethyst_gem);
-        GameRegistry.register(sapphire_gem);
-        GameRegistry.register(ruby_gem);
-        GameRegistry.register(teslatite_dust);
-        GameRegistry.register(copper_ingot);
-        GameRegistry.register(silver_ingot);
-        GameRegistry.register(zinc_ingot);
-        GameRegistry.register(tungsten_ingot);
-        GameRegistry.register(brass_ingot);
-        GameRegistry.register(blue_alloy_ingot);
-        GameRegistry.register(red_alloy_ingot);
-        GameRegistry.register(purple_alloy_ingot);
+        registerItem(amethyst_gem);
+        registerItem(sapphire_gem);
+        registerItem(ruby_gem);
+        registerItem(teslatite_dust);
+        registerItem(copper_ingot);
+        registerItem(silver_ingot);
+        registerItem(zinc_ingot);
+        registerItem(tungsten_ingot);
+        registerItem(brass_ingot);
+        registerItem(blue_alloy_ingot);
+        registerItem(red_alloy_ingot);
+        registerItem(purple_alloy_ingot);
 
-        GameRegistry.register(zinc_dust);
-        GameRegistry.register(zinc_ore_crushed);
-        GameRegistry.register(zinc_ore_purified);
-        GameRegistry.register(zinc_tiny_dust);
-        GameRegistry.register(tungsten_nugget);
+        registerItem(zinc_dust);
+        registerItem(zinc_ore_crushed);
+        registerItem(zinc_ore_purified);
+        registerItem(zinc_tiny_dust);
+        registerItem(tungsten_nugget);
 
-        GameRegistry.register(ruby_axe);
-        GameRegistry.register(ruby_sword);
-        GameRegistry.register(ruby_pickaxe);
-        GameRegistry.register(ruby_shovel);
-        GameRegistry.register(ruby_hoe);
-        GameRegistry.register(ruby_sickle);
+        registerItem(ruby_axe);
+        registerItem(ruby_sword);
+        registerItem(ruby_pickaxe);
+        registerItem(ruby_shovel);
+        registerItem(ruby_hoe);
+        registerItem(ruby_sickle);
 
-        GameRegistry.register(sapphire_axe);
-        GameRegistry.register(sapphire_sword);
-        GameRegistry.register(sapphire_pickaxe);
-        GameRegistry.register(sapphire_shovel);
-        GameRegistry.register(sapphire_hoe);
-        GameRegistry.register(sapphire_sickle);
+        registerItem(sapphire_axe);
+        registerItem(sapphire_sword);
+        registerItem(sapphire_pickaxe);
+        registerItem(sapphire_shovel);
+        registerItem(sapphire_hoe);
+        registerItem(sapphire_sickle);
 
-        GameRegistry.register(amethyst_axe);
-        GameRegistry.register(amethyst_sword);
-        GameRegistry.register(amethyst_pickaxe);
-        GameRegistry.register(amethyst_shovel);
-        GameRegistry.register(amethyst_hoe);
-        GameRegistry.register(amethyst_sickle);
+        registerItem(amethyst_axe);
+        registerItem(amethyst_sword);
+        registerItem(amethyst_pickaxe);
+        registerItem(amethyst_shovel);
+        registerItem(amethyst_hoe);
+        registerItem(amethyst_sickle);
 
-        GameRegistry.register(wood_sickle);
-        GameRegistry.register(stone_sickle);
-        GameRegistry.register(iron_sickle);
-        GameRegistry.register(gold_sickle);
-        GameRegistry.register(diamond_sickle);
+        registerItem(wood_sickle);
+        registerItem(stone_sickle);
+        registerItem(iron_sickle);
+        registerItem(gold_sickle);
+        registerItem(diamond_sickle);
 
        // if (!Loader.isModLoaded(Dependencies.FMP)) {
-       //     GameRegistry.register(iron_saw, new ResourceLocation(Refs.IRONSAW_NAME));
-       //     GameRegistry.register(diamond_saw, new ResourceLocation(Refs.DIAMONDSAW_NAME));
+       //     registerItem(iron_saw, new ResourceLocation(Refs.IRONSAW_NAME));
+       //     registerItem(diamond_saw, new ResourceLocation(Refs.DIAMONDSAW_NAME));
        // }
-       // GameRegistry.register(ruby_saw);
-       // GameRegistry.register(sapphire_saw);
-       // GameRegistry.register(amethyst_saw);
+       // registerItem(ruby_saw);
+       // registerItem(sapphire_saw);
+       // registerItem(amethyst_saw);
 
-        GameRegistry.register(flax_seeds);
-        GameRegistry.register(indigo_dye);
-        GameRegistry.register(silicon_boule);
-        GameRegistry.register(silicon_wafer);
-        GameRegistry.register(blue_doped_wafer);
-        GameRegistry.register(red_doped_wafer);
-        GameRegistry.register(screwdriver);
-        GameRegistry.register(silky_screwdriver);
-        GameRegistry.register(athame);
-        GameRegistry.register(zincplate);
-        GameRegistry.register(infused_teslatite_dust);
+        registerItem(flax_seeds);
+        registerItem(indigo_dye);
+        registerItem(silicon_boule);
+        registerItem(silicon_wafer);
+        registerItem(blue_doped_wafer);
+        registerItem(red_doped_wafer);
+        registerItem(screwdriver);
+        registerItem(silky_screwdriver);
+        registerItem(athame);
+        registerItem(zincplate);
+        registerItem(infused_teslatite_dust);
 
-        GameRegistry.register(stone_tile);
-        GameRegistry.register(bluestone_wire_tile);
-        GameRegistry.register(bluestone_anode_tile);
-        GameRegistry.register(bluestone_cathode_tile);
-        GameRegistry.register(bluestone_pointer_tile);
-        GameRegistry.register(silicon_chip_tile);
-        GameRegistry.register(tainted_silicon_chip_tile);
-        GameRegistry.register(quartz_resonator_tile);
-        GameRegistry.register(redstone_wire_tile);
-        GameRegistry.register(redstone_anode_tile);
-        GameRegistry.register(redstone_cathode_tile);
-        GameRegistry.register(redstone_pointer_tile);
-        // GameRegistry.register(stone_redwire, Refs.STONEREDWIRE_NAME);
-        // GameRegistry.register(plate_assembly, Refs.PLATEASSEMBLY_NAME);
-        GameRegistry.register(stone_bundle);
-        GameRegistry.register(screwdriver_handle);
-        GameRegistry.register(seed_bag);
-        GameRegistry.register(canvas_bag);
-        GameRegistry.register(canvas);
-        GameRegistry.register(lumar);
-        GameRegistry.register(wool_card);
-        GameRegistry.register(diamond_drawplate);
+        registerItem(stone_tile);
+        registerItem(bluestone_wire_tile);
+        registerItem(bluestone_anode_tile);
+        registerItem(bluestone_cathode_tile);
+        registerItem(bluestone_pointer_tile);
+        registerItem(silicon_chip_tile);
+        registerItem(tainted_silicon_chip_tile);
+        registerItem(quartz_resonator_tile);
+        registerItem(redstone_wire_tile);
+        registerItem(redstone_anode_tile);
+        registerItem(redstone_cathode_tile);
+        registerItem(redstone_pointer_tile);
+        // registerItem(stone_redwire, Refs.STONEREDWIRE_NAME);
+        // registerItem(plate_assembly, Refs.PLATEASSEMBLY_NAME);
+        registerItem(stone_bundle);
+        registerItem(screwdriver_handle);
+        registerItem(seed_bag);
+        registerItem(canvas_bag);
+        registerItem(canvas);
+        registerItem(lumar);
+        registerItem(wool_card);
+        registerItem(diamond_drawplate);
 
-        GameRegistry.register(paint_can);
-        GameRegistry.register(paint_brush);
+        registerItem(paint_can);
+        registerItem(paint_brush);
 
-        GameRegistry.register(copper_wire);
-        GameRegistry.register(iron_wire);
+        registerItem(copper_wire);
+        registerItem(iron_wire);
 
         MinecraftForge.addGrassSeed(new ItemStack(flax_seeds), 5);
     }
+
+    private static void registerItem(Item item){
+        GameRegistry.register(item);
+        renderlist.add(item);
+    }
+
 }
