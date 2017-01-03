@@ -1,0 +1,15 @@
+﻿{
+  "forge_marker": 1,
+  "defaults": {
+    "textures": {
+    "all": "bluepower:blocks/flax_crop_stage_0"
+    },
+    "model": "cube_all",
+    "uvlock": true
+  },
+  "variants": {
+    "normal": [{
+
+    }]
+  }
+}

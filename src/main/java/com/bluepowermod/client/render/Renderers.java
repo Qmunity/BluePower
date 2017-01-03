@@ -10,7 +10,6 @@ package com.bluepowermod.client.render;
 
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.init.BPItems;
-import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier1.TileLamp;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
@@ -31,7 +30,9 @@ public class Renderers {
             registerItemModel(item, 0);
         }
 
-        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(BPBlocks.amethyst_ore), 0, new ModelResourceLocation(Refs.MODID + ":ore", Refs.AMETHYSTORE_NAME.split("_")[0]));
+        for(Item item : BPBlocks.renderlist){
+            registerBlockModel(item, 0);
+        }
 
         ClientRegistry.bindTileEntitySpecialRenderer(TileLamp.class, new RenderLamp());
     }
@@ -39,6 +40,11 @@ public class Renderers {
     public static void registerItemModel(Item item, int metadata) {
         ResourceLocation loc = Item.REGISTRY.getNameForObject(item);
         ModelLoader.setCustomModelResourceLocation(item, metadata, new ModelResourceLocation(loc, "inventory"));
+    }
+
+    public static void registerBlockModel(Item item, int metadata) {
+        ResourceLocation loc = Item.REGISTRY.getNameForObject(item);
+        ModelLoader.setCustomModelResourceLocation(item, metadata, new ModelResourceLocation(loc, "normal"));
     }
 
 }
