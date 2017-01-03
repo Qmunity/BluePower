@@ -92,18 +92,10 @@ public class BlockCrop extends BlockCrops implements IGrowable {
     @Override
     public void onBlockHarvested(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
         if (world.getBlockState(pos).getBlock() instanceof BlockCrop) {
-            if ( getMetaFromState(world.getBlockState(pos)) == 8) {
-                world.setBlockState(pos.down(), getStateFromMeta(5), 2);
+            if ( ((BlockCrop)world.getBlockState(pos).getBlock()).isMaxAge(state) && world.getBlockState(pos.down()).getBlock() == this) {
+                world.setBlockState(pos.down(), getStateFromMeta(4), 2);
             }
         }
-    }
-
-    /**
-     * is the block grass, dirt or farmland
-     */
-    @Override
-    public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
-        return worldIn.getBlockState(pos.down()).getBlock()  == Blocks.FARMLAND;
     }
 
 
@@ -121,22 +113,15 @@ public class BlockCrop extends BlockCrops implements IGrowable {
                 }
             }
             if ((meta == 7) && (world.getBlockState(pos.down()).getBlock() instanceof BlockFarmland) && (world.getBlockState(pos.up()).getBlock() instanceof BlockAir)) {
-                world.setBlockState(pos.up(), BPBlocks.flax_crop.getStateFromMeta(8), 2);
+                world.setBlockState(pos.up(), BPBlocks.flax_crop.getStateFromMeta(7), 2);
             }
             // If the bottom somehow becomes fully grown, correct it
             if ((meta > 7) && (world.getBlockState(pos.down()).getBlock() instanceof BlockFarmland)) {
                 world.setBlockState(pos, this.getStateFromMeta(7), 2);
-                world.setBlockState(pos.up(), BPBlocks.flax_crop.getStateFromMeta(8), 2);
+                world.setBlockState(pos.up(), BPBlocks.flax_crop.getStateFromMeta(7), 2);
             }
 
         }
-    }
-
-    /**
-     * Gets the block's texture. Args: side, meta
-     */
-    public TextureAtlasSprite[] getIconArray() {
-        return this.iconArray;
     }
 
     /**
@@ -166,24 +151,10 @@ public class BlockCrop extends BlockCrops implements IGrowable {
     }
 
     /**
-     * Drops the block items with a specified chance of dropping the specified items
-     */
-    @Override
-    public void dropBlockAsItemWithChance(World worldIn, BlockPos pos, IBlockState state, float chance, int fortune) {
-        super.dropBlockAsItemWithChance(worldIn, pos, state, chance, fortune);
-    }
-
-    @Override
-    public Item getItemDropped(IBlockState state, Random rand, int fortune) {
-        return getMetaFromState(state) == 8 ? this.getCrop() : this.getSeed();
-    }
-
-    /**
      * Returns the quantity of items to drop on block destruction.
      */
     @Override
     public int quantityDropped(Random random) {
-
         return 1;
     }
 
@@ -192,7 +163,7 @@ public class BlockCrop extends BlockCrops implements IGrowable {
      */
     @Override
     public boolean canUseBonemeal(World world, Random rand, BlockPos pos, IBlockState state) {
-        return getMetaFromState(world.getBlockState(pos)) < 7;
+        return !isMaxAge(state);
     }
 
     /**
@@ -233,7 +204,7 @@ public class BlockCrop extends BlockCrops implements IGrowable {
             meta = meta + MathHelper.getInt(world.rand, 2, 5);
             if (meta > 6) {
                 world.setBlockState(pos, getStateFromMeta(7), 2);
-                world.setBlockState(pos.up(), BPBlocks.flax_crop.getStateFromMeta(8), 2);
+                world.setBlockState(pos.up(), BPBlocks.flax_crop.getStateFromMeta(7), 2);
             } else {
                 world.setBlockState(pos, getStateFromMeta(meta), 2);
             }
@@ -244,7 +215,7 @@ public class BlockCrop extends BlockCrops implements IGrowable {
     public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
         ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
 
-        if (getMetaFromState(state) >= 8) {
+        if (isMaxAge(state)) {
             for (int i = 0; i < 3 + fortune; ++i) {
                 if (RANDOM.nextInt(15) <= getMetaFromState(state)) {
                     ret.add(new ItemStack(this.getCrop(), 1, 0));
@@ -253,7 +224,7 @@ public class BlockCrop extends BlockCrops implements IGrowable {
             if (RANDOM.nextBoolean()) {
                 ret.add(new ItemStack(this.getSeed(), 1, 0));
             }
-        } else if (getMetaFromState(state) == 7) {
+        } else if (getMetaFromState(state) == 6) {
             ret.add(new ItemStack(this.getSeed(), 1 + RANDOM.nextInt(2), 0));
         } else {
             ret.add(new ItemStack(this.getSeed(), 1, 0));
@@ -272,13 +243,13 @@ public class BlockCrop extends BlockCrops implements IGrowable {
     @Override
     public void onNeighborChange(IBlockAccess world, BlockPos pos, BlockPos neighbor) {
         super.onNeighborChange(world, pos, neighbor);
-        if ((getMetaFromState(world.getBlockState(pos)) == 7) && (world.getBlockState(pos.up()).getBlock() == Blocks.AIR)) {
+        if (isMaxAge(world.getBlockState(pos)) && (world.getBlockState(pos.up()).getBlock() == Blocks.AIR)) {
             ((World)world).setBlockState(pos, getStateFromMeta(5), 2);
         }
-        if ((getMetaFromState(world.getBlockState(pos)) == 8) && world.getBlockState(pos.down()).getBlock().getMetaFromState(world.getBlockState(pos.down())) != 7) {
+        if (isMaxAge(world.getBlockState(pos)) && world.getBlockState(pos.down()).getBlock().getMetaFromState(world.getBlockState(pos.down())) != 7) {
             ((World)world).setBlockToAir(pos);
         }
-        if ((getMetaFromState(world.getBlockState(pos)) < 8) && (world.getBlockState(pos.down()).getBlock() instanceof BlockCrop)) {
+        if ((getMetaFromState(world.getBlockState(pos)) < 7) && (world.getBlockState(pos.down()).getBlock() instanceof BlockCrop)) {
             ((World)world).setBlockToAir(pos);
         }
         this.checkAndDropBlock((World)world, pos, world.getBlockState(pos));
@@ -301,7 +272,7 @@ public class BlockCrop extends BlockCrops implements IGrowable {
     @Override
     public boolean canBlockStay(World world, BlockPos pos, IBlockState state) {
         if (world.getBlockState(pos) != this) return super.canBlockStay(world, pos, state);
-        if (world.getBlockState(pos.down()).getBlock().canSustainPlant(world.getBlockState(pos.down()), world, pos.down(), EnumFacing.UP, this) && world.getBlockState(pos.down()).getBlock().isFertile(world, pos.down())) {
+        if (world.getBlockState(pos.down()).getBlock().canSustainPlant(world.getBlockState(pos.down()), world, pos.down(), EnumFacing.UP, this) || world.getBlockState(pos.down()).getBlock().isFertile(world, pos.down())) {
             return true;
         }
         return (world.getBlockState(pos.down()).getBlock() instanceof com.bluepowermod.block.worldgen.BlockCrop) && (world.getBlockState(pos.down()).getBlock().getMetaFromState(world.getBlockState(pos.down())) == 7);

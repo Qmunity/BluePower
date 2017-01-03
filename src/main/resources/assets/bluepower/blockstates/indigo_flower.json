@@ -2,14 +2,19 @@
   "forge_marker": 1,
   "defaults": {
     "textures": {
-    "all": "bluepower:blocks/indigo_flower"
+    "cross": "bluepower:blocks/indigo_flower"
     },
-    "model": "cube_all",
+    "model": "cross",
     "uvlock": true
   },
   "variants": {
-    "normal": [{
-
+    "normal": [{}],
+    "inventory": [{
+      "transform": "forge:default-item",
+      "model": "forge:item-layer",
+      "textures": {
+        "layer0": "bluepower:blocks/indigo_flower"
+      }
     }]
   }
 }

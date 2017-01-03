@@ -31,7 +31,7 @@ public class Renderers {
         }
 
         for(Item item : BPBlocks.renderlist){
-            registerBlockModel(item, 0);
+            registerItemModel(item, 0);
         }
 
         ClientRegistry.bindTileEntitySpecialRenderer(TileLamp.class, new RenderLamp());
@@ -40,11 +40,6 @@ public class Renderers {
     public static void registerItemModel(Item item, int metadata) {
         ResourceLocation loc = Item.REGISTRY.getNameForObject(item);
         ModelLoader.setCustomModelResourceLocation(item, metadata, new ModelResourceLocation(loc, "inventory"));
-    }
-
-    public static void registerBlockModel(Item item, int metadata) {
-        ResourceLocation loc = Item.REGISTRY.getNameForObject(item);
-        ModelLoader.setCustomModelResourceLocation(item, metadata, new ModelResourceLocation(loc, "normal"));
     }
 
 }

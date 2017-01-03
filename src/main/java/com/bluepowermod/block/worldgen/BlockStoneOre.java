@@ -28,8 +28,6 @@ import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.boss.EntityWither;
 import net.minecraft.item.Item;
-import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
@@ -114,17 +112,6 @@ public class BlockStoneOre extends Block {
         return !transparent;
     }
 
-    @Override
-    public boolean canRenderInLayer(IBlockState state, BlockRenderLayer layer) {
-        return transparent ? true : super.canRenderInLayer(state, layer);
-    }
-
-    @Override
-    public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess w, BlockPos pos, EnumFacing side) {
-        if (transparent)
-            return w.getBlockState(pos).getBlock() != this;
-        return super.shouldSideBeRendered(blockState, w, pos, side);
-    }
 
     @Override
     public int getLightOpacity(IBlockState state, IBlockAccess world, BlockPos pos) {

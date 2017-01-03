@@ -262,7 +262,7 @@ public class BPBlocks {
         registerBlock(sapphire_glass.setRegistryName(Refs.MODID, Refs.SAPPHIREGLASS_NAME));
         registerBlock(reinforced_sapphire_glass.setRegistryName(Refs.MODID, Refs.REINFORCEDSAPPHIREGLASS_NAME));
 
-        registerBlock(flax_crop);
+        GameRegistry.register(flax_crop); //Dosen't need Item as has seed
         registerBlock(indigo_flower);
 
         registerBlock(alloyfurnace);
@@ -318,5 +318,4 @@ public class BPBlocks {
         GameRegistry.register(new ItemBlock(block).setRegistryName(block.getRegistryName()));
         renderlist.add(Item.getItemFromBlock(block));
     }
-
 }
