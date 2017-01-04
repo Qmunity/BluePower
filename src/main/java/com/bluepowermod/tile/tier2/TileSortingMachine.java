@@ -92,7 +92,7 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
     @Override
     public void update() {
 
-        nonAcceptedStack = null;
+        nonAcceptedStack = ItemStack.EMPTY;
         super.update();
         if (!sweepTriggered && savedPulses > 0) {
             savedPulses--;
@@ -136,10 +136,10 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
                 }
                 for (int slot : accessibleSlots) {
                     ItemStack stack = inputInv.getStackInSlot(slot);
-                    if (stack != null && IOHelper.canExtractItemFromInventory(inputInv, stack, slot, dir.getOpposite().ordinal())) {
+                    if (!stack.isEmpty() && IOHelper.canExtractItemFromInventory(inputInv, stack, slot, dir.getOpposite().ordinal())) {
                         if (tryProcessItem(stack, false)) {
                             if (stack.getCount() == 0)
-                                inputInv.setInventorySlotContents(slot, null);
+                                inputInv.setInventorySlotContents(slot, ItemStack.EMPTY);
                             return;
                         }
                     }
@@ -147,9 +147,9 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
                 if (sortMode == SortMode.ANYSTACK_SEQUENTIAL) {
                     for (int i = curColumn; i < inventory.length; i += 8) {
                         ItemStack filterStack = inventory[i];
-                        if (filterStack != null) {
+                        if (!filterStack.isEmpty()) {
                             ItemStack extractedStack = IOHelper.extract(inputTE, dir.getOpposite(), filterStack, true, false);
-                            if (extractedStack != null) {
+                            if (!extractedStack.isEmpty()) {
                                 addItemToOutputBuffer(extractedStack.copy(), colors[curColumn]);
                                 gotoNextNonEmptyColumn();
                                 break;
@@ -176,7 +176,7 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
         List<ItemStack> requirements = new ArrayList<ItemStack>();
         for (int i = 0; i < 5; i++) {
             ItemStack filterStack = inventory[column + 8 * i];
-            if (filterStack != null) {
+            if (!filterStack.isEmpty()) {
                 boolean duplicate = false;
                 for (ItemStack requirement : requirements) {
                     if (ItemStackHelper.areStacksEqual(requirement, filterStack, fuzzySettings[column])) {
@@ -200,7 +200,7 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
             ItemStack stack = iterator.next();
             for (int slot : accessibleSlots) {
                 ItemStack invStack = inputInventory.getStackInSlot(slot);
-                if (invStack != null && ItemStackHelper.areStacksEqual(invStack, stack, fuzzySettings[column])) {
+                if (!invStack.isEmpty() && ItemStackHelper.areStacksEqual(invStack, stack, fuzzySettings[column])) {
                     stack.setCount(stack.getCount() - invStack.getCount());
                     if (stack.getCount() <= 0) {
                         iterator.remove();
@@ -219,7 +219,7 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
                             stack.setCount(stack.getCount() - substracted);
                             invStack.setCount(invStack.getCount() - substracted);
                             if (invStack.getCount() <= 0) {
-                                inputInventory.setInventorySlotContents(slot, null);
+                                inputInventory.setInventorySlotContents(slot, ItemStack.EMPTY);
                             }
                             ItemStack bufferStack = invStack.copy();
                             bufferStack.setCount(substracted);
@@ -250,7 +250,7 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
         case ANY_ITEM_DEFAULT:
             for (int i = 0; i < inventory.length; i++) {
                 ItemStack filter = inventory[i];
-                if (filter != null && ItemStackHelper.areStacksEqual(filter, stack, fuzzySettings[i % 8])
+                if (!filter.isEmpty() && ItemStackHelper.areStacksEqual(filter, stack, fuzzySettings[i % 8])
                         && stack.getCount() >= filter.getCount()) {
                     if (!simulate) {
                         addItemToOutputBuffer(filter.copy(), colors[i % 8]);
@@ -271,7 +271,7 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
         case ANY_STACK_DEFAULT:
             for (int i = 0; i < inventory.length; i++) {
                 ItemStack filter = inventory[i];
-                if (filter != null && ItemStackHelper.areStacksEqual(filter, stack, fuzzySettings[i % 8])) {
+                if (!filter.isEmpty() && ItemStackHelper.areStacksEqual(filter, stack, fuzzySettings[i % 8])) {
                     if (!simulate) {
                         addItemToOutputBuffer(stack.copy(), colors[i % 8]);
                     }
@@ -301,7 +301,7 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
         }
         while (oldColumn != curColumn) {
             for (int i = curColumn; i < inventory.length; i += 8) {
-                if (inventory[i] != null)
+                if (!inventory[i].isEmpty())
                     return;
             }
             if (++curColumn > 7) {
@@ -348,7 +348,7 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
 
         NBTTagList tagList = new NBTTagList();
         for (int currentIndex = 0; currentIndex < inventory.length; ++currentIndex) {
-            if (inventory[currentIndex] != null) {
+            if (!inventory[currentIndex].isEmpty()) {
                 NBTTagCompound tagCompound = new NBTTagCompound();
                 tagCompound.setByte("Slot", (byte) currentIndex);
                 inventory[currentIndex].writeToNBT(tagCompound);
@@ -404,20 +404,20 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
     @Override
     public ItemStack getStackInSlot(int slot) {
 
-        return slot < inventory.length ? inventory[slot] : null;
+        return slot < inventory.length ? inventory[slot] : ItemStack.EMPTY;
     }
 
     @Override
     public ItemStack decrStackSize(int slot, int amount) {
 
         ItemStack itemStack = getStackInSlot(slot);
-        if (itemStack != null) {
+        if (!itemStack.isEmpty()) {
             if (itemStack.getCount() <= amount) {
-                setInventorySlotContents(slot, null);
+                setInventorySlotContents(slot, ItemStack.EMPTY);
             } else {
                 itemStack = itemStack.splitStack(amount);
                 if (itemStack.getCount() == 0) {
-                    setInventorySlotContents(slot, null);
+                    setInventorySlotContents(slot, ItemStack.EMPTY);
                 }
             }
         }
@@ -429,8 +429,8 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
     @Override
     public ItemStack removeStackFromSlot(int slot) {
         ItemStack itemStack = getStackInSlot(slot);
-        if (itemStack != null) {
-            setInventorySlotContents(slot, null);
+        if (!itemStack.isEmpty()) {
+            setInventorySlotContents(slot, ItemStack.EMPTY);
         }
         return itemStack;
     }
@@ -440,11 +440,11 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
 
         if (slot < inventory.length) {
             inventory[slot] = itemStack;
-            if (itemStack != null && itemStack.getCount() > getInventoryStackLimit()) {
+            if (!itemStack.isEmpty() && itemStack.getCount() > getInventoryStackLimit()) {
                 itemStack.setCount(getInventoryStackLimit());
             }
         } else {
-            if (itemStack != null)
+            if (!itemStack.isEmpty())
                 tryProcessItem(itemStack, false);
         }
     }
@@ -495,7 +495,7 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
     @Override
     public boolean isItemValidForSlot(int var1, ItemStack var2) {
 
-        return var1 < inventory.length ? true : isBufferEmpty() && var2 != null && tryProcessItem(var2, true);
+        return var1 < inventory.length ? true : isBufferEmpty() && !var2.isEmpty() && tryProcessItem(var2, true);
     }
 
     @Override

@@ -73,7 +73,7 @@ public class TileTransposer extends TileMachineBase {
         EnumFacing dir = getOutputDirection().getOpposite();
         TileEntity inputTE = getTileCache(dir);
         ItemStack extractedStack = IOHelper.extractOneItem(inputTE, dir.getOpposite());
-        if (extractedStack != null)
+        if (!extractedStack.isEmpty())
             addItemToOutputBuffer(extractedStack);
     }
 

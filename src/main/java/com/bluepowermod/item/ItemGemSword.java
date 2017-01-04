@@ -17,6 +17,7 @@
 
 package com.bluepowermod.item;
 
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
@@ -26,7 +27,7 @@ import com.bluepowermod.reference.Refs;
 
 public class ItemGemSword extends ItemSword {
 
-    public    Item    customCraftingMaterial = null;
+    public    Item    customCraftingMaterial = Items.AIR;
     protected boolean canRepair              = true;
 
     public ItemGemSword(ToolMaterial material, String name, Item repairItem) {

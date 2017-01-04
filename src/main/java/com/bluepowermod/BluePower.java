@@ -23,6 +23,7 @@ import com.bluepowermod.redstone.RedstoneProviderVanilla;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.util.Achievements;
 import com.bluepowermod.world.WorldGenerationHandler;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.util.ResourceLocation;
@@ -163,7 +164,7 @@ public class BluePower {
                 name = "bluepower:quartz_resonator_tile";
 
             Item item = GameData.getItemRegistry().getObject(new ResourceLocation(name));
-            if (item == null)
+            if (item == Items.AIR)
                 continue;
             mapping.remap(item);
         }

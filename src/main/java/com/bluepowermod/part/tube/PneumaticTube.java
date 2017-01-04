@@ -192,8 +192,9 @@ public class PneumaticTube extends PartWireFreestanding implements IPartTicking,
                 for (EnumFacing dir : EnumFacing.VALUES)
                     if (getDeviceOnSide(dir) != null)
                         d = dir;
-
-                RedstoneApi.getInstance().getRedstonePropagator(this, d).propagate();
+                if (d != null) {
+                    RedstoneApi.getInstance().getRedstonePropagator(this, d).propagate();
+                }
 
                 sendUpdatePacket();
             }

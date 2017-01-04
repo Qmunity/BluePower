@@ -19,7 +19,7 @@ public class ItemStackHelper {
      */
     public static boolean areItemStacksEqual(ItemStack itemStack1, ItemStack itemStack2) {
 
-        return itemStack1 == null && itemStack2 == null || !(itemStack1 == null || itemStack2 == null)
+        return itemStack1.isEmpty() && itemStack2.isEmpty() || !(itemStack1.isEmpty() || itemStack2.isEmpty())
                 && itemStack1.getItem() == itemStack2.getItem() && itemStack1.getItemDamage() == itemStack2.getItemDamage()
                 && !(itemStack1.getTagCompound() == null && itemStack2.getTagCompound() != null)
                 && (itemStack1.getTagCompound() == null || itemStack1.getTagCompound().equals(itemStack2.getTagCompound()));
@@ -34,11 +34,11 @@ public class ItemStackHelper {
      * @return
      */
     public static boolean areStacksEqual(ItemStack stack1, ItemStack stack2, int mode) {
-        if (stack1 == null && stack2 != null)
+        if (stack1.isEmpty() && !stack2.isEmpty())
             return false;
-        if (stack1 != null && stack2 == null)
+        if (!stack1.isEmpty() && stack2.isEmpty())
             return false;
-        if (stack1 == null && stack2 == null)
+        if (stack1.isEmpty() && stack2.isEmpty())
             return true;
 
         if (mode == 0) {

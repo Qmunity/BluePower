@@ -34,9 +34,14 @@ public class RedConnectionHelper {
             new IConnectableProvider<IRedstoneDevice, RedstoneConnection>() {
 
                 @Override
-                public IRedstoneDevice getConnectableAt(World world, BlockPos pos, EnumFacing face, EnumFacing side) {
+                public IRedstoneDevice getConnectableAt(World world, BlockPos pos, EnumFacing side) {
+                    return RedstoneApi.getInstance().getRedstoneDevice(world, pos, side, null);
+                }
 
-                    return RedstoneApi.getInstance().getRedstoneDevice(world, pos, face, side);
+                @Override
+                public IRedstoneDevice getConnectableAt(World world, BlockPos pos,  EnumFacing side, EnumFacing face) {
+
+                    return RedstoneApi.getInstance().getRedstoneDevice(world, pos, side, face);
                 }
 
                 @Override
@@ -79,6 +84,12 @@ public class RedConnectionHelper {
 
     private static ConnectionLogicHelper<IBundledDevice, BundledConnection> bundled = new ConnectionLogicHelper<IBundledDevice, BundledConnection>(
             new IConnectableProvider<IBundledDevice, BundledConnection>() {
+
+                @Override
+                public IBundledDevice getConnectableAt(World world, BlockPos pos, EnumFacing side) {
+
+                    return RedstoneApi.getInstance().getBundledDevice(world, pos, null, side);
+                }
 
                 @Override
                 public IBundledDevice getConnectableAt(World world, BlockPos pos, EnumFacing face, EnumFacing side) {

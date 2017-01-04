@@ -76,30 +76,30 @@ public class ContainerAlloyFurnace extends Container {
     @Override
     public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int par2) {
     
-        ItemStack var3 = null;
-        Slot var4 = (Slot) inventorySlots.get(par2);
+        ItemStack var3 = ItemStack.EMPTY;
+        Slot var4 = inventorySlots.get(par2);
         
         if (var4 != null && var4.getHasStack()) {
             ItemStack var5 = var4.getStack();
             var3 = var5.copy();
             
             if (par2 < 11) {
-                if (!mergeItemStack(var5, 11, 47, false)) return null;
+                if (!mergeItemStack(var5, 11, 47, false)) return ItemStack.EMPTY;
                 var4.onSlotChange(var5, var3);
             } else {
                 if (TileEntityFurnace.isItemFuel(var5) && mergeItemStack(var5, 0, 1, false)) {
                     
-                } else if (!mergeItemStack(var5, 2, 11, false)) return null;
+                } else if (!mergeItemStack(var5, 2, 11, false)) return ItemStack.EMPTY;
                 var4.onSlotChange(var5, var3);
             }
             
             if (var5.getCount() == 0) {
-                var4.putStack((ItemStack) null);
+                var4.putStack(ItemStack.EMPTY);
             } else {
                 var4.onSlotChanged();
             }
             
-            if (var5.getCount() == var3.getCount()) return null;
+            if (var5.getCount() == var3.getCount()) return ItemStack.EMPTY;
             
             var4.onSlotChange(var3, var5);
         }
@@ -112,7 +112,6 @@ public class ContainerAlloyFurnace extends Container {
      */
     @Override
     public void detectAndSendChanges() {
-    
         super.detectAndSendChanges();
         
         for (Object crafter : listeners) {

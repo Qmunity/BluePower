@@ -100,6 +100,7 @@ public class Refs {
     public static final String ENGINE_NAME = "engine";
     public static final String KINETICGENERATOR_NAME = "kinetic_generator";
     public static final String WINDMILL_NAME = "windmill";
+    public static final String BATTERYBLOCK_NAME = "battery_block";
 
     public static final String BRASSINGOT_NAME = "brass_ingot";
     public static final String BLUEALLOYINGOT_NAME = "blue_alloy_ingot";

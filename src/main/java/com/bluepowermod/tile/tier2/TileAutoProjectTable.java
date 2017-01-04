@@ -16,7 +16,7 @@ import java.util.Map;
 
 public class TileAutoProjectTable extends TileProjectTable implements ISidedInventory {
     private static int[] slots;
-    protected ItemStack craftBuffer;
+    protected ItemStack craftBuffer = ItemStack.EMPTY;
     private boolean markedForBufferFill = true;
 
     static {
@@ -29,7 +29,7 @@ public class TileAutoProjectTable extends TileProjectTable implements ISidedInve
     public List<ItemStack> getDrops() {
 
         List<ItemStack> drops = super.getDrops();
-        if (craftBuffer != null)
+        if (!craftBuffer.isEmpty())
             drops.add(craftBuffer);
         return drops;
     }
@@ -37,12 +37,9 @@ public class TileAutoProjectTable extends TileProjectTable implements ISidedInve
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound tag) {
         super.writeToNBT(tag);
-
-        if (craftBuffer != null) {
             NBTTagCompound bufferTag = new NBTTagCompound();
             craftBuffer.writeToNBT(bufferTag);
             tag.setTag("craftBuffer", bufferTag);
-        }
 
         return tag;
     }
@@ -54,7 +51,7 @@ public class TileAutoProjectTable extends TileProjectTable implements ISidedInve
         if (tag.hasKey("craftBuffer")) {
             craftBuffer = new ItemStack(tag.getCompoundTag("craftBuffer"));
         } else {
-            craftBuffer = null;
+            craftBuffer = ItemStack.EMPTY;
         }
     }
 
@@ -130,10 +127,10 @@ public class TileAutoProjectTable extends TileProjectTable implements ISidedInve
     }
 
     private void tryFillCraftBuffer() {
-        if (craftBuffer == null && craftResult.getStackInSlot(0) != null && !world.isRemote) {
+        if (craftBuffer.isEmpty() && craftResult.getStackInSlot(0) != null && !world.isRemote) {
             Map<ItemStack, Integer> recipeItems = new HashMap<ItemStack, Integer>();
             for (ItemStack s : craftingGrid) {
-                if (s != null) {
+                if (!s.isEmpty()) {
                     addItem(recipeItems, s);
                 }
             }
@@ -142,7 +139,7 @@ public class TileAutoProjectTable extends TileProjectTable implements ISidedInve
                 ItemStack s = entry.getKey().copy();
                 s.setCount(entry.getValue());
                 ItemStack extracted = IOHelper.extract(this, null, s, true, true);
-                if (extracted == null) {
+                if (extracted.isEmpty()) {
                     canCraft = false;
                     break;
                 }

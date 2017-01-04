@@ -67,7 +67,7 @@ public class TileDeployer extends TileBase implements ISidedInventory, IEjectAni
     
     private boolean canDeployItem(ItemStack stack) {
     
-        return stack != null && !blacklistedItems.contains(stack.getItem());
+        return !stack.isEmpty() && !blacklistedItems.contains(stack.getItem());
     }
     
     @Override
@@ -88,21 +88,21 @@ public class TileDeployer extends TileBase implements ISidedInventory, IEjectAni
             
             for (int i = 0; i < inventory.length; i++) {
                 ItemStack stack = player.inventory.getStackInSlot(i);
-                if (stack == null || stack.getCount() <= 0) {
-                    inventory[i] = null;
+                if (stack.isEmpty() || stack.getCount() <= 0) {
+                    inventory[i] = ItemStack.EMPTY;
                 } else {
                     inventory[i] = stack;
                 }
-                player.inventory.setInventorySlotContents(i, null);
+                player.inventory.setInventorySlotContents(i, ItemStack.EMPTY);
             }
             for (int i = 0; i < player.inventory.getSizeInventory(); i++) {
                 ItemStack stack = player.inventory.getStackInSlot(i);
-                if (stack != null && stack.getCount() > 0) {
+                if (!stack.isEmpty() && stack.getCount() > 0) {
                     ItemStack remainder = IOHelper.insert(this, stack, getFacingDirection().getOpposite(), false);
-                    if (remainder != null) {
+                    if (!remainder.isEmpty()) {
                         world.spawnEntity(new EntityItem(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, remainder));
                     }
-                    player.inventory.setInventorySlotContents(i, null);
+                    player.inventory.setInventorySlotContents(i, ItemStack.EMPTY);
                 }
             }
         }
@@ -176,7 +176,7 @@ public class TileDeployer extends TileBase implements ISidedInventory, IEjectAni
                 player.inventory.currentItem = i;
                 ItemStack stack = player.getHeldItemMainhand();
                 boolean isGoingToShift = false;              
-                if(stack != null){
+                if(!stack.isEmpty()){
                 	if(stack.getItem() == Items.REEDS || stack.getItem() instanceof ItemRedstone){
                 		isGoingToShift = true;
                 	}
@@ -228,7 +228,7 @@ public class TileDeployer extends TileBase implements ISidedInventory, IEjectAni
         super.writeToNBT(tCompound);
         
         for (int i = 0; i < 9; i++) {
-            if (inventory[i] != null) {
+            if (!inventory[i].isEmpty()) {
                 NBTTagCompound tc = new NBTTagCompound();
                 inventory[i].writeToNBT(tc);
                 tCompound.setTag("inventory" + i, tc);
@@ -270,13 +270,13 @@ public class TileDeployer extends TileBase implements ISidedInventory, IEjectAni
     
         // this needs to be side aware as well
         ItemStack itemStack = getStackInSlot(slot);
-        if (itemStack != null) {
+        if (!itemStack.isEmpty()) {
             if (itemStack.getCount() <= amount) {
-                setInventorySlotContents(slot, null);
+                setInventorySlotContents(slot, ItemStack.EMPTY);
             } else {
                 itemStack = itemStack.splitStack(amount);
                 if (itemStack.getCount() == 0) {
-                    setInventorySlotContents(slot, null);
+                    setInventorySlotContents(slot,ItemStack.EMPTY);
                 }
             }
         }
@@ -341,7 +341,7 @@ public class TileDeployer extends TileBase implements ISidedInventory, IEjectAni
     
         List<ItemStack> drops = super.getDrops();
         for (ItemStack stack : inventory)
-            if (stack != null) drops.add(stack);
+            if (!stack.isEmpty()) drops.add(stack);
         return drops;
     }
 

@@ -39,7 +39,7 @@ public class TileCircuitDatabase extends TileCircuitTable {
         public void setInventorySlotContents(int slot, ItemStack itemStack) {
 
             super.setInventorySlotContents(slot, itemStack);
-            if (slot == 0 && itemStack != null) {
+            if (slot == 0 && !itemStack.isEmpty()) {
                 nameTextField = itemStack.getDisplayName();
             }
         }
@@ -112,7 +112,7 @@ public class TileCircuitDatabase extends TileCircuitTable {
 
         if (textFieldID == 1) {
             nameTextField = text;
-            if (copyInventory.getStackInSlot(0) != null) {
+            if (!copyInventory.getStackInSlot(0).isEmpty()) {
                 copyInventory.getStackInSlot(0).setStackDisplayName(nameTextField);
             }
         } else {
@@ -135,7 +135,7 @@ public class TileCircuitDatabase extends TileCircuitTable {
      */
     public boolean copy(EntityPlayer player, ItemStack template, ItemStack target, boolean simulate) {
 
-        if (template != null && target != null) {
+        if (!template.isEmpty() && !target.isEmpty()) {
             if (template.isItemEqual(target)) {
                 IDatabaseSaveable saveable = (IDatabaseSaveable) template.getItem();
                 if (saveable.canCopy(template, target)) {
@@ -143,9 +143,9 @@ public class TileCircuitDatabase extends TileCircuitTable {
                         List<ItemStack> stacksInTemplate = saveable.getItemsOnStack(template);
                         List<ItemStack> stacksInOutput = saveable.getItemsOnStack(target);
 
-                        if (stacksInTemplate == null)
+                        if (stacksInTemplate.isEmpty())
                             stacksInTemplate = new ArrayList<ItemStack>();
-                        if (stacksInOutput == null)
+                        if (stacksInOutput.isEmpty())
                             stacksInOutput = new ArrayList<ItemStack>();
 
                         List<ItemStack> traversedItems = new ArrayList<ItemStack>();
@@ -185,13 +185,13 @@ public class TileCircuitDatabase extends TileCircuitTable {
                                 ItemStack retrievedStack = templateStack.copy();
                                 retrievedStack.setCount(count);
                                 retrievedStack = IOHelper.extract(this, null, retrievedStack, true, simulate, 2);
-                                if (retrievedStack == null || retrievedStack.getCount() < count)
+                                if (retrievedStack.isEmpty() || retrievedStack.getCount() < count)
                                     return false;
                             } else if (count < 0) {
                                 ItemStack returnedStack = templateStack.copy();
                                 returnedStack.setCount(-count);
                                 returnedStack = IOHelper.insert(this, returnedStack, null, simulate);
-                                if (returnedStack != null && !simulate) {
+                                if (!returnedStack.isEmpty() && !simulate) {
                                     IOHelper.spawnItemInWorld(world, returnedStack, pos.getX()+ 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
                                 }
                             }
@@ -214,7 +214,7 @@ public class TileCircuitDatabase extends TileCircuitTable {
 
         super.update();
         if (!world.isRemote) {
-            if (copyInventory.getStackInSlot(0) != null) {
+            if (!copyInventory.getStackInSlot(0).isEmpty()) {
                 if (curCopyProgress >= 0) {
                     if (++curCopyProgress > UPLOAD_AND_COPY_TIME) {
                         curCopyProgress = -1;
@@ -255,12 +255,12 @@ public class TileCircuitDatabase extends TileCircuitTable {
 
         super.writeToNBT(tag);
 
-        if (copyInventory.getStackInSlot(0) != null) {
+        if (!copyInventory.getStackInSlot(0).isEmpty()) {
             NBTTagCompound stackTag = new NBTTagCompound();
             copyInventory.getStackInSlot(0).writeToNBT(stackTag);
             tag.setTag("copyTemplateStack", stackTag);
         }
-        if (copyInventory.getStackInSlot(1) != null) {
+        if (!copyInventory.getStackInSlot(1).isEmpty()) {
             NBTTagCompound stackTag = new NBTTagCompound();
             copyInventory.getStackInSlot(1).writeToNBT(stackTag);
             tag.setTag("copyOutputStack", stackTag);
@@ -280,13 +280,13 @@ public class TileCircuitDatabase extends TileCircuitTable {
         if (tag.hasKey("copyTemplateStack")) {
             copyInventory.setInventorySlotContents(0, new ItemStack(tag.getCompoundTag("copyTemplateStack")));
         } else {
-            copyInventory.setInventorySlotContents(0, null);
+            copyInventory.setInventorySlotContents(0, ItemStack.EMPTY);
         }
 
         if (tag.hasKey("copyOutputStack")) {
             copyInventory.setInventorySlotContents(1, new ItemStack(tag.getCompoundTag("copyOutputStack")));
         } else {
-            copyInventory.setInventorySlotContents(1, null);
+            copyInventory.setInventorySlotContents(1, ItemStack.EMPTY);
         }
 
         curUploadProgress = tag.getInteger("curUploadProgress");

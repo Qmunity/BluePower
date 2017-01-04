@@ -105,7 +105,7 @@ public class BPBlocks {
     public static Block regulator;
     public static Block item_detector;
     public static Block manager;
-
+    public static Block battery;
     // public static Block engine;
     // public static Block kinetic_generator;
     // public static Block windmill;
@@ -200,6 +200,7 @@ public class BPBlocks {
                 .setRegistryName(Refs.MODID, Refs.ITEMDETECTOR_NAME).setUnlocalizedName(Refs.ITEMDETECTOR_NAME);
         manager = new BlockRejecting(Material.ROCK, TileManager.class).setGuiId(GuiIDs.MANAGER_ID).emitsRedstone().setRegistryName(Refs.MODID, Refs.MANAGER_NAME).setUnlocalizedName(Refs.MANAGER_NAME);
 
+        battery = new BlockBattery();
         // engine = new BlockEngine();
         // kinetic_generator = new BlockKineticGenerator();
         // windmill = new BlockWindmill();
@@ -284,6 +285,7 @@ public class BPBlocks {
         registerBlock(item_detector);
         registerBlock(manager);
 
+        registerBlock(battery);
         /*
          * registerBlock(cpu.setRegistryName(Refs.MODID, Refs.BLOCKCPU_NAME); registerBlock(monitor.setRegistryName(Refs.MODID, Refs.BLOCKMONITOR_NAME);
          * registerBlock(disk_drive.setRegistryName(Refs.MODID, Refs.BLOCKDISKDRIVE_NAME); registerBlock(io_expander.setRegistryName(Refs.MODID, Refs.BLOCKIOEXPANDER_NAME);

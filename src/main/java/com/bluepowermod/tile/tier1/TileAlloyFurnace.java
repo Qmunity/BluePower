@@ -27,6 +27,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -43,15 +44,16 @@ public class TileAlloyFurnace extends TileBase implements ISidedInventory {
     public int currentBurnTime;
     public int currentProcessTime;
     public int maxBurnTime;
-    private ItemStack[] inventory;
+    private NonNullList<ItemStack> inventory;
     private ItemStack fuelInventory;
     private ItemStack outputInventory;
     private IAlloyFurnaceRecipe currentRecipe;
     private boolean updatingRecipe = true;
 
     public TileAlloyFurnace() {
-
-        inventory = new ItemStack[9];
+        this.inventory = NonNullList.withSize(10, ItemStack.EMPTY);
+        this.fuelInventory = ItemStack.EMPTY;
+        this.outputInventory = ItemStack.EMPTY;
     }
 
     /*************** BASIC TE FUNCTIONS **************/
@@ -66,7 +68,7 @@ public class TileAlloyFurnace extends TileBase implements ISidedInventory {
 
         for (int i = 0; i < 9; i++) {
             NBTTagCompound tc = tCompound.getCompoundTag("inventory" + i);
-            inventory[i] = new ItemStack(tc);
+            inventory.set(i, new ItemStack(tc));
         }
         fuelInventory = new ItemStack(tCompound.getCompoundTag("fuelInventory"));
         outputInventory = new ItemStack(tCompound.getCompoundTag("outputInventory"));
@@ -82,11 +84,9 @@ public class TileAlloyFurnace extends TileBase implements ISidedInventory {
         super.writeToNBT(tCompound);
 
         for (int i = 0; i < 9; i++) {
-            if (inventory[i] != null) {
                 NBTTagCompound tc = new NBTTagCompound();
-                inventory[i].writeToNBT(tc);
+                inventory.get(i).writeToNBT(tc);
                 tCompound.setTag("inventory" + i, tc);
-            }
         }
         if (fuelInventory != null) {
             NBTTagCompound fuelCompound = new NBTTagCompound();
@@ -147,7 +147,7 @@ public class TileAlloyFurnace extends TileBase implements ISidedInventory {
                     if (TileEntityFurnace.isItemFuel(fuelInventory)) {
                         // Put new item in
                         currentBurnTime = maxBurnTime = TileEntityFurnace.getItemBurnTime(fuelInventory) + 1;
-                        if (fuelInventory != null) {
+                        if (!fuelInventory.isEmpty()) {
                             fuelInventory.setCount(fuelInventory.getCount() - 1);
                             if (fuelInventory.getCount() <= 0) {
                                 fuelInventory = fuelInventory.getItem().getContainerItem(fuelInventory);
@@ -160,7 +160,7 @@ public class TileAlloyFurnace extends TileBase implements ISidedInventory {
 
                 if (++currentProcessTime >= 200) {
                     currentProcessTime = 0;
-                    if (outputInventory != null) {
+                    if (!outputInventory.isEmpty()) {
                         outputInventory.setCount(outputInventory.getCount() + currentRecipe.getCraftingResult(inventory).getCount());
                     } else {
                         outputInventory = currentRecipe.getCraftingResult(inventory).copy();
@@ -236,9 +236,9 @@ public class TileAlloyFurnace extends TileBase implements ISidedInventory {
         } else if (var1 == 1) {
             return outputInventory;
         } else if (var1 < 11) {
-            return inventory[var1 - 2];
+            return inventory.get(var1 - 2);
         }
-        return null;
+        return ItemStack.EMPTY;
     }
 
     @Override
@@ -246,11 +246,11 @@ public class TileAlloyFurnace extends TileBase implements ISidedInventory {
 
         ItemStack tInventory = getStackInSlot(var1);
 
-        if (tInventory == null) {
-            return null;
+        if (tInventory.isEmpty()) {
+            return ItemStack.EMPTY;
         }
 
-        ItemStack ret = null;
+        ItemStack ret = ItemStack.EMPTY;
         if (tInventory.getCount() < var2) {
             ret = tInventory;
             inventory = null;
@@ -258,11 +258,11 @@ public class TileAlloyFurnace extends TileBase implements ISidedInventory {
             ret = tInventory.splitStack(var2);
             if (tInventory.getCount() <= 0) {
                 if (var1 == 0) {
-                    fuelInventory = null;
+                    fuelInventory = ItemStack.EMPTY;
                 } else if (var1 == 1) {
-                    outputInventory = null;
+                    outputInventory = ItemStack.EMPTY;
                 } else {
-                    inventory[var1 - 2] = null;
+                    inventory.set(var1 - 2, ItemStack.EMPTY);
                 }
             }
         }
@@ -283,7 +283,7 @@ public class TileAlloyFurnace extends TileBase implements ISidedInventory {
         } else if (var1 == 1) {
             outputInventory = itemStack;
         } else {
-            inventory[var1 - 2] = itemStack;
+            inventory.set(var1 - 2, itemStack);
         }
         updatingRecipe = true;
     }
@@ -340,12 +340,12 @@ public class TileAlloyFurnace extends TileBase implements ISidedInventory {
     public List<ItemStack> getDrops() {
 
         List<ItemStack> drops = super.getDrops();
-        if (fuelInventory != null)
+        if (!fuelInventory.isEmpty())
             drops.add(fuelInventory);
-        if (outputInventory != null)
+        if (!outputInventory.isEmpty())
             drops.add(outputInventory);
         for (ItemStack stack : inventory)
-            if (stack != null)
+            if (!stack.isEmpty())
                 drops.add(stack);
         return drops;
     }
@@ -368,7 +368,7 @@ public class TileAlloyFurnace extends TileBase implements ISidedInventory {
     //Todo Fields
     @Override
     public boolean isEmpty() {
-        return inventory.length == 0;
+        return inventory.isEmpty();
     }
 
     @Override

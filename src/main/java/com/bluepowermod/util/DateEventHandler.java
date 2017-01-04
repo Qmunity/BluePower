@@ -67,7 +67,7 @@ public class DateEventHandler {
         NBTTagCompound nbttagcompound1 = new NBTTagCompound();
         NBTTagList nbttaglist = new NBTTagList();
 
-        if (itemstack1 != null && itemstack1.getItem() == Items.FIREWORK_CHARGE && itemstack1.hasTagCompound()
+        if (!itemstack1.isEmpty() && itemstack1.getItem() == Items.FIREWORK_CHARGE && itemstack1.hasTagCompound()
                 && itemstack1.getTagCompound().hasKey("Explosion")) {
             nbttaglist.appendTag(itemstack1.getTagCompound().getCompoundTag("Explosion"));
         }

@@ -48,13 +48,13 @@ public class RedstoneApi implements IRedstoneApi {
     private DummyRedstoneDevice returnDevice = DummyRedstoneDevice.getDeviceAt(null, null, null);
 
     @Override
-    public IRedstoneDevice getRedstoneDevice(World world, BlockPos pos, EnumFacing face, EnumFacing side) {
+    public IRedstoneDevice getRedstoneDevice(World world, BlockPos pos, EnumFacing side, EnumFacing face) {
 
         boolean returned = false;
         for (IRedstoneProvider provider : providers) {
             if (returned && provider instanceof RedstoneProviderVanilla)
                 continue;
-            IRedstoneDevice device = provider.getRedstoneDeviceAt(world, pos, face, side);
+            IRedstoneDevice device = provider.getRedstoneDeviceAt(world, pos, side, face);
             if (device == returnDevice) {
                 returned = true;
                 continue;
@@ -67,10 +67,10 @@ public class RedstoneApi implements IRedstoneApi {
     }
 
     @Override
-    public IBundledDevice getBundledDevice(World world, BlockPos pos, EnumFacing face, EnumFacing side) {
+    public IBundledDevice getBundledDevice(World world, BlockPos pos, EnumFacing side, EnumFacing face) {
 
         for (IRedstoneProvider provider : providers) {
-            IBundledDevice device = provider.getBundledDeviceAt(world, pos, face, side);
+            IBundledDevice device = provider.getBundledDeviceAt(world, pos, side, face);
             if (device == returnDevice)
                 return null;
             if (device != null)

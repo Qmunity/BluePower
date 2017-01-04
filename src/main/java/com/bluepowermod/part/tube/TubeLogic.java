@@ -168,11 +168,11 @@ public class TubeLogic implements IPneumaticTube {
                         if (rem != null)
                             remainder = rem.stack;
                         else
-                            remainder = null;
+                            remainder = ItemStack.EMPTY;
                     }
-                    if (remainder != null)
+                    if (!remainder.isEmpty())
                         remainder = IOHelper.insert(output, remainder, tubeStack.heading.getOpposite(), tubeStack.color, false);
-                    if (remainder != null) {
+                    if (!remainder.isEmpty()) {
                         if (injectStack(remainder, tubeStack.heading.getOpposite(), tubeStack.color, true)) {
                             tubeStack.stack = remainder;
                             tubeStack.progress = 0;
@@ -220,18 +220,18 @@ public class TubeLogic implements IPneumaticTube {
             fuzzySetting = ((IFuzzyRetrieving) target).getFuzzySetting();
         }
 
-        ItemStack extractedItem = null;
+        ItemStack extractedItem = ItemStack.EMPTY;
         if (result.getValue() instanceof TileManager) {// Exception for managers, the result can only end up as a manager if the pulling inventory was
             // a manager.
             TileEntity managedInventory = ((TileManager) result.getValue()).getTileCache(((TileManager) result.getValue()).getFacingDirection());
             extractedItem = IOHelper.extract(managedInventory, result.getKey().getOpposite(), filter, false, false, fuzzySetting);
-        } else if (filter != null) {
+        } else if (!filter.isEmpty()) {
             extractedItem = IOHelper.extract(result.getValue(), result.getKey().getOpposite(), filter, !(target instanceof TileManager), false,
                     fuzzySetting);
         } else {
             extractedItem = IOHelper.extract(result.getValue(), result.getKey().getOpposite(), false);
         }
-        if (extractedItem == null)
+        if (extractedItem.isEmpty())
             throw new IllegalArgumentException("This isn't possible!");
 
         stack = new TubeStack(extractedItem, result.getKey().getOpposite(), color);
@@ -532,7 +532,7 @@ public class TubeLogic implements IPneumaticTube {
             if (target.target instanceof IWeightedTubeInventory && ((IWeightedTubeInventory) target.target).getWeight(targetConnectionSide) > 10000)
                 return true;
             ItemStack remainder = IOHelper.insert((TileEntity) target.target, stack.copy(), targetConnectionSide.getOpposite(), true);
-            return remainder == null || remainder.getCount() < stack.getCount();
+            return remainder.isEmpty() || remainder.getCount() < stack.getCount();
         }
 
         public boolean isValidForImportItem(TubeStack stack) {
@@ -552,19 +552,19 @@ public class TubeLogic implements IPneumaticTube {
                             && retrievingManager.filterColor != pulledManager.filterColor)
                         return false;
                     TileEntity managedInventory = pulledManager.getTileCache(pulledManager.getFacingDirection());
-                    return IOHelper.extract(managedInventory, pulledManager.getFacingDirection().getOpposite(), stack.stack, false, true) != null;
+                    return !IOHelper.extract(managedInventory, pulledManager.getFacingDirection().getOpposite(), stack.stack, false, true).isEmpty();
                 }
             }
 
-            if (stack.stack != null) {
+            if (!stack.stack.isEmpty()) {
                 int fuzzySetting = 0;
                 if (stackTarget instanceof IFuzzyRetrieving) {
                     fuzzySetting = ((IFuzzyRetrieving) stackTarget).getFuzzySetting();
                 }
-                return IOHelper.extract((TileEntity) target.target, targetConnectionSide.getOpposite(), stack.stack,
-                        !(stackTarget instanceof TileManager), true, fuzzySetting) != null;
+                return !IOHelper.extract((TileEntity) target.target, targetConnectionSide.getOpposite(), stack.stack,
+                        !(stackTarget instanceof TileManager), true, fuzzySetting).isEmpty();
             } else {
-                return IOHelper.extract((TileEntity) target.target, targetConnectionSide.getOpposite(), true) != null;
+                return !IOHelper.extract((TileEntity) target.target, targetConnectionSide.getOpposite(), true).isEmpty();
             }
         }
     }

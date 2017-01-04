@@ -56,7 +56,6 @@ public class BlockCrop extends BlockCrops implements IGrowable {
     public BlockCrop() {
 
         this.setTickRandomly(true);
-        this.setCreativeTab(null);
         this.setHardness(0.0F);
         this.setSoundType(SoundType.PLANT);
         this.disableStats();

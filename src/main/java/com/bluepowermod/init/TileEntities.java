@@ -20,10 +20,7 @@ package com.bluepowermod.init;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier1.*;
 import com.bluepowermod.tile.tier2.*;
-import com.bluepowermod.tile.tier3.TileCircuitDatabase;
-import com.bluepowermod.tile.tier3.TileEngine;
-import com.bluepowermod.tile.tier3.TileManager;
-import com.bluepowermod.tile.tier3.TileSortron;
+import com.bluepowermod.tile.tier3.*;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class TileEntities {
@@ -45,6 +42,7 @@ public class TileEntities {
         // GameRegistry.registerTileEntity(TileDiskDrive.class, "diskDrive");
         // GameRegistry.registerTileEntity(TileIOExpander.class, "IOExpander");
         GameRegistry.registerTileEntity(TileEngine.class, Refs.MODID + ".engine");
+        GameRegistry.registerTileEntity(TileBattery.class, Refs.MODID + ".battery");
         // GameRegistry.registerTileEntity(TileWindmill.class, "windmill");
         // GameRegistry.registerTileEntity(TileKinectGenerator.class, "kinectgenerator");
         GameRegistry.registerTileEntity(TileDeployer.class, Refs.MODID + ".deployer");

@@ -42,8 +42,8 @@ public class BluePowerAPI implements IBPApi {
         Block b = world.getBlockState(pos).getBlock();
         if (te == null)
             throw new IllegalStateException("This block doesn't have a tile entity?!");
-        if (stack == null)
-            throw new IllegalArgumentException("ItemStack is null!");
+        if (stack.isEmpty())
+            throw new IllegalArgumentException("ItemStack is empty!");
         if (stack.hasTagCompound()) {
             NBTTagCompound tag = stack.getTagCompound();
             if (tag.hasKey("tileData")) {
@@ -66,8 +66,8 @@ public class BluePowerAPI implements IBPApi {
     @Override
     public void loadSilkySettings(IPart part, ItemStack stack) {
 
-        if (stack == null)
-            throw new IllegalArgumentException("ItemStack is null!");
+        if (stack.isEmpty())
+            throw new IllegalArgumentException("ItemStack is empty!");
         if (stack.hasTagCompound()) {
             NBTTagCompound tag = stack.getTagCompound();
             if (tag.hasKey("tileData")) {

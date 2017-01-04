@@ -18,6 +18,7 @@
 package com.bluepowermod.api.recipe;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 
 /**
  * This class only should be used for special recipes, like recipes that depend on NBT. For normal recipes use
@@ -27,17 +28,17 @@ import net.minecraft.item.ItemStack;
 public interface IAlloyFurnaceRecipe {
     
     /**
-     * Return true if this recipe can be smelted using the input stacks. The input stacks are the 9 inventory slots, so an element can be null.
+     * Return true if this recipe can be smelted using the input stacks. The input stacks are the 9 inventory slots, so an element can be ItemStack.EMPTY.
      *
      * @param input
      * @return
      */
-    boolean matches(ItemStack[] input);
+    boolean matches(NonNullList<ItemStack> input);
     
     /**
      * The items that are needed in this recipe need to be removed from the input inventory.
      */
-    void useItems(ItemStack[] input);
+    void useItems(NonNullList<ItemStack> input);
     
-    ItemStack getCraftingResult(ItemStack[] input);
+    ItemStack getCraftingResult(NonNullList<ItemStack> input);
 }

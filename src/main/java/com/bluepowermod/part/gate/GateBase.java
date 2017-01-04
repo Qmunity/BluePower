@@ -360,7 +360,7 @@ public abstract class GateBase<C_BOTTOM extends GateConnectionBase, C_TOP extend
         if (getLayout() == null && !getWorld().isRemote)
             loadLayout();
 
-        if (item != null && item.getItem() instanceof IScrewdriver) {
+        if (!item.isEmpty() && item.getItem() instanceof IScrewdriver) {
             if (player.isSneaking()) {
                 if (logic().changeMode()) {
                     if (!getWorld().isRemote) {
@@ -724,9 +724,9 @@ public abstract class GateBase<C_BOTTOM extends GateConnectionBase, C_TOP extend
     @SideOnly(Side.CLIENT)
     public void registerIcons(TextureMap reg) {
 
-        icon = reg.registerSprite(new ResourceLocation(Refs.MODID + ":gates/gate"));
-        iconSide = reg.registerSprite(new ResourceLocation(Refs.MODID + ":gates/side"));
-        iconDark = reg.registerSprite(new ResourceLocation(Refs.MODID + ":gates/gate_dark"));
+        icon = reg.registerSprite(new ResourceLocation(Refs.MODID + ":blocks/gates/gate"));
+        iconSide = reg.registerSprite(new ResourceLocation(Refs.MODID + ":blocks/gates/side"));
+        iconDark = reg.registerSprite(new ResourceLocation(Refs.MODID + ":blocks/gates/gate_dark"));
 
         if (getLayout() == null)
             loadLayout();

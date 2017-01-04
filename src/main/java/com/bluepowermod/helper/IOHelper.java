@@ -51,7 +51,7 @@ public class IOHelper {
         IInventory inv = getInventoryForTE(inventory);
         if (inv != null)
             return extract(inv, direction, simulate);
-        return null;
+        return ItemStack.EMPTY;
     }
 
     public static ItemStack extract(IInventory inventory, EnumFacing direction, boolean simulate) {
@@ -62,7 +62,7 @@ public class IOHelper {
 
             for (int anAccessibleSlotsFromSide : accessibleSlotsFromSide) {
                 ItemStack stack = extract(inventory, direction, anAccessibleSlotsFromSide, simulate);
-                if (stack != null)
+                if (!stack.isEmpty())
                     return stack;
             }
         } else {
@@ -70,23 +70,23 @@ public class IOHelper {
 
             for (int k = 0; k < j; ++k) {
                 ItemStack stack = extract(inventory, direction, k, simulate);
-                if (stack != null)
+                if (!stack.isEmpty())
                     return stack;
             }
         }
-        return null;
+        return ItemStack.EMPTY;
     }
 
     public static ItemStack extract(IInventory inventory, EnumFacing direction, int slot, boolean simulate) {
 
         ItemStack itemstack = inventory.getStackInSlot(slot);
 
-        if (itemstack != null && canExtractItemFromInventory(inventory, itemstack, slot, direction.ordinal())) {
+        if (!itemstack.isEmpty() && canExtractItemFromInventory(inventory, itemstack, slot, direction.ordinal())) {
             if (!simulate)
-                inventory.setInventorySlotContents(slot, null);
+                inventory.setInventorySlotContents(slot, ItemStack.EMPTY);
             return itemstack;
         }
-        return null;
+        return ItemStack.EMPTY;
     }
 
     public static ItemStack extract(TileEntity tile, EnumFacing direction, ItemStack requestedStack, boolean useItemCount, boolean simulate) {
@@ -97,7 +97,7 @@ public class IOHelper {
     public static int[] getAccessibleSlotsForInventory(IInventory inv, EnumFacing side) {
 
         int[] accessibleSlots;
-        if (inv != null) {
+        if (!inv.isEmpty()) {
             if (inv instanceof ISidedInventory) {
                 accessibleSlots = ((ISidedInventory) inv).getSlotsForFace(side);
             } else {
@@ -118,7 +118,7 @@ public class IOHelper {
         int count = 0;
         for (int slot : slots) {
             ItemStack invStack = inventory.getStackInSlot(slot);
-            if (invStack != null) {
+            if (!invStack.isEmpty()) {
                 if (ItemStackHelper.areStacksEqual(invStack, type, fuzzySetting)) {
                     count += invStack.getCount();
                 }
@@ -144,10 +144,10 @@ public class IOHelper {
     public static ItemStack extract(TileEntity tile, EnumFacing direction, ItemStack requestedStack, boolean useItemCount, boolean simulate,
             int fuzzySetting) {
 
-        if (requestedStack == null)
+        if (requestedStack.isEmpty())
             return requestedStack;
         IInventory inv = getInventoryForTE(tile);
-        if (inv != null) {
+        if (!inv.isEmpty()) {
             int[] accessibleSlots;
             if (inv instanceof ISidedInventory) {
                 accessibleSlots = ((ISidedInventory) inv).getSlotsForFace(direction);
@@ -159,11 +159,11 @@ public class IOHelper {
             int itemsFound = 0;
             for (int slot : accessibleSlots) {
                 ItemStack stack = inv.getStackInSlot(slot);
-                if (stack != null && ItemStackHelper.areStacksEqual(stack, requestedStack, fuzzySetting)
+                if (!stack.isEmpty() && ItemStackHelper.areStacksEqual(stack, requestedStack, fuzzySetting)
                         && IOHelper.canExtractItemFromInventory(inv, requestedStack, slot, direction.ordinal())) {
                     if (!useItemCount) {
                         if (!simulate) {
-                            inv.setInventorySlotContents(slot, null);
+                            inv.setInventorySlotContents(slot, ItemStack.EMPTY);
                         }
                         return stack;
                     }
@@ -171,11 +171,11 @@ public class IOHelper {
                 }
             }
             if (itemsFound >= requestedStack.getCount()) {
-                ItemStack exportedStack = null;
+                ItemStack exportedStack = ItemStack.EMPTY;
                 int itemsNeeded = requestedStack.getCount();
                 for (int slot : accessibleSlots) {
                     ItemStack stack = inv.getStackInSlot(slot);
-                    if (stack != null && ItemStackHelper.areStacksEqual(stack, requestedStack, fuzzySetting)
+                    if (!stack.isEmpty() && ItemStackHelper.areStacksEqual(stack, requestedStack, fuzzySetting)
                             && IOHelper.canExtractItemFromInventory(inv, requestedStack, slot, direction.ordinal())) {
                         int itemsSubstracted = Math.min(itemsNeeded, stack.getCount());
                         if (itemsSubstracted > 0)
@@ -184,7 +184,7 @@ public class IOHelper {
                         if (!simulate) {
                             stack.setCount(stack.getCount() - itemsSubstracted);
                             if (stack.getCount() == 0)
-                                inv.setInventorySlotContents(slot, null);
+                                inv.setInventorySlotContents(slot, ItemStack.EMPTY);
                             tile.markDirty();
                         }
                     }
@@ -194,14 +194,14 @@ public class IOHelper {
                 return exportedStack;
             }
         }
-        return null;
+        return ItemStack.EMPTY;
 
     }
 
     public static ItemStack extractOneItem(TileEntity tile, EnumFacing dir) {
 
         IInventory inv = getInventoryForTE(tile);
-        if (inv != null) {
+        if (!inv.isEmpty()) {
             int[] accessibleSlots;
             if (inv instanceof ISidedInventory) {
                 accessibleSlots = ((ISidedInventory) inv).getSlotsForFace(dir);
@@ -212,17 +212,17 @@ public class IOHelper {
             }
             for (int slot : accessibleSlots) {
                 ItemStack stack = inv.getStackInSlot(slot);
-                ItemStack retrievingStack = stack == null ? null : stack.copy().splitStack(1);
-                if (stack != null && IOHelper.canExtractItemFromInventory(inv, retrievingStack, slot, dir.ordinal())) {
+                ItemStack retrievingStack = stack.isEmpty() ? ItemStack.EMPTY : stack.copy().splitStack(1);
+                if (!stack.isEmpty() && IOHelper.canExtractItemFromInventory(inv, retrievingStack, slot, dir.ordinal())) {
                     ItemStack ret = stack.splitStack(1);
                     if (stack.getCount() == 0)
-                        inv.setInventorySlotContents(slot, null);
+                        inv.setInventorySlotContents(slot, ItemStack.EMPTY);
                     tile.markDirty();
                     return ret;
                 }
             }
         }
-        return null;
+        return ItemStack.EMPTY;
     }
 
     public static ItemStack insert(TileEntity tile, ItemStack itemStack, EnumFacing direction, boolean simulate) {
@@ -232,23 +232,23 @@ public class IOHelper {
 
     public static ItemStack insert(TileEntity tile, ItemStack itemStack, EnumFacing direction, TubeColor color, boolean simulate) {
 
-        if (tile == null || itemStack == null)
+        if (tile == null || itemStack.isEmpty())
             return itemStack;
 
         if (tile instanceof ITubeConnection) {
             TubeStack tubeStack = ((ITubeConnection) tile).acceptItemFromTube(new TubeStack(itemStack, direction.getOpposite(), color), direction,
                     simulate);
             if (tubeStack == null)
-                return null;
+                return ItemStack.EMPTY;
             return tubeStack.stack;
         }
         IInventory inv = getInventoryForTE(tile);
-        if (inv != null)
+        if (!inv.isEmpty())
             return insert(inv, itemStack, direction.ordinal(), simulate);
         PneumaticTube tube = MultipartCompatibility.getPart(tile.getWorld(), tile.getPos(), PneumaticTube.class);
         if (tube != null) {// we don't need to check connections, that's catched earlier.
             TubeLogic logic = tube.getLogic();
-            return logic.injectStack(itemStack, direction.getOpposite(), color, simulate) ? null : itemStack;
+            return logic.injectStack(itemStack, direction.getOpposite(), color, simulate) ? ItemStack.EMPTY : itemStack;
         }
         return itemStack;
     }
@@ -259,19 +259,19 @@ public class IOHelper {
             ISidedInventory isidedinventory = (ISidedInventory) inventory;
             int[] aint = isidedinventory.getSlotsForFace(EnumFacing.getFront(side));
 
-            for (int j = 0; j < aint.length && itemStack != null && itemStack.getCount() > 0; ++j) {
+            for (int j = 0; j < aint.length && !itemStack.isEmpty() && itemStack.getCount() > 0; ++j) {
                 itemStack = insert(inventory, itemStack, aint[j], side, simulate);
             }
         } else {
             int k = inventory.getSizeInventory();
 
-            for (int l = 0; l < k && itemStack != null && itemStack.getCount() > 0; ++l) {
+            for (int l = 0; l < k && !itemStack.isEmpty() && itemStack.getCount() > 0; ++l) {
                 itemStack = insert(inventory, itemStack, l, side, simulate);
             }
         }
 
-        if (itemStack != null && itemStack.getCount() == 0) {
-            itemStack = null;
+        if (!itemStack.isEmpty() && itemStack.getCount() == 0) {
+            itemStack = ItemStack.EMPTY;
         }
 
         return itemStack;
@@ -284,14 +284,14 @@ public class IOHelper {
         if (canInsertItemToInventory(inventory, itemStack, slot, side)) {
             boolean flag = false;
 
-            if (itemstack1 == null) {
+            if (itemstack1.isEmpty()) {
                 int max = Math.min(itemStack.getMaxStackSize(), inventory.getInventoryStackLimit());
                 if (max >= itemStack.getCount()) {
                     if (!simulate) {
                         inventory.setInventorySlotContents(slot, itemStack);
                         flag = true;
                     }
-                    itemStack = null;
+                    itemStack = ItemStack.EMPTY;
                 } else {
                     if (!simulate) {
                         inventory.setInventorySlotContents(slot, itemStack.splitStack(max));
@@ -343,7 +343,7 @@ public class IOHelper {
         for (int i = 0; i < inventory.getSizeInventory(); i++) {
             ItemStack itemStack = inventory.getStackInSlot(i);
 
-            if (itemStack != null && itemStack.getCount() > 0) {
+            if (!itemStack.isEmpty() && itemStack.getCount() > 0) {
                 spawnItemInWorld(world, itemStack, pos.getX(), pos.getY(), pos.getZ());
             }
         }

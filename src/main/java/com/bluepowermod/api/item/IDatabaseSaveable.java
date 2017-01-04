@@ -40,7 +40,7 @@ public interface IDatabaseSaveable {
      * calculate which items it needs.
      * @param templateStack
      * @param outputStack
-     * @return null is a valid return.
+     * @return ItemStack.EMPTY is a valid return.
      */
     public List<ItemStack> getItemsOnStack(ItemStack stack);
     

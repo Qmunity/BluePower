@@ -92,7 +92,7 @@ public class InventoryItem extends InventoryBasic {
         }
         NBTTagList itemList = new NBTTagList();
         for (int i = 0; i < getSizeInventory(); i++) {
-            if (getStackInSlot(i) != null) {
+            if (!getStackInSlot(i).isEmpty()) {
                 NBTTagCompound slotEntry = new NBTTagCompound();
                 slotEntry.setByte("Slot", (byte) i);
                 getStackInSlot(i).writeToNBT(slotEntry);
@@ -115,17 +115,17 @@ public class InventoryItem extends InventoryBasic {
         super.markDirty();
         
         if (!reading) {
-            saveInventory(null);
+            saveInventory(ItemStack.EMPTY);
         }
     }
     
     protected void setNBT(ItemStack is) {
     
-        if (is == null && player != null) {
+        if (is.isEmpty() && player != null) {
             is = player.getHeldItemMainhand();
         }
         
-        if (is != null && is.getItem() == this.item.getItem()) {
+        if (!is.isEmpty() && is.getItem() == this.item.getItem()) {
             is.setTagCompound(item.getTagCompound());
         }
     }

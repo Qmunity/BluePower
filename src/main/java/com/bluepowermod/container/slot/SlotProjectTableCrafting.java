@@ -42,7 +42,7 @@ public class SlotProjectTableCrafting extends SlotCrafting {
         super.onSlotChange(p_82870_1_, p_82870_2_);
 
         for (int i = 0; i < 9; i++) {
-            if (craftMatrix.getStackInSlot(i) == null && oldGrid[i] != null) {
+            if (craftMatrix.getStackInSlot(i).isEmpty() && oldGrid[i] != null) {
                 oldGrid[i].setCount(1);
                 ItemStack stackFromTable = ContainerProjectTable.extractStackFromTable(projectTable, oldGrid[i], false);
                 craftMatrix.setInventorySlotContents(i, stackFromTable);

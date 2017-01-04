@@ -56,7 +56,7 @@ public class TileBuffer extends TileBase implements ISidedInventory {
         super.writeToNBT(tCompound);
         
         for (int i = 0; i < 20; i++) {
-            if (allInventories[i] != null) {
+            if (!allInventories[i].isEmpty()) {
                 NBTTagCompound tc = new NBTTagCompound();
                 allInventories[i].writeToNBT(tc);
                 tCompound.setTag("inventory" + i, tc);
@@ -81,13 +81,13 @@ public class TileBuffer extends TileBase implements ISidedInventory {
     public ItemStack decrStackSize(int slot, int amount) {
     
         ItemStack itemStack = getStackInSlot(slot);
-        if (itemStack != null) {
+        if (!itemStack.isEmpty()) {
             if (itemStack.getCount() <= amount) {
-                setInventorySlotContents(slot, null);
+                setInventorySlotContents(slot, ItemStack.EMPTY);
             } else {
                 itemStack = itemStack.splitStack(amount);
                 if (itemStack.getCount() == 0) {
-                    setInventorySlotContents(slot, null);
+                    setInventorySlotContents(slot, ItemStack.EMPTY);
                 }
             }
         }
@@ -151,7 +151,7 @@ public class TileBuffer extends TileBase implements ISidedInventory {
     
         List<ItemStack> drops = super.getDrops();
         for (ItemStack stack : allInventories)
-            if (stack != null) drops.add(stack);
+            if (!stack.isEmpty()) drops.add(stack);
         return drops;
     }
 

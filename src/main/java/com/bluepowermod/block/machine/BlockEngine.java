@@ -112,7 +112,7 @@ public class BlockEngine extends BlockContainerBase {
     @SuppressWarnings("cast")
     @Override
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing efacing, float hitX, float hitY, float hitZ) {
-        if (player.inventory.getCurrentItem() != null) {
+        if (!player.inventory.getCurrentItem().isEmpty()) {
             Item item = player.inventory.getCurrentItem().getItem();
             if (item == BPItems.screwdriver) {
                 if (!world.isRemote) {

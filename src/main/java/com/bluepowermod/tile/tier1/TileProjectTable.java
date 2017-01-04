@@ -22,6 +22,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 
 import java.lang.reflect.Field;
@@ -32,8 +33,8 @@ import java.util.List;
  */
 public class TileProjectTable extends TileBase implements IInventory, IGuiButtonSensitive {
 
-    private ItemStack[] inventory = new ItemStack[18];
-    protected ItemStack[] craftingGrid = new ItemStack[9];
+    private NonNullList<ItemStack> inventory = NonNullList.withSize(19, ItemStack.EMPTY);
+    protected NonNullList<ItemStack> craftingGrid = NonNullList.withSize(9, ItemStack.EMPTY);
     protected final IInventory craftResult = new InventoryCraftResult();
     private static Field stackListFieldInventoryCrafting;
 
@@ -56,7 +57,7 @@ public class TileProjectTable extends TileBase implements IInventory, IGuiButton
             stackListFieldInventoryCrafting = ReflectionHelper.findField(InventoryCrafting.class, "field_70466_a", "stackList");
         }
         try {
-            stackListFieldInventoryCrafting.set(inventoryCrafting, craftingGrid);// Inject the array, so when stacks are being set to null by the
+            stackListFieldInventoryCrafting.set(inventoryCrafting, craftingGrid);// Inject the array, so when stacks are being set to ItemStack.EMPTY by the
                                                                                  // container it'll make it's way over to the actual stacks.
             return inventoryCrafting;
         } catch (Exception e) {
@@ -82,10 +83,10 @@ public class TileProjectTable extends TileBase implements IInventory, IGuiButton
 
         List<ItemStack> drops = super.getDrops();
         for (ItemStack stack : inventory)
-            if (stack != null)
+            if (!stack.isEmpty())
                 drops.add(stack);
         for (ItemStack stack : craftingGrid)
-            if (stack != null)
+            if (!stack.isEmpty())
                 drops.add(stack);
         return drops;
     }
@@ -96,24 +97,20 @@ public class TileProjectTable extends TileBase implements IInventory, IGuiButton
         super.writeToNBT(tag);
 
         NBTTagList tagList = new NBTTagList();
-        for (int currentIndex = 0; currentIndex < inventory.length; ++currentIndex) {
-            if (inventory[currentIndex] != null) {
+        for (int currentIndex = 0; currentIndex < inventory.size(); ++currentIndex) {
                 NBTTagCompound tagCompound = new NBTTagCompound();
-                tagCompound.setByte("Slot", (byte) currentIndex);
-                inventory[currentIndex].writeToNBT(tagCompound);
+                tagCompound.setByte("Slot", (byte)currentIndex);
+                inventory.get(currentIndex).writeToNBT(tagCompound);
                 tagList.appendTag(tagCompound);
-            }
         }
         tag.setTag("Items", tagList);
 
         tagList = new NBTTagList();
-        for (int currentIndex = 0; currentIndex < craftingGrid.length; ++currentIndex) {
-            if (craftingGrid[currentIndex] != null) {
+        for (int currentIndex = 0; currentIndex < craftingGrid.size(); ++currentIndex) {
                 NBTTagCompound tagCompound = new NBTTagCompound();
                 tagCompound.setByte("Slot", (byte) currentIndex);
-                craftingGrid[currentIndex].writeToNBT(tagCompound);
+                craftingGrid.get(currentIndex).writeToNBT(tagCompound);
                 tagList.appendTag(tagCompound);
-            }
         }
         tag.setTag("CraftingGrid", tagList);
         return tag;
@@ -125,22 +122,22 @@ public class TileProjectTable extends TileBase implements IInventory, IGuiButton
         super.readFromNBT(tag);
 
         NBTTagList tagList = tag.getTagList("Items", 10);
-        inventory = new ItemStack[18];
+        inventory = NonNullList.withSize(19, ItemStack.EMPTY);
         for (int i = 0; i < tagList.tagCount(); ++i) {
             NBTTagCompound tagCompound = tagList.getCompoundTagAt(i);
             byte slot = tagCompound.getByte("Slot");
-            if (slot >= 0 && slot < inventory.length) {
-                inventory[slot] = new ItemStack(tagCompound);
+            if (slot >= 0 && slot < inventory.size()) {
+                inventory.set(slot, new ItemStack(tagCompound));
             }
         }
 
         tagList = tag.getTagList("CraftingGrid", 10);
-        craftingGrid = new ItemStack[9];
+        craftingGrid = NonNullList.withSize(9, ItemStack.EMPTY);
         for (int i = 0; i < tagList.tagCount(); ++i) {
             NBTTagCompound tagCompound = tagList.getCompoundTagAt(i);
             byte slot = tagCompound.getByte("Slot");
-            if (slot >= 0 && slot < craftingGrid.length) {
-                craftingGrid[slot] = new ItemStack(tagCompound);
+            if (slot >= 0 && slot < craftingGrid.size()) {
+                craftingGrid.set(slot, new ItemStack(tagCompound));
             }
         }
     }
@@ -148,25 +145,25 @@ public class TileProjectTable extends TileBase implements IInventory, IGuiButton
     @Override
     public int getSizeInventory() {
 
-        return inventory.length;
+        return inventory.size();
     }
 
     @Override
     public ItemStack getStackInSlot(int i) {
-        return inventory[i];
+        return inventory.get(i);
     }
 
     @Override
     public ItemStack decrStackSize(int slot, int amount) {
 
         ItemStack itemStack = getStackInSlot(slot);
-        if (itemStack != null) {
+        if (!itemStack.isEmpty()) {
             if (itemStack.getCount() <= amount) {
-                setInventorySlotContents(slot, null);
+                setInventorySlotContents(slot, ItemStack.EMPTY);
             } else {
                 itemStack = itemStack.splitStack(amount);
                 if (itemStack.getCount() == 0) {
-                    setInventorySlotContents(slot, null);
+                    setInventorySlotContents(slot, ItemStack.EMPTY);
                 }
             }
         }
@@ -177,15 +174,15 @@ public class TileProjectTable extends TileBase implements IInventory, IGuiButton
     @Override
     public ItemStack removeStackFromSlot(int i) {
         ItemStack itemStack = getStackInSlot(i);
-        if (itemStack != null) {
-            setInventorySlotContents(i, null);
+        if (!itemStack.isEmpty()) {
+            setInventorySlotContents(i, ItemStack.EMPTY);
         }
         return itemStack;
     }
 
     @Override
     public void setInventorySlotContents(int i, ItemStack itemStack) {
-        inventory[i] = itemStack;
+        inventory.set(i, itemStack);
     }
 
     @Override
@@ -242,24 +239,24 @@ public class TileProjectTable extends TileBase implements IInventory, IGuiButton
     protected void craft() {
         // FMLCommonHandler.instance().firePlayerCraftingEvent(p_82870_1_, p_82870_2_, craftMatrix);
 
-        for (int i = 0; i < craftingGrid.length; ++i) {
-            ItemStack itemstack1 = craftingGrid[i];
+        for (int i = 0; i < craftingGrid.size(); ++i) {
+            ItemStack itemstack1 = craftingGrid.get(i);
 
-            if (itemstack1 != null) {
+            if (!itemstack1.isEmpty()) {
                 boolean pulledFromInventory = false;
-                if (craftingGrid[i].getCount() == 1) {
-                    ItemStack stackFromTable = ContainerProjectTable.extractStackFromTable(this, craftingGrid[i], false);
-                    pulledFromInventory = stackFromTable != null;
+                if (craftingGrid.get(i).getCount() == 1) {
+                    ItemStack stackFromTable = ContainerProjectTable.extractStackFromTable(this, craftingGrid.get(i), false);
+                    pulledFromInventory = !stackFromTable.isEmpty();
                 }
                 if (!pulledFromInventory) {
-                    craftingGrid[i].setCount(craftingGrid[i].getCount() - 1);
-                    if (craftingGrid[i].getCount() <= 0)
-                        craftingGrid[i] = null;
+                    craftingGrid.get(i).setCount(craftingGrid.get(i).getCount() - 1);
+                    if (craftingGrid.get(i).getCount() <= 0)
+                        craftingGrid.set(i, ItemStack.EMPTY);
                 }
                 if (itemstack1.getItem().hasContainerItem(itemstack1)) {
                     ItemStack itemstack2 = itemstack1.getItem().getContainerItem(itemstack1);
 
-                    if (itemstack2 != null && itemstack2.isItemStackDamageable() && itemstack2.getItemDamage() > itemstack2.getMaxDamage()) {
+                    if (!itemstack2.isEmpty() && itemstack2.isItemStackDamageable() && itemstack2.getItemDamage() > itemstack2.getMaxDamage()) {
                         continue;
                     }
 
@@ -271,10 +268,14 @@ public class TileProjectTable extends TileBase implements IInventory, IGuiButton
         }
     }
 
-    //Todo Fields
     @Override
     public boolean isEmpty() {
-        return inventory.length == 0;
+        for (ItemStack itemstack : inventory ){
+            if (!itemstack.isEmpty()){
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override

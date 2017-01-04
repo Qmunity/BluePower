@@ -73,7 +73,7 @@ public class WailaProviderParts implements IWailaDataProvider {
     @Override
     public ItemStack getWailaStack(IWailaDataAccessor data, IWailaConfigHandler cfg) {
 
-        return null;
+        return ItemStack.EMPTY;
     }
 
     @Override

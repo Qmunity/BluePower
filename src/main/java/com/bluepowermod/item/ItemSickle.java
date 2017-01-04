@@ -28,6 +28,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTool;
@@ -38,7 +39,7 @@ import java.util.Set;
 
 public class ItemSickle extends ItemTool {
 
-    public    Item    customCraftingMaterial = null;
+    public    Item    customCraftingMaterial = Items.AIR;
     protected boolean canRepair              = true;
 
     private static final Set toolBlocks = Sets.newHashSet(Blocks.LEAVES, Blocks.LEAVES2, Blocks.WHEAT, Blocks.POTATOES, Blocks.CARROTS,

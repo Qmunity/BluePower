@@ -645,7 +645,7 @@ implements IAdvancedSilkyRemovable, IAdvancedRedstoneConductor, IRedwire {
         // EntityPlayer player = BluePower.proxy.getPlayer();
 
         // if (mop != null
-        // && (player == null || (player != null && player.getHeldItemMainhand() != null && !(player.getHeldItemMainhand()
+        // && (player == null || (player != null && !player.getHeldItemMainhand().isEmpty() && !(player.getHeldItemMainhand()
         // .getItem() instanceof IScrewdriver))))
         if (mop != null)
             mop = new QRayTraceResult(mop, mop.getPart(), Vec3dCube.merge(getSelectionBoxes()));

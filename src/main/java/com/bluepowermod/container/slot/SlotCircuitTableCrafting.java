@@ -38,7 +38,7 @@ public class SlotCircuitTableCrafting extends SlotCrafting {
     @Override
     public boolean canTakeStack(EntityPlayer player) {
         ItemStack stack = getStack();
-        if (stack != null) {
+        if (!stack.isEmpty()) {
             return canCraft(stack, circuitTable);
         } else {
             return false;
@@ -52,7 +52,7 @@ public class SlotCircuitTableCrafting extends SlotCrafting {
             return false;
         for (ItemStack requiredItem : requiredItems) {
             ItemStack extractedStack = IOHelper.extract(circuitTable, null, requiredItem, true, true);
-            if (extractedStack == null || extractedStack.getCount() < requiredItem.getCount())
+            if (extractedStack.isEmpty() || extractedStack.getCount() < requiredItem.getCount())
                 return false;
         }
         return true;
@@ -78,7 +78,7 @@ public class SlotCircuitTableCrafting extends SlotCrafting {
         List recipeList = CraftingManager.getInstance().getRecipeList();
         for (IRecipe r : (List<IRecipe>) recipeList) {
             ItemStack result = r.getRecipeOutput();
-            if (result != null && result.isItemEqual(gate)) {
+            if (!result.isEmpty() && result.isItemEqual(gate)) {
                 if (r instanceof ShapedOreRecipe) {
                     ShapedOreRecipe recipe = (ShapedOreRecipe) r;
                     for (Object o : recipe.getInput()) {
@@ -88,9 +88,9 @@ public class SlotCircuitTableCrafting extends SlotCrafting {
                                 stack = (ItemStack) o;
                             } else {
                                 List<ItemStack> list = (List<ItemStack>) o;
-                                stack = list.size() > 0 ? list.get(0) : null;
+                                stack = list.size() > 0 ? list.get(0) : ItemStack.EMPTY;
                             }
-                            if (stack != null) {
+                            if (!stack.isEmpty()) {
                                 boolean needsAdding = true;
                                 for (ItemStack listStack : requiredItems) {
                                     if (listStack.isItemEqual(stack)) {
@@ -108,7 +108,7 @@ public class SlotCircuitTableCrafting extends SlotCrafting {
                 } else if (r instanceof ShapedRecipes) {
                     ShapedRecipes recipe = (ShapedRecipes) r;
                     for (ItemStack stack : recipe.recipeItems) {
-                        if (stack != null) {
+                        if (!stack.isEmpty()) {
                             boolean needsAdding = true;
                             for (ItemStack listStack : requiredItems) {
                                 if (listStack.isItemEqual(stack)) {

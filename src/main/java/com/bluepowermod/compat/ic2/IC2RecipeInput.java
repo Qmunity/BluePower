@@ -8,11 +8,10 @@
 package com.bluepowermod.compat.ic2;
 
 import ic2.api.recipe.IRecipeInput;
+import net.minecraft.item.ItemStack;
 
 import java.util.Arrays;
 import java.util.List;
-
-import net.minecraft.item.ItemStack;
 
 public class IC2RecipeInput implements IRecipeInput{
     private final ItemStack input;
@@ -23,7 +22,7 @@ public class IC2RecipeInput implements IRecipeInput{
 
     @Override
     public boolean matches(ItemStack subject){
-        return subject != null && input.isItemEqual(subject);
+        return subject.isEmpty() && input.isItemEqual(subject);
     }
 
     @Override

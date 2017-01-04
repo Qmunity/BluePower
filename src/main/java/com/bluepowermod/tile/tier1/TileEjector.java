@@ -37,13 +37,13 @@ public class TileEjector extends TileMachineBase implements IInventory {
 
         if (!world.isRemote && isBufferEmpty() && newValue) {
             for (int i = 0; i < inventory.length; i++) {
-                if (inventory[i] != null && inventory[i].getCount() > 0) {
+                if (!inventory[i].isEmpty() && inventory[i].getCount() > 0) {
                     ItemStack output = inventory[i].copy();
                     output.setCount(1);
                     addItemToOutputBuffer(output);
                     inventory[i].setCount(inventory[i].getCount() - 1);
                     if (inventory[i].getCount() == 0)
-                        inventory[i] = null;
+                        inventory[i] = ItemStack.EMPTY;
                     break;
                 }
             }
@@ -73,7 +73,7 @@ public class TileEjector extends TileMachineBase implements IInventory {
         super.writeToNBT(tCompound);
 
         for (int i = 0; i < 9; i++) {
-            if (inventory[i] != null) {
+            if (!inventory[i].isEmpty()) {
                 NBTTagCompound tc = new NBTTagCompound();
                 inventory[i].writeToNBT(tc);
                 tCompound.setTag("inventory" + i, tc);
@@ -113,13 +113,13 @@ public class TileEjector extends TileMachineBase implements IInventory {
     public ItemStack decrStackSize(int slot, int amount) {
 
         ItemStack itemStack = getStackInSlot(slot);
-        if (itemStack != null) {
+        if (!itemStack.isEmpty()) {
             if (itemStack.getCount() <= amount) {
-                setInventorySlotContents(slot, null);
+                setInventorySlotContents(slot, ItemStack.EMPTY);
             } else {
                 itemStack = itemStack.splitStack(amount);
                 if (itemStack.getCount() == 0) {
-                    setInventorySlotContents(slot, null);
+                    setInventorySlotContents(slot, ItemStack.EMPTY);
                 }
             }
         }
@@ -215,7 +215,7 @@ public class TileEjector extends TileMachineBase implements IInventory {
 
         List<ItemStack> drops = super.getDrops();
         for (ItemStack stack : inventory)
-            if (stack != null)
+            if (!stack.isEmpty())
                 drops.add(stack);
         return drops;
     }

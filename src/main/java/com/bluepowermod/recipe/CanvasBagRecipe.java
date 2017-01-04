@@ -35,15 +35,15 @@ public class CanvasBagRecipe extends ShapelessOreRecipe {
     @Override
     public ItemStack getCraftingResult(InventoryCrafting inventoryCrafting) {
     
-        ItemStack bag=null;
+        ItemStack bag = ItemStack.EMPTY;
         for (int slot=0;slot<inventoryCrafting.getSizeInventory();slot++)
         {
-            if (inventoryCrafting.getStackInSlot(slot)!=null && inventoryCrafting.getStackInSlot(slot).getItem() instanceof ItemCanvasBag)
+            if (!inventoryCrafting.getStackInSlot(slot).isEmpty() && inventoryCrafting.getStackInSlot(slot).getItem() instanceof ItemCanvasBag)
             {
                 bag = inventoryCrafting.getStackInSlot(slot);
             }
         }
-        if (bag!=null)
+        if (!bag.isEmpty())
         {
             bag=bag.copy();
             bag.setItemDamage(this.getRecipeOutput().getItemDamage());

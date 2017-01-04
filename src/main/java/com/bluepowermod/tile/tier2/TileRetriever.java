@@ -34,13 +34,13 @@ public class TileRetriever extends TileFilter implements IFuzzyRetrieving {
                 for (int i = 0; i < inventory.length; i++) {
                     if (mode == 1 || slotIndex == i) {
                         ItemStack stack = inventory[i];
-                        if (stack != null) {
+                        if (!stack.isEmpty()) {
                             if (tube.getLogic().retrieveStack(this, getFacingDirection(), stack)) {
                                 if (mode == 0) {
                                     if (++slotIndex >= inventory.length)
                                         slotIndex = 0;
                                     while (slotIndex != i) {
-                                        if (inventory[slotIndex] != null)
+                                        if (!inventory[slotIndex].isEmpty())
                                             break;
                                         if (++slotIndex >= inventory.length)
                                             slotIndex = 0;

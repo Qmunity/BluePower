@@ -17,6 +17,7 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.NonNullList;
 
 import java.util.List;
 
@@ -28,7 +29,7 @@ import java.util.List;
 public class TileItemDetector extends TileMachineBase implements ISidedInventory, IGuiButtonSensitive {
 
     public int mode;
-    private final ItemStack[] inventory = new ItemStack[9];
+    private final NonNullList<ItemStack> inventory = NonNullList.withSize(10, ItemStack.EMPTY);
     private int savedPulses = 0;
     public int fuzzySetting;
 
@@ -79,7 +80,7 @@ public class TileItemDetector extends TileMachineBase implements ISidedInventory
 
         boolean everythingNull = true;
         for (ItemStack invStack : inventory) {
-            if (invStack != null) {
+            if (!invStack.isEmpty()) {
                 if (ItemStackHelper.areStacksEqual(invStack, item, fuzzySetting)) {
                     return true;
                 }
@@ -96,10 +97,9 @@ public class TileItemDetector extends TileMachineBase implements ISidedInventory
     public void readFromNBT(NBTTagCompound tCompound) {
 
         super.readFromNBT(tCompound);
-
         for (int i = 0; i < 9; i++) {
             NBTTagCompound tc = tCompound.getCompoundTag("inventory" + i);
-            inventory[i] = new ItemStack(tc);
+            inventory.set(i, new ItemStack(tc));
         }
 
         mode = tCompound.getByte("mode");
@@ -116,11 +116,9 @@ public class TileItemDetector extends TileMachineBase implements ISidedInventory
         super.writeToNBT(tCompound);
 
         for (int i = 0; i < 9; i++) {
-            if (inventory[i] != null) {
                 NBTTagCompound tc = new NBTTagCompound();
-                inventory[i].writeToNBT(tc);
+                inventory.get(i).writeToNBT(tc);
                 tCompound.setTag("inventory" + i, tc);
-            }
         }
 
         tCompound.setByte("mode", (byte) mode);
@@ -133,26 +131,26 @@ public class TileItemDetector extends TileMachineBase implements ISidedInventory
     @Override
     public int getSizeInventory() {
 
-        return inventory.length;
+        return inventory.size();
     }
 
     @Override
     public ItemStack getStackInSlot(int i) {
 
-        return inventory[i];
+        return inventory.get(i);
     }
 
     @Override
     public ItemStack decrStackSize(int slot, int amount) {
 
         ItemStack itemStack = getStackInSlot(slot);
-        if (itemStack != null) {
+        if (!itemStack.isEmpty()) {
             if (itemStack.getCount() <= amount) {
-                setInventorySlotContents(slot, null);
+                setInventorySlotContents(slot, ItemStack.EMPTY);
             } else {
                 itemStack = itemStack.splitStack(amount);
                 if (itemStack.getCount() == 0) {
-                    setInventorySlotContents(slot, null);
+                    setInventorySlotContents(slot, ItemStack.EMPTY);
                 }
             }
         }
@@ -163,8 +161,8 @@ public class TileItemDetector extends TileMachineBase implements ISidedInventory
     @Override
     public ItemStack removeStackFromSlot(int i) {
         ItemStack itemStack = getStackInSlot(i);
-        if (itemStack != null) {
-            setInventorySlotContents(i, null);
+        if (!itemStack.isEmpty()) {
+            setInventorySlotContents(i, ItemStack.EMPTY);
         }
         return itemStack;
     }
@@ -172,7 +170,7 @@ public class TileItemDetector extends TileMachineBase implements ISidedInventory
     @Override
     public void setInventorySlotContents(int i, ItemStack itemStack) {
 
-        inventory[i] = itemStack;
+        inventory.set(i, itemStack);
     }
 
     @Override
@@ -219,7 +217,7 @@ public class TileItemDetector extends TileMachineBase implements ISidedInventory
 
         List<ItemStack> drops = super.getDrops();
         for (ItemStack stack : inventory)
-            if (stack != null)
+            if (!stack.isEmpty())
                 drops.add(stack);
         return drops;
     }
@@ -264,7 +262,7 @@ public class TileItemDetector extends TileMachineBase implements ISidedInventory
     //Todo Fields
     @Override
     public boolean isEmpty() {
-        return inventory.length == 0;
+        return inventory.size() == 0;
     }
 
     @Override

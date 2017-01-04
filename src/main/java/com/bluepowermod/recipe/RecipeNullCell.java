@@ -33,7 +33,7 @@ public class RecipeNullCell implements IRecipe {
     @Override
     public boolean matches(InventoryCrafting inv, World w) {
 
-        return getCraftingResult(inv) != null;
+        return !getCraftingResult(inv).isEmpty();
     }
 
     @Override
@@ -81,7 +81,7 @@ public class RecipeNullCell implements IRecipe {
     private ItemStack getCraftingResult(IInventory inv, EntityPlayer player, boolean isCrafting) {
 
         if (inv.getSizeInventory() < 9)
-            return null;
+            return ItemStack.EMPTY;
 
         int centerX = 0;
         int centerY = 0;
@@ -91,7 +91,7 @@ public class RecipeNullCell implements IRecipe {
         for (int x = 0; x < 3; x++) {
             for (int y = 0; y < 3; y++) {
                 ItemStack item = getItemAt(inv, x, y);
-                if (item == null)
+                if (item.isEmpty())
                     continue;
                 if (!(item.getItem() instanceof ItemPart))
                     continue;
@@ -109,7 +109,7 @@ public class RecipeNullCell implements IRecipe {
 
         // If there's no null cell, return null
         if (gnc == null)
-            return null;
+            return ItemStack.EMPTY;
 
         // Make this recipe invalid if there's items where there shouldn't be
         {
@@ -117,20 +117,20 @@ public class RecipeNullCell implements IRecipe {
             if (centerX < 2)
                 for (int x = centerX + 1; x < 3; x++)
                     for (int y = 0; y < 3; y++)
-                        if (getItemAt(inv, x, y) != null)
-                            return null;
+                        if (!getItemAt(inv, x, y).isEmpty())
+                            return ItemStack.EMPTY;
             // To the left - 1
             for (int x = 0; x < centerX - 1; x++)
                 for (int y = 0; y < 3; y++)
-                    if (getItemAt(inv, x, y) != null)
-                        return null;
+                    if (!getItemAt(inv, x, y).isEmpty())
+                        return ItemStack.EMPTY;
 
             // To the left
             if (centerX > 0) {
-                if (getItemAt(inv, centerX - 1, 0) != null)
-                    return null;
-                if (getItemAt(inv, centerX - 1, 2) != null)
-                    return null;
+                if (!getItemAt(inv, centerX - 1, 0).isEmpty())
+                    return ItemStack.EMPTY;
+                if (!getItemAt(inv, centerX - 1, 2).isEmpty())
+                    return ItemStack.EMPTY;
             }
         }
 
@@ -142,16 +142,16 @@ public class RecipeNullCell implements IRecipe {
                 // Screwdriver on top
                 if (centerY > 0) {
                     ItemStack sd = getItemAt(inv, centerX, centerY - 1);
-                    if (sd != null && sd.getItem() instanceof ItemScrewdriver) {
+                    if (!sd.isEmpty() && sd.getItem() instanceof ItemScrewdriver) {
                         RedwireType t = gnc.getTypeB();
                         boolean bundled = gnc.isBundledB();
                         if (t != null) {
                             boolean can = true;
                             if (centerY < 2)
-                                if (getItemAt(inv, centerX, centerY + 1) != null)
+                                if (!getItemAt(inv, centerX, centerY + 1).isEmpty())
                                     can = false;
                             if (centerX > 0)
-                                if (getItemAt(inv, centerX - 1, centerY) != null)
+                                if (!getItemAt(inv, centerX - 1, centerY).isEmpty())
                                     can = false;
                             if (!((IScrewdriver) sd.getItem()).damage(sd, getItemAt(inv, centerX, centerY).getCount(), null, true))
                                 can = false;
@@ -176,16 +176,16 @@ public class RecipeNullCell implements IRecipe {
                 // Screwdriver below
                 if (centerY < 2) {
                     ItemStack sd = getItemAt(inv, centerX, centerY + 1);
-                    if (sd != null && sd.getItem() instanceof ItemScrewdriver) {
+                    if (!sd.isEmpty() && sd.getItem() instanceof ItemScrewdriver) {
                         RedwireType t = gnc.getTypeA();
                         boolean bundled = gnc.isBundledA();
                         if (t != null) {
                             boolean can = true;
                             if (centerY > 0)
-                                if (getItemAt(inv, centerX, centerY - 1) != null)
+                                if (!getItemAt(inv, centerX, centerY - 1).isEmpty())
                                     can = false;
                             if (centerX > 0)
-                                if (getItemAt(inv, centerX - 1, centerY) != null)
+                                if (!getItemAt(inv, centerX - 1, centerY).isEmpty())
                                     can = false;
                             if (!((IScrewdriver) sd.getItem()).damage(sd, getItemAt(inv, centerX, centerY).getCount(), null, true))
                                 can = false;
@@ -210,7 +210,7 @@ public class RecipeNullCell implements IRecipe {
                 // Screwdriver on the left
                 if (centerX > 0) {
                     ItemStack sd = getItemAt(inv, centerX - 1, centerY);
-                    if (sd != null && sd.getItem() instanceof ItemScrewdriver) {
+                    if (!sd.isEmpty() && sd.getItem() instanceof ItemScrewdriver) {
                         RedwireType tA = gnc.getTypeA();
                         boolean bundledA = gnc.isBundledA();
                         RedwireType tB = gnc.getTypeB();
@@ -218,10 +218,10 @@ public class RecipeNullCell implements IRecipe {
                         if (tA != null || tB != null) {
                             boolean can = true;
                             if (centerY > 0)
-                                if (getItemAt(inv, centerX, centerY - 1) != null)
+                                if (!getItemAt(inv, centerX, centerY - 1).isEmpty())
                                     can = false;
                             if (centerY < 2)
-                                if (getItemAt(inv, centerX, centerY + 1) != null)
+                                if (!getItemAt(inv, centerX, centerY + 1).isEmpty())
                                     can = false;
                             int amt = 0;
                             if (tA != null && (tB == null || tB == tA))
@@ -234,7 +234,7 @@ public class RecipeNullCell implements IRecipe {
                                 can = false;
 
                             if (can) {
-                                ItemStack wire = null;
+                                ItemStack wire = ItemStack.EMPTY;
                                 if (tB != null) {
                                     wire = PartManager.getPartInfo("wire." + tB.getName() + (bundledB ? ".bundled" : "")).getStack(amt);
                                 } else {
@@ -266,7 +266,7 @@ public class RecipeNullCell implements IRecipe {
                 // Wire on top
                 if (centerY > 0 && gnc.getTypeB() == null) {
                     ItemStack wire = getItemAt(inv, centerX, centerY - 1);
-                    if (wire != null && wire.getItem() instanceof ItemPart) {
+                    if (!wire.isEmpty() && wire.getItem() instanceof ItemPart) {
                         IPart p = ((ItemPart) wire.getItem()).createPart(wire, BluePower.proxy.getPlayer(), null, null);
 
                         if (p != null && p instanceof PartRedwireFaceUninsulated) {
@@ -274,10 +274,10 @@ public class RecipeNullCell implements IRecipe {
                             boolean bundled = false;
                             boolean can = true;
                             if (centerY < 2)
-                                if (getItemAt(inv, centerX, centerY + 1) != null)
+                                if (!getItemAt(inv, centerX, centerY + 1).isEmpty())
                                     can = false;
                             if (centerX > 0)
-                                if (getItemAt(inv, centerX - 1, centerY) != null)
+                                if (!getItemAt(inv, centerX - 1, centerY).isEmpty())
                                     can = false;
 
                             if (can)
@@ -288,7 +288,7 @@ public class RecipeNullCell implements IRecipe {
                 // Wire below
                 if (centerY < 2 && gnc.getTypeA() == null) {
                     ItemStack wire = getItemAt(inv, centerX, centerY + 1);
-                    if (wire != null && wire.getItem() instanceof ItemPart) {
+                    if (!wire.isEmpty() && wire.getItem() instanceof ItemPart) {
                         IPart p = ((ItemPart) wire.getItem()).createPart(wire, BluePower.proxy.getPlayer(), null, null);
 
                         if (p != null && p instanceof PartRedwireFaceUninsulated) {
@@ -296,10 +296,10 @@ public class RecipeNullCell implements IRecipe {
                             boolean bundled = false;
                             boolean can = true;
                             if (centerY > 0)
-                                if (getItemAt(inv, centerX, centerY - 1) != null)
+                                if (!getItemAt(inv, centerX, centerY - 1).isEmpty())
                                     can = false;
                             if (centerX > 0)
-                                if (getItemAt(inv, centerX - 1, centerY) != null)
+                                if (!getItemAt(inv, centerX - 1, centerY).isEmpty())
                                     can = false;
 
                             if (can)
@@ -311,7 +311,7 @@ public class RecipeNullCell implements IRecipe {
                 if (centerY == 1 && gnc.getTypeA() == null && gnc.getTypeB() == null) {
                     ItemStack wireA = getItemAt(inv, centerX, centerY + 1);
                     ItemStack wireB = getItemAt(inv, centerX, centerY - 1);
-                    if (wireA != null && wireA.getItem() instanceof ItemPart && wireB != null && wireB.getItem() instanceof ItemPart) {
+                    if (!wireA.isEmpty() && wireA.getItem() instanceof ItemPart && !wireB.isEmpty() && wireB.getItem() instanceof ItemPart) {
                         IPart pA = ((ItemPart) wireA.getItem()).createPart(wireA, BluePower.proxy.getPlayer(), null, null);
                         IPart pB = ((ItemPart) wireB.getItem()).createPart(wireB, BluePower.proxy.getPlayer(), null, null);
 
@@ -323,7 +323,7 @@ public class RecipeNullCell implements IRecipe {
                             boolean bundledB = false;
                             boolean can = true;
                             if (centerX > 0)
-                                if (getItemAt(inv, centerX - 1, centerY) != null)
+                                if (!getItemAt(inv, centerX - 1, centerY).isEmpty())
                                     can = false;
 
                             if (can)
@@ -334,7 +334,7 @@ public class RecipeNullCell implements IRecipe {
             }
         }
 
-        return null;
+        return ItemStack.EMPTY;
     }
 
 }

@@ -90,7 +90,7 @@ public class GuiContainerBaseBP extends GuiContainerBase { //implements INEIGuiH
         return null;
     }*/
 
-   /* *//**
+    /**
      * Handles clicks while an itemstack has been dragged from the item panel. Use this to set configurable slots and the like. Changes made to the
      * stackSize of the dragged stack will be kept
      *

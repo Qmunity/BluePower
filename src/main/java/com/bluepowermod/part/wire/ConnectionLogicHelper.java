@@ -17,7 +17,9 @@ public class ConnectionLogicHelper<T extends IWorldLocation, C> {
 
     public static interface IConnectableProvider<T extends IWorldLocation, C> {
 
-        public T getConnectableAt(World world, BlockPos pos, EnumFacing face, EnumFacing side);
+        public T getConnectableAt(World world, BlockPos pos, EnumFacing side);
+
+        public T getConnectableAt(World world, BlockPos pos, EnumFacing side, EnumFacing face);
 
         public C createConnection(T a, T b, EnumFacing sideA, EnumFacing sideB, ConnectionType type);
 
@@ -47,8 +49,16 @@ public class ConnectionLogicHelper<T extends IWorldLocation, C> {
 
         // In same block
         do {
-            T dev = provider.getConnectableAt(device.getWorld(), device.getPos(), side == face.getOpposite() ? null
-                    : side, face == null ? side.getOpposite() : face);
+            T dev;
+            if (face != null) {
+                if (side == face.getOpposite()){
+                    dev = provider.getConnectableAt(device.getWorld(), device.getPos(), face);
+                }else{
+                    dev = provider.getConnectableAt(device.getWorld(), device.getPos(), side, face);
+                }
+            }else {
+                dev = provider.getConnectableAt(device.getWorld(), device.getPos(), side, side.getOpposite());
+            }
             if (dev == null || dev == device || !provider.isValidClosedCorner(dev))
                 break;
 

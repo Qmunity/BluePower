@@ -50,12 +50,12 @@ public class ItemSeedBag extends ItemBase {
     }
 
     public static ItemStack getSeedType(ItemStack seedBag) {
-        ItemStack seed = null;
+        ItemStack seed = ItemStack.EMPTY;
 
         IInventory seedBagInventory = InventoryItem.getItemInventory(seedBag, "Seed Bag", 9);
         for (int i = 0; i < seedBagInventory.getSizeInventory(); i++) {
             ItemStack is = seedBagInventory.getStackInSlot(i);
-            if (is != null) {
+            if (!is.isEmpty()) {
                 seed = is;
             }
         }
@@ -81,7 +81,7 @@ public class ItemSeedBag extends ItemBase {
         IInventory seedBagInventory = InventoryItem.getItemInventory(stack, "Seed Bag", 9);
         for (int i = 0; i < seedBagInventory.getSizeInventory(); i++) {
             ItemStack is = seedBagInventory.getStackInSlot(i);
-            if (is != null) {
+            if (!is.isEmpty()) {
                 items += is.getCount();
             }
         }
@@ -113,7 +113,7 @@ public class ItemSeedBag extends ItemBase {
         seedBagInventory.openInventory(player);
 
         ItemStack seed = getSeedType(player.getHeldItem(hand));
-        if (seed != null && seed.getItem() instanceof IPlantable) {
+        if (!seed.isEmpty() && seed.getItem() instanceof IPlantable) {
             IPlantable plant = (IPlantable) seed.getItem();
             for (int modX = -2; modX < 3; modX++) {
                 for (int modZ = -2; modZ < 3; modZ++) {
@@ -122,7 +122,7 @@ public class ItemSeedBag extends ItemBase {
                             && worldIn.isAirBlock(pos.add(modX, 1, modZ))) {
                         for (int i = 0; i < seedBagInventory.getSizeInventory(); i++) {
                             ItemStack is = seedBagInventory.getStackInSlot(i);
-                            if (is != null) {
+                            if (!is.isEmpty()) {
 
                                 Item item = is.getItem();
                                 item.onItemUse(player, worldIn, pos.add(modX, 0, modZ), hand, facing, hitX + modX, hitY, hitZ + modZ);

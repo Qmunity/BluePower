@@ -1,0 +1,24 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "textures": {
+      "up": "bluepower:blocks/machines/block_breaker_side",
+      "down": "bluepower:blocks/machines/block_breaker_side",
+      "right": "bluepower:blocks/machines/block_breaker_side",
+      "left": "bluepower:blocks/machines/block_breaker_side",
+      "front": "bluepower:blocks/machines/block_breaker_front",
+      "back": "bluepower:blocks/machines/block_breaker_back",
+      "particle": "bluepower:blocks/machines/block_breaker_side"
+    },
+    "model": "bluepower:cube",
+    "uvlock": true
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [{}],
+    "active":{
+      "true":{ "textures": {"front": "bluepower:blocks/machines/block_breaker_front_active"}},
+      "false":{"textures": {"front": "bluepower:blocks/machines/block_breaker_front"}}
+    }
+  }
+}

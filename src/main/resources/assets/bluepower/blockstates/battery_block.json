@@ -1,0 +1,30 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "textures": {
+      "up": "bluepower:blocks/machines/battery/battery_top",
+      "down": "bluepower:blocks/machines/battery/battery_bottom",
+      "side": "bluepower:blocks/machines/battery/battery_side_0",
+      "particle": "bluepower:blocks/machines/battery/battery_side_0"
+    },
+    "model": "bluepower:overlay_sided",
+    "uvlock": true
+  },
+  "variants": {
+    "normal": [
+      {"textures": {"overlay": "bluepower:blocks/machines/battery/battery_side_0"}}
+    ],
+    "inventory": [
+      {"textures": {"overlay": "bluepower:blocks/machines/battery/battery_side_0"}}
+    ],
+    "level":{
+      "0": {"textures": {"overlay": "bluepower:blocks/machines/battery/battery_side_0"}},
+      "1": {"textures": {"overlay": "bluepower:blocks/machines/battery/battery_side_1"}},
+      "2": {"textures": {"overlay": "bluepower:blocks/machines/battery/battery_side_2"}},
+      "3": {"textures": {"overlay": "bluepower:blocks/machines/battery/battery_side_3"}},
+      "4": {"textures": {"overlay": "bluepower:blocks/machines/battery/battery_side_4"}},
+      "5": {"textures": {"overlay": "bluepower:blocks/machines/battery/battery_side_5"}},
+      "6": {"textures": {"overlay": "bluepower:blocks/machines/battery/battery_side_6"}}
+    }
+  }
+}

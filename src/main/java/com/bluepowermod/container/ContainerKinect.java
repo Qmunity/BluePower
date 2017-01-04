@@ -63,7 +63,7 @@ public class ContainerKinect extends Container {
     @Override
     public ItemStack transferStackInSlot(EntityPlayer player, int par2) {
     	
-    	return null;
+    	return ItemStack.EMPTY;
      }
     
     

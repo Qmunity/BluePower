@@ -48,13 +48,13 @@ public class TileManager extends TileMachineBase implements ISidedInventory, IGu
             if (itemsAccepted > 0) {
                 if (itemsAccepted >= stack.stack.getCount()) {
                     ItemStack rejectedStack = IOHelper.insert(getTileCache(getFacingDirection()), stack.stack, from, simulate);
-                    if (rejectedStack == null || rejectedStack.getCount() != stack.stack.getCount()) {
+                    if (rejectedStack.isEmpty() || rejectedStack.getCount() != stack.stack.getCount()) {
                         if (!simulate) {
                             rejectTicker = 0;
                             sendUpdatePacket();
                         }
                     }
-                    if (rejectedStack == null) {
+                    if (rejectedStack.isEmpty()) {
                         return null;
                     } else {
                         stack.stack = rejectedStack;
@@ -66,13 +66,13 @@ public class TileManager extends TileMachineBase implements ISidedInventory, IGu
 
                 injectedStack.stack.setCount(itemsAccepted);
                 ItemStack rejectedStack = IOHelper.insert(getTileCache(getFacingDirection()), injectedStack.stack, from, simulate);
-                if (rejectedStack == null || rejectedStack.getCount() != injectedStack.stack.getCount()) {
+                if (rejectedStack.isEmpty() || rejectedStack.getCount() != injectedStack.stack.getCount()) {
                     if (!simulate) {
                         rejectTicker = 0;
                         sendUpdatePacket();
                     }
                 }
-                if (rejectedStack != null) {
+                if (!rejectedStack.isEmpty()) {
                     stack.stack.setCount(stack.stack.getCount() + rejectedStack.getCount());
                 }
             }
@@ -83,7 +83,7 @@ public class TileManager extends TileMachineBase implements ISidedInventory, IGu
 
     private int acceptedItems(ItemStack item) {
 
-        if (item == null)
+        if (item.isEmpty())
             return 0;
         int managerCount = IOHelper.getItemCount(item, this, null, fuzzySetting);
         if (mode == 1 && managerCount > 0)
@@ -111,7 +111,7 @@ public class TileManager extends TileMachineBase implements ISidedInventory, IGu
     private boolean shouldEmitRedstone() {
 
         for (ItemStack stack : inventory) {
-            if (stack != null && acceptedItems(stack) > 0)
+            if (!stack.isEmpty() && acceptedItems(stack) > 0)
                 return false;
         }
         return true;
@@ -146,7 +146,7 @@ public class TileManager extends TileMachineBase implements ISidedInventory, IGu
                 ItemStack rejectingStack = stack.copy();
                 rejectingStack.setCount(Math.min(rejectedItems, rejectingStack.getMaxStackSize()));
                 rejectingStack = IOHelper.extract(te, getFacingDirection().getOpposite(), rejectingStack, true, false, fuzzySetting);
-                if (rejectingStack != null) {
+                if (!rejectingStack.isEmpty()) {
                     this.addItemToOutputBuffer(rejectingStack, filterColor);
                 }
             }
@@ -180,7 +180,7 @@ public class TileManager extends TileMachineBase implements ISidedInventory, IGu
         super.writeToNBT(tCompound);
 
         for (int i = 0; i < 24; i++) {
-            if (inventory[i] != null) {
+            if (!inventory[i].isEmpty()) {
                 NBTTagCompound tc = new NBTTagCompound();
                 inventory[i].writeToNBT(tc);
                 tCompound.setTag("inventory" + i, tc);
@@ -229,7 +229,7 @@ public class TileManager extends TileMachineBase implements ISidedInventory, IGu
     public ItemStack decrStackSize(int slot, int amount) {
 
         ItemStack itemStack = getStackInSlot(slot);
-        if (itemStack != null) {
+        if (!itemStack.isEmpty()) {
             if (itemStack.getCount() <= amount) {
                 setInventorySlotContents(slot, ItemStack.EMPTY);
             } else {
@@ -320,7 +320,7 @@ public class TileManager extends TileMachineBase implements ISidedInventory, IGu
 
         List<ItemStack> drops = super.getDrops();
         for (ItemStack stack : inventory)
-            if (stack != null)
+            if (!stack.isEmpty())
                 drops.add(stack);
         return drops;
     }

@@ -29,7 +29,7 @@ import uk.co.qmunity.lib.part.compat.MultipartCompatibility;
 public class RedstoneProviderQmunityLib implements IRedstoneProvider {
 
     @Override
-    public IRedstoneDevice getRedstoneDeviceAt(World world, BlockPos pos, EnumFacing face, EnumFacing side) {
+    public IRedstoneDevice getRedstoneDeviceAt(World world, BlockPos pos, EnumFacing side, EnumFacing face) {
 
         ITilePartHolder holder = MultipartCompatibility.getPartHolder(world, pos);
         if (holder != null) {
@@ -65,7 +65,7 @@ public class RedstoneProviderQmunityLib implements IRedstoneProvider {
     }
 
     @Override
-    public IBundledDevice getBundledDeviceAt(World world, BlockPos pos, EnumFacing face, EnumFacing side) {
+    public IBundledDevice getBundledDeviceAt(World world, BlockPos pos, EnumFacing side, EnumFacing face) {
 
         ITilePartHolder holder = MultipartCompatibility.getPartHolder(world, pos);
         if (holder != null) {

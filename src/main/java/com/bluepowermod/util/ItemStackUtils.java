@@ -17,12 +17,11 @@
 
 package com.bluepowermod.util;
 
-import java.util.List;
-
+import com.bluepowermod.compat.CompatibilityUtils;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
-import com.bluepowermod.compat.CompatibilityUtils;
+import java.util.List;
 
 /**
  *
@@ -59,7 +58,7 @@ public class ItemStackUtils {
 
     public static boolean isScrewdriver(ItemStack item) {
 
-        if (item == null)
+        if (item.isEmpty())
             return false;
         if (item.getItem() == null)
             return false;

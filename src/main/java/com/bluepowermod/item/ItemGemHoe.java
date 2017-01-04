@@ -17,16 +17,16 @@
 
 package com.bluepowermod.item;
 
+import com.bluepowermod.init.BPCreativeTabs;
+import com.bluepowermod.reference.Refs;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemHoe;
 import net.minecraft.item.ItemStack;
 
-import com.bluepowermod.init.BPCreativeTabs;
-import com.bluepowermod.reference.Refs;
-
 public class ItemGemHoe extends ItemHoe {
 
-    public    Item    customCraftingMaterial = null;
+    public    Item    customCraftingMaterial = Items.AIR;
     protected boolean canRepair              = true;
 
     public ItemGemHoe(ToolMaterial material, String name, Item repairItem) {

@@ -189,7 +189,7 @@ public class GuiCircuitDatabaseMain extends GuiContainerBaseBP {
         }
         boolean nameDuplicatePrivate = false;
         boolean nameDuplicateServer = false;
-        if (circuitDatabase.copyInventory.getStackInSlot(0) != null) {
+        if (!circuitDatabase.copyInventory.getStackInSlot(0).isEmpty()) {
             for (ItemStack stack : circuitDatabase.stackDatabase.loadItemStacks()) {
                 if (stack.getDisplayName().equals(circuitDatabase.copyInventory.getStackInSlot(0).getDisplayName())) {
                     nameDuplicatePrivate = true;
@@ -206,8 +206,8 @@ public class GuiCircuitDatabaseMain extends GuiContainerBaseBP {
         shareOptionTab.enabledTabs[1] = !nameDuplicatePrivate;
         shareOptionTab.enabledTabs[2] = !nameDuplicateServer && !Minecraft.getMinecraft().isSingleplayer();
 
-        copyButton.enabled = circuitDatabase.copyInventory.getStackInSlot(0) != null
-                && circuitDatabase.copyInventory.getStackInSlot(1) != null
+        copyButton.enabled = !circuitDatabase.copyInventory.getStackInSlot(0).isEmpty()
+                && !circuitDatabase.copyInventory.getStackInSlot(1).isEmpty()
                 && circuitDatabase.copy(Minecraft.getMinecraft().player, circuitDatabase.copyInventory.getStackInSlot(0),
                         circuitDatabase.copyInventory.getStackInSlot(1), true);
     }

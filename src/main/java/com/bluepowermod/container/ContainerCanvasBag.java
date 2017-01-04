@@ -87,14 +87,14 @@ public class ContainerCanvasBag extends Container {
         if (par3.ordinal() != 2 || player.inventory.currentItem != par2) {
             return super.slotClick(par1, par2, par3, player);
         } else {
-            return null;
+            return ItemStack.EMPTY;
         }
     }
     
     @Override
     public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int par2) {
     
-        ItemStack itemstack = null;
+        ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = (Slot) inventorySlots.get(par2);
         
         if (slot != null && slot.getHasStack()) {
@@ -102,16 +102,16 @@ public class ContainerCanvasBag extends Container {
             itemstack = itemstack1.copy();
             
             if (par2 < 27) {
-                if (!mergeItemStack(itemstack1, 27, 63, true)) { return null; }
-            } else if (!mergeItemStack(itemstack1, 0, 27, false)) { return null; }
+                if (!mergeItemStack(itemstack1, 27, 63, true)) { return ItemStack.EMPTY; }
+            } else if (!mergeItemStack(itemstack1, 0, 27, false)) { return ItemStack.EMPTY; }
             
             if (itemstack1.getCount() == 0) {
-                slot.putStack((ItemStack) null);
+                slot.putStack(ItemStack.EMPTY);
             } else {
                 slot.onSlotChanged();
             }
             
-            if (itemstack1.getCount() == itemstack.getCount()) { return null; }
+            if (itemstack1.getCount() == itemstack.getCount()) { return ItemStack.EMPTY; }
             
             slot.onSlotChange(itemstack, itemstack1);
         }
@@ -137,7 +137,7 @@ public class ContainerCanvasBag extends Container {
                 slot = (Slot) inventorySlots.get(k);
                 itemstack1 = slot.getStack();
                 
-                if (itemstack1 != null && itemstack1.getItem() == par1ItemStack.getItem() && (!par1ItemStack.getHasSubtypes() || par1ItemStack.getItemDamage() == itemstack1.getItemDamage()) && ItemStack.areItemStackTagsEqual(par1ItemStack, itemstack1) && slot.isItemValid(par1ItemStack)) {
+                if (!itemstack1.isEmpty() && itemstack1.getItem() == par1ItemStack.getItem() && (!par1ItemStack.getHasSubtypes() || par1ItemStack.getItemDamage() == itemstack1.getItemDamage()) && ItemStack.areItemStackTagsEqual(par1ItemStack, itemstack1) && slot.isItemValid(par1ItemStack)) {
                     int l = itemstack1.getCount() + par1ItemStack.getCount();
                     
                     if (l <= par1ItemStack.getMaxStackSize()) {
@@ -172,7 +172,7 @@ public class ContainerCanvasBag extends Container {
                 slot = (Slot) inventorySlots.get(k);
                 itemstack1 = slot.getStack();
                 
-                if (itemstack1 == null && slot.isItemValid(par1ItemStack)) {
+                if (itemstack1.isEmpty() && slot.isItemValid(par1ItemStack)) {
                     if (1 < par1ItemStack.getCount()) {
                         ItemStack copy = par1ItemStack.copy();
                         copy.setCount(1);

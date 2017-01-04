@@ -108,7 +108,7 @@ public class BPCreativeTabs {
             @SideOnly(Side.CLIENT)
             public ItemStack getTabIconItem() {
 
-                return null;
+                return ItemStack.EMPTY;
             }
 
             @Override
@@ -116,7 +116,7 @@ public class BPCreativeTabs {
             public ItemStack getIconItemStack() {
 
                 ItemStack iconItem = PartManager.getPartInfo("timer").getStack();
-                if (iconItem != null) {
+                if (!iconItem.isEmpty()) {
                     return iconItem;
                 } else {
                     return new ItemStack(Blocks.STONE);
@@ -130,7 +130,7 @@ public class BPCreativeTabs {
             @SideOnly(Side.CLIENT)
             public ItemStack getTabIconItem() {
 
-                return null;
+                return ItemStack.EMPTY;
             }
 
             @Override
@@ -138,7 +138,7 @@ public class BPCreativeTabs {
             public ItemStack getIconItemStack() {
 
                 ItemStack iconItem = PartManager.getPartInfo("wire.bluestone").getStack();
-                if (iconItem != null) {
+                if (!iconItem.isEmpty()) {
                     return iconItem;
                 } else {
                     return new ItemStack(Blocks.STONE);
@@ -152,7 +152,7 @@ public class BPCreativeTabs {
             @SideOnly(Side.CLIENT)
             public ItemStack getTabIconItem() {
 
-                return null;
+                return ItemStack.EMPTY;
             }
 
             @Override
@@ -168,7 +168,7 @@ public class BPCreativeTabs {
                 ItemStack iconItem = PartManager.getPartInfo(
                         (b2 ? "fixture" : "cagelamp") + "." + MinecraftColor.VALID_COLORS[i].name().toLowerCase() + (b ? ".inverted" : ""))
                         .getStack();
-                if (iconItem != null) {
+                if (!iconItem.isEmpty()) {
                     return iconItem;
                 } else {
                     return new ItemStack(Blocks.STONE);

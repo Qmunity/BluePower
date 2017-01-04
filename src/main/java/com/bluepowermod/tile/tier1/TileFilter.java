@@ -48,7 +48,7 @@ public class TileFilter extends TileTransposer implements ISidedInventory, IGuiB
 
         boolean everythingNull = true;
         for (ItemStack invStack : inventory) {
-            if (invStack != null) {
+            if (!invStack.isEmpty()) {
                 if (ItemStackHelper.areStacksEqual(invStack, item, fuzzySetting)) {
                     return true;
                 }
@@ -73,10 +73,10 @@ public class TileFilter extends TileTransposer implements ISidedInventory, IGuiB
             EnumFacing direction = dir.getOpposite();
             boolean everythingNull = true;
             for (ItemStack filterStack : inventory) {
-                if (filterStack != null) {
+                if (!filterStack.isEmpty()) {
                     everythingNull = false;
                     ItemStack extractedStack = IOHelper.extract(tile, direction, filterStack, true, false, fuzzySetting);
-                    if (extractedStack != null) {
+                    if (!extractedStack.isEmpty()) {
                         this.addItemToOutputBuffer(extractedStack, filterColor);
                         break;
                     }
@@ -84,7 +84,7 @@ public class TileFilter extends TileTransposer implements ISidedInventory, IGuiB
             }
             if (everythingNull) {
                 ItemStack extractedStack = IOHelper.extract(tile, direction, false);
-                if (extractedStack != null) {
+                if (!extractedStack.isEmpty()) {
                     this.addItemToOutputBuffer(extractedStack, filterColor);
                 }
             }
@@ -116,7 +116,7 @@ public class TileFilter extends TileTransposer implements ISidedInventory, IGuiB
         super.writeToNBT(tCompound);
 
         for (int i = 0; i < 9; i++) {
-            if (inventory[i] != null) {
+            if (!inventory[i].isEmpty()) {
                 NBTTagCompound tc = new NBTTagCompound();
                 inventory[i].writeToNBT(tc);
                 tCompound.setTag("inventory" + i, tc);
@@ -145,13 +145,13 @@ public class TileFilter extends TileTransposer implements ISidedInventory, IGuiB
     public ItemStack decrStackSize(int slot, int amount) {
 
         ItemStack itemStack = getStackInSlot(slot);
-        if (itemStack != null) {
+        if (!itemStack.isEmpty()) {
             if (itemStack.getCount() <= amount) {
-                setInventorySlotContents(slot, null);
+                setInventorySlotContents(slot, ItemStack.EMPTY);
             } else {
                 itemStack = itemStack.splitStack(amount);
                 if (itemStack.getCount() == 0) {
-                    setInventorySlotContents(slot, null);
+                    setInventorySlotContents(slot, ItemStack.EMPTY);
                 }
             }
         }
@@ -162,8 +162,8 @@ public class TileFilter extends TileTransposer implements ISidedInventory, IGuiB
     @Override
     public ItemStack removeStackFromSlot(int i) {
         ItemStack itemStack = getStackInSlot(i);
-        if (itemStack != null) {
-            setInventorySlotContents(i, null);
+        if (!itemStack.isEmpty()) {
+            setInventorySlotContents(i, ItemStack.EMPTY);
         }
         return itemStack;
     }
@@ -214,7 +214,7 @@ public class TileFilter extends TileTransposer implements ISidedInventory, IGuiB
 
         List<ItemStack> drops = super.getDrops();
         for (ItemStack stack : inventory)
-            if (stack != null)
+            if (!stack.isEmpty())
                 drops.add(stack);
         return drops;
     }

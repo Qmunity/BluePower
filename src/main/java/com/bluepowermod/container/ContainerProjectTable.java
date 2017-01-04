@@ -121,7 +121,7 @@ public class ContainerProjectTable extends Container {
 
         for (int i = 0; i < 9; i++) {
             ItemStack stack = craftingGrid.getStackInSlot(i);
-            if (stack != null && stack.getCount() == 1 && extractStackFromTable(projectTable, stack, true) == null
+            if (!stack.isEmpty() && stack.getCount() == 1 && extractStackFromTable(projectTable, stack, true) == null
                     && (!stack.getItem().hasContainerItem(stack) )) //|| stack.getItem().doesContainerItemLeaveCraftingGrid(stack)
                 return true;
         }
@@ -139,7 +139,7 @@ public class ContainerProjectTable extends Container {
             if (slot.getHasStack()) {
                 mergeItemStack(slot.getStack(), 10, 28, false);
                 if (slot.getStack().getCount() <= 0)
-                    slot.putStack(null);
+                    slot.putStack(ItemStack.EMPTY);
             }
         }
     }
@@ -153,33 +153,33 @@ public class ContainerProjectTable extends Container {
         if (!isRetrying)
             itemsCrafted = 0;
 
-        ItemStack itemstack = null;
+        ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = (Slot) inventorySlots.get(par2);
         if (slot != null && slot.getHasStack()) {
             ItemStack itemstack1 = slot.getStack();
             itemstack = itemstack1.copy();
             if (par2 < 9) {
                 if (!mergeItemStack(itemstack1, 10, 28, false))
-                    return null;
+                    return ItemStack.EMPTY;
             } else if (par2 == 9) {
                 if (!mergeItemStack(itemstack1, 28, 64, false))
-                    return null;
+                    return ItemStack.EMPTY;
             } else if (par2 < 28) {
                 if (!mergeItemStack(itemstack1, 28, 64, false))
-                    return null;
+                    return ItemStack.EMPTY;
             } else {
                 if (!mergeItemStack(itemstack1, 10, 28, false))
-                    return null;
+                    return ItemStack.EMPTY;
             }
             if (itemstack1.getCount() == 0) {
-                slot.putStack(null);
+                slot.putStack(ItemStack.EMPTY);
             } else {
                 slot.onSlotChanged();
             }
             if (itemstack1.getCount() != itemstack.getCount()) {
                 slot.onSlotChange(itemstack, itemstack1);
             } else {
-                return null;
+                return ItemStack.EMPTY;
             }
         }
         return itemstack;

@@ -47,7 +47,7 @@ public class TileRegulator extends TileMachineBase implements ISidedInventory, I
         if (!world.isRemote && isBufferEmpty()) {
             boolean ratiosMatch = true;
             for (int i = 0; i < 9; i++) {
-                if (inventory[i] != null) {
+                if (!inventory[i].isEmpty()) {
                     int inputFilterItems = getItemsInSection(inventory[i], EnumSection.INPUT_FILTER);
                     int bufferItems = getItemsInSection(inventory[i], EnumSection.BUFFER);
                     if (bufferItems < inputFilterItems) {
@@ -71,12 +71,12 @@ public class TileRegulator extends TileMachineBase implements ISidedInventory, I
                             accessibleSlots[i] = i;
                     }
                     for (int i = 18; i < 27; i++) {
-                        if (inventory[i] != null) {
+                        if (!inventory[i].isEmpty()) {
                             int outputFilterItems = getItemsInSection(inventory[i], EnumSection.OUTPUT_FILTER);
                             int supplyingInvCount = 0;
                             for (int slot : accessibleSlots) {
                                 ItemStack stackInSlot = inv.getStackInSlot(slot);
-                                if (stackInSlot != null && ItemStackHelper.areStacksEqual(stackInSlot, inventory[i], fuzzySetting)
+                                if (!stackInSlot.isEmpty() && ItemStackHelper.areStacksEqual(stackInSlot, inventory[i], fuzzySetting)
                                         && IOHelper.canInsertItemToInventory(inv, inventory[i], slot, getFacingDirection().ordinal())) {
                                     supplyingInvCount += stackInSlot.getCount();
                                 }
@@ -92,10 +92,10 @@ public class TileRegulator extends TileMachineBase implements ISidedInventory, I
                                 // supply the
                                 // inventory from
                                 // the buffer.
-                                if (bufferItems != null) {
+                                if (!bufferItems.isEmpty()) {
                                     ItemStack remainder = IOHelper.insert(inv, bufferItems, getFacingDirection().ordinal(), false);// insert into
                                                                                                                                    // supplying inv.
-                                    if (remainder != null) {
+                                    if (!remainder.isEmpty()) {
                                         IOHelper.insert(this, remainder, null, false);// when not every item can be supplied, return
                                                                                                         // those to the buffer.
                                     }
@@ -127,7 +127,7 @@ public class TileRegulator extends TileMachineBase implements ISidedInventory, I
     private boolean isSatisfied() {
 
         IInventory inv = IOHelper.getInventoryForTE(getTileCache(getOutputDirection()));
-        if (inv != null) {
+        if (!inv.isEmpty()) {
             int[] accessibleSlots;
             if (inv instanceof ISidedInventory) {
                 accessibleSlots = ((ISidedInventory) inv).getSlotsForFace(getFacingDirection());
@@ -138,13 +138,13 @@ public class TileRegulator extends TileMachineBase implements ISidedInventory, I
             }
             boolean everythingNull = true;
             for (int i = 18; i < 27; i++) {
-                if (inventory[i] != null) {
+                if (!inventory[i].isEmpty()) {
                     everythingNull = false;
                     int outputFilterItems = getItemsInSection(inventory[i], EnumSection.OUTPUT_FILTER);
                     int supplyingInvCount = 0;
                     for (int slot : accessibleSlots) {
                         ItemStack stackInSlot = inv.getStackInSlot(slot);
-                        if (stackInSlot != null && ItemStackHelper.areStacksEqual(stackInSlot, inventory[i], fuzzySetting)
+                        if (!stackInSlot.isEmpty() && ItemStackHelper.areStacksEqual(stackInSlot, inventory[i], fuzzySetting)
                                 && IOHelper.canInsertItemToInventory(inv, inventory[i], slot, getFacingDirection().ordinal())) {
                             supplyingInvCount += stackInSlot.getCount();
                         }
@@ -162,7 +162,7 @@ public class TileRegulator extends TileMachineBase implements ISidedInventory, I
 
         // Check in output filter for every slot and look if the items are present in the buffer.
         for (int i = 0; i < 9; i++) {
-            if (inventory[i] != null) {
+            if (!inventory[i].isEmpty()) {
                 int inputFilterItems = getItemsInSection(inventory[i], EnumSection.INPUT_FILTER);
                 int bufferItems = getItemsInSection(inventory[i], EnumSection.BUFFER);
                 if (bufferItems >= inputFilterItems) {
@@ -186,22 +186,22 @@ public class TileRegulator extends TileMachineBase implements ISidedInventory, I
 
             ItemStack acceptedStack = stack.stack.splitStack(Math.min(allowedItems, stack.stack.getCount()));
 
-            if (acceptedStack != null && acceptedStack.getCount() > 0) {
+            if (!acceptedStack.isEmpty() && acceptedStack.getCount() > 0) {
                 for (int i = EnumSection.INPUT_FILTER.ordinal() * 9; i < EnumSection.INPUT_FILTER.ordinal() * 9 + 9; i++) {
-                    if (inventory[i] != null && ItemStackHelper.areStacksEqual(acceptedStack, inventory[i], fuzzySetting)) {
+                    if (!inventory[i].isEmpty() && ItemStackHelper.areStacksEqual(acceptedStack, inventory[i], fuzzySetting)) {
                         //TODO Check this as had unknown ordinal
                         acceptedStack = IOHelper.insert(this, acceptedStack, EnumSection.BUFFER.ordinal() * 9 + i, 0, simulate);
 
-                        if (acceptedStack == null) {
+                        if (acceptedStack.isEmpty()) {
                             break;
                         }
                     }
                 }
 
-                if (acceptedStack != null && acceptedStack.getCount() != 0) {
+                if (!acceptedStack.isEmpty() && acceptedStack.getCount() != 0) {
                     //TODO Check this as had unknown ordinal
                     ItemStack remainder = IOHelper.insert(this, acceptedStack, 0, simulate);
-                    if (remainder != null) {
+                    if (!remainder.isEmpty()) {
                         stack.stack.setCount(stack.stack.getCount() + remainder.getCount());
                     }
                 }
@@ -223,7 +223,7 @@ public class TileRegulator extends TileMachineBase implements ISidedInventory, I
 
         int count = 0;
         for (int i = section.ordinal() * 9; i < section.ordinal() * 9 + 9; i++) {
-            if (inventory[i] != null && ItemStackHelper.areStacksEqual(type, inventory[i], fuzzySetting))
+            if (!inventory[i].isEmpty() && ItemStackHelper.areStacksEqual(type, inventory[i], fuzzySetting))
                 count += inventory[i].getCount();
         }
         return count;
@@ -246,7 +246,7 @@ public class TileRegulator extends TileMachineBase implements ISidedInventory, I
 
         List<ItemStack> drops = super.getDrops();
         for (int i = 9; i < 18; i++) {
-            if (inventory[i] != null)
+            if (!inventory[i].isEmpty())
                 drops.add(inventory[i]);
         }
         return drops;
@@ -263,7 +263,7 @@ public class TileRegulator extends TileMachineBase implements ISidedInventory, I
 
         NBTTagList tagList = new NBTTagList();
         for (int currentIndex = 0; currentIndex < inventory.length; ++currentIndex) {
-            if (inventory[currentIndex] != null) {
+            if (!inventory[currentIndex].isEmpty()) {
                 NBTTagCompound tagCompound = new NBTTagCompound();
                 tagCompound.setByte("Slot", (byte) currentIndex);
                 inventory[currentIndex].writeToNBT(tagCompound);
@@ -310,13 +310,13 @@ public class TileRegulator extends TileMachineBase implements ISidedInventory, I
     public ItemStack decrStackSize(int slot, int amount) {
 
         ItemStack itemStack = getStackInSlot(slot);
-        if (itemStack != null) {
+        if (!itemStack.isEmpty()) {
             if (itemStack.getCount() <= amount) {
-                setInventorySlotContents(slot, null);
+                setInventorySlotContents(slot, ItemStack.EMPTY);
             } else {
                 itemStack = itemStack.splitStack(amount);
                 if (itemStack.getCount() == 0) {
-                    setInventorySlotContents(slot, null);
+                    setInventorySlotContents(slot, ItemStack.EMPTY);
                 }
             }
         }
@@ -327,8 +327,8 @@ public class TileRegulator extends TileMachineBase implements ISidedInventory, I
     @Override
     public ItemStack removeStackFromSlot(int i) {
         ItemStack itemStack = getStackInSlot(i);
-        if (itemStack != null) {
-            setInventorySlotContents(i, null);
+        if (!itemStack.isEmpty()) {
+            setInventorySlotContents(i, ItemStack.EMPTY);
         }
         return itemStack;
     }

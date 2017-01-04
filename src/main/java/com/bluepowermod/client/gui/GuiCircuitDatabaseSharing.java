@@ -99,14 +99,14 @@ public class GuiCircuitDatabaseSharing extends GuiCircuitTable {
 
     public ItemStack getCurrentDeletingTemplate() {
 
-        return curDeletingTemplate == -1 ? null : inventorySlots.getSlot(curDeletingTemplate).getStack();
+        return curDeletingTemplate == -1 ? ItemStack.EMPTY : inventorySlots.getSlot(curDeletingTemplate).getStack();
     }
 
     @Override
     protected boolean shouldDisplayRed(ItemStack stack) {
 
         if ((circuitDatabase.clientCurrentTab == 1 || circuitDatabase.clientCurrentTab == 2)
-                && circuitDatabase.copyInventory.getStackInSlot(1) != null) {
+                && !circuitDatabase.copyInventory.getStackInSlot(1).isEmpty()) {
             return !circuitDatabase.copy(Minecraft.getMinecraft().player, stack, circuitDatabase.copyInventory.getStackInSlot(1), true);
         } else {
             return false;

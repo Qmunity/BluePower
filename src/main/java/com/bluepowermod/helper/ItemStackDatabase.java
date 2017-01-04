@@ -101,7 +101,7 @@ public class ItemStackDatabase {
                         } else {
                             BluePower.log.error("Couldn't retrieve an itemstack with item id: " + tag.getShort("id"));
                             Item item = Item.REGISTRY.getObject(new ResourceLocation(tag.getString("owner"), tag.getString("name")));
-                            if (item != null) {
+                            if (item != null && item != Items.AIR) {
                                 ItemStack backupStack = new ItemStack(item, stack.getCount(), tag.getShort("Damage"));
                                 if (stack.hasTagCompound()) {
                                     backupStack.setTagCompound(stack.getTagCompound());

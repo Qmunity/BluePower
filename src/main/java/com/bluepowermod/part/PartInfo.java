@@ -110,7 +110,7 @@ public class PartInfo {
     @SideOnly(Side.CLIENT)
     public void registerRenderer() {
 
-       // MinecraftForgeClient.registerItemRenderer(item, RenderPartItem.instance);
+       //MinecraftForgeClient.registerItemRenderer(item, RenderPartItem.instance);
     }
 
 }

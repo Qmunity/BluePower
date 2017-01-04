@@ -42,7 +42,7 @@ public abstract class ContainerGhosts extends Container {
         
         if (clickTypeIn.ordinal() == 2) {
             if (((IPhantomSlot) slot).canAdjust()) {
-                slot.putStack(null);
+                slot.putStack(ItemStack.EMPTY);
             }
         } else if (clickTypeIn.ordinal() == 0 || clickTypeIn.ordinal() == 1) {
             InventoryPlayer playerInv = player.inventory;
@@ -78,7 +78,7 @@ public abstract class ContainerGhosts extends Container {
      */
     public boolean canStacksMerge(ItemStack stack1, ItemStack stack2) {
     
-        if (stack1 == null || stack2 == null) return false;
+        if (stack1.isEmpty() || stack2.isEmpty()) return false;
         if (!stack1.isItemEqual(stack2)) return false;
         if (!ItemStack.areItemStackTagsEqual(stack1, stack2)) return false;
         return true;
@@ -106,8 +106,8 @@ public abstract class ContainerGhosts extends Container {
         
         stackSlot.setCount(stackSize);
         
-        if (stackSlot.getCount() <= 0) {
-            slot.putStack((ItemStack) null);
+        if (!stackSlot.isEmpty() && stackSlot.getCount() <= 0) {
+            slot.putStack(ItemStack.EMPTY);
         }
     }
     

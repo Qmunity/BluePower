@@ -26,6 +26,7 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.monster.*;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Enchantments;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -61,8 +62,8 @@ public class BPEventHandler {
     @SubscribeEvent
     public void onAnvilEvent(AnvilUpdateEvent event) {
 
-        if (event.getLeft() != null && event.getLeft().getItem() == BPItems.screwdriver) {
-            if (event.getRight() != null && event.getRight().getItem() == Items.ENCHANTED_BOOK) {
+        if (!event.getLeft().isEmpty() && event.getLeft().getItem() == BPItems.screwdriver) {
+            if (!event.getRight().isEmpty() && event.getRight().getItem() == Items.ENCHANTED_BOOK) {
                 if (EnchantmentHelper.getEnchantments(event.getRight()).get(Enchantments.SILK_TOUCH) != null) {
                     event.setOutput(new ItemStack(BPItems.silky_screwdriver, 1, event.getLeft().getItemDamage()));
                     event.setCost(20);
@@ -76,7 +77,7 @@ public class BPEventHandler {
 
         if (event.getEntityPlayer().capabilities.isCreativeMode) {
             ItemStack heldItem = event.getEntityPlayer().getHeldItem(event.getHand());
-            if (heldItem != null && heldItem.getItem() instanceof ItemSickle) {
+            if (!heldItem.isEmpty() && heldItem.getItem() instanceof ItemSickle) {
                 heldItem.getItem().onBlockDestroyed(heldItem, event.getWorld(), event.getWorld().getBlockState(event.getPos()), event.getPos(), event.getEntityPlayer());
             }
         }
@@ -89,15 +90,15 @@ public class BPEventHandler {
         ItemStack pickUp = event.getItem().getEntityItem();
         if (!(player.openContainer instanceof ContainerSeedBag)) {
             for (ItemStack is : player.inventory.mainInventory) {
-                if (is != null && is.getItem() instanceof ItemSeedBag) {
+                if (!is.isEmpty() && is.getItem() instanceof ItemSeedBag) {
                     ItemStack seedType = ItemSeedBag.getSeedType(is);
-                    if (seedType != null && seedType.isItemEqual(pickUp)) {
+                    if (!seedType.isEmpty() && seedType.isItemEqual(pickUp)) {
                         InventoryItem inventory = InventoryItem.getItemInventory(is, "Seed Bag", 9);
                         inventory.openInventory(event.getEntityPlayer());
                         ItemStack pickedUp = TileEntityHopper.putStackInInventoryAllSlots(null, inventory, pickUp, null);
                         inventory.closeInventory(is);
 
-                        if (pickedUp == null) {
+                        if (pickedUp.isEmpty()) {
                             event.setResult(Event.Result.ALLOW);
                             event.getItem().setDead();
                             return;
@@ -126,7 +127,7 @@ public class BPEventHandler {
             if (entitySource.getEntity() instanceof EntityPlayer) {
                 EntityPlayer killer = (EntityPlayer) entitySource.getEntity();
 
-                if (killer.inventory.getCurrentItem() != null) {
+                if (!killer.inventory.getCurrentItem().isEmpty()) {
                     if (EnchantmentHelper.getEnchantments(killer.inventory.getCurrentItem()).containsKey(BPEnchantments.disjunction)) {
                         if (event.getEntityLiving() instanceof EntityEnderman || event.getEntityLiving() instanceof EntityDragon) {
                             int level = EnchantmentHelper.getEnchantmentLevel(BPEnchantments.disjunction, killer.inventory.getCurrentItem());
@@ -151,7 +152,7 @@ public class BPEventHandler {
             if (entitySource.getEntity() instanceof EntityPlayer) {
                 EntityPlayer killer = (EntityPlayer) entitySource.getEntity();
 
-                if (killer.inventory.getCurrentItem() != null) {
+                if (!killer.inventory.getCurrentItem().isEmpty()) {
                     if (EnchantmentHelper.getEnchantments(killer.inventory.getCurrentItem()).containsKey(BPEnchantments.vorpal)) {
                         int level = EnchantmentHelper.getEnchantmentLevel(BPEnchantments.vorpal, killer.inventory.getCurrentItem());
 
@@ -209,7 +210,7 @@ public class BPEventHandler {
 
         if (ClientProxy.getOpenedGui() instanceof GuiCircuitDatabaseSharing) {
             ItemStack deletingStack = ((GuiCircuitDatabaseSharing) ClientProxy.getOpenedGui()).getCurrentDeletingTemplate();
-            if (deletingStack != null && deletingStack == event.getItemStack()) {
+            if (!deletingStack.isEmpty() && deletingStack == event.getItemStack()) {
                 event.getToolTip().add(I18n.format("gui.circuitDatabase.info.sneakClickToConfirmDeleting"));
             } else {
                 event.getToolTip().add(I18n.format("gui.circuitDatabase.info.sneakClickToDelete"));
@@ -221,7 +222,7 @@ public class BPEventHandler {
     public void onCrafting(PlayerEvent.ItemCraftedEvent event) {
 
         Item item = event.crafting.getItem();
-        if (item == null)
+        if (item == Item.getItemFromBlock(Blocks.AIR))
             return;
 
         if (item.equals(BPItems.blue_doped_wafer) || item.equals(BPItems.red_doped_wafer)) {

@@ -64,23 +64,23 @@ public class ContainerBuffer extends Container {
     @Override
     public ItemStack transferStackInSlot(EntityPlayer player, int par2) {
     
-        ItemStack itemstack = null;
+        ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = (Slot) inventorySlots.get(par2);
         if (slot != null && slot.getHasStack()) {
             ItemStack itemstack1 = slot.getStack();
             itemstack = itemstack1.copy();
             if (par2 < 20) {
-                if (!mergeItemStack(itemstack1, 20, 56, true)) return null;
-            } else if (!mergeItemStack(itemstack1, 0, 20, false)) { return null; }
+                if (!mergeItemStack(itemstack1, 20, 56, true)) return ItemStack.EMPTY;
+            } else if (!mergeItemStack(itemstack1, 0, 20, false)) { return ItemStack.EMPTY; }
             if (itemstack1.getCount() == 0) {
-                slot.putStack(null);
+                slot.putStack(ItemStack.EMPTY);
             } else {
                 slot.onSlotChanged();
             }
             if (itemstack1.getCount() != itemstack.getCount()) {
                 slot.onSlotChange(itemstack, itemstack1);
             } else {
-                return null;
+                return ItemStack.EMPTY;
             }
         }
         return itemstack;

@@ -78,7 +78,7 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
             if (IOHelper.canInterfaceWith(getTileCache(getOutputDirection()), getFacingDirection())) {
                 ItemStack returnedStack = IOHelper.insert(getTileCache(getOutputDirection()), tubeStack.stack, getFacingDirection(), tubeStack.color,
                         false);
-                if (returnedStack == null) {
+                if (returnedStack.isEmpty()) {
                     iterator.remove();
                     markDirty();
                     if (!ejectionScheduled)

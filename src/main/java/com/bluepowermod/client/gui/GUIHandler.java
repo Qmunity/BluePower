@@ -61,7 +61,7 @@ public class GUIHandler implements IGuiHandler {
             }
             break;
         case CANVAS_BAG:
-            if (player.getHeldItemMainhand() != null && player.getHeldItemMainhand().getItem() instanceof ItemCanvasBag) {
+            if (!player.getHeldItemMainhand().isEmpty() && player.getHeldItemMainhand().getItem() instanceof ItemCanvasBag) {
                 return new ContainerCanvasBag(player.getHeldItemMainhand(), player.inventory, InventoryItem.getItemInventory(player,
                         player.getHeldItemMainhand(), "Canvas Bag", 27));
             }
@@ -69,18 +69,18 @@ public class GUIHandler implements IGuiHandler {
         case CPU:
             return new ContainerCPU(player.inventory, (TileCPU) ent);
         case MONITOR:
-            if (player.getHeldItemMainhand() != null && player.getHeldItemMainhand().getItem() instanceof ItemScrewdriver) {
+            if (!player.getHeldItemMainhand().isEmpty() && player.getHeldItemMainhand().getItem() instanceof ItemScrewdriver) {
                 return null;
             }
             return new ContainerMonitor(player.inventory, (TileMonitor) ent);
         case DISK_DRIVE: // TODO: this conditional will always be false (for fabricator77)
-            if (player.getHeldItemMainhand() != null && player.getHeldItemMainhand().getItem() instanceof ItemScrewdriver
+            if (!player.getHeldItemMainhand().isEmpty() && player.getHeldItemMainhand().getItem() instanceof ItemScrewdriver
             && player.getHeldItemMainhand().getItem() instanceof ItemFloppyDisk) {
                 return null;
             }
             return new ContainerDiskDrive(player.inventory, (TileDiskDrive) ent);
         case IO_EXPANDER:
-            if (player.getHeldItemMainhand() != null && player.getHeldItemMainhand().getItem() instanceof ItemScrewdriver) {
+            if (!player.getHeldItemMainhand().isEmpty() && player.getHeldItemMainhand().getItem() instanceof ItemScrewdriver) {
                 return null;
             }
             return new ContainerIOExpander(player.inventory, (TileIOExpander) ent);
@@ -134,12 +134,12 @@ public class GUIHandler implements IGuiHandler {
         case SORTING_MACHINE:
             return new GuiSortingMachine(player.inventory, (TileSortingMachine) ent);
         case SEEDBAG:
-            if (player.getHeldItemMainhand() != null && player.getHeldItemMainhand().getItem() instanceof ItemSeedBag) {
+            if (!player.getHeldItemMainhand().isEmpty() && player.getHeldItemMainhand().getItem() instanceof ItemSeedBag) {
                 return new GuiSeedBag(player.getHeldItemMainhand(), player.inventory, InventoryItem.getItemInventory(player,
                         player.getHeldItemMainhand(), BPItems.seed_bag.getUnlocalizedName(), 9));
             }
         case CANVAS_BAG:
-            if (player.getHeldItemMainhand() != null && player.getHeldItemMainhand().getItem() instanceof ItemCanvasBag) {
+            if (!player.getHeldItemMainhand().isEmpty() && player.getHeldItemMainhand().getItem() instanceof ItemCanvasBag) {
                 return new GuiCanvasBag(player.getHeldItemMainhand(), player.inventory, InventoryItem.getItemInventory(player,
                         player.getHeldItemMainhand(), BPItems.canvas_bag.getUnlocalizedName(), 27));
             }
@@ -147,18 +147,18 @@ public class GUIHandler implements IGuiHandler {
         case CPU:
             return new GuiCPU(player.inventory, (TileCPU) ent);
         case MONITOR:
-            if (player.getHeldItemMainhand() != null && player.getHeldItemMainhand().getItem() instanceof ItemScrewdriver) {
+            if (!player.getHeldItemMainhand().isEmpty() && player.getHeldItemMainhand().getItem() instanceof ItemScrewdriver) {
                 return null;
             }
             return new GuiMonitor(player.inventory, (TileMonitor) ent);
         case DISK_DRIVE: // TODO: this conditional will always be false (for fabricator77)
-            if (player.getHeldItemMainhand() != null && player.getHeldItemMainhand().getItem() instanceof ItemScrewdriver
+            if (!player.getHeldItemMainhand().isEmpty() && player.getHeldItemMainhand().getItem() instanceof ItemScrewdriver
             && player.getHeldItemMainhand().getItem() instanceof ItemFloppyDisk) {
                 return null;
             }
             return new GuiDiskDrive(player.inventory, (TileDiskDrive) ent);
         case IO_EXPANDER:
-            if (player.getHeldItemMainhand() != null && player.getHeldItemMainhand().getItem() instanceof ItemScrewdriver) {
+            if (!player.getHeldItemMainhand().isEmpty() && player.getHeldItemMainhand().getItem() instanceof ItemScrewdriver) {
                 return null;
             }
             return new GuiIOExpander(player.inventory, (TileIOExpander) ent);

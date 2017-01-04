@@ -57,9 +57,7 @@ public class TileEngine extends TileMachineBase{
 			}
 			
 		}
-		
-		
-		
+
 		isActive = true;
 	}
 

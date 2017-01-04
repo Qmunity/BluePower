@@ -1,0 +1,18 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "textures": {
+      "up": "bluepower:blocks/machines/circuit_table_top",
+      "down": "bluepower:blocks/machines/circuit_table_bottom",
+      "front": "bluepower:blocks/machines/circuit_table_front",
+      "side": "bluepower:blocks/machines/circuit_table_side",
+      "particle": "bluepower:blocks/machines/circuit_table_side"
+    },
+    "model": "bluepower:cube_front",
+    "uvlock": true
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [{}]
+  }
+}

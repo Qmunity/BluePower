@@ -37,18 +37,18 @@ public class SlotSeedBag extends Slot {
         itemstack = itemstack.copy();
         itemstack.setCount(1);
         if (itemstack.getItem() instanceof ItemSeeds) {
-            ItemStack seedType = null;
+            ItemStack seedType = ItemStack.EMPTY;
             
             for (int i = 0; i < this.inventory.getSizeInventory(); i++) {
                 ItemStack is = this.inventory.getStackInSlot(i);
-                if (is != null) {
+                if (!is.isEmpty()) {
                     seedType = is.copy();
                     seedType.setCount(1);
                     break;
                 }
             }
             
-            if (seedType == null) {
+            if (seedType.isEmpty()) {
                 return true;
             } else {
                 return ItemStack.areItemStacksEqual(itemstack, seedType);
