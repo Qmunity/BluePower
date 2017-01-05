@@ -31,18 +31,18 @@ public class TileRetriever extends TileFilter implements IFuzzyRetrieving {
             PneumaticTube tube = MultipartCompatibility.getPart(world, pos.offset(getFacingDirection()), PneumaticTube.class);
             if (tube != null) {
                 boolean everythingNull = true;
-                for (int i = 0; i < inventory.length; i++) {
+                for (int i = 0; i < inventory.size(); i++) {
                     if (mode == 1 || slotIndex == i) {
-                        ItemStack stack = inventory[i];
+                        ItemStack stack = inventory.get(i);
                         if (!stack.isEmpty()) {
                             if (tube.getLogic().retrieveStack(this, getFacingDirection(), stack)) {
                                 if (mode == 0) {
-                                    if (++slotIndex >= inventory.length)
+                                    if (++slotIndex >= inventory.size())
                                         slotIndex = 0;
                                     while (slotIndex != i) {
-                                        if (!inventory[slotIndex].isEmpty())
+                                        if (!inventory.get(slotIndex).isEmpty())
                                             break;
-                                        if (++slotIndex >= inventory.length)
+                                        if (++slotIndex >= inventory.size())
                                             slotIndex = 0;
                                     }
                                 }

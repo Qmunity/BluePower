@@ -1,0 +1,25 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "textures": {
+      "side": "bluepower:blocks/machines/transposer_side",
+      "up": "#side",
+      "down": "#side",
+      "right": "#side",
+      "left": "#side",
+      "front": "bluepower:blocks/machines/transposer_front",
+      "back": "bluepower:blocks/machines/transposer_back",
+      "particle": "#side"
+    },
+    "model": "bluepower:cube",
+    "uvlock": true
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [{}],
+    "active":{
+      "true":{"textures": {"side": "bluepower:blocks/machines/transposer_side_active"}},
+      "false":{"textures": {"side": "bluepower:blocks/machines/transposer_side"}}
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "textures": {
+      "side": "bluepower:blocks/machines/ejector_side",
+      "up": "#side",
+      "down": "#side",
+      "right": "bluepower:blocks/machines/ejector_side_0",
+      "left": "bluepower:blocks/machines/ejector_side_0",
+      "front": "bluepower:blocks/machines/ejector_front",
+      "back": "bluepower:blocks/machines/ejector_back",
+      "particle": "bluepower:blocks/machines/ejector_side"
+    },
+    "model": "bluepower:cube",
+    "uvlock": true
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [{}],
+    "active":{
+      "true":{"textures": {"side": "bluepower:blocks/machines/ejector_side_active"}},
+      "false":{"textures": {"side": "bluepower:blocks/machines/ejector_side"}}
+    }
+  }
+}

@@ -19,6 +19,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.NonNullList;
 
 import java.util.List;
 
@@ -29,7 +30,7 @@ import java.util.List;
  */
 public class TileFilter extends TileTransposer implements ISidedInventory, IGuiButtonSensitive {
 
-    protected final ItemStack[] inventory = new ItemStack[9];
+    protected final NonNullList<ItemStack> inventory = NonNullList.withSize(9, ItemStack.EMPTY);
     public TubeColor filterColor = TubeColor.NONE;
     public int fuzzySetting;
 
@@ -101,7 +102,7 @@ public class TileFilter extends TileTransposer implements ISidedInventory, IGuiB
 
         for (int i = 0; i < 9; i++) {
             NBTTagCompound tc = tCompound.getCompoundTag("inventory" + i);
-            inventory[i] = new ItemStack(tc);
+            inventory.set(i, new ItemStack(tc));
         }
         filterColor = TubeColor.values()[tCompound.getByte("filterColor")];
         fuzzySetting = tCompound.getByte("fuzzySetting");
@@ -116,11 +117,9 @@ public class TileFilter extends TileTransposer implements ISidedInventory, IGuiB
         super.writeToNBT(tCompound);
 
         for (int i = 0; i < 9; i++) {
-            if (!inventory[i].isEmpty()) {
                 NBTTagCompound tc = new NBTTagCompound();
-                inventory[i].writeToNBT(tc);
+                inventory.get(i).writeToNBT(tc);
                 tCompound.setTag("inventory" + i, tc);
-            }
         }
 
         tCompound.setByte("filterColor", (byte) filterColor.ordinal());
@@ -132,13 +131,13 @@ public class TileFilter extends TileTransposer implements ISidedInventory, IGuiB
     @Override
     public int getSizeInventory() {
 
-        return inventory.length;
+        return inventory.size();
     }
 
     @Override
     public ItemStack getStackInSlot(int i) {
 
-        return inventory[i];
+        return inventory.get(i);
     }
 
     @Override
@@ -170,7 +169,7 @@ public class TileFilter extends TileTransposer implements ISidedInventory, IGuiB
     @Override
     public void setInventorySlotContents(int i, ItemStack itemStack) {
 
-        inventory[i] = itemStack;
+        inventory.set(i, itemStack);
     }
 
     @Override
@@ -258,7 +257,7 @@ public class TileFilter extends TileTransposer implements ISidedInventory, IGuiB
     //Todo Fields
     @Override
     public boolean isEmpty() {
-        return inventory.length == 0;
+        return inventory.size() == 0;
     }
 
     @Override

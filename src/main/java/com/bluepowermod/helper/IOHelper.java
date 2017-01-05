@@ -97,7 +97,7 @@ public class IOHelper {
     public static int[] getAccessibleSlotsForInventory(IInventory inv, EnumFacing side) {
 
         int[] accessibleSlots;
-        if (!inv.isEmpty()) {
+        if (inv != null) {
             if (inv instanceof ISidedInventory) {
                 accessibleSlots = ((ISidedInventory) inv).getSlotsForFace(side);
             } else {

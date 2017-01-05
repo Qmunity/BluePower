@@ -32,7 +32,7 @@ import java.util.List;
  */
 public class TileCircuitTable extends TileBase implements IInventory, IGuiButtonSensitive, IGUITextFieldSensitive {
 
-    protected NonNullList<ItemStack> inventory = NonNullList.withSize(19, ItemStack.EMPTY);
+    protected NonNullList<ItemStack> inventory = NonNullList.withSize(24, ItemStack.EMPTY);
     public final InventoryBasic circuitInventory = new InventoryBasic("circuitInventory", false, 24);
     public int slotsScrolled;
     private String textboxString = "";
@@ -132,7 +132,7 @@ public class TileCircuitTable extends TileBase implements IInventory, IGuiButton
         super.readFromNBT(tag);
 
         NBTTagList tagList = tag.getTagList("Items", 10);
-        inventory = NonNullList.withSize(19, ItemStack.EMPTY);
+        inventory = NonNullList.withSize(24, ItemStack.EMPTY);
         for (int i = 0; i < tagList.tagCount(); ++i) {
             NBTTagCompound tagCompound = tagList.getCompoundTagAt(i);
             byte slot = tagCompound.getByte("Slot");
@@ -152,12 +152,7 @@ public class TileCircuitTable extends TileBase implements IInventory, IGuiButton
 
     @Override
     public ItemStack getStackInSlot(int i) {
-
-        if (i < 24){
-            return circuitInventory.getStackInSlot(i);
-        }
-
-        return inventory.get(i - 23);
+        return inventory.get(i);
     }
 
     @Override
@@ -189,10 +184,7 @@ public class TileCircuitTable extends TileBase implements IInventory, IGuiButton
 
     @Override
     public void setInventorySlotContents(int i, ItemStack itemStack) {
-        if (i < 24){
-            circuitInventory.setInventorySlotContents(i, itemStack);
-        }
-        inventory.set(i - 23, itemStack);
+        inventory.set(i, itemStack);
     }
 
     @Override

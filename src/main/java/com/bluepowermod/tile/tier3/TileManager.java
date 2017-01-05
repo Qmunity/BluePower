@@ -23,6 +23,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.NonNullList;
 import uk.co.qmunity.lib.part.compat.MultipartCompatibility;
 
 import java.util.List;
@@ -32,7 +33,7 @@ import java.util.List;
  */
 public class TileManager extends TileMachineBase implements ISidedInventory, IGuiButtonSensitive, IRejectAnimator, IFuzzyRetrieving {
 
-    protected final ItemStack[] inventory = new ItemStack[24];
+    protected final NonNullList<ItemStack> inventory = NonNullList.withSize(25, ItemStack.EMPTY);
     public TubeColor filterColor = TubeColor.NONE;
     public int priority;
     public int mode;
@@ -163,7 +164,7 @@ public class TileManager extends TileMachineBase implements ISidedInventory, IGu
 
         for (int i = 0; i < 24; i++) {
             NBTTagCompound tc = tCompound.getCompoundTag("inventory" + i);
-            inventory[i] = new ItemStack(tc);
+            inventory.set(i, new ItemStack(tc));
         }
         filterColor = TubeColor.values()[tCompound.getByte("filterColor")];
         mode = tCompound.getByte("mode");
@@ -180,11 +181,9 @@ public class TileManager extends TileMachineBase implements ISidedInventory, IGu
         super.writeToNBT(tCompound);
 
         for (int i = 0; i < 24; i++) {
-            if (!inventory[i].isEmpty()) {
                 NBTTagCompound tc = new NBTTagCompound();
-                inventory[i].writeToNBT(tc);
+                inventory.get(i).writeToNBT(tc);
                 tCompound.setTag("inventory" + i, tc);
-            }
         }
 
         tCompound.setByte("filterColor", (byte) filterColor.ordinal());
@@ -211,18 +210,18 @@ public class TileManager extends TileMachineBase implements ISidedInventory, IGu
     @Override
     public int getSizeInventory() {
 
-        return inventory.length;
+        return inventory.size();
     }
 
     @Override
     public boolean isEmpty() {
-        return inventory.length == 0;
+        return inventory.size() == 0;
     }
 
     @Override
     public ItemStack getStackInSlot(int i) {
 
-        return inventory[i];
+        return inventory.get(i);
     }
 
     @Override
@@ -255,7 +254,7 @@ public class TileManager extends TileMachineBase implements ISidedInventory, IGu
     @Override
     public void setInventorySlotContents(int i, ItemStack itemStack) {
 
-        inventory[i] = itemStack;
+        inventory.set(i, itemStack);
     }
 
     @Override
@@ -332,7 +331,7 @@ public class TileManager extends TileMachineBase implements ISidedInventory, IGu
         if (side == direction || side == direction.getOpposite()) {
             return new int[] {};
         }
-        int[] slots = new int[inventory.length];
+        int[] slots = new int[inventory.size()];
         for (int i = 0; i < slots.length; i++)
             slots[i] = i;
         return slots;

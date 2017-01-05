@@ -2,10 +2,10 @@
   "forge_marker": 1,
   "defaults": {
     "textures": {
-      "up": "bluepower:blocks/machines/deployer_side_0",
-      "down": "bluepower:blocks/machines/deployer_back",
-      "right": "bluepower:blocks/machines/deployer_side",
-      "left": "bluepower:blocks/machines/deployer_side",
+      "up": "bluepower:blocks/machines/deployer_side",
+      "down": "bluepower:blocks/machines/deployer_side",
+      "right": "bluepower:blocks/machines/deployer_side_0",
+      "left": "bluepower:blocks/machines/deployer_side_0",
       "front": "bluepower:blocks/machines/deployer_front",
       "back": "bluepower:blocks/machines/deployer_back",
       "particle": "bluepower:blocks/machines/deployer_side"

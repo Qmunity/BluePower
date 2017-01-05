@@ -9,6 +9,10 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.BlockRenderLayer;
 
+/**
+ * @author MoreThanHidden
+ */
+
 public class BlockBattery extends BlockContainerBase {
 
     public static final PropertyInteger LEVEL = PropertyInteger.create("level", 0, 6);

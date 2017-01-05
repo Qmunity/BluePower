@@ -3,6 +3,10 @@ package com.bluepowermod.tile.tier3;
 import com.bluepowermod.tile.TileMachineBase;
 import net.minecraft.nbt.NBTTagCompound;
 
+/**
+ * @author MoreThanHidden
+ */
+
 public class TileBattery extends TileMachineBase {
     public int energy;
 

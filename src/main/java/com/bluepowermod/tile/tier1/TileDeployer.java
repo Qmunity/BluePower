@@ -28,6 +28,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
@@ -47,7 +48,7 @@ import java.util.UUID;
 public class TileDeployer extends TileBase implements ISidedInventory, IEjectAnimator {
     
     private int                      animationTimer      = -1;
-    private final ItemStack[]        inventory           = new ItemStack[9];
+    private final NonNullList<ItemStack> inventory       = NonNullList.withSize(10, ItemStack.EMPTY);
     private static final List<Item>  blacklistedItems    = new ArrayList<Item>();
     private static final GameProfile FAKE_PLAYER_PROFILE = new GameProfile(UUID.randomUUID(), "[BP Deployer]");
     
@@ -79,19 +80,19 @@ public class TileDeployer extends TileBase implements ISidedInventory, IEjectAni
             sendUpdatePacket();
             
             FakePlayer player = FakePlayerFactory.get((WorldServer) world, FAKE_PLAYER_PROFILE);
-            for (int i = 0; i < inventory.length; i++) {
-                ItemStack stack = inventory[i];
+            for (int i = 0; i < inventory.size(); i++) {
+                ItemStack stack = inventory.get(i);
                 player.inventory.setInventorySlotContents(i, stack);
             }
             
             rightClick(player, 9);
             
-            for (int i = 0; i < inventory.length; i++) {
+            for (int i = 0; i < inventory.size(); i++) {
                 ItemStack stack = player.inventory.getStackInSlot(i);
                 if (stack.isEmpty() || stack.getCount() <= 0) {
-                    inventory[i] = ItemStack.EMPTY;
+                    inventory.set(i, ItemStack.EMPTY);
                 } else {
-                    inventory[i] = stack;
+                    inventory.set(i, stack);
                 }
                 player.inventory.setInventorySlotContents(i, ItemStack.EMPTY);
             }
@@ -215,7 +216,7 @@ public class TileDeployer extends TileBase implements ISidedInventory, IEjectAni
         
         for (int i = 0; i < 9; i++) {
             NBTTagCompound tc = tCompound.getCompoundTag("inventory" + i);
-            inventory[i] = new ItemStack(tc);
+            inventory.set(i, new ItemStack(tc));
         }
     }
     
@@ -228,11 +229,9 @@ public class TileDeployer extends TileBase implements ISidedInventory, IEjectAni
         super.writeToNBT(tCompound);
         
         for (int i = 0; i < 9; i++) {
-            if (!inventory[i].isEmpty()) {
                 NBTTagCompound tc = new NBTTagCompound();
-                inventory[i].writeToNBT(tc);
+                inventory.get(i).writeToNBT(tc);
                 tCompound.setTag("inventory" + i, tc);
-            }
         }
         return tCompound;
     }
@@ -256,13 +255,13 @@ public class TileDeployer extends TileBase implements ISidedInventory, IEjectAni
     @Override
     public int getSizeInventory() {
     
-        return inventory.length;
+        return inventory.size();
     }
     
     @Override
     public ItemStack getStackInSlot(int i) {
     
-        return inventory[i];
+        return inventory.get(i);
     }
     
     @Override
@@ -293,7 +292,7 @@ public class TileDeployer extends TileBase implements ISidedInventory, IEjectAni
     @Override
     public void setInventorySlotContents(int i, ItemStack itemStack) {
     
-        inventory[i] = itemStack;
+        inventory.set(i, itemStack);
     }
     
     @Override
@@ -384,7 +383,7 @@ public class TileDeployer extends TileBase implements ISidedInventory, IEjectAni
     //Todo Fields
     @Override
     public boolean isEmpty() {
-        return inventory.length == 0;
+        return inventory.size() == 0;
     }
 
     @Override

@@ -24,14 +24,13 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.NonNullList;
 
 import java.util.List;
 
-;
-
 public class TileBuffer extends TileBase implements ISidedInventory {
     
-    private final ItemStack[] allInventories = new ItemStack[20];
+    private final NonNullList<ItemStack> allInventories = NonNullList.withSize(21, ItemStack.EMPTY);
     
     /**
      * This function gets called whenever the world/chunk loads
@@ -43,7 +42,7 @@ public class TileBuffer extends TileBase implements ISidedInventory {
         
         for (int i = 0; i < 20; i++) {
             NBTTagCompound tc = tCompound.getCompoundTag("inventory" + i);
-            allInventories[i] = new ItemStack(tc);
+            allInventories.set(i, new ItemStack(tc));
         }
     }
     
@@ -56,11 +55,9 @@ public class TileBuffer extends TileBase implements ISidedInventory {
         super.writeToNBT(tCompound);
         
         for (int i = 0; i < 20; i++) {
-            if (!allInventories[i].isEmpty()) {
                 NBTTagCompound tc = new NBTTagCompound();
-                allInventories[i].writeToNBT(tc);
+                allInventories.get(i).writeToNBT(tc);
                 tCompound.setTag("inventory" + i, tc);
-            }
         }
         return  tCompound;
     }
@@ -68,13 +65,13 @@ public class TileBuffer extends TileBase implements ISidedInventory {
     @Override
     public int getSizeInventory() {
     
-        return allInventories.length;
+        return allInventories.size();
     }
     
     @Override
     public ItemStack getStackInSlot(int i) {
     
-        return allInventories[i];
+        return allInventories.get(i);
     }
     
     @Override
@@ -103,7 +100,7 @@ public class TileBuffer extends TileBase implements ISidedInventory {
     @Override
     public void setInventorySlotContents(int i, ItemStack itemStack) {
     
-        allInventories[i] = itemStack;
+        allInventories.set(i, itemStack);
     }
     
     @Override
@@ -160,7 +157,7 @@ public class TileBuffer extends TileBase implements ISidedInventory {
         int var1 = side.ordinal();
         EnumFacing dir = getFacingDirection();
         if (side == dir) {
-            int[] allSlots = new int[allInventories.length];
+            int[] allSlots = new int[allInventories.size()];
             for (int i = 0; i < allSlots.length; i++)
                 allSlots[i] = i;
             return allSlots;
@@ -186,7 +183,7 @@ public class TileBuffer extends TileBase implements ISidedInventory {
     //Todo Fields
     @Override
     public boolean isEmpty() {
-        return allInventories.length == 0;
+        return allInventories.size() == 0;
     }
 
     @Override

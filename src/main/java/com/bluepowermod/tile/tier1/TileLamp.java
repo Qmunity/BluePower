@@ -119,7 +119,7 @@ public class TileLamp extends TileBase implements IBundledDevice {
     @Override
     public World getWorld() {
 
-        return getWorld();
+        return world;
     }
 
     @Override

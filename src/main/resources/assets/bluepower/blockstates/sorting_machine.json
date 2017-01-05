@@ -1,0 +1,36 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "textures": {
+      "up": "bluepower:blocks/machines/sorting_machine_side_2",
+      "down": "bluepower:blocks/machines/sorting_machine_side_2",
+      "right": "bluepower:blocks/machines/sorting_machine_side",
+      "left": "bluepower:blocks/machines/sorting_machine_side",
+      "front": "bluepower:blocks/machines/sorting_machine_front",
+      "back": "bluepower:blocks/machines/sorting_machine_back",
+      "particle": "bluepower:blocks/machines/sorting_machine_side"
+    },
+    "model": "bluepower:cube",
+    "uvlock": true
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [{}],
+    "active":{
+      "true":{
+        "textures": {
+          "back": "bluepower:blocks/machines/sorting_machine_back_3",
+          "left": "bluepower:blocks/machines/sorting_machine_side_4",
+          "right": "bluepower:blocks/machines/sorting_machine_side_4"
+        }
+      },
+      "false":{
+        "textures": {
+          "right": "bluepower:blocks/machines/sorting_machine_side",
+          "left": "bluepower:blocks/machines/sorting_machine_side",
+          "back": "bluepower:blocks/machines/sorting_machine_back"
+        }
+      }
+    }
+  }
+}

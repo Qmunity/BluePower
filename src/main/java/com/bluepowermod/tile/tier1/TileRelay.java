@@ -28,14 +28,13 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.NonNullList;
 
 import java.util.List;
 
-;
-
 public class TileRelay extends TileMachineBase implements IInventory {
 
-    private final ItemStack[] inventory = new ItemStack[9];
+    private final NonNullList<ItemStack> inventory = NonNullList.withSize(10, ItemStack.EMPTY);
 
     @Override
     public void update() {
@@ -43,10 +42,10 @@ public class TileRelay extends TileMachineBase implements IInventory {
         super.update();
 
         if (!world.isRemote && isBufferEmpty()) {
-            for (int i = 0; i < inventory.length; i++) {
-                if (!inventory[i].isEmpty() && inventory[i].getCount() > 0) {
-                    addItemToOutputBuffer(inventory[i]);
-                    inventory[i] = ItemStack.EMPTY;
+            for (int i = 0; i < inventory.size(); i++) {
+                if (!inventory.get(i).isEmpty() && inventory.get(i).getCount() > 0) {
+                    addItemToOutputBuffer(inventory.get(i));
+                    inventory.set(i, ItemStack.EMPTY);
                     break;
                 }
             }
@@ -63,7 +62,7 @@ public class TileRelay extends TileMachineBase implements IInventory {
 
         for (int i = 0; i < 9; i++) {
             NBTTagCompound tc = tCompound.getCompoundTag("inventory" + i);
-            inventory[i] = new ItemStack(tc);
+            inventory.set(i, new ItemStack(tc));
         }
     }
 
@@ -76,11 +75,9 @@ public class TileRelay extends TileMachineBase implements IInventory {
         super.writeToNBT(tCompound);
 
         for (int i = 0; i < 9; i++) {
-            if (!inventory[i].isEmpty()) {
                 NBTTagCompound tc = new NBTTagCompound();
-                inventory[i].writeToNBT(tc);
+                inventory.get(i).writeToNBT(tc);
                 tCompound.setTag("inventory" + i, tc);
-            }
         }
         return tCompound;
     }
@@ -91,7 +88,7 @@ public class TileRelay extends TileMachineBase implements IInventory {
     @Override
     public int getSizeInventory() {
 
-        return inventory.length;
+        return inventory.size();
     }
 
     /**
@@ -102,7 +99,7 @@ public class TileRelay extends TileMachineBase implements IInventory {
     @Override
     public ItemStack getStackInSlot(int slot) {
 
-        return inventory[slot];
+        return inventory.get(slot);
     }
 
     /**
@@ -149,7 +146,7 @@ public class TileRelay extends TileMachineBase implements IInventory {
     @Override
     public void setInventorySlotContents(int slot, ItemStack itemStack) {
 
-        inventory[slot] = itemStack;
+        inventory.set(slot, itemStack);
     }
 
     /**
@@ -237,7 +234,7 @@ public class TileRelay extends TileMachineBase implements IInventory {
     //Todo Fields
     @Override
     public boolean isEmpty() {
-        return inventory.length == 0;
+        return inventory.size() == 0;
     }
 
     @Override

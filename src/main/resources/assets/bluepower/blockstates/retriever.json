@@ -1,0 +1,34 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "textures": {
+      "up": "bluepower:blocks/machines/retriever_side_3",
+      "down": "bluepower:blocks/machines/retriever_side_3",
+      "right": "bluepower:blocks/machines/retriever_side",
+      "left": "bluepower:blocks/machines/retriever_side",
+      "front": "bluepower:blocks/machines/retriever_front",
+      "back": "bluepower:blocks/machines/retriever_back",
+      "particle": "bluepower:blocks/machines/retriever_side"
+    },
+    "model": "bluepower:cube",
+    "uvlock": true
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [{}],
+    "active":{
+      "true":{
+        "textures": {
+          "left": "bluepower:blocks/machines/retriever_side_4",
+          "right": "bluepower:blocks/machines/retriever_side_4"
+        }
+      },
+      "false":{
+        "textures": {
+          "right": "bluepower:blocks/machines/retriever_side",
+          "left": "bluepower:blocks/machines/retriever_side"
+        }
+      }
+    }
+  }
+}
