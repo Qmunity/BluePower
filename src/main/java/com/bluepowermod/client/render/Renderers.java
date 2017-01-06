@@ -8,13 +8,17 @@
 
 package com.bluepowermod.client.render;
 
+import com.bluepowermod.block.worldgen.BlockStoneOreConnected;
+import com.bluepowermod.client.render.model.BakedModelLoader;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.init.BPItems;
 import com.bluepowermod.tile.tier1.TileLamp;
+import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -30,9 +34,16 @@ public class Renderers {
             registerItemModel(item, 0);
         }
 
-        for(Item item : BPBlocks.renderlist){
-            registerItemModel(item, 0);
+        for(Block block : BPBlocks.renderlist){
+            if (!(block instanceof BlockStoneOreConnected)) {
+                registerItemModel(Item.getItemFromBlock(block), 0);
+            }
         }
+
+        //Custom Rendererers
+        ModelLoaderRegistry.registerLoader(new BakedModelLoader());
+        ((BlockStoneOreConnected)BPBlocks.reinforced_sapphire_glass).initModel();
+
 
         ClientRegistry.bindTileEntitySpecialRenderer(TileLamp.class, new RenderLamp());
     }

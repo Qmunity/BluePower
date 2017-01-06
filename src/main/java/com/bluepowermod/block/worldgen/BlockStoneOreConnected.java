@@ -17,40 +17,122 @@
 
 package com.bluepowermod.block.worldgen;
 
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.state.BlockStateContainer;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.statemap.StateMapperBase;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
+import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.common.property.ExtendedBlockState;
+import net.minecraftforge.common.property.IExtendedBlockState;
+import net.minecraftforge.common.property.IUnlistedProperty;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class BlockStoneOreConnected extends BlockStoneOre {
+import java.util.ArrayList;
+import java.util.List;
 
-    @SideOnly(Side.CLIENT)
-    public TextureAtlasSprite[] icons;
-    public static int[] iconRefByID = { 0, 0, 6, 6, 0, 0, 6, 6, 3, 3, 19, 15, 3, 3, 19, 15, 1, 1, 18, 18, 1, 1, 13, 13, 2, 2, 23, 31, 2, 2,
-            27, 14, 0, 0, 6, 6, 0, 0, 6, 6, 3, 3, 19, 15, 3, 3, 19, 15, 1, 1, 18, 18, 1, 1, 13, 13, 2, 2, 23, 31, 2, 2, 27, 14, 4, 4, 5, 5,
-            4, 4, 5, 5, 17, 17, 22, 26, 17, 17, 22, 26, 16, 16, 20, 20, 16, 16, 28, 28, 21, 21, 46, 42, 21, 21, 43, 38, 4, 4, 5, 5, 4, 4,
-            5, 5, 9, 9, 30, 12, 9, 9, 30, 12, 16, 16, 20, 20, 16, 16, 28, 28, 25, 25, 45, 37, 25, 25, 40, 32, 0, 0, 6, 6, 0, 0, 6, 6, 3, 3,
-            19, 15, 3, 3, 19, 15, 1, 1, 18, 18, 1, 1, 13, 13, 2, 2, 23, 31, 2, 2, 27, 14, 0, 0, 6, 6, 0, 0, 6, 6, 3, 3, 19, 15, 3, 3, 19,
-            15, 1, 1, 18, 18, 1, 1, 13, 13, 2, 2, 23, 31, 2, 2, 27, 14, 4, 4, 5, 5, 4, 4, 5, 5, 17, 17, 22, 26, 17, 17, 22, 26, 7, 7, 24,
-            24, 7, 7, 10, 10, 29, 29, 44, 41, 29, 29, 39, 33, 4, 4, 5, 5, 4, 4, 5, 5, 9, 9, 30, 12, 9, 9, 30, 12, 7, 7, 24, 24, 7, 7, 10,
-            10, 8, 8, 36, 35, 8, 8, 34, 11 };
+public class BlockStoneOreConnected extends BlockStoneOre{
 
     private String name;
+    public static final ConnectedProperty CONNECTED = new ConnectedProperty("connected");
 
     public BlockStoneOreConnected(String name) {
-
         super(name);
         this.name = name;
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
-    public void registerBlockIcons(TextureMap iconRegister) {
-
-        icons = new TextureAtlasSprite[iconRefByID.length];
-
-        //for (int i = 0; i < 47; i++)
-            //icons[i] = iconRegister.registerIcon(Refs.MODID + ":" + name + "/" + name + "_" + (i + 1));
+    protected BlockStateContainer createBlockState() {
+        IProperty[] listedProperties = new IProperty[0]; // no listed properties
+        IUnlistedProperty[] unlistedProperties = new IUnlistedProperty[] { CONNECTED };
+        return new ExtendedBlockState(this, listedProperties, unlistedProperties);
     }
+
+    private Boolean isSameBlock(IBlockAccess world, BlockPos pos){
+        return world.getBlockState(pos).getBlock() == this;
+    }
+
+    @Override
+    public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
+        IExtendedBlockState extendedBlockState = (IExtendedBlockState) state;
+
+        List<Boolean> connected = new ArrayList<Boolean>();
+
+        //Directions
+        connected.add(isSameBlock(world, pos.north()));
+        connected.add(isSameBlock(world, pos.south()));
+        connected.add(isSameBlock(world, pos.west()));
+        connected.add(isSameBlock(world, pos.east()));
+        connected.add(isSameBlock(world, pos.up()));
+        connected.add(isSameBlock(world, pos.down()));
+
+        //Corners
+        connected.add(isSameBlock(world, pos.north().up().south().east()));
+        connected.add(isSameBlock(world, pos.north().up().south().west()));
+        connected.add(isSameBlock(world, pos.north().down().south().east()));
+        connected.add(isSameBlock(world, pos.north().down().south().west()));
+        connected.add(isSameBlock(world, pos.south().up().south().east()));
+        connected.add(isSameBlock(world, pos.south().up().south().west()));
+        connected.add(isSameBlock(world, pos.south().down().south().east()));
+        connected.add(isSameBlock(world, pos.south().down().south().west()));
+
+        return extendedBlockState
+                .withProperty(CONNECTED, connected);
+    }
+
+    @Override
+    public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+        world.markBlockRangeForRenderUpdate(pos.add(-1, -1, -1), pos.add(1, 1, 1));
+    }
+
+    @SideOnly(Side.CLIENT)
+    public void initModel() {
+        //Hide the state
+        StateMapperBase stateMapper = new StateMapperBase() {
+            @Override
+            protected ModelResourceLocation getModelResourceLocation(IBlockState iBlockState) {
+                return new ModelResourceLocation(getRegistryName().toString());
+            }
+        };
+        ModelLoader.setCustomStateMapper(this, stateMapper);
+    }
+
+
+    public static class ConnectedProperty implements IUnlistedProperty<List<Boolean>> {
+
+        private final String name;
+
+        public ConnectedProperty(String name) {
+            this.name = name;
+        }
+
+        @Override
+        public String getName() {
+            return name;
+        }
+
+        @Override
+        public boolean isValid(List<Boolean> value) {
+            return true;
+        }
+
+        @Override
+        public Class<List<Boolean>> getType() {
+            return null;
+        }
+
+        @Override
+        public String valueToString(List<Boolean> value) {
+            return value.toString();
+        }
+
+    }
+
 
 }

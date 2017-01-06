@@ -2,10 +2,10 @@
   "forge_marker": 1,
   "defaults": {
     "textures": {
-      "all": "bluepower:blocks/reinforced_sapphire_glass/reinforced_sapphire_glass_1"
+      "all": "bluepower:blocks/reinforced_sapphire_glass/reinforced_sapphire_glass_2"
     },
     "model": "cube_all",
-    "uvlock": true
+    "uvlock": false
   },
   "variants": {
     "normal": [{}],

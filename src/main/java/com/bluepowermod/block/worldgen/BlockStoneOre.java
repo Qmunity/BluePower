@@ -24,7 +24,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.boss.EntityWither;
 import net.minecraft.item.Item;
@@ -76,12 +75,6 @@ public class BlockStoneOre extends Block {
         return Item.getItemFromBlock(Block.getBlockFromName(Refs.MODID + ":" + name));
     }
 
-
-    @SideOnly(Side.CLIENT)
-    public void registerBlockIcons(TextureMap iconRegister) {
-
-        //blockIcon = iconRegister.registerSprite(Refs.MODID + ":" + name);
-    }
 
     // Allow storage blocks to be used as a beacon base
     @Override

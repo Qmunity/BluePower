@@ -31,7 +31,6 @@ import com.bluepowermod.util.Dependencies;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.material.Material;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -43,7 +42,7 @@ import java.util.List;
 @GameRegistry.ObjectHolder(Refs.MODID)
 public class BPBlocks {
 
-    public static List<Item> renderlist = new ArrayList<Item>();
+    public static List<Block> renderlist = new ArrayList<Block>();
     public static Block basalt;
     public static Block marble;
     public static Block basalt_cobble;
@@ -318,6 +317,6 @@ public class BPBlocks {
     private static void registerBlock(Block block) {
         GameRegistry.register(block);
         GameRegistry.register(new ItemBlock(block).setRegistryName(block.getRegistryName()));
-        renderlist.add(Item.getItemFromBlock(block));
+        renderlist.add(block);
     }
 }
