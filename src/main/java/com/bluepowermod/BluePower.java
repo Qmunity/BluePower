@@ -83,13 +83,13 @@ public class BluePower {
         BPItems.init();
         PartManager.registerItems();
 
-        proxy.initRenderers();
+        proxy.preInitRenderers();
     }
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
 
-
+        proxy.initRenderers();
         TileEntities.init();
         OreDictionarySetup.init();
         GameRegistry.registerWorldGenerator(new WorldGenerationHandler(), 0);

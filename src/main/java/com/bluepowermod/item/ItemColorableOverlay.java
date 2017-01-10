@@ -10,19 +10,18 @@ package com.bluepowermod.item;
 import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.reference.Refs;
+import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * @author MineMaarten
  */
-public class ItemColorableOverlay extends ItemBase {
+public class ItemColorableOverlay extends ItemBase implements IItemColor {
     
     private TextureAtlasSprite overlayTexture;
     
@@ -43,12 +42,10 @@ public class ItemColorableOverlay extends ItemBase {
         }
     }
 
-    @SideOnly(Side.CLIENT)
-    public int getColorFromItemStack(ItemStack itemStack, int renderPass) {
-    
-        return renderPass == 0 || itemStack.getItemDamage() >= 16 ? 0 : ItemDye.DYE_COLORS[itemStack.getItemDamage()];
+    @Override
+    public int getColorFromItemstack(ItemStack itemStack, int renderPass) {
+        return renderPass == 0 || itemStack.getItemDamage() >= 16 ? -1 : ItemDye.DYE_COLORS[15 - itemStack.getItemDamage()];
     }
-
     
     @Override
     public String getUnlocalizedName(ItemStack stack) {

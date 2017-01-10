@@ -245,6 +245,7 @@ public class BlockContainerBase extends BlockBase implements ITileEntityProvider
 
     @Override
     public boolean canConnectRedstone(IBlockState state, IBlockAccess world, BlockPos pos, @Nullable EnumFacing side) {
-        return ((TileBase) world.getTileEntity(pos)).canConnectRedstone();
+        TileEntity te = world.getTileEntity(pos);
+        return te != null && te instanceof TileBase && ((TileBase) te).canConnectRedstone();
     }
 }

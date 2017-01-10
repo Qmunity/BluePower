@@ -26,9 +26,14 @@ public class CommonProxy {
 
     }
 
+    public void preInitRenderers() {
+
+    }
+
     public void initRenderers() {
 
     }
+
 
     public EntityPlayer getPlayer() {
 

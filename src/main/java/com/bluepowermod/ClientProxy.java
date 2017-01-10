@@ -40,14 +40,20 @@ public class ClientProxy extends CommonProxy {
     }
 
     @Override
-    public void initRenderers() {
+    public void preInitRenderers() {
 
         MinecraftForge.EVENT_BUS.register(new IconSupplier());
         MinecraftForge.EVENT_BUS.register(new RenderDebugScreen());
         PartManager.registerRenderers();
-        Renderers.init();
+        Renderers.preinit();
 
         CompatibilityUtils.registerRenders();
+    }
+
+
+    @Override
+    public void initRenderers() {
+        Renderers.init();
     }
 
     @Override

@@ -21,6 +21,7 @@ package com.bluepowermod.item;
 
 import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.reference.Refs;
+import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemDye;
@@ -29,7 +30,7 @@ import net.minecraft.util.NonNullList;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemLumar extends ItemBase {
+public class ItemLumar extends ItemBase implements IItemColor{
 
     public ItemLumar() {
 
@@ -53,10 +54,10 @@ public class ItemLumar extends ItemBase {
         }
     }
 
+    @Override
     @SideOnly(Side.CLIENT)
-    public int getColorFromItemStack(ItemStack itemStack, int colour) {
-
-        int damage = itemStack.getItemDamage();
+    public int getColorFromItemstack(ItemStack stack, int tintIndex) {
+        int damage = stack.getItemDamage();
         if (damage >= 0 && damage < ItemDye.DYE_COLORS.length) { return ItemDye.DYE_COLORS[15 - damage]; }
         return 16777215;
     }

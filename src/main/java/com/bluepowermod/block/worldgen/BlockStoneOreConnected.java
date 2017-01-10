@@ -34,23 +34,39 @@ import net.minecraftforge.common.property.IUnlistedProperty;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
 public class BlockStoneOreConnected extends BlockStoneOre{
 
     private String name;
-    public static final ConnectedProperty CONNECTED = new ConnectedProperty("connected");
+    public static final List<ConnectedProperty> CONNECTED = new ArrayList<ConnectedProperty>();
+
+    static {
+        for(int i = 0; i < 18; i++){
+            CONNECTED.add(new ConnectedProperty("connected_" + i));
+        }
+    }
 
     public BlockStoneOreConnected(String name) {
         super(name);
         this.name = name;
+        IExtendedBlockState extendedBlockState = (IExtendedBlockState) blockState.getBaseState();
+        for(int i = 0; i < 18; i++){
+            extendedBlockState = extendedBlockState.withProperty(CONNECTED.get(i), false);
+        }
+        this.setDefaultState(extendedBlockState);
     }
 
     @Override
+    @Nonnull
     protected BlockStateContainer createBlockState() {
         IProperty[] listedProperties = new IProperty[0]; // no listed properties
-        IUnlistedProperty[] unlistedProperties = new IUnlistedProperty[] { CONNECTED };
+        IUnlistedProperty[] unlistedProperties = new IUnlistedProperty[18];
+        for(int i = 0; i < 18; i++){
+            unlistedProperties[i] = CONNECTED.get(i);
+        }
         return new ExtendedBlockState(this, listedProperties, unlistedProperties);
     }
 
@@ -61,7 +77,6 @@ public class BlockStoneOreConnected extends BlockStoneOre{
     @Override
     public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
         IExtendedBlockState extendedBlockState = (IExtendedBlockState) state;
-
         List<Boolean> connected = new ArrayList<Boolean>();
 
         //Directions
@@ -73,17 +88,28 @@ public class BlockStoneOreConnected extends BlockStoneOre{
         connected.add(isSameBlock(world, pos.down()));
 
         //Corners
-        connected.add(isSameBlock(world, pos.north().up().south().east()));
-        connected.add(isSameBlock(world, pos.north().up().south().west()));
-        connected.add(isSameBlock(world, pos.north().down().south().east()));
-        connected.add(isSameBlock(world, pos.north().down().south().west()));
-        connected.add(isSameBlock(world, pos.south().up().south().east()));
-        connected.add(isSameBlock(world, pos.south().up().south().west()));
-        connected.add(isSameBlock(world, pos.south().down().south().east()));
-        connected.add(isSameBlock(world, pos.south().down().south().west()));
+        connected.add(isSameBlock(world, pos.up().east()));
+        connected.add(isSameBlock(world, pos.up().west()));
+        connected.add(isSameBlock(world, pos.up().south()));
+        connected.add(isSameBlock(world, pos.up().north()));
+        connected.add(isSameBlock(world, pos.down().east()));
+        connected.add(isSameBlock(world, pos.down().west()));
+        connected.add(isSameBlock(world, pos.down().south()));
+        connected.add(isSameBlock(world, pos.down().north()));
+        connected.add(isSameBlock(world, pos.north().east()));
+        connected.add(isSameBlock(world, pos.north().west()));
+        connected.add(isSameBlock(world, pos.south().east()));
+        connected.add(isSameBlock(world, pos.south().west()));
 
-        return extendedBlockState
-                .withProperty(CONNECTED, connected);
+        for(int i = 0; i < 18; i++){
+            extendedBlockState = extendedBlockState.withProperty(CONNECTED.get(i), connected.get(i));
+        }
+
+        return extendedBlockState;
+    }
+    @Override
+    public void onBlockAdded(World world, BlockPos pos, IBlockState state) {
+        world.markBlockRangeForRenderUpdate(pos.add(-1, -1, -1), pos.add(1, 1, 1));
     }
 
     @Override
@@ -103,10 +129,10 @@ public class BlockStoneOreConnected extends BlockStoneOre{
         ModelLoader.setCustomStateMapper(this, stateMapper);
     }
 
-
-    public static class ConnectedProperty implements IUnlistedProperty<List<Boolean>> {
+    public static class ConnectedProperty implements IUnlistedProperty<Boolean> {
 
         private final String name;
+        private Class<Boolean> type;
 
         public ConnectedProperty(String name) {
             this.name = name;
@@ -118,17 +144,18 @@ public class BlockStoneOreConnected extends BlockStoneOre{
         }
 
         @Override
-        public boolean isValid(List<Boolean> value) {
+        public boolean isValid(Boolean value) {
             return true;
         }
 
         @Override
-        public Class<List<Boolean>> getType() {
-            return null;
+        public Class<Boolean> getType() {
+
+            return Boolean.class;
         }
 
         @Override
-        public String valueToString(List<Boolean> value) {
+        public String valueToString(Boolean value) {
             return value.toString();
         }
 

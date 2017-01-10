@@ -1,6 +1,7 @@
 ﻿{
-  "parent": "minecraft:item/generated",
+  "parent": "item/generated",
   "textures": {
-    "layer0": "bluepower:items/paint_can"
+    "layer0": "bluepower:items/paint_can",
+    "layer1": "bluepower:items/paint_can_overlay"
   }
 }

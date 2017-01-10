@@ -2,7 +2,6 @@ package com.bluepowermod.client.render.model;
 
 import com.bluepowermod.reference.Refs;
 import com.google.common.base.Function;
-import com.google.common.collect.ImmutableSet;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.VertexFormat;
@@ -11,6 +10,7 @@ import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.common.model.IModelState;
 import net.minecraftforge.common.model.TRSRTransformation;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -27,15 +27,7 @@ public class ConnectedModel implements IModel {
 
         @Override
         public IBakedModel bake(IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
-            return new ConnectedBakedModel(state, format, getIcons(location, bakedTextureGetter));
-        }
-
-        TextureAtlasSprite[] getIcons(ResourceLocation name, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter){
-            TextureAtlasSprite[] icons = new TextureAtlasSprite[47];
-
-            for (int i = 0; i < 47; i++)
-                icons[i] = bakedTextureGetter.apply(new ResourceLocation(Refs.MODID + ":" + name.getResourcePath() + "/" + name.getResourcePath() + "_" + (i + 1)));
-            return icons;
+            return new BakedModelBase(state, format, bakedTextureGetter, getTextures());
         }
 
         @Override
@@ -45,7 +37,13 @@ public class ConnectedModel implements IModel {
 
         @Override
         public Collection<ResourceLocation> getTextures() {
-            return ImmutableSet.of(location);
+            Collection<ResourceLocation> icons = new ArrayList<ResourceLocation>();
+
+            for (int i = 0; i < 47; i++)
+                icons.add(new ResourceLocation(Refs.MODID + ":" + "blocks/" + location.getResourcePath() + "/" + location.getResourcePath() + "_" + (i + 1)));
+            return icons;
+
+
         }
 
         @Override
