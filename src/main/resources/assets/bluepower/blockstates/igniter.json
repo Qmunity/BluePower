@@ -2,15 +2,15 @@
   "forge_marker": 1,
   "defaults": {
     "textures": {
-      "up": "bluepower:blocks/machines/igniter_side",
-      "down": "bluepower:blocks/machines/igniter_side",
+      "top": "bluepower:blocks/machines/igniter_side",
+      "bottom": "bluepower:blocks/machines/igniter_side",
       "left": "bluepower:blocks/machines/igniter_side",
       "right": "bluepower:blocks/machines/igniter_side",
       "front": "bluepower:blocks/machines/igniter_front",
       "back": "bluepower:blocks/machines/igniter_back",
       "particle": "bluepower:blocks/machines/igniter_side"
     },
-    "model": "bluepower:cube",
+    "model": "bluepower:cube_sided",
     "uvlock": true
   },
   "variants": {

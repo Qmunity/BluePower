@@ -49,7 +49,7 @@ public class RenderLamp extends TileEntitySpecialRenderer {
             }
             // power = 15;
             BlockPos vector = te.getPos();
-            Vec3dCube box = new Vec3dCube(-0.5, -0.5, -0.5, 0.5, 0.5, 0.5).expand(0.8 / 16D);
+            Vec3dCube box = new Vec3dCube(-0.05, -0.05, -0.05, 1.05, 1.05, 1.05);
 
             boolean[] renderFaces = new boolean[] { true, true, true, true, true, true };
 

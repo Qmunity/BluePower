@@ -17,12 +17,14 @@
 
 package com.bluepowermod.block.worldgen;
 
+import com.bluepowermod.client.render.ICustomModelBlock;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -38,7 +40,7 @@ import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BlockStoneOreConnected extends BlockStoneOre{
+public class BlockStoneOreConnected extends BlockStoneOre implements ICustomModelBlock {
 
     private String name;
     public static final List<ConnectedProperty> CONNECTED = new ArrayList<ConnectedProperty>();
@@ -117,9 +119,9 @@ public class BlockStoneOreConnected extends BlockStoneOre{
         world.markBlockRangeForRenderUpdate(pos.add(-1, -1, -1), pos.add(1, 1, 1));
     }
 
+    @Override
     @SideOnly(Side.CLIENT)
     public void initModel() {
-        //Hide the state
         StateMapperBase stateMapper = new StateMapperBase() {
             @Override
             protected ModelResourceLocation getModelResourceLocation(IBlockState iBlockState) {
@@ -127,6 +129,7 @@ public class BlockStoneOreConnected extends BlockStoneOre{
             }
         };
         ModelLoader.setCustomStateMapper(this, stateMapper);
+        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(getRegistryName(), "inventory"));
     }
 
     public static class ConnectedProperty implements IUnlistedProperty<Boolean> {

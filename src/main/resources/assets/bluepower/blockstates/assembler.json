@@ -2,8 +2,8 @@
   "forge_marker": 1,
   "defaults": {
     "textures": {
-      "up": "bluepower:blocks/machines/assembler_top",
-      "down": "bluepower:blocks/machines/assembler_bottom",
+      "top": "bluepower:blocks/machines/assembler_top",
+      "bottom": "bluepower:blocks/machines/assembler_bottom",
       "front": "bluepower:blocks/machines/assembler_front",
       "side": "bluepower:blocks/machines/assembler_side",
       "particle": "bluepower:blocks/machines/assembler_side"

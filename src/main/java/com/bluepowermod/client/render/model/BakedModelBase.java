@@ -10,6 +10,7 @@ import net.minecraft.client.renderer.block.model.ItemOverrideList;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.client.model.pipeline.UnpackedBakedQuad;
@@ -106,10 +107,13 @@ public class BakedModelBase implements IBakedModel{
         }
 
         IExtendedBlockState extendedBlockState = (IExtendedBlockState)state;
-        List<Boolean> connected = new ArrayList<Boolean>();
-        for(int i = 0; i < 18; i++){
-            connected.add(extendedBlockState.getValue(CONNECTED.get(i)));
-        }
+        List<Boolean> connected = NonNullList.withSize(18, false);
+         try {
+            for (int i = 0; i < 18; i++) {
+                connected.set(i, extendedBlockState.getValue(CONNECTED.get(i)));
+            }
+         }catch (NullPointerException ignored){}
+
         List<BakedQuad> quads = new ArrayList<BakedQuad>();
 
         //Add side quads if not connected
@@ -200,6 +204,7 @@ public class BakedModelBase implements IBakedModel{
 
     @Override
     public ItemOverrideList getOverrides() {
-        return null;
+        return ItemOverrideList.NONE;
     }
+
 }

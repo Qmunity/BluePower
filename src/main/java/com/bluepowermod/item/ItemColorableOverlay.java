@@ -11,7 +11,6 @@ import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.reference.Refs;
 import net.minecraft.client.renderer.color.IItemColor;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemDye;
@@ -22,9 +21,7 @@ import net.minecraft.util.NonNullList;
  * @author MineMaarten
  */
 public class ItemColorableOverlay extends ItemBase implements IItemColor {
-    
-    private TextureAtlasSprite overlayTexture;
-    
+
     public ItemColorableOverlay(String name) {
     
         setUnlocalizedName(name);
@@ -46,7 +43,9 @@ public class ItemColorableOverlay extends ItemBase implements IItemColor {
     public int getColorFromItemstack(ItemStack itemStack, int renderPass) {
         return renderPass == 0 || itemStack.getItemDamage() >= 16 ? -1 : ItemDye.DYE_COLORS[15 - itemStack.getItemDamage()];
     }
-    
+
+
+
     @Override
     public String getUnlocalizedName(ItemStack stack) {
     

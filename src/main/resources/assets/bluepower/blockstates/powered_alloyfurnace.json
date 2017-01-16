@@ -2,8 +2,8 @@
   "forge_marker": 1,
   "defaults": {
     "textures": {
-      "up": "bluepower:blocks/machines/alloyfurnace_top",
-      "down": "bluepower:blocks/machines/alloyfurnace_bottom",
+      "top": "bluepower:blocks/machines/alloyfurnace_top",
+      "bottom": "bluepower:blocks/machines/alloyfurnace_bottom",
       "front": "bluepower:blocks/machines/powered_alloyfurnace_front",
       "side": "bluepower:blocks/machines/powered_alloyfurnace_side",
       "particle": "bluepower:blocks/machines/alloyfurnace_side"

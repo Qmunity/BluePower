@@ -3,15 +3,15 @@
   "defaults": {
     "textures": {
       "side": "bluepower:blocks/machines/filter_side",
-      "up": "#side",
-      "down": "#side",
+      "top": "#side",
+      "bottom": "#side",
       "right": "#side",
       "left": "#side",
       "front": "bluepower:blocks/machines/filter_front",
       "back": "bluepower:blocks/machines/filter_back",
       "particle": "#side"
     },
-    "model": "bluepower:cube",
+    "model": "bluepower:cube_sided",
     "uvlock": true
   },
   "variants": {

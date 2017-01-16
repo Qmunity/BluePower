@@ -3,15 +3,15 @@
   "defaults": {
     "textures": {
       "side": "bluepower:blocks/machines/relay_side",
-      "up": "#side",
-      "down": "#side",
+      "top": "#side",
+      "bottom": "#side",
       "right": "bluepower:blocks/machines/relay_side_0",
       "left": "bluepower:blocks/machines/relay_side_0",
       "front": "bluepower:blocks/machines/relay_front",
       "back": "bluepower:blocks/machines/relay_back",
       "particle": "bluepower:blocks/machines/relay_side"
     },
-    "model": "bluepower:cube",
+    "model": "bluepower:cube_sided",
     "uvlock": true
   },
   "variants": {

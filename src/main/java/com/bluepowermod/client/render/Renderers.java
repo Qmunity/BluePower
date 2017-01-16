@@ -8,7 +8,7 @@
 
 package com.bluepowermod.client.render;
 
-import com.bluepowermod.block.worldgen.BlockStoneOreConnected;
+import com.bluepowermod.block.machine.BlockLamp;
 import com.bluepowermod.client.render.model.BakedModelLoader;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.init.BPItems;
@@ -16,6 +16,7 @@ import com.bluepowermod.tile.tier1.TileLamp;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.color.IBlockColor;
 import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -37,35 +38,43 @@ public class Renderers {
         for (Item item : BPItems.renderlist) {
             if (!(item instanceof IItemColor)) {
                 registerItemModel(item, 0);
-            }else {
+            } else {
                 NonNullList<ItemStack> subitems = NonNullList.create();
                 item.getSubItems(item, null, subitems);
-                for (ItemStack subitem : subitems){
+                for (ItemStack subitem : subitems) {
                     registerItemModel(item, item.getMetadata(subitem));
                 }
             }
         }
 
-        ModelLoaderRegistry.registerLoader(new BakedModelLoader());
-
         for (Block block : BPBlocks.renderlist) {
-            if (!(block instanceof BlockStoneOreConnected)) {
+            if (!(block instanceof ICustomModelBlock)) {
                 registerItemModel(Item.getItemFromBlock(block), 0);
             } else {
                 registerBakedModel(block);
             }
         }
 
+        ModelLoaderRegistry.registerLoader(new BakedModelLoader());
 
-        ClientRegistry.bindTileEntitySpecialRenderer(TileLamp.class, new RenderLamp());
     }
 
     public static void init() {
+
+        ClientRegistry.bindTileEntitySpecialRenderer(TileLamp.class, new RenderLamp());
+
         for (Item item : BPItems.renderlist) {
             if (item instanceof IItemColor) {
                 Minecraft.getMinecraft().getItemColors().registerItemColorHandler((IItemColor) item, item);
             }
         }
+        for (final Block block : BPBlocks.renderlist) {
+            if (block instanceof BlockLamp) {
+                Minecraft.getMinecraft().getBlockColors().registerBlockColorHandler((IBlockColor) block, block);
+                Minecraft.getMinecraft().getItemColors().registerItemColorHandler((IItemColor) block, Item.getItemFromBlock(block));
+            }
+        }
+
     }
 
     public static void registerItemModel(Item item, int metadata) {
@@ -74,7 +83,7 @@ public class Renderers {
     }
 
     public static void registerBakedModel(Block block) {
-        ((BlockStoneOreConnected) block).initModel();
+        ((ICustomModelBlock) block).initModel();
     }
 
 

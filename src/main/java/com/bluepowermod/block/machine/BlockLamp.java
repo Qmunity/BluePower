@@ -9,22 +9,31 @@ package com.bluepowermod.block.machine;
 
 import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.block.BlockContainerBase;
+import com.bluepowermod.client.render.ICustomModelBlock;
+import com.bluepowermod.client.render.RenderLamp;
 import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier1.TileLamp;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.PropertyBool;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.statemap.StateMapperBase;
+import net.minecraft.client.renderer.color.IBlockColor;
+import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -35,7 +44,9 @@ import javax.annotation.Nullable;
  * @author Koen Beckers (K4Unl)
  *
  */
-public class BlockLamp extends BlockContainerBase {
+public class BlockLamp extends BlockContainerBase implements IBlockColor, IItemColor, ICustomModelBlock{
+
+    public static final PropertyBool POWERED = PropertyBool.create("powered");
 
     private final boolean isInverted;
     private final MinecraftColor color;
@@ -50,7 +61,22 @@ public class BlockLamp extends BlockContainerBase {
         this.color = color;
         setUnlocalizedName(Refs.LAMP_NAME + "." + color.name().toLowerCase() + (isInverted ? ".inverted" : ""));
         setCreativeTab(BPCreativeTabs.lighting);
+        setDefaultState(blockState.getBaseState().withProperty(POWERED, isInverted));
+    }
 
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void initModel() {
+        //All lamps need to use the same blockstate
+        StateMapperBase stateMapper = new StateMapperBase() {
+            @Override
+            protected ModelResourceLocation getModelResourceLocation(IBlockState iBlockState) {
+                return new ModelResourceLocation(Refs.MODID + ":" + Refs.LAMP_NAME, getPropertyString(iBlockState.getProperties()));
+            }
+        };
+        ModelLoader.setCustomStateMapper(this, stateMapper);
+        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(Refs.MODID + ":" + Refs.LAMP_NAME, "inventory"));
     }
 
 
@@ -74,13 +100,6 @@ public class BlockLamp extends BlockContainerBase {
         if (isInverted())
             power = 15 - power;
         return power;
-    }
-
-    @SideOnly(Side.CLIENT)
-    public void registerBlockIcons(TextureMap iconRegister) {
-
-        on = iconRegister.registerSprite(new ResourceLocation(Refs.MODID + ":lamps/lamp_on"));
-        off = iconRegister.registerSprite(new ResourceLocation(Refs.MODID + ":lamps/lamp_off"));
     }
 
     @Override
@@ -122,7 +141,7 @@ public class BlockLamp extends BlockContainerBase {
 
     @Override
     public EnumBlockRenderType getRenderType(IBlockState state) {
-        return EnumBlockRenderType.ENTITYBLOCK_ANIMATED;
+        return EnumBlockRenderType.MODEL;
     }
 
     public int getColor(IBlockAccess w, BlockPos pos) {
@@ -147,14 +166,8 @@ public class BlockLamp extends BlockContainerBase {
 
     @Override
     public boolean canRenderInLayer(IBlockState state, BlockRenderLayer layer) {
-        //RenderLamp.pass = layer;
+        RenderLamp.pass = layer.ordinal();
         return true;
-    }
-
-    @SideOnly(Side.CLIENT)
-    public int colorMultiplier(IBlockAccess world, BlockPos pos) {
-
-        return getColor(world, pos);
     }
 
     @SideOnly(Side.CLIENT)
@@ -175,6 +188,9 @@ public class BlockLamp extends BlockContainerBase {
     public void neighborChanged(IBlockState state, World world, BlockPos pos, Block block, BlockPos fromPos) {
         super.neighborChanged(state, world, pos, block, fromPos);
 
+        int powered = world.isBlockIndirectlyGettingPowered(pos);
+        world.setBlockState(pos,state.withProperty(POWERED, isInverted != powered > 0), 3);
+
         if (this instanceof BlockLampRGB && block instanceof BlockLampRGB)
             return;
 
@@ -182,6 +198,21 @@ public class BlockLamp extends BlockContainerBase {
         if (te == null)
             return;
         te.onUpdate();
+    }
+
+    @Override
+    protected BlockStateContainer createBlockState() {
+        return new BlockStateContainer(this, POWERED);
+    }
+
+    @Override
+    public int getMetaFromState(IBlockState state) {
+        return state.getValue(POWERED) ? 1 : 0;
+    }
+
+    @Override
+    public IBlockState getStateFromMeta(int meta) {
+        return getDefaultState().withProperty(POWERED, meta != 0);
     }
 
     @Override
@@ -193,5 +224,17 @@ public class BlockLamp extends BlockContainerBase {
         if (te == null)
             return;
         te.onUpdate();
+    }
+
+    @Override
+    public int colorMultiplier(IBlockState state, @Nullable IBlockAccess world, @Nullable BlockPos pos, int tintIndex) {
+        //Color for Block
+        return getColor(world, pos);
+    }
+
+    @Override
+    public int getColorFromItemstack(ItemStack stack, int tintIndex) {
+        //Color for Itemstack
+        return getColor();
     }
 }

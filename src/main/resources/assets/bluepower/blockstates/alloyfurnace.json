@@ -1,12 +1,12 @@
 {
   "forge_marker": 1,
   "defaults": {
+
     "textures": {
-      "up": "bluepower:blocks/machines/alloyfurnace_top",
-      "down": "bluepower:blocks/machines/alloyfurnace_bottom",
+      "top": "bluepower:blocks/machines/alloyfurnace_top",
+      "bottom": "bluepower:blocks/machines/alloyfurnace_bottom",
       "front": "bluepower:blocks/machines/alloyfurnace_front_off",
-      "side": "bluepower:blocks/machines/alloyfurnace_side",
-      "particle": "bluepower:blocks/machines/alloyfurnace_side"
+      "side": "bluepower:blocks/machines/alloyfurnace_side"
     },
     "model": "bluepower:cube_front",
     "uvlock": true
@@ -14,6 +14,14 @@
   "variants": {
     "normal": [{}],
     "inventory": [{}],
+    "facing": {
+      "north": {},
+      "south": {"y": 180},
+      "west": {"y": 270},
+      "east": {"y": 90},
+      "up": {"x": -90},
+      "down": {"x": 90}
+    },
     "active":{
       "true":{"textures": {"front": "bluepower:blocks/machines/alloyfurnace_front_on"}},
       "false":{"textures": {"front": "bluepower:blocks/machines/alloyfurnace_front_off"}}

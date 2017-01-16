@@ -42,8 +42,6 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
-;
-
 /**
  * @author MineMaarten
  */
