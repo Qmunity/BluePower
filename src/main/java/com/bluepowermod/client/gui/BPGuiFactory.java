@@ -40,6 +40,16 @@ public class BPGuiFactory implements IModGuiFactory {
 
     }
 
+    @Override
+    public boolean hasConfigGui() {
+        return false;
+    }
+
+    @Override
+    public GuiScreen createConfigGui(GuiScreen parentScreen) {
+        return null;
+    }
+
     /**
      * Return the name of a class extending {@link net.minecraft.client.gui.GuiScreen}. This class will be instantiated when the "config" button is
      * pressed in the mod list. It will have a single argument constructor - the "parent" screen, the same as all Minecraft GUIs. The expected

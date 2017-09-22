@@ -17,11 +17,11 @@ import java.util.Collections;
 /**
  * @author MoreThanHidden
  */
-public class ConnectedModel implements IModel {
+public class PartModel implements IModel {
 
         ResourceLocation location;
 
-        public ConnectedModel(ResourceLocation location){
+        public PartModel(ResourceLocation location){
             this.location = location;
         }
 

@@ -32,10 +32,6 @@ repositories {
         name = "ic2"
         url = "http://maven.ic2.player.to/"
     }
-    maven {
-        name = "Qmunity"
-        url = "http://maven.bluepowermod.com/"
-    }
 	maven {
 		url "http://maven.amadornes.com/"
 	}
@@ -52,7 +48,7 @@ project.ext {
     } else {
         build = "-custom"
     }
-    mcVersion = "1.11"
+    mcVersion = "1.11.2"
 }
 
 
@@ -61,20 +57,17 @@ group = "com.bluepowermod"
 archivesBaseName = "BluePower"
 
 dependencies {
-    compile "li.cil.oc:OpenComputers:MC1.10.2-1.6.1.61-dev:api"
+    deobfCompile "li.cil.oc:OpenComputers:MC1.11.2-1.7.0.28:api"
     compile 'net.industrial-craft:industrialcraft-2:2.6.139-ex110:api'
     compile "codechicken:CodeChickenLib:1.11-3.0.0.150:dev"
-	deobfCompile "MCMultiPart:MCMultiPart-experimental:2.0.0_88:universal"
+	deobfCompile "MCMultiPart2:MCMultiPart-exp:2.0.0_19"
     deobfCompile "mcp.mobius.waila:Hwyla:1.8.5-B19_1.11"
 	deobfCompile "mezz.jei:jei_1.11:4.1.1.208:api"
 	runtime "mezz.jei:jei_1.11:4.1.1.208"
-	
-    //Qmunity needs to be updated also
-	//compile "qmunity:QmunityLib:0.2.116:deobf"
 }
 
 minecraft {
-    version = "${project.ext.mcVersion}-13.19.1.2199"
+    version = "${project.ext.mcVersion}-13.20.0.2315"
     runDir = "eclipse/assets"
 	mappings = "snapshot_20161225"
 

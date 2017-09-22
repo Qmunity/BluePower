@@ -16,6 +16,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * @author MineMaarten
@@ -33,6 +35,7 @@ public class ItemColorableOverlay extends ItemBase implements IItemColor {
 
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void getSubItems(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> subItems) {
         for (int i = 0; i < 16; i++) {
             subItems.add(new ItemStack(this, 1, i));
@@ -40,10 +43,10 @@ public class ItemColorableOverlay extends ItemBase implements IItemColor {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public int getColorFromItemstack(ItemStack itemStack, int renderPass) {
         return renderPass == 0 || itemStack.getItemDamage() >= 16 ? -1 : ItemDye.DYE_COLORS[15 - itemStack.getItemDamage()];
     }
-
 
 
     @Override

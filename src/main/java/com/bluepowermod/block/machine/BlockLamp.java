@@ -23,7 +23,6 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.client.renderer.color.IBlockColor;
 import net.minecraft.client.renderer.color.IItemColor;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -50,9 +49,6 @@ public class BlockLamp extends BlockContainerBase implements IBlockColor, IItemC
 
     private final boolean isInverted;
     private final MinecraftColor color;
-
-    @SideOnly(Side.CLIENT)
-    public static TextureAtlasSprite off, on;
 
     public BlockLamp(boolean isInverted, MinecraftColor color) {
 
@@ -170,20 +166,6 @@ public class BlockLamp extends BlockContainerBase implements IBlockColor, IItemC
         return true;
     }
 
-    @SideOnly(Side.CLIENT)
-    public TextureAtlasSprite getIcon(IBlockAccess world, BlockPos pos, int side) {
-
-        int power = getPower(world, pos);
-
-        return power > 0 ? on : off;
-    }
-
-    @SideOnly(Side.CLIENT)
-    public TextureAtlasSprite getIcon(int side, int meta) {
-
-        return isInverted ? on : off;
-    }
-
     @Override
     public void neighborChanged(IBlockState state, World world, BlockPos pos, Block block, BlockPos fromPos) {
         super.neighborChanged(state, world, pos, block, fromPos);
@@ -227,12 +209,14 @@ public class BlockLamp extends BlockContainerBase implements IBlockColor, IItemC
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public int colorMultiplier(IBlockState state, @Nullable IBlockAccess world, @Nullable BlockPos pos, int tintIndex) {
         //Color for Block
         return getColor(world, pos);
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public int getColorFromItemstack(ItemStack stack, int tintIndex) {
         //Color for Itemstack
         return getColor();

@@ -48,6 +48,7 @@ public class ItemLumar extends ItemBase implements IItemColor{
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void getSubItems(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> subItems) {
         for (int i = 0; i < ItemDye.DYE_COLORS.length; i++) {
             subItems.add(new ItemStack(this, 1, i));

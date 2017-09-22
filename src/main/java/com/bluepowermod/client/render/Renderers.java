@@ -31,8 +31,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class Renderers {
 
-    public static int RenderIdLamps;
-
     public static void preinit() {
 
         for (Item item : BPItems.renderlist) {

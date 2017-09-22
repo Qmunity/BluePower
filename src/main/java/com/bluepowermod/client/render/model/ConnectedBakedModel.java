@@ -29,7 +29,7 @@ import static com.bluepowermod.block.worldgen.BlockStoneOreConnected.CONNECTED;
 * @author MoreThanHidden
 */
 
-public class BakedModelBase implements IBakedModel{
+public class ConnectedBakedModel implements IBakedModel{
     private Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter;
     private List<ResourceLocation> sprite;
     private TextureAtlasSprite defaultTexture;
@@ -44,12 +44,12 @@ public class BakedModelBase implements IBakedModel{
             24, 7, 7, 10, 10, 29, 29, 44, 41, 29, 29, 39, 33, 4, 4, 5, 5, 4, 4, 5, 5, 9, 9, 30, 12, 9, 9, 30, 12, 7, 7, 24, 24, 7, 7, 10,
             10, 8, 8, 36, 35, 8, 8, 34, 11 };
 
-    public BakedModelBase(IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter, Collection<ResourceLocation> locations) {
+    public ConnectedBakedModel(IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter, Collection<ResourceLocation> locations) {
         this.format = format;
         this.sprite = new ArrayList<ResourceLocation>(locations);
         this.bakedTextureGetter = bakedTextureGetter;
 
-        defaultTexture = bakedTextureGetter.apply(sprite.get(0));
+        this.defaultTexture = bakedTextureGetter.apply(sprite.get(0));
 
     }
 
@@ -194,7 +194,7 @@ public class BakedModelBase implements IBakedModel{
 
     @Override
     public TextureAtlasSprite getParticleTexture() {
-        return defaultTexture;
+        return this.defaultTexture;
     }
 
     @Override
