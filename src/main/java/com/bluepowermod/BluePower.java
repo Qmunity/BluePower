@@ -21,12 +21,8 @@ import com.bluepowermod.redstone.RedstoneApi;
 import com.bluepowermod.redstone.RedstoneProviderQmunityLib;
 import com.bluepowermod.redstone.RedstoneProviderVanilla;
 import com.bluepowermod.reference.Refs;
-import com.bluepowermod.util.Achievements;
 import com.bluepowermod.world.WorldGenerationHandler;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
-import net.minecraft.item.crafting.CraftingManager;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.util.EnumHelper;
@@ -35,7 +31,6 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.*;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
-import net.minecraftforge.fml.common.registry.GameData;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import org.apache.logging.log4j.Logger;
 
@@ -99,74 +94,18 @@ public class BluePower {
         NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GUIHandler());
         CompatibilityUtils.init(event);
 
-        Achievements.init();
-
     }
 
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event) {
-
         CompatibilityUtils.postInit(event);
-
-        Recipes.init(CraftingManager.getInstance());
         AlloyFurnaceRegistry.getInstance().generateRecyclingRecipes();
-
         RedstoneApi.getInstance().registerRedstoneProvider(new RedstoneProviderVanilla());
     }
 
     @Mod.EventHandler
     public void serverStarting(FMLServerStartingEvent event) {
-
         // register commands
     }
 
-    @Mod.EventHandler
-    public void event(FMLMissingMappingsEvent event) {
-
-        for (FMLMissingMappingsEvent.MissingMapping mapping : event.get()) {
-            String name = mapping.name;
-            if (mapping.name.startsWith("bluepower:lamp")) {
-                name = name.replace("silver", "light_gray");
-                if (mapping.type == GameRegistry.Type.BLOCK) {
-                    mapping.remap(GameData.getBlockRegistry().getObject(new ResourceLocation(name)));
-                } else {
-                    mapping.remap(GameData.getItemRegistry().getObject(new ResourceLocation(name)));
-                }
-                continue;
-            }
-            if (mapping.name.equals("bluepower:bluepower_multipart")) {
-                mapping.ignore();
-                continue;
-            }
-
-            name = name.replace("silver", "light_gray");
-
-            name = name.replace("bluestoneWire", "wire.bluestone");
-
-            name = name.replace("cagelamp", "cagelamp.").replace("fixture", "fixture.");
-            if (name.contains("inverted"))
-                name = "bluepower:part." + name.substring("bluepower:part.inverted".length()) + ".inverted";
-
-            if (name.equals("bluepower:stone_wire"))
-                name = "bluepower:bluestone_wire_tile";
-            if (name.equals("bluepower:stone_cathode"))
-                name = "bluepower:bluestone_cathode_tile";
-            if (name.equals("bluepower:stone_anode"))
-                name = "bluepower:bluestone_anode_tile";
-            if (name.equals("bluepower:stone_pointer"))
-                name = "bluepower:bluestone_pointer_tile";
-
-            if (name.equals("bluepower:silicon_chip"))
-                name = "bluepower:silicon_chip_tile";
-            if (name.equals("bluepower:taintedsilicon_chip"))
-                name = "bluepower:tainted_silicon_chip_tile";
-            if (name.equals("bluepower:quartz_resonator"))
-                name = "bluepower:quartz_resonator_tile";
-
-            Item item = GameData.getItemRegistry().getObject(new ResourceLocation(name));
-            if (item == Items.AIR)
-                continue;
-            mapping.remap(item);
-        }
-    }
 }

@@ -24,6 +24,7 @@ import com.bluepowermod.reference.GuiIDs;
 import com.bluepowermod.reference.Refs;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
 import net.minecraft.util.EnumActionResult;
@@ -86,7 +87,7 @@ public class ItemScrewdriver extends ItemBase implements IScrewdriver {
             return false;
 
         if (!simulated) {
-            if (stack.attemptDamageItem(damage, new Random())) {
+            if (stack.attemptDamageItem(damage, new Random(), (EntityPlayerMP) player)) {
                 if (player != null)
                     player.renderBrokenItemStack(stack);
                 stack.setCount(stack.getCount() - 1);

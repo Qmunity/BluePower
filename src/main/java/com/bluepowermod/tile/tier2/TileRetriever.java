@@ -11,10 +11,13 @@ import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.part.tube.PneumaticTube;
 import com.bluepowermod.tile.IFuzzyRetrieving;
 import com.bluepowermod.tile.tier1.TileFilter;
+import mcmultipart.api.container.IMultipartContainer;
+import mcmultipart.api.multipart.MultipartHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import uk.co.qmunity.lib.part.compat.MultipartCompatibility;
+
+import java.util.Optional;
 
 /**
  * @author MineMaarten
@@ -28,14 +31,16 @@ public class TileRetriever extends TileFilter implements IFuzzyRetrieving {
     protected void pullItem() {
 
         if (isBufferEmpty()) {
-            PneumaticTube tube = MultipartCompatibility.getPart(world, pos.offset(getFacingDirection()), PneumaticTube.class);
-            if (tube != null) {
+            Optional<IMultipartContainer> container = MultipartHelper.getContainer(world, pos.offset(getOutputDirection()));
+            if (container.isPresent()) {
+                IMultipartContainer tube = container.get();
+                if(tube instanceof PneumaticTube) {
                 boolean everythingNull = true;
                 for (int i = 0; i < inventory.size(); i++) {
                     if (mode == 1 || slotIndex == i) {
                         ItemStack stack = inventory.get(i);
                         if (!stack.isEmpty()) {
-                            if (tube.getLogic().retrieveStack(this, getFacingDirection(), stack)) {
+                            if (((PneumaticTube)tube).getLogic().retrieveStack(this, getFacingDirection(), stack)) {
                                 if (mode == 0) {
                                     if (++slotIndex >= inventory.size())
                                         slotIndex = 0;
@@ -53,11 +58,12 @@ public class TileRetriever extends TileFilter implements IFuzzyRetrieving {
                     }
                 }
                 if (everythingNull) {
-                    tube.getLogic().retrieveStack(this, getFacingDirection(), null);
+                    ((PneumaticTube)tube).getLogic().retrieveStack(this, getFacingDirection(), null);
                     slotIndex = 0;
                 }
-            } else {
-                super.pullItem();
+                }else {
+                    super.pullItem();
+                }
             }
         }
     }

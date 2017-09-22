@@ -16,7 +16,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
-import uk.co.qmunity.lib.vec.Vec3dCube;
+
 
 ;
 
@@ -268,7 +268,7 @@ public class RenderHelper {
      * @author Koen Beckers (K4Unl)
      * @param vector
      */
-    public static void drawColoredCube(Vec3dCube vector) {
+    public static void drawColoredCube(AxisAlignedBB vector) {
 
         // Top side
         GL11.glColor3f(1.0F, 0.0F, 0.0F);
@@ -325,7 +325,7 @@ public class RenderHelper {
      * @author Koen Beckers (K4Unl) and Amadornes
      * @param vector
      */
-    public static void drawColoredCube(Vec3dCube vector, double r, double g, double b, double a, boolean... renderFaces) {
+    public static void drawColoredCube(AxisAlignedBB vector, double r, double g, double b, double a, boolean... renderFaces) {
 
         GL11.glColor4d(r, g, b, a);
 
@@ -393,7 +393,7 @@ public class RenderHelper {
      * @param vector
      * @param color
      *//*
-    public static void drawTesselatedColoredCube(Vec3dCube vector, int r, int g, int b, int a) {
+    public static void drawTesselatedColoredCube(AxisAlignedBB vector, int r, int g, int b, int a) {
 
         Tessellator t = Tessellator.instance;
         boolean wasTesselating = false;
@@ -462,7 +462,7 @@ public class RenderHelper {
      * @author Koen Beckers (K4Unl)
      * @param vector
      *//*
-    public static void drawTesselatedColoredCube(Vec3dCube vector) {
+    public static void drawTesselatedColoredCube(AxisAlignedBB vector) {
 
         Tessellator t = Tessellator.instance;
         boolean wasTesselating = false;
@@ -533,7 +533,7 @@ public class RenderHelper {
      * @author Koen Beckers (K4Unl)
      * @param vector
      */
-    public static void drawTesselatedTexturedCube(Vec3dCube vector) {
+    public static void drawTesselatedTexturedCube(AxisAlignedBB vector) {
 
         Tessellator t = Tessellator.getInstance();
         VertexBuffer b = t.getBuffer();
@@ -604,7 +604,7 @@ public class RenderHelper {
      * @author Koen Beckers (K4Unl)
      * @param vector
      *//*
-    public static void drawTesselatedCube(Vec3dCube vector) {
+    public static void drawTesselatedCube(AxisAlignedBB vector) {
 
         Tessellator t = Tessellator.instance;
         boolean wasTesselating = false;
@@ -669,7 +669,7 @@ public class RenderHelper {
      * @author ???
      * @param vector
      *//*
-    public static void drawTesselatedCubeWithoutNormals(Vec3dCube vector) {
+    public static void drawTesselatedCubeWithoutNormals(AxisAlignedBB vector) {
 
         Tessellator t = Tessellator.instance;
         boolean wasTesselating = false;

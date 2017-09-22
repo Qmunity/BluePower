@@ -3,12 +3,15 @@ package com.bluepowermod.item;
 import com.bluepowermod.block.worldgen.BlockStoneOre;
 import net.minecraft.block.Block;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 public class ItemBlockTooltip extends ItemBlock {
@@ -21,16 +24,11 @@ public class ItemBlockTooltip extends ItemBlock {
         this.block = block;
     }
 
-    @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
-    @SideOnly(Side.CLIENT)
-    public void addInformation(ItemStack p_77624_1_, EntityPlayer p_77624_2_, List p_77624_3_, boolean p_77624_4_) {
-
-        super.addInformation(p_77624_1_, p_77624_2_, p_77624_3_, p_77624_4_);
-
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+        super.addInformation(stack, worldIn, tooltip, flagIn);
         if (block instanceof BlockStoneOre)
             for (String s : ((BlockStoneOre) block).getTooltip())
-                p_77624_3_.add(I18n.format(s));
+                tooltip.add(I18n.format(s));
     }
-
 }

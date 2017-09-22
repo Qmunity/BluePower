@@ -41,7 +41,7 @@ public class ItemLimitedCrafting extends ItemBase {
     public ItemStack getContainerItem(ItemStack itemStack) {
     
         ItemStack container = itemStack.copy();
-        container.attemptDamageItem(1, new Random());
+        container.attemptDamageItem(1, new Random(), null);
         return container;
     }
 }

@@ -18,12 +18,8 @@
 package com.bluepowermod.init;
 
 import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
-import com.bluepowermod.api.misc.MinecraftColor;
-import com.bluepowermod.api.wire.redstone.RedwireType;
-import com.bluepowermod.part.PartManager;
 import com.bluepowermod.reference.BPOredictNames;
 
 public class OreDictionarySetup {
@@ -102,21 +98,7 @@ public class OreDictionarySetup {
         for (Block b : BPBlocks.blockLampInverted)
             OreDictionary.registerOre("lampInvertedBP", b);
 
-        for (RedwireType t : RedwireType.values()) {
-            for (MinecraftColor c : MinecraftColor.VALID_COLORS) {
-                ItemStack wireInsulated = PartManager.getPartInfo("wire." + t.getName() + "." + c.name().toLowerCase()).getStack(1);
-                OreDictionary.registerOre(String.format(BPOredictNames.WIRE_INSULATED_, t.getName()), wireInsulated.getItem());
-                OreDictionary.registerOre(BPOredictNames.WIRE_INSULATED, wireInsulated.getItem());
-
-                ItemStack wireBundled = PartManager.getPartInfo("wire." + t.getName() + ".bundled." + c.name().toLowerCase()).getStack(1);
-                OreDictionary.registerOre(String.format(BPOredictNames.WIRE_BUNDLED_, t.getName()), wireBundled.getItem());
-                OreDictionary.registerOre(BPOredictNames.WIRE_BUNDLED, wireBundled.getItem());
-            }
-
-            ItemStack wireBundled = PartManager.getPartInfo("wire." + t.getName() + ".bundled").getStack(1);
-            OreDictionary.registerOre(String.format(BPOredictNames.WIRE_BUNDLED_, t.getName()), wireBundled.getItem());
-            OreDictionary.registerOre(BPOredictNames.WIRE_BUNDLED, wireBundled.getItem());
-        }
+        //TODO Ore Dictionary Parts
     }
 
 }

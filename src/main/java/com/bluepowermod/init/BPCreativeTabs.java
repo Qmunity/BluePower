@@ -25,7 +25,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import com.bluepowermod.api.misc.MinecraftColor;
-import com.bluepowermod.part.PartManager;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -115,7 +114,7 @@ public class BPCreativeTabs {
             @SideOnly(Side.CLIENT)
             public ItemStack getIconItemStack() {
 
-                ItemStack iconItem = PartManager.getPartInfo("timer").getStack();
+                ItemStack iconItem = new ItemStack(BPBlocks.circuit_table);
                 if (!iconItem.isEmpty()) {
                     return iconItem;
                 } else {
@@ -137,7 +136,7 @@ public class BPCreativeTabs {
             @SideOnly(Side.CLIENT)
             public ItemStack getIconItemStack() {
 
-                ItemStack iconItem = PartManager.getPartInfo("wire.bluestone").getStack();
+                ItemStack iconItem = new ItemStack(BPItems.blue_alloy_ingot);
                 if (!iconItem.isEmpty()) {
                     return iconItem;
                 } else {
@@ -165,9 +164,7 @@ public class BPCreativeTabs {
                 boolean b = ((System.currentTimeMillis() / t) % (MinecraftColor.VALID_COLORS.length * 2)) >= MinecraftColor.VALID_COLORS.length;
                 boolean b2 = ((System.currentTimeMillis() / t) % (MinecraftColor.VALID_COLORS.length * 4)) >= MinecraftColor.VALID_COLORS.length;
 
-                ItemStack iconItem = PartManager.getPartInfo(
-                        (b2 ? "fixture" : "cagelamp") + "." + MinecraftColor.VALID_COLORS[i].name().toLowerCase() + (b ? ".inverted" : ""))
-                        .getStack();
+                ItemStack iconItem = new ItemStack(BPBlocks.blockLamp[0]);
                 if (!iconItem.isEmpty()) {
                     return iconItem;
                 } else {

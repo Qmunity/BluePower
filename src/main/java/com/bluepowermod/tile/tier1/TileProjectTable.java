@@ -232,8 +232,9 @@ public class TileProjectTable extends TileBase implements IInventory, IGuiButton
         }
     }
 
+    //TODO Fix the null pointer
     protected void updateCraftingGrid() {
-        craftResult.setInventorySlotContents(0, CraftingManager.getInstance().findMatchingRecipe(getCraftingGrid(), getWorld()));
+        craftResult.setInventorySlotContents(0, CraftingManager.findMatchingRecipe(getCraftingGrid(), getWorld()).getRecipeOutput());
     }
 
     protected void craft() {

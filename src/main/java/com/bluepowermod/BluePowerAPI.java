@@ -10,7 +10,9 @@ package com.bluepowermod;
 import com.bluepowermod.api.BPApi.IBPApi;
 import com.bluepowermod.api.block.IAdvancedSilkyRemovable;
 import com.bluepowermod.api.recipe.IAlloyFurnaceRegistry;
+import com.bluepowermod.api.tube.IPneumaticTube;
 import com.bluepowermod.api.wire.redstone.IRedstoneApi;
+import com.bluepowermod.part.tube.PneumaticTube;
 import com.bluepowermod.recipe.AlloyFurnaceRegistry;
 import com.bluepowermod.redstone.RedstoneApi;
 import net.minecraft.block.Block;
@@ -22,13 +24,6 @@ import net.minecraft.world.World;
 import uk.co.qmunity.lib.part.IPart;
 
 public class BluePowerAPI implements IBPApi {
-
-    // @Override
-    // public IPneumaticTube getPneumaticTube(TileEntity te) {
-    //
-    // PneumaticTube tube = getMultipartCompat().getBPPart(te, PneumaticTube.class);
-    // return tube != null ? tube.getLogic() : null;
-    // }
 
     @Override
     public IAlloyFurnaceRegistry getAlloyFurnaceRegistry() {

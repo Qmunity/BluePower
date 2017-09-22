@@ -31,8 +31,11 @@ import com.bluepowermod.util.Dependencies;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.material.Material;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
+import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import java.util.ArrayList;
@@ -42,7 +45,7 @@ import java.util.List;
 @GameRegistry.ObjectHolder(Refs.MODID)
 public class BPBlocks {
 
-    public static List<Block> renderlist = new ArrayList<Block>();
+    public static List<Block> blockList = new ArrayList<Block>();
     public static Block basalt;
     public static Block marble;
     public static Block basalt_cobble;
@@ -262,7 +265,7 @@ public class BPBlocks {
         registerBlock(sapphire_glass.setRegistryName(Refs.MODID, Refs.SAPPHIREGLASS_NAME));
         registerBlock(reinforced_sapphire_glass.setRegistryName(Refs.MODID, Refs.REINFORCEDSAPPHIREGLASS_NAME));
 
-        GameRegistry.register(flax_crop); //Dosen't need Item as has seed
+        registerBlock(flax_crop); //TODO Dosen't need Item as has seed
         registerBlock(indigo_flower);
 
         registerBlock(alloyfurnace);
@@ -315,8 +318,21 @@ public class BPBlocks {
     }
 
     private static void registerBlock(Block block) {
-        GameRegistry.register(block);
-        GameRegistry.register(new ItemBlock(block).setRegistryName(block.getRegistryName()));
-        renderlist.add(block);
+        blockList.add(block);
     }
+
+    @SubscribeEvent
+    public void registerBlocks(RegistryEvent.Register<Block> event) {
+        for(Block block : blockList) {
+            event.getRegistry().register(block);
+
+        }
+    }
+    @SubscribeEvent
+    public void registerBlockItems(RegistryEvent.Register<Item> event) {
+        for (Block block : blockList) {
+            event.getRegistry().register(new ItemBlock(block).setRegistryName(block.getRegistryName()));
+        }
+    }
+
 }

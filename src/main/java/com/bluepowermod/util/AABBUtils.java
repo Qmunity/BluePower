@@ -18,7 +18,7 @@ public class AABBUtils {
     }
 
     public static AxisAlignedBB translate(AxisAlignedBB aabb, double x, double y, double z) {
-        return aabb.move(new Vec3d(x,y,z));
+        return aabb.offset(x,y,z);
     }
 
 }

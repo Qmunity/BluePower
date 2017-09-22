@@ -19,7 +19,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
-import uk.co.qmunity.lib.vec.Vec3dCube;
+
 
 
 @SideOnly(Side.CLIENT)
@@ -49,7 +49,7 @@ public class RenderLamp extends TileEntitySpecialRenderer {
             }
             // power = 15;
             BlockPos vector = te.getPos();
-            Vec3dCube box = new Vec3dCube(-0.05, -0.05, -0.05, 1.05, 1.05, 1.05);
+            AxisAlignedBB box = new AxisAlignedBB(-0.05, -0.05, -0.05, 1.05, 1.05, 1.05);
 
             boolean[] renderFaces = new boolean[] { true, true, true, true, true, true };
 
@@ -59,22 +59,22 @@ public class RenderLamp extends TileEntitySpecialRenderer {
                 Block bl = vs.getBlock();
                 if (bl instanceof BlockLamp && ((BlockLamp) bl).getPower(te.getWorld(), v) > 0) {
                     if (d.getFrontOffsetX() < 0) {
-                        box = new Vec3dCube(new Vec3d(-0.5, box.getMinY(), box.getMinZ()), box.getMax());
+                        box = new AxisAlignedBB(new Vec3d(-0.5, box.getMinY(), box.getMinZ()), box.getMax());
                         renderFaces[2] = false;
                     } else if (d.getFrontOffsetY() < 0) {
-                        box = new Vec3dCube(new Vec3d(box.getMinX(), -0.5, box.getMinZ()), box.getMax());
+                        box = new AxisAlignedBB(new Vec3d(box.getMinX(), -0.5, box.getMinZ()), box.getMax());
                         renderFaces[1] = false;
                     } else if (d.getFrontOffsetZ() < 0) {
-                        box = new Vec3dCube(new Vec3d(box.getMinX(), box.getMinY(), -0.5), box.getMax());
+                        box = new AxisAlignedBB(new Vec3d(box.getMinX(), box.getMinY(), -0.5), box.getMax());
                         renderFaces[4] = false;
                     } else if (d.getFrontOffsetX() > 0) {
-                        box = new Vec3dCube(box.getMin(), new Vec3d(0.5, box.getMaxY(), box.getMaxZ()));
+                        box = new AxisAlignedBB(box.getMin(), new Vec3d(0.5, box.getMaxY(), box.getMaxZ()));
                         renderFaces[3] = false;
                     } else if (d.getFrontOffsetY() > 0) {
-                        box = new Vec3dCube(box.getMin(), new Vec3d(box.getMaxX(), 0.5, box.getMaxZ()));
+                        box = new AxisAlignedBB(box.getMin(), new Vec3d(box.getMaxX(), 0.5, box.getMaxZ()));
                         renderFaces[0] = false;
                     } else if (d.getFrontOffsetZ() > 0) {
-                        box = new Vec3dCube(box.getMin(), new Vec3d(box.getMaxX(), box.getMaxY(), 0.5));
+                        box = new AxisAlignedBB(box.getMin(), new Vec3d(box.getMaxX(), box.getMaxY(), 0.5));
                         renderFaces[5] = false;
                     }
                 }

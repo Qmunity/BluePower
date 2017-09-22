@@ -18,7 +18,7 @@ public class BakedModelLoader implements ICustomModelLoader {
     public static final Map<ResourceLocation, IModel> MODELS = new HashMap<ResourceLocation, IModel>();
 
     public BakedModelLoader(){
-        for (Block block :  BPBlocks.renderlist){
+        for (Block block :  BPBlocks.blockList){
             if (block instanceof BlockStoneOreConnected){
                 MODELS.put(block.getRegistryName(), new ConnectedModel(block.getRegistryName()));
             }

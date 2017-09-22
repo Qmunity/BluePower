@@ -18,8 +18,6 @@ import com.bluepowermod.item.ItemSeedBag;
 import com.bluepowermod.item.ItemSickle;
 import com.bluepowermod.network.BPNetworkHandler;
 import com.bluepowermod.network.message.MessageServerTickTime;
-import com.bluepowermod.part.PartManager;
-import com.bluepowermod.util.Achievements;
 import net.minecraft.block.BlockGrass;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -87,7 +85,7 @@ public class BPEventHandler {
     public void itemPickUp(EntityItemPickupEvent event) {
 
         EntityPlayer player = event.getEntityPlayer();
-        ItemStack pickUp = event.getItem().getEntityItem();
+        ItemStack pickUp = event.getItem().getItem();
         if (!(player.openContainer instanceof ContainerSeedBag)) {
             for (ItemStack is : player.inventory.mainInventory) {
                 if (!is.isEmpty() && is.getItem() instanceof ItemSeedBag) {
@@ -108,10 +106,6 @@ public class BPEventHandler {
                     }
                 }
             }
-        }
-
-        if (pickUp.getItem().equals(Item.getItemFromBlock(BPBlocks.tungsten_ore))) {
-            player.addStat(Achievements.tungstenAchievement, 1);
         }
     }
 
@@ -224,20 +218,6 @@ public class BPEventHandler {
         Item item = event.crafting.getItem();
         if (item == Item.getItemFromBlock(Blocks.AIR))
             return;
-
-        if (item.equals(BPItems.blue_doped_wafer) || item.equals(BPItems.red_doped_wafer)) {
-            event.player.addStat(Achievements.dopeAchievement, 1);
-        } else if (item.equals(PartManager.getPartInfo("pneumaticTube").getItem())) {
-            event.player.addStat(Achievements.tubeAchievement, 1);
-        } else if (item.equals(Item.getItemFromBlock(BPBlocks.sorting_machine))) {
-            event.player.addStat(Achievements.sortAchievement, 1);
-        } else if (item.equals(PartManager.getPartInfo("magTube").getItem())) {
-            event.player.addStat(Achievements.magTubeAchievement, 1);
-        } else if (item.equals(PartManager.getPartInfo("integratedCircuit3x3").getItem())
-                || item.equals(PartManager.getPartInfo("integratedCircuit5x5").getItem())
-                || item.equals(PartManager.getPartInfo("integratedCircuit7x7").getItem())) {
-            event.player.addStat(Achievements.circuitCeptionAchievement, 1);
-        }
     }
 
     @SubscribeEvent

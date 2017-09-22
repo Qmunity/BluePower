@@ -91,7 +91,7 @@ public class TileTransposer extends TileMachineBase {
     private void suckItems() {
 
         for (EntityItem entity : (List<EntityItem>) world.getEntitiesWithinAABB(EntityItem.class, ITEM_SUCK_AABBS[getFacingDirection().ordinal()].offset(pos))) {
-            ItemStack stack = entity.getEntityItem();
+            ItemStack stack = entity.getItem();
             if (isItemAccepted(stack) && !entity.isDead) {
                 addItemToOutputBuffer(stack, getAcceptedItemColor(stack));
                 entity.setDead();
@@ -105,7 +105,7 @@ public class TileTransposer extends TileMachineBase {
         AxisAlignedBB box = new AxisAlignedBB(pos.getX() + direction.getFrontOffsetX(), pos.getY() + direction.getFrontOffsetY(), pos.getZ() + direction.getFrontOffsetZ(), pos.getX()
                 + direction.getFrontOffsetX() + 1, pos.getY() + direction.getFrontOffsetY() + 1, pos.getZ() + direction.getFrontOffsetZ() + 1);
         for (EntityItem entity : (List<EntityItem>) world.getEntitiesWithinAABB(EntityItem.class, box)) {
-            ItemStack stack = entity.getEntityItem();
+            ItemStack stack = entity.getItem();
             if (isItemAccepted(stack) && !entity.isDead) {
                 addItemToOutputBuffer(stack, getAcceptedItemColor(stack));
                 entity.setDead();

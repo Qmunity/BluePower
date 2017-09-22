@@ -9,7 +9,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
     }
 }
 
@@ -48,7 +48,7 @@ project.ext {
     } else {
         build = "-custom"
     }
-    mcVersion = "1.11.2"
+    mcVersion = "1.12.1"
 }
 
 
@@ -57,19 +57,18 @@ group = "com.bluepowermod"
 archivesBaseName = "BluePower"
 
 dependencies {
-    deobfCompile "li.cil.oc:OpenComputers:MC1.11.2-1.7.0.28:api"
-    compile 'net.industrial-craft:industrialcraft-2:2.6.139-ex110:api'
-    compile "codechicken:CodeChickenLib:1.11-3.0.0.150:dev"
-	deobfCompile "MCMultiPart2:MCMultiPart-exp:2.0.0_19"
-    deobfCompile "mcp.mobius.waila:Hwyla:1.8.5-B19_1.11"
-	deobfCompile "mezz.jei:jei_1.11:4.1.1.208:api"
-	runtime "mezz.jei:jei_1.11:4.1.1.208"
+    deobfCompile "li.cil.oc:OpenComputers:MC1.12.1-1.7.0.4:api"
+    compile 'net.industrial-craft:industrialcraft-2:2.8.16-ex112:api'
+	deobfCompile "MCMultiPart2:MCMultiPart:2.2.2"
+    deobfCompile "mcp.mobius.waila:Hwyla:1.8.20-B35_1.12"
+	deobfCompile "mezz.jei:jei_1.12.1:4.7.8.95:api"
+	runtime "mezz.jei:jei_1.12.1:4.7.8.95"
 }
 
 minecraft {
-    version = "${project.ext.mcVersion}-13.20.0.2315"
-    runDir = "eclipse/assets"
-	mappings = "snapshot_20161225"
+    version = "${project.ext.mcVersion}-14.22.1.2485"
+    runDir = "run"
+	mappings = "snapshot_20170624"
 
     // replacing stuff in the source
     replace '@MAJOR@', project.major

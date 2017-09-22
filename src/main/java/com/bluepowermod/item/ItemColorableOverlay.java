@@ -33,12 +33,10 @@ public class ItemColorableOverlay extends ItemBase implements IItemColor {
         setMaxStackSize(1);
     }
 
-
     @Override
-    @SideOnly(Side.CLIENT)
-    public void getSubItems(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> subItems) {
+    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
         for (int i = 0; i < 16; i++) {
-            subItems.add(new ItemStack(this, 1, i));
+            items.add(new ItemStack(this, 1, i));
         }
     }
 

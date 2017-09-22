@@ -18,7 +18,6 @@
 package com.bluepowermod.init;
 
 import com.bluepowermod.BluePower;
-import com.bluepowermod.part.tube.TubeStack;
 import com.bluepowermod.reference.Refs;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraftforge.common.config.Configuration;
@@ -145,7 +144,6 @@ public class Config {
         if (!tubeRenderMode.equals("normal") && !tubeRenderMode.equals("reduced") && !tubeRenderMode.equals("none")) {
             tubeRenderMode = "auto";
         }
-        TubeStack.renderMode = TubeStack.RenderMode.valueOf(tubeRenderMode.toUpperCase());
 
         serverCircuitSavingOpOnly = config.get(Refs.CONFIG_CIRCUIT_DATABASE, "Server Template Saving by Ops only", false).getBoolean(false);
 

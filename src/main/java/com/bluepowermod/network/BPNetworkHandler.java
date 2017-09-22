@@ -20,7 +20,6 @@ package com.bluepowermod.network;
 import com.bluepowermod.network.message.*;
 import com.bluepowermod.reference.Refs;
 import net.minecraftforge.fml.relauncher.Side;
-import uk.co.qmunity.lib.network.NetworkHandler;
 
 
 public class BPNetworkHandler {

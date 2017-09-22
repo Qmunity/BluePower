@@ -30,12 +30,6 @@ public class Debugger {
 
         indicateBlock(te.getWorld(), te.getPos());
     }
-
-    public static void indicateBlock(IPart part) {
-
-        indicateBlock(part.getWorld(),part.getPos());
-    }
-
     public static void indicateBlock(World world, BlockPos pos) {
 
         if (world != null) {

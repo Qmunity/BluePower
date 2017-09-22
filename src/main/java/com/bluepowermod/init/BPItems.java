@@ -26,7 +26,9 @@ import net.minecraft.item.Item;
 import net.minecraft.item.Item.ToolMaterial;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import java.util.ArrayList;
@@ -34,7 +36,7 @@ import java.util.List;
 
 @GameRegistry.ObjectHolder(Refs.MODID)
 public class BPItems {
-    public static List<Item> renderlist = new ArrayList<Item>();
+    public static List<Item> itemList = new ArrayList<Item>();
     public static Item amethyst_gem;
     public static Item sapphire_gem;
     public static Item ruby_gem;
@@ -317,9 +319,15 @@ public class BPItems {
         MinecraftForge.addGrassSeed(new ItemStack(flax_seeds), 5);
     }
 
+    @SubscribeEvent
+    public void registerItems(RegistryEvent.Register<Item> event) {
+        for (Item item : itemList) {
+            event.getRegistry().register(item);
+        }
+    }
+
     private static void registerItem(Item item){
-        GameRegistry.register(item);
-        renderlist.add(item);
+        itemList.add(item);
     }
 
 }

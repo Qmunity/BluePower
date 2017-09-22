@@ -33,7 +33,7 @@ public class Renderers {
 
     public static void preinit() {
 
-        for (Item item : BPItems.renderlist) {
+        for (Item item : BPItems.itemList) {
             if (!(item instanceof IItemColor)) {
                 registerItemModel(item, 0);
             } else {
@@ -45,7 +45,7 @@ public class Renderers {
             }
         }
 
-        for (Block block : BPBlocks.renderlist) {
+        for (Block block : BPBlocks.blockList) {
             if (!(block instanceof ICustomModelBlock)) {
                 registerItemModel(Item.getItemFromBlock(block), 0);
             } else {
@@ -61,12 +61,12 @@ public class Renderers {
 
         ClientRegistry.bindTileEntitySpecialRenderer(TileLamp.class, new RenderLamp());
 
-        for (Item item : BPItems.renderlist) {
+        for (Item item : BPItems.itemList) {
             if (item instanceof IItemColor) {
                 Minecraft.getMinecraft().getItemColors().registerItemColorHandler((IItemColor) item, item);
             }
         }
-        for (final Block block : BPBlocks.renderlist) {
+        for (final Block block : BPBlocks.blockList) {
             if (block instanceof BlockLamp) {
                 Minecraft.getMinecraft().getBlockColors().registerBlockColorHandler((IBlockColor) block, block);
                 Minecraft.getMinecraft().getItemColors().registerItemColorHandler((IItemColor) block, Item.getItemFromBlock(block));
