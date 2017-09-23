@@ -38,8 +38,7 @@ public interface IDatabaseSaveable {
      * Items that contain items (an Integrated Circuit with gates on it) need to compare the input and output, and tell
      * which items are required. With this method you can tell the Circuit Database what items the item carries, so it can
      * calculate which items it needs.
-     * @param templateStack
-     * @param outputStack
+     * @param stack
      * @return ItemStack.EMPTY is a valid return.
      */
     public List<ItemStack> getItemsOnStack(ItemStack stack);

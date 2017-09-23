@@ -8,7 +8,6 @@
 package com.bluepowermod.client.gui.widget;
 
 import net.minecraft.client.Minecraft;
-import uk.co.qmunity.lib.client.gui.widget.WidgetMode;
 
 import com.bluepowermod.reference.Refs;
 
@@ -23,7 +22,7 @@ public class WidgetNumber extends WidgetMode {
     public void render(int mouseX, int mouseY, float frame) {
 
         super.render(mouseX, mouseY, frame);
-        Minecraft.getMinecraft().fontRendererObj.drawString("" + value, x + 4, y + 3, 4210752);
+        Minecraft.getMinecraft().fontRenderer.drawString("" + value, x + 4, y + 3, 4210752);
     }
 
     @Override

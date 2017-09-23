@@ -19,15 +19,12 @@
 
 package com.bluepowermod.tile.tier1;
 
-import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.init.BPBlocks;
-import com.bluepowermod.part.tube.TubeStack;
 import com.bluepowermod.tile.TileMachineBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.NonNullList;
 
 import java.util.List;
@@ -41,7 +38,7 @@ public class TileRelay extends TileMachineBase implements IInventory {
 
         super.update();
 
-        if (!world.isRemote && isBufferEmpty()) {
+        if (!world.isRemote) {
             for (int i = 0; i < inventory.size(); i++) {
                 if (!inventory.get(i).isEmpty() && inventory.get(i).getCount() > 0) {
                     addItemToOutputBuffer(inventory.get(i));
@@ -223,12 +220,6 @@ public class TileRelay extends TileMachineBase implements IInventory {
     public boolean canConnectRedstone() {
 
         return true;
-    }
-
-    @Override
-    public TubeStack acceptItemFromTube(TubeStack stack, EnumFacing from, boolean simulate) {
-        stack.stack = IOHelper.insert(this, stack.stack, from.ordinal(), simulate);
-        return stack.stack.isEmpty() ? null : stack;
     }
 
     //Todo Fields

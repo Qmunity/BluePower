@@ -17,8 +17,6 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.client.model.pipeline.UnpackedBakedQuad;
 import net.minecraftforge.common.model.IModelState;
 import net.minecraftforge.common.property.IExtendedBlockState;
-import uk.co.qmunity.lib.part.IPart;
-import uk.co.qmunity.lib.part.ITilePartHolder;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -66,11 +64,11 @@ public class PartBakedModel implements IBakedModel{
 
         List<BakedQuad> quads = new ArrayList<BakedQuad>();
 
-         if (state.getBlock() instanceof  ITilePartHolder){
+/*         if (state.getBlock() instanceof  ITilePartHolder){
             for ( IPart part : ((ITilePartHolder)state.getBlock()).getParts()  ) {
                 part.renderDynamic(null, 0, 0);
             }
-        }
+        }*/
         return quads;
     }
 
@@ -79,10 +77,10 @@ public class PartBakedModel implements IBakedModel{
 
         UnpackedBakedQuad.Builder builder = new UnpackedBakedQuad.Builder(format);
         builder.setTexture(sprite);
-        putVertex(builder, normal, v1.xCoord, v1.yCoord, v1.zCoord, 0, 16, sprite);
-        putVertex(builder, normal, v2.xCoord, v2.yCoord, v2.zCoord, 16, 16, sprite);
-        putVertex(builder, normal, v3.xCoord, v3.yCoord, v3.zCoord, 16, 0, sprite);
-        putVertex(builder, normal, v4.xCoord, v4.yCoord, v4.zCoord, 0, 0, sprite);
+        putVertex(builder, normal, v1.x, v1.y, v1.z, 0, 16, sprite);
+        putVertex(builder, normal, v2.x, v2.y, v2.z, 16, 16, sprite);
+        putVertex(builder, normal, v3.x, v3.y, v3.z, 16, 0, sprite);
+        putVertex(builder, normal, v4.x, v4.y, v4.z, 0, 0, sprite);
         return builder.build();
     }
 
@@ -103,7 +101,7 @@ public class PartBakedModel implements IBakedModel{
                         break;
                     }
                 case NORMAL:
-                    builder.put(e, (float) normal.xCoord, (float) normal.yCoord, (float) normal.zCoord, 0f);
+                    builder.put(e, (float) normal.x, (float) normal.y, (float) normal.z, 0f);
                     break;
                 default:
                     builder.put(e);

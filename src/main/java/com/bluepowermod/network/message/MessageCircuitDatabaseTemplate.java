@@ -10,6 +10,7 @@ package com.bluepowermod.network.message;
 import com.bluepowermod.BluePower;
 import com.bluepowermod.helper.ItemStackDatabase;
 import com.bluepowermod.network.BPNetworkHandler;
+import com.bluepowermod.network.LocatedPacket;
 import com.bluepowermod.reference.GuiIDs;
 import com.bluepowermod.tile.tier3.TileCircuitDatabase;
 import io.netty.buffer.ByteBuf;
@@ -17,7 +18,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
-import uk.co.qmunity.lib.network.LocatedPacket;
 
 /**
  * Used from client to server to select a template from the private library of the client. Used from server to client to message the client to save

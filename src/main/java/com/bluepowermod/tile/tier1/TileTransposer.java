@@ -21,7 +21,6 @@ package com.bluepowermod.tile.tier1;
 
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
 import com.bluepowermod.helper.IOHelper;
-import com.bluepowermod.part.tube.TubeStack;
 import com.bluepowermod.tile.TileMachineBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
@@ -37,7 +36,7 @@ public class TileTransposer extends TileMachineBase {
     public void update() {
 
         super.update();
-        if (isBufferEmpty() && !world.isRemote) {
+        if (!world.isRemote) {
             suckEntity();
         }
 
@@ -49,22 +48,13 @@ public class TileTransposer extends TileMachineBase {
         super.redstoneChanged(newValue);
         EnumFacing direction = getFacingDirection();
 
-        if (!world.isRemote && isBufferEmpty() && newValue) {
+        if (!world.isRemote && newValue) {
             if (world.isAirBlock(pos.offset(direction))) {
                 suckItems();
             } else {
                 pullItem();
             }
         }
-
-    }
-
-    @Override
-    public TubeStack acceptItemFromTube(TubeStack stack, EnumFacing from, boolean simulate) {
-
-        if (from == getFacingDirection() && getIsRedstonePowered())
-            return stack;
-        return super.acceptItemFromTube(stack, from, simulate);
 
     }
 

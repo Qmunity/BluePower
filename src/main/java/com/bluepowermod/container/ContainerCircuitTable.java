@@ -78,7 +78,7 @@ public class ContainerCircuitTable extends Container {
         if (scrollState != circuitTable.slotsScrolled) {
             scrollState = circuitTable.slotsScrolled;
             for (IContainerListener crafter : (List<IContainerListener>) listeners) {
-                crafter.sendProgressBarUpdate(this, 0, circuitTable.slotsScrolled);
+                crafter.sendWindowProperty(this, 0, circuitTable.slotsScrolled);
             }
         }
     }
@@ -91,18 +91,6 @@ public class ContainerCircuitTable extends Container {
         if (gui instanceof GuiCircuitTable) {
             ((GuiCircuitTable) gui).updateScrollbar(circuitTable.slotsScrolled);
         }
-    }
-
-    @Override
-    protected void retrySlotClick(int slot, int p_75133_2_, boolean p_75133_3_, EntityPlayer p_75133_4_) {
-
-        ItemStack stackInSlot = ((Slot) inventorySlots.get(slot)).getStack();
-        itemsCrafted += stackInSlot.getCount();
-        isRetrying = true;
-        if (itemsCrafted < stackInSlot.getMaxStackSize()) {
-            slotClick(slot, p_75133_2_, ClickType.values()[1], p_75133_4_);//only crafting slot doesn't retry clicking so no more than 64 items get crafted at a time
-        }
-        isRetrying = false;
     }
 
     @Override

@@ -21,6 +21,7 @@ package com.bluepowermod.container;
 
 import com.bluepowermod.ClientProxy;
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
+import com.bluepowermod.client.gui.GuiContainerBase;
 import com.bluepowermod.tile.tier3.TileManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -29,7 +30,6 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import uk.co.qmunity.lib.client.gui.GuiContainerBase;
 
 /**
  * @author MineMaarten
@@ -82,16 +82,16 @@ public class ContainerManager extends ContainerMachineBase {
             IContainerListener icrafting = (IContainerListener) crafter;
 
             if (filterColor != tileManager.filterColor.ordinal()) {
-                icrafting.sendProgressBarUpdate(this, 0, tileManager.filterColor.ordinal());
+                icrafting.sendWindowProperty(this, 0, tileManager.filterColor.ordinal());
             }
             if (priority != tileManager.priority) {
-                icrafting.sendProgressBarUpdate(this, 1, tileManager.priority);
+                icrafting.sendWindowProperty(this, 1, tileManager.priority);
             }
             if (mode != tileManager.mode) {
-                icrafting.sendProgressBarUpdate(this, 2, tileManager.mode);
+                icrafting.sendWindowProperty(this, 2, tileManager.mode);
             }
             if (fuzzySetting != tileManager.fuzzySetting) {
-                icrafting.sendProgressBarUpdate(this, 3, tileManager.fuzzySetting);
+                icrafting.sendWindowProperty(this, 3, tileManager.fuzzySetting);
             }
         }
         filterColor = tileManager.filterColor.ordinal();

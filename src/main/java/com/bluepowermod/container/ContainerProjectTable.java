@@ -96,25 +96,13 @@ public class ContainerProjectTable extends Container {
     public void onCraftMatrixChanged(IInventory p_75130_1_) {
 
         if (craftingGrid != null)
-            craftResult.setInventorySlotContents(0, CraftingManager.getInstance().findMatchingRecipe(craftingGrid, projectTable.getWorld()));
+            craftResult.setInventorySlotContents(0, CraftingManager.findMatchingResult(craftingGrid, projectTable.getWorld()));
     }
 
     @Override
     public boolean canInteractWith(EntityPlayer player) {
 
         return projectTable.isUsableByPlayer(player);
-    }
-
-    @Override
-    protected void retrySlotClick(int slot, int p_75133_2_, boolean p_75133_3_, EntityPlayer p_75133_4_) {
-
-        ItemStack stackInSlot = ((Slot) inventorySlots.get(slot)).getStack();
-        itemsCrafted += stackInSlot.getCount();
-        isRetrying = true;
-        if (slot != 9 || !isLastCraftingOperation() && itemsCrafted < stackInSlot.getMaxStackSize()) {
-            slotClick(slot, p_75133_2_, ClickType.values()[1], p_75133_4_);//only crafting slot doesn't retry clicking so no more than 64 items get crafted at a time
-        }
-        isRetrying = false;
     }
 
     private boolean isLastCraftingOperation() {

@@ -38,9 +38,6 @@ import net.minecraft.world.World;
 
 import java.util.Random;
 
-;
-
-
 public class BlockAlloyFurnace extends BlockContainerBase {
 
     public static final PropertyDirection FACING = PropertyDirection.create("facing");

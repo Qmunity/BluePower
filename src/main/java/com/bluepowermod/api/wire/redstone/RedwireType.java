@@ -18,8 +18,6 @@
 package com.bluepowermod.api.wire.redstone;
 
 import com.bluepowermod.api.misc.MinecraftColor;
-import com.bluepowermod.part.PartInfo;
-import com.bluepowermod.part.PartManager;
 
 public enum RedwireType {
 
@@ -76,11 +74,4 @@ public enum RedwireType {
 
         return type == this;// (this == BLUESTONE) == (type == BLUESTONE);
     }
-
-    public PartInfo getPartInfo(MinecraftColor color, boolean bundled) {
-
-        return PartManager.getPartInfo("wire." + getName()
-                + (color != MinecraftColor.NONE && color != null ? "." + color.name().toLowerCase() : "") + (bundled ? ".bundled" : ""));
-    }
-
 }

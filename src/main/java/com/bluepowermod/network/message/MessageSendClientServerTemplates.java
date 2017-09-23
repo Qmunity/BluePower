@@ -7,12 +7,12 @@
  */
 package com.bluepowermod.network.message;
 
+import com.bluepowermod.network.Packet;
 import com.bluepowermod.tile.tier3.TileCircuitDatabase;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
-import uk.co.qmunity.lib.network.Packet;
 
 import java.io.DataInput;
 import java.io.DataOutput;

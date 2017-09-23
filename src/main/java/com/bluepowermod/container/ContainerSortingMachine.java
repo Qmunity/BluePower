@@ -19,6 +19,7 @@ package com.bluepowermod.container;
 
 import com.bluepowermod.ClientProxy;
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
+import com.bluepowermod.client.gui.GuiContainerBase;
 import com.bluepowermod.container.slot.SlotPhantom;
 import com.bluepowermod.tile.tier2.TileSortingMachine;
 import net.minecraft.entity.player.EntityPlayer;
@@ -28,7 +29,6 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import uk.co.qmunity.lib.client.gui.GuiContainerBase;
 
 import java.util.Arrays;
 
@@ -95,25 +95,25 @@ public class ContainerSortingMachine extends ContainerMachineBase {
 
             for (int i = 0; i < 9; i++) {
                 if (colors[i] != sortingMachine.colors[i].ordinal()) {
-                    icrafting.sendProgressBarUpdate(this, i, sortingMachine.colors[i].ordinal());
+                    icrafting.sendWindowProperty(this, i, sortingMachine.colors[i].ordinal());
                 }
             }
 
             if (pullMode != sortingMachine.pullMode.ordinal()) {
-                icrafting.sendProgressBarUpdate(this, 9, sortingMachine.pullMode.ordinal());
+                icrafting.sendWindowProperty(this, 9, sortingMachine.pullMode.ordinal());
             }
 
             if (sortMode != sortingMachine.sortMode.ordinal()) {
-                icrafting.sendProgressBarUpdate(this, 10, sortingMachine.sortMode.ordinal());
+                icrafting.sendWindowProperty(this, 10, sortingMachine.sortMode.ordinal());
             }
 
             if (curColumn != sortingMachine.curColumn) {
-                icrafting.sendProgressBarUpdate(this, 11, sortingMachine.curColumn);
+                icrafting.sendWindowProperty(this, 11, sortingMachine.curColumn);
             }
 
             for (int i = 0; i < 8; i++) {
                 if (fuzzySettings[i] != sortingMachine.fuzzySettings[i]) {
-                    icrafting.sendProgressBarUpdate(this, i + 12, sortingMachine.fuzzySettings[i]);
+                    icrafting.sendWindowProperty(this, i + 12, sortingMachine.fuzzySettings[i]);
                 }
             }
         }

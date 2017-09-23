@@ -9,8 +9,6 @@ package com.bluepowermod.tile.tier1;
 
 import com.bluepowermod.helper.ItemStackHelper;
 import com.bluepowermod.init.BPBlocks;
-import com.bluepowermod.part.IGuiButtonSensitive;
-import com.bluepowermod.part.tube.TubeStack;
 import com.bluepowermod.tile.TileMachineBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
@@ -26,7 +24,7 @@ import java.util.List;
 /**
  * @author MineMaarten
  */
-public class TileItemDetector extends TileMachineBase implements ISidedInventory, IGuiButtonSensitive {
+public class TileItemDetector extends TileMachineBase implements ISidedInventory {
 
     public int mode;
     private final NonNullList<ItemStack> inventory = NonNullList.withSize(10, ItemStack.EMPTY);
@@ -50,10 +48,6 @@ public class TileItemDetector extends TileMachineBase implements ISidedInventory
                     }
                 }
             } else {
-                if (isBufferEmpty() == getOutputtingRedstone() > 0) {
-                    setOutputtingRedstone(!isBufferEmpty());
-                    sendUpdatePacket();
-                }
             }
         }
     }
@@ -64,7 +58,7 @@ public class TileItemDetector extends TileMachineBase implements ISidedInventory
         return getOutputtingRedstone() > 0;
     }
 
-    @Override
+/*    @Override
     public TubeStack acceptItemFromTube(TubeStack stack, EnumFacing from, boolean simulate) {
 
         if (from == getFacingDirection() && !isItemAccepted(stack.stack))
@@ -74,7 +68,7 @@ public class TileItemDetector extends TileMachineBase implements ISidedInventory
             savedPulses += mode == 0 ? stack.stack.getCount() : 1;
         }
         return remainder;
-    }
+    }*/
 
     private boolean isItemAccepted(ItemStack item) {
 
@@ -243,7 +237,7 @@ public class TileItemDetector extends TileMachineBase implements ISidedInventory
     }
 
 
-    @Override
+   /* @Override
     public void onButtonPress(EntityPlayer player, int messageId, int value) {
 
         if (messageId == 0)
@@ -251,7 +245,7 @@ public class TileItemDetector extends TileMachineBase implements ISidedInventory
         if (messageId == 1) {
             fuzzySetting = value;
         }
-    }
+    }*/
 
     @Override
     public boolean canConnectRedstone() {

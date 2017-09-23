@@ -11,8 +11,6 @@ import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
 import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.helper.ItemStackHelper;
 import com.bluepowermod.init.BPBlocks;
-import com.bluepowermod.part.IGuiButtonSensitive;
-import com.bluepowermod.part.tube.TubeStack;
 import com.bluepowermod.tile.TileMachineBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -25,12 +23,10 @@ import net.minecraft.util.NonNullList;
 
 import java.util.List;
 
-;
-
 /**
  * @author MineMaarten
  */
-public class TileRegulator extends TileMachineBase implements ISidedInventory, IGuiButtonSensitive {
+public class TileRegulator extends TileMachineBase implements ISidedInventory{
 
     private NonNullList<ItemStack> inventory = NonNullList.withSize(27, ItemStack.EMPTY);
     public TubeColor color = TubeColor.NONE;
@@ -45,7 +41,7 @@ public class TileRegulator extends TileMachineBase implements ISidedInventory, I
     public void update() {
 
         super.update();
-        if (!world.isRemote && isBufferEmpty()) {
+        if (!world.isRemote) {
             boolean ratiosMatch = true;
             for (int i = 0; i < 9; i++) {
                 if (!inventory.get(i).isEmpty()) {
@@ -173,51 +169,6 @@ public class TileRegulator extends TileMachineBase implements ISidedInventory, I
             }
         }
     }
-
-    @Override
-    public TubeStack acceptItemFromTube(TubeStack stack, EnumFacing from, boolean simulate) {
-
-        if (from == getFacingDirection() && isBufferEmpty()) {
-            stack = stack.copy();
-            int bufferItems = getItemsInSection(stack.stack, EnumSection.BUFFER);
-            int inputFilterItems = getItemsInSection(stack.stack, EnumSection.INPUT_FILTER);
-            int allowedItems = inputFilterItems - bufferItems;
-            if (allowedItems <= 0)
-                return stack;
-
-            ItemStack acceptedStack = stack.stack.splitStack(Math.min(allowedItems, stack.stack.getCount()));
-
-            if (!acceptedStack.isEmpty() && acceptedStack.getCount() > 0) {
-                for (int i = EnumSection.INPUT_FILTER.ordinal() * 9; i < EnumSection.INPUT_FILTER.ordinal() * 9 + 9; i++) {
-                    if (!inventory.get(i).isEmpty() && ItemStackHelper.areStacksEqual(acceptedStack, inventory.get(i), fuzzySetting)) {
-                        //TODO Check this as had unknown ordinal
-                        acceptedStack = IOHelper.insert(this, acceptedStack, EnumSection.BUFFER.ordinal() * 9 + i, 0, simulate);
-
-                        if (acceptedStack.isEmpty()) {
-                            break;
-                        }
-                    }
-                }
-
-                if (!acceptedStack.isEmpty() && acceptedStack.getCount() != 0) {
-                    //TODO Check this as had unknown ordinal
-                    ItemStack remainder = IOHelper.insert(this, acceptedStack, 0, simulate);
-                    if (!remainder.isEmpty()) {
-                        stack.stack.setCount(stack.stack.getCount() + remainder.getCount());
-                    }
-                }
-                if (stack.stack.getCount() > 0)
-                    return stack;
-                else
-                    return null;
-            } else {
-                return stack;
-            }
-
-        } else {
-            return super.acceptItemFromTube(stack, from, simulate);
-        }
-    }
     
 
     private int getItemsInSection(ItemStack type, EnumSection section) {
@@ -228,18 +179,6 @@ public class TileRegulator extends TileMachineBase implements ISidedInventory, I
                 count += inventory.get(i).getCount();
         }
         return count;
-    }
-
-    @Override
-    public void onButtonPress(EntityPlayer player, int messageId, int value) {
-
-        if (messageId == 1) {
-            mode = value;
-        } else if (messageId == 0) {
-            color = TubeColor.values()[value];
-        } else if (messageId == 2) {
-            fuzzySetting = value;
-        }
     }
 
     @Override

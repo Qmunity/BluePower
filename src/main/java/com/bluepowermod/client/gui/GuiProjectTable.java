@@ -21,10 +21,10 @@ package com.bluepowermod.client.gui;
 
 import java.util.List;
 
+import com.bluepowermod.client.gui.widget.IGuiWidget;
+import com.bluepowermod.client.gui.widget.WidgetMode;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
-import uk.co.qmunity.lib.client.gui.widget.IGuiWidget;
-import uk.co.qmunity.lib.client.gui.widget.WidgetMode;
 
 import com.bluepowermod.container.ContainerProjectTable;
 import com.bluepowermod.network.BPNetworkHandler;

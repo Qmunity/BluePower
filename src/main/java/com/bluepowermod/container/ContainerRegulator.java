@@ -21,6 +21,7 @@ package com.bluepowermod.container;
 
 import com.bluepowermod.ClientProxy;
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
+import com.bluepowermod.client.gui.GuiContainerBase;
 import com.bluepowermod.container.slot.SlotPhantom;
 import com.bluepowermod.tile.tier2.TileRegulator;
 import net.minecraft.entity.player.EntityPlayer;
@@ -30,7 +31,6 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import uk.co.qmunity.lib.client.gui.GuiContainerBase;
 
 /**
  * @author MineMaarten
@@ -92,13 +92,13 @@ public class ContainerRegulator extends ContainerMachineBase {
             IContainerListener icrafting = (IContainerListener) crafter;
 
             if (filterColor != tileRegulator.color.ordinal()) {
-                icrafting.sendProgressBarUpdate(this, 0, tileRegulator.color.ordinal());
+                icrafting.sendWindowProperty(this, 0, tileRegulator.color.ordinal());
             }
             if (mode != tileRegulator.mode) {
-                icrafting.sendProgressBarUpdate(this, 2, tileRegulator.mode);
+                icrafting.sendWindowProperty(this, 2, tileRegulator.mode);
             }
             if (fuzzySetting != tileRegulator.fuzzySetting) {
-                icrafting.sendProgressBarUpdate(this, 3, tileRegulator.fuzzySetting);
+                icrafting.sendWindowProperty(this, 3, tileRegulator.fuzzySetting);
             }
         }
         filterColor = tileRegulator.color.ordinal();

@@ -6,7 +6,6 @@ import net.minecraft.client.gui.Gui;
 import net.minecraft.util.math.MathHelper;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
-import uk.co.qmunity.lib.client.gui.widget.BaseWidget;
 
 public class WidgetVerticalScrollbar extends BaseWidget {
     public float currentScroll;

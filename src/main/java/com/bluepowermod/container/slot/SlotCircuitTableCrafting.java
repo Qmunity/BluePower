@@ -16,6 +16,7 @@ import net.minecraft.inventory.SlotCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 
@@ -75,13 +76,12 @@ public class SlotCircuitTableCrafting extends SlotCrafting {
     private static List<ItemStack> getCraftingComponents(ItemStack gate) {
 
         List<ItemStack> requiredItems = new ArrayList<ItemStack>();
-        List recipeList = CraftingManager.getInstance().getRecipeList();
-        for (IRecipe r : (List<IRecipe>) recipeList) {
+        for (IRecipe r : CraftingManager.REGISTRY) {
             ItemStack result = r.getRecipeOutput();
             if (!result.isEmpty() && result.isItemEqual(gate)) {
                 if (r instanceof ShapedOreRecipe) {
                     ShapedOreRecipe recipe = (ShapedOreRecipe) r;
-                    for (Object o : recipe.getInput()) {
+                    for (Object o : recipe.getIngredients()) {
                         if (o != null) {
                             ItemStack stack;
                             if (o instanceof ItemStack) {
@@ -107,18 +107,18 @@ public class SlotCircuitTableCrafting extends SlotCrafting {
                     return requiredItems;
                 } else if (r instanceof ShapedRecipes) {
                     ShapedRecipes recipe = (ShapedRecipes) r;
-                    for (ItemStack stack : recipe.recipeItems) {
-                        if (!stack.isEmpty()) {
+                    for (Ingredient stack : recipe.recipeItems) {
+                        if (!stack.getMatchingStacks()[0].isEmpty()) {
                             boolean needsAdding = true;
                             for (ItemStack listStack : requiredItems) {
-                                if (listStack.isItemEqual(stack)) {
+                                if (listStack.isItemEqual(stack.getMatchingStacks()[0])) {
                                     listStack.setCount(listStack.getCount() + 1);
                                     needsAdding = false;
                                     break;
                                 }
                             }
                             if (needsAdding)
-                                requiredItems.add(stack.copy());
+                                requiredItems.add(stack.getMatchingStacks()[0]);
                         }
                     }
                     return requiredItems;

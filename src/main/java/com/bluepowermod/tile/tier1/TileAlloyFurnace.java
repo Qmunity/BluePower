@@ -19,7 +19,6 @@ package com.bluepowermod.tile.tier1;
 
 import com.bluepowermod.api.recipe.IAlloyFurnaceRecipe;
 import com.bluepowermod.init.BPBlocks;
-import com.bluepowermod.recipe.AlloyFurnaceRegistry;
 import com.bluepowermod.tile.TileBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
@@ -139,7 +138,7 @@ public class TileAlloyFurnace extends TileBase implements ISidedInventory {
                 currentBurnTime--;
             }
             if (updatingRecipe) {
-                currentRecipe = AlloyFurnaceRegistry.getInstance().getMatchingRecipe(inventory, outputInventory);
+                //currentRecipe = AlloyFurnaceRegistry.getInstance().getMatchingRecipe(inventory, outputInventory);
                 updatingRecipe = false;
             }
             if (currentRecipe != null) {

@@ -7,9 +7,9 @@
  */
 package com.bluepowermod.container;
 
+import com.bluepowermod.client.gui.GuiContainerBase;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.IContainerListener;
-import uk.co.qmunity.lib.client.gui.GuiContainerBase;
 
 import com.bluepowermod.ClientProxy;
 import com.bluepowermod.tile.tier2.TileRetriever;
@@ -43,10 +43,10 @@ public class ContainerRetriever extends ContainerFilter {
             IContainerListener icrafting = (IContainerListener) crafter;
 
             if (slotIndex != retriever.slotIndex) {
-                icrafting.sendProgressBarUpdate(this, 2, retriever.slotIndex);
+                icrafting.sendWindowProperty(this, 2, retriever.slotIndex);
             }
             if (mode != retriever.mode) {
-                icrafting.sendProgressBarUpdate(this, 3, retriever.mode);
+                icrafting.sendWindowProperty(this, 3, retriever.mode);
             }
         }
         slotIndex = retriever.slotIndex;

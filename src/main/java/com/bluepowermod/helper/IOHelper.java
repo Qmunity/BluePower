@@ -17,14 +17,10 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.util.EnumFacing;;
-import uk.co.qmunity.lib.part.compat.MultipartCompatibility;
+import net.minecraft.util.EnumFacing;
 
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
 import com.bluepowermod.api.tube.ITubeConnection;
-import com.bluepowermod.part.tube.PneumaticTube;
-import com.bluepowermod.part.tube.TubeLogic;
-import com.bluepowermod.part.tube.TubeStack;
 
 /**
  * @author MineMaarten
@@ -235,7 +231,7 @@ public class IOHelper {
         if (tile == null || itemStack.isEmpty())
             return itemStack;
 
-        if (tile instanceof ITubeConnection) {
+       /* if (tile instanceof ITubeConnection) {
             TubeStack tubeStack = ((ITubeConnection) tile).acceptItemFromTube(new TubeStack(itemStack, direction.getOpposite(), color), direction,
                     simulate);
             if (tubeStack == null)
@@ -249,7 +245,7 @@ public class IOHelper {
         if (tube != null) {// we don't need to check connections, that's catched earlier.
             TubeLogic logic = tube.getLogic();
             return logic.injectStack(itemStack, direction.getOpposite(), color, simulate) ? ItemStack.EMPTY : itemStack;
-        }
+        }*/
         return itemStack;
     }
 
@@ -366,7 +362,7 @@ public class IOHelper {
                 itemStack.getItemDamage()));
 
         if (itemStack.hasTagCompound()) {
-            entityItem.getEntityItem().setTagCompound((NBTTagCompound) itemStack.getTagCompound().copy());
+            entityItem.getItem().setTagCompound((NBTTagCompound) itemStack.getTagCompound().copy());
         }
 
         float factor = 0.05F;
@@ -376,13 +372,13 @@ public class IOHelper {
         world.spawnEntity(entityItem);
         itemStack.setCount(0);
     }
-
+/*
     public static boolean canInterfaceWith(TileEntity tile, EnumFacing direction) {
 
         return canInterfaceWith(tile, direction, null, true);
-    }
+    }*/
 
-    public static boolean canInterfaceWith(TileEntity tile, EnumFacing direction, PneumaticTube requester, boolean canInterfaceWithIInventory) {
+   /* public static boolean canInterfaceWith(TileEntity tile, EnumFacing direction, PneumaticTube requester, boolean canInterfaceWithIInventory) {
 
         PneumaticTube tube = tile != null ? MultipartCompatibility.getPart(tile.getWorld(), tile.getPos(),
                 PneumaticTube.class) : null;
@@ -397,5 +393,5 @@ public class IOHelper {
             return !(tile instanceof ISidedInventory) || ((ISidedInventory) tile).getSlotsForFace(direction).length > 0;
         }
         return false;
-    }
+    }*/
 }

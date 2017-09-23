@@ -29,8 +29,6 @@ import net.minecraft.util.text.TextComponentString;
 import java.util.ArrayList;
 import java.util.List;
 
-;
-
 public class TileCircuitDatabase extends TileCircuitTable {
 
     public IInventory copyInventory = new InventoryBasic("copy inventory", false, 2) {
@@ -53,48 +51,6 @@ public class TileCircuitDatabase extends TileCircuitTable {
     public static List<ItemStack> serverDatabaseStacks = new ArrayList<ItemStack>(); // client side used only, sent from the server database.
     private EntityPlayer triggeringPlayer;
     public String nameTextField = "";
-
-    @Override
-    protected List<ItemStack> getApplicableItems() {
-
-        List<ItemStack> items = new ArrayList<ItemStack>();
-        if (world == null || !world.isRemote) {
-            return items;
-        } else {
-            items.addAll(clientCurrentTab == 1 ? stackDatabase.loadItemStacks() : serverDatabaseStacks);
-            return items;
-        }
-    }
-
-    @Override
-    public void onButtonPress(EntityPlayer player, int messageId, int value) {
-
-        switch (messageId) {
-        case 1:
-            player.openGui(BluePower.instance,
-                    value == 0 ? GuiIDs.CIRCUITDATABASE_MAIN_ID.ordinal() : GuiIDs.CIRCUITDATABASE_SHARING_ID.ordinal(), world, pos.getX(),
-                    pos.getY(), pos.getZ());
-            break;
-        case 2:
-            if (value == 2 && !hasPermissions(player))
-                return;
-            selectedShareOption = value;
-            if (selectedShareOption > 0) {
-                triggeringPlayer = player;
-                curUploadProgress = 0;
-            } else {
-                curUploadProgress = -1;
-            }
-            break;
-        case 3:
-            triggeringPlayer = player;
-            curCopyProgress = curCopyProgress >= 0 || !copy(player, copyInventory.getStackInSlot(0), copyInventory.getStackInSlot(1), true) ? -1
-                    : 0;
-            break;
-
-        }
-        super.onButtonPress(player, messageId, value);
-    }
 
     public static boolean hasPermissions(EntityPlayer player) {
 

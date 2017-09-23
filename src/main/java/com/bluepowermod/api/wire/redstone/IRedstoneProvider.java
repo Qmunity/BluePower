@@ -28,12 +28,8 @@ public interface IRedstoneProvider {
      *
      * @param world
      *            The world where the device is
-     * @param x
-     *            X coordinate of the device
-     * @param y
-     *            Y coordinate of the device
-     * @param z
-     *            Z coordinate of the device
+     * @param pos
+     *            Location of the device.
      * @param side
      *            Side of the device we're looking for
      * @param face

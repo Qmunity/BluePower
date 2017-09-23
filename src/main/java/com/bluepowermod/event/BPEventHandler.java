@@ -11,6 +11,7 @@ import com.bluepowermod.ClientProxy;
 import com.bluepowermod.client.gui.GuiCircuitDatabaseSharing;
 import com.bluepowermod.container.ContainerSeedBag;
 import com.bluepowermod.container.inventory.InventoryItem;
+import com.bluepowermod.helper.MathHelper;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.init.BPEnchantments;
 import com.bluepowermod.init.BPItems;
@@ -43,7 +44,6 @@ import net.minecraftforge.fml.common.gameevent.*;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import uk.co.qmunity.lib.helper.MathHelper;
 
 public class BPEventHandler {
 
@@ -101,7 +101,7 @@ public class BPEventHandler {
                             event.getItem().setDead();
                             return;
                         } else {
-                            event.getItem().setEntityItemStack(pickedUp);
+                            event.getItem().setItem(pickedUp);
                         }
                     }
                 }
@@ -118,8 +118,8 @@ public class BPEventHandler {
             // so we need to stop the loop.
             EntityDamageSource entitySource = (EntityDamageSource) event.getSource();
 
-            if (entitySource.getEntity() instanceof EntityPlayer) {
-                EntityPlayer killer = (EntityPlayer) entitySource.getEntity();
+            if (entitySource.getTrueSource() instanceof EntityPlayer) {
+                EntityPlayer killer = (EntityPlayer) entitySource.getTrueSource();
 
                 if (!killer.inventory.getCurrentItem().isEmpty()) {
                     if (EnchantmentHelper.getEnchantments(killer.inventory.getCurrentItem()).containsKey(BPEnchantments.disjunction)) {
@@ -143,8 +143,8 @@ public class BPEventHandler {
         if (event.getSource() instanceof EntityDamageSource) {
             EntityDamageSource entitySource = (EntityDamageSource) event.getSource();
 
-            if (entitySource.getEntity() instanceof EntityPlayer) {
-                EntityPlayer killer = (EntityPlayer) entitySource.getEntity();
+            if (entitySource.getTrueSource() instanceof EntityPlayer) {
+                EntityPlayer killer = (EntityPlayer) entitySource.getTrueSource();
 
                 if (!killer.inventory.getCurrentItem().isEmpty()) {
                     if (EnchantmentHelper.getEnchantments(killer.inventory.getCurrentItem()).containsKey(BPEnchantments.vorpal)) {

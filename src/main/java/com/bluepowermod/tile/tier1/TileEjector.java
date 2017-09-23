@@ -36,7 +36,7 @@ public class TileEjector extends TileMachineBase implements IInventory {
 
         super.redstoneChanged(newValue);
 
-        if (!world.isRemote && isBufferEmpty() && newValue) {
+        if (!world.isRemote && newValue) {
             for (int i = 0; i < inventory.size(); i++) {
                 if (!inventory.get(i).isEmpty() && inventory.get(i).getCount() > 0) {
                     ItemStack output = inventory.get(i).copy();

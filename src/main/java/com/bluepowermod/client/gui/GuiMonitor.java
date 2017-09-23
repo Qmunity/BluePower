@@ -7,8 +7,8 @@
  */
 package com.bluepowermod.client.gui;
 
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
@@ -87,7 +87,7 @@ public class GuiMonitor extends GuiContainerBaseBP {
         float f = 0.00195313F;
         float f1 = 0.00390625F;
         Tessellator tessellator = Tessellator.getInstance();
-        VertexBuffer buffer = tessellator.getBuffer();
+        BufferBuilder buffer = tessellator.getBuffer();
         buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
         buffer.pos(x + 0, z + h, zLevel).tex((u + 0) * f, (v + h) * f1).endVertex();
         buffer.pos(x + w, z + h, zLevel).tex((u + w) * f, (v + h) * f1).endVertex();
@@ -102,7 +102,7 @@ public class GuiMonitor extends GuiContainerBaseBP {
         float f = 0.00390625F;
         float f1 = 0.00390625F;
         Tessellator tessellator = Tessellator.getInstance();
-        VertexBuffer buffer = tessellator.getBuffer();
+        BufferBuilder buffer = tessellator.getBuffer();
         buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
         buffer.pos(x + 0, z + h, zLevel).tex((u + 0) * f, (v + h) * f1).endVertex();
         buffer.pos(x + w, z + h, zLevel).tex((u + w) * f, (v + h) * f1).endVertex();

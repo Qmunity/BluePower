@@ -7,9 +7,9 @@
  */
 package com.bluepowermod.network.message;
 
+import com.bluepowermod.network.LocatedPacket;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
-import uk.co.qmunity.lib.network.LocatedPacket;
 
 import com.bluepowermod.helper.Debugger;
 

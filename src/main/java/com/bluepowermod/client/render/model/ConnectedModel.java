@@ -1,7 +1,6 @@
 package com.bluepowermod.client.render.model;
 
 import com.bluepowermod.reference.Refs;
-import com.google.common.base.Function;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.VertexFormat;
@@ -13,6 +12,7 @@ import net.minecraftforge.common.model.TRSRTransformation;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.function.Function;
 
 /**
  * @author MoreThanHidden
@@ -25,10 +25,6 @@ public class ConnectedModel implements IModel {
             this.location = location;
         }
 
-        @Override
-        public IBakedModel bake(IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
-            return new ConnectedBakedModel(state, format, bakedTextureGetter, getTextures());
-        }
 
         @Override
         public Collection<ResourceLocation> getDependencies() {
@@ -44,6 +40,11 @@ public class ConnectedModel implements IModel {
             return icons;
 
 
+        }
+
+        @Override
+        public IBakedModel bake(IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
+            return new ConnectedBakedModel(state, format, bakedTextureGetter, getTextures());
         }
 
         @Override

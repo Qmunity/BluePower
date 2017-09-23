@@ -11,8 +11,6 @@ import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
 import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.helper.ItemStackHelper;
 import com.bluepowermod.init.BPBlocks;
-import com.bluepowermod.part.IGuiButtonSensitive;
-import com.bluepowermod.part.tube.TubeStack;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
@@ -22,19 +20,16 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.NonNullList;
 
 import java.util.List;
-
-;
-
 /**
  * @author MineMaarten
  */
-public class TileFilter extends TileTransposer implements ISidedInventory, IGuiButtonSensitive {
+public class TileFilter extends TileTransposer implements ISidedInventory{
 
     protected final NonNullList<ItemStack> inventory = NonNullList.withSize(9, ItemStack.EMPTY);
     public TubeColor filterColor = TubeColor.NONE;
     public int fuzzySetting;
 
-    @Override
+/*    @Override
     public TubeStack acceptItemFromTube(TubeStack stack, EnumFacing from, boolean simulate) {
 
         if (from == getFacingDirection() && (!isItemAccepted(stack.stack) || !isBufferEmpty()))
@@ -42,7 +37,7 @@ public class TileFilter extends TileTransposer implements ISidedInventory, IGuiB
         if (!simulate)
             this.addItemToOutputBuffer(stack.stack, filterColor);
         return null;
-    }
+    }*/
 
     @Override
     protected boolean isItemAccepted(ItemStack item) {
@@ -67,8 +62,6 @@ public class TileFilter extends TileTransposer implements ISidedInventory, IGuiB
 
     @Override
     protected void pullItem() {
-
-        if (isBufferEmpty()) {
             EnumFacing dir = getOutputDirection().getOpposite();
             TileEntity tile = getTileCache(dir);
             EnumFacing direction = dir.getOpposite();
@@ -89,7 +82,6 @@ public class TileFilter extends TileTransposer implements ISidedInventory, IGuiB
                     this.addItemToOutputBuffer(extractedStack, filterColor);
                 }
             }
-        }
     }
 
     /**
@@ -239,7 +231,7 @@ public class TileFilter extends TileTransposer implements ISidedInventory, IGuiB
     }
 
 
-    @Override
+   /* @Override
     public void onButtonPress(EntityPlayer player, int messageId, int value) {
 
         if (messageId == 0)
@@ -247,7 +239,7 @@ public class TileFilter extends TileTransposer implements ISidedInventory, IGuiB
         if (messageId == 1)
             fuzzySetting = value;
     }
-
+*/
     @Override
     public boolean canConnectRedstone() {
 

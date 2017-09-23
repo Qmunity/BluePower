@@ -118,15 +118,15 @@ public class ContainerAlloyFurnace extends Container {
             IContainerListener icrafting = (IContainerListener) crafter;
             
             if (currentBurnTime != tileFurnace.currentBurnTime) {
-                icrafting.sendProgressBarUpdate(this, 0, tileFurnace.currentBurnTime);
+                icrafting.sendWindowProperty(this, 0, tileFurnace.currentBurnTime);
             }
             
             if (maxBurnTime != tileFurnace.maxBurnTime) {
-                icrafting.sendProgressBarUpdate(this, 1, tileFurnace.maxBurnTime);
+                icrafting.sendWindowProperty(this, 1, tileFurnace.maxBurnTime);
             }
             
             if (currentProcessTime != tileFurnace.currentProcessTime) {
-                icrafting.sendProgressBarUpdate(this, 2, tileFurnace.currentProcessTime);
+                icrafting.sendWindowProperty(this, 2, tileFurnace.currentProcessTime);
             }
         }
         

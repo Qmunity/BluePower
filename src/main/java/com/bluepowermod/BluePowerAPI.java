@@ -10,25 +10,19 @@ package com.bluepowermod;
 import com.bluepowermod.api.BPApi.IBPApi;
 import com.bluepowermod.api.block.IAdvancedSilkyRemovable;
 import com.bluepowermod.api.recipe.IAlloyFurnaceRegistry;
-import com.bluepowermod.api.tube.IPneumaticTube;
-import com.bluepowermod.api.wire.redstone.IRedstoneApi;
-import com.bluepowermod.part.tube.PneumaticTube;
-import com.bluepowermod.recipe.AlloyFurnaceRegistry;
-import com.bluepowermod.redstone.RedstoneApi;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import uk.co.qmunity.lib.part.IPart;
 
 public class BluePowerAPI implements IBPApi {
 
     @Override
     public IAlloyFurnaceRegistry getAlloyFurnaceRegistry() {
 
-        return AlloyFurnaceRegistry.getInstance();
+        return null;//AlloyFurnaceRegistry.getInstance();
     }
 
     @Override
@@ -56,42 +50,4 @@ public class BluePowerAPI implements IBPApi {
             }
         }
     }
-
-
-    @Override
-    public void loadSilkySettings(IPart part, ItemStack stack) {
-
-        if (stack.isEmpty())
-            throw new IllegalArgumentException("ItemStack is empty!");
-        if (stack.hasTagCompound()) {
-            NBTTagCompound tag = stack.getTagCompound();
-            if (tag.hasKey("tileData")) {
-                NBTTagCompound tileTag = tag.getCompoundTag("tileData");
-                boolean err = false;
-                if (part instanceof IAdvancedSilkyRemovable) {
-                    try {
-                        part.getWorld();
-                        part.getPos();
-                    } catch (Exception ex) {
-                        err = true;
-                    }
-
-                    if (err) {
-                        ((IAdvancedSilkyRemovable) part).readSilkyData(null, new BlockPos(0, 0, 0), tileTag);
-                    } else {
-                        ((IAdvancedSilkyRemovable) part).readSilkyData(part.getWorld(), part.getPos(), tileTag);
-                    }
-                } else {
-                    part.readFromNBT(tileTag);
-                }
-            }
-        }
-    }
-
-    @Override
-    public IRedstoneApi getRedstoneApi() {
-
-        return RedstoneApi.getInstance();
-    }
-
 }

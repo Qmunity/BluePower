@@ -8,6 +8,9 @@
 package com.bluepowermod.client.gui;
 
 import com.bluepowermod.BluePower;
+import com.bluepowermod.client.gui.widget.BaseWidget;
+import com.bluepowermod.client.gui.widget.IGuiWidget;
+import com.bluepowermod.client.gui.widget.WidgetTab;
 import com.bluepowermod.container.ContainerCircuitDatabaseSharing;
 import com.bluepowermod.network.BPNetworkHandler;
 import com.bluepowermod.network.message.MessageCircuitDatabaseTemplate;
@@ -21,9 +24,6 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import uk.co.qmunity.lib.client.gui.widget.BaseWidget;
-import uk.co.qmunity.lib.client.gui.widget.IGuiWidget;
-import uk.co.qmunity.lib.client.gui.widget.WidgetTab;
 
 import java.util.List;
 
@@ -79,7 +79,7 @@ public class GuiCircuitDatabaseSharing extends GuiCircuitTable {
                 if (slot.getSlotIndex() == curDeletingTemplate) {
                     if (circuitDatabase.clientCurrentTab == 1) {
                         circuitDatabase.stackDatabase.deleteStack(slot.getStack());
-                        circuitDatabase.updateGateInventory();
+                       // circuitDatabase.updateGateInventory();
                     } else {
                         BPNetworkHandler.INSTANCE.sendToServer(new MessageCircuitDatabaseTemplate(circuitDatabase, slot.getStack(), true));
                     }

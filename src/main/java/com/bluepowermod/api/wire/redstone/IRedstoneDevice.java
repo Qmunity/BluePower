@@ -3,9 +3,8 @@ package com.bluepowermod.api.wire.redstone;
 import com.bluepowermod.api.connect.ConnectionType;
 import com.bluepowermod.api.connect.IConnectionCache;
 import net.minecraft.util.EnumFacing;
-import uk.co.qmunity.lib.vec.IWorldLocation;
 
-public interface IRedstoneDevice extends IWorldLocation {
+public interface IRedstoneDevice {
 
     /**
      * Returns whether or not the device passed as an argument can be connected to this device on the specified side. It also takes a ConnectionType,

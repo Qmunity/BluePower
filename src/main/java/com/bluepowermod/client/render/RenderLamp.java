@@ -14,6 +14,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.relauncher.Side;
@@ -21,15 +22,13 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
 
-
 @SideOnly(Side.CLIENT)
 public class RenderLamp extends TileEntitySpecialRenderer {
 
     public static int pass;
 
-
     @Override
-    public void renderTileEntityAt(TileEntity te, double x, double y, double z, float partialTicks, int destroyStage) {
+    public void render(TileEntity te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
         if (!(te.getBlockType() instanceof BlockLamp))
             return;
 
@@ -59,29 +58,29 @@ public class RenderLamp extends TileEntitySpecialRenderer {
                 Block bl = vs.getBlock();
                 if (bl instanceof BlockLamp && ((BlockLamp) bl).getPower(te.getWorld(), v) > 0) {
                     if (d.getFrontOffsetX() < 0) {
-                        box = new AxisAlignedBB(new Vec3d(-0.5, box.getMinY(), box.getMinZ()), box.getMax());
+                        box = new AxisAlignedBB(new Vec3d(-0.5, box.minY, box.minZ), new Vec3d(box.maxX, box.maxY, box.maxZ));
                         renderFaces[2] = false;
                     } else if (d.getFrontOffsetY() < 0) {
-                        box = new AxisAlignedBB(new Vec3d(box.getMinX(), -0.5, box.getMinZ()), box.getMax());
+                        box = new AxisAlignedBB(new Vec3d(box.minX, -0.5, box.minZ), new Vec3d(box.maxX, box.maxY, box.maxZ));
                         renderFaces[1] = false;
                     } else if (d.getFrontOffsetZ() < 0) {
-                        box = new AxisAlignedBB(new Vec3d(box.getMinX(), box.getMinY(), -0.5), box.getMax());
+                        box = new AxisAlignedBB(new Vec3d(box.minX, box.minY, -0.5), new Vec3d(box.maxX, box.maxY, box.maxZ));
                         renderFaces[4] = false;
                     } else if (d.getFrontOffsetX() > 0) {
-                        box = new AxisAlignedBB(box.getMin(), new Vec3d(0.5, box.getMaxY(), box.getMaxZ()));
+                        box = new AxisAlignedBB(new Vec3d(box.minX, box.minY, box.minZ), new Vec3d(0.5, box.maxY, box.maxZ));
                         renderFaces[3] = false;
                     } else if (d.getFrontOffsetY() > 0) {
-                        box = new AxisAlignedBB(box.getMin(), new Vec3d(box.getMaxX(), 0.5, box.getMaxZ()));
+                        box = new AxisAlignedBB(new Vec3d(box.minX, box.minY, box.minZ), new Vec3d(box.maxX, 0.5, box.maxZ));
                         renderFaces[0] = false;
                     } else if (d.getFrontOffsetZ() > 0) {
-                        box = new AxisAlignedBB(box.getMin(), new Vec3d(box.getMaxX(), box.getMaxY(), 0.5));
+                        box = new AxisAlignedBB(new Vec3d(box.minX, box.minY, box.minZ), new Vec3d(box.maxX, box.maxY, 0.5));
                         renderFaces[5] = false;
                     }
                 }
             }
 
-            box.getMin().add(new Vec3d(0.5, 0.5, 0.5));
-            box.getMax().add(new Vec3d(0.5, 0.5, 0.5));
+            box = new AxisAlignedBB(new Vec3d(box.minX + 0.5, box.minY + 0.5, box.minZ + 0.5), new Vec3d(box.maxX, box.maxY, box.maxZ));
+            box = new AxisAlignedBB(new Vec3d(box.minX, box.minY, box.minZ), new Vec3d(box.maxX + 0.5, box.maxY + 0.5, box.maxZ + 0.5));
 
             GL11.glTranslated(x, y, z);
             GL11.glEnable(GL11.GL_BLEND);

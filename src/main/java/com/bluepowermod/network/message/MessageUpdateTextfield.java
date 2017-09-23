@@ -7,12 +7,12 @@
  */
 package com.bluepowermod.network.message;
 
+import com.bluepowermod.network.LocatedPacket;
 import com.bluepowermod.tile.IGUITextFieldSensitive;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
-import uk.co.qmunity.lib.network.LocatedPacket;
 
 public class MessageUpdateTextfield extends LocatedPacket<MessageUpdateTextfield> {
 

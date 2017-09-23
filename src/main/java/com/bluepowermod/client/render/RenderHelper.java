@@ -8,11 +8,12 @@
 package com.bluepowermod.client.render;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
@@ -273,50 +274,50 @@ public class RenderHelper {
         // Top side
         GL11.glColor3f(1.0F, 0.0F, 0.0F);
         GL11.glNormal3d(0, 1, 0);
-        addVertex(vector.getMinX(), vector.getMaxY(), vector.getMaxZ());
-        addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ());
-        addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMinZ());
-        addVertex(vector.getMinX(), vector.getMaxY(), vector.getMinZ());
+        addVertex(vector.minX, vector.maxY, vector.maxZ);
+        addVertex(vector.maxX, vector.maxY, vector.maxZ);
+        addVertex(vector.maxX, vector.maxY, vector.minZ);
+        addVertex(vector.minX, vector.maxY, vector.minZ);
 
         // Bottom side
         GL11.glColor3f(1.0F, 1.0F, 0.0F);
         GL11.glNormal3d(0, -1, 0);
-        addVertex(vector.getMaxX(), vector.getMinY(), vector.getMaxZ());
-        addVertex(vector.getMinX(), vector.getMinY(), vector.getMaxZ());
-        addVertex(vector.getMinX(), vector.getMinY(), vector.getMinZ());
-        addVertex(vector.getMaxX(), vector.getMinY(), vector.getMinZ());
+        addVertex(vector.maxX, vector.minY, vector.maxZ);
+        addVertex(vector.minX, vector.minY, vector.maxZ);
+        addVertex(vector.minX, vector.minY, vector.minZ);
+        addVertex(vector.maxX, vector.minY, vector.minZ);
 
         // Draw west side:
         GL11.glColor3f(0.0F, 1.0F, 0.0F);
         GL11.glNormal3d(-1, 0, 0);
-        addVertex(vector.getMinX(), vector.getMinY(), vector.getMaxZ());
-        addVertex(vector.getMinX(), vector.getMaxY(), vector.getMaxZ());
-        addVertex(vector.getMinX(), vector.getMaxY(), vector.getMinZ());
-        addVertex(vector.getMinX(), vector.getMinY(), vector.getMinZ());
+        addVertex(vector.minX, vector.minY, vector.maxZ);
+        addVertex(vector.minX, vector.maxY, vector.maxZ);
+        addVertex(vector.minX, vector.maxY, vector.minZ);
+        addVertex(vector.minX, vector.minY, vector.minZ);
 
         // Draw east side:
         GL11.glColor3f(0.0F, 1.0F, 1.0F);
         GL11.glNormal3d(1, 0, 0);
-        addVertex(vector.getMaxX(), vector.getMinY(), vector.getMinZ());
-        addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMinZ());
-        addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ());
-        addVertex(vector.getMaxX(), vector.getMinY(), vector.getMaxZ());
+        addVertex(vector.maxX, vector.minY, vector.minZ);
+        addVertex(vector.maxX, vector.maxY, vector.minZ);
+        addVertex(vector.maxX, vector.maxY, vector.maxZ);
+        addVertex(vector.maxX, vector.minY, vector.maxZ);
 
         // Draw north side
         GL11.glColor3f(0.0F, 0.0F, 1.0F);
         GL11.glNormal3d(0, 0, -1);
-        addVertex(vector.getMinX(), vector.getMinY(), vector.getMinZ());
-        addVertex(vector.getMinX(), vector.getMaxY(), vector.getMinZ());
-        addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMinZ());
-        addVertex(vector.getMaxX(), vector.getMinY(), vector.getMinZ());
+        addVertex(vector.minX, vector.minY, vector.minZ);
+        addVertex(vector.minX, vector.maxY, vector.minZ);
+        addVertex(vector.maxX, vector.maxY, vector.minZ);
+        addVertex(vector.maxX, vector.minY, vector.minZ);
 
         // Draw south side
         GL11.glColor3f(0.0F, 0.0F, 0.0F);
         GL11.glNormal3d(0, 0, 1);
-        addVertex(vector.getMinX(), vector.getMinY(), vector.getMaxZ());
-        addVertex(vector.getMaxX(), vector.getMinY(), vector.getMaxZ());
-        addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ());
-        addVertex(vector.getMinX(), vector.getMaxY(), vector.getMaxZ());
+        addVertex(vector.minX, vector.minY, vector.maxZ);
+        addVertex(vector.maxX, vector.minY, vector.maxZ);
+        addVertex(vector.maxX, vector.maxY, vector.maxZ);
+        addVertex(vector.minX, vector.maxY, vector.maxZ);
     }
 
     /**
@@ -332,55 +333,55 @@ public class RenderHelper {
         // Top side
         if (renderFaces.length < 1 || renderFaces[0]) {
             GL11.glNormal3d(0, 1, 0);
-            addVertex(vector.getMinX(), vector.getMaxY(), vector.getMaxZ());
-            addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ());
-            addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMinZ());
-            addVertex(vector.getMinX(), vector.getMaxY(), vector.getMinZ());
+            addVertex(vector.minX, vector.maxY, vector.maxZ);
+            addVertex(vector.maxX, vector.maxY, vector.maxZ);
+            addVertex(vector.maxX, vector.maxY, vector.minZ);
+            addVertex(vector.minX, vector.maxY, vector.minZ);
         }
 
         // Bottom side
         if (renderFaces.length < 2 || renderFaces[1]) {
             GL11.glNormal3d(0, -1, 0);
-            addVertex(vector.getMaxX(), vector.getMinY(), vector.getMaxZ());
-            addVertex(vector.getMinX(), vector.getMinY(), vector.getMaxZ());
-            addVertex(vector.getMinX(), vector.getMinY(), vector.getMinZ());
-            addVertex(vector.getMaxX(), vector.getMinY(), vector.getMinZ());
+            addVertex(vector.maxX, vector.minY, vector.maxZ);
+            addVertex(vector.minX, vector.minY, vector.maxZ);
+            addVertex(vector.minX, vector.minY, vector.minZ);
+            addVertex(vector.maxX, vector.minY, vector.minZ);
         }
 
         // Draw west side:
         if (renderFaces.length < 3 || renderFaces[2]) {
             GL11.glNormal3d(-1, 0, 0);
-            addVertex(vector.getMinX(), vector.getMinY(), vector.getMaxZ());
-            addVertex(vector.getMinX(), vector.getMaxY(), vector.getMaxZ());
-            addVertex(vector.getMinX(), vector.getMaxY(), vector.getMinZ());
-            addVertex(vector.getMinX(), vector.getMinY(), vector.getMinZ());
+            addVertex(vector.minX, vector.minY, vector.maxZ);
+            addVertex(vector.minX, vector.maxY, vector.maxZ);
+            addVertex(vector.minX, vector.maxY, vector.minZ);
+            addVertex(vector.minX, vector.minY, vector.minZ);
         }
 
         // Draw east side:
         if (renderFaces.length < 4 || renderFaces[3]) {
             GL11.glNormal3d(1, 0, 0);
-            addVertex(vector.getMaxX(), vector.getMinY(), vector.getMinZ());
-            addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMinZ());
-            addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ());
-            addVertex(vector.getMaxX(), vector.getMinY(), vector.getMaxZ());
+            addVertex(vector.maxX, vector.minY, vector.minZ);
+            addVertex(vector.maxX, vector.maxY, vector.minZ);
+            addVertex(vector.maxX, vector.maxY, vector.maxZ);
+            addVertex(vector.maxX, vector.minY, vector.maxZ);
         }
 
         // Draw north side
         if (renderFaces.length < 5 || renderFaces[4]) {
             GL11.glNormal3d(0, 0, -1);
-            addVertex(vector.getMinX(), vector.getMinY(), vector.getMinZ());
-            addVertex(vector.getMinX(), vector.getMaxY(), vector.getMinZ());
-            addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMinZ());
-            addVertex(vector.getMaxX(), vector.getMinY(), vector.getMinZ());
+            addVertex(vector.minX, vector.minY, vector.minZ);
+            addVertex(vector.minX, vector.maxY, vector.minZ);
+            addVertex(vector.maxX, vector.maxY, vector.minZ);
+            addVertex(vector.maxX, vector.minY, vector.minZ);
         }
 
         // Draw south side
         if (renderFaces.length < 6 || renderFaces[5]) {
             GL11.glNormal3d(0, 0, 1);
-            addVertex(vector.getMinX(), vector.getMinY(), vector.getMaxZ());
-            addVertex(vector.getMaxX(), vector.getMinY(), vector.getMaxZ());
-            addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ());
-            addVertex(vector.getMinX(), vector.getMaxY(), vector.getMaxZ());
+            addVertex(vector.minX, vector.minY, vector.maxZ);
+            addVertex(vector.maxX, vector.minY, vector.maxZ);
+            addVertex(vector.maxX, vector.maxY, vector.maxZ);
+            addVertex(vector.minX, vector.maxY, vector.maxZ);
         }
 
         GL11.glColor4d(1, 1, 1, 1);
@@ -409,45 +410,45 @@ public class RenderHelper {
         t.setColorRGBA(r, g, b, a);
 
         t.setNormal(0, 1, 0);
-        t.addVertex(vector.getMinX(), vector.getMaxY(), vector.getMaxZ());
-        t.addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ());
-        t.addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMinZ());
-        t.addVertex(vector.getMinX(), vector.getMaxY(), vector.getMinZ());
+        t.addVertex(vector.minX, vector.maxY, vector.maxZ);
+        t.addVertex(vector.maxX, vector.maxY, vector.maxZ);
+        t.addVertex(vector.maxX, vector.maxY, vector.minZ);
+        t.addVertex(vector.minX, vector.maxY, vector.minZ);
 
         // Bottom side
         t.setNormal(0, -1, 0);
-        t.addVertex(vector.getMaxX(), vector.getMinY(), vector.getMaxZ());
-        t.addVertex(vector.getMinX(), vector.getMinY(), vector.getMaxZ());
-        t.addVertex(vector.getMinX(), vector.getMinY(), vector.getMinZ());
-        t.addVertex(vector.getMaxX(), vector.getMinY(), vector.getMinZ());
+        t.addVertex(vector.maxX, vector.minY, vector.maxZ);
+        t.addVertex(vector.minX, vector.minY, vector.maxZ);
+        t.addVertex(vector.minX, vector.minY, vector.minZ);
+        t.addVertex(vector.maxX, vector.minY, vector.minZ);
 
         // Draw west side:
         t.setNormal(-1, 0, 0);
-        t.addVertex(vector.getMinX(), vector.getMinY(), vector.getMaxZ());
-        t.addVertex(vector.getMinX(), vector.getMaxY(), vector.getMaxZ());
-        t.addVertex(vector.getMinX(), vector.getMaxY(), vector.getMinZ());
-        t.addVertex(vector.getMinX(), vector.getMinY(), vector.getMinZ());
+        t.addVertex(vector.minX, vector.minY, vector.maxZ);
+        t.addVertex(vector.minX, vector.maxY, vector.maxZ);
+        t.addVertex(vector.minX, vector.maxY, vector.minZ);
+        t.addVertex(vector.minX, vector.minY, vector.minZ);
 
         // Draw east side:
         t.setNormal(1, 0, 0);
-        t.addVertex(vector.getMaxX(), vector.getMinY(), vector.getMinZ());
-        t.addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMinZ());
-        t.addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ());
-        t.addVertex(vector.getMaxX(), vector.getMinY(), vector.getMaxZ());
+        t.addVertex(vector.maxX, vector.minY, vector.minZ);
+        t.addVertex(vector.maxX, vector.maxY, vector.minZ);
+        t.addVertex(vector.maxX, vector.maxY, vector.maxZ);
+        t.addVertex(vector.maxX, vector.minY, vector.maxZ);
 
         // Draw north side
         t.setNormal(0, 0, -1);
-        t.addVertex(vector.getMinX(), vector.getMinY(), vector.getMinZ());
-        t.addVertex(vector.getMinX(), vector.getMaxY(), vector.getMinZ());
-        t.addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMinZ());
-        t.addVertex(vector.getMaxX(), vector.getMinY(), vector.getMinZ());
+        t.addVertex(vector.minX, vector.minY, vector.minZ);
+        t.addVertex(vector.minX, vector.maxY, vector.minZ);
+        t.addVertex(vector.maxX, vector.maxY, vector.minZ);
+        t.addVertex(vector.maxX, vector.minY, vector.minZ);
 
         // Draw south side
         t.setNormal(0, 0, 1);
-        t.addVertex(vector.getMinX(), vector.getMinY(), vector.getMaxZ());
-        t.addVertex(vector.getMaxX(), vector.getMinY(), vector.getMaxZ());
-        t.addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ());
-        t.addVertex(vector.getMinX(), vector.getMaxY(), vector.getMaxZ());
+        t.addVertex(vector.minX, vector.minY, vector.maxZ);
+        t.addVertex(vector.maxX, vector.minY, vector.maxZ);
+        t.addVertex(vector.maxX, vector.maxY, vector.maxZ);
+        t.addVertex(vector.minX, vector.maxY, vector.maxZ);
 
         GL11.glColor4d(1, 1, 1, 1);
 
@@ -477,50 +478,50 @@ public class RenderHelper {
         // Top side
         t.setColorRGBA_F(1.0F, 0.0F, 0.0F, 1.0F);
         t.setNormal(0, 1, 0);
-        t.addVertex(vector.getMinX(), vector.getMaxY(), vector.getMaxZ());
-        t.addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ());
-        t.addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMinZ());
-        t.addVertex(vector.getMinX(), vector.getMaxY(), vector.getMinZ());
+        t.addVertex(vector.minX, vector.maxY, vector.maxZ);
+        t.addVertex(vector.maxX, vector.maxY, vector.maxZ);
+        t.addVertex(vector.maxX, vector.maxY, vector.minZ);
+        t.addVertex(vector.minX, vector.maxY, vector.minZ);
 
         // Bottom side
         t.setColorRGBA_F(1.0F, 1.0F, 0.0F, 1.0F);
         t.setNormal(0, -1, 0);
-        t.addVertex(vector.getMaxX(), vector.getMinY(), vector.getMaxZ());
-        t.addVertex(vector.getMinX(), vector.getMinY(), vector.getMaxZ());
-        t.addVertex(vector.getMinX(), vector.getMinY(), vector.getMinZ());
-        t.addVertex(vector.getMaxX(), vector.getMinY(), vector.getMinZ());
+        t.addVertex(vector.maxX, vector.minY, vector.maxZ);
+        t.addVertex(vector.minX, vector.minY, vector.maxZ);
+        t.addVertex(vector.minX, vector.minY, vector.minZ);
+        t.addVertex(vector.maxX, vector.minY, vector.minZ);
 
         // Draw west side:
         t.setColorRGBA_F(0.0F, 1.0F, 0.0F, 1.0F);
         t.setNormal(-1, 0, 0);
-        t.addVertex(vector.getMinX(), vector.getMinY(), vector.getMaxZ());
-        t.addVertex(vector.getMinX(), vector.getMaxY(), vector.getMaxZ());
-        t.addVertex(vector.getMinX(), vector.getMaxY(), vector.getMinZ());
-        t.addVertex(vector.getMinX(), vector.getMinY(), vector.getMinZ());
+        t.addVertex(vector.minX, vector.minY, vector.maxZ);
+        t.addVertex(vector.minX, vector.maxY, vector.maxZ);
+        t.addVertex(vector.minX, vector.maxY, vector.minZ);
+        t.addVertex(vector.minX, vector.minY, vector.minZ);
 
         // Draw east side:
         t.setColorRGBA_F(0.0F, 1.0F, 1.0F, 1.0F);
         t.setNormal(1, 0, 0);
-        t.addVertex(vector.getMaxX(), vector.getMinY(), vector.getMinZ());
-        t.addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMinZ());
-        t.addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ());
-        t.addVertex(vector.getMaxX(), vector.getMinY(), vector.getMaxZ());
+        t.addVertex(vector.maxX, vector.minY, vector.minZ);
+        t.addVertex(vector.maxX, vector.maxY, vector.minZ);
+        t.addVertex(vector.maxX, vector.maxY, vector.maxZ);
+        t.addVertex(vector.maxX, vector.minY, vector.maxZ);
 
         // Draw north side
         t.setColorRGBA_F(0.0F, 0.0F, 1.0F, 1.0F);
         t.setNormal(0, 0, -1);
-        t.addVertex(vector.getMinX(), vector.getMinY(), vector.getMinZ());
-        t.addVertex(vector.getMinX(), vector.getMaxY(), vector.getMinZ());
-        t.addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMinZ());
-        t.addVertex(vector.getMaxX(), vector.getMinY(), vector.getMinZ());
+        t.addVertex(vector.minX, vector.minY, vector.minZ);
+        t.addVertex(vector.minX, vector.maxY, vector.minZ);
+        t.addVertex(vector.maxX, vector.maxY, vector.minZ);
+        t.addVertex(vector.maxX, vector.minY, vector.minZ);
 
         // Draw south side
         t.setColorRGBA_F(0.0F, 0.0F, 0.0F, 1.0F);
         t.setNormal(0, 0, 1);
-        t.addVertex(vector.getMinX(), vector.getMinY(), vector.getMaxZ());
-        t.addVertex(vector.getMaxX(), vector.getMinY(), vector.getMaxZ());
-        t.addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ());
-        t.addVertex(vector.getMinX(), vector.getMaxY(), vector.getMaxZ());
+        t.addVertex(vector.minX, vector.minY, vector.maxZ);
+        t.addVertex(vector.maxX, vector.minY, vector.maxZ);
+        t.addVertex(vector.maxX, vector.maxY, vector.maxZ);
+        t.addVertex(vector.minX, vector.maxY, vector.maxZ);
 
         if (!wasTesselating) {
             t.draw();
@@ -536,7 +537,7 @@ public class RenderHelper {
     public static void drawTesselatedTexturedCube(AxisAlignedBB vector) {
 
         Tessellator t = Tessellator.getInstance();
-        VertexBuffer b = t.getBuffer();
+        BufferBuilder b = t.getBuffer();
         boolean wasTesselating = false;
 
         // Check if we were already tesselating
@@ -553,45 +554,45 @@ public class RenderHelper {
 
         // Top side
         b.normal(0, 1, 0);
-        b.pos(vector.getMinX(), vector.getMaxY(), vector.getMaxZ()).tex(minU, maxV).endVertex();
-        b.pos(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ()).tex(minU, minV).endVertex();
-        b.pos(vector.getMaxX(), vector.getMaxY(), vector.getMinZ()).tex(maxU, minV).endVertex();
-        b.pos(vector.getMinX(), vector.getMaxY(), vector.getMinZ()).tex(maxU, maxV).endVertex();
+        b.pos(vector.minX, vector.maxY, vector.maxZ).tex(minU, maxV).endVertex();
+        b.pos(vector.maxX, vector.maxY, vector.maxZ).tex(minU, minV).endVertex();
+        b.pos(vector.maxX, vector.maxY, vector.minZ).tex(maxU, minV).endVertex();
+        b.pos(vector.minX, vector.maxY, vector.minZ).tex(maxU, maxV).endVertex();
 
         // Bottom side
         b.normal(0, -1, 0);
-        b.pos(vector.getMaxX(), vector.getMinY(), vector.getMaxZ()).tex(minU, maxV).endVertex();
-        b.pos(vector.getMinX(), vector.getMinY(), vector.getMaxZ()).tex(minU, minV).endVertex();
-        b.pos(vector.getMinX(), vector.getMinY(), vector.getMinZ()).tex(maxU, minV).endVertex();
-        b.pos(vector.getMaxX(), vector.getMinY(), vector.getMinZ()).tex(maxU, maxV).endVertex();
+        b.pos(vector.maxX, vector.minY, vector.maxZ).tex(minU, maxV).endVertex();
+        b.pos(vector.minX, vector.minY, vector.maxZ).tex(minU, minV).endVertex();
+        b.pos(vector.minX, vector.minY, vector.minZ).tex(maxU, minV).endVertex();
+        b.pos(vector.maxX, vector.minY, vector.minZ).tex(maxU, maxV).endVertex();
 
         // Draw west side:
         b.normal(-1, 0, 0);
-        b.pos(vector.getMinX(), vector.getMinY(), vector.getMaxZ()).tex(minU, maxV).endVertex();
-        b.pos(vector.getMinX(), vector.getMaxY(), vector.getMaxZ()).tex(minU, minV).endVertex();
-        b.pos(vector.getMinX(), vector.getMaxY(), vector.getMinZ()).tex(maxU, minV).endVertex();
-        b.pos(vector.getMinX(), vector.getMinY(), vector.getMinZ()).tex(maxU, maxV).endVertex();
+        b.pos(vector.minX, vector.minY, vector.maxZ).tex(minU, maxV).endVertex();
+        b.pos(vector.minX, vector.maxY, vector.maxZ).tex(minU, minV).endVertex();
+        b.pos(vector.minX, vector.maxY, vector.minZ).tex(maxU, minV).endVertex();
+        b.pos(vector.minX, vector.minY, vector.minZ).tex(maxU, maxV).endVertex();
 
         // Draw east side:
         b.normal(1, 0, 0);
-        b.pos(vector.getMaxX(), vector.getMinY(), vector.getMinZ()).tex(minU, maxV).endVertex();
-        b.pos(vector.getMaxX(), vector.getMaxY(), vector.getMinZ()).tex(minU, minV).endVertex();
-        b.pos(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ()).tex(maxU, minV).endVertex();
-        b.pos(vector.getMaxX(), vector.getMinY(), vector.getMaxZ()).tex(maxU, maxV).endVertex();
+        b.pos(vector.maxX, vector.minY, vector.minZ).tex(minU, maxV).endVertex();
+        b.pos(vector.maxX, vector.maxY, vector.minZ).tex(minU, minV).endVertex();
+        b.pos(vector.maxX, vector.maxY, vector.maxZ).tex(maxU, minV).endVertex();
+        b.pos(vector.maxX, vector.minY, vector.maxZ).tex(maxU, maxV).endVertex();
 
         // Draw north side
         b.normal(0, 0, -1);
-        b.pos(vector.getMinX(), vector.getMinY(), vector.getMinZ()).tex(minU, maxV).endVertex();
-        b.pos(vector.getMinX(), vector.getMaxY(), vector.getMinZ()).tex(minU, minV).endVertex();
-        b.pos(vector.getMaxX(), vector.getMaxY(), vector.getMinZ()).tex(maxU, minV).endVertex();
-        b.pos(vector.getMaxX(), vector.getMinY(), vector.getMinZ()).tex(maxU, maxV).endVertex();
+        b.pos(vector.minX, vector.minY, vector.minZ).tex(minU, maxV).endVertex();
+        b.pos(vector.minX, vector.maxY, vector.minZ).tex(minU, minV).endVertex();
+        b.pos(vector.maxX, vector.maxY, vector.minZ).tex(maxU, minV).endVertex();
+        b.pos(vector.maxX, vector.minY, vector.minZ).tex(maxU, maxV).endVertex();
 
         // Draw south side
         b.normal(0, 0, 1);
-        b.pos(vector.getMinX(), vector.getMinY(), vector.getMaxZ()).tex(minU, maxV).endVertex();
-        b.pos(vector.getMaxX(), vector.getMinY(), vector.getMaxZ()).tex(minU, minV).endVertex();
-        b.pos(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ()).tex(maxU, minV).endVertex();
-        b.pos(vector.getMinX(), vector.getMaxY(), vector.getMaxZ()).tex(maxU, maxV).endVertex();
+        b.pos(vector.minX, vector.minY, vector.maxZ).tex(minU, maxV).endVertex();
+        b.pos(vector.maxX, vector.minY, vector.maxZ).tex(minU, minV).endVertex();
+        b.pos(vector.maxX, vector.maxY, vector.maxZ).tex(maxU, minV).endVertex();
+        b.pos(vector.minX, vector.maxY, vector.maxZ).tex(maxU, maxV).endVertex();
 
         if (!wasTesselating) {
             t.draw();
@@ -618,45 +619,45 @@ public class RenderHelper {
 
         // Top side
         t.setNormal(0, 1, 0);
-        t.addVertex(vector.getMinX(), vector.getMaxY(), vector.getMaxZ());
-        t.addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ());
-        t.addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMinZ());
-        t.addVertex(vector.getMinX(), vector.getMaxY(), vector.getMinZ());
+        t.addVertex(vector.minX, vector.maxY, vector.maxZ);
+        t.addVertex(vector.maxX, vector.maxY, vector.maxZ);
+        t.addVertex(vector.maxX, vector.maxY, vector.minZ);
+        t.addVertex(vector.minX, vector.maxY, vector.minZ);
 
         // Bottom side
         t.setNormal(0, -1, 0);
-        t.addVertex(vector.getMaxX(), vector.getMinY(), vector.getMaxZ());
-        t.addVertex(vector.getMinX(), vector.getMinY(), vector.getMaxZ());
-        t.addVertex(vector.getMinX(), vector.getMinY(), vector.getMinZ());
-        t.addVertex(vector.getMaxX(), vector.getMinY(), vector.getMinZ());
+        t.addVertex(vector.maxX, vector.minY, vector.maxZ);
+        t.addVertex(vector.minX, vector.minY, vector.maxZ);
+        t.addVertex(vector.minX, vector.minY, vector.minZ);
+        t.addVertex(vector.maxX, vector.minY, vector.minZ);
 
         // Draw west side:
         t.setNormal(-1, 0, 0);
-        t.addVertex(vector.getMinX(), vector.getMinY(), vector.getMaxZ());
-        t.addVertex(vector.getMinX(), vector.getMaxY(), vector.getMaxZ());
-        t.addVertex(vector.getMinX(), vector.getMaxY(), vector.getMinZ());
-        t.addVertex(vector.getMinX(), vector.getMinY(), vector.getMinZ());
+        t.addVertex(vector.minX, vector.minY, vector.maxZ);
+        t.addVertex(vector.minX, vector.maxY, vector.maxZ);
+        t.addVertex(vector.minX, vector.maxY, vector.minZ);
+        t.addVertex(vector.minX, vector.minY, vector.minZ);
 
         // Draw east side:
         t.setNormal(1, 0, 0);
-        t.addVertex(vector.getMaxX(), vector.getMinY(), vector.getMinZ());
-        t.addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMinZ());
-        t.addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ());
-        t.addVertex(vector.getMaxX(), vector.getMinY(), vector.getMaxZ());
+        t.addVertex(vector.maxX, vector.minY, vector.minZ);
+        t.addVertex(vector.maxX, vector.maxY, vector.minZ);
+        t.addVertex(vector.maxX, vector.maxY, vector.maxZ);
+        t.addVertex(vector.maxX, vector.minY, vector.maxZ);
 
         // Draw north side
         t.setNormal(0, 0, -1);
-        t.addVertex(vector.getMinX(), vector.getMinY(), vector.getMinZ());
-        t.addVertex(vector.getMinX(), vector.getMaxY(), vector.getMinZ());
-        t.addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMinZ());
-        t.addVertex(vector.getMaxX(), vector.getMinY(), vector.getMinZ());
+        t.addVertex(vector.minX, vector.minY, vector.minZ);
+        t.addVertex(vector.minX, vector.maxY, vector.minZ);
+        t.addVertex(vector.maxX, vector.maxY, vector.minZ);
+        t.addVertex(vector.maxX, vector.minY, vector.minZ);
 
         // Draw south side
         t.setNormal(0, 0, 1);
-        t.addVertex(vector.getMinX(), vector.getMinY(), vector.getMaxZ());
-        t.addVertex(vector.getMaxX(), vector.getMinY(), vector.getMaxZ());
-        t.addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ());
-        t.addVertex(vector.getMinX(), vector.getMaxY(), vector.getMaxZ());
+        t.addVertex(vector.minX, vector.minY, vector.maxZ);
+        t.addVertex(vector.maxX, vector.minY, vector.maxZ);
+        t.addVertex(vector.maxX, vector.maxY, vector.maxZ);
+        t.addVertex(vector.minX, vector.maxY, vector.maxZ);
 
         if (!wasTesselating) {
             t.draw();
@@ -682,40 +683,40 @@ public class RenderHelper {
         }
 
         // Top side
-        t.addVertex(vector.getMinX(), vector.getMaxY(), vector.getMaxZ());
-        t.addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ());
-        t.addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMinZ());
-        t.addVertex(vector.getMinX(), vector.getMaxY(), vector.getMinZ());
+        t.addVertex(vector.minX, vector.maxY, vector.maxZ);
+        t.addVertex(vector.maxX, vector.maxY, vector.maxZ);
+        t.addVertex(vector.maxX, vector.maxY, vector.minZ);
+        t.addVertex(vector.minX, vector.maxY, vector.minZ);
 
         // Bottom side
-        t.addVertex(vector.getMaxX(), vector.getMinY(), vector.getMaxZ());
-        t.addVertex(vector.getMinX(), vector.getMinY(), vector.getMaxZ());
-        t.addVertex(vector.getMinX(), vector.getMinY(), vector.getMinZ());
-        t.addVertex(vector.getMaxX(), vector.getMinY(), vector.getMinZ());
+        t.addVertex(vector.maxX, vector.minY, vector.maxZ);
+        t.addVertex(vector.minX, vector.minY, vector.maxZ);
+        t.addVertex(vector.minX, vector.minY, vector.minZ);
+        t.addVertex(vector.maxX, vector.minY, vector.minZ);
 
         // Draw west side:
-        t.addVertex(vector.getMinX(), vector.getMinY(), vector.getMaxZ());
-        t.addVertex(vector.getMinX(), vector.getMaxY(), vector.getMaxZ());
-        t.addVertex(vector.getMinX(), vector.getMaxY(), vector.getMinZ());
-        t.addVertex(vector.getMinX(), vector.getMinY(), vector.getMinZ());
+        t.addVertex(vector.minX, vector.minY, vector.maxZ);
+        t.addVertex(vector.minX, vector.maxY, vector.maxZ);
+        t.addVertex(vector.minX, vector.maxY, vector.minZ);
+        t.addVertex(vector.minX, vector.minY, vector.minZ);
 
         // Draw east side:
-        t.addVertex(vector.getMaxX(), vector.getMinY(), vector.getMinZ());
-        t.addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMinZ());
-        t.addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ());
-        t.addVertex(vector.getMaxX(), vector.getMinY(), vector.getMaxZ());
+        t.addVertex(vector.maxX, vector.minY, vector.minZ);
+        t.addVertex(vector.maxX, vector.maxY, vector.minZ);
+        t.addVertex(vector.maxX, vector.maxY, vector.maxZ);
+        t.addVertex(vector.maxX, vector.minY, vector.maxZ);
 
         // Draw north side
-        t.addVertex(vector.getMinX(), vector.getMinY(), vector.getMinZ());
-        t.addVertex(vector.getMinX(), vector.getMaxY(), vector.getMinZ());
-        t.addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMinZ());
-        t.addVertex(vector.getMaxX(), vector.getMinY(), vector.getMinZ());
+        t.addVertex(vector.minX, vector.minY, vector.minZ);
+        t.addVertex(vector.minX, vector.maxY, vector.minZ);
+        t.addVertex(vector.maxX, vector.maxY, vector.minZ);
+        t.addVertex(vector.maxX, vector.minY, vector.minZ);
 
         // Draw south side
-        t.addVertex(vector.getMinX(), vector.getMinY(), vector.getMaxZ());
-        t.addVertex(vector.getMaxX(), vector.getMinY(), vector.getMaxZ());
-        t.addVertex(vector.getMaxX(), vector.getMaxY(), vector.getMaxZ());
-        t.addVertex(vector.getMinX(), vector.getMaxY(), vector.getMaxZ());
+        t.addVertex(vector.minX, vector.minY, vector.maxZ);
+        t.addVertex(vector.maxX, vector.minY, vector.maxZ);
+        t.addVertex(vector.maxX, vector.maxY, vector.maxZ);
+        t.addVertex(vector.minX, vector.maxY, vector.maxZ);
 
         if (!wasTesselating) {
             t.draw();

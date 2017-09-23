@@ -38,7 +38,7 @@ public class TileBlockBreaker extends TileMachineBase {
     
         super.redstoneChanged(newValue);
         
-        if (!world.isRemote && newValue && isBufferEmpty()) {
+        if (!world.isRemote && newValue) {
             EnumFacing direction = getFacingDirection();
             IBlockState breakState = world.getBlockState(pos.offset(direction));
             if (!canBreakBlock(breakState.getBlock(), world, breakState, pos.offset(direction))) return;

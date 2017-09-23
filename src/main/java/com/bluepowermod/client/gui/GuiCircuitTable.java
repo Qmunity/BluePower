@@ -78,7 +78,7 @@ public class GuiCircuitTable extends GuiContainerBaseBP {
         super.initGui();
         buttonList.clear();
         Keyboard.enableRepeatEvents(true);
-        searchField = new GuiTextField(0, fontRendererObj, guiLeft + 8, guiTop + 20, 89, fontRendererObj.FONT_HEIGHT);
+        searchField = new GuiTextField(0, fontRenderer, guiLeft + 8, guiTop + 20, 89, fontRenderer.FONT_HEIGHT);
         searchField.setMaxStringLength(15);
         searchField.setEnableBackgroundDrawing(true);
         searchField.setVisible(true);

@@ -8,6 +8,7 @@
 package com.bluepowermod.container;
 
 import com.bluepowermod.ClientProxy;
+import com.bluepowermod.client.gui.GuiContainerBase;
 import com.bluepowermod.tile.tier1.TileItemDetector;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -16,7 +17,6 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import uk.co.qmunity.lib.client.gui.GuiContainerBase;
 
 /**
  * @author MineMaarten
@@ -100,10 +100,10 @@ public class ContainerItemDetector extends ContainerMachineBase {
             IContainerListener icrafting = (IContainerListener) crafter;
 
             if (mode != itemDetector.mode) {
-                icrafting.sendProgressBarUpdate(this, 0, itemDetector.mode);
+                icrafting.sendWindowProperty(this, 0, itemDetector.mode);
             }
             if (fuzzySetting != itemDetector.fuzzySetting) {
-                icrafting.sendProgressBarUpdate(this, 1, itemDetector.fuzzySetting);
+                icrafting.sendWindowProperty(this, 1, itemDetector.fuzzySetting);
             }
         }
         mode = itemDetector.mode;

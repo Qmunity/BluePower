@@ -20,7 +20,6 @@ import com.bluepowermod.reference.Refs;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.item.ItemDye;
 import org.lwjgl.opengl.GL11;
-import uk.co.qmunity.lib.client.gui.widget.BaseWidget;
 
 import java.util.List;
 

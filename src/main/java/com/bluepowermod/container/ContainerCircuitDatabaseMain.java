@@ -7,12 +7,12 @@
  */
 package com.bluepowermod.container;
 
+import com.bluepowermod.client.gui.GuiContainerBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import uk.co.qmunity.lib.client.gui.GuiContainerBase;
 
 import com.bluepowermod.ClientProxy;
 import com.bluepowermod.api.item.IDatabaseSaveable;
@@ -95,13 +95,13 @@ public class ContainerCircuitDatabaseMain extends ContainerGhosts {
             IContainerListener icrafting = (IContainerListener) crafter;
 
             if (curUploadProgress != circuitDatabase.curUploadProgress) {
-                icrafting.sendProgressBarUpdate(this, 0, circuitDatabase.curUploadProgress);
+                icrafting.sendWindowProperty(this, 0, circuitDatabase.curUploadProgress);
             }
             if (curCopyProgress != circuitDatabase.curCopyProgress) {
-                icrafting.sendProgressBarUpdate(this, 1, circuitDatabase.curCopyProgress);
+                icrafting.sendWindowProperty(this, 1, circuitDatabase.curCopyProgress);
             }
             if (selectedShareOption != circuitDatabase.selectedShareOption) {
-                icrafting.sendProgressBarUpdate(this, 2, circuitDatabase.selectedShareOption);
+                icrafting.sendWindowProperty(this, 2, circuitDatabase.selectedShareOption);
             }
         }
         curUploadProgress = circuitDatabase.curUploadProgress;

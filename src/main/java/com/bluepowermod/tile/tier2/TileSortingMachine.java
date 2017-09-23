@@ -11,8 +11,6 @@ import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
 import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.helper.ItemStackHelper;
 import com.bluepowermod.init.BPBlocks;
-import com.bluepowermod.part.IGuiButtonSensitive;
-import com.bluepowermod.part.tube.TubeStack;
 import com.bluepowermod.tile.TileMachineBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -27,14 +25,12 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-;
-
 /**
  *
  * @author MineMaarten
  */
 
-public class TileSortingMachine extends TileMachineBase implements ISidedInventory, IGuiButtonSensitive {
+public class TileSortingMachine extends TileMachineBase implements ISidedInventory {
 
     private ItemStack[] inventory = new ItemStack[40];
     public int curColumn = 0;
@@ -120,7 +116,6 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
 
     private void triggerSorting() {
 
-        if (isBufferEmpty()) {
             EnumFacing dir = getOutputDirection().getOpposite();
             TileEntity inputTE = getTileCache(dir);// might need opposite
 
@@ -168,7 +163,6 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
                     }
                 }
             }
-        }
     }
 
     private boolean matchAndProcessColumn(IInventory inputInventory, int[] accessibleSlots, int column) {
@@ -312,22 +306,6 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
         curColumn = 0;
     }
 
-    @Override
-    public void onButtonPress(EntityPlayer player, int messageId, int value) {
-
-        if (messageId < 0)
-            return;
-
-        if (messageId < 9) {
-            colors[messageId] = TubeColor.values()[value];
-        } else if (messageId == 9) {
-            pullMode = PullMode.values()[value];
-        } else if (messageId == 10) {
-            sortMode = SortMode.values()[value];
-        } else {
-            fuzzySettings[messageId - 11] = value;
-        }
-    }
 
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound tag) {
@@ -450,29 +428,6 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
     }
 
     @Override
-    public TubeStack acceptItemFromTube(TubeStack stack, EnumFacing from, boolean simulate) {
-
-        if (from == getOutputDirection()) {
-            return super.acceptItemFromTube(stack, from, simulate);
-        } else if (!isBufferEmpty() && !ejectionScheduled) {
-            return stack;
-        } else {
-            boolean success = !ItemStack.areItemStacksEqual(stack.stack, nonAcceptedStack) && tryProcessItem(stack.stack, simulate);
-            if (success) {
-                nonAcceptedStack = stack.stack;
-                if (stack.stack.getCount() <= 0) {
-                    return null;
-                } else {
-                    return stack;
-                }
-            } else {
-                return stack;
-            }
-        }
-
-    }
-
-    @Override
     public int getInventoryStackLimit() {
 
         return 64;
@@ -495,7 +450,7 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
     @Override
     public boolean isItemValidForSlot(int var1, ItemStack var2) {
 
-        return var1 < inventory.length ? true : isBufferEmpty() && !var2.isEmpty() && tryProcessItem(var2, true);
+        return var1 < inventory.length ? true : !var2.isEmpty() && tryProcessItem(var2, true);
     }
 
     @Override

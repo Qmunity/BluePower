@@ -10,7 +10,6 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.util.ResourceLocation;
-import uk.co.qmunity.lib.client.gui.GuiContainerBase;
 
 //@Optional.Interface(iface = "codechicken.nei.api.INEIGuiHandler", modid = Dependencies.NEI)
 public class GuiContainerBaseBP extends GuiContainerBase { //implements INEIGuiHandler
@@ -35,7 +34,7 @@ public class GuiContainerBaseBP extends GuiContainerBase { //implements INEIGuiH
             WidgetTabItemLister backlogTab = new WidgetTabItemLister(this, "gui.bluepower:tab.stuffed", Refs.MODID
                     + ":textures/gui/widgets/gui_stuffed.png", guiLeft + xSize, guiTop + 5, 0xFFc13d40, null, false);
             lastRightStat = backlogTab;
-            backlogTab.setItems(((TileMachineBase) inventory).getBacklog());
+            //backlogTab.setItems(((TileMachineBase) inventory).getBacklog());
             addWidget(backlogTab);
         }
 

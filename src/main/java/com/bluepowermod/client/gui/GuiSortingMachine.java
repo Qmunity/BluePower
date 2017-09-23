@@ -17,8 +17,7 @@
 
 package com.bluepowermod.client.gui;
 
-import com.bluepowermod.client.gui.widget.WidgetColor;
-import com.bluepowermod.client.gui.widget.WidgetFuzzySetting;
+import com.bluepowermod.client.gui.widget.*;
 import com.bluepowermod.container.ContainerSortingMachine;
 import com.bluepowermod.network.BPNetworkHandler;
 import com.bluepowermod.network.message.MessageGuiUpdate;
@@ -29,10 +28,6 @@ import com.bluepowermod.tile.tier2.TileSortingMachine.SortMode;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
-import uk.co.qmunity.lib.client.gui.widget.BaseWidget;
-import uk.co.qmunity.lib.client.gui.widget.IGuiWidget;
-import uk.co.qmunity.lib.client.gui.widget.WidgetMode;
-
 import java.util.List;
 
 /**

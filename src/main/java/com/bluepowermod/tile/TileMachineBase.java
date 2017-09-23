@@ -7,15 +7,11 @@
  */
 package com.bluepowermod.tile;
 
-import com.bluepowermod.BluePower;
 import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
 import com.bluepowermod.api.tube.ITubeConnection;
 import com.bluepowermod.api.tube.IWeightedTubeInventory;
-import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.helper.TileEntityCache;
-import com.bluepowermod.part.tube.TubeStack;
-import net.minecraft.block.BlockLiquid;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
@@ -23,15 +19,10 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
-import net.minecraftforge.fluids.IFluidBlock;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-
-;
 
 /**
  * @author MineMaarten
@@ -40,7 +31,6 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
 
     protected boolean spawnItemsInWorld = true;
     protected boolean acceptsTubeItems = true;
-    private final List<TubeStack> internalItemStackBuffer = new ArrayList<TubeStack>();
     private TileEntityCache tileCache;
     public static final int BUFFER_EMPTY_INTERVAL = 10;
     protected byte animationTicker = -1;
@@ -59,50 +49,11 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
                 ejectItems();
                 ejectionScheduled = false;
             }
-            if (animationTicker >= 0 && isBufferEmpty()) {
-                if (++animationTicker > ANIMATION_TIME) {
-                    animationTicker = -1;
-                    sendUpdatePacket();
-                }
-            }
-            if (getBacklog().size() > 50 && getTicker() % WARNING_INTERVAL  == 0) {
-                BluePower.log.warn("Large backlog (" + getBacklog().size() + " stacks) detected in " + this.getBlockType().getLocalizedName() + " at: " + this.pos.toString());
-            }
         }
     }
 
     private void ejectItems() {
 
-        for (Iterator<TubeStack> iterator = internalItemStackBuffer.iterator(); iterator.hasNext();) {
-            TubeStack tubeStack = iterator.next();
-            if (IOHelper.canInterfaceWith(getTileCache(getOutputDirection()), getFacingDirection())) {
-                ItemStack returnedStack = IOHelper.insert(getTileCache(getOutputDirection()), tubeStack.stack, getFacingDirection(), tubeStack.color,
-                        false);
-                if (returnedStack.isEmpty()) {
-                    iterator.remove();
-                    markDirty();
-                    if (!ejectionScheduled)
-                        break;
-                } else if (returnedStack.getCount() != tubeStack.stack.getCount()) {
-                    markDirty();
-                    if (!ejectionScheduled)
-                        break;
-                } else {
-                    break;
-                }
-            } else if (spawnItemsInWorld) {
-                EnumFacing direction = getFacingDirection().getOpposite();
-                if (!(world.getBlockState(pos.offset(direction)).isFullBlock()
-                        || ((world.getBlockState(pos.offset(direction))) instanceof BlockLiquid)
-                        || ((world.getBlockState(pos.offset(direction))) instanceof IFluidBlock))) {
-                    ejectItemInWorld(tubeStack.stack, direction);
-                    iterator.remove();
-                    markDirty();
-                } else {
-                    break;
-                }
-            }
-        }
     }
 
     @Override
@@ -121,23 +72,6 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
 
     protected void addItemToOutputBuffer(ItemStack stack, TubeColor color) {
 
-        if (!world.isRemote) {
-            internalItemStackBuffer.add(new TubeStack(stack, getOutputDirection().getOpposite(), color));
-            if (internalItemStackBuffer.size() == 1)
-                ejectionScheduled = true;
-            animationTicker = 0;
-            sendUpdatePacket();
-        }
-    }
-
-    public List<TubeStack> getBacklog() {
-        return internalItemStackBuffer;
-    }
-
-    @SideOnly(Side.CLIENT)
-    public void setBacklog(List<TubeStack> backlog) {
-        internalItemStackBuffer.clear();
-        internalItemStackBuffer.addAll(backlog);
     }
 
     protected void addItemToOutputBuffer(ItemStack stack) {
@@ -158,11 +92,6 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
         }
     }
 
-    protected boolean isBufferEmpty() {
-
-        return internalItemStackBuffer.isEmpty();// also say the buffer is empty when a immediate injection is scheduled.
-    }
-
     public TileEntity getTileCache(EnumFacing d) {
 
         if (tileCache == null) {
@@ -177,31 +106,10 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound compound) {
-
-        super.readFromNBT(compound);
-        NBTTagList nbttaglist = compound.getTagList("ItemBuffer", 10);
-
-        for (int i = 0; i < nbttaglist.tagCount(); ++i) {
-            NBTTagCompound nbttagcompound1 = nbttaglist.getCompoundTagAt(i);
-
-            internalItemStackBuffer.add(TubeStack.loadFromNBT(nbttagcompound1));
-        }
-    }
-
-    @Override
     public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 
         super.writeToNBT(compound);
         NBTTagList nbttaglist = new NBTTagList();
-
-        for (TubeStack tubeStack : internalItemStackBuffer) {
-            if (tubeStack != null) {
-                NBTTagCompound nbttagcompound1 = new NBTTagCompound();
-                tubeStack.writeToNBT(nbttagcompound1);
-                nbttaglist.appendTag(nbttagcompound1);
-            }
-        }
         compound.setTag("ItemBuffer", nbttaglist);
         return compound;
     }
@@ -242,29 +150,10 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
     }
 
     @Override
-    public List<ItemStack> getDrops() {
-
-        List<ItemStack> drops = super.getDrops();
-        for (TubeStack stack : internalItemStackBuffer)
-            drops.add(stack.stack);
-        return drops;
-    }
-
-    @Override
     public boolean isConnectedTo(EnumFacing from) {
 
         EnumFacing dir = getOutputDirection();
         return from == dir.getOpposite() || acceptsTubeItems && from == dir;
-    }
-
-    @Override
-    public TubeStack acceptItemFromTube(TubeStack stack, EnumFacing from, boolean simulate) {
-
-        if (from == getFacingDirection() && !isBufferEmpty() && !ejectionScheduled)
-            return stack;
-        if (!simulate)
-            this.addItemToOutputBuffer(stack.stack, stack.color);
-        return null;
     }
 
     @Override

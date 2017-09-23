@@ -7,8 +7,6 @@
  */
 package com.bluepowermod.client.render;
 
-import com.bluepowermod.part.PartInfo;
-import com.bluepowermod.part.PartManager;
 import com.bluepowermod.reference.Refs;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
@@ -153,8 +151,5 @@ public class IconSupplier {
             taintedSiliconChipOn = reg.registerSprite(new ResourceLocation(Refs.MODID + ":blocks/gates/components/tainted_silicon_chip_on"));
             quartzResonator = reg.registerSprite(new ResourceLocation(Refs.MODID + ":blocks/gates/components/resonator"));
             gateSolarPanel = reg.registerSprite(new ResourceLocation(Refs.MODID + ":blocks/gates/components/solarpanel"));
-
-            for (PartInfo i : PartManager.getRegisteredParts())
-                i.getExample().registerIcons(reg);
     }
 }

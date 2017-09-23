@@ -4,9 +4,8 @@ import com.bluepowermod.api.connect.ConnectionType;
 import com.bluepowermod.api.connect.IConnectionCache;
 import com.bluepowermod.api.misc.MinecraftColor;
 import net.minecraft.util.EnumFacing;
-import uk.co.qmunity.lib.vec.IWorldLocation;
 
-public interface IBundledDevice extends IWorldLocation {
+public interface IBundledDevice {
 
     /**
      * Returns whether or not the device passed as an argument can be connected to this device on the specified side. It also takes a ConnectionType,

@@ -38,7 +38,7 @@ public class Renderers {
                 registerItemModel(item, 0);
             } else {
                 NonNullList<ItemStack> subitems = NonNullList.create();
-                item.getSubItems(item, null, subitems);
+                    item.getSubItems(item.getCreativeTab(), subitems);
                 for (ItemStack subitem : subitems) {
                     registerItemModel(item, item.getMetadata(subitem));
                 }
@@ -77,7 +77,9 @@ public class Renderers {
 
     public static void registerItemModel(Item item, int metadata) {
         ResourceLocation loc = Item.REGISTRY.getNameForObject(item);
-        ModelLoader.setCustomModelResourceLocation(item, metadata, new ModelResourceLocation(loc, "inventory"));
+        if(loc != null) {
+            ModelLoader.setCustomModelResourceLocation(item, metadata, new ModelResourceLocation(loc, "inventory"));
+        }
     }
 
     public static void registerBakedModel(Block block) {

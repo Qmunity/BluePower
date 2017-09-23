@@ -7,6 +7,7 @@
  */
 package com.bluepowermod.client.gui;
 
+import com.bluepowermod.client.gui.widget.*;
 import com.bluepowermod.container.ContainerCircuitDatabaseMain;
 import com.bluepowermod.network.BPNetworkHandler;
 import com.bluepowermod.network.message.MessageGuiUpdate;
@@ -21,7 +22,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
-import uk.co.qmunity.lib.client.gui.widget.*;
 
 import java.io.IOException;
 import java.util.List;
@@ -111,7 +111,7 @@ public class GuiCircuitDatabaseMain extends GuiContainerBaseBP {
         addWidget(copyButton);
 
         Keyboard.enableRepeatEvents(true);
-        nameField = new GuiTextField(0, fontRendererObj, guiLeft + 95, guiTop + 35, 70, fontRendererObj.FONT_HEIGHT);
+        nameField = new GuiTextField(0, fontRenderer, guiLeft + 95, guiTop + 35, 70, fontRenderer.FONT_HEIGHT);
         nameField.setEnableBackgroundDrawing(true);
         nameField.setVisible(true);
         nameField.setTextColor(16777215);

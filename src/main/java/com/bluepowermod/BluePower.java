@@ -11,15 +11,9 @@ package com.bluepowermod;
 import com.bluepowermod.api.BPApi;
 import com.bluepowermod.client.gui.GUIHandler;
 import com.bluepowermod.compat.CompatibilityUtils;
-import com.bluepowermod.convert.WorldConversionEventHandler;
 import com.bluepowermod.event.BPEventHandler;
 import com.bluepowermod.init.*;
 import com.bluepowermod.network.BPNetworkHandler;
-import com.bluepowermod.part.PartManager;
-import com.bluepowermod.recipe.AlloyFurnaceRegistry;
-import com.bluepowermod.redstone.RedstoneApi;
-import com.bluepowermod.redstone.RedstoneProviderQmunityLib;
-import com.bluepowermod.redstone.RedstoneProviderVanilla;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.world.WorldGenerationHandler;
 import net.minecraft.item.Item;
@@ -35,7 +29,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import org.apache.logging.log4j.Logger;
 
 
-@Mod(modid = Refs.MODID, name = Refs.NAME, dependencies = "required-after:qmunitylib", guiFactory = Refs.GUIFACTORY)
+@Mod(modid = Refs.MODID, name = Refs.NAME, guiFactory = Refs.GUIFACTORY)
 public class BluePower {
 
     @Mod.Instance(Refs.MODID)
@@ -67,17 +61,8 @@ public class BluePower {
         BPEventHandler eventHandler = new BPEventHandler();
         MinecraftForge.EVENT_BUS.register(eventHandler);
         FMLCommonHandler.instance().bus().register(eventHandler);
-
-        MinecraftForge.EVENT_BUS.register(new WorldConversionEventHandler());
-
-        RedstoneApi.getInstance().registerRedstoneProvider(new RedstoneProviderQmunityLib());
-
-        PartManager.registerParts();
-
         BPBlocks.init();
         BPItems.init();
-        PartManager.registerItems();
-
         proxy.preInitRenderers();
     }
 
@@ -99,8 +84,6 @@ public class BluePower {
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event) {
         CompatibilityUtils.postInit(event);
-        AlloyFurnaceRegistry.getInstance().generateRecyclingRecipes();
-        RedstoneApi.getInstance().registerRedstoneProvider(new RedstoneProviderVanilla());
     }
 
     @Mod.EventHandler

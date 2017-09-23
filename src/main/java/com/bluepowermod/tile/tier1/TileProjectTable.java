@@ -11,7 +11,6 @@ import com.bluepowermod.BluePower;
 import com.bluepowermod.container.ContainerProjectTable;
 import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.init.BPBlocks;
-import com.bluepowermod.part.IGuiButtonSensitive;
 import com.bluepowermod.tile.TileBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
@@ -31,7 +30,7 @@ import java.util.List;
 /**
  * @author MineMaarten
  */
-public class TileProjectTable extends TileBase implements IInventory, IGuiButtonSensitive {
+public class TileProjectTable extends TileBase implements IInventory{
 
     private NonNullList<ItemStack> inventory = NonNullList.withSize(19, ItemStack.EMPTY);
     protected NonNullList<ItemStack> craftingGrid = NonNullList.withSize(9, ItemStack.EMPTY);
@@ -222,14 +221,6 @@ public class TileProjectTable extends TileBase implements IInventory, IGuiButton
     public boolean isItemValidForSlot(int p_94041_1_, ItemStack p_94041_2_) {
 
         return true;
-    }
-
-    @Override
-    public void onButtonPress(EntityPlayer player, int messageId, int value) {
-        Container container = player.openContainer;
-        if (container instanceof ContainerProjectTable) {
-            ((ContainerProjectTable) container).clearCraftingGrid();
-        }
     }
 
     //TODO Fix the null pointer
