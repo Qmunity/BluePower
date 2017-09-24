@@ -22,23 +22,26 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+@Mod.EventBusSubscriber(Side.CLIENT)
 @SideOnly(Side.CLIENT)
 public class Renderers {
 
-    public static void preinit() {
-
+    @SubscribeEvent
+    public static void registerModels(ModelRegistryEvent evt){
         for (Item item : BPItems.itemList) {
             if (!(item instanceof IItemColor)) {
                 registerItemModel(item, 0);
             } else {
                 NonNullList<ItemStack> subitems = NonNullList.create();
-                    item.getSubItems(item.getCreativeTab(), subitems);
                 for (ItemStack subitem : subitems) {
                     registerItemModel(item, item.getMetadata(subitem));
                 }
@@ -53,6 +56,9 @@ public class Renderers {
             }
         }
 
+    }
+
+    public static void preinit() {
         ModelLoaderRegistry.registerLoader(new BakedModelLoader());
 
     }
@@ -85,7 +91,6 @@ public class Renderers {
     public static void registerBakedModel(Block block) {
         ((ICustomModelBlock) block).initModel();
     }
-
 
 
 
