@@ -47,7 +47,7 @@ public class BPCreativeTabs {
             @SideOnly(Side.CLIENT)
             public ItemStack getTabIconItem() {
 
-                Block iconBlock = BPBlocks.marble;
+                Block iconBlock = BPBlocks.amethyst_block;
                 if (iconBlock != null) {
                     return new ItemStack(iconBlock);
                 } else {
@@ -164,7 +164,7 @@ public class BPCreativeTabs {
                 boolean b = ((System.currentTimeMillis() / t) % (MinecraftColor.VALID_COLORS.length * 2)) >= MinecraftColor.VALID_COLORS.length;
                 boolean b2 = ((System.currentTimeMillis() / t) % (MinecraftColor.VALID_COLORS.length * 4)) >= MinecraftColor.VALID_COLORS.length;
 
-                ItemStack iconItem = new ItemStack(BPBlocks.blockLamp[0]);
+                ItemStack iconItem = new ItemStack(BPBlocks.blockLampRGB);
                 if (!iconItem.isEmpty()) {
                     return iconItem;
                 } else {

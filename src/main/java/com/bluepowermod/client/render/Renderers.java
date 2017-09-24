@@ -42,6 +42,7 @@ public class Renderers {
                 registerItemModel(item, 0);
             } else {
                 NonNullList<ItemStack> subitems = NonNullList.create();
+                item.getSubItems(item.getCreativeTab(), subitems);
                 for (ItemStack subitem : subitems) {
                     registerItemModel(item, item.getMetadata(subitem));
                 }

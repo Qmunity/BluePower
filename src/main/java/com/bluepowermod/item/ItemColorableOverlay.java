@@ -25,7 +25,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class ItemColorableOverlay extends ItemBase implements IItemColor {
 
     public ItemColorableOverlay(String name) {
-    
+        super();
         setUnlocalizedName(name);
         setCreativeTab(BPCreativeTabs.items);
         setRegistryName(Refs.MODID + ":" + name);
@@ -35,8 +35,10 @@ public class ItemColorableOverlay extends ItemBase implements IItemColor {
 
     @Override
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
-        for (int i = 0; i < 16; i++) {
-            items.add(new ItemStack(this, 1, i));
+        if (isInCreativeTab(tab)) {
+            for (int i = 0; i < 16; i++) {
+                items.add(new ItemStack(this, 1, i));
+            }
         }
     }
 

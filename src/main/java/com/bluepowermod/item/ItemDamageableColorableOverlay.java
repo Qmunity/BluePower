@@ -25,8 +25,10 @@ public abstract class ItemDamageableColorableOverlay extends ItemColorableOverla
 
     @Override
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
-        items.add(new ItemStack(this, 1, 16));
-        super.getSubItems(tab, items);
+        if(isInCreativeTab(tab)) {
+            items.add(new ItemStack(this, 1, 16));
+            super.getSubItems(tab, items);
+        }
     }
 
     public static int getUsesUsed(ItemStack stack) {
