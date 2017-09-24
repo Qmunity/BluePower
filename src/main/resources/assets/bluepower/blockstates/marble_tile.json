@@ -2,7 +2,7 @@
   "forge_marker": 1,
   "defaults": {
     "textures": {
-      "all": "bluepower:blocks/marble_tile/marble_tile_1"
+      "all": "bluepower:blocks/ctm/marble_tile"
     },
     "model": "cube_all",
     "uvlock": true

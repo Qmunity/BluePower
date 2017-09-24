@@ -43,9 +43,6 @@ public class ClientProxy extends CommonProxy {
 
         MinecraftForge.EVENT_BUS.register(new IconSupplier());
         MinecraftForge.EVENT_BUS.register(new RenderDebugScreen());
-        //PartManager.registerRenderers();
-        Renderers.preinit();
-
         CompatibilityUtils.registerRenders();
     }
 

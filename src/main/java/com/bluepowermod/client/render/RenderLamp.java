@@ -79,8 +79,8 @@ public class RenderLamp extends TileEntitySpecialRenderer {
                 }
             }
 
-            box = new AxisAlignedBB(new Vec3d(box.minX + 0.5, box.minY + 0.5, box.minZ + 0.5), new Vec3d(box.maxX, box.maxY, box.maxZ));
-            box = new AxisAlignedBB(new Vec3d(box.minX, box.minY, box.minZ), new Vec3d(box.maxX + 0.5, box.maxY + 0.5, box.maxZ + 0.5));
+           // box = new AxisAlignedBB(new Vec3d(box.minX + 0.5, box.minY + 0.5, box.minZ + 0.5), new Vec3d(box.maxX, box.maxY, box.maxZ));
+           // box = new AxisAlignedBB(new Vec3d(box.minX, box.minY, box.minZ), new Vec3d(box.maxX + 0.5, box.maxY + 0.5, box.maxZ + 0.5));
 
             GL11.glTranslated(x, y, z);
             GL11.glEnable(GL11.GL_BLEND);

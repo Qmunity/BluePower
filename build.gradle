@@ -24,17 +24,21 @@ repositories {
 	maven { //JEI repo
 		url = "http://dvs1.progwml6.com/files/maven"
 	}
-    maven {
+    maven { //Open Computers
         name 'OpenComputers'
         url = "http://maven.cil.li/"
     }
-    maven {
+    maven { //IC2
         name = "ic2"
         url = "http://maven.ic2.player.to/"
     }
-	maven {
+	maven { //MC Multipart
 		url "http://maven.amadornes.com/"
 	}
+    maven { //CTM
+        name 'tterrag maven'
+        url "http://maven.tterrag.com/"
+    }
 }
 
 apply plugin: 'net.minecraftforge.gradle.forge'
@@ -63,6 +67,7 @@ dependencies {
     deobfCompile "mcp.mobius.waila:Hwyla:1.8.20-B35_1.12"
 	deobfCompile "mezz.jei:jei_1.12.1:4.7.8.95:api"
 	runtime "mezz.jei:jei_1.12.1:4.7.8.95"
+    compile "team.chisel.ctm:CTM:MC1.12-0.2.1.5"
 }
 
 minecraft {

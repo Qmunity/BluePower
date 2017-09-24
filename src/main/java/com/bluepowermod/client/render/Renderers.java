@@ -9,7 +9,6 @@
 package com.bluepowermod.client.render;
 
 import com.bluepowermod.block.machine.BlockLamp;
-import com.bluepowermod.client.render.model.BakedModelLoader;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.init.BPItems;
 import com.bluepowermod.tile.tier1.TileLamp;
@@ -24,7 +23,6 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -56,11 +54,6 @@ public class Renderers {
                 registerBakedModel(block);
             }
         }
-
-    }
-
-    public static void preinit() {
-        ModelLoaderRegistry.registerLoader(new BakedModelLoader());
 
     }
 

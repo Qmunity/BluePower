@@ -47,7 +47,7 @@ public class BPCreativeTabs {
             @SideOnly(Side.CLIENT)
             public ItemStack getTabIconItem() {
 
-                Block iconBlock = BPBlocks.amethyst_block;
+                Block iconBlock = BPBlocks.amethyst_ore;
                 if (iconBlock != null) {
                     return new ItemStack(iconBlock);
                 } else {
@@ -114,7 +114,7 @@ public class BPCreativeTabs {
             @SideOnly(Side.CLIENT)
             public ItemStack getIconItemStack() {
 
-                ItemStack iconItem = new ItemStack(BPBlocks.circuit_table);
+                ItemStack iconItem = new ItemStack(BPItems.redstone_pointer_tile);
                 if (!iconItem.isEmpty()) {
                     return iconItem;
                 } else {

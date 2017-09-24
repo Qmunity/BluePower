@@ -19,6 +19,7 @@ import net.minecraft.inventory.InventoryCraftResult;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.NonNullList;
@@ -223,9 +224,11 @@ public class TileProjectTable extends TileBase implements IInventory{
         return true;
     }
 
-    //TODO Fix the null pointer
     protected void updateCraftingGrid() {
-        craftResult.setInventorySlotContents(0, CraftingManager.findMatchingRecipe(getCraftingGrid(), getWorld()).getRecipeOutput());
+        IRecipe recipe = CraftingManager.findMatchingRecipe(getCraftingGrid(), getWorld());
+        if(recipe != null) {
+            craftResult.setInventorySlotContents(0, recipe.getRecipeOutput());
+        }
     }
 
     protected void craft() {

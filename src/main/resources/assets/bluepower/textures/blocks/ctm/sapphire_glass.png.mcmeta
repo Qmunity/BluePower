@@ -1,0 +1,10 @@
+{
+  "ctm": {
+    "ctm_version": 1,
+    "type": "CTM",
+    "layer": "TRANSLUCENT",
+    "textures": [
+      "bluepower:blocks/ctm/sapphire_glass_ctm"
+    ]
+  }
+}

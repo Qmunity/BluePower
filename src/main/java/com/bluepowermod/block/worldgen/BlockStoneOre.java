@@ -57,6 +57,7 @@ public class BlockStoneOre extends Block {
         setCreativeTab(BPCreativeTabs.blocks);
         setSoundType(SoundType.STONE);
         setRegistryName(Refs.MODID, name);
+        BPBlocks.blockList.add(this);
     }
 
     public Block setToolLevel(int level) {
