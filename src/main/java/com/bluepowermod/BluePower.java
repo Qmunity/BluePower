@@ -57,10 +57,9 @@ public class BluePower {
 
         CompatibilityUtils.preInit(event);
 
-        FMLCommonHandler.instance().bus().register(new Config());
+        MinecraftForge.EVENT_BUS.register(new Config());
         BPEventHandler eventHandler = new BPEventHandler();
         MinecraftForge.EVENT_BUS.register(eventHandler);
-        FMLCommonHandler.instance().bus().register(eventHandler);
         BPBlocks.init();
         BPItems.init();
         proxy.preInitRenderers();

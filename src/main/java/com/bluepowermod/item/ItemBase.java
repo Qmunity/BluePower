@@ -22,16 +22,18 @@
 
 package com.bluepowermod.item;
 
+import com.bluepowermod.init.BPItems;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import com.bluepowermod.reference.Refs;
+import net.minecraftforge.event.RegistryEvent;
 
 public class ItemBase extends Item {
 
     public ItemBase() {
-
         super();
+        BPItems.itemList.add(this);
     }
 
     @Override

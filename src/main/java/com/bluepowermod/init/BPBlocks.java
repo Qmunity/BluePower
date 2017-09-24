@@ -35,14 +35,13 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import java.util.ArrayList;
 import java.util.List;
 
-
-@GameRegistry.ObjectHolder(Refs.MODID)
+@Mod.EventBusSubscriber(modid = Refs.MODID)
 public class BPBlocks {
 
     public static List<Block> blockList = new ArrayList<Block>();
@@ -126,7 +125,6 @@ public class BPBlocks {
     public static Block sortron;
 
     public static void init() {
-
         instantiateBlocks();
         registerBlocks();
         initModDependantBlocks();
@@ -226,86 +224,16 @@ public class BPBlocks {
 
     private static void registerBlocks() {
 
-        registerBlock(basalt.setRegistryName(Refs.MODID, Refs.BASALT_NAME));
-        registerBlock(basalt_cobble.setRegistryName(Refs.MODID, Refs.BASALTCOBBLE_NAME));
-        registerBlock(basalt_brick.setRegistryName(Refs.MODID, Refs.BASALTBRICK_NAME));
-        registerBlock(basaltbrick_cracked.setRegistryName(Refs.MODID, Refs.CRACKEDBASALTBRICK_NAME));
-        registerBlock(fancy_basalt.setRegistryName(Refs.MODID, Refs.CHISELEDBASALTBRICK_NAME));
-        registerBlock(basalt_brick_small.setRegistryName(Refs.MODID, Refs.SMALLBASALTBRICK_NAME));
-        registerBlock(cracked_basalt_lava.setRegistryName(Refs.MODID, Refs.CRACKED_BASALT));
-        registerBlock(basalt_tile.setRegistryName(Refs.MODID, Refs.BASALTTILE_NAME));
-        registerBlock(basalt_paver.setRegistryName(Refs.MODID, Refs.BASALTPAVER_NAME));
-
-        registerBlock(marble.setRegistryName(Refs.MODID, Refs.MARBLE_NAME));
-        registerBlock(marble_brick.setRegistryName(Refs.MODID, Refs.MARBLEBRICK_NAME));
-        registerBlock(fancy_marble.setRegistryName(Refs.MODID, Refs.CHISELEDMARBLEBRICK_NAME));
-        registerBlock(marble_brick_small.setRegistryName(Refs.MODID, Refs.SMALLMARBLEBRICK_NAME));
-        registerBlock(marble_tile.setRegistryName(Refs.MODID, Refs.MARBLETILE_NAME));
-        registerBlock(marble_paver.setRegistryName(Refs.MODID, Refs.MARBLEPAVER_NAME));
-        registerBlock(tiles.setRegistryName(Refs.MODID, Refs.TILES_NAME));
-
-        registerBlock(teslatite_ore);
-        registerBlock(copper_ore.setRegistryName(Refs.MODID, Refs.COPPERORE_NAME));
-        registerBlock(silver_ore.setRegistryName(Refs.MODID, Refs.SILVERORE_NAME));
-        registerBlock(zinc_ore.setRegistryName(Refs.MODID, Refs.ZINCORE_NAME));
-        registerBlock(tungsten_ore.setRegistryName(Refs.MODID, Refs.TUNGSTENORE_NAME));
-        registerBlock(ruby_ore);
-        registerBlock(sapphire_ore);
-        registerBlock(amethyst_ore);
-
-        registerBlock(ruby_block.setRegistryName(Refs.MODID, Refs.RUBYBLOCK_NAME));
-        registerBlock(sapphire_block.setRegistryName(Refs.MODID, Refs.SAPPHIREBLOCK_NAME));
-        registerBlock(amethyst_block.setRegistryName(Refs.MODID, Refs.AMETHYSTBLOCK_NAME));
-        registerBlock(teslatite_block.setRegistryName(Refs.MODID, Refs.TESLATITEBLOCK_NAME));
-        registerBlock(copper_block.setRegistryName(Refs.MODID, Refs.COPPERBLOCK_NAME));
-        registerBlock(silver_block.setRegistryName(Refs.MODID, Refs.SILVERBLOCK_NAME));
-        registerBlock(zinc_block.setRegistryName(Refs.MODID, Refs.ZINCBLOCK_NAME));
-        registerBlock(tungsten_block.setRegistryName(Refs.MODID, Refs.TUNGSTENBLOCK_NAME));
-
-        registerBlock(sapphire_glass.setRegistryName(Refs.MODID, Refs.SAPPHIREGLASS_NAME));
-        registerBlock(reinforced_sapphire_glass.setRegistryName(Refs.MODID, Refs.REINFORCEDSAPPHIREGLASS_NAME));
-
-        registerBlock(flax_crop); //TODO Dosen't need Item as has seed
-        registerBlock(indigo_flower);
-
-        registerBlock(alloyfurnace);
-        registerBlock(sorting_machine);
-        registerBlock(block_breaker);
-        registerBlock(igniter);
-        registerBlock(buffer);
-        registerBlock(deployer);
-        registerBlock(project_table);
-        registerBlock(auto_project_table);
-        registerBlock(circuit_table);
-        registerBlock(circuit_database);
-        registerBlock(transposer);
-        registerBlock(ejector);
-        registerBlock(relay);
-        registerBlock(filter);
-        registerBlock(retriever);
-        registerBlock(regulator);
-        registerBlock(item_detector);
-        registerBlock(manager);
-
-        registerBlock(battery);
-        /*
-         * registerBlock(cpu.setRegistryName(Refs.MODID, Refs.BLOCKCPU_NAME); registerBlock(monitor.setRegistryName(Refs.MODID, Refs.BLOCKMONITOR_NAME);
-         * registerBlock(disk_drive.setRegistryName(Refs.MODID, Refs.BLOCKDISKDRIVE_NAME); registerBlock(io_expander.setRegistryName(Refs.MODID, Refs.BLOCKIOEXPANDER_NAME);
-         * 
-         * registerBlock(engine.setRegistryName(Refs.MODID, Refs.ENGINE_NAME); registerBlock(kinetic_generator.setRegistryName(Refs.MODID, Refs.KINETICGENERATOR_NAME);
-         * registerBlock(windmill.setRegistryName(Refs.MODID, Refs.WINDMILL_NAME);
-         */
-
         for (int i = 0; i < MinecraftColor.VALID_COLORS.length; i++) {
             MinecraftColor color = MinecraftColor.VALID_COLORS[i];
-            registerBlock(blockLamp[i].setRegistryName(Refs.MODID, Refs.LAMP_NAME + color.name().toLowerCase()));
+            blockLamp[i].setRegistryName(Refs.MODID, Refs.LAMP_NAME + color.name().toLowerCase());
         }
-        registerBlock(blockLampRGB.setRegistryName(Refs.MODID, Refs.LAMP_NAME + "RGB"));
+        blockLampRGB.setRegistryName(Refs.MODID, Refs.LAMP_NAME + "RGB");
         for (int i = 0; i < MinecraftColor.VALID_COLORS.length; i++) {
             MinecraftColor color = MinecraftColor.VALID_COLORS[i];
-            registerBlock(blockLampInverted[i].setRegistryName(Refs.MODID, Refs.LAMP_NAME + "inverted" + color.name().toLowerCase()));
+            blockLampInverted[i].setRegistryName(Refs.MODID, Refs.LAMP_NAME + "inverted" + color.name().toLowerCase());
         }
-        registerBlock(blockLampRGBInverted.setRegistryName(Refs.MODID, Refs.LAMP_NAME + "invertedRGB"));
+        blockLampRGBInverted.setRegistryName(Refs.MODID, Refs.LAMP_NAME + "invertedRGB");
 
     }
 
@@ -313,23 +241,19 @@ public class BPBlocks {
 
         if (Loader.isModLoaded(Dependencies.COMPUTER_CRAFT) || Loader.isModLoaded(Dependencies.OPEN_COMPUTERS)) {
             sortron = new BlockSortron();
-            registerBlock(sortron.setRegistryName(Refs.MODID, Refs.BLOCKSORTRON_NAME));
+            sortron.setRegistryName(Refs.MODID, Refs.BLOCKSORTRON_NAME);
         }
     }
 
-    private static void registerBlock(Block block) {
-        blockList.add(block);
-    }
-
     @SubscribeEvent
-    public void registerBlocks(RegistryEvent.Register<Block> event) {
+    public static void registerBlocks(RegistryEvent.Register<Block> event) {
         for(Block block : blockList) {
             event.getRegistry().register(block);
 
         }
     }
     @SubscribeEvent
-    public void registerBlockItems(RegistryEvent.Register<Item> event) {
+    public static void registerBlockItems(RegistryEvent.Register<Item> event) {
         for (Block block : blockList) {
             event.getRegistry().register(new ItemBlock(block).setRegistryName(block.getRegistryName()));
         }
