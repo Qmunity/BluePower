@@ -7,6 +7,7 @@
  */
 package com.bluepowermod.block.machine;
 
+import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier2.TileWindmill;
@@ -34,6 +35,7 @@ public class BlockWindmill extends Block implements ITileEntityProvider {
         setCreativeTab(BPCreativeTabs.items);
         setUnlocalizedName(Refs.WINDMILL_NAME);
         setRegistryName(Refs.MODID, Refs.WINDMILL_NAME);
+        BPBlocks.blockList.add(this);
     }
 
     @Override

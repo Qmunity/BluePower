@@ -36,7 +36,6 @@ public class ItemAthame extends ItemSword {
     private static ToolMaterial athameMaterial = EnumHelper.addToolMaterial("SILVER", 0, 100, 6.0F, 2.0F, 10);
     
     public ItemAthame() {
-    
         super(athameMaterial);
         this.setCreativeTab(BPCreativeTabs.tools);
         this.setMaxDamage(100);
@@ -44,6 +43,7 @@ public class ItemAthame extends ItemSword {
         this.setRegistryName(Refs.MODID + ":" + Refs.ATHAME_NAME);
         this.maxStackSize = 1;
         this.setFull3D();
+        BPItems.itemList.add(this);
     }
 
     public float getDamageDealt() {

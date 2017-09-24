@@ -61,6 +61,7 @@ public class BlockCrop extends BlockCrops implements IGrowable {
         this.disableStats();
         this.setUnlocalizedName(Refs.FLAXCROP_NAME);
         this.setRegistryName(Refs.MODID + ":" + Refs.FLAXCROP_NAME);
+        BPBlocks.blockList.add(this);
     }
 
     @Override

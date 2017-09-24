@@ -17,6 +17,7 @@
 
 package com.bluepowermod.item;
 
+import com.bluepowermod.init.BPItems;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemPickaxe;
@@ -31,12 +32,12 @@ public class ItemGemPickaxe extends ItemPickaxe {
     protected boolean canRepair              = true;
 
     public ItemGemPickaxe(ToolMaterial material, String name, Item repairItem) {
-
         super(material);
         this.setUnlocalizedName(name);
         this.setCreativeTab(BPCreativeTabs.tools);
         this.setRegistryName(Refs.MODID + ":" + name);
         this.customCraftingMaterial = repairItem;
+        BPItems.itemList.add(this);
     }
 
     @Override

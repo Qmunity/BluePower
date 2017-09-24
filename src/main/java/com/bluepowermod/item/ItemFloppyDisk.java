@@ -17,13 +17,14 @@
 
 package com.bluepowermod.item;
 
+import com.bluepowermod.init.BPItems;
 import com.bluepowermod.reference.Refs;
 
 public class ItemFloppyDisk extends ItemBase {
 
     public ItemFloppyDisk(String name) {
-
         this.setUnlocalizedName(name);
         this.setRegistryName(Refs.MODID + ":" + name);
+        BPItems.itemList.add(this);
     }
 }

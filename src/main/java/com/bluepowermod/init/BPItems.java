@@ -58,9 +58,6 @@ public class BPItems {
                 .setCreativeTab(BPCreativeTabs.items);
     public static final Item zinc_tiny_dust = new ItemBase().setUnlocalizedName(Refs.ZINCDUST_TINY_NAME).setRegistryName(Refs.MODID + ":" + Refs.ZINCDUST_TINY_NAME)
                 .setCreativeTab(BPCreativeTabs.items);
-    // ruby_saw = new ItemSaw(2, Refs.RUBYSAW_NAME);
-    // sapphire_saw = new ItemSaw(2, Refs.SAPPHIRESAW_NAME);
-    // amethyst_saw = new ItemSaw(2, Refs.AMETHYSTSAW_NAME);
     public static final Item wood_sickle = new ItemSickle(ToolMaterial.WOOD, Refs.WOODSICKLE_NAME, Item.getItemFromBlock(Blocks.PLANKS));
     public static final Item stone_sickle = new ItemSickle(ToolMaterial.STONE, Refs.STONESICKLE_NAME, Item.getItemFromBlock(Blocks.COBBLESTONE));
     public static final Item iron_sickle = new ItemSickle(ToolMaterial.IRON, Refs.IRONSICKLE_NAME, Items.IRON_INGOT);
@@ -123,10 +120,6 @@ public class BPItems {
     public static final Item amethyst_sickle = new ItemSickle(BluePower.gemMaterial, Refs.AMETHYSTSICKLE_NAME, BPItems.amethyst_gem);
 
     public static void init() {
-        if (!Loader.isModLoaded("ForgeMicroblock")) {// FMP already has an iron and diamond saw
-            //iron_saw = new ItemSaw(2, Refs.IRONSAW_NAME);
-            //diamond_saw = new ItemSaw(3, Refs.DIAMONDSAW_NAME);
-        }
         registerItems();
     }
 

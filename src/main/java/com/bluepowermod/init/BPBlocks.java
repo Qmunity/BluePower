@@ -27,6 +27,7 @@ import com.bluepowermod.tile.tier1.*;
 import com.bluepowermod.tile.tier2.*;
 import com.bluepowermod.tile.tier3.TileCircuitDatabase;
 import com.bluepowermod.tile.tier3.TileManager;
+import com.bluepowermod.util.BPLog;
 import com.bluepowermod.util.Dependencies;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
@@ -44,7 +45,7 @@ import java.util.List;
 @Mod.EventBusSubscriber(modid = Refs.MODID)
 public class BPBlocks {
 
-    public static List<Block> blockList = new ArrayList<Block>();
+    public static List<Block> blockList = new ArrayList<>();
     public static Block basalt;
     public static Block marble;
     public static Block basalt_cobble;
@@ -255,7 +256,9 @@ public class BPBlocks {
     @SubscribeEvent
     public static void registerBlockItems(RegistryEvent.Register<Item> event) {
         for (Block block : blockList) {
-            event.getRegistry().register(new ItemBlock(block).setRegistryName(block.getRegistryName()));
+            if (block.getRegistryName() != null && !(block instanceof BlockCrop)) { // Crops have seeds rather than blocks
+                event.getRegistry().register(new ItemBlock(block).setRegistryName(block.getRegistryName()));
+            }
         }
     }
 

@@ -18,6 +18,7 @@
 package com.bluepowermod.item;
 
 import com.bluepowermod.init.BPCreativeTabs;
+import com.bluepowermod.init.BPItems;
 import com.bluepowermod.reference.Refs;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -30,12 +31,12 @@ public class ItemGemHoe extends ItemHoe {
     protected boolean canRepair              = true;
 
     public ItemGemHoe(ToolMaterial material, String name, Item repairItem) {
-
         super(material);
         this.setUnlocalizedName(name);
         this.setCreativeTab(BPCreativeTabs.tools);
         this.setRegistryName(Refs.MODID + ":" + name);
         this.customCraftingMaterial = repairItem;
+        BPItems.itemList.add(this);
     }
 
     @Override

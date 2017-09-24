@@ -17,6 +17,7 @@
 
 package com.bluepowermod.item;
 
+import com.bluepowermod.init.BPItems;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -39,11 +40,11 @@ public class ItemCropSeed extends ItemSeeds implements IPlantable {
     public static Block field_150925_a;
 
     public ItemCropSeed(Block blockCrop, Block blockSoil) {
-
         super(blockCrop, blockSoil);
         field_150925_a = blockCrop;
         this.setCreativeTab(BPCreativeTabs.items);
         this.setRegistryName(Refs.MODID + ":" + Refs.FLAXSEED_NAME);
+        BPItems.itemList.add(this);
     }
 
     @Override
