@@ -16,7 +16,7 @@ import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier1.TileLamp;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyBool;
+import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -45,19 +45,19 @@ import javax.annotation.Nullable;
  */
 public class BlockLamp extends BlockContainerBase implements IBlockColor, IItemColor, ICustomModelBlock{
 
-    public static final PropertyBool POWERED = PropertyBool.create("powered");
+    public static final PropertyInteger POWER = PropertyInteger.create("power", 0, 15);
 
     private final boolean isInverted;
     private final MinecraftColor color;
 
     public BlockLamp(boolean isInverted, MinecraftColor color) {
 
-        super(Material.IRON, TileLamp.class);
+        super(Material.REDSTONE_LIGHT, TileLamp.class);
         this.isInverted = isInverted;
         this.color = color;
         setUnlocalizedName(Refs.LAMP_NAME + "." + color.name().toLowerCase() + (isInverted ? ".inverted" : ""));
         setCreativeTab(BPCreativeTabs.lighting);
-        setDefaultState(blockState.getBaseState().withProperty(POWERED, isInverted));
+        setDefaultState(blockState.getBaseState().withProperty(POWER, isInverted ? 15 : 0));
     }
 
 
@@ -68,7 +68,7 @@ public class BlockLamp extends BlockContainerBase implements IBlockColor, IItemC
         StateMapperBase stateMapper = new StateMapperBase() {
             @Override
             protected ModelResourceLocation getModelResourceLocation(IBlockState iBlockState) {
-                return new ModelResourceLocation(Refs.MODID + ":" + Refs.LAMP_NAME, getPropertyString(iBlockState.getProperties()));
+                return new ModelResourceLocation(Refs.MODID + ":" + Refs.LAMP_NAME, (!isInverted == iBlockState.getValue(POWER) > 0) ? "powered=true" : "powered=false");
             }
         };
         ModelLoader.setCustomStateMapper(this, stateMapper);
@@ -86,21 +86,9 @@ public class BlockLamp extends BlockContainerBase implements IBlockColor, IItemC
         return (TileLamp) te;
     }
 
-    public int getPower(IBlockAccess w, BlockPos pos) {
-
-        TileLamp te = get(w, pos);
-        if (te == null)
-            return 0;
-
-        int power = te.getPower();
-        if (isInverted())
-            power = 15 - power;
-        return power;
-    }
-
     @Override
     public int getLightValue(IBlockState state, IBlockAccess w, BlockPos pos) {
-        int pow = getPower(w, pos);
+        int pow = !isInverted ? state.getValue(POWER) : 15 - state.getValue(POWER);
 
         if (Loader.isModLoaded("coloredlightscore")) {
             int color = getColor(w, pos);
@@ -157,7 +145,7 @@ public class BlockLamp extends BlockContainerBase implements IBlockColor, IItemC
 
     @Override
     public boolean canConnectRedstone(IBlockState state, IBlockAccess world, BlockPos pos, @Nullable EnumFacing side) {
-        return !(world.getBlockState(pos) instanceof BlockLampRGB);
+        return !(world.getBlockState(pos) instanceof BlockLampRGB) && super.canConnectRedstone(state, world, pos, side);
     }
 
     @Override
@@ -167,45 +155,30 @@ public class BlockLamp extends BlockContainerBase implements IBlockColor, IItemC
     }
 
     @Override
-    public void neighborChanged(IBlockState state, World world, BlockPos pos, Block block, BlockPos fromPos) {
-        super.neighborChanged(state, world, pos, block, fromPos);
-
-        int powered = world.isBlockIndirectlyGettingPowered(pos);
-        world.setBlockState(pos,state.withProperty(POWERED, isInverted != powered > 0), 3);
-
-        if (this instanceof BlockLampRGB && block instanceof BlockLampRGB)
-            return;
-
-        TileLamp te = get(world, pos);
-        if (te == null)
-            return;
-        te.onUpdate();
-    }
-
-    @Override
     protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, POWERED);
+        return new BlockStateContainer(this, POWER);
     }
 
     @Override
     public int getMetaFromState(IBlockState state) {
-        return state.getValue(POWERED) ? 1 : 0;
+        return state.getValue(POWER);
     }
 
     @Override
     public IBlockState getStateFromMeta(int meta) {
-        return getDefaultState().withProperty(POWERED, meta != 0);
+        return getDefaultState().withProperty(POWER, meta);
     }
 
     @Override
     public void onBlockAdded(World world, BlockPos pos, IBlockState state) {
-
         super.onBlockAdded(world, pos, state);
+        world.setBlockState(pos, this.getDefaultState().withProperty(POWER, world.isBlockIndirectlyGettingPowered(pos)));
+    }
 
-        TileLamp te = get(world, pos);
-        if (te == null)
-            return;
-        te.onUpdate();
+    @Override
+    public void neighborChanged(IBlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos) {
+        super.neighborChanged(state, world, pos, blockIn, fromPos);
+        world.setBlockState(pos, this.getDefaultState().withProperty(POWER, world.isBlockIndirectlyGettingPowered(pos)));
     }
 
     @Override

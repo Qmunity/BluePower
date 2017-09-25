@@ -7,45 +7,25 @@
  */
 package com.bluepowermod.tile.tier1;
 
-import com.bluepowermod.api.connect.ConnectionType;
 import com.bluepowermod.api.misc.MinecraftColor;
-import com.bluepowermod.api.wire.redstone.IBundledDevice;
-import com.bluepowermod.api.wire.redstone.IInsulatedRedstoneDevice;
-import com.bluepowermod.block.machine.BlockLamp;
 import com.bluepowermod.block.machine.BlockLampRGB;
 import com.bluepowermod.client.render.RenderLamp;
 import com.bluepowermod.helper.MathHelper;
 import com.bluepowermod.tile.TileBase;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 
-;
 
 /**
  * @author Koen Beckers (K4Unl) and Amadornes. Yes. I only need this class to do the getPower() function.. damn :(
  */
 public class TileLamp extends TileBase{
 
-    private int power;
-
     private byte[] bundledPower = new byte[16];
-
-
-    public int getPower() {
-
-        return power;
-    }
-
-    public void onUpdate() {
-    }
 
     @Override
     protected void writeToPacketNBT(NBTTagCompound tCompound) {
-
-        tCompound.setInteger("power", power);
         if (blockType instanceof BlockLampRGB) {
             tCompound.setByte("red", bundledPower[MinecraftColor.RED.ordinal()]);
             tCompound.setByte("green", bundledPower[MinecraftColor.GREEN.ordinal()]);
@@ -55,8 +35,6 @@ public class TileLamp extends TileBase{
 
     @Override
     protected void readFromPacketNBT(NBTTagCompound tCompound) {
-
-        power = tCompound.getInteger("power");
         if (tCompound.hasKey("red")) {
             byte[] pow = bundledPower;
             pow[MinecraftColor.RED.ordinal()] = tCompound.getByte("red");
@@ -64,22 +42,16 @@ public class TileLamp extends TileBase{
             pow[MinecraftColor.BLUE.ordinal()] = tCompound.getByte("blue");
             bundledPower = pow;
         }
-        if (getWorld() != null) {
-            getWorld().markBlockRangeForRenderUpdate(pos, pos);
-            getWorld().checkLightFor(EnumSkyBlock.BLOCK, pos);
-        }
     }
 
     @Override
     public boolean shouldRenderInPass(int pass) {
-
         RenderLamp.pass = pass;
         return true;
     }
 
     @Override
     public World getWorld() {
-
         return world;
     }
 
