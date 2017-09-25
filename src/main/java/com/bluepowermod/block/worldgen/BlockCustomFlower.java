@@ -40,6 +40,7 @@ public class BlockCustomFlower extends BlockBush {
         this.setSoundType(SoundType.PLANT);
         this.setUnlocalizedName(name);
         this.setRegistryName(Refs.MODID, name);
+        BPBlocks.blockList.add(this);
     }
 
     @Override

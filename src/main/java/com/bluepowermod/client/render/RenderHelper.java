@@ -349,7 +349,7 @@ public class RenderHelper {
         }
 
         // Draw west side:
-        if (renderFaces.length < 3 || renderFaces[2]) {
+        if (renderFaces.length < 3 || renderFaces[5]) {
             GL11.glNormal3d(-1, 0, 0);
             addVertex(vector.minX, vector.minY, vector.maxZ);
             addVertex(vector.minX, vector.maxY, vector.maxZ);
@@ -358,7 +358,7 @@ public class RenderHelper {
         }
 
         // Draw east side:
-        if (renderFaces.length < 4 || renderFaces[3]) {
+        if (renderFaces.length < 4 || renderFaces[4]) {
             GL11.glNormal3d(1, 0, 0);
             addVertex(vector.maxX, vector.minY, vector.minZ);
             addVertex(vector.maxX, vector.maxY, vector.minZ);
@@ -367,7 +367,7 @@ public class RenderHelper {
         }
 
         // Draw north side
-        if (renderFaces.length < 5 || renderFaces[4]) {
+        if (renderFaces.length < 5 || renderFaces[3]) {
             GL11.glNormal3d(0, 0, -1);
             addVertex(vector.minX, vector.minY, vector.minZ);
             addVertex(vector.minX, vector.maxY, vector.minZ);
@@ -376,7 +376,7 @@ public class RenderHelper {
         }
 
         // Draw south side
-        if (renderFaces.length < 6 || renderFaces[5]) {
+        if (renderFaces.length < 6 || renderFaces[2]) {
             GL11.glNormal3d(0, 0, 1);
             addVertex(vector.minX, vector.minY, vector.maxZ);
             addVertex(vector.maxX, vector.minY, vector.maxZ);

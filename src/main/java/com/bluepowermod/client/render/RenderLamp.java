@@ -12,6 +12,7 @@ import com.bluepowermod.tile.tier1.TileLamp;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -47,9 +48,27 @@ public class RenderLamp extends TileEntitySpecialRenderer {
                 power = 15 - power;
             }
 
-            AxisAlignedBB box = new AxisAlignedBB(-0.01, -0.01, -0.01, 1.01, 1.01, 1.01);
-
+            //Define our base Glow
+            AxisAlignedBB box = new AxisAlignedBB(-0.05, -0.05, -0.05, 1.05, 1.05, 1.05);
             boolean[] renderFaces = new boolean[] { true, true, true, true, true, true };
+
+            //Remove overlapping Glow
+            for(EnumFacing face : EnumFacing.VALUES){
+                IBlockState block = te.getWorld().getBlockState( te.getPos().offset(face.getOpposite()));
+                if(block.getBlock() instanceof BlockLamp) {
+                    if (((BlockLamp) block.getBlock()).isInverted() ? block.getValue(BlockLamp.POWER) < 15 : block.getValue(BlockLamp.POWER) > 0){
+                        renderFaces[face.getIndex()] = false;
+                        double offsetx = (face.getFrontOffsetX() * 0.05) > 0 ? (face.getFrontOffsetX() * 0.05) : 0;
+                        double offsety = (face.getFrontOffsetY() * 0.05) > 0 ? (face.getFrontOffsetY() * 0.05) : 0;
+                        double offsetz = (face.getFrontOffsetZ() * 0.05) > 0 ? (face.getFrontOffsetZ() * 0.05) : 0;
+                        double toffsetx = (face.getFrontOffsetX() * 0.05) < 0 ? (face.getFrontOffsetX() * 0.05) : 0;
+                        double toffsety = (face.getFrontOffsetY() * 0.05) < 0 ? (face.getFrontOffsetY() * 0.05) : 0;
+                        double toffsetz = (face.getFrontOffsetZ() * 0.05) < 0 ? (face.getFrontOffsetZ() * 0.05) : 0;
+                        box = new AxisAlignedBB(box.minX + offsetx, box.minY + offsety, box.minZ + offsetz, box.maxX + toffsetx, box.maxY + toffsety, box.maxZ + toffsetz);
+                    }
+                }
+            }
+
 
             GL11.glTranslated(x, y, z);
             GL11.glEnable(GL11.GL_BLEND);
