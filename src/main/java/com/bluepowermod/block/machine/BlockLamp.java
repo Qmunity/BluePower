@@ -32,6 +32,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.relauncher.Side;
@@ -72,7 +73,11 @@ public class BlockLamp extends BlockContainerBase implements IBlockColor, IItemC
             }
         };
         ModelLoader.setCustomStateMapper(this, stateMapper);
-        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(Refs.MODID + ":" + Refs.LAMP_NAME, "inventory"));
+       if(!isInverted()) {
+           ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(Refs.MODID + ":" + Refs.LAMP_NAME, "inventory"));
+       }else {
+           ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(Refs.MODID + ":" + Refs.LAMP_NAME, "inventory_glow"));
+       }
     }
 
 

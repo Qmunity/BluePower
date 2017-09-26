@@ -2,14 +2,16 @@
   "forge_marker": 1,
   "defaults": {
     "textures": {
-    "all": "bluepower:blocks/lamps/lamp_off"
+      "all": "bluepower:blocks/lamps/lamp_off",
+      "glow": "bluepower:blocks/lamps/glow"
     },
     "model": "bluepower:tinted",
     "uvlock": true
   },
   "variants": {
     "normal": [{}],
-    "inventory": [{}],
+    "inventory": [{"textures": {"all": "bluepower:blocks/lamps/lamp_off"}}],
+    "inventory_glow": [{"submodel": "bluepower:glow"}],
     "powered":{
       "true":{"all": "bluepower:blocks/lamps/lamp_on"},
       "false":{"all": "bluepower:blocks/lamps/lamp_off"}
