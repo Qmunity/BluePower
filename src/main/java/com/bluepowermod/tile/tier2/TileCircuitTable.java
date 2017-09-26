@@ -7,6 +7,7 @@
  */
 package com.bluepowermod.tile.tier2;
 
+import com.bluepowermod.client.gui.IGuiButtonSensitive;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.tile.IGUITextFieldSensitive;
 import com.bluepowermod.tile.TileBase;
@@ -26,7 +27,7 @@ import java.util.List;
 /**
  * @author MineMaarten
  */
-public class TileCircuitTable extends TileBase implements IInventory, IGUITextFieldSensitive {
+public class TileCircuitTable extends TileBase implements IInventory, IGUITextFieldSensitive, IGuiButtonSensitive {
 
     protected NonNullList<ItemStack> inventory = NonNullList.withSize(24, ItemStack.EMPTY);
     public final InventoryBasic circuitInventory = new InventoryBasic("circuitInventory", false, 24);
@@ -203,4 +204,12 @@ public class TileCircuitTable extends TileBase implements IInventory, IGUITextFi
         return true;
     }
 
+    @Override
+    public void onButtonPress(EntityPlayer player, int messageId, int value) {
+        if (messageId == 0) {
+            slotsScrolled = value;
+        }
+        //updateGateInventory();
+        //((ICrafting) player).sendContainerAndContentsToPlayer(player.openContainer, player.openContainer.getInventory());
+    }
 }

@@ -8,6 +8,7 @@
 package com.bluepowermod.tile.tier2;
 
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
+import com.bluepowermod.client.gui.IGuiButtonSensitive;
 import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.helper.ItemStackHelper;
 import com.bluepowermod.init.BPBlocks;
@@ -30,7 +31,7 @@ import java.util.List;
  * @author MineMaarten
  */
 
-public class TileSortingMachine extends TileMachineBase implements ISidedInventory {
+public class TileSortingMachine extends TileMachineBase implements ISidedInventory, IGuiButtonSensitive {
 
     private ItemStack[] inventory = new ItemStack[40];
     public int curColumn = 0;
@@ -163,6 +164,23 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
                     }
                 }
             }
+    }
+
+    @Override
+    public void onButtonPress(EntityPlayer player, int messageId, int value) {
+
+        if (messageId < 0)
+            return;
+
+        if (messageId < 9) {
+            colors[messageId] = TubeColor.values()[value];
+        } else if (messageId == 9) {
+            pullMode = PullMode.values()[value];
+        } else if (messageId == 10) {
+            sortMode = SortMode.values()[value];
+        } else {
+            fuzzySettings[messageId - 11] = value;
+        }
     }
 
     private boolean matchAndProcessColumn(IInventory inputInventory, int[] accessibleSlots, int column) {

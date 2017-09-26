@@ -24,7 +24,7 @@ public class Refs {
     private static final String MAJOR = "@MAJOR@";
     private static final String MINOR = "@MINOR@";
     private static final String BUILD = "@BUILD_NUMBER@";
-    private static final String MCVERSION = "1.10";
+    private static final String MCVERSION = "1.12.1";
 
     public static final String MACHINE_TEXTURE_LOCATION = "machines/";
     public static final String MODEL_LOCATION = "models/";

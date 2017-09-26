@@ -8,6 +8,7 @@
 package com.bluepowermod.tile.tier2;
 
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
+import com.bluepowermod.client.gui.IGuiButtonSensitive;
 import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.helper.ItemStackHelper;
 import com.bluepowermod.init.BPBlocks;
@@ -26,7 +27,7 @@ import java.util.List;
 /**
  * @author MineMaarten
  */
-public class TileRegulator extends TileMachineBase implements ISidedInventory{
+public class TileRegulator extends TileMachineBase implements ISidedInventory, IGuiButtonSensitive{
 
     private NonNullList<ItemStack> inventory = NonNullList.withSize(27, ItemStack.EMPTY);
     public TubeColor color = TubeColor.NONE;
@@ -107,6 +108,18 @@ public class TileRegulator extends TileMachineBase implements ISidedInventory{
                 setOutputtingRedstone(shouldEmitRedstone);
                 sendUpdatePacket();
             }
+        }
+    }
+
+    @Override
+    public void onButtonPress(EntityPlayer player, int messageId, int value) {
+
+        if (messageId == 1) {
+            mode = value;
+        } else if (messageId == 0) {
+            color = TubeColor.values()[value];
+        } else if (messageId == 2) {
+            fuzzySetting = value;
         }
     }
 

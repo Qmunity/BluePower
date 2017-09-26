@@ -8,6 +8,7 @@
 package com.bluepowermod.tile.tier1;
 
 import com.bluepowermod.BluePower;
+import com.bluepowermod.client.gui.IGuiButtonSensitive;
 import com.bluepowermod.container.ContainerProjectTable;
 import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.init.BPBlocks;
@@ -31,7 +32,7 @@ import java.util.List;
 /**
  * @author MineMaarten
  */
-public class TileProjectTable extends TileBase implements IInventory{
+public class TileProjectTable extends TileBase implements IInventory, IGuiButtonSensitive{
 
     private NonNullList<ItemStack> inventory = NonNullList.withSize(19, ItemStack.EMPTY);
     protected NonNullList<ItemStack> craftingGrid = NonNullList.withSize(9, ItemStack.EMPTY);
@@ -260,6 +261,14 @@ public class TileProjectTable extends TileBase implements IInventory{
 
                 }
             }
+        }
+    }
+
+    @Override
+    public void onButtonPress(EntityPlayer player, int messageId, int value) {
+        Container container = player.openContainer;
+        if (container instanceof ContainerProjectTable) {
+            ((ContainerProjectTable) container).clearCraftingGrid();
         }
     }
 

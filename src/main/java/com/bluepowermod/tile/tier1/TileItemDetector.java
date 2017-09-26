@@ -7,6 +7,7 @@
  */
 package com.bluepowermod.tile.tier1;
 
+import com.bluepowermod.client.gui.IGuiButtonSensitive;
 import com.bluepowermod.helper.ItemStackHelper;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.tile.TileMachineBase;
@@ -24,7 +25,7 @@ import java.util.List;
 /**
  * @author MineMaarten
  */
-public class TileItemDetector extends TileMachineBase implements ISidedInventory {
+public class TileItemDetector extends TileMachineBase implements ISidedInventory, IGuiButtonSensitive {
 
     public int mode;
     private final NonNullList<ItemStack> inventory = NonNullList.withSize(10, ItemStack.EMPTY);
@@ -237,7 +238,7 @@ public class TileItemDetector extends TileMachineBase implements ISidedInventory
     }
 
 
-   /* @Override
+    @Override
     public void onButtonPress(EntityPlayer player, int messageId, int value) {
 
         if (messageId == 0)
@@ -245,7 +246,7 @@ public class TileItemDetector extends TileMachineBase implements ISidedInventory
         if (messageId == 1) {
             fuzzySetting = value;
         }
-    }*/
+    }
 
     @Override
     public boolean canConnectRedstone() {
