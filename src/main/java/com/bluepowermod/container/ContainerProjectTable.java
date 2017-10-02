@@ -18,6 +18,7 @@
 
 package com.bluepowermod.container;
 
+import com.bluepowermod.container.inventory.InventoryProjectTableCrafting;
 import com.bluepowermod.container.slot.SlotProjectTableCrafting;
 import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.tile.tier1.TileProjectTable;
@@ -29,7 +30,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.*;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.CraftingManager;
 import net.minecraftforge.fml.common.Optional;
 
 import java.util.ArrayList;
@@ -44,18 +44,20 @@ import java.util.Map;
 @ChestContainer
 public class ContainerProjectTable extends Container {
 
-    public final IInventory craftResult = new InventoryCraftResult();
-    private final TileProjectTable projectTable;
+    private final EntityPlayer player;
     private final InventoryCrafting craftingGrid;
-    private int itemsCrafted;
-    private boolean isRetrying = false;
+    private final InventoryCraftResult craftResult;
 
     public ContainerProjectTable(InventoryPlayer invPlayer, TileProjectTable projectTable) {
 
-        this.projectTable = projectTable;
-        craftingGrid = projectTable.getCraftingGrid(this);
-        onCraftMatrixChanged(craftingGrid);
+        craftResult =  new InventoryCraftResult();
+        craftingGrid = new InventoryProjectTableCrafting(this, projectTable, 3, 3);;
+        player = invPlayer.player;
 
+        //Output
+        addSlotToContainer(new SlotProjectTableCrafting(player, craftingGrid, craftResult, 0, 127, 34));
+
+        //Crafting Grid
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 3; ++j) {
                 //When changing the 34 and 16, this will break the NEI shift clicking the question mark. See NEIPluginInitConfig
@@ -63,8 +65,7 @@ public class ContainerProjectTable extends Container {
             }
         }
 
-        addSlotToContainer(new SlotProjectTableCrafting(projectTable, invPlayer.player, craftingGrid, craftResult, 0, 127, 34));
-
+        //Chest
         for (int i = 0; i < 2; ++i) {
             for (int j = 0; j < 9; ++j) {
                 addSlotToContainer(new Slot(projectTable, j + i * 9, 8 + j * 18, 79 + i * 18));
@@ -72,6 +73,7 @@ public class ContainerProjectTable extends Container {
         }
 
         bindPlayerInventory(invPlayer);
+        this.onCraftMatrixChanged(this.craftingGrid);
     }
 
     protected void bindPlayerInventory(InventoryPlayer invPlayer) {
@@ -94,35 +96,16 @@ public class ContainerProjectTable extends Container {
      */
     @Override
     public void onCraftMatrixChanged(IInventory p_75130_1_) {
-
-        if (craftingGrid != null)
-            craftResult.setInventorySlotContents(0, CraftingManager.findMatchingResult(craftingGrid, projectTable.getWorld()));
+        this.slotChangedCraftingGrid(player.getEntityWorld(), this.player, this.craftingGrid, this.craftResult);
     }
 
     @Override
-    public boolean canInteractWith(EntityPlayer player) {
-
-        return projectTable.isUsableByPlayer(player);
-    }
-
-    private boolean isLastCraftingOperation() {
-
-        for (int i = 0; i < 9; i++) {
-            ItemStack stack = craftingGrid.getStackInSlot(i);
-            if (!stack.isEmpty() && stack.getCount() == 1 && extractStackFromTable(projectTable, stack, true) == null
-                    && (!stack.getItem().hasContainerItem(stack) )) //|| stack.getItem().doesContainerItemLeaveCraftingGrid(stack)
-                return true;
-        }
-        return false;
-    }
-
-    public static ItemStack extractStackFromTable(TileProjectTable table, ItemStack stack, boolean simulate) {
-
-        return IOHelper.extract(table, null, stack, true, simulate);
+    public boolean canInteractWith(EntityPlayer playerIn) {
+        return true;
     }
 
     public void clearCraftingGrid() {
-        for (int i = 0; i < 9; i++) {
+        for (int i = 1; i < 10; i++) {
             Slot slot = (Slot) inventorySlots.get(i);
             if (slot.getHasStack()) {
                 mergeItemStack(slot.getStack(), 10, 28, false);
@@ -132,26 +115,34 @@ public class ContainerProjectTable extends Container {
         }
     }
 
+    @Override
+    public boolean canMergeSlot(ItemStack stack, Slot slotIn) {
+        return slotIn.inventory != this.craftResult && super.canMergeSlot(stack, slotIn);
+    }
+
+    public InventoryCrafting getCraftingGrid() {
+        return craftingGrid;
+    }
+
     /*
-     * 0-8 matrix, 9 result, 10 - 27 inventory, 28 - 63 player inv.
-     */
+             * 0 result, 1-9 matrix,  10 - 27 inventory, 28 - 63 player inv.
+             */
     @Override
     public ItemStack transferStackInSlot(EntityPlayer player, int par2) {
 
-        if (!isRetrying)
-            itemsCrafted = 0;
-
         ItemStack itemstack = ItemStack.EMPTY;
-        Slot slot = (Slot) inventorySlots.get(par2);
+        Slot slot = inventorySlots.get(par2);
         if (slot != null && slot.getHasStack()) {
             ItemStack itemstack1 = slot.getStack();
             itemstack = itemstack1.copy();
-            if (par2 < 9) {
+            if (0 < par2 && par2 < 10) {
                 if (!mergeItemStack(itemstack1, 10, 28, false))
                     return ItemStack.EMPTY;
-            } else if (par2 == 9) {
+            } else if (par2 == 0) {
+                itemstack1.getItem().onCreated(itemstack1, player.world, player);
                 if (!mergeItemStack(itemstack1, 28, 64, false))
                     return ItemStack.EMPTY;
+                slot.onSlotChange(itemstack1, itemstack);
             } else if (par2 < 28) {
                 if (!mergeItemStack(itemstack1, 28, 64, false))
                     return ItemStack.EMPTY;
@@ -167,9 +158,20 @@ public class ContainerProjectTable extends Container {
             if (itemstack1.getCount() != itemstack.getCount()) {
                 slot.onSlotChange(itemstack, itemstack1);
             } else {
+
+                this.onCraftMatrixChanged(this.craftingGrid);
                 return ItemStack.EMPTY;
             }
+            ItemStack itemstack2 = slot.onTake(player, itemstack1);
+
+            if (par2 == 0)
+            {
+                player.dropItem(itemstack2, false);
+            }
         }
+
+
+        this.onCraftMatrixChanged(this.craftingGrid);
         return itemstack;
     }
 

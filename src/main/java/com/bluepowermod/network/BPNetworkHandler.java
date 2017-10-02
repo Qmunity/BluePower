@@ -29,6 +29,7 @@ public class BPNetworkHandler {
     public static void initBP() {
 
         INSTANCE.registerPacket(MessageGuiUpdate.class, MessageGuiUpdate.class, Side.SERVER);
+        INSTANCE.registerPacket(MessageCraftingSync.class, MessageCraftingSync.class, Side.SERVER);
         INSTANCE.registerPacket(MessageUpdateTextfield.class, MessageUpdateTextfield.class, Side.SERVER);
         INSTANCE.registerPacket(MessageCircuitDatabaseTemplate.class, MessageCircuitDatabaseTemplate.class, Side.SERVER);
         INSTANCE.registerPacket(MessageCircuitDatabaseTemplate.class, MessageCircuitDatabaseTemplate.class, Side.CLIENT);

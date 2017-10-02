@@ -7,14 +7,16 @@
  */
 package com.bluepowermod.container.slot;
 
+import com.bluepowermod.helper.IOHelper;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.InventoryCrafting;
-import net.minecraft.inventory.SlotCrafting;
+import net.minecraft.inventory.*;
 import net.minecraft.item.ItemStack;
 
 import com.bluepowermod.container.ContainerProjectTable;
 import com.bluepowermod.tile.tier1.TileProjectTable;
+import net.minecraft.item.crafting.CraftingManager;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.NonNullList;
 
 /**
  * @author MineMaarten
@@ -22,33 +24,11 @@ import com.bluepowermod.tile.tier1.TileProjectTable;
 public class SlotProjectTableCrafting extends SlotCrafting {
     
     /** The craft matrix inventory linked to this result slot. */
-    private final IInventory       craftMatrix;
-    private final TileProjectTable projectTable;
+    private final InventoryCrafting craftMatrix;
+
+    public SlotProjectTableCrafting(EntityPlayer player, InventoryCrafting craftMatrix, InventoryCraftResult res, int p_i1823_4_, int p_i1823_5_, int p_i1823_6_) {
     
-    public SlotProjectTableCrafting(TileProjectTable projectTable, EntityPlayer p_i1823_1_, InventoryCrafting craftMatrix, IInventory p_i1823_3_, int p_i1823_4_, int p_i1823_5_, int p_i1823_6_) {
-    
-        super(p_i1823_1_, craftMatrix, p_i1823_3_, p_i1823_4_, p_i1823_5_, p_i1823_6_);
-        this.projectTable = projectTable;
+        super(player, craftMatrix, res, p_i1823_4_, p_i1823_5_, p_i1823_6_);
         this.craftMatrix = craftMatrix;
     }
-
-    @Override
-    public void onSlotChange(ItemStack p_82870_1_, ItemStack p_82870_2_) {
-        ItemStack[] oldGrid = new ItemStack[9];
-        for (int i = 0; i < 9; i++) {
-            oldGrid[i] = craftMatrix.getStackInSlot(i);
-        }
-
-        super.onSlotChange(p_82870_1_, p_82870_2_);
-
-        for (int i = 0; i < 9; i++) {
-            if (craftMatrix.getStackInSlot(i).isEmpty() && oldGrid[i] != null) {
-                oldGrid[i].setCount(1);
-                ItemStack stackFromTable = ContainerProjectTable.extractStackFromTable(projectTable, oldGrid[i], false);
-                craftMatrix.setInventorySlotContents(i, stackFromTable);
-            }
-        }
-    }
-
-    
 }

@@ -7,26 +7,19 @@
  */
 package com.bluepowermod.tile.tier1;
 
-import com.bluepowermod.BluePower;
 import com.bluepowermod.client.gui.IGuiButtonSensitive;
 import com.bluepowermod.container.ContainerProjectTable;
-import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.tile.TileBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryCraftResult;
-import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.CraftingManager;
-import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.NonNullList;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
 
-import java.lang.reflect.Field;
 import java.util.List;
 
 /**
@@ -36,48 +29,6 @@ public class TileProjectTable extends TileBase implements IInventory, IGuiButton
 
     private NonNullList<ItemStack> inventory = NonNullList.withSize(19, ItemStack.EMPTY);
     protected NonNullList<ItemStack> craftingGrid = NonNullList.withSize(9, ItemStack.EMPTY);
-    protected final IInventory craftResult = new InventoryCraftResult();
-    private static Field stackListFieldInventoryCrafting;
-
-    public InventoryCrafting getCraftingGrid(Container listener) {
-        InventoryCrafting inventoryCrafting = new InventoryCrafting(listener, 3, 3) {
-            @Override
-            public void setInventorySlotContents(int slot, ItemStack stack) {
-                super.setInventorySlotContents(slot, stack);
-                updateCraftingGrid();
-            }
-
-            @Override
-            public ItemStack decrStackSize(int p_70298_1_, int p_70298_2_) {
-                ItemStack stack = super.decrStackSize(p_70298_1_, p_70298_2_);
-                updateCraftingGrid();
-                return stack;
-            }
-        };
-        if (stackListFieldInventoryCrafting == null) {
-            stackListFieldInventoryCrafting = ReflectionHelper.findField(InventoryCrafting.class, "field_70466_a", "stackList");
-        }
-        try {
-            stackListFieldInventoryCrafting.set(inventoryCrafting, craftingGrid);// Inject the array, so when stacks are being set to ItemStack.EMPTY by the
-                                                                                 // container it'll make it's way over to the actual stacks.
-            return inventoryCrafting;
-        } catch (Exception e) {
-            BluePower.log.error("This is about to go wrong, Project Table getCraftingGrid:");
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    public InventoryCrafting getCraftingGrid() {
-        return getCraftingGrid(new Container() {
-            @Override
-            public boolean canInteractWith(EntityPlayer p_75145_1_) {
-
-                return false;
-            }
-
-        });
-    }
 
     @Override
     public List<ItemStack> getDrops() {
@@ -153,6 +104,9 @@ public class TileProjectTable extends TileBase implements IInventory, IGuiButton
     public ItemStack getStackInSlot(int i) {
         return inventory.get(i);
     }
+    public ItemStack getStackInCraftingSlot(int i) {
+        return craftingGrid.get(i);
+    }
 
     @Override
     public ItemStack decrStackSize(int slot, int amount) {
@@ -186,6 +140,10 @@ public class TileProjectTable extends TileBase implements IInventory, IGuiButton
         inventory.set(i, itemStack);
     }
 
+    public void setCraftingSlotContents(int i, ItemStack itemStack) {
+        craftingGrid.set(i, itemStack);
+    }
+
     @Override
     public String getName() {
 
@@ -211,7 +169,6 @@ public class TileProjectTable extends TileBase implements IInventory, IGuiButton
 
     @Override
     public void openInventory(EntityPlayer player) {
-
     }
 
     @Override
@@ -223,45 +180,6 @@ public class TileProjectTable extends TileBase implements IInventory, IGuiButton
     public boolean isItemValidForSlot(int p_94041_1_, ItemStack p_94041_2_) {
 
         return true;
-    }
-
-    protected void updateCraftingGrid() {
-        IRecipe recipe = CraftingManager.findMatchingRecipe(getCraftingGrid(), getWorld());
-        if(recipe != null) {
-            craftResult.setInventorySlotContents(0, recipe.getRecipeOutput());
-        }
-    }
-
-    protected void craft() {
-        // FMLCommonHandler.instance().firePlayerCraftingEvent(p_82870_1_, p_82870_2_, craftMatrix);
-
-        for (int i = 0; i < craftingGrid.size(); ++i) {
-            ItemStack itemstack1 = craftingGrid.get(i);
-
-            if (!itemstack1.isEmpty()) {
-                boolean pulledFromInventory = false;
-                if (craftingGrid.get(i).getCount() == 1) {
-                    ItemStack stackFromTable = ContainerProjectTable.extractStackFromTable(this, craftingGrid.get(i), false);
-                    pulledFromInventory = !stackFromTable.isEmpty();
-                }
-                if (!pulledFromInventory) {
-                    craftingGrid.get(i).setCount(craftingGrid.get(i).getCount() - 1);
-                    if (craftingGrid.get(i).getCount() <= 0)
-                        craftingGrid.set(i, ItemStack.EMPTY);
-                }
-                if (itemstack1.getItem().hasContainerItem(itemstack1)) {
-                    ItemStack itemstack2 = itemstack1.getItem().getContainerItem(itemstack1);
-
-                    if (!itemstack2.isEmpty() && itemstack2.isItemStackDamageable() && itemstack2.getItemDamage() > itemstack2.getMaxDamage()) {
-                        continue;
-                    }
-
-                    //Removed remainder as this is now handled by minecraft.
-                    IOHelper.insert(this, itemstack2, 0, false);
-
-                }
-            }
-        }
     }
 
     @Override

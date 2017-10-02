@@ -56,12 +56,6 @@ public class TileAutoProjectTable extends TileProjectTable implements ISidedInve
     }
 
     @Override
-    protected void updateCraftingGrid() {
-        super.updateCraftingGrid();
-        markedForBufferFill = true;
-    }
-
-    @Override
     public int getSizeInventory() {
 
         return super.getSizeInventory() + 1;
@@ -120,36 +114,10 @@ public class TileAutoProjectTable extends TileProjectTable implements ISidedInve
     public void update() {
         super.update();
         if (markedForBufferFill) {
-            updateCraftingGrid();
-            tryFillCraftBuffer();
             markedForBufferFill = false;
         }
     }
 
-    private void tryFillCraftBuffer() {
-        if (craftBuffer.isEmpty() && craftResult.getStackInSlot(0) != null && !world.isRemote) {
-            Map<ItemStack, Integer> recipeItems = new HashMap<ItemStack, Integer>();
-            for (ItemStack s : craftingGrid) {
-                if (!s.isEmpty()) {
-                    addItem(recipeItems, s);
-                }
-            }
-            boolean canCraft = true;
-            for (Map.Entry<ItemStack, Integer> entry : recipeItems.entrySet()) {
-                ItemStack s = entry.getKey().copy();
-                s.setCount(entry.getValue());
-                ItemStack extracted = IOHelper.extract(this, null, s, true, true);
-                if (extracted.isEmpty()) {
-                    canCraft = false;
-                    break;
-                }
-            }
-            if (canCraft) {
-                craftBuffer = craftResult.getStackInSlot(0).copy();
-                craft();
-            }
-        }
-    }
 
     @Override
     public String getName() {
