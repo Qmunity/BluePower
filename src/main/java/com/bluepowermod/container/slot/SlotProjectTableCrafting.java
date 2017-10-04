@@ -8,8 +8,10 @@
 package com.bluepowermod.container.slot;
 
 import com.bluepowermod.helper.IOHelper;
+import com.google.common.reflect.ImmutableTypeToInstanceMap;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.*;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import com.bluepowermod.container.ContainerProjectTable;
@@ -25,10 +27,51 @@ public class SlotProjectTableCrafting extends SlotCrafting {
     
     /** The craft matrix inventory linked to this result slot. */
     private final InventoryCrafting craftMatrix;
+    private final TileProjectTable projectTable;
+    private boolean remaining = false;
 
-    public SlotProjectTableCrafting(EntityPlayer player, InventoryCrafting craftMatrix, InventoryCraftResult res, int p_i1823_4_, int p_i1823_5_, int p_i1823_6_) {
+    public SlotProjectTableCrafting(TileProjectTable projectTable, EntityPlayer player, InventoryCrafting craftMatrix, InventoryCraftResult res, int p_i1823_4_, int p_i1823_5_, int p_i1823_6_) {
     
         super(player, craftMatrix, res, p_i1823_4_, p_i1823_5_, p_i1823_6_);
         this.craftMatrix = craftMatrix;
+        this.projectTable = projectTable;
     }
+
+    @Override
+    public void onSlotChange(ItemStack p_75220_1_, ItemStack p_75220_2_) {
+
+    }
+
+    @Override
+    public ItemStack onTake(EntityPlayer thePlayer, ItemStack stack) {
+            extractedFromTable();
+            remaining = false;
+            return super.onTake(thePlayer, stack);
+    }
+
+    private boolean extractedFromTable(){
+        boolean remaining = true;
+        for (int i = 0; i < 10; i++) {
+            ItemStack itemStack = craftMatrix.getStackInSlot(i);
+            if (itemStack.getCount() == 1) {
+                itemStack = extractFromTable(itemStack);
+                craftMatrix.setInventorySlotContents(i, itemStack);
+            }
+            if (itemStack.getCount() == 1) {
+                remaining  =  false;
+            }
+        }
+        return remaining;
+    }
+
+    private ItemStack extractFromTable(ItemStack itemStack){
+        for (int j = 0; j < projectTable.getSizeInventory(); j++) {
+            if (projectTable.getStackInSlot(j).getItem().equals(itemStack.getItem())) {
+                projectTable.decrStackSize(j, 1);
+                itemStack.setCount(itemStack.getCount() + 1);
+            }
+        }
+        return itemStack;
+    }
+
 }

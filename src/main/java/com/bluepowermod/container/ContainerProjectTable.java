@@ -49,13 +49,12 @@ public class ContainerProjectTable extends Container {
     private final InventoryCraftResult craftResult;
 
     public ContainerProjectTable(InventoryPlayer invPlayer, TileProjectTable projectTable) {
-
         craftResult =  new InventoryCraftResult();
         craftingGrid = new InventoryProjectTableCrafting(this, projectTable, 3, 3);;
         player = invPlayer.player;
 
         //Output
-        addSlotToContainer(new SlotProjectTableCrafting(player, craftingGrid, craftResult, 0, 127, 34));
+        addSlotToContainer(new SlotProjectTableCrafting(projectTable, player, craftingGrid, craftResult, 0, 127, 34));
 
         //Crafting Grid
         for (int i = 0; i < 3; ++i) {
@@ -125,8 +124,8 @@ public class ContainerProjectTable extends Container {
     }
 
     /*
-             * 0 result, 1-9 matrix,  10 - 27 inventory, 28 - 63 player inv.
-             */
+     * 0 result, 1-9 matrix,  10 - 27 inventory, 28 - 63 player inv.
+     */
     @Override
     public ItemStack transferStackInSlot(EntityPlayer player, int par2) {
 
@@ -138,11 +137,6 @@ public class ContainerProjectTable extends Container {
             if (0 < par2 && par2 < 10) {
                 if (!mergeItemStack(itemstack1, 10, 28, false))
                     return ItemStack.EMPTY;
-            } else if (par2 == 0) {
-                itemstack1.getItem().onCreated(itemstack1, player.world, player);
-                if (!mergeItemStack(itemstack1, 28, 64, false))
-                    return ItemStack.EMPTY;
-                slot.onSlotChange(itemstack1, itemstack);
             } else if (par2 < 28) {
                 if (!mergeItemStack(itemstack1, 28, 64, false))
                     return ItemStack.EMPTY;
@@ -169,7 +163,6 @@ public class ContainerProjectTable extends Container {
                 player.dropItem(itemstack2, false);
             }
         }
-
 
         this.onCraftMatrixChanged(this.craftingGrid);
         return itemstack;
