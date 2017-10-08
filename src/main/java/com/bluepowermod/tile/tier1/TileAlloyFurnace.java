@@ -214,7 +214,6 @@ public class TileAlloyFurnace extends TileBase implements ISidedInventory {
         if (_isActive != isActive) {
             isActive = _isActive;
             sendUpdatePacket();
-            this.markDirty();
         }
     }
 
