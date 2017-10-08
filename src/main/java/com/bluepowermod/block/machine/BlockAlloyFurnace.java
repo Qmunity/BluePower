@@ -30,6 +30,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
@@ -56,12 +57,27 @@ public class BlockAlloyFurnace extends BlockContainerBase {
         return new BlockStateContainer(this, FACING, ACTIVE);
     }
 
+
     @Override
     public IBlockState getStateFromMeta(int meta) {
         return getDefaultState()
                 .withProperty(FACING, EnumFacing.HORIZONTALS[meta & 3])
                 .withProperty(ACTIVE, (meta & 4) != 0);
     }
+
+    @Override
+    public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
+        if(world.getTileEntity(pos) != null) {
+            return state.withProperty(ACTIVE, isActive(world, pos));
+        }
+        return state;
+    }
+
+    public boolean isActive(IBlockAccess world, BlockPos pos) {
+        TileAlloyFurnace te = (TileAlloyFurnace)world.getTileEntity(pos);
+        return te.getIsActive();
+    }
+
 
     @Override
     public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack iStack) {

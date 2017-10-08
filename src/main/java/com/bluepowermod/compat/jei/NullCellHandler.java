@@ -1,4 +1,4 @@
-package com.bluepowermod.compat.nei;
+package com.bluepowermod.compat.jei;
 
 /*import codechicken.nei.api.stack.PositionedStack;
 import codechicken.nei.container.InventoryCraftingDummy;

@@ -81,14 +81,14 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
             throw new NullPointerException("Can't register an Alloy Furnace recipe with a null output stack or item");
         if (craftingResult.isEmpty())
             throw new NullPointerException("Can't register an Alloy Furnace recipe with a invalid output stack or item");
-        ItemStack[] requiredStacks = new ItemStack[requiredItems.length];
-        for (int i = 0; i < requiredStacks.length; i++) {
+        NonNullList<ItemStack> requiredStacks = NonNullList.create();
+        for (int i = 0; i < requiredStacks.size(); i++) {
             if (requiredItems[i] instanceof ItemStack) {
-                requiredStacks[i] = (ItemStack) requiredItems[i];
+                requiredStacks.add((ItemStack) requiredItems[i]);
             } else if (requiredItems[i] instanceof Item) {
-                requiredStacks[i] = new ItemStack((Item) requiredItems[i], 1, OreDictionary.WILDCARD_VALUE);
+                requiredStacks.add(new ItemStack((Item) requiredItems[i], 1, OreDictionary.WILDCARD_VALUE));
             } else if (requiredItems[i] instanceof Block) {
-                requiredStacks[i] = new ItemStack(Item.getItemFromBlock((Block) requiredItems[i]), 1, OreDictionary.WILDCARD_VALUE);
+                requiredStacks.add(new ItemStack(Item.getItemFromBlock((Block) requiredItems[i]), 1, OreDictionary.WILDCARD_VALUE));
             } else {
                 throw new IllegalArgumentException("Alloy Furnace crafting ingredients can only be ItemStack, Item or Block!");
             }
@@ -275,13 +275,13 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
     public class StandardAlloyFurnaceRecipe implements IAlloyFurnaceRecipe {
 
         private final ItemStack craftingResult;
-        private final ItemStack[] requiredItems;
+        private final NonNullList<ItemStack> requiredItems;
 
-        private StandardAlloyFurnaceRecipe(ItemStack craftingResult, ItemStack... requiredItems) {
+        private StandardAlloyFurnaceRecipe(ItemStack craftingResult, NonNullList<ItemStack> requiredItems) {
 
             if (craftingResult.isEmpty())
                 throw new IllegalArgumentException("Alloy Furnace crafting result can't be null!");
-            if (requiredItems.length > 9)
+            if (requiredItems.size() > 9)
                 throw new IllegalArgumentException("There can't be more than 9 crafting ingredients for the Alloy Furnace!");
             for (ItemStack requiredItem : requiredItems) {
                 if (requiredItem.isEmpty())
@@ -351,7 +351,7 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
          *
          * @return
          */
-        public ItemStack[] getRequiredItems() {
+        public NonNullList<ItemStack> getRequiredItems() {
 
             return requiredItems;
         }
