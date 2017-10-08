@@ -21,8 +21,8 @@ import java.util.Map;
 /**
  * @author MoreThanHidden
  */
-@JEIPlugin
-public class JEIPluginInit implements IModPlugin {
+@mezz.jei.api.JEIPlugin
+public class JEIPlugin implements IModPlugin {
 
     public static IJeiHelpers jeiHelpers;
     public static IModRegistry modRegistry;
@@ -49,7 +49,4 @@ public class JEIPluginInit implements IModPlugin {
         modRegistry.addRecipeCatalyst(new ItemStack(BPBlocks.project_table), VanillaRecipeCategoryUid.CRAFTING);
     }
 
-    @Override
-    public void onRuntimeAvailable(IJeiRuntime jeiRuntime) {
-    }
 }

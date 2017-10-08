@@ -1,0 +1,16 @@
+{
+  "result": {
+    "item": "bluepower:silver_block"
+  },
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "#": {
+      "item": "#INGOTSILVER"
+    }
+  }
+}

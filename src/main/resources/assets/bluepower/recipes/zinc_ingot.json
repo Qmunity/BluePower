@@ -1,0 +1,15 @@
+{
+  "result": {
+    "item": "bluepower:zinc_ingot",
+    "count": 9
+  },
+  "pattern": [
+    "#"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "#": {
+      "item": "bluepower:zinc_block"
+    }
+  }
+}

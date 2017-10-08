@@ -1,0 +1,16 @@
+{
+  "result": {
+    "item": "bluepower:basalt_brick_small",
+    "count": 4
+  },
+  "pattern": [
+    "##",
+    "##"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "#": {
+      "item": "bluepower:basalt_brick"
+    }
+  }
+}

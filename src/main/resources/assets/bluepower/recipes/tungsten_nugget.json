@@ -1,0 +1,15 @@
+{
+  "result": {
+    "item": "bluepower:tungsten_nugget",
+    "count": 9
+  },
+  "pattern": [
+    "#"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "#": {
+      "item": "bluepower:tungsten_ingot"
+    }
+  }
+}

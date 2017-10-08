@@ -1,0 +1,14 @@
+{
+  "result": {
+    "item": "bluepower:screwdriver_handle"
+  },
+  "ingredients": [
+    {
+      "item": "#STICKWOOD"
+    },
+    {
+      "item": "bluepower:indigo_dye"
+    }
+  ],
+  "type": "forge:ore_shapeless"
+}

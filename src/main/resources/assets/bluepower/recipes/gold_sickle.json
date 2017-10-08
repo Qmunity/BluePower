@@ -1,0 +1,19 @@
+{
+  "result": {
+    "item": "bluepower:gold_sickle"
+  },
+  "pattern": [
+    " G ",
+    "  G",
+    "SG "
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "S": {
+      "item": "#STICKWOOD"
+    },
+    "G": {
+      "item": "#INGOTGOLD"
+    }
+  }
+}

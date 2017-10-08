@@ -17,6 +17,7 @@
 
 package com.bluepowermod.init;
 
+import com.bluepowermod.recipe.CoreRecipes;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -28,7 +29,7 @@ public class Recipes {
 
     public static void init() {
 
-        //CoreRecipes.init();
+        CoreRecipes.init();
         //LogicRecipes.init();
         //MachineRecipes.init();
         //LightingRecipes.init();
