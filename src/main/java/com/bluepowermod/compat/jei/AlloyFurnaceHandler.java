@@ -9,15 +9,16 @@ package com.bluepowermod.compat.jei;
 
 import com.bluepowermod.recipe.AlloyFurnaceRegistry.StandardAlloyFurnaceRecipe;
 import com.bluepowermod.reference.Refs;
-import com.sun.xml.internal.bind.v2.model.core.ID;
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.gui.IDrawable;
+import mezz.jei.api.gui.IGuiItemStackGroup;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.IRecipeCategory;
 import mezz.jei.api.recipe.IRecipeWrapper;
 import mezz.jei.api.recipe.IRecipeWrapperFactory;
 import net.minecraft.client.Minecraft;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
@@ -34,7 +35,7 @@ public class AlloyFurnaceHandler implements IRecipeCategory<AlloyFurnaceWrapper>
     private final IDrawable background;
 
     public AlloyFurnaceHandler(IGuiHelper helper) {
-      background = helper.createDrawable(new ResourceLocation(Refs.MODID + ":textures/gui/alloy_furnace.png"),8,13, 142, 60);
+      background = helper.createDrawable(new ResourceLocation(Refs.MODID + ":textures/gui/alloy_furnace.png"),8,13, 147, 60);
     }
 
     @Override
@@ -64,7 +65,19 @@ public class AlloyFurnaceHandler implements IRecipeCategory<AlloyFurnaceWrapper>
 
     @Override
     public void setRecipe(IRecipeLayout recipeLayout, AlloyFurnaceWrapper recipeWrapper, IIngredients ingredients) {
-
+        IGuiItemStackGroup guiItemStackGroup = recipeLayout.getItemStacks();
+        guiItemStackGroup.init(0, true, 12, 21);
+        guiItemStackGroup.set(0, new ItemStack(Items.COAL));
+        guiItemStackGroup.init(1, false,125, 21);
+        guiItemStackGroup.set(1, ingredients.getOutputs(ItemStack.class).get(0));
+        for(int i = 0; i < 3; i++ ) {
+            for(int j = 0; j < 3; j++ ) {
+                guiItemStackGroup.init(i * 3 + j + 2, true, 38 + j * 18, 3 + i * 18);
+            }
+        }
+        for(int i = 0; i < ingredients.getInputs(ItemStack.class).get(0).size(); i++){
+            guiItemStackGroup.set(i + 2, ingredients.getInputs(ItemStack.class).get(0).get(i));
+        }
     }
 
 }

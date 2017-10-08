@@ -7,10 +7,13 @@
  */
 package com.bluepowermod.compat.jei;
 
+import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.recipe.AlloyFurnaceRegistry;
 import mezz.jei.api.*;
 import mezz.jei.api.recipe.IRecipeCategory;
 import mezz.jei.api.recipe.IRecipeCategoryRegistration;
+import mezz.jei.api.recipe.VanillaRecipeCategoryUid;
+import net.minecraft.item.ItemStack;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -38,8 +41,15 @@ public class JEIPluginInit implements IModPlugin {
     @Override
     public void register(IModRegistry registryIn) {
         modRegistry = registryIn;
+        //Alloy Furnace
         modRegistry.addRecipes( AlloyFurnaceRegistry.getInstance().getAllRecipes(), "bluepower.alloyfurnace");
+        modRegistry.handleRecipes(AlloyFurnaceRegistry.StandardAlloyFurnaceRecipe.class, new AlloyFurnaceWrapperFactory(), "bluepower.alloyfurnace");
+        modRegistry.addRecipeCatalyst(new ItemStack(BPBlocks.alloyfurnace), "bluepower.alloyfurnace");
+        //Crafting Table
+        modRegistry.addRecipeCatalyst(new ItemStack(BPBlocks.project_table), VanillaRecipeCategoryUid.CRAFTING);
     }
 
-
+    @Override
+    public void onRuntimeAvailable(IJeiRuntime jeiRuntime) {
+    }
 }
