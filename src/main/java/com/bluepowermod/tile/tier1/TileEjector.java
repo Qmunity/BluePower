@@ -179,12 +179,11 @@ public class TileEjector extends TileMachineBase implements IInventory {
     /**
      * Do not make give this method the name canInteractWith because it clashes with Container
      * 
-     * @param var1
+     * @param player
      */
     @Override
-    public boolean isUsableByPlayer(EntityPlayer var1) {
-
-        return true;
+    public boolean isUsableByPlayer(EntityPlayer player) {
+        return player.getDistanceSqToCenter(pos) <= 64.0D;
     }
 
     @Override

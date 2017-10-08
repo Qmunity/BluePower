@@ -7,18 +7,11 @@
  */
 package com.bluepowermod.container.slot;
 
-import com.bluepowermod.helper.IOHelper;
-import com.google.common.reflect.ImmutableTypeToInstanceMap;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.*;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-import com.bluepowermod.container.ContainerProjectTable;
 import com.bluepowermod.tile.tier1.TileProjectTable;
-import net.minecraft.item.crafting.CraftingManager;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.NonNullList;
 
 /**
  * @author MineMaarten
@@ -28,7 +21,6 @@ public class SlotProjectTableCrafting extends SlotCrafting {
     /** The craft matrix inventory linked to this result slot. */
     private final InventoryCrafting craftMatrix;
     private final TileProjectTable projectTable;
-    private boolean remaining = false;
 
     public SlotProjectTableCrafting(TileProjectTable projectTable, EntityPlayer player, InventoryCrafting craftMatrix, InventoryCraftResult res, int p_i1823_4_, int p_i1823_5_, int p_i1823_6_) {
     
@@ -45,7 +37,6 @@ public class SlotProjectTableCrafting extends SlotCrafting {
     @Override
     public ItemStack onTake(EntityPlayer thePlayer, ItemStack stack) {
             extractedFromTable();
-            remaining = false;
             return super.onTake(thePlayer, stack);
     }
 

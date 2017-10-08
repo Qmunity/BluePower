@@ -315,8 +315,7 @@ public class TileDeployer extends TileBase implements ISidedInventory, IEjectAni
     
     @Override
     public boolean isUsableByPlayer(EntityPlayer player) {
-    
-        return true;
+        return player.getDistanceSqToCenter(pos) <= 64.0D;
     }
 
     @Override

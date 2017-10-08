@@ -14,9 +14,11 @@ import com.bluepowermod.compat.CompatibilityUtils;
 import com.bluepowermod.event.BPEventHandler;
 import com.bluepowermod.init.*;
 import com.bluepowermod.network.BPNetworkHandler;
+import com.bluepowermod.recipe.AlloyFurnaceRegistry;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.world.WorldGenerationHandler;
 import net.minecraft.item.Item;
+import net.minecraft.item.crafting.CraftingManager;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.util.EnumHelper;
@@ -83,6 +85,8 @@ public class BluePower {
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event) {
         CompatibilityUtils.postInit(event);
+        Recipes.init();
+        AlloyFurnaceRegistry.getInstance().generateRecyclingRecipes();
     }
 
     @Mod.EventHandler

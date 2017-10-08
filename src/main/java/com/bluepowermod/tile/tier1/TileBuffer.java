@@ -123,8 +123,7 @@ public class TileBuffer extends TileBase implements ISidedInventory {
 
     @Override
     public boolean isUsableByPlayer(EntityPlayer player) {
-    
-        return true;
+        return player.getDistanceSqToCenter(pos) <= 64.0D;
     }
 
     @Override

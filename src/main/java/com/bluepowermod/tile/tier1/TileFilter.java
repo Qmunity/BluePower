@@ -182,7 +182,7 @@ public class TileFilter extends TileTransposer implements ISidedInventory, IGuiB
 
     @Override
     public boolean isUsableByPlayer(EntityPlayer player) {
-        return true;
+        return player.getDistanceSqToCenter(pos) <= 64.0D;
     }
 
     @Override

@@ -265,7 +265,9 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
                 if (!filter.isEmpty() && ItemStackHelper.areStacksEqual(filter, stack, fuzzySettings[i % 8])
                         && stack.getCount() >= filter.getCount()) {
                     if (!simulate) {
-                        addItemToOutputBuffer(filter.copy(), colors[i % 8]);
+                        ItemStack itemStack = stack.copy();
+                        itemStack.setCount(filter.getCount());
+                        addItemToOutputBuffer(itemStack, colors[i % 8]);
                     }
                     stack.setCount(stack.getCount() - filter.getCount());
                     return true;
@@ -453,7 +455,7 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
 
     @Override
     public boolean isUsableByPlayer(EntityPlayer player) {
-        return true;
+        return player.getDistanceSqToCenter(pos) <= 64.0D;
     }
 
     @Override

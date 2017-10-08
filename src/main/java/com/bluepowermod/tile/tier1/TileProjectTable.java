@@ -164,7 +164,7 @@ public class TileProjectTable extends TileBase implements IInventory, IGuiButton
 
     @Override
     public boolean isUsableByPlayer(EntityPlayer player) {
-        return true;
+        return player.getDistanceSqToCenter(pos) <= 64.0D;
     }
 
     @Override

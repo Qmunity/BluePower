@@ -158,8 +158,7 @@ public class TileCircuitTable extends TileBase implements IInventory, IGUITextFi
 
     @Override
     public boolean isUsableByPlayer(EntityPlayer player) {
-
-        return true;
+        return player.getDistanceSqToCenter(pos) <= 64.0D;
     }
 
 

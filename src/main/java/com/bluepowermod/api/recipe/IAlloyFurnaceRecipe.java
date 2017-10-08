@@ -22,7 +22,7 @@ import net.minecraft.util.NonNullList;
 
 /**
  * This class only should be used for special recipes, like recipes that depend on NBT. For normal recipes use
- * {com.bluepowermod.recipe.AlloyFurnaceRegistry#addRecipe(ItemStack, ItemStack...)}.
+ * {@link com.bluepowermod.recipe.AlloyFurnaceRegistry#addRecipe(ItemStack, Object...)}.
  * @author MineMaarten
  */
 public interface IAlloyFurnaceRecipe {

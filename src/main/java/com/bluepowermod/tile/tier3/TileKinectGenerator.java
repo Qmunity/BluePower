@@ -105,7 +105,7 @@ public class TileKinectGenerator extends TileBase implements ISidedInventory{
     public void setInventorySlotContents(int i, ItemStack itemStack) {
 
         this.allInventories[i] = itemStack;
-        //world.markBlockForUpdate(xCoord, yCoord, zCoord);
+        this.markDirty();
     }
 
     @Override
@@ -128,7 +128,7 @@ public class TileKinectGenerator extends TileBase implements ISidedInventory{
 
     @Override
     public boolean isUsableByPlayer(EntityPlayer player) {
-        return true;
+        return player.getDistanceSqToCenter(pos) <= 64.0D;
     }
 
     @Override
