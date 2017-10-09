@@ -30,6 +30,7 @@ import net.minecraft.util.NonNullList;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModContainer;
 import net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.oredict.OreIngredient;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 
@@ -144,9 +145,9 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
                 try {
                     if (recipe instanceof ShapedRecipes) {
                         ShapedRecipes shaped = (ShapedRecipes) recipe;
-                        if (shaped.recipeItems != null) {
-                            for (Ingredient input : shaped.recipeItems) {
-                                if (ItemStackUtils.isItemFuzzyEqual(input, recyclingItem)) {
+                        if (!shaped.getIngredients().isEmpty()) {
+                            for (Ingredient input : shaped.getIngredients()) {
+                                if (input.test(recyclingItem)) {
                                     ItemStack moltenDownItem = getRecyclingStack(recyclingItem);
                                     if (currentlyRecycledInto.isEmpty()
                                             || ItemStackUtils.isItemFuzzyEqual(currentlyRecycledInto, moltenDownItem)) {
@@ -160,7 +161,7 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
                         ShapelessRecipes shapeless = (ShapelessRecipes) recipe;
                         if (!shapeless.recipeItems.isEmpty()) {
                             for (Ingredient input : shapeless.recipeItems) {
-                                if (ItemStackUtils.isItemFuzzyEqual(input, recyclingItem)) {
+                                if (input.test(recyclingItem)) {
                                     ItemStack moltenDownItem = getRecyclingStack(recyclingItem);
                                     if (currentlyRecycledInto.isEmpty()
                                             || ItemStackUtils.isItemFuzzyEqual(currentlyRecycledInto, moltenDownItem)) {
@@ -174,12 +175,10 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
                         ShapedOreRecipe shapedOreRecipe = (ShapedOreRecipe) recipe;
                             for (Ingredient input : shapedOreRecipe.getIngredients()) {
                                 if (input != null) {
-                                    List<ItemStack> itemList = (List<ItemStack>) input;
-                                    for (ItemStack item : itemList) {
+                                    for (ItemStack item : input.getMatchingStacks()) {
                                         if (!item.isEmpty() && ItemStackUtils.isItemFuzzyEqual(item, recyclingItem)) {
                                             ItemStack moltenDownItem = getRecyclingStack(recyclingItem);
-                                            if (currentlyRecycledInto.isEmpty()
-                                                    || ItemStackUtils.isItemFuzzyEqual(currentlyRecycledInto, moltenDownItem)) {
+                                            if (currentlyRecycledInto.isEmpty() || ItemStackUtils.isItemFuzzyEqual(currentlyRecycledInto, moltenDownItem)) {
                                                 currentlyRecycledInto = moltenDownItem;
                                                 recyclingAmount += moltenDownItem.getCount();
                                             }
@@ -192,8 +191,7 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
                         ShapelessOreRecipe shapeless = (ShapelessOreRecipe) recipe;
                         for (Ingredient input : shapeless.getIngredients()) {
                             if (input != null) {
-                                List<ItemStack> itemList = (List<ItemStack>) input;
-                                for (ItemStack item : itemList) {
+                                for (ItemStack item : input.getMatchingStacks()) {
                                     if (!item.isEmpty() && ItemStackUtils.isItemFuzzyEqual(item, recyclingItem)) {
                                         ItemStack moltenDownItem = getRecyclingStack(recyclingItem);
                                         if (currentlyRecycledInto.isEmpty()
@@ -251,7 +249,7 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
     private ItemStack getRecyclingStack(ItemStack original) {
 
         ItemStack moltenDownStack = moltenDownMap.get(original);
-        return !moltenDownStack.isEmpty() ? moltenDownStack : original;
+        return moltenDownStack != null ? moltenDownStack : original;
     }
 
     public IAlloyFurnaceRecipe getMatchingRecipe(NonNullList<ItemStack> input, ItemStack outputSlot) {

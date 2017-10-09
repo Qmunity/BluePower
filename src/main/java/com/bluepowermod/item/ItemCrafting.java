@@ -27,6 +27,5 @@ public class ItemCrafting extends ItemBase {
         this.setCreativeTab(BPCreativeTabs.items);
         this.setUnlocalizedName(name);
         this.setRegistryName(Refs.MODID + ":" + name);
-        BPItems.itemList.add(this);
     }
 }
