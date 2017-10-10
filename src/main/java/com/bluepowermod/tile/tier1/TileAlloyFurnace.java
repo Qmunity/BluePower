@@ -18,6 +18,7 @@
 package com.bluepowermod.tile.tier1;
 
 import com.bluepowermod.api.recipe.IAlloyFurnaceRecipe;
+import com.bluepowermod.block.machine.BlockAlloyFurnace;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.recipe.AlloyFurnaceRegistry;
 import com.bluepowermod.tile.TileBase;
@@ -213,6 +214,7 @@ public class TileAlloyFurnace extends TileBase implements ISidedInventory {
 
         if (_isActive != isActive) {
             isActive = _isActive;
+            BlockAlloyFurnace.setState(isActive, world, pos);
             sendUpdatePacket();
         }
     }

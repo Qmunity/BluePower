@@ -28,6 +28,7 @@ import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -65,19 +66,16 @@ public class BlockAlloyFurnace extends BlockContainerBase {
                 .withProperty(ACTIVE, (meta & 4) != 0);
     }
 
-    @Override
-    public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
-        if(world.getTileEntity(pos) != null) {
-            return state.withProperty(ACTIVE, isActive(world, pos));
+    public static void setState(boolean active, World worldIn, BlockPos pos){
+        IBlockState iblockstate = worldIn.getBlockState(pos);
+        TileEntity tileentity = worldIn.getTileEntity(pos);
+
+        worldIn.setBlockState(pos, iblockstate.withProperty(ACTIVE, active), 3);
+        if (tileentity != null){
+            tileentity.validate();
+            worldIn.setTileEntity(pos, tileentity);
         }
-        return state;
     }
-
-    public boolean isActive(IBlockAccess world, BlockPos pos) {
-        TileAlloyFurnace te = (TileAlloyFurnace)world.getTileEntity(pos);
-        return te.getIsActive();
-    }
-
 
     @Override
     public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack iStack) {
@@ -98,10 +96,8 @@ public class BlockAlloyFurnace extends BlockContainerBase {
 
     @Override
     public void randomDisplayTick(IBlockState stateIn, World world, BlockPos pos, Random rnd) {
-
-        TileAlloyFurnace te = (TileAlloyFurnace) world.getTileEntity(pos);
-        if (te.getIsActive()) {
-            int l = te.getFacingDirection().ordinal();
+        if (stateIn.getValue(ACTIVE)) {
+            int l = stateIn.getValue(FACING).ordinal();
             float f = pos.getX() + 0.5F;
             float f1 = pos.getY() + 0.0F + rnd.nextFloat() * 6.0F / 16.0F;
             float f2 = pos.getZ() + 0.5F;
@@ -124,7 +120,6 @@ public class BlockAlloyFurnace extends BlockContainerBase {
         }
     }
 
-    // Not sure if you need this function.
     @Override
     public Item getItemDropped(IBlockState state, Random rand, int fortune) {
         return Item.getItemFromBlock(BPBlocks.alloyfurnace);
@@ -132,8 +127,7 @@ public class BlockAlloyFurnace extends BlockContainerBase {
 
     @Override
     public int getLightValue(IBlockState state, IBlockAccess world, BlockPos pos) {
-        TileAlloyFurnace te = (TileAlloyFurnace) world.getTileEntity(pos);
-        return te.getIsActive() ? 13 : 0;
+        return state.getValue(ACTIVE) ? 13 : 0;
     }
 
     @Override
