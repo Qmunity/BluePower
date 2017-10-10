@@ -11,9 +11,11 @@ package com.bluepowermod.client.render;
 import com.bluepowermod.block.machine.BlockLamp;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.init.BPItems;
+import com.bluepowermod.item.ItemPaintBrush;
 import com.bluepowermod.tile.tier1.TileLamp;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.color.IBlockColor;
 import net.minecraft.client.renderer.color.IItemColor;
@@ -78,7 +80,11 @@ public class Renderers {
     public static void registerItemModel(Item item, int metadata) {
         ResourceLocation loc = Item.REGISTRY.getNameForObject(item);
         if(loc != null) {
-            ModelLoader.setCustomModelResourceLocation(item, metadata, new ModelResourceLocation(loc, "inventory"));
+            if(item instanceof IItemColor && metadata == 16){
+                ModelLoader.setCustomModelResourceLocation(item, metadata, new ModelResourceLocation(loc + "_blank"));
+            }else{
+                ModelLoader.setCustomModelResourceLocation(item, metadata, new ModelResourceLocation(loc, "inventory"));
+            }
         }
     }
 
