@@ -18,6 +18,9 @@
 package com.bluepowermod.tile;
 
 import com.bluepowermod.BluePower;
+import com.bluepowermod.block.machine.BlockBattery;
+import com.bluepowermod.block.machine.BlockContainerFacingBase;
+import net.minecraft.block.BlockContainer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
@@ -38,7 +41,6 @@ public class TileBase extends TileEntity implements IRotatable, ITickable {
     private boolean isRedstonePowered;
     private int outputtingRedstone;
     private int ticker = 0;
-    private EnumFacing rotation = EnumFacing.UP;
 
     /*************** BASIC TE FUNCTIONS **************/
 
@@ -72,18 +74,10 @@ public class TileBase extends TileEntity implements IRotatable, ITickable {
      * @param tCompound
      */
     protected void writeToPacketNBT(NBTTagCompound tCompound) {
-
-        tCompound.setByte("rotation", (byte) rotation.ordinal());
         tCompound.setByte("outputtingRedstone", (byte) outputtingRedstone);
     }
 
     protected void readFromPacketNBT(NBTTagCompound tCompound) {
-
-        rotation = EnumFacing.fromAngle(tCompound.getByte("rotation"));
-        if (rotation.ordinal() > 5) {
-            BluePower.log.warn("invalid rotation!");
-            rotation = EnumFacing.UP;
-        }
         outputtingRedstone = tCompound.getByte("outputtingRedstone");
         if (world != null)
             markForRenderUpdate();
@@ -230,7 +224,7 @@ public class TileBase extends TileEntity implements IRotatable, ITickable {
     @Override
     public void setFacingDirection(EnumFacing dir) {
 
-        rotation = dir;
+        BlockContainerFacingBase.setState(dir, world, pos);
         if (world != null) {
             sendUpdatePacket();
             notifyNeighborBlockUpdate();
@@ -239,8 +233,7 @@ public class TileBase extends TileEntity implements IRotatable, ITickable {
 
     @Override
     public EnumFacing getFacingDirection() {
-
-        return rotation;
+        return world.getBlockState(pos).getValue(BlockContainerFacingBase.FACING);
     }
 
     public boolean canConnectRedstone() {

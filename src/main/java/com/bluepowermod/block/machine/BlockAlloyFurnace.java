@@ -40,59 +40,19 @@ import net.minecraft.world.World;
 
 import java.util.Random;
 
-public class BlockAlloyFurnace extends BlockContainerBase {
-
-    public static final PropertyDirection FACING = PropertyDirection.create("facing");
-    public static final PropertyBool ACTIVE = PropertyBool.create("active");
+public class BlockAlloyFurnace extends BlockContainerFacingBase {
 
     public BlockAlloyFurnace() {
 
         super(Material.ROCK, TileAlloyFurnace.class);
         setUnlocalizedName(Refs.ALLOYFURNACE_NAME);
         setRegistryName(Refs.MODID, Refs.ALLOYFURNACE_NAME);
-        setDefaultState(getDefaultState().withProperty(FACING, EnumFacing.NORTH).withProperty(ACTIVE, false));
-    }
-
-    @Override
-    protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, FACING, ACTIVE);
-    }
-
-
-    @Override
-    public IBlockState getStateFromMeta(int meta) {
-        return getDefaultState()
-                .withProperty(FACING, EnumFacing.HORIZONTALS[meta & 3])
-                .withProperty(ACTIVE, (meta & 4) != 0);
-    }
-
-    public static void setState(boolean active, World worldIn, BlockPos pos){
-        IBlockState iblockstate = worldIn.getBlockState(pos);
-        TileEntity tileentity = worldIn.getTileEntity(pos);
-
-        worldIn.setBlockState(pos, iblockstate.withProperty(ACTIVE, active), 3);
-        if (tileentity != null){
-            tileentity.validate();
-            worldIn.setTileEntity(pos, tileentity);
-        }
-    }
-
-    @Override
-    public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack iStack) {
-        super.onBlockPlacedBy(world, pos, state, placer, iStack);
-        world.setBlockState(pos, state.withProperty(FACING, placer.getAdjustedHorizontalFacing().getOpposite()), 2);
-    }
-
-    @Override
-    public int getMetaFromState(IBlockState state) {
-        return state.getValue(FACING).getIndex() + (state.getValue(ACTIVE) ? 4 : 0);
     }
 
     @Override
     public boolean isOpaqueCube(IBlockState state) {
         return true;
     }
-
 
     @Override
     public void randomDisplayTick(IBlockState stateIn, World world, BlockPos pos, Random rnd) {

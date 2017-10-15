@@ -8,6 +8,7 @@
 package com.bluepowermod.tile.tier1;
 
 import com.bluepowermod.BluePower;
+import com.bluepowermod.block.machine.BlockContainerFacingBase;
 import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.tile.IEjectAnimator;
@@ -46,24 +47,13 @@ import java.util.UUID;
  * @author MineMaarten
  */
 public class TileDeployer extends TileBase implements ISidedInventory, IEjectAnimator {
-    
-    private int                      animationTimer      = -1;
+
     private final NonNullList<ItemStack> inventory       = NonNullList.withSize(10, ItemStack.EMPTY);
     private static final List<Item>  blacklistedItems    = new ArrayList<Item>();
     private static final GameProfile FAKE_PLAYER_PROFILE = new GameProfile(UUID.randomUUID(), "[BP Deployer]");
     
     static {
         blacklistedItems.add(Items.ENDER_PEARL);
-    }
-    
-    @Override
-    public void update() {
-    
-        if (animationTimer >= 0) {
-            if (++animationTimer > 10) {
-                animationTimer = -1;
-            }
-        }
     }
     
     private boolean canDeployItem(ItemStack stack) {
@@ -76,7 +66,6 @@ public class TileDeployer extends TileBase implements ISidedInventory, IEjectAni
     
         super.redstoneChanged(newValue);
         if (!world.isRemote && newValue) {
-            animationTimer = 0;
             sendUpdatePacket();
             
             FakePlayer player = FakePlayerFactory.get((WorldServer) world, FAKE_PLAYER_PROFILE);
@@ -235,23 +224,7 @@ public class TileDeployer extends TileBase implements ISidedInventory, IEjectAni
         }
         return tCompound;
     }
-    
-    @Override
-    public void writeToPacketNBT(NBTTagCompound tag) {
-    
-        super.writeToPacketNBT(tag);
-        tag.setBoolean("animation", animationTimer >= 0);
-    }
-    
-    @Override
-    public void readFromPacketNBT(NBTTagCompound tag) {
-    
-        super.readFromPacketNBT(tag);
-        if (tag.getBoolean("animation")) {
-            animationTimer = 0;
-        }
-    }
-    
+
     @Override
     public int getSizeInventory() {
     
@@ -370,7 +343,7 @@ public class TileDeployer extends TileBase implements ISidedInventory, IEjectAni
     @Override
     public boolean isEjecting() {
     
-        return animationTimer >= 0;
+        return (world.getBlockState(pos)).getValue(BlockContainerFacingBase.ACTIVE);
     }
  
     @Override

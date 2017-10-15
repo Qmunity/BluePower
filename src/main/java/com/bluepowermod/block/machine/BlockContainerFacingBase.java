@@ -27,12 +27,12 @@ import javax.annotation.Nullable;
 /**
  * @author MineMaarten
  */
-public class BlockContainerFrontRender extends BlockContainerBase {
+public class BlockContainerFacingBase extends BlockContainerBase {
 
     public static final PropertyDirection FACING = PropertyDirection.create("facing");
     public static final PropertyBool ACTIVE = PropertyBool.create("active");
 
-    public BlockContainerFrontRender(Material material, Class<? extends TileBase> tileEntityClass) {
+    public BlockContainerFacingBase(Material material, Class<? extends TileBase> tileEntityClass) {
 
         super(material, tileEntityClass);
         setDefaultState(getDefaultState().withProperty(FACING, EnumFacing.NORTH).withProperty(ACTIVE, false));
@@ -63,27 +63,26 @@ public class BlockContainerFrontRender extends BlockContainerBase {
             worldIn.setTileEntity(pos, tileentity);
         }
     }
+    public static void setState(EnumFacing facing, World worldIn, BlockPos pos){
+        IBlockState iblockstate = worldIn.getBlockState(pos);
+        TileEntity tileentity = worldIn.getTileEntity(pos);
+
+        worldIn.setBlockState(pos, iblockstate.withProperty(FACING, facing), 3);
+        if (tileentity != null){
+            tileentity.validate();
+            worldIn.setTileEntity(pos, tileentity);
+        }
+    }
 
     @Override
     public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack iStack) {
         super.onBlockPlacedBy(world, pos, state, placer, iStack);
-        world.setBlockState(pos, state.withProperty(FACING, EnumFacing.getDirectionFromEntityLiving(pos, placer)), 2);
+        world.setBlockState(pos, state.withProperty(FACING, canRotateVertical() ? EnumFacing.getDirectionFromEntityLiving(pos, placer) : placer.getHorizontalFacing().getOpposite()), 2);
     }
-
 
     @Override
     public int getMetaFromState(IBlockState state) {
         //Meta 0-5 off direction - Meta 6-11 on direction
         return state.getValue(FACING).getIndex() + (state.getValue(ACTIVE) ? 6 : 0);
-    }
-
-
-    @Override
-    public boolean canConnectRedstone(IBlockState state, IBlockAccess world, BlockPos pos, @Nullable EnumFacing side) {
-        TileBase tb = (TileBase) world.getTileEntity(pos);
-        if (tb == null)
-            return false;
-
-        return tb.canConnectRedstone();
     }
 }
