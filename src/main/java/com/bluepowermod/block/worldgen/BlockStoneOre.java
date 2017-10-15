@@ -17,6 +17,7 @@
 
 package com.bluepowermod.block.worldgen;
 
+import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.reference.Refs;
@@ -24,9 +25,11 @@ import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.boss.EntityWither;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.Explosion;
@@ -35,6 +38,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nullable;
+import java.util.List;
 import java.util.Random;
 
 public class BlockStoneOre extends Block {
@@ -122,8 +127,15 @@ public class BlockStoneOre extends Block {
     public BlockStoneOre setWitherproof(boolean witherproof) {
 
         this.witherproof = witherproof;
-
         return this;
+    }
+
+    @Override
+    public void addInformation(ItemStack stack, @Nullable World player, List<String> tooltip, ITooltipFlag advanced) {
+        super.addInformation(stack, player, tooltip, advanced);
+        if(witherproof){
+            tooltip.add(MinecraftColor.RED.getChatColor() + "Witherproof");
+        }
     }
 
     @Override
@@ -144,18 +156,6 @@ public class BlockStoneOre extends Block {
     public boolean canDropFromExplosion(Explosion explosion) {
 
         return witherproof ? false : super.canDropFromExplosion(explosion);
-    }
-
-    public BlockStoneOre setTooltip(String... tooltip) {
-
-        this.tooltip = tooltip;
-
-        return this;
-    }
-
-    public String[] getTooltip() {
-
-        return tooltip;
     }
 
 }

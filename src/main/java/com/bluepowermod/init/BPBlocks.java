@@ -170,8 +170,7 @@ public class BPBlocks {
         tungsten_block = new BlockStoneOre(Refs.TUNGSTENBLOCK_NAME).setToolLevel(3).setResistance(25.0F).setHardness(5.0F);
 
         sapphire_glass = new BlockStoneOreConnected(Refs.SAPPHIREGLASS_NAME).setTransparent(true).setHardness(10).setResistance(10000);
-        reinforced_sapphire_glass = new BlockStoneOreConnected(Refs.REINFORCEDSAPPHIREGLASS_NAME).setTransparent(true).setWitherproof(true)
-                .setTooltip(MinecraftColor.RED.getChatColor() + "Witherproof").setHardness(30).setResistance(Integer.MAX_VALUE);
+        reinforced_sapphire_glass = new BlockStoneOreConnected(Refs.REINFORCEDSAPPHIREGLASS_NAME).setTransparent(true).setWitherproof(true).setHardness(30).setResistance(Integer.MAX_VALUE);
 
         flax_crop = new BlockCrop();
         indigo_flower = new BlockCustomFlower(Refs.INDIGOFLOWER_NAME);
@@ -179,7 +178,7 @@ public class BPBlocks {
         alloyfurnace = new BlockAlloyFurnace();
         block_breaker = new BlockContainerFacingBase(Material.ROCK, TileBlockBreaker.class).setRegistryName(Refs.MODID, Refs.BLOCKBREAKER_NAME).setUnlocalizedName(Refs.BLOCKBREAKER_NAME);
         igniter = new BlockIgniter();
-        buffer = new BlockContainerBase(Material.ROCK, TileBuffer.class).setGuiId(GuiIDs.BUFFER).setRegistryName(Refs.MODID, Refs.BLOCKBUFFER_NAME).setUnlocalizedName(Refs.BLOCKBUFFER_NAME);
+        buffer = new BlockContainerFacingBase(Material.ROCK, TileBuffer.class).setGuiId(GuiIDs.BUFFER).setRegistryName(Refs.MODID, Refs.BLOCKBUFFER_NAME).setUnlocalizedName(Refs.BLOCKBUFFER_NAME);
         deployer = new BlockContainerFacingBase(Material.ROCK, TileDeployer.class).setGuiId(GuiIDs.DEPLOYER_ID)
                 .setRegistryName(Refs.MODID, Refs.BLOCKDEPLOYER_NAME).setUnlocalizedName(Refs.BLOCKDEPLOYER_NAME);
         transposer = new BlockContainerBase(Material.ROCK, TileTransposer.class).setRegistryName(Refs.MODID, Refs.TRANSPOSER_NAME).setUnlocalizedName(Refs.TRANSPOSER_NAME);

@@ -18,7 +18,6 @@
 package com.bluepowermod.block;
 
 import com.bluepowermod.BluePower;
-import com.bluepowermod.api.BPApi;
 import com.bluepowermod.api.block.IAdvancedSilkyRemovable;
 import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.init.BPItems;
@@ -29,7 +28,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -177,17 +175,6 @@ public class BlockContainerBase extends BlockBase implements ITileEntityProvider
         world.removeTileEntity(pos);
     }
 
-    /**
-     * Method to detect how the block was placed, and what way it's facing.
-     */
-    @Override
-    public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack iStack) {
-        BPApi.getInstance().loadSilkySettings(world, pos, iStack);
-        TileEntity te = get(world, pos);
-        if (te instanceof IRotatable) {
-            ((IRotatable) te).setFacingDirection(placer.getHorizontalFacing().getOpposite());
-        }
-    }
 
     protected boolean canRotateVertical() {
 

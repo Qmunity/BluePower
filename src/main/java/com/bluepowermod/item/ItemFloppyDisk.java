@@ -17,14 +17,45 @@
 
 package com.bluepowermod.item;
 
+import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.init.BPItems;
 import com.bluepowermod.reference.Refs;
+import net.minecraft.client.renderer.color.IItemColor;
+import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
 
-public class ItemFloppyDisk extends ItemBase {
+import javax.annotation.Nullable;
+import java.util.List;
+
+public class ItemFloppyDisk extends ItemBase implements IItemColor{
 
     public ItemFloppyDisk(String name) {
         this.setUnlocalizedName(name);
         this.setRegistryName(Refs.MODID + ":" + name);
         BPItems.itemList.add(this);
+    }
+
+    public static void finaliseDisk(ItemStack itemStack, String name, MinecraftColor color){
+        NBTTagCompound nbt = new NBTTagCompound();
+        nbt.setInteger("color", color.getHex());
+        nbt.setString("name", name);
+        itemStack.setTagCompound(nbt);
+    }
+
+    @Override
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+        if(stack.getTagCompound() != null && stack.getTagCompound().hasKey("name")) {
+            tooltip.add(stack.getTagCompound().getString("name"));
+        }
+    }
+
+    @Override
+    public int getColorFromItemstack(ItemStack stack, int tintIndex) {
+        if(tintIndex == 0 && stack.getTagCompound() != null && stack.getTagCompound().hasKey("color")) {
+            return stack.getTagCompound().getInteger("color");
+        }
+        return -1;
     }
 }

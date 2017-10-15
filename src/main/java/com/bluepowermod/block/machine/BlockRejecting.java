@@ -14,7 +14,7 @@ import net.minecraft.block.material.Material;
 /**
  * @author MineMaarten
  */
-public class BlockRejecting extends BlockContainerBase {
+public class BlockRejecting extends BlockContainerFacingBase {
 
     public BlockRejecting(Material material, Class<? extends TileBase> tileEntityClass) {
 

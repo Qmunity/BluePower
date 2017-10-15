@@ -372,18 +372,18 @@ public class IOHelper {
         world.spawnEntity(entityItem);
         itemStack.setCount(0);
     }
-/*
+
     public static boolean canInterfaceWith(TileEntity tile, EnumFacing direction) {
 
-        return canInterfaceWith(tile, direction, null, true);
-    }*/
+        return canInterfaceWith(tile, direction, true);
+    }
 
-   /* public static boolean canInterfaceWith(TileEntity tile, EnumFacing direction, PneumaticTube requester, boolean canInterfaceWithIInventory) {
+   public static boolean canInterfaceWith(TileEntity tile, EnumFacing direction, boolean canInterfaceWithIInventory) {
 
-        PneumaticTube tube = tile != null ? MultipartCompatibility.getPart(tile.getWorld(), tile.getPos(),
-                PneumaticTube.class) : null;
-        if (tube != null && tube.isConnected(direction, requester))
-            return true;
+       // PneumaticTube tube = tile != null ? MultipartCompatibility.getPart(tile.getWorld(), tile.getPos(),
+                //PneumaticTube.class) : null;
+        //if (tube != null && tube.isConnected(direction, requester))
+            //return true;
         if (!canInterfaceWithIInventory)
             return false;
         if (tile instanceof ITubeConnection) {
@@ -393,5 +393,5 @@ public class IOHelper {
             return !(tile instanceof ISidedInventory) || ((ISidedInventory) tile).getSlotsForFace(direction).length > 0;
         }
         return false;
-    }*/
+    }
 }
