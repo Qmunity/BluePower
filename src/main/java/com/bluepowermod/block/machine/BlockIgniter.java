@@ -20,6 +20,7 @@ package com.bluepowermod.block.machine;
 import com.bluepowermod.block.BlockContainerBase;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.IRotatable;
+import com.bluepowermod.tile.TileBase;
 import com.bluepowermod.tile.tier1.TileIgniter;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -59,10 +60,19 @@ public class BlockIgniter extends BlockContainerBase {
 
     @Override
     public IBlockState getStateFromMeta(int meta) {
-        //Meta 0-5 off direction - Meta 5-11 on direction
+        //Meta 0-5 off direction - Meta 6-11 on direction
         return getDefaultState()
                 .withProperty(FACING, EnumFacing.VALUES[meta > 5 ? meta - 6 : meta])
                 .withProperty(ACTIVE, meta > 5);
+    }
+
+    @Override
+    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
+        super.neighborChanged(state, worldIn, pos, blockIn, fromPos);
+        TileEntity te = worldIn.getTileEntity(pos);
+        if (te != null && te instanceof TileBase) {
+            ((TileBase)te).onBlockNeighbourChanged();
+        }
     }
 
     public static void setState(boolean active, World worldIn, BlockPos pos){
@@ -85,7 +95,7 @@ public class BlockIgniter extends BlockContainerBase {
 
     @Override
     public int getMetaFromState(IBlockState state) {
-        //Meta 0-5 off direction - Meta 5-11 on direction
+        //Meta 0-5 off direction - Meta 6-11 on direction
         return state.getValue(FACING).getIndex() + (state.getValue(ACTIVE) ? 6 : 0);
     }
 

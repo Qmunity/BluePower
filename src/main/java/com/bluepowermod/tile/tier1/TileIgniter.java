@@ -17,6 +17,7 @@
 
 package com.bluepowermod.tile.tier1;
 
+import com.bluepowermod.block.machine.BlockIgniter;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
@@ -24,61 +25,47 @@ import net.minecraft.util.EnumFacing;;
 
 import com.bluepowermod.tile.IEjectAnimator;
 import com.bluepowermod.tile.TileBase;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+
+import static com.bluepowermod.block.machine.BlockIgniter.ACTIVE;
+import static com.bluepowermod.block.machine.BlockIgniter.FACING;
 
 public class TileIgniter extends TileBase implements IEjectAnimator {
 
-    private boolean isActive;
-
     @Override
     protected void redstoneChanged(boolean newValue) {
-
         super.redstoneChanged(newValue);
-        isActive = newValue;
+        BlockIgniter.setState(newValue, world, pos);
         sendUpdatePacket();
-        EnumFacing direction = getFacingDirection();
         if (getIsRedstonePowered()) {
-            ignite(direction);
+            ignite();
         } else {
-            extinguish(direction);
+            extinguish();
         }
     }
 
-    @Override
-    public void writeToPacketNBT(NBTTagCompound tCompound) {
-
-        super.writeToPacketNBT(tCompound);
-        tCompound.setBoolean("isActive", isActive);
-    }
-
-    @Override
-    public void readFromPacketNBT(NBTTagCompound tCompound) {
-
-        super.readFromPacketNBT(tCompound);
-        isActive = tCompound.getBoolean("isActive");
-        if (world != null)
-            markForRenderUpdate();
-    }
-
-    private void ignite(EnumFacing direction) {
-
-        if (getIsRedstonePowered() && world.isAirBlock(pos.offset(direction))) {
-            world.setBlockState(pos.offset(direction), Blocks.FIRE.getDefaultState());
+    private void ignite() {
+        EnumFacing facing = world.getBlockState(pos).getValue(FACING);
+        if (world.isBlockIndirectlyGettingPowered(pos) > 0 && world.isAirBlock(pos.offset(facing))) {
+            world.setBlockState(pos.offset(facing), Blocks.FIRE.getDefaultState());
         }
     }
 
-    private void extinguish(EnumFacing direction) {
-
-        Block target = world.getBlockState(pos.offset(direction)).getBlock();
-        if (!getIsRedstonePowered() && (target == Blocks.FIRE || target == Blocks.PORTAL)) {
-            world.setBlockToAir(pos.offset(direction));
+    private void extinguish() {
+        EnumFacing facing = world.getBlockState(pos).getValue(FACING);
+        Block target = world.getBlockState(pos.offset(facing)).getBlock();
+        if (world.isBlockIndirectlyGettingPowered(pos) == 0 && (target == Blocks.FIRE || target == Blocks.PORTAL)) {
+            world.setBlockToAir(pos.offset(facing));
         }
     }
+
 
     @Override
     public void update() {
 
         if (getTicker() % 5 == 0) {
-            ignite(getFacingDirection());
+            ignite();
         }
         super.update();
     }
@@ -86,12 +73,6 @@ public class TileIgniter extends TileBase implements IEjectAnimator {
     @Override
     public boolean isEjecting() {
 
-        return isActive;
-    }
-
-    @Override
-    public boolean canConnectRedstone() {
-
-        return true;
+        return world.getBlockState(pos).getValue(ACTIVE);
     }
 }
