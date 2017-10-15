@@ -47,7 +47,7 @@ public class TileIgniter extends TileBase implements IEjectAnimator {
 
     private void ignite() {
         EnumFacing facing = world.getBlockState(pos).getValue(FACING);
-        if (world.isBlockIndirectlyGettingPowered(pos) > 0 && world.isAirBlock(pos.offset(facing))) {
+        if (world.isBlockIndirectlyGettingPowered(pos) > 0 && world.isAirBlock(pos.offset(facing)) && Blocks.FIRE.canPlaceBlockAt(world, pos.offset(facing))) {
             world.setBlockState(pos.offset(facing), Blocks.FIRE.getDefaultState());
         }
     }

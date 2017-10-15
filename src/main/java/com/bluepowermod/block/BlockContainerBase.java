@@ -25,6 +25,7 @@ import com.bluepowermod.init.BPItems;
 import com.bluepowermod.reference.GuiIDs;
 import com.bluepowermod.tile.IRotatable;
 import com.bluepowermod.tile.TileBase;
+import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -109,8 +110,8 @@ public class BlockContainerBase extends BlockBase implements ITileEntityProvider
     }
 
     @Override
-    public void onNeighborChange(IBlockAccess world, BlockPos pos, BlockPos neighbor) {
-        super.onNeighborChange(world, pos, neighbor);
+    public void neighborChanged(IBlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos) {
+        super.neighborChanged(state, world, pos, blockIn, fromPos);
         // Only do this on the server side.
         if (!((World)world).isRemote) {
             TileBase tileEntity = get(world, pos);

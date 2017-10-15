@@ -66,15 +66,6 @@ public class BlockIgniter extends BlockContainerBase {
                 .withProperty(ACTIVE, meta > 5);
     }
 
-    @Override
-    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
-        super.neighborChanged(state, worldIn, pos, blockIn, fromPos);
-        TileEntity te = worldIn.getTileEntity(pos);
-        if (te != null && te instanceof TileBase) {
-            ((TileBase)te).onBlockNeighbourChanged();
-        }
-    }
-
     public static void setState(boolean active, World worldIn, BlockPos pos){
         IBlockState iblockstate = worldIn.getBlockState(pos);
         TileEntity tileentity = worldIn.getTileEntity(pos);
@@ -104,11 +95,6 @@ public class BlockIgniter extends BlockContainerBase {
         TileIgniter tile = (TileIgniter) world.getTileEntity(pos);
         boolean orientation = world.getBlockState(pos).getValue(FACING) == EnumFacing.UP;
         return orientation && tile.getIsRedstonePowered();
-    }
-
-    @Override
-    public boolean canConnectRedstone(IBlockState state, IBlockAccess world, BlockPos pos, @Nullable EnumFacing side) {
-        return !(world.getBlockState(pos) instanceof BlockLampRGB) && super.canConnectRedstone(state, world, pos, side);
     }
 
     @Override
