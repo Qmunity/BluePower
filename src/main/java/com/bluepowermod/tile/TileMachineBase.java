@@ -114,6 +114,7 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
                 ejectionScheduled = true;
             animationTicker = 0;
             sendUpdatePacket();
+            markDirty();
         }
     }
 
@@ -191,26 +192,6 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
         }
         compound.setTag("ItemBuffer", nbttaglist);
         return compound;
-    }
-
-    @Override
-    public void writeToPacketNBT(NBTTagCompound compound) {
-
-        super.writeToPacketNBT(compound);
-        compound.setBoolean("animating", animationTicker >= 0);
-    }
-
-    @Override
-    public void readFromPacketNBT(NBTTagCompound compound) {
-
-        super.readFromPacketNBT(compound);
-        boolean wasAnimating = isEjecting();
-        isAnimating = compound.getBoolean("animating");
-        if (isAnimating)
-            animationTicker = 0;
-        if (world != null && wasAnimating != isEjecting()) {
-            markForRenderUpdate();
-        }
     }
 
     public void ejectItemInWorld(ItemStack stack, EnumFacing oppDirection) {

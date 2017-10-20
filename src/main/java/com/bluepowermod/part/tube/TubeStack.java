@@ -50,7 +50,6 @@ public class TubeStack {
     public int idleCounter; // increased when the stack is standing still. This will cause the client to remove the stack when a timeout occurs.
     private TileEntity target; // only should have a value when retrieving items. this is the target the item wants to go to.
     private int targetX, targetY, targetZ;
-    private EnumFacing targetEntryDir; // Which side should this item make its entry.
     public static final double ITEM_SPEED = 0.0625;
     private double speed = ITEM_SPEED;
     public static double tickTimeMultiplier = 1;//Used client side to correct for TPS lag. This is being synchronized from the server.
@@ -112,14 +111,8 @@ public class TubeStack {
         return target;
     }
 
-    public EnumFacing getTargetEntryDir() {
 
-        return targetEntryDir;
-    }
-
-    public void setTarget(TileEntity tileEntity, EnumFacing targetEntryDir) {
-
-        this.targetEntryDir = targetEntryDir;
+    public void setTarget(TileEntity tileEntity) {
         target = tileEntity;
         if (target != null) {
             targetX = target.getPos().getX();
@@ -149,7 +142,6 @@ public class TubeStack {
         tag.setInteger("targetX", targetX);
         tag.setInteger("targetY", targetY);
         tag.setInteger("targetZ", targetZ);
-        tag.setByte("targetEntryDir", (byte) targetEntryDir.ordinal());
     }
 
     public static TubeStack loadFromNBT(NBTTagCompound tag) {
@@ -161,7 +153,6 @@ public class TubeStack {
         stack.targetX = tag.getInteger("targetX");
         stack.targetY = tag.getInteger("targetY");
         stack.targetZ = tag.getInteger("targetZ");
-        stack.targetEntryDir = EnumFacing.getFront(tag.getByte("targetEntryDir"));
         return stack;
     }
 
