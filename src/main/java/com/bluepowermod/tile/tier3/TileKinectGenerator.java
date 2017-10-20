@@ -13,6 +13,7 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.NonNullList;
 
 import java.util.List;
 
@@ -30,7 +31,7 @@ public class TileKinectGenerator extends TileBase implements ISidedInventory{
 			windtick +=windspeed;
 		}
 	}
-    private final ItemStack[] allInventories = new ItemStack[1];
+    private final NonNullList<ItemStack> allInventories = NonNullList.withSize(1, ItemStack.EMPTY);
 
     /**
      * This function gets called whenever the world/chunk loads
@@ -42,7 +43,7 @@ public class TileKinectGenerator extends TileBase implements ISidedInventory{
 
         for (int i = 0; i < 1; i++) {
             NBTTagCompound tc = tCompound.getCompoundTag("inventory" + i);
-            allInventories[i] = new ItemStack(tc);
+            allInventories.set(i, new ItemStack(tc));
         }
     }
 
@@ -55,9 +56,9 @@ public class TileKinectGenerator extends TileBase implements ISidedInventory{
         super.writeToNBT(tCompound);
 
         for (int i = 0; i < 1; i++) {
-            if (!allInventories[i].isEmpty()) {
+            if (!allInventories.get(i).isEmpty()) {
                 NBTTagCompound tc = new NBTTagCompound();
-                allInventories[i].writeToNBT(tc);
+                allInventories.get(i).writeToNBT(tc);
                 tCompound.setTag("inventory" + i, tc);
             }
         }
@@ -67,14 +68,14 @@ public class TileKinectGenerator extends TileBase implements ISidedInventory{
     @Override
     public int getSizeInventory() {
 
-        return allInventories.length;
+        return allInventories.size();
     }
 
 
     @Override
     public ItemStack getStackInSlot(int i) {
 
-        return this.allInventories[i];
+        return this.allInventories.get(i);
     }
 
     @Override
@@ -104,7 +105,7 @@ public class TileKinectGenerator extends TileBase implements ISidedInventory{
     @Override
     public void setInventorySlotContents(int i, ItemStack itemStack) {
 
-        this.allInventories[i] = itemStack;
+        this.allInventories.set(i, itemStack);
         this.markDirty();
     }
 
@@ -147,10 +148,9 @@ public class TileKinectGenerator extends TileBase implements ISidedInventory{
         return true;
     }
 
-    //Todo Feilds
     @Override
     public boolean isEmpty() {
-        return allInventories.length == 0;
+        return allInventories.isEmpty();
     }
 
     @Override

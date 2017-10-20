@@ -107,9 +107,9 @@ public class BPBlocks {
     public static Block item_detector;
     public static Block manager;
     public static Block battery;
-    // public static Block engine;
-    // public static Block kinetic_generator;
-    // public static Block windmill;
+    public static Block engine;
+    public static Block kinetic_generator;
+    public static Block windmill;
 
     // public static Block cpu;
     // public static Block monitor;
@@ -200,9 +200,9 @@ public class BPBlocks {
         manager = new BlockRejecting(Material.ROCK, TileManager.class).setGuiId(GuiIDs.MANAGER_ID).emitsRedstone().setRegistryName(Refs.MODID, Refs.MANAGER_NAME).setUnlocalizedName(Refs.MANAGER_NAME);
 
         battery = new BlockBattery();
-        // engine = new BlockEngine();
-        // kinetic_generator = new BlockKineticGenerator();
-        // windmill = new BlockWindmill();
+        engine = new BlockEngine();
+        kinetic_generator = new BlockKineticGenerator();
+        windmill = new BlockWindmill();
 
         // cpu = new BlockCPU();
         // monitor = new BlockMonitor();
