@@ -24,5 +24,13 @@ public abstract class ContainerMachineBase extends ContainerGhosts {
 
         super.detectAndSendChanges();
 
+        for (Object crafter : listeners) {
+            IContainerListener icrafting = (IContainerListener) crafter;
+            if (backlogSize != machine.getBacklog().size() && icrafting instanceof EntityPlayerMP) {
+                BPNetworkHandler.INSTANCE.sendTo(new MessageSyncMachineBacklog(machine, machine.getBacklog()), (EntityPlayerMP) icrafting);
+            }
+        }
+        backlogSize = machine.getBacklog().size();
+
     }
 }
