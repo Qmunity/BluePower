@@ -4,29 +4,34 @@
     "textures": {
       "top": "bluepower:blocks/machines/retriever_side_3",
       "bottom": "bluepower:blocks/machines/retriever_side_3",
-      "right": "bluepower:blocks/machines/retriever_side",
-      "left": "bluepower:blocks/machines/retriever_side",
+      "side": "bluepower:blocks/machines/retriever_side",
       "front": "bluepower:blocks/machines/retriever_front",
       "back": "bluepower:blocks/machines/retriever_back",
-      "particle": "bluepower:blocks/machines/retriever_side"
+      "particle": "#side"
     },
-    "model": "bluepower:cube_sided",
-    "uvlock": true
+    "model": "bluepower:cube_front_back",
+    "uvlock": false
   },
   "variants": {
     "normal": [{}],
-    "inventory": [{}],
+    "inventory": [{"x": -90}],
+    "facing": {
+      "north": {},
+      "south": {"y": 180},
+      "west": {"y": 270},
+      "east": {"y": 90},
+      "up": {"x": -90},
+      "down": {"x": 90}
+    },
     "active":{
       "true":{
         "textures": {
-          "left": "bluepower:blocks/machines/retriever_side_4",
-          "right": "bluepower:blocks/machines/retriever_side_4"
+          "side": "bluepower:blocks/machines/retriever_side_4"
         }
       },
       "false":{
         "textures": {
-          "right": "bluepower:blocks/machines/retriever_side",
-          "left": "bluepower:blocks/machines/retriever_side"
+          "side": "bluepower:blocks/machines/retriever_side"
         }
       }
     }

@@ -3,20 +3,24 @@
   "defaults": {
     "textures": {
       "side": "bluepower:blocks/machines/transposer_side",
-      "top": "#side",
-      "bottom": "#side",
-      "right": "#side",
-      "left": "#side",
       "front": "bluepower:blocks/machines/transposer_front",
       "back": "bluepower:blocks/machines/transposer_back",
       "particle": "#side"
     },
-    "model": "bluepower:cube_sided",
-    "uvlock": true
+    "model": "bluepower:cube_front_back",
+    "uvlock": false
   },
   "variants": {
     "normal": [{}],
-    "inventory": [{}],
+    "inventory": [{"x": -90}],
+    "facing": {
+      "north": {},
+      "south": {"y": 180},
+      "west": {"y": 270},
+      "east": {"y": 90},
+      "up": {"x": -90},
+      "down": {"x": 90}
+    },
     "active":{
       "true":{"textures": {"side": "bluepower:blocks/machines/transposer_side_active"}},
       "false":{"textures": {"side": "bluepower:blocks/machines/transposer_side"}}
