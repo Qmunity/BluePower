@@ -11,10 +11,10 @@
   "variants": {
     "normal": [{}],
     "inventory": [{"textures": {"all": "bluepower:blocks/lamps/lamp_off"}}],
-    "inventory_glow": [{"submodel": "bluepower:glow"}],
+    "inventory_glow": [{"textures": {"all": "bluepower:blocks/lamps/lamp_on"}, "submodel": "bluepower:glow"}],
     "powered":{
-      "true":{"all": "bluepower:blocks/lamps/lamp_on"},
-      "false":{"all": "bluepower:blocks/lamps/lamp_off"}
+      "true":{"textures": {"all": "bluepower:blocks/lamps/lamp_on"}},
+      "false":{"textures": {"all": "bluepower:blocks/lamps/lamp_off"}}
     }
   }
 }

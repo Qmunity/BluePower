@@ -17,6 +17,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -49,7 +50,8 @@ public class RenderLamp extends TileEntitySpecialRenderer {
             }
 
             //Define our base Glow
-            AxisAlignedBB box = new AxisAlignedBB(-0.05, -0.05, -0.05, 1.05, 1.05, 1.05);
+            AxisAlignedBB box = bLamp.getSize();
+            box = new AxisAlignedBB(box.minX - 0.05, box.minY - 0.05,box.minZ - 0.05,box.maxX + 0.05,box.maxY + 0.05,box.maxZ + 0.05);
             boolean[] renderFaces = new boolean[] { true, true, true, true, true, true };
 
             //Remove overlapping Glow

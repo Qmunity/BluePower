@@ -33,6 +33,7 @@ import net.minecraft.block.BlockBush;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
@@ -117,9 +118,14 @@ public class BPBlocks {
     // public static Block io_expander;
 
     public static Block[] blockLamp;
-    public static Block blockLampRGB;
-
     public static Block[] blockLampInverted;
+    public static Block[] cagedLamp;
+    public static Block[] cagedLampInverted;
+    public static Block[] fixedLamp;
+    public static Block[] fixedLampInverted;
+
+
+    public static Block blockLampRGB;
     public static Block blockLampRGBInverted;
 
     public static Block sortron;
@@ -210,15 +216,25 @@ public class BPBlocks {
         // io_expander = new BlockIOExpander();
 
         blockLamp = new Block[MinecraftColor.VALID_COLORS.length];
-        blockLampRGB = new BlockLampRGB(false);
-
+        blockLampRGB = new BlockLampRGB(Refs.LAMP_NAME,false, Block.FULL_BLOCK_AABB);
         blockLampInverted = new Block[MinecraftColor.VALID_COLORS.length];
-        blockLampRGBInverted = new BlockLampRGB(true);
+        blockLampRGBInverted = new BlockLampRGB(Refs.LAMP_NAME,true, Block.FULL_BLOCK_AABB);
 
-        for (int i = 0; i < MinecraftColor.VALID_COLORS.length; i++)
-            blockLamp[i] = new BlockLamp(false, MinecraftColor.VALID_COLORS[i]);
-        for (int i = 0; i < MinecraftColor.VALID_COLORS.length; i++)
-            blockLampInverted[i] = new BlockLamp(true, MinecraftColor.VALID_COLORS[i]);
+        cagedLamp = new Block[MinecraftColor.VALID_COLORS.length];
+        cagedLampInverted = new Block[MinecraftColor.VALID_COLORS.length];
+        fixedLamp = new Block[MinecraftColor.VALID_COLORS.length];
+        fixedLampInverted = new Block[MinecraftColor.VALID_COLORS.length];
+
+        for (int i = 0; i < MinecraftColor.VALID_COLORS.length; i++) {
+            blockLamp[i] = new BlockLamp(Refs.LAMP_NAME, false, MinecraftColor.VALID_COLORS[i], Block.FULL_BLOCK_AABB);
+            cagedLamp[i] = new BlockLamp(Refs.CAGELAMP_NAME, false, MinecraftColor.VALID_COLORS[i], new AxisAlignedBB(0.3125, 0.125, 0.3125,  0.6875, 0.6875, 0.6875));
+            fixedLamp[i] = new BlockLamp(Refs.FIXTURELAMP_NAME, false, MinecraftColor.VALID_COLORS[i], new AxisAlignedBB(0.1875, 0.125, 0.1875, 0.8125, 0.5, 0.8125 ));
+        }
+        for (int i = 0; i < MinecraftColor.VALID_COLORS.length; i++) {
+            blockLampInverted[i] = new BlockLamp(Refs.LAMP_NAME, true, MinecraftColor.VALID_COLORS[i], Block.FULL_BLOCK_AABB);
+            cagedLampInverted[i] = new BlockLamp(Refs.CAGELAMP_NAME, true, MinecraftColor.VALID_COLORS[i], new AxisAlignedBB(0.3125, 0.125, 0.3125,  0.6875, 0.6875, 0.6875));
+            fixedLampInverted[i] = new BlockLamp(Refs.FIXTURELAMP_NAME, true, MinecraftColor.VALID_COLORS[i], new AxisAlignedBB(0.1875, 0.125, 0.1875, 0.8125, 0.5, 0.8125 ));
+        }
     }
 
     private static void registerBlocks() {
@@ -226,11 +242,15 @@ public class BPBlocks {
         for (int i = 0; i < MinecraftColor.VALID_COLORS.length; i++) {
             MinecraftColor color = MinecraftColor.VALID_COLORS[i];
             blockLamp[i].setRegistryName(Refs.MODID, Refs.LAMP_NAME + color.name().toLowerCase());
+            cagedLamp[i].setRegistryName(Refs.MODID, Refs.CAGELAMP_NAME + color.name().toLowerCase());
+            fixedLamp[i].setRegistryName(Refs.MODID, Refs.FIXTURELAMP_NAME + color.name().toLowerCase());
         }
         blockLampRGB.setRegistryName(Refs.MODID, Refs.LAMP_NAME + "RGB");
         for (int i = 0; i < MinecraftColor.VALID_COLORS.length; i++) {
             MinecraftColor color = MinecraftColor.VALID_COLORS[i];
             blockLampInverted[i].setRegistryName(Refs.MODID, Refs.LAMP_NAME + "inverted" + color.name().toLowerCase());
+            cagedLampInverted[i].setRegistryName(Refs.MODID, Refs.CAGELAMP_NAME + "inverted" + color.name().toLowerCase());
+            fixedLampInverted[i].setRegistryName(Refs.MODID, Refs.FIXTURELAMP_NAME + "inverted" + color.name().toLowerCase());
         }
         blockLampRGBInverted.setRegistryName(Refs.MODID, Refs.LAMP_NAME + "invertedRGB");
 

@@ -3,6 +3,7 @@ package com.bluepowermod.block.machine;
 import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier1.TileLamp;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 
@@ -10,11 +11,9 @@ import java.awt.*;
 
 public class BlockLampRGB extends BlockLamp {
 
-    public BlockLampRGB(boolean isInverted) {
-
-        super(isInverted, MinecraftColor.NONE);
-
-        setUnlocalizedName(Refs.LAMP_NAME + ".rgb" + (isInverted ? ".inverted" : ""));
+    public BlockLampRGB(String name, boolean isInverted, AxisAlignedBB size) {
+        super(name, isInverted, MinecraftColor.NONE, size);
+        setUnlocalizedName(name + ".rgb" + (isInverted ? ".inverted" : ""));
     }
 
     @Override

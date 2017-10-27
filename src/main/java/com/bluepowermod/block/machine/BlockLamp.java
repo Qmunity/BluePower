@@ -29,6 +29,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -50,17 +51,38 @@ public class BlockLamp extends BlockContainerBase implements IBlockColor, IItemC
 
     private final boolean isInverted;
     private final MinecraftColor color;
+    private final AxisAlignedBB size;
+    private final String name;
 
-    public BlockLamp(boolean isInverted, MinecraftColor color) {
-
+    public BlockLamp(String name, boolean isInverted, MinecraftColor color, AxisAlignedBB size) {
         super(Material.REDSTONE_LIGHT, TileLamp.class);
         this.isInverted = isInverted;
         this.color = color;
-        setUnlocalizedName(Refs.LAMP_NAME + "." + color.name().toLowerCase() + (isInverted ? ".inverted" : ""));
+        this.size = size;
+        this.name = name;
+        setUnlocalizedName(name + "." + color.name().toLowerCase() + (isInverted ? ".inverted" : ""));
         setCreativeTab(BPCreativeTabs.lighting);
         setDefaultState(blockState.getBaseState().withProperty(POWER, isInverted ? 15 : 0));
     }
 
+    @Override
+    public boolean isOpaqueCube(IBlockState state) {
+        return false;
+    }
+
+    @Override
+    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+        return size;
+    }
+
+    @Override
+    public BlockRenderLayer getBlockLayer() {
+        return BlockRenderLayer.CUTOUT;
+    }
+
+    public AxisAlignedBB getSize(){
+        return size;
+    }
 
     @Override
     @SideOnly(Side.CLIENT)
@@ -69,14 +91,14 @@ public class BlockLamp extends BlockContainerBase implements IBlockColor, IItemC
         StateMapperBase stateMapper = new StateMapperBase() {
             @Override
             protected ModelResourceLocation getModelResourceLocation(IBlockState iBlockState) {
-                return new ModelResourceLocation(Refs.MODID + ":" + Refs.LAMP_NAME, (!isInverted == iBlockState.getValue(POWER) > 0) ? "powered=true" : "powered=false");
+                return new ModelResourceLocation(Refs.MODID + ":" + name, (!isInverted == iBlockState.getValue(POWER) > 0) ? "powered=true" : "powered=false");
             }
         };
         ModelLoader.setCustomStateMapper(this, stateMapper);
        if(!isInverted()) {
-           ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(Refs.MODID + ":" + Refs.LAMP_NAME, "inventory"));
+           ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(Refs.MODID + ":" + name, "inventory"));
        }else {
-           ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(Refs.MODID + ":" + Refs.LAMP_NAME, "inventory_glow"));
+           ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(Refs.MODID + ":" + name, "inventory_glow"));
        }
     }
 
@@ -128,11 +150,6 @@ public class BlockLamp extends BlockContainerBase implements IBlockColor, IItemC
         return pow;
     }
 
-    @Override
-    public EnumBlockRenderType getRenderType(IBlockState state) {
-        return EnumBlockRenderType.MODEL;
-    }
-
     public int getColor(IBlockAccess w, BlockPos pos) {
 
         return color.getHex();
@@ -156,7 +173,7 @@ public class BlockLamp extends BlockContainerBase implements IBlockColor, IItemC
     @Override
     public boolean canRenderInLayer(IBlockState state, BlockRenderLayer layer) {
         RenderLamp.pass = layer.ordinal();
-        return true;
+        return super.canRenderInLayer(state, layer);
     }
 
     @Override
