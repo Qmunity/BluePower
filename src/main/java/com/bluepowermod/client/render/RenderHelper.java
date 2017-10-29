@@ -72,7 +72,6 @@ public class RenderHelper {
             Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
 
             if (digital) {
-                rb.overrideBlockTexture = state ? IconSupplier.bluestoneTorchOn : IconSupplier.bluestoneTorchOff;
             } else {
                 rb.overrideBlockTexture = state ? Blocks.redstone_torch.getIcon(0, 0) : Blocks.unlit_redstone_torch.getIcon(0, 0);
             }

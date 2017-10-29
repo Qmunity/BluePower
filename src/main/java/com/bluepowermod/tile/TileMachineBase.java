@@ -13,7 +13,7 @@ import com.bluepowermod.api.tube.ITubeConnection;
 import com.bluepowermod.api.tube.IWeightedTubeInventory;
 import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.helper.TileEntityCache;
-import com.bluepowermod.part.tube.TubeStack;
+import com.bluepowermod.container.stack.TubeStack;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.client.resources.I18n;

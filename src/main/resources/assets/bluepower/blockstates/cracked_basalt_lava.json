@@ -2,9 +2,10 @@
   "forge_marker": 1,
   "defaults": {
     "textures": {
-    "all": "bluepower:blocks/cracked_basalt_lava"
+      "overlay": "bluepower:blocks/cracked_basalt_lava",
+      "all": "bluepower:blocks/basalt"
     },
-    "model": "cube_all",
+    "model": "bluepower:overlay",
     "uvlock": true
   },
   "variants": {

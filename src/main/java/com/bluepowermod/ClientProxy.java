@@ -17,7 +17,6 @@
 
 package com.bluepowermod;
 
-import com.bluepowermod.client.render.IconSupplier;
 import com.bluepowermod.client.render.RenderDebugScreen;
 import com.bluepowermod.client.render.Renderers;
 import com.bluepowermod.compat.CompatibilityUtils;
@@ -40,8 +39,6 @@ public class ClientProxy extends CommonProxy {
 
     @Override
     public void preInitRenderers() {
-
-        MinecraftForge.EVENT_BUS.register(new IconSupplier());
         MinecraftForge.EVENT_BUS.register(new RenderDebugScreen());
         CompatibilityUtils.registerRenders();
     }

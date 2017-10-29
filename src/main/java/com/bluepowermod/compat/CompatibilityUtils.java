@@ -10,9 +10,11 @@ package com.bluepowermod.compat;
 
 import com.bluepowermod.compat.hydcraft.CompatModuleHydCraft;
 import com.bluepowermod.compat.ic2.CompatModuleIC2;
+import com.bluepowermod.compat.mcmp.MCMPAddon;
 import com.bluepowermod.compat.waila.CompatModuleWaila;
 import com.bluepowermod.util.Dependencies;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -92,6 +94,9 @@ public class CompatibilityUtils {
     }
 
     public static void init(FMLInitializationEvent ev) {
+
+        //Register MCMultipart Addon
+        MinecraftForge.EVENT_BUS.register(new MCMPAddon());
 
         for (CompatModule m : getLoadedModules())
             m.init(ev);

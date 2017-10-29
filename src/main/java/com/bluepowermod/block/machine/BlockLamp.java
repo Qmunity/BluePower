@@ -27,13 +27,11 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.relauncher.Side;
@@ -63,6 +61,7 @@ public class BlockLamp extends BlockContainerBase implements IBlockColor, IItemC
         setUnlocalizedName(name + "." + color.name().toLowerCase() + (isInverted ? ".inverted" : ""));
         setCreativeTab(BPCreativeTabs.lighting);
         setDefaultState(blockState.getBaseState().withProperty(POWER, isInverted ? 15 : 0));
+        setRegistryName(name + (isInverted ? "inverted" : "") + color.name());
     }
 
     @Override
@@ -72,7 +71,8 @@ public class BlockLamp extends BlockContainerBase implements IBlockColor, IItemC
 
     @Override
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-        return size;
+        //Bounding box for the Caged Lamp
+        return size.equals(Refs.CAGELAMP_AABB) ? size.grow( 0.0625 ) : size;
     }
 
     @Override

@@ -8,17 +8,12 @@
 package com.bluepowermod.client.render;
 
 import com.bluepowermod.block.machine.BlockLamp;
-import com.bluepowermod.tile.tier1.TileLamp;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
@@ -51,22 +46,24 @@ public class RenderLamp extends TileEntitySpecialRenderer {
 
             //Define our base Glow
             AxisAlignedBB box = bLamp.getSize();
-            box = new AxisAlignedBB(box.minX - 0.05, box.minY - 0.05,box.minZ - 0.05,box.maxX + 0.05,box.maxY + 0.05,box.maxZ + 0.05);
+            box = box.equals(Block.FULL_BLOCK_AABB) ? box.grow(0.05) : box.grow(0.03125);
             boolean[] renderFaces = new boolean[] { true, true, true, true, true, true };
 
             //Remove overlapping Glow
-            for(EnumFacing face : EnumFacing.VALUES){
-                IBlockState block = te.getWorld().getBlockState( te.getPos().offset(face.getOpposite()));
-                if(block.getBlock() instanceof BlockLamp) {
-                    if (((BlockLamp) block.getBlock()).isInverted() ? block.getValue(BlockLamp.POWER) < 15 : block.getValue(BlockLamp.POWER) > 0){
-                        renderFaces[face.getIndex()] = false;
-                        double offsetx = (face.getFrontOffsetX() * 0.05) > 0 ? (face.getFrontOffsetX() * 0.05) : 0;
-                        double offsety = (face.getFrontOffsetY() * 0.05) > 0 ? (face.getFrontOffsetY() * 0.05) : 0;
-                        double offsetz = (face.getFrontOffsetZ() * 0.05) > 0 ? (face.getFrontOffsetZ() * 0.05) : 0;
-                        double toffsetx = (face.getFrontOffsetX() * 0.05) < 0 ? (face.getFrontOffsetX() * 0.05) : 0;
-                        double toffsety = (face.getFrontOffsetY() * 0.05) < 0 ? (face.getFrontOffsetY() * 0.05) : 0;
-                        double toffsetz = (face.getFrontOffsetZ() * 0.05) < 0 ? (face.getFrontOffsetZ() * 0.05) : 0;
-                        box = new AxisAlignedBB(box.minX + offsetx, box.minY + offsety, box.minZ + offsetz, box.maxX + toffsetx, box.maxY + toffsety, box.maxZ + toffsetz);
+            if(bLamp.getSize().equals(Block.FULL_BLOCK_AABB)) {
+                for (EnumFacing face : EnumFacing.VALUES) {
+                    IBlockState state = te.getWorld().getBlockState(te.getPos().offset(face.getOpposite()));
+                    if (state.getBlock() instanceof BlockLamp && ((BlockLamp)state.getBlock()).getSize().equals(Block.FULL_BLOCK_AABB)) {
+                        if (((BlockLamp) state.getBlock()).isInverted() ? state.getValue(BlockLamp.POWER) < 15 : state.getValue(BlockLamp.POWER) > 0) {
+                            renderFaces[face.getIndex()] = false;
+                            double offsetx = (face.getFrontOffsetX() * 0.05) > 0 ? (face.getFrontOffsetX() * 0.05) : 0;
+                            double offsety = (face.getFrontOffsetY() * 0.05) > 0 ? (face.getFrontOffsetY() * 0.05) : 0;
+                            double offsetz = (face.getFrontOffsetZ() * 0.05) > 0 ? (face.getFrontOffsetZ() * 0.05) : 0;
+                            double toffsetx = (face.getFrontOffsetX() * 0.05) < 0 ? (face.getFrontOffsetX() * 0.05) : 0;
+                            double toffsety = (face.getFrontOffsetY() * 0.05) < 0 ? (face.getFrontOffsetY() * 0.05) : 0;
+                            double toffsetz = (face.getFrontOffsetZ() * 0.05) < 0 ? (face.getFrontOffsetZ() * 0.05) : 0;
+                            box = new AxisAlignedBB(box.minX + offsetx, box.minY + offsety, box.minZ + offsetz, box.maxX + toffsetx, box.maxY + toffsety, box.maxZ + toffsetz);
+                        }
                     }
                 }
             }

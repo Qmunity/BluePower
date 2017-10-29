@@ -3,7 +3,7 @@ package com.bluepowermod.network.message;
 import com.bluepowermod.ClientProxy;
 import com.bluepowermod.client.gui.GuiContainerBase;
 import com.bluepowermod.network.LocatedPacket;
-import com.bluepowermod.part.tube.TubeStack;
+import com.bluepowermod.container.stack.TubeStack;
 import com.bluepowermod.tile.TileMachineBase;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;

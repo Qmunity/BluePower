@@ -5,7 +5,7 @@ import java.io.DataOutput;
 import java.io.IOException;
 
 import com.bluepowermod.network.Packet;
-import com.bluepowermod.part.tube.TubeStack;
+import com.bluepowermod.container.stack.TubeStack;
 import net.minecraft.entity.player.EntityPlayer;
 
 public class MessageServerTickTime extends Packet<MessageServerTickTime> {

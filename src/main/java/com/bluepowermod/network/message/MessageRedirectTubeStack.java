@@ -17,8 +17,8 @@
 
 package com.bluepowermod.network.message;
 
+import com.bluepowermod.container.stack.TubeStack;
 import com.bluepowermod.network.LocatedPacket;
-import com.bluepowermod.part.tube.TubeStack;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 

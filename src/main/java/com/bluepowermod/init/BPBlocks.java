@@ -18,8 +18,9 @@
 package com.bluepowermod.init;
 
 import com.bluepowermod.api.misc.MinecraftColor;
-import com.bluepowermod.block.BlockContainerBase;
 import com.bluepowermod.block.machine.*;
+import com.bluepowermod.block.machine.BlockLamp;
+import com.bluepowermod.block.machine.BlockLampRGB;
 import com.bluepowermod.block.worldgen.*;
 import com.bluepowermod.reference.GuiIDs;
 import com.bluepowermod.reference.Refs;
@@ -68,11 +69,11 @@ public class BPBlocks {
     public static Block ruby_ore;
     public static Block sapphire_ore;
     public static Block amethyst_ore;
-
     public static Block copper_ore;
     public static Block silver_ore;
     public static Block zinc_ore;
     public static Block tungsten_ore;
+    public static Block malachite_ore;
 
     public static Block ruby_block;
     public static Block sapphire_block;
@@ -82,6 +83,7 @@ public class BPBlocks {
     public static Block silver_block;
     public static Block zinc_block;
     public static Block tungsten_block;
+    public static Block malachite_block;
 
     public static Block sapphire_glass;
     public static Block reinforced_sapphire_glass;
@@ -132,7 +134,6 @@ public class BPBlocks {
 
     public static void init() {
         instantiateBlocks();
-        registerBlocks();
         initModDependantBlocks();
     }
 
@@ -160,6 +161,7 @@ public class BPBlocks {
         ruby_ore = new BlockRubyOre(Refs.RUBYORE_NAME);
         sapphire_ore = new BlockSapphireOre(Refs.SAPPHIREORE_NAME);
         amethyst_ore = new BlockAmethystOre(Refs.AMETHYSTORE_NAME);
+        malachite_ore = new BlockMalachiteOre(Refs.MALACHITEORE_NAME);
 
         copper_ore = new BlockStoneOre(Refs.COPPERORE_NAME);
         silver_ore = new BlockStoneOre(Refs.SILVERORE_NAME).setToolLevel(2);
@@ -170,6 +172,7 @@ public class BPBlocks {
         sapphire_block = new BlockStoneOre(Refs.SAPPHIREBLOCK_NAME).setToolLevel(2);
         amethyst_block = new BlockStoneOre(Refs.AMETHYSTBLOCK_NAME).setToolLevel(2);
         teslatite_block = new BlockStoneOre(Refs.TESLATITEBLOCK_NAME).setToolLevel(2);
+        malachite_block = new BlockStoneOre(Refs.MALACHITEBLOCK_NAME).setToolLevel(2);
         copper_block = new BlockStoneOre(Refs.COPPERBLOCK_NAME);
         silver_block = new BlockStoneOre(Refs.SILVERBLOCK_NAME).setToolLevel(2);
         zinc_block = new BlockStoneOre(Refs.ZINCBLOCK_NAME);
@@ -216,44 +219,35 @@ public class BPBlocks {
         // io_expander = new BlockIOExpander();
 
         blockLamp = new Block[MinecraftColor.VALID_COLORS.length];
-        blockLampRGB = new BlockLampRGB(Refs.LAMP_NAME,false, Block.FULL_BLOCK_AABB);
         blockLampInverted = new Block[MinecraftColor.VALID_COLORS.length];
-        blockLampRGBInverted = new BlockLampRGB(Refs.LAMP_NAME,true, Block.FULL_BLOCK_AABB);
-
         cagedLamp = new Block[MinecraftColor.VALID_COLORS.length];
         cagedLampInverted = new Block[MinecraftColor.VALID_COLORS.length];
         fixedLamp = new Block[MinecraftColor.VALID_COLORS.length];
         fixedLampInverted = new Block[MinecraftColor.VALID_COLORS.length];
 
-        for (int i = 0; i < MinecraftColor.VALID_COLORS.length; i++) {
+        //Regular Lamp
+        blockLampRGB = new BlockLampRGB(Refs.LAMP_NAME,false, Block.FULL_BLOCK_AABB);
+        for (int i = 0; i < MinecraftColor.VALID_COLORS.length; i++)
             blockLamp[i] = new BlockLamp(Refs.LAMP_NAME, false, MinecraftColor.VALID_COLORS[i], Block.FULL_BLOCK_AABB);
-            cagedLamp[i] = new BlockLamp(Refs.CAGELAMP_NAME, false, MinecraftColor.VALID_COLORS[i], new AxisAlignedBB(0.3125, 0.125, 0.3125,  0.6875, 0.6875, 0.6875));
-            fixedLamp[i] = new BlockLamp(Refs.FIXTURELAMP_NAME, false, MinecraftColor.VALID_COLORS[i], new AxisAlignedBB(0.1875, 0.125, 0.1875, 0.8125, 0.5, 0.8125 ));
-        }
-        for (int i = 0; i < MinecraftColor.VALID_COLORS.length; i++) {
+        blockLampRGBInverted = new BlockLampRGB(Refs.LAMP_NAME,true, Block.FULL_BLOCK_AABB);
+        for (int i = 0; i < MinecraftColor.VALID_COLORS.length; i++)
             blockLampInverted[i] = new BlockLamp(Refs.LAMP_NAME, true, MinecraftColor.VALID_COLORS[i], Block.FULL_BLOCK_AABB);
-            cagedLampInverted[i] = new BlockLamp(Refs.CAGELAMP_NAME, true, MinecraftColor.VALID_COLORS[i], new AxisAlignedBB(0.3125, 0.125, 0.3125,  0.6875, 0.6875, 0.6875));
-            fixedLampInverted[i] = new BlockLamp(Refs.FIXTURELAMP_NAME, true, MinecraftColor.VALID_COLORS[i], new AxisAlignedBB(0.1875, 0.125, 0.1875, 0.8125, 0.5, 0.8125 ));
-        }
-    }
 
-    private static void registerBlocks() {
+        //Cage Lamp
+        blockLampRGB = new BlockLampRGB(Refs.CAGELAMP_NAME,false, Refs.CAGELAMP_AABB);
+        for (int i = 0; i < MinecraftColor.VALID_COLORS.length; i++)
+            cagedLamp[i] = new BlockLamp(Refs.CAGELAMP_NAME, false, MinecraftColor.VALID_COLORS[i], Refs.CAGELAMP_AABB);
+        blockLampRGBInverted = new BlockLampRGB(Refs.CAGELAMP_NAME,true, Refs.CAGELAMP_AABB);
+        for (int i = 0; i < MinecraftColor.VALID_COLORS.length; i++)
+            cagedLampInverted[i] = new BlockLamp(Refs.CAGELAMP_NAME, true, MinecraftColor.VALID_COLORS[i], Refs.CAGELAMP_AABB);
 
-        for (int i = 0; i < MinecraftColor.VALID_COLORS.length; i++) {
-            MinecraftColor color = MinecraftColor.VALID_COLORS[i];
-            blockLamp[i].setRegistryName(Refs.MODID, Refs.LAMP_NAME + color.name().toLowerCase());
-            cagedLamp[i].setRegistryName(Refs.MODID, Refs.CAGELAMP_NAME + color.name().toLowerCase());
-            fixedLamp[i].setRegistryName(Refs.MODID, Refs.FIXTURELAMP_NAME + color.name().toLowerCase());
-        }
-        blockLampRGB.setRegistryName(Refs.MODID, Refs.LAMP_NAME + "RGB");
-        for (int i = 0; i < MinecraftColor.VALID_COLORS.length; i++) {
-            MinecraftColor color = MinecraftColor.VALID_COLORS[i];
-            blockLampInverted[i].setRegistryName(Refs.MODID, Refs.LAMP_NAME + "inverted" + color.name().toLowerCase());
-            cagedLampInverted[i].setRegistryName(Refs.MODID, Refs.CAGELAMP_NAME + "inverted" + color.name().toLowerCase());
-            fixedLampInverted[i].setRegistryName(Refs.MODID, Refs.FIXTURELAMP_NAME + "inverted" + color.name().toLowerCase());
-        }
-        blockLampRGBInverted.setRegistryName(Refs.MODID, Refs.LAMP_NAME + "invertedRGB");
-
+        //Fixture Lamp
+        blockLampRGB = new BlockLampRGB(Refs.FIXTURELAMP_NAME,false, Refs.FIXTURELAMP_AABB);
+        for (int i = 0; i < MinecraftColor.VALID_COLORS.length; i++)
+            fixedLamp[i] = new BlockLamp(Refs.FIXTURELAMP_NAME, false, MinecraftColor.VALID_COLORS[i], Refs.FIXTURELAMP_AABB);
+        blockLampRGBInverted = new BlockLampRGB(Refs.FIXTURELAMP_NAME,true, Refs.FIXTURELAMP_AABB);
+        for (int i = 0; i < MinecraftColor.VALID_COLORS.length; i++)
+            fixedLampInverted[i] = new BlockLamp(Refs.FIXTURELAMP_NAME, true, MinecraftColor.VALID_COLORS[i], Refs.FIXTURELAMP_AABB);
     }
 
     private static void initModDependantBlocks() {

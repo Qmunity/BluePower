@@ -1,7 +1,6 @@
 package com.bluepowermod.block.machine;
 
 import com.bluepowermod.api.misc.MinecraftColor;
-import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier1.TileLamp;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;

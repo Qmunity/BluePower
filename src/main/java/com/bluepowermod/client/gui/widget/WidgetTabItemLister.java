@@ -3,7 +3,7 @@ package com.bluepowermod.client.gui.widget;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.bluepowermod.part.tube.TubeStack;
+import com.bluepowermod.container.stack.TubeStack;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;

@@ -45,12 +45,14 @@ public class OreDictionarySetup {
         OreDictionary.registerOre(BPOredictNames.BLOCK_AMETHYST, BPBlocks.amethyst_block);
         OreDictionary.registerOre(BPOredictNames.BLOCK_RUBY, BPBlocks.ruby_block);
         OreDictionary.registerOre(BPOredictNames.BLOCK_SAPPHIRE, BPBlocks.sapphire_block);
+        OreDictionary.registerOre(BPOredictNames.BLOCK_MALACHITE, BPBlocks.malachite_block);
 
         // Ingots
         OreDictionary.registerOre(BPOredictNames.INGOT_COPPER, BPItems.copper_ingot);
         OreDictionary.registerOre(BPOredictNames.INGOT_ZINC, BPItems.zinc_ingot);
         OreDictionary.registerOre(BPOredictNames.INGOT_SILVER, BPItems.silver_ingot);
         OreDictionary.registerOre(BPOredictNames.INGOT_TUNGSTEN, BPItems.tungsten_ingot);
+        OreDictionary.registerOre(BPOredictNames.INGOT_TUNGCARB, BPItems.tungsten_carbite);
 
         OreDictionary.registerOre(BPOredictNames.INGOT_BLUE_ALLOY, BPItems.blue_alloy_ingot);
         OreDictionary.registerOre(BPOredictNames.INGOT_RED_ALLOY, BPItems.red_alloy_ingot);
