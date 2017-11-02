@@ -1,5 +1,6 @@
 package com.bluepowermod.compat.mcmp;
 
+import com.bluepowermod.block.machine.BlockLampSurface;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.compat.mcmp.parts.PartLamp;
 import com.bluepowermod.reference.Refs;
@@ -8,6 +9,7 @@ import mcmultipart.api.addon.IMCMPAddon;
 import mcmultipart.api.multipart.IMultipartRegistry;
 import mcmultipart.api.multipart.IMultipartTile;
 import mcmultipart.api.ref.MCMPCapabilities;
+import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -26,8 +28,12 @@ public class MCMPAddon implements IMCMPAddon{
 
     @Override
     public void registerParts(IMultipartRegistry registry) {
-        registry.registerPartWrapper(BPBlocks.cagedLamp[0], new PartLamp(BPBlocks.cagedLamp[0]));
-        registry.registerStackWrapper(Item.getItemFromBlock(BPBlocks.cagedLamp[0]), s -> true, BPBlocks.cagedLamp[0]);
+        for (Block block: BPBlocks.blockList) {
+            if(block instanceof BlockLampSurface){
+                registry.registerPartWrapper(block, new PartLamp(block));
+                registry.registerStackWrapper(Item.getItemFromBlock(block), s -> true, block);
+            }
+        }
     }
 
     @SubscribeEvent

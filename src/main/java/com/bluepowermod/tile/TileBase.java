@@ -17,10 +17,7 @@
 
 package com.bluepowermod.tile;
 
-import com.bluepowermod.BluePower;
-import com.bluepowermod.block.machine.BlockBattery;
-import com.bluepowermod.block.machine.BlockContainerFacingBase;
-import net.minecraft.block.BlockContainer;
+import com.bluepowermod.block.BlockContainerFacingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;

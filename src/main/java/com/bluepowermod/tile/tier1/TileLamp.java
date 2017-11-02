@@ -69,5 +69,8 @@ public class TileLamp extends TileBase{
         return (r << 16) + (g << 8) + b;
     }
 
-
+    @Override
+    protected void onTileLoaded() {
+        world.getBlockState(pos).neighborChanged(world, pos, world.getBlockState(pos).getBlock(), pos);
+    }
 }

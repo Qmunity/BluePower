@@ -8,10 +8,10 @@ import net.minecraft.world.IBlockAccess;
 
 import java.awt.*;
 
-public class BlockLampRGB extends BlockLamp {
+public class BlockLampRGBSurface extends BlockLampSurface {
 
-    public BlockLampRGB(String name, boolean isInverted) {
-        super(name, isInverted, MinecraftColor.NONE);
+    public BlockLampRGBSurface(String name, boolean isInverted, AxisAlignedBB size) {
+        super(name, isInverted, MinecraftColor.NONE, size);
         setUnlocalizedName(name + ".rgb" + (isInverted ? ".inverted" : ""));
     }
 

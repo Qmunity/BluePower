@@ -11,6 +11,7 @@ package com.bluepowermod.client.render;
 import com.bluepowermod.block.machine.BlockLamp;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.init.BPItems;
+import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier1.TileLamp;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -66,8 +67,8 @@ public class Renderers {
                 Minecraft.getMinecraft().getItemColors().registerItemColorHandler((IItemColor) item, item);
             }
         }
-        for (final Block block : BPBlocks.blockList) {
-            if (block instanceof BlockLamp) {
+        for (Block block : BPBlocks.blockList) {
+            if (block instanceof IBlockColor) {
                 Minecraft.getMinecraft().getBlockColors().registerBlockColorHandler((IBlockColor) block, block);
                 Minecraft.getMinecraft().getItemColors().registerItemColorHandler((IItemColor) block, Item.getItemFromBlock(block));
             }

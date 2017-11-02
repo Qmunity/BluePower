@@ -8,6 +8,8 @@
 package com.bluepowermod.client.render;
 
 import com.bluepowermod.block.machine.BlockLamp;
+import com.bluepowermod.block.machine.BlockLampSurface;
+import com.bluepowermod.util.AABBUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -43,9 +45,10 @@ public class RenderLamp extends TileEntitySpecialRenderer {
             if (bLamp.isInverted()) {
                 power = 15 - power;
             }
-
-            //Define our base Glow
             AxisAlignedBB box = bLamp.getSize();
+            //Define our base Glow
+            if (bLamp instanceof  BlockLampSurface)
+                box = AABBUtils.rotate(box, te.getWorld().getBlockState(te.getPos()).getValue(BlockLampSurface.FACING));
             box = box.equals(Block.FULL_BLOCK_AABB) ? box.grow(0.05) : box.grow(0.03125);
             boolean[] renderFaces = new boolean[] { true, true, true, true, true, true };
 

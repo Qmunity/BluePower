@@ -7,7 +7,7 @@
  */
 package com.bluepowermod.block.machine;
 
-import com.bluepowermod.block.BlockContainerBase;
+import com.bluepowermod.block.BlockContainerFacingBase;
 import com.bluepowermod.tile.TileBase;
 import net.minecraft.block.material.Material;
 

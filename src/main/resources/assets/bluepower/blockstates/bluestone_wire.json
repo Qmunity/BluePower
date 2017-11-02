@@ -1,0 +1,34 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "textures": {
+      "top": "bluepower:blocks/wire/insulation2",
+      "side": "bluepower:blocks/wire/insulation1",
+      "wire": "bluepower:base/bluestone_off",
+      "particle": "#wire"
+    },
+    "model": "bluepower:cable/wire"
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [{"submodel": {
+      "submodel1": {"model": "bluepower:cable/wire_extended"}
+    }}],
+    "east": {
+      "true": {"submodel": "bluepower:cable/wire_extended"},
+      "false":{}
+    },
+    "north": {
+      "true": {"submodel": "bluepower:cable/wire_extended"},
+      "false":{}
+    },
+    "south": {
+      "true": {"submodel": "bluepower:cable/wire_extended"},
+      "false":{}
+    },
+    "west": {
+      "true": {"submodel": "bluepower:cable/wire_extended"},
+      "false":{}
+    }
+    }
+}

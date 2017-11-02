@@ -19,25 +19,31 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.client.renderer.color.IBlockColor;
 import net.minecraft.client.renderer.color.IItemColor;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
+import java.util.List;
 
 /**
  * @author Koen Beckers (K4Unl)
@@ -49,14 +55,12 @@ public class BlockLamp extends BlockContainerBase implements IBlockColor, IItemC
 
     private final boolean isInverted;
     private final MinecraftColor color;
-    private final AxisAlignedBB size;
     private final String name;
 
-    public BlockLamp(String name, boolean isInverted, MinecraftColor color, AxisAlignedBB size) {
+    public BlockLamp(String name, boolean isInverted, MinecraftColor color) {
         super(Material.REDSTONE_LIGHT, TileLamp.class);
         this.isInverted = isInverted;
         this.color = color;
-        this.size = size;
         this.name = name;
         setUnlocalizedName(name + "." + color.name().toLowerCase() + (isInverted ? ".inverted" : ""));
         setCreativeTab(BPCreativeTabs.lighting);
@@ -64,24 +68,8 @@ public class BlockLamp extends BlockContainerBase implements IBlockColor, IItemC
         setRegistryName(name + (isInverted ? "inverted" : "") + color.name());
     }
 
-    @Override
-    public boolean isOpaqueCube(IBlockState state) {
-        return false;
-    }
-
-    @Override
-    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-        //Bounding box for the Caged Lamp
-        return size.equals(Refs.CAGELAMP_AABB) ? size.grow( 0.0625 ) : size;
-    }
-
-    @Override
-    public BlockRenderLayer getBlockLayer() {
-        return BlockRenderLayer.CUTOUT;
-    }
-
     public AxisAlignedBB getSize(){
-        return size;
+        return FULL_BLOCK_AABB;
     }
 
     @Override
@@ -192,15 +180,14 @@ public class BlockLamp extends BlockContainerBase implements IBlockColor, IItemC
     }
 
     @Override
-    public void onBlockAdded(World world, BlockPos pos, IBlockState state) {
-        super.onBlockAdded(world, pos, state);
-        world.setBlockState(pos, this.getDefaultState().withProperty(POWER, world.isBlockIndirectlyGettingPowered(pos)));
+    public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, EnumHand hand) {
+        return super.getStateForPlacement(world, pos, facing, hitX, hitY, hitZ, meta, placer, hand).withProperty(POWER, world.isBlockIndirectlyGettingPowered(pos));
     }
 
     @Override
     public void neighborChanged(IBlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos) {
         super.neighborChanged(state, world, pos, blockIn, fromPos);
-        world.setBlockState(pos, this.getDefaultState().withProperty(POWER, world.isBlockIndirectlyGettingPowered(pos)));
+        world.setBlockState(pos, state.withProperty(POWER, world.isBlockIndirectlyGettingPowered(pos)));
     }
 
     @Override

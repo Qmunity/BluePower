@@ -17,6 +17,7 @@
 
 package com.bluepowermod.block.machine;
 
+import com.bluepowermod.block.BlockContainerFacingBase;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier1.TileIgniter;
 import net.minecraft.block.material.Material;

@@ -8,7 +8,7 @@
 package com.bluepowermod.tile.tier1;
 
 import com.bluepowermod.BluePower;
-import com.bluepowermod.block.machine.BlockContainerFacingBase;
+import com.bluepowermod.block.BlockContainerFacingBase;
 import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.tile.IEjectAnimator;

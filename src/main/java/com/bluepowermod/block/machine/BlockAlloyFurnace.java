@@ -17,6 +17,7 @@
 
 package com.bluepowermod.block.machine;
 
+import com.bluepowermod.block.BlockContainerFacingBase;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.reference.GuiIDs;
 import com.bluepowermod.reference.Refs;

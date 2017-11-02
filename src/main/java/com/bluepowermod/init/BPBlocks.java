@@ -18,6 +18,7 @@
 package com.bluepowermod.init;
 
 import com.bluepowermod.api.misc.MinecraftColor;
+import com.bluepowermod.block.BlockContainerFacingBase;
 import com.bluepowermod.block.machine.*;
 import com.bluepowermod.block.machine.BlockLamp;
 import com.bluepowermod.block.machine.BlockLampRGB;
@@ -34,7 +35,6 @@ import net.minecraft.block.BlockBush;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
@@ -126,9 +126,10 @@ public class BPBlocks {
     public static Block[] fixedLamp;
     public static Block[] fixedLampInverted;
 
-
     public static Block blockLampRGB;
     public static Block blockLampRGBInverted;
+
+    public static Block[] blockAlloyWire;
 
     public static Block sortron;
 
@@ -226,28 +227,34 @@ public class BPBlocks {
         fixedLampInverted = new Block[MinecraftColor.VALID_COLORS.length];
 
         //Regular Lamp
-        blockLampRGB = new BlockLampRGB(Refs.LAMP_NAME,false, Block.FULL_BLOCK_AABB);
+        blockLampRGB = new BlockLampRGB(Refs.LAMP_NAME,false);
         for (int i = 0; i < MinecraftColor.VALID_COLORS.length; i++)
-            blockLamp[i] = new BlockLamp(Refs.LAMP_NAME, false, MinecraftColor.VALID_COLORS[i], Block.FULL_BLOCK_AABB);
-        blockLampRGBInverted = new BlockLampRGB(Refs.LAMP_NAME,true, Block.FULL_BLOCK_AABB);
+            blockLamp[i] = new BlockLamp(Refs.LAMP_NAME, false, MinecraftColor.VALID_COLORS[i]);
+        blockLampRGBInverted = new BlockLampRGB(Refs.LAMP_NAME,true);
         for (int i = 0; i < MinecraftColor.VALID_COLORS.length; i++)
-            blockLampInverted[i] = new BlockLamp(Refs.LAMP_NAME, true, MinecraftColor.VALID_COLORS[i], Block.FULL_BLOCK_AABB);
+            blockLampInverted[i] = new BlockLamp(Refs.LAMP_NAME, true, MinecraftColor.VALID_COLORS[i]);
 
         //Cage Lamp
-        blockLampRGB = new BlockLampRGB(Refs.CAGELAMP_NAME,false, Refs.CAGELAMP_AABB);
+        blockLampRGB = new BlockLampRGBSurface(Refs.CAGELAMP_NAME,false, Refs.CAGELAMP_AABB);
         for (int i = 0; i < MinecraftColor.VALID_COLORS.length; i++)
-            cagedLamp[i] = new BlockLamp(Refs.CAGELAMP_NAME, false, MinecraftColor.VALID_COLORS[i], Refs.CAGELAMP_AABB);
-        blockLampRGBInverted = new BlockLampRGB(Refs.CAGELAMP_NAME,true, Refs.CAGELAMP_AABB);
+            cagedLamp[i] = new BlockLampSurface(Refs.CAGELAMP_NAME, false, MinecraftColor.VALID_COLORS[i], Refs.CAGELAMP_AABB);
+        blockLampRGBInverted = new BlockLampRGBSurface(Refs.CAGELAMP_NAME,true, Refs.CAGELAMP_AABB);
         for (int i = 0; i < MinecraftColor.VALID_COLORS.length; i++)
-            cagedLampInverted[i] = new BlockLamp(Refs.CAGELAMP_NAME, true, MinecraftColor.VALID_COLORS[i], Refs.CAGELAMP_AABB);
+            cagedLampInverted[i] = new BlockLampSurface(Refs.CAGELAMP_NAME, true, MinecraftColor.VALID_COLORS[i], Refs.CAGELAMP_AABB);
 
         //Fixture Lamp
-        blockLampRGB = new BlockLampRGB(Refs.FIXTURELAMP_NAME,false, Refs.FIXTURELAMP_AABB);
+        blockLampRGB = new BlockLampRGBSurface(Refs.FIXTURELAMP_NAME,false, Refs.FIXTURELAMP_AABB);
         for (int i = 0; i < MinecraftColor.VALID_COLORS.length; i++)
-            fixedLamp[i] = new BlockLamp(Refs.FIXTURELAMP_NAME, false, MinecraftColor.VALID_COLORS[i], Refs.FIXTURELAMP_AABB);
-        blockLampRGBInverted = new BlockLampRGB(Refs.FIXTURELAMP_NAME,true, Refs.FIXTURELAMP_AABB);
+            fixedLamp[i] = new BlockLampSurface(Refs.FIXTURELAMP_NAME, false, MinecraftColor.VALID_COLORS[i], Refs.FIXTURELAMP_AABB);
+        blockLampRGBInverted = new BlockLampRGBSurface(Refs.FIXTURELAMP_NAME,true, Refs.FIXTURELAMP_AABB);
         for (int i = 0; i < MinecraftColor.VALID_COLORS.length; i++)
-            fixedLampInverted[i] = new BlockLamp(Refs.FIXTURELAMP_NAME, true, MinecraftColor.VALID_COLORS[i], Refs.FIXTURELAMP_AABB);
+            fixedLampInverted[i] = new BlockLampSurface(Refs.FIXTURELAMP_NAME, true, MinecraftColor.VALID_COLORS[i], Refs.FIXTURELAMP_AABB);
+
+        //Wires
+        blockAlloyWire = new Block[MinecraftColor.VALID_COLORS.length];
+
+        for (int i = 0; i < MinecraftColor.VALID_COLORS.length; i++)
+        blockAlloyWire[i] = new BlockAlloyWire(MinecraftColor.VALID_COLORS[i]);
     }
 
     private static void initModDependantBlocks() {

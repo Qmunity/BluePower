@@ -63,7 +63,7 @@ archivesBaseName = "BluePower"
 dependencies {
     deobfCompile "li.cil.oc:OpenComputers:MC1.12.1-1.7.0.4:api"
     compile 'net.industrial-craft:industrialcraft-2:2.8.16-ex112:api'
-	deobfCompile "MCMultiPart2:MCMultiPart:2.3.3"
+	deobfCompile "MCMultiPart2:MCMultiPart-exp:2.3.4_49"
     deobfCompile "mcp.mobius.waila:Hwyla:1.8.20-B35_1.12"
 	deobfCompile "mezz.jei:jei_1.12.1:4.7.8.95:api"
 	runtime "mezz.jei:jei_1.12.1:4.7.8.95"
