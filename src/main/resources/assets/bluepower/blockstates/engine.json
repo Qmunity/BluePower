@@ -1,0 +1,17 @@
+﻿{
+  "forge_marker":1,
+  "defaults":
+  {
+    "textures": {"#material": "bluepower:blocks/models/engineoff"},
+    "custom": {"flip-v": true},
+    "model":"bluepower:engine.obj",
+    "transform":"forge:default-block"
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [{}],
+    "active":{
+      "true":{"textures": {"#material": "bluepower:blocks/model/engineon"}}
+    }
+  }
+}

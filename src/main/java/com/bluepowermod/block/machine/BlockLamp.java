@@ -203,4 +203,5 @@ public class BlockLamp extends BlockContainerBase implements IBlockColor, IItemC
         //Color for Itemstack
         return getColor();
     }
+
 }

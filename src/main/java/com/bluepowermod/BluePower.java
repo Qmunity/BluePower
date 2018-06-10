@@ -19,6 +19,7 @@ import com.bluepowermod.reference.Refs;
 import com.bluepowermod.world.WorldGenerationHandler;
 import net.minecraft.item.Item;
 import net.minecraft.item.crafting.CraftingManager;
+import net.minecraftforge.client.model.obj.OBJLoader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.util.EnumHelper;

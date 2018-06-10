@@ -33,6 +33,7 @@ public class MCMPAddon implements IMCMPAddon{
                 registry.registerPartWrapper(block, new PartLamp(block));
                 registry.registerStackWrapper(Item.getItemFromBlock(block), s -> true, block);
             }
+
         }
     }
 
@@ -50,7 +51,7 @@ public class MCMPAddon implements IMCMPAddon{
                 @Nullable
                 @Override
                 public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
-                    return capability == MCMPCapabilities.MULTIPART_TILE ? (T)multipartTileLamp : null;
+                    return capability == MCMPCapabilities.MULTIPART_TILE ? MCMPCapabilities.MULTIPART_TILE.cast(multipartTileLamp) : null;
                 }
             });
         }

@@ -15,6 +15,8 @@ import net.minecraft.util.EnumFacing;;
 
 import com.bluepowermod.tile.TileMachineBase;
 
+import javax.annotation.Nullable;
+
 /**
  * 
  * @author TheFjong
@@ -61,11 +63,13 @@ public class TileEngine extends TileMachineBase{
 		isActive = true;
 	}
 
-	public Packet getDescriptionPacket() {
-        NBTTagCompound nbtTag = new NBTTagCompound();
-        this.writeToNBT(nbtTag);
-        return new SPacketUpdateTileEntity(this.pos, 1, nbtTag);
-    }
+	@Nullable
+	@Override
+	public SPacketUpdateTileEntity getUpdatePacket() {
+		NBTTagCompound nbtTag = new NBTTagCompound();
+		this.writeToNBT(nbtTag);
+		return new SPacketUpdateTileEntity(this.pos, 1, nbtTag);
+	}
 
 	@Override
 	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
@@ -81,27 +85,23 @@ public class TileEngine extends TileMachineBase{
     {
         return orientation;
     }
-    
-    
-    @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
-    	super.writeToNBT(compound);
-    	int rotation = orientation.ordinal();
-    	compound.setInteger("rotation", rotation);
-//    	compound.setByte("pumpTick", pumpTick);
-//    	compound.setByte("pumpSpeed", pumpSpeed);
-//    	compound.setByte("gearTick", gearTick);
-		return compound;
-    	
-    }
-    
-    @Override
-    public void readFromNBT(NBTTagCompound compound) {
-    	super.readFromNBT(compound);
-    	
-    	setOrientation(EnumFacing.fromAngle(compound.getInteger("rotation")));
-//    	pumpTick  = compound.getByte("pumpTick");
-//    	pumpSpeed =compound.getByte("pumpSpeed");
-//    	gearTick =compound.getByte("gearTick");
-    }
+
+
+	@Override
+	protected void writeToPacketNBT(NBTTagCompound compound) {
+		int rotation = orientation.getIndex();
+		compound.setInteger("rotation", rotation);
+		compound.setByte("pumpTick", pumpTick);
+		compound.setByte("pumpSpeed", pumpSpeed);
+		compound.setByte("gearTick", gearTick);
+	}
+
+	@Override
+	protected void readFromPacketNBT(NBTTagCompound compound) {
+		setOrientation(EnumFacing.getFront(compound.getInteger("rotation")));
+		pumpTick  = compound.getByte("pumpTick");
+		pumpSpeed = compound.getByte("pumpSpeed");
+		gearTick = compound.getByte("gearTick");
+	}
+
 }

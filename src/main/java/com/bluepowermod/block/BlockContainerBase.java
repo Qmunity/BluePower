@@ -45,7 +45,7 @@ import javax.annotation.Nullable;
  * @author MineMaarten
  */
 
-public class BlockContainerBase extends BlockBase implements ITileEntityProvider, IAdvancedSilkyRemovable {
+public class BlockContainerBase extends BlockBase implements IAdvancedSilkyRemovable {
 
     private GuiIDs guiId = GuiIDs.INVALID;
     private Class<? extends TileBase> tileEntityClass;
@@ -78,12 +78,17 @@ public class BlockContainerBase extends BlockBase implements ITileEntityProvider
     }
 
     @Override
-    public TileEntity createNewTileEntity(World world, int metadata) {
+    public boolean hasTileEntity(IBlockState state) {
+        return true;
+    }
 
+    @Nullable
+    @Override
+    public TileEntity createTileEntity(World world, IBlockState state) {
         try {
             return getTileEntity().newInstance();
         } catch (Exception e) {
-            return null;
+            return super.createTileEntity(world, state);
         }
     }
 

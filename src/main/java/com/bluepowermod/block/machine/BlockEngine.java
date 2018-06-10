@@ -8,6 +8,7 @@
 package com.bluepowermod.block.machine;
 
 import com.bluepowermod.block.BlockContainerBase;
+import com.bluepowermod.client.render.ICustomModelBlock;
 import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.init.BPItems;
 import com.bluepowermod.reference.GuiIDs;
@@ -15,6 +16,7 @@ import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier3.TileEngine;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -27,6 +29,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.client.model.ModelLoader;
 
 ;import javax.annotation.Nullable;
 
@@ -46,18 +49,18 @@ public class BlockEngine extends BlockContainerBase {
     }
 
     @Override
-    public boolean isOpaqueCube(IBlockState state) {
-        return false;
-    }
-
-    @Override
-    public boolean isNormalCube(IBlockState state, IBlockAccess world, BlockPos pos) {
-        return false;
-    }
-
-    @Override
     public EnumBlockRenderType getRenderType(IBlockState state) {
         return EnumBlockRenderType.ENTITYBLOCK_ANIMATED;
+    }
+
+    @Override
+    public boolean isFullCube(IBlockState state) {
+        return false;
+    }
+
+    @Override
+    public boolean isOpaqueCube(IBlockState state) {
+        return false;
     }
 
     @SuppressWarnings("cast")
@@ -101,12 +104,6 @@ public class BlockEngine extends BlockContainerBase {
             TileEngine tile = (TileEngine) world.getTileEntity(pos);
             tile.setOrientation(EnumFacing.getFront(direction));
         }
-    }
-
-    @Override
-    public TileEntity createNewTileEntity(World var1, int var2) {
-
-        return new TileEngine();
     }
 
     @SuppressWarnings("cast")
@@ -173,7 +170,7 @@ public class BlockEngine extends BlockContainerBase {
             }
         }
 
-        return false;
+        return super.onBlockActivated(world, pos, state, player, hand, efacing, hitX, hitY, hitZ);
     }
 
 
