@@ -444,6 +444,7 @@ item.bluepower:brass_ingot.name=Brass Ingot
 
 item.bluepower:tungsten_ingot.name=Tungsten Ingot
 item.bluepower:tungsten_nugget.name=Tungsten Nugget
+item.bluepower:tungsten_carbide.name=Tungsten Carbide Ingot
 
 # IC2-compat zinc
 item.bluepower:zinc_ore_crushed.name=Crushed Zinc Ore
@@ -470,6 +471,14 @@ item.bluepower:sapphire_axe.name=Sapphire Axe
 item.bluepower:sapphire_pickaxe.name=Sapphire Pickaxe
 item.bluepower:sapphire_hoe.name=Sapphire Hoe
 item.bluepower:sapphire_sickle.name=Sapphire Sickle
+
+item.bluepower:tungcarb_sword.name=Tungsten Carbide Sword
+item.bluepower:tungcarb_shovel.name=Tungsten Carbide Shovel
+item.bluepower:tungcarb_axe.name=Tungsten Carbide Axe
+item.bluepower:tungcarb_pickaxe.name=Tungsten Carbide Pickaxe
+item.bluepower:tungcarb_hoe.name=Tungsten Carbide Hoe
+item.bluepower:tungcarb_sickle.name=Tungsten Carbide Sickle
+item.bluepower:tungcarb_saw.name=Tungsten Carbide Saw
 
 item.bluepower:amethyst_sword.name=Amethyst Sword
 item.bluepower:amethyst_shovel.name=Amethyst Shovel

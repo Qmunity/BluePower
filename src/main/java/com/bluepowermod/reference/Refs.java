@@ -109,7 +109,7 @@ public class Refs {
     public static final String WINDMILL_NAME = "windmill";
     public static final String BATTERYBLOCK_NAME = "battery_block";
 
-    public static final String TUNGCARBINGOT_NAME = "tungsten_carbite";
+    public static final String TUNGCARBINGOT_NAME = "tungsten_carbide";
     public static final String BRASSINGOT_NAME = "brass_ingot";
     public static final String BLUEALLOYINGOT_NAME = "blue_alloy_ingot";
     public static final String REDALLOYINGOT_NAME = "red_alloy_ingot";

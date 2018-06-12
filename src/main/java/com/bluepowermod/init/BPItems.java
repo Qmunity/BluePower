@@ -46,7 +46,7 @@ public class BPItems {
     public static final Item silver_ingot = new ItemCrafting(Refs.SILVERINGOT_NAME);
     public static final Item zinc_ingot = new ItemCrafting(Refs.ZINCINGOT_NAME);
     public static final Item brass_ingot = new ItemCrafting(Refs.BRASSINGOT_NAME);
-    public static final Item tungsten_carbite = new ItemCrafting(Refs.TUNGCARBINGOT_NAME);
+    public static final Item tungsten_carbide = new ItemCrafting(Refs.TUNGCARBINGOT_NAME);
     public static final Item blue_alloy_ingot = new ItemCrafting(Refs.BLUEALLOYINGOT_NAME);
     public static final Item red_alloy_ingot = new ItemCrafting(Refs.REDALLOYINGOT_NAME);
     public static final Item purple_alloy_ingot = new ItemCrafting(Refs.PURPLEALLOYINGOT_NAME);
@@ -132,12 +132,12 @@ public class BPItems {
     public static final Item amethyst_hoe = new ItemGemHoe(BluePower.gemMaterial, Refs.AMETHYSTHOE_NAME, BPItems.amethyst_gem);
     public static final Item amethyst_sickle = new ItemSickle(BluePower.gemMaterial, Refs.AMETHYSTSICKLE_NAME, BPItems.amethyst_gem);
     public static final Item amethyst_saw = new ItemSaw(BluePower.gemMaterial.getHarvestLevel(), Refs.AMETHYSTSAW_NAME);
-    public static final Item tungcarb_axe = new ItemGemAxe(BluePower.gemMaterial, Refs.TUNGCARBAXE_NAME, BPItems.tungsten_carbite);
-    public static final Item tungcarb_sword = new ItemGemSword(BluePower.gemMaterial, Refs.TUNGCARBSWORD_NAME,BPItems.tungsten_carbite);
-    public static final Item tungcarb_pickaxe = new ItemGemPickaxe(BluePower.gemMaterial, Refs.TUNGCARBPICKAXE_NAME, BPItems.tungsten_carbite);
-    public static final Item tungcarb_shovel = new ItemGemSpade(BluePower.gemMaterial, Refs.TUNGCARBSPADE_NAME, BPItems.tungsten_carbite);
-    public static final Item tungcarb_hoe = new ItemGemHoe(BluePower.gemMaterial, Refs.TUNGCARBHOE_NAME, BPItems.tungsten_carbite);
-    public static final Item tungcarb_sickle = new ItemSickle(BluePower.gemMaterial, Refs.TUNGCARBSICKLE_NAME, BPItems.tungsten_carbite);
+    public static final Item tungcarb_axe = new ItemGemAxe(BluePower.gemMaterial, Refs.TUNGCARBAXE_NAME, BPItems.tungsten_carbide);
+    public static final Item tungcarb_sword = new ItemGemSword(BluePower.gemMaterial, Refs.TUNGCARBSWORD_NAME,BPItems.tungsten_carbide);
+    public static final Item tungcarb_pickaxe = new ItemGemPickaxe(BluePower.gemMaterial, Refs.TUNGCARBPICKAXE_NAME, BPItems.tungsten_carbide);
+    public static final Item tungcarb_shovel = new ItemGemSpade(BluePower.gemMaterial, Refs.TUNGCARBSPADE_NAME, BPItems.tungsten_carbide);
+    public static final Item tungcarb_hoe = new ItemGemHoe(BluePower.gemMaterial, Refs.TUNGCARBHOE_NAME, BPItems.tungsten_carbide);
+    public static final Item tungcarb_sickle = new ItemSickle(BluePower.gemMaterial, Refs.TUNGCARBSICKLE_NAME, BPItems.tungsten_carbide);
     public static final Item tungcarb_saw = new ItemSaw(BluePower.gemMaterial.getHarvestLevel(), Refs.TUNGCARBSAW_NAME);
 
     public static void init() {

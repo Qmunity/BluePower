@@ -7,15 +7,13 @@
  */
 package com.bluepowermod.client.render;
 
+import com.bluepowermod.block.machine.BlockEngine;
 import com.bluepowermod.init.BPBlocks;
 import com.sun.xml.internal.ws.api.pipe.Engine;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BlockRendererDispatcher;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.texture.TextureMap;
@@ -59,8 +57,8 @@ public class RenderEngine extends TileEntitySpecialRenderer<TileEngine> {
 
         // Render the rotating cog
         GlStateManager.pushMatrix();
-
         RenderHelper.disableStandardItemLighting();
+
         this.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
         if (Minecraft.isAmbientOcclusionEnabled()) {
             GlStateManager.shadeModel(GL11.GL_SMOOTH);
@@ -72,10 +70,8 @@ public class RenderEngine extends TileEntitySpecialRenderer<TileEngine> {
 
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder bufferBuilder = tessellator.getBuffer();
-        bufferBuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
         IBlockState state = BPBlocks.engine.getDefaultState();
         BlockRendererDispatcher dispatcher = Minecraft.getMinecraft().getBlockRendererDispatcher();
-        IBakedModel model = dispatcher.getModelForState(state);
         BlockPos pos = engine.getPos();
 
         GlStateManager.translate(x, y, z);
@@ -108,9 +104,36 @@ public class RenderEngine extends TileEntitySpecialRenderer<TileEngine> {
         }
 
         tessellator.getBuffer().setTranslation(-pos.getX(), -pos.getY(), -pos.getZ());
-        dispatcher.getBlockModelRenderer().renderModel(world, model, state, pos, bufferBuilder, false);
+
+        //Render Glider
+        GlStateManager.pushMatrix();
+        bufferBuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
+        f += tile.pumpTick;
+        if (tile.pumpSpeed > 0) {
+            f /= tile.pumpSpeed;
+        }
+        f = (float) ((float) (.5 - .5 * Math.cos(3.1415926535897931D * (double) f))/ 4);
+        GL11.glTranslatef(0, f, 0);
+        IBakedModel glider = dispatcher.getModelForState(state.withProperty(BlockEngine.GLIDER, true));
+        dispatcher.getBlockModelRenderer().renderModel(world, glider, state, pos, bufferBuilder, false);
 
         tessellator.draw();
+        GlStateManager.popMatrix();
+
+        //Render Gear
+        GlStateManager.pushMatrix();
+        bufferBuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
+
+        GlStateManager.translate(0.5, 0, 0.5);
+        long angle = (System.currentTimeMillis() / 10) % 360;
+        GlStateManager.rotate(angle, 0, 1, 0);
+        GlStateManager.translate(-0.5, 0, -0.5);
+        IBakedModel gear = dispatcher.getModelForState(state.withProperty(BlockEngine.GEAR, true));
+        dispatcher.getBlockModelRenderer().renderModel(world, gear, state, pos, bufferBuilder, false);
+
+        tessellator.draw();
+        GlStateManager.popMatrix();
+
 
         RenderHelper.enableStandardItemLighting();
         tessellator.getBuffer().setTranslation(0, 0, 0);

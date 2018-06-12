@@ -15,6 +15,10 @@ import com.bluepowermod.reference.GuiIDs;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier3.TileEngine;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.PropertyBool;
+import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.properties.PropertyInteger;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.EntityLivingBase;
@@ -40,17 +44,42 @@ import net.minecraftforge.client.model.ModelLoader;
  */
 public class BlockEngine extends BlockContainerBase {
 
+    public static final PropertyBool ACTIVE = PropertyBool.create("active");
+    public static final PropertyBool GEAR = PropertyBool.create("gear");
+    public static final PropertyBool GLIDER = PropertyBool.create("glider");
+    public static final PropertyEnum<EnumFacing> FACING = PropertyEnum.create("facing", EnumFacing.class);
+
     public BlockEngine() {
 
         super(Material.IRON, TileEngine.class);
         setCreativeTab(BPCreativeTabs.machines);
         setUnlocalizedName(Refs.ENGINE_NAME);
+        setDefaultState(blockState.getBaseState().withProperty(ACTIVE, false).withProperty(GEAR, false).withProperty(GLIDER, false).withProperty(FACING, EnumFacing.DOWN));
         setRegistryName(Refs.MODID, Refs.ENGINE_NAME);
     }
 
     @Override
+    protected BlockStateContainer createBlockState() {
+        return new BlockStateContainer(this, ACTIVE, GEAR, GLIDER, FACING);
+    }
+    @Override
+    public int getMetaFromState(IBlockState state) {
+        return state.getValue(ACTIVE) ? 0 : 1;
+    }
+
+    @Override
+    public IBlockState getStateFromMeta(int meta) {
+        return getDefaultState().withProperty(ACTIVE, meta == 1);
+    }
+
+    @Override
+    public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
+        return super.getActualState(state, worldIn, pos).withProperty(FACING, ((TileEngine)worldIn.getTileEntity(pos)).getOrientation());
+    }
+
+    @Override
     public EnumBlockRenderType getRenderType(IBlockState state) {
-        return EnumBlockRenderType.ENTITYBLOCK_ANIMATED;
+        return EnumBlockRenderType.MODEL;
     }
 
     @Override
