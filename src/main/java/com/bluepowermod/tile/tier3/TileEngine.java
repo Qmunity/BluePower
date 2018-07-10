@@ -63,19 +63,6 @@ public class TileEngine extends TileMachineBase{
 		isActive = true;
 	}
 
-	@Nullable
-	@Override
-	public SPacketUpdateTileEntity getUpdatePacket() {
-		NBTTagCompound nbtTag = new NBTTagCompound();
-		this.writeToNBT(nbtTag);
-		return new SPacketUpdateTileEntity(this.pos, 1, nbtTag);
-	}
-
-	@Override
-	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
-		readFromNBT(pkt.getNbtCompound());
-	}
-    
     public void setOrientation(EnumFacing orientation)
     {
         this.orientation = orientation;
@@ -89,19 +76,35 @@ public class TileEngine extends TileMachineBase{
 
 	@Override
 	protected void writeToPacketNBT(NBTTagCompound compound) {
-		int rotation = orientation.getIndex();
-		compound.setInteger("rotation", rotation);
-		compound.setByte("pumpTick", pumpTick);
-		compound.setByte("pumpSpeed", pumpSpeed);
-		compound.setByte("gearTick", gearTick);
+		super.writeToPacketNBT(compound);
+		if(orientation != null){
+			int rotation = orientation.getIndex();
+			compound.setInteger("rotation", rotation);
+		}
 	}
 
 	@Override
 	protected void readFromPacketNBT(NBTTagCompound compound) {
-		setOrientation(EnumFacing.getFront(compound.getInteger("rotation")));
-		pumpTick  = compound.getByte("pumpTick");
-		pumpSpeed = compound.getByte("pumpSpeed");
-		gearTick = compound.getByte("gearTick");
+		super.readFromPacketNBT(compound);
+		if(compound.hasKey("rotation")){
+            setOrientation(EnumFacing.getFront(compound.getInteger("rotation")));
+        }
 	}
 
+	@Nullable
+	@Override
+	public SPacketUpdateTileEntity getUpdatePacket() {
+		return new SPacketUpdateTileEntity(this.pos, 3, this.getUpdateTag());
+	}
+
+	@Override
+	public NBTTagCompound getUpdateTag() {
+		return this.writeToNBT(new NBTTagCompound());
+	}
+
+	@Override
+	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
+		super.onDataPacket(net, pkt);
+		handleUpdateTag(pkt.getNbtCompound());
+	}
 }

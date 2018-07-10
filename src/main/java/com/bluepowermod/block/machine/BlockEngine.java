@@ -74,7 +74,8 @@ public class BlockEngine extends BlockContainerBase {
 
     @Override
     public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
-        return super.getActualState(state, worldIn, pos).withProperty(FACING, ((TileEngine)worldIn.getTileEntity(pos)).getOrientation());
+        TileEngine tile = (TileEngine)worldIn.getTileEntity(pos);
+        return ((tile != null) && (tile.getOrientation() != null)) ? getDefaultState().withProperty(FACING, tile.getOrientation()).withProperty(ACTIVE, tile.isActive) : super.getActualState(state, worldIn, pos);
     }
 
     @Override

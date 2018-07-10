@@ -108,12 +108,15 @@ public class RenderEngine extends TileEntitySpecialRenderer<TileEngine> {
         //Render Glider
         GlStateManager.pushMatrix();
         bufferBuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
-        f += tile.pumpTick;
-        if (tile.pumpSpeed > 0) {
-            f /= tile.pumpSpeed;
+        float f2 = 0;
+        if(tile.isActive) {
+            f += tile.pumpTick;
+            if (tile.pumpSpeed > 0) {
+                f /= tile.pumpSpeed;
+            }
+            f2 = ((float) (.5 - .5 * Math.cos(3.1415926535897931D * (double) f)) / 4);
         }
-        f = (float) ((float) (.5 - .5 * Math.cos(3.1415926535897931D * (double) f))/ 4);
-        GL11.glTranslatef(0, f, 0);
+        GL11.glTranslatef(0, f2, 0);
         IBakedModel glider = dispatcher.getModelForState(state.withProperty(BlockEngine.GLIDER, true));
         dispatcher.getBlockModelRenderer().renderModel(world, glider, state, pos, bufferBuilder, false);
 
@@ -125,7 +128,7 @@ public class RenderEngine extends TileEntitySpecialRenderer<TileEngine> {
         bufferBuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
 
         GlStateManager.translate(0.5, 0, 0.5);
-        long angle = (System.currentTimeMillis() / 10) % 360;
+        long angle = tile.isActive ? (System.currentTimeMillis() / 10) % 360 : 0;
         GlStateManager.rotate(angle, 0, 1, 0);
         GlStateManager.translate(-0.5, 0, -0.5);
         IBakedModel gear = dispatcher.getModelForState(state.withProperty(BlockEngine.GEAR, true));
