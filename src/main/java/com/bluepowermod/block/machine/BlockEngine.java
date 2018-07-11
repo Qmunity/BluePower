@@ -93,46 +93,39 @@ public class BlockEngine extends BlockContainerBase {
         return false;
     }
 
+    @Override
+    public boolean rotateBlock(World world, BlockPos pos, EnumFacing dir) {
+        if(!world.isRemote) {
+            TileEngine engine = (TileEngine) world.getTileEntity(pos);
+            if (engine != null) {
+                engine.setOrientation(EnumFacing.getFront(dir.ordinal()));
+            }
+            world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 3);
+        }
+        return super.rotateBlock(world, pos, dir);
+    }
+
     @SuppressWarnings("cast")
     @Override
     public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase player, ItemStack iStack) {
         if (world.getTileEntity(pos) instanceof TileEngine) {
-
-            int direction = 0;
-            int facing;
+            EnumFacing facing;
 
             if (player.rotationPitch > 45) {
 
-                facing = 5;
+                facing = EnumFacing.DOWN;
             } else if (player.rotationPitch < -45) {
 
-                facing = 4;
+                facing = EnumFacing.UP;
             } else {
 
-                facing = MathHelper.floor(player.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
+                facing = player.getHorizontalFacing().getOpposite();
             }
 
-            if (facing == 0) {
-
-                direction = EnumFacing.SOUTH.ordinal();
-            } else if (facing == 1) {
-
-                direction = EnumFacing.WEST.ordinal();
-            } else if (facing == 2) {
-
-                direction = EnumFacing.NORTH.ordinal();
-            } else if (facing == 3) {
-
-                direction = EnumFacing.EAST.ordinal();
-            } else if (facing == 4) {
-
-                direction = EnumFacing.UP.ordinal();
-            } else if (facing == 5) {
-
-                direction = EnumFacing.DOWN.ordinal();
-            }
             TileEngine tile = (TileEngine) world.getTileEntity(pos);
-            tile.setOrientation(EnumFacing.getFront(direction));
+            if (tile != null) {
+                tile.setOrientation(facing);
+            }
         }
     }
 
@@ -142,61 +135,7 @@ public class BlockEngine extends BlockContainerBase {
         if (!player.inventory.getCurrentItem().isEmpty()) {
             Item item = player.inventory.getCurrentItem().getItem();
             if (item == BPItems.screwdriver) {
-                if (!world.isRemote) {
-                    int direction = 0;
-                    int facing = 0;
-
-                    if (player.rotationPitch > 45) {
-                        facing = 5;
-                    } else if (player.rotationPitch < -45) {
-                        facing = 4;
-                    } else {
-                        facing = MathHelper.floor(player.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
-                    }
-
-                    TileEngine engine = (TileEngine) world.getTileEntity(pos);
-
-                    if (facing == 0) {
-                        if (player.isSneaking()) {
-                            direction = EnumFacing.NORTH.ordinal();
-                        }else {
-                            direction = EnumFacing.SOUTH.ordinal();
-                        }
-                    } else if (facing == 1) {
-                        if (player.isSneaking()) {
-                            direction = EnumFacing.EAST.ordinal();
-                        }else {
-                            direction = EnumFacing.WEST.ordinal();
-                        }
-                    } else if (facing == 2) {
-                        if (player.isSneaking()) {
-                            direction = EnumFacing.SOUTH.ordinal();
-                        }else {
-                            direction = EnumFacing.NORTH.ordinal();
-                        }
-                    } else if (facing == 3) {
-                        if (player.isSneaking()){
-                            direction = EnumFacing.WEST.ordinal();
-                        }else {
-                            direction = EnumFacing.EAST.ordinal();
-                        }
-                    } else if (facing == 4) {
-                        if (player.isSneaking()) {
-                            direction = EnumFacing.DOWN.ordinal();
-                        }else {
-                            direction = EnumFacing.UP.ordinal();
-                        }
-                    } else if (facing == 5) {
-                        if (player.isSneaking()) {
-                            direction = EnumFacing.UP.ordinal();
-                        }else {
-                            direction = EnumFacing.DOWN.ordinal();
-                        }
-                    }
-
-                    engine.setOrientation(EnumFacing.getFront(direction));
-                    world.notifyNeighborsOfStateChange(pos, this, true);
-                }
+                return true;
             }
         }
 

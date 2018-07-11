@@ -220,17 +220,21 @@ public class TileBase extends TileEntity implements IRotatable, ITickable {
 
     @Override
     public void setFacingDirection(EnumFacing dir) {
-
-        BlockContainerFacingBase.setState(dir, world, pos);
-        if (world != null) {
-            sendUpdatePacket();
-            notifyNeighborBlockUpdate();
+        if(world.getBlockState(pos).getBlock() instanceof BlockContainerFacingBase) {
+            BlockContainerFacingBase.setState(dir, world, pos);
+            if (world != null) {
+                sendUpdatePacket();
+                notifyNeighborBlockUpdate();
+            }
         }
     }
 
     @Override
     public EnumFacing getFacingDirection() {
-        return world.getBlockState(pos).getValue(BlockContainerFacingBase.FACING);
+        if(world.getBlockState(pos).getBlock() instanceof BlockContainerFacingBase) {
+            return world.getBlockState(pos).getValue(BlockContainerFacingBase.FACING);
+        }
+        return EnumFacing.UP;
     }
 
     public boolean canConnectRedstone() {

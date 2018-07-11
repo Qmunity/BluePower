@@ -14,6 +14,7 @@ import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.util.EnumFacing;;
 
 import com.bluepowermod.tile.TileMachineBase;
+import net.minecraftforge.common.capabilities.Capability;
 
 import javax.annotation.Nullable;
 
@@ -26,26 +27,22 @@ public class TileEngine extends TileMachineBase{
 
 	private EnumFacing orientation;
 	public boolean isActive = false;
-	public byte pumpTick;
-	public byte pumpSpeed;
-	public byte gearSpeed;
-	public byte gearTick;
+    public byte pumpTick;
+    public byte pumpSpeed;
+
 	
 	public TileEngine(){
 		
 		pumpTick  = 0;
 		pumpSpeed = 16;
-		gearSpeed = 16;
 		
 	}
-	
-	@Override
+
+    @Override
 	public void update() {
 		super.update();
-		
 		if(world.isRemote){
 			if(isActive){
-				gearTick++;
 				pumpTick++;
 				if(pumpTick >= pumpSpeed *2){
 					pumpTick = 0;
@@ -60,12 +57,14 @@ public class TileEngine extends TileMachineBase{
 			
 		}
 
-		isActive = true;
+		//Todo: Replace with Energy Capability
+		isActive = getIsRedstonePowered();
+
 	}
 
-    public void setOrientation(EnumFacing orientation)
-    {
+    public void setOrientation(EnumFacing orientation){
         this.orientation = orientation;
+        markDirty();
     }
 
     public EnumFacing getOrientation()
@@ -77,18 +76,18 @@ public class TileEngine extends TileMachineBase{
 	@Override
 	protected void writeToPacketNBT(NBTTagCompound compound) {
 		super.writeToPacketNBT(compound);
-		if(orientation != null){
-			int rotation = orientation.getIndex();
-			compound.setInteger("rotation", rotation);
-		}
+		int rotation = orientation.getIndex();
+		compound.setInteger("rotation", rotation);
+        compound.setByte("pumpspeed", pumpSpeed);
+        compound.setByte("pumptick", pumpTick);
 	}
 
 	@Override
 	protected void readFromPacketNBT(NBTTagCompound compound) {
 		super.readFromPacketNBT(compound);
-		if(compound.hasKey("rotation")){
-            setOrientation(EnumFacing.getFront(compound.getInteger("rotation")));
-        }
+		orientation = EnumFacing.getFront(compound.getInteger("rotation"));
+        pumpSpeed = compound.getByte("pumpspeed");
+        pumpTick = compound.getByte("pumptick");
 	}
 
 	@Nullable

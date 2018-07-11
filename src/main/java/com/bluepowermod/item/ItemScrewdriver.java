@@ -19,6 +19,7 @@ package com.bluepowermod.item;
 
 import com.bluepowermod.api.misc.IScrewdriver;
 import com.bluepowermod.block.BlockContainerBase;
+import com.bluepowermod.block.machine.BlockEngine;
 import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.reference.GuiIDs;
 import com.bluepowermod.reference.Refs;
@@ -55,19 +56,13 @@ public class ItemScrewdriver extends ItemBase implements IScrewdriver {
     public EnumActionResult onItemUseFirst(EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) {
         Block block = world.getBlockState(pos).getBlock();
 
-        if (block instanceof BlockContainerBase) {
-            if (((BlockContainerBase) block).getGuiID() != GuiIDs.INVALID) {
-                if (player.isSneaking()) {
-                    if (block.rotateBlock(world, pos, side)) {
-                        damage(player.getHeldItem(hand), 1, player, false);
-                        return EnumActionResult.SUCCESS;
-                    }
-                }
+            if (player.isSneaking() && block.rotateBlock(world, pos, side.getOpposite())) {
+                damage(player.getHeldItem(hand), 1, player, false);
+                return EnumActionResult.SUCCESS;
+            } else if (block.rotateBlock(world, pos, side)) {
+                damage(player.getHeldItem(hand), 1, player, false);
+                return EnumActionResult.SUCCESS;
             }
-        } else if (!player.isSneaking() && block.rotateBlock(world, pos, side)) {
-            damage(player.getHeldItem(hand), 1, player, false);
-            return EnumActionResult.SUCCESS;
-        }
 
         return EnumActionResult.PASS;
     }
