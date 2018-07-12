@@ -7,6 +7,9 @@
  */
 package com.bluepowermod.tile.tier3;
 
+import com.bluepowermod.api.power.BlutricityFEStorage;
+import com.bluepowermod.api.power.CapabilityBlutricity;
+import com.bluepowermod.api.power.IPowerBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
@@ -15,6 +18,9 @@ import net.minecraft.util.EnumFacing;;
 
 import com.bluepowermod.tile.TileMachineBase;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.CapabilityInject;
+import net.minecraftforge.energy.EnergyStorage;
+import net.minecraftforge.energy.IEnergyStorage;
 
 import javax.annotation.Nullable;
 
@@ -23,12 +29,23 @@ import javax.annotation.Nullable;
  * @author TheFjong
  *
  */
-public class TileEngine extends TileMachineBase{
+public class TileEngine extends TileMachineBase  {
+
 
 	private EnumFacing orientation;
 	public boolean isActive = false;
     public byte pumpTick;
     public byte pumpSpeed;
+
+	private final BlutricityFEStorage storage = new BlutricityFEStorage(320){
+		@Override
+		public boolean canReceive() {
+			return false;
+		}
+	};
+
+	@CapabilityInject(BlutricityFEStorage.class)
+	public static Capability<BlutricityFEStorage> ENGINE_CAP = null;
 
 	
 	public TileEngine(){
@@ -105,5 +122,20 @@ public class TileEngine extends TileMachineBase{
 	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
 		super.onDataPacket(net, pkt);
 		handleUpdateTag(pkt.getNbtCompound());
+	}
+
+	@Override
+	public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
+    	if(capability == ENGINE_CAP)
+    		return true;
+		return super.hasCapability(capability, facing);
+	}
+
+	@Nullable
+	@Override
+	public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
+		if(capability == ENGINE_CAP)
+			return ENGINE_CAP.cast(storage);
+		return super.getCapability(capability, facing);
 	}
 }
