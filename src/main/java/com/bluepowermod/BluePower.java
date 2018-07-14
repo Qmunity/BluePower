@@ -9,6 +9,7 @@
 package com.bluepowermod;
 
 import com.bluepowermod.api.BPApi;
+import com.bluepowermod.api.power.CapabilityBlutricity;
 import com.bluepowermod.client.gui.GUIHandler;
 import com.bluepowermod.compat.CompatibilityUtils;
 import com.bluepowermod.event.BPEventHandler;
@@ -59,6 +60,7 @@ public class BluePower {
         BPEnchantments.init();
 
         CompatibilityUtils.preInit(event);
+        CapabilityBlutricity.register();
 
         MinecraftForge.EVENT_BUS.register(new Config());
         BPEventHandler eventHandler = new BPEventHandler();

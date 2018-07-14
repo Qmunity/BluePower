@@ -27,7 +27,7 @@ public class BlutricityStorage implements IPowerBase{
         double energyAccepted = 0;
         if (energy > 0)
             energyAccepted = Math.min(this.maxEnergy - this.energy, Math.min(this.maxEnergy, energy));
-        if (energy < 0)
+        else if (energy < 0)
             energyAccepted = -Math.min(this.energy, Math.min(this.maxEnergy, -energy));
         if (!simulate)
             this.energy += energyAccepted;

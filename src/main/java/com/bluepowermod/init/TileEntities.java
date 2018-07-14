@@ -43,8 +43,11 @@ public class TileEntities {
         // GameRegistry.registerTileEntity(TileIOExpander.class, "IOExpander");
         GameRegistry.registerTileEntity(TileEngine.class, Refs.MODID + ".engine");
         GameRegistry.registerTileEntity(TileBattery.class, Refs.MODID + ".battery");
-        // GameRegistry.registerTileEntity(TileWindmill.class, "windmill");
-        // GameRegistry.registerTileEntity(TileKinectGenerator.class, "kinectgenerator");
+        GameRegistry.registerTileEntity(TileWindmill.class, Refs.MODID + ".windmill");
+        GameRegistry.registerTileEntity(TileKinectGenerator.class, Refs.MODID + ".kinectgenerator");
+        GameRegistry.registerTileEntity(TileSolarPanel.class, Refs.MODID + ".solarpanel");
+
+
         GameRegistry.registerTileEntity(TileDeployer.class, Refs.MODID + ".deployer");
         GameRegistry.registerTileEntity(TileEjector.class, Refs.MODID + ".ejector");
         GameRegistry.registerTileEntity(TileRelay.class, Refs.MODID + ".relay");

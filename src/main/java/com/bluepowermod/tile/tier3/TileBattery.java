@@ -8,32 +8,46 @@
 
 package com.bluepowermod.tile.tier3;
 
+import com.bluepowermod.api.power.BlutricityStorage;
+import com.bluepowermod.api.power.CapabilityBlutricity;
+import com.bluepowermod.block.power.BlockBattery;
 import com.bluepowermod.tile.TileMachineBase;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.capabilities.Capability;
+
+import javax.annotation.Nullable;
 
 /**
  * @author MoreThanHidden
  */
 
 public class TileBattery extends TileMachineBase {
-    public int energy;
 
-    public TileBattery(){
-        this.energy = 0;
+    private final BlutricityStorage storage = new BlutricityStorage(3200);
+
+    @Override
+    public void update() {
+        double voltage = storage.getVoltage();
+        int level = (int)((voltage / storage.getMaxVoltage()) * 6);
+        if(world.getBlockState(pos).getValue(BlockBattery.LEVEL) != level){
+            world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos).withProperty(BlockBattery.LEVEL, level), 0);
+        }
     }
 
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
-        super.writeToNBT(compound);
-        compound.setInteger("energy", energy);
-        return compound;
-
+    public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
+        return capability == CapabilityBlutricity.BLUTRICITY_CAPABILITY || super.hasCapability(capability, facing);
     }
 
+    @Nullable
     @Override
-    public void readFromNBT(NBTTagCompound compound) {
-        super.readFromNBT(compound);
-        energy = compound.getInteger("energy");
+    public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
+        if(capability == CapabilityBlutricity.BLUTRICITY_CAPABILITY) {
+            return CapabilityBlutricity.BLUTRICITY_CAPABILITY.cast(storage);
+        }
+        return super.getCapability(capability, facing);
     }
 
 }

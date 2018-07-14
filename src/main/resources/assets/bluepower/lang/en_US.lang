@@ -82,6 +82,7 @@ tile.bluepower:windmill.name=Vertical Windmill
 tile.bluepower:kinetic_generator.name=Kinetic Generator
 tile.bluepower:engine.name=Blue Power Engine
 tile.bluepower:battery_block.name=Battery Block
+tile.bluepower:solar_panel.name=Solar Panel
 
 # Computer
 tile.bluepower:cpu.name=CPU

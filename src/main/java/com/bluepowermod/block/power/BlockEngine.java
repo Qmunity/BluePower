@@ -5,7 +5,7 @@
  * PARTICULAR PURPOSE. See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along
  * with Blue Power. If not, see <http://www.gnu.org/licenses/>
  */
-package com.bluepowermod.block.machine;
+package com.bluepowermod.block.power;
 
 import com.bluepowermod.block.BlockContainerBase;
 import com.bluepowermod.client.render.ICustomModelBlock;
@@ -39,7 +39,7 @@ import net.minecraftforge.client.model.ModelLoader;
 
 /**
  *
- * @author TheFjong
+ * @author TheFjong, MoreThanHidden
  *
  */
 public class BlockEngine extends BlockContainerBase {

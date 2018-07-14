@@ -18,10 +18,7 @@
 package com.bluepowermod.item;
 
 import com.bluepowermod.api.misc.IScrewdriver;
-import com.bluepowermod.block.BlockContainerBase;
-import com.bluepowermod.block.machine.BlockEngine;
 import com.bluepowermod.init.BPCreativeTabs;
-import com.bluepowermod.reference.GuiIDs;
 import com.bluepowermod.reference.Refs;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;

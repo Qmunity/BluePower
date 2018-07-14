@@ -22,6 +22,10 @@ import com.bluepowermod.block.BlockContainerFacingBase;
 import com.bluepowermod.block.machine.*;
 import com.bluepowermod.block.machine.BlockLamp;
 import com.bluepowermod.block.machine.BlockLampRGB;
+import com.bluepowermod.block.power.BlockBattery;
+import com.bluepowermod.block.power.BlockEngine;
+import com.bluepowermod.block.power.BlockSolarPanel;
+import com.bluepowermod.block.power.BlockWindmill;
 import com.bluepowermod.block.worldgen.*;
 import com.bluepowermod.reference.GuiIDs;
 import com.bluepowermod.reference.Refs;
@@ -113,6 +117,7 @@ public class BPBlocks {
     public static Block engine;
     public static Block kinetic_generator;
     public static Block windmill;
+    public static Block solarpanel;
 
     // public static Block cpu;
     // public static Block monitor;
@@ -213,6 +218,7 @@ public class BPBlocks {
         engine = new BlockEngine();
         kinetic_generator = new BlockKineticGenerator();
         windmill = new BlockWindmill();
+        solarpanel = new BlockSolarPanel();
 
         // cpu = new BlockCPU();
         // monitor = new BlockMonitor();

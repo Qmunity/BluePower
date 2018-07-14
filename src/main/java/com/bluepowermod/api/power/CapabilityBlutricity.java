@@ -4,17 +4,22 @@ import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 
 import javax.annotation.Nullable;
+import java.util.concurrent.Callable;
 
 /**
  * @author MoreThanHidden
  */
 public class CapabilityBlutricity {
 
+    @CapabilityInject(IPowerBase.class)
+    public static Capability<IPowerBase> BLUTRICITY_CAPABILITY = null;
+
     public static void register(){
-        CapabilityManager.INSTANCE.register(IPowerBase.class, new DefaultBlutricityStorage<>(), () -> new BlutricityStorage(320));
+        CapabilityManager.INSTANCE.register(IPowerBase.class, new DefaultBlutricityStorage<>(), BlutricityStorage.class);
     }
 
     private static class DefaultBlutricityStorage<T extends IPowerBase> implements Capability.IStorage<T> {

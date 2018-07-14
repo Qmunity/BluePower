@@ -44,9 +44,6 @@ public class TileEngine extends TileMachineBase  {
 		}
 	};
 
-	@CapabilityInject(BlutricityFEStorage.class)
-	public static Capability<BlutricityFEStorage> ENGINE_CAP = null;
-
 	
 	public TileEngine(){
 		
@@ -126,16 +123,15 @@ public class TileEngine extends TileMachineBase  {
 
 	@Override
 	public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
-    	if(capability == ENGINE_CAP)
-    		return true;
-		return super.hasCapability(capability, facing);
+		return capability == CapabilityBlutricity.BLUTRICITY_CAPABILITY || super.hasCapability(capability, facing);
 	}
 
 	@Nullable
 	@Override
 	public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
-		if(capability == ENGINE_CAP)
-			return ENGINE_CAP.cast(storage);
+		if(capability == CapabilityBlutricity.BLUTRICITY_CAPABILITY ) {
+			return CapabilityBlutricity.BLUTRICITY_CAPABILITY.cast(storage);
+		}
 		return super.getCapability(capability, facing);
 	}
 }
