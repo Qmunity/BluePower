@@ -10,6 +10,7 @@ package com.bluepowermod.tile.tier3;
 import com.bluepowermod.api.power.BlutricityFEStorage;
 import com.bluepowermod.api.power.CapabilityBlutricity;
 import com.bluepowermod.api.power.IPowerBase;
+import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
@@ -26,11 +27,10 @@ import javax.annotation.Nullable;
 
 /**
  * 
- * @author TheFjong
+ * @author TheFjong, MoreThanHidden
  *
  */
 public class TileEngine extends TileMachineBase  {
-
 
 	private EnumFacing orientation;
 	public boolean isActive = false;
@@ -71,8 +71,7 @@ public class TileEngine extends TileMachineBase  {
 			
 		}
 
-		//Todo: Replace with Energy Capability
-		isActive = getIsRedstonePowered();
+		isActive = (storage.getEnergyStored() > 0 && world.isBlockPowered(pos));
 
 	}
 
@@ -94,6 +93,9 @@ public class TileEngine extends TileMachineBase  {
 		compound.setInteger("rotation", rotation);
         compound.setByte("pumpspeed", pumpSpeed);
         compound.setByte("pumptick", pumpTick);
+        NBTBase nbtstorage = CapabilityBlutricity.BLUTRICITY_CAPABILITY.getStorage().writeNBT(CapabilityBlutricity.BLUTRICITY_CAPABILITY, storage, null);
+		compound.setTag("energy", nbtstorage);
+
 	}
 
 	@Override
@@ -102,6 +104,10 @@ public class TileEngine extends TileMachineBase  {
 		orientation = EnumFacing.getFront(compound.getInteger("rotation"));
         pumpSpeed = compound.getByte("pumpspeed");
         pumpTick = compound.getByte("pumptick");
+        if(compound.hasKey("energy")) {
+            NBTBase nbtstorage = compound.getTag("energy");
+            CapabilityBlutricity.BLUTRICITY_CAPABILITY.getStorage().readNBT(CapabilityBlutricity.BLUTRICITY_CAPABILITY, storage, null, nbtstorage);
+        }
 	}
 
 	@Nullable
@@ -133,5 +139,5 @@ public class TileEngine extends TileMachineBase  {
 			return CapabilityBlutricity.BLUTRICITY_CAPABILITY.cast(storage);
 		}
 		return super.getCapability(capability, facing);
-	}
+    }
 }

@@ -12,7 +12,10 @@ import com.bluepowermod.api.power.BlutricityStorage;
 import com.bluepowermod.api.power.CapabilityBlutricity;
 import com.bluepowermod.block.power.BlockBattery;
 import com.bluepowermod.tile.TileMachineBase;
+import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
@@ -33,6 +36,7 @@ public class TileBattery extends TileMachineBase {
         int level = (int)((voltage / storage.getMaxVoltage()) * 6);
         if(world.getBlockState(pos).getValue(BlockBattery.LEVEL) != level){
             world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos).withProperty(BlockBattery.LEVEL, level), 0);
+            markDirty();
         }
     }
 
@@ -48,6 +52,39 @@ public class TileBattery extends TileMachineBase {
             return CapabilityBlutricity.BLUTRICITY_CAPABILITY.cast(storage);
         }
         return super.getCapability(capability, facing);
+    }
+
+    @Override
+    protected void readFromPacketNBT(NBTTagCompound tCompound) {
+        super.readFromPacketNBT(tCompound);
+        if(tCompound.hasKey("energy")) {
+        NBTBase nbtstorage = tCompound.getTag("energy");
+        CapabilityBlutricity.BLUTRICITY_CAPABILITY.getStorage().readNBT(CapabilityBlutricity.BLUTRICITY_CAPABILITY, storage, null, nbtstorage);
+        }
+    }
+
+    @Override
+    protected void writeToPacketNBT(NBTTagCompound tCompound) {
+        super.writeToPacketNBT(tCompound);
+            NBTBase nbtstorage = CapabilityBlutricity.BLUTRICITY_CAPABILITY.getStorage().writeNBT(CapabilityBlutricity.BLUTRICITY_CAPABILITY, storage, null);
+            tCompound.setTag("energy", nbtstorage);
+    }
+
+    @Nullable
+    @Override
+    public SPacketUpdateTileEntity getUpdatePacket() {
+        return new SPacketUpdateTileEntity(this.pos, 3, this.getUpdateTag());
+    }
+
+    @Override
+    public NBTTagCompound getUpdateTag() {
+        return this.writeToNBT(new NBTTagCompound());
+    }
+
+    @Override
+    public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
+        super.onDataPacket(net, pkt);
+        handleUpdateTag(pkt.getNbtCompound());
     }
 
 }
