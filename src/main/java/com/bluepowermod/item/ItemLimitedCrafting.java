@@ -30,7 +30,7 @@ public class ItemLimitedCrafting extends ItemBase {
     public ItemLimitedCrafting(String name, int uses) {
     
         this.setCreativeTab(BPCreativeTabs.items);
-        this.setUnlocalizedName(name);
+        this.setTranslationKey(name);
         this.setRegistryName(Refs.MODID + ":" + name);
         this.setMaxDamage(uses - 1);
         

@@ -152,7 +152,7 @@ public class TileRelay extends TileMachineBase implements IInventory {
     @Override
     public String getName() {
 
-        return BPBlocks.relay.getUnlocalizedName();
+        return BPBlocks.relay.getTranslationKey();
     }
 
     /**

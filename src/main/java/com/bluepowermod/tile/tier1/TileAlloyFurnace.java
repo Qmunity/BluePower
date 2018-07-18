@@ -292,7 +292,7 @@ public class TileAlloyFurnace extends TileBase implements ISidedInventory {
     @Override
     public String getName() {
 
-        return BPBlocks.alloyfurnace.getUnlocalizedName();
+        return BPBlocks.alloyfurnace.getTranslationKey();
     }
 
     @Override

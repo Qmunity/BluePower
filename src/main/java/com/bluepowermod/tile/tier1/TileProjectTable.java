@@ -147,7 +147,7 @@ public class TileProjectTable extends TileBase implements IInventory, IGuiButton
     @Override
     public String getName() {
 
-        return BPBlocks.project_table.getUnlocalizedName();
+        return BPBlocks.project_table.getTranslationKey();
     }
 
     @Override

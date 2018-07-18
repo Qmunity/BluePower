@@ -76,6 +76,6 @@ public class MessageWirelessNewFreq extends LocatedPacket<MessageWirelessNewFreq
         acc = Accessibility.values()[buffer.readInt()];
         name = buffer.readUTF();
         bundled = buffer.readBoolean();
-        face = EnumFacing.getFront(buffer.readInt());
+        face = EnumFacing.byIndex(buffer.readInt());
     }
 }

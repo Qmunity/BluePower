@@ -106,7 +106,7 @@ public class TileBuffer extends TileBase implements ISidedInventory {
     @Override
     public String getName() {
     
-        return BPBlocks.buffer.getUnlocalizedName();
+        return BPBlocks.buffer.getTranslationKey();
     }
     
     @Override

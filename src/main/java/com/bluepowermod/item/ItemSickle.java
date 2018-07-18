@@ -49,7 +49,7 @@ public class ItemSickle extends ItemTool {
 
     public ItemSickle(ToolMaterial material, String name, Item repairItem) {
         super(material, toolBlocks);
-        this.setUnlocalizedName(name);
+        this.setTranslationKey(name);
         this.setCreativeTab(BPCreativeTabs.tools);
         this.setRegistryName(Refs.MODID + ":" + name);
         this.customCraftingMaterial = repairItem;
@@ -57,15 +57,15 @@ public class ItemSickle extends ItemTool {
     }
 
     @Override
-    public String getUnlocalizedName(ItemStack stack) {
+    public String getTranslationKey(ItemStack stack) {
 
-        return String.format("item.%s:%s", Refs.MODID, getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
+        return String.format("item.%s:%s", Refs.MODID, getUnwrappedUnlocalizedName(super.getTranslationKey()));
     }
 
     @Override
-    public String getUnlocalizedName() {
+    public String getTranslationKey() {
 
-        return String.format("item.%s:%s", Refs.MODID, getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
+        return String.format("item.%s:%s", Refs.MODID, getUnwrappedUnlocalizedName(super.getTranslationKey()));
     }
 
     protected String getUnwrappedUnlocalizedName(String name) {
@@ -74,9 +74,9 @@ public class ItemSickle extends ItemTool {
     }
 
     @Override
-    public float getStrVsBlock(ItemStack stack, IBlockState state) {
+    public float getDestroySpeed(ItemStack stack, IBlockState state) {
         if ((state.getMaterial() == Material.LEAVES) || (state.getMaterial() == Material.PLANTS) || toolBlocks.contains(state)) {
-            return this.efficiencyOnProperMaterial;
+            return this.efficiency;
         }
         return 1.0F;
     }

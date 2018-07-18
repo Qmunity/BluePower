@@ -42,7 +42,7 @@ public class ItemScrewdriver extends ItemBase implements IScrewdriver {
 
     public ItemScrewdriver() {
 
-        setUnlocalizedName(Refs.SCREWDRIVER_NAME);
+        setTranslationKey(Refs.SCREWDRIVER_NAME);
         setCreativeTab(BPCreativeTabs.tools);
         setMaxDamage(250);
         setMaxStackSize(1);

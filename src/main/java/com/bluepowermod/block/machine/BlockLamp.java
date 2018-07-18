@@ -62,7 +62,7 @@ public class BlockLamp extends BlockContainerBase implements IBlockColor, IItemC
         this.isInverted = isInverted;
         this.color = color;
         this.name = name;
-        setUnlocalizedName(name + "." + color.name().toLowerCase() + (isInverted ? ".inverted" : ""));
+        setTranslationKey(name + "." + color.name().toLowerCase() + (isInverted ? ".inverted" : ""));
         setCreativeTab(BPCreativeTabs.lighting);
         setDefaultState(blockState.getBaseState().withProperty(POWER, isInverted ? 15 : 0));
         setRegistryName(name + (isInverted ? "inverted" : "") + color.name());
@@ -181,13 +181,13 @@ public class BlockLamp extends BlockContainerBase implements IBlockColor, IItemC
 
     @Override
     public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, EnumHand hand) {
-        return super.getStateForPlacement(world, pos, facing, hitX, hitY, hitZ, meta, placer, hand).withProperty(POWER, world.isBlockIndirectlyGettingPowered(pos));
+        return super.getStateForPlacement(world, pos, facing, hitX, hitY, hitZ, meta, placer, hand).withProperty(POWER, world.getRedstonePowerFromNeighbors(pos));
     }
 
     @Override
     public void neighborChanged(IBlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos) {
         super.neighborChanged(state, world, pos, blockIn, fromPos);
-        world.setBlockState(pos, state.withProperty(POWER, world.isBlockIndirectlyGettingPowered(pos)));
+        world.setBlockState(pos, state.withProperty(POWER, world.getRedstonePowerFromNeighbors(pos)));
     }
 
     @Override
@@ -199,7 +199,7 @@ public class BlockLamp extends BlockContainerBase implements IBlockColor, IItemC
 
     @Override
     @SideOnly(Side.CLIENT)
-    public int getColorFromItemstack(ItemStack stack, int tintIndex) {
+    public int colorMultiplier(ItemStack stack, int tintIndex) {
         //Color for Itemstack
         return getColor();
     }

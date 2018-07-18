@@ -30,7 +30,7 @@ public class BlockIgniter extends BlockContainerFacingBase {
     public BlockIgniter() {
     
         super(Material.ROCK, TileIgniter.class);
-        setUnlocalizedName(Refs.BLOCKIGNITER_NAME);
+        setTranslationKey(Refs.BLOCKIGNITER_NAME);
         setRegistryName(Refs.MODID, Refs.BLOCKIGNITER_NAME);
     }
 

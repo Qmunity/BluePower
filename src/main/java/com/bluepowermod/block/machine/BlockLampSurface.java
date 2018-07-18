@@ -66,7 +66,7 @@ public class BlockLampSurface extends BlockLamp {
     }
 
     @Override
-    public BlockRenderLayer getBlockLayer() {
+    public BlockRenderLayer getRenderLayer() {
         return BlockRenderLayer.CUTOUT;
     }
 
@@ -93,7 +93,7 @@ public class BlockLampSurface extends BlockLamp {
 
     @Override
     public IBlockState getStateFromMeta(int meta) {
-        return getDefaultState().withProperty(FACING, EnumFacing.getFront(meta));
+        return getDefaultState().withProperty(FACING, EnumFacing.byIndex(meta));
     }
 
     @Override

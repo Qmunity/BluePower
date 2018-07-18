@@ -141,7 +141,7 @@ public class TileCircuitTable extends TileBase implements IInventory, IGUITextFi
     @Override
     public String getName() {
 
-        return BPBlocks.circuit_table.getUnlocalizedName();
+        return BPBlocks.circuit_table.getTranslationKey();
     }
 
     @Override

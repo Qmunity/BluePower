@@ -137,7 +137,7 @@ public class TileBase extends TileEntity implements IRotatable, ITickable {
      */
     public void checkRedstonePower() {
 
-        boolean isIndirectlyPowered = (getWorld().isBlockIndirectlyGettingPowered(pos) != 0);
+        boolean isIndirectlyPowered = (getWorld().getRedstonePowerFromNeighbors(pos) != 0);
         if (isIndirectlyPowered && !getIsRedstonePowered()) {
             redstoneChanged(true);
         } else if (getIsRedstonePowered() && !isIndirectlyPowered) {

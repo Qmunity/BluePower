@@ -72,6 +72,6 @@ public class ClientProxy extends CommonProxy {
     @Override
     public String getSavePath() {
 
-        return Minecraft.getMinecraft().mcDataDir.getAbsolutePath();
+        return Minecraft.getMinecraft().gameDir.getAbsolutePath();
     }
 }

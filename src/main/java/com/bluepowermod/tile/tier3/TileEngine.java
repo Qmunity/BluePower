@@ -101,7 +101,7 @@ public class TileEngine extends TileMachineBase  {
 	@Override
 	protected void readFromPacketNBT(NBTTagCompound compound) {
 		super.readFromPacketNBT(compound);
-		orientation = EnumFacing.getFront(compound.getInteger("rotation"));
+		orientation = EnumFacing.byIndex(compound.getInteger("rotation"));
         pumpSpeed = compound.getByte("pumpspeed");
         pumpTick = compound.getByte("pumptick");
         if(compound.hasKey("energy")) {

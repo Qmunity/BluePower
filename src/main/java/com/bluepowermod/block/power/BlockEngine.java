@@ -53,7 +53,7 @@ public class BlockEngine extends BlockContainerBase {
 
         super(Material.IRON, TileEngine.class);
         setCreativeTab(BPCreativeTabs.machines);
-        setUnlocalizedName(Refs.ENGINE_NAME);
+        setTranslationKey(Refs.ENGINE_NAME);
         setDefaultState(blockState.getBaseState().withProperty(ACTIVE, false).withProperty(GEAR, false).withProperty(GLIDER, false).withProperty(FACING, EnumFacing.DOWN));
         setRegistryName(Refs.MODID, Refs.ENGINE_NAME);
     }
@@ -98,7 +98,7 @@ public class BlockEngine extends BlockContainerBase {
         if(!world.isRemote) {
             TileEngine engine = (TileEngine) world.getTileEntity(pos);
             if (engine != null) {
-                engine.setOrientation(EnumFacing.getFront(dir.ordinal()));
+                engine.setOrientation(EnumFacing.byIndex(dir.ordinal()));
             }
             world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 3);
         }

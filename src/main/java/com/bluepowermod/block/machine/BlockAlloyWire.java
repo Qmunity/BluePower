@@ -37,7 +37,7 @@ public class BlockAlloyWire extends BlockBase implements IBlockColor, IItemColor
         super(Material.CIRCUITS);
         this.color = color;
         this.setDefaultState(this.blockState.getBaseState().withProperty(POWERED, false));
-        setUnlocalizedName(RedwireType.BLUESTONE.getName() + "_wire." + color.name().toLowerCase());
+        setTranslationKey(RedwireType.BLUESTONE.getName() + "_wire." + color.name().toLowerCase());
         setCreativeTab(BPCreativeTabs.wiring);
         setRegistryName(Refs.MODID + ":" + RedwireType.BLUESTONE.getName() + "_wire." + color.name());
     }
@@ -91,7 +91,7 @@ public class BlockAlloyWire extends BlockBase implements IBlockColor, IItemColor
 
     @Override
     @SideOnly(Side.CLIENT)
-    public int getColorFromItemstack(ItemStack stack, int tintIndex) {
+    public int colorMultiplier(ItemStack stack, int tintIndex) {
         //Color for Itemstack
         return tintIndex == 1 ? color.getHex() : -1;
     }

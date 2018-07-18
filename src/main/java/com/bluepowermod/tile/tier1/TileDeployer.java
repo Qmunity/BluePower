@@ -110,15 +110,15 @@ public class TileDeployer extends TileBase implements ISidedInventory, IEjectAni
         if (useItems > 9) throw new IllegalArgumentException("Hotbar is 9 items in width! You're trying " + useItems + "!");
         
         EnumFacing faceDir = getFacingDirection();
-        int dx = faceDir.getFrontOffsetX();
-        int dy = faceDir.getFrontOffsetY();
-        int dz = faceDir.getFrontOffsetZ();
+        int dx = faceDir.getXOffset();
+        int dy = faceDir.getYOffset();
+        int dz = faceDir.getZOffset();
         int x = pos.getX() + dx;
         int y = pos.getY() + dy;
         int z = pos.getZ() + dz;
         
         player.setPosition(x + 0.5, y + 0.5 - player.eyeHeight, z + 0.5);
-        player.rotationPitch = faceDir.getFrontOffsetY() * -90;
+        player.rotationPitch = faceDir.getYOffset() * -90;
         switch (faceDir) {
             case NORTH:
                 player.rotationYaw = 180;
@@ -271,7 +271,7 @@ public class TileDeployer extends TileBase implements ISidedInventory, IEjectAni
     @Override
     public String getName() {
     
-        return BPBlocks.deployer.getUnlocalizedName();
+        return BPBlocks.deployer.getTranslationKey();
     }
     
     @Override

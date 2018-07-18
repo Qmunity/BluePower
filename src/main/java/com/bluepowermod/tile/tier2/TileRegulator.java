@@ -293,7 +293,7 @@ public class TileRegulator extends TileMachineBase implements ISidedInventory, I
     @Override
     public String getName() {
 
-        return BPBlocks.regulator.getUnlocalizedName();
+        return BPBlocks.regulator.getTranslationKey();
     }
 
     @Override

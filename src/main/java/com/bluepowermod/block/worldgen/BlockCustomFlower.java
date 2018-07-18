@@ -38,15 +38,15 @@ public class BlockCustomFlower extends BlockBush {
         this.setCreativeTab(BPCreativeTabs.blocks);
         this.setHardness(0.0F);
         this.setSoundType(SoundType.PLANT);
-        this.setUnlocalizedName(name);
+        this.setTranslationKey(name);
         this.setRegistryName(Refs.MODID, name);
         BPBlocks.blockList.add(this);
     }
 
     @Override
-    public String getUnlocalizedName() {
+    public String getTranslationKey() {
 
-        return String.format("tile.%s:%s", Refs.MODID, getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
+        return String.format("tile.%s:%s", Refs.MODID, getUnwrappedUnlocalizedName(super.getTranslationKey()));
     }
 
     String getUnwrappedUnlocalizedName(String name) {

@@ -59,15 +59,15 @@ public class BlockCrop extends BlockCrops implements IGrowable {
         this.setHardness(0.0F);
         this.setSoundType(SoundType.PLANT);
         this.disableStats();
-        this.setUnlocalizedName(Refs.FLAXCROP_NAME);
+        this.setTranslationKey(Refs.FLAXCROP_NAME);
         this.setRegistryName(Refs.MODID + ":" + Refs.FLAXCROP_NAME);
         BPBlocks.blockList.add(this);
     }
 
     @Override
-    public String getUnlocalizedName() {
+    public String getTranslationKey() {
 
-        return String.format("tile.%s:%s", Refs.MODID, getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
+        return String.format("tile.%s:%s", Refs.MODID, getUnwrappedUnlocalizedName(super.getTranslationKey()));
     }
 
     String getUnwrappedUnlocalizedName(String name) {

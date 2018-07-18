@@ -145,7 +145,7 @@ public class TubeStack {
 
     public static TubeStack loadFromNBT(NBTTagCompound tag) {
 
-        TubeStack stack = new TubeStack(new ItemStack(tag), EnumFacing.getFront(tag.getByte("heading")),
+        TubeStack stack = new TubeStack(new ItemStack(tag), EnumFacing.byIndex(tag.getByte("heading")),
                 TubeColor.values()[tag.getByte("color")]);
         stack.progress = tag.getDouble("progress");
         stack.speed = tag.getDouble("speed");
@@ -166,7 +166,7 @@ public class TubeStack {
 
     public static TubeStack loadFromPacket(ByteBuf buf) {
 
-        TubeStack stack = new TubeStack(ByteBufUtils.readItemStack(buf), EnumFacing.getFront(buf.readByte()),
+        TubeStack stack = new TubeStack(ByteBufUtils.readItemStack(buf), EnumFacing.byIndex(buf.readByte()),
                 TubeColor.values()[buf.readByte()]);
         stack.speed = buf.readDouble();
         stack.progress = buf.readDouble();
@@ -191,7 +191,7 @@ public class TubeStack {
         double renderProgress = (oldProgress + (progress - oldProgress) * partialTick) * 2 - 1;
 
         GL11.glPushMatrix();
-        GL11.glTranslated(heading.getFrontOffsetX() * renderProgress * 0.5, heading.getFrontOffsetY() * renderProgress * 0.5, heading.getFrontOffsetZ() * renderProgress * 0.5);
+        GL11.glTranslated(heading.getXOffset() * renderProgress * 0.5, heading.getYOffset() * renderProgress * 0.5, heading.getZOffset() * renderProgress * 0.5);
         if (finalRenderMode != RenderMode.NONE) {
             GL11.glPushMatrix();
             if (stack.getCount() > 5) {

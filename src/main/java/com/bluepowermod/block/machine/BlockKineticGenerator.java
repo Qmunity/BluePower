@@ -26,7 +26,7 @@ public class BlockKineticGenerator extends BlockContainerBase {
     
         super(Material.IRON, TileKinectGenerator.class);
         setCreativeTab(BPCreativeTabs.machines);
-        setUnlocalizedName(Refs.KINETICGENERATOR_NAME);
+        setTranslationKey(Refs.KINETICGENERATOR_NAME);
         setRegistryName(Refs.MODID, Refs.KINETICGENERATOR_NAME);
     }
     

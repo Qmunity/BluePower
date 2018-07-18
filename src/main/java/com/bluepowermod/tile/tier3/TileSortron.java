@@ -31,7 +31,7 @@ public class TileSortron extends TileMachineBase {// implements IPeripheral/* , 
     // public void onBlockNeighbourChanged() {
     //
     // super.onBlockNeighbourChanged();
-    // EnumFacing direction = EnumFacing.getFront(getBlockMetadata());
+    // EnumFacing direction = EnumFacing.byIndex(getBlockMetadata());
     // TileEntity tile = worldObj.getTileEntity(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ);
     // if (tile instanceof IInventory) {
     // connectedInventory = (IInventory) tile;

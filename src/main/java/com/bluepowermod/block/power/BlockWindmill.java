@@ -33,7 +33,7 @@ public class BlockWindmill extends Block implements ITileEntityProvider {
     
         super(Material.IRON);
         setCreativeTab(BPCreativeTabs.items);
-        setUnlocalizedName(Refs.WINDMILL_NAME);
+        setTranslationKey(Refs.WINDMILL_NAME);
         setRegistryName(Refs.MODID, Refs.WINDMILL_NAME);
         BPBlocks.blockList.add(this);
     }

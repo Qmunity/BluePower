@@ -12,7 +12,7 @@ public class BlockLampRGBSurface extends BlockLampSurface {
 
     public BlockLampRGBSurface(String name, boolean isInverted, AxisAlignedBB size) {
         super(name, isInverted, MinecraftColor.NONE, size);
-        setUnlocalizedName(name + ".rgb" + (isInverted ? ".inverted" : ""));
+        setTranslationKey(name + ".rgb" + (isInverted ? ".inverted" : ""));
     }
 
     @Override

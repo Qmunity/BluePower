@@ -37,7 +37,7 @@ public class BlockItemOre extends BlockBase {
         this.setSoundType(SoundType.STONE);
         this.setHardness(2.5F);
         this.setResistance(10.0F);
-        this.setUnlocalizedName(type);
+        this.setTranslationKey(type);
         this.setRegistryName(Refs.MODID + ":" + type);
         this.setHarvestLevel("pickaxe", 2);
     }

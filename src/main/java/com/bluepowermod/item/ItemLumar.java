@@ -37,14 +37,14 @@ public class ItemLumar extends ItemBase implements IItemColor{
         super();
         this.setCreativeTab(BPCreativeTabs.items);
         this.setHasSubtypes(true);
-        this.setUnlocalizedName(Refs.LUMAR_NAME);
+        this.setTranslationKey(Refs.LUMAR_NAME);
         this.setRegistryName(Refs.MODID + ":" + Refs.LUMAR_NAME);
     }
 
     @Override
-    public String getUnlocalizedName(ItemStack itemStack) {
+    public String getTranslationKey(ItemStack itemStack) {
 
-        return super.getUnlocalizedName() + "." + Refs.oreDictDyes[15 - itemStack.getItemDamage()].substring(3).toLowerCase();
+        return super.getTranslationKey() + "." + Refs.oreDictDyes[15 - itemStack.getItemDamage()].substring(3).toLowerCase();
     }
 
     @Override
@@ -58,7 +58,7 @@ public class ItemLumar extends ItemBase implements IItemColor{
 
     @Override
     @SideOnly(Side.CLIENT)
-    public int getColorFromItemstack(ItemStack stack, int tintIndex) {
+    public int colorMultiplier(ItemStack stack, int tintIndex) {
         int damage = stack.getItemDamage();
         if (damage >= 0 && damage < ItemDye.DYE_COLORS.length) { return ItemDye.DYE_COLORS[15 - damage]; }
         return 16777215;

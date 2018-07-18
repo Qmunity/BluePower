@@ -196,15 +196,15 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
 
     public void ejectItemInWorld(ItemStack stack, EnumFacing oppDirection) {
 
-        float spawnX = pos.getX() + 0.5F + oppDirection.getFrontOffsetX() * 0.8F;
-        float spawnY = pos.getY() + 0.5F + oppDirection.getFrontOffsetY() * 0.8F;
-        float spawnZ = pos.getZ() + 0.5F + oppDirection.getFrontOffsetZ() * 0.8F;
+        float spawnX = pos.getX() + 0.5F + oppDirection.getXOffset() * 0.8F;
+        float spawnY = pos.getY() + 0.5F + oppDirection.getYOffset() * 0.8F;
+        float spawnZ = pos.getZ() + 0.5F + oppDirection.getZOffset() * 0.8F;
 
         EntityItem droppedItem = new EntityItem(world, spawnX, spawnY, spawnZ, stack);
 
-        droppedItem.motionX = oppDirection.getFrontOffsetX() * 0.20F;
-        droppedItem.motionY = oppDirection.getFrontOffsetY() * 0.20F;
-        droppedItem.motionZ = oppDirection.getFrontOffsetZ() * 0.20F;
+        droppedItem.motionX = oppDirection.getXOffset() * 0.20F;
+        droppedItem.motionY = oppDirection.getYOffset() * 0.20F;
+        droppedItem.motionZ = oppDirection.getZOffset() * 0.20F;
 
         world.spawnEntity(droppedItem);
     }

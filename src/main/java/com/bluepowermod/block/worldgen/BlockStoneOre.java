@@ -58,7 +58,7 @@ public class BlockStoneOre extends Block {
         setResistance(5.0F);
         setHardness(4.0F);
         this.setHarvestLevel("pickaxe", 1);
-        setUnlocalizedName(name);
+        setTranslationKey(name);
         setCreativeTab(BPCreativeTabs.blocks);
         setSoundType(SoundType.STONE);
         setRegistryName(Refs.MODID, name);
@@ -72,7 +72,7 @@ public class BlockStoneOre extends Block {
     }
 
     @Override
-    public String getUnlocalizedName() {
+    public String getTranslationKey() {
 
         return String.format("tile." + Refs.MODID + ":" + name);
     }
@@ -115,7 +115,7 @@ public class BlockStoneOre extends Block {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public BlockRenderLayer getBlockLayer() {
+    public BlockRenderLayer getRenderLayer() {
         return transparent ? BlockRenderLayer.TRANSLUCENT : BlockRenderLayer.SOLID;
     }
 

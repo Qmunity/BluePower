@@ -52,7 +52,7 @@ project.ext {
     } else {
         build = "-custom"
     }
-    mcVersion = "1.12.1"
+    mcVersion = "1.12.2"
 }
 
 
@@ -61,19 +61,19 @@ group = "com.bluepowermod"
 archivesBaseName = "BluePower"
 
 dependencies {
-    deobfCompile "li.cil.oc:OpenComputers:MC1.12.1-1.7.0.4:api"
-    compile 'net.industrial-craft:industrialcraft-2:2.8.16-ex112:api'
-	deobfCompile "MCMultiPart2:MCMultiPart-exp:2.3.4_49"
-    deobfCompile "mcp.mobius.waila:Hwyla:1.8.20-B35_1.12"
-	deobfCompile "mezz.jei:jei_1.12.1:4.7.8.95:api"
-	runtime "mezz.jei:jei_1.12.1:4.7.8.95"
-    compile "team.chisel.ctm:CTM:MC1.12-0.2.1.5"
+    deobfCompile "li.cil.oc:OpenComputers:MC1.12.2-1.7.2.71:api"
+    compile 'net.industrial-craft:industrialcraft-2:2.8.93-ex112:api'
+	deobfCompile "MCMultiPart2:MCMultiPart:2.5.1"
+    deobfCompile "mcp.mobius.waila:Hwyla:1.8.26-B41_1.12.2"
+	deobfCompile "mezz.jei:jei_1.12.2:4.11.0.204:api"
+	runtime "mezz.jei:jei_1.12.2:4.11.0.204"
+    compile "team.chisel.ctm:CTM:MC1.12.2-0.3.2.18"
 }
 
 minecraft {
-    version = "${project.ext.mcVersion}-14.22.1.2485"
+    version = "${project.ext.mcVersion}-14.23.4.2705"
     runDir = "run"
-	mappings = "snapshot_20170624"
+	mappings = "snapshot_20180717"
 
     // replacing stuff in the source
     replace '@MAJOR@', project.major
@@ -148,20 +148,20 @@ uploadArchives {
                     name project.archivesBaseName
                     packaging 'jar'
                     description 'BluePower'
-                    url 'https://github.com/Qmunity/BluePower'
+                    url 'https://github.com/MoreThanHidden/BluePower'
                     scm {
-                        url 'https://github.com/Qmunity/BluePower'
-                        connection 'scm:git:git@github.com:Qmunity/BluePower.git'
-                        developerConnection 'scm:git:git@github.com:Qmunity/BluePower.git'
+                        url 'https://github.com/MoreThanHidden/BluePower'
+                        connection 'scm:git:git@github.com:MoreThanHidden/BluePower.git'
+                        developerConnection 'scm:git:git@github.com:MoreThanHidden/BluePower.git'
                     }
                     issueManagement {
                         system 'github'
-                        url 'https://github.com/Qmunity/BluePower/issues'
+                        url 'https://github.com/MoreThanHidden/BluePower/issues'
                     }
                     licenses {
                         license {
                             name 'GPLv3'
-                            url 'https://github.com/Qmunity/BluePower/blob/master/LICENCE.txt'
+                            url 'https://github.com/MoreThanHidden/BluePower/blob/master/LICENCE.txt'
                             distribution 'repo'
                         }
                     }
@@ -184,6 +184,11 @@ uploadArchives {
                         developer {
                             id 'K4Unl'
                             name 'K4Unl'
+                            roles { role 'developer' }
+                        }
+                        developer {
+                            id 'MoreThanHidden'
+                            name 'MoreThanHidden'
                             roles { role 'developer' }
                         }
                         developer {

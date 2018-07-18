@@ -136,12 +136,12 @@ public class GUIHandler implements IGuiHandler {
         case SEEDBAG:
             if (!player.getHeldItemMainhand().isEmpty() && player.getHeldItemMainhand().getItem() instanceof ItemSeedBag) {
                 return new GuiSeedBag(player.getHeldItemMainhand(), player.inventory, InventoryItem.getItemInventory(player,
-                        player.getHeldItemMainhand(), BPItems.seed_bag.getUnlocalizedName(), 9));
+                        player.getHeldItemMainhand(), BPItems.seed_bag.getTranslationKey(), 9));
             }
         case CANVAS_BAG:
             if (!player.getHeldItemMainhand().isEmpty() && player.getHeldItemMainhand().getItem() instanceof ItemCanvasBag) {
                 return new GuiCanvasBag(player.getHeldItemMainhand(), player.inventory, InventoryItem.getItemInventory(player,
-                        player.getHeldItemMainhand(), BPItems.canvas_bag.getUnlocalizedName(), 27));
+                        player.getHeldItemMainhand(), BPItems.canvas_bag.getTranslationKey(), 27));
             }
             break;
         case CPU:

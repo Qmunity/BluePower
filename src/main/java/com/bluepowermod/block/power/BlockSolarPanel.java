@@ -25,7 +25,7 @@ public class BlockSolarPanel extends BlockContainerBase {
 
     public BlockSolarPanel() {
         super(Material.IRON, TileSolarPanel.class);
-        setUnlocalizedName(Refs.SOLARPANEL_NAME);
+        setTranslationKey(Refs.SOLARPANEL_NAME);
         setRegistryName(Refs.MODID, Refs.SOLARPANEL_NAME);
     }
 

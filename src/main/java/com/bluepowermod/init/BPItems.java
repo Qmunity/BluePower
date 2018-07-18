@@ -52,13 +52,13 @@ public class BPItems {
     public static final Item purple_alloy_ingot = new ItemCrafting(Refs.PURPLEALLOYINGOT_NAME);
     public static final Item tungsten_ingot = new ItemCrafting(Refs.TUNGSTENINGOT_NAME);
     public static final Item tungsten_nugget = new ItemCrafting(Refs.TUNGSTENNUGGET_NAME);
-    public static final Item zinc_ore_crushed = new ItemBase().setUnlocalizedName(Refs.ZINC_ORE_CRUSHED_NAME)
+    public static final Item zinc_ore_crushed = new ItemBase().setTranslationKey(Refs.ZINC_ORE_CRUSHED_NAME)
                 .setRegistryName(Refs.MODID + ":" + Refs.ZINC_ORE_CRUSHED_NAME).setCreativeTab(BPCreativeTabs.items);
-    public static final Item zinc_ore_purified = new ItemBase().setUnlocalizedName(Refs.ZINC_ORE_CRUSHED_PURIFIED_NAME)
+    public static final Item zinc_ore_purified = new ItemBase().setTranslationKey(Refs.ZINC_ORE_CRUSHED_PURIFIED_NAME)
                 .setRegistryName(Refs.MODID + ":" + Refs.ZINC_ORE_CRUSHED_PURIFIED_NAME).setCreativeTab(BPCreativeTabs.items);
-    public static final Item zinc_dust = new ItemBase().setUnlocalizedName(Refs.ZINCDUST_NAME).setRegistryName(Refs.MODID + ":" + Refs.ZINCDUST_NAME)
+    public static final Item zinc_dust = new ItemBase().setTranslationKey(Refs.ZINCDUST_NAME).setRegistryName(Refs.MODID + ":" + Refs.ZINCDUST_NAME)
                 .setCreativeTab(BPCreativeTabs.items);
-    public static final Item zinc_tiny_dust = new ItemBase().setUnlocalizedName(Refs.ZINCDUST_TINY_NAME).setRegistryName(Refs.MODID + ":" + Refs.ZINCDUST_TINY_NAME)
+    public static final Item zinc_tiny_dust = new ItemBase().setTranslationKey(Refs.ZINCDUST_TINY_NAME).setRegistryName(Refs.MODID + ":" + Refs.ZINCDUST_TINY_NAME)
                 .setCreativeTab(BPCreativeTabs.items);
     public static final Item wood_sickle = new ItemSickle(ToolMaterial.WOOD, Refs.WOODSICKLE_NAME, Item.getItemFromBlock(Blocks.PLANKS));
     public static final Item stone_sickle = new ItemSickle(ToolMaterial.STONE, Refs.STONESICKLE_NAME, Item.getItemFromBlock(Blocks.COBBLESTONE));
@@ -67,7 +67,7 @@ public class BPItems {
     public static final Item diamond_sickle = new ItemSickle(ToolMaterial.DIAMOND, Refs.DIAMONDSICKLE_NAME, Items.DIAMOND);
     public static final Item iron_saw = new ItemSaw(ToolMaterial.IRON.getHarvestLevel(), Refs.IRONSAW_NAME);
     public static final Item diamond_saw = new ItemSaw(ToolMaterial.DIAMOND.getHarvestLevel(), Refs.DIAMONDSAW_NAME);
-    public static final Item flax_seeds = new ItemCropSeed(BPBlocks.flax_crop, Blocks.FARMLAND).setUnlocalizedName(Refs.FLAXSEED_NAME);
+    public static final Item flax_seeds = new ItemCropSeed(BPBlocks.flax_crop, Blocks.FARMLAND).setTranslationKey(Refs.FLAXSEED_NAME);
     public static final Item indigo_dye = new ItemIndigoDye(Refs.INDIGODYE_NAME);
     public static final Item silicon_boule = new ItemCrafting(Refs.SILICONBOULE_NAME).setCreativeTab(BPCreativeTabs.items);
     public static final Item silicon_wafer = new ItemCrafting(Refs.SILICONWAFER_NAME).setCreativeTab(BPCreativeTabs.items);

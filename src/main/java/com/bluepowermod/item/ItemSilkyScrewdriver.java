@@ -35,7 +35,7 @@ public class ItemSilkyScrewdriver extends ItemBase {
 
     public ItemSilkyScrewdriver() {
 
-        setUnlocalizedName(Refs.SILKYSCREWDRIVER_NAME);
+        setTranslationKey(Refs.SILKYSCREWDRIVER_NAME);
         setCreativeTab(BPCreativeTabs.tools);
         setMaxDamage(250);
         setMaxStackSize(1);

@@ -45,8 +45,7 @@ public class BPCreativeTabs {
 
             @Override
             @SideOnly(Side.CLIENT)
-            public ItemStack getTabIconItem() {
-
+            public ItemStack createIcon() {
                 Block iconBlock = BPBlocks.amethyst_ore;
                 if (iconBlock != null) {
                     return new ItemStack(iconBlock);
@@ -60,7 +59,7 @@ public class BPCreativeTabs {
 
             @Override
             @SideOnly(Side.CLIENT)
-            public ItemStack getTabIconItem() {
+            public ItemStack createIcon() {
 
                 Block iconBlock = BPBlocks.alloyfurnace;
                 if (iconBlock != null) {
@@ -75,7 +74,7 @@ public class BPCreativeTabs {
 
             @Override
             @SideOnly(Side.CLIENT)
-            public ItemStack getTabIconItem() {
+            public ItemStack createIcon() {
 
                 Item iconItem = BPItems.ruby_gem;
                 if (iconItem != null) {
@@ -90,7 +89,7 @@ public class BPCreativeTabs {
 
             @Override
             @SideOnly(Side.CLIENT)
-            public ItemStack getTabIconItem() {
+            public ItemStack createIcon() {
 
                 Item iconItem = BPItems.screwdriver;
                 if (iconItem != null) {
@@ -105,14 +104,7 @@ public class BPCreativeTabs {
 
             @Override
             @SideOnly(Side.CLIENT)
-            public ItemStack getTabIconItem() {
-
-                return ItemStack.EMPTY;
-            }
-
-            @Override
-            @SideOnly(Side.CLIENT)
-            public ItemStack getIconItemStack() {
+            public ItemStack createIcon() {
 
                 ItemStack iconItem = new ItemStack(BPItems.redstone_pointer_tile);
                 if (!iconItem.isEmpty()) {
@@ -127,15 +119,7 @@ public class BPCreativeTabs {
 
             @Override
             @SideOnly(Side.CLIENT)
-            public ItemStack getTabIconItem() {
-
-                return ItemStack.EMPTY;
-            }
-
-            @Override
-            @SideOnly(Side.CLIENT)
-            public ItemStack getIconItemStack() {
-
+            public ItemStack createIcon() {
                 ItemStack iconItem = new ItemStack(BPItems.blue_alloy_ingot);
                 if (!iconItem.isEmpty()) {
                     return iconItem;
@@ -149,15 +133,7 @@ public class BPCreativeTabs {
 
             @Override
             @SideOnly(Side.CLIENT)
-            public ItemStack getTabIconItem() {
-
-                return ItemStack.EMPTY;
-            }
-
-            @Override
-            @SideOnly(Side.CLIENT)
-            public ItemStack getIconItemStack() {
-
+            public ItemStack createIcon() {
                 int t = 1000;
 
                 int i = (int) ((System.currentTimeMillis() / t) % MinecraftColor.VALID_COLORS.length);

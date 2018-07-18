@@ -12,7 +12,7 @@ public class BlockLampRGB extends BlockLamp {
 
     public BlockLampRGB(String name, boolean isInverted) {
         super(name, isInverted, MinecraftColor.NONE);
-        setUnlocalizedName(name + ".rgb" + (isInverted ? ".inverted" : ""));
+        setTranslationKey(name + ".rgb" + (isInverted ? ".inverted" : ""));
     }
 
     @Override

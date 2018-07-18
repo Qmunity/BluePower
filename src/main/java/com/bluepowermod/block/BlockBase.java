@@ -37,9 +37,9 @@ public abstract class BlockBase extends Block {
     }
     
     @Override
-    public String getUnlocalizedName() {
+    public String getTranslationKey() {
     
-        return String.format("tile.%s:%s", Refs.MODID, getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
+        return String.format("tile.%s:%s", Refs.MODID, getUnwrappedUnlocalizedName(super.getTranslationKey()));
     }
     
     protected String getUnwrappedUnlocalizedName(String name) {

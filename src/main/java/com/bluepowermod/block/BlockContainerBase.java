@@ -55,7 +55,7 @@ public class BlockContainerBase extends BlockBase implements IAdvancedSilkyRemov
     public BlockContainerBase(Material material, Class<? extends TileBase> tileEntityClass) {
 
         super(material);
-        isBlockContainer = true;
+        hasTileEntity = true;
         setTileEntityClass(tileEntityClass);
     }
 

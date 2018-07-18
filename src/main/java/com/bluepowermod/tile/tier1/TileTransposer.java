@@ -92,8 +92,8 @@ public class TileTransposer extends TileMachineBase {
     private void suckEntity() {
 
         EnumFacing direction = getFacingDirection();
-        AxisAlignedBB box = new AxisAlignedBB(pos.getX() + direction.getFrontOffsetX(), pos.getY() + direction.getFrontOffsetY(), pos.getZ() + direction.getFrontOffsetZ(), pos.getX()
-                + direction.getFrontOffsetX() + 1, pos.getY() + direction.getFrontOffsetY() + 1, pos.getZ() + direction.getFrontOffsetZ() + 1);
+        AxisAlignedBB box = new AxisAlignedBB(pos.getX() + direction.getXOffset(), pos.getY() + direction.getYOffset(), pos.getZ() + direction.getZOffset(), pos.getX()
+                + direction.getXOffset() + 1, pos.getY() + direction.getYOffset() + 1, pos.getZ() + direction.getZOffset() + 1);
         for (EntityItem entity : (List<EntityItem>) world.getEntitiesWithinAABB(EntityItem.class, box)) {
             ItemStack stack = entity.getItem();
             if (isItemAccepted(stack) && !entity.isDead) {

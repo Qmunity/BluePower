@@ -155,7 +155,7 @@ public class TileEjector extends TileMachineBase implements IInventory {
     @Override
     public String getName() {
 
-        return BPBlocks.ejector.getUnlocalizedName();
+        return BPBlocks.ejector.getTranslationKey();
     }
 
     /**

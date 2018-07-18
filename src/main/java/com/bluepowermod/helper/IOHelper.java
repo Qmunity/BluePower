@@ -253,7 +253,7 @@ public class IOHelper {
 
         if (inventory instanceof ISidedInventory && side > -1) {
             ISidedInventory isidedinventory = (ISidedInventory) inventory;
-            int[] aint = isidedinventory.getSlotsForFace(EnumFacing.getFront(side));
+            int[] aint = isidedinventory.getSlotsForFace(EnumFacing.byIndex(side));
 
             for (int j = 0; j < aint.length && !itemStack.isEmpty() && itemStack.getCount() > 0; ++j) {
                 itemStack = insert(inventory, itemStack, aint[j], side, simulate);
@@ -318,12 +318,12 @@ public class IOHelper {
     public static boolean canInsertItemToInventory(IInventory inventory, ItemStack itemStack, int slot, int side) {
 
         return inventory.isItemValidForSlot(slot, itemStack)
-                && (!(inventory instanceof ISidedInventory) || ((ISidedInventory) inventory).canInsertItem(slot, itemStack, EnumFacing.getFront(side)));
+                && (!(inventory instanceof ISidedInventory) || ((ISidedInventory) inventory).canInsertItem(slot, itemStack, EnumFacing.byIndex(side)));
     }
 
     public static boolean canExtractItemFromInventory(IInventory inventory, ItemStack itemStack, int slot, int side) {
 
-        return !(inventory instanceof ISidedInventory) || ((ISidedInventory) inventory).canExtractItem(slot, itemStack, EnumFacing.getFront(side));
+        return !(inventory instanceof ISidedInventory) || ((ISidedInventory) inventory).canExtractItem(slot, itemStack, EnumFacing.byIndex(side));
     }
 
     public static void dropInventory(World world, BlockPos pos) {

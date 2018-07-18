@@ -32,7 +32,7 @@ public class ItemSaw extends ItemBase{
         setRegistryName(Refs.MODID + ":" + name);
         setCreativeTab(BPCreativeTabs.tools);
         this.sawLevel = sawLevel;
-        setUnlocalizedName(name);
+        setTranslationKey(name);
         maxStackSize = 1;
         setMaxDamage(1 << sawLevel + 8);
     }

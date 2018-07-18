@@ -122,7 +122,7 @@ public class TileAutoProjectTable extends TileProjectTable implements ISidedInve
     @Override
     public String getName() {
 
-        return BPBlocks.auto_project_table.getUnlocalizedName();
+        return BPBlocks.auto_project_table.getTranslationKey();
     }
 
     //Todo Fields

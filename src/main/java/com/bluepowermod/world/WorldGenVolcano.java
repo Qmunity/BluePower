@@ -207,7 +207,7 @@ public class WorldGenVolcano {
         for (EnumFacing d : EnumFacing.VALUES) {
             if (d != EnumFacing.UP && d != EnumFacing.DOWN) {
                 if (rand.nextInt(2) == 0) {
-                    generateAltar(world, middleX + d.getFrontOffsetX() * roomSize / 2, startY - 1, middleZ + d.getFrontOffsetZ() * roomSize / 2, rand, d);
+                    generateAltar(world, middleX + d.getXOffset() * roomSize / 2, startY - 1, middleZ + d.getZOffset() * roomSize / 2, rand, d);
                 }
             }
         }
@@ -218,14 +218,14 @@ public class WorldGenVolcano {
         EnumFacing opDir = dir.getOpposite();
         Block altarBlock = ALTAR_BLOCKS[rand.nextInt(ALTAR_BLOCKS.length)];
         setAltarBlockAndPossiblyTrap(world, startX, startY, startZ, rand, altarBlock);
-        setAltarBlockAndPossiblyTrap(world, startX + opDir.getFrontOffsetX(), startY, startZ + opDir.getFrontOffsetZ(), rand, altarBlock);
+        setAltarBlockAndPossiblyTrap(world, startX + opDir.getXOffset(), startY, startZ + opDir.getZOffset(), rand, altarBlock);
         EnumFacing sideDir = EnumFacing.DOWN;
-        setAltarBlockAndPossiblyTrap(world, startX + sideDir.getFrontOffsetX(), startY, startZ + sideDir.getFrontOffsetZ(), rand, altarBlock);
-        setAltarBlockAndPossiblyTrap(world, startX + sideDir.getFrontOffsetX() + opDir.getFrontOffsetX(), startY, startZ + sideDir.getFrontOffsetZ() + opDir.getFrontOffsetZ(), rand,
+        setAltarBlockAndPossiblyTrap(world, startX + sideDir.getXOffset(), startY, startZ + sideDir.getZOffset(), rand, altarBlock);
+        setAltarBlockAndPossiblyTrap(world, startX + sideDir.getXOffset() + opDir.getXOffset(), startY, startZ + sideDir.getZOffset() + opDir.getZOffset(), rand,
                 altarBlock);
         sideDir = sideDir.getOpposite();
-        setAltarBlockAndPossiblyTrap(world, startX + sideDir.getFrontOffsetX(), startY, startZ + sideDir.getFrontOffsetZ(), rand, altarBlock);
-        setAltarBlockAndPossiblyTrap(world, startX + sideDir.getFrontOffsetX() + opDir.getFrontOffsetX(), startY, startZ + sideDir.getFrontOffsetZ() + opDir.getFrontOffsetZ(), rand,
+        setAltarBlockAndPossiblyTrap(world, startX + sideDir.getXOffset(), startY, startZ + sideDir.getZOffset(), rand, altarBlock);
+        setAltarBlockAndPossiblyTrap(world, startX + sideDir.getXOffset() + opDir.getXOffset(), startY, startZ + sideDir.getZOffset() + opDir.getZOffset(), rand,
                 altarBlock);
 
     }

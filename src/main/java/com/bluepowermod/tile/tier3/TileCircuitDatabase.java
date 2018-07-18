@@ -254,6 +254,6 @@ public class TileCircuitDatabase extends TileCircuitTable {
     @Override
     public String getName() {
 
-        return BPBlocks.circuit_database.getUnlocalizedName();
+        return BPBlocks.circuit_database.getTranslationKey();
     }
 }

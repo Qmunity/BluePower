@@ -31,7 +31,7 @@ public class ItemIndigoDye extends ItemBase {
 
     public ItemIndigoDye(String name) {
 
-        this.setUnlocalizedName(name);
+        this.setTranslationKey(name);
         this.setCreativeTab(BPCreativeTabs.items);
         this.setRegistryName(Refs.MODID + ":" + name);
     }

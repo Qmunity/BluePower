@@ -32,7 +32,7 @@ import java.util.List;
 public class ItemFloppyDisk extends ItemBase implements IItemColor{
 
     public ItemFloppyDisk(String name) {
-        this.setUnlocalizedName(name);
+        this.setTranslationKey(name);
         this.setRegistryName(Refs.MODID + ":" + name);
         BPItems.itemList.add(this);
     }
@@ -52,7 +52,7 @@ public class ItemFloppyDisk extends ItemBase implements IItemColor{
     }
 
     @Override
-    public int getColorFromItemstack(ItemStack stack, int tintIndex) {
+    public int colorMultiplier(ItemStack stack, int tintIndex) {
         if(tintIndex == 0 && stack.getTagCompound() != null && stack.getTagCompound().hasKey("color")) {
             return stack.getTagCompound().getInteger("color");
         }

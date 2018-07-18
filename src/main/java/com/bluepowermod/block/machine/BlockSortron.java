@@ -30,7 +30,7 @@ public class BlockSortron extends BlockContainerBase {
     public BlockSortron() {
     
         super(Material.ROCK, TileSortron.class);
-        setUnlocalizedName(Refs.BLOCKSORTRON_NAME);
+        setTranslationKey(Refs.BLOCKSORTRON_NAME);
         setRegistryName(Refs.MODID, Refs.BLOCKSORTRON_NAME);
     }
     

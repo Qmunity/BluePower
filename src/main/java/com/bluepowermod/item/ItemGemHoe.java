@@ -32,7 +32,7 @@ public class ItemGemHoe extends ItemHoe {
 
     public ItemGemHoe(ToolMaterial material, String name, Item repairItem) {
         super(material);
-        this.setUnlocalizedName(name);
+        this.setTranslationKey(name);
         this.setCreativeTab(BPCreativeTabs.tools);
         this.setRegistryName(Refs.MODID + ":" + name);
         this.customCraftingMaterial = repairItem;
@@ -40,9 +40,9 @@ public class ItemGemHoe extends ItemHoe {
     }
 
     @Override
-    public String getUnlocalizedName(ItemStack stack) {
+    public String getTranslationKey(ItemStack stack) {
 
-        return String.format("item.%s:%s", Refs.MODID, getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
+        return String.format("item.%s:%s", Refs.MODID, getUnwrappedUnlocalizedName(super.getTranslationKey()));
     }
 
     protected String getUnwrappedUnlocalizedName(String name) {

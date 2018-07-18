@@ -38,7 +38,7 @@ public class BlockBattery extends BlockContainerBase {
 
     public BlockBattery() {
         super(Material.IRON, TileBattery.class);
-        setUnlocalizedName(Refs.BATTERYBLOCK_NAME);
+        setTranslationKey(Refs.BATTERYBLOCK_NAME);
         setRegistryName(Refs.MODID, Refs.BATTERYBLOCK_NAME);
         this.setDefaultState(this.blockState.getBaseState().withProperty(LEVEL, 0));
     }
@@ -68,7 +68,7 @@ public class BlockBattery extends BlockContainerBase {
     }
 
     @Override
-    public BlockRenderLayer getBlockLayer() {
+    public BlockRenderLayer getRenderLayer() {
         return BlockRenderLayer.CUTOUT;
     }
 

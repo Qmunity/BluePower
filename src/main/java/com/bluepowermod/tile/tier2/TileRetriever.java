@@ -30,7 +30,7 @@ public class TileRetriever extends TileFilter implements IFuzzyRetrieving {
     @Override
     public String getName() {
 
-        return BPBlocks.retriever.getUnlocalizedName();
+        return BPBlocks.retriever.getTranslationKey();
     }
 
     @Override

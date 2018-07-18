@@ -167,7 +167,7 @@ public class TileFilter extends TileTransposer implements ISidedInventory, IGuiB
 
     @Override
     public String getName() {
-        return BPBlocks.filter.getUnlocalizedName();
+        return BPBlocks.filter.getTranslationKey();
     }
 
     @Override

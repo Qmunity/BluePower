@@ -171,7 +171,7 @@ public class TileItemDetector extends TileMachineBase implements ISidedInventory
     @Override
     public String getName() {
 
-        return BPBlocks.item_detector.getUnlocalizedName();
+        return BPBlocks.item_detector.getTranslationKey();
     }
 
     @Override

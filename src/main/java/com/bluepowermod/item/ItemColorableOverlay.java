@@ -26,7 +26,7 @@ public class ItemColorableOverlay extends ItemBase implements IItemColor {
 
     public ItemColorableOverlay(String name) {
         super();
-        setUnlocalizedName(name);
+        setTranslationKey(name);
         setCreativeTab(BPCreativeTabs.items);
         setRegistryName(Refs.MODID + ":" + name);
         setHasSubtypes(true);
@@ -44,14 +44,15 @@ public class ItemColorableOverlay extends ItemBase implements IItemColor {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public int getColorFromItemstack(ItemStack itemStack, int renderPass) {
+    public int colorMultiplier(ItemStack itemStack, int renderPass) {
         return renderPass == 0 || itemStack.getItemDamage() >= 16 ? -1 : ItemDye.DYE_COLORS[15 - itemStack.getItemDamage()];
     }
 
 
+
     @Override
-    public String getUnlocalizedName(ItemStack stack) {
+    public String getTranslationKey(ItemStack stack) {
     
-        return super.getUnlocalizedName() + "." + (stack.getItemDamage() >= 16 ? "empty" : MinecraftColor.values()[stack.getItemDamage()].name().toLowerCase());
+        return super.getTranslationKey() + "." + (stack.getItemDamage() >= 16 ? "empty" : MinecraftColor.values()[stack.getItemDamage()].name().toLowerCase());
     }
 }

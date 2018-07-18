@@ -40,8 +40,8 @@ public class ItemStackDatabase {
         stack.writeToNBT(tag);
 
         ResourceLocation ui = stack.getItem().getRegistryName();
-        tag.setString("owner", ui.getResourceDomain());
-        tag.setString("name", ui.getResourcePath());
+        tag.setString("owner", ui.getNamespace());
+        tag.setString("name", ui.getPath());
 
         try {
             FileOutputStream fos = new FileOutputStream(targetLocation);

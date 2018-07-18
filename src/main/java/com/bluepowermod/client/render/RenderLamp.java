@@ -59,12 +59,12 @@ public class RenderLamp extends TileEntitySpecialRenderer {
                     if (state.getBlock() instanceof BlockLamp && ((BlockLamp)state.getBlock()).getSize().equals(Block.FULL_BLOCK_AABB)) {
                         if (((BlockLamp) state.getBlock()).isInverted() ? state.getValue(BlockLamp.POWER) < 15 : state.getValue(BlockLamp.POWER) > 0) {
                             renderFaces[face.getIndex()] = false;
-                            double offsetx = (face.getFrontOffsetX() * 0.05) > 0 ? (face.getFrontOffsetX() * 0.05) : 0;
-                            double offsety = (face.getFrontOffsetY() * 0.05) > 0 ? (face.getFrontOffsetY() * 0.05) : 0;
-                            double offsetz = (face.getFrontOffsetZ() * 0.05) > 0 ? (face.getFrontOffsetZ() * 0.05) : 0;
-                            double toffsetx = (face.getFrontOffsetX() * 0.05) < 0 ? (face.getFrontOffsetX() * 0.05) : 0;
-                            double toffsety = (face.getFrontOffsetY() * 0.05) < 0 ? (face.getFrontOffsetY() * 0.05) : 0;
-                            double toffsetz = (face.getFrontOffsetZ() * 0.05) < 0 ? (face.getFrontOffsetZ() * 0.05) : 0;
+                            double offsetx = (face.getXOffset() * 0.05) > 0 ? (face.getXOffset() * 0.05) : 0;
+                            double offsety = (face.getYOffset() * 0.05) > 0 ? (face.getYOffset() * 0.05) : 0;
+                            double offsetz = (face.getZOffset() * 0.05) > 0 ? (face.getZOffset() * 0.05) : 0;
+                            double toffsetx = (face.getXOffset() * 0.05) < 0 ? (face.getXOffset() * 0.05) : 0;
+                            double toffsety = (face.getYOffset() * 0.05) < 0 ? (face.getYOffset() * 0.05) : 0;
+                            double toffsetz = (face.getZOffset() * 0.05) < 0 ? (face.getZOffset() * 0.05) : 0;
                             box = new AxisAlignedBB(box.minX + offsetx, box.minY + offsety, box.minZ + offsetz, box.maxX + toffsetx, box.maxY + toffsety, box.maxZ + toffsetz);
                         }
                     }

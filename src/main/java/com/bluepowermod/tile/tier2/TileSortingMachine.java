@@ -512,7 +512,7 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
 
     @Override
     public String getName() {
-        return BPBlocks.sorting_machine.getUnlocalizedName();
+        return BPBlocks.sorting_machine.getTranslationKey();
     }
 
     @Override

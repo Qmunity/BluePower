@@ -39,7 +39,7 @@ public class ItemAthame extends ItemSword {
         super(athameMaterial);
         this.setCreativeTab(BPCreativeTabs.tools);
         this.setMaxDamage(100);
-        this.setUnlocalizedName(Refs.ATHAME_NAME);
+        this.setTranslationKey(Refs.ATHAME_NAME);
         this.setRegistryName(Refs.MODID + ":" + Refs.ATHAME_NAME);
         this.maxStackSize = 1;
         this.setFull3D();
@@ -53,7 +53,7 @@ public class ItemAthame extends ItemSword {
     @Override
     public boolean hitEntity(ItemStack stack, EntityLivingBase entity, EntityLivingBase player) {
     
-        this.damageDealt = athameMaterial.getDamageVsEntity();
+        this.damageDealt = athameMaterial.getAttackDamage();
         if ((entity instanceof EntityEnderman) || (entity instanceof EntityDragon)) {
             this.damageDealt += 18.0F;
         }
@@ -62,9 +62,9 @@ public class ItemAthame extends ItemSword {
     }
 
     @Override
-    public String getUnlocalizedName(ItemStack stack) {
+    public String getTranslationKey(ItemStack stack) {
 
-        return String.format("item.%s:%s", Refs.MODID, getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
+        return String.format("item.%s:%s", Refs.MODID, getUnwrappedUnlocalizedName(super.getTranslationKey()));
     }
 
     protected String getUnwrappedUnlocalizedName(String name) {

@@ -43,7 +43,7 @@ public class ItemSeedBag extends ItemBase {
 
     public ItemSeedBag(String name) {
         this.setCreativeTab(BPCreativeTabs.items);
-        this.setUnlocalizedName(name);
+        this.setTranslationKey(name);
         this.setRegistryName(Refs.MODID + ":" + name);
         this.maxStackSize = 1;
     }
