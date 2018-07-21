@@ -2,8 +2,8 @@
   "forge_marker": 1,
   "defaults": {
     "textures": {
-      "top": "bluepower:blocks/wire/insulation2",
-      "side": "bluepower:blocks/wire/insulation1",
+      "top": "bluepower:blocks/wire/insulation1",
+      "side": "bluepower:blocks/wire/insulation2",
       "wire": "bluepower:base/bluestone_off",
       "particle": "#wire"
     },
@@ -11,24 +11,31 @@
   },
   "variants": {
     "normal": [{}],
-    "inventory": [{"submodel": {
-      "submodel1": {"model": "bluepower:cable/wire_extended"}
+    "inventory": [{"submodel":{
+      "extended1":{"model":"bluepower:cable/wire_extended","y": -90},
+      "extended2":{"model":"bluepower:cable/wire_extended","y": 90},
+      "extended3":{"model":"bluepower:cable/wire_extended","y": 180},
+      "extended4":{"model":"bluepower:cable/wire_extended"}
     }}],
-    "east": {
-      "true": {"submodel": "bluepower:cable/wire_extended"},
-      "false":{}
+    "connected_front": {"true": {"submodel":{"extended1":{"model":"bluepower:cable/wire_extended","y": -90}}},"false":{}},
+    "connected_back": {"true": {"submodel":{"extended2":{"model":"bluepower:cable/wire_extended","y": 90}}},"false":{}},
+    "connected_left": {"true": {"submodel":{"extended3":{"model":"bluepower:cable/wire_extended","y": 180}}},"false":{}},
+    "connected_right": {"true": {"submodel":{"extended4":{"model":"bluepower:cable/wire_extended"}}}, "false":{}},
+    "facing": {
+      "north": {"x": 90},
+      "south": {"x": 90, "y": 180},
+      "west": {"x": 90, "y": 270},
+      "east": {"x": 90, "y": 90},
+      "up": {},
+      "down": {"x": 180}
     },
-    "north": {
-      "true": {"submodel": "bluepower:cable/wire_extended"},
-      "false":{}
-    },
-    "south": {
-      "true": {"submodel": "bluepower:cable/wire_extended"},
-      "false":{}
-    },
-    "west": {
-      "true": {"submodel": "bluepower:cable/wire_extended"},
-      "false":{}
-    }
-    }
+    "powered":{"true":{"textures": {"wire": "bluepower:base/bluestone_on"}},"false":{}},
+    "straight":{
+      "0":{"model": "bluepower:cable/wire_bend"},
+      "1":{"submodel":{"straight":{"model":"bluepower:cable/wire_straight"},"straight2":{"model":"bluepower:cable/wire_straight","y": 180}}},
+      "2":{"submodel":{"straight":{"model":"bluepower:cable/wire_straight"}}},
+      "3":{"submodel":{"straight":{"model": "bluepower:cable/wire_straight","y": 90}}},
+      "4":{"submodel":{"straight":{"model": "bluepower:cable/wire_straight","y": -90}}},
+      "5":{"submodel":{"straight":{"model": "bluepower:cable/wire_straight","y": 180}}}}
+  }
 }

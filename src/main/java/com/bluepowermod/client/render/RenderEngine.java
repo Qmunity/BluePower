@@ -29,7 +29,8 @@ import com.bluepowermod.tile.tier3.TileEngine;
 
 /**
  *
- * @author TheFjong
+ * @author TheFjong, MoreThanHidden
+ * TODO: Create Rotation Helper and re-implement as Fast TESR
  *
  */
 @SideOnly(Side.CLIENT)
@@ -131,7 +132,6 @@ public class RenderEngine extends TileEntitySpecialRenderer<TileEngine> {
         tessellator.getBuffer().setTranslation(0, 0, 0);
 
         GlStateManager.popMatrix();
-
 
         GlStateManager.popMatrix();
         GlStateManager.popAttrib();
