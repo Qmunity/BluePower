@@ -16,12 +16,12 @@
             "from": [ 8.7, 3.0, 7.5 ],
             "to": [ 16.0, 3.2, 8.5 ], 
             "faces": {
-                "north": { "texture": "#wire", "uv": [ 0.0, 0.0, 7.0, 0.2 ] },
-                "east": { "texture": "#wire", "uv": [ 0.0, 0.0, 1.0, 0.2 ] },
-                "south": { "texture": "#wire", "uv": [ 0.0, 0.0, 7.0, 0.2 ] },
-                "west": { "texture": "#wire", "uv": [ 0.0, 0.0, 1.0, 0.2 ] },
-                "up": { "texture": "#wire", "uv": [ 0.0, 0.0, 7.0, 1.0 ] },
-                "down": { "texture": "#wire", "uv": [ 0.0, 0.0, 7.0, 1.0 ] }
+                "north": { "texture": "#wire", "tintindex": 2, "uv": [ 0.0, 0.0, 7.0, 0.2 ] },
+                "east": { "texture": "#wire", "tintindex": 2, "uv": [ 0.0, 0.0, 1.0, 0.2 ] },
+                "south": { "texture": "#wire", "tintindex": 2, "uv": [ 0.0, 0.0, 7.0, 0.2 ] },
+                "west": { "texture": "#wire", "tintindex": 2, "uv": [ 0.0, 0.0, 1.0, 0.2 ] },
+                "up": { "texture": "#wire", "tintindex": 2, "uv": [ 0.0, 0.0, 7.0, 1.0 ] },
+                "down": { "texture": "#wire", "tintindex": 2, "uv": [ 0.0, 0.0, 7.0, 1.0 ] }
             }
         }
     ]

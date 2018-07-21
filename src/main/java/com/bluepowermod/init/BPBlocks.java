@@ -18,6 +18,7 @@
 package com.bluepowermod.init;
 
 import com.bluepowermod.api.misc.MinecraftColor;
+import com.bluepowermod.api.wire.redstone.RedwireType;
 import com.bluepowermod.block.BlockContainerFacingBase;
 import com.bluepowermod.block.machine.*;
 import com.bluepowermod.block.machine.BlockLamp;
@@ -257,10 +258,12 @@ public class BPBlocks {
             fixedLampInverted[i] = new BlockLampSurface(Refs.FIXTURELAMP_NAME, true, MinecraftColor.VALID_COLORS[i], Refs.FIXTURELAMP_AABB);
 
         //Wires
-        blockAlloyWire = new Block[MinecraftColor.VALID_COLORS.length];
+        blockAlloyWire = new Block[MinecraftColor.VALID_COLORS.length * 2];
 
-        for (int i = 0; i < MinecraftColor.VALID_COLORS.length; i++)
-        blockAlloyWire[i] = new BlockAlloyWire(MinecraftColor.VALID_COLORS[i]);
+        for (int i = 0; i < MinecraftColor.VALID_COLORS.length; i++) {
+            blockAlloyWire[i] = new BlockInsulatedAlloyWire(RedwireType.BLUESTONE.getName(), MinecraftColor.VALID_COLORS[i]);
+            blockAlloyWire[i + MinecraftColor.VALID_COLORS.length] = new BlockInsulatedAlloyWire(RedwireType.RED_ALLOY.getName(), MinecraftColor.VALID_COLORS[i]);
+        }
     }
 
     private static void initModDependantBlocks() {

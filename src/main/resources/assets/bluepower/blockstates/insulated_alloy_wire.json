@@ -4,8 +4,8 @@
     "textures": {
       "top": "bluepower:blocks/wire/insulation1",
       "side": "bluepower:blocks/wire/insulation2",
-      "wire": "bluepower:base/bluestone_off",
-      "particle": "#wire"
+      "wire": "bluepower:base/alloy_off",
+      "particle": "blocks/glass_gray"
     },
     "model": "bluepower:cable/wire"
   },
@@ -29,7 +29,7 @@
       "up": {},
       "down": {"x": 180}
     },
-    "powered":{"true":{"textures": {"wire": "bluepower:base/bluestone_on"}},"false":{}},
+    "powered":{"true":{"textures": {"wire": "bluepower:base/alloy_on"}},"false":{}},
     "straight":{
       "0":{"model": "bluepower:cable/wire_bend"},
       "1":{"submodel":{"straight":{"model":"bluepower:cable/wire_straight"},"straight2":{"model":"bluepower:cable/wire_straight","y": 180}}},
