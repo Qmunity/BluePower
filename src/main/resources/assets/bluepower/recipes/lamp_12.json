@@ -1,0 +1,23 @@
+﻿{
+  "result": {
+    "item": "bluepower:lampbrown"
+  },
+  "pattern": [
+    "GLG",
+    "GLG",
+    "GRG"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "R": {
+      "item": "minecraft:redstone"
+    },
+    "G": {
+      "item": "minecraft:glass_pane"
+    },
+    "L": {
+      "item": "bluepower:lumar",
+      "data": 12
+    }
+  }
+}
