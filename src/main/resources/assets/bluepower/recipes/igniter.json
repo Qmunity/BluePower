@@ -1,0 +1,28 @@
+{
+  "result": {
+    "item": "bluepower:igniter"
+  },
+  "pattern": [
+    "NFN",
+    "SDS",
+    "SRS"
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "S": {
+      "item": "minecraft:cobblestone"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    },
+    "D": {
+      "item": "bluepower:deployer"
+    },
+    "N": {
+      "item": "minecraft:netherrack"
+    },
+    "F": {
+      "item": "minecraft:flint_and_steel"
+    }
+  }
+}

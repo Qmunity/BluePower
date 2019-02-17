@@ -234,26 +234,26 @@ public class BPBlocks {
         fixedLampInverted = new Block[MinecraftColor.VALID_COLORS.length];
 
         //Regular Lamp
-        blockLampRGB = new BlockLampRGB(Refs.LAMP_NAME,false);
+        blockLampRGB = new BlockLampRGB(Refs.LAMP_NAME,false).setWIP(true);
         for (int i = 0; i < MinecraftColor.VALID_COLORS.length; i++)
             blockLamp[i] = new BlockLamp(Refs.LAMP_NAME, false, MinecraftColor.VALID_COLORS[i]);
-        blockLampRGBInverted = new BlockLampRGB(Refs.LAMP_NAME,true);
+        blockLampRGBInverted = new BlockLampRGB(Refs.LAMP_NAME,true).setWIP(true);
         for (int i = 0; i < MinecraftColor.VALID_COLORS.length; i++)
             blockLampInverted[i] = new BlockLamp(Refs.LAMP_NAME, true, MinecraftColor.VALID_COLORS[i]);
 
         //Cage Lamp
-        blockLampRGB = new BlockLampRGBSurface(Refs.CAGELAMP_NAME,false, Refs.CAGELAMP_AABB);
+        blockLampRGB = new BlockLampRGBSurface(Refs.CAGELAMP_NAME,false, Refs.CAGELAMP_AABB).setWIP(true);
         for (int i = 0; i < MinecraftColor.VALID_COLORS.length; i++)
             cagedLamp[i] = new BlockLampSurface(Refs.CAGELAMP_NAME, false, MinecraftColor.VALID_COLORS[i], Refs.CAGELAMP_AABB);
-        blockLampRGBInverted = new BlockLampRGBSurface(Refs.CAGELAMP_NAME,true, Refs.CAGELAMP_AABB);
+        blockLampRGBInverted = new BlockLampRGBSurface(Refs.CAGELAMP_NAME,true, Refs.CAGELAMP_AABB).setWIP(true);
         for (int i = 0; i < MinecraftColor.VALID_COLORS.length; i++)
             cagedLampInverted[i] = new BlockLampSurface(Refs.CAGELAMP_NAME, true, MinecraftColor.VALID_COLORS[i], Refs.CAGELAMP_AABB);
 
         //Fixture Lamp
-        blockLampRGB = new BlockLampRGBSurface(Refs.FIXTURELAMP_NAME,false, Refs.FIXTURELAMP_AABB);
+        blockLampRGB = new BlockLampRGBSurface(Refs.FIXTURELAMP_NAME,false, Refs.FIXTURELAMP_AABB).setWIP(true);
         for (int i = 0; i < MinecraftColor.VALID_COLORS.length; i++)
             fixedLamp[i] = new BlockLampSurface(Refs.FIXTURELAMP_NAME, false, MinecraftColor.VALID_COLORS[i], Refs.FIXTURELAMP_AABB);
-        blockLampRGBInverted = new BlockLampRGBSurface(Refs.FIXTURELAMP_NAME,true, Refs.FIXTURELAMP_AABB);
+        blockLampRGBInverted = new BlockLampRGBSurface(Refs.FIXTURELAMP_NAME,true, Refs.FIXTURELAMP_AABB).setWIP(true);
         for (int i = 0; i < MinecraftColor.VALID_COLORS.length; i++)
             fixedLampInverted[i] = new BlockLampSurface(Refs.FIXTURELAMP_NAME, true, MinecraftColor.VALID_COLORS[i], Refs.FIXTURELAMP_AABB);
 

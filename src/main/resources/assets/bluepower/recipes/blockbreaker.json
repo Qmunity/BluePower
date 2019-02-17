@@ -1,0 +1,25 @@
+{
+  "result": {
+    "item": "bluepower:block_breaker"
+  },
+  "pattern": [
+    "SAS",
+    "SPS",
+    "SWS"
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "S": {
+      "item": "minecraft:cobblestone"
+    },
+    "W": {
+      "item": "bluepower:red_doped_wafer"
+    },
+    "A": {
+      "item": "minecraft:iron_pickaxe"
+    },
+    "P": {
+      "item": "minecraft:piston"
+    }
+  }
+}
