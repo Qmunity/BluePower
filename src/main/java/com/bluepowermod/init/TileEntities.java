@@ -61,5 +61,7 @@ public class TileEntities {
         GameRegistry.registerTileEntity(TileCircuitTable.class, Refs.MODID + ".circuitTable");
         GameRegistry.registerTileEntity(TileCircuitDatabase.class, Refs.MODID + ".circuitDatabase");
         GameRegistry.registerTileEntity(TileLamp.class, Refs.MODID + ".lamp");
+        GameRegistry.registerTileEntity(TileWire.class, Refs.MODID + ".wire");
+
     }
 }

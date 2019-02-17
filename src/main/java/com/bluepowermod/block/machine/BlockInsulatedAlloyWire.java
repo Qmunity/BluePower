@@ -34,17 +34,15 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nullable;
 
 
-public class BlockInsulatedAlloyWire extends BlockAlloyWire implements IBlockColor, IItemColor, ICustomModelBlock{
+public class BlockInsulatedAlloyWire extends BlockAlloyWire implements ICustomModelBlock{
 
     private final MinecraftColor color;
-    private final String type;
 
     public static final PropertyInteger STRAIGHT = PropertyInteger.create("straight", 0, 5);
 
     public BlockInsulatedAlloyWire(String type, MinecraftColor color) {
-        super(Material.CIRCUITS);
+        super(type, Material.CIRCUITS);
         this.color = color;
-        this.type = type;
         this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.UP).withProperty(CONNECTED_FRONT, false).withProperty(CONNECTED_BACK, false).withProperty(CONNECTED_LEFT, false).withProperty(CONNECTED_RIGHT, false).withProperty(STRAIGHT, 1).withProperty(POWERED, false));
         setTranslationKey("wire." + type + "." + color.name().toLowerCase());
         setCreativeTab(BPCreativeTabs.wiring);

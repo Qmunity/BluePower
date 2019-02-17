@@ -258,11 +258,14 @@ public class BPBlocks {
             fixedLampInverted[i] = new BlockLampSurface(Refs.FIXTURELAMP_NAME, true, MinecraftColor.VALID_COLORS[i], Refs.FIXTURELAMP_AABB);
 
         //Wires
-        blockAlloyWire = new Block[MinecraftColor.VALID_COLORS.length * 2];
+        blockAlloyWire = new Block[MinecraftColor.VALID_COLORS.length * 2 + 2];
+
+        blockAlloyWire[0] = new BlockAlloyWire(RedwireType.BLUESTONE.getName());
+        blockAlloyWire[MinecraftColor.VALID_COLORS.length + 1] =  new BlockAlloyWire(RedwireType.RED_ALLOY.getName());
 
         for (int i = 0; i < MinecraftColor.VALID_COLORS.length; i++) {
-            blockAlloyWire[i] = new BlockInsulatedAlloyWire(RedwireType.BLUESTONE.getName(), MinecraftColor.VALID_COLORS[i]);
-            blockAlloyWire[i + MinecraftColor.VALID_COLORS.length] = new BlockInsulatedAlloyWire(RedwireType.RED_ALLOY.getName(), MinecraftColor.VALID_COLORS[i]);
+            blockAlloyWire[i+1] = new BlockInsulatedAlloyWire(RedwireType.BLUESTONE.getName(), MinecraftColor.VALID_COLORS[i]);
+            blockAlloyWire[i + MinecraftColor.VALID_COLORS.length +2] = new BlockInsulatedAlloyWire(RedwireType.RED_ALLOY.getName(), MinecraftColor.VALID_COLORS[i]);
         }
     }
 
