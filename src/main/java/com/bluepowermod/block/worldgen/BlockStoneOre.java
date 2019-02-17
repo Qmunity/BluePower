@@ -130,6 +130,7 @@ public class BlockStoneOre extends Block {
         return this;
     }
 
+
     @Override
     public void addInformation(ItemStack stack, @Nullable World player, List<String> tooltip, ITooltipFlag advanced) {
         super.addInformation(stack, player, tooltip, advanced);

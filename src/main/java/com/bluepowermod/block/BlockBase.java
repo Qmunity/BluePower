@@ -17,6 +17,8 @@
 
 package com.bluepowermod.block;
 
+import com.bluepowermod.api.misc.MinecraftColor;
+import com.bluepowermod.block.worldgen.BlockStoneOre;
 import com.bluepowermod.init.BPBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
@@ -24,8 +26,16 @@ import net.minecraft.block.material.Material;
 
 import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.reference.Refs;
+import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
+
+import javax.annotation.Nullable;
+import java.util.List;
 
 public abstract class BlockBase extends Block {
+
+    private boolean wip = false;
     
     public BlockBase(Material material) {
     
@@ -35,7 +45,23 @@ public abstract class BlockBase extends Block {
         blockHardness = 3.0F;
         BPBlocks.blockList.add(this);
     }
-    
+
+
+    public BlockBase setWIP(boolean wip) {
+
+        this.wip = wip;
+        return this;
+    }
+
+    @Override
+    public void addInformation(ItemStack stack, @Nullable World player, List<String> tooltip, ITooltipFlag advanced) {
+        super.addInformation(stack, player, tooltip, advanced);
+        if(wip){
+            tooltip.add(MinecraftColor.RED.getChatColor() + "WIP");
+        }
+    }
+
+
     @Override
     public String getTranslationKey() {
     

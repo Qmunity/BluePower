@@ -198,28 +198,28 @@ public class BPBlocks {
         deployer = new BlockContainerFacingBase(Material.ROCK, TileDeployer.class).setGuiId(GuiIDs.DEPLOYER_ID)
                 .setRegistryName(Refs.MODID, Refs.BLOCKDEPLOYER_NAME).setTranslationKey(Refs.BLOCKDEPLOYER_NAME);
         transposer = new BlockContainerFacingBase(Material.ROCK, TileTransposer.class).setRegistryName(Refs.MODID, Refs.TRANSPOSER_NAME).setTranslationKey(Refs.TRANSPOSER_NAME);
-        sorting_machine = new BlockContainerFacingBase(Material.ROCK, TileSortingMachine.class).setGuiId(GuiIDs.SORTING_MACHINE)
+        sorting_machine = new BlockContainerFacingBase(Material.ROCK, TileSortingMachine.class).setGuiId(GuiIDs.SORTING_MACHINE).setWIP(true)
                 .setRegistryName(Refs.MODID, Refs.SORTING_MACHINE_NAME).setTranslationKey(Refs.SORTING_MACHINE_NAME);
         project_table = new BlockProjectTable().setGuiId(GuiIDs.PROJECTTABLE_ID);
         auto_project_table = new BlockProjectTable(TileAutoProjectTable.class).setGuiId(GuiIDs.PROJECTTABLE_ID).setRegistryName(Refs.MODID, Refs.AUTOPROJECTTABLE_NAME).setTranslationKey(Refs.AUTOPROJECTTABLE_NAME);
-        circuit_table = new BlockProjectTable(TileCircuitTable.class).setGuiId(GuiIDs.CIRCUITTABLE_ID).setRegistryName(Refs.MODID, Refs.CIRCUITTABLE_NAME).setTranslationKey(Refs.CIRCUITTABLE_NAME);
-        circuit_database = new BlockCircuitDatabase(TileCircuitDatabase.class).setGuiId(GuiIDs.CIRCUITDATABASE_MAIN_ID)
+        circuit_table = new BlockProjectTable(TileCircuitTable.class).setGuiId(GuiIDs.CIRCUITTABLE_ID).setWIP(true).setRegistryName(Refs.MODID, Refs.CIRCUITTABLE_NAME).setTranslationKey(Refs.CIRCUITTABLE_NAME);
+        circuit_database = new BlockCircuitDatabase(TileCircuitDatabase.class).setGuiId(GuiIDs.CIRCUITDATABASE_MAIN_ID).setWIP(true)
                 .setRegistryName(Refs.MODID, Refs.CIRCUITDATABASE_NAME).setTranslationKey(Refs.CIRCUITDATABASE_NAME);
         ejector = new BlockContainerFacingBase(Material.ROCK, TileEjector.class).setGuiId(GuiIDs.EJECTOR_ID).setRegistryName(Refs.MODID, Refs.EJECTOR_NAME).setTranslationKey(Refs.EJECTOR_NAME);
-        relay = new BlockContainerFacingBase(Material.ROCK, TileRelay.class).setGuiId(GuiIDs.RELAY_ID).setRegistryName(Refs.MODID, Refs.RELAY_NAME).setTranslationKey(Refs.RELAY_NAME);
-        filter = new BlockContainerFacingBase(Material.ROCK, TileFilter.class).setGuiId(GuiIDs.FILTER_ID).setRegistryName(Refs.MODID, Refs.FILTER_NAME).setTranslationKey(Refs.FILTER_NAME);
-        retriever = new BlockContainerFacingBase(Material.ROCK, TileRetriever.class).setGuiId(GuiIDs.RETRIEVER_ID).setRegistryName(Refs.MODID, Refs.RETRIEVER_NAME).setTranslationKey(Refs.RETRIEVER_NAME);
-        regulator = new BlockContainerFacingBase(Material.ROCK, TileRegulator.class).setGuiId(GuiIDs.REGULATOR_ID).emitsRedstone()
+        relay = new BlockContainerFacingBase(Material.ROCK, TileRelay.class).setGuiId(GuiIDs.RELAY_ID).setWIP(true).setRegistryName(Refs.MODID, Refs.RELAY_NAME).setTranslationKey(Refs.RELAY_NAME);
+        filter = new BlockContainerFacingBase(Material.ROCK, TileFilter.class).setGuiId(GuiIDs.FILTER_ID).setWIP(true).setRegistryName(Refs.MODID, Refs.FILTER_NAME).setTranslationKey(Refs.FILTER_NAME);
+        retriever = new BlockContainerFacingBase(Material.ROCK, TileRetriever.class).setGuiId(GuiIDs.RETRIEVER_ID).setWIP(true).setRegistryName(Refs.MODID, Refs.RETRIEVER_NAME).setTranslationKey(Refs.RETRIEVER_NAME);
+        regulator = new BlockContainerFacingBase(Material.ROCK, TileRegulator.class).setGuiId(GuiIDs.REGULATOR_ID).emitsRedstone().setWIP(true)
                 .setRegistryName(Refs.MODID, Refs.REGULATOR_NAME).setTranslationKey(Refs.REGULATOR_NAME);
-        item_detector = new BlockContainerFacingBase(Material.ROCK, TileItemDetector.class).setGuiId(GuiIDs.ITEMDETECTOR_ID).emitsRedstone()
+        item_detector = new BlockContainerFacingBase(Material.ROCK, TileItemDetector.class).setGuiId(GuiIDs.ITEMDETECTOR_ID).emitsRedstone().setWIP(true)
                 .setRegistryName(Refs.MODID, Refs.ITEMDETECTOR_NAME).setTranslationKey(Refs.ITEMDETECTOR_NAME);
-        manager = new BlockRejecting(Material.ROCK, TileManager.class).setGuiId(GuiIDs.MANAGER_ID).emitsRedstone().setRegistryName(Refs.MODID, Refs.MANAGER_NAME).setTranslationKey(Refs.MANAGER_NAME);
+        manager = new BlockRejecting(Material.ROCK, TileManager.class).setGuiId(GuiIDs.MANAGER_ID).emitsRedstone().setWIP(true).setRegistryName(Refs.MODID, Refs.MANAGER_NAME).setTranslationKey(Refs.MANAGER_NAME);
 
-        battery = new BlockBattery();
-        engine = new BlockEngine();
-        kinetic_generator = new BlockKineticGenerator();
-        windmill = new BlockWindmill();
-        solarpanel = new BlockSolarPanel();
+        battery = new BlockBattery().setWIP(true);
+        engine = new BlockEngine().setWIP(true);
+        kinetic_generator = new BlockKineticGenerator().setWIP(true);
+        //windmill = new BlockWindmill();
+        solarpanel = new BlockSolarPanel().setWIP(true);
 
         // cpu = new BlockCPU();
         // monitor = new BlockMonitor();
@@ -260,12 +260,12 @@ public class BPBlocks {
         //Wires
         blockAlloyWire = new Block[MinecraftColor.VALID_COLORS.length * 2 + 2];
 
-        blockAlloyWire[0] = new BlockAlloyWire(RedwireType.BLUESTONE.getName());
-        blockAlloyWire[MinecraftColor.VALID_COLORS.length + 1] =  new BlockAlloyWire(RedwireType.RED_ALLOY.getName());
+        blockAlloyWire[0] = new BlockAlloyWire(RedwireType.BLUESTONE.getName()).setWIP(true);
+        blockAlloyWire[MinecraftColor.VALID_COLORS.length + 1] =  new BlockAlloyWire(RedwireType.RED_ALLOY.getName()).setWIP(true);
 
         for (int i = 0; i < MinecraftColor.VALID_COLORS.length; i++) {
-            blockAlloyWire[i+1] = new BlockInsulatedAlloyWire(RedwireType.BLUESTONE.getName(), MinecraftColor.VALID_COLORS[i]);
-            blockAlloyWire[i + MinecraftColor.VALID_COLORS.length +2] = new BlockInsulatedAlloyWire(RedwireType.RED_ALLOY.getName(), MinecraftColor.VALID_COLORS[i]);
+            blockAlloyWire[i+1] = new BlockInsulatedAlloyWire(RedwireType.BLUESTONE.getName(), MinecraftColor.VALID_COLORS[i]).setWIP(true);
+            blockAlloyWire[i + MinecraftColor.VALID_COLORS.length +2] = new BlockInsulatedAlloyWire(RedwireType.RED_ALLOY.getName(), MinecraftColor.VALID_COLORS[i]).setWIP(true);
         }
     }
 
