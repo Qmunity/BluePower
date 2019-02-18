@@ -8,14 +8,14 @@
 package com.bluepowermod.tile.tier3;
 
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
+import com.bluepowermod.client.gui.IGuiButtonSensitive;
 import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.init.BPBlocks;
-import com.bluepowermod.part.IGuiButtonSensitive;
-import com.bluepowermod.part.tube.PneumaticTube;
-import com.bluepowermod.part.tube.TubeStack;
 import com.bluepowermod.tile.IFuzzyRetrieving;
 import com.bluepowermod.tile.IRejectAnimator;
 import com.bluepowermod.tile.TileMachineBase;
+import mcmultipart.api.container.IMultipartContainer;
+import mcmultipart.api.multipart.MultipartHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
@@ -24,14 +24,14 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.NonNullList;
-import uk.co.qmunity.lib.part.compat.MultipartCompatibility;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author MineMaarten
  */
-public class TileManager extends TileMachineBase implements ISidedInventory, IGuiButtonSensitive, IRejectAnimator, IFuzzyRetrieving {
+public class TileManager extends TileMachineBase implements ISidedInventory,  IRejectAnimator, IFuzzyRetrieving, IGuiButtonSensitive {
 
     protected final NonNullList<ItemStack> inventory = NonNullList.withSize(25, ItemStack.EMPTY);
     public TubeColor filterColor = TubeColor.NONE;
@@ -39,48 +39,6 @@ public class TileManager extends TileMachineBase implements ISidedInventory, IGu
     public int mode;
     public int fuzzySetting;
     private int rejectTicker = -1;
-
-    @Override
-    public TubeStack acceptItemFromTube(TubeStack stack, EnumFacing from, boolean simulate) {
-
-        if (from == getFacingDirection().getOpposite()) {
-            // if (!isBufferEmpty()) return stack;
-            int itemsAccepted = acceptedItems(stack.stack);
-            if (itemsAccepted > 0) {
-                if (itemsAccepted >= stack.stack.getCount()) {
-                    ItemStack rejectedStack = IOHelper.insert(getTileCache(getFacingDirection()), stack.stack, from, simulate);
-                    if (rejectedStack.isEmpty() || rejectedStack.getCount() != stack.stack.getCount()) {
-                        if (!simulate) {
-                            rejectTicker = 0;
-                            sendUpdatePacket();
-                        }
-                    }
-                    if (rejectedStack.isEmpty()) {
-                        return null;
-                    } else {
-                        stack.stack = rejectedStack;
-                        return stack;
-                    }
-                }
-                TubeStack injectedStack = stack.copy();
-                stack.stack.setCount(stack.stack.getCount() - itemsAccepted);
-
-                injectedStack.stack.setCount(itemsAccepted);
-                ItemStack rejectedStack = IOHelper.insert(getTileCache(getFacingDirection()), injectedStack.stack, from, simulate);
-                if (rejectedStack.isEmpty() || rejectedStack.getCount() != injectedStack.stack.getCount()) {
-                    if (!simulate) {
-                        rejectTicker = 0;
-                        sendUpdatePacket();
-                    }
-                }
-                if (!rejectedStack.isEmpty()) {
-                    stack.stack.setCount(stack.stack.getCount() + rejectedStack.getCount());
-                }
-            }
-        }
-        stack.setTarget(null, null);
-        return super.acceptItemFromTube(stack, from, simulate);
-    }
 
     private int acceptedItems(ItemStack item) {
 
@@ -93,9 +51,23 @@ public class TileManager extends TileMachineBase implements ISidedInventory, IGu
     }
 
     @Override
+    public void onButtonPress(EntityPlayer player, int messageId, int value) {
+
+        if (messageId == 0) {
+            filterColor = TubeColor.values()[value];
+        } else if (messageId == 1) {
+            mode = value;
+        } else if (messageId == 2) {
+            priority = value;
+        } else {
+            fuzzySetting = value;
+        }
+    }
+
+    @Override
     public void update() {
 
-        if (!world.isRemote && getTicker() % BUFFER_EMPTY_INTERVAL == 0 && isBufferEmpty()) {
+        if (!world.isRemote && getTicker() % BUFFER_EMPTY_INTERVAL == 0) {
             dumpUnwantedItems();
             retrieveItemsFromManagers();
             setOutputtingRedstone(mode == 0 && shouldEmitRedstone());
@@ -119,18 +91,8 @@ public class TileManager extends TileMachineBase implements ISidedInventory, IGu
     }
 
     private void retrieveItemsFromManagers() {
-
-        PneumaticTube tube = MultipartCompatibility.getPart(world, pos.offset(getOutputDirection()), PneumaticTube.class);
-        if (tube != null) {
-            for (ItemStack stack : inventory) {
-                int acceptedItems = acceptedItems(stack);
-                if (acceptedItems > 0) {
-                    ItemStack retrievingStack = stack.copy();
-                    retrievingStack.setCount(retrievingStack.getMaxStackSize());
-                    if (tube.getLogic().retrieveStack(this, getOutputDirection(), retrievingStack, filterColor))
-                        return;
-                }
-            }
+        Optional<IMultipartContainer> container = MultipartHelper.getContainer(world, pos.offset(getOutputDirection()));
+        if (container.isPresent()) {
         }
     }
 
@@ -259,7 +221,7 @@ public class TileManager extends TileMachineBase implements ISidedInventory, IGu
 
     @Override
     public String getName() {
-        return BPBlocks.manager.getUnlocalizedName();
+        return BPBlocks.manager.getTranslationKey();
     }
 
     @Override
@@ -275,7 +237,7 @@ public class TileManager extends TileMachineBase implements ISidedInventory, IGu
 
     @Override
     public boolean isUsableByPlayer(EntityPlayer player) {
-        return true;
+        return player.getDistanceSqToCenter(pos) <= 64.0D;
     }
 
     @Override
@@ -345,20 +307,6 @@ public class TileManager extends TileMachineBase implements ISidedInventory, IGu
     @Override
     public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
         return true;
-    }
-
-    @Override
-    public void onButtonPress(EntityPlayer player, int messageId, int value) {
-
-        if (messageId == 0) {
-            filterColor = TubeColor.values()[value];
-        } else if (messageId == 1) {
-            mode = value;
-        } else if (messageId == 2) {
-            priority = value;
-        } else {
-            fuzzySetting = value;
-        }
     }
 
     @Override

@@ -19,6 +19,7 @@ package com.bluepowermod.util;
 
 import com.bluepowermod.compat.CompatibilityUtils;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.List;
