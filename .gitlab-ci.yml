@@ -1,0 +1,10 @@
+image: java:8-jdk
+
+build:
+  stage: build
+  script:
+    - chmod +x gradlew
+    - ./gradlew clean build
+  artifacts:
+    paths:
+      - build/libs/*.jar
