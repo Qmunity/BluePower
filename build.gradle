@@ -58,7 +58,7 @@ project.ext {
 
 version = "${project.ext.major}.${project.minor}.${project.build}"
 group = "com.bluepowermod"
-archivesBaseName = "BluePower"
+archivesBaseName = "BluePower-Unoffical"
 
 dependencies {
     deobfCompile "li.cil.oc:OpenComputers:MC1.12.2-1.7.2.71:api"
