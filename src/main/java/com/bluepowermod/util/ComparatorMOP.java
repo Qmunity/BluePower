@@ -7,23 +7,23 @@
  */
 package com.bluepowermod.util;
 
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
+
 import java.util.Comparator;
 
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.Vec3;
-import uk.co.qmunity.lib.vec.Vec3d;
 
-public class ComparatorMOP implements Comparator<MovingObjectPosition> {
+public class ComparatorMOP implements Comparator<RayTraceResult> {
 
-    private Vec3 start = null;
+    private Vec3d start = null;
 
     public ComparatorMOP(Vec3d start) {
 
-        this.start = start.toVec3();
+        this.start = start;
     }
 
     @Override
-    public int compare(MovingObjectPosition arg0, MovingObjectPosition arg1) {
+    public int compare(RayTraceResult arg0, RayTraceResult arg1) {
 
         return (int) (((arg0.hitVec.distanceTo(start) - arg1.hitVec.distanceTo(start)) * 1000000));
     }

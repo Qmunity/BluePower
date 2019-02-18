@@ -7,15 +7,15 @@
  */
 package com.bluepowermod.container;
 
+import com.bluepowermod.client.gui.GuiContainerBase;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.ICrafting;
-import uk.co.qmunity.lib.client.gui.GuiContainerBase;
+import net.minecraft.inventory.IContainerListener;
 
 import com.bluepowermod.ClientProxy;
 import com.bluepowermod.tile.tier2.TileRetriever;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * @author MineMaarten
@@ -39,14 +39,14 @@ public class ContainerRetriever extends ContainerFilter {
 
         super.detectAndSendChanges();
 
-        for (Object crafter : crafters) {
-            ICrafting icrafting = (ICrafting) crafter;
+        for (Object crafter : listeners) {
+            IContainerListener icrafting = (IContainerListener) crafter;
 
             if (slotIndex != retriever.slotIndex) {
-                icrafting.sendProgressBarUpdate(this, 2, retriever.slotIndex);
+                icrafting.sendWindowProperty(this, 2, retriever.slotIndex);
             }
             if (mode != retriever.mode) {
-                icrafting.sendProgressBarUpdate(this, 3, retriever.mode);
+                icrafting.sendWindowProperty(this, 3, retriever.mode);
             }
         }
         slotIndex = retriever.slotIndex;

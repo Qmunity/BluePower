@@ -21,18 +21,16 @@
 
 package com.bluepowermod.client.gui;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraftforge.common.config.ConfigElement;
-
 import com.bluepowermod.BluePower;
 import com.bluepowermod.reference.Refs;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraftforge.common.config.ConfigElement;
+import net.minecraftforge.fml.client.config.DummyConfigElement;
+import net.minecraftforge.fml.client.config.GuiConfig;
+import net.minecraftforge.fml.client.config.IConfigElement;
 
-import cpw.mods.fml.client.config.DummyConfigElement;
-import cpw.mods.fml.client.config.GuiConfig;
-import cpw.mods.fml.client.config.IConfigElement;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BPGuiConfig extends GuiConfig {
 
@@ -56,7 +54,6 @@ public class BPGuiConfig extends GuiConfig {
         List<IConfigElement> listTeslatite = new ConfigElement(BluePower.config.getCategory(Refs.CONFIG_TESLATITE)).getChildElements();
         List<IConfigElement> listWorldGen = new ConfigElement(BluePower.config.getCategory(Refs.CONFIG_WORLDGEN)).getChildElements();
         List<IConfigElement> listSettings = new ConfigElement(BluePower.config.getCategory(Refs.CONFIG_SETTINGS)).getChildElements();
-        List<IConfigElement> listRecipes = new ConfigElement(BluePower.config.getCategory(Refs.CONFIG_RECIPES)).getChildElements();
         List<IConfigElement> listEnchants = new ConfigElement(BluePower.config.getCategory(Refs.CONFIG_ENCHANTS)).getChildElements();
         List<IConfigElement> listPneumaticTube = new ConfigElement(BluePower.config.getCategory(Refs.CONFIG_TUBES)).getChildElements();
         List<IConfigElement> listCircuitDatabase = new ConfigElement(BluePower.config.getCategory(Refs.CONFIG_CIRCUIT_DATABASE))
@@ -64,7 +61,6 @@ public class BPGuiConfig extends GuiConfig {
 
         list.add(new DummyConfigElement.DummyCategoryElement("World Gen", "config.bluepower:worldgen", listWorldGen));
         list.add(new DummyConfigElement.DummyCategoryElement("Settings", "config.bluepower:settings", listSettings));
-        list.add(new DummyConfigElement.DummyCategoryElement("Recipes", "config.bluepower:recipes", listRecipes));
         list.add(new DummyConfigElement.DummyCategoryElement("Enchantments", "config.bluepower:enchantments", listEnchants));
         list.add(new DummyConfigElement.DummyCategoryElement("Pneumatic Tubes", "config.bluepower:tubes", listPneumaticTube));
         list.add(new DummyConfigElement.DummyCategoryElement("Circuit Database", "config.bluepower:circuitDatabase", listCircuitDatabase));

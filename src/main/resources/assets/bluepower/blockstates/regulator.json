@@ -1,0 +1,31 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "textures": {
+      "side": "bluepower:blocks/machines/regulator_side",
+      "top": "bluepower:blocks/machines/regulator_side_0",
+      "bottom": "bluepower:blocks/machines/regulator_side_0",
+      "front": "bluepower:blocks/machines/regulator_front",
+      "back": "bluepower:blocks/machines/regulator_back",
+      "particle": "#side"
+    },
+    "model": "bluepower:cube_front_back",
+    "uvlock": false
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [{"x": -90}],
+    "facing": {
+      "north": {},
+      "south": {"y": 180},
+      "west": {"y": 270},
+      "east": {"y": 90},
+      "up": {"x": -90},
+      "down": {"x": 90}
+    },
+    "active":{
+      "true":{"textures": {"side": "bluepower:blocks/machines/regulator_active"}},
+      "false":{"textures": {"side": "bluepower:blocks/machines/regulator_side"}}
+    }
+  }
+}

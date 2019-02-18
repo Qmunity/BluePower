@@ -7,10 +7,13 @@
  */
 package com.bluepowermod.tile.tier1;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
+import com.bluepowermod.BluePower;
+import com.bluepowermod.block.BlockContainerFacingBase;
+import com.bluepowermod.helper.IOHelper;
+import com.bluepowermod.init.BPBlocks;
+import com.bluepowermod.tile.IEjectAnimator;
+import com.bluepowermod.tile.TileBase;
+import com.mojang.authlib.GameProfile;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -21,87 +24,75 @@ import net.minecraft.init.Items;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemRedstone;
-import net.minecraft.item.ItemReed;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.FakePlayerFactory;
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action;
 
-import com.bluepowermod.BluePower;
-import com.bluepowermod.helper.IOHelper;
-import com.bluepowermod.init.BPBlocks;
-import com.bluepowermod.tile.IEjectAnimator;
-import com.bluepowermod.tile.TileBase;
-import com.mojang.authlib.GameProfile;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
+;
 
 /**
  * @author MineMaarten
  */
 public class TileDeployer extends TileBase implements ISidedInventory, IEjectAnimator {
-    
-    private int                      animationTimer      = -1;
-    private final ItemStack[]        inventory           = new ItemStack[9];
+
+    private final NonNullList<ItemStack> inventory       = NonNullList.withSize(10, ItemStack.EMPTY);
     private static final List<Item>  blacklistedItems    = new ArrayList<Item>();
     private static final GameProfile FAKE_PLAYER_PROFILE = new GameProfile(UUID.randomUUID(), "[BP Deployer]");
     
     static {
-        blacklistedItems.add(Items.ender_pearl);
-    }
-    
-    @Override
-    public void updateEntity() {
-    
-        if (animationTimer >= 0) {
-            if (++animationTimer > 10) {
-                animationTimer = -1;
-            }
-        }
+        blacklistedItems.add(Items.ENDER_PEARL);
     }
     
     private boolean canDeployItem(ItemStack stack) {
     
-        return stack != null && !blacklistedItems.contains(stack.getItem());
+        return !stack.isEmpty() && !blacklistedItems.contains(stack.getItem());
     }
     
     @Override
     protected void redstoneChanged(boolean newValue) {
     
         super.redstoneChanged(newValue);
-        if (!worldObj.isRemote && newValue) {
-            animationTimer = 0;
+        if (!world.isRemote && newValue) {
             sendUpdatePacket();
             
-            FakePlayer player = FakePlayerFactory.get((WorldServer) worldObj, FAKE_PLAYER_PROFILE);
-            for (int i = 0; i < inventory.length; i++) {
-                ItemStack stack = inventory[i];
+            FakePlayer player = FakePlayerFactory.get((WorldServer) world, FAKE_PLAYER_PROFILE);
+            for (int i = 0; i < inventory.size(); i++) {
+                ItemStack stack = inventory.get(i);
                 player.inventory.setInventorySlotContents(i, stack);
             }
             
             rightClick(player, 9);
             
-            for (int i = 0; i < inventory.length; i++) {
+            for (int i = 0; i < inventory.size(); i++) {
                 ItemStack stack = player.inventory.getStackInSlot(i);
-                if (stack == null || stack.stackSize <= 0) {
-                    inventory[i] = null;
+                if (stack.isEmpty() || stack.getCount() <= 0) {
+                    inventory.set(i, ItemStack.EMPTY);
                 } else {
-                    inventory[i] = stack;
+                    inventory.set(i, stack);
                 }
-                player.inventory.setInventorySlotContents(i, null);
+                player.inventory.setInventorySlotContents(i, ItemStack.EMPTY);
             }
             for (int i = 0; i < player.inventory.getSizeInventory(); i++) {
                 ItemStack stack = player.inventory.getStackInSlot(i);
-                if (stack != null && stack.stackSize > 0) {
+                if (!stack.isEmpty() && stack.getCount() > 0) {
                     ItemStack remainder = IOHelper.insert(this, stack, getFacingDirection().getOpposite(), false);
-                    if (remainder != null) {
-                        worldObj.spawnEntityInWorld(new EntityItem(worldObj, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, remainder));
+                    if (!remainder.isEmpty()) {
+                        world.spawnEntity(new EntityItem(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, remainder));
                     }
-                    player.inventory.setInventorySlotContents(i, null);
+                    player.inventory.setInventorySlotContents(i, ItemStack.EMPTY);
                 }
             }
         }
@@ -118,16 +109,16 @@ public class TileDeployer extends TileBase implements ISidedInventory, IEjectAni
     
         if (useItems > 9) throw new IllegalArgumentException("Hotbar is 9 items in width! You're trying " + useItems + "!");
         
-        ForgeDirection faceDir = getFacingDirection();
-        int dx = faceDir.offsetX;
-        int dy = faceDir.offsetY;
-        int dz = faceDir.offsetZ;
-        int x = xCoord + dx;
-        int y = yCoord + dy;
-        int z = zCoord + dz;
+        EnumFacing faceDir = getFacingDirection();
+        int dx = faceDir.getXOffset();
+        int dy = faceDir.getYOffset();
+        int dz = faceDir.getZOffset();
+        int x = pos.getX() + dx;
+        int y = pos.getY() + dy;
+        int z = pos.getZ() + dz;
         
         player.setPosition(x + 0.5, y + 0.5 - player.eyeHeight, z + 0.5);
-        player.rotationPitch = faceDir.offsetY * -90;
+        player.rotationPitch = faceDir.getYOffset() * -90;
         switch (faceDir) {
             case NORTH:
                 player.rotationYaw = 180;
@@ -143,55 +134,56 @@ public class TileDeployer extends TileBase implements ISidedInventory, IEjectAni
         }
         
         try {
-            PlayerInteractEvent event = ForgeEventFactory.onPlayerInteract(player, Action.RIGHT_CLICK_AIR, x, y, z, faceDir.ordinal(), worldObj);
+            PlayerInteractEvent event =  new PlayerInteractEvent.RightClickEmpty(player, EnumHand.MAIN_HAND);
             if (event.isCanceled()) return false;
             
-            Block block = worldObj.getBlock(x, y, z);
-            List<EntityLivingBase> detectedEntities = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, AxisAlignedBB.getBoundingBox(x, y, z, x + 1, y + 1, z + 1));
+            Block block = world.getBlockState(new BlockPos(x, y, z)).getBlock();
+            List<EntityLivingBase> detectedEntities = world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(x, y, z, x + 1, y + 1, z + 1));
             
-            Entity entity = detectedEntities.isEmpty() ? null : detectedEntities.get(worldObj.rand.nextInt(detectedEntities.size()));
+            Entity entity = detectedEntities.isEmpty() ? null : detectedEntities.get(world.rand.nextInt(detectedEntities.size()));
             
             if (entity != null) {
                 for (int i = 0; i < useItems; i++) {
                     player.inventory.currentItem = i;
-                    ItemStack stack = player.getCurrentEquippedItem();
-                    if (canDeployItem(stack) && stack.getItem().itemInteractionForEntity(stack, player, (EntityLivingBase) entity)) return true;
-                    if (entity instanceof EntityAnimal && ((EntityAnimal) entity).interact(player)) return true;
+                    ItemStack stack = player.getHeldItemMainhand();
+                    if (canDeployItem(stack) && stack.getItem().itemInteractionForEntity(stack, player, (EntityLivingBase) entity, EnumHand.MAIN_HAND)) return true;
+                    if (entity instanceof EntityAnimal && ((EntityAnimal) entity).processInteract(player, EnumHand.MAIN_HAND)) return true;
                 }
             }
             
             for (int i = 0; i < useItems; i++) {
                 player.inventory.currentItem = i;
-                ItemStack stack = player.getCurrentEquippedItem();
-                if (canDeployItem(stack) && stack.getItem().onItemUseFirst(stack, player, worldObj, x, y, z, faceDir.ordinal(), dx, dy, dz)) return true;
+                ItemStack stack = player.getHeldItemMainhand();
+                if (canDeployItem(stack) && stack.getItem().onItemUseFirst(player, world, new BlockPos(x, y, z), faceDir, dx, dy, dz, EnumHand.MAIN_HAND) == EnumActionResult.SUCCESS) return true;
             }
             
             for (int i = 0; i < useItems; i++) {
                 player.inventory.currentItem = i;
-                if (!worldObj.isAirBlock(x, y, x) && block.onBlockActivated(worldObj, x, y, z, player, faceDir.ordinal(), dx, dy, dz)) return true;
+                if (!world.isAirBlock(new BlockPos(x, y, z)) && block.onBlockActivated(world, new BlockPos(x, y, z), world.getBlockState(new BlockPos(x, y, z)), player, EnumHand.MAIN_HAND, faceDir, dx, dy, dz)) return true;
             }
             
             for (int i = 0; i < useItems; i++) {
                 player.inventory.currentItem = i;
-                ItemStack stack = player.getCurrentEquippedItem();
+                ItemStack stack = player.getHeldItemMainhand();
                 boolean isGoingToShift = false;              
-                if(stack != null){
-                	if(stack.getItem() instanceof ItemReed || stack.getItem() instanceof ItemRedstone){
+                if(!stack.isEmpty()){
+                	if(stack.getItem() == Items.REEDS || stack.getItem() instanceof ItemRedstone){
                 		isGoingToShift = true;
                 	}
                 }
-                int useX = isGoingToShift ? xCoord : x;
-                int useY = isGoingToShift ? yCoord : y;
-                int useZ = isGoingToShift ? zCoord : z;
-                if (canDeployItem(stack) && stack.getItem().onItemUse(stack, player, worldObj, useX, useY, useZ, faceDir.ordinal(), dx, dy, dz)) return true;
+                int useX = isGoingToShift ? pos.getX() : x;
+                int useY = isGoingToShift ? pos.getY() : y;
+                int useZ = isGoingToShift ? pos.getZ() : z;
+                if (canDeployItem(stack) && stack.getItem().onItemUse(player, world, new BlockPos(useX, useY, useZ), EnumHand.MAIN_HAND, faceDir, dx, dy, dz) == EnumActionResult.SUCCESS) return true;
             }
             
             for (int i = 0; i < useItems; i++) {
                 player.inventory.currentItem = i;
-                ItemStack stack = player.getCurrentEquippedItem();
+                ItemStack stack = player.getHeldItemMainhand();
                 if (canDeployItem(stack)) {
                     ItemStack copy = stack.copy();
-                    player.setCurrentItemOrArmor(0, stack.getItem().onItemRightClick(stack, worldObj, player));
+                    //TODO Check this
+                    player.setHeldItem(EnumHand.MAIN_HAND, stack.getItem().onItemRightClick(world, player, EnumHand.MAIN_HAND).getResult());
                     if (!copy.isItemEqual(stack)) return true;
                 }
             }
@@ -213,7 +205,7 @@ public class TileDeployer extends TileBase implements ISidedInventory, IEjectAni
         
         for (int i = 0; i < 9; i++) {
             NBTTagCompound tc = tCompound.getCompoundTag("inventory" + i);
-            inventory[i] = ItemStack.loadItemStackFromNBT(tc);
+            inventory.set(i, new ItemStack(tc));
         }
     }
     
@@ -221,45 +213,28 @@ public class TileDeployer extends TileBase implements ISidedInventory, IEjectAni
      * This function gets called whenever the world/chunk is saved
      */
     @Override
-    public void writeToNBT(NBTTagCompound tCompound) {
+    public NBTTagCompound writeToNBT(NBTTagCompound tCompound) {
     
         super.writeToNBT(tCompound);
         
         for (int i = 0; i < 9; i++) {
-            if (inventory[i] != null) {
                 NBTTagCompound tc = new NBTTagCompound();
-                inventory[i].writeToNBT(tc);
+                inventory.get(i).writeToNBT(tc);
                 tCompound.setTag("inventory" + i, tc);
-            }
         }
+        return tCompound;
     }
-    
-    @Override
-    public void writeToPacketNBT(NBTTagCompound tag) {
-    
-        super.writeToPacketNBT(tag);
-        tag.setBoolean("animation", animationTimer >= 0);
-    }
-    
-    @Override
-    public void readFromPacketNBT(NBTTagCompound tag) {
-    
-        super.readFromPacketNBT(tag);
-        if (tag.getBoolean("animation")) {
-            animationTimer = 0;
-        }
-    }
-    
+
     @Override
     public int getSizeInventory() {
     
-        return inventory.length;
+        return inventory.size();
     }
     
     @Override
     public ItemStack getStackInSlot(int i) {
     
-        return inventory[i];
+        return inventory.get(i);
     }
     
     @Override
@@ -267,40 +242,40 @@ public class TileDeployer extends TileBase implements ISidedInventory, IEjectAni
     
         // this needs to be side aware as well
         ItemStack itemStack = getStackInSlot(slot);
-        if (itemStack != null) {
-            if (itemStack.stackSize <= amount) {
-                setInventorySlotContents(slot, null);
+        if (!itemStack.isEmpty()) {
+            if (itemStack.getCount() <= amount) {
+                setInventorySlotContents(slot, ItemStack.EMPTY);
             } else {
                 itemStack = itemStack.splitStack(amount);
-                if (itemStack.stackSize == 0) {
-                    setInventorySlotContents(slot, null);
+                if (itemStack.getCount() == 0) {
+                    setInventorySlotContents(slot,ItemStack.EMPTY);
                 }
             }
         }
         
         return itemStack;
     }
-    
+
     @Override
-    public ItemStack getStackInSlotOnClosing(int i) {
-    
+    public ItemStack removeStackFromSlot(int i) {
         return getStackInSlot(i);
     }
+
     
     @Override
     public void setInventorySlotContents(int i, ItemStack itemStack) {
     
-        inventory[i] = itemStack;
+        inventory.set(i, itemStack);
     }
     
     @Override
-    public String getInventoryName() {
+    public String getName() {
     
-        return BPBlocks.deployer.getUnlocalizedName();
+        return BPBlocks.deployer.getTranslationKey();
     }
     
     @Override
-    public boolean hasCustomInventoryName() {
+    public boolean hasCustomName() {
     
         return true;
     }
@@ -312,21 +287,20 @@ public class TileDeployer extends TileBase implements ISidedInventory, IEjectAni
     }
     
     @Override
-    public boolean isUseableByPlayer(EntityPlayer player) {
-    
-        return true;
+    public boolean isUsableByPlayer(EntityPlayer player) {
+        return player.getDistanceSqToCenter(pos) <= 64.0D;
     }
-    
+
     @Override
-    public void openInventory() {
-    
+    public void openInventory(EntityPlayer player) {
+
     }
-    
+
     @Override
-    public void closeInventory() {
-    
+    public void closeInventory(EntityPlayer player) {
+
     }
-    
+
     @Override
     public boolean isItemValidForSlot(int i, ItemStack itemStack) {
     
@@ -338,33 +312,30 @@ public class TileDeployer extends TileBase implements ISidedInventory, IEjectAni
     
         List<ItemStack> drops = super.getDrops();
         for (ItemStack stack : inventory)
-            if (stack != null) drops.add(stack);
+            if (!stack.isEmpty()) drops.add(stack);
         return drops;
     }
-    
+
     @Override
-    public int[] getAccessibleSlotsFromSide(int var1) {
-    
-        ForgeDirection direction = getFacingDirection();
-        
-        if (var1 == direction.ordinal()) { return new int[] {}; }
+    public int[] getSlotsForFace(EnumFacing side) {
+        EnumFacing direction = getFacingDirection();
+
+        if (side == direction) { return new int[] {}; }
         return new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8 };
     }
-    
+
     @Override
-    public boolean canInsertItem(int slot, ItemStack itemStack, int side) {
-    
-        for (int i : getAccessibleSlotsFromSide(side)) {
-            if (slot == i) { return true; }
+    public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction) {
+        for (int i : getSlotsForFace(direction)) {
+            if (index == i) { return true; }
         }
         return false;
     }
-    
+
     @Override
-    public boolean canExtractItem(int slot, ItemStack itemStack, int side) {
-    
-        for (int i : getAccessibleSlotsFromSide(side)) {
-            if (slot == i) { return true; }
+    public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
+        for (int i : getSlotsForFace(direction)) {
+            if (index == i) { return true; }
         }
         return false;
     }
@@ -372,7 +343,7 @@ public class TileDeployer extends TileBase implements ISidedInventory, IEjectAni
     @Override
     public boolean isEjecting() {
     
-        return animationTimer >= 0;
+        return (world.getBlockState(pos)).getValue(BlockContainerFacingBase.ACTIVE);
     }
  
     @Override
@@ -380,4 +351,31 @@ public class TileDeployer extends TileBase implements ISidedInventory, IEjectAni
     	
     	return true;
     }
+
+    //Todo Fields
+    @Override
+    public boolean isEmpty() {
+        return inventory.size() == 0;
+    }
+
+    @Override
+    public int getField(int id) {
+        return 0;
+    }
+
+    @Override
+    public void setField(int id, int value) {
+
+    }
+
+    @Override
+    public int getFieldCount() {
+        return 0;
+    }
+
+    @Override
+    public void clear() {
+
+    }
+
 }

@@ -57,13 +57,13 @@ public class ContainerKinect extends Container {
     @Override
     public boolean canInteractWith(EntityPlayer player) {
 
-        return tilekinect.isUseableByPlayer(player);
+        return tilekinect.isUsableByPlayer(player);
     }
 
     @Override
     public ItemStack transferStackInSlot(EntityPlayer player, int par2) {
     	
-    	return null;
+    	return ItemStack.EMPTY;
      }
     
     

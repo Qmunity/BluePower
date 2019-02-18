@@ -17,20 +17,20 @@
 
 package com.bluepowermod.tile.tier1;
 
-import java.util.List;
-
+import com.bluepowermod.init.BPBlocks;
+import com.bluepowermod.tile.TileBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.NonNullList;
 
-import com.bluepowermod.init.BPBlocks;
-import com.bluepowermod.tile.TileBase;
+import java.util.List;
 
 public class TileBuffer extends TileBase implements ISidedInventory {
     
-    private final ItemStack[] allInventories = new ItemStack[20];
+    private final NonNullList<ItemStack> allInventories = NonNullList.withSize(21, ItemStack.EMPTY);
     
     /**
      * This function gets called whenever the world/chunk loads
@@ -42,7 +42,7 @@ public class TileBuffer extends TileBase implements ISidedInventory {
         
         for (int i = 0; i < 20; i++) {
             NBTTagCompound tc = tCompound.getCompoundTag("inventory" + i);
-            allInventories[i] = ItemStack.loadItemStackFromNBT(tc);
+            allInventories.set(i, new ItemStack(tc));
         }
     }
     
@@ -50,69 +50,67 @@ public class TileBuffer extends TileBase implements ISidedInventory {
      * This function gets called whenever the world/chunk is saved
      */
     @Override
-    public void writeToNBT(NBTTagCompound tCompound) {
+    public NBTTagCompound writeToNBT(NBTTagCompound tCompound) {
     
         super.writeToNBT(tCompound);
         
         for (int i = 0; i < 20; i++) {
-            if (allInventories[i] != null) {
                 NBTTagCompound tc = new NBTTagCompound();
-                allInventories[i].writeToNBT(tc);
+                allInventories.get(i).writeToNBT(tc);
                 tCompound.setTag("inventory" + i, tc);
-            }
         }
+        return  tCompound;
     }
     
     @Override
     public int getSizeInventory() {
     
-        return allInventories.length;
+        return allInventories.size();
     }
     
     @Override
     public ItemStack getStackInSlot(int i) {
     
-        return allInventories[i];
+        return allInventories.get(i);
     }
     
     @Override
     public ItemStack decrStackSize(int slot, int amount) {
     
         ItemStack itemStack = getStackInSlot(slot);
-        if (itemStack != null) {
-            if (itemStack.stackSize <= amount) {
-                setInventorySlotContents(slot, null);
+        if (!itemStack.isEmpty()) {
+            if (itemStack.getCount() <= amount) {
+                setInventorySlotContents(slot, ItemStack.EMPTY);
             } else {
                 itemStack = itemStack.splitStack(amount);
-                if (itemStack.stackSize == 0) {
-                    setInventorySlotContents(slot, null);
+                if (itemStack.getCount() == 0) {
+                    setInventorySlotContents(slot, ItemStack.EMPTY);
                 }
             }
         }
         
         return itemStack;
     }
-    
+
     @Override
-    public ItemStack getStackInSlotOnClosing(int i) {
-    
+    public ItemStack removeStackFromSlot(int i) {
         return getStackInSlot(i);
     }
-    
+
     @Override
     public void setInventorySlotContents(int i, ItemStack itemStack) {
     
-        allInventories[i] = itemStack;
+        allInventories.set(i, itemStack);
     }
     
     @Override
-    public String getInventoryName() {
+    public String getName() {
     
-        return BPBlocks.buffer.getUnlocalizedName();
+        return BPBlocks.buffer.getTranslationKey();
     }
     
     @Override
-    public boolean hasCustomInventoryName() {
+    public boolean hasCustomName() {
     
         return true;
     }
@@ -122,23 +120,22 @@ public class TileBuffer extends TileBase implements ISidedInventory {
     
         return 64;
     }
-    
+
     @Override
-    public boolean isUseableByPlayer(EntityPlayer player) {
-    
-        return true;
+    public boolean isUsableByPlayer(EntityPlayer player) {
+        return player.getDistanceSqToCenter(pos) <= 64.0D;
     }
-    
+
     @Override
-    public void openInventory() {
-    
+    public void openInventory(EntityPlayer player) {
+
     }
-    
+
     @Override
-    public void closeInventory() {
-    
+    public void closeInventory(EntityPlayer player) {
+
     }
-    
+
     @Override
     public boolean isItemValidForSlot(int i, ItemStack itemStack) {
     
@@ -150,17 +147,16 @@ public class TileBuffer extends TileBase implements ISidedInventory {
     
         List<ItemStack> drops = super.getDrops();
         for (ItemStack stack : allInventories)
-            if (stack != null) drops.add(stack);
+            if (!stack.isEmpty()) drops.add(stack);
         return drops;
     }
-    
+
     @Override
-    public int[] getAccessibleSlotsFromSide(int var1) {
-    
-        ForgeDirection access = ForgeDirection.getOrientation(var1);
-        ForgeDirection dir = getFacingDirection();
-        if (access == dir) {
-            int[] allSlots = new int[allInventories.length];
+    public int[] getSlotsForFace(EnumFacing side) {
+        int var1 = side.ordinal();
+        EnumFacing dir = getFacingDirection();
+        if (side == dir) {
+            int[] allSlots = new int[allInventories.size()];
             for (int i = 0; i < allSlots.length; i++)
                 allSlots[i] = i;
             return allSlots;
@@ -172,16 +168,40 @@ public class TileBuffer extends TileBase implements ISidedInventory {
         }
         return slots;
     }
-    
+
     @Override
-    public boolean canInsertItem(int slot, ItemStack itemStack, int side) {
-    
+    public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction) {
         return true;
     }
-    
+
     @Override
-    public boolean canExtractItem(int slot, ItemStack itemStack, int side) {
-    
+    public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
         return true;
+    }
+
+    //Todo Fields
+    @Override
+    public boolean isEmpty() {
+        return allInventories.size() == 0;
+    }
+
+    @Override
+    public int getField(int id) {
+        return 0;
+    }
+
+    @Override
+    public void setField(int id, int value) {
+
+    }
+
+    @Override
+    public int getFieldCount() {
+        return 0;
+    }
+
+    @Override
+    public void clear() {
+
     }
 }

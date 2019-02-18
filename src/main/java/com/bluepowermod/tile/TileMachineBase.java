@@ -7,16 +7,14 @@
  */
 package com.bluepowermod.tile;
 
-import com.bluepowermod.BluePower;
 import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
 import com.bluepowermod.api.tube.ITubeConnection;
 import com.bluepowermod.api.tube.IWeightedTubeInventory;
 import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.helper.TileEntityCache;
-import com.bluepowermod.part.tube.TubeStack;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import com.bluepowermod.container.stack.TubeStack;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.item.EntityItem;
@@ -24,8 +22,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.IFluidBlock;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -48,23 +48,14 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
     private static final int WARNING_INTERVAL = 600; // Every 30s
 
     @Override
-    public void updateEntity() {
+    public void update() {
 
-        super.updateEntity();
+        super.update();
 
-        if (!worldObj.isRemote) {
+        if (!world.isRemote) {
             if (ejectionScheduled || getTicker() % BUFFER_EMPTY_INTERVAL == 0) {
                 ejectItems();
                 ejectionScheduled = false;
-            }
-            if (animationTicker >= 0 && isBufferEmpty()) {
-                if (++animationTicker > ANIMATION_TIME) {
-                    animationTicker = -1;
-                    sendUpdatePacket();
-                }
-            }
-            if (getBacklog().size() > 50 && getTicker() % WARNING_INTERVAL  == 0) {
-                BluePower.log.warn("Large backlog (" + getBacklog().size() + " stacks) detected in " + this.getBlockType().getLocalizedName() + " at: " + this.xCoord + ", " + this.yCoord + ", " + this.zCoord);
             }
         }
     }
@@ -76,12 +67,12 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
             if (IOHelper.canInterfaceWith(getTileCache(getOutputDirection()), getFacingDirection())) {
                 ItemStack returnedStack = IOHelper.insert(getTileCache(getOutputDirection()), tubeStack.stack, getFacingDirection(), tubeStack.color,
                         false);
-                if (returnedStack == null) {
+                if (returnedStack.isEmpty()) {
                     iterator.remove();
                     markDirty();
                     if (!ejectionScheduled)
                         break;
-                } else if (returnedStack.stackSize != tubeStack.stack.stackSize) {
+                } else if (returnedStack.getCount() != tubeStack.stack.getCount()) {
                     markDirty();
                     if (!ejectionScheduled)
                         break;
@@ -89,11 +80,9 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
                     break;
                 }
             } else if (spawnItemsInWorld) {
-                ForgeDirection direction = getFacingDirection().getOpposite();
-                if ((worldObj.getBlock(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ).getBlocksMovement(worldObj,
-                        xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ)) || (worldObj
-                        .getBlock(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ) instanceof BlockLiquid) || (worldObj
-                        .getBlock(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ) instanceof IFluidBlock)) {
+                EnumFacing direction = getFacingDirection().getOpposite();
+                Block block = world.getBlockState(pos.offset(direction)).getBlock();
+                if (block.isPassable(world, pos.offset(direction)) || block instanceof BlockLiquid || block instanceof IFluidBlock) {
                     ejectItemInWorld(tubeStack.stack, direction);
                     iterator.remove();
                     markDirty();
@@ -119,13 +108,13 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
     }
 
     protected void addItemToOutputBuffer(ItemStack stack, TubeColor color) {
-
-        if (!worldObj.isRemote) {
+        if (!world.isRemote) {
             internalItemStackBuffer.add(new TubeStack(stack, getOutputDirection().getOpposite(), color));
             if (internalItemStackBuffer.size() == 1)
                 ejectionScheduled = true;
             animationTicker = 0;
             sendUpdatePacket();
+            markDirty();
         }
     }
 
@@ -162,15 +151,15 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
         return internalItemStackBuffer.isEmpty();// also say the buffer is empty when a immediate injection is scheduled.
     }
 
-    public TileEntity getTileCache(ForgeDirection d) {
+    public TileEntity getTileCache(EnumFacing d) {
 
         if (tileCache == null) {
-            tileCache = new TileEntityCache(worldObj, xCoord, yCoord, zCoord);
+            tileCache = new TileEntityCache(world, pos);
         }
         return tileCache.getValue(d);
     }
 
-    public ForgeDirection getOutputDirection() {
+    public EnumFacing getOutputDirection() {
 
         return getFacingDirection().getOpposite();
     }
@@ -189,7 +178,7 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
     }
 
     @Override
-    public void writeToNBT(NBTTagCompound compound) {
+    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 
         super.writeToNBT(compound);
         NBTTagList nbttaglist = new NBTTagList();
@@ -201,43 +190,23 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
                 nbttaglist.appendTag(nbttagcompound1);
             }
         }
-
         compound.setTag("ItemBuffer", nbttaglist);
+        return compound;
     }
 
-    @Override
-    public void writeToPacketNBT(NBTTagCompound compound) {
+    public void ejectItemInWorld(ItemStack stack, EnumFacing oppDirection) {
 
-        super.writeToPacketNBT(compound);
-        compound.setBoolean("animating", animationTicker >= 0);
-    }
+        float spawnX = pos.getX() + 0.5F + oppDirection.getXOffset() * 0.8F;
+        float spawnY = pos.getY() + 0.5F + oppDirection.getYOffset() * 0.8F;
+        float spawnZ = pos.getZ() + 0.5F + oppDirection.getZOffset() * 0.8F;
 
-    @Override
-    public void readFromPacketNBT(NBTTagCompound compound) {
+        EntityItem droppedItem = new EntityItem(world, spawnX, spawnY, spawnZ, stack);
 
-        super.readFromPacketNBT(compound);
-        boolean wasAnimating = isEjecting();
-        isAnimating = compound.getBoolean("animating");
-        if (isAnimating)
-            animationTicker = 0;
-        if (worldObj != null && wasAnimating != isEjecting()) {
-            markForRenderUpdate();
-        }
-    }
+        droppedItem.motionX = oppDirection.getXOffset() * 0.20F;
+        droppedItem.motionY = oppDirection.getYOffset() * 0.20F;
+        droppedItem.motionZ = oppDirection.getZOffset() * 0.20F;
 
-    public void ejectItemInWorld(ItemStack stack, ForgeDirection oppDirection) {
-
-        float spawnX = xCoord + 0.5F + oppDirection.offsetX * 0.8F;
-        float spawnY = yCoord + 0.5F + oppDirection.offsetY * 0.8F;
-        float spawnZ = zCoord + 0.5F + oppDirection.offsetZ * 0.8F;
-
-        EntityItem droppedItem = new EntityItem(worldObj, spawnX, spawnY, spawnZ, stack);
-
-        droppedItem.motionX = oppDirection.offsetX * 0.20F;
-        droppedItem.motionY = oppDirection.offsetY * 0.20F;
-        droppedItem.motionZ = oppDirection.offsetZ * 0.20F;
-
-        worldObj.spawnEntityInWorld(droppedItem);
+        world.spawnEntity(droppedItem);
     }
 
     @Override
@@ -250,24 +219,14 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
     }
 
     @Override
-    public boolean isConnectedTo(ForgeDirection from) {
+    public boolean isConnectedTo(EnumFacing from) {
 
-        ForgeDirection dir = getOutputDirection();
+        EnumFacing dir = getOutputDirection();
         return from == dir.getOpposite() || acceptsTubeItems && from == dir;
     }
 
     @Override
-    public TubeStack acceptItemFromTube(TubeStack stack, ForgeDirection from, boolean simulate) {
-
-        if (from == getFacingDirection() && !isBufferEmpty() && !ejectionScheduled)
-            return stack;
-        if (!simulate)
-            this.addItemToOutputBuffer(stack.stack, stack.color);
-        return null;
-    }
-
-    @Override
-    public int getWeight(ForgeDirection from) {
+    public int getWeight(EnumFacing from) {
 
         return from == getOutputDirection().getOpposite() ? 1000000 : 0;// make the buffer side the last place to go
     }

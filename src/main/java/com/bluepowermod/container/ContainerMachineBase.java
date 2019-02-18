@@ -1,11 +1,10 @@
 package com.bluepowermod.container;
 
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.inventory.ICrafting;
-
 import com.bluepowermod.network.BPNetworkHandler;
 import com.bluepowermod.network.message.MessageSyncMachineBacklog;
 import com.bluepowermod.tile.TileMachineBase;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.inventory.IContainerListener;
 
 public abstract class ContainerMachineBase extends ContainerGhosts {
 
@@ -25,13 +24,13 @@ public abstract class ContainerMachineBase extends ContainerGhosts {
 
         super.detectAndSendChanges();
 
-        for (Object crafter : crafters) {
-            ICrafting icrafting = (ICrafting) crafter;
-
+        for (Object crafter : listeners) {
+            IContainerListener icrafting = (IContainerListener) crafter;
             if (backlogSize != machine.getBacklog().size() && icrafting instanceof EntityPlayerMP) {
                 BPNetworkHandler.INSTANCE.sendTo(new MessageSyncMachineBacklog(machine, machine.getBacklog()), (EntityPlayerMP) icrafting);
             }
         }
         backlogSize = machine.getBacklog().size();
+
     }
 }

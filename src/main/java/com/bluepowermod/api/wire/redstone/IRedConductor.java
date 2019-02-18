@@ -1,11 +1,11 @@
 package com.bluepowermod.api.wire.redstone;
 
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;;
 
 public interface IRedConductor {
 
-    public boolean hasLoss(ForgeDirection side);
+    public boolean hasLoss(EnumFacing side);
 
-    public boolean isAnalogue(ForgeDirection side);
+    public boolean isAnalogue(EnumFacing side);
 
 }

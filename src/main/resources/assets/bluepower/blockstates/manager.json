@@ -1,0 +1,29 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "textures": {
+      "side": "bluepower:blocks/machines/manager_side",
+      "top": "#side",
+      "bottom": "#side",
+      "right": "#side",
+      "left": "#side",
+      "front": "bluepower:blocks/machines/manager_front",
+      "back": "bluepower:blocks/machines/manager_back",
+      "particle": "#side"
+    },
+    "model": "bluepower:cube_sided",
+    "uvlock": true
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [{}],
+    "active=false,powered=false,rejecting=false":{"textures": {"side": "bluepower:blocks/machines/manager_side"}},
+    "active=true,powered=false,rejecting=false":{"textures": {"side": "bluepower:blocks/machines/manager_side_active"}},
+    "active=true,powered=true,rejecting=false":{"textures": {"side": "bluepower:blocks/machines/manager_side_active_powered"}},
+    "active=true,powered=false,rejecting=true":{"textures": {"side": "bluepower:blocks/machines/manager_side_active_rejecting"}},
+    "active=true,powered=true,rejecting=true":{"textures": {"side": "bluepower:blocks/machines/manager_side_active_powered_rejecting"}},
+    "active=false,powered=true,rejecting=false":{"textures": {"side": "bluepower:blocks/machines/manager_side_powered"}},
+    "active=false,powered=true,rejecting=true":{"textures": {"side": "bluepower:blocks/machines/manager_side_powered_rejecting"}},
+    "active=false,powered=false,rejecting=true":{"textures": {"side": "bluepower:blocks/machines/manager_side_rejecting"}}
+  }
+}

@@ -7,14 +7,11 @@
  */
 package com.bluepowermod.item;
 
-import java.util.List;
-
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.util.NonNullList;
 
 /**
  * @author MineMaarten
@@ -27,12 +24,11 @@ public abstract class ItemDamageableColorableOverlay extends ItemColorableOverla
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
-    public void getSubItems(Item par1, CreativeTabs tab, List subItems) {
-
-        subItems.add(new ItemStack(this, 1, 16));
-        super.getSubItems(par1, tab, subItems);
-
+    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
+        if(isInCreativeTab(tab)) {
+            items.add(new ItemStack(this, 1, 16));
+            super.getSubItems(tab, items);
+        }
     }
 
     public static int getUsesUsed(ItemStack stack) {

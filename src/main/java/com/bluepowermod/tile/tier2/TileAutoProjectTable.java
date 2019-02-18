@@ -1,21 +1,22 @@
 package com.bluepowermod.tile.tier2;
 
+import com.bluepowermod.helper.IOHelper;
+import com.bluepowermod.init.BPBlocks;
+import com.bluepowermod.tile.tier1.TileProjectTable;
+import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.util.ForgeDirection;
-
-import com.bluepowermod.helper.IOHelper;
-import com.bluepowermod.init.BPBlocks;
-import com.bluepowermod.tile.tier1.TileProjectTable;
+;
 
 public class TileAutoProjectTable extends TileProjectTable implements ISidedInventory {
     private static int[] slots;
-    protected ItemStack craftBuffer;
+    protected ItemStack craftBuffer = ItemStack.EMPTY;
     private boolean markedForBufferFill = true;
 
     static {
@@ -28,20 +29,19 @@ public class TileAutoProjectTable extends TileProjectTable implements ISidedInve
     public List<ItemStack> getDrops() {
 
         List<ItemStack> drops = super.getDrops();
-        if (craftBuffer != null)
+        if (!craftBuffer.isEmpty())
             drops.add(craftBuffer);
         return drops;
     }
 
     @Override
-    public void writeToNBT(NBTTagCompound tag) {
+    public NBTTagCompound writeToNBT(NBTTagCompound tag) {
         super.writeToNBT(tag);
-
-        if (craftBuffer != null) {
             NBTTagCompound bufferTag = new NBTTagCompound();
             craftBuffer.writeToNBT(bufferTag);
             tag.setTag("craftBuffer", bufferTag);
-        }
+
+        return tag;
     }
 
     @Override
@@ -49,16 +49,10 @@ public class TileAutoProjectTable extends TileProjectTable implements ISidedInve
         super.readFromNBT(tag);
 
         if (tag.hasKey("craftBuffer")) {
-            craftBuffer = ItemStack.loadItemStackFromNBT(tag.getCompoundTag("craftBuffer"));
+            craftBuffer = new ItemStack(tag.getCompoundTag("craftBuffer"));
         } else {
-            craftBuffer = null;
+            craftBuffer = ItemStack.EMPTY;
         }
-    }
-
-    @Override
-    protected void updateCraftingGrid() {
-        super.updateCraftingGrid();
-        markedForBufferFill = true;
     }
 
     @Override
@@ -68,21 +62,25 @@ public class TileAutoProjectTable extends TileProjectTable implements ISidedInve
     }
 
     @Override
-    public int[] getAccessibleSlotsFromSide(int p_94128_1_) {
+    public int[] getSlotsForFace(EnumFacing side) {
+        return new int[0];
+    }
+
+    public static int[] getSlots() {
         return slots;
     }
 
     @Override
-    public boolean canInsertItem(int slot, ItemStack stack, int side) {
+    public boolean canInsertItem(int slot, ItemStack itemStackIn, EnumFacing direction) {
         return slot < 18;
     }
 
     @Override
-    public boolean canExtractItem(int slot, ItemStack extractedStack, int side) {
+    public boolean canExtractItem(int slot, ItemStack stack, EnumFacing side) {
         if (slot == 18) {
             return true;
         } else {
-            return side > 5;
+            return side.ordinal() > 5;
         }
     }
 
@@ -113,44 +111,44 @@ public class TileAutoProjectTable extends TileProjectTable implements ISidedInve
     }
 
     @Override
-    public void updateEntity() {
-        super.updateEntity();
+    public void update() {
+        super.update();
         if (markedForBufferFill) {
-            updateCraftingGrid();
-            tryFillCraftBuffer();
             markedForBufferFill = false;
         }
     }
 
-    private void tryFillCraftBuffer() {
-        if (craftBuffer == null && craftResult.getStackInSlot(0) != null && !worldObj.isRemote) {
-            Map<ItemStack, Integer> recipeItems = new HashMap<ItemStack, Integer>();
-            for (ItemStack s : craftingGrid) {
-                if (s != null) {
-                    addItem(recipeItems, s);
-                }
-            }
-            boolean canCraft = true;
-            for (Map.Entry<ItemStack, Integer> entry : recipeItems.entrySet()) {
-                ItemStack s = entry.getKey().copy();
-                s.stackSize = entry.getValue();
-                ItemStack extracted = IOHelper.extract(this, ForgeDirection.UNKNOWN, s, true, true);
-                if (extracted == null) {
-                    canCraft = false;
-                    break;
-                }
-            }
-            if (canCraft) {
-                craftBuffer = craftResult.getStackInSlot(0).copy();
-                craft();
-            }
-        }
+
+    @Override
+    public String getName() {
+
+        return BPBlocks.auto_project_table.getTranslationKey();
+    }
+
+    //Todo Fields
+    @Override
+    public boolean isEmpty() {
+        return craftBuffer == ItemStack.EMPTY;
     }
 
     @Override
-    public String getInventoryName() {
+    public int getField(int id) {
+        return 0;
+    }
 
-        return BPBlocks.auto_project_table.getUnlocalizedName();
+    @Override
+    public void setField(int id, int value) {
+
+    }
+
+    @Override
+    public int getFieldCount() {
+        return 0;
+    }
+
+    @Override
+    public void clear() {
+
     }
 
 }

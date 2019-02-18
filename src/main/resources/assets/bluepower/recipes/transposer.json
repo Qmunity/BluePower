@@ -1,0 +1,25 @@
+{
+  "result": {
+    "item": "bluepower:transposer"
+  },
+  "pattern": [
+    "SSS",
+    "WPW",
+    "SRS"
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "S": {
+      "item": "minecraft:cobblestone"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    },
+    "W": {
+      "item": "#PLANKWOOD"
+    },
+    "P": {
+      "item": "minecraft:piston"
+    }
+  }
+}

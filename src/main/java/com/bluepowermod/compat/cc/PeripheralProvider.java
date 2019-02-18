@@ -6,6 +6,7 @@
  * with Blue Power. If not, see <http://www.gnu.org/licenses/>
  */
 package com.bluepowermod.compat.cc;
+/*
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -28,3 +29,4 @@ public class PeripheralProvider implements IPeripheralProvider {
         return null;
     }
 }
+*/

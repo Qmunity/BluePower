@@ -17,16 +17,13 @@
 
 package com.bluepowermod.init;
 
+import com.bluepowermod.BluePower;
+import com.bluepowermod.reference.Refs;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
-
-import com.bluepowermod.BluePower;
-import com.bluepowermod.part.tube.TubeStack;
-import com.bluepowermod.reference.Refs;
-
-import cpw.mods.fml.client.event.ConfigChangedEvent;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.client.event.ConfigChangedEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class Config {
 
@@ -138,16 +135,15 @@ public class Config {
                 .getStringList();
 
         Property prop = config.get(Refs.CONFIG_TUBES, "Enable Tube Caching", true);
-        prop.comment = "When enabled, the Tube routing is more friendly for the CPU. In return it uses a bit more RAM. Caching also may contain bugs still.";
+        prop.setComment("When enabled, the Tube routing is more friendly for the CPU. In return it uses a bit more RAM. Caching also may contain bugs still.");
         enableTubeCaching = prop.getBoolean();
 
         prop = config.get(Refs.CONFIG_TUBES, "Tube Render Mode", "auto");
-        prop.comment = "When encountering FPS issues with tubes with lots of items in it. Valid modes: \"normal\": Normal rendering, \"reduced\": All items going through tubes will display as 'one' item, \"none\": Only a small dot renders, \"auto\": will switch to \"normal\" on fancy graphics mode, and to \"reduced\" otherwise.";
+        prop.setComment("When encountering FPS issues with tubes with lots of items in it. Valid modes: \"normal\": Normal rendering, \"reduced\": All items going through tubes will display as 'one' item, \"none\": Only a small dot renders, \"auto\": will switch to \"normal\" on fancy graphics mode, and to \"reduced\" otherwise.");
         String tubeRenderMode = prop.getString();
         if (!tubeRenderMode.equals("normal") && !tubeRenderMode.equals("reduced") && !tubeRenderMode.equals("none")) {
             tubeRenderMode = "auto";
         }
-        TubeStack.renderMode = TubeStack.RenderMode.valueOf(tubeRenderMode.toUpperCase());
 
         serverCircuitSavingOpOnly = config.get(Refs.CONFIG_CIRCUIT_DATABASE, "Server Template Saving by Ops only", false).getBoolean(false);
 
@@ -167,14 +163,14 @@ public class Config {
     @SubscribeEvent
     public void onConfigChanged(ConfigChangedEvent event) {
 
-        if (event.modID.equals(Refs.MODID)) {
+        if (event.getModID().equals(Refs.MODID)) {
             syncConfig(BluePower.config);
         }
     }
 
     private static int findFreeEnchantID(int... ignored) {
 
-        for (int i = 20; i < Enchantment.enchantmentsList.length; i++) {
+        for (int i = 20; i < Enchantment.REGISTRY.getKeys().toArray().length; i++) {
             boolean ignore = false;
             for (int ig : ignored) {
                 if (ig == i) {
@@ -182,7 +178,7 @@ public class Config {
                     break;
                 }
             }
-            if (!ignore && Enchantment.enchantmentsList[i] == null)
+            if (!ignore && Enchantment.REGISTRY.getKeys().toArray()[i] == null)
                 return i;
         }
         return 0;

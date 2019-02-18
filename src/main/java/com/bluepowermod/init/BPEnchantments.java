@@ -18,8 +18,8 @@ public class BPEnchantments {
 	public static Enchantment disjunction;
 	
 	public static void init() {
-		vorpal = new EnchantmentVorpal(Config.vorpalEnchantmentId, 10);
-		disjunction = new EnchantmentDisjunction(Config.disjunctionEnchantmentId, 10);
+		vorpal = new EnchantmentVorpal(Config.vorpalEnchantmentId, Enchantment.Rarity.COMMON);
+		disjunction = new EnchantmentDisjunction(Config.disjunctionEnchantmentId, Enchantment.Rarity.COMMON);
 	}
 	
 }

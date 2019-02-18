@@ -1,0 +1,16 @@
+{
+  "result": {
+    "item": "bluepower:ruby_block"
+  },
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "#": {
+      "item": "#GEMRUBY"
+    }
+  }
+}

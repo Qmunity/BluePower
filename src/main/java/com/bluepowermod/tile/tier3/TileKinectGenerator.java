@@ -7,35 +7,31 @@
  */
 package com.bluepowermod.tile.tier3;
 
-import java.util.List;
-
+import com.bluepowermod.tile.TileBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.NonNullList;
 
-import com.bluepowermod.tile.TileBase;
+import java.util.List;
 
 public class TileKinectGenerator extends TileBase implements ISidedInventory{
 
 	public int windspeed = 10;
 	public int windtick = 0;
 	public TileKinectGenerator(){
-		
-		
-		
 	}
-	
-	
-	
+
 	@Override
-	public void updateEntity() {
+	public void update() {
 		
         if (windspeed < 0){
 			windtick +=windspeed;
 		}
 	}
-    private final ItemStack[] allInventories = new ItemStack[1];
+    private final NonNullList<ItemStack> allInventories = NonNullList.withSize(1, ItemStack.EMPTY);
 
     /**
      * This function gets called whenever the world/chunk loads
@@ -47,7 +43,7 @@ public class TileKinectGenerator extends TileBase implements ISidedInventory{
 
         for (int i = 0; i < 1; i++) {
             NBTTagCompound tc = tCompound.getCompoundTag("inventory" + i);
-            allInventories[i] = ItemStack.loadItemStackFromNBT(tc);
+            allInventories.set(i, new ItemStack(tc));
         }
     }
 
@@ -55,29 +51,31 @@ public class TileKinectGenerator extends TileBase implements ISidedInventory{
      * This function gets called whenever the world/chunk is saved
      */
     @Override
-    public void writeToNBT(NBTTagCompound tCompound) {
+    public NBTTagCompound writeToNBT(NBTTagCompound tCompound) {
 
         super.writeToNBT(tCompound);
 
         for (int i = 0; i < 1; i++) {
-            if (allInventories[i] != null) {
+            if (!allInventories.get(i).isEmpty()) {
                 NBTTagCompound tc = new NBTTagCompound();
-                allInventories[i].writeToNBT(tc);
+                allInventories.get(i).writeToNBT(tc);
                 tCompound.setTag("inventory" + i, tc);
             }
         }
+        return tCompound;
     }
 
     @Override
     public int getSizeInventory() {
 
-        return allInventories.length;
+        return allInventories.size();
     }
+
 
     @Override
     public ItemStack getStackInSlot(int i) {
 
-        return this.allInventories[i];
+        return this.allInventories.get(i);
     }
 
     @Override
@@ -85,13 +83,13 @@ public class TileKinectGenerator extends TileBase implements ISidedInventory{
 
         // this needs to be side aware as well
         ItemStack itemStack = getStackInSlot(slot);
-        if (itemStack != null) {
-            if (itemStack.stackSize <= amount) {
-                setInventorySlotContents(slot, null);
+        if (!itemStack.isEmpty()) {
+            if (itemStack.getCount() <= amount) {
+                setInventorySlotContents(slot, ItemStack.EMPTY);
             } else {
                 itemStack = itemStack.splitStack(amount);
-                if (itemStack.stackSize == 0) {
-                    setInventorySlotContents(slot, null);
+                if (itemStack.getCount() == 0) {
+                    setInventorySlotContents(slot, ItemStack.EMPTY);
                 }
             }
         }
@@ -100,26 +98,25 @@ public class TileKinectGenerator extends TileBase implements ISidedInventory{
     }
 
     @Override
-    public ItemStack getStackInSlotOnClosing(int i) {
-
+    public ItemStack removeStackFromSlot(int i) {
         return getStackInSlot(i);
     }
 
     @Override
     public void setInventorySlotContents(int i, ItemStack itemStack) {
 
-        this.allInventories[i] = itemStack;
-        worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+        this.allInventories.set(i, itemStack);
+        this.markDirty();
     }
 
     @Override
-    public String getInventoryName() {
+    public String getName() {
 
         return "tile.kinect.name";
     }
 
     @Override
-    public boolean hasCustomInventoryName() {
+    public boolean hasCustomName() {
 
         return true;
     }
@@ -131,18 +128,17 @@ public class TileKinectGenerator extends TileBase implements ISidedInventory{
     }
 
     @Override
-    public boolean isUseableByPlayer(EntityPlayer player) {
-
-        return true;
+    public boolean isUsableByPlayer(EntityPlayer player) {
+        return player.getDistanceSqToCenter(pos) <= 64.0D;
     }
 
     @Override
-    public void openInventory() {
+    public void openInventory(EntityPlayer player) {
 
     }
 
     @Override
-    public void closeInventory() {
+    public void closeInventory(EntityPlayer player) {
 
     }
 
@@ -153,30 +149,51 @@ public class TileKinectGenerator extends TileBase implements ISidedInventory{
     }
 
     @Override
+    public boolean isEmpty() {
+        return allInventories.isEmpty();
+    }
+
+    @Override
+    public int getField(int id) {
+        return 0;
+    }
+
+    @Override
+    public void setField(int id, int value) {
+
+    }
+
+    @Override
+    public int getFieldCount() {
+        return 0;
+    }
+
+    @Override
+    public void clear() {
+
+    }
+
+    @Override
     public List<ItemStack> getDrops() {
 
         List<ItemStack> drops = super.getDrops();
         for (ItemStack stack : allInventories)
-            if (stack != null) drops.add(stack);
+            if (!stack.isEmpty()) drops.add(stack);
         return drops;
     }
 
-    
-
     @Override
-    public boolean canInsertItem(int slot, ItemStack itemStack, int side) {
-
+    public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction) {
         return false;
     }
 
     @Override
-    public boolean canExtractItem(int slot, ItemStack itemStack, int side) {
-  
+    public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
         return false;
     }
 
-	@Override
-	public int[] getAccessibleSlotsFromSide(int var1) {
-		return null;
-	}
+    @Override
+    public int[] getSlotsForFace(EnumFacing side) {
+        return new int[0];
+    }
 }

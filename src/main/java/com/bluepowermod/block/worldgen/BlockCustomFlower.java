@@ -17,26 +17,19 @@
 
 package com.bluepowermod.block.worldgen;
 
-import net.minecraft.block.BlockBush;
-import net.minecraft.block.BlockFlower;
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.util.IIcon;
-import net.minecraft.world.IBlockAccess;
-import net.minecraftforge.common.EnumPlantType;
-
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.reference.Refs;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.block.BlockBush;
+import net.minecraft.block.BlockFlower;
+import net.minecraft.block.SoundType;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
+import net.minecraftforge.common.EnumPlantType;
 
 public class BlockCustomFlower extends BlockBush {
 
     public static final String[] field_149858_b = new String[] { "indigo_flower" };
-    @SideOnly(Side.CLIENT)
-    private IIcon icon;
-
     // private int meta;
 
     public BlockCustomFlower(String name) {
@@ -44,14 +37,16 @@ public class BlockCustomFlower extends BlockBush {
         super();
         this.setCreativeTab(BPCreativeTabs.blocks);
         this.setHardness(0.0F);
-        this.setStepSound(soundTypeGrass);
-        this.setBlockName(name);
+        this.setSoundType(SoundType.PLANT);
+        this.setTranslationKey(name);
+        this.setRegistryName(Refs.MODID, name);
+        BPBlocks.blockList.add(this);
     }
 
     @Override
-    public String getUnlocalizedName() {
+    public String getTranslationKey() {
 
-        return String.format("tile.%s:%s", Refs.MODID, getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
+        return String.format("tile.%s:%s", Refs.MODID, getUnwrappedUnlocalizedName(super.getTranslationKey()));
     }
 
     String getUnwrappedUnlocalizedName(String name) {
@@ -89,28 +84,7 @@ public class BlockCustomFlower extends BlockBush {
     }
 
     @Override
-    public EnumPlantType getPlantType(IBlockAccess world, int x, int y, int z) {
-
+    public EnumPlantType getPlantType(IBlockAccess world, BlockPos pos) {
         return EnumPlantType.Plains;
-    }
-
-    @SideOnly(Side.CLIENT)
-    @Override
-    public IIcon getIcon(int side, int meta) {
-
-        return this.icon;
-    }
-
-    @Override
-    public int damageDropped(int damage) {
-
-        return damage;
-    }
-
-    @SideOnly(Side.CLIENT)
-    @Override
-    public void registerBlockIcons(IIconRegister iconRegister) {
-
-        this.icon = iconRegister.registerIcon(Refs.MODID + ":" + Refs.INDIGOFLOWER_NAME);
     }
 }

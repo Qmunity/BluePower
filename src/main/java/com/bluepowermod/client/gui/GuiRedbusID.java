@@ -7,13 +7,12 @@
  */
 package com.bluepowermod.client.gui;
 
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StatCollector;
-
 import com.bluepowermod.container.ContainerRedbusID;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier3.IRedBusWindow;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.translation.I18n;
 
 public class GuiRedbusID extends GuiContainerBaseBP {
 
@@ -33,9 +32,9 @@ public class GuiRedbusID extends GuiContainerBaseBP {
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
 
-        drawHorizontalAlignedString(7, 4, xSize - 14, StatCollector.translateToLocal("gui.redbusgui"), true);
+        drawHorizontalAlignedString(7, 4, xSize - 14,  I18n.translateToLocal("gui.redbusgui"), true);
 
-        drawHorizontalAlignedString(7, 60, xSize - 14, StatCollector.translateToLocal("gui.redbus.id") + ":" + IRedBusWindow.redbus_id,
+        drawHorizontalAlignedString(7, 60, xSize - 14, I18n.translateToLocal("gui.redbus.id") + ":" + IRedBusWindow.redbus_id,
                 true);
     }
 

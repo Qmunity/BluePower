@@ -1,0 +1,16 @@
+{
+  "result": {
+    "item": "bluepower:alloyfurnace"
+  },
+  "pattern": [
+    "###",
+    "# #",
+    "###"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "#": {
+      "item": "minecraft:brick_block"
+    }
+  }
+}

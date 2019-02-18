@@ -19,10 +19,10 @@
 
 package com.bluepowermod.client.gui;
 
+import com.bluepowermod.client.gui.widget.BaseWidget;
+import com.bluepowermod.client.gui.widget.IGuiWidget;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
-import uk.co.qmunity.lib.client.gui.widget.BaseWidget;
-import uk.co.qmunity.lib.client.gui.widget.IGuiWidget;
 
 import com.bluepowermod.client.gui.widget.WidgetColor;
 import com.bluepowermod.client.gui.widget.WidgetFuzzySetting;

@@ -19,39 +19,42 @@
 
 package com.bluepowermod.item;
 
-import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
-import net.minecraftforge.common.IPlantable;
-import net.minecraftforge.common.util.ForgeDirection;
-
 import com.bluepowermod.BluePower;
 import com.bluepowermod.container.inventory.InventoryItem;
 import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.reference.GuiIDs;
 import com.bluepowermod.reference.Refs;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraftforge.common.IPlantable;
+
+;
 
 public class ItemSeedBag extends ItemBase {
 
     public ItemSeedBag(String name) {
-
         this.setCreativeTab(BPCreativeTabs.items);
-        this.setUnlocalizedName(name);
-        this.setTextureName(Refs.MODID + ":" + name);
+        this.setTranslationKey(name);
+        this.setRegistryName(Refs.MODID + ":" + name);
         this.maxStackSize = 1;
     }
 
     public static ItemStack getSeedType(ItemStack seedBag) {
-        ItemStack seed = null;
+        ItemStack seed = ItemStack.EMPTY;
 
         IInventory seedBagInventory = InventoryItem.getItemInventory(seedBag, "Seed Bag", 9);
-        seedBagInventory.openInventory();
         for (int i = 0; i < seedBagInventory.getSizeInventory(); i++) {
             ItemStack is = seedBagInventory.getStackInSlot(i);
-            if (is != null) {
+            if (!is.isEmpty()) {
                 seed = is;
             }
         }
@@ -68,18 +71,17 @@ public class ItemSeedBag extends ItemBase {
     @Override
     public boolean showDurabilityBar(ItemStack stack) {
 
-        return stack.stackTagCompound != null;
+        return stack.getTagCompound() != null;
     }
 
     public int getItemDamageForDisplay(ItemStack stack) {
 
         int items = 0;
         IInventory seedBagInventory = InventoryItem.getItemInventory(stack, "Seed Bag", 9);
-        seedBagInventory.openInventory();
         for (int i = 0; i < seedBagInventory.getSizeInventory(); i++) {
             ItemStack is = seedBagInventory.getStackInSlot(i);
-            if (is != null) {
-                items += is.stackSize;
+            if (!is.isEmpty()) {
+                items += is.getCount();
             }
         }
         return items;
@@ -92,40 +94,37 @@ public class ItemSeedBag extends ItemBase {
     }
 
     @Override
-    public ItemStack onItemRightClick(ItemStack itemstack, World worldObj, EntityPlayer playerEntity) {
-
+    public ActionResult<ItemStack> onItemRightClick(World worldObj, EntityPlayer playerEntity, EnumHand handIn) {
         if (!worldObj.isRemote && playerEntity.isSneaking()) {
             playerEntity.openGui(BluePower.instance, GuiIDs.SEEDBAG.ordinal(), worldObj, (int) playerEntity.posX, (int) playerEntity.posY,
                     (int) playerEntity.posZ);
         }
-        return itemstack;
+        return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, playerEntity.getHeldItem(handIn));
     }
 
     @Override
-    public boolean onItemUse(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, World par3World, int posX, int posY, int posZ, int par7,
-            float par8, float par9, float par10) {
-
-        if (par2EntityPlayer.isSneaking()) {
-            return false;
+    public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+        if (player.isSneaking()) {
+            return EnumActionResult.PASS;
         }
 
-        IInventory seedBagInventory = InventoryItem.getItemInventory(par2EntityPlayer, par2EntityPlayer.getCurrentEquippedItem(), "Seed Bag", 9);
-        seedBagInventory.openInventory();
+        IInventory seedBagInventory = InventoryItem.getItemInventory(player, player.getHeldItem(hand), "Seed Bag", 9);
+        seedBagInventory.openInventory(player);
 
-        ItemStack seed = getSeedType(par1ItemStack);
-        if (seed != null && seed.getItem() instanceof IPlantable) {
+        ItemStack seed = getSeedType(player.getHeldItem(hand));
+        if (!seed.isEmpty() && seed.getItem() instanceof IPlantable) {
             IPlantable plant = (IPlantable) seed.getItem();
             for (int modX = -2; modX < 3; modX++) {
                 for (int modZ = -2; modZ < 3; modZ++) {
-                    Block b = par3World.getBlock(posX + modX, posY, posZ + modZ);
-                    if (b.canSustainPlant(par3World, posX, posY, posZ, ForgeDirection.UP, plant)
-                            && par3World.isAirBlock(posX + modX, posY + 1, posZ + modZ)) {
+                    IBlockState b = worldIn.getBlockState(pos.add(modX, 0, modZ));
+                    if (b.getBlock().canSustainPlant(b, worldIn, pos, EnumFacing.UP, plant)
+                            && worldIn.isAirBlock(pos.add(modX, 1, modZ))) {
                         for (int i = 0; i < seedBagInventory.getSizeInventory(); i++) {
                             ItemStack is = seedBagInventory.getStackInSlot(i);
-                            if (is != null) {
+                            if (!is.isEmpty()) {
 
                                 Item item = is.getItem();
-                                item.onItemUse(is, par2EntityPlayer, par3World, posX + modX, posY, posZ + modZ, par7, par8 + modX, par9, par10 + modZ);
+                                item.onItemUse(player, worldIn, pos.add(modX, 0, modZ), hand, facing, hitX + modX, hitY, hitZ + modZ);
                                 seedBagInventory.decrStackSize(i, 0);
                                 break;
                             }
@@ -133,12 +132,12 @@ public class ItemSeedBag extends ItemBase {
                     }
                 }
             }
-            return true;
+            return EnumActionResult.SUCCESS;
 
         }
 
-        seedBagInventory.closeInventory();
+        seedBagInventory.closeInventory(player);
 
-        return false;
+        return EnumActionResult.PASS;
     }
 }

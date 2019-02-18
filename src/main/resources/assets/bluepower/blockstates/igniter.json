@@ -1,0 +1,29 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "textures": {
+      "side": "bluepower:blocks/machines/igniter_side",
+      "front": "bluepower:blocks/machines/igniter_front",
+      "back": "bluepower:blocks/machines/igniter_back",
+      "particle": "bluepower:blocks/machines/igniter_side"
+    },
+    "model": "bluepower:cube_front_back",
+    "uvlock": false
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [{"x": -90}],
+    "facing": {
+      "north": {},
+      "south": {"y": 180},
+      "west": {"y": 270},
+      "east": {"y": 90},
+      "up": {"x": -90},
+      "down": {"x": 90}
+    },
+    "active":{
+      "true":{"textures": {"front": "bluepower:blocks/machines/igniter_front_active", "side": "bluepower:blocks/machines/igniter_side_active"}},
+      "false":{"textures": {"front": "bluepower:blocks/machines/igniter_front", "side": "bluepower:blocks/machines/igniter_side"}}
+    }
+  }
+}

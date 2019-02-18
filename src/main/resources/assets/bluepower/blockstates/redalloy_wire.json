@@ -1,0 +1,32 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "textures": {
+      "wire": "bluepower:base/alloy_off",
+      "particle": "blocks/redstone_block"
+    },
+    "model": "bluepower:cable/alloywire_centre"
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [{"submodel":{
+      "extended1":{"model":"bluepower:cable/alloywire_extended","y": -90},
+      "extended2":{"model":"bluepower:cable/alloywire_extended","y": 90},
+      "extended3":{"model":"bluepower:cable/alloywire_extended","y": 180},
+      "extended4":{"model":"bluepower:cable/alloywire_extended"}
+    }}],
+    "connected_front": {"true": {"submodel":{"extended1":{"model":"bluepower:cable/alloywire_extended","y": -90}}},"false":{}},
+    "connected_back": {"true": {"submodel":{"extended2":{"model":"bluepower:cable/alloywire_extended","y": 90}}},"false":{}},
+    "connected_left": {"true": {"submodel":{"extended3":{"model":"bluepower:cable/alloywire_extended","y": 180}}},"false":{}},
+    "connected_right": {"true": {"submodel":{"extended4":{"model":"bluepower:cable/alloywire_extended"}}}, "false":{}},
+    "facing": {
+      "north": {"x": 90},
+      "south": {"x": 90, "y": 180},
+      "west": {"x": 90, "y": 270},
+      "east": {"x": 90, "y": 90},
+      "up": {},
+      "down": {"x": 180}
+    },
+    "powered":{"true":{"textures": {"wire": "bluepower:base/alloy_on"}},"false":{}}
+  }
+}

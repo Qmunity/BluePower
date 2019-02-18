@@ -36,26 +36,24 @@ public class ItemAthame extends ItemSword {
     private static ToolMaterial athameMaterial = EnumHelper.addToolMaterial("SILVER", 0, 100, 6.0F, 2.0F, 10);
     
     public ItemAthame() {
-    
         super(athameMaterial);
         this.setCreativeTab(BPCreativeTabs.tools);
         this.setMaxDamage(100);
-        this.setUnlocalizedName(Refs.ATHAME_NAME);
-        this.setTextureName(Refs.MODID + ":" + Refs.ATHAME_NAME);
+        this.setTranslationKey(Refs.ATHAME_NAME);
+        this.setRegistryName(Refs.MODID + ":" + Refs.ATHAME_NAME);
         this.maxStackSize = 1;
         this.setFull3D();
+        BPItems.itemList.add(this);
     }
-    
-    @Override
-    public float func_150931_i() {
-    
+
+    public float getDamageDealt() {
         return this.damageDealt;
     }
     
     @Override
     public boolean hitEntity(ItemStack stack, EntityLivingBase entity, EntityLivingBase player) {
     
-        this.damageDealt = athameMaterial.getDamageVsEntity();
+        this.damageDealt = athameMaterial.getAttackDamage();
         if ((entity instanceof EntityEnderman) || (entity instanceof EntityDragon)) {
             this.damageDealt += 18.0F;
         }
@@ -64,9 +62,9 @@ public class ItemAthame extends ItemSword {
     }
 
     @Override
-    public String getUnlocalizedName(ItemStack stack) {
+    public String getTranslationKey(ItemStack stack) {
 
-        return String.format("item.%s:%s", Refs.MODID, getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
+        return String.format("item.%s:%s", Refs.MODID, getUnwrappedUnlocalizedName(super.getTranslationKey()));
     }
 
     protected String getUnwrappedUnlocalizedName(String name) {

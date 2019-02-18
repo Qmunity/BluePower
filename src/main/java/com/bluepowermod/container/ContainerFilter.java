@@ -19,19 +19,17 @@
 
 package com.bluepowermod.container;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.ICrafting;
-import net.minecraft.inventory.Slot;
-import net.minecraft.item.ItemStack;
-import uk.co.qmunity.lib.client.gui.GuiContainerBase;
-
 import com.bluepowermod.ClientProxy;
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
+import com.bluepowermod.client.gui.GuiContainerBase;
 import com.bluepowermod.tile.tier1.TileFilter;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.IContainerListener;
+import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * @author MineMaarten
@@ -78,15 +76,15 @@ public class ContainerFilter extends ContainerMachineBase {
 
         super.detectAndSendChanges();
 
-        for (Object crafter : crafters) {
-            ICrafting icrafting = (ICrafting) crafter;
+        for (Object crafter : listeners) {
+            IContainerListener icrafting = (IContainerListener) crafter;
 
             if (filterColor != tileFilter.filterColor.ordinal()) {
-                icrafting.sendProgressBarUpdate(this, 0, tileFilter.filterColor.ordinal());
+                icrafting.sendWindowProperty(this, 0, tileFilter.filterColor.ordinal());
             }
 
             if (fuzzySetting != tileFilter.fuzzySetting) {
-                icrafting.sendProgressBarUpdate(this, 1, tileFilter.fuzzySetting);
+                icrafting.sendWindowProperty(this, 1, tileFilter.fuzzySetting);
             }
         }
         filterColor = tileFilter.filterColor.ordinal();
@@ -110,32 +108,32 @@ public class ContainerFilter extends ContainerMachineBase {
     @Override
     public boolean canInteractWith(EntityPlayer player) {
 
-        return tileFilter.isUseableByPlayer(player);
+        return tileFilter.isUsableByPlayer(player);
     }
 
     @Override
     public ItemStack transferStackInSlot(EntityPlayer player, int par2) {
 
-        ItemStack itemstack = null;
+        ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = (Slot) inventorySlots.get(par2);
         if (slot != null && slot.getHasStack()) {
             ItemStack itemstack1 = slot.getStack();
             itemstack = itemstack1.copy();
             if (par2 < 9) {
                 if (!mergeItemStack(itemstack1, 9, 45, true))
-                    return null;
+                    return ItemStack.EMPTY;
             } else if (!mergeItemStack(itemstack1, 0, 9, false)) {
-                return null;
+                return ItemStack.EMPTY;
             }
-            if (itemstack1.stackSize == 0) {
-                slot.putStack(null);
+            if (itemstack1.getCount() == 0) {
+                slot.putStack(ItemStack.EMPTY);
             } else {
                 slot.onSlotChanged();
             }
-            if (itemstack1.stackSize != itemstack.stackSize) {
-                slot.onPickupFromSlot(player, itemstack1);
+            if (itemstack1.getCount() != itemstack.getCount()) {
+                slot.onSlotChange(itemstack, itemstack1);
             } else {
-                return null;
+                return ItemStack.EMPTY;
             }
         }
         return itemstack;

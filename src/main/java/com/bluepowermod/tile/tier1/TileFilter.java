@@ -7,47 +7,45 @@
  */
 package com.bluepowermod.tile.tier1;
 
-import java.util.List;
-
+import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
+import com.bluepowermod.client.gui.IGuiButtonSensitive;
+import com.bluepowermod.helper.IOHelper;
+import com.bluepowermod.helper.ItemStackHelper;
+import com.bluepowermod.init.BPBlocks;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.NonNullList;
 
-import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
-import com.bluepowermod.helper.IOHelper;
-import com.bluepowermod.helper.ItemStackHelper;
-import com.bluepowermod.init.BPBlocks;
-import com.bluepowermod.part.IGuiButtonSensitive;
-import com.bluepowermod.part.tube.TubeStack;
-
+import java.util.List;
 /**
  * @author MineMaarten
  */
 public class TileFilter extends TileTransposer implements ISidedInventory, IGuiButtonSensitive {
 
-    protected final ItemStack[] inventory = new ItemStack[9];
+    protected final NonNullList<ItemStack> inventory = NonNullList.withSize(9, ItemStack.EMPTY);
     public TubeColor filterColor = TubeColor.NONE;
     public int fuzzySetting;
 
-    @Override
-    public TubeStack acceptItemFromTube(TubeStack stack, ForgeDirection from, boolean simulate) {
+/*    @Override
+    public TubeStack acceptItemFromTube(TubeStack stack, EnumFacing from, boolean simulate) {
 
         if (from == getFacingDirection() && (!isItemAccepted(stack.stack) || !isBufferEmpty()))
             return stack;
         if (!simulate)
             this.addItemToOutputBuffer(stack.stack, filterColor);
         return null;
-    }
+    }*/
 
     @Override
     protected boolean isItemAccepted(ItemStack item) {
 
         boolean everythingNull = true;
         for (ItemStack invStack : inventory) {
-            if (invStack != null) {
+            if (!invStack.isEmpty()) {
                 if (ItemStackHelper.areStacksEqual(invStack, item, fuzzySetting)) {
                     return true;
                 }
@@ -65,17 +63,15 @@ public class TileFilter extends TileTransposer implements ISidedInventory, IGuiB
 
     @Override
     protected void pullItem() {
-
-        if (isBufferEmpty()) {
-            ForgeDirection dir = getOutputDirection().getOpposite();
+            EnumFacing dir = getOutputDirection().getOpposite();
             TileEntity tile = getTileCache(dir);
-            ForgeDirection direction = dir.getOpposite();
+            EnumFacing direction = dir.getOpposite();
             boolean everythingNull = true;
             for (ItemStack filterStack : inventory) {
-                if (filterStack != null) {
+                if (!filterStack.isEmpty()) {
                     everythingNull = false;
                     ItemStack extractedStack = IOHelper.extract(tile, direction, filterStack, true, false, fuzzySetting);
-                    if (extractedStack != null) {
+                    if (!extractedStack.isEmpty()) {
                         this.addItemToOutputBuffer(extractedStack, filterColor);
                         break;
                     }
@@ -83,11 +79,10 @@ public class TileFilter extends TileTransposer implements ISidedInventory, IGuiB
             }
             if (everythingNull) {
                 ItemStack extractedStack = IOHelper.extract(tile, direction, false);
-                if (extractedStack != null) {
+                if (!extractedStack.isEmpty()) {
                     this.addItemToOutputBuffer(extractedStack, filterColor);
                 }
             }
-        }
     }
 
     /**
@@ -100,7 +95,7 @@ public class TileFilter extends TileTransposer implements ISidedInventory, IGuiB
 
         for (int i = 0; i < 9; i++) {
             NBTTagCompound tc = tCompound.getCompoundTag("inventory" + i);
-            inventory[i] = ItemStack.loadItemStackFromNBT(tc);
+            inventory.set(i, new ItemStack(tc));
         }
         filterColor = TubeColor.values()[tCompound.getByte("filterColor")];
         fuzzySetting = tCompound.getByte("fuzzySetting");
@@ -110,45 +105,45 @@ public class TileFilter extends TileTransposer implements ISidedInventory, IGuiB
      * This function gets called whenever the world/chunk is saved
      */
     @Override
-    public void writeToNBT(NBTTagCompound tCompound) {
+    public NBTTagCompound writeToNBT(NBTTagCompound tCompound) {
 
         super.writeToNBT(tCompound);
 
         for (int i = 0; i < 9; i++) {
-            if (inventory[i] != null) {
                 NBTTagCompound tc = new NBTTagCompound();
-                inventory[i].writeToNBT(tc);
+                inventory.get(i).writeToNBT(tc);
                 tCompound.setTag("inventory" + i, tc);
-            }
         }
 
         tCompound.setByte("filterColor", (byte) filterColor.ordinal());
         tCompound.setByte("fuzzySetting", (byte) fuzzySetting);
+
+        return tCompound;
     }
 
     @Override
     public int getSizeInventory() {
 
-        return inventory.length;
+        return inventory.size();
     }
 
     @Override
     public ItemStack getStackInSlot(int i) {
 
-        return inventory[i];
+        return inventory.get(i);
     }
 
     @Override
     public ItemStack decrStackSize(int slot, int amount) {
 
         ItemStack itemStack = getStackInSlot(slot);
-        if (itemStack != null) {
-            if (itemStack.stackSize <= amount) {
-                setInventorySlotContents(slot, null);
+        if (!itemStack.isEmpty()) {
+            if (itemStack.getCount() <= amount) {
+                setInventorySlotContents(slot, ItemStack.EMPTY);
             } else {
                 itemStack = itemStack.splitStack(amount);
-                if (itemStack.stackSize == 0) {
-                    setInventorySlotContents(slot, null);
+                if (itemStack.getCount() == 0) {
+                    setInventorySlotContents(slot, ItemStack.EMPTY);
                 }
             }
         }
@@ -157,52 +152,46 @@ public class TileFilter extends TileTransposer implements ISidedInventory, IGuiB
     }
 
     @Override
-    public ItemStack getStackInSlotOnClosing(int i) {
-
+    public ItemStack removeStackFromSlot(int i) {
         ItemStack itemStack = getStackInSlot(i);
-        if (itemStack != null) {
-            setInventorySlotContents(i, null);
+        if (!itemStack.isEmpty()) {
+            setInventorySlotContents(i, ItemStack.EMPTY);
         }
         return itemStack;
     }
-
     @Override
     public void setInventorySlotContents(int i, ItemStack itemStack) {
 
-        inventory[i] = itemStack;
+        inventory.set(i, itemStack);
     }
 
     @Override
-    public String getInventoryName() {
-
-        return BPBlocks.filter.getUnlocalizedName();
+    public String getName() {
+        return BPBlocks.filter.getTranslationKey();
     }
 
     @Override
-    public boolean hasCustomInventoryName() {
-
+    public boolean hasCustomName() {
         return false;
     }
 
     @Override
     public int getInventoryStackLimit() {
-
         return 64;
     }
 
     @Override
-    public boolean isUseableByPlayer(EntityPlayer player) {
-
-        return true;
+    public boolean isUsableByPlayer(EntityPlayer player) {
+        return player.getDistanceSqToCenter(pos) <= 64.0D;
     }
 
     @Override
-    public void openInventory() {
+    public void openInventory(EntityPlayer player) {
 
     }
 
     @Override
-    public void closeInventory() {
+    public void closeInventory(EntityPlayer player) {
 
     }
 
@@ -217,35 +206,33 @@ public class TileFilter extends TileTransposer implements ISidedInventory, IGuiB
 
         List<ItemStack> drops = super.getDrops();
         for (ItemStack stack : inventory)
-            if (stack != null)
+            if (!stack.isEmpty())
                 drops.add(stack);
         return drops;
     }
 
     @Override
-    public int[] getAccessibleSlotsFromSide(int var1) {
+    public int[] getSlotsForFace(EnumFacing side) {
+        EnumFacing direction = getFacingDirection();
 
-        ForgeDirection direction = getFacingDirection();
-
-        if (var1 == direction.ordinal() || var1 == direction.getOpposite().ordinal()) {
+        if (side == direction || side == direction.getOpposite()) {
             return new int[] {};
         }
         return new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8 };
     }
 
     @Override
-    public boolean canInsertItem(int slot, ItemStack itemStack, int side) {
-
+    public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction) {
         return true;
     }
 
     @Override
-    public boolean canExtractItem(int slot, ItemStack itemStack, int side) {
-
+    public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
         return true;
     }
 
-    @Override
+
+   /* @Override
     public void onButtonPress(EntityPlayer player, int messageId, int value) {
 
         if (messageId == 0)
@@ -253,10 +240,44 @@ public class TileFilter extends TileTransposer implements ISidedInventory, IGuiB
         if (messageId == 1)
             fuzzySetting = value;
     }
-
+*/
     @Override
     public boolean canConnectRedstone() {
 
         return true;
+    }
+
+    //Todo Fields
+    @Override
+    public boolean isEmpty() {
+        return inventory.size() == 0;
+    }
+
+    @Override
+    public int getField(int id) {
+        return 0;
+    }
+
+    @Override
+    public void setField(int id, int value) {
+
+    }
+
+    @Override
+    public int getFieldCount() {
+        return 0;
+    }
+
+    @Override
+    public void clear() {
+
+    }
+
+    @Override
+    public void onButtonPress(EntityPlayer player, int messageId, int value) {
+        if (messageId == 0)
+            filterColor = TubeColor.values()[value];
+        if (messageId == 1)
+            fuzzySetting = value;
     }
 }

@@ -60,19 +60,19 @@ public class ContainerSeedBag extends Container {
             }
         }
         
-        seedBagInventory.openInventory();
+        //seedBagInventory.openInventory();
     }
     
     @Override
     public boolean canInteractWith(EntityPlayer player) {
     
-        return player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() instanceof ItemSeedBag;
+        return !player.getHeldItemMainhand().isEmpty() && player.getHeldItemMainhand().getItem() instanceof ItemSeedBag;
     }
     
     @Override
     public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int par2) {
     
-        ItemStack itemstack = null;
+        ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = (Slot) this.inventorySlots.get(par2);
         
         if (slot != null && slot.getHasStack()) {
@@ -80,18 +80,18 @@ public class ContainerSeedBag extends Container {
             itemstack = itemstack1.copy();
             
             if (par2 < 9) {
-                if (!this.mergeItemStack(itemstack1, 9, 45, true)) { return null; }
-            } else if (!this.mergeItemStack(itemstack1, 0, 9, false)) { return null; }
+                if (!this.mergeItemStack(itemstack1, 9, 45, true)) { return ItemStack.EMPTY; }
+            } else if (!this.mergeItemStack(itemstack1, 0, 9, false)) { return ItemStack.EMPTY; }
             
-            if (itemstack1.stackSize == 0) {
-                slot.putStack((ItemStack) null);
+            if (itemstack1.getCount() == 0) {
+                slot.putStack(ItemStack.EMPTY);
             } else {
                 slot.onSlotChanged();
             }
             
-            if (itemstack1.stackSize == itemstack.stackSize) { return null; }
+            if (itemstack1.getCount() == itemstack.getCount()) { return ItemStack.EMPTY; }
             
-            slot.onPickupFromSlot(par1EntityPlayer, itemstack1);
+            slot.onSlotChange(itemstack, itemstack1);
         }
         
         return itemstack;
@@ -111,23 +111,23 @@ public class ContainerSeedBag extends Container {
         ItemStack itemstack1;
         
         if (par1ItemStack.isStackable()) {
-            while (par1ItemStack.stackSize > 0 && (!par4 && k < par3 || par4 && k >= par2)) {
+            while (par1ItemStack.getCount() > 0 && (!par4 && k < par3 || par4 && k >= par2)) {
                 slot = (Slot) this.inventorySlots.get(k);
                 itemstack1 = slot.getStack();
                 
-                if (itemstack1 != null && itemstack1.getItem() == par1ItemStack.getItem()
+                if (!itemstack1.isEmpty() && itemstack1.getItem() == par1ItemStack.getItem()
                         && (!par1ItemStack.getHasSubtypes() || par1ItemStack.getItemDamage() == itemstack1.getItemDamage())
                         && ItemStack.areItemStackTagsEqual(par1ItemStack, itemstack1) && slot.isItemValid(par1ItemStack)) {
-                    int l = itemstack1.stackSize + par1ItemStack.stackSize;
+                    int l = itemstack1.getCount() + par1ItemStack.getCount();
                     
                     if (l <= par1ItemStack.getMaxStackSize()) {
-                        par1ItemStack.stackSize = 0;
-                        itemstack1.stackSize = l;
+                        par1ItemStack.setCount(0);
+                        itemstack1.setCount(l);
                         slot.onSlotChanged();
                         flag1 = true;
-                    } else if (itemstack1.stackSize < par1ItemStack.getMaxStackSize()) {
-                        par1ItemStack.stackSize -= par1ItemStack.getMaxStackSize() - itemstack1.stackSize;
-                        itemstack1.stackSize = par1ItemStack.getMaxStackSize();
+                    } else if (itemstack1.getCount() < par1ItemStack.getMaxStackSize()) {
+                        par1ItemStack.setCount(par1ItemStack.getCount() - par1ItemStack.getMaxStackSize() - itemstack1.getCount());
+                        itemstack1.setCount(par1ItemStack.getMaxStackSize());
                         slot.onSlotChanged();
                         flag1 = true;
                     }
@@ -141,7 +141,7 @@ public class ContainerSeedBag extends Container {
             }
         }
         
-        if (par1ItemStack.stackSize > 0) {
+        if (par1ItemStack.getCount() > 0) {
             if (par4) {
                 k = par3 - 1;
             } else {
@@ -152,19 +152,19 @@ public class ContainerSeedBag extends Container {
                 slot = (Slot) this.inventorySlots.get(k);
                 itemstack1 = slot.getStack();
                 
-                if (itemstack1 == null && slot.isItemValid(par1ItemStack)) {
-                    if (1 < par1ItemStack.stackSize) {
+                if (itemstack1.isEmpty() && slot.isItemValid(par1ItemStack)) {
+                    if (1 < par1ItemStack.getCount()) {
                         ItemStack copy = par1ItemStack.copy();
-                        copy.stackSize = 1;
+                        copy.setCount(1);
                         slot.putStack(copy);
                         
-                        par1ItemStack.stackSize -= 1;
+                        par1ItemStack.setCount(par1ItemStack.getCount() - 1);
                         flag1 = true;
                         break;
                     } else {
                         slot.putStack(par1ItemStack.copy());
                         slot.onSlotChanged();
-                        par1ItemStack.stackSize = 0;
+                        par1ItemStack.setCount(0);
                         flag1 = true;
                         break;
                     }

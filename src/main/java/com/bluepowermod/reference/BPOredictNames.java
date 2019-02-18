@@ -21,12 +21,14 @@ public class BPOredictNames {
     public static final String BLOCK_AMETHYST = "blockAmethyst";
     public static final String BLOCK_RUBY = "blockRuby";
     public static final String BLOCK_SAPPHIRE = "blockSapphire";
+    public static final String BLOCK_MALACHITE = "blockMalachite";
 
     // Ingots
     public static final String INGOT_COPPER = "ingotCopper";
     public static final String INGOT_ZINC = "ingotZinc";
     public static final String INGOT_SILVER = "ingotSilver";
     public static final String INGOT_TUNGSTEN = "ingotTungsten";
+    public static final String INGOT_TUNGCARB = "ingotTungstenCarbite";
 
     public static final String INGOT_BLUE_ALLOY = "ingotBlueAlloy";
     public static final String INGOT_RED_ALLOY = "ingotRedAlloy";

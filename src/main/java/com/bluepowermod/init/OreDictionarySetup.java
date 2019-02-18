@@ -18,12 +18,8 @@
 package com.bluepowermod.init;
 
 import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
-import com.bluepowermod.api.misc.MinecraftColor;
-import com.bluepowermod.api.wire.redstone.RedwireType;
-import com.bluepowermod.part.PartManager;
 import com.bluepowermod.reference.BPOredictNames;
 
 public class OreDictionarySetup {
@@ -49,12 +45,14 @@ public class OreDictionarySetup {
         OreDictionary.registerOre(BPOredictNames.BLOCK_AMETHYST, BPBlocks.amethyst_block);
         OreDictionary.registerOre(BPOredictNames.BLOCK_RUBY, BPBlocks.ruby_block);
         OreDictionary.registerOre(BPOredictNames.BLOCK_SAPPHIRE, BPBlocks.sapphire_block);
+        OreDictionary.registerOre(BPOredictNames.BLOCK_MALACHITE, BPBlocks.malachite_block);
 
         // Ingots
         OreDictionary.registerOre(BPOredictNames.INGOT_COPPER, BPItems.copper_ingot);
         OreDictionary.registerOre(BPOredictNames.INGOT_ZINC, BPItems.zinc_ingot);
         OreDictionary.registerOre(BPOredictNames.INGOT_SILVER, BPItems.silver_ingot);
         OreDictionary.registerOre(BPOredictNames.INGOT_TUNGSTEN, BPItems.tungsten_ingot);
+        OreDictionary.registerOre(BPOredictNames.INGOT_TUNGCARB, BPItems.tungsten_carbide);
 
         OreDictionary.registerOre(BPOredictNames.INGOT_BLUE_ALLOY, BPItems.blue_alloy_ingot);
         OreDictionary.registerOre(BPOredictNames.INGOT_RED_ALLOY, BPItems.red_alloy_ingot);
@@ -102,21 +100,7 @@ public class OreDictionarySetup {
         for (Block b : BPBlocks.blockLampInverted)
             OreDictionary.registerOre("lampInvertedBP", b);
 
-        for (RedwireType t : RedwireType.values()) {
-            for (MinecraftColor c : MinecraftColor.VALID_COLORS) {
-                ItemStack wireInsulated = PartManager.getPartInfo("wire." + t.getName() + "." + c.name().toLowerCase()).getStack(1);
-                OreDictionary.registerOre(String.format(BPOredictNames.WIRE_INSULATED_, t.getName()), wireInsulated.getItem());
-                OreDictionary.registerOre(BPOredictNames.WIRE_INSULATED, wireInsulated.getItem());
-
-                ItemStack wireBundled = PartManager.getPartInfo("wire." + t.getName() + ".bundled." + c.name().toLowerCase()).getStack(1);
-                OreDictionary.registerOre(String.format(BPOredictNames.WIRE_BUNDLED_, t.getName()), wireBundled.getItem());
-                OreDictionary.registerOre(BPOredictNames.WIRE_BUNDLED, wireBundled.getItem());
-            }
-
-            ItemStack wireBundled = PartManager.getPartInfo("wire." + t.getName() + ".bundled").getStack(1);
-            OreDictionary.registerOre(String.format(BPOredictNames.WIRE_BUNDLED_, t.getName()), wireBundled.getItem());
-            OreDictionary.registerOre(BPOredictNames.WIRE_BUNDLED, wireBundled.getItem());
-        }
+        //TODO Ore Dictionary Parts
     }
 
 }

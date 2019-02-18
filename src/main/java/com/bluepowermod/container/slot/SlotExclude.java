@@ -38,6 +38,6 @@ public class SlotExclude extends Slot {
     @Override
     public boolean isItemValid(ItemStack par1ItemStack) {
 
-        return par1ItemStack == null || !(par1ItemStack.getItem() == filter);
+        return par1ItemStack.isEmpty() || !(par1ItemStack.getItem() == filter);
     }
 }

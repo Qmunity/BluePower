@@ -18,13 +18,14 @@
 package com.bluepowermod.item;
 
 import com.bluepowermod.init.BPCreativeTabs;
+import com.bluepowermod.init.BPItems;
 import com.bluepowermod.reference.Refs;
 
 public class ItemCrafting extends ItemBase {
 
     public ItemCrafting(String name) {
         this.setCreativeTab(BPCreativeTabs.items);
-        this.setUnlocalizedName(name);
-        this.setTextureName(Refs.MODID + ":" + name);
+        this.setTranslationKey(name);
+        this.setRegistryName(Refs.MODID + ":" + name);
     }
 }

@@ -7,19 +7,20 @@
  */
 package com.bluepowermod.tile.tier1;
 
-import java.util.List;
-
+import com.bluepowermod.client.gui.IGuiButtonSensitive;
+import com.bluepowermod.helper.ItemStackHelper;
+import com.bluepowermod.init.BPBlocks;
+import com.bluepowermod.tile.TileMachineBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.NonNullList;
 
-import com.bluepowermod.helper.ItemStackHelper;
-import com.bluepowermod.init.BPBlocks;
-import com.bluepowermod.part.IGuiButtonSensitive;
-import com.bluepowermod.part.tube.TubeStack;
-import com.bluepowermod.tile.TileMachineBase;
+import java.util.List;
+
+;
 
 /**
  * @author MineMaarten
@@ -27,17 +28,17 @@ import com.bluepowermod.tile.TileMachineBase;
 public class TileItemDetector extends TileMachineBase implements ISidedInventory, IGuiButtonSensitive {
 
     public int mode;
-    private final ItemStack[] inventory = new ItemStack[9];
+    private final NonNullList<ItemStack> inventory = NonNullList.withSize(10, ItemStack.EMPTY);
     private int savedPulses = 0;
     public int fuzzySetting;
 
     @Override
-    public void updateEntity() {
+    public void update() {
 
-        super.updateEntity();
-        if (!worldObj.isRemote) {
+        super.update();
+        if (!world.isRemote) {
             if (mode == 0 || mode == 1) {
-                if (worldObj.getWorldTime() % 2 == 0) {
+                if (world.getWorldTime() % 2 == 0) {
                     if (getOutputtingRedstone() > 0) {
                         this.setOutputtingRedstone(false);
                         sendUpdatePacket();
@@ -48,10 +49,6 @@ public class TileItemDetector extends TileMachineBase implements ISidedInventory
                     }
                 }
             } else {
-                if (isBufferEmpty() == getOutputtingRedstone() > 0) {
-                    setOutputtingRedstone(!isBufferEmpty());
-                    sendUpdatePacket();
-                }
             }
         }
     }
@@ -62,23 +59,23 @@ public class TileItemDetector extends TileMachineBase implements ISidedInventory
         return getOutputtingRedstone() > 0;
     }
 
-    @Override
-    public TubeStack acceptItemFromTube(TubeStack stack, ForgeDirection from, boolean simulate) {
+/*    @Override
+    public TubeStack acceptItemFromTube(TubeStack stack, EnumFacing from, boolean simulate) {
 
         if (from == getFacingDirection() && !isItemAccepted(stack.stack))
             return stack;
         TubeStack remainder = super.acceptItemFromTube(stack, from, simulate);
         if (remainder == null && !simulate && mode < 2) {
-            savedPulses += mode == 0 ? stack.stack.stackSize : 1;
+            savedPulses += mode == 0 ? stack.stack.getCount() : 1;
         }
         return remainder;
-    }
+    }*/
 
     private boolean isItemAccepted(ItemStack item) {
 
         boolean everythingNull = true;
         for (ItemStack invStack : inventory) {
-            if (invStack != null) {
+            if (!invStack.isEmpty()) {
                 if (ItemStackHelper.areStacksEqual(invStack, item, fuzzySetting)) {
                     return true;
                 }
@@ -95,10 +92,9 @@ public class TileItemDetector extends TileMachineBase implements ISidedInventory
     public void readFromNBT(NBTTagCompound tCompound) {
 
         super.readFromNBT(tCompound);
-
         for (int i = 0; i < 9; i++) {
             NBTTagCompound tc = tCompound.getCompoundTag("inventory" + i);
-            inventory[i] = ItemStack.loadItemStackFromNBT(tc);
+            inventory.set(i, new ItemStack(tc));
         }
 
         mode = tCompound.getByte("mode");
@@ -110,46 +106,46 @@ public class TileItemDetector extends TileMachineBase implements ISidedInventory
      * This function gets called whenever the world/chunk is saved
      */
     @Override
-    public void writeToNBT(NBTTagCompound tCompound) {
+    public NBTTagCompound writeToNBT(NBTTagCompound tCompound) {
 
         super.writeToNBT(tCompound);
 
         for (int i = 0; i < 9; i++) {
-            if (inventory[i] != null) {
                 NBTTagCompound tc = new NBTTagCompound();
-                inventory[i].writeToNBT(tc);
+                inventory.get(i).writeToNBT(tc);
                 tCompound.setTag("inventory" + i, tc);
-            }
         }
 
         tCompound.setByte("mode", (byte) mode);
         tCompound.setByte("fuzzySetting", (byte) fuzzySetting);
         tCompound.setInteger("savedPulses", savedPulses);
+
+        return tCompound;
     }
 
     @Override
     public int getSizeInventory() {
 
-        return inventory.length;
+        return inventory.size();
     }
 
     @Override
     public ItemStack getStackInSlot(int i) {
 
-        return inventory[i];
+        return inventory.get(i);
     }
 
     @Override
     public ItemStack decrStackSize(int slot, int amount) {
 
         ItemStack itemStack = getStackInSlot(slot);
-        if (itemStack != null) {
-            if (itemStack.stackSize <= amount) {
-                setInventorySlotContents(slot, null);
+        if (!itemStack.isEmpty()) {
+            if (itemStack.getCount() <= amount) {
+                setInventorySlotContents(slot, ItemStack.EMPTY);
             } else {
                 itemStack = itemStack.splitStack(amount);
-                if (itemStack.stackSize == 0) {
-                    setInventorySlotContents(slot, null);
+                if (itemStack.getCount() == 0) {
+                    setInventorySlotContents(slot, ItemStack.EMPTY);
                 }
             }
         }
@@ -158,11 +154,10 @@ public class TileItemDetector extends TileMachineBase implements ISidedInventory
     }
 
     @Override
-    public ItemStack getStackInSlotOnClosing(int i) {
-
+    public ItemStack removeStackFromSlot(int i) {
         ItemStack itemStack = getStackInSlot(i);
-        if (itemStack != null) {
-            setInventorySlotContents(i, null);
+        if (!itemStack.isEmpty()) {
+            setInventorySlotContents(i, ItemStack.EMPTY);
         }
         return itemStack;
     }
@@ -170,17 +165,17 @@ public class TileItemDetector extends TileMachineBase implements ISidedInventory
     @Override
     public void setInventorySlotContents(int i, ItemStack itemStack) {
 
-        inventory[i] = itemStack;
+        inventory.set(i, itemStack);
     }
 
     @Override
-    public String getInventoryName() {
+    public String getName() {
 
-        return BPBlocks.item_detector.getUnlocalizedName();
+        return BPBlocks.item_detector.getTranslationKey();
     }
 
     @Override
-    public boolean hasCustomInventoryName() {
+    public boolean hasCustomName() {
 
         return false;
     }
@@ -192,18 +187,17 @@ public class TileItemDetector extends TileMachineBase implements ISidedInventory
     }
 
     @Override
-    public boolean isUseableByPlayer(EntityPlayer player) {
-
-        return true;
+    public boolean isUsableByPlayer(EntityPlayer player) {
+        return player.getDistanceSqToCenter(pos) <= 64.0D;
     }
 
     @Override
-    public void openInventory() {
+    public void openInventory(EntityPlayer player) {
 
     }
 
     @Override
-    public void closeInventory() {
+    public void closeInventory(EntityPlayer player) {
 
     }
 
@@ -218,33 +212,31 @@ public class TileItemDetector extends TileMachineBase implements ISidedInventory
 
         List<ItemStack> drops = super.getDrops();
         for (ItemStack stack : inventory)
-            if (stack != null)
+            if (!stack.isEmpty())
                 drops.add(stack);
         return drops;
     }
 
     @Override
-    public int[] getAccessibleSlotsFromSide(int var1) {
+    public int[] getSlotsForFace(EnumFacing side) {
+        EnumFacing direction = getFacingDirection();
 
-        ForgeDirection direction = getFacingDirection();
-
-        if (var1 == direction.ordinal() || var1 == direction.getOpposite().ordinal()) {
+        if (side == direction || side == direction.getOpposite()) {
             return new int[] {};
         }
         return new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8 };
     }
 
     @Override
-    public boolean canInsertItem(int slot, ItemStack itemStack, int side) {
-
+    public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction) {
         return true;
     }
 
     @Override
-    public boolean canExtractItem(int slot, ItemStack itemStack, int side) {
-
+    public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
         return true;
     }
+
 
     @Override
     public void onButtonPress(EntityPlayer player, int messageId, int value) {
@@ -261,4 +253,31 @@ public class TileItemDetector extends TileMachineBase implements ISidedInventory
 
         return true;
     }
+
+    //Todo Fields
+    @Override
+    public boolean isEmpty() {
+        return inventory.size() == 0;
+    }
+
+    @Override
+    public int getField(int id) {
+        return 0;
+    }
+
+    @Override
+    public void setField(int id, int value) {
+
+    }
+
+    @Override
+    public int getFieldCount() {
+        return 0;
+    }
+
+    @Override
+    public void clear() {
+
+    }
+
 }

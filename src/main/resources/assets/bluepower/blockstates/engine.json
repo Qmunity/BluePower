@@ -1,0 +1,25 @@
+﻿{
+  "forge_marker":1,
+  "defaults":
+  {
+    "textures": {"#material": "bluepower:blocks/models/engineoff"},
+    "custom": {"flip-v": true},
+    "model":"bluepower:engine/engine_base.obj",
+    "transform":"forge:default-block"
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [{"submodel":{"gear":{"model":"bluepower:engine/engine_gear.obj","custom": {"flip-v": true}}, "glider":{"model":"bluepower:engine/engine_glider.obj","custom": {"flip-v": true}}}}],
+    "active":{"true":{"textures": {"#material": "bluepower:blocks/models/engineon"}},"false":{}},
+    "gear":{"true":{"model":"bluepower:engine/engine_gear.obj"},"false":{}},
+    "glider":{"true":{"model":"bluepower:engine/engine_glider.obj"},"false":{}},
+    "facing":{
+      "north": {"x": -90},
+      "south": {"x": 90},
+      "west": {"x": 90,"y": 90},
+      "east": {"x": -90,"y": 90},
+      "up": {"x": 180},
+      "down": {}
+    }
+  }
+}

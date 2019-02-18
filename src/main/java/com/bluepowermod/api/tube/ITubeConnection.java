@@ -7,9 +7,8 @@
  */
 package com.bluepowermod.api.tube;
 
-import net.minecraftforge.common.util.ForgeDirection;
 
-import com.bluepowermod.part.tube.TubeStack;
+import net.minecraft.util.EnumFacing;
 
 /**
  * 
@@ -18,7 +17,7 @@ import com.bluepowermod.part.tube.TubeStack;
 
 public interface ITubeConnection {
     
-    public boolean isConnectedTo(ForgeDirection from);
+    public boolean isConnectedTo(EnumFacing from);
     
     /**
      * 
@@ -27,5 +26,5 @@ public interface ITubeConnection {
      * @param simulate when true, only return what would have been accepted, but don't actually accept.
      * @return The TubeStack that was unable to enter this ITubeConnection
      */
-    public TubeStack acceptItemFromTube(TubeStack stack, ForgeDirection from, boolean simulate);
+    //public TubeStack acceptItemFromTube(TubeStack stack, EnumFacing from, boolean simulate);
 }

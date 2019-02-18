@@ -1,0 +1,16 @@
+{
+  "result": {
+    "item": "bluepower:zinc_block"
+  },
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "#": {
+      "item": "#INGOTZINC"
+    }
+  }
+}

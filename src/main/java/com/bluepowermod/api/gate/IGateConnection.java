@@ -1,20 +1,19 @@
 package com.bluepowermod.api.gate;
 
+import com.bluepowermod.api.wire.redstone.IBundledDevice;
+import com.bluepowermod.api.wire.redstone.IRedstoneDevice;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
+
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
-
-import net.minecraft.nbt.NBTTagCompound;
-import uk.co.qmunity.lib.util.Dir;
-
-import com.bluepowermod.api.wire.redstone.IBundledDevice;
-import com.bluepowermod.api.wire.redstone.IRedstoneDevice;
 
 public interface IGateConnection {
 
     public IGate<?, ?, ?, ?, ?, ?> getGate();
 
-    public Dir getDirection();
+    public EnumFacing getDirection();
 
     public void notifyUpdate();
 

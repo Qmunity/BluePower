@@ -1,76 +1,62 @@
 package com.bluepowermod.compat.cc;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import net.minecraft.init.Blocks;
-import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
-import uk.co.qmunity.lib.vec.Vec3i;
-
-import com.bluepowermod.api.connect.ConnectionType;
+/*import com.bluepowermod.api.connect.ConnectionType;
 import com.bluepowermod.api.connect.IConnectionCache;
 import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.api.wire.redstone.IBundledDevice;
 import com.bluepowermod.redstone.BundledConnectionCache;
 import com.bluepowermod.redstone.RedstoneApi;
-
 import dan200.computercraft.api.ComputerCraftAPI;
+import net.minecraft.init.Blocks;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+
+import java.util.ArrayList;
+import java.util.List;
+
+;
 
 public class BundledDeviceCCComputer implements IBundledDevice {
 
     private static List<BundledDeviceCCComputer> list = new ArrayList<BundledDeviceCCComputer>();
 
-    public static BundledDeviceCCComputer getDeviceAt(World world, int x, int y, int z) {
-
-        Vec3i loc = new Vec3i(x, y, z, world);
-
+    public static BundledDeviceCCComputer getDeviceAt(World world, BlockPos pos) {
         for (BundledDeviceCCComputer c : list)
-            if (c.loc.equals(loc))
+            if (c.loc.equals(pos))
                 return c;
 
-        BundledDeviceCCComputer c = new BundledDeviceCCComputer(loc);
+        BundledDeviceCCComputer c = new BundledDeviceCCComputer(world, pos);
         list.add(c);
         return c;
     }
 
-    private Vec3i loc;
+    private BlockPos loc;
+    private World world;
     private byte[][] curPow = new byte[6][16];
     private BundledConnectionCache connections = RedstoneApi.getInstance().createBundledConnectionCache(this);
 
-    public BundledDeviceCCComputer(Vec3i loc) {
-
+    public BundledDeviceCCComputer(World world, BlockPos loc) {
+        this.world = world;
         this.loc = loc;
     }
 
     @Override
     public World getWorld() {
 
-        return loc.getWorld();
+        return world;
+
     }
 
     @Override
-    public int getX() {
+    public BlockPos getPos() {
 
-        return loc.getX();
+        return loc;
     }
-
     @Override
-    public int getY() {
+    public boolean canConnect(EnumFacing side, IBundledDevice dev, ConnectionType type) {
 
-        return loc.getY();
-    }
-
-    @Override
-    public int getZ() {
-
-        return loc.getZ();
-    }
-
-    @Override
-    public boolean canConnect(ForgeDirection side, IBundledDevice dev, ConnectionType type) {
-
-        return type == ConnectionType.STRAIGHT || side != ForgeDirection.UNKNOWN;
+        return type == ConnectionType.STRAIGHT || side != null;
     }
 
     @Override
@@ -80,9 +66,9 @@ public class BundledDeviceCCComputer implements IBundledDevice {
     }
 
     @Override
-    public byte[] getBundledOutput(ForgeDirection side) {
+    public byte[] getBundledOutput(EnumFacing side) {
 
-        int out = ComputerCraftAPI.getBundledRedstoneOutput(getWorld(), getX(), getY(), getZ(), side.ordinal());
+        int out = ComputerCraftAPI.getBundledRedstoneOutput(getWorld(), getPos(), side.ordinal());
 
         if (out < 0)
             return new byte[16];
@@ -91,16 +77,16 @@ public class BundledDeviceCCComputer implements IBundledDevice {
     }
 
     @Override
-    public void setBundledPower(ForgeDirection side, byte[] power) {
+    public void setBundledPower(EnumFacing side, byte[] power) {
 
-        if (side == ForgeDirection.UNKNOWN)
+        if (side == null)
             return;
 
         curPow[side.ordinal()] = power;
     }
 
     @Override
-    public byte[] getBundledPower(ForgeDirection side) {
+    public byte[] getBundledPower(EnumFacing side) {
 
         return getBundledOutput(side);
     }
@@ -108,24 +94,24 @@ public class BundledDeviceCCComputer implements IBundledDevice {
     @Override
     public void onBundledUpdate() {
 
-        getWorld().notifyBlockOfNeighborChange(getX(), getY(), getZ(), Blocks.air);
+        getWorld().notifyNeighborsOfStateChange(getPos(), Blocks.AIR, true);
     }
 
-    public byte[] getCurPow(ForgeDirection side) {
+    public byte[] getCurPow(EnumFacing side) {
 
         return curPow[side.ordinal()];
     }
 
     @Override
-    public MinecraftColor getBundledColor(ForgeDirection side) {
+    public MinecraftColor getBundledColor(EnumFacing side) {
 
         return MinecraftColor.NONE;
     }
 
     @Override
-    public boolean isNormalFace(ForgeDirection side) {
+    public boolean isNormalFace(EnumFacing side) {
 
         return true;
     }
 
-}
+}*/

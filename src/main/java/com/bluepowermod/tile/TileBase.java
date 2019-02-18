@@ -17,28 +17,27 @@
 
 package com.bluepowermod.tile;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.bluepowermod.block.BlockContainerFacingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.network.Packet;
-import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ITickable;
 
-import com.bluepowermod.BluePower;
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author MineMaarten
  */
-public class TileBase extends TileEntity implements IRotatable {
+public class TileBase extends TileEntity implements IRotatable, ITickable {
 
     private boolean isRedstonePowered;
     private int outputtingRedstone;
     private int ticker = 0;
-    private ForgeDirection rotation = ForgeDirection.UP;
 
     /*************** BASIC TE FUNCTIONS **************/
 
@@ -57,12 +56,13 @@ public class TileBase extends TileEntity implements IRotatable {
      * This function gets called whenever the world/chunk is saved
      */
     @Override
-    public void writeToNBT(NBTTagCompound tCompound) {
+    public NBTTagCompound writeToNBT(NBTTagCompound tCompound) {
 
         super.writeToNBT(tCompound);
         tCompound.setBoolean("isRedstonePowered", isRedstonePowered);
 
         writeToPacketNBT(tCompound);
+        return  tCompound;
     }
 
     /**
@@ -71,64 +71,55 @@ public class TileBase extends TileEntity implements IRotatable {
      * @param tCompound
      */
     protected void writeToPacketNBT(NBTTagCompound tCompound) {
-
-        tCompound.setByte("rotation", (byte) rotation.ordinal());
         tCompound.setByte("outputtingRedstone", (byte) outputtingRedstone);
     }
 
     protected void readFromPacketNBT(NBTTagCompound tCompound) {
-
-        rotation = ForgeDirection.getOrientation(tCompound.getByte("rotation"));
-        if (rotation.ordinal() > 5) {
-            BluePower.log.warn("invalid rotation!");
-            rotation = ForgeDirection.UP;
-        }
         outputtingRedstone = tCompound.getByte("outputtingRedstone");
-        if (worldObj != null)
+        if (world != null)
             markForRenderUpdate();
     }
 
+    @Nullable
     @Override
-    public Packet getDescriptionPacket() {
-
+    public SPacketUpdateTileEntity getUpdatePacket() {
         NBTTagCompound tCompound = new NBTTagCompound();
         writeToPacketNBT(tCompound);
-        return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, 0, tCompound);
+        return new SPacketUpdateTileEntity(pos, 0, tCompound);
     }
 
     @Override
-    public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
+    public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
 
-        readFromPacketNBT(pkt.func_148857_g());
+        readFromPacketNBT(pkt.getNbtCompound());
     }
 
     protected void sendUpdatePacket() {
 
-        if (!worldObj.isRemote)
-            worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+        if (!world.isRemote)
+        world.notifyNeighborsOfStateChange(pos, getBlockType(), true);
     }
 
     protected void markForRenderUpdate() {
 
-        if (worldObj != null)
-            worldObj.markBlockRangeForRenderUpdate(xCoord, yCoord, zCoord, xCoord, yCoord, zCoord);
+        if (world != null)
+            world.markBlockRangeForRenderUpdate(pos.getX(), pos.getY(), pos.getZ(), pos.getX(), pos.getY(), pos.getZ());
     }
 
     protected void notifyNeighborBlockUpdate() {
 
-        worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, getBlockType());
+        //world.notifyBlocksOfNeighborChange(pos, getBlockType());
     }
 
     /**
-     * Function gets called every tick. Do not forget to call the super method!
+     * Function gets called every tick.
      */
     @Override
-    public void updateEntity() {
+    public void update() {
 
         if (ticker == 0) {
             onTileLoaded();
         }
-        super.updateEntity();
         ticker++;
     }
 
@@ -146,7 +137,7 @@ public class TileBase extends TileEntity implements IRotatable {
      */
     public void checkRedstonePower() {
 
-        boolean isIndirectlyPowered = getWorldObj().isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord);
+        boolean isIndirectlyPowered = (getWorld().getRedstonePowerFromNeighbors(pos) != 0);
         if (isIndirectlyPowered && !getIsRedstonePowered()) {
             redstoneChanged(true);
         } else if (getIsRedstonePowered() && !isIndirectlyPowered) {
@@ -218,7 +209,7 @@ public class TileBase extends TileEntity implements IRotatable {
      */
     protected void onTileLoaded() {
 
-        if (!worldObj.isRemote)
+        if (!world.isRemote)
             onBlockNeighbourChanged();
     }
 
@@ -228,19 +219,22 @@ public class TileBase extends TileEntity implements IRotatable {
     }
 
     @Override
-    public void setFacingDirection(ForgeDirection dir) {
-
-        rotation = dir;
-        if (worldObj != null) {
-            sendUpdatePacket();
-            notifyNeighborBlockUpdate();
+    public void setFacingDirection(EnumFacing dir) {
+        if(world.getBlockState(pos).getBlock() instanceof BlockContainerFacingBase) {
+            BlockContainerFacingBase.setState(dir, world, pos);
+            if (world != null) {
+                sendUpdatePacket();
+                notifyNeighborBlockUpdate();
+            }
         }
     }
 
     @Override
-    public ForgeDirection getFacingDirection() {
-
-        return rotation;
+    public EnumFacing getFacingDirection() {
+        if(world.getBlockState(pos).getBlock() instanceof BlockContainerFacingBase) {
+            return world.getBlockState(pos).getValue(BlockContainerFacingBase.FACING);
+        }
+        return EnumFacing.UP;
     }
 
     public boolean canConnectRedstone() {

@@ -7,20 +7,20 @@
  */
 package com.bluepowermod.container;
 
+import com.bluepowermod.client.gui.GuiContainerBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import uk.co.qmunity.lib.client.gui.GuiContainerBase;
 
 import com.bluepowermod.ClientProxy;
 import com.bluepowermod.api.item.IDatabaseSaveable;
 import com.bluepowermod.container.slot.SlotPhantom;
 import com.bluepowermod.tile.tier3.TileCircuitDatabase;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ContainerCircuitDatabaseMain extends ContainerGhosts {
 
@@ -91,17 +91,17 @@ public class ContainerCircuitDatabaseMain extends ContainerGhosts {
 
         super.detectAndSendChanges();
 
-        for (Object crafter : crafters) {
-            ICrafting icrafting = (ICrafting) crafter;
+        for (Object crafter : listeners) {
+            IContainerListener icrafting = (IContainerListener) crafter;
 
             if (curUploadProgress != circuitDatabase.curUploadProgress) {
-                icrafting.sendProgressBarUpdate(this, 0, circuitDatabase.curUploadProgress);
+                icrafting.sendWindowProperty(this, 0, circuitDatabase.curUploadProgress);
             }
             if (curCopyProgress != circuitDatabase.curCopyProgress) {
-                icrafting.sendProgressBarUpdate(this, 1, circuitDatabase.curCopyProgress);
+                icrafting.sendWindowProperty(this, 1, circuitDatabase.curCopyProgress);
             }
             if (selectedShareOption != circuitDatabase.selectedShareOption) {
-                icrafting.sendProgressBarUpdate(this, 2, circuitDatabase.selectedShareOption);
+                icrafting.sendWindowProperty(this, 2, circuitDatabase.selectedShareOption);
             }
         }
         curUploadProgress = circuitDatabase.curUploadProgress;
@@ -128,27 +128,27 @@ public class ContainerCircuitDatabaseMain extends ContainerGhosts {
     @Override
     public ItemStack transferStackInSlot(EntityPlayer player, int par2) {
 
-        ItemStack itemstack = null;
+        ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = (Slot) inventorySlots.get(par2);
         if (slot != null && slot.getHasStack()) {
             ItemStack itemstack1 = slot.getStack();
             itemstack = itemstack1.copy();
             if (par2 < 20) {
                 if (!mergeItemStack(itemstack1, 20, 55, false))
-                    return null;
+                    return ItemStack.EMPTY;
             } else {
                 if (!mergeItemStack(itemstack1, 2, 20, false))
-                    return null;
+                    return ItemStack.EMPTY;
             }
-            if (itemstack1.stackSize == 0) {
-                slot.putStack(null);
+            if (itemstack1.getCount() == 0) {
+                slot.putStack(ItemStack.EMPTY);
             } else {
                 slot.onSlotChanged();
             }
-            if (itemstack1.stackSize != itemstack.stackSize) {
-                slot.onPickupFromSlot(player, itemstack1);
+            if (itemstack1.getCount() != itemstack.getCount()) {
+                slot.onSlotChange(itemstack, itemstack1);
             } else {
-                return null;
+                return ItemStack.EMPTY;
             }
         }
         return itemstack;

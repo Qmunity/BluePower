@@ -7,50 +7,87 @@
  */
 package com.bluepowermod.block.machine;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
-
 import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.block.BlockContainerBase;
+import com.bluepowermod.client.render.IBPColoredBlock;
+import com.bluepowermod.client.render.ICustomModelBlock;
 import com.bluepowermod.client.render.RenderLamp;
 import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier1.TileLamp;
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.PropertyInteger;
+import net.minecraft.block.state.BlockStateContainer;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.statemap.StateMapperBase;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.Item;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
+import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import javax.annotation.Nullable;
 
 /**
  * @author Koen Beckers (K4Unl)
  *
  */
-public class BlockLamp extends BlockContainerBase {
+public class BlockLamp extends BlockContainerBase implements ICustomModelBlock, IBPColoredBlock{
+
+    public static final PropertyInteger POWER = PropertyInteger.create("power", 0, 15);
 
     private final boolean isInverted;
     private final MinecraftColor color;
+    private final String name;
 
-    @SideOnly(Side.CLIENT)
-    public static IIcon off, on;
-
-    public BlockLamp(boolean isInverted, MinecraftColor color) {
-
-        super(Material.iron, TileLamp.class);
+    public BlockLamp(String name, boolean isInverted, MinecraftColor color) {
+        super(Material.REDSTONE_LIGHT, TileLamp.class);
         this.isInverted = isInverted;
         this.color = color;
-        setBlockName(Refs.LAMP_NAME + "." + color.name().toLowerCase() + (isInverted ? ".inverted" : ""));
+        this.name = name;
+        setTranslationKey(name + "." + color.name().toLowerCase() + (isInverted ? ".inverted" : ""));
         setCreativeTab(BPCreativeTabs.lighting);
-
+        setDefaultState(blockState.getBaseState().withProperty(POWER, isInverted ? 15 : 0));
+        setRegistryName(name + (isInverted ? "inverted" : "") + color.name());
     }
 
-    protected TileLamp get(IBlockAccess w, int x, int y, int z) {
+    public AxisAlignedBB getSize(){
+        return FULL_BLOCK_AABB;
+    }
 
-        TileEntity te = w.getTileEntity(x, y, z);
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void initModel() {
+        //All lamps need to use the same blockstate
+        StateMapperBase stateMapper = new StateMapperBase() {
+            @Override
+            protected ModelResourceLocation getModelResourceLocation(IBlockState iBlockState) {
+                return new ModelResourceLocation(Refs.MODID + ":" + name, (!isInverted == iBlockState.getValue(POWER) > 0) ? "powered=true" : "powered=false");
+            }
+        };
+        ModelLoader.setCustomStateMapper(this, stateMapper);
+       if(!isInverted()) {
+           ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(Refs.MODID + ":" + name, "inventory"));
+       }else {
+           ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(Refs.MODID + ":" + name, "inventory_glow"));
+       }
+    }
+
+
+    protected TileLamp get(IBlockAccess w, BlockPos pos) {
+
+        TileEntity te = w.getTileEntity(pos);
 
         if (te == null || !(te instanceof TileLamp))
             return null;
@@ -58,33 +95,12 @@ public class BlockLamp extends BlockContainerBase {
         return (TileLamp) te;
     }
 
-    public int getPower(IBlockAccess w, int x, int y, int z) {
-
-        TileLamp te = get(w, x, y, z);
-        if (te == null)
-            return 0;
-
-        int power = te.getPower();
-        if (isInverted())
-            power = 15 - power;
-        return power;
-    }
-
     @Override
-    @SideOnly(Side.CLIENT)
-    public void registerBlockIcons(IIconRegister iconRegister) {
-
-        on = iconRegister.registerIcon(Refs.MODID + ":lamps/lamp_on");
-        off = iconRegister.registerIcon(Refs.MODID + ":lamps/lamp_off");
-    }
-
-    @Override
-    public int getLightValue(IBlockAccess w, int x, int y, int z) {
-
-        int pow = getPower(w, x, y, z);
+    public int getLightValue(IBlockState state, IBlockAccess w, BlockPos pos) {
+        int pow = !isInverted ? state.getValue(POWER) : 15 - state.getValue(POWER);
 
         if (Loader.isModLoaded("coloredlightscore")) {
-            int color = getColor(w, x, y, z);
+            int color = getColor(w, pos, 0);
 
             int ri = (color >> 16) & 0xFF;
             int gi = (color >> 8) & 0xFF;
@@ -117,20 +133,16 @@ public class BlockLamp extends BlockContainerBase {
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
-    public int getRenderType() {
-
-        return 0;
-    }
-
-    public int getColor(IBlockAccess w, int x, int y, int z) {
+    public int getColor(IBlockAccess w, BlockPos pos, int tint) {
 
         return color.getHex();
     }
 
-    public int getColor() {
+    @Override
+    public int getColor(int tint) {
 
         return color.getHex();
+
     }
 
     public boolean isInverted() {
@@ -139,71 +151,40 @@ public class BlockLamp extends BlockContainerBase {
     }
 
     @Override
-    public boolean canConnectRedstone(IBlockAccess world, int x, int y, int z, int side) {
-
-        return !(world.getBlock(x, y, z) instanceof BlockLampRGB);
+    public boolean canConnectRedstone(IBlockState state, IBlockAccess world, BlockPos pos, @Nullable EnumFacing side) {
+        return !(world.getBlockState(pos) instanceof BlockLampRGB) && super.canConnectRedstone(state, world, pos, side);
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
-    public boolean canRenderInPass(int pass) {
-
-        RenderLamp.pass = pass;
-        return true;
+    public boolean canRenderInLayer(IBlockState state, BlockRenderLayer layer) {
+        RenderLamp.pass = layer.ordinal();
+        return super.canRenderInLayer(state, layer);
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
-    public int getRenderBlockPass() {
-
-        return 1;
+    protected BlockStateContainer createBlockState() {
+        return new BlockStateContainer(this, POWER);
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
-    public int colorMultiplier(IBlockAccess world, int x, int y, int z) {
-
-        return getColor(world, x, y, z);
+    public int getMetaFromState(IBlockState state) {
+        return state.getValue(POWER);
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
-    public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
-
-        int power = getPower(world, x, y, z);
-
-        return power > 0 ? on : off;
+    public IBlockState getStateFromMeta(int meta) {
+        return getDefaultState().withProperty(POWER, meta);
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
-    public IIcon getIcon(int side, int meta) {
-
-        return isInverted ? on : off;
+    public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, EnumHand hand) {
+        return super.getStateForPlacement(world, pos, facing, hitX, hitY, hitZ, meta, placer, hand).withProperty(POWER, world.getRedstonePowerFromNeighbors(pos));
     }
 
     @Override
-    public void onNeighborBlockChange(World world, int x, int y, int z, Block block) {
-
-        super.onNeighborBlockChange(world, x, y, z, block);
-
-        if (this instanceof BlockLampRGB && block instanceof BlockLampRGB)
-            return;
-
-        TileLamp te = get(world, x, y, z);
-        if (te == null)
-            return;
-        te.onUpdate();
+    public void neighborChanged(IBlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos) {
+        super.neighborChanged(state, world, pos, blockIn, fromPos);
+        world.setBlockState(pos, state.withProperty(POWER, world.getRedstonePowerFromNeighbors(pos)));
     }
 
-    @Override
-    public void onBlockAdded(World world, int x, int y, int z) {
-
-        super.onBlockAdded(world, x, y, z);
-
-        TileLamp te = get(world, x, y, z);
-        if (te == null)
-            return;
-        te.onUpdate();
-    }
 }

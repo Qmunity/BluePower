@@ -1,21 +1,18 @@
 package com.bluepowermod.network.message;
 
+import com.bluepowermod.ClientProxy;
+import com.bluepowermod.client.gui.GuiContainerBase;
+import com.bluepowermod.network.LocatedPacket;
+import com.bluepowermod.container.stack.TubeStack;
+import com.bluepowermod.tile.TileMachineBase;
 import io.netty.buffer.ByteBuf;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import uk.co.qmunity.lib.client.gui.GuiContainerBase;
-import uk.co.qmunity.lib.network.LocatedPacket;
+import net.minecraftforge.fml.common.network.ByteBufUtils;
 
-import com.bluepowermod.ClientProxy;
-import com.bluepowermod.part.tube.TubeStack;
-import com.bluepowermod.tile.TileMachineBase;
-
-import cpw.mods.fml.common.network.ByteBufUtils;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MessageSyncMachineBacklog extends LocatedPacket<MessageSyncMachineBacklog> {
 
@@ -27,9 +24,9 @@ public class MessageSyncMachineBacklog extends LocatedPacket<MessageSyncMachineB
 
     public MessageSyncMachineBacklog(TileMachineBase tile, List<TubeStack> stacks) {
 
-        super(tile.xCoord, tile.yCoord, tile.zCoord);
+        super(tile.getPos());
         this.stacks = stacks;
-    }
+   }
 
     @Override
     public void toBytes(ByteBuf buf) {
@@ -56,7 +53,7 @@ public class MessageSyncMachineBacklog extends LocatedPacket<MessageSyncMachineB
     @Override
     public void handleClientSide(EntityPlayer player) {
 
-        TileEntity te = player.worldObj.getTileEntity(x, y, z);
+        TileEntity te = player.world.getTileEntity(pos);
         if (te instanceof TileMachineBase) {
             ((TileMachineBase) te).setBacklog(stacks);
             GuiContainerBase gui = (GuiContainerBase) ClientProxy.getOpenedGui();

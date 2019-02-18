@@ -17,17 +17,7 @@
 
 package com.bluepowermod.client.gui;
 
-import java.util.List;
-
-import net.minecraft.client.gui.Gui;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.util.ResourceLocation;
-import uk.co.qmunity.lib.client.gui.widget.BaseWidget;
-import uk.co.qmunity.lib.client.gui.widget.IGuiWidget;
-import uk.co.qmunity.lib.client.gui.widget.WidgetMode;
-
-import com.bluepowermod.client.gui.widget.WidgetColor;
-import com.bluepowermod.client.gui.widget.WidgetFuzzySetting;
+import com.bluepowermod.client.gui.widget.*;
 import com.bluepowermod.container.ContainerSortingMachine;
 import com.bluepowermod.network.BPNetworkHandler;
 import com.bluepowermod.network.message.MessageGuiUpdate;
@@ -35,6 +25,10 @@ import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier2.TileSortingMachine;
 import com.bluepowermod.tile.tier2.TileSortingMachine.PullMode;
 import com.bluepowermod.tile.tier2.TileSortingMachine.SortMode;
+import net.minecraft.client.gui.Gui;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.util.ResourceLocation;
+import java.util.List;
 
 /**
  *
@@ -128,7 +122,7 @@ public class GuiSortingMachine extends GuiContainerBaseBP {
 
         if (sortingMachine.sortMode == SortMode.ALLSTACK_SEQUENTIAL || sortingMachine.sortMode == SortMode.ANYSTACK_SEQUENTIAL) {
             mc.renderEngine.bindTexture(resLoc);
-            Gui.func_146110_a(guiLeft + 24 + sortingMachine.curColumn * 18, guiTop + 16, 176, 0, 20, 92, 256, 256);
+            Gui.drawModalRectWithCustomSizedTexture(guiLeft + 24 + sortingMachine.curColumn * 18, guiTop + 16, 176, 0, 20, 92, 256, 256);
         }
     }
 

@@ -1,0 +1,14 @@
+﻿{
+  "forge_marker": 1,
+  "defaults": {
+    "textures": {
+    "all": "bluepower:blocks/fancy_basalt"
+    },
+    "model": "cube_all",
+    "uvlock": true
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [{}]
+  }
+}

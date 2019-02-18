@@ -1,0 +1,30 @@
+﻿{
+  "result": {
+    "item": "bluepower:cagelampred"
+  },
+  "pattern": [
+    "BLB",
+    "GLG",
+    "SRS"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "B": {
+      "item": "minecraft:iron_bars"
+    },
+    "L": {
+      "item": "bluepower:lumar",
+      "data": 14
+    },
+    "G": {
+      "item": "minecraft:glass_pane"
+    },
+    "S": {
+      "item": "minecraft:stone_slab",
+      "data": 0
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    }
+  }
+}

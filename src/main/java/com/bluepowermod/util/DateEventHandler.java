@@ -17,10 +17,6 @@
 
 package com.bluepowermod.util;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Random;
-
 import net.minecraft.entity.item.EntityFireworkRocket;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemDye;
@@ -28,6 +24,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Random;
 
 public class DateEventHandler {
 
@@ -59,7 +59,7 @@ public class DateEventHandler {
 
     public static void spawnFirework(World world, double x, double y, double z) {
 
-        ItemStack rocket = new ItemStack(Items.fireworks);
+        ItemStack rocket = new ItemStack(Items.FIREWORKS);
 
         ItemStack itemstack1 = getFireworkCharge();
 
@@ -67,7 +67,7 @@ public class DateEventHandler {
         NBTTagCompound nbttagcompound1 = new NBTTagCompound();
         NBTTagList nbttaglist = new NBTTagList();
 
-        if (itemstack1 != null && itemstack1.getItem() == Items.firework_charge && itemstack1.hasTagCompound()
+        if (!itemstack1.isEmpty() && itemstack1.getItem() == Items.FIREWORK_CHARGE && itemstack1.hasTagCompound()
                 && itemstack1.getTagCompound().hasKey("Explosion")) {
             nbttaglist.appendTag(itemstack1.getTagCompound().getCompoundTag("Explosion"));
         }
@@ -79,18 +79,18 @@ public class DateEventHandler {
         rocket.setTagCompound(nbttagcompound);
 
         EntityFireworkRocket entity = new EntityFireworkRocket(world, x, y, z, rocket);
-        world.spawnEntityInWorld(entity);
+        world.spawnEntity(entity);
     }
 
     private static ItemStack getFireworkCharge() {
 
-        ItemStack charge = new ItemStack(Items.firework_charge);
+        ItemStack charge = new ItemStack(Items.FIREWORK_CHARGE);
         NBTTagCompound nbttagcompound = new NBTTagCompound();
         NBTTagCompound nbttagcompound1 = new NBTTagCompound();
         byte b0 = 0;
         ArrayList<Integer> arraylist = new ArrayList<Integer>();
 
-        arraylist.add(Integer.valueOf(ItemDye.field_150922_c[rand.nextInt(16)]));
+        arraylist.add(ItemDye.DYE_COLORS[rand.nextInt(16)]);
 
         if (rand.nextBoolean())
             nbttagcompound1.setBoolean("Flicker", true);

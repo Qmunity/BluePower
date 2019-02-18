@@ -17,26 +17,55 @@
 
 package com.bluepowermod.block;
 
+import com.bluepowermod.api.misc.MinecraftColor;
+import com.bluepowermod.block.worldgen.BlockStoneOre;
+import com.bluepowermod.init.BPBlocks;
 import net.minecraft.block.Block;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 
 import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.reference.Refs;
+import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
+
+import javax.annotation.Nullable;
+import java.util.List;
 
 public abstract class BlockBase extends Block {
+
+    private boolean wip = false;
     
     public BlockBase(Material material) {
     
         super(material);
-        setStepSound(soundTypeStone);
+        setSoundType(SoundType.STONE);
         setCreativeTab(BPCreativeTabs.machines);
         blockHardness = 3.0F;
+        BPBlocks.blockList.add(this);
     }
-    
+
+
+    public BlockBase setWIP(boolean wip) {
+
+        this.wip = wip;
+        return this;
+    }
+
     @Override
-    public String getUnlocalizedName() {
+    public void addInformation(ItemStack stack, @Nullable World player, List<String> tooltip, ITooltipFlag advanced) {
+        super.addInformation(stack, player, tooltip, advanced);
+        if(wip){
+            tooltip.add(MinecraftColor.RED.getChatColor() + "WIP");
+        }
+    }
+
+
+    @Override
+    public String getTranslationKey() {
     
-        return String.format("tile.%s:%s", Refs.MODID, getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
+        return String.format("tile.%s:%s", Refs.MODID, getUnwrappedUnlocalizedName(super.getTranslationKey()));
     }
     
     protected String getUnwrappedUnlocalizedName(String name) {

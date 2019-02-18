@@ -3,16 +3,14 @@ package com.bluepowermod.client.gui.widget;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.bluepowermod.container.stack.TubeStack;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
-import uk.co.qmunity.lib.client.gui.widget.GuiAnimatedStat;
-import uk.co.qmunity.lib.client.gui.widget.IGuiAnimatedStat;
 
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
-import com.bluepowermod.part.tube.TubeStack;
 
 public class WidgetTabItemLister extends GuiAnimatedStat {
 
@@ -82,7 +80,7 @@ public class WidgetTabItemLister extends GuiAnimatedStat {
                     int x = getBaseX() + i * 18 + 9;
                     int y = getAffectedY() + j * 18 + 18;
                     if (stack.color != TubeColor.NONE) {
-                        Gui.drawRect(x, y, x + 16, y + 16, 0xFF000000 + ItemDye.field_150922_c[stack.color.ordinal()]);
+                        Gui.drawRect(x, y, x + 16, y + 16, 0xFF000000 + ItemDye.DYE_COLORS[stack.color.ordinal()]);
                     }
                     renderItem(fontRenderer, x, y, stack.stack);
                 }

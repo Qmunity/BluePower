@@ -17,6 +17,8 @@
 
 package com.bluepowermod.item;
 
+import com.bluepowermod.init.BPItems;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemSpade;
 import net.minecraft.item.ItemStack;
@@ -26,22 +28,22 @@ import com.bluepowermod.reference.Refs;
 
 public class ItemGemSpade extends ItemSpade {
 
-    public    Item    customCraftingMaterial = null;
+    public    Item    customCraftingMaterial = Items.AIR;
     protected boolean canRepair              = true;
 
     public ItemGemSpade(ToolMaterial material, String name, Item repairItem) {
-
         super(material);
-        this.setUnlocalizedName(name);
+        this.setTranslationKey(name);
         this.setCreativeTab(BPCreativeTabs.tools);
-        this.setTextureName(Refs.MODID + ":" + name);
+        this.setRegistryName(Refs.MODID + ":" + name);
         this.customCraftingMaterial = repairItem;
+        BPItems.itemList.add(this);
     }
 
     @Override
-    public String getUnlocalizedName(ItemStack stack) {
+    public String getTranslationKey(ItemStack stack) {
 
-        return String.format("item.%s:%s", Refs.MODID, getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
+        return String.format("item.%s:%s", Refs.MODID, getUnwrappedUnlocalizedName(super.getTranslationKey()));
     }
 
     protected String getUnwrappedUnlocalizedName(String name) {

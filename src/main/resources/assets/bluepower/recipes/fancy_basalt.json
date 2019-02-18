@@ -1,0 +1,14 @@
+{
+  "result": {
+    "item": "bluepower:fancy_basalt"
+  },
+  "pattern": [
+    "#"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "#": {
+      "item": "bluepower:basalt_brick"
+    }
+  }
+}

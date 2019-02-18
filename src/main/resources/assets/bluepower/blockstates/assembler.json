@@ -1,0 +1,22 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "textures": {
+      "top": "bluepower:blocks/machines/assembler_top",
+      "bottom": "bluepower:blocks/machines/assembler_bottom",
+      "front": "bluepower:blocks/machines/assembler_front",
+      "side": "bluepower:blocks/machines/assembler_side",
+      "particle": "bluepower:blocks/machines/assembler_side"
+    },
+    "model": "bluepower:cube_front",
+    "uvlock": true
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [{}],
+    "active":{
+      "true":{"textures": {"front": "bluepower:blocks/machines/assembler_front_active"}},
+      "false":{"textures": {"front": "bluepower:blocks/machines/assembler_front"}}
+    }
+  }
+}

@@ -7,115 +7,136 @@
  */
 package com.bluepowermod.client.render;
 
+import com.bluepowermod.block.power.BlockEngine;
+import com.bluepowermod.init.BPBlocks;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.*;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.block.model.IBakedModel;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.AdvancedModelLoader;
-import net.minecraftforge.client.model.IModelCustom;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.util.EnumFacing;
 
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
-import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier3.TileEngine;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
 /**
- * 
- * @author TheFjong
- * 
+ *
+ * @author TheFjong, MoreThanHidden
+ * TODO: Create Rotation Helper and re-implement as Fast TESR
+ *
  */
 @SideOnly(Side.CLIENT)
-public class RenderEngine extends TileEntitySpecialRenderer {
-    
-    private ResourceLocation modelLocation      = new ResourceLocation(Refs.MODID + ":" + Refs.MODEL_LOCATION + "engine.obj");
-    private ResourceLocation textureLocationOff = new ResourceLocation(Refs.MODID + ":" + Refs.MODEL_TEXTURE_LOCATION + "engineoff.png");
-    private ResourceLocation textureLocationOn  = new ResourceLocation(Refs.MODID + ":" + Refs.MODEL_TEXTURE_LOCATION + "engineon.png");
-    
-    IModelCustom             engineModel;
-    float                    rotateAmount       = 0F;
-    
-    public RenderEngine() {
-    
-        engineModel = AdvancedModelLoader.loadModel(modelLocation);
-    }
-    
-    @SuppressWarnings("cast")
+public class RenderEngine extends TileEntitySpecialRenderer<TileEngine> {
+
+    float rotateAmount  = 0F;
+
     @Override
-    public void renderTileEntityAt(TileEntity engine, double x, double y, double z, float f) {
-    
-        if (engine instanceof TileEngine) {
-            
-            GL11.glPushMatrix();
-            GL11.glDisable(GL11.GL_LIGHTING);
-            TileEngine tile = (TileEngine) engine.getWorldObj().getTileEntity(engine.xCoord, engine.yCoord, engine.zCoord);
-            
-            ForgeDirection direction = tile.getOrientation();
-            
-            GL11.glTranslated(x, y, z);
-            GL11.glScaled(.0315, .0315, .0315);
-            
-            if (direction == ForgeDirection.UP) {
-                GL11.glTranslated(16, 28, 16);
-                GL11.glRotatef(180, 1, 0, 0);
-            }
-            if (direction == ForgeDirection.DOWN) {
-                GL11.glTranslated(16, 4, 16);
-                GL11.glRotatef(0, 0, 0, 0);
-            }
-            if (direction == ForgeDirection.EAST) {
-                GL11.glTranslated(28, 16, 16);
-                GL11.glRotatef(90, 0, 0, 1);
-            }
-            if (direction == ForgeDirection.WEST) {
-                GL11.glTranslated(4, 16, 16);
-                GL11.glRotatef(90, 0, 0, -1);
-            }
-            if (direction == ForgeDirection.NORTH) {
-                GL11.glTranslated(16, 16, 4);
-                GL11.glRotatef(90, 1, 0, 0);
-            }
-            if (direction == ForgeDirection.SOUTH) {
-                GL11.glTranslated(16, 16, 28);
-                GL11.glRotatef(90, -1, 0, 0);
-            }
-            if (tile.isActive) {
-                bindTexture(textureLocationOn);
-            } else {
-                bindTexture(textureLocationOff);
-            }
-            engineModel.renderAllExcept("gear", "glider");
-            
-            if (tile.isActive) {
-                f += tile.pumpTick;
-                if (tile.pumpSpeed > 0) {
-                    f /= tile.pumpSpeed;
-                }
-            } else {
-                f = 0;
-            }
-            f = (float) ((float) 6 * (.5 - .5 * Math.cos(3.1415926535897931D * (double) f)));
-            GL11.glTranslatef(0, f, 0);
-            
-            engineModel.renderPart("glider");
-            
-            GL11.glTranslatef(0, -f, 0);
-            
-            if (tile.isActive) {
-                if (tile.getWorldObj().isRemote) {
-                    rotateAmount++;
-                    
-                    GL11.glRotated(tile.gearTick * 19, 0, 1.5707963267948966D * (double) f, 0);
-                }
-            }
-            engineModel.renderPart("gear");
-            
-            GL11.glEnable(GL11.GL_LIGHTING);
-            
-            GL11.glPopMatrix();
+    public void render(TileEngine engine, double x, double y, double z, float f, int destroyStage, float alpha) {
+        GlStateManager.pushAttrib();
+        GlStateManager.pushMatrix();
+        // Translate to the location of our tile entity
+        GlStateManager.disableRescaleNormal();
+
+        // Render the rotating cog
+        GlStateManager.pushMatrix();
+        RenderHelper.disableStandardItemLighting();
+
+        this.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+        if (Minecraft.isAmbientOcclusionEnabled()) {
+            GlStateManager.shadeModel(GL11.GL_SMOOTH);
+        } else {
+            GlStateManager.shadeModel(GL11.GL_FLAT);
         }
+
+        World world = engine.getWorld();
+
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder bufferBuilder = tessellator.getBuffer();
+        IBlockState state = BPBlocks.engine.getDefaultState();
+        BlockRendererDispatcher dispatcher = Minecraft.getMinecraft().getBlockRendererDispatcher();
+        BlockPos pos = engine.getPos();
+
+        GlStateManager.translate(x, y, z);
+
+        TileEngine tile = (TileEngine) engine.getWorld().getTileEntity(engine.getPos());
+        EnumFacing direction = tile.getOrientation();
+
+        if (direction == EnumFacing.UP) {
+            GL11.glTranslated(0,1,1);
+            GL11.glRotatef(180, 1, 0, 0);
+        }
+        if (direction == EnumFacing.DOWN) {
+            GL11.glRotatef(0, 0, 0, 0);
+        }
+        if (direction == EnumFacing.EAST) {
+            GL11.glTranslated(1,0,0);
+            GL11.glRotatef(90, 0, 0, 1);
+        }
+        if (direction == EnumFacing.WEST) {
+            GL11.glTranslated(0,1,0);
+            GL11.glRotatef(90, 0, 0, -1);
+        }
+        if (direction == EnumFacing.NORTH) {
+            GL11.glTranslated(0,1,0);
+            GL11.glRotatef(90, 1, 0, 0);
+        }
+        if (direction == EnumFacing.SOUTH) {
+            GL11.glTranslated(0,0,1);
+            GL11.glRotatef(90, -1, 0, 0);
+        }
+
+        tessellator.getBuffer().setTranslation(-pos.getX(), -pos.getY(), -pos.getZ());
+
+        //Render Glider
+        GlStateManager.pushMatrix();
+        bufferBuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
+        float f2 = 0;
+        if(tile.isActive) {
+            f += tile.pumpTick;
+            if (tile.pumpSpeed > 0) {
+                f /= tile.pumpSpeed;
+            }
+            f2 = ((float) (.5 - .5 * Math.cos(3.1415926535897931D * (double) f)) / 4);
+        }
+        GL11.glTranslatef(0, f2, 0);
+        IBakedModel glider = dispatcher.getModelForState(state.withProperty(BlockEngine.GLIDER, true));
+        dispatcher.getBlockModelRenderer().renderModel(world, glider, state, pos, bufferBuilder, false);
+
+        tessellator.draw();
+        GlStateManager.popMatrix();
+
+        //Render Gear
+        GlStateManager.pushMatrix();
+        bufferBuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
+
+        GlStateManager.translate(0.5, 0, 0.5);
+        long angle = tile.isActive ? (System.currentTimeMillis() / 10) % 360 : 0;
+        GlStateManager.rotate(angle, 0, 1, 0);
+        GlStateManager.translate(-0.5, 0, -0.5);
+        IBakedModel gear = dispatcher.getModelForState(state.withProperty(BlockEngine.GEAR, true));
+        dispatcher.getBlockModelRenderer().renderModel(world, gear, state, pos, bufferBuilder, false);
+
+        tessellator.draw();
+        GlStateManager.popMatrix();
+
+
+        RenderHelper.enableStandardItemLighting();
+        tessellator.getBuffer().setTranslation(0, 0, 0);
+
+        GlStateManager.popMatrix();
+
+        GlStateManager.popMatrix();
+        GlStateManager.popAttrib();
     }
-    
+
+
+
 }

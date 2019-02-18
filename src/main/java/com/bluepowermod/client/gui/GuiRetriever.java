@@ -7,16 +7,15 @@
  */
 package com.bluepowermod.client.gui;
 
-import java.util.List;
-
-import net.minecraft.client.gui.Gui;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.util.ResourceLocation;
-import uk.co.qmunity.lib.client.gui.widget.WidgetMode;
-
+import com.bluepowermod.client.gui.widget.WidgetMode;
 import com.bluepowermod.container.ContainerRetriever;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier2.TileRetriever;
+import net.minecraft.client.gui.Gui;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.util.ResourceLocation;
+
+import java.util.List;
 
 /**
  * @author MineMaarten
@@ -59,7 +58,7 @@ public class GuiRetriever extends GuiFilter {
 
         if (((TileRetriever) filter).mode == 0) {
             int curSlot = ((TileRetriever) filter).slotIndex;
-            Gui.func_146110_a(guiLeft + 60 + curSlot % 3 * 18, guiTop + 15 + 18 * (curSlot / 3), 182, 0, 20, 20, 256, 256);
+            Gui.drawModalRectWithCustomSizedTexture(guiLeft + 60 + curSlot % 3 * 18, guiTop + 15 + 18 * (curSlot / 3), 182, 0, 20, 20, 256, 256);
         }
     }
 

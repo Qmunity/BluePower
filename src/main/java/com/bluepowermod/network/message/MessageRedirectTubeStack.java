@@ -17,14 +17,10 @@
 
 package com.bluepowermod.network.message;
 
+import com.bluepowermod.container.stack.TubeStack;
+import com.bluepowermod.network.LocatedPacket;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
-import uk.co.qmunity.lib.network.LocatedPacket;
-import uk.co.qmunity.lib.part.compat.MultipartCompatibility;
-
-import com.bluepowermod.part.tube.PneumaticTube;
-import com.bluepowermod.part.tube.TubeLogic;
-import com.bluepowermod.part.tube.TubeStack;
 
 public class MessageRedirectTubeStack extends LocatedPacket<MessageRedirectTubeStack> {
 
@@ -34,11 +30,11 @@ public class MessageRedirectTubeStack extends LocatedPacket<MessageRedirectTubeS
 
     }
 
-    public MessageRedirectTubeStack(PneumaticTube tube, TubeStack stack) {
+    //public MessageRedirectTubeStack(PneumaticTube tube, TubeStack stack) {
 
-        super(tube.getX(), tube.getY(), tube.getZ());
-        this.stack = stack;
-    }
+     //  super(tube.getPos());
+      //  this.stack = stack;
+    //}
 
     @Override
     public void toBytes(ByteBuf buf) {
@@ -57,13 +53,13 @@ public class MessageRedirectTubeStack extends LocatedPacket<MessageRedirectTubeS
     @Override
     public void handleClientSide(EntityPlayer player) {
 
-        PneumaticTube tube = MultipartCompatibility.getPart(player.worldObj, x, y, z, PneumaticTube.class);
-        if (tube == null)
+        //PneumaticTube tube = MultipartCompatibility.getPart(player.world, pos, PneumaticTube.class);
+        //if (tube == null)
             return;
-        TubeLogic logic = tube.getLogic();
-        if (logic == null)
-            return;
-        logic.onClientTubeRedirectPacket(stack);
+       // TubeLogic logic = tube.getLogic();
+        //if (logic == null)
+           // return;
+        //logic.onClientTubeRedirectPacket(stack);
     }
 
     @Override

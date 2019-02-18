@@ -8,7 +8,6 @@
 package com.bluepowermod.client.gui.widget;
 
 import net.minecraft.client.Minecraft;
-import uk.co.qmunity.lib.client.gui.widget.WidgetMode;
 
 import com.bluepowermod.reference.Refs;
 

@@ -17,23 +17,10 @@
 
 package com.bluepowermod.network;
 
-import uk.co.qmunity.lib.network.NetworkHandler;
-
-import com.bluepowermod.network.message.MessageCircuitDatabaseTemplate;
-import com.bluepowermod.network.message.MessageDebugBlock;
-import com.bluepowermod.network.message.MessageGuiUpdate;
-import com.bluepowermod.network.message.MessageRedirectTubeStack;
-import com.bluepowermod.network.message.MessageSendClientServerTemplates;
-import com.bluepowermod.network.message.MessageServerTickTime;
-import com.bluepowermod.network.message.MessageSyncMachineBacklog;
-import com.bluepowermod.network.message.MessageUpdateTextfield;
-import com.bluepowermod.network.message.MessageWirelessFrequencySync;
-import com.bluepowermod.network.message.MessageWirelessNewFreq;
-import com.bluepowermod.network.message.MessageWirelessRemoveFreq;
-import com.bluepowermod.network.message.MessageWirelessSaveFreq;
+import com.bluepowermod.network.message.*;
 import com.bluepowermod.reference.Refs;
+import net.minecraftforge.fml.relauncher.Side;
 
-import cpw.mods.fml.relauncher.Side;
 
 public class BPNetworkHandler {
 
@@ -42,6 +29,7 @@ public class BPNetworkHandler {
     public static void initBP() {
 
         INSTANCE.registerPacket(MessageGuiUpdate.class, MessageGuiUpdate.class, Side.SERVER);
+        INSTANCE.registerPacket(MessageCraftingSync.class, MessageCraftingSync.class, Side.SERVER);
         INSTANCE.registerPacket(MessageUpdateTextfield.class, MessageUpdateTextfield.class, Side.SERVER);
         INSTANCE.registerPacket(MessageCircuitDatabaseTemplate.class, MessageCircuitDatabaseTemplate.class, Side.SERVER);
         INSTANCE.registerPacket(MessageCircuitDatabaseTemplate.class, MessageCircuitDatabaseTemplate.class, Side.CLIENT);

@@ -1,0 +1,7 @@
+﻿{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "bluepower:items/canvas_bag",
+    "layer1": "bluepower:items/canvas_bag_overlay"
+  }
+}

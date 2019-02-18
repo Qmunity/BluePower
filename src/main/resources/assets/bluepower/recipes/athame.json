@@ -1,0 +1,18 @@
+{
+  "result": {
+    "item": "bluepower:athame"
+  },
+  "pattern": [
+    "# ",
+    " S"
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "#": {
+      "item": "#INGOTSILVER"
+    },
+    "S": {
+      "item": "#STICKWOOD"
+    }
+  }
+}

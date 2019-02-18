@@ -1,26 +1,24 @@
 package com.bluepowermod.block.machine;
 
-import java.awt.Color;
-
+import com.bluepowermod.api.misc.MinecraftColor;
+import com.bluepowermod.tile.tier1.TileLamp;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 
-import com.bluepowermod.api.misc.MinecraftColor;
-import com.bluepowermod.reference.Refs;
-import com.bluepowermod.tile.tier1.TileLamp;
+import java.awt.*;
 
 public class BlockLampRGB extends BlockLamp {
 
-    public BlockLampRGB(boolean isInverted) {
-
-        super(isInverted, MinecraftColor.NONE);
-
-        setBlockName(Refs.LAMP_NAME + ".rgb" + (isInverted ? ".inverted" : ""));
+    public BlockLampRGB(String name, boolean isInverted) {
+        super(name, isInverted, MinecraftColor.NONE);
+        setTranslationKey(name + ".rgb" + (isInverted ? ".inverted" : ""));
     }
 
     @Override
-    public int getColor(IBlockAccess w, int x, int y, int z) {
+    public int getColor(IBlockAccess w, BlockPos pos, int tint) {
 
-        TileLamp te = get(w, x, y, z);
+        TileLamp te = get(w, pos);
         if (te == null)
             return 0;
 
@@ -28,7 +26,7 @@ public class BlockLampRGB extends BlockLamp {
     }
 
     @Override
-    public int getColor() {
+    public int getColor(int tint) {
 
         return Color.getHSBColor((System.currentTimeMillis() % 10000) / 10000F, 1, 1).getRGB();
     }

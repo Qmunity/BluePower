@@ -7,18 +7,16 @@
  */
 package com.bluepowermod.container;
 
+import com.bluepowermod.ClientProxy;
+import com.bluepowermod.client.gui.GuiContainerBase;
+import com.bluepowermod.tile.tier1.TileItemDetector;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import uk.co.qmunity.lib.client.gui.GuiContainerBase;
-
-import com.bluepowermod.ClientProxy;
-import com.bluepowermod.tile.tier1.TileItemDetector;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * @author MineMaarten
@@ -59,32 +57,32 @@ public class ContainerItemDetector extends ContainerMachineBase {
     @Override
     public boolean canInteractWith(EntityPlayer player) {
 
-        return itemDetector.isUseableByPlayer(player);
+        return itemDetector.isUsableByPlayer(player);
     }
 
     @Override
     public ItemStack transferStackInSlot(EntityPlayer player, int par2) {
 
-        ItemStack itemstack = null;
+        ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = (Slot) inventorySlots.get(par2);
         if (slot != null && slot.getHasStack()) {
             ItemStack itemstack1 = slot.getStack();
             itemstack = itemstack1.copy();
             if (par2 < 9) {
                 if (!mergeItemStack(itemstack1, 9, 45, true))
-                    return null;
+                    return ItemStack.EMPTY;
             } else if (!mergeItemStack(itemstack1, 0, 9, false)) {
-                return null;
+                return ItemStack.EMPTY;
             }
-            if (itemstack1.stackSize == 0) {
-                slot.putStack(null);
+            if (itemstack1.getCount() == 0) {
+                slot.putStack(ItemStack.EMPTY);
             } else {
                 slot.onSlotChanged();
             }
-            if (itemstack1.stackSize != itemstack.stackSize) {
-                slot.onPickupFromSlot(player, itemstack1);
+            if (itemstack1.getCount() != itemstack.getCount()) {
+                slot.onSlotChange(itemstack, itemstack1);
             } else {
-                return null;
+                return ItemStack.EMPTY;
             }
         }
         return itemstack;
@@ -98,14 +96,14 @@ public class ContainerItemDetector extends ContainerMachineBase {
 
         super.detectAndSendChanges();
 
-        for (Object crafter : crafters) {
-            ICrafting icrafting = (ICrafting) crafter;
+        for (Object crafter : listeners) {
+            IContainerListener icrafting = (IContainerListener) crafter;
 
             if (mode != itemDetector.mode) {
-                icrafting.sendProgressBarUpdate(this, 0, itemDetector.mode);
+                icrafting.sendWindowProperty(this, 0, itemDetector.mode);
             }
             if (fuzzySetting != itemDetector.fuzzySetting) {
-                icrafting.sendProgressBarUpdate(this, 1, itemDetector.fuzzySetting);
+                icrafting.sendWindowProperty(this, 1, itemDetector.fuzzySetting);
             }
         }
         mode = itemDetector.mode;

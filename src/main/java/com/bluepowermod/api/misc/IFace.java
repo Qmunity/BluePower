@@ -16,10 +16,11 @@
  */
 package com.bluepowermod.api.misc;
 
-import net.minecraftforge.common.util.ForgeDirection;
+
+import net.minecraft.util.EnumFacing;
 
 public interface IFace {
 
-    ForgeDirection getFace();
+    EnumFacing getFace();
 
 }

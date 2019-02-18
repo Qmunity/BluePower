@@ -25,10 +25,9 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import com.bluepowermod.api.misc.MinecraftColor;
-import com.bluepowermod.part.PartManager;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BPCreativeTabs {
 
@@ -46,13 +45,12 @@ public class BPCreativeTabs {
 
             @Override
             @SideOnly(Side.CLIENT)
-            public Item getTabIconItem() {
-
-                Block iconBlock = BPBlocks.marble;
+            public ItemStack createIcon() {
+                Block iconBlock = BPBlocks.amethyst_ore;
                 if (iconBlock != null) {
-                    return Item.getItemFromBlock(iconBlock);
+                    return new ItemStack(iconBlock);
                 } else {
-                    return Item.getItemFromBlock(Blocks.stone);
+                    return new ItemStack(Blocks.STONE);
                 }
             }
         };
@@ -61,13 +59,13 @@ public class BPCreativeTabs {
 
             @Override
             @SideOnly(Side.CLIENT)
-            public Item getTabIconItem() {
+            public ItemStack createIcon() {
 
                 Block iconBlock = BPBlocks.alloyfurnace;
                 if (iconBlock != null) {
-                    return Item.getItemFromBlock(iconBlock);
+                    return new ItemStack(iconBlock);
                 } else {
-                    return Item.getItemFromBlock(Blocks.furnace);
+                    return new ItemStack(Blocks.FURNACE);
                 }
             }
         };
@@ -76,13 +74,13 @@ public class BPCreativeTabs {
 
             @Override
             @SideOnly(Side.CLIENT)
-            public Item getTabIconItem() {
+            public ItemStack createIcon() {
 
                 Item iconItem = BPItems.ruby_gem;
                 if (iconItem != null) {
-                    return BPItems.ruby_gem;
+                    return new ItemStack(BPItems.ruby_gem);
                 } else {
-                    return Items.diamond;
+                    return new ItemStack(Items.DIAMOND);
                 }
             }
         };
@@ -91,13 +89,13 @@ public class BPCreativeTabs {
 
             @Override
             @SideOnly(Side.CLIENT)
-            public Item getTabIconItem() {
+            public ItemStack createIcon() {
 
                 Item iconItem = BPItems.screwdriver;
                 if (iconItem != null) {
-                    return BPItems.screwdriver;
+                    return new ItemStack(BPItems.screwdriver);
                 } else {
-                    return Items.diamond_pickaxe;
+                    return new ItemStack(Items.DIAMOND_PICKAXE);
                 }
             }
         };
@@ -106,20 +104,13 @@ public class BPCreativeTabs {
 
             @Override
             @SideOnly(Side.CLIENT)
-            public Item getTabIconItem() {
+            public ItemStack createIcon() {
 
-                return null;
-            }
-
-            @Override
-            @SideOnly(Side.CLIENT)
-            public ItemStack getIconItemStack() {
-
-                ItemStack iconItem = PartManager.getPartInfo("timer").getStack();
-                if (iconItem != null) {
+                ItemStack iconItem = new ItemStack(BPItems.redstone_pointer_tile);
+                if (!iconItem.isEmpty()) {
                     return iconItem;
                 } else {
-                    return new ItemStack(Blocks.stone);
+                    return new ItemStack(Blocks.STONE);
                 }
             }
         };
@@ -128,20 +119,12 @@ public class BPCreativeTabs {
 
             @Override
             @SideOnly(Side.CLIENT)
-            public Item getTabIconItem() {
-
-                return null;
-            }
-
-            @Override
-            @SideOnly(Side.CLIENT)
-            public ItemStack getIconItemStack() {
-
-                ItemStack iconItem = PartManager.getPartInfo("wire.bluestone").getStack();
-                if (iconItem != null) {
+            public ItemStack createIcon() {
+                ItemStack iconItem = new ItemStack(BPItems.blue_alloy_ingot);
+                if (!iconItem.isEmpty()) {
                     return iconItem;
                 } else {
-                    return new ItemStack(Blocks.stone);
+                    return new ItemStack(Blocks.STONE);
                 }
             }
         };
@@ -150,28 +133,18 @@ public class BPCreativeTabs {
 
             @Override
             @SideOnly(Side.CLIENT)
-            public Item getTabIconItem() {
-
-                return null;
-            }
-
-            @Override
-            @SideOnly(Side.CLIENT)
-            public ItemStack getIconItemStack() {
-
+            public ItemStack createIcon() {
                 int t = 1000;
 
                 int i = (int) ((System.currentTimeMillis() / t) % MinecraftColor.VALID_COLORS.length);
                 boolean b = ((System.currentTimeMillis() / t) % (MinecraftColor.VALID_COLORS.length * 2)) >= MinecraftColor.VALID_COLORS.length;
                 boolean b2 = ((System.currentTimeMillis() / t) % (MinecraftColor.VALID_COLORS.length * 4)) >= MinecraftColor.VALID_COLORS.length;
 
-                ItemStack iconItem = PartManager.getPartInfo(
-                        (b2 ? "fixture" : "cagelamp") + "." + MinecraftColor.VALID_COLORS[i].name().toLowerCase() + (b ? ".inverted" : ""))
-                        .getStack();
-                if (iconItem != null) {
+                ItemStack iconItem = new ItemStack(BPBlocks.blockLampRGB);
+                if (!iconItem.isEmpty()) {
                     return iconItem;
                 } else {
-                    return new ItemStack(Blocks.stone);
+                    return new ItemStack(Blocks.STONE);
                 }
             }
         };

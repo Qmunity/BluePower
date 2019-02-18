@@ -11,6 +11,7 @@ import com.bluepowermod.ClientProxy;
 import com.bluepowermod.client.gui.GuiCircuitDatabaseSharing;
 import com.bluepowermod.container.ContainerSeedBag;
 import com.bluepowermod.container.inventory.InventoryItem;
+import com.bluepowermod.helper.MathHelper;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.init.BPEnchantments;
 import com.bluepowermod.init.BPItems;
@@ -18,39 +19,31 @@ import com.bluepowermod.item.ItemSeedBag;
 import com.bluepowermod.item.ItemSickle;
 import com.bluepowermod.network.BPNetworkHandler;
 import com.bluepowermod.network.message.MessageServerTickTime;
-import com.bluepowermod.part.PartManager;
-import com.bluepowermod.util.Achievements;
-import cpw.mods.fml.common.eventhandler.Event.Result;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.PlayerEvent;
-import cpw.mods.fml.common.gameevent.TickEvent;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.BlockGrass;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.boss.EntityDragon;
-import net.minecraft.entity.monster.EntityCreeper;
-import net.minecraft.entity.monster.EntityEnderman;
-import net.minecraft.entity.monster.EntitySkeleton;
-import net.minecraft.entity.monster.EntityZombie;
+import net.minecraft.entity.monster.*;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Enchantments;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntityHopper;
 import net.minecraft.util.EntityDamageSource;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.event.AnvilUpdateEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
-import net.minecraftforge.event.entity.player.BonemealEvent;
-import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
-import net.minecraftforge.event.entity.player.ItemTooltipEvent;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import uk.co.qmunity.lib.helper.MathHelper;
+import net.minecraftforge.event.entity.player.*;
+import net.minecraftforge.fml.common.eventhandler.Event;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.*;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BPEventHandler {
 
@@ -58,8 +51,8 @@ public class BPEventHandler {
     public void tick(TickEvent.WorldTickEvent event) {
         if (event.phase == TickEvent.Phase.END) {
             if (event.world.getWorldTime() % 200 == 0) {
-                double tickTime = MathHelper.mean(MinecraftServer.getServer().tickTimeArray) * 1.0E-6D;//In case world are going to get their own thread: MinecraftServer.getServer().worldTickTimes.get(event.world.provider.dimensionId)
-                BPNetworkHandler.INSTANCE.sendToDimension(new MessageServerTickTime(tickTime), event.world.provider.dimensionId);
+                double tickTime = MathHelper.mean(event.world.getMinecraftServer().tickTimeArray) * 1.0E-6D;//In case world are going to get their own thread: MinecraftServer.getServer().worldTickTimes.get(event.world.provider.dimensionId)
+                BPNetworkHandler.INSTANCE.sendToDimension(new MessageServerTickTime(tickTime), event.world.provider.getDimension());
             }
         }
     }
@@ -67,24 +60,23 @@ public class BPEventHandler {
     @SubscribeEvent
     public void onAnvilEvent(AnvilUpdateEvent event) {
 
-        if (event.left != null && event.left.getItem() == BPItems.screwdriver) {
-            if (event.right != null && event.right.getItem() == Items.enchanted_book) {
-                if (EnchantmentHelper.getEnchantments(event.right).get(Enchantment.silkTouch.effectId) != null) {
-                    event.output = new ItemStack(BPItems.silky_screwdriver, 1, event.left.getItemDamage());
-                    event.cost = 20;
+        if (!event.getLeft().isEmpty() && event.getLeft().getItem() == BPItems.screwdriver) {
+            if (!event.getRight().isEmpty() && event.getRight().getItem() == Items.ENCHANTED_BOOK) {
+                if (EnchantmentHelper.getEnchantments(event.getRight()).get(Enchantments.SILK_TOUCH) != null) {
+                    event.setOutput(new ItemStack(BPItems.silky_screwdriver, 1, event.getLeft().getItemDamage()));
+                    event.setCost(20);
                 }
             }
         }
     }
 
     @SubscribeEvent
-    public void onPlayerInteract(PlayerInteractEvent event) {
+    public void onPlayerInteract(PlayerInteractEvent.LeftClickBlock event) {
 
-        if (event.action == PlayerInteractEvent.Action.LEFT_CLICK_BLOCK && event.entityPlayer.capabilities.isCreativeMode) {
-            ItemStack heldItem = event.entityPlayer.getCurrentEquippedItem();
-            if (heldItem != null && heldItem.getItem() instanceof ItemSickle) {
-                heldItem.getItem().onBlockDestroyed(heldItem, event.world, event.world.getBlock(event.x, event.y, event.z), event.x, event.y,
-                        event.z, event.entityPlayer);
+        if (event.getEntityPlayer().capabilities.isCreativeMode) {
+            ItemStack heldItem = event.getEntityPlayer().getHeldItem(event.getHand());
+            if (!heldItem.isEmpty() && heldItem.getItem() instanceof ItemSickle) {
+                heldItem.getItem().onBlockDestroyed(heldItem, event.getWorld(), event.getWorld().getBlockState(event.getPos()), event.getPos(), event.getEntityPlayer());
             }
         }
     }
@@ -92,32 +84,28 @@ public class BPEventHandler {
     @SubscribeEvent
     public void itemPickUp(EntityItemPickupEvent event) {
 
-        EntityPlayer player = event.entityPlayer;
-        ItemStack pickUp = event.item.getEntityItem();
+        EntityPlayer player = event.getEntityPlayer();
+        ItemStack pickUp = event.getItem().getItem();
         if (!(player.openContainer instanceof ContainerSeedBag)) {
             for (ItemStack is : player.inventory.mainInventory) {
-                if (is != null && is.getItem() instanceof ItemSeedBag) {
+                if (!is.isEmpty() && is.getItem() instanceof ItemSeedBag) {
                     ItemStack seedType = ItemSeedBag.getSeedType(is);
-                    if (seedType != null && seedType.isItemEqual(pickUp)) {
+                    if (!seedType.isEmpty() && seedType.isItemEqual(pickUp)) {
                         InventoryItem inventory = InventoryItem.getItemInventory(is, "Seed Bag", 9);
-                        inventory.openInventory();
-                        ItemStack pickedUp = TileEntityHopper.func_145889_a(inventory, pickUp, -1);
+                        inventory.openInventory(event.getEntityPlayer());
+                        ItemStack pickedUp = TileEntityHopper.putStackInInventoryAllSlots(null, inventory, pickUp, null);
                         inventory.closeInventory(is);
 
-                        if (pickedUp == null) {
-                            event.setResult(Result.ALLOW);
-                            event.item.setDead();
+                        if (pickedUp.isEmpty()) {
+                            event.setResult(Event.Result.ALLOW);
+                            event.getItem().setDead();
                             return;
                         } else {
-                            event.item.setEntityItemStack(pickedUp);
+                            event.getItem().setItem(pickedUp);
                         }
                     }
                 }
             }
-        }
-
-        if (pickUp.getItem().equals(Item.getItemFromBlock(BPBlocks.tungsten_ore))) {
-            player.addStat(Achievements.tungstenAchievement, 1);
         }
     }
 
@@ -126,19 +114,19 @@ public class BPEventHandler {
     @SubscribeEvent
     public void onEntityAttack(LivingAttackEvent event) {
 
-        if (!isAttacking && event.source instanceof EntityDamageSource) {// this event will be trigger recursively by EntityLiving#attackEntityFrom,
+        if (!isAttacking && event.getSource() instanceof EntityDamageSource) {// this event will be trigger recursively by EntityLiving#attackEntityFrom,
             // so we need to stop the loop.
-            EntityDamageSource entitySource = (EntityDamageSource) event.source;
+            EntityDamageSource entitySource = (EntityDamageSource) event.getSource();
 
-            if (entitySource.getEntity() instanceof EntityPlayer) {
-                EntityPlayer killer = (EntityPlayer) entitySource.getEntity();
+            if (entitySource.getTrueSource() instanceof EntityPlayer) {
+                EntityPlayer killer = (EntityPlayer) entitySource.getTrueSource();
 
-                if (killer.inventory.getCurrentItem() != null) {
-                    if (EnchantmentHelper.getEnchantments(killer.inventory.getCurrentItem()).containsKey(BPEnchantments.disjunction.effectId)) {
-                        if (event.entityLiving instanceof EntityEnderman || event.entityLiving instanceof EntityDragon) {
-                            int level = EnchantmentHelper.getEnchantmentLevel(BPEnchantments.disjunction.effectId, killer.inventory.getCurrentItem());
+                if (!killer.inventory.getCurrentItem().isEmpty()) {
+                    if (EnchantmentHelper.getEnchantments(killer.inventory.getCurrentItem()).containsKey(BPEnchantments.disjunction)) {
+                        if (event.getEntityLiving() instanceof EntityEnderman || event.getEntityLiving() instanceof EntityDragon) {
+                            int level = EnchantmentHelper.getEnchantmentLevel(BPEnchantments.disjunction, killer.inventory.getCurrentItem());
                             isAttacking = true;
-                            event.entityLiving.attackEntityFrom(event.source, event.ammount * (level * 0.5F + 1));
+                            event.getEntityLiving().attackEntityFrom(event.getSource(), event.getAmount() * (level * 0.5F + 1));
                             isAttacking = false;
                             event.setCanceled(true);
                         }
@@ -152,22 +140,22 @@ public class BPEventHandler {
     @SubscribeEvent
     public void onEntityDeath(LivingDeathEvent event) {
 
-        if (event.source instanceof EntityDamageSource) {
-            EntityDamageSource entitySource = (EntityDamageSource) event.source;
+        if (event.getSource() instanceof EntityDamageSource) {
+            EntityDamageSource entitySource = (EntityDamageSource) event.getSource();
 
-            if (entitySource.getEntity() instanceof EntityPlayer) {
-                EntityPlayer killer = (EntityPlayer) entitySource.getEntity();
+            if (entitySource.getTrueSource() instanceof EntityPlayer) {
+                EntityPlayer killer = (EntityPlayer) entitySource.getTrueSource();
 
-                if (killer.inventory.getCurrentItem() != null) {
-                    if (EnchantmentHelper.getEnchantments(killer.inventory.getCurrentItem()).containsKey(BPEnchantments.vorpal.effectId)) {
-                        int level = EnchantmentHelper.getEnchantmentLevel(BPEnchantments.vorpal.effectId, killer.inventory.getCurrentItem());
+                if (!killer.inventory.getCurrentItem().isEmpty()) {
+                    if (EnchantmentHelper.getEnchantments(killer.inventory.getCurrentItem()).containsKey(BPEnchantments.vorpal)) {
+                        int level = EnchantmentHelper.getEnchantmentLevel(BPEnchantments.vorpal, killer.inventory.getCurrentItem());
 
                         if (level == 1) {
-                            if (killer.worldObj.rand.nextInt(6) == 1) {
+                            if (killer.world.rand.nextInt(6) == 1) {
                                 dropHeads(event);
                             }
                         } else if (level == 2) {
-                            if (killer.worldObj.rand.nextInt(3) == 1) {
+                            if (killer.world.rand.nextInt(3) == 1) {
                                 dropHeads(event);
                             }
                         }
@@ -179,29 +167,29 @@ public class BPEventHandler {
 
     private void dropHeads(LivingDeathEvent event) {
 
-        if (event.entityLiving instanceof EntityCreeper) {
-            event.entityLiving.entityDropItem(new ItemStack(Items.skull, 1, 4), 0.0F);
+        if (event.getEntityLiving() instanceof EntityCreeper) {
+            event.getEntityLiving().entityDropItem(new ItemStack(Items.SKULL, 1, 4), 0.0F);
         }
 
-        if (event.entityLiving instanceof EntityPlayer) {
-            ItemStack drop = new ItemStack(Items.skull, 1, 3);
-            drop.stackTagCompound = new NBTTagCompound();
-            drop.stackTagCompound.setString("SkullOwner", ((EntityPlayer) event.entityLiving).getDisplayName());
-            event.entityLiving.entityDropItem(drop, 0.0F);
+        if (event.getEntityLiving() instanceof EntityPlayer) {
+            ItemStack drop = new ItemStack(Items.SKULL, 1, 3);
+            drop.setTagCompound(new NBTTagCompound());
+            drop.getTagCompound().setString("SkullOwner", ((EntityPlayer) event.getEntityLiving()).getDisplayName().getFormattedText());
+            event.getEntityLiving().entityDropItem(drop, 0.0F);
         }
 
-        if (event.entityLiving instanceof EntitySkeleton) {
-            EntitySkeleton sk = (EntitySkeleton) event.entityLiving;
+        if (event.getEntityLiving() instanceof AbstractSkeleton) {
+            AbstractSkeleton sk = (AbstractSkeleton) event.getEntityLiving();
 
-            if (sk.getSkeletonType() == 0) {
-                event.entityLiving.entityDropItem(new ItemStack(Items.skull, 1, 0), 0.0F);
+            if (sk instanceof EntitySkeleton) {
+                event.getEntityLiving().entityDropItem(new ItemStack(Items.SKULL, 1, 0), 0.0F);
             } else {
-                event.entityLiving.entityDropItem(new ItemStack(Items.skull, 1, 1), 0.0F);
+                event.getEntityLiving().entityDropItem(new ItemStack(Items.SKULL, 1, 1), 0.0F);
             }
         }
 
-        if (event.entityLiving instanceof EntityZombie) {
-            event.entityLiving.entityDropItem(new ItemStack(Items.skull, 1, 2), 0.0F);
+        if (event.getEntityLiving() instanceof EntityZombie) {
+            event.getEntityLiving().entityDropItem(new ItemStack(Items.SKULL, 1, 2), 0.0F);
         }
     }
 
@@ -209,17 +197,17 @@ public class BPEventHandler {
     @SideOnly(Side.CLIENT)
     public void onItemTooltip(ItemTooltipEvent event) {
 
-        if (event.itemStack.hasTagCompound() && event.itemStack.getTagCompound().hasKey("tileData")
-                && !event.itemStack.getTagCompound().getBoolean("hideSilkyTooltip")) {
-            event.toolTip.add(I18n.format("gui.tooltip.hasSilkyData"));
+        if (event.getItemStack().hasTagCompound() && event.getItemStack().getTagCompound().hasKey("tileData")
+                && !event.getItemStack().getTagCompound().getBoolean("hideSilkyTooltip")) {
+            event.getToolTip().add(I18n.format("gui.tooltip.hasSilkyData"));
         }
 
         if (ClientProxy.getOpenedGui() instanceof GuiCircuitDatabaseSharing) {
             ItemStack deletingStack = ((GuiCircuitDatabaseSharing) ClientProxy.getOpenedGui()).getCurrentDeletingTemplate();
-            if (deletingStack != null && deletingStack == event.itemStack) {
-                event.toolTip.add(I18n.format("gui.circuitDatabase.info.sneakClickToConfirmDeleting"));
+            if (!deletingStack.isEmpty() && deletingStack == event.getItemStack()) {
+                event.getToolTip().add(I18n.format("gui.circuitDatabase.info.sneakClickToConfirmDeleting"));
             } else {
-                event.toolTip.add(I18n.format("gui.circuitDatabase.info.sneakClickToDelete"));
+                event.getToolTip().add(I18n.format("gui.circuitDatabase.info.sneakClickToDelete"));
             }
         }
     }
@@ -228,35 +216,21 @@ public class BPEventHandler {
     public void onCrafting(PlayerEvent.ItemCraftedEvent event) {
 
         Item item = event.crafting.getItem();
-        if (item == null)
+        if (item == Item.getItemFromBlock(Blocks.AIR))
             return;
-
-        if (item.equals(BPItems.blue_doped_wafer) || item.equals(BPItems.red_doped_wafer)) {
-            event.player.addStat(Achievements.dopeAchievement, 1);
-        } else if (item.equals(PartManager.getPartInfo("pneumaticTube").getItem())) {
-            event.player.addStat(Achievements.tubeAchievement, 1);
-        } else if (item.equals(Item.getItemFromBlock(BPBlocks.sorting_machine))) {
-            event.player.addStat(Achievements.sortAchievement, 1);
-        } else if (item.equals(PartManager.getPartInfo("magTube").getItem())) {
-            event.player.addStat(Achievements.magTubeAchievement, 1);
-        } else if (item.equals(PartManager.getPartInfo("integratedCircuit3x3").getItem())
-                || item.equals(PartManager.getPartInfo("integratedCircuit5x5").getItem())
-                || item.equals(PartManager.getPartInfo("integratedCircuit7x7").getItem())) {
-            event.player.addStat(Achievements.circuitCeptionAchievement, 1);
-        }
     }
 
     @SubscribeEvent
     public void onBonemealEvent(BonemealEvent event) {
 
-        if (!event.world.isRemote) {
-            if (event.block instanceof BlockGrass) {
-                for (int x = event.x - 2; x < event.x + 3; x++) {
-                    for (int z = event.z - 2; z < event.z + 3; z++) {
-                        if (event.world.isAirBlock(x, event.y + 1, z)) {
-                            if (event.world.rand.nextInt(50) == 1) {
-                                if (BPBlocks.indigo_flower.canBlockStay(event.world, event.x, event.y + 1, event.z)) {
-                                    event.world.setBlock(event.x, event.y + 1, event.z, BPBlocks.indigo_flower);
+        if (!event.getWorld().isRemote) {
+            if (event.getBlock() instanceof BlockGrass) {
+                for (int x = event.getPos().getX() - 2; x < event.getPos().getX() + 3; x++) {
+                    for (int z = event.getPos().getZ() - 2; z < event.getPos().getZ() + 3; z++) {
+                        if (event.getWorld().isAirBlock(new BlockPos(x, event.getPos().getY() + 1, z))) {
+                            if (event.getWorld().rand.nextInt(50) == 1) {
+                                if (BPBlocks.indigo_flower.canBlockStay(event.getWorld(), event.getPos().add(0,1,0), event.getWorld().getBlockState(event.getPos().add(0,1,0)))) {
+                                    event.getWorld().setBlockState(event.getPos().add(0,1,0), BPBlocks.indigo_flower.getDefaultState());
                                 }
                             }
                         }

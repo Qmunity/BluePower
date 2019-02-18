@@ -1,39 +1,32 @@
 package com.bluepowermod.network.message;
 
+import com.bluepowermod.api.misc.Accessibility;
+import com.bluepowermod.network.BPNetworkHandler;
+import com.bluepowermod.network.LocatedPacket;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.util.EnumFacing;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraftforge.common.util.ForgeDirection;
-import uk.co.qmunity.lib.network.LocatedPacket;
-import uk.co.qmunity.lib.part.IPart;
-import uk.co.qmunity.lib.part.ITilePartHolder;
-import uk.co.qmunity.lib.part.compat.MultipartCompatibility;
-
-import com.bluepowermod.api.misc.Accessibility;
-import com.bluepowermod.network.BPNetworkHandler;
-import com.bluepowermod.part.gate.wireless.Frequency;
-import com.bluepowermod.part.gate.wireless.IWirelessGate;
-import com.bluepowermod.part.gate.wireless.WirelessManager;
 
 public class MessageWirelessNewFreq extends LocatedPacket<MessageWirelessNewFreq> {
 
     private Accessibility acc;
     private String name;
     private boolean bundled;
-    private ForgeDirection face;
+    private EnumFacing face;
 
-    public MessageWirelessNewFreq(IWirelessGate gate, Accessibility newAccessibility, String newName, boolean bundled) {
+   // public MessageWirelessNewFreq(IWirelessGate gate, Accessibility newAccessibility, String newName, boolean bundled) {
 
-        super(gate);
+       // super(gate);
 
-        acc = newAccessibility;
-        name = newName;
-        this.bundled = bundled;
-        face = gate.getFace();
-    }
+       // acc = newAccessibility;
+       // name = newName;
+       // this.bundled = bundled;
+       // face = gate.getFace();
+   // }
 
     public MessageWirelessNewFreq() {
 
@@ -47,22 +40,21 @@ public class MessageWirelessNewFreq extends LocatedPacket<MessageWirelessNewFreq
     @Override
     public void handleServerSide(EntityPlayer player) {
 
-        Frequency freq = (Frequency) WirelessManager.COMMON_INSTANCE.registerFrequency(player, name, acc, bundled);
+        //Frequency freq = (Frequency) WirelessManager.COMMON_INSTANCE.registerFrequency(player, name, acc, bundled);
+       // ITilePartHolder h = MultipartCompatibility.getPartHolder(player.world, pos);
 
-        ITilePartHolder h = MultipartCompatibility.getPartHolder(player.worldObj, x, y, z);
-        if (h == null)
-            return;
+       // if (h != null) {
+        //    IWirelessGate p = null;
+           // for (IPart pa : h.getParts())
+          //      if (pa instanceof IWirelessGate && ((IWirelessGate) pa).getFace() == face)
+          //          p = (IWirelessGate) pa;
+          //  if (p == null)
+          //      return;
 
-        IWirelessGate p = null;
-        for (IPart pa : h.getParts())
-            if (pa instanceof IWirelessGate && ((IWirelessGate) pa).getFace() == face)
-                p = (IWirelessGate) pa;
-        if (p == null)
-            return;
+        //    p.setFrequency(freq);
 
-        p.setFrequency(freq);
-
-        BPNetworkHandler.INSTANCE.sendTo(new MessageWirelessFrequencySync(player), (EntityPlayerMP) player);
+        //    BPNetworkHandler.INSTANCE.sendTo(new MessageWirelessFrequencySync(player), (EntityPlayerMP) player);
+       // }
     }
 
     @Override
@@ -84,6 +76,6 @@ public class MessageWirelessNewFreq extends LocatedPacket<MessageWirelessNewFreq
         acc = Accessibility.values()[buffer.readInt()];
         name = buffer.readUTF();
         bundled = buffer.readBoolean();
-        face = ForgeDirection.getOrientation(buffer.readInt());
+        face = EnumFacing.byIndex(buffer.readInt());
     }
 }

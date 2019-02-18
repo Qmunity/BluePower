@@ -19,51 +19,48 @@
 
 package com.bluepowermod.item;
 
-import java.util.List;
-
+import com.bluepowermod.client.render.IBPColoredItem;
+import com.bluepowermod.init.BPCreativeTabs;
+import com.bluepowermod.reference.Refs;
+import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-import com.bluepowermod.init.BPCreativeTabs;
-import com.bluepowermod.reference.Refs;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
-public class ItemLumar extends ItemBase {
+public class ItemLumar extends ItemBase implements IBPColoredItem{
 
     public ItemLumar() {
 
         super();
         this.setCreativeTab(BPCreativeTabs.items);
         this.setHasSubtypes(true);
-        this.setUnlocalizedName(Refs.LUMAR_NAME);
-        this.setTextureName(Refs.MODID + ":" + Refs.LUMAR_NAME);
+        this.setTranslationKey(Refs.LUMAR_NAME);
+        this.setRegistryName(Refs.MODID + ":" + Refs.LUMAR_NAME);
     }
 
     @Override
-    public String getUnlocalizedName(ItemStack itemStack) {
+    public String getTranslationKey(ItemStack itemStack) {
 
-        return super.getUnlocalizedName() + "." + Refs.oreDictDyes[15 - itemStack.getItemDamage()].substring(3).toLowerCase();
+        return super.getTranslationKey() + "." + Refs.oreDictDyes[15 - itemStack.getItemDamage()].substring(3).toLowerCase();
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
-    public int getColorFromItemStack(ItemStack itemStack, int colour) {
-
-        int damage = itemStack.getItemDamage();
-        if (damage >= 0 && damage < ItemDye.field_150922_c.length) { return ItemDye.field_150922_c[15 - damage]; }
-        return 16777215;
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void getSubItems(Item item, CreativeTabs tab, List list) {
-
-        for (int i = 0; i < ItemDye.field_150922_c.length; i++) {
-            list.add(new ItemStack(this, 1, i));
+    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
+        if(isInCreativeTab(tab)) {
+            for (int i = 0; i < ItemDye.DYE_COLORS.length; i++) {
+                items.add(new ItemStack(this, 1, i));
+            }
         }
+    }
+
+    @Override
+    public int getColor(ItemStack stack, int tintIndex) {
+        int damage = stack.getItemDamage();
+        if (damage >= 0 && damage < ItemDye.DYE_COLORS.length) { return ItemDye.DYE_COLORS[15 - damage]; }
+        return 16777215;
     }
 }

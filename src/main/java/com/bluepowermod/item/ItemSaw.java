@@ -19,26 +19,20 @@ package com.bluepowermod.item;
 
 import java.util.Random;
 
+import com.bluepowermod.reference.Refs;
 import net.minecraft.item.ItemStack;
-import codechicken.microblock.Saw;
 
 import com.bluepowermod.init.BPCreativeTabs;
-import com.bluepowermod.reference.Refs;
-import com.bluepowermod.util.Dependencies;
 
-import cpw.mods.fml.common.Optional;
-
-@Optional.Interface(modid = Dependencies.FMP, iface = "codechicken.microblock.Saw")
-public class ItemSaw extends ItemBase implements Saw {
+public class ItemSaw extends ItemBase{
 
     private final int sawLevel;
 
     public ItemSaw(int sawLevel, String name) {
-
+        setRegistryName(Refs.MODID + ":" + name);
         setCreativeTab(BPCreativeTabs.tools);
         this.sawLevel = sawLevel;
-        setTextureName(Refs.MODID + ":" + name);
-        setUnlocalizedName(name);
+        setTranslationKey(name);
         maxStackSize = 1;
         setMaxDamage(1 << sawLevel + 8);
     }
@@ -49,30 +43,10 @@ public class ItemSaw extends ItemBase implements Saw {
     }
 
     @Override
-    @Optional.Method(modid = Dependencies.FMP)
-    public int getCuttingStrength(ItemStack itemstack) {
-
-        return sawLevel;
-    }
-
-    @Override
-    @Optional.Method(modid = Dependencies.FMP)
-    public int getMaxCuttingStrength() {
-
-        return sawLevel;
-    }
-
-    @Override
-    public boolean doesContainerItemLeaveCraftingGrid(ItemStack par1ItemStack) {
-
-        return false;
-    }
-
-    @Override
     public ItemStack getContainerItem(ItemStack itemStack) {
 
         ItemStack container = itemStack.copy();
-        container.attemptDamageItem(1, new Random());
+        container.attemptDamageItem(1, new Random(), null);
         return container;
     }
 

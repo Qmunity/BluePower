@@ -35,7 +35,7 @@ public class ItemPaintCan extends ItemDamageableColorableOverlay {
     public ItemStack getContainerItem(ItemStack itemStack) {
 
         if (itemStack.getItemDamage() >= 16)
-            return null;
+            return ItemStack.EMPTY;
         ItemStack stack = itemStack.copy();
         int newUses = getUsesUsed(stack) + 1;
 
@@ -58,6 +58,6 @@ public class ItemPaintCan extends ItemDamageableColorableOverlay {
     @Override
     public boolean hasContainerItem(ItemStack stack) {
 
-        return getContainerItem(stack) != null;
+        return !getContainerItem(stack).isEmpty();
     }
 }

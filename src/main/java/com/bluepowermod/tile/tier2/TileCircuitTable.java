@@ -7,89 +7,40 @@
  */
 package com.bluepowermod.tile.tier2;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
+import com.bluepowermod.client.gui.IGuiButtonSensitive;
+import com.bluepowermod.init.BPBlocks;
+import com.bluepowermod.tile.IGUITextFieldSensitive;
+import com.bluepowermod.tile.TileBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryBasic;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.NonNullList;
 
-import com.bluepowermod.init.BPBlocks;
-import com.bluepowermod.part.IGuiButtonSensitive;
-import com.bluepowermod.part.PartInfo;
-import com.bluepowermod.part.PartManager;
-import com.bluepowermod.part.gate.GateBase;
-import com.bluepowermod.tile.IGUITextFieldSensitive;
-import com.bluepowermod.tile.TileBase;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * @author MineMaarten
  */
-public class TileCircuitTable extends TileBase implements IInventory, IGuiButtonSensitive, IGUITextFieldSensitive {
+public class TileCircuitTable extends TileBase implements IInventory, IGUITextFieldSensitive, IGuiButtonSensitive {
 
-    protected ItemStack[] inventory = new ItemStack[18];
+    protected NonNullList<ItemStack> inventory = NonNullList.withSize(24, ItemStack.EMPTY);
     public final InventoryBasic circuitInventory = new InventoryBasic("circuitInventory", false, 24);
     public int slotsScrolled;
     private String textboxString = "";
 
     public TileCircuitTable() {
-
-        updateGateInventory();
-    }
-
-    public void updateGateInventory() {
-        //       if (worldObj == null || !worldObj.isRemote) {
-        List<ItemStack> gates = getApplicableItems();
-        Iterator<ItemStack> iterator = gates.iterator();
-        while (iterator.hasNext()) {
-            if (!iterator.next().getDisplayName().toLowerCase().contains(textboxString.toLowerCase()))
-                iterator.remove();
-        }
-        slotsScrolled = Math.max(0, Math.min(slotsScrolled, (gates.size() - 17) / 8));
-        for (int i = 0; i < circuitInventory.getSizeInventory(); i++) {
-            ItemStack stack = gates.size() > slotsScrolled * 8 + i ? gates.get(slotsScrolled * 8 + i) : null;
-            circuitInventory.setInventorySlotContents(i, stack);
-        }
-        //   }
-    }
-
-    protected List<ItemStack> getApplicableItems() {
-
-        List<ItemStack> gates = new ArrayList<ItemStack>();
-        List<PartInfo> registeredParts = PartManager.getRegisteredParts();
-        for (PartInfo part : registeredParts) {
-            if (part.getExample() instanceof GateBase<?, ?, ?, ?, ?, ?>
-            && ((GateBase<?, ?, ?, ?, ?, ?>) part.getExample()).isCraftableInCircuitTable()) {
-                ItemStack partStack = part.getStack().copy();
-                gates.add(partStack);
-            }
-        }
-        return gates;
-    }
-
-    public int getRequiredScrollStates() {
-        return (getApplicableItems().size() - 17) / 8;
-    }
-
-    @Override
-    public void onButtonPress(EntityPlayer player, int messageId, int value) {
-        if (messageId == 0) {
-            slotsScrolled = value;
-        }
-        updateGateInventory();
-        ((ICrafting) player).sendContainerAndContentsToPlayer(player.openContainer, player.openContainer.getInventory());
     }
 
     @Override
     public void setText(int textFieldID, String text) {
 
         textboxString = text;
-        updateGateInventory();
     }
 
     @Override
@@ -103,29 +54,27 @@ public class TileCircuitTable extends TileBase implements IInventory, IGuiButton
 
         List<ItemStack> drops = super.getDrops();
         for (ItemStack stack : inventory)
-            if (stack != null)
+            if (!stack.isEmpty())
                 drops.add(stack);
         return drops;
     }
 
     @Override
-    public void writeToNBT(NBTTagCompound tag) {
+    public NBTTagCompound writeToNBT(NBTTagCompound tag) {
 
         super.writeToNBT(tag);
 
         NBTTagList tagList = new NBTTagList();
-        for (int currentIndex = 0; currentIndex < inventory.length; ++currentIndex) {
-            if (inventory[currentIndex] != null) {
+        for (int currentIndex = 0; currentIndex < inventory.size(); ++currentIndex) {
                 NBTTagCompound tagCompound = new NBTTagCompound();
                 tagCompound.setByte("Slot", (byte) currentIndex);
-                inventory[currentIndex].writeToNBT(tagCompound);
+                inventory.get(currentIndex).writeToNBT(tagCompound);
                 tagList.appendTag(tagCompound);
-            }
         }
         tag.setTag("Items", tagList);
 
         tag.setString("textboxString", textboxString);
-
+        return tag;
     }
 
     @Override
@@ -134,12 +83,12 @@ public class TileCircuitTable extends TileBase implements IInventory, IGuiButton
         super.readFromNBT(tag);
 
         NBTTagList tagList = tag.getTagList("Items", 10);
-        inventory = new ItemStack[18];
+        inventory = NonNullList.withSize(24, ItemStack.EMPTY);
         for (int i = 0; i < tagList.tagCount(); ++i) {
             NBTTagCompound tagCompound = tagList.getCompoundTagAt(i);
             byte slot = tagCompound.getByte("Slot");
-            if (slot >= 0 && slot < inventory.length) {
-                inventory[slot] = ItemStack.loadItemStackFromNBT(tagCompound);
+            if (slot >= 0 && slot < inventory.size()) {
+                inventory.set(slot, new ItemStack(tagCompound));
             }
         }
 
@@ -149,26 +98,25 @@ public class TileCircuitTable extends TileBase implements IInventory, IGuiButton
     @Override
     public int getSizeInventory() {
 
-        return inventory.length;
+        return inventory.size();
     }
 
     @Override
     public ItemStack getStackInSlot(int i) {
-
-        return inventory[i];
+        return inventory.get(i);
     }
 
     @Override
     public ItemStack decrStackSize(int slot, int amount) {
 
         ItemStack itemStack = getStackInSlot(slot);
-        if (itemStack != null) {
-            if (itemStack.stackSize <= amount) {
-                setInventorySlotContents(slot, null);
+        if (!itemStack.isEmpty()) {
+            if (itemStack.getCount() <= amount) {
+                setInventorySlotContents(slot, ItemStack.EMPTY);
             } else {
                 itemStack = itemStack.splitStack(amount);
-                if (itemStack.stackSize == 0) {
-                    setInventorySlotContents(slot, null);
+                if (itemStack.getCount() == 0) {
+                    setInventorySlotContents(slot, ItemStack.EMPTY);
                 }
             }
         }
@@ -177,29 +125,27 @@ public class TileCircuitTable extends TileBase implements IInventory, IGuiButton
     }
 
     @Override
-    public ItemStack getStackInSlotOnClosing(int i) {
-
+    public ItemStack removeStackFromSlot(int i) {
         ItemStack itemStack = getStackInSlot(i);
-        if (itemStack != null) {
-            setInventorySlotContents(i, null);
+        if (!itemStack.isEmpty()) {
+            setInventorySlotContents(i, ItemStack.EMPTY);
         }
         return itemStack;
     }
 
     @Override
     public void setInventorySlotContents(int i, ItemStack itemStack) {
-
-        inventory[i] = itemStack;
+        inventory.set(i, itemStack);
     }
 
     @Override
-    public String getInventoryName() {
+    public String getName() {
 
-        return BPBlocks.circuit_table.getUnlocalizedName();
+        return BPBlocks.circuit_table.getTranslationKey();
     }
 
     @Override
-    public boolean hasCustomInventoryName() {
+    public boolean hasCustomName() {
 
         return false;
     }
@@ -211,18 +157,43 @@ public class TileCircuitTable extends TileBase implements IInventory, IGuiButton
     }
 
     @Override
-    public boolean isUseableByPlayer(EntityPlayer player) {
+    public boolean isUsableByPlayer(EntityPlayer player) {
+        return player.getDistanceSqToCenter(pos) <= 64.0D;
+    }
 
-        return true;
+
+    @Override
+    public void openInventory(EntityPlayer player) {
+
     }
 
     @Override
-    public void openInventory() {
+    public void closeInventory(EntityPlayer player) {
 
     }
 
     @Override
-    public void closeInventory() {
+    public boolean isEmpty() {
+        return inventory.isEmpty();
+    }
+
+    @Override
+    public int getField(int id) {
+        return 0;
+    }
+
+    @Override
+    public void setField(int id, int value) {
+
+    }
+
+    @Override
+    public int getFieldCount() {
+        return 0;
+    }
+
+    @Override
+    public void clear() {
 
     }
 
@@ -232,4 +203,12 @@ public class TileCircuitTable extends TileBase implements IInventory, IGuiButton
         return true;
     }
 
+    @Override
+    public void onButtonPress(EntityPlayer player, int messageId, int value) {
+        if (messageId == 0) {
+            slotsScrolled = value;
+        }
+        //updateGateInventory();
+        //((ICrafting) player).sendContainerAndContentsToPlayer(player.openContainer, player.openContainer.getInventory());
+    }
 }

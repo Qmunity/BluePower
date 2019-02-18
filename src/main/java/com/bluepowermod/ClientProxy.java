@@ -17,22 +17,19 @@
 
 package com.bluepowermod;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraftforge.common.MinecraftForge;
-
-import org.lwjgl.input.Keyboard;
-
-import com.bluepowermod.client.render.IconSupplier;
 import com.bluepowermod.client.render.RenderDebugScreen;
 import com.bluepowermod.client.render.Renderers;
 import com.bluepowermod.compat.CompatibilityUtils;
-import com.bluepowermod.part.PartManager;
-
-import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import com.bluepowermod.reference.Refs;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.client.model.obj.OBJLoader;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.client.FMLClientHandler;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.input.Keyboard;
 
 @SideOnly(Side.CLIENT)
 public class ClientProxy extends CommonProxy {
@@ -43,14 +40,16 @@ public class ClientProxy extends CommonProxy {
     }
 
     @Override
-    public void initRenderers() {
-
-        MinecraftForge.EVENT_BUS.register(new IconSupplier());
+    public void preInitRenderers() {
         MinecraftForge.EVENT_BUS.register(new RenderDebugScreen());
-        PartManager.registerRenderers();
-        Renderers.init();
-
         CompatibilityUtils.registerRenders();
+        OBJLoader.INSTANCE.addDomain(Refs.MODID);
+    }
+
+
+    @Override
+    public void initRenderers() {
+        Renderers.init();
     }
 
     @Override
@@ -73,6 +72,6 @@ public class ClientProxy extends CommonProxy {
     @Override
     public String getSavePath() {
 
-        return Minecraft.getMinecraft().mcDataDir.getAbsolutePath();
+        return Minecraft.getMinecraft().gameDir.getAbsolutePath();
     }
 }

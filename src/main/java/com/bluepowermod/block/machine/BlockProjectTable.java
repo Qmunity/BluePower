@@ -17,108 +17,31 @@
 
 package com.bluepowermod.block.machine;
 
-import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.util.IIcon;
-import net.minecraft.world.IBlockAccess;
-import net.minecraftforge.common.util.ForgeDirection;
-
 import com.bluepowermod.block.BlockContainerBase;
 import com.bluepowermod.reference.Refs;
-import com.bluepowermod.tile.IRotatable;
 import com.bluepowermod.tile.TileBase;
 import com.bluepowermod.tile.tier1.TileProjectTable;
+import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockProjectTable extends BlockContainerBase {
 
-    protected IIcon textureTop;
-    protected IIcon textureBottom;
-    protected IIcon textureSide;
-    protected IIcon textureFront;
-
     public BlockProjectTable() {
 
-        super(Material.wood, TileProjectTable.class);
-        setBlockName(Refs.PROJECTTABLE_NAME);
+        super(Material.WOOD, TileProjectTable.class);
+        setTranslationKey(Refs.PROJECTTABLE_NAME);
+        setRegistryName(Refs.MODID, Refs.PROJECTTABLE_NAME);
     }
 
     public BlockProjectTable(Class<? extends TileBase> tileClass) {
 
-        super(Material.wood, tileClass);
+        super(Material.WOOD, tileClass);
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
-    public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
-
-        IRotatable rotatable = (IRotatable) world.getTileEntity(x, y, z);
-        ForgeDirection s = ForgeDirection.getOrientation(side);
-        // If is facing
-
-        if (rotatable.getFacingDirection() == s) {
-            return textureFront;
-        }
-        switch (s) {
-        case UP:
-            return textureTop;
-        case DOWN:
-            return textureBottom;
-        case EAST:
-        case NORTH:
-        case SOUTH:
-        case WEST:
-        case UNKNOWN:
-            return textureSide;
-        default:
-            break;
-
-        }
-        return null;
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public IIcon getIcon(int side, int meta) {
-
-        ForgeDirection s = ForgeDirection.getOrientation(side);
-        if (meta == side) {
-            return textureFront;
-        }
-        switch (s) {
-        case UP:
-            return textureTop;
-        case DOWN:
-            return textureBottom;
-        case EAST:
-        case NORTH:
-        case SOUTH:
-        case WEST:
-        case UNKNOWN:
-            return textureSide;
-        default:
-            break;
-
-        }
-        return null;
-    }
-
-    @Override
-    public boolean isOpaqueCube() {
-
+    public boolean isOpaqueCube(IBlockState state) {
         return true;
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerBlockIcons(IIconRegister iconRegister) {
-
-        textureTop = iconRegister.registerIcon(getTextureName() + "_top");
-        textureBottom = iconRegister.registerIcon(getTextureName() + "_bottom");
-        textureSide = iconRegister.registerIcon(getTextureName() + "_side");
-        textureFront = iconRegister.registerIcon(getTextureName() + "_front");
     }
 
     @Override
@@ -127,10 +50,4 @@ public class BlockProjectTable extends BlockContainerBase {
         return false;
     }
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public int getRenderType() {
-
-        return 0;
-    }
 }

@@ -18,29 +18,10 @@
 package com.bluepowermod.init;
 
 import com.bluepowermod.reference.Refs;
-import com.bluepowermod.tile.tier1.TileAlloyFurnace;
-import com.bluepowermod.tile.tier1.TileBlockBreaker;
-import com.bluepowermod.tile.tier1.TileBuffer;
-import com.bluepowermod.tile.tier1.TileDeployer;
-import com.bluepowermod.tile.tier1.TileEjector;
-import com.bluepowermod.tile.tier1.TileFilter;
-import com.bluepowermod.tile.tier1.TileIgniter;
-import com.bluepowermod.tile.tier1.TileItemDetector;
-import com.bluepowermod.tile.tier1.TileLamp;
-import com.bluepowermod.tile.tier1.TileProjectTable;
-import com.bluepowermod.tile.tier1.TileRelay;
-import com.bluepowermod.tile.tier1.TileTransposer;
-import com.bluepowermod.tile.tier2.TileAutoProjectTable;
-import com.bluepowermod.tile.tier2.TileCircuitTable;
-import com.bluepowermod.tile.tier2.TileRegulator;
-import com.bluepowermod.tile.tier2.TileRetriever;
-import com.bluepowermod.tile.tier2.TileSortingMachine;
-import com.bluepowermod.tile.tier3.TileCircuitDatabase;
-import com.bluepowermod.tile.tier3.TileEngine;
-import com.bluepowermod.tile.tier3.TileManager;
-import com.bluepowermod.tile.tier3.TileSortron;
-
-import cpw.mods.fml.common.registry.GameRegistry;
+import com.bluepowermod.tile.tier1.*;
+import com.bluepowermod.tile.tier2.*;
+import com.bluepowermod.tile.tier3.*;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class TileEntities {
 
@@ -61,8 +42,12 @@ public class TileEntities {
         // GameRegistry.registerTileEntity(TileDiskDrive.class, "diskDrive");
         // GameRegistry.registerTileEntity(TileIOExpander.class, "IOExpander");
         GameRegistry.registerTileEntity(TileEngine.class, Refs.MODID + ".engine");
-        // GameRegistry.registerTileEntity(TileWindmill.class, "windmill");
-        // GameRegistry.registerTileEntity(TileKinectGenerator.class, "kinectgenerator");
+        GameRegistry.registerTileEntity(TileBattery.class, Refs.MODID + ".battery");
+        GameRegistry.registerTileEntity(TileWindmill.class, Refs.MODID + ".windmill");
+        GameRegistry.registerTileEntity(TileKinectGenerator.class, Refs.MODID + ".kinectgenerator");
+        GameRegistry.registerTileEntity(TileSolarPanel.class, Refs.MODID + ".solarpanel");
+
+
         GameRegistry.registerTileEntity(TileDeployer.class, Refs.MODID + ".deployer");
         GameRegistry.registerTileEntity(TileEjector.class, Refs.MODID + ".ejector");
         GameRegistry.registerTileEntity(TileRelay.class, Refs.MODID + ".relay");
@@ -76,5 +61,7 @@ public class TileEntities {
         GameRegistry.registerTileEntity(TileCircuitTable.class, Refs.MODID + ".circuitTable");
         GameRegistry.registerTileEntity(TileCircuitDatabase.class, Refs.MODID + ".circuitDatabase");
         GameRegistry.registerTileEntity(TileLamp.class, Refs.MODID + ".lamp");
+        GameRegistry.registerTileEntity(TileWire.class, Refs.MODID + ".wire");
+
     }
 }

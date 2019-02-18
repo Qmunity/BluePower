@@ -17,26 +17,27 @@
 
 package com.bluepowermod.world;
 
-import java.util.Random;
-
-import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
-import net.minecraft.world.chunk.IChunkProvider;
-import net.minecraft.world.gen.feature.WorldGenFlowers;
-import net.minecraft.world.gen.feature.WorldGenMinable;
-
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.init.Config;
+import net.minecraft.block.Block;
+import net.minecraft.init.Biomes;
+import net.minecraft.init.Blocks;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.chunk.IChunkProvider;
+import net.minecraft.world.gen.IChunkGenerator;
+import net.minecraft.world.gen.feature.WorldGenBush;
+import net.minecraft.world.gen.feature.WorldGenMinable;
+import net.minecraftforge.fml.common.IWorldGenerator;
 
-import cpw.mods.fml.common.IWorldGenerator;
+import java.util.Random;
+
 
 public class WorldGenerationHandler implements IWorldGenerator {
 
     @Override
-    public void generate(Random random, int chunkX, int chunkZ, World world, IChunkProvider chunkGenerator, IChunkProvider chunkProvider) {
-
+    public void generate(Random random, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator, IChunkProvider chunkProvider){
         if (!world.provider.isSurfaceWorld()) {
             return;
         }
@@ -72,26 +73,26 @@ public class WorldGenerationHandler implements IWorldGenerator {
             addOreToGenerate(random, Config.veinCountTungsten, Config.veinSizeTungsten, Config.minTungstenY, Config.maxTungstenY,
                     BPBlocks.tungsten_ore, world, chunkX, chunkZ);
         }
-
-        BiomeGenBase bgb = world.getWorldChunkManager().getBiomeGenAt(chunkX * 16 + 16, chunkZ * 16 + 16);
+        //TODO Check this
+        Biome bgb = world.getBiomeProvider().getBiome(new BlockPos(chunkX * 16 + 16, 0, chunkZ * 16 + 16));
 
         int n = 0;
-        if (bgb == BiomeGenBase.birchForest)
+        if (bgb == Biomes.BIRCH_FOREST)
             n = 1;
-        else if (bgb == BiomeGenBase.birchForestHills)
+        else if (bgb == Biomes.BIRCH_FOREST_HILLS)
             n = 1;
-        else if (bgb == BiomeGenBase.plains)
+        else if (bgb == Biomes.PLAINS)
             n = 1;
-        else if (bgb == BiomeGenBase.forest)
+        else if (bgb == Biomes.FOREST)
             n = 4;
-        else if (bgb == BiomeGenBase.roofedForest)
+        else if (bgb == Biomes.ROOFED_FOREST)
             n = 4;
 
         for (int i = 0; i < n; i++) {
             int x = chunkX * 16 + random.nextInt(16) + 8;
             int y = random.nextInt(128);
             int z = chunkZ * 16 + random.nextInt(16) + 8;
-            new WorldGenFlowers(BPBlocks.indigo_flower).generate(world, random, x, y, z);
+            new WorldGenBush(BPBlocks.indigo_flower).generate(world, random, new BlockPos(x, y, z));
         }
 
         if (Config.veinSizeMarble > 0) {
@@ -99,15 +100,15 @@ public class WorldGenerationHandler implements IWorldGenerator {
                 int x = chunkX * 16 + random.nextInt(16);
                 int y = 32 + random.nextInt(32);
                 int z = chunkZ * 16 + random.nextInt(16);
-                new WorldGenMarble(BPBlocks.marble, random.nextInt(Config.veinSizeMarble)).generate(world, random, x, y, z);
+                new WorldGenMarble(BPBlocks.marble, random.nextInt(Config.veinSizeMarble)).generate(world, random, new BlockPos(x, y, z));
             }
         }
         if (random.nextDouble() < Config.volcanoSpawnChance) {
             int x = chunkX * 16 + random.nextInt(16);
             int z = chunkZ * 16 + random.nextInt(16);//20
-            int y = world.getHeightValue(x, z) + 30 + random.nextInt(40);
+            int y = world.getHeight(x, z) + 30 + random.nextInt(40);
 
-            if (world.getBlock(x, 10, z) == Blocks.lava && world.getHeightValue(x, z) <= 90) {
+            if (world.getBlockState(new BlockPos(x, 10, z)).getBlock() == Blocks.LAVA && world.getHeight(x, z) <= 90) {
                 new WorldGenVolcano().generate(world, random, x, y, z);
             }
         }
@@ -119,7 +120,8 @@ public class WorldGenerationHandler implements IWorldGenerator {
             int x = chunkX * 16 + random.nextInt(16);
             int y = random.nextInt(maxY - minY) + minY;
             int z = chunkZ * 16 + random.nextInt(16);
-            new WorldGenMinable(block, veinSize).generate(world, random, x, y, z);
+            new WorldGenMinable(block.getDefaultState(), veinSize).generate(world, random, new BlockPos(x, y, z));
         }
     }
+
 }

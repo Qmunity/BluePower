@@ -1,0 +1,17 @@
+{
+  "result": {
+    "item": "minecraft:string",
+    "count": 4
+  },
+  "ingredients": [
+    {
+      "item": "bluepower:wool_card",
+      "data": 32767
+    },
+    {
+      "item": "minecraft:wool",
+      "data": 32767
+    }
+  ],
+  "type": "minecraft:crafting_shapeless"
+}

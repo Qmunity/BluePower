@@ -7,19 +7,17 @@
  */
 package com.bluepowermod.network.message;
 
+import com.bluepowermod.BluePower;
+import com.bluepowermod.helper.ItemStackDatabase;
+import com.bluepowermod.network.BPNetworkHandler;
+import com.bluepowermod.network.LocatedPacket;
+import com.bluepowermod.reference.GuiIDs;
+import com.bluepowermod.tile.tier3.TileCircuitDatabase;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import uk.co.qmunity.lib.network.LocatedPacket;
-
-import com.bluepowermod.BluePower;
-import com.bluepowermod.helper.ItemStackDatabase;
-import com.bluepowermod.network.BPNetworkHandler;
-import com.bluepowermod.reference.GuiIDs;
-import com.bluepowermod.tile.tier3.TileCircuitDatabase;
-
-import cpw.mods.fml.common.network.ByteBufUtils;
+import net.minecraftforge.fml.common.network.ByteBufUtils;
 
 /**
  * Used from client to server to select a template from the private library of the client. Used from server to client to message the client to save
@@ -38,13 +36,13 @@ public class MessageCircuitDatabaseTemplate extends LocatedPacket<MessageCircuit
 
     public MessageCircuitDatabaseTemplate(TileCircuitDatabase circuitDatabase, ItemStack stack) {
 
-        super(circuitDatabase.xCoord, circuitDatabase.yCoord, circuitDatabase.zCoord);
+        super(circuitDatabase.getPos().getX(), circuitDatabase.getPos().getY(), circuitDatabase.getPos().getZ());
         this.stack = stack;
     }
 
     public MessageCircuitDatabaseTemplate(TileCircuitDatabase circuitDatabase, ItemStack stack, boolean deleting) {
 
-        super(circuitDatabase.xCoord, circuitDatabase.yCoord, circuitDatabase.zCoord);
+        super(circuitDatabase.getPos().getX(), circuitDatabase.getPos().getY(), circuitDatabase.getPos().getZ());
         this.stack = stack;
         this.deleting = deleting;
     }
@@ -68,7 +66,7 @@ public class MessageCircuitDatabaseTemplate extends LocatedPacket<MessageCircuit
     @Override
     public void handleClientSide(EntityPlayer player) {
 
-        TileEntity te = player.worldObj.getTileEntity(x, y, z);
+        TileEntity te = player.world.getTileEntity(pos);
         if (te instanceof TileCircuitDatabase) {
             ((TileCircuitDatabase) te).saveToPrivateLibrary(stack);
         }
@@ -84,10 +82,10 @@ public class MessageCircuitDatabaseTemplate extends LocatedPacket<MessageCircuit
                 BPNetworkHandler.INSTANCE.sendToAll(new MessageSendClientServerTemplates(stackDatabase.loadItemStacks()));
             }
         } else {
-            TileEntity te = player.worldObj.getTileEntity(x, y, z);
+            TileEntity te = player.world.getTileEntity(pos);
             if (te instanceof TileCircuitDatabase) {
                 ((TileCircuitDatabase) te).copyInventory.setInventorySlotContents(0, stack);
-                player.openGui(BluePower.instance, GuiIDs.CIRCUITDATABASE_MAIN_ID.ordinal(), player.worldObj, x, y, z);
+                player.openGui(BluePower.instance, GuiIDs.CIRCUITDATABASE_MAIN_ID.ordinal(), player.world, pos.getX(), pos.getY(), pos.getZ());
             }
         }
     }

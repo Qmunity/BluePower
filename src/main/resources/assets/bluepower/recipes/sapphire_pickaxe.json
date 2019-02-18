@@ -1,0 +1,19 @@
+{
+  "result": {
+    "item": "bluepower:sapphire_pickaxe"
+  },
+  "pattern": [
+    "GGG",
+    " S ",
+    " S "
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "S": {
+      "item": "#STICKWOOD"
+    },
+    "G": {
+      "item": "#GEMSAPPHIRE"
+    }
+  }
+}

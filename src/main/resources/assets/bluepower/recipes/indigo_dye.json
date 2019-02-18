@@ -1,0 +1,14 @@
+{
+  "result": {
+    "item": "bluepower:indigo_dye"
+  },
+  "pattern": [
+    "#"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "#": {
+      "item": "bluepower:indigo_flower"
+    }
+  }
+}

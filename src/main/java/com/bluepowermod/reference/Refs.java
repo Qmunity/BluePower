@@ -17,6 +17,8 @@
 
 package com.bluepowermod.reference;
 
+import net.minecraft.util.math.AxisAlignedBB;
+
 public class Refs {
 
     public static final String NAME = "Blue Power";
@@ -24,7 +26,7 @@ public class Refs {
     private static final String MAJOR = "@MAJOR@";
     private static final String MINOR = "@MINOR@";
     private static final String BUILD = "@BUILD_NUMBER@";
-    private static final String MCVERSION = "1.7.10";
+    private static final String MCVERSION = "1.12.1";
 
     public static final String MACHINE_TEXTURE_LOCATION = "machines/";
     public static final String MODEL_LOCATION = "models/";
@@ -43,15 +45,18 @@ public class Refs {
     public static final String TILES = "tiles";
     public static final String ALLOYFURNACE_NAME = "alloyfurnace";
     public static final String AMETHYSTORE_NAME = "amethyst_ore";
+    public static final String MALACHITEORE_NAME = "malachite_ore";
     public static final String RUBYORE_NAME = "ruby_ore";
     public static final String SAPPHIREORE_NAME = "sapphire_ore";
     public static final String TESLATITEORE_NAME = "teslatite_ore";
     public static final String AMETHYSTBLOCK_NAME = "amethyst_block";
     public static final String SAPPHIREBLOCK_NAME = "sapphire_block";
+    public static final String MALACHITEBLOCK_NAME = "malachite_block";
     public static final String RUBYBLOCK_NAME = "ruby_block";
     public static final String TESLATITEBLOCK_NAME = "teslatite_block";
     public static final String AMETHYST_NAME = "amethyst_gem";
     public static final String SAPPHIRE_NAME = "sapphire_gem";
+    public static final String MALACHITE_NAME = "malachite_gem";
     public static final String RUBY_NAME = "ruby_gem";
     public static final String TESLATITE_NAME = "teslatite_dust";
     public static final String COPPERORE_NAME = "copper_ore";
@@ -77,6 +82,8 @@ public class Refs {
     public static final String ZINCDUST_TINY_NAME = "zinc_tiny_dust";
     public static final String INFUSEDTESLATITEDUST_NAME = "infused_teslatite_dust";
 
+    public static final String TUNGCARBSAW_NAME = "tungcarb_saw";
+    public static final String MALACHITESAW_NAME = "malachite_saw";
     public static final String AMETHYSTSAW_NAME = "amethyst_saw";
     public static final String SAPPHIRESAW_NAME = "sapphire_saw";
     public static final String RUBYSAW_NAME = "ruby_saw";
@@ -100,7 +107,10 @@ public class Refs {
     public static final String ENGINE_NAME = "engine";
     public static final String KINETICGENERATOR_NAME = "kinetic_generator";
     public static final String WINDMILL_NAME = "windmill";
+    public static final String BATTERYBLOCK_NAME = "battery_block";
+    public static final String SOLARPANEL_NAME = "solar_panel";
 
+    public static final String TUNGCARBINGOT_NAME = "tungsten_carbide";
     public static final String BRASSINGOT_NAME = "brass_ingot";
     public static final String BLUEALLOYINGOT_NAME = "blue_alloy_ingot";
     public static final String REDALLOYINGOT_NAME = "red_alloy_ingot";
@@ -121,12 +131,26 @@ public class Refs {
     public static final String SAPPHIREHOE_NAME = "sapphire_hoe";
     public static final String SAPPHIRESICKLE_NAME = "sapphire_sickle";
 
+    public static final String MALACHITEAXE_NAME = "malachite_axe";
+    public static final String MALACHITESWORD_NAME = "malachite_sword";
+    public static final String MALACHITEPICKAXE_NAME = "malachite_pickaxe";
+    public static final String MALACHITESPADE_NAME = "malachite_shovel";
+    public static final String MALACHITEHOE_NAME = "malachite_hoe";
+    public static final String MALACHITESICKLE_NAME = "malachite_sickle";
+
     public static final String AMETHYSTAXE_NAME = "amethyst_axe";
     public static final String AMETHYSTSWORD_NAME = "amethyst_sword";
     public static final String AMETHYSTPICKAXE_NAME = "amethyst_pickaxe";
     public static final String AMETHYSTSPADE_NAME = "amethyst_shovel";
     public static final String AMETHYSTHOE_NAME = "amethyst_hoe";
     public static final String AMETHYSTSICKLE_NAME = "amethyst_sickle";
+
+    public static final String TUNGCARBAXE_NAME = "tungcarb_axe";
+    public static final String TUNGCARBSWORD_NAME = "tungcarb_sword";
+    public static final String TUNGCARBPICKAXE_NAME = "tungcarb_pickaxe";
+    public static final String TUNGCARBSPADE_NAME = "tungcarb_shovel";
+    public static final String TUNGCARBHOE_NAME = "tungcarb_hoe";
+    public static final String TUNGCARBSICKLE_NAME = "tungcarb_sickle";
 
     public static final String FLAXSEED_NAME = "flax_seeds";
     public static final String FLAXCROP_NAME = "flax_crop";
@@ -202,6 +226,10 @@ public class Refs {
     public static final String[] oreDictDyes = new String[] { "dyeBlack", "dyeRed", "dyeGreen", "dyeBrown", "dyeBlue", "dyePurple",
         "dyeCyan", "dyeLightGray", "dyeGray", "dyePink", "dyeLime", "dyeYellow", "dyeLightBlue", "dyeMagenta", "dyeOrange", "dyeWhite" };
     public static final String LAMP_NAME = "lamp";
+    public static final String CAGELAMP_NAME = "cagelamp";
+    public static final AxisAlignedBB CAGELAMP_AABB = new AxisAlignedBB(0.3125, 0.125, 0.3125,  0.6875, 0.6875, 0.6875);
+    public static final String FIXTURELAMP_NAME = "fixture";
+    public static final AxisAlignedBB FIXTURELAMP_AABB = new AxisAlignedBB(0.1875, 0.125, 0.1875, 0.8125, 0.5, 0.8125 );
     public static final String CONFIG_WORLDGEN = "world gen";
     public static final String CONFIG_TUNGSTEN = "tungsten";
     public static final String CONFIG_COPPER = "copper";

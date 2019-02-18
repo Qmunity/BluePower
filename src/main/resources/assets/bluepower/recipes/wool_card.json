@@ -1,0 +1,22 @@
+{
+  "result": {
+    "item": "bluepower:wool_card"
+  },
+  "pattern": [
+    "f",
+    "p",
+    "s"
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "p": {
+      "item": "#PLANKWOOD"
+    },
+    "s": {
+      "item": "#STICKWOOD"
+    },
+    "f": {
+      "item": "bluepower:iron_wire"
+    }
+  }
+}

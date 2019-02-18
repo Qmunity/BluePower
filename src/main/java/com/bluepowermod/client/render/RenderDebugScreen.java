@@ -1,17 +1,5 @@
 package com.bluepowermod.client.render;
 
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.List;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.integrated.IntegratedServer;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
-import uk.co.qmunity.lib.helper.MathHelper;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-
 public class RenderDebugScreen {
 
 //    private final DecimalFormat df = new DecimalFormat("#####.###");

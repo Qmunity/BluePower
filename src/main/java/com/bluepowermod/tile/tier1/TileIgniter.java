@@ -17,81 +17,62 @@
 
 package com.bluepowermod.tile.tier1;
 
+import com.bluepowermod.block.machine.BlockIgniter;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;;
 
 import com.bluepowermod.tile.IEjectAnimator;
 import com.bluepowermod.tile.TileBase;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+
+import static com.bluepowermod.block.machine.BlockIgniter.ACTIVE;
+import static com.bluepowermod.block.machine.BlockIgniter.FACING;
 
 public class TileIgniter extends TileBase implements IEjectAnimator {
 
-    private boolean isActive;
-
     @Override
     protected void redstoneChanged(boolean newValue) {
-
         super.redstoneChanged(newValue);
-        isActive = newValue;
+        BlockIgniter.setState(newValue, world, pos);
         sendUpdatePacket();
-        ForgeDirection direction = getFacingDirection();
         if (getIsRedstonePowered()) {
-            ignite(direction);
+            ignite();
         } else {
-            extinguish(direction);
+            extinguish();
         }
     }
 
-    @Override
-    public void writeToPacketNBT(NBTTagCompound tCompound) {
-
-        super.writeToPacketNBT(tCompound);
-        tCompound.setBoolean("isActive", isActive);
-    }
-
-    @Override
-    public void readFromPacketNBT(NBTTagCompound tCompound) {
-
-        super.readFromPacketNBT(tCompound);
-        isActive = tCompound.getBoolean("isActive");
-        if (worldObj != null)
-            markForRenderUpdate();
-    }
-
-    private void ignite(ForgeDirection direction) {
-
-        if (getIsRedstonePowered() && worldObj.isAirBlock(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ)) {
-            worldObj.setBlock(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ, Blocks.fire);
+    private void ignite() {
+        EnumFacing facing = world.getBlockState(pos).getValue(FACING);
+        if (world.getRedstonePowerFromNeighbors(pos) > 0 && world.isAirBlock(pos.offset(facing)) && Blocks.FIRE.canPlaceBlockAt(world, pos.offset(facing))) {
+            world.setBlockState(pos.offset(facing), Blocks.FIRE.getDefaultState());
         }
     }
 
-    private void extinguish(ForgeDirection direction) {
-
-        Block target = worldObj.getBlock(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ);
-        if (!getIsRedstonePowered() && (target == Blocks.fire || target == Blocks.portal)) {
-            worldObj.setBlock(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ, Blocks.air);
+    private void extinguish() {
+        EnumFacing facing = world.getBlockState(pos).getValue(FACING);
+        Block target = world.getBlockState(pos.offset(facing)).getBlock();
+        if (world.getRedstonePowerFromNeighbors(pos) == 0 && (target == Blocks.FIRE || target == Blocks.PORTAL)) {
+            world.setBlockToAir(pos.offset(facing));
         }
     }
 
+
     @Override
-    public void updateEntity() {
+    public void update() {
 
         if (getTicker() % 5 == 0) {
-            ignite(getFacingDirection());
+            ignite();
         }
-        super.updateEntity();
+        super.update();
     }
 
     @Override
     public boolean isEjecting() {
 
-        return isActive;
-    }
-
-    @Override
-    public boolean canConnectRedstone() {
-
-        return true;
+        return world.getBlockState(pos).getValue(ACTIVE);
     }
 }

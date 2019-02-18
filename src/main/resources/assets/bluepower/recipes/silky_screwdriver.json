@@ -1,0 +1,18 @@
+{
+  "result": {
+    "item": "bluepower:silky_screwdriver"
+  },
+  "pattern": [
+    " t",
+    "S "
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "S": {
+      "item": "bluepower:screwdriver"
+    },
+    "t": {
+      "item": "#NUGGETTUNGSTEN"
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "result": {
+    "item": "bluepower:copper_block"
+  },
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "#": {
+      "item": "#INGOTCOPPER"
+    }
+  }
+}

@@ -19,33 +19,30 @@
 
 package com.bluepowermod.tile.tier1;
 
-import java.util.List;
-
+import com.bluepowermod.init.BPBlocks;
+import com.bluepowermod.tile.TileMachineBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.NonNullList;
 
-import com.bluepowermod.helper.IOHelper;
-import com.bluepowermod.init.BPBlocks;
-import com.bluepowermod.part.tube.TubeStack;
-import com.bluepowermod.tile.TileMachineBase;
+import java.util.List;
 
 public class TileRelay extends TileMachineBase implements IInventory {
 
-    private final ItemStack[] inventory = new ItemStack[9];
+    private final NonNullList<ItemStack> inventory = NonNullList.withSize(10, ItemStack.EMPTY);
 
     @Override
-    public void updateEntity() {
+    public void update() {
 
-        super.updateEntity();
+        super.update();
 
-        if (!worldObj.isRemote && isBufferEmpty()) {
-            for (int i = 0; i < inventory.length; i++) {
-                if (inventory[i] != null && inventory[i].stackSize > 0) {
-                    addItemToOutputBuffer(inventory[i]);
-                    inventory[i] = null;
+        if (!world.isRemote) {
+            for (int i = 0; i < inventory.size(); i++) {
+                if (!inventory.get(i).isEmpty() && inventory.get(i).getCount() > 0) {
+                    addItemToOutputBuffer(inventory.get(i));
+                    inventory.set(i, ItemStack.EMPTY);
                     break;
                 }
             }
@@ -62,7 +59,7 @@ public class TileRelay extends TileMachineBase implements IInventory {
 
         for (int i = 0; i < 9; i++) {
             NBTTagCompound tc = tCompound.getCompoundTag("inventory" + i);
-            inventory[i] = ItemStack.loadItemStackFromNBT(tc);
+            inventory.set(i, new ItemStack(tc));
         }
     }
 
@@ -70,17 +67,16 @@ public class TileRelay extends TileMachineBase implements IInventory {
      * This function gets called whenever the world/chunk is saved
      */
     @Override
-    public void writeToNBT(NBTTagCompound tCompound) {
+    public NBTTagCompound writeToNBT(NBTTagCompound tCompound) {
 
         super.writeToNBT(tCompound);
 
         for (int i = 0; i < 9; i++) {
-            if (inventory[i] != null) {
                 NBTTagCompound tc = new NBTTagCompound();
-                inventory[i].writeToNBT(tc);
+                inventory.get(i).writeToNBT(tc);
                 tCompound.setTag("inventory" + i, tc);
-            }
         }
+        return tCompound;
     }
 
     /**
@@ -89,7 +85,7 @@ public class TileRelay extends TileMachineBase implements IInventory {
     @Override
     public int getSizeInventory() {
 
-        return inventory.length;
+        return inventory.size();
     }
 
     /**
@@ -100,7 +96,7 @@ public class TileRelay extends TileMachineBase implements IInventory {
     @Override
     public ItemStack getStackInSlot(int slot) {
 
-        return inventory[slot];
+        return inventory.get(slot);
     }
 
     /**
@@ -113,13 +109,13 @@ public class TileRelay extends TileMachineBase implements IInventory {
     public ItemStack decrStackSize(int slot, int amount) {
 
         ItemStack itemStack = getStackInSlot(slot);
-        if (itemStack != null) {
-            if (itemStack.stackSize <= amount) {
-                setInventorySlotContents(slot, null);
+        if (!itemStack.isEmpty()) {
+            if (itemStack.getCount() <= amount) {
+                setInventorySlotContents(slot, ItemStack.EMPTY);
             } else {
                 itemStack = itemStack.splitStack(amount);
-                if (itemStack.stackSize == 0) {
-                    setInventorySlotContents(slot, null);
+                if (itemStack.getCount() == 0) {
+                    setInventorySlotContents(slot, ItemStack.EMPTY);
                 }
             }
         }
@@ -134,8 +130,7 @@ public class TileRelay extends TileMachineBase implements IInventory {
      * @param slot
      */
     @Override
-    public ItemStack getStackInSlotOnClosing(int slot) {
-
+    public ItemStack removeStackFromSlot(int slot) {
         return getStackInSlot(slot);
     }
 
@@ -148,23 +143,23 @@ public class TileRelay extends TileMachineBase implements IInventory {
     @Override
     public void setInventorySlotContents(int slot, ItemStack itemStack) {
 
-        inventory[slot] = itemStack;
+        inventory.set(slot, itemStack);
     }
 
     /**
      * Returns the name of the inventory
      */
     @Override
-    public String getInventoryName() {
+    public String getName() {
 
-        return BPBlocks.relay.getUnlocalizedName();
+        return BPBlocks.relay.getTranslationKey();
     }
 
     /**
      * Returns if the inventory is named
      */
     @Override
-    public boolean hasCustomInventoryName() {
+    public boolean hasCustomName() {
 
         return true;
     }
@@ -181,21 +176,20 @@ public class TileRelay extends TileMachineBase implements IInventory {
     /**
      * Do not make give this method the name canInteractWith because it clashes with Container
      * 
-     * @param var1
+     * @param player
      */
     @Override
-    public boolean isUseableByPlayer(EntityPlayer var1) {
-
-        return true;
+    public boolean isUsableByPlayer(EntityPlayer player) {
+        return player.getDistanceSqToCenter(pos) <= 64.0D;
     }
 
     @Override
-    public void openInventory() {
+    public void openInventory(EntityPlayer player) {
 
     }
 
     @Override
-    public void closeInventory() {
+    public void closeInventory(EntityPlayer player) {
 
     }
 
@@ -216,7 +210,7 @@ public class TileRelay extends TileMachineBase implements IInventory {
 
         List<ItemStack> drops = super.getDrops();
         for (ItemStack stack : inventory)
-            if (stack != null)
+            if (!stack.isEmpty())
                 drops.add(stack);
         return drops;
     }
@@ -227,9 +221,30 @@ public class TileRelay extends TileMachineBase implements IInventory {
         return true;
     }
 
+    //Todo Fields
     @Override
-    public TubeStack acceptItemFromTube(TubeStack stack, ForgeDirection from, boolean simulate) {
-        stack.stack = IOHelper.insert(this, stack.stack, from.ordinal(), simulate);
-        return stack.stack == null ? null : stack;
+    public boolean isEmpty() {
+        return inventory.size() == 0;
     }
+
+    @Override
+    public int getField(int id) {
+        return 0;
+    }
+
+    @Override
+    public void setField(int id, int value) {
+
+    }
+
+    @Override
+    public int getFieldCount() {
+        return 0;
+    }
+
+    @Override
+    public void clear() {
+
+    }
+
 }

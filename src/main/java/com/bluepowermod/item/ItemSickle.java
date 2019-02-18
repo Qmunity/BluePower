@@ -17,51 +17,55 @@
 
 package com.bluepowermod.item;
 
-import java.util.Set;
-
+import com.bluepowermod.init.BPCreativeTabs;
+import com.bluepowermod.init.BPItems;
+import com.bluepowermod.reference.Refs;
+import com.google.common.collect.Sets;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.BlockLilyPad;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTool;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import com.bluepowermod.init.BPCreativeTabs;
-import com.bluepowermod.reference.Refs;
-import com.google.common.collect.Sets;
+import java.util.Set;
 
 public class ItemSickle extends ItemTool {
 
-    public    Item    customCraftingMaterial = null;
+    public    Item    customCraftingMaterial = Items.AIR;
     protected boolean canRepair              = true;
 
-    private static final Set toolBlocks = Sets.newHashSet(Blocks.leaves, Blocks.leaves2, Blocks.wheat, Blocks.potatoes, Blocks.carrots,
-            Blocks.nether_wart, Blocks.red_mushroom, Blocks.brown_mushroom, Blocks.reeds, Blocks.tallgrass, Blocks.vine, Blocks.waterlily,
-            Blocks.red_flower, Blocks.yellow_flower);
+    private static final Set toolBlocks = Sets.newHashSet(Blocks.LEAVES, Blocks.LEAVES2, Blocks.WHEAT, Blocks.POTATOES, Blocks.CARROTS,
+            Blocks.NETHER_WART, Blocks.RED_MUSHROOM, Blocks.BROWN_MUSHROOM, Blocks.REEDS, Blocks.TALLGRASS, Blocks.VINE, Blocks.WATERLILY,
+            Blocks.RED_FLOWER, Blocks.YELLOW_FLOWER);
 
     public ItemSickle(ToolMaterial material, String name, Item repairItem) {
-        super(1.0F, material, toolBlocks);
-        this.setUnlocalizedName(name);
+        super(material, toolBlocks);
+        this.setTranslationKey(name);
         this.setCreativeTab(BPCreativeTabs.tools);
-        this.setTextureName(Refs.MODID + ":" + name);
+        this.setRegistryName(Refs.MODID + ":" + name);
         this.customCraftingMaterial = repairItem;
+        BPItems.itemList.add(this);
     }
 
     @Override
-    public String getUnlocalizedName(ItemStack stack) {
+    public String getTranslationKey(ItemStack stack) {
 
-        return String.format("item.%s:%s", Refs.MODID, getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
+        return String.format("item.%s:%s", Refs.MODID, getUnwrappedUnlocalizedName(super.getTranslationKey()));
     }
 
     @Override
-    public String getUnlocalizedName() {
+    public String getTranslationKey() {
 
-        return String.format("item.%s:%s", Refs.MODID, getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
+        return String.format("item.%s:%s", Refs.MODID, getUnwrappedUnlocalizedName(super.getTranslationKey()));
     }
 
     protected String getUnwrappedUnlocalizedName(String name) {
@@ -70,11 +74,9 @@ public class ItemSickle extends ItemTool {
     }
 
     @Override
-    public float func_150893_a(ItemStack itemStack, Block block) {
-
-        if ((block.getMaterial() == Material.leaves) || (block.getMaterial() == Material.plants) || toolBlocks.contains(block)) {
-
-            return this.efficiencyOnProperMaterial;
+    public float getDestroySpeed(ItemStack stack, IBlockState state) {
+        if ((state.getMaterial() == Material.LEAVES) || (state.getMaterial() == Material.PLANTS) || toolBlocks.contains(state)) {
+            return this.efficiency;
         }
         return 1.0F;
     }
@@ -87,61 +89,61 @@ public class ItemSickle extends ItemTool {
     }
 
     @Override
-    public boolean onBlockDestroyed(ItemStack itemStack, World world, Block block, int x, int y, int z, EntityLivingBase entityLiving) {
+    public boolean onBlockDestroyed(ItemStack stack, World world, IBlockState state, BlockPos pos, EntityLivingBase entityLiving) {
 
         boolean used = false;
 
         if (!(entityLiving instanceof EntityPlayer)) return false;
         EntityPlayer player = (EntityPlayer) entityLiving;
 
-        if ((block != null) && (block.isLeaves(world, x, y, z))) {
+        if ((state != null) && (state.getBlock().isLeaves(state, world, pos))) {
             for (int i = -1; i <= 1; i++) {
                 for (int j = -1; j <= 1; j++) {
                     for (int k = -1; k <= 1; k++) {
-                        Block blockToCheck = world.getBlock(x + i, y + j, z + k);
-                        int meta = world.getBlockMetadata(x + i, y + j, z + k);
-                        if ((blockToCheck != null) && (blockToCheck.isLeaves(world, x + i, y + j, z + k))) {
-                            if (blockToCheck.canHarvestBlock(player, meta)) {
-                                blockToCheck.harvestBlock(world, player, x + i, y + j, z + k, meta);
+                        Block blockToCheck = world.getBlockState(pos.add(i,j,k)).getBlock();
+                        IBlockState meta = world.getBlockState(pos.add(i,j,k));
+                        if ((blockToCheck != null) && (blockToCheck.isLeaves(meta, world, pos.add(i,j,k)))) {
+                            if (blockToCheck.canHarvestBlock(world, pos.add(i,j,k), player)) {
+                                blockToCheck.harvestBlock(world, player, pos.add(i,j,k), meta, null, stack);
                             }
-                            world.setBlock(x + i, y + j, z + k, Blocks.air);
+                            world.setBlockToAir(pos.add(i,j,k));
                             used = true;
                         }
                     }
                 }
             }
             if (used) {
-                itemStack.damageItem(1, entityLiving);
+                stack.damageItem(1, entityLiving);
             }
             return used;
         }
 
-        if ((block != null) && (block instanceof BlockLilyPad)) {
+        if ((state != null) && (state.getBlock() instanceof BlockLilyPad)) {
             for (int i = -2; i <= 2; i++) {
                 for (int j = -2; j <= 2; j++) {
-                    Block blockToCheck = world.getBlock(x + i, y, z + j);
-                    int meta = world.getBlockMetadata(x + i, y, z + j);
+                    Block blockToCheck = world.getBlockState(pos.add(i,0,j)).getBlock();
+                    IBlockState meta = world.getBlockState(pos.add(i,0,j));
                     if (blockToCheck != null && blockToCheck instanceof BlockLilyPad) {
-                        if (blockToCheck.canHarvestBlock(player, meta)) {
-                            blockToCheck.harvestBlock(world, player, x + i, y, z + j, meta);
+                        if (blockToCheck.canHarvestBlock(world, pos.add(i,0,j), player)) {
+                            blockToCheck.harvestBlock(world, player, pos.add(i,0,j), meta, null, stack);
                         }
-                        world.setBlock(x + i, y, z + j, Blocks.air);
+                        world.setBlockToAir(pos.add(i,0,j));
                         used = true;
                     }
                 }
             }
         }
-        if ((block != null) && !(block instanceof BlockLilyPad)) {
+        if ((state != null) && !(state.getBlock() instanceof BlockLilyPad)) {
             for (int i = -2; i <= 2; i++) {
                 for (int j = -2; j <= 2; j++) {
-                    Block blockToCheck = world.getBlock(x + i, y, z + j);
-                    int meta = world.getBlockMetadata(x + i, y, z + j);
+                    Block blockToCheck = world.getBlockState(pos.add(i,0,j)).getBlock();
+                    IBlockState meta = world.getBlockState(pos.add(i,0,j));
                     if (blockToCheck != null) {
                         if (blockToCheck instanceof BlockBush && !(blockToCheck instanceof BlockLilyPad)) {
-                            if (blockToCheck.canHarvestBlock(player, meta)) {
-                                blockToCheck.harvestBlock(world, player, x + i, y, z + j, meta);
+                            if (blockToCheck.canHarvestBlock(world,  pos.add(i,0,j), player)) {
+                                blockToCheck.harvestBlock(world, player, pos.add(i,0,j), meta, null, stack);
                             }
-                            world.setBlock(x + i, y, z + j, Blocks.air);
+                            world.setBlockToAir(pos.add(i,0,j));
                             used = true;
                         }
                     }
@@ -149,7 +151,7 @@ public class ItemSickle extends ItemTool {
             }
         }
         if (used) {
-            itemStack.damageItem(1, entityLiving);
+            stack.damageItem(1, entityLiving);
         }
         return used;
     }

@@ -1,55 +1,58 @@
 buildscript {
-    repositories {
-        mavenCentral()
-        maven {
-            name = "forge"
-            url = "http://files.minecraftforge.net/maven"
-        }
-        maven {
-            name = "sonatype"
+	repositories {
+		mavenCentral()
+        jcenter()
+        maven { url = "http://files.minecraftforge.net/maven" }
+		maven {
+			name = "sonatype"
             url = "https://oss.sonatype.org/content/repositories/snapshots/"
         }
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
     }
 }
 
 repositories {
-    maven { // The repo from which to get waila
-        name "Mobius Repo"
-        url "http://mobiusstrip.eu/maven"
-    }
+	maven { //repo for HWYLA
+		url "http://tehnut.info/maven"
+	}
     maven { // the repo from which to get NEI and stuff 
         name 'CB Repo'
         url "http://chickenbones.net/maven/"
     }
-    maven {
+	maven { //JEI repo
+		url = "http://dvs1.progwml6.com/files/maven"
+	}
+    maven { //Open Computers
         name 'OpenComputers'
         url = "http://maven.cil.li/"
     }
-    maven {
+    maven { //IC2
         name = "ic2"
         url = "http://maven.ic2.player.to/"
     }
-    maven {
-        name = "Qmunity"
-        url = "http://maven.bluepowermod.com/"
+	maven { //MC Multipart
+		url "http://maven.amadornes.com/"
+	}
+    maven { //CTM
+        name 'tterrag maven'
+        url "http://maven.tterrag.com/"
     }
 }
 
-apply plugin: 'forge'
+apply plugin: 'net.minecraftforge.gradle.forge'
 apply plugin: 'maven'
 
 project.ext {
     major = "0"
-    minor = "2"
+    minor = "3"
     if (System.getenv().BUILD_NUMBER != null) {
         build = System.getenv().BUILD_NUMBER
     } else {
         build = "-custom"
     }
-    mcVersion = "1.7.10"
+    mcVersion = "1.12.2"
 }
 
 
@@ -58,19 +61,19 @@ group = "com.bluepowermod"
 archivesBaseName = "BluePower"
 
 dependencies {
-    compile "codechicken:CodeChickenLib:1.7.10-1.1.3.138:dev"
-    compile "codechicken:CodeChickenCore:1.7.10-1.0.7.46:dev"
-    compile "codechicken:NotEnoughItems:1.7.10-1.0.5.111:dev"
-    compile "codechicken:ForgeMultipart:1.7.10-1.2.0.345:dev"
-    compile "mcp.mobius.waila:Waila:1.5.10_1.7.10"
-    compile "li.cil.oc:OpenComputers:MC1.7.10-1.5.13.689-dev:api"
-    compile 'net.industrial-craft:industrialcraft-2:2.2.746-experimental:api'
-    compile "qmunity:QmunityLib:0.2.116:deobf"
+    deobfCompile "li.cil.oc:OpenComputers:MC1.12.2-1.7.2.71:api"
+    compile 'net.industrial-craft:industrialcraft-2:2.8.93-ex112:api'
+	deobfCompile "MCMultiPart2:MCMultiPart:2.5.1"
+    deobfCompile "mcp.mobius.waila:Hwyla:1.8.26-B41_1.12.2"
+	deobfCompile "mezz.jei:jei_1.12.2:4.11.0.204:api"
+	runtime "mezz.jei:jei_1.12.2:4.11.0.204"
+    compile "team.chisel.ctm:CTM:MC1.12.2-0.3.2.18"
 }
 
 minecraft {
-    version = "${project.ext.mcVersion}-10.13.4.1481-${project.ext.mcVersion}"
-    runDir = "eclipse/assets"
+    version = "${project.ext.mcVersion}-14.23.4.2705"
+    runDir = "run"
+	mappings = "snapshot_20180717"
 
     // replacing stuff in the source
     replace '@MAJOR@', project.major
@@ -116,14 +119,6 @@ task deobfJar(type: Jar) {
     }
 }
 
-// add a source jar
-task sourceJar(type: Jar) {
-    from (sourceSets.main.allSource) {
-        appendix = "${project.ext.mcVersion}"
-        classifier = "sources"
-    }
-}
-
 // Create API library zip
 task apiZip(type: Zip) {
     from(sourceSets.main.java) {
@@ -153,20 +148,20 @@ uploadArchives {
                     name project.archivesBaseName
                     packaging 'jar'
                     description 'BluePower'
-                    url 'https://github.com/Qmunity/BluePower'
+                    url 'https://github.com/MoreThanHidden/BluePower'
                     scm {
-                        url 'https://github.com/Qmunity/BluePower'
-                        connection 'scm:git:git@github.com:Qmunity/BluePower.git'
-                        developerConnection 'scm:git:git@github.com:Qmunity/BluePower.git'
+                        url 'https://github.com/MoreThanHidden/BluePower'
+                        connection 'scm:git:git@github.com:MoreThanHidden/BluePower.git'
+                        developerConnection 'scm:git:git@github.com:MoreThanHidden/BluePower.git'
                     }
                     issueManagement {
                         system 'github'
-                        url 'https://github.com/Qmunity/BluePower/issues'
+                        url 'https://github.com/MoreThanHidden/BluePower/issues'
                     }
                     licenses {
                         license {
                             name 'GPLv3'
-                            url 'https://github.com/Qmunity/BluePower/blob/master/LICENCE.txt'
+                            url 'https://github.com/MoreThanHidden/BluePower/blob/master/LICENCE.txt'
                             distribution 'repo'
                         }
                     }
@@ -189,6 +184,11 @@ uploadArchives {
                         developer {
                             id 'K4Unl'
                             name 'K4Unl'
+                            roles { role 'developer' }
+                        }
+                        developer {
+                            id 'MoreThanHidden'
+                            name 'MoreThanHidden'
                             roles { role 'developer' }
                         }
                         developer {

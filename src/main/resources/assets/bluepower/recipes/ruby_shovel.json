@@ -1,0 +1,19 @@
+{
+  "result": {
+    "item": "bluepower:ruby_shovel"
+  },
+  "pattern": [
+    "G",
+    "S",
+    "S"
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "S": {
+      "item": "#STICKWOOD"
+    },
+    "G": {
+      "item": "#GEMRUBY"
+    }
+  }
+}

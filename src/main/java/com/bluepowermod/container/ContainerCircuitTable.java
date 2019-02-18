@@ -7,30 +7,26 @@
  */
 package com.bluepowermod.container;
 
+import com.bluepowermod.client.gui.GuiCircuitTable;
+import com.bluepowermod.container.slot.SlotCircuitTableCrafting;
+import com.bluepowermod.tile.tier2.TileCircuitTable;
 import invtweaks.api.container.ChestContainer;
-
-import java.util.List;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ICrafting;
-import net.minecraft.inventory.Slot;
+import net.minecraft.inventory.*;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-import com.bluepowermod.client.gui.GuiCircuitTable;
-import com.bluepowermod.container.slot.SlotCircuitTableCrafting;
-import com.bluepowermod.tile.tier2.TileCircuitTable;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import java.util.List;
 
 @ChestContainer
 public class ContainerCircuitTable extends Container {
 
     private final TileCircuitTable circuitTable;
+    public InventoryCrafting craftMatrix;
     private int itemsCrafted;
     private boolean isRetrying = false;
     private int scrollState = -1;
@@ -38,10 +34,10 @@ public class ContainerCircuitTable extends Container {
     public ContainerCircuitTable(InventoryPlayer invPlayer, TileCircuitTable circuitTable) {
 
         this.circuitTable = circuitTable;
-
+        craftMatrix = new InventoryCrafting(this, 5, 5);
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 8; ++j) {
-                addSlotToContainer(new SlotCircuitTableCrafting(invPlayer.player, circuitTable, circuitTable.circuitInventory, j + i * 8, 8 + j * 18,
+                addSlotToContainer(new SlotCircuitTableCrafting(invPlayer.player, circuitTable, craftMatrix, j + i * 8, 8 + j * 18,
                         33 + i * 18));
             }
         }
@@ -81,8 +77,8 @@ public class ContainerCircuitTable extends Container {
         super.detectAndSendChanges();
         if (scrollState != circuitTable.slotsScrolled) {
             scrollState = circuitTable.slotsScrolled;
-            for (ICrafting crafter : (List<ICrafting>) crafters) {
-                crafter.sendProgressBarUpdate(this, 0, circuitTable.slotsScrolled);
+            for (IContainerListener crafter : (List<IContainerListener>) listeners) {
+                crafter.sendWindowProperty(this, 0, circuitTable.slotsScrolled);
             }
         }
     }
@@ -98,44 +94,32 @@ public class ContainerCircuitTable extends Container {
     }
 
     @Override
-    protected void retrySlotClick(int slot, int p_75133_2_, boolean p_75133_3_, EntityPlayer p_75133_4_) {
-
-        ItemStack stackInSlot = ((Slot) inventorySlots.get(slot)).getStack();
-        itemsCrafted += stackInSlot.stackSize;
-        isRetrying = true;
-        if (itemsCrafted < stackInSlot.getMaxStackSize()) {
-            slotClick(slot, p_75133_2_, 1, p_75133_4_);//only crafting slot doesn't retry clicking so no more than 64 items get crafted at a time
-        }
-        isRetrying = false;
-    }
-
-    @Override
     public ItemStack transferStackInSlot(EntityPlayer player, int par2) {
 
         if (!isRetrying)
             itemsCrafted = 0;
 
-        ItemStack itemstack = null;
+        ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = (Slot) inventorySlots.get(par2);
         if (slot != null && slot.getHasStack()) {
             ItemStack itemstack1 = slot.getStack();
             itemstack = itemstack1.copy();
             if (par2 < 42) {
                 if (!mergeItemStack(itemstack1, 42, 77, false))
-                    return null;
+                    return ItemStack.EMPTY;
             } else {
                 if (!mergeItemStack(itemstack1, 24, 42, false))
-                    return null;
+                    return ItemStack.EMPTY;
             }
-            if (itemstack1.stackSize == 0) {
-                slot.putStack(null);
+            if (itemstack1.getCount() == 0) {
+                slot.putStack(ItemStack.EMPTY);
             } else {
                 slot.onSlotChanged();
             }
-            if (itemstack1.stackSize != itemstack.stackSize) {
-                slot.onPickupFromSlot(player, itemstack1);
+            if (itemstack1.getCount() != itemstack.getCount()) {
+                slot.onSlotChange(itemstack, itemstack1);
             } else {
-                return null;
+                return ItemStack.EMPTY;
             }
         }
         return itemstack;

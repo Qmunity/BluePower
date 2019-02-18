@@ -8,27 +8,22 @@
 
 package com.bluepowermod.compat;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import net.minecraft.item.ItemStack;
-
-import com.bluepowermod.compat.cc.CompatModuleCC;
-import com.bluepowermod.compat.fmp.CompatModuleFMP;
 import com.bluepowermod.compat.hydcraft.CompatModuleHydCraft;
 import com.bluepowermod.compat.ic2.CompatModuleIC2;
+import com.bluepowermod.compat.mcmp.MCMPAddon;
 import com.bluepowermod.compat.waila.CompatModuleWaila;
 import com.bluepowermod.util.Dependencies;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import java.util.*;
+
 
 public class CompatibilityUtils {
 
@@ -100,6 +95,9 @@ public class CompatibilityUtils {
 
     public static void init(FMLInitializationEvent ev) {
 
+        //Register MCMultipart Addon
+        MinecraftForge.EVENT_BUS.register(new MCMPAddon());
+
         for (CompatModule m : getLoadedModules())
             m.init(ev);
     }
@@ -129,8 +127,8 @@ public class CompatibilityUtils {
      * Register your modules here
      */
     static {
-        registerModule(Dependencies.FMP, CompatModuleFMP.class, null);
-        registerModule(Dependencies.COMPUTER_CRAFT, CompatModuleCC.class, null);
+        //registerModule(Dependencies.FMP, CompatModuleFMP.class, null);
+        //registerModule(Dependencies.COMPUTER_CRAFT, CompatModuleCC.class, null);
         registerModule(Dependencies.WAILA, CompatModuleWaila.class, null);
         registerModule(Dependencies.IC2, CompatModuleIC2.class, null);
         registerModule(Dependencies.HC, CompatModuleHydCraft.class, null);

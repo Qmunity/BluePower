@@ -1,0 +1,32 @@
+﻿{
+  "forge_marker": 1,
+  "defaults": {
+    "textures": {
+      "foot_side": "bluepower:blocks/lamps/cage_foot_side",
+      "foot_top": "bluepower:blocks/lamps/cage_foot_top",
+      "cage_side": "bluepower:blocks/lamps/cage",
+      "cage_top": "bluepower:blocks/lamps/cage_top",
+      "lamp_side": "bluepower:blocks/lamps/cage_lamp_off",
+      "lamp_top": "bluepower:blocks/lamps/cage_lamp_off_top",
+      "particle": "#lamp_side"
+    },
+    "model": "bluepower:cage_lamp"
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [{"textures": {"lamp_side": "bluepower:blocks/lamps/cage_lamp_off", "lamp_top": "bluepower:blocks/lamps/cage_lamp_off_top"}}],
+    "inventory_glow": [{"textures": {"lamp_side": "bluepower:blocks/lamps/cage_lamp_on", "lamp_top": "bluepower:blocks/lamps/cage_lamp_on_top"}}],
+    "facing": {
+      "north": {"x": 90},
+      "south": {"x": 90, "y": 180},
+      "west": {"x": 90, "y": 270},
+      "east": {"x": 90, "y": 90},
+      "up": {},
+      "down": {"x": 180}
+    },
+    "powered":{
+      "true":{"textures": {"lamp_side": "bluepower:blocks/lamps/cage_lamp_on", "lamp_top": "bluepower:blocks/lamps/cage_lamp_on_top"}},
+      "false":{"textures": {"lamp_side": "bluepower:blocks/lamps/cage_lamp_off", "lamp_top": "bluepower:blocks/lamps/cage_lamp_off_top"}}
+    }
+  }
+}

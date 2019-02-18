@@ -17,33 +17,7 @@
 
 package com.bluepowermod.client.gui;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
-
-import com.bluepowermod.container.ContainerAlloyFurnace;
-import com.bluepowermod.container.ContainerBuffer;
-import com.bluepowermod.container.ContainerCPU;
-import com.bluepowermod.container.ContainerCanvasBag;
-import com.bluepowermod.container.ContainerCircuitDatabaseMain;
-import com.bluepowermod.container.ContainerCircuitDatabaseSharing;
-import com.bluepowermod.container.ContainerCircuitTable;
-import com.bluepowermod.container.ContainerDeployer;
-import com.bluepowermod.container.ContainerDiskDrive;
-import com.bluepowermod.container.ContainerEjector;
-import com.bluepowermod.container.ContainerFilter;
-import com.bluepowermod.container.ContainerIOExpander;
-import com.bluepowermod.container.ContainerItemDetector;
-import com.bluepowermod.container.ContainerKinect;
-import com.bluepowermod.container.ContainerManager;
-import com.bluepowermod.container.ContainerMonitor;
-import com.bluepowermod.container.ContainerProjectTable;
-import com.bluepowermod.container.ContainerRedbusID;
-import com.bluepowermod.container.ContainerRegulator;
-import com.bluepowermod.container.ContainerRelay;
-import com.bluepowermod.container.ContainerRetriever;
-import com.bluepowermod.container.ContainerSeedBag;
-import com.bluepowermod.container.ContainerSortingMachine;
+import com.bluepowermod.container.*;
 import com.bluepowermod.container.inventory.InventoryItem;
 import com.bluepowermod.init.BPItems;
 import com.bluepowermod.item.ItemCanvasBag;
@@ -51,30 +25,19 @@ import com.bluepowermod.item.ItemFloppyDisk;
 import com.bluepowermod.item.ItemScrewdriver;
 import com.bluepowermod.item.ItemSeedBag;
 import com.bluepowermod.reference.GuiIDs;
-import com.bluepowermod.tile.tier1.TileAlloyFurnace;
-import com.bluepowermod.tile.tier1.TileBuffer;
-import com.bluepowermod.tile.tier1.TileDeployer;
-import com.bluepowermod.tile.tier1.TileEjector;
-import com.bluepowermod.tile.tier1.TileFilter;
-import com.bluepowermod.tile.tier1.TileItemDetector;
-import com.bluepowermod.tile.tier1.TileProjectTable;
-import com.bluepowermod.tile.tier1.TileRelay;
+import com.bluepowermod.tile.tier1.*;
 import com.bluepowermod.tile.tier2.TileCircuitTable;
 import com.bluepowermod.tile.tier2.TileRegulator;
 import com.bluepowermod.tile.tier2.TileRetriever;
 import com.bluepowermod.tile.tier2.TileSortingMachine;
-import com.bluepowermod.tile.tier3.IRedBusWindow;
-import com.bluepowermod.tile.tier3.TileCPU;
-import com.bluepowermod.tile.tier3.TileCircuitDatabase;
-import com.bluepowermod.tile.tier3.TileDiskDrive;
-import com.bluepowermod.tile.tier3.TileIOExpander;
-import com.bluepowermod.tile.tier3.TileKinectGenerator;
-import com.bluepowermod.tile.tier3.TileManager;
-import com.bluepowermod.tile.tier3.TileMonitor;
-
-import cpw.mods.fml.common.network.IGuiHandler;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import com.bluepowermod.tile.tier3.*;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.common.network.IGuiHandler;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class GUIHandler implements IGuiHandler {
 
@@ -82,7 +45,7 @@ public class GUIHandler implements IGuiHandler {
     public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
 
         // This function creates a container
-        TileEntity ent = world.getTileEntity(x, y, z);
+        TileEntity ent = world.getTileEntity(new BlockPos(x, y, z));
         // ID is the GUI ID
         switch (GuiIDs.values()[ID]) {
         case ALLOY_FURNACE:
@@ -92,32 +55,32 @@ public class GUIHandler implements IGuiHandler {
         case SORTING_MACHINE:
             return new ContainerSortingMachine(player.inventory, (TileSortingMachine) ent);
         case SEEDBAG:
-            if (player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() instanceof ItemSeedBag) {
-                return new ContainerSeedBag(player.getCurrentEquippedItem(), player.inventory, InventoryItem.getItemInventory(player,
-                        player.getCurrentEquippedItem(), "Seed Bag", 9));
+            if ((!player.getHeldItemMainhand().isEmpty()) && player.getHeldItemMainhand().getItem() instanceof ItemSeedBag) {
+                return new ContainerSeedBag(player.getHeldItemMainhand(), player.inventory, InventoryItem.getItemInventory(player,
+                        player.getHeldItemMainhand(), "Seed Bag", 9));
             }
             break;
         case CANVAS_BAG:
-            if (player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() instanceof ItemCanvasBag) {
-                return new ContainerCanvasBag(player.getCurrentEquippedItem(), player.inventory, InventoryItem.getItemInventory(player,
-                        player.getCurrentEquippedItem(), "Canvas Bag", 27));
+            if (!player.getHeldItemMainhand().isEmpty() && player.getHeldItemMainhand().getItem() instanceof ItemCanvasBag) {
+                return new ContainerCanvasBag(player.getHeldItemMainhand(), player.inventory, InventoryItem.getItemInventory(player,
+                        player.getHeldItemMainhand(), "Canvas Bag", 27));
             }
             break;
         case CPU:
             return new ContainerCPU(player.inventory, (TileCPU) ent);
         case MONITOR:
-            if (player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() instanceof ItemScrewdriver) {
+            if (!player.getHeldItemMainhand().isEmpty() && player.getHeldItemMainhand().getItem() instanceof ItemScrewdriver) {
                 return null;
             }
             return new ContainerMonitor(player.inventory, (TileMonitor) ent);
         case DISK_DRIVE: // TODO: this conditional will always be false (for fabricator77)
-            if (player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() instanceof ItemScrewdriver
-            && player.getCurrentEquippedItem().getItem() instanceof ItemFloppyDisk) {
+            if (!player.getHeldItemMainhand().isEmpty() && player.getHeldItemMainhand().getItem() instanceof ItemScrewdriver
+            && player.getHeldItemMainhand().getItem() instanceof ItemFloppyDisk) {
                 return null;
             }
             return new ContainerDiskDrive(player.inventory, (TileDiskDrive) ent);
         case IO_EXPANDER:
-            if (player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() instanceof ItemScrewdriver) {
+            if (!player.getHeldItemMainhand().isEmpty() && player.getHeldItemMainhand().getItem() instanceof ItemScrewdriver) {
                 return null;
             }
             return new ContainerIOExpander(player.inventory, (TileIOExpander) ent);
@@ -161,7 +124,7 @@ public class GUIHandler implements IGuiHandler {
     @SideOnly(Side.CLIENT)
     public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
 
-        TileEntity ent = world.getTileEntity(x, y, z);
+        TileEntity ent = world.getTileEntity(new BlockPos(x, y, z));
         // ID is the GUI ID
         switch (GuiIDs.values()[ID]) {
         case ALLOY_FURNACE:
@@ -171,31 +134,31 @@ public class GUIHandler implements IGuiHandler {
         case SORTING_MACHINE:
             return new GuiSortingMachine(player.inventory, (TileSortingMachine) ent);
         case SEEDBAG:
-            if (player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() instanceof ItemSeedBag) {
-                return new GuiSeedBag(player.getCurrentEquippedItem(), player.inventory, InventoryItem.getItemInventory(player,
-                        player.getCurrentEquippedItem(), BPItems.seed_bag.getUnlocalizedName(), 9));
+            if (!player.getHeldItemMainhand().isEmpty() && player.getHeldItemMainhand().getItem() instanceof ItemSeedBag) {
+                return new GuiSeedBag(player.getHeldItemMainhand(), player.inventory, InventoryItem.getItemInventory(player,
+                        player.getHeldItemMainhand(), BPItems.seed_bag.getTranslationKey(), 9));
             }
         case CANVAS_BAG:
-            if (player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() instanceof ItemCanvasBag) {
-                return new GuiCanvasBag(player.getCurrentEquippedItem(), player.inventory, InventoryItem.getItemInventory(player,
-                        player.getCurrentEquippedItem(), BPItems.canvas_bag.getUnlocalizedName(), 27));
+            if (!player.getHeldItemMainhand().isEmpty() && player.getHeldItemMainhand().getItem() instanceof ItemCanvasBag) {
+                return new GuiCanvasBag(player.getHeldItemMainhand(), player.inventory, InventoryItem.getItemInventory(player,
+                        player.getHeldItemMainhand(), BPItems.canvas_bag.getTranslationKey(), 27));
             }
             break;
         case CPU:
             return new GuiCPU(player.inventory, (TileCPU) ent);
         case MONITOR:
-            if (player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() instanceof ItemScrewdriver) {
+            if (!player.getHeldItemMainhand().isEmpty() && player.getHeldItemMainhand().getItem() instanceof ItemScrewdriver) {
                 return null;
             }
             return new GuiMonitor(player.inventory, (TileMonitor) ent);
         case DISK_DRIVE: // TODO: this conditional will always be false (for fabricator77)
-            if (player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() instanceof ItemScrewdriver
-            && player.getCurrentEquippedItem().getItem() instanceof ItemFloppyDisk) {
+            if (!player.getHeldItemMainhand().isEmpty() && player.getHeldItemMainhand().getItem() instanceof ItemScrewdriver
+            && player.getHeldItemMainhand().getItem() instanceof ItemFloppyDisk) {
                 return null;
             }
             return new GuiDiskDrive(player.inventory, (TileDiskDrive) ent);
         case IO_EXPANDER:
-            if (player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() instanceof ItemScrewdriver) {
+            if (!player.getHeldItemMainhand().isEmpty() && player.getHeldItemMainhand().getItem() instanceof ItemScrewdriver) {
                 return null;
             }
             return new GuiIOExpander(player.inventory, (TileIOExpander) ent);

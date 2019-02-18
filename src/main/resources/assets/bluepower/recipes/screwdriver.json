@@ -1,0 +1,18 @@
+{
+  "result": {
+    "item": "bluepower:screwdriver"
+  },
+  "pattern": [
+    " #",
+    "S "
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "#": {
+      "item": "#INGOTIRON"
+    },
+    "S": {
+      "item": "bluepower:screwdriver_handle"
+    }
+  }
+}

@@ -6,15 +6,15 @@
  * with Blue Power. If not, see <http://www.gnu.org/licenses/>
  */
 package com.bluepowermod.compat.cc;
-
+/*
 import com.bluepowermod.compat.CompatModule;
 import com.bluepowermod.redstone.RedstoneApi;
 
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import dan200.computercraft.api.ComputerCraftAPI;
 
 public class CompatModuleCC extends CompatModule {
@@ -52,4 +52,4 @@ public class CompatModuleCC extends CompatModule {
     public void registerRenders() {
 
     }
-}
+}*/

@@ -1,6 +1,6 @@
 package com.bluepowermod.api.wire.redstone;
 
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;;
 
 import com.bluepowermod.api.wire.redstone.IBundledConductor.IAdvancedBundledConductor;
 import com.bluepowermod.api.wire.redstone.IRedstoneConductor.IAdvancedRedstoneConductor;
@@ -10,7 +10,7 @@ import com.bluepowermod.api.wire.redstone.IRedstoneConductor.IAdvancedRedstoneCo
  */
 public interface IRedwire {
 
-    public RedwireType getRedwireType(ForgeDirection side);
+    public RedwireType getRedwireType(EnumFacing side);
 
     public static interface IInsulatedRedwire extends IInsulatedRedstoneDevice, IRedwire, IAdvancedRedstoneConductor,
             IAdvancedBundledConductor {

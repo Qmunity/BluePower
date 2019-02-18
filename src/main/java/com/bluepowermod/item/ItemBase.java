@@ -22,28 +22,30 @@
 
 package com.bluepowermod.item;
 
+import com.bluepowermod.init.BPItems;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import com.bluepowermod.reference.Refs;
+import net.minecraftforge.event.RegistryEvent;
 
 public class ItemBase extends Item {
 
     public ItemBase() {
-
         super();
+        BPItems.itemList.add(this);
     }
 
     @Override
-    public String getUnlocalizedName() {
+    public String getTranslationKey() {
 
-        return String.format("item.%s:%s", Refs.MODID, getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
+        return String.format("item.%s:%s", Refs.MODID, getUnwrappedUnlocalizedName(super.getTranslationKey()));
     }
 
     @Override
-    public String getUnlocalizedName(ItemStack stack) {
+    public String getTranslationKey(ItemStack stack) {
 
-        return String.format("item.%s:%s", Refs.MODID, getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
+        return String.format("item.%s:%s", Refs.MODID, getUnwrappedUnlocalizedName(super.getTranslationKey()));
     }
 
     protected String getUnwrappedUnlocalizedName(String name) {

@@ -7,15 +7,16 @@
  */
 package com.bluepowermod.tile.tier2;
 
+import com.bluepowermod.init.BPBlocks;
+import com.bluepowermod.tile.IFuzzyRetrieving;
+import com.bluepowermod.tile.tier1.TileFilter;
+import mcmultipart.api.container.IMultipartContainer;
+import mcmultipart.api.multipart.MultipartHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import uk.co.qmunity.lib.part.compat.MultipartCompatibility;
 
-import com.bluepowermod.init.BPBlocks;
-import com.bluepowermod.part.tube.PneumaticTube;
-import com.bluepowermod.tile.IFuzzyRetrieving;
-import com.bluepowermod.tile.tier1.TileFilter;
+import java.util.Optional;
 
 /**
  * @author MineMaarten
@@ -25,67 +26,20 @@ public class TileRetriever extends TileFilter implements IFuzzyRetrieving {
     public int slotIndex;
     public int mode;
 
-    @Override
-    protected void pullItem() {
 
-        if (isBufferEmpty()) {
-            PneumaticTube tube = MultipartCompatibility.getPart(worldObj, xCoord + getFacingDirection().offsetX, yCoord
-                    + getFacingDirection().offsetY, zCoord + getFacingDirection().offsetZ, PneumaticTube.class);
-            if (tube != null) {
-                boolean everythingNull = true;
-                for (int i = 0; i < inventory.length; i++) {
-                    if (mode == 1 || slotIndex == i) {
-                        ItemStack stack = inventory[i];
-                        if (stack != null) {
-                            if (tube.getLogic().retrieveStack(this, getFacingDirection(), stack)) {
-                                if (mode == 0) {
-                                    if (++slotIndex >= inventory.length)
-                                        slotIndex = 0;
-                                    while (slotIndex != i) {
-                                        if (inventory[slotIndex] != null)
-                                            break;
-                                        if (++slotIndex >= inventory.length)
-                                            slotIndex = 0;
-                                    }
-                                }
-                                return;
-                            }
-                            everythingNull = false;
-                        }
-                    }
-                }
-                if (everythingNull) {
-                    tube.getLogic().retrieveStack(this, getFacingDirection(), null);
-                    slotIndex = 0;
-                }
-            } else {
-                super.pullItem();
-            }
-        }
+    @Override
+    public String getName() {
+
+        return BPBlocks.retriever.getTranslationKey();
     }
 
     @Override
-    public String getInventoryName() {
-
-        return BPBlocks.retriever.getUnlocalizedName();
-    }
-
-    @Override
-    public void onButtonPress(EntityPlayer player, int messageId, int value) {
-
-        if (messageId == 2) {
-            mode = value;
-        } else {
-            super.onButtonPress(player, messageId, value);
-        }
-    }
-
-    @Override
-    public void writeToNBT(NBTTagCompound tag) {
+    public NBTTagCompound writeToNBT(NBTTagCompound tag) {
 
         super.writeToNBT(tag);
         tag.setByte("slotIndex", (byte) slotIndex);
         tag.setByte("mode", (byte) mode);
+        return tag;
     }
 
     @Override

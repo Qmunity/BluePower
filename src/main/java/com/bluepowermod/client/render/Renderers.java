@@ -8,58 +8,97 @@
 
 package com.bluepowermod.client.render;
 
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
-import net.minecraftforge.client.MinecraftForgeClient;
-
+import com.bluepowermod.BluePower;
+import com.bluepowermod.block.machine.BlockLamp;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.init.BPItems;
+import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier1.TileLamp;
+import com.bluepowermod.tile.tier3.TileEngine;
+import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.color.IBlockColor;
+import net.minecraft.client.renderer.color.IItemColor;
+import net.minecraft.client.renderer.color.ItemColors;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.client.model.obj.OBJLoader;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-import cpw.mods.fml.client.registry.ClientRegistry;
-import cpw.mods.fml.client.registry.RenderingRegistry;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
+@Mod.EventBusSubscriber(Side.CLIENT)
 @SideOnly(Side.CLIENT)
 public class Renderers {
 
-    public static int RenderIdLamps;
+    @SubscribeEvent
+    public static void registerModels(ModelRegistryEvent evt){
+
+        for (Item item : BPItems.itemList) {
+            if (!(item instanceof IBPColoredItem)) {
+                registerItemModel(item, 0);
+            } else {
+                NonNullList<ItemStack> subitems = NonNullList.create();
+                item.getSubItems(item.getCreativeTab(), subitems);
+                for (ItemStack subitem : subitems) {
+                    registerItemModel(item, item.getMetadata(subitem));
+                }
+            }
+        }
+
+        for (Block block : BPBlocks.blockList) {
+            if (!(block instanceof ICustomModelBlock)) {
+                registerItemModel(Item.getItemFromBlock(block), 0);
+            } else {
+                registerBakedModel(block);
+            }
+        }
+
+    }
 
     public static void init() {
 
-        RenderingRegistry.registerBlockHandler(new RendererBlockBase());
-
-        RenderingRegistry.registerBlockHandler(new RenderLamp());
-
-        // ClientRegistry.bindTileEntitySpecialRenderer(TileEngine.class, new RenderEngine());
-        // MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BPBlocks.engine), new RenderItemEngine());
-        // ClientRegistry.bindTileEntitySpecialRenderer(TileWindmill.class, new RenderWindmill());
-
         ClientRegistry.bindTileEntitySpecialRenderer(TileLamp.class, new RenderLamp());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEngine.class, new RenderEngine());
 
-        RenderLamp rl = new RenderLamp();
-        for (Block l : BPBlocks.blockLamp)
-            MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(l), rl);
-        for (Block l : BPBlocks.blockLampInverted)
-            MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(l), rl);
+        for (Item item : BPItems.itemList) {
+            if (item instanceof IBPColoredItem) {
+                Minecraft.getMinecraft().getItemColors().registerItemColorHandler(new BPItemColor(), item);
+            }
+        }
+        for (Block block : BPBlocks.blockList) {
+            if (block instanceof IBPColoredBlock) {
+                Minecraft.getMinecraft().getBlockColors().registerBlockColorHandler(new BPBlockColor(), block);
+                Minecraft.getMinecraft().getItemColors().registerItemColorHandler(new BPBlockColor(), Item.getItemFromBlock(block));
+            }
+        }
 
-        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BPBlocks.blockLampRGB), rl);
-        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BPBlocks.blockLampRGBInverted), rl);
-
-        RenderCircuitTile rct = new RenderCircuitTile();
-        MinecraftForgeClient.registerItemRenderer(BPItems.stone_tile, rct);
-        MinecraftForgeClient.registerItemRenderer(BPItems.bluestone_anode_tile, rct);
-        MinecraftForgeClient.registerItemRenderer(BPItems.bluestone_cathode_tile, rct);
-        MinecraftForgeClient.registerItemRenderer(BPItems.bluestone_pointer_tile, rct);
-        MinecraftForgeClient.registerItemRenderer(BPItems.bluestone_wire_tile, rct);
-        MinecraftForgeClient.registerItemRenderer(BPItems.redstone_anode_tile, rct);
-        MinecraftForgeClient.registerItemRenderer(BPItems.redstone_cathode_tile, rct);
-        MinecraftForgeClient.registerItemRenderer(BPItems.redstone_pointer_tile, rct);
-        MinecraftForgeClient.registerItemRenderer(BPItems.redstone_wire_tile, rct);
-        MinecraftForgeClient.registerItemRenderer(BPItems.silicon_chip_tile, rct);
-        MinecraftForgeClient.registerItemRenderer(BPItems.tainted_silicon_chip_tile, rct);
-        MinecraftForgeClient.registerItemRenderer(BPItems.quartz_resonator_tile, rct);
-        MinecraftForgeClient.registerItemRenderer(BPItems.stone_bundle, rct);
     }
+
+    public static void registerItemModel(Item item, int metadata) {
+        ResourceLocation loc = Item.REGISTRY.getNameForObject(item);
+        if(loc != null) {
+            if(item instanceof IBPColoredItem && metadata == 16){
+                ModelLoader.setCustomModelResourceLocation(item, metadata, new ModelResourceLocation(loc + "_blank"));
+            }else{
+                ModelLoader.setCustomModelResourceLocation(item, metadata, new ModelResourceLocation(loc, "inventory"));
+            }
+        }
+    }
+
+    public static void registerBakedModel(Block block) {
+        ((ICustomModelBlock) block).initModel();
+    }
+
+
+
+
+
 }

@@ -1,25 +1,25 @@
 package com.bluepowermod.api.gate;
 
+import com.bluepowermod.client.render.RenderHelper;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.Vec3i;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.util.List;
 
-import net.minecraft.nbt.NBTTagCompound;
-import uk.co.qmunity.lib.client.render.RenderHelper;
-import uk.co.qmunity.lib.vec.Vec3d;
-import uk.co.qmunity.lib.vec.Vec3dCube;
-import uk.co.qmunity.lib.vec.Vec3i;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
 public interface IGateComponent {
 
     public IGate<?, ?, ?, ?, ?, ?> getGate();
 
-    public void addCollisionBoxes(List<Vec3dCube> boxes);
+    public void addCollisionBoxes(List<AxisAlignedBB> boxes);
 
-    public List<Vec3dCube> getOcclusionBoxes();
+    public List<AxisAlignedBB> getOcclusionBoxes();
 
     public void tick();
 

@@ -7,15 +7,15 @@
  */
 package com.bluepowermod.enchant;
 
+import net.minecraft.client.resources.I18n;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnumEnchantmentType;
-import net.minecraft.util.StatCollector;
+import net.minecraft.inventory.EntityEquipmentSlot;
 
 public class EnchantmentDisjunction extends Enchantment {
 
-    public EnchantmentDisjunction(int par1, int par2) {
-
-        super(par1, par2, EnumEnchantmentType.weapon);
+    public EnchantmentDisjunction(int enchantId, Rarity rarity) {
+        super(rarity, EnumEnchantmentType.WEAPON, EntityEquipmentSlot.values());
     }
 
     @Override
@@ -39,7 +39,7 @@ public class EnchantmentDisjunction extends Enchantment {
     @Override
     public String getTranslatedName(int level) {
 
-        return StatCollector.translateToLocal("enchantment.bluepower:disjunction.name") + " "
-                + StatCollector.translateToLocal("enchantment.level." + level);
+        return I18n.format("enchantment.bluepower:disjunction.name") + " "
+                + I18n.format("enchantment.level." + level);
     }
 }

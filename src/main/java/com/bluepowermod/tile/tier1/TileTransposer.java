@@ -19,26 +19,24 @@
 
 package com.bluepowermod.tile.tier1;
 
-import java.util.List;
-
+import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
+import com.bluepowermod.helper.IOHelper;
+import com.bluepowermod.tile.TileMachineBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.AxisAlignedBB;
 
-import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
-import com.bluepowermod.helper.IOHelper;
-import com.bluepowermod.part.tube.TubeStack;
-import com.bluepowermod.tile.TileMachineBase;
+import java.util.List;
 
 public class TileTransposer extends TileMachineBase {
 
     @Override
-    public void updateEntity() {
+    public void update() {
 
-        super.updateEntity();
-        if (isBufferEmpty() && !worldObj.isRemote) {
+        super.update();
+        if (!world.isRemote) {
             suckEntity();
         }
 
@@ -48,10 +46,10 @@ public class TileTransposer extends TileMachineBase {
     protected void redstoneChanged(boolean newValue) {
 
         super.redstoneChanged(newValue);
-        ForgeDirection direction = getFacingDirection();
+        EnumFacing direction = getFacingDirection();
 
-        if (!worldObj.isRemote && isBufferEmpty() && newValue) {
-            if (worldObj.isAirBlock(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ)) {
+        if (!world.isRemote && newValue) {
+            if (world.isAirBlock(pos.offset(direction))) {
                 suckItems();
             } else {
                 pullItem();
@@ -60,40 +58,30 @@ public class TileTransposer extends TileMachineBase {
 
     }
 
-    @Override
-    public TubeStack acceptItemFromTube(TubeStack stack, ForgeDirection from, boolean simulate) {
-
-        if (from == getFacingDirection() && getIsRedstonePowered())
-            return stack;
-        return super.acceptItemFromTube(stack, from, simulate);
-
-    }
-
     protected void pullItem() {
 
-        ForgeDirection dir = getOutputDirection().getOpposite();
+        EnumFacing dir = getOutputDirection().getOpposite();
         TileEntity inputTE = getTileCache(dir);
         ItemStack extractedStack = IOHelper.extractOneItem(inputTE, dir.getOpposite());
-        if (extractedStack != null)
+        if (!extractedStack.isEmpty())
             addItemToOutputBuffer(extractedStack);
     }
 
     private static AxisAlignedBB[] ITEM_SUCK_AABBS;
     static {
         ITEM_SUCK_AABBS = new AxisAlignedBB[6];
-        ITEM_SUCK_AABBS[0] = AxisAlignedBB.getBoundingBox(-1, -1, -1, 2, 0, 2);
-        ITEM_SUCK_AABBS[1] = AxisAlignedBB.getBoundingBox(-1, 1, -1, 2, 2, 2);
-        ITEM_SUCK_AABBS[2] = AxisAlignedBB.getBoundingBox(-1, -1, -1, 2, 2, 0);
-        ITEM_SUCK_AABBS[3] = AxisAlignedBB.getBoundingBox(-1, -1, 1, 2, 2, 2);
-        ITEM_SUCK_AABBS[4] = AxisAlignedBB.getBoundingBox(-1, -1, -1, 0, 2, 2);
-        ITEM_SUCK_AABBS[5] = AxisAlignedBB.getBoundingBox(1, -1, -1, 2, 2, 2);
+        ITEM_SUCK_AABBS[0] = new AxisAlignedBB(-1, -1, -1, 2, 0, 2);
+        ITEM_SUCK_AABBS[1] = new AxisAlignedBB(-1, 1, -1, 2, 2, 2);
+        ITEM_SUCK_AABBS[2] = new AxisAlignedBB(-1, -1, -1, 2, 2, 0);
+        ITEM_SUCK_AABBS[3] = new AxisAlignedBB(-1, -1, 1, 2, 2, 2);
+        ITEM_SUCK_AABBS[4] = new AxisAlignedBB(-1, -1, -1, 0, 2, 2);
+        ITEM_SUCK_AABBS[5] = new AxisAlignedBB(1, -1, -1, 2, 2, 2);
     }
 
     private void suckItems() {
 
-        for (EntityItem entity : (List<EntityItem>) worldObj.getEntitiesWithinAABB(EntityItem.class, ITEM_SUCK_AABBS[getFacingDirection().ordinal()]
-                .copy().offset(xCoord, yCoord, zCoord))) {
-            ItemStack stack = entity.getEntityItem();
+        for (EntityItem entity : (List<EntityItem>) world.getEntitiesWithinAABB(EntityItem.class, ITEM_SUCK_AABBS[getFacingDirection().ordinal()].offset(pos))) {
+            ItemStack stack = entity.getItem();
             if (isItemAccepted(stack) && !entity.isDead) {
                 addItemToOutputBuffer(stack, getAcceptedItemColor(stack));
                 entity.setDead();
@@ -103,11 +91,11 @@ public class TileTransposer extends TileMachineBase {
 
     private void suckEntity() {
 
-        ForgeDirection direction = getFacingDirection();
-        AxisAlignedBB box = AxisAlignedBB.getBoundingBox(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ, xCoord
-                + direction.offsetX + 1, yCoord + direction.offsetY + 1, zCoord + direction.offsetZ + 1);
-        for (EntityItem entity : (List<EntityItem>) worldObj.getEntitiesWithinAABB(EntityItem.class, box)) {
-            ItemStack stack = entity.getEntityItem();
+        EnumFacing direction = getFacingDirection();
+        AxisAlignedBB box = new AxisAlignedBB(pos.getX() + direction.getXOffset(), pos.getY() + direction.getYOffset(), pos.getZ() + direction.getZOffset(), pos.getX()
+                + direction.getXOffset() + 1, pos.getY() + direction.getYOffset() + 1, pos.getZ() + direction.getZOffset() + 1);
+        for (EntityItem entity : (List<EntityItem>) world.getEntitiesWithinAABB(EntityItem.class, box)) {
+            ItemStack stack = entity.getItem();
             if (isItemAccepted(stack) && !entity.isDead) {
                 addItemToOutputBuffer(stack, getAcceptedItemColor(stack));
                 entity.setDead();

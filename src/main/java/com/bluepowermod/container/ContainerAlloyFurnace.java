@@ -20,7 +20,7 @@ package com.bluepowermod.container;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityFurnace;
@@ -29,8 +29,8 @@ import com.bluepowermod.container.slot.SlotMachineInput;
 import com.bluepowermod.container.slot.SlotMachineOutput;
 import com.bluepowermod.tile.tier1.TileAlloyFurnace;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * @author MineMaarten
@@ -76,32 +76,32 @@ public class ContainerAlloyFurnace extends Container {
     @Override
     public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int par2) {
     
-        ItemStack var3 = null;
-        Slot var4 = (Slot) inventorySlots.get(par2);
+        ItemStack var3 = ItemStack.EMPTY;
+        Slot var4 = inventorySlots.get(par2);
         
         if (var4 != null && var4.getHasStack()) {
             ItemStack var5 = var4.getStack();
             var3 = var5.copy();
             
             if (par2 < 11) {
-                if (!mergeItemStack(var5, 11, 47, false)) return null;
+                if (!mergeItemStack(var5, 11, 47, false)) return ItemStack.EMPTY;
                 var4.onSlotChange(var5, var3);
             } else {
                 if (TileEntityFurnace.isItemFuel(var5) && mergeItemStack(var5, 0, 1, false)) {
                     
-                } else if (!mergeItemStack(var5, 2, 11, false)) return null;
+                } else if (!mergeItemStack(var5, 2, 11, false)) return ItemStack.EMPTY;
                 var4.onSlotChange(var5, var3);
             }
             
-            if (var5.stackSize == 0) {
-                var4.putStack((ItemStack) null);
+            if (var5.getCount() == 0) {
+                var4.putStack(ItemStack.EMPTY);
             } else {
                 var4.onSlotChanged();
             }
             
-            if (var5.stackSize == var3.stackSize) return null;
+            if (var5.getCount() == var3.getCount()) return ItemStack.EMPTY;
             
-            var4.onPickupFromSlot(par1EntityPlayer, var5);
+            var4.onSlotChange(var3, var5);
         }
         
         return var3;
@@ -112,22 +112,21 @@ public class ContainerAlloyFurnace extends Container {
      */
     @Override
     public void detectAndSendChanges() {
-    
         super.detectAndSendChanges();
         
-        for (Object crafter : crafters) {
-            ICrafting icrafting = (ICrafting) crafter;
+        for (Object crafter : listeners) {
+            IContainerListener icrafting = (IContainerListener) crafter;
             
             if (currentBurnTime != tileFurnace.currentBurnTime) {
-                icrafting.sendProgressBarUpdate(this, 0, tileFurnace.currentBurnTime);
+                icrafting.sendWindowProperty(this, 0, tileFurnace.currentBurnTime);
             }
             
             if (maxBurnTime != tileFurnace.maxBurnTime) {
-                icrafting.sendProgressBarUpdate(this, 1, tileFurnace.maxBurnTime);
+                icrafting.sendWindowProperty(this, 1, tileFurnace.maxBurnTime);
             }
             
             if (currentProcessTime != tileFurnace.currentProcessTime) {
-                icrafting.sendProgressBarUpdate(this, 2, tileFurnace.currentProcessTime);
+                icrafting.sendWindowProperty(this, 2, tileFurnace.currentProcessTime);
             }
         }
         
@@ -156,7 +155,7 @@ public class ContainerAlloyFurnace extends Container {
     @Override
     public boolean canInteractWith(EntityPlayer entityplayer) {
     
-        return tileFurnace.isUseableByPlayer(entityplayer);
+        return tileFurnace.isUsableByPlayer(entityplayer);
     }
     
 }

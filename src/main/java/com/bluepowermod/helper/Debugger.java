@@ -7,14 +7,14 @@
  */
 package com.bluepowermod.helper;
 
-import java.util.Random;
-
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
-import uk.co.qmunity.lib.part.IPart;
-
 import com.bluepowermod.network.BPNetworkHandler;
 import com.bluepowermod.network.message.MessageDebugBlock;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+
+import java.util.Random;
 
 /**
  * Class aimed for debugging purposes only
@@ -27,26 +27,20 @@ public class Debugger {
 
     public static void indicateBlock(TileEntity te) {
 
-        indicateBlock(te.getWorldObj(), te.xCoord, te.yCoord, te.zCoord);
+        indicateBlock(te.getWorld(), te.getPos());
     }
-
-    public static void indicateBlock(IPart part) {
-
-        indicateBlock(part.getWorld(), part.getX(), part.getY(), part.getZ());
-    }
-
-    public static void indicateBlock(World world, int x, int y, int z) {
+    public static void indicateBlock(World world, BlockPos pos) {
 
         if (world != null) {
             if (world.isRemote) {
                 for (int i = 0; i < 5; i++) {
-                    double dx = x + 0.5;
-                    double dy = y + 0.5;
-                    double dz = z + 0.5;
-                    world.spawnParticle("flame", dx, dy, dz, 0, 0, 0);
+                    double dx = pos.getX() + 0.5;
+                    double dy = pos.getY() + 0.5;
+                    double dz = pos.getZ() + 0.5;
+                    world.spawnParticle(EnumParticleTypes.FLAME, dx, dy, dz, 0, 0, 0);
                 }
             } else {
-                BPNetworkHandler.INSTANCE.sendToAllAround(new MessageDebugBlock(x, y, z), world);
+                BPNetworkHandler.INSTANCE.sendToAllAround(new MessageDebugBlock(pos), world);
             }
         }
     }

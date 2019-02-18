@@ -1,0 +1,34 @@
+{
+    "textures": {
+        "end": "blocks/bundled_connection",
+        "side": "blocks/bundled_side_",
+        "top": "blocks/bundled_straight_",
+        "wire": "blocks/bluestone_off"
+    },
+    "elements": [
+        {
+            "from": [ 5.0, 0.0, 6.0 ], 
+            "to": [ 11.0, 4.0, 12.0 ], 
+            "faces": {
+                "north": { "texture": "#end", "uv": [ 11.0, 12.0, 5.0, 16.0 ] },
+                "east": { "texture": "#side", "uv": [ 5.0, 12.0, 11.0, 16.0 ] },
+                "south": { "texture": "#end", "uv": [ 5.0, 12.0, 11.0, 16.0 ] },
+                "west": { "texture": "#side", "uv": [ 5.0, 12.0, 11.0, 16.0 ] },
+                "up": { "texture": "#top", "uv": [ 5.0, 5.0, 11.0, 11.0 ] },
+                "down": { "texture": "#top", "uv": [ 5.0, 5.0, 11.0, 11.0 ] }
+            }
+        },
+        {
+            "from": [ 7.5, 4.0, 7.2 ], 
+            "to": [ 8.5, 4.2, 10.0 ], 
+            "faces": {
+                "north": { "texture": "#wire", "uv": [ 0.0, 0.0, 1.5, 0.2 ] },
+                "east": { "texture": "#wire", "uv": [ 0.0, 0.0, 1.5, 0.2 ] },
+                "south": { "texture": "#wire", "uv": [ 0.0, 0.0, 1.5, 0.2 ] },
+                "west": { "texture": "#wire", "uv": [ 0.0, 0.0, 1.5, 0.2 ] },
+                "up": { "texture": "#wire", "uv": [ 0.0, 0.0, 1.5, 1.5 ] },
+                "down": { "texture": "#wire", "uv": [ 0.0, 0.0, 1.5, 1.5 ] }
+            }
+        }
+    ]
+}

@@ -17,49 +17,36 @@
 
 package com.bluepowermod.block;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import com.bluepowermod.BluePower;
+import com.bluepowermod.api.block.IAdvancedSilkyRemovable;
+import com.bluepowermod.helper.IOHelper;
+import com.bluepowermod.init.BPItems;
+import com.bluepowermod.reference.GuiIDs;
+import com.bluepowermod.tile.IRotatable;
+import com.bluepowermod.tile.TileBase;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
+import net.minecraft.util.EnumBlockRenderType;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
-import uk.co.qmunity.lib.misc.ForgeDirectionUtils;
 
-import com.bluepowermod.BluePower;
-import com.bluepowermod.api.BPApi;
-import com.bluepowermod.api.block.IAdvancedSilkyRemovable;
-import com.bluepowermod.client.render.RendererBlockBase;
-import com.bluepowermod.client.render.RendererBlockBase.EnumFaceType;
-import com.bluepowermod.helper.IOHelper;
-import com.bluepowermod.init.BPItems;
-import com.bluepowermod.reference.GuiIDs;
-import com.bluepowermod.reference.Refs;
-import com.bluepowermod.tile.IBluePowered;
-import com.bluepowermod.tile.IEjectAnimator;
-import com.bluepowermod.tile.IRotatable;
-import com.bluepowermod.tile.TileBase;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import javax.annotation.Nullable;
 
 /**
  * @author MineMaarten
  */
 
-public class BlockContainerBase extends BlockBase implements ITileEntityProvider, IAdvancedSilkyRemovable {
+public class BlockContainerBase extends BlockBase implements IAdvancedSilkyRemovable {
 
-    @SideOnly(Side.CLIENT)
-    protected Map<String, IIcon> textures;
     private GuiIDs guiId = GuiIDs.INVALID;
     private Class<? extends TileBase> tileEntityClass;
     private boolean isRedstoneEmitter;
@@ -68,7 +55,7 @@ public class BlockContainerBase extends BlockBase implements ITileEntityProvider
     public BlockContainerBase(Material material, Class<? extends TileBase> tileEntityClass) {
 
         super(material);
-        isBlockContainer = true;
+        hasTileEntity = true;
         setTileEntityClass(tileEntityClass);
     }
 
@@ -91,12 +78,17 @@ public class BlockContainerBase extends BlockBase implements ITileEntityProvider
     }
 
     @Override
-    public TileEntity createNewTileEntity(World world, int metadata) {
+    public boolean hasTileEntity(IBlockState state) {
+        return true;
+    }
 
+    @Nullable
+    @Override
+    public TileEntity createTileEntity(World world, IBlockState state) {
         try {
             return getTileEntity().newInstance();
         } catch (Exception e) {
-            return null;
+            return super.createTileEntity(world, state);
         }
     }
 
@@ -110,9 +102,9 @@ public class BlockContainerBase extends BlockBase implements ITileEntityProvider
         return tileEntityClass;
     }
 
-    protected TileBase get(IBlockAccess w, int x, int y, int z) {
+    protected TileBase get(IBlockAccess w, BlockPos pos) {
 
-        TileEntity te = w.getTileEntity(x, y, z);
+        TileEntity te = w.getTileEntity(pos);
 
         if (te == null || !(te instanceof TileBase))
             return null;
@@ -121,12 +113,11 @@ public class BlockContainerBase extends BlockBase implements ITileEntityProvider
     }
 
     @Override
-    public void onNeighborBlockChange(World world, int x, int y, int z, Block block) {
-
-        super.onNeighborBlockChange(world, x, y, z, block);
+    public void neighborChanged(IBlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos) {
+        super.neighborChanged(state, world, pos, blockIn, fromPos);
         // Only do this on the server side.
-        if (!world.isRemote) {
-            TileBase tileEntity = get(world, x, y, z);
+        if (!((World)world).isRemote) {
+            TileBase tileEntity = get(world, pos);
             if (tileEntity != null) {
                 tileEntity.onBlockNeighbourChanged();
             }
@@ -134,15 +125,13 @@ public class BlockContainerBase extends BlockBase implements ITileEntityProvider
     }
 
     @Override
-    public boolean canProvidePower() {
-
+    public boolean canProvidePower(IBlockState state) {
         return isRedstoneEmitter;
     }
 
     @Override
-    public int isProvidingWeakPower(IBlockAccess par1IBlockAccess, int par2, int par3, int par4, int par5) {
-
-        TileEntity te = get(par1IBlockAccess, par2, par3, par4);
+    public int getWeakPower(IBlockState blockState, IBlockAccess par1IBlockAccess, BlockPos pos, EnumFacing side) {
+        TileEntity te = get(par1IBlockAccess, pos);
         if (te instanceof TileBase) {
             TileBase tileBase = (TileBase) te;
             return tileBase.getOutputtingRedstone();
@@ -151,11 +140,10 @@ public class BlockContainerBase extends BlockBase implements ITileEntityProvider
     }
 
     @Override
-    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int par6, float par7, float par8, float par9) {
-
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         if (player.isSneaking()) {
-            if (player.getHeldItem() != null) {
-                if (player.getHeldItem().getItem() == BPItems.screwdriver) {
+            if (!player.getHeldItem(hand).isEmpty()) {
+                if (player.getHeldItem(hand).getItem() == BPItems.screwdriver) {
                     return false;
                 }
             }
@@ -165,46 +153,33 @@ public class BlockContainerBase extends BlockBase implements ITileEntityProvider
             return false;
         }
 
-        TileEntity entity = get(world, x, y, z);
+        TileEntity entity = get(world, pos);
         if (entity == null || !(entity instanceof TileBase)) {
             return false;
         }
 
         if (getGuiID() != GuiIDs.INVALID) {
             if (!world.isRemote)
-                player.openGui(BluePower.instance, getGuiID().ordinal(), world, x, y, z);
+                player.openGui(BluePower.instance, getGuiID().ordinal(), world, pos.getX(), pos.getY(), pos.getZ());
             return true;
         }
         return false;
     }
 
     @Override
-    public void breakBlock(World world, int x, int y, int z, Block block, int meta) {
-
+    public void breakBlock(World world, BlockPos pos, IBlockState state) {
         if (!isSilkyRemoving) {
-            TileBase tile = get(world, x, y, z);
+            TileBase tile = get(world, pos);
             if (tile != null) {
                 for (ItemStack stack : tile.getDrops()) {
-                    IOHelper.spawnItemInWorld(world, stack, x + 0.5, y + 0.5, z + 0.5);
+                    IOHelper.spawnItemInWorld(world, stack, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
                 }
             }
         }
-        super.breakBlock(world, x, y, z, block, meta);
-        world.removeTileEntity(x, y, z);
+        super.breakBlock(world, pos, state);
+        world.removeTileEntity(pos);
     }
 
-    /**
-     * Method to detect how the block was placed, and what way it's facing.
-     */
-    @Override
-    public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase player, ItemStack iStack) {
-
-        BPApi.getInstance().loadSilkySettings(world, x, y, z, iStack);
-        TileEntity te = get(world, x, y, z);
-        if (te instanceof IRotatable) {
-            ((IRotatable) te).setFacingDirection(ForgeDirectionUtils.getDirectionFacing(player, canRotateVertical()).getOpposite());
-        }
-    }
 
     protected boolean canRotateVertical() {
 
@@ -212,120 +187,20 @@ public class BlockContainerBase extends BlockBase implements ITileEntityProvider
     }
 
     @Override
-    public boolean rotateBlock(World worldObj, int x, int y, int z, ForgeDirection axis) {
-
-        TileEntity te = get(worldObj, x, y, z);
+    public boolean rotateBlock(World world, BlockPos pos, EnumFacing dir) {
+        TileEntity te = get(world, pos);
         if (te instanceof IRotatable) {
             IRotatable rotatable = (IRotatable) te;
-            ForgeDirection dir = rotatable.getFacingDirection();
-            dir = dir.getRotation(axis);
-            if (dir != ForgeDirection.UP && dir != ForgeDirection.DOWN || canRotateVertical()) {
+            if (dir != EnumFacing.UP && dir != EnumFacing.DOWN || canRotateVertical()) {
                 rotatable.setFacingDirection(dir);
                 return true;
             }
         }
         return false;
     }
-
     @Override
-    @SideOnly(Side.CLIENT)
-    public void registerBlockIcons(IIconRegister iconRegister) {
-
-        textures = new HashMap<String, IIcon>();
-        for (EnumFaceType faceType : EnumFaceType.values()) {
-            boolean ejecting = false;
-            boolean powered = false;
-
-            do {
-                do {
-                    String iconName = getIconName(faceType, ejecting, powered);
-                    if (!textures.containsKey(iconName)) {
-                        textures.put(iconName, iconRegister.registerIcon(iconName));
-                    }
-
-                    powered = !powered;
-                } while (powered && IBluePowered.class.isAssignableFrom(getTileEntity()));
-                ejecting = !ejecting;
-            } while (ejecting && IEjectAnimator.class.isAssignableFrom(getTileEntity()));
-        }
-    }
-
-    @SideOnly(Side.CLIENT)
-    public IIcon getIcon(EnumFaceType faceType, boolean ejecting, boolean powered) {
-
-        return textures.get(getIconName(faceType, ejecting, powered));
-    }
-
-    @SideOnly(Side.CLIENT)
-    protected IIcon getIcon(EnumFaceType faceType, boolean ejecting, boolean powered, int side, TileEntity te) {
-
-        return getIcon(faceType, ejecting, powered);
-    }
-
-    @Override
-    public Block setBlockName(String name) {
-
-        super.setBlockName(name);
-        textureName = Refs.MODID + ":" + Refs.MACHINE_TEXTURE_LOCATION + name;
-        return this;
-    }
-
-    protected String getIconName(EnumFaceType faceType, boolean ejecting, boolean powered) {
-
-        String iconName = textureName + "_" + faceType.toString().toLowerCase();
-        if (faceType == EnumFaceType.SIDE) {
-            if (ejecting)
-                iconName += "_active";
-
-            // TODO: When powersystem is implemented, uncomment this!
-            // if (powered) iconName += "_powered";
-        }
-        return iconName;
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
-
-        if (textures == null)
-            return super.getIcon(world, x, y, z, side);
-        TileEntity te = get(world, x, y, z);
-        RendererBlockBase.EnumFaceType faceType = EnumFaceType.SIDE;
-        boolean powered = false;
-        boolean ejecting = false;
-        if (te instanceof IRotatable) {
-            ForgeDirection rotation = ((IRotatable) te).getFacingDirection();
-            if (rotation.ordinal() == side)
-                faceType = EnumFaceType.FRONT;
-            if (rotation.getOpposite().ordinal() == side)
-                faceType = EnumFaceType.BACK;
-        }
-        if (te instanceof IBluePowered) {
-            powered = ((IBluePowered) te).isPowered();
-        }
-        if (te instanceof IEjectAnimator) {
-            ejecting = ((IEjectAnimator) te).isEjecting();
-        }
-        return getIcon(faceType, ejecting, powered, side, te);
-    }
-
-    /**
-     * This method will only be called from the item render method. the meta variable doesn't have any meaning.
-     */
-    @Override
-    @SideOnly(Side.CLIENT)
-    public IIcon getIcon(int side, int meta) {
-
-        if (textures == null)
-            return super.getIcon(side, meta);
-        return getIcon(EnumFaceType.values()[side == 0 ? 2 : side == 1 ? 1 : 0], false, false);
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public int getRenderType() {
-
-        return RendererBlockBase.RENDER_ID;
+    public EnumBlockRenderType getRenderType(IBlockState state) {
+        return EnumBlockRenderType.MODEL;
     }
 
     public GuiIDs getGuiID() {
@@ -334,34 +209,34 @@ public class BlockContainerBase extends BlockBase implements ITileEntityProvider
     }
 
     @Override
-    public boolean preSilkyRemoval(World world, int x, int y, int z) {
+    public boolean preSilkyRemoval(World world, BlockPos pos) {
 
         isSilkyRemoving = true;
         return true;
     }
 
     @Override
-    public void postSilkyRemoval(World world, int x, int y, int z) {
+    public void postSilkyRemoval(World world, BlockPos pos) {
 
         isSilkyRemoving = false;
     }
 
     @Override
-    public boolean writeSilkyData(World world, int x, int y, int z, NBTTagCompound tag) {
+    public boolean writeSilkyData(World world, BlockPos pos, NBTTagCompound tag) {
 
-        world.getTileEntity(x, y, z).writeToNBT(tag);
+        world.getTileEntity(pos).writeToNBT(tag);
         return false;
     }
 
     @Override
-    public void readSilkyData(World world, int x, int y, int z, NBTTagCompound tag) {
+    public void readSilkyData(World world, BlockPos pos, NBTTagCompound tag) {
 
-        world.getTileEntity(x, y, z).readFromNBT(tag);
+        world.getTileEntity(pos).readFromNBT(tag);
     }
 
     @Override
-    public boolean canConnectRedstone(IBlockAccess world, int x, int y, int z, int side) {
-
-        return ((TileBase) world.getTileEntity(x, y, z)).canConnectRedstone();
+    public boolean canConnectRedstone(IBlockState state, IBlockAccess world, BlockPos pos, @Nullable EnumFacing side) {
+        TileEntity te = world.getTileEntity(pos);
+        return te != null && te instanceof TileBase && ((TileBase) te).canConnectRedstone();
     }
 }

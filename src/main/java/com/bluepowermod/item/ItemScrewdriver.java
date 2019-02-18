@@ -17,58 +17,52 @@
 
 package com.bluepowermod.item;
 
-import java.util.Random;
-
+import com.bluepowermod.api.misc.IScrewdriver;
+import com.bluepowermod.init.BPCreativeTabs;
+import com.bluepowermod.reference.Refs;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-import com.bluepowermod.api.misc.IScrewdriver;
-import com.bluepowermod.block.BlockContainerBase;
-import com.bluepowermod.init.BPCreativeTabs;
-import com.bluepowermod.reference.GuiIDs;
-import com.bluepowermod.reference.Refs;
+import java.util.Random;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+;
 
 public class ItemScrewdriver extends ItemBase implements IScrewdriver {
 
     public ItemScrewdriver() {
 
-        setUnlocalizedName(Refs.SCREWDRIVER_NAME);
+        setTranslationKey(Refs.SCREWDRIVER_NAME);
         setCreativeTab(BPCreativeTabs.tools);
         setMaxDamage(250);
         setMaxStackSize(1);
-        setTextureName(Refs.MODID + ":" + Refs.SCREWDRIVER_NAME);
+        setRegistryName(Refs.MODID + ":" + Refs.SCREWDRIVER_NAME);
     }
 
     @Override
-    public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
+    public EnumActionResult onItemUseFirst(EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) {
+        Block block = world.getBlockState(pos).getBlock();
 
-        Block block = world.getBlock(x, y, z);
-
-        if (block instanceof BlockContainerBase) {
-            if (((BlockContainerBase) block).getGuiID() != GuiIDs.INVALID) {
-                if (player.isSneaking()) {
-                    if (block.rotateBlock(world, x, y, z, ForgeDirection.getOrientation(side))) {
-                        damage(stack, 1, player, false);
-                        return true;
-                    }
-                }
+            if (player.isSneaking() && block.rotateBlock(world, pos, side.getOpposite())) {
+                damage(player.getHeldItem(hand), 1, player, false);
+                return EnumActionResult.SUCCESS;
+            } else if (block.rotateBlock(world, pos, side)) {
+                damage(player.getHeldItem(hand), 1, player, false);
+                return EnumActionResult.SUCCESS;
             }
-        } else if (!player.isSneaking() && block.rotateBlock(world, x, y, z, ForgeDirection.getOrientation(side))) {
-            damage(stack, 1, player, false);
-            return true;
-        }
 
-        return false;
+        return EnumActionResult.PASS;
     }
-
     @SideOnly(Side.CLIENT)
     @Override
     public boolean isFull3D() {
@@ -85,16 +79,16 @@ public class ItemScrewdriver extends ItemBase implements IScrewdriver {
             return false;
 
         if (!simulated) {
-            if (stack.attemptDamageItem(damage, new Random())) {
+            if (stack.attemptDamageItem(damage, new Random(), (EntityPlayerMP) player)) {
                 if (player != null)
                     player.renderBrokenItemStack(stack);
-                --stack.stackSize;
+                stack.setCount(stack.getCount() - 1);
 
                 if (player != null && player instanceof EntityPlayer)
-                    player.addStat(StatList.objectBreakStats[Item.getIdFromItem(stack.getItem())], 1);
+                    player.addStat(StatList.getObjectBreakStats(stack.getItem()), 1);
 
-                if (stack.stackSize < 0)
-                    stack.stackSize = 0;
+                if (stack.getCount() < 0)
+                    stack.setCount(0);
 
                 stack.setItemDamage(0);
             }
@@ -104,8 +98,8 @@ public class ItemScrewdriver extends ItemBase implements IScrewdriver {
     }
 
     @Override
-    public boolean doesSneakBypassUse(World world, int x, int y, int z, EntityPlayer player) {
-
+    public boolean doesSneakBypassUse(ItemStack stack, IBlockAccess world, BlockPos pos, EntityPlayer player) {
         return true;
     }
+
 }

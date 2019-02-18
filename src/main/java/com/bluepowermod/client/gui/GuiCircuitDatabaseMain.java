@@ -7,30 +7,24 @@
  */
 package com.bluepowermod.client.gui;
 
-import java.util.List;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiTextField;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.opengl.GL11;
-
-import uk.co.qmunity.lib.client.gui.widget.BaseWidget;
-import uk.co.qmunity.lib.client.gui.widget.IGuiWidget;
-import uk.co.qmunity.lib.client.gui.widget.WidgetMode;
-import uk.co.qmunity.lib.client.gui.widget.WidgetSidewaysTab;
-import uk.co.qmunity.lib.client.gui.widget.WidgetTab;
-
+import com.bluepowermod.client.gui.widget.*;
 import com.bluepowermod.container.ContainerCircuitDatabaseMain;
 import com.bluepowermod.network.BPNetworkHandler;
 import com.bluepowermod.network.message.MessageGuiUpdate;
 import com.bluepowermod.network.message.MessageUpdateTextfield;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier3.TileCircuitDatabase;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiTextField;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import org.lwjgl.input.Keyboard;
+import org.lwjgl.opengl.GL11;
+
+import java.io.IOException;
+import java.util.List;
 
 public class GuiCircuitDatabaseMain extends GuiContainerBaseBP {
 
@@ -117,7 +111,7 @@ public class GuiCircuitDatabaseMain extends GuiContainerBaseBP {
         addWidget(copyButton);
 
         Keyboard.enableRepeatEvents(true);
-        nameField = new GuiTextField(fontRendererObj, guiLeft + 95, guiTop + 35, 70, fontRendererObj.FONT_HEIGHT);
+        nameField = new GuiTextField(0, fontRenderer, guiLeft + 95, guiTop + 35, 70, fontRenderer.FONT_HEIGHT);
         nameField.setEnableBackgroundDrawing(true);
         nameField.setVisible(true);
         nameField.setTextColor(16777215);
@@ -141,7 +135,7 @@ public class GuiCircuitDatabaseMain extends GuiContainerBaseBP {
      * Fired when a key is typed. This is the equivalent of KeyListener.keyTyped(KeyEvent e).
      */
     @Override
-    protected void keyTyped(char par1, int par2) {
+    protected void keyTyped(char par1, int par2) throws IOException {
 
         if (par2 == 1)// esc
         {
@@ -195,7 +189,7 @@ public class GuiCircuitDatabaseMain extends GuiContainerBaseBP {
         }
         boolean nameDuplicatePrivate = false;
         boolean nameDuplicateServer = false;
-        if (circuitDatabase.copyInventory.getStackInSlot(0) != null) {
+        if (!circuitDatabase.copyInventory.getStackInSlot(0).isEmpty()) {
             for (ItemStack stack : circuitDatabase.stackDatabase.loadItemStacks()) {
                 if (stack.getDisplayName().equals(circuitDatabase.copyInventory.getStackInSlot(0).getDisplayName())) {
                     nameDuplicatePrivate = true;
@@ -212,9 +206,9 @@ public class GuiCircuitDatabaseMain extends GuiContainerBaseBP {
         shareOptionTab.enabledTabs[1] = !nameDuplicatePrivate;
         shareOptionTab.enabledTabs[2] = !nameDuplicateServer && !Minecraft.getMinecraft().isSingleplayer();
 
-        copyButton.enabled = circuitDatabase.copyInventory.getStackInSlot(0) != null
-                && circuitDatabase.copyInventory.getStackInSlot(1) != null
-                && circuitDatabase.copy(Minecraft.getMinecraft().thePlayer, circuitDatabase.copyInventory.getStackInSlot(0),
+        copyButton.enabled = !circuitDatabase.copyInventory.getStackInSlot(0).isEmpty()
+                && !circuitDatabase.copyInventory.getStackInSlot(1).isEmpty()
+                && circuitDatabase.copy(Minecraft.getMinecraft().player, circuitDatabase.copyInventory.getStackInSlot(0),
                         circuitDatabase.copyInventory.getStackInSlot(1), true);
     }
 
