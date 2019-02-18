@@ -47,8 +47,8 @@ apply plugin: 'maven'
 project.ext {
     major = "0"
     minor = "3"
-    if (System.getenv("CI_JOB_ID") != null) {
-        build = System.getenv("CI_JOB_ID")
+    if (System.getenv("CI_PIPELINE_IID") != null) {
+        build = System.getenv("CI_PIPELINE_IID")
     } else {
         build = "-custom"
     }
