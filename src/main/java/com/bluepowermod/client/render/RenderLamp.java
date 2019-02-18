@@ -35,7 +35,7 @@ public class RenderLamp extends TileEntitySpecialRenderer {
             BlockLamp bLamp = (BlockLamp) te.getBlockType();
             int power = te.getWorld().getBlockState(te.getPos()).getValue(BlockLamp.POWER);
 
-            int color = bLamp.getColor(te.getWorld(), te.getPos());
+            int color = bLamp.getColor(te.getWorld(), te.getPos(), 0);
 
             int redMask = 0xFF0000, greenMask = 0xFF00, blueMask = 0xFF;
             int r = (color & redMask) >> 16;

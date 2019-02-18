@@ -128,16 +128,15 @@ public class BlockInsulatedAlloyWire extends BlockAlloyWire implements ICustomMo
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
-    public int colorMultiplier(IBlockState state, @Nullable IBlockAccess world, @Nullable BlockPos pos, int tintIndex) {
+    public int getColor(IBlockAccess world, BlockPos pos, int tintIndex) {
         //Color for Block
         return tintIndex == 1 ? color.getHex() : tintIndex == 2 ? RedwireType.RED_ALLOY.getName().equals(type) ? MinecraftColor.RED.getHex() : MinecraftColor.BLUE.getHex() : -1;
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
-    public int colorMultiplier(ItemStack stack, int tintIndex) {
-        //Color for Itemstack
+    public int getColor(int tintIndex) {
+        //Color for Block
         return tintIndex == 1 ? color.getHex() : tintIndex == 2 ? RedwireType.RED_ALLOY.getName().equals(type) ? MinecraftColor.RED.getHex() : MinecraftColor.BLUE.getHex() : -1;
     }
+
 }

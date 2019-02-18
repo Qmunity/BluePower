@@ -8,21 +8,18 @@
 package com.bluepowermod.item;
 
 import com.bluepowermod.api.misc.MinecraftColor;
+import com.bluepowermod.client.render.IBPColoredItem;
 import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.reference.Refs;
-import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * @author MineMaarten
  */
-public class ItemColorableOverlay extends ItemBase implements IItemColor {
+public class ItemColorableOverlay extends ItemBase implements IBPColoredItem {
 
     public ItemColorableOverlay(String name) {
         super();
@@ -43,16 +40,13 @@ public class ItemColorableOverlay extends ItemBase implements IItemColor {
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
-    public int colorMultiplier(ItemStack itemStack, int renderPass) {
-        return renderPass == 0 || itemStack.getItemDamage() >= 16 ? -1 : ItemDye.DYE_COLORS[15 - itemStack.getItemDamage()];
-    }
-
-
-
-    @Override
     public String getTranslationKey(ItemStack stack) {
     
         return super.getTranslationKey() + "." + (stack.getItemDamage() >= 16 ? "empty" : MinecraftColor.values()[stack.getItemDamage()].name().toLowerCase());
+    }
+
+    @Override
+    public int getColor(ItemStack itemStack, int renderPass) {
+        return renderPass == 0 || itemStack.getItemDamage() >= 16 ? -1 : ItemDye.DYE_COLORS[15 - itemStack.getItemDamage()];
     }
 }

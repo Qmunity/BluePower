@@ -20,6 +20,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.color.IBlockColor;
 import net.minecraft.client.renderer.color.IItemColor;
+import net.minecraft.client.renderer.color.ItemColors;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
@@ -41,7 +42,7 @@ public class Renderers {
     public static void registerModels(ModelRegistryEvent evt){
 
         for (Item item : BPItems.itemList) {
-            if (!(item instanceof IItemColor)) {
+            if (!(item instanceof IBPColoredItem)) {
                 registerItemModel(item, 0);
             } else {
                 NonNullList<ItemStack> subitems = NonNullList.create();
@@ -68,14 +69,14 @@ public class Renderers {
         ClientRegistry.bindTileEntitySpecialRenderer(TileEngine.class, new RenderEngine());
 
         for (Item item : BPItems.itemList) {
-            if (item instanceof IItemColor) {
-                Minecraft.getMinecraft().getItemColors().registerItemColorHandler((IItemColor) item, item);
+            if (item instanceof IBPColoredItem) {
+                Minecraft.getMinecraft().getItemColors().registerItemColorHandler(new BPItemColor(), item);
             }
         }
         for (Block block : BPBlocks.blockList) {
-            if (block instanceof IBlockColor) {
-                Minecraft.getMinecraft().getBlockColors().registerBlockColorHandler((IBlockColor) block, block);
-                Minecraft.getMinecraft().getItemColors().registerItemColorHandler((IItemColor) block, Item.getItemFromBlock(block));
+            if (block instanceof IBPColoredBlock) {
+                Minecraft.getMinecraft().getBlockColors().registerBlockColorHandler(new BPBlockColor(), block);
+                Minecraft.getMinecraft().getItemColors().registerItemColorHandler(new BPBlockColor(), Item.getItemFromBlock(block));
             }
         }
 
@@ -84,7 +85,7 @@ public class Renderers {
     public static void registerItemModel(Item item, int metadata) {
         ResourceLocation loc = Item.REGISTRY.getNameForObject(item);
         if(loc != null) {
-            if(item instanceof IItemColor && metadata == 16){
+            if(item instanceof IBPColoredItem && metadata == 16){
                 ModelLoader.setCustomModelResourceLocation(item, metadata, new ModelResourceLocation(loc + "_blank"));
             }else{
                 ModelLoader.setCustomModelResourceLocation(item, metadata, new ModelResourceLocation(loc, "inventory"));

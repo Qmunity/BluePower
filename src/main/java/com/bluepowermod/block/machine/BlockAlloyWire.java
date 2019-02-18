@@ -4,6 +4,7 @@ import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.api.wire.redstone.RedwireType;
 import com.bluepowermod.block.BlockBase;
 import com.bluepowermod.block.BlockContainerBase;
+import com.bluepowermod.client.render.IBPColoredBlock;
 import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier1.TileWire;
@@ -35,7 +36,7 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
 
-public class BlockAlloyWire extends BlockContainerBase implements IBlockColor, IItemColor{
+public class BlockAlloyWire extends BlockContainerBase implements IBPColoredBlock{
 
     public static final PropertyDirection FACING = PropertyDirection.create("facing");
     public static final PropertyBool POWERED = PropertyBool.create("powered");
@@ -332,17 +333,15 @@ public class BlockAlloyWire extends BlockContainerBase implements IBlockColor, I
         }
     }
 
+
     @Override
-    @SideOnly(Side.CLIENT)
-    public int colorMultiplier(IBlockState state, @Nullable IBlockAccess world, @Nullable BlockPos pos, int tintIndex) {
-        //Color for Block
-        return tintIndex == 2 ? RedwireType.RED_ALLOY.getName().equals(type) ? MinecraftColor.RED.getHex() : MinecraftColor.BLUE.getHex() : -1;
+    public int getColor(IBlockAccess w, BlockPos pos, int tint) {
+        return tint == 2 ? RedwireType.RED_ALLOY.getName().equals(type) ? MinecraftColor.RED.getHex() : MinecraftColor.BLUE.getHex() : -1;
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
-    public int colorMultiplier(ItemStack stack, int tintIndex) {
-        //Color for Itemstack
-        return tintIndex == 2 ? RedwireType.RED_ALLOY.getName().equals(type) ? MinecraftColor.RED.getHex() : MinecraftColor.BLUE.getHex() : -1;
+    public int getColor(int tint) {
+        return tint == 2 ? RedwireType.RED_ALLOY.getName().equals(type) ? MinecraftColor.RED.getHex() : MinecraftColor.BLUE.getHex() : -1;
     }
+
 }

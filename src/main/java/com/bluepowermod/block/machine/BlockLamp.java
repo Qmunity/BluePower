@@ -9,6 +9,7 @@ package com.bluepowermod.block.machine;
 
 import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.block.BlockContainerBase;
+import com.bluepowermod.client.render.IBPColoredBlock;
 import com.bluepowermod.client.render.ICustomModelBlock;
 import com.bluepowermod.client.render.RenderLamp;
 import com.bluepowermod.init.BPCreativeTabs;
@@ -19,15 +20,10 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
-import net.minecraft.client.renderer.color.IBlockColor;
-import net.minecraft.client.renderer.color.IItemColor;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
@@ -38,18 +34,16 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.Loader;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
-import java.util.List;
 
 /**
  * @author Koen Beckers (K4Unl)
  *
  */
-public class BlockLamp extends BlockContainerBase implements IBlockColor, IItemColor, ICustomModelBlock{
+public class BlockLamp extends BlockContainerBase implements ICustomModelBlock, IBPColoredBlock{
 
     public static final PropertyInteger POWER = PropertyInteger.create("power", 0, 15);
 
@@ -106,7 +100,7 @@ public class BlockLamp extends BlockContainerBase implements IBlockColor, IItemC
         int pow = !isInverted ? state.getValue(POWER) : 15 - state.getValue(POWER);
 
         if (Loader.isModLoaded("coloredlightscore")) {
-            int color = getColor(w, pos);
+            int color = getColor(w, pos, 0);
 
             int ri = (color >> 16) & 0xFF;
             int gi = (color >> 8) & 0xFF;
@@ -138,14 +132,17 @@ public class BlockLamp extends BlockContainerBase implements IBlockColor, IItemC
         return pow;
     }
 
-    public int getColor(IBlockAccess w, BlockPos pos) {
+    @Override
+    public int getColor(IBlockAccess w, BlockPos pos, int tint) {
 
         return color.getHex();
     }
 
-    public int getColor() {
+    @Override
+    public int getColor(int tint) {
 
         return color.getHex();
+
     }
 
     public boolean isInverted() {
@@ -188,20 +185,6 @@ public class BlockLamp extends BlockContainerBase implements IBlockColor, IItemC
     public void neighborChanged(IBlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos) {
         super.neighborChanged(state, world, pos, blockIn, fromPos);
         world.setBlockState(pos, state.withProperty(POWER, world.getRedstonePowerFromNeighbors(pos)));
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public int colorMultiplier(IBlockState state, @Nullable IBlockAccess world, @Nullable BlockPos pos, int tintIndex) {
-        //Color for Block
-        return getColor(world, pos);
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public int colorMultiplier(ItemStack stack, int tintIndex) {
-        //Color for Itemstack
-        return getColor();
     }
 
 }
