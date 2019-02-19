@@ -29,7 +29,6 @@ public class InventoryItem extends InventoryBasic {
     
     private ItemStack    item;
     private EntityPlayer player;
-    
     private boolean      reading = false;
     
     public InventoryItem(EntityPlayer player, ItemStack item, String name, boolean customName, int size) {
@@ -42,6 +41,8 @@ public class InventoryItem extends InventoryBasic {
         if (!hasInventory()) {
             createInventory();
         }
+
+        loadInventory();
     }
     
     public static InventoryItem getItemInventory(ItemStack is, String name, int size) {
