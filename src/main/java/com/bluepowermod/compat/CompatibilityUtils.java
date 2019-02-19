@@ -10,7 +10,7 @@ package com.bluepowermod.compat;
 
 import com.bluepowermod.compat.hydcraft.CompatModuleHydCraft;
 import com.bluepowermod.compat.ic2.CompatModuleIC2;
-import com.bluepowermod.compat.mcmp.MCMPAddon;
+import com.bluepowermod.compat.mcmp.CompatModuleMCMP;
 import com.bluepowermod.compat.waila.CompatModuleWaila;
 import com.bluepowermod.util.Dependencies;
 import net.minecraft.item.ItemStack;
@@ -94,10 +94,6 @@ public class CompatibilityUtils {
     }
 
     public static void init(FMLInitializationEvent ev) {
-
-        //Register MCMultipart Addon
-        MinecraftForge.EVENT_BUS.register(new MCMPAddon());
-
         for (CompatModule m : getLoadedModules())
             m.init(ev);
     }
@@ -127,8 +123,8 @@ public class CompatibilityUtils {
      * Register your modules here
      */
     static {
-        //registerModule(Dependencies.FMP, CompatModuleFMP.class, null);
         //registerModule(Dependencies.COMPUTER_CRAFT, CompatModuleCC.class, null);
+        registerModule(Dependencies.MCMP, CompatModuleMCMP.class, null);
         registerModule(Dependencies.WAILA, CompatModuleWaila.class, null);
         registerModule(Dependencies.IC2, CompatModuleIC2.class, null);
         registerModule(Dependencies.HC, CompatModuleHydCraft.class, null);
