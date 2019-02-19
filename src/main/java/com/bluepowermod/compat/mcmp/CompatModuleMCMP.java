@@ -8,14 +8,6 @@
 package com.bluepowermod.compat.mcmp;
 
 import com.bluepowermod.compat.CompatModule;
-import com.bluepowermod.compat.ic2.IC2RecipeInput;
-import com.bluepowermod.init.BPBlocks;
-import com.bluepowermod.init.BPItems;
-import ic2.api.recipe.Recipes;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
