@@ -273,7 +273,6 @@ public class BPBlocks {
 
         if (Loader.isModLoaded(Dependencies.COMPUTER_CRAFT) || Loader.isModLoaded(Dependencies.OPEN_COMPUTERS)) {
             sortron = new BlockSortron();
-            sortron.setRegistryName(Refs.MODID, Refs.BLOCKSORTRON_NAME);
         }
     }
 

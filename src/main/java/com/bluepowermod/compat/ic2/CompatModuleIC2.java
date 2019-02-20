@@ -37,15 +37,15 @@ public class CompatModuleIC2 extends CompatModule {
         tag.setInteger("amount", 1000);
         Recipes.oreWashing.addRecipe(new IC2RecipeInput(new ItemStack(BPItems.zinc_ore_crushed)), tag, false, new ItemStack(
                 BPItems.zinc_ore_purified), new ItemStack(BPItems.zinc_tiny_dust, 2),
-                new ItemStack(Item.REGISTRY.getObject(new ResourceLocation("IC2:itemDust")), 1, 9));
+                new ItemStack(Item.REGISTRY.getObject(new ResourceLocation("ic2:itemDust")), 1, 9));
 
         tag = new NBTTagCompound();
         tag.setInteger("minHeat", 2000);
         Recipes.centrifuge.addRecipe(new IC2RecipeInput(new ItemStack(BPItems.zinc_ore_purified)), tag, false, new ItemStack(BPItems.zinc_dust),
-                new ItemStack(Item.REGISTRY.getObject(new ResourceLocation("IC2:itemDustSmall")), 1, 6));
+                new ItemStack(Item.REGISTRY.getObject(new ResourceLocation("ic2:itemDustSmall")), 1, 6));
         Recipes.centrifuge.addRecipe(new IC2RecipeInput(new ItemStack(BPItems.zinc_ore_crushed)), tag, false, new ItemStack(BPItems.zinc_dust),
-                new ItemStack(Item.REGISTRY.getObject(new ResourceLocation("IC2:itemDustSmall")), 1, 6), new ItemStack(Item.REGISTRY
-                        .getObject(new ResourceLocation("IC2:itemDust")), 1, 9));
+                new ItemStack(Item.REGISTRY.getObject(new ResourceLocation("ic2:itemDustSmall")), 1, 6), new ItemStack(Item.REGISTRY
+                        .getObject(new ResourceLocation("ic2:itemDust")), 1, 9));
 
     }
 
