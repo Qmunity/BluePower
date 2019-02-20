@@ -53,7 +53,7 @@ public class ItemCropSeed extends ItemSeeds implements IPlantable {
         if (facing.ordinal() != 1) {
             return EnumActionResult.PASS;
         } else if (player.canPlayerEdit(pos, facing, itemStack) && player.canPlayerEdit(pos.up(), facing, itemStack)) {
-            if (world.getBlockState(pos).getBlock().canSustainPlant(world.getBlockState(pos),  world, pos, EnumFacing.UP, this) && world.isAirBlock(pos.up())) {
+            if (world.getBlockState(pos).getBlock().canSustainPlant(world.getBlockState(pos),  world, pos, EnumFacing.UP, this) && world.isAirBlock(pos.up()) && world.getBlockState(pos).getBlock().isFertile(world, pos)) {
                 world.setBlockState(pos.up(), field_150925_a.getDefaultState(), 2);
                 itemStack.setCount(itemStack.getCount() - 1);
                 player.setHeldItem(hand, itemStack);

@@ -230,13 +230,8 @@ public class BlockCrop extends BlockCrops implements IGrowable {
                 ((World) world).setBlockToAir(pos.up());
             }
         }
-        if (!canBlockStay((World)world, pos, world.getBlockState(pos))) {
-            ((World)world).setBlockToAir(pos);
-            if (world.getBlockState(pos.up()).getBlock() == this) {
-                ((World)world).setBlockToAir(pos.up());
-            }
-        }
-        this.checkAndDropBlock((World)world, pos, world.getBlockState(pos));
+        checkAndDropBlock((World)world, pos, world.getBlockState(pos));
+        checkAndDropBlock((World)world, pos.up(), world.getBlockState(pos.up()));
     }
 
     @Override
@@ -261,7 +256,7 @@ public class BlockCrop extends BlockCrops implements IGrowable {
     @Override
     public boolean canBlockStay(World world, BlockPos pos, IBlockState state) {
         if (world.getBlockState(pos).getBlock() != this) return super.canBlockStay(world, pos, state);
-        if (world.getBlockState(pos.down()).getBlock().canSustainPlant(world.getBlockState(pos.down()), world, pos.down(), EnumFacing.UP, this) || isFertile(world, pos.down())) {
+        if (world.getBlockState(pos.down()).getBlock().canSustainPlant(world.getBlockState(pos.down()), world, pos.down(), EnumFacing.UP, this)) {
             return true;
         }
         return (world.getBlockState(pos.down()).getBlock() == this) && (getAge(world.getBlockState(pos.down())) == 6);
