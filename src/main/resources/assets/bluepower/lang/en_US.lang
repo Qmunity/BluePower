@@ -35,11 +35,13 @@ tile.bluepower:tiles.name=Basalt and Marble Tiles
 tile.bluepower:amethyst_ore.name=Amethyst Ore
 tile.bluepower:ruby_ore.name=Ruby Ore
 tile.bluepower:sapphire_ore.name=Sapphire Ore
+tile.bluepower:malachite_ore.name=Malachite Ore
 tile.bluepower:teslatite_ore.name=Teslatite Ore
 
 tile.bluepower:amethyst_block.name=Amethyst Block
 tile.bluepower:ruby_block.name=Ruby Block
 tile.bluepower:sapphire_block.name=Sapphire Block
+tile.bluepower:malachite_block.name=Malachite Block
 tile.bluepower:teslatite_block.name=Teslatite Block
 
 tile.bluepower:copper_ore.name=Copper Ore
@@ -430,6 +432,7 @@ tile.bluepower:cagelamp.black.inverted.name=Inverted Black Cage Lamp
 item.bluepower:ruby_gem.name=Ruby
 item.bluepower:amethyst_gem.name=Amethyst
 item.bluepower:sapphire_gem.name=Sapphire
+item.bluepower:malachite_gem.name=Malachite
 
 item.bluepower:teslatite_dust.name=Teslatite
 
@@ -488,6 +491,13 @@ item.bluepower:amethyst_pickaxe.name=Amethyst Pickaxe
 item.bluepower:amethyst_hoe.name=Amethyst Hoe
 item.bluepower:amethyst_sickle.name=Amethyst Sickle
 
+item.bluepower:malachite_sword.name=Malachite Sword
+item.bluepower:malachite_shovel.name=Malachite Shovel
+item.bluepower:malachite_axe.name=Malachite Axe
+item.bluepower:malachite_pickaxe.name=Malachite Pickaxe
+item.bluepower:malachite_hoe.name=Malachite Hoe
+item.bluepower:malachite_sickle.name=Malachite Sickle
+
 item.bluepower:wood_sickle.name=Wooden Sickle
 item.bluepower:stone_sickle.name=Stone Sickle
 item.bluepower:iron_sickle.name=Iron Sickle
@@ -504,6 +514,7 @@ item.bluepower:diamond_drawplate.name=Diamond Drawplate
 # Saws
 item.bluepower:iron_saw.name=Iron Saw
 item.bluepower:amethyst_saw.name=Amethyst Saw
+item.bluepower:malachite_saw.name=Malachite Saw
 item.bluepower:ruby_saw.name=Ruby Saw
 item.bluepower:sapphire_saw.name=Sapphire Saw
 item.bluepower:diamond_saw.name=Diamond Saw
@@ -614,7 +625,7 @@ tile.bluepower:wirelesstransceiver.analog.name=Analogue Wireless Transceiver
 item.bluepower:lumar.white.name=White Lumar
 item.bluepower:lumar.orange.name=Orange Lumar
 item.bluepower:lumar.magenta.name=Magenta Lumar
-item.bluepower:lumar.light_blue.name=Light Blue Lumar
+item.bluepower:lumar.lightblue.name=Light Blue Lumar
 item.bluepower:lumar.yellow.name=Yellow Lumar
 item.bluepower:lumar.lime.name=Lime Lumar
 item.bluepower:lumar.pink.name=Pink Lumar
