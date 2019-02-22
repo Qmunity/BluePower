@@ -7,6 +7,8 @@
  */
 package com.bluepowermod.compat.jei;
 
+import com.bluepowermod.container.ContainerAlloyFurnace;
+import com.bluepowermod.container.ContainerProjectTable;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.recipe.AlloyFurnaceRegistry;
 import mezz.jei.api.*;
@@ -45,8 +47,10 @@ public class JEIPlugin implements IModPlugin {
         modRegistry.addRecipes( AlloyFurnaceRegistry.getInstance().getAllRecipes(), "bluepower.alloyfurnace");
         modRegistry.handleRecipes(AlloyFurnaceRegistry.StandardAlloyFurnaceRecipe.class, new AlloyFurnaceWrapperFactory(), "bluepower.alloyfurnace");
         modRegistry.addRecipeCatalyst(new ItemStack(BPBlocks.alloyfurnace), "bluepower.alloyfurnace");
+        modRegistry.getRecipeTransferRegistry().addRecipeTransferHandler(ContainerAlloyFurnace.class, "bluepower.alloyfurnace", 2, 9, 11, 36);
         //Crafting Table
         modRegistry.addRecipeCatalyst(new ItemStack(BPBlocks.project_table), VanillaRecipeCategoryUid.CRAFTING);
+        modRegistry.getRecipeTransferRegistry().addRecipeTransferHandler(ContainerProjectTable.class, VanillaRecipeCategoryUid.CRAFTING, 1, 9, 10, 54);
     }
 
 }

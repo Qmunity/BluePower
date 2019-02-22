@@ -66,7 +66,7 @@ public class AlloyFurnaceHandler implements IRecipeCategory<AlloyFurnaceWrapper>
     @Override
     public void setRecipe(IRecipeLayout recipeLayout, AlloyFurnaceWrapper recipeWrapper, IIngredients ingredients) {
         IGuiItemStackGroup guiItemStackGroup = recipeLayout.getItemStacks();
-        guiItemStackGroup.init(0, true, 12, 21);
+        guiItemStackGroup.init(0, false, 12, 21);
         guiItemStackGroup.set(0, new ItemStack(Items.COAL));
         guiItemStackGroup.init(1, false,125, 21);
         guiItemStackGroup.set(1, ingredients.getOutputs(ItemStack.class).get(0));
