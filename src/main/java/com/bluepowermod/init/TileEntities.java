@@ -21,6 +21,7 @@ import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier1.*;
 import com.bluepowermod.tile.tier2.*;
 import com.bluepowermod.tile.tier3.*;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class TileEntities {
@@ -30,38 +31,38 @@ public class TileEntities {
      */
     public static void init() {
 
-        GameRegistry.registerTileEntity(TileAlloyFurnace.class, Refs.MODID + ".alloyFurnace");
-        GameRegistry.registerTileEntity(TileBlockBreaker.class, Refs.MODID + ".blockBreaker");
-        GameRegistry.registerTileEntity(TileIgniter.class, Refs.MODID + ".igniter");
-        GameRegistry.registerTileEntity(TileBuffer.class, Refs.MODID + ".buffer");
-        GameRegistry.registerTileEntity(TileTransposer.class, Refs.MODID + ".transposer");
-        GameRegistry.registerTileEntity(TileSortingMachine.class, Refs.MODID + ".sortingMachine");
-        GameRegistry.registerTileEntity(TileSortron.class, Refs.MODID + ".sortron");
+        GameRegistry.registerTileEntity(TileAlloyFurnace.class, new ResourceLocation(Refs.MODID, "alloyFurnace"));
+        GameRegistry.registerTileEntity(TileBlockBreaker.class, new ResourceLocation(Refs.MODID, "blockBreaker"));
+        GameRegistry.registerTileEntity(TileIgniter.class, new ResourceLocation(Refs.MODID, "igniter"));
+        GameRegistry.registerTileEntity(TileBuffer.class, new ResourceLocation(Refs.MODID, "buffer"));
+        GameRegistry.registerTileEntity(TileTransposer.class, new ResourceLocation(Refs.MODID, "transposer"));
+        GameRegistry.registerTileEntity(TileSortingMachine.class, new ResourceLocation(Refs.MODID, "sortingMachine"));
+        GameRegistry.registerTileEntity(TileSortron.class, new ResourceLocation(Refs.MODID, "sortron"));
         // GameRegistry.registerTileEntity(TileCPU.class, "CPU");
         // GameRegistry.registerTileEntity(TileMonitor.class, "monitor");
         // GameRegistry.registerTileEntity(TileDiskDrive.class, "diskDrive");
         // GameRegistry.registerTileEntity(TileIOExpander.class, "IOExpander");
-        GameRegistry.registerTileEntity(TileEngine.class, Refs.MODID + ".engine");
-        GameRegistry.registerTileEntity(TileBattery.class, Refs.MODID + ".battery");
-        GameRegistry.registerTileEntity(TileWindmill.class, Refs.MODID + ".windmill");
-        GameRegistry.registerTileEntity(TileKinectGenerator.class, Refs.MODID + ".kinectgenerator");
-        GameRegistry.registerTileEntity(TileSolarPanel.class, Refs.MODID + ".solarpanel");
+        GameRegistry.registerTileEntity(TileEngine.class, new ResourceLocation(Refs.MODID, "engine"));
+        GameRegistry.registerTileEntity(TileBattery.class, new ResourceLocation(Refs.MODID, "battery"));
+        GameRegistry.registerTileEntity(TileWindmill.class, new ResourceLocation(Refs.MODID, "windmill"));
+        GameRegistry.registerTileEntity(TileKinectGenerator.class, new ResourceLocation(Refs.MODID, "kinectgenerator"));
+        GameRegistry.registerTileEntity(TileSolarPanel.class, new ResourceLocation(Refs.MODID, "solarpanel"));
 
 
-        GameRegistry.registerTileEntity(TileDeployer.class, Refs.MODID + ".deployer");
-        GameRegistry.registerTileEntity(TileEjector.class, Refs.MODID + ".ejector");
-        GameRegistry.registerTileEntity(TileRelay.class, Refs.MODID + ".relay");
-        GameRegistry.registerTileEntity(TileFilter.class, Refs.MODID + ".filter");
-        GameRegistry.registerTileEntity(TileRetriever.class, Refs.MODID + ".retriever");
-        GameRegistry.registerTileEntity(TileRegulator.class, Refs.MODID + ".regulator");
-        GameRegistry.registerTileEntity(TileItemDetector.class, Refs.MODID + ".itemDetector");
-        GameRegistry.registerTileEntity(TileManager.class, Refs.MODID + ".manager");
-        GameRegistry.registerTileEntity(TileProjectTable.class, Refs.MODID + ".projectTable");
-        GameRegistry.registerTileEntity(TileAutoProjectTable.class, Refs.MODID + ".autoProjectTable");
-        GameRegistry.registerTileEntity(TileCircuitTable.class, Refs.MODID + ".circuitTable");
-        GameRegistry.registerTileEntity(TileCircuitDatabase.class, Refs.MODID + ".circuitDatabase");
-        GameRegistry.registerTileEntity(TileLamp.class, Refs.MODID + ".lamp");
-        GameRegistry.registerTileEntity(TileWire.class, Refs.MODID + ".wire");
+        GameRegistry.registerTileEntity(TileDeployer.class, new ResourceLocation(Refs.MODID, "deployer"));
+        GameRegistry.registerTileEntity(TileEjector.class, new ResourceLocation(Refs.MODID, "ejector"));
+        GameRegistry.registerTileEntity(TileRelay.class, new ResourceLocation(Refs.MODID, "relay"));
+        GameRegistry.registerTileEntity(TileFilter.class, new ResourceLocation(Refs.MODID, "filter"));
+        GameRegistry.registerTileEntity(TileRetriever.class, new ResourceLocation(Refs.MODID, "retriever"));
+        GameRegistry.registerTileEntity(TileRegulator.class, new ResourceLocation(Refs.MODID, "regulator"));
+        GameRegistry.registerTileEntity(TileItemDetector.class, new ResourceLocation(Refs.MODID, "itemDetector"));
+        GameRegistry.registerTileEntity(TileManager.class, new ResourceLocation(Refs.MODID, "manager"));
+        GameRegistry.registerTileEntity(TileProjectTable.class, new ResourceLocation(Refs.MODID, "projectTable"));
+        GameRegistry.registerTileEntity(TileAutoProjectTable.class, new ResourceLocation(Refs.MODID, "autoProjectTable"));
+        GameRegistry.registerTileEntity(TileCircuitTable.class, new ResourceLocation(Refs.MODID, "circuitTable"));
+        GameRegistry.registerTileEntity(TileCircuitDatabase.class, new ResourceLocation(Refs.MODID, "circuitDatabase"));
+        GameRegistry.registerTileEntity(TileLamp.class, new ResourceLocation(Refs.MODID, "lamp"));
+        GameRegistry.registerTileEntity(TileWire.class, new ResourceLocation(Refs.MODID, "wire"));
 
     }
 }
