@@ -24,6 +24,11 @@ repositories {
 	maven { //JEI repo
 		url = "http://dvs1.progwml6.com/files/maven"
 	}
+    maven {
+        // location of a maven mirror for JEI files, as a fallback
+        name = "ModMaven"
+        url = "modmaven.k-4u.nl"
+    }
     maven { //Open Computers
         name 'OpenComputers'
         url = "http://maven.cil.li/"
@@ -65,13 +70,13 @@ dependencies {
     compile 'net.industrial-craft:industrialcraft-2:2.8.93-ex112:api'
 	deobfCompile "MCMultiPart2:MCMultiPart:2.5.1"
     deobfCompile "mcp.mobius.waila:Hwyla:1.8.26-B41_1.12.2"
-	deobfCompile "mezz.jei:jei_1.12.2:4.11.0.204:api"
-	runtime "mezz.jei:jei_1.12.2:4.11.0.204"
+	deobfCompile "mezz.jei:jei_1.12.2:4.9.2.196:api"
+	runtime "mezz.jei:jei_1.12.2:4.9.2.196"
     compile "team.chisel.ctm:CTM:MC1.12.2-0.3.2.18"
 }
 
 minecraft {
-    version = "${project.ext.mcVersion}-14.23.4.2705"
+    version = "${project.ext.mcVersion}-14.23.5.2768"
     runDir = "run"
 	mappings = "snapshot_20180717"
 
@@ -148,20 +153,20 @@ uploadArchives {
                     name project.archivesBaseName
                     packaging 'jar'
                     description 'BluePower'
-                    url 'https://github.com/MoreThanHidden/BluePower'
+                    url 'https://github.com/Qmunity/BluePower'
                     scm {
-                        url 'https://github.com/MoreThanHidden/BluePower'
-                        connection 'scm:git:git@github.com:MoreThanHidden/BluePower.git'
-                        developerConnection 'scm:git:git@github.com:MoreThanHidden/BluePower.git'
+                        url 'https://github.com/Qmunity/BluePower'
+                        connection 'scm:git:git@github.com:Qmunity/BluePower.git'
+                        developerConnection 'scm:git:git@github.com:Qmunity/BluePower.git'
                     }
                     issueManagement {
                         system 'github'
-                        url 'https://github.com/MoreThanHidden/BluePower/issues'
+                        url 'https://github.com/Qmunity/BluePower/issues'
                     }
                     licenses {
                         license {
                             name 'GPLv3'
-                            url 'https://github.com/MoreThanHidden/BluePower/blob/master/LICENCE.txt'
+                            url 'https://github.com/Qmunity/BluePower/blob/master/LICENCE.txt'
                             distribution 'repo'
                         }
                     }
