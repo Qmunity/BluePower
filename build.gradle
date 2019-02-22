@@ -14,35 +14,9 @@ buildscript {
 }
 
 repositories {
-	maven { //repo for HWYLA
-		url "http://tehnut.info/maven"
-	}
-    maven { // the repo from which to get NEI and stuff 
-        name 'CB Repo'
-        url "http://chickenbones.net/maven/"
-    }
-	maven { //JEI repo
-		url = "http://dvs1.progwml6.com/files/maven"
-	}
     maven {
-        // location of a maven mirror for JEI files, as a fallback
-        name = "ModMaven"
-        url = "modmaven.k-4u.nl"
-    }
-    maven { //Open Computers
-        name 'OpenComputers'
-        url = "http://maven.cil.li/"
-    }
-    maven { //IC2
-        name = "ic2"
-        url = "http://maven.ic2.player.to/"
-    }
-	maven { //MC Multipart
-		url "http://maven.amadornes.com/"
-	}
-    maven { //CTM
-        name 'tterrag maven'
-        url "http://maven.tterrag.com/"
+	    name "ModMaven"
+	    url "https://modmaven.k-4u.nl"
     }
 }
 
