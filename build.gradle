@@ -14,6 +14,7 @@ buildscript {
 }
 
 repositories {
+    maven {url "http://tehnut.info/maven"}
     maven {
 	    name "ModMaven"
 	    url "https://modmaven.k-4u.nl"
@@ -40,13 +41,13 @@ group = "com.bluepowermod"
 archivesBaseName = "BluePower"
 
 dependencies {
-    deobfCompile "li.cil.oc:OpenComputers:MC1.12.2-1.7.2.71:api"
-    compile 'net.industrial-craft:industrialcraft-2:2.8.93-ex112:api'
-	deobfCompile "MCMultiPart2:MCMultiPart:2.5.1"
+    deobfCompile "li.cil.oc:OpenComputers:MC1.12.2-1.7.4.153:api"
+    compile "net.industrial-craft:industrialcraft-2:2.8.99-ex112:api"
+	deobfCompile "MCMultiPart2:MCMultiPart:2.5.3"
     deobfCompile "mcp.mobius.waila:Hwyla:1.8.26-B41_1.12.2"
 	deobfCompile "mezz.jei:jei_1.12.2:4.9.2.196:api"
 	runtime "mezz.jei:jei_1.12.2:4.9.2.196"
-    compile "team.chisel.ctm:CTM:MC1.12.2-0.3.2.18"
+    compile "team.chisel.ctm:CTM:MC1.12.2-0.3.3.22"
 }
 
 minecraft {
