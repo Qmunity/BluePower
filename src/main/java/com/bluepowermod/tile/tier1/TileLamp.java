@@ -12,6 +12,7 @@ import com.bluepowermod.block.machine.BlockLamp;
 import com.bluepowermod.block.machine.BlockLampRGB;
 import com.bluepowermod.client.render.RenderLamp;
 import com.bluepowermod.helper.MathHelper;
+import com.bluepowermod.init.Config;
 import com.bluepowermod.tile.TileBase;
 import elucent.albedo.lighting.ILightProvider;
 import elucent.albedo.lighting.Light;
@@ -90,13 +91,13 @@ public class TileLamp extends TileBase implements ILightProvider{
         int color = block.getColor(world, pos, 0);
 
         int redMask = 0xff0000, greenMask = 0xff00, blueMask = 0xff;
-        int r = ((color & redMask) >> 16) * value;
-        int g = ((color & greenMask) >> 8) * value;
-        int b = (color & blueMask) * value;
+        int r = (color & redMask) >> 16;
+        int g = (color & greenMask) >> 8;
+        int b = (color & blueMask);
 
         return Light.builder()
                 .pos(this.pos)
-                .color(r / 650,g / 650,b / 650)
+                .color(r ,g,b, Config.albedoBrightness)
                 .radius(Math.max(value / 2, 1))
                 .build();
     }

@@ -73,6 +73,7 @@ public class Config {
     public static int vorpalEnchantmentId;
     public static int disjunctionEnchantmentId;
     public static String[] alloyFurnaceBlacklist;
+    public static float albedoBrightness;
 
     public static boolean enableTubeCaching;
     public static boolean enableGateSounds;
@@ -154,6 +155,7 @@ public class Config {
                 hadEnchantCategory ? 111 : findFreeEnchantID(vorpalEnchantmentId)).getInt();
 
         enableGateSounds = config.get(Refs.CONFIG_SETTINGS, "Enable Gate Ticking Sounds", true).getBoolean();
+        albedoBrightness = config.get(Refs.CONFIG_SETTINGS, "Albedo Support Lamp Brightness", 10).getInt() / 1000.0F;
 
         if (config.hasChanged()) {
             config.save();
