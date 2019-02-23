@@ -9,6 +9,7 @@ package com.bluepowermod.client.render;
 
 import com.bluepowermod.block.machine.BlockLamp;
 import com.bluepowermod.block.machine.BlockLampSurface;
+import com.bluepowermod.init.Config;
 import com.bluepowermod.util.AABBUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -16,6 +17,7 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
@@ -28,7 +30,7 @@ public class RenderLamp extends TileEntitySpecialRenderer {
 
     @Override
     public void render(TileEntity te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
-        if (!(te.getBlockType() instanceof BlockLamp))
+        if (!(te.getBlockType() instanceof BlockLamp) || Loader.isModLoaded("albedo"))
             return;
 
         if (pass != 0) {

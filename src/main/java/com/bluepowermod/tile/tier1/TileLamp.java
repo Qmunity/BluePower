@@ -8,19 +8,24 @@
 package com.bluepowermod.tile.tier1;
 
 import com.bluepowermod.api.misc.MinecraftColor;
+import com.bluepowermod.block.machine.BlockLamp;
 import com.bluepowermod.block.machine.BlockLampRGB;
 import com.bluepowermod.client.render.RenderLamp;
 import com.bluepowermod.helper.MathHelper;
 import com.bluepowermod.tile.TileBase;
+import elucent.albedo.lighting.ILightProvider;
+import elucent.albedo.lighting.Light;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.Optional;
 
 
 /**
- * @author Koen Beckers (K4Unl) and Amadornes. Yes. I only need this class to do the getPower() function.. damn :(
+ * @author Koen Beckers (K4Unl) and Amadornes.
  */
-public class TileLamp extends TileBase{
+@Optional.Interface(iface="elucent.albedo.lighting.ILightProvider", modid="albedo")
+public class TileLamp extends TileBase implements ILightProvider{
 
     private byte[] bundledPower = new byte[16];
 
@@ -43,6 +48,7 @@ public class TileLamp extends TileBase{
             bundledPower = pow;
         }
     }
+
 
     @Override
     public boolean shouldRenderInPass(int pass) {
@@ -72,5 +78,26 @@ public class TileLamp extends TileBase{
     @Override
     protected void onTileLoaded() {
         world.getBlockState(pos).neighborChanged(world, pos, world.getBlockState(pos).getBlock(), pos);
+    }
+
+    @Optional.Method(modid="albedo")
+    @Override
+    public Light provideLight() {
+
+        BlockLamp block = (BlockLamp) world.getBlockState(pos).getBlock();
+        int value = block.getLightValue(world.getBlockState(pos), world, pos);
+
+        int color = block.getColor(world, pos, 0);
+
+        int redMask = 0xff0000, greenMask = 0xff00, blueMask = 0xff;
+        int r = ((color & redMask) >> 16) * value;
+        int g = ((color & greenMask) >> 8) * value;
+        int b = (color & blueMask) * value;
+
+        return Light.builder()
+                .pos(this.pos)
+                .color(r / 650,g / 650,b / 650)
+                .radius(Math.max(value / 2, 1))
+                .build();
     }
 }

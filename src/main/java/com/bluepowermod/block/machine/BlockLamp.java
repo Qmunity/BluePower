@@ -33,7 +33,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -97,39 +96,7 @@ public class BlockLamp extends BlockContainerBase implements ICustomModelBlock, 
 
     @Override
     public int getLightValue(IBlockState state, IBlockAccess w, BlockPos pos) {
-        int pow = !isInverted ? state.getValue(POWER) : 15 - state.getValue(POWER);
-
-        if (Loader.isModLoaded("coloredlightscore")) {
-            int color = getColor(w, pos, 0);
-
-            int ri = (color >> 16) & 0xFF;
-            int gi = (color >> 8) & 0xFF;
-            int bi = (color >> 0) & 0xFF;
-
-            float r = ri / 256F;
-            float g = gi / 256F;
-            float b = bi / 256F;
-
-            // Clamp color channels
-            if (r < 0.0f)
-                r = 0.0f;
-            else if (r > 1.0f)
-                r = 1.0f;
-
-            if (g < 0.0f)
-                g = 0.0f;
-            else if (g > 1.0f)
-                g = 1.0f;
-
-            if (b < 0.0f)
-                b = 0.0f;
-            else if (b > 1.0f)
-                b = 1.0f;
-
-            return pow | ((((int) (15.0F * b)) << 15) + (((int) (15.0F * g)) << 10) + (((int) (15.0F * r)) << 5));
-        }
-
-        return pow;
+        return !isInverted ? state.getValue(POWER) : 15 - state.getValue(POWER);
     }
 
     @Override
