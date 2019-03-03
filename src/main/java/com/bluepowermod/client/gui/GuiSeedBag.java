@@ -28,7 +28,7 @@ import com.bluepowermod.reference.Refs;
 
 public class GuiSeedBag extends GuiContainerBaseBP {
 
-    private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/seedBag.png");
+    private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/seedbag.png");
 
     public GuiSeedBag(ItemStack bag, IInventory playerInventory, IInventory seedBagInventory) {
 
