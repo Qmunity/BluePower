@@ -8,6 +8,7 @@
 package com.bluepowermod.event;
 
 import com.bluepowermod.ClientProxy;
+import com.bluepowermod.block.gates.BlockGateBase;
 import com.bluepowermod.client.gui.GuiCircuitDatabaseSharing;
 import com.bluepowermod.container.ContainerSeedBag;
 import com.bluepowermod.container.inventory.InventoryItem;
@@ -19,9 +20,23 @@ import com.bluepowermod.item.ItemSeedBag;
 import com.bluepowermod.item.ItemSickle;
 import com.bluepowermod.network.BPNetworkHandler;
 import com.bluepowermod.network.message.MessageServerTickTime;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockGrass;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.BlockRendererDispatcher;
+import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.block.model.IBakedModel;
+import net.minecraft.client.renderer.block.model.ModelBakery;
+import net.minecraft.client.renderer.block.model.ModelBlock;
+import net.minecraft.client.renderer.block.model.ModelManager;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.renderer.vertex.VertexBuffer;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.monster.*;
 import net.minecraft.entity.player.EntityPlayer;
@@ -33,7 +48,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntityHopper;
 import net.minecraft.util.EntityDamageSource;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.client.event.DrawBlockHighlightEvent;
+import net.minecraftforge.client.model.BakedModelWrapper;
+import net.minecraftforge.client.model.ISmartVariant;
+import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.client.model.MultiModel;
 import net.minecraftforge.event.AnvilUpdateEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
@@ -44,6 +65,9 @@ import net.minecraftforge.fml.common.gameevent.*;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.opengl.GL11;
+
+import java.util.Random;
 
 public class BPEventHandler {
 
@@ -239,4 +263,32 @@ public class BPEventHandler {
             }
         }
     }
+
+    @SideOnly(Side.CLIENT)
+    @SubscribeEvent
+    public void blockHighlightEvent(DrawBlockHighlightEvent event) {
+       Block block = Block.getBlockFromItem(event.getPlayer().getHeldItem(EnumHand.MAIN_HAND).getItem());
+       if(block instanceof BlockGateBase){
+           BlockPos position = event.getTarget().getBlockPos().up();
+           Entity entity = Minecraft.getMinecraft().getRenderViewEntity();
+           double d0 = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * (double)event.getPartialTicks();
+           double d1 = entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * (double)event.getPartialTicks();
+           double d2 = entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * (double)event.getPartialTicks();
+           Tessellator tessellator = Tessellator.getInstance();
+           BufferBuilder vertexbuffer = tessellator.getBuffer();
+           vertexbuffer.setTranslation(-d0, -d1, -d2 );
+           GlStateManager.pushMatrix();
+               GlStateManager.enableAlpha();
+               position.add(0.5, 0.1, 0.5);
+               vertexbuffer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
+               BlockRendererDispatcher blockrendererdispatcher = Minecraft.getMinecraft().getBlockRendererDispatcher();
+               IBlockState state = block.getDefaultState();
+               IBakedModel ibakedmodel = blockrendererdispatcher.getModelForState(state);
+               blockrendererdispatcher.getBlockModelRenderer().renderModel(event.getPlayer().world, ibakedmodel, state, position, vertexbuffer, false, new Random().nextLong());
+               tessellator.draw();
+           GlStateManager.popMatrix();
+           vertexbuffer.setTranslation(0, 0, 0);
+       }
+    }
+
 }

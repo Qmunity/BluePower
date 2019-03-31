@@ -228,6 +228,7 @@ public class Refs {
     public static final String LAMP_NAME = "lamp";
     public static final String CAGELAMP_NAME = "cagelamp";
     public static final AxisAlignedBB CAGELAMP_AABB = new AxisAlignedBB(0.3125, 0.125, 0.3125,  0.6875, 0.6875, 0.6875);
+    public static final AxisAlignedBB GATE_AABB = new AxisAlignedBB(0, 0, 0,  1, 2 / 16, 1);
     public static final String FIXTURELAMP_NAME = "fixture";
     public static final AxisAlignedBB FIXTURELAMP_AABB = new AxisAlignedBB(0.1875, 0.125, 0.1875, 0.8125, 0.5, 0.8125 );
     public static final String CONFIG_WORLDGEN = "world gen";

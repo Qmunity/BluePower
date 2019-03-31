@@ -1,0 +1,62 @@
+﻿{
+  "forge_marker": 1,
+  "defaults": {
+    "textures": {
+    },
+    "model": "bluepower:gate_and"
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [{}],
+    "facing": {
+      "north": {"x": 90},
+      "south": {"x": 90, "y": 180},
+      "west": {"x": 90, "y": 270},
+      "east": {"x": 90, "y": 90},
+      "up": {},
+      "down": {"x": 180}
+    },
+    "powered_back":{
+      "true":{
+        "textures": {
+          "bluestone_back": "bluepower:base/bluestone_on",
+          "torch_middle": "bluepower:blocks/bluestone_torch_off"
+        }
+      },
+      "false":{}
+    },
+    "powered_front":{
+      "true":{
+        "textures": {
+          "bluestone_front": "bluepower:base/bluestone_off",
+          "torch_front": "bluepower:blocks/bluestone_torch_on"
+        }
+      },
+      "false":{}
+    },
+    "powered_left":{
+      "true":{
+        "textures": {
+          "bluestone_left": "bluepower:base/bluestone_on",
+          "torch_left": "bluepower:blocks/bluestone_torch_off"
+        }
+      },
+      "false":{}
+    },
+    "powered_right":{
+      "true":{
+        "textures": {
+          "bluestone_right": "bluepower:base/bluestone_on",
+          "torch_right": "bluepower:blocks/bluestone_torch_off"
+        }
+      },
+      "false":{}
+    },
+    "rotation":{
+      "0":{},
+      "1":{"y": 90},
+      "2":{"y": 180},
+      "3":{"y": 270}
+    }
+  }
+}

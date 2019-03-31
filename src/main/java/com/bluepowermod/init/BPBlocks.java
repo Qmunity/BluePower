@@ -20,6 +20,7 @@ package com.bluepowermod.init;
 import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.api.wire.redstone.RedwireType;
 import com.bluepowermod.block.BlockContainerFacingBase;
+import com.bluepowermod.block.gates.BlockGateBase;
 import com.bluepowermod.block.machine.*;
 import com.bluepowermod.block.machine.BlockLamp;
 import com.bluepowermod.block.machine.BlockLampRGB;
@@ -134,6 +135,8 @@ public class BPBlocks {
 
     public static Block blockLampRGB;
     public static Block blockLampRGBInverted;
+    public static Block blockGateAND;
+    public static Block blockGateNAND;
 
     public static Block[] blockAlloyWire;
 
@@ -256,6 +259,15 @@ public class BPBlocks {
         blockLampRGBInverted = new BlockLampRGBSurface(Refs.FIXTURELAMP_NAME,true, Refs.FIXTURELAMP_AABB).setWIP(true);
         for (int i = 0; i < MinecraftColor.VALID_COLORS.length; i++)
             fixedLampInverted[i] = new BlockLampSurface(Refs.FIXTURELAMP_NAME, true, MinecraftColor.VALID_COLORS[i], Refs.FIXTURELAMP_AABB);
+
+        //Gates
+        blockGateAND = new BlockGateBase("gate_and").setRegistryName("bluepower:gate_and");
+        blockGateNAND = new BlockGateBase("gate_nand"){
+            @Override
+            public byte computeRedstone(byte back, byte left, byte right){
+                return (byte)((left == 0 || right == 0 || back == 0 ) ?  16 : 0);
+            }
+        }.setRegistryName("bluepower:gate_nand");
 
         //Wires
         blockAlloyWire = new Block[MinecraftColor.VALID_COLORS.length * 2 + 2];
