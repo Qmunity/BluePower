@@ -23,16 +23,17 @@ repositories {
         url "http://maven.cil.li"
     }
     maven {
-        name "ModMaven"
-        url "https://modmaven.k-4u.nl"
-    }
-    maven {
         name "IC2"
         url "http://maven.ic2.player.to"
     }
     maven {
-        name "Albedo"
-        url 'https://repo.elytradev.com'
+        // location of the maven that hosts JEI files
+        name "Progwml6 maven"
+        url "https://dvs1.progwml6.com/files/maven/"
+    }
+    maven {
+        name "ModMaven"
+        url "https://modmaven.k-4u.nl"
     }
 }
 

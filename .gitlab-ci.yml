@@ -1,10 +1,13 @@
 image: java:8-jdk
 
+variables:
+  GRADLE_OPTS: "-Dorg.gradle.daemon=true"
+
 build:
   stage: build
   script:
     - chmod +x gradlew
-    - ./gradlew clean build
+    - ./gradlew build
   artifacts:
     paths:
       - build/libs/*.jar
