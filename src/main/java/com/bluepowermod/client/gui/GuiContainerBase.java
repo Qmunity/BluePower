@@ -138,6 +138,7 @@ public class GuiContainerBase extends GuiContainer implements IWidgetListener {
     public void drawScreen(int x, int y, float partialTick) {
 
         super.drawScreen(x, y, partialTick);
+        this.renderHoveredToolTip(x, y);
         List<String> tooltip = new ArrayList<String>();
         boolean shift = BluePower.proxy.isSneakingInGui();
         for (IGuiWidget widget : widgets) {

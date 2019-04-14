@@ -47,7 +47,7 @@ public class InventoryProjectTableCrafting extends InventoryCrafting{
         this.projectTable.markDirty();
         this.eventHandler.onCraftMatrixChanged(this);
 
-        BPNetworkHandler.INSTANCE.sendToServer(new MessageCraftingSync());
+        //BPNetworkHandler.INSTANCE.sendToServer(new MessageCraftingSync());
     }
 
     @Nonnull
