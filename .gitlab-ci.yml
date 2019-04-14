@@ -1,9 +1,15 @@
 image: java:8-jdk
 
-cache:
-  key: ${CI_JOB_NAME}
 variables:
   GRADLE_OPTS: "-Dorg.gradle.daemon=true"
+  CACHE_DIR: "$CI_PROJECT_DIR/build"
+  CACHE_DIR2: "$CI_PROJECT_DIR/.gradle"
+  
+cache:
+  paths:
+  - $CACHE_DIR
+  - $CACHE_DIR2
+  key: "$CI_JOB_NAME"
 
 build:
   stage: build
