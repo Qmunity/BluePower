@@ -14,10 +14,25 @@ buildscript {
 }
 
 repositories {
-    maven {url "http://tehnut.info/maven"}
     maven {
-	    name "ModMaven"
-	    url "https://modmaven.k-4u.nl"
+        name "Hwyla"
+        url "http://tehnut.info/maven"
+    }
+    maven {
+        name "OpenComputers"
+        url "http://maven.cil.li"
+    }
+    maven {
+        name "ModMaven"
+        url "https://modmaven.k-4u.nl"
+    }
+    maven {
+        name "IC2"
+        url "http://maven.ic2.player.to"
+    }
+    maven {
+        name "Albedo"
+        url 'https://repo.elytradev.com'
     }
 }
 
