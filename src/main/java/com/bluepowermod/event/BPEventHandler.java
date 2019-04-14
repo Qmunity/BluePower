@@ -50,6 +50,7 @@ import net.minecraft.tileentity.TileEntityHopper;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 import net.minecraftforge.client.model.BakedModelWrapper;
 import net.minecraftforge.client.model.ISmartVariant;
@@ -267,28 +268,29 @@ public class BPEventHandler {
     @SideOnly(Side.CLIENT)
     @SubscribeEvent
     public void blockHighlightEvent(DrawBlockHighlightEvent event) {
-       Block block = Block.getBlockFromItem(event.getPlayer().getHeldItem(EnumHand.MAIN_HAND).getItem());
-       if(block instanceof BlockGateBase){
-           BlockPos position = event.getTarget().getBlockPos().up();
-           Entity entity = Minecraft.getMinecraft().getRenderViewEntity();
-           double d0 = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * (double)event.getPartialTicks();
-           double d1 = entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * (double)event.getPartialTicks();
-           double d2 = entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * (double)event.getPartialTicks();
-           Tessellator tessellator = Tessellator.getInstance();
-           BufferBuilder vertexbuffer = tessellator.getBuffer();
-           vertexbuffer.setTranslation(-d0, -d1, -d2 );
-           GlStateManager.pushMatrix();
-               GlStateManager.enableAlpha();
-               position.add(0.5, 0.1, 0.5);
-               vertexbuffer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
-               BlockRendererDispatcher blockrendererdispatcher = Minecraft.getMinecraft().getBlockRendererDispatcher();
-               IBlockState state = block.getDefaultState();
-               IBakedModel ibakedmodel = blockrendererdispatcher.getModelForState(state);
-               blockrendererdispatcher.getBlockModelRenderer().renderModel(event.getPlayer().world, ibakedmodel, state, position, vertexbuffer, false, new Random().nextLong());
-               tessellator.draw();
-           GlStateManager.popMatrix();
-           vertexbuffer.setTranslation(0, 0, 0);
-       }
+        RayTraceResult mop = event.getTarget();
+        Block block = Block.getBlockFromItem(event.getPlayer().getHeldItem(EnumHand.MAIN_HAND).getItem());
+        if(block instanceof BlockGateBase && mop.typeOfHit == RayTraceResult.Type.BLOCK){
+            BlockPos position = event.getTarget().getBlockPos().offset(mop.sideHit);
+            Entity entity = Minecraft.getMinecraft().getRenderViewEntity();
+            double d0 = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * (double)event.getPartialTicks();
+            double d1 = entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * (double)event.getPartialTicks();
+            double d2 = entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * (double)event.getPartialTicks();
+            Tessellator tessellator = Tessellator.getInstance();
+            BufferBuilder vertexbuffer = tessellator.getBuffer();
+            vertexbuffer.setTranslation(-d0, -d1, -d2 );
+            GlStateManager.pushMatrix();
+            GlStateManager.enableAlpha();
+            position.add(0.5, 0.1, 0.5);
+            vertexbuffer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
+            BlockRendererDispatcher blockrendererdispatcher = Minecraft.getMinecraft().getBlockRendererDispatcher();
+            IBlockState state = block.getDefaultState().withProperty(BlockGateBase.FACING, mop.sideHit);
+            IBakedModel ibakedmodel = blockrendererdispatcher.getModelForState(state);
+            blockrendererdispatcher.getBlockModelRenderer().renderModel(event.getPlayer().world, ibakedmodel, state, position, vertexbuffer, false, new Random().nextLong());
+            tessellator.draw();
+            GlStateManager.popMatrix();
+            vertexbuffer.setTranslation(0, 0, 0);
+        }
     }
 
 }
