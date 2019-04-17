@@ -1,17 +1,14 @@
 buildscript {
-	repositories {
-		mavenCentral()
+    repositories {
         jcenter()
-        maven { url = "http://files.minecraftforge.net/maven" }
-		maven {
-			name = "sonatype"
-            url = "https://oss.sonatype.org/content/repositories/snapshots/"
-        }
+        maven { url = "https://files.minecraftforge.net/maven" }
     }
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
     }
 }
+
+apply plugin: 'net.minecraftforge.gradle.forge'
 
 repositories {
     maven {
@@ -27,17 +24,19 @@ repositories {
         url "http://maven.ic2.player.to"
     }
     maven {
-        // location of the maven that hosts JEI files
-        name "Progwml6 maven"
+        name "JEI"
         url "https://dvs1.progwml6.com/files/maven/"
     }
     maven {
-        name "ModMaven"
-        url "https://modmaven.k-4u.nl"
+        name 'MCMultipart'
+        url 'https://maven.amadornes.com/'
+    }
+    maven {
+        name 'CTM'
+        url 'https://maven.tterrag.com/'
     }
 }
 
-apply plugin: 'net.minecraftforge.gradle.forge'
 apply plugin: 'maven'
 
 project.ext {
@@ -50,7 +49,6 @@ project.ext {
     }
     mcVersion = "1.12.2"
 }
-
 
 version = "${project.ext.major}.${project.minor}.${project.build}"
 group = "com.bluepowermod"
