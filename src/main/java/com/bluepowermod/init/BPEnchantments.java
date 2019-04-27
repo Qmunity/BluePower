@@ -11,6 +11,8 @@ import net.minecraft.enchantment.Enchantment;
 
 import com.bluepowermod.enchant.EnchantmentDisjunction;
 import com.bluepowermod.enchant.EnchantmentVorpal;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class BPEnchantments {
 
@@ -21,5 +23,12 @@ public class BPEnchantments {
 		vorpal = new EnchantmentVorpal(Config.vorpalEnchantmentId, Enchantment.Rarity.COMMON);
 		disjunction = new EnchantmentDisjunction(Config.disjunctionEnchantmentId, Enchantment.Rarity.COMMON);
 	}
+
+	@SubscribeEvent
+	public static void registerEnchantments(RegistryEvent.Register<Enchantment> event) {
+		event.getRegistry().register(vorpal.setRegistryName("bluepower:vorpal"));
+		event.getRegistry().register(disjunction.setRegistryName("bluepower:disjunction"));
+	}
+
 	
 }

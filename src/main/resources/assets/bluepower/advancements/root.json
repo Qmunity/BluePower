@@ -1,0 +1,17 @@
+{
+  "display": {
+    "icon": {
+      "item": "bluepower:project_table"
+    },
+    "title": {"translate": "achievement.bluepower"},
+    "description": {"translate": "achievement.bluepower.desc"},
+    "background": "bluepower:textures/blocks/sapphire_block.png",
+    "show_toast": false,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "root": {
+      "trigger": "minecraft:location"
+    }
+  }
+}

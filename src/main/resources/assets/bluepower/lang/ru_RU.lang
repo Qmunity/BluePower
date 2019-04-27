@@ -854,6 +854,7 @@ waila.bluepower:machine.stuffed=Stuffed
 
 # Achievements
 ##achievement.bluepower=
+##achievement.bluepower.desc=
 
 ##achievement.bluepower:vorpal=
 ##achievement.bluepower:vorpal.desc=

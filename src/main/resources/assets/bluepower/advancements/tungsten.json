@@ -1,0 +1,22 @@
+{
+  "display": {
+    "icon": {
+      "item": "bluepower:tungsten_ore"
+    },
+    "title": {"translate": "achievement.bluepower:tungsten"},
+    "description": {"translate": "achievement.bluepower:tungsten.desc"}
+  },
+  "parent": "bluepower:root",
+  "criteria": {
+    "end": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "bluepower:tungsten_ore"
+          }
+        ]
+      }
+    }
+  }
+}

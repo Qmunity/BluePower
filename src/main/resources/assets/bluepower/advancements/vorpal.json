@@ -1,0 +1,22 @@
+{
+  "display": {
+    "icon": {
+      "item": "bluepower:athame"
+    },
+    "title": {"translate": "achievement.bluepower:vorpal"},
+    "description": {"translate": "achievement.bluepower:vorpal.desc"}
+  },
+  "parent": "bluepower:root",
+  "criteria": {
+    "end": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+          "enchantments": [{"enchantment": "bluepower:vorpal"}]
+          }
+        ]
+      }
+    }
+  }
+}

@@ -853,6 +853,7 @@ waila.bluepower:machine.stuffed=Prepunjeno
 
 # Achievements
 ##achievement.bluepower=
+##achievement.bluepower.desc=
 
 ##achievement.bluepower:vorpal=
 ##achievement.bluepower:vorpal.desc=

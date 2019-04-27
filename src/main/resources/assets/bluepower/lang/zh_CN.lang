@@ -855,6 +855,7 @@ bluepower:accessability.private=私有
 
 # Achievements
 achievement.bluepower=蓝石力量
+##achievement.bluepower.desc=
 
 achievement.bluepower:vorpal=更好的赋予
 achievement.bluepower:vorpal.desc=得到斩首附魔

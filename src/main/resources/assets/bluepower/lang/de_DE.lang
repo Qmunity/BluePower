@@ -853,6 +853,7 @@ bluepower:accessability.private=Privat
 
 # Achievements
 achievement.bluepower=Bluepower
+achievement.bluepower.desc=Erkundung, Beleuchtung, Strom und Maschinen.
 
 achievement.bluepower:vorpal=Gut ausgestattet
 achievement.bluepower:vorpal.desc=Nutz die Vorpal Verzauberung

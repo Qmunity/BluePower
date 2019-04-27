@@ -56,8 +56,8 @@ public class BluePower {
         BPApi.init(new BluePowerAPI());
         // Load configs
         Config.syncConfig(config);
-
         BPEnchantments.init();
+        MinecraftForge.EVENT_BUS.register(BPEnchantments.class);
 
         CompatibilityUtils.preInit(event);
         CapabilityBlutricity.register();

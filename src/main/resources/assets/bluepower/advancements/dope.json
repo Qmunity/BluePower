@@ -1,0 +1,22 @@
+{
+  "display": {
+    "icon": {
+      "item": "bluepower:blue_doped_wafer"
+    },
+    "title": {"translate": "achievement.bluepower:dope"},
+    "description": {"translate": "achievement.bluepower:dope.desc"}
+  },
+  "parent": "bluepower:root",
+  "criteria": {
+    "end": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "bluepower:blue_doped_wafer"
+          }
+        ]
+      }
+    }
+  }
+}
