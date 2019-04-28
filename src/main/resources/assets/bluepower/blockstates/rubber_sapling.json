@@ -1,0 +1,27 @@
+﻿{
+  "forge_marker": 1,
+  "defaults": {
+    "textures": {
+    "cross": "bluepower:blocks/rubber_sapling"
+    },
+    "model": "cross",
+    "uvlock": true
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [{
+      "transform": "forge:default-item",
+      "model": "forge:item-layer",
+      "textures": {
+        "layer0": "bluepower:blocks/rubber_sapling"
+      }
+    }],
+    "stage":{
+      "0":{},
+      "1":{}
+    },
+    "type":{
+      "oak":{}
+    }
+  }
+}

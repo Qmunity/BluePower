@@ -1,0 +1,22 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "textures": {
+      "all": "bluepower:blocks/rubber_leaves"
+    },
+    "model": "leaves",
+    "uvlock": true
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [{}],
+    "check_decay": {
+      "true":{},
+      "false":{}
+    },
+    "decayable": {
+      "true":{},
+      "false":{}
+    }
+  }
+}

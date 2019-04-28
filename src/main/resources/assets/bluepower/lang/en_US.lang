@@ -57,6 +57,9 @@ tile.bluepower:tungsten_block.name=Tungsten Block
 # Plants
 tile.bluepower:flax_crop.name=Flax
 tile.bluepower:indigo_flower.name=Indigo Flower
+tile.bluepower:rubber_log.name=Rubber Log
+tile.bluepower:rubber_leaves.name=Rubber Leaves
+tile.bluepower:rubber_sapling.name=Rubber Sapling
 
 # Glass
 tile.bluepower:sapphire_glass.name=Sapphire Glass

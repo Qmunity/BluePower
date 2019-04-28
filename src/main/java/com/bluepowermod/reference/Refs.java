@@ -67,6 +67,9 @@ public class Refs {
     public static final String SILVERBLOCK_NAME = "silver_block";
     public static final String ZINCBLOCK_NAME = "zinc_block";
     public static final String TUNGSTENBLOCK_NAME = "tungsten_block";
+    public static final String RUBBERLOG_NAME = "rubber_log";
+    public static final String RUBBERLEAVES_NAME = "rubber_leaves";
+    public static final String RUBBERSAPLING_NAME = "rubber_sapling";
     public static final String COPPERINGOT_NAME = "copper_ingot";
     public static final String SILVERINGOT_NAME = "silver_ingot";
     public static final String ZINCINGOT_NAME = "zinc_ingot";
