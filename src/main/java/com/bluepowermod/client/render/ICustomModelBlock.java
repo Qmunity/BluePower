@@ -8,7 +8,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  */
 public interface ICustomModelBlock {
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     void initModel();
 
 }

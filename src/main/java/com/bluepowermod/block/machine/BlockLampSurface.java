@@ -43,7 +43,7 @@ public class BlockLampSurface extends BlockLamp {
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void initModel() {
         //All lamps need to use the same blockstate
         StateMapperBase stateMapper = new StateMapperBase() {

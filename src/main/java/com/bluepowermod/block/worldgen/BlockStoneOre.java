@@ -114,7 +114,7 @@ public class BlockStoneOre extends Block {
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public BlockRenderLayer getRenderLayer() {
         return transparent ? BlockRenderLayer.TRANSLUCENT : BlockRenderLayer.SOLID;
     }

@@ -84,7 +84,7 @@ public class ContainerCircuitTable extends Container {
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void updateProgressBar(int p_75137_1_, int p_75137_2_) {
         circuitTable.slotsScrolled = p_75137_2_;
         GuiScreen gui = Minecraft.getMinecraft().currentScreen;

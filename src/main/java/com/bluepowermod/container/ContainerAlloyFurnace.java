@@ -136,7 +136,7 @@ public class ContainerAlloyFurnace extends Container {
     }
     
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void updateProgressBar(int par1, int par2) {
     
         if (par1 == 0) {

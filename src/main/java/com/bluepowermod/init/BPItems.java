@@ -18,6 +18,7 @@
 package com.bluepowermod.init;
 
 import com.bluepowermod.BluePower;
+import com.bluepowermod.helper.GemItemTier;
 import com.bluepowermod.item.*;
 import com.bluepowermod.reference.Refs;
 import net.minecraft.init.Blocks;
@@ -25,6 +26,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.Item.ToolMaterial;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Loader;
@@ -104,7 +106,7 @@ public class BPItems {
     public static final Item iron_wire = new ItemCrafting(Refs.IRONWIRE_NAME);
     public static final Item paint_can = new ItemPaintCan(Refs.PAINTCAN_NAME);
     public static final Item paint_brush = new ItemPaintBrush(Refs.PAINTBRUSH_NAME);
-    public static final Item ruby_axe = new ItemGemAxe(BluePower.gemMaterial, Refs.RUBYAXE_NAME, BPItems.ruby_gem);
+    public static final Item ruby_axe = new ItemGemAxe(new GemItemTier(Ingredient.EMPTY), Refs.RUBYAXE_NAME, BPItems.ruby_gem);
     public static final Item ruby_sword = new ItemGemSword(BluePower.gemMaterial, Refs.RUBYSWORD_NAME, BPItems.ruby_gem);
     public static final Item ruby_pickaxe = new ItemGemPickaxe(BluePower.gemMaterial, Refs.RUBYPICKAXE_NAME, BPItems.ruby_gem);
     public static final Item ruby_shovel = new ItemGemSpade(BluePower.gemMaterial, Refs.RUBYSPADE_NAME, BPItems.ruby_gem);

@@ -34,13 +34,13 @@ public abstract class Packet<REQ extends Packet<REQ>> implements IMessage, IMess
         return null;
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public EntityPlayer getPlayerClient() {
 
         return Minecraft.getMinecraft().player;
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public abstract void handleClientSide(EntityPlayer player);
 
     public abstract void handleServerSide(EntityPlayer player);

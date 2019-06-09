@@ -54,7 +54,7 @@ public class ContainerRetriever extends ContainerFilter {
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void updateProgressBar(int id, int value) {
 
         super.updateProgressBar(id, value);

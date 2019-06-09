@@ -18,23 +18,19 @@
 package com.bluepowermod.item;
 
 import com.bluepowermod.init.BPItems;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemAxe;
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.*;
 
 import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.reference.Refs;
 
-public class ItemGemAxe extends ItemAxe {
+public class ItemGemAxe extends AxeItem {
 
     public    Item    customCraftingMaterial = Items.AIR;
     protected boolean canRepair              = true;
 
-    public ItemGemAxe(ToolMaterial material, String name, Item repairItem) {
+    public ItemGemAxe(IItemTier material, String name, Item repairItem) {
         super(material, material.getAttackDamage(), 1.4F);
-        this.setTranslationKey(name);
-        this.setCreativeTab(BPCreativeTabs.tools);
+        this.group = (BPCreativeTabs.tools);
         this.setRegistryName(Refs.MODID + ":" + name);
         this.customCraftingMaterial = repairItem;
         BPItems.itemList.add(this);

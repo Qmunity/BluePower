@@ -62,7 +62,7 @@ public class CompatModuleIC2 extends CompatModule {
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void registerRenders() {
 
     }

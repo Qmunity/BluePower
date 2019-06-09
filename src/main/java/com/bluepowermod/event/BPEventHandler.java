@@ -219,7 +219,7 @@ public class BPEventHandler {
     }
 
     @SubscribeEvent
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void onItemTooltip(ItemTooltipEvent event) {
 
         if (event.getItemStack().hasTagCompound() && event.getItemStack().getTagCompound().hasKey("tileData")
@@ -265,7 +265,7 @@ public class BPEventHandler {
         }
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public void blockHighlightEvent(DrawBlockHighlightEvent event) {
         RayTraceResult mop = event.getTarget();

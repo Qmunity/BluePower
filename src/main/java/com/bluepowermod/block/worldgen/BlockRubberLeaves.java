@@ -35,7 +35,7 @@ public class BlockRubberLeaves extends BlockLeaves {
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public BlockRenderLayer getRenderLayer() {
         return Blocks.LEAVES.getRenderLayer();
     }
@@ -45,7 +45,7 @@ public class BlockRubberLeaves extends BlockLeaves {
         return Blocks.LEAVES.isOpaqueCube(state);
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     @Override
     public boolean shouldSideBeRendered(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side){
         return Blocks.LEAVES.shouldSideBeRendered(state, world, pos, side);

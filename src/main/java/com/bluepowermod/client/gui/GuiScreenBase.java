@@ -18,7 +18,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * @author MineMaarten
  */
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public abstract class GuiScreenBase extends GuiScreen {
 
     protected int guiLeft, guiTop, xSize, ySize;

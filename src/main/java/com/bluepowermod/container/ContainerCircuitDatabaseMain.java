@@ -110,7 +110,7 @@ public class ContainerCircuitDatabaseMain extends ContainerGhosts {
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void updateProgressBar(int id, int value) {
 
         if (id == 0) {

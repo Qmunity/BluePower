@@ -71,7 +71,7 @@ public abstract class SyncedField<T> {
         return lastValue;
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void setValue(T value){
         try {
             if(arrayIndex >= 0) {

@@ -18,25 +18,23 @@
 package com.bluepowermod.compat;
 
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 
 public abstract class CompatModule {
 
-    public abstract void preInit(FMLPreInitializationEvent ev);
 
-    public abstract void init(FMLInitializationEvent ev);
+    public abstract void init(FMLCommonSetupEvent ev);
 
-    public abstract void postInit(FMLPostInitializationEvent ev);
+    public abstract void postInit(FMLLoadCompleteEvent ev);
 
     public abstract void registerBlocks();
 
     public abstract void registerItems();
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public abstract void registerRenders();
 
     public boolean isScrewdriver(ItemStack item) {

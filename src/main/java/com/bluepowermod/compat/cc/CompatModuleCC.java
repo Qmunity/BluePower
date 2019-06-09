@@ -48,7 +48,7 @@ public class CompatModuleCC extends CompatModule {
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void registerRenders() {
 
     }

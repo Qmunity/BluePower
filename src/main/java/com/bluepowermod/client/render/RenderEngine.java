@@ -33,7 +33,7 @@ import com.bluepowermod.tile.tier3.TileEngine;
  * TODO: Create Rotation Helper and re-implement as Fast TESR
  *
  */
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class RenderEngine extends TileEntitySpecialRenderer<TileEngine> {
 
     float rotateAmount  = 0F;

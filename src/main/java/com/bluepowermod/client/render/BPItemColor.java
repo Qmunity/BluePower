@@ -6,11 +6,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class BPItemColor implements IItemColor {
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public int colorMultiplier(ItemStack itemStack, int renderPass) {
         return ((IBPColoredItem)itemStack.getItem()).getColor(itemStack, renderPass);
     }

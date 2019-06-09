@@ -130,7 +130,7 @@ public class ContainerSortingMachine extends ContainerMachineBase {
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void updateProgressBar(int id, int value) {
 
         if (id < 9) {

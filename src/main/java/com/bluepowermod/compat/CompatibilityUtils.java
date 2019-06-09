@@ -14,13 +14,11 @@ import com.bluepowermod.compat.mcmp.CompatModuleMCMP;
 import com.bluepowermod.compat.waila.CompatModuleWaila;
 import com.bluepowermod.util.Dependencies;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.Loader;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.ModList;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 
 import java.util.*;
 
@@ -47,7 +45,7 @@ public class CompatibilityUtils {
         if (modules.containsKey(module))
             return;
 
-        if (Loader.isModLoaded(modid)) {
+        if ( ModList.get().isLoaded(modid)) {
             try {
                 Class<?> c = Class.forName(module);
                 if (!CompatModule.class.isAssignableFrom(c))
@@ -87,24 +85,18 @@ public class CompatibilityUtils {
         return null;
     }
 
-    public static void preInit(FMLPreInitializationEvent ev) {
-
-        for (CompatModule m : getLoadedModules())
-            m.preInit(ev);
-    }
-
-    public static void init(FMLInitializationEvent ev) {
+    public static void init(FMLCommonSetupEvent ev) {
         for (CompatModule m : getLoadedModules())
             m.init(ev);
     }
 
-    public static void postInit(FMLPostInitializationEvent ev) {
+    public static void postInit(FMLLoadCompleteEvent ev) {
 
         for (CompatModule m : getLoadedModules())
             m.postInit(ev);
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public static void registerRenders() {
 
         for (CompatModule m : getLoadedModules())

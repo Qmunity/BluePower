@@ -27,7 +27,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class GuiCircuitDatabaseSharing extends GuiCircuitTable {
 
     private final TileCircuitDatabase circuitDatabase;

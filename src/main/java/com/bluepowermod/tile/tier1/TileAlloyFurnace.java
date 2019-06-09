@@ -180,7 +180,7 @@ public class TileAlloyFurnace extends TileBase implements ISidedInventory {
         // setIsActive(newValue);
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void setBurnTicks(int _maxBurnTime, int _currentBurnTime) {
 
         maxBurnTime = _maxBurnTime;

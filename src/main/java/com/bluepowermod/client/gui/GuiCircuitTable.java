@@ -27,7 +27,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.io.IOException;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class GuiCircuitTable extends GuiContainerBaseBP {
 
     protected static final ResourceLocation guiTexture = new ResourceLocation(Refs.MODID, "textures/gui/circuit_table.png");

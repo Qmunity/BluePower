@@ -89,7 +89,7 @@ public class CompatModuleHydCraft extends CompatModule {
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void registerRenders() {
 
     }

@@ -122,7 +122,7 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
         return internalItemStackBuffer;
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void setBacklog(List<TubeStack> backlog) {
         internalItemStackBuffer.clear();
         internalItemStackBuffer.addAll(backlog);
@@ -244,7 +244,7 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
      *
      * @param info
      */
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void addWailaInfo(List<String> info) {
 
         if (isEjecting()) {

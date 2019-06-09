@@ -121,7 +121,7 @@ public class GUIHandler implements IGuiHandler {
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
 
         TileEntity ent = world.getTileEntity(new BlockPos(x, y, z));

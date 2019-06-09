@@ -48,7 +48,7 @@ public class ItemSilkyScrewdriver extends ItemBase {
             return EnumActionResult.PASS;
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     @Override
     public boolean isFull3D() {
 

@@ -53,7 +53,7 @@ public class TubeStack {
     private double speed = ITEM_SPEED;
     public static double tickTimeMultiplier = 1;//Used client side to correct for TPS lag. This is being synchronized from the server.
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     private static RenderItem customRenderItem;
     private static EntityItem renderedItem;
 
@@ -173,7 +173,7 @@ public class TubeStack {
         return stack;
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void render(float partialTick) {
 
         if (renderMode == RenderMode.AUTO) {

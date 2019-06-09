@@ -37,7 +37,7 @@ public class BlockInsulatedAlloyWire extends BlockAlloyWire implements ICustomMo
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void initModel() {
         //All wires need to use the same blockstate
         StateMapperBase stateMapper = new StateMapperBase() {

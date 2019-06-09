@@ -23,10 +23,10 @@ public interface IGateComponent {
 
     public void tick();
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void renderStatic(Vec3i translation, RenderHelper renderer, int pass);
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void renderDynamic(Vec3d translation, double delta, int pass);
 
     public void onLayoutRefresh();

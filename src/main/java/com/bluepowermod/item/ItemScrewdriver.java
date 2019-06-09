@@ -63,7 +63,7 @@ public class ItemScrewdriver extends ItemBase implements IScrewdriver {
 
         return EnumActionResult.PASS;
     }
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     @Override
     public boolean isFull3D() {
 

@@ -60,7 +60,7 @@ public class BlockGateBase extends BlockBase {
         setWIP(true);
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void initModel() {
         ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0,
                 new ModelResourceLocation(Refs.MODID + ":" + name, "inventory"));
