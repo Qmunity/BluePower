@@ -19,7 +19,7 @@
 
 package com.bluepowermod.client.gui;
 
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 
 import com.bluepowermod.container.ContainerEjector;
@@ -30,7 +30,7 @@ public class GuiEjector extends GuiContainerBaseBP {
 
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/seedbag.png");
 
-    public GuiEjector(InventoryPlayer invPlayer, TileEjector ejector) {
+    public GuiEjector(PlayerInventory invPlayer, TileEjector ejector) {
 
         super(ejector, new ContainerEjector(invPlayer, ejector), resLoc);
     }

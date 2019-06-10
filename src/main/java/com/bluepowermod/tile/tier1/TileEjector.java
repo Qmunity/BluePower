@@ -19,10 +19,10 @@ package com.bluepowermod.tile.tier1;
 
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.tile.TileMachineBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.NonNullList;
 
 import java.util.List;
@@ -55,12 +55,12 @@ public class TileEjector extends TileMachineBase implements IInventory {
      * This function gets called whenever the world/chunk loads
      */
     @Override
-    public void readFromNBT(NBTTagCompound tCompound) {
+    public void readFromNBT(CompoundNBT tCompound) {
 
         super.readFromNBT(tCompound);
 
         for (int i = 0; i < 9; i++) {
-            NBTTagCompound tc = tCompound.getCompoundTag("inventory" + i);
+            CompoundNBT tc = tCompound.getCompoundTag("inventory" + i);
             inventory.set(i, new ItemStack(tc));
         }
     }
@@ -69,12 +69,12 @@ public class TileEjector extends TileMachineBase implements IInventory {
      * This function gets called whenever the world/chunk is saved
      */
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound tCompound) {
+    public CompoundNBT writeToNBT(CompoundNBT tCompound) {
 
         super.writeToNBT(tCompound);
 
         for (int i = 0; i < 9; i++) {
-                NBTTagCompound tc = new NBTTagCompound();
+                CompoundNBT tc = new CompoundNBT();
                 inventory.get(i).writeToNBT(tc);
                 tCompound.setTag("inventory" + i, tc);
         }
@@ -182,17 +182,17 @@ public class TileEjector extends TileMachineBase implements IInventory {
      * @param player
      */
     @Override
-    public boolean isUsableByPlayer(EntityPlayer player) {
+    public boolean isUsableByPlayer(PlayerEntity player) {
         return player.getDistanceSqToCenter(pos) <= 64.0D;
     }
 
     @Override
-    public void openInventory(EntityPlayer player) {
+    public void openInventory(PlayerEntity player) {
 
     }
 
     @Override
-    public void closeInventory(EntityPlayer player) {
+    public void closeInventory(PlayerEntity player) {
 
     }
 

@@ -8,10 +8,10 @@
 package com.bluepowermod.container;
 
 import com.bluepowermod.client.gui.GuiContainerBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.IContainerListener;
-import net.minecraft.inventory.Slot;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.IContainerListener;
+import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 
 import com.bluepowermod.ClientProxy;
@@ -27,7 +27,7 @@ public class ContainerCircuitDatabaseMain extends ContainerGhosts {
     private int curUploadProgress, curCopyProgress, selectedShareOption;
     private final TileCircuitDatabase circuitDatabase;
 
-    public ContainerCircuitDatabaseMain(InventoryPlayer invPlayer, TileCircuitDatabase circuitDatabase) {
+    public ContainerCircuitDatabaseMain(PlayerInventory invPlayer, TileCircuitDatabase circuitDatabase) {
 
         this.circuitDatabase = circuitDatabase;
         addSlotToContainer(new SlotPhantom(circuitDatabase.copyInventory, 0, 57, 64) {
@@ -62,7 +62,7 @@ public class ContainerCircuitDatabaseMain extends ContainerGhosts {
         bindPlayerInventory(invPlayer);
     }
 
-    protected void bindPlayerInventory(InventoryPlayer invPlayer) {
+    protected void bindPlayerInventory(PlayerInventory invPlayer) {
 
         // Render inventory
         for (int i = 0; i < 3; i++) {
@@ -78,7 +78,7 @@ public class ContainerCircuitDatabaseMain extends ContainerGhosts {
     }
 
     @Override
-    public boolean canInteractWith(EntityPlayer player) {
+    public boolean canInteractWith(PlayerEntity player) {
 
         return true;
     }
@@ -126,7 +126,7 @@ public class ContainerCircuitDatabaseMain extends ContainerGhosts {
     }
 
     @Override
-    public ItemStack transferStackInSlot(EntityPlayer player, int par2) {
+    public ItemStack transferStackInSlot(PlayerEntity player, int par2) {
 
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = (Slot) inventorySlots.get(par2);

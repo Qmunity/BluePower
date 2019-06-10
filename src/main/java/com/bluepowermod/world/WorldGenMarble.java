@@ -18,15 +18,15 @@
 package com.bluepowermod.world;
 
 import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.gen.feature.WorldGenMinable;
+import net.minecraft.world.gen.feature.OreFeature;
 
 import java.util.*;
 
 @SuppressWarnings({ "unchecked", "rawtypes" })
-public class WorldGenMarble extends WorldGenMinable {
+public class WorldGenMarble extends OreFeature {
 
     LinkedList marbleVein = new LinkedList();
     HashSet veinsList = new HashSet();

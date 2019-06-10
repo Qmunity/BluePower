@@ -12,12 +12,12 @@ import com.bluepowermod.client.gui.IGuiButtonSensitive;
 import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.helper.ItemStackHelper;
 import com.bluepowermod.init.BPBlocks;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
 
 import java.util.List;
@@ -63,9 +63,9 @@ public class TileFilter extends TileTransposer implements ISidedInventory, IGuiB
 
     @Override
     protected void pullItem() {
-            EnumFacing dir = getOutputDirection().getOpposite();
+            Direction dir = getOutputDirection().getOpposite();
             TileEntity tile = getTileCache(dir);
-            EnumFacing direction = dir.getOpposite();
+            Direction direction = dir.getOpposite();
             boolean everythingNull = true;
             for (ItemStack filterStack : inventory) {
                 if (!filterStack.isEmpty()) {
@@ -89,12 +89,12 @@ public class TileFilter extends TileTransposer implements ISidedInventory, IGuiB
      * This function gets called whenever the world/chunk loads
      */
     @Override
-    public void readFromNBT(NBTTagCompound tCompound) {
+    public void readFromNBT(CompoundNBT tCompound) {
 
         super.readFromNBT(tCompound);
 
         for (int i = 0; i < 9; i++) {
-            NBTTagCompound tc = tCompound.getCompoundTag("inventory" + i);
+            CompoundNBT tc = tCompound.getCompoundTag("inventory" + i);
             inventory.set(i, new ItemStack(tc));
         }
         filterColor = TubeColor.values()[tCompound.getByte("filterColor")];
@@ -105,12 +105,12 @@ public class TileFilter extends TileTransposer implements ISidedInventory, IGuiB
      * This function gets called whenever the world/chunk is saved
      */
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound tCompound) {
+    public CompoundNBT writeToNBT(CompoundNBT tCompound) {
 
         super.writeToNBT(tCompound);
 
         for (int i = 0; i < 9; i++) {
-                NBTTagCompound tc = new NBTTagCompound();
+                CompoundNBT tc = new CompoundNBT();
                 inventory.get(i).writeToNBT(tc);
                 tCompound.setTag("inventory" + i, tc);
         }
@@ -181,17 +181,17 @@ public class TileFilter extends TileTransposer implements ISidedInventory, IGuiB
     }
 
     @Override
-    public boolean isUsableByPlayer(EntityPlayer player) {
+    public boolean isUsableByPlayer(PlayerEntity player) {
         return player.getDistanceSqToCenter(pos) <= 64.0D;
     }
 
     @Override
-    public void openInventory(EntityPlayer player) {
+    public void openInventory(PlayerEntity player) {
 
     }
 
     @Override
-    public void closeInventory(EntityPlayer player) {
+    public void closeInventory(PlayerEntity player) {
 
     }
 
@@ -212,8 +212,8 @@ public class TileFilter extends TileTransposer implements ISidedInventory, IGuiB
     }
 
     @Override
-    public int[] getSlotsForFace(EnumFacing side) {
-        EnumFacing direction = getFacingDirection();
+    public int[] getSlotsForFace(Direction side) {
+        Direction direction = getFacingDirection();
 
         if (side == direction || side == direction.getOpposite()) {
             return new int[] {};
@@ -222,12 +222,12 @@ public class TileFilter extends TileTransposer implements ISidedInventory, IGuiB
     }
 
     @Override
-    public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction) {
+    public boolean canInsertItem(int index, ItemStack itemStackIn, Direction direction) {
         return true;
     }
 
     @Override
-    public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
+    public boolean canExtractItem(int index, ItemStack stack, Direction direction) {
         return true;
     }
 
@@ -274,7 +274,7 @@ public class TileFilter extends TileTransposer implements ISidedInventory, IGuiB
     }
 
     @Override
-    public void onButtonPress(EntityPlayer player, int messageId, int value) {
+    public void onButtonPress(PlayerEntity player, int messageId, int value) {
         if (messageId == 0)
             filterColor = TubeColor.values()[value];
         if (messageId == 1)

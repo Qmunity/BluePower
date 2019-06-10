@@ -3,11 +3,11 @@ package com.bluepowermod.block.worldgen;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.reference.Refs;
-import net.minecraft.block.BlockLog;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.LogBlock;
 import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.block.state.IBlockState;
 
-public class BlockRubberLog extends BlockLog {
+public class BlockRubberLog extends LogBlock {
     public BlockRubberLog(){
         this.setRegistryName(Refs.MODID + ":" + Refs.RUBBERLOG_NAME);
         this.setDefaultState(this.blockState.getBaseState().withProperty(LOG_AXIS, EnumAxis.Y));
@@ -20,8 +20,8 @@ public class BlockRubberLog extends BlockLog {
      * Convert the given metadata into a BlockState for this Block
      */
     @Override
-    public IBlockState getStateFromMeta(int meta){
-        IBlockState iblockstate = this.getDefaultState();
+    public BlockState getStateFromMeta(int meta){
+        BlockState iblockstate = this.getDefaultState();
 
         switch (meta & 12){
             case 0:
@@ -45,7 +45,7 @@ public class BlockRubberLog extends BlockLog {
      */
     @Override
     @SuppressWarnings("incomplete-switch")
-    public int getMetaFromState(IBlockState state){
+    public int getMetaFromState(BlockState state){
         int i = 0;
         switch (state.getValue(LOG_AXIS)) {
             case X:

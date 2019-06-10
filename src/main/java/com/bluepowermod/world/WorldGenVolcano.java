@@ -21,14 +21,14 @@ import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.init.BPItems;
 import com.bluepowermod.init.Config;
 import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntityChest;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.tileentity.ChestTileEntity;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.storage.loot.LootTableList;
+import net.minecraft.world.storage.loot.LootTables;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -204,8 +204,8 @@ public class WorldGenVolcano {
             }
         }
 
-        for (EnumFacing d : EnumFacing.VALUES) {
-            if (d != EnumFacing.UP && d != EnumFacing.DOWN) {
+        for (Direction d : Direction.VALUES) {
+            if (d != Direction.UP && d != Direction.DOWN) {
                 if (rand.nextInt(2) == 0) {
                     generateAltar(world, middleX + d.getXOffset() * roomSize / 2, startY - 1, middleZ + d.getZOffset() * roomSize / 2, rand, d);
                 }
@@ -213,13 +213,13 @@ public class WorldGenVolcano {
         }
     }
 
-    private void generateAltar(World world, int startX, int startY, int startZ, Random rand, EnumFacing dir) {
+    private void generateAltar(World world, int startX, int startY, int startZ, Random rand, Direction dir) {
         generateLootChest(world, new BlockPos(startX, startY + 1, startZ), rand, dir);
-        EnumFacing opDir = dir.getOpposite();
+        Direction opDir = dir.getOpposite();
         Block altarBlock = ALTAR_BLOCKS[rand.nextInt(ALTAR_BLOCKS.length)];
         setAltarBlockAndPossiblyTrap(world, startX, startY, startZ, rand, altarBlock);
         setAltarBlockAndPossiblyTrap(world, startX + opDir.getXOffset(), startY, startZ + opDir.getZOffset(), rand, altarBlock);
-        EnumFacing sideDir = EnumFacing.DOWN;
+        Direction sideDir = Direction.DOWN;
         setAltarBlockAndPossiblyTrap(world, startX + sideDir.getXOffset(), startY, startZ + sideDir.getZOffset(), rand, altarBlock);
         setAltarBlockAndPossiblyTrap(world, startX + sideDir.getXOffset() + opDir.getXOffset(), startY, startZ + sideDir.getZOffset() + opDir.getZOffset(), rand,
                 altarBlock);
@@ -238,13 +238,13 @@ public class WorldGenVolcano {
         }
     }
 
-    private void generateLootChest(World world, BlockPos pos, Random rand, EnumFacing dir) {
+    private void generateLootChest(World world, BlockPos pos, Random rand, Direction dir) {
         world.setBlockState(pos, Blocks.CHEST.getDefaultState(), dir.getOpposite().ordinal());
         if (rand.nextInt(5) == 0) {
-            ((TileEntityChest) world.getTileEntity(pos)).setInventorySlotContents(13,
+            ((ChestTileEntity) world.getTileEntity(pos)).setInventorySlotContents(13,
                     new ItemStack(BPItems.tungsten_ingot, 5 + rand.nextInt(10)));
         } else {
-            ((TileEntityChest) world.getTileEntity(pos)).setLootTable(LootTableList.CHESTS_SIMPLE_DUNGEON, rand.nextInt());//Possibly to be added with IC designs from the community.
+            ((ChestTileEntity) world.getTileEntity(pos)).setLootTable(LootTables.CHESTS_SIMPLE_DUNGEON, rand.nextInt());//Possibly to be added with IC designs from the community.
         }
     }
 

@@ -27,11 +27,11 @@ import com.bluepowermod.util.Dependencies;
 import invtweaks.api.container.ChestContainer;
 import invtweaks.api.container.ContainerSection;
 import invtweaks.api.container.ContainerSectionCallback;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.ClickType;
-import net.minecraft.inventory.Container;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.container.ClickType;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Slot;
+import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.Optional;
 
@@ -76,13 +76,13 @@ public class ContainerCanvasBag extends Container {
     }
     
     @Override
-    public boolean canInteractWith(EntityPlayer player) {
+    public boolean canInteractWith(PlayerEntity player) {
     
         return ItemStack.areItemStacksEqual(player.getHeldItemMainhand(), bag);
     }
     
     @Override
-    public ItemStack slotClick(int par1, int par2, ClickType par3, EntityPlayer player) {
+    public ItemStack slotClick(int par1, int par2, ClickType par3, PlayerEntity player) {
     
         if (par3.ordinal() != 2 || player.inventory.currentItem != par2) {
             return super.slotClick(par1, par2, par3, player);
@@ -92,7 +92,7 @@ public class ContainerCanvasBag extends Container {
     }
     
     @Override
-    public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int par2) {
+    public ItemStack transferStackInSlot(PlayerEntity par1EntityPlayer, int par2) {
     
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = (Slot) inventorySlots.get(par2);

@@ -10,7 +10,7 @@ package com.bluepowermod.network.message;
 import com.bluepowermod.network.Packet;
 import com.bluepowermod.tile.tier3.TileCircuitDatabase;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 
@@ -62,13 +62,13 @@ public class MessageSendClientServerTemplates extends Packet<MessageSendClientSe
     }
 
     @Override
-    public void handleClientSide(EntityPlayer player) {
+    public void handleClientSide(PlayerEntity player) {
 
         TileCircuitDatabase.serverDatabaseStacks = stacks;
     }
 
     @Override
-    public void handleServerSide(EntityPlayer player) {
+    public void handleServerSide(PlayerEntity player) {
 
     }
 

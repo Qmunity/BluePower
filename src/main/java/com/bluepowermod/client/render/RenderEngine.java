@@ -9,15 +9,15 @@ package com.bluepowermod.client.render;
 
 import com.bluepowermod.block.power.BlockEngine;
 import com.bluepowermod.init.BPBlocks;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.block.model.IBakedModel;
-import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.client.renderer.texture.AtlasTexture;
+import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -34,7 +34,7 @@ import com.bluepowermod.tile.tier3.TileEngine;
  *
  */
 @OnlyIn(Dist.CLIENT)
-public class RenderEngine extends TileEntitySpecialRenderer<TileEngine> {
+public class RenderEngine extends TileEntityRenderer<TileEngine> {
 
     float rotateAmount  = 0F;
 
@@ -49,7 +49,7 @@ public class RenderEngine extends TileEntitySpecialRenderer<TileEngine> {
         GlStateManager.pushMatrix();
         RenderHelper.disableStandardItemLighting();
 
-        this.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+        this.bindTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE);
         if (Minecraft.isAmbientOcclusionEnabled()) {
             GlStateManager.shadeModel(GL11.GL_SMOOTH);
         } else {
@@ -60,35 +60,35 @@ public class RenderEngine extends TileEntitySpecialRenderer<TileEngine> {
 
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder bufferBuilder = tessellator.getBuffer();
-        IBlockState state = BPBlocks.engine.getDefaultState();
+        BlockState state = BPBlocks.engine.getDefaultState();
         BlockRendererDispatcher dispatcher = Minecraft.getMinecraft().getBlockRendererDispatcher();
         BlockPos pos = engine.getPos();
 
         GlStateManager.translate(x, y, z);
 
         TileEngine tile = (TileEngine) engine.getWorld().getTileEntity(engine.getPos());
-        EnumFacing direction = tile.getOrientation();
+        Direction direction = tile.getOrientation();
 
-        if (direction == EnumFacing.UP) {
+        if (direction == Direction.UP) {
             GL11.glTranslated(0,1,1);
             GL11.glRotatef(180, 1, 0, 0);
         }
-        if (direction == EnumFacing.DOWN) {
+        if (direction == Direction.DOWN) {
             GL11.glRotatef(0, 0, 0, 0);
         }
-        if (direction == EnumFacing.EAST) {
+        if (direction == Direction.EAST) {
             GL11.glTranslated(1,0,0);
             GL11.glRotatef(90, 0, 0, 1);
         }
-        if (direction == EnumFacing.WEST) {
+        if (direction == Direction.WEST) {
             GL11.glTranslated(0,1,0);
             GL11.glRotatef(90, 0, 0, -1);
         }
-        if (direction == EnumFacing.NORTH) {
+        if (direction == Direction.NORTH) {
             GL11.glTranslated(0,1,0);
             GL11.glRotatef(90, 1, 0, 0);
         }
-        if (direction == EnumFacing.SOUTH) {
+        if (direction == Direction.SOUTH) {
             GL11.glTranslated(0,0,1);
             GL11.glRotatef(90, -1, 0, 0);
         }

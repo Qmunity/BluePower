@@ -9,15 +9,15 @@ package com.bluepowermod.container.stack;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.RenderItem;
+import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemDye;
+import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.item.BlockItem;
+import net.minecraft.item.DyeItem;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -43,7 +43,7 @@ public class TubeStack {
     public final TubeColor color;
     public double progress; // 0 at the start, 0.5 on an intersection, 1 at the end.
     public double oldProgress;
-    public EnumFacing heading;
+    public Direction heading;
     public boolean enabled = true; // will be disabled when the client sided stack is at an intersection, at which point it needs to wait for server
     // input. This just serves a visual purpose.
     public int idleCounter; // increased when the stack is standing still. This will cause the client to remove the stack when a timeout occurs.
@@ -54,8 +54,8 @@ public class TubeStack {
     public static double tickTimeMultiplier = 1;//Used client side to correct for TPS lag. This is being synchronized from the server.
 
     @OnlyIn(Dist.CLIENT)
-    private static RenderItem customRenderItem;
-    private static EntityItem renderedItem;
+    private static ItemRenderer customRenderItem;
+    private static ItemEntity renderedItem;
 
     public static RenderMode renderMode;
 
@@ -63,12 +63,12 @@ public class TubeStack {
         AUTO, NORMAL, REDUCED, NONE
     }
 
-    public TubeStack(ItemStack stack, EnumFacing from) {
+    public TubeStack(ItemStack stack, Direction from) {
 
         this(stack, from, TubeColor.NONE);
     }
 
-    public TubeStack(ItemStack stack, EnumFacing from, TubeColor color) {
+    public TubeStack(ItemStack stack, Direction from, TubeColor color) {
 
         heading = from;
         this.stack = stack;
@@ -126,12 +126,12 @@ public class TubeStack {
 
     public TubeStack copy() {
 
-        NBTTagCompound tag = new NBTTagCompound();
+        CompoundNBT tag = new CompoundNBT();
         writeToNBT(tag);
         return loadFromNBT(tag);
     }
 
-    public void writeToNBT(NBTTagCompound tag) {
+    public void writeToNBT(CompoundNBT tag) {
 
         stack.writeToNBT(tag);
         tag.setByte("color", (byte) color.ordinal());
@@ -143,9 +143,9 @@ public class TubeStack {
         tag.setInteger("targetZ", targetZ);
     }
 
-    public static TubeStack loadFromNBT(NBTTagCompound tag) {
+    public static TubeStack loadFromNBT(CompoundNBT tag) {
 
-        TubeStack stack = new TubeStack(new ItemStack(tag), EnumFacing.byIndex(tag.getByte("heading")),
+        TubeStack stack = new TubeStack(new ItemStack(tag), Direction.byIndex(tag.getByte("heading")),
                 TubeColor.values()[tag.getByte("color")]);
         stack.progress = tag.getDouble("progress");
         stack.speed = tag.getDouble("speed");
@@ -166,7 +166,7 @@ public class TubeStack {
 
     public static TubeStack loadFromPacket(ByteBuf buf) {
 
-        TubeStack stack = new TubeStack(ByteBufUtils.readItemStack(buf), EnumFacing.byIndex(buf.readByte()),
+        TubeStack stack = new TubeStack(ByteBufUtils.readItemStack(buf), Direction.byIndex(buf.readByte()),
                 TubeColor.values()[buf.readByte()]);
         stack.speed = buf.readDouble();
         stack.progress = buf.readDouble();
@@ -184,7 +184,7 @@ public class TubeStack {
         if (customRenderItem == null) {
             customRenderItem = Minecraft.getMinecraft().getRenderItem();
 
-            renderedItem = new EntityItem(FMLClientHandler.instance().getWorldClient());
+            renderedItem = new ItemEntity(FMLClientHandler.instance().getWorldClient());
             renderedItem.hoverStart = 0.0F;
         }
 
@@ -197,7 +197,7 @@ public class TubeStack {
             if (stack.getCount() > 5) {
                 GL11.glScaled(0.8, 0.8, 0.8);
             }
-            if (!(stack.getItem() instanceof ItemBlock)) {
+            if (!(stack.getItem() instanceof BlockItem)) {
                 GL11.glScaled(0.8, 0.8, 0.8);
                 GL11.glTranslated(0, -0.15, 0);
             }
@@ -217,7 +217,7 @@ public class TubeStack {
 
             float size = 0.2F;
 
-            int colorInt = ItemDye.DYE_COLORS[color.ordinal()];
+            int colorInt = DyeItem.DYE_COLORS[color.ordinal()];
             float red = (colorInt >> 16) / 256F;
             float green = (colorInt >> 8 & 255) / 256F;
             float blue = (colorInt & 255) / 256F;

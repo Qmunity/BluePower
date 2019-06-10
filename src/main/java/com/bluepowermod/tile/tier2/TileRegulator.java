@@ -13,13 +13,13 @@ import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.helper.ItemStackHelper;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.tile.TileMachineBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
+import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
 
 import java.util.List;
@@ -112,7 +112,7 @@ public class TileRegulator extends TileMachineBase implements ISidedInventory, I
     }
 
     @Override
-    public void onButtonPress(EntityPlayer player, int messageId, int value) {
+    public void onButtonPress(PlayerEntity player, int messageId, int value) {
 
         if (messageId == 1) {
             mode = value;
@@ -206,7 +206,7 @@ public class TileRegulator extends TileMachineBase implements ISidedInventory, I
     }
 
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound tag) {
+    public CompoundNBT writeToNBT(CompoundNBT tag) {
 
         super.writeToNBT(tag);
 
@@ -214,9 +214,9 @@ public class TileRegulator extends TileMachineBase implements ISidedInventory, I
         tag.setByte("mode", (byte) mode);
         tag.setByte("fuzzySetting", (byte) fuzzySetting);
 
-        NBTTagList tagList = new NBTTagList();
+        ListNBT tagList = new ListNBT();
         for (int currentIndex = 0; currentIndex < inventory.size(); ++currentIndex) {
-                NBTTagCompound tagCompound = new NBTTagCompound();
+                CompoundNBT tagCompound = new CompoundNBT();
                 tagCompound.setByte("Slot", (byte) currentIndex);
                 inventory.get(currentIndex).writeToNBT(tagCompound);
                 tagList.appendTag(tagCompound);
@@ -226,7 +226,7 @@ public class TileRegulator extends TileMachineBase implements ISidedInventory, I
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound tag) {
+    public void readFromNBT(CompoundNBT tag) {
 
         super.readFromNBT(tag);
 
@@ -234,10 +234,10 @@ public class TileRegulator extends TileMachineBase implements ISidedInventory, I
         mode = tag.getByte("mode");
         fuzzySetting = tag.getByte("fuzzySetting");
 
-        NBTTagList tagList = tag.getTagList("Items", 10);
+        ListNBT tagList = tag.getTagList("Items", 10);
         inventory = NonNullList.withSize(27, ItemStack.EMPTY);
         for (int i = 0; i < tagList.tagCount(); ++i) {
-            NBTTagCompound tagCompound = tagList.getCompoundTagAt(i);
+            CompoundNBT tagCompound = tagList.getCompoundTagAt(i);
             byte slot = tagCompound.getByte("Slot");
             if (slot >= 0 && slot < inventory.size()) {
                 inventory.set(slot, new ItemStack(tagCompound));
@@ -309,17 +309,17 @@ public class TileRegulator extends TileMachineBase implements ISidedInventory, I
     }
 
     @Override
-    public boolean isUsableByPlayer(EntityPlayer player) {
+    public boolean isUsableByPlayer(PlayerEntity player) {
         return true;
     }
 
     @Override
-    public void openInventory(EntityPlayer player) {
+    public void openInventory(PlayerEntity player) {
 
     }
 
     @Override
-    public void closeInventory(EntityPlayer player) {
+    public void closeInventory(PlayerEntity player) {
 
     }
 
@@ -330,7 +330,7 @@ public class TileRegulator extends TileMachineBase implements ISidedInventory, I
     }
 
     @Override
-    public int[] getSlotsForFace(EnumFacing side) {
+    public int[] getSlotsForFace(Direction side) {
         if (side == getFacingDirection() || side == getOutputDirection())
             return new int[0];
         int[] slots = new int[9];
@@ -340,12 +340,12 @@ public class TileRegulator extends TileMachineBase implements ISidedInventory, I
     }
 
     @Override
-    public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction) {
+    public boolean canInsertItem(int index, ItemStack itemStackIn, Direction direction) {
         return true;
     }
 
     @Override
-    public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
+    public boolean canExtractItem(int index, ItemStack stack, Direction direction) {
         return true;
     }
 

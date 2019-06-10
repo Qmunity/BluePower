@@ -8,11 +8,11 @@ import com.bluepowermod.reference.Refs;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.item.Item;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -30,7 +30,7 @@ public class BlockInsulatedAlloyWire extends BlockAlloyWire implements ICustomMo
     public BlockInsulatedAlloyWire(String type, MinecraftColor color) {
         super(type, Material.CIRCUITS);
         this.color = color;
-        this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.UP).withProperty(CONNECTED_FRONT, false).withProperty(CONNECTED_BACK, false).withProperty(CONNECTED_LEFT, false).withProperty(CONNECTED_RIGHT, false).withProperty(STRAIGHT, 1).withProperty(POWERED, false));
+        this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, Direction.UP).withProperty(CONNECTED_FRONT, false).withProperty(CONNECTED_BACK, false).withProperty(CONNECTED_LEFT, false).withProperty(CONNECTED_RIGHT, false).withProperty(STRAIGHT, 1).withProperty(POWERED, false));
         setTranslationKey("wire." + type + "." + color.name().toLowerCase());
         setCreativeTab(BPCreativeTabs.wiring);
         setRegistryName(Refs.MODID + ":" + type + "_wire." + color.name());
@@ -42,7 +42,7 @@ public class BlockInsulatedAlloyWire extends BlockAlloyWire implements ICustomMo
         //All wires need to use the same blockstate
         StateMapperBase stateMapper = new StateMapperBase() {
             @Override
-            protected ModelResourceLocation getModelResourceLocation(IBlockState iBlockState) {
+            protected ModelResourceLocation getModelResourceLocation(BlockState iBlockState) {
                 return new ModelResourceLocation(Refs.MODID + ":insulated_alloy_wire", getPropertyString(iBlockState.getProperties()));
             }
         };
@@ -51,7 +51,7 @@ public class BlockInsulatedAlloyWire extends BlockAlloyWire implements ICustomMo
     }
 
     @Override
-    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+    public AxisAlignedBB getBoundingBox(BlockState state, IBlockAccess source, BlockPos pos) {
         return new AxisAlignedBB(0,0,0,1,0.1875,1);
     }
 
@@ -61,7 +61,7 @@ public class BlockInsulatedAlloyWire extends BlockAlloyWire implements ICustomMo
     }
 
     @Override
-    public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
+    public BlockState getActualState(BlockState state, IBlockAccess worldIn, BlockPos pos) {
         Boolean connected_back = state.getValue(CONNECTED_BACK);
         Boolean connected_front = state.getValue(CONNECTED_FRONT);
         Boolean connected_left = state.getValue(CONNECTED_LEFT);
@@ -70,7 +70,7 @@ public class BlockInsulatedAlloyWire extends BlockAlloyWire implements ICustomMo
         int connections = 0;
         int straight = 1;
 
-        for (EnumFacing face : FACING.getAllowedValues()){
+        for (Direction face : FACING.getAllowedValues()){
             switch (face){
                 case NORTH:
                     connected_front = worldIn.getBlockState(pos.offset(face)).getBlock().equals(this);

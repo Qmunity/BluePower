@@ -4,7 +4,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.ByteBufOutputStream;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -35,15 +35,15 @@ public abstract class Packet<REQ extends Packet<REQ>> implements IMessage, IMess
     }
 
     @OnlyIn(Dist.CLIENT)
-    public EntityPlayer getPlayerClient() {
+    public PlayerEntity getPlayerClient() {
 
         return Minecraft.getMinecraft().player;
     }
 
     @OnlyIn(Dist.CLIENT)
-    public abstract void handleClientSide(EntityPlayer player);
+    public abstract void handleClientSide(PlayerEntity player);
 
-    public abstract void handleServerSide(EntityPlayer player);
+    public abstract void handleServerSide(PlayerEntity player);
 
     @Override
     public void fromBytes(ByteBuf buf) {

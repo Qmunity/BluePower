@@ -3,16 +3,15 @@ package com.bluepowermod.block.worldgen;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.reference.Refs;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockLeaves;
 import net.minecraft.block.BlockPlanks;
+import net.minecraft.block.LeavesBlock;
 import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -24,7 +23,7 @@ import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Random;
 
-public class BlockRubberLeaves extends BlockLeaves {
+public class BlockRubberLeaves extends LeavesBlock {
 
     public BlockRubberLeaves(){
         this.setRegistryName(Refs.MODID + ":" + Refs.RUBBERLEAVES_NAME);
@@ -41,13 +40,13 @@ public class BlockRubberLeaves extends BlockLeaves {
     }
 
     @Override
-    public boolean isOpaqueCube(IBlockState state){
+    public boolean isOpaqueCube(BlockState state){
         return Blocks.LEAVES.isOpaqueCube(state);
     }
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public boolean shouldSideBeRendered(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side){
+    public boolean shouldSideBeRendered(BlockState state, IBlockAccess world, BlockPos pos, Direction side){
         return Blocks.LEAVES.shouldSideBeRendered(state, world, pos, side);
     }
 
@@ -58,7 +57,7 @@ public class BlockRubberLeaves extends BlockLeaves {
     }
 
     @Override
-    protected void dropApple(World worldIn, BlockPos pos, IBlockState state, int chance) {
+    protected void dropApple(World worldIn, BlockPos pos, BlockState state, int chance) {
         Item sticky_resin = Item.getByNameOrId("ic2:misc_resource");
         if (sticky_resin != null && worldIn.rand.nextInt(chance) == 0){
             spawnAsEntity(worldIn, pos, new ItemStack(sticky_resin, 1, 4));
@@ -73,14 +72,14 @@ public class BlockRubberLeaves extends BlockLeaves {
 
     @Nonnull
     @Override
-    public IBlockState getStateFromMeta(int meta){
+    public BlockState getStateFromMeta(int meta){
         return this.getDefaultState()
                 .withProperty(DECAYABLE, (meta & 4) == 0)
                 .withProperty(CHECK_DECAY, (meta & 8) > 0);
     }
 
     @Override
-    public int getMetaFromState(IBlockState state){
+    public int getMetaFromState(BlockState state){
         int meta = 0;
 
         if (!state.getValue(DECAYABLE)){
@@ -96,7 +95,7 @@ public class BlockRubberLeaves extends BlockLeaves {
 
 
     @Override
-    public Item getItemDropped(IBlockState state, Random rand, int fortune){
+    public Item getItemDropped(BlockState state, Random rand, int fortune){
         return Item.getItemFromBlock(Blocks.SAPLING);
     }
 

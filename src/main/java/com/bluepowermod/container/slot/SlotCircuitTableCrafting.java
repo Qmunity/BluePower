@@ -9,15 +9,15 @@ package com.bluepowermod.container.slot;
 
 import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.tile.tier2.TileCircuitTable;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.InventoryCrafting;
-import net.minecraft.inventory.SlotCrafting;
+import net.minecraft.inventory.container.CraftingResultSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.item.crafting.ShapedRecipes;
+import net.minecraft.item.crafting.ShapedRecipe;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 
 import java.util.ArrayList;
@@ -25,11 +25,11 @@ import java.util.List;
 
 ;
 
-public class SlotCircuitTableCrafting extends SlotCrafting {
+public class SlotCircuitTableCrafting extends CraftingResultSlot {
 
     private final TileCircuitTable circuitTable;
 
-    public SlotCircuitTableCrafting(EntityPlayer p_i1823_1_, IInventory circuitTable, InventoryCrafting craftSlot, int p_i1823_4_, int p_i1823_5_,
+    public SlotCircuitTableCrafting(PlayerEntity p_i1823_1_, IInventory circuitTable, CraftingInventory craftSlot, int p_i1823_4_, int p_i1823_5_,
                                     int p_i1823_6_) {
 
         super(p_i1823_1_, craftSlot, circuitTable, p_i1823_4_, p_i1823_5_, p_i1823_6_);
@@ -37,7 +37,7 @@ public class SlotCircuitTableCrafting extends SlotCrafting {
     }
 
     @Override
-    public boolean canTakeStack(EntityPlayer player) {
+    public boolean canTakeStack(PlayerEntity player) {
         ItemStack stack = getStack();
         if (!stack.isEmpty()) {
             return canCraft(stack, circuitTable);
@@ -105,8 +105,8 @@ public class SlotCircuitTableCrafting extends SlotCrafting {
                         }
                     }
                     return requiredItems;
-                } else if (r instanceof ShapedRecipes) {
-                    ShapedRecipes recipe = (ShapedRecipes) r;
+                } else if (r instanceof ShapedRecipe) {
+                    ShapedRecipe recipe = (ShapedRecipe) r;
                     for (Ingredient stack : recipe.recipeItems) {
                         if (!stack.getMatchingStacks()[0].isEmpty()) {
                             boolean needsAdding = true;

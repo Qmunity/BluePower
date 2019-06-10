@@ -21,13 +21,13 @@ import com.bluepowermod.api.misc.IScrewdriver;
 import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.reference.Refs;
 import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.stats.StatList;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.stats.Stats;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -50,18 +50,18 @@ public class ItemScrewdriver extends ItemBase implements IScrewdriver {
     }
 
     @Override
-    public EnumActionResult onItemUseFirst(EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) {
+    public ActionResultType onItemUseFirst(PlayerEntity player, World world, BlockPos pos, Direction side, float hitX, float hitY, float hitZ, Hand hand) {
         Block block = world.getBlockState(pos).getBlock();
 
             if (player.isSneaking() && block.rotateBlock(world, pos, side.getOpposite())) {
                 damage(player.getHeldItem(hand), 1, player, false);
-                return EnumActionResult.SUCCESS;
+                return ActionResultType.SUCCESS;
             } else if (block.rotateBlock(world, pos, side)) {
                 damage(player.getHeldItem(hand), 1, player, false);
-                return EnumActionResult.SUCCESS;
+                return ActionResultType.SUCCESS;
             }
 
-        return EnumActionResult.PASS;
+        return ActionResultType.PASS;
     }
     @OnlyIn(Dist.CLIENT)
     @Override
@@ -71,7 +71,7 @@ public class ItemScrewdriver extends ItemBase implements IScrewdriver {
     }
 
     @Override
-    public boolean damage(ItemStack stack, int damage, EntityPlayer player, boolean simulated) {
+    public boolean damage(ItemStack stack, int damage, PlayerEntity player, boolean simulated) {
 
         if (player != null && player.capabilities.isCreativeMode)
             return true;
@@ -79,13 +79,13 @@ public class ItemScrewdriver extends ItemBase implements IScrewdriver {
             return false;
 
         if (!simulated) {
-            if (stack.attemptDamageItem(damage, new Random(), (EntityPlayerMP) player)) {
+            if (stack.attemptDamageItem(damage, new Random(), (ServerPlayerEntity) player)) {
                 if (player != null)
                     player.renderBrokenItemStack(stack);
                 stack.setCount(stack.getCount() - 1);
 
-                if (player != null && player instanceof EntityPlayer)
-                    player.addStat(StatList.getObjectBreakStats(stack.getItem()), 1);
+                if (player != null && player instanceof PlayerEntity)
+                    player.addStat(Stats.getObjectBreakStats(stack.getItem()), 1);
 
                 if (stack.getCount() < 0)
                     stack.setCount(0);
@@ -98,7 +98,7 @@ public class ItemScrewdriver extends ItemBase implements IScrewdriver {
     }
 
     @Override
-    public boolean doesSneakBypassUse(ItemStack stack, IBlockAccess world, BlockPos pos, EntityPlayer player) {
+    public boolean doesSneakBypassUse(ItemStack stack, IBlockAccess world, BlockPos pos, PlayerEntity player) {
         return true;
     }
 

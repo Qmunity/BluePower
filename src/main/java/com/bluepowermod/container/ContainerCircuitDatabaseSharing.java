@@ -7,13 +7,13 @@
  */
 package com.bluepowermod.container;
 
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.PlayerInventory;
 
 import com.bluepowermod.tile.tier3.TileCircuitDatabase;
 
 public class ContainerCircuitDatabaseSharing extends ContainerCircuitTable {
 
-    public ContainerCircuitDatabaseSharing(InventoryPlayer invPlayer, TileCircuitDatabase circuitTable) {
+    public ContainerCircuitDatabaseSharing(PlayerInventory invPlayer, TileCircuitDatabase circuitTable) {
 
         super(invPlayer, circuitTable);
     }

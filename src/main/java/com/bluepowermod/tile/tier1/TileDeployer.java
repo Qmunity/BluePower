@@ -16,23 +16,23 @@ import com.bluepowermod.tile.TileBase;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.passive.EntityAnimal;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.entity.passive.AnimalEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Items;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemRedstone;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.NonNullList;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.*;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.WorldServer;
+import net.minecraft.world.ServerWorld;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.FakePlayerFactory;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
@@ -68,7 +68,7 @@ public class TileDeployer extends TileBase implements ISidedInventory, IEjectAni
         if (!world.isRemote && newValue) {
             sendUpdatePacket();
             
-            FakePlayer player = FakePlayerFactory.get((WorldServer) world, FAKE_PLAYER_PROFILE);
+            FakePlayer player = FakePlayerFactory.get((ServerWorld) world, FAKE_PLAYER_PROFILE);
             for (int i = 0; i < inventory.size(); i++) {
                 ItemStack stack = inventory.get(i);
                 player.inventory.setInventorySlotContents(i, stack);
@@ -90,7 +90,7 @@ public class TileDeployer extends TileBase implements ISidedInventory, IEjectAni
                 if (!stack.isEmpty() && stack.getCount() > 0) {
                     ItemStack remainder = IOHelper.insert(this, stack, getFacingDirection().getOpposite(), false);
                     if (!remainder.isEmpty()) {
-                        world.spawnEntity(new EntityItem(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, remainder));
+                        world.spawnEntity(new ItemEntity(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, remainder));
                     }
                     player.inventory.setInventorySlotContents(i, ItemStack.EMPTY);
                 }
@@ -109,7 +109,7 @@ public class TileDeployer extends TileBase implements ISidedInventory, IEjectAni
     
         if (useItems > 9) throw new IllegalArgumentException("Hotbar is 9 items in width! You're trying " + useItems + "!");
         
-        EnumFacing faceDir = getFacingDirection();
+        Direction faceDir = getFacingDirection();
         int dx = faceDir.getXOffset();
         int dy = faceDir.getYOffset();
         int dz = faceDir.getZOffset();
@@ -134,11 +134,11 @@ public class TileDeployer extends TileBase implements ISidedInventory, IEjectAni
         }
         
         try {
-            PlayerInteractEvent event =  new PlayerInteractEvent.RightClickEmpty(player, EnumHand.MAIN_HAND);
+            PlayerInteractEvent event =  new PlayerInteractEvent.RightClickEmpty(player, Hand.MAIN_HAND);
             if (event.isCanceled()) return false;
             
             Block block = world.getBlockState(new BlockPos(x, y, z)).getBlock();
-            List<EntityLivingBase> detectedEntities = world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(x, y, z, x + 1, y + 1, z + 1));
+            List<LivingEntity> detectedEntities = world.getEntitiesWithinAABB(LivingEntity.class, new AxisAlignedBB(x, y, z, x + 1, y + 1, z + 1));
             
             Entity entity = detectedEntities.isEmpty() ? null : detectedEntities.get(world.rand.nextInt(detectedEntities.size()));
             
@@ -146,20 +146,20 @@ public class TileDeployer extends TileBase implements ISidedInventory, IEjectAni
                 for (int i = 0; i < useItems; i++) {
                     player.inventory.currentItem = i;
                     ItemStack stack = player.getHeldItemMainhand();
-                    if (canDeployItem(stack) && stack.getItem().itemInteractionForEntity(stack, player, (EntityLivingBase) entity, EnumHand.MAIN_HAND)) return true;
-                    if (entity instanceof EntityAnimal && ((EntityAnimal) entity).processInteract(player, EnumHand.MAIN_HAND)) return true;
+                    if (canDeployItem(stack) && stack.getItem().itemInteractionForEntity(stack, player, (LivingEntity) entity, Hand.MAIN_HAND)) return true;
+                    if (entity instanceof AnimalEntity && ((AnimalEntity) entity).processInteract(player, Hand.MAIN_HAND)) return true;
                 }
             }
             
             for (int i = 0; i < useItems; i++) {
                 player.inventory.currentItem = i;
                 ItemStack stack = player.getHeldItemMainhand();
-                if (canDeployItem(stack) && stack.getItem().onItemUseFirst(player, world, new BlockPos(x, y, z), faceDir, dx, dy, dz, EnumHand.MAIN_HAND) == EnumActionResult.SUCCESS) return true;
+                if (canDeployItem(stack) && stack.getItem().onItemUseFirst(player, world, new BlockPos(x, y, z), faceDir, dx, dy, dz, Hand.MAIN_HAND) == ActionResultType.SUCCESS) return true;
             }
             
             for (int i = 0; i < useItems; i++) {
                 player.inventory.currentItem = i;
-                if (!world.isAirBlock(new BlockPos(x, y, z)) && block.onBlockActivated(world, new BlockPos(x, y, z), world.getBlockState(new BlockPos(x, y, z)), player, EnumHand.MAIN_HAND, faceDir, dx, dy, dz)) return true;
+                if (!world.isAirBlock(new BlockPos(x, y, z)) && block.onBlockActivated(world, new BlockPos(x, y, z), world.getBlockState(new BlockPos(x, y, z)), player, Hand.MAIN_HAND, faceDir, dx, dy, dz)) return true;
             }
             
             for (int i = 0; i < useItems; i++) {
@@ -174,7 +174,7 @@ public class TileDeployer extends TileBase implements ISidedInventory, IEjectAni
                 int useX = isGoingToShift ? pos.getX() : x;
                 int useY = isGoingToShift ? pos.getY() : y;
                 int useZ = isGoingToShift ? pos.getZ() : z;
-                if (canDeployItem(stack) && stack.getItem().onItemUse(player, world, new BlockPos(useX, useY, useZ), EnumHand.MAIN_HAND, faceDir, dx, dy, dz) == EnumActionResult.SUCCESS) return true;
+                if (canDeployItem(stack) && stack.getItem().onItemUse(player, world, new BlockPos(useX, useY, useZ), Hand.MAIN_HAND, faceDir, dx, dy, dz) == ActionResultType.SUCCESS) return true;
             }
             
             for (int i = 0; i < useItems; i++) {
@@ -183,7 +183,7 @@ public class TileDeployer extends TileBase implements ISidedInventory, IEjectAni
                 if (canDeployItem(stack)) {
                     ItemStack copy = stack.copy();
                     //TODO Check this
-                    player.setHeldItem(EnumHand.MAIN_HAND, stack.getItem().onItemRightClick(world, player, EnumHand.MAIN_HAND).getResult());
+                    player.setHeldItem(Hand.MAIN_HAND, stack.getItem().onItemRightClick(world, player, Hand.MAIN_HAND).getResult());
                     if (!copy.isItemEqual(stack)) return true;
                 }
             }
@@ -199,12 +199,12 @@ public class TileDeployer extends TileBase implements ISidedInventory, IEjectAni
      * This function gets called whenever the world/chunk loads
      */
     @Override
-    public void readFromNBT(NBTTagCompound tCompound) {
+    public void readFromNBT(CompoundNBT tCompound) {
     
         super.readFromNBT(tCompound);
         
         for (int i = 0; i < 9; i++) {
-            NBTTagCompound tc = tCompound.getCompoundTag("inventory" + i);
+            CompoundNBT tc = tCompound.getCompoundTag("inventory" + i);
             inventory.set(i, new ItemStack(tc));
         }
     }
@@ -213,12 +213,12 @@ public class TileDeployer extends TileBase implements ISidedInventory, IEjectAni
      * This function gets called whenever the world/chunk is saved
      */
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound tCompound) {
+    public CompoundNBT writeToNBT(CompoundNBT tCompound) {
     
         super.writeToNBT(tCompound);
         
         for (int i = 0; i < 9; i++) {
-                NBTTagCompound tc = new NBTTagCompound();
+                CompoundNBT tc = new CompoundNBT();
                 inventory.get(i).writeToNBT(tc);
                 tCompound.setTag("inventory" + i, tc);
         }
@@ -287,17 +287,17 @@ public class TileDeployer extends TileBase implements ISidedInventory, IEjectAni
     }
     
     @Override
-    public boolean isUsableByPlayer(EntityPlayer player) {
+    public boolean isUsableByPlayer(PlayerEntity player) {
         return player.getDistanceSqToCenter(pos) <= 64.0D;
     }
 
     @Override
-    public void openInventory(EntityPlayer player) {
+    public void openInventory(PlayerEntity player) {
 
     }
 
     @Override
-    public void closeInventory(EntityPlayer player) {
+    public void closeInventory(PlayerEntity player) {
 
     }
 
@@ -317,15 +317,15 @@ public class TileDeployer extends TileBase implements ISidedInventory, IEjectAni
     }
 
     @Override
-    public int[] getSlotsForFace(EnumFacing side) {
-        EnumFacing direction = getFacingDirection();
+    public int[] getSlotsForFace(Direction side) {
+        Direction direction = getFacingDirection();
 
         if (side == direction) { return new int[] {}; }
         return new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8 };
     }
 
     @Override
-    public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction) {
+    public boolean canInsertItem(int index, ItemStack itemStackIn, Direction direction) {
         for (int i : getSlotsForFace(direction)) {
             if (index == i) { return true; }
         }
@@ -333,7 +333,7 @@ public class TileDeployer extends TileBase implements ISidedInventory, IEjectAni
     }
 
     @Override
-    public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
+    public boolean canExtractItem(int index, ItemStack stack, Direction direction) {
         for (int i : getSlotsForFace(direction)) {
             if (index == i) { return true; }
         }

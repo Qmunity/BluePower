@@ -21,7 +21,7 @@ import com.bluepowermod.block.BlockContainerFacingBase;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier1.TileIgniter;
 import net.minecraft.block.material.Material;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -35,9 +35,9 @@ public class BlockIgniter extends BlockContainerFacingBase {
     }
 
     @Override
-    public boolean isFireSource(World world, BlockPos pos, EnumFacing side) {
+    public boolean isFireSource(World world, BlockPos pos, Direction side) {
         TileIgniter tile = (TileIgniter) world.getTileEntity(pos);
-        boolean orientation = world.getBlockState(pos).getValue(FACING) == EnumFacing.UP;
+        boolean orientation = world.getBlockState(pos).getValue(FACING) == Direction.UP;
         return orientation && tile.getIsRedstonePowered();
     }
 }

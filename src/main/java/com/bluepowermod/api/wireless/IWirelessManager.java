@@ -20,7 +20,7 @@ package com.bluepowermod.api.wireless;
 import java.util.List;
 import java.util.UUID;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 
 import com.bluepowermod.api.misc.Accessibility;
 
@@ -32,15 +32,15 @@ public interface IWirelessManager {
 
     public List<IBundledFrequency> getBundledFrequencies();
 
-    public List<IRedstoneFrequency> getAvailableRedstoneFrequencies(EntityPlayer player);
+    public List<IRedstoneFrequency> getAvailableRedstoneFrequencies(PlayerEntity player);
 
-    public List<IBundledFrequency> getAvailableBundledFrequencies(EntityPlayer player);
+    public List<IBundledFrequency> getAvailableBundledFrequencies(PlayerEntity player);
 
-    public IRedstoneFrequency registerRedstoneFrequency(EntityPlayer owner, String frequency, Accessibility accessibility);
+    public IRedstoneFrequency registerRedstoneFrequency(PlayerEntity owner, String frequency, Accessibility accessibility);
 
-    public IBundledFrequency registerBundledFrequency(EntityPlayer owner, String frequency, Accessibility accessibility);
+    public IBundledFrequency registerBundledFrequency(PlayerEntity owner, String frequency, Accessibility accessibility);
 
-    public IFrequency registerFrequency(EntityPlayer owner, String frequency, Accessibility accessibility, boolean isBundled);
+    public IFrequency registerFrequency(PlayerEntity owner, String frequency, Accessibility accessibility, boolean isBundled);
 
     public IFrequency registerFrequency(IFrequency frequency);
 

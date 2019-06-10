@@ -22,8 +22,8 @@ import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.reference.GuiIDs;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier1.TileAlloyFurnace;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
@@ -42,12 +42,12 @@ public class BlockAlloyFurnace extends BlockContainerFacingBase {
     }
 
     @Override
-    public boolean isOpaqueCube(IBlockState state) {
+    public boolean isOpaqueCube(BlockState state) {
         return true;
     }
 
     @Override
-    public void randomDisplayTick(IBlockState stateIn, World world, BlockPos pos, Random rnd) {
+    public void randomDisplayTick(BlockState stateIn, World world, BlockPos pos, Random rnd) {
         if (stateIn.getValue(ACTIVE)) {
             int l = stateIn.getValue(FACING).ordinal();
             float f = pos.getX() + 0.5F;
@@ -73,12 +73,12 @@ public class BlockAlloyFurnace extends BlockContainerFacingBase {
     }
 
     @Override
-    public Item getItemDropped(IBlockState state, Random rand, int fortune) {
+    public Item getItemDropped(BlockState state, Random rand, int fortune) {
         return Item.getItemFromBlock(BPBlocks.alloyfurnace);
     }
 
     @Override
-    public int getLightValue(IBlockState state, IBlockAccess world, BlockPos pos) {
+    public int getLightValue(BlockState state, IBlockAccess world, BlockPos pos) {
         return state.getValue(ACTIVE) ? 13 : 0;
     }
 

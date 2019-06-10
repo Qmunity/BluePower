@@ -2,8 +2,8 @@ package com.bluepowermod.client.gui.widget;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
-import net.minecraft.client.gui.Gui;
-import net.minecraft.init.SoundEvents;
+import net.minecraft.client.gui.AbstractGui;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
@@ -69,7 +69,7 @@ public class BaseWidget implements IGuiWidget {
         }
         if (textures.length > 0)
             Minecraft.getMinecraft().getTextureManager().bindTexture(textures[textureIndex]);
-        Gui.drawModalRectWithCustomSizedTexture(x, y, getTextureU(), getTextureV(), width, height, getTextureWidth(), getTextureHeight());
+        AbstractGui.drawModalRectWithCustomSizedTexture(x, y, getTextureU(), getTextureV(), width, height, getTextureWidth(), getTextureHeight());
     }
 
     protected int getTextureU() {

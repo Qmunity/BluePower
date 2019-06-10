@@ -143,8 +143,8 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
             ItemStack currentlyRecycledInto = ItemStack.EMPTY;
             for (ItemStack recyclingItem : bufferedRecyclingItems) {
                 try {
-                    if (recipe instanceof ShapedRecipes) {
-                        ShapedRecipes shaped = (ShapedRecipes) recipe;
+                    if (recipe instanceof ShapedRecipe) {
+                        ShapedRecipe shaped = (ShapedRecipe) recipe;
                         if (!shaped.getIngredients().isEmpty()) {
                             for (Ingredient input : shaped.getIngredients()) {
                                 if (input.test(recyclingItem)) {
@@ -157,8 +157,8 @@ public class AlloyFurnaceRegistry implements IAlloyFurnaceRegistry {
                                 }
                             }
                         }
-                    } else if (recipe instanceof ShapelessRecipes) {
-                        ShapelessRecipes shapeless = (ShapelessRecipes) recipe;
+                    } else if (recipe instanceof ShapelessRecipe) {
+                        ShapelessRecipe shapeless = (ShapelessRecipe) recipe;
                         if (!shapeless.recipeItems.isEmpty()) {
                             for (Ingredient input : shapeless.recipeItems) {
                                 if (input.test(recyclingItem)) {

@@ -7,10 +7,9 @@
  */
 package com.bluepowermod.item;
 
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.NonNullList;
 
 /**
@@ -24,7 +23,7 @@ public abstract class ItemDamageableColorableOverlay extends ItemColorableOverla
     }
 
     @Override
-    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
+    public void getSubItems(ItemGroup tab, NonNullList<ItemStack> items) {
         if(isInCreativeTab(tab)) {
             items.add(new ItemStack(this, 1, 16));
             super.getSubItems(tab, items);
@@ -33,7 +32,7 @@ public abstract class ItemDamageableColorableOverlay extends ItemColorableOverla
 
     public static int getUsesUsed(ItemStack stack) {
 
-        NBTTagCompound tag = stack.getTagCompound();
+        CompoundNBT tag = stack.getTagCompound();
         if (tag != null) {
             return tag.getInteger("usesUsed");
         } else {
@@ -43,9 +42,9 @@ public abstract class ItemDamageableColorableOverlay extends ItemColorableOverla
 
     public static void setUsesUsed(ItemStack stack, int newUses) {
 
-        NBTTagCompound tag = stack.getTagCompound();
+        CompoundNBT tag = stack.getTagCompound();
         if (tag == null) {
-            tag = new NBTTagCompound();
+            tag = new CompoundNBT();
             stack.setTagCompound(tag);
         }
         tag.setInteger("usesUsed", newUses);

@@ -12,10 +12,13 @@ import com.bluepowermod.container.slot.SlotCircuitTableCrafting;
 import com.bluepowermod.tile.tier2.TileCircuitTable;
 import invtweaks.api.container.ChestContainer;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.*;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.IContainerListener;
+import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -26,15 +29,15 @@ import java.util.List;
 public class ContainerCircuitTable extends Container {
 
     private final TileCircuitTable circuitTable;
-    public InventoryCrafting craftMatrix;
+    public CraftingInventory craftMatrix;
     private int itemsCrafted;
     private boolean isRetrying = false;
     private int scrollState = -1;
 
-    public ContainerCircuitTable(InventoryPlayer invPlayer, TileCircuitTable circuitTable) {
+    public ContainerCircuitTable(PlayerInventory invPlayer, TileCircuitTable circuitTable) {
 
         this.circuitTable = circuitTable;
-        craftMatrix = new InventoryCrafting(this, 5, 5);
+        craftMatrix = new CraftingInventory(this, 5, 5);
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 8; ++j) {
                 addSlotToContainer(new SlotCircuitTableCrafting(invPlayer.player, circuitTable, craftMatrix, j + i * 8, 8 + j * 18,
@@ -51,7 +54,7 @@ public class ContainerCircuitTable extends Container {
         bindPlayerInventory(invPlayer);
     }
 
-    protected void bindPlayerInventory(InventoryPlayer invPlayer) {
+    protected void bindPlayerInventory(PlayerInventory invPlayer) {
 
         // Render inventory
         for (int i = 0; i < 3; i++) {
@@ -67,7 +70,7 @@ public class ContainerCircuitTable extends Container {
     }
 
     @Override
-    public boolean canInteractWith(EntityPlayer player) {
+    public boolean canInteractWith(PlayerEntity player) {
 
         return true;
     }
@@ -87,14 +90,14 @@ public class ContainerCircuitTable extends Container {
     @OnlyIn(Dist.CLIENT)
     public void updateProgressBar(int p_75137_1_, int p_75137_2_) {
         circuitTable.slotsScrolled = p_75137_2_;
-        GuiScreen gui = Minecraft.getMinecraft().currentScreen;
+        Screen gui = Minecraft.getMinecraft().currentScreen;
         if (gui instanceof GuiCircuitTable) {
             ((GuiCircuitTable) gui).updateScrollbar(circuitTable.slotsScrolled);
         }
     }
 
     @Override
-    public ItemStack transferStackInSlot(EntityPlayer player, int par2) {
+    public ItemStack transferStackInSlot(PlayerEntity player, int par2) {
 
         if (!isRetrying)
             itemsCrafted = 0;

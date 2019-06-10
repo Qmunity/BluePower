@@ -22,10 +22,10 @@ import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
 import com.bluepowermod.client.gui.GuiContainerBase;
 import com.bluepowermod.container.slot.SlotPhantom;
 import com.bluepowermod.tile.tier2.TileSortingMachine;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.IContainerListener;
-import net.minecraft.inventory.Slot;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.IContainerListener;
+import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -44,7 +44,7 @@ public class ContainerSortingMachine extends ContainerMachineBase {
     private final int[] colors = new int[9];
     private final int[] fuzzySettings = new int[8];
 
-    public ContainerSortingMachine(InventoryPlayer invPlayer, TileSortingMachine sortingMachine) {
+    public ContainerSortingMachine(PlayerInventory invPlayer, TileSortingMachine sortingMachine) {
 
         super(sortingMachine);
         this.sortingMachine = sortingMachine;
@@ -60,7 +60,7 @@ public class ContainerSortingMachine extends ContainerMachineBase {
 
     }
 
-    protected void bindPlayerInventory(InventoryPlayer invPlayer) {
+    protected void bindPlayerInventory(PlayerInventory invPlayer) {
 
         int offset = 157;
         // Render inventory
@@ -77,7 +77,7 @@ public class ContainerSortingMachine extends ContainerMachineBase {
     }
 
     @Override
-    public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int par2) {
+    public ItemStack transferStackInSlot(PlayerEntity par1EntityPlayer, int par2) {
 
         return ItemStack.EMPTY;
     }
@@ -159,7 +159,7 @@ public class ContainerSortingMachine extends ContainerMachineBase {
     }
 
     @Override
-    public boolean canInteractWith(EntityPlayer entityplayer) {
+    public boolean canInteractWith(PlayerEntity entityplayer) {
 
         return sortingMachine.isUsableByPlayer(entityplayer);
     }

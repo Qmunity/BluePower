@@ -1,14 +1,12 @@
 package com.bluepowermod.tile.tier2;
 
-import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.tile.tier1.TileProjectTable;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -35,9 +33,9 @@ public class TileAutoProjectTable extends TileProjectTable implements ISidedInve
     }
 
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound tag) {
+    public CompoundNBT writeToNBT(CompoundNBT tag) {
         super.writeToNBT(tag);
-            NBTTagCompound bufferTag = new NBTTagCompound();
+            CompoundNBT bufferTag = new CompoundNBT();
             craftBuffer.writeToNBT(bufferTag);
             tag.setTag("craftBuffer", bufferTag);
 
@@ -45,7 +43,7 @@ public class TileAutoProjectTable extends TileProjectTable implements ISidedInve
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound tag) {
+    public void readFromNBT(CompoundNBT tag) {
         super.readFromNBT(tag);
 
         if (tag.hasKey("craftBuffer")) {
@@ -62,7 +60,7 @@ public class TileAutoProjectTable extends TileProjectTable implements ISidedInve
     }
 
     @Override
-    public int[] getSlotsForFace(EnumFacing side) {
+    public int[] getSlotsForFace(Direction side) {
         return new int[0];
     }
 
@@ -71,12 +69,12 @@ public class TileAutoProjectTable extends TileProjectTable implements ISidedInve
     }
 
     @Override
-    public boolean canInsertItem(int slot, ItemStack itemStackIn, EnumFacing direction) {
+    public boolean canInsertItem(int slot, ItemStack itemStackIn, Direction direction) {
         return slot < 18;
     }
 
     @Override
-    public boolean canExtractItem(int slot, ItemStack stack, EnumFacing side) {
+    public boolean canExtractItem(int slot, ItemStack stack, Direction side) {
         if (slot == 18) {
             return true;
         } else {

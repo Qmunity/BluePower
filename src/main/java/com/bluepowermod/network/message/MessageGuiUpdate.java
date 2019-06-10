@@ -10,7 +10,7 @@ package com.bluepowermod.network.message;
 import com.bluepowermod.client.gui.IGuiButtonSensitive;
 import com.bluepowermod.network.LocatedPacket;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.tileentity.TileEntity;
 
 /**
@@ -58,12 +58,12 @@ public class MessageGuiUpdate extends LocatedPacket<MessageGuiUpdate> {
     }
 
     @Override
-    public void handleClientSide(EntityPlayer player) {
+    public void handleClientSide(PlayerEntity player) {
 
     }
 
     @Override
-    public void handleServerSide(EntityPlayer player) {
+    public void handleServerSide(PlayerEntity player) {
 
             TileEntity te = player.world.getTileEntity(pos);
             if (te instanceof IGuiButtonSensitive) {

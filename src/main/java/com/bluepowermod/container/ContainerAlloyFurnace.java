@@ -17,13 +17,13 @@
 
 package com.bluepowermod.container;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.IContainerListener;
-import net.minecraft.inventory.Slot;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.IContainerListener;
+import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntityFurnace;
+import net.minecraft.tileentity.FurnaceTileEntity;
 
 import com.bluepowermod.container.slot.SlotMachineInput;
 import com.bluepowermod.container.slot.SlotMachineOutput;
@@ -43,7 +43,7 @@ public class ContainerAlloyFurnace extends Container {
     private int                    maxBurnTime;
     private int                    currentProcessTime;
     
-    public ContainerAlloyFurnace(InventoryPlayer invPlayer, TileAlloyFurnace furnace) {
+    public ContainerAlloyFurnace(PlayerInventory invPlayer, TileAlloyFurnace furnace) {
     
         tileFurnace = furnace;
         
@@ -58,7 +58,7 @@ public class ContainerAlloyFurnace extends Container {
         
     }
     
-    protected void bindPlayerInventory(InventoryPlayer invPlayer) {
+    protected void bindPlayerInventory(PlayerInventory invPlayer) {
     
         // Render inventory
         for (int i = 0; i < 3; i++) {
@@ -74,7 +74,7 @@ public class ContainerAlloyFurnace extends Container {
     }
     
     @Override
-    public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int par2) {
+    public ItemStack transferStackInSlot(PlayerEntity par1EntityPlayer, int par2) {
     
         ItemStack var3 = ItemStack.EMPTY;
         Slot var4 = inventorySlots.get(par2);
@@ -87,7 +87,7 @@ public class ContainerAlloyFurnace extends Container {
                 if (!mergeItemStack(var5, 11, 47, false)) return ItemStack.EMPTY;
                 var4.onSlotChange(var5, var3);
             } else {
-                if (TileEntityFurnace.isItemFuel(var5) && mergeItemStack(var5, 0, 1, false)) {
+                if (FurnaceTileEntity.isItemFuel(var5) && mergeItemStack(var5, 0, 1, false)) {
                     
                 } else if (!mergeItemStack(var5, 2, 11, false)) return ItemStack.EMPTY;
                 var4.onSlotChange(var5, var3);
@@ -153,7 +153,7 @@ public class ContainerAlloyFurnace extends Container {
     }
     
     @Override
-    public boolean canInteractWith(EntityPlayer entityplayer) {
+    public boolean canInteractWith(PlayerEntity entityplayer) {
     
         return tileFurnace.isUsableByPlayer(entityplayer);
     }

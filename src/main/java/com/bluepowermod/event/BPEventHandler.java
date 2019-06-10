@@ -21,8 +21,8 @@ import com.bluepowermod.item.ItemSickle;
 import com.bluepowermod.network.BPNetworkHandler;
 import com.bluepowermod.network.message.MessageServerTickTime;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockGrass;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.GrassBlock;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockRendererDispatcher;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -33,29 +33,24 @@ import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelBlock;
 import net.minecraft.client.renderer.block.model.ModelManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.client.renderer.vertex.VertexBuffer;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.boss.EntityDragon;
+import net.minecraft.entity.boss.dragon.EnderDragonEntity;
 import net.minecraft.entity.monster.*;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Enchantments;
-import net.minecraft.init.Items;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.block.Blocks;
+import net.minecraft.item.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntityHopper;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.tileentity.HopperTileEntity;
 import net.minecraft.util.EntityDamageSource;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
-import net.minecraftforge.client.model.BakedModelWrapper;
-import net.minecraftforge.client.model.ISmartVariant;
-import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.client.model.MultiModel;
 import net.minecraftforge.event.AnvilUpdateEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
@@ -109,7 +104,7 @@ public class BPEventHandler {
     @SubscribeEvent
     public void itemPickUp(EntityItemPickupEvent event) {
 
-        EntityPlayer player = event.getEntityPlayer();
+        PlayerEntity player = event.getEntityPlayer();
         ItemStack pickUp = event.getItem().getItem();
         if (!(player.openContainer instanceof ContainerSeedBag)) {
             for (ItemStack is : player.inventory.mainInventory) {
@@ -118,7 +113,7 @@ public class BPEventHandler {
                     if (!seedType.isEmpty() && seedType.isItemEqual(pickUp)) {
                         InventoryItem inventory = InventoryItem.getItemInventory(is, "Seed Bag", 9);
                         inventory.openInventory(event.getEntityPlayer());
-                        ItemStack pickedUp = TileEntityHopper.putStackInInventoryAllSlots(null, inventory, pickUp, null);
+                        ItemStack pickedUp = HopperTileEntity.putStackInInventoryAllSlots(null, inventory, pickUp, null);
                         inventory.closeInventory(is);
 
                         if (pickedUp.isEmpty()) {
@@ -143,12 +138,12 @@ public class BPEventHandler {
             // so we need to stop the loop.
             EntityDamageSource entitySource = (EntityDamageSource) event.getSource();
 
-            if (entitySource.getTrueSource() instanceof EntityPlayer) {
-                EntityPlayer killer = (EntityPlayer) entitySource.getTrueSource();
+            if (entitySource.getTrueSource() instanceof PlayerEntity) {
+                PlayerEntity killer = (PlayerEntity) entitySource.getTrueSource();
 
                 if (!killer.inventory.getCurrentItem().isEmpty()) {
                     if (EnchantmentHelper.getEnchantments(killer.inventory.getCurrentItem()).containsKey(BPEnchantments.disjunction)) {
-                        if (event.getEntityLiving() instanceof EntityEnderman || event.getEntityLiving() instanceof EntityDragon) {
+                        if (event.getEntityLiving() instanceof EndermanEntity || event.getEntityLiving() instanceof EnderDragonEntity) {
                             int level = EnchantmentHelper.getEnchantmentLevel(BPEnchantments.disjunction, killer.inventory.getCurrentItem());
                             isAttacking = true;
                             event.getEntityLiving().attackEntityFrom(event.getSource(), event.getAmount() * (level * 0.5F + 1));
@@ -168,8 +163,8 @@ public class BPEventHandler {
         if (event.getSource() instanceof EntityDamageSource) {
             EntityDamageSource entitySource = (EntityDamageSource) event.getSource();
 
-            if (entitySource.getTrueSource() instanceof EntityPlayer) {
-                EntityPlayer killer = (EntityPlayer) entitySource.getTrueSource();
+            if (entitySource.getTrueSource() instanceof PlayerEntity) {
+                PlayerEntity killer = (PlayerEntity) entitySource.getTrueSource();
 
                 if (!killer.inventory.getCurrentItem().isEmpty()) {
                     if (EnchantmentHelper.getEnchantments(killer.inventory.getCurrentItem()).containsKey(BPEnchantments.vorpal)) {
@@ -192,28 +187,28 @@ public class BPEventHandler {
 
     private void dropHeads(LivingDeathEvent event) {
 
-        if (event.getEntityLiving() instanceof EntityCreeper) {
+        if (event.getEntityLiving() instanceof CreeperEntity) {
             event.getEntityLiving().entityDropItem(new ItemStack(Items.SKULL, 1, 4), 0.0F);
         }
 
-        if (event.getEntityLiving() instanceof EntityPlayer) {
+        if (event.getEntityLiving() instanceof PlayerEntity) {
             ItemStack drop = new ItemStack(Items.SKULL, 1, 3);
-            drop.setTagCompound(new NBTTagCompound());
-            drop.getTagCompound().setString("SkullOwner", ((EntityPlayer) event.getEntityLiving()).getDisplayName().getFormattedText());
+            drop.setTagCompound(new CompoundNBT());
+            drop.getTagCompound().setString("SkullOwner", ((PlayerEntity) event.getEntityLiving()).getDisplayName().getFormattedText());
             event.getEntityLiving().entityDropItem(drop, 0.0F);
         }
 
-        if (event.getEntityLiving() instanceof AbstractSkeleton) {
-            AbstractSkeleton sk = (AbstractSkeleton) event.getEntityLiving();
+        if (event.getEntityLiving() instanceof AbstractSkeletonEntity) {
+            AbstractSkeletonEntity sk = (AbstractSkeletonEntity) event.getEntityLiving();
 
-            if (sk instanceof EntitySkeleton) {
+            if (sk instanceof SkeletonEntity) {
                 event.getEntityLiving().entityDropItem(new ItemStack(Items.SKULL, 1, 0), 0.0F);
             } else {
                 event.getEntityLiving().entityDropItem(new ItemStack(Items.SKULL, 1, 1), 0.0F);
             }
         }
 
-        if (event.getEntityLiving() instanceof EntityZombie) {
+        if (event.getEntityLiving() instanceof ZombieEntity) {
             event.getEntityLiving().entityDropItem(new ItemStack(Items.SKULL, 1, 2), 0.0F);
         }
     }
@@ -249,7 +244,7 @@ public class BPEventHandler {
     public void onBonemealEvent(BonemealEvent event) {
 
         if (!event.getWorld().isRemote) {
-            if (event.getBlock() instanceof BlockGrass) {
+            if (event.getBlock() instanceof GrassBlock) {
                 for (int x = event.getPos().getX() - 2; x < event.getPos().getX() + 3; x++) {
                     for (int z = event.getPos().getZ() - 2; z < event.getPos().getZ() + 3; z++) {
                         if (event.getWorld().isAirBlock(new BlockPos(x, event.getPos().getY() + 1, z))) {
@@ -269,7 +264,7 @@ public class BPEventHandler {
     @SubscribeEvent
     public void blockHighlightEvent(DrawBlockHighlightEvent event) {
         RayTraceResult mop = event.getTarget();
-        Block block = Block.getBlockFromItem(event.getPlayer().getHeldItem(EnumHand.MAIN_HAND).getItem());
+        Block block = Block.getBlockFromItem(event.getPlayer().getHeldItem(Hand.MAIN_HAND).getItem());
         if(block instanceof BlockGateBase && mop.typeOfHit == RayTraceResult.Type.BLOCK){
             BlockPos position = event.getTarget().getBlockPos().offset(mop.sideHit);
             Entity entity = Minecraft.getMinecraft().getRenderViewEntity();
@@ -284,7 +279,7 @@ public class BPEventHandler {
             position.add(0.5, 0.1, 0.5);
             vertexbuffer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
             BlockRendererDispatcher blockrendererdispatcher = Minecraft.getMinecraft().getBlockRendererDispatcher();
-            IBlockState state = block.getDefaultState().withProperty(BlockGateBase.FACING, mop.sideHit);
+            BlockState state = block.getDefaultState().withProperty(BlockGateBase.FACING, mop.sideHit);
             IBakedModel ibakedmodel = blockrendererdispatcher.getModelForState(state);
             blockrendererdispatcher.getBlockModelRenderer().renderModel(event.getPlayer().world, ibakedmodel, state, position, vertexbuffer, false, new Random().nextLong());
             tessellator.draw();

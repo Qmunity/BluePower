@@ -1,6 +1,6 @@
 package com.bluepowermod.network;
 
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -38,7 +38,7 @@ public class NetworkHandler{
         wrapper.sendToAll(packet);
     }
 
-    public void sendTo(IMessage packet, EntityPlayerMP player){
+    public void sendTo(IMessage packet, ServerPlayerEntity player){
 
         wrapper.sendTo(packet, player);
     }

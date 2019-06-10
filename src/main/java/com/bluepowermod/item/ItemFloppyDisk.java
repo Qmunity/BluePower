@@ -23,7 +23,7 @@ import com.bluepowermod.reference.Refs;
 import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
@@ -38,7 +38,7 @@ public class ItemFloppyDisk extends ItemBase implements IItemColor{
     }
 
     public static void finaliseDisk(ItemStack itemStack, String name, MinecraftColor color){
-        NBTTagCompound nbt = new NBTTagCompound();
+        CompoundNBT nbt = new CompoundNBT();
         nbt.setInteger("color", color.getHex());
         nbt.setString("name", name);
         itemStack.setTagCompound(nbt);

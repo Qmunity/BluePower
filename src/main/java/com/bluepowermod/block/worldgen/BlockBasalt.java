@@ -18,7 +18,7 @@
 package com.bluepowermod.block.worldgen;
 
 import com.bluepowermod.init.BPBlocks;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.item.Item;
 
 import java.util.Random;
@@ -32,7 +32,7 @@ public class BlockBasalt extends BlockStoneOre {
     }
 
     @Override
-    public Item getItemDropped(IBlockState state, Random rand, int fortune) {
+    public Item getItemDropped(BlockState state, Random rand, int fortune) {
         return Item.getItemFromBlock(BPBlocks.basalt_cobble);
     }
 

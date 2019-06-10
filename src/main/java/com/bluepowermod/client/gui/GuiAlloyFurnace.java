@@ -17,7 +17,7 @@
 
 package com.bluepowermod.client.gui;
 
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 
 import com.bluepowermod.container.ContainerAlloyFurnace;
@@ -32,7 +32,7 @@ public class GuiAlloyFurnace extends GuiContainerBaseBP {
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/alloy_furnace.png");
     private final TileAlloyFurnace furnace;
 
-    public GuiAlloyFurnace(InventoryPlayer invPlayer, TileAlloyFurnace furnace) {
+    public GuiAlloyFurnace(PlayerInventory invPlayer, TileAlloyFurnace furnace) {
 
         super(furnace, new ContainerAlloyFurnace(invPlayer, furnace), resLoc);
         this.furnace = furnace;

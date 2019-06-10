@@ -23,7 +23,7 @@ package com.bluepowermod.client.gui;
 
 import com.bluepowermod.BluePower;
 import com.bluepowermod.reference.Refs;
-import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraftforge.common.config.ConfigElement;
 import net.minecraftforge.fml.client.config.DummyConfigElement;
 import net.minecraftforge.fml.client.config.GuiConfig;
@@ -34,7 +34,7 @@ import java.util.List;
 
 public class BPGuiConfig extends GuiConfig {
 
-    public BPGuiConfig(GuiScreen parent) {
+    public BPGuiConfig(Screen parent) {
 
         super(parent, BPGuiConfig.getConfigElements(), Refs.MODID, false, false, GuiConfig.getAbridgedConfigPath(BluePower.config
                 .toString()));

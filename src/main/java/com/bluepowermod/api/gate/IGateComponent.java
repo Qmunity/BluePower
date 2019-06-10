@@ -1,7 +1,7 @@
 package com.bluepowermod.api.gate;
 
 import com.bluepowermod.client.render.RenderHelper;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
@@ -31,9 +31,9 @@ public interface IGateComponent {
 
     public void onLayoutRefresh();
 
-    public void writeToNBT(NBTTagCompound tag);
+    public void writeToNBT(CompoundNBT tag);
 
-    public void readFromNBT(NBTTagCompound tag);
+    public void readFromNBT(CompoundNBT tag);
 
     public void writeData(DataOutput buffer) throws IOException;
 

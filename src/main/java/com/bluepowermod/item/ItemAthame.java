@@ -17,12 +17,12 @@
 
 package com.bluepowermod.item;
 
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.boss.EntityDragon;
-import net.minecraft.entity.monster.EntityEnderman;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.boss.dragon.EnderDragonEntity;
+import net.minecraft.entity.monster.EndermanEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemSword;
+import net.minecraft.item.SwordItem;
 import net.minecraft.util.DamageSource;
 import net.minecraftforge.common.util.EnumHelper;
 
@@ -30,7 +30,7 @@ import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.init.BPItems;
 import com.bluepowermod.reference.Refs;
 
-public class ItemAthame extends ItemSword {
+public class ItemAthame extends SwordItem {
     
     private float               damageDealt;
     private static ToolMaterial athameMaterial = EnumHelper.addToolMaterial("SILVER", 0, 100, 6.0F, 2.0F, 10);
@@ -51,13 +51,13 @@ public class ItemAthame extends ItemSword {
     }
     
     @Override
-    public boolean hitEntity(ItemStack stack, EntityLivingBase entity, EntityLivingBase player) {
+    public boolean hitEntity(ItemStack stack, LivingEntity entity, LivingEntity player) {
     
         this.damageDealt = athameMaterial.getAttackDamage();
-        if ((entity instanceof EntityEnderman) || (entity instanceof EntityDragon)) {
+        if ((entity instanceof EndermanEntity) || (entity instanceof EnderDragonEntity)) {
             this.damageDealt += 18.0F;
         }
-        entity.attackEntityFrom(DamageSource.causePlayerDamage((EntityPlayer) player), this.damageDealt);
+        entity.attackEntityFrom(DamageSource.causePlayerDamage((PlayerEntity) player), this.damageDealt);
         return super.hitEntity(stack, entity, player);
     }
 

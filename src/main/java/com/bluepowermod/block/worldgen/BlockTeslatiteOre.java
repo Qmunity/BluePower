@@ -18,7 +18,7 @@
 package com.bluepowermod.block.worldgen;
 
 import com.bluepowermod.init.BPItems;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.item.Item;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -36,12 +36,12 @@ public class BlockTeslatiteOre extends BlockItemOre {
     }
 
     @Override
-    public int getExpDrop(IBlockState state, IBlockAccess world, BlockPos pos, int fortune) {
+    public int getExpDrop(BlockState state, IBlockAccess world, BlockPos pos, int fortune) {
         return MathHelper.getInt(rand, 2, 5);
     }
 
     @Override
-    public Item getItemDropped(IBlockState state, Random rand, int fortune) {
+    public Item getItemDropped(BlockState state, Random rand, int fortune) {
         return BPItems.teslatite_dust;
     }
 

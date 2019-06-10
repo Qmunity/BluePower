@@ -19,7 +19,7 @@
 
 package com.bluepowermod.client.gui;
 
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 
 import com.bluepowermod.container.ContainerDeployer;
@@ -34,7 +34,7 @@ public class GuiDeployer extends GuiContainerBaseBP {
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/deployer.png");
     private final TileDeployer deployer;
 
-    public GuiDeployer(InventoryPlayer invPlayer, TileDeployer deployer) {
+    public GuiDeployer(PlayerInventory invPlayer, TileDeployer deployer) {
 
         super(deployer, new ContainerDeployer(invPlayer, deployer), resLoc);
         this.deployer = deployer;

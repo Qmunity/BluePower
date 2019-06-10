@@ -19,14 +19,11 @@ package com.bluepowermod.tile.tier1;
 
 import com.bluepowermod.block.machine.BlockIgniter;
 import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;;
+import net.minecraft.block.Blocks;
+import net.minecraft.util.Direction;;
 
 import com.bluepowermod.tile.IEjectAnimator;
 import com.bluepowermod.tile.TileBase;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 
 import static com.bluepowermod.block.machine.BlockIgniter.ACTIVE;
 import static com.bluepowermod.block.machine.BlockIgniter.FACING;
@@ -46,14 +43,14 @@ public class TileIgniter extends TileBase implements IEjectAnimator {
     }
 
     private void ignite() {
-        EnumFacing facing = world.getBlockState(pos).getValue(FACING);
+        Direction facing = world.getBlockState(pos).getValue(FACING);
         if (world.getRedstonePowerFromNeighbors(pos) > 0 && world.isAirBlock(pos.offset(facing)) && Blocks.FIRE.canPlaceBlockAt(world, pos.offset(facing))) {
             world.setBlockState(pos.offset(facing), Blocks.FIRE.getDefaultState());
         }
     }
 
     private void extinguish() {
-        EnumFacing facing = world.getBlockState(pos).getValue(FACING);
+        Direction facing = world.getBlockState(pos).getValue(FACING);
         Block target = world.getBlockState(pos.offset(facing)).getBlock();
         if (world.getRedstonePowerFromNeighbors(pos) == 0 && (target == Blocks.FIRE || target == Blocks.PORTAL)) {
             world.setBlockToAir(pos.offset(facing));

@@ -7,9 +7,9 @@
  */
 package com.bluepowermod.client.gui;
 
-import net.minecraft.client.gui.GuiTextField;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
+import net.minecraft.client.gui.widget.TextFieldWidget;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
@@ -44,7 +44,7 @@ public class GuiCircuitTable extends GuiContainerBaseBP {
      * True if the left mouse button was held down last time drawScreen was called.
      */
     private boolean wasClicking;
-    private GuiTextField searchField;
+    private TextFieldWidget searchField;
     private final boolean firstRun = true;
     private int ticksExisted;
 
@@ -56,7 +56,7 @@ public class GuiCircuitTable extends GuiContainerBaseBP {
 
     private final boolean[] displayRed = new boolean[24];
 
-    public GuiCircuitTable(InventoryPlayer invPlayer, TileCircuitTable circuitTable) {
+    public GuiCircuitTable(PlayerInventory invPlayer, TileCircuitTable circuitTable) {
 
         this(circuitTable, new ContainerCircuitTable(invPlayer, circuitTable), guiTexture);
     }
@@ -78,7 +78,7 @@ public class GuiCircuitTable extends GuiContainerBaseBP {
         super.initGui();
         buttonList.clear();
         Keyboard.enableRepeatEvents(true);
-        searchField = new GuiTextField(0, fontRenderer, guiLeft + 8, guiTop + 20, 89, fontRenderer.FONT_HEIGHT);
+        searchField = new TextFieldWidget(0, fontRenderer, guiLeft + 8, guiTop + 20, 89, fontRenderer.FONT_HEIGHT);
         searchField.setMaxStringLength(15);
         searchField.setEnableBackgroundDrawing(true);
         searchField.setVisible(true);

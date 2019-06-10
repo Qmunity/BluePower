@@ -4,7 +4,7 @@ import com.bluepowermod.client.gui.widget.WidgetTabItemLister;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.TileMachineBase;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.inventory.Container;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.util.ResourceLocation;
 

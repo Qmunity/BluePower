@@ -18,9 +18,9 @@ import com.bluepowermod.network.message.MessageGuiUpdate;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier3.TileCircuitDatabase;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.ClickType;
-import net.minecraft.inventory.Slot;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.ClickType;
+import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -33,7 +33,7 @@ public class GuiCircuitDatabaseSharing extends GuiCircuitTable {
     private final TileCircuitDatabase circuitDatabase;
     private int curDeletingTemplate = -1;
 
-    public GuiCircuitDatabaseSharing(InventoryPlayer invPlayer, TileCircuitDatabase circuitDatabase) {
+    public GuiCircuitDatabaseSharing(PlayerInventory invPlayer, TileCircuitDatabase circuitDatabase) {
 
         super(circuitDatabase, new ContainerCircuitDatabaseSharing(invPlayer, circuitDatabase), guiTexture);
         this.circuitDatabase = circuitDatabase;

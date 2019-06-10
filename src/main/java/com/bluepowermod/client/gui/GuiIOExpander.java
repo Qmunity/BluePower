@@ -7,7 +7,7 @@
  */
 package com.bluepowermod.client.gui;
 
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 
 import com.bluepowermod.container.ContainerIOExpander;
@@ -20,7 +20,7 @@ public class GuiIOExpander extends GuiContainerBaseBP {
 
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID + ":textures/gui/ioexpandergui.png");
 
-    public GuiIOExpander(InventoryPlayer invPlayer, TileIOExpander ioExpander) {
+    public GuiIOExpander(PlayerInventory invPlayer, TileIOExpander ioExpander) {
 
         super(new ContainerIOExpander(invPlayer, ioExpander), resLoc);
         this.ioExpander = ioExpander;

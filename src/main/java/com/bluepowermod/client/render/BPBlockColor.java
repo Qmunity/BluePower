@@ -1,7 +1,7 @@
 package com.bluepowermod.client.render;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.color.IBlockColor;
 import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.item.ItemStack;
@@ -17,7 +17,7 @@ public class BPBlockColor implements IBlockColor, IItemColor {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public int colorMultiplier(IBlockState state, @Nullable IBlockAccess world, @Nullable BlockPos pos, int tintIndex) {
+    public int colorMultiplier(BlockState state, @Nullable IBlockAccess world, @Nullable BlockPos pos, int tintIndex) {
         //Color for Block
         return ((IBPColoredBlock)state.getBlock()).getColor(world, pos, tintIndex);
     }

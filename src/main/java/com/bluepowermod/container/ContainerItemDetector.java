@@ -10,10 +10,10 @@ package com.bluepowermod.container;
 import com.bluepowermod.ClientProxy;
 import com.bluepowermod.client.gui.GuiContainerBase;
 import com.bluepowermod.tile.tier1.TileItemDetector;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.IContainerListener;
-import net.minecraft.inventory.Slot;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.IContainerListener;
+import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -27,7 +27,7 @@ public class ContainerItemDetector extends ContainerMachineBase {
     private int fuzzySetting = -1;
     private final TileItemDetector itemDetector;
 
-    public ContainerItemDetector(InventoryPlayer invPlayer, TileItemDetector itemDetector) {
+    public ContainerItemDetector(PlayerInventory invPlayer, TileItemDetector itemDetector) {
 
         super(itemDetector);
         this.itemDetector = itemDetector;
@@ -39,7 +39,7 @@ public class ContainerItemDetector extends ContainerMachineBase {
         bindPlayerInventory(invPlayer);
     }
 
-    protected void bindPlayerInventory(InventoryPlayer invPlayer) {
+    protected void bindPlayerInventory(PlayerInventory invPlayer) {
 
         // Render inventory
         for (int i = 0; i < 3; i++) {
@@ -55,13 +55,13 @@ public class ContainerItemDetector extends ContainerMachineBase {
     }
 
     @Override
-    public boolean canInteractWith(EntityPlayer player) {
+    public boolean canInteractWith(PlayerEntity player) {
 
         return itemDetector.isUsableByPlayer(player);
     }
 
     @Override
-    public ItemStack transferStackInSlot(EntityPlayer player, int par2) {
+    public ItemStack transferStackInSlot(PlayerEntity player, int par2) {
 
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = (Slot) inventorySlots.get(par2);

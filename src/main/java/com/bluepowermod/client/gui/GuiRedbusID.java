@@ -10,7 +10,7 @@ package com.bluepowermod.client.gui;
 import com.bluepowermod.container.ContainerRedbusID;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier3.IRedBusWindow;
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.translation.I18n;
 
@@ -20,7 +20,7 @@ public class GuiRedbusID extends GuiContainerBaseBP {
 
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID + ":textures/gui/redbusgui.png");
 
-    public GuiRedbusID(InventoryPlayer invPlayer, IRedBusWindow device) {
+    public GuiRedbusID(PlayerInventory invPlayer, IRedBusWindow device) {
 
         super(new ContainerRedbusID(invPlayer, device), resLoc);
         this.device = device;

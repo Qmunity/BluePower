@@ -17,12 +17,12 @@
 
 package com.bluepowermod.util;
 
-import net.minecraft.entity.item.EntityFireworkRocket;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemDye;
+import net.minecraft.entity.item.FireworkRocketEntity;
+import net.minecraft.item.Items;
+import net.minecraft.item.DyeItem;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
@@ -63,9 +63,9 @@ public class DateEventHandler {
 
         ItemStack itemstack1 = getFireworkCharge();
 
-        NBTTagCompound nbttagcompound = new NBTTagCompound();
-        NBTTagCompound nbttagcompound1 = new NBTTagCompound();
-        NBTTagList nbttaglist = new NBTTagList();
+        CompoundNBT nbttagcompound = new CompoundNBT();
+        CompoundNBT nbttagcompound1 = new CompoundNBT();
+        ListNBT nbttaglist = new ListNBT();
 
         if (!itemstack1.isEmpty() && itemstack1.getItem() == Items.FIREWORK_CHARGE && itemstack1.hasTagCompound()
                 && itemstack1.getTagCompound().hasKey("Explosion")) {
@@ -78,19 +78,19 @@ public class DateEventHandler {
 
         rocket.setTagCompound(nbttagcompound);
 
-        EntityFireworkRocket entity = new EntityFireworkRocket(world, x, y, z, rocket);
+        FireworkRocketEntity entity = new FireworkRocketEntity(world, x, y, z, rocket);
         world.spawnEntity(entity);
     }
 
     private static ItemStack getFireworkCharge() {
 
         ItemStack charge = new ItemStack(Items.FIREWORK_CHARGE);
-        NBTTagCompound nbttagcompound = new NBTTagCompound();
-        NBTTagCompound nbttagcompound1 = new NBTTagCompound();
+        CompoundNBT nbttagcompound = new CompoundNBT();
+        CompoundNBT nbttagcompound1 = new CompoundNBT();
         byte b0 = 0;
         ArrayList<Integer> arraylist = new ArrayList<Integer>();
 
-        arraylist.add(ItemDye.DYE_COLORS[rand.nextInt(16)]);
+        arraylist.add(DyeItem.DYE_COLORS[rand.nextInt(16)]);
 
         if (rand.nextBoolean())
             nbttagcompound1.setBoolean("Flicker", true);

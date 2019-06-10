@@ -19,12 +19,12 @@ package com.bluepowermod.item;
 
 import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.reference.Refs;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.EnumAction;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.UseAction;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -44,8 +44,8 @@ public class ItemSilkyScrewdriver extends ItemBase {
 
 
     @Override
-    public EnumActionResult onItemUseFirst(EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) {
-            return EnumActionResult.PASS;
+    public ActionResultType onItemUseFirst(PlayerEntity player, World world, BlockPos pos, Direction side, float hitX, float hitY, float hitZ, Hand hand) {
+            return ActionResultType.PASS;
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -56,8 +56,8 @@ public class ItemSilkyScrewdriver extends ItemBase {
     }
 
     @Override
-    public EnumAction getItemUseAction(ItemStack par1ItemStack) {
+    public UseAction getItemUseAction(ItemStack par1ItemStack) {
 
-        return EnumAction.BLOCK;
+        return UseAction.BLOCK;
     }
 }

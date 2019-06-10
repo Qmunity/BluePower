@@ -16,13 +16,13 @@ import com.bluepowermod.tile.IRejectAnimator;
 import com.bluepowermod.tile.TileMachineBase;
 import mcmultipart.api.container.IMultipartContainer;
 import mcmultipart.api.multipart.MultipartHelper;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
 
 import java.util.List;
@@ -51,7 +51,7 @@ public class TileManager extends TileMachineBase implements ISidedInventory,  IR
     }
 
     @Override
-    public void onButtonPress(EntityPlayer player, int messageId, int value) {
+    public void onButtonPress(PlayerEntity player, int messageId, int value) {
 
         if (messageId == 0) {
             filterColor = TubeColor.values()[value];
@@ -120,12 +120,12 @@ public class TileManager extends TileMachineBase implements ISidedInventory,  IR
      * This function gets called whenever the world/chunk loads
      */
     @Override
-    public void readFromNBT(NBTTagCompound tCompound) {
+    public void readFromNBT(CompoundNBT tCompound) {
 
         super.readFromNBT(tCompound);
 
         for (int i = 0; i < 24; i++) {
-            NBTTagCompound tc = tCompound.getCompoundTag("inventory" + i);
+            CompoundNBT tc = tCompound.getCompoundTag("inventory" + i);
             inventory.set(i, new ItemStack(tc));
         }
         filterColor = TubeColor.values()[tCompound.getByte("filterColor")];
@@ -138,12 +138,12 @@ public class TileManager extends TileMachineBase implements ISidedInventory,  IR
      * This function gets called whenever the world/chunk is saved
      */
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound tCompound) {
+    public CompoundNBT writeToNBT(CompoundNBT tCompound) {
 
         super.writeToNBT(tCompound);
 
         for (int i = 0; i < 24; i++) {
-                NBTTagCompound tc = new NBTTagCompound();
+                CompoundNBT tc = new CompoundNBT();
                 inventory.get(i).writeToNBT(tc);
                 tCompound.setTag("inventory" + i, tc);
         }
@@ -156,14 +156,14 @@ public class TileManager extends TileMachineBase implements ISidedInventory,  IR
     }
 
     @Override
-    public void writeToPacketNBT(NBTTagCompound tag) {
+    public void writeToPacketNBT(CompoundNBT tag) {
 
         super.writeToPacketNBT(tag);
         tag.setByte("rejectAnimation", (byte) rejectTicker);
     }
 
     @Override
-    public void readFromPacketNBT(NBTTagCompound tag) {
+    public void readFromPacketNBT(CompoundNBT tag) {
 
         super.readFromPacketNBT(tag);
         rejectTicker = tag.getByte("rejectAnimation");
@@ -236,17 +236,17 @@ public class TileManager extends TileMachineBase implements ISidedInventory,  IR
     }
 
     @Override
-    public boolean isUsableByPlayer(EntityPlayer player) {
+    public boolean isUsableByPlayer(PlayerEntity player) {
         return player.getDistanceSqToCenter(pos) <= 64.0D;
     }
 
     @Override
-    public void openInventory(EntityPlayer player) {
+    public void openInventory(PlayerEntity player) {
 
     }
 
     @Override
-    public void closeInventory(EntityPlayer player) {
+    public void closeInventory(PlayerEntity player) {
 
     }
 
@@ -287,8 +287,8 @@ public class TileManager extends TileMachineBase implements ISidedInventory,  IR
     }
 
     @Override
-    public int[] getSlotsForFace(EnumFacing side) {
-        EnumFacing direction = getFacingDirection();
+    public int[] getSlotsForFace(Direction side) {
+        Direction direction = getFacingDirection();
 
         if (side == direction || side == direction.getOpposite()) {
             return new int[] {};
@@ -300,12 +300,12 @@ public class TileManager extends TileMachineBase implements ISidedInventory,  IR
     }
 
     @Override
-    public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction) {
+    public boolean canInsertItem(int index, ItemStack itemStackIn, Direction direction) {
         return true;
     }
 
     @Override
-    public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
+    public boolean canExtractItem(int index, ItemStack stack, Direction direction) {
         return true;
     }
 

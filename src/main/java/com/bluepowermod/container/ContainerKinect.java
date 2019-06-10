@@ -17,10 +17,10 @@
 
 package com.bluepowermod.container;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.Slot;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 
 import com.bluepowermod.tile.tier3.TileKinectGenerator;
@@ -29,7 +29,7 @@ public class ContainerKinect extends Container {
 
     private final TileKinectGenerator tilekinect;
 
-    public ContainerKinect(InventoryPlayer invPlayer, TileKinectGenerator kinect) {
+    public ContainerKinect(PlayerInventory invPlayer, TileKinectGenerator kinect) {
 
         tilekinect = kinect;
         
@@ -39,7 +39,7 @@ public class ContainerKinect extends Container {
         bindPlayerInventory(invPlayer);
     }
 
-    protected void bindPlayerInventory(InventoryPlayer invPlayer) {
+    protected void bindPlayerInventory(PlayerInventory invPlayer) {
 
         // Render inventory
         for (int i = 0; i < 3; i++) {
@@ -55,13 +55,13 @@ public class ContainerKinect extends Container {
     }
 
     @Override
-    public boolean canInteractWith(EntityPlayer player) {
+    public boolean canInteractWith(PlayerEntity player) {
 
         return tilekinect.isUsableByPlayer(player);
     }
 
     @Override
-    public ItemStack transferStackInSlot(EntityPlayer player, int par2) {
+    public ItemStack transferStackInSlot(PlayerEntity player, int par2) {
     	
     	return ItemStack.EMPTY;
      }

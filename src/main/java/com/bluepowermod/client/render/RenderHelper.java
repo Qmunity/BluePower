@@ -11,7 +11,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.fml.relauncher.Side;
@@ -728,7 +728,7 @@ public class RenderHelper {
      * @author amadornes
      * @param d
      */
-    public static void rotateRenderMatrix(EnumFacing d) {
+    public static void rotateRenderMatrix(Direction d) {
 
         switch (d) {
         case UP:

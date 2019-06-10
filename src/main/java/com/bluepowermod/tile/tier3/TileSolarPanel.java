@@ -12,9 +12,8 @@ import com.bluepowermod.api.power.CapabilityBlutricity;
 import com.bluepowermod.api.power.IPowerBase;
 import com.bluepowermod.tile.TileMachineBase;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityInject;
 
 import javax.annotation.Nullable;
 
@@ -34,7 +33,7 @@ public class TileSolarPanel extends TileMachineBase  {
 		if(world.isDaytime() && world.canSeeSky(pos) && storage.getVoltage() < 10)
 			storage.addEnergy(-(storage.getVoltage() - 10), false);
 
-		for (EnumFacing facing : EnumFacing.values()){
+		for (Direction facing : Direction.values()){
 		    TileEntity tile = world.getTileEntity(pos.offset(facing));
 		    if((storage.getVoltage() > 0) && tile != null && tile.hasCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, facing.getOpposite())){
 		        IPowerBase exStorage = tile.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, facing.getOpposite());
@@ -46,13 +45,13 @@ public class TileSolarPanel extends TileMachineBase  {
 	}
 
 	@Override
-	public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
+	public boolean hasCapability(Capability<?> capability, @Nullable Direction facing) {
 		return capability == CapabilityBlutricity.BLUTRICITY_CAPABILITY || super.hasCapability(capability, facing);
 	}
 
 	@Nullable
 	@Override
-	public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
+	public <T> T getCapability(Capability<T> capability, @Nullable Direction facing) {
 		if(capability == CapabilityBlutricity.BLUTRICITY_CAPABILITY) {
 				return CapabilityBlutricity.BLUTRICITY_CAPABILITY.cast(this.storage);
 		}

@@ -1,7 +1,7 @@
 package com.bluepowermod.api.connect;
 
 
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 
 public interface IConnectionCache<T> {
 
@@ -13,17 +13,17 @@ public interface IConnectionCache<T> {
     /**
      * Returns the connection on the specified side, or null if not connected.
      */
-    public IConnection<T> getConnectionOnSide(EnumFacing side);
+    public IConnection<T> getConnectionOnSide(Direction side);
 
     /**
      * Called when one device connects to the other.
      */
-    public void onConnect(EnumFacing side, T connectable, EnumFacing connectableSide, ConnectionType type);
+    public void onConnect(Direction side, T connectable, Direction connectableSide, ConnectionType type);
 
     /**
      * Called when one device disconnects from the other.
      */
-    public void onDisconnect(EnumFacing side);
+    public void onDisconnect(Direction side);
 
     /**
      * Checks for new devices and removes old ones.

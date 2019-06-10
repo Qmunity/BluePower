@@ -2,8 +2,8 @@ package com.bluepowermod.api.gate;
 
 import com.bluepowermod.api.wire.redstone.IBundledDevice;
 import com.bluepowermod.api.wire.redstone.IRedstoneDevice;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -13,7 +13,7 @@ public interface IGateConnection {
 
     public IGate<?, ?, ?, ?, ?, ?> getGate();
 
-    public EnumFacing getDirection();
+    public Direction getDirection();
 
     public void notifyUpdate();
 
@@ -33,9 +33,9 @@ public interface IGateConnection {
 
     public void refresh();
 
-    public void writeToNBT(NBTTagCompound tag);
+    public void writeToNBT(CompoundNBT tag);
 
-    public void readFromNBT(NBTTagCompound tag);
+    public void readFromNBT(CompoundNBT tag);
 
     public void writeData(DataOutput buffer) throws IOException;
 

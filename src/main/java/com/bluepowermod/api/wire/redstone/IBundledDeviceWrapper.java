@@ -1,9 +1,9 @@
 package com.bluepowermod.api.wire.redstone;
 
-import net.minecraft.util.EnumFacing;;
+import net.minecraft.util.Direction;;
 
 public interface IBundledDeviceWrapper {
 
-    public IBundledDevice getBundledDeviceOnSide(EnumFacing side);
+    public IBundledDevice getBundledDeviceOnSide(Direction side);
 
 }

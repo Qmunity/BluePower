@@ -1,7 +1,7 @@
 package com.bluepowermod.api.wire.redstone;
 
 import com.bluepowermod.api.connect.IConnection;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 
 import java.util.Collection;
 import java.util.Map.Entry;
@@ -13,7 +13,7 @@ public interface IRedstoneConductor extends IRedstoneDevice, IRedConductor {
     /**
      * Whether or not this device can continue (or start) a propagation on the specified side.
      */
-    public boolean canPropagateFrom(EnumFacing fromSide);
+    public boolean canPropagateFrom(Direction fromSide);
 
     public static interface IAdvancedRedstoneConductor extends IRedstoneConductor {
 
@@ -25,7 +25,7 @@ public interface IRedstoneConductor extends IRedstoneDevice, IRedConductor {
          * separately, after this one. This is useful in cases like Red Alloy and Infused Teslatite wires' power transmission, where one can connect
          * and power the other, but they cannot be ran on the same propagation run because one is lossy and the other one isn't.
          */
-        public Collection<Entry<IConnection<IRedstoneDevice>, Boolean>> propagate(EnumFacing fromSide);
+        public Collection<Entry<IConnection<IRedstoneDevice>, Boolean>> propagate(Direction fromSide);
     }
 
 }

@@ -17,7 +17,7 @@
 
 package com.bluepowermod;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraftforge.fml.server.FMLServerHandler;
 
 public class CommonProxy {
@@ -35,7 +35,7 @@ public class CommonProxy {
     }
 
 
-    public EntityPlayer getPlayer() {
+    public PlayerEntity getPlayer() {
 
         return null;
     }

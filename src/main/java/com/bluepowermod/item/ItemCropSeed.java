@@ -19,18 +19,19 @@ package com.bluepowermod.item;
 
 import com.bluepowermod.init.BPItems;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.EnumPlantType;
 import net.minecraftforge.common.IPlantable;
-import net.minecraft.util.EnumFacing;;
+;
 
 import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.reference.Refs;
@@ -48,21 +49,21 @@ public class ItemCropSeed extends ItemSeeds implements IPlantable {
     }
 
     @Override
-    public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+    public ActionResultType onItemUse(PlayerEntity player, World world, BlockPos pos, Hand hand, Direction facing, float hitX, float hitY, float hitZ) {
         ItemStack itemStack = player.getHeldItem(hand);
         if (facing.ordinal() != 1) {
-            return EnumActionResult.PASS;
+            return ActionResultType.PASS;
         } else if (player.canPlayerEdit(pos, facing, itemStack) && player.canPlayerEdit(pos.up(), facing, itemStack)) {
-            if (world.getBlockState(pos).getBlock().canSustainPlant(world.getBlockState(pos),  world, pos, EnumFacing.UP, this) && world.isAirBlock(pos.up()) && world.getBlockState(pos).getBlock().isFertile(world, pos)) {
+            if (world.getBlockState(pos).getBlock().canSustainPlant(world.getBlockState(pos),  world, pos, Direction.UP, this) && world.isAirBlock(pos.up()) && world.getBlockState(pos).getBlock().isFertile(world, pos)) {
                 world.setBlockState(pos.up(), field_150925_a.getDefaultState(), 2);
                 itemStack.setCount(itemStack.getCount() - 1);
                 player.setHeldItem(hand, itemStack);
-                return EnumActionResult.SUCCESS;
+                return ActionResultType.SUCCESS;
             } else {
-                return EnumActionResult.PASS;
+                return ActionResultType.PASS;
             }
         } else {
-            return EnumActionResult.PASS;
+            return ActionResultType.PASS;
         }
     }
 
@@ -72,7 +73,7 @@ public class ItemCropSeed extends ItemSeeds implements IPlantable {
     }
 
     @Override
-    public IBlockState getPlant(IBlockAccess world, BlockPos pos) {
+    public BlockState getPlant(IBlockAccess world, BlockPos pos) {
         return field_150925_a.getDefaultState();
     }
 

@@ -12,11 +12,7 @@ import com.bluepowermod.tile.IFuzzyRetrieving;
 import com.bluepowermod.tile.tier1.TileFilter;
 import mcmultipart.api.container.IMultipartContainer;
 import mcmultipart.api.multipart.MultipartHelper;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-
-import java.util.Optional;
+import net.minecraft.nbt.CompoundNBT;
 
 /**
  * @author MineMaarten
@@ -34,7 +30,7 @@ public class TileRetriever extends TileFilter implements IFuzzyRetrieving {
     }
 
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound tag) {
+    public CompoundNBT writeToNBT(CompoundNBT tag) {
 
         super.writeToNBT(tag);
         tag.setByte("slotIndex", (byte) slotIndex);
@@ -43,7 +39,7 @@ public class TileRetriever extends TileFilter implements IFuzzyRetrieving {
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound tag) {
+    public void readFromNBT(CompoundNBT tag) {
 
         super.readFromNBT(tag);
         slotIndex = tag.getByte("slotIndex");

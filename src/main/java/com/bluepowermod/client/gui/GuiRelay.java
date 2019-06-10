@@ -19,7 +19,7 @@
 
 package com.bluepowermod.client.gui;
 
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 
 import com.bluepowermod.container.ContainerRelay;
@@ -30,7 +30,7 @@ public class GuiRelay extends GuiContainerBaseBP {
 
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/seedbag.png");
 
-    public GuiRelay(InventoryPlayer invPlayer, TileRelay relay) {
+    public GuiRelay(PlayerInventory invPlayer, TileRelay relay) {
 
         super(relay, new ContainerRelay(invPlayer, relay), resLoc);
     }

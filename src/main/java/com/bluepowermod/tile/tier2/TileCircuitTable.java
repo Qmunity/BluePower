@@ -11,17 +11,14 @@ import com.bluepowermod.client.gui.IGuiButtonSensitive;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.tile.IGUITextFieldSensitive;
 import com.bluepowermod.tile.TileBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IContainerListener;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.InventoryBasic;
+import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.NonNullList;
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -30,7 +27,7 @@ import java.util.List;
 public class TileCircuitTable extends TileBase implements IInventory, IGUITextFieldSensitive, IGuiButtonSensitive {
 
     protected NonNullList<ItemStack> inventory = NonNullList.withSize(24, ItemStack.EMPTY);
-    public final InventoryBasic circuitInventory = new InventoryBasic("circuitInventory", false, 24);
+    public final Inventory circuitInventory = new Inventory("circuitInventory", false, 24);
     public int slotsScrolled;
     private String textboxString = "";
 
@@ -60,13 +57,13 @@ public class TileCircuitTable extends TileBase implements IInventory, IGUITextFi
     }
 
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound tag) {
+    public CompoundNBT writeToNBT(CompoundNBT tag) {
 
         super.writeToNBT(tag);
 
-        NBTTagList tagList = new NBTTagList();
+        ListNBT tagList = new ListNBT();
         for (int currentIndex = 0; currentIndex < inventory.size(); ++currentIndex) {
-                NBTTagCompound tagCompound = new NBTTagCompound();
+                CompoundNBT tagCompound = new CompoundNBT();
                 tagCompound.setByte("Slot", (byte) currentIndex);
                 inventory.get(currentIndex).writeToNBT(tagCompound);
                 tagList.appendTag(tagCompound);
@@ -78,14 +75,14 @@ public class TileCircuitTable extends TileBase implements IInventory, IGUITextFi
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound tag) {
+    public void readFromNBT(CompoundNBT tag) {
 
         super.readFromNBT(tag);
 
-        NBTTagList tagList = tag.getTagList("Items", 10);
+        ListNBT tagList = tag.getTagList("Items", 10);
         inventory = NonNullList.withSize(24, ItemStack.EMPTY);
         for (int i = 0; i < tagList.tagCount(); ++i) {
-            NBTTagCompound tagCompound = tagList.getCompoundTagAt(i);
+            CompoundNBT tagCompound = tagList.getCompoundTagAt(i);
             byte slot = tagCompound.getByte("Slot");
             if (slot >= 0 && slot < inventory.size()) {
                 inventory.set(slot, new ItemStack(tagCompound));
@@ -157,18 +154,18 @@ public class TileCircuitTable extends TileBase implements IInventory, IGUITextFi
     }
 
     @Override
-    public boolean isUsableByPlayer(EntityPlayer player) {
+    public boolean isUsableByPlayer(PlayerEntity player) {
         return player.getDistanceSqToCenter(pos) <= 64.0D;
     }
 
 
     @Override
-    public void openInventory(EntityPlayer player) {
+    public void openInventory(PlayerEntity player) {
 
     }
 
     @Override
-    public void closeInventory(EntityPlayer player) {
+    public void closeInventory(PlayerEntity player) {
 
     }
 
@@ -204,7 +201,7 @@ public class TileCircuitTable extends TileBase implements IInventory, IGUITextFi
     }
 
     @Override
-    public void onButtonPress(EntityPlayer player, int messageId, int value) {
+    public void onButtonPress(PlayerEntity player, int messageId, int value) {
         if (messageId == 0) {
             slotsScrolled = value;
         }

@@ -19,7 +19,7 @@
 
 package com.bluepowermod.client.gui;
 
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 
 import com.bluepowermod.container.ContainerKinect;
@@ -31,7 +31,7 @@ public class GuiKinect extends GuiContainerBaseBP {
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/kinect.png");
     private final TileKinectGenerator kinect;
 
-    public GuiKinect(InventoryPlayer invPlayer, TileKinectGenerator kinect) {
+    public GuiKinect(PlayerInventory invPlayer, TileKinectGenerator kinect) {
 
         super(new ContainerKinect(invPlayer, kinect), resLoc);
         this.kinect = kinect;

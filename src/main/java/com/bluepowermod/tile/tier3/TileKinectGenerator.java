@@ -8,11 +8,11 @@
 package com.bluepowermod.tile.tier3;
 
 import com.bluepowermod.tile.TileBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
 
 import java.util.List;
@@ -37,12 +37,12 @@ public class TileKinectGenerator extends TileBase implements ISidedInventory{
      * This function gets called whenever the world/chunk loads
      */
     @Override
-    public void readFromNBT(NBTTagCompound tCompound) {
+    public void readFromNBT(CompoundNBT tCompound) {
 
         super.readFromNBT(tCompound);
 
         for (int i = 0; i < 1; i++) {
-            NBTTagCompound tc = tCompound.getCompoundTag("inventory" + i);
+            CompoundNBT tc = tCompound.getCompoundTag("inventory" + i);
             allInventories.set(i, new ItemStack(tc));
         }
     }
@@ -51,13 +51,13 @@ public class TileKinectGenerator extends TileBase implements ISidedInventory{
      * This function gets called whenever the world/chunk is saved
      */
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound tCompound) {
+    public CompoundNBT writeToNBT(CompoundNBT tCompound) {
 
         super.writeToNBT(tCompound);
 
         for (int i = 0; i < 1; i++) {
             if (!allInventories.get(i).isEmpty()) {
-                NBTTagCompound tc = new NBTTagCompound();
+                CompoundNBT tc = new CompoundNBT();
                 allInventories.get(i).writeToNBT(tc);
                 tCompound.setTag("inventory" + i, tc);
             }
@@ -128,17 +128,17 @@ public class TileKinectGenerator extends TileBase implements ISidedInventory{
     }
 
     @Override
-    public boolean isUsableByPlayer(EntityPlayer player) {
+    public boolean isUsableByPlayer(PlayerEntity player) {
         return player.getDistanceSqToCenter(pos) <= 64.0D;
     }
 
     @Override
-    public void openInventory(EntityPlayer player) {
+    public void openInventory(PlayerEntity player) {
 
     }
 
     @Override
-    public void closeInventory(EntityPlayer player) {
+    public void closeInventory(PlayerEntity player) {
 
     }
 
@@ -183,17 +183,17 @@ public class TileKinectGenerator extends TileBase implements ISidedInventory{
     }
 
     @Override
-    public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction) {
+    public boolean canInsertItem(int index, ItemStack itemStackIn, Direction direction) {
         return false;
     }
 
     @Override
-    public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
+    public boolean canExtractItem(int index, ItemStack stack, Direction direction) {
         return false;
     }
 
     @Override
-    public int[] getSlotsForFace(EnumFacing side) {
+    public int[] getSlotsForFace(Direction side) {
         return new int[0];
     }
 }

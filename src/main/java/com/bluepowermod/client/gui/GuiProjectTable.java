@@ -23,7 +23,7 @@ import java.util.List;
 
 import com.bluepowermod.client.gui.widget.IGuiWidget;
 import com.bluepowermod.client.gui.widget.WidgetMode;
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 
 import com.bluepowermod.container.ContainerProjectTable;
@@ -40,7 +40,7 @@ public class GuiProjectTable extends GuiContainerBaseBP {
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/project_table.png");
     private final TileProjectTable projectTable;
 
-    public GuiProjectTable(InventoryPlayer invPlayer, TileProjectTable projectTable) {
+    public GuiProjectTable(PlayerInventory invPlayer, TileProjectTable projectTable) {
 
         super(projectTable, new ContainerProjectTable(invPlayer, projectTable), resLoc);
         this.projectTable = projectTable;

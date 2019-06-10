@@ -10,7 +10,7 @@ package com.bluepowermod.client.gui;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
@@ -25,7 +25,7 @@ public class GuiMonitor extends GuiContainerBaseBP {
     private static final ResourceLocation chracterSetResLoc = new ResourceLocation(Refs.MODID + ":textures/gui/65el02_chars.png");
     private final TileMonitor monitor;
 
-    public GuiMonitor(InventoryPlayer invPlayer, TileMonitor monitor) {
+    public GuiMonitor(PlayerInventory invPlayer, TileMonitor monitor) {
 
         super(new ContainerMonitor(invPlayer, monitor), resLoc);
         this.monitor = monitor;

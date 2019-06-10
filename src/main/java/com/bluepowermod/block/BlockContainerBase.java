@@ -24,17 +24,16 @@ import com.bluepowermod.init.BPItems;
 import com.bluepowermod.reference.GuiIDs;
 import com.bluepowermod.tile.IRotatable;
 import com.bluepowermod.tile.TileBase;
-import net.minecraft.block.Block;
-import net.minecraft.block.ITileEntityProvider;
+import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumBlockRenderType;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.block.BlockRenderType;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -78,13 +77,13 @@ public class BlockContainerBase extends BlockBase implements IAdvancedSilkyRemov
     }
 
     @Override
-    public boolean hasTileEntity(IBlockState state) {
+    public boolean hasTileEntity(BlockState state) {
         return true;
     }
 
     @Nullable
     @Override
-    public TileEntity createTileEntity(World world, IBlockState state) {
+    public TileEntity createTileEntity(World world, BlockState state) {
         try {
             return getTileEntity().newInstance();
         } catch (Exception e) {
@@ -113,7 +112,7 @@ public class BlockContainerBase extends BlockBase implements IAdvancedSilkyRemov
     }
 
     @Override
-    public void neighborChanged(IBlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos) {
+    public void neighborChanged(BlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos) {
         super.neighborChanged(state, world, pos, blockIn, fromPos);
         // Only do this on the server side.
         if (!((World)world).isRemote) {
@@ -125,12 +124,12 @@ public class BlockContainerBase extends BlockBase implements IAdvancedSilkyRemov
     }
 
     @Override
-    public boolean canProvidePower(IBlockState state) {
+    public boolean canProvidePower(BlockState state) {
         return isRedstoneEmitter;
     }
 
     @Override
-    public int getWeakPower(IBlockState blockState, IBlockAccess par1IBlockAccess, BlockPos pos, EnumFacing side) {
+    public int getWeakPower(BlockState blockState, IBlockAccess par1IBlockAccess, BlockPos pos, Direction side) {
         TileEntity te = get(par1IBlockAccess, pos);
         if (te instanceof TileBase) {
             TileBase tileBase = (TileBase) te;
@@ -140,7 +139,7 @@ public class BlockContainerBase extends BlockBase implements IAdvancedSilkyRemov
     }
 
     @Override
-    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World world, BlockPos pos, BlockState state, PlayerEntity player, Hand hand, Direction facing, float hitX, float hitY, float hitZ) {
         if (player.isSneaking()) {
             if (!player.getHeldItem(hand).isEmpty()) {
                 if (player.getHeldItem(hand).getItem() == BPItems.screwdriver) {
@@ -167,7 +166,7 @@ public class BlockContainerBase extends BlockBase implements IAdvancedSilkyRemov
     }
 
     @Override
-    public void breakBlock(World world, BlockPos pos, IBlockState state) {
+    public void breakBlock(World world, BlockPos pos, BlockState state) {
         if (!isSilkyRemoving) {
             TileBase tile = get(world, pos);
             if (tile != null) {
@@ -187,11 +186,11 @@ public class BlockContainerBase extends BlockBase implements IAdvancedSilkyRemov
     }
 
     @Override
-    public boolean rotateBlock(World world, BlockPos pos, EnumFacing dir) {
+    public boolean rotateBlock(World world, BlockPos pos, Direction dir) {
         TileEntity te = get(world, pos);
         if (te instanceof IRotatable) {
             IRotatable rotatable = (IRotatable) te;
-            if (dir != EnumFacing.UP && dir != EnumFacing.DOWN || canRotateVertical()) {
+            if (dir != Direction.UP && dir != Direction.DOWN || canRotateVertical()) {
                 rotatable.setFacingDirection(dir);
                 return true;
             }
@@ -199,8 +198,8 @@ public class BlockContainerBase extends BlockBase implements IAdvancedSilkyRemov
         return false;
     }
     @Override
-    public EnumBlockRenderType getRenderType(IBlockState state) {
-        return EnumBlockRenderType.MODEL;
+    public BlockRenderType getRenderType(BlockState state) {
+        return BlockRenderType.MODEL;
     }
 
     public GuiIDs getGuiID() {
@@ -222,20 +221,20 @@ public class BlockContainerBase extends BlockBase implements IAdvancedSilkyRemov
     }
 
     @Override
-    public boolean writeSilkyData(World world, BlockPos pos, NBTTagCompound tag) {
+    public boolean writeSilkyData(World world, BlockPos pos, CompoundNBT tag) {
 
         world.getTileEntity(pos).writeToNBT(tag);
         return false;
     }
 
     @Override
-    public void readSilkyData(World world, BlockPos pos, NBTTagCompound tag) {
+    public void readSilkyData(World world, BlockPos pos, CompoundNBT tag) {
 
         world.getTileEntity(pos).readFromNBT(tag);
     }
 
     @Override
-    public boolean canConnectRedstone(IBlockState state, IBlockAccess world, BlockPos pos, @Nullable EnumFacing side) {
+    public boolean canConnectRedstone(BlockState state, IBlockAccess world, BlockPos pos, @Nullable Direction side) {
         TileEntity te = world.getTileEntity(pos);
         return te != null && te instanceof TileBase && ((TileBase) te).canConnectRedstone();
     }

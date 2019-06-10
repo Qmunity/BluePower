@@ -19,9 +19,9 @@
 
 package com.bluepowermod.container;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Slot;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 
 import com.bluepowermod.tile.tier1.TileRelay;
@@ -30,7 +30,7 @@ public class ContainerRelay extends ContainerMachineBase {
 
     private final TileRelay tileRelay;
 
-    public ContainerRelay(InventoryPlayer invPlayer, TileRelay relay) {
+    public ContainerRelay(PlayerInventory invPlayer, TileRelay relay) {
         super(relay);
         tileRelay = relay;
 
@@ -42,7 +42,7 @@ public class ContainerRelay extends ContainerMachineBase {
         bindPlayerInventory(invPlayer);
     }
 
-    protected void bindPlayerInventory(InventoryPlayer invPlayer) {
+    protected void bindPlayerInventory(PlayerInventory invPlayer) {
 
         // Render inventory
         for (int i = 0; i < 3; i++) {
@@ -58,13 +58,13 @@ public class ContainerRelay extends ContainerMachineBase {
     }
 
     @Override
-    public boolean canInteractWith(EntityPlayer player) {
+    public boolean canInteractWith(PlayerEntity player) {
 
         return tileRelay.isUsableByPlayer(player);
     }
 
     @Override
-    public ItemStack transferStackInSlot(EntityPlayer player, int par2) {
+    public ItemStack transferStackInSlot(PlayerEntity player, int par2) {
 
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = (Slot) inventorySlots.get(par2);

@@ -13,15 +13,14 @@ import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.helper.ItemStackHelper;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.tile.TileMachineBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
 
 import java.util.ArrayList;
@@ -119,7 +118,7 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
 
     private void triggerSorting() {
 
-            EnumFacing dir = getOutputDirection().getOpposite();
+            Direction dir = getOutputDirection().getOpposite();
             TileEntity inputTE = getTileCache(dir);// might need opposite
 
             if (inputTE instanceof IInventory) {
@@ -169,7 +168,7 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
     }
 
     @Override
-    public void onButtonPress(EntityPlayer player, int messageId, int value) {
+    public void onButtonPress(PlayerEntity player, int messageId, int value) {
 
         if (messageId < 0)
             return;
@@ -330,7 +329,7 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
 
 
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound tag) {
+    public CompoundNBT writeToNBT(CompoundNBT tag) {
 
         super.writeToNBT(tag);
 
@@ -346,10 +345,10 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
 
         tag.setIntArray("fuzzySettings", fuzzySettings);
 
-        NBTTagList tagList = new NBTTagList();
+        ListNBT tagList = new ListNBT();
         for (int currentIndex = 0; currentIndex < inventory.size(); ++currentIndex) {
             if (!inventory.get(currentIndex).isEmpty()) {
-                NBTTagCompound tagCompound = new NBTTagCompound();
+                CompoundNBT tagCompound = new CompoundNBT();
                 tagCompound.setByte("Slot", (byte) currentIndex);
                 inventory.get(currentIndex).writeToNBT(tagCompound);
                 tagList.appendTag(tagCompound);
@@ -360,7 +359,7 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound tag) {
+    public void readFromNBT(CompoundNBT tag) {
 
         super.readFromNBT(tag);
 
@@ -376,10 +375,10 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
         if (tag.hasKey("fuzzySettings"))
             fuzzySettings = tag.getIntArray("fuzzySettings");
 
-        NBTTagList tagList = tag.getTagList("Items", 10);
+        ListNBT tagList = tag.getTagList("Items", 10);
         inventory = NonNullList.withSize(40, ItemStack.EMPTY);
         for (int i = 0; i < tagList.tagCount(); ++i) {
-            NBTTagCompound tagCompound = tagList.getCompoundTagAt(i);
+            CompoundNBT tagCompound = tagList.getCompoundTagAt(i);
             byte slot = tagCompound.getByte("Slot");
             if (slot >= 0 && slot < inventory.size()) {
                 inventory.set(slot, new ItemStack(tagCompound));
@@ -456,16 +455,16 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
     }
 
     @Override
-    public boolean isUsableByPlayer(EntityPlayer player) {
+    public boolean isUsableByPlayer(PlayerEntity player) {
         return player.getDistanceSqToCenter(pos) <= 64.0D;
     }
 
     @Override
-    public void openInventory(EntityPlayer player) {
+    public void openInventory(PlayerEntity player) {
     }
 
     @Override
-    public void closeInventory(EntityPlayer player) {
+    public void closeInventory(PlayerEntity player) {
 
     }
 
@@ -496,17 +495,17 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
     }
 
     @Override
-    public int[] getSlotsForFace(EnumFacing side) {
+    public int[] getSlotsForFace(Direction side) {
         return new int[] { inventory.size() };
     }
 
     @Override
-    public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction) {
+    public boolean canInsertItem(int index, ItemStack itemStackIn, Direction direction) {
         return getOutputDirection().getOpposite() == direction && isItemValidForSlot(index, itemStackIn);
     }
 
     @Override
-    public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
+    public boolean canExtractItem(int index, ItemStack stack, Direction direction) {
         return false;
     }
 

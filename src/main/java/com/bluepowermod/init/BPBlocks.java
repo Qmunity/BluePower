@@ -27,7 +27,6 @@ import com.bluepowermod.block.machine.BlockLampRGB;
 import com.bluepowermod.block.power.BlockBattery;
 import com.bluepowermod.block.power.BlockEngine;
 import com.bluepowermod.block.power.BlockSolarPanel;
-import com.bluepowermod.block.power.BlockWindmill;
 import com.bluepowermod.block.worldgen.*;
 import com.bluepowermod.reference.GuiIDs;
 import com.bluepowermod.reference.Refs;
@@ -38,25 +37,16 @@ import com.bluepowermod.tile.tier3.TileManager;
 import com.bluepowermod.util.Dependencies;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.item.BlockItem;
 import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 @Mod.EventBusSubscriber(modid = Refs.MODID)
 public class BPBlocks {
@@ -108,7 +98,7 @@ public class BPBlocks {
     public static Block reinforced_sapphire_glass;
 
     public static Block flax_crop;
-    public static BlockBush indigo_flower;
+    public static BushBlock indigo_flower;
 
     public static Block alloyfurnace;
     public static Block block_breaker;
@@ -316,7 +306,7 @@ public class BPBlocks {
     public static void registerBlockItems(RegistryEvent.Register<Item> event) {
         for (Block block : blockList) {
             if (block.getRegistryName() != null && !(block instanceof BlockCrop)) { // Crops have seeds rather than blocks
-                event.getRegistry().register(new ItemBlock(block).setRegistryName(block.getRegistryName()));
+                event.getRegistry().register(new BlockItem(block).setRegistryName(block.getRegistryName()));
             }
         }
     }

@@ -12,7 +12,7 @@ import java.util.List;
 import com.bluepowermod.client.gui.widget.BaseWidget;
 import com.bluepowermod.client.gui.widget.IGuiWidget;
 import com.bluepowermod.client.gui.widget.WidgetMode;
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 
 import com.bluepowermod.client.gui.widget.WidgetFuzzySetting;
@@ -30,7 +30,7 @@ public class GuiItemDetector extends GuiContainerBaseBP {
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/item_detector.png");
     private final TileItemDetector itemDetector;
 
-    public GuiItemDetector(InventoryPlayer invPlayer, TileItemDetector itemDetector) {
+    public GuiItemDetector(PlayerInventory invPlayer, TileItemDetector itemDetector) {
 
         super(itemDetector, new ContainerItemDetector(invPlayer, itemDetector), resLoc);
         this.itemDetector = itemDetector;

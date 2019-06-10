@@ -6,9 +6,9 @@ import com.bluepowermod.reference.Refs;
 import com.bluepowermod.world.WorldGenRubberTree;
 import net.minecraft.block.*;
 import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.BlockState;
+import net.minecraft.item.ItemGroup;
+import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
@@ -18,7 +18,7 @@ import net.minecraft.world.gen.feature.*;
 
 import java.util.Random;
 
-public class BlockRubberSapling extends BlockSapling {
+public class BlockRubberSapling extends SaplingBlock {
 
     public BlockRubberSapling() {
         this.setDefaultState(this.blockState.getBaseState().withProperty(STAGE, 0));
@@ -37,7 +37,7 @@ public class BlockRubberSapling extends BlockSapling {
      * Gets the metadata of the item this Block can drop. This method is called when the block gets destroyed. It
      * returns the metadata of the dropped item based on the old metadata of the block.
      */
-    public int damageDropped(IBlockState state)
+    public int damageDropped(BlockState state)
     {
         return 0;
     }
@@ -45,7 +45,7 @@ public class BlockRubberSapling extends BlockSapling {
     /**
      * returns a list of blocks with the same ID, but different meta (eg: wood returns 4 blocks)
      */
-    public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> items) {
+    public void getSubBlocks(ItemGroup itemIn, NonNullList<ItemStack> items) {
         items.add(new ItemStack(this));
     }
 
@@ -58,13 +58,13 @@ public class BlockRubberSapling extends BlockSapling {
     }
 
     @Override
-    public void generateTree(World worldIn, BlockPos pos, IBlockState state, Random rand) {
+    public void generateTree(World worldIn, BlockPos pos, BlockState state, Random rand) {
         if (!net.minecraftforge.event.terraingen.TerrainGen.saplingGrowTree(worldIn, rand, pos)) return;
         int i = 0;
         int j = 0;
-        WorldGenerator worldgenerator = new WorldGenRubberTree(true);
+        Feature worldgenerator = new WorldGenRubberTree(true);
 
-        IBlockState air = Blocks.AIR.getDefaultState();
+        BlockState air = Blocks.AIR.getDefaultState();
 
             worldIn.setBlockState(pos.add(i, 0, j), air, 4);
             worldIn.setBlockState(pos.add(i + 1, 0, j), air, 4);
@@ -85,7 +85,7 @@ public class BlockRubberSapling extends BlockSapling {
      * Convert the given metadata into a BlockState for this Block
      */
     @Override
-    public IBlockState getStateFromMeta(int meta)
+    public BlockState getStateFromMeta(int meta)
     {
         return this.getDefaultState().withProperty(STAGE, (meta & 8) >> 3);
     }
@@ -94,7 +94,7 @@ public class BlockRubberSapling extends BlockSapling {
      * Convert the BlockState into the correct metadata value
      */
     @Override
-    public int getMetaFromState(IBlockState state)
+    public int getMetaFromState(BlockState state)
     {
         int i = 0;
         i = i | state.getValue(STAGE) << 3;

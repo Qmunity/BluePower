@@ -13,7 +13,7 @@ import com.bluepowermod.init.BPItems;
 import ic2.api.item.IC2Items;
 import ic2.api.recipe.Recipes;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -31,13 +31,13 @@ public class CompatModuleIC2 extends CompatModule {
     public void init(FMLInitializationEvent ev) {
 
         Recipes.macerator.addRecipe(new IC2RecipeInput(new ItemStack(BPBlocks.zinc_ore)), null, false, new ItemStack(BPItems.zinc_ore_crushed, 2));
-        NBTTagCompound tag = new NBTTagCompound();
+        CompoundNBT tag = new CompoundNBT();
         tag.setInteger("amount", 1000);
         Recipes.oreWashing.addRecipe(new IC2RecipeInput(new ItemStack(BPItems.zinc_ore_crushed)), tag, false, new ItemStack(
                 BPItems.zinc_ore_purified), new ItemStack(BPItems.zinc_tiny_dust, 2),
                 IC2Items.getItem("dust", "stone"));
 
-        tag = new NBTTagCompound();
+        tag = new CompoundNBT();
         tag.setInteger("minHeat", 2000);
         Recipes.centrifuge.addRecipe(new IC2RecipeInput(new ItemStack(BPItems.zinc_ore_purified)), tag, false, new ItemStack(BPItems.zinc_dust),
                 IC2Items.getItem("dust", "small_sulfur"));

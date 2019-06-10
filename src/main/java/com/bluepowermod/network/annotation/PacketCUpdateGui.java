@@ -2,8 +2,8 @@ package com.bluepowermod.network.annotation;
 
 import com.bluepowermod.network.Packet;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
@@ -115,7 +115,7 @@ public class PacketCUpdateGui extends Packet<PacketCUpdateGui> {
     }
 
     @Override
-    public void handleClientSide(EntityPlayer player){
+    public void handleClientSide(PlayerEntity player){
         Container container = player.openContainer;
         //if(container instanceof ContainerBase) {
             //((ContainerBase)container).updateField(syncId, value);
@@ -123,7 +123,7 @@ public class PacketCUpdateGui extends Packet<PacketCUpdateGui> {
     }
 
     @Override
-    public void handleServerSide(EntityPlayer player){
+    public void handleServerSide(PlayerEntity player){
 
     }
 

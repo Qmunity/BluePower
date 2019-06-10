@@ -17,8 +17,8 @@
 
 package com.bluepowermod.block.worldgen;
 
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.block.BlockState;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 
@@ -29,7 +29,7 @@ public class BlockStoneOreConnected extends BlockStoneOre {
     }
 
     @Override
-    public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
+    public boolean shouldSideBeRendered(BlockState blockState, IBlockAccess blockAccess, BlockPos pos, Direction side) {
         return blockAccess.getBlockState(pos.offset(side)).getBlock() != this
                 && super.shouldSideBeRendered(blockState, blockAccess, pos, side);
     }

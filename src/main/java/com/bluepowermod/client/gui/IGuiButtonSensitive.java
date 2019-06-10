@@ -7,7 +7,7 @@
  */
 package com.bluepowermod.client.gui;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 
 /**
  * Implemented by BPParts or TileEntities, this interface can be used to sync client side gui input with server.
@@ -15,5 +15,5 @@ import net.minecraft.entity.player.EntityPlayer;
  */
 public interface IGuiButtonSensitive {
     
-    public void onButtonPress(EntityPlayer player, int messageId, int value);
+    public void onButtonPress(PlayerEntity player, int messageId, int value);
 }

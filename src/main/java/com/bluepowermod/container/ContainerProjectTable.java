@@ -20,15 +20,16 @@ package com.bluepowermod.container;
 
 import com.bluepowermod.container.inventory.InventoryProjectTableCrafting;
 import com.bluepowermod.container.slot.SlotProjectTableCrafting;
-import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.tile.tier1.TileProjectTable;
 import com.bluepowermod.util.Dependencies;
 import invtweaks.api.container.ChestContainer;
 import invtweaks.api.container.ContainerSection;
 import invtweaks.api.container.ContainerSectionCallback;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.*;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.Optional;
 
@@ -44,12 +45,12 @@ import java.util.Map;
 @ChestContainer
 public class ContainerProjectTable extends Container {
 
-    private final EntityPlayer player;
-    private final InventoryCrafting craftingGrid;
-    private final InventoryCraftResult craftResult;
+    private final PlayerEntity player;
+    private final CraftingInventory craftingGrid;
+    private final CraftResultInventory craftResult;
 
-    public ContainerProjectTable(InventoryPlayer invPlayer, TileProjectTable projectTable) {
-        craftResult =  new InventoryCraftResult();
+    public ContainerProjectTable(PlayerInventory invPlayer, TileProjectTable projectTable) {
+        craftResult =  new CraftResultInventory();
         craftingGrid = new InventoryProjectTableCrafting(this, projectTable, 3, 3);;
         player = invPlayer.player;
 
@@ -75,7 +76,7 @@ public class ContainerProjectTable extends Container {
         this.onCraftMatrixChanged(this.craftingGrid);
     }
 
-    protected void bindPlayerInventory(InventoryPlayer invPlayer) {
+    protected void bindPlayerInventory(PlayerInventory invPlayer) {
 
         // Render inventory
         for (int i = 0; i < 3; i++) {
@@ -99,7 +100,7 @@ public class ContainerProjectTable extends Container {
     }
 
     @Override
-    public boolean canInteractWith(EntityPlayer playerIn) {
+    public boolean canInteractWith(PlayerEntity playerIn) {
         return true;
     }
 
@@ -119,7 +120,7 @@ public class ContainerProjectTable extends Container {
         return slotIn.inventory != this.craftResult && super.canMergeSlot(stack, slotIn);
     }
 
-    public InventoryCrafting getCraftingGrid() {
+    public CraftingInventory getCraftingGrid() {
         return craftingGrid;
     }
 
@@ -127,7 +128,7 @@ public class ContainerProjectTable extends Container {
      * 0 result, 1-9 matrix,  10 - 27 inventory, 28 - 63 player inv.
      */
     @Override
-    public ItemStack transferStackInSlot(EntityPlayer player, int par2) {
+    public ItemStack transferStackInSlot(PlayerEntity player, int par2) {
 
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = inventorySlots.get(par2);

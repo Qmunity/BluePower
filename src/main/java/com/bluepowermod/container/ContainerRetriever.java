@@ -8,8 +8,8 @@
 package com.bluepowermod.container;
 
 import com.bluepowermod.client.gui.GuiContainerBase;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.IContainerListener;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.IContainerListener;
 
 import com.bluepowermod.ClientProxy;
 import com.bluepowermod.tile.tier2.TileRetriever;
@@ -25,7 +25,7 @@ public class ContainerRetriever extends ContainerFilter {
     private int slotIndex = -1, mode = -1;
     private final TileRetriever retriever;
 
-    public ContainerRetriever(InventoryPlayer invPlayer, TileRetriever retriever) {
+    public ContainerRetriever(PlayerInventory invPlayer, TileRetriever retriever) {
 
         super(invPlayer, retriever);
         this.retriever = retriever;

@@ -9,8 +9,8 @@ package com.bluepowermod.tile.tier3;
 
 import com.bluepowermod.BluePower;
 import com.bluepowermod.tile.TileBase;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.SoundEvents;
+import net.minecraft.block.Blocks;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.SoundCategory;
 
 import java.io.IOException;

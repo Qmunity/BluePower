@@ -7,7 +7,7 @@
  */
 package com.bluepowermod.client.gui;
 
-import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.relauncher.Side;
@@ -19,7 +19,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  */
 
 @OnlyIn(Dist.CLIENT)
-public abstract class GuiScreenBase extends GuiScreen {
+public abstract class GuiScreenBase extends Screen {
 
     protected int guiLeft, guiTop, xSize, ySize;
 

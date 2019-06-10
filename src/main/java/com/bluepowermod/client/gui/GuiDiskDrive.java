@@ -7,7 +7,7 @@
  */
 package com.bluepowermod.client.gui;
 
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 
 import com.bluepowermod.container.ContainerDiskDrive;
@@ -20,7 +20,7 @@ public class GuiDiskDrive extends GuiContainerBaseBP {
 
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID + ":textures/gui/diskdrivegui.png");
 
-    public GuiDiskDrive(InventoryPlayer invPlayer, TileDiskDrive diskDrive) {
+    public GuiDiskDrive(PlayerInventory invPlayer, TileDiskDrive diskDrive) {
 
         super(new ContainerDiskDrive(invPlayer, diskDrive), resLoc);
         this.diskDrive = diskDrive;

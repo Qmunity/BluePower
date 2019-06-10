@@ -20,9 +20,9 @@ package com.bluepowermod.tile.tier1;
 import com.bluepowermod.tile.TileMachineBase;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.IFluidBlock;
@@ -39,8 +39,8 @@ public class TileBlockBreaker extends TileMachineBase {
         super.redstoneChanged(newValue);
         
         if (!world.isRemote && newValue) {
-            EnumFacing direction = getFacingDirection();
-            IBlockState breakState = world.getBlockState(pos.offset(direction));
+            Direction direction = getFacingDirection();
+            BlockState breakState = world.getBlockState(pos.offset(direction));
             if (!canBreakBlock(breakState.getBlock(), world, breakState, pos.offset(direction))) return;
             List<ItemStack> breakStacks = breakState.getBlock().getDrops(world, pos.offset(direction), breakState, 0);
             world.destroyBlock(pos.offset(direction), false); // destroyBlock
@@ -48,7 +48,7 @@ public class TileBlockBreaker extends TileMachineBase {
         }
     }
 
-    private boolean canBreakBlock(Block block, World world, IBlockState state, BlockPos pos) {
+    private boolean canBreakBlock(Block block, World world, BlockState state, BlockPos pos) {
     
         return !world.isAirBlock(pos) && !(block instanceof BlockLiquid) && !(block instanceof IFluidBlock) && block.getBlockHardness(state, world, pos) > -1.0F;
     }

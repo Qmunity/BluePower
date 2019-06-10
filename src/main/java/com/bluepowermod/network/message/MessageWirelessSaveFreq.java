@@ -5,8 +5,8 @@ import java.io.DataOutput;
 import java.io.IOException;
 
 import com.bluepowermod.network.Packet;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 
 import com.bluepowermod.api.misc.Accessibility;
 import com.bluepowermod.network.BPNetworkHandler;
@@ -29,14 +29,14 @@ public class MessageWirelessSaveFreq extends Packet<MessageWirelessSaveFreq> {
     }
 
     @Override
-    public void handleClientSide(EntityPlayer player) {
+    public void handleClientSide(PlayerEntity player) {
 
     }
 
     @Override
-    public void handleServerSide(EntityPlayer player) {
+    public void handleServerSide(PlayerEntity player) {
 
-        BPNetworkHandler.INSTANCE.sendTo(new MessageWirelessFrequencySync(player), (EntityPlayerMP) player);
+        BPNetworkHandler.INSTANCE.sendTo(new MessageWirelessFrequencySync(player), (ServerPlayerEntity) player);
     }
 
     @Override

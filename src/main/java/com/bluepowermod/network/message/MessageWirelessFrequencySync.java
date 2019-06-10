@@ -7,16 +7,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.bluepowermod.network.Packet;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 
 import com.bluepowermod.api.wireless.IFrequency;
 
 public class MessageWirelessFrequencySync extends Packet<MessageWirelessFrequencySync> {
 
     //private List<Frequency> frequencies = new ArrayList<Frequency>();
-    private EntityPlayer player;
+    private PlayerEntity player;
 
-    public MessageWirelessFrequencySync(EntityPlayer player) {
+    public MessageWirelessFrequencySync(PlayerEntity player) {
 
         this.player = player;
     }
@@ -54,7 +54,7 @@ public class MessageWirelessFrequencySync extends Packet<MessageWirelessFrequenc
     }
 
     @Override
-    public void handleClientSide(EntityPlayer player) {
+    public void handleClientSide(PlayerEntity player) {
 
        // WirelessManager m = WirelessManager.CLIENT_INSTANCE;
 
@@ -65,7 +65,7 @@ public class MessageWirelessFrequencySync extends Packet<MessageWirelessFrequenc
     }
 
     @Override
-    public void handleServerSide(EntityPlayer player) {
+    public void handleServerSide(PlayerEntity player) {
 
     }
 

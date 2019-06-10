@@ -9,13 +9,13 @@ package com.bluepowermod.enchant;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnumEnchantmentType;
-import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.enchantment.EnchantmentType;
+import net.minecraft.inventory.EquipmentSlotType;
 
 public class EnchantmentVorpal extends Enchantment {
 
     public EnchantmentVorpal(int enchantId, Rarity rarity) {
-        super(rarity, EnumEnchantmentType.WEAPON, EntityEquipmentSlot.values());
+        super(rarity, EnchantmentType.WEAPON, EquipmentSlotType.values());
     }
 
     @Override

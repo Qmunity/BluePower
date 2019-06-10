@@ -8,16 +8,16 @@
 package com.bluepowermod.helper;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockChest;
-import net.minecraft.entity.item.EntityItem;
+import net.minecraft.block.ChestBlock;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.util.EnumFacing;
 
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
 import com.bluepowermod.api.tube.ITubeConnection;
@@ -33,8 +33,8 @@ public class IOHelper {
         if (te instanceof IInventory) {
             IInventory inv = (IInventory) te;
             Block block = te.getBlockType();
-            if (block instanceof BlockChest) {
-                inv = ((BlockChest) block).getContainer(te.getWorld(), te.getPos() ,false);
+            if (block instanceof ChestBlock) {
+                inv = ((ChestBlock) block).getContainer(te.getWorld(), te.getPos() ,false);
             }
             return inv;
         } else {
@@ -42,7 +42,7 @@ public class IOHelper {
         }
     }
 
-    public static ItemStack extract(TileEntity inventory, EnumFacing direction, boolean simulate) {
+    public static ItemStack extract(TileEntity inventory, Direction direction, boolean simulate) {
 
         IInventory inv = getInventoryForTE(inventory);
         if (inv != null)
@@ -50,7 +50,7 @@ public class IOHelper {
         return ItemStack.EMPTY;
     }
 
-    public static ItemStack extract(IInventory inventory, EnumFacing direction, boolean simulate) {
+    public static ItemStack extract(IInventory inventory, Direction direction, boolean simulate) {
 
         if (inventory instanceof ISidedInventory) {
             ISidedInventory isidedinventory = (ISidedInventory) inventory;
@@ -73,7 +73,7 @@ public class IOHelper {
         return ItemStack.EMPTY;
     }
 
-    public static ItemStack extract(IInventory inventory, EnumFacing direction, int slot, boolean simulate) {
+    public static ItemStack extract(IInventory inventory, Direction direction, int slot, boolean simulate) {
 
         ItemStack itemstack = inventory.getStackInSlot(slot);
 
@@ -85,12 +85,12 @@ public class IOHelper {
         return ItemStack.EMPTY;
     }
 
-    public static ItemStack extract(TileEntity tile, EnumFacing direction, ItemStack requestedStack, boolean useItemCount, boolean simulate) {
+    public static ItemStack extract(TileEntity tile, Direction direction, ItemStack requestedStack, boolean useItemCount, boolean simulate) {
 
         return extract(tile, direction, requestedStack, useItemCount, simulate, 0);
     }
 
-    public static int[] getAccessibleSlotsForInventory(IInventory inv, EnumFacing side) {
+    public static int[] getAccessibleSlotsForInventory(IInventory inv, Direction side) {
 
         int[] accessibleSlots;
         if (inv != null) {
@@ -107,7 +107,7 @@ public class IOHelper {
         }
     }
 
-    public static int getItemCount(ItemStack type, TileEntity inv, EnumFacing side, int fuzzySetting) {
+    public static int getItemCount(ItemStack type, TileEntity inv, Direction side, int fuzzySetting) {
 
         IInventory inventory = getInventoryForTE(inv);
         int[] slots = getAccessibleSlotsForInventory(inventory, side);
@@ -137,8 +137,8 @@ public class IOHelper {
      *            ,
      * @return
      */
-    public static ItemStack extract(TileEntity tile, EnumFacing direction, ItemStack requestedStack, boolean useItemCount, boolean simulate,
-            int fuzzySetting) {
+    public static ItemStack extract(TileEntity tile, Direction direction, ItemStack requestedStack, boolean useItemCount, boolean simulate,
+                                    int fuzzySetting) {
 
         if (requestedStack.isEmpty())
             return requestedStack;
@@ -194,7 +194,7 @@ public class IOHelper {
 
     }
 
-    public static ItemStack extractOneItem(TileEntity tile, EnumFacing dir) {
+    public static ItemStack extractOneItem(TileEntity tile, Direction dir) {
 
         IInventory inv = getInventoryForTE(tile);
         if (!inv.isEmpty()) {
@@ -221,12 +221,12 @@ public class IOHelper {
         return ItemStack.EMPTY;
     }
 
-    public static ItemStack insert(TileEntity tile, ItemStack itemStack, EnumFacing direction, boolean simulate) {
+    public static ItemStack insert(TileEntity tile, ItemStack itemStack, Direction direction, boolean simulate) {
 
         return insert(tile, itemStack, direction, TubeColor.NONE, simulate);
     }
 
-    public static ItemStack insert(TileEntity tile, ItemStack itemStack, EnumFacing direction, TubeColor color, boolean simulate) {
+    public static ItemStack insert(TileEntity tile, ItemStack itemStack, Direction direction, TubeColor color, boolean simulate) {
 
         if (tile == null || itemStack.isEmpty())
             return itemStack;
@@ -253,7 +253,7 @@ public class IOHelper {
 
         if (inventory instanceof ISidedInventory && side > -1) {
             ISidedInventory isidedinventory = (ISidedInventory) inventory;
-            int[] aint = isidedinventory.getSlotsForFace(EnumFacing.byIndex(side));
+            int[] aint = isidedinventory.getSlotsForFace(Direction.byIndex(side));
 
             for (int j = 0; j < aint.length && !itemStack.isEmpty() && itemStack.getCount() > 0; ++j) {
                 itemStack = insert(inventory, itemStack, aint[j], side, simulate);
@@ -318,12 +318,12 @@ public class IOHelper {
     public static boolean canInsertItemToInventory(IInventory inventory, ItemStack itemStack, int slot, int side) {
 
         return inventory.isItemValidForSlot(slot, itemStack)
-                && (!(inventory instanceof ISidedInventory) || ((ISidedInventory) inventory).canInsertItem(slot, itemStack, EnumFacing.byIndex(side)));
+                && (!(inventory instanceof ISidedInventory) || ((ISidedInventory) inventory).canInsertItem(slot, itemStack, Direction.byIndex(side)));
     }
 
     public static boolean canExtractItemFromInventory(IInventory inventory, ItemStack itemStack, int slot, int side) {
 
-        return !(inventory instanceof ISidedInventory) || ((ISidedInventory) inventory).canExtractItem(slot, itemStack, EnumFacing.byIndex(side));
+        return !(inventory instanceof ISidedInventory) || ((ISidedInventory) inventory).canExtractItem(slot, itemStack, Direction.byIndex(side));
     }
 
     public static void dropInventory(World world, BlockPos pos) {
@@ -358,11 +358,11 @@ public class IOHelper {
         float dY = world.rand.nextFloat() * 0.8F + 0.1F;
         float dZ = world.rand.nextFloat() * 0.8F + 0.1F;
 
-        EntityItem entityItem = new EntityItem(world, x + dX, y + dY, z + dZ, new ItemStack(itemStack.getItem(), itemStack.getCount(),
+        ItemEntity entityItem = new ItemEntity(world, x + dX, y + dY, z + dZ, new ItemStack(itemStack.getItem(), itemStack.getCount(),
                 itemStack.getItemDamage()));
 
         if (itemStack.hasTagCompound()) {
-            entityItem.getItem().setTagCompound((NBTTagCompound) itemStack.getTagCompound().copy());
+            entityItem.getItem().setTagCompound((CompoundNBT) itemStack.getTagCompound().copy());
         }
 
         float factor = 0.05F;
@@ -373,12 +373,12 @@ public class IOHelper {
         itemStack.setCount(0);
     }
 
-    public static boolean canInterfaceWith(TileEntity tile, EnumFacing direction) {
+    public static boolean canInterfaceWith(TileEntity tile, Direction direction) {
 
         return canInterfaceWith(tile, direction, true);
     }
 
-   public static boolean canInterfaceWith(TileEntity tile, EnumFacing direction, boolean canInterfaceWithIInventory) {
+   public static boolean canInterfaceWith(TileEntity tile, Direction direction, boolean canInterfaceWithIInventory) {
 
        // PneumaticTube tube = tile != null ? MultipartCompatibility.getPart(tile.getWorld(), tile.getPos(),
                 //PneumaticTube.class) : null;

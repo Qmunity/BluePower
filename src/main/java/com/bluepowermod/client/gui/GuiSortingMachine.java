@@ -25,8 +25,8 @@ import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier2.TileSortingMachine;
 import com.bluepowermod.tile.tier2.TileSortingMachine.PullMode;
 import com.bluepowermod.tile.tier2.TileSortingMachine.SortMode;
-import net.minecraft.client.gui.Gui;
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.client.gui.AbstractGui;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 import java.util.List;
 
@@ -40,7 +40,7 @@ public class GuiSortingMachine extends GuiContainerBaseBP {
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/sorting_machine.png");
     private final TileSortingMachine sortingMachine;
 
-    public GuiSortingMachine(InventoryPlayer invPlayer, TileSortingMachine sortingMachine) {
+    public GuiSortingMachine(PlayerInventory invPlayer, TileSortingMachine sortingMachine) {
 
         super(sortingMachine, new ContainerSortingMachine(invPlayer, sortingMachine), resLoc);
         this.sortingMachine = sortingMachine;
@@ -122,7 +122,7 @@ public class GuiSortingMachine extends GuiContainerBaseBP {
 
         if (sortingMachine.sortMode == SortMode.ALLSTACK_SEQUENTIAL || sortingMachine.sortMode == SortMode.ANYSTACK_SEQUENTIAL) {
             mc.renderEngine.bindTexture(resLoc);
-            Gui.drawModalRectWithCustomSizedTexture(guiLeft + 24 + sortingMachine.curColumn * 18, guiTop + 16, 176, 0, 20, 92, 256, 256);
+            AbstractGui.drawModalRectWithCustomSizedTexture(guiLeft + 24 + sortingMachine.curColumn * 18, guiTop + 16, 176, 0, 20, 92, 256, 256);
         }
     }
 

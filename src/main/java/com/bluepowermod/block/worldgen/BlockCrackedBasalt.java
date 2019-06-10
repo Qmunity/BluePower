@@ -20,10 +20,10 @@ package com.bluepowermod.block.worldgen;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.util.DateEventHandler;
 import com.bluepowermod.util.DateEventHandler.Event;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.item.EntityFallingBlock;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.entity.item.FallingBlockEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumParticleTypes;
@@ -53,7 +53,7 @@ public class BlockCrackedBasalt extends BlockStoneOre {
     }
 
     @Override
-    public void onBlockClicked(World world, BlockPos pos, EntityPlayer playerIn) {
+    public void onBlockClicked(World world, BlockPos pos, PlayerEntity playerIn) {
         if (world.getBlockState(pos) == this.getDefaultState()) {
             world.setBlockState(pos, this.getStateFromMeta(1), 2);
             world.scheduleBlockUpdate(pos, this, 1, 1);
@@ -61,7 +61,7 @@ public class BlockCrackedBasalt extends BlockStoneOre {
     }
 
     @Override
-    public void updateTick(World world, BlockPos pos, IBlockState state, Random random) {
+    public void updateTick(World world, BlockPos pos, BlockState state, Random random) {
         int meta =  this.getMetaFromState(world.getBlockState(pos));
         // When this block was active already (meta > 0) or when the random chance hit, spew lava.
         if (!world.isRemote && (meta > 0 || random.nextInt(100) == 0)) {
@@ -89,7 +89,7 @@ public class BlockCrackedBasalt extends BlockStoneOre {
         if (DateEventHandler.isEvent(Event.NEW_YEAR)) {
             DateEventHandler.spawnFirework(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
         } else {
-            EntityFallingBlock entity = new EntityFallingBlock(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
+            FallingBlockEntity entity = new FallingBlockEntity(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
                     DateEventHandler.isEvent(Event.HALLOWEEN) ? Blocks.LIT_PUMPKIN.getDefaultState() : Blocks.FLOWING_LAVA.getDefaultState());
             entity.motionY = 1 + random.nextDouble();
             entity.motionX = (random.nextDouble() - 0.5) * 0.8D;
@@ -102,7 +102,7 @@ public class BlockCrackedBasalt extends BlockStoneOre {
     }
 
     @Override
-    public Item getItemDropped(IBlockState state, Random rand, int fortune) {
+    public Item getItemDropped(BlockState state, Random rand, int fortune) {
         return Item.getItemFromBlock(BPBlocks.basalt_cobble);
     }
 
@@ -110,7 +110,7 @@ public class BlockCrackedBasalt extends BlockStoneOre {
      * A randomly called display update to be able to add particles or other items for display
      */
     @Override
-    public void randomDisplayTick(IBlockState stateIn, World world, BlockPos pos, Random rand) {
+    public void randomDisplayTick(BlockState stateIn, World world, BlockPos pos, Random rand) {
         if (getMetaFromState(world.getBlockState(pos)) > 0) {
             for (int i = 0; i < 10; i++)
                 world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, pos.getX() + rand.nextDouble(), pos.getY() + 1, pos.getZ() + rand.nextDouble(), (rand.nextDouble() - 0.5) * 0.2,

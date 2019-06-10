@@ -19,7 +19,7 @@
 
 package com.bluepowermod.client.gui;
 
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 
 import com.bluepowermod.container.ContainerBuffer;
@@ -31,7 +31,7 @@ public class GuiBuffer extends GuiContainerBaseBP {
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/buffer.png");
     private final TileBuffer buffer;
 
-    public GuiBuffer(InventoryPlayer invPlayer, TileBuffer buffer) {
+    public GuiBuffer(PlayerInventory invPlayer, TileBuffer buffer) {
 
         super(buffer, new ContainerBuffer(invPlayer, buffer), resLoc);
         this.buffer = buffer;

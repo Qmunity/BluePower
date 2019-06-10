@@ -11,8 +11,8 @@ import com.bluepowermod.client.gui.widget.WidgetMode;
 import com.bluepowermod.container.ContainerRetriever;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier2.TileRetriever;
-import net.minecraft.client.gui.Gui;
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.client.gui.AbstractGui;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 
 import java.util.List;
@@ -24,7 +24,7 @@ public class GuiRetriever extends GuiFilter {
 
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/retriever.png");
 
-    public GuiRetriever(InventoryPlayer invPlayer, TileRetriever retriever) {
+    public GuiRetriever(PlayerInventory invPlayer, TileRetriever retriever) {
 
         super(new ContainerRetriever(invPlayer, retriever), retriever, resLoc);
     }
@@ -58,7 +58,7 @@ public class GuiRetriever extends GuiFilter {
 
         if (((TileRetriever) filter).mode == 0) {
             int curSlot = ((TileRetriever) filter).slotIndex;
-            Gui.drawModalRectWithCustomSizedTexture(guiLeft + 60 + curSlot % 3 * 18, guiTop + 15 + 18 * (curSlot / 3), 182, 0, 20, 20, 256, 256);
+            AbstractGui.drawModalRectWithCustomSizedTexture(guiLeft + 60 + curSlot % 3 * 18, guiTop + 15 + 18 * (curSlot / 3), 182, 0, 20, 20, 256, 256);
         }
     }
 

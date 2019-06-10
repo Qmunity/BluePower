@@ -6,8 +6,8 @@ import com.bluepowermod.network.LocatedPacket;
 import com.bluepowermod.container.stack.TubeStack;
 import com.bluepowermod.tile.TileMachineBase;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 
@@ -34,7 +34,7 @@ public class MessageSyncMachineBacklog extends LocatedPacket<MessageSyncMachineB
         super.toBytes(buf);
         buf.writeInt(stacks.size());
         for (TubeStack stack : stacks) {
-            NBTTagCompound tag = new NBTTagCompound();
+            CompoundNBT tag = new CompoundNBT();
             stack.writeToNBT(tag);
             ByteBufUtils.writeTag(buf, tag);
         }
@@ -51,7 +51,7 @@ public class MessageSyncMachineBacklog extends LocatedPacket<MessageSyncMachineB
     }
 
     @Override
-    public void handleClientSide(EntityPlayer player) {
+    public void handleClientSide(PlayerEntity player) {
 
         TileEntity te = player.world.getTileEntity(pos);
         if (te instanceof TileMachineBase) {
@@ -63,7 +63,7 @@ public class MessageSyncMachineBacklog extends LocatedPacket<MessageSyncMachineB
     }
 
     @Override
-    public void handleServerSide(EntityPlayer player) {
+    public void handleServerSide(PlayerEntity player) {
 
     }
 

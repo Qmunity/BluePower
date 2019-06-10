@@ -3,9 +3,9 @@ package com.bluepowermod.client.gui;
 import com.bluepowermod.BluePower;
 import com.bluepowermod.client.gui.widget.*;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.inventory.Container;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -21,7 +21,7 @@ import java.util.List;
  * @author MineMaarten
  * @author K-4U
  */
-public class GuiContainerBase extends GuiContainer implements IWidgetListener {
+public class GuiContainerBase extends ContainerScreen implements IWidgetListener {
 
     protected static final int COLOR_TEXT = 4210752;
     protected final List<IGuiWidget> widgets = new ArrayList<IGuiWidget>();

@@ -7,11 +7,11 @@
  */
 package com.bluepowermod.container;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.ClickType;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.Slot;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.ClickType;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 
 import com.bluepowermod.container.slot.IPhantomSlot;
@@ -26,7 +26,7 @@ public abstract class ContainerGhosts extends Container {
      * @author CovertJaguar <http://www.railcraft.info>
      */
     @Override
-    public ItemStack slotClick(int slotNum, int dragType, ClickType clickTypeIn, EntityPlayer player) {
+    public ItemStack slotClick(int slotNum, int dragType, ClickType clickTypeIn, PlayerEntity player) {
         Slot slot = slotNum < 0 ? null : (Slot) inventorySlots.get(slotNum);
         if (slot instanceof IPhantomSlot) { return slotClickPhantom(slot, dragType, clickTypeIn,  player); }
         return super.slotClick(slotNum, dragType, clickTypeIn, player);
@@ -36,7 +36,7 @@ public abstract class ContainerGhosts extends Container {
      * This method is copied from the BuildCraft code, which can be found here: https://github.com/BuildCraft/BuildCraft
      * @author CovertJaguar <http://www.railcraft.info>
      */
-    private ItemStack slotClickPhantom(Slot slot, int dragType, ClickType clickTypeIn, EntityPlayer player) {
+    private ItemStack slotClickPhantom(Slot slot, int dragType, ClickType clickTypeIn, PlayerEntity player) {
     
         ItemStack stack = ItemStack.EMPTY;
         
@@ -45,7 +45,7 @@ public abstract class ContainerGhosts extends Container {
                 slot.putStack(ItemStack.EMPTY);
             }
         } else if (clickTypeIn.ordinal() == 0 || clickTypeIn.ordinal() == 1) {
-            InventoryPlayer playerInv = player.inventory;
+            PlayerInventory playerInv = player.inventory;
             slot.onSlotChanged();
             ItemStack stackSlot = slot.getStack();
             ItemStack stackHeld = playerInv.getItemStack();

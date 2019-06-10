@@ -22,12 +22,12 @@ import com.bluepowermod.block.machine.BlockAlloyFurnace;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.recipe.AlloyFurnaceRegistry;
 import com.bluepowermod.tile.TileBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntityFurnace;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.tileentity.FurnaceTileEntity;
+import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -63,12 +63,12 @@ public class TileAlloyFurnace extends TileBase implements ISidedInventory {
      * This function gets called whenever the world/chunk loads
      */
     @Override
-    public void readFromNBT(NBTTagCompound tCompound) {
+    public void readFromNBT(CompoundNBT tCompound) {
 
         super.readFromNBT(tCompound);
 
         for (int i = 0; i < 9; i++) {
-            NBTTagCompound tc = tCompound.getCompoundTag("inventory" + i);
+            CompoundNBT tc = tCompound.getCompoundTag("inventory" + i);
             inventory.set(i, new ItemStack(tc));
         }
         fuelInventory = new ItemStack(tCompound.getCompoundTag("fuelInventory"));
@@ -80,23 +80,23 @@ public class TileAlloyFurnace extends TileBase implements ISidedInventory {
      * This function gets called whenever the world/chunk is saved
      */
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound tCompound) {
+    public CompoundNBT writeToNBT(CompoundNBT tCompound) {
 
         super.writeToNBT(tCompound);
 
         for (int i = 0; i < 9; i++) {
-                NBTTagCompound tc = new NBTTagCompound();
+                CompoundNBT tc = new CompoundNBT();
                 inventory.get(i).writeToNBT(tc);
                 tCompound.setTag("inventory" + i, tc);
         }
         if (fuelInventory != null) {
-            NBTTagCompound fuelCompound = new NBTTagCompound();
+            CompoundNBT fuelCompound = new CompoundNBT();
             fuelInventory.writeToNBT(fuelCompound);
             tCompound.setTag("fuelInventory", fuelCompound);
         }
 
         if (outputInventory != null) {
-            NBTTagCompound outputCompound = new NBTTagCompound();
+            CompoundNBT outputCompound = new CompoundNBT();
             outputInventory.writeToNBT(outputCompound);
             tCompound.setTag("outputInventory", outputCompound);
         }
@@ -105,7 +105,7 @@ public class TileAlloyFurnace extends TileBase implements ISidedInventory {
     }
 
     @Override
-    public void readFromPacketNBT(NBTTagCompound tag) {
+    public void readFromPacketNBT(CompoundNBT tag) {
 
         super.readFromPacketNBT(tag);
         isActive = tag.getBoolean("isActive");
@@ -116,7 +116,7 @@ public class TileAlloyFurnace extends TileBase implements ISidedInventory {
     }
 
     @Override
-    public void writeToPacketNBT(NBTTagCompound tag) {
+    public void writeToPacketNBT(CompoundNBT tag) {
 
         super.writeToPacketNBT(tag);
         tag.setInteger("currentBurnTime", currentBurnTime);
@@ -144,9 +144,9 @@ public class TileAlloyFurnace extends TileBase implements ISidedInventory {
             }
             if (currentRecipe != null) {
                 if (currentBurnTime <= 0) {
-                    if (TileEntityFurnace.isItemFuel(fuelInventory)) {
+                    if (FurnaceTileEntity.isItemFuel(fuelInventory)) {
                         // Put new item in
-                        currentBurnTime = maxBurnTime = TileEntityFurnace.getItemBurnTime(fuelInventory) + 1;
+                        currentBurnTime = maxBurnTime = FurnaceTileEntity.getItemBurnTime(fuelInventory) + 1;
                         if (!fuelInventory.isEmpty()) {
                             fuelInventory.setCount(fuelInventory.getCount() - 1);
                             if (fuelInventory.getCount() <= 0) {
@@ -308,17 +308,17 @@ public class TileAlloyFurnace extends TileBase implements ISidedInventory {
     }
 
     @Override
-    public boolean isUsableByPlayer(EntityPlayer player) {
+    public boolean isUsableByPlayer(PlayerEntity player) {
         return player.getDistanceSqToCenter(pos) <= 64.0D;
     }
 
     @Override
-    public void openInventory(EntityPlayer player) {
+    public void openInventory(PlayerEntity player) {
 
     }
 
     @Override
-    public void closeInventory(EntityPlayer player) {
+    public void closeInventory(PlayerEntity player) {
 
     }
 
@@ -326,7 +326,7 @@ public class TileAlloyFurnace extends TileBase implements ISidedInventory {
     public boolean isItemValidForSlot(int slot, ItemStack itemStack) {
 
         if (slot == 0) {
-            return TileEntityFurnace.isItemFuel(itemStack);
+            return FurnaceTileEntity.isItemFuel(itemStack);
         } else if (slot == 1) { // Output slot
             return false;
         } else {
@@ -349,17 +349,17 @@ public class TileAlloyFurnace extends TileBase implements ISidedInventory {
     }
 
     @Override
-    public int[] getSlotsForFace(EnumFacing side) {
+    public int[] getSlotsForFace(Direction side) {
         return new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
     }
 
     @Override
-    public boolean canInsertItem(int slot, ItemStack item, EnumFacing direction) {
+    public boolean canInsertItem(int slot, ItemStack item, Direction direction) {
         return isItemValidForSlot(slot, item);
     }
 
     @Override
-    public boolean canExtractItem(int slot, ItemStack stack, EnumFacing direction) {
+    public boolean canExtractItem(int slot, ItemStack stack, Direction direction) {
         return slot == 1;
     }
 

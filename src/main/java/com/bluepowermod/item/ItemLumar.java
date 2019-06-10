@@ -22,10 +22,8 @@ package com.bluepowermod.item;
 import com.bluepowermod.client.render.IBPColoredItem;
 import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.reference.Refs;
-import net.minecraft.client.renderer.color.IItemColor;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemDye;
+import net.minecraft.item.ItemGroup;
+import net.minecraft.item.DyeItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.fml.relauncher.Side;
@@ -49,9 +47,9 @@ public class ItemLumar extends ItemBase implements IBPColoredItem{
     }
 
     @Override
-    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
+    public void getSubItems(ItemGroup tab, NonNullList<ItemStack> items) {
         if(isInCreativeTab(tab)) {
-            for (int i = 0; i < ItemDye.DYE_COLORS.length; i++) {
+            for (int i = 0; i < DyeItem.DYE_COLORS.length; i++) {
                 items.add(new ItemStack(this, 1, i));
             }
         }
@@ -60,7 +58,7 @@ public class ItemLumar extends ItemBase implements IBPColoredItem{
     @Override
     public int getColor(ItemStack stack, int tintIndex) {
         int damage = stack.getItemDamage();
-        if (damage >= 0 && damage < ItemDye.DYE_COLORS.length) { return ItemDye.DYE_COLORS[15 - damage]; }
+        if (damage >= 0 && damage < DyeItem.DYE_COLORS.length) { return DyeItem.DYE_COLORS[15 - damage]; }
         return 16777215;
     }
 }

@@ -6,7 +6,7 @@ import java.io.IOException;
 
 import com.bluepowermod.network.Packet;
 import com.bluepowermod.container.stack.TubeStack;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 
 public class MessageServerTickTime extends Packet<MessageServerTickTime> {
     private double tickTime;
@@ -19,12 +19,12 @@ public class MessageServerTickTime extends Packet<MessageServerTickTime> {
     }
 
     @Override
-    public void handleClientSide(EntityPlayer player) {
+    public void handleClientSide(PlayerEntity player) {
         TubeStack.tickTimeMultiplier = Math.min(1, 50D / Math.max(tickTime - 5, 0.01));//Let the client stack go a _little_ bit faster than the real value (50 / tickTime), as else if the server stacks arrive first, glitches happen.
     }
 
     @Override
-    public void handleServerSide(EntityPlayer player) {
+    public void handleServerSide(PlayerEntity player) {
 
     }
 

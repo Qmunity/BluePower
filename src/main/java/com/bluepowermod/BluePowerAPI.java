@@ -13,7 +13,7 @@ import com.bluepowermod.api.recipe.IAlloyFurnaceRegistry;
 import com.bluepowermod.recipe.AlloyFurnaceRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -35,14 +35,14 @@ public class BluePowerAPI implements IBPApi {
         if (stack.isEmpty())
             throw new IllegalArgumentException("ItemStack is empty!");
         if (stack.hasTagCompound()) {
-            NBTTagCompound tag = stack.getTagCompound();
+            CompoundNBT tag = stack.getTagCompound();
             if (tag.hasKey("tileData")) {
                 if (te instanceof IAdvancedSilkyRemovable) {
                     ((IAdvancedSilkyRemovable) te).readSilkyData(world, pos, tag.getCompoundTag("tileData"));
                 } else if (b instanceof IAdvancedSilkyRemovable) {
                     ((IAdvancedSilkyRemovable) b).readSilkyData(world, pos, tag.getCompoundTag("tileData"));
                 } else {
-                    NBTTagCompound tileTag = tag.getCompoundTag("tileData");
+                    CompoundNBT tileTag = tag.getCompoundTag("tileData");
                     tileTag.setInteger("x", pos.getX());
                     tileTag.setInteger("y", pos.getY());
                     tileTag.setInteger("z", pos.getZ());

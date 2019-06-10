@@ -11,8 +11,8 @@ import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.client.render.IBPColoredItem;
 import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.reference.Refs;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.ItemDye;
+import net.minecraft.item.DyeItem;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 
@@ -31,7 +31,7 @@ public class ItemColorableOverlay extends ItemBase implements IBPColoredItem {
     }
 
     @Override
-    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
+    public void getSubItems(ItemGroup tab, NonNullList<ItemStack> items) {
         if (isInCreativeTab(tab)) {
             for (int i = 0; i < 16; i++) {
                 items.add(new ItemStack(this, 1, i));
@@ -47,6 +47,6 @@ public class ItemColorableOverlay extends ItemBase implements IBPColoredItem {
 
     @Override
     public int getColor(ItemStack itemStack, int renderPass) {
-        return renderPass == 0 || itemStack.getItemDamage() >= 16 ? -1 : ItemDye.DYE_COLORS[15 - itemStack.getItemDamage()];
+        return renderPass == 0 || itemStack.getItemDamage() >= 16 ? -1 : DyeItem.DYE_COLORS[15 - itemStack.getItemDamage()];
     }
 }

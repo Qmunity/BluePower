@@ -20,14 +20,14 @@ package com.bluepowermod.block.worldgen;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.reference.Refs;
-import net.minecraft.block.BlockBush;
-import net.minecraft.block.BlockFlower;
+import net.minecraft.block.BushBlock;
+import net.minecraft.block.FlowerBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.EnumPlantType;
 
-public class BlockCustomFlower extends BlockBush {
+public class BlockCustomFlower extends BushBlock {
 
     public static final String[] field_149858_b = new String[] { "indigo_flower" };
     // private int meta;
@@ -54,7 +54,7 @@ public class BlockCustomFlower extends BlockBush {
         return name.substring(name.indexOf(".") + 1);
     }
 
-    public static BlockFlower func_149857_e(String name) {
+    public static FlowerBlock func_149857_e(String name) {
 
         String[] astring = field_149858_b;
         int i = astring.length;
@@ -65,7 +65,7 @@ public class BlockCustomFlower extends BlockBush {
             s1 = astring[j];
 
             if (s1.equals(name)) {
-                return (BlockFlower) BPBlocks.indigo_flower;
+                return (FlowerBlock) BPBlocks.indigo_flower;
             }
         }
         return null;

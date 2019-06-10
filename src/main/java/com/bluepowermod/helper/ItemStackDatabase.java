@@ -8,11 +8,11 @@
 package com.bluepowermod.helper;
 
 import com.bluepowermod.BluePower;
-import net.minecraft.init.Items;
+import net.minecraft.item.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 
 import java.io.*;
@@ -36,7 +36,7 @@ public class ItemStackDatabase {
         new File(saveLocation).mkdirs();
         File targetLocation = new File(saveLocation + stack.getDisplayName() + FILE_EXTENSION);
 
-        NBTTagCompound tag = new NBTTagCompound();
+        CompoundNBT tag = new CompoundNBT();
         stack.writeToNBT(tag);
 
         ResourceLocation ui = stack.getItem().getRegistryName();
@@ -94,7 +94,7 @@ public class ItemStackDatabase {
                         byte[] abyte = new byte[short1];
                         dos.read(abyte);
                         ByteArrayInputStream byteStream = new ByteArrayInputStream(abyte);
-                        NBTTagCompound tag = CompressedStreamTools.readCompressed(byteStream);
+                        CompoundNBT tag = CompressedStreamTools.readCompressed(byteStream);
                         ItemStack stack = new ItemStack(tag);
                         if (stack.getItem() != Items.AIR) {
                             stacks.add(stack);

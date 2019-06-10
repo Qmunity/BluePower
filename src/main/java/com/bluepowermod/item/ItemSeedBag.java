@@ -24,15 +24,14 @@ import com.bluepowermod.container.inventory.InventoryItem;
 import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.reference.GuiIDs;
 import com.bluepowermod.reference.Refs;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.*;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IPlantable;
@@ -94,18 +93,18 @@ public class ItemSeedBag extends ItemBase {
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World worldObj, EntityPlayer playerEntity, EnumHand handIn) {
+    public ActionResult<ItemStack> onItemRightClick(World worldObj, PlayerEntity playerEntity, Hand handIn) {
         if (!worldObj.isRemote && playerEntity.isSneaking()) {
             playerEntity.openGui(BluePower.instance, GuiIDs.SEEDBAG.ordinal(), worldObj, (int) playerEntity.posX, (int) playerEntity.posY,
                     (int) playerEntity.posZ);
         }
-        return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, playerEntity.getHeldItem(handIn));
+        return new ActionResult<ItemStack>(ActionResultType.SUCCESS, playerEntity.getHeldItem(handIn));
     }
 
     @Override
-    public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+    public ActionResultType onItemUse(PlayerEntity player, World worldIn, BlockPos pos, Hand hand, Direction facing, float hitX, float hitY, float hitZ) {
         if (player.isSneaking()) {
-            return EnumActionResult.PASS;
+            return ActionResultType.PASS;
         }
 
         IInventory seedBagInventory = InventoryItem.getItemInventory(player, player.getHeldItem(hand), "Seed Bag", 9);
@@ -116,8 +115,8 @@ public class ItemSeedBag extends ItemBase {
             IPlantable plant = (IPlantable) seed.getItem();
             for (int modX = -2; modX < 3; modX++) {
                 for (int modZ = -2; modZ < 3; modZ++) {
-                    IBlockState b = worldIn.getBlockState(pos.add(modX, 0, modZ));
-                    if (b.getBlock().canSustainPlant(b, worldIn, pos, EnumFacing.UP, plant)
+                    BlockState b = worldIn.getBlockState(pos.add(modX, 0, modZ));
+                    if (b.getBlock().canSustainPlant(b, worldIn, pos, Direction.UP, plant)
                             && worldIn.isAirBlock(pos.add(modX, 1, modZ))) {
                         for (int i = 0; i < seedBagInventory.getSizeInventory(); i++) {
                             ItemStack is = seedBagInventory.getStackInSlot(i);
@@ -132,12 +131,12 @@ public class ItemSeedBag extends ItemBase {
                     }
                 }
             }
-            return EnumActionResult.SUCCESS;
+            return ActionResultType.SUCCESS;
 
         }
 
         seedBagInventory.closeInventory(player);
 
-        return EnumActionResult.PASS;
+        return ActionResultType.PASS;
     }
 }

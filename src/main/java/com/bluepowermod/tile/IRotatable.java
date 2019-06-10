@@ -7,7 +7,7 @@
  */
 package com.bluepowermod.tile;
 
-import net.minecraft.util.EnumFacing;;
+import net.minecraft.util.Direction;;
 
 /**
  * Implemented by BluePower block that can be rotated.
@@ -15,7 +15,7 @@ import net.minecraft.util.EnumFacing;;
  */
 public interface IRotatable {
     
-    public void setFacingDirection(EnumFacing dir);
+    public void setFacingDirection(Direction dir);
     
-    public EnumFacing getFacingDirection();
+    public Direction getFacingDirection();
 }

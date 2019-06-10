@@ -5,8 +5,8 @@ import java.io.DataOutput;
 import java.io.IOException;
 
 import com.bluepowermod.network.Packet;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 
 import com.bluepowermod.network.BPNetworkHandler;
 
@@ -37,17 +37,17 @@ public class MessageWirelessRemoveFreq extends Packet<MessageWirelessRemoveFreq>
     }
 
     @Override
-    public void handleClientSide(EntityPlayer player) {
+    public void handleClientSide(PlayerEntity player) {
 
     }
 
     @Override
-    public void handleServerSide(EntityPlayer player) {
+    public void handleServerSide(PlayerEntity player) {
 
         // WirelessManager.COMMON_INSTANCE.unregisterFrequency(WirelessManager.COMMON_INSTANCE.getFrequency(freq.getAccessibility(),
         //        freq.getFrequencyName(), freq.getOwner()));
 
-        BPNetworkHandler.INSTANCE.sendTo(new MessageWirelessFrequencySync(player), (EntityPlayerMP) player);
+        BPNetworkHandler.INSTANCE.sendTo(new MessageWirelessFrequencySync(player), (ServerPlayerEntity) player);
 
     }
 }

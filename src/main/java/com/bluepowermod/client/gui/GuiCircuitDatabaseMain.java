@@ -15,9 +15,9 @@ import com.bluepowermod.network.message.MessageUpdateTextfield;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier3.TileCircuitDatabase;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiTextField;
+import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Keyboard;
@@ -30,11 +30,11 @@ public class GuiCircuitDatabaseMain extends GuiContainerBaseBP {
 
     private final TileCircuitDatabase circuitDatabase;
     private static final ResourceLocation copyTabTexture = new ResourceLocation(Refs.MODID, "textures/gui/circuit_database.png");
-    private GuiTextField nameField;
+    private TextFieldWidget nameField;
     private WidgetSidewaysTab shareOptionTab;
     private WidgetMode copyButton;
 
-    public GuiCircuitDatabaseMain(InventoryPlayer invPlayer, TileCircuitDatabase circuitDatabase) {
+    public GuiCircuitDatabaseMain(PlayerInventory invPlayer, TileCircuitDatabase circuitDatabase) {
 
         super(circuitDatabase, new ContainerCircuitDatabaseMain(invPlayer, circuitDatabase), copyTabTexture);
         this.circuitDatabase = circuitDatabase;
@@ -111,7 +111,7 @@ public class GuiCircuitDatabaseMain extends GuiContainerBaseBP {
         addWidget(copyButton);
 
         Keyboard.enableRepeatEvents(true);
-        nameField = new GuiTextField(0, fontRenderer, guiLeft + 95, guiTop + 35, 70, fontRenderer.FONT_HEIGHT);
+        nameField = new TextFieldWidget(0, fontRenderer, guiLeft + 95, guiTop + 35, 70, fontRenderer.FONT_HEIGHT);
         nameField.setEnableBackgroundDrawing(true);
         nameField.setVisible(true);
         nameField.setTextColor(16777215);

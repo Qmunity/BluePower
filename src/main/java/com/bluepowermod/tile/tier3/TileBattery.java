@@ -12,12 +12,11 @@ import com.bluepowermod.api.power.BlutricityStorage;
 import com.bluepowermod.api.power.CapabilityBlutricity;
 import com.bluepowermod.block.power.BlockBattery;
 import com.bluepowermod.tile.TileMachineBase;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SPacketUpdateTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.network.play.server.SUpdateTileEntityPacket;
+import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 
 import javax.annotation.Nullable;
@@ -41,13 +40,13 @@ public class TileBattery extends TileMachineBase {
     }
 
     @Override
-    public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
+    public boolean hasCapability(Capability<?> capability, @Nullable Direction facing) {
         return capability == CapabilityBlutricity.BLUTRICITY_CAPABILITY || super.hasCapability(capability, facing);
     }
 
     @Nullable
     @Override
-    public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
+    public <T> T getCapability(Capability<T> capability, @Nullable Direction facing) {
         if(capability == CapabilityBlutricity.BLUTRICITY_CAPABILITY) {
             return CapabilityBlutricity.BLUTRICITY_CAPABILITY.cast(storage);
         }
@@ -55,7 +54,7 @@ public class TileBattery extends TileMachineBase {
     }
 
     @Override
-    protected void readFromPacketNBT(NBTTagCompound tCompound) {
+    protected void readFromPacketNBT(CompoundNBT tCompound) {
         super.readFromPacketNBT(tCompound);
         if(tCompound.hasKey("energy")) {
         NBTBase nbtstorage = tCompound.getTag("energy");
@@ -64,7 +63,7 @@ public class TileBattery extends TileMachineBase {
     }
 
     @Override
-    protected void writeToPacketNBT(NBTTagCompound tCompound) {
+    protected void writeToPacketNBT(CompoundNBT tCompound) {
         super.writeToPacketNBT(tCompound);
             NBTBase nbtstorage = CapabilityBlutricity.BLUTRICITY_CAPABILITY.getStorage().writeNBT(CapabilityBlutricity.BLUTRICITY_CAPABILITY, storage, null);
             tCompound.setTag("energy", nbtstorage);
@@ -72,17 +71,17 @@ public class TileBattery extends TileMachineBase {
 
     @Nullable
     @Override
-    public SPacketUpdateTileEntity getUpdatePacket() {
-        return new SPacketUpdateTileEntity(this.pos, 3, this.getUpdateTag());
+    public SUpdateTileEntityPacket getUpdatePacket() {
+        return new SUpdateTileEntityPacket(this.pos, 3, this.getUpdateTag());
     }
 
     @Override
-    public NBTTagCompound getUpdateTag() {
-        return this.writeToNBT(new NBTTagCompound());
+    public CompoundNBT getUpdateTag() {
+        return this.writeToNBT(new CompoundNBT());
     }
 
     @Override
-    public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
+    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
         super.onDataPacket(net, pkt);
         handleUpdateTag(pkt.getNbtCompound());
     }

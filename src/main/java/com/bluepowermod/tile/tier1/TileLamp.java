@@ -16,7 +16,7 @@ import com.bluepowermod.init.Config;
 import com.bluepowermod.tile.TileBase;
 import elucent.albedo.lighting.ILightProvider;
 import elucent.albedo.lighting.Light;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.Optional;
@@ -31,7 +31,7 @@ public class TileLamp extends TileBase implements ILightProvider{
     private byte[] bundledPower = new byte[16];
 
     @Override
-    protected void writeToPacketNBT(NBTTagCompound tCompound) {
+    protected void writeToPacketNBT(CompoundNBT tCompound) {
         if (blockType instanceof BlockLampRGB) {
             tCompound.setByte("red", bundledPower[MinecraftColor.RED.ordinal()]);
             tCompound.setByte("green", bundledPower[MinecraftColor.GREEN.ordinal()]);
@@ -40,7 +40,7 @@ public class TileLamp extends TileBase implements ILightProvider{
     }
 
     @Override
-    protected void readFromPacketNBT(NBTTagCompound tCompound) {
+    protected void readFromPacketNBT(CompoundNBT tCompound) {
         if (tCompound.hasKey("red")) {
             byte[] pow = bundledPower;
             pow[MinecraftColor.RED.ordinal()] = tCompound.getByte("red");

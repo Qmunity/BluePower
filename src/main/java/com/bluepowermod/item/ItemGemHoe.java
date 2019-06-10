@@ -20,12 +20,12 @@ package com.bluepowermod.item;
 import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.init.BPItems;
 import com.bluepowermod.reference.Refs;
-import net.minecraft.init.Items;
+import net.minecraft.item.HoeItem;
+import net.minecraft.item.Items;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemHoe;
 import net.minecraft.item.ItemStack;
 
-public class ItemGemHoe extends ItemHoe {
+public class ItemGemHoe extends HoeItem {
 
     public    Item    customCraftingMaterial = Items.AIR;
     protected boolean canRepair              = true;

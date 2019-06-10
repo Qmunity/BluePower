@@ -2,7 +2,7 @@ package com.bluepowermod.client.gui.widget;
 
 import com.bluepowermod.reference.Refs;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.util.math.MathHelper;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
@@ -66,14 +66,14 @@ public class WidgetVerticalScrollbar extends BaseWidget {
             currentScroll = (float) (mouseY - 7 - getBounds().y) / (getBounds().height - 17);
         currentScroll = MathHelper.clamp(currentScroll, 0, 1);
         Minecraft.getMinecraft().getTextureManager().bindTexture(textures[0]);
-        Gui.drawModalRectWithCustomSizedTexture(x, y, 12, 0, getBounds().width, 1, 26, 15);
+        AbstractGui.drawModalRectWithCustomSizedTexture(x, y, 12, 0, getBounds().width, 1, 26, 15);
         for (int i = 0; i < getBounds().height - 2; i++)
-            Gui.drawModalRectWithCustomSizedTexture(x, y + 1 + i, 12, 1, getBounds().width, 1, 26, 15);
-        Gui.drawModalRectWithCustomSizedTexture(x, y + getBounds().height - 1, 12, 14, getBounds().width, 1, 26, 15);
+            AbstractGui.drawModalRectWithCustomSizedTexture(x, y + 1 + i, 12, 1, getBounds().width, 1, 26, 15);
+        AbstractGui.drawModalRectWithCustomSizedTexture(x, y + getBounds().height - 1, 12, 14, getBounds().width, 1, 26, 15);
 
         if (!enabled)
             GL11.glColor4d(0.8, 0.8, 0.8, 1);
-        Gui.drawModalRectWithCustomSizedTexture(x + 1, y + 1 + (int) ((getBounds().height - 17) * currentScroll), 0, 0, 12, 15, 26, 15);
+        AbstractGui.drawModalRectWithCustomSizedTexture(x + 1, y + 1 + (int) ((getBounds().height - 17) * currentScroll), 0, 0, 12, 15, 26, 15);
         GL11.glColor4d(1, 1, 1, 1);
     }
 

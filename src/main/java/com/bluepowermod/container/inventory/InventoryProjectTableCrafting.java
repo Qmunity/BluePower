@@ -1,10 +1,8 @@
 package com.bluepowermod.container.inventory;
 
-import com.bluepowermod.network.BPNetworkHandler;
-import com.bluepowermod.network.message.MessageCraftingSync;
 import com.bluepowermod.tile.tier1.TileProjectTable;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.InventoryCrafting;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nonnull;
@@ -12,7 +10,7 @@ import javax.annotation.Nonnull;
 /**
  *@author MoreThanHidden
  **/
-public class InventoryProjectTableCrafting extends InventoryCrafting{
+public class InventoryProjectTableCrafting extends CraftingInventory {
 
     private final int length;
     private final TileProjectTable projectTable;

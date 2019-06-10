@@ -17,10 +17,10 @@
 
 package com.bluepowermod.container;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.Slot;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 
 import com.bluepowermod.tile.tier1.TileBuffer;
@@ -29,7 +29,7 @@ public class ContainerBuffer extends Container {
     
     private final TileBuffer tileBuffer;
     
-    public ContainerBuffer(InventoryPlayer invPlayer, TileBuffer buffer) {
+    public ContainerBuffer(PlayerInventory invPlayer, TileBuffer buffer) {
     
         tileBuffer = buffer;
         for (int i = 0; i < 4; i++) {
@@ -40,7 +40,7 @@ public class ContainerBuffer extends Container {
         bindPlayerInventory(invPlayer);
     }
     
-    protected void bindPlayerInventory(InventoryPlayer invPlayer) {
+    protected void bindPlayerInventory(PlayerInventory invPlayer) {
     
         // Render inventory
         for (int i = 0; i < 3; i++) {
@@ -56,13 +56,13 @@ public class ContainerBuffer extends Container {
     }
     
     @Override
-    public boolean canInteractWith(EntityPlayer player) {
+    public boolean canInteractWith(PlayerEntity player) {
     
         return tileBuffer.isUsableByPlayer(player);
     }
     
     @Override
-    public ItemStack transferStackInSlot(EntityPlayer player, int par2) {
+    public ItemStack transferStackInSlot(PlayerEntity player, int par2) {
     
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = (Slot) inventorySlots.get(par2);

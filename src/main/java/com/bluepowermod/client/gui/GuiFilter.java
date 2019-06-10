@@ -21,7 +21,7 @@ package com.bluepowermod.client.gui;
 
 import com.bluepowermod.client.gui.widget.BaseWidget;
 import com.bluepowermod.client.gui.widget.IGuiWidget;
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 
 import com.bluepowermod.client.gui.widget.WidgetColor;
@@ -46,7 +46,7 @@ public class GuiFilter extends GuiContainerBaseBP {
         this.filter = filter;
     }
 
-    public GuiFilter(InventoryPlayer invPlayer, TileFilter filter) {
+    public GuiFilter(PlayerInventory invPlayer, TileFilter filter) {
 
         super(filter, new ContainerFilter(invPlayer, filter), resLoc);
         this.filter = filter;

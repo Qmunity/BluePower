@@ -31,7 +31,7 @@ import com.bluepowermod.tile.tier2.TileRegulator;
 import com.bluepowermod.tile.tier2.TileRetriever;
 import com.bluepowermod.tile.tier2.TileSortingMachine;
 import com.bluepowermod.tile.tier3.*;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -42,7 +42,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class GUIHandler implements IGuiHandler {
 
     @Override
-    public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
+    public Object getServerGuiElement(int ID, PlayerEntity player, World world, int x, int y, int z) {
 
         // This function creates a container
         TileEntity ent = world.getTileEntity(new BlockPos(x, y, z));
@@ -122,7 +122,7 @@ public class GUIHandler implements IGuiHandler {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
+    public Object getClientGuiElement(int ID, PlayerEntity player, World world, int x, int y, int z) {
 
         TileEntity ent = world.getTileEntity(new BlockPos(x, y, z));
         // ID is the GUI ID

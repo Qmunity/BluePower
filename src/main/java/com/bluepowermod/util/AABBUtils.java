@@ -8,9 +8,8 @@
 package com.bluepowermod.util;
 
 
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.Vec3d;
 
 public class AABBUtils {
 
@@ -22,7 +21,7 @@ public class AABBUtils {
         return aabb.offset(x,y,z);
     }
 
-    public static AxisAlignedBB rotate (AxisAlignedBB aabb, EnumFacing facing){
+    public static AxisAlignedBB rotate (AxisAlignedBB aabb, Direction facing){
         switch (facing){
             case UP:
                 return aabb;

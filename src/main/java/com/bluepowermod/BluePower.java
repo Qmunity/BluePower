@@ -39,7 +39,7 @@ public class BluePower {
         FMLJavaModLoadingContext.get().getModEventBus().register(this);
 
         BPApi.init(new BluePowerAPI());
-        // Load configs
+        //Load configs
         //TODO: Configs
         //Config.syncConfig(config);
         BPEnchantments.init();

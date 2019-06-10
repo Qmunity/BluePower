@@ -14,7 +14,7 @@ import com.bluepowermod.network.LocatedPacket;
 import com.bluepowermod.reference.GuiIDs;
 import com.bluepowermod.tile.tier3.TileCircuitDatabase;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
@@ -64,7 +64,7 @@ public class MessageCircuitDatabaseTemplate extends LocatedPacket<MessageCircuit
     }
 
     @Override
-    public void handleClientSide(EntityPlayer player) {
+    public void handleClientSide(PlayerEntity player) {
 
         TileEntity te = player.world.getTileEntity(pos);
         if (te instanceof TileCircuitDatabase) {
@@ -73,7 +73,7 @@ public class MessageCircuitDatabaseTemplate extends LocatedPacket<MessageCircuit
     }
 
     @Override
-    public void handleServerSide(EntityPlayer player) {
+    public void handleServerSide(PlayerEntity player) {
 
         if (deleting) {
             if (TileCircuitDatabase.hasPermissions(player)) {

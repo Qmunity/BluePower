@@ -20,7 +20,7 @@ package com.bluepowermod.network.message;
 import com.bluepowermod.container.stack.TubeStack;
 import com.bluepowermod.network.LocatedPacket;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 
 public class MessageRedirectTubeStack extends LocatedPacket<MessageRedirectTubeStack> {
 
@@ -51,7 +51,7 @@ public class MessageRedirectTubeStack extends LocatedPacket<MessageRedirectTubeS
     }
 
     @Override
-    public void handleClientSide(EntityPlayer player) {
+    public void handleClientSide(PlayerEntity player) {
 
         //PneumaticTube tube = MultipartCompatibility.getPart(player.world, pos, PneumaticTube.class);
         //if (tube == null)
@@ -63,7 +63,7 @@ public class MessageRedirectTubeStack extends LocatedPacket<MessageRedirectTubeS
     }
 
     @Override
-    public void handleServerSide(EntityPlayer player) {
+    public void handleServerSide(PlayerEntity player) {
 
     }
 

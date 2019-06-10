@@ -22,7 +22,7 @@ package com.bluepowermod.client.gui;
 import java.util.List;
 
 import com.bluepowermod.client.gui.widget.*;
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 
 import com.bluepowermod.container.ContainerManager;
@@ -39,7 +39,7 @@ public class GuiManager extends GuiContainerBaseBP {
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/manager.png");
     protected TileManager manager;
 
-    public GuiManager(InventoryPlayer invPlayer, TileManager manager) {
+    public GuiManager(PlayerInventory invPlayer, TileManager manager) {
 
         super(manager, new ContainerManager(invPlayer, manager), resLoc);
         this.manager = manager;

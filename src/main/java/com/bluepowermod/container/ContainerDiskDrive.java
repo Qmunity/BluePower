@@ -7,9 +7,9 @@
  */
 package com.bluepowermod.container;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.Container;
 
 import com.bluepowermod.tile.tier3.TileDiskDrive;
 
@@ -17,13 +17,13 @@ public class ContainerDiskDrive extends Container {
 
 	private final TileDiskDrive diskDrive;
 	
-	public ContainerDiskDrive(InventoryPlayer invPlayer, TileDiskDrive ent) {
+	public ContainerDiskDrive(PlayerInventory invPlayer, TileDiskDrive ent) {
 
 		this.diskDrive = ent;
 	}
 
 	@Override
-	public boolean canInteractWith(EntityPlayer entityplayer) {
+	public boolean canInteractWith(PlayerEntity entityplayer) {
 
 		return true;
 	}

@@ -17,7 +17,7 @@
 
 package com.bluepowermod.helper;
 
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -29,14 +29,14 @@ public abstract class LocationCache<CachedType> {
         if (world == null)
             throw new NullPointerException("World can't be null!");
         cachedValue = (CachedType[]) new Object[6];
-        for (EnumFacing d : EnumFacing.VALUES) {
+        for (Direction d : Direction.VALUES) {
             cachedValue[d.ordinal()] = getNewValue(world, pos.offset(d), extraArgs);
         }
     }
 
     protected abstract CachedType getNewValue(World world, BlockPos pos, Object... extraArgs);
 
-    public CachedType getValue(EnumFacing side) {
+    public CachedType getValue(Direction side) {
         return cachedValue[side.ordinal()];
     }
 }

@@ -9,13 +9,12 @@ package com.bluepowermod.client.render;
 
 import com.bluepowermod.block.machine.BlockLamp;
 import com.bluepowermod.block.machine.BlockLampSurface;
-import com.bluepowermod.init.Config;
 import com.bluepowermod.util.AABBUtils;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.block.BlockState;
+import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.relauncher.Side;
@@ -24,7 +23,7 @@ import org.lwjgl.opengl.GL11;
 
 
 @OnlyIn(Dist.CLIENT)
-public class RenderLamp extends TileEntitySpecialRenderer {
+public class RenderLamp extends TileEntityRenderer {
 
     public static int pass;
 
@@ -56,8 +55,8 @@ public class RenderLamp extends TileEntitySpecialRenderer {
 
             //Remove overlapping Glow
             if(bLamp.getSize().equals(Block.FULL_BLOCK_AABB)) {
-                for (EnumFacing face : EnumFacing.VALUES) {
-                    IBlockState state = te.getWorld().getBlockState(te.getPos().offset(face.getOpposite()));
+                for (Direction face : Direction.VALUES) {
+                    BlockState state = te.getWorld().getBlockState(te.getPos().offset(face.getOpposite()));
                     if (state.getBlock() instanceof BlockLamp && ((BlockLamp)state.getBlock()).getSize().equals(Block.FULL_BLOCK_AABB)) {
                         if (((BlockLamp) state.getBlock()).isInverted() ? state.getValue(BlockLamp.POWER) < 15 : state.getValue(BlockLamp.POWER) > 0) {
                             renderFaces[face.getIndex()] = false;

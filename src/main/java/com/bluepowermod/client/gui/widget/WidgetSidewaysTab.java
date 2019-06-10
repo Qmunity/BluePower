@@ -1,7 +1,7 @@
 package com.bluepowermod.client.gui.widget;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.AbstractGui;
 import org.lwjgl.opengl.GL11;
 
 import java.util.Arrays;
@@ -48,7 +48,7 @@ public class WidgetSidewaysTab extends BaseWidget {
                     GL11.glColor4d(0.2, 0.2, 0.2, 1);
                 }
             }
-            Gui.drawModalRectWithCustomSizedTexture(x + singleTabWidth * i, y, getTextureU(), getTextureV() + singleTabWidth * i, singleTabWidth, height, 256,
+            AbstractGui.drawModalRectWithCustomSizedTexture(x + singleTabWidth * i, y, getTextureU(), getTextureV() + singleTabWidth * i, singleTabWidth, height, 256,
                     256);
         }
     }

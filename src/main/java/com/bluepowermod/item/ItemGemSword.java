@@ -18,15 +18,15 @@
 package com.bluepowermod.item;
 
 import com.bluepowermod.init.BPItems;
-import net.minecraft.init.Items;
+import net.minecraft.item.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemSword;
+import net.minecraft.item.SwordItem;
 
 import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.reference.Refs;
 
-public class ItemGemSword extends ItemSword {
+public class ItemGemSword extends SwordItem {
 
     public    Item    customCraftingMaterial = Items.AIR;
     protected boolean canRepair              = true;

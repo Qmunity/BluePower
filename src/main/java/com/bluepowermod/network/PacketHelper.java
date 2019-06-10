@@ -2,7 +2,7 @@ package com.bluepowermod.network;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 
 import java.io.DataInput;
@@ -25,7 +25,7 @@ public class PacketHelper {
         return bytes;
     }
 
-    public static void writeNBT(DataOutput out, NBTTagCompound tag) throws IOException {
+    public static void writeNBT(DataOutput out, CompoundNBT tag) throws IOException {
 
         ByteBuf buf = Unpooled.buffer();
         ByteBufUtils.writeTag(buf, tag);
@@ -34,11 +34,11 @@ public class PacketHelper {
         writeBytes(out, bytes);
     }
 
-    public static NBTTagCompound readNBT(DataInput in) throws IOException {
+    public static CompoundNBT readNBT(DataInput in) throws IOException {
 
         ByteBuf buf = Unpooled.buffer();
         buf.writeBytes(readBytes(in));
-        NBTTagCompound t = ByteBufUtils.readTag(buf);
+        CompoundNBT t = ByteBufUtils.readTag(buf);
         return t;
     }
 }
