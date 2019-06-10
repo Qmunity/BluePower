@@ -21,9 +21,9 @@ public class GuiContainerBaseBP extends GuiContainerBase {
     }
 
     @Override
-    public void initGui() {
+    public void init() {
 
-        super.initGui();
+        super.init();
         lastLeftStat = lastRightStat = null;
 
         if (inventory instanceof TileMachineBase) {
@@ -34,13 +34,6 @@ public class GuiContainerBaseBP extends GuiContainerBase {
             addWidget(backlogTab);
         }
 
-        String unlocalizedInfo = inventory.getName() + ".info";
-        String localizedInfo = I18n.format(unlocalizedInfo);
-        if (!unlocalizedInfo.equals(localizedInfo)) {
-            addAnimatedStat("gui.bluepower:tab.info", Refs.MODID + ":textures/gui/widgets/gui_info.png", 0xFF8888FF, isInfoStatLeftSided()).setText(
-                    unlocalizedInfo);
-
-        }
     }
 
 }

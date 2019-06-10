@@ -19,10 +19,8 @@ package com.bluepowermod.util;
 
 import com.bluepowermod.compat.CompatibilityUtils;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraftforge.oredict.OreDictionary;
-
-import java.util.List;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.util.ResourceLocation;
 
 /**
  *
@@ -38,20 +36,13 @@ public class ItemStackUtils {
         }
         if (stack1.getItem() != stack2.getItem())
             return false;
-        return stack1.getItemDamage() == stack2.getItemDamage() || stack1.getItemDamage() == OreDictionary.WILDCARD_VALUE
-                || stack2.getItemDamage() == OreDictionary.WILDCARD_VALUE;
+        return stack1.equals(stack2);
     }
 
     public static boolean isSameOreDictStack(ItemStack stack1, ItemStack stack2) {
-
-        int ids[] = OreDictionary.getOreIDs(stack1);
-        for (int id : ids) {
-            String name = OreDictionary.getOreName(id);
-            List<ItemStack> oreDictStacks = OreDictionary.getOres(name);
-            for (ItemStack oreDictStack : oreDictStacks) {
-                if (OreDictionary.itemMatches(stack2, oreDictStack, false)) {
-                    return true;
-                }
+        for (ResourceLocation resTag : ItemTags.getCollection().getOwningTags(stack1.getItem())) {
+            if (ItemTags.getCollection().get(resTag) != null) {
+                return ItemTags.getCollection().get(resTag).contains(stack2.getItem());
             }
         }
         return false;

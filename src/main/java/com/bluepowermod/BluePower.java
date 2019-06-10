@@ -67,7 +67,7 @@ public class BluePower {
         //TODO: World Gen
         //GameRegistry.registerWorldGenerator(new WorldGenerationHandler(), 0);
 
-        proxy.init();
+        proxy.setup(event);
         BPNetworkHandler.initBP();
         //TODO: GUI
         //NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GUIHandler());

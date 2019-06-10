@@ -22,17 +22,19 @@ import com.bluepowermod.client.render.Renderers;
 import com.bluepowermod.compat.CompatibilityUtils;
 import com.bluepowermod.reference.Refs;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.model.obj.OBJLoader;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 
 @OnlyIn(Dist.CLIENT)
 public class ClientProxy extends CommonProxy {
 
     @Override
-    public void init() {
+    public void setup(FMLCommonSetupEvent event) {
 
     }
 
@@ -52,18 +54,19 @@ public class ClientProxy extends CommonProxy {
     @Override
     public PlayerEntity getPlayer() {
 
-        return FMLClientHandler.instance().getClientPlayerEntity();
+        return Minecraft.getInstance().player;
     }
 
     @Override
     public boolean isSneakingInGui() {
 
-        return Keyboard.isKeyDown(Minecraft.getInstance().gameSettings.keyBindSneak.getKeyCode());
+
+        return Minecraft.getInstance().gameSettings.keyBindSneak.isKeyDown();
     }
 
-    public static GuiScreen getOpenedGui() {
-
-        return FMLClientHandler.instance().getClient().currentScreen;
+    public static Screen getOpenedGui() {
+        //TODO: Check if this is the current screen
+        return Minecraft.getInstance().field_71462_r;
     }
 
     @Override
