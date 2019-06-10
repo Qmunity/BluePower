@@ -27,6 +27,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.AbstractChunkProvider;
 import net.minecraft.world.gen.ChunkGenerator;
+import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.gen.feature.BushFeature;
 import net.minecraft.world.gen.feature.OreFeature;
 import net.minecraftforge.fml.common.IWorldGenerator;
@@ -73,8 +74,8 @@ public class WorldGenerationHandler implements IWorldGenerator {
             addOreToGenerate(random, Config.veinCountTungsten, Config.veinSizeTungsten, Config.minTungstenY, Config.maxTungstenY,
                     BPBlocks.tungsten_ore, world, chunkX, chunkZ);
         }
-        //TODO Check this
-        Biome bgb = world.getBiomeProvider().getBiome(new BlockPos(chunkX * 16 + 16, 0, chunkZ * 16 + 16));
+
+        Biome bgb = world.getBiome(new BlockPos(chunkX * 16 + 16, 0, chunkZ * 16 + 16));
 
         int n = 0;
         if (bgb == Biomes.BIRCH_FOREST)
@@ -85,7 +86,7 @@ public class WorldGenerationHandler implements IWorldGenerator {
             n = 1;
         else if (bgb == Biomes.FOREST)
             n = 4;
-        else if (bgb == Biomes.ROOFED_FOREST)
+        else if (bgb == Biomes.DARK_FOREST)
             n = 4;
 
         for (int i = 0; i < n; i++) {
@@ -106,9 +107,9 @@ public class WorldGenerationHandler implements IWorldGenerator {
         if (random.nextDouble() < Config.volcanoSpawnChance) {
             int x = chunkX * 16 + random.nextInt(16);
             int z = chunkZ * 16 + random.nextInt(16);//20
-            int y = world.getHeight(x, z) + 30 + random.nextInt(40);
+            int y = world.getHeight(Heightmap.Type.WORLD_SURFACE, x, z) + 30 + random.nextInt(40);
 
-            if (world.getBlockState(new BlockPos(x, 10, z)).getBlock() == Blocks.LAVA && world.getHeight(x, z) <= 90) {
+            if (world.getBlockState(new BlockPos(x, 10, z)).getBlock() == Blocks.LAVA && world.getHeight(Heightmap.Type.WORLD_SURFACE, x, z) <= 90) {
                 new WorldGenVolcano().generate(world, random, x, y, z);
             }
         }

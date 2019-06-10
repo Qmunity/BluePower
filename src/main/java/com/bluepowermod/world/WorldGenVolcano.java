@@ -28,6 +28,7 @@ import net.minecraft.tileentity.ChestTileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.storage.loot.LootTables;
 
 import java.util.ArrayList;
@@ -50,13 +51,13 @@ public class WorldGenVolcano {
     public void generate(World world, Random rand, int middleX, int volcanoHeight, int middleZ) {
         List<Pos>[] distMap = calculateDistMap();
         boolean first = true;
-        int centreWorldHeight = world.getHeight(middleX, middleZ);
+        int centreWorldHeight = world.getHeight(Heightmap.Type.WORLD_SURFACE, middleX, middleZ);
         for (int dist = 0; dist < distMap.length; dist++) {// Loop through every XZ position of the volcano, in order of how close the positions are
             // from the center. The volcano will be generated from the center to the edge.
             List<Pos> distList = distMap[dist];
             boolean isFinished = true;// Will stay true as long as there were still blocks being generated at this distance from the volcano.
             for (Pos p : distList) {
-                int worldHeight = world.getHeight(p.x + middleX, p.z + middleZ) - 1;
+                int worldHeight = world.getHeight(Heightmap.Type.WORLD_SURFACE,p.x + middleX, p.z + middleZ) - 1;
                 int posHeight = first ? volcanoHeight : getNewVolcanoHeight(worldHeight, p, rand, dist);
                 if (posHeight >= 0 && (posHeight > worldHeight || canReplace(world, p.x + middleX, posHeight, p.z + middleZ))) {// If the calculated
                     // desired volcano
@@ -71,7 +72,7 @@ public class WorldGenVolcano {
                         for (int i = posHeight + 1; i < volcanoHeight; i++) {
                             if (canReplace(world, p.x + middleX, i, p.z + middleZ)
                                     && world.getBlockState(new BlockPos(p.x + middleX, i, p.z + middleZ)).getMaterial() != Material.WATER)
-                                world.setBlockToAir(new BlockPos(p.x + middleX, i, p.z + middleZ));
+                                world.setBlockState(new BlockPos(p.x + middleX, i, p.z + middleZ), Blocks.AIR.getDefaultState());
                         }
                     }
                     isFinished = false;
@@ -92,7 +93,7 @@ public class WorldGenVolcano {
         Block block = world.getBlockState(new BlockPos(x, y, z)).getBlock();
         Material material = world.getBlockState(new BlockPos(x, y, z)).getMaterial();
         return material == Material.WOOD || material == Material.CACTUS || material == Material.LEAVES || material == Material.PLANTS
-                || material == Material.VINE || block == Blocks.WATER|| block == Blocks.FLOWING_WATER;
+                || material == Material.TALL_PLANTS || block == Blocks.WATER;
     }
 
     private void generateLavaColumn(World world, int x, int topY, int z, Random rand) {
@@ -204,7 +205,7 @@ public class WorldGenVolcano {
             }
         }
 
-        for (Direction d : Direction.VALUES) {
+        for (Direction d : Direction.values()) {
             if (d != Direction.UP && d != Direction.DOWN) {
                 if (rand.nextInt(2) == 0) {
                     generateAltar(world, middleX + d.getXOffset() * roomSize / 2, startY - 1, middleZ + d.getZOffset() * roomSize / 2, rand, d);

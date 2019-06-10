@@ -8,7 +8,7 @@ public class RenderDebugScreen {
 //    public void onRenderDebugScreen(RenderGameOverlayEvent event) {
 //
 //        if (event.type == RenderGameOverlayEvent.ElementType.DEBUG) {
-//            Minecraft mc = Minecraft.getMinecraft();
+//            Minecraft mc = Minecraft.getInstance();
 //            FontRenderer fr = mc.fontRenderer;
 //            MinecraftServer sv = MinecraftServer.getServer();
 //            boolean isLocal = sv instanceof IntegratedServer;

@@ -70,13 +70,13 @@ public class Renderers {
 
         for (Item item : BPItems.itemList) {
             if (item instanceof IBPColoredItem) {
-                Minecraft.getMinecraft().getItemColors().registerItemColorHandler(new BPItemColor(), item);
+                Minecraft.getInstance().getItemColors().registerItemColorHandler(new BPItemColor(), item);
             }
         }
         for (Block block : BPBlocks.blockList) {
             if (block instanceof IBPColoredBlock) {
-                Minecraft.getMinecraft().getBlockColors().registerBlockColorHandler(new BPBlockColor(), block);
-                Minecraft.getMinecraft().getItemColors().registerItemColorHandler(new BPBlockColor(), Item.getItemFromBlock(block));
+                Minecraft.getInstance().getBlockColors().registerBlockColorHandler(new BPBlockColor(), block);
+                Minecraft.getInstance().getItemColors().registerItemColorHandler(new BPBlockColor(), Item.getItemFromBlock(block));
             }
         }
 

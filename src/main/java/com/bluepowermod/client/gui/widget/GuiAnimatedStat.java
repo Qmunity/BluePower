@@ -73,7 +73,7 @@ public class GuiAnimatedStat extends BaseWidget implements IGuiAnimatedStat, IGu
         texture = "";
         this.leftSided = leftSided;
         if (gui != null) {
-            ScaledResolution sr = new ScaledResolution(Minecraft.getMinecraft());
+            ScaledResolution sr = new ScaledResolution(Minecraft.getInstance());
             if (sr.getScaledWidth() < 520) {
                 textSize = (sr.getScaledWidth() - 220) * 0.0033F;
             } else {
@@ -329,7 +329,7 @@ public class GuiAnimatedStat extends BaseWidget implements IGuiAnimatedStat, IGu
     protected void renderItem(FontRenderer fontRenderer, int x, int y, ItemStack stack) {
 
         if (itemRenderer == null)
-            itemRenderer = new ItemRenderer(Minecraft.getMinecraft().getTextureManager(), Minecraft.getMinecraft().getRenderItem().getItemModelMesher().getModelManager(), Minecraft.getMinecraft().getItemColors());
+            itemRenderer = new ItemRenderer(Minecraft.getInstance().getTextureManager(), Minecraft.getInstance().getRenderItem().getItemModelMesher().getModelManager(), Minecraft.getInstance().getItemColors());
         GL11.glPushMatrix();
         GL11.glTranslated(0, 0, -50);
         GL11.glEnable(GL12.GL_RESCALE_NORMAL);
@@ -345,7 +345,7 @@ public class GuiAnimatedStat extends BaseWidget implements IGuiAnimatedStat, IGu
 
     public static void drawTexture(ResourceLocation texture, int x, int y) {
 
-        Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
+        Minecraft.getInstance().getTextureManager().bindTexture(texture);
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder buff = tessellator.getBuffer();
         buff.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
@@ -479,7 +479,7 @@ public class GuiAnimatedStat extends BaseWidget implements IGuiAnimatedStat, IGu
     @Override
     public void render(int mouseX, int mouseY, float partialTick) {
 
-        render(Minecraft.getMinecraft().fontRenderer, 0, partialTick);
+        render(Minecraft.getInstance().fontRenderer, 0, partialTick);
 
     }
 

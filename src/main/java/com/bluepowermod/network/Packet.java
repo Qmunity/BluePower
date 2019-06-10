@@ -37,7 +37,7 @@ public abstract class Packet<REQ extends Packet<REQ>> implements IMessage, IMess
     @OnlyIn(Dist.CLIENT)
     public PlayerEntity getPlayerClient() {
 
-        return Minecraft.getMinecraft().player;
+        return Minecraft.getInstance().player;
     }
 
     @OnlyIn(Dist.CLIENT)

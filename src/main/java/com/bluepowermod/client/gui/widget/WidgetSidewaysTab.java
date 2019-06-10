@@ -36,7 +36,7 @@ public class WidgetSidewaysTab extends BaseWidget {
     public void render(int mouseX, int mouseY, float partialTick) {
 
         if (textures.length > 0)
-            Minecraft.getMinecraft().getTextureManager().bindTexture(textures[0]);
+            Minecraft.getInstance().getTextureManager().bindTexture(textures[0]);
 
         for (int i = 0; i < tabAmount; i++) {
             if (i == value) {

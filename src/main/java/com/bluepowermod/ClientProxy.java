@@ -22,6 +22,7 @@ import com.bluepowermod.client.render.Renderers;
 import com.bluepowermod.compat.CompatibilityUtils;
 import com.bluepowermod.reference.Refs;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.model.obj.OBJLoader;
@@ -49,7 +50,7 @@ public class ClientProxy extends CommonProxy {
     }
 
     @Override
-    public EntityPlayer getPlayer() {
+    public PlayerEntity getPlayer() {
 
         return FMLClientHandler.instance().getClientPlayerEntity();
     }
@@ -57,7 +58,7 @@ public class ClientProxy extends CommonProxy {
     @Override
     public boolean isSneakingInGui() {
 
-        return Keyboard.isKeyDown(Minecraft.getMinecraft().gameSettings.keyBindSneak.getKeyCode());
+        return Keyboard.isKeyDown(Minecraft.getInstance().gameSettings.keyBindSneak.getKeyCode());
     }
 
     public static GuiScreen getOpenedGui() {
@@ -68,6 +69,6 @@ public class ClientProxy extends CommonProxy {
     @Override
     public String getSavePath() {
 
-        return Minecraft.getMinecraft().gameDir.getAbsolutePath();
+        return Minecraft.getInstance().gameDir.getAbsolutePath();
     }
 }

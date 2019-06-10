@@ -68,7 +68,7 @@ public class BaseWidget implements IGuiWidget {
             GL11.glColor4d(0.2, 0.2, 0.2, 1);
         }
         if (textures.length > 0)
-            Minecraft.getMinecraft().getTextureManager().bindTexture(textures[textureIndex]);
+            Minecraft.getInstance().getTextureManager().bindTexture(textures[textureIndex]);
         AbstractGui.drawModalRectWithCustomSizedTexture(x, y, getTextureU(), getTextureV(), width, height, getTextureWidth(), getTextureHeight());
     }
 
@@ -95,7 +95,7 @@ public class BaseWidget implements IGuiWidget {
     @Override
     public void onMouseClicked(int mouseX, int mouseY, int button) {
 
-        Minecraft.getMinecraft().getSoundHandler()
+        Minecraft.getInstance().getSoundHandler()
                 .playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
         gui.actionPerformed(this);
     }

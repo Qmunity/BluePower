@@ -60,14 +60,14 @@ public class GuiCircuitDatabaseMain extends GuiContainerBaseBP {
                     break;
                 case 2:
                     curTip.add("gui.bluepower:circuitDatabase.tab.server");
-                    if (Minecraft.getMinecraft().isSingleplayer())
+                    if (Minecraft.getInstance().isSingleplayer())
                         curTip.add("gui.bluepower:circuitDatabase.info.serverOnly");
                     break;
                 }
             }
         };
         widget.value = circuitDatabase.clientCurrentTab;
-        widget.enabledTabs[2] = !Minecraft.getMinecraft().isSingleplayer();
+        widget.enabledTabs[2] = !Minecraft.getInstance().isSingleplayer();
         addWidget(widget);
 
         shareOptionTab = new WidgetSidewaysTab(2, guiLeft + 44, guiTop + 18, 14, 14, 234, 3, Refs.MODID
@@ -88,7 +88,7 @@ public class GuiCircuitDatabaseMain extends GuiContainerBaseBP {
                     break;
                 case 2:
                     curTip.add("gui.bluepower:circuitDatabase.action.saveServer");
-                    if (Minecraft.getMinecraft().isSingleplayer()) {
+                    if (Minecraft.getInstance().isSingleplayer()) {
                         curTip.add("gui.bluepower:circuitDatabase.info.serverOnly");
                     } else if (!enabledTabs[curHoveredTab]) {
                         curTip.add("gui.bluepower:circuitDatabase.info.nameTaken");
@@ -204,11 +204,11 @@ public class GuiCircuitDatabaseMain extends GuiContainerBaseBP {
             }
         }
         shareOptionTab.enabledTabs[1] = !nameDuplicatePrivate;
-        shareOptionTab.enabledTabs[2] = !nameDuplicateServer && !Minecraft.getMinecraft().isSingleplayer();
+        shareOptionTab.enabledTabs[2] = !nameDuplicateServer && !Minecraft.getInstance().isSingleplayer();
 
         copyButton.enabled = !circuitDatabase.copyInventory.getStackInSlot(0).isEmpty()
                 && !circuitDatabase.copyInventory.getStackInSlot(1).isEmpty()
-                && circuitDatabase.copy(Minecraft.getMinecraft().player, circuitDatabase.copyInventory.getStackInSlot(0),
+                && circuitDatabase.copy(Minecraft.getInstance().player, circuitDatabase.copyInventory.getStackInSlot(0),
                         circuitDatabase.copyInventory.getStackInSlot(1), true);
     }
 

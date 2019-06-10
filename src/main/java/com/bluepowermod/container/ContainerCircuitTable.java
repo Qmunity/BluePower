@@ -90,7 +90,7 @@ public class ContainerCircuitTable extends Container {
     @OnlyIn(Dist.CLIENT)
     public void updateProgressBar(int p_75137_1_, int p_75137_2_) {
         circuitTable.slotsScrolled = p_75137_2_;
-        Screen gui = Minecraft.getMinecraft().currentScreen;
+        Screen gui = Minecraft.getInstance().currentScreen;
         if (gui instanceof GuiCircuitTable) {
             ((GuiCircuitTable) gui).updateScrollbar(circuitTable.slotsScrolled);
         }

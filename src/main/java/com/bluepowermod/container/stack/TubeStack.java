@@ -177,12 +177,12 @@ public class TubeStack {
     public void render(float partialTick) {
 
         if (renderMode == RenderMode.AUTO) {
-            renderMode = Minecraft.getMinecraft().gameSettings.fancyGraphics ? RenderMode.NORMAL : RenderMode.REDUCED;
+            renderMode = Minecraft.getInstance().gameSettings.fancyGraphics ? RenderMode.NORMAL : RenderMode.REDUCED;
         }
         final RenderMode finalRenderMode = renderMode;
 
         if (customRenderItem == null) {
-            customRenderItem = Minecraft.getMinecraft().getRenderItem();
+            customRenderItem = Minecraft.getInstance().getRenderItem();
 
             renderedItem = new ItemEntity(FMLClientHandler.instance().getWorldClient());
             renderedItem.hoverStart = 0.0F;
@@ -225,7 +225,7 @@ public class TubeStack {
             GL11.glDisable(GL11.GL_CULL_FACE);
             GL11.glDisable(GL11.GL_LIGHTING);
             GL11.glColor3f(red, green, blue);
-            Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Refs.MODID, "textures/blocks/tubes/inside_color_border.png"));
+            Minecraft.getInstance().renderEngine.bindTexture(new ResourceLocation(Refs.MODID, "textures/blocks/tubes/inside_color_border.png"));
             RenderHelper.drawTesselatedTexturedCube(new AxisAlignedBB(-size, -size, -size, size, size, size));
             GL11.glEnable(GL11.GL_CULL_FACE);
             GL11.glEnable(GL11.GL_LIGHTING);

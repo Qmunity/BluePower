@@ -267,7 +267,7 @@ public class BPEventHandler {
         Block block = Block.getBlockFromItem(event.getPlayer().getHeldItem(Hand.MAIN_HAND).getItem());
         if(block instanceof BlockGateBase && mop.typeOfHit == RayTraceResult.Type.BLOCK){
             BlockPos position = event.getTarget().getBlockPos().offset(mop.sideHit);
-            Entity entity = Minecraft.getMinecraft().getRenderViewEntity();
+            Entity entity = Minecraft.getInstance().getRenderViewEntity();
             double d0 = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * (double)event.getPartialTicks();
             double d1 = entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * (double)event.getPartialTicks();
             double d2 = entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * (double)event.getPartialTicks();
@@ -278,7 +278,7 @@ public class BPEventHandler {
             GlStateManager.enableAlpha();
             position.add(0.5, 0.1, 0.5);
             vertexbuffer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
-            BlockRendererDispatcher blockrendererdispatcher = Minecraft.getMinecraft().getBlockRendererDispatcher();
+            BlockRendererDispatcher blockrendererdispatcher = Minecraft.getInstance().getBlockRendererDispatcher();
             BlockState state = block.getDefaultState().withProperty(BlockGateBase.FACING, mop.sideHit);
             IBakedModel ibakedmodel = blockrendererdispatcher.getModelForState(state);
             blockrendererdispatcher.getBlockModelRenderer().renderModel(event.getPlayer().world, ibakedmodel, state, position, vertexbuffer, false, new Random().nextLong());

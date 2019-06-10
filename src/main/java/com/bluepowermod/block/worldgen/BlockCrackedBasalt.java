@@ -26,7 +26,6 @@ import net.minecraft.entity.item.FallingBlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -40,7 +39,6 @@ import java.util.Random;
 public class BlockCrackedBasalt extends BlockStoneOre {
 
     public BlockCrackedBasalt(String name) {
-
         super(name);
         setTickRandomly(true);
         setResistance(25.0F);

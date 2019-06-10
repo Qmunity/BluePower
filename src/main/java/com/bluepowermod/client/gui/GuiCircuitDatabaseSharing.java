@@ -59,14 +59,14 @@ public class GuiCircuitDatabaseSharing extends GuiCircuitTable {
                     break;
                 case 2:
                     curTip.add("gui.bluepower:circuitDatabase.tab.server");
-                    if (Minecraft.getMinecraft().isSingleplayer())
+                    if (Minecraft.getInstance().isSingleplayer())
                         curTip.add("gui.bluepower:circuitDatabase.info.serverOnly");
                     break;
                 }
             }
         };
         widget.value = circuitDatabase.clientCurrentTab;
-        widget.enabledTabs[2] = !Minecraft.getMinecraft().isSingleplayer();
+        widget.enabledTabs[2] = !Minecraft.getInstance().isSingleplayer();
         addWidget(widget);
 
     }
@@ -107,7 +107,7 @@ public class GuiCircuitDatabaseSharing extends GuiCircuitTable {
 
         if ((circuitDatabase.clientCurrentTab == 1 || circuitDatabase.clientCurrentTab == 2)
                 && !circuitDatabase.copyInventory.getStackInSlot(1).isEmpty()) {
-            return !circuitDatabase.copy(Minecraft.getMinecraft().player, stack, circuitDatabase.copyInventory.getStackInSlot(1), true);
+            return !circuitDatabase.copy(Minecraft.getInstance().player, stack, circuitDatabase.copyInventory.getStackInSlot(1), true);
         } else {
             return false;
         }

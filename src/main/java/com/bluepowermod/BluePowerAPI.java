@@ -34,19 +34,19 @@ public class BluePowerAPI implements IBPApi {
             throw new IllegalStateException("This block doesn't have a tile entity?!");
         if (stack.isEmpty())
             throw new IllegalArgumentException("ItemStack is empty!");
-        if (stack.hasTagCompound()) {
-            CompoundNBT tag = stack.getTagCompound();
-            if (tag.hasKey("tileData")) {
+        if (stack.hasTag()) {
+            CompoundNBT tag = stack.getTag();
+            if (tag.hasUniqueId("tileData")) {
                 if (te instanceof IAdvancedSilkyRemovable) {
-                    ((IAdvancedSilkyRemovable) te).readSilkyData(world, pos, tag.getCompoundTag("tileData"));
+                    ((IAdvancedSilkyRemovable) te).readSilkyData(world, pos, tag.getCompound("tileData"));
                 } else if (b instanceof IAdvancedSilkyRemovable) {
-                    ((IAdvancedSilkyRemovable) b).readSilkyData(world, pos, tag.getCompoundTag("tileData"));
+                    ((IAdvancedSilkyRemovable) b).readSilkyData(world, pos, tag.getCompound("tileData"));
                 } else {
-                    CompoundNBT tileTag = tag.getCompoundTag("tileData");
-                    tileTag.setInteger("x", pos.getX());
-                    tileTag.setInteger("y", pos.getY());
-                    tileTag.setInteger("z", pos.getZ());
-                    te.readFromNBT(tileTag);
+                    CompoundNBT tileTag = tag.getCompound("tileData");
+                    tileTag.putInt("x", pos.getX());
+                    tileTag.putInt("y", pos.getY());
+                    tileTag.putInt("z", pos.getZ());
+                    te.read(tileTag);
                 }
             }
         }

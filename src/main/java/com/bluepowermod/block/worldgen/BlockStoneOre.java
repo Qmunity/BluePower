@@ -33,10 +33,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.Explosion;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -52,15 +49,21 @@ public class BlockStoneOre extends Block {
 
     public BlockStoneOre(String name) {
 
-        super(Material.ROCK);
+        super(Properties.create(Material.ROCK).hardnessAndResistance(5.0F));
 
         this.name = name;
-        setResistance(5.0F);
-        setHardness(4.0F);
-        this.setHarvestLevel("pickaxe", 1);
         setTranslationKey(name);
         setCreativeTab(BPCreativeTabs.blocks);
         setSoundType(SoundType.STONE);
+        setRegistryName(Refs.MODID, name);
+        BPBlocks.blockList.add(this);
+    }
+
+    public BlockStoneOre(String name, Properties properties) {
+
+        super(properties);
+
+        this.name = name;
         setRegistryName(Refs.MODID, name);
         BPBlocks.blockList.add(this);
     }

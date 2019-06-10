@@ -61,7 +61,7 @@ public class RenderEngine extends TileEntityRenderer<TileEngine> {
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder bufferBuilder = tessellator.getBuffer();
         BlockState state = BPBlocks.engine.getDefaultState();
-        BlockRendererDispatcher dispatcher = Minecraft.getMinecraft().getBlockRendererDispatcher();
+        BlockRendererDispatcher dispatcher = Minecraft.getInstance().getBlockRendererDispatcher();
         BlockPos pos = engine.getPos();
 
         GlStateManager.translate(x, y, z);
