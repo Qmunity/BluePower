@@ -57,7 +57,7 @@ repositories {
 apply plugin: 'maven'
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.14.2-26.0.7'
+    minecraft 'net.minecraftforge:forge:1.14.2-26.0.32'
     //deobfCompile "li.cil.oc:OpenComputers:MC1.12.2-1.7.4.153:api"
     //compile "net.industrial-craft:industrialcraft-2:2.8.99-ex112:api"
 	//deobfCompile "MCMultiPart2:MCMultiPart:2.5.3"
@@ -68,7 +68,7 @@ dependencies {
 }
 
 minecraft {
-    mappings channel: 'snapshot', version: '20190608-1.14.2'
+    mappings channel: 'snapshot', version: '20190614-1.14.2'
 
     runs {
         client = {

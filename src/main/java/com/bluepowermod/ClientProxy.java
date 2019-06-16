@@ -65,8 +65,7 @@ public class ClientProxy extends CommonProxy {
     }
 
     public static Screen getOpenedGui() {
-        //TODO: Check if this is the current screen
-        return Minecraft.getInstance().field_71462_r;
+        return Minecraft.getInstance().currentScreen;
     }
 
     @Override

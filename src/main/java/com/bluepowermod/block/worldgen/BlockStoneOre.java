@@ -57,9 +57,7 @@ public class BlockStoneOre extends Block {
     }
 
     public BlockStoneOre(String name, Properties properties) {
-
         super(properties);
-
         this.name = name;
         setRegistryName(Refs.MODID, name);
         BPBlocks.blockList.add(this);

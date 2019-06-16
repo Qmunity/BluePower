@@ -1,10 +1,10 @@
 package com.bluepowermod.client.gui.widget;
 
+import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.ItemRenderer;
@@ -15,7 +15,6 @@ import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraftforge.fml.client.FMLClientHandler;
 import org.apache.commons.lang3.text.WordUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
@@ -73,7 +72,7 @@ public class GuiAnimatedStat extends BaseWidget implements IGuiAnimatedStat, IGu
         texture = "";
         this.leftSided = leftSided;
         if (gui != null) {
-            ScaledResolution sr = new ScaledResolution(Minecraft.getInstance());
+            MainWindow sr = Minecraft.getInstance().mainWindow;
             if (sr.getScaledWidth() < 520) {
                 textSize = (sr.getScaledWidth() - 220) * 0.0033F;
             } else {
@@ -203,7 +202,7 @@ public class GuiAnimatedStat extends BaseWidget implements IGuiAnimatedStat, IGu
         oldWidth = width;
         oldHeight = height;
 
-        FontRenderer fontRenderer = FMLClientHandler.instance().getClient().fontRenderer;
+        FontRenderer fontRenderer = Minecraft.getInstance().fontRenderer;
         doneExpanding = true;
         if (isClicked) {
             // calculate the width and height needed for the box to fit the
@@ -276,7 +275,7 @@ public class GuiAnimatedStat extends BaseWidget implements IGuiAnimatedStat, IGu
 
         if (leftSided)
             renderWidth *= -1;
-        AbstractGui.drawRect(renderBaseX, renderAffectedY /* + 1 */, renderBaseX + renderWidth /*- 1*/, renderAffectedY + renderHeight,
+        AbstractGui.fill(renderBaseX, renderAffectedY /* + 1 */, renderBaseX + renderWidth /*- 1*/, renderAffectedY + renderHeight,
                 backGroundColor);
         GL11.glDisable(GL11.GL_TEXTURE_2D);
         GL11.glLineWidth(3.0F);
@@ -329,7 +328,7 @@ public class GuiAnimatedStat extends BaseWidget implements IGuiAnimatedStat, IGu
     protected void renderItem(FontRenderer fontRenderer, int x, int y, ItemStack stack) {
 
         if (itemRenderer == null)
-            itemRenderer = new ItemRenderer(Minecraft.getInstance().getTextureManager(), Minecraft.getInstance().getRenderItem().getItemModelMesher().getModelManager(), Minecraft.getInstance().getItemColors());
+            itemRenderer = new ItemRenderer(Minecraft.getInstance().getTextureManager(), Minecraft.getInstance().getItemRenderer().getItemModelMesher().getModelManager(), Minecraft.getInstance().getItemColors());
         GL11.glPushMatrix();
         GL11.glTranslated(0, 0, -50);
         GL11.glEnable(GL12.GL_RESCALE_NORMAL);

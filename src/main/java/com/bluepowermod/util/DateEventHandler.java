@@ -80,8 +80,7 @@ public class DateEventHandler {
         rocket.setTag(nbttagcompound);
 
         FireworkRocketEntity entity = new FireworkRocketEntity(world, x, y, z, rocket);
-        //TODO: Update Mappings func_217376_c to AddEntity
-        world.func_217376_c(entity);
+        world.addEntity(entity);
     }
 
     private static ItemStack getFireworkCharge() {

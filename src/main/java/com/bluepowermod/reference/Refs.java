@@ -234,6 +234,9 @@ public class Refs {
     public static final AxisAlignedBB GATE_AABB = new AxisAlignedBB(0, 0, 0,  1, 2 / 16, 1);
     public static final String FIXTURELAMP_NAME = "fixture";
     public static final AxisAlignedBB FIXTURELAMP_AABB = new AxisAlignedBB(0.1875, 0.125, 0.1875, 0.8125, 0.5, 0.8125 );
+
+
+   //Configs
     public static final String CONFIG_WORLDGEN = "world gen";
     public static final String CONFIG_TUNGSTEN = "tungsten";
     public static final String CONFIG_COPPER = "copper";

@@ -22,27 +22,31 @@ import com.bluepowermod.util.DateEventHandler;
 import com.bluepowermod.util.DateEventHandler.Event;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.SoundType;
+import net.minecraft.block.material.Material;
 import net.minecraft.entity.item.FallingBlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+import net.minecraft.world.storage.loot.LootContext;
 
+import java.util.List;
 import java.util.Random;
 
 /**
- * 
  * @author MineMaarten
  */
 
 public class BlockCrackedBasalt extends BlockStoneOre {
 
     public BlockCrackedBasalt(String name) {
-        super(name);
-        setTickRandomly(true);
-        setResistance(25.0F);
-        setHarvestLevel("pickaxe", 1);
+        super(name, Properties.create(Material.ROCK).hardnessAndResistance(25.0F).sound(SoundType.STONE).tickRandomly());
     }
 
     @Override
@@ -50,69 +54,46 @@ public class BlockCrackedBasalt extends BlockStoneOre {
         return BlockRenderLayer.CUTOUT;
     }
 
-    @Override
-    public void onBlockClicked(World world, BlockPos pos, PlayerEntity playerIn) {
-        if (world.getBlockState(pos) == this.getDefaultState()) {
-            world.setBlockState(pos, this.getStateFromMeta(1), 2);
-            world.scheduleBlockUpdate(pos, this, 1, 1);
-        }
-    }
 
     @Override
-    public void updateTick(World world, BlockPos pos, BlockState state, Random random) {
-        int meta =  this.getMetaFromState(world.getBlockState(pos));
-        // When this block was active already (meta > 0) or when the random chance hit, spew lava.
-        if (!world.isRemote && (meta > 0 || random.nextInt(100) == 0)) {
-
-            if (meta > 4) {
+    public void randomTick(BlockState state, World world, BlockPos pos, Random random) {
+        // When the random chance hit, spew lava.
+        if (!world.isRemote && (random.nextInt(100) == 0)) {
                 spawnLava(world, pos, random);
-            }
-            if (meta < 15) {
-                if (random.nextInt(40) == 0 || meta == 0)
-                    world.setBlockState(pos, this.getStateFromMeta(meta + 1), 2);
-                world.scheduleBlockUpdate(pos, this, 1, 1);
-            } else {
-                world.setBlockState(pos, Blocks.FLOWING_LAVA.getDefaultState());
-            }
         }
     }
 
-    @Override
-    protected boolean canSilkHarvest() {
-
-        return false;
-    }
+    //TODO: Confirm this can't be silk touched
+    //@Override
+    //protected boolean canSilkHarvest() {
+    //     return false;
+    //}
 
     private void spawnLava(World world, BlockPos pos, Random random) {
         if (DateEventHandler.isEvent(Event.NEW_YEAR)) {
             DateEventHandler.spawnFirework(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
         } else {
             FallingBlockEntity entity = new FallingBlockEntity(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
-                    DateEventHandler.isEvent(Event.HALLOWEEN) ? Blocks.LIT_PUMPKIN.getDefaultState() : Blocks.FLOWING_LAVA.getDefaultState());
-            entity.motionY = 1 + random.nextDouble();
-            entity.motionX = (random.nextDouble() - 0.5) * 0.8D;
-            entity.motionZ = (random.nextDouble() - 0.5) * 0.8D;
+                    DateEventHandler.isEvent(Event.HALLOWEEN) ? Blocks.CARVED_PUMPKIN.getDefaultState() : Blocks.LAVA.getDefaultState());
+            entity.setMotion( 1 + random.nextDouble(), (random.nextDouble() - 0.5) * 0.8D, (random.nextDouble() - 0.5) * 0.8D);
             entity.fallTime = 1;// make this field that keeps track of the ticks set to 1, so it doesn't kill itself when it searches for a lava
             // block.
             entity.shouldDropItem = false; // disable item drops when the falling block fails to place.
-            world.spawnEntity(entity);
+            world.addEntity(entity);
         }
     }
 
     @Override
-    public Item getItemDropped(BlockState state, Random rand, int fortune) {
-        return Item.getItemFromBlock(BPBlocks.basalt_cobble);
+    public List<ItemStack> getDrops(BlockState p_220076_1_, LootContext.Builder p_220076_2_) {
+        NonNullList<ItemStack> itemStacks = NonNullList.create();
+        itemStacks.add(new ItemStack(Item.getItemFromBlock(BPBlocks.basalt_cobble)));
+        return itemStacks;
     }
 
-    /**
-     * A randomly called display update to be able to add particles or other items for display
-     */
     @Override
-    public void randomDisplayTick(BlockState stateIn, World world, BlockPos pos, Random rand) {
-        if (getMetaFromState(world.getBlockState(pos)) > 0) {
+    public void animateTick(BlockState stateIn, World world, BlockPos pos, Random rand) {
             for (int i = 0; i < 10; i++)
-                world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, pos.getX() + rand.nextDouble(), pos.getY() + 1, pos.getZ() + rand.nextDouble(), (rand.nextDouble() - 0.5) * 0.2,
+                world.addParticle(ParticleTypes.SMOKE, pos.getX() + rand.nextDouble(), pos.getY() + 1, pos.getZ() + rand.nextDouble(), (rand.nextDouble() - 0.5) * 0.2,
                         rand.nextDouble() * 0.1, (rand.nextDouble() - 0.5) * 0.2);
-        }
     }
 }

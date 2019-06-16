@@ -10,12 +10,13 @@ package com.bluepowermod;
 
 import com.bluepowermod.api.BPApi;
 import com.bluepowermod.api.power.CapabilityBlutricity;
+import com.bluepowermod.client.gui.BPContainerType;
 import com.bluepowermod.compat.CompatibilityUtils;
 import com.bluepowermod.event.BPEventHandler;
 import com.bluepowermod.init.*;
-import com.bluepowermod.network.BPNetworkHandler;
 import com.bluepowermod.recipe.AlloyFurnaceRegistry;
 import com.bluepowermod.reference.Refs;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
@@ -68,9 +69,7 @@ public class BluePower {
         //GameRegistry.registerWorldGenerator(new WorldGenerationHandler(), 0);
 
         proxy.setup(event);
-        BPNetworkHandler.initBP();
-        //TODO: GUI
-        //NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GUIHandler());
+        DistExecutor.runWhenOn(Dist.CLIENT, () -> BPContainerType::registerScreenFactories);
         CompatibilityUtils.init(event);
 
     }

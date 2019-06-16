@@ -15,20 +15,17 @@ import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.helper.TileEntityCache;
 import com.bluepowermod.container.stack.TubeStack;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockLiquid;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
-import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fluids.IFluidBlock;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -50,10 +47,14 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
     protected boolean ejectionScheduled;
     private static final int WARNING_INTERVAL = 600; // Every 30s
 
-    @Override
-    public void update() {
+    public TileMachineBase(TileEntityType<?> type) {
+        super(type);
+    }
 
-        super.update();
+    @Override
+    public void tick() {
+
+        super.tick();
 
         if (!world.isRemote) {
             if (ejectionScheduled || getTicker() % BUFFER_EMPTY_INTERVAL == 0) {
@@ -168,9 +169,9 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
     }
 
     @Override
-    public void readFromNBT(CompoundNBT compound) {
+    public void read(CompoundNBT compound) {
 
-        super.readFromNBT(compound);
+        super.read(compound);
         ListNBT nbttaglist = compound.getList("ItemBuffer", 10);
 
         for (int i = 0; i < nbttaglist.size(); ++i) {
@@ -181,9 +182,9 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
     }
 
     @Override
-    public CompoundNBT writeToNBT(CompoundNBT compound) {
+    public CompoundNBT write(CompoundNBT compound) {
 
-        super.writeToNBT(compound);
+        super.write(compound);
         ListNBT nbttaglist = new ListNBT();
 
         for (TubeStack tubeStack : internalItemStackBuffer) {
@@ -204,11 +205,8 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
         float spawnZ = pos.getZ() + 0.5F + oppDirection.getZOffset() * 0.8F;
 
         ItemEntity droppedItem = new ItemEntity(world, spawnX, spawnY, spawnZ, stack);
-
         droppedItem.setMotion(oppDirection.getXOffset() * 0.20F, oppDirection.getYOffset() * 0.20F, oppDirection.getZOffset() * 0.20F);
-
-        //TODO: Update Mappings func_217376_c to AddEntity
-        world.func_217376_c(droppedItem);
+        world.addEntity(droppedItem);
     }
 
     @Override
