@@ -17,6 +17,7 @@
 
 package com.bluepowermod.util;
 
+import com.bluepowermod.api.misc.MinecraftColor;
 import net.minecraft.entity.item.FireworkRocketEntity;
 import net.minecraft.item.Items;
 import net.minecraft.item.DyeItem;
@@ -79,8 +80,8 @@ public class DateEventHandler {
         rocket.setTag(nbttagcompound);
 
         FireworkRocketEntity entity = new FireworkRocketEntity(world, x, y, z, rocket);
-        //TODO: Spawn Firework
-        //world.spawnEntity(entity);
+        //TODO: Update Mappings func_217376_c to AddEntity
+        world.func_217376_c(entity);
     }
 
     private static ItemStack getFireworkCharge() {
@@ -90,8 +91,7 @@ public class DateEventHandler {
         CompoundNBT nbttagcompound1 = new CompoundNBT();
         byte b0 = 0;
         ArrayList<Integer> arraylist = new ArrayList<Integer>();
-        //TODO: Add Firework to List
-        //arraylist.add( DyeItem.DYE_COLORS[rand.nextInt(16)]);
+        arraylist.add( MinecraftColor.values()[rand.nextInt(16)].getHex());
 
         if (rand.nextBoolean())
             nbttagcompound1.putBoolean("Flicker", true);

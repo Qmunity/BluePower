@@ -11,7 +11,6 @@ import com.bluepowermod.api.recipe.IAlloyFurnaceRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.Loader;
 
 /**
  * This is then main hub where you can interface with BluePower as a modder. Note that the 'instance' in this class will be filled in BluePower's
@@ -53,7 +52,7 @@ public class BPApi {
      */
     public static void init(IBPApi inst) {
 
-        if (instance == null && Loader.instance().activeModContainer().getModId().equals("bluepower")) {
+        if (instance == null &&  Loader.instance().activeModContainer().getModId().equals("bluepower")) {
             instance = inst;
         } else {
             throw new IllegalStateException("This method should be called from BluePower only!");

@@ -1,6 +1,6 @@
 package com.bluepowermod.api.power;
 
-import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
@@ -18,21 +18,22 @@ public class CapabilityBlutricity {
     public static Capability<IPowerBase> BLUTRICITY_CAPABILITY = null;
 
     public static void register(){
-        CapabilityManager.INSTANCE.register(IPowerBase.class, new DefaultBlutricityStorage<>(), BlutricityStorage.class);
+        //TODO: Add factory
+        CapabilityManager.INSTANCE.register(IPowerBase.class, new DefaultBlutricityStorage<>(), () -> {throw new UnsupportedOperationException();});
     }
 
     private static class DefaultBlutricityStorage<T extends IPowerBase> implements Capability.IStorage<T> {
 
         @Nullable
         @Override
-        public NBTBase writeNBT(Capability<T> capability, T instance, Direction side) {
+        public INBT writeNBT(Capability<T> capability, T instance, Direction direction) {
             CompoundNBT nbt = new CompoundNBT();
-            nbt.setDouble("blutricity", instance.getVoltage());
+            nbt.putDouble("blutricity", instance.getVoltage());
             return nbt;
         }
 
         @Override
-        public void readNBT(Capability<T> capability, T instance, Direction side, NBTBase nbt) {
+        public void readNBT(Capability<T> capability, T instance, Direction side, INBT nbt) {
             CompoundNBT tags = (CompoundNBT) nbt;
             double energy = tags.getDouble("blutricity");
             instance.addEnergy(-(instance.getVoltage() - energy), false);

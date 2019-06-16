@@ -23,6 +23,9 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
+import net.minecraft.util.math.Vec3d;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fluids.IFluidBlock;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -82,7 +85,7 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
             } else if (spawnItemsInWorld) {
                 Direction direction = getFacingDirection().getOpposite();
                 Block block = world.getBlockState(pos.offset(direction)).getBlock();
-                if (block.isPassable(world, pos.offset(direction)) || block instanceof BlockLiquid || block instanceof IFluidBlock) {
+                if (!world.getBlockState( pos.offset(direction)).isSolid() || block instanceof IFluidBlock) {
                     ejectItemInWorld(tubeStack.stack, direction);
                     iterator.remove();
                     markDirty();
@@ -168,10 +171,10 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
     public void readFromNBT(CompoundNBT compound) {
 
         super.readFromNBT(compound);
-        ListNBT nbttaglist = compound.getTagList("ItemBuffer", 10);
+        ListNBT nbttaglist = compound.getList("ItemBuffer", 10);
 
-        for (int i = 0; i < nbttaglist.tagCount(); ++i) {
-            CompoundNBT nbttagcompound1 = nbttaglist.getCompoundTagAt(i);
+        for (int i = 0; i < nbttaglist.size(); ++i) {
+            CompoundNBT nbttagcompound1 = nbttaglist.getCompound(i);
 
             internalItemStackBuffer.add(TubeStack.loadFromNBT(nbttagcompound1));
         }
@@ -187,10 +190,10 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
             if (tubeStack != null) {
                 CompoundNBT nbttagcompound1 = new CompoundNBT();
                 tubeStack.writeToNBT(nbttagcompound1);
-                nbttaglist.appendTag(nbttagcompound1);
+                nbttaglist.add(nbttagcompound1);
             }
         }
-        compound.setTag("ItemBuffer", nbttaglist);
+        compound.put("ItemBuffer", nbttaglist);
         return compound;
     }
 
@@ -202,11 +205,10 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
 
         ItemEntity droppedItem = new ItemEntity(world, spawnX, spawnY, spawnZ, stack);
 
-        droppedItem.motionX = oppDirection.getXOffset() * 0.20F;
-        droppedItem.motionY = oppDirection.getYOffset() * 0.20F;
-        droppedItem.motionZ = oppDirection.getZOffset() * 0.20F;
+        droppedItem.setMotion(oppDirection.getXOffset() * 0.20F, oppDirection.getYOffset() * 0.20F, oppDirection.getZOffset() * 0.20F);
 
-        world.spawnEntity(droppedItem);
+        //TODO: Update Mappings func_217376_c to AddEntity
+        world.func_217376_c(droppedItem);
     }
 
     @Override

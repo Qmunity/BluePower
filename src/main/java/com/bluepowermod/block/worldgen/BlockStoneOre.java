@@ -28,16 +28,18 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.boss.WitherEntity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.Explosion;
-import net.minecraft.world.World;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextComponentUtils;
+import net.minecraft.world.*;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.Random;
 
 public class BlockStoneOre extends Block {
 
@@ -48,13 +50,8 @@ public class BlockStoneOre extends Block {
     private String[] tooltip = new String[] {};
 
     public BlockStoneOre(String name) {
-
-        super(Properties.create(Material.ROCK).hardnessAndResistance(5.0F));
-
+        super(Properties.create(Material.ROCK).hardnessAndResistance(5.0F).sound(SoundType.STONE));
         this.name = name;
-        setTranslationKey(name);
-        setCreativeTab(BPCreativeTabs.blocks);
-        setSoundType(SoundType.STONE);
         setRegistryName(Refs.MODID, name);
         BPBlocks.blockList.add(this);
     }
@@ -68,27 +65,15 @@ public class BlockStoneOre extends Block {
         BPBlocks.blockList.add(this);
     }
 
-    public Block setToolLevel(int level) {
-
-        super.setHarvestLevel("pickaxe", level);
-        return this;
-    }
-
     @Override
     public String getTranslationKey() {
 
         return String.format("tile." + Refs.MODID + ":" + name);
     }
 
-    @Override
-    public Item getItemDropped(BlockState state, Random rand, int fortune) {
-        return Item.getItemFromBlock(Block.getBlockFromName(Refs.MODID + ":" + name));
-    }
-
-
     // Allow storage blocks to be used as a beacon base
     @Override
-    public boolean isBeaconBase(IBlockAccess worldObj, BlockPos pos, BlockPos beacon) {
+    public boolean isBeaconBase(BlockState state, IWorldReader world, BlockPos pos, BlockPos beacon) {
         return this == BPBlocks.amethyst_block || this == BPBlocks.ruby_block || this == BPBlocks.malachite_block || this == BPBlocks.sapphire_block
                 || this == BPBlocks.copper_block || this == BPBlocks.zinc_block || this == BPBlocks.silver_block
                 || this == BPBlocks.tungsten_block;
@@ -102,29 +87,14 @@ public class BlockStoneOre extends Block {
     }
 
     @Override
-    public boolean isNormalCube(BlockState state, IBlockAccess world, BlockPos pos) {
-        return !transparent;
-    }
-
-    @Override
-    public boolean isNormalCube(BlockState state) {
-        return !transparent;
-    }
-
-    @Override
-    public boolean isOpaqueCube(BlockState state) {
-        return !transparent;
-    }
-
-    @Override
     @OnlyIn(Dist.CLIENT)
     public BlockRenderLayer getRenderLayer() {
         return transparent ? BlockRenderLayer.TRANSLUCENT : BlockRenderLayer.SOLID;
     }
 
     @Override
-    public int getLightOpacity(BlockState state, IBlockAccess world, BlockPos pos) {
-        return transparent ? 0 : super.getLightOpacity(state, world, pos);
+    public int getOpacity(BlockState state, IBlockReader worldIn, BlockPos pos) {
+        return transparent ? 0 : super.getOpacity(state, worldIn, pos);
     }
 
     public BlockStoneOre setWitherproof(boolean witherproof) {
@@ -133,17 +103,16 @@ public class BlockStoneOre extends Block {
         return this;
     }
 
-
     @Override
-    public void addInformation(ItemStack stack, @Nullable World player, List<String> tooltip, ITooltipFlag advanced) {
-        super.addInformation(stack, player, tooltip, advanced);
+    public void addInformation(ItemStack stack, @Nullable IBlockReader worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+        super.addInformation(stack, worldIn, tooltip, flagIn);
         if(witherproof){
-            tooltip.add(MinecraftColor.RED.getChatColor() + "Witherproof");
+            tooltip.add(new StringTextComponent(MinecraftColor.RED.getChatColor() + "Witherproof"));
         }
     }
 
     @Override
-    public boolean canEntityDestroy(BlockState state, IBlockAccess world, BlockPos pos, Entity entity) {
+    public boolean canEntityDestroy(BlockState state, IBlockReader world, BlockPos pos, Entity entity) {
         if (witherproof)
             return !(entity instanceof WitherEntity) && super.canEntityDestroy(state, world, pos, entity);
 
@@ -151,9 +120,10 @@ public class BlockStoneOre extends Block {
     }
 
     @Override
-    public void onBlockExploded(World world, BlockPos pos, Explosion explosion) {
+    public void onExplosionDestroy(World worldIn, BlockPos pos, Explosion explosionIn) {
+        //TODO: Test Witherproof still works
         if (!witherproof)
-            super.onBlockExploded(world, pos, explosion);
+            super.onExplosionDestroy(worldIn, pos, explosionIn);
     }
 
     @Override

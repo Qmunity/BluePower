@@ -19,11 +19,14 @@ package com.bluepowermod.block.worldgen;
 
 import com.bluepowermod.init.BPItems;
 import net.minecraft.block.BlockState;
-import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IWorldReader;
+import net.minecraft.world.storage.loot.LootContext;
 
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -36,14 +39,17 @@ public class BlockTeslatiteOre extends BlockItemOre {
     }
 
     @Override
-    public int getExpDrop(BlockState state, IBlockAccess world, BlockPos pos, int fortune) {
-        return MathHelper.getInt(rand, 2, 5);
+    public int getExpDrop(BlockState state, IWorldReader world, BlockPos pos, int fortune, int silktouch) {
+        return MathHelper.nextInt(rand, 2, 5);
     }
 
     @Override
-    public Item getItemDropped(BlockState state, Random rand, int fortune) {
-        return BPItems.teslatite_dust;
+    public List<ItemStack> getDrops(BlockState p_220076_1_, LootContext.Builder p_220076_2_) {
+        List<ItemStack> stacks = NonNullList.create();
+        stacks.add(new ItemStack(BPItems.teslatite_dust));
+        return stacks;
     }
+
 
     @Override
     public int quantityDropped(Random rand) {
