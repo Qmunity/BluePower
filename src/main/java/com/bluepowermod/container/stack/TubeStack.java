@@ -10,23 +10,21 @@ package com.bluepowermod.container.stack;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemRenderer;
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
+import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.DyeItem;
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.*;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
+import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import net.minecraftforge.fml.client.FMLClientHandler;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
 import com.bluepowermod.client.render.RenderHelper;
@@ -133,30 +131,29 @@ public class TubeStack {
 
     public void writeToNBT(CompoundNBT tag) {
 
-        stack.writeToNBT(tag);
-        tag.setByte("color", (byte) color.ordinal());
-        tag.setByte("heading", (byte) heading.ordinal());
-        tag.setDouble("progress", progress);
-        tag.setDouble("speed", speed);
-        tag.setInteger("targetX", targetX);
-        tag.setInteger("targetY", targetY);
-        tag.setInteger("targetZ", targetZ);
+        stack.write(tag);
+        tag.putByte("color", (byte) color.ordinal());
+        tag.putByte("heading", (byte) heading.ordinal());
+        tag.putDouble("progress", progress);
+        tag.putDouble("speed", speed);
+        tag.putInt("targetX", targetX);
+        tag.putInt("targetY", targetY);
+        tag.putInt("targetZ", targetZ);
     }
 
     public static TubeStack loadFromNBT(CompoundNBT tag) {
 
-        TubeStack stack = new TubeStack(new ItemStack(tag), Direction.byIndex(tag.getByte("heading")),
+        TubeStack stack = new TubeStack(new ItemStack((IItemProvider) tag), Direction.byIndex(tag.getByte("heading")),
                 TubeColor.values()[tag.getByte("color")]);
         stack.progress = tag.getDouble("progress");
         stack.speed = tag.getDouble("speed");
-        stack.targetX = tag.getInteger("targetX");
-        stack.targetY = tag.getInteger("targetY");
-        stack.targetZ = tag.getInteger("targetZ");
+        stack.targetX = tag.getInt("targetX");
+        stack.targetY = tag.getInt("targetY");
+        stack.targetZ = tag.getInt("targetZ");
         return stack;
     }
 
     public void writeToPacket(ByteBuf buf) {
-
         ByteBufUtils.writeItemStack(buf, stack);
         buf.writeByte(heading.ordinal());
         buf.writeByte((byte) color.ordinal());
@@ -182,10 +179,9 @@ public class TubeStack {
         final RenderMode finalRenderMode = renderMode;
 
         if (customRenderItem == null) {
-            customRenderItem = Minecraft.getInstance().getRenderItem();
+            customRenderItem = Minecraft.getInstance().getItemRenderer();
 
-            renderedItem = new ItemEntity(FMLClientHandler.instance().getWorldClient());
-            renderedItem.hoverStart = 0.0F;
+            renderedItem = new ItemEntity(Minecraft.getInstance().world, 0,0,0);
         }
 
         double renderProgress = (oldProgress + (progress - oldProgress) * partialTick) * 2 - 1;
@@ -217,7 +213,7 @@ public class TubeStack {
 
             float size = 0.2F;
 
-            int colorInt = DyeItem.DYE_COLORS[color.ordinal()];
+            int colorInt = DyeColor.values()[color.ordinal()].getId();
             float red = (colorInt >> 16) / 256F;
             float green = (colorInt >> 8 & 255) / 256F;
             float blue = (colorInt & 255) / 256F;
@@ -225,7 +221,8 @@ public class TubeStack {
             GL11.glDisable(GL11.GL_CULL_FACE);
             GL11.glDisable(GL11.GL_LIGHTING);
             GL11.glColor3f(red, green, blue);
-            Minecraft.getInstance().renderEngine.bindTexture(new ResourceLocation(Refs.MODID, "textures/blocks/tubes/inside_color_border.png"));
+            //TODO: Find replacement for RenderEngine
+            //Minecraft.getInstance().renderEngine.bindTexture(new ResourceLocation(Refs.MODID, "textures/blocks/tubes/inside_color_border.png"));
             RenderHelper.drawTesselatedTexturedCube(new AxisAlignedBB(-size, -size, -size, size, size, size));
             GL11.glEnable(GL11.GL_CULL_FACE);
             GL11.glEnable(GL11.GL_LIGHTING);

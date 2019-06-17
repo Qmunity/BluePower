@@ -2,13 +2,19 @@ package com.bluepowermod.client.gui;
 
 import com.bluepowermod.BluePower;
 import com.bluepowermod.client.gui.widget.*;
+import com.bluepowermod.container.ContainerAlloyFurnace;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextComponentUtils;
 import org.apache.commons.lang3.text.WordUtils;
 import org.lwjgl.opengl.GL11;
 
@@ -21,28 +27,19 @@ import java.util.List;
  * @author MineMaarten
  * @author K-4U
  */
-public class GuiContainerBase extends ContainerScreen implements IWidgetListener {
+public class GuiContainerBase<T extends Container> extends ContainerScreen<T> implements IWidgetListener {
 
     protected static final int COLOR_TEXT = 4210752;
     protected final List<IGuiWidget> widgets = new ArrayList<IGuiWidget>();
-    private final ResourceLocation resLoc;
     protected IInventory inventory;
     protected IGuiAnimatedStat lastLeftStat, lastRightStat;
 
-    public GuiContainerBase(Container mainContainer, ResourceLocation _resLoc) {
+    public GuiContainerBase(T container, PlayerInventory playerInventory, ITextComponent title){
+        super(container, playerInventory, title);
 
-        super(mainContainer);
-        resLoc = _resLoc;
-    }
-
-    public GuiContainerBase(IInventory inventory, Container mainContainer, ResourceLocation _resLoc) {
-
-        this(mainContainer, _resLoc);
-        this.inventory = inventory;
     }
 
     protected boolean isInfoStatLeftSided() {
-
         return true;
     }
 
@@ -79,11 +76,10 @@ public class GuiContainerBase extends ContainerScreen implements IWidgetListener
     }
 
     @Override
-    public void setWorldAndResolution(Minecraft par1Minecraft, int par2, int par3) {
-
+    public void setSize(int par2, int par3) {
         widgets.clear();
         lastLeftStat = lastRightStat = null;
-        super.setWorldAndResolution(par1Minecraft, par2, par3);
+        super.setSize( par2, par3);
     }
 
     public static void drawVerticalProgressBar(int xOffset, int yOffset, int h, int w, float value, float max, int color) {
@@ -127,7 +123,7 @@ public class GuiContainerBase extends ContainerScreen implements IWidgetListener
         int x = (width - xSize) / 2;
         int y = (height - ySize) / 2;
 
-        drawTexturedModalRect(x, y, 0, 0, xSize, ySize);
+        blit(x, y, 0, 0, xSize, ySize);
 
         for (IGuiWidget widget : widgets) {
             widget.render(i, j, f);
@@ -160,13 +156,8 @@ public class GuiContainerBase extends ContainerScreen implements IWidgetListener
     }
 
     @Override
-    protected void mouseClicked(int x, int y, int button) {
-
-        try {
-            super.mouseClicked(x, y, button);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public boolean mouseClicked(double x, double y, int button) {
+        super.mouseClicked(x, y, button);
         for (IGuiWidget widget : widgets) {
             if (widget.getBounds().contains(x, y) && (!(widget instanceof BaseWidget) || ((BaseWidget) widget).enabled))
                 widget.onMouseClicked(x, y, button);

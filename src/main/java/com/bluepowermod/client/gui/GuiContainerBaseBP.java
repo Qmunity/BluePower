@@ -1,23 +1,20 @@
 package com.bluepowermod.client.gui;
 
 import com.bluepowermod.client.gui.widget.WidgetTabItemLister;
+import com.bluepowermod.container.ContainerAlloyFurnace;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.TileMachineBase;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
 
-public class GuiContainerBaseBP extends GuiContainerBase {
+public class GuiContainerBaseBP<T extends Container> extends GuiContainerBase<T> {
 
-    public GuiContainerBaseBP(Container mainContainer, ResourceLocation _resLoc) {
-
-        super(mainContainer, _resLoc);
-    }
-
-    public GuiContainerBaseBP(IInventory inventory, Container mainContainer, ResourceLocation _resLoc) {
-
-        super(inventory, mainContainer, _resLoc);
+    public GuiContainerBaseBP(T container, PlayerInventory playerInventory, ITextComponent title){
+        super(container, playerInventory, title);
     }
 
     @Override

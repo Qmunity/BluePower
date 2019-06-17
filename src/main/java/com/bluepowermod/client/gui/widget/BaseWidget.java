@@ -1,7 +1,7 @@
 package com.bluepowermod.client.gui.widget;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.PositionedSoundRecord;
+import net.minecraft.client.audio.SimpleSound;
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.ResourceLocation;
@@ -69,7 +69,7 @@ public class BaseWidget implements IGuiWidget {
         }
         if (textures.length > 0)
             Minecraft.getInstance().getTextureManager().bindTexture(textures[textureIndex]);
-        AbstractGui.drawModalRectWithCustomSizedTexture(x, y, getTextureU(), getTextureV(), width, height, getTextureWidth(), getTextureHeight());
+        AbstractGui.blit(x, y, getTextureU(), getTextureV(), width, height, getTextureWidth(), getTextureHeight());
     }
 
     protected int getTextureU() {
@@ -96,7 +96,7 @@ public class BaseWidget implements IGuiWidget {
     public void onMouseClicked(int mouseX, int mouseY, int button) {
 
         Minecraft.getInstance().getSoundHandler()
-                .playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+                .play(SimpleSound.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
         gui.actionPerformed(this);
     }
 

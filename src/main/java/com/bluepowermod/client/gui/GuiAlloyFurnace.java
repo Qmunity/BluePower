@@ -17,43 +17,40 @@
 
 package com.bluepowermod.client.gui;
 
+import net.minecraft.client.gui.IHasContainer;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 
 import com.bluepowermod.container.ContainerAlloyFurnace;
 import com.bluepowermod.reference.Refs;
-import com.bluepowermod.tile.tier1.TileAlloyFurnace;
+import net.minecraft.util.text.ITextComponent;
 
 /**
  * @author MineMaarten
  */
-public class GuiAlloyFurnace extends GuiContainerBaseBP {
+public class GuiAlloyFurnace extends GuiContainerBaseBP<ContainerAlloyFurnace> implements IHasContainer<ContainerAlloyFurnace> {
 
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/alloy_furnace.png");
-    private final TileAlloyFurnace furnace;
+    private final ContainerAlloyFurnace furnace;
 
-    public GuiAlloyFurnace(PlayerInventory invPlayer, TileAlloyFurnace furnace) {
-
-        super(furnace, new ContainerAlloyFurnace(invPlayer, furnace), resLoc);
-        this.furnace = furnace;
+    public GuiAlloyFurnace(ContainerAlloyFurnace container, PlayerInventory playerInventory, ITextComponent title){
+        super(container, playerInventory, title);
+        this.furnace = container;
     }
 
     @Override
-    protected void drawGuiContainerBackgroundLayer(float f, int i, int j) {
-
-        super.drawGuiContainerBackgroundLayer(f, i, j);
-
+    protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY){
         int x = (width - xSize) / 2;
         int y = (height - ySize) / 2;
 
-        mc.renderEngine.bindTexture(resLoc);
+        this.minecraft.getTextureManager().bindTexture(resLoc);
 
         int burningPercentage = (int) (furnace.getBurningPercentage() * 13);
         if (burningPercentage > 0)
-            drawTexturedModalRect(x + 22, y + 54 + 13 - burningPercentage, 177, 13 - burningPercentage, 14, burningPercentage + 1);
+            this.blit(x + 22, y + 54 + 13 - burningPercentage, 177, 13 - burningPercentage, 14, burningPercentage + 1);
 
         int processPercentage = (int) (furnace.getProcessPercentage() * 22);
-        drawTexturedModalRect(x + 103, y + 35, 178, 14, processPercentage, 15);
+        this.blit(x + 103, y + 35, 178, 14, processPercentage, 15);
     }
 
 }
