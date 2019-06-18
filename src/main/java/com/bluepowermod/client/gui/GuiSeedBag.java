@@ -19,19 +19,20 @@
 
 package com.bluepowermod.client.gui;
 
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
+import net.minecraft.client.gui.IHasContainer;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 
 import com.bluepowermod.container.ContainerSeedBag;
 import com.bluepowermod.reference.Refs;
+import net.minecraft.util.text.ITextComponent;
 
-public class GuiSeedBag extends GuiContainerBaseBP {
+public class GuiSeedBag extends GuiContainerBaseBP<ContainerSeedBag> implements IHasContainer<ContainerSeedBag> {
 
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/seedbag.png");
 
-    public GuiSeedBag(ItemStack bag, IInventory playerInventory, IInventory seedBagInventory) {
-
-        super(seedBagInventory, new ContainerSeedBag(bag, playerInventory, seedBagInventory), resLoc);
+    public GuiSeedBag(ContainerSeedBag container, PlayerInventory playerInventory, ITextComponent title){
+        super(container, playerInventory, title, resLoc);
     }
+
 }

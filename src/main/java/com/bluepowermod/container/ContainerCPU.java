@@ -7,24 +7,25 @@
  */
 package com.bluepowermod.container;
 
+import com.bluepowermod.client.gui.BPContainerType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.container.Container;
-
-import com.bluepowermod.tile.tier3.TileCPU;
 
 public class ContainerCPU extends Container {
 
-	private final TileCPU cpu;
-	
-	public ContainerCPU(PlayerInventory invPlayer, TileCPU cpu) {
+	public ContainerCPU(int windowId, PlayerInventory invPlayer, IInventory inventory) {
+		super(BPContainerType.CPU, windowId);
+	}
 
-		this.cpu = cpu;
+	public ContainerCPU( int id, PlayerInventory player )    {
+		this( id, player, new Inventory( 0 ));
 	}
 
 	@Override
 	public boolean canInteractWith(PlayerEntity entityplayer) {
-
 		return true;
 	}
 

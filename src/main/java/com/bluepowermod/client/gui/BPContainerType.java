@@ -102,14 +102,33 @@ public class BPContainerType {
 
 
     @Mod.EventBusSubscriber(modid = Refs.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
-    public static class Registration
-    {
+    public static class Registration{
         @SubscribeEvent
-        public static void onContainerTypeRegistry(final RegistryEvent.Register<ContainerType<?>> e)
-        {
+        public static void onContainerTypeRegistry(final RegistryEvent.Register<ContainerType<?>> e){
             e.getRegistry().registerAll(
                     new ContainerType<>(ContainerAlloyFurnace::new).setRegistryName(ContainerNames.ALLOY_FURNACE),
-                    new ContainerType<>(ContainerBuffer::new).setRegistryName(ContainerNames.BUFFER)
+                    new ContainerType<>(ContainerBuffer::new).setRegistryName(ContainerNames.BUFFER),
+                    new ContainerType<>(ContainerSortingMachine::new).setRegistryName(ContainerNames.SORTING_MACHINE),
+                    new ContainerType<>(ContainerSeedBag::new).setRegistryName(ContainerNames.SEEDBAG),
+                    new ContainerType<>(ContainerCanvasBag::new).setRegistryName(ContainerNames.CANVAS_BAG),
+                    new ContainerType<>(ContainerCPU::new).setRegistryName(ContainerNames.CPU),
+                    new ContainerType<>(ContainerMonitor::new).setRegistryName(ContainerNames.MONITOR),
+                    new ContainerType<>(ContainerDiskDrive::new).setRegistryName(ContainerNames.DISK_DRIVE),
+                    new ContainerType<>(ContainerIOExpander::new).setRegistryName(ContainerNames.IO_EXPANDER),
+                    new ContainerType<>(ContainerRedbusID::new).setRegistryName(ContainerNames.REDBUS),
+                    new ContainerType<>(ContainerKinect::new).setRegistryName(ContainerNames.KINETIC_GENERATOR),
+                    new ContainerType<>(ContainerDeployer::new).setRegistryName(ContainerNames.DEPLOYER),
+                    new ContainerType<>(ContainerRelay::new).setRegistryName(ContainerNames.RELAY),
+                    new ContainerType<>(ContainerEjector::new).setRegistryName(ContainerNames.EJECTOR),
+                    new ContainerType<>(ContainerFilter::new).setRegistryName(ContainerNames.FILTER),
+                    new ContainerType<>(ContainerRetriever::new).setRegistryName(ContainerNames.RETRIEVER),
+                    new ContainerType<>(ContainerRegulator::new).setRegistryName(ContainerNames.REGULATOR),
+                    new ContainerType<>(ContainerItemDetector::new).setRegistryName(ContainerNames.ITEM_DETECTOR),
+                    new ContainerType<>(ContainerProjectTable::new).setRegistryName(ContainerNames.PROJECT_TABLE),
+                    new ContainerType<>(ContainerCircuitTable::new).setRegistryName(ContainerNames.CIRCUIT_TABLE),
+                    new ContainerType<>(ContainerManager::new).setRegistryName(ContainerNames.MANAGER),
+                    new ContainerType<>(ContainerCircuitDatabaseMain::new).setRegistryName(ContainerNames.CIRCUITDATABASE_MAIN),
+                    new ContainerType<>(ContainerCircuitDatabaseSharing::new).setRegistryName(ContainerNames.CIRCUITDATABASE_SHARING)
             );
         }
     }
@@ -118,6 +137,27 @@ public class BPContainerType {
     public static void registerScreenFactories(){
         ScreenManager.registerFactory(ALLOY_FURNACE, GuiAlloyFurnace::new);
         ScreenManager.registerFactory(BUFFER, GuiBuffer::new);
+        ScreenManager.registerFactory(SORTING_MACHINE, GuiSortingMachine::new);
+        ScreenManager.registerFactory(SEEDBAG, GuiSeedBag::new);
+        ScreenManager.registerFactory(CANVAS_BAG, GuiCanvasBag::new);
+        ScreenManager.registerFactory(CPU, GuiCPU::new);
+        ScreenManager.registerFactory(MONITOR, GuiMonitor::new);
+        ScreenManager.registerFactory(DISK_DRIVE, GuiDiskDrive::new);
+        ScreenManager.registerFactory(IO_EXPANDER, GuiIOExpander::new);
+        ScreenManager.registerFactory(REDBUS, GuiRedbusID::new);
+        ScreenManager.registerFactory(KINETIC_GENERATOR, GuiKinect::new);
+        ScreenManager.registerFactory(DEPLOYER, GuiDeployer::new);
+        ScreenManager.registerFactory(RELAY, GuiRelay::new);
+        ScreenManager.registerFactory(EJECTOR, GuiEjector::new);
+        ScreenManager.registerFactory(FILTER, GuiFilter::new);
+        ScreenManager.registerFactory(RETRIEVER, GuiRetriever::new);
+        ScreenManager.registerFactory(REGULATOR, GuiRegulator::new);
+        ScreenManager.registerFactory(ITEM_DETECTOR, GuiItemDetector::new);
+        ScreenManager.registerFactory(PROJECT_TABLE, GuiProjectTable::new);
+        ScreenManager.registerFactory(CIRCUIT_TABLE, GuiCircuitTable::new);
+        ScreenManager.registerFactory(MANAGER, GuiManager::new);
+        ScreenManager.registerFactory(CIRCUITDATABASE_MAIN, GuiCircuitDatabaseMain::new);
+        ScreenManager.registerFactory(CIRCUITDATABASE_SHARING, GuiCircuitDatabaseSharing::new);
     }
 
 }

@@ -19,41 +19,39 @@ package com.bluepowermod.client.gui;
 
 import com.bluepowermod.client.gui.widget.*;
 import com.bluepowermod.container.ContainerSortingMachine;
-import com.bluepowermod.network.BPNetworkHandler;
-import com.bluepowermod.network.message.MessageGuiUpdate;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier2.TileSortingMachine;
 import com.bluepowermod.tile.tier2.TileSortingMachine.PullMode;
 import com.bluepowermod.tile.tier2.TileSortingMachine.SortMode;
 import net.minecraft.client.gui.AbstractGui;
+import net.minecraft.client.gui.IHasContainer;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
+
 import java.util.List;
 
 /**
- *
  * @author MineMaarten
  */
 
-public class GuiSortingMachine extends GuiContainerBaseBP {
+public class GuiSortingMachine extends GuiContainerBaseBP<ContainerSortingMachine> implements IHasContainer<ContainerSortingMachine> {
 
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/sorting_machine.png");
-    private final TileSortingMachine sortingMachine;
+    private final ContainerSortingMachine sortingMachine;
 
-    public GuiSortingMachine(PlayerInventory invPlayer, TileSortingMachine sortingMachine) {
-
-        super(sortingMachine, new ContainerSortingMachine(invPlayer, sortingMachine), resLoc);
-        this.sortingMachine = sortingMachine;
+    public GuiSortingMachine(ContainerSortingMachine container, PlayerInventory playerInventory, ITextComponent title){
+        super(container, playerInventory, title, resLoc);
+        this.sortingMachine = container;
         ySize = 239;
     }
 
     @Override
-    public void initGui() {
-
-        super.initGui();
+    public void init() {
+        super.init();
         for (int i = 0; i < 8; i++) {
             WidgetColor colorWidget = new WidgetColor(i, guiLeft + 27 + 18 * i, guiTop + 110);
-            colorWidget.value = sortingMachine.colors[i].ordinal();
+            colorWidget.value = i;
             addWidget(colorWidget);
         }
 
@@ -61,7 +59,7 @@ public class GuiSortingMachine extends GuiContainerBaseBP {
         case ANY_ITEM_DEFAULT:
         case ANY_STACK_DEFAULT:
             WidgetColor colorWidget = new WidgetColor(8, guiLeft + 7, guiTop + 122);
-            colorWidget.value = sortingMachine.colors[8].ordinal();
+            colorWidget.value = 8;
             addWidget(colorWidget);
         }
 
@@ -112,7 +110,8 @@ public class GuiSortingMachine extends GuiContainerBaseBP {
     public void actionPerformed(IGuiWidget widget) {
 
         BaseWidget baseWidget = (BaseWidget) widget;
-        BPNetworkHandler.INSTANCE.sendToServer(new MessageGuiUpdate(sortingMachine, widget.getID(), baseWidget.value));
+        //TODO: Check Network Handler
+        //BPNetworkHandler.INSTANCE.sendToServer(new MessageGuiUpdate(sortingMachine, widget.getID(), baseWidget.value));
     }
 
     @Override
@@ -121,8 +120,8 @@ public class GuiSortingMachine extends GuiContainerBaseBP {
         super.drawGuiContainerBackgroundLayer(f, i, j);
 
         if (sortingMachine.sortMode == SortMode.ALLSTACK_SEQUENTIAL || sortingMachine.sortMode == SortMode.ANYSTACK_SEQUENTIAL) {
-            mc.renderEngine.bindTexture(resLoc);
-            AbstractGui.drawModalRectWithCustomSizedTexture(guiLeft + 24 + sortingMachine.curColumn * 18, guiTop + 16, 176, 0, 20, 92, 256, 256);
+            this.minecraft.getTextureManager().bindTexture(resLoc);
+            AbstractGui.blit(guiLeft + 24 + sortingMachine.curColumn * 18, guiTop + 16, 176, 0, 20, 92, 256, 256);
         }
     }
 

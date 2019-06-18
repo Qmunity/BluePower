@@ -8,6 +8,7 @@
 package com.bluepowermod.tile.tier3;
 
 import com.bluepowermod.BluePower;
+import com.bluepowermod.tile.BPTileEntityType;
 import com.bluepowermod.tile.TileBase;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.SoundEvents;
@@ -66,6 +67,7 @@ public class TileCPU extends TileBase implements IRedBusWindow {
     private int BRKaddress;
 
     public TileCPU() {
+        super(BPTileEntityType.CPU);
         //TODO: make memory a config option
         this.memory = new byte[8192];
         powerOnReset();
@@ -122,7 +124,7 @@ public class TileCPU extends TileBase implements IRedBusWindow {
     //TODO: NBT read/write
     
     @Override
-    public void update() {
+    public void tick() {
         // 20 ticks per second = 20khz
         if (halt) return;
         this.rtc += 1;

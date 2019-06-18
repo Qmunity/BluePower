@@ -13,8 +13,8 @@ import net.minecraft.util.text.ITextComponent;
 
 public class GuiContainerBaseBP<T extends Container> extends GuiContainerBase<T> {
 
-    public GuiContainerBaseBP(T container, PlayerInventory playerInventory, ITextComponent title){
-        super(container, playerInventory, title);
+    public GuiContainerBaseBP(T container, PlayerInventory playerInventory, ITextComponent title, ResourceLocation resloc){
+        super(container, playerInventory, title, resloc);
     }
 
     @Override

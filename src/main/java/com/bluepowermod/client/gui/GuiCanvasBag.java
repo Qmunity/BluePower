@@ -19,29 +19,23 @@
 
 package com.bluepowermod.client.gui;
 
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 
 import com.bluepowermod.container.ContainerCanvasBag;
 import com.bluepowermod.reference.Refs;
+import net.minecraft.util.text.ITextComponent;
 
 public class GuiCanvasBag extends GuiContainerBaseBP {
 
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/canvas_bag.png");
-    ItemStack bag;
 
-    public GuiCanvasBag(ItemStack bag, IInventory playerInventory, IInventory canvasBagInventory) {
-
-        super(canvasBagInventory, new ContainerCanvasBag(bag, playerInventory, canvasBagInventory), resLoc);
-
-        this.bag = bag;
+    public GuiCanvasBag(ContainerCanvasBag container, PlayerInventory playerInventory, ITextComponent title){
+        super(container, playerInventory, title, resLoc);
     }
 
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-
         super.drawGuiContainerForegroundLayer(mouseX, mouseY);
-
     }
 }

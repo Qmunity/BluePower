@@ -7,21 +7,19 @@
  */
 package com.bluepowermod.client.gui;
 
+import net.minecraft.client.gui.IHasContainer;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 
 import com.bluepowermod.container.ContainerCPU;
 import com.bluepowermod.reference.Refs;
-import com.bluepowermod.tile.tier3.TileCPU;
+import net.minecraft.util.text.ITextComponent;
 
-public class GuiCPU extends GuiContainerBaseBP {
-
-    private final TileCPU cpu;
+public class GuiCPU extends GuiContainerBaseBP<ContainerCPU> implements IHasContainer<ContainerCPU> {
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID + ":textures/gui/cpugui.png");
 
-    public GuiCPU(PlayerInventory invPlayer, TileCPU cpu) {
-
-        super(new ContainerCPU(invPlayer, cpu), resLoc);
-        this.cpu = cpu;
+    public GuiCPU(ContainerCPU container, PlayerInventory playerInventory, ITextComponent title){
+        super(container, playerInventory, title, resLoc);
     }
+
 }

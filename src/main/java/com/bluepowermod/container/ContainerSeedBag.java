@@ -19,7 +19,11 @@
 
 package com.bluepowermod.container;
 
+import com.bluepowermod.client.gui.BPContainerType;
+import com.bluepowermod.tile.tier1.TileBuffer;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.container.Slot;
@@ -31,36 +35,38 @@ import com.bluepowermod.container.slot.SlotSeedBag;
 import com.bluepowermod.item.ItemSeedBag;
 
 public class ContainerSeedBag extends Container {
-    
-    IInventory seedBagInventory;
-    ItemStack bag;
-    
-    public ContainerSeedBag(ItemStack bag,IInventory playerInventory, IInventory seedBagInventory) {
-    
-        this.seedBagInventory = seedBagInventory;
-        this.bag = bag;
+
+    private IInventory seedBagInventory;
+
+    public ContainerSeedBag(PlayerInventory playerInventory, IInventory inventory, int windowId) {
+        super(BPContainerType.SEEDBAG, windowId);
+        this.seedBagInventory = inventory;
         
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 3; ++j) {
-                this.addSlotToContainer(new SlotSeedBag(seedBagInventory, j + i * 3, 62 + j * 18, 17 + i * 18));
+                this.addSlot(new SlotSeedBag(seedBagInventory, j + i * 3, 62 + j * 18, 17 + i * 18));
             }
         }
         
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 9; ++j) {
-                this.addSlotToContainer(new Slot(playerInventory, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
+                this.addSlot(new Slot(playerInventory, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
             }
         }
         
         for (int i = 0; i < 9; ++i) {
             if (playerInventory.getStackInSlot(i) == ((InventoryItem) seedBagInventory).getItem()) {
-                this.addSlotToContainer(new SlotLocked(playerInventory, i, 8 + i * 18, 142));
+                this.addSlot(new SlotLocked(playerInventory, i, 8 + i * 18, 142));
             } else {
-                this.addSlotToContainer(new Slot(playerInventory, i, 8 + i * 18, 142));
+                this.addSlot(new Slot(playerInventory, i, 8 + i * 18, 142));
             }
         }
         
         //seedBagInventory.openInventory();
+    }
+
+    public ContainerSeedBag(int windowId, PlayerInventory invPlayer) {
+        this(invPlayer, new Inventory(9), windowId);
     }
     
     @Override
@@ -116,7 +122,7 @@ public class ContainerSeedBag extends Container {
                 itemstack1 = slot.getStack();
                 
                 if (!itemstack1.isEmpty() && itemstack1.getItem() == par1ItemStack.getItem()
-                        && (!par1ItemStack.getHasSubtypes() || par1ItemStack.getItemDamage() == itemstack1.getItemDamage())
+                        && (!par1ItemStack.hasContainerItem() || par1ItemStack.getDamage() == itemstack1.getDamage())
                         && ItemStack.areItemStackTagsEqual(par1ItemStack, itemstack1) && slot.isItemValid(par1ItemStack)) {
                     int l = itemstack1.getCount() + par1ItemStack.getCount();
                     

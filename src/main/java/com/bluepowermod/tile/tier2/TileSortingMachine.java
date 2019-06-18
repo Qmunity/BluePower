@@ -12,6 +12,7 @@ import com.bluepowermod.client.gui.IGuiButtonSensitive;
 import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.helper.ItemStackHelper;
 import com.bluepowermod.init.BPBlocks;
+import com.bluepowermod.tile.BPTileEntityType;
 import com.bluepowermod.tile.TileMachineBase;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
@@ -21,6 +22,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
+import net.minecraft.util.IItemProvider;
 import net.minecraft.util.NonNullList;
 
 import java.util.ArrayList;
@@ -28,18 +30,18 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- *
  * @author MineMaarten
  */
 
 public class TileSortingMachine extends TileMachineBase implements ISidedInventory, IGuiButtonSensitive {
 
-    private NonNullList<ItemStack> inventory = NonNullList.withSize(40, ItemStack.EMPTY);
     public int curColumn = 0;
     public PullMode pullMode = PullMode.SINGLE_STEP;
     public SortMode sortMode = SortMode.ANYSTACK_SEQUENTIAL;
     private boolean sweepTriggered;
     private int savedPulses;
+    public static final int SLOTS = 40;
+    private NonNullList<ItemStack> inventory = NonNullList.withSize(SLOTS, ItemStack.EMPTY);
     public final TubeColor[] colors = new TubeColor[9];
     public int[] fuzzySettings = new int[8];
     private ItemStack nonAcceptedStack;// will be set to the latest accepted stack via tubes.. It will reject any following items from that stack that
@@ -47,7 +49,7 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
     // tick.
 
     public TileSortingMachine() {
-
+        super(BPTileEntityType.SORTING_MACHINE);
         for (int i = 0; i < colors.length; i++)
             colors[i] = TubeColor.NONE;
     }
@@ -88,15 +90,15 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
     }
 
     @Override
-    public void update() {
+    public void tick() {
 
         nonAcceptedStack = ItemStack.EMPTY;
-        super.update();
+        super.tick();
         if (!sweepTriggered && savedPulses > 0) {
             savedPulses--;
             sweepTriggered = true;
         }
-        if (!world.isRemote && world.getWorldTime() % TileMachineBase.BUFFER_EMPTY_INTERVAL == 0
+        if (!world.isRemote && world.getGameTime() % TileMachineBase.BUFFER_EMPTY_INTERVAL == 0
                 && (pullMode == PullMode.SINGLE_SWEEP && sweepTriggered || pullMode == PullMode.AUTOMATIC)) {
             triggerSorting();
         }
@@ -329,59 +331,59 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
 
 
     @Override
-    public CompoundNBT writeToNBT(CompoundNBT tag) {
+    public CompoundNBT write(CompoundNBT tag) {
 
-        super.writeToNBT(tag);
+        super.write(tag);
 
-        tag.setByte("pullMode", (byte) pullMode.ordinal());
-        tag.setByte("sortMode", (byte) sortMode.ordinal());
-        tag.setInteger("savedPulses", savedPulses);
+        tag.putByte("pullMode", (byte) pullMode.ordinal());
+        tag.putByte("sortMode", (byte) sortMode.ordinal());
+        tag.putInt("savedPulses", savedPulses);
 
         int[] colorArray = new int[colors.length];
         for (int i = 0; i < colorArray.length; i++) {
             colorArray[i] = colors[i].ordinal();
         }
-        tag.setIntArray("colors", colorArray);
+        tag.putIntArray("colors", colorArray);
 
-        tag.setIntArray("fuzzySettings", fuzzySettings);
+        tag.putIntArray("fuzzySettings", fuzzySettings);
 
         ListNBT tagList = new ListNBT();
         for (int currentIndex = 0; currentIndex < inventory.size(); ++currentIndex) {
             if (!inventory.get(currentIndex).isEmpty()) {
                 CompoundNBT tagCompound = new CompoundNBT();
-                tagCompound.setByte("Slot", (byte) currentIndex);
-                inventory.get(currentIndex).writeToNBT(tagCompound);
-                tagList.appendTag(tagCompound);
+                tagCompound.putByte("Slot", (byte) currentIndex);
+                inventory.get(currentIndex).write(tagCompound);
+                tagList.add(tagCompound);
             }
         }
-        tag.setTag("Items", tagList);
+        tag.put("Items", tagList);
         return tag;
     }
 
     @Override
-    public void readFromNBT(CompoundNBT tag) {
+    public void read(CompoundNBT tag) {
 
-        super.readFromNBT(tag);
+        super.read(tag);
 
         pullMode = PullMode.values()[tag.getByte("pullMode")];
         sortMode = SortMode.values()[tag.getByte("sortMode")];
-        savedPulses = tag.getInteger("savedPulses");
+        savedPulses = tag.getInt("savedPulses");
 
         int[] colorArray = tag.getIntArray("colors");
         for (int i = 0; i < colorArray.length; i++) {
             colors[i] = TubeColor.values()[colorArray[i]];
         }
 
-        if (tag.hasKey("fuzzySettings"))
+        if (tag.contains("fuzzySettings"))
             fuzzySettings = tag.getIntArray("fuzzySettings");
 
-        ListNBT tagList = tag.getTagList("Items", 10);
+        ListNBT tagList = tag.getList("Items", 10);
         inventory = NonNullList.withSize(40, ItemStack.EMPTY);
-        for (int i = 0; i < tagList.tagCount(); ++i) {
-            CompoundNBT tagCompound = tagList.getCompoundTagAt(i);
+        for (int i = 0; i < tagList.size(); ++i) {
+            CompoundNBT tagCompound = tagList.getCompound(i);
             byte slot = tagCompound.getByte("Slot");
             if (slot >= 0 && slot < inventory.size()) {
-                inventory.set(slot, new ItemStack(tagCompound));
+                inventory.set(slot, new ItemStack((IItemProvider) tagCompound));
             }
         }
     }
@@ -414,7 +416,7 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
             if (itemStack.getCount() <= amount) {
                 setInventorySlotContents(slot, ItemStack.EMPTY);
             } else {
-                itemStack = itemStack.splitStack(amount);
+                itemStack = itemStack.split(amount);
                 if (itemStack.getCount() == 0) {
                     setInventorySlotContents(slot, ItemStack.EMPTY);
                 }
@@ -456,7 +458,7 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
 
     @Override
     public boolean isUsableByPlayer(PlayerEntity player) {
-        return player.getDistanceSqToCenter(pos) <= 64.0D;
+        return player.getPosition().withinDistance(pos, 64.0D);
     }
 
     @Override
@@ -472,21 +474,6 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
     public boolean isItemValidForSlot(int var1, ItemStack var2) {
 
         return var1 < inventory.size() ? true : !var2.isEmpty() && tryProcessItem(var2, true);
-    }
-
-    @Override
-    public int getField(int id) {
-        return 0;
-    }
-
-    @Override
-    public void setField(int id, int value) {
-
-    }
-
-    @Override
-    public int getFieldCount() {
-        return 0;
     }
 
     @Override
@@ -506,16 +493,6 @@ public class TileSortingMachine extends TileMachineBase implements ISidedInvento
 
     @Override
     public boolean canExtractItem(int index, ItemStack stack, Direction direction) {
-        return false;
-    }
-
-    @Override
-    public String getName() {
-        return BPBlocks.sorting_machine.getTranslationKey();
-    }
-
-    @Override
-    public boolean hasCustomName() {
         return false;
     }
 

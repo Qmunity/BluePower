@@ -36,13 +36,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IPlantable;
 
-;
-
 public class ItemSeedBag extends ItemBase {
 
     public ItemSeedBag(String name) {
         this.setCreativeTab(BPCreativeTabs.items);
-        this.setTranslationKey(name);
         this.setRegistryName(Refs.MODID + ":" + name);
         this.maxStackSize = 1;
     }
@@ -70,7 +67,7 @@ public class ItemSeedBag extends ItemBase {
     @Override
     public boolean showDurabilityBar(ItemStack stack) {
 
-        return stack.getTagCompound() != null;
+        return stack.getTag() != null;
     }
 
     public int getItemDamageForDisplay(ItemStack stack) {

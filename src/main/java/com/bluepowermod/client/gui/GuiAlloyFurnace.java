@@ -34,7 +34,7 @@ public class GuiAlloyFurnace extends GuiContainerBaseBP<ContainerAlloyFurnace> i
     private final ContainerAlloyFurnace furnace;
 
     public GuiAlloyFurnace(ContainerAlloyFurnace container, PlayerInventory playerInventory, ITextComponent title){
-        super(container, playerInventory, title);
+        super(container, playerInventory, title, resLoc);
         this.furnace = container;
     }
 
@@ -45,11 +45,11 @@ public class GuiAlloyFurnace extends GuiContainerBaseBP<ContainerAlloyFurnace> i
 
         this.minecraft.getTextureManager().bindTexture(resLoc);
 
-        int burningPercentage = (int) (furnace.getBurningPercentage() * 13);
+        int burningPercentage = (int) (furnace.currentProcessTime * 13);
         if (burningPercentage > 0)
             this.blit(x + 22, y + 54 + 13 - burningPercentage, 177, 13 - burningPercentage, 14, burningPercentage + 1);
 
-        int processPercentage = (int) (furnace.getProcessPercentage() * 22);
+        int processPercentage = (int) (furnace.currentProcessTime * 22);
         this.blit(x + 103, y + 35, 178, 14, processPercentage, 15);
     }
 

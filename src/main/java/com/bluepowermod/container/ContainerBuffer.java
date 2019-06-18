@@ -37,7 +37,7 @@ public class ContainerBuffer extends Container {
         this.inventory = inventory;
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 5; j++) {
-                addSlot(new Slot(inventory, i * 5 + j, 45 + j * 18, 18 + i * 18));
+                addSlot(new Slot(this.inventory, i * 5 + j, 45 + j * 18, 18 + i * 18));
             }
         }
         bindPlayerInventory(invPlayer);

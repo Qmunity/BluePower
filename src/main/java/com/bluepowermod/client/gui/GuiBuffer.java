@@ -19,22 +19,20 @@
 
 package com.bluepowermod.client.gui;
 
+import net.minecraft.client.gui.IHasContainer;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 
 import com.bluepowermod.container.ContainerBuffer;
 import com.bluepowermod.reference.Refs;
-import com.bluepowermod.tile.tier1.TileBuffer;
+import net.minecraft.util.text.ITextComponent;
 
-public class GuiBuffer extends GuiContainerBaseBP {
+public class GuiBuffer extends GuiContainerBaseBP<ContainerBuffer> implements IHasContainer<ContainerBuffer> {
 
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/buffer.png");
-    private final TileBuffer buffer;
 
-    public GuiBuffer(PlayerInventory invPlayer, TileBuffer buffer) {
-
-        super(buffer, new ContainerBuffer(invPlayer, buffer), resLoc);
-        this.buffer = buffer;
+    public GuiBuffer(ContainerBuffer container, PlayerInventory playerInventory, ITextComponent title){
+        super(container, playerInventory, title, resLoc);
         ySize = 186;
     }
 }
