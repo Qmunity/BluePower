@@ -9,13 +9,14 @@ package com.bluepowermod.tile.tier1;
 
 import com.bluepowermod.client.gui.IGuiButtonSensitive;
 import com.bluepowermod.helper.ItemStackHelper;
-import com.bluepowermod.init.BPBlocks;
+import com.bluepowermod.tile.BPTileEntityType;
 import com.bluepowermod.tile.TileMachineBase;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
+import net.minecraft.util.IItemProvider;
 import net.minecraft.util.NonNullList;
 
 import java.util.List;
@@ -28,17 +29,22 @@ import java.util.List;
 public class TileItemDetector extends TileMachineBase implements ISidedInventory, IGuiButtonSensitive {
 
     public int mode;
-    private final NonNullList<ItemStack> inventory = NonNullList.withSize(10, ItemStack.EMPTY);
+    public final static int SLOTS = 10;
+    private final NonNullList<ItemStack> inventory = NonNullList.withSize(SLOTS, ItemStack.EMPTY);
     private int savedPulses = 0;
     public int fuzzySetting;
 
-    @Override
-    public void update() {
+    public TileItemDetector() {
+        super(BPTileEntityType.ITEM_DETECTOR);
+    }
 
-        super.update();
+    @Override
+    public void tick() {
+
+        super.tick();
         if (!world.isRemote) {
             if (mode == 0 || mode == 1) {
-                if (world.getWorldTime() % 2 == 0) {
+                if (world.getGameTime() % 2 == 0) {
                     if (getOutputtingRedstone() > 0) {
                         this.setOutputtingRedstone(false);
                         sendUpdatePacket();
@@ -89,36 +95,36 @@ public class TileItemDetector extends TileMachineBase implements ISidedInventory
      * This function gets called whenever the world/chunk loads
      */
     @Override
-    public void readFromNBT(CompoundNBT tCompound) {
+    public void read(CompoundNBT tCompound) {
 
-        super.readFromNBT(tCompound);
+        super.read(tCompound);
         for (int i = 0; i < 9; i++) {
-            CompoundNBT tc = tCompound.getCompoundTag("inventory" + i);
-            inventory.set(i, new ItemStack(tc));
+            CompoundNBT tc = tCompound.getCompound("inventory" + i);
+            inventory.set(i, new ItemStack((IItemProvider) tc));
         }
 
         mode = tCompound.getByte("mode");
         fuzzySetting = tCompound.getByte("fuzzySetting");
-        savedPulses = tCompound.getInteger("savedPulses");
+        savedPulses = tCompound.getInt("savedPulses");
     }
 
     /**
      * This function gets called whenever the world/chunk is saved
      */
     @Override
-    public CompoundNBT writeToNBT(CompoundNBT tCompound) {
+    public CompoundNBT write(CompoundNBT tCompound) {
 
-        super.writeToNBT(tCompound);
+        super.write(tCompound);
 
         for (int i = 0; i < 9; i++) {
                 CompoundNBT tc = new CompoundNBT();
-                inventory.get(i).writeToNBT(tc);
-                tCompound.setTag("inventory" + i, tc);
+                inventory.get(i).write(tc);
+                tCompound.put("inventory" + i, tc);
         }
 
-        tCompound.setByte("mode", (byte) mode);
-        tCompound.setByte("fuzzySetting", (byte) fuzzySetting);
-        tCompound.setInteger("savedPulses", savedPulses);
+        tCompound.putByte("mode", (byte) mode);
+        tCompound.putByte("fuzzySetting", (byte) fuzzySetting);
+        tCompound.putInt("savedPulses", savedPulses);
 
         return tCompound;
     }
@@ -143,7 +149,7 @@ public class TileItemDetector extends TileMachineBase implements ISidedInventory
             if (itemStack.getCount() <= amount) {
                 setInventorySlotContents(slot, ItemStack.EMPTY);
             } else {
-                itemStack = itemStack.splitStack(amount);
+                itemStack = itemStack.split(amount);
                 if (itemStack.getCount() == 0) {
                     setInventorySlotContents(slot, ItemStack.EMPTY);
                 }
@@ -169,18 +175,6 @@ public class TileItemDetector extends TileMachineBase implements ISidedInventory
     }
 
     @Override
-    public String getName() {
-
-        return BPBlocks.item_detector.getTranslationKey();
-    }
-
-    @Override
-    public boolean hasCustomName() {
-
-        return false;
-    }
-
-    @Override
     public int getInventoryStackLimit() {
 
         return 64;
@@ -188,7 +182,7 @@ public class TileItemDetector extends TileMachineBase implements ISidedInventory
 
     @Override
     public boolean isUsableByPlayer(PlayerEntity player) {
-        return player.getDistanceSqToCenter(pos) <= 64.0D;
+        return player.getPosition().withinDistance(pos, 64.0D);
     }
 
     @Override
@@ -258,21 +252,6 @@ public class TileItemDetector extends TileMachineBase implements ISidedInventory
     @Override
     public boolean isEmpty() {
         return inventory.size() == 0;
-    }
-
-    @Override
-    public int getField(int id) {
-        return 0;
-    }
-
-    @Override
-    public void setField(int id, int value) {
-
-    }
-
-    @Override
-    public int getFieldCount() {
-        return 0;
     }
 
     @Override

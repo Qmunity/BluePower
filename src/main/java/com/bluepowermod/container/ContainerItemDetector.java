@@ -8,49 +8,56 @@
 package com.bluepowermod.container;
 
 import com.bluepowermod.ClientProxy;
+import com.bluepowermod.client.gui.BPContainerType;
 import com.bluepowermod.client.gui.GuiContainerBase;
+import com.bluepowermod.tile.tier1.TileAlloyFurnace;
 import com.bluepowermod.tile.tier1.TileItemDetector;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.IContainerListener;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.Inventory;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 /**
  * @author MineMaarten
  */
-public class ContainerItemDetector extends ContainerMachineBase {
+public class ContainerItemDetector extends Container {
 
     private int mode = -1;
     private int fuzzySetting = -1;
-    private final TileItemDetector itemDetector;
+    private final IInventory itemDetector;
 
-    public ContainerItemDetector(PlayerInventory invPlayer, TileItemDetector itemDetector) {
-
-        super(itemDetector);
-        this.itemDetector = itemDetector;
+    public ContainerItemDetector(int windowId, PlayerInventory invPlayer, IInventory inventory) {
+        super(BPContainerType.ITEM_DETECTOR, windowId);
+        this.itemDetector = inventory;
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 3; ++j) {
-                addSlotToContainer(new Slot(itemDetector, j + i * 3, 62 + j * 18, 17 + i * 18));
+                addSlot(new Slot(itemDetector, j + i * 3, 62 + j * 18, 17 + i * 18));
             }
         }
         bindPlayerInventory(invPlayer);
     }
+
+    public ContainerItemDetector( int id, PlayerInventory player )    {
+        this( id, player, new Inventory( TileItemDetector.SLOTS ));
+    }
+
 
     protected void bindPlayerInventory(PlayerInventory invPlayer) {
 
         // Render inventory
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 9; j++) {
-                addSlotToContainer(new Slot(invPlayer, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
+                addSlot(new Slot(invPlayer, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
             }
         }
 
         // Render hotbar
         for (int j = 0; j < 9; j++) {
-            addSlotToContainer(new Slot(invPlayer, j, 8 + j * 18, 142));
+            addSlot(new Slot(invPlayer, j, 8 + j * 18, 142));
         }
     }
 
@@ -88,27 +95,6 @@ public class ContainerItemDetector extends ContainerMachineBase {
         return itemstack;
     }
 
-    /**
-     * Looks for changes made in the container, sends them to every listener.
-     */
-    @Override
-    public void detectAndSendChanges() {
-
-        super.detectAndSendChanges();
-
-        for (Object crafter : listeners) {
-            IContainerListener icrafting = (IContainerListener) crafter;
-
-            if (mode != itemDetector.mode) {
-                icrafting.sendWindowProperty(this, 0, itemDetector.mode);
-            }
-            if (fuzzySetting != itemDetector.fuzzySetting) {
-                icrafting.sendWindowProperty(this, 1, itemDetector.fuzzySetting);
-            }
-        }
-        mode = itemDetector.mode;
-        fuzzySetting = itemDetector.fuzzySetting;
-    }
 
     @Override
     @OnlyIn(Dist.CLIENT)
@@ -116,10 +102,10 @@ public class ContainerItemDetector extends ContainerMachineBase {
 
         super.updateProgressBar(id, value);
         if (id == 0) {
-            itemDetector.mode = value;
+            mode = value;
             ((GuiContainerBase) ClientProxy.getOpenedGui()).redraw();
         } else if (id == 1) {
-            itemDetector.fuzzySetting = value;
+            fuzzySetting = value;
             ((GuiContainerBase) ClientProxy.getOpenedGui()).redraw();
         }
     }

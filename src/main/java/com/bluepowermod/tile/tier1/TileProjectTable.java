@@ -10,6 +10,7 @@ package com.bluepowermod.tile.tier1;
 import com.bluepowermod.client.gui.IGuiButtonSensitive;
 import com.bluepowermod.container.ContainerProjectTable;
 import com.bluepowermod.init.BPBlocks;
+import com.bluepowermod.tile.BPTileEntityType;
 import com.bluepowermod.tile.TileBase;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.container.Container;
@@ -17,6 +18,8 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
+import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.util.IItemProvider;
 import net.minecraft.util.NonNullList;
 
 import java.util.List;
@@ -26,8 +29,13 @@ import java.util.List;
  */
 public class TileProjectTable extends TileBase implements IInventory, IGuiButtonSensitive{
 
+    public final static int SLOTS = 28;
     private NonNullList<ItemStack> inventory = NonNullList.withSize(19, ItemStack.EMPTY);
     protected NonNullList<ItemStack> craftingGrid = NonNullList.withSize(9, ItemStack.EMPTY);
+
+    public TileProjectTable() {
+        super(BPTileEntityType.PROJECT_TABLE);
+    }
 
     @Override
     public List<ItemStack> getDrops() {
@@ -43,52 +51,52 @@ public class TileProjectTable extends TileBase implements IInventory, IGuiButton
     }
 
     @Override
-    public CompoundNBT writeToNBT(CompoundNBT tag) {
+    public CompoundNBT write(CompoundNBT tag) {
 
-        super.writeToNBT(tag);
+        super.write(tag);
 
         ListNBT tagList = new ListNBT();
         for (int currentIndex = 0; currentIndex < inventory.size(); ++currentIndex) {
                 CompoundNBT tagCompound = new CompoundNBT();
-                tagCompound.setByte("Slot", (byte)currentIndex);
-                inventory.get(currentIndex).writeToNBT(tagCompound);
-                tagList.appendTag(tagCompound);
+                tagCompound.putByte("Slot", (byte)currentIndex);
+                inventory.get(currentIndex).write(tagCompound);
+                tagList.add(tagCompound);
         }
-        tag.setTag("Items", tagList);
+        tag.put("Items", tagList);
 
         tagList = new ListNBT();
         for (int currentIndex = 0; currentIndex < craftingGrid.size(); ++currentIndex) {
                 CompoundNBT tagCompound = new CompoundNBT();
-                tagCompound.setByte("Slot", (byte) currentIndex);
-                craftingGrid.get(currentIndex).writeToNBT(tagCompound);
-                tagList.appendTag(tagCompound);
+                tagCompound.putByte("Slot", (byte) currentIndex);
+                craftingGrid.get(currentIndex).write(tagCompound);
+                tagList.add(tagCompound);
         }
-        tag.setTag("CraftingGrid", tagList);
+        tag.put("CraftingGrid", tagList);
         return tag;
     }
 
     @Override
-    public void readFromNBT(CompoundNBT tag) {
+    public void read(CompoundNBT tag) {
 
-        super.readFromNBT(tag);
+        super.read(tag);
 
-        ListNBT tagList = tag.getTagList("Items", 10);
+        ListNBT tagList = tag.getList("Items", 10);
         inventory = NonNullList.withSize(19, ItemStack.EMPTY);
-        for (int i = 0; i < tagList.tagCount(); ++i) {
-            CompoundNBT tagCompound = tagList.getCompoundTagAt(i);
+        for (int i = 0; i < tagList.size(); ++i) {
+            CompoundNBT tagCompound = tagList.getCompound(i);
             byte slot = tagCompound.getByte("Slot");
             if (slot >= 0 && slot < inventory.size()) {
-                inventory.set(slot, new ItemStack(tagCompound));
+                inventory.set(slot, new ItemStack((IItemProvider) tagCompound));
             }
         }
 
-        tagList = tag.getTagList("CraftingGrid", 10);
+        tagList = tag.getList("CraftingGrid", 10);
         craftingGrid = NonNullList.withSize(9, ItemStack.EMPTY);
-        for (int i = 0; i < tagList.tagCount(); ++i) {
-            CompoundNBT tagCompound = tagList.getCompoundTagAt(i);
+        for (int i = 0; i < tagList.size(); ++i) {
+            CompoundNBT tagCompound = tagList.getCompound(i);
             byte slot = tagCompound.getByte("Slot");
             if (slot >= 0 && slot < craftingGrid.size()) {
-                craftingGrid.set(slot, new ItemStack(tagCompound));
+                craftingGrid.set(slot, new ItemStack((IItemProvider) tagCompound));
             }
         }
     }
@@ -115,7 +123,7 @@ public class TileProjectTable extends TileBase implements IInventory, IGuiButton
             if (itemStack.getCount() <= amount) {
                 setInventorySlotContents(slot, ItemStack.EMPTY);
             } else {
-                itemStack = itemStack.splitStack(amount);
+                itemStack = itemStack.split(amount);
                 if (itemStack.getCount() == 0) {
                     setInventorySlotContents(slot, ItemStack.EMPTY);
                 }
@@ -143,17 +151,6 @@ public class TileProjectTable extends TileBase implements IInventory, IGuiButton
         craftingGrid.set(i, itemStack);
     }
 
-    @Override
-    public String getName() {
-
-        return BPBlocks.project_table.getTranslationKey();
-    }
-
-    @Override
-    public boolean hasCustomName() {
-
-        return false;
-    }
 
     @Override
     public int getInventoryStackLimit() {
@@ -163,7 +160,7 @@ public class TileProjectTable extends TileBase implements IInventory, IGuiButton
 
     @Override
     public boolean isUsableByPlayer(PlayerEntity player) {
-        return player.getDistanceSqToCenter(pos) <= 64.0D;
+        return player.getPosition().withinDistance(pos, 64.0D);
     }
 
     @Override
@@ -197,21 +194,6 @@ public class TileProjectTable extends TileBase implements IInventory, IGuiButton
             }
         }
         return true;
-    }
-
-    @Override
-    public int getField(int id) {
-        return 0;
-    }
-
-    @Override
-    public void setField(int id, int value) {
-
-    }
-
-    @Override
-    public int getFieldCount() {
-        return 0;
     }
 
     @Override

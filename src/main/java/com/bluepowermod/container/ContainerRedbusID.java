@@ -7,25 +7,33 @@
  */
 package com.bluepowermod.container;
 
+import com.bluepowermod.client.gui.BPContainerType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.container.Container;
 
 import com.bluepowermod.tile.tier3.IRedBusWindow;
 
 public class ContainerRedbusID extends Container {
 
-	private final IRedBusWindow device;
-	
-	public ContainerRedbusID(PlayerInventory invPlayer, IRedBusWindow device) {
+	private final IInventory inventory;
 
-		this.device = device;
+	public ContainerRedbusID(int windowId, PlayerInventory invPlayer, IInventory inventory) {
+		super(BPContainerType.REDBUS, windowId);
+		this.inventory = inventory;
+	}
+
+	public ContainerRedbusID( int id, PlayerInventory player )    {
+		this( id, player, new Inventory( 1));
 	}
 
 	@Override
-	public boolean canInteractWith(PlayerEntity entityplayer) {
-
-		return true;
+	public boolean canInteractWith(PlayerEntity playerEntity) {
+		return inventory.isUsableByPlayer(playerEntity);
 	}
+
+
 
 }

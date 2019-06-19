@@ -19,24 +19,30 @@
 
 package com.bluepowermod.tile.tier1;
 
-import com.bluepowermod.init.BPBlocks;
+import com.bluepowermod.tile.BPTileEntityType;
 import com.bluepowermod.tile.TileMachineBase;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.IItemProvider;
 import net.minecraft.util.NonNullList;
 
 import java.util.List;
 
 public class TileRelay extends TileMachineBase implements IInventory {
 
-    private final NonNullList<ItemStack> inventory = NonNullList.withSize(10, ItemStack.EMPTY);
+    public static final int SLOTS = 10;
+    private final NonNullList<ItemStack> inventory = NonNullList.withSize(SLOTS, ItemStack.EMPTY);
+
+    public TileRelay() {
+        super(BPTileEntityType.RELAY);
+    }
 
     @Override
-    public void update() {
+    public void tick() {
 
-        super.update();
+        super.tick();
 
         if (!world.isRemote) {
             for (int i = 0; i < inventory.size(); i++) {
@@ -53,13 +59,13 @@ public class TileRelay extends TileMachineBase implements IInventory {
      * This function gets called whenever the world/chunk loads
      */
     @Override
-    public void readFromNBT(CompoundNBT tCompound) {
+    public void read(CompoundNBT tCompound) {
 
-        super.readFromNBT(tCompound);
+        super.read(tCompound);
 
         for (int i = 0; i < 9; i++) {
-            CompoundNBT tc = tCompound.getCompoundTag("inventory" + i);
-            inventory.set(i, new ItemStack(tc));
+            CompoundNBT tc = tCompound.getCompound("inventory" + i);
+            inventory.set(i, new ItemStack((IItemProvider) tc));
         }
     }
 
@@ -67,14 +73,14 @@ public class TileRelay extends TileMachineBase implements IInventory {
      * This function gets called whenever the world/chunk is saved
      */
     @Override
-    public CompoundNBT writeToNBT(CompoundNBT tCompound) {
+    public CompoundNBT write(CompoundNBT tCompound) {
 
-        super.writeToNBT(tCompound);
+        super.write(tCompound);
 
         for (int i = 0; i < 9; i++) {
                 CompoundNBT tc = new CompoundNBT();
-                inventory.get(i).writeToNBT(tc);
-                tCompound.setTag("inventory" + i, tc);
+                inventory.get(i).write(tc);
+                tCompound.put("inventory" + i, tc);
         }
         return tCompound;
     }
@@ -113,7 +119,7 @@ public class TileRelay extends TileMachineBase implements IInventory {
             if (itemStack.getCount() <= amount) {
                 setInventorySlotContents(slot, ItemStack.EMPTY);
             } else {
-                itemStack = itemStack.splitStack(amount);
+                itemStack = itemStack.split(amount);
                 if (itemStack.getCount() == 0) {
                     setInventorySlotContents(slot, ItemStack.EMPTY);
                 }
@@ -147,24 +153,6 @@ public class TileRelay extends TileMachineBase implements IInventory {
     }
 
     /**
-     * Returns the name of the inventory
-     */
-    @Override
-    public String getName() {
-
-        return BPBlocks.relay.getTranslationKey();
-    }
-
-    /**
-     * Returns if the inventory is named
-     */
-    @Override
-    public boolean hasCustomName() {
-
-        return true;
-    }
-
-    /**
      * Returns the maximum stack size for a inventory slot.
      */
     @Override
@@ -180,7 +168,7 @@ public class TileRelay extends TileMachineBase implements IInventory {
      */
     @Override
     public boolean isUsableByPlayer(PlayerEntity player) {
-        return player.getDistanceSqToCenter(pos) <= 64.0D;
+        return player.getPosition().withinDistance(pos, 64.0D);
     }
 
     @Override
@@ -225,21 +213,6 @@ public class TileRelay extends TileMachineBase implements IInventory {
     @Override
     public boolean isEmpty() {
         return inventory.size() == 0;
-    }
-
-    @Override
-    public int getField(int id) {
-        return 0;
-    }
-
-    @Override
-    public void setField(int id, int value) {
-
-    }
-
-    @Override
-    public int getFieldCount() {
-        return 0;
     }
 
     @Override

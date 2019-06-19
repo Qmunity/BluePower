@@ -7,11 +7,8 @@
  */
 package com.bluepowermod.tile.tier2;
 
-import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.tile.IFuzzyRetrieving;
 import com.bluepowermod.tile.tier1.TileFilter;
-import mcmultipart.api.container.IMultipartContainer;
-import mcmultipart.api.multipart.MultipartHelper;
 import net.minecraft.nbt.CompoundNBT;
 
 /**
@@ -24,24 +21,16 @@ public class TileRetriever extends TileFilter implements IFuzzyRetrieving {
 
 
     @Override
-    public String getName() {
-
-        return BPBlocks.retriever.getTranslationKey();
-    }
-
-    @Override
-    public CompoundNBT writeToNBT(CompoundNBT tag) {
-
-        super.writeToNBT(tag);
-        tag.setByte("slotIndex", (byte) slotIndex);
-        tag.setByte("mode", (byte) mode);
+    public CompoundNBT write(CompoundNBT tag) {
+        super.write(tag);
+        tag.putByte("slotIndex", (byte) slotIndex);
+        tag.putByte("mode", (byte) mode);
         return tag;
     }
 
     @Override
-    public void readFromNBT(CompoundNBT tag) {
-
-        super.readFromNBT(tag);
+    public void read(CompoundNBT tag) {
+        super.read(tag);
         slotIndex = tag.getByte("slotIndex");
         mode = tag.getByte("mode");
     }

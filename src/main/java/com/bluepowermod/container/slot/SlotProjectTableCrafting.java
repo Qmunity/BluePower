@@ -21,9 +21,9 @@ public class SlotProjectTableCrafting extends CraftingResultSlot {
     
     /** The craft matrix inventory linked to this result slot. */
     private final CraftingInventory craftMatrix;
-    private final TileProjectTable projectTable;
+    private final IInventory projectTable;
 
-    public SlotProjectTableCrafting(TileProjectTable projectTable, PlayerEntity player, CraftingInventory craftMatrix, CraftResultInventory res, int p_i1823_4_, int p_i1823_5_, int p_i1823_6_) {
+    public SlotProjectTableCrafting(IInventory projectTable, PlayerEntity player, CraftingInventory craftMatrix, CraftResultInventory res, int p_i1823_4_, int p_i1823_5_, int p_i1823_6_) {
     
         super(player, craftMatrix, res, p_i1823_4_, p_i1823_5_, p_i1823_6_);
         this.craftMatrix = craftMatrix;

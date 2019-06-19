@@ -7,15 +7,18 @@
  */
 package com.bluepowermod.container;
 
+import com.bluepowermod.client.gui.BPContainerType;
 import com.bluepowermod.client.gui.GuiContainerBase;
+import com.bluepowermod.tile.tier1.TileAlloyFurnace;
+import com.bluepowermod.tile.tier2.TileRetriever;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.IContainerListener;
+import net.minecraft.inventory.IInventory;
 
 import com.bluepowermod.ClientProxy;
-import com.bluepowermod.tile.tier2.TileRetriever;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraft.inventory.Inventory;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 /**
  * @author MineMaarten
@@ -23,34 +26,15 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class ContainerRetriever extends ContainerFilter {
 
     private int slotIndex = -1, mode = -1;
-    private final TileRetriever retriever;
+    private final IInventory retriever;
 
-    public ContainerRetriever(PlayerInventory invPlayer, TileRetriever retriever) {
-
-        super(invPlayer, retriever);
-        this.retriever = retriever;
+    public ContainerRetriever(int windowId, PlayerInventory invPlayer, IInventory inventory) {
+        super(BPContainerType.RETRIEVER, windowId, inventory);
+        this.retriever = inventory;
     }
 
-    /**
-     * Looks for changes made in the container, sends them to every listener.
-     */
-    @Override
-    public void detectAndSendChanges() {
-
-        super.detectAndSendChanges();
-
-        for (Object crafter : listeners) {
-            IContainerListener icrafting = (IContainerListener) crafter;
-
-            if (slotIndex != retriever.slotIndex) {
-                icrafting.sendWindowProperty(this, 2, retriever.slotIndex);
-            }
-            if (mode != retriever.mode) {
-                icrafting.sendWindowProperty(this, 3, retriever.mode);
-            }
-        }
-        slotIndex = retriever.slotIndex;
-        mode = retriever.mode;
+    public ContainerRetriever( int id, PlayerInventory player )    {
+        this( id, player, new Inventory( TileRetriever.SLOTS ));
     }
 
     @Override
@@ -60,10 +44,10 @@ public class ContainerRetriever extends ContainerFilter {
         super.updateProgressBar(id, value);
 
         if (id == 2) {
-            retriever.slotIndex = value;
+            slotIndex = value;
         }
         if (id == 3) {
-            retriever.mode = value;
+            mode = value;
             ((GuiContainerBase) ClientProxy.getOpenedGui()).redraw();
         }
     }

@@ -7,20 +7,31 @@
  */
 package com.bluepowermod.container;
 
+import com.bluepowermod.client.gui.BPContainerType;
+import com.bluepowermod.tile.tier1.TileAlloyFurnace;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.container.Container;
 
 import com.bluepowermod.tile.tier3.TileMonitor;
 
 public class ContainerMonitor extends Container {
 
-	public ContainerMonitor(PlayerInventory inventoryPlayer, TileMonitor monitor) {
+	private final IInventory inventory;
+
+	public ContainerMonitor(int windowId, PlayerInventory invPlayer, IInventory inventory) {
+		super(BPContainerType.MONITOR, windowId);
+		this.inventory = inventory;
+	}
+
+	public ContainerMonitor( int id, PlayerInventory player )    {
+		this( id, player, new Inventory( 0 ));
 	}
 
 	@Override
-	public boolean canInteractWith(PlayerEntity var1) {
-		return true;
+	public boolean canInteractWith(PlayerEntity playerEntity) {
+		return inventory.isUsableByPlayer(playerEntity);
 	}
-
 }
