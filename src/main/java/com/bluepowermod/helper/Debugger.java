@@ -37,7 +37,7 @@ public class Debugger {
                     double dx = pos.getX() + 0.5;
                     double dy = pos.getY() + 0.5;
                     double dz = pos.getZ() + 0.5;
-                    world.spawnParticle(EnumParticleTypes.FLAME, dx, dy, dz, 0, 0, 0);
+                    world.addParticle(ParticleTypes.FLAME, dx, dy, dz, 0, 0, 0);
                 }
             } else {
                 BPNetworkHandler.INSTANCE.sendToAllAround(new MessageDebugBlock(pos), world);

@@ -34,7 +34,7 @@ public class TileBattery extends TileMachineBase {
         double voltage = storage.getVoltage();
         int level = (int)((voltage / storage.getMaxVoltage()) * 6);
         if(world.getBlockState(pos).getValue(BlockBattery.LEVEL) != level){
-            world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos).withProperty(BlockBattery.LEVEL, level), 0);
+            world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos).with(BlockBattery.LEVEL, level), 0);
             markDirty();
         }
     }

@@ -6,7 +6,7 @@ import com.bluepowermod.util.AABBUtils;
 import mcmultipart.RayTraceHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.properties.PropertyDirection;
+import net.minecraft.state.DirectionProperty;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
@@ -20,8 +20,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class BlockLampSurface extends BlockLamp {
 
@@ -29,14 +29,14 @@ public class BlockLampSurface extends BlockLamp {
     private final Boolean isInverted;
     private final AxisAlignedBB size;
 
-    public static final PropertyDirection FACING = PropertyDirection.create("facing");
+    public static final DirectionProperty FACING = DirectionProperty.create("facing");
 
     public BlockLampSurface(String name, boolean isInverted, MinecraftColor color, AxisAlignedBB size) {
         super(name, isInverted, color);
         this.name = name;
         this.isInverted = isInverted;
         this.size = size;
-        this.setDefaultState(blockState.getBaseState().withProperty(POWER, isInverted ? 15 : 0).withProperty(FACING, Direction.UP));
+        this.setDefaultState(blockState.getBaseState().with(POWER, isInverted ? 15 : 0).with(FACING, Direction.UP));
     }
 
     @Override
@@ -70,7 +70,7 @@ public class BlockLampSurface extends BlockLamp {
     @Override
     public AxisAlignedBB getBoundingBox(BlockState state, IBlockAccess source, BlockPos pos) {
         //Bounding box for the Caged Lamp
-        return AABBUtils.rotate(size.equals(Refs.CAGELAMP_AABB) ? size.grow( 0.0625) : size, state.getValue(FACING));
+        return AABBUtils.rotate(size.equals(Refs.CAGELAMP_AABB) ? size.grow( 0.0625) : size, state.get(FACING));
     }
 
     @Override
@@ -85,18 +85,18 @@ public class BlockLampSurface extends BlockLamp {
 
     @Override
     public int getMetaFromState(BlockState state) {
-        return state.getValue(FACING).getIndex();
+        return state.get(FACING).getIndex();
     }
 
     @Override
     public BlockState getStateFromMeta(int meta) {
-        return getDefaultState().withProperty(FACING, Direction.byIndex(meta));
+        return getDefaultState().with(FACING, Direction.byIndex(meta));
     }
 
     @Override
     public void neighborChanged(BlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos) {
         super.neighborChanged(state, world, pos, blockIn, fromPos);
-        if(!world.getBlockState(pos.offset(state.getValue(FACING).getOpposite())).isFullBlock()){
+        if(!world.getBlockState(pos.offset(state.get(FACING).getOpposite())).isFullBlock()){
             world.setBlockToAir(pos);
             this.dropBlockAsItem(world, pos, state, 0);
         }
@@ -104,6 +104,6 @@ public class BlockLampSurface extends BlockLamp {
 
     @Override
     public BlockState getStateForPlacement(World world, BlockPos pos, Direction facing, float hitX, float hitY, float hitZ, int meta, LivingEntity placer, Hand hand) {
-        return super.getStateForPlacement(world, pos, facing, hitX, hitY, hitZ, meta, placer, hand).withProperty(FACING, facing);
+        return super.getStateForPlacement(world, pos, facing, hitX, hitY, hitZ, meta, placer, hand).with(FACING, facing);
     }
 }

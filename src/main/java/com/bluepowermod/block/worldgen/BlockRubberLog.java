@@ -10,7 +10,7 @@ import net.minecraft.block.state.BlockStateContainer;
 public class BlockRubberLog extends LogBlock {
     public BlockRubberLog(){
         this.setRegistryName(Refs.MODID + ":" + Refs.RUBBERLOG_NAME);
-        this.setDefaultState(this.blockState.getBaseState().withProperty(LOG_AXIS, EnumAxis.Y));
+        this.setDefaultState(this.blockState.getBaseState().with(LOG_AXIS, EnumAxis.Y));
         this.setTranslationKey(Refs.MODID + ":" + Refs.RUBBERLOG_NAME);
         this.setCreativeTab(BPCreativeTabs.blocks);
         BPBlocks.blockList.add(this);
@@ -25,16 +25,16 @@ public class BlockRubberLog extends LogBlock {
 
         switch (meta & 12){
             case 0:
-                iblockstate = iblockstate.withProperty(LOG_AXIS, EnumAxis.Y);
+                iblockstate = iblockstate.with(LOG_AXIS, EnumAxis.Y);
                 break;
             case 4:
-                iblockstate = iblockstate.withProperty(LOG_AXIS, EnumAxis.X);
+                iblockstate = iblockstate.with(LOG_AXIS, EnumAxis.X);
                 break;
             case 8:
-                iblockstate = iblockstate.withProperty(LOG_AXIS, EnumAxis.Z);
+                iblockstate = iblockstate.with(LOG_AXIS, EnumAxis.Z);
                 break;
             default:
-                iblockstate = iblockstate.withProperty(LOG_AXIS, EnumAxis.NONE);
+                iblockstate = iblockstate.with(LOG_AXIS, EnumAxis.NONE);
         }
 
         return iblockstate;
@@ -47,7 +47,7 @@ public class BlockRubberLog extends LogBlock {
     @SuppressWarnings("incomplete-switch")
     public int getMetaFromState(BlockState state){
         int i = 0;
-        switch (state.getValue(LOG_AXIS)) {
+        switch (state.get(LOG_AXIS)) {
             case X:
                 i |= 4;
                 break;

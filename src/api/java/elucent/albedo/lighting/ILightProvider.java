@@ -24,8 +24,8 @@
 
 package elucent.albedo.lighting;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 public interface ILightProvider {
     @OnlyIn(Dist.CLIENT)

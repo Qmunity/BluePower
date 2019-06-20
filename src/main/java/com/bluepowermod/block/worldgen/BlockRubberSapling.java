@@ -21,7 +21,7 @@ import java.util.Random;
 public class BlockRubberSapling extends SaplingBlock {
 
     public BlockRubberSapling() {
-        this.setDefaultState(this.blockState.getBaseState().withProperty(STAGE, 0));
+        this.setDefaultState(this.blockState.getBaseState().with(STAGE, 0));
         this.setRegistryName(Refs.MODID + ":" + Refs.RUBBERSAPLING_NAME);
         this.setTranslationKey(Refs.MODID + ":" + Refs.RUBBERSAPLING_NAME);
         this.setCreativeTab(BPCreativeTabs.blocks);
@@ -87,7 +87,7 @@ public class BlockRubberSapling extends SaplingBlock {
     @Override
     public BlockState getStateFromMeta(int meta)
     {
-        return this.getDefaultState().withProperty(STAGE, (meta & 8) >> 3);
+        return this.getDefaultState().with(STAGE, (meta & 8) >> 3);
     }
 
     /**
@@ -97,7 +97,7 @@ public class BlockRubberSapling extends SaplingBlock {
     public int getMetaFromState(BlockState state)
     {
         int i = 0;
-        i = i | state.getValue(STAGE) << 3;
+        i = i | state.get(STAGE) << 3;
         return i;
     }
 

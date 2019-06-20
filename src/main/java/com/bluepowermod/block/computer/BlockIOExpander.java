@@ -8,7 +8,6 @@
 package com.bluepowermod.block.computer;
 
 import com.bluepowermod.block.BlockContainerBase;
-import com.bluepowermod.reference.GuiIDs;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier3.TileIOExpander;
 import net.minecraft.block.material.Material;
@@ -19,12 +18,6 @@ public class BlockIOExpander extends BlockContainerBase {
 
         super(Material.IRON, TileIOExpander.class);
         setRegistryName(Refs.BLOCKIOEXPANDER_NAME);
-    }
-
-    @Override
-    public GuiIDs getGuiID() {
-
-        return GuiIDs.IO_EXPANDER;
     }
 
 }

@@ -19,15 +19,14 @@ package com.bluepowermod.block.machine;
 
 import com.bluepowermod.block.BlockContainerFacingBase;
 import com.bluepowermod.init.BPBlocks;
-import com.bluepowermod.reference.GuiIDs;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier1.TileAlloyFurnace;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
-import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IEnviromentBlockReader;
 import net.minecraft.world.World;
 
 import java.util.Random;
@@ -37,19 +36,14 @@ public class BlockAlloyFurnace extends BlockContainerFacingBase {
     public BlockAlloyFurnace() {
 
         super(Material.ROCK, TileAlloyFurnace.class);
-        setTranslationKey(Refs.ALLOYFURNACE_NAME);
         setRegistryName(Refs.MODID, Refs.ALLOYFURNACE_NAME);
     }
 
-    @Override
-    public boolean isOpaqueCube(BlockState state) {
-        return true;
-    }
 
     @Override
-    public void randomDisplayTick(BlockState stateIn, World world, BlockPos pos, Random rnd) {
-        if (stateIn.getValue(ACTIVE)) {
-            int l = stateIn.getValue(FACING).ordinal();
+    public void randomTick(BlockState stateIn, World world, BlockPos pos, Random rnd) {
+        if (stateIn.get(ACTIVE)) {
+            int l = stateIn.get(FACING).ordinal();
             float f = pos.getX() + 0.5F;
             float f1 = pos.getY() + 0.0F + rnd.nextFloat() * 6.0F / 16.0F;
             float f2 = pos.getZ() + 0.5F;
@@ -57,35 +51,24 @@ public class BlockAlloyFurnace extends BlockContainerFacingBase {
             float f4 = rnd.nextFloat() * 0.6F - 0.3F;
 
             if (l == 4) {
-                world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, f - f3, f1, f2 + f4, 0.0D, 0.0D, 0.0D);
-                world.spawnParticle(EnumParticleTypes.FLAME, f - f3, f1, f2 + f4, 0.0D, 0.0D, 0.0D);
+                world.addParticle(ParticleTypes.SMOKE, f - f3, f1, f2 + f4, 0.0D, 0.0D, 0.0D);
+                world.addParticle(ParticleTypes.FLAME, f - f3, f1, f2 + f4, 0.0D, 0.0D, 0.0D);
             } else if (l == 5) {
-                world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, f + f3, f1, f2 + f4, 0.0D, 0.0D, 0.0D);
-                world.spawnParticle(EnumParticleTypes.FLAME, f + f3, f1, f2 + f4, 0.0D, 0.0D, 0.0D);
+                world.addParticle(ParticleTypes.SMOKE, f + f3, f1, f2 + f4, 0.0D, 0.0D, 0.0D);
+                world.addParticle(ParticleTypes.FLAME, f + f3, f1, f2 + f4, 0.0D, 0.0D, 0.0D);
             } else if (l == 2) {
-                world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, f + f4, f1, f2 - f3, 0.0D, 0.0D, 0.0D);
-                world.spawnParticle(EnumParticleTypes.FLAME, f + f4, f1, f2 - f3, 0.0D, 0.0D, 0.0D);
+                world.addParticle(ParticleTypes.SMOKE, f + f4, f1, f2 - f3, 0.0D, 0.0D, 0.0D);
+                world.addParticle(ParticleTypes.FLAME, f + f4, f1, f2 - f3, 0.0D, 0.0D, 0.0D);
             } else if (l == 3) {
-                world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, f + f4, f1, f2 + f3, 0.0D, 0.0D, 0.0D);
-                world.spawnParticle(EnumParticleTypes.FLAME, f + f4, f1, f2 + f3, 0.0D, 0.0D, 0.0D);
+                world.addParticle(ParticleTypes.SMOKE, f + f4, f1, f2 + f3, 0.0D, 0.0D, 0.0D);
+                world.addParticle(ParticleTypes.FLAME, f + f4, f1, f2 + f3, 0.0D, 0.0D, 0.0D);
             }
         }
     }
 
     @Override
-    public Item getItemDropped(BlockState state, Random rand, int fortune) {
-        return Item.getItemFromBlock(BPBlocks.alloyfurnace);
-    }
-
-    @Override
-    public int getLightValue(BlockState state, IBlockAccess world, BlockPos pos) {
-        return state.getValue(ACTIVE) ? 13 : 0;
-    }
-
-    @Override
-    public GuiIDs getGuiID() {
-
-        return GuiIDs.ALLOY_FURNACE;
+    public int getLightValue(BlockState state, IEnviromentBlockReader world, BlockPos pos) {
+        return state.get(ACTIVE) ? 13 : 0;
     }
 
     @Override

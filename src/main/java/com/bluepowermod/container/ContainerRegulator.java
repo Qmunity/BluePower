@@ -47,7 +47,7 @@ public class ContainerRegulator extends Container {
     public int fuzzySetting = -1;
 
     public ContainerRegulator(int windowId, PlayerInventory invPlayer, IInventory inventory) {
-        super(BPContainerType.ALLOY_FURNACE, windowId);
+        super(BPContainerType.REGULATOR, windowId);
         this.regulator = inventory;
 
         for (int i = 0; i < 3; ++i) {

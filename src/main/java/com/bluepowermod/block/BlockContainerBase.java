@@ -21,7 +21,6 @@ import com.bluepowermod.BluePower;
 import com.bluepowermod.api.block.IAdvancedSilkyRemovable;
 import com.bluepowermod.helper.IOHelper;
 import com.bluepowermod.init.BPItems;
-import com.bluepowermod.reference.GuiIDs;
 import com.bluepowermod.tile.IRotatable;
 import com.bluepowermod.tile.TileBase;
 import net.minecraft.block.*;
@@ -35,7 +34,7 @@ import net.minecraft.block.BlockRenderType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
@@ -46,23 +45,15 @@ import javax.annotation.Nullable;
 
 public class BlockContainerBase extends BlockBase implements IAdvancedSilkyRemovable {
 
-    private GuiIDs guiId = GuiIDs.INVALID;
     private Class<? extends TileBase> tileEntityClass;
     private boolean isRedstoneEmitter;
     private boolean isSilkyRemoving;
 
     public BlockContainerBase(Material material, Class<? extends TileBase> tileEntityClass) {
-
         super(material);
-        hasTileEntity = true;
         setTileEntityClass(tileEntityClass);
     }
 
-    public BlockContainerBase setGuiId(GuiIDs guiId) {
-
-        this.guiId = guiId;
-        return this;
-    }
 
     public BlockContainerBase setTileEntityClass(Class<? extends TileBase> tileEntityClass) {
 
@@ -83,11 +74,11 @@ public class BlockContainerBase extends BlockBase implements IAdvancedSilkyRemov
 
     @Nullable
     @Override
-    public TileEntity createTileEntity(World world, BlockState state) {
+    public TileEntity createTileEntity(BlockState state, IBlockReader world) {
         try {
             return getTileEntity().newInstance();
         } catch (Exception e) {
-            return super.createTileEntity(world, state);
+            return super.createTileEntity(state, world);
         }
     }
 

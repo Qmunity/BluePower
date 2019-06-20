@@ -18,7 +18,7 @@ import com.bluepowermod.tile.tier1.TileLamp;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyInteger;
+import net.minecraft.state.IntegerProperty;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
@@ -33,8 +33,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 
@@ -44,7 +44,7 @@ import javax.annotation.Nullable;
  */
 public class BlockLamp extends BlockContainerBase implements ICustomModelBlock, IBPColoredBlock{
 
-    public static final PropertyInteger POWER = PropertyInteger.create("power", 0, 15);
+    public static final IntegerProperty POWER = IntegerProperty.create("power", 0, 15);
 
     private final boolean isInverted;
     private final MinecraftColor color;
@@ -57,7 +57,7 @@ public class BlockLamp extends BlockContainerBase implements ICustomModelBlock, 
         this.name = name;
         setTranslationKey(name + "." + color.name().toLowerCase() + (isInverted ? ".inverted" : ""));
         setCreativeTab(BPCreativeTabs.lighting);
-        setDefaultState(blockState.getBaseState().withProperty(POWER, isInverted ? 15 : 0));
+        setDefaultState(blockState.getBaseState().with(POWER, isInverted ? 15 : 0));
         setRegistryName(name + (isInverted ? "inverted" : "") + color.name());
     }
 
@@ -96,7 +96,7 @@ public class BlockLamp extends BlockContainerBase implements ICustomModelBlock, 
 
     @Override
     public int getLightValue(BlockState state, IBlockAccess w, BlockPos pos) {
-        return !isInverted ? state.getValue(POWER) : 15 - state.getValue(POWER);
+        return !isInverted ? state.get(POWER) : 15 - state.get(POWER);
     }
 
     @Override
@@ -135,23 +135,23 @@ public class BlockLamp extends BlockContainerBase implements ICustomModelBlock, 
 
     @Override
     public int getMetaFromState(BlockState state) {
-        return state.getValue(POWER);
+        return state.get(POWER);
     }
 
     @Override
     public BlockState getStateFromMeta(int meta) {
-        return getDefaultState().withProperty(POWER, meta);
+        return getDefaultState().with(POWER, meta);
     }
 
     @Override
     public BlockState getStateForPlacement(World world, BlockPos pos, Direction facing, float hitX, float hitY, float hitZ, int meta, LivingEntity placer, Hand hand) {
-        return super.getStateForPlacement(world, pos, facing, hitX, hitY, hitZ, meta, placer, hand).withProperty(POWER, world.getRedstonePowerFromNeighbors(pos));
+        return super.getStateForPlacement(world, pos, facing, hitX, hitY, hitZ, meta, placer, hand).with(POWER, world.getRedstonePowerFromNeighbors(pos));
     }
 
     @Override
     public void neighborChanged(BlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos) {
         super.neighborChanged(state, world, pos, blockIn, fromPos);
-        world.setBlockState(pos, state.withProperty(POWER, world.getRedstonePowerFromNeighbors(pos)));
+        world.setBlockState(pos, state.with(POWER, world.getRedstonePowerFromNeighbors(pos)));
     }
 
 }

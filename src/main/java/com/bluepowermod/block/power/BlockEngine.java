@@ -10,47 +10,40 @@ package com.bluepowermod.block.power;
 import com.bluepowermod.block.BlockContainerBase;
 import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.init.BPItems;
-import com.bluepowermod.reference.GuiIDs;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier3.TileEngine;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyBool;
-import net.minecraft.block.properties.PropertyEnum;
-import net.minecraft.block.properties.PropertyInteger;
-import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.state.BooleanProperty;
+import net.minecraft.state.EnumProperty;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-;import javax.annotation.Nullable;
+import javax.annotation.Nullable;
 
 /**
- *
  * @author TheFjong, MoreThanHidden
- *
  */
 public class BlockEngine extends BlockContainerBase {
 
-    public static final PropertyBool ACTIVE = PropertyBool.create("active");
-    public static final PropertyBool GEAR = PropertyBool.create("gear");
-    public static final PropertyBool GLIDER = PropertyBool.create("glider");
-    public static final PropertyEnum<Direction> FACING = PropertyEnum.create("facing", Direction.class);
+    public static final BooleanProperty ACTIVE = BooleanProperty.create("active");
+    public static final BooleanProperty GEAR = BooleanProperty.create("gear");
+    public static final BooleanProperty GLIDER = BooleanProperty.create("glider");
+    public static final EnumProperty<Direction> FACING = EnumProperty.create("facing", Direction.class);
 
     public BlockEngine() {
 
         super(Material.IRON, TileEngine.class);
         setCreativeTab(BPCreativeTabs.machines);
         setTranslationKey(Refs.ENGINE_NAME);
-        setDefaultState(blockState.getBaseState().withProperty(ACTIVE, false).withProperty(GEAR, false).withProperty(GLIDER, false).withProperty(FACING, Direction.DOWN));
+        setDefaultState(blockState.getBaseState().with(ACTIVE, false).with(GEAR, false).with(GLIDER, false).with(FACING, Direction.DOWN));
         setRegistryName(Refs.MODID, Refs.ENGINE_NAME);
     }
 
@@ -58,35 +51,11 @@ public class BlockEngine extends BlockContainerBase {
     protected BlockStateContainer createBlockState() {
         return new BlockStateContainer(this, ACTIVE, GEAR, GLIDER, FACING);
     }
-    @Override
-    public int getMetaFromState(BlockState state) {
-        return state.getValue(ACTIVE) ? 0 : 1;
-    }
 
-    @Override
-    public BlockState getStateFromMeta(int meta) {
-        return getDefaultState().withProperty(ACTIVE, meta == 1);
-    }
-
-    @Override
-    public BlockState getActualState(BlockState state, IBlockAccess worldIn, BlockPos pos) {
-        TileEngine tile = (TileEngine)worldIn.getTileEntity(pos);
-        return ((tile != null) && (tile.getOrientation() != null)) ? getDefaultState().withProperty(FACING, tile.getOrientation()).withProperty(ACTIVE, tile.isActive) : super.getActualState(state, worldIn, pos);
-    }
 
     @Override
     public BlockRenderType getRenderType(BlockState state) {
         return BlockRenderType.MODEL;
-    }
-
-    @Override
-    public boolean isFullCube(BlockState state) {
-        return false;
-    }
-
-    @Override
-    public boolean isOpaqueCube(BlockState state) {
-        return false;
     }
 
     @Override
@@ -136,18 +105,6 @@ public class BlockEngine extends BlockContainerBase {
         }
 
         return super.onBlockActivated(world, pos, state, player, hand, efacing, hitX, hitY, hitZ);
-    }
-
-
-    /**
-     * Method to be overwritten that returns a GUI ID
-     *
-     * @return
-     */
-    @Override
-    public GuiIDs getGuiID() {
-
-        return GuiIDs.INVALID;
     }
 
     @Override

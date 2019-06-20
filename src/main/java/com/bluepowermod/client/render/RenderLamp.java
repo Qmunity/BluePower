@@ -17,8 +17,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.fml.common.Loader;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.lwjgl.opengl.GL11;
 
 
@@ -58,7 +58,7 @@ public class RenderLamp extends TileEntityRenderer {
                 for (Direction face : Direction.VALUES) {
                     BlockState state = te.getWorld().getBlockState(te.getPos().offset(face.getOpposite()));
                     if (state.getBlock() instanceof BlockLamp && ((BlockLamp)state.getBlock()).getSize().equals(Block.FULL_BLOCK_AABB)) {
-                        if (((BlockLamp) state.getBlock()).isInverted() ? state.getValue(BlockLamp.POWER) < 15 : state.getValue(BlockLamp.POWER) > 0) {
+                        if (((BlockLamp) state.getBlock()).isInverted() ? state.get(BlockLamp.POWER) < 15 : state.get(BlockLamp.POWER) > 0) {
                             renderFaces[face.getIndex()] = false;
                             double offsetx = (face.getXOffset() * 0.05) > 0 ? (face.getXOffset() * 0.05) : 0;
                             double offsety = (face.getYOffset() * 0.05) > 0 ? (face.getYOffset() * 0.05) : 0;

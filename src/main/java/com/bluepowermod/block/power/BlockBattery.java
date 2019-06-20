@@ -15,9 +15,9 @@ import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier3.TileBattery;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.state.IntegerProperty;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.Direction;
@@ -33,13 +33,13 @@ import net.minecraft.world.World;
 
 public class BlockBattery extends BlockContainerBase {
 
-    public static final PropertyInteger LEVEL = PropertyInteger.create("level", 0, 6);
+    public static final IntegerProperty LEVEL = IntegerProperty.create("level", 0, 6);
 
     public BlockBattery() {
         super(Material.IRON, TileBattery.class);
         setTranslationKey(Refs.BATTERYBLOCK_NAME);
         setRegistryName(Refs.MODID, Refs.BATTERYBLOCK_NAME);
-        this.setDefaultState(this.blockState.getBaseState().withProperty(LEVEL, 0));
+        this.setDefaultState(this.blockState.getBaseState().with(LEVEL, 0));
     }
 
     @Override
@@ -49,7 +49,7 @@ public class BlockBattery extends BlockContainerBase {
             IPowerBase storage = tile.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, null);
             double voltage = storage.getVoltage();
             int level = (int)((voltage / storage.getMaxVoltage()) * 6);
-            return this.blockState.getBaseState().withProperty(LEVEL, level);
+            return this.blockState.getBaseState().with(LEVEL, level);
         }
         return super.getActualState(state, worldIn, pos);
     }
@@ -78,12 +78,12 @@ public class BlockBattery extends BlockContainerBase {
 
     @Override
     public int getMetaFromState(BlockState state) {
-        return state.getValue(LEVEL);
+        return state.get(LEVEL);
     }
 
     @Override
     public BlockState getStateFromMeta(int meta) {
-        return this.blockState.getBaseState().withProperty(LEVEL, meta);
+        return this.blockState.getBaseState().with(LEVEL, meta);
     }
 
 }

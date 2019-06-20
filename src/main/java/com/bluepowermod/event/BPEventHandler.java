@@ -59,8 +59,8 @@ import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.*;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.lwjgl.opengl.GL11;
 
 import java.util.Random;
@@ -279,7 +279,7 @@ public class BPEventHandler {
             position.add(0.5, 0.1, 0.5);
             vertexbuffer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
             BlockRendererDispatcher blockrendererdispatcher = Minecraft.getInstance().getBlockRendererDispatcher();
-            BlockState state = block.getDefaultState().withProperty(BlockGateBase.FACING, mop.sideHit);
+            BlockState state = block.getDefaultState().with(BlockGateBase.FACING, mop.sideHit);
             IBakedModel ibakedmodel = blockrendererdispatcher.getModelForState(state);
             blockrendererdispatcher.getBlockModelRenderer().renderModel(event.getPlayer().world, ibakedmodel, state, position, vertexbuffer, false, new Random().nextLong());
             tessellator.draw();

@@ -21,8 +21,8 @@ import net.minecraft.util.Direction;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.lwjgl.opengl.GL11;
 
 import com.bluepowermod.tile.tier3.TileEngine;
@@ -107,7 +107,7 @@ public class RenderEngine extends TileEntityRenderer<TileEngine> {
             f2 = ((float) (.5 - .5 * Math.cos(3.1415926535897931D * (double) f)) / 4);
         }
         GL11.glTranslatef(0, f2, 0);
-        IBakedModel glider = dispatcher.getModelForState(state.withProperty(BlockEngine.GLIDER, true));
+        IBakedModel glider = dispatcher.getModelForState(state.with(BlockEngine.GLIDER, true));
         dispatcher.getBlockModelRenderer().renderModel(world, glider, state, pos, bufferBuilder, false);
 
         tessellator.draw();
@@ -121,7 +121,7 @@ public class RenderEngine extends TileEntityRenderer<TileEngine> {
         long angle = tile.isActive ? (System.currentTimeMillis() / 10) % 360 : 0;
         GlStateManager.rotate(angle, 0, 1, 0);
         GlStateManager.translate(-0.5, 0, -0.5);
-        IBakedModel gear = dispatcher.getModelForState(state.withProperty(BlockEngine.GEAR, true));
+        IBakedModel gear = dispatcher.getModelForState(state.with(BlockEngine.GEAR, true));
         dispatcher.getBlockModelRenderer().renderModel(world, gear, state, pos, bufferBuilder, false);
 
         tessellator.draw();

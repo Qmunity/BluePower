@@ -8,17 +8,17 @@
 package com.bluepowermod.block;
 
 import com.bluepowermod.tile.TileBase;
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyBool;
-import net.minecraft.block.properties.PropertyDirection;
-import net.minecraft.block.state.BlockStateContainer;
+import net.minecraft.state.DirectionProperty;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.state.BooleanProperty;
+import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 /**
@@ -26,35 +26,25 @@ import net.minecraft.world.World;
  */
 public class BlockContainerFacingBase extends BlockContainerBase {
 
-    public static final PropertyDirection FACING = PropertyDirection.create("facing");
-    public static final PropertyBool ACTIVE = PropertyBool.create("active");
+    public static final DirectionProperty FACING = DirectionProperty.create("facing");
+    public static final BooleanProperty ACTIVE = BooleanProperty.create("active");
 
     public BlockContainerFacingBase(Material material, Class<? extends TileBase> tileEntityClass) {
 
         super(material, tileEntityClass);
-        setDefaultState(getDefaultState().withProperty(FACING, Direction.NORTH).withProperty(ACTIVE, false));
+        setDefaultState(getDefaultState().with(FACING, Direction.NORTH).with(ACTIVE, false));
     }
 
-
     @Override
-    protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, FACING, ACTIVE);
-    }
-
-
-    @Override
-    public BlockState getStateFromMeta(int meta) {
-        //Meta 0-5 off direction - Meta 6-11 on direction
-        return getDefaultState()
-                .withProperty(FACING, Direction.VALUES[meta > 5 ? meta - 6 : meta])
-                .withProperty(ACTIVE, meta > 5);
+    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder){
+        builder.add(FACING, ACTIVE);
     }
 
     public static void setState(boolean active, World worldIn, BlockPos pos){
         BlockState iblockstate = worldIn.getBlockState(pos);
         TileEntity tileentity = worldIn.getTileEntity(pos);
 
-        worldIn.setBlockState(pos, iblockstate.withProperty(ACTIVE, active), 3);
+        worldIn.setBlockState(pos, iblockstate.with(ACTIVE, active), 3);
         if (tileentity != null){
             tileentity.validate();
             worldIn.setTileEntity(pos, tileentity);
@@ -64,7 +54,7 @@ public class BlockContainerFacingBase extends BlockContainerBase {
         BlockState iblockstate = worldIn.getBlockState(pos);
         TileEntity tileentity = worldIn.getTileEntity(pos);
 
-        worldIn.setBlockState(pos, iblockstate.withProperty(FACING, facing), 3);
+        worldIn.setBlockState(pos, iblockstate.with(FACING, facing), 3);
         if (tileentity != null){
             tileentity.validate();
             worldIn.setTileEntity(pos, tileentity);
@@ -74,12 +64,7 @@ public class BlockContainerFacingBase extends BlockContainerBase {
     @Override
     public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack iStack) {
         super.onBlockPlacedBy(world, pos, state, placer, iStack);
-        world.setBlockState(pos, state.withProperty(FACING, canRotateVertical() ? Direction.getDirectionFromEntityLiving(pos, placer) : placer.getHorizontalFacing().getOpposite()), 2);
+        world.setBlockState(pos, state.with(FACING, canRotateVertical() ? Direction.getFacingDirections(placer)[0] : placer.getHorizontalFacing().getOpposite()), 2);
     }
 
-    @Override
-    public int getMetaFromState(BlockState state) {
-        //Meta 0-5 off direction - Meta 6-11 on direction
-        return state.getValue(FACING).getIndex() + (state.getValue(ACTIVE) ? 6 : 0);
-    }
 }

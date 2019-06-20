@@ -18,17 +18,16 @@
 package com.bluepowermod.block;
 
 import com.bluepowermod.api.misc.MinecraftColor;
-import com.bluepowermod.block.worldgen.BlockStoneOre;
 import com.bluepowermod.init.BPBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
-
-import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.reference.Refs;
+import net.minecraft.block.material.Material;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.world.IBlockReader;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -38,11 +37,7 @@ public abstract class BlockBase extends Block {
     private boolean wip = false;
     
     public BlockBase(Material material) {
-    
-        super(material);
-        setSoundType(SoundType.STONE);
-        setCreativeTab(BPCreativeTabs.machines);
-        blockHardness = 3.0F;
+        super(Properties.create(material).sound(SoundType.STONE).hardnessAndResistance(3.0F));
         BPBlocks.blockList.add(this);
     }
 
@@ -54,10 +49,10 @@ public abstract class BlockBase extends Block {
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World player, List<String> tooltip, ITooltipFlag advanced) {
-        super.addInformation(stack, player, tooltip, advanced);
+    public void addInformation(ItemStack stack, @Nullable IBlockReader world, List<ITextComponent> tooltip, ITooltipFlag advanced) {
+        super.addInformation(stack, world, tooltip, advanced);
         if(wip){
-            tooltip.add(MinecraftColor.RED.getChatColor() + "WIP");
+            tooltip.add(new StringTextComponent(MinecraftColor.RED.getChatColor() + "WIP") );
         }
     }
 

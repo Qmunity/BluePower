@@ -16,8 +16,8 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -29,7 +29,7 @@ public class BlockRubberLeaves extends LeavesBlock {
         this.setRegistryName(Refs.MODID + ":" + Refs.RUBBERLEAVES_NAME);
         this.setTranslationKey(Refs.MODID + ":" + Refs.RUBBERLEAVES_NAME);
         this.setCreativeTab(BPCreativeTabs.blocks);
-        this.setDefaultState(this.blockState.getBaseState().withProperty(CHECK_DECAY, false).withProperty(DECAYABLE, true));
+        this.setDefaultState(this.blockState.getBaseState().with(CHECK_DECAY, false).with(DECAYABLE, true));
         BPBlocks.blockList.add(this);
     }
 
@@ -74,19 +74,19 @@ public class BlockRubberLeaves extends LeavesBlock {
     @Override
     public BlockState getStateFromMeta(int meta){
         return this.getDefaultState()
-                .withProperty(DECAYABLE, (meta & 4) == 0)
-                .withProperty(CHECK_DECAY, (meta & 8) > 0);
+                .with(DECAYABLE, (meta & 4) == 0)
+                .with(CHECK_DECAY, (meta & 8) > 0);
     }
 
     @Override
     public int getMetaFromState(BlockState state){
         int meta = 0;
 
-        if (!state.getValue(DECAYABLE)){
+        if (!state.get(DECAYABLE)){
             meta |= 4;
         }
 
-        if (state.getValue(CHECK_DECAY)){
+        if (state.get(CHECK_DECAY)){
             meta |= 8;
         }
 

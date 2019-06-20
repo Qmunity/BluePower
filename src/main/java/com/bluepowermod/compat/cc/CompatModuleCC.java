@@ -13,8 +13,8 @@ import com.bluepowermod.redstone.RedstoneApi;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import dan200.computercraft.api.ComputerCraftAPI;
 
 public class CompatModuleCC extends CompatModule {

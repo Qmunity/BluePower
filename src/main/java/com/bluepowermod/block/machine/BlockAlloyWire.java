@@ -13,8 +13,8 @@ import net.minecraft.block.*;
 import net.minecraft.block.RepeaterBlock;
 import net.minecraft.block.ObserverBlock;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyBool;
-import net.minecraft.block.properties.PropertyDirection;
+import net.minecraft.state.BooleanProperty;
+import net.minecraft.state.DirectionProperty;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -22,9 +22,10 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -32,39 +33,27 @@ import java.util.Set;
 
 public class BlockAlloyWire extends BlockContainerBase implements IBPColoredBlock{
 
-    public static final PropertyDirection FACING = PropertyDirection.create("facing");
-    public static final PropertyBool POWERED = PropertyBool.create("powered");
-    public static final PropertyBool CONNECTED_FRONT = PropertyBool.create("connected_front");
-    public static final PropertyBool CONNECTED_BACK = PropertyBool.create("connected_back");
-    public static final PropertyBool CONNECTED_LEFT = PropertyBool.create("connected_left");
-    public static final PropertyBool CONNECTED_RIGHT = PropertyBool.create("connected_right");
+    public static final DirectionProperty FACING = DirectionProperty.create("facing");
+    public static final BooleanProperty POWERED = BooleanProperty.create("powered");
+    public static final BooleanProperty CONNECTED_FRONT = BooleanProperty.create("connected_front");
+    public static final BooleanProperty CONNECTED_BACK = BooleanProperty.create("connected_back");
+    public static final BooleanProperty CONNECTED_LEFT = BooleanProperty.create("connected_left");
+    public static final BooleanProperty CONNECTED_RIGHT = BooleanProperty.create("connected_right");
     private boolean canProvidePower = true;
     final String type;
     /** List of blocks to update with redstone. */
     private final Set<BlockPos> blocksNeedingUpdate = Sets.<BlockPos>newHashSet();
 
     public BlockAlloyWire(String type) {
-        super(Material.CIRCUITS, TileWire.class);
+        super(Material.ROCK, TileWire.class);
         this.type = type;
-        this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, Direction.UP).withProperty(CONNECTED_FRONT, false).withProperty(CONNECTED_BACK, false).withProperty(CONNECTED_LEFT, false).withProperty(CONNECTED_RIGHT, false).withProperty(POWERED, false));
-        setTranslationKey("wire." + type);
-        setCreativeTab(BPCreativeTabs.wiring);
+        this.setDefaultState(this.stateContainer.getBaseState().with(FACING, Direction.UP).with(CONNECTED_FRONT, false).with(CONNECTED_BACK, false).with(CONNECTED_LEFT, false).with(CONNECTED_RIGHT, false).with(POWERED, false));
         setRegistryName(Refs.MODID + ":" + type + "_wire");
     }
 
     public BlockAlloyWire(String type, Material material) {
         super(material, TileWire.class);
         this.type = type;
-    }
-
-    @Override
-    public boolean isOpaqueCube(BlockState state) {
-        return false;
-    }
-
-    @Override
-    public AxisAlignedBB getBoundingBox(BlockState state, IBlockAccess source, BlockPos pos) {
-        return new AxisAlignedBB(0,0,0,1,0.1875,1);
     }
 
     private BlockState updateSurroundingWire(World worldIn, BlockPos pos, BlockState state)
@@ -75,7 +64,7 @@ public class BlockAlloyWire extends BlockContainerBase implements IBPColoredBloc
 
         for (BlockPos blockpos : list)
         {
-            worldIn.notifyNeighborsOfStateChange(blockpos, this, false);
+            worldIn.notifyNeighborsOfStateChange(blockpos, this);
         }
 
         return state;
@@ -84,14 +73,14 @@ public class BlockAlloyWire extends BlockContainerBase implements IBPColoredBloc
     private BlockState calculateCurrentChanges(World worldIn, BlockPos pos1, BlockPos pos2, BlockState state)
     {
         BlockState iblockstate = state;
-        boolean i = state.getValue(POWERED);
+        boolean i = state.get(POWERED);
         this.canProvidePower = false;
         int k = worldIn.getRedstonePowerFromNeighbors(pos1);
         this.canProvidePower = true;
 
         if (i != k > 0)
         {
-            state = state.withProperty(POWERED, k > 0);
+            state = state.with(POWERED, k > 0);
 
             if (worldIn.getBlockState(pos1) == iblockstate)
             {
@@ -228,12 +217,12 @@ public class BlockAlloyWire extends BlockContainerBase implements IBPColoredBloc
 
     @Override
     public int getMetaFromState(BlockState state) {
-        return state.getValue(POWERED) ? 1 : 0;
+        return state.get(POWERED) ? 1 : 0;
     }
 
     @Override
     public BlockState getStateFromMeta(int meta) {
-        return getDefaultState().withProperty( POWERED,meta > 0);
+        return getDefaultState().with( POWERED,meta > 0);
     }
 
     public boolean canProvidePower(BlockState state)
@@ -244,10 +233,10 @@ public class BlockAlloyWire extends BlockContainerBase implements IBPColoredBloc
 
     @Override
     public BlockState getActualState(BlockState state, IBlockAccess worldIn, BlockPos pos) {
-        Boolean connected_back = state.getValue(CONNECTED_BACK);
-        Boolean connected_front = state.getValue(CONNECTED_FRONT);
-        Boolean connected_left = state.getValue(CONNECTED_LEFT);
-        Boolean connected_right = state.getValue(CONNECTED_RIGHT);
+        Boolean connected_back = state.get(CONNECTED_BACK);
+        Boolean connected_front = state.get(CONNECTED_FRONT);
+        Boolean connected_left = state.get(CONNECTED_LEFT);
+        Boolean connected_right = state.get(CONNECTED_RIGHT);
 
         for (Direction face : FACING.getAllowedValues()){
             BlockState stateof = worldIn.getBlockState(pos.offset(face));
@@ -268,10 +257,10 @@ public class BlockAlloyWire extends BlockContainerBase implements IBPColoredBloc
         }
 
         return super.getActualState(state, worldIn, pos)
-                .withProperty(CONNECTED_RIGHT, connected_right)
-                .withProperty(CONNECTED_LEFT, connected_left)
-                .withProperty(CONNECTED_FRONT, connected_front)
-                .withProperty(CONNECTED_BACK, connected_back);
+                .with(CONNECTED_RIGHT, connected_right)
+                .with(CONNECTED_LEFT, connected_left)
+                .with(CONNECTED_FRONT, connected_front)
+                .with(CONNECTED_BACK, connected_back);
     }
 
     /**
@@ -305,7 +294,7 @@ public class BlockAlloyWire extends BlockContainerBase implements IBPColoredBloc
             return true;
         }else if (canConnectTo(iblockstate, side, worldIn, pos)){
             return true;
-        }else if (iblockstate.getBlock() == Blocks.POWERED_REPEATER && iblockstate.getValue(RedstoneDiodeBlock.FACING) == side){
+        }else if (iblockstate.getBlock() == Blocks.POWERED_REPEATER && iblockstate.get(RedstoneDiodeBlock.FACING) == side){
             return true;
         }else{
             return !flag && canConnectUpwardsTo(worldIn, blockpos.down());

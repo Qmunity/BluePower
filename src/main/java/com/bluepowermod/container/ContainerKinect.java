@@ -34,7 +34,7 @@ public class ContainerKinect extends Container {
     private final IInventory kinect;
 
     public ContainerKinect(int windowId, PlayerInventory invPlayer, IInventory inventory) {
-        super(BPContainerType.ALLOY_FURNACE, windowId);
+        super(BPContainerType.KINETIC_GENERATOR, windowId);
         kinect = inventory;
         
         //Inventory for Turbines
