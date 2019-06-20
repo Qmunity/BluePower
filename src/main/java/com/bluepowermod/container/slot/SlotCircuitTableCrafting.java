@@ -14,11 +14,9 @@ import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.container.CraftingResultSlot;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.item.crafting.ShapedRecipe;
-import net.minecraftforge.oredict.ShapedOreRecipe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -75,7 +73,8 @@ public class SlotCircuitTableCrafting extends CraftingResultSlot {
 
     private static List<ItemStack> getCraftingComponents(ItemStack gate) {
 
-        List<ItemStack> requiredItems = new ArrayList<ItemStack>();
+      /* TODO: Update this for 1.14
+      List<ItemStack> requiredItems = new ArrayList<ItemStack>();
         for (IRecipe r : CraftingManager.REGISTRY) {
             ItemStack result = r.getRecipeOutput();
             if (!result.isEmpty() && result.isItemEqual(gate)) {
@@ -124,7 +123,7 @@ public class SlotCircuitTableCrafting extends CraftingResultSlot {
                     return requiredItems;
                 }
             }
-        }
+        }*/
         return new ArrayList<ItemStack>();
     }
 }

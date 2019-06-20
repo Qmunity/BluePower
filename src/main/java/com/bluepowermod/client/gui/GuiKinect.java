@@ -19,22 +19,22 @@
 
 package com.bluepowermod.client.gui;
 
+import net.minecraft.client.gui.IHasContainer;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 
 import com.bluepowermod.container.ContainerKinect;
 import com.bluepowermod.reference.Refs;
-import com.bluepowermod.tile.tier3.TileKinectGenerator;
+import net.minecraft.util.text.ITextComponent;
 
-public class GuiKinect extends GuiContainerBaseBP {
+public class GuiKinect extends GuiContainerBaseBP<ContainerKinect> implements IHasContainer<ContainerKinect> {
 
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/kinect.png");
-    private final TileKinectGenerator kinect;
+    private final ContainerKinect kinect;
 
-    public GuiKinect(PlayerInventory invPlayer, TileKinectGenerator kinect) {
-
-        super(new ContainerKinect(invPlayer, kinect), resLoc);
-        this.kinect = kinect;
+    public GuiKinect(ContainerKinect container, PlayerInventory playerInventory, ITextComponent title){
+        super(container, playerInventory, title, resLoc);
+        this.kinect = container;
         ySize = 165;
     }
 }

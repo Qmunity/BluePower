@@ -26,8 +26,8 @@ import net.minecraftforge.api.distmarker.OnlyIn;
  */
 public class ContainerItemDetector extends Container {
 
-    private int mode = -1;
-    private int fuzzySetting = -1;
+    public int mode = -1;
+    public int fuzzySetting = -1;
     private final IInventory itemDetector;
 
     public ContainerItemDetector(int windowId, PlayerInventory invPlayer, IInventory inventory) {

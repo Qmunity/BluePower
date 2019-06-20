@@ -11,6 +11,7 @@ import com.bluepowermod.client.gui.IGuiButtonSensitive;
 import com.bluepowermod.network.LocatedPacket;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.tileentity.TileEntity;
 
 /**
@@ -28,9 +29,8 @@ public class MessageGuiUpdate extends LocatedPacket<MessageGuiUpdate> {
     public MessageGuiUpdate() {
 
     }
-    public MessageGuiUpdate(TileEntity tile, int messageId, int value) {
-
-        super(tile.getPos());
+    public MessageGuiUpdate(Container container, int messageId, int value) {
+        super();
         partId = -1;
         this.messageId = messageId;
         this.value = value;

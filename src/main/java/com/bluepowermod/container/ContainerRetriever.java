@@ -25,7 +25,8 @@ import net.minecraftforge.api.distmarker.OnlyIn;
  */
 public class ContainerRetriever extends ContainerFilter {
 
-    private int slotIndex = -1, mode = -1;
+    public int slotIndex = -1;
+    public int mode = -1;
     private final IInventory retriever;
 
     public ContainerRetriever(int windowId, PlayerInventory invPlayer, IInventory inventory) {

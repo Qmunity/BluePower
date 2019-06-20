@@ -9,42 +9,38 @@ package com.bluepowermod.client.gui;
 
 import com.bluepowermod.client.gui.widget.*;
 import com.bluepowermod.container.ContainerCircuitDatabaseMain;
-import com.bluepowermod.network.BPNetworkHandler;
-import com.bluepowermod.network.message.MessageGuiUpdate;
-import com.bluepowermod.network.message.MessageUpdateTextfield;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier3.TileCircuitDatabase;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.IHasContainer;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import org.lwjgl.input.Keyboard;
+import net.minecraft.util.text.ITextComponent;
 import org.lwjgl.opengl.GL11;
 
 import java.io.IOException;
 import java.util.List;
 
-public class GuiCircuitDatabaseMain extends GuiContainerBaseBP {
+public class GuiCircuitDatabaseMain extends GuiContainerBaseBP<ContainerCircuitDatabaseMain> implements IHasContainer<ContainerCircuitDatabaseMain> {
 
-    private final TileCircuitDatabase circuitDatabase;
+    private final ContainerCircuitDatabaseMain circuitDatabase;
     private static final ResourceLocation copyTabTexture = new ResourceLocation(Refs.MODID, "textures/gui/circuit_database.png");
     private TextFieldWidget nameField;
     private WidgetSidewaysTab shareOptionTab;
     private WidgetMode copyButton;
 
-    public GuiCircuitDatabaseMain(PlayerInventory invPlayer, TileCircuitDatabase circuitDatabase) {
-
-        super(circuitDatabase, new ContainerCircuitDatabaseMain(invPlayer, circuitDatabase), copyTabTexture);
-        this.circuitDatabase = circuitDatabase;
+    public GuiCircuitDatabaseMain(ContainerCircuitDatabaseMain container, PlayerInventory playerInventory, ITextComponent title){
+        super(container, playerInventory, title, copyTabTexture);
+        this.circuitDatabase = container;
         ySize = 224;
     }
 
     @Override
-    public void initGui() {
+    public void init() {
 
-        super.initGui();
+        super.init();
 
         WidgetTab widget = new WidgetTab(1, guiLeft - 32, guiTop + 10, 33, 35, 198, 3, Refs.MODID + ":textures/gui/circuit_database.png") {
 
@@ -66,7 +62,7 @@ public class GuiCircuitDatabaseMain extends GuiContainerBaseBP {
                 }
             }
         };
-        widget.value = circuitDatabase.clientCurrentTab;
+        widget.value = circuitDatabase.selectedShareOption;
         widget.enabledTabs[2] = !Minecraft.getInstance().isSingleplayer();
         addWidget(widget);
 
@@ -110,44 +106,41 @@ public class GuiCircuitDatabaseMain extends GuiContainerBaseBP {
         };
         addWidget(copyButton);
 
-        Keyboard.enableRepeatEvents(true);
-        nameField = new TextFieldWidget(0, fontRenderer, guiLeft + 95, guiTop + 35, 70, fontRenderer.FONT_HEIGHT);
+        //Keyboard.enableRepeatEvents(true);
+        //nameField = new TextFieldWidget(0, font, guiLeft + 95, guiTop + 35, 70, font.FONT_HEIGHT);
         nameField.setEnableBackgroundDrawing(true);
         nameField.setVisible(true);
         nameField.setTextColor(16777215);
-        nameField.setText(circuitDatabase.getText(1));
+        //nameField.setText(circuitDatabase.getText(1));
 
     }
 
     @Override
-    protected void mouseClicked(int x, int y, int button) {
-
+    public boolean mouseClicked(double x, double y, int button) {
         super.mouseClicked(x, y, button);
         nameField.mouseClicked(x, y, button);
         if (nameField.isFocused() && button == 1) {
             nameField.setText("");
-            circuitDatabase.setText(1, nameField.getText());
-            BPNetworkHandler.INSTANCE.sendToServer(new MessageUpdateTextfield(circuitDatabase, 0));
+            //circuitDatabase.setText(1, nameField.getText());
+            //BPNetworkHandler.INSTANCE.sendToServer(new MessageUpdateTextfield(circuitDatabase, 0));
         }
+        return false;
     }
 
-    /**
-     * Fired when a key is typed. This is the equivalent of KeyListener.keyTyped(KeyEvent e).
-     */
     @Override
-    protected void keyTyped(char par1, int par2) throws IOException {
-
+    public boolean keyPressed(int par1, int par2, int par3) {
         if (par2 == 1)// esc
         {
-            super.keyTyped(par1, par2);
+            super.keyPressed(par1, par2, par3);
         } else {
-            if (nameField.textboxKeyTyped(par1, par2)) {
-                circuitDatabase.setText(1, nameField.getText());
-                BPNetworkHandler.INSTANCE.sendToServer(new MessageUpdateTextfield(circuitDatabase, 1));
+            if (nameField.keyPressed(par1, par2, par3)) {
+                //circuitDatabase.setText(1, nameField.getText());
+                //BPNetworkHandler.INSTANCE.sendToServer(new MessageUpdateTextfield(circuitDatabase, 1));
             } else {
-                super.keyTyped(par1, par2);
+                super.keyPressed(par1, par2, par3);
             }
         }
+        return true;
     }
 
     @Override
@@ -156,18 +149,18 @@ public class GuiCircuitDatabaseMain extends GuiContainerBaseBP {
         super.drawGuiContainerBackgroundLayer(par1, par2, par3);
 
         this.drawString(guiLeft + 95, guiTop + 25, I18n.format("gui.bluepower:circuitDatabase.name"), false);
-        nameField.drawTextBox();
+        //nameField.drawTextBox();
 
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        mc.renderEngine.bindTexture(copyTabTexture);
+        this.minecraft.getTextureManager().bindTexture(copyTabTexture);
 
         int processPercentage = circuitDatabase.curCopyProgress * 22 / TileCircuitDatabase.UPLOAD_AND_COPY_TIME;
         if (processPercentage > 0)
-            drawTexturedModalRect(guiLeft + 77, guiTop + 64, 176, 0, processPercentage, 15);
+            blit(guiLeft + 77, guiTop + 64, 176, 0, processPercentage, 15);
 
         processPercentage = circuitDatabase.curUploadProgress * 22 / TileCircuitDatabase.UPLOAD_AND_COPY_TIME;
         if (processPercentage > 0)
-            drawTexturedModalRect(guiLeft + 57, guiTop + 57 - processPercentage, 176, 37 - processPercentage, 15, processPercentage);
+            blit(guiLeft + 57, guiTop + 57 - processPercentage, 176, 37 - processPercentage, 15, processPercentage);
 
     }
 
@@ -175,16 +168,16 @@ public class GuiCircuitDatabaseMain extends GuiContainerBaseBP {
     public void actionPerformed(IGuiWidget widget) {
 
         if (widget.getID() == 1) {
-            circuitDatabase.clientCurrentTab = ((BaseWidget) widget).value;
+            //circuitDatabase.clientCurrentTab = ((BaseWidget) widget).value;
         }
-        BPNetworkHandler.INSTANCE.sendToServer(new MessageGuiUpdate(circuitDatabase, widget.getID(), ((BaseWidget) widget).value));
+        //BPNetworkHandler.INSTANCE.sendToServer(new MessageGuiUpdate(circuitDatabase, widget.getID(), ((BaseWidget) widget).value));
     }
 
     @Override
-    public void updateScreen() {
+    public void tick() {
 
-        super.updateScreen();
-        if (!nameField.isFocused()) {
+        super.tick();
+        /*if (!nameField.isFocused()) {
             nameField.setText(circuitDatabase.nameTextField);
         }
         boolean nameDuplicatePrivate = false;
@@ -209,7 +202,7 @@ public class GuiCircuitDatabaseMain extends GuiContainerBaseBP {
         copyButton.enabled = !circuitDatabase.copyInventory.getStackInSlot(0).isEmpty()
                 && !circuitDatabase.copyInventory.getStackInSlot(1).isEmpty()
                 && circuitDatabase.copy(Minecraft.getInstance().player, circuitDatabase.copyInventory.getStackInSlot(0),
-                        circuitDatabase.copyInventory.getStackInSlot(1), true);
+                        circuitDatabase.copyInventory.getStackInSlot(1), true);*/
     }
 
     @Override

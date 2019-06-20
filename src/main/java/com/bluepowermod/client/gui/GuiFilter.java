@@ -21,6 +21,8 @@ package com.bluepowermod.client.gui;
 
 import com.bluepowermod.client.gui.widget.BaseWidget;
 import com.bluepowermod.client.gui.widget.IGuiWidget;
+import com.bluepowermod.container.ContainerAlloyFurnace;
+import net.minecraft.client.gui.IHasContainer;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 
@@ -31,31 +33,28 @@ import com.bluepowermod.network.BPNetworkHandler;
 import com.bluepowermod.network.message.MessageGuiUpdate;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier1.TileFilter;
+import net.minecraft.util.text.ITextComponent;
 
 /**
  * @author MineMaarten
  */
-public class GuiFilter extends GuiContainerBaseBP {
+public class GuiFilter extends GuiContainerBaseBP<ContainerFilter> implements IHasContainer<ContainerFilter> {
 
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/seedbag.png");
-    protected TileFilter filter;
+    protected ContainerFilter filter;
 
-    public GuiFilter(ContainerFilter container, TileFilter filter, ResourceLocation resLoc) {
-
-        super(filter, container, resLoc);
-        this.filter = filter;
+    public GuiFilter(ContainerFilter container, PlayerInventory playerInventory, ITextComponent title){
+        super(container, playerInventory, title, resLoc);
+        this.filter = container;
     }
-
-    public GuiFilter(PlayerInventory invPlayer, TileFilter filter) {
-
-        super(filter, new ContainerFilter(invPlayer, filter), resLoc);
-        this.filter = filter;
+    public GuiFilter(ContainerFilter container, PlayerInventory playerInventory, ITextComponent title, ResourceLocation resourceLocation){
+        super(container, playerInventory, title, resourceLocation);
+        this.filter = container;
     }
-
     @Override
-    public void initGui() {
+    public void init() {
 
-        super.initGui();
+        super.init();
         WidgetColor colorWidget = new WidgetColor(0, guiLeft + 117, guiTop + 55);
         colorWidget.value = filter.filterColor.ordinal();
         addWidget(colorWidget);
@@ -69,6 +68,6 @@ public class GuiFilter extends GuiContainerBaseBP {
     public void actionPerformed(IGuiWidget widget) {
 
         BaseWidget baseWidget = (BaseWidget) widget;
-        BPNetworkHandler.INSTANCE.sendToServer(new MessageGuiUpdate(filter, widget.getID(), baseWidget.value));
+        //BPNetworkHandler.INSTANCE.sendToServer(new MessageGuiUpdate(filter, widget.getID(), baseWidget.value));
     }
 }

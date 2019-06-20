@@ -42,9 +42,9 @@ public class ContainerRegulator extends Container {
 
     private final IInventory regulator;
     private int filterColor = -1;
-    private TubeColor color = TubeColor.BLACK;
-    private int mode = -1;
-    private int fuzzySetting = -1;
+    public TubeColor color = TubeColor.BLACK;
+    public int mode = -1;
+    public int fuzzySetting = -1;
 
     public ContainerRegulator(int windowId, PlayerInventory invPlayer, IInventory inventory) {
         super(BPContainerType.ALLOY_FURNACE, windowId);

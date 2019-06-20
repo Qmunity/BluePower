@@ -22,6 +22,8 @@ package com.bluepowermod.client.gui;
 import java.util.List;
 
 import com.bluepowermod.client.gui.widget.*;
+import com.bluepowermod.container.ContainerAlloyFurnace;
+import net.minecraft.client.gui.IHasContainer;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 
@@ -30,26 +32,26 @@ import com.bluepowermod.network.BPNetworkHandler;
 import com.bluepowermod.network.message.MessageGuiUpdate;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier3.TileManager;
+import net.minecraft.util.text.ITextComponent;
 
 /**
  * @author MineMaarten
  */
-public class GuiManager extends GuiContainerBaseBP {
+public class GuiManager extends GuiContainerBaseBP<ContainerManager> implements IHasContainer<ContainerManager> {
 
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/manager.png");
-    protected TileManager manager;
+    protected ContainerManager manager;
 
-    public GuiManager(PlayerInventory invPlayer, TileManager manager) {
-
-        super(manager, new ContainerManager(invPlayer, manager), resLoc);
-        this.manager = manager;
+    public GuiManager(ContainerManager container, PlayerInventory playerInventory, ITextComponent title){
+        super(container, playerInventory, title, resLoc);
+        this.manager = container;
         ySize = 187;
     }
 
     @Override
-    public void initGui() {
+    public void init() {
 
-        super.initGui();
+        super.init();
         WidgetColor colorWidget = new WidgetColor(0, guiLeft + 155, guiTop + 55);
         colorWidget.value = manager.filterColor.ordinal();
         addWidget(colorWidget);
@@ -101,6 +103,6 @@ public class GuiManager extends GuiContainerBaseBP {
     public void actionPerformed(IGuiWidget widget) {
 
         BaseWidget baseWidget = (BaseWidget) widget;
-        BPNetworkHandler.INSTANCE.sendToServer(new MessageGuiUpdate(manager, widget.getID(), baseWidget.value));
+        //BPNetworkHandler.INSTANCE.sendToServer(new MessageGuiUpdate(manager, widget.getID(), baseWidget.value));
     }
 }

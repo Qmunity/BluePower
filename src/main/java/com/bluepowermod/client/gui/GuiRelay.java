@@ -19,20 +19,20 @@
 
 package com.bluepowermod.client.gui;
 
+import net.minecraft.client.gui.IHasContainer;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 
 import com.bluepowermod.container.ContainerRelay;
 import com.bluepowermod.reference.Refs;
-import com.bluepowermod.tile.tier1.TileRelay;
+import net.minecraft.util.text.ITextComponent;
 
-public class GuiRelay extends GuiContainerBaseBP {
+public class GuiRelay extends GuiContainerBaseBP<ContainerRelay> implements IHasContainer<ContainerRelay> {
 
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/seedbag.png");
 
-    public GuiRelay(PlayerInventory invPlayer, TileRelay relay) {
-
-        super(relay, new ContainerRelay(invPlayer, relay), resLoc);
+    public GuiRelay(ContainerRelay container, PlayerInventory playerInventory, ITextComponent title){
+        super(container, playerInventory, title, resLoc);
     }
 
 }

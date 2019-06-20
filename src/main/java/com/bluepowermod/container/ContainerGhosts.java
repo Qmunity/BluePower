@@ -11,16 +11,23 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.ClickType;
 import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 
 import com.bluepowermod.container.slot.IPhantomSlot;
 
+import javax.annotation.Nullable;
+
 /**
  * @author MineMaarten
  */
 public abstract class ContainerGhosts extends Container {
-    
+
+    protected ContainerGhosts(@Nullable ContainerType<?> p_i50105_1_, int p_i50105_2_) {
+        super(p_i50105_1_, p_i50105_2_);
+    }
+
     /**
      * This class is copied from the BuildCraft code, which can be found here: https://github.com/BuildCraft/BuildCraft
      * @author CovertJaguar <http://www.railcraft.info>

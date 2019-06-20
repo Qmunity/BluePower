@@ -8,31 +8,34 @@
 package com.bluepowermod.client.gui;
 
 import com.bluepowermod.client.gui.widget.WidgetMode;
+import com.bluepowermod.container.ContainerAlloyFurnace;
 import com.bluepowermod.container.ContainerRetriever;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier2.TileRetriever;
 import net.minecraft.client.gui.AbstractGui;
+import net.minecraft.client.gui.IHasContainer;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
 
 import java.util.List;
 
 /**
  * @author MineMaarten
  */
-public class GuiRetriever extends GuiFilter {
+public class GuiRetriever extends GuiContainerBaseBP<ContainerRetriever> implements IHasContainer<ContainerRetriever> {
 
     private static final ResourceLocation resLoc = new ResourceLocation(Refs.MODID, "textures/gui/retriever.png");
-
-    public GuiRetriever(PlayerInventory invPlayer, TileRetriever retriever) {
-
-        super(new ContainerRetriever(invPlayer, retriever), retriever, resLoc);
+    private final ContainerRetriever filter;
+    public GuiRetriever(ContainerRetriever container, PlayerInventory playerInventory, ITextComponent title){
+        super(container, playerInventory, title, resLoc);
+        this.filter = container;
     }
 
     @Override
-    public void initGui() {
+    public void init() {
 
-        super.initGui();
+        super.init();
         WidgetMode colorWidget = new WidgetMode(2, guiLeft + 117, guiTop + 20, 202, 2, Refs.MODID + ":textures/gui/retriever.png") {
 
             @Override
@@ -47,7 +50,7 @@ public class GuiRetriever extends GuiFilter {
                 }
             }
         };
-        colorWidget.value = ((TileRetriever) filter).mode;
+        colorWidget.value = filter.mode;
         addWidget(colorWidget);
     }
 
@@ -56,9 +59,9 @@ public class GuiRetriever extends GuiFilter {
 
         super.drawGuiContainerBackgroundLayer(f, i, j);
 
-        if (((TileRetriever) filter).mode == 0) {
-            int curSlot = ((TileRetriever) filter).slotIndex;
-            AbstractGui.drawModalRectWithCustomSizedTexture(guiLeft + 60 + curSlot % 3 * 18, guiTop + 15 + 18 * (curSlot / 3), 182, 0, 20, 20, 256, 256);
+        if (filter.mode == 0) {
+            int curSlot = filter.slotIndex;
+            AbstractGui.blit(guiLeft + 60 + curSlot % 3 * 18, guiTop + 15 + 18 * (curSlot / 3), 182, 0, 20, 20, 256, 256);
         }
     }
 

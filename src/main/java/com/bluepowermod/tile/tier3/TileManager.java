@@ -33,7 +33,8 @@ import java.util.List;
  * @author MineMaarten
  */
 public class TileManager extends TileMachineBase implements ISidedInventory,  IRejectAnimator, IFuzzyRetrieving, IGuiButtonSensitive {
-    protected final NonNullList<ItemStack> inventory = NonNullList.withSize(25, ItemStack.EMPTY);
+    public static final int SLOTS = 25;
+    protected final NonNullList<ItemStack> inventory = NonNullList.withSize(SLOTS, ItemStack.EMPTY);
     public TubeColor filterColor = TubeColor.NONE;
     public int priority;
     public int mode;

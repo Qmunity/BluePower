@@ -21,38 +21,44 @@ package com.bluepowermod.container;
 
 import com.bluepowermod.ClientProxy;
 import com.bluepowermod.api.tube.IPneumaticTube.TubeColor;
+import com.bluepowermod.client.gui.BPContainerType;
 import com.bluepowermod.client.gui.GuiContainerBase;
 import com.bluepowermod.tile.tier3.TileManager;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.IContainerListener;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.Inventory;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 /**
  * @author MineMaarten
  */
-public class ContainerManager extends ContainerMachineBase {
+public class ContainerManager extends Container {
 
-    private final TileManager tileManager;
-    private int filterColor = -1;
-    private int priority = -1;
-    private int mode = -1;
-    private int fuzzySetting = -0;
+    private final IInventory manager;
+    public TubeColor filterColor;
+    public int priority = -1;
+    public int mode = -1;
+    public int fuzzySetting = -0;
 
-    public ContainerManager(PlayerInventory invPlayer, TileManager manager) {
-
-        super(manager);
-        tileManager = manager;
+    public ContainerManager(int windowId, PlayerInventory invPlayer, IInventory inventory) {
+        super(BPContainerType.MANAGER, windowId);
+        manager = inventory;
 
         for (int i = 0; i < 4; ++i) {
             for (int j = 0; j < 6; ++j) {
-                addSlotToContainer(new Slot(manager, j + i * 6, 44 + j * 18, 19 + i * 18));
+                addSlot(new Slot(manager, j + i * 6, 44 + j * 18, 19 + i * 18));
             }
         }
         bindPlayerInventory(invPlayer);
+    }
+
+    public ContainerManager( int id, PlayerInventory player )    {
+        this( id, player, new Inventory( TileManager.SLOTS ));
     }
 
     protected void bindPlayerInventory(PlayerInventory invPlayer) {
@@ -60,64 +66,36 @@ public class ContainerManager extends ContainerMachineBase {
         // Render inventory
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 9; j++) {
-                addSlotToContainer(new Slot(invPlayer, j + i * 9 + 9, 8 + j * 18, 104 + i * 18));
+                addSlot(new Slot(invPlayer, j + i * 9 + 9, 8 + j * 18, 104 + i * 18));
             }
         }
 
         // Render hotbar
         for (int j = 0; j < 9; j++) {
-            addSlotToContainer(new Slot(invPlayer, j, 8 + j * 18, 162));
+            addSlot(new Slot(invPlayer, j, 8 + j * 18, 162));
         }
     }
 
-    /**
-     * Looks for changes made in the container, sends them to every listener.
-     */
-    @Override
-    public void detectAndSendChanges() {
 
-        super.detectAndSendChanges();
-
-        for (Object crafter : listeners) {
-            IContainerListener icrafting = (IContainerListener) crafter;
-
-            if (filterColor != tileManager.filterColor.ordinal()) {
-                icrafting.sendWindowProperty(this, 0, tileManager.filterColor.ordinal());
-            }
-            if (priority != tileManager.priority) {
-                icrafting.sendWindowProperty(this, 1, tileManager.priority);
-            }
-            if (mode != tileManager.mode) {
-                icrafting.sendWindowProperty(this, 2, tileManager.mode);
-            }
-            if (fuzzySetting != tileManager.fuzzySetting) {
-                icrafting.sendWindowProperty(this, 3, tileManager.fuzzySetting);
-            }
-        }
-        filterColor = tileManager.filterColor.ordinal();
-        priority = tileManager.priority;
-        mode = tileManager.mode;
-        fuzzySetting = tileManager.fuzzySetting;
-    }
 
     @Override
     @OnlyIn(Dist.CLIENT)
     public void updateProgressBar(int id, int value) {
 
         if (id == 0) {
-            tileManager.filterColor = TubeColor.values()[value];
+            filterColor = TubeColor.values()[value];
             ((GuiContainerBase) ClientProxy.getOpenedGui()).redraw();
         }
         if (id == 1) {
-            tileManager.priority = value;
+            priority = value;
             ((GuiContainerBase) ClientProxy.getOpenedGui()).redraw();
         }
         if (id == 2) {
-            tileManager.mode = value;
+            mode = value;
             ((GuiContainerBase) ClientProxy.getOpenedGui()).redraw();
         }
         if (id == 3) {
-            tileManager.fuzzySetting = value;
+            fuzzySetting = value;
             ((GuiContainerBase) ClientProxy.getOpenedGui()).redraw();
         }
     }
@@ -125,7 +103,7 @@ public class ContainerManager extends ContainerMachineBase {
     @Override
     public boolean canInteractWith(PlayerEntity player) {
 
-        return tileManager.isUsableByPlayer(player);
+        return manager.isUsableByPlayer(player);
     }
 
     @Override

@@ -42,8 +42,8 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public class ContainerFilter extends Container {
 
     private final IInventory filter;
-    private TubeColor filterColor = TubeColor.BLACK;
-    private int fuzzySetting = -1;
+    public TubeColor filterColor = TubeColor.BLACK;
+    public int fuzzySetting = -1;
 
     public ContainerFilter(int windowId, PlayerInventory invPlayer, IInventory inventory) {
         super(BPContainerType.FILTER, windowId);
