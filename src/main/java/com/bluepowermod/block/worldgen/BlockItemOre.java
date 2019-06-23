@@ -33,38 +33,7 @@ public class BlockItemOre extends BlockBase {
     public BlockItemOre(String type) {
 
         super(Material.IRON);
-        this.setCreativeTab(BPCreativeTabs.blocks);
-        this.setSoundType(SoundType.STONE);
-        this.setHardness(2.5F);
-        this.setResistance(10.0F);
-        this.setTranslationKey(type);
         this.setRegistryName(Refs.MODID + ":" + type);
-        this.setHarvestLevel("pickaxe", 2);
     }
 
-    @Override
-    public int quantityDropped(Random rand) {
-
-        return 1;
-    }
-
-    @Override
-    protected boolean canSilkHarvest() {
-
-        return true;
-    }
-
-    @Override
-    public int quantityDroppedWithBonus(int quantity, Random rand) {
-
-        if (quantity > 0 && Item.getItemFromBlock(this) != this.getItemDropped(this.getDefaultState(), rand, quantity)) {
-            int j = rand.nextInt(quantity + 2) - 1;
-            if (j < 0) {
-                j = 0;
-            }
-            return this.quantityDropped(rand) * (j + 1);
-        } else {
-            return this.quantityDropped(rand);
-        }
-    }
 }

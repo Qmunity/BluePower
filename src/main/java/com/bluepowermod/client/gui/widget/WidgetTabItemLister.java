@@ -3,6 +3,7 @@ package com.bluepowermod.client.gui.widget;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.container.stack.TubeStack;
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.gui.FontRenderer;
@@ -71,7 +72,7 @@ public class WidgetTabItemLister extends GuiAnimatedStat {
         super.render(fontRenderer, zLevel, partialTicks);
         if (isDoneExpanding()) {
             if (showingItems.size() > 0) {
-                AbstractGui.drawRect(getBaseX() + 7, getAffectedY() + 16, getBaseX() + Math.min(MAX_ITEMS_X, showingItems.size()) * 18 + 9,
+                AbstractGui.fill(getBaseX() + 7, getAffectedY() + 16, getBaseX() + Math.min(MAX_ITEMS_X, showingItems.size()) * 18 + 9,
                         getAffectedY() + 36 + (showingItems.size() - 1) / MAX_ITEMS_X * 18, 0xFFAAAAAA);
             }
             for (int i = 0; i < MAX_ITEMS_X; i++) {
@@ -80,7 +81,7 @@ public class WidgetTabItemLister extends GuiAnimatedStat {
                     int x = getBaseX() + i * 18 + 9;
                     int y = getAffectedY() + j * 18 + 18;
                     if (stack.color != TubeColor.NONE) {
-                        AbstractGui.drawRect(x, y, x + 16, y + 16, 0xFF000000 + DyeItem.DYE_COLORS[stack.color.ordinal()]);
+                        AbstractGui.fill(x, y, x + 16, y + 16, 0xFF000000 + MinecraftColor.values()[stack.color.ordinal()].getHex());
                     }
                     renderItem(fontRenderer, x, y, stack.stack);
                 }

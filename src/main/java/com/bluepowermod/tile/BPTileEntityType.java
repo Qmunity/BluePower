@@ -69,4 +69,7 @@ public class BPTileEntityType {
     @ObjectHolder(ContainerNames.CIRCUITDATABASE_MAIN)
     public static TileEntityType<TileCircuitDatabase> CIRCUITDATABASE;
 
+    @ObjectHolder(ContainerNames.WINDMILL)
+    public static TileEntityType<TileCircuitDatabase> WINDMILL;
+
 }

@@ -30,18 +30,12 @@ public class BlockProjectTable extends BlockContainerBase {
     public BlockProjectTable() {
 
         super(Material.WOOD, TileProjectTable.class);
-        setTranslationKey(Refs.PROJECTTABLE_NAME);
         setRegistryName(Refs.MODID, Refs.PROJECTTABLE_NAME);
     }
 
     public BlockProjectTable(Class<? extends TileBase> tileClass) {
 
         super(Material.WOOD, tileClass);
-    }
-
-    @Override
-    public boolean isOpaqueCube(BlockState state) {
-        return true;
     }
 
     @Override

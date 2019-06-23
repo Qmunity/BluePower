@@ -3,23 +3,19 @@ package com.bluepowermod.block.machine;
 import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.api.wire.redstone.RedwireType;
 import com.bluepowermod.client.render.ICustomModelBlock;
-import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.reference.Refs;
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.state.IntegerProperty;
-import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.client.renderer.block.statemap.StateMapperBase;
-import net.minecraft.item.Item;
+import net.minecraft.state.StateContainer;
 import net.minecraft.util.Direction;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
-import net.minecraftforge.client.model.ModelLoader;
+import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-
 
 public class BlockInsulatedAlloyWire extends BlockAlloyWire implements ICustomModelBlock{
 
@@ -28,40 +24,19 @@ public class BlockInsulatedAlloyWire extends BlockAlloyWire implements ICustomMo
     public static final IntegerProperty STRAIGHT = IntegerProperty.create("straight", 0, 5);
 
     public BlockInsulatedAlloyWire(String type, MinecraftColor color) {
-        super(type, Material.CIRCUITS);
+        super(type, Material.ROCK);
         this.color = color;
-        this.setDefaultState(this.blockState.getBaseState().with(FACING, Direction.UP).with(CONNECTED_FRONT, false).with(CONNECTED_BACK, false).with(CONNECTED_LEFT, false).with(CONNECTED_RIGHT, false).with(STRAIGHT, 1).with(POWERED, false));
-        setTranslationKey("wire." + type + "." + color.name().toLowerCase());
-        setCreativeTab(BPCreativeTabs.wiring);
+        this.setDefaultState(this.getStateContainer().getBaseState().with(FACING, Direction.UP).with(CONNECTED_FRONT, false).with(CONNECTED_BACK, false).with(CONNECTED_LEFT, false).with(CONNECTED_RIGHT, false).with(STRAIGHT, 1).with(POWERED, false));
         setRegistryName(Refs.MODID + ":" + type + "_wire." + color.name());
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
-    public void initModel() {
-        //All wires need to use the same blockstate
-        StateMapperBase stateMapper = new StateMapperBase() {
-            @Override
-            protected ModelResourceLocation getModelResourceLocation(BlockState iBlockState) {
-                return new ModelResourceLocation(Refs.MODID + ":insulated_alloy_wire", getPropertyString(iBlockState.getProperties()));
-            }
-        };
-        ModelLoader.setCustomStateMapper(this, stateMapper);
-        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(Refs.MODID + ":insulated_alloy_wire", "inventory"));
+    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder){
+        builder.add(FACING, CONNECTED_FRONT, CONNECTED_BACK, CONNECTED_LEFT, CONNECTED_RIGHT, STRAIGHT, POWERED);
     }
 
     @Override
-    public AxisAlignedBB getBoundingBox(BlockState state, IBlockAccess source, BlockPos pos) {
-        return new AxisAlignedBB(0,0,0,1,0.1875,1);
-    }
-
-    @Override
-    protected BlockStateContainer createBlockState(){
-        return new BlockStateContainer(this, FACING, CONNECTED_FRONT, CONNECTED_BACK, CONNECTED_LEFT, CONNECTED_RIGHT, STRAIGHT, POWERED);
-    }
-
-    @Override
-    public BlockState getActualState(BlockState state, IBlockAccess worldIn, BlockPos pos) {
+    public BlockState getStateForPlacement(BlockState state, Direction facing, BlockState state2, IWorld worldIn, BlockPos pos, BlockPos pos2, Hand hand) {
         Boolean connected_back = state.get(CONNECTED_BACK);
         Boolean connected_front = state.get(CONNECTED_FRONT);
         Boolean connected_left = state.get(CONNECTED_LEFT);
@@ -106,7 +81,7 @@ public class BlockInsulatedAlloyWire extends BlockAlloyWire implements ICustomMo
             straight = 0;
         }
 
-        return super.getActualState(state, worldIn, pos)
+        return super.getStateForPlacement(state, facing, state2, worldIn, pos, pos2, hand)
                 .with(CONNECTED_RIGHT, connected_right)
                 .with(CONNECTED_LEFT, connected_left)
                 .with(CONNECTED_FRONT, connected_front)
@@ -115,7 +90,7 @@ public class BlockInsulatedAlloyWire extends BlockAlloyWire implements ICustomMo
     }
 
     @Override
-    public int getColor(IBlockAccess world, BlockPos pos, int tintIndex) {
+    public int getColor(IBlockReader world, BlockPos pos, int tintIndex) {
         //Color for Block
         return tintIndex == 1 ? color.getHex() : tintIndex == 2 ? RedwireType.RED_ALLOY.getName().equals(type) ? MinecraftColor.RED.getHex() : MinecraftColor.BLUE.getHex() : -1;
     }
@@ -126,4 +101,9 @@ public class BlockInsulatedAlloyWire extends BlockAlloyWire implements ICustomMo
         return tintIndex == 1 ? color.getHex() : tintIndex == 2 ? RedwireType.RED_ALLOY.getName().equals(type) ? MinecraftColor.RED.getHex() : MinecraftColor.BLUE.getHex() : -1;
     }
 
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public void initModel() {
+
+    }
 }

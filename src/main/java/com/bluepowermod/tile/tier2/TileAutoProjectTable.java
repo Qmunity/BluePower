@@ -86,7 +86,7 @@ public class TileAutoProjectTable extends TileProjectTable implements ISidedInve
         for (Map.Entry<ItemStack, Integer> entry : collection.entrySet()) {
             ItemStack s = entry.getKey();
             if (s.isItemEqual(stack) && ItemStack.areItemStackTagsEqual(stack, s)) {
-                entry.setValue(entry.getValue() + 1);
+                entry.setValue(entry.get() + 1);
                 return;
             }
         }

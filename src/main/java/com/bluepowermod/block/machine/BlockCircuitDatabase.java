@@ -19,16 +19,11 @@ package com.bluepowermod.block.machine;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.World;
 
-import com.bluepowermod.helper.ItemStackDatabase;
-import com.bluepowermod.network.BPNetworkHandler;
-import com.bluepowermod.network.message.MessageSendClientServerTemplates;
 import com.bluepowermod.tile.TileBase;
 import com.bluepowermod.tile.tier3.TileCircuitDatabase;
 
@@ -40,13 +35,13 @@ public class BlockCircuitDatabase extends BlockProjectTable {
     }
 
     @Override
-    public boolean onBlockActivated(World world, BlockPos pos, BlockState state, PlayerEntity player, Hand hand, Direction facing, float hitX, float hitY, float hitZ) {
-        if (super.onBlockActivated(world, pos, state, player, hand, facing, hitX, hitY, hitZ)) {
+    public boolean onBlockActivated(BlockState blockState, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult rayTraceResult) {
+        if (super.onBlockActivated(blockState, world, pos, player, hand, rayTraceResult)) {
             TileCircuitDatabase database = (TileCircuitDatabase) world.getTileEntity(pos);
             database.clientCurrentTab = 0;
             if (!world.isRemote) {
-                BPNetworkHandler.INSTANCE.sendTo(new MessageSendClientServerTemplates(new ItemStackDatabase().loadItemStacks()),
-                        (ServerPlayerEntity) player);
+                //BPNetworkHandler.INSTANCE.sendTo(new MessageSendClientServerTemplates(new ItemStackDatabase().loadItemStacks()),
+                        //(ServerPlayerEntity) player);
             }
             return true;
         } else {

@@ -48,7 +48,7 @@ public class WidgetSidewaysTab extends BaseWidget {
                     GL11.glColor4d(0.2, 0.2, 0.2, 1);
                 }
             }
-            AbstractGui.drawModalRectWithCustomSizedTexture(x + singleTabWidth * i, y, getTextureU(), getTextureV() + singleTabWidth * i, singleTabWidth, height, 256,
+            AbstractGui.blit(x + singleTabWidth * i, y, getTextureU(), getTextureV() + singleTabWidth * i, singleTabWidth, height, 256,
                     256);
         }
     }

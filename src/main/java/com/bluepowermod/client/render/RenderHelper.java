@@ -18,9 +18,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.lwjgl.opengl.GL11;
 
-
-;
-
 @OnlyIn(Dist.CLIENT)
 public class RenderHelper {
 
@@ -190,7 +187,7 @@ public class RenderHelper {
             GL11.glRotated(180 + 360 * -angle, 0, 1, 0);
             GL11.glTranslated(-0.5, -0.5, -0.5);
 
-            Minecraft.getInstance().renderEngine.bindTexture(new ResourceLocation("minecraft:textures/blocks/stone.png"));
+            Minecraft.getInstance().getTextureManager().bindTexture(new ResourceLocation("minecraft:textures/blocks/stone.png"));
 
             GL11.glBegin(GL11.GL_QUADS);
             {

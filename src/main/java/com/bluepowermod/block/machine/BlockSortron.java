@@ -8,7 +8,6 @@
 package com.bluepowermod.block.machine;
 
 import com.bluepowermod.block.BlockContainerBase;
-import com.bluepowermod.reference.GuiIDs;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier3.TileSortron;
 import net.minecraft.block.material.Material;
@@ -23,15 +22,7 @@ public class BlockSortron extends BlockContainerBase {
     public BlockSortron() {
     
         super(Material.ROCK, TileSortron.class);
-        setTranslationKey(Refs.BLOCKSORTRON_NAME);
         setRegistryName(Refs.MODID, Refs.BLOCKSORTRON_NAME);
     }
-    
-    @Override
-    public GuiIDs getGuiID() {
-    
-        return GuiIDs.INVALID;
-    }
-
 
 }

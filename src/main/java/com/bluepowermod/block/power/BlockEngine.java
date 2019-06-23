@@ -8,10 +8,10 @@
 package com.bluepowermod.block.power;
 
 import com.bluepowermod.block.BlockContainerBase;
-import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.init.BPItems;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier3.TileEngine;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
@@ -21,9 +21,12 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.EnumProperty;
+import net.minecraft.state.StateContainer;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
@@ -41,33 +44,17 @@ public class BlockEngine extends BlockContainerBase {
     public BlockEngine() {
 
         super(Material.IRON, TileEngine.class);
-        setCreativeTab(BPCreativeTabs.machines);
-        setTranslationKey(Refs.ENGINE_NAME);
-        setDefaultState(blockState.getBaseState().with(ACTIVE, false).with(GEAR, false).with(GLIDER, false).with(FACING, Direction.DOWN));
+        setDefaultState(this.stateContainer.getBaseState().with(ACTIVE, false).with(GEAR, false).with(GLIDER, false).with(FACING, Direction.DOWN));
         setRegistryName(Refs.MODID, Refs.ENGINE_NAME);
     }
-
     @Override
-    protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, ACTIVE, GEAR, GLIDER, FACING);
+    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder){
+        builder.add(ACTIVE, GEAR, GLIDER, FACING);
     }
-
 
     @Override
     public BlockRenderType getRenderType(BlockState state) {
         return BlockRenderType.MODEL;
-    }
-
-    @Override
-    public boolean rotateBlock(World world, BlockPos pos, Direction dir) {
-        if(!world.isRemote) {
-            TileEngine engine = (TileEngine) world.getTileEntity(pos);
-            if (engine != null) {
-                engine.setOrientation(Direction.byIndex(dir.ordinal()));
-            }
-            world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 3);
-        }
-        return super.rotateBlock(world, pos, dir);
     }
 
     @SuppressWarnings("cast")
@@ -94,9 +81,8 @@ public class BlockEngine extends BlockContainerBase {
         }
     }
 
-    @SuppressWarnings("cast")
     @Override
-    public boolean onBlockActivated(World world, BlockPos pos, BlockState state, PlayerEntity player, Hand hand, Direction efacing, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(BlockState blockState, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult rayTraceResult) {
         if (!player.inventory.getCurrentItem().isEmpty()) {
             Item item = player.inventory.getCurrentItem().getItem();
             if (item == BPItems.screwdriver) {
@@ -104,11 +90,11 @@ public class BlockEngine extends BlockContainerBase {
             }
         }
 
-        return super.onBlockActivated(world, pos, state, player, hand, efacing, hitX, hitY, hitZ);
+        return super.onBlockActivated(blockState, world, pos, player, hand, rayTraceResult);
     }
 
     @Override
-    public boolean canConnectRedstone(BlockState state, IBlockAccess world, BlockPos pos, @Nullable Direction side) {
+    public boolean canConnectRedstone(BlockState state, IBlockReader world, BlockPos pos, @Nullable Direction side) {
         return true;
     }
 

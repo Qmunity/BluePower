@@ -7,13 +7,12 @@
  */
 package com.bluepowermod.helper;
 
-import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.ChestBlock;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
@@ -32,9 +31,9 @@ public class IOHelper {
 
         if (te instanceof IInventory) {
             IInventory inv = (IInventory) te;
-            Block block = te.getBlockType();
-            if (block instanceof ChestBlock) {
-                inv = ((ChestBlock) block).getContainer(te.getWorld(), te.getPos() ,false);
+            BlockState block = te.getBlockState();
+            if (block.getBlock() instanceof ChestBlock) {
+                inv = (IInventory) ((ChestBlock) block.getBlock()).getContainer(block, te.getWorld(), te.getPos());
             }
             return inv;
         } else {
@@ -208,9 +207,9 @@ public class IOHelper {
             }
             for (int slot : accessibleSlots) {
                 ItemStack stack = inv.getStackInSlot(slot);
-                ItemStack retrievingStack = stack.isEmpty() ? ItemStack.EMPTY : stack.copy().splitStack(1);
+                ItemStack retrievingStack = stack.isEmpty() ? ItemStack.EMPTY : stack.copy().split(1);
                 if (!stack.isEmpty() && IOHelper.canExtractItemFromInventory(inv, retrievingStack, slot, dir.ordinal())) {
-                    ItemStack ret = stack.splitStack(1);
+                    ItemStack ret = stack.split(1);
                     if (stack.getCount() == 0)
                         inv.setInventorySlotContents(slot, ItemStack.EMPTY);
                     tile.markDirty();
@@ -290,10 +289,10 @@ public class IOHelper {
                     itemStack = ItemStack.EMPTY;
                 } else {
                     if (!simulate) {
-                        inventory.setInventorySlotContents(slot, itemStack.splitStack(max));
+                        inventory.setInventorySlotContents(slot, itemStack.split(max));
                         flag = true;
                     } else {
-                        itemStack.splitStack(max);
+                        itemStack.split(max);
                     }
                 }
             } else if (ItemStackHelper.areItemStacksEqual(itemstack1, itemStack)) {
@@ -358,18 +357,14 @@ public class IOHelper {
         float dY = world.rand.nextFloat() * 0.8F + 0.1F;
         float dZ = world.rand.nextFloat() * 0.8F + 0.1F;
 
-        ItemEntity entityItem = new ItemEntity(world, x + dX, y + dY, z + dZ, new ItemStack(itemStack.getItem(), itemStack.getCount(),
-                itemStack.getItemDamage()));
-
-        if (itemStack.hasTagCompound()) {
-            entityItem.getItem().setTagCompound((CompoundNBT) itemStack.getTagCompound().copy());
+        ItemEntity entityItem = new ItemEntity(world, x + dX, y + dY, z + dZ, new ItemStack(itemStack.getItem(), itemStack.getCount()));
+        if (itemStack.hasTag()) {
+            entityItem.getItem().setTag(itemStack.getTag().copy());
         }
 
         float factor = 0.05F;
-        entityItem.motionX = world.rand.nextGaussian() * factor;
-        entityItem.motionY = world.rand.nextGaussian() * factor + 0.2F;
-        entityItem.motionZ = world.rand.nextGaussian() * factor;
-        world.spawnEntity(entityItem);
+        entityItem.setMotion(world.rand.nextGaussian() * factor, world.rand.nextGaussian() * factor + 0.2F, world.rand.nextGaussian() * factor);
+        world.addEntity(entityItem);
         itemStack.setCount(0);
     }
 

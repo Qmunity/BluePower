@@ -48,7 +48,7 @@ public class WidgetTab extends BaseWidget {
                     GL11.glColor4d(0.2, 0.2, 0.2, 1);
                 }
             }
-            AbstractGui.drawModalRectWithCustomSizedTexture(x, y + singleTabHeight * i, getTextureU(), getTextureV() + singleTabHeight * i, width, singleTabHeight, 256,
+            AbstractGui.blit(x, y + singleTabHeight * i, getTextureU(), getTextureV() + singleTabHeight * i, width, singleTabHeight, 256,
                     256);
         }
     }

@@ -131,12 +131,12 @@ public class GuiCircuitTable extends GuiContainerBaseBP<ContainerCircuitTable> i
         int k = guiTop + 48;
         int l = k + 112;
         this.minecraft.getTextureManager().bindTexture(scrollTexture);
-        // drawTexturedModalRect(i1, k + (int) ((l - k - 17) * currentScroll), 232 + (needsScrollBars() ? 0 : 12), 0, 12, 15);
+         //blit(i1, k + (int) ((l - k - 17) * currentScroll), 232 + (needsScrollBars() ? 0 : 12), 0, 12, 15);
 
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 8; j++) {
                 if (displayRed[i * 8 + j]) {
-                    //drawRect(guiLeft + 8 + j * 18, guiTop + 33 + i * 18, guiLeft + 24 + j * 18, guiTop + 49 + i * 18, 0x55FF0000);
+                    fill(guiLeft + 8 + j * 18, guiTop + 33 + i * 18, guiLeft + 24 + j * 18, guiTop + 49 + i * 18, 0x55FF0000);
                 }
             }
         }

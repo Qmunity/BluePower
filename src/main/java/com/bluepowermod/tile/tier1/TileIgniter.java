@@ -43,14 +43,14 @@ public class TileIgniter extends TileBase implements IEjectAnimator {
     }
 
     private void ignite() {
-        Direction facing = world.getBlockState(pos).getValue(FACING);
+        Direction facing = world.getBlockState(pos).get(FACING);
         if (world.getRedstonePowerFromNeighbors(pos) > 0 && world.isAirBlock(pos.offset(facing)) && Blocks.FIRE.canPlaceBlockAt(world, pos.offset(facing))) {
             world.setBlockState(pos.offset(facing), Blocks.FIRE.getDefaultState());
         }
     }
 
     private void extinguish() {
-        Direction facing = world.getBlockState(pos).getValue(FACING);
+        Direction facing = world.getBlockState(pos).get(FACING);
         Block target = world.getBlockState(pos.offset(facing)).getBlock();
         if (world.getRedstonePowerFromNeighbors(pos) == 0 && (target == Blocks.FIRE || target == Blocks.PORTAL)) {
             world.setBlockToAir(pos.offset(facing));
@@ -70,6 +70,6 @@ public class TileIgniter extends TileBase implements IEjectAnimator {
     @Override
     public boolean isEjecting() {
 
-        return world.getBlockState(pos).getValue(ACTIVE);
+        return world.getBlockState(pos).get(ACTIVE);
     }
 }

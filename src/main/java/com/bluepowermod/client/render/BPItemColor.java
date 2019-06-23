@@ -9,9 +9,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public class BPItemColor implements IItemColor {
 
     @Override
-    @OnlyIn(Dist.CLIENT)
-    public int colorMultiplier(ItemStack itemStack, int renderPass) {
+    public int getColor(ItemStack itemStack, int renderPass) {
         return ((IBPColoredItem)itemStack.getItem()).getColor(itemStack, renderPass);
     }
-
 }

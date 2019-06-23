@@ -26,7 +26,7 @@ public class PacketCUpdateGui extends Packet<PacketCUpdateGui> {
 
     public PacketCUpdateGui(int syncId, SyncedField syncField){
         this.syncId = syncId;
-        value = syncField.getValue();
+        value = syncField.get();
         type = getType(syncField);
     }
 

@@ -4,7 +4,7 @@ import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.tile.tier1.TileLamp;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IBlockReader;
 
 import java.awt.*;
 
@@ -12,11 +12,10 @@ public class BlockLampRGB extends BlockLamp {
 
     public BlockLampRGB(String name, boolean isInverted) {
         super(name, isInverted, MinecraftColor.NONE);
-        setTranslationKey(name + ".rgb" + (isInverted ? ".inverted" : ""));
     }
 
     @Override
-    public int getColor(IBlockAccess w, BlockPos pos, int tint) {
+    public int getColor(IBlockReader w, BlockPos pos, int tint) {
 
         TileLamp te = get(w, pos);
         if (te == null)

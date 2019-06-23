@@ -41,4 +41,5 @@ public class ContainerNames {
     public static final String MANAGER = Refs.MODID + ":manager";
     public static final String CIRCUITDATABASE_MAIN = Refs.MODID + ":circuitdatabase_main";
     public static final String CIRCUITDATABASE_SHARING = Refs.MODID + ":circuitdatabase_sharing";
+    public static final String WINDMILL = Refs.MODID + ":windmill";
 }

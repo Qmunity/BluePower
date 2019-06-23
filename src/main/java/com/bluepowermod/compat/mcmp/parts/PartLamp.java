@@ -8,7 +8,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
 public class PartLamp implements IMultipart {
@@ -29,7 +29,7 @@ public class PartLamp implements IMultipart {
     }
 
     @Override
-    public IPartSlot getSlotFromWorld(IBlockAccess world, BlockPos pos, BlockState state) {
+    public IPartSlot getSlotFromWorld(IBlockReader world, BlockPos pos, BlockState state) {
         return EnumFaceSlot.DOWN;
     }
 

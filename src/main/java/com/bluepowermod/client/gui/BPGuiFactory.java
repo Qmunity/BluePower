@@ -47,7 +47,7 @@ public class BPGuiFactory implements IModGuiFactory {
 
     @Override
     public Screen createConfigGui(Screen parentScreen) {
-        return new BPGuiConfig(parentScreen);
+        return null;
     }
 
     /**

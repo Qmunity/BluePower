@@ -15,7 +15,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IBlockReader;
 
 /**
  * @author MoreThanHidden
@@ -25,22 +25,7 @@ public class BlockSolarPanel extends BlockContainerBase {
 
     public BlockSolarPanel() {
         super(Material.IRON, TileSolarPanel.class);
-        setTranslationKey(Refs.SOLARPANEL_NAME);
         setRegistryName(Refs.MODID, Refs.SOLARPANEL_NAME);
     }
 
-    @Override
-    public AxisAlignedBB getBoundingBox(BlockState state, IBlockAccess source, BlockPos pos) {
-        return new AxisAlignedBB(0,0,0,1,0.25,1);
-    }
-
-    @Override
-    public boolean isFullBlock(BlockState state) {
-        return false;
-    }
-
-    @Override
-    public boolean isOpaqueCube(BlockState state) {
-        return false;
-    }
 }

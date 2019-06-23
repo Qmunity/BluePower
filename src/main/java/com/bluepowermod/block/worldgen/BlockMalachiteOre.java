@@ -19,12 +19,13 @@ package com.bluepowermod.block.worldgen;
 
 import com.bluepowermod.init.BPItems;
 import net.minecraft.block.BlockState;
-import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IWorldReader;
+import net.minecraft.world.storage.loot.LootContext;
 
-import java.util.Random;
+import java.util.List;
 
 /**
  * Created by MoreThanHidden on 29/10/17.
@@ -36,12 +37,14 @@ public class BlockMalachiteOre extends BlockItemOre {
     }
 
     @Override
-    public int getExpDrop(BlockState state, IBlockAccess world, BlockPos pos, int fortune) {
-        return MathHelper.getInt(rand, 3, 7);
+    public int getExpDrop(BlockState state, IWorldReader world, BlockPos pos, int fortune, int silktouch) {
+        return MathHelper.nextInt(rand, 3, 7);
     }
 
     @Override
-    public Item getItemDropped(BlockState state, Random rand, int fortune) {
-      return BPItems.malachite_gem;
+    public List<ItemStack> getDrops(BlockState p_220076_1_, LootContext.Builder p_220076_2_) {
+        List<ItemStack> drops = super.getDrops(p_220076_1_, p_220076_2_);
+        drops.add(new ItemStack(BPItems.malachite_gem));
+        return drops;
     }
 }

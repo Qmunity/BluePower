@@ -7,22 +7,23 @@
  */
 package com.bluepowermod.tile.tier2;
 
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ITickable;
+import com.bluepowermod.tile.BPTileEntityType;
+import com.bluepowermod.tile.TileBase;
+import net.minecraft.client.renderer.texture.ITickable;
 
-public class TileWindmill extends TileEntity implements ITickable {
+public class TileWindmill extends TileBase implements ITickable {
 
 	
 	public int turbineTick;
 	public TileWindmill(){
-		
+		super(BPTileEntityType.WINDMILL);
+
 		turbineTick = 0;
 	}
-	
+
 	@Override
-	public void update() {
+	public void tick() {
 		if(world.isRemote){
-			
 			turbineTick++;
 		}
 	}

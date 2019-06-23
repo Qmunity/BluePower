@@ -1,25 +1,17 @@
 package com.bluepowermod.block.machine;
 
 import com.bluepowermod.api.misc.MinecraftColor;
-import com.bluepowermod.reference.Refs;
-import com.bluepowermod.util.AABBUtils;
-import mcmultipart.RayTraceHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.state.DirectionProperty;
-import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.client.renderer.block.statemap.StateMapperBase;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.Item;
+import net.minecraft.state.StateContainer;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
-import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -36,30 +28,13 @@ public class BlockLampSurface extends BlockLamp {
         this.name = name;
         this.isInverted = isInverted;
         this.size = size;
-        this.setDefaultState(blockState.getBaseState().with(POWER, isInverted ? 15 : 0).with(FACING, Direction.UP));
+        this.setDefaultState(stateContainer.getBaseState().with(POWER, isInverted ? 15 : 0).with(FACING, Direction.UP));
     }
 
     @Override
     @OnlyIn(Dist.CLIENT)
     public void initModel() {
-        //All lamps need to use the same blockstate
-        StateMapperBase stateMapper = new StateMapperBase() {
-            @Override
-            protected ModelResourceLocation getModelResourceLocation(BlockState iBlockState) {
-                return new ModelResourceLocation(Refs.MODID + ":" + name, "facing=" + iBlockState.getValue(FACING).getName() + "," + ((!isInverted == iBlockState.getValue(POWER) > 0) ? "powered=true" : "powered=false"));
-            }
-        };
-        ModelLoader.setCustomStateMapper(this, stateMapper);
-        if(!isInverted()) {
-            ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(Refs.MODID + ":" + name, "inventory"));
-        }else {
-            ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(Refs.MODID + ":" + name, "inventory_glow"));
-        }
-    }
 
-    @Override
-    public boolean isOpaqueCube(BlockState state) {
-        return false;
     }
 
     @Override
@@ -67,43 +42,23 @@ public class BlockLampSurface extends BlockLamp {
         return BlockRenderLayer.CUTOUT;
     }
 
+
     @Override
-    public AxisAlignedBB getBoundingBox(BlockState state, IBlockAccess source, BlockPos pos) {
-        //Bounding box for the Caged Lamp
-        return AABBUtils.rotate(size.equals(Refs.CAGELAMP_AABB) ? size.grow( 0.0625) : size, state.get(FACING));
+    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+        builder.add(POWER, FACING);
     }
 
     @Override
-    public AxisAlignedBB getSize() {
-        return size;
-    }
-
-    @Override
-    protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, POWER, FACING);
-    }
-
-    @Override
-    public int getMetaFromState(BlockState state) {
-        return state.get(FACING).getIndex();
-    }
-
-    @Override
-    public BlockState getStateFromMeta(int meta) {
-        return getDefaultState().with(FACING, Direction.byIndex(meta));
-    }
-
-    @Override
-    public void neighborChanged(BlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos) {
-        super.neighborChanged(state, world, pos, blockIn, fromPos);
-        if(!world.getBlockState(pos.offset(state.get(FACING).getOpposite())).isFullBlock()){
-            world.setBlockToAir(pos);
-            this.dropBlockAsItem(world, pos, state, 0);
+    public void neighborChanged(BlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos, boolean bool) {
+        super.neighborChanged(state, world, pos, blockIn, fromPos, bool);
+        if (!world.getBlockState(pos.offset(state.get(FACING).getOpposite())).isSolid()) {
+            world.destroyBlock(pos, true);
         }
     }
 
     @Override
-    public BlockState getStateForPlacement(World world, BlockPos pos, Direction facing, float hitX, float hitY, float hitZ, int meta, LivingEntity placer, Hand hand) {
-        return super.getStateForPlacement(world, pos, facing, hitX, hitY, hitZ, meta, placer, hand).with(FACING, facing);
+    public BlockState getStateForPlacement(BlockState state, Direction facing, BlockState state2, IWorld world, BlockPos pos1, BlockPos pos2, Hand hand) {
+        return super.getStateForPlacement(state, facing, state2, world, pos1, pos2, hand).with(FACING, facing);
     }
+
 }

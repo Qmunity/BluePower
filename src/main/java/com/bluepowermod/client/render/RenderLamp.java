@@ -10,13 +10,11 @@ package com.bluepowermod.client.render;
 import com.bluepowermod.block.machine.BlockLamp;
 import com.bluepowermod.block.machine.BlockLampSurface;
 import com.bluepowermod.util.AABBUtils;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.lwjgl.opengl.GL11;
@@ -28,13 +26,13 @@ public class RenderLamp extends TileEntityRenderer {
     public static int pass;
 
     @Override
-    public void render(TileEntity te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
-        if (!(te.getBlockType() instanceof BlockLamp) || Loader.isModLoaded("albedo"))
+    public void render(TileEntity te, double x, double y, double z, float partialTicks, int destroyStage) {
+        if (!(te.getBlockState().getBlock() instanceof BlockLamp)) //|| Loader.isModLoaded("albedo"))
             return;
 
         if (pass != 0) {
-            BlockLamp bLamp = (BlockLamp) te.getBlockType();
-            int power = te.getWorld().getBlockState(te.getPos()).getValue(BlockLamp.POWER);
+            BlockLamp bLamp = (BlockLamp) te.getBlockState().getBlock();
+            int power = te.getWorld().getBlockState(te.getPos()).get(BlockLamp.POWER);
 
             int color = bLamp.getColor(te.getWorld(), te.getPos(), 0);
 
@@ -46,18 +44,18 @@ public class RenderLamp extends TileEntityRenderer {
             if (bLamp.isInverted()) {
                 power = 15 - power;
             }
-            AxisAlignedBB box = bLamp.getSize();
+            AxisAlignedBB box = bLamp.getShape(te.getBlockState(), null, null, null).getBoundingBox();
             //Define our base Glow
             if (bLamp instanceof  BlockLampSurface)
-                box = AABBUtils.rotate(box, te.getWorld().getBlockState(te.getPos()).getValue(BlockLampSurface.FACING));
-            box = box.equals(Block.FULL_BLOCK_AABB) ? box.grow(0.05) : box.grow(0.03125);
+                box = AABBUtils.rotate(box, te.getWorld().getBlockState(te.getPos()).get(BlockLampSurface.FACING));
+            box = box.equals(new AxisAlignedBB(0,0,0,1,1,1)) ? box.grow(0.05) : box.grow(0.03125);
             boolean[] renderFaces = new boolean[] { true, true, true, true, true, true };
 
             //Remove overlapping Glow
-            if(bLamp.getSize().equals(Block.FULL_BLOCK_AABB)) {
-                for (Direction face : Direction.VALUES) {
+            if(bLamp.getShape(te.getBlockState(), null, null, null).getBoundingBox().equals(new AxisAlignedBB(0,0,0,1,1,1))) {
+                for (Direction face : Direction.values()) {
                     BlockState state = te.getWorld().getBlockState(te.getPos().offset(face.getOpposite()));
-                    if (state.getBlock() instanceof BlockLamp && ((BlockLamp)state.getBlock()).getSize().equals(Block.FULL_BLOCK_AABB)) {
+                    if (state.getBlock() instanceof BlockLamp && ((BlockLamp)state.getBlock()).getShape(te.getBlockState(), null, null, null).getBoundingBox().equals(new AxisAlignedBB(0,0,0,1,1,1))) {
                         if (((BlockLamp) state.getBlock()).isInverted() ? state.get(BlockLamp.POWER) < 15 : state.get(BlockLamp.POWER) > 0) {
                             renderFaces[face.getIndex()] = false;
                             double offsetx = (face.getXOffset() * 0.05) > 0 ? (face.getXOffset() * 0.05) : 0;

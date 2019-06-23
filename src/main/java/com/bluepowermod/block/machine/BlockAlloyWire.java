@@ -4,7 +4,6 @@ import com.bluepowermod.api.misc.MinecraftColor;
 import com.bluepowermod.api.wire.redstone.RedwireType;
 import com.bluepowermod.block.BlockContainerBase;
 import com.bluepowermod.client.render.IBPColoredBlock;
-import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier1.TileWire;
 import com.google.common.collect.Lists;
@@ -15,17 +14,16 @@ import net.minecraft.block.ObserverBlock;
 import net.minecraft.block.material.Material;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.DirectionProperty;
-import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.state.StateContainer;
 import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -106,11 +104,11 @@ public class BlockAlloyWire extends BlockContainerBase implements IBPColoredBloc
     {
         if (worldIn.getBlockState(pos).getBlock() == this)
         {
-            worldIn.notifyNeighborsOfStateChange(pos, this, false);
+            worldIn.notifyNeighborsOfStateChange(pos, this);
 
             for (Direction enumfacing : Direction.values())
             {
-                worldIn.notifyNeighborsOfStateChange(pos.offset(enumfacing), this, false);
+                worldIn.notifyNeighborsOfStateChange(pos.offset(enumfacing), this);
             }
         }
     }
@@ -126,7 +124,7 @@ public class BlockAlloyWire extends BlockContainerBase implements IBPColoredBloc
 
             for (Direction enumfacing : Direction.Plane.VERTICAL)
             {
-                worldIn.notifyNeighborsOfStateChange(pos.offset(enumfacing), this, false);
+                worldIn.notifyNeighborsOfStateChange(pos.offset(enumfacing), this);
             }
 
             for (Direction enumfacing1 : Direction.Plane.HORIZONTAL)
@@ -138,7 +136,7 @@ public class BlockAlloyWire extends BlockContainerBase implements IBPColoredBloc
             {
                 BlockPos blockpos = pos.offset(enumfacing2);
 
-                if (worldIn.getBlockState(blockpos).isNormalCube())
+                if (worldIn.getBlockState(blockpos).isNormalCube(worldIn, pos))
                 {
                     this.notifyWireNeighborsOfStateChange(worldIn, blockpos.up());
                 }
@@ -150,31 +148,28 @@ public class BlockAlloyWire extends BlockContainerBase implements IBPColoredBloc
         }
     }
 
-    /**
-     * Called serverside after this block is replaced with another in Chunk, but before the Tile Entity is updated
-     */
-    public void breakBlock(World worldIn, BlockPos pos, BlockState state)
-    {
-        super.breakBlock(worldIn, pos, state);
+    @Override
+    public void onPlayerDestroy(IWorld worldIn, BlockPos pos, BlockState state) {
+        super.onPlayerDestroy(worldIn, pos, state);
 
-        if (!worldIn.isRemote){
+        if (!worldIn.getWorld().isRemote){
             for (Direction enumfacing : Direction.values()){
-                worldIn.notifyNeighborsOfStateChange(pos.offset(enumfacing), this, false);
+                worldIn.getWorld().notifyNeighborsOfStateChange(pos.offset(enumfacing), this);
             }
 
-            this.updateSurroundingWire(worldIn, pos, state);
+            this.updateSurroundingWire(worldIn.getWorld(), pos, state);
 
             for (Direction enumfacing1 : Direction.Plane.HORIZONTAL){
-                this.notifyWireNeighborsOfStateChange(worldIn, pos.offset(enumfacing1));
+                this.notifyWireNeighborsOfStateChange(worldIn.getWorld(), pos.offset(enumfacing1));
             }
 
             for (Direction enumfacing2 : Direction.Plane.HORIZONTAL){
                 BlockPos blockpos = pos.offset(enumfacing2);
 
-                if (worldIn.getBlockState(blockpos).isNormalCube()){
-                    this.notifyWireNeighborsOfStateChange(worldIn, blockpos.up());
+                if (worldIn.getBlockState(blockpos).isNormalCube(worldIn, blockpos)){
+                    this.notifyWireNeighborsOfStateChange(worldIn.getWorld(), blockpos.up());
                 }else{
-                    this.notifyWireNeighborsOfStateChange(worldIn, blockpos.down());
+                    this.notifyWireNeighborsOfStateChange(worldIn.getWorld(), blockpos.down());
                 }
             }
         }
@@ -191,8 +186,7 @@ public class BlockAlloyWire extends BlockContainerBase implements IBPColoredBloc
             if (this.canPlaceBlockAt(worldIn, pos)){
                 this.updateSurroundingWire(worldIn, pos, state);
             }else{
-                this.dropBlockAsItem(worldIn, pos, state, 0);
-                worldIn.setBlockToAir(pos);
+                worldIn.destroyBlock(pos, true);
             }
         }
     }
@@ -201,28 +195,13 @@ public class BlockAlloyWire extends BlockContainerBase implements IBPColoredBloc
      * Checks if this block can be placed exactly at the given position.
      */
     public boolean canPlaceBlockAt(World worldIn, BlockPos pos){
-        return worldIn.getBlockState(pos.down()).isTopSolid() || worldIn.getBlockState(pos.down()).getBlock() == Blocks.GLOWSTONE;
+        return worldIn.getBlockState(pos.down()).isSolid() || worldIn.getBlockState(pos.down()).getBlock() == Blocks.GLOWSTONE;
     }
 
-
-    @Nullable
-    public AxisAlignedBB getCollisionBoundingBox(BlockState blockState, IBlockAccess worldIn, BlockPos pos){
-        return NULL_AABB;
-    }
 
     @Override
-    protected BlockStateContainer createBlockState(){
-        return new BlockStateContainer(this, FACING, CONNECTED_FRONT, CONNECTED_BACK, CONNECTED_LEFT, CONNECTED_RIGHT, POWERED);
-    }
-
-    @Override
-    public int getMetaFromState(BlockState state) {
-        return state.get(POWERED) ? 1 : 0;
-    }
-
-    @Override
-    public BlockState getStateFromMeta(int meta) {
-        return getDefaultState().with( POWERED,meta > 0);
+    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder){
+        builder.add(FACING, CONNECTED_FRONT, CONNECTED_BACK, CONNECTED_LEFT, CONNECTED_RIGHT, POWERED);
     }
 
     public boolean canProvidePower(BlockState state)
@@ -232,7 +211,7 @@ public class BlockAlloyWire extends BlockContainerBase implements IBPColoredBloc
 
 
     @Override
-    public BlockState getActualState(BlockState state, IBlockAccess worldIn, BlockPos pos) {
+    public BlockState getStateForPlacement(BlockState state, Direction facing, BlockState state2, IWorld worldIn, BlockPos pos, BlockPos pos2, Hand hand) {
         Boolean connected_back = state.get(CONNECTED_BACK);
         Boolean connected_front = state.get(CONNECTED_FRONT);
         Boolean connected_left = state.get(CONNECTED_LEFT);
@@ -256,61 +235,53 @@ public class BlockAlloyWire extends BlockContainerBase implements IBPColoredBloc
             }
         }
 
-        return super.getActualState(state, worldIn, pos)
+        return super.getStateForPlacement(state, facing, state2, worldIn, pos, pos2, hand)
                 .with(CONNECTED_RIGHT, connected_right)
                 .with(CONNECTED_LEFT, connected_left)
                 .with(CONNECTED_FRONT, connected_front)
                 .with(CONNECTED_BACK, connected_back);
     }
 
-    /**
-     * @deprecated call via {@link IBlockState#getStrongPower(IBlockAccess,BlockPos, Direction)} whenever possible.
-     * Implementing/overriding is fine.
-     */
-    public int getStrongPower(BlockState blockState, IBlockAccess blockAccess, BlockPos pos, Direction side){
+    @Override
+    public int getStrongPower(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side){
         return !this.canProvidePower ? 0 : blockState.getWeakPower(blockAccess, pos, side);
     }
 
-    /**
-     * @deprecated call via {@link IBlockState#getWeakPower(IBlockAccess,BlockPos, Direction)} whenever possible.
-     * Implementing/overriding is fine.
-     */
-    public int getWeakPower(BlockState blockState, IBlockAccess blockAccess, BlockPos pos, Direction side){
+    public int getWeakPower(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side){
         TileWire tile = (TileWire) blockAccess.getTileEntity(pos);
+        assert tile != null;
         if (!this.canProvidePower || !this.isPowerSourceAt(blockAccess, pos, side) || !tile.getIsRedstonePowered()){
             return 0;
         }else{
-            return blockState.getValue(POWERED) ? 16 : 0;
+            return blockState.get(POWERED) ? 16 : 0;
         }
     }
 
-    private boolean isPowerSourceAt(IBlockAccess worldIn, BlockPos pos, Direction side){
+
+    private boolean isPowerSourceAt(IBlockReader worldIn, BlockPos pos, Direction side){
         BlockPos blockpos = pos.offset(side);
         BlockState iblockstate = worldIn.getBlockState(blockpos);
-        boolean flag = iblockstate.isNormalCube();
-        boolean flag1 = worldIn.getBlockState(pos.up()).isNormalCube();
+        boolean flag = iblockstate.isNormalCube(worldIn, blockpos);
+        boolean flag1 = worldIn.getBlockState(pos.up()).isNormalCube(worldIn, pos.up());
 
         if (!flag1 && flag && canConnectUpwardsTo(worldIn, blockpos.up())){
             return true;
         }else if (canConnectTo(iblockstate, side, worldIn, pos)){
             return true;
-        }else if (iblockstate.getBlock() == Blocks.POWERED_REPEATER && iblockstate.get(RedstoneDiodeBlock.FACING) == side){
+        }else if (iblockstate.getBlock() == Blocks.REPEATER && iblockstate.get(RedstoneDiodeBlock.HORIZONTAL_FACING) == side){
             return true;
         }else{
             return !flag && canConnectUpwardsTo(worldIn, blockpos.down());
         }
     }
 
-    protected static boolean canConnectUpwardsTo(IBlockAccess worldIn, BlockPos pos){
+    protected static boolean canConnectUpwardsTo(IBlockReader worldIn, BlockPos pos){
         return canConnectTo(worldIn.getBlockState(pos), null, worldIn, pos);
     }
 
-    protected static boolean canConnectTo(BlockState blockState, @Nullable Direction side, IBlockAccess world, BlockPos pos){
-        if (Blocks.UNPOWERED_REPEATER.isSameDiode(blockState)){
-            Direction enumfacing = blockState.getValue(RepeaterBlock.FACING);
-            return enumfacing == side || enumfacing.getOpposite() == side;
-        }else if (Blocks.OBSERVER == blockState.getBlock()){
-            return side == blockState.getValue(ObserverBlock.FACING);
+    protected static boolean canConnectTo(BlockState blockState, @Nullable Direction side, IBlockReader world, BlockPos pos){
+        if (Blocks.OBSERVER == blockState.getBlock()){
+            return side == blockState.get(ObserverBlock.FACING);
         }else{
             return blockState.getBlock().canConnectRedstone(blockState, world, pos, side);
         }
@@ -318,7 +289,7 @@ public class BlockAlloyWire extends BlockContainerBase implements IBPColoredBloc
 
 
     @Override
-    public int getColor(IBlockAccess w, BlockPos pos, int tint) {
+    public int getColor(IBlockReader w, BlockPos pos, int tint) {
         return tint == 2 ? RedwireType.RED_ALLOY.getName().equals(type) ? MinecraftColor.RED.getHex() : MinecraftColor.BLUE.getHex() : -1;
     }
 

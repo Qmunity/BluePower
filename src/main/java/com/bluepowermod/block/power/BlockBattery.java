@@ -13,18 +13,20 @@ import com.bluepowermod.api.power.IPowerBase;
 import com.bluepowermod.block.BlockContainerBase;
 import com.bluepowermod.reference.Refs;
 import com.bluepowermod.tile.tier3.TileBattery;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.state.IntegerProperty;
+import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 
 /**
@@ -37,33 +39,33 @@ public class BlockBattery extends BlockContainerBase {
 
     public BlockBattery() {
         super(Material.IRON, TileBattery.class);
-        setTranslationKey(Refs.BATTERYBLOCK_NAME);
         setRegistryName(Refs.MODID, Refs.BATTERYBLOCK_NAME);
-        this.setDefaultState(this.blockState.getBaseState().with(LEVEL, 0));
+        this.setDefaultState(this.stateContainer.getBaseState().with(LEVEL, 0));
+
     }
 
     @Override
-    public BlockState getActualState(BlockState state, IBlockAccess worldIn, BlockPos pos) {
+    public BlockState getStateForPlacement(BlockState state, Direction facing, BlockState state2, IWorld worldIn, BlockPos pos, BlockPos pos2, Hand hand) {
         TileEntity tile = worldIn.getTileEntity(pos);
-        if(tile != null && tile.hasCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, null)) {
-            IPowerBase storage = tile.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, null);
+        if(tile != null && tile.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY).isPresent()) {
+            IPowerBase storage = tile.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY).orElse(null);
             double voltage = storage.getVoltage();
             int level = (int)((voltage / storage.getMaxVoltage()) * 6);
-            return this.blockState.getBaseState().with(LEVEL, level);
+            return this.stateContainer.getBaseState().with(LEVEL, level);
         }
-        return super.getActualState(state, worldIn, pos);
+        return super.getStateForPlacement(state, facing, state2, worldIn, pos, pos2, hand);
     }
 
     @Override
-    public boolean onBlockActivated(World world, BlockPos pos, BlockState state, PlayerEntity player, Hand hand, Direction facing, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(BlockState blockState, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult rayTraceResult) {
         TileEntity tile = world.getTileEntity(pos);
-        if(tile != null && tile.hasCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, null)) {
-            IPowerBase storage = tile.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, null);
+        if(tile != null && tile.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY, null).isPresent()) {
+            IPowerBase storage = tile.getCapability(CapabilityBlutricity.BLUTRICITY_CAPABILITY).orElse(null);
             if(world.isRemote)
                 player.sendMessage(new StringTextComponent("Voltage: " + storage.getVoltage()));
             return true;
         }
-        return super.onBlockActivated(world, pos, state, player, hand, facing, hitX, hitY, hitZ);
+        return super.onBlockActivated(blockState, world, pos, player, hand, rayTraceResult);
     }
 
     @Override
@@ -72,18 +74,8 @@ public class BlockBattery extends BlockContainerBase {
     }
 
     @Override
-    protected BlockStateContainer createBlockState(){
-        return new BlockStateContainer(this, LEVEL);
-    }
-
-    @Override
-    public int getMetaFromState(BlockState state) {
-        return state.get(LEVEL);
-    }
-
-    @Override
-    public BlockState getStateFromMeta(int meta) {
-        return this.blockState.getBaseState().with(LEVEL, meta);
+    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder){
+        builder.add(LEVEL);
     }
 
 }

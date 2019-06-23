@@ -1,14 +1,14 @@
 package com.bluepowermod.client.render;
 
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IBlockReader;
 
 /**
  * @author MoreThanHidden
  */
 public interface IBPColoredBlock {
 
-    int getColor(IBlockAccess w, BlockPos pos, int tint);
+    int getColor(IBlockReader w, BlockPos pos, int tint);
     int getColor(int tint);
 
 }

@@ -7,6 +7,8 @@
  */
 package com.bluepowermod.block.power;
 
+import com.bluepowermod.block.BlockBase;
+import com.bluepowermod.block.BlockContainerBase;
 import com.bluepowermod.init.BPBlocks;
 import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.reference.Refs;
@@ -18,43 +20,26 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+
+import javax.annotation.Nullable;
 
 /**
  * 
  * @author TheFjong
  * 
  */
-public class BlockWindmill extends Block implements ITileEntityProvider {
+public class BlockWindmill extends BlockContainerBase implements ITileEntityProvider {
     
     public BlockWindmill() {
-    
-        super(Material.IRON);
-        setCreativeTab(BPCreativeTabs.items);
-        setTranslationKey(Refs.WINDMILL_NAME);
+        super(Material.IRON, TileWindmill.class);
         setRegistryName(Refs.MODID, Refs.WINDMILL_NAME);
         BPBlocks.blockList.add(this);
     }
 
     @Override
-    public AxisAlignedBB getBoundingBox(BlockState state, IBlockAccess source, BlockPos pos) {
-        return new AxisAlignedBB(0, 0, 0, 1, 1, 1);
-    }
-
-    @Override
-    public TileEntity createNewTileEntity(World var1, int var2) {
-    
-        return new TileWindmill();
-    }
-
-    @Override
-    public boolean isNormalCube(BlockState state, IBlockAccess world, BlockPos pos) {
-        return false;
-    }
-
-    @Override
-    public boolean isOpaqueCube(BlockState state) {
+    public boolean isNormalCube(BlockState state, IBlockReader world, BlockPos pos) {
         return false;
     }
 
@@ -62,5 +47,10 @@ public class BlockWindmill extends Block implements ITileEntityProvider {
     public BlockRenderType getRenderType(BlockState state) {
         return BlockRenderType.MODEL;
     }
-    
+
+    @Nullable
+    @Override
+    public TileEntity createNewTileEntity(IBlockReader iBlockReader) {
+        return new TileWindmill();
+    }
 }

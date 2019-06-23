@@ -50,9 +50,4 @@ public class BlockTeslatiteOre extends BlockItemOre {
         return stacks;
     }
 
-
-    @Override
-    public int quantityDropped(Random rand) {
-        return 2 + rand.nextInt(2);
-    }
 }

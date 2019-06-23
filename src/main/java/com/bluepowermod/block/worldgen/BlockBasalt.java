@@ -20,7 +20,11 @@ package com.bluepowermod.block.worldgen;
 import com.bluepowermod.init.BPBlocks;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.storage.loot.LootContext;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -32,8 +36,10 @@ public class BlockBasalt extends BlockStoneOre {
     }
 
     @Override
-    public Item getItemDropped(BlockState state, Random rand, int fortune) {
-        return Item.getItemFromBlock(BPBlocks.basalt_cobble);
+    public List<ItemStack> getDrops(BlockState blockState, LootContext.Builder builder) {
+        List<ItemStack> drops = new ArrayList<>();
+        drops.add(new ItemStack(BPBlocks.basalt_cobble));
+        return drops;
     }
 
 }

@@ -18,27 +18,20 @@
 package com.bluepowermod.block.worldgen;
 
 import com.bluepowermod.init.BPBlocks;
-import com.bluepowermod.init.BPCreativeTabs;
 import com.bluepowermod.reference.Refs;
 import net.minecraft.block.BushBlock;
 import net.minecraft.block.FlowerBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
-import net.minecraftforge.common.EnumPlantType;
+import net.minecraft.world.IBlockReader;
 
 public class BlockCustomFlower extends BushBlock {
 
     public static final String[] field_149858_b = new String[] { "indigo_flower" };
     // private int meta;
 
-    public BlockCustomFlower(String name) {
-
-        super();
-        this.setCreativeTab(BPCreativeTabs.blocks);
-        this.setHardness(0.0F);
-        this.setSoundType(SoundType.PLANT);
-        this.setTranslationKey(name);
+    public BlockCustomFlower(String name, Properties properties) {
+        super(properties.hardnessAndResistance(0.0F).sound(SoundType.PLANT).tickRandomly());
         this.setRegistryName(Refs.MODID, name);
         BPBlocks.blockList.add(this);
     }
@@ -83,8 +76,4 @@ public class BlockCustomFlower extends BushBlock {
         return 0;
     }
 
-    @Override
-    public EnumPlantType getPlantType(IBlockAccess world, BlockPos pos) {
-        return EnumPlantType.Plains;
-    }
 }

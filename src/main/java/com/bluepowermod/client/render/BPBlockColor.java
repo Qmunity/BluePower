@@ -6,7 +6,8 @@ import net.minecraft.client.renderer.color.IBlockColor;
 import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IEnviromentBlockReader;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -17,13 +18,13 @@ public class BPBlockColor implements IBlockColor, IItemColor {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public int colorMultiplier(BlockState state, @Nullable IBlockAccess world, @Nullable BlockPos pos, int tintIndex) {
-        //Color for Block
+    public int getColor(BlockState state, @Nullable IEnviromentBlockReader world, @Nullable BlockPos pos, int tintIndex) {
         return ((IBPColoredBlock)state.getBlock()).getColor(world, pos, tintIndex);
     }
 
     @Override
-    public int colorMultiplier(ItemStack stack, int tintIndex) {
+    @OnlyIn(Dist.CLIENT)
+    public int getColor(ItemStack stack, int tintIndex) {
         return ((IBPColoredBlock)Block.getBlockFromItem(stack.getItem())).getColor(tintIndex);
     }
 }

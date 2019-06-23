@@ -160,7 +160,7 @@ public class TileMachineBase extends TileBase implements ITubeConnection, IWeigh
         if (tileCache == null) {
             tileCache = new TileEntityCache(world, pos);
         }
-        return tileCache.getValue(d);
+        return tileCache.get(d);
     }
 
     public Direction getOutputDirection() {
